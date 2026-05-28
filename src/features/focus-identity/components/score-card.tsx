@@ -1,10 +1,10 @@
 import React from "react";
 import { View } from "react-native";
-import { Text } from "../../../../components/primitives/Text";
-import { StatusBanner } from "../../../../shared/ui/components/StatusFeedback";
-import { useTheme } from "../../../../theme";
-import { MAX_FOCUS_SCORE } from "../../schemas";
-import type { FocusScoreDashboardModel } from "../../types";
+import { Text } from "@/components/primitives/Text";
+import { StatusBanner } from "@/shared/ui/components/StatusFeedback";
+import { useTheme } from "@/theme";
+import { MAX_FOCUS_SCORE } from "../schemas";
+import type { FocusScoreDashboardModel } from "../types";
 
 interface ScoreCardProps {
   model: FocusScoreDashboardModel;

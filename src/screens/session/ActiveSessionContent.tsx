@@ -12,8 +12,8 @@ import { CoachSessionBannerLazy } from "./components/CoachSessionBannerLazy";
 import { ActiveSessionBottomControls } from "./ActiveSessionBottomControls";
 import type { useActiveSessionController } from "./hooks/useActiveSessionController";
 import type { useStudyQuizBreak } from "./hooks/useStudyQuizBreak";
-import type { ActiveSessionDisplayPolicy } from "../utils/active-session-display-policy";
-import type { ActiveSessionHeroViewModel } from "../utils/active-session-hero-view-model";
+import type { ActiveSessionDisplayPolicy } from "./utils/active-session-display-policy";
+import type { ActiveSessionHeroViewModel } from "./utils/active-session-hero-view-model";
 import type { FocusContract } from "../../features/focus-contract/types";
 
 const ENABLE_SESSION_COMPANION_LAYER = true;

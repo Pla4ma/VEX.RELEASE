@@ -1,10 +1,10 @@
 import { eventBus } from "../../../events";
-import { consumeBountiesOnDamage } from "../../../features/boss/BossBountySystem";
-import { recordBountyLootBoost } from "../../../features/boss/bounty-loot-boost";
+import { consumeBountiesOnDamage } from "../../features/boss/service";
+import { recordBountyLootBoost } from "../../features/boss/service";
 import {
   applyDamage,
   getActiveEncounter,
-} from "../../../features/boss/service";
+} from "../../features/boss/service";
 
 jest.mock("../../../events", () => ({
   eventBus: { publish: jest.fn(), subscribe: jest.fn() },

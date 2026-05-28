@@ -2,7 +2,7 @@ import React from "react";
 import { InterruptionWarning } from "../../session/components/InterruptionWarning";
 import { ActiveSessionControlDock } from "./components/ActiveSessionControlDock";
 import { ActiveSessionControlRecovery } from "./components/ActiveSessionControlRecovery";
-import type { ActiveSessionControlFailure } from "../utils/active-session-control-failure";
+import type { ActiveSessionControlFailure } from "./utils/active-session-control-failure";
 
 interface ActiveSessionBottomControlsProps {
   controlFailure: ActiveSessionControlFailure | null;

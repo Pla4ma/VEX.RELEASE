@@ -1,10 +1,10 @@
 import React from "react";
 import { View } from "react-native";
-import { Button } from "../../../../components/primitives/Button";
-import { Text } from "../../../../components/primitives/Text";
-import { useTheme } from "../../../../theme";
-import { MAX_FOCUS_SCORE } from "../../schemas";
-import type { FocusScoreDashboardModel } from "../../types";
+import { Button } from "@/components/primitives/Button";
+import { Text } from "@/components/primitives/Text";
+import { useTheme } from "@/theme";
+import { MAX_FOCUS_SCORE } from "../schemas";
+import type { FocusScoreDashboardModel } from "../types";
 
 interface WhatChangedProps {
   model: FocusScoreDashboardModel;

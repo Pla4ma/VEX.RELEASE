@@ -1,4 +1,4 @@
-import type { RetentionJourneyCopy } from "../schemas";
+import type { RetentionJourneyCopy } from "./schemas";
 import { DAY0_COPY } from "./copy/day0";
 import { DAY1_COPY } from "./copy/day1";
 import { DAY2_COPY } from "./copy/day2";

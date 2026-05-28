@@ -27,3 +27,13 @@ export function canUserFightBoss(): Promise<{
 }> {
   return Promise.resolve({ allowed: false, reason: "archived" });
 }
+
+/** @deprecated Bounty system archived — stub for backward compat */
+export function consumeBountiesOnDamage(): void {
+  // no-op: bounty system removed
+}
+
+/** @deprecated Loot boost archived — stub for backward compat */
+export function recordBountyLootBoost(): void {
+  // no-op: loot boost system removed
+}

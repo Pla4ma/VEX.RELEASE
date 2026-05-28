@@ -1,8 +1,8 @@
 import React, { useMemo } from "react";
 import { View } from "react-native";
-import { Text } from "../../../../components/primitives/Text";
-import { useTheme } from "../../../../theme";
-import type { FocusScoreDashboardModel } from "../../types";
+import { Text } from "@/components/primitives/Text";
+import { useTheme } from "@/theme";
+import type { FocusScoreDashboardModel } from "../types";
 
 interface FactorMapProps {
   model: FocusScoreDashboardModel;

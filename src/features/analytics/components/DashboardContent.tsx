@@ -4,7 +4,7 @@ import { eventBus } from "../../../events";
 import { EmptyAnalytics, NetworkError } from "../../../shared/ui/primitives/EmptyState";
 import { Skeleton, SkeletonChart, SkeletonList } from "../../../shared/ui/primitives/Skeleton";
 import type { Insight, TimeSeriesData } from "../types";
-import type { SessionHeatmapData } from "../repository-types";
+import type { SessionHeatmapData } from "../repository";
 import type { DashboardError, DashboardState } from "./AnalyticsDashboard.types";
 import { Heatmap } from "./Heatmap";
 import { HeatmapSkeleton, formatMetricName, formatValue } from "./AnalyticsDashboard.helpers";

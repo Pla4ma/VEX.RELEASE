@@ -12,7 +12,7 @@ import {
   FREE_BOUNDARY_COPY,
   PREMIUM_BOUNDARY_COPY,
   FEATURE_HIGHLIGHT_MAP,
-} from "../../../paywall/paywall-copy";
+} from "../../../../screens/paywall/paywall-copy";
 
 export {
   resolvePremiumStrategy,

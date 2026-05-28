@@ -1,5 +1,5 @@
-import { SessionMode } from "../../../session/modes";
-import type { SessionSummary } from "../../../session/types";
+import { SessionMode } from "../../../../session/modes";
+import type { SessionSummary } from "../../../../session/types";
 import type { CompletionLedger } from "../../schemas";
 
 export const summary: SessionSummary = {

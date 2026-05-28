@@ -1,7 +1,7 @@
 import React from "react";
 import { Pressable, View } from "react-native";
-import { Text } from "../../../../components/primitives/Text";
-import { useTheme } from "../../../../theme";
+import { Text } from "@/components/primitives/Text";
+import { useTheme } from "@/theme";
 import type { PaywallPlan } from "./paywall-data";
 
 interface PlanCardProps {
