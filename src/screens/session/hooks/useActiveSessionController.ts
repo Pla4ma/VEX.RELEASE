@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { AppState, BackHandler } from "react-native";
 import * as Sentry from "@sentry/react-native";
 import {
@@ -8,7 +8,6 @@ import {
 } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useProgressionSummary } from "../../../features/progression/hooks";
-import { getSprintChainService } from "../../../features/session/SprintChainService";
 import { useStreak } from "../../../features/streaks/hooks";
 import { getSessionThemeById } from "../../../features/themes/session-themes";
 import type { SessionStackParams } from "../../../navigation/types";
@@ -17,17 +16,17 @@ import {
   useSession,
   useSessionHistory,
 } from "../../../session/hooks/useSession";
-import { resolveSessionMode, SessionMode } from "../../../session/modes";
+import { resolveSessionMode } from "../../../session/modes";
 import { useAuthStore } from "../../../store";
 import { useTheme } from "../../../theme";
-import {
-  buildActiveSessionControlFailure,
-  type ActiveSessionControlFailure,
-} from "../utils/active-session-control-failure";
+import type { ActiveSessionControlFailure } from "../utils/active-session-control-failure";
 import { useActiveSessionMetrics } from "./useActiveSessionMetrics";
 import { useCompanionSession } from "./useCompanionSession";
+import { useActiveSessionHandlers } from "./useActiveSessionHandlers";
+
 type SessionNavigationProp = NativeStackNavigationProp<SessionStackParams>;
 type ActiveSessionRouteProp = RouteProp<SessionStackParams, "ActiveSession">;
+
 export function useActiveSessionController() {
   const navigation = useNavigation<SessionNavigationProp>();
   const route = useRoute<ActiveSessionRouteProp>();
@@ -42,6 +41,7 @@ export function useActiveSessionController() {
   const [creativeMood, setCreativeMood] = useState<Mood | null>(null);
   const [controlFailure, setControlFailure] =
     useState<ActiveSessionControlFailure | null>(null);
+
   const sessionTheme = useMemo(
     () => getSessionThemeById(selectedThemeId),
     [selectedThemeId],
@@ -84,6 +84,7 @@ export function useActiveSessionController() {
     sessionTheme,
     streakDays: streak?.currentDays ?? 0,
   });
+
   useEffect(() => {
     const backHandler = BackHandler.addEventListener(
       "hardwareBackPress",
@@ -95,6 +96,7 @@ export function useActiveSessionController() {
     );
     return () => backHandler.remove();
   }, [isExiting]);
+
   useEffect(() => {
     const subscription = AppState.addEventListener("change", (nextState) => {
       if (!sessionQuery.session?.id || !sessionQuery.isActive) return;
@@ -117,6 +119,7 @@ export function useActiveSessionController() {
     });
     return () => subscription.remove();
   }, [sessionQuery]);
+
   useEffect(
     () => () => {
       if (!sessionQuery.session?.id || !sessionQuery.isActive) return;
@@ -128,127 +131,31 @@ export function useActiveSessionController() {
     },
     [sessionQuery],
   );
-  const handlePauseResume = useCallback(async (): Promise<void> => {
-    try {
-      if (sessionQuery.isPaused) {
-        await sessionQuery.resumeSession();
-        setControlFailure(null);
-        Sentry.addBreadcrumb({
-          category: "session",
-          message: "Session resumed",
-          level: "info",
-        });
-        return;
-      }
-      await sessionQuery.pauseSession("user");
-      setControlFailure(null);
-      Sentry.addBreadcrumb({
-        category: "session",
-        message: "Session paused",
-        level: "info",
-      });
-    } catch (caught) {
-      setControlFailure(buildActiveSessionControlFailure("pause"));
-      Sentry.captureException(caught, { tags: { feature: "session-control" } });
-    }
-  }, [sessionQuery]);
-  const handleComplete = useCallback(async (): Promise<void> => {
-    try {
-      const finalPurityScore = sessionQuery.getAntiCheatScore();
-      const result = await sessionQuery.endSession();
-      let sprintChainCount = sessionQuery.session?.config.sprintChainCount ?? 1;
-      if (currentMode === SessionMode.SPRINT) {
-        const sprintState =
-          await getSprintChainService().recordSprintCompleted(userId);
-        sprintChainCount = sprintState.completedCount;
-      }
-      await companion.completeCompanionSession({
-        ...result,
-        focusPurityScore: finalPurityScore,
-      });
-      setControlFailure(null);
-      Sentry.addBreadcrumb({
-        category: "session",
-        message: "Session completed",
-        level: "info",
-      });
-      navigation.navigate("SessionComplete", {
-        sessionId,
-        summary: {
-          ...result,
-          focusPurityScore: finalPurityScore,
-          sprintChainCount,
-          userLevel: progressionSummary?.level ?? result.userLevel ?? 1,
-          creativeMood: creativeMood ?? undefined,
-        },
-      });
-    } catch (caught) {
-      setControlFailure(buildActiveSessionControlFailure("complete"));
-      Sentry.captureException(caught, {
-        tags: { feature: "session-complete" },
-      });
-    }
-  }, [
-    companion,
-    creativeMood,
-    currentMode,
-    navigation,
-    progressionSummary?.level,
-    sessionId,
+
+  const handlers = useActiveSessionHandlers({
     sessionQuery,
+    companion,
+    currentMode,
     userId,
-  ]);
-  const handleCreativeMoodSelected = useCallback(
-    (mood: Mood): void => setCreativeMood(mood),
-    [],
-  );
-  const handleSkipCreativeMood = useCallback(
-    (): void => setCreativeMood(null),
-    [],
-  );
-  const handleAbandon = useCallback(async (): Promise<void> => {
-    setIsExiting(true);
-    setShowInterruption(false);
-    try {
-      await sessionQuery.abandonSession("user");
-      setControlFailure(null);
-      Sentry.addBreadcrumb({
-        category: "session",
-        message: "Session abandoned",
-        level: "warning",
-      });
-      navigation.goBack();
-    } catch (caught) {
-      setControlFailure(buildActiveSessionControlFailure("abandon"));
-      Sentry.captureException(caught, { tags: { feature: "session-abandon" } });
-      setIsExiting(false);
-    }
-  }, [navigation, sessionQuery]);
-  const retryControlFailure = useCallback(async (): Promise<void> => {
-    if (!controlFailure) return;
-    if (controlFailure.action === "complete") {
-      await handleComplete();
-      return;
-    }
-    if (controlFailure.action === "abandon") {
-      await handleAbandon();
-      return;
-    }
-    await handlePauseResume();
-  }, [controlFailure, handleAbandon, handleComplete, handlePauseResume]);
-  const clearControlFailure = useCallback(
-    (): void => setControlFailure(null),
-    [],
-  );
+    sessionId,
+    navigation,
+    progressionLevel: progressionSummary?.level,
+    creativeMood,
+    setCreativeMood,
+    setControlFailure,
+    setIsExiting,
+    setShowInterruption,
+  });
+
   return {
     actions: {
-      clearControlFailure,
-      handleAbandon,
-      handleComplete,
-      handleCreativeMoodSelected,
-      handlePauseResume,
-      handleSkipCreativeMood,
-      retryControlFailure,
+      clearControlFailure: handlers.clearControlFailure,
+      handleAbandon: handlers.handleAbandon,
+      handleComplete: handlers.handleComplete,
+      handleCreativeMoodSelected: handlers.handleCreativeMoodSelected,
+      handlePauseResume: handlers.handlePauseResume,
+      handleSkipCreativeMood: handlers.handleSkipCreativeMood,
+      retryControlFailure: () => handlers.retryControlFailure(controlFailure),
       setDismissDegradedState,
       setShowInterruption,
       setShowMultiplierInfo,

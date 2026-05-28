@@ -1,59 +1,32 @@
 import { eventBus } from "../../events";
-import { getCoachPresenceMessageForInterruption } from "../../features/coach-presence/coach-presence-message-resolver";
-import { getCoachPresenceMessage as getCoachPresenceMessageEnriched } from "../../features/coach-presence/copy-service";
 import { getAvailabilityFor } from "../../features/liveops-config/feature-access-store";
-import { createDebugger } from "../../utils/debug";
-import type { SessionStatus } from "../types";
+import type { SessionHistoryEntry } from "./sessionCoachContext";
+import type { CoachIntegrationConfig } from "./coach-config";
+import { FEATURE_KEY, debug, DEFAULT_CONFIG } from "./coach-config";
 import {
-  analyzeSessionPattern,
-  buildCoachPresenceContext,
-  getRecentAbandonmentCount,
-  getRecentCompletionCount,
-  type CoachSessionInsight,
-  type SessionHistoryEntry,
-} from "./sessionCoachContext";
+  handleSessionStarted,
+  handleInterruptionRisk,
+  handleSessionPaused,
+  handleSessionAbandoned,
+  handleSessionCompleted,
+  handleSuccessfulRecovery,
+  sendCoachMessage,
+  type CoachHandlerState,
+} from "./coach-handlers";
 
-const FEATURE_KEY = "ai_coach_basic" as const;
-const debug = createDebugger("session:coach-integration");
-
-export interface CoachIntegrationConfig {
-  enabled: boolean;
-  interruptionThresholds: { warning: number; critical: number };
-  enableProactiveTips: boolean;
-  enableComebackDetection: boolean;
-  enableStreakRiskAlerts: boolean;
-  enablePersonalizedGoals: boolean;
-  enableSessionInsights: boolean;
-}
-
-const DEFAULT_CONFIG: CoachIntegrationConfig = {
-  enabled: true,
-  interruptionThresholds: { warning: 60, critical: 300 },
-  enableProactiveTips: false,
-  enableComebackDetection: true,
-  enableStreakRiskAlerts: false,
-  enablePersonalizedGoals: true,
-  enableSessionInsights: true,
-};
-
-type CoachMessage = {
-  type: string;
-  message: string;
-  context: string;
-  priority: "low" | "normal" | "high";
-  actionButton?: { label: string; action: string };
-};
+export { CoachIntegrationConfig } from "./coach-config";
 
 export class SessionCoachIntegration {
   private readonly config: CoachIntegrationConfig;
   private readonly unsubscribers: Array<() => void> = [];
-  private readonly userSessionHistory = new Map<
-    string,
-    SessionHistoryEntry[]
-  >();
+  private readonly handlerState: CoachHandlerState;
 
   constructor(config: Partial<CoachIntegrationConfig> = {}) {
     this.config = { ...DEFAULT_CONFIG, ...config };
+    this.handlerState = {
+      userSessionHistory: new Map<string, SessionHistoryEntry[]>(),
+      config: this.config,
+    };
     this.setupEventListeners();
   }
 
@@ -74,195 +47,42 @@ export class SessionCoachIntegration {
     this.unsubscribers.push(
       eventBus.subscribe(
         "session:started",
-        (data) => data && this.handleSessionStarted(data.sessionId, ""),
+        (data) =>
+          data && handleSessionStarted(this.handlerState, data.sessionId, ""),
       ),
       eventBus.subscribe(
         "session:interruption:risk",
-        (data) => data && this.handleInterruptionRisk("", data.riskLevel),
+        (data) => data && handleInterruptionRisk("", data.riskLevel),
       ),
       eventBus.subscribe(
         "session:paused",
-        (data) => data && this.handleSessionPaused("", data.reason),
+        (data) => data && handleSessionPaused("", data.reason),
       ),
       eventBus.subscribe(
         "session:abandoned",
         (data) =>
           data &&
-          this.handleSessionAbandoned(data.userId || "", data.elapsedTime || 0),
+          handleSessionAbandoned(
+            this.handlerState,
+            data.userId || "",
+            data.elapsedTime || 0,
+          ),
       ),
       eventBus.subscribe(
         "session:completed",
         (data) =>
-          data && this.handleSessionCompleted(data.sessionId, data.userId),
+          data &&
+          handleSessionCompleted(
+            this.handlerState,
+            data.sessionId,
+            data.userId,
+          ),
       ),
       eventBus.subscribe(
         "session:recovery:successful",
-        (data) => data && this.handleSuccessfulRecovery(data.userId),
+        (data) => data && handleSuccessfulRecovery(data.userId),
       ),
     );
-  }
-
-  private handleSessionStarted(sessionId: string, userId: string): void {
-    const history = this.getRecentSessionHistory(userId);
-    const pattern = analyzeSessionPattern(history);
-    this.trackSessionEvent(userId, "ACTIVE");
-    if (this.config.enableComebackDetection && pattern.isComeback) {
-      this.sendCoachMessage(
-        userId,
-        this.buildPresenceMessage(
-          "welcome_back",
-          "comeback_detected",
-          "normal",
-          "inactive",
-          pattern,
-        ),
-      );
-    }
-    if (this.config.enablePersonalizedGoals) {
-      debug.debug("[Coach Goal]", { userId, sessionId, pattern });
-    }
-  }
-
-  private handleInterruptionRisk(
-    userId: string,
-    riskLevel: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL",
-  ): void {
-    if (riskLevel !== "CRITICAL") {
-      return;
-    }
-    const message = getCoachPresenceMessageForInterruption({
-      motivationStyle: "CALM",
-      firstWeekStage: null,
-      sessionState: "risk",
-      riskLevel: "critical",
-      primaryGoal: "focus",
-      studyLayerLabel: null,
-      comebackState: null,
-      bossIntensity: "hidden",
-    });
-    this.sendCoachMessage(userId, {
-      type: "interruption_warning",
-      message,
-      context: "interruption_risk",
-      priority: "high",
-    });
-  }
-
-  private handleSessionPaused(userId: string, reason?: string): void {
-    this.trackSessionEvent(userId, "PAUSED");
-    if (reason !== "interruption" && reason !== "emergency") {
-      return;
-    }
-    const message = getCoachPresenceMessageEnriched(
-      buildCoachPresenceContext({ sessionMode: "active_paused" }),
-    );
-    if (message.shouldShow) {
-      this.sendCoachMessage(userId, {
-        type: "pause",
-        message: message.message,
-        context: "pause_interruption",
-        priority: "normal",
-      });
-    }
-  }
-
-  private handleSessionAbandoned(userId: string, elapsedTime: number): void {
-    this.trackSessionEvent(userId, "ABANDONED");
-    const history = this.getRecentSessionHistory(userId);
-    if (getRecentAbandonmentCount(history) >= 3 || elapsedTime > 600) {
-      this.sendCoachMessage(
-        userId,
-        this.buildPresenceMessage(
-          "support",
-          "abandonment_pattern",
-          "normal",
-          "active_paused",
-        ),
-      );
-    }
-  }
-
-  private handleSessionCompleted(sessionId: string, userId: string): void {
-    this.trackSessionEvent(userId, "COMPLETED");
-    if (!this.config.enableSessionInsights) {
-      return;
-    }
-    const insight = this.generateSessionInsight(userId, sessionId);
-    debug.debug("[Coach Insights]", insight);
-    if (getRecentCompletionCount(this.getRecentSessionHistory(userId)) >= 5) {
-      this.sendCoachMessage(
-        userId,
-        this.buildPresenceMessage(
-          "milestone",
-          "completion_streak",
-          "normal",
-          "completed",
-        ),
-      );
-    }
-  }
-
-  private handleSuccessfulRecovery(userId: string): void {
-    this.sendCoachMessage(
-      userId,
-      this.buildPresenceMessage(
-        "recovery",
-        "recovery_success",
-        "normal",
-        "completed",
-      ),
-    );
-  }
-
-  private buildPresenceMessage(
-    type: string,
-    context: string,
-    priority: CoachMessage["priority"],
-    sessionMode: Parameters<typeof buildCoachPresenceContext>[0]["sessionMode"],
-    pattern?: Parameters<typeof buildCoachPresenceContext>[0]["pattern"],
-  ): CoachMessage {
-    const output = getCoachPresenceMessageEnriched(
-      buildCoachPresenceContext({ sessionMode, pattern }),
-    );
-    return {
-      type,
-      message: output.message,
-      context,
-      priority,
-      actionButton: output.optionalActionLabel
-        ? { label: output.optionalActionLabel, action: output.safeIntent }
-        : undefined,
-    };
-  }
-
-  private sendCoachMessage(userId: string, message: CoachMessage): void {
-    eventBus.publish("coach:intent", { userId, ...message });
-    debug.debug("[Coach]", { userId, ...message, timestamp: Date.now() });
-  }
-
-  private getRecentSessionHistory(userId: string): SessionHistoryEntry[] {
-    return this.userSessionHistory.get(userId) || [];
-  }
-
-  private trackSessionEvent(userId: string, status: SessionStatus): void {
-    const history = this.getRecentSessionHistory(userId);
-    history.push({ timestamp: Date.now(), status });
-    this.userSessionHistory.set(userId, history.slice(-100));
-  }
-
-  private generateSessionInsight(
-    userId: string,
-    sessionId: string,
-  ): CoachSessionInsight {
-    return {
-      sessionId,
-      userId,
-      type: "pattern",
-      insight: "CoachPresence owns final copy.",
-      actionItems: [],
-      confidence: 0,
-      generatedAt: Date.now(),
-    };
   }
 }
 

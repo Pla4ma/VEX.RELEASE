@@ -1,0 +1,57 @@
+import React from "react";
+import { Pressable } from "react-native";
+import { Box } from "../../../components/primitives/Box";
+import { Text } from "../../../components/primitives/Text";
+import { launchColors } from "@theme/tokens/launch-colors";
+
+export interface WeeklyReportCompactProps {
+  totalMinutes: number;
+  changePercent: number;
+  onPress: () => void;
+}
+
+export function WeeklyReportCompact({
+  totalMinutes,
+  changePercent,
+  onPress,
+}: WeeklyReportCompactProps): JSX.Element {
+  const isImprovement = changePercent >= 0;
+  return (
+    <Pressable
+      onPress={onPress}
+      accessibilityLabel="Interactive control"
+      accessibilityRole="button"
+      accessibilityHint="Activates this control"
+    >
+      <Box
+        flexDirection="row"
+        alignItems="center"
+        gap="md"
+        p="md"
+        borderRadius="lg"
+        bg="background.secondary"
+        style={{
+          borderLeftWidth: 4,
+          borderLeftColor: isImprovement
+            ? launchColors.hex_22c55e
+            : launchColors.hex_f59e0b,
+        }}
+      >
+        <Text fontSize={24}>📊</Text>
+        <Box flex={1}>
+          <Text variant="body" color="text.primary" fontWeight="600">
+            {totalMinutes}m this week
+          </Text>
+          <Text
+            variant="caption"
+            color={isImprovement ? "success.DEFAULT" : "warning.DEFAULT"}
+          >
+            {isImprovement ? "+" : ""}
+            {changePercent}% vs last week
+          </Text>
+        </Box>
+        <Text fontSize={20}>→</Text>
+      </Box>
+    </Pressable>
+  );
+}

@@ -8,9 +8,10 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { LinearGradient } from "expo-linear-gradient";
-import Svg, { Circle, G, Path, Text as SvgText } from "react-native-svg";
-import { createSheet } from "@/shared/ui/create-sheet";
+import Svg, { Circle, G, Text as SvgText } from "react-native-svg";
 import { launchColors } from "@theme/tokens/launch-colors";
+import { styles } from "./xp-progress-bar.styles";
+
 interface XpProgressBarProps {
   currentXp: number;
   threshold: number;
@@ -20,9 +21,11 @@ interface XpProgressBarProps {
   xpJustAdded?: number;
   onLevelUp?: () => void;
 }
+
 const { width } = Dimensions.get("window");
 const BAR_WIDTH = width - 48;
 const BAR_HEIGHT = 24;
+
 export const XpProgressBar: React.FC<XpProgressBarProps> = ({
   currentXp,
   threshold,
@@ -40,12 +43,14 @@ export const XpProgressBar: React.FC<XpProgressBarProps> = ({
   >([]);
   const progressPercent = Math.min(100, (currentXp / threshold) * 100);
   const progressWidth = (BAR_WIDTH * progressPercent) / 100;
+
   useEffect(() => {
     progressAnim.value = withSpring(progressWidth, {
       damping: 12,
       stiffness: 100,
     });
   }, [progressAnim, progressWidth]);
+
   useEffect(() => {
     if (isAnimating && xpJustAdded > 0) {
       pulseAnim.value = withSequence(
@@ -61,6 +66,7 @@ export const XpProgressBar: React.FC<XpProgressBarProps> = ({
       setTimeout(() => setParticles([]), 1000);
     }
   }, [isAnimating, xpJustAdded, progressWidth, pulseAnim]);
+
   useEffect(() => {
     if (progressPercent >= 100) {
       setShowLevelUp(true);
@@ -68,6 +74,7 @@ export const XpProgressBar: React.FC<XpProgressBarProps> = ({
       setTimeout(() => setShowLevelUp(false), 3000);
     }
   }, [progressPercent, onLevelUp]);
+
   const getTierColor = (lvl: number): [string, string] => {
     if (lvl >= 50) {
       return [launchColors.hex_ffd700, launchColors.hex_ffa500];
@@ -80,16 +87,19 @@ export const XpProgressBar: React.FC<XpProgressBarProps> = ({
     }
     return [launchColors.hex_4caf50, launchColors.hex_2e7d32];
   };
+
   const [startColor, endColor] = getTierColor(level);
+
   const containerAnimatedStyle = useAnimatedStyle(() => ({
     transform: [{ scale: pulseAnim.value }],
   }));
+
   const progressAnimatedStyle = useAnimatedStyle(() => ({
     width: progressAnim.value,
   }));
+
   return (
     <Animated.View style={[styles.container, containerAnimatedStyle]}>
-      {}
       <View style={styles.levelBadgeContainer}>
         <Svg width={56} height={56}>
           <Circle
@@ -125,9 +135,7 @@ export const XpProgressBar: React.FC<XpProgressBarProps> = ({
         </Svg>
       </View>
 
-      {}
       <View style={styles.barContainer}>
-        {}
         <View style={[styles.track, { width: BAR_WIDTH }]}>
           <LinearGradient
             colors={[launchColors.hex_2a2a4a, launchColors.hex_1a1a2e]}
@@ -137,7 +145,6 @@ export const XpProgressBar: React.FC<XpProgressBarProps> = ({
           />
         </View>
 
-        {}
         <Animated.View style={[styles.progressFill, progressAnimatedStyle]}>
           <LinearGradient
             colors={[startColor, endColor]}
@@ -146,14 +153,10 @@ export const XpProgressBar: React.FC<XpProgressBarProps> = ({
             style={StyleSheet.absoluteFill}
           />
 
-          {}
           <View style={styles.shine} />
-
-          {}
           <View style={[styles.tipGlow, { shadowColor: startColor }]} />
         </Animated.View>
 
-        {}
         {particles.map((particle) => (
           <Animated.View
             key={particle.id}
@@ -168,7 +171,6 @@ export const XpProgressBar: React.FC<XpProgressBarProps> = ({
           />
         ))}
 
-        {}
         <View style={styles.xpTextContainer}>
           <Text style={styles.xpText}>
             <Text style={[styles.xpCurrent, { color: startColor }]}>
@@ -179,7 +181,6 @@ export const XpProgressBar: React.FC<XpProgressBarProps> = ({
           </Text>
         </View>
 
-        {}
         {showLevelUp && (
           <Animated.View style={styles.levelUpBadge}>
             <Text style={styles.levelUpText}>LEVEL UP!</Text>
@@ -187,93 +188,7 @@ export const XpProgressBar: React.FC<XpProgressBarProps> = ({
         )}
       </View>
 
-      {}
       <Text style={styles.totalXp}>Total: {totalXp.toLocaleString()} XP</Text>
     </Animated.View>
   );
 };
-const styles = createSheet({
-  container: { alignItems: "center", paddingVertical: 16 },
-  levelBadgeContainer: { marginBottom: 12 },
-  barContainer: {
-    position: "relative",
-    height: BAR_HEIGHT,
-    justifyContent: "center",
-  },
-  track: {
-    height: BAR_HEIGHT,
-    borderRadius: 12,
-    overflow: "hidden",
-    backgroundColor: launchColors.hex_1a1a2e,
-  },
-  progressFill: {
-    position: "absolute",
-    left: 0,
-    top: 0,
-    height: BAR_HEIGHT,
-    borderRadius: 12,
-    overflow: "hidden",
-  },
-  shine: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    height: "50%",
-    backgroundColor: launchColors.rgb_255_255_255_0_2,
-  },
-  tipGlow: {
-    position: "absolute",
-    right: -4,
-    top: -2,
-    width: 8,
-    height: BAR_HEIGHT + 4,
-    borderRadius: 4,
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.8,
-    shadowRadius: 10,
-    elevation: 10,
-  },
-  particle: {
-    position: "absolute",
-    width: 4,
-    height: 4,
-    borderRadius: 2,
-    opacity: 0.8,
-  },
-  xpTextContainer: {
-    position: "absolute",
-    left: 0,
-    right: 0,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  xpText: { flexDirection: "row", fontSize: 12, fontWeight: "700" },
-  xpCurrent: { fontWeight: "bold" },
-  xpSeparator: { color: launchColors.rgb_255_255_255_0_5 },
-  xpThreshold: { color: launchColors.rgb_255_255_255_0_6 },
-  levelUpBadge: {
-    position: "absolute",
-    right: 10,
-    top: -30,
-    backgroundColor: launchColors.hex_ffd700,
-    paddingHorizontal: 12,
-    paddingVertical: 4,
-    borderRadius: 12,
-    shadowColor: launchColors.hex_ffd700,
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.5,
-    shadowRadius: 10,
-    elevation: 5,
-  },
-  levelUpText: {
-    color: launchColors.hex_1a1a2e,
-    fontWeight: "bold",
-    fontSize: 11,
-  },
-  totalXp: {
-    marginTop: 8,
-    fontSize: 12,
-    color: launchColors.rgb_255_255_255_0_5,
-  },
-});

@@ -1,0 +1,153 @@
+import React from "react";
+import { View, Text, Pressable, ViewStyle } from "react-native";
+import Animated from "react-native-reanimated";
+import { useTheme } from "../../../theme";
+import { useFadeIn, useSlideIn } from "../hooks/useReanimated";
+import { createSheet } from "@/shared/ui/create-sheet";
+
+interface EmptyStateProps {
+  icon: string;
+  title: string;
+  message: string;
+  actionLabel?: string;
+  onAction?: () => void;
+  secondaryActionLabel?: string;
+  onSecondaryAction?: () => void;
+  style?: ViewStyle;
+  animated?: boolean;
+}
+
+export function EmptyState({
+  icon,
+  title,
+  message,
+  actionLabel,
+  onAction,
+  secondaryActionLabel,
+  onSecondaryAction,
+  style,
+  animated = true,
+}: EmptyStateProps) {
+  const { theme } = useTheme();
+  const fadeStyle = useFadeIn(500, animated ? 100 : 0);
+  const slideStyle = useSlideIn("up", 30);
+  const containerStyle = animated ? fadeStyle : undefined;
+  const contentStyle = animated ? slideStyle : undefined;
+  return (
+    <Animated.View style={[styles.container, containerStyle, style]}>
+      <Animated.View style={[styles.content, contentStyle]}>
+        <View
+          style={[
+            styles.iconContainer,
+            { backgroundColor: theme.colors.background.tertiary },
+          ]}
+        >
+          <Text style={styles.icon}>{icon}</Text>
+        </View>
+
+        <Text style={[styles.title, { color: theme.colors.text.primary }]}>
+          {title}
+        </Text>
+        <Text style={[styles.message, { color: theme.colors.text.tertiary }]}>
+          {message}
+        </Text>
+
+        {(actionLabel || secondaryActionLabel) && (
+          <View style={styles.actions}>
+            {actionLabel && onAction && (
+              <Pressable
+                style={({ pressed }) => [
+                  styles.primaryButton,
+                  { backgroundColor: theme.colors.primary[500] },
+                  pressed && { opacity: 0.8 },
+                ]}
+                onPress={onAction}
+                accessibilityLabel="Interactive control"
+                accessibilityRole="button"
+                accessibilityHint="Activates this control"
+              >
+                <Text
+                  style={[
+                    styles.primaryButtonText,
+                    { color: theme.colors.text.inverse },
+                  ]}
+                >
+                  {actionLabel}
+                </Text>
+              </Pressable>
+            )}
+
+            {secondaryActionLabel && onSecondaryAction && (
+              <Pressable
+                style={({ pressed }) => [
+                  styles.secondaryButton,
+                  pressed && { opacity: 0.8 },
+                ]}
+                onPress={onSecondaryAction}
+                accessibilityLabel="Interactive control"
+                accessibilityRole="button"
+                accessibilityHint="Activates this control"
+              >
+                <Text
+                  style={[
+                    styles.secondaryButtonText,
+                    { color: theme.colors.primary[500] },
+                  ]}
+                >
+                  {secondaryActionLabel}
+                </Text>
+              </Pressable>
+            )}
+          </View>
+        )}
+      </Animated.View>
+    </Animated.View>
+  );
+}
+
+const styles = createSheet({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 32,
+  },
+  content: { alignItems: "center", maxWidth: 400 },
+  iconContainer: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 24,
+  },
+  icon: { fontSize: 40 },
+  title: {
+    fontSize: 20,
+    fontWeight: "700",
+    marginBottom: 12,
+    textAlign: "center",
+  },
+  message: {
+    fontSize: 14,
+    textAlign: "center",
+    marginBottom: 24,
+    lineHeight: 20,
+  },
+  actions: { flexDirection: "column", gap: 12, width: "100%" },
+  primaryButton: {
+    paddingVertical: 14,
+    paddingHorizontal: 24,
+    borderRadius: 12,
+    alignItems: "center",
+  },
+  primaryButtonText: { fontSize: 16, fontWeight: "600" },
+  secondaryButton: {
+    backgroundColor: "transparent",
+    paddingVertical: 14,
+    paddingHorizontal: 24,
+    borderRadius: 12,
+    alignItems: "center",
+  },
+  secondaryButtonText: { fontSize: 16, fontWeight: "500" },
+});
