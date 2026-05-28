@@ -41,9 +41,16 @@ export {
   isInPeakWindow,
   processSmartNotifications,
   useSmartNotifications,
+} from "./SmartNotificationScheduler";
+export {
+  PeakFocusWindowSchema,
+  NotificationContentTypeSchema,
+  SmartNotificationConfigSchema,
   type PeakFocusWindow,
   type NotificationContentType,
-} from "./SmartNotificationScheduler";
+  type SmartNotificationConfig,
+} from "./SmartNotificationScheduler-types";
+export { selectNotificationType } from "./SmartNotificationScheduler-generators";
 
 // Phase 11.6 - Weekly Report
 export {

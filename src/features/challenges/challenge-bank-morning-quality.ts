@@ -1,0 +1,103 @@
+/**
+ * Personal challenge bank — morning routines, personal bests, and quality.
+ */
+
+import type { ChallengeBankTemplate } from "./challenge-bank-types";
+
+export const MORNING_QUALITY_CHALLENGES: ChallengeBankTemplate[] = [
+  {
+    id: "challenge-morning-early-bird",
+    name: "Early Bird",
+    description:
+      "Complete {{target}} focus sessions between 6:00 AM and 10:00 AM",
+    type: "SESSION_COUNT",
+    difficulty: "EASY",
+    target: 3,
+    timeLimit: 24 * 60 * 60 * 1000,
+    rewardType: "COINS",
+    rewardAmount: 50,
+    tags: ["morning", "routine", "productivity"],
+    seasonal: false,
+  },
+  {
+    id: "challenge-morning-power-hour",
+    name: "Power Hour Master",
+    description: "Focus for {{target}} minutes during morning hours (6-10 AM)",
+    type: "FOCUS_TIME",
+    difficulty: "NORMAL",
+    target: 60,
+    timeLimit: 24 * 60 * 60 * 1000,
+    rewardType: "COINS",
+    rewardAmount: 75,
+    tags: ["morning", "focus", "deep-work"],
+    seasonal: false,
+  },
+  {
+    id: "challenge-morning-streak",
+    name: "Morning Streak Builder",
+    description:
+      "Complete a session before 9 AM for {{target}} consecutive days",
+    type: "STREAK",
+    difficulty: "NORMAL",
+    target: 3,
+    timeLimit: 7 * 24 * 60 * 60 * 1000,
+    rewardType: "COINS",
+    rewardAmount: 100,
+    tags: ["morning", "habit", "consistency"],
+    seasonal: false,
+  },
+  {
+    id: "challenge-beat-daily-record",
+    name: "Personal Best Pursuer",
+    description:
+      "Beat your daily focus record of {{comparison}} minutes by completing {{target}} minutes today",
+    type: "FOCUS_TIME",
+    difficulty: "CHALLENGING",
+    target: 180,
+    timeLimit: 24 * 60 * 60 * 1000,
+    rewardType: "COINS",
+    rewardAmount: 150,
+    tags: ["personal-best", "record", "achievement"],
+    seasonal: false,
+  },
+  {
+    id: "challenge-session-duration-record",
+    name: "Endurance Test",
+    description:
+      "Complete a single session longer than your personal best ({{comparison}}+ minutes)",
+    type: "FOCUS_TIME",
+    difficulty: "CHALLENGING",
+    target: 60,
+    timeLimit: 24 * 60 * 60 * 1000,
+    rewardType: "COINS",
+    rewardAmount: 125,
+    tags: ["endurance", "personal-best", "focus"],
+    seasonal: false,
+  },
+  {
+    id: "challenge-s-grade",
+    name: "Perfectionist",
+    description: "Complete {{target}} S-grade (95+ quality) sessions",
+    type: "SESSION_COUNT",
+    difficulty: "CHALLENGING",
+    target: 2,
+    timeLimit: 7 * 24 * 60 * 60 * 1000,
+    rewardType: "COINS",
+    rewardAmount: 150,
+    tags: ["quality", "s-grade", "excellence"],
+    seasonal: false,
+  },
+  {
+    id: "challenge-a-grade-streak",
+    name: "Quality Streak",
+    description: "Complete {{target}} consecutive A-grade or better sessions",
+    type: "STREAK",
+    difficulty: "NORMAL",
+    target: 5,
+    timeLimit: 7 * 24 * 60 * 60 * 1000,
+    rewardType: "COINS",
+    rewardAmount: 100,
+    tags: ["quality", "streak", "consistency"],
+    seasonal: false,
+  },
+];
