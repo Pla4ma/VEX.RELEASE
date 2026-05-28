@@ -1,28 +1,17 @@
 import NetInfo, { type NetInfoState } from "@react-native-community/netinfo";
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Pressable, Text, View } from "react-native";
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withSpring,
-  withTiming,
-} from "react-native-reanimated";
+import Animated from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { haptics } from "@/shared/feedback";
-import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { useTheme } from "@/theme";
 import { semanticOpacity } from "@/theme/tokens/opacity";
 import { spacing } from "@/theme/tokens/spacing";
 import { sizing } from "@/theme/tokens/sizing";
 import { SyncQueueDetails } from "./smart-offline/SyncQueueDetails";
 import type { PendingAction } from "./smart-offline/types";
+import { useOfflineAnimation } from "./smart-offline/useOfflineAnimation";
 
 interface SmartOfflineIndicatorProps {
   syncQueue: PendingAction[];
@@ -42,16 +31,11 @@ export const SmartOfflineIndicator: React.FC<SmartOfflineIndicatorProps> = ({
   onDismiss,
 }) => {
   const { theme } = useTheme();
-  const { isReducedMotion } = useReducedMotion();
   const insets = useSafeAreaInsets();
   const [isConnected, setIsConnected] = useState(true);
   const [isExpanded, setIsExpanded] = useState(false);
   const [lastSyncTime, setLastSyncTime] = useState<number | null>(null);
-  const hideTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const hiddenOffset = -(sizing.height["2xl"] + insets.top + spacing[12]);
-  const translateY = useSharedValue(hiddenOffset);
-  const opacity = useSharedValue(0);
-  const scale = useSharedValue(1);
 
   const grouped = useMemo(
     () => ({
@@ -61,6 +45,17 @@ export const SmartOfflineIndicator: React.FC<SmartOfflineIndicatorProps> = ({
     }),
     [syncQueue],
   );
+
+  const { animatedStyle, contentStyle, animateOut, handleScale } =
+    useOfflineAnimation({
+      hiddenOffset,
+      animationNormal: theme.animation.normal,
+      animationFast: theme.animation.fast,
+      animationVerySlow: theme.animation.verySlow,
+      isConnected,
+      syncQueueLength: syncQueue.length,
+      lastSyncTime,
+    });
 
   const statusColor = !isConnected
     ? theme.colors.error.DEFAULT
@@ -78,53 +73,6 @@ export const SmartOfflineIndicator: React.FC<SmartOfflineIndicatorProps> = ({
         ? `Online - synced ${formatTime(lastSyncTime)}`
         : "Online";
 
-  const animatedStyle = useAnimatedStyle(() => ({
-    opacity: opacity.value,
-    transform: [{ translateY: translateY.value }],
-  }));
-
-  const contentStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
-  }));
-
-  const clearHideTimer = useCallback(() => {
-    if (hideTimer.current) {
-      clearTimeout(hideTimer.current);
-      hideTimer.current = null;
-    }
-  }, []);
-
-  const animateIn = useCallback(() => {
-    clearHideTimer();
-    translateY.value = isReducedMotion
-      ? 0
-      : withSpring(0, { damping: 18, stiffness: 260 });
-    opacity.value = withTiming(1, {
-      duration: isReducedMotion ? 0 : theme.animation.normal,
-    });
-  }, [
-    clearHideTimer,
-    isReducedMotion,
-    opacity,
-    theme.animation.normal,
-    translateY,
-  ]);
-
-  const animateOut = useCallback(() => {
-    translateY.value = withTiming(hiddenOffset, {
-      duration: isReducedMotion ? 0 : theme.animation.fast,
-    });
-    opacity.value = withTiming(0, {
-      duration: isReducedMotion ? 0 : theme.animation.fast,
-    });
-  }, [
-    hiddenOffset,
-    isReducedMotion,
-    opacity,
-    theme.animation.fast,
-    translateY,
-  ]);
-
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener((state: NetInfoState) => {
       const connected = state.isConnected ?? true;
@@ -137,28 +85,9 @@ export const SmartOfflineIndicator: React.FC<SmartOfflineIndicatorProps> = ({
       }
     });
     return () => {
-      clearHideTimer();
       unsubscribe();
     };
-  }, [clearHideTimer]);
-
-  useEffect(() => {
-    if (!isConnected || syncQueue.length > 0) {
-      animateIn();
-      return;
-    }
-    if (lastSyncTime) {
-      animateIn();
-      hideTimer.current = setTimeout(animateOut, theme.animation.verySlow);
-    }
-  }, [
-    animateIn,
-    animateOut,
-    isConnected,
-    lastSyncTime,
-    syncQueue.length,
-    theme.animation.verySlow,
-  ]);
+  }, []);
 
   const handleDismiss = useCallback(() => {
     animateOut();
@@ -167,11 +96,9 @@ export const SmartOfflineIndicator: React.FC<SmartOfflineIndicatorProps> = ({
 
   const handleSync = useCallback(() => {
     void haptics.impact("medium");
-    scale.value = isReducedMotion
-      ? 1
-      : withSpring(1, { damping: 16, stiffness: 300 });
+    handleScale();
     onManualSync?.();
-  }, [isReducedMotion, onManualSync, scale]);
+  }, [handleScale, onManualSync]);
 
   if (isConnected && syncQueue.length === 0 && !lastSyncTime) {
     return null;

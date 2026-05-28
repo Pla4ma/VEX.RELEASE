@@ -1,42 +1,18 @@
 import React from "react";
-import {
-  View,
-  StyleSheet,
-  Pressable,
-  StyleProp,
-  ViewStyle,
-  TextStyle,
-} from "react-native";
+import { View, Pressable } from "react-native";
 import { useTheme } from "../theme";
 import { Text } from "./primitives";
 import { Icon } from "../icons";
 import { createSheet } from "@/shared/ui/create-sheet";
-export interface BadgeProps {
-  children: string;
-  variant?:
-    | "default"
-    | "primary"
-    | "success"
-    | "warning"
-    | "error"
-    | "info"
-    | "secondary"
-    | "outline";
-  size?: "sm" | "md" | "lg";
-  leftIcon?: string;
-  rightIcon?: string;
-  onPress?: () => void;
-  onRemove?: () => void;
-  disabled?: boolean;
-  fullWidth?: boolean;
-  style?: StyleProp<ViewStyle>;
-  textStyle?: StyleProp<TextStyle>;
-}
-const sizeMap = {
-  sm: { paddingVertical: 2, paddingHorizontal: 6, fontSize: 10, iconSize: 10 },
-  md: { paddingVertical: 4, paddingHorizontal: 8, fontSize: 12, iconSize: 12 },
-  lg: { paddingVertical: 6, paddingHorizontal: 12, fontSize: 14, iconSize: 14 },
-};
+import {
+  type BadgeProps,
+  type SizeKey,
+  sizeMap,
+  getVariantStyles,
+} from "./badge-config";
+
+export type { BadgeProps } from "./badge-config";
+
 export const Badge: React.FC<BadgeProps> = ({
   children,
   variant = "default",
@@ -51,60 +27,9 @@ export const Badge: React.FC<BadgeProps> = ({
   textStyle,
 }) => {
   const { theme } = useTheme();
-  const sizeConfig = sizeMap[size];
-  const getVariantStyles = () => {
-    switch (variant) {
-      case "primary":
-        return {
-          backgroundColor: theme.colors.primary[100],
-          borderColor: theme.colors.primary[200],
-          textColor: theme.colors.primary[700],
-        };
-      case "success":
-        return {
-          backgroundColor: theme.colors.success.light + "30",
-          borderColor: theme.colors.success.DEFAULT + "40",
-          textColor: theme.colors.success.dark,
-        };
-      case "warning":
-        return {
-          backgroundColor: theme.colors.warning.light + "30",
-          borderColor: theme.colors.warning.DEFAULT + "40",
-          textColor: theme.colors.warning.dark,
-        };
-      case "error":
-        return {
-          backgroundColor: theme.colors.error.light + "30",
-          borderColor: theme.colors.error.DEFAULT + "40",
-          textColor: theme.colors.error.dark,
-        };
-      case "info":
-        return {
-          backgroundColor: theme.colors.info.light + "30",
-          borderColor: theme.colors.info.DEFAULT + "40",
-          textColor: theme.colors.info.dark,
-        };
-      case "secondary":
-        return {
-          backgroundColor: theme.colors.background.tertiary,
-          borderColor: theme.colors.border.DEFAULT,
-          textColor: theme.colors.text.secondary,
-        };
-      case "outline":
-        return {
-          backgroundColor: "transparent",
-          borderColor: theme.colors.border.strong,
-          textColor: theme.colors.text.primary,
-        };
-      default:
-        return {
-          backgroundColor: theme.colors.background.secondary,
-          borderColor: theme.colors.border.light,
-          textColor: theme.colors.text.primary,
-        };
-    }
-  };
-  const variantStyles = getVariantStyles();
+  const sizeConfig = sizeMap[size as SizeKey];
+  const variantStyles = getVariantStyles(variant, theme);
+
   const BadgeContent = (
     <View
       style={[
@@ -114,9 +39,7 @@ export const Badge: React.FC<BadgeProps> = ({
           borderColor: variantStyles.borderColor,
           borderWidth: variant === "outline" ? 1 : 0,
           paddingVertical: sizeConfig.paddingVertical,
-          paddingHorizontal: onRemove
-            ? sizeConfig.paddingHorizontal
-            : sizeConfig.paddingHorizontal,
+          paddingHorizontal: sizeConfig.paddingHorizontal,
           borderRadius: size === "sm" ? 4 : size === "md" ? 6 : 8,
         },
         fullWidth && styles.fullWidth,
@@ -173,6 +96,7 @@ export const Badge: React.FC<BadgeProps> = ({
       )}
     </View>
   );
+
   if (onPress || onRemove) {
     return (
       <Pressable
@@ -185,9 +109,7 @@ export const Badge: React.FC<BadgeProps> = ({
             borderColor: variantStyles.borderColor,
             borderWidth: variant === "outline" ? 1 : 0,
             paddingVertical: sizeConfig.paddingVertical,
-            paddingHorizontal: onRemove
-              ? sizeConfig.paddingHorizontal
-              : sizeConfig.paddingHorizontal,
+            paddingHorizontal: sizeConfig.paddingHorizontal,
             borderRadius: size === "sm" ? 4 : size === "md" ? 6 : 8,
           },
           fullWidth && styles.fullWidth,
@@ -251,6 +173,7 @@ export const Badge: React.FC<BadgeProps> = ({
   }
   return BadgeContent;
 };
+
 const styles = createSheet({
   container: {
     flexDirection: "row",
@@ -265,4 +188,5 @@ const styles = createSheet({
   removeButton: { marginLeft: 4, padding: 2 },
   disabled: { opacity: 0.5 },
 });
+
 export default Badge;

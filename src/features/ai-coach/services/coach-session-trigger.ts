@@ -1,69 +1,27 @@
 import { eventBus } from "../../../events";
 import { capture } from "@/shared/analytics";
 import { CoachEvents } from "@/shared/analytics/analytics-events";
-import { getPersonalizedContext } from "./coach-memory";
 import { createDebugger } from "../../../utils/debug";
+import type { CoachSessionConfig, SessionTriggerResult } from "./coach-session-types";
+import {
+  toAnalyticsDifficulty,
+  toAnalyticsSessionType,
+} from "./coach-session-types";
+
+export type { CoachSessionConfig, SessionTriggerResult } from "./coach-session-types";
+export {
+  toAnalyticsDifficulty,
+  toAnalyticsSessionType,
+} from "./coach-session-types";
+export {
+  getStreakProtectionConfig,
+  getComebackBuilderConfig,
+  getOptimalTimeConfig,
+  getCoachRecommendedConfig,
+} from "./coach-session-configs";
+
 const debug = createDebugger("ai-coach:session-trigger");
-export interface CoachSessionConfig {
-  duration: number;
-  difficulty: "EASY" | "NORMAL" | "CHALLENGING" | "PUSH";
-  sessionType: "FOCUS" | "BOSS_BATTLE" | "CHALLENGE" | "FREE";
-  source:
-    | "COACH_RECOMMENDATION"
-    | "STREAK_PROTECTION"
-    | "COMEBACK_BUILDER"
-    | "OPTIMAL_TIME";
-  context: {
-    coachReasoning: string;
-    userStreakDays?: number;
-    isStreakAtRisk?: boolean;
-    isComebackMode?: boolean;
-    optimalTimeWindow?: boolean;
-  };
-}
-export interface SessionTriggerResult {
-  success: boolean;
-  sessionId?: string;
-  config: CoachSessionConfig;
-  error?: string;
-}
-function toAnalyticsDifficulty(
-  difficulty: CoachSessionConfig["difficulty"],
-): "easy" | "medium" | "hard" {
-  if (difficulty === "EASY") {
-    return "easy";
-  }
-  if (difficulty === "PUSH" || difficulty === "CHALLENGING") {
-    return "hard";
-  }
-  return "medium";
-}
-function toAnalyticsSessionType(
-  sessionType: CoachSessionConfig["sessionType"],
-): "focus" | "challenge" | "boss" {
-  if (sessionType === "CHALLENGE") {
-    return "challenge";
-  }
-  if (sessionType === "BOSS_BATTLE") {
-    return "boss";
-  }
-  return "focus";
-}
-export function getStreakProtectionConfig(userId: string): CoachSessionConfig {
-  const context = getPersonalizedContext(userId);
-  const preferredDuration = (context.preferredDuration as number) || 25;
-  return {
-    duration: Math.min(preferredDuration, 20),
-    difficulty: "EASY",
-    sessionType: "FOCUS",
-    source: "STREAK_PROTECTION",
-    context: {
-      coachReasoning: `Quick ${Math.min(preferredDuration, 20)}-minute session to protect your streak. Based on your history, you can absolutely do this.`,
-      userStreakDays: context.personalBestStreak as number,
-      isStreakAtRisk: true,
-    },
-  };
-}
+
 export async function startStreakAtRiskSession(
   userId: string,
   hoursRemaining: number,
@@ -129,52 +87,7 @@ export async function startStreakAtRiskSession(
     };
   }
 }
-export function getComebackBuilderConfig(userId: string): CoachSessionConfig {
-  const context = getPersonalizedContext(userId);
-  const comebackCount = (context.comebackCount as number) || 0;
-  return {
-    duration: 25,
-    difficulty: "NORMAL",
-    sessionType: "FOCUS",
-    source: "COMEBACK_BUILDER",
-    context: {
-      coachReasoning:
-        comebackCount > 0
-          ? `Comeback #${comebackCount + 1} starts now. 25 minutes to rebuild momentum.`
-          : "Fresh start time. 25 minutes to begin your new streak. You've got this!",
-      isComebackMode: true,
-    },
-  };
-}
-export function getOptimalTimeConfig(userId: string): CoachSessionConfig {
-  const context = getPersonalizedContext(userId);
-  const productiveTime = context.productiveTimeOfDay as string;
-  const preferredDuration = (context.preferredDuration as number) || 25;
-  return {
-    duration: preferredDuration,
-    difficulty: "CHALLENGING",
-    sessionType: "FOCUS",
-    source: "OPTIMAL_TIME",
-    context: {
-      coachReasoning: productiveTime
-        ? `It's your power time (${productiveTime})! A ${preferredDuration}-minute session now will be incredibly productive.`
-        : `Your optimal focus window is open! Based on your patterns, a ${preferredDuration}-minute session would be perfect right now.`,
-      optimalTimeWindow: true,
-    },
-  };
-}
-export function getCoachRecommendedConfig(
-  userId: string,
-  recommendation: { duration: number; difficulty: string; reasoning: string },
-): CoachSessionConfig {
-  return {
-    duration: recommendation.duration,
-    difficulty: recommendation.difficulty as CoachSessionConfig["difficulty"],
-    sessionType: "FOCUS",
-    source: "COACH_RECOMMENDATION",
-    context: { coachReasoning: recommendation.reasoning },
-  };
-}
+
 export async function triggerCoachSession(
   userId: string,
   config: CoachSessionConfig,
@@ -204,6 +117,7 @@ export async function triggerCoachSession(
     return { success: false, config, error: err.message };
   }
 }
+
 export async function handleCoachCta(
   userId: string,
   ctaType: "start_session" | "view_streak" | "view_progress",
@@ -237,6 +151,7 @@ export async function handleCoachCta(
       debug.warn("Unknown CTA type: %s", ctaType);
   }
 }
+
 export function trackCoachCtaEffectiveness(
   sessionId: string,
   config: CoachSessionConfig,
@@ -253,6 +168,7 @@ export function trackCoachCtaEffectiveness(
     conversion_rate: sessionCompleted ? 1 : 0,
   });
 }
+
 export function getCoachCtaStats(userId: string): {
   totalCtAsClicked: number;
   sessionsStarted: number;

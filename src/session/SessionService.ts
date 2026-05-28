@@ -7,38 +7,32 @@ import { getSessionEventEmitter } from "./SessionEventEmitter";
 import { getRewardAdapter } from "./integration/RewardAdapter";
 import { getPresetService } from "./presets";
 import { SessionMode } from "./modes";
+import { SessionServiceQueries } from "./SessionServiceQueries";
 import type {
   SessionState,
   SessionConfig,
   SessionPreset,
   SessionSummary,
-  SessionHistoryEntry,
 } from "./types";
-import type {
-  SessionServiceOptions,
-  SessionStatsResult,
-  CreateCustomPresetInput,
-} from "./session-service-types";
+import type { SessionServiceOptions } from "./session-service-types";
 import { createDebugger } from "../utils/debug";
 
 const debug = createDebugger("session:service");
 
-export type {
-  SessionServiceOptions,
-  SessionStatsResult,
-  CreateCustomPresetInput,
-};
+export type { SessionServiceOptions };
+export { SessionServiceQueries };
 
-export class SessionService {
+export class SessionService extends SessionServiceQueries {
   private userId: string | null = null;
-  private orchestrator: SessionOrchestrator;
-  private repository = getSessionRepository();
-  private eventEmitter = getSessionEventEmitter();
+  protected orchestrator: SessionOrchestrator;
+  protected repository = getSessionRepository();
+  protected eventEmitter = getSessionEventEmitter();
   private rewardAdapter = getRewardAdapter();
-  private presetService = getPresetService();
+  protected presetService = getPresetService();
   private options: SessionServiceOptions;
 
   constructor(options: SessionServiceOptions = {}) {
+    super();
     this.options = {
       autoSave: true,
       enableNotifications: true,
@@ -150,80 +144,27 @@ export class SessionService {
   abandonSession(reason?: string): Promise<void> {
     return this.orchestrator.abandonSession(reason);
   }
+
   backgroundSession(): Promise<void> {
     return this.orchestrator.backgroundSession();
   }
+
   foregroundSession(): Promise<void> {
     return this.orchestrator.foregroundSession();
   }
+
   applyStudyQuizBonus(correctAnswers: number): void {
     this.orchestrator.applyStudyQuizBonus(correctAnswers);
   }
+
   completeSession(): Promise<SessionSummary> {
     return this.orchestrator.completeSession();
   }
+
   attemptRecovery(
     recoveryType: "USER_RESUME" | "STREAK_SAVE" | "PARTIAL_CREDIT",
   ): Promise<boolean> {
     return this.orchestrator.attemptRecovery(recoveryType);
-  }
-  getCurrentSession(): SessionState | null {
-    return this.orchestrator.getSession();
-  }
-  getActiveSession(): Promise<SessionState | null> {
-    return this.repository.getActiveSession();
-  }
-  isSessionActive(): boolean {
-    return this.orchestrator.isSessionActive();
-  }
-  isSessionPaused(): boolean {
-    return this.orchestrator.isPaused();
-  }
-  getRemainingSeconds(): number {
-    return this.orchestrator.getRemainingSeconds();
-  }
-  getElapsedSeconds(): number {
-    return this.orchestrator.getElapsedSeconds();
-  }
-  getCompletionPercentage(): number {
-    return this.orchestrator.getPercentageComplete();
-  }
-  getCurrentPurityScore(): number {
-    return this.orchestrator.getCurrentPurityScore();
-  }
-  getPurityLabel(): "Elite" | "Good" | "Okay" | "Distracted" {
-    return this.orchestrator.getPurityLabel();
-  }
-  getSessionHistory(limit: number = 100): Promise<SessionHistoryEntry[]> {
-    return this.repository.getSessionHistory(limit);
-  }
-  getSessionById(sessionId: string): Promise<SessionHistoryEntry | null> {
-    return this.repository.getSessionById(sessionId);
-  }
-  getSessionSummary(sessionId: string): Promise<SessionSummary | null> {
-    return this.repository.getSessionSummary(sessionId);
-  }
-  getAllSummaries(): Promise<SessionSummary[]> {
-    return this.repository.getAllSummaries();
-  }
-  getSessionStats(): Promise<SessionStatsResult> {
-    return this.repository.getSessionStats();
-  }
-  getAllPresets(): SessionPreset[] {
-    return this.presetService.getAllPresets();
-  }
-  getPresetById(presetId: string): SessionPreset | undefined {
-    return this.presetService.getPresetById(presetId);
-  }
-
-  async createCustomPreset(
-    config: CreateCustomPresetInput,
-  ): Promise<SessionPreset> {
-    return this.presetService.createCustomPreset(config);
-  }
-
-  async deletePreset(presetId: string): Promise<void> {
-    return this.presetService.deletePreset(presetId);
   }
 
   private trackAnalytics(
@@ -247,7 +188,6 @@ export function createSessionService(
 ): SessionService {
   return new SessionService(options);
 }
-
 let serviceInstance: SessionService | null = null;
 export function getSessionService(
   options?: SessionServiceOptions,

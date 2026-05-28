@@ -1,22 +1,13 @@
-import { useMemo, useRef, useCallback } from "react";
-import {
-  useActiveChallenges,
-  useClaimChallengeReward,
-} from "../../../features/challenges/hooks";
-import { useFreezeStreak } from "../../../features/streaks/hooks";
+import { useMemo, useRef } from "react";
+import { useActiveChallenges } from "../../../features/challenges/hooks";
 import { useSavedTomorrowPreview } from "../../../features/home-spine/hooks";
 import { useActiveIntervention } from "../../../features/ai-coach/hooks";
 import { useNotificationBadge } from "../../../features/notifications/components/NotificationBadge";
 import { useToast } from "../../../shared/ui/components/Toast";
 import type { HomeController } from "./home-controller-types";
-import type {
-  ChallengeItem,
-  SessionListItem,
-} from "../../../features/home-spine/components";
-import {
-  getQualityGrade,
-  getHomeCompanionMood,
-} from "../../../screens/home/utils";
+import type { ChallengeItem, SessionListItem } from "../../../features/home-spine/components";
+import { getQualityGrade, getHomeCompanionMood } from "../../../screens/home/utils";
+import { useHomeDataHandlers } from "./useHomeDataHandlers";
 
 interface UseHomeDataInput {
   controller: HomeController;
@@ -28,8 +19,6 @@ export function useHomeData(input: UseHomeDataInput) {
   const challengesQuery = useActiveChallenges(controller.userId, {
     enabled: controller.runtime.canQueryChallenges,
   });
-  const claimRewardMutation = useClaimChallengeReward();
-  const freezeStreakMutation = useFreezeStreak();
   const {
     intervention,
     isLoading: interventionLoading,
@@ -171,71 +160,13 @@ export function useHomeData(input: UseHomeDataInput) {
       ),
     [controller.currentStreak, controller.historyQuery.history],
   );
-  const handleClaimReward = useCallback(
-    (challengeId: string) => {
-      if (!controller.userId) {
-        showToast({
-          type: "error",
-          title: "Sign in required",
-          message: "You need an active profile to claim challenge rewards.",
-        });
-        return;
-      }
-      claimRewardMutation.mutate(
-        { userId: controller.userId, challengeId },
-        {
-          onSuccess: (result: {
-            rewards: Array<{ amount: number; type: string }>;
-          }) => {
-            const rewardText = result.rewards
-              .map((reward) => `+${reward.amount} ${reward.type}`)
-              .join(", ");
-            showToast({
-              type: "success",
-              title: `Reward claimed! ${rewardText}`,
-            });
-          },
-          onError: (error: unknown) => {
-            showToast({
-              type: "error",
-              title: "Reward claim failed",
-              message:
-                error instanceof Error
-                  ? error.message
-                  : "Try again when your connection is stable.",
-              action: {
-                label: "Retry",
-                onPress: () => handleClaimReward(challengeId),
-              },
-            });
-          },
-        },
-      );
-    },
-    [claimRewardMutation, controller.userId, showToast],
-  );
-  const handleFreezeStreak = useCallback(() => {
-    if (!controller.userId) return;
-    freezeStreakMutation.mutate(controller.userId, {
-      onSuccess: () => {
-        showToast({
-          type: "success",
-          title: "Streak protected",
-          message: "Your streak freeze is active for today.",
-        });
-      },
-      onError: (error: unknown) => {
-        showToast({
-          type: "error",
-          title: "Could not freeze streak",
-          message:
-            error instanceof Error
-              ? error.message
-              : "Try again before your streak expires.",
-        });
-      },
-    });
-  }, [controller.userId, freezeStreakMutation, showToast]);
+
+  const {
+    claimRewardMutation,
+    freezeStreakMutation,
+    handleClaimReward,
+    handleFreezeStreak,
+  } = useHomeDataHandlers(controller, showToast);
 
   return {
     controller,

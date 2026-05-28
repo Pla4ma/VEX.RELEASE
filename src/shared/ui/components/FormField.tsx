@@ -1,11 +1,5 @@
 import React, { useCallback, useState } from "react";
-import {
-  TextInput,
-  View,
-  type TextInputProps,
-  type TextStyle,
-  type ViewStyle,
-} from "react-native";
+import { TextInput, View } from "react-native";
 import Animated, {
   useAnimatedStyle,
   withTiming,
@@ -19,59 +13,11 @@ import {
   type FormSectionProps,
   InputGroup,
 } from "./FormFieldParts";
-
-export type FieldSize = "sm" | "md" | "lg";
-export type FieldState =
-  | "default"
-  | "focused"
-  | "error"
-  | "success"
-  | "disabled"
-  | "loading";
-
-export interface FormFieldProps extends Omit<TextInputProps, "style"> {
-  label?: string;
-  placeholder?: string;
-  error?: string;
-  successMessage?: string;
-  helperText?: string;
-  state?: FieldState;
-  required?: boolean;
-  disabled?: boolean;
-  loading?: boolean;
-  showCounter?: boolean;
-  maxLength?: number;
-  size?: FieldSize;
-  leftIcon?: string;
-  rightIcon?: string;
-  containerStyle?: ViewStyle;
-  inputStyle?: TextStyle;
-  accessibilityLabel?: string;
-  accessibilityHint?: string;
-  onValidate?: (value: string) => string | null;
-  onChangeText?: (text: string) => void;
-}
-
-const sizeConfig = {
-  sm: {
-    paddingVertical: 10,
-    paddingHorizontal: 12,
-    fontSize: 14,
-    minHeight: 44,
-  },
-  md: {
-    paddingVertical: 13,
-    paddingHorizontal: 16,
-    fontSize: 16,
-    minHeight: 52,
-  },
-  lg: {
-    paddingVertical: 16,
-    paddingHorizontal: 18,
-    fontSize: 17,
-    minHeight: 58,
-  },
-};
+import {
+  type FieldState,
+  type FormFieldProps,
+  sizeConfig,
+} from "./FormFieldTypes";
 
 export const FormField: React.FC<FormFieldProps> = ({
   label,
@@ -105,29 +51,17 @@ export const FormField: React.FC<FormFieldProps> = ({
   const effectiveValue = value ?? internalValue;
   const state: FieldState =
     propState ??
-    (loading
-      ? "loading"
-      : disabled
-        ? "disabled"
-        : error || internalError
-          ? "error"
-          : successMessage
-            ? "success"
-            : isFocused
-              ? "focused"
-              : "default");
+    (loading ? "loading" : disabled ? "disabled" : error || internalError
+      ? "error"
+      : successMessage ? "success" : isFocused ? "focused" : "default");
   const semantic = theme.colors.semantic;
   const config = sizeConfig[size];
-
   const validate = useCallback(
     (text: string) => {
-      if (onValidate) {
-        setInternalError(onValidate(text));
-      }
+      if (onValidate) setInternalError(onValidate(text));
     },
     [onValidate],
   );
-
   const handleChangeText = useCallback(
     (text: string) => {
       setInternalValue(text);
@@ -261,5 +195,5 @@ export const FormField: React.FC<FormFieldProps> = ({
 };
 
 export { FormSection, InputGroup };
-export type { FormSectionProps };
+export type { FormSectionProps, FormFieldProps };
 export default FormField;

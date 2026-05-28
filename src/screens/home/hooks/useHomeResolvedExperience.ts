@@ -6,14 +6,8 @@ import {
 } from "../../../features/personalization";
 import { useFirstWeekExperience } from "../../../features/personalization/useFirstWeekExperience";
 import {
-  getBehaviorSignals,
   recordBehaviorSignal,
 } from "../../../features/personalization/behavior-signal-store";
-import { resolveUserBehaviorSignals } from "../../../features/personalization/behavior-resolver";
-import type {
-  BehaviorSignal,
-  BehaviorResolverInput,
-} from "../../../features/personalization/behavior-signal-schemas";
 import type { BehaviorStats } from "../../../features/personalization/schemas";
 import type { HomeController } from "./home-controller-types";
 import { useHomeLaneProfile } from "./useHomeLaneProfile";
@@ -28,18 +22,12 @@ import {
   normalizeMotivationStyle,
   resolvePrimaryGoal,
   computeDaysSinceTimestamp,
-  computeCompletedDurations,
-  computeAbandonedDurations,
-  computePreferredMode,
-  computeBestTimeOfDay,
-  computeStudyUsageRatio,
-  computeCoachInteractions,
-  computeComebackSessions,
 } from "./home-experience-utils";
 import {
   resolveGamificationIntensity,
   resolveUserStage,
 } from "./useHomeExperienceTypes";
+import { useHomeBehaviorStats } from "./useHomeBehaviorStats";
 
 export { recordBehaviorSignal };
 
@@ -62,9 +50,6 @@ export function useHomeResolvedExperience(
     ?.data as ActiveBossData | null;
   const activeStudyPlanData = controller.activeStudyPlanQuery
     ?.data as ActiveStudyPlanData | null;
-  const hasActiveBoss = activeBossData != null;
-  const hasActiveStudyPlan = activeStudyPlanData != null;
-  const hasActiveRecommendation = Boolean(controller.primaryRecommendation);
 
   const startedAt = useOnboardingStore.getState().startedAt;
   const daysSinceOnboarding =
@@ -93,83 +78,15 @@ export function useHomeResolvedExperience(
     study: Boolean(features.content_study?.isUnlocked),
   };
 
-  const resolvedBehaviorSignals = useMemo(() => {
-    const recentSignals: BehaviorSignal[] = getBehaviorSignals(
-      controller.userId,
-      {
-        maxAgeMs: 7 * 24 * 60 * 60 * 1000,
-        maxSignals: 20,
-      },
-    );
-    const studySessionCount = completedSessions.filter(
-      (s) =>
-        s.mode === "STUDY" ||
-        s.config?.sessionMode === "STUDY" ||
-        Boolean(s.config?.studyPlanId),
-    ).length;
-    const deepWorkCount = completedSessions.filter(
-      (s) => s.mode === "DEEP_WORK" || s.config?.sessionMode === "DEEP_WORK",
-    ).length;
-    const learningCount = 0;
-    const creativeCount = completedSessions.filter(
-      (s) => s.mode === "CREATIVE" || s.config?.sessionMode === "CREATIVE",
-    ).length;
-
-    const resolverInput: BehaviorResolverInput = {
-      recentSignals,
-      recentSessions: {
-        completedSessions: completedSessions.length,
-        studySessions: studySessionCount,
-        deepWorkSessions: deepWorkCount,
-        learningSessions: learningCount,
-        creativeSessions: creativeCount,
-        totalSessions: sessionHistory.length,
-        preferredMode: computePreferredMode(completedSessions),
-        bestTimeOfDay: computeBestTimeOfDay(completedSessions),
-      },
-      firstWeekExperience: {
-        stage:
-          totalCompletedSessions === 0 ? "DAY_0_NOT_STARTED" : "POST_DAY_7",
-        isDayZero: totalCompletedSessions === 0,
-      },
-    };
-    return resolveUserBehaviorSignals(resolverInput);
-  }, [
-    controller.userId,
+  const { behaviorStats, resolvedBehaviorSignals } = useHomeBehaviorStats({
+    userId: controller.userId,
+    totalCompletedSessions,
     completedSessions,
+    abandonedSessions,
     sessionHistory,
-    totalCompletedSessions,
-  ]);
-
-  const behaviorStats: BehaviorStats = {
-    totalCompletedSessions,
-    abandonedSessionDurations: computeAbandonedDurations(abandonedSessions),
-    bossChallengeEngagement: resolvedBehaviorSignals.bossEngagement as
-      | "none"
-      | "low"
-      | "medium"
-      | "high",
-    coachInteractions: Math.max(
-      computeCoachInteractions(controller),
-      resolvedBehaviorSignals.coachInteractions,
-    ),
-    comebackSessions: computeComebackSessions(controller),
-    completedSessionDurations: computeCompletedDurations(completedSessions),
-    completionStreak: controller.currentStreak,
-    ignoredFeatures: resolvedBehaviorSignals.ignoredFeatures,
-    mostSuccessfulTimeOfDay:
-      resolvedBehaviorSignals.mostSuccessfulTimeOfDay ??
-      computeBestTimeOfDay(completedSessions),
-    preferredSessionMode:
-      (resolvedBehaviorSignals.preferredSessionMode as
-        | BehaviorStats["preferredSessionMode"]
-        | null) ?? computePreferredMode(completedSessions),
-    premiumFeatureAttempts: resolvedBehaviorSignals.premiumFeatureAttempts,
-    studyUsageRatio:
-      resolvedBehaviorSignals.studyUsageRatio > 0
-        ? resolvedBehaviorSignals.studyUsageRatio
-        : computeStudyUsageRatio(completedSessions, totalCompletedSessions),
-  };
+    currentStreak: controller.currentStreak,
+    controller,
+  });
 
   const vexInput: VexExperienceRuntimeInput = {
     behaviorStats,

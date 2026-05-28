@@ -1,7 +1,7 @@
 /**
- * TASK 3 — FirstWeekExperience product journey tests
+ * FirstWeekExperience — early journey tests (Day 0–5, Comeback)
  *
- * Verifies first-week arc across all user types and stages.
+ * Verifies first-week arc stages and early user types.
  */
 import { computeFirstWeekRuntime } from "../useFirstWeekExperienceRuntime";
 import type { FirstWeekRuntimeInput } from "../useFirstWeekExperienceRuntime";
@@ -23,7 +23,7 @@ function baseInput(
   };
 }
 
-describe("FirstWeekExperience product journey", () => {
+describe("FirstWeekExperience — early journey", () => {
   describe("Day 0", () => {
     it("Day 0 calm user — Start First Session primary, boss hidden", () => {
       const result = computeFirstWeekRuntime(
@@ -129,27 +129,6 @@ describe("FirstWeekExperience product journey", () => {
     });
   });
 
-  describe("Day 7 deeper mode", () => {
-    it("Day 7 — weekly insight + premium value moment", () => {
-      const result = computeFirstWeekRuntime(
-        baseInput({
-          completedSessions: 7,
-          daysSinceOnboarding: 7,
-          daysSinceLastSession: 0,
-          featureAvailable: {
-            boss: true,
-            premium: true,
-            social: false,
-            study: true,
-          },
-        }),
-      );
-
-      expect(result.currentDayStage).toBe("DAY_7_DEEPER_MODE");
-      expect(result.premiumMoment).toBe("weekly_value");
-    });
-  });
-
   describe("Comeback user", () => {
     it("missed several days — comeback state activated", () => {
       const result = computeFirstWeekRuntime(
@@ -163,98 +142,6 @@ describe("FirstWeekExperience product journey", () => {
       expect(result.comebackState).toBe("missed_week");
       expect(result.coachMessageType).toBe("comeback");
       expect(result.allowedHomeSurfaces).toContain("recovery_cta");
-    });
-  });
-
-  describe("Premium gating", () => {
-    it("premium unavailable — premiumMoment is none", () => {
-      const result = computeFirstWeekRuntime(
-        baseInput({
-          completedSessions: 7,
-          daysSinceOnboarding: 7,
-          featureAvailable: {
-            boss: true,
-            premium: false,
-            social: false,
-            study: true,
-          },
-        }),
-      );
-
-      expect(result.premiumMoment).toBe("none");
-    });
-
-    it("premium configured but not active — premium moment follows stage", () => {
-      const result = computeFirstWeekRuntime(
-        baseInput({
-          completedSessions: 5,
-          daysSinceOnboarding: 5,
-          isPremium: false,
-          featureAvailable: {
-            boss: true,
-            premium: true,
-            social: false,
-            study: true,
-          },
-        }),
-      );
-
-      expect(result.premiumMoment).toBe("soft_tease");
-    });
-  });
-
-  describe("Boss gating", () => {
-    it("boss unavailable — bossIntensity hidden", () => {
-      const result = computeFirstWeekRuntime(
-        baseInput({
-          motivationStyle: "game_like",
-          completedSessions: 5,
-          featureAvailable: {
-            boss: false,
-            premium: true,
-            social: false,
-            study: true,
-          },
-        }),
-      );
-
-      expect(result.bossIntensity).toBe("hidden");
-    });
-
-    it("minimal user — boss stays hidden", () => {
-      const result = computeFirstWeekRuntime(
-        baseInput({
-          motivationStyle: "calm",
-          completedSessions: 5,
-          featureAvailable: {
-            boss: true,
-            premium: true,
-            social: false,
-            study: true,
-          },
-        }),
-      );
-
-      expect(result.bossIntensity).toBe("hidden");
-    });
-  });
-
-  describe("Content study gating", () => {
-    it("study degraded — study surfaces may be limited", () => {
-      const result = computeFirstWeekRuntime(
-        baseInput({
-          motivationStyle: "study_focused",
-          completedSessions: 5,
-          featureAvailable: {
-            boss: true,
-            premium: true,
-            social: false,
-            study: false,
-          },
-        }),
-      );
-
-      expect(result.currentDayStage).toBe("DAY_5_PATH_FORMING");
     });
   });
 });
