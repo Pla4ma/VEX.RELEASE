@@ -7,7 +7,7 @@ import {
   getCompanionBonuses,
   canUseSpecialAbility,
   useSpecialAbility,
-} from "../service";
+} from "../companion-profile-ops";
 import { getEconomyService } from "../../../economy/EconomyService";
 import { getDefaultStorageAdapter } from "../../../persistence/MMKVStorageAdapter";
 jest.mock("../../../economy/EconomyService");
