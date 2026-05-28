@@ -3,8 +3,9 @@ import {
   MessageCategorySchema,
   TriggerTypeSchema,
   CoachUserStateSchema,
-  BehaviorSignalDetectedEventSchema,
-} from "./event-schemas";
+
+} from "./schemas";
+import { BehaviorSignalDetectedEventSchema } from "./event-schemas";
 import type {
   CoachMessageGeneratedEvent,
   CoachStateChangedEvent,
@@ -12,7 +13,7 @@ import type {
   ComebackActivatedEvent,
   BehaviorSignalDetectedEvent,
   InterventionTriggeredEvent,
-} from "./event-schemas";
+} from "./schemas";
 
 export function createCoachMessageGeneratedEvent(
   userId: string,
