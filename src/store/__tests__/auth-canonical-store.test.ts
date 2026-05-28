@@ -33,11 +33,14 @@ jest.mock("../../shared/monetization/revenuecat-service", () => ({
 }));
 jest.mock("../../persistence/SecureStorage", () => ({
   getSecureStorage: () => ({
+    getItem: jest.fn().mockResolvedValue(null),
     removeItem: jest.fn().mockResolvedValue(undefined),
+    setItem: jest.fn().mockResolvedValue(undefined),
   }),
   SecureStorageKeys: {
     AUTH_TOKEN: "vex_auth_token",
     REFRESH_TOKEN: "vex_refresh_token",
+    USER_PROFILE: "vex_user_profile",
   },
 }));
 jest.mock("../../persistence/MMKVStorageAdapter", () => ({
@@ -54,11 +57,7 @@ jest.mock("../../services/streakService", () => ({
   streakService: { reset: jest.fn(), setUserId: jest.fn() },
 }));
 jest.mock("../../utils/debug", () => ({
-  createDebugger: () => ({
-    error: jest.fn(),
-    info: jest.fn(),
-    warn: jest.fn(),
-  }),
+  createDebugger: () => ({ error: jest.fn(), info: jest.fn(), warn: jest.fn() }),
 }));
 
 const mockUser: User = {
@@ -149,10 +148,7 @@ describe("canonical auth store", () => {
         .loginWithCredentials("test@example.com", "password"),
     ).resolves.toBe(true);
 
-    expect(signInWithEmail).toHaveBeenCalledWith(
-      "test@example.com",
-      "password",
-    );
+    expect(signInWithEmail).toHaveBeenCalledWith("test@example.com", "password");
     expect(setSentryUser).toHaveBeenCalledWith(
       mockUser.id,
       mockUser.email,

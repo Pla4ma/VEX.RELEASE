@@ -85,13 +85,13 @@ export async function syncQuotaToSupabase(
 ): Promise<void> {
   try {
     const { error } = await getSupabaseClient()
-      .from("ai_quota_log" as never)
+      .from("ai_quota_log")
       .insert({
         user_id: userId,
         category,
         token_count: record.tokenCount,
         created_at: new Date(record.timestamp).toISOString(),
-      } as never);
+      });
     if (error) {
       // Non-blocking — client-side MMKV is the source of truth
     }

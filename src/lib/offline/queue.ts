@@ -1,32 +1,17 @@
+import { z } from "zod";
+import { MMKVStorageAdapter } from "../../persistence/MMKVStorageAdapter";
 import { captureSilentFailure } from "../../utils/silent-failure";
 import { v4 } from "../../utils/uuid";
-import { z } from "zod";
-import {
-  getConnectionState,
-  subscribeToConnectionChanges,
-  type ConnectionState,
-} from "../repository/base";
+import { getConnectionState, subscribeToConnectionChanges } from "../repository/base";
+
+const OFFLINE_QUEUE_STORAGE_KEY = "offline_queue_v1";
+const offlineQueueStorage = new MMKVStorageAdapter("offline-queue");
+
 export const OfflineQueueEntrySchema = z
   .object({
     id: z.string().uuid(),
-    operation: z.enum([
-      "CREATE",
-      "UPDATE",
-      "DELETE",
-      "XP_ADD",
-      "REWARD_CLAIM",
-      "STREAK_RECORD",
-      "SESSION_COMPLETE",
-      "MEMORY_CREATE",
-    ]),
-    feature: z.enum([
-      "progression",
-      "streaks",
-      "rewards",
-      "boss",
-      "sessions",
-      "focus-memory",
-    ]),
+    operation: z.enum(["CREATE", "UPDATE", "DELETE", "XP_ADD", "REWARD_CLAIM", "STREAK_RECORD", "SESSION_COMPLETE", "MEMORY_CREATE"]),
+    feature: z.enum(["progression", "streaks", "rewards", "boss", "sessions", "focus-memory"]),
     payload: z.record(z.unknown()),
     idempotencyKey: z.string(),
     createdAt: z.number(),
@@ -37,194 +22,129 @@ export const OfflineQueueEntrySchema = z
     error: z.string().optional(),
   })
   .strict();
+
 export type OfflineQueueEntry = z.infer<typeof OfflineQueueEntrySchema>;
-export type OfflineQueueEntryInput = Omit<
-  OfflineQueueEntry,
-  "id" | "createdAt" | "retryCount" | "maxRetries" | "priority"
-> & {
-  retryCount?: number;
-  maxRetries?: number;
-  priority?: "high" | "normal" | "low";
-};
+export type OfflineQueueEntryInput = Omit<OfflineQueueEntry, "id" | "createdAt" | "retryCount" | "maxRetries" | "priority"> & { retryCount?: number; maxRetries?: number; priority?: "high" | "normal" | "low" | "critical" };
+
 const queue: OfflineQueueEntry[] = [];
 const processingSet = new Set<string>();
 const listeners: Set<(queue: OfflineQueueEntry[]) => void> = new Set();
-export function enqueue(entry: OfflineQueueEntryInput): OfflineQueueEntry {
-  const fullEntry: OfflineQueueEntry = {
-    ...entry,
-    retryCount: entry.retryCount ?? 0,
-    maxRetries: entry.maxRetries ?? 3,
-    priority: entry.priority ?? "normal",
-    id: v4(),
-    createdAt: Date.now(),
-  };
-  const existingIndex = queue.findIndex(
-    (e) => e.idempotencyKey === entry.idempotencyKey,
-  );
-  if (existingIndex >= 0) {
-    if (entry.payload && typeof entry.payload === "object") {
-      queue[existingIndex] = { ...queue[existingIndex]!, ...fullEntry };
-      notifyListeners();
-      return queue[existingIndex]!;
-    }
-    return queue[existingIndex]!;
+const processors: Map<string, QueueProcessor> = new Map();
+export function persistQueue(): void {
+  try {
+    offlineQueueStorage.setItemSync(OFFLINE_QUEUE_STORAGE_KEY, JSON.stringify(queue));
+  } catch (error) {
+    captureSilentFailure(error, { feature: "lib", operation: "offline-queue-persist", type: "data" });
   }
-  const priorityOrder: Record<string, number> = { high: 0, normal: 1, low: 2 };
-  const insertIndex = queue.findIndex(
-    (e) =>
-      priorityOrder[e.priority]! > priorityOrder[entry.priority || "normal"]!,
-  );
-  if (insertIndex === -1) {
-    queue.push(fullEntry);
-  } else {
-    queue.splice(insertIndex, 0, fullEntry);
+}
+export function loadQueue(): void {
+  const stored = offlineQueueStorage.getItemSync(OFFLINE_QUEUE_STORAGE_KEY);
+  queue.length = 0;
+  processingSet.clear();
+  if (!stored) { notifyListeners(); return; }
+  try {
+    const parsed: unknown = JSON.parse(stored);
+    if (!Array.isArray(parsed)) throw new Error("Offline queue storage is not an array");
+    for (const candidate of parsed) {
+      const result = OfflineQueueEntrySchema.safeParse(candidate);
+      if (result.success) queue.push(result.data);
+      else captureSilentFailure(result.error, { feature: "lib", operation: "offline-queue-load-entry", type: "data" });
+    }
+  } catch (error) {
+    captureSilentFailure(error, { feature: "lib", operation: "offline-queue-load", type: "data" });
   }
   notifyListeners();
-  return fullEntry;
+}
+loadQueue();
+export function enqueue(entry: OfflineQueueEntryInput): OfflineQueueEntry {
+  const fullEntry: OfflineQueueEntry = { ...entry, retryCount: entry.retryCount ?? 0, maxRetries: entry.maxRetries ?? 3, priority: entry.priority ?? "normal", id: v4(), createdAt: Date.now() };
+  const existingIndex = queue.findIndex((e) => e.idempotencyKey === entry.idempotencyKey);
+  if (existingIndex >= 0) {
+    queue[existingIndex] = { ...queue[existingIndex]!, ...fullEntry };
+    notifyListeners();
+    persistQueue();
+    return queue[existingIndex]!;
+  }
+  const priorityOrder: Record<OfflineQueueEntry["priority"], number> = { critical: 0, high: 1, normal: 2, low: 3 };
+  const insertIndex = queue.findIndex((e) => priorityOrder[e.priority] > priorityOrder[entry.priority ?? "normal"]);
+  if (insertIndex === -1) queue.push(fullEntry);
+  else queue.splice(insertIndex, 0, fullEntry);
+  notifyListeners(); persistQueue(); return fullEntry;
 }
 export function dequeue(entryId: string): OfflineQueueEntry | undefined {
   const index = queue.findIndex((e) => e.id === entryId);
-  if (index === -1) {
-    return undefined;
-  }
+  if (index === -1) return undefined;
   const entry = queue[index];
-  queue.splice(index, 1);
-  processingSet.delete(entryId);
-  notifyListeners();
+  queue.splice(index, 1); processingSet.delete(entryId); notifyListeners(); persistQueue();
   return entry;
 }
-export function getQueue(): readonly OfflineQueueEntry[] {
-  return Object.freeze([...queue]);
-}
-export function getQueueLength(): number {
-  return queue.length;
-}
+export function getQueue(): readonly OfflineQueueEntry[] { return Object.freeze([...queue]); }
+export function getQueueLength(): number { return queue.length; }
 export function clearQueue(): void {
-  queue.length = 0;
-  processingSet.clear();
-  notifyListeners();
+  queue.length = 0; processingSet.clear(); notifyListeners();
+  offlineQueueStorage.removeItemSync(OFFLINE_QUEUE_STORAGE_KEY);
 }
-export function updateEntry(
-  entryId: string,
-  updates: Partial<OfflineQueueEntry>,
-): void {
+export function updateEntry(entryId: string, updates: Partial<OfflineQueueEntry>): void {
   const index = queue.findIndex((e) => e.id === entryId);
-  if (index !== -1) {
-    queue[index] = { ...queue[index]!, ...updates };
-    notifyListeners();
-  }
+  if (index === -1) return;
+  queue[index] = { ...queue[index]!, ...updates };
+  notifyListeners(); persistQueue();
 }
 export function markProcessing(entryId: string): boolean {
-  if (processingSet.has(entryId)) {
-    return false;
-  }
-  processingSet.add(entryId);
-  return true;
+  if (processingSet.has(entryId)) return false;
+  processingSet.add(entryId); return true;
 }
-export function unmarkProcessing(entryId: string): void {
-  processingSet.delete(entryId);
-}
-export function isProcessing(entryId: string): boolean {
-  return processingSet.has(entryId);
-}
-export function subscribe(
-  callback: (queue: OfflineQueueEntry[]) => void,
-): () => void {
+export function unmarkProcessing(entryId: string): void { processingSet.delete(entryId); }
+export function isProcessing(entryId: string): boolean { return processingSet.has(entryId); }
+export function subscribe(callback: (queue: OfflineQueueEntry[]) => void): () => void {
   listeners.add(callback);
   return () => listeners.delete(callback);
 }
-function notifyListeners(): void {
-  const snapshot = [...queue];
-  listeners.forEach((cb) => cb(snapshot));
-}
+function notifyListeners(): void { const snapshot = [...queue]; listeners.forEach((cb) => cb(snapshot)); }
 export type QueueProcessor = (entry: OfflineQueueEntry) => Promise<void>;
-const processors: Map<string, QueueProcessor> = new Map();
-export function registerProcessor(
-  feature: string,
-  operation: string,
-  processor: QueueProcessor,
-): void {
+export function registerProcessor(feature: string, operation: string, processor: QueueProcessor): void {
   processors.set(`${feature}:${operation}`, processor);
 }
-export function unregisterProcessor(feature: string, operation: string): void {
-  processors.delete(`${feature}:${operation}`);
-}
+export function unregisterProcessor(feature: string, operation: string): void { processors.delete(`${feature}:${operation}`); }
 export async function processEntry(entry: OfflineQueueEntry): Promise<void> {
   const processor = processors.get(`${entry.feature}:${entry.operation}`);
-  if (!processor) {
-    throw new Error(
-      `No processor registered for ${entry.feature}:${entry.operation}`,
-    );
-  }
-  if (entry.dependsOn) {
-    const dependency = queue.find((e) => e.id === entry.dependsOn);
-    if (dependency) {
-      throw new Error(`Dependency not yet processed: ${entry.dependsOn}`);
-    }
-  }
-  if (!markProcessing(entry.id)) {
-    throw new Error(`Entry ${entry.id} is already being processed`);
-  }
+  if (!processor) throw new Error(`No processor registered for ${entry.feature}:${entry.operation}`);
+  if (entry.dependsOn && queue.find((e) => e.id === entry.dependsOn)) throw new Error(`Dependency not yet processed: ${entry.dependsOn}`);
+  if (!markProcessing(entry.id)) throw new Error(`Entry ${entry.id} is already being processed`);
   try {
     await processor(entry);
     dequeue(entry.id);
   } catch (error) {
     unmarkProcessing(entry.id);
-    const newRetryCount = entry.retryCount + 1;
-    if (newRetryCount >= entry.maxRetries) {
-      updateEntry(entry.id, {
-        retryCount: newRetryCount,
-        error: error instanceof Error ? error.message : "Unknown error",
-      });
-    } else {
-      updateEntry(entry.id, {
-        retryCount: newRetryCount,
-        error: error instanceof Error ? error.message : "Unknown error",
-      });
-    }
+    updateEntry(entry.id, { retryCount: entry.retryCount + 1, error: error instanceof Error ? error.message : "Unknown error" });
     throw error;
   }
 }
 let autoProcessInterval: ReturnType<typeof setInterval> | null = null;
 let isAutoProcessingEnabled = false;
 export function startAutoProcessing(intervalMs: number = 5000): void {
-  if (isAutoProcessingEnabled) {
-    return;
-  }
+  if (isAutoProcessingEnabled) return;
   isAutoProcessingEnabled = true;
-  if (getConnectionState() === "online") {
-    processQueue();
-  }
+  if (getConnectionState() === "online") void processQueue();
   subscribeToConnectionChanges((state) => {
-    if (state === "online") {
-      processQueue();
-    }
+    if (state === "online") void processQueue();
   });
   autoProcessInterval = setInterval(() => {
-    if (getConnectionState() === "online" && queue.length > 0) {
-      processQueue();
-    }
+    if (getConnectionState() === "online" && queue.length > 0) void processQueue();
   }, intervalMs);
 }
 export function stopAutoProcessing(): void {
   isAutoProcessingEnabled = false;
-  if (autoProcessInterval) {
-    clearInterval(autoProcessInterval);
-    autoProcessInterval = null;
-  }
+  if (autoProcessInterval) clearInterval(autoProcessInterval);
+  autoProcessInterval = null;
 }
 async function processQueue(): Promise<void> {
   pruneExpiredEntries();
-  const entriesToProcess = queue.filter((e) => !isProcessing(e.id));
-  for (const entry of entriesToProcess) {
+  for (const entry of queue.filter((e) => !isProcessing(e.id))) {
     try {
       await processEntry(entry);
     } catch (error) {
-      captureSilentFailure(error, {
-        feature: "lib",
-        operation: "network-fallback",
-        type: "network",
-      });
+      captureSilentFailure(error, { feature: "lib", operation: "network-fallback", type: "network" });
     }
   }
 }
@@ -253,11 +173,10 @@ export function pruneExpiredEntries(): void {
   const cutoff = Date.now() - OFFLINE_QUEUE_TTL_MS;
   const before = queue.length;
   for (let i = queue.length - 1; i >= 0; i -= 1) {
-    if (queue[i]!.createdAt < cutoff) {
-      queue.splice(i, 1);
-    }
+    if (queue[i]!.createdAt < cutoff) queue.splice(i, 1);
   }
   if (queue.length < before) {
     notifyListeners();
+    persistQueue();
   }
 }

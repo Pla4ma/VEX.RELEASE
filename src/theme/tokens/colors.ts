@@ -244,3 +244,52 @@ export function getColors(
   }
   return highContrast ? highContrastLightColors : lightColors;
 }
+
+export const accessibilityPalette = {
+  neutral: {
+    primary: "#0066CC",
+    secondary: "#00AA66",
+    success: "#00AA66",
+    warning: "#FF6600",
+    error: "#CC0033",
+    info: "#0066CC",
+    accent: "#FF6600",
+    background: "#FFFFFF",
+    text: "#000000",
+  },
+  deuteranopia: {
+    primary: "#0066CC",
+    secondary: "#FF6600",
+    success: "#0066CC",
+    warning: "#FF6600",
+    error: "#AA00AA",
+    info: "#0066CC",
+    accent: "#AA00AA",
+    background: "#FFFFFF",
+    text: "#000000",
+  },
+  tritanopia: {
+    primary: "#CC0066",
+    secondary: "#FF6600",
+    success: "#00AA66",
+    warning: "#FF6600",
+    error: "#CC0066",
+    info: "#CC0066",
+    accent: "#00AA66",
+    background: "#FFFFFF",
+    text: "#000000",
+  },
+  achromatopsia: {
+    primary: "#333333",
+    secondary: "#666666",
+    success: "#333333",
+    warning: "#666666",
+    error: "#000000",
+    info: "#333333",
+    accent: "#999999",
+    background: "#FFFFFF",
+    text: "#000000",
+  },
+} as const;
+
+export type AccessibilityPaletteName = keyof typeof accessibilityPalette;

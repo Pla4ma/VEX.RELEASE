@@ -1,13 +1,8 @@
 [
-  "src/features/ai-coach/hooks-realtime.ts",
-  "src/features/ai-coach/repository/memories.ts",
   "src/features/ai-coach/repository/messages.ts",
   "src/features/analytics/repository/storage.ts",
-  "src/features/focus-identity/repository-focus-score.ts",
   "src/features/progression/repository/prestige.ts",
   "src/features/progression/repository/unified.ts",
   "src/features/session/repository/stakes.ts",
-  "src/features/streaks/repository-insurance.ts",
-  "src/features/streaks/repository/enhanced.ts",
   "src/services/supabaseAuth.ts"
 ]

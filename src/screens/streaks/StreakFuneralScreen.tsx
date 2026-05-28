@@ -1,14 +1,7 @@
 import { withScreenErrorBoundary } from "../../shared/ui/components/ScreenErrorBoundary";
 import React, { useCallback, useMemo } from "react";
 import { ScrollView } from "react-native";
-import Animated, {
-  FadeIn,
-  FadeInUp,
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-  withSequence,
-} from "react-native-reanimated";
+import Animated, { FadeIn, FadeInUp } from "react-native-reanimated";
 import {
   useNavigation,
   useRoute,
@@ -23,64 +16,17 @@ import { getStreakService } from "../../streaks/StreakService";
 import { useTheme } from "../../theme";
 import { useToast } from "../../shared/ui/components/Toast";
 import { useBalance } from "../../features/economy/hooks";
-import { useFeatureAccess } from "../../features/liveops-config";
-import {
-  getFeatureAvailability,
-  isFeatureAvailableForNavigation,
-} from "../../features/liveops-config/feature-availability";
 import { getFeatureStatus } from "../../features/liveops-config/final-release-feature-map";
 import type { ExtendedRootStackParams } from "../../navigation/types";
-const RESTORE_COSTS = {
-  UNDER_7_DAYS: 100,
-  DAYS_7_TO_29: 200,
-  DAYS_30_PLUS: 500,
-} as const;
-function calculateRestoreCost(streakDays: number): number {
-  if (streakDays < 7) {
-    return RESTORE_COSTS.UNDER_7_DAYS;
-  }
-  if (streakDays < 30) {
-    return RESTORE_COSTS.DAYS_7_TO_29;
-  }
-  return RESTORE_COSTS.DAYS_30_PLUS;
-}
+import { StreakFuneralFlame } from "./StreakFuneralFlame";
+import { calculateRestoreCost } from "./streak-funeral-costs";
+
 type StreakFuneralRoute = RouteProp<ExtendedRootStackParams, "StreakFuneral">;
-type StreakFuneralNavigation = NativeStackNavigationProp<
-  ExtendedRootStackParams,
-  "StreakFuneral"
->;
-function DyingFlame(): JSX.Element {
-  const flameScale = useSharedValue(1);
-  const flameOpacity = useSharedValue(1);
-  React.useEffect(() => {
-    flameScale.value = withSequence(
-      withTiming(0.9, { duration: 500 }),
-      withTiming(0.7, { duration: 500 }),
-      withTiming(0.4, { duration: 500 }),
-      withTiming(0, { duration: 500 }),
-    );
-    flameOpacity.value = withSequence(
-      withTiming(0.8, { duration: 500 }),
-      withTiming(0.6, { duration: 500 }),
-      withTiming(0.3, { duration: 500 }),
-      withTiming(0, { duration: 500 }),
-    );
-  }, [flameOpacity, flameScale]);
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: flameScale.value }],
-    opacity: flameOpacity.value,
-  }));
-  return (
-    <Animated.View style={animatedStyle}>
-      <Text fontSize={96}>🔥</Text>
-    </Animated.View>
-  );
-}
+type StreakFuneralNavigation = NativeStackNavigationProp<ExtendedRootStackParams>;
+
 export const StreakFuneralScreen: React.FC = () => {
   const { theme } = useTheme();
-  const disclosure = useFeatureAccess();
   const showGems = getFeatureStatus("gems_prominent") !== "hidden";
-  const showShop = getFeatureStatus("shop") !== "hidden";
   const { show: showToast } = useToast();
   const { user } = useAuthStore();
   const navigation = useNavigation<StreakFuneralNavigation>();
@@ -94,12 +40,14 @@ export const StreakFuneralScreen: React.FC = () => {
   );
   const { data: gemsBalanceData } = useBalance(user?.id ?? "", "GEMS");
   const gemBalance = gemsBalanceData ?? 0;
+
   const completeFuneral = useCallback(() => {
     if (user?.id) {
       getStreakService(user.id).markFuneralShown();
     }
     navigation.goBack();
   }, [navigation, user?.id]);
+
   const handleStartFresh = useCallback(() => {
     Sentry.addBreadcrumb({
       category: "streaks",
@@ -115,7 +63,8 @@ export const StreakFuneralScreen: React.FC = () => {
     });
     completeFuneral();
   }, [completeFuneral, previousStreak, diedAt, showToast]);
-  const handleReminisce = useCallback(() => {
+
+  const handleReminisce = useCallback((): void => {
     Sentry.addBreadcrumb({
       category: "streaks",
       message: "User chose to view streak history",
@@ -129,14 +78,11 @@ export const StreakFuneralScreen: React.FC = () => {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ flexGrow: 1, justifyContent: "center" }}
       >
-        {}
         <Animated.View entering={FadeIn.delay(200)}>
           <Box alignItems="center" mb="2xl">
-            <DyingFlame />
+            <StreakFuneralFlame />
           </Box>
         </Animated.View>
-
-        {}
         <Animated.View entering={FadeInUp.delay(400)}>
           <Box alignItems="center" mb="xl">
             <Text variant="h2" color="text.primary" textAlign="center" mb="md">
@@ -149,8 +95,6 @@ export const StreakFuneralScreen: React.FC = () => {
             </Text>
           </Box>
         </Animated.View>
-
-        {}
         <Animated.View entering={FadeInUp.delay(500)}>
           <Box alignItems="center" mb="xl">
             <Text variant="body" color="text.secondary" textAlign="center">
@@ -159,8 +103,6 @@ export const StreakFuneralScreen: React.FC = () => {
             </Text>
           </Box>
         </Animated.View>
-
-        {}
         <Animated.View entering={FadeInUp.delay(600)}>
           <Box
             bg="background.secondary"
@@ -185,8 +127,6 @@ export const StreakFuneralScreen: React.FC = () => {
             </Text>
           </Box>
         </Animated.View>
-
-        {}
         <Animated.View entering={FadeInUp.delay(800)}>
           <Box mb="2xl">
             <Text
@@ -202,11 +142,8 @@ export const StreakFuneralScreen: React.FC = () => {
             </Text>
           </Box>
         </Animated.View>
-
-        {}
         <Animated.View entering={FadeInUp.delay(1000)}>
           <Box gap="md">
-            {}
             {showGems && (
               <Button
                 variant="primary"
@@ -222,32 +159,12 @@ export const StreakFuneralScreen: React.FC = () => {
               </Button>
             )}
 
-            {}
             {showGems && gemBalance < restoreCost && (
               <Text variant="caption" color="text.tertiary" textAlign="center">
                 Need {restoreCost} gems. You have {gemBalance}.{"\n"}
-                {showShop ? (
-                  <Text
-                    variant="caption"
-                    color="primary.500"
-                    onPress={() => {
-                      const canGo = isFeatureAvailableForNavigation(
-                        getFeatureAvailability(disclosure.features.shop),
-                      );
-                      if (canGo) navigation.navigate("Shop");
-                    }}
-                  >
-                    Earn gems in the shop
-                  </Text>
-                ) : (
-                  <Text variant="caption" color="text.tertiary">
-                    Complete more sessions to earn gems.
-                  </Text>
-                )}
+                Complete more sessions to earn gems.
               </Text>
             )}
-
-            {}
             <Button
               variant="secondary"
               size="md"
@@ -259,8 +176,6 @@ export const StreakFuneralScreen: React.FC = () => {
             >
               Start fresh — new rhythm
             </Button>
-
-            {}
             <Button
               variant="ghost"
               size="sm"
@@ -275,7 +190,6 @@ export const StreakFuneralScreen: React.FC = () => {
           </Box>
         </Animated.View>
 
-        {}
         <Box height={40} />
       </ScrollView>
     </Box>

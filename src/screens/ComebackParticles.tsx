@@ -8,6 +8,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { createSheet } from "@/shared/ui/create-sheet";
+import { useReducedMotion } from "@/hooks";
 
 interface ParticleProps {
   index: number;
@@ -26,15 +27,18 @@ export function Particle({
   delay,
   color,
 }: ParticleProps): JSX.Element {
+  const { isReducedMotion } = useReducedMotion();
   const progress = useSharedValue(0);
 
   useEffect(() => {
-    progress.value = withRepeat(
-      withTiming(1, { duration, easing: Easing.linear }),
-      -1,
-      false,
-    );
-  }, [duration, progress]);
+    progress.value = isReducedMotion
+      ? 1
+      : withRepeat(
+          withTiming(1, { duration, easing: Easing.linear }),
+          -1,
+          false,
+        );
+  }, [duration, progress, isReducedMotion]);
 
   const animatedStyle = useAnimatedStyle(() => ({
     opacity: 0.2 + 0.5 * (1 - progress.value),
@@ -48,7 +52,7 @@ export function Particle({
     <Animated.View
       style={[
         styles.particle,
-        animatedStyle,
+        isReducedMotion ? { opacity: 0.2 } : animatedStyle,
         {
           left,
           width: size,

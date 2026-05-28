@@ -23,6 +23,17 @@ const StreakFuneralScreen = React.lazy(
   () => import("../screens/streaks/StreakFuneralScreen"),
 );
 const ComebackScreen = React.lazy(() => import("../screens/ComebackScreen"));
+const FocusScoreDashboard = React.lazy(() =>
+  import("../features/focus-identity/FocusScoreDashboard").then((module) => ({
+    default: module.FocusScoreDashboard,
+  })),
+);
+const AchievementsScreen = React.lazy(
+  () => import("../screens/profile/AchievementsScreen"),
+);
+const AnalyticsScreen = React.lazy(
+  () => import("../screens/analytics/AnalyticsScreen"),
+);
 
 export function RootStackAuthenticatedRoutes({
   hasCompletedOnboarding,
@@ -98,6 +109,27 @@ export function RootStackAuthenticatedRoutes({
         {() => (
           <React.Suspense fallback={null}>
             <ComebackScreen />
+          </React.Suspense>
+        )}
+      </Stack.Screen>
+      <Stack.Screen name="FocusScoreDashboard">
+        {() => (
+          <React.Suspense fallback={null}>
+            <FocusScoreDashboard />
+          </React.Suspense>
+        )}
+      </Stack.Screen>
+      <Stack.Screen name="Achievements">
+        {() => (
+          <React.Suspense fallback={null}>
+            <AchievementsScreen />
+          </React.Suspense>
+        )}
+      </Stack.Screen>
+      <Stack.Screen name="Analytics">
+        {() => (
+          <React.Suspense fallback={null}>
+            <AnalyticsScreen />
           </React.Suspense>
         )}
       </Stack.Screen>

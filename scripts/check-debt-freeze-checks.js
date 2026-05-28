@@ -33,7 +33,7 @@ function checkPartFiles(files) {
     .map((f) => ({ file: path.relative(ROOT, f).replace(/\\/g, '/'), rule: 'part-N-file' }));
 }
 
-// 2. Line limit violations
+// 2. Line limit violations (>200 lines)
 function checkLineLimit(files) {
   return files
     .map((f) => ({
@@ -41,7 +41,7 @@ function checkLineLimit(files) {
       lines: fs.readFileSync(f, 'utf8').split(/\r?\n/).length,
     }))
     .filter((r) => r.lines > 200)
-    .map((r) => ({ file: r.file, rule: 'line-limit', detail: `${r.lines} lines` }));
+    .map((r) => ({ file: r.file, lines: r.lines, rule: 'line-limit', detail: `${r.lines} lines` }));
 }
 
 // 3. as unknown as

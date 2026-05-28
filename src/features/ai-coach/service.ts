@@ -115,6 +115,14 @@ export {
 
 // Service getter for compatibility with hooks expecting service pattern
 import type { CoachRecommendation } from "./services/CoachRecommendationService";
+import { fetchActiveRecommendations as fetchActiveRecommendationsRepository } from "./repository";
+import type { SessionRecommendation } from "./schemas";
+
+export async function fetchActiveRecommendations(
+  userId: string,
+): Promise<SessionRecommendation[]> {
+  return fetchActiveRecommendationsRepository(userId);
+}
 
 export interface CoachService {
   createRecommendation: (

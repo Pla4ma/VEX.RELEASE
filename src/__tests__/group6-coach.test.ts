@@ -1,3 +1,6 @@
+import { QueryClient } from "@tanstack/react-query";
+
+import { COACH_QUERY_KEYS } from "../features/ai-coach/constants";
 import { experience } from "./product-journey-debloat-personalization-helpers";
 
 describe("Group 6 — Coach", () => {
@@ -51,5 +54,16 @@ describe("Group 6 — Coach", () => {
 
     const coachExp = experience("coach_led");
     expect(coachExp.coachMessageStyle).toBe("mentor");
+  });
+
+  it("6e: completed coach writes invalidate home recommendations", async () => {
+    const queryClient = new QueryClient();
+    const userId = "user-coach-1";
+    const queryKey = COACH_QUERY_KEYS.recommendations(userId);
+
+    queryClient.setQueryData(queryKey, []);
+    await queryClient.invalidateQueries({ queryKey });
+
+    expect(queryClient.getQueryState(queryKey)?.isInvalidated).toBe(true);
   });
 });

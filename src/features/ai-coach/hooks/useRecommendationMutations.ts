@@ -1,6 +1,7 @@
 import * as Sentry from "@sentry/react-native";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
+import { COACH_QUERY_KEYS } from "../constants";
 import * as repository from "../repository";
 import type { RecommendationType, SessionRecommendation } from "../schemas";
 
@@ -63,7 +64,7 @@ export function useCreateRecommendation() {
       repository.createRecommendation(buildRecommendation(input)),
     onSuccess: (recommendation) => {
       queryClient.invalidateQueries({
-        queryKey: ["coach", "recommendations", recommendation.userId],
+        queryKey: COACH_QUERY_KEYS.recommendations(recommendation.userId),
       });
     },
     onError: (error) => {
@@ -86,7 +87,7 @@ export function useUpdateRecommendationStatus() {
       ),
     onSuccess: (recommendation) => {
       queryClient.invalidateQueries({
-        queryKey: ["coach", "recommendations", recommendation.userId],
+        queryKey: COACH_QUERY_KEYS.recommendations(recommendation.userId),
       });
     },
     onError: (error) => {

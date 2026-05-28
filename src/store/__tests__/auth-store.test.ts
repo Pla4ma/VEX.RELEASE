@@ -35,11 +35,14 @@ jest.mock("../../shared/monetization/revenuecat-service", () => ({
 
 jest.mock("../../persistence/SecureStorage", () => ({
   getSecureStorage: () => ({
+    getItem: jest.fn().mockResolvedValue(null),
     removeItem: jest.fn().mockResolvedValue(undefined),
+    setItem: jest.fn().mockResolvedValue(undefined),
   }),
   SecureStorageKeys: {
     AUTH_TOKEN: "vex_auth_token",
     REFRESH_TOKEN: "vex_refresh_token",
+    USER_PROFILE: "vex_user_profile",
   },
 }));
 

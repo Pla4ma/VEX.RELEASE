@@ -1,5 +1,20 @@
 import { z } from "zod";
 import { launchColors } from "@theme/tokens/launch-colors";
+
+/** DB row shape from `user_settings` table */
+export const SettingRowSchema = z.object({
+  id: z.string(),
+  user_id: z.string(),
+  key: z.string(),
+  value: z.unknown(),
+  category: SettingCategorySchema,
+  is_default: z.boolean(),
+  last_modified: z.number(),
+  last_synced: z.number().optional(),
+  device_id: z.string().optional(),
+});
+export type SettingRow = z.infer<typeof SettingRowSchema>;
+
 export const SettingCategorySchema = z.enum([
   "general",
   "notifications",

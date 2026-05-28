@@ -11,9 +11,9 @@
 // Core Engine
 export {
   FocusIdentityEngine,
-  FocusIdentityService,
   FOCUS_SCORE_CONFIG,
 } from "./FocusIdentityEngine";
+export { FocusIdentityService } from "./focus-identity-service";
 
 // Types
 export type {

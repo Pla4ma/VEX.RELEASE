@@ -16,7 +16,11 @@ export type ProgressionService = {
   addXP: (
     amount: number,
     source: string,
-    options?: { metadata?: Record<string, unknown>; sessionId?: string },
+    options?: {
+      metadata?: Record<string, unknown>;
+      sessionId?: string;
+      idempotencyKey?: string;
+    },
   ) => Promise<void>;
   getState: () => ProgressionServiceState;
   canPrestige: () => boolean;
@@ -50,13 +54,17 @@ export function getProgressionService(userId?: string): ProgressionService {
         return;
       }
 
-      await addXp(userId, {
+      await addXp(
         userId,
-        amount,
-        source: normalizeXpSource(source),
-        metadata: options?.metadata,
-        sessionId: options?.sessionId,
-      });
+        {
+          userId,
+          amount,
+          source: normalizeXpSource(source),
+          metadata: options?.metadata,
+          sessionId: options?.sessionId,
+        },
+        { idempotencyKey: options?.idempotencyKey },
+      );
     },
     getState(): ProgressionServiceState {
       return DEFAULT_STATE;

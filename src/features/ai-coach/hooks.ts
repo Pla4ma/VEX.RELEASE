@@ -5,8 +5,15 @@
  * This file exists for backward compatibility.
  */
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+  type QueryObserverResult,
+  type RefetchOptions,
+} from "@tanstack/react-query";
 import { createDebugger } from "../../utils/debug";
+import { COACH_QUERY_KEYS } from "./constants";
 import {
   askCoachQuestion,
   getCoachHistory,
@@ -14,7 +21,7 @@ import {
   type CoachQuestionResponse,
 } from "./services/coach-screen-service";
 import type { CoachMessage, CoachState } from "./types";
-import { fetchActiveRecommendations } from "./repository";
+import { fetchActiveRecommendations } from "./service";
 import type { SessionRecommendation } from "./hooks/useRecommendationMutations";
 
 export { COACH_QUERY_KEYS } from "./constants";
@@ -29,27 +36,41 @@ export {
 
 const debug = createDebugger("coach:hooks");
 
-export function useActiveCoachRecommendations(
-  userId: string | null,
-  enabled: boolean,
-): {
+type ActiveCoachRecommendationsOptions = {
+  enabled?: boolean;
+};
+
+type ActiveCoachRecommendationsResult = {
+  data: SessionRecommendation[] | undefined;
   primaryRecommendation: SessionRecommendation | null;
   isPending: boolean;
-} {
-  const { data } = useQuery<SessionRecommendation[]>({
-    queryKey: ["coach", "recommendations", userId],
-    queryFn: () => fetchActiveRecommendations(userId ?? ""),
+  isError: boolean;
+  error: Error | null;
+  refetch: (
+    options?: RefetchOptions,
+  ) => Promise<QueryObserverResult<SessionRecommendation[], Error>>;
+};
+
+export function useActiveCoachRecommendations(
+  userId: string,
+  options: ActiveCoachRecommendationsOptions | boolean = {},
+): ActiveCoachRecommendationsResult {
+  const enabled =
+    typeof options === "boolean" ? options : (options.enabled ?? true);
+  const { data, isPending, isError, error, refetch } = useQuery<
+    SessionRecommendation[],
+    Error
+  >({
+    queryKey: COACH_QUERY_KEYS.recommendations(userId),
+    queryFn: () => fetchActiveRecommendations(userId),
     enabled: enabled && Boolean(userId),
     staleTime: 1000 * 60 * 5,
   });
-  const primary = data
-    ? (data
-        .filter(
-          (item) => item.status === "ACTIVE" && item.expiresAt > Date.now(),
-        )
-        .sort((a, b) => (b.confidence ?? 0) - (a.confidence ?? 0))[0] ?? null)
-    : null;
-  return { primaryRecommendation: primary, isPending: false };
+  const primaryRecommendation =
+    (data ?? [])
+      .filter((item) => item.status === "ACTIVE" && item.expiresAt > Date.now())
+      .sort((a, b) => (b.confidence ?? 0) - (a.confidence ?? 0))[0] ?? null;
+  return { data, primaryRecommendation, isPending, isError, error, refetch };
 }
 
 export function useCoachScreenState(): {

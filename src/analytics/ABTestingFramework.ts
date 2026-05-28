@@ -304,7 +304,7 @@ function isUserEligible(
   }
   if (
     targeting.platforms &&
-    !targeting.platforms.includes(profile.platform as never)
+    !targeting.platforms.includes(profile.platform as "ios" | "android" | "web")
   ) {
     return false;
   }

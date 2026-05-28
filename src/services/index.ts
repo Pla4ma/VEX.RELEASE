@@ -14,6 +14,7 @@ export {
   subscribeToSquadChanges,
   subscribeToGuildQuests,
   broadcastActivity,
+  cleanupPresence,
   cleanupRealtime,
   getActiveChannelCount,
   type PresenceStatus,

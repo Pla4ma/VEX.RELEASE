@@ -20,6 +20,7 @@ import {
   publishMonthlyReportDismissed,
 } from "../events";
 import { launchColors } from "@theme/tokens/launch-colors";
+import { capture } from "../../../shared/analytics/analytics-service";
 interface MonthlyFocusReportProps {
   userId: string;
   onClose: () => void;
@@ -212,7 +213,11 @@ ${report.highlight}
       if (report) {
         publishMonthlyReportShared(userId, report.month, report.grade);
       }
-    } catch (_shareError) {}
+    } catch (error) {
+      if (error instanceof Error) {
+        capture('monthly_report_share_failed', { error: error.message });
+      }
+    }
   };
   const handleClose = () => {
     if (report) {

@@ -12,7 +12,13 @@ type LegacyStreakState = {
 type StreakService = {
   getState: () => LegacyStreakState;
   markFuneralShown: () => void;
-  recordSession: () => Promise<LegacyStreakState>;
+  recordSession: (options?: {
+    sessionId?: string;
+    completedAt?: number;
+    duration?: number;
+    qualityScore?: number;
+    idempotencyKey?: string;
+  }) => Promise<LegacyStreakState>;
 };
 
 const EMPTY_STREAK_STATE: LegacyStreakState = {
@@ -37,17 +43,17 @@ export function getStreakService(userId?: string): StreakService {
         diedAt: Date.now(),
       });
     },
-    async recordSession(): Promise<LegacyStreakState> {
+    async recordSession(options): Promise<LegacyStreakState> {
       if (!userId) {
         return EMPTY_STREAK_STATE;
       }
 
       const result = await recordSession({
         userId,
-        sessionId: v4(),
-        duration: 10 * 60,
-        qualityScore: 80,
-        completedAt: Date.now(),
+        sessionId: options?.sessionId ?? v4(),
+        duration: options?.duration ?? 10 * 60,
+        qualityScore: options?.qualityScore ?? 80,
+        completedAt: options?.completedAt ?? Date.now(),
       });
       return {
         ...EMPTY_STREAK_STATE,

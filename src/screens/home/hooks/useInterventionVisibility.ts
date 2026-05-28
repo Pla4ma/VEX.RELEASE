@@ -96,7 +96,7 @@ export function resolveInterventionVisibility(
 
     const hiddenSurfaces = firstWeekExperience.hiddenSurfaces ?? [];
     if (
-      hiddenSurfaces.includes("squads" as never) &&
+      hiddenSurfaces.includes("squads") &&
       intervention.type === "BOSS_FINISH"
     ) {
       return {

@@ -1,4 +1,4 @@
-import { eventBus } from "../events";
+import { eventBus, type EventChannels } from "../events";
 import type { SessionEventChannels, SessionEventChannel } from "./types/events";
 import type {
   SessionSummary,
@@ -50,13 +50,13 @@ export class SessionEventEmitter {
   ): void {
     if (!this.sessionId) return;
     eventBus.publish(
-      channel as never,
+      channel as keyof EventChannels,
       {
         sessionId: this.sessionId,
         userId: this.userId,
         timestamp: Date.now(),
         ...payload,
-      } as never,
+      } as EventChannels[keyof EventChannels],
     );
   }
 

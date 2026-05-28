@@ -11,6 +11,7 @@ import Animated, {
 import { Text } from "./primitives/Text";
 import { useTheme } from "../theme";
 import { createSheet } from "@/shared/ui/create-sheet";
+import { useReducedMotion } from "@/hooks";
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
@@ -28,6 +29,7 @@ export function FocusRing({
   gradientColors,
 }: FocusRingProps): JSX.Element {
   const { theme } = useTheme();
+  const { isReducedMotion } = useReducedMotion();
   const strokeWidth = 12;
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
@@ -35,11 +37,13 @@ export function FocusRing({
   const clamped = Math.max(0, Math.min(100, progressPercent));
 
   useEffect(() => {
-    progress.value = withTiming(clamped, {
-      duration: 900,
-      easing: Easing.out(Easing.cubic),
-    });
-  }, [clamped, progress]);
+    progress.value = isReducedMotion
+      ? clamped
+      : withTiming(clamped, {
+          duration: 900,
+          easing: Easing.out(Easing.cubic),
+        });
+  }, [clamped, progress, isReducedMotion]);
 
   const animatedProps = useAnimatedProps(() => ({
     strokeDashoffset: circumference - (circumference * progress.value) / 100,

@@ -46,7 +46,7 @@ export const SUBSYSTEM_META: Record<string, SubsystemMeta> = {
     canRunWhenLocked: true,
     blocksCompletion: false,
     fallbackBehavior:
-      "XP not awarded for this session; no retry (XP is ephemeral).",
+      "XP queued offline and retried when connectivity returns.",
   },
   rewards: {
     label: "rewards",

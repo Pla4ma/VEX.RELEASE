@@ -5,6 +5,7 @@ import {
   type SyncConflict,
   type SettingCategory,
 } from "./types";
+import { SettingRowSchema } from "./schemas";
 const TABLE_SETTINGS = "user_settings";
 const TABLE_SYNC_STATE = "settings_sync_state";
 const TABLE_PENDING_CHANGES = "settings_pending_changes";
@@ -340,17 +341,18 @@ export async function getSettingsVersion(userId: string): Promise<number> {
   }
   return data?.version || 0;
 }
-function mapFromDb(row: { [key: string]: unknown }): Setting {
+function mapFromDb(row: unknown): Setting {
+  const parsed = SettingRowSchema.parse(row);
   return {
-    id: row.id as string,
-    userId: row.user_id as string,
-    key: row.key as string,
-    value: row.value as import("./types").SettingValue,
-    category: row.category as SettingCategory,
-    isDefault: row.is_default as boolean,
-    lastModified: row.last_modified as number,
-    lastSynced: row.last_synced as number | undefined,
-    deviceId: row.device_id as string | undefined,
+    id: parsed.id,
+    userId: parsed.user_id,
+    key: parsed.key,
+    value: parsed.value as import("./types").SettingValue,
+    category: parsed.category,
+    isDefault: parsed.is_default,
+    lastModified: parsed.last_modified,
+    lastSynced: parsed.last_synced,
+    deviceId: parsed.device_id,
   };
 }
 function mapSyncStateFromDb(row: { [key: string]: unknown }): SyncState {

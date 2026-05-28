@@ -5,6 +5,7 @@ type GrantOptions = {
   bonusType?: string;
   challengeId?: string;
   exactAmount?: number;
+  idempotencyKey?: string;
   previousStreak?: number;
   sessionId?: string;
   streakMultiplier?: number;
@@ -50,6 +51,7 @@ export function getRewardService(userId?: string): RewardService {
         type,
         triggerType: normalizeTrigger(triggerType),
         triggerId: options?.sessionId ?? options?.challengeId,
+        idempotencyKey: options?.idempotencyKey,
         amount:
           options?.exactAmount ??
           Math.max(0, Math.floor(calculation.baseAmount)),

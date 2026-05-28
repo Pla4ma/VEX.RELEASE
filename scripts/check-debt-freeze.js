@@ -38,20 +38,40 @@ function walkSrc() {
 }
 
 // === BASELINE MANAGEMENT ===
+const LINE_LIMIT_KEY = 'line-limit';
+
 function loadBaseline(name) {
   const p = path.join(BASELINE_DIR, name + '.json');
-  if (fs.existsSync(p)) {
-    return new Set(JSON.parse(fs.readFileSync(p, 'utf8')));
+  if (!fs.existsSync(p)) {
+    return name === LINE_LIMIT_KEY ? Object.create(null) : new Set();
   }
-  return new Set();
+  const data = JSON.parse(fs.readFileSync(p, 'utf8'));
+  if (name === LINE_LIMIT_KEY && isLineLimitMap(data)) {
+    return data;
+  }
+  return new Set(data);
 }
 
 function saveBaseline(name, findings) {
   if (!fs.existsSync(BASELINE_DIR)) {
     fs.mkdirSync(BASELINE_DIR, { recursive: true });
   }
-  const files = new Set(findings.map((f) => f.file));
-  fs.writeFileSync(path.join(BASELINE_DIR, name + '.json'), JSON.stringify([...files].sort(), null, 2));
+  const outPath = path.join(BASELINE_DIR, name + '.json');
+  if (name === LINE_LIMIT_KEY) {
+    const map = Object.create(null);
+    for (const f of findings) {
+      map[f.file] = f.lines;
+    }
+    fs.writeFileSync(outPath, JSON.stringify(map, null, 2));
+  } else {
+    const files = new Set(findings.map((f) => f.file));
+    fs.writeFileSync(outPath, JSON.stringify([...files].sort(), null, 2));
+  }
+}
+
+function isLineLimitMap(value) {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
+  return Object.entries(value).every(([, v]) => typeof v === 'number');
 }
 
 // === MAIN ===
@@ -84,7 +104,17 @@ function main() {
   for (const [key, check] of Object.entries(checks)) {
     const findings = check.run(files);
     const baseline = loadBaseline(key);
-    const newViolations = findings.filter((f) => !baseline.has(f.file));
+
+    let newViolations;
+    if (key === LINE_LIMIT_KEY) {
+      newViolations = findings.filter((f) => {
+        const baselineLines = baseline[f.file];
+        if (baselineLines === undefined) return true;
+        return f.lines > baselineLines;
+      });
+    } else {
+      newViolations = findings.filter((f) => !baseline.has(f.file));
+    }
 
     if (newViolations.length > 0) {
       allNew.push({ label: check.label, violations: newViolations });

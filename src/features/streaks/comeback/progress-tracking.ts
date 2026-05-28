@@ -129,7 +129,7 @@ export async function updateQuestProgress(
   completedStage: ComebackQuestStage,
 ): Promise<ComebackQuest | null> {
   try {
-    const updateData: Record<string, any> = {
+    const updateData: Record<string, unknown> = {
       updated_at: new Date().toISOString(),
     };
 

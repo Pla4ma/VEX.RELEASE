@@ -13,6 +13,7 @@ import { useTheme } from "../../../theme";
 import { capture } from "../../analytics";
 import { FeatureEvents } from "../../analytics/analytics-events";
 import { createSheet } from "@/shared/ui/create-sheet";
+import { useReducedMotion } from "@/hooks";
 const DISMISS_DURATION = 30 * 1000;
 export interface OfflineBannerProps {
   message?: string;
@@ -25,6 +26,7 @@ export function OfflineBanner({
   onReappear,
 }: OfflineBannerProps): JSX.Element | null {
   const { theme } = useTheme();
+  const { isReducedMotion } = useReducedMotion();
   const { colors } = theme;
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
@@ -56,11 +58,15 @@ export function OfflineBanner({
   useEffect(() => {
     const shouldShow = !isConnected && !isDismissed;
     if (shouldShow) {
-      slideAnim.value = withSpring(0, { damping: 15, stiffness: 150 });
+      slideAnim.value = isReducedMotion
+        ? 0
+        : withSpring(0, { damping: 15, stiffness: 150 });
     } else {
-      slideAnim.value = withTiming(-100, { duration: 250 });
+      slideAnim.value = isReducedMotion
+        ? -100
+        : withTiming(-100, { duration: 250 });
     }
-  }, [isConnected, isDismissed, slideAnim]);
+  }, [isConnected, isDismissed, slideAnim, isReducedMotion]);
   useEffect(() => {
     if (isDismissed && !isConnected) {
       const timer = setTimeout(() => {

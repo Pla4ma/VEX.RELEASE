@@ -1,8 +1,5 @@
 [
-  "src/screens/home/containers/EngagedHomeContainer.tsx",
-  "src/screens/home/containers/PowerUserHomeContainer.tsx",
   "src/screens/home/hooks/useActivatingHomeModel.ts",
   "src/screens/home/hooks/useEngagedHomeModel.ts",
-  "src/screens/home/hooks/useHomeScreenController.ts",
   "src/screens/home/hooks/usePowerUserHomeModel.ts"
 ]

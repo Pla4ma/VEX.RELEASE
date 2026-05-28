@@ -1,12 +1,12 @@
 import {
   FocusIdentityEngine,
-  FocusIdentityService,
   FOCUS_SCORE_CONFIG,
 } from "../FocusIdentityEngine";
+import { FocusIdentityService } from "../focus-identity-service";
 describe("FocusIdentityEngine", () => {
   let engine: FocusIdentityEngine;
   beforeEach(() => {
-    engine = new FocusIdentityEngine("test-user-123");
+    engine = new FocusIdentityEngine();
   });
   describe("Score Band Determination", () => {
     it("should return correct band for Legendary score (800-850)", () => {

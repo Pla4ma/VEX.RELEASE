@@ -15,7 +15,7 @@ export class FocusIdentityService {
 
   constructor(userId: string) {
     this.userId = userId;
-    this.engine = new FocusIdentityEngine(userId);
+    this.engine = new FocusIdentityEngine();
   }
 
   public async getProfile(): Promise<FocusIdentityProfile | null> {

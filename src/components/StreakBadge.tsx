@@ -12,6 +12,7 @@ import { Text } from "./primitives/Text";
 import { useTheme } from "../theme";
 import { createSheet } from "@/shared/ui/create-sheet";
 import { launchColors } from "@theme/tokens/launch-colors";
+import { useReducedMotion } from "@/hooks";
 
 type StreakBadgeProps = {
   days: number;
@@ -25,12 +26,15 @@ export function StreakBadge({
   variant = "default",
 }: StreakBadgeProps): JSX.Element {
   const { theme } = useTheme();
+  const { isReducedMotion } = useReducedMotion();
   const pulse = useSharedValue(0);
   const isGlass = variant === "glass";
 
   useEffect(() => {
     if (isAtRisk && days > 0) {
-      pulse.value = withRepeat(withTiming(1, { duration: 900 }), -1, true);
+      pulse.value = isReducedMotion
+        ? 1
+        : withRepeat(withTiming(1, { duration: 900 }), -1, true);
     } else {
       cancelAnimation(pulse);
       pulse.value = 0.3;
@@ -38,7 +42,7 @@ export function StreakBadge({
     return () => {
       cancelAnimation(pulse);
     };
-  }, [days, isAtRisk, pulse]);
+  }, [days, isAtRisk, pulse, isReducedMotion]);
 
   const animatedStyle = useAnimatedStyle(() => ({
     borderWidth: isAtRisk ? 1.5 + pulse.value : 1.5,

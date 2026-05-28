@@ -1,415 +1,80 @@
-import { withScreenErrorBoundary } from "../../shared/ui/components/ScreenErrorBoundary";
-import { captureSilentFailure } from "../../utils/silent-failure";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Pressable, ScrollView } from "react-native";
 import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
-import { FlashList } from "@shopify/flash-list";
-import { LinearGradient } from "expo-linear-gradient";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import {
-  type NativeStackNavigationProp,
-  type NativeStackScreenProps,
-} from "@react-navigation/native-stack";
-import {
-  useNavigation,
-  useRoute,
-  type RouteProp,
-} from "@react-navigation/native";
-import { Avatar } from "../../components/Avatar";
-import { Badge } from "../../components/Badge";
-import { EmptyState } from "../../components/EmptyState";
-import { Box, Card, Text } from "../../components/primitives";
-import { Skeleton } from "../../components/ui/Skeleton";
+import { useNavigation, useRoute, type RouteProp } from "@react-navigation/native";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { withScreenErrorBoundary } from "../../shared/ui/components/ScreenErrorBoundary";
+import { Box, Text } from "../../components/primitives";
 import { useAchievements } from "../../features/achievements/hooks";
-import { useWallet } from "../../features/economy/hooks";
-import {
-  getMasteryRankDisplay,
-  type MasteryState,
-} from "../../features/mastery/types";
-import {
-  getFeatureAvailability,
-  isFeatureAvailableForNavigation,
-} from "../../features/liveops-config/feature-availability";
-import { getFeatureStatus } from "../../features/liveops-config/final-release-feature-map";
+import { getFeatureAvailability, isFeatureAvailableForNavigation } from "../../features/liveops-config/feature-availability";
 import { useFeatureAccess } from "../../features/liveops-config";
-import { MasteryService } from "../../features/mastery/service";
-import { useProgressionSummary } from "../../features/progression/hooks";
-import { useStreakSummary } from "../../features/streaks/hooks";
-import { Icon } from "../../icons";
-import type { ExtendedRootStackParams } from "../../navigation/types";
-import { getHeroGradientColors } from "../home/HomeScreenVisuals";
-import {
-  useSessionHistory,
-  useSessionStats,
-} from "../../session/hooks/useSession";
-import { FocusScoreCard } from "../../features/focus-identity/components/FocusScoreCard";
-import { ScoreHistoryChart } from "../../features/focus-identity/components/ScoreHistoryChart";
-import { PersonalBestsGrid } from "./components/PersonalBestsGrid";
+import { useSessionHistory } from "../../session/hooks/useSession";
 import { buildProfileAchievementCards } from "./profile-achievements";
-import type { SessionHistoryEntry } from "../../session/types";
 import { useAuthStore } from "../../store";
 import { useTheme } from "../../theme";
-import type { MainTabParams } from "../../navigation/types";
-import { launchColors } from "@theme/tokens/launch-colors";
-type Props = NativeStackScreenProps<ExtendedRootStackParams, "Main">;
+import { ProfileHeader } from "./ProfileHeader";
+import { ProfileStatsTab } from "./ProfileStatsTab";
+import { ProfileAchievementsTab } from "./ProfileAchievementsTab";
+import { ProfileActivityTab } from "./ProfileActivityTab";
+import { ProfileMasterySheet } from "./ProfileMasterySheet";
+import { useProfileData } from "./useProfileData";
+import type { ExtendedRootStackParams, MainTabParams } from "../../navigation/types";
+
 type Tab = "stats" | "achievements" | "activity";
-type TechniqueItem = {
-  key: keyof MasteryState["techniques"];
-  label: string;
-  color: string;
-};
-const makeMastery = (userId: string): MasteryState => ({
-  userId,
-  totalMasteryPoints: 0,
-  rank: "APPRENTICE",
-  techniques: {
-    durationMastery: 0,
-    purityMastery: 0,
-    consistencyMastery: 0,
-    comebackMastery: 0,
-    bossMastery: 0,
-  },
-  activeChallenges: [],
-  unlockedFeatures: [],
-  updatedAt: Date.now(),
-});
-const hours = (ms: number) => `${Math.round((ms / 3600000) * 10) / 10}h`;
-const when = (ts: number) =>
-  new Date(ts).toLocaleDateString("en-US", { month: "short", day: "numeric" });
-const minutes = (entry: SessionHistoryEntry) =>
-  `${Math.max(1, Math.round((entry.summary?.effectiveDuration ?? 0) / 60))} min`;
-export const ProfileScreen: React.FC<Partial<Props>> = ({
-  navigation: propNavigation,
-}) => {
-  const navigation =
-    propNavigation ??
-    useNavigation<NativeStackNavigationProp<ExtendedRootStackParams>>();
+
+export const ProfileScreen: React.FC = () => {
   const { theme } = useTheme();
-  const insets = useSafeAreaInsets();
+  const navigation = useNavigation<NativeStackNavigationProp<ExtendedRootStackParams>>();
   const route = useRoute<RouteProp<MainTabParams, "Profile">>();
   const { user, logout } = useAuthStore();
   const disclosure = useFeatureAccess();
+  const userId = user?.id ?? null;
+
   const requestedTab = route.params?.tab;
   const initialTab: Tab =
-    requestedTab === "achievements"
-      ? "achievements"
-      : requestedTab === "activity" || requestedTab === "social"
-        ? "activity"
-        : "stats";
+    requestedTab === "achievements" ? "achievements"
+    : requestedTab === "activity" || requestedTab === "social" ? "activity"
+    : "stats";
+
   const [activeTab, setActiveTab] = useState<Tab>(initialTab);
-  const [mastery, setMastery] = useState<MasteryState>(
-    makeMastery(user?.id ?? "guest"),
-  );
-  const [masteryLoading, setMasteryLoading] = useState(true);
-  const userId = user?.id ?? null;
+  useEffect(() => { setActiveTab(initialTab); }, [initialTab]);
+
   const sheetRef = useRef<BottomSheet>(null);
-  const progressionQuery = useProgressionSummary(userId);
-  const streakQuery = useStreakSummary(userId);
-  const statsQuery = useSessionStats(userId ?? "");
-  const walletQuery = useWallet(userId ?? "", {
-    enabled: getFeatureStatus("economy_advanced") !== "hidden",
-  });
+  const {
+    mastery, masteryLoading, rankDisplay, streakQuery, progressionQuery,
+    loading, hasStatsError, xpPercent, stats,
+  } = useProfileData(userId);
+
   const historyQuery = useSessionHistory(userId ?? "", 20);
   const achievementsQuery = useAchievements(userId ?? "");
-  const profileAchievements = useMemo(
+  const achievements = React.useMemo(
     () => buildProfileAchievementCards(achievementsQuery.data),
     [achievementsQuery.data],
   );
-  const rankDisplay = getMasteryRankDisplay(mastery.rank);
-  const techniques: TechniqueItem[] = [
-    {
-      key: "durationMastery",
-      label: "Duration",
-      color: theme.colors.primary[500],
-    },
-    {
-      key: "purityMastery",
-      label: "Purity",
-      color: theme.colors.success.DEFAULT,
-    },
-    {
-      key: "consistencyMastery",
-      label: "Consistency",
-      color: theme.colors.warning.DEFAULT,
-    },
-    {
-      key: "comebackMastery",
-      label: "Comeback",
-      color: theme.colors.accent.pink,
-    },
-    { key: "bossMastery", label: "Boss", color: theme.colors.info.DEFAULT },
-  ];
-  const headerColors = useMemo(
-    () =>
-      [...getHeroGradientColors(streakQuery.data?.currentDays ?? 0)] as [
-        string,
-        string,
-      ],
-    [streakQuery.data?.currentDays],
-  );
-  const xpPercent = Math.max(
-    0,
-    Math.min(100, progressionQuery.data?.progressPercent ?? 0),
-  );
-  const loading =
-    progressionQuery.isLoading ||
-    streakQuery.isLoading ||
-    statsQuery.isLoading ||
-    walletQuery.isLoading;
-  const achievementLoading = achievementsQuery.isLoading;
-  const stats = [
-    {
-      label: "Current Streak",
-      value: `${streakQuery.data?.currentDays ?? 0} days`,
-      icon: "fire",
-      color: theme.colors.warning.DEFAULT,
-    },
-    {
-      label: "Longest Streak",
-      value: `${streakQuery.data?.longestDays ?? 0} days`,
-      icon: "calendar",
-      color: theme.colors.error.DEFAULT,
-    },
-    {
-      label: "Level",
-      value: `${progressionQuery.data?.level ?? 1}`,
-      icon: "star",
-      color: theme.colors.primary[500],
-    },
-    {
-      label: "Total Sessions",
-      value: `${statsQuery.stats?.totalSessions ?? 0}`,
-      icon: "activity",
-      color: theme.colors.info.DEFAULT,
-    },
-    {
-      label: "Focus Hours",
-      value: hours(statsQuery.stats?.totalFocusTime ?? 0),
-      icon: "clock",
-      color: theme.colors.success.DEFAULT,
-    },
-    {
-      label: "Coins",
-      value: `${walletQuery.data?.coins ?? 0}`,
-      icon: "gem",
-      color: theme.colors.warning.DEFAULT,
-    },
-  ];
-  useEffect(() => {
-    let mounted = true;
-    const loadMastery = async (): Promise<void> => {
-      if (!userId) {
-        if (mounted) {
-          setMastery(makeMastery("guest"));
-          setMasteryLoading(false);
-        }
-        return;
-      }
-      setMasteryLoading(true);
-      try {
-        const nextMastery =
-          await MasteryService.getOrCreateMasteryStateAsync(userId);
-        if (mounted) {
-          setMastery(nextMastery);
-        }
-      } catch (error) {
-        captureSilentFailure(error, {
-          feature: "screens",
-          operation: "mastery-load",
-          type: "network",
-        });
-        if (mounted) {
-          setMastery(MasteryService.getOrCreateMasteryState(userId));
-        }
-      } finally {
-        if (mounted) {
-          setMasteryLoading(false);
-        }
-      }
-    };
-    void loadMastery();
-    return () => {
-      mounted = false;
-    };
-  }, [userId]);
-  useEffect(() => {
-    setActiveTab(initialTab);
-  }, [initialTab]);
-  const renderStat = (item: (typeof stats)[number]) => (
-    <Box key={item.label} style={{ width: "47%" }}>
-      <Card
-        size="md"
-        style={{ backgroundColor: theme.colors.background.secondary }}
-      >
-        <Icon name={item.icon} size={20} color={item.color} />
-        <Text variant="caption" color="text.tertiary" style={{ marginTop: 10 }}>
-          {item.label}
-        </Text>
-        {loading ? (
-          <Skeleton width="70%" height={28} borderRadius={10} />
-        ) : (
-          <Text
-            variant="h3"
-            style={{
-              marginTop: 6,
-              color: theme.colors.text.primary,
-              fontWeight: "800",
-            }}
-          >
-            {item.value}
-          </Text>
-        )}
-      </Card>
-    </Box>
-  );
+
   return (
     <Box flex={1} style={{ backgroundColor: theme.colors.background.primary }}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <LinearGradient
-          colors={headerColors}
-          style={{
-            paddingTop: insets.top + theme.spacing[5],
-            paddingHorizontal: theme.spacing[5],
-            paddingBottom: theme.spacing[6],
-            borderBottomLeftRadius: 28,
-            borderBottomRightRadius: 28,
-          }}
-        >
-          <Box
-            flexDirection="row"
-            justifyContent="space-between"
-            mb={theme.spacing[4]}
-          >
-            <Pressable
-              onPress={() =>
-                navigation.navigate("Settings", { screen: "SettingsMain" })
-              }
-              style={{ padding: 8 }}
-              accessibilityLabel="Open settings"
-              accessibilityRole="button"
-              accessibilityHint="Opens account and app settings"
-            >
-              <Icon
-                name="setting"
-                size={24}
-                color={theme.colors.text.inverse}
-              />
-            </Pressable>
-            <Box flexDirection="row" alignItems="center" gap={8}>
-              <Pressable
-                onPress={() => navigation.navigate("Notifications")}
-                style={{ padding: 8 }}
-                accessibilityLabel="Open notifications"
-                accessibilityRole="button"
-                accessibilityHint="Shows your VEX notifications"
-              >
-                <Icon
-                  name="notification"
-                  size={24}
-                  color={theme.colors.text.inverse}
-                />
-              </Pressable>
-              <Pressable
-                onPress={logout}
-                style={{ padding: 8 }}
-                accessibilityLabel="Log out"
-                accessibilityRole="button"
-                accessibilityHint="Signs out of this VEX account"
-              >
-                <Icon
-                  name="logout"
-                  size={24}
-                  color={theme.colors.text.inverse}
-                />
-              </Pressable>
-            </Box>
-          </Box>
-          <Box alignItems="center">
-            <Avatar
-              name={user?.displayName || "User"}
-              size="xl"
-              status="online"
-            />
-            <Text
-              variant="h2"
-              style={{
-                color: launchColors.hex_fff,
-                fontWeight: "800",
-                marginTop: theme.spacing[4],
-              }}
-            >
-              {user?.displayName || "User"}
-            </Text>
-            <Text
-              variant="body"
-              style={{ color: launchColors.rgb_255_255_255_0_78, marginTop: 4 }}
-            >
-              {user?.id || "No email available"}
-            </Text>
-            <Box flexDirection="row" mt={theme.spacing[3]}>
-              <Badge
-                variant="primary"
-                size="sm"
-                leftIcon="star"
-              >{`Level ${progressionQuery.data?.level ?? 1}`}</Badge>
-              <Badge
-                variant="success"
-                size="sm"
-                leftIcon="fire"
-                style={{ marginLeft: 8 }}
-              >{`${streakQuery.data?.currentDays ?? 0} Day Streak`}</Badge>
-            </Box>
-          </Box>
-          <Box mt={theme.spacing[5]}>
-            <Box
-              flexDirection="row"
-              justifyContent="space-between"
-              alignItems="center"
-              mb={8}
-            >
-              <Text
-                variant="caption"
-                style={{ color: launchColors.rgb_255_255_255_0_86 }}
-              >{`Level ${progressionQuery.data?.level ?? 1} | ${progressionQuery.data?.xp ?? 0}/${progressionQuery.data?.nextLevelThreshold ?? 100} XP`}</Text>
-              <Text
-                variant="caption"
-                style={{ color: launchColors.rgb_255_255_255_0_68 }}
-              >{`${Math.round(xpPercent)}%`}</Text>
-            </Box>
-            <Box
-              height={6}
-              borderRadius={999}
-              overflow="hidden"
-              style={{ backgroundColor: launchColors.rgb_255_255_255_0_18 }}
-            >
-              <Box
-                height="100%"
-                borderRadius={999}
-                style={{
-                  width: `${xpPercent}%`,
-                  backgroundColor: launchColors.hex_fff,
-                }}
-              />
-            </Box>
-          </Box>
-        </LinearGradient>
+        <ProfileHeader
+          user={user ?? null}
+          streakDays={streakQuery.data?.currentDays ?? 0}
+          level={progressionQuery.data?.level ?? 1}
+          xp={progressionQuery.data?.xp ?? 0}
+          nextLevelThreshold={progressionQuery.data?.nextLevelThreshold ?? 100}
+          xpPercent={xpPercent}
+          onSettingsPress={() => navigation.navigate("Settings", { screen: "SettingsMain" })}
+          onNotificationsPress={() => navigation.navigate("Notifications")}
+          onLogout={logout}
+        />
 
         <Box p={16} gap={16}>
-          <Box
-            flexDirection="row"
-            style={{
-              borderBottomWidth: 1,
-              borderBottomColor: theme.colors.border.light,
-            }}
-          >
+          <Box flexDirection="row" style={{ borderBottomWidth: 1, borderBottomColor: theme.colors.border.light }}>
             {(["stats", "achievements", "activity"] as const).map((tab) => (
               <Pressable
                 key={tab}
                 onPress={() => setActiveTab(tab)}
                 style={{
-                  flex: 1,
-                  alignItems: "center",
-                  paddingVertical: 12,
+                  flex: 1, alignItems: "center", paddingVertical: 12,
                   borderBottomWidth: activeTab === tab ? 2 : 0,
                   borderBottomColor: theme.colors.primary[500],
                 }}
@@ -421,10 +86,7 @@ export const ProfileScreen: React.FC<Partial<Props>> = ({
                 <Text
                   variant="body"
                   style={{
-                    color:
-                      activeTab === tab
-                        ? theme.colors.primary[500]
-                        : theme.colors.text.secondary,
+                    color: activeTab === tab ? theme.colors.primary[500] : theme.colors.text.secondary,
                     fontWeight: activeTab === tab ? "700" : "500",
                     textTransform: "capitalize",
                   }}
@@ -436,336 +98,36 @@ export const ProfileScreen: React.FC<Partial<Props>> = ({
           </Box>
 
           {activeTab === "stats" ? (
-            <Box gap={16}>
-              {progressionQuery.error ||
-              streakQuery.error ||
-              walletQuery.error ? (
-                <Card
-                  size="md"
-                  style={{ backgroundColor: theme.colors.background.secondary }}
-                >
-                  <Text variant="body" color="error.DEFAULT">
-                    Some profile data could not load. Pull to refresh or revisit
-                    this screen in a moment.
-                  </Text>
-                </Card>
-              ) : null}
-              {userId && (
-                <FocusScoreCard
-                  userId={userId}
-                  size="large"
-                  showTrend={true}
-                  animate={true}
-                  onPress={() => {}}
-                />
-              )}
-              {userId && activeTab === "stats" && (
-                <ScoreHistoryChart userId={userId} />
-              )}
-              <PersonalBestsGrid userId={userId} />
-              <Box flexDirection="row" flexWrap="wrap" gap={12}>
-                {stats.map(renderStat)}
-              </Box>
-              <Pressable
-                onPress={() => {
-                  if (
-                    isFeatureAvailableForNavigation(
-                      getFeatureAvailability(disclosure.features.achievements),
-                    )
-                  )
-                    navigation.navigate("Mastery");
-                }}
-                accessibilityLabel="View Mastery details"
-                accessibilityRole="button"
-                accessibilityHint="Opens the full mastery progression screen"
-              >
-                <Card
-                  size="lg"
-                  style={{ backgroundColor: theme.colors.background.secondary }}
-                >
-                  <Box
-                    flexDirection="row"
-                    justifyContent="space-between"
-                    alignItems="center"
-                    mb={12}
-                  >
-                    <Box>
-                      <Text variant="h4" color="text.primary">
-                        Mastery
-                      </Text>
-                      <Text
-                        variant="caption"
-                        color="text.tertiary"
-                      >{`${rankDisplay.icon} ${rankDisplay.title.toUpperCase()}`}</Text>
-                    </Box>
-                    {masteryLoading ? (
-                      <Skeleton width={72} height={24} borderRadius={12} />
-                    ) : (
-                      <Badge
-                        variant="secondary"
-                        size="sm"
-                      >{`${mastery.totalMasteryPoints} pts`}</Badge>
-                    )}
-                  </Box>
-                  {masteryLoading ? (
-                    <Skeleton
-                      lines={5}
-                      height={10}
-                      borderRadius={999}
-                      spacing={10}
-                    />
-                  ) : (
-                    techniques.map((tech) => (
-                      <Box key={tech.key} mb={10}>
-                        <Box
-                          flexDirection="row"
-                          justifyContent="space-between"
-                          mb={6}
-                        >
-                          <Text variant="caption" color="text.secondary">
-                            {tech.label}
-                          </Text>
-                          <Text
-                            variant="caption"
-                            color="text.tertiary"
-                          >{`${mastery.techniques[tech.key]}/25`}</Text>
-                        </Box>
-                        <Box
-                          height={6}
-                          borderRadius={999}
-                          overflow="hidden"
-                          style={{
-                            backgroundColor: theme.colors.background.tertiary,
-                          }}
-                        >
-                          <Box
-                            height="100%"
-                            borderRadius={999}
-                            style={{
-                              width: `${(mastery.techniques[tech.key] / 25) * 100}%`,
-                              backgroundColor: tech.color,
-                            }}
-                          />
-                        </Box>
-                      </Box>
-                    ))
-                  )}
-                </Card>
-              </Pressable>
-            </Box>
-          ) : null}
-
-          {activeTab === "achievements" ? (
-            achievementLoading ? (
-              <Card
-                size="lg"
-                style={{ backgroundColor: theme.colors.background.secondary }}
-              >
-                <Skeleton
-                  lines={6}
-                  height={22}
-                  borderRadius={10}
-                  spacing={12}
-                />
-              </Card>
-            ) : achievementsQuery.isError ? (
-              <Card
-                size="lg"
-                style={{ backgroundColor: theme.colors.background.secondary }}
-              >
-                <EmptyState
-                  icon="!"
-                  title="Achievements unavailable"
-                  body="Your identity rewards could not load right now. Retry from the achievements screen or come back after your next session."
-                  actionLabel="Open achievements"
-                  onAction={() => navigation.navigate("Achievements")}
-                />
-              </Card>
-            ) : profileAchievements.length === 0 ? (
-              <Card
-                size="lg"
-                style={{ backgroundColor: theme.colors.background.secondary }}
-              >
-                <EmptyState
-                  icon="+"
-                  title="No earned proof yet"
-                  body="Complete your first focus session to unlock real achievements on this profile."
-                  actionLabel="Start session"
-                  onAction={() =>
-                    navigation.navigate("SessionStack", {
-                      screen: "SessionSetup",
-                      params: {},
-                    })
-                  }
-                />
-              </Card>
-            ) : (
-              <Box gap={12}>
-                {profileAchievements.map((item) => (
-                  <Pressable
-                    key={item.id}
-                    onPress={() => navigation.navigate("Achievements")}
-                    accessibilityLabel={item.accessibilityLabel}
-                    accessibilityRole="button"
-                    accessibilityHint="Opens the full achievement collection"
-                  >
-                    <Card
-                      size="md"
-                      style={{
-                        backgroundColor: theme.colors.background.secondary,
-                        opacity: item.statusTone === "success" ? 1 : 0.7,
-                      }}
-                    >
-                      <Box flexDirection="row" alignItems="center" gap={12}>
-                        <Box
-                          width={44}
-                          height={44}
-                          borderRadius={12}
-                          justifyContent="center"
-                          alignItems="center"
-                          style={{
-                            backgroundColor:
-                              item.statusTone === "success"
-                                ? theme.colors.primary[100]
-                                : theme.colors.background.tertiary,
-                          }}
-                        >
-                          <Text variant="h3" color="text.primary">
-                            {item.icon}
-                          </Text>
-                        </Box>
-                        <Box flex={1}>
-                          <Text variant="h4" color="text.primary">
-                            {item.title}
-                          </Text>
-                          <Text variant="caption" color="text.secondary">
-                            {item.description}
-                          </Text>
-                          <Text
-                            variant="caption"
-                            color="text.tertiary"
-                            style={{ marginTop: 4 }}
-                          >
-                            {item.progressLabel}
-                          </Text>
-                        </Box>
-                        <Badge variant={item.statusTone} size="sm">
-                          {item.statusLabel}
-                        </Badge>
-                      </Box>
-                    </Card>
-                  </Pressable>
-                ))}
-              </Box>
-            )
-          ) : null}
-
-          {activeTab === "activity" ? (
-            historyQuery.isLoading ? (
-              <Card
-                size="lg"
-                style={{ backgroundColor: theme.colors.background.secondary }}
-              >
-                <Skeleton
-                  lines={5}
-                  height={52}
-                  borderRadius={14}
-                  spacing={12}
-                />
-              </Card>
-            ) : historyQuery.error ? (
-              <Card
-                size="lg"
-                style={{ backgroundColor: theme.colors.background.secondary }}
-              >
-                <EmptyState
-                  icon="!"
-                  title="Activity unavailable"
-                  body="We couldn't load your recent sessions right now."
-                  actionLabel="Start session"
-                  onAction={() =>
-                    navigation.navigate("SessionStack", {
-                      screen: "SessionSetup",
-                      params: {},
-                    })
-                  }
-                />
-              </Card>
-            ) : historyQuery.history.length === 0 ? (
-              <Card
-                size="lg"
-                style={{ backgroundColor: theme.colors.background.secondary }}
-              >
-                <EmptyState
-                  icon="+"
-                  title="No recent activity"
-                  body="Start a session to turn your profile into a live record of wins, streaks, and progression."
-                  actionLabel="Start session"
-                  onAction={() =>
-                    navigation.navigate("SessionStack", {
-                      screen: "SessionSetup",
-                      params: {},
-                    })
-                  }
-                />
-              </Card>
-            ) : (
-              <Box
-                style={{
-                  height: Math.max(360, historyQuery.history.length * 86),
-                }}
-              >
-                <FlashList
-                  data={historyQuery.history}
-                  scrollEnabled={false}
-                  estimatedItemSize={86}
-                  keyExtractor={(item: SessionHistoryEntry) => item.sessionId}
-                  renderItem={({ item }: { item: SessionHistoryEntry }) => (
-                    <Card
-                      size="md"
-                      style={{
-                        backgroundColor: theme.colors.background.secondary,
-                        marginBottom: 12,
-                      }}
-                    >
-                      <Box
-                        flexDirection="row"
-                        justifyContent="space-between"
-                        alignItems="center"
-                      >
-                        <Box flex={1}>
-                          <Text variant="h4" color="text.primary">
-                            {item.config.customName || "Focus Session"}
-                          </Text>
-                          <Text
-                            variant="caption"
-                            color="text.secondary"
-                          >{`${when(item.startedAt)} | ${minutes(item)}`}</Text>
-                        </Box>
-                        <Box alignItems="flex-end">
-                          <Badge
-                            variant={
-                              item.status === "COMPLETED"
-                                ? "success"
-                                : "secondary"
-                            }
-                            size="sm"
-                          >
-                            {item.status}
-                          </Badge>
-                          <Text
-                            variant="caption"
-                            color="text.tertiary"
-                            style={{ marginTop: 6 }}
-                          >{`${item.summary?.xpEarned ?? 0} XP`}</Text>
-                        </Box>
-                      </Box>
-                    </Card>
-                  )}
-                />
-              </Box>
-            )
-          ) : null}
+            <ProfileStatsTab
+              theme={theme} userId={userId} stats={stats} statsLoading={loading}
+              hasError={hasStatsError} mastery={mastery} masteryLoading={masteryLoading}
+              rankDisplay={rankDisplay}
+              techniques={[
+                { key: "durationMastery", label: "Duration", color: theme.colors.primary[500] },
+                { key: "purityMastery", label: "Purity", color: theme.colors.success.DEFAULT },
+                { key: "consistencyMastery", label: "Consistency", color: theme.colors.warning.DEFAULT },
+                { key: "comebackMastery", label: "Comeback", color: theme.colors.accent.pink },
+                { key: "bossMastery", label: "Boss", color: theme.colors.info.DEFAULT },
+              ]}
+              onMasteryPress={() => {
+                if (isFeatureAvailableForNavigation(getFeatureAvailability(disclosure.features.achievements)))
+                  navigation.navigate("Mastery");
+              }}
+            />
+          ) : activeTab === "achievements" ? (
+            <ProfileAchievementsTab
+              theme={theme} isLoading={achievementsQuery.isLoading}
+              isError={!!achievementsQuery.isError} achievements={achievements}
+              onOpenAchievements={() => navigation.navigate("Achievements")}
+              onStartSession={() => navigation.navigate("SessionStack", { screen: "SessionSetup", params: {} })}
+            />
+          ) : (
+            <ProfileActivityTab
+              theme={theme} isLoading={historyQuery.isLoading}
+              isError={!!historyQuery.error} history={historyQuery.history}
+              onStartSession={() => navigation.navigate("SessionStack", { screen: "SessionSetup", params: {} })}
+            />
+          )}
         </Box>
       </ScrollView>
 
@@ -775,92 +137,22 @@ export const ProfileScreen: React.FC<Partial<Props>> = ({
         snapPoints={["60%", "90%"]}
         enablePanDownToClose
         backdropComponent={(props) => (
-          <BottomSheetBackdrop
-            {...props}
-            appearsOnIndex={0}
-            disappearsOnIndex={-1}
-          />
+          <BottomSheetBackdrop {...props} appearsOnIndex={0} disappearsOnIndex={-1} />
         )}
         backgroundStyle={{
           backgroundColor: theme.colors.background.secondary,
-          borderWidth: 1,
-          borderColor: theme.colors.border.light,
+          borderWidth: 1, borderColor: theme.colors.border.light,
         }}
         handleIndicatorStyle={{ backgroundColor: theme.colors.text.tertiary }}
       >
-        <ScrollView
-          contentContainerStyle={{
-            paddingHorizontal: theme.spacing[5],
-            paddingVertical: theme.spacing[4],
-            gap: theme.spacing[4],
-          }}
-        >
-          <Text
-            variant="h3"
-            color="text.primary"
-          >{`${rankDisplay.icon} ${rankDisplay.title}`}</Text>
-          <Text
-            variant="body"
-            color="text.secondary"
-          >{`${mastery.totalMasteryPoints} total mastery points`}</Text>
-          {mastery.activeChallenges.length > 0 ? (
-            mastery.activeChallenges.slice(0, 3).map((challenge) => (
-              <Card
-                key={challenge.id}
-                size="md"
-                style={{ backgroundColor: theme.colors.background.primary }}
-              >
-                <Text variant="h4" color="text.primary">
-                  {challenge.title}
-                </Text>
-                <Text
-                  variant="caption"
-                  color="text.secondary"
-                  style={{ marginTop: 4 }}
-                >
-                  {challenge.description}
-                </Text>
-                <Box
-                  height={8}
-                  borderRadius={999}
-                  overflow="hidden"
-                  mt={12}
-                  style={{ backgroundColor: theme.colors.background.tertiary }}
-                >
-                  <Box
-                    height="100%"
-                    borderRadius={999}
-                    style={{
-                      width: `${Math.max(0, Math.min(100, (challenge.current / Math.max(1, challenge.target)) * 100))}%`,
-                      backgroundColor: theme.colors.primary[500],
-                    }}
-                  />
-                </Box>
-                <Box flexDirection="row" justifyContent="space-between" mt={8}>
-                  <Text
-                    variant="caption"
-                    color="text.tertiary"
-                  >{`${challenge.current}/${challenge.target} ${challenge.unit}`}</Text>
-                  <Text
-                    variant="caption"
-                    color="success.DEFAULT"
-                  >{`+${challenge.masteryPoints} MP`}</Text>
-                </Box>
-              </Card>
-            ))
-          ) : (
-            <Card
-              size="md"
-              style={{ backgroundColor: theme.colors.background.primary }}
-            >
-              <Text variant="body" color="text.secondary">
-                Complete sessions to unlock mastery challenges
-              </Text>
-            </Card>
-          )}
-        </ScrollView>
+        <ProfileMasterySheet
+          theme={theme} rankDisplay={rankDisplay}
+          totalMasteryPoints={mastery.totalMasteryPoints}
+          challenges={mastery.activeChallenges}
+        />
       </BottomSheet>
     </Box>
   );
 };
+
 export default withScreenErrorBoundary(ProfileScreen, "Profile");

@@ -1,6 +1,8 @@
-export { useAuthStore } from "./authStore";
-export { useAppStore } from "./appStore";
-export { useUIStore } from "./uiStore";
+import { useAuthStore } from "./authStore";
+import { useAppStore } from "./appStore";
+import { useUIStore } from "./uiStore";
+
+export { useAuthStore, useAppStore, useUIStore };
 
 export function useStore() {
   return {

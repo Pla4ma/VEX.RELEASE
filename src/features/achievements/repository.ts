@@ -8,6 +8,7 @@ import { getSupabaseClient } from "../../config/supabase";
 
 const supabase = getSupabaseClient();
 import { type UserAchievement } from "./types";
+import { UserAchievementRowSchema } from "./schemas";
 
 // ============================================================================
 // User Achievements
@@ -28,14 +29,15 @@ export async function getUserAchievement(
     return null;
   }
 
+  const parsed = UserAchievementRowSchema.parse(data);
   return {
-    userId: data.user_id,
-    achievementId: data.achievement_id,
-    progress: data.progress,
-    maxProgress: data.max_progress,
-    isUnlocked: data.is_unlocked,
-    unlockedAt: data.unlocked_at,
-    progressHistory: data.progress_history || [],
+    userId: parsed.user_id,
+    achievementId: parsed.achievement_id,
+    progress: parsed.progress,
+    maxProgress: parsed.max_progress,
+    isUnlocked: parsed.is_unlocked,
+    unlockedAt: parsed.unlocked_at ? new Date(parsed.unlocked_at).getTime() : undefined,
+    progressHistory: parsed.progress_history,
   };
 }
 
@@ -51,14 +53,15 @@ export async function getAllUserAchievements(
     return [];
   }
 
-  return data.map((row) => ({
+  const rows = UserAchievementRowSchema.array().parse(data);
+  return rows.map((row) => ({
     userId: row.user_id,
     achievementId: row.achievement_id,
     progress: row.progress,
     maxProgress: row.max_progress,
     isUnlocked: row.is_unlocked,
-    unlockedAt: row.unlocked_at,
-    progressHistory: row.progress_history || [],
+    unlockedAt: row.unlocked_at ? new Date(row.unlocked_at).getTime() : undefined,
+    progressHistory: row.progress_history,
   }));
 }
 
@@ -88,13 +91,14 @@ export async function createUserAchievement(
     return null;
   }
 
+  const parsed = UserAchievementRowSchema.parse(data);
   return {
-    userId: data.user_id,
-    achievementId: data.achievement_id,
-    progress: data.progress,
-    maxProgress: data.max_progress,
-    isUnlocked: data.is_unlocked,
-    progressHistory: data.progress_history || [],
+    userId: parsed.user_id,
+    achievementId: parsed.achievement_id,
+    progress: parsed.progress,
+    maxProgress: parsed.max_progress,
+    isUnlocked: parsed.is_unlocked,
+    progressHistory: parsed.progress_history,
   };
 }
 
@@ -132,16 +136,15 @@ export async function updateAchievementProgress(
     return null;
   }
 
+  const parsed = UserAchievementRowSchema.parse(data);
   return {
-    userId: data.user_id,
-    achievementId: data.achievement_id,
-    progress: data.progress,
-    maxProgress: data.max_progress,
-    isUnlocked: data.is_unlocked,
-    unlockedAt: data.unlocked_at
-      ? new Date(data.unlocked_at).getTime()
-      : undefined,
-    progressHistory: data.progress_history || [],
+    userId: parsed.user_id,
+    achievementId: parsed.achievement_id,
+    progress: parsed.progress,
+    maxProgress: parsed.max_progress,
+    isUnlocked: parsed.is_unlocked,
+    unlockedAt: updates.unlockedAt,
+    progressHistory: parsed.progress_history,
   };
 }
 

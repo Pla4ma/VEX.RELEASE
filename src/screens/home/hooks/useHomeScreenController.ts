@@ -1,28 +1,14 @@
 import { useMemo } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { useQuery } from "@tanstack/react-query";
-import {
-  useCreateRecommendation,
-  useUpdateRecommendationStatus,
-  type SessionRecommendation,
-} from "../../../features/ai-coach";
-import * as coachRepository from "../../../features/ai-coach/repository";
+import { useActiveCoachRecommendations, useCreateRecommendation, useUpdateRecommendationStatus, type SessionRecommendation } from "../../../features/ai-coach";
 import { useActiveStudyPlan } from "../../../features/content-study";
 import { useLearningExecutionLayer } from "../../../features/learning-execution";
 import { useActiveBoss } from "../../../features/boss/hooks";
 import { useHomeSpineModel } from "../../../features/home-spine/hooks";
-import {
-  getFeatureAvailability,
-  isFeatureAvailableForNavigation,
-  useDisclosureAnalytics,
-  useFeatureAccess,
-} from "../../../features/liveops-config";
+import { getFeatureAvailability, isFeatureAvailableForNavigation, useDisclosureAnalytics, useFeatureAccess } from "../../../features/liveops-config";
 import { getNextBestAction } from "../../../features/progression";
 import { useProgressionSummary } from "../../../features/progression/hooks";
-import {
-  useComebackState,
-  useStreakSummary,
-} from "../../../features/streaks/hooks";
+import { useComebackState, useStreakSummary } from "../../../features/streaks/hooks";
 import { useNetInfo } from "../../../network";
 import type { ExtendedRootStackParams } from "../../../navigation/types";
 import { useSessionHistory } from "../../../session/hooks/useSession";
@@ -30,11 +16,7 @@ import { useAuthStore } from "../../../store";
 import { useSessionUIStore } from "../../../store/session-state";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { buildHomeFeatureRuntime } from "./home-feature-runtime";
-import {
-  buildDisplayedReturnReason,
-  getFocusedMinutesForToday,
-  getNextUnlockFeature,
-} from "./home-controller-helpers";
+import { buildDisplayedReturnReason, getFocusedMinutesForToday, getNextUnlockFeature } from "./home-controller-helpers";
 import { useHomeAnalyticsEffects } from "./useHomeAnalyticsEffects";
 import { useHomeNavigationActions } from "./useHomeNavigationActions";
 import { useHomeReturnReason } from "./useHomeReturnReason";
@@ -108,11 +90,8 @@ export function useHomeScreenController() {
     nextUnlockFeature,
   });
   const isCoreLoading = disclosure.isLoading;
-  const recommendationsQuery = useQuery({
-    queryKey: ["coach", "recommendations", userId],
-    queryFn: () => coachRepository.fetchActiveRecommendations(userId),
+  const recommendationsQuery = useActiveCoachRecommendations(userId, {
     enabled: runtime.canQueryCoach && Boolean(userId) && !isCoreLoading,
-    staleTime: 1000 * 60 * 5,
   });
   const primaryRecommendation = useMemo<SessionRecommendation | null>(
     () =>
@@ -123,7 +102,7 @@ export function useHomeScreenController() {
         .sort((a, b) => (b.confidence ?? 0) - (a.confidence ?? 0))[0] ?? null,
     [recommendationsQuery.data],
   );
-  const isLoading = isCoreLoading || recommendationsQuery.isLoading;
+  const isLoading = isCoreLoading || recommendationsQuery.isPending;
   const loadError =
     disclosure.error ?? activeStudyPlanQuery.error ?? comebackQuery.error;
   const isFirstRun =
@@ -138,14 +117,7 @@ export function useHomeScreenController() {
     totalCompletedSessions: disclosure.inputs.totalCompletedSessions,
     userId,
   });
-  const {
-    continueStudyPlan,
-    openContentStudy,
-    openNextAction,
-    openProgress,
-    openSetup,
-    openSocial,
-  } = useHomeNavigationActions({
+  const { continueStudyPlan, openContentStudy, openNextAction, openProgress, openSetup, openSocial } = useHomeNavigationActions({
     activeStudyPlan: activeStudyPlanQuery.data
       ? {
           contentId: activeStudyPlanQuery.data.contentId,
@@ -180,7 +152,7 @@ export function useHomeScreenController() {
     openNextAction,
     openSetup,
     primaryRecommendation,
-    recommendationsLoading: recommendationsQuery.isLoading,
+    recommendationsLoading: recommendationsQuery.isPending,
     updateRecommendationStatus,
     userId,
   });
@@ -208,40 +180,16 @@ export function useHomeScreenController() {
     [homeSpine.returnReason, returnReason],
   );
   return {
-    user,
-    userId,
-    isOnline,
-    isLoading,
-    isFirstRun,
-    loadError,
-    homeHighlight,
-    completionSync,
-    clearHomeHighlight,
-    currentStreak,
-    currentXp,
-    todayFocusMinutes,
-    progressPercent,
-    latestSession,
-    primaryRecommendation,
-    homeSpine,
+    user, userId, isOnline, isLoading, isFirstRun, loadError,
+    homeHighlight, completionSync, clearHomeHighlight,
+    currentStreak, currentXp, todayFocusMinutes, progressPercent,
+    latestSession, primaryRecommendation, homeSpine,
     returnReason: displayedReturnReason,
-    disclosure,
-    runtime,
-    streakQuery,
-    progressionQuery,
-    historyQuery,
+    disclosure, runtime, streakQuery, progressionQuery, historyQuery,
     squadsQuery: createStubQuery(),
-    activeStudyPlanQuery,
-    learningExecutionLayer,
-    comebackQuery,
-    activeBossQuery,
-    shouldShowSecondarySystems,
-    shouldShowExpansionSystems,
-    openSetup,
-    openProgress,
-    openSocial,
-    openContentStudy,
-    continueStudyPlan,
+    activeStudyPlanQuery, learningExecutionLayer, comebackQuery, activeBossQuery,
+    shouldShowSecondarySystems, shouldShowExpansionSystems,
+    openSetup, openProgress, openSocial, openContentStudy, continueStudyPlan,
     retryAll: disclosure.refetchAll,
   };
 }

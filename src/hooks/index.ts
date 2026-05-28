@@ -13,8 +13,8 @@ export {
   useFeedUpdates,
   useSquadChanges,
   useGuildQuests,
-  useOnlineUsers,
 } from "./useRealtime";
+export { useOnlineUsers } from "./useOnlineUsers";
 
 // Phase 7 — Polish & Performance
 export {

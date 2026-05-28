@@ -22,6 +22,7 @@ import Animated, {
 import { Box, Text } from "./primitives";
 import { Icon } from "../icons";
 import { launchColors } from "@theme/tokens/launch-colors";
+import { useReducedMotion } from "@/hooks";
 
 interface OfflineBannerProps {
   /** Custom message to display when offline */
@@ -39,6 +40,7 @@ export const OfflineBanner: React.FC<OfflineBannerProps> = ({
 }) => {
   const [isOffline, setIsOffline] = useState(false);
   const [wasOffline, setWasOffline] = useState(false);
+  const { isReducedMotion } = useReducedMotion();
 
   const translateY = useSharedValue(-100);
   const opacity = useSharedValue(0);
@@ -50,11 +52,21 @@ export const OfflineBanner: React.FC<OfflineBannerProps> = ({
 
       if (offline) {
         setWasOffline(true);
-        translateY.value = withSpring(0, { damping: 15 });
-        opacity.value = withTiming(1, { duration: 300 });
+        if (isReducedMotion) {
+          translateY.value = 0;
+          opacity.value = 1;
+        } else {
+          translateY.value = withSpring(0, { damping: 15 });
+          opacity.value = withTiming(1, { duration: 300 });
+        }
       } else {
-        translateY.value = withSpring(-100, { damping: 15 });
-        opacity.value = withTiming(0, { duration: 300 });
+        if (isReducedMotion) {
+          translateY.value = -100;
+          opacity.value = 0;
+        } else {
+          translateY.value = withSpring(-100, { damping: 15 });
+          opacity.value = withTiming(0, { duration: 300 });
+        }
       }
     });
 
@@ -70,7 +82,7 @@ export const OfflineBanner: React.FC<OfflineBannerProps> = ({
     });
 
     return () => unsubscribe();
-  }, [translateY, opacity]);
+  }, [translateY, opacity, isReducedMotion]);
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ translateY: translateY.value }],

@@ -20,7 +20,7 @@ import { launchColors } from "@theme/tokens/launch-colors";
 export function useFocusIdentity(userId: string) {
   const { score, history, status, error, refetch } = useFocusScore();
 
-  const engine = useMemo(() => new FocusIdentityEngine(userId), [userId]);
+  const engine = useMemo(() => new FocusIdentityEngine(), [userId]);
 
   // Transform the data to match the expected interface
   const profile: FocusIdentityProfile | null = useMemo(() => {
@@ -134,7 +134,7 @@ export function useFocusScoreColor(score: number | null): string {
       return theme.colors.text.secondary;
     }
 
-    const engine = new FocusIdentityEngine("temp");
+    const engine = new FocusIdentityEngine();
     const band = engine.getScoreBand(score);
 
     switch (band.label) {

@@ -1,3 +1,16 @@
+import type { BehaviorProfile } from "../types";
+
+type ActiveStudyPlan = {
+  id?: string;
+  title: string;
+  progress?: number;
+  nextSession?: string | null;
+  totalTasks?: number;
+  completedTasks?: number;
+  contentId?: string;
+  generationId?: string;
+};
+
 export type CoachRecommendationType =
   | "focus_session"
   | "study_plan"

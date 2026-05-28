@@ -9,11 +9,8 @@
   "src/features/focus-identity/__tests__/FocusIdentityEngine.test.ts",
   "src/features/settings/__tests__/service.test.ts",
   "src/features/streaks/__tests__/service-comprehensive.test.ts",
-  "src/features/vex-actions/__tests__/actions.test.ts",
   "src/navigation/__tests__/RootNavigator.test.tsx",
   "src/performance/__tests__/PerformanceGate.test.ts",
-  "src/production/__tests__/Phase9ExitGate.test.ts",
   "src/screens/session/hooks/__tests__/useCompanionSession.test.ts",
-  "src/session/engines/scoring/__tests__/BaseScoreCalculator.test.ts",
-  "src/session/services/__tests__/SessionLifecycleService.test.ts"
+  "src/session/engines/scoring/__tests__/BaseScoreCalculator.test.ts"
 ]

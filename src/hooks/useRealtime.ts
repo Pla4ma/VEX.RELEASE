@@ -1,5 +1,6 @@
-import { useEffect, useRef, useCallback, useState } from "react";
+import { useEffect, useCallback, useState } from "react";
 import {
+  cleanupPresence,
   initializePresence,
   updatePresence,
   subscribeToSquadPresence,
@@ -13,7 +14,6 @@ import {
   type SquadPresence,
   type BroadcastMessage,
 } from "../services/realtime";
-import { eventBus } from "../events";
 import { createDebugger } from "../utils/debug";
 const debug = createDebugger("hooks:realtime");
 interface UsePresenceOptions {
@@ -47,6 +47,7 @@ export function usePresence({
     init();
     return () => {
       mounted = false;
+      void cleanupPresence();
     };
   }, [userId, initialStatus]);
   const setPresenceStatus = useCallback(
@@ -64,25 +65,29 @@ interface UseSquadPresenceOptions {
 }
 export function useSquadPresence({ squadId }: UseSquadPresenceOptions) {
   const [presence, setPresence] = useState<SquadPresence | null>(null);
-  const unsubscribeRef = useRef<(() => void) | null>(null);
   useEffect(() => {
     if (!squadId) {
       return;
     }
     let mounted = true;
+    let unsubscribe: (() => void) | null = null;
     const subscribe = async () => {
-      const unsubscribe = await subscribeToSquadPresence(squadId, (data) => {
+      const nextUnsubscribe = await subscribeToSquadPresence(squadId, (data) => {
         if (mounted) {
           setPresence(data);
         }
       });
-      unsubscribeRef.current = unsubscribe;
+      if (!mounted) {
+        nextUnsubscribe();
+        return;
+      }
+      unsubscribe = nextUnsubscribe;
     };
     subscribe();
     return () => {
       mounted = false;
-      unsubscribeRef.current?.();
-      unsubscribeRef.current = null;
+      unsubscribe?.();
+      unsubscribe = null;
     };
   }, [squadId]);
   return {
@@ -177,32 +182,4 @@ export function useGuildQuests({
     return unsubscribe;
   }, [guildId, onQuestUpdate]);
   return { questUpdates, latestUpdate: questUpdates[questUpdates.length - 1] };
-}
-export function useOnlineUsers() {
-  const [onlineUsers, setOnlineUsers] = useState<Set<string>>(new Set());
-  useEffect(() => {
-    const unsubscribe = eventBus.subscribe(
-      "realtime:presence_update",
-      (event) => {
-        if (event.status === "online" || event.status === "in_session") {
-          setOnlineUsers((prev) => new Set([...prev, event.userId]));
-        } else {
-          setOnlineUsers((prev) => {
-            const next = new Set(prev);
-            next.delete(event.userId);
-            return next;
-          });
-        }
-      },
-    );
-    return unsubscribe;
-  }, []);
-  return {
-    onlineUsers,
-    onlineCount: onlineUsers.size,
-    isOnline: useCallback(
-      (userId: string) => onlineUsers.has(userId),
-      [onlineUsers],
-    ),
-  };
 }

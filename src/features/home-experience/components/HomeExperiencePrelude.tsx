@@ -35,7 +35,7 @@ export function HomeExperiencePrelude({
 
   const showMotivationPicker = firstWeekExperience
     ? firstWeekExperience.allowedHomeSurfaces.includes(
-        "motivation_confirmation" as never,
+        "motivation_confirmation",
       )
     : model.visibleSections.includes("motivation_style");
   const showEvolutionTeaser = firstWeekExperience
@@ -44,7 +44,7 @@ export function HomeExperiencePrelude({
     : model.teasedElements.length > 0;
   const showCoachLine = firstWeekExperience
     ? firstWeekExperience.allowedHomeSurfaces.includes(
-        "coach_presence_line" as never,
+        "coach_presence_line",
       )
     : true;
   const isBossVisible = firstWeekExperience

@@ -9,6 +9,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { Box, Text } from "./primitives";
 import { useTheme } from "../theme";
+import { useReducedMotion } from "@/hooks";
 
 type LevelUpCelebrationProps = {
   oldLevel: number;
@@ -24,13 +25,16 @@ export const LevelUpCelebration: React.FC<LevelUpCelebrationProps> = ({
   onDismiss,
 }) => {
   const { theme } = useTheme();
+  const { isReducedMotion } = useReducedMotion();
   const levelScale = useSharedValue(0.7);
 
   useEffect(() => {
-    levelScale.value = withSpring(1, { damping: 10, stiffness: 150 });
+    levelScale.value = isReducedMotion
+      ? 1
+      : withSpring(1, { damping: 10, stiffness: 150 });
     const timeoutId = setTimeout(onDismiss, 3500);
     return () => clearTimeout(timeoutId);
-  }, [levelScale, onDismiss]);
+  }, [levelScale, onDismiss, isReducedMotion]);
 
   const levelStyle = useAnimatedStyle(() => ({
     transform: [{ scale: levelScale.value }],
