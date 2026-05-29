@@ -82,28 +82,22 @@ export function buildHomeController(input: BuildControllerInput): HomeController
     isLoading: disclosure.isLoading || recommendationsPending,
     isFirstRun,
     loadError,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    homeHighlight: homeHighlight as any,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    completionSync: completionSync as any,
+    homeHighlight,
+    completionSync,
     clearHomeHighlight,
     currentStreak,
     currentXp,
     todayFocusMinutes,
     progressPercent,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    latestSession: (historyQuery.history[0] ?? null) as any,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    primaryRecommendation: primaryRecommendation as any,
+    latestSession: historyQuery.history[0] ?? null,
+    primaryRecommendation: primaryRecommendation ?? null,
     homeSpine,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    returnReason: displayedReturnReason as any,
+    returnReason: displayedReturnReason,
     disclosure,
     runtime,
     streakQuery,
     progressionQuery,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    historyQuery: historyQuery as any,
+    historyQuery,
     squadsQuery: createStubQuery() as UseQueryResult,
     activeStudyPlanQuery: activeStudyPlanQuery as UseQueryResult,
     learningExecutionLayer,

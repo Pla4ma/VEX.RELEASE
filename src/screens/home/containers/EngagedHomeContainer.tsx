@@ -101,8 +101,7 @@ export function useEngagedContainerModel(
     activeStudyPlanQuery, comebackQuery,
     continueStudyPlan: actions.continueStudyPlan, nextBestAction,
     openNextAction: actions.openNextAction, openSetup,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    primaryRecommendation, runtime, updateRecommendationStatus: updateRecommendationStatus as any, userId,
+    primaryRecommendation, runtime, updateRecommendationStatus, userId,
   });
 
   const homeSpine = useHomeSpineModel({
@@ -125,15 +124,16 @@ export function useEngagedContainerModel(
 
   const controller = buildHomeController({
     activeStudyPlanQuery, clearHomeHighlight, completionSync, comebackQuery,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    createRecommendation: createRecommendation as any, currentStreak, currentXp, disclosure,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    displayedReturnReason: displayedReturnReason as any, historyQuery, homeHighlight, homeSpine,
+    createRecommendation: {
+      mutate: (vars) => createRecommendation.mutate(vars as Parameters<typeof createRecommendation.mutate>[0]),
+      mutateAsync: (vars) => createRecommendation.mutateAsync(vars as Parameters<typeof createRecommendation.mutateAsync>[0]),
+      isPending: createRecommendation.isPending,
+      reset: createRecommendation.reset,
+    }, currentStreak, currentXp, disclosure,
+    displayedReturnReason, historyQuery, homeHighlight, homeSpine,
     isFirstRun, isOnline, learningExecutionLayer, loadError,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    primaryRecommendation: primaryRecommendation as any, progressPercent, progressionQuery,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    recommendationsPending, runtime: runtime as any, streakQuery, todayFocusMinutes,
+    primaryRecommendation, progressPercent, progressionQuery,
+    recommendationsPending, runtime, streakQuery, todayFocusMinutes,
     updateRecommendationStatus: {
       mutate: (vars) => updateRecommendationStatus.mutate(vars as Parameters<typeof updateRecommendationStatus.mutate>[0]),
       mutateAsync: (vars) => updateRecommendationStatus.mutateAsync(vars as Parameters<typeof updateRecommendationStatus.mutateAsync>[0]),
@@ -153,10 +153,8 @@ export function useEngagedContainerModel(
     isFirstRun, loadError, currentStreak, currentXp,
     todayFocusMinutes, progressPercent,
     primaryRecommendation: primaryRecommendation ?? null, homeSpine,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    returnReason: displayedReturnReason as any,
+    returnReason: displayedReturnReason,
     stage: disclosure.stage, productTier: disclosure.productTier,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    features: disclosure.features, runtime: runtime as any, controller,
+    features: disclosure.features, runtime, controller,
   };
 }

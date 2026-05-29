@@ -77,19 +77,15 @@ export function usePowerUserContainerModel(
     currentStreak, nextUnlockFeature,
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const returnReason = useMemo((): any => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const returnReason = useMemo((): HomeReturnReason => {
     return buildReturnReasonConfig({
       activeStudyPlanData: activeStudyPlanQuery.data as ActiveStudyPlanData | undefined,
       comebackData: comebackQuery.data as ComebackData | undefined,
       shouldShowExpansionSystems: runtime.shouldShowExpansionSystems,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      primaryRecommendation, nextBestAction: nextBestAction as any,
+      primaryRecommendation, nextBestAction,
       continueStudyPlan, openNextAction, openSetup,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      updateRecommendationStatus: updateRecommendationStatus as any, userId,
-    }) as unknown as HomeReturnReason;
+      updateRecommendationStatus, userId,
+    });
   }, [
     activeStudyPlanQuery.data, comebackQuery.data, continueStudyPlan,
     nextBestAction, openNextAction, openSetup, primaryRecommendation,
