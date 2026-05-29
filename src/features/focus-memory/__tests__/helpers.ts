@@ -8,8 +8,12 @@ import {
   filterImportMemories,
   findMemoriesForRecommendation,
   generateRecommendationEvidence,
+  hasEvidenceConflict,
   listActiveMemories,
+  listDeletedMemoryHashes,
   scopeMessageForSource,
+  hashEvidence,
+  isImportSourceMemory,
 } from "../service";
 import { contentScopeForSource } from "../expiry";
 
@@ -56,7 +60,11 @@ export {
   filterImportMemories,
   findMemoriesForRecommendation,
   generateRecommendationEvidence,
+  hasEvidenceConflict,
   listActiveMemories,
+  listDeletedMemoryHashes,
   scopeMessageForSource,
   contentScopeForSource,
+  hashEvidence,
+  isImportSourceMemory,
 };
