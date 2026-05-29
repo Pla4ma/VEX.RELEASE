@@ -81,7 +81,7 @@ describe("Day 0 student preview", () => {
     const preview = buildDayZeroStudyPreview();
     expect(preview.hidden).toBe(false);
     expect(preview.ctaLabel).toContain("Start first study block");
-    expect(preview.title).toContain("preview");
+    expect(preview.title).toContain("VEX helps you");
     expect(preview.riskLabel).toBeNull();
     expect(preview.offlineFallback).toBeNull();
   });

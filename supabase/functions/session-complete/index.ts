@@ -69,6 +69,15 @@ serve(async (request: Request) => {
 
   const req: CompleteSessionRequest = parsed.data;
 
+  // --- Server-Side Validation: clamp client-provided values ---
+  const MAX_SESSION_SECONDS = 14400; // 4 hours max
+  const clampedDuration = Math.min(req.durationSeconds, MAX_SESSION_SECONDS);
+  const clampedEffective = Math.min(req.effectiveDurationSeconds, clampedDuration);
+  const clampedQuality = Math.max(0, Math.min(100, req.focusQuality));
+
+  // Never trust client-provided streakDays — server calculates from DB
+  const safeStreakDays = 0;
+
   // --- Execute Server-Authoritative Completion ---
   if (!supabaseUrl || !serviceRoleKey) {
     return respond({ success: false, error: { code: 'CONFIG_ERROR', message: 'Missing Supabase configuration' } }, 500, request);
@@ -80,15 +89,15 @@ serve(async (request: Request) => {
     p_user_id: auth.userId,
     p_session_id: req.sessionId,
     p_idempotency_key: req.idempotencyKey,
-    p_duration_seconds: req.durationSeconds,
-    p_effective_duration_seconds: req.effectiveDurationSeconds,
+    p_duration_seconds: clampedDuration,
+    p_effective_duration_seconds: clampedEffective,
     p_completion_percentage: req.completionPercentage,
-    p_focus_quality: req.focusQuality,
+    p_focus_quality: clampedQuality,
     p_interruptions: req.interruptions,
     p_pauses: req.pauses,
     p_session_mode: req.sessionMode,
     p_final_score: req.finalScore,
-    p_streak_days: req.streakDays,
+    p_streak_days: safeStreakDays,
     p_mode_bonus: req.modeBonus,
   });
 
@@ -96,7 +105,7 @@ serve(async (request: Request) => {
     console.error('complete_session RPC failed:', error);
     return respond({
       success: false,
-      error: { code: 'RPC_ERROR', message: error.message, details: error.details },
+      error: { code: 'SESSION_COMPLETION_FAILED', message: 'Session completion failed. Please try again.' },
       processingTimeMs: Date.now() - startedAt,
     }, 500, request);
   }

@@ -31,11 +31,12 @@ serve(async (req) => {
 
     return jsonWithCors(req, { success: true, runId: handle.id }, 200);
   } catch (error) {
+    console.error('season-finalize failed:', error);
     return jsonWithCors(
       req,
       {
         success: false,
-        message: error instanceof Error ? error.message : String(error),
+        message: 'Season finalization failed. Please try again.',
       },
       500,
     );

@@ -9,8 +9,8 @@ import {
 
 const DEFAULT_NOW: TodayAction = {
   id: "clean-session",
-  label: "Start one clean session.",
-  ctaLabel: "Start",
+  label: "Name one task. Run the block. That is enough.",
+  ctaLabel: "Start clean block",
   durationSeconds: 25 * 60,
 };
 
@@ -38,7 +38,7 @@ export function buildTodaySystem(rawInput: TodaySystemInput): TodaySystem {
   const now = input.nowAction ?? DEFAULT_NOW;
   const recovery: TodayAction = {
     id: "five-minute-recovery",
-    label: "Do 5 minutes.",
+    label: "Five minutes. No pressure. Just keep the thread alive.",
     ctaLabel: "Recover",
     durationSeconds: 5 * 60,
   };
@@ -60,8 +60,8 @@ export function buildTodaySystem(rawInput: TodaySystemInput): TodaySystem {
         !hidden,
         "Done",
         input.completedToday > 0
-          ? `${input.completedToday} clean block saved today.`
-          : "Nothing banked yet.",
+          ? `${input.completedToday} clean block${input.completedToday === 1 ? "" : "s"} banked. Quiet progress.`
+          : "Nothing banked yet. The first block is the hardest.",
         null,
       ),
       section(

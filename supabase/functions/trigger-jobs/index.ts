@@ -58,11 +58,12 @@ serve(async (req) => {
     // Add CORS headers to response
     return withCorsHeaders(response, corsHeaders);
   } catch (error) {
+    console.error('trigger-jobs failed:', error);
     return jsonWithCors(
       req,
       {
         error: 'Internal server error',
-        message: error instanceof Error ? error.message : String(error),
+        message: 'Job processing failed. Please try again.',
       },
       500,
     );

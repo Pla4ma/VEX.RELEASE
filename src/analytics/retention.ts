@@ -5,20 +5,53 @@
  * Tracks and calculates user retention metrics.
  */
 
+import { MMKV } from "react-native-mmkv";
 import type { RetentionCohort } from "./types";
 
+const retentionStorage = new MMKV({ id: "retention" });
 const retentionCohorts = new Map<string, RetentionCohort>();
+
+function loadCohortsFromStorage(): void {
+  try {
+    const stored = retentionStorage.getString("retention_cohorts");
+    if (!stored) return;
+    const parsed = JSON.parse(stored) as Record<string, RetentionCohort>;
+    for (const [key, value] of Object.entries(parsed)) {
+      retentionCohorts.set(key, value);
+    }
+  } catch {
+    // Storage corruption — start fresh
+  }
+}
+
+function persistCohorts(): void {
+  try {
+    const obj: Record<string, RetentionCohort> = {};
+    for (const [key, value] of retentionCohorts) {
+      obj[key] = value;
+    }
+    retentionStorage.set("retention_cohorts", JSON.stringify(obj));
+  } catch {
+    // Persistence failure is non-fatal for retention tracking
+  }
+}
+
+// Initialize from persisted storage
+loadCohortsFromStorage();
 
 export function trackRetentionEvent(
   userId: string,
   event: "first_open" | "session" | "return",
 ): void {
-  const today =
-    new Date().toISOString().split("T")[0] ??
-    new Date().toISOString().slice(0, 10);
-  const userFirstOpen = getUserFirstOpen(userId);
+  const todayParts = new Date().toISOString().split("T");
+  const today = todayParts[0];
+  if (!today) return;
 
   if (event === "first_open") {
+    // Check if user already has a first-open date stored
+    const storedDate = getUserFirstOpen(userId);
+    if (storedDate) return; // Already tracked
+
     const existing = retentionCohorts.get(today);
     const cohort: RetentionCohort = existing ?? {
       cohortDate: today,
@@ -30,18 +63,16 @@ export function trackRetentionEvent(
     cohort.cohortSize++;
     retentionCohorts.set(today, cohort);
     storeUserFirstOpen(userId, today);
+    persistCohorts();
     return;
   }
 
-  if (!userFirstOpen) {
-    return;
-  }
+  const userFirstOpen = getUserFirstOpen(userId);
+  if (!userFirstOpen) return;
 
   const daysSince = daysBetween(userFirstOpen, today);
   const cohort = retentionCohorts.get(userFirstOpen);
-  if (!cohort) {
-    return;
-  }
+  if (!cohort) return;
 
   if (daysSince === 1) {
     cohort.day1++;
@@ -52,13 +83,16 @@ export function trackRetentionEvent(
   if (daysSince === 30) {
     cohort.day30++;
   }
+  persistCohorts();
 }
 
-function getUserFirstOpen(_userId: string): string | null {
-  return null;
+function getUserFirstOpen(userId: string): string | null {
+  return retentionStorage.getString(`first_open:${userId}`) ?? null;
 }
 
-function storeUserFirstOpen(_userId: string, _date: string): void {}
+function storeUserFirstOpen(userId: string, date: string): void {
+  retentionStorage.set(`first_open:${userId}`, date);
+}
 
 function daysBetween(date1: string, date2: string): number {
   const d1 = new Date(date1);

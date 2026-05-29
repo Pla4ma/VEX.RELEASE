@@ -5,20 +5,24 @@ export const ONBOARDING_GOALS: Array<{
   label: string;
   description: string;
 }> = [
-  { id: "WORK", label: "Work", description: "Focus on professional tasks" },
+  {
+    id: "WORK",
+    label: "Find My Rhythm",
+    description: "Let VEX learn what kind of sessions you finish best",
+  },
   {
     id: "STUDY",
     label: "Study",
-    description: "Learn and absorb new information",
+    description: "Learn and absorb new information with adaptive review",
   },
   {
     id: "CREATIVE",
-    label: "Creative",
-    description: "Create, design, or build something",
+    label: "Deep Work",
+    description: "Protect creative focus — VEX remembers where you left off",
   },
   {
     id: "PERSONAL",
-    label: "Personal",
-    description: "Personal growth and organization",
+    label: "Start Clean",
+    description: "One focused session without noise or tracking pressure",
   },
 ];

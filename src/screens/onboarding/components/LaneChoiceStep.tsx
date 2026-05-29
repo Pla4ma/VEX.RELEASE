@@ -21,10 +21,10 @@ const ALL_LANES: Lane[] = [
 ];
 
 export const LANE_DESCRIPTIONS: Record<Lane, string> = {
-  student: "For studying, review, exams, and learning blocks.",
-  game_like: "For momentum, challenge, and game-like focus.",
-  deep_creative: "For deep work, creative work, and picking up where you left off.",
-  minimal_normal: "For simple, calm, organized focus without noise.",
+  student: "Continue learning without guessing what to study next.",
+  game_like: "Turn focus into momentum without cheap game rewards.",
+  deep_creative: "Pick up deep work where you left off.",
+  minimal_normal: "Start one useful action without noise.",
 };
 
 export function LaneChoiceStep({ onSelect }: LaneChoiceStepProps): JSX.Element {
@@ -37,12 +37,12 @@ export function LaneChoiceStep({ onSelect }: LaneChoiceStepProps): JSX.Element {
   return (
     <View style={styles.section}>
       <Text style={[styles.stepTitle, { color: theme.colors.text.primary }]}>
-        Pick your focus mode
+        Pick your lane
       </Text>
       <Text
         style={[styles.stepSubtitle, { color: theme.colors.text.secondary }]}
       >
-        You can change this anytime from Settings.
+        VEX will adapt to your choice. Change anytime from Settings.
       </Text>
       <View style={styles.choiceGrid}>
         {ALL_LANES.map((lane, index) => (

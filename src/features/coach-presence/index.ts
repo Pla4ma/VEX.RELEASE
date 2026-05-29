@@ -38,9 +38,8 @@ export type {
 } from "./schemas";
 export { decideCoachVisibility } from "./visibility-policy";
 export {
-  getRetentionMoment,
+  coachMomentFromJourneyState,
   shouldShowRetentionMoment,
-  type RetentionInput,
   type RetentionMessage,
   type RetentionMoment,
 } from "./day-retention";

@@ -2,11 +2,11 @@ import type { PurchasesPackageDisplayInfo } from "../../shared/monetization";
 import { launchColors } from "@theme/tokens/launch-colors";
 
 export const VALUE_PROPOSITION =
-  "VEX Premium remembers more and adapts deeper. No coins. No gimmicks.";
+  "Your VEX. Smarter over time. Deeper where it matters.";
 export const FREE_BOUNDARY_COPY =
-  "Core sessions, basic progress, streak building, basic Coach Presence, and Rescue mode stay free forever.";
+  "Sessions, progress, and Rescue stay free forever. Premium adds personalized intelligence that grows with your rhythm.";
 export const PREMIUM_BOUNDARY_COPY =
-  "Premium adds long memory, advanced focus reports, study import depth, project continuity, calendar intelligence, advanced friction modes, weekly experiments, and private memory console controls.";
+  "Premium unlocks lane-specific intelligence: deeper memory, weekly patterns, smarter planning, and advanced controls. Free sessions always work.";
 
 const FALLBACK_PRICING = {
   monthly: "Live pricing unavailable",

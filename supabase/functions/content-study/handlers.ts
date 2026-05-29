@@ -125,7 +125,7 @@ export async function handleSubmit(req: Request, supabase: SupabaseClient, userI
     status: validated.type === 'PASTE' ? 'EXTRACTED' : 'PENDING',
     extracted_at: validated.type === 'PASTE' ? new Date().toISOString() : null,
   }).select().single();
-  if (error || !content) return json({ success: false, error: `Failed: ${error?.message}` }, 400);
+  if (error || !content) return json({ success: false, error: 'Content submission failed. Please try again.' }, 400);
   return json({ success: true, contentId: content.id, status: content.status, message: validated.type === 'PASTE' ? 'Content ready' : 'Submitted for extraction' }, 200);
 }
 
@@ -143,8 +143,9 @@ export async function handleExtract(req: Request, supabase: SupabaseClient, user
     await supabase.from('study_content').update({ extracted_text: extractedText, extracted_length: extractedText.length, status: 'EXTRACTED', extracted_at: new Date().toISOString() }).eq('id', contentId);
     return json({ success: true, contentId, extractedLength: extractedText.length, status: 'EXTRACTED' });
   } catch (e) {
-    await supabase.from('study_content').update({ status: 'FAILED', error_message: e instanceof Error ? e.message : 'Extraction failed' }).eq('id', contentId);
-    return json({ success: false, error: e instanceof Error ? e.message : 'Unknown' }, 400);
+    await supabase.from('study_content').update({ status: 'FAILED', error_message: 'Extraction failed' }).eq('id', contentId);
+    console.error('Extraction failed for content:', contentId, e);
+    return json({ success: false, error: 'Content extraction failed. Please try again.' }, 400);
   }
 }
 
@@ -167,12 +168,16 @@ export async function handleGenerate(req: Request, supabase: SupabaseClient, use
       content_id: validated.contentId, user_id: userId, model: 'gemini-2.5-pro', processing_time_ms: Date.now() - startTime,
       summary: parsed.summary, key_concepts: parsed.keyConcepts, tasks: parsed.tasks, quiz_items: parsed.quizItems, session_plan: parsed.sessionPlan,
     }).select().single();
-    if (genError) throw new Error(`Save failed: ${genError.message}`);
+    if (genError) {
+      console.error('Save failed:', genError);
+      throw new Error('Failed to save study generation');
+    }
     await supabase.from('study_content').update({ status: 'READY', generation_count_today: supabase.rpc('increment'), last_generation_date: new Date().toISOString().split('T')[0] }).eq('id', validated.contentId);
     return json({ success: true, generationId: generation.id, contentId: validated.contentId, summary: parsed.summary, keyConcepts: parsed.keyConcepts, tasks: parsed.tasks, quizItems: parsed.quizItems, sessionPlan: parsed.sessionPlan, remaining: remaining - 1 });
   } catch (e) {
     await supabase.from('study_content').update({ status: 'FAILED' }).eq('id', validated.contentId);
-    return json({ success: false, error: e instanceof Error ? e.message : 'Unknown' }, 400);
+    console.error('Generation failed:', e);
+    return json({ success: false, error: 'Study plan generation failed. Please try again.' }, 400);
   }
 }
 
@@ -188,6 +193,6 @@ export async function handleFeedback(req: Request, supabase: SupabaseClient, use
   const body = await req.json();
   const validated = SubmitFeedbackSchema.parse(body);
   const { error } = await supabase.from('study_generations').update({ user_rating: validated.rating, was_helpful: validated.wasHelpful }).eq('id', validated.generationId).eq('user_id', userId);
-  if (error) return json({ success: false, error: error.message }, 400);
+  if (error) return json({ success: false, error: 'Failed to save feedback.' }, 400);
   return json({ success: true });
 }

@@ -90,13 +90,13 @@ export function getModeReturnHook(
     string
   > = {
     student:
-      "Tomorrow, VEX can help you continue with the next study block.",
+      "Your review queue updated. Tomorrow's study block already knows what to cover.",
     game_like:
-      "Your next run will start cleaner because VEX knows what helped today.",
+      "Your run data saved. Tomorrow's encounter starts from where you left off.",
     deep_creative:
-      "Your next project block will start from the next move you saved.",
+      "Your handoff note is the next move. Tomorrow picks up exactly here.",
     minimal_normal:
-      "Tomorrow starts with one clean action, not a dashboard.",
+      "One clean block banked. Tomorrow starts with the same simplicity.",
   };
 
   return hooks[mode];

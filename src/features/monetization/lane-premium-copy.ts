@@ -21,20 +21,20 @@ const BLOCKED_OLD_ECONOMY_TERMS = [
 
 export const LANE_PREMIUM_COPY = {
   student: {
-    headline: "Unlock deeper Study Intelligence",
-    body: "Unlock deeper Study Intelligence: imports, review plans, weak topics, and exam prep.",
+    headline: "Your Study Intelligence gets deeper",
+    body: "VEX can turn your study rhythm into review plans, weak-topic focus, and smarter next blocks.",
   },
   game_like: {
-    headline: "Unlock advanced Run Intelligence",
-    body: "Unlock advanced Run Intelligence: personal bosses, modifiers, and weekly run recaps.",
+    headline: "Your Run Intelligence gets sharper",
+    body: "VEX can build personal boss insights, custom modifiers, and weekly recaps from your run data.",
   },
   deep_creative: {
-    headline: "Unlock Project Memory",
-    body: "Unlock Project Memory: context restore, next moves, and flow windows.",
+    headline: "Your Project Memory keeps more context",
+    body: "VEX can preserve context, next moves, and flow windows across your project blocks.",
   },
   minimal_normal: {
-    headline: "Unlock Focus Intelligence",
-    body: "Unlock Focus Intelligence: quiet weekly reports, best windows, and smarter planning.",
+    headline: "Your Focus Intelligence works quietly",
+    body: "VEX can surface weekly patterns, best windows, and smarter planning without adding noise.",
   },
 } as const;
 

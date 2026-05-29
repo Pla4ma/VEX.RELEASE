@@ -8,10 +8,10 @@ export const DAY2_COPY: JourneyDayCopy = {
     minimal_normal: "Proof of rhythm. Two clean blocks.",
   },
   primaryCta: {
-    student: "Keep the study streak going",
-    game_like: "Keep the run alive",
-    deep_creative: "Keep the project moving",
-    minimal_normal: "Keep the clean streak",
+    student: "Continue your study practice",
+    game_like: "Continue your run practice",
+    deep_creative: "Continue your project practice",
+    minimal_normal: "Continue your clean practice",
   },
   sessionSuggestion: {
     student: {

@@ -13,8 +13,6 @@ import { useTheme } from "../../../theme";
 import { ONBOARDING_GOALS } from "../../../features/onboarding";
 import { styles } from "../styles";
 
-const FIRST_LEVEL_XP = 100;
-
 type StarterPreset = {
   id: string;
   title: string;
@@ -167,7 +165,7 @@ export function RevealStep({
           ]}
         >
           <Text style={[styles.heroStat, { color: theme.colors.text.primary }]}>
-            0 streak days · Level 1 · 0 XP
+            Clean slate · VEX learns from your first block
           </Text>
           <Text
             style={[
@@ -175,7 +173,7 @@ export function RevealStep({
               { color: theme.colors.text.secondary },
             ]}
           >
-            First level-up at {FIRST_LEVEL_XP} XP
+            First adaptation at 3 sessions
           </Text>
           <ProgressBar
             progress={progress}
@@ -191,7 +189,7 @@ export function RevealStep({
               { color: theme.colors.text.secondary },
             ]}
           >
-            0 / {FIRST_LEVEL_XP} XP
+          0 / 3 sessions needed
           </Text>
         </View>
       </Animated.View>

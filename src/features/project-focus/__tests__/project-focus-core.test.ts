@@ -101,7 +101,7 @@ describe("project-focus service — thread lifecycle", () => {
 
     const rescued = rescueStaleProject(stale, 10 + 7 * 86_400_000);
     expect(rescued.state).toBe("rescued");
-    expect(rescued.bestSessionMode).toBe("LIGHT_FOCUS");
+    expect(rescued.bestSessionMode).toBe("CREATIVE");
     expect(rescued.rescuedAt).not.toBeNull();
 
     const brief = buildProjectSessionBrief(rescued);

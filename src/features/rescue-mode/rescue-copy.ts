@@ -28,11 +28,11 @@ export const LANE_RESCUE_COPY: Record<Lane, Record<RescueReason, string>> = {
     no_time: "7 minutes. Just the next move. Nothing else.",
   },
   minimal_normal: {
-    too_big: "Do 5 minutes. Stop cleanly if needed.",
-    tired: "Do 5 minutes. Stop cleanly if needed.",
-    distracted: "Do 5 minutes. Stop cleanly if needed.",
-    anxious: "Do 5 minutes. Stop cleanly if needed.",
-    unclear: "Do 5 minutes. Stop cleanly if needed.",
-    no_time: "Do 5 minutes. Stop cleanly if needed.",
+    too_big: "Break it down. One small piece for 5 minutes.",
+    tired: "Rest is valid. If you start, 5 minutes is enough.",
+    distracted: "Close the extras. One small task for 5 minutes.",
+    anxious: "No pressure. Open the task and look for 5 minutes.",
+    unclear: "Name the simplest next step. 5 minutes on that.",
+    no_time: "Two minutes counts. Do what fits.",
   },
 };

@@ -17,11 +17,26 @@ export function shouldOfferRescue(input: {
   completedSessions: number;
   hasCompletedToday: boolean;
   inactivityDays: number;
+  abandonedSessionExists: boolean;
+  openedAppNoStart: boolean;
+  sessionStartedQuitEarly: boolean;
+  recentDismissals: number;
+  homeCtaDismissals: number;
+  userTooBig: boolean;
 }): boolean {
-  if (input.daysSinceOnboarding < 4) return false;
   if (input.completedSessions === 0) return false;
   if (input.hasCompletedToday) return false;
-  return input.inactivityDays >= 1;
+
+  const hasFrictionSignal =
+    input.abandonedSessionExists ||
+    input.sessionStartedQuitEarly ||
+    input.openedAppNoStart ||
+    input.recentDismissals >= 2 ||
+    input.homeCtaDismissals >= 2 ||
+    input.userTooBig ||
+    (input.inactivityDays >= 1);
+
+  return hasFrictionSignal;
 }
 
 export function shouldShowPremiumAfterValue(input: {

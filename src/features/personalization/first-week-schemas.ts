@@ -8,7 +8,9 @@ export const FirstWeekStageSchema = z.enum([
   "DAY_1_RETURN",
   "DAY_2_PROGRESS_PROOF",
   "DAY_3_COMPANION_CONNECTION",
+  "DAY_4_RECOVERY",
   "DAY_5_PATH_FORMING",
+  "DAY_6_WEEKLY_PREP",
   "DAY_7_DEEPER_MODE",
   "POST_DAY_7",
 ]);
@@ -145,6 +147,7 @@ export const FirstWeekExperienceSchema = z
       "study_deep_work_path",
       "tiny_boss_teaser",
       "weekly_insight",
+      "companion_continuity",
     ]),
     blockedSurfaceReasons: z.array(z.string().min(1)),
     firstWeekExperiment: z
@@ -163,6 +166,15 @@ export const FirstWeekExperienceSchema = z
     ]),
     unlockExplanation: z.string().min(1),
     unlockTease: z.string().min(1).nullable(),
+    returnTomorrowHook: z.string().min(1).max(200),
+    dayStory: z
+      .object({
+        emotionalGoal: z.string().min(1).max(200),
+        nudgeBehavior: z.string().min(1).max(200),
+        reasonToReturnTomorrow: z.string().min(1).max(200),
+        suggestedAdjustment: z.string().min(1).max(200).nullable(),
+      })
+      .strict(),
   })
   .strict();
 

@@ -13,6 +13,8 @@ function maxDailyFor(lane: Lane): number {
 }
 
 function typeFor(input: NudgePolicyInput, lane: Lane): NudgeType {
+  if (input.journeyNudgeType !== undefined) return input.journeyNudgeType;
+
   const paused = input.pausedCategories.includes(laneToCategory(lane));
   if (paused) return "none";
 
@@ -24,16 +26,6 @@ function typeFor(input: NudgePolicyInput, lane: Lane): NudgeType {
   if (input.context === "run_open" && lane === "game_like")
     return "run_continue";
   if (input.context === "weekly_ready") return "weekly_insight";
-
-  // First-week nudge schedule
-  const day = input.daysSinceOnboarding;
-  if (day === 0) return "none";
-  if (day === 1) return "gentle_return";
-  if (day === 2 && input.completedSessions > 0) return "gentle_return";
-  if (day === 3 && input.memoryConfidence !== undefined && input.memoryConfidence > 0.3)
-    return "gentle_return";
-  if (day === 4 && input.context === "avoidance") return "rescue";
-  if (day === 7) return "weekly_insight";
 
   return input.completedSessions > 0 ? "gentle_return" : "none";
 }

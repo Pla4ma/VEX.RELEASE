@@ -60,7 +60,7 @@ export const TIERS: Record<TierId, TierDefinition> = {
     id: "premium",
     name: "Premium",
     description:
-      "A deeper personal execution system — not locked game features",
+      "Personalized intelligence that grows with your rhythm — not locked game features",
     monthlyPrice: 9.99,
     yearlyPrice: 59.99,
     trialDays: 7,

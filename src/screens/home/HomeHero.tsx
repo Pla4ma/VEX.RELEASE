@@ -108,8 +108,8 @@ export function HomeHero({
           </View>
         ) : isFirstRun ? (
           <Text variant="body" color={WHITE_MUTED}>
-            Start one clean session. VEX will turn it into today&apos;s focus,
-            streak, and reward snapshot.
+            Start one clean session so VEX can learn your rhythm and shape
+            what comes next.
           </Text>
         ) : (
           <>
@@ -156,8 +156,7 @@ export function HomeHero({
               Welcome to VEX
             </Text>
             <Text variant="bodySmall" color={WHITE_MUTED}>
-              Build your first streak, earn your first XP, and watch this space
-              turn into your daily focus snapshot.
+              Start one clean session. VEX will use it to shape tomorrow.
             </Text>
           </View>
         ) : (

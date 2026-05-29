@@ -36,7 +36,7 @@ it("evidence-based boss cites the detected behavior archetype", () => {
   });
   expect(boss.isEvidenceBased).toBe(true);
   expect(boss.archetype).toBe("switch_swarm");
-  expect(boss.name).toBe("Switch Swarm");
+  expect(boss.name).toBe("The Context Switch");
   expect(boss.recoveryPrompt).toContain("protect one thread");
 });
 
@@ -48,6 +48,6 @@ it("cold game-like user with no signals gets teaser boss", () => {
   expect(boss.isTeaser).toBe(true);
   expect(boss.isEvidenceBased).toBe(false);
   expect(boss.archetype).toBe("cold_start_shadow");
-  expect(boss.name).toBe("Cold Start Shadow");
+  expect(boss.name).toBe("The Blank Page");
   expect(boss.recoveryPrompt).toContain("Start one small encounter");
 });

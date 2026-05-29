@@ -1,6 +1,20 @@
 import { z } from "zod";
 import { LaneProfileSchema } from "../lane-engine/schemas";
 
+export const SessionEvidenceSchema = z
+  .object({
+    completedSessions: z.number().int().min(0),
+    focusHours: z.number().min(0),
+    consistencyRate: z.number().min(0).max(1),
+    bestWindow: z.string().optional(),
+    bestDay: z.string().optional(),
+    completedSessionsInLane: z.number().int().min(0).optional(),
+    longestStreak: z.number().int().min(0).optional(),
+  })
+  .strict();
+
+export type SessionEvidence = z.infer<typeof SessionEvidenceSchema>;
+
 export const PremiumPersonalizationInputSchema = z
   .object({
     billingConfigured: z.boolean(),
@@ -32,6 +46,7 @@ export const PremiumPersonalizationInputSchema = z
     currentStreakDays: z.number().int().min(0),
     daysSinceOnboarding: z.number().int().min(0),
     paywallDismissals: z.number().int().min(0).default(0),
+    sessionEvidence: SessionEvidenceSchema.optional(),
   })
   .strict();
 

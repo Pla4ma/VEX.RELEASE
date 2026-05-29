@@ -1,6 +1,7 @@
 import type { Lane, LaneProfile } from "../lane-engine/types";
 import type { FirstWeekExperience, FirstWeekStage } from "./first-week-schemas";
 export { resolveFirstWeekExperiment } from "./first-week-experiment";
+import { DAY_4_RECOVERY, DAY_6_WEEKLY_PREP } from "./first-week-lane-copy-recovery";
 
 type LaneCopy = Pick<
   FirstWeekExperience,
@@ -37,30 +38,27 @@ const DAY_0: Record<Lane, LaneCopy> = {
 const DAY_1_RETURN: Record<Lane, LaneCopy> = {
   student: {
     laneStageTheme: "study_return",
-    primaryMessage:
-      "Return to your study block. No new systems yet — just the rhythm.",
+    primaryMessage: "Pick up with one focused study block.",
     unlockExplanation:
-      "One completed study session earns a tiny preview of Study OS after the next block.",
+      "VEX remembers what you started. One more block and Study OS begins to open.",
   },
   game_like: {
     laneStageTheme: "run_return",
-    primaryMessage:
-      "Run it again. One more clean encounter before Run Board begins to form.",
+    primaryMessage: "Your next clean run is ready.",
     unlockExplanation:
-      "Complete this encounter and VEX will unlock a small progress proof.",
+      "VEX remembers your run rhythm. One more encounter and Run Board starts forming.",
   },
   deep_creative: {
     laneStageTheme: "project_return",
-    primaryMessage:
-      "Return to your project block. VEX remembers where you left off.",
+    primaryMessage: "Your project thread is waiting at the next move.",
     unlockExplanation:
-      "After one more completed block, VEX can start preserving next moves.",
+      "VEX remembers where you left off. After this block, next-move memory activates.",
   },
   minimal_normal: {
     laneStageTheme: "clean_return",
-    primaryMessage: "Same clean container. No extras — just presence.",
+    primaryMessage: "One clean block is enough today.",
     unlockExplanation:
-      "After this session, a tiny Today Strip preview will appear.",
+      "VEX remembers your clean rhythm. After this session, Today Strip preview appears.",
   },
 };
 
@@ -154,6 +152,8 @@ const PATH: Record<Lane, string> = {
     "Today Strip opens when VEX has enough rhythm to stay useful and quiet.",
 };
 
+export { RETURN_TOMORROW_HOOK, resolveReturnTomorrowHook } from "./first-week-return-hooks";
+
 export function resolveLaneCopy(
   stage: FirstWeekStage,
   laneProfile: LaneProfile,
@@ -172,6 +172,8 @@ export function resolveLaneCopy(
   if (stage === "DAY_1_RETURN") return DAY_1_RETURN[lane];
   if (stage === "DAY_2_PROGRESS_PROOF") return DAY_2_PROOF[lane];
   if (stage === "DAY_3_COMPANION_CONNECTION") return DAY_3_COMPANION[lane];
+  if (stage === "DAY_4_RECOVERY") return DAY_4_RECOVERY[lane];
+  if (stage === "DAY_6_WEEKLY_PREP") return DAY_6_WEEKLY_PREP[lane];
   const pathExplanation = PATH[lane];
   if (stage === "DAY_5_PATH_FORMING") {
     return {

@@ -52,10 +52,10 @@ export const NudgePolicyInputSchema = z
       ])
       .default("none"),
     memoryConfidence: z.number().min(0).max(1).optional(),
-    // Budget pause per category — repeated dismissal pauses the category
     pausedCategories: z
       .array(z.enum(["study", "run", "project", "clean"]))
       .default([]),
+    journeyNudgeType: NudgeTypeSchema.optional(),
   })
   .strict();
 

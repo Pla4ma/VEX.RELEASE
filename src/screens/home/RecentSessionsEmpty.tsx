@@ -31,11 +31,11 @@ export function RecentSessionsEmpty({
         ]}
       >
         <Text variant="h4" color={theme.colors.text.primary}>
-          Your first win unlocks the board
+          One session changes what you see here
         </Text>
         <Text variant="body" color={theme.colors.text.secondary}>
-          Start a focus session or study from content to fill this feed with
-          your last three runs.
+          Start a focus session or study from content. VEX will build your
+          recent activity from real sessions.
         </Text>
         <Button
           onPress={onStart}
@@ -60,9 +60,9 @@ export function RecentSessionsEmpty({
       ]}
     >
       <EmptyState
-        icon="⏱️"
+        icon="\u23F1\uFE0F"
         title="No sessions yet"
-        body="Start a focus session to build your recent activity board and track your daily rhythm."
+        body="Start a focus session. VEX builds your activity feed from what you actually finish."
         actionLabel="Start session"
         onAction={onStart}
       />

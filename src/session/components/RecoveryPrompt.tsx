@@ -34,32 +34,32 @@ export const RecoveryPrompt: React.FC<RecoveryPromptProps> = ({
       type: "AUTO_RESUME",
       label: "Auto Resume",
       description: "Continue from where you left",
-      icon: "▶️",
-      penalty: "None - if resumed quickly",
+      icon: "\u25B6\uFE0F",
+      penalty: "No penalty — if resumed quickly",
       available: timeLost < 300,
     },
     {
       type: "USER_RESUME",
-      label: "Manual Resume",
-      description: "Resume with minor penalty",
-      icon: "👆",
-      penalty: "-10% score penalty",
+      label: "Resume Session",
+      description: "Pick up with a small adjustment",
+      icon: "\uD83D\uDC46",
+      penalty: "VEX adjusts quality slightly",
       available: true,
     },
     {
       type: "STREAK_SAVE",
-      label: "Use Streak Save",
-      description: `Protect your ${streakDays}-day streak`,
-      icon: "🔥",
-      penalty: "Consumes 1 streak save",
+      label: "Protect Your Rhythm",
+      description: `Keep your ${streakDays}-day pattern intact`,
+      icon: "\uD83D\uDD04",
+      penalty: "Uses one rhythm protection",
       available: hasStreakSave,
     },
     {
       type: "PARTIAL_CREDIT",
-      label: "Take Partial Credit",
-      description: "Get credit for completed time",
-      icon: "💰",
-      penalty: "50% XP & coins only",
+      label: "Save What You Did",
+      description: "Keep credit for completed time",
+      icon: "\u2705",
+      penalty: "Partial session credit retained",
       available: timeLost > 0,
     },
   ];
@@ -78,15 +78,15 @@ export const RecoveryPrompt: React.FC<RecoveryPromptProps> = ({
         <View style={styles.container}>
           {}
           <View style={styles.header}>
-            <Text style={styles.icon}>🔄</Text>
-            <Text style={styles.title}>Session Interrupted</Text>
+            <Text style={styles.icon}>&#x1F504;</Text>
+            <Text style={styles.title}>VEX noticed the pause</Text>
             <Text style={styles.subtitle}>
-              {formatTime(timeLost)} of focus time was lost
+              {formatTime(timeLost)} of focus time was affected
             </Text>
           </View>
 
           {}
-          <Text style={styles.sectionTitle}>Choose Recovery Option:</Text>
+          <Text style={styles.sectionTitle}>How should VEX handle this?</Text>
 
           <View style={styles.options}>
             {recoveryOptions
@@ -121,28 +121,28 @@ export const RecoveryPrompt: React.FC<RecoveryPromptProps> = ({
 
           {}
           <View style={styles.abandonSection}>
-            <Text style={styles.orText}>— or —</Text>
+            <Text style={styles.orText}>&#x2014; or &#x2014;</Text>
             <Pressable
               style={({ pressed }) => [
                 styles.abandonButton,
                 pressed && { opacity: 0.8 },
               ]}
               onPress={onAbandon}
-              accessibilityLabel="Abandon Session button"
+              accessibilityLabel="End session button"
               accessibilityRole="button"
-              accessibilityHint="Activates this control"
+              accessibilityHint="Ends this session"
             >
-              <Text style={styles.abandonText}>Abandon Session</Text>
+              <Text style={styles.abandonText}>End This Session</Text>
               <Text style={styles.abandonPenalty}>
-                Lose all progress & streak risk
+                VEX still learns from what you completed
               </Text>
             </Pressable>
           </View>
 
           {}
           <Text style={styles.helpText}>
-            Select the best option based on how much time you lost and your
-            current streak status.
+            VEX will remember how this session ended and adjust your next
+            recommendation.
           </Text>
         </View>
       </View>

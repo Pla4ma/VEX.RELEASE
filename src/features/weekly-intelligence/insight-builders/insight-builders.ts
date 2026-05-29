@@ -148,13 +148,13 @@ export function buildAdjustment(input: WeeklyInsightInput): string {
 export function buildPremiumDeeperInsight(input: WeeklyInsightInput): string | undefined {
   const map: Record<Lane, string> = {
     student:
-      "Unlock deeper Study Intelligence: topic-level weakness analysis and adaptive review scheduling.",
+      "Unlock topic-level gap analysis: see exactly which concepts are weak and get an adaptive review schedule that closes them before your next exam.",
     game_like:
-      "Unlock Focus Run intelligence: encounter-level stats, blocker pattern detection, and optimal warm-up timing.",
+      "Unlock encounter-level analytics: see your blocker patterns, optimal warm-up timing, and recovery win rate across every run this week.",
     deep_creative:
-      "Unlock deeper project memory: thread continuity analytics and next-move prediction across sessions.",
+      "Unlock project thread analytics: see your next-move prediction accuracy, stale-thread risk timeline, and deep work continuity score.",
     minimal_normal:
-      "Unlock quieter weekly planning: adaptive nudge scheduling and minimal-effort optimal windows.",
+      "Unlock rhythm optimization: see your best time windows, nudge sensitivity, and an adaptive schedule that protects your cleanest blocks.",
   };
   return map[input.lane];
 }

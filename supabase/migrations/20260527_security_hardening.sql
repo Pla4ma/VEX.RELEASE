@@ -35,7 +35,8 @@ DECLARE
   v_current_count INTEGER;
   v_reset_at BIGINT;
 BEGIN
-  v_window_start := floor(extract(epoch from clock_timestamp()) * 1000);
+  -- Fixed-window: bucket by p_window_seconds, not per-millisecond
+  v_window_start := floor(extract(epoch from clock_timestamp()) / p_window_seconds) * p_window_seconds * 1000;
   v_reset_at := v_window_start + (p_window_seconds * 1000);
 
   INSERT INTO public.rate_limit_buckets (user_id, operation, window_start, count)
@@ -412,6 +413,14 @@ $$;
 -- === Add RLS for rate_limit_buckets (service-only) ===
 CREATE POLICY rate_limit_service_only ON public.rate_limit_buckets
   FOR ALL USING (false) WITH CHECK (false);
+
+-- === Security: Revoke direct client access to economy RPCs ===
+-- These functions must only be called by Edge Functions using the service role.
+-- Direct client calls are blocked to prevent XP/economy manipulation.
+
+REVOKE EXECUTE ON FUNCTION public.atomic_add_xp FROM anon, authenticated;
+REVOKE EXECUTE ON FUNCTION public.complete_session FROM anon, authenticated;
+REVOKE EXECUTE ON FUNCTION public.check_rate_limit FROM anon, authenticated;
 
 -- === Security: Ensure all economy functions are SECURITY DEFINER ===
 -- The atomic_add_xp and complete_session functions above use SECURITY DEFINER

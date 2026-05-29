@@ -9,35 +9,35 @@ const BOSS_COPY: Record<
   Pick<PersonalBoss, "name" | "recoveryPrompt">
 > = {
   cold_start_shadow: {
-    name: "Cold Start Shadow",
+    name: "The Blank Page",
     recoveryPrompt: "Start one small encounter before judging the day.",
   },
   deadline_wraith: {
-    name: "Deadline Wraith",
+    name: "The Deadline",
     recoveryPrompt: "Pick the nearest deadline action and make it visible.",
   },
   doomscroll_hydra: {
-    name: "Doomscroll Hydra",
+    name: "The Feed Trap",
     recoveryPrompt: "Put the feed away and restart with five clean minutes.",
   },
   fog_of_unclear_work: {
-    name: "Fog of Unclear Work",
+    name: "The Fog",
     recoveryPrompt: "Rewrite the task until the first move is obvious.",
   },
   late_start_shade: {
-    name: "Late Start Shade",
+    name: "The Late Start",
     recoveryPrompt: "Use a short start window before the day drifts.",
   },
   perfectionism_wall: {
-    name: "Perfectionism Wall",
+    name: "The Polish Trap",
     recoveryPrompt: "Ship one rough move instead of polishing the plan.",
   },
   switch_swarm: {
-    name: "Switch Swarm",
+    name: "The Context Switch",
     recoveryPrompt: "Close competing contexts and protect one thread.",
   },
   task_avoidance: {
-    name: "Task Avoidance Wraith",
+    name: "The Avoidance",
     recoveryPrompt:
       "Start the work for just two minutes and let momentum pull you in.",
   },

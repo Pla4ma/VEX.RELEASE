@@ -7,11 +7,11 @@ describe("today system", () => {
       completedToday: 0,
     });
     expect(system.sections.find((s) => s.key === "now")?.body).toBe(
-      "Start one clean session.",
+      "Name one task. Run the block. That is enough.",
     );
     expect(system.sections.find((s) => s.key === "later")?.visible).toBe(false);
     expect(system.sections.find((s) => s.key === "done")?.body).toBe(
-      "Nothing banked yet.",
+      "Nothing banked yet. The first block is the hardest.",
     );
   });
 

@@ -69,6 +69,46 @@ describe("shouldOfferRescue", () => {
         completedSessions: 3,
         hasCompletedToday: false,
         inactivityDays: 2,
+        abandonedSessionExists: false,
+        openedAppNoStart: false,
+        sessionStartedQuitEarly: false,
+        recentDismissals: 0,
+        homeCtaDismissals: 0,
+        userTooBig: false,
+      }),
+    ).toBe(true);
+  });
+
+  it("returns true on day 1 with abandoned session", () => {
+    expect(
+      shouldOfferRescue({
+        daysSinceOnboarding: 1,
+        completedSessions: 1,
+        hasCompletedToday: false,
+        inactivityDays: 0,
+        abandonedSessionExists: true,
+        openedAppNoStart: false,
+        sessionStartedQuitEarly: false,
+        recentDismissals: 0,
+        homeCtaDismissals: 0,
+        userTooBig: false,
+      }),
+    ).toBe(true);
+  });
+
+  it("returns true with repeated home CTA dismissals", () => {
+    expect(
+      shouldOfferRescue({
+        daysSinceOnboarding: 2,
+        completedSessions: 2,
+        hasCompletedToday: false,
+        inactivityDays: 0,
+        abandonedSessionExists: false,
+        openedAppNoStart: false,
+        sessionStartedQuitEarly: false,
+        recentDismissals: 0,
+        homeCtaDismissals: 2,
+        userTooBig: false,
       }),
     ).toBe(true);
   });
@@ -80,17 +120,29 @@ describe("shouldOfferRescue", () => {
         completedSessions: 3,
         hasCompletedToday: true,
         inactivityDays: 2,
+        abandonedSessionExists: false,
+        openedAppNoStart: false,
+        sessionStartedQuitEarly: false,
+        recentDismissals: 0,
+        homeCtaDismissals: 0,
+        userTooBig: false,
       }),
     ).toBe(false);
   });
 
-  it("returns false before day 4", () => {
+  it("returns false if no sessions completed", () => {
     expect(
       shouldOfferRescue({
         daysSinceOnboarding: 2,
-        completedSessions: 2,
+        completedSessions: 0,
         hasCompletedToday: false,
         inactivityDays: 1,
+        abandonedSessionExists: false,
+        openedAppNoStart: false,
+        sessionStartedQuitEarly: false,
+        recentDismissals: 0,
+        homeCtaDismissals: 0,
+        userTooBig: false,
       }),
     ).toBe(false);
   });

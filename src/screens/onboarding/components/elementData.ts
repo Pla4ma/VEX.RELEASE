@@ -16,7 +16,7 @@ export const ELEMENTS: ElementInfo[] = [
     tagline: "Energetic • Bold",
     lore:
       "Born from the spark of determination. Flame companions thrive on intense, energetic focus sessions.",
-    effect: "+3% boss damage",
+    effect: "+3% focus recovery speed",
     personality: "Passionate and driven",
   },
   {
@@ -25,7 +25,7 @@ export const ELEMENTS: ElementInfo[] = [
     tagline: "Calm • Consistent",
     lore:
       "Flowing with the rhythm of consistency. Wave companions excel in sustained, calm focus.",
-    effect: "+3% streak protection",
+    effect: "+3% rhythm protection",
     personality: "Steady and reliable",
   },
   {
@@ -34,7 +34,7 @@ export const ELEMENTS: ElementInfo[] = [
     tagline: "Grounded • Steady",
     lore:
       "Grounded in steady progress. Terra companions reward patient, methodical focus.",
-    effect: "+5% XP for long sessions (45+ min)",
+    effect: "+5% rhythm strength for deep work (45+ min)",
     personality: "Patient and persistent",
   },
   {
@@ -52,7 +52,7 @@ export const ELEMENTS: ElementInfo[] = [
     tagline: "Mysterious • Intensive",
     lore:
       "Mysterious and intensive. Void companions draw power from deep, uninterrupted focus.",
-    effect: "+2% rare drop chance",
+    effect: "+2% session memory quality",
     personality: "Intense and focused",
   },
   {
@@ -61,7 +61,7 @@ export const ELEMENTS: ElementInfo[] = [
     tagline: "Pure • Perfectionist",
     lore:
       "Pure and perfectionist. Lumina companions seek excellence in every session.",
-    effect: "+5% XP for S-grade sessions",
+    effect: "+5% adaptive calibration for clean sessions",
     personality: "Disciplined and precise",
   },
 ];

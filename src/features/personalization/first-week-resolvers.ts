@@ -21,8 +21,10 @@ export function resolveStage(input: FirstWeekResolverInput): FirstWeekStage {
   if (input.completedSessions === 0) return "DAY_0_NOT_STARTED";
   if (input.completedSessions === 1) return "DAY_1_RETURN";
   if (input.completedSessions === 2) return "DAY_2_PROGRESS_PROOF";
-  if (input.completedSessions < 5) return "DAY_3_COMPANION_CONNECTION";
-  if (input.completedSessions < 7) return "DAY_5_PATH_FORMING";
+  if (input.completedSessions === 3) return "DAY_3_COMPANION_CONNECTION";
+  if (input.completedSessions === 4) return "DAY_4_RECOVERY";
+  if (input.completedSessions === 5) return "DAY_5_PATH_FORMING";
+  if (input.completedSessions === 6) return "DAY_6_WEEKLY_PREP";
   if (input.completedSessions === 7) return "DAY_7_DEEPER_MODE";
   return "POST_DAY_7";
 }
@@ -96,6 +98,18 @@ export function resolveSurfaces(
     }
     return base;
   }
+  if (stage === "DAY_4_RECOVERY") {
+    return ["coach_presence_line", "recovery_cta", "start_session", "companion_continuity"];
+  }
+  if (stage === "DAY_6_WEEKLY_PREP") {
+    return [
+      "coach_presence_line",
+      "start_session",
+      "progress_proof",
+      "companion_continuity",
+      "weekly_insight",
+    ];
+  }
   if (
     stage === "DAY_5_PATH_FORMING" ||
     stage === "DAY_7_DEEPER_MODE" ||
@@ -123,9 +137,19 @@ export function resolvePremiumMoment(
 ): FirstWeekExperience["premiumMoment"] {
   if (!input.featureAvailability.premium || input.premiumState !== "configured")
     return "none";
+  // No premium before Day 5 per spec
+  if (
+    stage === "DAY_0_NOT_STARTED" ||
+    stage === "DAY_1_RETURN" ||
+    stage === "DAY_2_PROGRESS_PROOF" ||
+    stage === "DAY_3_COMPANION_CONNECTION" ||
+    stage === "DAY_4_RECOVERY"
+  )
+    return "none";
   if (stage === "DAY_7_DEEPER_MODE" || stage === "POST_DAY_7")
     return "weekly_value";
-  if (stage === "DAY_5_PATH_FORMING") return "soft_tease";
+  if (stage === "DAY_5_PATH_FORMING" || stage === "DAY_6_WEEKLY_PREP")
+    return "soft_tease";
   return "none";
 }
 

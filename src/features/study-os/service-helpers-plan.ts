@@ -142,7 +142,7 @@ export function buildDayZeroStudyPreview(): StudyOsHomeSurface {
     hidden: false,
     offlineFallback: null,
     riskLabel: null,
-    title: "Study OS preview",
+    title: "VEX helps you study the right thing next",
   });
 }
 

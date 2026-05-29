@@ -8,6 +8,7 @@ import type {
 import { createDebugger } from "../../utils/debug";
 import { withResilience } from "../../utils/supabase-resilience";
 import { mapContentRow, mapGenerationRow } from "./row-mappers";
+import { sanitizeFilename } from "./validators-file";
 
 const debug = createDebugger("content-study:repository");
 
@@ -40,19 +41,28 @@ export async function uploadStudyFileRecord(
     debug.info("Uploading study file: %s for user: %s", filename, userId);
     const response = await globalThis["fetch"](fileUri);
     if (!response.ok) {
-      throw new Error(`Failed to fetch file from URI: ${response.statusText}`);
+      throw new Error("Failed to read file for upload");
     }
+    const safeFilename = sanitizeFilename(filename);
+    const ext = safeFilename.split(".").pop()?.toLowerCase() ?? "";
+    const contentType = ext === "pdf"
+      ? "application/pdf"
+      : ext === "txt"
+        ? "text/plain"
+        : ext === "md"
+          ? "text/markdown"
+          : "application/octet-stream";
     const blob = await response.blob();
-    const filePath = `${userId}/${Date.now()}_${filename}`;
+    const filePath = `${userId}/${Date.now()}_${safeFilename}`;
     const { error } = await getSupabaseClient()
       .storage.from("study-content")
       .upload(filePath, blob, {
-        contentType: "application/pdf",
+        contentType,
         upsert: false,
       });
     if (error) {
       debug.error("Supabase storage upload failed", error);
-      throw new Error(`Storage upload failed: ${error.message}`);
+      throw new Error("Storage upload failed");
     }
     debug.info("Study file uploaded successfully: %s", filePath);
     return filePath;
@@ -67,7 +77,7 @@ export async function deleteStudyFileRecord(filePath: string): Promise<void> {
     .storage.from("study-content")
     .remove([filePath]);
   if (error) {
-    throw new Error(error.message);
+    throw new Error("Failed to delete file");
   }
 }
 
@@ -83,7 +93,7 @@ export async function fetchContentHistoryRecords(userId: string, limit = 20) {
     { operation: "fetchContentHistoryRecords", fallbackValue: [] },
   );
   if (error) {
-    throw new Error(error.message);
+    throw new Error("Failed to fetch content history");
   }
   return (data ?? []).map(mapContentRow);
 }
@@ -96,7 +106,7 @@ export async function fetchContentRecord(contentId: string) {
     .is("deleted_at", null)
     .maybeSingle();
   if (error) {
-    throw new Error(error.message);
+    throw new Error("Failed to fetch content record");
   }
   return data ? mapContentRow(data) : null;
 }
@@ -109,7 +119,7 @@ export async function fetchGenerationRecord(generationId: string) {
     .is("deleted_at", null)
     .maybeSingle();
   if (error) {
-    throw new Error(error.message);
+    throw new Error("Failed to fetch generation record");
   }
   return data ? mapGenerationRow(data) : null;
 }
@@ -127,7 +137,7 @@ export async function updateContentTextRecord(
     })
     .eq("id", contentId);
   if (error) {
-    throw new Error(error.message);
+    throw new Error("Failed to update content text");
   }
 }
 
@@ -137,7 +147,7 @@ export async function deleteContentRecord(contentId: string): Promise<void> {
     .update({ deleted_at: new Date().toISOString() })
     .eq("id", contentId);
   if (error) {
-    throw new Error(error.message);
+    throw new Error("Failed to delete content record");
   }
 }
 

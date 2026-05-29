@@ -37,6 +37,11 @@ export const RescueEligibilityInputSchema = z
     hoursUntilStreakBreak: z.number().min(0),
     hasActiveSession: z.boolean(),
     userTooBig: z.boolean().default(false),
+    openedAppNoStart: z.boolean().default(false),
+    sessionStartedQuitEarly: z.boolean().default(false),
+    ignoredReturnNudge: z.boolean().default(false),
+    homeCtaDismissals: z.number().int().min(0).default(0),
+    inactivityDays: z.number().int().min(0).default(0),
     now: z
       .number()
       .int()

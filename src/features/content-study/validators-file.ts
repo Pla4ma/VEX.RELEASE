@@ -2,6 +2,13 @@ import type { ValidationError } from "./types";
 import { CONTENT_STUDY_CONSTANTS } from "./types";
 import type { ValidationResult } from "./validators";
 
+export function sanitizeFilename(filename: string): string {
+  return filename
+    .replace(/[^a-zA-Z0-9._-]/g, "_")
+    .replace(/_+/g, "_")
+    .slice(0, 100);
+}
+
 export function validateFileUpload(
   file: { uri: string; name: string; size: number; type: string } | null,
 ): ValidationResult {

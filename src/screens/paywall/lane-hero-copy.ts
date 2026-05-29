@@ -10,8 +10,8 @@ export interface LanePremiumHero {
 
 export const LANE_PREMIUM_HERO_COPY: Record<PremiumLane, LanePremiumHero> = {
   study: {
-    headline: "Unlock deeper Study Intelligence",
-    body: "Imports, review plans, weak topics, and exam prep.",
+    headline: "Your Study Intelligence gets deeper",
+    body: "Review plans, weak-topic focus, and smarter next blocks — built from your material.",
     benefits: [
       "Advanced import and material processing",
       "Review intelligence and spaced repetition",
@@ -19,8 +19,8 @@ export const LANE_PREMIUM_HERO_COPY: Record<PremiumLane, LanePremiumHero> = {
     ],
   },
   run: {
-    headline: "Unlock advanced Run Intelligence",
-    body: "Personal bosses, modifiers, and weekly run recaps.",
+    headline: "Your Run Intelligence gets sharper",
+    body: "Personal boss insights, custom modifiers, and weekly run recaps — purely from your data.",
     benefits: [
       "Personal boss depth and behavior modifiers",
       "Weekly run recap with mastery insights",
@@ -28,8 +28,8 @@ export const LANE_PREMIUM_HERO_COPY: Record<PremiumLane, LanePremiumHero> = {
     ],
   },
   project: {
-    headline: "Unlock Project Memory",
-    body: "Context restore, next moves, and flow windows.",
+    headline: "Your Project Memory keeps more context",
+    body: "Longer memory, context restoration, and flow windows across project blocks.",
     benefits: [
       "Long project memory across sessions",
       "Context restoration and next-move detection",
@@ -37,8 +37,8 @@ export const LANE_PREMIUM_HERO_COPY: Record<PremiumLane, LanePremiumHero> = {
     ],
   },
   clean: {
-    headline: "Unlock Focus Intelligence",
-    body: "Quiet weekly reports, best windows, and smarter planning.",
+    headline: "Your Focus Intelligence works quietly",
+    body: "Weekly patterns, best windows, and smarter planning without adding noise.",
     benefits: [
       "Weekly focus intelligence reports",
       "Calendar-aware planning windows",

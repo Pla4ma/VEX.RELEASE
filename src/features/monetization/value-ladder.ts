@@ -111,13 +111,13 @@ export function getUpgradeMessage(position: LadderPosition): string {
     return "You are already on Premium.";
   }
   if (position.upgradeUrgency === "high") {
-    return "Your rhythm is strong. VEX Pro turns that rhythm into a full execution system.";
+    return "Your rhythm is strong. VEX Premium turns that rhythm into a full execution system.";
   }
   if (position.upgradeUrgency === "medium") {
     return "You are building real momentum. Premium adds depth when you are ready.";
   }
   if (position.discountEligible && position.discountPercent) {
-    return `${position.discountPercent}% off VEX Pro for early rhythm builders.`;
+    return `${position.discountPercent}% off VEX Premium for early rhythm builders.`;
   }
   return "Keep building your rhythm. Premium will be ready when you are.";
 }

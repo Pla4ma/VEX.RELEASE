@@ -31,11 +31,11 @@ export const STARTER_PRESETS = [
   },
   {
     id: "pomodoro",
-    title: "Pomodoro",
+    title: "Standard Focus",
     durationLabel: "25 min",
     subtitle: "Balanced default for daily consistency.",
     launchDescription:
-      "The classic balance: long enough to matter, short enough to complete.",
+      "A balanced block: long enough to matter, short enough to complete.",
   },
   {
     id: "deep",

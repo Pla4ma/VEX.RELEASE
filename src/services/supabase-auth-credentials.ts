@@ -31,7 +31,7 @@ export async function signUpWithEmail(
     });
 
     if (error) {
-      return { user: null, error: new Error(error.message) };
+      return { user: null, error: new Error("Invalid email or password.") };
     }
 
     if (data.user) {
@@ -66,7 +66,7 @@ export async function signInWithEmail(
     });
 
     if (error) {
-      return { user: null, error: new Error(error.message) };
+      return { user: null, error: new Error("Invalid email or password.") };
     }
 
     if (data.user) {
@@ -90,12 +90,14 @@ export async function resetPassword(
     });
 
     if (error) {
-      return { error: new Error(error.message) };
+      // Never reveal whether an email account exists
+      return { error: null };
     }
 
     return { error: null };
   } catch (err) {
-    return { error: handleSupabaseError(err) };
+    // Always return success for password reset to prevent email enumeration
+    return { error: null };
   }
 }
 
@@ -107,11 +109,11 @@ export async function updatePassword(
     const { error } = await supabase.auth.updateUser({ password: newPassword });
 
     if (error) {
-      return { error: new Error(error.message) };
+      return { error: new Error("Password update failed. Please try again.") };
     }
 
     return { error: null };
   } catch (err) {
-    return { error: handleSupabaseError(err) };
+    return { error: new Error("Password update failed. Please try again.") };
   }
 }

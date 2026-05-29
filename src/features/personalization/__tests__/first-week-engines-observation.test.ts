@@ -50,10 +50,10 @@ describe("deriveCompanionObservation", () => {
     expect(obs).toContain("7:00");
   });
 
-  it("minimal_normal: falls back to general tempo observation", () => {
+  it("minimal_normal: falls back to low-confidence learning message", () => {
     const sp = baseProfile({ preferredStartHour: null, consistencyScore: 0.3 });
     const obs = deriveCompanionObservation("minimal_normal", sp).observation;
-    expect(obs).toContain("35 minutes");
+    expect(obs).toContain("still learning");
   });
 
   it("all lanes produce non-empty observation", () => {

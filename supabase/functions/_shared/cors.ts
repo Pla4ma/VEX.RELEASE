@@ -17,9 +17,13 @@ export function resolveCorsOrigin(request: Request): string {
     return ALLOWED_ORIGINS[0];
   }
 
-  return ALLOWED_ORIGINS.includes(origin as (typeof ALLOWED_ORIGINS)[number])
-    ? origin
-    : ALLOWED_ORIGINS[0];
+  const allowed = ALLOWED_ORIGINS as readonly string[];
+  if (allowed.includes(origin)) {
+    return origin;
+  }
+
+  // Reject unknown origins — do not mirror them
+  return ALLOWED_ORIGINS[0];
 }
 
 export function buildCorsHeaders(

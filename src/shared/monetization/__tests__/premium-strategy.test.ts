@@ -110,6 +110,50 @@ describe("resolvePremiumStrategy", () => {
     );
   });
 
+  it("references session data when evidence is provided", () => {
+    const strategy = resolvePremiumStrategy({
+      billingConfigured: true,
+      completedSessions: 45,
+      sessionEvidence: {
+        completedSessions: 42,
+        focusHours: 15,
+        consistencyRate: 0.8,
+        bestWindow: "morning",
+        bestDay: "weekday",
+      },
+    });
+    expect(strategy.paywallBody).toMatch(/42 sessions/);
+    expect(strategy.paywallBody).toMatch(/15h/);
+    expect(strategy.paywallBody).toContain("mornings");
+    expect(strategy.paywallBody).toContain("weekdays");
+    expect(strategy.paywallBody).toContain("Premium adds");
+  });
+
+  it("falls back to generic when evidence is insufficient (<5 sessions)", () => {
+    const strategy = resolvePremiumStrategy({
+      billingConfigured: true,
+      completedSessions: 45,
+      sessionEvidence: {
+        completedSessions: 2,
+        focusHours: 0.5,
+        consistencyRate: 0.5,
+      },
+    });
+    expect(strategy.paywallBody).toContain("VEX Premium adds");
+    expect(strategy.paywallBody).not.toMatch(/Based on/);
+    expect(strategy.paywallBody).not.toMatch(/Across \d/);
+  });
+
+  it("falls back to generic when no evidence provided", () => {
+    const strategy = resolvePremiumStrategy({
+      billingConfigured: true,
+      completedSessions: 45,
+    });
+    expect(strategy.paywallBody).toContain("VEX Premium adds");
+    expect(strategy.paywallBody).not.toMatch(/Based on/);
+    expect(strategy.paywallBody).not.toMatch(/Across \d/);
+  });
+
   it("has free vs pro matrix", () => {
     const strategy = resolvePremiumStrategy({
       billingConfigured: true,

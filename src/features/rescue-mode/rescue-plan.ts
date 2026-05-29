@@ -64,16 +64,22 @@ export function isRescueEligible(
 
   if (input.abandonedSessionExists) {
     trigger = "abandoned_session";
+  } else if (input.sessionStartedQuitEarly) {
+    trigger = "abandoned_session";
+  } else if (input.openedAppNoStart) {
+    trigger = "missed_planned";
   } else if (input.missedPlannedSession) {
     trigger = "missed_planned";
   } else if (input.recentDismissals >= 3) {
     trigger = "notification_dismissal_pattern";
   } else if (input.recentDismissals >= 2) {
     trigger = "repeated_dismissals";
-  } else if (input.streakAtRisk && input.hoursUntilStreakBreak <= 6) {
-    trigger = "streak_risk";
+  } else if (input.homeCtaDismissals >= 2) {
+    trigger = "repeated_dismissals";
   } else if (input.userTooBig) {
     trigger = "user_too_big";
+  } else if (input.inactivityDays >= 1 && input.completedSessions >= 1) {
+    trigger = "streak_risk";
   }
 
   if (!trigger) return notEligible("No rescue trigger signal detected.");

@@ -47,7 +47,7 @@
     "@supabase/supabase-js": "^2.103.3",
     "@tanstack/react-query": "^5.52.0",
     "babel-preset-expo": "~56.0.0",
-    "expo": "~56.0.5",
+    "expo": "~56.0.6",
     "expo-build-properties": "~56.0.15",
     "expo-dev-client": "~56.0.16",
     "expo-document-picker": "~56.0.4",

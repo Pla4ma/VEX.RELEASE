@@ -5,11 +5,22 @@ export type PremiumHighIntentAction =
   | "memory_console"
   | "calendar_intelligence";
 
+export interface SessionEvidence {
+  completedSessions: number;
+  focusHours: number;
+  consistencyRate: number;
+  bestWindow?: string;
+  bestDay?: string;
+  completedSessionsInLane?: number;
+  longestStreak?: number;
+}
+
 export interface PremiumStrategyInput {
   billingConfigured: boolean;
   completedSessions: number;
   highIntentAction?: PremiumHighIntentAction;
   paywallDismissals?: number;
+  sessionEvidence?: SessionEvidence;
 }
 
 export interface PremiumStrategy {
@@ -101,6 +112,20 @@ function hiddenStrategy(
   };
 }
 
+function buildEvidenceBody(evidence: SessionEvidence): string | null {
+  const { completedSessions, focusHours, bestWindow, bestDay } = evidence;
+  if (completedSessions < 5 || focusHours < 1) return null;
+
+  const hours = Math.round(focusHours);
+  if (bestWindow && bestDay) {
+    return `Based on ${completedSessions} sessions and ${hours}h of focus, your strongest rhythm is ${bestWindow}s on ${bestDay}s.`;
+  }
+  if (bestWindow) {
+    return `Across ${completedSessions} sessions and ${hours}h of focus, ${bestWindow}s are when you are most consistent.`;
+  }
+  return `Across ${completedSessions} sessions and ${hours}h of focus, your rhythm is forming. Premium builds on this.`;
+}
+
 export function resolvePremiumStrategy(
   input: PremiumStrategyInput,
 ): PremiumStrategy {
@@ -113,7 +138,6 @@ export function resolvePremiumStrategy(
   if ((input.paywallDismissals ?? 0) >= 2) {
     return hiddenStrategy("none", "Premium waits until there is real value");
   }
-  // No paywall before soft-tease threshold (session 5), even with highIntentAction
   if (input.completedSessions < 5) {
     return hiddenStrategy("none", "Premium waits until there is real value");
   }
@@ -123,13 +147,19 @@ export function resolvePremiumStrategy(
     input.highIntentAction ?? (hasValue ? "after_value" : "none");
   const canShowPaywall = triggerMoment !== "none";
 
+  const evidenceClause = input.sessionEvidence
+    ? buildEvidenceBody(input.sessionEvidence)
+    : null;
+  const baseBody = evidenceClause
+    ? `${evidenceClause} Premium adds deeper memory, Study OS depth, weekly intelligence, calendar planning, and quiet recovery automation.`
+    : "VEX Premium adds deeper memory, Study OS depth, weekly intelligence, calendar planning, and quiet recovery automation.";
+
   return {
     canShowPaywall,
     entitlementArchitecture: ENTITLEMENT_ARCHITECTURE,
     freeFeatures: FREE_FEATURES,
     noFakeBillingChecklist: NO_FAKE_BILLING,
-    paywallBody:
-      "VEX Pro adds deeper memory, Study OS depth, weekly intelligence, calendar planning, and quiet recovery automation.",
+    paywallBody: baseBody,
     paywallHeadline: "Turn your rhythm into a personal execution system",
     premiumFeatures: PREMIUM_FEATURES,
     triggerMoment,

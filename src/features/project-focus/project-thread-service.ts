@@ -83,7 +83,7 @@ export function rescueStaleProject(
 ): ProjectThread {
   const rescued = ProjectThreadSchema.parse({
     ...thread,
-    bestSessionMode: "LIGHT_FOCUS",
+    bestSessionMode: thread.bestSessionMode === "DEEP_WORK" ? "CREATIVE" : thread.bestSessionMode,
     lastTouched: now,
     rescuedAt: now,
     staleRisk: "none",
