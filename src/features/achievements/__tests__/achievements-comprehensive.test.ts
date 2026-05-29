@@ -1,9 +1,11 @@
 /**
- * Comprehensive tests for the achievements feature.
+ * Achievements — Comprehensive Tests
  *
  * Covers: schemas, repository, definitions helpers, achievement-unlock,
- * achievement-helpers, event-handlers, EventHandler class, and stats.
+ * achievement-helpers, event-handlers, EventHandler class, stats, hooks,
+ * and definitions index.
  */
+
 import { describe, it, expect, jest, beforeEach } from "@jest/globals";
 
 // ─── Event bus mock ────────────────────────────────────────────────────────
@@ -110,7 +112,9 @@ import {
 } from "../boss-streak-achievements";
 import { eventBus } from "../../../events";
 import { getAvailabilityFor } from "../../liveops-config/feature-access-store";
+import Sentry from "@sentry/react-native";
 import type { Achievement, UserAchievement } from "../types";
+import { DEDICATION_ACHIEVEMENTS } from "../types";
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
@@ -137,6 +141,22 @@ const makeDbRow = (overrides: Record<string, unknown> = {}) => ({
   ...overrides,
 });
 
+const makeTestAchievement = (overrides: Partial<Achievement> = {}): Achievement => ({
+  id: "test-ach",
+  title: "Test Achievement",
+  description: "A test achievement",
+  category: "SESSION",
+  rarity: "COMMON",
+  icon: "🌟",
+  isHidden: false,
+  progressMax: 1,
+  unlockCondition: { type: "TEST", target: 1, comparator: "GREATER_THAN" },
+  pointValue: 10,
+  shareText: "I did it!",
+  reward: {},
+  ...overrides,
+});
+
 // ════════════════════════════════════════════════════════════════════════════
 // 1. Schemas
 // ════════════════════════════════════════════════════════════════════════════
@@ -144,15 +164,17 @@ const makeDbRow = (overrides: Record<string, unknown> = {}) => ({
 describe("Schemas", () => {
   describe("AchievementCategorySchema", () => {
     it("accepts all valid categories", () => {
-      for (const cat of [
-        "SESSION", "STREAK", "BOSS", "SOCIAL", "PROGRESSION", "ECONOMY",
-      ]) {
+      for (const cat of ["SESSION", "STREAK", "BOSS", "SOCIAL", "PROGRESSION", "ECONOMY"]) {
         expect(AchievementCategorySchema.parse(cat)).toBe(cat);
       }
     });
 
     it("rejects an invalid category", () => {
       expect(() => AchievementCategorySchema.parse("INVALID")).toThrow();
+    });
+
+    it("rejects lowercase category", () => {
+      expect(() => AchievementCategorySchema.parse("session")).toThrow();
     });
   });
 
@@ -184,9 +206,12 @@ describe("Schemas", () => {
     });
 
     it("accepts null unlocked_at", () => {
-      expect(
-        UserAchievementRowSchema.parse(makeDbRow({ unlocked_at: null })).unlocked_at,
-      ).toBeNull();
+      expect(UserAchievementRowSchema.parse(makeDbRow({ unlocked_at: null })).unlocked_at).toBeNull();
+    });
+
+    it("accepts string unlocked_at", () => {
+      const parsed = UserAchievementRowSchema.parse(makeDbRow({ unlocked_at: "2024-01-01T00:00:00Z" }));
+      expect(parsed.unlocked_at).toBe("2024-01-01T00:00:00Z");
     });
 
     it("parses progress_history entries", () => {
@@ -200,7 +225,7 @@ describe("Schemas", () => {
 });
 
 // ════════════════════════════════════════════════════════════════════════════
-// 2. Repository (tested via mocked interface — verifies shape of exports)
+// 2. Repository exports
 // ════════════════════════════════════════════════════════════════════════════
 
 describe("Repository exports", () => {
@@ -231,24 +256,9 @@ describe("Repository exports", () => {
 
 describe("Definitions Helpers", () => {
   const testAchs: Achievement[] = [
-    {
-      id: "ach-1", title: "First", description: "First ach",
-      category: "SESSION", rarity: "COMMON", icon: "🌱", isHidden: false,
-      progressMax: 1, unlockCondition: { type: "TEST", target: 1, comparator: "GREATER_THAN" },
-      pointValue: 10, shareText: "text", reward: {},
-    },
-    {
-      id: "ach-2", title: "Second", description: "Second ach",
-      category: "BOSS", rarity: "RARE", icon: "🏆", isHidden: true,
-      progressMax: 5, unlockCondition: { type: "TEST", target: 5, comparator: "CUMULATIVE" },
-      pointValue: 50, shareText: "text", reward: {},
-    },
-    {
-      id: "ach-3", title: "Third", description: "Third ach",
-      category: "SESSION", rarity: "COMMON", icon: "⭐", isHidden: false, isDeprecated: true,
-      progressMax: 10, unlockCondition: { type: "TEST", target: 10, comparator: "CUMULATIVE" },
-      pointValue: 25, shareText: "text", reward: {},
-    },
+    makeTestAchievement({ id: "ach-1", title: "First", category: "SESSION", rarity: "COMMON", isHidden: false, pointValue: 10 }),
+    makeTestAchievement({ id: "ach-2", title: "Second", category: "BOSS", rarity: "RARE", isHidden: true, pointValue: 50, progressMax: 5, unlockCondition: { type: "TEST", target: 5, comparator: "CUMULATIVE" } }),
+    makeTestAchievement({ id: "ach-3", title: "Third", category: "SESSION", rarity: "COMMON", isHidden: false, isDeprecated: true, pointValue: 25, progressMax: 10, unlockCondition: { type: "TEST", target: 10, comparator: "CUMULATIVE" } }),
   ];
 
   describe("getAchievementById (helper)", () => {
@@ -277,6 +287,10 @@ describe("Definitions Helpers", () => {
     it("filters by rarity", () => {
       expect(getAchievementsByRarity(testAchs, "COMMON")).toHaveLength(2);
     });
+
+    it("returns empty for unmatched rarity", () => {
+      expect(getAchievementsByRarity(testAchs, "LEGENDARY")).toHaveLength(0);
+    });
   });
 
   describe("getVisibleAchievements", () => {
@@ -291,7 +305,7 @@ describe("Definitions Helpers", () => {
     it("returns full info for visible achievement", () => {
       const info = getAchievementDisplayInfo(testAchs[0]!, false);
       expect(info.title).toBe("First");
-      expect(info.icon).toBe("🌱");
+      expect(info.icon).toBe("🌟");
     });
 
     it("returns mystery for hidden + locked", () => {
@@ -306,8 +320,13 @@ describe("Definitions Helpers", () => {
     });
 
     it("shows legendary hint for hidden+locked LEGENDARY", () => {
-      const ach: Achievement = { ...testAchs[1]!, rarity: "LEGENDARY", isHidden: true };
+      const ach = makeTestAchievement({ rarity: "LEGENDARY", isHidden: true });
       expect(getAchievementDisplayInfo(ach, false).description).toContain("rumored");
+    });
+
+    it("shows mystery hint for hidden+locked non-LEGENDARY", () => {
+      const ach = makeTestAchievement({ rarity: "COMMON", isHidden: true });
+      expect(getAchievementDisplayInfo(ach, false).description).toContain("mystery");
     });
   });
 
@@ -323,6 +342,13 @@ describe("Definitions Helpers", () => {
     it("matches RARITY_CONFIG", () => {
       expect(getRarityPoints("COMMON")).toBe(RARITY_CONFIG.COMMON.points);
       expect(getRarityPoints("LEGENDARY")).toBe(RARITY_CONFIG.LEGENDARY.points);
+    });
+
+    it("increases with rarity tier", () => {
+      expect(getRarityPoints("COMMON")).toBeLessThan(getRarityPoints("UNCOMMON"));
+      expect(getRarityPoints("UNCOMMON")).toBeLessThan(getRarityPoints("RARE"));
+      expect(getRarityPoints("RARE")).toBeLessThan(getRarityPoints("EPIC"));
+      expect(getRarityPoints("EPIC")).toBeLessThan(getRarityPoints("LEGENDARY"));
     });
   });
 
@@ -384,10 +410,8 @@ describe("achievement-unlock", () => {
 
     it("unlocks and returns result for valid locked achievement", async () => {
       const realAch = ALL_ACHIEVEMENTS[0]!;
-      // checkAchievement: getUserAchievement -> null
       mockGetUserAchievement
         .mockResolvedValueOnce(null)
-        // unlockAchievement: getUserAchievement -> null
         .mockResolvedValueOnce(null);
       mockCreateUserAchievement.mockResolvedValue(
         mockUserAchievement({ achievementId: realAch.id, isUnlocked: true }),
@@ -404,11 +428,7 @@ describe("achievement-unlock", () => {
     it("checks multiple achievement ids against user progress", async () => {
       const realAch = ALL_ACHIEVEMENTS[0]!;
       mockGetAllUserAchievements.mockResolvedValue([
-        mockUserAchievement({
-          achievementId: realAch.id,
-          progress: realAch.progressMax,
-          isUnlocked: false,
-        }),
+        mockUserAchievement({ achievementId: realAch.id, progress: realAch.progressMax, isUnlocked: false }),
       ]);
       mockGetUserAchievement.mockResolvedValue(null);
       mockUpdateAchievementProgress.mockResolvedValue(
@@ -417,11 +437,17 @@ describe("achievement-unlock", () => {
       await achievementUnlock.checkCumulativeAchievements("user-1", "TEST", [realAch.id]);
       expect(mockGetAllUserAchievements).toHaveBeenCalledWith("user-1");
     });
+
+    it("skips unknown achievement ids", async () => {
+      mockGetAllUserAchievements.mockResolvedValue([]);
+      await achievementUnlock.checkCumulativeAchievements("user-1", "TEST", ["nonexistent-id"]);
+      expect(mockGetUserAchievement).not.toHaveBeenCalled();
+    });
   });
 });
 
 // ════════════════════════════════════════════════════════════════════════════
-// 5. Achievement Helpers (achievement-helpers.ts)
+// 5. Achievement Helpers
 // ════════════════════════════════════════════════════════════════════════════
 
 describe("achievement-helpers", () => {
@@ -438,9 +464,7 @@ describe("achievement-helpers", () => {
     });
 
     it("returns false for unknown feature id", () => {
-      expect(
-        achievementHelpers.hasUnlockedFeature(["achievement-7-day-streak"], "nope"),
-      ).toBe(false);
+      expect(achievementHelpers.hasUnlockedFeature(["achievement-7-day-streak"], "nope")).toBe(false);
     });
   });
 
@@ -459,25 +483,14 @@ describe("achievement-helpers", () => {
 
   describe("getNextMilestoneDays", () => {
     it.each([
-      [0, 3],
-      [3, 7],
-      [7, 14],
-      [14, 30],
-      [30, 100],
-      [100, 100],
-      [200, 100],
+      [0, 3], [3, 7], [7, 14], [14, 30], [30, 100], [100, 100], [200, 100],
     ])("streak %i -> next milestone %i", (streak, expected) => {
       expect(achievementHelpers.getNextMilestoneDays(streak)).toBe(expected);
     });
   });
 
   describe("getAchievementPreview", () => {
-    const base: Achievement = {
-      id: "t", title: "Test Achievement", description: "A test",
-      category: "SESSION", rarity: "COMMON", icon: "🌟", isHidden: false,
-      progressMax: 1, unlockCondition: { type: "T", target: 1, comparator: "GREATER_THAN" },
-      pointValue: 10, shareText: "text", reward: {},
-    };
+    const base = makeTestAchievement();
 
     it("returns full info for visible achievement", () => {
       const p = achievementHelpers.getAchievementPreview(base, true);
@@ -494,19 +507,12 @@ describe("achievement-helpers", () => {
     });
 
     it("returns real info for hidden but unlocked", () => {
-      expect(
-        achievementHelpers.getAchievementPreview({ ...base, isHidden: true }, true).title,
-      ).toBe("Test Achievement");
+      expect(achievementHelpers.getAchievementPreview({ ...base, isHidden: true }, true).title).toBe("Test Achievement");
     });
   });
 
   describe("handleAchievementUnlock", () => {
-    const makeAch = (id: string): Achievement => ({
-      id, title: "T", description: "d",
-      category: "SESSION", rarity: "COMMON", icon: "⭐", isHidden: false,
-      progressMax: 1, unlockCondition: { type: "T", target: 1, comparator: "GREATER_THAN" },
-      pointValue: 10, shareText: "text", reward: {},
-    });
+    const makeAch = (id: string): Achievement => makeTestAchievement({ id });
 
     it("returns { unlocked: true, features }", () => {
       const r = achievementHelpers.handleAchievementUnlock("user-1", makeAch("generic"));
@@ -521,6 +527,11 @@ describe("achievement-helpers", () => {
     ])("awards insurance for %s", (id, milestone) => {
       achievementHelpers.handleAchievementUnlock("user-1", makeAch(id));
       expect(mockAwardInsurance).toHaveBeenCalledWith("user-1", milestone, 1);
+    });
+
+    it("does not award insurance for non-streak achievement", () => {
+      achievementHelpers.handleAchievementUnlock("user-1", makeAch("random-ach"));
+      expect(mockAwardInsurance).not.toHaveBeenCalled();
     });
 
     it("publishes achievement:unlocked event", () => {
@@ -541,9 +552,7 @@ describe("achievement-helpers", () => {
 
     it("sets currentAchievement to last unlocked", () => {
       if (STUDY_ACHIEVEMENTS.length >= 2) {
-        const g = achievementHelpers.getProgressionGuide(
-          [STUDY_ACHIEVEMENTS[0]!.id, STUDY_ACHIEVEMENTS[1]!.id], [],
-        );
+        const g = achievementHelpers.getProgressionGuide([STUDY_ACHIEVEMENTS[0]!.id, STUDY_ACHIEVEMENTS[1]!.id], []);
         expect(g.currentAchievement?.id).toBe(STUDY_ACHIEVEMENTS[1]!.id);
       }
     });
@@ -564,6 +573,11 @@ describe("achievement-helpers", () => {
         expect(g.nextAchievement).not.toBeNull();
       }
     });
+
+    it("returns empty nearbyAchievements when nothing in progress", () => {
+      const g = achievementHelpers.getProgressionGuide([], []);
+      expect(g.nearbyAchievements).toEqual([]);
+    });
   });
 });
 
@@ -580,78 +594,86 @@ describe("event-handlers", () => {
 
   describe("handleSessionCompleted", () => {
     it("calls checkCumulativeAchievements for SESSION_COMPLETE", async () => {
-      await eventHandlers.handleSessionCompleted({
-        userId: "user-1", duration: 1800, quality: 80, timestamp: Date.now(),
-      } as any);
-      expect(mockCheckCumulative).toHaveBeenCalledWith(
-        "user-1", "SESSION_COMPLETE", expect.arrayContaining(["session-first"]),
-      );
+      await eventHandlers.handleSessionCompleted({ userId: "user-1", duration: 1800, quality: 80, timestamp: Date.now() } as any);
+      expect(mockCheckCumulative).toHaveBeenCalledWith("user-1", "SESSION_COMPLETE", expect.arrayContaining(["session-first"]));
     });
 
     it("checks 60-min achievement for long sessions", async () => {
-      await eventHandlers.handleSessionCompleted({
-        userId: "user-1", duration: 3700, timestamp: Date.now(),
-      } as any);
+      await eventHandlers.handleSessionCompleted({ userId: "user-1", duration: 3700, timestamp: Date.now() } as any);
       expect(mockCheckAchievement).toHaveBeenCalledWith("user-1", "session-60-min");
     });
 
     it("does not check 60-min for short sessions", async () => {
-      await eventHandlers.handleSessionCompleted({
-        userId: "user-1", duration: 1800, timestamp: Date.now(),
-      } as any);
-      expect(
-        mockCheckAchievement.mock.calls.find(([, id]: [string, string]) => id === "session-60-min"),
-      ).toBeUndefined();
+      await eventHandlers.handleSessionCompleted({ userId: "user-1", duration: 1800, timestamp: Date.now() } as any);
+      expect(mockCheckAchievement.mock.calls.find(([, id]: [string, string]) => id === "session-60-min")).toBeUndefined();
+    });
+
+    it("checks perfect session for quality >= 95", async () => {
+      await eventHandlers.handleSessionCompleted({ userId: "user-1", duration: 1800, quality: 98, timestamp: Date.now() } as any);
+      expect(mockCheckCumulative).toHaveBeenCalledWith("user-1", "PERFECT_SESSION", expect.arrayContaining(["session-first-s-grade"]));
+    });
+
+    it("does not check perfect session for quality < 95", async () => {
+      await eventHandlers.handleSessionCompleted({ userId: "user-1", duration: 1800, quality: 80, timestamp: Date.now() } as any);
+      expect(mockCheckCumulative.mock.calls.find(([, type]: [string, string]) => type === "PERFECT_SESSION")).toBeUndefined();
     });
   });
 
   describe("handleStreakUpdated", () => {
     it("checks streak achievements based on streak days", async () => {
-      await eventHandlers.handleStreakUpdated({
-        userId: "user-1", state: { currentStreak: 10 },
-      } as any);
+      await eventHandlers.handleStreakUpdated({ userId: "user-1", state: { currentStreak: 10 } } as any);
       expect(mockCheckAchievement).toHaveBeenCalled();
     });
 
     it("checks all applicable tiers for high streaks", async () => {
-      await eventHandlers.handleStreakUpdated({
-        userId: "user-1", state: { currentStreak: 100 },
-      } as any);
+      await eventHandlers.handleStreakUpdated({ userId: "user-1", state: { currentStreak: 100 } } as any);
       expect(mockCheckAchievement.mock.calls.length).toBeGreaterThanOrEqual(5);
+    });
+
+    it("does not check streak-365 for streak < 365", async () => {
+      await eventHandlers.handleStreakUpdated({ userId: "user-1", state: { currentStreak: 50 } } as any);
+      expect(mockCheckAchievement.mock.calls.find(([, id]: [string, string]) => id === "streak-365")).toBeUndefined();
+    });
+  });
+
+  describe("handleStreakMilestone", () => {
+    it("adds Sentry breadcrumb for milestone", async () => {
+      await eventHandlers.handleStreakMilestone({ userId: "user-1", milestone: 7 } as any);
+      expect(Sentry.addBreadcrumb).toHaveBeenCalledWith(expect.objectContaining({ category: "achievements", message: expect.stringContaining("7") }));
     });
   });
 
   describe("handleBossDefeated", () => {
     it("checks cumulative boss achievements", async () => {
-      await eventHandlers.handleBossDefeated({
-        userId: "user-1", bossId: "boss-1", damageDealt: 50, participants: ["user-1"],
-      } as any);
-      expect(mockCheckCumulative).toHaveBeenCalledWith(
-        "user-1", "BOSS_DEFEAT", expect.arrayContaining(["boss-first"]),
-      );
+      await eventHandlers.handleBossDefeated({ userId: "user-1", bossId: "boss-1", damageDealt: 50, participants: ["user-1"] } as any);
+      expect(mockCheckCumulative).toHaveBeenCalledWith("user-1", "BOSS_DEFEAT", expect.arrayContaining(["boss-first"]));
     });
 
     it("checks solo boss when no participants", async () => {
-      await eventHandlers.handleBossDefeated({
-        userId: "user-1", bossId: "boss-1", damageDealt: 50, participants: [],
-      } as any);
+      await eventHandlers.handleBossDefeated({ userId: "user-1", bossId: "boss-1", damageDealt: 50, participants: [] } as any);
       expect(mockCheckAchievement).toHaveBeenCalledWith("user-1", "boss-solo");
     });
 
+    it("checks squad boss when participants exist", async () => {
+      await eventHandlers.handleBossDefeated({ userId: "user-1", bossId: "boss-1", damageDealt: 50, participants: ["user-1", "user-2"] } as any);
+      expect(mockCheckAchievement).toHaveBeenCalledWith("user-1", "boss-squad");
+    });
+
     it("checks critical hit when damage > 100", async () => {
-      await eventHandlers.handleBossDefeated({
-        userId: "user-1", bossId: "boss-1", damageDealt: 150, participants: ["user-1"],
-      } as any);
+      await eventHandlers.handleBossDefeated({ userId: "user-1", bossId: "boss-1", damageDealt: 150, participants: ["user-1"] } as any);
       expect(mockCheckAchievement).toHaveBeenCalledWith("user-1", "boss-critical");
+    });
+
+    it("does not check critical hit when damage <= 100", async () => {
+      await eventHandlers.handleBossDefeated({ userId: "user-1", bossId: "boss-1", damageDealt: 50, participants: ["user-1"] } as any);
+      expect(mockCheckAchievement.mock.calls.find(([, id]: [string, string]) => id === "boss-critical")).toBeUndefined();
     });
   });
 
   describe("handleLevelUp", () => {
     it("checks level achievements for high levels", async () => {
       await eventHandlers.handleLevelUp({ userId: "user-1", newLevel: 25 } as any);
-      expect(
-        mockCheckAchievement.mock.calls.find(([, id]: [string, string]) => id === "prog-level-5"),
-      ).toBeDefined();
+      expect(mockCheckAchievement.mock.calls.find(([, id]: [string, string]) => id === "prog-level-5")).toBeDefined();
     });
 
     it("does not check for low levels", async () => {
@@ -680,6 +702,13 @@ describe("event-handlers", () => {
       expect(mockCheckAchievement).not.toHaveBeenCalled();
     });
   });
+
+  describe("handleAchievementCheck", () => {
+    it("adds breadcrumb for manual check", async () => {
+      await eventHandlers.handleAchievementCheck({ userId: "user-1", type: "manual" } as any);
+      expect(Sentry.addBreadcrumb).toHaveBeenCalledWith(expect.objectContaining({ category: "achievements", message: expect.stringContaining("Manual") }));
+    });
+  });
 });
 
 // ════════════════════════════════════════════════════════════════════════════
@@ -689,10 +718,7 @@ describe("event-handlers", () => {
 describe("AchievementEventHandler", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    mockGetAvailabilityFor.mockReturnValue({
-      canSubscribeToEvents: true,
-      isEnabled: true,
-    } as any);
+    mockGetAvailabilityFor.mockReturnValue({ canSubscribeToEvents: true, isEnabled: true } as any);
     mockSubscribe.mockReturnValue(jest.fn());
   });
 
@@ -722,10 +748,7 @@ describe("AchievementEventHandler", () => {
   });
 
   it("skips initialization when feature not available", () => {
-    mockGetAvailabilityFor.mockReturnValue({
-      canSubscribeToEvents: false,
-      isEnabled: false,
-    } as any);
+    mockGetAvailabilityFor.mockReturnValue({ canSubscribeToEvents: false, isEnabled: false } as any);
     const h = new AchievementEventHandler();
     h.initialize();
     expect(mockSubscribe).not.toHaveBeenCalled();
@@ -743,17 +766,13 @@ describe("checkAchievementManually", () => {
 
   it("returns false when already unlocked", async () => {
     const realAch = ALL_ACHIEVEMENTS[0]!;
-    mockGetUserAchievement.mockResolvedValue(
-      mockUserAchievement({ achievementId: realAch.id, isUnlocked: true }),
-    );
+    mockGetUserAchievement.mockResolvedValue(mockUserAchievement({ achievementId: realAch.id, isUnlocked: true }));
     expect(await checkAchievementManually("user-1", realAch.id)).toBe(false);
   });
 
   it("returns true when exists and not unlocked", async () => {
     const realAch = ALL_ACHIEVEMENTS[0]!;
-    mockGetUserAchievement.mockResolvedValue(
-      mockUserAchievement({ achievementId: realAch.id, isUnlocked: false }),
-    );
+    mockGetUserAchievement.mockResolvedValue(mockUserAchievement({ achievementId: realAch.id, isUnlocked: false }));
     expect(await checkAchievementManually("user-1", realAch.id)).toBe(true);
   });
 });
@@ -819,6 +838,12 @@ describe("Stats Service", () => {
       const stats = await statsService.getAchievementStats("user-1");
       expect(Object.keys(stats.byTier).length).toBeGreaterThan(0);
     });
+
+    it("byCategory contains entries for categories", async () => {
+      mockGetUserAchievement.mockResolvedValue(null);
+      const stats = await statsService.getAchievementStats("user-1");
+      expect(Object.keys(stats.byCategory).length).toBeGreaterThan(0);
+    });
   });
 
   describe("getNextAchievements", () => {
@@ -834,6 +859,21 @@ describe("Stats Service", () => {
       mockGetUserAchievement.mockResolvedValue(null);
       const result = await statsService.getNextAchievements("user-1", 100);
       expect(result.every((a) => !a.isHidden)).toBe(true);
+    });
+
+    it("respects limit parameter", async () => {
+      mockGetUserAchievement.mockResolvedValue(null);
+      const result = await statsService.getNextAchievements("user-1", 3);
+      expect(result.length).toBeLessThanOrEqual(3);
+    });
+
+    it("includes remaining and percentComplete fields", async () => {
+      mockGetUserAchievement.mockResolvedValue(null);
+      const result = await statsService.getNextAchievements("user-1", 1);
+      if (result.length > 0) {
+        expect(typeof result[0]!.remaining).toBe("number");
+        expect(typeof result[0]!.percentComplete).toBe("number");
+      }
     });
   });
 
@@ -871,6 +911,36 @@ describe("Stats Service", () => {
       const info = statsService.revealHiddenAchievement("nonexistent");
       expect(info.name).toBe("???");
       expect(info.icon).toBe("❓");
+    });
+  });
+
+  describe("getCompletionPercentage", () => {
+    it("returns 0 when no achievements unlocked", async () => {
+      mockGetUserAchievement.mockResolvedValue(null);
+      const pct = await statsService.getCompletionPercentage("user-1");
+      expect(pct).toBe(0);
+    });
+  });
+
+  describe("getRecentlyUnlockedAchievements", () => {
+    it("returns empty when no user achievements", async () => {
+      mockGetAllUserAchievements.mockResolvedValue([]);
+      const result = await statsService.getRecentlyUnlockedAchievements("user-1");
+      expect(result).toEqual([]);
+    });
+
+    it("respects limit parameter", async () => {
+      mockGetAllUserAchievements.mockResolvedValue([]);
+      const result = await statsService.getRecentlyUnlockedAchievements("user-1", 2);
+      expect(result.length).toBeLessThanOrEqual(2);
+    });
+  });
+
+  describe("initializeUserAchievements", () => {
+    it("creates user achievements for all definitions", async () => {
+      mockCreateUserAchievement.mockResolvedValue(null);
+      await statsService.initializeUserAchievements("user-1");
+      expect(mockCreateUserAchievement).toHaveBeenCalledTimes(ALL_ACHIEVEMENTS.length);
     });
   });
 });
@@ -931,5 +1001,54 @@ describe("Definitions Index", () => {
       expect(u.featureId).toBeTruthy();
       expect(u.featureName).toBeTruthy();
     }
+  });
+
+  it("DEDICATION_ACHIEVEMENTS has session achievements", () => {
+    expect(DEDICATION_ACHIEVEMENTS.length).toBeGreaterThan(0);
+    expect(DEDICATION_ACHIEVEMENTS.every((a) => a.category === "SESSION")).toBe(true);
+  });
+
+  it("ALL_ACHIEVEMENTS has no duplicate IDs", () => {
+    const ids = ALL_ACHIEVEMENTS.map((a) => a.id);
+    expect(new Set(ids).size).toBe(ids.length);
+  });
+});
+
+// ════════════════════════════════════════════════════════════════════════════
+// 10. Hooks — query key factory
+// ════════════════════════════════════════════════════════════════════════════
+
+describe("achievementKeys", () => {
+  it("all key starts with 'achievements'", () => {
+    expect(achievementKeys.all).toEqual(["achievements"]);
+  });
+
+  it("byUser includes userId", () => {
+    const key = achievementKeys.byUser("user-123");
+    expect(key).toContain("user-123");
+    expect(key[0]).toBe("achievements");
+  });
+
+  it("list includes userId and 'list'", () => {
+    const key = achievementKeys.list("abc");
+    expect(key).toContain("list");
+    expect(key).toContain("abc");
+  });
+
+  it("detail includes userId and achievementId", () => {
+    const key = achievementKeys.detail("u-1", "ach-1");
+    expect(key).toContain("detail");
+    expect(key).toContain("u-1");
+    expect(key).toContain("ach-1");
+  });
+
+  it("recent includes userId and 'recent'", () => {
+    const key = achievementKeys.recent("u-1");
+    expect(key).toContain("recent");
+  });
+
+  it("stats includes userId and 'stats'", () => {
+    const key = achievementKeys.stats("u-1");
+    expect(key).toContain("stats");
   });
 });
