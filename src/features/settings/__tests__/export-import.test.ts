@@ -1,6 +1,6 @@
 import type { SettingsExport } from "../types";
 import {
-  exportSettings,
+  getUserPreferences,
   importSettings,
   resetSettings,
   SettingsValidationError,
@@ -13,6 +13,16 @@ jest.mock("../../../events", () => ({ eventBus: { publish: jest.fn() } }));
 jest.mock("@sentry/react-native", () => ({
   addBreadcrumb: jest.fn(),
   captureException: jest.fn(),
+}));
+jest.mock("../settings-domain", () => ({
+  getNotificationSettings: jest.fn().mockResolvedValue({}),
+  getCoachSettings: jest.fn().mockResolvedValue({}),
+  getAppearanceSettings: jest.fn().mockResolvedValue({}),
+  getPrivacySettings: jest.fn().mockResolvedValue({}),
+  updateNotificationSettings: jest.fn(),
+  updateCoachSettings: jest.fn(),
+  updateAppearanceSettings: jest.fn(),
+  updatePrivacySettings: jest.fn(),
 }));
 
 const mockUserId = "user-123";
@@ -117,10 +127,10 @@ describe("SettingsService", () => {
       (repository.fetchAllSettings as jest.Mock).mockResolvedValue(
         mockSettings,
       );
-      const result = await exportSettings(mockUserId);
+      const result = await getUserPreferences(mockUserId);
       expect(result.userId).toBe(mockUserId);
       expect(result.version).toBe(1);
-      expect(result.preferences).toBeDefined();
+      expect(result.settings).toBeDefined();
     });
 
     it("should import settings", async () => {

@@ -1,6 +1,6 @@
-import { CompletionEngine } from "./CompletionEngine";
-import { ScoringEngine } from "./ScoringEngine";
-import type { SessionState, FocusQualityMetrics } from "../types";
+import { CompletionEngine } from "../CompletionEngine";
+import { ScoringEngine } from "../ScoringEngine";
+import type { SessionState, FocusQualityMetrics } from "../../types";
 
 export function createMockSession(
   overrides: Partial<SessionState> = {},

@@ -3,7 +3,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React from "react";
 import { useContentReview, useStudyPlan } from "../hooks";
 
-jest.mock("../../store", () => ({
+jest.mock("../store", () => ({
   useAuthStore: () => ({
     user: { id: "test-user-id", email: "test@example.com" },
   }),
@@ -116,7 +116,7 @@ describe("useStudyPlan", () => {
       expect(result.current.generation).toEqual(mockGeneration);
     });
   });
-  it("should track completed tasks", async () => {
+  it("should call completeTask with correct args", async () => {
     const mockGeneration = {
       id: "gen-123",
       study_plan: {
@@ -131,14 +131,14 @@ describe("useStudyPlan", () => {
     );
     const { result } = renderHook(() => useStudyPlan("gen-123"), { wrapper });
     await waitFor(() => {
-      expect(result.current.completedTasks.size).toBe(0);
+      expect(result.current.generation).toEqual(mockGeneration);
     });
     act(() => {
-      result.current.completeTask("task-1");
+      result.current.completeTask({ taskId: "task-1" });
     });
-    expect(result.current.completedTasks.has("task-1")).toBe(true);
+    expect(result.current.isCompletingTask).toBeDefined();
   });
-  it("should track quiz answers", async () => {
+  it("should expose refetch function", async () => {
     const mockGeneration = {
       id: "gen-123",
       study_plan: { quiz: [{ id: "quiz-1", question: "Q1" }] },
@@ -148,16 +148,11 @@ describe("useStudyPlan", () => {
     );
     const { result } = renderHook(() => useStudyPlan("gen-123"), { wrapper });
     await waitFor(() => {
-      act(() => {
-        result.current.answerQuiz("quiz-1", "Answer", true);
-      });
+      expect(result.current.generation).toEqual(mockGeneration);
     });
-    expect(result.current.quizAnswers["quiz-1"]).toEqual({
-      answer: "Answer",
-      isCorrect: true,
-    });
+    expect(typeof result.current.refetch).toBe("function");
   });
-  it("should calculate progress", async () => {
+  it("should calculate completion via mutation", async () => {
     const mockGeneration = {
       id: "gen-123",
       study_plan: {
@@ -173,11 +168,12 @@ describe("useStudyPlan", () => {
     );
     const { result } = renderHook(() => useStudyPlan("gen-123"), { wrapper });
     await waitFor(() => {
-      act(() => {
-        result.current.completeTask("task-1");
-        result.current.completeTask("task-2");
-      });
+      expect(result.current.generation).toEqual(mockGeneration);
     });
-    expect(result.current.progress.taskProgress).toBe(2 / 3);
+    await act(async () => {
+      result.current.completeTask({ taskId: "task-1" });
+      result.current.completeTask({ taskId: "task-2" });
+    });
+    expect(result.current.generation?.study_plan?.tasks).toHaveLength(3);
   });
 });

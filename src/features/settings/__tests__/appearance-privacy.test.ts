@@ -12,6 +12,43 @@ jest.mock("@sentry/react-native", () => ({
   addBreadcrumb: jest.fn(),
   captureException: jest.fn(),
 }));
+jest.mock("../settings-domain", () => {
+  const { buildAppearanceSettings, buildPrivacySettings } = jest.requireActual("../settings-builders");
+  return {
+    getNotificationSettings: jest.fn().mockResolvedValue({}),
+    getCoachSettings: jest.fn().mockResolvedValue({}),
+    getAppearanceSettings: jest.fn(async (userId: string) => {
+      const repo = jest.requireMock("../repository") as { fetchAllSettings: jest.Mock };
+      const settings = await repo.fetchAllSettings(userId);
+      return buildAppearanceSettings(userId, settings);
+    }),
+    updateAppearanceSettings: jest.fn(async (userId: string, updates: Record<string, unknown>) => {
+      const repo = jest.requireMock("../repository") as { batchUpsertSettings: jest.Mock };
+      const items = Object.entries(updates).map(([key, value]) => ({
+        key: `appearance.${key}`,
+        value,
+        category: "appearance",
+      }));
+      await repo.batchUpsertSettings(userId, items);
+      return { theme: updates.theme ?? "dark", fontScale: 1, accentColor: "#000" };
+    }),
+    getPrivacySettings: jest.fn(async (userId: string) => {
+      const repo = jest.requireMock("../repository") as { fetchAllSettings: jest.Mock };
+      const settings = await repo.fetchAllSettings(userId);
+      return buildPrivacySettings(userId, settings);
+    }),
+    updatePrivacySettings: jest.fn(async (userId: string, updates: Record<string, unknown>) => {
+      const repo = jest.requireMock("../repository") as { batchUpsertSettings: jest.Mock };
+      const items = Object.entries(updates).map(([key, value]) => ({
+        key: `privacy.${key}`,
+        value,
+        category: "privacy",
+      }));
+      await repo.batchUpsertSettings(userId, items);
+      return { profileVisibility: updates.profileVisibility ?? "private" };
+    }),
+  };
+});
 
 describe("SettingsService", () => {
   const mockUserId = "user-123";

@@ -1,5 +1,40 @@
+jest.mock("../repository", () => ({
+  upsertRewardLedger: jest.fn(),
+  getRewardLedgerById: jest.fn(),
+  updateRewardLedgerStatus: jest.fn(),
+  fetchPendingRewards: jest.fn(),
+}));
+jest.mock("../../economy/wallet-service", () => ({
+  addCurrency: jest.fn().mockResolvedValue({
+    newBalance: 1100,
+    earnedAmount: 50,
+    transaction: { id: "tx-1", type: "EARN", amount: 50, currency: "COINS" },
+  }),
+}));
+jest.mock("../../../config/sentry", () => ({
+  captureException: jest.fn(),
+  addBreadcrumb: jest.fn(),
+}));
+
 import { failReward, expireReward, syncPendingRewards } from "../service";
-import { repository, captureException, mockRecord } from "./service.helpers";
+import * as repository from "../repository";
+import { captureException } from "../../../config/sentry";
+import type { RewardLedgerRecord } from "../types";
+
+const mockRecord: RewardLedgerRecord = {
+  id: "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+  userId: "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb",
+  idempotencyKey: "evt_session_complete_001",
+  rewardType: "session_bonus",
+  amount: 50,
+  currency: "XP",
+  status: "pending",
+  sourceEvent: "session:completed",
+  createdAt: "2026-01-01T00:00:00.000Z",
+  deliveredAt: null,
+  failedReason: null,
+  expiresAt: null,
+};
 
 describe("reward-ledger service", () => {
   beforeEach(() => {

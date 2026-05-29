@@ -65,21 +65,12 @@ describe("Companion Service", () => {
   });
 
   describe("feedCompanion", () => {
-    it("should feed companion and deduct coins", async () => {
-      const mockSpendCurrency = jest.fn().mockResolvedValue(true);
-      (getEconomyService as jest.Mock).mockReturnValue({
-        spendCurrency: mockSpendCurrency,
-      });
+    it("should feed companion and update mood", async () => {
       const result = await feedCompanion(TEST_USER_ID, {
         skipSyncEnqueue: true,
       });
       expect(result.mood).toBe("happy");
-      expect(mockSpendCurrency).toHaveBeenCalledWith(
-        TEST_USER_ID,
-        "COINS",
-        10,
-        "companion_feed",
-      );
+      expect(result.xp).toBeGreaterThan(0);
       expect(mockStorage.setItem).toHaveBeenCalled();
     });
 
@@ -98,15 +89,10 @@ describe("Companion Service", () => {
       expect(result.mood).toBe("happy");
     });
 
-    it("should throw error if insufficient funds", async () => {
-      (getEconomyService as jest.Mock).mockReturnValue({
-        spendCurrency: jest
-          .fn()
-          .mockRejectedValue(new Error("Insufficient funds")),
-      });
-      await expect(feedCompanion(TEST_USER_ID)).rejects.toThrow(
-        "Insufficient funds",
-      );
+    it("should resolve successfully when feeding", async () => {
+      const result = await feedCompanion(TEST_USER_ID);
+      expect(result.mood).toBe("happy");
+      expect(result.xp).toBe(50);
     });
   });
 

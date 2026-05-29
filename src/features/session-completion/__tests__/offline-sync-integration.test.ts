@@ -5,6 +5,36 @@ import {
   beforeEach,
   jest,
 } from "@jest/globals";
+
+// These jest.mock() calls must appear before any imports from
+// ../offline-sync-integration so that babel-jest hoists them above
+// the transitive import chain (offline-sync-core → useNetInfo → React).
+// Without them the real useNetInfo module loads and triggers
+// NULL_PROPERTY_ACCESS when it calls useState at module scope.
+jest.mock("../offline-sync-service", () => ({
+  sessionCompletionOfflineSync: {
+    queueSessionCompletion: jest.fn(),
+    getSyncStatus: jest.fn(),
+    forceRetryAll: jest.fn(),
+    getDiagnostics: jest.fn(),
+  },
+}));
+jest.mock("../ledger-service", () => ({ buildCompletionLedger: jest.fn() }));
+jest.mock("../../../network/useNetInfo", () => ({
+  useNetInfo: jest.fn(),
+}));
+jest.mock("../../../network/NetInfoAdapter", () => ({
+  getNetInfoAdapter: jest.fn(() => ({
+    getCurrentState: jest.fn(() => ({
+      isConnected: true,
+      isInternetReachable: true,
+      type: "wifi",
+      details: null,
+    })),
+    subscribe: jest.fn(() => jest.fn()),
+  })),
+}));
+
 import {
   completeSessionWithOfflineSync,
   useCompleteSessionWithOfflineSync,

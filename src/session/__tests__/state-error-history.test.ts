@@ -15,7 +15,7 @@ beforeEach(() => {
 
 describe("getSessionState", () => {
   it("should return current session state", async () => {
-    const session = await ctx.service.createSession(mockSessionConfig);
+    const session = await ctx.service.createCustomSession(mockSessionConfig);
     const state = ctx.service.getSessionState(session.id);
     expect(state).toBeDefined();
     expect(state.sessionId).toBe(session.id);
@@ -23,7 +23,7 @@ describe("getSessionState", () => {
   });
 
   it("should calculate remaining time correctly", async () => {
-    const session = await ctx.service.createSession(mockSessionConfig);
+    const session = await ctx.service.createCustomSession(mockSessionConfig);
     await ctx.service.startSession(session.id);
     const state = ctx.service.getSessionState(session.id);
     expect(state.remainingSeconds).toBeLessThanOrEqual(session.config.duration);
@@ -34,7 +34,7 @@ describe("getSessionState", () => {
 describe("error handling", () => {
   it("should handle repository save failure", async () => {
     ctx.mockRepository.saveSession.mockRejectedValue(new Error("DB error"));
-    await expect(ctx.service.createSession(mockSessionConfig)).rejects.toThrow(
+    await expect(ctx.service.createCustomSession(mockSessionConfig)).rejects.toThrow(
       "DB error",
     );
     expect(eventBus.publish).toHaveBeenCalledWith(
@@ -44,7 +44,7 @@ describe("error handling", () => {
   });
 
   it("should handle concurrent session operations", async () => {
-    const session = await ctx.service.createSession(mockSessionConfig);
+    const session = await ctx.service.createCustomSession(mockSessionConfig);
     await ctx.service.startSession(session.id);
     const pause1 = ctx.service.pauseSession(session.id, { reason: "TEST" });
     const pause2 = ctx.service.pauseSession(session.id, { reason: "TEST" });

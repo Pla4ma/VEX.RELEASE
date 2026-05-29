@@ -92,14 +92,14 @@ function firstWeek(lane: Lane, completedSessions: number) {
 describe("first-week journey hardening", () => {
   it.each([
     ["student", "study_os", "Start study block", "Study OS"],
-    ["game_like", "run_board", "Start encounter", "Run Board"],
+    ["game_like", "run_board", "Start clean run", "Run Board"],
     [
       "deep_creative",
       "project_thread",
       "Resume project block",
       "Project Focus Path",
     ],
-    ["minimal_normal", "today_strip", "Start clean session", "Today Strip"],
+    ["minimal_normal", "today_strip", "Start clean action", "Today Strip"],
   ] as const)(
     "keeps %s journey wired through week one",
     (lane, surface, ctaLabel, pathName) => {

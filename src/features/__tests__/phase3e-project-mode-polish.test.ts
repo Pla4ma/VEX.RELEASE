@@ -12,7 +12,7 @@ import {
   isRescueEligible,
   decideHomeSurfaces,
   SessionMode,
-} from "./phase3-lane-polish-helpers";
+} from "./phase3-test-helpers";
 
 describe("Phase 3E — Project Mode Polish", () => {
   const projectProfile = baseLaneProfile({ primaryLane: "deep_creative" });

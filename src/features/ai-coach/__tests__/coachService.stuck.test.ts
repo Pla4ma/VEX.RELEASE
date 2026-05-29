@@ -2,7 +2,7 @@ import { describe, test, expect, beforeEach, jest } from "@jest/globals";
 import { createCoachTestSetup } from "./coach-test-setup";
 import type { InterventionContext } from "../types";
 
-jest.mock("../../utils/debug", () => ({
+jest.mock("../../../utils/debug", () => ({
   createDebugger: () => ({
     info: jest.fn(),
     error: jest.fn(),

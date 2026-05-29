@@ -4,7 +4,7 @@
 import {
   decideHomeSurfaces,
   makeBaseInput,
-} from "./home-resolved-first-week.helpers";
+} from "./home-resolved-first-week-helpers";
 
 describe("Home resolved experience — firstWeek phase integration", () => {
   describe("First-week boss gating", () => {

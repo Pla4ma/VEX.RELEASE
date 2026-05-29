@@ -138,7 +138,7 @@ describe("Lane Engine — mechanic policy & Day 0", () => {
     });
     const policy = getLaneMechanicPolicy(profile);
 
-    expect(policy.preferredMechanics).toContain("personal_boss");
+    expect(policy.preferredMechanics).toContain("focus_run");
     expect(policy.blockedMechanics).toContain("wagers");
     expect(policy.blockedMechanics).toContain("generic_leaderboards");
   });
@@ -162,7 +162,7 @@ describe("Lane Engine — mechanic policy & Day 0", () => {
     });
     const policy = getLaneMechanicPolicy(profile);
 
-    expect(policy.blockedMechanics).toContain("boss_full_cta");
+    expect(policy.blockedMechanics).toContain("blocker_full_cta");
     expect(policy.blockedMechanics).toContain("challenge_spam");
     expect(policy.blockedMechanics).toContain("economy");
     expect(policy.blockedMechanics).toContain("xp_first_ui");

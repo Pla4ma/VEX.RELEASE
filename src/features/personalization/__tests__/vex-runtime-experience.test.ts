@@ -67,7 +67,7 @@ describe("useVexRuntimeExperience", () => {
     };
     const result = computeVexRuntimeExperience(input);
     expect(result.completionSequence.emphasis).toBe(
-      "confirmation_coach_progress_next_action",
+      "confirmation_companion_next_action",
     );
     expect(result.completionSequence.showCoachReflection).toBe(true);
   });

@@ -3,7 +3,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React from "react";
 import { useContentHistory, useRateLimit } from "../hooks";
 
-jest.mock("../../store", () => ({
+jest.mock("../store", () => ({
   useAuthStore: () => ({
     user: { id: "test-user-id", email: "test@example.com" },
   }),
@@ -58,7 +58,7 @@ describe("useContentHistory", () => {
       expect(result.current.content).toBeDefined();
     });
     await act(async () => {
-      await result.current.refresh();
+      await result.current.refetch();
     });
     expect(service.fetchContentHistory).toHaveBeenCalledTimes(2);
   });

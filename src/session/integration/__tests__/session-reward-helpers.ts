@@ -1,4 +1,3 @@
-import { jest } from "@jest/globals";
 import { eventBus } from "../../../events";
 import type { SessionSummary } from "../../types";
 
@@ -35,8 +34,9 @@ export function createMockSummary(
 }
 
 export function setupMockEventBus() {
-  const mockEventBus = { publish: jest.fn(), subscribe: jest.fn() };
-  (eventBus.publish as jest.Mock) = mockEventBus.publish;
-  (eventBus.subscribe as jest.Mock) = mockEventBus.subscribe;
-  return mockEventBus;
+  jest.clearAllMocks();
+  return {
+    publish: eventBus.publish as unknown as jest.Mock,
+    subscribe: eventBus.subscribe as unknown as jest.Mock,
+  };
 }

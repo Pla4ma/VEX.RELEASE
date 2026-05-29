@@ -4,7 +4,7 @@ import {
   createEngines,
 } from "./CompletionEngine.helpers";
 
-describe("CompletionEngine > handlePartialCompletion", () => {
+describe("CompletionEngine > completePartial", () => {
   let completionEngine: ReturnType<typeof createEngines>["completionEngine"];
 
   beforeEach(() => {
@@ -14,10 +14,11 @@ describe("CompletionEngine > handlePartialCompletion", () => {
   it("should handle partial completion", () => {
     const session = createMockSession({ completionPercentage: 70 });
     const metrics = createMockMetrics();
-    const result = completionEngine.handlePartialCompletion(
+    const result = completionEngine.completePartial(
       session,
       metrics,
       5,
+      "user_paused",
     );
     expect(result.success).toBe(true);
     expect(result.status).toBe("PARTIAL");
@@ -26,17 +27,18 @@ describe("CompletionEngine > handlePartialCompletion", () => {
   it("should set session status to PARTIAL", () => {
     const session = createMockSession({ completionPercentage: 70 });
     const metrics = createMockMetrics();
-    completionEngine.handlePartialCompletion(session, metrics, 5);
+    completionEngine.completePartial(session, metrics, 5, "user_paused");
     expect(session.status).toBe("PARTIAL");
   });
 
   it("should grant partial rewards", () => {
     const session = createMockSession({ completionPercentage: 70 });
     const metrics = createMockMetrics();
-    const result = completionEngine.handlePartialCompletion(
+    const result = completionEngine.completePartial(
       session,
       metrics,
       5,
+      "user_paused",
     );
     expect(result.rewardsGranted).toBe(true);
   });
@@ -44,10 +46,11 @@ describe("CompletionEngine > handlePartialCompletion", () => {
   it("should maintain streak for partial completion above threshold", () => {
     const session = createMockSession({ completionPercentage: 70 });
     const metrics = createMockMetrics();
-    const result = completionEngine.handlePartialCompletion(
+    const result = completionEngine.completePartial(
       session,
       metrics,
       5,
+      "user_paused",
     );
     expect(result.streakMaintained).toBe(true);
   });

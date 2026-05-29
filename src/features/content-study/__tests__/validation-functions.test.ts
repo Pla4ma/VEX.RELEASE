@@ -69,7 +69,8 @@ describe("Validation Functions", () => {
       expect(result.warnings.some((w) => w.code === "LONG_CONTENT")).toBe(true);
     });
     it("should return warning for poor formatting", () => {
-      const text = "Line1\n\n\n\n\n\nLine2\n\n\n\n\n\nLine3";
+      const text =
+        "A\n\n\n\n\nB\n\n\n\n\nC\n\n\n\n\nD\n\n\n\n\nE\n\n\n\n\nF\n\n\n\n\nG";
       const result = validatePastedText(text);
       expect(result.warnings.some((w) => w.code === "POOR_FORMATTING")).toBe(
         true,

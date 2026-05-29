@@ -100,6 +100,7 @@ describe("rescue mode — eligibility", () => {
       recentDismissals: 0,
       streakAtRisk: true,
       hoursUntilStreakBreak: 3,
+      inactivityDays: 1,
       hasActiveSession: false,
       now: 100,
     });

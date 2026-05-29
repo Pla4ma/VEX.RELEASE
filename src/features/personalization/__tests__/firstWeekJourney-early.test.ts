@@ -89,7 +89,7 @@ describe("FirstWeekExperience — early journey", () => {
       expect(result.currentDayStage).toBe("DAY_1_RETURN");
       expect(result.spotlightSurface).toBe("progress_proof");
       expect(result.primaryMessage).toBe(
-        "Same clean container. No extras — just presence.",
+        "One clean block is enough today.",
       );
     });
   });

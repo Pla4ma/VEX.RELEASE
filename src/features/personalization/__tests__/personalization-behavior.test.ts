@@ -15,7 +15,7 @@ describe("Intense user", () => {
     });
     const result = resolveVexExperience(
       profile,
-      makeStats({ totalCompletedSessions: 10 }),
+      makeStats({ totalCompletedSessions: 10, bossChallengeEngagement: "high" }),
       { boss: true, challenges: true, premium: true, study: false },
     );
     expect(result.coachTone).toBe("direct");

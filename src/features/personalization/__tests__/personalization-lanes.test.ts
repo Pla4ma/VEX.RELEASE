@@ -82,7 +82,7 @@ describe("Personalization v3 — user lanes", () => {
       });
       const result = resolveVexExperience(
         profile,
-        makeStats({ totalCompletedSessions: 5 }),
+        makeStats({ totalCompletedSessions: 5, bossChallengeEngagement: "high" }),
         { boss: true, challenges: true, premium: false, study: false },
       );
       expect(result.bossIntensity).toBe("game-like");
@@ -93,7 +93,7 @@ describe("Personalization v3 — user lanes", () => {
       const profile = makeProfile({ motivationStyle: "game_like" });
       const result = resolveVexExperience(
         profile,
-        makeStats({ totalCompletedSessions: 5 }),
+        makeStats({ totalCompletedSessions: 5, bossChallengeEngagement: "high" }),
         { boss: true, challenges: true, premium: false, study: false },
       );
       expect(result.boss.isVisible).toBe(true);
@@ -110,7 +110,7 @@ describe("Personalization v3 — user lanes", () => {
       });
       const result = resolveVexExperience(
         profile,
-        makeStats({ totalCompletedSessions: 10 }),
+        makeStats({ totalCompletedSessions: 10, bossChallengeEngagement: "high" }),
         { boss: true, challenges: true, premium: true, study: false },
       );
       expect(result.coachTone).toBe("direct");

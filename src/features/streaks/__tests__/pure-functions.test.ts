@@ -11,7 +11,7 @@ describe("StreaksService — pure functions", () => {
       expect(isQualifyingSession(900, 50)).toBe(true);
     });
     it("should reject short sessions", () => {
-      expect(isQualifyingSession(600, 100)).toBe(false);
+      expect(isQualifyingSession(599, 100)).toBe(false);
     });
     it("should reject low quality sessions", () => {
       expect(isQualifyingSession(1800, 40)).toBe(false);

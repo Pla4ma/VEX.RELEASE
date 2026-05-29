@@ -1,4 +1,8 @@
 import type { HomeSurfaceMap } from "../surface-decision-schemas";
+import { decideHomeSurfaces, getSpotlightSurface } from "../home-surface-decision";
+import { buildHomeExperienceModel } from "../service";
+
+export { decideHomeSurfaces, getSpotlightSurface, buildHomeExperienceModel };
 
 export const featureAvailability = {
   boss: true,

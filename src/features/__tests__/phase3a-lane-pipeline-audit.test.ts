@@ -4,8 +4,8 @@ import {
   getLaneMechanicPolicy,
   getLanePresentationPolicy,
   decideNudge,
-} from "./phase3-lane-polish-helpers";
-import type { Lane, LaneMechanicPolicy } from "./phase3-lane-polish-helpers";
+} from "./phase3-lane-polish/helpers";
+import type { Lane, LaneMechanicPolicy } from "./phase3-lane-polish/helpers";
 
 describe("Phase 3A — Lane Pipeline Audit", () => {
   it("audit table: all four modes produce distinct profiles", () => {

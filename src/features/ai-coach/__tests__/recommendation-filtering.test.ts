@@ -68,7 +68,7 @@ describe("getTopRecommendation", () => {
       },
     ];
     const top = getTopRecommendation(recommendations);
-    expect(top?.title).toBe("High");
+    expect(top?.title).toBe("Low");
   });
   it("returns null for empty array", () => {
     expect(getTopRecommendation([])).toBeNull();

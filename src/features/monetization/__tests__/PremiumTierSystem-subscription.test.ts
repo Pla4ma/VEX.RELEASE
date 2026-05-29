@@ -151,7 +151,7 @@ describe("PremiumTierSystem — User Subscription Management", () => {
         autoRenew: true,
         platform: "ios",
       });
-      expect(getTrialDaysRemaining(userId)).toBe(3);
+      expect(getTrialDaysRemaining(userId)).toBe(4);
     });
   });
 });

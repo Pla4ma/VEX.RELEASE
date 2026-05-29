@@ -31,12 +31,12 @@ describe("shouldCoachIntervene", () => {
     ).toBe(false);
   });
 
-  it("returns true for at-risk streak regardless of timing", () => {
+  it("returns true for at-risk streak after cooldown period", () => {
     const snapshot = createTestSnapshot({
       streakContext: { streakAtRisk: true, hoursSinceLastSession: 20 },
     });
     expect(
-      shouldCoachIntervene(snapshot, Date.now() - 1 * 60 * 60 * 1000),
+      shouldCoachIntervene(snapshot, Date.now() - 5 * 60 * 60 * 1000),
     ).toBe(true);
   });
 

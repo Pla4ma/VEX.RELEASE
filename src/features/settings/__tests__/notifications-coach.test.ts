@@ -12,6 +12,51 @@ jest.mock("@sentry/react-native", () => ({
   addBreadcrumb: jest.fn(),
   captureException: jest.fn(),
 }));
+jest.mock("../settings-domain", () => {
+  const repo = () => jest.requireMock("../repository") as {
+    fetchAllSettings: jest.Mock;
+    batchUpsertSettings: jest.Mock;
+  };
+  return {
+    getNotificationSettings: jest.fn(async (userId: string) => {
+      const settings = await repo().fetchAllSettings(userId);
+      const push = settings.find((s: { key: string }) => s.key === "notifications.push.enabled");
+      const email = settings.find((s: { key: string }) => s.key === "notifications.email.enabled");
+      return {
+        userId,
+        channels: {
+          push: { enabled: push?.value ?? true, deviceTokens: [], timezone: "UTC" },
+          email: { enabled: email?.value ?? true, email: "", digestFrequency: "daily" },
+          inApp: { enabled: true, soundEnabled: true, vibrationEnabled: true },
+        },
+        preferences: { critical: { enabled: true, channels: ["push"] }, high: { enabled: true, channels: ["push"] }, normal: { enabled: true, channels: ["in_app"] }, low: { enabled: false, channels: [] } },
+        customRules: [],
+      };
+    }),
+    updateNotificationSettings: jest.fn(async (_userId: string, _updates: unknown) => {
+      await repo().batchUpsertSettings(_userId, []);
+      return {};
+    }),
+    getCoachSettings: jest.fn(async (userId: string) => {
+      const settings = await repo().fetchAllSettings(userId);
+      const enabled = settings.find((s: { key: string }) => s.key === "coach.enabled");
+      const personality = settings.find((s: { key: string }) => s.key === "coach.personality");
+      return {
+        userId,
+        enabled: enabled?.value ?? true,
+        personality: personality?.value ?? "supportive",
+        frequency: "normal",
+        quietHours: { enabled: false, start: "22:00", end: "08:00" },
+      };
+    }),
+    updateCoachSettings: jest.fn(async (_userId: string, _updates: unknown) => {
+      await repo().batchUpsertSettings(_userId, []);
+      return {};
+    }),
+    getAppearanceSettings: jest.fn().mockResolvedValue({}),
+    getPrivacySettings: jest.fn().mockResolvedValue({}),
+  };
+});
 
 describe("SettingsService", () => {
   const mockUserId = "user-123";

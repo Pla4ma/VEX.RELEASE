@@ -18,9 +18,9 @@ describe("lane session brief", () => {
 
   it.each([
     ["student", "Start study block", "STUDY"],
-    ["game_like", "Start encounter", "SPRINT"],
+    ["game_like", "Start clean run", "SPRINT"],
     ["deep_creative", "Resume project block", "CREATIVE"],
-    ["minimal_normal", "Start clean session", "LIGHT_FOCUS"],
+    ["minimal_normal", "Start clean action", "LIGHT_FOCUS"],
   ] as const)("builds lane setup for %s", (lane, ctaLabel, sessionMode) => {
     const brief = buildLaneSessionBrief({ durationSeconds: 25 * 60, lane });
 
@@ -55,7 +55,7 @@ describe("lane session brief", () => {
 
     expect(brief.userFacingModeName).toBe("Run");
     expect(brief.sessionMode).toBe("SPRINT");
-    expect(brief.ctaLabel).toBe("Start encounter");
+    expect(brief.ctaLabel).toBe("Start clean run");
     expect(JSON.stringify(brief)).not.toMatch(
       /coin|gem|shop|wager|currency|bounty/i,
     );
@@ -83,8 +83,8 @@ describe("lane session brief", () => {
 
     expect(brief.userFacingModeName).toBe("Clean");
     expect(brief.sessionMode).toBe("LIGHT_FOCUS");
-    expect(brief.title).toBe("Clean session ready");
-    expect(brief.body).toContain("Name one task");
+    expect(brief.title).toBe("One action ready");
+    expect(brief.body).toContain("Name one action");
   });
 
   // PHASE 5 - Test 5: first session setup remains short
@@ -162,7 +162,7 @@ describe("lane session brief", () => {
     expect(studentBrief.successCondition).toContain(
       "five honest study minutes",
     );
-    expect(gameBrief.successCondition).toContain("clean hit");
+    expect(gameBrief.successCondition).toContain("clean next move");
     expect(creativeBrief.successCondition).toContain("project edit");
     expect(cleanBrief.successCondition).toContain("five minutes");
   });

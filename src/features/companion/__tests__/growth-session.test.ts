@@ -70,7 +70,7 @@ describe("Companion Growth", () => {
         userId,
         phase: "YOUNG",
         level: 99,
-        totalFocusMinutes: 295,
+        totalFocusMinutes: 350,
         element: "FLAME",
         elementAffinity: 50,
         currentMood: "CONTENT",

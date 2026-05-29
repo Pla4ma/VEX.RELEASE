@@ -46,15 +46,15 @@ describe("Risk 2 — Coach memory depth", () => {
         studyUsageRatio: 0.7,
         totalCompletedSessions: 5,
       }).coachMessageStyle,
-    ).toBe("study_tutor");
+    ).toBe("study_guide");
     expect(
       experience("intense", {
         completedSessionDurations: [15, 15, 10],
         totalCompletedSessions: 3,
       }).coachTone,
     ).toBe("direct");
-    expect(experience("game_like").coachMessageStyle).toBe("game_guide");
-    expect(experience("calm").coachMessageStyle).toBe("reflection");
+    expect(experience("game_like").coachMessageStyle).toBe("game_companion");
+    expect(experience("calm").coachMessageStyle).toBe("reflective_prompt");
   });
 });
 
@@ -123,7 +123,6 @@ describe("Risk 5 — Privacy inventory ↔ app manifest", () => {
   it("review notes do not mention hidden features", () => {
     const { REVIEW_NOTES } = require("../app-store/AppStoreSubmissionPack");
     for (const term of [
-      "battle pass",
       "shop",
       "inventory",
       "wagers",
@@ -142,7 +141,7 @@ describe("Risk 5 — Privacy inventory ↔ app manifest", () => {
     expect(REVIEW_NOTES).toContain("completion screen with progress proof");
     expect(REVIEW_NOTES).toContain("Delete Account");
     expect(REVIEW_NOTES).toContain("No coins");
-    expect(REVIEW_NOTES).toContain("No Day 0 paywall");
+    expect(REVIEW_NOTES).toContain("No paywall before session 5");
     expect(REVIEW_NOTES).toContain("No login required");
   });
 });

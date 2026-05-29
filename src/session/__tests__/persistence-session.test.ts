@@ -22,17 +22,25 @@ describe("SessionPersistence", () => {
     });
 
     it("should track analytics event on persist", () => {
-      const { eventBus } = require("../../../events");
+      const realEvents = jest.requireActual("../../events") as {
+        eventBus: { publish: (...args: unknown[]) => void };
+      };
+      const publishSpy = jest.spyOn(realEvents.eventBus, "publish");
       SessionPersistence.persist(mockSession);
-      expect(eventBus.publish).toHaveBeenCalledWith("analytics:track", {
+      expect(publishSpy).toHaveBeenCalledWith("analytics:track", {
         event: "session_persisted",
         properties: expect.any(Object),
       });
+      publishSpy.mockRestore();
     });
   });
 
   describe("load", () => {
     it("should return null when no session exists", () => {
+      const { MMKV } = require("react-native-mmkv");
+      const mockStorage = new MMKV();
+      mockStorage.getString.mockReset();
+      mockStorage.getAllKeys.mockReturnValue([]);
       const result = SessionPersistence.load();
       expect(result).toBeNull();
     });

@@ -19,7 +19,13 @@ describe("SessionService", () => {
       abandonSession: jest.fn(),
       completeSession: jest.fn(),
       getSessionStatus: jest.fn(),
+      isSessionActive: jest.fn().mockReturnValue(false),
       setUserId: jest.fn(),
+      backgroundSession: jest.fn(),
+      foregroundSession: jest.fn(),
+      applyStudyQuizBonus: jest.fn(),
+      attemptRecovery: jest.fn(),
+      destroy: jest.fn(),
     };
     (getSessionOrchestrator as jest.Mock).mockReturnValue(mockOrchestrator);
     service = createService();
@@ -70,7 +76,11 @@ describe("SessionService", () => {
     });
 
     it("should throw error when active session exists", async () => {
-      mockOrchestrator.getSessionStatus.mockReturnValue({ status: "active" });
+      mockOrchestrator.isSessionActive.mockReturnValue(true);
+      // Access the mocked repository to make getActiveSession return a session
+      const { getSessionRepository } = require("../repository/SessionRepository");
+      const repo = getSessionRepository();
+      repo.getActiveSession.mockResolvedValue({ id: "existing-session" });
       await expect(service.createCustomSession(validConfig)).rejects.toThrow(
         "Cannot create new session: one is already active",
       );

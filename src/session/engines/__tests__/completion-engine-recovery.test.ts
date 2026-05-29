@@ -1,6 +1,6 @@
-import { createMockSession, createMockMetrics, createEngines } from "./helpers";
+import { createMockSession, createMockMetrics, createEngines } from "./CompletionEngine.helpers";
 
-describe("CompletionEngine — handlePartialCompletion", () => {
+describe("CompletionEngine — completePartial", () => {
   let completionEngine: ReturnType<typeof createEngines>["completionEngine"];
 
   beforeEach(() => {
@@ -10,10 +10,11 @@ describe("CompletionEngine — handlePartialCompletion", () => {
   it("should handle partial completion", () => {
     const session = createMockSession({ completionPercentage: 70 });
     const metrics = createMockMetrics();
-    const result = completionEngine.handlePartialCompletion(
+    const result = completionEngine.completePartial(
       session,
       metrics,
       5,
+      "partial",
     );
     expect(result.success).toBe(true);
     expect(result.status).toBe("PARTIAL");
@@ -22,17 +23,18 @@ describe("CompletionEngine — handlePartialCompletion", () => {
   it("should set session status to PARTIAL", () => {
     const session = createMockSession({ completionPercentage: 70 });
     const metrics = createMockMetrics();
-    completionEngine.handlePartialCompletion(session, metrics, 5);
+    completionEngine.completePartial(session, metrics, 5, "partial");
     expect(session.status).toBe("PARTIAL");
   });
 
   it("should grant partial rewards", () => {
     const session = createMockSession({ completionPercentage: 70 });
     const metrics = createMockMetrics();
-    const result = completionEngine.handlePartialCompletion(
+    const result = completionEngine.completePartial(
       session,
       metrics,
       5,
+      "partial",
     );
     expect(result.rewardsGranted).toBe(true);
   });
@@ -40,10 +42,11 @@ describe("CompletionEngine — handlePartialCompletion", () => {
   it("should maintain streak for partial completion above threshold", () => {
     const session = createMockSession({ completionPercentage: 70 });
     const metrics = createMockMetrics();
-    const result = completionEngine.handlePartialCompletion(
+    const result = completionEngine.completePartial(
       session,
       metrics,
       5,
+      "partial",
     );
     expect(result.streakMaintained).toBe(true);
   });
@@ -61,7 +64,8 @@ describe("CompletionEngine — attemptRecovery", () => {
       status: "ABANDONED",
       completionPercentage: 75,
     });
-    const result = completionEngine.attemptRecovery(session, 5);
+    const metrics = createMockMetrics();
+    const result = completionEngine.attemptRecovery(session, "PARTIAL_CREDIT", metrics, 5);
     expect(result.success).toBe(true);
   });
 
@@ -70,7 +74,8 @@ describe("CompletionEngine — attemptRecovery", () => {
       status: "ABANDONED",
       completionPercentage: 75,
     });
-    completionEngine.attemptRecovery(session, 5);
+    const metrics = createMockMetrics();
+    completionEngine.attemptRecovery(session, "PARTIAL_CREDIT", metrics, 5);
     expect(session.status).toBe("RECOVERED");
   });
 
@@ -79,9 +84,10 @@ describe("CompletionEngine — attemptRecovery", () => {
       status: "ABANDONED",
       completionPercentage: 30,
     });
-    const result = completionEngine.attemptRecovery(session, 5);
+    const metrics = createMockMetrics();
+    const result = completionEngine.attemptRecovery(session, "PARTIAL_CREDIT", metrics, 5);
     expect(result.success).toBe(false);
-    expect(result.error).toBeDefined();
+    expect(result.summary).toBeDefined();
   });
 
   it("should fail recovery for already completed sessions", () => {
@@ -89,7 +95,8 @@ describe("CompletionEngine — attemptRecovery", () => {
       status: "COMPLETED",
       completionPercentage: 100,
     });
-    const result = completionEngine.attemptRecovery(session, 5);
+    const metrics = createMockMetrics();
+    const result = completionEngine.attemptRecovery(session, "PARTIAL_CREDIT", metrics, 5);
     expect(result.success).toBe(false);
   });
 });

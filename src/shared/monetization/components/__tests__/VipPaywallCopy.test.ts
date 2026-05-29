@@ -2,7 +2,12 @@ import { readFileSync } from "fs";
 import { join } from "path";
 
 const source = readFileSync(
-  join(__dirname, "..", "VipPaywallScreen.tsx"),
+  join(__dirname, "..", "paywall-data.ts"),
+  "utf8",
+);
+
+const actions = readFileSync(
+  join(__dirname, "..", "usePaywallActions.ts"),
   "utf8",
 );
 
@@ -18,7 +23,7 @@ describe("VipPaywallScreen copy", () => {
   });
 
   it("uses the approved purchase failure message", () => {
-    expect(source).toContain(
+    expect(actions).toContain(
       "Purchase didn't go through. Your card was not charged.",
     );
   });

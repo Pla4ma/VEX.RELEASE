@@ -1,4 +1,4 @@
-import { createMockSession, createMockMetrics, createEngines } from "./helpers";
+import { createMockSession, createMockMetrics, createEngines } from "./CompletionEngine.helpers";
 
 describe("CompletionEngine — abandonSession", () => {
   let completionEngine: ReturnType<typeof createEngines>["completionEngine"];

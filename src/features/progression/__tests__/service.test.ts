@@ -6,7 +6,7 @@ import {
   calculateLevelThreshold,
   calculateTotalXpToLevel,
   calculateLevelFromTotalXp,
-} from "../service-enhanced-math";
+} from "../service-xp-calculations";
 
 describe("ProgressionService", () => {
   describe("calculateLevelThreshold", () => {

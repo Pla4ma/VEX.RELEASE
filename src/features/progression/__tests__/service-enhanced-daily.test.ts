@@ -1,4 +1,4 @@
-import { getDailyProgress } from "../service-enhanced-daily";
+import { getDailyProgress } from "../service-daily-progress";
 import { fetchXpHistory } from "../repository";
 import { fetchXpStats } from "../repository/enhanced";
 

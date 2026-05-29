@@ -1,3 +1,21 @@
+jest.mock("../repository", () => ({
+  upsertRewardLedger: jest.fn(),
+  getRewardLedgerById: jest.fn(),
+  updateRewardLedgerStatus: jest.fn(),
+  fetchPendingRewards: jest.fn(),
+}));
+jest.mock("../../economy/wallet-service", () => ({
+  addCurrency: jest.fn().mockResolvedValue({
+    newBalance: 1100,
+    earnedAmount: 50,
+    transaction: { id: "tx-1", type: "EARN", amount: 50, currency: "COINS" },
+  }),
+}));
+jest.mock("../../../config/sentry", () => ({
+  captureException: jest.fn(),
+  addBreadcrumb: jest.fn(),
+}));
+
 import * as repository from "../repository";
 import { addCurrency } from "../../economy/wallet-service";
 import { captureException } from "../../../config/sentry";
@@ -28,20 +46,3 @@ export const validInput: CreateRewardLedgerInput = {
   currency: "XP",
   sourceEvent: "session:completed",
 };
-
-export function setupMocks(): void {
-  jest.mock("../repository");
-  jest.mock("../../economy/wallet-service", () => ({
-    addCurrency: jest.fn().mockResolvedValue({
-      newBalance: 1100,
-      earnedAmount: 50,
-      transaction: { id: "tx-1", type: "EARN", amount: 50, currency: "COINS" },
-    }),
-  }));
-  jest.mock("../../../config/sentry", () => ({
-    captureException: jest.fn(),
-    addBreadcrumb: jest.fn(),
-  }));
-}
-
-setupMocks();

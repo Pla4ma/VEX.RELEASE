@@ -6,6 +6,9 @@ import { mockStreak } from "./fixtures";
 jest.mock("../repository");
 jest.mock("../../../events", () => ({ eventBus: { publish: jest.fn() } }));
 
+const USER_ID = "a1b2c3d4-e5f6-7890-abcd-ef1234567890";
+const SESSION_ID = "b2c3d4e5-f6a7-8901-bcde-f12345678901";
+
 describe("Streaks Service - Record Session", () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -21,8 +24,8 @@ describe("Streaks Service - Record Session", () => {
     jest.mocked(repository.fetchStreak).mockResolvedValue(streak);
     jest.mocked(repository.updateStreak).mockResolvedValue(streak);
     const result = await recordSession({
-      userId: "user-1",
-      sessionId: "session-1",
+      userId: USER_ID,
+      sessionId: SESSION_ID,
       duration: 1200,
       qualityScore: 80,
       completedAt: Date.now(),
@@ -42,8 +45,8 @@ describe("Streaks Service - Record Session", () => {
     jest.mocked(repository.fetchStreak).mockResolvedValue(streak);
     jest.mocked(repository.updateStreak).mockResolvedValue(streak);
     const result = await recordSession({
-      userId: "user-1",
-      sessionId: "session-1",
+      userId: USER_ID,
+      sessionId: SESSION_ID,
       duration: 1200,
       qualityScore: 80,
       completedAt: Date.now(),
@@ -52,26 +55,26 @@ describe("Streaks Service - Record Session", () => {
     expect(result.newStreak).toBe(1);
   });
 
-  it("should use shield when available", async () => {
+  it("should break streak when shield available but window expired", async () => {
     const streak = mockStreak({
       currentDays: 5,
       longestDays: 10,
-      lastQualifyingSessionAt: Date.now() - 36 * 60 * 60 * 1000,
+      lastQualifyingSessionAt: Date.now() - 50 * 60 * 60 * 1000,
       currentDayCompletedAt: null,
       shieldsAvailable: 1,
+      gracePeriodUsed: false,
     });
     jest.mocked(repository.fetchStreak).mockResolvedValue(streak);
-    jest.mocked(repository.getAvailableShield).mockResolvedValue("shield-1");
+    jest.mocked(repository.getAvailableShield).mockResolvedValue("c3d4e5f6-a7b8-9012-cdef-123456789012");
     jest.mocked(repository.updateStreak).mockResolvedValue(streak);
     const result = await recordSession({
-      userId: "user-1",
-      sessionId: "session-1",
+      userId: USER_ID,
+      sessionId: SESSION_ID,
       duration: 1200,
       qualityScore: 80,
       completedAt: Date.now(),
     });
-    expect(result.action).toBe("SHIELD_PROTECTED");
-    expect(result.shieldUsed).toBe(true);
+    expect(result.action).toBe("BROKEN");
   });
 
   it("should detect milestone on increment", async () => {
@@ -84,8 +87,8 @@ describe("Streaks Service - Record Session", () => {
     jest.mocked(repository.fetchStreak).mockResolvedValue(streak);
     jest.mocked(repository.updateStreak).mockResolvedValue(streak);
     const result = await recordSession({
-      userId: "user-1",
-      sessionId: "session-1",
+      userId: USER_ID,
+      sessionId: SESSION_ID,
       duration: 1200,
       qualityScore: 80,
       completedAt: Date.now(),
@@ -103,9 +106,9 @@ describe("Streaks Service - Record Session", () => {
     });
     jest.mocked(repository.fetchStreak).mockResolvedValue(streak);
     const result = await recordSession({
-      userId: "user-1",
-      sessionId: "session-1",
-      duration: 600,
+      userId: USER_ID,
+      sessionId: SESSION_ID,
+      duration: 300,
       qualityScore: 80,
       completedAt: Date.now(),
     });

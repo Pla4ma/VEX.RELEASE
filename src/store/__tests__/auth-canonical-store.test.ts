@@ -2,17 +2,91 @@ import fs from "fs";
 import path from "path";
 import * as canonicalStore from "../index";
 import * as compatibilityStore from "../../store";
-import { setSentryUser, clearSentryUser } from "../../config/sentry";
-import { revenueCatService } from "../../shared/monetization/revenuecat-service";
-import {
-  getCurrentUser,
-  signInWithEmail,
-  signOut,
-  signUpWithEmail,
-} from "../../services/supabaseAuth";
-import { progressionService } from "../../services/progressionService";
-import { streakService } from "../../services/streakService";
 import { mockUser } from "./auth-canonical-store.fixtures";
+
+jest.mock("../../config/sentry", () => ({
+  setSentryUser: jest.fn(),
+  clearSentryUser: jest.fn(),
+  captureException: jest.fn(),
+}));
+
+jest.mock("../../shared/monetization/revenuecat-service", () => ({
+  revenueCatService: {
+    setUserId: jest.fn(),
+    clearUserId: jest.fn(),
+  },
+}));
+
+jest.mock("../../services/progressionService", () => ({
+  progressionService: {
+    setUserId: jest.fn(),
+    reset: jest.fn(),
+  },
+}));
+
+jest.mock("../../services/streakService", () => ({
+  streakService: {
+    setUserId: jest.fn(),
+    reset: jest.fn(),
+  },
+}));
+
+jest.mock("../../services/supabaseAuth", () => ({
+  signInWithEmail: jest.fn(),
+  signUpWithEmail: jest.fn(),
+  signOut: jest.fn(),
+  getCurrentUser: jest.fn(),
+  getCurrentSession: jest.fn(),
+  resetPassword: jest.fn(),
+  updatePassword: jest.fn(),
+  onAuthStateChange: jest.fn(),
+}));
+
+jest.mock("../../persistence/SecureStorage", () => ({
+  getSecureStorage: jest.fn(() => ({
+    removeItem: jest.fn(),
+    getItem: jest.fn(),
+    setItem: jest.fn(),
+  })),
+  SecureStorageKeys: {
+    AUTH_TOKEN: "auth-token",
+    REFRESH_TOKEN: "refresh-token",
+  },
+}));
+
+jest.mock("../authProfileStorage", () => ({
+  saveUserProfile: jest.fn(),
+  removeUserProfile: jest.fn(),
+  loadUserProfile: jest.fn(),
+}));
+
+jest.mock("../../utils/debug", () => ({
+  createDebugger: () => ({
+    log: jest.fn(),
+    error: jest.fn(),
+    warn: jest.fn(),
+  }),
+}));
+
+const { setSentryUser, clearSentryUser } = jest.requireMock(
+  "../../config/sentry",
+) as { setSentryUser: jest.Mock; clearSentryUser: jest.Mock };
+const { revenueCatService } = jest.requireMock(
+  "../../shared/monetization/revenuecat-service",
+) as { revenueCatService: { setUserId: jest.Mock; clearUserId: jest.Mock } };
+const { progressionService } = jest.requireMock(
+  "../../services/progressionService",
+) as { progressionService: { setUserId: jest.Mock; reset: jest.Mock } };
+const { streakService } = jest.requireMock(
+  "../../services/streakService",
+) as { streakService: { setUserId: jest.Mock; reset: jest.Mock } };
+const { signInWithEmail, signUpWithEmail, signOut, getCurrentUser } =
+  jest.requireMock("../../services/supabaseAuth") as {
+    signInWithEmail: jest.Mock;
+    signUpWithEmail: jest.Mock;
+    signOut: jest.Mock;
+    getCurrentUser: jest.Mock;
+  };
 
 describe("canonical auth store", () => {
   beforeEach(() => {
@@ -46,9 +120,10 @@ describe("canonical auth store", () => {
   });
 
   it("loginWithCredentials uses Supabase auth and binds user services", async () => {
-    jest
-      .mocked(signInWithEmail)
-      .mockResolvedValueOnce({ error: null, user: mockUser });
+    (signInWithEmail as jest.Mock).mockResolvedValueOnce({
+      error: null,
+      user: mockUser,
+    });
 
     await expect(
       canonicalStore.useAuthStore
@@ -68,9 +143,10 @@ describe("canonical auth store", () => {
   });
 
   it("register uses Supabase auth", async () => {
-    jest
-      .mocked(signUpWithEmail)
-      .mockResolvedValueOnce({ error: null, user: mockUser });
+    (signUpWithEmail as jest.Mock).mockResolvedValueOnce({
+      error: null,
+      user: mockUser,
+    });
 
     await expect(
       canonicalStore.useAuthStore.getState().register({
@@ -94,9 +170,10 @@ describe("canonical auth store", () => {
   });
 
   it("checkAuth reflects Supabase current user", async () => {
-    jest
-      .mocked(getCurrentUser)
-      .mockResolvedValueOnce({ error: null, user: mockUser });
+    (getCurrentUser as jest.Mock).mockResolvedValueOnce({
+      error: null,
+      user: mockUser,
+    });
 
     await canonicalStore.useAuthStore.getState().checkAuth();
 
@@ -109,7 +186,7 @@ describe("canonical auth store", () => {
       isAuthenticated: true,
       user: mockUser,
     });
-    jest.mocked(signOut).mockResolvedValueOnce({ error: null });
+    (signOut as jest.Mock).mockResolvedValueOnce({ error: null });
 
     await canonicalStore.useAuthStore.getState().logout();
 

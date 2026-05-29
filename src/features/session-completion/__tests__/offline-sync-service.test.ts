@@ -54,6 +54,22 @@ jest.mock("../../../persistence/MMKVStorageAdapter", () => ({
       delete mockStorage[key];
     }),
   })),
+  getMMKVStorageAdapter: jest.fn().mockReturnValue({
+    getItemSync: jest.fn((key: string) => mockStorage[key] ?? null),
+    setItemSync: jest.fn((key: string, value: string) => {
+      mockStorage[key] = value;
+    }),
+    removeItemSync: jest.fn((key: string) => {
+      delete mockStorage[key];
+    }),
+    getItem: jest.fn(async (key: string) => mockStorage[key] ?? null),
+    setItem: jest.fn(async (key: string, value: string) => {
+      mockStorage[key] = value;
+    }),
+    removeItem: jest.fn(async (key: string) => {
+      delete mockStorage[key];
+    }),
+  }),
 }));
 
 const createLedgerMock = jest.mocked(createCompletionLedger);

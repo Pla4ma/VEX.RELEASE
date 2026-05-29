@@ -30,7 +30,7 @@ export const mockSession: PersistedSessionState = {
   interruptions: 0,
   pauses: 0,
   backgroundTime: 0,
-  configId: "config-123",
+  configId: "550e8400-e29b-41d4-a716-446655440001",
   deviceId: "device-test",
   deviceName: "Test Device",
   version: 1,
@@ -52,24 +52,25 @@ export const baseState: PersistedSessionState = {
   interruptions: 0,
   pauses: 0,
   backgroundTime: 0,
-  configId: "config-123",
+  configId: "550e8400-e29b-41d4-a716-446655440001",
   deviceId: "device-test",
   version: 1,
 };
 
 export function setupMocks(): void {
+  const mockMMKVInstance = {
+    set: jest.fn(),
+    getString: jest.fn(),
+    getNumber: jest.fn(),
+    delete: jest.fn(),
+    contains: jest.fn(),
+    getAllKeys: jest.fn(),
+  };
   jest.mock("react-native-mmkv", () => ({
-    MMKV: jest.fn().mockImplementation(() => ({
-      set: jest.fn(),
-      getString: jest.fn(),
-      getNumber: jest.fn(),
-      delete: jest.fn(),
-      contains: jest.fn(),
-      getAllKeys: jest.fn(),
-    })),
+    MMKV: jest.fn().mockImplementation(() => mockMMKVInstance),
   }));
-  jest.mock("../../../events", () => ({ eventBus: { publish: jest.fn() } }));
-  jest.mock("../../../utils/debug", () => ({
+  jest.mock("../../events", () => ({ eventBus: { publish: jest.fn() } }));
+  jest.mock("../../utils/debug", () => ({
     createDebugger: jest.fn(() => ({
       debug: jest.fn(),
       info: jest.fn(),

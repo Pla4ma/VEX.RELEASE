@@ -21,8 +21,8 @@ describe("PremiumTierSystem", () => {
       expect(TIERS.free.features.deepCoachMemory).toBe(false);
       expect(TIERS.free.features.advancedStudyOS).toBe(false);
       expect(TIERS.free.features.progressIntelligence).toBe(false);
-      expect(TIERS.free.features.visualIdentity).toBe(false);
-      expect(TIERS.free.features.premiumSessionModes).toBe(false);
+      expect(TIERS.free.features.memoryConsole).toBe(false);
+      expect(TIERS.free.features.calendarIntelligence).toBe(false);
       expect(TIERS.free.features.recoveryPlanning).toBe(false);
     });
 
@@ -40,8 +40,8 @@ describe("PremiumTierSystem", () => {
       expect(TIERS.premium.features.deepCoachMemory).toBe(true);
       expect(TIERS.premium.features.advancedStudyOS).toBe(true);
       expect(TIERS.premium.features.progressIntelligence).toBe(true);
-      expect(TIERS.premium.features.visualIdentity).toBe(true);
-      expect(TIERS.premium.features.premiumSessionModes).toBe(true);
+      expect(TIERS.premium.features.memoryConsole).toBe(true);
+      expect(TIERS.premium.features.calendarIntelligence).toBe(true);
       expect(TIERS.premium.features.recoveryPlanning).toBe(true);
     });
 
@@ -104,7 +104,7 @@ describe("PremiumTierSystem", () => {
   describe("PAYWALL_CONTEXTS", () => {
     it("has context for each premium feature type", () => {
       const ctx = getPaywallContext("DEEP_COACH_MEMORY");
-      expect(ctx.title).toContain("Coach");
+      expect(ctx.title).toContain("Session Intelligence");
       expect(ctx.headline).toBeTruthy();
     });
 

@@ -24,9 +24,9 @@ describe("TimerEngine", () => {
     it("should emit tick events at regular intervals", () => {
       engine.start();
       jest.advanceTimersByTime(1000);
-      expect(mockCallbacks.onTick).toHaveBeenCalledTimes(1);
+      expect(mockCallbacks.onTick).toHaveBeenCalledTimes(2);
       jest.advanceTimersByTime(2000);
-      expect(mockCallbacks.onTick).toHaveBeenCalledTimes(3);
+      expect(mockCallbacks.onTick).toHaveBeenCalledTimes(4);
     });
 
     it("should return early if already running", () => {

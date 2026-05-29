@@ -1,5 +1,5 @@
 import { describe, it, expect, jest, beforeEach } from "@jest/globals";
-import * as service from "../service";
+import * as service from "../stats";
 import * as repository from "../repository";
 import type { UserAchievement } from "../types";
 

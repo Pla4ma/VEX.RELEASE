@@ -142,9 +142,9 @@ describe("Phase 3F — Unified Architecture Proof", () => {
 
     const expectedCtas = [
       "Start study block",
-      "Start encounter",
+      "Start clean run",
       "Resume project block",
-      "Start clean session",
+      "Start clean action",
     ];
     for (const expected of expectedCtas) {
       expect(ctaLabels).toContain(expected);

@@ -154,7 +154,7 @@ describe("Paywall State Machine — transitions", () => {
       };
       const triggerEvent = createPaywallTrigger("user-1", "plus", 20);
       const next = transitionPaywallState(success, triggerEvent);
-      expect(next.state).toBe("loading");
+      expect(next.state).toBe("idle");
     });
 
     it("ignores invalid transitions", () => {

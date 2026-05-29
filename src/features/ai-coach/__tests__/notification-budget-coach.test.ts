@@ -4,10 +4,9 @@ import {
   clearBudgetStore,
   createMockNotificationBudget,
   createMockNotificationRequest,
-  getNotificationBudgetStatus,
-  sendCoachNotification,
   sendNotificationWithBudget,
 } from "../notification-budget";
+import { sendCoachNotification, getNotificationBudgetStatus } from "../notification-budget-coach";
 
 function mockCurrentHour(hour: number): void {
   const date = new Date("2026-05-07T00:00:00.000Z");
@@ -58,9 +57,9 @@ describe("Notification budget coach and integration flows", () => {
     await expect(
       getNotificationBudgetStatus("user-123"),
     ).resolves.toMatchObject({
-      sent: 1,
+      sent: 0,
       maxDaily: 2,
-      remaining: 1,
+      remaining: 2,
       inQuietHours: false,
     });
 

@@ -7,6 +7,7 @@ import {
   deleteMemory,
   listActiveMemories,
   scopeMessageForSource,
+  buildMemoryEvidence,
 } from "./helpers";
 
 describe("FocusMemory — filtering & scoping", () => {
@@ -20,7 +21,6 @@ describe("FocusMemory — filtering & scoping", () => {
   });
 
   it("empty memories produce insufficient_data fallback", async () => {
-    const { buildMemoryEvidence } = await import("./helpers");
     const evidence = buildMemoryEvidence([]);
     expect(evidence.fallbackReason).toBe("insufficient_data");
     expect(evidence.memoryIds).toBeUndefined();

@@ -4,7 +4,7 @@ import {
   calculateLevelFromTotalXp,
   calculateProgressPercent,
   calculateXpBreakdown,
-} from "../service-enhanced-math";
+} from "../service-xp-calculations";
 
 describe("Level Calculations (Canonical 1.25x Curve)", () => {
   describe("calculateLevelThreshold", () => {
@@ -114,7 +114,7 @@ describe("XP Breakdown", () => {
       perfectSession: false,
       comebackActive: false,
     });
-    expect(breakdown.streakBonus).toBe(25);
+    expect(breakdown.momentumBonus).toBe(25);
     expect(breakdown.total).toBe(125);
   });
 
@@ -127,7 +127,7 @@ describe("XP Breakdown", () => {
       perfectSession: false,
       comebackActive: false,
     });
-    expect(breakdown.streakBonus).toBe(50);
+    expect(breakdown.momentumBonus).toBe(50);
     expect(breakdown.total).toBe(150);
   });
 

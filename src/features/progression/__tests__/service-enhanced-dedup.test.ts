@@ -3,7 +3,7 @@ import {
   generateIdempotencyKey,
   isDuplicateOperation,
   markOperationProcessed,
-} from "../service-enhanced-dedup";
+} from "../service-dedup";
 import type { AddXpOperationResult } from "../service-enhanced-types";
 
 const RESULT: AddXpOperationResult = {

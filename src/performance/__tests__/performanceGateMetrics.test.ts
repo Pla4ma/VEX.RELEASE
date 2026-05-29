@@ -12,7 +12,6 @@ import {
   mockPerformanceMonitor,
   mockFetch,
   mockRequestAnimationFrame,
-  type PerformanceGate,
 } from "./performanceGateSetup";
 
 describe("PerformanceGate", () => {

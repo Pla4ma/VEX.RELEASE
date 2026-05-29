@@ -34,13 +34,14 @@ describe("no old economy premium copy", () => {
     },
   );
 
-  it("explicitly disclaims no coins, no gems", () => {
-    expect(allCopy).toContain("no coin");
-    expect(allCopy).toContain("no gem");
+  it("explicitly disclaims no currency, no gimmicks", () => {
+    expect(allCopy).toContain("no currency");
+    expect(allCopy).toContain("no gimmicks");
   });
 
   it("VALUE_PROPOSITION disclaims game economy", () => {
-    expect(VALUE_PROPOSITION.toLowerCase()).toContain("not a game economy");
+    expect(VALUE_PROPOSITION.toLowerCase()).toContain("smarter over time");
+    expect(VALUE_PROPOSITION.toLowerCase()).not.toMatch(/coin|gem|shop|currency/i);
   });
 
   it("personalized premium excludes economy for all lanes", () => {

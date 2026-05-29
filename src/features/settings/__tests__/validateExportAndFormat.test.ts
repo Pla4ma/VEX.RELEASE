@@ -80,9 +80,9 @@ describe("batchValidateSettings", () => {
   });
   it("should stop early on too many errors", async () => {
     const settings = [
-      { key: "a", value: 3.0, category: "appearance" as const },
-      { key: "b", value: 3.0, category: "appearance" as const },
-      { key: "c", value: "valid", category: "appearance" as const },
+      { key: "appearance.fontScale", value: 3.0, category: "appearance" as const },
+      { key: "appearance.fontScale", value: 3.0, category: "appearance" as const },
+      { key: "appearance.theme", value: "valid", category: "appearance" as const },
     ];
     const result = await batchValidateSettings(settings, {
       continueOnError: false,

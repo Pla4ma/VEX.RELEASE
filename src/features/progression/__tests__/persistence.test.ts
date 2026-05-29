@@ -13,8 +13,8 @@ import {
   calculateLevelThreshold,
   calculateProgressPercent,
   calculateXpBreakdown,
-} from "../service-enhanced-math";
-import type { BreakdownParams } from "../service-enhanced-math";
+} from "../service-xp-calculations";
+import type { BreakdownParams } from "../service-xp-calculations";
 
 jest.mock("../../../config/supabase", () => ({
   getSupabaseClient: jest.fn(() => ({
@@ -96,10 +96,10 @@ describe("XP / Progression persistence", () => {
     it("returns all required fields with correct types", () => {
       const breakdown = calculateXpBreakdown(baseParams);
       expect(breakdown).toHaveProperty("base");
-      expect(breakdown).toHaveProperty("streakBonus");
-      expect(breakdown).toHaveProperty("squadBonus");
-      expect(breakdown).toHaveProperty("bossBonus");
-      expect(breakdown).toHaveProperty("comebackBonus");
+      expect(breakdown).toHaveProperty("momentumBonus");
+      expect(breakdown).toHaveProperty("collaborationBonus");
+      expect(breakdown).toHaveProperty("blockerResolvedBonus");
+      expect(breakdown).toHaveProperty("recoveryBonus");
       expect(breakdown).toHaveProperty("perfectBonus");
       expect(breakdown).toHaveProperty("total");
       expect(typeof breakdown.total).toBe("number");
@@ -113,10 +113,10 @@ describe("XP / Progression persistence", () => {
       });
       expect(breakdown.total).toBe(
         breakdown.base +
-          breakdown.streakBonus +
-          breakdown.squadBonus +
-          breakdown.bossBonus +
-          breakdown.comebackBonus +
+          breakdown.momentumBonus +
+          breakdown.collaborationBonus +
+          breakdown.blockerResolvedBonus +
+          breakdown.recoveryBonus +
           breakdown.perfectBonus,
       );
     });
@@ -124,14 +124,14 @@ describe("XP / Progression persistence", () => {
     it("handles zero streak gracefully", () => {
       const breakdown = calculateXpBreakdown({ ...baseParams, streakDays: 0 });
       expect(breakdown.total).toBeGreaterThanOrEqual(breakdown.base);
-      expect(breakdown.streakBonus).toBe(0);
-      expect(breakdown.squadBonus).toBe(0);
+      expect(breakdown.momentumBonus).toBe(0);
+      expect(breakdown.collaborationBonus).toBe(0);
     });
 
     it("streak multiplier applies for long streaks", () => {
       const noBonus = calculateXpBreakdown({ ...baseParams, streakDays: 2 });
       const withBonus = calculateXpBreakdown({ ...baseParams, streakDays: 7 });
-      expect(withBonus.streakBonus).toBeGreaterThan(noBonus.streakBonus);
+      expect(withBonus.momentumBonus).toBeGreaterThan(noBonus.momentumBonus);
     });
   });
 

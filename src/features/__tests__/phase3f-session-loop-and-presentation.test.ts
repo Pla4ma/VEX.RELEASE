@@ -5,8 +5,8 @@ import {
   buildLaneSessionBrief,
   resolveLaneCopy,
   decideNudge,
-} from "./phase3-lane-polish-helpers";
-import type { Lane } from "./phase3-lane-polish-helpers";
+} from "./phase3-lane-polish/helpers";
+import type { Lane } from "./phase3-lane-polish/helpers";
 
 describe("Phase 3F — Session Loop and Presentation", () => {
   it("all modes share same core session loop (SessionMode enum covers all)", () => {
@@ -122,7 +122,7 @@ describe("Phase 3F — Session Loop and Presentation", () => {
     const cleanPolicy = getLaneMechanicPolicy(
       baseLaneProfile({ primaryLane: "minimal_normal" }),
     );
-    expect(cleanPolicy.blockedMechanics).toContain("boss_full_cta");
+    expect(cleanPolicy.blockedMechanics).toContain("blocker_full_cta");
     expect(cleanPolicy.blockedMechanics).toContain("challenge_spam");
     expect(cleanPolicy.blockedMechanics).toContain("xp_first_ui");
     expect(cleanPolicy.blockedMechanics).toContain("economy");

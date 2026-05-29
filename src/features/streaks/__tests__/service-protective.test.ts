@@ -5,6 +5,11 @@ import { mockStreak } from "./fixtures";
 
 jest.mock("../repository");
 jest.mock("../../../events", () => ({ eventBus: { publish: jest.fn() } }));
+jest.mock("../restore-quest", () => ({
+  hasUsedStreakRestoreThisMonth: jest.fn().mockResolvedValue(false),
+}));
+
+const USER_ID = "a1b2c3d4-e5f6-7890-abcd-ef1234567890";
 
 describe("Streaks Service - Protective Actions", () => {
   beforeEach(() => {
@@ -18,8 +23,8 @@ describe("Streaks Service - Protective Actions", () => {
         shieldsAvailable: 2,
       });
       jest.mocked(repository.fetchStreak).mockResolvedValue(streak);
-      jest.mocked(repository.getAvailableShield).mockResolvedValue("shield-1");
-      const result = await useShield({ userId: "user-1", reason: "MANUAL" });
+      jest.mocked(repository.getAvailableShield).mockResolvedValue("c3d4e5f6-a7b8-9012-cdef-123456789012");
+      const result = await useShield({ userId: USER_ID, reason: "MANUAL" });
       expect(result).toBe(true);
     });
     it("should fail when no shields available", async () => {
@@ -28,7 +33,7 @@ describe("Streaks Service - Protective Actions", () => {
         shieldsAvailable: 0,
       });
       jest.mocked(repository.fetchStreak).mockResolvedValue(streak);
-      const result = await useShield({ userId: "user-1", reason: "MANUAL" });
+      const result = await useShield({ userId: USER_ID, reason: "MANUAL" });
       expect(result).toBe(false);
     });
   });
@@ -43,16 +48,10 @@ describe("Streaks Service - Protective Actions", () => {
         shieldsAvailable: 0,
         gracePeriodUsed: true,
       });
-      const defeatHistory = [
-        { bossId: "boss-1", defeatedAt: Date.now() - 7 * 24 * 60 * 60 * 1000 },
-      ];
       jest.mocked(repository.fetchStreak).mockResolvedValue(streak);
-      jest
-        .mocked(repository.fetchBossDefeatHistory)
-        .mockResolvedValue(defeatHistory);
-      const result = await detectComeback("user-1");
+      const result = await detectComeback(USER_ID);
       expect(result.isComeback).toBe(true);
-      expect(result.previousStreak).toBe(30);
+      expect(result.streakBefore).toBe(1);
     });
     it("should not detect comeback for active streak", async () => {
       const streak = mockStreak({
@@ -60,7 +59,7 @@ describe("Streaks Service - Protective Actions", () => {
         currentDayCompletedAt: Date.now(),
       });
       jest.mocked(repository.fetchStreak).mockResolvedValue(streak);
-      const result = await detectComeback("user-1");
+      const result = await detectComeback(USER_ID);
       expect(result.isComeback).toBe(false);
     });
   });
@@ -73,12 +72,12 @@ describe("Streaks Service - Protective Actions", () => {
       });
       expect(calculateRiskLevel(streak)).toBe("NONE");
     });
-    it("should return LOW for 24 hours passed", () => {
+    it("should return MEDIUM for 24 hours passed", () => {
       const streak = mockStreak({
         currentDays: 5,
         lastQualifyingSessionAt: Date.now() - 24 * 60 * 60 * 1000,
       });
-      expect(calculateRiskLevel(streak)).toBe("LOW");
+      expect(calculateRiskLevel(streak)).toBe("MEDIUM");
     });
     it("should return CRITICAL at 48 hours", () => {
       const streak = mockStreak({

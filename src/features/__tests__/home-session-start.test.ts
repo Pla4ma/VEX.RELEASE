@@ -139,7 +139,7 @@ describe("SessionStart (buildLaneSessionBrief)", () => {
       durationSeconds: 25 * 60,
     });
     expect(brief.sessionMode).toBe("SPRINT");
-    expect(brief.ctaLabel).toBe("Start encounter");
+    expect(brief.ctaLabel).toBe("Start clean run");
   });
 
   it("deep_creative lane → CREATIVE mode with project block CTA", () => {
@@ -157,7 +157,7 @@ describe("SessionStart (buildLaneSessionBrief)", () => {
       durationSeconds: 25 * 60,
     });
     expect(brief.sessionMode).toBe("LIGHT_FOCUS");
-    expect(brief.ctaLabel).toBe("Start clean session");
+    expect(brief.ctaLabel).toBe("Start clean action");
   });
 
   it("no old economy surfaces in lane brief output", () => {

@@ -48,7 +48,7 @@ describe("premium strategy integration", () => {
       .toLowerCase();
     for (const term of blockedEconomyTerms) {
       const positiveUse = new RegExp(
-        `(?<!(no|not|without|never|0)[\\\\s\\\\S]{0,30})${term}`,
+        `(?<!(no|not|without|never|0)[\\s\\S]{0,30})${term}`,
         "i",
       );
       expect(copy).not.toMatch(positiveUse);
@@ -98,7 +98,7 @@ describe("personalized premium", () => {
         .toLowerCase();
       for (const term of blockedEconomyTerms) {
         const positiveUse = new RegExp(
-          `(?<!(no|not|without|never|0)[\\\\s\\\\S]{0,30})${term}`,
+          `(?<!(no|not|without|never|0)[\\s\\S]{0,30})${term}`,
           "i",
         );
         expect(copy).not.toMatch(positiveUse);

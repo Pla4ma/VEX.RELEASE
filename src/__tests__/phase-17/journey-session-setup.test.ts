@@ -51,7 +51,7 @@ describe("Phase 17 — First session: Run setup", () => {
     expect(
       buildLaneSessionBrief({ durationSeconds: 10 * 60, lane: "game_like" })
         .ctaLabel,
-    ).toBe("Start encounter");
+    ).toBe("Start clean run");
   });
 });
 
@@ -75,7 +75,7 @@ describe("Phase 17 — First session: Clean setup", () => {
     });
     expect(brief.userFacingModeName).toBe("Clean");
     expect(brief.sessionMode).toBe("LIGHT_FOCUS");
-    expect(brief.ctaLabel).toBe("Start clean session");
+    expect(brief.ctaLabel).toBe("Start clean action");
   });
   it("clean setup has no gamification or economy references", () => {
     const json = JSON.stringify(

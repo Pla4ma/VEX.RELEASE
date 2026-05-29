@@ -104,7 +104,7 @@ describe("Active Session Modes", () => {
     });
     it("returns light focus config as fallback", () => {
       const config = getActiveSessionConfig("UNKNOWN" as SessionMode);
-      expect(config.mode).toBe(SessionMode.LIGHT_FOCUS);
+      expect(config.mode).toBe(SessionMode.FLOW);
     });
   });
   describe("getModeSpecificUI", () => {

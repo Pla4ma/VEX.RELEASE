@@ -14,7 +14,7 @@ it("personal blocker is teaser when less than 3 days of evidence exist", () => {
 
 it("personal blocker is evidence-based after 3+ days with 2+ signals", () => {
   const blocker = resolvePersonalBlocker({
-    firstActiveDay: weekStartDaysAgo(5),
+    firstActiveDay: weekStartDaysAgo(8),
     signals: ["deadline avoidance", "deadline late", "deadline pressure"],
     now: nowForDaysAgo(0),
   });

@@ -3,10 +3,10 @@
  */
 import {
   buildFeatureAccess,
-  getFeatureAvailability,
   type FeatureAccessMap,
   type FeatureKey,
 } from "../features/liveops-config/feature-access";
+import { getFeatureAvailability } from "../features/liveops-config/feature-availability";
 import { resolveVexExperience } from "../features/personalization/service";
 import { resolveFirstWeekExperience } from "../features/personalization/first-week-service";
 import type {

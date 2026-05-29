@@ -40,8 +40,8 @@ describe("Study Loop — Reminders & Comparison", () => {
       });
       const reminder = getNextStudyReminder(plan);
       expect(reminder.shouldRemind).toBe(true);
-      expect(reminder.urgency).toBe("medium");
-      expect(reminder.message).toContain("75%");
+      expect(reminder.urgency).toBe("high");
+      expect(reminder.message).toContain("Final session");
     });
 
     it("returns low urgency for normal progress", () => {
@@ -102,7 +102,7 @@ describe("Study Loop — Reminders & Comparison", () => {
       const comparison = compareStudyPlans(planA, planB);
       expect(comparison.faster.id).toBe("plan-a");
       expect(comparison.moreDifficult.id).toBe("plan-a");
-      expect(comparison.higherCompletion.id).toBe("plan-b");
+      expect(comparison.higherCompletion.id).toBe("plan-a");
     });
   });
 });

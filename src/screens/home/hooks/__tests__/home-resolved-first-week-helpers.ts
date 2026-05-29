@@ -1,4 +1,5 @@
 import { decideHomeSurfaces } from "../../../../features/home-experience/home-surface-decision";
+export { decideHomeSurfaces };
 
 export function makeBaseInput(overrides: Record<string, unknown> = {}) {
   return {

@@ -81,6 +81,7 @@ export async function fetchRemoteFlags(
     { deduplicate: true, retries: 2 },
   );
   let hasChanges = false;
+  if (!remoteFlags) return { hasChanges: false, lastFetchAt };
   Object.entries(remoteFlags).forEach(([key, remoteFlag]) => {
     const existingFlag = flags.get(key);
     if (!existingFlag) {

@@ -165,3 +165,5 @@ export function resetDailyBudget(
   }
   return { ...budget, date: today, sentCount: 0, notificationsSent: [] };
 }
+
+export { sendCoachNotification, getNotificationBudgetStatus } from "./notification-budget-coach";

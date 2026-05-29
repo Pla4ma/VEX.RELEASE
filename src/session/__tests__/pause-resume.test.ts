@@ -14,7 +14,7 @@ beforeEach(() => {
 
 describe("pauseSession", () => {
   it("should pause active session", async () => {
-    const session = await ctx.service.createSession(mockSessionConfig);
+    const session = await ctx.service.createCustomSession(mockSessionConfig);
     await ctx.service.startSession(session.id);
     const pausedSession = await ctx.service.pauseSession(session.id, {
       reason: "USER_INITIATED",
@@ -25,7 +25,7 @@ describe("pauseSession", () => {
   });
 
   it("should emit session:paused event", async () => {
-    const session = await ctx.service.createSession(mockSessionConfig);
+    const session = await ctx.service.createCustomSession(mockSessionConfig);
     await ctx.service.startSession(session.id);
     await ctx.service.pauseSession(session.id, { reason: "USER_INITIATED" });
     expect(eventBus.publish).toHaveBeenCalledWith(
@@ -35,7 +35,7 @@ describe("pauseSession", () => {
   });
 
   it("should track pause reason", async () => {
-    const session = await ctx.service.createSession(mockSessionConfig);
+    const session = await ctx.service.createCustomSession(mockSessionConfig);
     await ctx.service.startSession(session.id);
     await ctx.service.pauseSession(session.id, {
       reason: "INTERRUPTION",
@@ -53,7 +53,7 @@ describe("pauseSession", () => {
 
 describe("resumeSession", () => {
   it("should resume paused session", async () => {
-    const session = await ctx.service.createSession(mockSessionConfig);
+    const session = await ctx.service.createCustomSession(mockSessionConfig);
     await ctx.service.startSession(session.id);
     await ctx.service.pauseSession(session.id, { reason: "USER_INITIATED" });
     const resumedSession = await ctx.service.resumeSession(session.id);
@@ -62,7 +62,7 @@ describe("resumeSession", () => {
   });
 
   it("should emit session:resumed event", async () => {
-    const session = await ctx.service.createSession(mockSessionConfig);
+    const session = await ctx.service.createCustomSession(mockSessionConfig);
     await ctx.service.startSession(session.id);
     await ctx.service.pauseSession(session.id, { reason: "USER_INITIATED" });
     await ctx.service.resumeSession(session.id);

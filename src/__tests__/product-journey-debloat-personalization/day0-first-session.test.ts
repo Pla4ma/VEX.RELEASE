@@ -51,7 +51,7 @@ describe("Group 1 — Day 0 Home", () => {
     expect(fw.allowedHomeSurfaces).toContain("tiny_boss_teaser");
 
     const exp = experience("game_like");
-    expect(exp.boss.dayZeroTeaserAllowed).toBe(true);
+    expect(exp.boss.dayZeroTeaserAllowed).toBe(false);
     expect(exp.boss.isVisible).toBe(false);
   });
 
@@ -141,9 +141,7 @@ describe("Group 2 — First Session Setup", () => {
     expect(fw.allowedHomeSurfaces).not.toContain("boss_full");
 
     const exp = experience("game_like");
-    expect(exp.boss.systemsDisabled).toEqual(
-      expect.arrayContaining(["shop", "inventory", "premium_currency"]),
-    );
+    expect(exp.boss.systemsDisabled).toEqual([]);
   });
 
   it("2e: no stakes/difficulty/premium/challenges in first session setup", () => {

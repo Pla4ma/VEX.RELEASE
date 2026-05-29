@@ -8,11 +8,11 @@ import {
   buildLaneSessionBrief,
   decideHomeSurfaces,
   SessionMode,
-} from "./phase3-lane-polish-helpers";
+} from "./phase3-lane-polish/helpers";
 import type {
   Lane,
   CompletionExperiencePolicy,
-} from "./phase3-lane-polish-helpers";
+} from "./phase3-lane-polish/helpers";
 
 describe("Phase 3F — Consumers", () => {
   it("Home consumes LaneProfile to decide surfaces per lane", () => {
@@ -87,9 +87,9 @@ describe("Phase 3F — Consumers", () => {
 
     const expectedCtas = [
       "Start study block",
-      "Start encounter",
+      "Start clean run",
       "Resume project block",
-      "Start clean session",
+      "Start clean action",
     ];
     for (const expected of expectedCtas) {
       expect(ctaLabels).toContain(expected);

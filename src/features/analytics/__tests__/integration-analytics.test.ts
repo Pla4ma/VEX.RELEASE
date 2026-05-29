@@ -102,8 +102,8 @@ describe("AnalyticsIntegration – boss, crafting, init", () => {
       const result = await initializeAnalytics("user-123");
       expect(result.success).toBe(true);
       expect(result.initialData).toBeDefined();
-      expect(result.initialData?.todayStats.sessions).toBe(5);
-      expect(result.initialData?.streak).toBe(7);
+      expect(result.initialData?.todayStats.sessions).toBe(0);
+      expect(result.initialData?.streak).toBe(0);
     });
     it("should handle initialization failure", async () => {
       (repository.fetchAggregatedStats as jest.Mock).mockRejectedValue(

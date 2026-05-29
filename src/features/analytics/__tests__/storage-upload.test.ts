@@ -1,12 +1,24 @@
 import { captureSilentFailure } from "../../../utils/silent-failure";
-import { uploadExportData } from "../storage";
+import { uploadExportData } from "../repository/storage";
 import { getSupabaseClient } from "../../../config/supabase";
-jest.mock("../../../config/supabase", () => ({
-  getSupabaseClient: jest.fn(),
-  handleSupabaseError: jest.fn((error: { message: string }) => {
-    throw new Error(error.message);
-  }),
-}));
+jest.mock("../../../config/supabase", () => {
+  const mockFrom = jest.fn().mockReturnValue({
+    upload: jest.fn(),
+    download: jest.fn(),
+    remove: jest.fn(),
+    createSignedUrl: jest.fn(),
+    list: jest.fn(),
+    getPublicUrl: jest.fn().mockReturnValue({ data: { publicUrl: "https://example.com/file" } }),
+  });
+  return {
+    getSupabaseClient: jest.fn().mockReturnValue({
+      storage: { from: mockFrom },
+    }),
+    handleSupabaseError: jest.fn((error: { message: string }) => {
+      throw new Error(error.message);
+    }),
+  };
+});
 
 jest.mock("@sentry/react-native", () => ({
   addBreadcrumb: jest.fn(),
@@ -18,20 +30,15 @@ describe("AnalyticsStorage - uploadExportData", () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    mockSupabase = {
-      storage: {
-        from: jest
-          .fn()
-          .mockReturnValue({
-            upload: jest.fn(),
-            download: jest.fn(),
-            remove: jest.fn(),
-            createSignedUrl: jest.fn(),
-            list: jest.fn(),
-          }),
-      },
-    };
-    (getSupabaseClient as jest.Mock).mockReturnValue(mockSupabase);
+    mockSupabase = getSupabaseClient() as { storage: { from: jest.Mock } };
+    mockSupabase.storage.from.mockReturnValue({
+      upload: jest.fn(),
+      download: jest.fn(),
+      remove: jest.fn(),
+      createSignedUrl: jest.fn(),
+      list: jest.fn(),
+      getPublicUrl: jest.fn().mockReturnValue({ data: { publicUrl: "https://example.com/file" } }),
+    });
   });
 
   it("should upload JSON data successfully", async () => {

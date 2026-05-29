@@ -15,7 +15,7 @@ beforeEach(() => {
 
 describe("completeSession", () => {
   it("should complete session and calculate rewards", async () => {
-    const session = await ctx.service.createSession(mockSessionConfig);
+    const session = await ctx.service.createCustomSession(mockSessionConfig);
     await ctx.service.startSession(session.id);
     jest.advanceTimersByTime(1000);
     const completedSession = await ctx.service.completeSession(session.id, {
@@ -29,7 +29,7 @@ describe("completeSession", () => {
   });
 
   it("should emit session:completed event", async () => {
-    const session = await ctx.service.createSession(mockSessionConfig);
+    const session = await ctx.service.createCustomSession(mockSessionConfig);
     await ctx.service.startSession(session.id);
     await ctx.service.completeSession(session.id, {
       completionPercentage: 100,
@@ -41,7 +41,7 @@ describe("completeSession", () => {
   });
 
   it("should emit session:rewards:granted event", async () => {
-    const session = await ctx.service.createSession(mockSessionConfig);
+    const session = await ctx.service.createCustomSession(mockSessionConfig);
     await ctx.service.startSession(session.id);
     await ctx.service.completeSession(session.id, {
       completionPercentage: 100,
@@ -53,7 +53,7 @@ describe("completeSession", () => {
   });
 
   it("should handle partial completion", async () => {
-    const session = await ctx.service.createSession(mockSessionConfig);
+    const session = await ctx.service.createCustomSession(mockSessionConfig);
     await ctx.service.startSession(session.id);
     const completedSession = await ctx.service.completeSession(session.id, {
       completionPercentage: 50,
@@ -68,7 +68,7 @@ describe("completeSession", () => {
 
 describe("abandonSession", () => {
   it("should mark session as abandoned", async () => {
-    const session = await ctx.service.createSession(mockSessionConfig);
+    const session = await ctx.service.createCustomSession(mockSessionConfig);
     await ctx.service.startSession(session.id);
     const abandonedSession = await ctx.service.abandonSession(
       session.id,
@@ -80,7 +80,7 @@ describe("abandonSession", () => {
   });
 
   it("should emit session:abandoned event", async () => {
-    const session = await ctx.service.createSession(mockSessionConfig);
+    const session = await ctx.service.createCustomSession(mockSessionConfig);
     await ctx.service.startSession(session.id);
     await ctx.service.abandonSession(session.id, "USER_CANCELLED");
     expect(eventBus.publish).toHaveBeenCalledWith(
@@ -90,7 +90,7 @@ describe("abandonSession", () => {
   });
 
   it("should not grant rewards for abandoned session", async () => {
-    const session = await ctx.service.createSession(mockSessionConfig);
+    const session = await ctx.service.createCustomSession(mockSessionConfig);
     await ctx.service.startSession(session.id);
     await ctx.service.abandonSession(session.id, "USER_CANCELLED");
     const rewardsCall = (eventBus.publish as jest.Mock).mock.calls.find(

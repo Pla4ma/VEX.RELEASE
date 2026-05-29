@@ -14,7 +14,7 @@ beforeEach(() => {
 
 describe("createSession", () => {
   it("should create a new session with valid config", async () => {
-    const session = await ctx.service.createSession(mockSessionConfig);
+    const session = await ctx.service.createCustomSession(mockSessionConfig);
     expect(session).toBeDefined();
     expect(session.userId).toBe("test-user-123");
     expect(session.config.duration).toBe(mockSessionConfig.duration);
@@ -24,20 +24,20 @@ describe("createSession", () => {
 
   it("should reject session with duration below minimum", async () => {
     const invalidConfig = { ...mockSessionConfig, duration: 30 };
-    await expect(ctx.service.createSession(invalidConfig)).rejects.toThrow(
+    await expect(ctx.service.createCustomSession(invalidConfig)).rejects.toThrow(
       "duration",
     );
   });
 
   it("should reject session with duration above maximum", async () => {
     const invalidConfig = { ...mockSessionConfig, duration: 90000 };
-    await expect(ctx.service.createSession(invalidConfig)).rejects.toThrow(
+    await expect(ctx.service.createCustomSession(invalidConfig)).rejects.toThrow(
       "duration",
     );
   });
 
   it("should emit session:created event", async () => {
-    await ctx.service.createSession(mockSessionConfig);
+    await ctx.service.createCustomSession(mockSessionConfig);
     expect(eventBus.publish).toHaveBeenCalledWith(
       "session:created",
       expect.any(Object),
@@ -45,14 +45,14 @@ describe("createSession", () => {
   });
 
   it("should persist session to repository", async () => {
-    const session = await ctx.service.createSession(mockSessionConfig);
+    const session = await ctx.service.createCustomSession(mockSessionConfig);
     expect(ctx.mockRepository.saveSession).toHaveBeenCalledWith(session);
   });
 });
 
 describe("startSession", () => {
   it("should transition session from CREATED to ACTIVE", async () => {
-    const session = await ctx.service.createSession(mockSessionConfig);
+    const session = await ctx.service.createCustomSession(mockSessionConfig);
     const startedSession = await ctx.service.startSession(session.id);
     expect(startedSession.status).toBe("ACTIVE");
     expect(startedSession.phase).toBe("FOCUS");
@@ -60,7 +60,7 @@ describe("startSession", () => {
   });
 
   it("should emit session:started event", async () => {
-    const session = await ctx.service.createSession(mockSessionConfig);
+    const session = await ctx.service.createCustomSession(mockSessionConfig);
     await ctx.service.startSession(session.id);
     expect(eventBus.publish).toHaveBeenCalledWith(
       "session:started",
@@ -75,7 +75,7 @@ describe("startSession", () => {
   });
 
   it("should reject starting already active session", async () => {
-    const session = await ctx.service.createSession(mockSessionConfig);
+    const session = await ctx.service.createCustomSession(mockSessionConfig);
     await ctx.service.startSession(session.id);
     await expect(ctx.service.startSession(session.id)).rejects.toThrow(
       "already active",

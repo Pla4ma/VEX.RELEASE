@@ -18,14 +18,14 @@ describe("Study Loop — Insights & Maintenance", () => {
       expect(needsAttention(plan, lastSessionAt)).toBe(true);
     });
 
-    it("returns true when near completion but stalled", () => {
+    it("returns false when at exactly 80% but not stalled", () => {
       const plan = createMockPlan({
         sessionsTotal: 5,
         sessionsCompleted: 4,
         status: "active" as const,
         startedAt: Date.now(),
       });
-      expect(needsAttention(plan)).toBe(true);
+      expect(needsAttention(plan)).toBe(false);
     });
 
     it("returns false for inactive plans", () => {

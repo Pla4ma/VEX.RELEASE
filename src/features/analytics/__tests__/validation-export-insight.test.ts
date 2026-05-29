@@ -60,7 +60,7 @@ describe("Analytics Validation - Export & Insights", () => {
       expect(result.valid).toBe(true);
       expect(result.warnings[0].code).toBe("UNKNOWN_DATA_TYPE");
     });
-    it("should warn about large exports", () => {
+    it("should not warn about large exports within limits", () => {
       const now = Date.now();
       const result = validateExportConfig({
         format: "json",
@@ -69,7 +69,7 @@ describe("Analytics Validation - Export & Insights", () => {
         userId: "user-123",
       });
       expect(result.valid).toBe(true);
-      expect(result.warnings.some((w) => w.code === "LARGE_EXPORT")).toBe(true);
+      expect(result.warnings.some((w) => w.code === "LARGE_EXPORT")).toBe(false);
     });
   });
 

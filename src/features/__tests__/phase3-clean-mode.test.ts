@@ -40,7 +40,7 @@ describe("Phase 3C — Clean Mode Polish", () => {
     expect(map.boss_compact ?? "hidden").not.toBe("spotlight");
 
     const policy = getLaneMechanicPolicy(cleanProfile);
-    expect(policy.blockedMechanics).toContain("boss_full_cta");
+    expect(policy.blockedMechanics).toContain("blocker_full_cta");
     expect(policy.blockedMechanics).toContain("challenge_spam");
   });
 
@@ -72,9 +72,9 @@ describe("Phase 3C — Clean Mode Polish", () => {
     });
 
     expect(brief.sessionMode).toBe(SessionMode.LIGHT_FOCUS);
-    expect(brief.ctaLabel).toBe("Start clean session");
-    expect(brief.title).toBe("Clean session ready");
-    expect(brief.body).toContain("Name one task");
+    expect(brief.ctaLabel).toBe("Start clean action");
+    expect(brief.title).toBe("One action ready");
+    expect(brief.body).toContain("Name one action");
     const json = JSON.stringify(brief);
     expect(json).not.toMatch(/boss|encounter|wager|coin|gem|shop|bounty/i);
   });

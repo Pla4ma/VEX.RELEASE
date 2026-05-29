@@ -9,8 +9,8 @@ import {
   buildLaneSessionBrief,
   decideHomeSurfaces,
   SessionMode,
-} from "./phase3-lane-polish-helpers";
-import type { Lane } from "./phase3-lane-polish-helpers";
+} from "./phase3-lane-polish/helpers";
+import type { Lane } from "./phase3-lane-polish/helpers";
 
 describe("Phase 3D — Run Mode Polish", () => {
   const runProfile = baseLaneProfile({ primaryLane: "game_like" });

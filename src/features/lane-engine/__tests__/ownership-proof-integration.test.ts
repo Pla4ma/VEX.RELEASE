@@ -141,7 +141,7 @@ describe("Lane Engine ownership proof – consumer integration", () => {
 
   it("lane policy describes mechanics but cannot unlock hidden features directly", () => {
     const policy = getLaneMechanicPolicy(profile("game_like"));
-    expect(policy.preferredMechanics).toContain("personal_boss");
+    expect(policy.preferredMechanics).toContain("focus_run");
     expect("canRender" in policy).toBe(false);
     expect("canRoute" in policy).toBe(false);
     expect("canQuery" in policy).toBe(false);
