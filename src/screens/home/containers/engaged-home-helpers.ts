@@ -3,11 +3,13 @@ import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import type { FeatureAccessResult } from "../../../features/liveops-config";
 import type { HomeFeatureRuntime } from "../hooks/home-feature-runtime";
 import type { ExtendedRootStackParams } from "../../../navigation/types";
-import type { SessionRecommendation } from "../../../features/ai-coach";
+import type { SessionRecommendation, RecommendationStatus } from "../../../features/ai-coach";
 import type { HomeReturnReason } from "../hooks/useHomeReturnReason";
 import { navigateToMainTab } from "../../../navigation/navigation-helpers";
 import { buildLearningSessionParams } from "../../../features/learning-execution";
+import type { LearningSessionTarget } from "../../../features/learning-execution";
 import { buildHomeReturnReasonState } from "../../../features/home-spine/service";
+import type { NextBestAction } from "../../../features/progression";
 import type { ActiveStudyPlanData, ComebackData } from "./engaged-home-types";
 
 type Nav = NativeStackNavigationProp<ExtendedRootStackParams>;
@@ -23,7 +25,7 @@ interface ActionsInput {
   canNavigateContentStudy: boolean;
   canNavigateSocial: boolean;
   disclosure: FeatureAccessResult;
-  learningExecutionLayer: { target: unknown | null };
+  learningExecutionLayer: { target: LearningSessionTarget | null };
   navigation: Nav;
   openSetup: (params?: Record<string, unknown>) => void;
   userId: string;
@@ -51,7 +53,7 @@ export function useEngagedActions(input: ActionsInput) {
   }, [canNavigateContentStudy, navigation, openSetup]);
   const continueStudyPlan = useCallback(() => {
     if (!learningExecutionLayer.target) { openContentStudy(); return; }
-    openSetup(buildLearningSessionParams(learningExecutionLayer.target as any));
+    openSetup(buildLearningSessionParams(learningExecutionLayer.target as LearningSessionTarget));
   }, [learningExecutionLayer.target, openContentStudy, openSetup]);
   const openNextAction = useCallback(() => {
     analytics.trackNextBestActionPressed(
@@ -66,7 +68,7 @@ interface ReturnReasonInput {
   activeStudyPlanQuery: { data: unknown };
   comebackQuery: { data: unknown };
   continueStudyPlan: () => void;
-  nextBestAction: unknown;
+  nextBestAction: NextBestAction;
   openNextAction: () => void;
   openSetup: (params?: Record<string, unknown>) => void;
   primaryRecommendation: SessionRecommendation | null | undefined;
@@ -74,7 +76,7 @@ interface ReturnReasonInput {
   updateRecommendationStatus: {
     mutateAsync: (vars: {
       recommendationId: string;
-      status: string;
+      status: RecommendationStatus;
       userId: string;
     }) => Promise<unknown>;
   };
@@ -103,8 +105,7 @@ export function useEngagedReturnReason(
         : null,
       canShowExpansionSystems: runtime.shouldShowExpansionSystems,
       comebackMessage: cbData?.isComeback ? (cbData.message ?? null) : null,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      nextBestAction: nextBestAction as any,
+      nextBestAction: nextBestAction,
       primaryRecommendation: primaryRecommendation
         ? {
             id: primaryRecommendation.id,

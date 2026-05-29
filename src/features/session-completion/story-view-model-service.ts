@@ -1,19 +1,16 @@
 import type { SessionSummary } from "../../session/types";
 import type { CompanionMemory } from "../companion/memory-types";
-import { getMemories } from "../companion/memory-repository";
 import type { CompanionPromise } from "../companion-promise/types";
-import { getRecentPromises } from "../companion-promise/repository";
 import type { FocusContract } from "../focus-contract/types";
-import { getContractForSession } from "../focus-contract/service";
 import { buildCompletionReflection } from "./completion-reflection-service";
 import { CompletionLedgerSchema, type CompletionLedger, type CompletionPersonalizationResult } from "./schemas";
-import { getCompletionLedgerBySessionId } from "./repository";
 import { buildPostSessionNextAction } from "./service";
 import { selectHeadlineReward } from "./headline-reward.service";
 import { PostSessionStoryViewModelSchema, type PostSessionStoryViewModel } from "./story-view-model-schema";
 import { computePersonalBestProof, buildStoryBeats } from "./story-beat-builders";
 
 export { PostSessionStoryViewModelSchema, type PostSessionStoryViewModel };
+export { getPostSessionStoryViewModel } from "./story-view-model-fetcher";
 
 export function buildPostSessionStoryViewModel(input: {
   degradedWarnings: string[];
@@ -75,15 +72,13 @@ export function buildPostSessionStoryViewModel(input: {
       completedAt: new Date(ledger.completedAt).toISOString(),
       mode: sessionMode,
     });
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const beats = buildStoryBeats({
-    ledger: ledger as any,
+    ledger,
     sessionMode,
     meaningBody,
     reflectionNextAction: reflection.nextAction,
     companionMemory: input.companionMemory,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    companionPromise: input.companionPromise as any,
+    companionPromise: input.companionPromise ?? null,
     personalBestProof,
     personalBestBody,
     nextActionPresetMode: nextAction?.routeParams?.presetMode ?? null,
@@ -167,35 +162,5 @@ export function buildPostSessionStoryViewModel(input: {
     sessionId: input.summary.sessionId,
     streakState: ledger.streakResult,
     xpProgress: { xpDelta: ledger.xpDelta },
-  });
-}
-
-export async function getPostSessionStoryViewModel(input: {
-  sessionId: string;
-  summary: SessionSummary;
-  userId: string | null;
-}): Promise<PostSessionStoryViewModel | null> {
-  const ledger = await getCompletionLedgerBySessionId(input.sessionId);
-  if (!ledger) {
-    return null;
-  }
-  const [memories, promises, focusContract] = input.userId
-    ? await Promise.all([
-        getMemories(input.userId),
-        getRecentPromises(input.userId, 10),
-        getContractForSession(input.sessionId, input.userId).catch(() => null),
-      ])
-    : [[], [], null];
-  return buildPostSessionStoryViewModel({
-    companionMemory:
-      memories.find((memory) => memory.sessionId === input.sessionId) ?? null,
-    companionPromise:
-      promises.find((promise) => promise.sourceSessionId === input.sessionId) ??
-      null,
-    degradedWarnings: ledger.degradedSystems,
-    focusContract,
-    ledger,
-    personalizationResult: null,
-    summary: input.summary,
   });
 }

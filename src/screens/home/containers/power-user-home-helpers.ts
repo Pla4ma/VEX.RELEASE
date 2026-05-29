@@ -1,6 +1,7 @@
-import type { SessionRecommendation } from "../../../features/ai-coach";
+import type { SessionRecommendation, RecommendationStatus } from "../../../features/ai-coach";
 import type { HomeReturnReason } from "../hooks/useHomeReturnReason";
 import { buildHomeReturnReasonState } from "../../../features/home-spine/service";
+import type { NextBestAction } from "../../../features/progression";
 import type {
   ActiveStudyPlanData,
   ComebackData,
@@ -11,14 +12,14 @@ export function buildReturnReasonConfig(params: {
   comebackData: ComebackData | undefined;
   shouldShowExpansionSystems: boolean;
   primaryRecommendation: SessionRecommendation | null;
-  nextBestAction: { type: string } | null;
+  nextBestAction: NextBestAction;
   continueStudyPlan: () => void;
   openNextAction: () => void;
   openSetup: (params?: Record<string, unknown>) => void;
   updateRecommendationStatus: {
     mutateAsync: (args: {
       recommendationId: string;
-      status: string;
+      status: RecommendationStatus;
       userId: string;
     }) => Promise<unknown>;
   };
@@ -37,7 +38,6 @@ export function buildReturnReasonConfig(params: {
     userId,
   } = params;
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const reasonState = buildHomeReturnReasonState({
       activeStudyPlan: activeStudyPlanData
         ? {
@@ -51,8 +51,7 @@ export function buildReturnReasonConfig(params: {
       comebackMessage: comebackData?.isComeback
         ? (comebackData.message ?? null)
         : null,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      nextBestAction: nextBestAction as any,
+      nextBestAction: nextBestAction,
       primaryRecommendation: primaryRecommendation
       ? {
           id: primaryRecommendation.id,

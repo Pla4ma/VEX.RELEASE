@@ -75,7 +75,7 @@ export function useStreakRisk(): UseStreakRiskReturn {
     staleTime: STALE_TIME,
     retry: 3,
   });
-  const riskStatus = computeRiskStatus(streakData as { currentDays: number } | undefined, cachedRiskStatus as StreakRiskStatus | null | undefined);
+  const riskStatus = computeRiskStatus(streakData ?? undefined, cachedRiskStatus);
   const checkRiskMutation = useMutation({
     mutationFn: async () => {
       if (!userId || !streakData) {

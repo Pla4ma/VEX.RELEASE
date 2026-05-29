@@ -10,28 +10,15 @@ import { ActiveSessionModeOverlays } from "./components/ActiveSessionModeOverlay
 import { SessionContractReminder } from "./components/SessionContractReminder";
 import { CoachSessionBannerLazy } from "./components/CoachSessionBannerLazy";
 import { ActiveSessionBottomControls } from "./ActiveSessionBottomControls";
-import type { useActiveSessionController } from "./hooks/useActiveSessionController";
-import type { useStudyQuizBreak } from "./hooks/useStudyQuizBreak";
-import type { ActiveSessionDisplayPolicy } from "./utils/active-session-display-policy";
-import type { ActiveSessionHeroViewModel } from "./utils/active-session-hero-view-model";
-import type { FocusContract } from "../../features/focus-contract/types";
+import {
+  ENABLE_SESSION_COMPANION_LAYER,
+  ENABLE_SESSION_COACH_BANNER,
+  ENABLE_SESSION_MODE_OVERLAYS,
+  ENABLE_SESSION_HERO,
+  type ActiveSessionContentProps,
+} from "./ActiveSessionContent.types";
 
-const ENABLE_SESSION_COMPANION_LAYER = true;
-const ENABLE_SESSION_COACH_BANNER = true;
-const ENABLE_SESSION_MODE_OVERLAYS = true;
-const ENABLE_SESSION_HERO = true;
-
-export interface ActiveSessionContentProps {
-  controller: ReturnType<typeof useActiveSessionController>;
-  contract: FocusContract | null;
-  currentMode: SessionMode;
-  displayPolicy: ActiveSessionDisplayPolicy;
-  heroViewModel: ActiveSessionHeroViewModel;
-  outerStrokeDashoffset: number;
-  focusStage: "interruption" | "paused" | "active";
-  studyQuizBreak: ReturnType<typeof useStudyQuizBreak>;
-  plannedQuizBreakOptedIn: boolean;
-}
+export type { ActiveSessionContentProps };
 
 export function ActiveSessionContent({
   controller,

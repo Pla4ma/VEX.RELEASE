@@ -121,7 +121,18 @@ export function usePowerUserContainerModel(
     historyQuery, primaryRecommendation, homeSpine, displayedReturnReason,
     runtime, streakQuery, progressionQuery, activeStudyPlanQuery,
     learningExecutionLayer, comebackQuery, activeBossQuery,
-    createRecommendation, updateRecommendationStatus,
+    createRecommendation: {
+      mutate: (vars) => createRecommendation.mutate(vars as Parameters<typeof createRecommendation.mutate>[0]),
+      mutateAsync: (vars) => createRecommendation.mutateAsync(vars as Parameters<typeof createRecommendation.mutateAsync>[0]),
+      isPending: createRecommendation.isPending,
+      reset: createRecommendation.reset,
+    },
+    updateRecommendationStatus: {
+      mutate: (vars) => updateRecommendationStatus.mutate(vars as Parameters<typeof updateRecommendationStatus.mutate>[0]),
+      mutateAsync: (vars) => updateRecommendationStatus.mutateAsync(vars as Parameters<typeof updateRecommendationStatus.mutateAsync>[0]),
+      isPending: updateRecommendationStatus.isPending,
+      reset: updateRecommendationStatus.reset,
+    },
     openSetup, openProgress, openSocial, openContentStudy, continueStudyPlan,
   });
 

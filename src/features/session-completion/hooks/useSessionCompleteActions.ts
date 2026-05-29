@@ -3,13 +3,14 @@ import * as Sentry from "@sentry/react-native";
 import { useCallback } from "react";
 
 import type { SessionStackParams } from "../../../navigation/types";
+import type { HomeHighlight } from "../../../store/session-state";
 
 type SessionNavigationProp = NativeStackNavigationProp<SessionStackParams>;
 
 interface ReturnPlan {
   highlightMessage: string;
   highlightTitle: string;
-  highlightTone: string;
+  highlightTone: HomeHighlight["tone"];
 }
 
 interface ActionsInput {
@@ -17,11 +18,7 @@ interface ActionsInput {
   reflection: string;
   selectedMood: string | null;
   returnPlan: ReturnPlan;
-  showHomeHighlight: (input: {
-    message: string;
-    title: string;
-    tone: string;
-  }) => void;
+  showHomeHighlight: (highlight: HomeHighlight) => void;
   syncHomeReturn: () => Promise<unknown>;
 }
 

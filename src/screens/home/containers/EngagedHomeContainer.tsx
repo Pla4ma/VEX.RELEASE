@@ -134,7 +134,12 @@ export function useEngagedContainerModel(
     primaryRecommendation: primaryRecommendation as any, progressPercent, progressionQuery,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     recommendationsPending, runtime: runtime as any, streakQuery, todayFocusMinutes,
-    updateRecommendationStatus, userId,
+    updateRecommendationStatus: {
+      mutate: (vars) => updateRecommendationStatus.mutate(vars as Parameters<typeof updateRecommendationStatus.mutate>[0]),
+      mutateAsync: (vars) => updateRecommendationStatus.mutateAsync(vars as Parameters<typeof updateRecommendationStatus.mutateAsync>[0]),
+      isPending: updateRecommendationStatus.isPending,
+      reset: updateRecommendationStatus.reset,
+    }, userId,
     actions: {
       openSetup, openProgress: actions.openProgress,
       openSocial: actions.openSocial, openContentStudy: actions.openContentStudy,

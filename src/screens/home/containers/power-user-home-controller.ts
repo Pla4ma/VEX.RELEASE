@@ -2,8 +2,11 @@ import type { UseQueryResult } from "@tanstack/react-query";
 import type { SessionRecommendation } from "../../../features/ai-coach";
 import type { LearningExecutionLayer } from "../../../features/learning-execution";
 import type { FeatureAccessResult } from "../../../features/liveops-config";
-import type { HomeController } from "../hooks/home-controller-types";
+import type { HomeController, SessionHistoryResult } from "../hooks/home-controller-types";
 import type { HomeReturnReason } from "../hooks/useHomeReturnReason";
+import type { HomeSpineModel } from "../../../features/home-spine/schemas";
+import type { HomeFeatureRuntime } from "../hooks/home-feature-runtime";
+import type { HomeHighlight, CompletionSyncState } from "../../../store/session-state";
 import { createStubQuery } from "../hooks/home-controller-stubs";
 
 export function buildController(params: {
@@ -13,29 +16,26 @@ export function buildController(params: {
   recommendationsPending: boolean;
   isFirstRun: boolean;
   loadError: Error | null;
-  homeHighlight: unknown;
-  completionSync: unknown;
+  homeHighlight: HomeHighlight | null;
+  completionSync: CompletionSyncState;
   clearHomeHighlight: () => void;
   currentStreak: number;
   currentXp: number;
   todayFocusMinutes: number;
   progressPercent: number;
-  historyQuery: { history: unknown[] };
+  historyQuery: SessionHistoryResult;
   primaryRecommendation: SessionRecommendation | null;
-  homeSpine: unknown;
+  homeSpine: HomeSpineModel;
   displayedReturnReason: HomeReturnReason;
-  runtime: {
-    shouldShowSecondarySystems: boolean;
-    shouldShowExpansionSystems: boolean;
-  };
+  runtime: HomeFeatureRuntime;
   streakQuery: UseQueryResult;
   progressionQuery: UseQueryResult;
   activeStudyPlanQuery: UseQueryResult;
-  learningExecutionLayer: { target: LearningExecutionLayer["target"] };
+  learningExecutionLayer: LearningExecutionLayer;
   comebackQuery: UseQueryResult;
   activeBossQuery: UseQueryResult | null;
-  createRecommendation: unknown;
-  updateRecommendationStatus: unknown;
+  createRecommendation: HomeController["createRecommendation"];
+  updateRecommendationStatus: HomeController["updateRecommendationStatus"];
   openSetup: (params?: Record<string, unknown>) => void;
   openProgress: () => void;
   openSocial: () => void;
@@ -83,33 +83,25 @@ export function buildController(params: {
     isLoading: disclosure.isLoading || recommendationsPending,
     isFirstRun,
     loadError,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    homeHighlight: homeHighlight as any,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    completionSync: completionSync as any,
+    homeHighlight,
+    completionSync,
     clearHomeHighlight,
     currentStreak,
     currentXp,
     todayFocusMinutes,
     progressPercent,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    latestSession: (historyQuery.history[0] ?? null) as any,
+    latestSession: historyQuery.history[0] ?? null,
     primaryRecommendation,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    homeSpine: homeSpine as any,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    returnReason: displayedReturnReason as any,
+    homeSpine,
+    returnReason: displayedReturnReason,
     disclosure,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    runtime: runtime as any,
+    runtime,
     streakQuery,
     progressionQuery,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    historyQuery: historyQuery as any,
+    historyQuery,
     squadsQuery: createStubQuery() as UseQueryResult,
     activeStudyPlanQuery: activeStudyPlanQuery as UseQueryResult,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    learningExecutionLayer: learningExecutionLayer as any,
+    learningExecutionLayer,
     comebackQuery: comebackQuery as UseQueryResult,
     activeBossQuery: (activeBossQuery ?? createStubQuery()) as UseQueryResult,
     recommendationsQuery: {} as UseQueryResult,
@@ -120,10 +112,8 @@ export function buildController(params: {
     openSocial,
     openContentStudy,
     continueStudyPlan,
-    createRecommendation:
-      createRecommendation as HomeController["createRecommendation"],
-    updateRecommendationStatus:
-      updateRecommendationStatus as HomeController["updateRecommendationStatus"],
+    createRecommendation,
+    updateRecommendationStatus,
     retryAll: disclosure.refetchAll as () => Promise<unknown>,
     features: disclosure.features,
   };

@@ -6,21 +6,22 @@ import type { FeatureAccessResult } from "../../../features/liveops-config";
 import type { HomeSpineModel } from "../../../features/home-spine/schemas";
 import type { HomeReturnReason } from "../hooks/useHomeReturnReason";
 import type { LearningExecutionLayer } from "../../../features/learning-execution";
+import type { HomeHighlight, CompletionSyncState } from "../../../store/session-state";
 import type { StreakQueryData, ProgressionQueryData } from "./engaged-home-types";
 import { createStubQuery } from "../hooks/home-controller-stubs";
 
 interface BuildControllerInput {
   activeStudyPlanQuery: UseQueryResult;
   clearHomeHighlight: () => void;
-  completionSync: unknown;
+  completionSync: CompletionSyncState;
   comebackQuery: UseQueryResult;
-  createRecommendation: unknown;
+  createRecommendation: HomeController["createRecommendation"];
   currentStreak: number;
   currentXp: number;
   disclosure: FeatureAccessResult;
   displayedReturnReason: HomeReturnReason;
   historyQuery: SessionHistoryResult;
-  homeHighlight: unknown;
+  homeHighlight: HomeHighlight | null;
   homeSpine: HomeSpineModel;
   isFirstRun: boolean;
   isOnline: boolean;
@@ -33,7 +34,7 @@ interface BuildControllerInput {
   runtime: HomeFeatureRuntime;
   streakQuery: UseQueryResult;
   todayFocusMinutes: number;
-  updateRecommendationStatus: unknown;
+  updateRecommendationStatus: HomeController["updateRecommendationStatus"];
   userId: string;
   actions: {
     openSetup: (params?: Record<string, unknown>) => void;

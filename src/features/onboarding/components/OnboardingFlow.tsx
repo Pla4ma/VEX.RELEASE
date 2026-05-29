@@ -141,9 +141,9 @@ function FirstResultScreen({
 export const OnboardingFlow = withScreenErrorBoundary(function _OnboardingFlow({
   onStartSession,
   onBack,
-  onComplete,
+  onComplete: _onComplete,
 }: OnboardingFlowProps): JSX.Element {
-  const { state, isLoading, markNotificationAsked, markRewardSeen } =
+  const { state, isLoading } =
     useOnboardingProgressState();
   if (isLoading || !state) {
     return (
@@ -152,35 +152,11 @@ export const OnboardingFlow = withScreenErrorBoundary(function _OnboardingFlow({
       </View>
     );
   }
-  // OnboardingFlow state shape refactor in progress — these nested properties
-  // (state.steps, state.permissions) don't exist on the current OnboardingStore.
-  // Rendering default flow until architecture alignment completes.
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-  if (
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (state as any).steps?.firstSessionCompleted &&
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    !(state as any).permissions?.notificationAsked
-  ) {
-    return (
-      <NotificationPermissionScreen
-        onComplete={() => {
-          markNotificationAsked(true);
-        }}
-      />
-    );
-  }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  if ((state as any).steps?.firstSessionCompleted && !(state as any).steps?.rewardSeen) {
-    return (
-      <FirstResultScreen
-        onComplete={() => {
-          markRewardSeen();
-          onComplete?.();
-        }}
-      />
-    );
-  }
+  // OnboardingState (Zustand) does not yet expose steps/permissions fields.
+  // OnboardingProgress (TanStack Query) will provide these once the
+  // architecture alignment between Zustand ↔ Supabase progress completes.
+  // Until then, the NotificationPermissionScreen and FirstResultScreen
+  // helpers are defined above but unreachable.
   return (
     <OnboardingNavigator
       onStartSession={(config) => {

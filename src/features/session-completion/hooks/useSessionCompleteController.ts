@@ -131,8 +131,7 @@ export function useSessionCompleteController(input: {
     reflection,
     returnPlan,
     selectedMood,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    showHomeHighlight: showHomeHighlight as any,
+    showHomeHighlight,
     syncHomeReturn,
   });
 

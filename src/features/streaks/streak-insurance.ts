@@ -17,20 +17,6 @@ export const StreakInsuranceSchema = z.object({
   usedAt: z.number().optional(),
 });
 
-/** @deprecated Gamification — gamble mechanic removed. Use recovery proof instead. */
-export const StreakGambleSchema = z.object({
-  id: z.string(),
-  userId: z.string(),
-  streakDaysAtRisk: z.number(),
-  startedAt: z.number(),
-  sessionId: z.string(),
-  status: z.enum(["ACTIVE", "WON", "LOST", "CANCELLED"]),
-  requiredGrade: z.enum(["S", "A", "B"]),
-  actualGrade: z.string().optional(),
-  bonusXpIfWon: z.number(),
-  settledAt: z.number().optional(),
-});
-
 /**
  * Recovery Proof (formerly Comeback Token).
  * Proof that you can restart after a pause — VEX records the pattern.
@@ -45,7 +31,6 @@ export const ComebackTokenSchema = z.object({
 });
 
 export type StreakInsurance = z.infer<typeof StreakInsuranceSchema>;
-export type StreakGamble = z.infer<typeof StreakGambleSchema>;
 export type ComebackToken = z.infer<typeof ComebackTokenSchema>;
 
 export interface InsurancePricing {
@@ -81,60 +66,6 @@ export function calculateInsurancePayout(
   const restoredDays = Math.max(3, Math.floor(streakDays * restorePercent));
   const xpBonus = restoredDays * 10;
   return { restoredDays, xpBonus };
-}
-
-export interface GambleConfig {
-  requiredGrade: "S" | "A" | "B";
-  timeWindowHours: number;
-  bonusXpMultiplier: number;
-  riskLevel: "LOW" | "MEDIUM" | "HIGH";
-}
-
-export const GAMBLE_CONFIGS: Record<string, GambleConfig> = {
-  conservative: {
-    requiredGrade: "B",
-    timeWindowHours: 24,
-    bonusXpMultiplier: 1.5,
-    riskLevel: "LOW",
-  },
-  moderate: {
-    requiredGrade: "A",
-    timeWindowHours: 12,
-    bonusXpMultiplier: 2.0,
-    riskLevel: "MEDIUM",
-  },
-  aggressive: {
-    requiredGrade: "S",
-    timeWindowHours: 6,
-    bonusXpMultiplier: 3.0,
-    riskLevel: "HIGH",
-  },
-};
-
-export function getGambleOptions(
-  streakDays: number,
-  hoursRemaining: number,
-): {
-  available: boolean;
-  options: Array<{
-    type: string;
-    config: GambleConfig;
-    available: boolean;
-    reason?: string;
-  }>;
-} {
-  const options = Object.entries(GAMBLE_CONFIGS).map(([type, config]) => {
-    const available = hoursRemaining <= config.timeWindowHours;
-    return {
-      type,
-      config,
-      available,
-      reason: available
-        ? undefined
-        : `Requires ${config.timeWindowHours}h or less remaining`,
-    };
-  });
-  return { available: options.some((o) => o.available), options };
 }
 
 export function calculateComebackTokensEarned(
@@ -192,6 +123,9 @@ export function createInsurance(
     used: false,
   };
 }
+
+export { StreakGambleSchema, GAMBLE_CONFIGS, getGambleOptions } from "./streak-gamble";
+export type { StreakGamble, GambleConfig } from "./streak-gamble";
 
 export {
   type SettleGambleResult,

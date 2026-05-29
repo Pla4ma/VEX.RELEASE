@@ -1,5 +1,5 @@
 import type { StreakRiskStatus } from "../streak-risk-monitor";
-import type { RiskLevel } from "../schemas-enhanced";
+import type { Streak, RiskLevel } from "../schemas";
 import { calculateStreakRisk } from "../streak-risk-monitor";
 import { launchColors } from "@theme/tokens/launch-colors";
 
@@ -59,15 +59,13 @@ export function getUrgencyLabel(riskLevel: RiskLevel): string {
 }
 
 export function computeRiskStatus(
-  streakData: { currentDays: number } | undefined,
+  streakData: Streak | undefined,
   cachedRiskStatus: StreakRiskStatus | null | undefined,
 ): StreakRiskStatus | null {
   if (!streakData) {
     return cachedRiskStatus || null;
   }
-// Input narrowed from full Streak type to only the currentDays field needed by risk calc
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const freshRisk = calculateStreakRisk(streakData as any);
+  const freshRisk = calculateStreakRisk(streakData);
   if (cachedRiskStatus) {
     return {
       ...freshRisk,
