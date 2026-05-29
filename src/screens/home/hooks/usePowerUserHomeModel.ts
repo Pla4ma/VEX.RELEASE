@@ -108,17 +108,13 @@ export function usePowerUserHomeModel(
       buildReturnReason({
         activeStudyPlanData: activeStudyPlanQuery.data as Record<string, unknown> | undefined,
         comebackData: comebackQuery.data as Record<string, unknown> | undefined,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        runtime: runtime as any,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        nextBestAction: nextBestAction as any,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        primaryRecommendation: primaryRecommendation as any,
+        runtime: runtime,
+        nextBestAction: nextBestAction,
+        primaryRecommendation: primaryRecommendation,
         openSetup: nav.openSetup,
         continueStudyPlan: nav.continueStudyPlan,
         openNextAction: nav.openNextAction,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        updateRecommendationStatus: updateRecommendationStatus as any,
+        updateRecommendationStatus: updateRecommendationStatus,
         userId,
       }),
     [

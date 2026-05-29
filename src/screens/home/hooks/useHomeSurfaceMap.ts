@@ -137,8 +137,7 @@ export function useHomeSurfaceMap(
       isFirstSession,
       firstWeekPhase: input.firstWeek,
       degradedFeatures,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    laneProfile: input.laneProfile as any,
+    laneProfile: input.laneProfile,
     });
   }, [
     b.totalCompletedSessions,

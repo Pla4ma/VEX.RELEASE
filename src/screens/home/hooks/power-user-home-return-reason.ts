@@ -1,4 +1,6 @@
 import type { SessionRecommendation } from "../../../features/ai-coach";
+import type { RecommendationStatus } from "../../../features/ai-coach";
+import type { NextBestAction } from "../../../features/progression";
 import type { HomeFeatureRuntime } from "./home-feature-runtime";
 import type { HomeReturnReason } from "./useHomeReturnReason";
 import { buildHomeReturnReasonState } from "../../../features/home-spine/service";
@@ -7,7 +9,7 @@ interface ReturnReasonParams {
   activeStudyPlanData: Record<string, unknown> | undefined;
   comebackData: Record<string, unknown> | undefined;
   runtime: HomeFeatureRuntime;
-  nextBestAction: { action: string; label: string } | null;
+  nextBestAction: NextBestAction | null;
   primaryRecommendation: SessionRecommendation | null;
   openSetup: (params?: Record<string, unknown>) => void;
   continueStudyPlan: () => void;
@@ -15,8 +17,8 @@ interface ReturnReasonParams {
   updateRecommendationStatus: {
     mutateAsync: (params: {
       recommendationId: string;
-      status: string;
-      userId: string;
+      status: RecommendationStatus;
+      userId?: string;
     }) => Promise<unknown>;
   };
   userId: string;
@@ -49,8 +51,7 @@ export function buildReturnReason(params: ReturnReasonParams): HomeReturnReason 
     comebackMessage: comebackData?.isComeback
       ? ((comebackData.message as string) ?? null)
       : null,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    nextBestAction: nextBestAction as any,
+    nextBestAction: nextBestAction!,
     primaryRecommendation: primaryRecommendation
       ? {
           id: primaryRecommendation.id,
