@@ -1,50 +1,50 @@
-import type { BossArchetype, PersonalBoss } from "./schemas";
+import type { BlockerArchetype, PersonalBlocker } from "./schemas";
 
 // ---------------------------------------------------------------------------
-// Boss copy
+// Blocker copy (productivity language, not game language)
 // ---------------------------------------------------------------------------
 
-const BOSS_COPY: Record<
-  BossArchetype,
-  Pick<PersonalBoss, "name" | "recoveryPrompt">
+const BLOCKER_COPY: Record<
+  BlockerArchetype,
+  Pick<PersonalBlocker, "name" | "recoveryPrompt">
 > = {
-  cold_start_shadow: {
+  blank_start: {
     name: "The Blank Page",
-    recoveryPrompt: "Start one small encounter before judging the day.",
+    recoveryPrompt: "Start one small run before judging the day.",
   },
-  deadline_wraith: {
-    name: "The Deadline",
+  deadline_pressure: {
+    name: "Deadline Pressure",
     recoveryPrompt: "Pick the nearest deadline action and make it visible.",
   },
-  doomscroll_hydra: {
-    name: "The Feed Trap",
-    recoveryPrompt: "Put the feed away and restart with five clean minutes.",
+  distraction_loop: {
+    name: "The Distraction Loop",
+    recoveryPrompt: "Put feeds away and restart with five clean minutes.",
   },
-  fog_of_unclear_work: {
-    name: "The Fog",
+  unclear_scope: {
+    name: "Unclear Scope",
     recoveryPrompt: "Rewrite the task until the first move is obvious.",
   },
-  late_start_shade: {
-    name: "The Late Start",
+  delayed_start: {
+    name: "The Delayed Start",
     recoveryPrompt: "Use a short start window before the day drifts.",
   },
-  perfectionism_wall: {
-    name: "The Polish Trap",
+  over_prep: {
+    name: "The Over-Prep Trap",
     recoveryPrompt: "Ship one rough move instead of polishing the plan.",
   },
-  switch_swarm: {
-    name: "The Context Switch",
+  context_switching: {
+    name: "Context Switching",
     recoveryPrompt: "Close competing contexts and protect one thread.",
   },
-  task_avoidance: {
-    name: "The Avoidance",
+  avoidant_pattern: {
+    name: "The Avoidance Pattern",
     recoveryPrompt:
       "Start the work for just two minutes and let momentum pull you in.",
   },
 };
 
 // ---------------------------------------------------------------------------
-// Evidence-based boss resolution
+// Evidence-based blocker resolution
 // ---------------------------------------------------------------------------
 
 const MIN_EVIDENCE_DAYS = 3;
@@ -61,28 +61,28 @@ function daysSinceFirstSession(firstActiveDay: number, now: number): number {
   return Math.floor((weekStart(now) - firstActiveDay) / msPerDay);
 }
 
-function detectArchetype(joined: string): BossArchetype {
-  if (joined.includes("deadline")) return "deadline_wraith";
+function detectArchetype(joined: string): BlockerArchetype {
+  if (joined.includes("deadline")) return "deadline_pressure";
   if (joined.includes("switch") || joined.includes("context"))
-    return "switch_swarm";
+    return "context_switching";
   if (joined.includes("late") || joined.includes("delay"))
-    return "late_start_shade";
+    return "delayed_start";
   if (joined.includes("unclear") || joined.includes("fog"))
-    return "fog_of_unclear_work";
+    return "unclear_scope";
   if (joined.includes("perfect") || joined.includes("overprep"))
-    return "perfectionism_wall";
+    return "over_prep";
   if (joined.includes("scroll") || joined.includes("distraction"))
-    return "doomscroll_hydra";
+    return "distraction_loop";
   if (joined.includes("avoid") || joined.includes("procrastinat"))
-    return "task_avoidance";
-  return "cold_start_shadow";
+    return "avoidant_pattern";
+  return "blank_start";
 }
 
-export function resolvePersonalBoss(input: {
+export function resolvePersonalBlocker(input: {
   signals: string[];
   firstActiveDay: number;
   now?: number;
-}): PersonalBoss {
+}): PersonalBlocker {
   const now = input.now ?? Date.now();
   const signals = input.signals.filter(Boolean);
   const evidenceCount = signals.length;
@@ -93,9 +93,9 @@ export function resolvePersonalBoss(input: {
   const isEvidenceBased = hasEnoughDays && evidenceCount >= 2;
 
   if (evidenceCount === 0) {
-    const fallback = BOSS_COPY.cold_start_shadow;
+    const fallback = BLOCKER_COPY.blank_start;
     return {
-      archetype: "cold_start_shadow",
+      archetype: "blank_start",
       evidenceCount: 0,
       isEvidenceBased: false,
       isTeaser: true,
@@ -107,9 +107,9 @@ export function resolvePersonalBoss(input: {
 
   const joined = signals.join(" ").toLowerCase();
   const archetype = detectArchetype(joined);
-  const copy = BOSS_COPY[archetype];
+  const copy = BLOCKER_COPY[archetype];
 
-  /** Must cite evidence when boss is evidence-based */
+  /** Must cite evidence when blocker is evidence-based */
   return {
     archetype,
     evidenceCount,

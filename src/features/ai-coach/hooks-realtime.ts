@@ -1,5 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useQueryClient } from "@tanstack/react-query";
+import * as Sentry from "@sentry/react-native";
+import * as ExpoNotifications from "expo-notifications";
 import {
   type CoachMessage,
   type CoachState,
@@ -131,6 +133,23 @@ export function useRealtimeCoach(userId: string) {
   useRealtimeRecommendations(userId);
 }
 
-async function showLocalNotification(message: CoachMessage) {
-  debug.info("[Coach Notification]", message.content);
+async function showLocalNotification(message: CoachMessage): Promise<void> {
+  try {
+    const { status } = await ExpoNotifications.getPermissionsAsync();
+    if (status !== "granted") return;
+
+    await ExpoNotifications.scheduleNotificationAsync({
+      content: {
+        title: "VEX Coach",
+        body: message.content,
+        data: { messageId: message.id, type: message.category },
+        sound: true,
+      },
+      trigger: null,
+    });
+  } catch (error) {
+    Sentry.captureException(error, {
+      tags: { feature: "coach-local-notification" },
+    });
+  }
 }

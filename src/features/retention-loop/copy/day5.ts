@@ -63,9 +63,9 @@ export const DAY5_COPY: JourneyDayCopy = {
   },
   premiumTrigger: { day: 5, trigger: "none", copyKey: "none" },
   returnReason: {
-    student: "Your study practice has a real shape now. Return to refine it.",
-    game_like: "Your run discipline is clear. Return to sharpen it.",
-    deep_creative: "Your project practice is defined. Return to deepen it.",
-    minimal_normal: "Your clean practice is established. Return to reinforce it.",
+    student: "VEX knows what I need to study or review next.",
+    game_like: "VEX helps me build momentum and understand what blocks me.",
+    deep_creative: "VEX remembers where I left off.",
+    minimal_normal: "VEX gives me one useful action without noise.",
   },
 };

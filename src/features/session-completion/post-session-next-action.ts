@@ -42,11 +42,59 @@ function mapRecommendationDifficulty(input: {
   return "NORMAL";
 }
 
+function laneNativeCta(lane: string | undefined): string {
+  switch (lane) {
+    case "student":
+      return "Start next study block";
+    case "game_like":
+      return "Start next run";
+    case "deep_creative":
+      return "Protect next move";
+    case "minimal_normal":
+      return "See next step";
+    default:
+      return "Start next focus";
+  }
+}
+
+function laneNativeReason(
+  lane: string | undefined,
+  defaultReason: string,
+): string {
+  switch (lane) {
+    case "student":
+      return "Pick one topic and name it before starting.";
+    case "game_like":
+      return "Momentum builds with each clean run. Keep it going.";
+    case "deep_creative":
+      return "Name the next concrete move before you start.";
+    case "minimal_normal":
+      return "One action, no noise. Just pick the next thing.";
+    default:
+      return defaultReason;
+  }
+}
+
+function behaviorAdjustedDuration(
+  summary: SessionSummary,
+): number {
+  const baseDuration = Math.max(15 * 60, Math.min(summary.plannedDuration, 45 * 60));
+  if (summary.completionPercentage < 50) {
+    return Math.min(baseDuration, 15 * 60);
+  }
+  const effectiveMinutes = Math.round(summary.effectiveDuration / 60);
+  if (effectiveMinutes < 20) {
+    return effectiveMinutes * 60;
+  }
+  return baseDuration;
+}
+
 export function buildPostSessionNextAction(input: {
   summary: SessionSummary;
   studyContext?: SessionStudyContext;
+  lane?: string;
 }): PostSessionNextAction {
-  const { studyContext, summary } = input;
+  const { studyContext, summary, lane } = input;
   if (studyContext && hasActiveStudyFollowUp(studyContext)) {
     const target =
       studyContext.studyTarget ??
@@ -62,11 +110,17 @@ export function buildPostSessionNextAction(input: {
       ),
     };
 
+    const behaviorDuration = behaviorAdjustedDuration(summary);
+    const studyRouteParams = {
+      ...routeParams,
+      suggestedDurationSeconds: behaviorDuration,
+    };
+
     return PostSessionNextActionSchema.parse({
       ctaLabel: "Review next",
-      id: routeParams.recommendationId,
+      id: studyRouteParams.recommendationId,
       reason: `Review ${target} while the session is still fresh.`,
-      routeParams,
+      routeParams: studyRouteParams,
     });
   }
 
@@ -94,10 +148,16 @@ export function buildPostSessionNextAction(input: {
     suggestedDurationSeconds: recommendation.duration * 60,
   };
 
+  const behaviorDuration = behaviorAdjustedDuration(summary);
+  const finalRouteParams = {
+    ...routeParams,
+    suggestedDurationSeconds: behaviorDuration,
+  };
+
   return PostSessionNextActionSchema.parse({
-    ctaLabel: "Start next focus",
-    id: routeParams.recommendationId,
-    reason: recommendation.reason,
-    routeParams,
+    ctaLabel: laneNativeCta(lane),
+    id: finalRouteParams.recommendationId,
+    reason: laneNativeReason(lane, recommendation.reason),
+    routeParams: finalRouteParams,
   });
 }

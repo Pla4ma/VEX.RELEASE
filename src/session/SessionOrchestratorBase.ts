@@ -1,4 +1,4 @@
-import type { SessionOrchestrator } from "./types";
+import type { SessionOrchestrator } from "./SessionOrchestrator";
 import { TimerEngine } from "./engines/TimerEngine";
 import { ScoringEngine } from "./engines/ScoringEngine";
 import { CompletionEngine } from "./engines/CompletionEngine";

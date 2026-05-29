@@ -49,6 +49,19 @@ function blocked(
   });
 }
 
+/**
+ * Check whether current time falls within a user's learned quiet window.
+ * Evening dismissals (hour ≥ 18) suppress evening nudges.
+ */
+function isEveningQuietByBehavior(
+  now: number,
+  eveningDismissals: number,
+): boolean {
+  if (eveningDismissals < 2) return false;
+  const hour = new Date(now).getHours();
+  return hour >= 18 || hour < 6;
+}
+
 export function decideNudge(rawInput: NudgePolicyInput): NudgeDecision {
   const input = NudgePolicyInputSchema.parse(rawInput);
   const lane = input.laneProfile?.primaryLane ?? input.lane;
@@ -67,6 +80,17 @@ export function decideNudge(rawInput: NudgePolicyInput): NudgeDecision {
   }
   if (input.quietHoursActive && !input.manuallyScheduled) {
     return blocked(input, budgetRemaining, "Quiet hours block this nudge.");
+  }
+  if (
+    isEveningQuietByBehavior(input.now, input.recentDismissals) &&
+    !input.manuallyScheduled &&
+    nudgeType !== "rescue"
+  ) {
+    return blocked(
+      input,
+      budgetRemaining,
+      "Evening dismissals learned — suppressing non-rescue nudges.",
+    );
   }
   if (budgetRemaining <= 0)
     return blocked(input, budgetRemaining, "Daily nudge budget reached.");

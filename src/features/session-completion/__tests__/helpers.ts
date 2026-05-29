@@ -17,19 +17,19 @@ export const CLEAN_REFLECTIONS: Record<Lane, string> = {
   student: "What made this study block work?",
   game_like: "What kept the run clean?",
   deep_creative: "What should VEX remember for next block?",
-  minimal_normal: "Keep same setup next time?",
+  minimal_normal: "Keep this setup for next time?",
 };
 
 export const PARTIAL_REFLECTIONS: Record<Lane, string> = {
   student: "Was the task too big or unclear?",
-  game_like: "What debuff hit this run?",
+  game_like: "What broke your momentum?",
   deep_creative: "Where did flow break?",
-  minimal_normal: "What made this hard?",
+  minimal_normal: "What made this one hard?",
 };
 
 export const ABANDONED_REFLECTIONS: Record<Lane, string> = {
   student: "What pulled you away first?",
-  game_like: "What interrupted the encounter?",
+  game_like: "What interrupted your run?",
   deep_creative: "What broke the thread?",
   minimal_normal: "What got in the way?",
 };

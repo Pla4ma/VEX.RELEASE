@@ -26,8 +26,8 @@ export function publishProgressionEvents(
     totalXP: newTotalXp,
     currentLevel: newLevel,
     progressPercent: calculateProgressPercent(newXpInLevel, newLevel),
-    streakBonus: breakdown.streakBonus,
-    boostBonus: breakdown.comebackBonus,
+    streakBonus: breakdown.momentumBonus,
+    boostBonus: breakdown.recoveryBonus,
   });
   if (levelUpOccurred) {
     eventBus.publish("progression:level_up", {

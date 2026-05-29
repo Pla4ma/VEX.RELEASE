@@ -6,6 +6,7 @@ import {
 import { getStoredFocusRun, upsertStoredFocusRun } from "./repository";
 
 export { buildFocusRunDisplay, computeFocusRunGrade } from "./display";
+export { resolvePersonalBlocker } from "./blocker-resolution";
 
 // ---------------------------------------------------------------------------
 // Helper
@@ -37,9 +38,9 @@ export async function startFocusRun(
   const ws = weekStart(now);
   return upsertStoredFocusRun(
     FocusRunSchema.parse({
-      bossId: null,
+      blockerId: null,
       cleanStarts: 0,
-      completedEncounters: 0,
+      completedRuns: 0,
       events: [
         {
           id: `${userId}:${now}:start`,
@@ -49,8 +50,8 @@ export async function startFocusRun(
         },
       ],
       finalGrade: null,
+      focusModifiers: ["Phone away", "One tab", "Reflection upgrade"],
       id: `${userId}:${ws}`,
-      modifiers: ["Phone away", "One tab", "Reflection upgrade"],
       recoveryWins: 0,
       reflectionUpgrades: 0,
       status: "active",
@@ -81,13 +82,13 @@ export async function recordFocusRunEvent(input: {
 
   const updates: Partial<FocusRun> = { events: updatedEvents };
 
-  if (input.eventType === "encounter_completed") {
-    updates.completedEncounters = (run.completedEncounters ?? 0) + 1;
+  if (input.eventType === "run_milestone") {
+    updates.completedRuns = (run.completedRuns ?? 0) + 1;
   }
   if (input.eventType === "clean_start") {
     updates.cleanStarts = (run.cleanStarts ?? 0) + 1;
   }
-  if (input.eventType === "rescue_win") {
+  if (input.eventType === "recovery_win") {
     updates.recoveryWins = (run.recoveryWins ?? 0) + 1;
   }
   if (input.eventType === "reflection_upgrade") {

@@ -75,6 +75,20 @@ export function applyTowerDecay(
     totalBlocks: newTotalBlocks,
     totalHeight: newHeight,
     totalBonuses: {
+      progressAcceleration: Math.floor(
+        tower.totalBonuses.progressAcceleration * decayFactor,
+      ),
+      momentumResistanceHours:
+        Math.floor(
+          tower.totalBonuses.momentumResistanceHours * decayFactor * 10,
+        ) / 10,
+      energyRegenBonus:
+        Math.floor(tower.totalBonuses.energyRegenBonus * decayFactor * 10) / 10,
+      focusResilienceBonus:
+        Math.floor(tower.totalBonuses.focusResilienceBonus * decayFactor * 10) / 10,
+      focusDurationBonus:
+        Math.floor(tower.totalBonuses.focusDurationBonus * decayFactor * 10) /
+        10,
       xpBoostPercent: Math.floor(
         tower.totalBonuses.xpBoostPercent * decayFactor,
       ),
@@ -82,13 +96,8 @@ export function applyTowerDecay(
         Math.floor(
           tower.totalBonuses.streakResistanceHours * decayFactor * 10,
         ) / 10,
-      energyRegenBonus:
-        Math.floor(tower.totalBonuses.energyRegenBonus * decayFactor * 10) / 10,
       bossDamageBonus:
         Math.floor(tower.totalBonuses.bossDamageBonus * decayFactor * 10) / 10,
-      focusDurationBonus:
-        Math.floor(tower.totalBonuses.focusDurationBonus * decayFactor * 10) /
-        10,
     },
   };
   const restoreCost = blocksLost * 25;
@@ -127,16 +136,23 @@ export function restoreTowerBlocks(
     };
   }
   const restoredBonuses = {
+    progressAcceleration: Math.floor(
+      tower.totalBonuses.progressAcceleration *
+        (maxRestorable / tower.totalBlocks + 1),
+    ),
+    momentumResistanceHours:
+      tower.totalBonuses.momentumResistanceHours + maxRestorable * 0.5,
+    energyRegenBonus: tower.totalBonuses.energyRegenBonus + maxRestorable * 1,
+    focusResilienceBonus: tower.totalBonuses.focusResilienceBonus + maxRestorable * 3,
+    focusDurationBonus:
+      tower.totalBonuses.focusDurationBonus + maxRestorable * 5,
     xpBoostPercent: Math.floor(
       tower.totalBonuses.xpBoostPercent *
         (maxRestorable / tower.totalBlocks + 1),
     ),
     streakResistanceHours:
       tower.totalBonuses.streakResistanceHours + maxRestorable * 0.5,
-    energyRegenBonus: tower.totalBonuses.energyRegenBonus + maxRestorable * 1,
     bossDamageBonus: tower.totalBonuses.bossDamageBonus + maxRestorable * 3,
-    focusDurationBonus:
-      tower.totalBonuses.focusDurationBonus + maxRestorable * 5,
   };
   const updatedTower: FocusTower = {
     ...tower,

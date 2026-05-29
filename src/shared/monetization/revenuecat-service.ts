@@ -1,8 +1,8 @@
 import Purchases, {
   LOG_LEVEL,
   type CustomerInfo,
-  type PurchasesPackage,
 } from "react-native-purchases";
+import type { PurchasesPackage } from "react-native-purchases";
 import { Platform } from "react-native";
 import * as Sentry from "@sentry/react-native";
 import { createDebugger } from "../../utils/debug";
@@ -14,10 +14,14 @@ import type {
 } from "./revenuecat-types";
 import {
   createServiceError,
-  isUserCancelled,
   mapEntitlements,
   normalizeError,
 } from "./revenuecat-service-helpers";
+import {
+  purchasePackage as executePurchase,
+  restorePurchases as executeRestore,
+  syncPurchases as executeSync,
+} from "./revenuecat-service-purchases";
 
 const debug = createDebugger("monetization:revenuecat");
 const IOS_API_KEY = process.env.EXPO_PUBLIC_REVENUECAT_IOS_KEY;
@@ -26,8 +30,9 @@ const ANDROID_API_KEY = process.env.EXPO_PUBLIC_REVENUECAT_ANDROID_KEY;
 class RevenueCatService {
   private status: RevenueCatStatus = "uninitialized";
   private currentUserId: string | null = null;
-  private debugMode = __DEV__;
-  private reportError(operation: string, error: unknown): void {
+  debugMode = __DEV__;
+  private customerInfoUpdateCallbacks: Array<(info: CustomerInfo) => void> = [];
+  reportError(operation: string, error: unknown): void {
     const err = error instanceof Error ? error : new Error(String(error));
     if (this.debugMode) debug.error(`[RevenueCat] ${operation} failed`, err);
     Sentry.captureException(err, { tags: { component: "RevenueCatService", operation } });
@@ -107,36 +112,10 @@ class RevenueCatService {
     }
   }
   async purchasePackage(pkg: PurchasesPackage): Promise<PurchaseResult> {
-    if (!this.isReady()) {
-      return { success: false, error: createServiceError("CONFIGURATION_ERROR", "RevenueCat not initialized") };
-    }
-    try {
-      const { customerInfo } = await Purchases.purchasePackage(pkg);
-      return { success: true, customerInfo };
-    } catch (error) {
-      if (isUserCancelled(error)) {
-        return { success: false, error: createServiceError("PURCHASE_CANCELLED", "User cancelled the purchase"), errorCode: "PURCHASE_CANCELLED" };
-      }
-      const err = normalizeError(error);
-      Sentry.captureException(err.underlyingError || new Error(err.message), {
-        tags: { component: "RevenueCatService", operation: "purchasePackage", productId: pkg.product.identifier },
-        extra: { productIdentifier: pkg.product.identifier, packageIdentifier: pkg.identifier },
-      });
-      return { success: false, error: err, errorCode: err.code };
-    }
+    return executePurchase(this, pkg);
   }
   async restorePurchases(): Promise<PurchaseResult> {
-    if (!this.isReady()) {
-      return { success: false, error: createServiceError("CONFIGURATION_ERROR", "RevenueCat not initialized") };
-    }
-    try {
-      const customerInfo = await Purchases.restorePurchases();
-      return { success: true, customerInfo };
-    } catch (error) {
-      const err = normalizeError(error);
-      this.reportError("restorePurchases", err.underlyingError || new Error(err.message));
-      return { success: false, error: err, errorCode: err.code };
-    }
+    return executeRestore(this);
   }
   async setUserId(appUserId: string): Promise<boolean> { return this.identifyUser(appUserId); }
   async clearUserId(): Promise<boolean> { return this.logoutUser(); }
@@ -171,22 +150,26 @@ class RevenueCatService {
     }
   }
   async syncPurchases(): Promise<boolean> {
-    if (!this.isReady()) return false;
-    try {
-      await Purchases.syncPurchases();
-      return true;
-    } catch (error) {
-      debug.error("[RevenueCat] Sync purchases failed", normalizeError(error));
-      return false;
-    }
+    return executeSync(this);
   }
   isReady(): boolean { return this.status === "ready"; }
   getStatus(): RevenueCatStatus { return this.status; }
   getCurrentUserId(): string | null { return this.currentUserId; }
+  onCustomerInfoUpdate(callback: (info: CustomerInfo) => void): () => void {
+    this.customerInfoUpdateCallbacks.push(callback);
+    return () => {
+      this.customerInfoUpdateCallbacks = this.customerInfoUpdateCallbacks.filter(
+        (cb) => cb !== callback,
+      );
+    };
+  }
+
   private handleCustomerInfoUpdate(customerInfo: CustomerInfo): void {
     if (this.debugMode) {
       debug.debug("[RevenueCat] Customer info updated:", Object.keys(customerInfo.entitlements.active));
     }
+    // Notify all registered consumers of subscription state changes
+    this.customerInfoUpdateCallbacks.forEach((cb) => cb(customerInfo));
   }
 }
 

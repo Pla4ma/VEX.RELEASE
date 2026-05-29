@@ -17,29 +17,47 @@ export interface CompletionReward {
 }
 
 export type RewardType =
-  | "experience_points"
-  | "currency"
-  | "skill_points"
-  | "streak_extension"
+  | "progress_proof"
+  | "insight"
+  | "momentum_bonus"
+  | "recovery_proof"
   | "unlock"
   | "badge"
   | "title"
   | "cosmetic"
   | "boost"
+  | "mode_adaptation"
+  // Legacy — internal only, not user-facing
+  /** @deprecated Use progress_proof */
+  | "experience_points"
+  /** @deprecated Internal infrastructure only */
+  | "currency"
+  /** @deprecated Use momentum_bonus */
+  | "skill_points"
+  /** @deprecated Use momentum_bonus */
+  | "streak_extension"
+  /** @deprecated Internal infrastructure only */
   | "consumable";
 
 export type RewardSource =
   | "completion"
   | "performance"
   | "milestone"
-  | "streak"
-  | "achievement"
+  | "momentum"
+  | "insight"
   | "bonus"
   | "event"
+  | "weekly_intelligence"
+  // Legacy — internal only
+  /** @deprecated Use momentum */
+  | "streak"
+  /** @deprecated Use insight */
+  | "achievement"
+  /** @deprecated Use weekly_intelligence */
   | "challenge";
 
 export interface RewardCondition {
-  type: "score" | "time" | "accuracy" | "streak" | "achievement" | "custom";
+  type: "score" | "time" | "accuracy" | "momentum" | "insight" | "custom";
   operator: "greater_than" | "less_than" | "equals" | "reaches";
   value: number;
   description: string;
@@ -53,5 +71,4 @@ export interface RewardMetadata {
   animation?: string;
   sound?: string;
   description: string;
-  lore?: string;
 }

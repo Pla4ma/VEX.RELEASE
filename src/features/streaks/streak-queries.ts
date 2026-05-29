@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/react-native";
 import { v4 } from "../../utils/uuid";
 import type { Streak } from "./schemas";
 import { RepositoryError, supabase, parseStreakRow } from "./repository-helpers";
@@ -94,9 +95,18 @@ export async function recordShieldEarned(
       created_at: Date.now(),
     });
   if (error) {
-    throw new RepositoryError("recordShieldEarned", error);
+    throw new RepositoryError("recordShieldEarned:insert", error);
   }
-  await supabase.rpc("increment_shield_count", { p_user_id: userId });
+
+  const { error: rpcError } = await supabase
+    .rpc("increment_shield_count", { p_user_id: userId });
+  if (rpcError) {
+    Sentry.captureException(rpcError, {
+      tags: { operation: "increment_shield_count" },
+      extra: { userId, source },
+    });
+    throw new RepositoryError("recordShieldEarned:increment", rpcError);
+  }
 }
 
 export async function recordShieldUsed(

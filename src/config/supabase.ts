@@ -8,6 +8,7 @@ import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { CURRENT_CONFIG } from "../constants/app";
 import type { Database } from "../types/supabase";
 import { createDebugger } from "../utils/debug";
+import { getSecureStorage } from "../persistence/SecureStorage";
 
 const debug = createDebugger("config:supabase");
 
@@ -15,50 +16,70 @@ const debug = createDebugger("config:supabase");
  * Create mock Supabase client for missing credentials
  */
 function createMockSupabaseClient(): SupabaseClient {
-  const error = new Error(
+  const err = new Error(
     "Supabase not configured. Please set EXPO_PUBLIC_SUPABASE_URL and EXPO_PUBLIC_SUPABASE_ANON_KEY in your environment.",
   );
 
-  return {
+  const authErr = {
+    message: err.message,
+    code: "mock_error",
+    status: 500,
+    __isAuthError: true,
+    name: "AuthError",
+    toJSON: (): object => ({}),
+  } as unknown as import("@supabase/supabase-js").AuthError;
+
+  const mockClient = {
     auth: {
       signUp: async () => ({
-        data: { user: null },
-        error: { message: error.message },
+        data: { user: null, session: null },
+        error: authErr,
       }),
       signInWithPassword: async () => ({
-        data: { user: null },
-        error: { message: error.message },
+        data: { user: null, session: null },
+        error: authErr,
       }),
-      signOut: async () => ({ error: { message: error.message } }),
+      signOut: async () => ({ error: authErr }),
       getSession: async () => ({
         data: { session: null },
-        error: { message: error.message },
+        error: authErr,
       }),
       getUser: async () => ({
         data: { user: null },
-        error: { message: error.message },
+        error: authErr,
       }),
       resetPasswordForEmail: async () => ({
-        error: { message: error.message },
+        data: null,
+        error: authErr,
       }),
-      updateUser: async () => ({ error: { message: error.message } }),
+      updateUser: async () => ({
+        data: { user: null },
+        error: authErr,
+      }),
       onAuthStateChange: () => ({
-        data: { subscription: { unsubscribe: () => {} } },
+        data: {
+          subscription: {
+            id: "mock-sub",
+            callback: () => {},
+            unsubscribe: () => {},
+          },
+        },
       }),
     },
     from: () => ({
       select: () => ({
         eq: () => ({
           order: () => ({
-            data: [],
-            error: { message: error.message },
+            data: [] as never[],
+            error: null,
           }),
         }),
       }),
     }),
-    // Jest-only partial mock. Does not implement full SupabaseClient surface.
   };
-  return mockClient as SupabaseClient;
+
+  // Partial mock — cast at boundary, documented
+  return mockClient as unknown as SupabaseClient;
 }
 
 /**
@@ -77,6 +98,16 @@ function createMissingSupabaseConfigError(): Error {
   );
 }
 
+/** Static storage adapter — no dynamic import on every auth operation */
+const secureStorageAdapter = {
+  getItem: (key: string): Promise<string | null> =>
+    getSecureStorage().getItem(key).then((v) => v ?? null),
+  setItem: (key: string, value: string): Promise<void> =>
+    getSecureStorage().setItem(key, value),
+  removeItem: (key: string): Promise<void> =>
+    getSecureStorage().removeItem(key),
+};
+
 /**
  * Create Supabase client
  */
@@ -92,28 +123,10 @@ function createSupabaseClient(): SupabaseClient {
 
   return createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
     auth: {
-      // Storage is handled by our secure storage
-      storage: {
-        getItem: async (key: string) => {
-          const { getSecureStorage } =
-            await import("../persistence/SecureStorage");
-          const value = await getSecureStorage().getItem(key);
-          return value ?? null;
-        },
-        setItem: async (key: string, value: string) => {
-          const { getSecureStorage } =
-            await import("../persistence/SecureStorage");
-          return getSecureStorage().setItem(key, value);
-        },
-        removeItem: async (key: string) => {
-          const { getSecureStorage } =
-            await import("../persistence/SecureStorage");
-          return getSecureStorage().removeItem(key);
-        },
-      },
+      storage: secureStorageAdapter,
       autoRefreshToken: !IS_JEST,
       persistSession: !IS_JEST,
-      detectSessionInUrl: false, // Not applicable for native
+      detectSessionInUrl: false,
     },
     global: {
       headers: {
@@ -157,7 +170,6 @@ export function handleSupabaseError(error: unknown): Error {
   }
 
   if (error !== null && typeof error === "object") {
-    // Narrowing from unknown to read .message / .code — validated via typeof guards
     const err = error as Record<string, unknown>;
     const msg = typeof err.message === "string" ? err.message : undefined;
     const code = typeof err.code === "string" ? err.code : undefined;

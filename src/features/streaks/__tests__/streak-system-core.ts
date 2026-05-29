@@ -107,7 +107,8 @@ describe("Streak System - Core Logic", () => {
         lastQualifyingSessionAt: Date.now() - 26 * 60 * 60 * 1000,
       });
       mockRepository.fetchStreak.mockResolvedValue(streak);
-      mockRepository.getAvailableShield.mockResolvedValue("shield-1");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (mockRepository.getAvailableShield as any).mockResolvedValue("shield-1");
       mockRepository.updateStreak.mockResolvedValue({
         ...streak,
         currentDays: 6,

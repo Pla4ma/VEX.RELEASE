@@ -133,7 +133,7 @@ export function applyBehaviorScores(
   if (input.bossEngagement === "high") {
     scores.game_like += 0.35;
     scores.minimal_normal -= 0.2;
-    evidence.push(makeEvidence("boss_engagement", "high", 0.35, observedAt));
+    evidence.push(makeEvidence("run_engagement", "high", 0.35, observedAt));
   }
   if (input.bossDismissals >= 3) {
     scores.game_like -= 0.35;

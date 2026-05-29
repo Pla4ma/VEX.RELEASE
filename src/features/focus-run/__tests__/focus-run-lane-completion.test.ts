@@ -11,15 +11,15 @@ describe("FocusRun lane display and completion", () => {
     });
 
     expect(display.laneAllowed).toBe(true);
-    expect(display.boss.isTeaser).toBe(true);
-    expect(display.boss.isEvidenceBased).toBe(false);
-    expect(display.completedEncounters).toBe(0);
+    expect(display.blocker.isTeaser).toBe(true);
+    expect(display.blocker.isEvidenceBased).toBe(false);
+    expect(display.completedRuns).toBe(0);
     expect(display.finalGrade).toBeNull();
-    expect(display.weekSummary).toBe("No encounters yet this week.");
-    expect(display.title).toBe("Weekly Focus Run");
+    expect(display.weekSummary).toBe("No runs yet this week.");
+    expect(display.title).toBe("Weekly Momentum");
   });
 
-  it("minimal_normal lane has no run board and no boss CTA", () => {
+  it("minimal_normal lane has no run board and no blocker CTA", () => {
     const display = buildFocusRunDisplay({
       firstActiveDay: 10,
       lane: "minimal_normal",
@@ -30,7 +30,7 @@ describe("FocusRun lane display and completion", () => {
     expect(display.title).toContain("hidden");
 
     const serialized = JSON.stringify(display);
-    expect(serialized).not.toMatch(/face.*boss/i);
+    expect(serialized).not.toMatch(/face.*blocker/i);
     expect(serialized).not.toMatch(/full cta/i);
   });
 
@@ -47,7 +47,7 @@ describe("FocusRun lane display and completion", () => {
     const completedRun: FocusRun = {
       ...MOCK_RUN,
       cleanStarts: 3,
-      completedEncounters: 5,
+      completedRuns: 5,
       recoveryWins: 2,
       reflectionUpgrades: 1,
       status: "completed",
@@ -59,7 +59,7 @@ describe("FocusRun lane display and completion", () => {
       run: completedRun,
     });
 
-    expect(display.completedEncounters).toBe(5);
+    expect(display.completedRuns).toBe(5);
     expect(display.cleanStarts).toBe(3);
     expect(display.recoveryWins).toBe(2);
 
@@ -76,7 +76,7 @@ describe("FocusRun lane display and completion", () => {
     const completedRun: FocusRun = {
       ...MOCK_RUN,
       cleanStarts: 8,
-      completedEncounters: 12,
+      completedRuns: 12,
       recoveryWins: 5,
       reflectionUpgrades: 3,
       status: "completed",
@@ -90,7 +90,7 @@ describe("FocusRun lane display and completion", () => {
     });
 
     expect(display.finalGrade).toBe("S");
-    expect(display.weekSummary).toContain("12 encounters");
+    expect(display.weekSummary).toContain("12 runs");
     expect(display.weekSummary).toContain("8 clean starts");
     expect(display.weekSummary).toContain("5 recovery wins");
 

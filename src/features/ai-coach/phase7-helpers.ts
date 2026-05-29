@@ -48,7 +48,7 @@ export function extractSuggestionTitle(message: string): string {
 
 export function extractActionFromMessage(message: string): string {
   const actionMatch = message.match(/(try|start|complete|do)\s+[^.!?]+/i);
-  return actionMatch ? actionMatch[0] : "Start a session";
+  return actionMatch ? actionMatch[0] : "Start your next block";
 }
 
 export async function analyzeSessionPatterns(

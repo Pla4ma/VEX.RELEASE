@@ -1,15 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 import { ScrollView, Pressable, Linking } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useTheme, ThemeMode } from "../../theme";
 import { Box, Text } from "../../components/primitives";
-import { Icon } from "../../icons";
 import { useAuthStore } from "../../store";
 import type { SettingsStackParams } from "../../navigation";
 import { withScreenErrorBoundary } from "../../shared/ui/components/ScreenErrorBoundary";
-import { launchColors } from "@theme/tokens/launch-colors";
 import { isFeatureHidden } from "../../features/liveops-config/final-release-feature-map";
+import { useSettingsStore } from "../../features/settings/store";
 import { SettingsProfileRow } from "./SettingsProfileRow";
 import { SettingsSectionGroup } from "./SettingsSectionGroup";
 import { buildSettingsGroups } from "./buildSettingsGroups";
@@ -22,19 +21,22 @@ export const SettingsScreen = withScreenErrorBoundary(function _SettingsScreen({
   const { theme, mode, setMode } = useTheme();
   const insets = useSafeAreaInsets();
   const { user, logout } = useAuthStore();
-  const [streakReminders, setStreakReminders] = useState(true);
-  const [bossAlerts, setBossAlerts] = useState(true);
-  const [squadNotifications, setSquadNotifications] = useState(true);
-  const [rivalNotifications, setRivalNotifications] = useState(true);
+  const {
+    streakReminders,
+    bossAlerts,
+    squadNotifications,
+    rivalNotifications,
+    coachMessages,
+    achievementUnlocks,
+    soundEffects,
+    haptics,
+    analyticsEnabled,
+    setPreference,
+  } = useSettingsStore();
   const showEconomyToggles =
     !isFeatureHidden("boss_tab") &&
     !isFeatureHidden("challenges") &&
     !isFeatureHidden("wagers");
-  const [coachMessages, setCoachMessages] = useState(true);
-  const [achievementUnlocks, setAchievementUnlocks] = useState(true);
-  const [soundEffects, setSoundEffects] = useState(true);
-  const [haptics, setHaptics] = useState(true);
-  const [analyticsEnabled, setAnalyticsEnabled] = useState(true);
 
   const handleThemeChange = (newMode: ThemeMode) => setMode(newMode);
   const openPrivacyPolicy = () => Linking.openURL("https://vex.app/privacy");
@@ -42,15 +44,15 @@ export const SettingsScreen = withScreenErrorBoundary(function _SettingsScreen({
   const openSupport = () => Linking.openURL("mailto:support@vex.app");
 
   const settingGroups = buildSettingsGroups({
-    streakReminders, setStreakReminders,
-    bossAlerts, setBossAlerts,
-    squadNotifications, setSquadNotifications,
-    rivalNotifications, setRivalNotifications,
-    coachMessages, setCoachMessages,
-    achievementUnlocks, setAchievementUnlocks,
-    soundEffects, setSoundEffects,
-    haptics, setHaptics,
-    analyticsEnabled, setAnalyticsEnabled,
+    streakReminders, setStreakReminders: (v) => setPreference("streakReminders", v),
+    bossAlerts, setBossAlerts: (v) => setPreference("bossAlerts", v),
+    squadNotifications, setSquadNotifications: (v) => setPreference("squadNotifications", v),
+    rivalNotifications, setRivalNotifications: (v) => setPreference("rivalNotifications", v),
+    coachMessages, setCoachMessages: (v) => setPreference("coachMessages", v),
+    achievementUnlocks, setAchievementUnlocks: (v) => setPreference("achievementUnlocks", v),
+    soundEffects, setSoundEffects: (v) => setPreference("soundEffects", v),
+    haptics, setHaptics: (v) => setPreference("haptics", v),
+    analyticsEnabled, setAnalyticsEnabled: (v) => setPreference("analyticsEnabled", v),
     mode, handleThemeChange, navigation,
     openSupport, openPrivacyPolicy, openTerms,
     navigateToCoach: () => navigation.navigate("CoachSettings"),
@@ -125,7 +127,7 @@ export const SettingsScreen = withScreenErrorBoundary(function _SettingsScreen({
             paddingVertical: 16,
             alignItems: "center",
             borderRadius: 12,
-            backgroundColor: launchColors.hex_fee2e2,
+            backgroundColor: theme.colors.error.light,
             marginBottom: 16,
           }}
           onPress={logout}

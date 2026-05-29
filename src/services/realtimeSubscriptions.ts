@@ -62,14 +62,21 @@ export function subscribeToActivity(
 }
 
 export function subscribeToFeedChanges(
+  userId: string,
   callback: (payload: unknown) => void,
 ): () => void {
   const client = getSupabaseClient();
+  const channelName = `feed:changes:${userId}`;
   const channel = client
-    .channel("feed:changes")
+    .channel(channelName)
     .on(
       "postgres_changes",
-      { event: "*", schema: "public", table: "feed_items" },
+      {
+        event: "*",
+        schema: "public",
+        table: "feed_items",
+        filter: `user_id=eq.${userId}`,
+      },
       (payload) => {
         callback(payload);
         const newRecord = payload.new as Record<string, unknown> | undefined;
@@ -83,10 +90,10 @@ export function subscribeToFeedChanges(
       },
     );
   channel.subscribe();
-  activeChannels.set("feed:changes", channel);
+  activeChannels.set(channelName, channel);
   return () => {
     channel.unsubscribe();
-    activeChannels.delete("feed:changes");
+    activeChannels.delete(channelName);
   };
 }
 

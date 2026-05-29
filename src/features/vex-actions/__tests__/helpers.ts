@@ -12,7 +12,7 @@ import type { ActionGate } from "../action-utils";
 // ─── Mocks ──────────────────────────────────────────────────────────────────
 
 jest.mock("../../focus-run/service", () => ({
-  recordFocusRunEvent: jest.fn().mockResolvedValue({
+  recordFocusRunEvent: jest.fn<(...args: unknown[]) => Promise<unknown>>().mockResolvedValue({
     id: "run-1",
     userId: "u1",
     weekStartsAt: 0,
@@ -26,7 +26,7 @@ jest.mock("../../focus-run/service", () => ({
     finalGrade: null,
     events: [],
   }),
-  buildFocusRunDisplay: jest.fn().mockReturnValue({
+  buildFocusRunDisplay: jest.fn<(...args: unknown[]) => unknown>().mockReturnValue({
     laneAllowed: true,
     title: "test",
     body: "test",
@@ -51,7 +51,7 @@ jest.mock("../../focus-run/service", () => ({
 }));
 
 jest.mock("../../study-os/service", () => ({
-  createManualStudyPlan: jest.fn().mockResolvedValue({
+  createManualStudyPlan: jest.fn<(...args: unknown[]) => Promise<unknown>>().mockResolvedValue({
     id: "plan-1",
     userId: "u1",
     title: "Test Plan",
@@ -72,7 +72,7 @@ jest.mock("../../study-os/service", () => ({
 }));
 
 jest.mock("../../project-focus/service", () => ({
-  completeProjectSession: jest.fn().mockResolvedValue({
+  completeProjectSession: jest.fn<(...args: unknown[]) => Promise<unknown>>().mockResolvedValue({
     id: "thread-1",
     userId: "u1",
     projectTitle: "Test",
@@ -91,7 +91,7 @@ jest.mock("../../project-focus/service", () => ({
 }));
 
 jest.mock("../../focus-memory/service", () => ({
-  findMemoriesForRecommendation: jest.fn().mockResolvedValue([]),
+  findMemoriesForRecommendation: jest.fn<(...args: unknown[]) => Promise<unknown>>().mockResolvedValue([]),
 }));
 
 // ─── Test helper ────────────────────────────────────────────────────────

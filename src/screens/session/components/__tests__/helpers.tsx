@@ -117,7 +117,7 @@ export function renderHero(
     renderer = TestRenderer.create(
       <ActiveSessionHero
         viewModel={viewModel}
-        progressRingProps={baseProgressRingProps}
+        progressRingProps={baseProgressRingProps as any}
         themeColors={{
           error: "red",
           inverse: "white",

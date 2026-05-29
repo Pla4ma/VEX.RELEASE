@@ -37,21 +37,23 @@ export function buildReturnReasonConfig(params: {
     userId,
   } = params;
 
-  const reasonState = buildHomeReturnReasonState({
-    activeStudyPlan: activeStudyPlanData
-      ? {
-          completedTasks: activeStudyPlanData.completedTasks ?? 0,
-          remainingMinutes: activeStudyPlanData.remainingMinutes ?? 0,
-          title: activeStudyPlanData.title ?? "",
-          totalTasks: activeStudyPlanData.totalTasks ?? 0,
-        }
-      : null,
-    canShowExpansionSystems: shouldShowExpansionSystems,
-    comebackMessage: comebackData?.isComeback
-      ? (comebackData.message ?? null)
-      : null,
-    nextBestAction,
-    primaryRecommendation: primaryRecommendation
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const reasonState = buildHomeReturnReasonState({
+      activeStudyPlan: activeStudyPlanData
+        ? {
+            completedTasks: activeStudyPlanData.completedTasks ?? 0,
+            remainingMinutes: activeStudyPlanData.remainingMinutes ?? 0,
+            title: activeStudyPlanData.title ?? "",
+            totalTasks: activeStudyPlanData.totalTasks ?? 0,
+          }
+        : null,
+      canShowExpansionSystems: shouldShowExpansionSystems,
+      comebackMessage: comebackData?.isComeback
+        ? (comebackData.message ?? null)
+        : null,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      nextBestAction: nextBestAction as any,
+      primaryRecommendation: primaryRecommendation
       ? {
           id: primaryRecommendation.id,
           reasoning: primaryRecommendation.reasoning ?? "",

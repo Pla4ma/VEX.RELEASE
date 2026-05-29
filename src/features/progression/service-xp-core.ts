@@ -27,10 +27,10 @@ export {
 
 const ZERO_BREAKDOWN = {
   base: 0,
-  streakBonus: 0,
-  squadBonus: 0,
-  bossBonus: 0,
-  comebackBonus: 0,
+  momentumBonus: 0,
+  collaborationBonus: 0,
+  blockerResolvedBonus: 0,
+  recoveryBonus: 0,
   perfectBonus: 0,
   total: 0,
 };

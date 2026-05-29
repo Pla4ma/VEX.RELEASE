@@ -92,7 +92,7 @@ export function getModeReturnHook(
     student:
       "Your review queue updated. Tomorrow's study block already knows what to cover.",
     game_like:
-      "Your run data saved. Tomorrow's encounter starts from where you left off.",
+      "Your momentum data saved. Tomorrow's clean start builds on today's run.",
     deep_creative:
       "Your handoff note is the next move. Tomorrow picks up exactly here.",
     minimal_normal:

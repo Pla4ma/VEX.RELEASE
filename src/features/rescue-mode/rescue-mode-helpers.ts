@@ -15,6 +15,37 @@ export function durationForLane(lane: Lane): number {
   return 5 * 60;
 }
 
+/**
+ * Behavior-adaptive rescue duration.
+ *
+ * If the user has shown a pattern (repeated app-opened-no-start, repeated
+ * pauses, recent short sessions), the rescue duration is reduced further to
+ * match their demonstrated capacity.
+ */
+export function behaviorAdjustedDuration(
+  baseDurationSeconds: number,
+  behaviorSignals: {
+    openedAppNoStart: boolean;
+    hasRepeatedPauses: boolean;
+    avgRecentDurationSeconds: number;
+  },
+): number {
+  let adjusted = baseDurationSeconds;
+  if (behaviorSignals.openedAppNoStart) {
+    adjusted = Math.min(adjusted, 5 * 60);
+  }
+  if (behaviorSignals.hasRepeatedPauses) {
+    adjusted = Math.min(adjusted, 7 * 60);
+  }
+  if (
+    behaviorSignals.avgRecentDurationSeconds > 0 &&
+    behaviorSignals.avgRecentDurationSeconds < adjusted
+  ) {
+    adjusted = behaviorSignals.avgRecentDurationSeconds;
+  }
+  return Math.max(3 * 60, adjusted);
+}
+
 export function modeFor(lane: Lane): SessionMode {
   if (lane === "student") return SessionMode.STUDY;
   if (lane === "deep_creative") return SessionMode.CREATIVE;

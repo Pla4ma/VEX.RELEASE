@@ -87,9 +87,9 @@ export function EmptyFeed({
   return (
     <EmptyState
       icon="👹"
-      title="The Arena Awaits"
-      message={`${bossName} is waiting. Your squad has no sessions to show yet. Change that.`}
-      actionLabel="Start a Session"
+      title="No sessions yet"
+      message="Your squad doesn't have any sessions to show yet. Start one to lead the way."
+      actionLabel="Start a session"
       onAction={onStartSession}
     />
   );

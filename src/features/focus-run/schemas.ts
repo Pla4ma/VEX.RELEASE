@@ -6,12 +6,12 @@ import { z } from "zod";
 
 export const FocusRunEventTypeSchema = z.enum([
   "run_started",
-  "encounter_completed",
-  "rescue_win",
+  "run_milestone",
+  "recovery_win",
   "clean_start",
-  "abandoned_encounter",
+  "abandoned_run",
   "reflection_upgrade",
-  "boss_revealed",
+  "blocker_detected",
   "run_completed",
 ]);
 
@@ -21,15 +21,15 @@ export const FocusRunStatusSchema = z.enum([
   "abandoned",
 ]);
 
-export const BossArchetypeSchema = z.enum([
-  "doomscroll_hydra",
-  "late_start_shade",
-  "fog_of_unclear_work",
-  "perfectionism_wall",
-  "switch_swarm",
-  "deadline_wraith",
-  "cold_start_shadow",
-  "task_avoidance",
+export const BlockerArchetypeSchema = z.enum([
+  "distraction_loop",
+  "delayed_start",
+  "unclear_scope",
+  "over_prep",
+  "context_switching",
+  "deadline_pressure",
+  "blank_start",
+  "avoidant_pattern",
 ]);
 
 export const FocusRunGradeSchema = z.enum(["S", "A", "B", "C", "D"]);
@@ -53,9 +53,9 @@ export const FocusRunSchema = z
     userId: z.string().min(1),
     weekStartsAt: z.number().int().min(0),
     status: FocusRunStatusSchema,
-    bossId: z.string().min(1).nullable(),
-    modifiers: z.array(z.string().min(1)),
-    completedEncounters: z.number().int().min(0),
+    blockerId: z.string().min(1).nullable(),
+    focusModifiers: z.array(z.string().min(1)),
+    completedRuns: z.number().int().min(0),
     cleanStarts: z.number().int().min(0),
     recoveryWins: z.number().int().min(0),
     reflectionUpgrades: z.number().int().min(0),
@@ -65,21 +65,21 @@ export const FocusRunSchema = z
   .strict();
 
 // ---------------------------------------------------------------------------
-// Personal Boss
+// Personal Blocker (formerly Personal Boss)
 // ---------------------------------------------------------------------------
 
-export const PersonalBossEvidenceSchema = z
+export const PersonalBlockerEvidenceSchema = z
   .object({
-    archetype: BossArchetypeSchema,
+    archetype: BlockerArchetypeSchema,
     signals: z.array(z.string().min(1)),
     firstObservedDay: z.number().int().min(0),
     lastObservedDay: z.number().int().min(0),
   })
   .strict();
 
-export const PersonalBossSchema = z
+export const PersonalBlockerSchema = z
   .object({
-    archetype: BossArchetypeSchema,
+    archetype: BlockerArchetypeSchema,
     name: z.string().min(1),
     evidenceCount: z.number().int().min(0),
     isTeaser: z.boolean(),
@@ -98,10 +98,10 @@ export const FocusRunDisplaySchema = z
     laneAllowed: z.boolean(),
     title: z.string().min(1),
     body: z.string().min(1),
-    boss: PersonalBossSchema,
+    blocker: PersonalBlockerSchema,
     nextAction: z.string().min(1),
-    modifiers: z.array(z.string().min(1)),
-    completedEncounters: z.number().int().min(0),
+    focusModifiers: z.array(z.string().min(1)),
+    completedRuns: z.number().int().min(0),
     cleanStarts: z.number().int().min(0),
     recoveryWins: z.number().int().min(0),
     reflectionUpgrades: z.number().int().min(0),
@@ -114,12 +114,12 @@ export const FocusRunDisplaySchema = z
 // Inferred types
 // ---------------------------------------------------------------------------
 
-export type BossArchetype = z.infer<typeof BossArchetypeSchema>;
+export type BlockerArchetype = z.infer<typeof BlockerArchetypeSchema>;
 export type FocusRun = z.infer<typeof FocusRunSchema>;
 export type FocusRunDisplay = z.infer<typeof FocusRunDisplaySchema>;
 export type FocusRunEvent = z.infer<typeof FocusRunEventSchema>;
 export type FocusRunEventType = z.infer<typeof FocusRunEventTypeSchema>;
 export type FocusRunStatus = z.infer<typeof FocusRunStatusSchema>;
 export type FocusRunGrade = z.infer<typeof FocusRunGradeSchema>;
-export type PersonalBoss = z.infer<typeof PersonalBossSchema>;
-export type PersonalBossEvidence = z.infer<typeof PersonalBossEvidenceSchema>;
+export type PersonalBlocker = z.infer<typeof PersonalBlockerSchema>;
+export type PersonalBlockerEvidence = z.infer<typeof PersonalBlockerEvidenceSchema>;

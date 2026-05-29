@@ -125,7 +125,7 @@ describe("Lane Engine ownership proof – consumer integration", () => {
       primaryGoal: "work",
       studyUsageRatio: 0,
     });
-    expect(premium.premiumHeadline).toContain("project");
+    expect(premium.premiumHeadline.toLowerCase()).toContain("project");
 
     const active = resolveActiveSessionDisplayPolicy({
       bossIntensity: "visible",

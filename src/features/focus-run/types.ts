@@ -5,6 +5,7 @@ export type {
   FocusRunEventType,
   FocusRunGrade,
   FocusRunStatus,
-  PersonalBoss,
-  PersonalBossEvidence,
+  PersonalBlocker,
+  PersonalBlockerEvidence,
+  BlockerArchetype,
 } from "./schemas";

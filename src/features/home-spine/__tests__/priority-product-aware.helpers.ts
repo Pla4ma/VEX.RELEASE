@@ -25,7 +25,7 @@ function makeAccess(
   };
 }
 
-export const mockFeatureAccess: FeatureAccessMap = {
+export const mockFeatureAccess = {
   boss_tab: makeAccess({ key: "boss_tab", isUnlocked: true }),
   challenges: makeAccess({ key: "challenges", isUnlocked: true }),
   content_study: makeAccess({ key: "content_study", isUnlocked: true }),
@@ -33,9 +33,7 @@ export const mockFeatureAccess: FeatureAccessMap = {
   ai_coach_advanced: makeAccess({ key: "ai_coach_advanced", isUnlocked: true }),
   battle_pass: makeAccess({ key: "battle_pass", isUnlocked: false, isVisible: false }),
   companion_detail: makeAccess({ key: "companion_detail", isUnlocked: true }),
-  streaks_advanced: makeAccess({ key: "streaks_advanced", isUnlocked: true }),
   squads: makeAccess({ key: "squads", isUnlocked: false, isVisible: false }),
-  economy: makeAccess({ key: "economy_basic", isUnlocked: false, isVisible: false }),
   coach_memory: makeAccess({ key: "memory_console", isUnlocked: true }),
   products: makeAccess({ key: "achievements", isUnlocked: true }),
   session_advanced: makeAccess({ key: "seasonal_features", isUnlocked: true }),

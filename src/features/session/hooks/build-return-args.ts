@@ -27,12 +27,6 @@ export interface BuildReturnArgs {
     isLoading: boolean;
     isFetching: boolean;
   };
-  activeSessionQuery: {
-    data: SessionState | null | undefined;
-    error: Error | null;
-    isLoading: boolean;
-    isFetching: boolean;
-  };
   startSessionMutation: {
     isPending: boolean;
     mutate: (config: SessionConfig) => void;

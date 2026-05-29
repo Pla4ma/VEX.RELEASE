@@ -63,9 +63,9 @@ export const DAY6_COPY: JourneyDayCopy = {
   },
   premiumTrigger: { day: 6, trigger: "none", copyKey: "none" },
   returnReason: {
-    student: "Your first weekly study intelligence is almost ready. Return tomorrow.",
-    game_like: "Your first weekly run intelligence is almost ready. Return tomorrow.",
-    deep_creative: "Your first weekly project intelligence is almost ready. Return tomorrow.",
-    minimal_normal: "Your first weekly intelligence is almost ready. Return tomorrow.",
+    student: "VEX knows what I need to study or review next.",
+    game_like: "VEX helps me build momentum and understand what blocks me.",
+    deep_creative: "VEX remembers where I left off.",
+    minimal_normal: "VEX gives me one useful action without noise.",
   },
 };

@@ -118,13 +118,13 @@ export const ActiveSessionControlDock: React.FC<
         <Pressable
           onPress={onPauseResume}
           accessibilityLabel={
-            isPaused ? "Resume focus timer" : "Pause focus timer"
+            isPaused ? "Resume session" : "Pause session"
           }
           accessibilityRole="button"
           accessibilityHint={
             isPaused
-              ? "Restarts the active focus timer"
-              : "Pauses the active focus timer"
+              ? "Restarts the active session"
+              : "Pauses the active session"
           }
         >
           <Box

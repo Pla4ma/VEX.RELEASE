@@ -14,6 +14,7 @@ import {
   REFLECTIONS,
   situationFor,
   displayFor,
+  buildCompletionLearning,
   buildMemoryCandidates,
   buildProgressProof,
   buildUserFacingSummary,
@@ -109,5 +110,11 @@ export function buildCompletionPersonalizationResult(input: {
     unlockDecision: unlockFor(resolvedLane, hiddenFeatureKeys),
     nextAction,
     userFacingSummary: buildUserFacingSummary(resolvedLane, situation, display),
+    completionLearning: buildCompletionLearning(
+      personalizationInput,
+      situation,
+      resolvedLane,
+      streakDays,
+    ),
   };
 }

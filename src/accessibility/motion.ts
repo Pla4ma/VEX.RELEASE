@@ -13,8 +13,7 @@ export function getAnimationConfig(reducedMotion: boolean): AnimationConfig {
   return {
     duration: reducedMotion ? 0 : 300,
     easing: "ease-in-out",
-    reducedMotion: reducedMotion,
-    useNativeDriver: true,
+    useReducedMotion: reducedMotion,
   };
 }
 

@@ -1,4 +1,8 @@
 import { z } from "zod";
+import { XpSourceSchema } from "./schemas-xp";
+
+export { XpSourceSchema };
+
 export const ProgressionSchema = z
   .object({
     id: z.string().uuid(),
@@ -22,34 +26,17 @@ export const ProgressionSummarySchema = z
     progressPercent: z.number().min(0).max(100),
   })
   .strict();
-export const XpSourceSchema = z.enum([
-  "SESSION_COMPLETE",
-  "STREAK_BONUS",
-  "BOSS_BONUS",
-  "SQUAD_BONUS",
-  "PERFECT_SESSION_BONUS",
-  "COMEBACK_BONUS",
-  "DAILY_LOGIN",
-  "ACHIEVEMENT_UNLOCK",
-  "ACHIEVEMENT_BONUS",
-  "CHALLENGE_BONUS",
-  "SOCIAL_BONUS",
-  "EVENT_BONUS",
-  "BOOST_BONUS",
-  "SEASON_BONUS",
-  "AI_COACH_BONUS",
-  "LEVEL_UP_REWARD",
-  "MILESTONE_REWARD",
-  "PROMOTIONAL",
-  "EVENT_PARTICIPATION",
-  "AI_COACH_GOAL",
-]);
 export const XpMetadataSchema = z
   .object({
+    momentumDays: z.number().optional(),
+    collaborationMultiplier: z.number().optional(),
+    blockerResolved: z.boolean().optional(),
+    perfectSession: z.boolean().optional(),
+    recoveryActive: z.boolean().optional(),
+    // Legacy fields — preserved for DB compatibility
     streakDays: z.number().optional(),
     squadMultiplier: z.number().optional(),
     bossActive: z.boolean().optional(),
-    perfectSession: z.boolean().optional(),
     comebackActive: z.boolean().optional(),
   })
   .catchall(z.unknown())
@@ -74,20 +61,28 @@ export const LevelUpRecordSchema = z
 export const XpBreakdownSchema = z
   .object({
     base: z.number().min(0),
-    streakBonus: z.number().min(0),
-    squadBonus: z.number().min(0),
-    bossBonus: z.number().min(0),
-    comebackBonus: z.number().min(0),
+    momentumBonus: z.number().min(0),
+    collaborationBonus: z.number().min(0),
+    blockerResolvedBonus: z.number().min(0),
+    recoveryBonus: z.number().min(0),
     perfectBonus: z.number().min(0),
     total: z.number().min(0),
+    // Legacy accessors — mapped from new fields for DB compatibility
+    streakBonus: z.number().min(0).optional(),
+    squadBonus: z.number().min(0).optional(),
+    bossBonus: z.number().min(0).optional(),
+    comebackBonus: z.number().min(0).optional(),
   })
   .strict();
 export const UnlockTypeSchema = z.enum([
   "FEATURE",
-  "BOSS",
+  "BLOCKER_INSIGHT",
   "SHOP_ITEM",
   "COSMETIC",
   "TITLE",
+  "MODE_ADAPTATION",
+  // Legacy — preserved for DB compatibility
+  "BOSS",
   "GAME_MODE",
 ]);
 export const UnlockSchema = z
@@ -108,12 +103,15 @@ export const MilestoneTypeSchema = z.enum([
   "DAYS_ACTIVE",
 ]);
 export const MilestoneRewardTypeSchema = z.enum([
-  "XP",
-  "COINS",
-  "GEMS",
+  "PROGRESS_PROOF",
+  "INSIGHT",
   "ITEM",
   "TITLE",
   "COSMETIC",
+  // Legacy economy rewards — deprecated, kept for DB compatibility
+  "XP",
+  "COINS",
+  "GEMS",
 ]);
 export const MilestoneSchema = z
   .object({

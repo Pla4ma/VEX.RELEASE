@@ -12,7 +12,7 @@ export function NoMessagesEmptyState({
       icon="✉️"
       title="No Messages Yet"
       message="Your coach will send personalized messages here based on your activity and progress."
-      actionLabel="Start a Session"
+      actionLabel="Start a session"
       onAction={onBrowseChallenges}
       secondaryActionLabel="Browse Challenges"
       onSecondaryAction={onBrowseChallenges}

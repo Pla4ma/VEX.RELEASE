@@ -32,6 +32,11 @@ export {
   shouldOfferRescue,
   shouldShowPremiumAfterValue,
   getPremiumCopy,
+  getPremiumHeadline,
+  getRescueCopy,
+  getNotificationCopy,
+  getModeReturnHook,
+  getModeReturnReason,
 } from "./retention-guards";
 
 export {

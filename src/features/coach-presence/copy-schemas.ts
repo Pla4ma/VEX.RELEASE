@@ -116,6 +116,7 @@ const CoachPresenceMessageOutputSchema = z
       "pattern",
       "intervention",
     ]),
+    behaviorAdaptation: z.string().max(120).nullable(),
   })
   .strict();
 

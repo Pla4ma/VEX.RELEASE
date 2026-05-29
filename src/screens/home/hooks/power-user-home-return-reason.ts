@@ -49,7 +49,8 @@ export function buildReturnReason(params: ReturnReasonParams): HomeReturnReason 
     comebackMessage: comebackData?.isComeback
       ? ((comebackData.message as string) ?? null)
       : null,
-    nextBestAction,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    nextBestAction: nextBestAction as any,
     primaryRecommendation: primaryRecommendation
       ? {
           id: primaryRecommendation.id,

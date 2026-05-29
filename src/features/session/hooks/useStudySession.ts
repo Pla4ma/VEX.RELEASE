@@ -8,6 +8,7 @@
  */
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import * as Sentry from "@sentry/react-native";
 import { useState } from "react";
 import { createDebugger } from "../../../utils/debug";
 import { getSessionOrchestrator } from "../../../session/orchestrator-factory";
@@ -38,7 +39,7 @@ export function useStudySession() {
   const currentSessionQuery = useQuery({
     queryKey: studySessionKeys.current(),
     queryFn: () => orchestrator.getSession(),
-    refetchInterval: 1000,
+    staleTime: Infinity,
   });
 
   const sessionHistoryQuery = useQuery({
@@ -53,12 +54,6 @@ export function useStudySession() {
     refetchInterval: 60000,
   });
 
-  const activeSessionQuery = useQuery({
-    queryKey: studySessionKeys.active(),
-    queryFn: () => orchestrator.getActiveSession(),
-    refetchInterval: 1000,
-  });
-
   const startSessionMutation = useMutation({
     mutationFn: async (config: SessionConfig) => {
       await orchestrator.createSession(config);
@@ -67,14 +62,15 @@ export function useStudySession() {
     onSuccess: (sessionState) => {
       debug.info("Study session started", { sessionId: sessionState.id });
       queryClient.invalidateQueries({ queryKey: studySessionKeys.current() });
-      queryClient.invalidateQueries({ queryKey: studySessionKeys.active() });
-
       capture(SessionEvents.SESSION_STARTED, {
         session_id: sessionState.id,
         user_id: sessionState.userId,
         mode: getSessionMode(sessionState),
         duration_seconds: getExpectedDuration(sessionState),
       });
+    },
+    onError: (error) => {
+      Sentry.captureException(error, { tags: { feature: "session-start" } });
     },
   });
 
@@ -83,14 +79,15 @@ export function useStudySession() {
     onSuccess: (sessionState) => {
       debug.info("Study session paused", { sessionId: sessionState.id });
       queryClient.invalidateQueries({ queryKey: studySessionKeys.current() });
-      queryClient.invalidateQueries({ queryKey: studySessionKeys.active() });
-
       capture(SessionEvents.SESSION_PAUSED, {
         session_id: sessionState.id,
         user_id: sessionState.userId,
         duration_seconds: sessionState.elapsedTime,
         progress_percentage: sessionState.completionPercentage,
       });
+    },
+    onError: (error) => {
+      Sentry.captureException(error, { tags: { feature: "session-pause" } });
     },
   });
 
@@ -99,14 +96,15 @@ export function useStudySession() {
     onSuccess: (sessionState) => {
       debug.info("Study session resumed", { sessionId: sessionState.id });
       queryClient.invalidateQueries({ queryKey: studySessionKeys.current() });
-      queryClient.invalidateQueries({ queryKey: studySessionKeys.active() });
-
       capture(SessionEvents.SESSION_RESUMED, {
         session_id: sessionState.id,
         user_id: sessionState.userId,
         duration_seconds: sessionState.elapsedTime,
         progress_percentage: sessionState.completionPercentage,
       });
+    },
+    onError: (error) => {
+      Sentry.captureException(error, { tags: { feature: "session-resume" } });
     },
   });
 
@@ -115,7 +113,6 @@ export function useStudySession() {
     onSuccess: async (sessionState) => {
       debug.info("Study session ended", { sessionId: sessionState.id });
       queryClient.invalidateQueries({ queryKey: studySessionKeys.current() });
-      queryClient.invalidateQueries({ queryKey: studySessionKeys.active() });
       queryClient.invalidateQueries({ queryKey: studySessionKeys.history() });
       queryClient.invalidateQueries({ queryKey: studySessionKeys.stats() });
 
@@ -138,6 +135,9 @@ export function useStudySession() {
         });
       }
     },
+    onError: (error) => {
+      Sentry.captureException(error, { tags: { feature: "session-end" } });
+    },
   });
 
   return buildReturn({
@@ -149,7 +149,6 @@ export function useStudySession() {
     currentSessionQuery,
     sessionHistoryQuery,
     sessionStatsQuery,
-    activeSessionQuery,
     startSessionMutation,
     pauseSessionMutation,
     resumeSessionMutation,
@@ -169,12 +168,12 @@ async function handleSessionRewards(sessionState: SessionState): Promise<void> {
       },
     });
   } catch (error) {
-    debug.error("Failed to grant XP:", error as Error);
+    Sentry.captureException(error, { tags: { feature: "xp-grant" } });
   }
 
   try {
     await streakService.updateStreak();
   } catch (error) {
-    debug.error("Failed to update streak:", error as Error);
+    Sentry.captureException(error, { tags: { feature: "streak-update" } });
   }
 }

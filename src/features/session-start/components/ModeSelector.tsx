@@ -22,31 +22,31 @@ type ModeCard = {
 
 const MODE_CARDS: ModeCard[] = [
   {
-    description: "Boss 1.5x - No mercy for distractions",
+    description: "High intensity — for hard, uninterrupted work",
     icon: "BRAIN",
     mode: SessionMode.DEEP_WORK,
     name: "Deep Work",
   },
   {
-    description: "Perfect for streak maintenance",
+    description: "Steady, low-pressure — protect a single thread",
     icon: "LEAF",
     mode: SessionMode.LIGHT_FOCUS,
     name: "Light Focus",
   },
   {
-    description: "Study plan linked - earn quiz bonuses",
+    description: "Named study blocks with recall and review built in",
     icon: "BOOK",
     mode: SessionMode.STUDY,
     name: "Study",
   },
   {
-    description: "Log your mood. Express freely.",
+    description: "Open-ended creative flow — no pressure, no timers",
     icon: "PALETTE",
     mode: SessionMode.CREATIVE,
     name: "Creative",
   },
   {
-    description: "25-min blocks. Chain them for increasing XP.",
+    description: "Short blocks — chain them for momentum",
     icon: "BOLT",
     mode: SessionMode.SPRINT,
     name: "Sprint",
@@ -154,11 +154,12 @@ export function ModeSelector({
                     </Text>
                   </Box>
                   <Box alignItems="flex-end">
-                    <Text variant="caption" color="primary.500">
-                      {`${config.xpMultiplier.toFixed(2)}x XP`}
-                    </Text>
                     <Text variant="caption" color="text.secondary">
-                      {`${config.bossDamageMultiplier.toFixed(2)}x boss`}
+                      {config.minimumQualifyingDurationSeconds >= 45 * 60
+                        ? "Full session"
+                        : config.minimumQualifyingDurationSeconds >= 20 * 60
+                          ? "Standard"
+                          : "Short block"}
                     </Text>
                   </Box>
                 </Box>

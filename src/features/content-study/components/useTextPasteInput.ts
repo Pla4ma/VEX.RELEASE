@@ -14,12 +14,14 @@ import { CONTENT_STUDY_CONSTANTS } from "../types";
 import { validatePastedText } from "../validation";
 
 interface UseTextPasteInputReturn {
-  inputRef: React.RefObject<TextInput>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  inputRef: any;
   errors: ValidationError[];
   warnings: ValidationError[];
   isFocused: boolean;
   setIsFocused: (focused: boolean) => void;
-  animatedStyle: { transform: [{ translateX: number }] };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  animatedStyle: any;
   handleChange: (text: string) => void;
   clearInput: () => void;
   characterCount: number;

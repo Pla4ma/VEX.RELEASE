@@ -35,13 +35,18 @@ export interface Achievement {
   unlockCondition: AchievementCondition;
   pointValue: number;
   reward: {
-    coins?: number;
-    xp?: number;
-    gems?: number;
+    insight?: string;
+    proof?: string;
     badge?: string;
     title?: string;
     cosmetic?: string;
     itemId?: string;
+    /** @deprecated Use insight/proof instead */
+    coins?: number;
+    /** @deprecated Use insight/proof instead */
+    xp?: number;
+    /** @deprecated */
+    gems?: number;
   };
   shareText: string;
   unlockedAt?: number;
@@ -66,7 +71,7 @@ export const DEDICATION_ACHIEVEMENTS: Achievement[] = [
   {
     id: "achievement-first-session",
     title: "First Steps",
-    description: "Complete your first focus session",
+    description: "VEX recorded your first focus session",
     category: "SESSION",
     rarity: "COMMON",
     icon: "🌱",
@@ -77,15 +82,15 @@ export const DEDICATION_ACHIEVEMENTS: Achievement[] = [
       target: 1,
       comparator: "GREATER_THAN",
     },
-    reward: { coins: 50, xp: 100 },
+    reward: { insight: "First pattern recorded" },
     pointValue: 10,
     shareText: "I just started my focus journey! 🌱",
     unlockRate: 0.95,
   },
   {
     id: "achievement-100-sessions",
-    title: "Centurion",
-    description: "Complete 100 focus sessions",
+    title: "100 Milestone",
+    description: "VEX has learned from 100 of your sessions",
     category: "SESSION",
     rarity: "UNCOMMON",
     icon: "💯",
@@ -96,15 +101,15 @@ export const DEDICATION_ACHIEVEMENTS: Achievement[] = [
       target: 100,
       comparator: "CUMULATIVE",
     },
-    reward: { coins: 200, xp: 500, badge: "Centurion" },
+    reward: { insight: "Strong momentum pattern detected", badge: "Centurion" },
     pointValue: 25,
-    shareText: "100 sessions complete! Building momentum 💯",
+    shareText: "100 sessions — VEX knows my rhythm 💯",
     unlockRate: 0.45,
   },
   {
     id: "achievement-1000-sessions",
-    title: "Session Master",
-    description: "Complete 1,000 focus sessions",
+    title: "Depth Milestone",
+    description: "VEX has deep understanding from 1,000 sessions",
     category: "SESSION",
     rarity: "RARE",
     icon: "🏆",
@@ -116,13 +121,12 @@ export const DEDICATION_ACHIEVEMENTS: Achievement[] = [
       comparator: "CUMULATIVE",
     },
     reward: {
-      coins: 500,
-      xp: 1500,
+      insight: "VEX can predict your optimal focus windows",
       badge: "Session Master",
       title: "The Focused",
     },
     pointValue: 50,
-    shareText: "1000 sessions! The grind never stops 🏆",
+    shareText: "1,000 sessions! VEX knows me deeply 🏆",
     unlockRate: 0.12,
   },
 ];

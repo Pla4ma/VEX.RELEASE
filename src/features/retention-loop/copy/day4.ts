@@ -3,7 +3,7 @@ import type { JourneyDayCopy } from "../schemas";
 export const DAY4_COPY: JourneyDayCopy = {
   homeMessage: {
     student: "Need a tiny start today?",
-    game_like: "Need a recovery encounter?",
+    game_like: "Need a recovery run?",
     deep_creative: "Need a re-entry path?",
     minimal_normal: "Need a tiny start?",
   },
@@ -22,7 +22,7 @@ export const DAY4_COPY: JourneyDayCopy = {
     game_like: {
       durationMinutes: 10,
       type: "RECOVERY",
-      taskPrompt: "Recovery encounter: survive 10 clean minutes.",
+      taskPrompt: "Recovery run: 10 clean minutes. No targets, just move.",
     },
     deep_creative: {
       durationMinutes: 7,
@@ -50,22 +50,22 @@ export const DAY4_COPY: JourneyDayCopy = {
   notificationCopy: {
     title: {
       student: "Need a tiny start?",
-      game_like: "Need a recovery encounter?",
+    game_like: "Need a recovery run?",
       deep_creative: "Need a re-entry?",
       minimal_normal: "Need a tiny start?",
     },
     body: {
       student: "8-minute review. Just one section. No pressure.",
-      game_like: "10-minute recovery encounter. Just move.",
+      game_like: "10-minute recovery run. Just move.",
       deep_creative: "7 minutes. Just find the next move.",
       minimal_normal: "5-minute block. That is enough.",
     },
   },
   premiumTrigger: { day: 4, trigger: "none", copyKey: "none" },
   returnReason: {
-    student: "VEX respects that some days are harder. Return when ready.",
-    game_like: "Recovery is part of the run. VEX will be here when you return.",
-    deep_creative: "Creative work is not always linear. VEX holds your thread.",
-    minimal_normal: "Clean means not forcing it. VEX will be here when you return.",
+    student: "VEX knows what I need to study or review next.",
+    game_like: "VEX helps me build momentum and understand what blocks me.",
+    deep_creative: "VEX remembers where I left off.",
+    minimal_normal: "VEX gives me one useful action without noise.",
   },
 };

@@ -91,6 +91,16 @@ export function buildWhatGotInWay(input: WeeklyInsightInput): InsightFinding[] {
       }),
     );
   }
+  // Behavior-based: repeated short sessions < 15 min
+  if (input.avgDurationMinutes < 15 && input.completedSessions >= 3) {
+    findings.push(
+      InsightFindingSchema.parse({
+        category: "blocked",
+        observation: `Average session was ${Math.round(input.avgDurationMinutes)} minutes — sessions under 15 minutes may limit depth.`,
+        confidence: input.completedSessions >= 5 ? "medium" : "weak",
+      }),
+    );
+  }
   return findings.slice(0, 3);
 }
 
@@ -116,19 +126,22 @@ export function buildAdjustment(input: WeeklyInsightInput): string {
     if (input.weakTopics && input.weakTopics.length > 0) {
       return `Try reviewing "${input.weakTopics[0]}" in your next short block before tackling new material.`;
     }
-    if (input.avgDurationMinutes < 15) {
-      return "Try one 20-minute study block this week — sessions under 15 minutes may limit depth.";
+    if (input.avgDurationMinutes < 15 && input.completedSessions >= 3) {
+      return "Your sessions averaged under 15 minutes this week. Try one 20-minute study block — sessions under 15 may limit depth.";
     }
     return "Pick one topic per session. Naming the topic first correlates with cleaner starts.";
   }
   if (lane === "game_like") {
     if (input.blockerPattern) {
-      return `"${input.blockerPattern}" appears to be a pattern. Consider a deliberate recovery encounter to break it.`;
+      return `"${input.blockerPattern}" appears to be a pattern. Consider a deliberate recovery run to break it.`;
     }
     if (input.recoveryWins && input.recoveryWins >= 1) {
-      return "Recovery encounters work for you. Keep using them when runs feel heavy.";
+      return "Recovery runs work for you. Keep using them when momentum feels heavy.";
     }
-    return "A short warm-up before your main encounter may help clean starts.";
+    if (input.avgDurationMinutes < 20 && input.completedSessions >= 3) {
+      return "Your runs average under 20 minutes. One focused sprint might build momentum.";
+    }
+    return "A short warm-up before your main run may help clean starts.";
   }
   if (lane === "deep_creative") {
     if (input.staleThreadDays && input.staleThreadDays >= 2) {
@@ -140,6 +153,9 @@ export function buildAdjustment(input: WeeklyInsightInput): string {
     if (input.nudgeDismissals && input.nudgeDismissals >= 2) {
       return "VEX will stay quieter this week. One block per day, no extra nudges.";
     }
+    if (input.avgDurationMinutes < 20 && input.completedSessions >= 3) {
+      return "Your sessions averaged under 20 minutes this week. That rhythm might work for you — keep it consistent.";
+    }
     return `Your best window seemed to be ${input.bestTimeWindow ?? "when you started"}. Try the same window this week.`;
   }
   return "Keep going. VEX needs more data to suggest adjustments.";
@@ -150,7 +166,7 @@ export function buildPremiumDeeperInsight(input: WeeklyInsightInput): string | u
     student:
       "Unlock topic-level gap analysis: see exactly which concepts are weak and get an adaptive review schedule that closes them before your next exam.",
     game_like:
-      "Unlock encounter-level analytics: see your blocker patterns, optimal warm-up timing, and recovery win rate across every run this week.",
+      "Unlock run-level analytics: see your blocker patterns, optimal warm-up timing, and recovery win rate across every run this week.",
     deep_creative:
       "Unlock project thread analytics: see your next-move prediction accuracy, stale-thread risk timeline, and deep work continuity score.",
     minimal_normal:

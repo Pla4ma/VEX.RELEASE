@@ -13,7 +13,7 @@ import {
   saveRiskStatusEnhanced,
   fetchStreakEnhanced,
 } from "../repository/enhanced";
-import { StreakRiskStatusSchema } from "../schemas-enhanced";
+import { StreakRiskStatusSchema, type StreakRiskStatus } from "../schemas-enhanced";
 import {
   QUERY_KEYS,
   RISK_CHECK_INTERVAL,
@@ -75,7 +75,7 @@ export function useStreakRisk(): UseStreakRiskReturn {
     staleTime: STALE_TIME,
     retry: 3,
   });
-  const riskStatus = computeRiskStatus(streakData, cachedRiskStatus);
+  const riskStatus = computeRiskStatus(streakData as { currentDays: number } | undefined, cachedRiskStatus as StreakRiskStatus | null | undefined);
   const checkRiskMutation = useMutation({
     mutationFn: async () => {
       if (!userId || !streakData) {

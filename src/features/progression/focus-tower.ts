@@ -16,17 +16,20 @@ function calculateTotalBonuses(
 ): FocusTower["totalBonuses"] {
   const bonuses = { ...tower.totalBonuses };
   switch (newBlock.bonusType) {
+    case "PROGRESS_ACCELERATION":
     case "XP_BOOST":
-      bonuses.xpBoostPercent += newBlock.bonusValue;
+      bonuses.progressAcceleration += newBlock.bonusValue;
       break;
+    case "MOMENTUM_RESISTANCE":
     case "STREAK_RESISTANCE":
-      bonuses.streakResistanceHours += newBlock.bonusValue;
+      bonuses.momentumResistanceHours += newBlock.bonusValue;
       break;
     case "ENERGY_REGEN":
       bonuses.energyRegenBonus += newBlock.bonusValue;
       break;
+    case "FOCUS_RESILIENCE":
     case "BOSS_DAMAGE":
-      bonuses.bossDamageBonus += newBlock.bonusValue;
+      bonuses.focusResilienceBonus += newBlock.bonusValue;
       break;
     case "FOCUS_DURATION":
       bonuses.focusDurationBonus += newBlock.bonusValue;
@@ -129,14 +132,14 @@ export function getTowerDisplay(tower: FocusTower): {
     ((tower.totalBlocks % nextMilestone) / nextMilestone) * 100,
   );
   const bonuses: string[] = [];
-  if (tower.totalBonuses.xpBoostPercent > 0) {
-    bonuses.push(`+${tower.totalBonuses.xpBoostPercent}% XP`);
+  if (tower.totalBonuses.progressAcceleration > 0) {
+    bonuses.push(`+${tower.totalBonuses.progressAcceleration}% faster progress`);
   }
-  if (tower.totalBonuses.streakResistanceHours > 0) {
-    bonuses.push(`+${tower.totalBonuses.streakResistanceHours}h streak buffer`);
+  if (tower.totalBonuses.momentumResistanceHours > 0) {
+    bonuses.push(`+${tower.totalBonuses.momentumResistanceHours}h momentum buffer`);
   }
-  if (tower.totalBonuses.bossDamageBonus > 0) {
-    bonuses.push(`+${tower.totalBonuses.bossDamageBonus}% boss damage`);
+  if (tower.totalBonuses.focusResilienceBonus > 0) {
+    bonuses.push(`+${tower.totalBonuses.focusResilienceBonus}% focus resilience`);
   }
   return {
     height: `${Math.floor(tower.totalHeight)}m`,

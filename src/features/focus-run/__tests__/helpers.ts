@@ -1,15 +1,14 @@
-import { buildFocusRunDisplay, computeFocusRunGrade } from "../service";
-import { resolvePersonalBoss } from "../boss-resolution";
+import { buildFocusRunDisplay, computeFocusRunGrade, resolvePersonalBlocker } from "../service";
 import type { FocusRun, FocusRunGrade } from "../schemas";
 
 export const MOCK_RUN: FocusRun = {
-  bossId: null,
+  blockerId: null,
   cleanStarts: 0,
-  completedEncounters: 0,
+  completedRuns: 0,
   events: [],
   finalGrade: null,
+  focusModifiers: ["Phone away", "One tab"],
   id: "run-1",
-  modifiers: ["Phone away", "One tab"],
   recoveryWins: 0,
   reflectionUpgrades: 0,
   status: "active",
@@ -29,4 +28,4 @@ export function nowForDaysAgo(_daysAgo: number): number {
   return Date.now();
 }
 
-export { buildFocusRunDisplay, computeFocusRunGrade, resolvePersonalBoss };
+export { buildFocusRunDisplay, computeFocusRunGrade, resolvePersonalBlocker };

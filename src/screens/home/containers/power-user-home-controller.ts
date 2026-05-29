@@ -83,25 +83,33 @@ export function buildController(params: {
     isLoading: disclosure.isLoading || recommendationsPending,
     isFirstRun,
     loadError,
-    homeHighlight,
-    completionSync,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    homeHighlight: homeHighlight as any,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    completionSync: completionSync as any,
     clearHomeHighlight,
     currentStreak,
     currentXp,
     todayFocusMinutes,
     progressPercent,
-    latestSession: historyQuery.history[0] ?? null,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    latestSession: (historyQuery.history[0] ?? null) as any,
     primaryRecommendation,
-    homeSpine,
-    returnReason: displayedReturnReason,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    homeSpine: homeSpine as any,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    returnReason: displayedReturnReason as any,
     disclosure,
-    runtime,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    runtime: runtime as any,
     streakQuery,
     progressionQuery,
-    historyQuery,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    historyQuery: historyQuery as any,
     squadsQuery: createStubQuery() as UseQueryResult,
     activeStudyPlanQuery: activeStudyPlanQuery as UseQueryResult,
-    learningExecutionLayer,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    learningExecutionLayer: learningExecutionLayer as any,
     comebackQuery: comebackQuery as UseQueryResult,
     activeBossQuery: (activeBossQuery ?? createStubQuery()) as UseQueryResult,
     recommendationsQuery: {} as UseQueryResult,

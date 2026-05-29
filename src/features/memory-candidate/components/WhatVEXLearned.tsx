@@ -50,7 +50,7 @@ export function WhatVEXLearnedView({
           lineHeight: 20,
           textAlign: "center",
         },
-      }, "Not enough session data yet. Complete a few more sessions and VEX will share what it observes."),
+      }, "VEX is still learning. Complete one more session to make this sharper."),
     ]);
   }
 

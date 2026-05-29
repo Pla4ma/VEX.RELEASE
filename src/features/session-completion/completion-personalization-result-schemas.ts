@@ -64,6 +64,17 @@ const NextActionSchema = z
   })
   .strict();
 
+const CompletionLearningSchema = z
+  .object({
+    observation: z.string().min(1).max(200),
+    evidence: z.string().min(1).max(120),
+    confidence: z.enum(["weak", "medium", "strong"]),
+    recommendedAction: z.string().min(1).max(160).optional(),
+    isColdStart: z.boolean(),
+  })
+  .strict();
+export type CompletionLearning = z.infer<typeof CompletionLearningSchema>;
+
 export const CompletionPersonalizationResultSchema = z
   .object({
     laneProfile: LaneProfileSchema,
@@ -73,6 +84,7 @@ export const CompletionPersonalizationResultSchema = z
     unlockDecision: CompletionUnlockDecisionSchema,
     nextAction: NextActionSchema.nullable(),
     userFacingSummary: CompletionUserFacingSummarySchema,
+    completionLearning: CompletionLearningSchema.optional(),
   })
   .strict();
 export type CompletionPersonalizationResult = z.infer<

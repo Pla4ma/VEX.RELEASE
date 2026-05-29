@@ -10,8 +10,11 @@ import {
   buildUserFacingSummary,
   unlockFor,
 } from "./completion-text-grade";
+import { buildCompletionLearning } from "./completion-learning";
+import type { CompletionLearning } from "./completion-learning";
 
-export { buildProgressProof, buildUserFacingSummary, unlockFor };
+export { buildProgressProof, buildUserFacingSummary, unlockFor, buildCompletionLearning };
+export type { CompletionLearning };
 
 type CompletionSituation = "clean" | "partial" | "abandoned" | "comeback";
 
@@ -23,16 +26,16 @@ export const REFLECTIONS: Record<Lane, Record<CompletionSituation, string>> = {
     partial: "Where did flow break?",
   },
   game_like: {
-    abandoned: "What interrupted the encounter?",
+    abandoned: "What interrupted your run?",
     clean: "What kept the run clean?",
-    comeback: "How do we stabilize the run?",
-    partial: "What debuff hit this run?",
+    comeback: "How do you stabilize the run?",
+    partial: "What broke your momentum?",
   },
   minimal_normal: {
     abandoned: "What got in the way?",
-    clean: "Keep same setup next time?",
+    clean: "Keep this setup for next time?",
     comeback: "What is the next clean step?",
-    partial: "What made this hard?",
+    partial: "What made this one hard?",
   },
   student: {
     abandoned: "What pulled you away first?",
@@ -67,9 +70,9 @@ export function displayFor(
   if (lane === "game_like")
     return {
       displayBody:
-        "Run progress updates from completed focus only. No currency layer.",
-      displayTitle: "Encounter logged",
-      nextActionLabel: "Continue run",
+        "Momentum logged from real focus. No coins, no boosts.",
+      displayTitle: "Run completed",
+      nextActionLabel: "Next run",
     };
   if (lane === "deep_creative")
     return {
@@ -85,7 +88,7 @@ export function displayFor(
     };
   return {
     displayBody: "Clean result saved with one quiet next step.",
-    displayTitle: "Session banked",
+    displayTitle: "Done for now",
     nextActionLabel: "See next step",
   };
 }
@@ -103,8 +106,8 @@ function memoryText(
       ? `User completed a ${minutes}-minute study block.`
       : lane === "game_like"
         ? situation === "clean"
-          ? "Game-like user engages with run progress after clean completion."
-          : "Game-like user needs recovery after interrupted encounter."
+          ? "Run user maintains momentum after clean completion."
+          : "Run user needs recovery after interrupted block."
         : lane === "deep_creative"
           ? summary.completionPercentage >= 100
             ? "User protects creative continuity when next move exists."

@@ -22,7 +22,7 @@ export const DAY2_COPY: JourneyDayCopy = {
     game_like: {
       durationMinutes: 15,
       type: "SPRINT",
-      taskPrompt: "One encounter. Maybe push a little harder. 15 minutes.",
+      taskPrompt: "One clean run. Name the target, then move. 15 minutes.",
     },
     deep_creative: {
       durationMinutes: 25,
@@ -63,9 +63,9 @@ export const DAY2_COPY: JourneyDayCopy = {
   },
   premiumTrigger: { day: 2, trigger: "none", copyKey: "none" },
   returnReason: {
-    student: "Three blocks of evidence. VEX sees your study pattern.",
-    game_like: "Three runs of data. VEX sees your movement pattern.",
-    deep_creative: "Three sessions of context. VEX sees your project pattern.",
-    minimal_normal: "Three blocks of rhythm. VEX sees your clean pattern.",
+    student: "VEX knows what I need to study or review next.",
+    game_like: "VEX helps me build momentum and understand what blocks me.",
+    deep_creative: "VEX remembers where I left off.",
+    minimal_normal: "VEX gives me one useful action without noise.",
   },
 };

@@ -121,11 +121,11 @@ export const MonthlyFocusReportScreen = withScreenErrorBoundary(
               navigation.navigate("SessionStack", { screen: "SessionSetup" })
             }
             variant="primary"
-            accessibilityLabel="Start a focus session"
+            accessibilityLabel="Start a session"
             accessibilityRole="button"
             accessibilityHint="Navigates to session setup"
           >
-            Start a Session
+            Start a session
           </Button>
         </Box>
       );

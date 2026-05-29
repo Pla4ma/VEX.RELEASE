@@ -5,19 +5,41 @@ import {
   type FocusRunDisplay,
   type FocusRunGrade,
 } from "./schemas";
-import { resolvePersonalBoss } from "./boss-resolution";
+import { resolvePersonalBlocker } from "./blocker-resolution";
 import type { Lane } from "../lane-engine/types";
 
+function gradeLabel(grade: FocusRunGrade): string {
+  const map: Record<FocusRunGrade, string> = {
+    S: "exceptional",
+    A: "strong",
+    B: "solid",
+    C: "steady",
+    D: "building",
+  };
+  return map[grade];
+}
+
+function gradeDescription(grade: FocusRunGrade): string {
+  const map: Record<FocusRunGrade, string> = {
+    S: "Exceptional momentum — clean starts, no interruptions, deep flow.",
+    A: "Strong run — high focus quality with few interruptions.",
+    B: "Solid run — good focus with room to tighten.",
+    C: "Steady progress — inconsistent but you showed up.",
+    D: "Building momentum — every run is a data point.",
+  };
+  return map[grade];
+}
+
 export function computeFocusRunGrade(run: FocusRun): FocusRunGrade {
-  const encounters = run.completedEncounters ?? 0;
+  const completedRuns = run.completedRuns ?? 0;
   const cleanStarts = run.cleanStarts ?? 0;
   const recoveryWins = run.recoveryWins ?? 0;
   const upgrades = run.reflectionUpgrades ?? 0;
 
-  if (encounters === 0) return "D";
+  if (completedRuns === 0) return "D";
 
   const score =
-    encounters * 2 + cleanStarts * 1.5 + recoveryWins * 1 + upgrades * 0.5;
+    completedRuns * 2 + cleanStarts * 1.5 + recoveryWins * 1 + upgrades * 0.5;
 
   if (score >= 20) return "S";
   if (score >= 14) return "A";
@@ -39,12 +61,12 @@ export function buildFocusRunDisplay(input: {
   const allSignals =
     input.signals ?? events.map((event) => event.signal ?? "").filter(Boolean);
 
-  const boss = resolvePersonalBoss({
+  const blocker = resolvePersonalBlocker({
     firstActiveDay: input.firstActiveDay ?? 0,
     signals: allSignals,
   });
 
-  const completedEncounters = run?.completedEncounters ?? 0;
+  const completedRuns = run?.completedRuns ?? 0;
   const cleanStarts = run?.cleanStarts ?? 0;
   const recoveryWins = run?.recoveryWins ?? 0;
   const reflectionUpgrades = run?.reflectionUpgrades ?? 0;
@@ -55,9 +77,9 @@ export function buildFocusRunDisplay(input: {
       : null;
 
   const summaryParts: string[] = [];
-  if (completedEncounters > 0) {
+  if (completedRuns > 0) {
     summaryParts.push(
-      `${completedEncounters} encounter${completedEncounters === 1 ? "" : "s"}`,
+      `${completedRuns} run${completedRuns === 1 ? "" : "s"}`,
     );
   }
   if (cleanStarts > 0) {
@@ -73,27 +95,34 @@ export function buildFocusRunDisplay(input: {
   const weekSummary =
     summaryParts.length > 0
       ? summaryParts.join(" · ")
-      : "No encounters yet this week.";
+      : "No runs yet this week.";
+
+  const bodyText =
+    events.length === 0
+      ? "Begin with one honest run. Nothing is bought, saved, or boosted."
+      : finalGrade
+        ? `${gradeLabel(finalGrade)} run · ${gradeDescription(finalGrade)}`
+        : `${events.length} run signals logged from real sessions.`;
+
+  const nextActionText =
+    blocker.isTeaser ? "Start first run" : `Watch for ${blocker.name}`;
 
   return FocusRunDisplaySchema.parse({
-    body:
-      events.length === 0
-        ? "Begin with one honest encounter. Nothing is bought, saved, or boosted."
-        : `${events.length} run signals logged from real sessions.`,
-    boss,
+    body: bodyText,
+    blocker,
     cleanStarts,
-    completedEncounters,
+    completedRuns,
     finalGrade,
     laneAllowed,
-    modifiers: run?.modifiers ?? [
+    focusModifiers: run?.focusModifiers ?? [
       "Phone away",
       "One tab",
       "Reflection upgrade",
     ],
-    nextAction: boss.isTeaser ? "Start first encounter" : `Face ${boss.name}`,
+    nextAction: nextActionText,
     recoveryWins,
     reflectionUpgrades,
-    title: laneAllowed ? "Weekly Focus Run" : "Run board hidden for this lane",
+    title: laneAllowed ? "Weekly Momentum" : "Run board hidden for this lane",
     weekSummary,
   });
 }

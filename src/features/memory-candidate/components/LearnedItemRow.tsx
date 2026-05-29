@@ -89,6 +89,28 @@ export function LearnedItemRow({
             lineHeight: 18,
           },
         }, item.evidence),
+        item.recommendedAction &&
+          React.createElement(Text, {
+            key: "action",
+            style: {
+              color: theme.colors.primary[500],
+              fontSize: theme.typography.body.small.fontSize ?? 14,
+              fontWeight: theme.fontWeights.medium,
+              lineHeight: 18,
+              marginTop: theme.spacing[2],
+            },
+          }, item.recommendedAction),
+        item.humilityNote &&
+          React.createElement(Text, {
+            key: "humility",
+            style: {
+              color: theme.colors.text.tertiary,
+              fontSize: theme.typography.ui.caption.fontSize ?? 11,
+              fontStyle: "italic",
+              lineHeight: 14,
+              marginTop: theme.spacing[1],
+            },
+          }, item.humilityNote),
       ]),
     ]),
     React.createElement(View, {

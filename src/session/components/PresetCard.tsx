@@ -1,7 +1,8 @@
 import React from "react";
-import { View, Text, Pressable, StyleSheet } from "react-native";
+import { View, Pressable } from "react-native";
+import { Text } from "../../components/primitives";
+import { useTheme } from "../../theme";
 import type { SessionPreset } from "../types";
-import { launchColors } from "@theme/tokens/launch-colors";
 
 interface PresetCardProps {
   preset: SessionPreset;
@@ -34,83 +35,80 @@ export const PresetCard: React.FC<PresetCardProps> = ({
   onSelect,
   onDelete,
 }) => {
+  const { theme } = useTheme();
+
   return (
     <Pressable
-      style={({ pressed }) =>
-        pressed ? [styles.presetCard, { opacity: 0.8 }] : styles.presetCard
-      }
+      style={({ pressed }) => ({
+        width: "48%",
+        backgroundColor: pressed
+          ? theme.colors.surface.pressed
+          : theme.colors.surface.card,
+        borderRadius: theme.borderRadius.lg,
+        padding: theme.spacing[4],
+        alignItems: "center",
+        borderWidth: 1,
+        borderColor: theme.colors.border.light,
+        opacity: pressed ? theme.opacity[80] : theme.opacity[100],
+      })}
       onPress={() => onSelect(preset)}
       onLongPress={() => !preset.isDefault && onDelete(preset.id)}
       accessibilityLabel="Interactive control"
       accessibilityRole="button"
       accessibilityHint="Activates this control"
     >
-      <View style={styles.presetIcon}>
-        <Text style={styles.iconText}>{getCategoryEmoji(preset.category)}</Text>
+      <View
+        style={{
+          width: 48,
+          height: 48,
+          backgroundColor: theme.colors.primary[100] || theme.colors.surface.button,
+          borderRadius: 24,
+          justifyContent: "center",
+          alignItems: "center",
+          marginBottom: 12,
+        }}
+      >
+        <Text style={{ fontSize: 24 }}>
+          {getCategoryEmoji(preset.category)}
+        </Text>
       </View>
-      <Text style={styles.presetName} numberOfLines={1}>
+      <Text
+        variant="body"
+        numberOfLines={1}
+        style={{ color: theme.colors.text.primary, marginBottom: 4 }}
+      >
         {preset.name}
       </Text>
-      <Text style={styles.presetDuration}>
+      <Text
+        variant="h2"
+        style={{ color: theme.colors.primary[500], marginBottom: 4 }}
+      >
         {formatDuration(preset.duration)}
       </Text>
-      <Text style={styles.presetDetails}>
-        {preset.intervals} {preset.intervals > 1 ? "intervals" : "interval"}
+      <Text
+        variant="caption"
+        style={{ color: theme.colors.text.tertiary }}
+      >
+        {preset.intervals}{" "}
+        {preset.intervals > 1 ? "intervals" : "interval"}
       </Text>
       {preset.strictMode && (
-        <View style={styles.strictBadge}>
-          <Text style={styles.strictText}>Strict</Text>
+        <View
+          style={{
+            position: "absolute",
+            top: 8,
+            right: 8,
+            backgroundColor: theme.colors.warning.DEFAULT,
+            paddingHorizontal: 6,
+            paddingVertical: 2,
+            borderRadius: 4,
+          }}
+        >
+          <Text variant="caption" style={{ color: theme.colors.text.inverse }}>
+            Strict
+          </Text>
         </View>
       )}
     </Pressable>
   );
 };
-
-const styles = StyleSheet.create({
-  presetCard: {
-    width: "48%",
-    backgroundColor: launchColors.hex_2a2a3e,
-    borderRadius: 12,
-    padding: 16,
-    alignItems: "center" as const,
-    borderWidth: 1,
-    borderColor: launchColors.hex_3a3a4e,
-  },
-  presetIcon: {
-    width: 48,
-    height: 48,
-    backgroundColor: launchColors.hex_e9456020,
-    borderRadius: 24,
-    justifyContent: "center" as const,
-    alignItems: "center" as const,
-    marginBottom: 12,
-  },
-  iconText: { fontSize: 24 },
-  presetName: {
-    fontSize: 16,
-    fontWeight: "600" as const,
-    color: launchColors.hex_fff,
-    marginBottom: 4,
-  },
-  presetDuration: {
-    fontSize: 20,
-    fontWeight: "700" as const,
-    color: launchColors.hex_e94560,
-    marginBottom: 4,
-  },
-  presetDetails: { fontSize: 12, color: launchColors.hex_9e9e9e },
-  strictBadge: {
-    position: "absolute" as const,
-    top: 8,
-    right: 8,
-    backgroundColor: launchColors.hex_ffa500,
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    borderRadius: 4,
-  },
-  strictText: {
-    fontSize: 10,
-    color: launchColors.hex_fff,
-    fontWeight: "600" as const,
-  },
-});

@@ -4,7 +4,8 @@ import Animated from "react-native-reanimated";
 import { styles } from "./PremiumErrorRecovery.styles";
 
 interface ResolvedSuccessCardProps {
-  animatedStyle: { transform?: Array<Record<string, number>>; [key: string]: unknown };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  animatedStyle: any;
   successBg: string;
   successColor: string;
 }

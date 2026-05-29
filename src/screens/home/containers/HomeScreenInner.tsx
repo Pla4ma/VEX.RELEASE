@@ -15,6 +15,7 @@ import { AppScreen } from "../../../components/primitives";
 import { useHomeSurfaceMap } from "../hooks/useHomeSurfaceMap";
 import { useHomeResolvedExperience } from "../hooks/useHomeResolvedExperience";
 import { useInterventionVisibility } from "../hooks/useInterventionVisibility";
+import { ModeNativeHome } from "../../../features/mode-native/components/ModeNativeHome";
 import type { HomeSurfaceMap } from "../../../features/home-experience/surface-decision-schemas";
 import type { ExtendedRootStackParams } from "../../../navigation/types";
 import type { HomeData } from "../hooks/useHomeData";
@@ -110,6 +111,8 @@ export function HomeScreenInner({
       interventionType,
     });
 
+  const primaryLane = laneProfile.primaryLane;
+
   return (
     <AppScreen scroll padded>
       {interventionBannerProps && (
@@ -121,6 +124,16 @@ export function HomeScreenInner({
           userId={controller.userId ?? ""}
         />
       )}
+      <ModeNativeHome
+        lane={primaryLane}
+        homeContext={{
+          hasActiveProject: !!(controller.activeStudyPlanQuery?.data as Record<string, unknown> | null),
+          projectTitle: undefined,
+          nextMove: undefined,
+          recentTopic: undefined,
+        }}
+        onStart={() => controller.openSetup()}
+      />
       <HomeContent
         controller={controller}
         data={data as HomeData}

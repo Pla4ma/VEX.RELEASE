@@ -1,96 +1,27 @@
 import { WhatVEXLearnedInputSchema, WhatVEXLearnedSchema } from "./schemas";
 import type { LearnedItem, WhatVEXLearned, WhatVEXLearnedInput } from "./schemas";
+import { buildInsightBuilders } from "./insight-builders";
 
-function buildLearnedItems(
-  input: WhatVEXLearnedInput,
-): LearnedItem[] {
-  const items: LearnedItem[] = [];
+function buildLearnedItems(input: WhatVEXLearnedInput): LearnedItem[] {
   const now = Date.now();
+  if (input.totalSessions < 3) return [];
 
-  if (input.totalFocusMinutes >= 30 && input.totalSessions >= 2) {
-    items.push({
-      id: `learned:${input.userId}:duration`,
-      observation: `Your focus sessions average ${Math.round(input.totalFocusMinutes / Math.max(1, input.totalSessions))} minutes.`,
-      evidence: `${input.totalSessions} sessions totaling ${input.totalFocusMinutes} minutes of focused work.`,
-      confidence: input.totalSessions >= 5 ? "medium" : "weak",
-      lane: input.lane,
-      userVisible: true,
-      editedByUser: false,
-      deletedByUser: false,
-      createdAt: now,
+  const builders = buildInsightBuilders(input, now);
+
+  const prioritized = builders
+    .filter((b) => b.condition())
+    .map((b) => b.build())
+    .sort((a, b) => {
+      const aScore =
+        (a.insightCategory !== "general" ? 10 : 0) +
+        (a.confidence === "strong" ? 3 : a.confidence === "medium" ? 2 : 1);
+      const bScore =
+        (b.insightCategory !== "general" ? 10 : 0) +
+        (b.confidence === "strong" ? 3 : b.confidence === "medium" ? 2 : 1);
+      return bScore - aScore;
     });
-  }
 
-  if (
-    input.streakDays >= 3 &&
-    input.bestSessionDurationMinutes &&
-    input.bestSessionDurationMinutes >= 20
-  ) {
-    items.push({
-      id: `learned:${input.userId}:streak`,
-      observation: `Your longest streak is ${input.streakDays} days with a best session of ${input.bestSessionDurationMinutes} minutes.`,
-      evidence: `Streak of ${input.streakDays} days. Best session: ${input.bestSessionDurationMinutes} minutes.`,
-      confidence: input.streakDays >= 7 ? "strong" : "medium",
-      lane: input.lane,
-      userVisible: true,
-      editedByUser: false,
-      deletedByUser: false,
-      createdAt: now,
-    });
-  }
-
-  if (
-    input.averageFocusScore !== undefined &&
-    input.averageFocusScore >= 70 &&
-    input.totalSessions >= 2
-  ) {
-    items.push({
-      id: `learned:${input.userId}:focus`,
-      observation: `Your average focus quality is ${Math.round(input.averageFocusScore)}%. Sessions hold well.`,
-      evidence: `Average focus score of ${Math.round(input.averageFocusScore)}% across ${input.totalSessions} sessions.`,
-      confidence: input.totalSessions >= 5 ? "medium" : "weak",
-      lane: input.lane,
-      userVisible: true,
-      editedByUser: false,
-      deletedByUser: false,
-      createdAt: now,
-    });
-  }
-
-  if (
-    input.mostProductiveTimeLabel &&
-    input.totalSessions >= 4
-  ) {
-    items.push({
-      id: `learned:${input.userId}:time`,
-      observation: input.totalSessions < 8
-        ? `Sessions have tended toward ${input.mostProductiveTimeLabel}. Still early to call a pattern.`
-        : `Your strongest sessions tend to happen ${input.mostProductiveTimeLabel}.`,
-      evidence: `Most consistent session quality during ${input.mostProductiveTimeLabel}.`,
-      confidence: input.totalSessions >= 8 ? "medium" : "weak",
-      lane: input.lane,
-      userVisible: true,
-      editedByUser: false,
-      deletedByUser: false,
-      createdAt: now,
-    });
-  }
-
-  if (input.rescueSessionsCompleted >= 1) {
-    items.push({
-      id: `learned:${input.userId}:rescue`,
-      observation: `You have completed ${input.rescueSessionsCompleted} recovery sessions. You come back effectively.`,
-      evidence: `${input.rescueSessionsCompleted} rescue sessions completed.`,
-      confidence: input.rescueSessionsCompleted >= 3 ? "medium" : "weak",
-      lane: input.lane,
-      userVisible: true,
-      editedByUser: false,
-      deletedByUser: false,
-      createdAt: now,
-    });
-  }
-
-  return items;
+  return prioritized.slice(0, 5);
 }
 
 function buildDisclaimer(sessionCount: number): string {
@@ -103,7 +34,9 @@ function buildDisclaimer(sessionCount: number): string {
   return "Based on your session data. VEX may still be wrong. Edit or hide anything that does not fit.";
 }
 
-export function buildWhatVEXLearned(rawInput: WhatVEXLearnedInput): WhatVEXLearned {
+export function buildWhatVEXLearned(
+  rawInput: WhatVEXLearnedInput,
+): WhatVEXLearned {
   const input = WhatVEXLearnedInputSchema.parse(rawInput);
   const hasEnoughEvidence = input.totalSessions >= 3;
   const items = hasEnoughEvidence ? buildLearnedItems(input) : [];

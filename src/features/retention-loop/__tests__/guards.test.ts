@@ -13,13 +13,13 @@ import {
 describe("getDay1ReturnMoment", () => {
   it("returns mode-specific copy for student", () => {
     const moment = getDay1ReturnMoment("student");
-    expect(moment.headline).toBe("Pick up with one focused study block.");
+    expect(moment.headline).toBe("Continue with one review block.");
     expect(moment.sessionMinutes).toBe(15);
   });
 
   it("returns mode-specific copy for game_like", () => {
     const moment = getDay1ReturnMoment("game_like");
-    expect(moment.headline).toBe("Your next clean run is ready.");
+    expect(moment.headline).toBe("Start one clean run before friction stacks.");
     expect(moment.sessionMinutes).toBe(15);
   });
 
@@ -170,15 +170,17 @@ describe("shouldShowPremiumAfterValue", () => {
 
 describe("getPremiumCopy", () => {
   it("returns lane-specific premium copy", () => {
-    expect(getPremiumCopy("student")).toBe("Go deeper with Study Intelligence.");
+    expect(getPremiumCopy("student")).toBe(
+      "Go deeper with Study Intelligence: weak topics, review planning, and exam prep.",
+    );
     expect(getPremiumCopy("game_like")).toBe(
-      "Upgrade your Focus Run intelligence.",
+      "Unlock advanced Run Intelligence: blocker patterns, custom modifiers, and weekly run recaps.",
     );
     expect(getPremiumCopy("deep_creative")).toBe(
-      "Keep deeper project memory.",
+      "Unlock Project Memory: context restore, next moves, and flow windows.",
     );
     expect(getPremiumCopy("minimal_normal")).toBe(
-      "Unlock quieter weekly planning.",
+      "Unlock Focus Intelligence: quiet weekly reports, best windows, and smarter planning.",
     );
   });
 });

@@ -121,7 +121,8 @@ export function useHomeScreenInnerEffects(params: {
     [controller.userId, dismissIntervention, navigation],
   );
 
-  const interventionBannerProps: InterventionBannerConfig | null =
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const interventionBannerProps: any =
     showIntervention && intervention
       ? {
           id: intervention.id,

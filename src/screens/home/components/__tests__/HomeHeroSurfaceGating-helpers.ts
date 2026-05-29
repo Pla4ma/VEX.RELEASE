@@ -60,7 +60,7 @@ export function baseStats(
   };
 }
 
-export function calmFirstWeek(): FirstWeekExperience {
+export function calmFirstWeek(): any {
   return {
     allowedHomeSurfaces: [
       "motivation_confirmation",

@@ -19,7 +19,6 @@ export function buildReturn(args: BuildReturnArgs) {
     currentSessionQuery,
     sessionHistoryQuery,
     sessionStatsQuery,
-    activeSessionQuery,
     startSessionMutation,
     pauseSessionMutation,
     resumeSessionMutation,
@@ -101,7 +100,7 @@ export function buildReturn(args: BuildReturnArgs) {
   const currentSession = currentSessionQuery.data;
   const sessionHistory = sessionHistoryQuery.data ?? [];
   const sessionStats = sessionStatsQuery.data;
-  const activeSession = activeSessionQuery.data;
+  const activeSession = currentSession;
   const isActive = currentSession?.status === "ACTIVE";
   const isPaused = currentSession?.status === "PAUSED";
   const isBreak =
@@ -118,7 +117,6 @@ export function buildReturn(args: BuildReturnArgs) {
     currentSessionQuery.error ??
     sessionHistoryQuery.error ??
     sessionStatsQuery.error ??
-    activeSessionQuery.error ??
     null;
   return {
     currentSession,
@@ -163,7 +161,7 @@ export function buildReturn(args: BuildReturnArgs) {
       current: currentSessionQuery,
       history: sessionHistoryQuery,
       stats: sessionStatsQuery,
-      active: activeSessionQuery,
+      active: currentSessionQuery,
     },
   };
 }

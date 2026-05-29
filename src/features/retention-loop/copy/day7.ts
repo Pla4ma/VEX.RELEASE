@@ -2,10 +2,14 @@ import type { JourneyDayCopy } from "../schemas";
 
 export const DAY7_COPY: JourneyDayCopy = {
   homeMessage: {
-    student: "Your study data turned into real intelligence. See what VEX found.",
-    game_like: "Your runs reveal a clear pattern. VEX mapped your focus style.",
-    deep_creative: "Your project sessions have a shape. VEX found the thread.",
-    minimal_normal: "Your week of clean blocks shows a clear pattern. See it.",
+    student:
+      "This week, your strongest study rhythm was shorter named blocks.",
+    game_like:
+      "Your biggest blocker this week was opening the app without starting.",
+    deep_creative:
+      "Your project stayed active when you saved a handoff after each block.",
+    minimal_normal:
+      "Your cleanest sessions happened when VEX stayed quiet.",
   },
   primaryCta: {
     student: "See study intelligence",
@@ -17,17 +21,17 @@ export const DAY7_COPY: JourneyDayCopy = {
     student: {
       durationMinutes: 25,
       type: "STUDY",
-      taskPrompt: "Review the weakest topic VEX identified. 25 minutes of targeted study.",
+      taskPrompt: "Review the weakest topic VEX identified. Name it first, 25 minutes.",
     },
     game_like: {
       durationMinutes: 20,
       type: "SPRINT",
-      taskPrompt: "Run the encounter style that scored highest this week. 20 minutes.",
+      taskPrompt: "Run with a named target. 20 minutes of clean focus.",
     },
     deep_creative: {
       durationMinutes: 30,
       type: "DEEP_WORK",
-      taskPrompt: "Continue the longest project thread. 30 minutes of deep work.",
+      taskPrompt: "Continue the longest project thread. Save a handoff note after, 30 minutes.",
     },
     minimal_normal: {
       durationMinutes: 15,
@@ -36,36 +40,40 @@ export const DAY7_COPY: JourneyDayCopy = {
     },
   },
   completionPayoff: {
-    student: "One week of study data. VEX now knows your topic strengths and gaps.",
-    game_like: "One week of run data. VEX now knows your encounter style and blockers.",
-    deep_creative: "One week of project data. VEX now knows your thread patterns.",
-    minimal_normal: "One week of clean data. VEX now knows your rhythm windows.",
+    student: "One week of study data. VEX knows your topic strengths and gaps.",
+    game_like: "One week of run data. VEX knows your blocker patterns.",
+    deep_creative: "One week of project data. VEX knows your thread patterns.",
+    minimal_normal: "One week of clean data. VEX knows your rhythm windows.",
   },
   nextActionCopy: {
     student: "Week 2 starts tomorrow. VEX will suggest reviews based on your gaps.",
-    game_like: "Week 2 starts tomorrow. VEX will match encounter difficulty to your level.",
+    game_like: "Week 2 starts tomorrow. VEX will match run style to your pattern.",
     deep_creative: "Week 2 starts tomorrow. VEX will surface your strongest thread.",
     minimal_normal: "Week 2 starts tomorrow. VEX will suggest your best time window.",
   },
   notificationCopy: {
     title: {
-      student: "Study intelligence ready",
-      game_like: "Run intelligence ready",
-      deep_creative: "Project continuity map ready",
-      minimal_normal: "Week pattern ready",
+      student: "Your study intelligence is ready",
+      game_like: "Your run intelligence is ready",
+      deep_creative: "Your project continuity map is ready",
+      minimal_normal: "Your week pattern is ready",
     },
     body: {
-      student: "VEX found your topic gaps and study strengths. See the full picture.",
-      game_like: "VEX found your best encounter style and blocker patterns. See the map.",
-      deep_creative: "VEX found your thread shape and next-move patterns. See the path.",
-      minimal_normal: "VEX found your best time windows and rhythm. See the pattern.",
+      student:
+        "VEX found your strongest study rhythm. Shorter named blocks worked best.",
+      game_like:
+        "VEX found your biggest blocker. See how to overcome it.",
+      deep_creative:
+        "VEX found your thread patterns. Handoff notes made the difference.",
+      minimal_normal:
+        "VEX found your best sessions were the quietest. See the pattern.",
     },
   },
-  premiumTrigger: { day: 7, trigger: "deep_insight_tap", copyKey: "study" },
+  premiumTrigger: { day: 7, trigger: "deep_insight_tap", copyKey: "none" },
   returnReason: {
-    student: "One week of study evidence. VEX knows your gaps. Return to close them.",
-    game_like: "One week of run evidence. VEX knows your style. Return to sharpen it.",
-    deep_creative: "One week of project evidence. VEX knows your threads. Return to build.",
-    minimal_normal: "One week of clean evidence. VEX knows your rhythm. Return to keep it.",
+    student: "VEX knows what I need to study or review next.",
+    game_like: "VEX helps me build momentum and understand what blocks me.",
+    deep_creative: "VEX remembers where I left off.",
+    minimal_normal: "VEX gives me one useful action without noise.",
   },
 };

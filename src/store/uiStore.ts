@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 import type { Nullable } from "../types/global";
 
-interface UIState {
+export interface UIState {
   toast: Nullable<{
     id: string;
     message: string;

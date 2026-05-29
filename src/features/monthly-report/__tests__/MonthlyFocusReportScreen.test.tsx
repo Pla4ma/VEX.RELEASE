@@ -133,7 +133,7 @@ describe("MonthlyFocusReportScreen", () => {
     setupMocks({ report: null });
     render(<MonthlyFocusReportScreen />);
     expect(screen.getByText("No Sessions Yet")).toBeTruthy();
-    expect(screen.getByText("Start a Session")).toBeTruthy();
+    expect(screen.getByText("Start a session")).toBeTruthy();
   });
 
   it("renders offline banner when offline", () => {

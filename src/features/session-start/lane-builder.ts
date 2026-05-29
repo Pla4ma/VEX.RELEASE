@@ -24,10 +24,10 @@ function laneBriefCopy(
     };
   if (lane === "game_like")
     return {
-      body: "Treat this as one clean encounter against the blocker in front of you.",
-      ctaLabel: "Start encounter",
+      body: "One clean run. Focus on momentum, not perfection.",
+      ctaLabel: "Start clean run",
       sessionMode: SessionMode.SPRINT,
-      title: "Run encounter ready",
+      title: "Run ready",
       userFacingModeName: "Run",
     };
   if (lane === "deep_creative")
@@ -39,10 +39,10 @@ function laneBriefCopy(
       userFacingModeName: "Project",
     };
   return {
-    body: "Name one task, run the block, stop when the timer ends.",
-    ctaLabel: "Start clean session",
+    body: "Name one action. Start. Stop when the timer ends. No noise.",
+    ctaLabel: "Start clean action",
     sessionMode: SessionMode.LIGHT_FOCUS,
-    title: "Clean session ready",
+    title: "One action ready",
     userFacingModeName: "Clean",
   };
 }
@@ -74,7 +74,7 @@ export function buildLaneSessionBrief(input: {
 
   const rescueSuccessByLane: Record<Lane, string> = {
     student: "Complete five honest study minutes.",
-    game_like: "Land one clean hit on the next move.",
+    game_like: "Start one clean next move.",
     deep_creative: "Make one concrete project edit.",
     minimal_normal: "Stay focused for five minutes.",
   };

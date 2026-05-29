@@ -1,4 +1,5 @@
 export type {
+  InsightCategory,
   LearnedItem,
   MemoryCandidate,
   MemoryCandidateInput,

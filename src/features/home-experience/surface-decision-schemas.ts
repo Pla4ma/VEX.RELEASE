@@ -55,6 +55,7 @@ const FirstWeekPhaseSchema = z
     spotlightSurface: z.enum([
       "none",
       "progress_proof",
+      "companion_continuity",
       "study_deep_work_path",
       "tiny_boss_teaser",
       "weekly_insight",

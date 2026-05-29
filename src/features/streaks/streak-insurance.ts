@@ -1,5 +1,11 @@
 import { z } from "zod";
 
+/**
+ * Momentum Protection (formerly Streak Insurance).
+ * Protects accumulated momentum — not gamified streaks.
+ * Intelligence: VEX learns recovery patterns, not just day counts.
+ */
+
 export const StreakInsuranceSchema = z.object({
   id: z.string(),
   userId: z.string(),
@@ -11,6 +17,7 @@ export const StreakInsuranceSchema = z.object({
   usedAt: z.number().optional(),
 });
 
+/** @deprecated Gamification — gamble mechanic removed. Use recovery proof instead. */
 export const StreakGambleSchema = z.object({
   id: z.string(),
   userId: z.string(),
@@ -24,6 +31,10 @@ export const StreakGambleSchema = z.object({
   settledAt: z.number().optional(),
 });
 
+/**
+ * Recovery Proof (formerly Comeback Token).
+ * Proof that you can restart after a pause — VEX records the pattern.
+ */
 export const ComebackTokenSchema = z.object({
   id: z.string(),
   userId: z.string(),
@@ -151,17 +162,17 @@ export function canPurchaseInsurance(
 ): { allowed: boolean; reason: string | null; cost: number } {
   const cost = calculateInsuranceCost(streakDays);
   if (hasActiveInsurance) {
-    return { allowed: false, reason: "Already have active insurance", cost };
+    return { allowed: false, reason: "Already have active momentum protection", cost };
   }
   if (streakDays < INSURANCE_PRICING.minDays) {
     return {
       allowed: false,
-      reason: `Need ${INSURANCE_PRICING.minDays} day streak minimum`,
+      reason: `Need ${INSURANCE_PRICING.minDays} day momentum minimum`,
       cost,
     };
   }
   if (currentBalance < cost) {
-    return { allowed: false, reason: `Need ${cost} coins`, cost };
+    return { allowed: false, reason: "Not enough saved progress", cost };
   }
   return { allowed: true, reason: null, cost };
 }

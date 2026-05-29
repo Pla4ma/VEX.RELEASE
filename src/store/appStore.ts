@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 import type { Nullable } from "../types/global";
 
-interface AppState {
+export interface AppState {
   isInitialized: boolean;
   isOnline: boolean;
   lastSyncTime: Nullable<number>;

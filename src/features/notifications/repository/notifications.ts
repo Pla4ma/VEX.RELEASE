@@ -91,8 +91,9 @@ export function subscribeToNotificationCenter(
   userId: string,
   onChange: () => void,
 ): () => void {
+  const channelName = `notifications-screen:${userId}`;
   const channel = supabase
-    .channel("notifications-screen")
+    .channel(channelName)
     .on(
       "postgres_changes",
       {

@@ -1,12 +1,15 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Pressable, Text, View } from "react-native";
 import { useTheme } from "../../../theme/ThemeContext";
 import type { RescueEligibilityResult } from "../schemas";
+import type { Lane } from "../../lane-engine/types";
+import { deriveRescueSurface } from "../../mode-native/service";
 
 interface RescueBannerProps {
   eligibility: RescueEligibilityResult;
   onStartRescue: () => void;
   onDismiss: () => void;
+  lane?: Lane | null;
   accessibilityLabel?: string;
   accessibilityHint?: string;
 }
@@ -15,15 +18,28 @@ export function RescueBanner({
   eligibility,
   onStartRescue,
   onDismiss,
+  lane,
   accessibilityLabel = "Rescue mode available. Tap to start a short focus block.",
   accessibilityHint = "Opens a low-pressure 5 to 12 minute rescue session.",
 }: RescueBannerProps) {
   const { theme } = useTheme();
   const { colors } = theme;
 
+  const rescueSurface = useMemo(
+    () => (lane ? deriveRescueSurface(lane) : null),
+    [lane],
+  );
+
   if (!eligibility.eligible) return null;
 
   const minutes = Math.round(eligibility.recommendedDurationSeconds / 60);
+  const headline = rescueSurface?.headline ?? "Small step, big impact";
+  const body =
+    rescueSurface?.body ??
+    `A ${minutes}-minute rescue block is available. No pressure, no judgment — just one small action to keep moving forward.`;
+  const actionLabel = rescueSurface
+    ? `${rescueSurface.actionLabel} (${minutes}m)`
+    : `Start ${minutes} min`;
 
   return (
     <View
@@ -46,7 +62,7 @@ export function RescueBanner({
         }}
         accessibilityRole="header"
       >
-        Small step, big impact
+        {headline}
       </Text>
 
       <Text
@@ -56,8 +72,7 @@ export function RescueBanner({
           color: colors.semantic.textPrimary,
         }}
       >
-        A {minutes}-minute rescue block is available. No pressure, no judgment —
-        just one small action to keep moving forward.
+        {body}
       </Text>
 
       <View
@@ -91,7 +106,7 @@ export function RescueBanner({
               color: colors.text.inverse,
             }}
           >
-            Start {minutes} min
+            {actionLabel}
           </Text>
         </Pressable>
 

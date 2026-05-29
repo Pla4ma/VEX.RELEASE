@@ -137,7 +137,7 @@ export function createNavigationActions(set: SetFn, get: GetFn) {
       if (Object.keys(updates).length > 0) set(updates);
     },
 
-    setChosenLane: (lane) => {
+    setChosenLane: (lane: import("../lane-engine/types").Lane | null) => {
       set({ chosenLane: lane });
     },
   };

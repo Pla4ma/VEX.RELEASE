@@ -7,24 +7,17 @@ import type { TooltipStep } from "./types";
 export const TOOLTIPS: TooltipStep[] = [
   {
     target: "timer",
-    title: "Focus Timer",
+    title: "Your Session Engine",
     description:
-      "This is your focus timer. Set your desired focus duration and tap Start to begin your session.",
+      "Set your duration and tap Start. VEX adapts to how you work — not the other way around.",
     icon: "⏱️",
   },
   {
     target: "quality",
-    title: "Session Quality",
+    title: "Session Reflection",
     description:
-      "After each session, rate your focus quality. This helps track your progress over time.",
+      "After your session, reflect on what helped or broke your focus. This builds your personal patterns over time.",
     icon: "⭐",
-  },
-  {
-    target: "boss",
-    title: "Boss Battle",
-    description:
-      "Complete focus sessions to defeat bosses and earn rewards! The more you focus, the stronger you become.",
-    icon: "👹",
   },
 ];
 

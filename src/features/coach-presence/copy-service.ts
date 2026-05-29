@@ -2,13 +2,17 @@ import type {
   CoachMemoryConfidence,
   CoachPresenceMotivationStyle,
 } from "./schemas";
+import type {
+  CoachPresenceContext,
+  CoachPresenceMessageOutput,
+} from "./copy-schemas";
 import {
   CoachPresenceContextSchema,
   CoachPresenceMessageOutputSchema,
   TONE_MAP,
   MOOD_MAP,
 } from "./copy-schemas";
-import type {
+export type {
   CoachPresenceContext,
   CoachPresenceMessageOutput,
 } from "./copy-schemas";
@@ -156,6 +160,7 @@ export function getCoachPresenceMessage(
 ): CoachPresenceMessageOutput {
   const ctx = CoachPresenceContextSchema.parse(rawContext);
   const displayMode = getDisplayMode(ctx);
+  const behaviorAdaptation = resolveBehaviorAdaptation(ctx);
   return CoachPresenceMessageOutputSchema.parse({
     message: buildMessage(ctx),
     tone: TONE_MAP[ctx.motivationStyle],
@@ -164,5 +169,28 @@ export function getCoachPresenceMessage(
     optionalActionLabel: resolveActionLabel(ctx),
     shouldShow: displayMode !== "quiet",
     displayMode,
+    behaviorAdaptation,
   });
+}
+
+function resolveBehaviorAdaptation(
+  ctx: CoachPresenceContext,
+): string | null {
+  if (ctx.memoryConfidence === "none") {
+    return "VEX is still learning from your sessions.";
+  }
+  if (ctx.latestSession && ctx.latestSession.durationMinutes < 15) {
+    return "Your last sessions were short. VEX will keep blocks small.";
+  }
+  if (ctx.completionContext === "comeback") {
+    return "VEX noticed you came back after a gap. Starting small.";
+  }
+  if (
+    ctx.memoryConfidence === "medium" &&
+    ctx.latestSession &&
+    ctx.latestSession.durationMinutes >= 25
+  ) {
+    return "Your session rhythm is forming. VEX is learning your pace.";
+  }
+  return null;
 }

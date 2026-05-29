@@ -13,7 +13,9 @@ export const DEFAULT_FLAGS: FeatureFlagConfig[] = [
     rolloutPercentage: 0,
     requiresPremium: true,
   },
+  /** @deprecated Gamification — squad wars feature archived */
   { key: "squad_wars_enabled", defaultValue: false, rolloutPercentage: 0 },
+  /** @deprecated Gamification — battle pass concept removed */
   { key: "battle_pass_season_2", defaultValue: false, rolloutPercentage: 0 },
   { key: "streak_recovery_v2", defaultValue: true, rolloutPercentage: 50 },
   {
@@ -23,6 +25,7 @@ export const DEFAULT_FLAGS: FeatureFlagConfig[] = [
     requiresPremium: false,
   },
   { key: "analytics_enhanced", defaultValue: true, rolloutPercentage: 100 },
+  /** @deprecated Gamification — boss combat archived. Use blocker intelligence instead. */
   {
     key: "real_time_boss_combat",
     defaultValue: false,
@@ -54,6 +57,7 @@ export const DEFAULT_FLAGS: FeatureFlagConfig[] = [
     description:
       "Enable skill tree progression (Endurance/Intensity/Social/Tactics)",
   },
+  /** @deprecated Gamification — prestige/ascension concept phased out */
   {
     key: "prestige_system",
     defaultValue: false,
@@ -90,6 +94,7 @@ export const DEFAULT_FLAGS: FeatureFlagConfig[] = [
     rolloutPercentage: 100,
     description: "Enable FOCUS_POINTS as simplified primary earning currency",
   },
+  /** @deprecated Gamification — gem sinks are dark pattern risk. Removed. */
   {
     key: "emergency_gem_sinks",
     defaultValue: false,
@@ -97,12 +102,14 @@ export const DEFAULT_FLAGS: FeatureFlagConfig[] = [
     description:
       "DISABLED: Emergency gem sinks (streak freeze, boss retry, session save) - dark pattern risk",
   },
+  /** @deprecated Gamification — trading system not aligned with intelligence progression */
   {
     key: "trading_system",
     defaultValue: false,
     rolloutPercentage: 0,
     description: "Enable item trading between users",
   },
+  /** @deprecated Gamification — prime time events reframed as focus window intelligence */
   {
     key: "prime_time_events",
     defaultValue: true,
@@ -110,18 +117,21 @@ export const DEFAULT_FLAGS: FeatureFlagConfig[] = [
     description:
       "Enable scheduled bonus windows (Morning Rally, Power Hour, etc)",
   },
+  /** @deprecated Gamification — streak creatures reframed as momentum pattern visualization */
   {
     key: "streak_creature_system",
     defaultValue: true,
     rolloutPercentage: 100,
     description: "Replace streak numbers with evolving creature companions",
   },
+  /** @deprecated Gamification — boss raids archived. Use weekly intelligence. */
   {
     key: "weekly_boss_raids",
     defaultValue: false,
     rolloutPercentage: 0,
     description: "Enable weekend epic boss raids for squad collaboration",
   },
+  /** @deprecated Gamification — boss bounty archived. Economy system phased out. */
   {
     key: "boss_bounty_system",
     defaultValue: false,
@@ -129,6 +139,7 @@ export const DEFAULT_FLAGS: FeatureFlagConfig[] = [
     description:
       "DISABLED: Boss bounty loot multiplier system until economy risk is resolved",
   },
+  /** @deprecated Gamification — squad boss archived. Use blocker intelligence. */
   {
     key: "squad_boss_system",
     defaultValue: false,
@@ -141,12 +152,14 @@ export const DEFAULT_FLAGS: FeatureFlagConfig[] = [
     rolloutPercentage: 100,
     description: "AI predicts and prevents problems vs reactive",
   },
+  /** @deprecated Gamification — reframed as blocker intelligence adaptation */
   {
     key: "adaptive_difficulty",
     defaultValue: true,
     rolloutPercentage: 100,
     description: "Dynamic boss difficulty based on user performance",
   },
+  /** @deprecated Gamification — linear leveling replaced by intelligence progression */
   {
     key: "legacy_linear_leveling",
     defaultValue: true,

@@ -51,7 +51,7 @@ export function useEngagedActions(input: ActionsInput) {
   }, [canNavigateContentStudy, navigation, openSetup]);
   const continueStudyPlan = useCallback(() => {
     if (!learningExecutionLayer.target) { openContentStudy(); return; }
-    openSetup(buildLearningSessionParams(learningExecutionLayer.target));
+    openSetup(buildLearningSessionParams(learningExecutionLayer.target as any));
   }, [learningExecutionLayer.target, openContentStudy, openSetup]);
   const openNextAction = useCallback(() => {
     analytics.trackNextBestActionPressed(
@@ -103,7 +103,8 @@ export function useEngagedReturnReason(
         : null,
       canShowExpansionSystems: runtime.shouldShowExpansionSystems,
       comebackMessage: cbData?.isComeback ? (cbData.message ?? null) : null,
-      nextBestAction,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      nextBestAction: nextBestAction as any,
       primaryRecommendation: primaryRecommendation
         ? {
             id: primaryRecommendation.id,

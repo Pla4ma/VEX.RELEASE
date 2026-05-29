@@ -10,7 +10,7 @@ import {
   type SessionRecommendation,
 } from "./schemas";
 import { getOrCreateCoachState, updateCoachState } from "./persona-manager";
-import { generateAISessionSummary } from "../../shared/ai/edge-function-service";
+import { generateSessionSummary as callEdgeSessionSummary } from "../../shared/ai/edge-function-service";
 import type { GenerateSessionSummaryResponse } from "../../shared/ai";
 import {
   calculateSignalConfidence,
@@ -157,7 +157,7 @@ export async function generateSessionSummary(
   context: SessionSummaryContext,
 ): Promise<GenerateSessionSummaryResponse> {
   const enrichedContext = await enrichSessionSummaryContext(userId, context);
-  return generateAISessionSummary({ userId, context: enrichedContext });
+  return callEdgeSessionSummary({ userId, context: enrichedContext });
 }
 
 // ─── Exported: suggest challenges ───────────────────────────────

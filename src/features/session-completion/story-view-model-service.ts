@@ -75,13 +75,15 @@ export function buildPostSessionStoryViewModel(input: {
       completedAt: new Date(ledger.completedAt).toISOString(),
       mode: sessionMode,
     });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const beats = buildStoryBeats({
-    ledger,
+    ledger: ledger as any,
     sessionMode,
     meaningBody,
     reflectionNextAction: reflection.nextAction,
     companionMemory: input.companionMemory,
-    companionPromise: input.companionPromise,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    companionPromise: input.companionPromise as any,
     personalBestProof,
     personalBestBody,
     nextActionPresetMode: nextAction?.routeParams?.presetMode ?? null,

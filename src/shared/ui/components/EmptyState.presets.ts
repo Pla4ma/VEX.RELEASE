@@ -20,7 +20,7 @@ export const PRESETS = {
     icon: "📦",
     title: "Your inventory is empty",
     description: "Complete sessions to earn rewards and items.",
-    actionLabel: "Start a Session",
+    actionLabel: "Start a session",
   },
   feed: {
     icon: "📰",

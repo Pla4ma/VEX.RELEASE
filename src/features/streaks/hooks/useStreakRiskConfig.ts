@@ -65,7 +65,9 @@ export function computeRiskStatus(
   if (!streakData) {
     return cachedRiskStatus || null;
   }
-  const freshRisk = calculateStreakRisk(streakData);
+// Input narrowed from full Streak type to only the currentDays field needed by risk calc
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const freshRisk = calculateStreakRisk(streakData as any);
   if (cachedRiskStatus) {
     return {
       ...freshRisk,

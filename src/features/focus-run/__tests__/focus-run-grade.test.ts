@@ -22,7 +22,7 @@ describe("computeFocusRunGrade", () => {
       const run: FocusRun = {
         ...MOCK_RUN,
         cleanStarts: tc.clean,
-        completedEncounters: tc.encounters,
+        completedRuns: tc.encounters,
         recoveryWins: tc.recovery,
         reflectionUpgrades: tc.upgrades,
         status: "completed",

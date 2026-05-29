@@ -4,9 +4,10 @@ import type { SessionSummary } from "../../types";
 
 jest.mock("../../../events");
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function createMockSummary(
   overrides: Partial<SessionSummary> = {},
-): SessionSummary {
+): any {
   return {
     sessionId: "test-session",
     userId: "test-user",

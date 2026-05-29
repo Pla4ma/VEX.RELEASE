@@ -9,6 +9,8 @@ import type {
   RevenueCatError,
   UseRevenueCatState,
 } from "./revenuecat-types";
+import { useMonetizationStore } from "./store";
+import { mapEntitlements } from "./revenuecat-service-helpers";
 import { refreshOfferings, refreshCustomer } from "./revenuecat-query-ops";
 import {
   executePurchase,
@@ -26,15 +28,18 @@ export function useRevenueCat(): UseRevenueCatState {
   const [availablePackages, setAvailablePackages] = useState<
     PurchasesPackageDisplayInfo[]
   >([]);
-  const [customerInfo, setCustomerInfo] = useState<CustomerInfo | null>(null);
-  const [activeEntitlements, setActiveEntitlements] = useState<
-    EntitlementInfo[]
-  >([]);
-  const [isPremium, setIsPremium] = useState(false);
   const [isLoadingOfferings, setIsLoadingOfferings] = useState(false);
   const [isLoadingCustomer, setIsLoadingCustomer] = useState(false);
-  const [isPurchasing, setIsPurchasing] = useState(false);
   const [isRestoring, setIsRestoring] = useState(false);
+  const {
+    isPurchasing,
+    customerInfo,
+    activeEntitlements,
+    isPremium,
+    setIsPurchasing,
+    setEntitlements: setStoreEntitlements,
+    setCustomerInfo: setStoreCustomerInfo,
+  } = useMonetizationStore();
   const [offeringsError, setOfferingsError] = useState<RevenueCatError | null>(
     null,
   );
@@ -63,12 +68,16 @@ export function useRevenueCat(): UseRevenueCatState {
     (): Promise<void> =>
       refreshCustomer({
         setIsLoading: setIsLoadingCustomer,
-        setCustomerInfo,
-        setEntitlements: setActiveEntitlements,
-        setIsPremium,
+        setCustomerInfo: setStoreCustomerInfo,
+        setEntitlements: setStoreEntitlements,
+        setIsPremium: (v) => {
+          if (!v) {
+            setStoreEntitlements([]);
+          }
+        },
         setError: setCustomerError,
       }),
-    [],
+    [setStoreCustomerInfo, setStoreEntitlements],
   );
 
   useEffect(() => {
@@ -93,6 +102,16 @@ export function useRevenueCat(): UseRevenueCatState {
     };
   }, [doRefreshCustomer, doRefreshOfferings]);
 
+  useEffect(() => {
+    if (!isReady) return;
+    const unsubscribe = revenueCatService.onCustomerInfoUpdate((info) => {
+      const entitlements = mapEntitlements(info);
+      setStoreCustomerInfo(info);
+      setStoreEntitlements(entitlements);
+    });
+    return unsubscribe;
+  }, [isReady, setStoreCustomerInfo, setStoreEntitlements]);
+
   const purchasePackage = useCallback(
     (packageInfo: PurchasesPackageDisplayInfo): Promise<PurchaseResult> =>
       executePurchase(
@@ -105,7 +124,7 @@ export function useRevenueCat(): UseRevenueCatState {
         },
         packageInfo,
       ),
-    [offerings?.identifier, doRefreshCustomer],
+    [offerings?.identifier, doRefreshCustomer, setIsPurchasing],
   );
 
   const restorePurchases = useCallback(

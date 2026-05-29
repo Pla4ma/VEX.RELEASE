@@ -128,12 +128,13 @@ export function useActivityBroadcast({
   return { messages, sendActivity, clearMessages };
 }
 interface UseFeedUpdatesOptions {
+  userId: string;
   onUpdate?: (payload: unknown) => void;
 }
-export function useFeedUpdates({ onUpdate }: UseFeedUpdatesOptions = {}) {
+export function useFeedUpdates({ userId, onUpdate }: UseFeedUpdatesOptions) {
   const [updates, setUpdates] = useState<unknown[]>([]);
   useEffect(() => {
-    const unsubscribe = subscribeToFeedChanges((payload) => {
+    const unsubscribe = subscribeToFeedChanges(userId, (payload) => {
       setUpdates((prev) => [...prev.slice(-19), payload]);
       onUpdate?.(payload);
     });
