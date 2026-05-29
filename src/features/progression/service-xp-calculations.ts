@@ -61,24 +61,24 @@ export function calculateXpBreakdown(params: BreakdownParams): XpBreakdown {
     streakMultiplier = 1.25;
   }
 
-  const streakBonus = Math.floor(base * (streakMultiplier - 1));
-  const squadBonus =
+  const momentumBonus = Math.floor(base * (streakMultiplier - 1));
+  const collaborationBonus =
     params.squadMultiplier > 1
       ? Math.floor(base * (params.squadMultiplier - 1))
       : 0;
-  const bossBonus = params.bossActive ? Math.floor(base * 0.2) : 0;
+  const blockerResolvedBonus = params.bossActive ? Math.floor(base * 0.2) : 0;
   const perfectBonus = params.perfectSession ? Math.floor(base * 0.15) : 0;
-  const comebackBonus = params.comebackActive ? Math.floor(base * 0.1) : 0;
+  const recoveryBonus = params.comebackActive ? Math.floor(base * 0.1) : 0;
   const total =
-    base + streakBonus + squadBonus + bossBonus + perfectBonus + comebackBonus;
+    base + momentumBonus + collaborationBonus + blockerResolvedBonus + perfectBonus + recoveryBonus;
 
   return XpBreakdownSchema.parse({
     base,
-    streakBonus,
-    squadBonus,
-    bossBonus,
+    momentumBonus,
+    collaborationBonus,
+    blockerResolvedBonus,
+    recoveryBonus,
     perfectBonus,
-    comebackBonus,
     total,
   });
 }

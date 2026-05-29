@@ -736,16 +736,18 @@ describe("contentRowSchema and mapContentRow", () => {
     expect(parsed.is_user_edited).toBe(false);
   });
 
-  it("mapContentRow throws on incomplete row (missing generationCount in StudyContentSchema)", () => {
-    // The mapper passes generationCountToday but StudyContentSchema expects generationCount
-    // This is a known schema mismatch in the source code
-    expect(() => mapContentRow(validRow)).toThrow();
+  it("mapContentRow maps generationCountToday to generationCount correctly", () => {
+    // The mapper now correctly maps generationCountToday -> generationCount
+    const result = mapContentRow(validRow);
+    expect(result.generationCount).toBe(0);
   });
 
-  it("mapContentRow handles nullable fields the same way", () => {
+  it("mapContentRow handles nullable fields without throwing", () => {
     const row = { ...validRow, source_url: null, title: null, error_message: null };
-    // Same schema mismatch as above
-    expect(() => mapContentRow(row)).toThrow();
+    const result = mapContentRow(row);
+    expect(result.sourceUrl).toBeUndefined();
+    expect(result.title).toBeUndefined();
+    expect(result.errorMessage).toBeUndefined();
   });
 
   it("rejects invalid source_type", () => {

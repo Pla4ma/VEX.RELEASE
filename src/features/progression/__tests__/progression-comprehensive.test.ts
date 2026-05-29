@@ -352,11 +352,8 @@ describe("XP Calculations", () => {
   });
 
   describe("calculateXpBreakdown", () => {
-    it("throws ZodError due to missing required schema fields (legacy field mismatch)", () => {
-      // The function uses legacy field names (streakBonus, squadBonus, bossBonus)
-      // but XpBreakdownSchema requires new field names (momentumBonus, collaborationBonus, etc.)
-      // with .strict() — so the parse will always fail.
-      expect(() =>
+    it("returns valid breakdown with no bonuses when params have no bonuses", () => {
+      const result =
         calculateXpBreakdown({
           baseAmount: 100,
           streakDays: 0,
@@ -364,12 +361,18 @@ describe("XP Calculations", () => {
           bossActive: false,
           perfectSession: false,
           comebackActive: false,
-        }),
-      ).toThrow();
+        });
+      expect(result.base).toBe(100);
+      expect(result.momentumBonus).toBe(0);
+      expect(result.collaborationBonus).toBe(0);
+      expect(result.blockerResolvedBonus).toBe(0);
+      expect(result.perfectBonus).toBe(0);
+      expect(result.recoveryBonus).toBe(0);
+      expect(result.total).toBe(100);
     });
 
-    it("throws for any input due to schema mismatch", () => {
-      expect(() =>
+    it("returns valid breakdown with all bonuses applied", () => {
+      const result =
         calculateXpBreakdown({
           baseAmount: 50,
           streakDays: 10,
@@ -377,8 +380,14 @@ describe("XP Calculations", () => {
           bossActive: true,
           perfectSession: true,
           comebackActive: true,
-        }),
-      ).toThrow();
+        });
+      expect(result.base).toBe(50);
+      expect(result.momentumBonus).toBeGreaterThanOrEqual(0);
+      expect(result.collaborationBonus).toBeGreaterThanOrEqual(0);
+      expect(result.blockerResolvedBonus).toBe(10);
+      expect(result.perfectBonus).toBe(7);
+      expect(result.recoveryBonus).toBe(5);
+      expect(result.total).toBeGreaterThan(50);
     });
 
     it("BreakdownParams interface accepts all parameter types", () => {
@@ -391,8 +400,9 @@ describe("XP Calculations", () => {
         perfectSession: false,
         comebackActive: true,
       };
-      // The function itself throws at the parse step, but params are valid
-      expect(() => calculateXpBreakdown(params)).toThrow();
+      const result = calculateXpBreakdown(params);
+      expect(result).toBeDefined();
+      expect(result.total).toBeGreaterThan(0);
     });
   });
 });
@@ -1034,8 +1044,8 @@ describe("Prestige Engine", () => {
       expect(result.success).toBe(true);
       expect(result.prestigeState.prestigeLevel).toBe(1);
       expect(result.newState.tracks.DURATION.level).toBe(1);
-      // Note: executePrestige hardcodes overallRank to "APPRENTICE" in the reset state
-      expect(result.newState.overallRank).toBe("APPRENTICE");
+      // executePrestige computes overallRank via calculateMasteryRank — prestige > 0 returns TRANSCENDENT
+      expect(result.newState.overallRank).toBe("TRANSCENDENT");
       expect(result.newState.prestigeLevel).toBe(1);
     });
   });

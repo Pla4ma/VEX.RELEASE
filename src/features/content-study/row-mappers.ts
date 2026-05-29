@@ -72,7 +72,7 @@ export function mapContentRow(row: unknown) {
     isUserEdited: parsed.is_user_edited,
     status: parsed.status,
     errorMessage: parsed.error_message ?? undefined,
-    generationCountToday: parsed.generation_count_today,
+    generationCount: parsed.generation_count_today,
     lastGenerationDate: parsed.last_generation_date ?? undefined,
     deletedAt: parsed.deleted_at ?? undefined,
     createdAt: parsed.created_at,
@@ -90,7 +90,9 @@ export function mapGenerationRow(row: unknown) {
     model: parsed.model,
     generationVersion: parsed.generation_version,
     processingTimeMs: parsed.processing_time_ms ?? undefined,
-    summary: parsed.summary,
+    summary: typeof parsed.summary === "string"
+      ? JSON.parse(parsed.summary) as Record<string, unknown>
+      : parsed.summary,
     keyConcepts: parsed.key_concepts,
     tasks: parsed.tasks,
     quizItems: parsed.quiz_items,

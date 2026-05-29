@@ -1,6 +1,7 @@
 import type { UnifiedMasteryState } from "./unified-mastery";
 import type { PrestigeState, PrestigeResult, NightmareModeConfig, PrestigeBonus } from "./prestige-types";
 import { calculatePrestigeBonuses } from "./prestige-bonuses";
+import { calculateMasteryRank } from "./mastery-types";
 
 export function canPrestige(
   masteryState: UnifiedMasteryState,
@@ -78,7 +79,7 @@ export function executePrestige(
       },
     },
     overallLevel: 1,
-    overallRank: "APPRENTICE",
+    overallRank: calculateMasteryRank(1, newPrestigeLevel),
     prestigeLevel: newPrestigeLevel,
     prestigeBonuses: [
       ...masteryState.prestigeBonuses,

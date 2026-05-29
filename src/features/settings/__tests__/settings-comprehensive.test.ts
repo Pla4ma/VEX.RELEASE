@@ -627,12 +627,13 @@ describe("defaults", () => {
     expect(prefs.settings["general.timezone"]).toBeDefined();
   });
 
-  it("createDefaultNotificationSettings throws due to empty email default (source bug)", () => {
-    // NOTE: The source code defaults email to "" which fails Zod's .email() validator.
-    // This test documents the known issue rather than masking it.
-    expect(() =>
-      createDefaultNotificationSettings("550e8400-e29b-41d4-a716-446655440020"),
-    ).toThrow();
+  it("createDefaultNotificationSettings returns valid notification settings", () => {
+    // The source code now defaults email to a valid placeholder that passes .email() validator.
+    const settings = createDefaultNotificationSettings("550e8400-e29b-41d4-a716-446655440020");
+    expect(settings.channels.email.enabled).toBe(true);
+    expect(settings.channels.email.email).toBeTruthy();
+    expect(settings.channels.push.enabled).toBe(true);
+    expect(settings.channels.inApp.enabled).toBe(true);
   });
 
   it("createDefaultCoachSettings returns valid shape", () => {
