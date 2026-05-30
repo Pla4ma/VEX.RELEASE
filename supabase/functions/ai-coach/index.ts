@@ -1,8 +1,8 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.49.8';
 import { buildCorsHeaders } from '../_shared/cors.ts';
 import { verifyAuthorizedUser } from '../_shared/auth.ts';
 import { AIRequestSchema, AIRequestTypeSchema, CoachPayloadSchema, type AIRequest } from './schemas.ts';
+import { checkRateLimit } from '../_shared/rate-limit.ts';
 
 type GeminiResponse = { candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>; usageMetadata?: { promptTokenCount?: number; candidatesTokenCount?: number } };
 const httpRequest = globalThis.fetch.bind(globalThis);
@@ -20,8 +20,11 @@ serve(async (request) => {
   if (parsed.data.userId !== auth.userId) return respond(buildError(parsed.data.requestType, startedAt, 'FORBIDDEN', 'Request user does not match auth token', false), 403, request);
   const apiKey = Deno.env.get('GEMINI_API_KEY');
   if (!apiKey) return respond(buildError(parsed.data.requestType, startedAt, 'GEMINI_API_ERROR', 'Missing Gemini configuration', true), 200, request);
-  if (parsed.data.requestType === 'GENERATE_COACH_MESSAGE' && await isRateLimited(parsed.data.userId)) {
-    return respond(buildError(parsed.data.requestType, startedAt, 'GEMINI_RATE_LIMIT', 'Hourly AI coach message limit reached', true), 200, request);
+  const supabaseUrl = Deno.env.get('SUPABASE_URL');
+  const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+  if (parsed.data.requestType === 'GENERATE_COACH_MESSAGE' && supabaseUrl && serviceRoleKey) {
+    const rateLimit = await checkRateLimit(parsed.data.userId, 'ai:coach', supabaseUrl, serviceRoleKey);
+    if (!rateLimit.allowed) return respond(buildError(parsed.data.requestType, startedAt, 'GEMINI_RATE_LIMIT', 'Hourly AI coach message limit reached', true), 200, request);
   }
   try {
     const prompt = buildPrompt(parsed.data);
@@ -41,20 +44,12 @@ function buildPrompt(request: AIRequest): { system: string; user: string; maxOut
   return { system: 'Return a short plain-text coaching response.', user: JSON.stringify(request.context), maxOutputTokens: 150 };
 }
 
-async function isRateLimited(userId: string): Promise<boolean> {
-  const url = Deno.env.get('SUPABASE_URL');
-  const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
-  if (!url || !serviceRoleKey) return false;
-  const supabase = createClient(url, serviceRoleKey);
-  const { count } = await supabase.from('coach_messages').select('id', { count: 'exact', head: true }).eq('user_id', userId).gte('created_at', new Date(Date.now() - 60 * 60 * 1000).toISOString());
-  return (count ?? 0) >= 5;
-}
 
 async function callGemini(apiKey: string, systemPrompt: string, userPrompt: string, maxOutputTokens: number): Promise<GeminiResponse> {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 9000);
   try {
-    const response = await httpRequest(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, signal: controller.signal, body: JSON.stringify({ systemInstruction: { role: 'user', parts: [{ text: systemPrompt }] }, contents: [{ role: 'user', parts: [{ text: userPrompt }] }], generationConfig: { temperature: 0.4, maxOutputTokens } }) });
+    const response = await httpRequest(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey }, signal: controller.signal, body: JSON.stringify({ systemInstruction: { role: 'user', parts: [{ text: systemPrompt }] }, contents: [{ role: 'user', parts: [{ text: userPrompt }] }], generationConfig: { temperature: 0.4, maxOutputTokens } }) });
     if (!response.ok) throw new Error(`Gemini API error: ${response.status}`);
     return (await response.json()) as GeminiResponse;
   } finally { clearTimeout(timeoutId); }

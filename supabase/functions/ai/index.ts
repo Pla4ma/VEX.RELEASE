@@ -4,6 +4,7 @@ import { AIRequestSchema, type AIRequest, type AIResponse } from '../../../src/s
 import { AI_TIMEOUTS, FALLBACK_CONTENT, GENERATION_CONFIG, MODEL_BY_USE_CASE, SYSTEM_PROMPTS, USER_PROMPT_TEMPLATES } from '../../../src/shared/ai/ai-constants.ts';
 import { verifyAuthorizedUser, jsonResponse } from './auth.ts';
 import { callGemini } from './gemini.ts';
+import { checkRateLimit } from '../_shared/rate-limit.ts';
 
 const ROUTE_BY_SLUG: Record<string, AIRequest['requestType']> = {
   'coach-message': 'GENERATE_COACH_MESSAGE',
@@ -18,6 +19,12 @@ serve(async (request) => {
   if (request.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders });
   const auth = await verifyAuthorizedUser(request);
   if (!auth.ok) return auth.response;
+  const supabaseUrl = Deno.env.get('SUPABASE_URL');
+  const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+  if (supabaseUrl && serviceRoleKey) {
+    const rateLimit = await checkRateLimit(auth.userId, 'ai:generate', supabaseUrl, serviceRoleKey);
+    if (!rateLimit.allowed) return jsonResponse({ error: 'Rate limit exceeded. Try again later.', retryAfter: Math.ceil((rateLimit.resetAt - Date.now()) / 1000) }, 429, corsHeaders);
+  }
   if (request.method !== 'POST') return jsonResponse({ error: 'Method not allowed' }, 405, corsHeaders);
 
   const slug = getRouteSlug(request.url);

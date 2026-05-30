@@ -8,6 +8,7 @@ export interface RateLimitConfig {
 const DEFAULT_CONFIGS: Record<string, RateLimitConfig> = {
   'session:complete': { maxRequests: 10, windowSeconds: 60 },
   'ai:coach': { maxRequests: 5, windowSeconds: 3600 },
+  'ai:generate': { maxRequests: 20, windowSeconds: 3600 },
   'auth:login': { maxRequests: 10, windowSeconds: 300 },
   'auth:signup': { maxRequests: 5, windowSeconds: 300 },
   'default': { maxRequests: 20, windowSeconds: 60 },
@@ -33,7 +34,7 @@ export async function checkRateLimit(
 
   if (error) {
     console.error(`Rate limit check failed for ${operation}:`, error);
-    return { allowed: true, remaining: maxRequests, resetAt: Date.now() + windowSeconds * 1000 };
+    return { allowed: false, remaining: 0, resetAt: Date.now() + windowSeconds * 1000 };
   }
 
   const result = data as { allowed: boolean; remaining: number; reset_at: number };

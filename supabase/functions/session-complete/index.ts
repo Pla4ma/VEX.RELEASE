@@ -75,8 +75,7 @@ serve(async (request: Request) => {
   const clampedEffective = Math.min(req.effectiveDurationSeconds, clampedDuration);
   const clampedQuality = Math.max(0, Math.min(100, req.focusQuality));
 
-  // Never trust client-provided streakDays — server calculates from DB
-  const safeStreakDays = 0;
+  // Streak is now fully server-authoritative — no client-provided streakDays sent to RPC
 
   // --- Execute Server-Authoritative Completion ---
   if (!supabaseUrl || !serviceRoleKey) {
@@ -97,7 +96,6 @@ serve(async (request: Request) => {
     p_pauses: req.pauses,
     p_session_mode: req.sessionMode,
     p_final_score: req.finalScore,
-    p_streak_days: safeStreakDays,
     p_mode_bonus: req.modeBonus,
   });
 

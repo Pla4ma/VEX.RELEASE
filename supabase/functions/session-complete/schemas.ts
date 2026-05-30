@@ -11,7 +11,6 @@ export const CompleteSessionRequestSchema = z.object({
   pauses: z.number().int().min(0).default(0),
   sessionMode: z.string().default('FLOW'),
   finalScore: z.number().int().min(0).default(0),
-  streakDays: z.number().int().min(0).default(0),
   modeBonus: z.number().int().min(0).default(0),
 }).strict();
 
