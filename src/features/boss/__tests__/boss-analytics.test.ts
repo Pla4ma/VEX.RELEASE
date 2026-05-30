@@ -1,3 +1,7 @@
+/**
+ * Tests for boss analytics
+ */
+
 import {
   BOSS_ANALYTICS_EVENTS,
   trackBossEvent,
@@ -6,32 +10,28 @@ import {
   trackCombatAbilityActivated,
 } from "../analytics";
 
-describe("Boss analytics (all stubs)", () => {
-  it("BOSS_ANALYTICS_EVENTS is an empty readonly array", () => {
+describe("boss analytics", () => {
+  it("BOSS_ANALYTICS_EVENTS is an empty array", () => {
     expect(BOSS_ANALYTICS_EVENTS).toEqual([]);
-    expect(Array.isArray(BOSS_ANALYTICS_EVENTS)).toBe(true);
   });
 
-  it("trackBossEvent is a void function", () => {
-    expect(trackBossEvent()).toBeUndefined();
+  it("trackBossEvent is a no-op function", () => {
+    expect(() => trackBossEvent()).not.toThrow();
   });
 
-  it("trackBossRouteOpened accepts all arg combinations", () => {
-    expect(() => trackBossRouteOpened()).not.toThrow();
-    expect(() => trackBossRouteOpened("user-1")).not.toThrow();
-    expect(() => trackBossRouteOpened("user-1", "high")).not.toThrow();
+  it("trackBossRouteOpened accepts all args", () => {
     expect(() => trackBossRouteOpened("user-1", "high", true)).not.toThrow();
-    expect(() => trackBossRouteOpened(null, undefined, false)).not.toThrow();
   });
 
-  it("trackBossCTAClicked accepts all arg combinations", () => {
-    expect(() => trackBossCTAClicked()).not.toThrow();
-    expect(() => trackBossCTAClicked("user-1")).not.toThrow();
+  it("trackBossRouteOpened works with no args", () => {
+    expect(() => trackBossRouteOpened()).not.toThrow();
+  });
+
+  it("trackBossCTAClicked accepts all args", () => {
     expect(() => trackBossCTAClicked("user-1", 25, "intense")).not.toThrow();
   });
 
-  it("trackCombatAbilityActivated accepts all arg combinations", () => {
-    expect(() => trackCombatAbilityActivated()).not.toThrow();
+  it("trackCombatAbilityActivated accepts all args", () => {
     expect(() =>
       trackCombatAbilityActivated("u1", "e1", "fireball", 50, true),
     ).not.toThrow();

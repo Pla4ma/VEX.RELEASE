@@ -36,7 +36,6 @@ module.exports = [
   '<rootDir>/src/features/content-study/__tests__/persistence.test.ts',
   '<rootDir>/src/shared/ai/__tests__/edge-function-service.test.ts',
   '<rootDir>/src/features/settings/__tests__/service.test.ts',
-  '<rootDir>/src/features/focus-identity/__tests__/focus-identity-schemas.test.ts',
   '<rootDir>/src/features/ai-coach/__tests__/CoachRecommendationService.test.ts',
   '<rootDir>/src/features/settings/__tests__/validation.test.ts',
   '<rootDir>/src/features/ai-coach/__tests__/recommendation-pipeline.test.ts',

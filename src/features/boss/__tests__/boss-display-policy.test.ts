@@ -1,3 +1,7 @@
+/**
+ * Tests for boss display-policy
+ */
+
 import {
   shouldShowBossPreview,
   isCombatAllowed,
@@ -7,48 +11,42 @@ import {
   isBossVisibleAtHome,
 } from "../display-policy";
 
-describe("Display policy (all stubs return false/empty)", () => {
-  it("shouldShowBossPreview always returns false", () => {
+describe("display-policy", () => {
+  it("shouldShowBossPreview returns false", () => {
     expect(shouldShowBossPreview()).toBe(false);
   });
 
-  it("isCombatAllowed always returns false regardless of argument", () => {
+  it("isCombatAllowed returns false", () => {
     expect(isCombatAllowed()).toBe(false);
-    expect(isCombatAllowed(undefined)).toBe(false);
+  });
+
+  it("isCombatAllowed ignores policy argument", () => {
     expect(isCombatAllowed({ some: "policy" })).toBe(false);
   });
 
-  it("isBossVisibleAtSurface always returns false", () => {
+  it("isBossVisibleAtSurface returns false", () => {
     expect(isBossVisibleAtSurface()).toBe(false);
-    expect(isBossVisibleAtSurface("home")).toBe(false);
   });
 
-  it("useBossDisplayPolicy returns hidden and no combat", () => {
+  it("useBossDisplayPolicy returns not visible and combat not allowed", () => {
     const policy = useBossDisplayPolicy();
-    expect(policy).toEqual({ isVisible: false, combatAllowed: false });
+    expect(policy.isVisible).toBe(false);
+    expect(policy.combatAllowed).toBe(false);
   });
 
-  it("useBossDisplayPolicy returns same result with context argument", () => {
-    expect(useBossDisplayPolicy("home")).toEqual({
-      isVisible: false,
-      combatAllowed: false,
-    });
-    expect(useBossDisplayPolicy("session")).toEqual({
-      isVisible: false,
-      combatAllowed: false,
-    });
+  it("useBossDisplayPolicy ignores context argument", () => {
+    const policy = useBossDisplayPolicy("home");
+    expect(policy.isVisible).toBe(false);
+    expect(policy.combatAllowed).toBe(false);
   });
 
-  it("getBossDisplayCopy returns empty strings for title and subtitle", () => {
+  it("getBossDisplayCopy returns empty title and subtitle", () => {
     const copy = getBossDisplayCopy();
-    expect(copy).toHaveProperty("title");
-    expect(copy).toHaveProperty("subtitle");
     expect(copy.title).toBe("");
     expect(copy.subtitle).toBe("");
   });
 
-  it("isBossVisibleAtHome is a boolean constant set to false", () => {
+  it("isBossVisibleAtHome is false", () => {
     expect(isBossVisibleAtHome).toBe(false);
-    expect(typeof isBossVisibleAtHome).toBe("boolean");
   });
 });

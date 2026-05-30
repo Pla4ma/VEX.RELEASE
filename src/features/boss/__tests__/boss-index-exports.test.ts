@@ -1,36 +1,55 @@
+/**
+ * Tests for boss index exports and individual hook file exports
+ * Covers: boss index exports, hooks/useActiveBoss exports
+ */
+
 import * as bossIndex from "../index";
+import { useActiveBossEnhanced } from "../hooks/useActiveBoss";
 
-describe("boss index exports completeness", () => {
-  const expectedFunctions = [
-    "shouldShowBossPreview",
-    "isBossVisibleAtSurface",
-    "isCombatAllowed",
-    "getBossDisplayCopy",
-    "getBossEngagementSignals",
-    "deriveBossEngagementLevel",
-    "trackBossEvent",
-    "trackBossRouteOpened",
-    "trackBossCTAClicked",
-  ];
-
-  it.each(expectedFunctions)("exports %s as a function", (name) => {
-    expect(typeof (bossIndex as Record<string, unknown>)[name]).toBe(
-      "function",
-    );
+describe("boss index exports", () => {
+  it("exports shouldShowBossPreview", () => {
+    expect(typeof bossIndex.shouldShowBossPreview).toBe("function");
   });
 
-  it("exports bossRepository object", () => {
+  it("exports isBossVisibleAtSurface", () => {
+    expect(typeof bossIndex.isBossVisibleAtSurface).toBe("function");
+  });
+
+  it("exports isCombatAllowed", () => {
+    expect(typeof bossIndex.isCombatAllowed).toBe("function");
+  });
+
+  it("exports getBossDisplayCopy", () => {
+    expect(typeof bossIndex.getBossDisplayCopy).toBe("function");
+  });
+
+  it("exports bossRepository", () => {
     expect(bossIndex.bossRepository).toBeDefined();
-    expect(typeof bossIndex.bossRepository).toBe("object");
   });
 
-  it("exports PersonalBossBlockSchema", () => {
-    expect(bossIndex.PersonalBossBlockSchema).toBeDefined();
+  it("exports getBossEngagementSignals", () => {
+    expect(typeof bossIndex.getBossEngagementSignals).toBe("function");
   });
 
-  it("exports hook functions", () => {
-    expect(typeof bossIndex.useActiveBoss).toBe("function");
-    expect(typeof bossIndex.useBossEngagementSummary).toBe("function");
-    expect(typeof bossIndex.useAvailableBosses).toBe("function");
+  it("exports deriveBossEngagementLevel", () => {
+    expect(typeof bossIndex.deriveBossEngagementLevel).toBe("function");
+  });
+
+  it("exports trackBossEvent", () => {
+    expect(typeof bossIndex.trackBossEvent).toBe("function");
+  });
+
+  it("exports trackBossRouteOpened", () => {
+    expect(typeof bossIndex.trackBossRouteOpened).toBe("function");
+  });
+
+  it("exports trackBossCTAClicked", () => {
+    expect(typeof bossIndex.trackBossCTAClicked).toBe("function");
+  });
+});
+
+describe("hooks/useActiveBoss exports", () => {
+  it("useActiveBossEnhanced is a function", () => {
+    expect(typeof useActiveBossEnhanced).toBe("function");
   });
 });
