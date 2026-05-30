@@ -1,9 +1,10 @@
-import React, { useMemo } from "react";
+import React, { useCallback, useMemo } from "react";
 import { Pressable, Text, View } from "react-native";
 import { useTheme } from "../../../theme/ThemeContext";
 import type { RescueEligibilityResult } from "../schemas";
 import type { Lane } from "../../lane-engine/types";
 import { deriveRescueSurface } from "../../mode-native/service";
+import { sessionStart, buttonTap } from "../../../utils/haptics";
 
 interface RescueBannerProps {
   eligibility: RescueEligibilityResult;
@@ -40,6 +41,16 @@ export function RescueBanner({
   const actionLabel = rescueSurface
     ? `${rescueSurface.actionLabel} (${minutes}m)`
     : `Start ${minutes} min`;
+
+  const handleStart = useCallback(() => {
+    sessionStart();
+    onStartRescue();
+  }, [onStartRescue]);
+
+  const handleDismiss = useCallback(() => {
+    buttonTap();
+    onDismiss();
+  }, [onDismiss]);
 
   return (
     <View
@@ -83,7 +94,7 @@ export function RescueBanner({
         }}
       >
         <Pressable
-          onPress={onStartRescue}
+          onPress={handleStart}
           accessibilityRole="button"
           accessibilityLabel={accessibilityLabel}
           accessibilityHint={accessibilityHint}
@@ -111,7 +122,7 @@ export function RescueBanner({
         </Pressable>
 
         <Pressable
-          onPress={onDismiss}
+          onPress={handleDismiss}
           accessibilityRole="button"
           accessibilityLabel="Dismiss rescue mode suggestion"
           accessibilityHint="Hides the rescue mode banner for now."

@@ -10,6 +10,7 @@ import Animated, {
 import { Box } from "../../../components/primitives/Box";
 import { Text } from "../../../components/primitives/Text";
 import { useTheme } from "../../../theme";
+import { cardSelection } from "../../../utils/haptics";
 
 export function DurationChip({
   minutes,
@@ -26,6 +27,7 @@ export function DurationChip({
     transform: [{ scale: scale.value }],
   }));
   const handlePress = () => {
+    cardSelection();
     scale.value = withSequence(
       withTiming(0.95, { duration: 100 }),
       withSpring(1, { damping: 15, stiffness: 200 }),
@@ -35,9 +37,9 @@ export function DurationChip({
   return (
     <Pressable
       onPress={handlePress}
-      accessibilityLabel="Interactive control"
+      accessibilityLabel={`Select ${minutes} minute duration`}
       accessibilityRole="button"
-      accessibilityHint="Activates this control"
+      accessibilityHint="Selects this session duration"
     >
       <Animated.View
         style={[

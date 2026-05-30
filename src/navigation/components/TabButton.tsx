@@ -11,6 +11,7 @@ import Animated, {
 import { Icon } from "../../icons";
 import { Text } from "../../components/primitives/Text";
 import { useTheme } from "../../theme";
+import { tabSwitch } from "../../utils/haptics";
 import { createSheet } from "../../shared/ui/create-sheet";
 
 const ICONS = {
@@ -82,6 +83,7 @@ export function TabButton({
   }));
 
   const handlePress = () => {
+    tabSwitch();
     bounce.value = withSequence(
       withTiming(0.85, { duration: 80 }),
       withSpring(1, { damping: 10, stiffness: 200 }),

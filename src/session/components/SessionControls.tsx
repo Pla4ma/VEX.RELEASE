@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, Pressable, Modal } from "react-native";
 import { styles } from "./session-controls.styles";
+import { sessionStart, sessionPause, sessionResume, buttonTap } from "../../utils/haptics";
 
 interface SessionControlsProps {
   isActive: boolean;
@@ -23,7 +24,20 @@ export const SessionControls: React.FC<SessionControlsProps> = ({
   const [showConfirmAbandon, setShowConfirmAbandon] = useState(false);
   const handleAbandon = () => {
     setShowConfirmAbandon(false);
+    buttonTap();
     onAbandon();
+  };
+  const handleStart = () => {
+    sessionStart();
+    onStart();
+  };
+  const handlePause = () => {
+    sessionPause();
+    onPause();
+  };
+  const handleResume = () => {
+    sessionResume();
+    onResume();
   };
   if (!isActive) {
     return (
@@ -35,7 +49,7 @@ export const SessionControls: React.FC<SessionControlsProps> = ({
             disabled && styles.disabled,
             pressed && { opacity: 0.8 },
           ]}
-          onPress={onStart}
+          onPress={handleStart}
           disabled={disabled}
           accessibilityLabel="▶ Start Session button"
           accessibilityRole="button"
@@ -56,7 +70,7 @@ export const SessionControls: React.FC<SessionControlsProps> = ({
               styles.resumeButton,
               pressed && { opacity: 0.8 },
             ]}
-            onPress={onResume}
+            onPress={handleResume}
             accessibilityLabel="▶ Resume button"
             accessibilityRole="button"
             accessibilityHint="Activates this control"
@@ -70,7 +84,7 @@ export const SessionControls: React.FC<SessionControlsProps> = ({
               styles.pauseButton,
               pressed && { opacity: 0.8 },
             ]}
-            onPress={onPause}
+            onPress={handlePause}
             accessibilityLabel="⏸ Pause button"
             accessibilityRole="button"
             accessibilityHint="Activates this control"
