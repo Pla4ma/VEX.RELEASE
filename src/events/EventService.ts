@@ -22,6 +22,7 @@ export class EventService {
   private userId: string | null = null;
   private activeEvents: Map<string, Event> = new Map();
   private challengeManager: ChallengeManager;
+  private cleanupEventListeners: (() => void) | null = null;
 
   constructor(userId?: string) {
     this.userId = userId ?? null;
@@ -34,10 +35,17 @@ export class EventService {
       debug.info("EventService skipped - seasonal systems inactive");
       return;
     }
-    setupEventListeners(() => this.userId, this.challengeManager);
+    this.cleanupEventListeners = setupEventListeners(
+      () => this.userId,
+      this.challengeManager,
+    );
     this.loadState();
   }
 
+  destroy(): void {
+    this.cleanupEventListeners?.();
+    this.cleanupEventListeners = null;
+  }
   setUserId(userId: string): void {
     this.userId = userId;
     if (getAvailabilityFor("seasonal_features").canUseBackend) {
@@ -95,37 +103,29 @@ export class EventService {
   registerChallenge(challenge: Challenge): Challenge {
     return this.challengeManager.registerChallenge(challenge);
   }
-
   joinChallenge(challengeId: string): void {
     this.challengeManager.joinChallenge(challengeId);
   }
-
   claimChallengeReward(challengeId: string): void {
     this.challengeManager.claimChallengeReward(challengeId);
   }
-
   getActiveEvents(): Event[] {
     return Array.from(this.activeEvents.values()).filter(
       (e) => e.status === "ACTIVE" || e.status === "ENDING_SOON",
     );
   }
-
   getEventById(id: string): Event | undefined {
     return this.activeEvents.get(id);
   }
-
   getActiveChallenges(): Challenge[] {
     return this.challengeManager.getActiveChallenges();
   }
-
   getChallengeById(id: string): Challenge | undefined {
     return this.challengeManager.getChallengeById(id);
   }
-
   getUserChallengeProgress(challengeId: string): number {
     return this.challengeManager.getUserChallengeProgress(challengeId);
   }
-
   getCompletedChallenges(): Challenge[] {
     return this.challengeManager.getCompletedChallenges();
   }

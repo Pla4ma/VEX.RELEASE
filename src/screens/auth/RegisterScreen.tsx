@@ -12,7 +12,7 @@ import { useAuthStore } from "../../store/index";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
 import { useTheme } from "../../theme";
 import { getMinTouchTargetStyle } from "../../utils/touchTarget";
-import { registerSchema, type RegisterFormData } from "../../validation";
+import { registerSchema, type RegisterFormData } from "./schemas";
 import { AuthValuePreview } from "./components/AuthValuePreview";
 
 type Props = NativeStackScreenProps<AuthStackParams, "Register">;

@@ -73,6 +73,9 @@ export function useSession(userId: string): UseSessionReturn {
     }
   }, [service]);
 
+  const sessionIdRef = useRef(state.session?.id);
+  sessionIdRef.current = state.session?.id;
+
   useEffect(() => {
     refresh();
   }, [refresh]);
@@ -81,7 +84,7 @@ export function useSession(userId: string): UseSessionReturn {
     const unsubscribers: Array<() => void> = [];
     unsubscribers.push(
       eventBus.subscribe("session:tick", (data) => {
-        if (data.sessionId === state.session?.id) {
+        if (data.sessionId === sessionIdRef.current) {
           setState((prev) => ({
             ...prev,
             remainingSeconds: Math.ceil(data.remaining / 1000),
@@ -93,35 +96,35 @@ export function useSession(userId: string): UseSessionReturn {
     );
     unsubscribers.push(
       eventBus.subscribe("session:started", (data) => {
-        if (data.sessionId === state.session?.id) {
+        if (data.sessionId === sessionIdRef.current) {
           setState((prev) => ({ ...prev, isActive: true, isPaused: false }));
         }
       }),
     );
     unsubscribers.push(
       eventBus.subscribe("session:paused", (data) => {
-        if (data.sessionId === state.session?.id) {
+        if (data.sessionId === sessionIdRef.current) {
           setState((prev) => ({ ...prev, isPaused: true }));
         }
       }),
     );
     unsubscribers.push(
       eventBus.subscribe("session:resumed", (data) => {
-        if (data.sessionId === state.session?.id) {
+        if (data.sessionId === sessionIdRef.current) {
           setState((prev) => ({ ...prev, isPaused: false }));
         }
       }),
     );
     unsubscribers.push(
       eventBus.subscribe("session:completed", (data) => {
-        if (data.sessionId === state.session?.id) {
+        if (data.sessionId === sessionIdRef.current) {
           setState((prev) => ({ ...prev, isActive: false, isPaused: false }));
         }
       }),
     );
     unsubscribers.push(
       eventBus.subscribe("session:abandoned", (data) => {
-        if (data.sessionId === state.session?.id) {
+        if (data.sessionId === sessionIdRef.current) {
           setState((prev) => ({ ...prev, isActive: false, isPaused: false }));
         }
       }),
@@ -129,7 +132,7 @@ export function useSession(userId: string): UseSessionReturn {
     return () => {
       unsubscribers.forEach((unsub) => unsub());
     };
-  }, [state.session?.id]);
+  }, []);
 
   const wrapAction = useCallback(
     <Args extends unknown[], R>(

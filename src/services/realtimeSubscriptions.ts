@@ -35,6 +35,13 @@ export async function broadcastActivity(
       },
     });
   }
+
+  // Schedule cleanup after 5 seconds to prevent channel leaks
+  const channelToClean = channel;
+  setTimeout(() => {
+    void channelToClean?.unsubscribe();
+    activeChannels.delete(fullChannelName);
+  }, 5_000);
 }
 
 export function subscribeToActivity(

@@ -121,8 +121,7 @@ export function useHomeScreenInnerEffects(params: {
     [controller.userId, dismissIntervention, navigation],
   );
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const interventionBannerProps: any =
+  const interventionBannerProps: InterventionBannerConfig | null =
     showIntervention && intervention
       ? {
           id: intervention.id,
@@ -136,7 +135,7 @@ export function useHomeScreenInnerEffects(params: {
               ? `${intervention.message} (gentle reminder)`
               : intervention.message,
           actionLabel: intervention.actionLabel ?? "Start session",
-          hoursRemaining: intervention.hoursRemaining,
+          hoursRemaining: intervention.hoursRemaining ?? 0,
           metadata: intervention.metadata as
             | Record<string, unknown>
             | undefined,

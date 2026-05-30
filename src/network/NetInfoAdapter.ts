@@ -35,6 +35,7 @@ export class NetInfoAdapter {
   private netInfo: unknown | null = null;
   private subscribers: Set<NetworkChangeCallback> = new Set();
   private unsubscribe: (() => void) | null = null;
+  private initialized = false;
   private currentState: NetworkState = {
     isConnected: true,
     isInternetReachable: true,
@@ -46,6 +47,8 @@ export class NetInfoAdapter {
    * Initialize NetInfo
    */
   async initialize(): Promise<void> {
+    if (this.initialized) return;
+    this.initialized = true;
     try {
       const NetInfo = require("@react-native-community/netinfo").default;
       this.netInfo = NetInfo;
@@ -136,6 +139,7 @@ export class NetInfoAdapter {
       this.unsubscribe = null;
     }
     this.subscribers.clear();
+    this.initialized = false;
   }
 }
 

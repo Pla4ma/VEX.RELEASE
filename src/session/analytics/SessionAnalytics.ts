@@ -31,6 +31,7 @@ export class SessionAnalytics {
   private eventQueue: SessionAnalyticsEvent[] = [];
   private metrics: EngagementMetrics | null = null;
   private patterns: PatternMetrics | null = null;
+  private cleanupListeners: (() => void) | null = null;
 
   setUserId(userId: string): void {
     this.userId = userId;
@@ -41,7 +42,10 @@ export class SessionAnalytics {
     if (!this.userId) {
       return;
     }
-    setupAnalyticsEventListeners(this.userId, (eventName, properties) =>
+    if (this.cleanupListeners) {
+      this.cleanupListeners();
+    }
+    this.cleanupListeners = setupAnalyticsEventListeners(this.userId, (eventName, properties) =>
       this.track(eventName, properties),
     );
   }

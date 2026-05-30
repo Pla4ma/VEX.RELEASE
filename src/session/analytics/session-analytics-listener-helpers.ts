@@ -5,8 +5,8 @@ type TrackFunction = (
   properties: Record<string, unknown>,
 ) => void;
 
-export function subscribeErrorEventListeners(track: TrackFunction): void {
-  eventBus.subscribe("session:failed", (data) => {
+export function subscribeErrorEventListeners(track: TrackFunction): () => void {
+  const unsub1 = eventBus.subscribe("session:failed", (data) => {
     if (!data) {
       return;
     }
@@ -18,7 +18,7 @@ export function subscribeErrorEventListeners(track: TrackFunction): void {
     });
   });
 
-  eventBus.subscribe("session:sync:failed", (data) => {
+  const unsub2 = eventBus.subscribe("session:sync:failed", (data) => {
     if (!data) {
       return;
     }
@@ -29,4 +29,9 @@ export function subscribeErrorEventListeners(track: TrackFunction): void {
       willRetry: data.willRetry,
     });
   });
+
+  return () => {
+    unsub1();
+    unsub2();
+  };
 }

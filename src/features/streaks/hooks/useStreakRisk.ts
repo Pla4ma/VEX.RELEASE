@@ -76,7 +76,8 @@ export function useStreakRisk(): UseStreakRiskReturn {
     retry: 3,
   });
   const riskStatus = computeRiskStatus(streakData ?? undefined, cachedRiskStatus);
-  const checkRiskMutation = useMutation({
+  // eslint-disable-next-line max-len -- destructuring mutation fields to stabilize useEffect deps
+  const { mutate: triggerRiskCheck, mutateAsync: triggerRiskCheckAsync, error: mutationError, isPending: isMutationPending } = useMutation({
     mutationFn: async () => {
       if (!userId || !streakData) {
         return null;
@@ -124,16 +125,16 @@ export function useStreakRisk(): UseStreakRiskReturn {
     if (!userId) {
       return;
     }
-    checkRiskMutation.mutate();
+    triggerRiskCheck();
     intervalRef.current = setInterval(() => {
-      checkRiskMutation.mutate();
+      triggerRiskCheck();
     }, RISK_CHECK_INTERVAL);
     return () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
       }
     };
-  }, [checkRiskMutation, userId, streakData?.currentDays]);
+  }, [triggerRiskCheck, userId, streakData?.currentDays]);
   useEffect(() => {
     if (!userId) {
       return;
@@ -152,8 +153,8 @@ export function useStreakRisk(): UseStreakRiskReturn {
     };
   }, [userId, queryClient]);
   const checkRisk = useCallback(async () => {
-    await checkRiskMutation.mutateAsync();
-  }, [checkRiskMutation]);
+    await triggerRiskCheckAsync();
+  }, [triggerRiskCheckAsync]);
   const refresh = useCallback(async () => {
     await Promise.all([refetchStreak(), refetchRisk()]);
     await checkRisk();
@@ -167,8 +168,8 @@ export function useStreakRisk(): UseStreakRiskReturn {
     });
   }, [queryClient, userId]);
   const isLoading = isStreakLoading || isRiskLoading;
-  const error = (streakError || riskError || checkRiskMutation.error) as Error | null;
-  const isRefreshing = checkRiskMutation.isPending;
+  const error = (streakError || riskError || mutationError) as Error | null;
+  const isRefreshing = isMutationPending;
   const flameColor = getFlameColor(riskStatus?.flameHealthPercent ?? 100);
   const urgencyLabel = getUrgencyLabel(riskStatus?.riskLevel || "NONE");
   const shouldShowWarning = riskStatus?.riskLevel === "MEDIUM" || riskStatus?.riskLevel === "HIGH";

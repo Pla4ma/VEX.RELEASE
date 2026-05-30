@@ -101,12 +101,16 @@ export class EventBus {
     timeout?: number,
   ): Promise<EventChannels[T]> {
     return new Promise((resolve, reject) => {
+      let timer: ReturnType<typeof setTimeout> | undefined;
       const unsubscribe = this.subscribeOnce(
         channel,
-        resolve as EventHandler<EventChannels[T]>,
+        ((data: EventChannels[T]) => {
+          if (timer !== undefined) clearTimeout(timer);
+          resolve(data);
+        }) as EventHandler<EventChannels[T]>,
       );
       if (timeout) {
-        setTimeout(() => {
+        timer = setTimeout(() => {
           unsubscribe();
           reject(new Error(`Timeout waiting for event: ${channel}`));
         }, timeout);

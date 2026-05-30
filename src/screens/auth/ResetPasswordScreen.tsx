@@ -14,7 +14,7 @@ import { useTheme } from "../../theme";
 import { Box, Text } from "../../components/primitives";
 import { Button, Input } from "../../components";
 import { Icon } from "../../icons";
-import { resetPasswordSchema } from "../../validation";
+import { resetPasswordSchema } from "./schemas";
 import type { AuthStackParams } from "../../navigation";
 
 type Props = NativeStackScreenProps<AuthStackParams, "ResetPassword">;

@@ -1,4 +1,4 @@
-import { forgotPasswordSchema } from "../../validation";
+import { forgotPasswordSchema } from "./schemas";
 import { resetPassword } from "../../services/supabaseAuth";
 import { captureException } from "../../config/sentry";
 

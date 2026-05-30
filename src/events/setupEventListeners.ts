@@ -11,56 +11,74 @@ import type { ChallengeManager } from "./ChallengeManager";
 export function setupEventListeners(
   getUserId: () => string | null,
   challengeManager: ChallengeManager,
-): void {
-  eventBus.subscribe(
-    "session:completed",
-    (payload: { userId: string; duration: number }) => {
-      if (payload.userId === getUserId()) {
-        challengeManager.updateChallengeProgress("SESSION_COUNT", 1);
-        challengeManager.updateChallengeProgress(
-          "SESSION_DURATION",
-          payload.duration,
-        );
-      }
-    },
+): () => void {
+  const unsubscribers: Array<() => void> = [];
+
+  unsubscribers.push(
+    eventBus.subscribe(
+      "session:completed",
+      (payload: { userId: string; duration: number }) => {
+        if (payload.userId === getUserId()) {
+          challengeManager.updateChallengeProgress("SESSION_COUNT", 1);
+          challengeManager.updateChallengeProgress(
+            "SESSION_DURATION",
+            payload.duration,
+          );
+        }
+      },
+    ),
   );
 
-  eventBus.subscribe(
-    "progression:xp_added",
-    (payload: { userId: string; amount: number }) => {
-      if (payload.userId === getUserId()) {
-        challengeManager.updateChallengeProgress("XP_EARNED", payload.amount);
-      }
-    },
+  unsubscribers.push(
+    eventBus.subscribe(
+      "progression:xp_added",
+      (payload: { userId: string; amount: number }) => {
+        if (payload.userId === getUserId()) {
+          challengeManager.updateChallengeProgress("XP_EARNED", payload.amount);
+        }
+      },
+    ),
   );
 
-  eventBus.subscribe(
-    "streak:updated",
-    (payload: { userId: string; state: { currentStreak: number } }) => {
-      if (payload.userId === getUserId()) {
-        challengeManager.updateChallengeProgress(
-          "STREAK_DAYS",
-          payload.state.currentStreak,
-        );
-      }
-    },
+  unsubscribers.push(
+    eventBus.subscribe(
+      "streak:updated",
+      (payload: { userId: string; state: { currentStreak: number } }) => {
+        if (payload.userId === getUserId()) {
+          challengeManager.updateChallengeProgress(
+            "STREAK_DAYS",
+            payload.state.currentStreak,
+          );
+        }
+      },
+    ),
   );
 
-  eventBus.subscribe(
-    "progression:level_up",
-    (payload: { userId: string; newLevel: number }) => {
-      if (payload.userId === getUserId()) {
-        challengeManager.updateChallengeProgress(
-          "LEVEL_REACHED",
-          payload.newLevel,
-        );
-      }
-    },
+  unsubscribers.push(
+    eventBus.subscribe(
+      "progression:level_up",
+      (payload: { userId: string; newLevel: number }) => {
+        if (payload.userId === getUserId()) {
+          challengeManager.updateChallengeProgress(
+            "LEVEL_REACHED",
+            payload.newLevel,
+          );
+        }
+      },
+    ),
   );
 
-  eventBus.subscribe("achievement:unlock", (payload: { userId: string }) => {
-    if (payload.userId === getUserId()) {
-      challengeManager.updateChallengeProgress("ACHIEVEMENT_UNLOCKED", 1);
+  unsubscribers.push(
+    eventBus.subscribe("achievement:unlock", (payload: { userId: string }) => {
+      if (payload.userId === getUserId()) {
+        challengeManager.updateChallengeProgress("ACHIEVEMENT_UNLOCKED", 1);
+      }
+    }),
+  );
+
+  return () => {
+    for (const unsub of unsubscribers) {
+      unsub();
     }
-  });
+  };
 }

@@ -12,10 +12,18 @@ type TrackFunction = (
 export function setupAnalyticsEventListeners(
   userId: string,
   track: TrackFunction,
-): void {
-  eventBus.subscribe("session:created", (data) => {
-    if (!data) {
-      return;
+): () => void {
+  let sessionDuration = 0;
+  const unsubs: Array<() => void> = [];
+
+  unsubs.push(eventBus.subscribe("session:created", (data) => {
+    if (!data) { return; }
+    const configObj =
+      data.config && typeof data.config === "object"
+        ? (data.config as Record<string, unknown>)
+        : {};
+    if (typeof configObj.duration === "number") {
+      sessionDuration = configObj.duration;
     }
     track("session_created", {
       sessionId: data.sessionId,
@@ -23,12 +31,10 @@ export function setupAnalyticsEventListeners(
       config: data.config,
       timestamp: data.timestamp,
     });
-  });
+  }));
 
-  eventBus.subscribe("session:started", (data) => {
-    if (!data) {
-      return;
-    }
+  unsubs.push(eventBus.subscribe("session:started", (data) => {
+    if (!data) { return; }
     capture(SessionEvents.SESSION_STARTED, {
       session_id: data.sessionId,
       user_id: userId,
@@ -40,15 +46,11 @@ export function setupAnalyticsEventListeners(
       startedAt: data.startedAt,
       phase: data.phase,
     });
-  });
+  }));
 
-  eventBus.subscribe("session:completed", (data) => {
-    if (!data) {
-      return;
-    }
-    if (getOrchestratorHandlesCompletion()) {
-      return;
-    }
+  unsubs.push(eventBus.subscribe("session:completed", (data) => {
+    if (!data) { return; }
+    if (getOrchestratorHandlesCompletion()) { return; }
     const summary =
       data.summary && typeof data.summary === "object"
         ? (data.summary as Record<string, unknown>)
@@ -81,14 +83,12 @@ export function setupAnalyticsEventListeners(
       summary: data.summary,
       duration: data.duration,
     });
-  });
+  }));
 
-  eventBus.subscribe("session:abandoned", (data) => {
-    if (!data) {
-      return;
-    }
+  unsubs.push(eventBus.subscribe("session:abandoned", (data) => {
+    if (!data) { return; }
     const elapsedSeconds = data.elapsedTime || 0;
-    const totalDuration = 0;
+    const totalDuration = sessionDuration;
     const completionPercentage =
       totalDuration > 0
         ? Math.round((elapsedSeconds / totalDuration) * 100)
@@ -108,58 +108,48 @@ export function setupAnalyticsEventListeners(
       elapsedTime: data.elapsedTime,
       abandonedAt: data.abandonedAt,
     });
-  });
+  }));
 
-  eventBus.subscribe("session:interruption", (data) => {
-    if (!data) {
-      return;
-    }
+  unsubs.push(eventBus.subscribe("session:interruption", (data) => {
+    if (!data) { return; }
     track("session_interrupted", {
       sessionId: data.sessionId,
       userId: data.userId,
       interruption: data.interruption,
     });
-  });
+  }));
 
-  eventBus.subscribe("session:recovery:successful", (data) => {
-    if (!data) {
-      return;
-    }
+  unsubs.push(eventBus.subscribe("session:recovery:successful", (data) => {
+    if (!data) { return; }
     track("session_recovered", {
       sessionId: data.sessionId,
       userId: data.userId,
       recoveredAt: data.recoveredAt,
       recoveredTime: data.recoveredTime,
     });
-  });
+  }));
 
-  eventBus.subscribe("session:anticheat:flag", (data) => {
-    if (!data) {
-      return;
-    }
+  unsubs.push(eventBus.subscribe("session:anticheat:flag", (data) => {
+    if (!data) { return; }
     track("anti_cheat_flag", {
       sessionId: data.sessionId,
       userId: data.userId,
       flag: data.flag,
     });
-  });
+  }));
 
-  eventBus.subscribe("session:phase:changed", (data) => {
-    if (!data) {
-      return;
-    }
+  unsubs.push(eventBus.subscribe("session:phase:changed", (data) => {
+    if (!data) { return; }
     track("phase_transition", {
       sessionId: data.sessionId,
       previousPhase: data.previousPhase,
       newPhase: data.newPhase,
       timestamp: data.timestamp,
     });
-  });
+  }));
 
-  eventBus.subscribe("session:tick", (data) => {
-    if (!data) {
-      return;
-    }
+  unsubs.push(eventBus.subscribe("session:tick", (data) => {
+    if (!data) { return; }
     track("session_tick", {
       sessionId: data.sessionId,
       elapsed: data.elapsed,
@@ -167,19 +157,23 @@ export function setupAnalyticsEventListeners(
       percentage: data.percentage,
       phase: data.phase,
     });
-  });
+  }));
 
-  eventBus.subscribe("session:rewards:granted", (data) => {
-    if (!data) {
-      return;
-    }
+  unsubs.push(eventBus.subscribe("session:rewards:granted", (data) => {
+    if (!data) { return; }
     track("rewards_earned", {
       sessionId: data.sessionId,
       userId: data.userId,
       rewards: data.rewards,
       timestamp: data.timestamp,
     });
-  });
+  }));
 
-  subscribeErrorEventListeners(track);
+  unsubs.push(subscribeErrorEventListeners(track));
+
+  return () => {
+    for (const unsub of unsubs) {
+      unsub();
+    }
+  };
 }

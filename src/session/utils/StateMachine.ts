@@ -12,6 +12,13 @@ import type {
 
 const debug = createDebugger("session:stateMachine");
 
+const MAX_QUEUE_DEPTH = 10;
+
+interface QueuedEvent {
+  event: Event;
+  payload: unknown;
+}
+
 export class StateMachine<TContext> {
   private config: StateMachineConfig<TContext>;
   private currentState: State;
@@ -19,6 +26,7 @@ export class StateMachine<TContext> {
   private history: TransitionRecord[] = [];
   private isTransitioning = false;
   private abortController: AbortController | null = null;
+  private eventQueue: QueuedEvent[] = [];
 
   constructor(config: StateMachineConfig<TContext>) {
     this.config = config;
@@ -33,8 +41,12 @@ export class StateMachine<TContext> {
 
   async send(event: Event, payload?: unknown): Promise<boolean> {
     if (this.isTransitioning) {
+      if (this.eventQueue.length >= MAX_QUEUE_DEPTH) {
+        debug.warn("Event queue full (max %d), dropping event: %s", MAX_QUEUE_DEPTH, event);
+        return false;
+      }
       debug.warn("State machine busy, queuing event: %s", event);
-      setTimeout(() => this.send(event, payload), 0);
+      this.eventQueue.push({ event, payload });
       return false;
     }
     this.isTransitioning = true;
@@ -50,7 +62,6 @@ export class StateMachine<TContext> {
           event,
           fromState,
         );
-        this.isTransitioning = false;
         return false;
       }
       const transitions = Array.isArray(transition) ? transition : [transition];
@@ -71,10 +82,11 @@ export class StateMachine<TContext> {
         "Transition failed: %s",
         error instanceof Error ? error : new Error(String(error)),
       );
-      this.isTransitioning = false;
       return false;
     } finally {
+      this.isTransitioning = false;
       this.abortController = null;
+      this.flushQueue();
     }
   }
 
@@ -167,5 +179,12 @@ export class StateMachine<TContext> {
       return false;
     }
     return true;
+  }
+
+  private flushQueue(): void {
+    const next = this.eventQueue.shift();
+    if (next) {
+      void this.send(next.event, next.payload);
+    }
   }
 }

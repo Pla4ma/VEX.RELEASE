@@ -3,7 +3,7 @@ import { FadeInDown } from "react-native-reanimated";
 import { useToast } from "../../shared/ui/components/Toast";
 import { useAuthStore } from "../../store/index";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
-import { loginSchema } from "../../validation";
+import { loginSchema } from "./schemas";
 
 type LoginErrors = { email?: string; password?: string };
 
