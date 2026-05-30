@@ -88,7 +88,7 @@ export function StudyLibraryScreen(): JSX.Element {
             variant="outline"
             size="sm"
             onPress={() => navigation.navigate("ContentInput", {})}
-            accessibilityLabel="+ Add New button"
+            accessibilityLabel="Add new content"
             accessibilityRole="button"
             accessibilityHint="Double tap to activate"
           >

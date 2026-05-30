@@ -91,7 +91,7 @@ export function TooltipCard({
               paddingVertical: theme.spacing[2],
               alignItems: "center",
             }}
-            accessibilityLabel="Skip tutorial button"
+            accessibilityLabel="Skip tutorial"
             accessibilityRole="button"
             accessibilityHint="Double tap to activate"
           >

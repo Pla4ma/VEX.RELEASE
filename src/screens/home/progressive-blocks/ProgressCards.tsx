@@ -128,7 +128,7 @@ export function ReturnReasonCard({
           <Button
             variant="outline"
             onPress={onDismiss}
-            accessibilityLabel="Dismiss button"
+            accessibilityLabel="Dismiss progress card"
             accessibilityRole="button"
             accessibilityHint="Double tap to activate"
           >

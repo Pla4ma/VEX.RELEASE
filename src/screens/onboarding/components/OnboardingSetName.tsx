@@ -163,7 +163,7 @@ export function OnboardingSetName({
               fullWidth
               onPress={handleContinue}
               disabled={!isValid}
-              accessibilityLabel="Continue button"
+              accessibilityLabel="Continue"
               accessibilityRole="button"
               accessibilityHint="Double tap to activate"
             >
@@ -172,7 +172,7 @@ export function OnboardingSetName({
 
             <Pressable
               onPress={handleSkip}
-              accessibilityLabel="I'll decide later ( ) button"
+              accessibilityLabel="Skip setting name for now"
               accessibilityRole="button"
               accessibilityHint="Double tap to activate"
             >

@@ -93,7 +93,7 @@ export function ChallengeProgressRow({
         {challenge.isCompleted && !challenge.isClaimed && onClaim && (
           <Pressable
             onPress={() => onClaim(challenge.id)}
-            accessibilityLabel="Claim button"
+            accessibilityLabel="Claim challenge reward"
             accessibilityRole="button"
             accessibilityHint="Double tap to activate"
           >

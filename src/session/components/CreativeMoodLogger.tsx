@@ -4,6 +4,7 @@ import Animated, { SlideInDown, FadeOut } from "react-native-reanimated";
 import { Box } from "../../components/primitives/Box";
 import { Text } from "../../components/primitives/Text";
 import { useTheme } from "../../theme";
+import { selection } from "../../utils/haptics";
 
 /**
  * CreativeMoodLogger
@@ -67,6 +68,7 @@ export function CreativeMoodLogger({
           <Pressable
             key={mood.emoji}
             onPress={() => {
+              selection();
               setSelected(mood);
               setTimeout(() => onMoodSelected(mood), 400);
             }}

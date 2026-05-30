@@ -149,7 +149,7 @@ export const FilterSortBar: React.FC<{
               currentIndex === -1 ? 0 : (currentIndex + 1) % sorts.length;
             onSortChange(sorts[nextIndex]!);
           }}
-          accessibilityLabel="↕️ button"
+          accessibilityLabel="Toggle sort order"
           accessibilityRole="button"
           accessibilityHint="Double tap to activate"
         >

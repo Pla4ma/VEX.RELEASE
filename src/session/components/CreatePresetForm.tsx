@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, Pressable, Modal, TextInput } from "react-native";
 import { launchColors } from "@theme/tokens/launch-colors";
+import { buttonTap } from "../../utils/haptics";
 
 interface CreatePresetFormProps {
   visible: boolean;
@@ -62,7 +63,7 @@ export const CreatePresetForm: React.FC<CreatePresetFormProps> = ({
                 pressed && { opacity: 0.8 },
               ]}
               onPress={onClose}
-              accessibilityLabel="Cancel button"
+              accessibilityLabel="Cancel preset creation"
               accessibilityRole="button"
               accessibilityHint="Double tap to activate"
             >
@@ -74,8 +75,8 @@ export const CreatePresetForm: React.FC<CreatePresetFormProps> = ({
                 styles.createConfirmButton,
                 pressed && { opacity: 0.8 },
               ]}
-              onPress={handleCreate}
-              accessibilityLabel="Create button"
+              onPress={() => { buttonTap(); handleCreate(); }}
+              accessibilityLabel="Create custom preset"
               accessibilityRole="button"
               accessibilityHint="Double tap to activate"
             >

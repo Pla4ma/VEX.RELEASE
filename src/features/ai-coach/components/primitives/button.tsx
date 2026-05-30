@@ -67,7 +67,7 @@ export function Button({
   const isDisabled = disabled || loading;
   return (
     <AnimatedPressable
-      accessibilityHint="Activates this coach control"
+      accessibilityHint="Activates the coach menu"
       accessibilityLabel={defaultAccessibilityLabel}
       accessibilityRole="button"
       onPressIn={handlePressIn}
@@ -125,8 +125,8 @@ export function IconButton({
   }));
   return (
     <AnimatedPressable
-      accessibilityHint="Activates this coach control"
-      accessibilityLabel="Coach icon button"
+      accessibilityHint="Activates the coach menu"
+      accessibilityLabel="Open coach menu"
       accessibilityRole="button"
       disabled={disabled || loading}
       style={[

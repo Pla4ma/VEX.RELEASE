@@ -23,7 +23,7 @@ export const RecentSearches: React.FC<RecentSearchesProps> = ({ onSelect }) => {
       >
         <Text variant="h4">Recent Searches</Text>
         <Pressable
-          accessibilityLabel="Clear All button"
+          accessibilityLabel="Clear all recent searches"
           accessibilityRole="button"
           accessibilityHint="Clears all recent searches"
         >

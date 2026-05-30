@@ -32,7 +32,7 @@ export function CoachRecommendationCard({
             source: "coach_recommendation",
           });
         }}
-        accessibilityLabel="Start session button"
+        accessibilityLabel="Start recommended session"
         accessibilityRole="button"
         accessibilityHint="Double tap to activate"
       >

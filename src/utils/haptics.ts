@@ -38,6 +38,7 @@ export {
   studyProgressMilestone,
   deepLinkOpened,
   featureUnlocked,
+  selection,
 } from "./haptics-actions";
 
 export function useHaptics() {

@@ -40,7 +40,7 @@ export function SettingsErrorState({
           pressed && { opacity: 0.8 },
         ]}
         onPress={onRetry}
-        accessibilityLabel="Retry button"
+        accessibilityLabel="Retry loading settings"
         accessibilityRole="button"
         accessibilityHint="Double tap to activate"
       >

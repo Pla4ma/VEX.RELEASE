@@ -1,4 +1,5 @@
 import { captureSilentFailure } from "../../../utils/silent-failure";
+import { buttonTap } from "../../../utils/haptics";
 import React, { useCallback, useEffect, useState } from "react";
 import { View, Pressable } from "react-native";
 import Animated, { FadeInDown, FadeOutUp } from "react-native-reanimated";
@@ -74,6 +75,7 @@ export function CoachInterventionBanner({
     if (isNonDismissable(intervention.type, intervention.hoursRemaining)) {
       return;
     }
+    buttonTap();
     const raw = storage.getItemSync(DISMISSAL_STORAGE_KEY);
     const dismissed: Record<string, number> = raw ? JSON.parse(raw) : {};
     dismissed[intervention.id] = Date.now();
@@ -86,6 +88,7 @@ export function CoachInterventionBanner({
     if (!intervention) {
       return;
     }
+    buttonTap();
     onAction?.(intervention);
   }, [intervention, onAction]);
 

@@ -3,6 +3,7 @@ import { Pressable, View } from "react-native";
 import { Box, Card, Text } from "../../../components/primitives";
 import { Icon } from "../../../icons";
 import { useTheme } from "../../../theme";
+import { buttonTap } from "../../../utils/haptics";
 import { getMasteryRankDisplay, type MasteryRank } from "../types";
 import {
   FEATURE_INFO,
@@ -31,7 +32,10 @@ export function LockedFeaturePreview({
   const pointsNeeded = getPointsToUnlock(feature, userPoints);
   return (
     <Pressable
-      onPress={onNavigateToMastery}
+      onPress={() => {
+        buttonTap();
+        onNavigateToMastery?.();
+      }}
       accessibilityLabel={`${featureInfo.name} is locked. Requires ${rankDisplay.title} rank.`}
       accessibilityRole="button"
       accessibilityHint="Tap to view mastery progression"

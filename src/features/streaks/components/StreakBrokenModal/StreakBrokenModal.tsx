@@ -163,7 +163,7 @@ export function StreakBrokenModal({
                 size="lg"
                 fullWidth
                 onPress={onStartFresh}
-                accessibilityLabel="🔥 Start Fresh button"
+                accessibilityLabel="Start fresh streak"
                 accessibilityRole="button"
                 accessibilityHint="Double tap to activate"
               >
@@ -174,7 +174,7 @@ export function StreakBrokenModal({
                 size="md"
                 fullWidth
                 onPress={onDismiss}
-                accessibilityLabel="Not now button"
+                accessibilityLabel="Dismiss streak recovery"
                 accessibilityRole="button"
                 accessibilityHint="Double tap to activate"
               >

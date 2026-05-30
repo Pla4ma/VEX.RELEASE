@@ -27,7 +27,7 @@ export function SessionAdvancedOptions({
     <Box px="lg" mt="lg">
       <Pressable
         onPress={onToggle}
-        accessibilityLabel="Advanced options button"
+        accessibilityLabel="Toggle advanced options"
         accessibilityRole="button"
         accessibilityHint="Double tap to activate"
       >

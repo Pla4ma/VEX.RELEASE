@@ -125,7 +125,7 @@ export function FirstSessionCTA({
           size="lg"
           fullWidth
           onPress={onStartSession}
-          accessibilityLabel="focus session →`} button"
+          accessibilityLabel="Start first focus session"
           accessibilityRole="button"
           accessibilityHint="Double tap to select"
         >
@@ -140,7 +140,7 @@ export function FirstSessionCTA({
       >
         <Pressable
           onPress={onBack}
-          accessibilityLabel="← Go back button"
+          accessibilityLabel="Go back"
           accessibilityRole="button"
           accessibilityHint="Double tap to select"
         >

@@ -65,9 +65,9 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
           size="md"
           onPress={onAction}
           style={styles.actionButton}
-          accessibilityLabel={actionLabel ?? "Action"}
+          accessibilityLabel={actionLabel ?? "Perform primary action"}
           accessibilityRole="button"
-          accessibilityHint="Double tap to perform action"
+          accessibilityHint="Performs the primary action for this section"
         >
           {actionLabel}
         </Button>
@@ -80,9 +80,9 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
             styles.secondaryAction,
             pressed && { opacity: 0.8 },
           ]}
-          accessibilityLabel={secondaryActionLabel ?? "Secondary action"}
+          accessibilityLabel={secondaryActionLabel ?? "Perform secondary action"}
           accessibilityRole="button"
-          accessibilityHint="Double tap to perform action"
+          accessibilityHint="Performs the secondary action for this section"
         >
           <Text
             style={[styles.secondaryText, { color: theme.colors.primary[500] }]}

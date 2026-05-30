@@ -121,7 +121,7 @@ export const QuizCard: React.FC<QuizCardProps> = ({
             pressed && { opacity: 0.8 },
           ]}
           onPress={() => onReveal(quiz.id)}
-          accessibilityLabel="Show Answer button"
+          accessibilityLabel="Show answer"
           accessibilityRole="button"
           accessibilityHint="Double tap to activate"
         >

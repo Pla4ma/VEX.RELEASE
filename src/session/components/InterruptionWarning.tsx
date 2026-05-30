@@ -14,6 +14,7 @@ import {
   getSeverityMessage,
   formatTime,
 } from "./InterruptionWarning.helpers";
+import { buttonTap } from "../../utils/haptics";
 
 export const InterruptionWarning: React.FC<InterruptionWarningProps> = ({
   countdownSeconds,
@@ -113,7 +114,7 @@ export const InterruptionWarning: React.FC<InterruptionWarningProps> = ({
                 styles.resumeButton,
                 pressed && { opacity: 0.8 },
               ]}
-              onPress={onResume}
+              onPress={() => { buttonTap(); onResume(); }}
               accessibilityLabel="Resume focus session"
               accessibilityRole="button"
               accessibilityHint="Returns to the active focus timer"
@@ -127,7 +128,7 @@ export const InterruptionWarning: React.FC<InterruptionWarningProps> = ({
                   styles.streakSaveButton,
                   pressed && { opacity: 0.8 },
                 ]}
-                onPress={onUseStreakSave}
+                onPress={() => { buttonTap(); onUseStreakSave(); }}
                 accessibilityLabel="Use streak save"
                 accessibilityRole="button"
                 accessibilityHint="Uses a streak save before ending this session"
@@ -141,7 +142,7 @@ export const InterruptionWarning: React.FC<InterruptionWarningProps> = ({
                 styles.abandonButton,
                 pressed && { opacity: 0.8 },
               ]}
-              onPress={onAbandon}
+              onPress={() => { buttonTap(); onAbandon(); }}
               accessibilityLabel="End focus session"
               accessibilityRole="button"
               accessibilityHint="Ends this session and moves to recovery"

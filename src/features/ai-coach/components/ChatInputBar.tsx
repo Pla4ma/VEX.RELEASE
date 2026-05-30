@@ -37,7 +37,7 @@ export function ChatInputBar({
         ]}
         onPress={onSend}
         disabled={disabled}
-        accessibilityLabel="Send button"
+        accessibilityLabel="Send message"
         accessibilityRole="button"
         accessibilityHint="Double tap to activate"
       >

@@ -138,7 +138,7 @@ export function ComebackQuestCard({
             size="lg"
             onPress={onStartSession}
             fullWidth
-            accessibilityLabel="✅ Start Your Next Session button"
+            accessibilityLabel="Start your next session"
             accessibilityRole="button"
             accessibilityHint="Double tap to activate"
           >
@@ -150,7 +150,7 @@ export function ComebackQuestCard({
         {onViewDetails && (
           <Pressable
             onPress={onViewDetails}
-            accessibilityLabel="View Full Details → button"
+            accessibilityLabel="View full quest details"
             accessibilityRole="button"
             accessibilityHint="Double tap to activate"
           >

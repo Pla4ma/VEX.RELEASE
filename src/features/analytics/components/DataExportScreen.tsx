@@ -53,7 +53,7 @@ export function DataExportScreen({ userId, onClose }: DataExportScreenProps) {
         <Pressable
           onPress={onClose}
           style={({ pressed }) => [styles.closeButton, pressed && { opacity: 0.8 }]}
-          accessibilityLabel="Close button"
+          accessibilityLabel="Close data export"
           accessibilityRole="button"
           accessibilityHint="Double tap to select"
         >
@@ -114,7 +114,7 @@ export function DataExportScreen({ userId, onClose }: DataExportScreenProps) {
             style={({ pressed }) => [styles.exportButton, pressed && { opacity: 0.8 }]}
             onPress={handleExport}
             disabled={exportMutation.isPending}
-            accessibilityLabel="Start Export button"
+            accessibilityLabel="Start data export"
             accessibilityRole="button"
             accessibilityHint="Double tap to select"
           >

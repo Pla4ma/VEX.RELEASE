@@ -10,6 +10,7 @@ import { getGrade, type MoodType } from "./SessionSummary.helpers";
 import { SessionSummaryMoodSelector } from "./SessionSummaryMoodSelector";
 import { SessionSummaryStats } from "./SessionSummaryStats";
 import styles from "./SessionSummary.styles";
+import { buttonTap } from "../../utils/haptics";
 
 interface SessionSummaryProps {
   summary: SessionSummaryType;
@@ -130,8 +131,8 @@ export const SessionSummary: React.FC<SessionSummaryProps> = ({
               styles.shareButton,
               pressed && { opacity: 0.8 },
             ]}
-            onPress={onShare}
-            accessibilityLabel="📤 Share button"
+            onPress={() => { buttonTap(); onShare?.(); }}
+            accessibilityLabel="Share session summary"
             accessibilityRole="button"
             accessibilityHint="Double tap to activate"
           >
@@ -142,8 +143,8 @@ export const SessionSummary: React.FC<SessionSummaryProps> = ({
               styles.newSessionButton,
               pressed && { opacity: 0.8 },
             ]}
-            onPress={onStartNew}
-            accessibilityLabel="▶ New Session button"
+            onPress={() => { buttonTap(); onStartNew?.(); }}
+            accessibilityLabel="Start new session"
             accessibilityRole="button"
             accessibilityHint="Double tap to activate"
           >
@@ -154,8 +155,8 @@ export const SessionSummary: React.FC<SessionSummaryProps> = ({
               styles.closeButton,
               pressed && { opacity: 0.8 },
             ]}
-            onPress={onClose}
-            accessibilityLabel="Close button"
+            onPress={() => { buttonTap(); onClose(); }}
+            accessibilityLabel="Close summary"
             accessibilityRole="button"
             accessibilityHint="Double tap to activate"
           >

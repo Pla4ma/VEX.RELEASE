@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, Pressable, TextInput } from "react-native";
 import { launchColors } from "@theme/tokens/launch-colors";
 import { getMoodEmoji, type MoodType } from "./SessionSummary.helpers";
+import { selection } from "../../utils/haptics";
 
 interface SessionSummaryMoodSelectorProps {
   mood: MoodType;
@@ -26,8 +27,8 @@ export const SessionSummaryMoodSelector: React.FC<
               mood === m && styles.moodButtonActive,
               pressed && { opacity: 0.8 },
             ]}
-            onPress={() => onMoodChange(m)}
-            accessibilityLabel={`Mood ${getMoodEmoji(m)} button`}
+            onPress={() => { selection(); onMoodChange(m); }}
+            accessibilityLabel={`Select mood ${getMoodEmoji(m)}`}
             accessibilityRole="button"
             accessibilityHint="Double tap to activate"
           >

@@ -142,7 +142,7 @@ export function SessionBackgroundedState({
             onPress={() => handleAction("resume", onResume)}
             disabled={selectedAction !== null}
             isLoading={selectedAction === "resume"}
-            accessibilityLabel="Resume Session → button"
+            accessibilityLabel="Resume session"
             accessibilityRole="button"
             accessibilityHint="Double tap to activate"
           >
@@ -154,7 +154,7 @@ export function SessionBackgroundedState({
             size="md"
             onPress={() => handleAction("pause", onPause)}
             disabled={selectedAction !== null}
-            accessibilityLabel="Pause & Review button"
+            accessibilityLabel="Pause and review session"
             accessibilityRole="button"
             accessibilityHint="Double tap to activate"
           >
@@ -168,7 +168,7 @@ export function SessionBackgroundedState({
               style={{ flex: 1 }}
               onPress={() => handleAction("end", onEnd)}
               disabled={selectedAction !== null}
-              accessibilityLabel="End Session button"
+              accessibilityLabel="End session"
               accessibilityRole="button"
               accessibilityHint="Double tap to activate"
             >
@@ -180,7 +180,7 @@ export function SessionBackgroundedState({
               style={{ flex: 1 }}
               onPress={() => handleAction("abandon", onAbandon)}
               disabled={selectedAction !== null}
-              accessibilityLabel="Abandon button"
+              accessibilityLabel="Abandon session"
               accessibilityRole="button"
               accessibilityHint="Double tap to activate"
             >

@@ -136,7 +136,7 @@ export const PasswordChangeSection: React.FC = () => {
                   borderWidth: 1,
                   borderColor: theme.colors.border.light,
                 }}
-                accessibilityLabel="Cancel button"
+                accessibilityLabel="Cancel password change"
                 accessibilityRole="button"
                 accessibilityHint="Double tap to change setting"
               >

@@ -136,7 +136,7 @@ export function TodaysChallengesWidget({
                     size="sm"
                     onPress={onViewAll}
                     style={{ alignSelf: "center" }}
-                    accessibilityLabel="View All Challenges › button"
+                    accessibilityLabel="View all challenges"
                     accessibilityRole="button"
                     accessibilityHint="Double tap to view challenges"
                   >

@@ -84,7 +84,7 @@ export function ChallengeList({
               variant="primary"
               onPress={onRetry}
               style={styles.retryButton}
-              accessibilityLabel="Retry button"
+              accessibilityLabel="Retry loading challenges"
               accessibilityRole="button"
               accessibilityHint="Double tap to select"
             >
@@ -116,7 +116,7 @@ export function ChallengeList({
               variant="secondary"
               onPress={onRefresh}
               style={styles.retryButton}
-              accessibilityLabel="Show All button"
+              accessibilityLabel="Show all challenges"
               accessibilityRole="button"
               accessibilityHint="Double tap to select"
             >

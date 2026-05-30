@@ -96,7 +96,7 @@ export function CompanionGrowthSection({
           variant="secondary"
           onPress={load}
           style={{ marginTop: theme.spacing[3] }}
-          accessibilityLabel="Retry button"
+          accessibilityLabel="Retry loading"
           accessibilityRole="button"
           accessibilityHint="Double tap to activate"
         >

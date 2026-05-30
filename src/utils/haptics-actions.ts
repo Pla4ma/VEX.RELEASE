@@ -195,3 +195,7 @@ export async function featureUnlocked(): Promise<void> {
     120,
   );
 }
+
+export async function selection(): Promise<void> {
+  await triggerHaptic("selection");
+}

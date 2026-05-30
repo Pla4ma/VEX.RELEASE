@@ -102,7 +102,7 @@ export class AccessibilityEnhancer {
   ): React.ComponentType<P> {
     return this.enhanceComponent(ButtonComponent, {
       accessibilityRole: "button",
-      accessibilityHint: "Activates this control",
+      accessibilityHint: "Performs the associated action",
     });
   }
 
@@ -111,7 +111,7 @@ export class AccessibilityEnhancer {
   ): React.ComponentType<P> {
     return this.enhanceComponent(InputComponent, {
       accessibilityRole: "textbox",
-      accessibilityHint: "Text input field",
+      accessibilityHint: "Opens text input for editing",
     });
   }
 

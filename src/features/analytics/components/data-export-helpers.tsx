@@ -48,7 +48,7 @@ export function CategorySelector({ selectedCategory, onSelect }: CategorySelecto
               pressed && { opacity: 0.8 },
             ]}
             onPress={() => onSelect(category.key)}
-            accessibilityLabel={`${category.label} category button`}
+            accessibilityLabel={`Select ${category.label} export category`}
             accessibilityRole="button"
             accessibilityHint="Double tap to select"
           >
@@ -88,7 +88,7 @@ export function FormatSelector({ selectedFormat, onSelect }: FormatSelectorProps
               pressed && { opacity: 0.8 },
             ]}
             onPress={() => onSelect(format.key)}
-            accessibilityLabel={`${format.label} format button`}
+            accessibilityLabel={`Select ${format.label} export format`}
             accessibilityRole="button"
             accessibilityHint="Double tap to select"
           >
@@ -134,7 +134,7 @@ export function DangerZoneSection() {
             ],
           );
         }}
-        accessibilityLabel="Delete All My Data button"
+        accessibilityLabel="Delete all my data"
         accessibilityRole="button"
         accessibilityHint="Double tap to select"
       >
@@ -169,7 +169,7 @@ export function ConfirmExportModal({
             <Pressable
               style={({ pressed }) => [styles.modalButtonSecondary, pressed && { opacity: 0.8 }]}
               onPress={onClose}
-              accessibilityLabel="Cancel button"
+              accessibilityLabel="Cancel data deletion"
               accessibilityRole="button"
               accessibilityHint="Double tap to select"
             >
@@ -178,7 +178,7 @@ export function ConfirmExportModal({
             <Pressable
               style={({ pressed }) => [styles.modalButtonPrimary, pressed && { opacity: 0.8 }]}
               onPress={onConfirm}
-              accessibilityLabel="Confirm Export button"
+              accessibilityLabel="Confirm data export"
               accessibilityRole="button"
               accessibilityHint="Double tap to select"
             >

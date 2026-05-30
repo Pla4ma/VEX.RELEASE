@@ -76,7 +76,7 @@ export function RestoreStreakCard({
         isLoading={isRestoring}
         disabled={!canAfford || isRestoring}
         style={{ marginTop: theme.spacing[2] }}
-        accessibilityLabel="gems button"
+        accessibilityLabel="Use gems to restore streak"
         accessibilityRole="button"
         accessibilityHint="Double tap to activate"
       >

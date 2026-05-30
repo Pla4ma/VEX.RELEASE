@@ -151,7 +151,7 @@ export const PromptView: React.FC<PromptViewProps> = ({
             variant="ghost"
             size="sm"
             onPress={onDismiss}
-            accessibilityLabel="I'll risk it (don't remind me) button"
+            accessibilityLabel="Risk it without reminder"
             accessibilityRole="button"
             accessibilityHint="Double tap to activate"
           >

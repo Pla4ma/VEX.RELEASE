@@ -79,7 +79,7 @@ export function OnboardingPermissions({
               fullWidth
               onPress={handleRequest}
               isLoading={false}
-              accessibilityLabel="Enable Notifications button"
+              accessibilityLabel="Enable notifications"
               accessibilityRole="button"
               accessibilityHint="Double tap to activate"
             >
@@ -93,7 +93,7 @@ export function OnboardingPermissions({
               variant="primary"
               fullWidth
               onPress={onContinue}
-              accessibilityLabel="Continue button"
+              accessibilityLabel="Continue"
               accessibilityRole="button"
               accessibilityHint="Double tap to activate"
             >

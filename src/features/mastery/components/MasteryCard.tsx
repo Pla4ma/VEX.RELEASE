@@ -168,7 +168,7 @@ export function MasteryCard({
                   size="sm"
                   variant="outline"
                   onPress={() => handleClaim(challenge.id)}
-                  accessibilityLabel="Claim button"
+                  accessibilityLabel="Claim reward"
                   accessibilityRole="button"
                   accessibilityHint="Double tap to activate"
                 >

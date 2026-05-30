@@ -42,7 +42,7 @@ export const ChallengeHub: React.FC<ChallengeHubProps> = ({
     <Pressable
       onPress={() => onChallengePress?.(item.challengeId)}
       style={({ pressed }) => [pressed && { opacity: 0.9 }]}
-      accessibilityLabel="onClaimReward?.(item.challengeId)} button"
+      accessibilityLabel="Claim reward"
       accessibilityRole="button"
       accessibilityHint="Double tap to select"
     >

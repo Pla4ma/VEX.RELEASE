@@ -73,7 +73,7 @@ export const EmailChangeSection: React.FC<EmailChangeSectionProps> = ({
               borderRadius: 8,
               alignItems: "center",
             }}
-            accessibilityLabel="Change Email button"
+            accessibilityLabel="Change email"
             accessibilityRole="button"
             accessibilityHint="Double tap to change setting"
           >

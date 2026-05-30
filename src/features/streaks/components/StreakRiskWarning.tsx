@@ -73,7 +73,7 @@ export function StreakRiskWarning({
           pressed && { opacity: 0.8 },
         ]}
         onPress={onStartSession}
-        accessibilityLabel="Start Session button"
+        accessibilityLabel="Start focus session"
         accessibilityRole="button"
         accessibilityHint="Double tap to activate"
       >
@@ -84,7 +84,7 @@ export function StreakRiskWarning({
         <Pressable
           style={({ pressed }) => [styles.dismiss, pressed && { opacity: 0.8 }]}
           onPress={onDismiss}
-          accessibilityLabel="Dismiss button"
+          accessibilityLabel="Dismiss streak warning"
           accessibilityRole="button"
           accessibilityHint="Double tap to activate"
         >

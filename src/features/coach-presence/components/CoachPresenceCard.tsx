@@ -3,6 +3,7 @@ import { Pressable, View } from "react-native";
 import { Text } from "../../../components/primitives/Text";
 import { useTheme } from "../../../theme";
 import { getMinTouchTargetStyle } from "../../../utils/touchTarget";
+import { buttonTap } from "../../../utils/haptics";
 import type { CoachPresence } from "../schemas";
 
 interface CoachPresenceCardProps {
@@ -20,7 +21,10 @@ export function CoachPresenceCard({
 
   return (
     <Pressable
-      onPress={onPress ?? onAction}
+      onPress={() => {
+        buttonTap();
+        (onPress ?? onAction)();
+      }}
       accessibilityLabel="Coach presence"
       accessibilityRole="button"
       accessibilityHint="Opens the coach presence action"
@@ -75,7 +79,10 @@ export function CoachPresenceCard({
         </Text>
 
         <Pressable
-          onPress={onAction}
+          onPress={() => {
+            buttonTap();
+            onAction();
+          }}
           accessibilityLabel={presence.nextAction.label}
           accessibilityRole="button"
           accessibilityHint={presence.nextAction.reason}

@@ -125,7 +125,7 @@ export function ChallengeCard({
               style={styles.actionButton}
               isLoading={loading}
               isDisabled={loading}
-              accessibilityLabel="Claim Reward button"
+              accessibilityLabel="Claim challenge reward"
               accessibilityRole="button"
               accessibilityHint="Double tap to select"
             >

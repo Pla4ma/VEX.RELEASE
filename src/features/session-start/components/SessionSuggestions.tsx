@@ -43,7 +43,7 @@ export function SessionSuggestions({
       {/* Header */}
       <Pressable
         onPress={onToggleExpand}
-        accessibilityLabel="🤖 SUGGESTIONS › button"
+        accessibilityLabel="View session suggestions"
         accessibilityRole="button"
         accessibilityHint="Double tap to activate"
       >

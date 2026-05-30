@@ -181,7 +181,7 @@ export function GoalScreen({
       >
         <Pressable
           onPress={onSkip}
-          accessibilityLabel="Skip for now › button"
+          accessibilityLabel="Skip for now"
           accessibilityRole="button"
           accessibilityHint="Double tap to select"
         >

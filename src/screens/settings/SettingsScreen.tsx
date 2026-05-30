@@ -131,7 +131,7 @@ export const SettingsScreen = withScreenErrorBoundary(function _SettingsScreen({
             marginBottom: 16,
           }}
           onPress={logout}
-          accessibilityLabel="Log Out button"
+          accessibilityLabel="Log out"
           accessibilityRole="button"
           accessibilityHint="Double tap to change setting"
         >

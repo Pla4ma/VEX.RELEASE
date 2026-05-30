@@ -73,7 +73,7 @@ export const NearMissActions: React.FC<NearMissActionsProps> = ({
         size="md"
         fullWidth
         onPress={onAcknowledge}
-        accessibilityLabel="👍 I'll Get It Next Time button"
+        accessibilityLabel="I'll get it next time"
         accessibilityRole="button"
         accessibilityHint="Double tap to select"
       >
@@ -85,7 +85,7 @@ export const NearMissActions: React.FC<NearMissActionsProps> = ({
           size="md"
           fullWidth
           onPress={onViewNextChallenge}
-          accessibilityLabel="🎯 View Upcoming Challenges button"
+          accessibilityLabel="View upcoming challenges"
           accessibilityRole="button"
           accessibilityHint="Double tap to select"
         >

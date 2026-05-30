@@ -65,7 +65,7 @@ export function CustomDurationInput({
   return (
     <Pressable
       onPress={onActivate}
-      accessibilityLabel="Custom button"
+      accessibilityLabel="Enter custom duration"
       accessibilityRole="button"
       accessibilityHint="Double tap to activate"
     >

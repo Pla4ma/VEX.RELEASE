@@ -35,7 +35,7 @@ export const SessionEmptyState: React.FC<SessionEmptyStateProps> = ({
             pressed && { opacity: 0.8 },
           ]}
           onPress={onCreateSession}
-          accessibilityLabel="Start First Session button"
+          accessibilityLabel="Start first session"
           accessibilityRole="button"
           accessibilityHint="Double tap to activate"
         >
@@ -48,7 +48,7 @@ export const SessionEmptyState: React.FC<SessionEmptyStateProps> = ({
             pressed && { opacity: 0.8 },
           ]}
           onPress={onBrowsePresets}
-          accessibilityLabel="Browse Presets button"
+          accessibilityLabel="Browse presets"
           accessibilityRole="button"
           accessibilityHint="Double tap to activate"
         >

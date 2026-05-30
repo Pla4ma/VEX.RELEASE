@@ -118,7 +118,7 @@ export const ResetPasswordScreen: React.FC<Props> = ({ navigation, route }) => {
               variant="primary"
               onPress={handleLogin}
               style={{ marginTop: 32 }}
-              accessibilityLabel="Continue to Login button"
+              accessibilityLabel="Continue to login"
               accessibilityRole="button"
               accessibilityHint="Double tap to activate"
             >
@@ -157,7 +157,7 @@ export const ResetPasswordScreen: React.FC<Props> = ({ navigation, route }) => {
                 isLoading={isLoading}
                 disabled={isLoading || !password || !confirmPassword}
                 style={{ marginTop: 8 }}
-                accessibilityLabel="Reset Password button"
+                accessibilityLabel="Reset password"
                 accessibilityRole="button"
                 accessibilityHint="Double tap to activate"
               >

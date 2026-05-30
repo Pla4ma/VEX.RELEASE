@@ -83,9 +83,9 @@ export function StudyPlanScreen() {
           <Pressable
             style={({ pressed }) => [styles.retryButton, pressed && { opacity: 0.8 }]}
             onPress={() => navigation.goBack()}
-            accessibilityLabel="Go Back button"
+            accessibilityLabel="Go back"
             accessibilityRole="button"
-            accessibilityHint="Double tap to activate"
+            accessibilityHint="Returns to the previous screen"
           >
             <Text style={styles.retryButtonText}>Go Back</Text>
           </Pressable>
@@ -123,9 +123,9 @@ export function StudyPlanScreen() {
           ]}
           onPress={handleStartSession}
           disabled={isStartingSession}
-          accessibilityLabel="Start session button"
+          accessibilityLabel="Start study session"
           accessibilityRole="button"
-          accessibilityHint="Double tap to activate"
+          accessibilityHint="Starts a study session from this plan"
         >
           {isStartingSession ? (
             <ActivityIndicator size="small" color={launchColors.hex_fff} />

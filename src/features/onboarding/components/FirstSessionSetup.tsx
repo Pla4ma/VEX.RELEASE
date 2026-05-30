@@ -163,7 +163,7 @@ export function FirstSessionSetup({
           fullWidth
           onPress={handleStartSession}
           disabled={isAdvancing}
-          accessibilityLabel="Start focus session → button"
+          accessibilityLabel="Start first focus session"
           accessibilityRole="button"
           accessibilityHint="Double tap to select"
         >
@@ -180,7 +180,7 @@ export function FirstSessionSetup({
       >
         <Pressable
           onPress={onBack}
-          accessibilityLabel="← Go back button"
+          accessibilityLabel="Go back"
           accessibilityRole="button"
           accessibilityHint="Double tap to select"
         >

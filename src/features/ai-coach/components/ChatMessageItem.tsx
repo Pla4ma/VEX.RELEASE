@@ -68,7 +68,7 @@ export function ChatMessageItem({
               pressed && { opacity: 0.8 },
             ]}
             onPress={() => { buttonTap(); onActionPress(message); }}
-            accessibilityLabel={message.metadata?.actionLabel ?? "Action"}
+            accessibilityLabel={message.metadata?.actionLabel ?? "Coach action"}
             accessibilityRole="button"
             accessibilityHint="Double tap to perform action"
           >

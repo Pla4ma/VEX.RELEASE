@@ -101,7 +101,7 @@ export function ComebackCard({
       <Button
         size="lg"
         onPress={onStart}
-        accessibilityLabel="Start My Comeback Session button"
+        accessibilityLabel="Start comeback session"
         accessibilityRole="button"
         accessibilityHint="Double tap to activate"
       >
@@ -111,7 +111,7 @@ export function ComebackCard({
         variant="ghost"
         size="lg"
         onPress={onClose}
-        accessibilityLabel="Remind Me Later button"
+        accessibilityLabel="Remind me later"
         accessibilityRole="button"
         accessibilityHint="Double tap to activate"
       >

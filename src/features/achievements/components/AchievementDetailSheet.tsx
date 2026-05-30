@@ -112,7 +112,7 @@ export const AchievementDetailSheet: React.FC<AchievementDetailSheetProps> = ({
           size="lg"
           fullWidth
           onPress={handleShare}
-          accessibilityLabel="📤 Share Achievement button"
+          accessibilityLabel="Share achievement"
           accessibilityRole="button"
           accessibilityHint="Double tap to activate"
         >
@@ -124,7 +124,7 @@ export const AchievementDetailSheet: React.FC<AchievementDetailSheetProps> = ({
           size="md"
           fullWidth
           onPress={onClose}
-          accessibilityLabel="Close button"
+          accessibilityLabel="Close achievement details"
           accessibilityRole="button"
           accessibilityHint="Double tap to activate"
         >

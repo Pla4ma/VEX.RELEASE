@@ -107,7 +107,7 @@ export function SessionReflectionSheet({
             size="lg"
             fullWidth
             onPress={onFinish}
-            accessibilityLabel="Finish button"
+            accessibilityLabel="Finish reflection"
             accessibilityRole="button"
             accessibilityHint="Double tap to activate"
           >
@@ -118,7 +118,7 @@ export function SessionReflectionSheet({
             size="md"
             fullWidth
             onPress={onSkip}
-            accessibilityLabel="Skip button"
+            accessibilityLabel="Skip reflection"
             accessibilityRole="button"
             accessibilityHint="Double tap to activate"
           >

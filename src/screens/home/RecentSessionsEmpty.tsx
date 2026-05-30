@@ -39,7 +39,7 @@ export function RecentSessionsEmpty({
         </Text>
         <Button
           onPress={onStart}
-          accessibilityLabel="Start session button"
+          accessibilityLabel="Start session"
           accessibilityRole="button"
           accessibilityHint="Double tap to activate"
         >

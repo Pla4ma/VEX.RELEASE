@@ -39,7 +39,7 @@ export const ShortAnswerInput: React.FC<ShortAnswerInputProps> = ({
         size="sm"
         onPress={onSubmit}
         disabled={!value.trim()}
-        accessibilityLabel="Submit button"
+        accessibilityLabel="Submit answer"
         accessibilityRole="button"
         accessibilityHint="Double tap to activate"
       >

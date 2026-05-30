@@ -118,7 +118,7 @@ export function SessionValidationFeedback({
                   size="sm"
                   onPress={() => onFixError(field)}
                   style={{ alignSelf: "flex-start", marginTop: 4 }}
-                  accessibilityLabel="Fix this → button"
+                  accessibilityLabel="Fix this issue"
                   accessibilityRole="button"
                   accessibilityHint="Double tap to activate"
                 >
@@ -158,7 +158,7 @@ export function SessionValidationFeedback({
                     size="sm"
                     onPress={() => onDismissWarning(warning.field)}
                     style={{ alignSelf: "flex-start", marginTop: 2 }}
-                    accessibilityLabel="Dismiss button"
+                    accessibilityLabel="Dismiss validation feedback"
                     accessibilityRole="button"
                     accessibilityHint="Double tap to activate"
                   >

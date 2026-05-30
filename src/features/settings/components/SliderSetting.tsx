@@ -33,7 +33,7 @@ export function SliderSetting({
             pressed && { opacity: 0.8 },
           ]}
           onPress={() => onChange(Math.max(min, value - 0.1))}
-          accessibilityLabel="- button"
+          accessibilityLabel="Decrease value"
           accessibilityRole="button"
           accessibilityHint="Double tap to activate"
         >
@@ -46,7 +46,7 @@ export function SliderSetting({
             pressed && { opacity: 0.8 },
           ]}
           onPress={() => onChange(Math.min(max, value + 0.1))}
-          accessibilityLabel="+ button"
+          accessibilityLabel="Increase value"
           accessibilityRole="button"
           accessibilityHint="Double tap to activate"
         >

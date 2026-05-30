@@ -25,7 +25,7 @@ export function SettingItem({
     <Pressable
       onPress={onPress}
       style={({ pressed }) => [styles.container, pressed && { opacity: 0.8 }]}
-      accessibilityLabel="Setting item button"
+      accessibilityLabel={`Setting: ${label}`}
       accessibilityRole="button"
       accessibilityHint="Double tap to activate"
     >

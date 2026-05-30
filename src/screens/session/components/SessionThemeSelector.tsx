@@ -67,7 +67,7 @@ export function SessionThemeSelector({
           <Button
             variant="outline"
             onPress={themeQueryRetry}
-            accessibilityLabel="Retry button"
+            accessibilityLabel="Retry loading themes"
             accessibilityRole="button"
             accessibilityHint="Double tap to activate"
           >

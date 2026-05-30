@@ -51,7 +51,7 @@ export const SessionControls: React.FC<SessionControlsProps> = ({
           ]}
           onPress={handleStart}
           disabled={disabled}
-          accessibilityLabel="▶ Start Session button"
+          accessibilityLabel="Start session"
           accessibilityRole="button"
           accessibilityHint="Double tap to activate"
         >
@@ -71,7 +71,7 @@ export const SessionControls: React.FC<SessionControlsProps> = ({
               pressed && { opacity: 0.8 },
             ]}
             onPress={handleResume}
-            accessibilityLabel="▶ Resume button"
+            accessibilityLabel="Resume session"
             accessibilityRole="button"
             accessibilityHint="Double tap to activate"
           >
@@ -85,7 +85,7 @@ export const SessionControls: React.FC<SessionControlsProps> = ({
               pressed && { opacity: 0.8 },
             ]}
             onPress={handlePause}
-            accessibilityLabel="⏸ Pause button"
+            accessibilityLabel="Pause session"
             accessibilityRole="button"
             accessibilityHint="Double tap to activate"
           >
@@ -100,7 +100,7 @@ export const SessionControls: React.FC<SessionControlsProps> = ({
             pressed && { opacity: 0.8 },
           ]}
           onPress={() => setShowConfirmAbandon(true)}
-          accessibilityLabel="✕ Abandon button"
+          accessibilityLabel="Abandon session"
           accessibilityRole="button"
           accessibilityHint="Double tap to activate"
         >

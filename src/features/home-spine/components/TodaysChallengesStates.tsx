@@ -83,7 +83,7 @@ export function ChallengesErrorState({
           variant="outline"
           size="sm"
           onPress={onRetry}
-          accessibilityLabel="Try Again button"
+          accessibilityLabel="Retry loading challenges"
           accessibilityRole="button"
           accessibilityHint="Double tap to activate"
         >

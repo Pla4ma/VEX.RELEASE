@@ -61,7 +61,7 @@ export function EmptyLibraryState({
           size="sm"
           mt="md"
           onPress={onRetry}
-          accessibilityLabel="Try Again button"
+          accessibilityLabel="Retry loading library"
           accessibilityRole="button"
           accessibilityHint="Double tap to activate"
         >
@@ -91,7 +91,7 @@ export function EmptyLibraryState({
             size="sm"
             mt="md"
             onPress={onAddContent}
-            accessibilityLabel="Add Your First Content button"
+            accessibilityLabel="Add first content"
             accessibilityRole="button"
             accessibilityHint="Double tap to activate"
           >

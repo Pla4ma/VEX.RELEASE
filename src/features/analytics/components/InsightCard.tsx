@@ -96,7 +96,7 @@ export function InsightCard({
               ]}
               onPress={onDismiss}
               accessibilityRole="button"
-              accessibilityLabel="Dismiss button"
+              accessibilityLabel="Dismiss insight"
               accessibilityHint="Double tap to select"
             >
               <Text style={[styles.dismissText, { color: severity.color }]}>

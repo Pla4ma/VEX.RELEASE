@@ -116,7 +116,7 @@ export const PdfUploaderFileCard: React.FC<FileCardProps> = ({
           {onRetry && (
             <Pressable
               onPress={onRetry}
-              accessibilityLabel="Retry button"
+              accessibilityLabel="Retry upload"
               accessibilityRole="button"
               accessibilityHint="Double tap to activate"
             >
@@ -164,7 +164,7 @@ export const PdfUploaderFileCard: React.FC<FileCardProps> = ({
           variant="ghost"
           size="sm"
           onPress={onRemove}
-          accessibilityLabel="Remove button"
+          accessibilityLabel="Remove file"
           accessibilityRole="button"
           accessibilityHint="Double tap to activate"
         >

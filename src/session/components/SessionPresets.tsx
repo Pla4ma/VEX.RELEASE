@@ -6,6 +6,7 @@ import { createSheet } from "@/shared/ui/create-sheet";
 import { launchColors } from "@theme/tokens/launch-colors";
 import { PresetCard } from "./PresetCard";
 import { CreatePresetForm } from "./CreatePresetForm";
+import { cardSelection } from "../../utils/haptics";
 
 interface SessionPresetsProps {
   userId: string;
@@ -59,7 +60,7 @@ export const SessionPresets: React.FC<SessionPresetsProps> = ({
             onPress={() =>
               setSelectedCategory(category === "All" ? null : category)
             }
-            accessibilityLabel={`${category} button`}
+            accessibilityLabel={`Select ${category} category`}
             accessibilityRole="button"
             accessibilityHint="Double tap to activate"
           >
@@ -82,7 +83,7 @@ export const SessionPresets: React.FC<SessionPresetsProps> = ({
             <PresetCard
               key={preset.id}
               preset={preset}
-              onSelect={onSelectPreset}
+              onSelect={(preset) => { cardSelection(); onSelectPreset(preset); }}
               onDelete={deletePreset}
             />
           ))}
@@ -94,8 +95,8 @@ export const SessionPresets: React.FC<SessionPresetsProps> = ({
             styles.createButton,
             pressed && { opacity: 0.8 },
           ]}
-          onPress={() => setShowCreateModal(true)}
-          accessibilityLabel="+ Create Custom Preset button"
+          onPress={() => { cardSelection(); setShowCreateModal(true); }}
+          accessibilityLabel="Create custom preset"
           accessibilityRole="button"
           accessibilityHint="Double tap to activate"
         >

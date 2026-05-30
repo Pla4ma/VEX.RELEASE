@@ -36,7 +36,7 @@ export function SettingsCategoryTabs({
             pressed && { opacity: 0.8 },
           ]}
           onPress={() => onCategoryChange(category.key)}
-          accessibilityLabel={`${category.label} category button`}
+          accessibilityLabel={`Select ${category.label} settings category`}
           accessibilityRole="button"
           accessibilityHint="Double tap to activate"
         >

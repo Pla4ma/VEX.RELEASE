@@ -110,7 +110,7 @@ export function ContentView({
                 pressed && { opacity: 0.8 },
               ]}
               onPress={onCancelEditing}
-              accessibilityLabel="Cancel button"
+              accessibilityLabel="Cancel editing"
               accessibilityRole="button"
               accessibilityHint="Double tap to activate"
             >
@@ -122,7 +122,7 @@ export function ContentView({
                 pressed && { opacity: 0.8 },
               ]}
               onPress={onSave}
-              accessibilityLabel="Save button"
+              accessibilityLabel="Save changes"
               accessibilityRole="button"
               accessibilityHint="Double tap to activate"
             >
@@ -136,7 +136,7 @@ export function ContentView({
               pressed && { opacity: 0.8 },
             ]}
             onPress={onStartEditing}
-            accessibilityLabel="Edit button"
+            accessibilityLabel="Edit content"
             accessibilityRole="button"
             accessibilityHint="Double tap to activate"
           >
@@ -166,7 +166,7 @@ export function ErrorDisplay({ errorMessage, onRetry }: ErrorDisplayProps) {
           pressed && { opacity: 0.8 },
         ]}
         onPress={onRetry}
-        accessibilityLabel="Try Again button"
+        accessibilityLabel="Retry processing"
         accessibilityRole="button"
         accessibilityHint="Double tap to activate"
       >

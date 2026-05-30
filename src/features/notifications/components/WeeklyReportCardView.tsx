@@ -143,7 +143,7 @@ export function WeeklyReportCard({
             size="lg"
             onPress={onViewAnalytics}
             fullWidth
-            accessibilityLabel="View Full Analytics button"
+            accessibilityLabel="View full weekly analytics"
             accessibilityRole="button"
             accessibilityHint="Double tap to select"
           >
@@ -156,7 +156,7 @@ export function WeeklyReportCard({
               size="md"
               onPress={onShare}
               fullWidth
-              accessibilityLabel="Share My Week button"
+              accessibilityLabel="Share weekly report"
               accessibilityRole="button"
               accessibilityHint="Double tap to select"
             >

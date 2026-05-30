@@ -127,7 +127,7 @@ export function ContentReviewScreen() {
             ]}
             onPress={handleGenerate}
             disabled={isGenerating}
-            accessibilityLabel="Generate button"
+            accessibilityLabel="Generate study content"
             accessibilityRole="button"
             accessibilityHint="Double tap to activate"
           >

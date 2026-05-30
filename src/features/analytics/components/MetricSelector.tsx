@@ -118,7 +118,7 @@ export function MetricSelector({
               <Pressable
                 onPress={() => setModalVisible(false)}
                 style={({ pressed }) => [pressed && { opacity: 0.8 }]}
-                accessibilityLabel="Done button"
+                accessibilityLabel="Done selecting metrics"
                 accessibilityRole="button"
                 accessibilityHint="Double tap to select"
               >

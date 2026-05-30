@@ -11,6 +11,7 @@ import Animated, { FadeInUp, FadeOutDown } from "react-native-reanimated";
 import { Box } from "../../../components/primitives/Box";
 import { Text } from "../../../components/primitives/Text";
 import { useTheme } from "../../../theme";
+import { cardSelection } from "../../../utils/haptics";
 import type { RecallQuestion } from "../schemas";
 
 export interface RecallQuestionCardProps {
@@ -31,6 +32,7 @@ export function RecallQuestionCard({
   if (dismissed) return <></>;
 
   const handleDismiss = () => {
+    cardSelection();
     setDismissed(true);
     setTimeout(() => onDismiss(), 300);
   };
@@ -60,7 +62,7 @@ export function RecallQuestionCard({
           </Text>
           <Pressable
             onPress={handleDismiss}
-            accessibilityLabel="Dismiss"
+            accessibilityLabel="Dismiss recall question"
             accessibilityRole="button"
           >
             <Text variant="bodySmall" color="text.muted">
@@ -80,7 +82,12 @@ export function RecallQuestionCard({
         ) : null}
 
         <Box flexDirection="row" mt={3}>
-          <Pressable onPress={handleDismiss} style={{ flex: 1 }}>
+          <Pressable
+            onPress={handleDismiss}
+            style={{ flex: 1 }}
+            accessibilityLabel="Dismiss recall question"
+            accessibilityRole="button"
+          >
             <Box
               p={2}
               borderRadius="md"
@@ -94,7 +101,11 @@ export function RecallQuestionCard({
           </Pressable>
           {onReview ? (
             <Box ml={2} style={{ flex: 1 }}>
-              <Pressable onPress={onReview}>
+              <Pressable
+                onPress={() => { cardSelection(); onReview(); }}
+                accessibilityLabel="Review question in study session"
+                accessibilityRole="button"
+              >
                 <Box
                   p={2}
                   borderRadius="md"

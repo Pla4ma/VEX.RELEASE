@@ -68,7 +68,7 @@ export function OnboardingChoosePersona({
 
           <Pressable
             onPress={onSkip}
-            accessibilityLabel="Skip for now (defaults to Mentor) button"
+            accessibilityLabel="Skip persona selection, defaults to Mentor"
             accessibilityRole="button"
             accessibilityHint="Double tap to activate"
           >

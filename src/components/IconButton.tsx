@@ -57,9 +57,9 @@ export const IconButton: React.FC<IconButtonProps> = ({
       style={({ pressed }) => [...buttonStyle, pressed && { opacity: 0.7 }]}
       onPress={(e) => { buttonTap(); props.onPress?.(e); }}
       {...props}
-      accessibilityLabel={props.accessibilityLabel ?? `${icon} button`}
+      accessibilityLabel={props.accessibilityLabel ?? icon}
       accessibilityRole="button"
-      accessibilityHint={props.accessibilityHint ?? "Double tap to activate"}
+      accessibilityHint={props.accessibilityHint ?? `Activates ${icon} action`}
     >
       <Text style={[styles.icon, { fontSize: iconSize }]}>{icon}</Text>
     </Pressable>

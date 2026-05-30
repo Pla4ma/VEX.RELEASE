@@ -119,9 +119,9 @@ export const Banner: React.FC<BannerProps> = ({
                   size="sm"
                   onPress={onAction}
                   style={{ marginRight: secondaryActionText ? 8 : 0 }}
-                  accessibilityLabel={actionText ?? "Action"}
+                  accessibilityLabel={actionText ?? "Perform action"}
                   accessibilityRole="button"
-                  accessibilityHint="Double tap to activate"
+                  accessibilityHint="Performs the primary banner action"
                 >
                   {actionText}
                 </Button>
@@ -131,9 +131,9 @@ export const Banner: React.FC<BannerProps> = ({
                   variant="ghost"
                   size="sm"
                   onPress={onSecondaryAction}
-                  accessibilityLabel={secondaryActionText ?? "Action"}
+                  accessibilityLabel={secondaryActionText ?? "Perform secondary action"}
                   accessibilityRole="button"
-                  accessibilityHint="Double tap to activate"
+                  accessibilityHint="Performs the secondary banner action"
                 >
                   {secondaryActionText}
                 </Button>

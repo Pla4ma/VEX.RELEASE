@@ -112,7 +112,7 @@ export function CompanionRevealScreen({
           size="lg"
           fullWidth
           onPress={onContinue}
-          accessibilityLabel="Continue to session setup → button"
+          accessibilityLabel="Continue to session setup"
           accessibilityRole="button"
           accessibilityHint="Double tap to select"
         >
@@ -127,7 +127,7 @@ export function CompanionRevealScreen({
       >
         <Pressable
           onPress={onBack}
-          accessibilityLabel="← Go back button"
+          accessibilityLabel="Go back"
           accessibilityRole="button"
           accessibilityHint="Double tap to select"
         >

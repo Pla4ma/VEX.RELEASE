@@ -86,7 +86,7 @@ export const ErrorOverlay: React.FC<{
           styles.retryButton,
           { backgroundColor: theme.colors.error.DEFAULT },
         ]}
-        accessibilityLabel="Retry button"
+        accessibilityLabel="Retry loading"
         accessibilityRole="button"
         accessibilityHint="Double tap to activate"
       >

@@ -81,8 +81,8 @@ export function IconButton({
         style as ViewStyle,
       ]}
       testID={testID}
-      accessibilityLabel={accessibilityLabel || `${name} button`}
-      accessibilityHint={accessibilityHint || "Activates this icon control"}
+      accessibilityLabel={accessibilityLabel || name}
+      accessibilityHint={accessibilityHint || `Activates ${name} control`}
       accessibilityRole="button"
       accessibilityState={{ disabled }}
     >

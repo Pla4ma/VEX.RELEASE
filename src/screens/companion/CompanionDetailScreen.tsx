@@ -80,7 +80,7 @@ export function CompanionDetailScreen(): JSX.Element {
           variant="secondary"
           onPress={load}
           style={{ marginTop: theme.spacing[4] }}
-          accessibilityLabel="Retry button"
+          accessibilityLabel="Retry loading companion"
           accessibilityRole="button"
           accessibilityHint="Double tap to activate"
         >

@@ -91,7 +91,7 @@ export function ErrorFallback({
             <Button
               variant="primary"
               onPress={onRetry}
-              accessibilityLabel="Try Again button"
+              accessibilityLabel="Try again"
               accessibilityRole="button"
               accessibilityHint="Double tap to activate"
             >
@@ -102,7 +102,7 @@ export function ErrorFallback({
             <Button
               variant="ghost"
               onPress={onDegraded}
-              accessibilityLabel="Continue Anyway button"
+              accessibilityLabel="Continue anyway"
               accessibilityRole="button"
               accessibilityHint="Double tap to activate"
             >

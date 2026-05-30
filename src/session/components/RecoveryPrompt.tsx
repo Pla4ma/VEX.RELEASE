@@ -129,7 +129,7 @@ export const RecoveryPrompt: React.FC<RecoveryPromptProps> = ({
                 pressed && { opacity: 0.8 },
               ]}
               onPress={onAbandon}
-              accessibilityLabel="End session button"
+              accessibilityLabel="End session"
               accessibilityRole="button"
               accessibilityHint="Ends this session"
             >

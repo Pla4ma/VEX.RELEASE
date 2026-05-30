@@ -157,7 +157,7 @@ export function StudyProgressPanel({
             size="sm"
             onPress={studyProgress.onMarkComplete}
             isLoading={studyProgress.isCompleting}
-            accessibilityLabel="Mark Complete button"
+            accessibilityLabel="Mark complete"
             accessibilityRole="button"
             accessibilityHint="Double tap to activate"
           >
@@ -167,7 +167,7 @@ export function StudyProgressPanel({
             variant="outline"
             size="sm"
             onPress={studyProgress.onSkip}
-            accessibilityLabel="Skip button"
+            accessibilityLabel="Skip task"
             accessibilityRole="button"
             accessibilityHint="Double tap to activate"
           >

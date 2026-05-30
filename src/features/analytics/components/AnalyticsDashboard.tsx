@@ -105,7 +105,7 @@ export function AnalyticsDashboard({
             style={({ pressed }) => [styles.iconButton, pressed && { opacity: 0.8 }]}
             onPress={onExportPress}
             accessibilityRole="button"
-            accessibilityLabel="Export button"
+            accessibilityLabel="Export analytics data"
             accessibilityHint="Double tap to select"
           >
             <Text style={styles.iconButtonText}>EXP</Text>
@@ -114,7 +114,7 @@ export function AnalyticsDashboard({
             style={({ pressed }) => [styles.iconButton, pressed && { opacity: 0.8 }]}
             onPress={onSettingsPress}
             accessibilityRole="button"
-            accessibilityLabel="Settings button"
+            accessibilityLabel="Open analytics settings"
             accessibilityHint="Double tap to select"
           >
             <Text style={styles.iconButtonText}>SET</Text>

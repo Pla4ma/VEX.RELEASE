@@ -102,7 +102,7 @@ export const GambleActionButtons: React.FC<GambleActionButtonsProps> = ({
           borderColor: theme.colors.warning.DEFAULT,
           borderWidth: 2,
         }}
-        accessibilityLabel="🎲 Take the Risk Start a session NOW - Score S or A to save streak button"
+        accessibilityLabel="Take the risk and start a session now to save streak"
         accessibilityRole="button"
         accessibilityHint="Double tap to activate"
       >

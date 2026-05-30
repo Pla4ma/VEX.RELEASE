@@ -11,6 +11,7 @@ import Animated, { FadeInUp } from "react-native-reanimated";
 import { Box } from "../../../components/primitives/Box";
 import { Text } from "../../../components/primitives/Text";
 import { useTheme } from "../../../theme";
+import { buttonTap } from "../../../utils/haptics";
 import type { StudyOsHomeSurface } from "../schemas";
 
 export interface StudyOsPreviewProps {
@@ -30,7 +31,10 @@ export function StudyOsPreview({
   return (
     <Animated.View entering={FadeInUp.duration(400).delay(200)}>
       <Pressable
-        onPress={onStartBlock}
+        onPress={() => {
+          buttonTap();
+          onStartBlock();
+        }}
         disabled={isLoading}
         accessibilityLabel={surface.ctaLabel}
         accessibilityRole="button"

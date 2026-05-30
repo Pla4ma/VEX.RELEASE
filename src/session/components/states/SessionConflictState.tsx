@@ -90,7 +90,7 @@ export function SessionConflictState({
               isDisabled={isResolving}
               onPress={() => handleResolveOption("local")}
               buttonText="Keep This Version"
-              accessibilityLabel="Keep This Version button"
+              accessibilityLabel="Keep this version"
               delay={100}
             />
 
@@ -104,7 +104,7 @@ export function SessionConflictState({
               isDisabled={isResolving}
               onPress={() => handleResolveOption("remote")}
               buttonText="Use Other Version"
-              accessibilityLabel="Use Other Version button"
+              accessibilityLabel="Use other version"
               delay={200}
             />
           </Box>
@@ -135,7 +135,7 @@ export function SessionConflictState({
                 onPress={() => handleResolveOption("merge")}
                 isLoading={isResolving && selectedOption === "merge"}
                 disabled={isResolving}
-                accessibilityLabel="Try to Merge Both Versions button"
+                accessibilityLabel="Merge both versions"
                 accessibilityRole="button"
                 accessibilityHint="Double tap to activate"
               >

@@ -132,7 +132,7 @@ export const NotificationScheduleSection: React.FC = () => {
               <Pressable
                 style={{ flex: 1, marginRight: 8 }}
                 onPress={() => handleSetQuietHours("start")}
-                accessibilityLabel="Start button"
+                accessibilityLabel="Set notification start time"
                 accessibilityRole="button"
                 accessibilityHint="Double tap to change setting"
               >
@@ -166,7 +166,7 @@ export const NotificationScheduleSection: React.FC = () => {
               <Pressable
                 style={{ flex: 1, marginLeft: 8 }}
                 onPress={() => handleSetQuietHours("end")}
-                accessibilityLabel="End button"
+                accessibilityLabel="Set notification end time"
                 accessibilityRole="button"
                 accessibilityHint="Double tap to change setting"
               >

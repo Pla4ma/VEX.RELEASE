@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, Pressable } from "react-native";
 import type { GambleOptionProps, Theme } from "./types";
 import { GAMBLE_COLORS } from "./types";
+import { buttonTap } from "../../../utils/haptics";
 import {
   gambleOptionStyle,
   gambleBadgeStyle,
@@ -21,7 +22,10 @@ export const GambleOption: React.FC<GambleOptionProps> = ({
   const color = GAMBLE_COLORS[type](theme);
   return (
     <Pressable
-      onPress={onPress}
+      onPress={() => {
+        buttonTap();
+        onPress();
+      }}
       accessibilityLabel={`${type} gamble: ${description}`}
       accessibilityRole="button"
       accessibilityHint={`Select ${type} gamble option for ${xpBonus} XP bonus`}

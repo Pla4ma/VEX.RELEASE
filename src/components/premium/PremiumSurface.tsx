@@ -106,9 +106,9 @@ export function PremiumSurface({
         >
           <Button
             onPress={onAction}
-            accessibilityLabel={actionLabel ?? "Action"}
+            accessibilityLabel={actionLabel ?? "Perform action"}
             accessibilityRole="button"
-            accessibilityHint="Double tap to activate"
+            accessibilityHint="Performs the primary action for this section"
           >
             {actionLabel}
           </Button>
@@ -116,9 +116,9 @@ export function PremiumSurface({
             <Button
               variant="outline"
               onPress={onSecondaryAction}
-              accessibilityLabel={secondaryActionLabel ?? "Action"}
+              accessibilityLabel={secondaryActionLabel ?? "Perform secondary action"}
               accessibilityRole="button"
-              accessibilityHint="Double tap to activate"
+              accessibilityHint="Performs the secondary action for this section"
               >
               {secondaryActionLabel}
             </Button>

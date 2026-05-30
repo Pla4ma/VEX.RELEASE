@@ -66,7 +66,7 @@ export const NotificationsScreen: React.FC = () => {
         {unreadCount > 0 && (
           <Pressable
             onPress={handleMarkAllAsRead}
-            accessibilityLabel="Mark all read button"
+            accessibilityLabel="Mark all notifications as read"
             accessibilityRole="button"
             accessibilityHint="Marks all notifications as read"
           >

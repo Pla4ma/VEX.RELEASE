@@ -121,7 +121,7 @@ export function OnboardingWelcome({
             variant="primary"
             fullWidth
             onPress={onContinue}
-            accessibilityLabel="Let's Go button"
+            accessibilityLabel="Get started"
             accessibilityRole="button"
             accessibilityHint="Starts the onboarding flow"
           >

@@ -77,7 +77,7 @@ export const NetworkStatus: React.FC<NetworkStatusProps> = ({
               pressed && { opacity: 0.8 },
             ]}
             onPress={onSync}
-            accessibilityLabel="Sync button"
+            accessibilityLabel="Sync content"
             accessibilityRole="button"
             accessibilityHint="Double tap to activate"
           >

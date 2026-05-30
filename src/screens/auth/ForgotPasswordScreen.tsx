@@ -54,7 +54,7 @@ export const ForgotPasswordScreen: React.FC<Props> = ({ navigation }) => {
                 />
               }
               style={{ alignSelf: "flex-start", marginBottom: 24 }}
-              accessibilityLabel="Back to Login button"
+              accessibilityLabel="Back to login"
               accessibilityRole="button"
               accessibilityHint="Double tap to activate"
             >
@@ -122,7 +122,7 @@ export const ForgotPasswordScreen: React.FC<Props> = ({ navigation }) => {
                   onPress={handleBack}
                   fullWidth
                   style={{ marginTop: 32 }}
-                  accessibilityLabel="Back to Login button"
+                  accessibilityLabel="Back to login"
                   accessibilityRole="button"
                   accessibilityHint="Double tap to activate"
                 >
@@ -163,7 +163,7 @@ export const ForgotPasswordScreen: React.FC<Props> = ({ navigation }) => {
                   isLoading={isLoading}
                   disabled={isLoading || !email}
                   fullWidth
-                  accessibilityLabel="Send Reset Link button"
+                  accessibilityLabel="Send reset link"
                   accessibilityRole="button"
                   accessibilityHint="Double tap to activate"
                 >

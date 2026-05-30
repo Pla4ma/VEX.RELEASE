@@ -108,7 +108,7 @@ export const AchievementsScreen: React.FC = () => {
             <Pressable
               onPress={() => setSelectedAchievement(null)}
               style={({ pressed }) => [pressed && { opacity: 0.8 }]}
-              accessibilityLabel="Close button"
+              accessibilityLabel="Close achievements"
               accessibilityRole="button"
               accessibilityHint="Double tap to activate"
             >

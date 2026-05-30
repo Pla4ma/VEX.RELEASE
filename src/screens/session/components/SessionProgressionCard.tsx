@@ -127,7 +127,7 @@ export function SessionProgressionCard({
                 variant="outline"
                 size="sm"
                 onPress={onRetryRewards}
-                accessibilityLabel="Retry Progress button"
+                accessibilityLabel="Retry loading progress"
                 accessibilityRole="button"
                 accessibilityHint="Double tap to activate"
               >

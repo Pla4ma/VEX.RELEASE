@@ -71,7 +71,7 @@ export function RecentSessionsList({
           </Text>
           <Pressable
             onPress={onViewAll}
-            accessibilityLabel="View all › button"
+            accessibilityLabel="View all recent sessions"
             accessibilityRole="button"
             accessibilityHint="Double tap to activate"
           >

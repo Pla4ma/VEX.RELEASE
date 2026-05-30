@@ -120,7 +120,7 @@ export const NotificationSettingsScreen: React.FC<Props> = ({
               borderRadius: 12,
               alignItems: "center",
             }}
-            accessibilityLabel="Send Test Notification button"
+            accessibilityLabel="Send test notification"
             accessibilityRole="button"
             accessibilityHint="Double tap to change setting"
           >

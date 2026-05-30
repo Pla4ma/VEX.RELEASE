@@ -133,7 +133,7 @@ export const LevelUpOverlay: React.FC<LevelUpOverlayProps> = ({
               pressed && { opacity: 0.8 },
             ]}
             onPress={onContinue}
-            accessibilityLabel="AWESOME! 🎉 button"
+            accessibilityLabel="Dismiss level up celebration"
             accessibilityRole="button"
             accessibilityHint="Double tap to activate"
           >

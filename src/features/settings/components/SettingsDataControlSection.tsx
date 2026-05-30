@@ -32,7 +32,7 @@ export function SettingsDataControlSection({
             format: "json",
           });
         }}
-        accessibilityLabel="Export Data button"
+        accessibilityLabel="Export data"
         accessibilityRole="button"
         accessibilityHint="Double tap to activate"
       >
@@ -59,7 +59,7 @@ export function SettingsDataControlSection({
             ],
           );
         }}
-        accessibilityLabel="Import Data button"
+        accessibilityLabel="Import data"
         accessibilityRole="button"
         accessibilityHint="Double tap to activate"
       >
@@ -101,7 +101,7 @@ export function SettingsDataControlSection({
               ],
             );
           }}
-          accessibilityLabel="Delete All My Data button"
+          accessibilityLabel="Delete all my data"
           accessibilityRole="button"
           accessibilityHint="Double tap to activate"
         >

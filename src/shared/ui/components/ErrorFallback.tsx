@@ -84,7 +84,7 @@ export function ErrorFallback({
         variant="primary"
         onPress={onRetry}
         style={{ width: "100%", maxWidth: 280 }}
-        accessibilityLabel="Try Again button"
+        accessibilityLabel="Try again"
         accessibilityRole="button"
         accessibilityHint="Retries the screen operation"
       >
@@ -95,7 +95,7 @@ export function ErrorFallback({
           variant="ghost"
           onPress={onGoBack}
           style={{ width: "100%", maxWidth: 280, marginTop: theme.spacing[3] }}
-          accessibilityLabel="Go Back button"
+          accessibilityLabel="Go back"
           accessibilityRole="button"
           accessibilityHint="Navigates back to the previous screen"
         >

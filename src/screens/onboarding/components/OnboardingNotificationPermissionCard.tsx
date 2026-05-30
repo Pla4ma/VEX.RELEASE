@@ -163,7 +163,7 @@ export function OnboardingNotificationPermissionCard({
             isDisabled={state === "submitting"}
             isLoading={state === "submitting"}
             fullWidth
-            accessibilityLabel="Yes, remind me button"
+            accessibilityLabel="Enable notification reminders"
             accessibilityRole="button"
             accessibilityHint="Double tap to activate"
           >
@@ -176,7 +176,7 @@ export function OnboardingNotificationPermissionCard({
             }}
             isDisabled={state === "submitting"}
             fullWidth
-            accessibilityLabel="Maybe later button"
+            accessibilityLabel="Skip notification setup"
             accessibilityRole="button"
             accessibilityHint="Double tap to activate"
           >

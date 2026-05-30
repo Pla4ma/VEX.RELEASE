@@ -55,7 +55,7 @@ export function OnboardingErrorState({
               pressed && { opacity: 0.8 },
             ]}
             onPress={onRetry}
-            accessibilityLabel="Try Again button"
+            accessibilityLabel="Try again"
             accessibilityRole="button"
             accessibilityHint="Double tap to select"
           >
@@ -69,7 +69,7 @@ export function OnboardingErrorState({
                 pressed && { opacity: 0.8 },
               ]}
               onPress={onSkip}
-              accessibilityLabel="Skip for Now button"
+              accessibilityLabel="Skip for now"
               accessibilityRole="button"
               accessibilityHint="Double tap to select"
             >

@@ -149,7 +149,7 @@ export function NameScreen({
           fullWidth
           onPress={handleContinue}
           disabled={!isValid}
-          accessibilityLabel="Continue → button"
+          accessibilityLabel="Continue"
           accessibilityRole="button"
           accessibilityHint="Double tap to select"
         >
@@ -164,7 +164,7 @@ export function NameScreen({
       >
         <Pressable
           onPress={onSkip}
-          accessibilityLabel="Skip for now › button"
+          accessibilityLabel="Skip for now"
           accessibilityRole="button"
           accessibilityHint="Double tap to select"
         >

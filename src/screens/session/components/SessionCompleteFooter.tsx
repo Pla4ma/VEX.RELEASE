@@ -52,7 +52,7 @@ export function SessionCompleteFooter({
               size="md"
               fullWidth
               onPress={onShare}
-              accessibilityLabel="Share Your Session button"
+              accessibilityLabel="Share session"
               accessibilityRole="button"
               accessibilityHint="Double tap to activate"
             >

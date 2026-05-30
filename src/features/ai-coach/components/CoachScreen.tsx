@@ -130,7 +130,7 @@ export function CoachScreen(): JSX.Element {
             <Pressable
               onPress={() => setError(null)}
               style={({ pressed }) => [pressed && { opacity: 0.8 }]}
-              accessibilityLabel="Dismiss button"
+              accessibilityLabel="Dismiss coach"
               accessibilityRole="button"
               accessibilityHint="Double tap to activate"
             >

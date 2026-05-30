@@ -35,7 +35,7 @@ export function ProgressionErrorState({
         <Pressable
           style={({ pressed }) => [styles.button, pressed && { opacity: 0.8 }]}
           onPress={onRetry}
-          accessibilityLabel="Try Again button"
+          accessibilityLabel="Try again"
           accessibilityRole="button"
           accessibilityHint="Double tap to activate"
         >

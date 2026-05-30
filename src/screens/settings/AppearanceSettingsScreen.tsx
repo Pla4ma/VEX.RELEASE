@@ -124,7 +124,7 @@ export const AppearanceSettingsScreen: React.FC<Props> = ({ navigation }) => {
               borderWidth: 1,
               borderColor: theme.colors.border.light,
             }}
-            accessibilityLabel="Reset to Defaults button"
+            accessibilityLabel="Reset appearance to defaults"
             accessibilityRole="button"
             accessibilityHint="Double tap to change setting"
           >

@@ -115,7 +115,7 @@ export function YouTubeVideoPreview({
               variant="ghost"
               size="sm"
               onPress={onExtract}
-              accessibilityLabel="Retry button"
+              accessibilityLabel="Retry loading video"
               accessibilityRole="button"
               accessibilityHint="Double tap to activate"
             >

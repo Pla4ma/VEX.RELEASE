@@ -42,7 +42,7 @@ export function GraceUsesIndicator({
     <Animated.View entering={FadeIn.duration(300)}>
       <Pressable
         onPress={onPress}
-        accessibilityLabel="🛡️ / saves button"
+        accessibilityLabel="View streak save details"
         accessibilityRole="button"
         accessibilityHint="Double tap to activate"
       >

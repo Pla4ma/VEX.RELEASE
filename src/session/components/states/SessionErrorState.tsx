@@ -53,7 +53,7 @@ export const SessionErrorState: React.FC<SessionErrorStateProps> = ({
               pressed && { opacity: 0.8 },
             ]}
             onPress={onRetry}
-            accessibilityLabel="🔄 Try Again button"
+            accessibilityLabel="Try again"
             accessibilityRole="button"
             accessibilityHint="Double tap to activate"
           >
@@ -68,7 +68,7 @@ export const SessionErrorState: React.FC<SessionErrorStateProps> = ({
               pressed && { opacity: 0.8 },
             ]}
             onPress={onGoBack}
-            accessibilityLabel="← Go Back button"
+            accessibilityLabel="Go back"
             accessibilityRole="button"
             accessibilityHint="Double tap to activate"
           >
@@ -83,7 +83,7 @@ export const SessionErrorState: React.FC<SessionErrorStateProps> = ({
               pressed && { opacity: 0.8 },
             ]}
             onPress={onContactSupport}
-            accessibilityLabel="Contact Support button"
+            accessibilityLabel="Contact support"
             accessibilityRole="button"
             accessibilityHint="Double tap to activate"
           >

@@ -22,7 +22,7 @@ export function SettingsActions({
         ]}
         onPress={onSync}
         disabled={settingsState === "syncing"}
-        accessibilityLabel="Sync button"
+        accessibilityLabel="Sync settings"
         accessibilityRole="button"
         accessibilityHint="Double tap to activate"
       >
@@ -38,7 +38,7 @@ export function SettingsActions({
         ]}
         onPress={onReset}
         disabled={settingsState === "saving"}
-        accessibilityLabel="Reset to Defaults button"
+        accessibilityLabel="Reset to defaults"
         accessibilityRole="button"
         accessibilityHint="Double tap to activate"
       >
