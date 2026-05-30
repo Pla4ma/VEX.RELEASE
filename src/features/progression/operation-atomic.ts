@@ -1,17 +1,20 @@
 import * as Sentry from "@sentry/react-native";
+import { z } from "zod";
 import { getSupabaseClient } from "../../config/supabase";
 import type { AddXpInput } from "./schemas";
 
-export interface AtomicXpRpcResult {
-  success: boolean;
-  duplicate: boolean;
-  xp_added: number;
-  new_total_xp: number;
-  new_level: number;
-  previous_level: number;
-  level_up: boolean;
-  rewards: string[];
-}
+const AtomicXpRpcResultSchema = z.object({
+  success: z.boolean(),
+  duplicate: z.boolean(),
+  xp_added: z.number(),
+  new_total_xp: z.number(),
+  new_level: z.number(),
+  previous_level: z.number(),
+  level_up: z.boolean(),
+  rewards: z.array(z.string()),
+});
+
+export type AtomicXpRpcResult = z.infer<typeof AtomicXpRpcResultSchema>;
 
 export async function tryAtomicAddXp(
   userId: string,
@@ -39,7 +42,7 @@ export async function tryAtomicAddXp(
       return null;
     }
 
-    return data as unknown as AtomicXpRpcResult;
+    return AtomicXpRpcResultSchema.parse(data);
   } catch (error) {
     Sentry.captureException(error, {
       tags: { operation: "tryAtomicAddXp" },

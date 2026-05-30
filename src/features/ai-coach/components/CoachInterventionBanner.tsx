@@ -92,7 +92,7 @@ export function CoachInterventionBanner({
   if (!intervention || isDismissed) {
     return null;
   }
-  const colors = getBannerColors(intervention.type, theme as unknown as Record<string, Record<string, string>>);
+  const colors = getBannerColors(intervention.type, theme as unknown as Record<string, Record<string, string | undefined>>);
   const canDismiss = !isNonDismissable(
     intervention.type,
     intervention.hoursRemaining,
