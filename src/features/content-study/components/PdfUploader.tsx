@@ -112,6 +112,9 @@ export const PdfUploader: React.FC<PdfUploaderProps> = ({
       ]}
       onPress={pickDocument}
       disabled={disabled || isPicking}
+      accessibilityRole="button"
+      accessibilityLabel="Upload a PDF, text, or markdown file"
+      accessibilityHint="Opens the file picker to select a study document"
     >
       {isPicking ? (
         <ActivityIndicator color={theme.colors.primary[500]} />
