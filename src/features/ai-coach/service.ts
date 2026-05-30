@@ -108,7 +108,6 @@ export {
   validateCoachInput,
   createFallbackInsight,
   containsForbiddenPII,
-  createMockCoachInput,
   CoachInputContractSchema,
   type CoachInputContract,
 } from "./input-contract";

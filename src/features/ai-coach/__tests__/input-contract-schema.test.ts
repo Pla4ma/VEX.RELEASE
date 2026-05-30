@@ -2,9 +2,9 @@ import { describe, expect, it } from "@jest/globals";
 import {
   CoachInputContractSchema,
   containsForbiddenPII,
-  createMockCoachInput,
   validateCoachInput,
 } from "../input-contract";
+import { createMockCoachInput } from "./input-contract-test-utils";
 
 describe("Coach input contract schema", () => {
   it("accepts valid coach input", () => {

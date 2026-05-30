@@ -13,7 +13,6 @@ export {
   containsForbiddenPII,
 } from "./input-contract-privacy";
 export { createFallbackInsight } from "./input-contract-fallback";
-export { createMockCoachInput } from "./input-contract-test-utils";
 
 export function validateCoachInput(rawInput: unknown): CoachInputContract {
   const parsed = CoachInputContractSchema.parse(rawInput);

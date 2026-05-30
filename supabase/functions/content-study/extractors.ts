@@ -1,4 +1,4 @@
-import { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
+import { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.49.8';
 
 const GEMINI_API_KEY = Deno.env.get('GEMINI_API_KEY') || '';
 const GEMINI_MODEL = 'gemini-2.5-pro';

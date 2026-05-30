@@ -5,7 +5,7 @@
  * Extracted from index.ts for file size compliance.
  */
 
-import { createClient, SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
+import { createClient, SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.49.8';
 import { SubmitContentSchema, GenerateStudyPlanSchema, SubmitFeedbackSchema, type StudyTask, type QuizItem, type SessionPlan, type RawStudyTask, type RawQuizItem, type RawStudyPlanResponse, type RawSessionPlan } from './schemas.ts';
 import { extractFromYouTube, extractFromPDF, generateStudyPlan } from './extractors.ts';
 
@@ -104,7 +104,7 @@ function parseStudyPlanResponse(text: string): { tasks: StudyTask[]; quizItems: 
 
 async function checkRateLimit(supabase: SupabaseClient, userId: string): Promise<{ canGenerate: boolean; remaining: number }> {
   const { data, error } = await supabase.rpc('check_daily_generation_limit', { p_user_id: userId, p_limit: DAILY_GENERATION_LIMIT });
-  if (error || !data) return { canGenerate: true, remaining: DAILY_GENERATION_LIMIT };
+  if (error || !data) return { canGenerate: false, remaining: 0 };
   return { canGenerate: data[0]?.can_generate ?? true, remaining: data[0]?.remaining ?? 0 };
 }
 

@@ -9,8 +9,8 @@ import {
   generateUUID,
   trackCoachSuggestionAccepted,
   trackCoachSuggestionConversionFailed,
-} from "./phase7-helpers";
-import { CoachSuggestionSchema, type CoachSuggestion } from "./phase7-schemas";
+} from "./ai-helpers";
+import { CoachSuggestionSchema, type CoachSuggestion } from "./suggestion-schemas";
 
 export async function generateMissionSuggestion(
   userId: string,

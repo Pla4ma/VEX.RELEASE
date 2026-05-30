@@ -1,5 +1,4 @@
-import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.49.8';
 import { buildCorsHeaders, withCorsHeaders } from '../_shared/cors.ts';
 import {
   handleSubmit,
@@ -9,7 +8,7 @@ import {
   handleFeedback,
 } from './handlers.ts';
 
-serve(async (req) => {
+Deno.serve(async (req) => {
   const corsHeaders = buildCorsHeaders(req);
   if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders });
   try {

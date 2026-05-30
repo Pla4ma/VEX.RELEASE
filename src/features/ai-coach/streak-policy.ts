@@ -1,12 +1,12 @@
 import { validateCoachInput } from "./input-contract";
 import { validateMessageQuality } from "./message-quality-gate";
-import { buildInputContractFromStreakData } from "./phase7-input-builders";
+import { buildInputContractFromStreakData } from "./input-builders";
 import {
   extractActionFromMessage,
   generateStreakProtectionMessage,
   generateUUID,
-} from "./phase7-helpers";
-import { CoachSuggestionSchema, type CoachSuggestion } from "./phase7-schemas";
+} from "./ai-helpers";
+import { CoachSuggestionSchema, type CoachSuggestion } from "./suggestion-schemas";
 
 export async function handleStreakRiskIntegration(
   userId: string,

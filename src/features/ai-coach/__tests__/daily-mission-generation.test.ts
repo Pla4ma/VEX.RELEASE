@@ -1,10 +1,10 @@
 import { beforeEach, describe, expect, it, vi } from "@jest/globals";
-import { createMockCoachInput } from "../input-contract";
+import { createMockCoachInput } from "./input-contract-test-utils";
 import {
   convertSuggestionToMission,
   generateMissionSuggestion,
-} from "../phase7-integration";
-import type { CoachSuggestion } from "../phase7-schemas";
+} from "../integration";
+import type { CoachSuggestion } from "../suggestion-schemas";
 import { validateMessageQuality } from "../message-quality-gate";
 import { eventBus } from "../../../events";
 

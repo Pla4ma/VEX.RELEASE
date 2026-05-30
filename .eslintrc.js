@@ -4,8 +4,8 @@ module.exports = {
   rules: {
     'prettier/prettier': 'off',
     '@typescript-eslint/no-unused-vars': 'warn',
-    'react-hooks/exhaustive-deps': 'warn',
-    'react-hooks/rules-of-hooks': 'warn',
+    'react-hooks/exhaustive-deps': 'error',
+    'react-hooks/rules-of-hooks': 'error',
     'no-new-func': 'warn',
     'react-native/no-inline-styles': 'off',
   },

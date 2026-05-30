@@ -2,9 +2,9 @@ import { describe, expect, it } from "@jest/globals";
 import {
   CoachInputContractSchema,
   createFallbackInsight,
-  createMockCoachInput,
   FORBIDDEN_DATA_FIELDS,
 } from "../input-contract";
+import { createMockCoachInput } from "./input-contract-test-utils";
 
 function testUuid(): string {
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (char) => {

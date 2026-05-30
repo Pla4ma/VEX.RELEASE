@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "@jest/globals";
-import { getHomeCoachSuggestion } from "../phase7-integration";
+import { getHomeCoachSuggestion } from "../integration";
 import * as repository from "../repository";
 import { validateMessageQuality } from "../message-quality-gate";
 

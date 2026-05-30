@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "@jest/globals";
-import { createMockCoachInput } from "../input-contract";
-import { generateSessionRecommendation } from "../phase7-integration";
+import { createMockCoachInput } from "./input-contract-test-utils";
+import { generateSessionRecommendation } from "../integration";
 
 jest.mock("../message-quality-gate", () => ({
   validateMessageQuality: jest.fn(() => ({

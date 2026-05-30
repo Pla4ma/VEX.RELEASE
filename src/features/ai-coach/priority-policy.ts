@@ -3,7 +3,7 @@ import {
   PriorityEngineSchema,
   type CoachPriority,
   type PriorityEngine,
-} from "./phase7-schemas";
+} from "./suggestion-schemas";
 
 export function shouldCoachShowSuggestion(
   priorityEngine: PriorityEngine,

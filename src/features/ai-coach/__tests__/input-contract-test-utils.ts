@@ -1,4 +1,4 @@
-import type { CoachInputContract } from "./input-contract-schema";
+import type { CoachInputContract } from "../input-contract-schema";
 
 function generateMockUUID(): string {
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {

@@ -1,11 +1,11 @@
 import { describe, expect, it } from "@jest/globals";
-import { createMockCoachInput } from "../input-contract";
+import { createMockCoachInput } from "./input-contract-test-utils";
 import {
   generateMissionSuggestion,
   handleStreakRiskIntegration,
   shouldCoachShowSuggestion,
-} from "../phase7-integration";
-import type { PriorityEngine } from "../phase7-schemas";
+} from "../integration";
+import type { PriorityEngine } from "../suggestion-schemas";
 
 describe("Phase 7 streak and priority integration", () => {
   it("generates streak protection suggestion for critical risk", async () => {
