@@ -67,7 +67,7 @@ module.exports = {
     ...legacyFailingTests,
     '<rootDir>/src/archive/',
     '<rootDir>/src/features/battle-pass/',
-    '<rootDir>/src/features/boss/',
+
     '<rootDir>/src/features/challenges/',
     '<rootDir>/src/features/inventory/',
     '<rootDir>/src/features/shop/',
