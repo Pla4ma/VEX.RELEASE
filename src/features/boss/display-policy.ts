@@ -7,7 +7,6 @@ export function isCombatAllowed(_policy?: unknown): boolean {
 export function isBossVisibleAtSurface(_policy?: unknown): boolean {
   return false;
 }
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function useBossDisplayPolicy(_context?: string): {
   isVisible: boolean;
   combatAllowed: boolean;

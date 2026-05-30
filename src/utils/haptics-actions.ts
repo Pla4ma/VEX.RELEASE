@@ -196,6 +196,4 @@ export async function featureUnlocked(): Promise<void> {
   );
 }
 
-export async function selection(): Promise<void> {
-  await triggerHaptic("selection");
-}
+export const selection = () => triggerHaptic("selection");

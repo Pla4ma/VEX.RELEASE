@@ -4,7 +4,6 @@ export function calculateDamage(): number {
 export function createEncounter(): Promise<null> {
   return Promise.resolve(null);
 }
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function applyDamage(_input?: {
   encounterId: string;
   sessionId: string;
@@ -12,7 +11,6 @@ export function applyDamage(_input?: {
 }): Promise<null> {
   return Promise.resolve(null);
 }
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function getActiveEncounter(
   _userId: string,
 ): Promise<{ status: string; bossId: string; id: string } | null> {

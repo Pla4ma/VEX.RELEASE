@@ -1,8 +1,8 @@
 import { SessionService } from "../SessionService";
-import { getSessionOrchestrator } from "../SessionOrchestrator";
+import { getSessionOrchestrator } from "../orchestrator-factory";
 import type { SessionConfig, SessionState } from "../types";
 
-jest.mock("../SessionOrchestrator", () => ({
+jest.mock("../orchestrator-factory", () => ({
   getSessionOrchestrator: jest.fn(),
   createSessionOrchestrator: jest.fn(),
   SessionOrchestrator: jest.fn(),

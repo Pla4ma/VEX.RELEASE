@@ -1,7 +1,5 @@
-import {
-  SessionOrchestrator,
-  getSessionOrchestrator,
-} from "./SessionOrchestrator";
+import { getSessionOrchestrator } from "./orchestrator-factory";
+import { SessionOrchestrator } from "./SessionOrchestrator";
 import { getSessionRepository } from "./repository/SessionRepository";
 import { getSessionEventEmitter } from "./SessionEventEmitter";
 import { getRewardAdapter } from "./integration/RewardAdapter";

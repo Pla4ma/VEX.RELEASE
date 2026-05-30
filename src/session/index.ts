@@ -61,11 +61,8 @@ export {
   getSessionService,
 } from "./SessionService";
 export type { SessionServiceOptions } from "./SessionService";
-export {
-  SessionOrchestrator,
-  createSessionOrchestrator,
-  getSessionOrchestrator,
-} from "./SessionOrchestrator";
+export { SessionOrchestrator } from "./SessionOrchestrator";
+export { createSessionOrchestrator, getSessionOrchestrator } from "./orchestrator-factory";
 export {
   SessionEventEmitter,
   createSessionEventEmitter,

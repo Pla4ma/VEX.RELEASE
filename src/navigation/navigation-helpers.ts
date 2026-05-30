@@ -40,7 +40,7 @@ export function navigateToRootScreen(
   if (params !== undefined) {
     navigation.navigate(route as string, params as Record<string, unknown>);
   } else {
-    navigation.navigate(route as string);
+    navigation.navigate(route as never);
   }
 }
 export function navigateToAuthScreen(
@@ -49,7 +49,7 @@ export function navigateToAuthScreen(
   params?: AuthStackParams[AuthStackRoute],
 ): void {
   debug.info("Navigating to auth screen: %s", route);
-  navigation.navigate("Auth", { screen: route, params });
+  navigation.navigate("Auth", { screen: route as string, params });
 }
 export function navigateToMainTab(
   navigation: NavigationProp<RootStackParams>,
@@ -57,7 +57,7 @@ export function navigateToMainTab(
   params?: MainTabParams[MainTabRoute],
 ): void {
   debug.info("Navigating to main tab: %s", route);
-  navigation.navigate("Main", { screen: route, params });
+  navigation.navigate("Main", { screen: route as string, params });
 }
 export function navigateToMainStackScreen<Route extends MainStackRoute>(
   navigation: NavigationProp<MainStackParams>,
@@ -68,7 +68,7 @@ export function navigateToMainStackScreen<Route extends MainStackRoute>(
   if (params !== undefined) {
     navigation.navigate(route as string, params as Record<string, unknown>);
   } else {
-    navigation.navigate(route as string);
+    navigation.navigate(route as never);
   }
 }
 export function navigateToSessionStackScreen(

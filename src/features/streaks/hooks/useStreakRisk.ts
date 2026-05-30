@@ -76,8 +76,12 @@ export function useStreakRisk(): UseStreakRiskReturn {
     retry: 3,
   });
   const riskStatus = computeRiskStatus(streakData ?? undefined, cachedRiskStatus);
-  // eslint-disable-next-line max-len -- destructuring mutation fields to stabilize useEffect deps
-  const { mutate: triggerRiskCheck, mutateAsync: triggerRiskCheckAsync, error: mutationError, isPending: isMutationPending } = useMutation({
+  const {
+    mutate: triggerRiskCheck,
+    mutateAsync: triggerRiskCheckAsync,
+    error: mutationError,
+    isPending: isMutationPending,
+  } = useMutation({
     mutationFn: async () => {
       if (!userId || !streakData) {
         return null;

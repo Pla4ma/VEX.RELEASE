@@ -16,14 +16,12 @@ export function getBossEngagementSignals(
 ): BossEngagementSignal[] {
   return [];
 }
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function useBossEngagementSignals(
   inputs: BossEngagementInputs,
 ): BossEngagementInputs & { signals: BossEngagementSignal[] } {
   return { signals: [], ...inputs };
 }
 export type BossEngagementLevel = "none" | "low" | "medium" | "high";
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function deriveBossEngagementLevel(
   _inputs: BossEngagementInputs,
 ): BossEngagementLevel {

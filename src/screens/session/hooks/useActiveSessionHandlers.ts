@@ -5,6 +5,7 @@ import { getSprintChainService } from "../../../features/session/SprintChainServ
 import type { SessionStackParams } from "../../../navigation/types";
 import type { Mood } from "../../../session/components/CreativeMoodLogger";
 import type { SessionSummary } from "../../../session/types/schemas";
+import { SessionSummarySchema } from "../../../session/types/schemas";
 import type { useSession } from "../../../session/hooks/useSession";
 import { SessionMode } from "../../../session/modes";
 import {
@@ -93,13 +94,13 @@ export function useActiveSessionHandlers({
       });
       navigation.navigate("SessionComplete", {
         sessionId,
-        summary: {
+        summary: SessionSummarySchema.parse({
           ...result,
           focusPurityScore: finalPurityScore,
           sprintChainCount,
           userLevel: progressionLevel ?? result.userLevel ?? 1,
           creativeMood: creativeMood ?? undefined,
-        } as unknown as SessionSummary,
+        }),
       });
     } catch (caught) {
       setControlFailure(buildActiveSessionControlFailure("complete"));

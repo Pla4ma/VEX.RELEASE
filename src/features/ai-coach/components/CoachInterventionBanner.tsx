@@ -150,7 +150,7 @@ export function CoachInterventionBanner({
           variant="body"
           style={{ marginBottom: theme.spacing[3], lineHeight: 20 }}
         >
-          {intervention.message}
+          {(intervention.message ?? "").slice(0, 600)}
         </Text>
 
         <Pressable
