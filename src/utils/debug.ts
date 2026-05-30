@@ -64,13 +64,20 @@ function formatMessage(namespace: string, message: string): string {
  */
 function reportToErrorTracking(
   level: LogLevel,
-  _message: string,
-  _error?: Error,
+  message: string,
+  error?: Error,
 ): void {
-  // In production, send to error tracking service
   if (!IS_DEVELOPMENT && level >= LogLevel.ERROR) {
-    // Example: Sentry.captureException(error);
-    // Example: Bugsnag.notify(error);
+    try {
+      const Sentry = require('@sentry/react-native');
+      if (error) {
+        Sentry.captureException(error);
+      } else {
+        Sentry.captureMessage(message, 'error');
+      }
+    } catch {
+      // Sentry not available — fail silently
+    }
   }
 }
 
@@ -93,44 +100,40 @@ export function createDebugger(namespace: string): Debugger {
   return {
     debug: (message: string, ...args: unknown[]) => {
       if (currentLogLevel <= LogLevel.DEBUG && isNamespaceEnabled(namespace)) {
-        void formatMessage(namespace, message);
-        void args;
+        console.debug(formatMessage(namespace, message), ...args);
       }
     },
 
     info: (message: string, ...args: unknown[]) => {
       if (currentLogLevel <= LogLevel.INFO) {
-        void formatMessage(namespace, message);
-        void args;
+        console.log(formatMessage(namespace, message), ...args);
       }
     },
 
     warn: (message: string, ...args: unknown[]) => {
       if (currentLogLevel <= LogLevel.WARN) {
-        void formatMessage(namespace, message);
-        void args;
+        console.warn(formatMessage(namespace, message), ...args);
       }
     },
 
     error: (message: string, error?: Error | unknown, ...args: unknown[]) => {
       if (currentLogLevel <= LogLevel.ERROR) {
-        void formatMessage(namespace, message);
-        void args;
         const errorInstance =
           error instanceof Error ? error : new Error(String(error));
+        console.error(formatMessage(namespace, message), errorInstance, ...args);
         reportToErrorTracking(LogLevel.ERROR, message, errorInstance);
       }
     },
 
     time: (label: string) => {
       if (currentLogLevel <= LogLevel.DEBUG && isNamespaceEnabled(namespace)) {
-        void label;
+        console.time(label);
       }
     },
 
     timeEnd: (label: string) => {
       if (currentLogLevel <= LogLevel.DEBUG && isNamespaceEnabled(namespace)) {
-        void label;
+        console.timeEnd(label);
       }
     },
   };

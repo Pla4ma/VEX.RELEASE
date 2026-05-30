@@ -114,7 +114,7 @@ export async function updateStreakEnhanced(
     operation: "UPDATE",
     feature: "streaks",
     payload: { userId, updates } as Record<string, unknown>,
-    idempotencyKey: `streak:update:${userId}:${Date.now()}`,
+    idempotencyKey: `streak:update:${userId}`,
     maxRetries: 5,
     priority: "high",
   };

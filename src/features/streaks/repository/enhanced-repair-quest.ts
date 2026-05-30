@@ -81,7 +81,7 @@ export async function updateRepairQuestEnhanced(
     operation: "UPDATE",
     feature: "streaks",
     payload: { questId, updates },
-    idempotencyKey: `repair-quest:update:${questId}:${Date.now()}`,
+    idempotencyKey: `repair-quest:update:${questId}`,
     maxRetries: 5,
     priority: "high",
   });

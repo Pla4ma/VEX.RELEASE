@@ -186,5 +186,4 @@ export function isSupabaseConfigured(): boolean {
   return Boolean(SUPABASE_URL && SUPABASE_ANON_KEY);
 }
 
-export { SUPABASE_URL, SUPABASE_ANON_KEY };
 export type { Database };
