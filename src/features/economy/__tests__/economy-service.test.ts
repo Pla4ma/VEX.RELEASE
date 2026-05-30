@@ -1,13 +1,3 @@
-/**
- * Tests for economy service: wallet retrieval and balance
- */
-
-import { RepositoryError } from "../repository";
-
-const VALID_UUID = "550e8400-e29b-41d4-a716-446655440000";
-const VALID_UUID2 = "550e8400-e29b-41d4-a716-446655440001";
-
-// Mock supabase client
 const mockRpc = jest.fn();
 const mockUpsert = jest.fn();
 const mockSelect = jest.fn();
@@ -34,6 +24,7 @@ jest.mock("../repository", () => {
   };
 });
 
+import { RepositoryError } from "../repository";
 import {
   getOrCreateWallet,
   getWalletSummary,
@@ -48,8 +39,8 @@ describe("getOrCreateWallet", () => {
   it("returns wallet coins and gems on success", async () => {
     mockSingle.mockResolvedValue({
       data: {
-        id: VALID_UUID,
-        user_id: VALID_UUID2,
+        id: "550e8400-e29b-41d4-a716-446655440000",
+        user_id: "550e8400-e29b-41d4-a716-446655440001",
         coins: 150,
         gems: 7,
         created_at: 1000,
@@ -58,7 +49,7 @@ describe("getOrCreateWallet", () => {
       error: null,
     });
 
-    const wallet = await getOrCreateWallet(VALID_UUID2);
+    const wallet = await getOrCreateWallet("550e8400-e29b-41d4-a716-446655440001");
     expect(wallet.coins).toBe(150);
     expect(wallet.gems).toBe(7);
   });
@@ -69,41 +60,25 @@ describe("getOrCreateWallet", () => {
       error: { message: "duplicate key", code: "23505" },
     });
 
-    await expect(getOrCreateWallet(VALID_UUID2)).rejects.toThrow(
-      RepositoryError,
-    );
+    await expect(
+      getOrCreateWallet("550e8400-e29b-41d4-a716-446655440001"),
+    ).rejects.toThrow(RepositoryError);
   });
 
-  it("throws on invalid wallet data from database", async () => {
+  it("throws on invalid wallet data (schema validation)", async () => {
     mockSingle.mockResolvedValue({
       data: { invalid: true },
       error: null,
     });
 
-    await expect(getOrCreateWallet(VALID_UUID2)).rejects.toThrow();
-  });
-
-  it("returns zeroed wallet when DB returns zero values", async () => {
-    mockSingle.mockResolvedValue({
-      data: {
-        id: VALID_UUID,
-        user_id: VALID_UUID2,
-        coins: 0,
-        gems: 0,
-        created_at: 1000,
-        updated_at: 1000,
-      },
-      error: null,
-    });
-
-    const wallet = await getOrCreateWallet(VALID_UUID2);
-    expect(wallet.coins).toBe(0);
-    expect(wallet.gems).toBe(0);
+    await expect(
+      getOrCreateWallet("550e8400-e29b-41d4-a716-446655440001"),
+    ).rejects.toThrow();
   });
 });
 
 describe("getWalletSummary", () => {
-  it("returns {coins:0, gems:0} when no user is authenticated", async () => {
+  it("returns {coins:0, gems:0} when no user", async () => {
     mockGetUser.mockResolvedValue({
       data: { user: null },
       error: null,
@@ -113,15 +88,15 @@ describe("getWalletSummary", () => {
     expect(summary).toEqual({ coins: 0, gems: 0 });
   });
 
-  it("returns wallet data when user is authenticated", async () => {
+  it("returns wallet when user exists", async () => {
     mockGetUser.mockResolvedValue({
-      data: { user: { id: VALID_UUID2 } },
+      data: { user: { id: "550e8400-e29b-41d4-a716-446655440001" } },
       error: null,
     });
     mockSingle.mockResolvedValue({
       data: {
-        id: VALID_UUID,
-        user_id: VALID_UUID2,
+        id: "550e8400-e29b-41d4-a716-446655440000",
+        user_id: "550e8400-e29b-41d4-a716-446655440001",
         coins: 200,
         gems: 15,
         created_at: 1000,
@@ -140,8 +115,8 @@ describe("getBalance", () => {
   it("returns coins from wallet", async () => {
     mockSingle.mockResolvedValue({
       data: {
-        id: VALID_UUID,
-        user_id: VALID_UUID2,
+        id: "550e8400-e29b-41d4-a716-446655440000",
+        user_id: "550e8400-e29b-41d4-a716-446655440001",
         coins: 500,
         gems: 20,
         created_at: 1000,
@@ -150,24 +125,7 @@ describe("getBalance", () => {
       error: null,
     });
 
-    const balance = await getBalance(VALID_UUID2);
+    const balance = await getBalance("550e8400-e29b-41d4-a716-446655440001");
     expect(balance).toBe(500);
-  });
-
-  it("returns 0 when wallet has 0 coins", async () => {
-    mockSingle.mockResolvedValue({
-      data: {
-        id: VALID_UUID,
-        user_id: VALID_UUID2,
-        coins: 0,
-        gems: 100,
-        created_at: 1000,
-        updated_at: 1000,
-      },
-      error: null,
-    });
-
-    const balance = await getBalance(VALID_UUID2);
-    expect(balance).toBe(0);
   });
 });

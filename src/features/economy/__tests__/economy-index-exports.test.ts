@@ -1,27 +1,23 @@
-/**
- * Tests for economy index exports
- */
-
 import * as economyIndex from "../index";
 
 describe("economy index exports", () => {
-  it("exports SimpleWalletBadge component", () => {
+  it("exports SimpleWalletBadge", () => {
     expect(economyIndex.SimpleWalletBadge).toBeDefined();
   });
 
-  it("exports useWallet hook", () => {
+  it("exports useWallet", () => {
     expect(typeof economyIndex.useWallet).toBe("function");
   });
 
-  it("exports addCurrency from wallet-service", () => {
+  it("exports addCurrency", () => {
     expect(typeof economyIndex.addCurrency).toBe("function");
   });
 
-  it("exports spendCurrency from wallet-service", () => {
+  it("exports spendCurrency", () => {
     expect(typeof economyIndex.spendCurrency).toBe("function");
   });
 
-  it("exports getInsuranceStatus from StreakInsurance", () => {
+  it("exports getInsuranceStatus", () => {
     expect(typeof economyIndex.getInsuranceStatus).toBe("function");
   });
 });

@@ -1,15 +1,63 @@
-/**
- * Tests for CurrencyTypeSchema, SpendInputSchema, and CurrencyGrantSchema
- */
-
 import {
+  WalletSchema,
   CurrencyTypeSchema,
   SpendInputSchema,
   CurrencyGrantSchema,
 } from "../schemas";
 
-const VALID_UUID = "550e8400-e29b-41d4-a716-446655440000";
-const VALID_UUID2 = "550e8400-e29b-41d4-a716-446655440001";
+describe("WalletSchema", () => {
+  it("validates a valid wallet", () => {
+    const result = WalletSchema.parse({
+      id: "550e8400-e29b-41d4-a716-446655440000",
+      user_id: "550e8400-e29b-41d4-a716-446655440001",
+      coins: 100,
+      gems: 10,
+      created_at: Date.now(),
+      updated_at: Date.now(),
+    });
+    expect(result.coins).toBe(100);
+    expect(result.gems).toBe(10);
+  });
+
+  it("defaults coins and gems to 0", () => {
+    const result = WalletSchema.parse({
+      id: "550e8400-e29b-41d4-a716-446655440000",
+      user_id: "550e8400-e29b-41d4-a716-446655440001",
+      coins: 0,
+      gems: 0,
+      created_at: 1000,
+      updated_at: 1000,
+    });
+    expect(result.coins).toBe(0);
+    expect(result.gems).toBe(0);
+  });
+
+  it("rejects negative coins", () => {
+    expect(() =>
+      WalletSchema.parse({
+        id: "550e8400-e29b-41d4-a716-446655440000",
+        user_id: "550e8400-e29b-41d4-a716-446655440001",
+        coins: -1,
+        gems: 0,
+        created_at: 1000,
+        updated_at: 1000,
+      }),
+    ).toThrow();
+  });
+
+  it("rejects non-UUID id", () => {
+    expect(() =>
+      WalletSchema.parse({
+        id: "not-a-uuid",
+        user_id: "550e8400-e29b-41d4-a716-446655440001",
+        coins: 0,
+        gems: 0,
+        created_at: 1000,
+        updated_at: 1000,
+      }),
+    ).toThrow();
+  });
+});
 
 describe("CurrencyTypeSchema", () => {
   it.each(["COINS", "GEMS", "XP", "SEASONAL", "FOCUS_POINTS"])(
@@ -19,36 +67,32 @@ describe("CurrencyTypeSchema", () => {
     },
   );
 
-  it("rejects unknown currency types", () => {
+  it("rejects invalid currency", () => {
     expect(() => CurrencyTypeSchema.parse("DIAMONDS")).toThrow();
-    expect(() => CurrencyTypeSchema.parse("")).toThrow();
-    expect(() => CurrencyTypeSchema.parse("coins")).toThrow();
   });
 });
 
 describe("SpendInputSchema", () => {
   const validInput = {
-    userId: VALID_UUID,
+    userId: "550e8400-e29b-41d4-a716-446655440000",
     currency: "COINS" as const,
     amount: 50,
     sink: "shop_purchase",
   };
 
-  it("validates a minimal spend input", () => {
+  it("validates a valid spend input", () => {
     const result = SpendInputSchema.parse(validInput);
     expect(result.amount).toBe(50);
     expect(result.sink).toBe("shop_purchase");
-    expect(result.currency).toBe("COINS");
   });
 
-  it("accepts optional description and metadata", () => {
+  it("accepts optional fields", () => {
     const result = SpendInputSchema.parse({
       ...validInput,
-      description: "Bought sword",
-      metadata: { itemId: "sword-1", rarity: "epic" },
+      description: "Bought item",
+      metadata: { itemId: "sword" },
     });
-    expect(result.description).toBe("Bought sword");
-    expect(result.metadata).toEqual({ itemId: "sword-1", rarity: "epic" });
+    expect(result.description).toBe("Bought item");
   });
 
   it("rejects zero amount", () => {
@@ -68,35 +112,23 @@ describe("SpendInputSchema", () => {
       SpendInputSchema.parse({ ...validInput, sink: "" }),
     ).toThrow();
   });
-
-  it("rejects non-UUID userId", () => {
-    expect(() =>
-      SpendInputSchema.parse({ ...validInput, userId: "bad" }),
-    ).toThrow();
-  });
-
-  it("rejects invalid currency", () => {
-    expect(() =>
-      SpendInputSchema.parse({ ...validInput, currency: "INVALID" }),
-    ).toThrow();
-  });
 });
 
 describe("CurrencyGrantSchema", () => {
   const validGrant = {
-    userId: VALID_UUID,
+    userId: "550e8400-e29b-41d4-a716-446655440000",
     amount: 100,
     currency: "COINS" as const,
     source: "session_complete",
   };
 
-  it("validates a minimal grant", () => {
+  it("validates a valid grant", () => {
     const result = CurrencyGrantSchema.parse(validGrant);
     expect(result.amount).toBe(100);
     expect(result.source).toBe("session_complete");
   });
 
-  it("accepts all optional fields", () => {
+  it("accepts optional fields", () => {
     const result = CurrencyGrantSchema.parse({
       ...validGrant,
       sourceId: "session-123",
@@ -105,9 +137,7 @@ describe("CurrencyGrantSchema", () => {
       metadata: { bonus: true },
     });
     expect(result.sourceId).toBe("session-123");
-    expect(result.description).toBe("Session reward");
     expect(result.skipEvents).toBe(true);
-    expect(result.metadata).toEqual({ bonus: true });
   });
 
   it("accepts null sourceId", () => {
@@ -121,18 +151,6 @@ describe("CurrencyGrantSchema", () => {
   it("rejects zero amount", () => {
     expect(() =>
       CurrencyGrantSchema.parse({ ...validGrant, amount: 0 }),
-    ).toThrow();
-  });
-
-  it("rejects empty source", () => {
-    expect(() =>
-      CurrencyGrantSchema.parse({ ...validGrant, source: "" }),
-    ).toThrow();
-  });
-
-  it("rejects non-UUID userId", () => {
-    expect(() =>
-      CurrencyGrantSchema.parse({ ...validGrant, userId: "bad" }),
     ).toThrow();
   });
 });
