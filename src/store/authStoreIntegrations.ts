@@ -1,6 +1,5 @@
 import { revenueCatService } from "../shared/monetization/revenuecat-service";
 import { progressionService } from "../services/progressionService";
-import { streakService } from "../services/streakService";
 import type { User } from "../types/models";
 import { createDebugger } from "../utils/debug";
 
@@ -15,11 +14,6 @@ export function resetServiceSingletonsForLogout(): void {
   } catch (error) {
     debug.error("Failed to reset progression service on logout", error);
   }
-  try {
-    streakService.reset();
-  } catch (error) {
-    debug.error("Failed to reset streak service on logout", error);
-  }
 }
 
 export function initializeServicesAfterAuth(user: User): void {
@@ -30,7 +24,6 @@ export function initializeServicesAfterAuth(user: User): void {
   }
   if (integrationsInitializedForUserId !== user.id) {
     progressionService.setUserId(user.id);
-    streakService.setUserId(user.id);
     integrationsInitializedForUserId = user.id;
   }
 }

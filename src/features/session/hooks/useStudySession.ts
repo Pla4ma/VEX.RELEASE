@@ -13,11 +13,9 @@ import { useState } from "react";
 import { createDebugger } from "../../../utils/debug";
 import { getSessionOrchestrator } from "../../../session/orchestrator-factory";
 import { getCoachService } from "../../ai-coach/service";
-import type { SessionConfig, SessionState } from "../../../session/types";
+import type { SessionConfig } from "../../../session/types";
 import { capture } from "../../../shared/analytics/analytics-service";
 import { SessionEvents } from "../../../shared/analytics/analytics-events";
-import { progressionService } from "../../../services/progressionService";
-import { streakService } from "../../../services/streakService";
 import {
   studySessionKeys,
   getSessionMode,
@@ -117,7 +115,8 @@ export function useStudySession() {
       queryClient.invalidateQueries({ queryKey: studySessionKeys.stats() });
 
       if (sessionState.status === "COMPLETED") {
-        await handleSessionRewards(sessionState);
+        // Streak recording + XP granting handled by completion-subsystems.ts
+        // via Supabase-backed services — no redundant in-memory calls needed.
         capture(SessionEvents.SESSION_COMPLETED, {
           session_id: sessionState.id,
           user_id: sessionState.userId,
@@ -154,26 +153,4 @@ export function useStudySession() {
     resumeSessionMutation,
     endSessionMutation,
   });
-}
-
-async function handleSessionRewards(sessionState: SessionState): Promise<void> {
-  try {
-    await progressionService.grantXP({
-      amount: sessionState.finalScore ?? 0,
-      source: "session_complete",
-      metadata: {
-        session_id: sessionState.id,
-        mode: getSessionMode(sessionState),
-        duration_seconds: sessionState.elapsedTime,
-      },
-    });
-  } catch (error) {
-    Sentry.captureException(error, { tags: { feature: "xp-grant" } });
-  }
-
-  try {
-    await streakService.updateStreak();
-  } catch (error) {
-    Sentry.captureException(error, { tags: { feature: "streak-update" } });
-  }
 }

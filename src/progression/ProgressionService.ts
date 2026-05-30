@@ -27,15 +27,6 @@ export type ProgressionService = {
   prestige: () => Promise<void>;
 };
 
-const DEFAULT_STATE: ProgressionServiceState = {
-  currentLevel: 1,
-  level: 1,
-  totalXp: 0,
-  xp: 0,
-  progressPercent: 0,
-  xpToNextLevel: 100,
-};
-
 function normalizeXpSource(source: string): XpSource {
   if (
     source === "STREAK_BONUS" ||
@@ -47,7 +38,20 @@ function normalizeXpSource(source: string): XpSource {
   return "SESSION_COMPLETE";
 }
 
+function createDefaultState(): ProgressionServiceState {
+  return {
+    currentLevel: 1,
+    level: 1,
+    totalXp: 0,
+    xp: 0,
+    progressPercent: 0,
+    xpToNextLevel: 100,
+  };
+}
+
 export function getProgressionService(userId?: string): ProgressionService {
+  const state = createDefaultState();
+
   return {
     async addXP(amount, source, options): Promise<void> {
       if (!userId || amount <= 0) {
@@ -67,19 +71,18 @@ export function getProgressionService(userId?: string): ProgressionService {
       );
     },
     getState(): ProgressionServiceState {
-      return DEFAULT_STATE;
+      return { ...state };
     },
     canPrestige(): boolean {
-      return DEFAULT_STATE.level >= 10; // Basic prestige requirement
+      return state.level >= 10;
     },
     async prestige(): Promise<void> {
       if (!this.canPrestige()) {
         throw new Error("Cannot prestige: requirements not met");
       }
-      // Reset progression with prestige benefits
-      DEFAULT_STATE.level = 1;
-      DEFAULT_STATE.totalXp = 0;
-      DEFAULT_STATE.xp = 0;
+      state.level = 1;
+      state.totalXp = 0;
+      state.xp = 0;
     },
   };
 }
