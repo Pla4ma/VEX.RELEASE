@@ -20,6 +20,7 @@ import { useNotificationNavigation } from "./hooks/useNotificationNavigation";
 import { useStreakFuneralNavigation } from "./hooks/useStreakFuneralNavigation";
 import { RootStackScreens } from "./RootStackScreens";
 import { markColdStart } from "../app/cold-start-performance";
+import { createLinkingConfig } from "./linking-config";
 
 import type { ExtendedRootStackParams } from "./types";
 
@@ -58,6 +59,7 @@ export const RootNavigator: React.FC = () => {
 
   const featureAccess = useFeatureAccess();
   const totalCompletedSessions = featureAccess.inputs.totalCompletedSessions;
+  const linking = useMemo(() => createLinkingConfig(), []);
 
   const hasCompletedOnboarding = useMemo(
     () => canCompleteForUser(user?.id),
@@ -136,6 +138,7 @@ export const RootNavigator: React.FC = () => {
   return (
     <NavigationContainer
       ref={navigationRef}
+      linking={linking}
       onReady={() => {
         markColdStart("root_navigator_ready");
         setIsNavigationReady(true);
