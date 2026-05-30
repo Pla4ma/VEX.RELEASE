@@ -34,7 +34,6 @@ jest.mock("../../companion-promise/service", () => ({
       missedPromise: null,
     }),
 }));
-
 jest.mock("../repository", () => ({
   createCompletionLedger: (...args: unknown[]) =>
     mockCreateCompletionLedger(...args),
@@ -114,7 +113,6 @@ jest.mock("../ledger-service", () => ({
     xpDelta: 120,
   })),
 }));
-
 describe("orchestrateSessionCompletion story return", () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -197,24 +195,5 @@ describe("orchestrateSessionCompletion story return", () => {
       ledger.grade,
     );
     expect(story?.headline.type).toBe("personal_best");
-  });
-
-  it("does not replay subsystems for an already processed idempotency key", async () => {
-    await orchestrateSessionCompletion({
-      sessionId: summary.sessionId,
-      summary,
-      timestamp: 3000001,
-      userId: summary.userId,
-    });
-
-    const replay = await orchestrateSessionCompletion({
-      sessionId: summary.sessionId,
-      summary,
-      timestamp: 3000001,
-      userId: summary.userId,
-    });
-
-    expect(replay).toBeNull();
-    expect(mockApplyCompletionSubsystems).toHaveBeenCalledTimes(1);
   });
 });

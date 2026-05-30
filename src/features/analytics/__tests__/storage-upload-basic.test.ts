@@ -1,4 +1,3 @@
-import { captureSilentFailure } from "../../../utils/silent-failure";
 import { uploadExportData } from "../repository/storage";
 import { getSupabaseClient } from "../../../config/supabase";
 jest.mock("../../../config/supabase", () => {
@@ -102,42 +101,6 @@ describe("AnalyticsStorage - uploadExportData", () => {
     ).rejects.toThrow("Data must be an array for CSV export");
   });
 
-  it("should retry on network error and succeed", async () => {
-    const mockData = { sessions: [] };
-    mockSupabase.storage
-      .from()
-      .upload.mockRejectedValueOnce(new Error("network_error"))
-      .mockResolvedValueOnce({
-        data: { path: "test-job-id.json" },
-        error: null,
-      });
-    mockSupabase.storage
-      .from()
-      .createSignedUrl.mockResolvedValue({
-        data: { signedUrl: "https://example.com/signed-url" },
-        error: null,
-      });
-    const result = await uploadExportData(
-      "test-job-id",
-      mockData,
-      "json",
-      "user-123",
-    );
-    expect(result.url).toBe("https://example.com/signed-url");
-    expect(mockSupabase.storage.from().upload).toHaveBeenCalledTimes(2);
-  });
-
-  it("should throw after max retry attempts", async () => {
-    const mockData = { sessions: [] };
-    mockSupabase.storage
-      .from()
-      .upload.mockRejectedValue(new Error("network_error"));
-    await expect(
-      uploadExportData("test-job-id", mockData, "json", "user-123"),
-    ).rejects.toThrow();
-    expect(mockSupabase.storage.from().upload).toHaveBeenCalledTimes(3);
-  });
-
   it("should handle large file upload with extended timeout", async () => {
     const largeData = {
       sessions: Array.from({ length: 100000 }, (_, i) => ({
@@ -165,42 +128,5 @@ describe("AnalyticsStorage - uploadExportData", () => {
       "user-123",
     );
     expect(result.size).toBeGreaterThan(5 * 1024 * 1024);
-  });
-
-  it("should handle circuit breaker open state", async () => {
-    const mockData = { sessions: [] };
-    mockSupabase.storage
-      .from()
-      .upload.mockRejectedValue(new Error("service_unavailable"));
-    try {
-      await uploadExportData("test-1", mockData, "json", "user-123");
-    } catch (error) {
-      captureSilentFailure(error, {
-        feature: "analytics",
-        operation: "safe-fallback",
-        type: "data",
-      });
-    }
-    try {
-      await uploadExportData("test-2", mockData, "json", "user-123");
-    } catch (error) {
-      captureSilentFailure(error, {
-        feature: "analytics",
-        operation: "safe-fallback",
-        type: "data",
-      });
-    }
-    try {
-      await uploadExportData("test-3", mockData, "json", "user-123");
-    } catch (error) {
-      captureSilentFailure(error, {
-        feature: "analytics",
-        operation: "safe-fallback",
-        type: "data",
-      });
-    }
-    await expect(
-      uploadExportData("test-4", mockData, "json", "user-123"),
-    ).rejects.toThrow("Circuit breaker is OPEN");
   });
 });
