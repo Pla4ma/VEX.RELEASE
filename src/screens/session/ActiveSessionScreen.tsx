@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { resolveSessionMode } from "../../session/modes";
+import { SessionMode } from "../../session/modes";
 import { useContractForSession } from "../../features/focus-contract/hooks";
 import { withScreenErrorBoundary } from "../../shared/ui/components/ScreenErrorBoundary";
 import { ActiveSessionGuardStates } from "./components/ActiveSessionGuardStates";
@@ -7,6 +8,14 @@ import { useActiveSessionController } from "./hooks/useActiveSessionController";
 import { useStudyQuizBreak } from "./hooks/useStudyQuizBreak";
 import { useActiveSessionDisplay } from "./hooks/useActiveSessionDisplay";
 import { ActiveSessionContent } from "./ActiveSessionContent";
+import type { Lane } from "../../features/lane-engine/types";
+
+const SESSION_MODE_TO_LANE: Record<string, Lane> = {
+  [SessionMode.STUDY]: "student",
+  [SessionMode.LIGHT_FOCUS]: "game_like",
+  [SessionMode.DEEP_WORK]: "deep_creative",
+  [SessionMode.CREATIVE]: "minimal_normal",
+};
 
 export const ActiveSessionScreen = withScreenErrorBoundary(
   function _ActiveSessionScreen(): React.JSX.Element | null {
@@ -28,6 +37,10 @@ export const ActiveSessionScreen = withScreenErrorBoundary(
     );
     const currentMode = resolveSessionMode(
       sessionQuery.session?.config.sessionMode,
+    );
+    const lane = useMemo(
+      () => SESSION_MODE_TO_LANE[currentMode] ?? "minimal_normal",
+      [currentMode],
     );
     const { displayPolicy, heroViewModel } = useActiveSessionDisplay({
       dailyProgress: metrics.dailyProgress,
@@ -95,6 +108,7 @@ export const ActiveSessionScreen = withScreenErrorBoundary(
         controller={controller}
         contract={contract}
         currentMode={currentMode}
+        lane={lane}
         displayPolicy={displayPolicy}
         heroViewModel={heroViewModel}
         outerStrokeDashoffset={outerStrokeDashoffset}

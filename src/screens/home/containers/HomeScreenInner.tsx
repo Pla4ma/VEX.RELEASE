@@ -112,6 +112,8 @@ export function HomeScreenInner({
     });
 
   const primaryLane = laneProfile.primaryLane;
+  const isDayZero =
+    controller.disclosure.inputs.totalCompletedSessions === 0;
 
   return (
     <AppScreen scroll padded>
@@ -134,17 +136,19 @@ export function HomeScreenInner({
         }}
         onStart={() => controller.openSetup()}
       />
-      <HomeContent
-        controller={controller}
-        data={data as HomeData}
-        comebackSessionsCompleted={comebackSessionsCompleted ?? 0}
-        features={features}
-        handleClaimReward={handleClaimReward}
-        streakHoursRemaining={safeStreakHours}
-        surfaceMap={surfaceMap}
-        resolvedExperience={resolvedExperience}
-        firstWeekExperience={firstWeekExperience}
-      />
+      {!isDayZero && (
+        <HomeContent
+          controller={controller}
+          data={data as HomeData}
+          comebackSessionsCompleted={comebackSessionsCompleted ?? 0}
+          features={features}
+          handleClaimReward={handleClaimReward}
+          streakHoursRemaining={safeStreakHours}
+          surfaceMap={surfaceMap}
+          resolvedExperience={resolvedExperience}
+          firstWeekExperience={firstWeekExperience}
+        />
+      )}
     </AppScreen>
   );
 }

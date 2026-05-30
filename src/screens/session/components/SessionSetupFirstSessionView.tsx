@@ -1,5 +1,4 @@
-import React, { useCallback, useState } from "react";
-import { ScrollView } from "react-native";
+import React, { useCallback, useMemo, useState } from "react";
 import type { CompositeNavigationProp } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
@@ -12,17 +11,28 @@ import type {
   ExtendedRootStackParams,
   SessionStackParams,
 } from "../../../navigation/types";
-import { SessionSetupHeader } from "./SessionSetupHeader";
-import { FirstSessionSetupCard } from "./FirstSessionSetupCard";
+import { ModeQuickContract } from "../../../features/mode-native/components/ModeQuickContract";
 import { useFirstSessionPersonalization } from "../hooks/useFirstSessionPersonalization";
 import { useFirstSessionStart } from "../hooks/useFirstSessionStart";
 import { useAuthStore } from "../../../store";
 import { useOnboardingStore } from "../../../features/onboarding";
+import type { Lane } from "../../../features/lane-engine/types";
 
 type SessionNavigationProp = CompositeNavigationProp<
   NativeStackNavigationProp<SessionStackParams>,
   NativeStackNavigationProp<ExtendedRootStackParams>
 >;
+
+const SESSION_MODE_TO_LANE: Record<string, Lane> = {
+  [SessionMode.STUDY]: "student",
+  [SessionMode.LIGHT_FOCUS]: "game_like",
+  [SessionMode.DEEP_WORK]: "deep_creative",
+  [SessionMode.CREATIVE]: "minimal_normal",
+};
+
+function sessionModeToLane(mode: SessionMode): Lane {
+  return SESSION_MODE_TO_LANE[mode] ?? "minimal_normal";
+}
 
 type FirstSessionViewProps = {
   navigation: SessionNavigationProp;
@@ -47,10 +57,20 @@ export function FirstSessionView({
     userId,
   });
 
-  const handleStart = useCallback(
-    (config: { mode: SessionMode; durationMinutes: number; goal?: string }) => {
+  const lane = useMemo(
+    () => sessionModeToLane(personalization.defaultMode),
+    [personalization.defaultMode],
+  );
+
+  const handleContractAnswers = useCallback(
+    (answers: Record<string, string>) => {
       markFirstSessionStarted();
-      handleFirstSessionStart(config).catch((err: unknown) => {
+      const goal = Object.values(answers).join(" — ");
+      handleFirstSessionStart({
+        mode: personalization.defaultMode,
+        durationMinutes: personalization.suggestedDurationMinutes,
+        goal,
+      }).catch((err: unknown) => {
         const message =
           err instanceof Error
             ? err.message
@@ -58,7 +78,12 @@ export function FirstSessionView({
         setError(message);
       });
     },
-    [handleFirstSessionStart, markFirstSessionStarted],
+    [
+      handleFirstSessionStart,
+      markFirstSessionStarted,
+      personalization.defaultMode,
+      personalization.suggestedDurationMinutes,
+    ],
   );
 
   if (!userId) {
@@ -88,32 +113,18 @@ export function FirstSessionView({
 
   return (
     <Box flex={1} bg="background.primary">
-      <SessionSetupHeader
-        durationSeconds={personalization.suggestedDurationMinutes * 60}
-        mode={personalization.defaultMode}
-        onBack={onBack}
-        userId={userId}
+      <SessionStartStatusCard
+        offlineMessage={offlineMessage}
+        routeWarningMessage={null}
+        startErrorMessage={error}
+        onDismissStartError={() => setError(null)}
       />
-
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 140 }}
-      >
-        <SessionStartStatusCard
-          offlineMessage={offlineMessage}
-          routeWarningMessage={null}
-          startErrorMessage={error}
-          onDismissStartError={() => setError(null)}
-        />
-
-        <FirstSessionSetupCard
-          personalization={personalization}
-          isStarting={isStarting}
-          onStart={handleStart}
-        />
-
-        <Box height={120} />
-      </ScrollView>
+      <ModeQuickContract
+        lane={lane}
+        isStarting={isStarting}
+        onStart={handleContractAnswers}
+        onBack={onBack}
+      />
     </Box>
   );
 }

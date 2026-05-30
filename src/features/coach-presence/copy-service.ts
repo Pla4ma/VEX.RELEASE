@@ -146,7 +146,15 @@ function buildMessage(ctx: CoachPresenceContext): string {
     ctx.premiumMoment !== "hidden" &&
     ctx.memoryConfidence === "strong"
   ) {
-    return "Your rhythm is real now. VEX Pro can go deeper with it.";
+    return "VEX is starting to see your rhythm. Premium keeps deeper history and sharper weekly intelligence.";
+  }
+  if (
+    ctx.premiumMoment &&
+    ctx.premiumMoment !== "none" &&
+    ctx.premiumMoment !== "hidden" &&
+    (ctx.memoryConfidence === "weak" || ctx.memoryConfidence === "medium")
+  ) {
+    return "Premium unlocks deeper history when VEX has enough signals.";
   }
   return (
     buildPatternMessage(ctx) ??

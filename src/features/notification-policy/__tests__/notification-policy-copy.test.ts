@@ -21,7 +21,7 @@ describe("notification policy — copy", () => {
         daysSinceOnboarding: 3,
         context: "avoidance",
       });
-      expect(result.title).toBe("Need a recovery encounter?");
+      expect(result.title).toBe("Need a recovery run?");
     });
 
     it("produces study_deadline copy", () => {

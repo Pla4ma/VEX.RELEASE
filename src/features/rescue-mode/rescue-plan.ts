@@ -116,7 +116,7 @@ export function buildRescueCompletionRecord(
 
   const nextMap: Record<Lane, string> = {
     student: "Try the same weak section again tomorrow for 10 minutes.",
-    game_like: "Do another short recovery encounter when ready.",
+    game_like: "Do another short recovery run when ready.",
     deep_creative: "Return when the next move is clear.",
     minimal_normal: "A short session tomorrow keeps the momentum.",
   };

@@ -1,9 +1,7 @@
 /**
- * Tests for deriveHomeSurface from service.ts
+ * Tests for deriveHomeSurface — cold-start vs evidence-backed branching
  */
-
 import { describe, it, expect } from "@jest/globals";
-
 import { deriveHomeSurface } from "../service";
 import { ModeHomeSurfaceSchema } from "../schemas";
 import type { Lane } from "../../lane-engine/types";
@@ -11,40 +9,142 @@ import type { Lane } from "../../lane-engine/types";
 const ALL_LANES: Lane[] = ["student", "game_like", "deep_creative", "minimal_normal"];
 
 // ═══════════════════════════════════════════════════════════════════════
-// SERVICE: deriveHomeSurface
+// Cold-start (completedSessions < 3) — no overclaiming
 // ═══════════════════════════════════════════════════════════════════════
 
-describe("deriveHomeSurface", () => {
+describe("deriveHomeSurface — cold-start (completedSessions < 3)", () => {
   it("returns default minimal_normal surface with empty context", () => {
     const surface = deriveHomeSurface({});
     expect(surface.lane).toBe("minimal_normal");
     expect(surface.headline).toBe("One clean action");
     expect(surface.primaryAction).toBe("start_session");
-    expect(surface.suggestedDurationMinutes).toBe(15);
+    expect(surface.rhythmLabel).toBeNull();
   });
 
-  it("returns student surface when laneOverride is student", () => {
+  it("student cold-start: does not claim VEX knows what to study", () => {
     const surface = deriveHomeSurface({ laneOverride: "student" });
-    expect(surface.lane).toBe("student");
-    expect(surface.headline).toBe("Your next study block is ready");
-    expect(surface.primaryAction).toBe("start_study_block");
-    expect(surface.suggestedDurationMinutes).toBe(20);
+    expect(surface.primaryFeeling).toBe("I want to build a study habit.");
+    expect(surface.headline).toBe("Start your next study block");
+    expect(surface.body).toContain("VEX will learn");
+    expect(surface.body).not.toContain("needs the most attention");
+    expect(surface.rhythmLabel).toBeNull();
   });
 
-  it("returns game_like surface when laneOverride is game_like", () => {
+  it("game_like cold-start: does not claim best momentum", () => {
     const surface = deriveHomeSurface({ laneOverride: "game_like" });
-    expect(surface.lane).toBe("game_like");
     expect(surface.headline).toBe("Start a clean run");
-    expect(surface.primaryAction).toBe("start_clean_run");
+    expect(surface.body).toContain("VEX will learn");
+    expect(surface.body).not.toContain("best momentum");
+    expect(surface.rhythmLabel).toBeNull();
   });
 
-  it("returns deep_creative surface when laneOverride is deep_creative", () => {
+  it("deep_creative cold-start: does not claim VEX remembers or project waiting", () => {
     const surface = deriveHomeSurface({ laneOverride: "deep_creative" });
-    expect(surface.lane).toBe("deep_creative");
-    expect(surface.headline).toBe("Your project is waiting");
-    expect(surface.primaryAction).toBe("resume_project");
+    expect(surface.primaryFeeling).toBe("I want to protect my deep work.");
+    expect(surface.headline).toBe("Start a project block");
+    expect(surface.body).not.toContain("Your project is waiting");
+    expect(surface.body).not.toContain("already saved");
+    expect(surface.body).toContain("Name the project");
   });
 
+  it("minimal_normal cold-start: same as evidence (no claims to drop)", () => {
+    const surface = deriveHomeSurface({ laneOverride: "minimal_normal" });
+    expect(surface.headline).toBe("One clean action");
+    expect(surface.rhythmLabel).toBeNull();
+  });
+
+  // Cold-start should NOT enrich body with evidence-dependent details
+  it("cold-start student: does not enrich with weakTopicCount", () => {
+    const surface = deriveHomeSurface({
+      laneOverride: "student",
+      recentTopic: "Graph algorithms",
+      weakTopicCount: 3,
+      completedSessions: 1,
+    });
+    expect(surface.body).toBe("Start with one named study target. VEX will learn what needs review.");
+    expect(surface.body).not.toContain("Graph algorithms");
+  });
+
+  it("cold-start deep_creative: does not enrich with nextMove", () => {
+    const surface = deriveHomeSurface({
+      laneOverride: "deep_creative",
+      hasActiveProject: true,
+      nextMove: "Write the welcome screen",
+      completedSessions: 2,
+    });
+    expect(surface.body).toBe("Name the project and save the next move after this block.");
+  });
+
+  it("cold-start game_like: does not enrich with cleanStarts", () => {
+    const surface = deriveHomeSurface({
+      laneOverride: "game_like",
+      cleanStartsThisWeek: 5,
+      completedSessions: 0,
+    });
+    expect(surface.body).toBe("Start one clean run. VEX will learn what helps you keep momentum.");
+  });
+});
+
+// ═══════════════════════════════════════════════════════════════════════
+// Evidence-backed (completedSessions >= 3)
+// ═══════════════════════════════════════════════════════════════════════
+
+describe("deriveHomeSurface — evidence-backed (completedSessions >= 3)", () => {
+  it("student evidence: can claim VEX knows", () => {
+    const surface = deriveHomeSurface({
+      laneOverride: "student",
+      completedSessions: 5,
+    });
+    expect(surface.primaryFeeling).toBe("VEX knows what I should study next.");
+    expect(surface.headline).toBe("Your next study block is ready");
+  });
+
+  it("student evidence: enriches with weakTopicCount", () => {
+    const surface = deriveHomeSurface({
+      laneOverride: "student",
+      recentTopic: "Graph algorithms",
+      weakTopicCount: 3,
+      completedSessions: 5,
+    });
+    expect(surface.body).toBe('Review "Graph algorithms" — 3 topics need attention. 20 minutes.');
+  });
+
+  it("deep_creative evidence: enriches with nextMove", () => {
+    const surface = deriveHomeSurface({
+      laneOverride: "deep_creative",
+      hasActiveProject: true,
+      nextMove: "Write the welcome screen",
+      completedSessions: 4,
+    });
+    expect(surface.body).toBe("Next move: Write the welcome screen. Pick up where you stopped.");
+  });
+
+  it("game_like evidence: enriches with cleanStartsThisWeek", () => {
+    const surface = deriveHomeSurface({
+      laneOverride: "game_like",
+      cleanStartsThisWeek: 5,
+      completedSessions: 6,
+    });
+    expect(surface.body).toBe("5 clean starts this week. Keep the momentum going.");
+  });
+
+  it("evidence-backed: rhythmLabel present for non-minimal lanes", () => {
+    const studentSurface = deriveHomeSurface({ laneOverride: "student", completedSessions: 3 });
+    expect(studentSurface.rhythmLabel).toBe("Best study rhythm: mornings");
+  });
+
+  it("minimal_normal evidence: same body structure, different provenance", () => {
+    const surface = deriveHomeSurface({ laneOverride: "minimal_normal", completedSessions: 4 });
+    expect(surface.headline).toBe("One clean action");
+    expect(surface.body).not.toContain("VEX will stay quiet");
+  });
+});
+
+// ═══════════════════════════════════════════════════════════════════════
+// Boundary & fallback
+// ═══════════════════════════════════════════════════════════════════════
+
+describe("deriveHomeSurface — edge cases", () => {
   it("falls back to minimal_normal for invalid laneOverride", () => {
     const surface = deriveHomeSurface({ laneOverride: "invalid_lane" as unknown as Lane });
     expect(surface.lane).toBe("minimal_normal");
@@ -55,87 +155,17 @@ describe("deriveHomeSurface", () => {
     expect(surface.lane).toBe("minimal_normal");
   });
 
-  it("returns default body for deep_creative without active project", () => {
-    const surface = deriveHomeSurface({ laneOverride: "deep_creative" });
-    expect(surface.body).toBe("Pick up right where you stopped. The next move is already saved — just resume.");
-  });
-
-  it("enriches deep_creative body when hasActiveProject and nextMove present", () => {
-    const surface = deriveHomeSurface({
-      laneOverride: "deep_creative",
-      hasActiveProject: true,
-      nextMove: "Write the welcome screen",
-    });
-    expect(surface.body).toBe("Next move: Write the welcome screen. Pick up where you stopped.");
-  });
-
-  it("returns default student body when no recentTopic", () => {
-    const surface = deriveHomeSurface({ laneOverride: "student" });
-    expect(surface.body).toContain("Review the topic that needs the most attention");
-  });
-
-  it("enriches student body with recentTopic only (no weak topics)", () => {
-    const surface = deriveHomeSurface({
-      laneOverride: "student",
-      recentTopic: "Graph algorithms",
-    });
-    expect(surface.body).toBe('Your next study block: "Graph algorithms" for 20 minutes.');
-  });
-
-  it("enriches student body with recentTopic and singular weak topic count", () => {
-    const surface = deriveHomeSurface({
-      laneOverride: "student",
-      recentTopic: "Graph algorithms",
-      weakTopicCount: 1,
-    });
-    expect(surface.body).toBe('Review "Graph algorithms" — 1 topic needs attention. 20 minutes.');
-  });
-
-  it("enriches student body with recentTopic and plural weak topic count", () => {
-    const surface = deriveHomeSurface({
-      laneOverride: "student",
-      recentTopic: "Graph algorithms",
-      weakTopicCount: 3,
-    });
-    expect(surface.body).toBe('Review "Graph algorithms" — 3 topics need attention. 20 minutes.');
-  });
-
-  it("ignores weakTopicCount when it is 0", () => {
-    const surface = deriveHomeSurface({
-      laneOverride: "student",
-      recentTopic: "Graph algorithms",
-      weakTopicCount: 0,
-    });
-    expect(surface.body).toBe('Your next study block: "Graph algorithms" for 20 minutes.');
-  });
-
-  it("enriches game_like body with cleanStartsThisWeek (singular)", () => {
-    const surface = deriveHomeSurface({
-      laneOverride: "game_like",
-      cleanStartsThisWeek: 1,
-    });
-    expect(surface.body).toBe("1 clean start this week. Keep the momentum going.");
-  });
-
-  it("enriches game_like body with cleanStartsThisWeek (plural)", () => {
-    const surface = deriveHomeSurface({
-      laneOverride: "game_like",
-      cleanStartsThisWeek: 5,
-    });
-    expect(surface.body).toBe("5 clean starts this week. Keep the momentum going.");
-  });
-
-  it("returns default game_like body when cleanStartsThisWeek is 0", () => {
-    const surface = deriveHomeSurface({
-      laneOverride: "game_like",
-      cleanStartsThisWeek: 0,
-    });
-    expect(surface.body).toBe("Your best momentum comes from naming the task first. No boss today — just forward motion.");
-  });
-
   it("returns valid ModeHomeSurface for all lanes", () => {
     for (const lane of ALL_LANES) {
-      const surface = deriveHomeSurface({ laneOverride: lane });
+      const surface = deriveHomeSurface({ laneOverride: lane, completedSessions: 5 });
+      const result = ModeHomeSurfaceSchema.safeParse(surface);
+      expect(result.success).toBe(true);
+    }
+  });
+
+  it("returns valid ModeHomeSurface for all lanes in cold-start", () => {
+    for (const lane of ALL_LANES) {
+      const surface = deriveHomeSurface({ laneOverride: lane, completedSessions: 0 });
       const result = ModeHomeSurfaceSchema.safeParse(surface);
       expect(result.success).toBe(true);
     }

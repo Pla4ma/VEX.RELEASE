@@ -85,7 +85,7 @@ export const FEATURE_HIGHLIGHT_MAP: Record<string, PaywallFeatureHighlight> = {
   premium_session_modes: {
     title: "Advanced Friction Modes",
     benefit:
-      "Custom modifiers, personal boss depth, advanced run recap — no currency, no gimmicks.",
+      "Custom modifiers, personal blocker depth, advanced run recap — no currency, no gimmicks.",
     iconName: "zap",
     gradient: [launchColors.hex_4f46e5, launchColors.hex_7c3aed],
   },

@@ -1,9 +1,9 @@
 import React, { useState, useCallback } from "react";
-import { Pressable } from "react-native";
+import { Pressable, TextInput } from "react-native";
 import { Box } from "../../../components/primitives/Box";
 import { Text } from "../../../components/primitives/Text";
 import { useTheme } from "../../../theme";
-import type { ModeQuickContract, QuickContractQuestion } from "../schemas";
+import type { QuickContractQuestion } from "../schemas";
 import { useModeQuickContract } from "../hooks";
 import type { Lane } from "../../lane-engine/types";
 
@@ -74,39 +74,28 @@ export function ModeQuickContract({
               <Text variant="label" color="text.primary">
                 {q.label}
               </Text>
-              <Pressable
+              <TextInput
+                value={answers[q.key] ?? ""}
+                onChangeText={(text) => handleAnswer(q.key, text)}
+                placeholder={q.placeholder}
+                placeholderTextColor={theme.colors.text.tertiary}
                 accessibilityLabel={q.label}
-                accessibilityRole="text"
                 accessibilityHint={`Enter your ${q.label.toLowerCase()}`}
-              >
-                <Box
-                  minHeight={52}
-                  px="md"
-                  py="md"
-                  bg="background.secondary"
-                  borderRadius="md"
-                  borderWidth={1}
-                  borderColor={
+                style={{
+                  minHeight: 52,
+                  paddingHorizontal: theme.spacing[4],
+                  paddingVertical: theme.spacing[3],
+                  backgroundColor: theme.colors.background.secondary,
+                  borderRadius: theme.borderRadius.md,
+                  borderWidth: 1,
+                  borderColor:
                     (answers[q.key] ?? "").trim().length >= 3
-                      ? "primary.500"
-                      : "border.light"
-                  }
-                >
-                  {/* Read-only placeholder display — input handled via parent state */}
-                  <Text
-                    variant="body"
-                    color={
-                      (answers[q.key] ?? "").trim().length >= 3
-                        ? "text.primary"
-                        : "text.tertiary"
-                    }
-                  >
-                    {(answers[q.key] ?? "").trim().length >= 3
-                      ? answers[q.key]
-                      : q.placeholder}
-                  </Text>
-                </Box>
-              </Pressable>
+                      ? theme.colors.primary[500]
+                      : theme.colors.border.light,
+                  color: theme.colors.text.primary,
+                  fontSize: theme.typography.body.medium.fontSize,
+                }}
+              />
             </Box>
           ))}
         </Box>

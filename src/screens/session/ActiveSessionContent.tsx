@@ -10,6 +10,7 @@ import { ActiveSessionModeOverlays } from "./components/ActiveSessionModeOverlay
 import { SessionContractReminder } from "./components/SessionContractReminder";
 import { CoachSessionBannerLazy } from "./components/CoachSessionBannerLazy";
 import { ActiveSessionBottomControls } from "./ActiveSessionBottomControls";
+import { ModeActiveIndicatorBar } from "../../features/mode-native/components/ModeRescueSurface";
 import {
   ENABLE_SESSION_COMPANION_LAYER,
   ENABLE_SESSION_COACH_BANNER,
@@ -24,6 +25,7 @@ export function ActiveSessionContent({
   controller,
   contract,
   currentMode,
+  lane,
   displayPolicy,
   heroViewModel,
   outerStrokeDashoffset,
@@ -91,6 +93,10 @@ export function ActiveSessionContent({
         isPaused={sessionQuery.isPaused}
         theme={theme}
         onInterrupt={() => actions.setShowInterruption(true)}
+      />
+      <ModeActiveIndicatorBar
+        lane={lane}
+        completionPercentage={sessionQuery.completionPercentage}
       />
       {displayPolicy.showContractReminder ? (
         <SessionContractReminder

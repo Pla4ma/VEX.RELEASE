@@ -15,7 +15,7 @@ const BLOCKED_OLD_ECONOMY_TERMS = [
   "premium chest",
   "paid streak save",
   "battle pass",
-  "pay-to-win boss",
+  "pay-to-win blocker",
   "fake AI memory",
 ] as const;
 
@@ -26,7 +26,7 @@ export const LANE_PREMIUM_COPY = {
   },
   game_like: {
     headline: "Your Run Intelligence gets sharper",
-    body: "VEX can build personal boss insights, custom modifiers, and weekly recaps from your run data.",
+    body: "VEX can build personal blocker insights, custom modifiers, and weekly recaps from your run data.",
   },
   deep_creative: {
     headline: "Your Project Memory keeps more context",

@@ -5,6 +5,8 @@ import {
   QUICK_CONTRACT_COPY,
   ACTIVE_INDICATOR_COPY,
   RESCUE_COPY,
+  EVIDENCE_HOME_COPY,
+  COLD_START_HOME_COPY,
 } from "./copy";
 import {
   ModeHomeSurfaceSchema,
@@ -36,34 +38,48 @@ export interface HomeContext {
   recentTopic?: string;
   weakTopicCount?: number;
   cleanStartsThisWeek?: number;
+  /** Number of completed sessions — used to decide cold-start vs evidence-backed */
+  completedSessions?: number;
 }
 
 export function deriveHomeSurface(context: HomeContext): ModeHomeSurface {
   const lane = context.laneOverride
     ? resolveLane(context.laneOverride)
     : "minimal_normal";
-  const base = HOME_COPY[lane];
+
+  const hasEvidence = (context.completedSessions ?? 0) >= 3;
+  const base = hasEvidence
+    ? EVIDENCE_HOME_COPY[lane]
+    : COLD_START_HOME_COPY[lane];
 
   let body = base.body;
-  if (lane === "deep_creative" && context.hasActiveProject && context.nextMove) {
-    body = `Next move: ${context.nextMove}. Pick up where you stopped.`;
-  }
-  if (
-    lane === "student" &&
-    context.recentTopic &&
-    context.weakTopicCount !== undefined &&
-    context.weakTopicCount > 0
-  ) {
-    body = `Review "${context.recentTopic}" — ${context.weakTopicCount} topic${context.weakTopicCount === 1 ? "" : "s"} need${context.weakTopicCount === 1 ? "s" : ""} attention. ${base.suggestedDurationMinutes} minutes.`;
-  } else if (lane === "student" && context.recentTopic) {
-    body = `Your next study block: "${context.recentTopic}" for ${base.suggestedDurationMinutes} minutes.`;
-  }
-  if (
-    lane === "game_like" &&
-    context.cleanStartsThisWeek !== undefined &&
-    context.cleanStartsThisWeek > 0
-  ) {
-    body = `${context.cleanStartsThisWeek} clean start${context.cleanStartsThisWeek === 1 ? "" : "s"} this week. Keep the momentum going.`;
+
+  // Only apply evidence-backed enrichment when evidence exists
+  if (hasEvidence) {
+    if (
+      lane === "deep_creative" &&
+      context.hasActiveProject &&
+      context.nextMove
+    ) {
+      body = `Next move: ${context.nextMove}. Pick up where you stopped.`;
+    }
+    if (
+      lane === "student" &&
+      context.recentTopic &&
+      context.weakTopicCount !== undefined &&
+      context.weakTopicCount > 0
+    ) {
+      body = `Review "${context.recentTopic}" — ${context.weakTopicCount} topic${context.weakTopicCount === 1 ? "" : "s"} need${context.weakTopicCount === 1 ? "s" : ""} attention. ${base.suggestedDurationMinutes} minutes.`;
+    } else if (lane === "student" && context.recentTopic) {
+      body = `Your next study block: "${context.recentTopic}" for ${base.suggestedDurationMinutes} minutes.`;
+    }
+    if (
+      lane === "game_like" &&
+      context.cleanStartsThisWeek !== undefined &&
+      context.cleanStartsThisWeek > 0
+    ) {
+      body = `${context.cleanStartsThisWeek} clean start${context.cleanStartsThisWeek === 1 ? "" : "s"} this week. Keep the momentum going.`;
+    }
   }
 
   return ModeHomeSurfaceSchema.parse({ ...base, lane, body });

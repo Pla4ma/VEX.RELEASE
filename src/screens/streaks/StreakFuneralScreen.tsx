@@ -1,5 +1,5 @@
 import { withScreenErrorBoundary } from "../../shared/ui/components/ScreenErrorBoundary";
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback } from "react";
 import { ScrollView } from "react-native";
 import Animated, { FadeIn, FadeInUp } from "react-native-reanimated";
 import {
@@ -15,18 +15,14 @@ import { useAuthStore } from "../../store";
 import { getStreakService } from "../../streaks/StreakService";
 import { useTheme } from "../../theme";
 import { useToast } from "../../shared/ui/components/Toast";
-import { useBalance } from "../../features/economy/hooks";
-import { getFeatureStatus } from "../../features/liveops-config/final-release-feature-map";
 import type { ExtendedRootStackParams } from "../../navigation/types";
 import { StreakFuneralFlame } from "./StreakFuneralFlame";
-import { calculateRestoreCost } from "./streak-funeral-costs";
 
 type StreakFuneralRoute = RouteProp<ExtendedRootStackParams, "StreakFuneral">;
 type StreakFuneralNavigation = NativeStackNavigationProp<ExtendedRootStackParams>;
 
 export const StreakFuneralScreen: React.FC = () => {
   const { theme } = useTheme();
-  const showGems = getFeatureStatus("gems_prominent") !== "hidden";
   const { show: showToast } = useToast();
   const { user } = useAuthStore();
   const navigation = useNavigation<StreakFuneralNavigation>();
@@ -34,12 +30,6 @@ export const StreakFuneralScreen: React.FC = () => {
   const { previousStreak, diedAt } = route.params;
   const hoursSinceDeath = Math.floor((Date.now() - diedAt) / (1000 * 60 * 60));
   const daysSinceDeath = Math.floor(hoursSinceDeath / 24);
-  const restoreCost = useMemo(
-    () => calculateRestoreCost(previousStreak),
-    [previousStreak],
-  );
-  const { data: gemsBalanceData } = useBalance(user?.id ?? "", "GEMS");
-  const gemBalance = gemsBalanceData ?? 0;
 
   const completeFuneral = useCallback(() => {
     if (user?.id) {
@@ -51,14 +41,14 @@ export const StreakFuneralScreen: React.FC = () => {
   const handleStartFresh = useCallback(() => {
     Sentry.addBreadcrumb({
       category: "streaks",
-      message: "User acknowledged streak funeral and started fresh",
+      message: "User acknowledged streak pause and started fresh",
       level: "info",
       data: { previousStreak, diedAt },
     });
     showToast({
       type: "success",
-      title: "New streak started!",
-      message: "Every day is a fresh beginning.",
+      title: "New rhythm started!",
+      message: "Every day is a clean start.",
       duration: 3000,
     });
     completeFuneral();
@@ -144,35 +134,14 @@ export const StreakFuneralScreen: React.FC = () => {
         </Animated.View>
         <Animated.View entering={FadeInUp.delay(1000)}>
           <Box gap="md">
-            {showGems && (
-              <Button
-                variant="primary"
-                size="lg"
-                fullWidth
-                onPress={handleStartFresh}
-                disabled={gemBalance < restoreCost}
-                accessibilityLabel={`Restore rhythm for ${restoreCost} gems`}
-                accessibilityRole="button"
-                accessibilityHint={`Protects your ${previousStreak}-day rhythm for ${restoreCost} gems`}
-              >
-                Restore rhythm for {restoreCost} 💎
-              </Button>
-            )}
-
-            {showGems && gemBalance < restoreCost && (
-              <Text variant="caption" color="text.tertiary" textAlign="center">
-                Need {restoreCost} gems. You have {gemBalance}.{"\n"}
-                Complete more sessions to earn gems.
-              </Text>
-            )}
             <Button
-              variant="secondary"
-              size="md"
+              variant="primary"
+              size="lg"
               fullWidth
               onPress={handleStartFresh}
               accessibilityLabel="Start fresh with a new rhythm"
               accessibilityRole="button"
-              accessibilityHint="Begins a new rhythm with bonus XP for your first sessions"
+              accessibilityHint="Begins a new rhythm with your next session"
             >
               Start fresh — new rhythm
             </Button>

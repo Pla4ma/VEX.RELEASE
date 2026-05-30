@@ -85,30 +85,30 @@ export function selectHeadlineReward(
   if (boss?.isEnabled && boss.currentHealth <= 0) {
     return reward({
       type: "boss_defeated",
-      title: "Boss defeated. Your focus did that.",
-      body: "Your session finished the fight.",
-      iconName: "swords",
-      value: "Boss cleared",
+      title: "Blocker cleared. Your focus broke through.",
+      body: "Your session pushed past a friction pattern.",
+      iconName: "shield",
+      value: "Blocker cleared",
     });
   }
 
   if (summary.newLevel > summary.previousLevel) {
     return reward({
       type: "level_up",
-      title: `Level ${summary.newLevel}. You earned this.`,
+      title: `Progress depth ${summary.newLevel}. You earned this.`,
       body: "Your focused time moved progression forward.",
       iconName: "arrow-up-circle",
-      value: `Level ${summary.newLevel}`,
+      value: `Depth ${summary.newLevel}`,
     });
   }
 
   if (challenge?.isEnabled && challenge.completedThisSession) {
     return reward({
       type: "challenge_complete",
-      title: "Challenge cleared. Locked in.",
-      body: "This session finished an active challenge.",
+      title: "Experiment complete. Locked in.",
+      body: "This session finished an active focus experiment.",
       iconName: "target",
-      value: "Challenge complete",
+      value: "Experiment complete",
     });
   }
 
@@ -134,11 +134,11 @@ export function selectHeadlineReward(
 
   return reward({
     type: "xp_earned",
-    title: `+${summary.xpEarned} XP. Session complete.`,
+    title: "Progress saved. Session complete.",
     body: summary.focusPurityScore
       ? `Focus purity: ${summary.focusPurityScore}%. Keep building the rhythm.`
       : "Your progress is locked in. Keep building the rhythm.",
     iconName: "zap",
-    value: `+${summary.xpEarned} XP`,
+    value: "Progress saved",
   });
 }

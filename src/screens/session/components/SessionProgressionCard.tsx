@@ -24,13 +24,13 @@ export function SessionProgressionCard({
   const metrics = [levelMetric].filter(isProgressMetric);
   const rewardStatusMessage =
     rewardCreditStatus === "crediting"
-      ? "Saving rewards..."
+      ? "Saving progress..."
       : rewardCreditStatus === "retrying"
-        ? "Retrying reward sync..."
+        ? "Retrying progress sync..."
         : rewardCreditStatus === "success"
-          ? "Rewards saved"
+          ? "Progress saved"
           : rewardCreditStatus === "failed"
-            ? "Rewards are waiting to sync"
+            ? "Progress is waiting to sync"
             : null;
   const rewardStatusColor =
     rewardCreditStatus === "success"
@@ -70,7 +70,7 @@ export function SessionProgressionCard({
             }}
           >
             <Text variant="body" color={theme.colors.text.secondary}>
-              Progression data is syncing. Your rewards are still safe.
+              Progression data is syncing. Your progress is still safe.
             </Text>
           </Box>
         </Animated.View>
@@ -91,7 +91,7 @@ export function SessionProgressionCard({
             justifyContent="space-between"
           >
             <Text variant="h4" color={theme.colors.text.primary}>
-              Streak {streakLabel}
+              Consistency {streakLabel}
             </Text>
             {streakIncreased ? (
               <Box
@@ -114,7 +114,7 @@ export function SessionProgressionCard({
           <Box alignItems="center" gap={8}>
             {isRewardSyncing ? (
               <Text variant="caption" color={theme.colors.text.secondary}>
-                Applying rewards...
+                Applying progress...
               </Text>
             ) : null}
             {rewardError ? (
@@ -127,11 +127,11 @@ export function SessionProgressionCard({
                 variant="outline"
                 size="sm"
                 onPress={onRetryRewards}
-                accessibilityLabel="Retry Rewards button"
+                accessibilityLabel="Retry Progress button"
                 accessibilityRole="button"
                 accessibilityHint="Activates this control"
               >
-                Retry Rewards
+                Retry
               </Button>
             ) : null}
           </Box>

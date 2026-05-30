@@ -193,7 +193,7 @@ describe("Copy objects", () => {
     it("primaryMetricValue templates contain placeholders", () => {
       expect(WEEKLY_INTELLIGENCE_COPY.student.primaryMetricValue).toContain("{completedSessions}");
       expect(WEEKLY_INTELLIGENCE_COPY.game_like.primaryMetricValue).toContain("{cleanStarts}");
-      expect(WEEKLY_INTELLIGENCE_COPY.minimal_normal.primaryMetricValue).toContain("{duration}");
+      expect(WEEKLY_INTELLIGENCE_COPY.minimal_normal.primaryMetricValue).toContain("{completedSessions}");
     });
   });
 });

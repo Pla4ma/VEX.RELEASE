@@ -46,14 +46,14 @@ function buildXpLineItems(
     (summary.streakBonus ?? 0) + summary.modeBonus + qualityBonus + squadBonus;
   const baseXp = Math.max(0, totalXp - knownBonuses);
   const items: XpLineItem[] = [
-    { amount: baseXp, id: "base", label: "Base XP" },
+    { amount: baseXp, id: "base", label: "Session progress" },
   ];
 
   if ((summary.streakBonus ?? 0) > 0) {
     items.push({
       amount: summary.streakBonus ?? 0,
       id: "streak",
-      label: "Streak Bonus",
+      label: "Consistency bonus",
     });
   }
   if (summary.modeBonus > 0) {
@@ -105,7 +105,7 @@ export function XPEarnAnimation({
         }}
       >
         <Text variant="label" color={theme.colors.primary[400]}>
-          XP BREAKDOWN
+          PROGRESS BREAKDOWN
         </Text>
         <Text variant="h3" color={theme.colors.text.primary} mt={2}>
           Your run is being counted.
@@ -139,7 +139,7 @@ export function XPEarnAnimation({
 
         <Box mt={6}>
           <Text variant="caption" color={theme.colors.text.secondary}>
-            Total XP
+            Progress total
           </Text>
           <AnimatedCounter
             animateOnMount
@@ -171,7 +171,7 @@ export function XPEarnAnimation({
           />
         </Box>
         <Text variant="caption" color={theme.colors.text.secondary} mt={3}>
-          Level progress locks in before any level-up celebration fires.
+          Progression depth locks in before any milestone celebration fires.
         </Text>
       </Box>
     </Animated.View>

@@ -18,7 +18,7 @@ describe("deriveRescueSurface", () => {
   it("returns student rescue", () => {
     const rescue = deriveRescueSurface("student");
     expect(rescue.lane).toBe("student");
-    expect(rescue.headline).toBe("Review one weak section for 8 minutes");
+    expect(rescue.headline).toBe("Review one section for 8 minutes");
     expect(rescue.suggestedDurationMinutes).toBe(8);
     expect(rescue.actionLabel).toBe("Start review");
   });

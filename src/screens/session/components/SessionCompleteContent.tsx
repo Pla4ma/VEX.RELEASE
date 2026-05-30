@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ScrollView } from "react-native";
 import BottomSheet from "@gorhom/bottom-sheet";
 import Animated, { FadeIn } from "react-native-reanimated";
@@ -22,12 +22,22 @@ import { saveTomorrowPreview } from "../../../features/home-spine/tomorrowPrevie
 import { useFeatureAccess } from "../../../features/liveops-config";
 import { useOnboardingStore } from "../../../features/onboarding/store";
 import { usePremiumStatus } from "../../../shared/monetization";
+import { ModeCompletionSurface } from "../../../features/mode-native/components/ModeCompletionSurface";
+import type { Lane } from "../../../features/lane-engine/types";
+import { SessionMode } from "../../../session/modes";
 
 import { SessionCompleteHeroSection } from "./SessionCompleteHeroSection";
 import { SessionCompleteRewardsPhase } from "./SessionCompleteRewardsPhase";
 import { SessionCompleteNextSteps } from "./SessionCompleteNextSteps";
 import { SessionCompleteOverlays } from "./SessionCompleteOverlays";
 import { SessionContractReflectionCard } from "./SessionContractReflectionCard";
+
+const SESSION_MODE_TO_LANE: Record<string, Lane> = {
+  [SessionMode.STUDY]: "student",
+  [SessionMode.LIGHT_FOCUS]: "game_like",
+  [SessionMode.DEEP_WORK]: "deep_creative",
+  [SessionMode.CREATIVE]: "minimal_normal",
+};
 
 type SessionCompleteContentProps = {
   sessionId: string;
@@ -102,6 +112,11 @@ export function SessionCompleteContent({
     void sessionComplete();
   }, []);
 
+  const lane = useMemo(
+    () => SESSION_MODE_TO_LANE[summary.sessionMode] ?? "minimal_normal",
+    [summary.sessionMode],
+  );
+
   const handleGradeRevealComplete = useCallback(() => {
     setGradeRevealed(true);
   }, []);
@@ -134,6 +149,11 @@ export function SessionCompleteContent({
           }}
           showsVerticalScrollIndicator={false}
         >
+          <SessionCompleteHeroSection
+            controller={controller}
+            summary={summary}
+          />
+
           {!isHidden("contract_reflection_card") ? (
             <SessionContractReflectionCard
               contract={contractQuery.contract}
@@ -142,9 +162,15 @@ export function SessionCompleteContent({
             />
           ) : null}
 
-          <SessionCompleteHeroSection
-            controller={controller}
-            summary={summary}
+          <ModeCompletionSurface
+            lane={lane}
+            topic={contractQuery.contract?.taskDescription}
+            task={contractQuery.contract?.taskDescription}
+            project={contractQuery.contract?.taskDescription}
+            action={contractQuery.contract?.taskDescription}
+            onPrimaryAction={() => {
+              controller.navigation.navigate({ name: "Home", params: {} });
+            }}
           />
 
           <SessionCompleteRewardsPhase

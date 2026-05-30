@@ -47,6 +47,7 @@ describe("Edge cases", () => {
     const ctx: CompletionContext = {
       laneOverride: "game_like",
       task: "ship feature",
+      completedSessions: 5,
       cleanStarts: 3,
       blockerDetected: true,
       recoveryWin: true,

@@ -83,7 +83,10 @@ function buildNarrative(
 }
 
 function buildPremiumBridge(sessionCount: number): string | undefined {
-  if (sessionCount < 7) return undefined;
+  if (sessionCount < 5) return undefined;
+  if (sessionCount < 7) {
+    return "Premium unlocks deeper history when VEX has enough signals.";
+  }
   return "VEX is starting to see your rhythm. Premium keeps deeper history and sharper weekly intelligence.";
 }
 

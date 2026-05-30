@@ -48,6 +48,7 @@ describe("deriveCompletionSurface", () => {
     const surface = deriveCompletionSurface({
       laneOverride: "student",
       topic: "math",
+      completedSessions: 5,
       weakTopicCount: 1,
     });
     expect(surface.body).toContain("1 topic may need review");
@@ -58,6 +59,7 @@ describe("deriveCompletionSurface", () => {
     const surface = deriveCompletionSurface({
       laneOverride: "student",
       topic: "math",
+      completedSessions: 5,
       weakTopicCount: 5,
     });
     expect(surface.body).toContain("5 topics may need review");
@@ -77,6 +79,7 @@ describe("deriveCompletionSurface", () => {
     const surface = deriveCompletionSurface({
       laneOverride: "game_like",
       task: "ship feature",
+      completedSessions: 5,
       cleanStarts: 3,
     });
     expect(surface.body).toContain("3 clean starts confirmed");
@@ -86,6 +89,7 @@ describe("deriveCompletionSurface", () => {
     const surface = deriveCompletionSurface({
       laneOverride: "game_like",
       task: "ship feature",
+      completedSessions: 5,
       blockerDetected: true,
     });
     expect(surface.body).toContain("blocker signal saved");
@@ -96,6 +100,7 @@ describe("deriveCompletionSurface", () => {
     const surface = deriveCompletionSurface({
       laneOverride: "game_like",
       task: "ship feature",
+      completedSessions: 5,
       recoveryWin: true,
     });
     expect(surface.body).toContain("recovery win");
@@ -106,6 +111,7 @@ describe("deriveCompletionSurface", () => {
     const surface = deriveCompletionSurface({
       laneOverride: "deep_creative",
       project: "VEX",
+      completedSessions: 5,
       handoffSaved: true,
     });
     expect(surface.body).toContain("Handoff note saved");
@@ -116,6 +122,7 @@ describe("deriveCompletionSurface", () => {
     const surface = deriveCompletionSurface({
       laneOverride: "deep_creative",
       project: "VEX",
+      completedSessions: 5,
       staleRisk: "high",
     });
     expect(surface.body).toContain("high risk of going stale");

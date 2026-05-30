@@ -100,8 +100,8 @@ describe("selectHeadlineReward", () => {
     expect(select({ contract: { status: "done" } }).type).toBe("contract_done");
   });
 
-  it("falls back to xp_earned with the actual XP amount", () => {
-    expect(select({}).value).toBe("+240 XP");
+  it("falls back to progress_saved when no other trigger fires", () => {
+    expect(select({}).value).toBe("Progress saved");
   });
 
   it("keeps priority order when multiple triggers are present", () => {

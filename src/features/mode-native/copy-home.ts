@@ -1,9 +1,12 @@
 import type { Lane } from "../lane-engine/types";
 import type { ModeHomeSurface, ModeQuickContract } from "./schemas";
 
-// ── Home surface copy ──────────────────────────────────────────────────
+// ── Evidence-backed home copy (shown when user has session data) ────────
 
-export const HOME_COPY: Record<Lane, Omit<ModeHomeSurface, "lane">> = {
+export const EVIDENCE_HOME_COPY: Record<
+  Lane,
+  Omit<ModeHomeSurface, "lane">
+> = {
   student: {
     primaryFeeling: "VEX knows what I should study next.",
     headline: "Your next study block is ready",
@@ -46,51 +49,134 @@ export const HOME_COPY: Record<Lane, Omit<ModeHomeSurface, "lane">> = {
   },
 };
 
-// ── Quick Contract copy ────────────────────────────────────────────────
+// ── Cold-start home copy (shown when VEX has no session evidence) ──────
 
-export const QUICK_CONTRACT_COPY: Record<Lane, Omit<ModeQuickContract, "lane">> =
-  {
-    student: {
-      title: "Quick contract: Study",
-      questions: [
-        { key: "topic", label: "What are you studying?", placeholder: 'e.g. "Graph traversal algorithms"' },
-        { key: "done", label: "What will count as done?", placeholder: 'e.g. "Understand BFS and DFS with examples"' },
-      ],
-      durationLabel: "Study for",
-      suggestedDurationMinutes: 20,
-      startLabel: "Start study block",
-      showAdvancedSettings: false,
-    },
-    game_like: {
-      title: "Quick contract: Run",
-      questions: [
-        { key: "task", label: "What do you want to move through?", placeholder: 'e.g. "Ship the onboarding flow"' },
-        { key: "start", label: "What would a clean start look like?", placeholder: 'e.g. "Open the file, named the first change"' },
-      ],
-      durationLabel: "Run for",
-      suggestedDurationMinutes: 25,
-      startLabel: "Start run",
-      showAdvancedSettings: false,
-    },
-    deep_creative: {
-      title: "Quick contract: Project",
-      questions: [
-        { key: "project", label: "What project are you protecting?", placeholder: 'e.g. "VEX onboarding redesign"' },
-        { key: "move", label: "What is the next move?", placeholder: 'e.g. "Outline the welcome flow"' },
-      ],
-      durationLabel: "Protect for",
-      suggestedDurationMinutes: 30,
-      startLabel: "Start project block",
-      showAdvancedSettings: false,
-    },
-    minimal_normal: {
-      title: "Quick contract: Clean",
-      questions: [
-        { key: "action", label: "What is the one action?", placeholder: 'e.g. "Clear inbox to zero"' },
-      ],
-      durationLabel: "Focus for",
-      suggestedDurationMinutes: 15,
-      startLabel: "Start clean session",
-      showAdvancedSettings: false,
-    },
-  };
+export const COLD_START_HOME_COPY: Record<
+  Lane,
+  Omit<ModeHomeSurface, "lane">
+> = {
+  student: {
+    primaryFeeling: "I want to build a study habit.",
+    headline: "Start your next study block",
+    body: "Start with one named study target. VEX will learn what needs review.",
+    primaryAction: "start_study_block",
+    primaryActionLabel: "Start study block",
+    suggestedDurationMinutes: 20,
+    secondaryHint: "Name one topic. One block. No distractions.",
+    rhythmLabel: null,
+  },
+  game_like: {
+    primaryFeeling: "I want clean starts to become a pattern.",
+    headline: "Start a clean run",
+    body: "Start one clean run. VEX will learn what helps you keep momentum.",
+    primaryAction: "start_clean_run",
+    primaryActionLabel: "Start clean run",
+    suggestedDurationMinutes: 25,
+    secondaryHint: "Name the one thing. Then move.",
+    rhythmLabel: null,
+  },
+  deep_creative: {
+    primaryFeeling: "I want to protect my deep work.",
+    headline: "Start a project block",
+    body: "Name the project and save the next move after this block.",
+    primaryAction: "resume_project",
+    primaryActionLabel: "Resume project",
+    suggestedDurationMinutes: 30,
+    secondaryHint: "Save your next move before closing.",
+    rhythmLabel: null,
+  },
+  minimal_normal: {
+    primaryFeeling: "I want one clean action.",
+    headline: "One clean action",
+    body: "One clean action. VEX will stay quiet unless you ask for more.",
+    primaryAction: "start_session",
+    primaryActionLabel: "Start",
+    suggestedDurationMinutes: 15,
+    secondaryHint: "One action. 15 minutes. That's it.",
+    rhythmLabel: null,
+  },
+};
+
+// ── Default export for backward compat (evidence-backed) ────────────────
+
+/** @deprecated — use EVIDENCE_HOME_COPY or COLD_START_HOME_COPY explicitly */
+export const HOME_COPY = EVIDENCE_HOME_COPY;
+
+// ── Quick Contract copy (no evidence dependency — user fills fields) ────
+
+export const QUICK_CONTRACT_COPY: Record<
+  Lane,
+  Omit<ModeQuickContract, "lane">
+> = {
+  student: {
+    title: "Quick contract: Study",
+    questions: [
+      {
+        key: "topic",
+        label: "What are you studying?",
+        placeholder: 'e.g. "Graph traversal algorithms"',
+      },
+      {
+        key: "done",
+        label: "What will count as done?",
+        placeholder: 'e.g. "Understand BFS and DFS with examples"',
+      },
+    ],
+    durationLabel: "Study for",
+    suggestedDurationMinutes: 20,
+    startLabel: "Start study block",
+    showAdvancedSettings: false,
+  },
+  game_like: {
+    title: "Quick contract: Run",
+    questions: [
+      {
+        key: "task",
+        label: "What do you want to move through?",
+        placeholder: 'e.g. "Ship the onboarding flow"',
+      },
+      {
+        key: "start",
+        label: "What would a clean start look like?",
+        placeholder: 'e.g. "Open the file, named the first change"',
+      },
+    ],
+    durationLabel: "Run for",
+    suggestedDurationMinutes: 25,
+    startLabel: "Start run",
+    showAdvancedSettings: false,
+  },
+  deep_creative: {
+    title: "Quick contract: Project",
+    questions: [
+      {
+        key: "project",
+        label: "What project are you protecting?",
+        placeholder: 'e.g. "VEX onboarding redesign"',
+      },
+      {
+        key: "move",
+        label: "What is the next move?",
+        placeholder: 'e.g. "Outline the welcome flow"',
+      },
+    ],
+    durationLabel: "Protect for",
+    suggestedDurationMinutes: 30,
+    startLabel: "Start project block",
+    showAdvancedSettings: false,
+  },
+  minimal_normal: {
+    title: "Quick contract: Clean",
+    questions: [
+      {
+        key: "action",
+        label: "What is the one action?",
+        placeholder: 'e.g. "Clear inbox to zero"',
+      },
+    ],
+    durationLabel: "Focus for",
+    suggestedDurationMinutes: 15,
+    startLabel: "Start clean session",
+    showAdvancedSettings: false,
+  },
+};

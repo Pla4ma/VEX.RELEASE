@@ -11,12 +11,12 @@ const RESCUE_REFLECTION_QUESTIONS: Record<Lane, Record<RescueReason, string>> = 
     no_time: "Could 5 minutes work tomorrow?",
   },
   game_like: {
-    too_big: "Was the encounter too big, or did you need a warm-up?",
+    too_big: "Was the run too long, or did you need a warm-up?",
     tired: "Would a different time fit better?",
     distracted: "What interrupted the run?",
-    anxious: "What made entering the arena feel heavy?",
-    unclear: "What would make the next encounter clear?",
-    no_time: "Could a 5-minute sprint fit tomorrow?",
+    anxious: "What made the run feel heavy?",
+    unclear: "What would make the next run clear?",
+    no_time: "Could a 5-minute run fit tomorrow?",
   },
   deep_creative: {
     too_big: "Was the task too big, or did you need a smaller entry point?",
@@ -50,12 +50,12 @@ const RETURN_TOMORROW_ACTIONS: Record<Lane, Record<RescueReason, string>> = {
     no_time: "Block 5 minutes tomorrow for one review.",
   },
   game_like: {
-    too_big: "Start tomorrow with one short encounter.",
+    too_big: "Start tomorrow with one short run.",
     tired: "Come back tomorrow when the run feels lighter.",
     distracted: "Silence everything before tomorrow's run.",
-    anxious: "Tomorrow's run: survive 5 minutes. That is enough.",
+    anxious: "Tomorrow's run: 5 minutes of clean focus. That is enough.",
     unclear: "Pick one clear target for tomorrow.",
-    no_time: "5-minute sprint tomorrow. No setup.",
+    no_time: "5-minute run tomorrow. No setup.",
   },
   deep_creative: {
     too_big: "Tomorrow: identify one concrete next move.",

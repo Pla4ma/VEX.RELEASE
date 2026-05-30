@@ -25,8 +25,8 @@ export function copyFor(
         body: "Review one weak section. 8 minutes. No pressure.",
       },
       game_like: {
-        title: "Need a recovery encounter?",
-        body: "Recovery encounter: 10 clean minutes. Just move.",
+        title: "Need a recovery run?",
+        body: "Recovery run: 10 clean minutes. Just move.",
       },
       deep_creative: {
         title: "Need a re-entry path?",
@@ -52,7 +52,7 @@ export function copyFor(
     };
   }
   if (type === "run_continue") {
-    return { title: "One encounter", body: "One clean block is enough today." };
+    return { title: "One run", body: "One clean block is enough today." };
   }
   if (type === "weekly_insight") {
     return {
@@ -67,7 +67,7 @@ export function copyFor(
     },
     game_like: {
       title: "Your next run is ready",
-      body: "One clean encounter waiting. 15 minutes.",
+      body: "One clean block waiting. 15 minutes.",
     },
     deep_creative: {
       title: "Project thread waiting",

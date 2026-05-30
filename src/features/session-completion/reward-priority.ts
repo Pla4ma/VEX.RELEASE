@@ -134,9 +134,9 @@ export function buildSessionRewardPriority(
 
   if (boss?.isEnabled && boss.currentHealth <= 0) {
     rewards.push({
-      detail: "Boss cleared",
+      detail: "Blocker cleared",
       kind: "boss",
-      label: "Boss defeated",
+      label: "Blocker cleared",
       priority: "major",
     });
   }
@@ -145,11 +145,11 @@ export function buildSessionRewardPriority(
     rewards.push({
       detail:
         summary.newLevel > summary.previousLevel
-          ? `Level ${summary.newLevel}`
-          : `+${summary.xpEarned} XP`,
+          ? `Depth ${summary.newLevel}`
+          : "Progress saved",
       kind: "level",
       label:
-        summary.newLevel > summary.previousLevel ? "Level up" : "Large XP gain",
+        summary.newLevel > summary.previousLevel ? "Progression depth" : "Progress gained",
       priority: "major",
     });
   }
@@ -167,16 +167,16 @@ export function buildSessionRewardPriority(
     rewards.push({
       detail: "Progress locked",
       kind: "challenge",
-      label: "Challenge progress",
+      label: "Experiment progress",
       priority: "supporting",
     });
   }
 
   if (summary.xpEarned > 0) {
     rewards.push({
-      detail: `+${summary.xpEarned} XP`,
+      detail: "Progress saved",
       kind: "xp",
-      label: "Session XP earned",
+      label: "Session progress saved",
       priority: "standard",
     });
   }
