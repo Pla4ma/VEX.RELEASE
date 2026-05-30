@@ -29,7 +29,7 @@ export function ToggleSetting({
         {description && <Text style={styles.description}>{description}</Text>}
       </View>
       <Pressable
-        onPress={() => { toggleSwitch(); onToggle(!value); }}
+        onPress={() => { toggleSwitch(!value); onToggle(!value); }}
         style={({ pressed }) => [
           styles.toggle,
           value ? styles.toggleActive : styles.toggleInactive,

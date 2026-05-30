@@ -1,11 +1,11 @@
-import type { UseQueryResult } from "@tanstack/react-query";
+import type { UseQueryResult, QueryObserverPendingResult } from "@tanstack/react-query";
 import type { HomeReturnReason } from "./useHomeReturnReason";
 import type { SessionRecommendation } from "../../../features/ai-coach";
 import type { LearningExecutionLayer } from "../../../features/learning-execution";
 
 export function createStubQuery<TData = unknown>(): UseQueryResult<TData> {
-  return {
-    data: undefined as unknown as TData,
+  const stub: QueryObserverPendingResult<TData> = {
+    data: undefined,
     dataUpdatedAt: 0,
     error: null,
     errorUpdatedAt: 0,
@@ -13,24 +13,26 @@ export function createStubQuery<TData = unknown>(): UseQueryResult<TData> {
     failureCount: 0,
     failureReason: null,
     fetchStatus: "idle" as const,
-    isError: false as const,
+    isError: false,
     isFetched: false,
     isFetchedAfterMount: false,
     isFetching: false,
     isInitialLoading: false,
     isLoading: false,
-    isLoadingError: false as const,
+    isLoadingError: false,
+    isEnabled: true,
     isPaused: false,
-    isPending: false,
+    isPending: true,
     isPlaceholderData: false,
-    isRefetchError: false as const,
+    isRefetchError: false,
     isRefetching: false,
     isStale: false,
-    isSuccess: false as const,
-    promise: Promise.resolve(undefined as unknown as TData),
-    refetch: () => Promise.resolve(createStubQuery<TData>() as UseQueryResult<TData>),
+    isSuccess: false,
+    promise: new Promise<TData>(() => {}),
+    refetch: () => Promise.resolve(createStubQuery<TData>()),
     status: "pending" as const,
-  } as unknown as UseQueryResult<TData>;
+  };
+  return stub;
 }
 
 export function stubNavigationActions() {
