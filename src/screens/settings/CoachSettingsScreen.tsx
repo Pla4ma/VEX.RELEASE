@@ -76,9 +76,9 @@ export const CoachSettingsScreen: React.FC<Props> = ({ navigation }) => {
           <Pressable
             onPress={() => navigation.goBack()}
             style={{ marginRight: 12 }}
-            accessibilityLabel="Interactive control"
+            accessibilityLabel="Coach setting"
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to change setting"
           >
             <Icon
               name="arrow-left"
@@ -130,9 +130,9 @@ export const CoachSettingsScreen: React.FC<Props> = ({ navigation }) => {
               borderWidth: 1,
               borderColor: theme.colors.error.DEFAULT + "30",
             }}
-            accessibilityLabel="Interactive control"
+            accessibilityLabel="Coach setting"
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to change setting"
           >
             <Box
               width={40}

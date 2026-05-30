@@ -93,9 +93,9 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
                 variant="primary"
                 onPress={onAction}
                 style={styles.primaryAction}
-                accessibilityLabel="Action button"
+                accessibilityLabel="Perform action"
                 accessibilityRole="button"
-                accessibilityHint="Activates this control"
+                accessibilityHint="Double tap to activate"
               >
                 {actionLabel}
               </Button>
@@ -106,9 +106,9 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
                 variant="ghost"
                 onPress={onSecondary}
                 style={styles.secondaryAction}
-                accessibilityLabel="Action button"
+                accessibilityLabel="Perform action"
                 accessibilityRole="button"
-                accessibilityHint="Activates this control"
+                accessibilityHint="Double tap to activate"
               >
                 {secondaryLabel}
               </Button>

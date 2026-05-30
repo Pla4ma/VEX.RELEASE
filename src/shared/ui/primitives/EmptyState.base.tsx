@@ -62,9 +62,9 @@ export function EmptyState({
                   pressed && { opacity: 0.8 },
                 ]}
                 onPress={onAction}
-                accessibilityLabel="Interactive control"
+                accessibilityLabel="Action"
                 accessibilityRole="button"
-                accessibilityHint="Activates this control"
+                accessibilityHint="Double tap to activate"
               >
                 <Text
                   style={[
@@ -84,9 +84,9 @@ export function EmptyState({
                   pressed && { opacity: 0.8 },
                 ]}
                 onPress={onSecondaryAction}
-                accessibilityLabel="Interactive control"
+                accessibilityLabel="Action"
                 accessibilityRole="button"
-                accessibilityHint="Activates this control"
+                accessibilityHint="Double tap to activate"
               >
                 <Text
                   style={[

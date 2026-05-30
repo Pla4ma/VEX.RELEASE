@@ -7,6 +7,7 @@ import { Icon } from "../../../icons";
 import type { YouTubeInputProps } from "../types";
 import { validateYouTubeUrl } from "../validation";
 import { styles } from "./YouTubeInputStyles";
+import { buttonTap } from "../../../utils/haptics";
 import { YouTubeVideoPreview } from "./YouTubeVideoPreview";
 
 export const YouTubeInput: React.FC<YouTubeInputProps> = ({
@@ -84,14 +85,14 @@ export const YouTubeInput: React.FC<YouTubeInputProps> = ({
         />
         {value.length > 0 && !disabled && (
           <Pressable
-            onPress={clearInput}
+            onPress={() => { buttonTap(); clearInput(); }}
             style={({ pressed }) => [
               styles.clearButton,
               pressed && { opacity: 0.8 },
             ]}
-            accessibilityLabel="Interactive control"
+            accessibilityLabel="Clear YouTube URL"
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to clear input"
           >
             <Icon name="x" size="sm" color={theme.colors.text.muted} />
           </Pressable>

@@ -93,7 +93,7 @@ export function ErrorFallback({
               onPress={onRetry}
               accessibilityLabel="Try Again button"
               accessibilityRole="button"
-              accessibilityHint="Activates this control"
+              accessibilityHint="Double tap to activate"
             >
               Try Again
             </Button>
@@ -104,7 +104,7 @@ export function ErrorFallback({
               onPress={onDegraded}
               accessibilityLabel="Continue Anyway button"
               accessibilityRole="button"
-              accessibilityHint="Activates this control"
+              accessibilityHint="Double tap to activate"
             >
               Continue Anyway
             </Button>

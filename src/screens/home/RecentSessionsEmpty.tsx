@@ -41,7 +41,7 @@ export function RecentSessionsEmpty({
           onPress={onStart}
           accessibilityLabel="Start session button"
           accessibilityRole="button"
-          accessibilityHint="Activates this control"
+          accessibilityHint="Double tap to activate"
         >
           Start session
         </Button>

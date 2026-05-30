@@ -78,9 +78,9 @@ export const TwoFactorSection: React.FC = () => {
             paddingHorizontal: 16,
           }}
           onPress={handleTwoFactorToggle}
-          accessibilityLabel="Interactive control"
+          accessibilityLabel="Two-factor authentication"
           accessibilityRole="button"
-          accessibilityHint="Activates this control"
+          accessibilityHint="Double tap to change setting"
         >
           <Box
             width={40}

@@ -59,9 +59,9 @@ export function OnboardingChoosePersona({
             fullWidth
             onPress={onContinue}
             disabled={!selectedPersona}
-            accessibilityLabel="Action button"
+            accessibilityLabel="Perform action"
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to activate"
           >
             {selectedPersona ? "Continue" : "Select a coach"}
           </Button>
@@ -70,7 +70,7 @@ export function OnboardingChoosePersona({
             onPress={onSkip}
             accessibilityLabel="Skip for now (defaults to Mentor) button"
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to activate"
           >
             <Box py="sm" alignItems="center">
               <Text variant="body" color="text.tertiary">

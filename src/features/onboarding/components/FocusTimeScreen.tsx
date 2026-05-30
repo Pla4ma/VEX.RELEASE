@@ -51,9 +51,9 @@ function DurationCard({
     >
       <Pressable
         onPress={onPress}
-        accessibilityLabel="Interactive control"
+        accessibilityLabel="Focus time option"
         accessibilityRole="button"
-        accessibilityHint="Activates this control"
+        accessibilityHint="Double tap to select"
       >
         <Animated.View
           style={[
@@ -164,7 +164,7 @@ export function FocusTimeScreen({
           onPress={onSkip}
           accessibilityLabel="Skip for now › button"
           accessibilityRole="button"
-          accessibilityHint="Activates this control"
+          accessibilityHint="Double tap to select"
         >
           <Box alignItems="center" py="md">
             <Text variant="bodySmall" color="text.tertiary">

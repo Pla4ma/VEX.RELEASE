@@ -103,7 +103,7 @@ export function ComebackCard({
         onPress={onStart}
         accessibilityLabel="Start My Comeback Session button"
         accessibilityRole="button"
-        accessibilityHint="Activates this control"
+        accessibilityHint="Double tap to activate"
       >
         Start My Comeback Session
       </Button>
@@ -113,7 +113,7 @@ export function ComebackCard({
         onPress={onClose}
         accessibilityLabel="Remind Me Later button"
         accessibilityRole="button"
-        accessibilityHint="Activates this control"
+        accessibilityHint="Double tap to activate"
       >
         Remind Me Later
       </Button>

@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Pressable } from "react-native";
 import { useTheme } from "../theme";
+import { buttonTap } from "../utils/haptics";
 import { Text } from "./primitives";
 import { Icon } from "../icons";
 import { createSheet } from "@/shared/ui/create-sheet";
@@ -83,9 +84,9 @@ export const Badge: React.FC<BadgeProps> = ({
         <Pressable
           onPress={onRemove}
           style={styles.removeButton}
-          accessibilityLabel="Interactive control"
+          accessibilityLabel={`Remove ${typeof children === "string" ? children : "badge"}`}
           accessibilityRole="button"
-          accessibilityHint="Activates this control"
+          accessibilityHint="Double tap to remove badge"
         >
           <Icon
             name="close"
@@ -100,7 +101,7 @@ export const Badge: React.FC<BadgeProps> = ({
   if (onPress || onRemove) {
     return (
       <Pressable
-        onPress={onPress || onRemove}
+        onPress={() => { buttonTap(); (onPress || onRemove)?.(); }}
         disabled={disabled}
         style={({ pressed }) => [
           styles.container,
@@ -116,9 +117,9 @@ export const Badge: React.FC<BadgeProps> = ({
           style,
           pressed && { opacity: 0.8 },
         ]}
-        accessibilityLabel="Interactive control"
+        accessibilityLabel={typeof children === "string" ? children : "Badge"}
         accessibilityRole="button"
-        accessibilityHint="Activates this control"
+        accessibilityHint="Double tap to activate"
       >
         <View style={styles.content}>
           {leftIcon && (
@@ -157,9 +158,9 @@ export const Badge: React.FC<BadgeProps> = ({
             onPress={onRemove}
             style={styles.removeButton}
             hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-            accessibilityLabel="Interactive control"
+            accessibilityLabel={`Remove ${typeof children === "string" ? children : "badge"}`}
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to remove badge"
           >
             <Icon
               name="close"

@@ -81,7 +81,7 @@ export function OnboardingPermissions({
               isLoading={false}
               accessibilityLabel="Enable Notifications button"
               accessibilityRole="button"
-              accessibilityHint="Activates this control"
+              accessibilityHint="Double tap to activate"
             >
               Enable Notifications
             </Button>
@@ -95,7 +95,7 @@ export function OnboardingPermissions({
               onPress={onContinue}
               accessibilityLabel="Continue button"
               accessibilityRole="button"
-              accessibilityHint="Activates this control"
+              accessibilityHint="Double tap to activate"
             >
               Continue
             </Button>
@@ -107,9 +107,9 @@ export function OnboardingPermissions({
               variant="ghost"
               fullWidth
               onPress={onContinue}
-              accessibilityLabel="Action button"
+              accessibilityLabel="Perform action"
               accessibilityRole="button"
-              accessibilityHint="Activates this control"
+              accessibilityHint="Double tap to activate"
             >
               {status === "denied"
                 ? "Continue without notifications"

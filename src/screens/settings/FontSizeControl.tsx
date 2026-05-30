@@ -55,9 +55,9 @@ export const FontSizeControl: React.FC<FontSizeControlProps> = ({
                 paddingVertical: 16,
                 paddingHorizontal: 16,
               }}
-              accessibilityLabel="Interactive control"
+              accessibilityLabel="Font size control"
               accessibilityRole="button"
-              accessibilityHint="Activates this control"
+              accessibilityHint="Double tap to change setting"
             >
               <Box
                 width={40}

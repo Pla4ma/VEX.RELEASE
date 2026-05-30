@@ -4,6 +4,7 @@ import Animated, { FadeInUp } from "react-native-reanimated";
 import { Box } from "../../../components/primitives/Box";
 import { Text } from "../../../components/primitives/Text";
 import { useTheme } from "../../../theme";
+import { buttonTap } from "../../../utils/haptics";
 import { TomorrowPreviewPersonalized } from "./TomorrowPreviewPersonalized";
 export interface TomorrowPreviewProps {
   streakWillContinue: boolean;
@@ -71,9 +72,9 @@ export function TomorrowPreview(props: TomorrowPreviewProps): JSX.Element {
     <Animated.View entering={FadeInUp.duration(500).delay(400)}>
       <Pressable
         onPress={props.onPress}
-        accessibilityLabel="Interactive control"
+        accessibilityLabel="Tomorrow preview"
         accessibilityRole="button"
-        accessibilityHint="Activates this control"
+        accessibilityHint="Double tap to view details"
       >
         <Box
           m="lg"

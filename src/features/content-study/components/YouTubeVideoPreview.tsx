@@ -117,7 +117,7 @@ export function YouTubeVideoPreview({
               onPress={onExtract}
               accessibilityLabel="Retry button"
               accessibilityRole="button"
-              accessibilityHint="Activates this control"
+              accessibilityHint="Double tap to activate"
             >
               Retry
             </Button>

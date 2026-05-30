@@ -36,7 +36,7 @@ export function InsightCard({
       onPress={onPress}
       accessibilityRole="button"
       accessibilityLabel={`Insight: ${insight.title}`}
-      accessibilityHint="Activates this control"
+      accessibilityHint="Double tap to select"
     >
       <View style={styles.header}>
         <Text style={styles.icon}>{severity.icon}</Text>
@@ -80,8 +80,8 @@ export function InsightCard({
             ]}
             onPress={onAction}
             accessibilityRole="button"
-            accessibilityLabel="Action button"
-            accessibilityHint="Activates this control"
+            accessibilityLabel="Perform action"
+            accessibilityHint="Double tap to select"
           >
             <Text style={styles.actionButtonText}>
               {formatActionLabel(insight.actionType)}
@@ -97,7 +97,7 @@ export function InsightCard({
               onPress={onDismiss}
               accessibilityRole="button"
               accessibilityLabel="Dismiss button"
-              accessibilityHint="Activates this control"
+              accessibilityHint="Double tap to select"
             >
               <Text style={[styles.dismissText, { color: severity.color }]}>
                 Dismiss

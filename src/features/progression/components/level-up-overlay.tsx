@@ -135,7 +135,7 @@ export const LevelUpOverlay: React.FC<LevelUpOverlayProps> = ({
             onPress={onContinue}
             accessibilityLabel="AWESOME! 🎉 button"
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to activate"
           >
             <LinearGradient
               colors={[launchColors.hex_ffd700, launchColors.hex_ff6b35]}

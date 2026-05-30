@@ -67,7 +67,7 @@ export function CustomDurationInput({
       onPress={onActivate}
       accessibilityLabel="Custom button"
       accessibilityRole="button"
-      accessibilityHint="Activates this control"
+      accessibilityHint="Double tap to activate"
     >
       <Box
         px="md"

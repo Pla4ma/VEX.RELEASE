@@ -4,6 +4,7 @@ import { Box } from "../../../components/primitives/Box";
 import { Text } from "../../../components/primitives/Text";
 import { Icon } from "../../../icons";
 import { useTheme } from "../../../theme";
+import { buttonTap } from "../../../utils/haptics";
 import { launchColors } from "@theme/tokens/launch-colors";
 
 interface FilterChipProps {
@@ -22,11 +23,11 @@ export function FilterChip({
   const { theme } = useTheme();
   return (
     <Pressable
-      onPress={onPress}
+      onPress={() => { buttonTap(); onPress(); }}
       accessibilityRole="button"
       accessibilityState={{ selected: isActive }}
-      accessibilityLabel="Interactive control"
-      accessibilityHint="Activates this control"
+      accessibilityLabel={`${label} filter${isActive ? ", active" : ""}`}
+      accessibilityHint="Double tap to toggle filter"
     >
       <Box
         flexDirection="row"

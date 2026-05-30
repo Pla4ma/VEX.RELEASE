@@ -127,7 +127,7 @@ export function FirstSessionCTA({
           onPress={onStartSession}
           accessibilityLabel="focus session →`} button"
           accessibilityRole="button"
-          accessibilityHint="Activates this control"
+          accessibilityHint="Double tap to select"
         >
           {`Start ${durationOption?.label ?? "25-minute"} focus session →`}
         </Button>
@@ -142,7 +142,7 @@ export function FirstSessionCTA({
           onPress={onBack}
           accessibilityLabel="← Go back button"
           accessibilityRole="button"
-          accessibilityHint="Activates this control"
+          accessibilityHint="Double tap to select"
         >
           <Box alignItems="center" py="md">
             <Text variant="bodySmall" color="text.tertiary">

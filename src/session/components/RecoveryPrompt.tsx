@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, Pressable, Modal } from "react-native";
 import type { RecoveryType } from "../types";
+import { buttonTap } from "../../utils/haptics";
 import { styles } from "./RecoveryPrompt.styles";
 
 interface RecoveryOption {
@@ -98,10 +99,10 @@ export const RecoveryPrompt: React.FC<RecoveryPromptProps> = ({
                     styles.optionCard,
                     pressed && { opacity: 0.8 },
                   ]}
-                  onPress={() => onSelect(option.type)}
-                  accessibilityLabel="Interactive control"
+                  onPress={() => { buttonTap(); onSelect(option.type); }}
+                  accessibilityLabel={`${option.label}: ${option.description}`}
                   accessibilityRole="button"
-                  accessibilityHint="Activates this control"
+                  accessibilityHint={`Double tap to ${option.label.toLowerCase()}`}
                 >
                   <View style={styles.optionHeader}>
                     <Text style={styles.optionIcon}>{option.icon}</Text>

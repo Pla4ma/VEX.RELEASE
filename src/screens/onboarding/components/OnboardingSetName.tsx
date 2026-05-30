@@ -165,7 +165,7 @@ export function OnboardingSetName({
               disabled={!isValid}
               accessibilityLabel="Continue button"
               accessibilityRole="button"
-              accessibilityHint="Activates this control"
+              accessibilityHint="Double tap to activate"
             >
               Continue
             </Button>
@@ -174,7 +174,7 @@ export function OnboardingSetName({
               onPress={handleSkip}
               accessibilityLabel="I'll decide later ( ) button"
               accessibilityRole="button"
-              accessibilityHint="Activates this control"
+              accessibilityHint="Double tap to activate"
             >
               <Box py="sm" alignItems="center">
                 <Text variant="body" color="text.tertiary">

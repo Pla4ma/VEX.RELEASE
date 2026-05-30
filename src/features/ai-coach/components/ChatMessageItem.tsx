@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, Pressable } from "react-native";
 import type { ChatMessage } from "./coach-chat-types";
+import { buttonTap } from "../../../utils/haptics";
 import { getPersonalityEmoji } from "./coach-helpers";
 import { styles } from "./CoachScreen.styles";
 
@@ -66,10 +67,10 @@ export function ChatMessageItem({
               styles.actionButton,
               pressed && { opacity: 0.8 },
             ]}
-            onPress={() => onActionPress(message)}
-            accessibilityLabel="Action button"
+            onPress={() => { buttonTap(); onActionPress(message); }}
+            accessibilityLabel={message.metadata?.actionLabel ?? "Action"}
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to perform action"
           >
             <Text style={styles.actionButtonText}>
               {message.metadata.actionLabel}

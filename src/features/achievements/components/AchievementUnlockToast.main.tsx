@@ -104,9 +104,9 @@ export const AchievementUnlockToast: React.FC<AchievementUnlockToastProps> = ({
     >
       <Pressable
         onPress={handlePress}
-        accessibilityLabel="Interactive control"
+        accessibilityLabel={`Achievement unlocked: ${display.title}`}
         accessibilityRole="button"
-        accessibilityHint="Activates this control"
+        accessibilityHint="Double tap to view achievement details"
       >
         {isHighRarity && (
           <Animated.View

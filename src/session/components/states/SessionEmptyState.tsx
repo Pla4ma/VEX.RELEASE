@@ -37,7 +37,7 @@ export const SessionEmptyState: React.FC<SessionEmptyStateProps> = ({
           onPress={onCreateSession}
           accessibilityLabel="Start First Session button"
           accessibilityRole="button"
-          accessibilityHint="Activates this control"
+          accessibilityHint="Double tap to activate"
         >
           <Text style={styles.primaryButtonText}>Start First Session</Text>
         </Pressable>
@@ -50,7 +50,7 @@ export const SessionEmptyState: React.FC<SessionEmptyStateProps> = ({
           onPress={onBrowsePresets}
           accessibilityLabel="Browse Presets button"
           accessibilityRole="button"
-          accessibilityHint="Activates this control"
+          accessibilityHint="Double tap to activate"
         >
           <Text style={styles.secondaryButtonText}>Browse Presets</Text>
         </Pressable>

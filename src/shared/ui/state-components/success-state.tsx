@@ -55,9 +55,9 @@ export function SuccessState({
             { backgroundColor: theme.colors.success.DEFAULT },
             pressed && { opacity: 0.8 },
           ]}
-          accessibilityLabel="Interactive control"
+          accessibilityLabel="Success action"
           accessibilityRole="button"
-          accessibilityHint="Activates this control"
+          accessibilityHint="Double tap to activate"
         >
           <Text
             style={[

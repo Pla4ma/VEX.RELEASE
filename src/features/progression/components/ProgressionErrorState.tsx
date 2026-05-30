@@ -37,7 +37,7 @@ export function ProgressionErrorState({
           onPress={onRetry}
           accessibilityLabel="Try Again button"
           accessibilityRole="button"
-          accessibilityHint="Activates this control"
+          accessibilityHint="Double tap to activate"
         >
           <Text style={styles.buttonText}>Try Again</Text>
         </Pressable>

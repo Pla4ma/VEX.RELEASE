@@ -5,6 +5,7 @@ import { useTheme } from "../../theme";
 import { getPremiumCardStyle } from "../premiumStyles";
 import { Button } from "../primitives/Button";
 import { Text } from "../primitives/Text";
+import { buttonTap } from "../../utils/haptics";
 
 type SurfaceTone = "default" | "celebration" | "info" | "warning" | "locked";
 
@@ -105,9 +106,9 @@ export function PremiumSurface({
         >
           <Button
             onPress={onAction}
-            accessibilityLabel="Action button"
+            accessibilityLabel={actionLabel ?? "Action"}
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to activate"
           >
             {actionLabel}
           </Button>
@@ -115,10 +116,10 @@ export function PremiumSurface({
             <Button
               variant="outline"
               onPress={onSecondaryAction}
-              accessibilityLabel="Action button"
+              accessibilityLabel={secondaryActionLabel ?? "Action"}
               accessibilityRole="button"
-              accessibilityHint="Activates this control"
-            >
+              accessibilityHint="Double tap to activate"
+              >
               {secondaryActionLabel}
             </Button>
           ) : null}

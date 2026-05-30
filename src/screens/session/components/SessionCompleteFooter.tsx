@@ -54,7 +54,7 @@ export function SessionCompleteFooter({
               onPress={onShare}
               accessibilityLabel="Share Your Session button"
               accessibilityRole="button"
-              accessibilityHint="Activates this control"
+              accessibilityHint="Double tap to activate"
             >
               Share Your Session
             </Button>

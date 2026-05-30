@@ -81,9 +81,9 @@ export function AtRiskBanner({
     <Animated.View entering={FadeIn.duration(300)} style={pulseStyle}>
       <Pressable
         onPress={onStartSession}
-        accessibilityLabel="Interactive control"
+        accessibilityLabel="Streak at risk banner"
         accessibilityRole="button"
-        accessibilityHint="Activates this control"
+        accessibilityHint="Double tap to protect your streak"
       >
         <Box
           mx="lg"

@@ -149,9 +149,9 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({
       onPress={onPress}
       disabled={disabled || !onPress}
       style={styles.stepContainer}
-      accessibilityLabel="Interactive control"
+      accessibilityLabel="Step indicator"
       accessibilityRole="button"
-      accessibilityHint="Activates this control"
+      accessibilityHint="Double tap to activate"
     >
       {" "}
       {indicatorContent}

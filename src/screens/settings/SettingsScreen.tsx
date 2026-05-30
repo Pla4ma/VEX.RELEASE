@@ -133,7 +133,7 @@ export const SettingsScreen = withScreenErrorBoundary(function _SettingsScreen({
           onPress={logout}
           accessibilityLabel="Log Out button"
           accessibilityRole="button"
-          accessibilityHint="Activates this control"
+          accessibilityHint="Double tap to change setting"
         >
           <Text
             style={{ color: theme.colors.error.DEFAULT, fontWeight: "600" }}

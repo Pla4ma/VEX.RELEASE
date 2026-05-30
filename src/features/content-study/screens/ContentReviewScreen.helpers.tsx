@@ -112,7 +112,7 @@ export function ContentView({
               onPress={onCancelEditing}
               accessibilityLabel="Cancel button"
               accessibilityRole="button"
-              accessibilityHint="Activates this control"
+              accessibilityHint="Double tap to activate"
             >
               <Text style={styles.cancelButtonText}>Cancel</Text>
             </Pressable>
@@ -124,7 +124,7 @@ export function ContentView({
               onPress={onSave}
               accessibilityLabel="Save button"
               accessibilityRole="button"
-              accessibilityHint="Activates this control"
+              accessibilityHint="Double tap to activate"
             >
               <Text style={styles.saveButtonText}>{UI_TEXT.SAVE_BUTTON}</Text>
             </Pressable>
@@ -138,7 +138,7 @@ export function ContentView({
             onPress={onStartEditing}
             accessibilityLabel="Edit button"
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to activate"
           >
             <Text style={styles.editButtonText}>{UI_TEXT.EDIT_BUTTON}</Text>
           </Pressable>
@@ -168,7 +168,7 @@ export function ErrorDisplay({ errorMessage, onRetry }: ErrorDisplayProps) {
         onPress={onRetry}
         accessibilityLabel="Try Again button"
         accessibilityRole="button"
-        accessibilityHint="Activates this control"
+        accessibilityHint="Double tap to activate"
       >
         <Text style={styles.retryButtonText}>Try Again</Text>
       </Pressable>

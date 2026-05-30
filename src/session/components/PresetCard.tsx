@@ -2,6 +2,7 @@ import React from "react";
 import { View, Pressable } from "react-native";
 import { Text } from "../../components/primitives";
 import { useTheme } from "../../theme";
+import { buttonTap } from "../../utils/haptics";
 import type { SessionPreset } from "../types";
 
 interface PresetCardProps {
@@ -51,11 +52,14 @@ export const PresetCard: React.FC<PresetCardProps> = ({
         borderColor: theme.colors.border.light,
         opacity: pressed ? theme.opacity[80] : theme.opacity[100],
       })}
-      onPress={() => onSelect(preset)}
+      onPress={() => {
+        buttonTap();
+        onSelect(preset);
+      }}
       onLongPress={() => !preset.isDefault && onDelete(preset.id)}
-      accessibilityLabel="Interactive control"
+      accessibilityLabel={`${preset.name} preset, ${formatDuration(preset.duration)}`}
       accessibilityRole="button"
-      accessibilityHint="Activates this control"
+      accessibilityHint="Double tap to select this preset"
     >
       <View
         style={{

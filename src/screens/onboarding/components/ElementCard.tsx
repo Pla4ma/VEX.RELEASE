@@ -48,9 +48,9 @@ export function ElementCard({
         onPressIn={handlePressIn}
         onPressOut={handlePressOut}
         style={{ width: "100%" }}
-        accessibilityLabel="Interactive control"
+        accessibilityLabel="Element option"
         accessibilityRole="button"
-        accessibilityHint="Activates this control"
+        accessibilityHint="Double tap to activate"
       >
         <Animated.View
           style={[

@@ -79,7 +79,7 @@ export const CardStatusOverlay: React.FC<{
               onPress={onRetry}
               accessibilityLabel="Retry button"
               accessibilityRole="button"
-              accessibilityHint="Activates this control"
+              accessibilityHint="Double tap to activate"
             >
               Retry
             </Button>

@@ -71,9 +71,9 @@ export function PersonaCard({
     >
       <Pressable
         onPress={handlePress}
-        accessibilityLabel="Interactive control"
+        accessibilityLabel="Persona option"
         accessibilityRole="button"
-        accessibilityHint="Activates this control"
+        accessibilityHint="Double tap to activate"
       >
         <Box
           p="lg"

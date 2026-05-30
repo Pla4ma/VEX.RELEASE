@@ -62,9 +62,9 @@ export const CosmeticPreviewCard: React.FC<{
         onPress={onPress}
         onPressIn={handlePressIn}
         onPressOut={handlePressOut}
-        accessibilityLabel="Interactive control"
+        accessibilityLabel="Cosmetic preview"
         accessibilityRole="button"
-        accessibilityHint="Activates this control"
+        accessibilityHint="Double tap to activate"
       >
         <Card
           size="sm"

@@ -26,9 +26,9 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = ({
           <Pressable
             onPress={item.onPress}
             disabled={!item.onPress || index === items.length - 1}
-            accessibilityLabel="Interactive control"
+            accessibilityLabel="Breadcrumb"
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to activate"
           >
             <Text
               variant="caption"

@@ -29,9 +29,9 @@ export const SelectionToolbar: React.FC<SelectionToolbarProps> = ({
         </Text>
         <Pressable
           onPress={selectedCount === totalCount ? onClear : onSelectAll}
-          accessibilityLabel="Interactive control"
+          accessibilityLabel="Selection action"
           accessibilityRole="button"
-          accessibilityHint="Activates this control"
+          accessibilityHint="Double tap to activate"
         >
           <Text variant="caption" color="primary.500">
             {selectedCount === totalCount ? "Clear" : "Select All"}
@@ -50,9 +50,9 @@ export const SelectionToolbar: React.FC<SelectionToolbarProps> = ({
                   backgroundColor: theme.colors.error.DEFAULT + "20",
                 },
               ]}
-              accessibilityLabel="Interactive control"
+              accessibilityLabel="Selection action"
               accessibilityRole="button"
-              accessibilityHint="Activates this control"
+              accessibilityHint="Double tap to activate"
             >
               <Text
                 variant="caption"

@@ -4,10 +4,10 @@ import { createDebugger } from "../../utils/debug";
 
 const debug = createDebugger("session:orchestrator:lifecycle");
 
-import type { SessionOrchestrator } from "../SessionOrchestrator";
+import type { SessionOrchestratorBase } from "../SessionOrchestratorBase";
 
 export async function startSession(
-  orch: SessionOrchestrator,
+  orch: SessionOrchestratorBase,
   countdownSeconds: number = 0,
 ): Promise<SessionState> {
   if (!orch.session) throw new Error("No active session");
@@ -45,7 +45,7 @@ export async function startSession(
 }
 
 export async function pauseSession(
-  orch: SessionOrchestrator,
+  orch: SessionOrchestratorBase,
   reason?: string,
 ): Promise<SessionState> {
   if (!orch.session || !orch.timerEngine) throw new Error("No active session");
@@ -69,7 +69,7 @@ export async function pauseSession(
 }
 
 export async function resumeSession(
-  orch: SessionOrchestrator,
+  orch: SessionOrchestratorBase,
 ): Promise<SessionState> {
   if (!orch.session || !orch.timerEngine) throw new Error("No active session");
   if (orch.session.status !== "PAUSED") {
@@ -98,7 +98,7 @@ export async function resumeSession(
 }
 
 export async function backgroundSession(
-  orch: SessionOrchestrator,
+  orch: SessionOrchestratorBase,
 ): Promise<void> {
   if (!orch.session || !orch.timerEngine) return;
   orch.antiCheatEngine.recordBackgroundSwitch();
@@ -118,7 +118,7 @@ export async function backgroundSession(
 }
 
 export async function foregroundSession(
-  orch: SessionOrchestrator,
+  orch: SessionOrchestratorBase,
 ): Promise<void> {
   if (!orch.session || !orch.timerEngine) return;
   const fgAt = Date.now();

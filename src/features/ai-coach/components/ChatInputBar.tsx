@@ -39,7 +39,7 @@ export function ChatInputBar({
         disabled={disabled}
         accessibilityLabel="Send button"
         accessibilityRole="button"
-        accessibilityHint="Activates this control"
+        accessibilityHint="Double tap to activate"
       >
         <Text style={styles.sendButtonText}>Send</Text>
       </Pressable>

@@ -44,7 +44,7 @@ export const ChallengeHub: React.FC<ChallengeHubProps> = ({
       style={({ pressed }) => [pressed && { opacity: 0.9 }]}
       accessibilityLabel="onClaimReward?.(item.challengeId)} button"
       accessibilityRole="button"
-      accessibilityHint="Activates this control"
+      accessibilityHint="Double tap to select"
     >
       <ChallengeCard challenge={item} onClaim={() => onClaimReward?.(item.challengeId)} />
     </Pressable>
@@ -105,9 +105,9 @@ export const ChallengeHub: React.FC<ChallengeHubProps> = ({
               pressed && { opacity: 0.7 },
             ]}
             onPress={() => setActiveFilter(filter)}
-            accessibilityLabel="Interactive control"
+            accessibilityLabel="Challenge hub item"
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to select"
           >
             <Text style={[styles.filterText, activeFilter === filter && styles.filterTextActive]}>
               {filter}

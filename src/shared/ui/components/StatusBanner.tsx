@@ -148,7 +148,7 @@ export const StatusBanner: React.FC<StatusFeedbackProps> = ({
               onPress={onRetry}
               accessibilityLabel="Retry button"
               accessibilityRole="button"
-              accessibilityHint="Activates this control"
+              accessibilityHint="Double tap to activate"
             >
               Retry
             </Button>
@@ -157,9 +157,9 @@ export const StatusBanner: React.FC<StatusFeedbackProps> = ({
             <Button
               size="sm"
               onPress={onAction}
-              accessibilityLabel="Action button"
+              accessibilityLabel="Perform action"
               accessibilityRole="button"
-              accessibilityHint="Activates this control"
+              accessibilityHint="Double tap to activate"
             >
               {actionLabel || "Continue"}
             </Button>

@@ -44,9 +44,9 @@ export function BossPreviewCard({
   return (
     <Pressable
       onPress={onPress}
-      accessibilityLabel="Interactive control"
+      accessibilityLabel={`Boss ${bossName}, ${Math.round(healthPercent)} percent health`}
       accessibilityRole="button"
-      accessibilityHint="Activates this control"
+      accessibilityHint="Double tap to view boss details"
     >
       <Animated.View entering={FadeIn.duration(400).delay(200)}>
         <Box

@@ -1,4 +1,3 @@
-import type { SessionOrchestrator } from "./SessionOrchestrator";
 import { TimerEngine } from "./engines/TimerEngine";
 import { ScoringEngine } from "./engines/ScoringEngine";
 import { CompletionEngine } from "./engines/CompletionEngine";
@@ -10,6 +9,8 @@ import type {
   SessionConfig,
   FocusQualityMetrics,
   SessionSummary,
+  InterruptionType,
+  InterruptionSeverity,
 } from "./types";
 import { v4 as uuidv4 } from "../utils/uuid";
 import { createDebugger } from "../utils/debug";
@@ -32,7 +33,22 @@ import {
 
 const debug = createDebugger("session:orchestrator");
 
-export class SessionOrchestratorBase {
+export abstract class SessionOrchestratorBase {
+  abstract handleTimerTick(
+    elapsed: number,
+    remaining: number,
+    percentage: number,
+  ): void;
+  abstract handleTimerComplete(): Promise<void>;
+  abstract handleTimerWarning(sec: number): void;
+  abstract recordInterruption(
+    type: InterruptionType,
+    severity?: InterruptionSeverity,
+  ): void;
+  abstract completeLastInterruption(duration: number): void;
+  abstract handleAntiCheatViolation(warning: string): void;
+  abstract handleBreakComplete(): Promise<void>;
+
   session: SessionState | null = null;
   userId: string | null = null;
   timerEngine: TimerEngine | null = null;
@@ -64,7 +80,7 @@ export class SessionOrchestratorBase {
     this.antiCheatEngine = new AntiCheatEngine();
     this.eventEmitter = new SessionEventEmitter();
     this.focusMetrics = createEmptyFocusMetrics();
-    loadActiveSession(this as unknown as SessionOrchestrator);
+    loadActiveSession(this);
     debug.info("SessionOrchestrator initialized");
   }
 
@@ -80,10 +96,10 @@ export class SessionOrchestratorBase {
       await persistence.saveSessionState(this.session, this.repository);
   }
   finalizeSession(summary: SessionSummary): void {
-    doFinalizeSession(this as unknown as SessionOrchestrator, summary);
+    doFinalizeSession(this, summary);
   }
   finalizeAbandonedSession(): void {
-    doFinalizeAbandonedSession(this as unknown as SessionOrchestrator);
+    doFinalizeAbandonedSession(this);
   }
 
   setUserId(id: string): void {
@@ -93,7 +109,7 @@ export class SessionOrchestratorBase {
     debug.info("SessionOrchestrator user set: %s", id);
   }
   createSession(config: SessionConfig): Promise<SessionState> {
-    return createSession(this as unknown as SessionOrchestrator, config);
+    return createSession(this, config);
   }
   cancelStart(): void {
     if (this.countdownActive) {
@@ -103,18 +119,18 @@ export class SessionOrchestratorBase {
   }
 
   startSession(countdown = 0): Promise<SessionState> {
-    return startSession(this as unknown as SessionOrchestrator, countdown);
+    return startSession(this, countdown);
   }
   pauseSession(reason?: string): Promise<SessionState> {
-    return pauseSession(this as unknown as SessionOrchestrator, reason);
+    return pauseSession(this, reason);
   }
   resumeSession(): Promise<SessionState> {
-    return resumeSession(this as unknown as SessionOrchestrator);
+    return resumeSession(this);
   }
   backgroundSession(): Promise<void> {
-    return backgroundSession(this as unknown as SessionOrchestrator);
+    return backgroundSession(this);
   }
   foregroundSession(): Promise<void> {
-    return foregroundSession(this as unknown as SessionOrchestrator);
+    return foregroundSession(this);
   }
 }

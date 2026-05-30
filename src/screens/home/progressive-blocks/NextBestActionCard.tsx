@@ -40,9 +40,9 @@ export function NextBestActionCard({
       </Text>
       <Button
         onPress={onPress}
-        accessibilityLabel="Action button"
+        accessibilityLabel="Perform action"
         accessibilityRole="button"
-        accessibilityHint="Activates this control"
+        accessibilityHint="Double tap to activate"
       >
         {action.ctaLabel}
       </Button>

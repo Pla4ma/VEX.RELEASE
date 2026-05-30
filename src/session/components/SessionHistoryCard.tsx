@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, Pressable } from "react-native";
 import type { SessionHistoryEntry } from "../types";
 import { launchColors } from "@theme/tokens/launch-colors";
+import { buttonTap } from "../../utils/haptics";
 import {
   formatDuration,
   formatDate,
@@ -20,10 +21,13 @@ export const SessionHistoryCard: React.FC<SessionHistoryCardProps> = ({
   return (
     <Pressable
       style={({ pressed }) => [styles.historyItem, pressed && { opacity: 0.8 }]}
-      onPress={() => onSelect?.(entry)}
-      accessibilityLabel="Interactive control"
+      onPress={() => {
+        buttonTap();
+        onSelect?.(entry);
+      }}
+      accessibilityLabel={`Session: ${entry.config.category || "Focus Session"}, ${entry.summary?.finalScore ?? 0} points`}
       accessibilityRole="button"
-      accessibilityHint="Activates this control"
+      accessibilityHint="Double tap to view session details"
     >
       <View style={styles.itemLeft}>
         <View

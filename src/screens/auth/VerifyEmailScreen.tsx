@@ -135,7 +135,7 @@ export const VerifyEmailScreen: React.FC<Props> = ({ navigation, route }) => {
               style={{ marginTop: 32 }}
               accessibilityLabel="Continue to Login button"
               accessibilityRole="button"
-              accessibilityHint="Activates this control"
+              accessibilityHint="Double tap to activate"
             >
               Continue to Login
             </Button>
@@ -165,7 +165,7 @@ export const VerifyEmailScreen: React.FC<Props> = ({ navigation, route }) => {
                 style={{ marginTop: 8 }}
                 accessibilityLabel="Verify Email button"
                 accessibilityRole="button"
-                accessibilityHint="Activates this control"
+                accessibilityHint="Double tap to activate"
               >
                 Verify Email
               </Button>
@@ -179,7 +179,7 @@ export const VerifyEmailScreen: React.FC<Props> = ({ navigation, route }) => {
                     onPress={handleResend}
                     accessibilityLabel="Resend Code button"
                     accessibilityRole="button"
-                    accessibilityHint="Activates this control"
+                    accessibilityHint="Double tap to activate"
                   >
                     Resend Code
                   </Button>

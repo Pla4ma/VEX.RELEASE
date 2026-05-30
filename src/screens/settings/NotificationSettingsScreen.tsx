@@ -61,9 +61,9 @@ export const NotificationSettingsScreen: React.FC<Props> = ({
           <Pressable
             onPress={() => navigation.goBack()}
             style={{ marginRight: 12 }}
-            accessibilityLabel="Interactive control"
+            accessibilityLabel="Notification setting"
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to change setting"
           >
             <Icon
               name="arrow-left"
@@ -122,7 +122,7 @@ export const NotificationSettingsScreen: React.FC<Props> = ({
             }}
             accessibilityLabel="Send Test Notification button"
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to change setting"
           >
             <Box flexDirection="row" alignItems="center">
               <Icon name="bell" size={18} color={launchColors.hex_fff} />

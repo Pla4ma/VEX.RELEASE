@@ -4,6 +4,7 @@ import { Text } from "../../../components/primitives/Text";
 import { useTheme } from "../../../theme";
 import { Icon } from "../../../icons";
 import { quizPanelStyles } from "./QuizPanelStyles";
+import { cardSelection } from "../../../utils/haptics";
 
 interface MultipleChoiceOptionsProps {
   options: string[];
@@ -61,11 +62,11 @@ export const MultipleChoiceOptions: React.FC<MultipleChoiceOptionsProps> = ({
                   pressed && !isAnswered && !readOnly ? 0.8 : 1,
               },
             ]}
-            onPress={() => onSelect(option)}
+            onPress={() => { cardSelection(); onSelect(option); }}
             disabled={isAnswered || readOnly}
-            accessibilityLabel="Interactive control"
+            accessibilityLabel={`Answer option: ${option}${isSelected ? ", selected" : ""}`}
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to select this answer"
           >
             <Text
               style={[

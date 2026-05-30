@@ -106,7 +106,7 @@ export function AnalyticsDashboard({
             onPress={onExportPress}
             accessibilityRole="button"
             accessibilityLabel="Export button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to select"
           >
             <Text style={styles.iconButtonText}>EXP</Text>
           </Pressable>
@@ -115,7 +115,7 @@ export function AnalyticsDashboard({
             onPress={onSettingsPress}
             accessibilityRole="button"
             accessibilityLabel="Settings button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to select"
           >
             <Text style={styles.iconButtonText}>SET</Text>
           </Pressable>

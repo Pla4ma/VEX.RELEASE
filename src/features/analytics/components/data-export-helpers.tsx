@@ -50,7 +50,7 @@ export function CategorySelector({ selectedCategory, onSelect }: CategorySelecto
             onPress={() => onSelect(category.key)}
             accessibilityLabel={`${category.label} category button`}
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to select"
           >
             <Text style={styles.optionIcon}>{category.icon}</Text>
             <Text style={[styles.optionLabel, selectedCategory === category.key && styles.optionLabelSelected]}>
@@ -90,7 +90,7 @@ export function FormatSelector({ selectedFormat, onSelect }: FormatSelectorProps
             onPress={() => onSelect(format.key)}
             accessibilityLabel={`${format.label} format button`}
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to select"
           >
             <Text style={styles.formatIcon}>{format.icon}</Text>
             <Text style={[styles.formatLabel, selectedFormat === format.key && styles.formatLabelSelected]}>
@@ -136,7 +136,7 @@ export function DangerZoneSection() {
         }}
         accessibilityLabel="Delete All My Data button"
         accessibilityRole="button"
-        accessibilityHint="Activates this control"
+        accessibilityHint="Double tap to select"
       >
         <Text style={styles.dangerButtonText}>Delete All My Data</Text>
       </Pressable>
@@ -171,7 +171,7 @@ export function ConfirmExportModal({
               onPress={onClose}
               accessibilityLabel="Cancel button"
               accessibilityRole="button"
-              accessibilityHint="Activates this control"
+              accessibilityHint="Double tap to select"
             >
               <Text style={styles.modalButtonSecondaryText}>Cancel</Text>
             </Pressable>
@@ -180,7 +180,7 @@ export function ConfirmExportModal({
               onPress={onConfirm}
               accessibilityLabel="Confirm Export button"
               accessibilityRole="button"
-              accessibilityHint="Activates this control"
+              accessibilityHint="Double tap to select"
             >
               <Text style={styles.modalButtonPrimaryText}>Start Export</Text>
             </Pressable>

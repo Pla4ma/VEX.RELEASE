@@ -130,9 +130,9 @@ export function NotificationCard({
                 marginTop: 4,
                 paddingHorizontal: 0,
               }}
-              accessibilityLabel="Action button"
+              accessibilityLabel="Perform action"
               accessibilityRole="button"
-              accessibilityHint="Activates this control"
+              accessibilityHint="Double tap to activate"
             >
               {item.actionText}
             </Button>

@@ -71,9 +71,9 @@ export function Heatmap({
                       pressed && { opacity: 0.7 },
                     ]}
                     onPress={() => onCellPress?.(day, hour, value)}
-                    accessibilityLabel="Interactive control"
+                    accessibilityLabel="Heatmap cell"
                     accessibilityRole="button"
-                    accessibilityHint="Activates this control"
+                    accessibilityHint="Double tap to select"
                   >
                     {value > 0 && (
                       <View

@@ -89,9 +89,9 @@ export function ContextualPaywallBanner({
       >
         <Pressable
           onPress={handleOpenPaywall}
-          accessibilityLabel="Interactive control"
+          accessibilityLabel="Paywall action"
           accessibilityRole="button"
-          accessibilityHint="Activates this control"
+          accessibilityHint="Double tap to activate"
         >
           <View style={{ flexDirection: "row", gap: 12, alignItems: "center" }}>
             <Text fontSize={28}>{message.emoji}</Text>
@@ -132,7 +132,7 @@ export function ContextualPaywallBanner({
           style={{ position: "absolute", top: 8, right: 8, padding: 4 }}
           accessibilityLabel="✕ button"
           accessibilityRole="button"
-          accessibilityHint="Activates this control"
+          accessibilityHint="Double tap to activate"
         >
           <Text fontSize={12} color={theme.colors.text.tertiary}>
             ✕

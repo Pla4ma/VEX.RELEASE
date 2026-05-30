@@ -144,7 +144,7 @@ export function SessionBackgroundedState({
             isLoading={selectedAction === "resume"}
             accessibilityLabel="Resume Session → button"
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to activate"
           >
             Resume Session →
           </Button>
@@ -156,7 +156,7 @@ export function SessionBackgroundedState({
             disabled={selectedAction !== null}
             accessibilityLabel="Pause & Review button"
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to activate"
           >
             Pause & Review
           </Button>
@@ -170,7 +170,7 @@ export function SessionBackgroundedState({
               disabled={selectedAction !== null}
               accessibilityLabel="End Session button"
               accessibilityRole="button"
-              accessibilityHint="Activates this control"
+              accessibilityHint="Double tap to activate"
             >
               End Session
             </Button>
@@ -182,7 +182,7 @@ export function SessionBackgroundedState({
               disabled={selectedAction !== null}
               accessibilityLabel="Abandon button"
               accessibilityRole="button"
-              accessibilityHint="Activates this control"
+              accessibilityHint="Double tap to activate"
             >
               Abandon
             </Button>

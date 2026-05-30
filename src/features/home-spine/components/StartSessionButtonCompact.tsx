@@ -5,6 +5,7 @@ import { Text } from "../../../components/primitives/Text";
 import { useTheme } from "../../../theme";
 import type { StartSessionButtonProps } from "./StartSessionButton";
 import { useStartSessionButtonColors } from "./start-session-button-colors";
+import { sessionStart } from "../../../utils/haptics";
 
 export function StartSessionButtonCompact({
   onPress,
@@ -16,11 +17,11 @@ export function StartSessionButtonCompact({
   const colors = useStartSessionButtonColors(streakRiskLevel, hasActiveSession);
   return (
     <Pressable
-      onPress={onPress}
+      onPress={() => { sessionStart(); onPress?.(); }}
       disabled={isLoading}
-      accessibilityLabel="Interactive control"
+      accessibilityLabel={hasActiveSession ? "Resume focus session" : "Start focus session"}
       accessibilityRole="button"
-      accessibilityHint="Activates this control"
+      accessibilityHint="Double tap to begin focusing"
     >
       <Box
         flexDirection="row"

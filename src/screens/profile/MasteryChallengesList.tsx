@@ -138,7 +138,7 @@ export function MasteryChallengesList({
           onPress={onRefresh}
           accessibilityLabel="Refresh challenges"
           accessibilityRole="button"
-          accessibilityHint="Activates this control"
+          accessibilityHint="Double tap to activate"
         >
           <Icon
             name="refresh"

@@ -116,7 +116,7 @@ export function MasteryScreen(): JSX.Element {
               accessibilityLabel="Go back"
               accessibilityRole="button"
               style={{ padding: 8 }}
-              accessibilityHint="Activates this control"
+              accessibilityHint="Double tap to activate"
             >
               <Icon
                 name="close"

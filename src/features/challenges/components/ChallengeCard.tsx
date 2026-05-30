@@ -127,7 +127,7 @@ export function ChallengeCard({
               isDisabled={loading}
               accessibilityLabel="Claim Reward button"
               accessibilityRole="button"
-              accessibilityHint="Activates this control"
+              accessibilityHint="Double tap to select"
             >
               Claim Reward
             </Button>
@@ -141,9 +141,9 @@ export function ChallengeCard({
                 pressed && { opacity: 0.8 },
               ]}
               disabled={loading}
-              accessibilityLabel="Interactive control"
+              accessibilityLabel="Challenge card"
               accessibilityRole="button"
-              accessibilityHint="Activates this control"
+              accessibilityHint="Double tap to select"
             >
               <Badge variant="outline">
                 {challenge.freeRerollAvailable

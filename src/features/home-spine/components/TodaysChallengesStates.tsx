@@ -85,7 +85,7 @@ export function ChallengesErrorState({
           onPress={onRetry}
           accessibilityLabel="Try Again button"
           accessibilityRole="button"
-          accessibilityHint="Activates this control"
+          accessibilityHint="Double tap to activate"
         >
           Try Again
         </Button>

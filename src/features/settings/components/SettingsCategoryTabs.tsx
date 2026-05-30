@@ -38,7 +38,7 @@ export function SettingsCategoryTabs({
           onPress={() => onCategoryChange(category.key)}
           accessibilityLabel={`${category.label} category button`}
           accessibilityRole="button"
-          accessibilityHint="Activates this control"
+          accessibilityHint="Double tap to activate"
         >
           <Text style={styles.tabIcon}>{category.icon}</Text>
           <Text

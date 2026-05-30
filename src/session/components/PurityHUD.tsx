@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
 import { Pressable, View } from "react-native";
 import Animated, { FadeIn } from "react-native-reanimated";
+import { buttonTap } from "../../utils/haptics";
 
 import { Text } from "../../components/primitives/Text";
 import { useTheme } from "../../theme";
@@ -81,10 +82,10 @@ export const PurityHUD = React.memo(
             </Text>
             <Pressable
               disabled={!onMultiplierPress}
-              onPress={onMultiplierPress}
-              accessibilityLabel="x`} button"
+              onPress={() => { buttonTap(); onMultiplierPress?.(); }}
+              accessibilityLabel={`${formatMultiplier(streakMultiplier)}x multiplier`}
               accessibilityRole="button"
-              accessibilityHint="Activates this control"
+              accessibilityHint="Double tap to view multiplier details"
             >
               <View
                 style={[
@@ -131,10 +132,10 @@ export const PurityHUD = React.memo(
         </Animated.View>
         <Pressable
           disabled={!onMultiplierPress}
-          onPress={onMultiplierPress}
-          accessibilityLabel="x streak`} button"
+          onPress={() => { buttonTap(); onMultiplierPress?.(); }}
+          accessibilityLabel={`${formatMultiplier(streakMultiplier)}x streak multiplier`}
           accessibilityRole="button"
-          accessibilityHint="Activates this control"
+          accessibilityHint="Double tap to view streak multiplier details"
         >
           <View
             style={[

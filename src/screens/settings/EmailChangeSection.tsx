@@ -75,7 +75,7 @@ export const EmailChangeSection: React.FC<EmailChangeSectionProps> = ({
             }}
             accessibilityLabel="Change Email button"
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to change setting"
           >
             <Text
               style={{ color: launchColors.hex_fff, fontWeight: "600" }}

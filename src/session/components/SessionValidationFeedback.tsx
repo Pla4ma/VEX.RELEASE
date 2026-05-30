@@ -120,7 +120,7 @@ export function SessionValidationFeedback({
                   style={{ alignSelf: "flex-start", marginTop: 4 }}
                   accessibilityLabel="Fix this → button"
                   accessibilityRole="button"
-                  accessibilityHint="Activates this control"
+                  accessibilityHint="Double tap to activate"
                 >
                   Fix this →
                 </Button>
@@ -160,7 +160,7 @@ export function SessionValidationFeedback({
                     style={{ alignSelf: "flex-start", marginTop: 2 }}
                     accessibilityLabel="Dismiss button"
                     accessibilityRole="button"
-                    accessibilityHint="Activates this control"
+                    accessibilityHint="Double tap to activate"
                   >
                     Dismiss
                   </Button>

@@ -64,9 +64,9 @@ export const NotificationScheduleSection: React.FC = () => {
             paddingHorizontal: 16,
           }}
           onPress={handleQuietHoursToggle}
-          accessibilityLabel="Interactive control"
+          accessibilityLabel="Notification schedule"
           accessibilityRole="button"
-          accessibilityHint="Activates this control"
+          accessibilityHint="Double tap to change setting"
         >
           <Box
             width={40}
@@ -134,7 +134,7 @@ export const NotificationScheduleSection: React.FC = () => {
                 onPress={() => handleSetQuietHours("start")}
                 accessibilityLabel="Start button"
                 accessibilityRole="button"
-                accessibilityHint="Activates this control"
+                accessibilityHint="Double tap to change setting"
               >
                 <Box
                   p={12}
@@ -168,7 +168,7 @@ export const NotificationScheduleSection: React.FC = () => {
                 onPress={() => handleSetQuietHours("end")}
                 accessibilityLabel="End button"
                 accessibilityRole="button"
-                accessibilityHint="Activates this control"
+                accessibilityHint="Double tap to change setting"
               >
                 <Box
                   p={12}

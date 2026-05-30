@@ -165,7 +165,7 @@ export function FirstSessionSetup({
           disabled={isAdvancing}
           accessibilityLabel="Start focus session → button"
           accessibilityRole="button"
-          accessibilityHint="Activates this control"
+          accessibilityHint="Double tap to select"
         >
           {isAdvancing
             ? "Starting..."
@@ -182,7 +182,7 @@ export function FirstSessionSetup({
           onPress={onBack}
           accessibilityLabel="← Go back button"
           accessibilityRole="button"
-          accessibilityHint="Activates this control"
+          accessibilityHint="Double tap to select"
         >
           <Box alignItems="center" py="md">
             <Text variant="bodySmall" color="text.tertiary">

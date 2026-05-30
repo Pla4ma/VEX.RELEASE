@@ -25,9 +25,9 @@ export const AchievementCard: React.FC<{
     <Pressable
       onPress={onPress}
       style={({ pressed }) => [pressed && { opacity: 0.7 }]}
-      accessibilityLabel="Interactive control"
+      accessibilityLabel="Achievement category"
       accessibilityRole="button"
-      accessibilityHint="Activates this control"
+      accessibilityHint="Double tap to activate"
     >
       <Animated.View entering={FadeInUp.duration(200)}>
         <Box

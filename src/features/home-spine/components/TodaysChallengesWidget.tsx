@@ -54,9 +54,9 @@ export function TodaysChallengesWidget({
         {/* Header - Always visible */}
         <Pressable
           onPress={() => setIsExpanded((prev) => !prev)}
-          accessibilityLabel="Interactive control"
+          accessibilityLabel="Today's challenges"
           accessibilityRole="button"
-          accessibilityHint="Activates this control"
+          accessibilityHint="Double tap to view challenges"
         >
           <Box
             flexDirection="row"
@@ -138,7 +138,7 @@ export function TodaysChallengesWidget({
                     style={{ alignSelf: "center" }}
                     accessibilityLabel="View All Challenges › button"
                     accessibilityRole="button"
-                    accessibilityHint="Activates this control"
+                    accessibilityHint="Double tap to view challenges"
                   >
                     View All Challenges ›
                   </Button>

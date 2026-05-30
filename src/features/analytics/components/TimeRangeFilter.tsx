@@ -58,7 +58,7 @@ export function TimeRangeFilter({
             accessibilityRole="button"
             accessibilityLabel={range.label}
             accessibilityState={{ selected: selected === range.value }}
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to select"
           >
             <Text
               style={[

@@ -73,7 +73,7 @@ export function RecentSessionsList({
             onPress={onViewAll}
             accessibilityLabel="View all › button"
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to activate"
           >
             <Text variant="bodySmall" color="link">
               View all ›

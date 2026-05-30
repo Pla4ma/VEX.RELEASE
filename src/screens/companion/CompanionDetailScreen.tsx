@@ -82,7 +82,7 @@ export function CompanionDetailScreen(): JSX.Element {
           style={{ marginTop: theme.spacing[4] }}
           accessibilityLabel="Retry button"
           accessibilityRole="button"
-          accessibilityHint="Activates this control"
+          accessibilityHint="Double tap to activate"
         >
           Retry
         </Button>

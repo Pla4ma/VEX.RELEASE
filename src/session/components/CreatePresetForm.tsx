@@ -64,7 +64,7 @@ export const CreatePresetForm: React.FC<CreatePresetFormProps> = ({
               onPress={onClose}
               accessibilityLabel="Cancel button"
               accessibilityRole="button"
-              accessibilityHint="Activates this control"
+              accessibilityHint="Double tap to activate"
             >
               <Text style={styles.cancelButtonText}>Cancel</Text>
             </Pressable>
@@ -77,7 +77,7 @@ export const CreatePresetForm: React.FC<CreatePresetFormProps> = ({
               onPress={handleCreate}
               accessibilityLabel="Create button"
               accessibilityRole="button"
-              accessibilityHint="Activates this control"
+              accessibilityHint="Double tap to activate"
             >
               <Text style={styles.createButtonTextConfirm}>Create</Text>
             </Pressable>

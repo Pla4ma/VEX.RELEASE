@@ -67,9 +67,9 @@ export function DurationCard({
     >
       <Pressable
         onPress={onPress}
-        accessibilityLabel="Interactive control"
+        accessibilityLabel="Duration option"
         accessibilityRole="button"
-        accessibilityHint="Activates this control"
+        accessibilityHint="Double tap to select"
       >
         <Animated.View
           style={[

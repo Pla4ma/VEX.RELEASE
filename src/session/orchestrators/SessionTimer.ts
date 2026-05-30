@@ -4,10 +4,10 @@ import { pauseSession } from "./SessionLifecycle";
 
 const debug = createDebugger("session:orchestrator:timer");
 
-import type { SessionOrchestrator } from "../SessionOrchestrator";
+import type { SessionOrchestratorBase } from "../SessionOrchestratorBase";
 
 export function handleTimerTick(
-  orch: SessionOrchestrator,
+  orch: SessionOrchestratorBase,
   elapsed: number,
   remaining: number,
   percentage: number,
@@ -54,7 +54,7 @@ export function handleTimerTick(
 }
 
 export function handleTimerWarning(
-  orch: SessionOrchestrator,
+  orch: SessionOrchestratorBase,
   sec: number,
 ): void {
   if (!orch.session) return;
@@ -67,7 +67,7 @@ export function handleTimerWarning(
   );
 }
 
-export async function startBreak(orch: SessionOrchestrator): Promise<void> {
+export async function startBreak(orch: SessionOrchestratorBase): Promise<void> {
   if (!orch.session) return;
   const isLong =
     (orch.session.currentInterval || 0) %
@@ -113,7 +113,7 @@ export async function startBreak(orch: SessionOrchestrator): Promise<void> {
 }
 
 export function handleBreakTick(
-  orch: SessionOrchestrator,
+  orch: SessionOrchestratorBase,
   elapsed: number,
 ): void {
   if (!orch.session) return;
@@ -122,7 +122,7 @@ export function handleBreakTick(
 }
 
 export async function handleBreakComplete(
-  orch: SessionOrchestrator,
+  orch: SessionOrchestratorBase,
 ): Promise<void> {
   if (!orch.session) return;
   const prev = orch.session.phase;
@@ -138,7 +138,7 @@ export async function handleBreakComplete(
   debug.info("Break complete: %s", orch.session.id);
 }
 
-export function endBreak(orch: SessionOrchestrator): void {
+export function endBreak(orch: SessionOrchestratorBase): void {
   if (!orch.session) return;
   const prev = orch.session.phase;
   orch.session.phase = "FOCUS";
@@ -150,7 +150,7 @@ export function endBreak(orch: SessionOrchestrator): void {
   debug.info("Break ended: %s", orch.session.id);
 }
 
-function restartFocusTimer(orch: SessionOrchestrator): void {
+function restartFocusTimer(orch: SessionOrchestratorBase): void {
   orch.timerEngine = new TimerEngine(
     orch.session!.id,
     Math.floor(orch.session!.config.duration * 1000),

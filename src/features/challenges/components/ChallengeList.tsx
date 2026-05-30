@@ -86,7 +86,7 @@ export function ChallengeList({
               style={styles.retryButton}
               accessibilityLabel="Retry button"
               accessibilityRole="button"
-              accessibilityHint="Activates this control"
+              accessibilityHint="Double tap to select"
             >
               Retry
             </Button>
@@ -118,7 +118,7 @@ export function ChallengeList({
               style={styles.retryButton}
               accessibilityLabel="Show All button"
               accessibilityRole="button"
-              accessibilityHint="Activates this control"
+              accessibilityHint="Double tap to select"
             >
               Show All
             </Button>

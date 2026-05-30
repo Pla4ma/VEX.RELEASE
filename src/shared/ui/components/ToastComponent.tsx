@@ -141,9 +141,9 @@ export const ToastComponent: React.FC<ToastProps> = ({ toast, onDismiss }) => {
                 },
                 pressed && { opacity: 0.8 },
               ]}
-              accessibilityLabel="Interactive control"
+              accessibilityLabel="Dismiss notification"
               accessibilityRole="button"
-              accessibilityHint="Activates this control"
+              accessibilityHint="Double tap to activate"
             >
               <Text variant="caption" color="text.inverse">
                 {toastAction.label}

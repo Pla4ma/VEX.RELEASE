@@ -5,6 +5,7 @@ import { useTheme } from "../../../theme";
 import { getElementThemeColors } from "./companion-evolution-types";
 import type { EvolutionPhase, CompanionEvolutionCeremonyProps } from "./companion-evolution-types";
 import { useCeremonyAnimation } from "./companion-evolution-hooks";
+import { companionEvolution } from "../../../utils/haptics";
 import {
   GlowLayer,
   FlashLayer,
@@ -32,16 +33,19 @@ export const CompanionEvolutionCeremony: React.FC<
   }, [runCeremony, setCeremonyPhase]);
 
   const handleTap = () => {
-    if (ceremonyPhase === "complete") onComplete();
+    if (ceremonyPhase === "complete") {
+      companionEvolution();
+      onComplete();
+    }
   };
 
   return (
     <Pressable
       onPress={handleTap}
       style={{ flex: 1 }}
-      accessibilityLabel="Interactive control"
+      accessibilityLabel="Dismiss companion evolution ceremony"
       accessibilityRole="button"
-      accessibilityHint="Activates this control"
+      accessibilityHint="Double tap to continue"
     >
       <Box
         flex={1}

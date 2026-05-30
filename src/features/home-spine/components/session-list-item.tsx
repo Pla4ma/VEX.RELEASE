@@ -5,6 +5,7 @@ import Animated, { FadeIn } from "react-native-reanimated";
 import { Box } from "../../../components/primitives/Box";
 import { Text } from "../../../components/primitives/Text";
 import { useTheme } from "../../../theme";
+import { buttonTap } from "../../../utils/haptics";
 import {
   type SessionListItem,
   formatDuration,
@@ -84,10 +85,10 @@ export function SessionRow({
   const hasInterruptions = session.interruptions > 0;
   return (
     <Pressable
-      onPress={onPress}
-      accessibilityLabel="Interactive control"
+      onPress={() => { buttonTap(); onPress?.(); }}
+      accessibilityLabel={`${formatDuration(session.duration)} session, ${session.qualityGrade} grade`}
       accessibilityRole="button"
-      accessibilityHint="Activates this control"
+      accessibilityHint="Double tap to view session details"
     >
       <Box flexDirection="row" alignItems="center" py="md" px="lg" gap="md">
         <Box width={4} height={48} borderRadius="full" bg={accentColor} />

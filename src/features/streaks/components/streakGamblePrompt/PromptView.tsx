@@ -153,7 +153,7 @@ export const PromptView: React.FC<PromptViewProps> = ({
             onPress={onDismiss}
             accessibilityLabel="I'll risk it (don't remind me) button"
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to activate"
           >
             <Text color={theme.colors.text.tertiary}>
               I'll risk it (don't remind me)

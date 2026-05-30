@@ -8,6 +8,7 @@ import React from "react";
 import { Pressable, type ViewStyle, type PressableProps } from "react-native";
 import { Text } from "./primitives";
 import { createSheet } from "@/shared/ui/create-sheet";
+import { buttonTap } from "../utils/haptics";
 import { launchColors } from "@theme/tokens/launch-colors";
 
 export interface IconButtonProps extends PressableProps {
@@ -54,10 +55,11 @@ export const IconButton: React.FC<IconButtonProps> = ({
   return (
     <Pressable
       style={({ pressed }) => [...buttonStyle, pressed && { opacity: 0.7 }]}
+      onPress={(e) => { buttonTap(); props.onPress?.(e); }}
       {...props}
-      accessibilityLabel="Interactive control"
+      accessibilityLabel={props.accessibilityLabel ?? `${icon} button`}
       accessibilityRole="button"
-      accessibilityHint="Activates this control"
+      accessibilityHint={props.accessibilityHint ?? "Double tap to activate"}
     >
       <Text style={[styles.icon, { fontSize: iconSize }]}>{icon}</Text>
     </Pressable>

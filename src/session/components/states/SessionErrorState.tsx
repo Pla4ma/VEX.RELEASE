@@ -55,7 +55,7 @@ export const SessionErrorState: React.FC<SessionErrorStateProps> = ({
             onPress={onRetry}
             accessibilityLabel="🔄 Try Again button"
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to activate"
           >
             <Text style={styles.primaryButtonText}>🔄 Try Again</Text>
           </Pressable>
@@ -70,7 +70,7 @@ export const SessionErrorState: React.FC<SessionErrorStateProps> = ({
             onPress={onGoBack}
             accessibilityLabel="← Go Back button"
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to activate"
           >
             <Text style={styles.secondaryButtonText}>← Go Back</Text>
           </Pressable>
@@ -85,7 +85,7 @@ export const SessionErrorState: React.FC<SessionErrorStateProps> = ({
             onPress={onContactSupport}
             accessibilityLabel="Contact Support button"
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to activate"
           >
             <Text style={styles.supportButtonText}>Contact Support</Text>
           </Pressable>

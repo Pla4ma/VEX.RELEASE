@@ -134,7 +134,7 @@ export function CoachInterventionBanner({
               hitSlop={{ top: 10, right: 10, bottom: 10, left: 10 }}
               accessibilityLabel="Dismiss intervention"
               accessibilityRole="button"
-              accessibilityHint="Activates this control"
+              accessibilityHint="Double tap to activate"
             >
               <Text fontSize={18} color="secondary">
                 ×
@@ -161,7 +161,7 @@ export function CoachInterventionBanner({
           }}
           accessibilityLabel={intervention.actionLabel}
           accessibilityRole="button"
-          accessibilityHint="Activates this control"
+          accessibilityHint="Double tap to activate"
         >
           <Text
             style={{

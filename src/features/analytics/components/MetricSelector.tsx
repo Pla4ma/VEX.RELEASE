@@ -76,9 +76,9 @@ export function MetricSelector({
         ]}
         onPress={() => !disabled && setModalVisible(true)}
         disabled={disabled}
-        accessibilityLabel="Interactive control"
+        accessibilityLabel="Metric selector"
         accessibilityRole="button"
-        accessibilityHint="Activates this control"
+        accessibilityHint="Double tap to select"
       >
         <View style={styles.selectedContainer}>
           {selected.length === 0 ? (
@@ -108,9 +108,9 @@ export function MetricSelector({
         <Pressable
           style={styles.overlay}
           onPress={() => setModalVisible(false)}
-          accessibilityLabel="Interactive control"
+          accessibilityLabel="Metric selector"
           accessibilityRole="button"
-          accessibilityHint="Activates this control"
+          accessibilityHint="Double tap to select"
         >
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
@@ -120,7 +120,7 @@ export function MetricSelector({
                 style={({ pressed }) => [pressed && { opacity: 0.8 }]}
                 accessibilityLabel="Done button"
                 accessibilityRole="button"
-                accessibilityHint="Activates this control"
+                accessibilityHint="Double tap to select"
               >
                 <Text style={styles.closeButton}>Done</Text>
               </Pressable>
@@ -144,9 +144,9 @@ export function MetricSelector({
                         ]}
                         onPress={() => toggleMetric(metric.value)}
                         disabled={disabled_metric}
-                        accessibilityLabel="Interactive control"
+                        accessibilityLabel="Metric selector"
                         accessibilityRole="button"
-                        accessibilityHint="Activates this control"
+                        accessibilityHint="Double tap to select"
                       >
                         <View
                           style={[

@@ -53,9 +53,9 @@ export const CoachToneSelector: React.FC<CoachToneSelectorProps> = ({
                 paddingVertical: 16,
                 paddingHorizontal: 16,
               }}
-              accessibilityLabel="Interactive control"
+              accessibilityLabel="Coach tone option"
               accessibilityRole="button"
-              accessibilityHint="Activates this control"
+              accessibilityHint="Double tap to change setting"
             >
               <Box
                 width={40}

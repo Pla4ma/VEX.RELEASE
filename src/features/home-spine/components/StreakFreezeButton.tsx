@@ -20,6 +20,7 @@ import Animated, {
 import { Box } from "../../../components/primitives/Box";
 import { Text } from "../../../components/primitives/Text";
 import { useTheme } from "../../../theme";
+import { buttonTap } from "../../../utils/haptics";
 
 export interface StreakFreezeButtonProps {
   /** Whether freeze is available today */
@@ -91,11 +92,11 @@ export function StreakFreezeButton({
     return (
       <Animated.View entering={FadeIn} style={pulseStyle}>
         <Pressable
-          onPress={onFreeze}
+          onPress={() => { buttonTap(); onFreeze(); }}
           disabled={isFreezing}
-          accessibilityLabel="🧊 button"
+          accessibilityLabel="Freeze streak for today"
           accessibilityRole="button"
-          accessibilityHint="Activates this control"
+          accessibilityHint="Double tap to freeze your streak"
         >
           <Box
             flexDirection="row"
@@ -126,11 +127,11 @@ export function StreakFreezeButton({
   return (
     <Animated.View entering={FadeIn} style={pulseStyle}>
       <Pressable
-        onPress={onFreeze}
+        onPress={() => { buttonTap(); onFreeze(); }}
         disabled={isFreezing}
-        accessibilityLabel="Interactive control"
+        accessibilityLabel="Freeze your streak for today"
         accessibilityRole="button"
-        accessibilityHint="Activates this control"
+        accessibilityHint="Double tap to freeze your streak"
       >
         <Box
           mx="lg"

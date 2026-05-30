@@ -35,7 +35,7 @@ export function SliderSetting({
           onPress={() => onChange(Math.max(min, value - 0.1))}
           accessibilityLabel="- button"
           accessibilityRole="button"
-          accessibilityHint="Activates this control"
+          accessibilityHint="Double tap to activate"
         >
           <Text style={styles.sliderButtonText}>-</Text>
         </Pressable>
@@ -48,7 +48,7 @@ export function SliderSetting({
           onPress={() => onChange(Math.min(max, value + 0.1))}
           accessibilityLabel="+ button"
           accessibilityRole="button"
-          accessibilityHint="Activates this control"
+          accessibilityHint="Double tap to activate"
         >
           <Text style={styles.sliderButtonText}>+</Text>
         </Pressable>

@@ -70,9 +70,9 @@ export const AppearanceSettingsScreen: React.FC<Props> = ({ navigation }) => {
           <Pressable
             onPress={() => navigation.goBack()}
             style={{ marginRight: 12 }}
-            accessibilityLabel="Interactive control"
+            accessibilityLabel="Appearance setting"
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to change setting"
           >
             <Icon
               name="arrow-left"
@@ -126,7 +126,7 @@ export const AppearanceSettingsScreen: React.FC<Props> = ({ navigation }) => {
             }}
             accessibilityLabel="Reset to Defaults button"
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to change setting"
           >
             <Text
               style={{

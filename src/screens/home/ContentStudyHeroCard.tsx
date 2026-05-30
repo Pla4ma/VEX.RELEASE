@@ -85,7 +85,7 @@ export function ContentStudyHeroCard({
           onPress={onRetry}
           accessibilityLabel="Retry button"
           accessibilityRole="button"
-          accessibilityHint="Activates this control"
+          accessibilityHint="Double tap to activate"
         >
           Retry
         </Button>
@@ -145,7 +145,7 @@ export function ContentStudyHeroCard({
           onPress={onContinue}
           accessibilityLabel={`${copy.homeCta} button`}
           accessibilityRole="button"
-          accessibilityHint="Activates this control"
+          accessibilityHint="Double tap to activate"
         >{`${copy.homeCta}: ${activePlan.title}`}</Button>
       </View>
     );
@@ -180,7 +180,7 @@ export function ContentStudyHeroCard({
           onPress={onStart}
           accessibilityLabel="Get Started button"
           accessibilityRole="button"
-          accessibilityHint="Activates this control"
+          accessibilityHint="Double tap to activate"
         >
           {copy.emptyCta}
         </Button>
@@ -189,7 +189,7 @@ export function ContentStudyHeroCard({
           onPress={onSeeHowItWorks}
           accessibilityLabel="See How It Works button"
           accessibilityRole="button"
-          accessibilityHint="Activates this control"
+          accessibilityHint="Double tap to activate"
         >
           See How It Works
         </Button>

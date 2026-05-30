@@ -85,9 +85,9 @@ function SettingRow({ item, theme }: { item: SettingItem; theme: Theme }) {
       }}
       onPress={item.type === "toggle" ? undefined : item.onPress}
       disabled={item.type === "toggle"}
-      accessibilityLabel="Interactive control"
+      accessibilityLabel="Settings section"
       accessibilityRole="button"
-      accessibilityHint="Activates this control"
+      accessibilityHint="Double tap to change setting"
     >
       <Box
         width={36}

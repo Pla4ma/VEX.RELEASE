@@ -1,6 +1,7 @@
 import React from "react";
 import { Pressable } from "react-native";
 import Animated, { FadeIn } from "react-native-reanimated";
+import { buttonTap } from "../../utils/haptics";
 import { Box } from "../../components/primitives/Box";
 import { Text } from "../../components/primitives/Text";
 import { useTheme } from "../../theme";
@@ -35,10 +36,13 @@ export function BossDamagePreview({
   const isNearDeath = currentHealthPercent <= 20 && !willDefeat;
   return (
     <Pressable
-      onPress={onPress}
-      accessibilityLabel="Interactive control"
+      onPress={() => {
+        buttonTap();
+        onPress?.();
+      }}
+      accessibilityLabel={`Boss ${bossName}, ${Math.round(currentHealthPercent)} percent health`}
       accessibilityRole="button"
-      accessibilityHint="Activates this control"
+      accessibilityHint="Double tap to view boss details"
     >
       <Animated.View entering={FadeIn.duration(400)}>
         <Box

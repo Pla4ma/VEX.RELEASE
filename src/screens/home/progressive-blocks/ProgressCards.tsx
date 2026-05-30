@@ -43,9 +43,9 @@ export function ProgressPreviewCard({
       <Button
         variant="outline"
         onPress={onPress}
-        accessibilityLabel="Action button"
+        accessibilityLabel="Perform action"
         accessibilityRole="button"
-        accessibilityHint="Activates this control"
+        accessibilityHint="Double tap to activate"
       >
         {ctaLabel}
       </Button>
@@ -118,9 +118,9 @@ export function ReturnReasonCard({
       >
         <Button
           onPress={onPress}
-          accessibilityLabel="Action button"
+          accessibilityLabel="Perform action"
           accessibilityRole="button"
-          accessibilityHint="Activates this control"
+          accessibilityHint="Double tap to activate"
         >
           {ctaLabel}
         </Button>
@@ -130,7 +130,7 @@ export function ReturnReasonCard({
             onPress={onDismiss}
             accessibilityLabel="Dismiss button"
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to activate"
           >
             Dismiss
           </Button>

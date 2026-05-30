@@ -106,7 +106,7 @@ export function OnboardingResumePrompt({
                 isLoading={selectedAction === "resume"}
                 accessibilityLabel="Continue Setup → button"
                 accessibilityRole="button"
-                accessibilityHint="Activates this control"
+                accessibilityHint="Double tap to select"
               >
                 Continue Setup →
               </Button>
@@ -118,7 +118,7 @@ export function OnboardingResumePrompt({
                 isLoading={selectedAction === "restart"}
                 accessibilityLabel="Start Fresh button"
                 accessibilityRole="button"
-                accessibilityHint="Activates this control"
+                accessibilityHint="Double tap to select"
               >
                 Start Fresh
               </Button>
@@ -129,7 +129,7 @@ export function OnboardingResumePrompt({
                 disabled={selectedAction !== null}
                 accessibilityLabel="Skip for Now button"
                 accessibilityRole="button"
-                accessibilityHint="Activates this control"
+                accessibilityHint="Double tap to select"
               >
                 Skip for Now
               </Button>

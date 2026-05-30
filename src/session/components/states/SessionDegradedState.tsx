@@ -71,7 +71,7 @@ export const SessionDegradedState: React.FC<SessionDegradedStateProps> = ({
             onPress={onRetryFullMode}
             accessibilityLabel="🔄 Retry Full Mode button"
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to activate"
           >
             <Text style={styles.primaryButtonText}>🔄 Retry Full Mode</Text>
           </Pressable>
@@ -86,7 +86,7 @@ export const SessionDegradedState: React.FC<SessionDegradedStateProps> = ({
             onPress={onContinueAnyway}
             accessibilityLabel="Continue in Limited Mode button"
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to activate"
           >
             <Text style={styles.secondaryButtonText}>
               Continue in Limited Mode
@@ -103,7 +103,7 @@ export const SessionDegradedState: React.FC<SessionDegradedStateProps> = ({
             onPress={onEndSession}
             accessibilityLabel="End Session button"
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to activate"
           >
             <Text style={styles.endButtonText}>End Session</Text>
           </Pressable>

@@ -7,6 +7,7 @@ import React from "react";
 import { View, Text, Pressable } from "react-native";
 import { createSheet } from "@/shared/ui/create-sheet";
 import { launchColors } from "@theme/tokens/launch-colors";
+import { toggleSwitch } from "../../../utils/haptics";
 
 interface ToggleSettingProps {
   label: string;
@@ -28,15 +29,15 @@ export function ToggleSetting({
         {description && <Text style={styles.description}>{description}</Text>}
       </View>
       <Pressable
-        onPress={() => onToggle(!value)}
+        onPress={() => { toggleSwitch(); onToggle(!value); }}
         style={({ pressed }) => [
           styles.toggle,
           value ? styles.toggleActive : styles.toggleInactive,
           pressed && { opacity: 0.8 },
         ]}
-        accessibilityLabel="Interactive control"
+        accessibilityLabel={`${label}, ${value ? "on" : "off"}`}
         accessibilityRole="button"
-        accessibilityHint="Activates this control"
+        accessibilityHint={`Double tap to turn ${value ? "off" : "on"}`}
       >
         <View
           style={[

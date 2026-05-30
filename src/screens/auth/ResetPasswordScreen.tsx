@@ -120,7 +120,7 @@ export const ResetPasswordScreen: React.FC<Props> = ({ navigation, route }) => {
               style={{ marginTop: 32 }}
               accessibilityLabel="Continue to Login button"
               accessibilityRole="button"
-              accessibilityHint="Activates this control"
+              accessibilityHint="Double tap to activate"
             >
               Continue to Login
             </Button>
@@ -159,7 +159,7 @@ export const ResetPasswordScreen: React.FC<Props> = ({ navigation, route }) => {
                 style={{ marginTop: 8 }}
                 accessibilityLabel="Reset Password button"
                 accessibilityRole="button"
-                accessibilityHint="Activates this control"
+                accessibilityHint="Double tap to activate"
               >
                 Reset Password
               </Button>

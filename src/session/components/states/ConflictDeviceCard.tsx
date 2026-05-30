@@ -106,7 +106,7 @@ export function ConflictDeviceCard({
           style={{ marginTop: 12 }}
           accessibilityLabel={accessibilityLabel}
           accessibilityRole="button"
-          accessibilityHint="Activates this control"
+          accessibilityHint="Double tap to activate"
         >
           {buttonText}
         </Button>

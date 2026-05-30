@@ -14,6 +14,7 @@ import Animated, { FadeInUp } from "react-native-reanimated";
 import { Box } from "../../../components/primitives/Box";
 import { Text } from "../../../components/primitives/Text";
 import { useTheme } from "../../../theme";
+import { sessionStart } from "../../../utils/haptics";
 import { ComebackQuestCardSkeleton } from "./ComebackQuestCardSkeleton";
 
 export type { ComebackQuestCardSkeleton } from "./ComebackQuestCardSkeleton";
@@ -59,9 +60,9 @@ export function ComebackQuestCard({
     <Animated.View entering={FadeInUp.duration(400).delay(200)}>
       <Pressable
         onPress={onPress}
-        accessibilityLabel="Interactive control"
+        accessibilityLabel="Comeback quest card"
         accessibilityRole="button"
-        accessibilityHint="Activates this control"
+        accessibilityHint="Double tap to start comeback session"
       >
         <Box
           mx="lg"

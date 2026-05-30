@@ -110,7 +110,7 @@ export const AchievementsScreen: React.FC = () => {
               style={({ pressed }) => [pressed && { opacity: 0.8 }]}
               accessibilityLabel="Close button"
               accessibilityRole="button"
-              accessibilityHint="Activates this control"
+              accessibilityHint="Double tap to activate"
             >
               <Text variant="body" color={theme.colors.text.secondary}>Close</Text>
             </Pressable>

@@ -73,9 +73,9 @@ export function SessionReflectionSheet({
                     ? theme.colors.primary[500]
                     : theme.colors.border.light,
               }}
-              accessibilityLabel="Interactive control"
+              accessibilityLabel="Session reflection"
               accessibilityRole="button"
-              accessibilityHint="Activates this control"
+              accessibilityHint="Double tap to activate"
             >
               <Text variant="h4">{mood.emoji}</Text>
             </Pressable>
@@ -109,7 +109,7 @@ export function SessionReflectionSheet({
             onPress={onFinish}
             accessibilityLabel="Finish button"
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to activate"
           >
             Finish
           </Button>
@@ -120,7 +120,7 @@ export function SessionReflectionSheet({
             onPress={onSkip}
             accessibilityLabel="Skip button"
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to activate"
           >
             Skip
           </Button>

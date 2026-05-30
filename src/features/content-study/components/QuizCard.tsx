@@ -123,7 +123,7 @@ export const QuizCard: React.FC<QuizCardProps> = ({
           onPress={() => onReveal(quiz.id)}
           accessibilityLabel="Show Answer button"
           accessibilityRole="button"
-          accessibilityHint="Activates this control"
+          accessibilityHint="Double tap to activate"
         >
           <Text
             style={[

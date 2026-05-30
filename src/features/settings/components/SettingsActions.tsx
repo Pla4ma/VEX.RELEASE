@@ -24,7 +24,7 @@ export function SettingsActions({
         disabled={settingsState === "syncing"}
         accessibilityLabel="Sync button"
         accessibilityRole="button"
-        accessibilityHint="Activates this control"
+        accessibilityHint="Double tap to activate"
       >
         <Text style={styles.actionButtonText}>
           {settingsState === "syncing" ? "Syncing..." : "Sync Now"}
@@ -40,7 +40,7 @@ export function SettingsActions({
         disabled={settingsState === "saving"}
         accessibilityLabel="Reset to Defaults button"
         accessibilityRole="button"
-        accessibilityHint="Activates this control"
+        accessibilityHint="Double tap to activate"
       >
         <Text style={[styles.actionButtonText, styles.dangerButtonText]}>
           Reset to Defaults

@@ -42,9 +42,9 @@ export const CategoryTabs: React.FC<{
           return (
             <Pressable
               onPress={() => onSelect(item.id)}
-              accessibilityLabel="Interactive control"
+              accessibilityLabel="Achievement filter"
               accessibilityRole="button"
-              accessibilityHint="Activates this control"
+              accessibilityHint="Double tap to activate"
             >
               <Box
                 px={4}
@@ -105,9 +105,9 @@ export const FilterSortBar: React.FC<{
           <Pressable
             key={f}
             onPress={() => onFilterChange(f)}
-            accessibilityLabel="Interactive control"
+            accessibilityLabel="Achievement filter"
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to activate"
           >
             <Box
               px={3}
@@ -151,7 +151,7 @@ export const FilterSortBar: React.FC<{
           }}
           accessibilityLabel="↕️ button"
           accessibilityRole="button"
-          accessibilityHint="Activates this control"
+          accessibilityHint="Double tap to activate"
         >
           <Box flexDirection="row" alignItems="center" gap={1}>
             <Text variant="caption" color={theme.colors.primary[500]}>

@@ -137,7 +137,7 @@ export function SessionConflictState({
                 disabled={isResolving}
                 accessibilityLabel="Try to Merge Both Versions button"
                 accessibilityRole="button"
-                accessibilityHint="Activates this control"
+                accessibilityHint="Double tap to activate"
               >
                 Try to Merge Both Versions
               </Button>

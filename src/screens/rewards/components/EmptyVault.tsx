@@ -49,7 +49,7 @@ export function EmptyVault({ onGetChest }: EmptyVaultProps): JSX.Element {
           onPress={onGetChest}
           accessibilityLabel="Start a Session button"
           accessibilityRole="button"
-          accessibilityHint="Activates this control"
+          accessibilityHint="Double tap to activate"
         >
           Start a Session
         </Button>

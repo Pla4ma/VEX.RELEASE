@@ -5,6 +5,7 @@ import { useTheme } from "../../../theme/ThemeContext";
 import { Text, ProgressBar } from "../../../components";
 import type { PersonalQuest } from "../PersonalQuestGenerator";
 import { getQuestIcon, formatTimeRemaining } from "./questCardHelpers";
+import { buttonTap } from "../../../utils/haptics";
 
 interface DailyQuestCardProps {
   quest: PersonalQuest | null;
@@ -44,11 +45,11 @@ export function DailyQuestCard({
       }}
     >
       <Pressable
-        onPress={onPress}
+        onPress={() => { buttonTap(); onPress?.(); }}
         disabled={!onPress}
-        accessibilityLabel="Interactive control"
+        accessibilityLabel={`Daily quest: ${quest?.title ?? "Loading"}`}
         accessibilityRole="button"
-        accessibilityHint="Activates this control"
+        accessibilityHint="Double tap to view quest details"
       >
         <View style={{ padding: theme.spacing[4] }}>
           {/* Header */}

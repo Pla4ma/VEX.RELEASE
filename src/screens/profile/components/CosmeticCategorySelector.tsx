@@ -45,9 +45,9 @@ export const CosmeticCategoryHeader: React.FC<{
       </Box>
       <Pressable
         onPress={onClose}
-        accessibilityLabel="Interactive control"
+        accessibilityLabel="Cosmetic category"
         accessibilityRole="button"
-        accessibilityHint="Activates this control"
+        accessibilityHint="Double tap to activate"
       >
         <Box
           width={36}
@@ -106,9 +106,9 @@ export const CosmeticEquipBar: React.FC<{
               ? 0.5
               : 1,
         }}
-        accessibilityLabel="Interactive control"
+        accessibilityLabel="Cosmetic category"
         accessibilityRole="button"
-        accessibilityHint="Activates this control"
+        accessibilityHint="Double tap to activate"
       >
         {isEquipping ? (
           <Animated.View

@@ -7,6 +7,7 @@ import { Button } from "./primitives/Button";
 import { Text } from "./primitives/Text";
 import { useTheme } from "../theme";
 import { UnlockRequirementRow } from "./UnlockRequirementRow";
+import { buttonTap } from "../utils/haptics";
 import { useDisclosureAnalytics } from "../features/liveops-config";
 import type {
   FeatureKey,
@@ -77,6 +78,7 @@ export function LockedFeatureScreen(
           />
           <Button
             onPress={() => {
+              buttonTap();
               analytics.trackTeaserCtaPressed(
                 props.feature,
                 props.ctaLabel,
@@ -84,9 +86,9 @@ export function LockedFeatureScreen(
               );
               props.onPress();
             }}
-            accessibilityLabel="Action button"
+            accessibilityLabel={props.ctaLabel}
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to learn more"
           >
             {props.ctaLabel}
           </Button>

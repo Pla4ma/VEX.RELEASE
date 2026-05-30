@@ -19,9 +19,9 @@ export function WeeklyReportCompact({
   return (
     <Pressable
       onPress={onPress}
-      accessibilityLabel="Interactive control"
+      accessibilityLabel="Weekly report"
       accessibilityRole="button"
-      accessibilityHint="Activates this control"
+      accessibilityHint="Double tap to select"
     >
       <Box
         flexDirection="row"

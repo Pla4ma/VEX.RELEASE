@@ -124,7 +124,7 @@ export function DashboardContent({
                   <Pressable
                     accessibilityLabel="View all insights"
                     accessibilityRole="button"
-                    accessibilityHint="Activates this control"
+                    accessibilityHint="Double tap to select"
                     style={({ pressed }) => [pressed && { opacity: 0.8 }]}
                   >
                     <Text style={styles.seeAllText}>See All</Text>

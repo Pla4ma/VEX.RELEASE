@@ -78,7 +78,7 @@ export function RestoreStreakCard({
         style={{ marginTop: theme.spacing[2] }}
         accessibilityLabel="gems button"
         accessibilityRole="button"
-        accessibilityHint="Activates this control"
+        accessibilityHint="Double tap to activate"
       >
         {canAfford ? "💎 Restore Streak" : `Need ${cost} gems`}
       </Button>

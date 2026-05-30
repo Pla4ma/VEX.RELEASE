@@ -6,6 +6,7 @@ import { Icon } from "../../../icons";
 import type { StudyTask } from "../types";
 import { TASK_PRIORITY_CONFIG } from "../constants";
 import { styles } from "./study-task-list-styles";
+import { buttonTap, stepCompleted } from "../../../utils/haptics";
 
 interface TaskCardProps {
   task: StudyTask;
@@ -48,12 +49,12 @@ export const TaskCard: React.FC<TaskCardProps> = ({
           opacity: isLocked ? 0.5 : pressed ? 0.8 : 1,
         },
       ]}
-      onPress={() => !isLocked && onSelect(task.id)}
+      onPress={() => { if (!isLocked) { buttonTap(); onSelect(task.id); } }}
       disabled={isLocked || readOnly}
       accessibilityRole="button"
       accessibilityState={{ selected: isActive, disabled: isLocked }}
-      accessibilityLabel="Interactive control"
-      accessibilityHint="Activates this control"
+      accessibilityLabel={`${task.content}${isActive ? ", active" : ""}${isLocked ? ", locked" : ""}`}
+      accessibilityHint="Double tap to select task"
     >
       {}
       <Pressable
@@ -69,11 +70,11 @@ export const TaskCard: React.FC<TaskCardProps> = ({
             opacity: pressed && !isLocked && !readOnly ? 0.8 : 1,
           },
         ]}
-        onPress={() => !readOnly && onComplete(task.id)}
+        onPress={() => { if (!readOnly) { stepCompleted(); onComplete(task.id); } }}
         disabled={isLocked || readOnly}
-        accessibilityLabel="Interactive control"
+        accessibilityLabel={isCompleted ? `Mark "${task.content}" incomplete` : `Mark "${task.content}" complete`}
         accessibilityRole="button"
-        accessibilityHint="Activates this control"
+        accessibilityHint="Double tap to toggle task completion"
       >
         {isCompleted && (
           <Icon

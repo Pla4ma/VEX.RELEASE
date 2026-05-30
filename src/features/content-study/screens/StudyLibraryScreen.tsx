@@ -90,7 +90,7 @@ export function StudyLibraryScreen(): JSX.Element {
             onPress={() => navigation.navigate("ContentInput", {})}
             accessibilityLabel="+ Add New button"
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to activate"
           >
             + Add New
           </Button>

@@ -145,7 +145,7 @@ export function WeeklyReportCard({
             fullWidth
             accessibilityLabel="View Full Analytics button"
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to select"
           >
             View Full Analytics
           </Button>
@@ -158,7 +158,7 @@ export function WeeklyReportCard({
               fullWidth
               accessibilityLabel="Share My Week button"
               accessibilityRole="button"
-              accessibilityHint="Activates this control"
+              accessibilityHint="Double tap to select"
             >
               Share My Week
             </Button>

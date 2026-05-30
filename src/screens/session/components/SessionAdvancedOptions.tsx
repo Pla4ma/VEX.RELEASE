@@ -29,7 +29,7 @@ export function SessionAdvancedOptions({
         onPress={onToggle}
         accessibilityLabel="Advanced options button"
         accessibilityRole="button"
-        accessibilityHint="Activates this control"
+        accessibilityHint="Double tap to activate"
       >
         <Box flexDirection="row" alignItems="center" py="md">
           <Text variant="label" color="text.secondary">

@@ -67,7 +67,7 @@ export function SessionSuggestionCard({
           style={[styles.acceptButton, { backgroundColor: config.color }]}
           accessibilityLabel="Start suggested session"
           accessibilityRole="button"
-          accessibilityHint="Activates this control"
+          accessibilityHint="Double tap to activate"
         >
           <Text style={styles.acceptButtonText}>Start Session</Text>
         </Pressable>
@@ -77,7 +77,7 @@ export function SessionSuggestionCard({
           style={styles.dismissButton}
           accessibilityLabel="Dismiss suggestion"
           accessibilityRole="button"
-          accessibilityHint="Activates this control"
+          accessibilityHint="Double tap to activate"
         >
           <Text style={styles.dismissButtonText}>Not Now</Text>
         </Pressable>

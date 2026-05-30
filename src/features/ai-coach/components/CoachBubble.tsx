@@ -5,6 +5,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { Text } from "../../../components/primitives";
 import { useTheme } from "../../../theme";
+import { buttonTap } from "../../../utils/haptics";
 import type { CoachMessage } from "../types";
 
 export interface CoachMessageBubbleProps {
@@ -89,10 +90,10 @@ export function CoachMessageBubble({
         {}
         {isLongMessage && (
           <Pressable
-            onPress={() => setExpanded(!expanded)}
-            accessibilityLabel="Interactive control"
+            onPress={() => { buttonTap(); setExpanded(!expanded); }}
+            accessibilityLabel={expanded ? "Show less" : "Read more"}
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to toggle message length"
           >
             <Text
               variant="caption"
@@ -121,7 +122,7 @@ export function CoachMessageBubble({
         {}
         {message.actionTaken && (
           <Pressable
-            onPress={() => onActionPress?.(message.actionTaken || "")}
+            onPress={() => { buttonTap(); onActionPress?.(message.actionTaken || ""); }}
             style={{
               backgroundColor: isCoach
                 ? theme.colors.primary[500]
@@ -132,9 +133,9 @@ export function CoachMessageBubble({
               marginTop: theme.spacing[2],
               alignSelf: "flex-start",
             }}
-            accessibilityLabel="Interactive control"
+            accessibilityLabel={message.actionTaken ?? "Coach action"}
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to perform action"
           >
             <Text
               variant="bodySmall"

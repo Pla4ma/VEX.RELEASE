@@ -61,7 +61,7 @@ export const SessionPresets: React.FC<SessionPresetsProps> = ({
             }
             accessibilityLabel={`${category} button`}
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to activate"
           >
             <Text
               style={[
@@ -97,7 +97,7 @@ export const SessionPresets: React.FC<SessionPresetsProps> = ({
           onPress={() => setShowCreateModal(true)}
           accessibilityLabel="+ Create Custom Preset button"
           accessibilityRole="button"
-          accessibilityHint="Activates this control"
+          accessibilityHint="Double tap to activate"
         >
           <Text style={styles.createButtonText}>+ Create Custom Preset</Text>
         </Pressable>

@@ -154,7 +154,7 @@ export function StreakMilestoneModal({
                     onPress={onShare}
                     accessibilityLabel={`${milestone}-day streak share button`}
                     accessibilityRole="button"
-                    accessibilityHint="Activates this control"
+                    accessibilityHint="Double tap to activate"
                   >
                     {`📤 Share my ${milestone}-day streak`}
                   </Button>
@@ -166,7 +166,7 @@ export function StreakMilestoneModal({
                   onPress={onDismiss}
                   accessibilityLabel="Continue → button"
                   accessibilityRole="button"
-                  accessibilityHint="Activates this control"
+                  accessibilityHint="Double tap to activate"
                 >
                   Continue →
                 </Button>

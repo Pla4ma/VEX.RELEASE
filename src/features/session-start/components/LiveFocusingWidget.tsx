@@ -15,6 +15,7 @@ import { useCountUp, formatNumber } from "./live-focusing/helpers";
 import { PulsingLiveDot } from "./live-focusing/PulsingLiveDot";
 import { AvatarStack } from "./live-focusing/AvatarStack";
 import { TrendIndicator } from "./live-focusing/TrendIndicator";
+import { buttonTap } from "../../../utils/haptics";
 
 export { LiveFocusingSkeleton } from "./live-focusing/LiveFocusingSkeleton";
 export type { LiveFocusingData } from "./live-focusing/types";
@@ -30,10 +31,10 @@ export function LiveFocusingWidget({
   if (compact) {
     return (
       <Pressable
-        onPress={onPress}
-        accessibilityLabel="Interactive control"
+        onPress={() => { buttonTap(); onPress?.(); }}
+        accessibilityLabel={`${data.totalCount} people focusing now`}
         accessibilityRole="button"
-        accessibilityHint="Activates this control"
+        accessibilityHint="Double tap to see who's focusing"
       >
         <Box
           flexDirection="row"
@@ -63,10 +64,10 @@ export function LiveFocusingWidget({
   return (
     <Animated.View entering={FadeIn.duration(400)}>
       <Pressable
-        onPress={onPress}
-        accessibilityLabel="Interactive control"
-        accessibilityRole="button"
-        accessibilityHint="Activates this control"
+         onPress={() => { buttonTap(); onPress?.(); }}
+         accessibilityLabel={`${data.totalCount} people focusing right now`}
+         accessibilityRole="button"
+         accessibilityHint="Double tap to see who's focusing"
       >
         <Box
           p="xl"

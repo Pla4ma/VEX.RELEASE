@@ -69,7 +69,7 @@ export function SessionThemeSelector({
             onPress={themeQueryRetry}
             accessibilityLabel="Retry button"
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to activate"
           >
             Retry
           </Button>
@@ -90,9 +90,9 @@ export function SessionThemeSelector({
               return (
                 <Pressable
                   onPress={() => onPressTheme(item)}
-                  accessibilityLabel="Interactive control"
+                  accessibilityLabel="Theme option"
                   accessibilityRole="button"
-                  accessibilityHint="Activates this control"
+                  accessibilityHint="Double tap to activate"
                 >
                   <Box
                     width={132}

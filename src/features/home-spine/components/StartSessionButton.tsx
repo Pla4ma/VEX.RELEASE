@@ -15,6 +15,7 @@ import { StartSessionButtonCompact } from "./StartSessionButtonCompact";
 import { useStartSessionButtonColors } from "./start-session-button-colors";
 import type { StartSessionButtonProps } from "./start-session-button-types";
 import { formatTime } from "./start-session-button-types";
+import { sessionStart } from "../../../utils/haptics";
 export type { StartSessionButtonProps };
 
 export function StartSessionButton({
@@ -99,11 +100,11 @@ export function StartSessionButton({
   return (
     <Animated.View style={animatedStyle} testID={testID}>
       <Pressable
-        onPress={onPress}
+        onPress={() => { sessionStart(); onPress?.(); }}
         disabled={isLoading}
-        accessibilityLabel="Interactive control"
+        accessibilityLabel={buttonLabel}
         accessibilityRole="button"
-        accessibilityHint="Activates this control"
+        accessibilityHint="Double tap to start a focus session"
       >
         <Box
           mx="lg"

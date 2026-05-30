@@ -13,6 +13,7 @@ import {
   getRiskConfig,
   type StreakRiskBannerProps,
 } from "./streak-risk-config";
+import { sessionStart } from "../../../utils/haptics";
 
 export type { StreakRiskLevel, StreakRiskBannerProps } from "./streak-risk-config";
 
@@ -59,10 +60,10 @@ export function StreakRiskBanner({
   }
   return (
     <Pressable
-      onPress={() => onStartSession(suggestedDuration)}
-      accessibilityLabel="Interactive control"
+      onPress={() => { sessionStart(); onStartSession(suggestedDuration); }}
+      accessibilityLabel={`Start ${suggestedDuration}-minute session to protect your ${streakDays}-day streak`}
       accessibilityRole="button"
-      accessibilityHint="Activates this control"
+      accessibilityHint="Double tap to start a focus session"
     >
       <Animated.View
         style={[
@@ -155,10 +156,10 @@ export function StreakCriticalAlert({
   }));
   return (
     <Pressable
-      onPress={onStartSession}
-      accessibilityLabel="Interactive control"
+      onPress={() => { sessionStart(); onStartSession(); }}
+      accessibilityLabel={`Last chance: save your ${streakDays}-day streak`}
       accessibilityRole="button"
-      accessibilityHint="Activates this control"
+      accessibilityHint="Double tap to start a session now"
     >
       <Animated.View style={[pulseStyle]}>
         <Box

@@ -122,9 +122,9 @@ export const CoachPersonaSelector: React.FC<CoachPersonaSelectorProps> = ({
                   paddingVertical: 16,
                   paddingHorizontal: 16,
                 }}
-                accessibilityLabel="Interactive control"
+                accessibilityLabel="Coach persona option"
                 accessibilityRole="button"
-                accessibilityHint="Activates this control"
+                accessibilityHint="Double tap to change setting"
               >
                 <Box
                   width={48}

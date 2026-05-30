@@ -10,11 +10,11 @@ import { createDebugger } from "../../utils/debug";
 
 const debug = createDebugger("session:orchestrator:core");
 
-import type { SessionOrchestrator } from "../SessionOrchestrator";
+import type { SessionOrchestratorBase } from "../SessionOrchestratorBase";
 import { TimerEngine } from "../engines/TimerEngine";
 
 export async function createSession(
-  orch: SessionOrchestrator,
+  orch: SessionOrchestratorBase,
   config: SessionConfig,
 ): Promise<SessionState> {
   if (!orch.userId) throw new Error("SessionOrchestrator: No user set");
@@ -78,7 +78,7 @@ export async function createSession(
   return session;
 }
 
-export function loadActiveSession(orch: SessionOrchestrator): void {
+export function loadActiveSession(orch: SessionOrchestratorBase): void {
   void persistence.loadActiveSession(orch.repository).then((s) => {
     if (!s) return;
     orch.session = s;
@@ -101,14 +101,14 @@ export function loadActiveSession(orch: SessionOrchestrator): void {
 }
 
 export function finalizeSession(
-  orch: SessionOrchestrator,
+  orch: SessionOrchestratorBase,
   summary: Parameters<typeof persistence.finalizeSession>[1],
 ): void {
   if (!orch.session) return;
   void persistence.finalizeSession(orch.session, summary, orch.repository);
 }
 
-export function finalizeAbandonedSession(orch: SessionOrchestrator): void {
+export function finalizeAbandonedSession(orch: SessionOrchestratorBase): void {
   if (!orch.session) return;
   void persistence.finalizeAbandonedSession(orch.session, orch.repository);
 }

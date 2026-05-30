@@ -41,7 +41,7 @@ export const ShortAnswerInput: React.FC<ShortAnswerInputProps> = ({
         disabled={!value.trim()}
         accessibilityLabel="Submit button"
         accessibilityRole="button"
-        accessibilityHint="Activates this control"
+        accessibilityHint="Double tap to activate"
       >
         Submit
       </Button>

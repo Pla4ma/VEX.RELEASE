@@ -107,7 +107,7 @@ export const WonView: React.FC<WonViewProps> = ({ outcome, onDismiss }) => {
               onPress={onDismiss}
               accessibilityLabel="Continue button"
               accessibilityRole="button"
-              accessibilityHint="Activates this control"
+              accessibilityHint="Double tap to activate"
             >
               Continue
             </Button>
@@ -181,7 +181,7 @@ export const LostView: React.FC<LostViewProps> = ({
               onPress={onDismiss}
               accessibilityLabel="Start Fresh button"
               accessibilityRole="button"
-              accessibilityHint="Activates this control"
+              accessibilityHint="Double tap to activate"
             >
               Start Fresh
             </Button>

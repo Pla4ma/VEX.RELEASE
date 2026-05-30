@@ -35,9 +35,9 @@ export const NotificationCategoryToggle: React.FC<
         paddingHorizontal: 16,
       }}
       onPress={() => onToggle(item.id)}
-      accessibilityLabel="Interactive control"
+      accessibilityLabel="Notification category"
       accessibilityRole="button"
-      accessibilityHint="Activates this control"
+      accessibilityHint="Double tap to change setting"
     >
       <Box
         width={40}

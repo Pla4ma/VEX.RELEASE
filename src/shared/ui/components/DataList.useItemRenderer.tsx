@@ -43,7 +43,7 @@ export function useItemRenderer<T extends Record<string, unknown>>({
           accessibilityLabel={getItemAccessibilityLabel?.(item.data)}
           accessibilityState={{ selected: isSelected, disabled: item.disabled }}
           accessibilityRole="button"
-          accessibilityHint="Activates this control"
+          accessibilityHint="Double tap to activate"
         >
           <View style={[item.loading && styles.itemLoading]}>
             {renderItem(item.data, index, context)}

@@ -135,7 +135,7 @@ export function StudyQuizBreak({
           onPress={onSkip}
           accessibilityLabel="Skip study quiz"
           accessibilityRole="button"
-          accessibilityHint="Activates this control"
+          accessibilityHint="Double tap to activate"
         >
           Skip
         </Button>
@@ -144,7 +144,7 @@ export function StudyQuizBreak({
           onPress={() => onClose(correctAnswers)}
           accessibilityLabel="Submit study quiz"
           accessibilityRole="button"
-          accessibilityHint="Activates this control"
+          accessibilityHint="Double tap to activate"
         >
           {`Continue +${correctAnswers * 5}`}
         </Button>

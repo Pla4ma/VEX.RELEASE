@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from "react";
 import { View, Text, Pressable, ScrollView, TextInput } from "react-native";
+import { buttonTap } from "../../utils/haptics";
 import { useSessionHistory } from "../hooks/useSession";
 import { SessionHistoryCard } from "./SessionHistoryCard";
 import {
@@ -88,10 +89,10 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
                 timeRange === range && styles.filterChipActive,
                 pressed && { opacity: 0.8 },
               ]}
-              onPress={() => setTimeRange(range)}
-              accessibilityLabel="Interactive control"
+              onPress={() => { buttonTap(); setTimeRange(range); }}
+              accessibilityLabel={`Filter by ${range}`}
               accessibilityRole="button"
-              accessibilityHint="Activates this control"
+              accessibilityHint="Double tap to filter sessions by time range"
             >
               <Text
                 style={[
@@ -117,10 +118,10 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
                   filterStatus === status && styles.filterChipActive,
                   pressed && { opacity: 0.8 },
                 ]}
-                onPress={() => setFilterStatus(status)}
-                accessibilityLabel="Interactive control"
+                onPress={() => { buttonTap(); setFilterStatus(status); }}
+                accessibilityLabel={`Filter by ${status}`}
                 accessibilityRole="button"
-                accessibilityHint="Activates this control"
+                accessibilityHint="Double tap to filter sessions by status"
               >
                 <Text
                   style={[

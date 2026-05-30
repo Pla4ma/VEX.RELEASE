@@ -3,6 +3,7 @@ import { Pressable } from "react-native";
 import { Box } from "../../../components/primitives/Box";
 import { Text } from "../../../components/primitives/Text";
 import { useTheme } from "../../../theme";
+import { buttonTap } from "../../../utils/haptics";
 import type { ComebackQuestProgress } from "../ComebackQuestSystem";
 
 export function ComebackQuestCompact({
@@ -19,10 +20,10 @@ export function ComebackQuestCompact({
     (progress.quest3.completed ? 1 : 0);
   return (
     <Pressable
-      onPress={onPress}
-      accessibilityLabel="Interactive control"
+      onPress={() => { buttonTap(); onPress(); }}
+      accessibilityLabel={`Comeback quest: ${completedCount} of 3 complete`}
       accessibilityRole="button"
-      accessibilityHint="Activates this control"
+      accessibilityHint="Double tap to view comeback quest details"
     >
       <Box
         flexDirection="row"

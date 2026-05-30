@@ -102,7 +102,7 @@ export function QuizSection({ quizItems, revealedAnswers, toggleAnswer }: {
               onPress={() => toggleAnswer(item.id)}
               accessibilityLabel="Toggle answer button"
               accessibilityRole="button"
-              accessibilityHint="Activates this control"
+              accessibilityHint="Double tap to activate"
             >
               <Text style={styles.answerToggleText}>
                 {isRevealed ? UI_TEXT.QUIZ_HIDE_ANSWER : UI_TEXT.QUIZ_SHOW_ANSWER}
@@ -185,7 +185,7 @@ export function RatingSection({ userRating, setUserRating }: {
             onPress={() => setUserRating(star)}
             accessibilityLabel={`Rate ${star} stars`}
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to activate"
           >
             <Text style={[styles.star, userRating && star <= userRating && styles.starFilled]}>★</Text>
           </Pressable>

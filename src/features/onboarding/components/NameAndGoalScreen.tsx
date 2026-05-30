@@ -140,7 +140,7 @@ export function NameAndGoalScreen({
               onPress={onSkip}
               accessibilityLabel="Skip for now › button"
               accessibilityRole="button"
-              accessibilityHint="Activates this control"
+              accessibilityHint="Double tap to select"
             >
               <Box alignItems="center" py="md">
                 <Text variant="bodySmall" color="text.tertiary">

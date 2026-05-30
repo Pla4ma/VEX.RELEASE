@@ -10,6 +10,7 @@ import { Text } from "../../../components/primitives/Text";
 import { useTheme } from "../../../theme";
 import { Icon } from "../../../icons";
 import { createSheet } from "@/shared/ui/create-sheet";
+import { buttonTap } from "../../../utils/haptics";
 import { launchColors } from "@theme/tokens/launch-colors";
 
 interface NetworkStatusProps {
@@ -78,7 +79,7 @@ export const NetworkStatus: React.FC<NetworkStatusProps> = ({
             onPress={onSync}
             accessibilityLabel="Sync button"
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to activate"
           >
             <Text
               style={[styles.actionText, { color: launchColors.hex_ffffff }]}
@@ -95,9 +96,9 @@ export const NetworkStatus: React.FC<NetworkStatusProps> = ({
               pressed && { opacity: 0.8 },
             ]}
             onPress={onDismiss}
-            accessibilityLabel="Interactive control"
+            accessibilityLabel="Dismiss network status"
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to dismiss"
           >
             <Icon name="x" size="sm" color={launchColors.hex_ffffff} />
           </Pressable>

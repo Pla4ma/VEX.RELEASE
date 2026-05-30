@@ -10,6 +10,7 @@ import Animated, {
 import { Box, Text } from "./primitives";
 import { useTheme } from "../theme";
 import { useReducedMotion } from "@/hooks";
+import { buttonTap } from "../utils/haptics";
 
 type LevelUpCelebrationProps = {
   oldLevel: number;
@@ -47,11 +48,11 @@ export const LevelUpCelebration: React.FC<LevelUpCelebrationProps> = ({
 
   return (
     <Pressable
-      onPress={onDismiss}
+      onPress={() => { buttonTap(); onDismiss(); }}
       style={{ flex: 1 }}
-      accessibilityLabel="Interactive control"
+      accessibilityLabel={`Dismiss level ${newLevel} celebration`}
       accessibilityRole="button"
-      accessibilityHint="Activates this control"
+      accessibilityHint="Double tap to dismiss"
     >
       <Animated.View entering={FadeIn.duration(220)} style={{ flex: 1 }}>
         <Box

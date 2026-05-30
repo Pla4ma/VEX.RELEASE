@@ -4,7 +4,7 @@
  * Backend client and configuration for Supabase.
  */
 
-import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import { createClient, AuthError, type SupabaseClient } from "@supabase/supabase-js";
 import { CURRENT_CONFIG } from "../constants/app";
 import type { Database } from "../types/supabase";
 import { createDebugger } from "../utils/debug";
@@ -20,14 +20,7 @@ function createMockSupabaseClient(): SupabaseClient {
     "Supabase not configured. Please set EXPO_PUBLIC_SUPABASE_URL and EXPO_PUBLIC_SUPABASE_ANON_KEY in your environment.",
   );
 
-  const authErr = {
-    message: err.message,
-    code: "mock_error",
-    status: 500,
-    __isAuthError: true,
-    name: "AuthError",
-    toJSON: (): object => ({}),
-  } as unknown as import("@supabase/supabase-js").AuthError;
+  const authErr = new AuthError(err.message, 500, "mock_error");
 
   const mockClient = {
     auth: {
@@ -78,7 +71,9 @@ function createMockSupabaseClient(): SupabaseClient {
     }),
   };
 
-  // Partial mock — cast at boundary, documented
+  // TODO(safe-cast): Partial mock — SupabaseClient has hundreds of methods.
+  // Proper fix: use a branded mock type that satisfies the methods actually
+  // called in test paths, or use a full mock library (e.g. msw).
   return mockClient as unknown as SupabaseClient;
 }
 

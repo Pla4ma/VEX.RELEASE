@@ -55,21 +55,18 @@ export function useMotionAccessibility(): MotionPreferences & {
 export function withMotionAccessibility<P extends object>(
   Component: React.ComponentType<P>,
 ): React.ComponentType<P> {
-  const MotionAccessibleComponent = React.forwardRef<unknown, P>(
-    (props, _ref) => {
-      const motion = useMotionAccessibility();
-      return React.createElement(Component, {
-        ...props,
-        motionAccessibility: motion,
-      } as P);
-    },
-  );
+  function MotionAccessibleComponent(props: P) {
+    const motion = useMotionAccessibility();
+    return React.createElement(Component, {
+      ...props,
+      motionAccessibility: motion,
+    } as P);
+  }
   MotionAccessibleComponent.displayName = `WithMotionAccessibility(${
     Component.displayName || Component.name
   })`;
-  // ForwardRefExoticComponent<P> satisfies ComponentType<P> at runtime;
-  // TS cannot verify due to PropsWithoutRef wrapping at generic boundary.
-  return MotionAccessibleComponent as unknown as React.ComponentType<P>;
+  // FC<P> satisfies ComponentType<P> — no cast needed.
+  return MotionAccessibleComponent;
 }
 
 export const ACCESSIBLE_ANIMATION_PRESETS = {

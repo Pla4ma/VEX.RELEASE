@@ -165,7 +165,7 @@ export function StreakBrokenModal({
                 onPress={onStartFresh}
                 accessibilityLabel="🔥 Start Fresh button"
                 accessibilityRole="button"
-                accessibilityHint="Activates this control"
+                accessibilityHint="Double tap to activate"
               >
                 🔥 Start Fresh
               </Button>
@@ -176,7 +176,7 @@ export function StreakBrokenModal({
                 onPress={onDismiss}
                 accessibilityLabel="Not now button"
                 accessibilityRole="button"
-                accessibilityHint="Activates this control"
+                accessibilityHint="Double tap to activate"
               >
                 Not now
               </Button>

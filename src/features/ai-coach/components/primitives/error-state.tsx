@@ -94,7 +94,7 @@ export function ErrorState({
             style={[styles.retryButton, isRetrying && styles.buttonDisabled]}
             accessibilityLabel="Retry loading"
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to activate"
           >
             {isRetrying ? (
               <ActivityIndicator color={launchColors.hex_fff} />
@@ -112,7 +112,7 @@ export function ErrorState({
             style={styles.dismissButton}
             accessibilityLabel="Dismiss error"
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to activate"
           >
             <Text style={styles.dismissButtonText}>Dismiss</Text>
           </Pressable>

@@ -165,7 +165,7 @@ export function OnboardingNotificationPermissionCard({
             fullWidth
             accessibilityLabel="Yes, remind me button"
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to activate"
           >
             Yes, remind me
           </Button>
@@ -178,7 +178,7 @@ export function OnboardingNotificationPermissionCard({
             fullWidth
             accessibilityLabel="Maybe later button"
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to activate"
           >
             Maybe later
           </Button>

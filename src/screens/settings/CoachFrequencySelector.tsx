@@ -70,9 +70,9 @@ export const CoachFrequencySelector: React.FC<
                 paddingVertical: 16,
                 paddingHorizontal: 16,
               }}
-              accessibilityLabel="Interactive control"
+              accessibilityLabel="Coach frequency option"
               accessibilityRole="button"
-              accessibilityHint="Activates this control"
+              accessibilityHint="Double tap to change setting"
             >
               <Box
                 width={40}

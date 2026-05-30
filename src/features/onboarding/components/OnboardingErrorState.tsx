@@ -57,7 +57,7 @@ export function OnboardingErrorState({
             onPress={onRetry}
             accessibilityLabel="Try Again button"
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to select"
           >
             <Text style={styles.primaryButtonText}>Try Again</Text>
           </Pressable>
@@ -71,7 +71,7 @@ export function OnboardingErrorState({
               onPress={onSkip}
               accessibilityLabel="Skip for Now button"
               accessibilityRole="button"
-              accessibilityHint="Activates this control"
+              accessibilityHint="Double tap to select"
             >
               <Text style={styles.secondaryButtonText}>Skip for Now</Text>
             </Pressable>

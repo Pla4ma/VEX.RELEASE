@@ -61,9 +61,9 @@ export const GambleActionButtons: React.FC<GambleActionButtonsProps> = ({
           fullWidth
           onPress={handleUseShield}
           disabled={shieldsAvailable === 0}
-          accessibilityLabel="Action button"
+          accessibilityLabel="Perform action"
           accessibilityRole="button"
-          accessibilityHint="Activates this control"
+          accessibilityHint="Double tap to activate"
         >
           <Box flexDirection="row" alignItems="center" gap={2}>
             <Text style={{ fontSize: 20 }}>🛡️</Text>
@@ -104,7 +104,7 @@ export const GambleActionButtons: React.FC<GambleActionButtonsProps> = ({
         }}
         accessibilityLabel="🎲 Take the Risk Start a session NOW - Score S or A to save streak button"
         accessibilityRole="button"
-        accessibilityHint="Activates this control"
+        accessibilityHint="Double tap to activate"
       >
         <Box flexDirection="row" alignItems="center" gap={2}>
           <Text style={{ fontSize: 20 }}>🎲</Text>

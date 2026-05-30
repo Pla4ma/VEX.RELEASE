@@ -98,7 +98,7 @@ export function CompanionGrowthSection({
           style={{ marginTop: theme.spacing[3] }}
           accessibilityLabel="Retry button"
           accessibilityRole="button"
-          accessibilityHint="Activates this control"
+          accessibilityHint="Double tap to activate"
         >
           Retry
         </Button>

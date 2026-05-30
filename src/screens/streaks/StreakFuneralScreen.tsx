@@ -152,7 +152,7 @@ export const StreakFuneralScreen: React.FC = () => {
               onPress={handleReminisce}
               accessibilityLabel="View focus history button"
               accessibilityRole="button"
-              accessibilityHint="Activates this control"
+              accessibilityHint="Double tap to activate"
             >
               View Focus History
             </Button>

@@ -69,9 +69,9 @@ export function TooltipBubble({
     >
       <Pressable
         onPress={onDismiss}
-        accessibilityLabel="Interactive control"
+        accessibilityLabel="Tooltip"
         accessibilityRole="button"
-        accessibilityHint="Activates this control"
+        accessibilityHint="Double tap to select"
       >
         <Box
           p="lg"
@@ -171,9 +171,9 @@ export function TooltipOverlay({
       <Pressable
         onPress={onPress}
         style={{ flex: 1 }}
-        accessibilityLabel="Interactive control"
+        accessibilityLabel="Tooltip"
         accessibilityRole="button"
-        accessibilityHint="Activates this control"
+        accessibilityHint="Double tap to select"
       />
     </Animated.View>
   );

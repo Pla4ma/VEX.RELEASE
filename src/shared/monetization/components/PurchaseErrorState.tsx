@@ -69,7 +69,7 @@ export function PurchaseErrorState({
             onPress={onRetry}
             accessibilityLabel="Try Again button"
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to activate"
           >
             <Text
               style={[
@@ -90,7 +90,7 @@ export function PurchaseErrorState({
               onPress={onCancel}
               accessibilityLabel="Cancel button"
               accessibilityRole="button"
-              accessibilityHint="Activates this control"
+              accessibilityHint="Double tap to activate"
             >
               <Text
                 style={[

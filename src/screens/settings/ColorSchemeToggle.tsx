@@ -64,9 +64,9 @@ export const ColorSchemeToggle: React.FC<ColorSchemeToggleProps> = ({
                   borderWidth: accentColor === color.id ? 3 : 0,
                   borderColor: theme.colors.text.primary,
                 }}
-                accessibilityLabel="Interactive control"
+                accessibilityLabel="Color scheme option"
                 accessibilityRole="button"
-                accessibilityHint="Activates this control"
+                accessibilityHint="Double tap to change setting"
               >
                 {accentColor === color.id && (
                   <Icon name="check" size={24} color={launchColors.hex_fff} />
@@ -101,9 +101,9 @@ export const ColorSchemeToggle: React.FC<ColorSchemeToggleProps> = ({
                   paddingVertical: 16,
                   paddingHorizontal: 16,
                 }}
-                accessibilityLabel="Interactive control"
+                accessibilityLabel="Color scheme option"
                 accessibilityRole="button"
-                accessibilityHint="Activates this control"
+                accessibilityHint="Double tap to change setting"
               >
                 <Box
                   width={40}

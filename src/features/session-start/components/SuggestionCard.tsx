@@ -12,6 +12,7 @@ import Animated, {
 import { Box } from "../../../components/primitives/Box";
 import { Text } from "../../../components/primitives/Text";
 import { useTheme } from "../../../theme";
+import { buttonTap } from "../../../utils/haptics";
 import type { SessionSuggestion } from "./session-suggestions-types";
 
 /**
@@ -34,6 +35,7 @@ export function SuggestionCard({
   }));
 
   const handlePress = () => {
+    buttonTap();
     scale.value = withSequence(
       withTiming(0.98, { duration: 100 }),
       withSpring(1, { damping: 15, stiffness: 200 }),
@@ -48,9 +50,9 @@ export function SuggestionCard({
     >
       <Pressable
         onPress={handlePress}
-        accessibilityLabel="Interactive control"
+        accessibilityLabel={`${suggestion.title} suggestion, ${suggestion.durationMinutes} minutes`}
         accessibilityRole="button"
-        accessibilityHint="Activates this control"
+        accessibilityHint="Double tap to start this session"
       >
         <Box
           flexDirection="row"

@@ -29,7 +29,7 @@ export const SessionSummaryMoodSelector: React.FC<
             onPress={() => onMoodChange(m)}
             accessibilityLabel={`Mood ${getMoodEmoji(m)} button`}
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to activate"
           >
             <Text style={styles.moodEmoji}>{getMoodEmoji(m)}</Text>
           </Pressable>

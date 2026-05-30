@@ -54,7 +54,7 @@ export function EmptyState({
               style={styles.primaryButton}
               accessibilityLabel={actionLabel}
               accessibilityRole="button"
-              accessibilityHint="Activates this control"
+              accessibilityHint="Double tap to activate"
             >
               <Text style={styles.primaryButtonText}>{actionLabel}</Text>
             </Pressable>
@@ -66,7 +66,7 @@ export function EmptyState({
               style={styles.secondaryButton}
               accessibilityLabel={secondaryActionLabel}
               accessibilityRole="button"
-              accessibilityHint="Activates this control"
+              accessibilityHint="Double tap to activate"
             >
               <Text style={styles.secondaryButtonText}>
                 {secondaryActionLabel}

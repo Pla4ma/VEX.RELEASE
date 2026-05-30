@@ -45,7 +45,7 @@ export function SessionSuggestions({
         onPress={onToggleExpand}
         accessibilityLabel="🤖 SUGGESTIONS › button"
         accessibilityRole="button"
-        accessibilityHint="Activates this control"
+        accessibilityHint="Double tap to activate"
       >
         <Box
           flexDirection="row"

@@ -75,7 +75,7 @@ export function StreakRiskWarning({
         onPress={onStartSession}
         accessibilityLabel="Start Session button"
         accessibilityRole="button"
-        accessibilityHint="Activates this control"
+        accessibilityHint="Double tap to activate"
       >
         <Text style={styles.buttonText}>Start Session</Text>
       </Pressable>
@@ -86,7 +86,7 @@ export function StreakRiskWarning({
           onPress={onDismiss}
           accessibilityLabel="Dismiss button"
           accessibilityRole="button"
-          accessibilityHint="Activates this control"
+          accessibilityHint="Double tap to activate"
         >
           <Text style={styles.dismissText}>Dismiss</Text>
         </Pressable>

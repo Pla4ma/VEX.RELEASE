@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Image, Pressable } from "react-native";
 import { useTheme } from "../theme";
+import { buttonTap } from "../utils/haptics";
 import { Text } from "./primitives";
 import { launchColors } from "@theme/tokens/launch-colors";
 import { SIZE_MAP, FONT_SIZE_MAP, STATUS_COLOR_MAP } from "./Avatar.types";
@@ -161,16 +162,16 @@ export const Avatar: React.FC<AvatarProps> = ({
   if (onPress) {
     return (
       <Pressable
-        onPress={onPress}
+        onPress={() => { buttonTap(); onPress(); }}
         style={({ pressed }) => [
           avatarStyles.container,
           { width: sizeValue, height: sizeValue },
           style,
           pressed && { opacity: 0.8 },
         ]}
-        accessibilityLabel="Interactive control"
+        accessibilityLabel={`Avatar for ${name}`}
         accessibilityRole="button"
-        accessibilityHint="Activates this control"
+        accessibilityHint="Double tap to view profile"
       >
         {AvatarContent}
       </Pressable>

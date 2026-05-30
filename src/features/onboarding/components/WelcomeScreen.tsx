@@ -168,7 +168,7 @@ export function WelcomeScreen({ onStart }: WelcomeScreenProps): JSX.Element {
             onPress={onStart}
             accessibilityLabel="Let's go → button"
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to select"
           >
             Let's go →
           </Button>

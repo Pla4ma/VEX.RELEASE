@@ -27,7 +27,7 @@ export function SettingItem({
       style={({ pressed }) => [styles.container, pressed && { opacity: 0.8 }]}
       accessibilityLabel="Setting item button"
       accessibilityRole="button"
-      accessibilityHint="Activates this control"
+      accessibilityHint="Double tap to activate"
     >
       <View style={styles.content}>
         <Text style={styles.label}>{label}</Text>

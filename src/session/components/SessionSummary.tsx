@@ -133,7 +133,7 @@ export const SessionSummary: React.FC<SessionSummaryProps> = ({
             onPress={onShare}
             accessibilityLabel="📤 Share button"
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to activate"
           >
             <Text style={styles.shareButtonText}>📤 Share</Text>
           </Pressable>
@@ -145,7 +145,7 @@ export const SessionSummary: React.FC<SessionSummaryProps> = ({
             onPress={onStartNew}
             accessibilityLabel="▶ New Session button"
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to activate"
           >
             <Text style={styles.newSessionButtonText}>▶ New Session</Text>
           </Pressable>
@@ -157,7 +157,7 @@ export const SessionSummary: React.FC<SessionSummaryProps> = ({
             onPress={onClose}
             accessibilityLabel="Close button"
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to activate"
           >
             <Text style={styles.closeButtonText}>Close</Text>
           </Pressable>

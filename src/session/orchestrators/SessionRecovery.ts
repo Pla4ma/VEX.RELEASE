@@ -10,10 +10,10 @@ import { createDebugger } from "../../utils/debug";
 
 const debug = createDebugger("session:orchestrator:recovery");
 
-import type { SessionOrchestrator } from "../SessionOrchestrator";
+import type { SessionOrchestratorBase } from "../SessionOrchestratorBase";
 
 export async function attemptRecovery(
-  orch: SessionOrchestrator,
+  orch: SessionOrchestratorBase,
   recoveryType: "USER_RESUME" | "STREAK_SAVE" | "PARTIAL_CREDIT",
 ): Promise<boolean> {
   if (!orch.session) throw new Error("No active session");
@@ -62,7 +62,7 @@ export async function attemptRecovery(
 }
 
 export function completeLastInterruption(
-  orch: SessionOrchestrator,
+  orch: SessionOrchestratorBase,
   duration: number,
 ): void {
   const last = orch.interruptions[orch.interruptions.length - 1];
@@ -73,7 +73,7 @@ export function completeLastInterruption(
 }
 
 export function recordInterruption(
-  orch: SessionOrchestrator,
+  orch: SessionOrchestratorBase,
   type: InterruptionType,
   severity: InterruptionSeverity = "MODERATE",
 ): InterruptionRecord {
@@ -106,7 +106,7 @@ export function recordInterruption(
 }
 
 export function handleAntiCheatViolation(
-  orch: SessionOrchestrator,
+  orch: SessionOrchestratorBase,
   warning: string,
 ): void {
   if (!orch.session) return;
@@ -122,7 +122,7 @@ export function handleAntiCheatViolation(
 }
 
 export function logInterruption(
-  orch: SessionOrchestrator,
+  orch: SessionOrchestratorBase,
   type: string,
   _details?: Record<string, unknown>,
 ): void {
@@ -136,7 +136,7 @@ export function logInterruption(
 }
 
 export function logRecovery(
-  orch: SessionOrchestrator,
+  orch: SessionOrchestratorBase,
   type: string,
   _details?: Record<string, unknown>,
 ): void {

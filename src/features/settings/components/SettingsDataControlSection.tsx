@@ -34,7 +34,7 @@ export function SettingsDataControlSection({
         }}
         accessibilityLabel="Export Data button"
         accessibilityRole="button"
-        accessibilityHint="Activates this control"
+        accessibilityHint="Double tap to activate"
       >
         <View>
           <Text style={styles.actionRowText}>Export Data</Text>
@@ -61,7 +61,7 @@ export function SettingsDataControlSection({
         }}
         accessibilityLabel="Import Data button"
         accessibilityRole="button"
-        accessibilityHint="Activates this control"
+        accessibilityHint="Double tap to activate"
       >
         <View>
           <Text style={styles.actionRowText}>Import Data</Text>
@@ -103,7 +103,7 @@ export function SettingsDataControlSection({
           }}
           accessibilityLabel="Delete All My Data button"
           accessibilityRole="button"
-          accessibilityHint="Activates this control"
+          accessibilityHint="Double tap to activate"
         >
           <Text style={styles.dangerActionText}>Delete All My Data</Text>
         </Pressable>

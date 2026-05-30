@@ -170,7 +170,7 @@ export function MasteryCard({
                   onPress={() => handleClaim(challenge.id)}
                   accessibilityLabel="Claim button"
                   accessibilityRole="button"
-                  accessibilityHint="Activates this control"
+                  accessibilityHint="Double tap to activate"
                 >
                   Claim
                 </Button>

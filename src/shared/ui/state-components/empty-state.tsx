@@ -46,9 +46,9 @@ export function EmptyState({
                 { backgroundColor: theme.colors.semantic.danger },
                 pressed && { opacity: 0.8 },
               ]}
-              accessibilityLabel="Interactive control"
+              accessibilityLabel="Empty state action"
               accessibilityRole="button"
-              accessibilityHint="Activates this control"
+              accessibilityHint="Double tap to activate"
             >
               <Text
                 style={[
@@ -68,9 +68,9 @@ export function EmptyState({
                 { backgroundColor: theme.colors.background.tertiary },
                 pressed && { opacity: 0.8 },
               ]}
-              accessibilityLabel="Interactive control"
+              accessibilityLabel="Empty state action"
               accessibilityRole="button"
-              accessibilityHint="Activates this control"
+              accessibilityHint="Double tap to activate"
             >
               <Text
                 style={[

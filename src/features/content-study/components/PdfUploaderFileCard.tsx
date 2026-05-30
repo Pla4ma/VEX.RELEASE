@@ -118,7 +118,7 @@ export const PdfUploaderFileCard: React.FC<FileCardProps> = ({
               onPress={onRetry}
               accessibilityLabel="Retry button"
               accessibilityRole="button"
-              accessibilityHint="Activates this control"
+              accessibilityHint="Double tap to activate"
             >
               <Text
                 style={[
@@ -166,7 +166,7 @@ export const PdfUploaderFileCard: React.FC<FileCardProps> = ({
           onPress={onRemove}
           accessibilityLabel="Remove button"
           accessibilityRole="button"
-          accessibilityHint="Activates this control"
+          accessibilityHint="Double tap to activate"
         >
           Remove
         </Button>

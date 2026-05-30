@@ -9,6 +9,7 @@ import { Box } from "../../../components/primitives/Box";
 import { Text } from "../../../components/primitives/Text";
 import { useTheme } from "../../../theme";
 import { DAY_WIDTH, EVENT_ICONS, type DayData } from "./weekly-calendar-types";
+import { buttonTap } from "../../../utils/haptics";
 
 export function DayCell({
   day,
@@ -71,10 +72,10 @@ export function DayCell({
       style={[{ width: DAY_WIDTH, paddingHorizontal: 2 }, animatedStyle]}
     >
       <Pressable
-        onPress={onPress}
-        accessibilityLabel="Interactive control"
+        onPress={() => { buttonTap(); onPress(); }}
+        accessibilityLabel={`${dayName} ${dayNum}, ${day.status}`}
         accessibilityRole="button"
-        accessibilityHint="Activates this control"
+        accessibilityHint="Double tap to select this day"
       >
         <Box alignItems="center" py="sm" borderRadius="lg" borderWidth={1}>
           <Text

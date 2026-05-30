@@ -51,9 +51,9 @@ export function ErrorState({
               { backgroundColor: theme.colors.semantic.danger },
               pressed && { opacity: 0.8 },
             ]}
-            accessibilityLabel="Interactive control"
+            accessibilityLabel="Error action"
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to activate"
           >
             <Text
               style={[
@@ -73,9 +73,9 @@ export function ErrorState({
               { backgroundColor: theme.colors.background.tertiary },
               pressed && { opacity: 0.8 },
             ]}
-            accessibilityLabel="Interactive control"
+            accessibilityLabel="Error action"
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to activate"
           >
             <Text
               style={[

@@ -10,6 +10,7 @@ import { Button } from "../../../components/primitives/Button";
 import { useTheme } from "../../../theme";
 import { Icon } from "../../../icons";
 import { createSheet } from "@/shared/ui/create-sheet";
+import { buttonTap } from "../../../utils/haptics";
 
 interface EmptyStateProps {
   icon: string;
@@ -64,9 +65,9 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
           size="md"
           onPress={onAction}
           style={styles.actionButton}
-          accessibilityLabel="Action button"
+          accessibilityLabel={actionLabel ?? "Action"}
           accessibilityRole="button"
-          accessibilityHint="Activates this control"
+          accessibilityHint="Double tap to perform action"
         >
           {actionLabel}
         </Button>
@@ -74,14 +75,14 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
 
       {secondaryActionLabel && onSecondaryAction && (
         <Pressable
-          onPress={onSecondaryAction}
+          onPress={() => { buttonTap(); onSecondaryAction?.(); }}
           style={({ pressed }) => [
             styles.secondaryAction,
             pressed && { opacity: 0.8 },
           ]}
-          accessibilityLabel="Interactive control"
+          accessibilityLabel={secondaryActionLabel ?? "Secondary action"}
           accessibilityRole="button"
-          accessibilityHint="Activates this control"
+          accessibilityHint="Double tap to perform action"
         >
           <Text
             style={[styles.secondaryText, { color: theme.colors.primary[500] }]}

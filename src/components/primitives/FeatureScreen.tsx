@@ -80,7 +80,7 @@ export const FeatureScreen: React.FC<FeatureScreenProps> = ({
             accessibilityRole="button"
             accessibilityLabel="Go back"
             style={{ padding: 8, marginLeft: -8, marginRight: 8 }}
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to activate"
           >
             <Icon name="back" size="md" color={theme.colors.text.primary} />
           </Pressable>
@@ -103,7 +103,7 @@ export const FeatureScreen: React.FC<FeatureScreenProps> = ({
             accessibilityRole="button"
             accessibilityLabel={rightAction.label}
             style={{ padding: 8 }}
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to activate"
           >
             <Icon
               name={rightAction.icon}

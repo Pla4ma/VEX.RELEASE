@@ -114,7 +114,7 @@ export function CompanionRevealScreen({
           onPress={onContinue}
           accessibilityLabel="Continue to session setup → button"
           accessibilityRole="button"
-          accessibilityHint="Activates this control"
+          accessibilityHint="Double tap to select"
         >
           Continue to session setup →
         </Button>
@@ -129,7 +129,7 @@ export function CompanionRevealScreen({
           onPress={onBack}
           accessibilityLabel="← Go back button"
           accessibilityRole="button"
-          accessibilityHint="Activates this control"
+          accessibilityHint="Double tap to select"
         >
           <Box alignItems="center" py="md">
             <Text variant="bodySmall" color="text.tertiary">

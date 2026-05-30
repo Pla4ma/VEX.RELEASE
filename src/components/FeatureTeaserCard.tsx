@@ -11,6 +11,7 @@ import type {
   UserExperienceStage,
 } from "../features/liveops-config";
 import { UnlockRequirementRow } from "./UnlockRequirementRow";
+import { buttonTap } from "../utils/haptics";
 
 interface FeatureTeaserCardProps {
   feature: FeatureKey;
@@ -62,6 +63,7 @@ export function FeatureTeaserCard(props: FeatureTeaserCardProps): JSX.Element {
       />
       <Button
         onPress={() => {
+          buttonTap();
           analytics.trackTeaserCtaPressed(
             props.feature,
             props.ctaLabel,
@@ -69,9 +71,9 @@ export function FeatureTeaserCard(props: FeatureTeaserCardProps): JSX.Element {
           );
           props.onPress();
         }}
-        accessibilityLabel="Action button"
+        accessibilityLabel={props.ctaLabel}
         accessibilityRole="button"
-        accessibilityHint="Activates this control"
+        accessibilityHint="Double tap to learn more"
       >
         {props.ctaLabel}
       </Button>

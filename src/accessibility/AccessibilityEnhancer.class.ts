@@ -58,8 +58,9 @@ export class AccessibilityEnhancer {
       return React.createElement(Component, { ...enhancedProps, ref } as P);
     });
     EnhancedComponent.displayName = `Enhanced(${Component.displayName || Component.name})`;
-    // ForwardRefExoticComponent<P> satisfies ComponentType<P> at runtime;
-    // TS cannot verify due to PropsWithoutRef wrapping at generic boundary.
+    // TODO(safe-cast): ForwardRefExoticComponent is not part of React.ComponentType union.
+    // Proper fix: change return type to ForwardRefExoticComponent<P> or use a typed HOC
+    // library (e.g. recompose). Cast is structurally safe at runtime.
     return EnhancedComponent as unknown as React.ComponentType<P>;
   }
 

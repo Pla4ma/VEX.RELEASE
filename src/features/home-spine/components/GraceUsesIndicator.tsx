@@ -44,7 +44,7 @@ export function GraceUsesIndicator({
         onPress={onPress}
         accessibilityLabel="🛡️ / saves button"
         accessibilityRole="button"
-        accessibilityHint="Activates this control"
+        accessibilityHint="Double tap to activate"
       >
         <Box
           flexDirection="row"

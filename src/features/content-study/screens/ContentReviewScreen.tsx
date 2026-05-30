@@ -129,7 +129,7 @@ export function ContentReviewScreen() {
             disabled={isGenerating}
             accessibilityLabel="Generate button"
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to activate"
           >
             {isGenerating ? (
               <ActivityIndicator size="small" color={launchColors.hex_fff} />

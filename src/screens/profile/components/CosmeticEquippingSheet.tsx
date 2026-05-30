@@ -120,9 +120,9 @@ export const CosmeticEquippingSheet: React.FC<CosmeticEquippingSheetProps> = ({
         <Pressable
           style={{ flex: 1 }}
           onPress={onClose}
-          accessibilityLabel="Interactive control"
+          accessibilityLabel="Cosmetic equip"
           accessibilityRole="button"
-          accessibilityHint="Activates this control"
+          accessibilityHint="Double tap to activate"
         />
 
         <Animated.View style={[modalStyle, style]}>

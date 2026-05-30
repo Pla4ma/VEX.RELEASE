@@ -11,6 +11,7 @@ import { useTheme } from "../theme";
 import { Text } from "./primitives";
 import { Icon } from "../icons";
 import { Button } from "./primitives";
+import { buttonTap } from "../utils/haptics";
 import {
   getVariantStyles,
   sizeStyles,
@@ -118,9 +119,9 @@ export const Banner: React.FC<BannerProps> = ({
                   size="sm"
                   onPress={onAction}
                   style={{ marginRight: secondaryActionText ? 8 : 0 }}
-                  accessibilityLabel="Action button"
+                  accessibilityLabel={actionText ?? "Action"}
                   accessibilityRole="button"
-                  accessibilityHint="Activates this control"
+                  accessibilityHint="Double tap to activate"
                 >
                   {actionText}
                 </Button>
@@ -130,9 +131,9 @@ export const Banner: React.FC<BannerProps> = ({
                   variant="ghost"
                   size="sm"
                   onPress={onSecondaryAction}
-                  accessibilityLabel="Action button"
+                  accessibilityLabel={secondaryActionText ?? "Action"}
                   accessibilityRole="button"
-                  accessibilityHint="Activates this control"
+                  accessibilityHint="Double tap to activate"
                 >
                   {secondaryActionText}
                 </Button>
@@ -143,14 +144,14 @@ export const Banner: React.FC<BannerProps> = ({
 
         {onDismiss && (
           <Pressable
-            onPress={onDismiss}
+            onPress={() => { buttonTap(); onDismiss(); }}
             style={({ pressed }) => [
               styles.dismissButton,
               pressed && { opacity: 0.7 },
             ]}
-            accessibilityLabel="Interactive control"
+            accessibilityLabel={`Dismiss ${title}`}
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to dismiss"
           >
             <Icon name="close" size={20} color={variantStyles.textColor} />
           </Pressable>

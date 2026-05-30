@@ -62,9 +62,9 @@ export function GoalCard({
     >
       <Pressable
         onPress={onPress}
-        accessibilityLabel="Interactive control"
+        accessibilityLabel="Goal option"
         accessibilityRole="button"
-        accessibilityHint="Activates this control"
+        accessibilityHint="Double tap to select"
       >
         <Animated.View
           style={[

@@ -85,7 +85,7 @@ export function ExportProgress({
             onPress={onCancel}
             accessibilityRole="button"
             accessibilityLabel="Cancel button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to select"
           >
             <Text style={styles.cancelButtonText}>Cancel</Text>
           </Pressable>
@@ -108,7 +108,7 @@ export function ExportProgress({
             onPress={onDownload}
             accessibilityRole="button"
             accessibilityLabel="Download button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to select"
           >
             <Text style={styles.downloadButtonText}>Download</Text>
           </Pressable>
@@ -124,7 +124,7 @@ export function ExportProgress({
             onPress={onRetry}
             accessibilityRole="button"
             accessibilityLabel="Retry button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to select"
           >
             <Text style={styles.retryButtonText}>Retry</Text>
           </Pressable>

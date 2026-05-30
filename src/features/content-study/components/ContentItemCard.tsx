@@ -5,6 +5,7 @@ import { Box } from "../../../components/primitives/Box";
 import { Text } from "../../../components/primitives/Text";
 import { Icon } from "../../../icons";
 import { useTheme } from "../../../theme";
+import { buttonTap } from "../../../utils/haptics";
 import type { StudyContent } from "../types";
 import {
   STATUS_CONFIG,
@@ -45,10 +46,10 @@ export function ContentItemCard({
   return (
     <Animated.View entering={FadeInUp.delay(index * 50).springify()}>
       <Pressable
-        onPress={onPress}
-        accessibilityLabel="Interactive control"
+        onPress={() => { buttonTap(); onPress(); }}
+        accessibilityLabel={`${content.title || "Untitled"} study content`}
         accessibilityRole="button"
-        accessibilityHint="Activates this control"
+        accessibilityHint="Double tap to view content details"
       >
         <Box
           p="md"
@@ -150,7 +151,7 @@ export function ContentItemCard({
               hitSlop={8}
               accessibilityLabel="Delete content"
               accessibilityRole="button"
-              accessibilityHint="Activates this control"
+              accessibilityHint="Double tap to activate"
             >
               <Box p="xs">
                 <Icon

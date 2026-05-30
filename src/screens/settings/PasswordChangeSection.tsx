@@ -46,9 +46,9 @@ export const PasswordChangeSection: React.FC = () => {
               paddingVertical: 16,
               paddingHorizontal: 16,
             }}
-            accessibilityLabel="Interactive control"
+            accessibilityLabel="Password change"
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to change setting"
           >
             <Box
               width={40}
@@ -138,7 +138,7 @@ export const PasswordChangeSection: React.FC = () => {
                 }}
                 accessibilityLabel="Cancel button"
                 accessibilityRole="button"
-                accessibilityHint="Activates this control"
+                accessibilityHint="Double tap to change setting"
               >
                 <Text
                   style={{
@@ -161,9 +161,9 @@ export const PasswordChangeSection: React.FC = () => {
                   marginLeft: 8,
                   opacity: isChangingPassword ? 0.7 : 1,
                 }}
-                accessibilityLabel="Interactive control"
+                accessibilityLabel="Password change"
                 accessibilityRole="button"
-                accessibilityHint="Activates this control"
+                accessibilityHint="Double tap to change setting"
               >
                 <Text
                   style={{ color: launchColors.hex_fff, fontWeight: "600" }}

@@ -148,7 +148,7 @@ export function FirstResultScreen({
           onPress={onComplete}
           accessibilityLabel="Continue to Home → button"
           accessibilityRole="button"
-          accessibilityHint="Activates this control"
+          accessibilityHint="Double tap to select"
         >
           Continue to Home →
         </Button>

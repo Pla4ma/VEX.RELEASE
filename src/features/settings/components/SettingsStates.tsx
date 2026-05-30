@@ -42,7 +42,7 @@ export function SettingsErrorState({
         onPress={onRetry}
         accessibilityLabel="Retry button"
         accessibilityRole="button"
-        accessibilityHint="Activates this control"
+        accessibilityHint="Double tap to activate"
       >
         <Text style={styles.retryButtonText}>Retry</Text>
       </Pressable>

@@ -44,7 +44,7 @@ export function DayDetailsPopover({
           onPress={onClose}
           accessibilityLabel="✕ button"
           accessibilityRole="button"
-          accessibilityHint="Activates this control"
+          accessibilityHint="Double tap to activate"
         >
           <Text fontSize={20} color="text.tertiary">
             ✕

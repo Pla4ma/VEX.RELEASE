@@ -34,7 +34,7 @@ export function CoachRecommendationCard({
         }}
         accessibilityLabel="Start session button"
         accessibilityRole="button"
-        accessibilityHint="Activates this control"
+        accessibilityHint="Double tap to activate"
       >
         <Text style={styles.startSessionButtonText}>
           Start {recommendation.duration}-min Session

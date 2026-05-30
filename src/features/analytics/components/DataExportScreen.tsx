@@ -55,7 +55,7 @@ export function DataExportScreen({ userId, onClose }: DataExportScreenProps) {
           style={({ pressed }) => [styles.closeButton, pressed && { opacity: 0.8 }]}
           accessibilityLabel="Close button"
           accessibilityRole="button"
-          accessibilityHint="Activates this control"
+          accessibilityHint="Double tap to select"
         >
           <Text style={styles.closeIcon}>✕</Text>
         </Pressable>
@@ -116,7 +116,7 @@ export function DataExportScreen({ userId, onClose }: DataExportScreenProps) {
             disabled={exportMutation.isPending}
             accessibilityLabel="Start Export button"
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to select"
           >
             <Text style={styles.exportButtonText}>
               {exportMutation.isPending ? "Preparing..." : "Start Export"}

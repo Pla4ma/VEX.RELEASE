@@ -71,9 +71,9 @@ export function TooltipCard({
             borderRadius: theme.borderRadius.lg,
             alignItems: "center",
           }}
-          accessibilityLabel="Interactive control"
+          accessibilityLabel="Tooltip"
           accessibilityRole="button"
-          accessibilityHint="Activates this control"
+          accessibilityHint="Double tap to activate"
         >
           <Text
             color={theme.colors.text.inverse}
@@ -93,7 +93,7 @@ export function TooltipCard({
             }}
             accessibilityLabel="Skip tutorial button"
             accessibilityRole="button"
-            accessibilityHint="Activates this control"
+            accessibilityHint="Double tap to activate"
           >
             <Text
               variant="body"
