@@ -1,117 +1,176 @@
+/**
+ * Study OS — Recall Tests
+ *
+ * Covers: generateRecallQuestion, getEmptyRecallFallback, shouldGenerateRecall
+ */
+
 import {
-  completeStudyBlock,
-  completeStudyBlockEnhanced,
-  createPasteStudyPlan,
   generateRecallQuestion,
   getEmptyRecallFallback,
-  getPlannedBlocksFromPlan,
   shouldGenerateRecall,
-  mockStore,
-} from "./study-os.helpers";
+} from "../service";
+import { StudyPlanSchema, RecallQuestionSchema } from "../schemas";
 
-describe("Recall questions", () => {
-  beforeEach(() => mockStore.clear());
+// ─── Mock external dependencies ──────────────────────────────────
 
-  it("generates recall question from block data", () => {
-    const recall = generateRecallQuestion({
-      blockObjective: "Understand limits",
-      blockTitle: "Calculus Limits",
-      studyBlockId: "block-1",
-      studyPlanId: "plan-1",
+const mockStore = new Map<string, string>();
+
+jest.mock("react-native-mmkv", () => ({
+  MMKV: class MockMMKV {
+    getString(key: string): string | undefined {
+      return mockStore.get(key);
+    }
+    set(key: string, value: string | number | boolean): void {
+      mockStore.set(key, String(value));
+    }
+    delete(key: string): void {
+      mockStore.delete(key);
+    }
+    contains(key: string): boolean {
+      return mockStore.has(key);
+    }
+    getAllKeys(): string[] {
+      return Array.from(mockStore.keys());
+    }
+  },
+}));
+
+jest.mock("../../../session/modes", () => ({
+  SessionMode: {
+    STUDY: "STUDY",
+    FOCUS: "FOCUS",
+  },
+}));
+
+jest.mock("../../session-start/service", () => ({
+  buildLaneSessionBrief: jest.fn((input: { durationSeconds: number; lane: string }) => ({
+    durationSeconds: input.durationSeconds,
+    lane: input.lane,
+    mode: "study",
+  })),
+}));
+
+// ─── generateRecallQuestion ──────────────────────────────────────
+
+describe("generateRecallQuestion", () => {
+  it("generates recall type without reflection", () => {
+    const q = generateRecallQuestion({
+      blockTitle: "Photosynthesis",
+      blockObjective: "Understand light reactions",
+      studyBlockId: "b1",
+      studyPlanId: "p1",
     });
-    expect(recall.kind).toBe("recall");
-    expect(recall.prompt).toContain("Calculus Limits");
-    expect(recall.answerHint).toBeNull();
+    expect(q.kind).toBe("recall");
+    expect(q.prompt).toContain("Photosynthesis");
+    expect(q.answerHint).toBeNull();
+    expect(q.studyBlockId).toBe("b1");
+    expect(q.studyPlanId).toBe("p1");
   });
 
-  it("generates reflection question when reflection given", () => {
-    const recall = generateRecallQuestion({
-      blockObjective: "Understand limits",
-      blockTitle: "Calculus Limits",
-      reflection: "I focused on the epsilon-delta definition",
-      studyBlockId: "block-1",
-      studyPlanId: "plan-1",
+  it("generates reflection type with reflection text", () => {
+    const q = generateRecallQuestion({
+      blockTitle: "Photosynthesis",
+      blockObjective: "Understand light reactions",
+      reflection: "The diagrams helped a lot",
+      studyBlockId: "b1",
+      studyPlanId: "p1",
     });
-    expect(recall.kind).toBe("reflection");
-    expect(recall.prompt).toContain("Reflect");
-    expect(recall.answerHint).toBe("I focused on the epsilon-delta definition");
+    expect(q.kind).toBe("reflection");
+    expect(q.prompt).toContain("Reflect");
+    expect(q.answerHint).toContain("diagrams helped");
   });
 
-  it("empty recall fallback returns placeholder", () => {
-    const fallback = getEmptyRecallFallback();
-    expect(fallback.id).toBe("no-recall");
-    expect(fallback.kind).toBe("reflection");
+  it("truncates answerHint to 200 chars", () => {
+    const longReflection = "A".repeat(300);
+    const q = generateRecallQuestion({
+      blockTitle: "Test",
+      blockObjective: "Test obj",
+      reflection: longReflection,
+      studyBlockId: "b1",
+      studyPlanId: "p1",
+    });
+    expect(q.answerHint!.length).toBeLessThanOrEqual(200);
   });
 
-  it("shouldGenerateRecall false when no completed blocks", () => {
-    expect(shouldGenerateRecall(null)).toBe(false);
+  it("generates ID containing studyBlockId", () => {
+    const q = generateRecallQuestion({
+      blockTitle: "A",
+      blockObjective: "B",
+      studyBlockId: "b1",
+      studyPlanId: "p1",
+    });
+    expect(q.id).toContain("b1");
+    expect(q.id).toContain("recall");
   });
 
-  it("shouldGenerateRecall true when completed blocks exist", async () => {
-    const plan = await createPasteStudyPlan({
-      now: 10,
-      pastedText: "Read chapter 1.",
-      title: "History",
-      userId: "s-1",
+  it("validates against RecallQuestionSchema", () => {
+    const q = generateRecallQuestion({
+      blockTitle: "Test",
+      blockObjective: "Learn",
+      studyBlockId: "b1",
+      studyPlanId: "p1",
     });
-    const updated = await completeStudyBlock({
-      blockId: plan.blocks[0]?.id ?? "",
-      studyPlanId: plan.id,
-      userId: "s-1",
-      now: 20,
-    });
-    expect(shouldGenerateRecall(updated)).toBe(true);
+    expect(() => RecallQuestionSchema.parse(q)).not.toThrow();
   });
 });
 
-describe("Enhanced completion", () => {
-  beforeEach(() => mockStore.clear());
+// ─── getEmptyRecallFallback ──────────────────────────────────────
 
-  it("returns recall question with completed plan", async () => {
-    const plan = await createPasteStudyPlan({
-      now: 10,
-      pastedText: "Review cell structure.",
-      title: "Biology",
-      userId: "s-1",
-    });
-    const result = await completeStudyBlockEnhanced({
-      blockId: plan.blocks[0]?.id ?? "",
-      reflection: "Memorized organelles",
-      studyPlanId: plan.id,
-      userId: "s-1",
-      now: 20,
-    });
-    expect(result.plan.blocks[0]?.status).toBe("completed");
-    expect(result.recallQuestion).not.toBeNull();
-    expect(result.recallQuestion?.kind).toBe("reflection");
-    expect(result.recallQuestion?.answerHint).toBe("Memorized organelles");
-    expect(result.memoryContent).toContain("Memorized organelles");
-    expect(result.memoryTags).toContain("study-block");
+describe("getEmptyRecallFallback", () => {
+  it("returns a valid fallback question", () => {
+    const fallback = getEmptyRecallFallback();
+    expect(fallback.id).toBe("no-recall");
+    expect(fallback.prompt).toContain("start one first");
+    expect(fallback.kind).toBe("reflection");
+    expect(fallback.answerHint).toBeNull();
   });
 
-  it("returns null suggested next when all blocks complete", async () => {
-    const plan = await createPasteStudyPlan({
-      now: 10,
-      pastedText: "Chapter one.",
-      title: "Reading",
-      userId: "s-1",
-    });
-    const result = await completeStudyBlockEnhanced({
-      blockId: plan.blocks[0]?.id ?? "",
-      studyPlanId: plan.id,
-      userId: "s-1",
-      now: 20,
-    });
-    expect(result.suggestedNextBlock).toBeNull();
+  it("validates against RecallQuestionSchema", () => {
+    expect(() =>
+      RecallQuestionSchema.parse(getEmptyRecallFallback()),
+    ).not.toThrow();
+  });
+});
+
+// ─── shouldGenerateRecall ────────────────────────────────────────
+
+describe("shouldGenerateRecall", () => {
+  it("returns false for null plan", () => {
+    expect(shouldGenerateRecall(null)).toBe(false);
   });
 
-  it("getPlannedBlocksFromPlan returns not-started blocks", async () => {
-    const plan = await createPasteStudyPlan({
-      now: 10,
-      pastedText: "Study math.",
-      title: "Math",
-      userId: "s-1",
+  it("returns false when no blocks are completed", () => {
+    const plan = StudyPlanSchema.parse({
+      blocks: [
+        { estimatedMinutes: 25, id: "b1", objective: "Learn", priority: "medium", status: "not_started", studyPlanId: "p1", title: "T" },
+      ],
+      createdAt: 100,
+      deadlineAt: null,
+      id: "p1",
+      reviewItems: [],
+      source: { createdAt: 100, extractedTextStatus: "none", id: "s1", title: "T", type: "manual", userId: "u1" },
+      status: "active",
+      title: "Plan",
+      userId: "u1",
     });
-    expect(getPlannedBlocksFromPlan(plan)).toHaveLength(1);
+    expect(shouldGenerateRecall(plan)).toBe(false);
+  });
+
+  it("returns true when at least one block is completed", () => {
+    const plan = StudyPlanSchema.parse({
+      blocks: [
+        { estimatedMinutes: 25, id: "b1", objective: "Learn", priority: "medium", status: "completed", studyPlanId: "p1", title: "T" },
+        { estimatedMinutes: 25, id: "b2", objective: "More", priority: "medium", status: "not_started", studyPlanId: "p1", title: "T2" },
+      ],
+      createdAt: 100,
+      deadlineAt: null,
+      id: "p1",
+      reviewItems: [],
+      source: { createdAt: 100, extractedTextStatus: "none", id: "s1", title: "T", type: "manual", userId: "u1" },
+      status: "active",
+      title: "Plan",
+      userId: "u1",
+    });
+    expect(shouldGenerateRecall(plan)).toBe(true);
   });
 });
