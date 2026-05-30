@@ -12,6 +12,7 @@ import {
   type QueryObserverResult,
   type RefetchOptions,
 } from "@tanstack/react-query";
+import { useMemo } from "react";
 import { createDebugger } from "../../utils/debug";
 import { COACH_QUERY_KEYS } from "./constants";
 import {
@@ -66,10 +67,15 @@ export function useActiveCoachRecommendations(
     enabled: enabled && Boolean(userId),
     staleTime: 1000 * 60 * 5,
   });
-  const primaryRecommendation =
-    (data ?? [])
-      .filter((item) => item.status === "ACTIVE" && item.expiresAt > Date.now())
-      .sort((a, b) => (b.confidence ?? 0) - (a.confidence ?? 0))[0] ?? null;
+  const primaryRecommendation = useMemo(
+    () =>
+      (data ?? [])
+        .filter(
+          (item) => item.status === "ACTIVE" && item.expiresAt > Date.now(),
+        )
+        .sort((a, b) => (b.confidence ?? 0) - (a.confidence ?? 0))[0] ?? null,
+    [data],
+  );
   return { data, primaryRecommendation, isPending, isError, error, refetch };
 }
 

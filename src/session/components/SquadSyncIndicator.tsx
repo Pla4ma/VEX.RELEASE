@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useMemo, useRef } from "react";
 
 import { Box } from "../../components/primitives/Box";
 import { eventBus } from "../../events";
@@ -43,12 +43,14 @@ export function SquadSyncIndicator({
   const maxToastsReachedRef = useRef(false);
   const squadCompletionsRef = useRef<Set<string>>(new Set());
   const encouragedMembersRef = useRef<Set<string>>(new Set());
-  const otherMembers = members.filter(
-    (member) => member.userId !== currentUserId,
+  const otherMembers = useMemo(
+    () => members.filter((member) => member.userId !== currentUserId),
+    [members, currentUserId],
   );
-  const focusingCount = otherMembers.filter(
-    (member) => member.isFocusing,
-  ).length;
+  const focusingCount = useMemo(
+    () => otherMembers.filter((member) => member.isFocusing).length,
+    [otherMembers],
+  );
 
   const handleSquadCompletion = useCallback(
     (memberName: string, durationMinutes: number) => {

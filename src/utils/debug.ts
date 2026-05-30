@@ -106,7 +106,8 @@ export function createDebugger(namespace: string): Debugger {
 
     info: (message: string, ...args: unknown[]) => {
       if (currentLogLevel <= LogLevel.INFO) {
-        console.log(formatMessage(namespace, message), ...args);
+        // eslint-disable-next-line no-restricted-syntax -- debugger info channel
+        console.info(formatMessage(namespace, message), ...args);
       }
     },
 

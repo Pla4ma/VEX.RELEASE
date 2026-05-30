@@ -1,4 +1,3 @@
-import { getSupabaseClient } from "../../config/supabase";
 import { StreakRowSchema, StreakSchema, type Streak } from "./schemas";
 
 export class RepositoryError extends Error {
@@ -13,7 +12,8 @@ export class RepositoryError extends Error {
   }
 }
 
-export const supabase = getSupabaseClient();
+/** Re-export singleton from canonical source to avoid stale module-level references */
+export { supabase } from "../../config/supabase";
 
 export function parseStreakRow(row: unknown): Streak {
   const parsed = StreakRowSchema.parse(row);

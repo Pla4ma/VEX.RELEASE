@@ -1,5 +1,3 @@
-import { getSupabaseClient } from "../../../config/supabase";
-
 export class RepositoryError extends Error {
   constructor(
     public operation: string,
@@ -14,4 +12,5 @@ export class RepositoryError extends Error {
   }
 }
 
-export const supabase = getSupabaseClient();
+/** Re-export singleton from canonical source to avoid stale module-level references */
+export { supabase } from "../../../config/supabase";

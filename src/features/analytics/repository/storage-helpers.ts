@@ -1,12 +1,10 @@
 import {
-  getSupabaseClient,
-} from "../../../config/supabase";
-import {
   CircuitBreaker,
 } from "../../../shared/hardening";
 import { AnalyticsStorageError } from "./storage-types";
 
-export const supabase = getSupabaseClient();
+/** Re-export singleton from canonical source to avoid stale module-level references */
+export { supabase } from "../../../config/supabase";
 
 export const storageCircuitBreaker = new CircuitBreaker({
   failureThreshold: 3,

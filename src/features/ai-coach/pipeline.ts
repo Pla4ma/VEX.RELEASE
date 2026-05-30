@@ -26,6 +26,7 @@ import {
   readBoolean,
 } from "./pipeline-helpers";
 import { activateComeback } from "./pipeline-comeback";
+import { sanitizeLLMContext } from "./llm-input-sanitizer";
 
 export { activateComeback } from "./pipeline-comeback";
 
@@ -63,7 +64,7 @@ export async function generateMessage(
         userId: input.userId,
         personaId: state.personaId,
         metadata: { timestamp: Date.now() },
-        context: {
+        context: sanitizeLLMContext({
           ...input.context,
           currentLevel: progression.currentLevel,
           currentStreak: stats.currentStreak,
@@ -76,7 +77,7 @@ export async function generateMessage(
               Math.round(summary.actualDuration / 60),
             ),
           })),
-        },
+        }),
       },
     },
   );
