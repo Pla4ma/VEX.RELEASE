@@ -36,6 +36,7 @@ export const FEATURE_DESCRIPTIONS: Record<string, string> = {
     "AI-powered assistant for help and recommendations",
   [FEATURE_FLAGS.PREVIEW_FEATURES]:
     "Enable experimental features (may be unstable)",
+  [FEATURE_FLAGS.DATA_EXPORT]: "Export your data in JSON or CSV format",
 };
 
 export const FEATURE_GROUPS = {

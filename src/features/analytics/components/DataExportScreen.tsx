@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from "react";
-import { View, Text, ScrollView, Pressable, Switch, Alert } from "react-native";
+import { View, Text, ScrollView, Pressable, Switch, Alert, Linking } from "react-native";
 import { useExportAnalytics, useExportJobs } from "../hooks";
 import { ExportProgress } from "./ExportProgress";
 import { ErrorBoundary } from "../../../errors/ErrorBoundary";
@@ -16,6 +16,7 @@ import {
   DangerZoneSection,
   ConfirmExportModal,
 } from "./data-export-helpers";
+import * as Sentry from "@sentry/react-native";
 
 export type { DataExportScreenProps, ExportFormat, DataCategory };
 
@@ -44,8 +45,25 @@ export function DataExportScreen({ userId, onClose }: DataExportScreenProps) {
   }, [exportMutation, selectedFormat, selectedCategory]);
 
   const handleDownload = useCallback((jobId: string) => {
-    Alert.alert("Download", `Downloading export ${jobId}...`);
-  }, []);
+    const job = exportJobs?.find((j) => j.id === jobId);
+    if (!job?.fileUrl) {
+      Alert.alert("Download", "This export is not ready yet. Please wait for it to complete.", [{ text: "OK" }]);
+      return;
+    }
+    Sentry.addBreadcrumb({
+      category: "analytics_export",
+      message: "Downloading export file",
+      level: "info",
+      data: { jobId, fileUrl: job.fileUrl },
+    });
+    Linking.openURL(job.fileUrl).catch((err: Error) => {
+      Sentry.captureException(err, {
+        tags: { feature: "analytics_export", operation: "download" },
+        extra: { jobId, fileUrl: job.fileUrl },
+      });
+      Alert.alert("Download Failed", "Unable to open the download link. Please try again.", [{ text: "OK" }]);
+    });
+  }, [exportJobs]);
 
   return (
     <View style={styles.container}>

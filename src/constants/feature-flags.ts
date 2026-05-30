@@ -73,4 +73,5 @@ export const FEATURE_FLAGS = {
   PREVIEW_FEATURES: "preview_features",
   EXPERIMENTAL_UI: "experimental_ui",
   EARLY_ACCESS: "early_access",
+  DATA_EXPORT: "data_export",
 } as const;

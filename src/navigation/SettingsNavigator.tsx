@@ -15,6 +15,7 @@ import AppearanceSettingsScreen from "../screens/settings/AppearanceSettingsScre
 import CoachSettingsScreen from "../screens/settings/CoachSettingsScreen";
 import PrivacySettingsScreen from "../screens/settings/PrivacySettingsScreen";
 import AccountSettingsScreen from "../screens/settings/AccountSettingsScreen";
+import { DataExportScreen } from "../screens/settings/DataExportScreen";
 import type { SettingsStackParams } from "./types";
 
 const Stack = createNativeStackNavigator<SettingsStackParams>();
@@ -38,6 +39,7 @@ export const SettingsNavigator: React.FC = () => {
       <Stack.Screen name="PrivacySettings" component={PrivacySettingsScreen} />
       <Stack.Screen name="AccountSettings" component={AccountSettingsScreen} />
       <Stack.Screen name="LaneMode" component={LaneModeSettingsScreen} />
+      <Stack.Screen name="DataExport" component={DataExportScreen} />
     </Stack.Navigator>
   );
 };

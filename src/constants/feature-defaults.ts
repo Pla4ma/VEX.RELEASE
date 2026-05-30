@@ -75,4 +75,5 @@ export const FEATURE_FLAG_DEFAULTS: Record<string, boolean> = {
   [FEATURE_FLAGS.PREVIEW_FEATURES]: false,
   [FEATURE_FLAGS.EXPERIMENTAL_UI]: false,
   [FEATURE_FLAGS.EARLY_ACCESS]: false,
+  [FEATURE_FLAGS.DATA_EXPORT]: true,
 };

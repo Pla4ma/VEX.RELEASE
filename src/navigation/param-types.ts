@@ -119,6 +119,7 @@ export interface SettingsStackParams {
   AppearanceSettings: undefined;
   CoachSettings: undefined;
   LaneMode: undefined;
+  DataExport: undefined;
 }
 
 export interface ScreenOptionsFactory {

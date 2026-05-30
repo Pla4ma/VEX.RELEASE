@@ -36,6 +36,7 @@ export interface BuildSettingsGroupsParams {
   navigateToPrivacy: () => void;
   navigateToAccount: () => void;
   navigateToLaneMode: () => void;
+  navigateToDataExport: () => void;
 }
 
 export function buildSettingsGroups(p: BuildSettingsGroupsParams): SettingGroup[] {
@@ -98,6 +99,13 @@ export function buildSettingsGroups(p: BuildSettingsGroupsParams): SettingGroup[
           onPress: p.navigateToPrivacy },
         { id: "analytics", icon: "bar-chart-2", title: "Anonymous Analytics", subtitle: "Help improve VEX", type: "toggle",
           value: p.analyticsEnabled, onToggle: p.setAnalyticsEnabled },
+      ],
+    },
+    {
+      title: "Data",
+      items: [
+        { id: "data-export", icon: "download", title: "Export My Data", subtitle: "Download sessions, achievements, progression", type: "link",
+          onPress: p.navigateToDataExport },
       ],
     },
     {

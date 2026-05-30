@@ -29,7 +29,8 @@ export type SettingsStackRoute =
   | "AccountSettings"
   | "NotificationSettings"
   | "PrivacySettings"
-  | "AppearanceSettings";
+  | "AppearanceSettings"
+  | "DataExport";
 
 export type SessionStackRoute =
   | "SessionSetup"

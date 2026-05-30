@@ -61,6 +61,7 @@ export const SettingsScreen = withScreenErrorBoundary(function _SettingsScreen({
     navigateToPrivacy: () => navigation.navigate("PrivacySettings"),
     navigateToAccount: () => navigation.navigate("AccountSettings"),
     navigateToLaneMode: () => navigation.navigate("LaneMode"),
+    navigateToDataExport: () => navigation.navigate("DataExport"),
   });
 
   const filteredGroups = settingGroups
