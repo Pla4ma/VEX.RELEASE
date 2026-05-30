@@ -294,4 +294,12 @@ export function setupMocks() {
   );
 }
 
-export { mockConnectionState, mockEnqueue, mockSetCompletionSyncState };
+export {
+  mockConnectionState,
+  mockEnqueue,
+  mockSetCompletionSyncState,
+  mockCreateLedger,
+  mockFindLedger,
+  mockApplySubsystems,
+  mockApplySideEffects,
+};
