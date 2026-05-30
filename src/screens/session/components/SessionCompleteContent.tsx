@@ -9,9 +9,7 @@ import {
   type CompletionSurface,
   resolveCompletionExperiencePolicy,
 } from "../../../features/session-completion/completion-experience-policy";
-import type { SessionCompletionConsequences } from "../../../features/session-completion/story-consequence-service";
 import { useSessionCompleteController } from "../../../features/session-completion/hooks";
-import type { SessionSummary } from "../../../session/types";
 import { useTomorrowPreviewForSession } from "../../../features/home-spine/hooks";
 import {
   useContractForSession,
@@ -23,27 +21,16 @@ import { useFeatureAccess } from "../../../features/liveops-config";
 import { useOnboardingStore } from "../../../features/onboarding/store";
 import { usePremiumStatus } from "../../../shared/monetization";
 import { ModeCompletionSurface } from "../../../features/mode-native/components/ModeCompletionSurface";
-import type { Lane } from "../../../features/lane-engine/types";
-import { SessionMode } from "../../../session/modes";
 
 import { SessionCompleteHeroSection } from "./SessionCompleteHeroSection";
 import { SessionCompleteRewardsPhase } from "./SessionCompleteRewardsPhase";
 import { SessionCompleteNextSteps } from "./SessionCompleteNextSteps";
 import { SessionCompleteOverlays } from "./SessionCompleteOverlays";
 import { SessionContractReflectionCard } from "./SessionContractReflectionCard";
-
-const SESSION_MODE_TO_LANE: Record<string, Lane> = {
-  [SessionMode.STUDY]: "student",
-  [SessionMode.LIGHT_FOCUS]: "game_like",
-  [SessionMode.DEEP_WORK]: "deep_creative",
-  [SessionMode.CREATIVE]: "minimal_normal",
-};
-
-type SessionCompleteContentProps = {
-  sessionId: string;
-  summary: SessionSummary;
-  consequences?: SessionCompletionConsequences;
-};
+import {
+  SESSION_MODE_TO_LANE,
+  type SessionCompleteContentProps,
+} from "./SessionCompleteContent.types";
 
 export function SessionCompleteContent({
   sessionId,
