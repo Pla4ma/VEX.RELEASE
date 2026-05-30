@@ -52,7 +52,7 @@ describe("Phase 3F — Mechanics & Cross-Lane Proof", () => {
     const cleanPolicy = getLaneMechanicPolicy(
       baseLaneProfile({ primaryLane: "minimal_normal" }),
     );
-    expect(cleanPolicy.blockedMechanics).toContain("boss_full_cta");
+    expect(cleanPolicy.blockedMechanics).toContain("blocker_full_cta");
     expect(cleanPolicy.blockedMechanics).toContain("challenge_spam");
     expect(cleanPolicy.blockedMechanics).toContain("xp_first_ui");
     expect(cleanPolicy.blockedMechanics).toContain("economy");

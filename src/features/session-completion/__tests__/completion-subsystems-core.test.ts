@@ -1,6 +1,4 @@
-import { applyCompletionSubsystems } from "../completion-subsystems";
-import { setFeatureAccessMap } from "../../liveops-config/feature-access-store";
-import type { FeatureAccessMap } from "../../liveops-config/feature-access";
+// Helper must be imported FIRST so its jest.mock() calls register before source modules load
 import {
   mockOrder,
   mockAddBreadcrumb,
@@ -11,6 +9,9 @@ import {
   baseSummary,
   defaultFeatureAccess,
 } from "./completion-subsystems.helpers";
+import { applyCompletionSubsystems } from "../completion-subsystems";
+import { setFeatureAccessMap } from "../../liveops-config/feature-access-store";
+import type { FeatureAccessMap } from "../../liveops-config/feature-access";
 
 describe("applyCompletionSubsystems", () => {
   beforeEach(() => {

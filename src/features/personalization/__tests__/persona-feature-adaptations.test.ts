@@ -67,15 +67,15 @@ describe("VexExperience — feature adaptations & edge cases", () => {
       expect(exp.behaviorAdaptations).toContain("boss_ignored");
     });
 
-    it("boss intensity remains game-like", () => {
-      expect(exp.bossIntensity).toBe("game-like");
+    it("boss intensity is subtle when engagement is none", () => {
+      expect(exp.bossIntensity).toBe("subtle");
     });
   });
 
   describe("User who uses Study heavily", () => {
     const exp = resolveVexExperience(
       profile("coach_led"),
-      stats({ totalCompletedSessions: 6, studyUsageRatio: 0.8 }),
+      stats({ totalCompletedSessions: 6, studyUsageRatio: 0.8, premiumFeatureAttempts: ["advanced_study"] }),
       baseAvailability,
     );
 

@@ -1,27 +1,57 @@
+const mockSelect = jest.fn();
+
+jest.mock("../../../config/supabase", () => ({
+  supabase: {
+    from: jest.fn(() => ({
+      select: mockSelect,
+    })),
+  },
+}));
+
 import {
   fetchMonthlyFocusReportInput,
   MonthlyReportRepositoryError,
 } from "../repository";
-import { mockSelect } from "./test-setup";
 
 describe("fetchMonthlyFocusReportInput — error and empty handling", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    mockSelect.mockReset();
   });
 
   it("throws MonthlyReportRepositoryError on Supabase error", async () => {
-    mockSelect.mockReturnValue({
-      eq: jest.fn().mockReturnValue({
-        gte: jest.fn().mockReturnValue({
-          lte: jest.fn().mockReturnValue({
-            order: jest.fn().mockResolvedValue({
-              data: null,
-              error: { message: "DB error", code: "XX000" },
+    // Query 1: focus_score_history — .select().eq().gte().lte().order()
+    mockSelect
+      .mockReturnValueOnce({
+        eq: jest.fn().mockReturnValue({
+          gte: jest.fn().mockReturnValue({
+            lte: jest.fn().mockReturnValue({
+              order: jest.fn().mockResolvedValue({
+                data: null,
+                error: { message: "DB error", code: "XX000" },
+              }),
             }),
           }),
         }),
-      }),
-    });
+      })
+      // Query 2: session_ledgers (should not be reached)
+      .mockReturnValueOnce({
+        eq: jest.fn().mockReturnValue({
+          gte: jest.fn().mockReturnValue({
+            lte: jest.fn().mockResolvedValue({
+              data: [],
+              error: null,
+            }),
+          }),
+        }),
+      })
+      // Query 3: focus_score_current (should not be reached)
+      .mockReturnValueOnce({
+        eq: jest.fn().mockReturnValue({
+          single: jest
+            .fn()
+            .mockResolvedValue({ data: { factors: {} }, error: null }),
+        }),
+      });
 
     await expect(
       fetchMonthlyFocusReportInput({
@@ -36,6 +66,7 @@ describe("fetchMonthlyFocusReportInput — error and empty handling", () => {
     const scoreData = [{ score: 550, created_at: "2025-03-01T00:00:00Z" }];
     const factors = {};
 
+    // Query 1: focus_score_history — .select().eq().gte().lte().order()
     mockSelect
       .mockReturnValueOnce({
         eq: jest.fn().mockReturnValue({
@@ -48,6 +79,7 @@ describe("fetchMonthlyFocusReportInput — error and empty handling", () => {
           }),
         }),
       })
+      // Query 2: session_ledgers — .select().eq().gte().lte()
       .mockReturnValueOnce({
         eq: jest.fn().mockReturnValue({
           gte: jest.fn().mockReturnValue({
@@ -55,6 +87,7 @@ describe("fetchMonthlyFocusReportInput — error and empty handling", () => {
           }),
         }),
       })
+      // Query 3: focus_score_current — .select().eq().single()
       .mockReturnValueOnce({
         eq: jest.fn().mockReturnValue({
           single: jest

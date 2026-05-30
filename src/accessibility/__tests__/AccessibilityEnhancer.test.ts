@@ -17,7 +17,7 @@ describe("AccessibilityEnhancer", () => {
   describe("Component Enhancement", () => {
     it("should enhance component with accessibility props", () => {
       const EnhancedComponent = enhancer.enhanceComponent(mockComponent);
-      expect(EnhancedComponent.displayName).toBe("Enhanced(Test Component)");
+      expect(EnhancedComponent.displayName).toBe("Enhanced(mockComponent)");
     });
     it("should apply contrast enhancements", () => {
       const props = { style: { color: "#999999", backgroundColor: "#FFFFFF" } };

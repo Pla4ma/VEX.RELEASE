@@ -43,7 +43,7 @@ describe("Risk 3 — Run Companion Party-Mode Gating", () => {
   it("Run brief has encounter CTA, no party/squad language", () => {
     const brief = buildLaneSessionBrief({ lane: "game_like" });
     expect(brief.sessionMode).toBe(SessionMode.SPRINT);
-    expect(brief.ctaLabel).toBe("Start encounter");
+    expect(brief.ctaLabel).toBe("Start clean run");
     expect(brief.title).not.toContain("party");
   });
 

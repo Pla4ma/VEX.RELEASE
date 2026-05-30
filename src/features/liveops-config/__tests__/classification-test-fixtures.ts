@@ -5,6 +5,7 @@ export const FEATURE_FOLDERS = [
   "achievements",
   "ai-coach",
   "analytics",
+  "auth",
   "battle-pass",
   "boss",
   "boss-realtime",
@@ -33,6 +34,8 @@ export const FEATURE_FOLDERS = [
   "liveops-config",
   "mastery",
   "memory-candidate",
+  "mode-native",
+  "mode-retention",
   "monetization",
   "monthly-report",
   "notification-policy",
@@ -44,6 +47,7 @@ export const FEATURE_FOLDERS = [
   "project-focus",
   "rescue-mode",
   "retention",
+  "retention-loop",
   "reward-ledger",
   "rewards",
   "seasons",
@@ -67,6 +71,7 @@ export const FEATURE_FOLDERS = [
   "unlock-explainer",
   "vex-actions",
   "wallet",
+  "weekly-intelligence",
   "weekly-quests",
 ];
 

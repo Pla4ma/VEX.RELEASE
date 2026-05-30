@@ -5,38 +5,33 @@ import { NavigationContainer } from "@react-navigation/native";
 import { jest } from "@jest/globals";
 import { NavigationGuard } from "../NavigationGuard";
 
-const mockIsFeatureEnabled = jest.fn();
-const mockIsFeatureDisabled = jest.fn();
-const mockIsFeatureOptional = jest.fn();
-const mockGetDisabledFeatures = jest.fn(() => [
-  "social-feed",
-  "duels",
-  "rankings",
-  "squad-wars",
-  "rivals",
-  "trading",
-  "emergency-gem-sinks",
-  "complex-crafting",
-  "ar-experimental",
-]);
+const mockIsEnabled = jest.fn();
 
-jest.mock("../../../constants/features", () => ({
-  isFeatureEnabled: mockIsFeatureEnabled,
-  isFeatureDisabled: mockIsFeatureDisabled,
-  isFeatureOptional: mockIsFeatureOptional,
-  getDisabledFeatures: mockGetDisabledFeatures,
+jest.mock("../../../hooks/useFeatureFlags", () => ({
+  useFeatureFlags: () => ({
+    isEnabled: mockIsEnabled,
+  }),
 }));
 
 export function resetFeatureMocks(): void {
   jest.clearAllMocks();
-  mockIsFeatureEnabled.mockReturnValue(false);
-  mockIsFeatureDisabled.mockReturnValue(false);
-  mockIsFeatureOptional.mockReturnValue(false);
+  mockIsEnabled.mockReturnValue(false);
 }
 
-export function renderGuardedFeature(feature: string): void {
+export function renderGuardedFeature(
+  feature: string,
+  fallback?: React.ReactNode,
+): void {
+  const defaultFallback = (
+    <View testID="fallback-content">
+      <Text>Feature not available</Text>
+    </View>
+  );
   const TestComponent = () => (
-    <NavigationGuard featureFlag={feature}>
+    <NavigationGuard
+      featureFlag={feature}
+      fallback={fallback ?? defaultFallback}
+    >
       <View testID="protected-content">
         <Text>{feature} Content</Text>
       </View>
@@ -49,9 +44,4 @@ export function renderGuardedFeature(feature: string): void {
   );
 }
 
-export {
-  mockIsFeatureEnabled,
-  mockIsFeatureDisabled,
-  mockIsFeatureOptional,
-  mockGetDisabledFeatures,
-};
+export { mockIsEnabled };

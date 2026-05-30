@@ -1,15 +1,10 @@
-import {
-  render,
-  screen,
-  fireEvent,
-  waitFor,
-} from "@testing-library/react-native";
 import React from "react";
-import { HomeScreen } from "../HomeScreen";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react-native";
 import {
   mockState,
   resetRecommendationsMocks,
 } from "./home-screen-recommendations-helpers";
+import { HomeScreen } from "../HomeScreen";
 
 describe("HomeScreen recommendations", () => {
   beforeEach(() => {

@@ -5,18 +5,7 @@ import * as repository from "../repository";
 import { eventBus } from "../../../events";
 
 jest.mock("../repository");
-jest.mock("../storage", () => ({
-  uploadExportData: jest
-    .fn()
-    .mockResolvedValue({
-      url: "https://test.com/export.json",
-      size: 1000,
-      checksum: "abc123",
-      uploadedAt: Date.now(),
-      expiresAt: Date.now() + 604800000,
-    }),
-  deleteExportData: jest.fn().mockResolvedValue(undefined),
-}));
+
 jest.mock("../../../events", () => ({ eventBus: { publish: jest.fn() } }));
 jest.mock("@sentry/react-native", () => ({
   addBreadcrumb: jest.fn(),
@@ -50,7 +39,7 @@ describe("AnalyticsService", () => {
         mockTimeSeriesData,
       );
       const result = await getAnalyticsData({
-        userId: "user-123",
+        userId: "550e8400-e29b-41d4-a716-446655440000",
         metrics: ["sessions_completed", "xp_earned"],
         timeRange: "last_7_days",
         granularity: "day",
@@ -77,7 +66,7 @@ describe("AnalyticsService", () => {
         mockTimeSeriesData,
       );
       await getAnalyticsData({
-        userId: "user-123",
+        userId: "550e8400-e29b-41d4-a716-446655440000",
         metrics: ["sessions_completed"],
         timeRange: "last_7_days",
         granularity: "day",
@@ -85,7 +74,7 @@ describe("AnalyticsService", () => {
         filters: [{ dimension: "day_of_week", operator: "eq", value: "1" }],
       });
       expect(repository.fetchTimeSeriesData).toHaveBeenCalledWith(
-        "user-123",
+        "550e8400-e29b-41d4-a716-446655440000",
         "sessions_completed",
         "last_7_days",
         "day",

@@ -1,10 +1,4 @@
-import { orchestrateSessionCompletion } from "../completion-orchestrator";
-import {
-  applyHomeReturnOptimisticUpdate,
-  completionReturnQueryKeys,
-  getNextCompletionSyncState,
-  invalidateCompletionReturnQueries,
-} from "../home-return-sync";
+// Fixtures must be imported FIRST so jest.mock() calls register before source modules load
 import {
   createSummary,
   createQueryClient,
@@ -14,6 +8,13 @@ import {
   mockSetCompletionSyncState,
   setupMocks,
 } from "./exit-gate-policy.fixtures";
+import { orchestrateSessionCompletion } from "../completion-orchestrator";
+import {
+  applyHomeReturnOptimisticUpdate,
+  completionReturnQueryKeys,
+  getNextCompletionSyncState,
+  invalidateCompletionReturnQueries,
+} from "../home-return-sync";
 
 const summary = createSummary("550e8400-e29b-41d4-a716-446655440101");
 

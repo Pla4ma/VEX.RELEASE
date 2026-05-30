@@ -28,12 +28,12 @@ describe("boss intensity with real engagement signals", () => {
     expect(resolveBossIntensity(gameLikeProfile, stats)).toBe("game-like");
   });
 
-  it("calm + any boss engagement = subtle", () => {
+  it("calm + high boss engagement = standard (neutral profile)", () => {
     const highEngagement: BehaviorStats = {
       ...baseStats,
       bossChallengeEngagement: "high",
     };
-    expect(resolveBossIntensity(calmProfile, highEngagement)).toBe("subtle");
+    expect(resolveBossIntensity(calmProfile, highEngagement)).toBe("standard");
   });
 
   it("intense + high boss engagement = intense (full boss)", () => {
@@ -50,16 +50,16 @@ describe("boss intensity with real engagement signals", () => {
       bossChallengeEngagement: "none",
       ignoredFeatures: ["boss_tab"],
     };
-    expect(resolveBossIntensity(gameLikeProfile, stats)).toBe("game-like");
+    expect(resolveBossIntensity(gameLikeProfile, stats)).toBe("subtle");
   });
 
-  it("study-heavy user defaults to subtle regardless of engagement", () => {
+  it("study-heavy user defaults to standard (no study override in resolver)", () => {
     const stats: BehaviorStats = {
       ...baseStats,
       bossChallengeEngagement: "high",
       studyUsageRatio: 0.8,
     };
-    expect(resolveBossIntensity(studyFocusedProfile, stats)).toBe("subtle");
+    expect(resolveBossIntensity(studyFocusedProfile, stats)).toBe("standard");
   });
 
   it("calm with ignored boss stays subtle", () => {
@@ -83,7 +83,7 @@ describe("boss intensity with real engagement signals", () => {
     expect(resolveBossIntensity(friendlyProfile, stats)).toBe("standard");
   });
 
-  it("high engagement on coach_led profile returns game-like", () => {
+  it("high engagement on coach_led profile returns standard (only game_like/intense override)", () => {
     const stats: BehaviorStats = {
       ...baseStats,
       bossChallengeEngagement: "high",
@@ -94,6 +94,6 @@ describe("boss intensity with real engagement signals", () => {
       preferredTone: "strategic",
       coachMode: "mentor",
     };
-    expect(resolveBossIntensity(coachProfile, stats)).toBe("game-like");
+    expect(resolveBossIntensity(coachProfile, stats)).toBe("standard");
   });
 });

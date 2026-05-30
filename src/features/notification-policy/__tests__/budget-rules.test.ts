@@ -173,11 +173,14 @@ describe("notification policy — budget rules", () => {
   });
 
   it("pauses category on 3+ dismissals", () => {
+    const noon = new Date();
+    noon.setHours(12, 0, 0, 0);
     const paused = decideNudge({
       lane: "student",
       completedSessions: 5,
       daysSinceOnboarding: 7,
       recentDismissals: 3,
+      now: noon.getTime(),
     });
     expect(paused.allowed).toBe(false);
     expect(paused.reason).toContain("category paused");

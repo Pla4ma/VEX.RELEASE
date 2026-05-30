@@ -1,3 +1,11 @@
+// Fixtures must be imported FIRST so jest.mock() calls register before source modules load
+import {
+  mockSessionCompletionOfflineSync,
+  mockGetCurrentState,
+  mockGetNetInfoAdapter,
+  onlineState,
+  flushPromises,
+} from "./offline-sync-test-fixtures";
 import {
   describe,
   it,
@@ -10,13 +18,6 @@ import {
   performSessionCompletionHealthCheck,
   SessionCompletionSyncMonitor,
 } from "../offline-sync-integration";
-import {
-  mockSessionCompletionOfflineSync,
-  mockGetCurrentState,
-  mockGetNetInfoAdapter,
-  onlineState,
-  flushPromises,
-} from "./offline-sync-test-fixtures";
 
 describe("offline sync health checks and monitoring", () => {
   beforeEach(() => {
@@ -69,7 +70,7 @@ describe("offline sync health checks and monitoring", () => {
   });
 
   describe("SessionCompletionSyncMonitor", () => {
-    let monitor: SessionCompletionSyncMonitor;
+    let monitor: InstanceType<typeof SessionCompletionSyncMonitor>;
     let onHealthStatusChange: jest.Mock;
 
     beforeEach(() => {
@@ -98,6 +99,7 @@ describe("offline sync health checks and monitoring", () => {
         expect.objectContaining({ status: "healthy" }),
       );
       jest.clearAllMocks();
+      mockGetCurrentState.mockReturnValue(onlineState);
       mockSessionCompletionOfflineSync.getDiagnostics.mockReturnValue({
         fallbackEntriesCount: 5,
         lastSyncAt: Date.now(),
@@ -116,6 +118,7 @@ describe("offline sync health checks and monitoring", () => {
       expect(monitor.getLastHealthStatus()?.status).toBe("healthy");
       monitor.stop();
       jest.clearAllMocks();
+      mockGetCurrentState.mockReturnValue(onlineState);
       jest.advanceTimersByTime(10000);
       await flushPromises();
       expect(

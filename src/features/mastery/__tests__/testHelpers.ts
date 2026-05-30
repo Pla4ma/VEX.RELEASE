@@ -1,13 +1,18 @@
-import { loadStoredMasteryState } from "../repository";
+import { loadStoredMasteryState, persistMasteryState } from "../repository";
 import { MASTERY_RANK_THRESHOLDS } from "../types";
 
 export const TEST_USER_ID = "test-user-123";
 
 const mockedLoadStoredMasteryState = jest.mocked(loadStoredMasteryState);
+const mockedPersistMasteryState = jest.mocked(persistMasteryState);
 
 export function setupMasteryMocks(): void {
   jest.clearAllMocks();
   mockedLoadStoredMasteryState.mockReturnValue(null);
+  // persistMasteryState returns the state it receives (with updatedAt bump)
+  mockedPersistMasteryState.mockImplementation(
+    (state) => ({ ...state, updatedAt: Date.now() }),
+  );
 }
 
 export function makeBaseState(

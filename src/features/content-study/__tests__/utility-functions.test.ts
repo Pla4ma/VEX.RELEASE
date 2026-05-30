@@ -22,7 +22,7 @@ describe("Utility Functions", () => {
       ).toBe("dQw4w9WgXcQ");
     });
     it("should return null for invalid URLs", () => {
-      expect(extractYouTubeVideoId("invalid-url")).toBeNull();
+      expect(extractYouTubeVideoId("not-a-url")).toBeNull();
       expect(extractYouTubeVideoId("")).toBeNull();
     });
   });

@@ -1,12 +1,13 @@
+// Helper must be imported FIRST so its jest.mock() calls register before source modules load
+import {
+  resetCompletionMocks,
+  focusIdentityUpdateMock,
+} from "./completion-product-journey-helpers";
 import { applyCompletionSubsystems } from "../completion-subsystems";
 import {
   createCompletionLedger,
   createSessionSummary,
 } from "./ledger-test-utils";
-import {
-  resetCompletionMocks,
-  focusIdentityUpdateMock,
-} from "./completion-product-journey-helpers";
 
 describe("focus identity updates once", () => {
   beforeEach(() => {

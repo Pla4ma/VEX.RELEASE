@@ -20,6 +20,7 @@ describe("PerformanceGate", () => {
   beforeEach(() => {
     jest.clearAllMocks();
     gate = performanceGate;
+    gate.setTargets(DEVELOPMENT_TARGETS);
     mockFetch.mockClear();
   });
   afterEach(() => {

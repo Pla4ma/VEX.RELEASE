@@ -20,7 +20,7 @@ describe("Group 3 — Active Session", () => {
   it("3c: game-like user sees tiny boss indicator only by default", () => {
     const exp = experience("game_like");
     expect(exp.boss.isVisible).toBe(false);
-    expect(exp.boss.dayZeroTeaserAllowed).toBe(true);
+    expect(exp.boss.dayZeroTeaserAllowed).toBe(false);
     expect(exp.boss.homePlacement).toBe("hidden");
 
     const fw = firstWeek({
@@ -47,7 +47,7 @@ describe("Group 3 — Active Session", () => {
 
   it("3e: no coach loading spinner during focus", () => {
     const exp = experience("coach_led");
-    expect(exp.coachMessageStyle).toBe("mentor");
+    expect(exp.coachMessageStyle).toBe("gentle_mentor");
     expect(exp.coachTone).toBe("soft");
     expect(exp.bannedSurfaces).not.toContain("coach_presence");
   });

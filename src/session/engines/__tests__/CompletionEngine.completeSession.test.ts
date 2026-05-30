@@ -62,7 +62,7 @@ describe("CompletionEngine > completeSession", () => {
     const result = completionEngine.completeSession(session, metrics, 5);
     expect(result.summary).toBeDefined();
     expect(result.summary.sessionId).toBe("test-session");
-    expect(result.summary.totalScore).toBeGreaterThan(0);
+    expect(result.summary.finalScore).toBeGreaterThan(0);
   });
 
   it("should include reflection in summary when provided", () => {

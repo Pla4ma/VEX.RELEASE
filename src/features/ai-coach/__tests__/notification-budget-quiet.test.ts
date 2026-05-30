@@ -73,6 +73,7 @@ describe("Notification budget quiet hours and suppression", () => {
   });
 
   it("suppresses duplicates inside four hours and allows them later", async () => {
+    mockCurrentHour(10);
     const recent = createMockNotificationBudget("user-123", {
       notificationsSent: [
         {

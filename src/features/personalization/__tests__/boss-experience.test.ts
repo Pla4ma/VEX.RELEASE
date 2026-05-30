@@ -12,8 +12,9 @@ describe("resolveVexExperience — boss & home", () => {
     );
 
     expect(experience.boss.intensity).toBe("subtle");
-    expect(experience.boss.homePlacement).toBe("top_tiny");
-    expect(experience.boss.copy).toContain("momentum");
+    expect(experience.boss.isVisible).toBe(false);
+    expect(experience.boss.homePlacement).toBe("hidden");
+    expect(experience.boss.copy).toContain("rhythm");
     expect(experience.boss.copy).not.toMatch(/battle|damage|kill|defeat/i);
     expect(experience.home.sections).not.toContain("boss_full_cta");
   });
@@ -32,12 +33,12 @@ describe("resolveVexExperience — boss & home", () => {
     expect(experience.boss.intensity).toBe("game-like");
     expect(experience.boss.progressSource).toBe("completed_focus_sessions");
     expect(experience.boss.completionEffect).toBe("session_damage");
-    expect(experience.boss.systemsDisabled).toEqual(
+    expect(experience.hiddenSystems).toEqual(
       expect.arrayContaining([
         "shop",
         "inventory",
-        "premium_currency",
         "battle_pass",
+        "wagers",
       ]),
     );
     expect(experience.home.sections).toContain("boss_compact");
@@ -66,7 +67,7 @@ describe("resolveVexExperience — boss & home", () => {
     );
 
     expect(experience.boss.isVisible).toBe(false);
-    expect(experience.boss.dayZeroTeaserAllowed).toBe(true);
+    expect(experience.boss.dayZeroTeaserAllowed).toBe(false);
     expect(experience.routeGates.boss.canQuery).toBe(false);
     expect(experience.routeGates.boss.canNavigate).toBe(false);
   });

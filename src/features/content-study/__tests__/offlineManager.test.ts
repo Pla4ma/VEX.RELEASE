@@ -40,11 +40,11 @@ describe("Utility Functions", () => {
   });
   it("should calculate storage usage", async () => {
     await mockStorage.setItem(
-      "content-study:drafts",
+      "vex:content-study:drafts",
       JSON.stringify([{ id: "1" }]),
     );
     await mockStorage.setItem(
-      "content-study:sessions",
+      "vex:content-study:sessions",
       JSON.stringify([{ id: "2" }]),
     );
     const usage = await getStorageUsage();
@@ -53,11 +53,11 @@ describe("Utility Functions", () => {
     expect(usage.total).toBeGreaterThan(0);
   });
   it("should clear all content study data", async () => {
-    await mockStorage.setItem("content-study:drafts", "data");
-    await mockStorage.setItem("content-study:sessions", "data");
+    await mockStorage.setItem("vex:content-study:drafts", "data");
+    await mockStorage.setItem("vex:content-study:sessions", "data");
     await mockStorage.setItem("other-key", "should remain");
     await clearAllContentStudyData();
-    const drafts = await mockStorage.getItem("content-study:drafts");
+    const drafts = await mockStorage.getItem("vex:content-study:drafts");
     const other = await mockStorage.getItem("other-key");
     expect(drafts).toBeNull();
     expect(other).toBe("should remain");

@@ -1,8 +1,6 @@
 import { eventBus } from "../../../events";
 import type { SessionSummary } from "../../types";
 
-jest.mock("../../../events");
-
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function createMockSummary(
   overrides: Partial<SessionSummary> = {},
@@ -34,9 +32,17 @@ export function createMockSummary(
 }
 
 export function setupMockEventBus() {
-  jest.clearAllMocks();
-  return {
-    publish: eventBus.publish as unknown as jest.Mock,
-    subscribe: eventBus.subscribe as unknown as jest.Mock,
-  };
+  // Restore any previous spies to avoid nesting
+  jest.restoreAllMocks();
+
+  const publish = jest
+    .spyOn(eventBus, "publish")
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    .mockImplementation((() => {}) as any);
+  const subscribe = jest
+    .spyOn(eventBus, "subscribe")
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    .mockImplementation((() => () => {}) as any);
+
+  return { publish, subscribe };
 }

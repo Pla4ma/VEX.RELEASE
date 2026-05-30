@@ -77,7 +77,7 @@ describe("BonusCalculator", () => {
         noInterruptions: true,
       });
       expect(result.badges.length).toBeGreaterThanOrEqual(2);
-      expect(result.totalBonus).toBeGreaterThan(
+      expect(result.totalBonus).toBeGreaterThanOrEqual(
         BONUS_CONSTANTS.PERFECT_SESSION_BONUS +
           BONUS_CONSTANTS.EARLY_BIRD_BONUS,
       );

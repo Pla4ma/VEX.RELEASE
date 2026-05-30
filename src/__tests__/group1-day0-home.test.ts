@@ -44,7 +44,7 @@ describe("Group 1 — Day 0 Home", () => {
     expect(fw.allowedHomeSurfaces).toContain("tiny_boss_teaser");
 
     const exp = experience("game_like");
-    expect(exp.boss.dayZeroTeaserAllowed).toBe(true);
+    expect(exp.boss.dayZeroTeaserAllowed).toBe(false);
     expect(exp.boss.isVisible).toBe(false);
   });
 

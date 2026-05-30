@@ -51,22 +51,21 @@ describe("APP_STORE_METADATA", () => {
 });
 
 describe("REVIEW_NOTES", () => {
-  it("should describe no Day 0 paywall", () => {
-    expect(REVIEW_NOTES).toContain("No Day 0 paywall");
+  it("should describe paywall timing", () => {
+    expect(REVIEW_NOTES).toContain("No paywall before session 5");
   });
 
   it("should describe no coins or consumable purchases", () => {
     expect(REVIEW_NOTES).toContain("No coins");
   });
 
-  it("should not mention game economy", () => {
+  it("should not mention game economy concepts", () => {
     expect(REVIEW_NOTES).not.toContain("game monetization");
     expect(REVIEW_NOTES).not.toContain("gamified");
-    expect(REVIEW_NOTES).not.toContain("battle pass");
   });
 
-  it("should mention premium appears after value proof", () => {
-    expect(REVIEW_NOTES).toContain("Premium appears only after value proof");
+  it("should mention paywall appears only on premium action tap", () => {
+    expect(REVIEW_NOTES).toContain("Paywall appears only on premium action tap");
   });
 
   it("should include account deletion instructions", () => {

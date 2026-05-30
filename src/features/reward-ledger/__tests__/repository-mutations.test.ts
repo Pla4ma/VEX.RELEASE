@@ -1,15 +1,5 @@
 import { describe, it, expect, beforeEach } from "@jest/globals";
-
-const mockSingle = jest.fn();
-const mockSelect = jest.fn();
-const mockEq = jest.fn();
-const mockFrom = jest.fn();
-
-jest.mock("../../../config/supabase", () => ({
-  supabase: {
-    from: (...args: unknown[]) => mockFrom(...args),
-  },
-}));
+import { mockFrom, mockSingle } from "./repository-test-setup";
 
 import {
   updateRewardLedgerStatus,

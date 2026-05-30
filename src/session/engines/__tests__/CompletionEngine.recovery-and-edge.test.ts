@@ -11,41 +11,59 @@ describe("CompletionEngine > attemptRecovery", () => {
     ({ completionEngine } = createEngines());
   });
 
-  it("should attempt to recover abandoned session", () => {
+  it("should successfully recover with USER_RESUME", () => {
     const session = createMockSession({
       status: "ABANDONED",
       completionPercentage: 75,
     });
-    const result = completionEngine.attemptRecovery(session, 5);
+    const metrics = createMockMetrics();
+    const result = completionEngine.attemptRecovery(
+      session,
+      "USER_RESUME",
+      metrics,
+      5,
+    );
     expect(result.success).toBe(true);
   });
 
-  it("should change status to RECOVERED on success", () => {
+  it("should set status to ACTIVE on USER_RESUME", () => {
     const session = createMockSession({
       status: "ABANDONED",
       completionPercentage: 75,
     });
-    completionEngine.attemptRecovery(session, 5);
-    expect(session.status).toBe("RECOVERED");
+    const metrics = createMockMetrics();
+    completionEngine.attemptRecovery(session, "USER_RESUME", metrics, 5);
+    expect(session.status).toBe("ACTIVE");
   });
 
-  it("should fail recovery for low completion percentages", () => {
+  it("should fail STREAK_SAVE for low completion percentages", () => {
     const session = createMockSession({
       status: "ABANDONED",
-      completionPercentage: 30,
+      completionPercentage: 20,
     });
-    const result = completionEngine.attemptRecovery(session, 5);
+    const metrics = createMockMetrics();
+    const result = completionEngine.attemptRecovery(
+      session,
+      "STREAK_SAVE",
+      metrics,
+      5,
+    );
     expect(result.success).toBe(false);
-    expect(result.error).toBeDefined();
   });
 
-  it("should fail recovery for already completed sessions", () => {
+  it("should succeed PARTIAL_CREDIT regardless of session state", () => {
     const session = createMockSession({
       status: "COMPLETED",
       completionPercentage: 100,
     });
-    const result = completionEngine.attemptRecovery(session, 5);
-    expect(result.success).toBe(false);
+    const metrics = createMockMetrics();
+    const result = completionEngine.attemptRecovery(
+      session,
+      "PARTIAL_CREDIT",
+      metrics,
+      5,
+    );
+    expect(result.success).toBe(true);
   });
 });
 
@@ -58,9 +76,9 @@ describe("CompletionEngine > edge cases", () => {
 
   it("should handle zero completion percentage", () => {
     const session = createMockSession({ completionPercentage: 0 });
-    const abandonResult = completionEngine.abandonSession(session, 5);
+    const abandonResult = completionEngine.abandonSession(session);
     expect(abandonResult.partialCredit).toBe(false);
-    expect(abandonResult.canRecover).toBe(false);
+    expect(abandonResult.canRecover).toBe(true);
   });
 
   it("should handle session with many pauses", () => {

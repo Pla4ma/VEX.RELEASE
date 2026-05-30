@@ -23,6 +23,7 @@ describe("Notification budget coach and integration flows", () => {
   });
 
   it("sends specific coach notifications and suppresses generic login reminders", async () => {
+    mockCurrentHour(14);
     await expect(
       sendCoachNotification(
         "user-123",
@@ -72,6 +73,7 @@ describe("Notification budget coach and integration flows", () => {
   });
 
   it("handles edge-case request and budget values", async () => {
+    mockCurrentHour(14);
     await expect(
       canSendNotification(
         createMockNotificationRequest("user-123", {
@@ -111,6 +113,7 @@ describe("Notification budget coach and integration flows", () => {
   });
 
   it("handles typical daily flow with critical override", async () => {
+    mockCurrentHour(14);
     let budget = createMockNotificationBudget("user-123");
 
     const result1 = await sendNotificationWithBudget(

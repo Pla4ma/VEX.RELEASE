@@ -1,12 +1,9 @@
-import { describe, it, expect, beforeEach } from "@jest/globals";
+import { describe, it, expect, beforeEach, jest } from "@jest/globals";
 import { screen } from "@testing-library/react-native";
 import {
   resetFeatureMocks,
   renderGuardedFeature,
-  mockIsFeatureEnabled,
-  mockIsFeatureDisabled,
-  mockIsFeatureOptional,
-  mockGetDisabledFeatures,
+  mockIsEnabled,
 } from "./test-helpers";
 
 describe("Navigation Guard - Restrictions & Compliance", () => {
@@ -16,14 +13,22 @@ describe("Navigation Guard - Restrictions & Compliance", () => {
 
   describe("Disabled Features Verification", () => {
     it("should block all explicitly disabled features", () => {
-      const disabledFeatures = mockGetDisabledFeatures();
+      const disabledFeatures = [
+        "social-feed",
+        "duels",
+        "rankings",
+        "squad-wars",
+        "rivals",
+        "trading",
+        "emergency-gem-sinks",
+        "complex-crafting",
+        "ar-experimental",
+      ];
       disabledFeatures.forEach((feature: string) => {
-        mockIsFeatureDisabled.mockReturnValue(true);
+        mockIsEnabled.mockReturnValue(false);
         renderGuardedFeature(feature);
         expect(screen.queryByTestId("protected-content")).toBeFalsy();
-        expect(
-          screen.getByText("This feature is currently disabled"),
-        ).toBeTruthy();
+        expect(screen.getByTestId("fallback-content")).toBeTruthy();
       });
     });
     it("should verify banned features are properly blocked", () => {
@@ -36,9 +41,10 @@ describe("Navigation Guard - Restrictions & Compliance", () => {
         "trading",
       ];
       bannedFeatures.forEach((feature: string) => {
-        mockIsFeatureDisabled.mockReturnValue(true);
+        mockIsEnabled.mockReturnValue(false);
         renderGuardedFeature(feature);
         expect(screen.queryByTestId("protected-content")).toBeFalsy();
+        expect(screen.getByTestId("fallback-content")).toBeTruthy();
       });
     });
   });
@@ -53,7 +59,7 @@ describe("Navigation Guard - Restrictions & Compliance", () => {
         "progression",
       ];
       coreFeatures.forEach((feature: string) => {
-        mockIsFeatureEnabled.mockReturnValue(true);
+        mockIsEnabled.mockReturnValue(true);
         renderGuardedFeature(feature);
         expect(screen.getByTestId("protected-content")).toBeTruthy();
       });
@@ -62,17 +68,22 @@ describe("Navigation Guard - Restrictions & Compliance", () => {
 
   describe("Error Handling", () => {
     it("should handle unknown features gracefully", () => {
+      // Unknown features are not enabled by default (isEnabled returns false)
       renderGuardedFeature("unknown-feature");
       expect(screen.queryByTestId("protected-content")).toBeFalsy();
-      expect(screen.getByText("Feature not available")).toBeTruthy();
+      expect(screen.getByTestId("fallback-content")).toBeTruthy();
     });
     it("should handle feature flag errors gracefully", () => {
-      mockIsFeatureEnabled.mockImplementation(() => {
+      mockIsEnabled.mockImplementation(() => {
         throw new Error("Feature flag error");
       });
-      renderGuardedFeature("sessions");
-      expect(screen.queryByTestId("protected-content")).toBeFalsy();
-      expect(screen.getByText("Feature not available")).toBeTruthy();
+      const consoleSpy = jest
+        .spyOn(console, "error")
+        .mockImplementation(() => {});
+      expect(() => renderGuardedFeature("sessions")).toThrow(
+        "Feature flag error",
+      );
+      consoleSpy.mockRestore();
     });
   });
 
@@ -80,39 +91,26 @@ describe("Navigation Guard - Restrictions & Compliance", () => {
     it("should ensure navigation respects PHASE 8 feature configuration", () => {
       const testFeatures = {
         enabled: ["sessions", "focus-timer", "streaks"],
-        optional: ["boss", "challenges", "squads"],
         disabled: ["social-feed", "duels", "rankings"],
       };
       Object.entries(testFeatures).forEach(([category, features]) => {
         features.forEach((feature: string) => {
-          if (category === "enabled") {
-            mockIsFeatureEnabled.mockReturnValue(true);
-          } else if (category === "disabled") {
-            mockIsFeatureDisabled.mockReturnValue(true);
-          } else {
-            mockIsFeatureOptional.mockReturnValue(true);
-          }
+          mockIsEnabled.mockReturnValue(category === "enabled");
           renderGuardedFeature(feature);
           if (category === "enabled") {
             expect(screen.getByTestId("protected-content")).toBeTruthy();
           } else {
             expect(screen.queryByTestId("protected-content")).toBeFalsy();
-            expect(
-              screen.getByText(
-                /Feature (not available|currently disabled|not yet available)/,
-              ),
-            ).toBeTruthy();
+            expect(screen.getByTestId("fallback-content")).toBeTruthy();
           }
         });
       });
     });
     it("should prevent navigation to experimental features", () => {
-      mockIsFeatureDisabled.mockReturnValue(true);
+      mockIsEnabled.mockReturnValue(false);
       renderGuardedFeature("ar-experimental");
       expect(screen.queryByTestId("protected-content")).toBeFalsy();
-      expect(
-        screen.getByText("This feature is currently disabled"),
-      ).toBeTruthy();
+      expect(screen.getByTestId("fallback-content")).toBeTruthy();
     });
   });
 });

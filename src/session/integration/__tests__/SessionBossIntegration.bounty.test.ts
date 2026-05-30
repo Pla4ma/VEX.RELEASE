@@ -1,69 +1,47 @@
-import {
-  initializeSessionBossIntegration,
-  calculateBossDamage,
-} from "../SessionBossIntegration";
-import {
-  mockedEventBus,
-  mockedConsumeBountiesOnDamage,
-  mockedRecordBountyLootBoost,
-  MOCK_ENCOUNTER,
-  buildSessionSummary,
-  setupMocks,
-} from "./SessionBossIntegration.helpers";
+/**
+ * SessionBossIntegration — bounty loot boost tests.
+ *
+ * Boss combat is archived (no-op). These tests verify the no-op contract:
+ * - `initializeSessionBossIntegration()` returns a cleanup function
+ * - `calculateBossDamage()` always returns 0 (no parameters)
+ * - No event subscriptions are wired (boss combat is archived)
+ */
 
-describe("SessionBossIntegration > bounty loot boost", () => {
+import { initializeSessionBossIntegration, calculateBossDamage } from "../SessionBossIntegration";
+import { getAvailabilityFor } from "../../../features/liveops-config/feature-access-store";
+import { ENABLED_AVAILABILITY } from "./SessionBossIntegration.helpers";
+
+jest.mock("../../../features/liveops-config/feature-access-store", () => ({
+  getAvailabilityFor: jest.fn(),
+}));
+
+const mockedGetAvailabilityFor = jest.mocked(getAvailabilityFor);
+
+describe("SessionBossIntegration > bounty loot boost (archived no-op)", () => {
   beforeEach(() => {
-    setupMocks();
+    mockedGetAvailabilityFor.mockClear();
+    mockedGetAvailabilityFor.mockReturnValue(ENABLED_AVAILABILITY);
   });
 
-  it("arms a one-shot chest loot boost when boss damage consumes bounties", async () => {
-    initializeSessionBossIntegration();
-    const handler = mockedEventBus.subscribe.mock.calls[0]?.[1];
-    mockedConsumeBountiesOnDamage.mockReturnValue({
-      lootMultiplier: 4,
-      consumedCount: 2,
-      consumedBountyIds: [
-        "123e4567-e89b-12d3-a456-426614174010",
-        "123e4567-e89b-12d3-a456-426614174011",
-      ],
-    });
-    await handler?.({
-      sessionId: "123e4567-e89b-12d3-a456-426614174002",
-      userId: "user-123",
-      summary: buildSessionSummary({
-        focusQuality: 90,
-        focusPurityScore: 90,
-        streakDays: 7,
-        userLevel: 2,
-      }),
-    });
-    expect(mockedConsumeBountiesOnDamage).toHaveBeenCalledWith(
-      "123e4567-e89b-12d3-a456-426614174000",
-      expect.any(Number),
-    );
-    expect(mockedRecordBountyLootBoost).toHaveBeenCalledWith({
-      userId: "user-123",
-      sessionId: "123e4567-e89b-12d3-a456-426614174002",
-      encounterId: "123e4567-e89b-12d3-a456-426614174000",
-      lootMultiplier: 4,
-      consumedCount: 2,
-    });
-    expect(mockedEventBus.publish).toHaveBeenCalledWith(
-      "analytics:track",
-      expect.objectContaining({ event: "boss_bounty_loot_boost_armed" }),
-    );
+  it("returns a cleanup function from initializeSessionBossIntegration", () => {
+    const cleanup = initializeSessionBossIntegration();
+    expect(typeof cleanup).toBe("function");
+  });
+
+  it("cleanup function can be called without error", () => {
+    const cleanup = initializeSessionBossIntegration();
+    expect(() => cleanup()).not.toThrow();
+  });
+
+  it("calculateBossDamage always returns 0 with no arguments", () => {
+    expect(calculateBossDamage()).toBe(0);
   });
 });
 
-describe("SessionBossIntegration > calculateBossDamage", () => {
-  it("applies daily boss damage modifiers to matching session modes", () => {
-    const sprintDamage = calculateBossDamage({
-      ...buildSessionSummary({
-        sessionMode: "SPRINT",
-        modeBonus: 0,
-        createdAt: new Date("2026-04-29T12:00:00-04:00").getTime(),
-      }),
-    } as Parameters<typeof calculateBossDamage>[0]);
-    expect(sprintDamage).toBe(72);
+describe("SessionBossIntegration > calculateBossDamage (archived no-op)", () => {
+  it("returns 0 regardless of call count", () => {
+    expect(calculateBossDamage()).toBe(0);
+    expect(calculateBossDamage()).toBe(0);
+    expect(calculateBossDamage()).toBe(0);
   });
 });

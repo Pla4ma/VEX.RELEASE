@@ -1,9 +1,9 @@
 import {
   createTestContext,
   mockSessionConfig,
+  mockUserId,
   type TestContext,
 } from "./helpers";
-import { eventBus } from "../../events";
 
 let ctx: TestContext;
 
@@ -16,68 +16,71 @@ describe("createSession", () => {
   it("should create a new session with valid config", async () => {
     const session = await ctx.service.createCustomSession(mockSessionConfig);
     expect(session).toBeDefined();
-    expect(session.userId).toBe("test-user-123");
-    expect(session.config.duration).toBe(mockSessionConfig.duration);
-    expect(session.status).toBe("CREATED");
-    expect(session.phase).toBe("PREPARATION");
+    expect(session.id).toBe("test-session-123");
+    expect(session.userId).toBe(mockUserId);
   });
 
-  it("should reject session with duration below minimum", async () => {
-    const invalidConfig = { ...mockSessionConfig, duration: 30 };
-    await expect(ctx.service.createCustomSession(invalidConfig)).rejects.toThrow(
-      "duration",
+  it("should reject session when orchestrator throws validation error", async () => {
+    ctx.mockOrchestrator.createSession.mockRejectedValue(
+      new Error("duration below minimum"),
     );
+    await expect(
+      ctx.service.createCustomSession({ ...mockSessionConfig, duration: 30 }),
+    ).rejects.toThrow("duration");
   });
 
   it("should reject session with duration above maximum", async () => {
-    const invalidConfig = { ...mockSessionConfig, duration: 90000 };
-    await expect(ctx.service.createCustomSession(invalidConfig)).rejects.toThrow(
-      "duration",
+    ctx.mockOrchestrator.createSession.mockRejectedValue(
+      new Error("duration above maximum"),
     );
+    await expect(
+      ctx.service.createCustomSession({ ...mockSessionConfig, duration: 90000 }),
+    ).rejects.toThrow("duration");
   });
 
-  it("should emit session:created event", async () => {
+  it("should delegate createSession to orchestrator", async () => {
     await ctx.service.createCustomSession(mockSessionConfig);
-    expect(eventBus.publish).toHaveBeenCalledWith(
-      "session:created",
-      expect.any(Object),
+    expect(ctx.mockOrchestrator.createSession).toHaveBeenCalledWith(
+      mockSessionConfig,
     );
   });
 
-  it("should persist session to repository", async () => {
-    const session = await ctx.service.createCustomSession(mockSessionConfig);
-    expect(ctx.mockRepository.saveSession).toHaveBeenCalledWith(session);
+  it("should call eventEmitter.attach on create", async () => {
+    const { getSessionEventEmitter } = require("../SessionEventEmitter");
+    const emitter = getSessionEventEmitter();
+    await ctx.service.createCustomSession(mockSessionConfig);
+    expect(emitter.attach).toHaveBeenCalledWith(
+      "test-session-123",
+      mockUserId,
+    );
   });
 });
 
 describe("startSession", () => {
-  it("should transition session from CREATED to ACTIVE", async () => {
-    const session = await ctx.service.createCustomSession(mockSessionConfig);
-    const startedSession = await ctx.service.startSession(session.id);
-    expect(startedSession.status).toBe("ACTIVE");
-    expect(startedSession.phase).toBe("FOCUS");
-    expect(startedSession.startedAt).toBeDefined();
+  it("should delegate startSession to orchestrator", async () => {
+    await ctx.service.createCustomSession(mockSessionConfig);
+    await ctx.service.startSession(0);
+    expect(ctx.mockOrchestrator.startSession).toHaveBeenCalledWith(0);
   });
 
-  it("should emit session:started event", async () => {
-    const session = await ctx.service.createCustomSession(mockSessionConfig);
-    await ctx.service.startSession(session.id);
-    expect(eventBus.publish).toHaveBeenCalledWith(
-      "session:started",
-      expect.any(Object),
-    );
+  it("should default countdown to 0", async () => {
+    await ctx.service.createCustomSession(mockSessionConfig);
+    await ctx.service.startSession();
+    expect(ctx.mockOrchestrator.startSession).toHaveBeenCalledWith(0);
   });
 
-  it("should reject starting non-existent session", async () => {
-    await expect(ctx.service.startSession("non-existent-id")).rejects.toThrow(
-      "not found",
+  it("should reject starting when orchestrator throws not found", async () => {
+    ctx.mockOrchestrator.startSession.mockRejectedValue(
+      new Error("Session not found"),
     );
+    await expect(ctx.service.startSession(0)).rejects.toThrow("not found");
   });
 
   it("should reject starting already active session", async () => {
-    const session = await ctx.service.createCustomSession(mockSessionConfig);
-    await ctx.service.startSession(session.id);
-    await expect(ctx.service.startSession(session.id)).rejects.toThrow(
+    ctx.mockOrchestrator.startSession.mockRejectedValue(
+      new Error("Session already active"),
+    );
+    await expect(ctx.service.startSession(0)).rejects.toThrow(
       "already active",
     );
   });

@@ -1,8 +1,22 @@
-import { SessionPersistence, mockSession } from "./persistence.helpers";
+import { SessionPersistence, mockSession, mockMMKVInstance } from "./persistence.helpers";
 
 describe("SessionPersistence", () => {
+  let mockStorage: any;
+
   beforeEach(() => {
-    jest.clearAllMocks();
+    mockStorage = mockMMKVInstance;
+    // Reset all mock methods
+    mockStorage.set.mockReset();
+    mockStorage.getString.mockReset();
+    mockStorage.getNumber.mockReset();
+    mockStorage.delete.mockReset();
+    mockStorage.contains.mockReset();
+    mockStorage.getAllKeys.mockReset();
+    // Set default return values
+    mockStorage.getString.mockReturnValue(undefined);
+    mockStorage.getAllKeys.mockReturnValue([]);
+    mockStorage.contains.mockReturnValue(false);
+    mockStorage.getNumber.mockReturnValue(undefined);
   });
 
   describe("persist", () => {
@@ -22,42 +36,31 @@ describe("SessionPersistence", () => {
     });
 
     it("should track analytics event on persist", () => {
-      const realEvents = jest.requireActual("../../events") as {
-        eventBus: { publish: (...args: unknown[]) => void };
-      };
-      const publishSpy = jest.spyOn(realEvents.eventBus, "publish");
+      const { eventBus } = require("../../events");
+      eventBus.publish.mockClear();
       SessionPersistence.persist(mockSession);
-      expect(publishSpy).toHaveBeenCalledWith("analytics:track", {
+      expect(eventBus.publish).toHaveBeenCalledWith("analytics:track", {
         event: "session_persisted",
         properties: expect.any(Object),
       });
-      publishSpy.mockRestore();
     });
   });
 
   describe("load", () => {
     it("should return null when no session exists", () => {
-      const { MMKV } = require("react-native-mmkv");
-      const mockStorage = new MMKV();
-      mockStorage.getString.mockReset();
-      mockStorage.getAllKeys.mockReturnValue([]);
       const result = SessionPersistence.load();
       expect(result).toBeNull();
     });
 
     it("should load valid persisted session", () => {
-      const { MMKV } = require("react-native-mmkv");
-      const mockStorage = new MMKV();
       mockStorage.getString.mockReturnValue(JSON.stringify(mockSession));
       const result = SessionPersistence.load();
       expect(result).not.toBeNull();
     });
 
     it("should recover from backup on corruption", () => {
-      const { MMKV } = require("react-native-mmkv");
-      const mockStorage = new MMKV();
       mockStorage.getString
-        .mockReturnValueOnce(null)
+        .mockReturnValueOnce("invalid-corrupted-json")
         .mockReturnValueOnce(JSON.stringify(mockSession));
       mockStorage.getAllKeys.mockReturnValue(["session:backup:123456"]);
       const result = SessionPersistence.load();

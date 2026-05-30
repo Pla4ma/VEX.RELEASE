@@ -18,7 +18,7 @@ describe("paywall copy", () => {
       ]),
     ].join(" ");
 
-    expect(joined).toContain("Core sessions");
+    expect(joined).toContain("Sessions");
     expect(joined).toMatch(
       /coach memory|progress intelligence|execution system/i,
     );

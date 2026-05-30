@@ -51,9 +51,9 @@ describe("Phase 3A — Lane Pipeline Audit", () => {
     };
 
     expect(policies.student.preferredMechanics).toContain("study_os");
-    expect(policies.minimal_normal.blockedMechanics).toContain("boss_full_cta");
+    expect(policies.minimal_normal.blockedMechanics).toContain("blocker_full_cta");
     expect(policies.minimal_normal.blockedMechanics).toContain("xp_first_ui");
-    expect(policies.game_like.preferredMechanics).toContain("personal_boss");
+    expect(policies.game_like.preferredMechanics).toContain("personal_blocker");
     expect(policies.deep_creative.preferredMechanics).toContain(
       "project_thread",
     );

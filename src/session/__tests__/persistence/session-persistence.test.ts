@@ -1,8 +1,22 @@
-import { SessionPersistence, mockSession } from "./helpers";
+import { SessionPersistence, mockSession, getMockMMKVInstance } from "./helpers";
 
 describe("SessionPersistence", () => {
+  let mockStorage: any;
+
   beforeEach(() => {
-    jest.clearAllMocks();
+    mockStorage = getMockMMKVInstance();
+    // Reset all mock methods
+    mockStorage.set.mockReset();
+    mockStorage.getString.mockReset();
+    mockStorage.getNumber.mockReset();
+    mockStorage.delete.mockReset();
+    mockStorage.contains.mockReset();
+    mockStorage.getAllKeys.mockReset();
+    // Set default return values
+    mockStorage.getString.mockReturnValue(undefined);
+    mockStorage.getAllKeys.mockReturnValue([]);
+    mockStorage.contains.mockReturnValue(false);
+    mockStorage.getNumber.mockReturnValue(undefined);
   });
 
   describe("persist", () => {
@@ -23,6 +37,7 @@ describe("SessionPersistence", () => {
 
     it("should track analytics event on persist", () => {
       const { eventBus } = require("../../../events");
+      eventBus.publish.mockClear();
       SessionPersistence.persist(mockSession);
       expect(eventBus.publish).toHaveBeenCalledWith("analytics:track", {
         event: "session_persisted",
@@ -38,18 +53,14 @@ describe("SessionPersistence", () => {
     });
 
     it("should load valid persisted session", () => {
-      const { MMKV } = require("react-native-mmkv");
-      const mockStorage = new MMKV();
       mockStorage.getString.mockReturnValue(JSON.stringify(mockSession));
       const result = SessionPersistence.load();
       expect(result).not.toBeNull();
     });
 
     it("should recover from backup on corruption", () => {
-      const { MMKV } = require("react-native-mmkv");
-      const mockStorage = new MMKV();
       mockStorage.getString
-        .mockReturnValueOnce(null)
+        .mockReturnValueOnce("invalid-corrupted-json")
         .mockReturnValueOnce(JSON.stringify(mockSession));
       mockStorage.getAllKeys.mockReturnValue(["session:backup:123456"]);
       const result = SessionPersistence.load();

@@ -6,12 +6,42 @@ import {
   canResumeSession,
 } from "../utils/persistence";
 
+// Use var so declaration is hoisted; assignment happens inside factory
+var mockMMKVInstance: any;
+
+jest.mock("react-native-mmkv", () => {
+  mockMMKVInstance = {
+    set: jest.fn(),
+    getString: jest.fn(),
+    getNumber: jest.fn(),
+    delete: jest.fn(),
+    contains: jest.fn(),
+    getAllKeys: jest.fn(),
+  };
+  return {
+    MMKV: jest.fn().mockImplementation(() => mockMMKVInstance),
+  };
+});
+jest.mock("../../events", () => ({ eventBus: { publish: jest.fn() } }));
+jest.mock("../../utils/debug", () => ({
+  createDebugger: jest.fn(() => ({
+    debug: jest.fn(),
+    info: jest.fn(),
+    warn: jest.fn(),
+    error: jest.fn(),
+  })),
+}));
+jest.mock("../../utils/silent-failure", () => ({
+  captureSilentFailure: jest.fn(),
+}));
+
 export {
   SessionPersistence,
   PersistedSessionState,
   SessionPersistenceError,
   isSessionStale,
   canResumeSession,
+  mockMMKVInstance,
 };
 
 export const mockSession: PersistedSessionState = {
@@ -56,28 +86,3 @@ export const baseState: PersistedSessionState = {
   deviceId: "device-test",
   version: 1,
 };
-
-export function setupMocks(): void {
-  const mockMMKVInstance = {
-    set: jest.fn(),
-    getString: jest.fn(),
-    getNumber: jest.fn(),
-    delete: jest.fn(),
-    contains: jest.fn(),
-    getAllKeys: jest.fn(),
-  };
-  jest.mock("react-native-mmkv", () => ({
-    MMKV: jest.fn().mockImplementation(() => mockMMKVInstance),
-  }));
-  jest.mock("../../events", () => ({ eventBus: { publish: jest.fn() } }));
-  jest.mock("../../utils/debug", () => ({
-    createDebugger: jest.fn(() => ({
-      debug: jest.fn(),
-      info: jest.fn(),
-      warn: jest.fn(),
-      error: jest.fn(),
-    })),
-  }));
-}
-
-setupMocks();

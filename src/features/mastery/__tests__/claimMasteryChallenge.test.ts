@@ -1,4 +1,4 @@
-import { claimMasteryChallenge } from "../service";
+import { MasteryService } from "../service";
 import { loadStoredMasteryState, persistMasteryState } from "../repository";
 import { TEST_USER_ID, setupMasteryMocks, makeBaseState } from "./testHelpers";
 
@@ -11,7 +11,7 @@ describe("Mastery Service > claimMasteryChallenge", () => {
     setupMasteryMocks();
   });
 
-  it("should claim completed challenge and award points", async () => {
+  it("should claim completed challenge and award points", () => {
     const state = makeBaseState({
       totalMasteryPoints: 100,
       techniques: {
@@ -31,17 +31,19 @@ describe("Mastery Service > claimMasteryChallenge", () => {
           current: 100,
           status: "COMPLETED",
           completedAt: Date.now(),
+          difficulty: "MEDIUM",
+          unit: "minutes",
+          masteryPoints: 10,
         },
       ],
     });
     mockedLoadStoredMasteryState.mockReturnValue(state);
-    const result = await claimMasteryChallenge(TEST_USER_ID, "challenge-1");
-    expect(result.success).toBe(true);
-    expect(result.pointsAwarded).toBeGreaterThan(0);
+    const result = MasteryService.claimChallenge(TEST_USER_ID, "challenge-1");
+    expect(result).toBe(true);
     expect(persistMasteryState).toHaveBeenCalled();
   });
 
-  it("should throw error for incomplete challenge", async () => {
+  it("should return false for incomplete challenge", () => {
     const state = makeBaseState({
       totalMasteryPoints: 100,
       techniques: {
@@ -60,16 +62,19 @@ describe("Mastery Service > claimMasteryChallenge", () => {
           target: 100,
           current: 50,
           status: "ACTIVE",
+          completedAt: null,
+          difficulty: "MEDIUM",
+          unit: "minutes",
+          masteryPoints: 10,
         },
       ],
     });
     mockedLoadStoredMasteryState.mockReturnValue(state);
-    await expect(
-      claimMasteryChallenge(TEST_USER_ID, "challenge-1"),
-    ).rejects.toThrow("Challenge not completed");
+    const result = MasteryService.claimChallenge(TEST_USER_ID, "challenge-1");
+    expect(result).toBe(false);
   });
 
-  it("should throw error for non-existent challenge", async () => {
+  it("should return false for non-existent challenge", () => {
     const state = makeBaseState({
       totalMasteryPoints: 100,
       techniques: {
@@ -81,8 +86,7 @@ describe("Mastery Service > claimMasteryChallenge", () => {
       },
     });
     mockedLoadStoredMasteryState.mockReturnValue(state);
-    await expect(
-      claimMasteryChallenge(TEST_USER_ID, "non-existent"),
-    ).rejects.toThrow("Challenge not found");
+    const result = MasteryService.claimChallenge(TEST_USER_ID, "non-existent");
+    expect(result).toBe(false);
   });
 });

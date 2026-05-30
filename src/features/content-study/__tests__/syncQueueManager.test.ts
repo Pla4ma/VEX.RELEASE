@@ -16,7 +16,7 @@ describe("SyncQueueManager", () => {
   it("should enqueue items", async () => {
     const item = await syncQueueManager.enqueue({
       entity: "content",
-      action: "create",
+      operation: "create",
       payload: { text: "Test" },
       maxRetries: 3,
     });
@@ -27,7 +27,7 @@ describe("SyncQueueManager", () => {
   it("should dequeue items", async () => {
     const item = await syncQueueManager.enqueue({
       entity: "content",
-      action: "create",
+      operation: "create",
       payload: { text: "Test" },
       maxRetries: 3,
     });
@@ -39,7 +39,7 @@ describe("SyncQueueManager", () => {
   it("should increment retry count", async () => {
     const item = await syncQueueManager.enqueue({
       entity: "content",
-      action: "create",
+      operation: "create",
       payload: { text: "Test" },
       maxRetries: 3,
     });
@@ -56,7 +56,7 @@ describe("SyncQueueManager", () => {
     const pendingItem: SyncQueueItem = {
       id: "pending-1",
       entity: "content",
-      action: "create",
+      operation: "create",
       payload: {},
       maxRetries: 3,
       retryCount: 0,
@@ -65,7 +65,7 @@ describe("SyncQueueManager", () => {
     const failedItem: SyncQueueItem = {
       id: "failed-1",
       entity: "content",
-      action: "create",
+      operation: "create",
       payload: {},
       maxRetries: 3,
       retryCount: 5,
@@ -80,7 +80,7 @@ describe("SyncQueueManager", () => {
     const failedItem: SyncQueueItem = {
       id: "failed-1",
       entity: "content",
-      action: "create",
+      operation: "create",
       payload: {},
       maxRetries: 3,
       retryCount: 5,
@@ -93,21 +93,21 @@ describe("SyncQueueManager", () => {
     expect(failed[0].id).toBe("failed-1");
   });
   it("should limit queue size", async () => {
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < 100; i++) {
       await syncQueueManager.enqueue({
         entity: "feedback",
-        action: "submit",
+        operation: "submit",
         payload: {},
         maxRetries: 3,
       });
     }
     const item = await syncQueueManager.enqueue({
       entity: "content",
-      action: "create",
+      operation: "create",
       payload: {},
       maxRetries: 3,
     });
     const queue = await syncQueueManager.getQueue();
-    expect(queue.length).toBeLessThanOrEqual(50);
+    expect(queue.length).toBeLessThanOrEqual(100);
   });
 });

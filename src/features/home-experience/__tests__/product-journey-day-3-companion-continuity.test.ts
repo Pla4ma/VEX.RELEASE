@@ -1,11 +1,11 @@
 import {
   buildHomeExperienceModel,
-  getHomeStage,
   decideHomeSurfaces,
   featureAvailability,
   studyProfile,
   baseStats,
 } from "./product-journey-helpers";
+import { getHomeStage } from "../service";
 
 describe("product journey — Day 3 companion continuity", () => {
   it("companion thread visible for friendly style", () => {

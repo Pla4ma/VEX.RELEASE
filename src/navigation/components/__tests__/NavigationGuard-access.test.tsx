@@ -1,11 +1,11 @@
 import { describe, it, expect, beforeEach } from "@jest/globals";
 import { screen } from "@testing-library/react-native";
+import React from "react";
+import { View, Text } from "react-native";
 import {
   resetFeatureMocks,
   renderGuardedFeature,
-  mockIsFeatureEnabled,
-  mockIsFeatureDisabled,
-  mockIsFeatureOptional,
+  mockIsEnabled,
 } from "./test-helpers";
 
 describe("Navigation Guard - Access Control", () => {
@@ -15,53 +15,50 @@ describe("Navigation Guard - Access Control", () => {
 
   describe("Feature Access Control", () => {
     it("should allow navigation to enabled features", () => {
-      mockIsFeatureEnabled.mockReturnValue(true);
+      mockIsEnabled.mockImplementation((key: string) => key === "sessions");
       renderGuardedFeature("sessions");
       expect(screen.getByTestId("protected-content")).toBeTruthy();
     });
+
     it("should block navigation to disabled features", () => {
-      mockIsFeatureDisabled.mockReturnValue(true);
+      mockIsEnabled.mockReturnValue(false);
       renderGuardedFeature("social-feed");
       expect(screen.queryByTestId("protected-content")).toBeFalsy();
-      expect(
-        screen.getByText("This feature is currently disabled"),
-      ).toBeTruthy();
+      expect(screen.getByTestId("fallback-content")).toBeTruthy();
     });
-    it("should show appropriate message for disabled features", () => {
-      mockIsFeatureDisabled.mockReturnValue(true);
+
+    it("should show fallback for disabled features", () => {
+      mockIsEnabled.mockReturnValue(false);
       renderGuardedFeature("duels");
       expect(screen.queryByTestId("protected-content")).toBeFalsy();
-      expect(
-        screen.getByText("This feature is currently disabled"),
-      ).toBeTruthy();
-      expect(
-        screen.getByText("Duels will be available in a future update"),
-      ).toBeTruthy();
+      expect(screen.getByText("Feature not available")).toBeTruthy();
     });
   });
 
-  describe("Optional Feature Handling", () => {
-    it("should allow access to optional features when enabled", () => {
-      mockIsFeatureEnabled.mockReturnValue(true);
+  describe("Independent Feature Flags", () => {
+    it("should allow access when specific feature is enabled", () => {
+      mockIsEnabled.mockImplementation((key: string) => key === "boss");
       renderGuardedFeature("boss");
       expect(screen.getByTestId("protected-content")).toBeTruthy();
     });
-    it("should block access to optional features when disabled", () => {
-      mockIsFeatureOptional.mockReturnValue(true);
+
+    it("should block access when specific feature is disabled", () => {
+      mockIsEnabled.mockImplementation((key: string) => key === "boss");
       renderGuardedFeature("challenges");
       expect(screen.queryByTestId("protected-content")).toBeFalsy();
-      expect(
-        screen.getByText("This feature is not yet available"),
-      ).toBeTruthy();
+      expect(screen.getByTestId("fallback-content")).toBeTruthy();
     });
-    it("should show different message for optional features", () => {
-      mockIsFeatureOptional.mockReturnValue(true);
-      renderGuardedFeature("squads");
+
+    it("should show custom fallback when provided", () => {
+      mockIsEnabled.mockReturnValue(false);
+      const customFallback = (
+        <View testID="custom-fallback">
+          <Text>Custom unavailable message</Text>
+        </View>
+      );
+      renderGuardedFeature("squads", customFallback);
       expect(screen.queryByTestId("protected-content")).toBeFalsy();
-      expect(
-        screen.getByText("This feature is not yet available"),
-      ).toBeTruthy();
-      expect(screen.getByText("Squads will be available soon")).toBeTruthy();
+      expect(screen.getByTestId("custom-fallback")).toBeTruthy();
     });
   });
 });

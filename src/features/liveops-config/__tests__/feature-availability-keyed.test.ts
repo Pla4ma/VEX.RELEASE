@@ -33,7 +33,7 @@ describe("keyed FeatureAvailability", () => {
       "src/navigation/premium-route-gating.ts",
       "src/navigation/notification-filters.ts",
       "src/screens/notifications/NotificationScreenConfig.ts",
-      "src/hooks/usePrefetchQueries.ts",
+      "src/hooks/prefetcher.ts",
       "src/screens/progress/progress-actions.ts",
       "src/features/liveops-config/feature-access-store.ts",
     ];

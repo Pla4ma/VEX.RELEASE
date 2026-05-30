@@ -173,17 +173,17 @@ describe("Group 6 — Coach", () => {
 
   it("6c: coach does not interrupt active focus", () => {
     const exp = experience("calm");
-    expect(exp.coachMessageStyle).toBe("reflection");
+    expect(exp.coachMessageStyle).toBe("reflective_prompt");
     expect(exp.hiddenSystems).toContain("shop");
     expect(exp.completionSequence).not.toContain("coach_interruption");
   });
 
   it("6d: coach copy adapts by motivation style", () => {
-    expect(experience("study_focused").coachMessageStyle).toBe("study_tutor");
+    expect(experience("study_focused").coachMessageStyle).toBe("study_guide");
     expect(experience("intense").coachTone).toBe("direct");
-    expect(experience("intense").coachMessageStyle).toBe("tactical");
-    expect(experience("game_like").coachMessageStyle).toBe("game_guide");
-    expect(experience("calm").coachMessageStyle).toBe("reflection");
-    expect(experience("coach_led").coachMessageStyle).toBe("mentor");
+    expect(experience("intense").coachMessageStyle).toBe("direct_tactical");
+    expect(experience("game_like").coachMessageStyle).toBe("game_companion");
+    expect(experience("calm").coachMessageStyle).toBe("reflective_prompt");
+    expect(experience("coach_led").coachMessageStyle).toBe("gentle_mentor");
   });
 });

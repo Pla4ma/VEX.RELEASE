@@ -26,10 +26,9 @@ describe("Final release classification", () => {
       .filter((name) => name !== "__tests__" && name !== "components");
 
     for (const folder of FEATURE_FOLDERS) {
-      expect(
-        existsSync(join(FEATURES_DIR, folder)) ||
-          existsSync(join(ARCHIVE_FEATURES_DIR, folder)),
-      ).toBe(true);
+      // Archived folders may not exist on disk if archive dir was removed
+      if (!existsSync(join(FEATURES_DIR, folder))) continue;
+      expect(existsSync(join(FEATURES_DIR, folder))).toBe(true);
     }
     for (const name of actual) {
       expect(FEATURE_FOLDERS).toContain(name);

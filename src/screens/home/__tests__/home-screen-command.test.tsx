@@ -1,11 +1,11 @@
 import React from "react";
 import { render, screen } from "@testing-library/react-native";
-import { HomeScreen } from "../HomeScreen";
 import {
   mockState,
   createCommandHomeData,
   resetCommandMocks,
 } from "./home-screen-command-helpers";
+import { HomeScreen } from "../HomeScreen";
 
 describe("HomeScreen command center", () => {
   beforeEach(() => {

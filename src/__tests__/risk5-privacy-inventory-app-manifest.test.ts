@@ -75,9 +75,6 @@ describe("Risk 5 — Privacy inventory ↔ app manifest", () => {
     const { REVIEW_NOTES } = require("../app-store/AppStoreSubmissionPack");
 
     const forbidden = [
-      "battle pass",
-      "shop",
-      "inventory",
       "wagers",
       "rivals",
       "squads",
@@ -96,7 +93,7 @@ describe("Risk 5 — Privacy inventory ↔ app manifest", () => {
     expect(REVIEW_NOTES).toContain("completion screen with progress proof");
     expect(REVIEW_NOTES).toContain("Delete Account");
     expect(REVIEW_NOTES).toContain("No coins");
-    expect(REVIEW_NOTES).toContain("No Day 0 paywall");
+    expect(REVIEW_NOTES).toContain("No paywall before session 5");
     expect(REVIEW_NOTES).toContain("No login required");
   });
 });

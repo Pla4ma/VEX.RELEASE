@@ -10,9 +10,9 @@ import {
 import {
   initializeRevenueCat,
   restorePurchases as restoreRevenueCatPurchases,
-} from "../../../shared/monetization/revenuecat-service";
+} from "../../../shared/monetization/revenuecat-facade";
 
-jest.mock("../../../shared/monetization/revenuecat-service", () => ({
+jest.mock("../../../shared/monetization/revenuecat-facade", () => ({
   initializeRevenueCat: jest.fn(),
   restorePurchases: jest.fn(),
 }));

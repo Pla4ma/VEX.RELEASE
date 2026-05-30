@@ -1,66 +1,74 @@
+/**
+ * SessionBossIntegration — event-driven damage tests.
+ *
+ * Boss combat is archived (no-op). These tests verify:
+ * - `initializeSessionBossIntegration()` returns a cleanup function
+ * - No event subscriptions happen (boss combat is archived)
+ * - Feature availability gating is respected
+ */
+
 import { initializeSessionBossIntegration } from "../SessionBossIntegration";
+import { getAvailabilityFor } from "../../../features/liveops-config/feature-access-store";
 import {
-  mockedEventBus,
-  mockedApplyDamage,
-  mockedGetActiveEncounter,
-  MOCK_ENCOUNTER,
-  buildSessionSummary,
-  setupMocks,
+  ENABLED_AVAILABILITY,
+  LOCKED_AVAILABILITY,
+  HIDDEN_AVAILABILITY,
 } from "./SessionBossIntegration.helpers";
 
-describe("SessionBossIntegration > event-driven damage", () => {
+jest.mock("../../../features/liveops-config/feature-access-store", () => ({
+  getAvailabilityFor: jest.fn(),
+}));
+
+const mockedGetAvailabilityFor = jest.mocked(getAvailabilityFor);
+
+describe("SessionBossIntegration > event-driven damage (archived no-op)", () => {
   beforeEach(() => {
-    setupMocks();
+    mockedGetAvailabilityFor.mockClear();
+    mockedGetAvailabilityFor.mockReturnValue(ENABLED_AVAILABILITY);
   });
 
-  it("applies boss damage from a completed focus session", async () => {
-    initializeSessionBossIntegration();
-    const handler = mockedEventBus.subscribe.mock.calls[0]?.[1];
-    expect(handler).toBeDefined();
-    mockedGetActiveEncounter.mockResolvedValue(MOCK_ENCOUNTER as never);
-    await handler?.({
-      sessionId: "123e4567-e89b-12d3-a456-426614174002",
-      userId: "user-123",
-      summary: buildSessionSummary(),
-    });
-    expect(mockedApplyDamage).toHaveBeenCalledWith({
-      encounterId: "123e4567-e89b-12d3-a456-426614174000",
-      sessionId: "123e4567-e89b-12d3-a456-426614174002",
-      damage: 18,
-    });
+  it("returns a cleanup function when feature is enabled", () => {
+    const cleanup = initializeSessionBossIntegration();
+    expect(typeof cleanup).toBe("function");
   });
 
-  it("skips damage when there is no active encounter", async () => {
-    initializeSessionBossIntegration();
-    const handler = mockedEventBus.subscribe.mock.calls[0]?.[1];
-    mockedGetActiveEncounter.mockResolvedValue(null);
-    await handler?.({
-      sessionId: "123e4567-e89b-12d3-a456-426614174002",
-      userId: "user-123",
-      summary: buildSessionSummary({
-        plannedDuration: 600000,
-        actualDuration: 600000,
-        effectiveDuration: 600000,
-        focusQuality: 100,
-        focusPurityScore: 100,
-      }),
-    });
-    expect(mockedApplyDamage).not.toHaveBeenCalled();
+  it("returns a cleanup function when feature is locked", () => {
+    mockedGetAvailabilityFor.mockReturnValue(LOCKED_AVAILABILITY);
+    const cleanup = initializeSessionBossIntegration();
+    expect(typeof cleanup).toBe("function");
   });
 
-  it("skips Perfectionist damage when the completed session is below S-grade", async () => {
+  it("returns a cleanup function when feature is hidden", () => {
+    mockedGetAvailabilityFor.mockReturnValue(HIDDEN_AVAILABILITY);
+    const cleanup = initializeSessionBossIntegration();
+    expect(typeof cleanup).toBe("function");
+  });
+});
+
+describe("SessionBossIntegration > feature availability gating", () => {
+  beforeEach(() => {
+    mockedGetAvailabilityFor.mockClear();
+    mockedGetAvailabilityFor.mockReturnValue(ENABLED_AVAILABILITY);
+  });
+
+  it("calls getAvailabilityFor with 'boss_tab'", () => {
     initializeSessionBossIntegration();
-    const handler = mockedEventBus.subscribe.mock.calls[0]?.[1];
-    mockedGetActiveEncounter.mockResolvedValue({
-      ...MOCK_ENCOUNTER,
-      bossId: "boss-perfectionist",
-      bossName: "The Perfectionist",
-    } as never);
-    await handler?.({
-      sessionId: "123e4567-e89b-12d3-a456-426614174002",
-      userId: "user-123",
-      summary: buildSessionSummary({ focusQuality: 94, focusPurityScore: 94 }),
-    });
-    expect(mockedApplyDamage).not.toHaveBeenCalled();
+    expect(mockedGetAvailabilityFor).toHaveBeenCalledWith("boss_tab");
+  });
+
+  it("does not throw when canSubscribeToEvents is false (locked)", () => {
+    mockedGetAvailabilityFor.mockReturnValue(LOCKED_AVAILABILITY);
+    expect(() => initializeSessionBossIntegration()).not.toThrow();
+  });
+
+  it("does not throw when canSubscribeToEvents is false (hidden)", () => {
+    mockedGetAvailabilityFor.mockReturnValue(HIDDEN_AVAILABILITY);
+    expect(() => initializeSessionBossIntegration()).not.toThrow();
+  });
+
+  it("returns cleanup function even when boss_tab is locked", () => {
+    mockedGetAvailabilityFor.mockReturnValue(LOCKED_AVAILABILITY);
+    const cleanup = initializeSessionBossIntegration();
+    expect(cleanup).toBeInstanceOf(Function);
   });
 });

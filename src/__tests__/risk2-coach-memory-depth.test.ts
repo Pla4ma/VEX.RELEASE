@@ -40,19 +40,19 @@ describe("Risk 2 — Coach memory depth", () => {
       studyUsageRatio: 0.7,
       totalCompletedSessions: 5,
     });
-    expect(studyExp.coachMessageStyle).toBe("study_tutor");
+    expect(studyExp.coachMessageStyle).toBe("study_guide");
 
     const intenseExp = experience("intense", {
       completedSessionDurations: [15, 15, 10],
       totalCompletedSessions: 3,
     });
     expect(intenseExp.coachTone).toBe("direct");
-    expect(intenseExp.coachMessageStyle).toBe("tactical");
+    expect(intenseExp.coachMessageStyle).toBe("direct_tactical");
 
     const gameExp = experience("game_like");
-    expect(gameExp.coachMessageStyle).toBe("game_guide");
+    expect(gameExp.coachMessageStyle).toBe("game_companion");
 
     const calmExp = experience("calm");
-    expect(calmExp.coachMessageStyle).toBe("reflection");
+    expect(calmExp.coachMessageStyle).toBe("reflective_prompt");
   });
 });

@@ -1,15 +1,5 @@
 import { describe, it, expect, beforeEach } from "@jest/globals";
-
-const mockSingle = jest.fn();
-const mockSelect = jest.fn();
-const mockEq = jest.fn();
-const mockFrom = jest.fn();
-
-jest.mock("../../../config/supabase", () => ({
-  supabase: {
-    from: (...args: unknown[]) => mockFrom(...args),
-  },
-}));
+import { mockFrom, mockSingle } from "./repository-test-setup";
 
 import {
   upsertRewardLedger,
@@ -40,21 +30,6 @@ const mockDbRecord = {
   failed_reason: null,
   expires_at: null,
 };
-
-function buildChain(...methods: Array<{ name: string; returnValue: unknown }>) {
-  const chain: Record<string, jest.Mock> = {};
-  let lastMethod = "";
-  methods.forEach(({ name, returnValue }) => {
-    chain[name] = jest.fn().mockImplementation(() => {
-      lastMethod = name;
-      if (typeof returnValue === "function") {
-        return returnValue();
-      }
-      return returnValue;
-    });
-  });
-  return { chain, lastMethod };
-}
 
 describe("reward-ledger repository", () => {
   beforeEach(() => {

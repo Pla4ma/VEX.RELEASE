@@ -42,14 +42,14 @@ describe("premium copy — no economy language", () => {
     expect(durableCount).toBeGreaterThanOrEqual(3);
   });
 
-  it("mentions no coins, no gems explicitly", () => {
-    expect(allCopy).toContain("no coin");
-    expect(allCopy).toContain("no gem");
+  it("mentions no currency, no gimmicks explicitly", () => {
+    expect(allCopy).toContain("no currency");
+    expect(allCopy).toContain("no gimmick");
   });
 
-  it("free boundary copy asserts core loop stays free forever", () => {
+  it("free boundary copy asserts sessions stay free forever", () => {
     expect(FREE_BOUNDARY_COPY).toMatch(/free.*(forever|always|stay)/i);
-    expect(FREE_BOUNDARY_COPY).toContain("Core sessions");
+    expect(FREE_BOUNDARY_COPY).toMatch(/session/i);
   });
 });
 

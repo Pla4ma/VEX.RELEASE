@@ -21,7 +21,8 @@ export function createMockSession(
       dndEnabled: false,
       strictMode: false,
       autoStartBreaks: false,
-      autoStartPomodoros: false,
+      autoStartNextInterval: false,
+      sessionMode: "FLOW" as const,
     },
     currentInterval: 1,
     totalIntervals: 4,
@@ -32,6 +33,10 @@ export function createMockSession(
     interruptions: 0,
     pauses: 0,
     startTime: Date.now() - 1500000,
+    startedAt: Date.now() - 1500000,
+    baseScore: 0,
+    recoveryAttempts: 0,
+    maxRecoveryAttempts: 3,
     ...overrides,
   } as SessionState;
 }

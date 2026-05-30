@@ -100,6 +100,6 @@ describe("premium final-release truth", () => {
     );
 
     expect(focusAvailability.canNavigate).toBe(true);
-    expect(FREE_BOUNDARY_COPY).toContain("Core sessions");
+    expect(FREE_BOUNDARY_COPY).toContain("free forever");
   });
 });

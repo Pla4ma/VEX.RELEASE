@@ -1,8 +1,5 @@
 import React from "react";
-import {
-  createRecommendationsHomeData,
-  resetRecommendationsMocks,
-} from "./recommendations-test-data";
+import { createRecommendationsHomeData } from "./recommendations-test-data";
 
 export type HomeData = {
   companionMood: string;
@@ -30,13 +27,18 @@ export type HomeData = {
   unreadNotificationCount: number;
 };
 
-export { createRecommendationsHomeData, resetRecommendationsMocks };
+export { createRecommendationsHomeData };
 
 export const mockState = {
   navigate: jest.fn(),
   updateRecommendationStatus: jest.fn(),
   homeData: createRecommendationsHomeData(),
 };
+
+export function resetRecommendationsMocks(): void {
+  jest.clearAllMocks();
+  mockState.homeData = createRecommendationsHomeData();
+}
 
 jest.mock("@react-navigation/native", () => ({
   ...jest.requireActual("@react-navigation/native"),

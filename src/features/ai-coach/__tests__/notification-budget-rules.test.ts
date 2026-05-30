@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from "@jest/globals";
+import { afterEach, beforeEach, describe, expect, it, vi } from "@jest/globals";
 import {
   canSendNotification,
   clearBudgetStore,
@@ -14,10 +14,15 @@ describe("Notification budget rules", () => {
   let mockRequest: NotificationRequest;
 
   beforeEach(() => {
-    jest.useRealTimers();
+    jest.useFakeTimers();
+    jest.setSystemTime(new Date("2026-01-15T10:00:00"));
     clearBudgetStore();
     mockBudget = createMockNotificationBudget("user-123");
     mockRequest = createMockNotificationRequest("user-123");
+  });
+
+  afterEach(() => {
+    jest.useRealTimers();
   });
 
   it("allows notifications under limit and blocks when limit is reached", async () => {

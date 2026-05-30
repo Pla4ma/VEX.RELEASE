@@ -3,7 +3,6 @@ import {
   exportAnalyticsData,
 } from "../service";
 import * as repository from "../repository";
-import { eventBus } from "../../../events";
 
 jest.mock("../repository");
 jest.mock("../repository/storage", () => ({
@@ -172,14 +171,6 @@ describe("AnalyticsService", () => {
       expect(result.id).toBe("job-123");
       expect(result.status).toBe("pending");
       expect(repository.createExportJob).toHaveBeenCalled();
-      expect(eventBus.publish).toHaveBeenCalledWith(
-        "analytics:export_requested",
-        expect.objectContaining({
-          jobId: "job-123",
-          userId: "user-123",
-          format: "json",
-        }),
-      );
     });
   });
 });

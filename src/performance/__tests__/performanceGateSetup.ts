@@ -9,8 +9,13 @@ import {
 } from "../PerformanceGate";
 
 export const mockPerformanceMonitor = {
-  start: jest.fn(),
-  stop: jest.fn(),
+  isRunning: false,
+  start: jest.fn(function (this: { isRunning: boolean }) {
+    this.isRunning = true;
+  }),
+  stop: jest.fn(function (this: { isRunning: boolean }) {
+    this.isRunning = false;
+  }),
   getMetrics: jest.fn(() => ({
     fps: 60,
     avgFps: 58,
@@ -22,6 +27,13 @@ export const mockPerformanceMonitor = {
   })),
   onJank: jest.fn(),
 };
+
+// Wire the mock into the singleton's internal PerformanceMonitor instance
+Object.defineProperty(performanceGate, "performanceMonitor", {
+  value: mockPerformanceMonitor,
+  writable: true,
+  configurable: true,
+});
 
 export const mockFetch = jest.fn();
 Object.defineProperty(global, "fetch", { value: mockFetch, writable: true });

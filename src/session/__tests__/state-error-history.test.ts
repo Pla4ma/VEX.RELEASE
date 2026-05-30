@@ -4,7 +4,6 @@ import {
   mockUserId,
   type TestContext,
 } from "./helpers";
-import { eventBus } from "../../events";
 
 let ctx: TestContext;
 
@@ -13,47 +12,45 @@ beforeEach(() => {
   ctx = createTestContext();
 });
 
-describe("getSessionState", () => {
-  it("should return current session state", async () => {
-    const session = await ctx.service.createCustomSession(mockSessionConfig);
-    const state = ctx.service.getSessionState(session.id);
+describe("getCurrentSession", () => {
+  it("should return current session from orchestrator", () => {
+    const mockSession = { id: "session-1", status: "CREATED" };
+    ctx.mockOrchestrator.getSession.mockReturnValue(mockSession);
+    const state = ctx.service.getCurrentSession();
     expect(state).toBeDefined();
-    expect(state.sessionId).toBe(session.id);
-    expect(state.status).toBe("CREATED");
+    expect(state?.id).toBe("session-1");
   });
 
-  it("should calculate remaining time correctly", async () => {
-    const session = await ctx.service.createCustomSession(mockSessionConfig);
-    await ctx.service.startSession(session.id);
-    const state = ctx.service.getSessionState(session.id);
-    expect(state.remainingSeconds).toBeLessThanOrEqual(session.config.duration);
-    expect(state.remainingSeconds).toBeGreaterThan(0);
+  it("should return null when no session", () => {
+    ctx.mockOrchestrator.getSession.mockReturnValue(null);
+    const state = ctx.service.getCurrentSession();
+    expect(state).toBeNull();
   });
 });
 
 describe("error handling", () => {
   it("should handle repository save failure", async () => {
-    ctx.mockRepository.saveSession.mockRejectedValue(new Error("DB error"));
-    await expect(ctx.service.createCustomSession(mockSessionConfig)).rejects.toThrow(
-      "DB error",
+    ctx.mockRepository.getActiveSession.mockResolvedValue(null);
+    ctx.mockOrchestrator.isSessionActive.mockReturnValue(false);
+    ctx.mockOrchestrator.createSession.mockRejectedValue(
+      new Error("DB error"),
     );
-    expect(eventBus.publish).toHaveBeenCalledWith(
-      "session:failed",
-      expect.objectContaining({ canRecover: true }),
-    );
+    await expect(
+      ctx.service.createCustomSession(mockSessionConfig),
+    ).rejects.toThrow("DB error");
   });
 
-  it("should handle concurrent session operations", async () => {
-    const session = await ctx.service.createCustomSession(mockSessionConfig);
-    await ctx.service.startSession(session.id);
-    const pause1 = ctx.service.pauseSession(session.id, { reason: "TEST" });
-    const pause2 = ctx.service.pauseSession(session.id, { reason: "TEST" });
-    await expect(Promise.all([pause1, pause2])).rejects.toThrow();
+  it("should throw error when no user is set", async () => {
+    const serviceWithoutUser =
+      new (require("../SessionService").SessionService)();
+    await expect(
+      serviceWithoutUser.createCustomSession(mockSessionConfig),
+    ).rejects.toThrow("SessionService: No user set");
   });
 });
 
 describe("session history", () => {
-  it("should retrieve session history", async () => {
+  it("should retrieve session history with limit", async () => {
     const mockHistory = [
       {
         id: "session-1",
@@ -67,13 +64,8 @@ describe("session history", () => {
       },
     ];
     ctx.mockRepository.getSessionHistory.mockResolvedValue(mockHistory);
-    const history = await ctx.service.getSessionHistory(mockUserId, {
-      limit: 10,
-    });
+    const history = await ctx.service.getSessionHistory(10);
     expect(history).toHaveLength(2);
-    expect(ctx.mockRepository.getSessionHistory).toHaveBeenCalledWith(
-      mockUserId,
-      { limit: 10 },
-    );
+    expect(ctx.mockRepository.getSessionHistory).toHaveBeenCalledWith(10);
   });
 });

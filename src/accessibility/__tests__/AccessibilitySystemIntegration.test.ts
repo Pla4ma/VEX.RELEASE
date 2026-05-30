@@ -41,6 +41,7 @@ describe("AccessibilitySystem Integration", () => {
           accessibilityLabel: "Accessible Button",
           accessibilityRole: "button",
           accessibilityHint: "Activates this control",
+          onPress: jest.fn(),
           style: { color: "#000000", backgroundColor: "#FFFFFF" },
         },
       };

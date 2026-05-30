@@ -11,6 +11,9 @@ jest.mock("../../../config/supabase", () => {
     remove: jest.fn(),
     createSignedUrl: jest.fn(),
     list: jest.fn(),
+    getPublicUrl: jest.fn().mockReturnValue({
+      data: { publicUrl: "https://example.com/file" },
+    }),
   });
   return {
     getSupabaseClient: jest.fn().mockReturnValue({
@@ -39,6 +42,9 @@ describe("AnalyticsStorage - download & delete", () => {
       remove: jest.fn(),
       createSignedUrl: jest.fn(),
       list: jest.fn(),
+      getPublicUrl: jest.fn().mockReturnValue({
+        data: { publicUrl: "https://example.com/file" },
+      }),
     });
   });
 

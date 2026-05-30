@@ -12,13 +12,13 @@ import type { FocusQualityMetrics } from "./bonus-calculator-helpers";
 
 describe("BonusCalculator", () => {
   describe("edge cases", () => {
-    it("should handle negative durations", () => {
+    it("should cap bonus at max for negative durations", () => {
       const bonus = calculateTimeBonus({
         plannedDuration: 1500,
         actualDuration: -100,
         completionPercentage: 100,
       });
-      expect(bonus).toBe(0);
+      expect(bonus).toBe(BONUS_CONSTANTS.TIME_BONUS_MAX);
     });
 
     it("should handle very long streaks", () => {

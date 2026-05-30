@@ -1,9 +1,9 @@
 import {
   createTestContext,
   mockSessionConfig,
+  mockUserId,
   type TestContext,
 } from "./helpers";
-import { eventBus } from "../../events";
 
 let ctx: TestContext;
 
@@ -13,62 +13,51 @@ beforeEach(() => {
 });
 
 describe("pauseSession", () => {
-  it("should pause active session", async () => {
-    const session = await ctx.service.createCustomSession(mockSessionConfig);
-    await ctx.service.startSession(session.id);
-    const pausedSession = await ctx.service.pauseSession(session.id, {
-      reason: "USER_INITIATED",
-    });
-    expect(pausedSession.isPaused).toBe(true);
-    expect(pausedSession.pauses).toBe(1);
-    expect(pausedSession.pausedAt).toBeDefined();
-  });
-
-  it("should emit session:paused event", async () => {
-    const session = await ctx.service.createCustomSession(mockSessionConfig);
-    await ctx.service.startSession(session.id);
-    await ctx.service.pauseSession(session.id, { reason: "USER_INITIATED" });
-    expect(eventBus.publish).toHaveBeenCalledWith(
-      "session:paused",
-      expect.any(Object),
+  it("should delegate pause to orchestrator", async () => {
+    ctx.mockOrchestrator.pauseSession.mockResolvedValue(undefined);
+    await ctx.service.pauseSession("USER_INITIATED");
+    expect(ctx.mockOrchestrator.pauseSession).toHaveBeenCalledWith(
+      "USER_INITIATED",
     );
   });
 
-  it("should track pause reason", async () => {
-    const session = await ctx.service.createCustomSession(mockSessionConfig);
-    await ctx.service.startSession(session.id);
-    await ctx.service.pauseSession(session.id, {
-      reason: "INTERRUPTION",
-      interruptionId: "int-123",
-    });
-    expect(eventBus.publish).toHaveBeenCalledWith(
-      "session:paused",
-      expect.objectContaining({
-        reason: "INTERRUPTION",
-        interruptionId: "int-123",
-      }),
+  it("should pass reason to orchestrator", async () => {
+    ctx.mockOrchestrator.pauseSession.mockResolvedValue(undefined);
+    await ctx.service.pauseSession("INTERRUPTION");
+    expect(ctx.mockOrchestrator.pauseSession).toHaveBeenCalledWith(
+      "INTERRUPTION",
+    );
+  });
+
+  it("should emit notification when enabled", async () => {
+    ctx.mockOrchestrator.pauseSession.mockResolvedValue(undefined);
+    await ctx.service.pauseSession("USER_INITIATED");
+    const emitter = require("../SessionEventEmitter").getSessionEventEmitter();
+    expect(emitter.emitNotification).toHaveBeenCalledWith(
+      "SESSION_PAUSED",
+      "Session Paused",
+      "USER_INITIATED",
+      "normal",
     );
   });
 });
 
 describe("resumeSession", () => {
-  it("should resume paused session", async () => {
-    const session = await ctx.service.createCustomSession(mockSessionConfig);
-    await ctx.service.startSession(session.id);
-    await ctx.service.pauseSession(session.id, { reason: "USER_INITIATED" });
-    const resumedSession = await ctx.service.resumeSession(session.id);
-    expect(resumedSession.isPaused).toBe(false);
-    expect(resumedSession.totalPausedTime).toBeGreaterThan(0);
+  it("should delegate resume to orchestrator", async () => {
+    ctx.mockOrchestrator.resumeSession.mockResolvedValue(undefined);
+    await ctx.service.resumeSession();
+    expect(ctx.mockOrchestrator.resumeSession).toHaveBeenCalled();
   });
 
-  it("should emit session:resumed event", async () => {
-    const session = await ctx.service.createCustomSession(mockSessionConfig);
-    await ctx.service.startSession(session.id);
-    await ctx.service.pauseSession(session.id, { reason: "USER_INITIATED" });
-    await ctx.service.resumeSession(session.id);
-    expect(eventBus.publish).toHaveBeenCalledWith(
-      "session:resumed",
-      expect.any(Object),
+  it("should emit notification when enabled", async () => {
+    ctx.mockOrchestrator.resumeSession.mockResolvedValue(undefined);
+    await ctx.service.resumeSession();
+    const emitter = require("../SessionEventEmitter").getSessionEventEmitter();
+    expect(emitter.emitNotification).toHaveBeenCalledWith(
+      "SESSION_RESUMED",
+      "Session Resumed",
+      "Your session is now active",
+      "normal",
     );
   });
 });

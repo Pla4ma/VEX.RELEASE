@@ -1,6 +1,4 @@
-import { SessionMode } from "../../../session/modes";
-import { applyCompletionSubsystems } from "../completion-subsystems";
-import { resolveCompletionExperiencePolicy } from "../completion-experience-policy";
+// Helpers must be imported FIRST so jest.mock() calls register before source modules load
 import {
   mockOrder,
   mockAddXP,
@@ -8,6 +6,9 @@ import {
   baseSummary,
   resetEconomyMocks,
 } from "./economy-deactivation-helpers";
+import { SessionMode } from "../../../session/modes";
+import { applyCompletionSubsystems } from "../completion-subsystems";
+import { resolveCompletionExperiencePolicy } from "../completion-experience-policy";
 
 describe("Phase 6 — economy deactivation boundary", () => {
   beforeEach(() => {

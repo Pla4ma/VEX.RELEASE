@@ -881,7 +881,7 @@ describe("Notifications Feature", () => {
           makeServiceCtx(),
           "UTC",
           0, // quietStart = 0
-          23, // quietEnd = 23 (always in quiet hours)
+          24, // quietEnd = 24 (always in quiet hours — half-open interval [0,24))
         );
         expect(result.sent).toBe(false);
         expect(result.reason).toBe("quiet_hours");
@@ -1081,7 +1081,7 @@ describe("Notifications Feature", () => {
           notificationPrefs: {
             ...makeSmartCtx().notificationPrefs,
             quietHoursStart: quietHour,
-            quietHoursEnd: (quietHour + 1) % 24,
+            quietHoursEnd: quietHour + 1, // no modulo — avoids midnight wraparound
           },
         });
         const result = evaluateNotificationContext(ctx);
@@ -1591,8 +1591,8 @@ describe("Notifications Feature", () => {
         expect(typeof isQuietHours("UTC", 0, 23)).toBe("boolean");
       });
 
-      it("returns true when all hours are quiet (0-23)", () => {
-        expect(isQuietHours("UTC", 0, 23)).toBe(true);
+      it("returns true when all hours are quiet (0-24)", () => {
+        expect(isQuietHours("UTC", 0, 24)).toBe(true);
       });
 
       it("returns false when no hours are quiet (impossible range)", () => {
@@ -1743,7 +1743,9 @@ describe("Notifications Feature", () => {
 
       it("returns true when within default window size (2)", () => {
         const now = new Date();
-        const hour = (now.getHours() + 1) % 24;
+        const currentHour = now.getHours();
+        // Avoid midnight wraparound: use subtraction when near end of day
+        const hour = currentHour > 0 ? currentHour - 1 : currentHour + 1;
         expect(isInPeakWindow(hour)).toBe(true);
       });
 
@@ -1755,7 +1757,9 @@ describe("Notifications Feature", () => {
 
       it("respects custom window size", () => {
         const now = new Date();
-        const hour = (now.getHours() + 3) % 24;
+        const currentHour = now.getHours();
+        // Avoid midnight wraparound: ensure diff is exactly 3
+        const hour = currentHour <= 20 ? currentHour + 3 : currentHour - 3;
         expect(isInPeakWindow(hour, 2)).toBe(false);
         expect(isInPeakWindow(hour, 3)).toBe(true);
       });

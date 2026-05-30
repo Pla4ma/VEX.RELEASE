@@ -1286,8 +1286,12 @@ describe("settleGamble", () => {
 // ============================================================================
 describe("assessStreakRisk", () => {
   it("returns NONE risk when session was today", () => {
-    const assessment = assessStreakRisk(5, Date.now() - 3600000, "UTC", 1000, false, 0);
+    jest.useFakeTimers();
+    jest.setSystemTime(new Date("2024-06-15T12:00:00Z"));
+    const oneHourAgo = Date.now() - 3600000;
+    const assessment = assessStreakRisk(5, oneHourAgo, "UTC", 1000, false, 0);
     expect(assessment.riskLevel).toBe("NONE");
+    jest.useRealTimers();
   });
 
   it("calculates risk when no session today", () => {

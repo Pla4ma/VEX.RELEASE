@@ -32,6 +32,12 @@ describe("Clean lane notification budget enforcement", () => {
   beforeEach(() => {
     jest.useRealTimers();
     clearBudgetStore();
+    // Ensure we are outside quiet hours (22:00-07:00) so notifications are not blocked
+    jest.spyOn(Date.prototype, "getHours").mockReturnValue(12);
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
   });
 
   it("Clean lane sendCoachNotification respects 1/day budget", async () => {

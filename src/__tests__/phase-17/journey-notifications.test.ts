@@ -70,7 +70,7 @@ describe("Phase 17 — Notifications: Lane copy", () => {
       daysSinceOnboarding: 2,
     });
     expect(d.allowed).toBe(true);
-    expect(d.title).toBe("One block");
+    expect(d.title).toBe("One clean block");
   });
 });
 

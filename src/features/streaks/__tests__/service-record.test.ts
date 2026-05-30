@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, jest } from "@jest/globals";
+import { describe, it, expect, beforeEach, afterEach, jest } from "@jest/globals";
 import { recordSession } from "../service";
 import * as repository from "../repository";
 import { mockStreak } from "./fixtures";
@@ -12,6 +12,13 @@ const SESSION_ID = "b2c3d4e5-f6a7-8901-bcde-f12345678901";
 describe("Streaks Service - Record Session", () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    // Set system time to noon UTC so 20h ago is always the previous calendar day
+    jest.useFakeTimers();
+    jest.setSystemTime(new Date("2024-06-15T12:00:00Z"));
+  });
+
+  afterEach(() => {
+    jest.useRealTimers();
   });
 
   it("should increment streak for qualifying session", async () => {

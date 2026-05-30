@@ -82,7 +82,7 @@ describe("Game-like user", () => {
     });
     const result = resolveVexExperience(
       profile,
-      makeStats({ totalCompletedSessions: 5 }),
+      makeStats({ totalCompletedSessions: 5, bossChallengeEngagement: "low" }),
       { boss: true, challenges: true, premium: false, study: false },
     );
     expect(result.bossIntensity).toBe("game-like");
@@ -93,7 +93,7 @@ describe("Game-like user", () => {
     const profile = makeProfile({ motivationStyle: "game_like" });
     const result = resolveVexExperience(
       profile,
-      makeStats({ totalCompletedSessions: 5 }),
+      makeStats({ totalCompletedSessions: 5, bossChallengeEngagement: "medium" }),
       { boss: true, challenges: true, premium: false, study: false },
     );
     expect(result.boss.isVisible).toBe(true);

@@ -3,7 +3,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React from "react";
 import { useContentReview, useStudyPlan } from "../hooks";
 
-jest.mock("../store", () => ({
+jest.mock("../../../store", () => ({
   useAuthStore: () => ({
     user: { id: "test-user-id", email: "test@example.com" },
   }),
@@ -20,7 +20,7 @@ jest.mock("../ContentStudyService", () => ({
   fetchGenerationById: jest.fn(),
   pollContentStatus: jest.fn(),
   fetchContentHistory: jest.fn(),
-  checkRateLimit: jest.fn(),
+  deleteContent: jest.fn(),
 }));
 import * as service from "../ContentStudyService";
 
@@ -42,9 +42,9 @@ describe("useContentReview", () => {
   it("should fetch content data", async () => {
     const mockContent = {
       id: "content-123",
-      source_type: "PASTE",
+      sourceType: "PASTE",
       status: "EXTRACTED",
-      extracted_text: "Extracted text",
+      extractedText: "Extracted text",
     };
     (service.fetchContentById as jest.Mock).mockResolvedValue(mockContent);
     const { result } = renderHook(() => useContentReview("content-123"), {
@@ -81,9 +81,9 @@ describe("useContentReview", () => {
   it("should calculate canGenerate based on content status", async () => {
     const mockContent = {
       id: "content-123",
-      source_type: "PASTE",
+      sourceType: "PASTE",
       status: "EXTRACTED",
-      extracted_text: "Extracted text",
+      extractedText: "Extracted text",
     };
     (service.fetchContentById as jest.Mock).mockResolvedValue(mockContent);
     const { result } = renderHook(() => useContentReview("content-123"), {
@@ -99,15 +99,36 @@ describe("useStudyPlan", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
+
+  const mockGeneration = {
+    id: "gen-123",
+    contentId: "content-123",
+    userId: "test-user-id",
+    summary: { overview: "Test Plan Overview", keyPoints: ["Point 1"] },
+    keyConcepts: [{ term: "Concept 1", definition: "Definition 1" }],
+    tasks: [
+      { id: "task-1", content: "Task 1", priority: "MEDIUM", estimatedMinutes: 10 },
+      { id: "task-2", content: "Task 2", priority: "MEDIUM", estimatedMinutes: 10 },
+    ],
+    quizItems: [],
+    sessionPlan: {
+      recommendedDuration: 30,
+      suggestedDifficulty: "NORMAL",
+      focusAreas: ["reading"],
+    },
+    metadata: {
+      contentLength: 1000,
+      processingTimeMs: 500,
+      modelVersion: "v1",
+      confidenceScore: 0.9,
+    },
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    accessCount: 0,
+    isArchived: false,
+  };
+
   it("should fetch generation data", async () => {
-    const mockGeneration = {
-      id: "gen-123",
-      study_plan: {
-        summary: { title: "Test Plan", keyPoints: ["Point 1"] },
-        tasks: [],
-        quiz: [],
-      },
-    };
     (service.fetchGenerationById as jest.Mock).mockResolvedValue(
       mockGeneration,
     );
@@ -117,15 +138,6 @@ describe("useStudyPlan", () => {
     });
   });
   it("should call completeTask with correct args", async () => {
-    const mockGeneration = {
-      id: "gen-123",
-      study_plan: {
-        tasks: [
-          { id: "task-1", content: "Task 1" },
-          { id: "task-2", content: "Task 2" },
-        ],
-      },
-    };
     (service.fetchGenerationById as jest.Mock).mockResolvedValue(
       mockGeneration,
     );
@@ -139,10 +151,6 @@ describe("useStudyPlan", () => {
     expect(result.current.isCompletingTask).toBeDefined();
   });
   it("should expose refetch function", async () => {
-    const mockGeneration = {
-      id: "gen-123",
-      study_plan: { quiz: [{ id: "quiz-1", question: "Q1" }] },
-    };
     (service.fetchGenerationById as jest.Mock).mockResolvedValue(
       mockGeneration,
     );
@@ -153,27 +161,25 @@ describe("useStudyPlan", () => {
     expect(typeof result.current.refetch).toBe("function");
   });
   it("should calculate completion via mutation", async () => {
-    const mockGeneration = {
-      id: "gen-123",
-      study_plan: {
-        tasks: [
-          { id: "task-1", content: "Task 1" },
-          { id: "task-2", content: "Task 2" },
-          { id: "task-3", content: "Task 3" },
-        ],
-      },
+    const threeTaskGeneration = {
+      ...mockGeneration,
+      tasks: [
+        { id: "task-1", content: "Task 1", priority: "MEDIUM", estimatedMinutes: 10 },
+        { id: "task-2", content: "Task 2", priority: "MEDIUM", estimatedMinutes: 10 },
+        { id: "task-3", content: "Task 3", priority: "MEDIUM", estimatedMinutes: 10 },
+      ],
     };
     (service.fetchGenerationById as jest.Mock).mockResolvedValue(
-      mockGeneration,
+      threeTaskGeneration,
     );
     const { result } = renderHook(() => useStudyPlan("gen-123"), { wrapper });
     await waitFor(() => {
-      expect(result.current.generation).toEqual(mockGeneration);
+      expect(result.current.generation).toEqual(threeTaskGeneration);
     });
     await act(async () => {
       result.current.completeTask({ taskId: "task-1" });
       result.current.completeTask({ taskId: "task-2" });
     });
-    expect(result.current.generation?.study_plan?.tasks).toHaveLength(3);
+    expect(result.current.generation?.tasks).toHaveLength(3);
   });
 });
