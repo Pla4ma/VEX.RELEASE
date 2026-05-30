@@ -38,6 +38,13 @@ import type { FocusIdentityEventDefinitions } from "./focus-identity";
 import type { SessionStoryEventDefinitions } from "./session-story";
 import type { CompanionPromiseEventDefinitions } from "./companion-promise";
 import type { FocusContractEventDefinitions } from "./focus-contract";
+import type { CompanionEventDefinitions } from "./companion";
+import type { FeatureGateEventDefinitions } from "./feature-gate";
+import type { AccountDeletionEventDefinitions } from "./account-deletion";
+import type { CosmeticsEventDefinitions } from "./cosmetics";
+import type { DuelEventDefinitions } from "./duel";
+import type { SeasonsEventDefinitions } from "./seasons";
+import type { LeaderboardEventDefinitions } from "./leaderboards";
 
 export * from "./base";
 export * from "./onboarding";
@@ -79,6 +86,13 @@ export * from "./focus-identity";
 export * from "./session-story";
 export * from "./companion-promise";
 export * from "./focus-contract";
+export * from "./companion";
+export * from "./feature-gate";
+export * from "./account-deletion";
+export * from "./cosmetics";
+export * from "./duel";
+export * from "./seasons";
+export * from "./leaderboards";
 
 export interface EventChannels
   extends
@@ -121,8 +135,15 @@ export interface EventChannels
     FocusIdentityEventDefinitions,
     SessionStoryEventDefinitions,
     CompanionPromiseEventDefinitions,
-    FocusContractEventDefinitions {
-  [key: string]: unknown;
+    FocusContractEventDefinitions,
+    CompanionEventDefinitions,
+    FeatureGateEventDefinitions,
+    AccountDeletionEventDefinitions,
+    CosmeticsEventDefinitions,
+    DuelEventDefinitions,
+    SeasonsEventDefinitions,
+    LeaderboardEventDefinitions {
+  // index signature removed — EventChannel must be a union of declared keys only
 }
 
 export type EventChannel = keyof EventChannels;

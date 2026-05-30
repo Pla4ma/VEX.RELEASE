@@ -31,13 +31,9 @@ export {
 } from "./InteractiveCard";
 export type { InteractiveCardProps } from "./InteractiveCard";
 
-// Data Display
+// Data Display (FlashList-backed)
 export { DataList, SelectionToolbar } from "./DataList";
 export type { DataListProps, DataListItem, DataListSection } from "./DataList";
-
-// FlashList optimized version (Phase 7A.1)
-export { DataListFlashList, SelectionToolbar as DataListFlashListSelectionToolbar } from "./DataListFlashList";
-export type { DataListFlashListProps, DataListItem as DataListFlashListItem, DataListSection as DataListFlashListSection } from "./DataListFlashList";
 
 // Progress & Feedback
 export { ProgressSteps } from "./ProgressSteps";

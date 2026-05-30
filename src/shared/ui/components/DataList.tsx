@@ -1,9 +1,7 @@
 /**
  * DataList Component
  *
- * Uses FlashList for optimal performance (60fps scrolling).
- *
- * Phase 7A.1 — FlashList migration
+ * FlashList-optimized version of DataList for high-performance scrolling.
  *
  * Requirements:
  * - npm install @shopify/flash-list
@@ -17,10 +15,17 @@ import { useTheme } from "../../../theme";
 import { styles } from "./DataList.styles";
 import { ListFooter } from "./DataList.ListFooter";
 import { useItemRenderer } from "./DataList.useItemRenderer";
-import type { DataListProps, DataListItem } from "./DataList.types";
+import type {
+  DataListProps,
+  DataListItem,
+} from "./DataList.types";
 
 export { SelectionToolbar } from "./DataList.SelectionToolbar";
-export type { DataListProps, DataListItem, DataListSection } from "./DataList.types";
+export type {
+  DataListProps,
+  DataListItem,
+  DataListSection,
+} from "./DataList.types";
 
 export function DataList<T extends Record<string, unknown>>({
   items, sections, renderItem,
@@ -29,15 +34,13 @@ export function DataList<T extends Record<string, unknown>>({
   loading = false, loadingMore = false, error = null, refreshing = false,
   emptyTitle = "No items found",
   emptySubtitle = "Try adjusting your filters or check back later",
-  emptyIcon = "\uD83D\uDCED",
+  emptyIcon = "📭",
   selectionMode = "none", selectedIds = new Set(),
   onSelectionChange, onRefresh, onLoadMore, onRetry, onItemPress,
-  itemHeight: _itemHeight, estimatedItemSize = 80,
-  stickySectionHeadersEnabled = false, showsVerticalScrollIndicator = true,
+  estimatedItemSize,
+  stickySectionHeadersEnabled = false,
+  showsVerticalScrollIndicator = true,
   contentContainerStyle, style,
-  maxToRenderPerBatch: _maxToRenderPerBatch = 10,
-  windowSize: _windowSize = 5,
-  removeClippedSubviews: _removeClippedSubviews = true,
   accessibilityLabel, getItemAccessibilityLabel,
 }: DataListProps<T>) {
   const { theme } = useTheme();
@@ -120,7 +123,7 @@ export function DataList<T extends Record<string, unknown>>({
         data={items}
         renderItem={renderItemWrapper}
         keyExtractor={resolvedKeyExtractor}
-        estimatedItemSize={estimatedItemSize || 80}
+        estimatedItemSize={estimatedItemSize}
         refreshControl={refreshControl}
         onEndReached={onLoadMore}
         onEndReachedThreshold={0.5}
@@ -131,7 +134,7 @@ export function DataList<T extends Record<string, unknown>>({
           </>
         )}
         showsVerticalScrollIndicator={showsVerticalScrollIndicator}
-        contentContainerStyle={[styles.contentContainer, contentContainerStyle]}
+        contentContainerStyle={contentContainerStyle}
         stickyHeaderIndices={
           stickySectionHeadersEnabled && sections
             ? sections.reduce((indices: number[], section, index) => {
@@ -143,6 +146,8 @@ export function DataList<T extends Record<string, unknown>>({
               }, [])
             : undefined
         }
+        disableAutoLayout={false}
+        removeClippedSubviews={true}
       />
     </View>
   );

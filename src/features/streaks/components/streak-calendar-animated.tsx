@@ -5,7 +5,7 @@ import { useTheme } from "@/theme";
 import { DayCell, type DayData } from "./streak-calendar-day-cell";
 import { getStyles } from "./streak-calendar-styles";
 
-interface StreakCalendarEnhancedProps {
+interface StreakCalendarAnimatedProps {
   userId: string;
   month: number;
   year: number;
@@ -15,7 +15,7 @@ interface StreakCalendarEnhancedProps {
   title?: string;
 }
 
-export function StreakCalendarEnhanced({
+export function StreakCalendarAnimated({
   userId,
   month,
   year,
@@ -23,7 +23,7 @@ export function StreakCalendarEnhanced({
   previewDayData,
   previewCurrentStreakDays,
   title,
-}: StreakCalendarEnhancedProps) {
+}: StreakCalendarAnimatedProps) {
   const { theme } = useTheme();
   const styles = getStyles(theme);
   const {
@@ -188,4 +188,4 @@ export function StreakCalendarEnhanced({
   );
 }
 
-export default StreakCalendarEnhanced;
+export default StreakCalendarAnimated;

@@ -2,8 +2,8 @@ import { useQuery } from "@tanstack/react-query";
 import * as Sentry from "@sentry/react-native";
 import { useAuthStore } from "../../../store";
 import { getRepairQuestStatus } from "../streak-repair-quest";
-import { RepairQuestStatusOutputSchema } from "../schemas-enhanced";
-import type { RepairQuestStatusOutput } from "../schemas-enhanced";
+import { RepairQuestStatusOutputSchema } from "../schemas-risk-repair";
+import type { RepairQuestStatusOutput } from "../schemas-risk-repair";
 import type { UseStreakRepairQuestReturn } from "./types";
 
 const QUERY_KEYS = {

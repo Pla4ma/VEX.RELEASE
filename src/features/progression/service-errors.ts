@@ -1,4 +1,4 @@
-import type { ProgressionError } from "./service-enhanced-types";
+import type { ProgressionError } from "./types";
 
 export function createProgressionError(
   code: ProgressionError["code"],

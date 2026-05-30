@@ -11,8 +11,8 @@ import {
 import {
   saveRepairQuestEnhanced,
 } from "../repository/enhanced";
-import { StreakRepairQuestSchema } from "../schemas-enhanced";
-import type { StreakRepairQuest } from "../schemas-enhanced";
+import { StreakRepairQuestSchema } from "../schemas-risk-repair";
+import type { StreakRepairQuest } from "../schemas-risk-repair";
 import type { RecordSessionResult } from "./types";
 import type { QueryKey } from "@tanstack/react-query";
 

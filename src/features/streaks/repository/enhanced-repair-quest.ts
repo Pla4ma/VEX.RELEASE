@@ -2,7 +2,7 @@ import { getSupabaseClient } from "../../../config/supabase";
 import {
   StreakRepairQuestSchema,
   type StreakRepairQuest,
-} from "../schemas-enhanced";
+} from "../schemas-risk-repair";
 import { enqueue } from "../../../lib/offline/queue";
 import {
   executeWithFallback,

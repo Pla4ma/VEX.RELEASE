@@ -2,7 +2,7 @@ import { getSupabaseClient } from "../../../config/supabase";
 import {
   StreakRiskStatusSchema,
   type StreakRiskStatus,
-} from "../schemas-enhanced";
+} from "../schemas-risk-repair";
 import { executeWithFallback, type RepositoryResult } from "./enhanced";
 
 const supabase = getSupabaseClient();

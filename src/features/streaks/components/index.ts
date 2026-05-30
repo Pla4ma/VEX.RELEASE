@@ -5,5 +5,5 @@
 
 export { StreakFlameChain } from "./streak-flame-chain";
 export { StreakCalendar } from "./streak-calendar";
-export { StreakCalendarEnhanced } from "./streak-calendar-enhanced";
+export { StreakCalendarAnimated } from "./streak-calendar-animated";
 export { StreakRiskWarning } from "./StreakRiskWarning";

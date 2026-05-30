@@ -9,12 +9,12 @@ import {
 import { createProgressionError } from "./service-errors";
 import { calculateXpBreakdown } from "./service-xp-calculations";
 import { runAddXpOperation } from "./service-operation";
-import type { AddXpOperationResult } from "./service-enhanced-types";
+import type { AddXpOperationResult } from "./types";
 
 export type {
   AddXpOperationResult,
   ProgressionError,
-} from "./service-enhanced-types";
+} from "./types";
 export { configureProgressionService } from "./service-config";
 export { getDailyProgress } from "./service-daily-progress";
 export {

@@ -4,7 +4,7 @@ import {
   isDuplicateOperation,
   markOperationProcessed,
 } from "../service-dedup";
-import type { AddXpOperationResult } from "../service-enhanced-types";
+import type { AddXpOperationResult } from "../types";
 
 const RESULT: AddXpOperationResult = {
   breakdown: {

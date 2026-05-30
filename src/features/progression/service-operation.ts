@@ -14,7 +14,7 @@ import {
   calculateTotalXpToLevel,
 } from "./service-xp-calculations";
 import { getLevelUpRewards } from "./service-level-rewards";
-import type { AddXpOperationResult } from "./service-enhanced-types";
+import type { AddXpOperationResult } from "./types";
 import { tryAtomicAddXp } from "./operation-atomic";
 import { publishProgressionEvents } from "./operation-events";
 

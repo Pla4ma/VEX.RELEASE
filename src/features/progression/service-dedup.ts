@@ -1,4 +1,4 @@
-import type { AddXpOperationResult } from "./service-enhanced-types";
+import type { AddXpOperationResult } from "./types";
 import { getMMKVStorageAdapter } from "../../persistence/MMKVStorageAdapter";
 
 const DEDUP_MMKV_KEY = "prog:dedup:keys";

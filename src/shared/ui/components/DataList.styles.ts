@@ -6,7 +6,6 @@ import { launchColors } from "@theme/tokens/launch-colors";
 
 export const styles = createSheet({
   container: { flex: 1 },
-  contentContainer: { flexGrow: 1 },
   itemLoading: { opacity: 0.7 },
   itemLoadingOverlay: {
     position: "absolute",
@@ -17,19 +16,6 @@ export const styles = createSheet({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: launchColors.rgb_0_0_0_0_3,
-  },
-  refreshIndicator: {
-    height: 60,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  refreshArrow: {
-    width: 20,
-    height: 20,
-    borderWidth: 2,
-    borderRadius: 10,
-    borderTopColor: "transparent",
-    borderLeftColor: "transparent",
   },
   footerContainer: {
     padding: 16,

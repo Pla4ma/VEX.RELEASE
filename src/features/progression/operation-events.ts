@@ -1,7 +1,7 @@
 import { eventBus } from "../../events/EventBus";
 import type { AddXpInput } from "./schemas";
 import { calculateProgressPercent } from "./service-xp-calculations";
-import type { AddXpOperationResult } from "./service-enhanced-types";
+import type { AddXpOperationResult } from "./types";
 
 export function publishProgressionEvents(
   skipEvents: boolean | undefined,

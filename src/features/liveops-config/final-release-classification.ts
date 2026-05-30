@@ -12,7 +12,7 @@ import { z } from "zod";
 import { ACTIVE } from "./classification-data-active";
 import { ARCHIVED } from "./classification-data-archived";
 import { INTERNAL } from "./classification-data-internal";
-import { LEGACY } from "./classification-data-legacy";
+import { LEGACY } from "./classification-data-v1";
 import { PROGRESSIVE } from "./classification-data-progressive";
 
 // ── Schemas ──

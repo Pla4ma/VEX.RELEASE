@@ -1,5 +1,5 @@
 /**
- * DataList — shared type definitions
+ * DataList — type definitions
  */
 import type { ReactElement } from "react";
 import type { ViewStyle } from "react-native";
@@ -43,15 +43,11 @@ export type DataListProps<T> = {
   onLoadMore?: () => void | Promise<void>;
   onRetry?: () => void;
   onItemPress?: (item: T, index: number) => void;
-  itemHeight?: number;
-  estimatedItemSize?: number;
+  estimatedItemSize: number;
   stickySectionHeadersEnabled?: boolean;
   showsVerticalScrollIndicator?: boolean;
   contentContainerStyle?: ViewStyle;
   style?: ViewStyle;
-  maxToRenderPerBatch?: number;
-  windowSize?: number;
-  removeClippedSubviews?: boolean;
   accessibilityLabel?: string;
   getItemAccessibilityLabel?: (item: T) => string;
 };

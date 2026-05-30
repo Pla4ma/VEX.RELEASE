@@ -1,6 +1,6 @@
 /**
- * Enhanced Streak Schemas with Complete Validation
- * For 10/10 quality compliance
+ * Streak Risk & Repair Quest Schemas
+ * Risk monitoring and repair quest validation
  */
 
 import { z } from "zod";

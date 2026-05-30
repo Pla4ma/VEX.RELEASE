@@ -128,4 +128,11 @@ export interface CoachEventDefinitions {
     occurredAt: number;
     timestamp: number;
   };
+  "coach:intent": {
+    userId: string;
+    context?: string;
+    message?: string;
+    triggerType?: string;
+    timestamp?: number;
+  };
 }
