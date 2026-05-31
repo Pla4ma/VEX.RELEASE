@@ -132,6 +132,7 @@ export function useSessionSetupState(
   }, [
     currentStreak,
     masteryStateKey,
+    params,
     params?.goal,
     params?.presetDuration,
     params?.presetId,

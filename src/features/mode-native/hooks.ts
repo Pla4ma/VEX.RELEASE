@@ -31,6 +31,7 @@ export function useModeHomeSurface(
   context: HomeContext,
 ): ModeHomeSurface {
   return useMemo(() => deriveHomeSurface(context), [
+    context,
     context.laneOverride,
     context.hasActiveProject,
     context.projectTitle,
@@ -62,7 +63,7 @@ export function useModeCompletion(
 ): ModeCompletionSurface {
   return useMemo(
     () => deriveCompletionSurface(context),
-    [context.laneOverride, context.topic, context.task, context.project, context.action],
+    [context, context.laneOverride, context.topic, context.task, context.project, context.action],
   );
 }
 

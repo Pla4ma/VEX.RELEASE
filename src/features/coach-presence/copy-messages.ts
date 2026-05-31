@@ -80,21 +80,13 @@ export function buildMessage(ctx: CoachPresenceContext): string {
     return "You are not behind. Start with one clean session.";
   }
   if (ctx.memoryConfidence === "none") return buildDayZeroMessage(ctx);
-  if (
-    ctx.premiumMoment &&
-    ctx.premiumMoment !== "none" &&
-    ctx.premiumMoment !== "hidden" &&
-    ctx.memoryConfidence === "strong"
-  ) {
-    return "VEX is starting to see your rhythm. Premium keeps deeper history and sharper weekly intelligence.";
-  }
-  if (
-    ctx.premiumMoment &&
-    ctx.premiumMoment !== "none" &&
-    ctx.premiumMoment !== "hidden" &&
-    (ctx.memoryConfidence === "weak" || ctx.memoryConfidence === "medium")
-  ) {
-    return "Premium unlocks deeper history when VEX has enough signals.";
+  if (ctx.premiumMoment && ctx.premiumMoment !== "none" && ctx.premiumMoment !== "hidden") {
+    if (ctx.memoryConfidence === "strong") {
+      return "VEX sees your rhythm. Pro plan keeps deeper history and sharper weekly intelligence.";
+    }
+    if (ctx.memoryConfidence === "weak" || ctx.memoryConfidence === "medium") {
+      return "Premium unlocks deeper history when VEX has enough signals.";
+    }
   }
   return (
     buildPatternMessage(ctx) ??

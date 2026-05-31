@@ -1,4 +1,4 @@
-import { getSupabase, RepositoryError } from "./repository";
+import { getSupabase, RepositoryError, spendCurrencyRpc, addCurrencyRpc } from "./repository";
 import { WalletSchema, SpendInputSchema, type SpendInput } from "./schemas";
 import type { WalletSummary, SpendError } from "./types";
 
@@ -39,15 +39,13 @@ export async function hasEnoughBalance(
 
 export async function spendCurrency(input: SpendInput): Promise<boolean> {
   const parsed = SpendInputSchema.parse(input);
-  const supabase = getSupabase();
-  const { data, error } = await supabase.rpc("atomic_spend_currency", {
-    p_user_id: parsed.userId,
-    p_currency: parsed.currency,
-    p_amount: parsed.amount,
-    p_sink: parsed.sink,
+  const result = await spendCurrencyRpc({
+    userId: parsed.userId,
+    currency: parsed.currency,
+    amount: parsed.amount,
+    sink: parsed.sink,
   });
-  if (error) throw new RepositoryError("spendCurrency", error);
-  return (data as { success: boolean }).success;
+  return result.success;
 }
 
 export async function addCurrency(
@@ -56,12 +54,5 @@ export async function addCurrency(
   currency: "COINS" | "GEMS",
   source: string,
 ): Promise<void> {
-  const supabase = getSupabase();
-  const { error } = await supabase.rpc("atomic_add_currency", {
-    p_user_id: userId,
-    p_currency: currency,
-    p_amount: amount,
-    p_source: source,
-  });
-  if (error) throw new RepositoryError("addCurrency", error);
+  await addCurrencyRpc({ userId, currency, amount, source });
 }

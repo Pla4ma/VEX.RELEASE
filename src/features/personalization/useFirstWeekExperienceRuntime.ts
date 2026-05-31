@@ -145,6 +145,7 @@ export function useFirstWeekExperienceRuntime(
       primaryCtaLabel: experience.primaryCTA.label,
     };
   }, [
+    input,
     input.completedSessions,
     input.daysSinceOnboarding,
     input.daysSinceLastSession,

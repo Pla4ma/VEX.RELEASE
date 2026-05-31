@@ -58,7 +58,7 @@ export const Particle: React.FC<{
       }, 500);
     }, 3000);
     return () => clearTimeout(timeout);
-  }, [config.delay, config.id, config.velocityX, config.velocityY, onComplete]);
+  }, [config.delay, config.id, config.velocityX, config.velocityY, onComplete, opacity, rotation, scale, translateX, translateY]);
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [
       { translateX: translateX.value },

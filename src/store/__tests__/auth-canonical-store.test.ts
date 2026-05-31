@@ -17,13 +17,6 @@ jest.mock("../../shared/monetization/revenuecat-service", () => ({
   },
 }));
 
-jest.mock("../../services/progressionService", () => ({
-  progressionService: {
-    setUserId: jest.fn(),
-    reset: jest.fn(),
-  },
-}));
-
 jest.mock("../../services/supabaseAuth", () => ({
   signInWithEmail: jest.fn(),
   signUpWithEmail: jest.fn(),
@@ -67,9 +60,6 @@ const { setSentryUser, clearSentryUser } = jest.requireMock(
 const { revenueCatService } = jest.requireMock(
   "../../shared/monetization/revenuecat-service",
 ) as { revenueCatService: { setUserId: jest.Mock; clearUserId: jest.Mock } };
-const { progressionService } = jest.requireMock(
-  "../../services/progressionService",
-) as { progressionService: { setUserId: jest.Mock; reset: jest.Mock } };
 const { signInWithEmail, signUpWithEmail, signOut, getCurrentUser } =
   jest.requireMock("../../services/supabaseAuth") as {
     signInWithEmail: jest.Mock;
@@ -128,7 +118,6 @@ describe("canonical auth store", () => {
       mockUser.username,
     );
     expect(revenueCatService.setUserId).toHaveBeenCalledWith(mockUser.id);
-    expect(progressionService.setUserId).toHaveBeenCalledWith(mockUser.id);
   });
 
   it("register uses Supabase auth", async () => {
@@ -184,6 +173,5 @@ describe("canonical auth store", () => {
     expect(canonicalStore.useAuthStore.getState().isAuthenticated).toBe(false);
     expect(clearSentryUser).toHaveBeenCalledTimes(1);
     expect(revenueCatService.clearUserId).toHaveBeenCalledTimes(1);
-    expect(progressionService.reset).toHaveBeenCalledTimes(1);
   });
 });

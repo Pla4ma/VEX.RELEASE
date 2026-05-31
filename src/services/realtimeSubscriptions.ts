@@ -17,11 +17,12 @@ export async function broadcastActivity(
 ): Promise<void> {
   const client = getSupabaseClient();
   const fullChannelName = getActivityChannelName(channelName);
-  let channel = activeChannels.get(fullChannelName);
+  const txKey = `tx:${fullChannelName}`;
+  let channel = activeChannels.get(txKey);
   if (!channel) {
-    const newChannel = client.channel(fullChannelName);
+    const newChannel = client.channel(`${fullChannelName}:tx:${Date.now()}`);
     await newChannel.subscribe();
-    activeChannels.set(fullChannelName, newChannel);
+    activeChannels.set(txKey, newChannel);
     channel = newChannel;
   }
   if (channel) {
@@ -36,11 +37,12 @@ export async function broadcastActivity(
     });
   }
 
-  // Schedule cleanup after 5 seconds to prevent channel leaks
   const channelToClean = channel;
   setTimeout(() => {
     void channelToClean?.unsubscribe();
-    activeChannels.delete(fullChannelName);
+    if (activeChannels.get(txKey) === channelToClean) {
+      activeChannels.delete(txKey);
+    }
   }, 5_000);
 }
 

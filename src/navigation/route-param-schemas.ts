@@ -93,6 +93,11 @@ export const routeParamSchemas = {
       tab: z.enum(["stats", "achievements", "activity", "social"]).optional(),
     })
     .strict(),
+  ResetPassword: z
+    .object({
+      token: z.string().min(20).max(512).regex(/^[A-Za-z0-9._-]+$/),
+    })
+    .strict(),
   Search: z.object({ query: optionalShortText }).strict(),
   SessionComplete: z
     .object({ sessionId: uuidish, summary: z.unknown() })

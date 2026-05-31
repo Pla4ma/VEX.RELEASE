@@ -20,7 +20,7 @@ export { useFocusScoreColor, useIdentityStatement } from "./hooks-display";
 export function useFocusIdentity(userId: string) {
   const { score, history, status, error, refetch } = useFocusScore();
 
-  const engine = useMemo(() => new FocusIdentityEngine(), [userId]);
+  const engine = useMemo(() => new FocusIdentityEngine(), []);
 
   // Transform the data to match the expected interface
   const profile: FocusIdentityProfile | null = useMemo(() => {

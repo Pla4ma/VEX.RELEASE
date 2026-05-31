@@ -1,11 +1,13 @@
+import type { RefObject } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { TextInput } from "react-native";
+import type { TextInput, ViewStyle } from "react-native";
 import {
   useAnimatedStyle,
   useSharedValue,
   withSequence,
   withTiming,
 } from "react-native-reanimated";
+import type { AnimatedStyle } from "react-native-reanimated";
 
 import { useReducedMotion } from "../../../hooks/useReducedMotion";
 import { useTheme } from "../../../theme";
@@ -14,14 +16,12 @@ import { CONTENT_STUDY_CONSTANTS } from "../types";
 import { validatePastedText } from "../validation";
 
 interface UseTextPasteInputReturn {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  inputRef: any;
+  inputRef: RefObject<TextInput | null>;
   errors: ValidationError[];
   warnings: ValidationError[];
   isFocused: boolean;
   setIsFocused: (focused: boolean) => void;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  animatedStyle: any;
+  animatedStyle: AnimatedStyle<ViewStyle>;
   handleChange: (text: string) => void;
   clearInput: () => void;
   characterCount: number;
@@ -115,13 +115,16 @@ export function useTextPasteInput({
   const isUnderMin =
     characterCount < CONTENT_STUDY_CONSTANTS.MIN_PASTE_LENGTH &&
     characterCount > 0;
-  const borderColor = isFocused
-    ? theme.colors.semantic.primary
-    : errors.length > 0
-      ? theme.colors.semantic.danger
-      : warnings.length > 0
-        ? theme.colors.semantic.warning
-        : theme.colors.semantic.inputBorder;
+  let borderColor: string;
+  if (isFocused) {
+    borderColor = theme.colors.semantic.primary;
+  } else if (errors.length > 0) {
+    borderColor = theme.colors.semantic.danger;
+  } else if (warnings.length > 0) {
+    borderColor = theme.colors.semantic.warning;
+  } else {
+    borderColor = theme.colors.semantic.inputBorder;
+  }
 
   return {
     inputRef,

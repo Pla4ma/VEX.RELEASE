@@ -96,7 +96,7 @@ export function useContentInput() {
       isValid: errors.length === 0,
     }));
     return errors.length === 0;
-  }, [state.activeTab, state.pastedText, state.youtubeUrl, state.selectedFile]);
+  }, [state]);
 
   const submitMutation = useMutation({
     mutationFn: async () => {

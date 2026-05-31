@@ -105,6 +105,7 @@ export function useFirstWeekExperience(
   return useMemo(
     () => computeFirstWeekExperience(input),
     [
+      input,
       input.completedSessions,
       input.daysSinceOnboarding,
       input.daysSinceLastSession,

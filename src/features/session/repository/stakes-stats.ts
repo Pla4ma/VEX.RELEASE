@@ -4,12 +4,12 @@ import { withRetry, RepositoryError } from "../../../lib/repository/base";
 import { captureSilentFailure } from "../../../utils/silent-failure";
 import {
   UserStakesPreferenceSchema,
+  StakesStatsSchema,
+  type StakesStats,
   type StakesSessionRecord,
   type UserStakesPreference,
 } from "./stakes-schemas";
 import { saveStakesSession } from "./stakes-queries";
-
-const supabase = getSupabaseClient();
 
 export async function updateStakesPreference(
   userId: string,
@@ -27,6 +27,7 @@ export async function updateStakesPreference(
       maxRetries: 5,
       priority: "normal",
     });
+    const supabase = getSupabaseClient();
     const { data, error } = await withRetry(
       "updateStakesPreference",
       async () => {
@@ -60,23 +61,18 @@ export async function updateStakesPreference(
 export async function fetchStakesStats(
   userId: string,
 ): Promise<{
-  data: {
-    totalSessions: number;
-    completedSessions: number;
-    completionRate: number;
-    totalXpEarned: number;
-    netGems: number;
-  } | null;
+  data: StakesStats | null;
   error: RepositoryError | null;
 }> {
   try {
+    const supabase = getSupabaseClient();
     const { data, error } = await withRetry("fetchStakesStats", async () => {
       return await supabase.rpc("get_stakes_stats", { p_user_id: userId });
     });
     if (error) {
       throw error;
     }
-    return { data, error: null };
+    return { data: StakesStatsSchema.parse(data), error: null };
   } catch (error) {
     captureSilentFailure(error, {
       feature: "sessions",

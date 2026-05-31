@@ -22,6 +22,7 @@ export function useRetentionDay(input: {
   return useMemo(
     () => computeJourneyState(input),
     [
+      input,
       input.userId,
       input.daysSinceOnboarding,
       input.completedSessions,

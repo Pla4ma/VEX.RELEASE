@@ -15,10 +15,10 @@ jest.mock("../../../config/supabase", () => {
       data: { publicUrl: "https://example.com/file" },
     }),
   });
+  const mockClient = { storage: { from: mockFrom } };
   return {
-    getSupabaseClient: jest.fn().mockReturnValue({
-      storage: { from: mockFrom },
-    }),
+    supabase: mockClient,
+    getSupabaseClient: jest.fn().mockReturnValue(mockClient),
     handleSupabaseError: jest.fn((error: { message: string }) => {
       throw new Error(error.message);
     }),

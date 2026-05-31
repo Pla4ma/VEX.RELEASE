@@ -140,6 +140,7 @@ export function useHomeSurfaceMap(
     laneProfile: input.laneProfile,
     });
   }, [
+    b,
     b.totalCompletedSessions,
     safeStyle,
     p.primaryGoal,
@@ -153,6 +154,7 @@ export function useHomeSurfaceMap(
     b.completionStreak,
     featureAccess.features,
     input.firstWeek,
+    input.laneProfile,
     p.gamificationIntensity,
     p.studyLayerName,
     p.userStage,

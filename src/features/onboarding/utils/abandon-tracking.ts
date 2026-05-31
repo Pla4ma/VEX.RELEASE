@@ -4,13 +4,17 @@ import { createDebugger } from "../../../utils/debug";
 import { eventBus } from "../../../events";
 import type { OnboardingState } from "../types";
 import { loadPersistedOnboarding } from "./persistence";
+import { getMmkvEncryptionKeySync } from "../../../persistence/mmkv-key";
 
 const debug = createDebugger("onboarding:persistence");
 
-const storage = new MMKV({
-  id: "onboarding-persistence",
-  encryptionKey: "onboarding-secure-storage",
-});
+let _storage: MMKV | null = null;
+function getStorage(): MMKV {
+  if (!_storage) {
+    _storage = new MMKV({ id: "onboarding-persistence", encryptionKey: getMmkvEncryptionKeySync() });
+  }
+  return _storage;
+}
 
 const KEYS = {
   ABANDON_COUNT: "onboarding:abandon_count",
@@ -34,12 +38,12 @@ export function recordAbandon(
       timestamp: Date.now(),
       partialData,
     };
-    const currentCount = storage.getNumber(KEYS.ABANDON_COUNT) || 0;
-    storage.set(KEYS.ABANDON_COUNT, currentCount + 1);
-    storage.set(KEYS.LAST_STEP_ABANDONED, currentStep);
+    const currentCount = getStorage().getNumber(KEYS.ABANDON_COUNT) || 0;
+    getStorage().set(KEYS.ABANDON_COUNT, currentCount + 1);
+    getStorage().set(KEYS.LAST_STEP_ABANDONED, currentStep);
     const history = getAbandonHistory();
     history.unshift(record);
-    storage.set(
+    getStorage().set(
       "onboarding:abandon_history",
       JSON.stringify(history.slice(0, 5)),
     );
@@ -64,7 +68,7 @@ export function recordAbandon(
 
 export function getAbandonHistory(): AbandonRecord[] {
   try {
-    const data = storage.getString("onboarding:abandon_history");
+    const data = getStorage().getString("onboarding:abandon_history");
     return data ? JSON.parse(data) : [];
   } catch (error) {
     captureSilentFailure(error, {
@@ -77,11 +81,11 @@ export function getAbandonHistory(): AbandonRecord[] {
 }
 
 export function getAbandonCount(): number {
-  return storage.getNumber(KEYS.ABANDON_COUNT) || 0;
+  return getStorage().getNumber(KEYS.ABANDON_COUNT) || 0;
 }
 
 export function getLastAbandonedStep(): number | null {
-  const step = storage.getNumber(KEYS.LAST_STEP_ABANDONED);
+  const step = getStorage().getNumber(KEYS.LAST_STEP_ABANDONED);
   return step === undefined || step === 0 ? null : step;
 }
 
@@ -101,8 +105,8 @@ export function recordCompletionAttempt(
   success: boolean,
   error?: string,
 ): void {
-  const attempts = storage.getNumber(KEYS.COMPLETION_ATTEMPTS) || 0;
-  storage.set(KEYS.COMPLETION_ATTEMPTS, attempts + 1);
+  const attempts = getStorage().getNumber(KEYS.COMPLETION_ATTEMPTS) || 0;
+  getStorage().set(KEYS.COMPLETION_ATTEMPTS, attempts + 1);
   eventBus.publish("analytics:track", {
     event: "onboarding_completion_attempt",
     properties: { success, attemptNumber: attempts + 1, error: error || null },
@@ -110,7 +114,7 @@ export function recordCompletionAttempt(
 }
 
 export function getCompletionAttempts(): number {
-  return storage.getNumber(KEYS.COMPLETION_ATTEMPTS) || 0;
+  return getStorage().getNumber(KEYS.COMPLETION_ATTEMPTS) || 0;
 }
 
 export function getPartialData(): Partial<OnboardingState> | null {

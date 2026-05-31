@@ -52,6 +52,7 @@ export function useModeRetentionScore(
   input: RetentionScoreInput,
 ): ModeRetentionScore {
   return useMemo(() => scoreModeRetention(input), [
+    input,
     input.lane,
     input.hasNextAction,
     input.hasCompletionContext,

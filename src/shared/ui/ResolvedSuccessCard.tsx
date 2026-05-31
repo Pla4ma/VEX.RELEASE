@@ -1,11 +1,11 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { View, Text, type ViewStyle } from "react-native";
 import Animated from "react-native-reanimated";
+import type { AnimatedStyle } from "react-native-reanimated";
 import { styles } from "./PremiumErrorRecovery.styles";
 
 interface ResolvedSuccessCardProps {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  animatedStyle: any;
+  animatedStyle: AnimatedStyle<ViewStyle>;
   successBg: string;
   successColor: string;
 }

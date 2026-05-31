@@ -6,7 +6,7 @@
  */
 
 import { z } from "zod";
-import { spendCurrency } from "../economy/service";
+import { spendCurrency } from "../economy/wallet-service";
 import { getDefaultStorageAdapter } from "../../persistence/MMKVStorageAdapter";
 
 const profileSchema = z.object({
@@ -113,13 +113,16 @@ export async function feedCompanion(
   userId: string,
   options: PersistOptions = {},
 ): Promise<CompanionProfile> {
-  await spendCurrency({
+  const spendResult = await spendCurrency({
     userId,
     currency: "COINS",
     amount: 10,
     sink: "UPGRADE",
     description: "Feed companion",
   });
+  if (!spendResult.success) {
+    throw new Error(spendResult.error?.message ?? "Failed to spend currency for companion feed");
+  }
   const current = await loadProfile(userId);
   const updated = await saveProfile(userId, {
     ...current,

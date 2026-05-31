@@ -36,9 +36,6 @@ jest.mock("../../persistence/MMKVStorageAdapter", () => ({
     setItem: jest.fn().mockResolvedValue(undefined),
   }),
 }));
-jest.mock("../../services/progressionService", () => ({
-  progressionService: { reset: jest.fn(), setUserId: jest.fn() },
-}));
 jest.mock("../../services/streakService", () => ({
   streakService: { reset: jest.fn(), setUserId: jest.fn() },
 }));

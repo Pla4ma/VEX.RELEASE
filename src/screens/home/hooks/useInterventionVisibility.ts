@@ -135,6 +135,7 @@ export function useInterventionVisibility(
   return useMemo(
     () => resolveInterventionVisibility(input),
     [
+      input,
       input.intervention,
       input.interventionLoading,
       input.surfaceMap,

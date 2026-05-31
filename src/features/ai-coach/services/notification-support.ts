@@ -54,10 +54,13 @@ export async function sendPushNotification(
   try {
     return await pushCircuitBreaker.execute(async () => {
       const categoryConfig = getCategoryConfig(message.category);
-      debug.warn("Push delivery is not implemented on-device", {
-        to: expoPushToken,
-        title: categoryConfig.title,
-        messageId: message.id,
+      await Notifications.scheduleNotificationAsync({
+        content: {
+          title: categoryConfig.title,
+          body: message.content,
+          data: { action: "COACH_MESSAGE", messageId: message.id, token: expoPushToken },
+        },
+        trigger: null,
       });
       return true;
     });

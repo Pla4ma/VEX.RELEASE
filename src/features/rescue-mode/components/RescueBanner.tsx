@@ -31,6 +31,16 @@ export function RescueBanner({
     [lane],
   );
 
+  const handleStart = useCallback(() => {
+    sessionStart();
+    onStartRescue();
+  }, [onStartRescue]);
+
+  const handleDismiss = useCallback(() => {
+    buttonTap();
+    onDismiss();
+  }, [onDismiss]);
+
   if (!eligibility.eligible) return null;
 
   const minutes = Math.round(eligibility.recommendedDurationSeconds / 60);
@@ -41,16 +51,6 @@ export function RescueBanner({
   const actionLabel = rescueSurface
     ? `${rescueSurface.actionLabel} (${minutes}m)`
     : `Start ${minutes} min`;
-
-  const handleStart = useCallback(() => {
-    sessionStart();
-    onStartRescue();
-  }, [onStartRescue]);
-
-  const handleDismiss = useCallback(() => {
-    buttonTap();
-    onDismiss();
-  }, [onDismiss]);
 
   return (
     <View

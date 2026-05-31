@@ -15,6 +15,7 @@ import { eventBus } from "../../../events";
 describe("SmartNotificationSystem", () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    jest.spyOn(eventBus, "publish");
     notificationHistory.clear();
     scheduledNotifications.clear();
   });

@@ -13,13 +13,17 @@ import {
   getCompletionAttempts as getCompletionAttemptsFn,
   getPartialData as getPartialDataFn,
 } from "./abandon-tracking";
+import { getMmkvEncryptionKeySync } from "../../../persistence/mmkv-key";
 
 const debug = createDebugger("onboarding:persistence");
 
-const storage = new MMKV({
-  id: "onboarding-persistence",
-  encryptionKey: "onboarding-secure-storage",
-});
+let _storage: MMKV | null = null;
+function getStorage(): MMKV {
+  if (!_storage) {
+    _storage = new MMKV({ id: "onboarding-persistence", encryptionKey: getMmkvEncryptionKeySync() });
+  }
+  return _storage;
+}
 
 const PersistedOnboardingStateSchema = z.object({
   isOnboarded: z.boolean(),
@@ -51,9 +55,9 @@ export function persistOnboardingState(state: OnboardingState): void {
       version: 1,
     };
     const validated = PersistedOnboardingStateSchema.parse(persistedState);
-    storage.set(KEYS.ONBOARDING_STATE, JSON.stringify(validated));
+    getStorage().set(KEYS.ONBOARDING_STATE, JSON.stringify(validated));
     if (!state.isOnboarded)
-      storage.set(KEYS.INCOMPLETE_BACKUP, JSON.stringify(validated));
+      getStorage().set(KEYS.INCOMPLETE_BACKUP, JSON.stringify(validated));
     debug.info("Onboarding state persisted", {
       step: state.currentStep,
       isOnboarded: state.isOnboarded,
@@ -68,7 +72,7 @@ export function persistOnboardingState(state: OnboardingState): void {
 
 export function loadPersistedOnboarding(): OnboardingState | null {
   try {
-    const data = storage.getString(KEYS.ONBOARDING_STATE);
+    const data = getStorage().getString(KEYS.ONBOARDING_STATE);
     if (!data) {
       debug.info("No persisted onboarding state found");
       return null;
@@ -106,8 +110,8 @@ export function loadPersistedOnboarding(): OnboardingState | null {
 }
 
 export function clearOnboardingState(): void {
-  storage.delete(KEYS.ONBOARDING_STATE);
-  storage.delete(KEYS.INCOMPLETE_BACKUP);
+  getStorage().delete(KEYS.ONBOARDING_STATE);
+  getStorage().delete(KEYS.INCOMPLETE_BACKUP);
   debug.info("Onboarding state cleared");
 }
 
@@ -131,7 +135,7 @@ export function getResumeStep(): OnboardingStep | null {
 
 function recoverFromBackup(): OnboardingState | null {
   try {
-    const data = storage.getString(KEYS.INCOMPLETE_BACKUP);
+    const data = getStorage().getString(KEYS.INCOMPLETE_BACKUP);
     if (!data) return null;
     const parsed = JSON.parse(data);
     const validated = PersistedOnboardingStateSchema.parse(parsed);

@@ -9,7 +9,7 @@ import {
 import type { BuildReturnArgs } from "./build-return-args";
 export type { BuildReturnArgs } from "./build-return-args";
 
-export function buildReturn(args: BuildReturnArgs) {
+export function useStudySessionReturn(args: BuildReturnArgs) {
   const {
     queryClient,
     orchestrator,

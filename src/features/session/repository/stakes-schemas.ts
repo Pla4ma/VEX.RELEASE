@@ -32,5 +32,14 @@ export const UserStakesPreferenceSchema = z.object({
   updated_at: z.number(),
 });
 
+export const StakesStatsSchema = z.object({
+  totalSessions: z.number(),
+  completedSessions: z.number(),
+  completionRate: z.number(),
+  totalXpEarned: z.number(),
+  netGems: z.number(),
+});
+
+export type StakesStats = z.infer<typeof StakesStatsSchema>;
 export type StakesSessionRecord = z.infer<typeof StakesSessionRecordSchema>;
 export type UserStakesPreference = z.infer<typeof UserStakesPreferenceSchema>;

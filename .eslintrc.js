@@ -11,12 +11,12 @@ module.exports = {
   },
   overrides: [
     {
-      files: ['src/utils/haptics.ts'],
+      files: ['src/utils/haptics.ts', 'src/utils/haptics-types.ts'],
       rules: { 'no-restricted-imports': 'off' },
     },
     {
       files: ['src/**/*.{ts,tsx}'],
-      excludedFiles: ['src/utils/haptics.ts'],
+      excludedFiles: ['src/utils/haptics.ts', 'src/utils/haptics-types.ts'],
       rules: {
         'no-restricted-imports': [
           'error',

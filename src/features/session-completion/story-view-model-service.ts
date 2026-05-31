@@ -83,7 +83,7 @@ export function buildPostSessionStoryViewModel(input: {
     personalBestBody,
     nextActionPresetMode: nextAction?.routeParams?.presetMode ?? null,
   });
-  const headline = selectHeadlineReward({
+  const headlineRaw = selectHeadlineReward({
     streak: {
       currentDays: ledger.streakResult.newDays,
       previousDays: ledger.streakResult.previousDays,
@@ -101,6 +101,10 @@ export function buildPostSessionStoryViewModel(input: {
       xpEarned: ledger.xpDelta,
     },
   });
+  const headline =
+    headlineRaw.type === "xp_earned" && ledger.xpDelta > 0
+      ? { ...headlineRaw, value: `+${ledger.xpDelta} XP` }
+      : headlineRaw;
   return PostSessionStoryViewModelSchema.parse({
     beats,
     companionReaction: { reactionId: ledger.companionReactionId },

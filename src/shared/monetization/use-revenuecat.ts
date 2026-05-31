@@ -124,7 +124,7 @@ export function useRevenueCat(): UseRevenueCatState {
         },
         packageInfo,
       ),
-    [offerings?.identifier, doRefreshCustomer, setIsPurchasing],
+    [offerings, doRefreshCustomer, setIsPurchasing],
   );
 
   const restorePurchases = useCallback(

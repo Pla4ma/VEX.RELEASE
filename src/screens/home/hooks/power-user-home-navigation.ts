@@ -13,7 +13,7 @@ interface NavigationCallbacks {
   openNextAction: () => void;
 }
 
-export function buildNavigationCallbacks(params: {
+export function useNavigationCallbacks(params: {
   navigation: NavigationProp<Record<string, unknown>>;
   userId: string;
   disclosure: FeatureAccessResult;

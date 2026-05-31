@@ -42,3 +42,8 @@ data/jest-results.json
 .replit
 
 .omo/
+
+# Secrets / local runtime state - never commit
+credentials.json
+state.json
+debug_logs/

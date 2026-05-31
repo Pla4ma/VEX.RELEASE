@@ -1,5 +1,11 @@
 import { z } from "zod";
 
+export const CurrencyRpcResultSchema = z.object({
+  success: z.boolean(),
+  new_balance: z.number().optional(),
+});
+export type CurrencyRpcResult = z.infer<typeof CurrencyRpcResultSchema>;
+
 export const WalletSchema = z.object({
   id: z.string().uuid(),
   user_id: z.string().uuid(),

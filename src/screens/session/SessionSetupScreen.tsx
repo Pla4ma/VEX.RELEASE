@@ -39,6 +39,12 @@ export const SessionSetupScreen = withScreenErrorBoundary(
     const [selectedDifficulty, setSelectedDifficulty] =
       useState<SessionDifficulty>("FOCUSED");
 
+    const controller = useSessionStartController({
+      navigation,
+      routeParams: route.params,
+      focusContractText: contractText.trim().length >= 3 ? contractText : null,
+    });
+
     if (isFirstSessionSetup) {
       return (
         <FirstSessionView
@@ -47,12 +53,6 @@ export const SessionSetupScreen = withScreenErrorBoundary(
         />
       );
     }
-
-    const controller = useSessionStartController({
-      navigation,
-      routeParams: route.params,
-      focusContractText: contractText.trim().length >= 3 ? contractText : null,
-    });
 
     if (!controller.userId) {
       return (

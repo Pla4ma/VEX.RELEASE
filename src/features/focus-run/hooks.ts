@@ -43,7 +43,7 @@ export function useFocusRunDisplay(input: {
         run,
         signals: input.signals,
       }),
-    [input.lane, input.userId, run, input.signals, input.firstActiveDay],
+    [input.lane, run, input.signals, input.firstActiveDay],
   );
 }
 

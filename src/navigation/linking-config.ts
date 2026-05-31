@@ -1,17 +1,10 @@
-/**
- * Deep link configuration for React Navigation.
- *
- * Maps URL paths to navigation screens so that external deep links
- * (from notifications, shared links, OS intents) resolve correctly.
- */
-
+import { Linking } from "react-native";
+import * as Notifications from "expo-notifications";
 import type { LinkingOptions, PathConfigMap } from "@react-navigation/native";
 import type { ExtendedRootStackParams } from "./param-types";
 
 const PREFIXES = ["vex://", "https://app.vex.com", "https://vex.app"];
 
-// React Navigation's nested PathConfigMap types are strict — cast is safe
-// because the config matches the actual route structure in param-types.ts.
 const SCREEN_CONFIG = {
   Auth: {
     screens: {
@@ -67,10 +60,28 @@ export function createLinkingConfig(): LinkingOptions<ExtendedRootStackParams> {
       screens: SCREEN_CONFIG,
     },
     async getInitialURL() {
-      return null;
+      const url = await Linking.getInitialURL();
+      if (url != null) return url;
+      const response = await Notifications.getLastNotificationResponseAsync();
+      const notifUrl = response?.notification.request.content.data?.url;
+      return typeof notifUrl === "string" ? notifUrl : null;
     },
-    subscribe() {
-      return () => {};
+    subscribe(listener) {
+      const linkingSub = Linking.addEventListener("url", ({ url }) => {
+        listener(url);
+      });
+      const notifSub = Notifications.addNotificationResponseReceivedListener(
+        (response) => {
+          const url = response.notification.request.content.data?.url;
+          if (typeof url === "string") {
+            listener(url);
+          }
+        },
+      );
+      return () => {
+        linkingSub.remove();
+        notifSub.remove();
+      };
     },
   };
 }

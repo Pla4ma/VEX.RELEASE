@@ -52,7 +52,7 @@ export function copyFor(
     };
   }
   if (type === "run_continue") {
-    return { title: "One run", body: "One clean block is enough today." };
+    return { title: "One encounter", body: "One clean block is enough today." };
   }
   if (type === "weekly_insight") {
     return {

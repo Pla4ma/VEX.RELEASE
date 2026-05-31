@@ -47,6 +47,7 @@ export function useVexRuntimeExperience(
   return useMemo(
     () => computeVexRuntimeExperience(effectiveInput),
     [
+      effectiveInput,
       effectiveInput.completedSessions,
       effectiveInput.daysSinceOnboarding,
       effectiveInput.daysSinceLastSession,

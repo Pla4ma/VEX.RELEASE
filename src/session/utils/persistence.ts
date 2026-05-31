@@ -15,11 +15,15 @@ import {
   type RecoveryAttempt,
 } from "./persistence-recovery";
 import { isSessionStale, canResumeSession } from "./persistence-resume";
+import { getMmkvEncryptionKeySync } from "../../persistence/mmkv-key";
 const debug = createDebugger("session:persistence");
-const storage = new MMKV({
-  id: "session-persistence",
-  encryptionKey: "session-secure-storage-key",
-});
+let _storage: MMKV | null = null;
+function getStorage(): MMKV {
+  if (!_storage) {
+    _storage = new MMKV({ id: "session-persistence", encryptionKey: getMmkvEncryptionKeySync() });
+  }
+  return _storage;
+}
 const PersistedSessionStateSchema = z.object({
   sessionId: z.string().uuid(),
   userId: z.string(),
@@ -66,10 +70,10 @@ export function persistSessionState(state: PersistedSessionState): void {
   try {
     const validated = PersistedSessionStateSchema.parse(state);
     const data = JSON.stringify(validated);
-    storage.set(KEYS.ACTIVE_SESSION, data);
-    storage.set(KEYS.LAST_SYNC, Date.now());
+    getStorage().set(KEYS.ACTIVE_SESSION, data);
+    getStorage().set(KEYS.LAST_SYNC, Date.now());
     const backupKey = `${KEYS.BACKUP_PREFIX}${Date.now()}`;
-    storage.set(backupKey, data);
+    getStorage().set(backupKey, data);
     cleanupOldBackups();
     debug.info("Session state persisted", { sessionId: state.sessionId });
     eventBus.publish("analytics:track", {
@@ -92,7 +96,7 @@ export function persistSessionState(state: PersistedSessionState): void {
 }
 export function loadPersistedSession(): PersistedSessionState | null {
   try {
-    const data = storage.getString(KEYS.ACTIVE_SESSION);
+    const data = getStorage().getString(KEYS.ACTIVE_SESSION);
     if (!data) {
       debug.info("No persisted session found");
       return null;
@@ -110,35 +114,35 @@ export function loadPersistedSession(): PersistedSessionState | null {
   }
 }
 export function clearPersistedSession(): void {
-  storage.delete(KEYS.ACTIVE_SESSION);
-  storage.delete(KEYS.RECOVERY_ATTEMPTS);
+  getStorage().delete(KEYS.ACTIVE_SESSION);
+  getStorage().delete(KEYS.RECOVERY_ATTEMPTS);
   debug.info("Persisted session cleared");
 }
 export function hasPersistedSession(): boolean {
-  return storage.contains(KEYS.ACTIVE_SESSION);
+  return getStorage().contains(KEYS.ACTIVE_SESSION);
 }
 export function getTimeSinceLastPersist(): number {
-  const lastSync = storage.getNumber(KEYS.LAST_SYNC);
+  const lastSync = getStorage().getNumber(KEYS.LAST_SYNC);
   if (!lastSync) return Infinity;
   return Date.now() - lastSync;
 }
 function cleanupOldBackups(): void {
-  const allKeys = storage.getAllKeys();
+  const allKeys = getStorage().getAllKeys();
   const backupKeys = allKeys
     .filter((key) => key.startsWith(KEYS.BACKUP_PREFIX))
     .sort()
     .reverse();
-  backupKeys.slice(10).forEach((key) => storage.delete(key));
+  backupKeys.slice(10).forEach((key) => getStorage().delete(key));
 }
 function recoverFromBackup(): PersistedSessionState | null {
-  const allKeys = storage.getAllKeys();
+  const allKeys = getStorage().getAllKeys();
   const backupKeys = allKeys
     .filter((key) => key.startsWith(KEYS.BACKUP_PREFIX))
     .sort()
     .reverse();
   for (const key of backupKeys) {
     try {
-      const data = storage.getString(key);
+      const data = getStorage().getString(key);
       if (data) {
         const validated = PersistedSessionStateSchema.parse(JSON.parse(data));
         debug.info("Session recovered from backup", {

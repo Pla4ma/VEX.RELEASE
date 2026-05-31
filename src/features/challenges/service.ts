@@ -165,12 +165,12 @@ export async function claimChallengeReward(input: {
       });
     }
     if (detail.coinReward > 0) {
-      /* coin rewards archived */ rewards.push({
+      rewards.push({
         type: "COINS",
         amount: detail.coinReward,
         itemId: null,
-        delivered: true,
-        deliveredAt: Date.now(),
+        delivered: false,
+        deliveredAt: null,
       });
     }
     await repository.updateUserChallenge(

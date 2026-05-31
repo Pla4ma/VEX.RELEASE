@@ -3,7 +3,6 @@ import {
   feedCompanion,
   petCompanion,
 } from "../companion-profile-ops";
-import { getEconomyService } from "../../../economy/EconomyService";
 import { getDefaultStorageAdapter } from "../../../persistence/MMKVStorageAdapter";
 import {
   TEST_USER_ID,
@@ -11,7 +10,6 @@ import {
   createCompanionProfile,
 } from "./companion-test-setup";
 
-jest.mock("../../../economy/EconomyService");
 jest.mock("../../../persistence/MMKVStorageAdapter");
 
 const mockStorage = createMockStorage();
@@ -81,9 +79,6 @@ describe("Companion Service", () => {
         lastFedAt: Date.now() - 20 * 60 * 60 * 1000,
       });
       mockStorage.getItem.mockResolvedValue(JSON.stringify(existingProfile));
-      (getEconomyService as jest.Mock).mockReturnValue({
-        spendCurrency: jest.fn().mockResolvedValue(true),
-      });
       const result = await feedCompanion(TEST_USER_ID);
       expect(result.xp).toBeGreaterThan(100);
       expect(result.mood).toBe("happy");

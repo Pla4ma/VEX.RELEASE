@@ -9,6 +9,7 @@ export function useUnlockDecision(input: UnlockExplainerInput): UnlockDecision {
   return useMemo(
     () => createUnlockDecision(input),
     [
+      input,
       input.featureKey,
       input.laneProfile,
       input.sessionCount,

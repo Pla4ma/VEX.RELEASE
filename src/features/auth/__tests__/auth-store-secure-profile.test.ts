@@ -42,9 +42,6 @@ jest.mock("../../../config/sentry", () => ({
 jest.mock("../../../shared/monetization/revenuecat-service", () => ({
   revenueCatService: { clearUserId: jest.fn(), setUserId: jest.fn() },
 }));
-jest.mock("../../../services/progressionService", () => ({
-  progressionService: { reset: jest.fn(), setUserId: jest.fn() },
-}));
 jest.mock("../../../services/streakService", () => ({
   streakService: { reset: jest.fn(), setUserId: jest.fn() },
 }));

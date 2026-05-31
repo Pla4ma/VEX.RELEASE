@@ -139,7 +139,7 @@ export function useFeedUpdates({ userId, onUpdate }: UseFeedUpdatesOptions) {
       onUpdate?.(payload);
     });
     return unsubscribe;
-  }, [onUpdate]);
+  }, [userId, onUpdate]);
   const clearUpdates = useCallback(() => {
     setUpdates([]);
   }, []);

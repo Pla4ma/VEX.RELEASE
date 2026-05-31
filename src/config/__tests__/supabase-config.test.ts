@@ -29,8 +29,9 @@ describe("Supabase config", () => {
 
     jest.resetModules();
 
+    const { getSupabaseClient } = require("../supabase") as typeof import("../supabase");
     expect(() => {
-      require("../supabase");
+      getSupabaseClient();
     }).toThrow("Missing Supabase configuration");
   });
 });

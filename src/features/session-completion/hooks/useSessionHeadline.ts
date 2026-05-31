@@ -67,7 +67,7 @@ export function useSessionHeadline(input: {
 
   return useMemo(() => {
     return selectHeadlineReward(buildHeadlineConsequences(input));
-  }, [consequences, contractStatus, summary]);
+  }, [input, consequences, contractStatus, summary]);
 }
 
 export function useSessionRewardPriority(input: {
@@ -79,5 +79,5 @@ export function useSessionRewardPriority(input: {
 
   return useMemo(() => {
     return buildSessionRewardPriority(buildHeadlineConsequences(input));
-  }, [consequences, contractStatus, summary]);
+  }, [input, consequences, contractStatus, summary]);
 }

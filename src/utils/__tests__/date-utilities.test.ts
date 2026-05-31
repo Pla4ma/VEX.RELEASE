@@ -60,22 +60,22 @@ describe("isYesterday", () => {
 
 describe("addDays", () => {
   it("adds positive days", () => {
-    const base = new Date("2024-06-15");
+    const base = new Date("2024-06-15T12:00:00");
     const result = addDays(base, 5);
     expect(result.getDate()).toBe(20);
   });
   it("subtracts days when negative", () => {
-    const base = new Date("2024-06-15");
+    const base = new Date("2024-06-15T12:00:00");
     const result = addDays(base, -3);
     expect(result.getDate()).toBe(12);
   });
   it("does not mutate the original date", () => {
-    const base = new Date("2024-06-15");
+    const base = new Date("2024-06-15T12:00:00");
     addDays(base, 5);
     expect(base.getDate()).toBe(15);
   });
   it("handles month boundaries", () => {
-    const base = new Date("2024-06-30");
+    const base = new Date("2024-06-30T12:00:00");
     const result = addDays(base, 2);
     expect(result.getMonth()).toBe(6);
     expect(result.getDate()).toBe(2);

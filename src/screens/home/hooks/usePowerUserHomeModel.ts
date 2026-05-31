@@ -31,7 +31,7 @@ import {
 } from "./home-controller-helpers";
 import { createStubQuery } from "./home-controller-stubs";
 import type { Nav, PowerUserModelInput } from "./power-user-home-types";
-import { buildNavigationCallbacks } from "./power-user-home-navigation";
+import { useNavigationCallbacks } from "./power-user-home-navigation";
 import { buildReturnReason } from "./power-user-home-return-reason";
 import { buildHomeController } from "./power-user-home-controller";
 
@@ -87,7 +87,7 @@ export function usePowerUserHomeModel(
   const canNavigateSocial = isFeatureAvailableForNavigation(
     getFeatureAvailability(disclosure.features.social_tab));
 
-  const nav = buildNavigationCallbacks({
+  const nav = useNavigationCallbacks({
     navigation, userId, disclosure, analytics,
     canNavigateSocial, canNavigateContentStudy,
     learningExecutionTarget: learningExecutionLayer.target,

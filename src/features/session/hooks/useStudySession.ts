@@ -21,7 +21,7 @@ import {
   getSessionMode,
   getExpectedDuration,
 } from "./useStudySession.helpers";
-import { buildReturn } from "./useStudySession.return";
+import { useStudySessionReturn } from "./useStudySession.return";
 
 const debug = createDebugger("session:useStudySession");
 
@@ -139,7 +139,7 @@ export function useStudySession() {
     },
   });
 
-  return buildReturn({
+  return useStudySessionReturn({
     queryClient,
     orchestrator,
     coachService,

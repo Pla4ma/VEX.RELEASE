@@ -196,6 +196,5 @@ export class AccessibilityEnhancer {
     return { score: Math.max(0, score), issues, recommendations };
   }
 }
-
 export const accessibilityEnhancer = AccessibilityEnhancer.getInstance();
 export type { EnhancedAccessibilityProps, AccessibilityEnhancement, AccessibilityEnhancementConfig } from "./AccessibilityEnhancerTypes";

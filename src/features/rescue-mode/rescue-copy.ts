@@ -11,12 +11,12 @@ export const LANE_RESCUE_COPY: Record<Lane, Record<RescueReason, string>> = {
     no_time: "Review one topic. 5 minutes. That is enough.",
   },
   game_like: {
-    too_big: "Recovery run: 10 clean minutes of focus.",
-    tired: "A short run. No targets. Just move for 10 minutes.",
-    distracted: "One run. 10 minutes. Turn everything else off.",
-    anxious: "Recovery run: 10 clean minutes of focus.",
-    unclear: "Recovery run: 10 clean minutes of focus.",
-    no_time: "Quick run. 5 minutes. Just one block.",
+    too_big: "Recovery encounter: 10 clean minutes of focus.",
+    tired: "A short encounter. No targets. Just move for 10 minutes.",
+    distracted: "One encounter. 10 minutes. Turn everything else off.",
+    anxious: "Recovery encounter: 10 clean minutes of focus.",
+    unclear: "Recovery encounter: 10 clean minutes of focus.",
+    no_time: "Quick encounter. 5 minutes. Just one block.",
   },
   deep_creative: {
     too_big: "Re-enter the project for 7 minutes. Only identify the next move.",
