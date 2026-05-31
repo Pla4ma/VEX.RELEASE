@@ -2,14 +2,14 @@ import {
   MessageQualityAnalysisSchema,
   MessageQualityElements,
   type MessageQualityAnalysis,
-} from "./message-quality-schema";
+} from './message-quality-schema';
 import {
   calculateQualityConfidence,
   detectGenericPatterns,
   detectQualityElements,
   determineSuggestedAction,
-} from "./message-quality-scoring";
-import { v4 } from "../../utils/uuid";
+} from './message-quality-scoring';
+import { v4 } from '../../utils/uuid';
 
 export {
   MessageQualityAnalysisSchema,
@@ -17,11 +17,11 @@ export {
   MessageQualityElementValues,
   type MessageQualityAnalysis,
   type MessageQualityElement,
-} from "./message-quality-schema";
+} from './message-quality-schema';
 export {
   APPROVED_MESSAGE_EXAMPLES,
   REJECTED_MESSAGE_EXAMPLES,
-} from "./message-quality-examples";
+} from './message-quality-examples';
 
 export function validateMessageQuality(
   messageId: string,
@@ -64,8 +64,8 @@ export function createMockQualityAnalysis(
   return MessageQualityAnalysisSchema.parse({
     messageId: generateMockUUID(),
     content:
-      "Your strongest sessions this week started after 8 PM. Try a 25-minute Recovery session tonight.",
-    category: "STREAK_RISK",
+      'Your strongest sessions this week started after 8 PM. Try a 25-minute Recovery session tonight.',
+    category: 'STREAK_RISK',
     qualityElements: [
       MessageQualityElements.REASON,
       MessageQualityElements.CONFIDENCE_LEVEL,
@@ -75,7 +75,7 @@ export function createMockQualityAnalysis(
     genericReasons: [],
     passesQualityGate: true,
     confidence: 0.85,
-    suggestedAction: "approve",
+    suggestedAction: 'approve',
     ...overrides,
   });
 }

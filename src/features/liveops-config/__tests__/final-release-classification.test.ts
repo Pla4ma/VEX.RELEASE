@@ -1,33 +1,33 @@
-import { existsSync, readdirSync } from "fs";
-import { join } from "path";
+import { existsSync, readdirSync } from 'fs';
+import { join } from 'path';
 
-import { createPrefetcher, QueryKeys } from "../../../hooks/usePrefetchQueries";
+import { createPrefetcher, QueryKeys } from '../../../hooks/usePrefetchQueries';
 import {
   isNotArchivedRoute,
   FEATURE_ROUTE_REGISTRY,
-} from "../../../navigation/feature-route-registry";
-import { isNotificationTypeFilterable } from "../../../screens/notifications/NotificationScreenConfig";
-import { getFeatureAvailability } from "../feature-access";
+} from '../../../navigation/feature-route-registry';
+import { isNotificationTypeFilterable } from '../../../screens/notifications/NotificationScreenConfig';
+import { getFeatureAvailability } from '../feature-access';
 import {
   DISABLED_FEATURES,
   FEATURE_RELEASE_STATES,
   FEATURE_THRESHOLDS,
-} from "../feature-access-config";
-import { FEATURE_FOLDERS, HIDDEN_KEYS, featuresAt } from "./classification-test-fixtures";
+} from '../feature-access-config';
+import { FEATURE_FOLDERS, HIDDEN_KEYS, featuresAt } from './classification-test-fixtures';
 
-const FEATURES_DIR = join(process.cwd(), "src", "features");
-const ARCHIVE_FEATURES_DIR = join(process.cwd(), "archive", "features");
+const FEATURES_DIR = join(process.cwd(), 'src', 'features');
+const ARCHIVE_FEATURES_DIR = join(process.cwd(), 'archive', 'features');
 
-describe("Final release classification", () => {
-  it("classifies every feature folder and references real folders only", () => {
+describe('Final release classification', () => {
+  it('classifies every feature folder and references real folders only', () => {
     const actual = readdirSync(FEATURES_DIR, { withFileTypes: true })
       .filter((entry) => entry.isDirectory())
       .map((entry) => entry.name)
-      .filter((name) => name !== "__tests__" && name !== "components");
+      .filter((name) => name !== '__tests__' && name !== 'components');
 
     for (const folder of FEATURE_FOLDERS) {
       // Archived folders may not exist on disk if archive dir was removed
-      if (!existsSync(join(FEATURES_DIR, folder))) continue;
+      if (!existsSync(join(FEATURES_DIR, folder))) {continue;}
       expect(existsSync(join(FEATURES_DIR, folder))).toBe(true);
     }
     for (const name of actual) {
@@ -35,7 +35,7 @@ describe("Final release classification", () => {
     }
   });
 
-  it("blocks archived features on all runtime gates", () => {
+  it('blocks archived features on all runtime gates', () => {
     const features = featuresAt(999);
     for (const key of HIDDEN_KEYS) {
       const availability = getFeatureAvailability(features[key]);
@@ -43,12 +43,12 @@ describe("Final release classification", () => {
       const releaseState = FEATURE_RELEASE_STATES[key];
 
       expect(DISABLED_FEATURES).toContain(key);
-      expect(releaseState).toBe("final_release_deactivated");
+      expect(releaseState).toBe('final_release_deactivated');
       expect(
         threshold === Number.POSITIVE_INFINITY ||
-          releaseState === "final_release_deactivated",
+          releaseState === 'final_release_deactivated',
       ).toBe(true);
-      expect(availability.state).toBe("disabled");
+      expect(availability.state).toBe('disabled');
       expect(availability.canRenderEntryPoint).toBe(false);
       expect(availability.canNavigate).toBe(false);
       expect(availability.canQuery).toBe(false);
@@ -59,24 +59,24 @@ describe("Final release classification", () => {
     }
   });
 
-  it("keeps archived routes, prefetches, and notifications inert", () => {
-    for (const route of ["Guild", "Shop", "Inventory", "PostSessionStory"]) {
+  it('keeps archived routes, prefetches, and notifications inert', () => {
+    for (const route of ['Guild', 'Shop', 'Inventory', 'PostSessionStory']) {
       expect(isNotArchivedRoute(route)).toBe(false);
     }
 
     const archived = new Set([
-      "shop",
-      "inventory",
-      "battle_pass",
-      "squads",
-      "social_tab",
-      "rivals",
-      "rankings",
-      "wagers",
-      "economy_advanced",
-      "economy_basic",
-      "gems_prominent",
-      "seasonal_features",
+      'shop',
+      'inventory',
+      'battle_pass',
+      'squads',
+      'social_tab',
+      'rivals',
+      'rankings',
+      'wagers',
+      'economy_advanced',
+      'economy_basic',
+      'gems_prominent',
+      'seasonal_features',
     ]);
     for (const entry of FEATURE_ROUTE_REGISTRY) {
       expect(archived.has(entry.feature)).toBe(false);
@@ -104,11 +104,11 @@ describe("Final release classification", () => {
     expect(calls).not.toContainEqual(
       expect.objectContaining({ queryKey: QueryKeys.USER.INVENTORY }),
     );
-    expect(isNotificationTypeFilterable("SQUAD", featuresAt(0))).toBe(false);
-    expect(isNotificationTypeFilterable("RIVAL", featuresAt(0))).toBe(false);
+    expect(isNotificationTypeFilterable('SQUAD', featuresAt(0))).toBe(false);
+    expect(isNotificationTypeFilterable('RIVAL', featuresAt(0))).toBe(false);
   });
 
-  it("keeps progressive features inert until their unlock session count", () => {
+  it('keeps progressive features inert until their unlock session count', () => {
     expect(getFeatureAvailability(featuresAt(0).boss_tab).canQuery).toBe(false);
     expect(getFeatureAvailability(featuresAt(7).boss_tab).canQuery).toBe(true);
     expect(getFeatureAvailability(featuresAt(0).challenges).canQuery).toBe(

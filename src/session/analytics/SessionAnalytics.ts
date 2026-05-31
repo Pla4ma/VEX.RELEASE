@@ -3,18 +3,18 @@ import type {
   InterruptionRecord,
   AntiCheatFlag,
   RecoveryRecord,
-} from "../types";
-import { eventBus } from "../../events";
-import { createDebugger } from "../../utils/debug";
+} from '../types';
+import { eventBus } from '../../events';
+import { createDebugger } from '../../utils/debug';
 import type {
   SessionAnalyticsEvent,
   EngagementMetrics,
   PatternMetrics,
-} from "./session-analytics-types";
-import { setupAnalyticsEventListeners } from "./session-analytics-listeners";
-import { calculatePatternMetricsFromHistory } from "./session-analytics-helpers";
+} from './session-analytics-types';
+import { setupAnalyticsEventListeners } from './session-analytics-listeners';
+import { calculatePatternMetricsFromHistory } from './session-analytics-helpers';
 
-const debug = createDebugger("session:analytics");
+const debug = createDebugger('session:analytics');
 
 let orchestratorHandlesCompletion = false;
 
@@ -65,7 +65,7 @@ export class SessionAnalytics {
     if (this.eventQueue.length >= 50) {
       this.flush();
     }
-    eventBus.publish("analytics:track", {
+    eventBus.publish('analytics:track', {
       event: eventName,
       properties: { ...properties, userId: this.userId },
     });
@@ -76,10 +76,10 @@ export class SessionAnalytics {
   ): Promise<EngagementMetrics> {
     const totalSessions = history.length;
     const completedSessions = history.filter(
-      (h) => h.status === "COMPLETED",
+      (h) => h.status === 'COMPLETED',
     ).length;
     const abandonedSessions = history.filter(
-      (h) => h.status === "ABANDONED",
+      (h) => h.status === 'ABANDONED',
     ).length;
     const totalFocusTime = history.reduce((acc, h) => {
       return acc + (h.summary?.effectiveDuration || 0);
@@ -118,7 +118,7 @@ export class SessionAnalytics {
   }
 
   trackAntiCheatIncident(flag: AntiCheatFlag): void {
-    this.track("anti_cheat_incident", {
+    this.track('anti_cheat_incident', {
       sessionId: flag.sessionId,
       type: flag.type,
       severity: flag.severity,
@@ -128,7 +128,7 @@ export class SessionAnalytics {
   }
 
   trackInterruptionImpact(interruption: InterruptionRecord): void {
-    this.track("interruption_impact", {
+    this.track('interruption_impact', {
       sessionId: interruption.sessionId,
       type: interruption.type,
       severity: interruption.severity,
@@ -144,7 +144,7 @@ export class SessionAnalytics {
     success: boolean,
     duration?: number,
   ): void {
-    this.track("funnel_step", {
+    this.track('funnel_step', {
       step,
       sessionId,
       success,
@@ -159,7 +159,7 @@ export class SessionAnalytics {
     }
     const events = [...this.eventQueue];
     this.eventQueue = [];
-    debug.info("[Analytics Batch]", {
+    debug.info('[Analytics Batch]', {
       userId: this.userId,
       events,
       timestamp: Date.now(),

@@ -1,31 +1,31 @@
-import { withRetry, withTimeout } from "../../../shared/hardening";
-import type { DownloadResult } from "./storage-types";
-import { AnalyticsStorageError } from "./storage-types";
+import { withRetry, withTimeout } from '../../../shared/hardening';
+import type { DownloadResult } from './storage-types';
+import { AnalyticsStorageError } from './storage-types';
 import {
   supabase,
   storageCircuitBreaker,
   calculateChecksum,
   isRetryableStorageError,
-} from "./storage-helpers";
+} from './storage-helpers';
 
-export type { StorageUploadConfig, UploadResult, DownloadResult, StorageError } from "./storage-types";
-export { AnalyticsStorageError } from "./storage-types";
-export { uploadExportData } from "./storage-upload";
+export type { StorageUploadConfig, UploadResult, DownloadResult, StorageError } from './storage-types';
+export { AnalyticsStorageError } from './storage-types';
+export { uploadExportData } from './storage-upload';
 
 export async function downloadExportData(
   jobId: string,
   userId: string,
-  format: "json" | "csv",
+  format: 'json' | 'csv',
 ): Promise<DownloadResult> {
   return storageCircuitBreaker.execute(async () => {
-    const bucket = "analytics-exports";
+    const bucket = 'analytics-exports';
     const path = `${userId}/${jobId}.${format}`;
     return await withRetry(
       async () => {
         const { data, error } = await withTimeout(
           supabase.storage.from(bucket).download(path),
           30000,
-          "Storage download timeout",
+          'Storage download timeout',
         );
         if (error) {
           throw new AnalyticsStorageError(
@@ -38,8 +38,8 @@ export async function downloadExportData(
         }
         if (!data) {
           throw new AnalyticsStorageError(
-            "No data returned from download",
-            "EMPTY_RESPONSE",
+            'No data returned from download',
+            'EMPTY_RESPONSE',
             bucket,
             path,
             false,
@@ -52,8 +52,8 @@ export async function downloadExportData(
           .getPublicUrl(path);
         return {
           data,
-          url: metadata?.publicUrl || "",
-          contentType: format === "json" ? "application/json" : "text/csv",
+          url: metadata?.publicUrl || '',
+          contentType: format === 'json' ? 'application/json' : 'text/csv',
           size: data.size,
           checksum,
         };
@@ -61,7 +61,7 @@ export async function downloadExportData(
       {
         maxAttempts: 3,
         baseDelayMs: 1000,
-        retryableErrors: ["network_error", "timeout"],
+        retryableErrors: ['network_error', 'timeout'],
       },
     );
   });
@@ -70,9 +70,9 @@ export async function downloadExportData(
 export async function deleteExportData(
   jobId: string,
   userId: string,
-  format: "json" | "csv",
+  format: 'json' | 'csv',
 ): Promise<void> {
-  const bucket = "analytics-exports";
+  const bucket = 'analytics-exports';
   const path = `${userId}/${jobId}.${format}`;
   const { error } = await supabase.storage.from(bucket).remove([path]);
   if (error) {
@@ -93,7 +93,7 @@ export async function getStorageMetrics(
   totalSize: number;
   oldestExport: number | null;
 }> {
-  const bucket = "analytics-exports";
+  const bucket = 'analytics-exports';
   const prefix = `${userId}/`;
   const { data, error } = await supabase.storage.from(bucket).list(prefix);
   if (error || !data) {
@@ -119,7 +119,7 @@ export async function cleanupOldExports(
   userId: string,
   maxAgeDays: number = 30,
 ): Promise<{ deleted: number; freedSpace: number }> {
-  const bucket = "analytics-exports";
+  const bucket = 'analytics-exports';
   const prefix = `${userId}/`;
   const cutoff = Date.now() - maxAgeDays * 24 * 60 * 60 * 1000;
   const { data, error } = await supabase.storage.from(bucket).list(prefix);

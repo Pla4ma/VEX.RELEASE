@@ -1,25 +1,25 @@
-import { withScreenErrorBoundary } from "../../shared/ui/components/ScreenErrorBoundary";
-import React, { useEffect } from "react";
-import { Pressable, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { type NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { useNavigation } from "@react-navigation/native";
+import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+import React, { useEffect } from 'react';
+import { Pressable, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { type NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useNavigation } from '@react-navigation/native';
 import Animated, {
   FadeInUp,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
-} from "react-native-reanimated";
-import { Box, Text } from "../../components/primitives";
-import { ErrorState } from "../../components/states/ErrorState";
-import { Icon } from "../../icons";
-import type { MainStackParams } from "../../navigation/types";
-import { useAuthStore } from "../../store";
-import { useTheme } from "../../theme";
-import { MasteryHeader, RankUnlocks } from "./MasteryHeader";
-import { MasteryTechniqueGrid } from "./MasteryTechniqueGrid";
-import { MasteryChallengesList } from "./MasteryChallengesList";
-import { useMasteryState } from "./useMasteryState";
+} from 'react-native-reanimated';
+import { Box, Text } from '../../components/primitives';
+import { ErrorState } from '../../components/states/ErrorState';
+import { Icon } from '../../icons';
+import type { MainStackParams } from '../../navigation/types';
+import { useAuthStore } from '../../store';
+import { useTheme } from '../../theme';
+import { MasteryHeader, RankUnlocks } from './MasteryHeader';
+import { MasteryTechniqueGrid } from './MasteryTechniqueGrid';
+import { MasteryChallengesList } from './MasteryChallengesList';
+import { useMasteryState } from './useMasteryState';
 
 export function MasteryScreen(): JSX.Element {
   const navigation =
@@ -98,9 +98,9 @@ export function MasteryScreen(): JSX.Element {
         <Animated.View entering={FadeInUp.duration(400)}>
           <View
             style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
             }}
           >
             <View>
@@ -155,4 +155,4 @@ export function MasteryScreen(): JSX.Element {
   );
 }
 
-export default withScreenErrorBoundary(MasteryScreen, "Mastery");
+export default withScreenErrorBoundary(MasteryScreen, 'Mastery');

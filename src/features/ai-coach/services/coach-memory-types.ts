@@ -5,10 +5,10 @@ export interface CoachMemory {
   bestSessionQuality: number;
   bestSessionQualityDate: number | null;
   mostProductiveTimeOfDay:
-    | "morning"
-    | "afternoon"
-    | "evening"
-    | "night"
+    | 'morning'
+    | 'afternoon'
+    | 'evening'
+    | 'night'
     | null;
   mostUsedSessionDuration: number;
   totalSessionsCompleted: number;
@@ -26,7 +26,7 @@ export interface SessionFacts {
   quality: number;
   completedAt: number;
   sessionType: string;
-  timeOfDay: "morning" | "afternoon" | "evening" | "night";
+  timeOfDay: 'morning' | 'afternoon' | 'evening' | 'night';
 }
 
 export interface StreakFacts {

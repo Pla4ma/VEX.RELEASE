@@ -7,37 +7,37 @@
  * - Archived features are never unlocked regardless of session count
  */
 
-import { buildFeatureAccess } from "../feature-access";
-import { FEATURE_THRESHOLDS } from "../feature-access-config";
-import type { FeatureKey } from "../feature-access";
+import { buildFeatureAccess } from '../feature-access';
+import { FEATURE_THRESHOLDS } from '../feature-access-config';
+import type { FeatureKey } from '../feature-access';
 
 const PROGRESSIVELY_UNLOCKED: FeatureKey[] = [
-  "boss_tab",
-  "achievements",
-  "challenges",
-  "ai_coach_advanced",
-  "content_study_advanced",
-  "quiz_review_mode",
+  'boss_tab',
+  'achievements',
+  'challenges',
+  'ai_coach_advanced',
+  'content_study_advanced',
+  'quiz_review_mode',
 ];
 
 const ALWAYS_HIDDEN: FeatureKey[] = [
-  "shop",
-  "inventory",
-  "battle_pass",
-  "wagers",
-  "rivals",
-  "squads",
-  "rankings",
-  "economy_advanced",
-  "gems_prominent",
-  "social_tab",
-  "streak_insurance",
-  "seasonal_features",
-  "boss_bounties",
+  'shop',
+  'inventory',
+  'battle_pass',
+  'wagers',
+  'rivals',
+  'squads',
+  'rankings',
+  'economy_advanced',
+  'gems_prominent',
+  'social_tab',
+  'streak_insurance',
+  'seasonal_features',
+  'boss_bounties',
 ];
 
-describe("Progressive Unlock — Locked Before Threshold", () => {
-  it("progressively unlocked features are locked at session 0", () => {
+describe('Progressive Unlock — Locked Before Threshold', () => {
+  it('progressively unlocked features are locked at session 0', () => {
     const result = buildFeatureAccess({
       totalCompletedSessions: 0,
     });
@@ -47,7 +47,7 @@ describe("Progressive Unlock — Locked Before Threshold", () => {
     }
   });
 
-  it("progressively unlocked features are locked at session 1", () => {
+  it('progressively unlocked features are locked at session 1', () => {
     const result = buildFeatureAccess({
       totalCompletedSessions: 1,
     });
@@ -58,7 +58,7 @@ describe("Progressive Unlock — Locked Before Threshold", () => {
     }
   });
 
-  it("features unlock at their configured threshold", () => {
+  it('features unlock at their configured threshold', () => {
     // Some features have dependency chains — need enough sessions for all deps
     const sessionOverride: Partial<Record<FeatureKey, number>> = {
       quiz_review_mode: 12, // needs content_study (threshold 12)
@@ -76,10 +76,10 @@ describe("Progressive Unlock — Locked Before Threshold", () => {
     }
   });
 
-  it("features are locked at threshold - 1", () => {
+  it('features are locked at threshold - 1', () => {
     for (const feature of PROGRESSIVELY_UNLOCKED) {
       const threshold = FEATURE_THRESHOLDS[feature] ?? 0;
-      if (threshold <= 0) continue;
+      if (threshold <= 0) {continue;}
 
       const result = buildFeatureAccess({
         totalCompletedSessions: threshold - 1,
@@ -90,7 +90,7 @@ describe("Progressive Unlock — Locked Before Threshold", () => {
   });
 });
 
-describe("Archived Features — Never Unlocked", () => {
+describe('Archived Features — Never Unlocked', () => {
   [0, 1, 5, 10, 50, 100, 1000].forEach((sessions) => {
     it(`archived features are locked at ${sessions} sessions`, () => {
       const result = buildFeatureAccess({
@@ -104,25 +104,25 @@ describe("Archived Features — Never Unlocked", () => {
   });
 });
 
-describe("Archived Features — Threshold is POSITIVE_INFINITY", () => {
-  it("all archived features have Number.POSITIVE_INFINITY threshold", () => {
+describe('Archived Features — Threshold is POSITIVE_INFINITY', () => {
+  it('all archived features have Number.POSITIVE_INFINITY threshold', () => {
     for (const feature of ALWAYS_HIDDEN) {
       expect(FEATURE_THRESHOLDS[feature]).toBe(Number.POSITIVE_INFINITY);
     }
   });
 });
 
-describe("Core Features — Always Available", () => {
+describe('Core Features — Always Available', () => {
   const coreFeatures: FeatureKey[] = [
-    "focus_session",
-    "home_tab",
-    "focus_tab",
-    "profile_tab",
-    "progress_view",
-    "ai_coach_basic",
+    'focus_session',
+    'home_tab',
+    'focus_tab',
+    'profile_tab',
+    'progress_view',
+    'ai_coach_basic',
   ];
 
-  it("core features are available at session 0", () => {
+  it('core features are available at session 0', () => {
     const result = buildFeatureAccess({
       totalCompletedSessions: 0,
     });

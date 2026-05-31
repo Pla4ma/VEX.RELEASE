@@ -1,6 +1,6 @@
-import type { SessionSummary } from "../../../session/types";
-import type { CompanionState } from "../../../features/companion/types";
-import { SessionMode } from "../../../session/modes";
+import type { SessionSummary } from '../../../session/types';
+import type { CompanionState } from '../../../features/companion/types';
+import { SessionMode } from '../../../session/modes';
 
 export type UseCompanionSessionInput = {
   currentMode: SessionMode;

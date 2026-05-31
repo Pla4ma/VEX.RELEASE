@@ -1,17 +1,17 @@
-import * as Sentry from "@sentry/react-native";
+import * as Sentry from '@sentry/react-native';
 
-import { getUserTimezone } from "../ai-coach/utils/timezone";
+import { getUserTimezone } from '../ai-coach/utils/timezone';
 import {
   fetchChallengeExpiryCandidates,
   upsertReminderPlan,
-} from "./repository";
-import { ReminderPlanInputSchema } from "./schemas";
+} from './repository';
+import { ReminderPlanInputSchema } from './schemas';
 import {
   UserIdSchema,
   HOUR_MS,
   respectQuietHours,
   type ReminderDraft,
-} from "./retention-strategy-config";
+} from './retention-strategy-config';
 
 async function scheduleReminder(
   userId: string,
@@ -23,13 +23,13 @@ async function scheduleReminder(
     );
   } catch (error) {
     Sentry.addBreadcrumb({
-      category: "notifications.retention",
-      message: "Retention reminder scheduling failed",
-      level: "error",
+      category: 'notifications.retention',
+      message: 'Retention reminder scheduling failed',
+      level: 'error',
       data: { userId, type: draft.type, scheduledFor: draft.scheduledFor },
     });
     Sentry.captureException(error, {
-      tags: { feature: "retention-notifications", reminderType: draft.type },
+      tags: { feature: 'retention-notifications', reminderType: draft.type },
       extra: { userId },
     });
   }
@@ -44,7 +44,7 @@ export async function scheduleChallengeExpiryNotifications(
   await Promise.all(
     candidates.map((challenge) =>
       scheduleReminder(validatedUserId, {
-        type: "RETENTION_CHALLENGE_EXPIRY",
+        type: 'RETENTION_CHALLENGE_EXPIRY',
         scheduledFor: respectQuietHours(
           Math.max(Date.now() + HOUR_MS, challenge.expiresAt - 3 * HOUR_MS),
           timezone,

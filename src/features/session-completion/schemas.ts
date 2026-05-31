@@ -1,22 +1,22 @@
-import { z } from "zod";
-import { SessionModeSchema } from "../../session/modes";
-import { SessionSummarySchema } from "../../session/types";
+import { z } from 'zod';
+import { SessionModeSchema } from '../../session/modes';
+import { SessionSummarySchema } from '../../session/types';
 
-export const SessionCompletionGradeSchema = z.enum(["S", "A", "B", "C", "D"]);
+export const SessionCompletionGradeSchema = z.enum(['S', 'A', 'B', 'C', 'D']);
 export type SessionCompletionGrade = z.infer<
   typeof SessionCompletionGradeSchema
 >;
 
 export const CompletionSyncStatusSchema = z.enum([
-  "synced",
-  "pending_sync",
-  "failed_sync",
+  'synced',
+  'pending_sync',
+  'failed_sync',
 ]);
 export type CompletionSyncStatus = z.infer<typeof CompletionSyncStatusSchema>;
 
 export const CompletionStreakResultSchema = z
   .object({
-    action: z.enum(["extended", "maintained", "broken", "saved_by_insurance"]),
+    action: z.enum(['extended', 'maintained', 'broken', 'saved_by_insurance']),
     newDays: z.number().int().min(0),
     previousDays: z.number().int().min(0),
   })
@@ -30,11 +30,11 @@ export const CompletionDailyMissionResultSchema = z
     missionId: z.string().nullable(),
     progressDelta: z.number(),
     status: z.enum([
-      "completed",
-      "progressed",
-      "unchanged",
-      "pending_sync",
-      "failed",
+      'completed',
+      'progressed',
+      'unchanged',
+      'pending_sync',
+      'failed',
     ]),
   })
   .strict();
@@ -48,7 +48,7 @@ export const CompletionLedgerSchema = z
     idempotencyKey: z.string().min(1),
     sessionId: z.string().uuid(),
     userId: z.string().min(1),
-    mode: z.union([SessionModeSchema, z.literal("UNKNOWN")]),
+    mode: z.union([SessionModeSchema, z.literal('UNKNOWN')]),
     targetDurationSeconds: z.number().int().min(0),
     completedDurationSeconds: z.number().int().min(0),
     effectiveFocusedSeconds: z.number().int().min(0),
@@ -97,7 +97,7 @@ export const SessionCompletionReturnPlanSchema = z
   .object({
     highlightMessage: z.string(),
     highlightTitle: z.string(),
-    highlightTone: z.enum(["celebration", "info", "warning"]),
+    highlightTone: z.enum(['celebration', 'info', 'warning']),
     homeCtaLabel: z.string(),
     modeReturnHook: z.string().optional(),
     nextSessionLabel: z.string(),
@@ -117,14 +117,14 @@ export const PostSessionNextActionSchema = z
     routeParams: z
       .object({
         presetMode: z.enum([
-          "LIGHT_FOCUS",
-          "DEEP_WORK",
-          "SPRINT",
-          "CREATIVE",
-          "STUDY",
+          'LIGHT_FOCUS',
+          'DEEP_WORK',
+          'SPRINT',
+          'CREATIVE',
+          'STUDY',
         ]),
         recommendationId: z.string().min(1),
-        suggestedDifficulty: z.enum(["EASY", "NORMAL", "CHALLENGING", "PUSH"]),
+        suggestedDifficulty: z.enum(['EASY', 'NORMAL', 'CHALLENGING', 'PUSH']),
         suggestedDurationSeconds: z.number().int().min(60),
       })
       .strict(),
@@ -134,7 +134,7 @@ export type PostSessionNextAction = z.infer<typeof PostSessionNextActionSchema>;
 
 export const CompletionReflectionInputSchema = z
   .object({
-    bossIntensity: z.enum(["hidden", "visible", "high"]).nullable().optional(),
+    bossIntensity: z.enum(['hidden', 'visible', 'high']).nullable().optional(),
     firstWeekStage: z.string().nullable().optional(),
     motivationStyle: z.string().nullable().optional(),
     primaryGoal: z.string().nullable().optional(),
@@ -153,7 +153,7 @@ export const CompletionReflectionSchema = z
     adaptivePayoff: z.string().nullable(),
     nextAction: z.string().min(1),
     reflection: z.string().min(1),
-    tone: z.enum(["calm", "coach", "study", "intense"]),
+    tone: z.enum(['calm', 'coach', 'study', 'intense']),
   })
   .strict();
 export type CompletionReflection = z.infer<typeof CompletionReflectionSchema>;
@@ -163,20 +163,20 @@ export {
   CompletionPersonalizationInputSchema,
   CompletionPersonalizationSchema,
   CompletionUnlockDecisionSchema,
-} from "./completion-personalization-schemas";
+} from './completion-personalization-schemas';
 export type {
   CompletionMemoryCandidate,
   CompletionPersonalization,
   CompletionPersonalizationInput,
   CompletionUnlockDecision,
-} from "./completion-personalization-schemas";
+} from './completion-personalization-schemas';
 export {
   CompletionPersonalizationResultSchema,
   CompletionProgressProofSchema,
   CompletionUserFacingSummarySchema,
-} from "./completion-personalization-result-schemas";
+} from './completion-personalization-result-schemas';
 export type {
   CompletionPersonalizationResult,
   CompletionProgressProof,
   CompletionUserFacingSummary,
-} from "./completion-personalization-result-schemas";
+} from './completion-personalization-result-schemas';

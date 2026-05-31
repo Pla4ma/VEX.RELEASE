@@ -1,7 +1,7 @@
-import { captureSilentFailure } from "../../utils/silent-failure";
-import { generateSessionSummary } from "../../shared/ai/edge-function-service";
-import { getOrCreateCoachState } from "./persona-manager";
-import { getSessionRepository } from "../../session/repository/SessionRepository";
+import { captureSilentFailure } from '../../utils/silent-failure';
+import { generateSessionSummary } from '../../shared/ai/edge-function-service';
+import { getOrCreateCoachState } from './persona-manager';
+import { getSessionRepository } from '../../session/repository/SessionRepository';
 
 interface SummaryContext {
   sessionCount: number;
@@ -14,7 +14,7 @@ interface SummaryContext {
 
 export async function generatePerformanceSummary(
   userId: string,
-  period: "daily" | "weekly" | "monthly",
+  period: 'daily' | 'weekly' | 'monthly',
 ): Promise<{
   period: string;
   sessionsCompleted: number;
@@ -67,7 +67,7 @@ export async function generatePerformanceSummary(
 
 async function generateAISummaryMessage(
   userId: string,
-  period: "daily" | "weekly" | "monthly",
+  period: 'daily' | 'weekly' | 'monthly',
   context: SummaryContext,
   currentState: string,
 ): Promise<string> {
@@ -87,9 +87,9 @@ async function generateAISummaryMessage(
       },
     });
     if (response.success) {
-      const enouragementValue = response.structuredData?.["encouragement"];
+      const enouragementValue = response.structuredData?.encouragement;
       if (
-        typeof enouragementValue === "string" &&
+        typeof enouragementValue === 'string' &&
         enouragementValue.length > 0
       ) {
         return enouragementValue;
@@ -98,9 +98,9 @@ async function generateAISummaryMessage(
     }
   } catch (error) {
     captureSilentFailure(error, {
-      feature: "ai-coach",
-      operation: "ui-fallback",
-      type: "ui",
+      feature: 'ai-coach',
+      operation: 'ui-fallback',
+      type: 'ui',
     });
     return generateSummaryMessage(currentState, period);
   }
@@ -110,26 +110,26 @@ async function generateAISummaryMessage(
 function generateSummaryMessage(_state: string, period: string): string {
   const messages: Record<string, string[]> = {
     daily: [
-      "Great work today! Every session is a step forward.",
+      'Great work today! Every session is a step forward.',
       "You showed up today\u2014that's what matters. Keep building!",
       "Today's focus is tomorrow's success. Well done!",
     ],
     weekly: [
-      "What a week! Your consistency is paying off.",
-      "7 days of effort, infinite progress. Keep it up!",
-      "You crushed this week! Ready for the next one?",
+      'What a week! Your consistency is paying off.',
+      '7 days of effort, infinite progress. Keep it up!',
+      'You crushed this week! Ready for the next one?',
     ],
     monthly: [
       "A month of dedication! You're becoming unstoppable.",
       "30 days of growth. Look how far you've come!",
-      "Monthly milestone achieved! Your future self thanks you.",
+      'Monthly milestone achieved! Your future self thanks you.',
     ],
   };
   const periodMessages = messages[period];
   if (!periodMessages || periodMessages.length === 0) {
-    return "Great work today! Every session is a step forward.";
+    return 'Great work today! Every session is a step forward.';
   }
   const result =
     periodMessages[Math.floor(Math.random() * periodMessages.length)];
-  return result ?? "Great work today! Every session is a step forward.";
+  return result ?? 'Great work today! Every session is a step forward.';
 }

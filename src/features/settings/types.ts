@@ -1,4 +1,4 @@
-import type { z } from "zod";
+import type { z } from 'zod';
 import type {
   SettingCategorySchema,
   NotificationChannelSchema,
@@ -9,7 +9,7 @@ import type {
   DataRetentionPolicySchema,
   ExportFormatSchema,
   SyncStatusSchema,
-} from "./schemas";
+} from './schemas';
 export type SettingCategory = z.infer<typeof SettingCategorySchema>;
 export type NotificationChannel = z.infer<typeof NotificationChannelSchema>;
 export type NotificationPriority = z.infer<typeof NotificationPrioritySchema>;
@@ -57,7 +57,7 @@ export interface NotificationSettings {
     email: {
       enabled: boolean;
       email: string;
-      digestFrequency: "immediate" | "daily" | "weekly" | "never";
+      digestFrequency: 'immediate' | 'daily' | 'weekly' | 'never';
     };
     inApp: {
       enabled: boolean;
@@ -78,7 +78,7 @@ export interface NotificationRule {
   userId: string;
   name: string;
   condition: {
-    type: "time" | "location" | "activity" | "streak";
+    type: 'time' | 'location' | 'activity' | 'streak';
     params: Record<string, unknown>;
   };
   action: {
@@ -113,7 +113,7 @@ export interface CoachTrigger {
   id: string;
   userId: string;
   eventType: string;
-  condition: "before" | "after" | "during";
+  condition: 'before' | 'after' | 'during';
   threshold?: number;
   messageTemplate: string;
   isActive: boolean;
@@ -130,7 +130,7 @@ export interface AppearanceSettings {
 }
 export interface PrivacySettings {
   userId: string;
-  profileVisibility: "public" | "friends" | "private";
+  profileVisibility: 'public' | 'friends' | 'private';
   showOnlineStatus: boolean;
   showActivityStatus: boolean;
   allowDataAnalysis: boolean;
@@ -143,7 +143,7 @@ export interface DataControlSettings {
   retentionPolicy: DataRetentionPolicy;
   autoExport: {
     enabled: boolean;
-    frequency: "weekly" | "monthly" | "never";
+    frequency: 'weekly' | 'monthly' | 'never';
     format: ExportFormat;
     lastExport?: number;
   };
@@ -157,4 +157,4 @@ export type {
   SettingsUIState,
   SettingValidationResult,
   SettingsChangeEvent,
-} from "./types-sync";
+} from './types-sync';

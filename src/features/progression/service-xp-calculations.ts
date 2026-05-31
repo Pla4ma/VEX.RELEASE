@@ -1,5 +1,5 @@
-import { XpBreakdownSchema, type XpBreakdown } from "./schemas";
-import { getProgressionServiceConfig } from "./service-config";
+import { XpBreakdownSchema, type XpBreakdown } from './schemas';
+import { getProgressionServiceConfig } from './service-config';
 
 export interface BreakdownParams {
   baseAmount: number;

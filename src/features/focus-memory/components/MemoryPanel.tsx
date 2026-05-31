@@ -1,7 +1,7 @@
-import React from "react";
-import { Pressable, Text, View } from "react-native";
-import { useTheme } from "../../../theme/ThemeContext";
-import type { MemoryPanelProps } from "../memory-panel-types";
+import React from 'react';
+import { Pressable, Text, View } from 'react-native';
+import { useTheme } from '../../../theme/ThemeContext';
+import type { MemoryPanelProps } from '../memory-panel-types';
 
 export function MemoryPanel({
   items,
@@ -13,7 +13,7 @@ export function MemoryPanel({
   const { theme } = useTheme();
   const { colors } = theme;
 
-  if (items.length === 0) return null;
+  if (items.length === 0) {return null;}
 
   return (
     <View
@@ -24,7 +24,7 @@ export function MemoryPanel({
         backgroundColor: colors.semantic.surface,
         borderWidth: 1,
         borderColor: colors.border.light,
-        overflow: "hidden",
+        overflow: 'hidden',
       }}
     >
       <View
@@ -38,7 +38,7 @@ export function MemoryPanel({
         <Text
           style={{
             fontSize: 16,
-            fontWeight: "700",
+            fontWeight: '700',
             color: colors.text.primary,
           }}
           accessibilityRole="header"
@@ -70,15 +70,15 @@ export function MemoryPanel({
         >
           <View
             style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
             }}
           >
             <Text
               style={{
                 fontSize: 14,
-                fontWeight: "600",
+                fontWeight: '600',
                 color: colors.text.primary,
                 flex: 1,
               }}
@@ -89,7 +89,7 @@ export function MemoryPanel({
             <Text
               style={{
                 fontSize: 11,
-                fontWeight: "500",
+                fontWeight: '500',
                 color:
                   item.confidence >= 0.7
                     ? colors.semantic.success
@@ -102,9 +102,9 @@ export function MemoryPanel({
 
           <View
             style={{
-              flexDirection: "row",
+              flexDirection: 'row',
               gap: theme.spacing[1],
-              alignItems: "center",
+              alignItems: 'center',
             }}
           >
             <Text
@@ -129,13 +129,13 @@ export function MemoryPanel({
                 color: colors.text.muted,
               }}
             >
-              {item.type.replace(/_/g, " ")}
+              {item.type.replace(/_/g, ' ')}
             </Text>
           </View>
 
           <View
             style={{
-              flexDirection: "row",
+              flexDirection: 'row',
               gap: theme.spacing[3],
               marginTop: theme.spacing[1],
             }}
@@ -154,7 +154,7 @@ export function MemoryPanel({
                     borderRadius: theme.borderRadius.sm,
                     opacity: pressed ? 0.6 : 1,
                     minHeight: 44,
-                    justifyContent: "center" as const,
+                    justifyContent: 'center' as const,
                   })}
                 >
                   <Text
@@ -175,7 +175,7 @@ export function MemoryPanel({
                     borderRadius: theme.borderRadius.sm,
                     opacity: pressed ? 0.6 : 1,
                     minHeight: 44,
-                    justifyContent: "center" as const,
+                    justifyContent: 'center' as const,
                   })}
                 >
                   <Text

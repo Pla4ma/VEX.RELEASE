@@ -1,8 +1,8 @@
-import type { Achievement, AchievementCategory } from "./types";
+import type { Achievement, AchievementCategory } from './types';
 
 export interface FeatureUnlock {
   achievementId: string;
-  featureType: "COSMETIC" | "BOSS" | "STUDY" | "SOCIAL" | "PREMIUM";
+  featureType: 'COSMETIC' | 'BOSS' | 'STUDY' | 'SOCIAL' | 'PREMIUM';
   featureId: string;
   featureName: string;
   description: string;

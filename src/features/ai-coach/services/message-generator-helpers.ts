@@ -1,14 +1,14 @@
 import type {
   MessageCategory,
   CoachMessageTemplate,
-} from "../schemas";
-import * as repository from "../repository";
-import { withRetry } from "../utils/retry";
+} from '../schemas';
+import * as repository from '../repository';
+import { withRetry } from '../utils/retry';
 import type {
   GenerationConfig,
   TemplateLibrary,
-} from "./message-generator-types";
-import { getSafeDefault, DEFAULT_TEMPLATES } from "./message-generator-types";
+} from './message-generator-types';
+import { getSafeDefault, DEFAULT_TEMPLATES } from './message-generator-types';
 
 // ─── Template Cache ───
 
@@ -17,7 +17,7 @@ const CACHE_TTL_MS = 5 * 60 * 1000;
 const templateCache: TemplateLibrary = {
   templates: new Map(),
   lastUpdated: 0,
-  version: "1.0.0",
+  version: '1.0.0',
 };
 
 export async function fetchTemplatesWithCache(
@@ -34,7 +34,7 @@ export async function fetchTemplatesWithCache(
   const templates = await withRetry(
     () => repository.fetchMessageTemplates(personaId, category),
     { maxAttempts: 2 },
-    "fetch-templates",
+    'fetch-templates',
   );
   templateCache.templates.set(category, templates);
   templateCache.lastUpdated = now;
@@ -74,17 +74,17 @@ export function checkTemplateConditions(
       return false;
     }
     switch (condition.operator) {
-      case "eq":
+      case 'eq':
         return contextValue === condition.value;
-      case "gt":
+      case 'gt':
         return Number(contextValue) > Number(condition.value);
-      case "lt":
+      case 'lt':
         return Number(contextValue) < Number(condition.value);
-      case "gte":
+      case 'gte':
         return Number(contextValue) >= Number(condition.value);
-      case "lte":
+      case 'lte':
         return Number(contextValue) <= Number(condition.value);
-      case "in":
+      case 'in':
         return (
           Array.isArray(condition.value) &&
           condition.value.includes(contextValue)
@@ -130,7 +130,7 @@ export function generateFromPersonalityTemplate(
   config: GenerationConfig,
 ): string {
   if (!templates || templates.length === 0) {
-    return getSafeDefault("SESSION_SUGGESTION");
+    return getSafeDefault('SESSION_SUGGESTION');
   }
   const selectedTemplate =
     templates[Math.floor(Math.random() * templates.length)]!;
@@ -155,7 +155,7 @@ export function substituteVariables(
 }
 
 export function sanitizeContent(content: string): string {
-  return content.replace(/[<>]/g, "").trim();
+  return content.replace(/[<>]/g, '').trim();
 }
 
 // ─── Priority ───
@@ -178,13 +178,13 @@ export function calculatePriority(
     OVERLOAD_WARNING: 6,
   };
   let priority = basePriorities[category] || 5;
-  if (context.urgency === "high") {
+  if (context.urgency === 'high') {
     priority += 2;
   }
-  if (context.urgency === "critical") {
+  if (context.urgency === 'critical') {
     priority += 3;
   }
-  if (context.riskLevel === "CRITICAL") {
+  if (context.riskLevel === 'CRITICAL') {
     priority += 2;
   }
   return Math.min(10, priority);

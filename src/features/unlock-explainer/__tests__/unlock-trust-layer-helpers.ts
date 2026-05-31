@@ -1,11 +1,11 @@
-import { createUnlockDecision, isFeatureVisible } from "../service";
-import { buildUserFacingReason, UnlockDecisionSchema } from "../schemas";
+import { createUnlockDecision, isFeatureVisible } from '../service';
+import { buildUserFacingReason, UnlockDecisionSchema } from '../schemas';
 import {
   computeFeatureSafetyGates,
   canDegradedPremiumTease,
   isNeverUnlockFeature,
   NEVER_UNLOCK_FEATURES,
-} from "../safety";
+} from '../safety';
 
 export {
   createUnlockDecision,

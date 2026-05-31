@@ -1,9 +1,9 @@
-import React from "react";
+import React from 'react';
 
-import { getAnalyticsService } from "../../analytics/AnalyticsService";
+import { getAnalyticsService } from '../../analytics/AnalyticsService';
 
-jest.mock("../../analytics/AnalyticsService");
-jest.mock("../../utils/debug", () => ({
+jest.mock('../../analytics/AnalyticsService');
+jest.mock('../../utils/debug', () => ({
   createDebugger: () => ({
     debug: jest.fn(),
     info: jest.fn(),
@@ -21,24 +21,24 @@ export const ThrowError = ({
   shouldThrow: boolean;
 }) => {
   if (shouldThrow) {
-    throw new Error("Test error");
+    throw new Error('Test error');
   }
   return <div>Normal render</div>;
 };
 
 export const ThrowNetworkError = () => {
-  const error = new Error("Network request failed");
-  error.name = "NetworkError";
+  const error = new Error('Network request failed');
+  error.name = 'NetworkError';
   throw error;
 };
 
 export const ThrowAuthError = () => {
-  const error = new Error("Unauthorized");
-  error.name = "AuthError";
+  const error = new Error('Unauthorized');
+  error.name = 'AuthError';
   throw error;
 };
 
 export const ThrowClientError = () => {
-  const error = new Error("Client error");
+  const error = new Error('Client error');
   throw error;
 };

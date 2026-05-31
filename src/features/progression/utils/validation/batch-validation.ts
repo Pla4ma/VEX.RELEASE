@@ -1,7 +1,7 @@
-import type { XPTransaction, ValidationResult } from "./types";
-import { MAX_XP_PER_HOUR } from "./types";
-import { validateXPTransaction } from "./xp-validation";
-import { validateLevelUp, validatePrestige } from "./level-validation";
+import type { XPTransaction, ValidationResult } from './types';
+import { MAX_XP_PER_HOUR } from './types';
+import { validateXPTransaction } from './xp-validation';
+import { validateLevelUp, validatePrestige } from './level-validation';
 
 export function validateXPBatch(
   transactions: XPTransaction[],
@@ -41,10 +41,10 @@ export function validateXPBatch(
   const totalXP = result.data!.valid.reduce((sum, t) => sum + t.amount, 0);
   if (totalXP > MAX_XP_PER_HOUR * 2) {
     result.violations.push({
-      type: "RATE_LIMIT",
-      field: "batch",
+      type: 'RATE_LIMIT',
+      field: 'batch',
       message: `Batch total XP ${totalXP} exceeds safe threshold`,
-      severity: "HIGH",
+      severity: 'HIGH',
       details: { totalXP, threshold: MAX_XP_PER_HOUR * 2 },
     });
     result.riskScore = Math.min(100, result.riskScore + 20);
@@ -59,8 +59,8 @@ export function validateXPBatch(
 
 // ── Barrel Export ────────────────────────────────────────────────────────────
 
-export { validateXPTransaction } from "./xp-validation";
-export { validateLevelUp, validatePrestige } from "./level-validation";
+export { validateXPTransaction } from './xp-validation';
+export { validateLevelUp, validatePrestige } from './level-validation';
 
 export const ProgressionValidation = {
   validateXPTransaction,

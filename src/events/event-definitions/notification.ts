@@ -6,10 +6,10 @@
  */
 
 export type NotificationEventType =
-  | "notification:send"
-  | "notification:scheduled"
-  | "notification:opened"
-  | "notification:dismissed";
+  | 'notification:send'
+  | 'notification:scheduled'
+  | 'notification:opened'
+  | 'notification:dismissed';
 
 export interface NotificationSendEvent {
   userId: string;
@@ -17,7 +17,7 @@ export interface NotificationSendEvent {
   title: string;
   body: string;
   data?: Record<string, unknown>;
-  priority?: "low" | "normal" | "high" | "urgent";
+  priority?: 'low' | 'normal' | 'high' | 'urgent';
   scheduledAt?: number;
   expiresAt?: number;
 }

@@ -1,6 +1,6 @@
-import { Box } from "../../components/primitives/Box";
-import { Text } from "../../components/primitives/Text";
-import { useTheme } from "../../theme";
+import { Box } from '../../components/primitives/Box';
+import { Text } from '../../components/primitives/Text';
+import { useTheme } from '../../theme';
 
 export function SquadSyncLoadingState(): JSX.Element {
   const { theme } = useTheme();

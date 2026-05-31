@@ -1,20 +1,20 @@
-import React from "react";
-import { Pressable } from "react-native";
-import Animated, { FadeInUp } from "react-native-reanimated";
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { Button } from "../../../components/primitives/Button";
-import { useTheme } from "../../../theme";
+import React from 'react';
+import { Pressable } from 'react-native';
+import Animated, { FadeInUp } from 'react-native-reanimated';
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { Button } from '../../../components/primitives/Button';
+import { useTheme } from '../../../theme';
 import {
   type ComebackQuest,
   type ComebackQuestProgress,
   COMEBACK_QUEST_CONFIG,
-} from "../ComebackQuestSystem";
+} from '../ComebackQuestSystem';
 import {
   QuestStep,
   PhoenixBadgePreview,
   QuestProgressBar,
-} from "./ComebackQuestSubcomponents";
+} from './ComebackQuestSubcomponents';
 
 export interface ComebackQuestCardProps {
   quest: ComebackQuest;
@@ -30,13 +30,13 @@ export function ComebackQuestCard({
   onViewDetails,
 }: ComebackQuestCardProps): JSX.Element {
   const { theme } = useTheme();
-  const isComplete = progress.currentStage === "COMPLETE";
+  const isComplete = progress.currentStage === 'COMPLETE';
   const currentQuestNum =
-    progress.currentStage === "QUEST_1"
+    progress.currentStage === 'QUEST_1'
       ? 1
-      : progress.currentStage === "QUEST_2"
+      : progress.currentStage === 'QUEST_2'
         ? 2
-        : progress.currentStage === "QUEST_3"
+        : progress.currentStage === 'QUEST_3'
           ? 3
           : 0;
   return (
@@ -46,11 +46,11 @@ export function ComebackQuestCard({
         <Box alignItems="center" gap="sm">
           <Text fontSize={48}>🔥</Text>
           <Text variant="h3" color="text.primary" textAlign="center">
-            {isComplete ? "Welcome Back!" : "Comeback Quest"}
+            {isComplete ? 'Welcome Back!' : 'Comeback Quest'}
           </Text>
           <Text variant="body" color="text.secondary" textAlign="center">
             {isComplete
-              ? "You completed your comeback. The streak is back."
+              ? 'You completed your comeback. The streak is back.'
               : `${quest.daysAbsent} days away. Your streak is gone but your skills are not. Do this one session. Rebuild from here.`}
           </Text>
         </Box>
@@ -125,10 +125,10 @@ export function ComebackQuestCard({
             accessibilityHint="Double tap to activate"
           >
             {currentQuestNum === 1
-              ? "🚀 Start First Comeback Session"
+              ? '🚀 Start First Comeback Session'
               : currentQuestNum === 2
-                ? "⚡ Continue Your Comeback"
-                : "🎯 Final Quest — You Got This!"}
+                ? '⚡ Continue Your Comeback'
+                : '🎯 Final Quest — You Got This!'}
           </Button>
         )}
 
@@ -166,5 +166,5 @@ export function ComebackQuestCard({
   );
 }
 
-export { ComebackQuestCompact } from "./ComebackQuestCompact";
+export { ComebackQuestCompact } from './ComebackQuestCompact';
 export default ComebackQuestCard;

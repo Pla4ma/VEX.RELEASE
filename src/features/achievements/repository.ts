@@ -4,11 +4,11 @@
  * Data access layer for achievement system
  */
 
-import { getSupabaseClient } from "../../config/supabase";
+import { getSupabaseClient } from '../../config/supabase';
 
 const supabase = getSupabaseClient();
-import { type UserAchievement } from "./types";
-import { UserAchievementRowSchema } from "./schemas";
+import { type UserAchievement } from './types';
+import { UserAchievementRowSchema } from './schemas';
 
 // ============================================================================
 // User Achievements
@@ -19,10 +19,10 @@ export async function getUserAchievement(
   achievementId: string,
 ): Promise<UserAchievement | null> {
   const { data, error } = await supabase
-    .from("user_achievements")
-    .select("*")
-    .eq("user_id", userId)
-    .eq("achievement_id", achievementId)
+    .from('user_achievements')
+    .select('*')
+    .eq('user_id', userId)
+    .eq('achievement_id', achievementId)
     .single();
 
   if (error || !data) {
@@ -45,9 +45,9 @@ export async function getAllUserAchievements(
   userId: string,
 ): Promise<UserAchievement[]> {
   const { data, error } = await supabase
-    .from("user_achievements")
-    .select("*")
-    .eq("user_id", userId);
+    .from('user_achievements')
+    .select('*')
+    .eq('user_id', userId);
 
   if (error || !data) {
     return [];
@@ -75,7 +75,7 @@ export async function createUserAchievement(
   },
 ): Promise<UserAchievement | null> {
   const { data, error } = await supabase
-    .from("user_achievements")
+    .from('user_achievements')
     .insert({
       user_id: userId,
       achievement_id: achievementId,
@@ -125,10 +125,10 @@ export async function updateAchievementProgress(
   }
 
   const { data, error } = await supabase
-    .from("user_achievements")
+    .from('user_achievements')
     .update(updateData)
-    .eq("user_id", userId)
-    .eq("achievement_id", achievementId)
+    .eq('user_id', userId)
+    .eq('achievement_id', achievementId)
     .select()
     .single();
 
@@ -149,5 +149,5 @@ export async function updateAchievementProgress(
 }
 
 export async function resetAllUserAchievements(userId: string): Promise<void> {
-  await supabase.from("user_achievements").delete().eq("user_id", userId);
+  await supabase.from('user_achievements').delete().eq('user_id', userId);
 }

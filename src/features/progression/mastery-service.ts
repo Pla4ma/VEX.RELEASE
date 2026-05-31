@@ -4,19 +4,19 @@ import type {
   MasteryTrackState,
   SessionMasteryResult,
   UnifiedMasteryState,
-} from "./mastery-types";
+} from './mastery-types';
 import {
   calculateMasteryRank,
   calculateXpForLevel,
   MASTERY_TRACKS,
-} from "./mastery-types";
+} from './mastery-types';
 import {
   calculateBossMasteryXp,
   calculateComebackMasteryXp,
   calculateConsistencyMasteryXp,
   calculateDurationMasteryXp,
   calculatePurityMasteryXp,
-} from "./xp-calculators";
+} from './xp-calculators';
 
 interface LegacyMasteryData {
   durationMastery?: number;
@@ -27,11 +27,11 @@ interface LegacyMasteryData {
 }
 
 const TRACK_TO_LEGACY_KEY: Record<MasteryTrack, keyof LegacyMasteryData> = {
-  DURATION: "durationMastery",
-  PURITY: "purityMastery",
-  CONSISTENCY: "consistencyMastery",
-  COMEBACK: "comebackMastery",
-  BOSS: "bossMastery",
+  DURATION: 'durationMastery',
+  PURITY: 'purityMastery',
+  CONSISTENCY: 'consistencyMastery',
+  COMEBACK: 'comebackMastery',
+  BOSS: 'bossMastery',
 };
 
 export function calculateMasteryXpFromSession(
@@ -161,7 +161,7 @@ export function createInitialMasteryState(
     userId,
     tracks,
     overallLevel: 1,
-    overallRank: "APPRENTICE",
+    overallRank: 'APPRENTICE',
     prestigeLevel: 0,
     prestigeBonuses: [],
     lastUpdated: Date.now(),

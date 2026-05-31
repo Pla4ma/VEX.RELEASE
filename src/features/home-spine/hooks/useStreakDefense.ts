@@ -7,8 +7,8 @@
  * @phase 2.7
  */
 
-import { useMemo } from "react";
-import { useStreakSummary } from "../../../features/streaks/hooks";
+import { useMemo } from 'react';
+import { useStreakSummary } from '../../../features/streaks/hooks';
 
 export interface StreakDefenseState {
   /** Whether user can freeze streak today */
@@ -31,7 +31,7 @@ export interface StreakDefenseState {
   /** Whether streak is currently at risk (< 12h remaining) */
   isAtRisk: boolean;
   /** Risk level: NONE, LOW, MEDIUM, HIGH, CRITICAL */
-  riskLevel: "NONE" | "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
+  riskLevel: 'NONE' | 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   /** Whether weekend mode is active (streak doesn't count weekends) */
   isWeekendMode: boolean;
   /** Loading state */
@@ -80,7 +80,7 @@ function calculateQualifyingWindow(
 
   return {
     hoursUntilOpen,
-    timeLabel: "6:00 AM tomorrow",
+    timeLabel: '6:00 AM tomorrow',
   };
 }
 
@@ -99,7 +99,7 @@ export function useStreakDefense(userId: string | null): StreakDefenseState {
     data: streakSummary,
     isLoading,
     error,
-  } = useStreakSummary(userId ?? "");
+  } = useStreakSummary(userId ?? '');
 
   return useMemo(() => {
     if (!streakSummary || !userId) {
@@ -111,7 +111,7 @@ export function useStreakDefense(userId: string | null): StreakDefenseState {
         hoursLeft: null,
         nextQualifyingWindow: null,
         isAtRisk: false,
-        riskLevel: "NONE",
+        riskLevel: 'NONE',
         isWeekendMode: false,
         isLoading,
         error,
@@ -122,16 +122,16 @@ export function useStreakDefense(userId: string | null): StreakDefenseState {
     const isAtRisk = streakSummary.isAtRisk;
 
     // Determine risk level
-    let riskLevel: StreakDefenseState["riskLevel"] = streakSummary.riskLevel;
-    if (hoursLeft !== null && riskLevel === "NONE") {
+    let riskLevel: StreakDefenseState['riskLevel'] = streakSummary.riskLevel;
+    if (hoursLeft !== null && riskLevel === 'NONE') {
       if (hoursLeft <= 1) {
-        riskLevel = "CRITICAL";
+        riskLevel = 'CRITICAL';
       } else if (hoursLeft <= 4) {
-        riskLevel = "HIGH";
+        riskLevel = 'HIGH';
       } else if (hoursLeft <= 8) {
-        riskLevel = "MEDIUM";
+        riskLevel = 'MEDIUM';
       } else if (hoursLeft < 12) {
-        riskLevel = "LOW";
+        riskLevel = 'LOW';
       }
     }
 
@@ -146,7 +146,7 @@ export function useStreakDefense(userId: string | null): StreakDefenseState {
       graceUsesRemaining: streakSummary.shieldAvailable ? 1 : 0,
       maxGraceUses: 1, // One shield per day
       hoursLeft,
-      nextQualifyingWindow: calculateQualifyingWindow(hoursLeft, "UTC"),
+      nextQualifyingWindow: calculateQualifyingWindow(hoursLeft, 'UTC'),
       isAtRisk,
       riskLevel,
       isWeekendMode: false,

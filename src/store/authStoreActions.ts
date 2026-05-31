@@ -2,42 +2,42 @@ import {
   clearSentryUser,
   captureException,
   setSentryUser,
-} from "../config/sentry";
+} from '../config/sentry';
 import {
   getSecureStorage,
   SecureStorageKeys,
-} from "../persistence/SecureStorage";
+} from '../persistence/SecureStorage';
 import {
   getCurrentUser,
   signInWithEmail,
   signOut,
   signUpWithEmail,
-} from "../services/supabaseAuth";
-import type { User } from "../types/models";
-import { createDebugger } from "../utils/debug";
+} from '../services/supabaseAuth';
+import type { User } from '../types/models';
+import { createDebugger } from '../utils/debug';
 import {
   removeUserProfile,
   saveUserProfile,
-} from "./authProfileStorage";
+} from './authProfileStorage';
 import {
   handleAuthCheckError,
   hydrateStoredProfile,
   setAuthenticatedUser,
   setSignedOut,
   toError,
-} from "./authStoreActionHelpers";
+} from './authStoreActionHelpers';
 import {
   deinitializeServicesAfterLogout,
   initializeServicesAfterAuth,
   resetServiceSingletonsForLogout,
-} from "./authStoreIntegrations";
-import type { AuthState, AuthStateSetter } from "./authStoreTypes";
+} from './authStoreIntegrations';
+import type { AuthState, AuthStateSetter } from './authStoreTypes';
 
-const debug = createDebugger("store:auth");
+const debug = createDebugger('store:auth');
 
 type AuthActions = Omit<
   AuthState,
-  "error" | "isAuthenticated" | "isLoading" | "user"
+  'error' | 'isAuthenticated' | 'isLoading' | 'user'
 >;
 
 export function createAuthActions(set: AuthStateSetter): AuthActions {
@@ -83,7 +83,7 @@ export function createAuthActions(set: AuthStateSetter): AuthActions {
         if (error || !user) {
           set((state) => {
             state.isLoading = false;
-            state.error = error?.message ?? "Sign in failed";
+            state.error = error?.message ?? 'Sign in failed';
           });
           return false;
         }
@@ -97,7 +97,7 @@ export function createAuthActions(set: AuthStateSetter): AuthActions {
           state.isLoading = false;
           state.error = toError(err).message;
         });
-        captureException(toError(err), { tags: { feature: "auth-login" } });
+        captureException(toError(err), { tags: { feature: 'auth-login' } });
         return false;
       }
     },
@@ -115,7 +115,7 @@ export function createAuthActions(set: AuthStateSetter): AuthActions {
         if (error || !user) {
           set((state) => {
             state.isLoading = false;
-            state.error = error?.message ?? "Registration failed";
+            state.error = error?.message ?? 'Registration failed';
           });
           return false;
         }
@@ -129,15 +129,15 @@ export function createAuthActions(set: AuthStateSetter): AuthActions {
           state.isLoading = false;
           state.error = toError(err).message;
         });
-        captureException(toError(err), { tags: { feature: "auth-register" } });
+        captureException(toError(err), { tags: { feature: 'auth-register' } });
         return false;
       }
     },
     logout: async () => {
       const { error: signOutError } = await signOut();
       if (signOutError) {
-        debug.error("[AuthStore] Sign out failed:", signOutError);
-        captureException(signOutError, { tags: { feature: "auth-logout" } });
+        debug.error('[AuthStore] Sign out failed:', signOutError);
+        captureException(signOutError, { tags: { feature: 'auth-logout' } });
         return;
       }
       const secureStorage = getSecureStorage();

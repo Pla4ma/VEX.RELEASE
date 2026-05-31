@@ -1,9 +1,9 @@
-import React from "react";
+import React from 'react';
 import Animated, {
   useAnimatedStyle,
   type SharedValue,
-} from "react-native-reanimated";
-import { PERFECT_PARTICLE_COUNT } from "../utils/active-session";
+} from 'react-native-reanimated';
+import { PERFECT_PARTICLE_COUNT } from '../utils/active-session';
 
 export const PerfectFocusBurstParticle: React.FC<{
   color: string;
@@ -22,7 +22,7 @@ export const PerfectFocusBurstParticle: React.FC<{
   return (
     <Animated.View
       style={[
-        { position: "absolute", width: 10, height: 10, borderRadius: 999 },
+        { position: 'absolute', width: 10, height: 10, borderRadius: 999 },
         { backgroundColor: color },
         style,
       ]}

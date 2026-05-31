@@ -1,7 +1,7 @@
-import type { AddXpOperationResult } from "./types";
-import { getMMKVStorageAdapter } from "../../persistence/MMKVStorageAdapter";
+import type { AddXpOperationResult } from './types';
+import { getMMKVStorageAdapter } from '../../persistence/MMKVStorageAdapter';
 
-const DEDUP_MMKV_KEY = "prog:dedup:keys";
+const DEDUP_MMKV_KEY = 'prog:dedup:keys';
 const MAX_DEDUP_ENTRIES = 500;
 const DEDUP_TTL_MS = 24 * 60 * 60 * 1000;
 
@@ -15,7 +15,7 @@ const mmkv = getMMKVStorageAdapter();
 async function loadPersistedKeys(): Promise<Map<string, number>> {
   try {
     const raw = await mmkv.getItem(DEDUP_MMKV_KEY);
-    if (!raw) return new Map();
+    if (!raw) {return new Map();}
     const parsed = JSON.parse(raw) as DedupEntry[];
     const cutoff = Date.now() - DEDUP_TTL_MS;
     const valid = parsed.filter((e) => e.ts > cutoff);
@@ -34,7 +34,7 @@ let processedOperations = new Map<string, number>();
 let loadedPromise: Promise<void> | null = null;
 
 function ensureLoaded(): void {
-  if (loadedPromise) return;
+  if (loadedPromise) {return;}
   loadedPromise = loadPersistedKeys().then((loaded) => {
     processedOperations = loaded;
   });

@@ -1,5 +1,5 @@
-import type { SessionConfig, SessionState, SessionSummary } from "../types";
-import type { SessionService } from "../SessionService";
+import type { SessionConfig, SessionState, SessionSummary } from '../types';
+import type { SessionService } from '../SessionService';
 
 export interface SessionActions {
   createSession: (config: SessionConfig) => Promise<SessionState>;
@@ -11,11 +11,11 @@ export interface SessionActions {
   backgroundSession: () => Promise<void>;
   foregroundSession: () => Promise<void>;
   attemptRecovery: (
-    type: "USER_RESUME" | "STREAK_SAVE" | "PARTIAL_CREDIT",
+    type: 'USER_RESUME' | 'STREAK_SAVE' | 'PARTIAL_CREDIT',
   ) => Promise<boolean>;
   applyStudyQuizBonus: (correctAnswers: number) => void;
   getAntiCheatScore: () => number;
-  getAntiCheatLabel: () => "Elite" | "Good" | "Okay" | "Distracted";
+  getAntiCheatLabel: () => 'Elite' | 'Good' | 'Okay' | 'Distracted';
 }
 
 export function createSessionActions(service: SessionService): SessionActions {
@@ -45,7 +45,7 @@ export function createSessionActions(service: SessionService): SessionActions {
       await service.foregroundSession();
     },
     attemptRecovery: async (
-      type: "USER_RESUME" | "STREAK_SAVE" | "PARTIAL_CREDIT",
+      type: 'USER_RESUME' | 'STREAK_SAVE' | 'PARTIAL_CREDIT',
     ) => {
       return service.attemptRecovery(type);
     },

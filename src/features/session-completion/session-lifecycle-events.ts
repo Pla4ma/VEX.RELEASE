@@ -1,14 +1,14 @@
-import type { BaseSessionCompletionEvent } from "./base-event-types";
+import type { BaseSessionCompletionEvent } from './base-event-types';
 
 export interface SessionCompletedEvent extends BaseSessionCompletionEvent {
-  type: "session_completed";
+  type: 'session_completed';
   data: {
     completionType:
-      | "natural"
-      | "forced"
-      | "abandoned"
-      | "timeout"
-      | "achievement";
+      | 'natural'
+      | 'forced'
+      | 'abandoned'
+      | 'timeout'
+      | 'achievement';
     completionTime: Date;
     duration: number;
     objectives: {
@@ -36,7 +36,7 @@ export interface SessionCompletedEvent extends BaseSessionCompletionEvent {
 }
 
 export interface SessionAbortedEvent extends BaseSessionCompletionEvent {
-  type: "session_aborted";
+  type: 'session_aborted';
   data: {
     abortTime: Date;
     duration: number;
@@ -47,18 +47,18 @@ export interface SessionAbortedEvent extends BaseSessionCompletionEvent {
       currentPhase: string;
     };
     abortReason:
-      | "user_choice"
-      | "technical_error"
-      | "timeout"
-      | "emergency"
-      | "system_intervention";
+      | 'user_choice'
+      | 'technical_error'
+      | 'timeout'
+      | 'emergency'
+      | 'system_intervention';
     abortContext: { trigger: string; userState: string; systemState: string };
     recovery: { resumable: boolean; dataPreserved: boolean; penalty: unknown };
   };
 }
 
 export interface SessionTimeoutEvent extends BaseSessionCompletionEvent {
-  type: "session_timeout";
+  type: 'session_timeout';
   data: {
     timeoutTime: Date;
     duration: number;
@@ -68,7 +68,7 @@ export interface SessionTimeoutEvent extends BaseSessionCompletionEvent {
       objectivesCompleted: number;
       totalObjectives: number;
     };
-    timeoutType: "soft" | "hard" | "grace_period";
+    timeoutType: 'soft' | 'hard' | 'grace_period';
     consequences: {
       scorePenalty: number;
       rewardReduction: number;

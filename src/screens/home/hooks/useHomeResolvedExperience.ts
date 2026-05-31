@@ -1,33 +1,33 @@
-import { useMemo } from "react";
-import { useOnboardingStore } from "../../../features/onboarding/store";
+import { useMemo } from 'react';
+import { useOnboardingStore } from '../../../features/onboarding/store';
 import {
   useResolvedVexExperienceRuntime,
   type VexExperienceRuntimeInput,
-} from "../../../features/personalization";
-import { useFirstWeekExperience } from "../../../features/personalization/useFirstWeekExperience";
+} from '../../../features/personalization';
+import { useFirstWeekExperience } from '../../../features/personalization/useFirstWeekExperience';
 import {
   recordBehaviorSignal,
-} from "../../../features/personalization/behavior-signal-store";
-import type { BehaviorStats } from "../../../features/personalization/schemas";
-import type { HomeController } from "./home-controller-types";
-import { useHomeLaneProfile } from "./useHomeLaneProfile";
+} from '../../../features/personalization/behavior-signal-store';
+import type { BehaviorStats } from '../../../features/personalization/schemas';
+import type { HomeController } from './home-controller-types';
+import { useHomeLaneProfile } from './useHomeLaneProfile';
 import type {
   ActiveBossData,
   ActiveStudyPlanData,
   HomeFeatureAvailability,
   HomeResolvedExperience,
   LegacySessionData,
-} from "./home-resolved-experience-types";
+} from './home-resolved-experience-types';
 import {
   normalizeMotivationStyle,
   resolvePrimaryGoal,
   computeDaysSinceTimestamp,
-} from "./home-experience-utils";
+} from './home-experience-utils';
 import {
   resolveGamificationIntensity,
   resolveUserStage,
-} from "./useHomeExperienceTypes";
-import { useHomeBehaviorStats } from "./useHomeBehaviorStats";
+} from './useHomeExperienceTypes';
+import { useHomeBehaviorStats } from './useHomeBehaviorStats';
 
 export { recordBehaviorSignal };
 
@@ -55,7 +55,7 @@ export function useHomeResolvedExperience(
   const daysSinceOnboarding =
     onboarded && startedAt != null
       ? computeDaysSinceTimestamp(
-          typeof startedAt === "number" ? startedAt : Date.now(),
+          typeof startedAt === 'number' ? startedAt : Date.now(),
         )
       : 0;
   const latestSession = controller.latestSession as LegacySessionData | null;
@@ -65,10 +65,10 @@ export function useHomeResolvedExperience(
 
   const sessionHistory = controller.historyQuery.history ?? [];
   const completedSessions = sessionHistory.filter(
-    (s) => s.status === "COMPLETED",
+    (s) => s.status === 'COMPLETED',
   );
   const abandonedSessions = sessionHistory.filter(
-    (s) => s.status === "ABANDONED",
+    (s) => s.status === 'ABANDONED',
   );
 
   const featureAvailability: HomeFeatureAvailability = {
@@ -106,12 +106,12 @@ export function useHomeResolvedExperience(
     daysSinceOnboarding,
     daysSinceLastSession,
     motivationStyle: motivationStyle as
-      | "calm"
-      | "friendly"
-      | "coach_led"
-      | "study_focused"
-      | "game_like"
-      | "intense"
+      | 'calm'
+      | 'friendly'
+      | 'coach_led'
+      | 'study_focused'
+      | 'game_like'
+      | 'intense'
       | undefined,
     primaryGoal,
     bossEngagement: behaviorStats.bossChallengeEngagement,

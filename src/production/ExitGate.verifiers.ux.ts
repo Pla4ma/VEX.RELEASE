@@ -2,19 +2,19 @@
  * Verifiers: Accessibility & Performance.
  */
 
-import { performanceGate } from "../performance/PerformanceGate";
-import type { AccessibilityReport, PerformanceReport } from "./ExitGate.types";
-import { getErrorMessage, computeStatusAndScore } from "./ExitGate.verifier-utils";
+import { performanceGate } from '../performance/PerformanceGate';
+import type { AccessibilityReport, PerformanceReport } from './ExitGate.types';
+import { getErrorMessage, computeStatusAndScore } from './ExitGate.verifier-utils';
 
 export async function verifyAccessibility(): Promise<{
-  status: "pass" | "fail" | "warning";
+  status: 'pass' | 'fail' | 'warning';
   score: number;
   report: AccessibilityReport;
   issues: string[];
 }> {
   try {
     const report: AccessibilityReport = {
-      wcagComplianceLevel: "AA",
+      wcagComplianceLevel: 'AA',
       screenReaderSupport: 95,
       keyboardNavigationSupport: 98,
       colorContrastIssues: 0,
@@ -25,23 +25,23 @@ export async function verifyAccessibility(): Promise<{
       timestamp: Date.now(),
     };
     const issues: string[] = [];
-    if (report.wcagComplianceLevel !== "AA") {
-      issues.push("App does not meet WCAG 2.1 AA compliance");
+    if (report.wcagComplianceLevel !== 'AA') {
+      issues.push('App does not meet WCAG 2.1 AA compliance');
     }
     if (report.screenReaderSupport < 90) {
-      issues.push("Screen reader support below 90%");
+      issues.push('Screen reader support below 90%');
     }
     if (report.keyboardNavigationSupport < 95) {
-      issues.push("Keyboard navigation support below 95%");
+      issues.push('Keyboard navigation support below 95%');
     }
     if (report.colorContrastIssues > 5) {
-      issues.push("More than 5 color contrast issues found");
+      issues.push('More than 5 color contrast issues found');
     }
     const { status, score } = computeStatusAndScore(issues, 3, 1);
     return { status, score, report, issues };
   } catch (error) {
     const fallback: AccessibilityReport = {
-      wcagComplianceLevel: "A",
+      wcagComplianceLevel: 'A',
       screenReaderSupport: 0,
       keyboardNavigationSupport: 0,
       colorContrastIssues: 0,
@@ -52,7 +52,7 @@ export async function verifyAccessibility(): Promise<{
       timestamp: Date.now(),
     };
     return {
-      status: "fail",
+      status: 'fail',
       score: 0,
       report: fallback,
       issues: [`Accessibility verification failed: ${getErrorMessage(error)}`],
@@ -61,7 +61,7 @@ export async function verifyAccessibility(): Promise<{
 }
 
 export async function verifyPerformance(): Promise<{
-  status: "pass" | "fail" | "warning";
+  status: 'pass' | 'fail' | 'warning';
   score: number;
   report: PerformanceReport;
   issues: string[];
@@ -83,16 +83,16 @@ export async function verifyPerformance(): Promise<{
     };
     const issues: string[] = [];
     if (report.metrics.averageFPS < 55) {
-      issues.push("Average FPS below 55");
+      issues.push('Average FPS below 55');
     }
     if (report.metrics.memoryUsage > 150) {
-      issues.push("Memory usage exceeds 150MB");
+      issues.push('Memory usage exceeds 150MB');
     }
     if (report.metrics.networkLatency > 1000) {
-      issues.push("Network latency exceeds 1 second");
+      issues.push('Network latency exceeds 1 second');
     }
-    const status: "pass" | "fail" | "warning" =
-      issues.length === 0 ? "pass" : report.score < 70 ? "fail" : "warning";
+    const status: 'pass' | 'fail' | 'warning' =
+      issues.length === 0 ? 'pass' : report.score < 70 ? 'fail' : 'warning';
     return { status, score: report.score, report, issues };
   } catch (error) {
     const fallback: PerformanceReport = {
@@ -109,7 +109,7 @@ export async function verifyPerformance(): Promise<{
       timestamp: Date.now(),
     };
     return {
-      status: "fail",
+      status: 'fail',
       score: 0,
       report: fallback,
       issues: [`Performance verification failed: ${getErrorMessage(error)}`],

@@ -1,11 +1,11 @@
-import React from "react";
-import { View } from "react-native";
-import type { AppearanceSettings } from "../types";
-import { ToggleSetting } from "./ToggleSetting";
-import { SettingItem } from "./SettingItem";
-import { SliderSetting } from "./SliderSetting";
-import { createSheet } from "@/shared/ui/create-sheet";
-import { launchColors } from "@theme/tokens/launch-colors";
+import React from 'react';
+import { View } from 'react-native';
+import type { AppearanceSettings } from '../types';
+import { ToggleSetting } from './ToggleSetting';
+import { SettingItem } from './SettingItem';
+import { SliderSetting } from './SliderSetting';
+import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
 
 interface SettingsAppearanceSectionProps {
   appearance: AppearanceSettings | undefined;
@@ -18,7 +18,7 @@ export function SettingsAppearanceSection({
     <View style={styles.settingsGroup}>
       <SettingItem
         label="Theme"
-        value={appearance?.theme ?? "system"}
+        value={appearance?.theme ?? 'system'}
         onPress={() => {}}
       />
       <SettingItem

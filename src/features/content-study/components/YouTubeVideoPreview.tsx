@@ -1,14 +1,14 @@
-import React from "react";
-import { View, Image, ActivityIndicator } from "react-native";
+import React from 'react';
+import { View, Image, ActivityIndicator } from 'react-native';
 
-import { Text } from "../../../components/primitives/Text";
-import { Button } from "../../../components/primitives/Button";
-import { useTheme } from "../../../theme";
-import { Icon } from "../../../icons";
-import type { YouTubeInputProps } from "../types";
-import { styles, formatDuration } from "./YouTubeInputStyles";
+import { Text } from '../../../components/primitives/Text';
+import { Button } from '../../../components/primitives/Button';
+import { useTheme } from '../../../theme';
+import { Icon } from '../../../icons';
+import type { YouTubeInputProps } from '../types';
+import { styles, formatDuration } from './YouTubeInputStyles';
 
-type VideoInfo = NonNullable<YouTubeInputProps["videoInfo"]>;
+type VideoInfo = NonNullable<YouTubeInputProps['videoInfo']>;
 
 interface YouTubeVideoPreviewProps {
   videoInfo: VideoInfo | null | undefined;
@@ -63,7 +63,7 @@ export function YouTubeVideoPreview({
               ]}
               numberOfLines={2}
             >
-              {videoInfo.title || "Video title unavailable"}
+              {videoInfo.title || 'Video title unavailable'}
             </Text>
             {videoInfo.channelName && (
               <Text

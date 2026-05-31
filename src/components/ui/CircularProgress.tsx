@@ -1,13 +1,13 @@
-import React, { useEffect } from "react";
-import { View } from "react-native";
+import React, { useEffect } from 'react';
+import { View } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withTiming,
-} from "react-native-reanimated";
+} from 'react-native-reanimated';
 
-import { Text } from "../primitives";
-import { useTheme } from "../../theme";
+import { Text } from '../primitives';
+import { useTheme } from '../../theme';
 
 interface CircularProgressProps {
   progress: number;
@@ -49,28 +49,28 @@ export const CircularProgress: React.FC<CircularProgressProps> = ({
 
   return (
     <View style={{ height: size, width: size }}>
-      <Animated.View style={[{ position: "absolute" }, rotationStyle]}>
+      <Animated.View style={[{ position: 'absolute' }, rotationStyle]}>
         <View
           style={{
             borderColor: bgCircleColor,
             borderRadius: size / 2,
             borderWidth: strokeWidth,
             height: size,
-            position: "absolute",
+            position: 'absolute',
             width: size,
           }}
         />
         <View
           style={{
-            borderBottomColor: "transparent",
+            borderBottomColor: 'transparent',
             borderColor: circleColor,
-            borderLeftColor: "transparent",
+            borderLeftColor: 'transparent',
             borderRadius: size / 2,
             borderRightColor: circleColor,
             borderTopColor: circleColor,
             borderWidth: strokeWidth,
             height: size,
-            transform: [{ rotate: "-45deg" }],
+            transform: [{ rotate: '-45deg' }],
             width: size,
           }}
         />
@@ -78,11 +78,11 @@ export const CircularProgress: React.FC<CircularProgressProps> = ({
       {showPercentage ? (
         <View
           style={{
-            alignItems: "center",
+            alignItems: 'center',
             bottom: 0,
-            justifyContent: "center",
+            justifyContent: 'center',
             left: 0,
-            position: "absolute",
+            position: 'absolute',
             right: 0,
             top: 0,
           }}

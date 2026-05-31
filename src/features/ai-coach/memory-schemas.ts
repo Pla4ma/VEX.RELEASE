@@ -1,21 +1,21 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const MemoryTypeSchema = z.enum([
-  "FIRST_S_GRADE",
-  "LONGEST_SESSION",
-  "BEST_STREAK",
-  "FIRST_BOSS_DEFEATED",
-  "FIRST_RIVAL_WIN",
-  "LEVEL_UP",
-  "STREAK_MILESTONE",
-  "PERFECT_SESSION",
-  "ONBOARDING_GOAL",
-  "SESSION_COUNT_MILESTONE",
-  "STUDY_PATTERN",
-  "PREFERRED_TECHNIQUE",
-  "FAILURE_MODE",
-  "OPTIMAL_FOCUS_TIME",
-  "DOCUMENT_MILESTONE",
+  'FIRST_S_GRADE',
+  'LONGEST_SESSION',
+  'BEST_STREAK',
+  'FIRST_BOSS_DEFEATED',
+  'FIRST_RIVAL_WIN',
+  'LEVEL_UP',
+  'STREAK_MILESTONE',
+  'PERFECT_SESSION',
+  'ONBOARDING_GOAL',
+  'SESSION_COUNT_MILESTONE',
+  'STUDY_PATTERN',
+  'PREFERRED_TECHNIQUE',
+  'FAILURE_MODE',
+  'OPTIMAL_FOCUS_TIME',
+  'DOCUMENT_MILESTONE',
 ]);
 
 export const CoachMemoryRowSchema = z.object({
@@ -63,7 +63,7 @@ export const RecommendationEvidenceSchema = z
     evidenceSummary: z.string().min(1).optional(),
     confidence: z.number().min(0).max(1).optional(),
     fallbackReason: z
-      .enum(["cold_start", "insufficient_data", "user_override"])
+      .enum(['cold_start', 'insufficient_data', 'user_override'])
       .optional(),
   })
   .strict();

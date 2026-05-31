@@ -6,11 +6,11 @@
  */
 
 export type ProgressionEventType =
-  | "progression:xp_earned"
-  | "progression:level_up"
-  | "progression:economy_activity"
-  | "progression:achievement_unlocked"
-  | "progression:milestone_reached";
+  | 'progression:xp_earned'
+  | 'progression:level_up'
+  | 'progression:economy_activity'
+  | 'progression:achievement_unlocked'
+  | 'progression:milestone_reached';
 
 export interface ProgressionXpEarnedEvent {
   userId: string;
@@ -41,7 +41,7 @@ export interface ProgressionAchievementUnlockedEvent {
   userId: string;
   achievementId: string;
   achievementType: string;
-  rarity: "common" | "rare" | "epic" | "legendary";
+  rarity: 'common' | 'rare' | 'epic' | 'legendary';
   xpBonus: number;
   unlockedAt: number;
 }

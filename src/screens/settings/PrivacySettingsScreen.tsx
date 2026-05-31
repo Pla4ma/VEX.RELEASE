@@ -1,19 +1,19 @@
-import { withScreenErrorBoundary } from "../../shared/ui/components/ScreenErrorBoundary";
-import React, { useCallback, useState } from "react";
-import { Alert, Pressable, ScrollView } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import type { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useTheme } from "../../theme";
-import { Box, Card, Text } from "../../components/primitives";
-import type { SettingsStackParams } from "../../navigation";
-import { useDeleteAccount } from "../../features/account-deletion/hooks";
-import { useAuthStore, useUIStore } from "../../store/index";
-import { usePaywall } from "../../shared/monetization";
-import { PrivacyToggleRow } from "./PrivacyToggleRow";
-import { TOGGLE_ROWS } from "./privacy-toggle-data";
-import type { ToggleKey } from "./privacy-toggle-data";
+import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+import React, { useCallback, useState } from 'react';
+import { Alert, Pressable, ScrollView } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useTheme } from '../../theme';
+import { Box, Card, Text } from '../../components/primitives';
+import type { SettingsStackParams } from '../../navigation';
+import { useDeleteAccount } from '../../features/account-deletion/hooks';
+import { useAuthStore, useUIStore } from '../../store/index';
+import { usePaywall } from '../../shared/monetization';
+import { PrivacyToggleRow } from './PrivacyToggleRow';
+import { TOGGLE_ROWS } from './privacy-toggle-data';
+import type { ToggleKey } from './privacy-toggle-data';
 
-type Props = NativeStackScreenProps<SettingsStackParams, "PrivacySettings">;
+type Props = NativeStackScreenProps<SettingsStackParams, 'PrivacySettings'>;
 
 export const PrivacySettingsScreen: React.FC<Props> = () => {
   const { theme } = useTheme();
@@ -38,13 +38,13 @@ export const PrivacySettingsScreen: React.FC<Props> = () => {
       return;
     }
     Alert.alert(
-      "Delete account permanently?",
-      "This removes your VEX account, signs out purchases, and clears local private data from this device.",
+      'Delete account permanently?',
+      'This removes your VEX account, signs out purchases, and clears local private data from this device.',
       [
-        { text: "Cancel", style: "cancel" },
+        { text: 'Cancel', style: 'cancel' },
         {
-          text: "Delete Forever",
-          style: "destructive",
+          text: 'Delete Forever',
+          style: 'destructive',
           onPress: () => {
             void deleteAccountMutation
               .deleteAccountAsync({ userId: user.id })
@@ -62,17 +62,17 @@ export const PrivacySettingsScreen: React.FC<Props> = () => {
       .then((result) => {
         showToast({
           message: result.success
-            ? "Purchases restored."
-            : "No active purchases were found to restore.",
-          type: result.success ? "success" : "warning",
+            ? 'Purchases restored.'
+            : 'No active purchases were found to restore.',
+          type: result.success ? 'success' : 'warning',
           duration: 5000,
         });
       })
       .catch(() => {
         showToast({
           message:
-            "Restore failed. Try again from the App Store account that purchased VEX.",
-          type: "error",
+            'Restore failed. Try again from the App Store account that purchased VEX.',
+          type: 'error',
           duration: 5000,
         });
       });
@@ -142,13 +142,13 @@ export const PrivacySettingsScreen: React.FC<Props> = () => {
           accessibilityRole="button"
           onPress={restorePurchases}
           style={{
-            alignItems: "center",
+            alignItems: 'center',
             borderColor: theme.colors.border.DEFAULT,
             borderRadius: theme.borderRadius.lg,
             borderWidth: 1,
             marginBottom: theme.spacing[3],
             minHeight: 56,
-            justifyContent: "center",
+            justifyContent: 'center',
           }}
         >
           <Text variant="button" color="text.primary">
@@ -163,11 +163,11 @@ export const PrivacySettingsScreen: React.FC<Props> = () => {
           disabled={deleteAccountMutation.isPending || !user?.id}
           onPress={confirmDelete}
           style={{
-            alignItems: "center",
+            alignItems: 'center',
             backgroundColor: theme.colors.error.DEFAULT,
             borderRadius: theme.borderRadius.lg,
             minHeight: 56,
-            justifyContent: "center",
+            justifyContent: 'center',
             opacity: deleteAccountMutation.isPending
               ? theme.opacity[50]
               : theme.opacity[100],
@@ -175,8 +175,8 @@ export const PrivacySettingsScreen: React.FC<Props> = () => {
         >
           <Text variant="button" color="text.inverse">
             {deleteAccountMutation.isPending
-              ? "Deleting Account..."
-              : "Delete Account"}
+              ? 'Deleting Account...'
+              : 'Delete Account'}
           </Text>
         </Pressable>
       </ScrollView>
@@ -186,5 +186,5 @@ export const PrivacySettingsScreen: React.FC<Props> = () => {
 
 export default withScreenErrorBoundary(
   PrivacySettingsScreen,
-  "PrivacySettings",
+  'PrivacySettings',
 );

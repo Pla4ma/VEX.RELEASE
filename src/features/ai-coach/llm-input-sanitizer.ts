@@ -28,7 +28,7 @@ const MAX_CONTEXT_STRING_LENGTH = 500;
 export function sanitizeForLLM(value: string): string {
   let sanitized = value.slice(0, MAX_CONTEXT_STRING_LENGTH);
   for (const pattern of INJECTION_PATTERNS) {
-    sanitized = sanitized.replace(pattern, "[filtered]");
+    sanitized = sanitized.replace(pattern, '[filtered]');
   }
   return sanitized;
 }
@@ -42,17 +42,17 @@ export function sanitizeLLMContext(
 ): Record<string, unknown> {
   const sanitized: Record<string, unknown> = {};
   for (const [key, value] of Object.entries(context)) {
-    if (typeof value === "string") {
+    if (typeof value === 'string') {
       sanitized[key] = sanitizeForLLM(value);
     } else if (Array.isArray(value)) {
       sanitized[key] = value.map((item) =>
-        typeof item === "string"
+        typeof item === 'string'
           ? sanitizeForLLM(item)
-          : typeof item === "object" && item !== null
+          : typeof item === 'object' && item !== null
             ? sanitizeLLMContext(item as Record<string, unknown>)
             : item,
       );
-    } else if (typeof value === "object" && value !== null) {
+    } else if (typeof value === 'object' && value !== null) {
       sanitized[key] = sanitizeLLMContext(value as Record<string, unknown>);
     } else {
       sanitized[key] = value;

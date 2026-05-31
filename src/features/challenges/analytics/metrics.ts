@@ -4,7 +4,7 @@
  * Metrics calculation functions for challenge performance analysis.
  */
 
-import type { Challenge, UserChallenge } from "../types";
+import type { Challenge, UserChallenge } from '../types';
 
 /**
  * Calculate challenge engagement metrics
@@ -22,17 +22,17 @@ export function calculateChallengeMetrics(
 } {
   const totalIssued = userChallenges.length;
   const completed = userChallenges.filter(
-    (uc) => uc.status === "COMPLETED" || uc.status === "CLAIMED",
+    (uc) => uc.status === 'COMPLETED' || uc.status === 'CLAIMED',
   ).length;
-  const claimed = userChallenges.filter((uc) => uc.status === "CLAIMED").length;
-  const expired = userChallenges.filter((uc) => uc.status === "EXPIRED").length;
+  const claimed = userChallenges.filter((uc) => uc.status === 'CLAIMED').length;
+  const expired = userChallenges.filter((uc) => uc.status === 'EXPIRED').length;
   const rerolled = userChallenges.filter((uc) => uc.rerollCount > 0).length;
 
   // Calculate average time to complete
   const completedWithTime = userChallenges.filter(
     (uc) =>
-      uc.status === "COMPLETED" ||
-      (uc.status === "CLAIMED" && uc.completedAt && uc.assignedAt),
+      uc.status === 'COMPLETED' ||
+      (uc.status === 'CLAIMED' && uc.completedAt && uc.assignedAt),
   );
 
   const averageTimeToComplete =
@@ -71,12 +71,12 @@ export function calculateDifficultyMetrics(
     });
 
     const completed = filtered.filter(
-      (uc) => uc.status === "COMPLETED" || uc.status === "CLAIMED",
+      (uc) => uc.status === 'COMPLETED' || uc.status === 'CLAIMED',
     ).length;
 
     const completedWithTime = filtered.filter(
       (uc) =>
-        (uc.status === "COMPLETED" || uc.status === "CLAIMED") &&
+        (uc.status === 'COMPLETED' || uc.status === 'CLAIMED') &&
         uc.completedAt &&
         uc.assignedAt,
     );
@@ -96,8 +96,8 @@ export function calculateDifficultyMetrics(
   };
 
   return {
-    easy: byDifficulty("EASY"),
-    medium: byDifficulty("MEDIUM"),
-    hard: byDifficulty("HARD"),
+    easy: byDifficulty('EASY'),
+    medium: byDifficulty('MEDIUM'),
+    hard: byDifficulty('HARD'),
   };
 }

@@ -1,7 +1,7 @@
 import type {
   BenchmarkComparison,
   BenchmarkType,
-} from "./completion-benchmark-set";
+} from './completion-benchmark-set';
 
 export interface ShareableTemplate {
   id: string;
@@ -13,16 +13,16 @@ export interface ShareableTemplate {
 }
 
 export type TemplateLayout =
-  | "centered"
-  | "left_aligned"
-  | "right_aligned"
-  | "split"
-  | "card"
-  | "banner"
-  | "story";
+  | 'centered'
+  | 'left_aligned'
+  | 'right_aligned'
+  | 'split'
+  | 'card'
+  | 'banner'
+  | 'story';
 
 export interface TemplateStyle {
-  theme: "light" | "dark" | "colorful" | "minimal" | "bold";
+  theme: 'light' | 'dark' | 'colorful' | 'minimal' | 'bold';
   colors: ColorScheme;
   fonts: FontScheme;
   animations: AnimationScheme;
@@ -44,7 +44,7 @@ export interface FontScheme {
 
 export interface AnimationScheme {
   enabled: boolean;
-  type: "fade" | "slide" | "bounce" | "zoom" | "none";
+  type: 'fade' | 'slide' | 'bounce' | 'zoom' | 'none';
   duration: number; // in seconds
 }
 
@@ -65,7 +65,7 @@ export interface TemplateBranding {
 
 export interface ShareableCustomization {
   field: string;
-  type: "text" | "color" | "image" | "layout";
+  type: 'text' | 'color' | 'image' | 'layout';
   options: CustomizationOption[];
   selected?: unknown;
 }
@@ -112,7 +112,7 @@ export interface TrendData {
   date: Date;
   value: number;
   change: number;
-  significance: "low" | "medium" | "high";
+  significance: 'low' | 'medium' | 'high';
   prediction?: number;
 }
 
@@ -120,26 +120,26 @@ export interface CompletionInsight {
   type: InsightType;
   title: string;
   description: string;
-  significance: "low" | "medium" | "high";
+  significance: 'low' | 'medium' | 'high';
   confidence: number;
   actionable: boolean;
-  priority: "low" | "medium" | "high";
+  priority: 'low' | 'medium' | 'high';
   recommendations: string[];
   evidence: EvidenceData[];
 }
 
 export type InsightType =
-  | "strength"
-  | "weakness"
-  | "opportunity"
-  | "threat"
-  | "pattern"
-  | "anomaly"
-  | "correlation"
-  | "prediction";
+  | 'strength'
+  | 'weakness'
+  | 'opportunity'
+  | 'threat'
+  | 'pattern'
+  | 'anomaly'
+  | 'correlation'
+  | 'prediction';
 
 export interface EvidenceData {
-  type: "metric" | "event" | "behavior" | "feedback";
+  type: 'metric' | 'event' | 'behavior' | 'feedback';
   value: unknown;
   timestamp: Date;
   context: string;
@@ -155,12 +155,12 @@ export interface CompletionPrediction {
 }
 
 export type PredictionType =
-  | "next_session_score"
-  | "churn_probability"
-  | "achievement_timeline"
-  | "skill_progression"
-  | "engagement_level"
-  | "retention_probability";
+  | 'next_session_score'
+  | 'churn_probability'
+  | 'achievement_timeline'
+  | 'skill_progression'
+  | 'engagement_level'
+  | 'retention_probability';
 
 export interface PredictionFactor {
   factor: string;
@@ -172,7 +172,7 @@ export interface PredictionFactor {
 export interface PredictionAction {
   action: string;
   expectedImpact: number;
-  effort: "low" | "medium" | "high";
+  effort: 'low' | 'medium' | 'high';
   timeline: string;
   resources: string[];
 }

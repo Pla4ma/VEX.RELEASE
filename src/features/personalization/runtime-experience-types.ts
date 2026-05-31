@@ -1,6 +1,6 @@
-import type { VexExperience } from "./schemas";
-import type { FirstWeekExperience } from "./first-week-schemas";
-import type { HomeSurfaceMap } from "../home-experience/surface-decision-schemas";
+import type { VexExperience } from './schemas';
+import type { FirstWeekExperience } from './first-week-schemas';
+import type { HomeSurfaceMap } from '../home-experience/surface-decision-schemas';
 
 export interface VexRuntimeInput {
   completedSessions: number;
@@ -8,7 +8,7 @@ export interface VexRuntimeInput {
   daysSinceLastSession: number | null;
   motivationStyle?: string;
   primaryGoal?: string;
-  bossEngagement: "none" | "low" | "medium" | "high";
+  bossEngagement: 'none' | 'low' | 'medium' | 'high';
   studyUsageRatio: number;
   coachInteractions: number;
   completionStreak: number;
@@ -40,7 +40,7 @@ export interface CompletionSequenceDetails {
 
 export interface PremiumMomentDetails {
   canShow: boolean;
-  triggerMoment: "none" | "soft_tease" | "weekly_value" | "session_value";
+  triggerMoment: 'none' | 'soft_tease' | 'weekly_value' | 'session_value';
   delayDays: number;
   requiresBillingReady: boolean;
 }

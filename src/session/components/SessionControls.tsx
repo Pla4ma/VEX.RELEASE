@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { View, Text, Pressable, Modal } from "react-native";
-import { styles } from "./session-controls.styles";
-import { sessionStart, sessionPause, sessionResume, buttonTap } from "../../utils/haptics";
+import React, { useState } from 'react';
+import { View, Text, Pressable, Modal } from 'react-native';
+import { styles } from './session-controls.styles';
+import { sessionStart, sessionPause, sessionResume, buttonTap } from '../../utils/haptics';
 
 interface SessionControlsProps {
   isActive: boolean;

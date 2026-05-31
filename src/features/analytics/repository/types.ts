@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export type AnalyticsBucket = {
   timestamp: number;
@@ -18,7 +18,7 @@ export const SessionHeatmapInputSchema = z.object({
 });
 
 export const HeatmapBucketSchema = z.object({
-  day: z.enum(["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]),
+  day: z.enum(['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']),
   hour: z.number().int().min(0).max(23),
   value: z.number().int().min(0),
 });
@@ -28,6 +28,6 @@ export const SessionHeatmapDataSchema = z.object({
   buckets: z.array(HeatmapBucketSchema).length(7 * 24),
 });
 
-export const HEATMAP_DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"] as const;
+export const HEATMAP_DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] as const;
 
 export type SessionHeatmapData = z.infer<typeof SessionHeatmapDataSchema>;

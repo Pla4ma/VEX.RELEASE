@@ -13,31 +13,31 @@ export type {
   PersonalBossBlock,
   BossVisibility,
   PersonalBossCompletionSignal,
-} from "./types";
-export { PersonalBossBlockSchema } from "./types";
+} from './types';
+export { PersonalBossBlockSchema } from './types';
 export {
   shouldShowBossPreview,
   isBossVisibleAtSurface,
   isCombatAllowed,
   getBossDisplayCopy,
-} from "./display-policy";
-export { bossRepository } from "./repository";
+} from './display-policy';
+export { bossRepository } from './repository';
 export {
   useActiveBoss,
   useBossEngagementSummary,
   useAvailableBosses,
-} from "./hooks";
+} from './hooks';
 export {
   getBossEngagementSignals,
   deriveBossEngagementLevel,
-} from "./boss-engagement-signals";
+} from './boss-engagement-signals';
 export type {
   BossEngagementSignal,
   BossEngagementLevel,
   BossEngagementInputs,
-} from "./boss-engagement-signals";
+} from './boss-engagement-signals';
 export {
   trackBossEvent,
   trackBossRouteOpened,
   trackBossCTAClicked,
-} from "./analytics";
+} from './analytics';

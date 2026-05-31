@@ -1,26 +1,26 @@
-import type { MessageCategory } from "./types";
-import type { CoachMemory } from "./memory-schemas";
-import { getRelevantMemories, canClaimStrongPattern } from "./CoachMemory";
+import type { MessageCategory } from './types';
+import type { CoachMemory } from './memory-schemas';
+import { getRelevantMemories, canClaimStrongPattern } from './CoachMemory';
 
-type Persona = "MENTOR" | "CHEERLEADER" | "DRILL_SERGEANT";
+type Persona = 'MENTOR' | 'CHEERLEADER' | 'DRILL_SERGEANT';
 
-function safeString(value: unknown, fallback: string = ""): string {
-  return typeof value === "string" ? value : fallback;
+function safeString(value: unknown, fallback: string = ''): string {
+  return typeof value === 'string' ? value : fallback;
 }
 
 function safeNumber(value: unknown, fallback: number = 0): number {
-  return typeof value === "number" ? value : fallback;
+  return typeof value === 'number' ? value : fallback;
 }
 
 const MENTOR_TEMPLATES: Partial<Record<string, string>> = {
   FIRST_S_GRADE:
     "You hit your first S grade {{daysSince}} days ago — since then, you've earned {{extraAchievements}}. You're improving faster than you realize.",
   LONGEST_SESSION:
-    "Remember when you completed that {{duration}}-minute session {{daysSince}} days ago? That was a breakthrough moment. You have that capacity within you.",
+    'Remember when you completed that {{duration}}-minute session {{daysSince}} days ago? That was a breakthrough moment. You have that capacity within you.',
   BEST_STREAK:
     "Your {{streakDays}}-day streak record still stands. You built that through consistency, not intensity. That's the path forward.",
   FIRST_BOSS_DEFEATED:
-    "Your first boss victory against {{bossName}} showed you what focused effort can accomplish. That same determination is available to you now.",
+    'Your first boss victory against {{bossName}} showed you what focused effort can accomplish. That same determination is available to you now.',
   ONBOARDING_GOAL:
     "When you started, you said you wanted to {{goal}}. Let's look at how you're doing — you've made more progress than you might think.",
 };
@@ -33,7 +33,7 @@ const CHEERLEADER_TEMPLATES: Partial<Record<string, string>> = {
   BEST_STREAK:
     "Your {{streakDays}}-day streak LEGEND is still alive! You built that through showing up every day! That's the champion spirit!",
   FIRST_BOSS_DEFEATED:
-    "Your first boss takedown of {{bossName}}?! That was AMAZING! You have that SAME POWER right now! Use it!",
+    'Your first boss takedown of {{bossName}}?! That was AMAZING! You have that SAME POWER right now! Use it!',
   ONBOARDING_GOAL:
     "You told me you wanted to {{goal}} — and LOOK AT YOU GO! You're making it happen! I'm so proud!",
 };
@@ -46,7 +46,7 @@ const DRILL_SERGEANT_TEMPLATES: Partial<Record<string, string>> = {
   BEST_STREAK:
     "{{streakDays}} days. That was your best. You had discipline then. Where is it now? Find it. Or admit you're weak.",
   FIRST_BOSS_DEFEATED:
-    "{{bossName}} went down because you had FOCUS. Now you make excuses. Enough. Get back to work.",
+    '{{bossName}} went down because you had FOCUS. Now you make excuses. Enough. Get back to work.',
   ONBOARDING_GOAL:
     "You said you'd {{goal}}. Words are easy. Actions are hard. Which are you choosing today?",
 };
@@ -69,7 +69,7 @@ function formatTemplate(
 export async function generateMemoryReferenceMessage(
   userId: string,
   category: MessageCategory,
-  persona: Persona = "MENTOR",
+  persona: Persona = 'MENTOR',
   sessionCount: number = 0,
 ): Promise<string | null> {
   if (!canClaimStrongPattern(sessionCount)) {
@@ -92,12 +92,12 @@ export async function generateMemoryReferenceMessage(
   }
 
   const extraAchievements =
-    memories.length > 1 ? "several more" : "another one";
+    memories.length > 1 ? 'several more' : 'another one';
   const metadata = primaryMemory.metadata;
   const duration = safeNumber(metadata.duration);
   const streakDays = safeNumber(metadata.streakDays);
-  const bossName = safeString(metadata.bossName, "Unknown Boss");
-  const goal = safeString(metadata.goal, "improve");
+  const bossName = safeString(metadata.bossName, 'Unknown Boss');
+  const goal = safeString(metadata.goal, 'improve');
 
   const message = formatTemplate(rawTemplate, {
     daysSince,

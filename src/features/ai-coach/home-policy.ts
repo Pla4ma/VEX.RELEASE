@@ -1,13 +1,13 @@
-import { validateCoachInput } from "./input-contract";
-import { buildInputContractForUser } from "./input-builders";
-import { generateMissionSuggestion } from "./mission-policy";
+import { validateCoachInput } from './input-contract';
+import { buildInputContractForUser } from './input-builders';
+import { generateMissionSuggestion } from './mission-policy';
 import {
   getPriorityEngineState,
   shouldCoachShowSuggestion,
-} from "./priority-policy";
-import { generateSessionRecommendation } from "./recommendation-policy";
-import { handleStreakRiskIntegration } from "./streak-policy";
-import type { CoachSuggestion } from "./suggestion-schemas";
+} from './priority-policy';
+import { generateSessionRecommendation } from './recommendation-policy';
+import { handleStreakRiskIntegration } from './streak-policy';
+import type { CoachSuggestion } from './suggestion-schemas';
 
 export async function getHomeCoachSuggestion(
   userId: string,
@@ -25,7 +25,7 @@ export async function getHomeCoachSuggestion(
     handleStreakRiskIntegration(userId, {
       currentStreak: validatedInput.streakState.currentStreak,
       hoursSinceLastSession: validatedInput.streakState.hoursSinceLastSession,
-      riskLevel: validatedInput.streakState.streakAtRisk ? "high" : "low",
+      riskLevel: validatedInput.streakState.streakAtRisk ? 'high' : 'low',
     }),
   ]);
 

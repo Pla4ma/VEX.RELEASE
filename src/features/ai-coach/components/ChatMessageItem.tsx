@@ -1,9 +1,9 @@
-import React from "react";
-import { View, Text, Pressable } from "react-native";
-import type { ChatMessage } from "./coach-chat-types";
-import { buttonTap } from "../../../utils/haptics";
-import { getPersonalityEmoji } from "./coach-helpers";
-import { styles } from "./CoachScreen.styles";
+import React from 'react';
+import { View, Text, Pressable } from 'react-native';
+import type { ChatMessage } from './coach-chat-types';
+import { buttonTap } from '../../../utils/haptics';
+import { getPersonalityEmoji } from './coach-helpers';
+import { styles } from './CoachScreen.styles';
 
 interface ChatMessageItemProps {
   message: ChatMessage;
@@ -16,8 +16,8 @@ export function ChatMessageItem({
   personaId,
   onActionPress,
 }: ChatMessageItemProps): JSX.Element {
-  const isCoach = message.type === "coach";
-  const isUser = message.type === "user";
+  const isCoach = message.type === 'coach';
+  const isUser = message.type === 'user';
 
   return (
     <View
@@ -68,7 +68,7 @@ export function ChatMessageItem({
               pressed && { opacity: 0.8 },
             ]}
             onPress={() => { buttonTap(); onActionPress(message); }}
-            accessibilityLabel={message.metadata?.actionLabel ?? "Coach action"}
+            accessibilityLabel={message.metadata?.actionLabel ?? 'Coach action'}
             accessibilityRole="button"
             accessibilityHint="Double tap to perform action"
           >

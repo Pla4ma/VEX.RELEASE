@@ -1,4 +1,4 @@
-import type { AntiCheatFlag } from "../types";
+import type { AntiCheatFlag } from '../types';
 
 export interface SessionValidationInput {
   endedAt?: number;
@@ -24,7 +24,7 @@ export interface DeviceChangeResult {
 }
 
 export interface ActionResult {
-  action: AntiCheatFlag["actionTaken"];
+  action: AntiCheatFlag['actionTaken'];
   scoreReduction: number;
   shouldInvalidate: boolean;
 }
@@ -34,11 +34,11 @@ export interface TickRecord {
   elapsed: number;
 }
 
-export type PurityLabel = "Elite" | "Good" | "Okay" | "Distracted";
-export type SeverityLevel = "CLEAN" | "WARNING" | "MODERATE" | "CRITICAL";
+export type PurityLabel = 'Elite' | 'Good' | 'Okay' | 'Distracted';
+export type SeverityLevel = 'CLEAN' | 'WARNING' | 'MODERATE' | 'CRITICAL';
 export type EngineStatus =
-  | "CLEAN"
-  | "WARNING"
-  | "FLAGGED"
-  | "FAILED"
-  | "INVALIDATED";
+  | 'CLEAN'
+  | 'WARNING'
+  | 'FLAGGED'
+  | 'FAILED'
+  | 'INVALIDATED';

@@ -1,4 +1,4 @@
-import { launchColors } from "@theme/tokens/launch-colors";
+import { launchColors } from '@theme/tokens/launch-colors';
 
 export interface Particle {
   id: number;
@@ -14,24 +14,24 @@ export const PROGRESS_MESSAGES: Record<
   { title: string; subtitle: string; emoji: string }
 > = {
   25: {
-    title: "25% Complete!",
-    subtitle: "Great start! Keep going!",
-    emoji: "🌟",
+    title: '25% Complete!',
+    subtitle: 'Great start! Keep going!',
+    emoji: '🌟',
   },
   50: {
-    title: "Halfway There!",
+    title: 'Halfway There!',
     subtitle: "You're doing amazing!",
-    emoji: "🔥",
+    emoji: '🔥',
   },
   75: {
-    title: "75% Done!",
-    subtitle: "Almost there! Push through!",
-    emoji: "⚡",
+    title: '75% Done!',
+    subtitle: 'Almost there! Push through!',
+    emoji: '⚡',
   },
   90: {
-    title: "Almost Done!",
-    subtitle: "Final stretch! You got this!",
-    emoji: "🏆",
+    title: 'Almost Done!',
+    subtitle: 'Final stretch! You got this!',
+    emoji: '🏆',
   },
 };
 
@@ -39,19 +39,19 @@ export const MINUTE_MESSAGES: Record<
   number,
   { title: string; subtitle: string; emoji: string }
 > = {
-  10: { title: "10 Minutes!", subtitle: "Focus power building!", emoji: "💪" },
-  20: { title: "20 Minutes!", subtitle: "Deep focus zone!", emoji: "🧠" },
+  10: { title: '10 Minutes!', subtitle: 'Focus power building!', emoji: '💪' },
+  20: { title: '20 Minutes!', subtitle: 'Deep focus zone!', emoji: '🧠' },
   30: {
-    title: "30 Minutes!",
-    subtitle: "Half hour of pure focus!",
-    emoji: "👑",
+    title: '30 Minutes!',
+    subtitle: 'Half hour of pure focus!',
+    emoji: '👑',
   },
   45: {
-    title: "45 Minutes!",
-    subtitle: "Legendary concentration!",
-    emoji: "💎",
+    title: '45 Minutes!',
+    subtitle: 'Legendary concentration!',
+    emoji: '💎',
   },
-  60: { title: "1 Hour!", subtitle: "You are unstoppable!", emoji: "🚀" },
+  60: { title: '1 Hour!', subtitle: 'You are unstoppable!', emoji: '🚀' },
 };
 
 export function generateParticles(count: number): Particle[] {
@@ -85,7 +85,7 @@ export function detectCheckpoint(
   elapsedMinutes: number,
   lastCheckpoint: number,
 ): {
-  type: "progress" | "minute";
+  type: 'progress' | 'minute';
   value: number;
   title: string;
   subtitle: string;
@@ -96,7 +96,7 @@ export function detectCheckpoint(
     if (progressPercent >= checkpoint && lastCheckpoint < checkpoint) {
       const message = PROGRESS_MESSAGES[checkpoint];
       if (message) {
-        return { type: "progress", value: checkpoint, ...message };
+        return { type: 'progress', value: checkpoint, ...message };
       }
     }
   }
@@ -105,7 +105,7 @@ export function detectCheckpoint(
     if (elapsedMinutes === checkpoint && lastCheckpoint < checkpoint + 100) {
       const message = MINUTE_MESSAGES[checkpoint];
       if (message) {
-        return { type: "minute", value: checkpoint, ...message };
+        return { type: 'minute', value: checkpoint, ...message };
       }
     }
   }

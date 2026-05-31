@@ -1,5 +1,5 @@
-import type { FocusScoreHistoryPoint } from "../types";
-import { launchColors } from "@theme/tokens/launch-colors";
+import type { FocusScoreHistoryPoint } from '../types';
+import { launchColors } from '@theme/tokens/launch-colors';
 
 export interface ChartPadding {
   top: number;
@@ -36,9 +36,9 @@ export function buildPathD(
     .map((point: FocusScoreHistoryPoint, i: number) => {
       const x = scaleX(i);
       const y = scaleY(point.score);
-      return `${i === 0 ? "M" : "L"} ${x} ${y}`;
+      return `${i === 0 ? 'M' : 'L'} ${x} ${y}`;
     })
-    .join(" ");
+    .join(' ');
 }
 
 export function buildAreaD(
@@ -52,12 +52,12 @@ export function buildAreaD(
 }
 
 export function getScoreColor(latestScore: number): string {
-  if (latestScore >= 800) return launchColors.hex_ffd700;
-  if (latestScore >= 740) return launchColors.hex_c0c0c0;
-  if (latestScore >= 670) return launchColors.hex_cd7f32;
-  if (latestScore >= 580) return launchColors.hex_4caf50;
-  if (latestScore >= 500) return launchColors.hex_8bc34a;
-  if (latestScore >= 420) return launchColors.hex_ffc107;
+  if (latestScore >= 800) {return launchColors.hex_ffd700;}
+  if (latestScore >= 740) {return launchColors.hex_c0c0c0;}
+  if (latestScore >= 670) {return launchColors.hex_cd7f32;}
+  if (latestScore >= 580) {return launchColors.hex_4caf50;}
+  if (latestScore >= 500) {return launchColors.hex_8bc34a;}
+  if (latestScore >= 420) {return launchColors.hex_ffc107;}
   return launchColors.hex_ff9800;
 }
 

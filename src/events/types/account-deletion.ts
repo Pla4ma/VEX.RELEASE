@@ -3,7 +3,7 @@
  */
 
 export interface AccountDeletionEventDefinitions {
-  "account-deletion:completed": {
+  'account-deletion:completed': {
     result: unknown;
     timestamp: number;
   };

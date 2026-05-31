@@ -4,9 +4,9 @@ import {
   validateSessionConfig,
   validateSessionSummary,
   validateTimerConfig,
-} from "../schemas";
+} from '../schemas';
 
-const VALID_SESSION_ID = "550e8400-e29b-41d4-a716-446655440000";
+const VALID_SESSION_ID = '550e8400-e29b-41d4-a716-446655440000';
 
 function createValidSummaryInput(): unknown {
   return {
@@ -26,21 +26,21 @@ function createValidSummaryInput(): unknown {
     penaltiesApplied: [],
     plannedDuration: 1_500,
     sessionId: VALID_SESSION_ID,
-    status: "COMPLETED",
+    status: 'COMPLETED',
     streakBonus: 25,
     streakDays: 7,
     streakIncreased: true,
     streakMaintained: true,
     timeBonus: 25,
-    userId: "user-1",
+    userId: 'user-1',
     vsAverage: 10,
     vsBest: 0,
     xpEarned: 120,
   };
 }
 
-describe("session validation schemas", () => {
-  it("applies safe defaults for completion summaries at app boundaries", () => {
+describe('session validation schemas', () => {
+  it('applies safe defaults for completion summaries at app boundaries', () => {
     const result = validateSessionSummary(createValidSummaryInput());
 
     expect(result.success).toBe(true);
@@ -53,11 +53,11 @@ describe("session validation schemas", () => {
     expect(result.data.userLevel).toBe(1);
   });
 
-  it("rejects corrupted completion summaries before rewards or streaks can consume them", () => {
+  it('rejects corrupted completion summaries before rewards or streaks can consume them', () => {
     const result = validateSessionSummary({
       ...createValidSummaryInput(),
       completionPercentage: 101,
-      sessionId: "not-a-session-id",
+      sessionId: 'not-a-session-id',
     });
 
     expect(result.success).toBe(false);
@@ -65,12 +65,12 @@ describe("session validation schemas", () => {
       return;
     }
 
-    expect(result.error.issues.map((issue) => issue.path.join("."))).toEqual(
-      expect.arrayContaining(["completionPercentage", "sessionId"]),
+    expect(result.error.issues.map((issue) => issue.path.join('.'))).toEqual(
+      expect.arrayContaining(['completionPercentage', 'sessionId']),
     );
   });
 
-  it("rejects impossible session setup values that would break timer recovery", () => {
+  it('rejects impossible session setup values that would break timer recovery', () => {
     const result = validateSessionConfig({
       autoStartBreaks: false,
       autoStartNextInterval: false,
@@ -91,12 +91,12 @@ describe("session validation schemas", () => {
       return;
     }
 
-    expect(result.error.issues.map((issue) => issue.path.join("."))).toEqual(
-      expect.arrayContaining(["duration", "intervals"]),
+    expect(result.error.issues.map((issue) => issue.path.join('.'))).toEqual(
+      expect.arrayContaining(['duration', 'intervals']),
     );
   });
 
-  it("rejects invalid focus quality and timer recovery metrics", () => {
+  it('rejects invalid focus quality and timer recovery metrics', () => {
     const focusResult = validateFocusQualityMetrics({
       calculatedAt: 1_700_000_000_000,
       consistencyScore: 90,
@@ -128,7 +128,7 @@ describe("session validation schemas", () => {
     expect(timerResult.success).toBe(false);
   });
 
-  it("keeps damage mitigation bounded so penalties cannot invert rewards", () => {
+  it('keeps damage mitigation bounded so penalties cannot invert rewards', () => {
     const result = validateDamageCalculation({
       abandonDamage: 0,
       antiCheatDamage: 0,
@@ -146,8 +146,8 @@ describe("session validation schemas", () => {
       return;
     }
 
-    expect(result.error.issues.map((issue) => issue.path.join("."))).toEqual(
-      expect.arrayContaining(["finalPenalty", "mitigation"]),
+    expect(result.error.issues.map((issue) => issue.path.join('.'))).toEqual(
+      expect.arrayContaining(['finalPenalty', 'mitigation']),
     );
   });
 });

@@ -1,38 +1,38 @@
-import { describe, it, expect, jest, beforeEach } from "@jest/globals";
+import { describe, it, expect, jest, beforeEach } from '@jest/globals';
 import {
   coachService,
   mockUserId,
   handleStreakRiskDetected,
   handleStreakBroken,
-} from "./integration-test-helpers";
-import type { CoachState, ComebackPlan } from "../schemas";
+} from './integration-test-helpers';
+import type { CoachState, ComebackPlan } from '../schemas';
 
-describe("Cross-System Integration", () => {
+describe('Cross-System Integration', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  describe("Streaks → Coach Integration", () => {
-    it("streak risk detection triggers appropriate intervention", async () => {
+  describe('Streaks → Coach Integration', () => {
+    it('streak risk detection triggers appropriate intervention', async () => {
       const riskPayload = {
         userId: mockUserId,
         currentStreak: 7,
         hoursSinceLastSession: 36,
-        riskLevel: "HIGH" as const,
+        riskLevel: 'HIGH' as const,
         hoursRemaining: 12,
       };
-      const mockDetectRisk = jest.spyOn(coachService, "detectStreakRisk");
+      const mockDetectRisk = jest.spyOn(coachService, 'detectStreakRisk');
       mockDetectRisk.mockResolvedValue({} as CoachState);
-      const mockGenerateMessage = jest.spyOn(coachService, "generateMessage");
+      const mockGenerateMessage = jest.spyOn(coachService, 'generateMessage');
       mockGenerateMessage.mockResolvedValue({
-        id: "msg-1",
+        id: 'msg-1',
         userId: mockUserId,
-        personaId: "default",
-        category: "STREAK_RISK",
-        content: "Your streak is at risk!",
-        deliveryMethod: "BOTH",
+        personaId: 'default',
+        category: 'STREAK_RISK',
+        content: 'Your streak is at risk!',
+        deliveryMethod: 'BOTH',
         priority: 10,
-        status: "SENT",
+        status: 'SENT',
         createdAt: Date.now(),
         scheduledFor: null,
         deliveredAt: null,
@@ -46,33 +46,33 @@ describe("Cross-System Integration", () => {
       expect(mockGenerateMessage).toHaveBeenCalledWith(
         expect.objectContaining({
           userId: mockUserId,
-          category: "STREAK_RISK",
+          category: 'STREAK_RISK',
           context: expect.objectContaining({
-            urgency: "high",
-            riskLevel: "HIGH",
+            urgency: 'high',
+            riskLevel: 'HIGH',
           }),
         }),
       );
     });
 
-    it("critical streak risk triggers modal message", async () => {
+    it('critical streak risk triggers modal message', async () => {
       const riskPayload = {
         userId: mockUserId,
         currentStreak: 10,
         hoursSinceLastSession: 44,
-        riskLevel: "CRITICAL" as const,
+        riskLevel: 'CRITICAL' as const,
         hoursRemaining: 4,
       };
-      const mockGenerateMessage = jest.spyOn(coachService, "generateMessage");
+      const mockGenerateMessage = jest.spyOn(coachService, 'generateMessage');
       mockGenerateMessage.mockResolvedValue({
-        id: "msg-1",
+        id: 'msg-1',
         userId: mockUserId,
-        personaId: "default",
-        category: "STREAK_RISK",
-        content: "CRITICAL: Save your streak!",
-        deliveryMethod: "BOTH",
+        personaId: 'default',
+        category: 'STREAK_RISK',
+        content: 'CRITICAL: Save your streak!',
+        deliveryMethod: 'BOTH',
         priority: 10,
-        status: "SENT",
+        status: 'SENT',
         createdAt: Date.now(),
         scheduledFor: null,
         deliveredAt: null,
@@ -85,27 +85,27 @@ describe("Cross-System Integration", () => {
       expect(mockGenerateMessage).toHaveBeenCalledWith(
         expect.objectContaining({
           context: expect.objectContaining({
-            urgency: "critical",
-            deliveryMethod: "MODAL",
+            urgency: 'critical',
+            deliveryMethod: 'MODAL',
           }),
         }),
       );
     });
 
-    it("streak break with 3+ days triggers comeback activation", async () => {
+    it('streak break with 3+ days triggers comeback activation', async () => {
       const breakPayload = {
         userId: mockUserId,
         previousStreak: 5,
         daysInactive: 2,
         brokenAt: Date.now(),
       };
-      const mockActivateComeback = jest.spyOn(coachService, "activateComeback");
+      const mockActivateComeback = jest.spyOn(coachService, 'activateComeback');
       mockActivateComeback.mockResolvedValue({
-        id: "comeback-1",
+        id: 'comeback-1',
         userId: mockUserId,
         previousStreak: 5,
         daysInactive: 2,
-        status: "ACTIVE",
+        status: 'ACTIVE',
         startedAt: Date.now(),
         expiresAt: Date.now() + 7 * 86400000,
         sessionsCompleted: 0,

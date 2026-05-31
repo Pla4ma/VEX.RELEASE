@@ -1,11 +1,11 @@
-import React from "react";
-import { View } from "react-native";
+import React from 'react';
+import { View } from 'react-native';
 
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import { launchColors } from "@theme/tokens/launch-colors";
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import { launchColors } from '@theme/tokens/launch-colors';
 
-type Confidence = "low" | "medium" | "high";
+type Confidence = 'low' | 'medium' | 'high';
 
 interface ConfidenceIndicatorProps {
   confidence: Confidence;
@@ -16,11 +16,11 @@ export function ConfidenceIndicator({
 }: ConfidenceIndicatorProps): JSX.Element {
   const { theme } = useTheme();
 
-  const barWidth = confidence === "high" ? "100%" : confidence === "medium" ? "60%" : "30%";
+  const barWidth = confidence === 'high' ? '100%' : confidence === 'medium' ? '60%' : '30%';
   const barColor =
-    confidence === "high"
+    confidence === 'high'
       ? theme.colors.success.DEFAULT
-      : confidence === "medium"
+      : confidence === 'medium'
         ? theme.colors.warning.DEFAULT
         : theme.colors.text.secondary;
 
@@ -28,15 +28,15 @@ export function ConfidenceIndicator({
     <View
       style={{
         marginTop: theme.spacing[2],
-        flexDirection: "row",
-        alignItems: "center",
+        flexDirection: 'row',
+        alignItems: 'center',
       }}
     >
       <Text
         variant="caption"
         style={{ color: theme.colors.text.secondary }}
       >
-        Confidence:{" "}
+        Confidence:{' '}
         {confidence.charAt(0).toUpperCase() + confidence.slice(1)}
       </Text>
       <View
@@ -46,13 +46,13 @@ export function ConfidenceIndicator({
           height: 4,
           backgroundColor: launchColors.rgb_255_255_255_0_2,
           borderRadius: 2,
-          overflow: "hidden",
+          overflow: 'hidden',
         }}
       >
         <View
           style={{
             width: barWidth,
-            height: "100%",
+            height: '100%',
             backgroundColor: barColor,
           }}
         />

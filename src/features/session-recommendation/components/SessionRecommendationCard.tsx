@@ -5,13 +5,13 @@
  * Integrates with the Phase 3 Home screen session start control.
  */
 
-import React from "react";
-import { Pressable, View } from "react-native";
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { Button } from "../../../components/primitives/Button";
-import { useTheme } from "../../../theme";
-import type { SessionRecommendation } from "../types";
+import React from 'react';
+import { Pressable, View } from 'react-native';
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { Button } from '../../../components/primitives/Button';
+import { useTheme } from '../../../theme';
+import type { SessionRecommendation } from '../types';
 
 export interface SessionRecommendationCardProps {
   recommendation: SessionRecommendation;
@@ -42,13 +42,13 @@ export function SessionRecommendationCard({
 
   const getSessionModeIcon = (mode: string): string => {
     const icons: Record<string, string> = {
-      FOCUS: "🎯",
-      RECOVERY: "🌱",
-      STUDY: "📚",
-      BOSS_PREP: "⚔️",
-      HABIT_BUILD: "🔄",
+      FOCUS: '🎯',
+      RECOVERY: '🌱',
+      STUDY: '📚',
+      BOSS_PREP: '⚔️',
+      HABIT_BUILD: '🔄',
     };
-    return icons[mode] || "🎯";
+    return icons[mode] || '🎯';
   };
 
   const modeColor = getSessionModeColor(recommendation.mode);
@@ -69,7 +69,7 @@ export function SessionRecommendationCard({
             width={48}
             height={48}
             borderRadius="lg"
-            bg={theme.colors.warning[500] + "20"}
+            bg={theme.colors.warning[500] + '20'}
             justifyContent="center"
             alignItems="center"
           >
@@ -98,7 +98,7 @@ export function SessionRecommendationCard({
           {recommendation.reason}
         </Text>
 
-        <Button variant="outline" size="sm" disabled style={{ width: "100%" }}>
+        <Button variant="outline" size="sm" disabled style={{ width: '100%' }}>
           Cannot start session
         </Button>
       </Box>
@@ -112,14 +112,14 @@ export function SessionRecommendationCard({
       borderRadius="xl"
       bg={theme.colors.background.secondary}
       borderWidth={1}
-      borderColor={modeColor + "30"}
+      borderColor={modeColor + '30'}
     >
       <Box flexDirection="row" alignItems="center" gap="md" mb="md">
         <Box
           width={48}
           height={48}
           borderRadius="lg"
-          bg={modeColor + "20"}
+          bg={modeColor + '20'}
           justifyContent="center"
           alignItems="center"
         >
@@ -132,9 +132,9 @@ export function SessionRecommendationCard({
           </Text>
           <Text variant="caption" color="text.secondary">
             {recommendation.fallback
-              ? "Default suggestion"
-              : "Personalized recommendation"}
-            {" • "}
+              ? 'Default suggestion'
+              : 'Personalized recommendation'}
+            {' • '}
             {Math.round(recommendation.confidence * 100)}% confidence
           </Text>
         </Box>
@@ -154,7 +154,7 @@ export function SessionRecommendationCard({
         alignItems="center"
       >
         <Button
-          variant={recommendation.fallback ? "outline" : "primary"}
+          variant={recommendation.fallback ? 'outline' : 'primary'}
           size="sm"
           onPress={onAccept}
           style={{ flex: 1, marginRight: showDismiss ? theme.spacing[2] : 0 }}

@@ -1,9 +1,9 @@
-import { useQueryClient } from "@tanstack/react-query";
-import { useCallback } from "react";
-import { AddXpInputSchema, type AddXpInput } from "../schemas";
-import { getProgressionEnhanced } from "../service-read";
-import type { AddXpOperationResult } from "../service-xp-core";
-import { progressionKeys, useAddXp } from "./index";
+import { useQueryClient } from '@tanstack/react-query';
+import { useCallback } from 'react';
+import { AddXpInputSchema, type AddXpInput } from '../schemas';
+import { getProgressionEnhanced } from '../service-read';
+import type { AddXpOperationResult } from '../service-xp-core';
+import { progressionKeys, useAddXp } from './index';
 
 export function useOptimisticXp() {
   const queryClient = useQueryClient();

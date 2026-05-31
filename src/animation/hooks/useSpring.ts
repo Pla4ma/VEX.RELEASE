@@ -4,16 +4,16 @@
  * React hook for spring animations with Reanimated.
  */
 
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo } from 'react';
 import {
   useSharedValue,
   useAnimatedStyle,
   withSpring,
   type WithSpringConfig,
   type SharedValue,
-} from "react-native-reanimated";
+} from 'react-native-reanimated';
 
-import { defaultSpring } from "../springs";
+import { defaultSpring } from '../springs';
 
 /**
  * Spring animation options

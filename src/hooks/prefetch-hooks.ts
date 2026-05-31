@@ -1,12 +1,12 @@
-import { useCallback, useMemo } from "react";
-import { useQueryClient } from "@tanstack/react-query";
+import { useCallback, useMemo } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 
-import type { FeatureKey } from "../features/liveops-config/feature-access";
-import { isCoreQueryKey, createPrefetcher } from "./prefetcher";
+import type { FeatureKey } from '../features/liveops-config/feature-access';
+import { isCoreQueryKey, createPrefetcher } from './prefetcher';
 import {
   type PrefetchPolicy,
   type PrefetchQueriesReturn,
-} from "./prefetch-query-keys";
+} from './prefetch-query-keys';
 
 export function usePrefetchQueries(
   defaultPolicy?: PrefetchPolicy,
@@ -36,7 +36,7 @@ export function usePrefetchQueries(
   );
   const prefetchByKey = useCallback(
     (queryKey: readonly string[]) => {
-      if (!isCoreQueryKey(queryKey)) return;
+      if (!isCoreQueryKey(queryKey)) {return;}
       void queryClient.prefetchQuery({ queryKey, staleTime: 60 * 1000 });
     },
     [queryClient],

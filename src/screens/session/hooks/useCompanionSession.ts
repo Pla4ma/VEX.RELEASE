@@ -1,16 +1,16 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import { useToast } from "../../../shared/ui/components/Toast";
-import type { SessionSummary } from "../../../session/types";
-import { triggerHaptic } from "../../../utils/haptics";
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useToast } from '../../../shared/ui/components/Toast';
+import type { SessionSummary } from '../../../session/types';
+import { triggerHaptic } from '../../../utils/haptics';
 import {
   getCompanionService,
   type CompanionService,
-} from "../../../features/companion/service";
-import type { CompanionState } from "../../../features/companion/types";
-import { loadCompanionState } from "../../../features/companion/session-storage";
-import type { UseCompanionSessionInput, UseCompanionSessionResult } from "./useCompanionSessionTypes";
-import { MILESTONES, getMilestoneLabel, getMilestoneHaptic } from "./milestoneHelpers";
-import { completeCompanionSessionImpl } from "./completionHelper";
+} from '../../../features/companion/service';
+import type { CompanionState } from '../../../features/companion/types';
+import { loadCompanionState } from '../../../features/companion/session-storage';
+import type { UseCompanionSessionInput, UseCompanionSessionResult } from './useCompanionSessionTypes';
+import { MILESTONES, getMilestoneLabel, getMilestoneHaptic } from './milestoneHelpers';
+import { completeCompanionSessionImpl } from './completionHelper';
 
 export type { UseCompanionSessionInput, UseCompanionSessionResult };
 export function useCompanionSession(
@@ -88,7 +88,7 @@ export function useCompanionSession(
       current
         ? {
             ...current,
-            currentMood: "SLEEPY",
+            currentMood: 'SLEEPY',
             sessionProgress: 0,
             updatedAt: Date.now(),
           }
@@ -118,19 +118,19 @@ export function useCompanionSession(
     }
     if (purityScore < 60 && !dangerActiveRef.current) {
       dangerActiveRef.current = true;
-      flashEvent("Struggling");
+      flashEvent('Struggling');
       showRef.current({
-        type: "warning",
-        title: "Struggling",
+        type: 'warning',
+        title: 'Struggling',
         duration: 1400,
-        priority: "normal",
+        priority: 'normal',
       });
       setState((current) =>
         current
-          ? { ...current, currentMood: "STRUGGLING", updatedAt: Date.now() }
+          ? { ...current, currentMood: 'STRUGGLING', updatedAt: Date.now() }
           : current,
       );
-      void triggerHaptic("warning");
+      void triggerHaptic('warning');
     }
     if (purityScore >= 60) {
       dangerActiveRef.current = false;
@@ -140,19 +140,19 @@ export function useCompanionSession(
       const pureSeconds = elapsedSeconds - pureFocusStartedAtRef.current;
       if (pureSeconds >= 300 && !pureBurstTriggeredRef.current) {
         pureBurstTriggeredRef.current = true;
-        flashEvent("On fire!");
+        flashEvent('On fire!');
         showRef.current({
-          type: "success",
-          title: "On fire!",
+          type: 'success',
+          title: 'On fire!',
           duration: 1400,
-          priority: "normal",
+          priority: 'normal',
         });
         setState((current) =>
           current
-            ? { ...current, currentMood: "ECSTATIC", updatedAt: Date.now() }
+            ? { ...current, currentMood: 'ECSTATIC', updatedAt: Date.now() }
             : current,
         );
-        void triggerHaptic("success");
+        void triggerHaptic('success');
       }
       return;
     }

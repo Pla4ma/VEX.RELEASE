@@ -1,9 +1,9 @@
-import React from "react";
-import { TextInput, Pressable } from "react-native";
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import { PRESETS, type DurationPreset } from "./duration-picker-types";
+import React from 'react';
+import { TextInput, Pressable } from 'react-native';
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import { PRESETS, type DurationPreset } from './duration-picker-types';
 
 export function CustomDurationInput({
   value,
@@ -18,7 +18,7 @@ export function CustomDurationInput({
 }): JSX.Element {
   const { theme } = useTheme();
   const [inputValue, setInputValue] = React.useState(
-    value && !PRESETS.includes(value as DurationPreset) ? value.toString() : "",
+    value && !PRESETS.includes(value as DurationPreset) ? value.toString() : '',
   );
   const handleSubmit = () => {
     const num = parseInt(inputValue, 10);
@@ -50,9 +50,9 @@ export function CustomDurationInput({
           style={{
             width: 60,
             fontSize: 16,
-            fontWeight: "600",
+            fontWeight: '600',
             color: theme.colors.text.primary,
-            textAlign: "center",
+            textAlign: 'center',
           }}
           autoFocus
         />
@@ -76,7 +76,7 @@ export function CustomDurationInput({
         bg={theme.colors.background.secondary}
         borderWidth={2}
         borderColor={theme.colors.border.DEFAULT}
-        style={{ borderStyle: "dashed" }}
+        style={{ borderStyle: 'dashed' }}
       >
         <Text variant="body" color="text.secondary" fontWeight="500">
           Custom

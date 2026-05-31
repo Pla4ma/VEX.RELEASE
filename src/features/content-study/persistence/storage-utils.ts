@@ -1,5 +1,5 @@
-import { getStorage, STORAGE_KEYS } from "../persistence";
-import { CONTENT_STUDY_CONSTANTS } from "../types";
+import { getStorage, STORAGE_KEYS } from '../persistence';
+import { CONTENT_STUDY_CONSTANTS } from '../types';
 
 export async function getStorageUsage(): Promise<{
   drafts: number;
@@ -25,7 +25,7 @@ export async function getStorageUsage(): Promise<{
   const sizes = { drafts: 0, sessions: 0, cache: 0, syncQueue: 0, total: 0 };
 
   items.forEach(([itemKey, value]) => {
-    if (!value || !itemKey) return;
+    if (!value || !itemKey) {return;}
 
     const size = new Blob([value]).size;
 

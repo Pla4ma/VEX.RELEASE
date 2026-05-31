@@ -1,5 +1,5 @@
-import { useAnimatedProps, useAnimatedStyle, type SharedValue } from "react-native-reanimated";
-import type { PurityLabel } from "../utils/active-session";
+import { useAnimatedProps, useAnimatedStyle, type SharedValue } from 'react-native-reanimated';
+import type { PurityLabel } from '../utils/active-session';
 
 export type ActiveSessionProgressRingProps = {
   CIRCUMFERENCE: number;

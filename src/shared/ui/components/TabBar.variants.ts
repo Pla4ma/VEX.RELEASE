@@ -1,6 +1,6 @@
-import type { ViewStyle, TextStyle } from "react-native";
-import type { TabBarProps } from "./TabBar.types";
-import { launchColors } from "@theme/tokens/launch-colors";
+import type { ViewStyle, TextStyle } from 'react-native';
+import type { TabBarProps } from './TabBar.types';
+import { launchColors } from '@theme/tokens/launch-colors';
 
 interface ThemeColors {
   primary: { [key: string]: string | undefined; 500: string };
@@ -16,17 +16,17 @@ interface VariantStyleResult {
 }
 
 export function getVariantStyles(
-  variant: NonNullable<TabBarProps["variant"]>,
+  variant: NonNullable<TabBarProps['variant']>,
   isActive: boolean,
   theme: { colors: ThemeColors },
 ): VariantStyleResult {
   switch (variant) {
-    case "pills":
+    case 'pills':
       return {
         container: {
           backgroundColor: isActive
             ? theme.colors.primary[500]
-            : "transparent",
+            : 'transparent',
           borderRadius: 999,
         },
         text: {
@@ -40,14 +40,14 @@ export function getVariantStyles(
             : theme.colors.text.secondary,
         },
       };
-    case "underline":
+    case 'underline':
       return {
         container: {
-          backgroundColor: "transparent",
+          backgroundColor: 'transparent',
           borderBottomWidth: 2,
           borderBottomColor: isActive
             ? theme.colors.primary[500]
-            : "transparent",
+            : 'transparent',
         },
         text: {
           color: isActive
@@ -60,7 +60,7 @@ export function getVariantStyles(
             : theme.colors.text.secondary,
         },
       };
-    case "buttons":
+    case 'buttons':
       return {
         container: {
           backgroundColor: isActive
@@ -88,7 +88,7 @@ export function getVariantStyles(
         container: {
           backgroundColor: isActive
             ? `${theme.colors.primary[500]}20`
-            : "transparent",
+            : 'transparent',
           borderRadius: 8,
         },
         text: {

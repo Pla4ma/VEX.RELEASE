@@ -1,5 +1,5 @@
-import type { CoachMemory } from "./coach-memory-types";
-import { getOrCreateMemory, getPersonalizedContext } from "./coach-memory";
+import type { CoachMemory } from './coach-memory-types';
+import { getOrCreateMemory, getPersonalizedContext } from './coach-memory';
 
 export function generatePersonalizedMessage(
   userId: string,
@@ -8,20 +8,20 @@ export function generatePersonalizedMessage(
 ): string {
   const memory = getOrCreateMemory(userId);
   let personalized = baseMessage;
-  if (personalized.includes("{{personalBestStreak}}")) {
+  if (personalized.includes('{{personalBestStreak}}')) {
     personalized = personalized.replace(
       /\{\{personalBestStreak\}\}/g,
       String(memory.longestStreak),
     );
   }
-  if (personalized.includes("{{personalBestQuality}}")) {
+  if (personalized.includes('{{personalBestQuality}}')) {
     personalized = personalized.replace(
       /\{\{personalBestQuality\}\}/g,
       String(memory.bestSessionQuality),
     );
   }
   if (
-    personalized.includes("{{productiveTimeOfDay}}") &&
+    personalized.includes('{{productiveTimeOfDay}}') &&
     memory.mostProductiveTimeOfDay
   ) {
     personalized = personalized.replace(
@@ -29,20 +29,20 @@ export function generatePersonalizedMessage(
       memory.mostProductiveTimeOfDay,
     );
   }
-  if (personalized.includes("{{totalSessions}}")) {
+  if (personalized.includes('{{totalSessions}}')) {
     personalized = personalized.replace(
       /\{\{totalSessions\}\}/g,
       String(memory.totalSessionsCompleted),
     );
   }
-  if (personalized.includes("{{totalFocusHours}}")) {
+  if (personalized.includes('{{totalFocusHours}}')) {
     personalized = personalized.replace(
       /\{\{totalFocusHours\}\}/g,
       String(Math.round(memory.totalFocusMinutes / 60)),
     );
   }
   if (
-    personalized.includes("{{lastBossDefeated}}") &&
+    personalized.includes('{{lastBossDefeated}}') &&
     memory.lastBossDefeated
   ) {
     personalized = personalized.replace(
@@ -50,7 +50,7 @@ export function generatePersonalizedMessage(
       memory.lastBossDefeated,
     );
   }
-  if (personalized.includes("{{comebackCount}}")) {
+  if (personalized.includes('{{comebackCount}}')) {
     personalized = personalized.replace(
       /\{\{comebackCount\}\}/g,
       String(memory.comebackCount),
@@ -62,15 +62,15 @@ export function generatePersonalizedMessage(
 export function getMemoryBasedSuggestions(
   userId: string,
   category:
-    | "STREAK_RISK"
-    | "MILESTONE_HYPE"
-    | "COMEBACK_SUPPORT"
-    | "PROGRESS_REMINDER",
+    | 'STREAK_RISK'
+    | 'MILESTONE_HYPE'
+    | 'COMEBACK_SUPPORT'
+    | 'PROGRESS_REMINDER',
 ): string[] {
   const memory = getOrCreateMemory(userId);
   const suggestions: string[] = [];
   switch (category) {
-    case "STREAK_RISK":
+    case 'STREAK_RISK':
       if (memory.longestStreak > 0) {
         suggestions.push(
           `You had a ${memory.longestStreak}-day streak in the past. Let's beat that record!`,
@@ -79,7 +79,7 @@ export function getMemoryBasedSuggestions(
         );
       }
       break;
-    case "MILESTONE_HYPE":
+    case 'MILESTONE_HYPE':
       if (memory.bestSessionQuality > 90) {
         suggestions.push(
           `Your best session ever scored ${memory.bestSessionQuality}! That kind of focus is legendary.`,
@@ -93,7 +93,7 @@ export function getMemoryBasedSuggestions(
         );
       }
       break;
-    case "COMEBACK_SUPPORT":
+    case 'COMEBACK_SUPPORT':
       if (memory.comebackCount > 0) {
         suggestions.push(
           `This is comeback #${memory.comebackCount} for you. Each one made you stronger.`,
@@ -108,7 +108,7 @@ export function getMemoryBasedSuggestions(
         );
       }
       break;
-    case "PROGRESS_REMINDER":
+    case 'PROGRESS_REMINDER':
       if (memory.mostProductiveTimeOfDay) {
         suggestions.push(
           `Your most productive time tends to be ${memory.mostProductiveTimeOfDay}s. Use that knowledge!`,

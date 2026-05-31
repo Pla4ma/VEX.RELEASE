@@ -7,10 +7,10 @@ import {
   baseStats,
   baseProfile,
   featureAvailability,
-} from "./helpers";
+} from './helpers';
 
-describe("Home (decideHomeSurfaces)", () => {
-  it("student LaneProfile → surfaces Study OS and blocks boss full CTA", () => {
+describe('Home (decideHomeSurfaces)', () => {
+  it('student LaneProfile → surfaces Study OS and blocks boss full CTA', () => {
     const map = decideHomeSurfaces({
       behaviorStats: baseStats,
       featureAvailability,
@@ -19,27 +19,27 @@ describe("Home (decideHomeSurfaces)", () => {
       hasActiveStudyPlan: true,
       isFirstSession: false,
       personalizationProfile: baseProfile,
-      laneProfile: { primaryLane: "student" },
+      laneProfile: { primaryLane: 'student' },
     });
-    expect(map.study_os).not.toBe("hidden");
-    expect(map.boss_full_cta).not.toBe("primary");
+    expect(map.study_os).not.toBe('hidden');
+    expect(map.boss_full_cta).not.toBe('primary');
   });
 
-  it("game_like LaneProfile → surfaces run_board", () => {
+  it('game_like LaneProfile → surfaces run_board', () => {
     const map = decideHomeSurfaces({
-      behaviorStats: { ...baseStats, bossChallengeEngagement: "medium" },
+      behaviorStats: { ...baseStats, bossChallengeEngagement: 'medium' },
       featureAvailability,
       hasActiveBoss: true,
       hasActiveRecommendation: false,
       hasActiveStudyPlan: false,
       isFirstSession: false,
       personalizationProfile: baseProfile,
-      laneProfile: { primaryLane: "game_like" },
+      laneProfile: { primaryLane: 'game_like' },
     });
-    expect(map.run_board).not.toBe("hidden");
+    expect(map.run_board).not.toBe('hidden');
   });
 
-  it("deep_creative LaneProfile → surfaces project_thread and focus_window", () => {
+  it('deep_creative LaneProfile → surfaces project_thread and focus_window', () => {
     const map = decideHomeSurfaces({
       behaviorStats: { ...baseStats, projectFocusUsageRatio: 0.6 },
       featureAvailability,
@@ -48,13 +48,13 @@ describe("Home (decideHomeSurfaces)", () => {
       hasActiveStudyPlan: false,
       isFirstSession: false,
       personalizationProfile: baseProfile,
-      laneProfile: { primaryLane: "deep_creative" },
+      laneProfile: { primaryLane: 'deep_creative' },
     });
-    expect(map.project_thread).not.toBe("hidden");
-    expect(map.focus_window).not.toBe("hidden");
+    expect(map.project_thread).not.toBe('hidden');
+    expect(map.focus_window).not.toBe('hidden');
   });
 
-  it("minimal_normal LaneProfile → surfaces today_strip and blocks boss noise", () => {
+  it('minimal_normal LaneProfile → surfaces today_strip and blocks boss noise', () => {
     const map = decideHomeSurfaces({
       behaviorStats: baseStats,
       featureAvailability,
@@ -64,104 +64,104 @@ describe("Home (decideHomeSurfaces)", () => {
       isFirstSession: false,
       personalizationProfile: {
         ...baseProfile,
-        gamificationIntensity: "minimal",
-        motivationStyle: "calm",
+        gamificationIntensity: 'minimal',
+        motivationStyle: 'calm',
       },
-      laneProfile: { primaryLane: "minimal_normal" },
+      laneProfile: { primaryLane: 'minimal_normal' },
     });
-    expect(map.today_strip).not.toBe("hidden");
-    expect(map.boss_full_cta).toBe("blocked");
+    expect(map.today_strip).not.toBe('hidden');
+    expect(map.boss_full_cta).toBe('blocked');
   });
 });
 
-describe("FirstWeek (resolveLaneCopy)", () => {
-  it("student LaneProfile → study block Day 0 copy", () => {
+describe('FirstWeek (resolveLaneCopy)', () => {
+  it('student LaneProfile → study block Day 0 copy', () => {
     const copy = resolveLaneCopy(
-      "DAY_0_NOT_STARTED",
-      baseLaneProfile({ primaryLane: "student" }),
-      "fallback",
+      'DAY_0_NOT_STARTED',
+      baseLaneProfile({ primaryLane: 'student' }),
+      'fallback',
     );
-    expect(copy.primaryMessage).toContain("study block");
-    expect(copy.laneStageTheme).toBe("first_study_block");
+    expect(copy.primaryMessage).toContain('study block');
+    expect(copy.laneStageTheme).toBe('first_study_block');
   });
 
-  it("game_like LaneProfile → run Day 0 copy", () => {
+  it('game_like LaneProfile → run Day 0 copy', () => {
     const copy = resolveLaneCopy(
-      "DAY_0_NOT_STARTED",
-      baseLaneProfile({ primaryLane: "game_like" }),
-      "fallback",
+      'DAY_0_NOT_STARTED',
+      baseLaneProfile({ primaryLane: 'game_like' }),
+      'fallback',
     );
-    expect(copy.primaryMessage).toContain("run");
-    expect(copy.laneStageTheme).toBe("first_focus_run");
+    expect(copy.primaryMessage).toContain('run');
+    expect(copy.laneStageTheme).toBe('first_focus_run');
   });
 
-  it("deep_creative LaneProfile → project Day 0 copy", () => {
+  it('deep_creative LaneProfile → project Day 0 copy', () => {
     const copy = resolveLaneCopy(
-      "DAY_0_NOT_STARTED",
-      baseLaneProfile({ primaryLane: "deep_creative" }),
-      "fallback",
+      'DAY_0_NOT_STARTED',
+      baseLaneProfile({ primaryLane: 'deep_creative' }),
+      'fallback',
     );
-    expect(copy.primaryMessage).toContain("project");
-    expect(copy.laneStageTheme).toBe("first_project_block");
+    expect(copy.primaryMessage).toContain('project');
+    expect(copy.laneStageTheme).toBe('first_project_block');
   });
 
-  it("minimal_normal LaneProfile → clean session Day 0 copy", () => {
+  it('minimal_normal LaneProfile → clean session Day 0 copy', () => {
     const copy = resolveLaneCopy(
-      "DAY_0_NOT_STARTED",
-      baseLaneProfile({ primaryLane: "minimal_normal" }),
-      "fallback",
+      'DAY_0_NOT_STARTED',
+      baseLaneProfile({ primaryLane: 'minimal_normal' }),
+      'fallback',
     );
-    expect(copy.primaryMessage).toContain("clean");
-    expect(copy.laneStageTheme).toBe("first_clean_session");
+    expect(copy.primaryMessage).toContain('clean');
+    expect(copy.laneStageTheme).toBe('first_clean_session');
   });
 
-  it("resolveFirstWeekExperiment consumes Lane (derived from LaneProfile.primaryLane)", () => {
-    const exp = resolveFirstWeekExperiment("student", "DAY_5_PATH_FORMING");
+  it('resolveFirstWeekExperiment consumes Lane (derived from LaneProfile.primaryLane)', () => {
+    const exp = resolveFirstWeekExperiment('student', 'DAY_5_PATH_FORMING');
     expect(exp).not.toBeNull();
-    expect(exp!.action).toContain("study block");
+    expect(exp!.action).toContain('study block');
   });
 });
 
-describe("SessionStart (buildLaneSessionBrief)", () => {
-  it("student lane → STUDY mode with study block CTA", () => {
+describe('SessionStart (buildLaneSessionBrief)', () => {
+  it('student lane → STUDY mode with study block CTA', () => {
     const brief = buildLaneSessionBrief({
-      lane: "student",
+      lane: 'student',
       durationSeconds: 25 * 60,
     });
-    expect(brief.sessionMode).toBe("STUDY");
-    expect(brief.ctaLabel).toBe("Start study block");
-    expect(brief.title).toContain("Study");
+    expect(brief.sessionMode).toBe('STUDY');
+    expect(brief.ctaLabel).toBe('Start study block');
+    expect(brief.title).toContain('Study');
   });
 
-  it("game_like lane → SPRINT mode with encounter CTA", () => {
+  it('game_like lane → SPRINT mode with encounter CTA', () => {
     const brief = buildLaneSessionBrief({
-      lane: "game_like",
+      lane: 'game_like',
       durationSeconds: 25 * 60,
     });
-    expect(brief.sessionMode).toBe("SPRINT");
-    expect(brief.ctaLabel).toBe("Start clean run");
+    expect(brief.sessionMode).toBe('SPRINT');
+    expect(brief.ctaLabel).toBe('Start clean run');
   });
 
-  it("deep_creative lane → CREATIVE mode with project block CTA", () => {
+  it('deep_creative lane → CREATIVE mode with project block CTA', () => {
     const brief = buildLaneSessionBrief({
-      lane: "deep_creative",
+      lane: 'deep_creative',
       durationSeconds: 25 * 60,
     });
-    expect(brief.sessionMode).toBe("CREATIVE");
-    expect(brief.ctaLabel).toBe("Resume project block");
+    expect(brief.sessionMode).toBe('CREATIVE');
+    expect(brief.ctaLabel).toBe('Resume project block');
   });
 
-  it("minimal_normal lane → LIGHT_FOCUS mode with clean session CTA", () => {
+  it('minimal_normal lane → LIGHT_FOCUS mode with clean session CTA', () => {
     const brief = buildLaneSessionBrief({
-      lane: "minimal_normal",
+      lane: 'minimal_normal',
       durationSeconds: 25 * 60,
     });
-    expect(brief.sessionMode).toBe("LIGHT_FOCUS");
-    expect(brief.ctaLabel).toBe("Start clean action");
+    expect(brief.sessionMode).toBe('LIGHT_FOCUS');
+    expect(brief.ctaLabel).toBe('Start clean action');
   });
 
-  it("no old economy surfaces in lane brief output", () => {
-    const brief = buildLaneSessionBrief({ lane: "game_like" });
+  it('no old economy surfaces in lane brief output', () => {
+    const brief = buildLaneSessionBrief({ lane: 'game_like' });
     const json = JSON.stringify(brief);
     expect(json).not.toMatch(
       /wager|insuranceCost|bountyCost|wallet|gem|shop|inventory/i,

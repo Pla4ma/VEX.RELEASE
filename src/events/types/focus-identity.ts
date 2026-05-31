@@ -6,7 +6,7 @@
  */
 
 export interface FocusIdentityEventDefinitions {
-  "focus-identity:score_updated": {
+  'focus-identity:score_updated': {
     userId: string;
     previousScore: number;
     newScore: number;
@@ -58,7 +58,7 @@ export interface FocusIdentityEventDefinitions {
     userId: string;
     anchorId: string;
     promptId: string;
-    response: "SNOOZED" | "STARTED" | "COMPLETED" | "DISMISSED";
+    response: 'SNOOZED' | 'STARTED' | 'COMPLETED' | 'DISMISSED';
     consistency: number;
     currentStreak: number;
   };

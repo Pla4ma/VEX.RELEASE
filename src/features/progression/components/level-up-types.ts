@@ -1,4 +1,4 @@
-import { launchColors } from "@theme/tokens/launch-colors";
+import { launchColors } from '@theme/tokens/launch-colors';
 
 export interface LevelUpOverlayProps {
   isVisible: boolean;
@@ -20,21 +20,21 @@ export interface ConfettiPiece {
 
 export function getTierTitle(level: number): string {
   if (level >= 100) {
-    return "🏆 GRAND MASTER";
+    return '🏆 GRAND MASTER';
   }
   if (level >= 50) {
-    return "🌟 MASTER";
+    return '🌟 MASTER';
   }
   if (level >= 25) {
-    return "⭐ EXPERT";
+    return '⭐ EXPERT';
   }
   if (level >= 10) {
-    return "💫 ADEPT";
+    return '💫 ADEPT';
   }
   if (level >= 5) {
-    return "✨ APPRENTICE";
+    return '✨ APPRENTICE';
   }
-  return "🌱 NOVICE";
+  return '🌱 NOVICE';
 }
 
 export function getTierColor(level: number): [string, string] {

@@ -1,5 +1,5 @@
-import { computeFeatureSafetyGates } from "../unlock-explainer/safety";
-import type { UnlockDecision } from "../unlock-explainer/types";
+import { computeFeatureSafetyGates } from '../unlock-explainer/safety';
+import type { UnlockDecision } from '../unlock-explainer/types';
 
 /**
  * Route Safety Bridge — integrates unlock-explainer safety gates with
@@ -40,7 +40,7 @@ export function checkRouteSafety(
     return {
       canRegisterRoute: false,
       canNavigate: false,
-      reason: "Feature is hidden — no render, no route, no query.",
+      reason: 'Feature is hidden — no render, no route, no query.',
     };
   }
 
@@ -49,7 +49,7 @@ export function checkRouteSafety(
       canRegisterRoute: false,
       canNavigate: false,
       reason:
-        "Feature is teased/blocked — no route registration, no navigation.",
+        'Feature is teased/blocked — no route registration, no navigation.',
     };
   }
 

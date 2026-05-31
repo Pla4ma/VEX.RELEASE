@@ -2,14 +2,14 @@
  * Screen reader announcement and accessible label utilities.
  */
 
-import { eventBus } from "../events";
-import type { ScreenReaderAnnouncement } from "./types";
+import { eventBus } from '../events';
+import type { ScreenReaderAnnouncement } from './types';
 
 const announcements: ScreenReaderAnnouncement[] = [];
 
 export function announce(
   message: string,
-  priority: "polite" | "assertive" = "polite",
+  priority: 'polite' | 'assertive' = 'polite',
 ): void {
   const announcement: ScreenReaderAnnouncement = {
     id: `ann-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
@@ -21,8 +21,8 @@ export function announce(
   if (announcements.length > 10) {
     announcements.shift();
   }
-  const eventPriority = priority === "assertive" ? "high" : "normal";
-  eventBus.publish("accessibility:announce", {
+  const eventPriority = priority === 'assertive' ? 'high' : 'normal';
+  eventBus.publish('accessibility:announce', {
     message,
     priority: eventPriority,
   });
@@ -58,5 +58,5 @@ export function generateAccessibleLabel(element: {
   if (element.action) {
     parts.push(`, double tap to ${element.action}`);
   }
-  return parts.join("");
+  return parts.join('');
 }

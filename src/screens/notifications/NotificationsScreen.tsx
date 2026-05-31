@@ -1,23 +1,23 @@
-import { withScreenErrorBoundary } from "../../shared/ui/components/ScreenErrorBoundary";
-import React from "react";
-import { Pressable, RefreshControl } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { FlashList } from "@shopify/flash-list";
-import { useTheme } from "../../theme";
-import { Box, Text } from "../../components/primitives";
+import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+import React from 'react';
+import { Pressable, RefreshControl } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { FlashList } from '@shopify/flash-list';
+import { useTheme } from '../../theme';
+import { Box, Text } from '../../components/primitives';
 import {
   NotificationLoadingState,
   NotificationErrorState,
   NotificationEmptyState,
   NotificationFilteredEmptyState,
-} from "./NotificationStateViews";
+} from './NotificationStateViews';
 import {
   NotificationFilterBar,
   NotificationCard,
   NotificationSectionHeader,
-} from "./NotificationComponents";
-import { useNotificationsData } from "./useNotificationsData";
-import type { NotificationListItem } from "./NotificationScreenConfig";
+} from './NotificationComponents';
+import { useNotificationsData } from './useNotificationsData';
+import type { NotificationListItem } from './NotificationScreenConfig';
 
 export const NotificationsScreen: React.FC = () => {
   const { theme } = useTheme();
@@ -43,16 +43,16 @@ export const NotificationsScreen: React.FC = () => {
   const inset = insets.top;
 
   if (isLoading)
-    return <NotificationLoadingState insetsTop={inset} backgroundColor={bg} />;
+    {return <NotificationLoadingState insetsTop={inset} backgroundColor={bg} />;}
   if (error)
-    return (
+    {return (
       <NotificationErrorState
         insetsTop={inset}
         backgroundColor={bg}
         message={error.message}
         onRetry={() => loadNotifications()}
       />
-    );
+    );}
 
   const header = (
     <Box px={20} pb={12} pt={inset + 16}>
@@ -91,17 +91,17 @@ export const NotificationsScreen: React.FC = () => {
   );
 
   if (notifications.length === 0)
-    return (
+    {return (
       <NotificationEmptyState backgroundColor={bg} headerElement={header} />
-    );
+    );}
   if (listData.length === 0)
-    return (
+    {return (
       <NotificationFilteredEmptyState
         backgroundColor={bg}
         headerElement={header}
         activeFilter={activeFilter}
       />
-    );
+    );}
 
   return (
     <Box flex={1} style={{ backgroundColor: bg }}>
@@ -109,20 +109,20 @@ export const NotificationsScreen: React.FC = () => {
       <FlashList
         data={listData}
         keyExtractor={(item: NotificationListItem, index: number) =>
-          item.type === "header"
+          item.type === 'header'
             ? `header-${item.title}-${index}`
             : item.data!.id
         }
         contentContainerStyle={{ padding: 16, paddingTop: 0 }}
         estimatedItemSize={80}
         renderItem={({ item }: { item: NotificationListItem }) => {
-          if (item.type === "header")
-            return (
+          if (item.type === 'header')
+            {return (
               <NotificationSectionHeader
                 title={item.title!}
                 count={item.count!}
               />
-            );
+            );}
           return (
             <NotificationCard
               item={item.data!}
@@ -144,4 +144,4 @@ export const NotificationsScreen: React.FC = () => {
   );
 };
 
-export default withScreenErrorBoundary(NotificationsScreen, "Notifications");
+export default withScreenErrorBoundary(NotificationsScreen, 'Notifications');

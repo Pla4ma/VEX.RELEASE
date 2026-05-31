@@ -1,6 +1,6 @@
-import React from "react";
-import { Box, Skeleton, Stack } from "@components/primitives";
-import { useReducedMotion } from "../../../hooks";
+import React from 'react';
+import { Box, Skeleton, Stack } from '@components/primitives';
+import { useReducedMotion } from '../../../hooks';
 
 export function ReportSkeleton(): JSX.Element {
   const { isReducedMotion } = useReducedMotion();

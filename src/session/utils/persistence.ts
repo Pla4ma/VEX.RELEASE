@@ -1,39 +1,39 @@
-import { captureSilentFailure } from "../../utils/silent-failure";
-import { MMKV } from "react-native-mmkv";
-import { z } from "zod";
-import { createDebugger } from "../../utils/debug";
-import { eventBus } from "../../events";
+import { captureSilentFailure } from '../../utils/silent-failure';
+import { MMKV } from 'react-native-mmkv';
+import { z } from 'zod';
+import { createDebugger } from '../../utils/debug';
+import { eventBus } from '../../events';
 import {
   addToSessionHistory,
   getSessionHistory,
   type SessionHistoryEntry,
-} from "./persistence-history";
+} from './persistence-history';
 import {
   recordRecoveryAttempt,
   getRecoveryAttempts,
   getRecoverySuccessRate,
   type RecoveryAttempt,
-} from "./persistence-recovery";
-import { isSessionStale, canResumeSession } from "./persistence-resume";
-import { getMmkvEncryptionKeySync } from "../../persistence/mmkv-key";
-const debug = createDebugger("session:persistence");
+} from './persistence-recovery';
+import { isSessionStale, canResumeSession } from './persistence-resume';
+import { getMmkvEncryptionKeySync } from '../../persistence/mmkv-key';
+const debug = createDebugger('session:persistence');
 let _storage: MMKV | null = null;
 function getStorage(): MMKV {
   if (!_storage) {
-    _storage = new MMKV({ id: "session-persistence", encryptionKey: getMmkvEncryptionKeySync() });
+    _storage = new MMKV({ id: 'session-persistence', encryptionKey: getMmkvEncryptionKeySync() });
   }
   return _storage;
 }
 const PersistedSessionStateSchema = z.object({
   sessionId: z.string().uuid(),
   userId: z.string(),
-  status: z.enum(["ACTIVE", "PAUSED", "BACKGROUNDED", "INTERRUPTION_RISK"]),
+  status: z.enum(['ACTIVE', 'PAUSED', 'BACKGROUNDED', 'INTERRUPTION_RISK']),
   phase: z.enum([
-    "FOCUS",
-    "SHORT_BREAK",
-    "LONG_BREAK",
-    "PREPARATION",
-    "REVIEW",
+    'FOCUS',
+    'SHORT_BREAK',
+    'LONG_BREAK',
+    'PREPARATION',
+    'REVIEW',
   ]),
   startedAt: z.number(),
   lastUpdatedAt: z.number(),
@@ -54,17 +54,17 @@ const PersistedSessionStateSchema = z.object({
 export type PersistedSessionState = z.infer<typeof PersistedSessionStateSchema>;
 export type { SessionHistoryEntry, RecoveryAttempt };
 export { isSessionStale, canResumeSession };
-export { addToSessionHistory, getSessionHistory } from "./persistence-history";
+export { addToSessionHistory, getSessionHistory } from './persistence-history';
 export {
   recordRecoveryAttempt,
   getRecoveryAttempts,
   getRecoverySuccessRate,
-} from "./persistence-recovery";
+} from './persistence-recovery';
 const KEYS = {
-  ACTIVE_SESSION: "session:active",
-  LAST_SYNC: "session:lastSync",
-  RECOVERY_ATTEMPTS: "session:recoveryAttempts",
-  BACKUP_PREFIX: "session:backup:",
+  ACTIVE_SESSION: 'session:active',
+  LAST_SYNC: 'session:lastSync',
+  RECOVERY_ATTEMPTS: 'session:recoveryAttempts',
+  BACKUP_PREFIX: 'session:backup:',
 } as const;
 export function persistSessionState(state: PersistedSessionState): void {
   try {
@@ -75,9 +75,9 @@ export function persistSessionState(state: PersistedSessionState): void {
     const backupKey = `${KEYS.BACKUP_PREFIX}${Date.now()}`;
     getStorage().set(backupKey, data);
     cleanupOldBackups();
-    debug.info("Session state persisted", { sessionId: state.sessionId });
-    eventBus.publish("analytics:track", {
-      event: "session_persisted",
+    debug.info('Session state persisted', { sessionId: state.sessionId });
+    eventBus.publish('analytics:track', {
+      event: 'session_persisted',
       properties: {
         sessionId: state.sessionId,
         status: state.status,
@@ -86,10 +86,10 @@ export function persistSessionState(state: PersistedSessionState): void {
     });
   } catch (error) {
     debug.error(
-      "Failed to persist session state",
+      'Failed to persist session state',
       error instanceof Error ? error : new Error(String(error)),
     );
-    throw new SessionPersistenceError("Failed to persist session state", {
+    throw new SessionPersistenceError('Failed to persist session state', {
       cause: error,
     });
   }
@@ -98,16 +98,16 @@ export function loadPersistedSession(): PersistedSessionState | null {
   try {
     const data = getStorage().getString(KEYS.ACTIVE_SESSION);
     if (!data) {
-      debug.info("No persisted session found");
+      debug.info('No persisted session found');
       return null;
     }
     const parsed = JSON.parse(data);
     const validated = PersistedSessionStateSchema.parse(parsed);
-    debug.info("Session state loaded", { sessionId: validated.sessionId });
+    debug.info('Session state loaded', { sessionId: validated.sessionId });
     return validated;
   } catch (error) {
     debug.error(
-      "Failed to load persisted session",
+      'Failed to load persisted session',
       error instanceof Error ? error : new Error(String(error)),
     );
     return recoverFromBackup();
@@ -116,14 +116,14 @@ export function loadPersistedSession(): PersistedSessionState | null {
 export function clearPersistedSession(): void {
   getStorage().delete(KEYS.ACTIVE_SESSION);
   getStorage().delete(KEYS.RECOVERY_ATTEMPTS);
-  debug.info("Persisted session cleared");
+  debug.info('Persisted session cleared');
 }
 export function hasPersistedSession(): boolean {
   return getStorage().contains(KEYS.ACTIVE_SESSION);
 }
 export function getTimeSinceLastPersist(): number {
   const lastSync = getStorage().getNumber(KEYS.LAST_SYNC);
-  if (!lastSync) return Infinity;
+  if (!lastSync) {return Infinity;}
   return Date.now() - lastSync;
 }
 function cleanupOldBackups(): void {
@@ -145,23 +145,23 @@ function recoverFromBackup(): PersistedSessionState | null {
       const data = getStorage().getString(key);
       if (data) {
         const validated = PersistedSessionStateSchema.parse(JSON.parse(data));
-        debug.info("Session recovered from backup", {
+        debug.info('Session recovered from backup', {
           sessionId: validated.sessionId,
         });
-        eventBus.publish("analytics:track", {
-          event: "session_recovered_from_backup",
+        eventBus.publish('analytics:track', {
+          event: 'session_recovered_from_backup',
           properties: {
             sessionId: validated.sessionId,
-            backupAge: Date.now() - parseInt(key.split(":").pop() || "0"),
+            backupAge: Date.now() - parseInt(key.split(':').pop() || '0'),
           },
         });
         return validated;
       }
     } catch (error) {
       captureSilentFailure(error, {
-        feature: "session",
-        operation: "safe-fallback",
-        type: "data",
+        feature: 'session',
+        operation: 'safe-fallback',
+        type: 'data',
       });
       continue;
     }
@@ -174,7 +174,7 @@ export class SessionPersistenceError extends Error {
     public details?: { cause?: unknown; sessionId?: string },
   ) {
     super(message);
-    this.name = "SessionPersistenceError";
+    this.name = 'SessionPersistenceError';
   }
 }
 export const SessionPersistence = {

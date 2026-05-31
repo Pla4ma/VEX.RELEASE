@@ -5,13 +5,13 @@
  * session management, and system-level events.
  */
 
-import type { ContentStudyErrorCode } from "./types";
-import { CONTENT_STUDY_CONSTANTS } from "./types";
-import { contentStudyAnalytics } from "./analytics-service";
+import type { ContentStudyErrorCode } from './types';
+import { CONTENT_STUDY_CONSTANTS } from './types';
+import { contentStudyAnalytics } from './analytics-service';
 
 export const studyTrackers = {
   planViewed(generationId: string, viewDurationMs: number): void {
-    contentStudyAnalytics.track("content_study_plan_viewed", {
+    contentStudyAnalytics.track('content_study_plan_viewed', {
       generation_id: generationId,
       view_duration_ms: viewDurationMs,
     });
@@ -21,7 +21,7 @@ export const studyTrackers = {
     taskId: string,
     taskIndex: number,
   ): void {
-    contentStudyAnalytics.track("content_study_task_viewed", {
+    contentStudyAnalytics.track('content_study_task_viewed', {
       generation_id: generationId,
       task_id: taskId,
       task_index: taskIndex,
@@ -33,7 +33,7 @@ export const studyTrackers = {
     taskIndex: number,
     timeSpentMs: number,
   ): void {
-    contentStudyAnalytics.track("content_study_task_completed", {
+    contentStudyAnalytics.track('content_study_task_completed', {
       generation_id: generationId,
       task_id: taskId,
       task_index: taskIndex,
@@ -45,7 +45,7 @@ export const studyTrackers = {
     quizId: string,
     quizIndex: number,
   ): void {
-    contentStudyAnalytics.track("content_study_quiz_viewed", {
+    contentStudyAnalytics.track('content_study_quiz_viewed', {
       generation_id: generationId,
       quiz_id: quizId,
       quiz_index: quizIndex,
@@ -58,7 +58,7 @@ export const studyTrackers = {
     timeSpentMs: number,
     difficulty: string,
   ): void {
-    contentStudyAnalytics.track("content_study_quiz_answered", {
+    contentStudyAnalytics.track('content_study_quiz_answered', {
       generation_id: generationId,
       quiz_id: quizId,
       is_correct: isCorrect,
@@ -74,7 +74,7 @@ export const studyTrackers = {
       focus_areas: string[];
     },
   ): void {
-    contentStudyAnalytics.track("content_study_session_started", {
+    contentStudyAnalytics.track('content_study_session_started', {
       generation_id: generationId,
       duration_seconds: sessionConfig.duration,
       difficulty: sessionConfig.difficulty,
@@ -87,7 +87,7 @@ export const studyTrackers = {
     interruptions: number,
     tasksCompleted: number,
   ): void {
-    contentStudyAnalytics.track("content_study_session_completed", {
+    contentStudyAnalytics.track('content_study_session_completed', {
       generation_id: generationId,
       actual_duration_ms: actualDurationMs,
       interruptions,
@@ -99,14 +99,14 @@ export const studyTrackers = {
     rating: number,
     timeSinceGenerationMs: number,
   ): void {
-    contentStudyAnalytics.track("content_study_feedback_submitted", {
+    contentStudyAnalytics.track('content_study_feedback_submitted', {
       generation_id: generationId,
       rating,
       time_since_generation_ms: timeSinceGenerationMs,
     });
   },
   rateLimited(remaining: number, resetsAt: number): void {
-    contentStudyAnalytics.track("content_study_rate_limited", {
+    contentStudyAnalytics.track('content_study_rate_limited', {
       remaining_generations: remaining,
       resets_at: resetsAt,
       hours_until_reset: Math.ceil(
@@ -115,16 +115,16 @@ export const studyTrackers = {
     });
   },
   offlineMode(
-    reason: "user_initiated" | "network_loss" | "forced",
+    reason: 'user_initiated' | 'network_loss' | 'forced',
   ): void {
-    contentStudyAnalytics.track("content_study_offline_mode", { reason });
+    contentStudyAnalytics.track('content_study_offline_mode', { reason });
   },
   error(
     errorCode: ContentStudyErrorCode,
     context: string,
     recoverable: boolean,
   ): void {
-    contentStudyAnalytics.track("content_study_error", {
+    contentStudyAnalytics.track('content_study_error', {
       error_code: errorCode,
       context,
       recoverable,

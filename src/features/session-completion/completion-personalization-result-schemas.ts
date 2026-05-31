@@ -1,10 +1,10 @@
-import { z } from "zod";
+import { z } from 'zod';
 
-import { LaneProfileSchema } from "../lane-engine/schemas";
+import { LaneProfileSchema } from '../lane-engine/schemas';
 import {
   CompletionMemoryCandidateSchema,
   CompletionUnlockDecisionSchema,
-} from "./completion-personalization-schemas";
+} from './completion-personalization-schemas';
 
 export const CompletionProgressProofSchema = z
   .object({
@@ -12,10 +12,10 @@ export const CompletionProgressProofSchema = z
     grade: z.string().min(1),
     streakDays: z.number().int().min(0),
     streakAction: z.enum([
-      "extended",
-      "maintained",
-      "broken",
-      "saved_by_insurance",
+      'extended',
+      'maintained',
+      'broken',
+      'saved_by_insurance',
     ]),
     focusScoreDelta: z.number().int(),
     effectiveMinutes: z.number().int().min(0),
@@ -33,7 +33,7 @@ export const CompletionUserFacingSummarySchema = z
     displayTitle: z.string().min(1),
     displayBody: z.string().min(1),
     nextActionLabel: z.string().min(1),
-    tone: z.enum(["celebration", "info", "warning"]),
+    tone: z.enum(['celebration', 'info', 'warning']),
   })
   .strict();
 export type CompletionUserFacingSummary = z.infer<
@@ -43,14 +43,14 @@ export type CompletionUserFacingSummary = z.infer<
 const NextActionRouteParamsSchema = z
   .object({
     presetMode: z.enum([
-      "LIGHT_FOCUS",
-      "DEEP_WORK",
-      "SPRINT",
-      "CREATIVE",
-      "STUDY",
+      'LIGHT_FOCUS',
+      'DEEP_WORK',
+      'SPRINT',
+      'CREATIVE',
+      'STUDY',
     ]),
     recommendationId: z.string().min(1),
-    suggestedDifficulty: z.enum(["EASY", "NORMAL", "CHALLENGING", "PUSH"]),
+    suggestedDifficulty: z.enum(['EASY', 'NORMAL', 'CHALLENGING', 'PUSH']),
     suggestedDurationSeconds: z.number().int().min(60),
   })
   .strict();
@@ -68,7 +68,7 @@ const CompletionLearningSchema = z
   .object({
     observation: z.string().min(1).max(200),
     evidence: z.string().min(1).max(120),
-    confidence: z.enum(["weak", "medium", "strong"]),
+    confidence: z.enum(['weak', 'medium', 'strong']),
     recommendedAction: z.string().min(1).max(160).optional(),
     isColdStart: z.boolean(),
   })

@@ -2,10 +2,10 @@
  * Basic Challenges — Core service operations
  */
 
-import { eventBus } from "../../events";
-import * as repository from "./repository";
-import { UserChallengeSchema, type UserChallenge } from "./schemas";
-import { CONFIG, type BasicChallengeClaimResult, type BasicChallengeProgressResult, type BasicChallengesStatus } from "./basic-challenge-types";
+import { eventBus } from '../../events';
+import * as repository from './repository';
+import { UserChallengeSchema, type UserChallenge } from './schemas';
+import { CONFIG, type BasicChallengeClaimResult, type BasicChallengeProgressResult, type BasicChallengesStatus } from './basic-challenge-types';
 
 export async function getOrCreateBasicDailyChallenge(
   userId: string,
@@ -19,7 +19,7 @@ export async function getOrCreateBasicDailyChallenge(
     const now = Date.now();
     if (existing.expiresAt !== null && existing.expiresAt < now) {
       await repository.updateUserChallenge(existing.id, existing.challengeId, {
-        status: "EXPIRED",
+        status: 'EXPIRED',
       });
       return createBasicChallenge(userId, CONFIG.dailyChallengeId, 86400000);
     }
@@ -41,7 +41,7 @@ export async function getOrCreateBasicWeeklyChallenge(
     const now = Date.now();
     if (existing.expiresAt !== null && existing.expiresAt < now) {
       await repository.updateUserChallenge(existing.id, existing.challengeId, {
-        status: "EXPIRED",
+        status: 'EXPIRED',
       });
       return createBasicChallenge(userId, CONFIG.weeklyChallengeId, 604800000);
     }
@@ -73,10 +73,10 @@ export async function getBasicChallengesStatus(
 
   const dailyProgress = daily?.currentValue ?? 0;
   const weeklyProgress = weekly?.currentValue ?? 0;
-  const dailyCompleted = daily?.status === "COMPLETED";
-  const weeklyCompleted = weekly?.status === "COMPLETED";
-  const dailyClaimed = daily?.status === "CLAIMED";
-  const weeklyClaimed = weekly?.status === "CLAIMED";
+  const dailyCompleted = daily?.status === 'COMPLETED';
+  const weeklyCompleted = weekly?.status === 'COMPLETED';
+  const dailyClaimed = daily?.status === 'CLAIMED';
+  const weeklyClaimed = weekly?.status === 'CLAIMED';
 
   return {
     daily: {
@@ -112,15 +112,15 @@ export async function updateBasicChallengeProgressFromSession(
   let weeklyUpdated = false;
   let weeklyCompleted = false;
 
-  if (daily && daily.status === "ACTIVE") {
+  if (daily && daily.status === 'ACTIVE') {
     const newValue = daily.currentValue + 1;
     if (newValue >= CONFIG.dailyTarget && !dailyCompleted) {
       await repository.updateUserChallenge(daily.id, daily.challengeId, {
         currentValue: newValue,
-        status: "COMPLETED",
+        status: 'COMPLETED',
         completedAt: Date.now(),
       });
-      eventBus.publish("challenge:completed", {
+      eventBus.publish('challenge:completed', {
         userId,
         challengeId: daily.challengeId,
         completedAt: Date.now(),
@@ -135,15 +135,15 @@ export async function updateBasicChallengeProgressFromSession(
     }
   }
 
-  if (weekly && weekly.status === "ACTIVE") {
+  if (weekly && weekly.status === 'ACTIVE') {
     const newValue = weekly.currentValue + 1;
     if (newValue >= CONFIG.weeklyTarget && !weeklyCompleted) {
       await repository.updateUserChallenge(weekly.id, weekly.challengeId, {
         currentValue: newValue,
-        status: "COMPLETED",
+        status: 'COMPLETED',
         completedAt: Date.now(),
       });
-      eventBus.publish("challenge:completed", {
+      eventBus.publish('challenge:completed', {
         userId,
         challengeId: weekly.challengeId,
         completedAt: Date.now(),
@@ -163,26 +163,26 @@ export async function updateBasicChallengeProgressFromSession(
 
 export async function claimBasicChallengeReward(
   userId: string,
-  challengeType: "DAILY" | "WEEKLY",
+  challengeType: 'DAILY' | 'WEEKLY',
 ): Promise<BasicChallengeClaimResult> {
   const challenge =
-    challengeType === "DAILY"
+    challengeType === 'DAILY'
       ? await getOrCreateBasicDailyChallenge(userId)
       : await getOrCreateBasicWeeklyChallenge(userId);
 
-  if (!challenge || challenge.status !== "COMPLETED") {
+  if (!challenge || challenge.status !== 'COMPLETED') {
     return { success: false, xpEarned: 0 };
   }
 
   await repository.updateUserChallenge(challenge.id, challenge.challengeId, {
-    status: "CLAIMED",
+    status: 'CLAIMED',
     claimedAt: Date.now(),
   });
 
   const xpEarned =
-    challengeType === "DAILY" ? CONFIG.dailyRewardXp : CONFIG.weeklyRewardXp;
+    challengeType === 'DAILY' ? CONFIG.dailyRewardXp : CONFIG.weeklyRewardXp;
 
-  eventBus.publish("challenge:reward_claimed", {
+  eventBus.publish('challenge:reward_claimed', {
     challengeId: challenge.challengeId,
     claimedAt: Date.now(),
   });

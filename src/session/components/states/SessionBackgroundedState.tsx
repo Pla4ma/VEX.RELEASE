@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { View } from "react-native";
-import Animated, { FadeIn, FadeInUp } from "react-native-reanimated";
-import { Text } from "../../../components/primitives/Text";
-import { Button } from "../../../components/primitives/Button";
-import { Box } from "../../../components/primitives/Box";
-import { useTheme } from "../../../theme";
-import { triggerHapticEvent, HapticEvents } from "../../../constants/haptics";
-import { eventBus } from "../../../events";
-import { styles } from "./SessionBackgroundedState.styles";
+import React, { useEffect, useState } from 'react';
+import { View } from 'react-native';
+import Animated, { FadeIn, FadeInUp } from 'react-native-reanimated';
+import { Text } from '../../../components/primitives/Text';
+import { Button } from '../../../components/primitives/Button';
+import { Box } from '../../../components/primitives/Box';
+import { useTheme } from '../../../theme';
+import { triggerHapticEvent, HapticEvents } from '../../../constants/haptics';
+import { eventBus } from '../../../events';
+import { styles } from './SessionBackgroundedState.styles';
 import {
   formatDuration,
   calculateProgressLoss,
-} from "./session-backgrounded-helpers";
+} from './session-backgrounded-helpers';
 
 interface SessionBackgroundedStateProps {
   backgroundDuration: number;
@@ -42,8 +42,8 @@ export function SessionBackgroundedState({
   );
   useEffect(() => {
     triggerHapticEvent(HapticEvents.WARNING);
-    eventBus.publish("analytics:track", {
-      event: "session_backgrounded_detected",
+    eventBus.publish('analytics:track', {
+      event: 'session_backgrounded_detected',
       properties: {
         durationMs: backgroundDuration,
         progressAtBackground: sessionProgress,
@@ -53,8 +53,8 @@ export function SessionBackgroundedState({
   }, [backgroundDuration, sessionProgress, isLongBackground]);
   const handleAction = (action: string, callback: () => void) => {
     setSelectedAction(action);
-    eventBus.publish("analytics:track", {
-      event: "session_backgrounded_action",
+    eventBus.publish('analytics:track', {
+      event: 'session_backgrounded_action',
       properties: { action, durationMs: backgroundDuration },
     });
     callback();
@@ -139,9 +139,9 @@ export function SessionBackgroundedState({
           <Button
             variant="primary"
             size="lg"
-            onPress={() => handleAction("resume", onResume)}
+            onPress={() => handleAction('resume', onResume)}
             disabled={selectedAction !== null}
-            isLoading={selectedAction === "resume"}
+            isLoading={selectedAction === 'resume'}
             accessibilityLabel="Resume session"
             accessibilityRole="button"
             accessibilityHint="Double tap to activate"
@@ -152,7 +152,7 @@ export function SessionBackgroundedState({
           <Button
             variant="secondary"
             size="md"
-            onPress={() => handleAction("pause", onPause)}
+            onPress={() => handleAction('pause', onPause)}
             disabled={selectedAction !== null}
             accessibilityLabel="Pause and review session"
             accessibilityRole="button"
@@ -166,7 +166,7 @@ export function SessionBackgroundedState({
               variant="ghost"
               size="sm"
               style={{ flex: 1 }}
-              onPress={() => handleAction("end", onEnd)}
+              onPress={() => handleAction('end', onEnd)}
               disabled={selectedAction !== null}
               accessibilityLabel="End session"
               accessibilityRole="button"
@@ -178,7 +178,7 @@ export function SessionBackgroundedState({
               variant="ghost"
               size="sm"
               style={{ flex: 1 }}
-              onPress={() => handleAction("abandon", onAbandon)}
+              onPress={() => handleAction('abandon', onAbandon)}
               disabled={selectedAction !== null}
               accessibilityLabel="Abandon session"
               accessibilityRole="button"

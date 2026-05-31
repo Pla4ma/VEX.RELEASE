@@ -1,11 +1,11 @@
-import React from "react";
-import { View, type ViewStyle } from "react-native";
-import { useTheme } from "../../theme";
-import { Box, Text } from "../primitives";
-import { Spinner, Dots, Pulse, styles } from "./loading-variants";
+import React from 'react';
+import { View, type ViewStyle } from 'react-native';
+import { useTheme } from '../../theme';
+import { Box, Text } from '../primitives';
+import { Spinner, Dots, Pulse, styles } from './loading-variants';
 
-export type LoadingVariant = "spinner" | "dots" | "pulse" | "skeleton";
-export type LoadingSize = "sm" | "md" | "lg" | "xl";
+export type LoadingVariant = 'spinner' | 'dots' | 'pulse' | 'skeleton';
+export type LoadingSize = 'sm' | 'md' | 'lg' | 'xl';
 
 export interface LoadingProps {
   variant?: LoadingVariant;
@@ -25,8 +25,8 @@ const sizeMap: Record<LoadingSize, number> = {
 };
 
 export const Loading: React.FC<LoadingProps> = ({
-  variant = "spinner",
-  size = "md",
+  variant = 'spinner',
+  size = 'md',
   text,
   fullScreen = false,
   style,
@@ -41,11 +41,11 @@ export const Loading: React.FC<LoadingProps> = ({
   }
   const renderVariant = () => {
     switch (variant) {
-      case "dots":
+      case 'dots':
         return <Dots size={sizeValue} color={color} />;
-      case "pulse":
+      case 'pulse':
         return <Pulse size={sizeValue} color={color} />;
-      case "spinner":
+      case 'spinner':
       default:
         return <Spinner size={sizeValue} color={color} />;
     }
@@ -57,7 +57,7 @@ export const Loading: React.FC<LoadingProps> = ({
       style={Object.assign({ gap: theme.spacing[3] }, style || {})}
       accessible={true}
       accessibilityRole="progressbar"
-      accessibilityLabel={accessibilityLabel || text || "Loading"}
+      accessibilityLabel={accessibilityLabel || text || 'Loading'}
     >
       {renderVariant()}
       {text && (

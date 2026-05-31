@@ -3,10 +3,10 @@
  * Setting row with increment/decrement buttons
  */
 
-import React from "react";
-import { View, Text, Pressable } from "react-native";
-import { createSheet } from "@/shared/ui/create-sheet";
-import { launchColors } from "@theme/tokens/launch-colors";
+import React from 'react';
+import { View, Text, Pressable } from 'react-native';
+import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
 
 interface SliderSettingProps {
   label: string;
@@ -59,9 +59,9 @@ export function SliderSetting({
 
 const styles = createSheet({
   container: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     paddingVertical: 16,
     paddingHorizontal: 16,
     backgroundColor: launchColors.hex_ffffff,
@@ -73,8 +73,8 @@ const styles = createSheet({
     color: launchColors.hex_111827,
   },
   sliderContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 12,
   },
   sliderButton: {
@@ -82,18 +82,18 @@ const styles = createSheet({
     height: 32,
     borderRadius: 16,
     backgroundColor: launchColors.hex_f3f4f6,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   sliderButtonText: {
     fontSize: 18,
     color: launchColors.hex_374151,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   sliderValue: {
     fontSize: 16,
     color: launchColors.hex_111827,
     minWidth: 40,
-    textAlign: "center",
+    textAlign: 'center',
   },
 });

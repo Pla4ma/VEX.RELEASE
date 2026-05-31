@@ -1,14 +1,14 @@
-import { z } from "zod";
-import { LaneSchema } from "../lane-engine/schemas";
-import { NudgeSignalTypeSchema, NudgeTypeSchema } from "./schemas";
+import { z } from 'zod';
+import { LaneSchema } from '../lane-engine/schemas';
+import { NudgeSignalTypeSchema, NudgeTypeSchema } from './schemas';
 
 export const NotificationPolicyEventSchema = z
   .object({
     type: z.enum([
-      "nudge_allowed",
-      "nudge_blocked",
-      "nudge_dismissed",
-      "nudge_signal",
+      'nudge_allowed',
+      'nudge_blocked',
+      'nudge_dismissed',
+      'nudge_signal',
     ]),
     userId: z.string().min(1),
     nudgeType: NudgeTypeSchema,

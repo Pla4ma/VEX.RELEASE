@@ -2,7 +2,7 @@ export {
   detectStudyStuck,
   detectDistraction,
   detectOptimalBreak,
-} from "./intervention-detectors-session";
+} from './intervention-detectors-session';
 
 export {
   detectStudyBehind,
@@ -10,4 +10,4 @@ export {
   detectMomentumBuilding,
   detectComebackReady,
   detectStudyPlanComplete,
-} from "./intervention-detectors-engagement";
+} from './intervention-detectors-engagement';

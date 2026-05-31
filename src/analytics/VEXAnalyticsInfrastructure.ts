@@ -1,18 +1,18 @@
-import type { RetentionCohort } from "./VEXAnalyticsInfrastructure.types";
+import type { RetentionCohort } from './VEXAnalyticsInfrastructure.types';
 
 const retentionCohorts = new Map<string, RetentionCohort>();
 
 export function trackRetentionEvent(
   userId: string,
-  event: "first_open" | "session" | "return",
+  event: 'first_open' | 'session' | 'return',
 ): void {
-  const dateParts = new Date().toISOString().split("T");
+  const dateParts = new Date().toISOString().split('T');
   const today = dateParts[0];
   if (!today) {
     return;
   }
   const userFirstOpen = getUserFirstOpen(userId);
-  if (event === "first_open") {
+  if (event === 'first_open') {
     const cohort = retentionCohorts.get(today) ?? {
       cohortDate: today,
       cohortSize: 0,
@@ -94,24 +94,24 @@ export {
   getAverageSessionsPerWeek,
   getStudyPlanCompletionRate,
   calculatePowerUserPercentage,
-} from "./engagement";
-export type { EngagementMetrics } from "./engagement";
-export { trackMonetizationEvent, getMonetizationMetrics } from "./monetization";
-export type { MonetizationMetrics } from "./monetization";
+} from './engagement';
+export type { EngagementMetrics } from './engagement';
+export { trackMonetizationEvent, getMonetizationMetrics } from './monetization';
+export type { MonetizationMetrics } from './monetization';
 export {
   trackPaywallEvent,
   getPaywallAnalytics,
   getBestPaywallContext,
-} from "./paywall";
-export type { PaywallAnalytics } from "./paywall";
-export { trackStreakEvent, getStreakSurvivalMetrics } from "./streaks";
-export type { StreakSurvivalMetrics } from "./streaks";
-export { generateDashboardReport } from "./dashboard";
-export type { VEXDashboard } from "./dashboard";
-export { TARGET_METRICS } from "./VEXAnalyticsInfrastructure.types";
+} from './paywall';
+export type { PaywallAnalytics } from './paywall';
+export { trackStreakEvent, getStreakSurvivalMetrics } from './streaks';
+export type { StreakSurvivalMetrics } from './streaks';
+export { generateDashboardReport } from './dashboard';
+export type { VEXDashboard } from './dashboard';
+export { TARGET_METRICS } from './VEXAnalyticsInfrastructure.types';
 export type {
   MetricWithTarget,
   VEXSuccessMetrics,
   VEXTargetMetrics,
   RetentionCohort,
-} from "./VEXAnalyticsInfrastructure.types";
+} from './VEXAnalyticsInfrastructure.types';

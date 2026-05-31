@@ -1,9 +1,9 @@
-import { eventBus } from "../../events";
-import * as repository from "./repository";
+import { eventBus } from '../../events';
+import * as repository from './repository';
 import {
   ComebackPlanSchema,
   ActivateComebackInputSchema,
-} from "./schemas";
+} from './schemas';
 
 export async function activateComeback(
   input:
@@ -11,14 +11,14 @@ export async function activateComeback(
     | { userId: string; previousStreak?: number; daysInactive?: number },
 ) {
   const normalized =
-    typeof input === "string"
+    typeof input === 'string'
       ? { userId: input, previousStreak: 0, daysInactive: 4 }
       : ActivateComebackInputSchema.partial({
           previousStreak: true,
           daysInactive: true,
         }).parse({ previousStreak: 0, daysInactive: 4, ...input });
   const existing = await repository.fetchActiveComebackPlan(normalized.userId);
-  if (existing && existing.status === "ACTIVE") {
+  if (existing && existing.status === 'ACTIVE') {
     return existing;
   }
   const now = Date.now();
@@ -27,7 +27,7 @@ export async function activateComeback(
     userId: normalized.userId,
     previousStreak: normalized.previousStreak,
     daysInactive: normalized.daysInactive,
-    status: "ACTIVE",
+    status: 'ACTIVE',
     startedAt: now,
     expiresAt: now + 48 * 60 * 60 * 1000,
     sessionsCompleted: 0,
@@ -36,7 +36,7 @@ export async function activateComeback(
     messages: [],
   });
   const savedPlan = await repository.upsertComebackPlan(plan);
-  eventBus.publish("coach:comeback_activated", {
+  eventBus.publish('coach:comeback_activated', {
     userId: normalized.userId,
     planId: savedPlan.id,
     targetSessions: savedPlan.targetSessions,

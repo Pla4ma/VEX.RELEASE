@@ -1,14 +1,14 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo } from 'react';
 
 import {
   useCreateRecommendation,
   useUpdateRecommendationStatus,
   type SessionRecommendation,
-} from "../../../features/ai-coach";
-import type { HomeActionIntent } from "../../../features/home-spine/schemas";
-import { buildHomeReturnReasonState } from "../../../features/home-spine/service";
-import type { NextBestAction } from "../../../features/progression";
-import type { SessionStackParams } from "../../../navigation/types";
+} from '../../../features/ai-coach';
+import type { HomeActionIntent } from '../../../features/home-spine/schemas';
+import { buildHomeReturnReasonState } from '../../../features/home-spine/service';
+import type { NextBestAction } from '../../../features/progression';
+import type { SessionStackParams } from '../../../navigation/types';
 
 export interface HomeReturnReason {
   eyebrow: string;
@@ -17,12 +17,12 @@ export interface HomeReturnReason {
   ctaLabel: string;
   intent: HomeActionIntent;
   source:
-    | "coach"
-    | "comeback"
-    | "study-plan"
-    | "next-best-action"
-    | "completion-highlight";
-  tone: "default" | "celebration" | "info" | "warning";
+    | 'coach'
+    | 'comeback'
+    | 'study-plan'
+    | 'next-best-action'
+    | 'completion-highlight';
+  tone: 'default' | 'celebration' | 'info' | 'warning';
   onPress: () => Promise<void> | void;
 }
 
@@ -41,7 +41,7 @@ interface UseHomeReturnReasonParams {
   latestSessionEndedAt: number | null;
   nextBestAction: NextBestAction;
   openNextAction: () => void;
-  openSetup: (params?: SessionStackParams["SessionSetup"]) => void;
+  openSetup: (params?: SessionStackParams['SessionSetup']) => void;
   primaryRecommendation: SessionRecommendation | null;
   recommendationsLoading: boolean;
   updateRecommendationStatus: ReturnType<typeof useUpdateRecommendationStatus>;
@@ -77,7 +77,7 @@ export function useHomeReturnReason({
     }
     createRecommendation.mutate({
       userId,
-      type: currentStreak > 0 ? "STREAK_PROTECTION" : "OPTIMAL_TIME",
+      type: currentStreak > 0 ? 'STREAK_PROTECTION' : 'OPTIMAL_TIME',
       context: {
         streakDays: currentStreak,
         currentLevel,
@@ -111,7 +111,7 @@ export function useHomeReturnReason({
             reasoning:
               primaryRecommendation.reasoning ?? primaryRecommendation.reason,
             suggestedDifficulty:
-              primaryRecommendation.suggestedDifficulty ?? "NORMAL",
+              primaryRecommendation.suggestedDifficulty ?? 'NORMAL',
             suggestedDuration:
               primaryRecommendation.suggestedDuration ?? 15 * 60,
             type: primaryRecommendation.recommendationType,
@@ -120,11 +120,11 @@ export function useHomeReturnReason({
     });
 
     const getOnPress = () => {
-      if (reasonState.intent === "continue-study-plan") {
+      if (reasonState.intent === 'continue-study-plan') {
         return onContinueStudyPlan;
       }
 
-      if (reasonState.intent === "accept-coach-recommendation") {
+      if (reasonState.intent === 'accept-coach-recommendation') {
         return async () => {
           if (!userId || !reasonState.recommendationId) {
             return;
@@ -132,7 +132,7 @@ export function useHomeReturnReason({
 
           await updateRecommendationStatus.mutateAsync({
             recommendationId: reasonState.recommendationId,
-            status: "ACCEPTED",
+            status: 'ACCEPTED',
             userId,
           });
           openSetup({
@@ -143,7 +143,7 @@ export function useHomeReturnReason({
         };
       }
 
-      return reasonState.source === "next-best-action"
+      return reasonState.source === 'next-best-action'
         ? openNextAction
         : () => openSetup();
     };

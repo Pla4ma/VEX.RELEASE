@@ -4,9 +4,9 @@ import type {
   MasteryRank,
   TechniqueKey,
   ChallengeTemplate,
-} from "./types";
-import { FOCUS_CHALLENGES } from "./challenge-data-focus";
-import { RESILIENCE_CHALLENGES } from "./challenge-data-resilience";
+} from './types';
+import { FOCUS_CHALLENGES } from './challenge-data-focus';
+import { RESILIENCE_CHALLENGES } from './challenge-data-resilience';
 
 const challengeTemplates: Record<TechniqueKey, ChallengeTemplate[]> = {
   ...FOCUS_CHALLENGES,
@@ -14,7 +14,7 @@ const challengeTemplates: Record<TechniqueKey, ChallengeTemplate[]> = {
 };
 
 export function generateMasteryChallenges(
-  techniques: MasteryState["techniques"],
+  techniques: MasteryState['techniques'],
   _currentRank: MasteryRank,
 ): MasteryChallenge[] {
   const challenges: MasteryChallenge[] = [];
@@ -23,27 +23,27 @@ export function generateMasteryChallenges(
     number,
   ][];
   const lowestTechnique = techniqueEntries.sort((a, b) => a[1] - b[1])[0];
-  if (!lowestTechnique) return challenges;
+  if (!lowestTechnique) {return challenges;}
   const techKey = lowestTechnique[0];
   const techLevel = lowestTechnique[1];
-  if (!techKey || techLevel === undefined) return challenges;
+  if (!techKey || techLevel === undefined) {return challenges;}
 
-  let targetDifficulty: "EASY" | "MEDIUM" | "HARD" | "ELITE";
+  let targetDifficulty: 'EASY' | 'MEDIUM' | 'HARD' | 'ELITE';
   if (techLevel < 5) {
-    targetDifficulty = "EASY";
+    targetDifficulty = 'EASY';
   } else if (techLevel < 15) {
-    targetDifficulty = "MEDIUM";
+    targetDifficulty = 'MEDIUM';
   } else if (techLevel < 25) {
-    targetDifficulty = "HARD";
+    targetDifficulty = 'HARD';
   } else {
-    targetDifficulty = "ELITE";
+    targetDifficulty = 'ELITE';
   }
 
   const templates = challengeTemplates[techKey];
-  if (!templates) return challenges;
+  if (!templates) {return challenges;}
   const matchingTemplate =
     templates.find((t) => t.difficulty === targetDifficulty) ?? templates[0];
-  if (!matchingTemplate) return challenges;
+  if (!matchingTemplate) {return challenges;}
   challenges.push({
     id: `mastery_${techKey}_${Date.now()}`,
     technique: techKey,
@@ -54,21 +54,21 @@ export function generateMasteryChallenges(
     current: 0,
     unit: matchingTemplate.unit,
     masteryPoints: matchingTemplate.points,
-    status: "ACTIVE",
+    status: 'ACTIVE',
     completedAt: null,
   });
 
   const filteredEntries = techniqueEntries.filter((t) => t[0] !== techKey);
   const randomIndex = Math.floor(Math.random() * 4);
   const otherTechnique = filteredEntries[randomIndex];
-  if (!otherTechnique) return challenges;
+  if (!otherTechnique) {return challenges;}
   const otherKey = otherTechnique[0];
-  if (!otherKey) return challenges;
+  if (!otherKey) {return challenges;}
   const otherTemplates = challengeTemplates[otherKey];
-  if (!otherTemplates) return challenges;
+  if (!otherTemplates) {return challenges;}
   const otherTemplate =
     otherTemplates[Math.floor(Math.random() * otherTemplates.length)];
-  if (!otherTemplate) return challenges;
+  if (!otherTemplate) {return challenges;}
   challenges.push({
     id: `mastery_${otherKey}_${Date.now()}_2`,
     technique: otherKey,
@@ -79,7 +79,7 @@ export function generateMasteryChallenges(
     current: 0,
     unit: otherTemplate.unit,
     masteryPoints: otherTemplate.points,
-    status: "ACTIVE",
+    status: 'ACTIVE',
     completedAt: null,
   });
 

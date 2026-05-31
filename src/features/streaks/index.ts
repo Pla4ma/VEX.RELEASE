@@ -3,7 +3,7 @@
  */
 
 // Types
-export * from "./types";
+export * from './types';
 export {
   RiskLevelSchema,
   StreakSchema,
@@ -21,16 +21,16 @@ export {
   UseShieldInputSchema,
   FreezeStreakInputSchema,
   RestoreStreakInputSchema,
-} from "./schemas";
+} from './schemas';
 
 // Service
-export * from "./service";
+export * from './service';
 
 // Phase 11.4 - Comeback Quest System
 export {
   ComebackQuestCard,
   ComebackQuestCompact,
-} from "./components/ComebackQuestCard";
+} from './components/ComebackQuestCard';
 export {
   checkComebackEligibility,
   createComebackQuest,
@@ -40,14 +40,14 @@ export {
   type ComebackQuest,
   type ComebackQuestProgress,
   type ComebackQuestStage,
-} from "./ComebackQuestSystem";
-export * as streaksRepository from "./repository";
+} from './ComebackQuestSystem';
+export * as streaksRepository from './repository';
 
 // Hooks
-export * from "./hooks";
+export * from './hooks';
 
 // Analytics
-export * from "./analytics";
+export * from './analytics';
 
 // Utils - risk calculator functions
 export {
@@ -56,7 +56,7 @@ export {
   analyzePattern,
   type RiskFactors,
   type RiskLevel,
-} from "./utils/risk-calculator";
+} from './utils/risk-calculator';
 
 // Phase 3.2 - Streak System Evolution (continued from Phase 3)
 export {
@@ -87,4 +87,4 @@ export {
   type InsuranceSource,
   type StreakRecoveryPlan,
   type StreakProtectionResult,
-} from "./StreakEvolutionSystem";
+} from './StreakEvolutionSystem';

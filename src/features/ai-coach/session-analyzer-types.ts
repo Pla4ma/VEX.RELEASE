@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 // ─── Domain types ───────────────────────────────────────────────
 export type KeyConcept = { term: string; definition?: string };

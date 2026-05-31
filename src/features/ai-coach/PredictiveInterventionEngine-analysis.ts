@@ -1,4 +1,4 @@
-import type { RiskAssessment } from "./PredictiveInterventionEngine-types";
+import type { RiskAssessment } from './PredictiveInterventionEngine-types';
 
 export function analyzeCreatureNeglect(creatureData: {
   lastFedAt: number | null;
@@ -15,7 +15,7 @@ export function analyzeCreatureNeglect(creatureData: {
     creatureData.lastFedAt &&
     now - creatureData.lastFedAt > 24 * 60 * 60 * 1000
   ) {
-    evidence.push("Creature not fed for over 24 hours");
+    evidence.push('Creature not fed for over 24 hours');
     confidence += 0.4;
   }
   if (creatureData.happiness < 30) {
@@ -27,17 +27,17 @@ export function analyzeCreatureNeglect(creatureData: {
     confidence += 0.3;
   }
   if (creatureData.evolutionProgress < 20 && creatureData.level > 1) {
-    evidence.push("Evolution progress stalled");
+    evidence.push('Evolution progress stalled');
     confidence += 0.2;
   }
-  const severity: RiskAssessment["severity"] =
-    confidence > 0.6 ? "high" : confidence > 0.3 ? "medium" : "low";
+  const severity: RiskAssessment['severity'] =
+    confidence > 0.6 ? 'high' : confidence > 0.3 ? 'medium' : 'low';
   return {
     confidence: Math.min(1, confidence),
     severity,
     evidence,
     action:
-      "Your creature needs attention! Feed and play with it to keep it happy and healthy.",
+      'Your creature needs attention! Feed and play with it to keep it happy and healthy.',
   };
 }
 
@@ -60,7 +60,7 @@ export function analyzeRaidParticipation(raidHistory: Array<{
     participatingWeeks.reduce((sum, week) => sum + week.damage, 0) /
     (participatingWeeks.length || 1);
   if (avgDamage < 1000) {
-    evidence.push("Low contribution when participating in raids");
+    evidence.push('Low contribution when participating in raids');
     confidence += 0.2;
   }
   if (last4Weeks.length >= 3) {
@@ -73,18 +73,18 @@ export function analyzeRaidParticipation(raidHistory: Array<{
       (week) => week.participated,
     ).length;
     if (recentParticipation < olderParticipation) {
-      evidence.push("Declining raid participation trend");
+      evidence.push('Declining raid participation trend');
       confidence += 0.3;
     }
   }
-  const severity: RiskAssessment["severity"] =
-    confidence > 0.5 ? "medium" : "low";
+  const severity: RiskAssessment['severity'] =
+    confidence > 0.5 ? 'medium' : 'low';
   return {
     confidence: Math.min(1, confidence),
     severity,
     evidence,
     action:
-      "Weekend raids are starting! Join your squad for epic rewards and teamwork.",
+      'Weekend raids are starting! Join your squad for epic rewards and teamwork.',
   };
 }
 
@@ -107,7 +107,7 @@ export function analyzePrimeTimeParticipation(eventHistory: Array<{
     confidence += 0.4;
   }
   const morningEvents = last7Days.filter((event) =>
-    event.eventType.includes("MORNING"),
+    event.eventType.includes('MORNING'),
   );
   const missedMorningEvents = morningEvents.filter(
     (event) => !event.participated,
@@ -116,7 +116,7 @@ export function analyzePrimeTimeParticipation(eventHistory: Array<{
     morningEvents.length >= 2 &&
     missedMorningEvents === morningEvents.length
   ) {
-    evidence.push("Consistently missing Morning Rally events");
+    evidence.push('Consistently missing Morning Rally events');
     confidence += 0.3;
   }
   const totalRewards = last7Days.reduce(
@@ -126,11 +126,11 @@ export function analyzePrimeTimeParticipation(eventHistory: Array<{
     0,
   );
   if (totalRewards < 100) {
-    evidence.push("Low bonus reward accumulation");
+    evidence.push('Low bonus reward accumulation');
     confidence += 0.2;
   }
-  const severity: RiskAssessment["severity"] =
-    confidence > 0.4 ? "medium" : "low";
+  const severity: RiskAssessment['severity'] =
+    confidence > 0.4 ? 'medium' : 'low';
   return {
     confidence: Math.min(1, confidence),
     severity,
@@ -151,23 +151,23 @@ export function analyzeCreatureEvolutionStall(creature: {
   const evidence: string[] = [];
   let confidence = 0;
   if (
-    creature.stage === "BABY" &&
+    creature.stage === 'BABY' &&
     creature.evolutionProgress < 50 &&
     creature.totalSessions > 20
   ) {
-    evidence.push("Stuck in Baby stage despite good activity");
+    evidence.push('Stuck in Baby stage despite good activity');
     confidence += 0.4;
   }
   if (creature.lastEvolutionAt) {
     const weeksSinceEvolution =
       (Date.now() - creature.lastEvolutionAt) / (7 * 24 * 60 * 60 * 1000);
     if (weeksSinceEvolution > 2 && creature.evolutionProgress < 80) {
-      evidence.push("Slow evolution progress over time");
+      evidence.push('Slow evolution progress over time');
       confidence += 0.3;
     }
   }
   if (creature.currentStreak > 10 && creature.evolutionProgress < 60) {
-    evidence.push("Strong streak but poor evolution progress");
+    evidence.push('Strong streak but poor evolution progress');
     confidence += 0.3;
   }
   if (creature.averagePurity < 75) {
@@ -176,13 +176,13 @@ export function analyzeCreatureEvolutionStall(creature: {
     );
     confidence += 0.2;
   }
-  const severity: RiskAssessment["severity"] =
-    confidence > 0.6 ? "medium" : "low";
+  const severity: RiskAssessment['severity'] =
+    confidence > 0.6 ? 'medium' : 'low';
   return {
     confidence: Math.min(1, confidence),
     severity,
     evidence,
     action:
-      "Focus on higher purity sessions to help your creature evolve faster!",
+      'Focus on higher purity sessions to help your creature evolve faster!',
   };
 }

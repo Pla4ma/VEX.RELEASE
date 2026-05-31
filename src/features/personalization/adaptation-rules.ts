@@ -2,7 +2,7 @@ import {
   AdaptationResultSchema,
   type AdaptationRuleInput,
   type AdaptationResult,
-} from "./session-behavior-signal-schemas";
+} from './session-behavior-signal-schemas';
 
 function coldStart(): AdaptationResult {
   return AdaptationResultSchema.parse({
@@ -23,7 +23,7 @@ function coldStart(): AdaptationResult {
     fromMode: null,
     toMode: null,
     userFacingAdaptation: null,
-    confidence: "low",
+    confidence: 'low',
   });
 }
 
@@ -35,21 +35,21 @@ export function resolveAdaptation(input: AdaptationRuleInput): AdaptationResult 
   if (summary.consecutiveAppOpenedNoSession >= 2) {
     result.shouldReduceFriction = true;
     result.shouldShowRescue = true;
-    result.rescueReason = "opened_app_no_start";
+    result.rescueReason = 'opened_app_no_start';
     result.suggestedDurationMinutes = 10;
     result.userFacingAdaptation =
-      "You skipped setup twice, so VEX made this one smaller.";
+      'You skipped setup twice, so VEX made this one smaller.';
     confidenceCount++;
   }
 
   if (summary.totalSessionsStarted >= 3 && summary.totalPauses >= 3) {
     result.shouldSuggestShorterSessions = true;
     result.shorterSessionReason =
-      "You pause mid-session often. Try a shorter block.";
+      'You pause mid-session often. Try a shorter block.';
     result.suggestedDurationMinutes = Math.min(15, currentDurationMinutes);
     if (!result.userFacingAdaptation) {
       result.userFacingAdaptation =
-        "You paused halfway last time, so VEX suggests a shorter block.";
+        'You paused halfway last time, so VEX suggests a shorter block.';
     }
     confidenceCount++;
   }
@@ -77,7 +77,7 @@ export function resolveAdaptation(input: AdaptationRuleInput): AdaptationResult 
     result.handoffLabel = summary.lastHandoffLabel;
     if (!result.userFacingAdaptation) {
       result.userFacingAdaptation =
-        "You saved a next move, so Project Mode starts there.";
+        'You saved a next move, so Project Mode starts there.';
     }
     confidenceCount++;
   }
@@ -86,7 +86,7 @@ export function resolveAdaptation(input: AdaptationRuleInput): AdaptationResult 
     result.shouldQuietEveningNudges = true;
     if (!result.userFacingAdaptation) {
       result.userFacingAdaptation =
-        "You dismissed evening nudges, so VEX will stay quieter then.";
+        'You dismissed evening nudges, so VEX will stay quieter then.';
     }
     confidenceCount++;
   }
@@ -96,7 +96,7 @@ export function resolveAdaptation(input: AdaptationRuleInput): AdaptationResult 
     summary.totalSessionsStarted >= 3
   ) {
     result.shouldShowRescue = true;
-    result.rescueReason = "make_it_smaller";
+    result.rescueReason = 'make_it_smaller';
     result.shouldReduceFriction = true;
     result.suggestedDurationMinutes = Math.min(
       12,
@@ -104,7 +104,7 @@ export function resolveAdaptation(input: AdaptationRuleInput): AdaptationResult 
     );
     if (!result.userFacingAdaptation) {
       result.userFacingAdaptation =
-        "VEX noticed a few unfinished sessions. Try a smaller block.";
+        'VEX noticed a few unfinished sessions. Try a smaller block.';
     }
     confidenceCount++;
   }
@@ -121,18 +121,18 @@ export function resolveAdaptation(input: AdaptationRuleInput): AdaptationResult 
 
   if (
     summary.modeChanges >= 1 &&
-    summary.previousMode === "SPRINT" &&
-    summary.lastMode === "FOCUS"
+    summary.previousMode === 'SPRINT' &&
+    summary.lastMode === 'FOCUS'
   ) {
     result.shouldReduceGameLanguage = true;
     result.gameLanguageReason =
-      "You switched from game-like to focus. VEX adjusted the tone.";
+      'You switched from game-like to focus. VEX adjusted the tone.';
     result.modeChangeDetected = true;
     result.fromMode = summary.previousMode;
     result.toMode = summary.lastMode;
     if (!result.userFacingAdaptation) {
       result.userFacingAdaptation =
-        "You moved from Run to a quieter mode. VEX reduced game-like language.";
+        'You moved from Run to a quieter mode. VEX reduced game-like language.';
     }
     confidenceCount++;
   }
@@ -144,7 +144,7 @@ export function resolveAdaptation(input: AdaptationRuleInput): AdaptationResult 
     result.shouldQuietEveningNudges = true;
     if (!result.userFacingAdaptation) {
       result.userFacingAdaptation =
-        "You dismissed a few nudges, so VEX will stay lighter.";
+        'You dismissed a few nudges, so VEX will stay lighter.';
     }
     confidenceCount++;
   }
@@ -152,22 +152,22 @@ export function resolveAdaptation(input: AdaptationRuleInput): AdaptationResult 
   if (summary.rescueCompletedCount >= 1) {
     if (!result.shouldShowRescue && summary.totalSessionsAbandoned >= 1) {
       result.shouldShowRescue = true;
-      result.rescueReason = "recovery_pattern";
+      result.rescueReason = 'recovery_pattern';
       result.suggestedDurationMinutes = 8;
     }
     if (!result.userFacingAdaptation) {
       result.userFacingAdaptation =
-        "VEX noticed you worked through a rescue block before. Another small one might help.";
+        'VEX noticed you worked through a rescue block before. Another small one might help.';
     }
     confidenceCount++;
   }
 
   result.confidence =
     confidenceCount >= 3
-      ? "high"
+      ? 'high'
       : confidenceCount >= 2
-        ? "medium"
-        : "low";
+        ? 'medium'
+        : 'low';
 
   return result;
 }

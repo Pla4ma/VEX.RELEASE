@@ -1,1 +1,1 @@
-export { edgeAIClient } from "./edge-function-service";
+export { edgeAIClient } from './edge-function-service';

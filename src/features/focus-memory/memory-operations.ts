@@ -1,6 +1,6 @@
-import { v4 } from "../../utils/uuid";
-import { expiryForType, isSensitiveMemory } from "./expiry";
-import { readMemories, writeMemories } from "./repository";
+import { v4 } from '../../utils/uuid';
+import { expiryForType, isSensitiveMemory } from './expiry';
+import { readMemories, writeMemories } from './repository';
 import {
   CreateMemoryCandidateInputSchema,
   FocusMemorySchema,
@@ -8,10 +8,10 @@ import {
   type CreateMemoryCandidateInput,
   type FocusMemory,
   type MemoryRecommendationInput,
-} from "./schemas";
+} from './schemas';
 
 function isActive(memory: FocusMemory, now: number): boolean {
-  if (memory.deletedAt !== null) return false;
+  if (memory.deletedAt !== null) {return false;}
   return memory.expiresAt === null || memory.expiresAt > now;
 }
 
@@ -23,7 +23,7 @@ export async function hasEvidenceConflict(
   userId: string,
   evidenceHash: string,
 ): Promise<boolean> {
-  if (!evidenceHash) return false;
+  if (!evidenceHash) {return false;}
   const all = await readMemories(userId);
   return all.some(
     (m) => m.evidenceHash === evidenceHash && m.deletedAt !== null,
@@ -43,7 +43,7 @@ export async function createMemoryCandidate(
     );
     if (conflict) {
       throw new Error(
-        "EvidenceConflict: memory with this evidence was previously deleted",
+        'EvidenceConflict: memory with this evidence was previously deleted',
       );
     }
   }
@@ -83,7 +83,7 @@ export async function acceptMemory(
   );
   await writeMemories(userId, updated);
   const found = updated.find((memory) => memory.id === memoryId);
-  if (!found) throw new Error("Memory not found");
+  if (!found) {throw new Error('Memory not found');}
   return found;
 }
 

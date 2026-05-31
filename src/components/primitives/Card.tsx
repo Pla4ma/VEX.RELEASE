@@ -1,4 +1,4 @@
-import React, { forwardRef } from "react";
+import React, { forwardRef } from 'react';
 import {
   Pressable,
   View,
@@ -6,29 +6,29 @@ import {
   type AccessibilityState,
   type StyleProp,
   type ViewStyle,
-} from "react-native";
+} from 'react-native';
 import Animated, {
   interpolate,
   useAnimatedStyle,
   useSharedValue,
   withSpring,
-} from "react-native-reanimated";
-import { useTheme } from "../../theme";
+} from 'react-native-reanimated';
+import { useTheme } from '../../theme';
 
 export type CardVariant =
-  | "default"
-  | "elevated"
-  | "outlined"
-  | "ghost"
-  | "premium"
-  | "glass";
-export type CardSize = "sm" | "md" | "lg";
+  | 'default'
+  | 'elevated'
+  | 'outlined'
+  | 'ghost'
+  | 'premium'
+  | 'glass';
+export type CardSize = 'sm' | 'md' | 'lg';
 export type CardState =
-  | "default"
-  | "loading"
-  | "disabled"
-  | "error"
-  | "success";
+  | 'default'
+  | 'loading'
+  | 'disabled'
+  | 'error'
+  | 'success';
 
 export interface CardProps {
   children: React.ReactNode;
@@ -52,9 +52,9 @@ export const Card = forwardRef<View, CardProps>(
   (
     {
       children,
-      variant = "default",
-      size = "md",
-      state = "default",
+      variant = 'default',
+      size = 'md',
+      state = 'default',
       interactive = false,
       onPress,
       onLongPress,
@@ -73,7 +73,7 @@ export const Card = forwardRef<View, CardProps>(
 
     const animatedStyle = useAnimatedStyle(() => ({
       opacity:
-        state === "disabled"
+        state === 'disabled'
           ? 0.62
           : interpolate(pressed.value, [0, 1], [1, 0.94]),
       transform: [{ scale: interpolate(pressed.value, [0, 1], [1, 0.99]) }],
@@ -96,12 +96,12 @@ export const Card = forwardRef<View, CardProps>(
         shadowRadius: 28,
       },
       outlined: {
-        backgroundColor: "transparent",
+        backgroundColor: 'transparent',
         borderColor: semantic.borderStrong,
         borderWidth: 1,
       },
       ghost: {
-        backgroundColor: "transparent",
+        backgroundColor: 'transparent',
       },
       glass: {
         backgroundColor: semantic.surfaceGlass,
@@ -124,7 +124,7 @@ export const Card = forwardRef<View, CardProps>(
       sm: { borderRadius: theme.borderRadius.lg, padding: theme.spacing[3] },
       md: { borderRadius: theme.borderRadius.xl, padding: theme.spacing[4] },
       lg: {
-        borderRadius: theme.borderRadius["2xl"],
+        borderRadius: theme.borderRadius['2xl'],
         padding: theme.spacing[5],
       },
     };
@@ -137,7 +137,7 @@ export const Card = forwardRef<View, CardProps>(
       success: { borderColor: semantic.success, borderWidth: 1 },
     };
     const combined = [
-      { overflow: "hidden" as const },
+      { overflow: 'hidden' as const },
       variantStyles[variant],
       sizeStyles[size],
       stateStyles[state],
@@ -150,12 +150,12 @@ export const Card = forwardRef<View, CardProps>(
           ref={ref}
           accessibilityHint={accessibilityHint}
           accessibilityLabel={accessibilityLabel}
-          accessibilityRole={accessibilityRole ?? "button"}
+          accessibilityRole={accessibilityRole ?? 'button'}
           accessibilityState={{
             ...accessibilityState,
-            disabled: state === "disabled",
+            disabled: state === 'disabled',
           }}
-          disabled={state === "disabled"}
+          disabled={state === 'disabled'}
           onLongPress={onLongPress}
           onPress={onPress}
           onPressIn={() => {
@@ -188,6 +188,6 @@ export const Card = forwardRef<View, CardProps>(
   },
 );
 
-Card.displayName = "Card";
+Card.displayName = 'Card';
 
-export { CardHeader, CardFooter } from "./CardSubcomponents";
+export { CardHeader, CardFooter } from './CardSubcomponents';

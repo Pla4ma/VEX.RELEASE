@@ -1,6 +1,6 @@
-import type { CompletionLedger } from "../schemas";
-import type { SessionSummary } from "../../../session/types";
-import { SessionMode } from "../../../session/modes";
+import type { CompletionLedger } from '../schemas';
+import type { SessionSummary } from '../../../session/types';
+import { SessionMode } from '../../../session/modes';
 
 export const baseLedger: CompletionLedger = {
   companionReactionId: null,
@@ -10,28 +10,28 @@ export const baseLedger: CompletionLedger = {
   dailyMissionResult: {
     missionId: null,
     progressDelta: 0,
-    status: "unchanged",
+    status: 'unchanged',
   },
   degradedSystems: [],
   effectiveFocusedSeconds: 1400,
   focusScoreDelta: 8,
-  grade: "B",
+  grade: 'B',
   gradeScore: 75,
-  idempotencyKey: "550e8400-e29b-41d4-a716-4466554400:completed",
+  idempotencyKey: '550e8400-e29b-41d4-a716-4466554400:completed',
   interruptionCount: 1,
-  ledgerId: "550e8400-e29b-41d4-a716-446655440001",
+  ledgerId: '550e8400-e29b-41d4-a716-446655440001',
   mode: SessionMode.FLOW,
-  offlineSyncStatus: "synced",
+  offlineSyncStatus: 'synced',
   pauseCount: 0,
   qualityScore: 75,
   rewardIds: [],
-  sessionId: "550e8400-e29b-41d4-a716-446655440002",
+  sessionId: '550e8400-e29b-41d4-a716-446655440002',
   startedAt: 500000,
-  streakResult: { action: "extended", newDays: 3, previousDays: 2 },
+  streakResult: { action: 'extended', newDays: 3, previousDays: 2 },
   strictMode: false,
   targetDurationSeconds: 1500,
-  timezone: "UTC",
-  userId: "550e8400-e29b-41d4-a716-4466554400ab",
+  timezone: 'UTC',
+  userId: '550e8400-e29b-41d4-a716-4466554400ab',
   xpDelta: 80,
 };
 
@@ -55,15 +55,15 @@ export const baseSummary: SessionSummary = {
   pauses: 0,
   penaltiesApplied: [],
   plannedDuration: 1500,
-  sessionId: "550e8400-e29b-41d4-a716-446655440002",
+  sessionId: '550e8400-e29b-41d4-a716-446655440002',
   sessionMode: SessionMode.FLOW,
-  status: "COMPLETED",
+  status: 'COMPLETED',
   streakBonus: 10,
   streakDays: 3,
   streakIncreased: true,
   streakMaintained: true,
   timeBonus: 10,
-  userId: "550e8400-e29b-41d4-a716-4466554400ab",
+  userId: '550e8400-e29b-41d4-a716-4466554400ab',
   userLevel: 2,
   vsAverage: 0,
   vsBest: 0,

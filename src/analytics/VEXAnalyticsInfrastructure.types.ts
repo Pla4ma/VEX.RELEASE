@@ -1,7 +1,7 @@
 export interface MetricWithTarget {
   current: number;
   target: number;
-  trend: "up" | "down" | "flat";
+  trend: 'up' | 'down' | 'flat';
 }
 
 export interface VEXSuccessMetrics {

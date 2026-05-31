@@ -1,23 +1,23 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { ScrollView, View, type LayoutChangeEvent } from "react-native";
+import React, { useCallback, useEffect, useState } from 'react';
+import { ScrollView, View, type LayoutChangeEvent } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withSpring,
-} from "react-native-reanimated";
-import { useTheme } from "../../../theme";
-import type { TabBarProps } from "./TabBar.types";
-import { styles } from "./TabBar.styles";
-import TabItemComponent from "./TabItemComponent";
-import { Breadcrumb } from "./Breadcrumb";
+} from 'react-native-reanimated';
+import { useTheme } from '../../../theme';
+import type { TabBarProps } from './TabBar.types';
+import { styles } from './TabBar.styles';
+import TabItemComponent from './TabItemComponent';
+import { Breadcrumb } from './Breadcrumb';
 
 export const TabBar: React.FC<TabBarProps> = ({
   tabs,
   activeTab,
   onChange,
-  orientation = "horizontal",
-  variant = "default",
-  size = "md",
+  orientation = 'horizontal',
+  variant = 'default',
+  size = 'md',
   showLabels = true,
   scrollable = false,
   style,
@@ -55,7 +55,7 @@ export const TabBar: React.FC<TabBarProps> = ({
     [onChange, tabs],
   );
 
-  const isHorizontal = orientation === "horizontal";
+  const isHorizontal = orientation === 'horizontal';
   const indicatorStyle = useAnimatedStyle(() => ({
     transform: [{ translateX: indicatorPosition.value }],
     width: indicatorWidth.value,
@@ -76,7 +76,7 @@ export const TabBar: React.FC<TabBarProps> = ({
         />
       ))}
 
-      {variant === "underline" && isHorizontal ? (
+      {variant === 'underline' && isHorizontal ? (
         <Animated.View
           style={[
             styles.underlineIndicator,
@@ -121,5 +121,5 @@ export const TabBar: React.FC<TabBarProps> = ({
 };
 
 export { Breadcrumb };
-export type { TabBarProps, TabItem, BreadcrumbProps } from "./TabBar.types";
+export type { TabBarProps, TabItem, BreadcrumbProps } from './TabBar.types';
 export default TabBar;

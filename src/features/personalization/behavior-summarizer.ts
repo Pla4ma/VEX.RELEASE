@@ -1,4 +1,4 @@
-import type { SessionBehaviorSummary } from "./session-behavior-signal-schemas";
+import type { SessionBehaviorSummary } from './session-behavior-signal-schemas';
 
 type SignalInput = {
   signalType: string;
@@ -55,11 +55,11 @@ export function summarizeSessionBehavior(
 
   for (const signal of sorted) {
     switch (signal.signalType) {
-      case "session_started":
+      case 'session_started':
         totalSessionsStarted++;
         resetConsecutive();
         break;
-      case "session_completed":
+      case 'session_completed':
         totalSessionsCompleted++;
         if (signal.metadata?.durationSeconds) {
           totalDuration += signal.metadata.durationSeconds;
@@ -68,50 +68,50 @@ export function summarizeSessionBehavior(
         }
         resetConsecutive();
         break;
-      case "session_abandoned":
+      case 'session_abandoned':
         totalSessionsAbandoned++;
         break;
-      case "session_paused":
+      case 'session_paused':
         totalPauses++;
         if (signal.metadata?.pauseCount) {
           totalPauses += signal.metadata.pauseCount;
         }
         break;
-      case "session_resumed":
+      case 'session_resumed':
         resetConsecutive();
         break;
-      case "app_opened_no_session":
+      case 'app_opened_no_session':
         appOpenedNoSessionCount++;
         consecutiveAppOpenedNoSession++;
         break;
-      case "cta_dismissed":
+      case 'cta_dismissed':
         ctaDismissals++;
         break;
-      case "notification_dismissed":
+      case 'notification_dismissed':
         notificationDismissals++;
         if (signal.metadata?.dismissedEvening) {
           eveningDismissals++;
         }
         break;
-      case "rescue_started":
+      case 'rescue_started':
         rescueStartedCount++;
         break;
-      case "rescue_completed":
+      case 'rescue_completed':
         rescueCompletedCount++;
         break;
-      case "reflection_saved":
+      case 'reflection_saved':
         reflectionCount++;
         break;
-      case "mode_changed":
+      case 'mode_changed':
         modeChanges++;
         previousMode = signal.metadata?.previousMode ?? null;
         lastMode = signal.metadata?.newMode ?? null;
         break;
-      case "study_target_completed":
+      case 'study_target_completed':
         studyTargetsCompleted++;
         lastStudyTarget = signal.metadata?.studyTarget ?? null;
         break;
-      case "project_handoff_saved":
+      case 'project_handoff_saved':
         projectHandoffSaved = true;
         lastHandoffLabel = signal.metadata?.nextActionLabel ?? null;
         break;
@@ -140,8 +140,8 @@ export function summarizeSessionBehavior(
     rescueCompletedCount,
     reflectionCount,
     modeChanges,
-    lastMode: lastMode as SessionBehaviorSummary["lastMode"],
-    previousMode: previousMode as SessionBehaviorSummary["previousMode"],
+    lastMode: lastMode as SessionBehaviorSummary['lastMode'],
+    previousMode: previousMode as SessionBehaviorSummary['previousMode'],
     studyTargetsCompleted,
     lastStudyTarget,
     projectHandoffSaved,

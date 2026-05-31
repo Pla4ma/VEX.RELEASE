@@ -3,12 +3,12 @@ import {
   clearActiveRescuePlan,
   saveRescueCompletion,
   saveRescueMemory,
-} from "./repository";
+} from './repository';
 import {
   buildRescueCompletionRecord,
   buildRescueCompletionMemory,
-} from "./service";
-import type { RescueOutcome } from "./schemas";
+} from './service';
+import type { RescueOutcome } from './schemas';
 
 interface RescueCompletionInput {
   userId: string;
@@ -22,15 +22,15 @@ export async function recordRescueCompletion(
   input: RescueCompletionInput,
 ): Promise<void> {
   const plan = await getActiveRescuePlan(input.userId);
-  if (!plan) return;
+  if (!plan) {return;}
 
   let outcome: RescueOutcome;
-  if (input.status === "COMPLETED") {
-    outcome = "completed";
+  if (input.status === 'COMPLETED') {
+    outcome = 'completed';
   } else if (input.completionPercentage >= 50) {
-    outcome = "partial";
+    outcome = 'partial';
   } else {
-    outcome = "abandoned";
+    outcome = 'abandoned';
   }
 
   const record = buildRescueCompletionRecord(

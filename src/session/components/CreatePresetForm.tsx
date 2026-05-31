@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { View, Text, Pressable, Modal, TextInput } from "react-native";
-import { launchColors } from "@theme/tokens/launch-colors";
-import { buttonTap } from "../../utils/haptics";
+import React, { useState } from 'react';
+import { View, Text, Pressable, Modal, TextInput } from 'react-native';
+import { launchColors } from '@theme/tokens/launch-colors';
+import { buttonTap } from '../../utils/haptics';
 
 interface CreatePresetFormProps {
   visible: boolean;
@@ -14,14 +14,14 @@ export const CreatePresetForm: React.FC<CreatePresetFormProps> = ({
   onClose,
   onCreate,
 }) => {
-  const [name, setName] = useState("");
-  const [duration, setDuration] = useState("25");
+  const [name, setName] = useState('');
+  const [duration, setDuration] = useState('25');
 
   const handleCreate = () => {
     if (name.trim()) {
       onCreate(name, parseInt(duration) * 60);
-      setName("");
-      setDuration("25");
+      setName('');
+      setDuration('25');
     }
   };
 
@@ -93,7 +93,7 @@ const styles = {
   modalOverlay: {
     flex: 1,
     backgroundColor: launchColors.rgb_0_0_0_0_7,
-    justifyContent: "center" as const,
+    justifyContent: 'center' as const,
     padding: 24,
   },
   modalContent: {
@@ -103,7 +103,7 @@ const styles = {
   },
   modalTitle: {
     fontSize: 20,
-    fontWeight: "700" as const,
+    fontWeight: '700' as const,
     color: launchColors.hex_fff,
     marginBottom: 20,
   },
@@ -118,27 +118,27 @@ const styles = {
     borderWidth: 1,
     borderColor: launchColors.hex_3a3a4e,
   },
-  modalButtons: { flexDirection: "row" as const, gap: 12 },
+  modalButtons: { flexDirection: 'row' as const, gap: 12 },
   modalButton: {
     flex: 1,
     paddingVertical: 14,
     borderRadius: 8,
-    alignItems: "center" as const,
+    alignItems: 'center' as const,
   },
   cancelButton: {
-    backgroundColor: "transparent",
+    backgroundColor: 'transparent',
     borderWidth: 1,
     borderColor: launchColors.hex_9e9e9e,
   },
   cancelButtonText: {
     color: launchColors.hex_9e9e9e,
     fontSize: 16,
-    fontWeight: "600" as const,
+    fontWeight: '600' as const,
   },
   createConfirmButton: { backgroundColor: launchColors.hex_e94560 },
   createButtonTextConfirm: {
     color: launchColors.hex_fff,
     fontSize: 16,
-    fontWeight: "600" as const,
+    fontWeight: '600' as const,
   },
 };

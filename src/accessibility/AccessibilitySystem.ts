@@ -23,43 +23,43 @@ export {
   type FocusableElement,
   type AccessibilityAudit,
   type AccessibilityIssue,
-} from "./types";
+} from './types';
 
 export {
   calculateContrastRatio,
   checkContrast,
   getAccessibleAlternatives,
-} from "./contrastUtils";
+} from './contrastUtils';
 
 export {
   COLOR_BLIND_PALETTES,
   getAccessibleColor,
   getStatusPattern,
-} from "./colorBlindPalettes";
+} from './colorBlindPalettes';
 
 export {
   announce,
   getRecentAnnouncements,
   generateAccessibleLabel,
-} from "./screenReaderUtils";
+} from './screenReaderUtils';
 
 export {
   getAnimationConfig,
   getAnimationStyles,
   calculateScaledFontSize,
   getScaledTypography,
-} from "./animationUtils";
+} from './animationUtils';
 
 export {
   registerFocusableElement,
   getNextFocusableElement,
   getPreviousFocusableElement,
-} from "./focusManagement";
+} from './focusManagement';
 
 export {
   getAccessibilityPreferences,
   updateAccessibilityPreferences,
   detectSystemAccessibility,
-} from "./preferences";
+} from './preferences';
 
-export { auditScreen } from "./audit";
+export { auditScreen } from './audit';

@@ -1,21 +1,21 @@
-import { z } from "zod";
-import type { UnifiedMasteryState } from "./unified-mastery";
+import { z } from 'zod';
+import type { UnifiedMasteryState } from './unified-mastery';
 
 export const PrestigeBonusSchema = z.object({
   id: z.string(),
   name: z.string(),
   description: z.string(),
   type: z.enum([
-    "XP_BOOST",
-    "COIN_BOOST",
-    "DROP_CHANCE",
-    "DAMAGE_BOOST",
-    "TIME_REDUCTION",
-    "SPECIAL",
+    'XP_BOOST',
+    'COIN_BOOST',
+    'DROP_CHANCE',
+    'DAMAGE_BOOST',
+    'TIME_REDUCTION',
+    'SPECIAL',
   ]),
   value: z.number(),
   icon: z.string(),
-  rarity: z.enum(["COMMON", "RARE", "EPIC", "LEGENDARY"]),
+  rarity: z.enum(['COMMON', 'RARE', 'EPIC', 'LEGENDARY']),
 });
 
 export type PrestigeBonus = z.infer<typeof PrestigeBonusSchema>;

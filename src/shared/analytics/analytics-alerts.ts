@@ -1,14 +1,14 @@
-import { capture } from "./index";
-import type { RevenueMetrics, RetentionData } from "./retention-analytics";
-import type { Funnel } from "./funnel-analytics";
+import { capture } from './index';
+import type { RevenueMetrics, RetentionData } from './retention-analytics';
+import type { Funnel } from './funnel-analytics';
 
 export interface MetricAlert {
   id: string;
   metric: string;
   threshold: number;
-  operator: ">" | "<" | "=";
+  operator: '>' | '<' | '=';
   currentValue: number;
-  severity: "WARNING" | "CRITICAL";
+  severity: 'WARNING' | 'CRITICAL';
   triggeredAt: number;
 }
 
@@ -17,42 +17,42 @@ export interface AlertRule {
   name: string;
   metric: string;
   threshold: number;
-  operator: ">" | "<" | "=";
+  operator: '>' | '<' | '=';
   duration: number;
-  severity: "WARNING" | "CRITICAL";
+  severity: 'WARNING' | 'CRITICAL';
   notifyChannels: string[];
 }
 
 const DEFAULT_ALERT_RULES: AlertRule[] = [
   {
-    id: "alert-d1-retention-drop",
-    name: "D1 Retention Drop",
-    metric: "retention.day1",
+    id: 'alert-d1-retention-drop',
+    name: 'D1 Retention Drop',
+    metric: 'retention.day1',
     threshold: 10,
-    operator: "<",
+    operator: '<',
     duration: 60,
-    severity: "CRITICAL",
-    notifyChannels: ["email", "slack"],
+    severity: 'CRITICAL',
+    notifyChannels: ['email', 'slack'],
   },
   {
-    id: "alert-session-crash-rate",
-    name: "Session Crash Rate High",
-    metric: "crash.session_rate",
+    id: 'alert-session-crash-rate',
+    name: 'Session Crash Rate High',
+    metric: 'crash.session_rate',
     threshold: 1,
-    operator: ">",
+    operator: '>',
     duration: 30,
-    severity: "WARNING",
-    notifyChannels: ["email"],
+    severity: 'WARNING',
+    notifyChannels: ['email'],
   },
   {
-    id: "alert-revenue-drop",
-    name: "Daily Revenue Drop",
-    metric: "revenue.daily",
+    id: 'alert-revenue-drop',
+    name: 'Daily Revenue Drop',
+    metric: 'revenue.daily',
     threshold: 20,
-    operator: "<",
+    operator: '<',
     duration: 120,
-    severity: "CRITICAL",
-    notifyChannels: ["email", "slack", "pagerduty"],
+    severity: 'CRITICAL',
+    notifyChannels: ['email', 'slack', 'pagerduty'],
   },
 ];
 
@@ -68,13 +68,13 @@ export function checkAlerts(
     }
     let isTriggered = false;
     switch (rule.operator) {
-      case ">":
+      case '>':
         isTriggered = currentValue > rule.threshold;
         break;
-      case "<":
+      case '<':
         isTriggered = currentValue < rule.threshold;
         break;
-      case "=":
+      case '=':
         isTriggered = currentValue === rule.threshold;
         break;
     }
@@ -88,7 +88,7 @@ export function checkAlerts(
         severity: rule.severity,
         triggeredAt: Date.now(),
       });
-      capture("alert_triggered", {
+      capture('alert_triggered', {
         rule_id: rule.id,
         metric: rule.metric,
         current_value: currentValue,
@@ -100,7 +100,7 @@ export function checkAlerts(
   return triggered;
 }
 
-export function createDashboardData(_timeRange: "1d" | "7d" | "30d" | "90d"): {
+export function createDashboardData(_timeRange: '1d' | '7d' | '30d' | '90d'): {
   revenue: RevenueMetrics;
   retention: RetentionData;
   funnels: Funnel[];

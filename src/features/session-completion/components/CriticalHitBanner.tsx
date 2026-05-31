@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react';
 import Animated, {
   FadeIn,
   FadeOut,
@@ -7,12 +7,12 @@ import Animated, {
   withSequence,
   withTiming,
   withDelay,
-} from "react-native-reanimated";
-import { triggerHapticPattern } from "../../../utils/haptics";
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import { LightningBolt, EnergyBurst } from "./CriticalHitBanner.effects";
+} from 'react-native-reanimated';
+import { triggerHapticPattern } from '../../../utils/haptics';
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import { LightningBolt, EnergyBurst } from './CriticalHitBanner.effects';
 
 export interface CriticalHitBannerProps {
   xpAmount: number;
@@ -26,7 +26,7 @@ export function CriticalHitBanner({
   const { theme } = useTheme();
   useEffect(() => {
     const triggerHaptics = async () => {
-      await triggerHapticPattern(["success", "success"], 200);
+      await triggerHapticPattern(['success', 'success'], 200);
     };
     void triggerHaptics();
     const timer = setTimeout(() => {
@@ -64,7 +64,7 @@ export function CriticalHitBanner({
       <Animated.View
         entering={FadeIn.duration(300)}
         exiting={FadeOut.duration(300)}
-        style={[{ width: "100%", alignItems: "center" }]}
+        style={[{ width: '100%', alignItems: 'center' }]}
       >
         {}
         <Box
@@ -89,7 +89,7 @@ export function CriticalHitBanner({
               backgroundColor: `${theme.colors.accent.purple}30`,
               borderWidth: 3,
               borderColor: theme.colors.accent.purple,
-              alignItems: "center",
+              alignItems: 'center',
             },
             bannerStyle,
           ]}
@@ -111,7 +111,7 @@ export function CriticalHitBanner({
         {}
         <Animated.View
           style={[
-            { marginTop: 32, alignItems: "center", opacity: 0 },
+            { marginTop: 32, alignItems: 'center', opacity: 0 },
             tripleXStyle,
           ]}
         >
@@ -148,7 +148,7 @@ export function CriticalHitBanner({
           <Text
             variant="h4"
             color="text.tertiary"
-            style={{ textDecorationLine: "line-through" }}
+            style={{ textDecorationLine: 'line-through' }}
           >
             Was: {xpAmount} XP
           </Text>

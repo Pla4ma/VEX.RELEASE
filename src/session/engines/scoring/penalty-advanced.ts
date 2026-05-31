@@ -1,4 +1,4 @@
-import { PENALTY_CONSTANTS, severityRankings } from "./penalty-constants";
+import { PENALTY_CONSTANTS, severityRankings } from './penalty-constants';
 import type {
   AntiCheatViolationType,
   AntiCheatPenaltyInput,
@@ -8,7 +8,7 @@ import type {
   PenaltyAction,
   AntiCheatPenaltyResult,
   TotalPenaltyResult,
-} from "./penalty-types";
+} from './penalty-types';
 
 export function calculateAntiCheatPenalty(
   input: AntiCheatPenaltyInput,
@@ -29,11 +29,11 @@ export function calculateAntiCheatPenalty(
   let total = 0;
   const violations: Array<{ type: AntiCheatViolationType; penalty: number }> =
     [];
-  let maxSeverity: string = "LOW";
+  let maxSeverity: string = 'LOW';
   for (const violation of input.violations) {
     const base = basePenalties[violation.type];
     const multiplier = severityMultipliers[violation.severity];
-    if (multiplier === undefined) continue;
+    if (multiplier === undefined) {continue;}
     const penalty = base * multiplier;
     total += penalty;
     violations.push({ type: violation.type, penalty });
@@ -48,13 +48,13 @@ export function calculateAntiCheatPenalty(
     }
   }
   const actionMap: Record<string, PenaltyAction> = {
-    LOW: "WARNING",
-    MEDIUM: "PENALTY",
-    HIGH: "DISQUALIFY",
-    CRITICAL: "BAN",
+    LOW: 'WARNING',
+    MEDIUM: 'PENALTY',
+    HIGH: 'DISQUALIFY',
+    CRITICAL: 'BAN',
   };
   const actionRequired = actionMap[maxSeverity];
-  return { total, violations, actionRequired: actionRequired ?? "WARNING" };
+  return { total, violations, actionRequired: actionRequired ?? 'WARNING' };
 }
 
 export function calculateAbandonPenalty(

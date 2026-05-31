@@ -4,7 +4,7 @@
  * Shared services for the VEX application.
  */
 
-export * from "./supabaseAuth";
+export * from './supabaseAuth';
 export {
   initializePresence,
   updatePresence,
@@ -21,4 +21,4 @@ export {
   type UserPresence,
   type SquadPresence,
   type BroadcastMessage,
-} from "./realtime";
+} from './realtime';

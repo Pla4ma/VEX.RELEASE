@@ -1,20 +1,20 @@
-import React from "react";
-import { Pressable, View } from "react-native";
-import Animated, { FadeInUp } from "react-native-reanimated";
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import { launchColors } from "@theme/tokens/launch-colors";
+import React from 'react';
+import { Pressable, View } from 'react-native';
+import Animated, { FadeInUp } from 'react-native-reanimated';
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import { launchColors } from '@theme/tokens/launch-colors';
 
 export interface TomorrowPreviewSessionProps {
   preview: {
     type:
-      | "STREAK_MILESTONE"
-      | "BOSS_NEAR_DEATH"
-      | "RIVAL_GAP"
-      | "POWER_HOUR"
-      | "CHALLENGE_RESET"
-      | "GENERIC";
+      | 'STREAK_MILESTONE'
+      | 'BOSS_NEAR_DEATH'
+      | 'RIVAL_GAP'
+      | 'POWER_HOUR'
+      | 'CHALLENGE_RESET'
+      | 'GENERIC';
     headline: string;
     subtext: string;
     emoji: string;
@@ -30,15 +30,15 @@ export function TomorrowPreviewSession({
   const { theme } = useTheme();
   const getTypeColor = () => {
     switch (preview.type) {
-      case "STREAK_MILESTONE":
+      case 'STREAK_MILESTONE':
         return theme.colors.warning[500];
-      case "BOSS_NEAR_DEATH":
+      case 'BOSS_NEAR_DEATH':
         return theme.colors.error[500];
-      case "RIVAL_GAP":
+      case 'RIVAL_GAP':
         return theme.colors.primary[500];
-      case "POWER_HOUR":
+      case 'POWER_HOUR':
         return launchColors.hex_f59e0b;
-      case "CHALLENGE_RESET":
+      case 'CHALLENGE_RESET':
         return launchColors.hex_10b981;
       default:
         return theme.colors.primary[500];
@@ -78,8 +78,8 @@ export function TomorrowPreviewSession({
                 height: 48,
                 borderRadius: theme.borderRadius.full,
                 backgroundColor: `${accentColor}20`,
-                justifyContent: "center",
-                alignItems: "center",
+                justifyContent: 'center',
+                alignItems: 'center',
               }}
             >
               <Text fontSize={24}>{preview.emoji}</Text>

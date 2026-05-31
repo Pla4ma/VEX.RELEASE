@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import { Pressable } from "react-native";
+import React, { useState } from 'react';
+import { Pressable } from 'react-native';
 import Animated, {
   FadeInUp,
-} from "react-native-reanimated";
-import { Text } from "../../../components/primitives";
-import { useTheme } from "../../../theme";
-import { buttonTap } from "../../../utils/haptics";
-import type { CoachMessage } from "../types";
+} from 'react-native-reanimated';
+import { Text } from '../../../components/primitives';
+import { useTheme } from '../../../theme';
+import { buttonTap } from '../../../utils/haptics';
+import type { CoachMessage } from '../types';
 
 export interface CoachMessageBubbleProps {
   message: CoachMessage;
@@ -25,15 +25,15 @@ export function CoachMessageBubble({
   const [expanded, setExpanded] = useState(false);
   const formatTime = (timestamp: number): string => {
     const date = new Date(timestamp);
-    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
   const isLongMessage = message.content.length > 200;
   const displayContent =
     expanded || !isLongMessage
       ? message.content
-      : message.content.slice(0, 200) + "...";
+      : message.content.slice(0, 200) + '...';
   const getPersonaEmoji = () => {
-    return "🤖";
+    return '🤖';
   };
   return (
     <Animated.View
@@ -41,12 +41,12 @@ export function CoachMessageBubble({
         .delay(index * 100)
         .springify()}
       style={{
-        flexDirection: "row",
-        alignItems: "flex-start",
+        flexDirection: 'row',
+        alignItems: 'flex-start',
         gap: theme.spacing[2],
         marginBottom: theme.spacing[3],
-        alignSelf: isCoach ? "flex-start" : "flex-end",
-        maxWidth: "85%",
+        alignSelf: isCoach ? 'flex-start' : 'flex-end',
+        maxWidth: '85%',
       }}
     >
       {}
@@ -57,8 +57,8 @@ export function CoachMessageBubble({
             height: 36,
             borderRadius: 18,
             backgroundColor: theme.colors.primary[500],
-            justifyContent: "center",
-            alignItems: "center",
+            justifyContent: 'center',
+            alignItems: 'center',
             marginTop: theme.spacing[1],
           }}
         >
@@ -91,7 +91,7 @@ export function CoachMessageBubble({
         {isLongMessage && (
           <Pressable
             onPress={() => { buttonTap(); setExpanded(!expanded); }}
-            accessibilityLabel={expanded ? "Show less" : "Read more"}
+            accessibilityLabel={expanded ? 'Show less' : 'Read more'}
             accessibilityRole="button"
             accessibilityHint="Double tap to toggle message length"
           >
@@ -101,7 +101,7 @@ export function CoachMessageBubble({
               fontWeight="600"
               style={{ marginTop: theme.spacing[1] }}
             >
-              {expanded ? "Show less" : "Read more"}
+              {expanded ? 'Show less' : 'Read more'}
             </Text>
           </Pressable>
         )}
@@ -122,7 +122,7 @@ export function CoachMessageBubble({
         {}
         {message.actionTaken && (
           <Pressable
-            onPress={() => { buttonTap(); onActionPress?.(message.actionTaken || ""); }}
+            onPress={() => { buttonTap(); onActionPress?.(message.actionTaken || ''); }}
             style={{
               backgroundColor: isCoach
                 ? theme.colors.primary[500]
@@ -131,9 +131,9 @@ export function CoachMessageBubble({
               paddingVertical: theme.spacing[2],
               borderRadius: theme.borderRadius.lg,
               marginTop: theme.spacing[2],
-              alignSelf: "flex-start",
+              alignSelf: 'flex-start',
             }}
-            accessibilityLabel={message.actionTaken ?? "Coach action"}
+            accessibilityLabel={message.actionTaken ?? 'Coach action'}
             accessibilityRole="button"
             accessibilityHint="Double tap to perform action"
           >

@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 const uuidish = z.string().min(1).max(100);
 const optionalShortText = z.string().max(1000).optional();
@@ -9,19 +9,19 @@ export const sessionSetupParamsSchema = z
     presetDuration: z.number().positive().optional(),
     presetMode: z
       .enum([
-        "LIGHT_FOCUS",
-        "DEEP_WORK",
-        "SPRINT",
-        "CREATIVE",
-        "STUDY",
-        "RECOVERY",
+        'LIGHT_FOCUS',
+        'DEEP_WORK',
+        'SPRINT',
+        'CREATIVE',
+        'STUDY',
+        'RECOVERY',
       ])
       .optional(),
     selectedThemeId: optionalShortText,
     goal: optionalShortText,
     suggestedDurationSeconds: z.number().positive().optional(),
     suggestedDifficulty: z
-      .enum(["EASY", "NORMAL", "CHALLENGING", "PUSH"])
+      .enum(['EASY', 'NORMAL', 'CHALLENGING', 'PUSH'])
       .optional(),
     recommendationId: optionalShortText,
     comebackMultiplier: z.number().positive().optional(),
@@ -44,7 +44,7 @@ export const sessionSetupParamsSchema = z
     learningExecutionLabel: optionalShortText,
     learningExecutionTaskId: optionalShortText,
     source: z
-      .enum(["content-study", "learning-execution", "onboarding_first_session"])
+      .enum(['content-study', 'learning-execution', 'onboarding_first_session'])
       .optional(),
     generationId: optionalShortText,
     contentId: optionalShortText,
@@ -63,8 +63,8 @@ export const routeParamSchemas = {
   ContentReview: z.object({ contentId: uuidish }).strict(),
   Leaderboard: z
     .object({
-      period: z.enum(["DAILY", "WEEKLY", "MONTHLY"]).optional(),
-      scope: z.enum(["GLOBAL", "FRIENDS"]).optional(),
+      period: z.enum(['DAILY', 'WEEKLY', 'MONTHLY']).optional(),
+      scope: z.enum(['GLOBAL', 'FRIENDS']).optional(),
     })
     .strict()
     .optional(),
@@ -90,7 +90,7 @@ export const routeParamSchemas = {
   Profile: z
     .object({
       userId: optionalShortText,
-      tab: z.enum(["stats", "achievements", "activity", "social"]).optional(),
+      tab: z.enum(['stats', 'achievements', 'activity', 'social']).optional(),
     })
     .strict(),
   ResetPassword: z

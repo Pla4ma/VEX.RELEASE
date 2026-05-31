@@ -5,7 +5,7 @@ import {
   SessionRewardsCalculatedEvent,
   SessionAchievementUnlockedEvent,
   SessionCompletionEventType,
-} from "./types";
+} from './types';
 
 export function validateSessionCompletionEvent(
   event: SessionCompletionEventType,
@@ -17,21 +17,21 @@ export function validateSessionCompletionEvent(
     return false;
   }
   switch (event.type) {
-    case "session_completed":
+    case 'session_completed':
       return validateSessionCompletedEvent(event as SessionCompletedEvent);
-    case "session_performance_calculated":
+    case 'session_performance_calculated':
       return validateSessionPerformanceCalculatedEvent(
         event as SessionPerformanceCalculatedEvent,
       );
-    case "session_rewards_calculated":
+    case 'session_rewards_calculated':
       return validateSessionRewardsCalculatedEvent(
         event as SessionRewardsCalculatedEvent,
       );
-    case "session_achievement_unlocked":
+    case 'session_achievement_unlocked':
       return validateSessionAchievementUnlockedEvent(
         event as SessionAchievementUnlockedEvent,
       );
-    case "session_milestone_reached":
+    case 'session_milestone_reached':
       return validateSessionMilestoneReachedEvent(
         event as SessionMilestoneReachedEvent,
       );
@@ -44,7 +44,7 @@ function validateSessionCompletedEvent(event: SessionCompletedEvent): boolean {
   return !!(
     data.completionType &&
     data.completionTime &&
-    typeof data.duration === "number" &&
+    typeof data.duration === 'number' &&
     data.objectives &&
     data.performance &&
     data.conditions
@@ -79,7 +79,7 @@ function validateSessionAchievementUnlockedEvent(
     data.progress &&
     data.criteria &&
     data.rarity &&
-    typeof data.points === "number" &&
+    typeof data.points === 'number' &&
     data.rewards &&
     data.recognition
   );
@@ -92,9 +92,9 @@ function validateSessionMilestoneReachedEvent(
     data.milestoneId &&
     data.milestoneType &&
     data.milestoneName &&
-    typeof data.value === "number" &&
-    typeof data.target === "number" &&
-    typeof data.previousRecord === "number" &&
+    typeof data.value === 'number' &&
+    typeof data.target === 'number' &&
+    typeof data.previousRecord === 'number' &&
     data.significance &&
     data.recognition &&
     data.rewards

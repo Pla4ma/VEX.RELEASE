@@ -1,5 +1,5 @@
-export { AchievementUnlockToast } from "./AchievementUnlockToast.main";
+export { AchievementUnlockToast } from './AchievementUnlockToast.main';
 export {
   useAchievementUnlockToast,
   AchievementToastProvider,
-} from "./AchievementToastProvider";
+} from './AchievementToastProvider';

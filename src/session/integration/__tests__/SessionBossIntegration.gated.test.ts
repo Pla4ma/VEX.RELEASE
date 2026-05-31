@@ -1,33 +1,33 @@
-import { initializeSessionBossIntegration } from "../SessionBossIntegration";
-import { eventBus } from "../../../events";
-import { getAvailabilityFor } from "../../../features/liveops-config/feature-access-store";
+import { initializeSessionBossIntegration } from '../SessionBossIntegration';
+import { eventBus } from '../../../events';
+import { getAvailabilityFor } from '../../../features/liveops-config/feature-access-store';
 import {
   applyDamage,
   getActiveEncounter,
-} from "../../../features/boss/service";
+} from '../../../features/boss/service';
 
-jest.mock("../../../events", () => ({
+jest.mock('../../../events', () => ({
   eventBus: {
     publish: jest.fn(),
     subscribe: jest.fn().mockReturnValue(jest.fn()),
   },
 }));
-jest.mock("../../../features/liveops-config/feature-access-store", () => ({
+jest.mock('../../../features/liveops-config/feature-access-store', () => ({
   getAvailabilityFor: jest.fn(),
 }));
-jest.mock("../../../features/boss/service", () => ({
+jest.mock('../../../features/boss/service', () => ({
   applyDamage: jest.fn(),
   getActiveEncounter: jest.fn(),
 }));
 jest.mock(
-  "../../../features/boss/damage-rules",
+  '../../../features/boss/damage-rules',
   () => ({
     applyBossDamageRules: jest.fn((dmg) => dmg),
   }),
   { virtual: true },
 );
 jest.mock(
-  "../../../features/boss/BossBountySystem",
+  '../../../features/boss/BossBountySystem',
   () => ({
     consumeBountiesOnDamage: jest.fn().mockReturnValue({
       lootMultiplier: 1,
@@ -38,13 +38,13 @@ jest.mock(
   { virtual: true },
 );
 jest.mock(
-  "../../../features/boss/bounty-loot-boost",
+  '../../../features/boss/bounty-loot-boost',
   () => ({
     recordBountyLootBoost: jest.fn(),
   }),
   { virtual: true },
 );
-describe("SessionBossIntegration - FeatureAvailability gating", () => {
+describe('SessionBossIntegration - FeatureAvailability gating', () => {
   const mockedEventBus = jest.mocked(eventBus);
   const mockedGetAvailability = jest.mocked(getAvailabilityFor);
 
@@ -53,9 +53,9 @@ describe("SessionBossIntegration - FeatureAvailability gating", () => {
     mockedEventBus.subscribe.mockReturnValue(jest.fn());
   });
 
-  it("should not subscribe when boss_tab cannot subscribe to events", () => {
+  it('should not subscribe when boss_tab cannot subscribe to events', () => {
     mockedGetAvailability.mockReturnValue({
-      state: "locked",
+      state: 'locked',
       canRenderEntryPoint: false,
       canNavigate: false,
       canQuery: false,
@@ -63,17 +63,17 @@ describe("SessionBossIntegration - FeatureAvailability gating", () => {
       canSubscribeToEvents: false,
       canExpose: false,
       canShowTeaser: false,
-      snapshot: {} as ReturnType<typeof getAvailabilityFor>["snapshot"],
+      snapshot: {} as ReturnType<typeof getAvailabilityFor>['snapshot'],
     } as ReturnType<typeof getAvailabilityFor>);
 
     const cleanup = initializeSessionBossIntegration();
-    expect(typeof cleanup).toBe("function");
+    expect(typeof cleanup).toBe('function');
     expect(mockedEventBus.subscribe).not.toHaveBeenCalled();
   });
 
-  it("boss integration is no-op when boss features archived", () => {
+  it('boss integration is no-op when boss features archived', () => {
     mockedGetAvailability.mockReturnValue({
-      state: "unlocked",
+      state: 'unlocked',
       canRenderEntryPoint: true,
       canNavigate: true,
       canQuery: true,
@@ -81,16 +81,16 @@ describe("SessionBossIntegration - FeatureAvailability gating", () => {
       canSubscribeToEvents: true,
       canExpose: true,
       canShowTeaser: false,
-      snapshot: {} as ReturnType<typeof getAvailabilityFor>["snapshot"],
+      snapshot: {} as ReturnType<typeof getAvailabilityFor>['snapshot'],
     } as ReturnType<typeof getAvailabilityFor>);
 
     initializeSessionBossIntegration();
     expect(mockedEventBus.subscribe).not.toHaveBeenCalled();
   });
 
-  it("should not subscribe when boss_tab is hidden", () => {
+  it('should not subscribe when boss_tab is hidden', () => {
     mockedGetAvailability.mockReturnValue({
-      state: "hidden",
+      state: 'hidden',
       canRenderEntryPoint: false,
       canNavigate: false,
       canQuery: false,
@@ -98,7 +98,7 @@ describe("SessionBossIntegration - FeatureAvailability gating", () => {
       canSubscribeToEvents: false,
       canExpose: false,
       canShowTeaser: false,
-      snapshot: {} as ReturnType<typeof getAvailabilityFor>["snapshot"],
+      snapshot: {} as ReturnType<typeof getAvailabilityFor>['snapshot'],
     } as ReturnType<typeof getAvailabilityFor>);
 
     initializeSessionBossIntegration();

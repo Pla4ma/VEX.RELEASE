@@ -1,17 +1,17 @@
-import { create } from "zustand";
-import { immer } from "zustand/middleware/immer";
-import type { Nullable } from "../types/global";
+import { create } from 'zustand';
+import { immer } from 'zustand/middleware/immer';
+import type { Nullable } from '../types/global';
 
 export interface UIState {
   toast: Nullable<{
     id: string;
     message: string;
-    type: "success" | "error" | "warning" | "info";
+    type: 'success' | 'error' | 'warning' | 'info';
     duration?: number;
   }>;
   activeModal: Nullable<string>;
   modalProps: Record<string, unknown>;
-  showToast: (toast: Omit<NonNullable<UIState["toast"]>, "id">) => void;
+  showToast: (toast: Omit<NonNullable<UIState['toast']>, 'id'>) => void;
   hideToast: () => void;
   showModal: (name: string, props?: Record<string, unknown>) => void;
   hideModal: () => void;

@@ -9,11 +9,11 @@ export {
   getDailyProgress,
   batchAddXp,
   configureProgressionService,
-} from "./service-xp-core";
-export { getLevelUpCelebrationRewards } from "./service-level-rewards";
-export { getProgressionServiceConfig } from "./service-config";
+} from './service-xp-core';
+export { getLevelUpCelebrationRewards } from './service-level-rewards';
+export { getProgressionServiceConfig } from './service-config';
 
-import { configureProgressionService as configureSvc } from "./service-xp-core";
+import { configureProgressionService as configureSvc } from './service-xp-core';
 
 export function initializeProgressionService() {
   configureSvc({});

@@ -1,7 +1,7 @@
-import type { ViewStyle } from "react-native";
-import { launchColors } from "@theme/tokens/launch-colors";
+import type { ViewStyle } from 'react-native';
+import { launchColors } from '@theme/tokens/launch-colors';
 
-export type PremiumCardSize = "small" | "medium" | "large" | "hero";
+export type PremiumCardSize = 'small' | 'medium' | 'large' | 'hero';
 
 const PREMIUM_RADII: Record<PremiumCardSize, number> = {
   small: 16,
@@ -26,7 +26,7 @@ export function getPremiumCardStyle(size: PremiumCardSize): ViewStyle {
 }
 
 export function withAlpha(hexColor: string, alpha: number): string {
-  if (!hexColor.startsWith("#") || hexColor.length !== 7) {
+  if (!hexColor.startsWith('#') || hexColor.length !== 7) {
     return hexColor;
   }
 

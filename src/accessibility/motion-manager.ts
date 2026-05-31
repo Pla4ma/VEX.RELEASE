@@ -4,30 +4,30 @@
  * Manages motion preferences and animation creation with accessibility support.
  */
 
-import { createDebugger } from "../utils/debug";
+import { createDebugger } from '../utils/debug';
 import {
   DEFAULT_MOTION_PREFERENCES,
   type MotionPreferences,
   type AnimationConfig,
-} from "./motion-preferences";
+} from './motion-preferences';
 import {
   adjustAnimationForAccessibility,
   createAnimationType,
-} from "./animation-utils";
+} from './animation-utils';
 import {
   createAnimatedValue,
   createTiming,
   easingOut,
   type AnimatedValue,
   type CompositeAnimation,
-} from "./motion-animation-stubs";
+} from './motion-animation-stubs';
 import {
   type HapticType,
   type MotionPerformanceStats,
   createDefaultPerformanceStats,
-} from "./motion-config";
+} from './motion-config';
 
-const debug = createDebugger("motion-accessibility");
+const debug = createDebugger('motion-accessibility');
 
 export class MotionAccessibilityManager {
   private static instance: MotionAccessibilityManager;
@@ -55,7 +55,7 @@ export class MotionAccessibilityManager {
     this.preferences = { ...this.preferences, ...updates };
     this.savePreferences();
     this.notifyListeners();
-    debug.info("Motion preferences updated:", this.preferences);
+    debug.info('Motion preferences updated:', this.preferences);
   }
 
   setReducedMotion(enabled: boolean): void {
@@ -128,7 +128,7 @@ export class MotionAccessibilityManager {
       const reducedMotion = await Promise.resolve(false);
       return { reducedMotion };
     } catch (error) {
-      debug.error("Failed to detect system motion preferences:", error);
+      debug.error('Failed to detect system motion preferences:', error);
       return {};
     }
   }
@@ -140,7 +140,7 @@ export class MotionAccessibilityManager {
     try {
       return animationFn();
     } catch (error) {
-      debug.error("Animation creation failed, using fallback:", error);
+      debug.error('Animation creation failed, using fallback:', error);
       if (fallback) {
         fallback();
       }
@@ -177,17 +177,17 @@ export class MotionAccessibilityManager {
 
   private loadPreferences(): void {
     try {
-      debug.debug("Loaded motion preferences (using defaults)");
+      debug.debug('Loaded motion preferences (using defaults)');
     } catch (error) {
-      debug.error("Failed to load motion preferences:", error);
+      debug.error('Failed to load motion preferences:', error);
     }
   }
 
   private savePreferences(): void {
     try {
-      debug.debug("Saved motion preferences:", this.preferences);
+      debug.debug('Saved motion preferences:', this.preferences);
     } catch (error) {
-      debug.error("Failed to save motion preferences:", error);
+      debug.error('Failed to save motion preferences:', error);
     }
   }
 

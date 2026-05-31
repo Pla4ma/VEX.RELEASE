@@ -1,15 +1,15 @@
-import { useQuery } from "@tanstack/react-query";
-import * as Sentry from "@sentry/react-native";
-import { useAuthStore } from "../../../store";
-import { getRepairQuestStatus } from "../streak-repair-quest";
-import { RepairQuestStatusOutputSchema } from "../schemas-risk-repair";
-import type { RepairQuestStatusOutput } from "../schemas-risk-repair";
-import type { UseStreakRepairQuestReturn } from "./types";
+import { useQuery } from '@tanstack/react-query';
+import * as Sentry from '@sentry/react-native';
+import { useAuthStore } from '../../../store';
+import { getRepairQuestStatus } from '../streak-repair-quest';
+import { RepairQuestStatusOutputSchema } from '../schemas-risk-repair';
+import type { RepairQuestStatusOutput } from '../schemas-risk-repair';
+import type { UseStreakRepairQuestReturn } from './types';
 
 const QUERY_KEYS = {
   repairQuestStatus: (userId: string) => [
-    "streaks",
-    "repairQuestStatus",
+    'streaks',
+    'repairQuestStatus',
     userId,
   ],
 } as const;
@@ -18,13 +18,13 @@ const GC_TIME = 10 * 60 * 1000;
 
 export function useRepairQuestStatus(): Pick<
   UseStreakRepairQuestReturn,
-  | "status"
-  | "isStatusLoading"
-  | "statusError"
-  | "refetchStatus"
-  | "canStartQuest"
-  | "progressPercent"
-  | "hoursRemaining"
+  | 'status'
+  | 'isStatusLoading'
+  | 'statusError'
+  | 'refetchStatus'
+  | 'canStartQuest'
+  | 'progressPercent'
+  | 'hoursRemaining'
 > {
   const userId = useAuthStore((state) => state.user?.id);
   const {
@@ -33,18 +33,18 @@ export function useRepairQuestStatus(): Pick<
     error: statusError,
     refetch: refetchStatusFn,
   } = useQuery({
-    queryKey: QUERY_KEYS.repairQuestStatus(userId ?? ""),
+    queryKey: QUERY_KEYS.repairQuestStatus(userId ?? ''),
     queryFn: async (): Promise<RepairQuestStatusOutput | null> => {
-      if (!userId) return null;
+      if (!userId) {return null;}
       try {
         const statusData = await getRepairQuestStatus(userId);
         return RepairQuestStatusOutputSchema.parse(statusData);
       } catch (err) {
         Sentry.captureException(err, {
           tags: {
-            feature: "streaks",
-            hook: "useRepairQuestStatus",
-            operation: "fetchStatus",
+            feature: 'streaks',
+            hook: 'useRepairQuestStatus',
+            operation: 'fetchStatus',
           },
         });
         throw err;

@@ -1,23 +1,23 @@
-import { captureSilentFailure } from "../../../../utils/silent-failure";
-import React from "react";
-import { Modal, Dimensions } from "react-native";
-import Animated, { FadeIn } from "react-native-reanimated";
-import { Box } from "../../../../components/primitives/Box";
-import { Text } from "../../../../components/primitives/Text";
-import { Button } from "../../../../components/primitives/Button";
-import { useTheme } from "../../../../theme";
-import { useState } from "react";
-import type { StreakBrokenModalProps } from "./types";
-import { calculateRestoreCost } from "./helpers";
+import { captureSilentFailure } from '../../../../utils/silent-failure';
+import React from 'react';
+import { Modal, Dimensions } from 'react-native';
+import Animated, { FadeIn } from 'react-native-reanimated';
+import { Box } from '../../../../components/primitives/Box';
+import { Text } from '../../../../components/primitives/Text';
+import { Button } from '../../../../components/primitives/Button';
+import { useTheme } from '../../../../theme';
+import { useState } from 'react';
+import type { StreakBrokenModalProps } from './types';
+import { calculateRestoreCost } from './helpers';
 import {
   LossStat,
   WhatRemains,
   ComebackBonus,
   CoachMessage,
-} from "./Subcomponents";
-import { RestoreStreakCard } from "./RestoreStreakCard";
+} from './Subcomponents';
+import { RestoreStreakCard } from './RestoreStreakCard';
 
-const { width: SCREEN_WIDTH } = Dimensions.get("window");
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 export function StreakBrokenModal({
   visible,
@@ -50,15 +50,15 @@ export function StreakBrokenModal({
       if (success) {
         onDismiss();
       } else {
-        setRestoreError("Failed to restore streak. Please try again.");
+        setRestoreError('Failed to restore streak. Please try again.');
       }
     } catch (error) {
       captureSilentFailure(error, {
-        feature: "streaks",
-        operation: "network-fallback",
-        type: "network",
+        feature: 'streaks',
+        operation: 'network-fallback',
+        type: 'network',
       });
-      setRestoreError("An error occurred. Please try again.");
+      setRestoreError('An error occurred. Please try again.');
     } finally {
       setIsRestoring(false);
     }
@@ -80,7 +80,7 @@ export function StreakBrokenModal({
       >
         <Animated.View
           entering={FadeIn.duration(300)}
-          style={{ width: SCREEN_WIDTH - 40, maxHeight: "80%" }}
+          style={{ width: SCREEN_WIDTH - 40, maxHeight: '80%' }}
         >
           <Box
             bg="background.secondary"

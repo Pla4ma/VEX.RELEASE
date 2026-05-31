@@ -1,11 +1,11 @@
-import React from "react";
-import { Pressable } from "react-native";
-import Animated, { FadeInUp } from "react-native-reanimated";
-import { Box, Text } from "@/components/primitives";
-import { Skeleton } from "@/shared/ui/primitives";
-import { useTheme } from "@/theme";
-import { getRarityColor, getAchievementDisplayInfo } from "@/features/achievements/definitions";
-import type { Achievement } from "@/features/achievements/types";
+import React from 'react';
+import { Pressable } from 'react-native';
+import Animated, { FadeInUp } from 'react-native-reanimated';
+import { Box, Text } from '@/components/primitives';
+import { Skeleton } from '@/shared/ui/primitives';
+import { useTheme } from '@/theme';
+import { getRarityColor, getAchievementDisplayInfo } from '@/features/achievements/definitions';
+import type { Achievement } from '@/features/achievements/types';
 
 export interface AchievementWithStatus extends Achievement {
   progress: number;
@@ -77,7 +77,7 @@ export const AchievementCard: React.FC<{
               </Text>
               {!achievement.isUnlocked && achievement.progress > 0 && (
                 <Box mt={2}>
-                  <Box height={4} borderRadius={2} bg={theme.colors.background.tertiary} style={{ overflow: "hidden" }}>
+                  <Box height={4} borderRadius={2} bg={theme.colors.background.tertiary} style={{ overflow: 'hidden' }}>
                     <Box
                       height="100%" borderRadius={2} bg={rarityColor}
                       style={{ width: `${achievement.completionPercentage}%` }}

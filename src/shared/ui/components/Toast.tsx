@@ -1,7 +1,7 @@
-export { ToastProvider, useToast } from "./ToastProvider";
-export { ToastComponent as Toast } from "./ToastComponent";
-export { ToastContainer } from "./ToastContainer";
-export { useToastHelpers } from "./ToastHelpers";
+export { ToastProvider, useToast } from './ToastProvider';
+export { ToastComponent as Toast } from './ToastComponent';
+export { ToastContainer } from './ToastContainer';
+export { useToastHelpers } from './ToastHelpers';
 export type {
   ToastType,
   ToastPosition,
@@ -12,4 +12,4 @@ export type {
   ToastProviderProps,
   ToastProps,
   ToastContainerProps,
-} from "./Toast.types";
+} from './Toast.types';

@@ -1,9 +1,9 @@
-import React from "react";
-import { View, Text, Pressable, ViewStyle } from "react-native";
-import Animated from "react-native-reanimated";
-import { useTheme } from "../../../theme";
-import { useFadeIn, useSlideIn } from "../hooks/useReanimated";
-import { createSheet } from "@/shared/ui/create-sheet";
+import React from 'react';
+import { View, Text, Pressable, ViewStyle } from 'react-native';
+import Animated from 'react-native-reanimated';
+import { useTheme } from '../../../theme';
+import { useFadeIn, useSlideIn } from '../hooks/useReanimated';
+import { createSheet } from '@/shared/ui/create-sheet';
 
 interface EmptyStateProps {
   icon: string;
@@ -30,7 +30,7 @@ export function EmptyState({
 }: EmptyStateProps) {
   const { theme } = useTheme();
   const fadeStyle = useFadeIn(500, animated ? 100 : 0);
-  const slideStyle = useSlideIn("up", 30);
+  const slideStyle = useSlideIn('up', 30);
   const containerStyle = animated ? fadeStyle : undefined;
   const contentStyle = animated ? slideStyle : undefined;
   return (
@@ -108,46 +108,46 @@ export function EmptyState({
 const styles = createSheet({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: 32,
   },
-  content: { alignItems: "center", maxWidth: 400 },
+  content: { alignItems: 'center', maxWidth: 400 },
   iconContainer: {
     width: 80,
     height: 80,
     borderRadius: 40,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     marginBottom: 24,
   },
   icon: { fontSize: 40 },
   title: {
     fontSize: 20,
-    fontWeight: "700",
+    fontWeight: '700',
     marginBottom: 12,
-    textAlign: "center",
+    textAlign: 'center',
   },
   message: {
     fontSize: 14,
-    textAlign: "center",
+    textAlign: 'center',
     marginBottom: 24,
     lineHeight: 20,
   },
-  actions: { flexDirection: "column", gap: 12, width: "100%" },
+  actions: { flexDirection: 'column', gap: 12, width: '100%' },
   primaryButton: {
     paddingVertical: 14,
     paddingHorizontal: 24,
     borderRadius: 12,
-    alignItems: "center",
+    alignItems: 'center',
   },
-  primaryButtonText: { fontSize: 16, fontWeight: "600" },
+  primaryButtonText: { fontSize: 16, fontWeight: '600' },
   secondaryButton: {
-    backgroundColor: "transparent",
+    backgroundColor: 'transparent',
     paddingVertical: 14,
     paddingHorizontal: 24,
     borderRadius: 12,
-    alignItems: "center",
+    alignItems: 'center',
   },
-  secondaryButtonText: { fontSize: 16, fontWeight: "500" },
+  secondaryButtonText: { fontSize: 16, fontWeight: '500' },
 });

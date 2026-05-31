@@ -1,4 +1,4 @@
-export { EventEmitter } from "./EventEmitter";
+export { EventEmitter } from './EventEmitter';
 export {
   contentStudyEvents,
   emitDraftSaved,
@@ -19,10 +19,10 @@ export {
   emitRateLimitHit,
   emitOfflineSyncStarted,
   emitOfflineSyncComplete,
-} from "./emitters";
+} from './emitters';
 export {
   useContentStudyEvent,
   useContentStudyEvents,
   composeEventHandlers,
   initializeContentStudyEventIntegration,
-} from "./event-hooks";
+} from './event-hooks';

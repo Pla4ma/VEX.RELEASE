@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import Animated, {
   FadeIn,
   FadeOut,
@@ -8,10 +8,10 @@ import Animated, {
   withSequence,
   withDelay,
   withSpring,
-} from "react-native-reanimated";
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
+} from 'react-native-reanimated';
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
 export interface NearMissDisplayProps {
   xpAmount: number;
   onComplete: () => void;
@@ -55,7 +55,7 @@ function Sparkle({
   }));
   return (
     <Animated.View
-      style={[{ position: "absolute", left: x, top: y }, sparkleStyle]}
+      style={[{ position: 'absolute', left: x, top: y }, sparkleStyle]}
     >
       <Text fontSize={size}>✨</Text>
     </Animated.View>
@@ -79,7 +79,7 @@ export function NearMissDisplay({
     <Animated.View
       entering={FadeIn.duration(400)}
       exiting={FadeOut.duration(300)}
-      style={[{ width: "100%", alignItems: "center" }, containerStyle]}
+      style={[{ width: '100%', alignItems: 'center' }, containerStyle]}
     >
       <Box
         p="xl"

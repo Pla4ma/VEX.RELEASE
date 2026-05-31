@@ -1,18 +1,18 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const PromiseTargetModeSchema = z.enum([
-  "FOCUS",
-  "RECOVERY",
-  "STUDY",
-  "BOSS_PREP",
-  "HABIT_BUILD",
+  'FOCUS',
+  'RECOVERY',
+  'STUDY',
+  'BOSS_PREP',
+  'HABIT_BUILD',
 ]);
 
 export const CompanionPromiseStatusSchema = z.enum([
-  "pending",
-  "fulfilled",
-  "missed",
-  "replaced",
+  'pending',
+  'fulfilled',
+  'missed',
+  'replaced',
 ]);
 
 export const CompanionPromiseSchema = z
@@ -30,33 +30,33 @@ export const CompanionPromiseSchema = z
   })
   .strict();
 
-export const CompanionPromiseHomeStateSchema = z.discriminatedUnion("kind", [
+export const CompanionPromiseHomeStateSchema = z.discriminatedUnion('kind', [
   z
-    .object({ kind: z.literal("hidden"), showOfflineBanner: z.boolean() })
+    .object({ kind: z.literal('hidden'), showOfflineBanner: z.boolean() })
     .strict(),
   z
     .object({
-      kind: z.literal("offline"),
+      kind: z.literal('offline'),
       showOfflineBanner: z.literal(true),
     })
     .strict(),
   z
     .object({
-      kind: z.literal("pending"),
+      kind: z.literal('pending'),
       promise: CompanionPromiseSchema,
       showOfflineBanner: z.boolean(),
     })
     .strict(),
   z
     .object({
-      kind: z.literal("fulfilled"),
+      kind: z.literal('fulfilled'),
       promise: CompanionPromiseSchema,
       showOfflineBanner: z.boolean(),
     })
     .strict(),
   z
     .object({
-      kind: z.literal("missed"),
+      kind: z.literal('missed'),
       promise: CompanionPromiseSchema,
       showOfflineBanner: z.boolean(),
     })

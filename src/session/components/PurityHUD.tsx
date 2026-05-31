@@ -1,11 +1,11 @@
-import React, { useMemo } from "react";
-import { Pressable, View } from "react-native";
-import Animated, { FadeIn } from "react-native-reanimated";
-import { buttonTap } from "../../utils/haptics";
+import React, { useMemo } from 'react';
+import { Pressable, View } from 'react-native';
+import Animated, { FadeIn } from 'react-native-reanimated';
+import { buttonTap } from '../../utils/haptics';
 
-import { Text } from "../../components/primitives/Text";
-import { useTheme } from "../../theme";
-import { createSheet } from "@/shared/ui/create-sheet";
+import { Text } from '../../components/primitives/Text';
+import { useTheme } from '../../theme';
+import { createSheet } from '@/shared/ui/create-sheet';
 
 export interface PurityHUDProps {
   purityScore: number;
@@ -16,9 +16,9 @@ export interface PurityHUDProps {
 }
 
 const formatMultiplier = (value: number): string =>
-  value.toFixed(value % 1 === 0 ? 1 : 2).replace(/\.0$/, "");
+  value.toFixed(value % 1 === 0 ? 1 : 2).replace(/\.0$/, '');
 const withAlpha = (color: string, alpha: number): string =>
-  color.startsWith("#")
+  color.startsWith('#')
     ? `rgba(${parseInt(color.slice(1, 3), 16)}, ${parseInt(color.slice(3, 5), 16)}, ${parseInt(color.slice(5, 7), 16)}, ${alpha})`
     : color;
 
@@ -32,31 +32,31 @@ export const PurityHUD = React.memo(
   }: PurityHUDProps) {
     const { theme } = useTheme();
     const display = useMemo(() => {
-      if (purityLabel === "Elite") {
+      if (purityLabel === 'Elite') {
         return {
-          icon: "\uD83D\uDD25",
+          icon: '\uD83D\uDD25',
           color: theme.colors.primary[500],
-          text: "ELITE FOCUS",
+          text: 'ELITE FOCUS',
         };
       }
-      if (purityLabel === "Good") {
+      if (purityLabel === 'Good') {
         return {
-          icon: "\u2728",
+          icon: '\u2728',
           color: theme.colors.success.DEFAULT,
-          text: "GOOD FLOW",
+          text: 'GOOD FLOW',
         };
       }
-      if (purityLabel === "Okay") {
+      if (purityLabel === 'Okay') {
         return {
-          icon: "\u26A1",
+          icon: '\u26A1',
           color: theme.colors.warning.DEFAULT,
-          text: "STAY SHARP",
+          text: 'STAY SHARP',
         };
       }
       return {
-        icon: "\u2022",
+        icon: '\u2022',
         color: theme.colors.error.DEFAULT,
-        text: "DISTRACTED",
+        text: 'DISTRACTED',
       };
     }, [
       purityLabel,
@@ -78,7 +78,7 @@ export const PurityHUD = React.memo(
               style={{ color: display.color }}
             >{`${display.icon} ${display.text}`}</Text>
             <Text variant="caption" color="text.secondary">
-              {"\u2022"}
+              {'\u2022'}
             </Text>
             <Pressable
               disabled={!onMultiplierPress}
@@ -163,8 +163,8 @@ export const PurityHUD = React.memo(
 );
 
 const styles = createSheet({
-  compactWrap: { marginTop: 18, alignItems: "center" },
-  compactRow: { flexDirection: "row", alignItems: "center", gap: 8 },
+  compactWrap: { marginTop: 18, alignItems: 'center' },
+  compactRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   card: {
     marginHorizontal: 20,
     marginTop: 8,
@@ -173,12 +173,12 @@ const styles = createSheet({
     borderWidth: 1,
     paddingHorizontal: 14,
     paddingVertical: 12,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     gap: 12,
   },
-  defaultRow: { flexDirection: "row", alignItems: "center", gap: 10 },
+  defaultRow: { flexDirection: 'row', alignItems: 'center', gap: 10 },
   multiplierPill: {
     borderRadius: 999,
     borderWidth: 1,

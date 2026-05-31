@@ -1,21 +1,21 @@
-import type { RewardTrigger } from "./schemas";
+import type { RewardTrigger } from './schemas';
 
 const BASE_XP = 50;
 const MULTIPLIER_PER_MINUTE = 1.5;
 
 export function calculateXpReward(
   durationMinutes: number = 25,
-  trigger: RewardTrigger = "SESSION_COMPLETE",
+  trigger: RewardTrigger = 'SESSION_COMPLETE',
   streakMultiplier: number = 1.0,
 ): number {
   const base = BASE_XP + durationMinutes * MULTIPLIER_PER_MINUTE;
   let total = Math.round(base * streakMultiplier);
 
   switch (trigger) {
-    case "STREAK":
+    case 'STREAK':
       total = Math.round(total * 1.5);
       break;
-    case "COMEBACK":
+    case 'COMEBACK':
       total = Math.round(total * 2.0);
       break;
     default:
@@ -30,7 +30,7 @@ export async function createReward(input: {
   type: string;
   trigger?: string;
   triggerType?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   triggerId?: unknown;
   idempotencyKey?: string;
   amount: number;

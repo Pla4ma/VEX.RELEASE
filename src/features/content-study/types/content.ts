@@ -3,14 +3,14 @@
  * StudyContent and StudyGeneration entity types
  */
 
-import type { ContentSourceType, ContentStatus } from "./enums";
+import type { ContentSourceType, ContentStatus } from './enums';
 import type {
   StudyTask,
   QuizItem,
   SessionPlan,
   KeyConcept,
   StudySummary,
-} from "./domain";
+} from './domain';
 
 export interface StudyContent {
   id: string;

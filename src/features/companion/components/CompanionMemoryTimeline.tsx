@@ -1,15 +1,15 @@
-import NetInfo from "@react-native-community/netinfo";
-import { FlashList, type ListRenderItem } from "@shopify/flash-list";
-import React, { useMemo } from "react";
+import NetInfo from '@react-native-community/netinfo';
+import { FlashList, type ListRenderItem } from '@shopify/flash-list';
+import React, { useMemo } from 'react';
 
-import { Box, Button, Card, Text } from "../../../components/primitives";
-import { ErrorState } from "../../../components/states/ErrorState";
-import type { CompanionMemory } from "../memory-types";
+import { Box, Button, Card, Text } from '../../../components/primitives';
+import { ErrorState } from '../../../components/states/ErrorState';
+import type { CompanionMemory } from '../memory-types';
 import {
   groupCompanionMemories,
   type CompanionMemoryGroup,
-} from "./companion-memory-groups";
-import { CompanionMemoryItem } from "./CompanionMemoryItem";
+} from './companion-memory-groups';
+import { CompanionMemoryItem } from './CompanionMemoryItem';
 
 type CompanionMemoryTimelineProps = {
   isError: boolean;
@@ -20,8 +20,8 @@ type CompanionMemoryTimelineProps = {
 };
 
 type TimelineRow =
-  | { id: string; kind: "header"; title: CompanionMemoryGroup["title"] }
-  | { id: string; kind: "memory"; memory: CompanionMemory };
+  | { id: string; kind: 'header'; title: CompanionMemoryGroup['title'] }
+  | { id: string; kind: 'memory'; memory: CompanionMemory };
 
 export function CompanionMemoryTimeline({
   isError,
@@ -33,7 +33,7 @@ export function CompanionMemoryTimeline({
   const netInfo = NetInfo.useNetInfo();
   const rows = useMemo(() => buildRows(memories), [memories]);
   const renderItem: ListRenderItem<TimelineRow> = ({ item }) => {
-    if (item.kind === "header") {
+    if (item.kind === 'header') {
       return (
         <Text variant="label" color="text.secondary">
           {item.title}
@@ -78,12 +78,12 @@ function buildRows(memories: CompanionMemory[]): TimelineRow[] {
   return groupCompanionMemories(memories).flatMap((group) => [
     {
       id: `header-${group.title}`,
-      kind: "header" as const,
+      kind: 'header' as const,
       title: group.title,
     },
     ...group.data.map((memory) => ({
       id: memory.id,
-      kind: "memory" as const,
+      kind: 'memory' as const,
       memory,
     })),
   ]);

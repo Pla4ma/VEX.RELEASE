@@ -1,18 +1,18 @@
-import { getSupabaseClient } from "../../../config/supabase";
+import { getSupabaseClient } from '../../../config/supabase';
 import {
   StreakRiskStatusSchema,
   type StreakRiskStatus,
-} from "../schemas-risk-repair";
-import { executeWithFallback, type RepositoryResult } from "./enhanced";
+} from '../schemas-risk-repair';
+import { executeWithFallback, type RepositoryResult } from './enhanced';
 
 const supabase = getSupabaseClient();
 
 export async function saveRiskStatusEnhanced(
   status: StreakRiskStatus,
 ): Promise<RepositoryResult<StreakRiskStatus>> {
-  return executeWithFallback("saveRiskStatus", async () => {
+  return executeWithFallback('saveRiskStatus', async () => {
     const { data, error } = await supabase
-      .from("streak_risk_status")
+      .from('streak_risk_status')
       .upsert(
         {
           user_id: status.userId,
@@ -26,7 +26,7 @@ export async function saveRiskStatusEnhanced(
           notifications_sent: status.notificationsSent,
           last_updated: status.lastUpdated,
         },
-        { onConflict: "user_id" },
+        { onConflict: 'user_id' },
       )
       .select()
       .single();
@@ -40,14 +40,14 @@ export async function saveRiskStatusEnhanced(
 export async function fetchRiskStatusEnhanced(
   userId: string,
 ): Promise<RepositoryResult<StreakRiskStatus | null>> {
-  return executeWithFallback("fetchRiskStatus", async () => {
+  return executeWithFallback('fetchRiskStatus', async () => {
     const { data, error } = await supabase
-      .from("streak_risk_status")
-      .select("*")
-      .eq("user_id", userId)
+      .from('streak_risk_status')
+      .select('*')
+      .eq('user_id', userId)
       .single();
     if (error) {
-      if (error.code === "PGRST116") {
+      if (error.code === 'PGRST116') {
         return null;
       }
       throw error;
@@ -73,11 +73,11 @@ export async function fetchRiskStatusEnhanced(
 export async function fetchUsersWithActiveStreaksEnhanced(): Promise<
   RepositoryResult<string[]>
 > {
-  return executeWithFallback("fetchUsersWithActiveStreaks", async () => {
+  return executeWithFallback('fetchUsersWithActiveStreaks', async () => {
     const { data, error } = await supabase
-      .from("streaks")
-      .select("user_id")
-      .gt("current_days", 0);
+      .from('streaks')
+      .select('user_id')
+      .gt('current_days', 0);
     if (error) {
       throw error;
     }

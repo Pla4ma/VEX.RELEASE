@@ -1,4 +1,4 @@
-import { analyticsService, type UserTraits } from "./analytics-service";
+import { analyticsService, type UserTraits } from './analytics-service';
 
 export const capture = (eventName: string, properties?: object): void => {
   analyticsService.capture(eventName, properties);

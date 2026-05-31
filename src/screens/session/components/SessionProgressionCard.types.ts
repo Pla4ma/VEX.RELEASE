@@ -33,7 +33,7 @@ export type StudyProgress = {
 export type SessionProgressionCardProps = {
   isRewardSyncing: boolean;
   levelMetric: ProgressMetric | null;
-  rewardCreditStatus: "idle" | "crediting" | "success" | "retrying" | "failed";
+  rewardCreditStatus: 'idle' | 'crediting' | 'success' | 'retrying' | 'failed';
   rewardError: string | null;
   streakLabel: string;
   streakIncreased: boolean;

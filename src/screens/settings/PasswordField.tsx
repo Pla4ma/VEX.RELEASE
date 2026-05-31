@@ -1,7 +1,7 @@
-import React from "react";
-import { TextInput } from "react-native";
-import { useTheme } from "../../theme";
-import { Box, Text } from "../../components/primitives";
+import React from 'react';
+import { TextInput } from 'react-native';
+import { useTheme } from '../../theme';
+import { Box, Text } from '../../components/primitives';
 
 interface PasswordFieldProps {
   label: string;

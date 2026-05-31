@@ -1,8 +1,8 @@
-import type { SessionSummary } from "../types";
-import { createDebugger } from "../../utils/debug";
-import { parseSessionSummaryMapJson } from "./SessionRepositoryParsers";
+import type { SessionSummary } from '../types';
+import { createDebugger } from '../../utils/debug';
+import { parseSessionSummaryMapJson } from './SessionRepositoryParsers';
 
-const debug = createDebugger("session:repository");
+const debug = createDebugger('session:repository');
 
 type StorageGetter = (key: string) => Promise<string | null>;
 type StorageSetter = (key: string, value: string) => Promise<void>;
@@ -21,7 +21,7 @@ export async function getSessionSummary(
     }
   } catch (error) {
     debug.error(
-      "Failed to load summary",
+      'Failed to load summary',
       error instanceof Error ? error : new Error(String(error)),
     );
   }
@@ -43,7 +43,7 @@ export async function saveSessionSummary(
     await setString(storageKey, JSON.stringify(summaries));
   } catch (error) {
     debug.error(
-      "Failed to save summary",
+      'Failed to save summary',
       error instanceof Error ? error : new Error(String(error)),
     );
     throw error;
@@ -56,10 +56,10 @@ export async function getAllSummaries(
 ): Promise<SessionSummary[]> {
   try {
     const data = await getString(storageKey);
-    if (data) return Object.values(parseSessionSummaryMapJson(data));
+    if (data) {return Object.values(parseSessionSummaryMapJson(data));}
   } catch (error) {
     debug.error(
-      "Failed to load summaries",
+      'Failed to load summaries',
       error instanceof Error ? error : new Error(String(error)),
     );
   }

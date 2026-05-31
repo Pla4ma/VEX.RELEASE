@@ -5,13 +5,13 @@ import {
   type InterventionRule,
   type MessageCategory,
   type TriggerType,
-} from "../schemas";
-import * as repository from "../repository";
-import { withRetry } from "../utils/retry";
+} from '../schemas';
+import * as repository from '../repository';
+import { withRetry } from '../utils/retry';
 import {
   DEFAULT_ENGINE_CONFIG,
   InterventionError,
-} from "./intervention-engine-types";
+} from './intervention-engine-types';
 
 // ─── Condition Evaluation ───
 
@@ -34,17 +34,17 @@ function evaluateSingleCondition(
   const { field, operator, value } = condition;
   const contextValue = getNestedValue(context, field);
   switch (operator) {
-    case "eq":
+    case 'eq':
       return contextValue === value;
-    case "gt":
+    case 'gt':
       return Number(contextValue) > Number(value);
-    case "lt":
+    case 'lt':
       return Number(contextValue) < Number(value);
-    case "gte":
+    case 'gte':
       return Number(contextValue) >= Number(value);
-    case "lte":
+    case 'lte':
       return Number(contextValue) <= Number(value);
-    case "in":
+    case 'in':
       return Array.isArray(value) && value.includes(contextValue);
     default:
       return false;
@@ -52,8 +52,8 @@ function evaluateSingleCondition(
 }
 
 function getNestedValue(obj: Record<string, unknown>, path: string): unknown {
-  return path.split(".").reduce<unknown>((current, key) => {
-    if (current && typeof current === "object") {
+  return path.split('.').reduce<unknown>((current, key) => {
+    if (current && typeof current === 'object') {
       return Object.entries(current).find(
         ([entryKey]) => entryKey === key,
       )?.[1];
@@ -80,7 +80,7 @@ export async function fetchCoachStateWithRetry(
   const state = await withRetry(
     () => repository.fetchCoachState(userId),
     { maxAttempts: 3 },
-    "fetch-coach-state",
+    'fetch-coach-state',
   );
   if (!state) {
     throw new InterventionError(`No coach state found for user ${userId}`);
@@ -94,7 +94,7 @@ export async function fetchTodaysExecutionsWithRetry(
   return withRetry(
     () => repository.fetchTodaysInterventionExecutions(userId),
     { maxAttempts: 3 },
-    "fetch-todays-executions",
+    'fetch-todays-executions',
   );
 }
 
@@ -110,7 +110,7 @@ export async function isInCooldown(
         rule.cooldownHours || DEFAULT_ENGINE_CONFIG.defaultCooldownHours,
       ),
     { maxAttempts: 2 },
-    "check-cooldown",
+    'check-cooldown',
   );
 }
 
@@ -151,22 +151,22 @@ export function inferCategoryFromTrigger(
   triggerType: TriggerType,
 ): MessageCategory {
   const mapping: Record<TriggerType, MessageCategory> = {
-    STREAK_AT_RISK: "STREAK_RISK",
-    NO_SESSION_24H: "MOTIVATION_BOOST",
-    NO_SESSION_48H: "STREAK_RISK",
-    NO_SESSION_72H: "COMEBACK_SUPPORT",
-    SESSION_ABANDONED: "POST_FAILURE",
-    LOW_QUALITY_SESSION: "POST_FAILURE",
-    MILESTONE_REACHED: "MILESTONE_HYPE",
-    LEVEL_UP: "MILESTONE_HYPE",
-    BOSS_TIMEOUT_WARNING: "CHALLENGE_PROMPT",
-    CHALLENGE_EXPIRING: "CHALLENGE_PROMPT",
-    COMEBACK_WINDOW_OPEN: "COMEBACK_SUPPORT",
-    DIFFICULTY_MISMATCH: "DIFFICULTY_ADJUST",
-    OVERLOAD_DETECTED: "OVERLOAD_WARNING",
-    MUTED_USER_REMINDER: "MOTIVATION_BOOST",
+    STREAK_AT_RISK: 'STREAK_RISK',
+    NO_SESSION_24H: 'MOTIVATION_BOOST',
+    NO_SESSION_48H: 'STREAK_RISK',
+    NO_SESSION_72H: 'COMEBACK_SUPPORT',
+    SESSION_ABANDONED: 'POST_FAILURE',
+    LOW_QUALITY_SESSION: 'POST_FAILURE',
+    MILESTONE_REACHED: 'MILESTONE_HYPE',
+    LEVEL_UP: 'MILESTONE_HYPE',
+    BOSS_TIMEOUT_WARNING: 'CHALLENGE_PROMPT',
+    CHALLENGE_EXPIRING: 'CHALLENGE_PROMPT',
+    COMEBACK_WINDOW_OPEN: 'COMEBACK_SUPPORT',
+    DIFFICULTY_MISMATCH: 'DIFFICULTY_ADJUST',
+    OVERLOAD_DETECTED: 'OVERLOAD_WARNING',
+    MUTED_USER_REMINDER: 'MOTIVATION_BOOST',
   };
-  return mapping[triggerType] || "MOTIVATION_BOOST";
+  return mapping[triggerType] || 'MOTIVATION_BOOST';
 }
 
 export function logInterventionError(

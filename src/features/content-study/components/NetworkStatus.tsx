@@ -3,15 +3,15 @@
  * Shows offline/slow connection indicators
  */
 
-import React from "react";
-import { View, Pressable } from "react-native";
-import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import { Icon } from "../../../icons";
-import { createSheet } from "@/shared/ui/create-sheet";
-import { buttonTap } from "../../../utils/haptics";
-import { launchColors } from "@theme/tokens/launch-colors";
+import React from 'react';
+import { View, Pressable } from 'react-native';
+import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import { Icon } from '../../../icons';
+import { createSheet } from '@/shared/ui/create-sheet';
+import { buttonTap } from '../../../utils/haptics';
+import { launchColors } from '@theme/tokens/launch-colors';
 
 interface NetworkStatusProps {
   isOffline: boolean;
@@ -51,13 +51,13 @@ export const NetworkStatus: React.FC<NetworkStatusProps> = ({
     >
       <View style={styles.content}>
         <Icon
-          name={isOffline ? "wifi-off" : "alert-triangle"}
+          name={isOffline ? 'wifi-off' : 'alert-triangle'}
           size="sm"
           color={launchColors.hex_ffffff}
         />
         <View style={styles.textContainer}>
           <Text style={[styles.title, { color: launchColors.hex_ffffff }]}>
-            {isOffline ? "Offline Mode" : "Slow Connection"}
+            {isOffline ? 'Offline Mode' : 'Slow Connection'}
           </Text>
           <Text
             style={[styles.description, { color: launchColors.hex_ffffff }]}
@@ -65,8 +65,8 @@ export const NetworkStatus: React.FC<NetworkStatusProps> = ({
             {isOffline
               ? pendingSyncCount
                 ? `${pendingSyncCount} items queued for sync`
-                : "Changes will sync when you reconnect"
-              : "Some features may be slower than usual"}
+                : 'Changes will sync when you reconnect'
+              : 'Some features may be slower than usual'}
           </Text>
         </View>
 
@@ -111,23 +111,23 @@ export const NetworkStatus: React.FC<NetworkStatusProps> = ({
 // Inline network indicator for inline usage
 export const InlineNetworkIndicator: React.FC<{
   isOffline: boolean;
-  size?: "sm" | "md";
-}> = ({ isOffline, size = "sm" }) => {
+  size?: 'sm' | 'md';
+}> = ({ isOffline, size = 'sm' }) => {
   const { theme } = useTheme();
 
   if (!isOffline) {
     return null;
   }
 
-  const iconSize = size === "sm" ? 14 : 18;
+  const iconSize = size === 'sm' ? 14 : 18;
 
   return (
     <View
       style={[
         styles.inline,
         {
-          backgroundColor: theme.colors.error.DEFAULT + "20",
-          padding: size === "sm" ? 4 : 6,
+          backgroundColor: theme.colors.error.DEFAULT + '20',
+          padding: size === 'sm' ? 4 : 6,
         },
       ]}
     >
@@ -141,11 +141,11 @@ const styles = createSheet({
     marginHorizontal: 16,
     marginTop: 8,
     borderRadius: 12,
-    overflow: "hidden",
+    overflow: 'hidden',
   },
   content: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     padding: 12,
   },
   textContainer: {
@@ -154,7 +154,7 @@ const styles = createSheet({
   },
   title: {
     fontSize: 14,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   description: {
     fontSize: 12,
@@ -170,7 +170,7 @@ const styles = createSheet({
   },
   actionText: {
     fontSize: 13,
-    fontWeight: "500",
+    fontWeight: '500',
   },
   dismiss: {
     marginLeft: 8,

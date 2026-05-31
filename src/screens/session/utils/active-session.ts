@@ -1,5 +1,5 @@
-import { launchColors } from "@theme/tokens/launch-colors";
-export type PurityLabel = "Elite" | "Good" | "Okay" | "Distracted";
+import { launchColors } from '@theme/tokens/launch-colors';
+export type PurityLabel = 'Elite' | 'Good' | 'Okay' | 'Distracted';
 export type GradientState = { top: string; middle: string; bottom: string };
 
 export const DAILY_GOAL_SECONDS = 2 * 60 * 60;
@@ -28,18 +28,18 @@ const BREAK_GRADIENT = [
 export const formatTime = (seconds: number): string =>
   `${Math.floor(seconds / 60)
     .toString()
-    .padStart(2, "0")}:${Math.max(seconds % 60, 0)
+    .padStart(2, '0')}:${Math.max(seconds % 60, 0)
     .toString()
-    .padStart(2, "0")}`;
+    .padStart(2, '0')}`;
 
 export const formatMultiplier = (value: number): string =>
-  value.toFixed(value % 1 === 0 ? 1 : 2).replace(/\.0$/, "");
+  value.toFixed(value % 1 === 0 ? 1 : 2).replace(/\.0$/, '');
 
 export const clamp = (value: number, min: number, max: number): number =>
   Math.min(Math.max(value, min), max);
 
 export const withAlpha = (color: string, alpha: number): string =>
-  color.startsWith("#")
+  color.startsWith('#')
     ? `rgba(${parseInt(color.slice(1, 3), 16)}, ${parseInt(color.slice(3, 5), 16)}, ${parseInt(color.slice(5, 7), 16)}, ${alpha})`
     : color;
 
@@ -47,11 +47,11 @@ export const getVisualStateIndex = (
   phase: string | undefined,
   label: PurityLabel,
 ): number =>
-  phase === "SHORT_BREAK" || phase === "LONG_BREAK"
+  phase === 'SHORT_BREAK' || phase === 'LONG_BREAK'
     ? 3
-    : label === "Distracted"
+    : label === 'Distracted'
       ? 0
-      : label === "Okay"
+      : label === 'Okay'
         ? 1
         : 2;
 
@@ -88,8 +88,8 @@ export const getGradientPalette = (value: number): GradientState => {
 };
 
 export const getPhaseInfo = (phase: string | undefined) =>
-  phase === "SHORT_BREAK"
-    ? { label: "Reset Window", icon: "clock" as const }
-    : phase === "LONG_BREAK"
-      ? { label: "Long Reset", icon: "clock" as const }
-      : { label: "Locked In", icon: "target" as const };
+  phase === 'SHORT_BREAK'
+    ? { label: 'Reset Window', icon: 'clock' as const }
+    : phase === 'LONG_BREAK'
+      ? { label: 'Long Reset', icon: 'clock' as const }
+      : { label: 'Locked In', icon: 'target' as const };

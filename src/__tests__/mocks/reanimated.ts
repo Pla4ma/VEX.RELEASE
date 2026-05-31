@@ -22,13 +22,13 @@ const mockChain = () => ({
 });
 
 try {
-  jest.mock("react-native-reanimated", () => {
+  jest.mock('react-native-reanimated', () => {
     const mockAnimated = {
-      View: "Animated.View",
-      Text: "Animated.Text",
-      ScrollView: "Animated.ScrollView",
-      VirtualizedList: "Animated.VirtualizedList",
-      Image: "Animated.Image",
+      View: 'Animated.View',
+      Text: 'Animated.Text',
+      ScrollView: 'Animated.ScrollView',
+      VirtualizedList: 'Animated.VirtualizedList',
+      Image: 'Animated.Image',
       createAnimatedComponent: jest.fn((component: unknown) => component),
     };
     return {

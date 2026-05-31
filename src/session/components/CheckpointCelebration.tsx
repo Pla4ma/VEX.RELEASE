@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { View } from "react-native";
+import React, { useEffect, useState } from 'react';
+import { View } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -8,17 +8,17 @@ import Animated, {
   withSequence,
   Easing,
   runOnJS,
-} from "react-native-reanimated";
-import { useTheme } from "../../theme/ThemeContext";
-import { Text } from "../../components";
+} from 'react-native-reanimated';
+import { useTheme } from '../../theme/ThemeContext';
+import { Text } from '../../components';
 import type {
   Particle,
   CheckpointCelebrationProps,
-} from "./checkpoint-celebration-helpers";
+} from './checkpoint-celebration-helpers';
 import {
   generateParticles,
   detectCheckpoint,
-} from "./checkpoint-celebration-helpers";
+} from './checkpoint-celebration-helpers';
 import {
   overlayStyle,
   particleContainerStyle,
@@ -32,7 +32,7 @@ import {
   bonusTextStyle,
   progressContainerStyle,
   progressBarStyle,
-} from "./CheckpointCelebration.styles";
+} from './CheckpointCelebration.styles';
 
 export function CheckpointCelebration({
   progressPercent,
@@ -43,7 +43,7 @@ export function CheckpointCelebration({
   const { theme } = useTheme();
   const [showCelebration, setShowCelebration] = useState(false);
   const [celebrationData, setCelebrationData] = useState<{
-    type: "progress" | "minute";
+    type: 'progress' | 'minute';
     value: number;
     title: string;
     subtitle: string;
@@ -68,7 +68,7 @@ export function CheckpointCelebration({
       setCelebrationData(detected);
       setShowCelebration(true);
       setLastCheckpoint(
-        detected.type === "progress" ? detected.value : detected.value + 100,
+        detected.type === 'progress' ? detected.value : detected.value + 100,
       );
       setParticles(generateParticles(20));
     }
@@ -157,14 +157,14 @@ export function CheckpointCelebration({
         </Text>
 
         {}
-        {celebrationData.type === "minute" && (
+        {celebrationData.type === 'minute' && (
           <View style={bonusBadgeStyle}>
             <Text style={bonusTextStyle}>+50 XP Bonus!</Text>
           </View>
         )}
 
         {}
-        {celebrationData.type === "progress" && (
+        {celebrationData.type === 'progress' && (
           <View style={progressContainerStyle}>
             <View
               style={[

@@ -1,50 +1,50 @@
-import { z } from "zod";
+import { z } from 'zod';
 
-import { LaneSchema } from "../lane-engine/schemas";
-import { SessionModeSchema } from "../../session/modes";
-import { SessionSummarySchema } from "../../session/types";
+import { LaneSchema } from '../lane-engine/schemas';
+import { SessionModeSchema } from '../../session/modes';
+import { SessionSummarySchema } from '../../session/types';
 
 export const MotivationStyleSchema = z.enum([
-  "calm",
-  "friendly",
-  "game_like",
-  "coach_led",
-  "competitive",
-  "intense",
-  "study_focused",
-  "student",
-  "creator",
-  "worker",
+  'calm',
+  'friendly',
+  'game_like',
+  'coach_led',
+  'competitive',
+  'intense',
+  'study_focused',
+  'student',
+  'creator',
+  'worker',
 ]);
 
 export const PrimaryGoalSchema = z
-  .enum(["WORK", "STUDY", "CREATIVE", "PERSONAL"])
+  .enum(['WORK', 'STUDY', 'CREATIVE', 'PERSONAL'])
   .nullable();
 
 export const AdaptivePayoffSchema = z.enum([
-  "study_progress",
-  "boss_damage",
-  "coach_next_action",
-  "progress_insight",
+  'study_progress',
+  'boss_damage',
+  'coach_next_action',
+  'progress_insight',
 ]);
 
 export const CompletionSurfaceSchema = z.enum([
-  "battle_pass_card",
-  "premium_chest",
-  "coins_gems_wallet",
-  "shop_inventory_prompts",
-  "rival_consequence_cards",
-  "squad_consequence_cards",
-  "multiple_reward_rows",
-  "social_share_primary_action",
-  "boss_consequence_card",
-  "challenge_consequence_card",
-  "contract_reflection_card",
-  "companion_growth_card",
-  "chest_reward_animation",
-  "follow_through_cards",
-  "mastery_card",
-  "study_progress_card",
+  'battle_pass_card',
+  'premium_chest',
+  'coins_gems_wallet',
+  'shop_inventory_prompts',
+  'rival_consequence_cards',
+  'squad_consequence_cards',
+  'multiple_reward_rows',
+  'social_share_primary_action',
+  'boss_consequence_card',
+  'challenge_consequence_card',
+  'contract_reflection_card',
+  'companion_growth_card',
+  'chest_reward_animation',
+  'follow_through_cards',
+  'mastery_card',
+  'study_progress_card',
 ]);
 
 export const PolicyBeatSchema = z
@@ -55,13 +55,13 @@ export const PolicyBeatSchema = z
   .strict();
 
 export const CompletionBeatKindSchema = z.enum([
-  "completion_confirmation",
-  "xp_streak_progress",
-  "coach_companion_reflection",
-  "study_progress",
-  "boss_damage",
-  "coach_next_action",
-  "progress_insight",
+  'completion_confirmation',
+  'xp_streak_progress',
+  'coach_companion_reflection',
+  'study_progress',
+  'boss_damage',
+  'coach_next_action',
+  'progress_insight',
 ]);
 
 export const CompletionBeatSchema = z
@@ -83,14 +83,14 @@ export const PolicyBeatsSchema = z
 export const CompletionExperiencePolicySchema = z
   .object({
     adaptivePayoff: AdaptivePayoffSchema,
-    animationLevel: z.enum(["none", "minimal", "low_medium", "medium_high"]),
+    animationLevel: z.enum(['none', 'minimal', 'low_medium', 'medium_high']),
     beats: PolicyBeatsSchema,
     heroBeat: PolicyBeatSchema,
     hiddenCompletionSurfaces: z.array(CompletionSurfaceSchema),
     nextAction: z.enum([
-      "coach_next_action",
-      "home_return_plan",
-      "start_next_focus",
+      'coach_next_action',
+      'home_return_plan',
+      'start_next_focus',
     ]),
     progressBeat: PolicyBeatSchema,
     reflectionBeat: PolicyBeatSchema,
@@ -119,7 +119,7 @@ export const CompletionExperiencePolicyInputSchema = z
     firstWeekStage: z.string().nullable(),
     lane: LaneSchema.optional(),
     motivationStyle: MotivationStyleSchema,
-    premiumState: z.enum(["free", "premium"]),
+    premiumState: z.enum(['free', 'premium']),
     primaryGoal: PrimaryGoalSchema,
     sessionMode: SessionModeSchema,
     summary: SessionSummarySchema,

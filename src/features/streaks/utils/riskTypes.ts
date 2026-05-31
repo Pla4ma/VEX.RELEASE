@@ -1,10 +1,10 @@
-export type RiskLevel = "NONE" | "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
+export type RiskLevel = 'NONE' | 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
 
 export interface RiskFactors {
   hoursSinceLastSession: number;
   typicalSessionHour: number;
   currentHour: number;
-  historicalPattern: "CONSISTENT" | "VARIABLE" | "DECLINING";
+  historicalPattern: 'CONSISTENT' | 'VARIABLE' | 'DECLINING';
   daysUntilStreakBreak: number;
   recentSessionQuality: number;
   weekendRisk: boolean;
@@ -16,8 +16,8 @@ export interface RiskAssessment {
   score: number;
   factors: RiskFactors;
   recommendation: string;
-  urgency: "NONE" | "SOON" | "URGENT" | "CRITICAL";
-  suggestedAction: "NONE" | "REMINDER" | "PUSH" | "INTERVENTION";
+  urgency: 'NONE' | 'SOON' | 'URGENT' | 'CRITICAL';
+  suggestedAction: 'NONE' | 'REMINDER' | 'PUSH' | 'INTERVENTION';
 }
 
 export const WEIGHTS = {

@@ -3,7 +3,7 @@
  * Manages all animation values and effects for the Active Session screen
  */
 
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 import Animated, {
   useSharedValue,
   useDerivedValue,
@@ -14,9 +14,9 @@ import Animated, {
   withTiming,
   Easing,
   type SharedValue,
-} from "react-native-reanimated";
-import { Circle } from "react-native-svg";
-import { useTheme } from "../../../theme";
+} from 'react-native-reanimated';
+import { Circle } from 'react-native-svg';
+import { useTheme } from '../../../theme';
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 

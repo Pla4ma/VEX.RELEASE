@@ -1,8 +1,8 @@
-import { calculateFocusScoreUpdate } from "../score-algorithm";
-import { createInput } from "./score-algorithm.fixtures";
+import { calculateFocusScoreUpdate } from '../score-algorithm';
+import { createInput } from './score-algorithm.fixtures';
 
-describe("focus score algorithm", () => {
-  it("creates visible movement for first session users", () => {
+describe('focus score algorithm', () => {
+  it('creates visible movement for first session users', () => {
     const result = calculateFocusScoreUpdate(
       createInput({
         previousScore: 550,
@@ -18,11 +18,11 @@ describe("focus score algorithm", () => {
     expect(result.delta).toBeGreaterThanOrEqual(4);
   });
 
-  it("enforces floor and ceiling bounds", () => {
+  it('enforces floor and ceiling bounds', () => {
     const low = calculateFocusScoreUpdate(
       createInput({
         previousScore: 301,
-        grade: "D",
+        grade: 'D',
         signals: {
           consistency: 0,
           streakStability: 0,
@@ -35,7 +35,7 @@ describe("focus score algorithm", () => {
     const high = calculateFocusScoreUpdate(
       createInput({
         previousScore: 849,
-        grade: "S",
+        grade: 'S',
         signals: {
           consistency: 100,
           streakStability: 100,
@@ -49,22 +49,22 @@ describe("focus score algorithm", () => {
     expect(high.newScore).toBe(850);
   });
 
-  it("handles all grades from S through D", () => {
-    const s = calculateFocusScoreUpdate(createInput({ grade: "S" }));
-    const a = calculateFocusScoreUpdate(createInput({ grade: "A" }));
-    const b = calculateFocusScoreUpdate(createInput({ grade: "B" }));
-    const c = calculateFocusScoreUpdate(createInput({ grade: "C" }));
-    const d = calculateFocusScoreUpdate(createInput({ grade: "D" }));
+  it('handles all grades from S through D', () => {
+    const s = calculateFocusScoreUpdate(createInput({ grade: 'S' }));
+    const a = calculateFocusScoreUpdate(createInput({ grade: 'A' }));
+    const b = calculateFocusScoreUpdate(createInput({ grade: 'B' }));
+    const c = calculateFocusScoreUpdate(createInput({ grade: 'C' }));
+    const d = calculateFocusScoreUpdate(createInput({ grade: 'D' }));
     expect(s.delta).toBeGreaterThan(a.delta);
     expect(a.delta).toBeGreaterThan(b.delta);
     expect(b.delta).toBeGreaterThan(c.delta);
     expect(c.delta).toBeGreaterThan(d.delta);
   });
 
-  it("applies missed-day decay via streak update recency signal", () => {
+  it('applies missed-day decay via streak update recency signal', () => {
     const result = calculateFocusScoreUpdate(
       createInput({
-        eventType: "streak:updated",
+        eventType: 'streak:updated',
         grade: undefined,
         sessionMode: undefined,
         signals: {
@@ -79,10 +79,10 @@ describe("focus score algorithm", () => {
     expect(result.delta).toBeLessThan(0);
   });
 
-  it("softens losses on comeback sessions", () => {
+  it('softens losses on comeback sessions', () => {
     const missed = calculateFocusScoreUpdate(
       createInput({
-        eventType: "streak:updated",
+        eventType: 'streak:updated',
         grade: undefined,
         sessionMode: undefined,
         signals: {
@@ -96,9 +96,9 @@ describe("focus score algorithm", () => {
     );
     const comeback = calculateFocusScoreUpdate(
       createInput({
-        eventType: "comeback:completed",
-        grade: "B",
-        sessionMode: "recovery",
+        eventType: 'comeback:completed',
+        grade: 'B',
+        sessionMode: 'recovery',
         signals: {
           consistency: 52,
           streakStability: 50,
@@ -111,11 +111,11 @@ describe("focus score algorithm", () => {
     expect(comeback.delta).toBeGreaterThan(missed.delta);
   });
 
-  it("prevents recovery farming and caps recovery multipliers", () => {
+  it('prevents recovery farming and caps recovery multipliers', () => {
     const result = calculateFocusScoreUpdate(
       createInput({
-        grade: "S",
-        sessionMode: "recovery",
+        grade: 'S',
+        sessionMode: 'recovery',
         signals: {
           consistency: 100,
           streakStability: 100,
@@ -129,10 +129,10 @@ describe("focus score algorithm", () => {
     expect(result.xpQualityMultiplier).toBeLessThanOrEqual(1.05);
   });
 
-  it("penalizes abandoned sessions", () => {
+  it('penalizes abandoned sessions', () => {
     const result = calculateFocusScoreUpdate(
       createInput({
-        eventType: "session:abandoned",
+        eventType: 'session:abandoned',
         grade: undefined,
         sessionMode: undefined,
         signals: {
@@ -148,13 +148,13 @@ describe("focus score algorithm", () => {
     expect(result.xpQualityMultiplier).toBe(0.5);
   });
 
-  it("includes top positive and top negative factor explanations", () => {
+  it('includes top positive and top negative factor explanations', () => {
     const result = calculateFocusScoreUpdate(createInput());
-    expect(result.explanations[0]).toContain("Top positive factor");
-    expect(result.explanations[1]).toContain("Top negative factor");
+    expect(result.explanations[0]).toContain('Top positive factor');
+    expect(result.explanations[1]).toContain('Top negative factor');
   });
 
-  it("keeps factor weights at 100 with contract completion included", () => {
+  it('keeps factor weights at 100 with contract completion included', () => {
     const result = calculateFocusScoreUpdate(
       createInput({ completedContractCount: 3, contractCompletionRate: 1 }),
     );
@@ -168,14 +168,14 @@ describe("focus score algorithm", () => {
     expect(result.newScore).toBeLessThanOrEqual(850);
   });
 
-  it("does not penalize users with no contracts", () => {
+  it('does not penalize users with no contracts', () => {
     const result = calculateFocusScoreUpdate(
       createInput({ completedContractCount: 0, contractCompletionRate: 0 }),
     );
     expect(result.factors.contractCompletion.score).toBe(50);
   });
 
-  it("penalizes missed contracts only after enough contract history exists", () => {
+  it('penalizes missed contracts only after enough contract history exists', () => {
     const noHistory = calculateFocusScoreUpdate(
       createInput({ completedContractCount: 0, contractCompletionRate: 0 }),
     );

@@ -1,12 +1,12 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const RetentionReminderTypeSchema = z.enum([
-  "RETENTION_ONBOARDING_DAY_1",
-  "RETENTION_ONBOARDING_DAY_3",
-  "RETENTION_ONBOARDING_DAY_7",
-  "RETENTION_STREAK_PROTECTION",
-  "RETENTION_RE_ENGAGEMENT",
-  "RETENTION_CHALLENGE_EXPIRY",
+  'RETENTION_ONBOARDING_DAY_1',
+  'RETENTION_ONBOARDING_DAY_3',
+  'RETENTION_ONBOARDING_DAY_7',
+  'RETENTION_STREAK_PROTECTION',
+  'RETENTION_RE_ENGAGEMENT',
+  'RETENTION_CHALLENGE_EXPIRY',
 ]);
 
 export const ReminderMetadataSchema = z.record(z.unknown());
@@ -28,9 +28,9 @@ export const ReminderPlanRowSchema = z
     reminder_type: RetentionReminderTypeSchema,
     scheduled_for: z.number().int().positive(),
     delivery_method: z
-      .enum(["IN_APP", "PUSH", "BOTH", "DEFERRED"])
-      .default("BOTH"),
-    status: z.enum(["SCHEDULED", "DELIVERED", "FAILED", "CANCELLED"]),
+      .enum(['IN_APP', 'PUSH', 'BOTH', 'DEFERRED'])
+      .default('BOTH'),
+    status: z.enum(['SCHEDULED', 'DELIVERED', 'FAILED', 'CANCELLED']),
     context: z
       .object({
         message: z.string().min(1).max(500),
@@ -61,14 +61,14 @@ export const ChallengeExpiryCandidateSchema = z
   .strict();
 
 export const NotificationCenterTypeSchema = z.enum([
-  "ACHIEVEMENT",
-  "STREAK_RISK",
-  "BOSS",
-  "SQUAD",
-  "RIVAL",
-  "COACH",
-  "REWARD",
-  "LEVEL_UP",
+  'ACHIEVEMENT',
+  'STREAK_RISK',
+  'BOSS',
+  'SQUAD',
+  'RIVAL',
+  'COACH',
+  'REWARD',
+  'LEVEL_UP',
 ]);
 
 export const NotificationCenterItemSchema = z

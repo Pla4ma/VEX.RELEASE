@@ -1,13 +1,13 @@
-import React from "react";
-import { View, type ViewStyle } from "react-native";
-import Animated from "react-native-reanimated";
-import { useTheme } from "../../../theme";
-import { usePulseStyle } from "./animations";
-import { styles } from "./styles";
-import type { SkeletonProps } from "./types";
+import React from 'react';
+import { View, type ViewStyle } from 'react-native';
+import Animated from 'react-native-reanimated';
+import { useTheme } from '../../../theme';
+import { usePulseStyle } from './animations';
+import { styles } from './styles';
+import type { SkeletonProps } from './types';
 
 export function Skeleton({
-  variant = "text",
+  variant = 'text',
   count = 1,
   width,
   height,
@@ -19,12 +19,12 @@ export function Skeleton({
   const { theme } = useTheme();
   const pulseStyle = usePulseStyle(animated);
   const variantStyles: Record<
-    NonNullable<SkeletonProps["variant"]>,
+    NonNullable<SkeletonProps['variant']>,
     ViewStyle
   > = {
-    card: { width: width ?? "100%", height: height ?? 120, borderRadius: 12 },
-    list: { width: width ?? "100%", height: height ?? 60, borderRadius: 8 },
-    text: { width: width ?? "80%", height: height ?? 16, borderRadius: 4 },
+    card: { width: width ?? '100%', height: height ?? 120, borderRadius: 12 },
+    list: { width: width ?? '100%', height: height ?? 60, borderRadius: 8 },
+    text: { width: width ?? '80%', height: height ?? 16, borderRadius: 4 },
     avatar: {
       width: width ?? 48,
       height: height ?? 48,

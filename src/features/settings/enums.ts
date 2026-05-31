@@ -1,51 +1,51 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const SettingCategorySchema = z.enum([
-  "general",
-  "notifications",
-  "coach",
-  "appearance",
-  "privacy",
-  "data",
-  "advanced",
+  'general',
+  'notifications',
+  'coach',
+  'appearance',
+  'privacy',
+  'data',
+  'advanced',
 ]);
 export const NotificationChannelSchema = z.enum([
-  "push",
-  "email",
-  "in_app",
-  "sms",
+  'push',
+  'email',
+  'in_app',
+  'sms',
 ]);
 export const NotificationPrioritySchema = z.enum([
-  "critical",
-  "high",
-  "normal",
-  "low",
+  'critical',
+  'high',
+  'normal',
+  'low',
 ]);
 export const CoachPersonalitySchema = z.enum([
-  "supportive",
-  "tough",
-  "neutral",
-  "funny",
+  'supportive',
+  'tough',
+  'neutral',
+  'funny',
 ]);
 export const CoachFrequencySchema = z.enum([
-  "minimal",
-  "moderate",
-  "frequent",
-  "constant",
+  'minimal',
+  'moderate',
+  'frequent',
+  'constant',
 ]);
-export const ThemeModeSchema = z.enum(["light", "dark", "system"]);
+export const ThemeModeSchema = z.enum(['light', 'dark', 'system']);
 export const DataRetentionPolicySchema = z.enum([
-  "minimal",
-  "standard",
-  "comprehensive",
-  "forever",
+  'minimal',
+  'standard',
+  'comprehensive',
+  'forever',
 ]);
-export const ExportFormatSchema = z.enum(["json", "csv", "pdf"]);
+export const ExportFormatSchema = z.enum(['json', 'csv', 'pdf']);
 export const SyncStatusSchema = z.enum([
-  "idle",
-  "syncing",
-  "error",
-  "conflict",
+  'idle',
+  'syncing',
+  'error',
+  'conflict',
 ]);
 
 export type SettingCategory = z.infer<typeof SettingCategorySchema>;

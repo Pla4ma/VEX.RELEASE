@@ -1,33 +1,33 @@
-import { getSupabaseClient } from "../../../config/supabase";
+import { getSupabaseClient } from '../../../config/supabase';
 import {
   StreakRepairQuestSchema,
   type StreakRepairQuest,
-} from "../schemas-risk-repair";
-import { enqueue } from "../../../lib/offline/queue";
+} from '../schemas-risk-repair';
+import { enqueue } from '../../../lib/offline/queue';
 import {
   executeWithFallback,
   StreaksRepositoryError,
   type RepositoryResult,
-} from "./enhanced";
-import { RepositoryErrorCode } from "../../../lib/repository/base";
+} from './enhanced';
+import { RepositoryErrorCode } from '../../../lib/repository/base';
 
 const supabase = getSupabaseClient();
 
 export async function fetchActiveRepairQuestEnhanced(
   userId: string,
 ): Promise<RepositoryResult<StreakRepairQuest>> {
-  return executeWithFallback("fetchActiveRepairQuest", async () => {
+  return executeWithFallback('fetchActiveRepairQuest', async () => {
     const { data, error } = await supabase
-      .from("streak_repair_quests")
-      .select("*")
-      .eq("user_id", userId)
-      .eq("status", "ACTIVE")
+      .from('streak_repair_quests')
+      .select('*')
+      .eq('user_id', userId)
+      .eq('status', 'ACTIVE')
       .single();
     if (error) {
-      if (error.code === "PGRST116") {
+      if (error.code === 'PGRST116') {
         throw new StreaksRepositoryError(
-          "fetchActiveRepairQuest",
-          new Error("No active repair quest found"),
+          'fetchActiveRepairQuest',
+          new Error('No active repair quest found'),
           RepositoryErrorCode.NOT_FOUND,
         );
       }
@@ -41,16 +41,16 @@ export async function saveRepairQuestEnhanced(
   quest: StreakRepairQuest,
 ): Promise<RepositoryResult<StreakRepairQuest>> {
   enqueue({
-    operation: "CREATE",
-    feature: "streaks",
+    operation: 'CREATE',
+    feature: 'streaks',
     payload: { quest },
     idempotencyKey: `quest:save:${quest.id}`,
     maxRetries: 5,
-    priority: "high",
+    priority: 'high',
   });
-  return executeWithFallback("saveRepairQuest", async () => {
+  return executeWithFallback('saveRepairQuest', async () => {
     const { data, error } = await supabase
-      .from("streak_repair_quests")
+      .from('streak_repair_quests')
       .insert({
         id: quest.id,
         user_id: quest.userId,
@@ -78,16 +78,16 @@ export async function updateRepairQuestEnhanced(
   updates: Partial<StreakRepairQuest>,
 ): Promise<RepositoryResult<StreakRepairQuest>> {
   enqueue({
-    operation: "UPDATE",
-    feature: "streaks",
+    operation: 'UPDATE',
+    feature: 'streaks',
     payload: { questId, updates },
     idempotencyKey: `repair-quest:update:${questId}`,
     maxRetries: 5,
-    priority: "high",
+    priority: 'high',
   });
-  return executeWithFallback("updateRepairQuest", async () => {
+  return executeWithFallback('updateRepairQuest', async () => {
     const { data, error } = await supabase
-      .from("streak_repair_quests")
+      .from('streak_repair_quests')
       .update({
         sessions_completed: updates.sessionsCompleted,
         session_ids: updates.sessionIds,
@@ -95,7 +95,7 @@ export async function updateRepairQuestEnhanced(
         completed_at: updates.completedAt,
         updated_at: Date.now(),
       })
-      .eq("id", questId)
+      .eq('id', questId)
       .select()
       .single();
     if (error) {
@@ -116,12 +116,12 @@ export async function fetchExpiredRepairQuestsEnhanced(): Promise<
     }>
   >
 > {
-  return executeWithFallback("fetchExpiredRepairQuests", async () => {
+  return executeWithFallback('fetchExpiredRepairQuests', async () => {
     const { data, error } = await supabase
-      .from("streak_repair_quests")
-      .select("id, user_id, previous_streak, status, expires_at")
-      .eq("status", "ACTIVE")
-      .lt("expires_at", Date.now());
+      .from('streak_repair_quests')
+      .select('id, user_id, previous_streak, status, expires_at')
+      .eq('status', 'ACTIVE')
+      .lt('expires_at', Date.now());
     if (error) {
       throw error;
     }

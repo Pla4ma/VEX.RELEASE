@@ -1,30 +1,30 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   createRescuePlan,
   isRescueEligible,
   buildRescueCompletionRecord,
   buildRescueCompletionMemory,
   generateRescueReflection,
-} from "./service";
+} from './service';
 import {
   getActiveRescuePlan,
   saveActiveRescuePlan,
   clearActiveRescuePlan,
   saveRescueCompletion,
   getRescueCompletions,
-} from "./repository";
+} from './repository';
 import type {
   RescueEligibilityInput,
   RescueEligibilityResult,
   RescueOutcome,
   RescuePlan,
   RescuePlanInput,
-} from "./schemas";
+} from './schemas';
 
 export function useActiveRescuePlan(userId: string | null) {
   const query = useQuery({
-    queryKey: ["rescue-mode", userId],
-    queryFn: () => getActiveRescuePlan(userId ?? ""),
+    queryKey: ['rescue-mode', userId],
+    queryFn: () => getActiveRescuePlan(userId ?? ''),
     enabled: Boolean(userId),
   });
 
@@ -48,7 +48,7 @@ export function useCreateRescuePlan() {
     },
     onSuccess: (_plan, variables) => {
       void queryClient.invalidateQueries({
-        queryKey: ["rescue-mode", variables.userId],
+        queryKey: ['rescue-mode', variables.userId],
       });
     },
   });
@@ -64,7 +64,7 @@ export function useRescueEligibility() {
       return isRescueEligible(input);
     },
     onMutate: (input) => {
-      queryClient.setQueryData(["rescue-eligibility", input.userId], null);
+      queryClient.setQueryData(['rescue-eligibility', input.userId], null);
     },
   });
 }
@@ -92,10 +92,10 @@ export function useRescueCompletion() {
     },
     onSuccess: (_result, params) => {
       void queryClient.invalidateQueries({
-        queryKey: ["rescue-mode", params.plan.userId],
+        queryKey: ['rescue-mode', params.plan.userId],
       });
       void queryClient.invalidateQueries({
-        queryKey: ["rescue-completions", params.plan.userId],
+        queryKey: ['rescue-completions', params.plan.userId],
       });
     },
   });
@@ -103,8 +103,8 @@ export function useRescueCompletion() {
 
 export function useRescueCompletions(userId: string | null, limit?: number) {
   return useQuery({
-    queryKey: ["rescue-completions", userId, limit],
-    queryFn: () => getRescueCompletions(userId ?? "", limit),
+    queryKey: ['rescue-completions', userId, limit],
+    queryFn: () => getRescueCompletions(userId ?? '', limit),
     enabled: Boolean(userId),
   });
 }
@@ -117,7 +117,7 @@ export function useClearRescuePlan() {
       await clearActiveRescuePlan(userId);
     },
     onSuccess: (_result, userId) => {
-      void queryClient.invalidateQueries({ queryKey: ["rescue-mode", userId] });
+      void queryClient.invalidateQueries({ queryKey: ['rescue-mode', userId] });
     },
   });
 }

@@ -4,7 +4,7 @@
  * React hook for scale animations.
  */
 
-import { useCallback } from "react";
+import { useCallback } from 'react';
 import {
   useSharedValue,
   useAnimatedStyle,
@@ -13,10 +13,10 @@ import {
   type WithTimingConfig,
   type WithSpringConfig,
   type SharedValue,
-} from "react-native-reanimated";
+} from 'react-native-reanimated';
 
-import { durations } from "../timings";
-import { gentleSpring } from "../springs";
+import { durations } from '../timings';
+import { gentleSpring } from '../springs';
 
 /**
  * Scale animation options

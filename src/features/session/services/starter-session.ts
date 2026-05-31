@@ -7,8 +7,8 @@
  * @phase 4
  */
 
-import type { SessionConfig } from "../types";
-import { SessionMode } from "../../../session/modes";
+import type { SessionConfig } from '../types';
+import { SessionMode } from '../../../session/modes';
 
 export interface StarterSessionConfig {
   duration: number;
@@ -121,7 +121,7 @@ export function getStarterSessionMessage(progress: number): string {
   } else if (progress < 0.3) {
     return "You're doing amazing! Keep this rhythm going.";
   } else if (progress < 0.5) {
-    return "Halfway there! Your focus is getting stronger.";
+    return 'Halfway there! Your focus is getting stronger.';
   } else if (progress < 0.7) {
     return "Fantastic work! You're in the zone now.";
   } else if (progress < 0.9) {

@@ -8,26 +8,26 @@
  * @phase 7 — adaptive motivation layer
  */
 
-import React from "react";
-import { View, Pressable } from "react-native";
-import { useTheme } from "../../../theme";
-import { Text } from "../../../components/primitives/Text";
-import { Icon } from "../../../icons";
-import { useHaptics } from "../../../utils/haptics";
-import { useNavigation } from "@react-navigation/native";
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import type { ExtendedRootStackParams } from "../../../navigation/types";
-import { launchColors } from "@theme/tokens/launch-colors";
+import React from 'react';
+import { View, Pressable } from 'react-native';
+import { useTheme } from '../../../theme';
+import { Text } from '../../../components/primitives/Text';
+import { Icon } from '../../../icons';
+import { useHaptics } from '../../../utils/haptics';
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import type { ExtendedRootStackParams } from '../../../navigation/types';
+import { launchColors } from '@theme/tokens/launch-colors';
 import {
   isFeatureAvailableForNavigation,
   getFeatureAvailability,
-} from "../../../features/liveops-config";
-import { useFeatureAccess } from "../../../features/liveops-config";
+} from '../../../features/liveops-config';
+import { useFeatureAccess } from '../../../features/liveops-config';
 import {
   useBossDisplayPolicy,
   isCombatAllowed,
   isBossVisibleAtSurface,
-} from "../../../features/boss/display-policy";
+} from '../../../features/boss/display-policy';
 
 interface MiniBossPreviewProps {
   userId: string;
@@ -40,7 +40,7 @@ export function MiniBossPreview({
   const haptics = useHaptics();
   const navigation =
     useNavigation<NativeStackNavigationProp<ExtendedRootStackParams>>();
-  const policy = useBossDisplayPolicy("home_indicator");
+  const policy = useBossDisplayPolicy('home_indicator');
   const { features } = useFeatureAccess();
 
   if (!isBossVisibleAtSurface(policy)) {
@@ -52,9 +52,9 @@ export function MiniBossPreview({
   const showCombat = isCombatAllowed(policy) && canNavigate;
 
   const handlePress = () => {
-    if (!canNavigate) return;
+    if (!canNavigate) {return;}
     haptics.medium();
-    navigation.navigate("Boss");
+    navigation.navigate('Boss');
   };
 
   if (!showCombat) {
@@ -65,8 +65,8 @@ export function MiniBossPreview({
         accessibilityRole="button"
         accessibilityHint="View your focus momentum progress"
         style={{
-          flexDirection: "row",
-          alignItems: "center",
+          flexDirection: 'row',
+          alignItems: 'center',
           backgroundColor: theme.colors.background.secondary,
           borderRadius: theme.borderRadius.xl,
           padding: theme.spacing[3],
@@ -81,12 +81,12 @@ export function MiniBossPreview({
             height: 32,
             borderRadius: theme.borderRadius.lg,
             backgroundColor: `${theme.colors.primary[500]}20`,
-            justifyContent: "center",
-            alignItems: "center",
+            justifyContent: 'center',
+            alignItems: 'center',
             marginRight: theme.spacing[2],
           }}
         >
-          <Text fontSize={14}>{"\u{1F4CA}"}</Text>
+          <Text fontSize={14}>{'\u{1F4CA}'}</Text>
         </View>
         <Text variant="caption" color={theme.colors.text.secondary}>
           Focus momentum building
@@ -109,8 +109,8 @@ export function MiniBossPreview({
       accessibilityHint="View current boss progress"
       style={({ pressed }) => [
         {
-          flexDirection: "row",
-          alignItems: "center",
+          flexDirection: 'row',
+          alignItems: 'center',
           backgroundColor: theme.colors.background.secondary,
           borderRadius: theme.borderRadius.xl,
           padding: theme.spacing[3],
@@ -127,12 +127,12 @@ export function MiniBossPreview({
           height: 36,
           borderRadius: theme.borderRadius.lg,
           backgroundColor: launchColors.rgb_239_68_68_0_1,
-          justifyContent: "center",
-          alignItems: "center",
+          justifyContent: 'center',
+          alignItems: 'center',
           marginRight: theme.spacing[2],
         }}
       >
-        <Text fontSize={16}>{"\u{1F409}"}</Text>
+        <Text fontSize={16}>{'\u{1F409}'}</Text>
       </View>
       <View style={{ flex: 1 }}>
         <Text

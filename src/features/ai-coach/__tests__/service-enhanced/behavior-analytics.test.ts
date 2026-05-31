@@ -1,23 +1,23 @@
-import { describe, it, expect, jest, beforeEach } from "@jest/globals";
+import { describe, it, expect, jest, beforeEach } from '@jest/globals';
 import {
   processBehaviorSignal,
   detectPatterns,
-} from "../../services/behavior-analytics";
-import * as repository from "../../repository";
+} from '../../services/behavior-analytics';
+import * as repository from '../../repository';
 import {
   createMockBehaviorProfile,
   mockUserId,
-} from "./helpers";
+} from './helpers';
 
-jest.mock("../../repository");
+jest.mock('../../repository');
 
-describe("Behavior Analytics", () => {
+describe('Behavior Analytics', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  describe("processBehaviorSignal", () => {
-    it("creates and persists behavior signal", async () => {
+  describe('processBehaviorSignal', () => {
+    it('creates and persists behavior signal', async () => {
       (repository.addBehaviorSignal as jest.Mock).mockImplementation((s) => s);
       (repository.fetchRecentBehaviorSignals as jest.Mock).mockResolvedValue(
         [],
@@ -27,16 +27,16 @@ describe("Behavior Analytics", () => {
       );
       const profile = await processBehaviorSignal(
         mockUserId,
-        "SESSION_QUALITY_TREND",
+        'SESSION_QUALITY_TREND',
         0.85,
-        { source: "test" },
+        { source: 'test' },
       );
       expect(profile).toBeDefined();
       expect(profile.userId).toBe(mockUserId);
       expect(repository.addBehaviorSignal).toHaveBeenCalled();
     });
 
-    it("calculates correct confidence for different signal types", async () => {
+    it('calculates correct confidence for different signal types', async () => {
       (repository.addBehaviorSignal as jest.Mock).mockImplementation((s) => s);
       (repository.fetchRecentBehaviorSignals as jest.Mock).mockResolvedValue(
         [],
@@ -46,13 +46,13 @@ describe("Behavior Analytics", () => {
       );
       const profile1 = await processBehaviorSignal(
         mockUserId,
-        "STREAK_MAINTENANCE_RATE",
+        'STREAK_MAINTENANCE_RATE',
         0.9,
         {},
       );
       const profile2 = await processBehaviorSignal(
         mockUserId,
-        "SOCIAL_ENGAGEMENT",
+        'SOCIAL_ENGAGEMENT',
         0.9,
         {},
       );
@@ -62,17 +62,17 @@ describe("Behavior Analytics", () => {
     });
   });
 
-  describe("detectPatterns", () => {
-    it("detects morning person pattern", () => {
+  describe('detectPatterns', () => {
+    it('detects morning person pattern', () => {
       const profile = createMockBehaviorProfile({
-        confidenceLevel: "HIGH",
+        confidenceLevel: 'HIGH',
         coldStart: false,
         dataPoints: 25,
         signals: [
           {
-            id: "sig-1",
+            id: 'sig-1',
             userId: mockUserId,
-            signalType: "MORNING_PERSON",
+            signalType: 'MORNING_PERSON',
             value: 0.85,
             confidence: 0.8,
             timestamp: Date.now(),
@@ -82,19 +82,19 @@ describe("Behavior Analytics", () => {
         ],
       });
       const patterns = detectPatterns(profile);
-      expect(patterns.some((p) => p.patternType === "CHRONOTYPE")).toBe(true);
+      expect(patterns.some((p) => p.patternType === 'CHRONOTYPE')).toBe(true);
     });
 
-    it("detects streak maintainer pattern", () => {
+    it('detects streak maintainer pattern', () => {
       const profile = createMockBehaviorProfile({
-        confidenceLevel: "HIGH",
+        confidenceLevel: 'HIGH',
         coldStart: false,
         dataPoints: 30,
         signals: [
           {
-            id: "sig-1",
+            id: 'sig-1',
             userId: mockUserId,
-            signalType: "STREAK_MAINTENANCE_RATE",
+            signalType: 'STREAK_MAINTENANCE_RATE',
             value: 0.9,
             confidence: 0.85,
             timestamp: Date.now(),
@@ -104,12 +104,12 @@ describe("Behavior Analytics", () => {
         ],
       });
       const patterns = detectPatterns(profile);
-      expect(patterns.some((p) => p.patternType === "CONSISTENCY")).toBe(true);
+      expect(patterns.some((p) => p.patternType === 'CONSISTENCY')).toBe(true);
     });
 
-    it("returns empty patterns for cold start users", () => {
+    it('returns empty patterns for cold start users', () => {
       const profile = createMockBehaviorProfile({
-        confidenceLevel: "LOW",
+        confidenceLevel: 'LOW',
         coldStart: true,
         dataPoints: 2,
       });

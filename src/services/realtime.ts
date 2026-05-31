@@ -1,6 +1,6 @@
-import { getSupabaseClient } from "../config/supabase";
-import { eventBus } from "../events";
-import { createDebugger } from "../utils/debug";
+import { getSupabaseClient } from '../config/supabase';
+import { eventBus } from '../events';
+import { createDebugger } from '../utils/debug';
 import {
   activeChannels,
   CHANNELS,
@@ -11,22 +11,22 @@ import {
   type PresenceStatus,
   type UserPresence,
   type SquadPresence,
-} from "./realtimeShared";
+} from './realtimeShared';
 export {
   type PresenceStatus,
   type UserPresence,
   type SquadPresence,
   type BroadcastMessage,
-} from "./realtimeShared";
+} from './realtimeShared';
 export {
   broadcastActivity,
   subscribeToActivity,
   subscribeToFeedChanges,
   subscribeToSquadChanges,
   subscribeToGuildQuests,
-} from "./realtimeSubscriptions";
+} from './realtimeSubscriptions';
 
-const debug = createDebugger("realtime");
+const debug = createDebugger('realtime');
 export async function initializePresence(userId: string): Promise<void> {
   setCurrentUserId(userId);
   const client = getSupabaseClient();
@@ -34,31 +34,31 @@ export async function initializePresence(userId: string): Promise<void> {
     config: { presence: { key: userId } },
   });
   channel
-    .on("presence", { event: "sync" }, () => {
+    .on('presence', { event: 'sync' }, () => {
       const newState = channel.presenceState();
-      debug.debug("Presence sync:", newState);
+      debug.debug('Presence sync:', newState);
       handlePresenceSync(newState);
     })
-    .on("presence", { event: "join" }, ({ key, newPresences }) => {
-      debug.debug("Join:", key, newPresences);
+    .on('presence', { event: 'join' }, ({ key, newPresences }) => {
+      debug.debug('Join:', key, newPresences);
     })
-    .on("presence", { event: "leave" }, ({ key, leftPresences }) => {
-      debug.debug("Leave:", key, leftPresences);
+    .on('presence', { event: 'leave' }, ({ key, leftPresences }) => {
+      debug.debug('Leave:', key, leftPresences);
     });
   await channel.subscribe(async (status) => {
-    if (status === "SUBSCRIBED") {
+    if (status === 'SUBSCRIBED') {
       const trackStatus = await channel.track({
         userId,
-        status: "online",
+        status: 'online',
         lastSeen: Date.now(),
         online_at: Date.now(),
       });
-      if (trackStatus !== "ok") {
-        debug.debug("Failed to track presence:", trackStatus);
+      if (trackStatus !== 'ok') {
+        debug.debug('Failed to track presence:', trackStatus);
       }
     }
   });
-  activeChannels.set("presence", channel);
+  activeChannels.set('presence', channel);
 }
 
 export async function updatePresence(
@@ -69,7 +69,7 @@ export async function updatePresence(
   if (!currentUserId) {
     return;
   }
-  const channel = activeChannels.get("presence");
+  const channel = activeChannels.get('presence');
   if (!channel) {
     return;
   }
@@ -79,10 +79,10 @@ export async function updatePresence(
     lastSeen: Date.now(),
     ...metadata,
   });
-  if (trackStatus !== "ok") {
-    debug.debug("Failed to update presence:", trackStatus);
+  if (trackStatus !== 'ok') {
+    debug.debug('Failed to update presence:', trackStatus);
   }
-  eventBus.publish("realtime:presence_update", {
+  eventBus.publish('realtime:presence_update', {
     userId: currentUserId,
     status,
     timestamp: Date.now(),
@@ -98,7 +98,7 @@ export async function subscribeToSquadPresence(
   const channel = client.channel(channelName, {
     config: { presence: { key: squadId } },
   });
-  channel.on("presence", { event: "sync" }, () => {
+  channel.on('presence', { event: 'sync' }, () => {
     const state = channel.presenceState();
     const members = new Map<string, UserPresence>();
     let activeCount = 0;
@@ -109,10 +109,10 @@ export async function subscribeToSquadPresence(
         return;
       }
       members.set(key, presence);
-      if (presence.status !== "offline") {
+      if (presence.status !== 'offline') {
         activeCount++;
       }
-      if (presence.status === "in_session") {
+      if (presence.status === 'in_session') {
         inSessionCount++;
       }
     });
@@ -143,28 +143,28 @@ function normalizePresenceEntry(
   fallbackUserId: string,
   entry: unknown,
 ): UserPresence | null {
-  if (!entry || typeof entry !== "object") {
+  if (!entry || typeof entry !== 'object') {
     return null;
   }
-  const status = Reflect.get(entry, "status");
+  const status = Reflect.get(entry, 'status');
   if (!isPresenceStatus(status)) {
     return null;
   }
-  const userId = Reflect.get(entry, "userId");
-  const lastSeen = Reflect.get(entry, "lastSeen");
+  const userId = Reflect.get(entry, 'userId');
+  const lastSeen = Reflect.get(entry, 'lastSeen');
   return {
-    userId: typeof userId === "string" ? userId : fallbackUserId,
+    userId: typeof userId === 'string' ? userId : fallbackUserId,
     status,
-    lastSeen: typeof lastSeen === "number" ? lastSeen : Date.now(),
+    lastSeen: typeof lastSeen === 'number' ? lastSeen : Date.now(),
   };
 }
 
 function isPresenceStatus(status: unknown): status is PresenceStatus {
   return (
-    status === "online" ||
-    status === "away" ||
-    status === "offline" ||
-    status === "in_session"
+    status === 'online' ||
+    status === 'away' ||
+    status === 'offline' ||
+    status === 'in_session'
   );
 }
 
@@ -176,10 +176,10 @@ export function onPresenceChange(
 }
 
 export async function cleanupPresence(): Promise<void> {
-  const channel = activeChannels.get("presence");
+  const channel = activeChannels.get('presence');
   if (channel) {
     await channel.unsubscribe();
-    activeChannels.delete("presence");
+    activeChannels.delete('presence');
   }
   resetCurrentUserId();
 }
@@ -187,7 +187,7 @@ export async function cleanupPresence(): Promise<void> {
 export async function cleanupRealtime(): Promise<void> {
   for (const [name, channel] of activeChannels) {
     await channel.unsubscribe();
-    debug.info("[Realtime] Unsubscribed from:", name);
+    debug.info('[Realtime] Unsubscribed from:', name);
   }
   activeChannels.clear();
   resetCurrentUserId();

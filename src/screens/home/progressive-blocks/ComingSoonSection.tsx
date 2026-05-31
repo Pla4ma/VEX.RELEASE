@@ -1,14 +1,14 @@
-import React from "react";
-import { View } from "react-native";
+import React from 'react';
+import { View } from 'react-native';
 
-import { FeatureTeaserCard } from "../../../components/FeatureTeaserCard";
-import { Text } from "../../../components/primitives/Text";
+import { FeatureTeaserCard } from '../../../components/FeatureTeaserCard';
+import { Text } from '../../../components/primitives/Text';
 import type {
   FeatureAccessMap,
   FeatureKey,
   UserExperienceStage,
-} from "../../../features/liveops-config";
-import { HOME_FEATURE_COPY } from "../home-feature-copy";
+} from '../../../features/liveops-config';
+import { HOME_FEATURE_COPY } from '../home-feature-copy';
 
 export function ComingSoonSection({
   features,

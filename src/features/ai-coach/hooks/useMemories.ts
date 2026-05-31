@@ -4,23 +4,23 @@ import {
   useQueryClient,
   type QueryObserverResult,
   type RefetchOptions,
-} from "@tanstack/react-query";
-import { useToastHelpers } from "../../../shared/ui/components/Toast";
+} from '@tanstack/react-query';
+import { useToastHelpers } from '../../../shared/ui/components/Toast';
 import {
   createCoachMemory,
   fetchCoachMemories,
-} from "../services/memory-service";
+} from '../services/memory-service';
 import type {
   CoachMemory,
   CreateCoachMemoryInput,
   MemoryType,
-} from "../memory-schemas";
-import { useNetworkStatus } from "./useNetworkStatus";
+} from '../memory-schemas';
+import { useNetworkStatus } from './useNetworkStatus';
 
 const memoryKeys = {
-  all: (userId: string) => ["coach", "memories", userId] as const,
+  all: (userId: string) => ['coach', 'memories', userId] as const,
   typed: (userId: string, type: MemoryType) =>
-    ["coach", "memories", userId, type] as const,
+    ['coach', 'memories', userId, type] as const,
 };
 
 export interface UseCoachMemoriesResult {
@@ -46,7 +46,7 @@ export function useCoachMemories(
     staleTime: 2 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
     retry: 2,
-    networkMode: "offlineFirst",
+    networkMode: 'offlineFirst',
   });
   const executeRefetch = query.refetch;
 
@@ -81,8 +81,8 @@ export function useCreateCoachMemory(): {
     },
     onError: () => {
       toast.error(
-        "Coach memory could not be saved.",
-        "Your next session still works. Try again when the connection is steady.",
+        'Coach memory could not be saved.',
+        'Your next session still works. Try again when the connection is steady.',
       );
     },
   });

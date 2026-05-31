@@ -1,12 +1,12 @@
-import { useEffect } from "react";
-import { useQueryClient } from "@tanstack/react-query";
-import { captureException } from "../../../config/sentry";
+import { useEffect } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
+import { captureException } from '../../../config/sentry';
 import {
   buildContentStudyTimeoutFallback,
   pollContentStatus,
-} from "../ContentStudyService";
-import type { StudyContent } from "../types";
-import { contentStudyQueryKeys } from "./queryKeys";
+} from '../ContentStudyService';
+import type { StudyContent } from '../types';
+import { contentStudyQueryKeys } from './queryKeys';
 
 export function useContentExtractionPolling(
   contentId: string,
@@ -21,7 +21,7 @@ export function useContentExtractionPolling(
       return;
     }
 
-    const needsPolling = ["PENDING", "EXTRACTING", "PROCESSING"].includes(
+    const needsPolling = ['PENDING', 'EXTRACTING', 'PROCESSING'].includes(
       content.status,
     );
 
@@ -33,9 +33,9 @@ export function useContentExtractionPolling(
       try {
         const status = await pollContentStatus(contentId);
         if (
-          status.status === "EXTRACTED" ||
-          status.status === "READY" ||
-          status.status === "FAILED"
+          status.status === 'EXTRACTED' ||
+          status.status === 'READY' ||
+          status.status === 'FAILED'
         ) {
           clearInterval(pollInterval);
           void queryClient.invalidateQueries({
@@ -43,13 +43,13 @@ export function useContentExtractionPolling(
           });
         }
         onExtractingChange(
-          ["PENDING", "EXTRACTING", "PROCESSING"].includes(status.status),
+          ['PENDING', 'EXTRACTING', 'PROCESSING'].includes(status.status),
         );
       } catch (error) {
         captureException(
-          error instanceof Error ? error : new Error("Poll failed"),
+          error instanceof Error ? error : new Error('Poll failed'),
           {
-            area: "content-study.review.poll",
+            area: 'content-study.review.poll',
             contentId,
           },
         );

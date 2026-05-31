@@ -1,12 +1,12 @@
-import { createSheet } from "@/shared/ui/create-sheet";
-import { launchColors } from "@theme/tokens/launch-colors";
+import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
 
 export const settingsStyles = createSheet({
   container: { flex: 1, backgroundColor: launchColors.hex_f9fafb },
   header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     padding: 16,
     backgroundColor: launchColors.hex_ffffff,
     borderBottomWidth: 1,
@@ -16,7 +16,7 @@ export const settingsStyles = createSheet({
   backButtonText: { fontSize: 16, color: launchColors.hex_6366f1 },
   headerTitle: {
     fontSize: 18,
-    fontWeight: "600",
+    fontWeight: '600',
     color: launchColors.hex_111827,
   },
   headerSpacer: { width: 60 },
@@ -28,7 +28,7 @@ export const settingsStyles = createSheet({
   },
   tabsContent: { paddingHorizontal: 12, paddingVertical: 12, gap: 8 },
   tab: {
-    alignItems: "center",
+    alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 20,
@@ -38,26 +38,26 @@ export const settingsStyles = createSheet({
   activeTab: { backgroundColor: launchColors.hex_6366f1 },
   tabIcon: { fontSize: 20, marginBottom: 4 },
   tabLabel: { fontSize: 12, color: launchColors.hex_6b7280 },
-  activeTabLabel: { color: launchColors.hex_ffffff, fontWeight: "500" },
+  activeTabLabel: { color: launchColors.hex_ffffff, fontWeight: '500' },
   contentScroll: { flex: 1 },
   centerContainer: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: 32,
   },
   loadingText: { marginTop: 16, fontSize: 16, color: launchColors.hex_6b7280 },
   errorIcon: { fontSize: 48, marginBottom: 16 },
   errorTitle: {
     fontSize: 18,
-    fontWeight: "600",
+    fontWeight: '600',
     color: launchColors.hex_ef4444,
     marginBottom: 8,
   },
   errorMessage: {
     fontSize: 14,
     color: launchColors.hex_6b7280,
-    textAlign: "center",
+    textAlign: 'center',
     marginBottom: 16,
   },
   retryButton: {
@@ -68,7 +68,7 @@ export const settingsStyles = createSheet({
   },
   retryButtonText: {
     color: launchColors.hex_ffffff,
-    fontWeight: "600",
+    fontWeight: '600',
     fontSize: 14,
   },
   settingsGroup: {
@@ -81,12 +81,12 @@ export const settingsStyles = createSheet({
     backgroundColor: launchColors.hex_6366f1,
     paddingVertical: 14,
     borderRadius: 8,
-    alignItems: "center",
+    alignItems: 'center',
   },
   actionButtonText: {
     color: launchColors.hex_ffffff,
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   dangerButton: { backgroundColor: launchColors.hex_fee2e2 },
   dangerButtonText: { color: launchColors.hex_ef4444 },

@@ -1,5 +1,5 @@
-import { z } from "zod";
-import * as repository from "../repository";
+import { z } from 'zod';
+import * as repository from '../repository';
 import {
   ComparativeStatsSchema,
   InsightSchema,
@@ -9,8 +9,8 @@ import {
   type AnalyticsMetric,
   type Insight,
   type ComparativeStats,
-} from "../schemas";
-import { eventBus } from "../../../events";
+} from '../schemas';
+import { eventBus } from '../../../events';
 
 export async function getComparativeStats(
   userId: string,
@@ -23,12 +23,12 @@ export async function getComparativeStats(
   const previousStart = currentStart - periodLength;
   const previousEnd = currentStart;
   const [currentData, previousData] = await Promise.all([
-    repository.fetchTimeSeriesData(userId, metric, currentRange, "day"),
+    repository.fetchTimeSeriesData(userId, metric, currentRange, 'day'),
     repository.fetchTimeSeriesData(
       userId,
       metric,
-      "custom" as TimeRange,
-      "day",
+      'custom' as TimeRange,
+      'day',
     ),
   ]);
   const currentValue = currentData.summary.total;
@@ -56,7 +56,7 @@ export async function getComparativeStats(
 }
 
 async function createInsight(
-  input: Omit<z.infer<typeof CreateInsightInputSchema>, "relatedMetrics"> & {
+  input: Omit<z.infer<typeof CreateInsightInputSchema>, 'relatedMetrics'> & {
     relatedMetrics?: string[];
   },
 ): Promise<Insight> {
@@ -82,7 +82,7 @@ async function createInsight(
     relatedMetrics: validated.relatedMetrics,
   });
   await repository.createInsight(insight);
-  eventBus.publish("analytics:insight_generated", {
+  eventBus.publish('analytics:insight_generated', {
     userId: validated.userId,
     insightId: insight.id,
     type: insight.type,
@@ -94,9 +94,9 @@ export async function generateInsights(userId: string): Promise<Insight[]> {
   const insights: Insight[] = [];
   const streakData = await repository.fetchTimeSeriesData(
     userId,
-    "streak_days",
-    "last_7_days",
-    "day",
+    'streak_days',
+    'last_7_days',
+    'day',
   );
   const currentStreak =
     streakData.points[streakData.points.length - 1]?.value ?? 0;
@@ -104,20 +104,20 @@ export async function generateInsights(userId: string): Promise<Insight[]> {
     insights.push(
       await createInsight({
         userId,
-        type: "streak_achieved",
-        severity: "celebration",
+        type: 'streak_achieved',
+        severity: 'celebration',
         title: `${currentStreak} Day Streak! 🔥`,
         description: `Amazing! You've maintained focus for ${currentStreak} consecutive days. Keep the momentum going!`,
-        metric: "streak_days",
+        metric: 'streak_days',
         expiresInDays: 7,
       }),
     );
   }
   const todaysSession = await repository.fetchTimeSeriesData(
     userId,
-    "sessions_completed",
-    "today",
-    "hour",
+    'sessions_completed',
+    'today',
+    'hour',
   );
   if (
     currentStreak > 0 &&
@@ -127,21 +127,21 @@ export async function generateInsights(userId: string): Promise<Insight[]> {
     insights.push(
       await createInsight({
         userId,
-        type: "streak_at_risk",
-        severity: "warning",
-        title: "Streak at Risk! \u26A0\uFE0F",
+        type: 'streak_at_risk',
+        severity: 'warning',
+        title: 'Streak at Risk! \u26A0\uFE0F',
         description: `You haven't completed a focus session today. Start one now to keep your ${currentStreak} day streak alive!`,
-        metric: "sessions_completed",
+        metric: 'sessions_completed',
         expiresInDays: 1,
-        actionType: "start_session",
+        actionType: 'start_session',
       }),
     );
   }
   const xpData = await repository.fetchTimeSeriesData(
     userId,
-    "xp_earned",
-    "last_30_days",
-    "day",
+    'xp_earned',
+    'last_30_days',
+    'day',
   );
   const totalXp = xpData.summary.total;
   const xpMilestones = [100, 500, 1000, 5000, 10000];
@@ -157,11 +157,11 @@ export async function generateInsights(userId: string): Promise<Insight[]> {
         insights.push(
           await createInsight({
             userId,
-            type: "milestone_reached",
-            severity: "celebration",
+            type: 'milestone_reached',
+            severity: 'celebration',
             title: `${nextMilestone} XP Milestone! 🎉`,
             description: `Incredible! You've earned ${nextMilestone} total XP. You're leveling up fast!`,
-            metric: "xp_earned",
+            metric: 'xp_earned',
             expiresInDays: 14,
           }),
         );

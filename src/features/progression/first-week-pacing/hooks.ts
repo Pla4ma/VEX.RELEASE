@@ -4,18 +4,18 @@
  * React hooks for accessing first week progression data and state.
  */
 
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import * as service from "./service";
-import { useAuthStore } from "../../../store";
-import type { FirstWeekProgress, FirstWeekSession } from "./schemas";
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import * as service from './service';
+import { useAuthStore } from '../../../store';
+import type { FirstWeekProgress, FirstWeekSession } from './schemas';
 
 // ============================================================================
 // Query Keys
 // ============================================================================
 
 export const firstWeekKeys = {
-  all: ["first-week"] as const,
-  byUser: (userId: string) => [...firstWeekKeys.all, "user", userId] as const,
+  all: ['first-week'] as const,
+  byUser: (userId: string) => [...firstWeekKeys.all, 'user', userId] as const,
 };
 
 // ============================================================================
@@ -34,7 +34,7 @@ export function useFirstWeekProgress(userId: string) {
 
 export function useCurrentFirstWeekProgress() {
   const user = useAuthStore((state) => state.user);
-  const userId = user?.id ?? "";
+  const userId = user?.id ?? '';
 
   return useFirstWeekProgress(userId);
 }
@@ -55,13 +55,13 @@ export function useProgressToNextSession() {
     }: {
       userId: string;
       completedSession:
-        | "SESSION_1"
-        | "SESSION_2"
-        | "SESSION_3"
-        | "SESSION_4"
-        | "SESSION_5"
-        | "SESSION_6"
-        | "SESSION_7";
+        | 'SESSION_1'
+        | 'SESSION_2'
+        | 'SESSION_3'
+        | 'SESSION_4'
+        | 'SESSION_5'
+        | 'SESSION_6'
+        | 'SESSION_7';
       xpEarned: number;
       sessionData?: Record<string, unknown>;
     }) => {
@@ -128,13 +128,13 @@ export function useNextSession(
   }
 
   const sessions: FirstWeekSession[] = [
-    "SESSION_1",
-    "SESSION_2",
-    "SESSION_3",
-    "SESSION_4",
-    "SESSION_5",
-    "SESSION_6",
-    "SESSION_7",
+    'SESSION_1',
+    'SESSION_2',
+    'SESSION_3',
+    'SESSION_4',
+    'SESSION_5',
+    'SESSION_6',
+    'SESSION_7',
   ];
 
   const currentIndex = sessions.indexOf(progress.currentSession);

@@ -1,12 +1,12 @@
-import { useQuery } from "@tanstack/react-query";
-import { buildTodaySystem } from "./service";
-import type { TodaySystemInput } from "./schemas";
+import { useQuery } from '@tanstack/react-query';
+import { buildTodaySystem } from './service';
+import type { TodaySystemInput } from './schemas';
 
 const FALLBACK_INPUT: TodaySystemInput = {
   completedToday: 0,
   dayFeelsMessy: false,
   hiddenFeatureKeys: [],
-  lane: "minimal_normal",
+  lane: 'minimal_normal',
   laterAction: null,
   nowAction: null,
   reducedMotion: false,
@@ -14,9 +14,9 @@ const FALLBACK_INPUT: TodaySystemInput = {
 
 export function useTodaySystem(input: TodaySystemInput | null) {
   const query = useQuery({
-    queryKey: ["today-system", input],
+    queryKey: ['today-system', input],
     queryFn: () => buildTodaySystem(input ?? FALLBACK_INPUT),
-    enabled: input !== null && !input.hiddenFeatureKeys.includes("today_strip"),
+    enabled: input !== null && !input.hiddenFeatureKeys.includes('today_strip'),
   });
 
   return {

@@ -1,10 +1,10 @@
-import { eventBus } from "../events";
-import type { Experiment, ExperimentAssignment, Variant } from "./ab-types";
+import { eventBus } from '../events';
+import type { Experiment, ExperimentAssignment, Variant } from './ab-types';
 import {
   isUserEligibleForExperiment,
   selectVariant,
-} from "./ab-management-types";
-import { experiments, userAssignments } from "./ab-experiments-mgmt";
+} from './ab-management-types';
+import { experiments, userAssignments } from './ab-experiments-mgmt';
 
 export function assignUserToExperiment(
   userId: string,
@@ -12,7 +12,7 @@ export function assignUserToExperiment(
   forceVariant?: string,
 ): ExperimentAssignment | null {
   const experiment = experiments.get(experimentId);
-  if (!experiment || experiment.status !== "RUNNING") {
+  if (!experiment || experiment.status !== 'RUNNING') {
     return null;
   }
   const existingAssignments = userAssignments.get(userId) || [];
@@ -36,7 +36,7 @@ export function assignUserToExperiment(
     userId,
   };
   userAssignments.set(userId, [...existingAssignments, assignment]);
-  eventBus.publish("experiment:assigned", { assignment, experiment });
+  eventBus.publish('experiment:assigned', { assignment, experiment });
   return assignment;
 }
 
@@ -84,7 +84,7 @@ export function recordExperimentEvent(
   if (!experiment) {
     return;
   }
-  eventBus.publish("experiment:event", {
+  eventBus.publish('experiment:event', {
     userId,
     experimentId,
     variantId: assignment.variantId,
@@ -109,11 +109,11 @@ export function removeUserFromExperiment(
     return false;
   }
   userAssignments.set(userId, filtered);
-  eventBus.publish("experiment:unassigned", { userId, experimentId });
+  eventBus.publish('experiment:unassigned', { userId, experimentId });
   return true;
 }
 
 export function clearUserAssignments(userId: string): void {
   userAssignments.delete(userId);
-  eventBus.publish("experiment:assignments_cleared", { userId });
+  eventBus.publish('experiment:assignments_cleared', { userId });
 }

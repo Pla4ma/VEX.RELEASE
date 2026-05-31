@@ -1,9 +1,9 @@
-import React from "react";
-import { View, Pressable } from "react-native";
-import { Text } from "../../components/primitives";
-import { useTheme } from "../../theme";
-import { buttonTap } from "../../utils/haptics";
-import type { SessionPreset } from "../types";
+import React from 'react';
+import { View, Pressable } from 'react-native';
+import { Text } from '../../components/primitives';
+import { useTheme } from '../../theme';
+import { buttonTap } from '../../utils/haptics';
+import type { SessionPreset } from '../types';
 
 interface PresetCardProps {
   preset: SessionPreset;
@@ -18,16 +18,16 @@ const formatDuration = (seconds: number): string => {
 
 const getCategoryEmoji = (category?: string): string => {
   switch (category) {
-    case "Study":
-      return "📚";
-    case "Work":
-      return "💼";
-    case "Creative":
-      return "🎨";
-    case "Health":
-      return "💪";
+    case 'Study':
+      return '📚';
+    case 'Work':
+      return '💼';
+    case 'Creative':
+      return '🎨';
+    case 'Health':
+      return '💪';
     default:
-      return "🎯";
+      return '🎯';
   }
 };
 
@@ -41,13 +41,13 @@ export const PresetCard: React.FC<PresetCardProps> = ({
   return (
     <Pressable
       style={({ pressed }) => ({
-        width: "48%",
+        width: '48%',
         backgroundColor: pressed
           ? theme.colors.surface.pressed
           : theme.colors.surface.card,
         borderRadius: theme.borderRadius.lg,
         padding: theme.spacing[4],
-        alignItems: "center",
+        alignItems: 'center',
         borderWidth: 1,
         borderColor: theme.colors.border.light,
         opacity: pressed ? theme.opacity[80] : theme.opacity[100],
@@ -67,8 +67,8 @@ export const PresetCard: React.FC<PresetCardProps> = ({
           height: 48,
           backgroundColor: theme.colors.primary[100] || theme.colors.surface.button,
           borderRadius: 24,
-          justifyContent: "center",
-          alignItems: "center",
+          justifyContent: 'center',
+          alignItems: 'center',
           marginBottom: 12,
         }}
       >
@@ -93,13 +93,13 @@ export const PresetCard: React.FC<PresetCardProps> = ({
         variant="caption"
         style={{ color: theme.colors.text.tertiary }}
       >
-        {preset.intervals}{" "}
-        {preset.intervals > 1 ? "intervals" : "interval"}
+        {preset.intervals}{' '}
+        {preset.intervals > 1 ? 'intervals' : 'interval'}
       </Text>
       {preset.strictMode && (
         <View
           style={{
-            position: "absolute",
+            position: 'absolute',
             top: 8,
             right: 8,
             backgroundColor: theme.colors.warning.DEFAULT,

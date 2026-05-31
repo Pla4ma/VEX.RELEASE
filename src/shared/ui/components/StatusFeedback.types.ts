@@ -1,13 +1,13 @@
-import type { ViewStyle } from "react-native";
-import type { Theme } from "../../../theme";
+import type { ViewStyle } from 'react-native';
+import type { Theme } from '../../../theme';
 
 export type AsyncStatus =
-  | "idle"
-  | "loading"
-  | "success"
-  | "error"
-  | "retrying"
-  | "offline";
+  | 'idle'
+  | 'loading'
+  | 'success'
+  | 'error'
+  | 'retrying'
+  | 'offline';
 
 export interface StatusFeedbackProps {
   status: AsyncStatus;
@@ -15,7 +15,7 @@ export interface StatusFeedbackProps {
   description?: string;
   onRetry?: () => void;
   onDismiss?: () => void;
-  variant?: "inline" | "banner" | "card";
+  variant?: 'inline' | 'banner' | 'card';
   style?: ViewStyle;
   autoDismissSuccess?: boolean;
   autoDismissDelay?: number;
@@ -25,27 +25,27 @@ export interface StatusFeedbackProps {
 }
 
 export const STATUS_CONFIG: Record<AsyncStatus, { icon: string; title: string }> = {
-  idle: { icon: "", title: "" },
-  loading: { icon: "⏳", title: "Loading" },
-  retrying: { icon: "🔄", title: "Retrying" },
-  success: { icon: "✓", title: "Success" },
-  error: { icon: "✕", title: "Error" },
-  offline: { icon: "📡", title: "Offline" },
+  idle: { icon: '', title: '' },
+  loading: { icon: '⏳', title: 'Loading' },
+  retrying: { icon: '🔄', title: 'Retrying' },
+  success: { icon: '✓', title: 'Success' },
+  error: { icon: '✕', title: 'Error' },
+  offline: { icon: '📡', title: 'Offline' },
 };
 
 export const getStatusColor = (status: AsyncStatus, theme: Theme): string => {
   switch (status) {
-    case "loading":
+    case 'loading':
       return theme.colors.primary[500];
-    case "retrying":
+    case 'retrying':
       return theme.colors.warning.dark;
-    case "success":
+    case 'success':
       return theme.colors.success.dark;
-    case "error":
+    case 'error':
       return theme.colors.error.dark;
-    case "offline":
+    case 'offline':
       return theme.colors.text.disabled;
     default:
-      return "transparent";
+      return 'transparent';
   }
 };

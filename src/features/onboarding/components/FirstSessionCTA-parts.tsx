@@ -1,14 +1,14 @@
-import React from "react";
+import React from 'react';
 import Animated, {
   useAnimatedStyle,
   withRepeat,
   withTiming,
-} from "react-native-reanimated";
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import type { FocusDuration, FocusGoal } from "../schemas";
-import { DURATION_OPTIONS, GOAL_OPTIONS } from "../service";
+} from 'react-native-reanimated';
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import type { FocusDuration, FocusGoal } from '../schemas';
+import { DURATION_OPTIONS, GOAL_OPTIONS } from '../service';
 
 /**
  * Pulsing circle animation for excitement
@@ -29,7 +29,7 @@ export function PulseRing(): JSX.Element {
     <Animated.View
       style={[
         {
-          position: "absolute",
+          position: 'absolute',
           width: 160,
           height: 160,
           borderRadius: 80,
@@ -67,9 +67,9 @@ export function SessionPreview({
       gap="md"
     >
       <Box flexDirection="row" alignItems="center" gap="sm">
-        <Text fontSize={40}>{durationOption?.emoji ?? "🍅"}</Text>
+        <Text fontSize={40}>{durationOption?.emoji ?? '🍅'}</Text>
         <Text variant="h2" color="text.primary" fontWeight="700">
-          {durationOption?.label ?? "25 min"}
+          {durationOption?.label ?? '25 min'}
         </Text>
       </Box>
 

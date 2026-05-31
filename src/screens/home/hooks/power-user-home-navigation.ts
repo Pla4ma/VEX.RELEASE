@@ -1,8 +1,8 @@
-import { useCallback } from "react";
-import type { NavigationProp } from "@react-navigation/native";
-import type { SessionStackParams } from "../../../navigation/types";
-import type { FeatureAccessResult } from "../../../features/liveops-config";
-import type { LearningSessionTarget } from "../../../features/learning-execution";
+import { useCallback } from 'react';
+import type { NavigationProp } from '@react-navigation/native';
+import type { SessionStackParams } from '../../../navigation/types';
+import type { FeatureAccessResult } from '../../../features/liveops-config';
+import type { LearningSessionTarget } from '../../../features/learning-execution';
 
 interface NavigationCallbacks {
   openSetup: (params?: Record<string, unknown>) => void;
@@ -20,7 +20,7 @@ export function useNavigationCallbacks(params: {
   analytics: {
     trackFirstSessionStarted: (userId: string, source: string) => void;
     trackNextBestActionPressed: (
-      stage: import("../../../features/liveops-config").UserExperienceStage,
+      stage: import('../../../features/liveops-config').UserExperienceStage,
       completedSessions: number,
     ) => void;
   };
@@ -40,34 +40,34 @@ export function useNavigationCallbacks(params: {
       if (userId && disclosure.inputs.totalCompletedSessions === 0) {
         analytics.trackFirstSessionStarted(
           userId,
-          (setupParams as SessionStackParams["SessionSetup"] | undefined)?.source ?? "home",
+          (setupParams as SessionStackParams['SessionSetup'] | undefined)?.source ?? 'home',
         );
       }
-      navigation.navigate("SessionStack", {
-        screen: "SessionSetup",
-        params: (setupParams ?? {}) as SessionStackParams["SessionSetup"],
+      navigation.navigate('SessionStack', {
+        screen: 'SessionSetup',
+        params: (setupParams ?? {}) as SessionStackParams['SessionSetup'],
       });
     },
     [analytics, disclosure.inputs.totalCompletedSessions, navigation, userId],
   );
 
   const openProgress = useCallback(
-    () => navigation.navigate("Main", { screen: "Progress" }),
+    () => navigation.navigate('Main', { screen: 'Progress' }),
     [navigation],
   );
 
   const openSocial = useCallback(() => {
     navigation.navigate(
-      "Main",
+      'Main',
       canNavigateSocial
-        ? { screen: "Profile", params: { tab: "social" } }
-        : { screen: "Profile", params: { tab: "stats" } },
+        ? { screen: 'Profile', params: { tab: 'social' } }
+        : { screen: 'Profile', params: { tab: 'stats' } },
     );
   }, [canNavigateSocial, navigation]);
 
   const openContentStudy = useCallback(() => {
     if (!canNavigateContentStudy) { openSetup(); return; }
-    navigation.navigate("ContentStudy");
+    navigation.navigate('ContentStudy');
   }, [canNavigateContentStudy, navigation, openSetup]);
 
   const continueStudyPlan = useCallback(() => {

@@ -1,14 +1,14 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { View, TextInput, Pressable } from "react-native";
+import React, { useCallback, useEffect, useState } from 'react';
+import { View, TextInput, Pressable } from 'react-native';
 
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import { Icon } from "../../../icons";
-import type { YouTubeInputProps } from "../types";
-import { validateYouTubeUrl } from "../validation";
-import { styles } from "./YouTubeInputStyles";
-import { buttonTap } from "../../../utils/haptics";
-import { YouTubeVideoPreview } from "./YouTubeVideoPreview";
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import { Icon } from '../../../icons';
+import type { YouTubeInputProps } from '../types';
+import { validateYouTubeUrl } from '../validation';
+import { styles } from './YouTubeInputStyles';
+import { buttonTap } from '../../../utils/haptics';
+import { YouTubeVideoPreview } from './YouTubeVideoPreview';
 
 export const YouTubeInput: React.FC<YouTubeInputProps> = ({
   value,
@@ -44,7 +44,7 @@ export const YouTubeInput: React.FC<YouTubeInputProps> = ({
     onValidationChange?.(result.isValid, result.errors[0]?.message);
   }, [value, onValidationChange]);
   const clearInput = useCallback(() => {
-    onChange("");
+    onChange('');
   }, [onChange]);
   const handlePaste = useCallback(async () => {}, []);
   return (

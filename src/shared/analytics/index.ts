@@ -18,19 +18,19 @@ export {
   updateUserProperties,
   isFeatureEnabled,
   getFeatureFlag,
-} from "./analytics-service";
+} from './analytics-service';
 
-export { initializeAnalyticsEventBridge } from "./event-bus-bridge";
+export { initializeAnalyticsEventBridge } from './event-bus-bridge';
 export {
   ProductAnalyticsEvents,
   type ProductAnalyticsEvent,
-} from "./product-events";
+} from './product-events';
 export {
   sanitizeAnalyticsProperties,
   sanitizeEventName,
   sanitizeUserTraits,
   type SafeAnalyticsProperties,
-} from "./privacy";
+} from './privacy';
 
 // Event constants and types
 export {
@@ -68,7 +68,7 @@ export {
   type EconomyEventProperties,
   type SocialEventProperties,
   type CoachEventProperties,
-} from "./analytics-events";
+} from './analytics-events';
 
 // Hook exports
 export {
@@ -76,7 +76,7 @@ export {
   useScreenTracking,
   useProgressionTracking,
   useSessionTracking,
-} from "./use-analytics";
+} from './use-analytics';
 
 // Sentry alert exports (Phase 8C.2)
 export {
@@ -86,4 +86,4 @@ export {
   alertSuspiciousActivity,
   alertDatabaseDegradation,
   withRevenueAlert,
-} from "./sentry-alerts";
+} from './sentry-alerts';

@@ -1,4 +1,4 @@
-import { getMMKVStorageAdapter } from "../../persistence/MMKVStorageAdapter";
+import { getMMKVStorageAdapter } from '../../persistence/MMKVStorageAdapter';
 
 export interface MMKVInstance {
   getString(key: string): string | undefined;
@@ -23,8 +23,8 @@ export class SessionStorageHelper {
 
   private initStorage(): void {
     try {
-      const { MMKV } = require("react-native-mmkv");
-      this.mmkv = new MMKV({ id: "session-storage" });
+      const { MMKV } = require('react-native-mmkv');
+      this.mmkv = new MMKV({ id: 'session-storage' });
       this.useMMKV = true;
     } catch (error: unknown) {
       this.useMMKV = false;
@@ -32,17 +32,17 @@ export class SessionStorageHelper {
   }
 
   async getString(key: string): Promise<string | null> {
-    if (this.useMMKV && this.mmkv) return this.mmkv.getString(key) ?? null;
+    if (this.useMMKV && this.mmkv) {return this.mmkv.getString(key) ?? null;}
     return getMMKVStorageAdapter().getItem(key);
   }
 
   async setString(key: string, value: string): Promise<void> {
-    if (this.useMMKV && this.mmkv) this.mmkv.set(key, value);
-    else await getMMKVStorageAdapter().setItem(key, value);
+    if (this.useMMKV && this.mmkv) {this.mmkv.set(key, value);}
+    else {await getMMKVStorageAdapter().setItem(key, value);}
   }
 
   async removeString(key: string): Promise<void> {
-    if (this.useMMKV && this.mmkv) this.mmkv.delete(key);
-    else await getMMKVStorageAdapter().removeItem(key);
+    if (this.useMMKV && this.mmkv) {this.mmkv.delete(key);}
+    else {await getMMKVStorageAdapter().removeItem(key);}
   }
 }

@@ -1,47 +1,47 @@
-import { withScreenErrorBoundary } from "../../shared/ui/components/ScreenErrorBoundary";
-import React, { useState, useCallback, useMemo } from "react";
-import { Pressable } from "react-native";
-import { FlashList } from "@shopify/flash-list";
-import { Box, Text } from "@/components/primitives";
-import { Skeleton } from "@/shared/ui/primitives";
-import { useTheme } from "@/theme";
-import { useAchievements, achievementKeys } from "@/features/achievements/hooks";
-import { useAchievementStats } from "@/features/achievements/hooks-computed";
-import type { AchievementCategory, AchievementRarity } from "@/features/achievements/types";
-import { useQueryClient } from "@tanstack/react-query";
-import { AchievementsHeader } from "./AchievementProgressBar";
-import { CategoryTabs, FilterSortBar, type FilterType, type SortType } from "./AchievementSearchFilter";
-import { AchievementCard, AchievementSkeletonCard, EmptyState, type AchievementWithStatus } from "./AchievementCategorySection";
+import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+import React, { useState, useCallback, useMemo } from 'react';
+import { Pressable } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
+import { Box, Text } from '@/components/primitives';
+import { Skeleton } from '@/shared/ui/primitives';
+import { useTheme } from '@/theme';
+import { useAchievements, achievementKeys } from '@/features/achievements/hooks';
+import { useAchievementStats } from '@/features/achievements/hooks-computed';
+import type { AchievementCategory, AchievementRarity } from '@/features/achievements/types';
+import { useQueryClient } from '@tanstack/react-query';
+import { AchievementsHeader } from './AchievementProgressBar';
+import { CategoryTabs, FilterSortBar, type FilterType, type SortType } from './AchievementSearchFilter';
+import { AchievementCard, AchievementSkeletonCard, EmptyState, type AchievementWithStatus } from './AchievementCategorySection';
 
-const RARITY_ORDER: AchievementRarity[] = ["LEGENDARY", "EPIC", "RARE", "UNCOMMON", "COMMON"];
-const CATEGORY_ORDER: AchievementCategory[] = ["SESSION", "STREAK", "BOSS", "SOCIAL", "PROGRESSION", "ECONOMY"];
+const RARITY_ORDER: AchievementRarity[] = ['LEGENDARY', 'EPIC', 'RARE', 'UNCOMMON', 'COMMON'];
+const CATEGORY_ORDER: AchievementCategory[] = ['SESSION', 'STREAK', 'BOSS', 'SOCIAL', 'PROGRESSION', 'ECONOMY'];
 
 export const AchievementsScreen: React.FC = () => {
   const { theme } = useTheme();
   const queryClient = useQueryClient();
-  const userId = "current-user";
+  const userId = 'current-user';
   const { data: achievements, isLoading } = useAchievements(userId);
   const { data: stats } = useAchievementStats(userId);
-  const [selectedCategory, setSelectedCategory] = useState<AchievementCategory | "ALL">("ALL");
-  const [filter, setFilter] = useState<FilterType>("ALL");
-  const [sort, setSort] = useState<SortType>("RARITY");
+  const [selectedCategory, setSelectedCategory] = useState<AchievementCategory | 'ALL'>('ALL');
+  const [filter, setFilter] = useState<FilterType>('ALL');
+  const [sort, setSort] = useState<SortType>('RARITY');
   const [selectedAchievement, setSelectedAchievement] = useState<AchievementWithStatus | null>(null);
 
   const filteredAchievements = useMemo(() => {
-    if (!achievements) return [];
+    if (!achievements) {return [];}
     let result = [...achievements];
-    if (selectedCategory !== "ALL") {
+    if (selectedCategory !== 'ALL') {
       result = result.filter((a) => a.category === selectedCategory);
     }
-    if (filter === "UNLOCKED") {
+    if (filter === 'UNLOCKED') {
       result = result.filter((a) => a.isUnlocked);
-    } else if (filter === "LOCKED") {
+    } else if (filter === 'LOCKED') {
       result = result.filter((a) => !a.isUnlocked);
     }
     result.sort((a, b) => {
-      if (sort === "RARITY") return RARITY_ORDER.indexOf(a.rarity) - RARITY_ORDER.indexOf(b.rarity);
-      if (sort === "RECENT") return (b.unlockedAt || 0) - (a.unlockedAt || 0);
-      if (sort === "CATEGORY") return CATEGORY_ORDER.indexOf(a.category) - CATEGORY_ORDER.indexOf(b.category);
+      if (sort === 'RARITY') {return RARITY_ORDER.indexOf(a.rarity) - RARITY_ORDER.indexOf(b.rarity);}
+      if (sort === 'RECENT') {return (b.unlockedAt || 0) - (a.unlockedAt || 0);}
+      if (sort === 'CATEGORY') {return CATEGORY_ORDER.indexOf(a.category) - CATEGORY_ORDER.indexOf(b.category);}
       return 0;
     });
     return result;
@@ -133,4 +133,4 @@ export const AchievementsScreen: React.FC = () => {
   );
 };
 
-export default withScreenErrorBoundary(AchievementsScreen, "Achievements");
+export default withScreenErrorBoundary(AchievementsScreen, 'Achievements');

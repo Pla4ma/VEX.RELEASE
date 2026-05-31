@@ -3,21 +3,21 @@
  */
 
 export interface ProgressionEventDefinitions {
-  "progression:add-xp": {
+  'progression:add-xp': {
     userId: string;
     amount: number;
     source: string;
     sessionId?: string;
     metadata?: Record<string, unknown>;
   };
-  "progression:add_xp": {
+  'progression:add_xp': {
     userId: string;
     amount: number;
     source: string;
     sessionId?: string;
     metadata?: Record<string, unknown>;
   };
-  "progression:xp_added": {
+  'progression:xp_added': {
     userId: string;
     amount: number;
     source: string;
@@ -27,7 +27,7 @@ export interface ProgressionEventDefinitions {
     streakBonus: number;
     boostBonus: number;
   };
-  "progression:level_up": {
+  'progression:level_up': {
     userId: string;
     newLevel: number;
     previousLevel: number;
@@ -37,15 +37,15 @@ export interface ProgressionEventDefinitions {
     source: string;
     rewards: string[];
   };
-  "progression:prestige": {
+  'progression:prestige': {
     userId: string;
     prestige: number;
     previousLevel: number;
     resetXP: number;
     multiplier: number;
   };
-  "social:level_up": { userId: string; newLevel: number; timestamp: number };
-  "social:prestige": {
+  'social:level_up': { userId: string; newLevel: number; timestamp: number };
+  'social:prestige': {
     userId: string;
     prestige: number;
     previousLevel: number;
@@ -54,57 +54,57 @@ export interface ProgressionEventDefinitions {
     badge: string;
     rewards: string[];
   };
-  "progression:xp_earned": {
+  'progression:xp_earned': {
     userId: string;
     xp: number;
     source: string;
     sessionId?: string;
     bossId?: string;
   };
-  "progression:economy_activity": {
+  'progression:economy_activity': {
     userId: string;
     currency: string;
     amount: number;
     type: string;
     source: string;
   };
-  "focus_tower:block_added": {
+  'focus_tower:block_added': {
     userId: string;
     block: unknown;
     newTotal: number;
     tierUp: boolean;
     milestoneReached?: number;
   };
-  "focus_tower:tier_up": {
+  'focus_tower:tier_up': {
     userId: string;
     tier?: number;
     previousTier?: number;
     newTier?: number;
     tierName?: string;
   };
-  "focus_tower:milestone": {
+  'focus_tower:milestone': {
     userId: string;
     milestone: string | number;
     value?: number;
     totalBlocks?: number;
   };
-  "focus_tower:decay": {
+  'focus_tower:decay': {
     userId: string;
     daysInactive: number;
     decayAmount: number;
   };
-  "focus_tower:restored": {
+  'focus_tower:restored': {
     userId: string;
     restoredTier: number;
     previousTier: number;
   };
-  "mastery:unlocks": {
+  'mastery:unlocks': {
     userId: string;
     trackId: string;
     unlocks: string[];
     timestamp: number;
   };
-  "prestige:available": {
+  'prestige:available': {
     userId: string;
     prestigeLevel: number;
     requirements: string[];

@@ -3,25 +3,25 @@ import {
   ProjectSessionBriefSchema,
   type ProjectThread,
   type ProjectSessionBrief,
-} from "./schemas";
-import { listStoredProjectThreads, upsertStoredProjectThread } from "./repository";
+} from './schemas';
+import { listStoredProjectThreads, upsertStoredProjectThread } from './repository';
 import {
   trackProjectSessionStarted,
   trackProjectThreadUpdated,
   trackProjectHandoffStored,
-} from "./analytics";
+} from './analytics';
 
 const STALE_AFTER_MS = 3 * 86_400_000;
 
 function staleRisk(
   lastTouched: number,
   now: number,
-): ProjectThread["staleRisk"] {
+): ProjectThread['staleRisk'] {
   const age = now - lastTouched;
-  if (age >= STALE_AFTER_MS * 2) return "high";
-  if (age >= STALE_AFTER_MS) return "medium";
-  if (age >= 86_400_000) return "low";
-  return "none";
+  if (age >= STALE_AFTER_MS * 2) {return 'high';}
+  if (age >= STALE_AFTER_MS) {return 'medium';}
+  if (age >= 86_400_000) {return 'low';}
+  return 'none';
 }
 
 export function buildProjectSessionBrief(
@@ -29,9 +29,9 @@ export function buildProjectSessionBrief(
   now = Date.now(),
 ): ProjectSessionBrief {
   const risk = staleRisk(thread.lastTouched, now);
-  const isRescued = thread.state === "rescued";
+  const isRescued = thread.state === 'rescued';
   return ProjectSessionBriefSchema.parse({
-    durationSeconds: isRescued ? 10 * 60 : risk === "high" ? 15 * 60 : 25 * 60,
+    durationSeconds: isRescued ? 10 * 60 : risk === 'high' ? 15 * 60 : 25 * 60,
     successCondition: isRescued
       ? `Review: ${thread.lastSessionSummary ?? thread.currentObjective}`
       : thread.nextMove,
@@ -60,9 +60,9 @@ export type ProjectMemoryCandidate = {
   metadata: {
     projectTitle: string;
     threadId: string;
-    state: ProjectThread["state"];
+    state: ProjectThread['state'];
   };
-  type: "project_handoff";
+  type: 'project_handoff';
 };
 
 export function buildProjectMemoryCandidate(
@@ -72,18 +72,18 @@ export function buildProjectMemoryCandidate(
   return {
     content: [
       thread.handoffNote && `Handoff: ${thread.handoffNote}`,
-      `Last summary: ${thread.lastSessionSummary ?? "N/A"}`,
+      `Last summary: ${thread.lastSessionSummary ?? 'N/A'}`,
       `Next move: ${thread.nextMove}`,
       thread.blocker && `Blocker: ${thread.blocker}`,
     ]
       .filter(Boolean)
-      .join("\n"),
+      .join('\n'),
     metadata: {
       projectTitle: thread.projectTitle,
       state: thread.state,
       threadId: thread.id,
     },
-    type: "project_handoff",
+    type: 'project_handoff',
   };
 }
 
@@ -99,7 +99,7 @@ export async function completeProjectSession(input: {
 }): Promise<ProjectThread> {
   const threads = await listStoredProjectThreads(input.userId);
   const thread = threads.find((item) => item.id === input.threadId);
-  if (!thread) throw new Error("Project thread could not be found.");
+  if (!thread) {throw new Error('Project thread could not be found.');}
   const now = input.now ?? Date.now();
   const updated = await upsertStoredProjectThread(
     ProjectThreadSchema.parse({
@@ -112,8 +112,8 @@ export async function completeProjectSession(input: {
       openQuestions: input.openQuestion
         ? [...thread.openQuestions, input.openQuestion]
         : thread.openQuestions,
-      staleRisk: "none",
-      state: input.blocker ? "blocked" : "active",
+      staleRisk: 'none',
+      state: input.blocker ? 'blocked' : 'active',
     }),
   );
   trackProjectThreadUpdated(updated.projectTitle, updated.state);

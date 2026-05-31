@@ -12,8 +12,8 @@ export interface BasicChallengeConfig {
 }
 
 export const CONFIG: BasicChallengeConfig = {
-  dailyChallengeId: "basic-daily-001",
-  weeklyChallengeId: "basic-weekly-001",
+  dailyChallengeId: 'basic-daily-001',
+  weeklyChallengeId: 'basic-weekly-001',
   dailyTarget: 1,
   weeklyTarget: 5,
   dailyRewardXp: 25,

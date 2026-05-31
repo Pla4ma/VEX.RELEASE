@@ -1,4 +1,4 @@
-import { StreakRowSchema, StreakSchema, type Streak } from "./schemas";
+import { StreakRowSchema, StreakSchema, type Streak } from './schemas';
 
 export class RepositoryError extends Error {
   constructor(
@@ -6,14 +6,14 @@ export class RepositoryError extends Error {
     public originalError: unknown,
   ) {
     super(
-      `Repository error in ${operation}: ${originalError instanceof Error ? originalError.message : "Unknown error"}`,
+      `Repository error in ${operation}: ${originalError instanceof Error ? originalError.message : 'Unknown error'}`,
     );
-    this.name = "RepositoryError";
+    this.name = 'RepositoryError';
   }
 }
 
 /** Re-export singleton from canonical source to avoid stale module-level references */
-export { supabase } from "../../config/supabase";
+export { supabase } from '../../config/supabase';
 
 export function parseStreakRow(row: unknown): Streak {
   const parsed = StreakRowSchema.parse(row);

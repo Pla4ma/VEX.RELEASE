@@ -1,8 +1,8 @@
-import { NOTIFICATION_CONFIG } from "./notification-config";
-import { getScheduledCoachNotifications } from "./notification-support";
-import { createDebugger } from "../../../utils/debug";
+import { NOTIFICATION_CONFIG } from './notification-config';
+import { getScheduledCoachNotifications } from './notification-support';
+import { createDebugger } from '../../../utils/debug';
 
-const debug = createDebugger("ai-coach:notifications");
+const debug = createDebugger('ai-coach:notifications');
 
 export function isSameCalendarDay(left: Date, right: Date): boolean {
   return (
@@ -28,14 +28,14 @@ export async function isRateLimited(): Promise<boolean> {
       const trigger = item.trigger;
       return Boolean(
         trigger &&
-        typeof trigger === "object" &&
-        "date" in trigger &&
+        typeof trigger === 'object' &&
+        'date' in trigger &&
         new Date(String(trigger.date)).getTime() > oneHourAgo,
       );
     }).length;
     return recentCount >= NOTIFICATION_CONFIG.maxNotificationsPerHour;
   } catch (error) {
-    debug.warn("Notification rate limit check failed", error);
+    debug.warn('Notification rate limit check failed', error);
     return false;
   }
 }

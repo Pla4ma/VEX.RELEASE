@@ -1,17 +1,17 @@
-import React, { useEffect } from "react";
-import { View } from "react-native";
+import React, { useEffect } from 'react';
+import { View } from 'react-native';
 
-import { getPremiumCardStyle } from "./premiumStyles";
-import { Button } from "./primitives/Button";
-import { Text } from "./primitives/Text";
-import { useTheme } from "../theme";
-import { useDisclosureAnalytics } from "../features/liveops-config";
+import { getPremiumCardStyle } from './premiumStyles';
+import { Button } from './primitives/Button';
+import { Text } from './primitives/Text';
+import { useTheme } from '../theme';
+import { useDisclosureAnalytics } from '../features/liveops-config';
 import type {
   FeatureKey,
   UserExperienceStage,
-} from "../features/liveops-config";
-import { UnlockRequirementRow } from "./UnlockRequirementRow";
-import { buttonTap } from "../utils/haptics";
+} from '../features/liveops-config';
+import { UnlockRequirementRow } from './UnlockRequirementRow';
+import { buttonTap } from '../utils/haptics';
 
 interface FeatureTeaserCardProps {
   feature: FeatureKey;
@@ -40,10 +40,10 @@ export function FeatureTeaserCard(props: FeatureTeaserCardProps): JSX.Element {
         borderWidth: 1,
         borderColor: theme.colors.primary[100],
         backgroundColor: theme.colors.background.secondary,
-        borderRadius: theme.borderRadius["2xl"],
+        borderRadius: theme.borderRadius['2xl'],
         padding: theme.spacing[4],
         gap: theme.spacing[3],
-        ...getPremiumCardStyle("large"),
+        ...getPremiumCardStyle('large'),
       }}
     >
       <View style={{ gap: theme.spacing[1] }}>

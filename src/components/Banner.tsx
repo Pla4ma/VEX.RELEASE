@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   View,
   Pressable,
@@ -6,24 +6,24 @@ import {
   ViewStyle,
   Image,
   ImageSourcePropType,
-} from "react-native";
-import { useTheme } from "../theme";
-import { Text } from "./primitives";
-import { Icon } from "../icons";
-import { Button } from "./primitives";
-import { buttonTap } from "../utils/haptics";
+} from 'react-native';
+import { useTheme } from '../theme';
+import { Text } from './primitives';
+import { Icon } from '../icons';
+import { Button } from './primitives';
+import { buttonTap } from '../utils/haptics';
 import {
   getVariantStyles,
   sizeStyles,
   styles,
   type BannerVariant,
-} from "./Banner.config";
+} from './Banner.config';
 
 export interface BannerProps {
   title: string;
   description?: string;
   variant?: BannerVariant;
-  size?: "sm" | "md" | "lg";
+  size?: 'sm' | 'md' | 'lg';
   icon?: string;
   backgroundImage?: ImageSourcePropType;
   actionText?: string;
@@ -38,8 +38,8 @@ export interface BannerProps {
 export const Banner: React.FC<BannerProps> = ({
   title,
   description,
-  variant = "default",
-  size = "md",
+  variant = 'default',
+  size = 'md',
   icon,
   backgroundImage,
   actionText,
@@ -61,7 +61,7 @@ export const Banner: React.FC<BannerProps> = ({
         {
           backgroundColor: variantStyles.backgroundColor,
           padding: currentSize.padding,
-          borderRadius: size === "sm" ? 8 : size === "md" ? 12 : 16,
+          borderRadius: size === 'sm' ? 8 : size === 'md' ? 12 : 16,
         },
         fullWidth && styles.fullWidth,
         style,
@@ -73,7 +73,7 @@ export const Banner: React.FC<BannerProps> = ({
           resizeMode="cover"
           style={[
             styles.backgroundImage,
-            { borderRadius: size === "sm" ? 8 : size === "md" ? 12 : 16 },
+            { borderRadius: size === 'sm' ? 8 : size === 'md' ? 12 : 16 },
           ]}
         />
       )}
@@ -94,7 +94,7 @@ export const Banner: React.FC<BannerProps> = ({
         <View style={styles.textContainer}>
           <Text
             variant={currentSize.titleSize}
-            style={{ color: variantStyles.textColor, fontWeight: "600" }}
+            style={{ color: variantStyles.textColor, fontWeight: '600' }}
           >
             {title}
           </Text>
@@ -119,7 +119,7 @@ export const Banner: React.FC<BannerProps> = ({
                   size="sm"
                   onPress={onAction}
                   style={{ marginRight: secondaryActionText ? 8 : 0 }}
-                  accessibilityLabel={actionText ?? "Perform action"}
+                  accessibilityLabel={actionText ?? 'Perform action'}
                   accessibilityRole="button"
                   accessibilityHint="Performs the primary banner action"
                 >
@@ -131,7 +131,7 @@ export const Banner: React.FC<BannerProps> = ({
                   variant="ghost"
                   size="sm"
                   onPress={onSecondaryAction}
-                  accessibilityLabel={secondaryActionText ?? "Perform secondary action"}
+                  accessibilityLabel={secondaryActionText ?? 'Perform secondary action'}
                   accessibilityRole="button"
                   accessibilityHint="Performs the secondary banner action"
                 >

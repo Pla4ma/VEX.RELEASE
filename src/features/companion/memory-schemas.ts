@@ -1,22 +1,22 @@
-import { z } from "zod";
-import { SessionModeSchema } from "../../session/modes";
-import { SessionCompletionGradeSchema } from "../session-completion/schemas";
+import { z } from 'zod';
+import { SessionModeSchema } from '../../session/modes';
+import { SessionCompletionGradeSchema } from '../session-completion/schemas';
 
 export const CompanionMemoryTypeSchema = z.enum([
-  "first_session",
-  "first_s_grade",
-  "first_7_day_streak",
-  "first_30_day_streak",
-  "first_comeback",
-  "first_deep_work",
-  "first_clean_sprint",
-  "boss_first_defeat",
-  "companion_first_evolution",
-  "companion_second_evolution",
-  "contract_streak",
-  "personal_best_broken",
-  "hardest_comeback",
-  "milestone_custom",
+  'first_session',
+  'first_s_grade',
+  'first_7_day_streak',
+  'first_30_day_streak',
+  'first_comeback',
+  'first_deep_work',
+  'first_clean_sprint',
+  'boss_first_defeat',
+  'companion_first_evolution',
+  'companion_second_evolution',
+  'contract_streak',
+  'personal_best_broken',
+  'hardest_comeback',
+  'milestone_custom',
 ]);
 
 export const CompanionMemorySchema = z

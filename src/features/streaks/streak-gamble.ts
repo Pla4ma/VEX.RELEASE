@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 /**
  * Streak Gamble mechanics.
@@ -11,8 +11,8 @@ export const StreakGambleSchema = z.object({
   streakDaysAtRisk: z.number(),
   startedAt: z.number(),
   sessionId: z.string(),
-  status: z.enum(["ACTIVE", "WON", "LOST", "CANCELLED"]),
-  requiredGrade: z.enum(["S", "A", "B"]),
+  status: z.enum(['ACTIVE', 'WON', 'LOST', 'CANCELLED']),
+  requiredGrade: z.enum(['S', 'A', 'B']),
   actualGrade: z.string().optional(),
   bonusXpIfWon: z.number(),
   settledAt: z.number().optional(),
@@ -21,30 +21,30 @@ export const StreakGambleSchema = z.object({
 export type StreakGamble = z.infer<typeof StreakGambleSchema>;
 
 export interface GambleConfig {
-  requiredGrade: "S" | "A" | "B";
+  requiredGrade: 'S' | 'A' | 'B';
   timeWindowHours: number;
   bonusXpMultiplier: number;
-  riskLevel: "LOW" | "MEDIUM" | "HIGH";
+  riskLevel: 'LOW' | 'MEDIUM' | 'HIGH';
 }
 
 export const GAMBLE_CONFIGS: Record<string, GambleConfig> = {
   conservative: {
-    requiredGrade: "B",
+    requiredGrade: 'B',
     timeWindowHours: 24,
     bonusXpMultiplier: 1.5,
-    riskLevel: "LOW",
+    riskLevel: 'LOW',
   },
   moderate: {
-    requiredGrade: "A",
+    requiredGrade: 'A',
     timeWindowHours: 12,
     bonusXpMultiplier: 2.0,
-    riskLevel: "MEDIUM",
+    riskLevel: 'MEDIUM',
   },
   aggressive: {
-    requiredGrade: "S",
+    requiredGrade: 'S',
     timeWindowHours: 6,
     bonusXpMultiplier: 3.0,
-    riskLevel: "HIGH",
+    riskLevel: 'HIGH',
   },
 };
 

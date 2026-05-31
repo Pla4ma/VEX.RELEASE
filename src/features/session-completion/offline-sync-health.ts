@@ -1,11 +1,11 @@
-import { createDebugger } from "../../utils/debug";
-import { getNetInfoAdapter } from "../../network/NetInfoAdapter";
-import { sessionCompletionOfflineSync } from "./offline-sync-service";
+import { createDebugger } from '../../utils/debug';
+import { getNetInfoAdapter } from '../../network/NetInfoAdapter';
+import { sessionCompletionOfflineSync } from './offline-sync-service';
 
-const debug = createDebugger("session-completion:offline-health");
+const debug = createDebugger('session-completion:offline-health');
 
 export interface SessionCompletionHealthCheckResult {
-  status: "healthy" | "warning" | "critical";
+  status: 'healthy' | 'warning' | 'critical';
   pendingCount: number;
   oldestPendingAgeMinutes?: number;
   minutesSinceLastSync?: number;
@@ -27,35 +27,35 @@ export async function performSessionCompletionHealthCheck(): Promise<SessionComp
     ? Math.floor((now - diagnostics.lastSyncAt) / (1000 * 60))
     : undefined;
   const recommendations: string[] = [];
-  let status: "healthy" | "warning" | "critical" = "healthy";
+  let status: 'healthy' | 'warning' | 'critical' = 'healthy';
   if (pendingCount > 10) {
-    status = "critical";
+    status = 'critical';
     recommendations.push(
-      "High number of pending sessions - check network connectivity",
+      'High number of pending sessions - check network connectivity',
     );
   } else if (pendingCount > 3) {
-    status = "warning";
-    recommendations.push("Several sessions pending sync");
+    status = 'warning';
+    recommendations.push('Several sessions pending sync');
   }
   if (oldestAgeMinutes && oldestAgeMinutes > 60) {
-    status = status === "healthy" ? "warning" : "critical";
-    recommendations.push("Some sessions have been pending for over an hour");
+    status = status === 'healthy' ? 'warning' : 'critical';
+    recommendations.push('Some sessions have been pending for over an hour');
   } else if (oldestAgeMinutes && oldestAgeMinutes > 15) {
-    if (status === "healthy") {
-      status = "warning";
+    if (status === 'healthy') {
+      status = 'warning';
     }
-    recommendations.push("Some sessions have been pending for over 15 minutes");
+    recommendations.push('Some sessions have been pending for over 15 minutes');
   }
   if (minutesSinceLastSync && minutesSinceLastSync > 30) {
-    status = status === "healthy" ? "warning" : "critical";
-    recommendations.push("No successful sync in over 30 minutes");
+    status = status === 'healthy' ? 'warning' : 'critical';
+    recommendations.push('No successful sync in over 30 minutes');
   }
   if (!isOnline) {
-    status = "critical";
-    recommendations.push("Device is offline - session completions will queue");
+    status = 'critical';
+    recommendations.push('Device is offline - session completions will queue');
   }
-  if (status === "healthy") {
-    recommendations.push("Session completion sync is operating normally");
+  if (status === 'healthy') {
+    recommendations.push('Session completion sync is operating normally');
   }
   return {
     status,
@@ -88,7 +88,7 @@ export class SessionCompletionSyncMonitor {
     if (this.intervalId) {
       this.stop();
     }
-    debug.info("Starting session completion sync monitor");
+    debug.info('Starting session completion sync monitor');
     this.performHealthCheck();
     this.intervalId = setInterval(() => {
       this.performHealthCheck();
@@ -99,7 +99,7 @@ export class SessionCompletionSyncMonitor {
     if (this.intervalId) {
       clearInterval(this.intervalId);
       this.intervalId = null;
-      debug.info("Stopped session completion sync monitor");
+      debug.info('Stopped session completion sync monitor');
     }
   }
 
@@ -115,7 +115,7 @@ export class SessionCompletionSyncMonitor {
       }
       this.lastHealthStatus = healthStatus;
     } catch (error) {
-      debug.error("Health check failed:", error);
+      debug.error('Health check failed:', error);
     }
   }
 

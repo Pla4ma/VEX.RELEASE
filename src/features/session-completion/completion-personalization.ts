@@ -4,12 +4,12 @@ import {
   type CompletionPersonalization,
   type CompletionPersonalizationInput,
   type CompletionPersonalizationResult,
-} from "./schemas";
-import { resolveCompletionLaneProfile } from "../lane-engine/service";
-import type { Lane, LaneProfile } from "../lane-engine/types";
-import type { SessionSummary } from "../../session/types";
-import { buildPostSessionNextAction } from "./post-session-next-action";
-import type { PostSessionNextAction } from "./schemas";
+} from './schemas';
+import { resolveCompletionLaneProfile } from '../lane-engine/service';
+import type { Lane, LaneProfile } from '../lane-engine/types';
+import type { SessionSummary } from '../../session/types';
+import { buildPostSessionNextAction } from './post-session-next-action';
+import type { PostSessionNextAction } from './schemas';
 import {
   REFLECTIONS,
   situationFor,
@@ -19,7 +19,7 @@ import {
   buildProgressProof,
   buildUserFacingSummary,
   unlockFor,
-} from "./completion-text";
+} from './completion-text';
 
 export function buildCompletionPersonalization(
   rawInput: CompletionPersonalizationInput,
@@ -45,7 +45,7 @@ export function buildCompletionPersonalizationResult(input: {
   isPersonalBest: boolean;
   lane?: Lane;
   laneProfile?: LaneProfile;
-  streakAction: "extended" | "maintained" | "broken" | "saved_by_insurance";
+  streakAction: 'extended' | 'maintained' | 'broken' | 'saved_by_insurance';
   streakDays: number;
   summary: SessionSummary;
   xpDelta: number;
@@ -58,7 +58,7 @@ export function buildCompletionPersonalizationResult(input: {
     hiddenFeatureKeys = [],
     isComeback = false,
     isPersonalBest,
-    lane = "minimal_normal",
+    lane = 'minimal_normal',
     laneProfile,
     streakAction,
     streakDays,

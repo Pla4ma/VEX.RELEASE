@@ -1,16 +1,16 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const FocusMemoryTypeSchema = z.enum([
-  "best_time_window",
-  "avoidance_trigger",
-  "successful_session_pattern",
-  "failed_session_pattern",
-  "preferred_tone",
-  "study_deadline",
-  "project_continuity",
-  "friction_preference",
-  "notification_preference",
-  "lane_evidence",
+  'best_time_window',
+  'avoidance_trigger',
+  'successful_session_pattern',
+  'failed_session_pattern',
+  'preferred_tone',
+  'study_deadline',
+  'project_continuity',
+  'friction_preference',
+  'notification_preference',
+  'lane_evidence',
 ]);
 
 export const FocusMemorySchema = z
@@ -20,11 +20,11 @@ export const FocusMemorySchema = z
     type: FocusMemoryTypeSchema,
     summary: z.string().min(1),
     source: z.enum([
-      "session_completion",
-      "reflection",
-      "behavior",
-      "import",
-      "manual",
+      'session_completion',
+      'reflection',
+      'behavior',
+      'import',
+      'manual',
     ]),
     confidence: z.number().min(0).max(1),
     accepted: z.boolean(),
@@ -37,16 +37,16 @@ export const FocusMemorySchema = z
   .strict();
 
 export const ColdStartReasonSchema = z.enum([
-  "cold_start",
-  "insufficient_data",
-  "user_override",
+  'cold_start',
+  'insufficient_data',
+  'user_override',
 ]);
 
 export const EvidenceLaneContextSchema = z.enum([
-  "student",
-  "game_like",
-  "deep_creative",
-  "minimal_normal",
+  'student',
+  'game_like',
+  'deep_creative',
+  'minimal_normal',
 ]);
 
 export const RecommendationEvidenceSchema = z
@@ -56,11 +56,11 @@ export const RecommendationEvidenceSchema = z
     confidence: z.number().min(0).max(1).optional(),
     fallbackReason: ColdStartReasonSchema.optional(),
     source: z.enum([
-      "session_completion",
-      "reflection",
-      "behavior",
-      "rescue_completion",
-      "cold_start",
+      'session_completion',
+      'reflection',
+      'behavior',
+      'rescue_completion',
+      'cold_start',
     ]),
     lane: EvidenceLaneContextSchema,
     mode: z.string().min(1).optional(),
@@ -73,11 +73,11 @@ export const CreateMemoryCandidateInputSchema = z
     type: FocusMemoryTypeSchema,
     summary: z.string().min(1),
     source: z.enum([
-      "session_completion",
-      "reflection",
-      "behavior",
-      "import",
-      "manual",
+      'session_completion',
+      'reflection',
+      'behavior',
+      'import',
+      'manual',
     ]),
     confidence: z.number().min(0).max(1),
     evidenceHash: z.string().min(1).optional(),

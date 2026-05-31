@@ -1,8 +1,8 @@
-import React from "react";
-import { View, Text } from "react-native";
-import { render } from "@testing-library/react-native";
+import React from 'react';
+import { View, Text } from 'react-native';
+import { render } from '@testing-library/react-native';
 
-jest.mock("react-native-purchases", () => ({
+jest.mock('react-native-purchases', () => ({
   __esModule: true,
   default: {
     configure: jest.fn(),
@@ -39,27 +39,27 @@ jest.mock("react-native-purchases", () => ({
   PURCHASES_ERROR_CODE: { PURCHASE_CANCELLED_ERROR: 2 },
 }));
 
-describe("Test environment smoke", () => {
-  it("renders View with Text", () => {
+describe('Test environment smoke', () => {
+  it('renders View with Text', () => {
     const { getByText } = render(
       <View testID="smoke-view">
         <Text>Smoke Test</Text>
       </View>,
     );
-    expect(getByText("Smoke Test")).toBeTruthy();
+    expect(getByText('Smoke Test')).toBeTruthy();
   });
 
-  it("renders VEX primitive component (Badge)", () => {
-    const { Badge } = require("@/components/Badge");
+  it('renders VEX primitive component (Badge)', () => {
+    const { Badge } = require('@/components/Badge');
     const { getByText } = render(<Badge variant="primary">VEX Smoke</Badge>);
-    expect(getByText("VEX Smoke")).toBeTruthy();
+    expect(getByText('VEX Smoke')).toBeTruthy();
   });
 
-  it("renders NavigationContainer with one screen", () => {
-    const { NavigationContainer } = require("@react-navigation/native");
+  it('renders NavigationContainer with one screen', () => {
+    const { NavigationContainer } = require('@react-navigation/native');
     const {
       createNativeStackNavigator,
-    } = require("@react-navigation/native-stack");
+    } = require('@react-navigation/native-stack');
     const Stack = createNativeStackNavigator();
     const TestScreen = () => (
       <View testID="test-screen">
@@ -73,48 +73,48 @@ describe("Test environment smoke", () => {
         </Stack.Navigator>
       </NavigationContainer>,
     );
-    expect(getByText("Navigation works")).toBeTruthy();
+    expect(getByText('Navigation works')).toBeTruthy();
   });
 
-  it("imports Reanimated mock safely", () => {
-    const reanimated = require("react-native-reanimated");
+  it('imports Reanimated mock safely', () => {
+    const reanimated = require('react-native-reanimated');
     expect(reanimated.useSharedValue).toBeDefined();
     expect(reanimated.withTiming).toBeDefined();
   });
 
-  it("imports Gesture Handler mock safely", () => {
-    const gh = require("react-native-gesture-handler");
+  it('imports Gesture Handler mock safely', () => {
+    const gh = require('react-native-gesture-handler');
     expect(gh.Gesture).toBeDefined();
   });
 
-  it("imports Sentry mock safely", () => {
-    const Sentry = require("@sentry/react-native");
+  it('imports Sentry mock safely', () => {
+    const Sentry = require('@sentry/react-native');
     expect(Sentry.captureException).toBeDefined();
     expect(Sentry.addBreadcrumb).toBeDefined();
     expect(Sentry.init).toBeDefined();
   });
 
-  it("imports RevenueCat / react-native-purchases mock safely", () => {
-    const Purchases = require("react-native-purchases");
+  it('imports RevenueCat / react-native-purchases mock safely', () => {
+    const Purchases = require('react-native-purchases');
     expect(Purchases.default.configure).toBeDefined();
     expect(Purchases.default.getCustomerInfo).toBeDefined();
   });
 
-  it("has ImageLoader turbo module mock", () => {
+  it('has ImageLoader turbo module mock', () => {
     expect(global.__turboModuleProxy).toBeDefined();
-    const loader = (global as any).__turboModuleProxy("ImageLoader");
+    const loader = (global as any).__turboModuleProxy('ImageLoader');
     expect(loader).toBeDefined();
     expect(loader.getConstants).toBeDefined();
   });
 
-  it("has NativeAnimatedHelper mock", () => {
+  it('has NativeAnimatedHelper mock', () => {
     expect(() =>
-      require("react-native/Libraries/Animated/NativeAnimatedHelper"),
+      require('react-native/Libraries/Animated/NativeAnimatedHelper'),
     ).not.toThrow();
   });
 
-  it("has Safe Area Context mock", () => {
-    const sac = require("react-native-safe-area-context");
+  it('has Safe Area Context mock', () => {
+    const sac = require('react-native-safe-area-context');
     expect(sac.SafeAreaProvider).toBeDefined();
   });
 });

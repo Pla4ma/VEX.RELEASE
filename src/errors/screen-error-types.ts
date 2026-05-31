@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 export interface ScreenErrorConfig {
   screenName: string;
@@ -10,17 +10,17 @@ export interface ScreenErrorConfig {
 }
 
 export type ScreenType =
-  | "session"
-  | "session-complete"
-  | "home"
-  | "rewards"
-  | "streaks"
-  | "progression"
-  | "profile"
-  | "settings"
-  | "boss"
-  | "challenges"
-  | "squads";
+  | 'session'
+  | 'session-complete'
+  | 'home'
+  | 'rewards'
+  | 'streaks'
+  | 'progression'
+  | 'profile'
+  | 'settings'
+  | 'boss'
+  | 'challenges'
+  | 'squads';
 
 export interface ScreenErrorWrapperProps {
   children: React.ReactNode;

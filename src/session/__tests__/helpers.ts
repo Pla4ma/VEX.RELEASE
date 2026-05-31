@@ -1,18 +1,18 @@
-import { SessionService, createSessionService } from "../SessionService";
-import { getSessionRepository } from "../repository/SessionRepository";
-import { eventBus } from "../../events";
-import { SESSION_CONSTANTS } from "../index";
-import { getSessionOrchestrator } from "../SessionOrchestrator";
-import { getSessionEventEmitter } from "../SessionEventEmitter";
+import { SessionService, createSessionService } from '../SessionService';
+import { getSessionRepository } from '../repository/SessionRepository';
+import { eventBus } from '../../events';
+import { SESSION_CONSTANTS } from '../index';
+import { getSessionOrchestrator } from '../SessionOrchestrator';
+import { getSessionEventEmitter } from '../SessionEventEmitter';
 
-jest.mock("../repository/SessionRepository");
-jest.mock("../../events");
-jest.mock("../SessionOrchestrator", () => ({
+jest.mock('../repository/SessionRepository');
+jest.mock('../../events');
+jest.mock('../SessionOrchestrator', () => ({
   getSessionOrchestrator: jest.fn(),
   createSessionOrchestrator: jest.fn(),
   SessionOrchestrator: jest.fn(),
 }));
-jest.mock("../SessionEventEmitter", () => ({
+jest.mock('../SessionEventEmitter', () => ({
   getSessionEventEmitter: jest.fn().mockReturnValue({
     attach: jest.fn(),
     detach: jest.fn(),
@@ -20,12 +20,12 @@ jest.mock("../SessionEventEmitter", () => ({
     emitNotification: jest.fn(),
   }),
 }));
-jest.mock("../integration/RewardAdapter", () => ({
+jest.mock('../integration/RewardAdapter', () => ({
   getRewardAdapter: jest.fn().mockReturnValue({
     setUserId: jest.fn(),
   }),
 }));
-jest.mock("../presets", () => ({
+jest.mock('../presets', () => ({
   getPresetService: jest.fn().mockReturnValue({
     setUserId: jest.fn(),
     getPresetById: jest.fn().mockReturnValue(null),
@@ -38,12 +38,12 @@ export interface TestContext {
   mockOrchestrator: Record<string, jest.Mock>;
 }
 
-export const mockUserId = "test-user-123";
+export const mockUserId = 'test-user-123';
 
 export const mockSessionConfig = {
   duration: 1800,
-  type: "focus" as const,
-  difficulty: "medium" as const,
+  type: 'focus' as const,
+  difficulty: 'medium' as const,
   enableNotifications: true,
   enableSound: true,
 };
@@ -51,10 +51,10 @@ export const mockSessionConfig = {
 export function createTestContext(): TestContext {
   const mockOrchestrator: Record<string, jest.Mock> = {
     createSession: jest.fn().mockResolvedValue({
-      id: "test-session-123",
+      id: 'test-session-123',
       userId: mockUserId,
-      status: "PREPARING",
-      phase: "PREPARATION",
+      status: 'PREPARING',
+      phase: 'PREPARATION',
       config: {},
     }),
     startSession: jest.fn().mockResolvedValue(undefined),
@@ -62,9 +62,9 @@ export function createTestContext(): TestContext {
     resumeSession: jest.fn().mockResolvedValue(undefined),
     abandonSession: jest.fn().mockResolvedValue(undefined),
     completeSession: jest.fn().mockResolvedValue({
-      sessionId: "test-session-123",
+      sessionId: 'test-session-123',
       userId: mockUserId,
-      status: "COMPLETED",
+      status: 'COMPLETED',
       finalScore: 100,
       xpEarned: 50,
       completionPercentage: 100,

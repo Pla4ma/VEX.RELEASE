@@ -1,4 +1,4 @@
-import type { SettingValue, SettingCategory } from "./types";
+import type { SettingValue, SettingCategory } from './types';
 
 export class SettingsValidationError extends Error {
   constructor(
@@ -7,7 +7,7 @@ export class SettingsValidationError extends Error {
     public validationErrors: string[],
   ) {
     super(message);
-    this.name = "SettingsValidationError";
+    this.name = 'SettingsValidationError';
   }
 }
 
@@ -21,29 +21,29 @@ export function validateSettingValue(
     errors.push(`Value cannot be undefined for key: ${key}`);
   }
   switch (category) {
-    case "notifications":
-      if (key.includes("frequency") && typeof value === "string") {
-        const valid = ["immediate", "daily", "weekly", "never"];
-        if (!valid.includes(value)) errors.push(`Invalid frequency: ${value}`);
+    case 'notifications':
+      if (key.includes('frequency') && typeof value === 'string') {
+        const valid = ['immediate', 'daily', 'weekly', 'never'];
+        if (!valid.includes(value)) {errors.push(`Invalid frequency: ${value}`);}
       }
-      if (key.includes("quietHours") && value !== null) {
+      if (key.includes('quietHours') && value !== null) {
         const hour = Number(value);
-        if (hour < 0 || hour > 23) errors.push("Hour must be between 0 and 23");
+        if (hour < 0 || hour > 23) {errors.push('Hour must be between 0 and 23');}
       }
       break;
-    case "appearance":
-      if (key.includes("fontScale") && typeof value === "number") {
-        if (value < 0.5 || value > 2) errors.push("Font scale must be between 0.5 and 2.0");
+    case 'appearance':
+      if (key.includes('fontScale') && typeof value === 'number') {
+        if (value < 0.5 || value > 2) {errors.push('Font scale must be between 0.5 and 2.0');}
       }
-      if (key.includes("theme") && typeof value === "string") {
-        if (!["light", "dark", "system", "high-contrast"].includes(value))
-          errors.push(`Invalid theme: ${value}`);
+      if (key.includes('theme') && typeof value === 'string') {
+        if (!['light', 'dark', 'system', 'high-contrast'].includes(value))
+          {errors.push(`Invalid theme: ${value}`);}
       }
       break;
-    case "coach":
-      if (key.includes("frequency") && typeof value === "string") {
-        if (!["low", "medium", "high"].includes(value))
-          errors.push(`Invalid frequency: ${value}`);
+    case 'coach':
+      if (key.includes('frequency') && typeof value === 'string') {
+        if (!['low', 'medium', 'high'].includes(value))
+          {errors.push(`Invalid frequency: ${value}`);}
       }
       break;
   }
@@ -52,6 +52,6 @@ export function validateSettingValue(
 
 export function resolveConflict(
   conflict: { localTimestamp: number; remoteTimestamp: number },
-): "local" | "remote" | "merge" {
-  return conflict.localTimestamp > conflict.remoteTimestamp ? "local" : "remote";
+): 'local' | 'remote' | 'merge' {
+  return conflict.localTimestamp > conflict.remoteTimestamp ? 'local' : 'remote';
 }

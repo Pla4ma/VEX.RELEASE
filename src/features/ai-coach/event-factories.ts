@@ -1,11 +1,11 @@
-import { z } from "zod";
+import { z } from 'zod';
 import {
   MessageCategorySchema,
   TriggerTypeSchema,
   CoachUserStateSchema,
 
-} from "./schemas";
-import { BehaviorSignalDetectedEventSchema } from "./event-schemas";
+} from './schemas';
+import { BehaviorSignalDetectedEventSchema } from './event-schemas';
 import type {
   CoachMessageGeneratedEvent,
   CoachStateChangedEvent,
@@ -13,7 +13,7 @@ import type {
   ComebackActivatedEvent,
   BehaviorSignalDetectedEvent,
   InterventionTriggeredEvent,
-} from "./event-schemas";
+} from './event-schemas';
 
 export function createCoachMessageGeneratedEvent(
   userId: string,
@@ -30,7 +30,7 @@ export function createCoachMessageGeneratedEvent(
     content,
     priority,
     deliveryMethod: z
-      .enum(["IN_APP", "PUSH", "BOTH", "DEFERRED"])
+      .enum(['IN_APP', 'PUSH', 'BOTH', 'DEFERRED'])
       .parse(deliveryMethod),
     timestamp: Date.now(),
   };
@@ -63,7 +63,7 @@ export function createStreakRiskDetectedEvent(
     currentStreak,
     hoursSinceLastSession,
     riskLevel: z
-      .enum(["NONE", "LOW", "MEDIUM", "HIGH", "CRITICAL"])
+      .enum(['NONE', 'LOW', 'MEDIUM', 'HIGH', 'CRITICAL'])
       .parse(riskLevel),
     detectedAt: Date.now(),
   };

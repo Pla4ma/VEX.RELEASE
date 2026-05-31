@@ -8,15 +8,15 @@ export {
   MAX_STREAK_BONUS_MULTIPLIER,
   MAX_QUALITY_BONUS,
   getNumberFromMetadata,
-} from "./validation/types";
+} from './validation/types';
 export type {
   XPTransaction,
   ValidationResult,
   Violation,
   Warning,
-} from "./validation/types";
-export { validateXPTransaction } from "./validation/xp-validation";
-export { validateSourceSpecific } from "./validation/source-validators";
-export { validateLevelUp, validatePrestige } from "./validation/level-validation";
-export { validateXPBatch } from "./validation/batch-validation";
-export { ProgressionValidation, default } from "./validation/batch-validation";
+} from './validation/types';
+export { validateXPTransaction } from './validation/xp-validation';
+export { validateSourceSpecific } from './validation/source-validators';
+export { validateLevelUp, validatePrestige } from './validation/level-validation';
+export { validateXPBatch } from './validation/batch-validation';
+export { ProgressionValidation, default } from './validation/batch-validation';

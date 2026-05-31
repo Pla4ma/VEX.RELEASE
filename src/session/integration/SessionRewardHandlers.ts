@@ -1,17 +1,17 @@
-import { getStreakSummary } from "../../features/streaks/service";
-import { eventBus } from "../../events";
-import { createDebugger } from "../../utils/debug";
-import type { SessionSummary } from "../types";
-import type { RewardIntegrationConfig } from "./SessionRewardIntegration";
+import { getStreakSummary } from '../../features/streaks/service';
+import { eventBus } from '../../events';
+import { createDebugger } from '../../utils/debug';
+import type { SessionSummary } from '../types';
+import type { RewardIntegrationConfig } from './SessionRewardIntegration';
 import {
   advanceRestoreQuest,
   handleAbandonment,
   handlePartialCompletion,
-} from "./session-reward-recovery";
+} from './session-reward-recovery';
 export {
   handleAbandonment,
   handlePartialCompletion,
-} from "./session-reward-recovery";
+} from './session-reward-recovery';
 import {
   calculateRewards,
   grantRewards,
@@ -24,9 +24,9 @@ import {
   recordSquadWarDamageIfNeeded,
   type RewardCalculationResult,
   updateStreak,
-} from "./session-reward-helpers";
+} from './session-reward-helpers';
 
-const debug = createDebugger("session:reward-handlers");
+const debug = createDebugger('session:reward-handlers');
 
 export function isFullyDisabled(config: RewardIntegrationConfig): boolean {
   return (
@@ -66,13 +66,13 @@ export async function handleSessionCompleted(
 ): Promise<void> {
   if (isFullyDisabled(config)) {
     debug.debug(
-      "SessionRewardIntegration: all side effects delegated — skipping session %s",
+      'SessionRewardIntegration: all side effects delegated — skipping session %s',
       sessionId,
     );
     return;
   }
 
-  debug.info("Processing rewards for completed session %s", sessionId);
+  debug.info('Processing rewards for completed session %s', sessionId);
   const summary: SessionSummary = { ...sessionData, sessionId, userId };
 
   const rewards = calculateRewards(await fetchUserStreak(userId), summary);
@@ -111,7 +111,7 @@ export async function handleSessionCompleted(
   const shouldPublishRewards =
     config.autoGrantRewards || config.autoUpdateStreak || config.autoAddXP;
   if (shouldPublishRewards) {
-    eventBus.publish("session:rewards:calculated", {
+    eventBus.publish('session:rewards:calculated', {
       sessionId,
       userId,
       rewards: {
@@ -131,7 +131,7 @@ async function addSessionXpInternal(
   userId: string,
   totalXp: number,
 ): Promise<void> {
-  publishXp(userId, totalXp, "session_completion");
+  publishXp(userId, totalXp, 'session_completion');
   await Promise.resolve();
 }
 
@@ -149,9 +149,9 @@ async function tryRecordSquadDamage(
       rewards.streakMultiplier,
     );
   } catch (error) {
-    debug.warn("Failed to record squad war damage for session %s", sessionId);
+    debug.warn('Failed to record squad war damage for session %s', sessionId);
     debug.error(
-      "Squad war damage error",
+      'Squad war damage error',
       error instanceof Error ? error : new Error(String(error)),
     );
   }

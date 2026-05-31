@@ -1,9 +1,9 @@
-import { capture } from "../../shared/analytics/analytics-service";
+import { capture } from '../../shared/analytics/analytics-service';
 
 export function trackSessionFeedbackRequested(
   userId: string,
   sessionId: string,
-  feedbackType: "rating" | "survey" | "comment" | "suggestion" | "bug_report",
+  feedbackType: 'rating' | 'survey' | 'comment' | 'suggestion' | 'bug_report',
   requestedAt: Date,
   context: {
     sessionType: string;
@@ -29,7 +29,7 @@ export function trackSessionFeedbackRequested(
     deadline?: Date;
   },
 ): void {
-  capture("session_completion_feedback_requested", {
+  capture('session_completion_feedback_requested', {
     user_id: userId,
     session_id: sessionId,
     feedback_type: feedbackType,
@@ -57,7 +57,7 @@ export function trackSessionFeedbackSubmitted(
   }[],
   rating?: number,
   comment?: string,
-  sentiment?: "positive" | "neutral" | "negative",
+  sentiment?: 'positive' | 'neutral' | 'negative',
   context?: {
     device: string;
     location?: string;
@@ -69,7 +69,7 @@ export function trackSessionFeedbackSubmitted(
     availability?: string;
   },
 ): void {
-  capture("session_completion_feedback_submitted", {
+  capture('session_completion_feedback_submitted', {
     user_id: userId,
     session_id: sessionId,
     feedback_id: feedbackId,
@@ -92,11 +92,11 @@ export function trackSessionShared(
   userId: string,
   sessionId: string,
   shareType:
-    | "achievement"
-    | "record"
-    | "milestone"
-    | "completion"
-    | "performance",
+    | 'achievement'
+    | 'record'
+    | 'milestone'
+    | 'completion'
+    | 'performance',
   sharedAt: Date,
   platform: string,
   content: {
@@ -107,7 +107,7 @@ export function trackSessionShared(
     stats: unknown;
   },
   audience: {
-    type: "public" | "friends" | "group" | "private";
+    type: 'public' | 'friends' | 'group' | 'private';
     recipients?: string[];
   },
   engagement: {
@@ -122,7 +122,7 @@ export function trackSessionShared(
     social: number;
   },
 ): void {
-  capture("session_completion_shared", {
+  capture('session_completion_shared', {
     user_id: userId,
     session_id: sessionId,
     share_type: shareType,
@@ -138,7 +138,7 @@ export function trackSessionShared(
 export function trackSessionCompared(
   userId: string,
   sessionId: string,
-  comparisonType: "peer" | "friend" | "leaderboard" | "global" | "historical",
+  comparisonType: 'peer' | 'friend' | 'leaderboard' | 'global' | 'historical',
   comparisonTarget: string,
   metrics: {
     user: number;
@@ -160,7 +160,7 @@ export function trackSessionCompared(
     nextSteps: string[];
   },
 ): void {
-  capture("session_completion_compared", {
+  capture('session_completion_compared', {
     user_id: userId,
     session_id: sessionId,
     comparison_type: comparisonType,

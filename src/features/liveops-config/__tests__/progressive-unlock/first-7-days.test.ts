@@ -7,21 +7,21 @@ import {
   buildHomeFeatureRuntime,
   getFeatureAvailability,
   allFlagsOn,
-} from "./helpers";
+} from './helpers';
 
 // ============================================================================
 // 0.10 — First 7 days journey: the critical path must be clean
 // ============================================================================
 
-describe("first 7 days journey", () => {
-  it("day 0: only core features visible, nothing else registered", () => {
+describe('first 7 days journey', () => {
+  it('day 0: only core features visible, nothing else registered', () => {
     const { features, productTier, stage } = buildFeatureAccess({
       totalCompletedSessions: 0,
     });
     const show = buildRootExposureFlags({ features, isEnabled: allFlagsOn });
 
-    expect(stage).toBe("NEW_USER");
-    expect(productTier).toBe("CORE_EXECUTION");
+    expect(stage).toBe('NEW_USER');
+    expect(productTier).toBe('CORE_EXECUTION');
     expect(features.focus_session.isUnlocked).toBe(true);
     expect(features.home_tab.isUnlocked).toBe(true);
     expect(features.focus_tab.isUnlocked).toBe(true);
@@ -35,36 +35,36 @@ describe("first 7 days journey", () => {
     expect(show.companion).toBe(false);
   });
 
-  it("day 1-2: companion teases, nothing else unlocks", () => {
+  it('day 1-2: companion teases, nothing else unlocks', () => {
     const { features, stage } = buildFeatureAccess({
       totalCompletedSessions: 2,
     });
-    expect(stage).toBe("ACTIVATING");
+    expect(stage).toBe('ACTIVATING');
     expect(features.companion_detail.isTeased).toBe(true);
     expect(features.companion_detail.isUnlocked).toBe(false);
     expect(features.challenges.isUnlocked).toBe(false);
     expect(features.boss_tab.isUnlocked).toBe(false);
   });
 
-  it("day 3: companion detail unlocks", () => {
-    const avail = availabilityFor(3, "companion_detail");
-    expect(avail.state).toBe("unlocked");
+  it('day 3: companion detail unlocks', () => {
+    const avail = availabilityFor(3, 'companion_detail');
+    expect(avail.state).toBe('unlocked');
   });
 
-  it("day 5: challenges unlock for default profile", () => {
-    const avail = availabilityFor(5, "challenges");
-    expect(avail.state).toBe("unlocked");
+  it('day 5: challenges unlock for default profile', () => {
+    const avail = availabilityFor(5, 'challenges');
+    expect(avail.state).toBe('unlocked');
   });
 
-  it("day 7: boss unlocks for game_like profile, but not for calm", () => {
-    const gamerBoss = availabilityFor(7, "boss_tab", GAMER_PROFILE);
-    expect(gamerBoss.state).toBe("unlocked");
+  it('day 7: boss unlocks for game_like profile, but not for calm', () => {
+    const gamerBoss = availabilityFor(7, 'boss_tab', GAMER_PROFILE);
+    expect(gamerBoss.state).toBe('unlocked');
 
-    const calmBoss = availabilityFor(7, "boss_tab", CALM_PROFILE);
-    expect(calmBoss.state).toBe("disabled");
+    const calmBoss = availabilityFor(7, 'boss_tab', CALM_PROFILE);
+    expect(calmBoss.state).toBe('disabled');
   });
 
-  it("full 20-session progression: all progressive features unlocked for gamer", () => {
+  it('full 20-session progression: all progressive features unlocked for gamer', () => {
     const { features } = buildFeatureAccess({
       totalCompletedSessions: 20,
       motivationProfile: GAMER_PROFILE,
@@ -89,8 +89,8 @@ describe("first 7 days journey", () => {
 // 0.8 — Single source of truth: every system uses getFeatureAvailability
 // ============================================================================
 
-describe("single source of truth", () => {
-  it("FeatureAvailability contract is consumed by home feature runtime", () => {
+describe('single source of truth', () => {
+  it('FeatureAvailability contract is consumed by home feature runtime', () => {
     const { features, productTier } = buildFeatureAccess({
       totalCompletedSessions: 10,
       motivationProfile: GAMER_PROFILE,
@@ -111,7 +111,7 @@ describe("single source of truth", () => {
     expect(runtime.canQueryStudy).toBe(studyAvail.canQuery);
   });
 
-  it("FeatureAvailability contract is consumed by route exposure", () => {
+  it('FeatureAvailability contract is consumed by route exposure', () => {
     const { features } = buildFeatureAccess({
       totalCompletedSessions: 10,
       motivationProfile: GAMER_PROFILE,
@@ -127,10 +127,10 @@ describe("single source of truth", () => {
     );
   });
 
-  it("does not leak disabled feature access through any path", () => {
+  it('does not leak disabled feature access through any path', () => {
     const { features } = buildFeatureAccess({ totalCompletedSessions: 999 });
     const show = buildRootExposureFlags({ features, isEnabled: allFlagsOn });
-    const runtime = buildHomeFeatureRuntime(features, "RPG_DEPTH");
+    const runtime = buildHomeFeatureRuntime(features, 'RPG_DEPTH');
 
     expect(show.battlePass).toBe(false);
     expect(runtime.canQueryBattlePass).toBe(false);

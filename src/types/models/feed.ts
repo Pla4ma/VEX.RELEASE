@@ -1,4 +1,4 @@
-import type { BaseModel } from "./user";
+import type { BaseModel } from './user';
 
 export interface Notification extends BaseModel {
   userId: string;
@@ -15,15 +15,15 @@ export interface Notification extends BaseModel {
 }
 
 export type NotificationType =
-  | "system"
-  | "achievement"
-  | "squad"
-  | "economy"
-  | "social"
-  | "content"
-  | "security";
+  | 'system'
+  | 'achievement'
+  | 'squad'
+  | 'economy'
+  | 'social'
+  | 'content'
+  | 'security';
 
-export type NotificationPriority = "low" | "normal" | "high" | "urgent";
+export type NotificationPriority = 'low' | 'normal' | 'high' | 'urgent';
 
 export interface ActivityFeedItem extends BaseModel {
   userId: string;
@@ -36,15 +36,15 @@ export interface ActivityFeedItem extends BaseModel {
 }
 
 export type ActivityType =
-  | "joined"
-  | "created"
-  | "updated"
-  | "completed"
-  | "achieved"
-  | "earned"
-  | "shared"
-  | "commented"
-  | "liked";
+  | 'joined'
+  | 'created'
+  | 'updated'
+  | 'completed'
+  | 'achieved'
+  | 'earned'
+  | 'shared'
+  | 'commented'
+  | 'liked';
 
 export interface RelatedEntity {
   type: string;

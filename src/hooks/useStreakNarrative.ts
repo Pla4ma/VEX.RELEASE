@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo } from 'react';
 // import { generateStreakNarrative, generateRiskWarning, generateBreakRecovery } from '../retention/streak-narrative';
 // import type { StreakNarrative } from '../retention/streak-narrative';
 
@@ -6,30 +6,30 @@ import { useMemo } from "react";
 type StreakNarrative = {
   title: string;
   message: string;
-  type: "motivational" | "warning" | "recovery";
+  type: 'motivational' | 'warning' | 'recovery';
 };
 
 function generateStreakNarrative(_props: unknown): StreakNarrative {
   return {
-    title: "Keep Going!",
-    message: "Your streak is building momentum.",
-    type: "motivational",
+    title: 'Keep Going!',
+    message: 'Your streak is building momentum.',
+    type: 'motivational',
   };
 }
 
 function generateRiskWarning(_props: unknown): StreakNarrative {
   return {
-    title: "Streak at Risk",
+    title: 'Streak at Risk',
     message: "Don't lose your progress!",
-    type: "warning",
+    type: 'warning',
   };
 }
 
 function generateBreakRecovery(_props: unknown): StreakNarrative {
   return {
-    title: "Welcome Back!",
-    message: "Time to rebuild your streak.",
-    type: "recovery",
+    title: 'Welcome Back!',
+    message: 'Time to rebuild your streak.',
+    type: 'recovery',
   };
 }
 
@@ -46,7 +46,7 @@ interface UseStreakNarrativeReturn {
   narrative: StreakNarrative;
   riskWarning: {
     show: boolean;
-    urgency: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
+    urgency: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
     headline: string;
     story: string;
     callToAction: string;
@@ -76,10 +76,10 @@ export function useStreakNarrative({
 
     return {
       show: hoursSinceLastSession > 20,
-      urgency: "MEDIUM" as const,
+      urgency: 'MEDIUM' as const,
       headline: warning.title,
       story: warning.message,
-      callToAction: "Keep your streak going!",
+      callToAction: 'Keep your streak going!',
     };
   }, [streakDays, hoursSinceLastSession]);
 

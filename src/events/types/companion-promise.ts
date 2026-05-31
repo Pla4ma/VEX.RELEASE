@@ -1,20 +1,20 @@
 export interface CompanionPromiseEventDefinitions {
-  "companion-promise:created": {
+  'companion-promise:created': {
     userId: string;
     promiseId: string;
     timestamp?: number;
   };
-  "companion-promise:fulfilled": {
+  'companion-promise:fulfilled': {
     userId: string;
     promiseId: string;
     timestamp?: number;
   };
-  "companion-promise:missed": {
+  'companion-promise:missed': {
     userId: string;
     promiseId: string;
     timestamp?: number;
   };
-  "companion-promise:recovered": {
+  'companion-promise:recovered': {
     userId: string;
     promiseId: string;
     timestamp?: number;

@@ -4,16 +4,16 @@
  */
 
 const PROFILE_TO_MODE: Record<string, string> = {
-  study_focused: "STUDY",
-  student: "STUDY",
-  worker: "LIGHT_FOCUS",
-  calm: "LIGHT_FOCUS",
-  friendly: "LIGHT_FOCUS",
-  coach_led: "LIGHT_FOCUS",
-  game_like: "LIGHT_FOCUS",
-  intense: "DEEP_WORK",
-  competitive: "DEEP_WORK",
-  creator: "CREATIVE",
+  study_focused: 'STUDY',
+  student: 'STUDY',
+  worker: 'LIGHT_FOCUS',
+  calm: 'LIGHT_FOCUS',
+  friendly: 'LIGHT_FOCUS',
+  coach_led: 'LIGHT_FOCUS',
+  game_like: 'LIGHT_FOCUS',
+  intense: 'DEEP_WORK',
+  competitive: 'DEEP_WORK',
+  creator: 'CREATIVE',
 };
 
 const PROFILE_TO_DURATION: Record<string, number> = {
@@ -30,30 +30,30 @@ const PROFILE_TO_DURATION: Record<string, number> = {
 };
 
 const PROFILE_TO_COACH_LINE: Record<string, string> = {
-  calm: "Start gentle. No pressure. Just show up.",
-  game_like: "Your first boss is watching. Let them see you show up.",
-  intense: "One block. Full intensity. Set the tone.",
-  competitive: "Every session counts. Make this one matter.",
-  study_focused: "Your material is ready. Lock in and absorb.",
-  student: "Start your study rhythm now. Build the habit.",
-  worker: "Your work deserves your full attention.",
-  friendly: "No pressure at all. Just you and the timer.",
-  coach_led: "Your coach believes in this first step.",
-  creator: "Your work needs your presence. Start creating.",
+  calm: 'Start gentle. No pressure. Just show up.',
+  game_like: 'Your first boss is watching. Let them see you show up.',
+  intense: 'One block. Full intensity. Set the tone.',
+  competitive: 'Every session counts. Make this one matter.',
+  study_focused: 'Your material is ready. Lock in and absorb.',
+  student: 'Start your study rhythm now. Build the habit.',
+  worker: 'Your work deserves your full attention.',
+  friendly: 'No pressure at all. Just you and the timer.',
+  coach_led: 'Your coach believes in this first step.',
+  creator: 'Your work needs your presence. Start creating.',
 };
 
 function goalToProfileType(g: string | null): string {
   switch (g) {
-    case "STUDY":
-      return "study_focused";
-    case "WORK":
-      return "worker";
-    case "CREATIVE":
-      return "creator";
-    case "PERSONAL":
-      return "calm";
+    case 'STUDY':
+      return 'study_focused';
+    case 'WORK':
+      return 'worker';
+    case 'CREATIVE':
+      return 'creator';
+    case 'PERSONAL':
+      return 'calm';
     default:
-      return "friendly";
+      return 'friendly';
   }
 }
 
@@ -69,18 +69,18 @@ export function computePersonalization(input: {
     ? motivationProfile.primary
     : goalToProfileType(goal);
 
-  const defaultMode = PROFILE_TO_MODE[profileType] ?? "LIGHT_FOCUS";
+  const defaultMode = PROFILE_TO_MODE[profileType] ?? 'LIGHT_FOCUS';
   const baseDuration = PROFILE_TO_DURATION[profileType] ?? 25;
   const suggestedDurationMinutes = focusDuration ?? baseDuration;
   const coachLine =
-    PROFILE_TO_COACH_LINE[profileType] ?? "One session. One step.";
-  const showBossTease = profileType === "game_like";
+    PROFILE_TO_COACH_LINE[profileType] ?? 'One session. One step.';
+  const showBossTease = profileType === 'game_like';
 
   const durationLabel = showBossTease
-    ? "Short session to show the boss you are here"
-    : profileType === "calm"
-      ? "A gentle start to build your rhythm"
-      : "Recommended to build momentum";
+    ? 'Short session to show the boss you are here'
+    : profileType === 'calm'
+      ? 'A gentle start to build your rhythm'
+      : 'Recommended to build momentum';
 
   return {
     companionElement: element,

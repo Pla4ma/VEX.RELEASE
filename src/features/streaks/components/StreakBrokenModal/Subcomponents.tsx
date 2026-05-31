@@ -1,8 +1,8 @@
-import React from "react";
-import { Box } from "../../../../components/primitives/Box";
-import { Text } from "../../../../components/primitives/Text";
-import { useTheme } from "../../../../theme";
-import type { StreakBrokenModalProps } from "./types";
+import React from 'react';
+import { Box } from '../../../../components/primitives/Box';
+import { Text } from '../../../../components/primitives/Text';
+import { useTheme } from '../../../../theme';
+import type { StreakBrokenModalProps } from './types';
 
 interface LossStatProps {
   emoji: string;
@@ -22,7 +22,7 @@ export function LossStat({
       <Text fontSize={32}>{emoji}</Text>
       <Text
         variant="h3"
-        color={isLoss ? "error.DEFAULT" : "text.primary"}
+        color={isLoss ? 'error.DEFAULT' : 'text.primary'}
         fontWeight="700"
       >
         {value}
@@ -67,7 +67,7 @@ export function WhatRemains({
 export function ComebackBonus({
   bonus,
 }: {
-  bonus: StreakBrokenModalProps["comebackBonus"];
+  bonus: StreakBrokenModalProps['comebackBonus'];
 }): JSX.Element {
   const { theme } = useTheme();
   return (
@@ -87,7 +87,7 @@ export function ComebackBonus({
         </Text>
       </Box>
       <Text variant="body" color="text.secondary" textAlign="center">
-        Complete sessions in the next {bonus.duration}h to earn{" "}
+        Complete sessions in the next {bonus.duration}h to earn{' '}
         <Text color="accent.orange" fontWeight="700">
           {bonus.xpMultiplier}× XP
         </Text>

@@ -1,8 +1,8 @@
-import React from "react";
-import { View, Text, Pressable } from "react-native";
-import type { GambleOptionProps, Theme } from "./types";
-import { GAMBLE_COLORS } from "./types";
-import { buttonTap } from "../../../utils/haptics";
+import React from 'react';
+import { View, Text, Pressable } from 'react-native';
+import type { GambleOptionProps, Theme } from './types';
+import { GAMBLE_COLORS } from './types';
+import { buttonTap } from '../../../utils/haptics';
 import {
   gambleOptionStyle,
   gambleBadgeStyle,
@@ -10,7 +10,7 @@ import {
   gambleContentStyle,
   gambleDescriptionStyle,
   xpBonusStyle,
-} from "./styles";
+} from './styles';
 
 export const GambleOption: React.FC<GambleOptionProps> = ({
   type,

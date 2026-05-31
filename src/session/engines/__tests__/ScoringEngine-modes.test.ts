@@ -3,17 +3,17 @@ import {
   SessionMode,
   createMockSession,
   createMockFocusMetrics,
-} from "./ScoringEngine.helpers";
+} from './ScoringEngine.helpers';
 
-describe("ScoringEngine", () => {
+describe('ScoringEngine', () => {
   let engine: ScoringEngine;
 
   beforeEach(() => {
     engine = new ScoringEngine();
   });
 
-  describe("Mode Differentiation", () => {
-    it("applies deep work XP and strict pause penalties", () => {
+  describe('Mode Differentiation', () => {
+    it('applies deep work XP and strict pause penalties', () => {
       const baseSession = createMockSession({ pauses: 3, pausedTime: 10000 });
       const deepSession = createMockSession({
         pauses: 3,
@@ -30,7 +30,7 @@ describe("ScoringEngine", () => {
       expect(deepCalc.pausePenalty).toBeGreaterThan(baseCalc.pausePenalty);
     });
 
-    it("halves light focus pause penalties", () => {
+    it('halves light focus pause penalties', () => {
       const baseSession = createMockSession({
         pauses: 5,
         config: {
@@ -48,7 +48,7 @@ describe("ScoringEngine", () => {
       ).toBeLessThan(engine.calculateScore(baseSession, metrics).pausePenalty);
     });
 
-    it("adds study quiz bonus points", () => {
+    it('adds study quiz bonus points', () => {
       const session = createMockSession({
         config: {
           ...createMockSession().config,
@@ -63,7 +63,7 @@ describe("ScoringEngine", () => {
       expect(calculation.intervalBonus).toBeGreaterThanOrEqual(10);
     });
 
-    it("adds creative mood bonus points", () => {
+    it('adds creative mood bonus points', () => {
       const session = createMockSession({
         config: {
           ...createMockSession().config,
@@ -76,7 +76,7 @@ describe("ScoringEngine", () => {
       ).toBeGreaterThanOrEqual(10);
     });
 
-    it("adds sprint chain bonus points", () => {
+    it('adds sprint chain bonus points', () => {
       const session = createMockSession({
         config: {
           ...createMockSession().config,
@@ -90,8 +90,8 @@ describe("ScoringEngine", () => {
     });
   });
 
-  describe("Edge Cases", () => {
-    it("should handle zero duration session", () => {
+  describe('Edge Cases', () => {
+    it('should handle zero duration session', () => {
       const session = createMockSession({
         config: { ...createMockSession().config, duration: 0 },
         effectiveTime: 0,
@@ -101,7 +101,7 @@ describe("ScoringEngine", () => {
       expect(calculation.basePoints).toBe(0);
     });
 
-    it("should not return negative final score", () => {
+    it('should not return negative final score', () => {
       const session = createMockSession({ pauses: 1000, interruptions: 1000 });
       const metrics = createMockFocusMetrics({ overallScore: 0 });
       const calculation = engine.calculateScore(session, metrics);

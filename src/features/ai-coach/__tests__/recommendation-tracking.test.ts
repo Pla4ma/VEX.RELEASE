@@ -1,76 +1,76 @@
 import {
   trackRecommendationInteraction,
   batchProcessRecommendations,
-} from "../recommendation-pipeline";
+} from '../recommendation-pipeline';
 
-describe("trackRecommendationInteraction", () => {
-  it("tracks view without error", async () => {
+describe('trackRecommendationInteraction', () => {
+  it('tracks view without error', async () => {
     await expect(
-      trackRecommendationInteraction("rec-1", "user-123", "viewed"),
+      trackRecommendationInteraction('rec-1', 'user-123', 'viewed'),
     ).resolves.not.toThrow();
   });
-  it("tracks acceptance without error", async () => {
+  it('tracks acceptance without error', async () => {
     await expect(
-      trackRecommendationInteraction("rec-1", "user-123", "accepted"),
+      trackRecommendationInteraction('rec-1', 'user-123', 'accepted'),
     ).resolves.not.toThrow();
   });
-  it("tracks dismissal without error", async () => {
+  it('tracks dismissal without error', async () => {
     await expect(
-      trackRecommendationInteraction("rec-1", "user-123", "dismissed"),
+      trackRecommendationInteraction('rec-1', 'user-123', 'dismissed'),
     ).resolves.not.toThrow();
   });
 });
 
-describe("batchProcessRecommendations", () => {
-  it("groups recommendations by priority", () => {
+describe('batchProcessRecommendations', () => {
+  it('groups recommendations by priority', () => {
     const now = Date.now();
     const recommendations = [
       {
-        id: "rec-1",
-        userId: "user-123",
-        type: "session" as const,
-        title: "Critical",
-        description: "Test",
-        reasoning: "Test",
+        id: 'rec-1',
+        userId: 'user-123',
+        type: 'session' as const,
+        title: 'Critical',
+        description: 'Test',
+        reasoning: 'Test',
         confidence: 0.9,
-        priority: "critical" as const,
-        actionType: "start_session" as const,
+        priority: 'critical' as const,
+        actionType: 'start_session' as const,
         expiresAt: now + 60 * 60 * 1000,
       },
       {
-        id: "rec-2",
-        userId: "user-123",
-        type: "session" as const,
-        title: "High 1",
-        description: "Test",
-        reasoning: "Test",
+        id: 'rec-2',
+        userId: 'user-123',
+        type: 'session' as const,
+        title: 'High 1',
+        description: 'Test',
+        reasoning: 'Test',
         confidence: 0.9,
-        priority: "high" as const,
-        actionType: "start_session" as const,
+        priority: 'high' as const,
+        actionType: 'start_session' as const,
         expiresAt: now + 60 * 60 * 1000,
       },
       {
-        id: "rec-3",
-        userId: "user-123",
-        type: "session" as const,
-        title: "High 2",
-        description: "Test",
-        reasoning: "Test",
+        id: 'rec-3',
+        userId: 'user-123',
+        type: 'session' as const,
+        title: 'High 2',
+        description: 'Test',
+        reasoning: 'Test',
         confidence: 0.9,
-        priority: "high" as const,
-        actionType: "start_session" as const,
+        priority: 'high' as const,
+        actionType: 'start_session' as const,
         expiresAt: now + 60 * 60 * 1000,
       },
       {
-        id: "rec-4",
-        userId: "user-123",
-        type: "session" as const,
-        title: "Low",
-        description: "Test",
-        reasoning: "Test",
+        id: 'rec-4',
+        userId: 'user-123',
+        type: 'session' as const,
+        title: 'Low',
+        description: 'Test',
+        reasoning: 'Test',
         confidence: 0.9,
-        priority: "low" as const,
-        actionType: "start_session" as const,
+        priority: 'low' as const,
+        actionType: 'start_session' as const,
         expiresAt: now + 60 * 60 * 1000,
       },
     ];

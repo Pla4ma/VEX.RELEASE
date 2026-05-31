@@ -1,23 +1,12 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo } from 'react';
 
-import { computeFeatureSafetyGates, isPremiumGatedFeature } from "./safety";
-import { createUnlockDecision } from "./service";
-import { useUnlockExplainerStore } from "./store";
-import type { UnlockDecision, UnlockExplainerInput } from "./types";
+import { computeFeatureSafetyGates, isPremiumGatedFeature } from './safety';
+import { createUnlockDecision } from './service';
+import { useUnlockExplainerStore } from './store';
+import type { UnlockDecision, UnlockExplainerInput } from './types';
 
 export function useUnlockDecision(input: UnlockExplainerInput): UnlockDecision {
-  return useMemo(
-    () => createUnlockDecision(input),
-    [
-      input,
-      input.featureKey,
-      input.laneProfile,
-      input.sessionCount,
-      input.isPremium,
-      input.hasRelatedBehavior,
-      input.manualOverride,
-    ],
-  );
+  return useMemo(() => createUnlockDecision(input), [input]);
 }
 
 export interface UnlockWithHide {
@@ -49,7 +38,7 @@ export function useUnlockWithHide(input: UnlockExplainerInput): UnlockWithHide {
   const isDegradedPremium =
     isPremiumGatedFeature(input.featureKey) &&
     input.isPremium === false &&
-    decision.decision === "degraded";
+    decision.decision === 'degraded';
 
   const safety = useMemo(
     () =>

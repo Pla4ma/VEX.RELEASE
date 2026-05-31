@@ -1,13 +1,13 @@
-import React from "react";
-import { View } from "react-native";
-import { FlashList, type ListRenderItem } from "@shopify/flash-list";
-import { Badge } from "../../../components/Badge";
-import { Box, Card, Text } from "../../../components/primitives";
-import { ErrorState } from "../../../components/states/ErrorState";
-import { Skeleton } from "../../../components/ui/Skeleton";
-import { usePersonalBests } from "../../../features/personal-bests/hooks";
-import type { PersonalBest } from "../../../features/personal-bests/types";
-import { useTheme } from "../../../theme";
+import React from 'react';
+import { View } from 'react-native';
+import { FlashList, type ListRenderItem } from '@shopify/flash-list';
+import { Badge } from '../../../components/Badge';
+import { Box, Card, Text } from '../../../components/primitives';
+import { ErrorState } from '../../../components/states/ErrorState';
+import { Skeleton } from '../../../components/ui/Skeleton';
+import { usePersonalBests } from '../../../features/personal-bests/hooks';
+import type { PersonalBest } from '../../../features/personal-bests/types';
+import { useTheme } from '../../../theme';
 
 const ESTIMATED_ITEM_SIZE = 88;
 
@@ -16,18 +16,18 @@ function formatMode(mode: string): string {
     .toLowerCase()
     .split(/[_\s-]+/)
     .filter(Boolean)
-    .map((part) => `${part[0]?.toUpperCase() ?? ""}${part.slice(1)}`)
-    .join(" ");
+    .map((part) => `${part[0]?.toUpperCase() ?? ''}${part.slice(1)}`)
+    .join(' ');
 }
 
-function formatDuration(bucket: PersonalBest["durationBucket"]): string {
-  return bucket === "60+" ? "60+ min" : `${bucket} min`;
+function formatDuration(bucket: PersonalBest['durationBucket']): string {
+  return bucket === '60+' ? '60+ min' : `${bucket} min`;
 }
 
 function formatDate(value: string): string {
-  return new Date(value).toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
+  return new Date(value).toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
   });
 }
 

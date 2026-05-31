@@ -1,6 +1,6 @@
-import type { ActiveSessionConfig } from "./types";
-import { SessionMode } from "../../session/modes";
-export { MODE_SPECIFIC_UI, getModeSpecificUI } from "./active-session-ui";
+import type { ActiveSessionConfig } from './types';
+import { SessionMode } from '../../session/modes';
+export { MODE_SPECIFIC_UI, getModeSpecificUI } from './active-session-ui';
 
 export const ACTIVE_SESSION_CONFIG: Partial<
   Record<SessionMode, ActiveSessionConfig>

@@ -1,9 +1,9 @@
-import { useMemo } from "react";
-import { useTheme } from "../../../theme";
-import type { StartSessionButtonProps } from "./start-session-button-types";
+import { useMemo } from 'react';
+import { useTheme } from '../../../theme';
+import type { StartSessionButtonProps } from './start-session-button-types';
 
 export function useStartSessionButtonColors(
-  streakRiskLevel: StartSessionButtonProps["streakRiskLevel"],
+  streakRiskLevel: StartSessionButtonProps['streakRiskLevel'],
   hasActiveSession: boolean,
   isFinalStrike: boolean = false,
 ) {
@@ -29,7 +29,7 @@ export function useStartSessionButtonColors(
         isFinalStrike: false,
       };
     }
-    if (streakRiskLevel === "CRITICAL") {
+    if (streakRiskLevel === 'CRITICAL') {
       return {
         gradient: [
           theme.colors.error.dark,
@@ -39,7 +39,7 @@ export function useStartSessionButtonColors(
         isFinalStrike: false,
       };
     }
-    if (streakRiskLevel === "HIGH") {
+    if (streakRiskLevel === 'HIGH') {
       return {
         gradient: [
           theme.colors.error.DEFAULT,
@@ -49,7 +49,7 @@ export function useStartSessionButtonColors(
         isFinalStrike: false,
       };
     }
-    if (streakRiskLevel === "MEDIUM") {
+    if (streakRiskLevel === 'MEDIUM') {
       return {
         gradient: [
           theme.colors.warning[500],

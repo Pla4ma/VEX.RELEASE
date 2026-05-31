@@ -1,17 +1,17 @@
 /**
  * Content-Study Tests: API Schemas & Service
  */
-import { describe, it, expect, jest } from "@jest/globals";
+import { describe, it, expect, jest } from '@jest/globals';
 
 import {
   normalizeError,
   ContentStudyTimeoutFallbackSchema,
-} from "../api-schemas";
-import { ContentStudyErrorCode } from "../types";
-import { buildContentStudyTimeoutFallback } from "../service";
+} from '../api-schemas';
+import { ContentStudyErrorCode } from '../types';
+import { buildContentStudyTimeoutFallback } from '../service';
 
 // ─── Mocks (required by service) ───────────────────────────────────────────
-jest.mock("../repository", () => ({
+jest.mock('../repository', () => ({
   invokeContentStudy: jest.fn(),
   uploadStudyFileRecord: jest.fn(),
   deleteStudyFileRecord: jest.fn(),
@@ -22,15 +22,15 @@ jest.mock("../repository", () => ({
   deleteContentRecord: jest.fn(),
 }));
 
-jest.mock("../../../utils/supabase-resilience", () => ({
+jest.mock('../../../utils/supabase-resilience', () => ({
   withResilience: (promise: Promise<unknown>) => promise,
 }));
 
-jest.mock("../../../config/supabase", () => ({
+jest.mock('../../../config/supabase', () => ({
   getSupabaseClient: jest.fn(),
 }));
 
-jest.mock("../../../utils/debug", () => ({
+jest.mock('../../../utils/debug', () => ({
   createDebugger: () => ({
     info: jest.fn(),
     error: jest.fn(),
@@ -41,56 +41,56 @@ jest.mock("../../../utils/debug", () => ({
 // ============================================================================
 // normalizeError
 // ============================================================================
-describe("normalizeError", () => {
-  it("wraps an Error instance", () => {
-    const err = new Error("test error");
-    const result = normalizeError(err, ContentStudyErrorCode.NETWORK_ERROR, "fallback");
+describe('normalizeError', () => {
+  it('wraps an Error instance', () => {
+    const err = new Error('test error');
+    const result = normalizeError(err, ContentStudyErrorCode.NETWORK_ERROR, 'fallback');
     expect(result.code).toBe(ContentStudyErrorCode.NETWORK_ERROR);
-    expect(result.message).toBe("test error");
+    expect(result.message).toBe('test error');
     expect(result.recoverable).toBe(true);
   });
 
-  it("handles non-Error value", () => {
-    const result = normalizeError("string error", ContentStudyErrorCode.INVALID_INPUT, "fallback msg");
+  it('handles non-Error value', () => {
+    const result = normalizeError('string error', ContentStudyErrorCode.INVALID_INPUT, 'fallback msg');
     expect(result.code).toBe(ContentStudyErrorCode.INVALID_INPUT);
-    expect(result.message).toBe("fallback msg");
+    expect(result.message).toBe('fallback msg');
     expect(result.recoverable).toBe(true);
   });
 
-  it("handles null/undefined", () => {
-    const result = normalizeError(null, ContentStudyErrorCode.UNKNOWN_ERROR, "unknown");
-    expect(result.message).toBe("unknown");
+  it('handles null/undefined', () => {
+    const result = normalizeError(null, ContentStudyErrorCode.UNKNOWN_ERROR, 'unknown');
+    expect(result.message).toBe('unknown');
   });
 });
 
 // ============================================================================
 // ContentStudyTimeoutFallbackSchema
 // ============================================================================
-describe("ContentStudyTimeoutFallbackSchema", () => {
-  it("accepts valid fallback object", () => {
+describe('ContentStudyTimeoutFallbackSchema', () => {
+  it('accepts valid fallback object', () => {
     const result = ContentStudyTimeoutFallbackSchema.safeParse({
-      body: "Start studying now",
-      ctaLabel: "Start",
-      title: "Content warming up",
+      body: 'Start studying now',
+      ctaLabel: 'Start',
+      title: 'Content warming up',
     });
     expect(result.success).toBe(true);
   });
 
-  it("rejects empty body", () => {
+  it('rejects empty body', () => {
     const result = ContentStudyTimeoutFallbackSchema.safeParse({
-      body: "",
-      ctaLabel: "Start",
-      title: "Title",
+      body: '',
+      ctaLabel: 'Start',
+      title: 'Title',
     });
     expect(result.success).toBe(false);
   });
 
-  it("rejects extra fields (strict mode)", () => {
+  it('rejects extra fields (strict mode)', () => {
     const result = ContentStudyTimeoutFallbackSchema.safeParse({
-      body: "body",
-      ctaLabel: "cta",
-      title: "title",
-      extra: "not allowed",
+      body: 'body',
+      ctaLabel: 'cta',
+      title: 'title',
+      extra: 'not allowed',
     });
     expect(result.success).toBe(false);
   });
@@ -99,8 +99,8 @@ describe("ContentStudyTimeoutFallbackSchema", () => {
 // ============================================================================
 // buildContentStudyTimeoutFallback
 // ============================================================================
-describe("buildContentStudyTimeoutFallback", () => {
-  it("returns a valid fallback object", () => {
+describe('buildContentStudyTimeoutFallback', () => {
+  it('returns a valid fallback object', () => {
     const fallback = buildContentStudyTimeoutFallback();
     expect(fallback.body).toBeTruthy();
     expect(fallback.ctaLabel).toBeTruthy();

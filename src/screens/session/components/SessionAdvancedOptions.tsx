@@ -1,12 +1,12 @@
-import React from "react";
-import { Pressable } from "react-native";
-import Animated, { FadeInDown } from "react-native-reanimated";
+import React from 'react';
+import { Pressable } from 'react-native';
+import Animated, { FadeInDown } from 'react-native-reanimated';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { Icon } from "../../../icons";
-import { useTheme } from "../../../theme";
-import type { PresetWithIcon } from "../utils/session-setup";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { Icon } from '../../../icons';
+import { useTheme } from '../../../theme';
+import type { PresetWithIcon } from '../utils/session-setup';
 
 type SessionAdvancedOptionsProps = {
   onToggle: () => void;
@@ -37,7 +37,7 @@ export function SessionAdvancedOptions({
           </Text>
           <Box ml="sm">
             <Icon
-              name={showAdvanced ? "chevron-up" : "chevron-down"}
+              name={showAdvanced ? 'chevron-up' : 'chevron-down'}
               size="sm"
               color={theme.colors.text.secondary}
             />
@@ -74,7 +74,7 @@ export function SessionAdvancedOptions({
             <Box flexDirection="row" justifyContent="space-between">
               <Text variant="body">Strict Mode</Text>
               <Text variant="body" fontWeight="600">
-                {selectedPreset.strictMode ? "On" : "Off"}
+                {selectedPreset.strictMode ? 'On' : 'Off'}
               </Text>
             </Box>
           </Box>

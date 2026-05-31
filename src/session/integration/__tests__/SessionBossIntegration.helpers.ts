@@ -5,10 +5,10 @@
  * This file only exports typed availability fixtures.
  */
 
-import type { FeatureAvailability } from "../../../features/liveops-config/feature-availability";
+import type { FeatureAvailability } from '../../../features/liveops-config/feature-availability';
 
 export const ENABLED_AVAILABILITY: FeatureAvailability = {
-  state: "unlocked",
+  state: 'unlocked',
   canRenderEntryPoint: true,
   canNavigate: true,
   canQuery: true,
@@ -16,11 +16,11 @@ export const ENABLED_AVAILABILITY: FeatureAvailability = {
   canRegisterRoute: true,
   canSubscribeToEvents: true,
   canShowNotification: true,
-  reason: "Feature is unlocked",
+  reason: 'Feature is unlocked',
 };
 
 export const LOCKED_AVAILABILITY: FeatureAvailability = {
-  state: "locked",
+  state: 'locked',
   canRenderEntryPoint: false,
   canNavigate: false,
   canQuery: false,
@@ -28,11 +28,11 @@ export const LOCKED_AVAILABILITY: FeatureAvailability = {
   canRegisterRoute: false,
   canSubscribeToEvents: false,
   canShowNotification: false,
-  reason: "Feature is locked",
+  reason: 'Feature is locked',
 };
 
 export const HIDDEN_AVAILABILITY: FeatureAvailability = {
-  state: "hidden",
+  state: 'hidden',
   canRenderEntryPoint: false,
   canNavigate: false,
   canQuery: false,
@@ -40,5 +40,5 @@ export const HIDDEN_AVAILABILITY: FeatureAvailability = {
   canRegisterRoute: false,
   canSubscribeToEvents: false,
   canShowNotification: false,
-  reason: "Feature is hidden",
+  reason: 'Feature is hidden',
 };

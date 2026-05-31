@@ -1,5 +1,5 @@
-import { z } from "zod";
-import { NotificationChannelSchema, NotificationPrioritySchema } from "./enums";
+import { z } from 'zod';
+import { NotificationChannelSchema, NotificationPrioritySchema } from './enums';
 
 export const NotificationSettingsSchema = z
   .object({
@@ -19,7 +19,7 @@ export const NotificationSettingsSchema = z
           .object({
             enabled: z.boolean(),
             email: z.string().email(),
-            digestFrequency: z.enum(["immediate", "daily", "weekly", "never"]),
+            digestFrequency: z.enum(['immediate', 'daily', 'weekly', 'never']),
           })
           .strict(),
         inApp: z
@@ -47,7 +47,7 @@ export const NotificationSettingsSchema = z
           name: z.string().min(1).max(100),
           condition: z
             .object({
-              type: z.enum(["time", "location", "activity", "streak"]),
+              type: z.enum(['time', 'location', 'activity', 'streak']),
               params: z.record(z.unknown()),
             })
             .strict(),

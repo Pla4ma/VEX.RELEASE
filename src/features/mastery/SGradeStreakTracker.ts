@@ -10,12 +10,12 @@
  * - 10 consecutive: title cosmetic awarded
  */
 
-import { z } from "zod";
-import { captureSilentFailure } from "../../utils/silent-failure";
-import { getMMKVStorage } from "../../persistence/MMKVStorage";
+import { z } from 'zod';
+import { captureSilentFailure } from '../../utils/silent-failure';
+import { getMMKVStorage } from '../../persistence/MMKVStorage';
 
 // Storage key for MMKV
-const SGRADE_STREAK_KEY = "vex:mastery:s-grade-streak";
+const SGRADE_STREAK_KEY = 'vex:mastery:s-grade-streak';
 
 // Schema for S-grade streak data
 const SGradeStreakDataSchema = z.object({
@@ -57,7 +57,7 @@ export async function trackSGradeSession(
     let newCount: number;
     let milestone: 3 | 5 | 10 | undefined;
 
-    if (gradeLetter === "S") {
+    if (gradeLetter === 'S') {
       // Increment streak for S grade
       newCount = currentData.count + 1;
 
@@ -85,7 +85,7 @@ export async function trackSGradeSession(
 
     // Emit event if milestone reached or streak continued
     if (milestone && eventBus) {
-      eventBus.emit("mastery:s_grade_streak", {
+      eventBus.emit('mastery:s_grade_streak', {
         userId,
         count: newCount,
         milestone,
@@ -97,9 +97,9 @@ export async function trackSGradeSession(
     captureSilentFailure(
       error instanceof Error ? error : new Error(String(error)),
       {
-        feature: "mastery",
-        operation: "track-s-grade",
-        type: "data",
+        feature: 'mastery',
+        operation: 'track-s-grade',
+        type: 'data',
       },
     );
     // Return safe default on error
@@ -134,9 +134,9 @@ async function readSGradeStreak(): Promise<SGradeStreakData> {
     captureSilentFailure(
       error instanceof Error ? error : new Error(String(error)),
       {
-        feature: "mastery",
-        operation: "read-s-grade-streak",
-        type: "data",
+        feature: 'mastery',
+        operation: 'read-s-grade-streak',
+        type: 'data',
       },
     );
     return { count: 0 };
@@ -155,9 +155,9 @@ async function saveSGradeStreak(data: SGradeStreakData): Promise<void> {
     captureSilentFailure(
       error instanceof Error ? error : new Error(String(error)),
       {
-        feature: "mastery",
-        operation: "save-s-grade-streak",
-        type: "data",
+        feature: 'mastery',
+        operation: 'save-s-grade-streak',
+        type: 'data',
       },
     );
   }

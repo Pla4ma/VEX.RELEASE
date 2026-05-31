@@ -7,17 +7,17 @@
  * @phase 4
  */
 
-import React from "react";
+import React from 'react';
 import Animated, {
   FadeIn,
   useAnimatedStyle,
   withRepeat,
   withTiming,
-} from "react-native-reanimated";
+} from 'react-native-reanimated';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
 
 /**
  * Animated success celebration
@@ -40,7 +40,7 @@ export function SuccessCelebration(): JSX.Element {
       <Animated.View
         style={[
           {
-            position: "absolute",
+            position: 'absolute',
             width: 160,
             height: 160,
             borderRadius: 80,
@@ -68,7 +68,7 @@ export function SuccessCelebration(): JSX.Element {
       <Animated.View
         entering={FadeIn.duration(600).delay(400)}
         style={{
-          position: "absolute",
+          position: 'absolute',
           top: 20,
           right: 30,
         }}
@@ -79,7 +79,7 @@ export function SuccessCelebration(): JSX.Element {
       <Animated.View
         entering={FadeIn.duration(600).delay(600)}
         style={{
-          position: "absolute",
+          position: 'absolute',
           bottom: 25,
           left: 25,
         }}

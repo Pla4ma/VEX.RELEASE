@@ -1,10 +1,10 @@
-import type { SessionStatus } from "../types";
-import type { CoachPresenceContext } from "../../features/coach-presence";
+import type { SessionStatus } from '../types';
+import type { CoachPresenceContext } from '../../features/coach-presence';
 
 export interface CoachSessionInsight {
   sessionId: string;
   userId: string;
-  type: "productivity" | "focus_quality" | "pattern" | "suggestion";
+  type: 'productivity' | 'focus_quality' | 'pattern' | 'suggestion';
   insight: string;
   actionItems: string[];
   confidence: number;
@@ -27,7 +27,7 @@ export function analyzeSessionPattern(
     ? Math.floor((Date.now() - lastSession.timestamp) / (24 * 60 * 60 * 1000))
     : 0;
   const completed = history.filter(
-    (entry) => entry.status === "COMPLETED",
+    (entry) => entry.status === 'COMPLETED',
   ).length;
   return {
     isComeback: daysSinceLastSession >= 3,
@@ -42,7 +42,7 @@ export function getRecentCompletionCount(
   const recent = history.slice(-10);
   let count = 0;
   for (let i = recent.length - 1; i >= 0; i--) {
-    if (recent[i]?.status !== "COMPLETED") break;
+    if (recent[i]?.status !== 'COMPLETED') {break;}
     count++;
   }
   return count;
@@ -51,27 +51,27 @@ export function getRecentCompletionCount(
 export function getRecentAbandonmentCount(
   history: SessionHistoryEntry[],
 ): number {
-  return history.slice(-7).filter((entry) => entry.status === "ABANDONED")
+  return history.slice(-7).filter((entry) => entry.status === 'ABANDONED')
     .length;
 }
 
 export function buildCoachPresenceContext(input: {
-  sessionMode: CoachPresenceContext["sessionMode"];
-  riskLevel?: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
+  sessionMode: CoachPresenceContext['sessionMode'];
+  riskLevel?: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   pattern?: SessionPattern;
 }): CoachPresenceContext {
   return {
-    motivationStyle: "CALM",
-    primaryGoal: "focus",
+    motivationStyle: 'CALM',
+    primaryGoal: 'focus',
     firstWeekStage: null,
     latestSession: null,
-    memoryConfidence: "none",
+    memoryConfidence: 'none',
     sessionMode: input.sessionMode,
-    comebackState: input.pattern?.isComeback ? "missed_2_3_days" : null,
+    comebackState: input.pattern?.isComeback ? 'missed_2_3_days' : null,
     studyLayerLabel: null,
-    bossIntensity: "hidden",
+    bossIntensity: 'hidden',
     completionContext: null,
-    premiumMoment: "none",
+    premiumMoment: 'none',
     aiAvailable: false,
   };
 }

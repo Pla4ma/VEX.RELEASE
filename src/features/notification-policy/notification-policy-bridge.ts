@@ -1,7 +1,7 @@
-import { decideNudge } from "./service";
-import type { NudgeDecision, NudgePolicyInput } from "./schemas";
-import { getSentToday } from "./hooks";
-import type { Lane } from "../lane-engine/types";
+import { decideNudge } from './service';
+import type { NudgeDecision, NudgePolicyInput } from './schemas';
+import { getSentToday } from './hooks';
+import type { Lane } from '../lane-engine/types';
 
 export interface BridgeInput {
   userId: string;
@@ -11,12 +11,12 @@ export interface BridgeInput {
   quietHoursActive: boolean;
   userMuted: boolean;
   context:
-    | "none"
-    | "avoidance"
-    | "deadline"
-    | "project_stale"
-    | "run_open"
-    | "weekly_ready";
+    | 'none'
+    | 'avoidance'
+    | 'deadline'
+    | 'project_stale'
+    | 'run_open'
+    | 'weekly_ready';
   sentToday?: number;
 }
 
@@ -44,7 +44,7 @@ export function checkNotificationBudget(input: BridgeInput): BridgeResult {
   } as NudgePolicyInput;
 
   const decision = decideNudge(policyInput);
-  const maxDaily = input.lane === "minimal_normal" ? 1 : 2;
+  const maxDaily = input.lane === 'minimal_normal' ? 1 : 2;
 
   return {
     blocked: !decision.allowed,

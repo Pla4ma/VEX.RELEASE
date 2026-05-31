@@ -1,11 +1,11 @@
-import React, { useCallback, useMemo } from "react";
-import { View, ScrollView } from "react-native";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import { Icon } from "../../../icons";
-import type { StudyTaskListProps, StudyTask } from "../types";
-import { TaskCard } from "./TaskCard";
-import { styles } from "./study-task-list-styles";
+import React, { useCallback, useMemo } from 'react';
+import { View, ScrollView } from 'react-native';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import { Icon } from '../../../icons';
+import type { StudyTaskListProps, StudyTask } from '../types';
+import { TaskCard } from './TaskCard';
+import { styles } from './study-task-list-styles';
 
 export const StudyTaskList: React.FC<StudyTaskListProps> = ({
   tasks,
@@ -81,7 +81,7 @@ export const StudyTaskList: React.FC<StudyTaskListProps> = ({
             />
           </View>
           <Text style={[styles.timeText, { color: theme.colors.text.muted }]}>
-            {formatDuration(completedTime)} /{" "}
+            {formatDuration(completedTime)} /{' '}
             {formatDuration(estimatedTotalTime)}
           </Text>
         </View>

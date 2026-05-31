@@ -1,12 +1,12 @@
-import { revenueCatService } from "./revenuecat-service";
+import { revenueCatService } from './revenuecat-service';
 import type {
   CustomerInfoResult,
   OfferingsResult,
   PurchaseResult,
   RevenueCatStatus,
-} from "./revenuecat-types";
+} from './revenuecat-types';
 
-export const initializeRevenueCat = (userId?: string): Promise<{ status: "ready" | "missing_keys" | "error" }> =>
+export const initializeRevenueCat = (userId?: string): Promise<{ status: 'ready' | 'missing_keys' | 'error' }> =>
   revenueCatService.initialize(userId);
 
 export const getCustomerInfo = (): Promise<CustomerInfoResult> =>

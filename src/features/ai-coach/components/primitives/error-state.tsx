@@ -1,9 +1,9 @@
-import { captureSilentFailure } from "../../../../utils/silent-failure";
-import React, { useState } from "react";
-import { View, Text, Pressable, ActivityIndicator } from "react-native";
-import Animated, { Keyframe, FadeIn } from "react-native-reanimated";
-import { launchColors } from "@theme/tokens/launch-colors";
-import { errorStateStyles as styles } from "./error-state-styles";
+import { captureSilentFailure } from '../../../../utils/silent-failure';
+import React, { useState } from 'react';
+import { View, Text, Pressable, ActivityIndicator } from 'react-native';
+import Animated, { Keyframe, FadeIn } from 'react-native-reanimated';
+import { launchColors } from '@theme/tokens/launch-colors';
+import { errorStateStyles as styles } from './error-state-styles';
 
 const Shake = new Keyframe({
   0: { transform: [{ translateX: 0 }] },
@@ -30,7 +30,7 @@ interface ErrorStateProps {
 }
 
 export function ErrorState({
-  title = "Oops! Something went wrong",
+  title = 'Oops! Something went wrong',
   message,
   errorCode,
   onRetry,
@@ -50,9 +50,9 @@ export function ErrorState({
       setLocalAttempts(0);
     } catch (error) {
       captureSilentFailure(error, {
-        feature: "ai-coach",
-        operation: "ui-fallback",
-        type: "ui",
+        feature: 'ai-coach',
+        operation: 'ui-fallback',
+        type: 'ui',
       });
       setLocalAttempts((prev) => prev + 1);
     } finally {
@@ -67,7 +67,7 @@ export function ErrorState({
       style={[styles.container, isDegraded && styles.degradedContainer]}
     >
       <Animated.View entering={Shake.duration(500)}>
-        <Text style={styles.icon}>{isDegraded ? "⚠️" : "😕"}</Text>
+        <Text style={styles.icon}>{isDegraded ? '⚠️' : '😕'}</Text>
       </Animated.View>
 
       <Text style={styles.title}>{title}</Text>
@@ -100,7 +100,7 @@ export function ErrorState({
               <ActivityIndicator color={launchColors.hex_fff} />
             ) : (
               <Text style={styles.retryButtonText}>
-                {isDegraded ? "Try Again" : "Retry"}
+                {isDegraded ? 'Try Again' : 'Retry'}
               </Text>
             )}
           </Pressable>
@@ -157,7 +157,7 @@ export function ErrorBoundaryFallback({
     <ErrorState
       title="Something Went Wrong"
       message={
-        error.message || "An unexpected error occurred in the coach component."
+        error.message || 'An unexpected error occurred in the coach component.'
       }
       errorCode="BOUNDARY_ERROR"
       onRetry={async () => resetError()}

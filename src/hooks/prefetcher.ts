@@ -1,17 +1,17 @@
-import type { FeatureKey } from "../features/liveops-config/feature-access";
+import type { FeatureKey } from '../features/liveops-config/feature-access';
 import {
   getFeatureAvailabilityFor,
   isFeatureAvailableForQueries,
-} from "../features/liveops-config/feature-availability";
-import { createDebugger } from "../utils/debug";
+} from '../features/liveops-config/feature-availability';
+import { createDebugger } from '../utils/debug';
 import {
   QueryKeys,
   type PrefetchOptions,
   type PrefetchPolicy,
   type PrefetchQueryClient,
-} from "./prefetch-query-keys";
+} from './prefetch-query-keys';
 
-const debug = createDebugger("prefetch");
+const debug = createDebugger('prefetch');
 
 export function nullQuery(): Promise<null> {
   return Promise.resolve(null);
@@ -28,9 +28,9 @@ export function canPrefetchFeature(
   policy: PrefetchPolicy | undefined,
   feature: FeatureKey,
 ): boolean {
-  if (policy?.totalCompletedSessions === 0) return false;
+  if (policy?.totalCompletedSessions === 0) {return false;}
   const access = policy?.featureAccess?.[feature];
-  if (!access) return false;
+  if (!access) {return false;}
   return isFeatureAvailableForQueries(
     getFeatureAvailabilityFor(feature, access),
   );
@@ -43,7 +43,7 @@ export function isCoreQueryKey(queryKey: readonly string[]): boolean {
     QueryKeys.SESSION.HISTORY,
     QueryKeys.USER.PROFILE,
   ];
-  return coreKeys.some((coreKey) => coreKey.join(":") === queryKey.join(":"));
+  return coreKeys.some((coreKey) => coreKey.join(':') === queryKey.join(':'));
 }
 
 export function createPrefetcher(
@@ -64,31 +64,31 @@ export function createPrefetcher(
         staleTime: 5 * 60 * 1000,
       });
       prefetch({ queryKey: QueryKeys.SESSION.ACTIVE, staleTime: 30 * 1000 });
-      debug.debug("[Prefetch] Session queries warmed");
+      debug.debug('[Prefetch] Session queries warmed');
     },
     social: (policy?: PrefetchPolicy): void => {
-      if (!canQuery("social_tab", policy)) return;
+      if (!canQuery('social_tab', policy)) {return;}
       prefetch({ queryKey: QueryKeys.SOCIAL.FEED, staleTime: 30 * 1000 });
       prefetch({ queryKey: QueryKeys.SOCIAL.RIVALS, staleTime: 2 * 60 * 1000 });
-      if (canQuery("squads", policy)) {
+      if (canQuery('squads', policy)) {
         prefetch({ queryKey: QueryKeys.SQUAD.STATUS, staleTime: 60 * 1000 });
       }
-      debug.debug("[Prefetch] Social queries warmed");
+      debug.debug('[Prefetch] Social queries warmed');
     },
     shop: (policy?: PrefetchPolicy): void => {
-      if (!canQuery("shop", policy)) return;
+      if (!canQuery('shop', policy)) {return;}
       prefetch({
         queryKey: QueryKeys.SHOP.CATEGORIES,
         staleTime: 5 * 60 * 1000,
       });
       prefetch({ queryKey: QueryKeys.SHOP.OFFERS, staleTime: 30 * 1000 });
-      if (canQuery("economy_basic", policy)) {
+      if (canQuery('economy_basic', policy)) {
         prefetch({ queryKey: QueryKeys.USER.WALLET, staleTime: 10 * 1000 });
       }
-      debug.debug("[Prefetch] Shop queries warmed");
+      debug.debug('[Prefetch] Shop queries warmed');
     },
     battlePass: (policy?: PrefetchPolicy): void => {
-      if (!canQuery("battle_pass", policy)) return;
+      if (!canQuery('battle_pass', policy)) {return;}
       prefetch({
         queryKey: QueryKeys.BATTLE_PASS.PROGRESS,
         staleTime: 30 * 1000,
@@ -97,7 +97,7 @@ export function createPrefetcher(
         queryKey: QueryKeys.BATTLE_PASS.TIERS,
         staleTime: 5 * 60 * 1000,
       });
-      debug.debug("[Prefetch] Battle pass queries warmed");
+      debug.debug('[Prefetch] Battle pass queries warmed');
     },
     profile: (policy?: PrefetchPolicy): void => {
       prefetch({ queryKey: QueryKeys.USER.PROFILE, staleTime: 2 * 60 * 1000 });
@@ -105,20 +105,20 @@ export function createPrefetcher(
         queryKey: QueryKeys.SESSION.HISTORY,
         staleTime: 2 * 60 * 1000,
       });
-      if (canQuery("economy_basic", policy)) {
+      if (canQuery('economy_basic', policy)) {
         prefetch({ queryKey: QueryKeys.USER.WALLET, staleTime: 10 * 1000 });
       }
-      if (canQuery("inventory", policy)) {
+      if (canQuery('inventory', policy)) {
         prefetch({ queryKey: QueryKeys.USER.INVENTORY, staleTime: 60 * 1000 });
       }
-      debug.debug("[Prefetch] Profile queries warmed");
+      debug.debug('[Prefetch] Profile queries warmed');
     },
     byFeature: (
       feature: FeatureKey,
       queryKey: readonly string[],
       policy?: PrefetchPolicy,
     ): void => {
-      if (!canQuery(feature, policy)) return;
+      if (!canQuery(feature, policy)) {return;}
       prefetch({ queryKey, staleTime: 60 * 1000 });
     },
   };

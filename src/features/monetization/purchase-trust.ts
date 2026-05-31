@@ -1,17 +1,17 @@
-import * as Sentry from "@sentry/react-native";
-import type { CustomerInfo } from "../../shared/monetization/revenuecat-types";
+import * as Sentry from '@sentry/react-native';
+import type { CustomerInfo } from '../../shared/monetization/revenuecat-types';
 import {
   initializeRevenueCat,
   restorePurchases as restoreRevenueCatPurchases,
-} from "../../shared/monetization/revenuecat-facade";
-import { createDebugger } from "../../utils/debug";
+} from '../../shared/monetization/revenuecat-facade';
+import { createDebugger } from '../../utils/debug';
 import {
   PurchaseTrustError,
   TRUST_SIGNALS,
   type PurchaseReceipt,
   type PurchaseVerification,
   type TrustSignalConfig,
-} from "./purchase-trust-types";
+} from './purchase-trust-types';
 
 export {
   PurchaseReceiptSchema,
@@ -22,14 +22,14 @@ export {
   type PurchaseVerification,
   type TrustSignal,
   type TrustSignalConfig,
-} from "./purchase-trust-types";
+} from './purchase-trust-types';
 
-const debug = createDebugger("monetization:purchase-trust");
+const debug = createDebugger('monetization:purchase-trust');
 
 export async function verifyPurchaseReceipt(
   receipt: PurchaseReceipt,
 ): Promise<PurchaseVerification> {
-  debug.info("Rejected raw receipt verification: %s", receipt.transactionId);
+  debug.info('Rejected raw receipt verification: %s', receipt.transactionId);
 
   return {
     verified: false,
@@ -40,7 +40,7 @@ export async function verifyPurchaseReceipt(
     expiryDate: receipt.expiryDate,
     isTrial: receipt.isTrial,
     platform: receipt.platform,
-    errorReason: "Raw client receipts must be verified by RevenueCat.",
+    errorReason: 'Raw client receipts must be verified by RevenueCat.',
   };
 }
 
@@ -48,7 +48,7 @@ export async function restorePurchases(
   userId: string,
 ): Promise<PurchaseVerification[]> {
   const init = await initializeRevenueCat(userId);
-  if (init.status !== "ready") {
+  if (init.status !== 'ready') {
     throw new PurchaseTrustError(
       `RevenueCat restore unavailable: ${init.status}`,
     );
@@ -56,9 +56,9 @@ export async function restorePurchases(
 
   const result = await restoreRevenueCatPurchases();
   if (!result.success || !result.customerInfo) {
-    const message = result.error?.message ?? "RevenueCat restore failed.";
+    const message = result.error?.message ?? 'RevenueCat restore failed.';
     Sentry.captureException(result.error ?? new PurchaseTrustError(message), {
-      tags: { component: "purchase-trust", operation: "restorePurchases" },
+      tags: { component: 'purchase-trust', operation: 'restorePurchases' },
       extra: { userId, errorCode: result.errorCode },
     });
     throw new PurchaseTrustError(message);
@@ -91,10 +91,10 @@ export function getActiveTrustSignals(
   const signals = [...TRUST_SIGNALS];
   if (includeTrial) {
     signals.push({
-      id: "verified_reviews",
-      icon: "star",
-      title: "Loved by Users",
-      description: "User feedback is verified before publication.",
+      id: 'verified_reviews',
+      icon: 'star',
+      title: 'Loved by Users',
+      description: 'User feedback is verified before publication.',
       priority: 5,
     });
   }
@@ -108,16 +108,16 @@ export function calculatePriceTrustScore(
   hasGuarantee: boolean,
 ): number {
   let score = 50;
-  if (discountedPrice < originalPrice) score += 15;
-  if (hasTrial) score += 20;
-  if (hasGuarantee) score += 15;
+  if (discountedPrice < originalPrice) {score += 15;}
+  if (hasTrial) {score += 20;}
+  if (hasGuarantee) {score += 15;}
   return Math.min(100, score);
 }
 
 export function getPriceExplanation(
   tier: string,
   price: number,
-  period: "month" | "year",
+  period: 'month' | 'year',
   hasTrial: boolean,
 ): string {
   const dailyCost = price / 30;
@@ -129,7 +129,7 @@ export function getPriceExplanation(
 
 export function verifyPurchaseHash(): string {
   throw new PurchaseTrustError(
-    "Client-side purchase hash verification is unsupported.",
+    'Client-side purchase hash verification is unsupported.',
   );
 }
 
@@ -149,12 +149,12 @@ export async function logPurchaseAttempt(
   error?: string,
 ): Promise<void> {
   debug.info(
-    "Purchase attempt: user=%s tier=%s success=%s",
+    'Purchase attempt: user=%s tier=%s success=%s',
     userId,
     tier,
     success,
   );
-  if (error) debug.error("Purchase error: %s", new Error(error));
+  if (error) {debug.error('Purchase error: %s', new Error(error));}
 }
 
 export function getRefundEligibility(
@@ -166,13 +166,13 @@ export function getRefundEligibility(
   if (purchase.verified && daysSincePurchase <= refundWindowDays) {
     return {
       eligible: true,
-      reason: "Within 7-day guarantee period",
+      reason: 'Within 7-day guarantee period',
       daysRemaining,
     };
   }
   return {
     eligible: false,
-    reason: "Refund period expired or purchase unverified",
+    reason: 'Refund period expired or purchase unverified',
     daysRemaining: 0,
   };
 }
@@ -184,12 +184,12 @@ function mapCustomerInfoToVerifications(
     verified: entitlement.isActive,
     transactionId: entitlement.originalPurchaseDate,
     productId: entitlement.productIdentifier,
-    tier: entitlement.identifier === "premium" ? "premium" : "plus",
+    tier: entitlement.identifier === 'premium' ? 'premium' : 'plus',
     purchaseDate: Date.parse(entitlement.latestPurchaseDate),
     expiryDate: entitlement.expirationDate
       ? Date.parse(entitlement.expirationDate)
       : undefined,
-    isTrial: entitlement.periodType === "TRIAL",
-    platform: entitlement.store === "PLAY_STORE" ? "android" : "ios",
+    isTrial: entitlement.periodType === 'TRIAL',
+    platform: entitlement.store === 'PLAY_STORE' ? 'android' : 'ios',
   }));
 }

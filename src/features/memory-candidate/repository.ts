@@ -1,12 +1,12 @@
-import { storage } from "../../store/mmkv-storage";
+import { storage } from '../../store/mmkv-storage';
 import {
   MemoryCandidateSchema,
   MemoryCandidateListSchema,
   type MemoryCandidate,
   type MemoryCandidateInput,
-} from "./schemas";
+} from './schemas';
 
-const KEY_PREFIX = "memory-candidate:";
+const KEY_PREFIX = 'memory-candidate:';
 
 function keyFor(userId: string): string {
   return `${KEY_PREFIX}${userId}`;
@@ -16,7 +16,7 @@ export async function listMemoryCandidates(
   userId: string,
 ): Promise<MemoryCandidate[]> {
   const raw = storage.getString(keyFor(userId));
-  if (!raw) return [];
+  if (!raw) {return [];}
   return MemoryCandidateListSchema.parse(JSON.parse(raw));
 }
 
@@ -25,7 +25,7 @@ export async function createMemoryCandidate(
 ): Promise<MemoryCandidate> {
   const candidate = MemoryCandidateSchema.parse({
     ...input,
-    confidence: "medium",
+    confidence: 'medium',
     createdAt: Date.now(),
     id: `mem:${input.userId}:${Date.now()}`,
   });

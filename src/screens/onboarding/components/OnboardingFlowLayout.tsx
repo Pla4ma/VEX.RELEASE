@@ -1,19 +1,19 @@
-import React, { useMemo, type ReactNode } from "react";
-import { ScrollView, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import React, { useMemo, type ReactNode } from 'react';
+import { ScrollView, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { SmartCoachHint } from "../../../components/coach/SmartCoachHint";
-import { PremiumSurface } from "../../../components/premium";
-import { Button } from "../../../components/primitives/Button";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import { styles } from "../styles";
-import { ONBOARDING_PROMISE_COPY, STEP_TITLES } from "./onboarding-flow-data";
-import { getCoachCue } from "./onboarding-flow-helpers";
+import { SmartCoachHint } from '../../../components/coach/SmartCoachHint';
+import { PremiumSurface } from '../../../components/premium';
+import { Button } from '../../../components/primitives/Button';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import { styles } from '../styles';
+import { ONBOARDING_PROMISE_COPY, STEP_TITLES } from './onboarding-flow-data';
+import { getCoachCue } from './onboarding-flow-helpers';
 import {
   getProgressPhaseIndex,
   OnboardingProgressIndicator,
-} from "./OnboardingProgressIndicator";
+} from './OnboardingProgressIndicator';
 
 type OnboardingFlowLayoutProps = {
   children: ReactNode;
@@ -120,10 +120,10 @@ export function OnboardingFlowLayout({
             <SmartCoachHint
               body={
                 step === 0
-                  ? "Pick the honest answer. VEX will adapt the first session around it."
+                  ? 'Pick the honest answer. VEX will adapt the first session around it.'
                   : getCoachCue(step).body
               }
-              mood={step === lastStepIndex - 1 ? "celebrate" : "active"}
+              mood={step === lastStepIndex - 1 ? 'celebrate' : 'active'}
               title={getCoachCue(step).title}
             />
           </>

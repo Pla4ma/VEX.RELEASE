@@ -24,11 +24,11 @@ export interface User extends BaseModel {
   onboardingCompletedAt?: string | null;
 }
 
-export type UserRole = "user" | "moderator" | "admin" | "superadmin";
-export type UserStatus = "active" | "inactive" | "suspended" | "pending";
+export type UserRole = 'user' | 'moderator' | 'admin' | 'superadmin';
+export type UserStatus = 'active' | 'inactive' | 'suspended' | 'pending';
 
 export interface UserPreferences {
-  theme: "light" | "dark" | "system";
+  theme: 'light' | 'dark' | 'system';
   language: string;
   notifications: NotificationPreferences;
   privacy: PrivacyPreferences;
@@ -40,7 +40,7 @@ export interface NotificationPreferences {
   email: boolean;
   sms: boolean;
   inApp: boolean;
-  digestFrequency: "realtime" | "daily" | "weekly" | "never";
+  digestFrequency: 'realtime' | 'daily' | 'weekly' | 'never';
   quietHours: QuietHoursConfig;
 }
 
@@ -52,7 +52,7 @@ export interface QuietHoursConfig {
 }
 
 export interface PrivacyPreferences {
-  profileVisibility: "public" | "followers" | "private";
+  profileVisibility: 'public' | 'followers' | 'private';
   activityStatus: boolean;
   readReceipts: boolean;
   allowTagging: boolean;
@@ -65,7 +65,7 @@ export interface AccessibilityPreferences {
   highContrast: boolean;
   largeText: boolean;
   screenReaderOptimized: boolean;
-  colorBlindMode?: "deuteranopia" | "protanopia" | "tritanopia";
+  colorBlindMode?: 'deuteranopia' | 'protanopia' | 'tritanopia';
 }
 
 export interface UserMetadata {

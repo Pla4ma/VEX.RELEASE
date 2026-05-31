@@ -6,18 +6,18 @@
  * @phase 6 - Deepening: Loading state
  */
 
-import React from "react";
-import { View, Text } from "react-native";
-import Animated, { FadeIn } from "react-native-reanimated";
-import { createSheet } from "@/shared/ui/create-sheet";
-import { launchColors } from "@theme/tokens/launch-colors";
+import React from 'react';
+import { View, Text } from 'react-native';
+import Animated, { FadeIn } from 'react-native-reanimated';
+import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
 
 interface PurchaseLoadingStateProps {
   productName?: string;
 }
 
 export function PurchaseLoadingState({
-  productName = "Product",
+  productName = 'Product',
 }: PurchaseLoadingStateProps): JSX.Element {
   return (
     <Animated.View entering={FadeIn} style={styles.container}>
@@ -33,8 +33,8 @@ export function PurchaseLoadingState({
 
         {/* Skeleton Description */}
         <View style={styles.skeletonLine} />
-        <View style={[styles.skeletonLine, { width: "70%" }]} />
-        <View style={[styles.skeletonLine, { width: "50%" }]} />
+        <View style={[styles.skeletonLine, { width: '70%' }]} />
+        <View style={[styles.skeletonLine, { width: '50%' }]} />
 
         {/* Skeleton Button */}
         <View style={styles.skeletonButton} />
@@ -49,13 +49,13 @@ const styles = createSheet({
   container: {
     flex: 1,
     backgroundColor: launchColors.hex_1a1a2e,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: 24,
   },
   content: {
-    width: "100%",
-    alignItems: "center",
+    width: '100%',
+    alignItems: 'center',
   },
   skeletonIcon: {
     width: 80,
@@ -64,28 +64,28 @@ const styles = createSheet({
     backgroundColor: launchColors.hex_2a2a3e,
   },
   skeletonTitle: {
-    width: "50%",
+    width: '50%',
     height: 28,
     backgroundColor: launchColors.hex_2a2a3e,
     borderRadius: 8,
     marginTop: 24,
   },
   skeletonPrice: {
-    width: "30%",
+    width: '30%',
     height: 24,
     backgroundColor: launchColors.hex_2a2a3e,
     borderRadius: 8,
     marginTop: 12,
   },
   skeletonLine: {
-    width: "90%",
+    width: '90%',
     height: 16,
     backgroundColor: launchColors.hex_2a2a3e,
     borderRadius: 4,
     marginTop: 8,
   },
   skeletonButton: {
-    width: "80%",
+    width: '80%',
     height: 48,
     backgroundColor: launchColors.hex_2a2a3e,
     borderRadius: 12,

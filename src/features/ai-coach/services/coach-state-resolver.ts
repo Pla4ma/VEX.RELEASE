@@ -2,8 +2,8 @@ import {
   type CoachUserState,
   type CoachState,
   type BehaviorProfile,
-} from "../schemas";
-import * as repository from "../repository";
+} from '../schemas';
+import * as repository from '../repository';
 
 export interface CoachSignals {
   comebackActive: boolean;
@@ -14,29 +14,29 @@ export interface CoachSignals {
   sessionOverload: boolean;
   isMuted: boolean;
   isColdStart: boolean;
-  profileConfidence: "LOW" | "MEDIUM" | "HIGH";
+  profileConfidence: 'LOW' | 'MEDIUM' | 'HIGH';
   dataPoints: number;
 }
 
 export function resolveCoachState(signals: CoachSignals): CoachUserState {
-  if (signals.isMuted) return "MUTED_MODE";
-  if (signals.sessionOverload) return "OVERLOAD_PROTECTION";
-  if (signals.comebackActive) return "COMEBACK_MODE";
-  if (signals.streakIsAtRisk) return "STREAK_AT_RISK";
+  if (signals.isMuted) {return 'MUTED_MODE';}
+  if (signals.sessionOverload) {return 'OVERLOAD_PROTECTION';}
+  if (signals.comebackActive) {return 'COMEBACK_MODE';}
+  if (signals.streakIsAtRisk) {return 'STREAK_AT_RISK';}
   if (signals.streakRecentlyBroken && signals.daysSinceBreak < 3)
-    return "POST_FAILURE_SUPPORT";
-  if (signals.hasUncelebratedMilestone) return "MILESTONE_HYPE";
-  if (signals.isColdStart) return "COLD_START";
-  if (signals.profileConfidence === "HIGH" && signals.dataPoints >= 20) {
-    return "HIGH_CONFIDENCE";
+    {return 'POST_FAILURE_SUPPORT';}
+  if (signals.hasUncelebratedMilestone) {return 'MILESTONE_HYPE';}
+  if (signals.isColdStart) {return 'COLD_START';}
+  if (signals.profileConfidence === 'HIGH' && signals.dataPoints >= 20) {
+    return 'HIGH_CONFIDENCE';
   }
-  if (signals.dataPoints >= 5) return "LOW_CONFIDENCE";
-  return "COLD_START";
+  if (signals.dataPoints >= 5) {return 'LOW_CONFIDENCE';}
+  return 'COLD_START';
 }
 
 interface StreakStatus {
   isAtRisk: boolean;
-  riskLevel: "NONE" | "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
+  riskLevel: 'NONE' | 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   wasRecentlyBroken: boolean;
   daysSinceBreak: number;
   recentMilestone: boolean;
@@ -57,7 +57,7 @@ function buildCoachSignals(
   comebackPlan: { status: string } | null,
 ): CoachSignals {
   return {
-    comebackActive: comebackPlan?.status === "ACTIVE",
+    comebackActive: comebackPlan?.status === 'ACTIVE',
     streakIsAtRisk: streakStatus.isAtRisk,
     streakRecentlyBroken: streakStatus.wasRecentlyBroken,
     daysSinceBreak: streakStatus.daysSinceBreak,
@@ -66,7 +66,7 @@ function buildCoachSignals(
     sessionOverload: sessionMetrics.sessionsToday >= 5,
     isMuted: !!(currentState?.reduceNotifications || currentState?.muteUntil),
     isColdStart: !profile || profile.coldStart,
-    profileConfidence: profile?.confidenceLevel ?? "LOW",
+    profileConfidence: profile?.confidenceLevel ?? 'LOW',
     dataPoints: profile?.dataPoints ?? 0,
   };
 }
@@ -101,7 +101,7 @@ async function fetchStreakStatus(
   if (!profile || profile.signals.length === 0) {
     return {
       isAtRisk: false,
-      riskLevel: "NONE",
+      riskLevel: 'NONE',
       wasRecentlyBroken: false,
       daysSinceBreak: 0,
       recentMilestone: false,
@@ -110,10 +110,10 @@ async function fetchStreakStatus(
   }
 
   const streakSignal = profile.signals.find(
-    (s) => s.signalType === "STREAK_MAINTENANCE_RATE",
+    (s) => s.signalType === 'STREAK_MAINTENANCE_RATE',
   );
   const consistencySignal = profile.signals.find(
-    (s) => s.signalType === "CONSISTENCY_SCORE",
+    (s) => s.signalType === 'CONSISTENCY_SCORE',
   );
 
   const streakValue = streakSignal?.value ?? 1;
@@ -124,12 +124,12 @@ async function fetchStreakStatus(
   const daysSinceBreak = wasRecentlyBroken ? 1 : 0;
   const recentMilestone = streakValue >= 0.9;
 
-  let riskLevel: StreakStatus["riskLevel"] = "NONE";
+  let riskLevel: StreakStatus['riskLevel'] = 'NONE';
   if (isAtRisk) {
-    if (streakValue < 0.2) riskLevel = "CRITICAL";
-    else if (streakValue < 0.4) riskLevel = "HIGH";
-    else if (streakValue < 0.5) riskLevel = "MEDIUM";
-    else riskLevel = "LOW";
+    if (streakValue < 0.2) {riskLevel = 'CRITICAL';}
+    else if (streakValue < 0.4) {riskLevel = 'HIGH';}
+    else if (streakValue < 0.5) {riskLevel = 'MEDIUM';}
+    else {riskLevel = 'LOW';}
   }
 
   return {
@@ -149,10 +149,10 @@ async function fetchRecentSessionMetrics(
   try {
     const behaviorProfile = await repository.fetchBehaviorProfile(userId);
     if (!behaviorProfile)
-      return { sessionsToday: 0, sessionsThisWeek: 0, averageQuality: 75 };
+      {return { sessionsToday: 0, sessionsThisWeek: 0, averageQuality: 75 };}
 
     const qualitySignals = behaviorProfile.signals.filter(
-      (s) => s.signalType === "SESSION_QUALITY_TREND",
+      (s) => s.signalType === 'SESSION_QUALITY_TREND',
     );
     const averageQuality =
       qualitySignals.length > 0

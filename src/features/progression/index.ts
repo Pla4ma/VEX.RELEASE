@@ -3,7 +3,7 @@
  */
 
 // Types
-export * from "./types";
+export * from './types';
 export {
   ProgressionSchema,
   ProgressionSummarySchema,
@@ -23,16 +23,16 @@ export {
   CheckUnlocksInputSchema,
   AddXpResultSchema,
   LevelUpResultSchema,
-} from "./schemas";
-export type { AddXpInput } from "./schemas";
+} from './schemas';
+export type { AddXpInput } from './schemas';
 
 // Service
-export * from "./service";
-export * as progressionRepository from "./repository";
+export * from './service';
+export * as progressionRepository from './repository';
 
 // Hooks
-export * from "./hooks";
+export * from './hooks';
 
 // Analytics
-export * from "./analytics";
-export * from "./next-best-action";
+export * from './analytics';
+export * from './next-best-action';

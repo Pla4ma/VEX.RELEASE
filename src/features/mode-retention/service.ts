@@ -1,6 +1,6 @@
-import type { Lane } from "../lane-engine/types";
-import { MODE_RETENTION_MANIFEST } from "./copy";
-import { ModeRetentionScoreSchema } from "./schemas";
+import type { Lane } from '../lane-engine/types';
+import { MODE_RETENTION_MANIFEST } from './copy';
+import { ModeRetentionScoreSchema } from './schemas';
 import type {
   ModeNotificationCopy,
   ModePremiumBridge,
@@ -8,20 +8,20 @@ import type {
   ModeRetentionManifest,
   ModeRetentionScore,
   ModeReturnHook,
-} from "./schemas";
+} from './schemas';
 
 // ── Helpers ────────────────────────────────────────────────────────────
 
 export function normalizeLane(raw: unknown): Lane {
   if (
-    raw === "student" ||
-    raw === "game_like" ||
-    raw === "deep_creative" ||
-    raw === "minimal_normal"
+    raw === 'student' ||
+    raw === 'game_like' ||
+    raw === 'deep_creative' ||
+    raw === 'minimal_normal'
   ) {
     return raw;
   }
-  return "minimal_normal";
+  return 'minimal_normal';
 }
 
 // ── Get manifest for a lane ─────────────────────────────────────────────
@@ -45,7 +45,7 @@ export function getModeReturnHook(lane: unknown): ModeReturnHook {
   };
 }
 
-export { getModeDayCopy } from "./service-day-copy";
+export { getModeDayCopy } from './service-day-copy';
 
 // ── Get rescue copy ─────────────────────────────────────────────────────
 
@@ -124,14 +124,14 @@ export function scoreAllModes(inputs: RetentionScoreInput[]): ModeRetentionScore
 // ── Build full audit scores with defaults applied ───────────────────────
 
 export function buildDefaultAuditScores(): ModeRetentionScore[] {
-  const lanes: Lane[] = ["student", "game_like", "deep_creative", "minimal_normal"];
+  const lanes: Lane[] = ['student', 'game_like', 'deep_creative', 'minimal_normal'];
 
   return lanes.map((lane) =>
     scoreModeRetention({
       lane,
       hasNextAction: true,
       hasCompletionContext: true,
-      hasMemoryInsight: lane === "minimal_normal" ? false : true,
+      hasMemoryInsight: lane === 'minimal_normal' ? false : true,
       hasWeeklyIntelligence: true,
       nudgeCopyIsSpecific: true,
       returnReasonIsModeSpecific: true,

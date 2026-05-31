@@ -1,8 +1,8 @@
-import React from "react";
+import React from 'react';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import type { SessionHistoryStats } from "../types";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import type { SessionHistoryStats } from '../types';
 
 export function HistoryStats({
   stats,
@@ -29,7 +29,7 @@ export function HistoryStats({
       </Box>
       <Box flex={1} alignItems="center">
         <Text variant="h4" color="success.DEFAULT">
-          {stats.averageScore ?? "Not yet"}
+          {stats.averageScore ?? 'Not yet'}
         </Text>
         <Text variant="caption" color="text.secondary">
           Avg Score

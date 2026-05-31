@@ -1,29 +1,29 @@
-import type { CoachStyle } from "./personality-templates";
+import type { CoachStyle } from './personality-templates';
 
 export const DAY1_EMPATHY_TEMPLATES: Record<CoachStyle, string[]> = {
   DRILL_SERGEANT: [
     "LISTEN UP. The streak broke. I won't sugarcoat it — but I also won't let you stay down. Tell me: what happened? We'll fix it.",
-    "SETBACKS HAPPEN. Even to the best. Your {{streakDaysBeforeBreak}}-day streak proves you have what it takes. Now we REBUILD.",
+    'SETBACKS HAPPEN. Even to the best. Your {{streakDaysBeforeBreak}}-day streak proves you have what it takes. Now we REBUILD.',
   ],
   FRIEND: [
-    "Hey, your streak ended. That really sucks — I know you were working hard on it. Want to talk about what happened? 💙",
-    "{{streakDaysBeforeBreak}} days was amazing, and I know you can do it again. No judgment here — just want to help you get back on track. 🤗",
+    'Hey, your streak ended. That really sucks — I know you were working hard on it. Want to talk about what happened? 💙',
+    '{{streakDaysBeforeBreak}} days was amazing, and I know you can do it again. No judgment here — just want to help you get back on track. 🤗',
   ],
   MENTOR: [
-    "The path of discipline includes moments of interruption. Your {{streakDaysBeforeBreak}} days demonstrated remarkable commitment. Let us understand what occurred and prepare for what follows.",
-    "Streaks, like all things, are impermanent. What matters is the wisdom gained. What would you identify as the primary challenge?",
+    'The path of discipline includes moments of interruption. Your {{streakDaysBeforeBreak}} days demonstrated remarkable commitment. Let us understand what occurred and prepare for what follows.',
+    'Streaks, like all things, are impermanent. What matters is the wisdom gained. What would you identify as the primary challenge?',
   ],
   CHEERLEADER: [
     "Oh no! Your streak ended? I'm so sorry! 😢 But you know what? {{streakDaysBeforeBreak}} days was INCREDIBLE and you can totally do it again!",
     "Don't you dare feel bad! You did something amazing for {{streakDaysBeforeBreak}} days! Let's figure out what got in the way! 🔥",
   ],
   RIVAL: [
-    "Well, that happened. {{streakDaysBeforeBreak}} days down. Question is: you going to let that define you, or are you coming back stronger?",
+    'Well, that happened. {{streakDaysBeforeBreak}} days down. Question is: you going to let that define you, or are you coming back stronger?',
     "I've seen you at {{streakDaysBeforeBreak}} days. That person didn't disappear. So what's the plan?",
   ],
   MINDFUL: [
-    "Breathe. The streak has ended, and with it, certain expectations. Let us sit with this moment. What arose that interrupted your practice?",
-    "Each end is also a beginning. Your {{streakDaysBeforeBreak}} days were beautiful in their consistency. Now, we turn the page gently.",
+    'Breathe. The streak has ended, and with it, certain expectations. Let us sit with this moment. What arose that interrupted your practice?',
+    'Each end is also a beginning. Your {{streakDaysBeforeBreak}} days were beautiful in their consistency. Now, we turn the page gently.',
   ],
 };
 
@@ -37,7 +37,7 @@ export const DAY2_GOAL_TEMPLATES: Record<CoachStyle, string[]> = {
     "Hey, how about we just focus on today? One little 15-minute session. That's all I'm asking! Easy peasy! 🔥",
   ],
   MENTOR: [
-    "Day two invites a gentle reengagement. I propose a single 15-minute session — modest, achievable, and sufficient to reestablish rhythm.",
+    'Day two invites a gentle reengagement. I propose a single 15-minute session — modest, achievable, and sufficient to reestablish rhythm.',
     "The mountain is climbed one step at a time. Today's step: 15 minutes of focused attention. Nothing more is required.",
   ],
   CHEERLEADER: [
@@ -46,11 +46,11 @@ export const DAY2_GOAL_TEMPLATES: Record<CoachStyle, string[]> = {
   ],
   RIVAL: [
     "Day 2. Here's the deal: 15 minutes. That's your test. Pass it, and we build. Fail it... well, that's on you.",
-    "Fifteen minutes. You can do that in your sleep. Question is: will you?",
+    'Fifteen minutes. You can do that in your sleep. Question is: will you?',
   ],
   MINDFUL: [
-    "Day two. A 15-minute session awaits — not as obligation, but as gift to yourself. Begin, and let the rest unfold naturally.",
-    "Fifteen minutes. Breathe in, begin. Breathe out, complete. No more, no less.",
+    'Day two. A 15-minute session awaits — not as obligation, but as gift to yourself. Begin, and let the rest unfold naturally.',
+    'Fifteen minutes. Breathe in, begin. Breathe out, complete. No more, no less.',
   ],
 };
 
@@ -64,8 +64,8 @@ export const DAY3_MOMENTUM_TEMPLATES: Record<CoachStyle, string[]> = {
     "Two sessions down, and you're already building momentum! Let's do 20 minutes today? I'm so proud of you! 💙",
   ],
   MENTOR: [
-    "Day three. Momentum is gathering like water forming a stream. Today: 20 minutes. Observe how the practice deepens with continuity.",
-    "You have reestablished your practice. Now we extend it gently to 20 minutes. The habit is returning.",
+    'Day three. Momentum is gathering like water forming a stream. Today: 20 minutes. Observe how the practice deepens with continuity.',
+    'You have reestablished your practice. Now we extend it gently to 20 minutes. The habit is returning.',
   ],
   CHEERLEADER: [
     "DAY 3!! 🎯🎯 You're ON FIRE! Let's do 20 minutes today and keep this amazing momentum going! You are SO back!",
@@ -76,7 +76,7 @@ export const DAY3_MOMENTUM_TEMPLATES: Record<CoachStyle, string[]> = {
     "You're back. Now prove you're staying. 20 minutes today.",
   ],
   MINDFUL: [
-    "Day three. The momentum of presence is building. Today: 20 minutes. Flow with it, neither grasping nor resisting.",
-    "Twenty minutes today. The practice returns to you as you return to it. Natural, cyclical, complete.",
+    'Day three. The momentum of presence is building. Today: 20 minutes. Flow with it, neither grasping nor resisting.',
+    'Twenty minutes today. The practice returns to you as you return to it. Natural, cyclical, complete.',
   ],
 };

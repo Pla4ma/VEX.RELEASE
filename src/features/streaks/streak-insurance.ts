@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 /**
  * Momentum Protection (formerly Streak Insurance).
@@ -93,7 +93,7 @@ export function canPurchaseInsurance(
 ): { allowed: boolean; reason: string | null; cost: number } {
   const cost = calculateInsuranceCost(streakDays);
   if (hasActiveInsurance) {
-    return { allowed: false, reason: "Already have active momentum protection", cost };
+    return { allowed: false, reason: 'Already have active momentum protection', cost };
   }
   if (streakDays < INSURANCE_PRICING.minDays) {
     return {
@@ -103,7 +103,7 @@ export function canPurchaseInsurance(
     };
   }
   if (currentBalance < cost) {
-    return { allowed: false, reason: "Not enough saved progress", cost };
+    return { allowed: false, reason: 'Not enough saved progress', cost };
   }
   return { allowed: true, reason: null, cost };
 }
@@ -124,8 +124,8 @@ export function createInsurance(
   };
 }
 
-export { StreakGambleSchema, GAMBLE_CONFIGS, getGambleOptions } from "./streak-gamble";
-export type { StreakGamble, GambleConfig } from "./streak-gamble";
+export { StreakGambleSchema, GAMBLE_CONFIGS, getGambleOptions } from './streak-gamble';
+export type { StreakGamble, GambleConfig } from './streak-gamble';
 
 export {
   type SettleGambleResult,
@@ -134,4 +134,4 @@ export {
   assessStreakRisk,
   convertShieldsToInsurance,
   StreakInsuranceEvents,
-} from "./streak-risk-assessment";
+} from './streak-risk-assessment';

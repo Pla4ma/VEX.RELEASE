@@ -1,48 +1,48 @@
-import React, { type ReactNode } from "react";
+import React, { type ReactNode } from 'react';
 import {
   Text as RNText,
   type TextProps as RNTextProps,
   type TextStyle,
   type StyleProp,
-} from "react-native";
+} from 'react-native';
 
-import { useTheme } from "../../theme";
-import type { ColorValue, SpacingValue } from "./types";
-import { resolveColorValue, resolveSpacingValue } from "./theme-values";
+import { useTheme } from '../../theme';
+import type { ColorValue, SpacingValue } from './types';
+import { resolveColorValue, resolveSpacingValue } from './theme-values';
 
 export type TextVariant =
-  | "hero"
-  | "display"
-  | "h1"
-  | "h2"
-  | "h3"
-  | "h4"
-  | "h5"
-  | "heading"
-  | "heading2"
-  | "heading3"
-  | "heading4"
-  | "bodyLarge"
-  | "body"
-  | "bodySmall"
-  | "caption"
-  | "label"
-  | "button";
+  | 'hero'
+  | 'display'
+  | 'h1'
+  | 'h2'
+  | 'h3'
+  | 'h4'
+  | 'h5'
+  | 'heading'
+  | 'heading2'
+  | 'heading3'
+  | 'heading4'
+  | 'bodyLarge'
+  | 'body'
+  | 'bodySmall'
+  | 'caption'
+  | 'label'
+  | 'button';
 
-export interface TextProps extends Omit<RNTextProps, "style"> {
+export interface TextProps extends Omit<RNTextProps, 'style'> {
   variant?: TextVariant;
-  fontSize?: TextStyle["fontSize"];
-  fontWeight?: TextStyle["fontWeight"];
-  weight?: TextStyle["fontWeight"];
-  lineHeight?: TextStyle["lineHeight"];
-  letterSpacing?: TextStyle["letterSpacing"];
-  textAlign?: TextStyle["textAlign"];
-  textTransform?: TextStyle["textTransform"];
-  textDecorationLine?: TextStyle["textDecorationLine"];
-  fontStyle?: TextStyle["fontStyle"];
+  fontSize?: TextStyle['fontSize'];
+  fontWeight?: TextStyle['fontWeight'];
+  weight?: TextStyle['fontWeight'];
+  lineHeight?: TextStyle['lineHeight'];
+  letterSpacing?: TextStyle['letterSpacing'];
+  textAlign?: TextStyle['textAlign'];
+  textTransform?: TextStyle['textTransform'];
+  textDecorationLine?: TextStyle['textDecorationLine'];
+  fontStyle?: TextStyle['fontStyle'];
   color?: ColorValue;
-  flex?: TextStyle["flex"];
-  opacity?: TextStyle["opacity"];
+  flex?: TextStyle['flex'];
+  opacity?: TextStyle['opacity'];
   m?: SpacingValue;
   mt?: SpacingValue;
   mr?: SpacingValue;
@@ -58,48 +58,48 @@ export interface TextProps extends Omit<RNTextProps, "style"> {
   px?: SpacingValue;
   py?: SpacingValue;
   numberOfLines?: number;
-  ellipsizeMode?: "head" | "middle" | "tail" | "clip";
+  ellipsizeMode?: 'head' | 'middle' | 'tail' | 'clip';
   children?: ReactNode;
   style?: StyleProp<TextStyle>;
 }
 
 function getVariantStyles(
   variant: TextVariant,
-  theme: ReturnType<typeof useTheme>["theme"],
+  theme: ReturnType<typeof useTheme>['theme'],
 ): TextStyle {
   const { typography, fontWeights } = theme;
   const display = typography.display.large;
   const body = typography.body.medium;
   switch (variant) {
-    case "hero":
-    case "display":
+    case 'hero':
+    case 'display':
       return {
         fontSize: display.fontSize,
         lineHeight: display.lineHeight,
         fontWeight: fontWeights.heavy,
       };
-    case "h1":
+    case 'h1':
       return { ...typography.heading.h1, fontWeight: fontWeights.heavy };
-    case "h2":
+    case 'h2':
       return { ...typography.heading.h2, fontWeight: fontWeights.heavy };
-    case "h3":
+    case 'h3':
       return { ...typography.heading.h3, fontWeight: fontWeights.bold };
-    case "h4":
-    case "h5":
-    case "heading":
-    case "heading2":
-    case "heading3":
-    case "heading4":
+    case 'h4':
+    case 'h5':
+    case 'heading':
+    case 'heading2':
+    case 'heading3':
+    case 'heading4':
       return { ...typography.heading.h4, fontWeight: fontWeights.semibold };
-    case "bodyLarge":
+    case 'bodyLarge':
       return typography.body.large;
-    case "bodySmall":
+    case 'bodySmall':
       return typography.body.small;
-    case "caption":
+    case 'caption':
       return typography.ui.caption;
-    case "label":
+    case 'label':
       return typography.ui.label;
-    case "button":
+    case 'button':
       return typography.ui.button;
     default:
       return body;
@@ -107,7 +107,7 @@ function getVariantStyles(
 }
 
 export function Text({
-  variant = "body",
+  variant = 'body',
   fontSize,
   fontWeight,
   weight,

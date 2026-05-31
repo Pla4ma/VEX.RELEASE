@@ -1,20 +1,20 @@
-import React from "react";
-import { ScrollView, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import React from 'react';
+import { ScrollView, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { StaggeredEnter } from "../../shared/ui/components/EnterAnimation";
-import { useTheme } from "../../theme";
-import { withScreenErrorBoundary } from "../../shared/ui/components/ScreenErrorBoundary";
-import { usePaywallScreen } from "./use-paywall-screen";
-import { PaywallHero } from "./PaywallHero";
-import { PaywallFooterActions, PaywallPlanList } from "./PaywallPlans";
+import { StaggeredEnter } from '../../shared/ui/components/EnterAnimation';
+import { useTheme } from '../../theme';
+import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+import { usePaywallScreen } from './use-paywall-screen';
+import { PaywallHero } from './PaywallHero';
+import { PaywallFooterActions, PaywallPlanList } from './PaywallPlans';
 import {
   PaywallErrorState,
   PaywallLoadingState,
   PaywallStatusMessageBanner,
   PaywallUnavailableState,
-} from "./PaywallStates";
-import { paywallStyles as styles } from "./paywall-styles";
+} from './PaywallStates';
+import { paywallStyles as styles } from './paywall-styles';
 
 export const PaywallScreen = withScreenErrorBoundary(
   function _PaywallScreen(): JSX.Element {
@@ -110,7 +110,7 @@ export const PaywallScreen = withScreenErrorBoundary(
       </View>
     );
   },
-  "Paywall",
+  'Paywall',
 );
 
 export default PaywallScreen;

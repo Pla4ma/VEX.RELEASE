@@ -2,10 +2,10 @@
  * Tests for session-events feature: evaluateMidSessionEvent deduplication.
  */
 
-import { evaluateMidSessionEvent } from "../service";
-import type { EvaluateMidSessionEventInput } from "../schemas";
+import { evaluateMidSessionEvent } from '../service';
+import type { EvaluateMidSessionEventInput } from '../schemas';
 
-describe("evaluateMidSessionEvent – deduplication", () => {
+describe('evaluateMidSessionEvent – deduplication', () => {
   const baseInput: EvaluateMidSessionEventInput = {
     bossHealthPercent: 80,
     elapsedSeconds: 300,
@@ -19,7 +19,7 @@ describe("evaluateMidSessionEvent – deduplication", () => {
     jest.clearAllMocks();
   });
 
-  it("suppresses duplicate event keys", () => {
+  it('suppresses duplicate event keys', () => {
     const event = evaluateMidSessionEvent({
       ...baseInput,
       bossHealthPercent: null,
@@ -36,7 +36,7 @@ describe("evaluateMidSessionEvent – deduplication", () => {
     expect(duplicate).toBeNull();
   });
 
-  it("emits a different event when key changes", () => {
+  it('emits a different event when key changes', () => {
     const event1 = evaluateMidSessionEvent({
       ...baseInput,
       bossHealthPercent: null,

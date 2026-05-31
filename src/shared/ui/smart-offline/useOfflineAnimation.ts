@@ -1,11 +1,11 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from 'react';
 import {
   useAnimatedStyle,
   useSharedValue,
   withSpring,
   withTiming,
-} from "react-native-reanimated";
-import { useReducedMotion } from "@/hooks/useReducedMotion";
+} from 'react-native-reanimated';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 interface UseOfflineAnimationOptions {
   hiddenOffset: number;

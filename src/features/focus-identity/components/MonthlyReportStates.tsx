@@ -1,8 +1,8 @@
-import React from "react";
-import { View } from "react-native";
-import { Text } from "../../../components/primitives/Text";
-import { Button } from "../../../components/primitives/Button";
-import { useTheme } from "../../../theme";
+import React from 'react';
+import { View } from 'react-native';
+import { Text } from '../../../components/primitives/Text';
+import { Button } from '../../../components/primitives/Button';
+import { useTheme } from '../../../theme';
 
 interface ErrorStateProps {
   message: string;
@@ -20,8 +20,8 @@ export function MonthlyReportErrorState({
     <View
       style={{
         flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
+        justifyContent: 'center',
+        alignItems: 'center',
         backgroundColor: theme.colors.background.primary,
         paddingHorizontal: theme.spacing[6],
       }}
@@ -36,7 +36,7 @@ export function MonthlyReportErrorState({
       <Text
         variant="body"
         color="textSecondary"
-        style={{ textAlign: "center", marginBottom: theme.spacing[6] }}
+        style={{ textAlign: 'center', marginBottom: theme.spacing[6] }}
       >
         {message}
       </Text>
@@ -66,8 +66,8 @@ export function MonthlyReportEmptyState({
     <View
       style={{
         flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
+        justifyContent: 'center',
+        alignItems: 'center',
         backgroundColor: theme.colors.background.primary,
         paddingHorizontal: theme.spacing[6],
       }}
@@ -82,7 +82,7 @@ export function MonthlyReportEmptyState({
       <Text
         variant="body"
         color="textSecondary"
-        style={{ textAlign: "center", marginBottom: theme.spacing[6] }}
+        style={{ textAlign: 'center', marginBottom: theme.spacing[6] }}
       >
         Complete sessions this month to generate your first focus report.
       </Text>

@@ -5,10 +5,10 @@
  * Provides CTAs to create first session.
  */
 
-import React from "react";
-import { View, Text, Pressable } from "react-native";
-import { createSheet } from "@/shared/ui/create-sheet";
-import { launchColors } from "@theme/tokens/launch-colors";
+import React from 'react';
+import { View, Text, Pressable } from 'react-native';
+import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
 
 interface SessionEmptyStateProps {
   onCreateSession?: () => void;
@@ -71,8 +71,8 @@ const styles = createSheet({
   container: {
     flex: 1,
     backgroundColor: launchColors.hex_1a1a2e,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: 32,
   },
   icon: {
@@ -81,19 +81,19 @@ const styles = createSheet({
   },
   title: {
     fontSize: 24,
-    fontWeight: "700",
+    fontWeight: '700',
     color: launchColors.hex_fff,
     marginBottom: 12,
   },
   description: {
     fontSize: 16,
     color: launchColors.hex_9e9e9e,
-    textAlign: "center",
+    textAlign: 'center',
     marginBottom: 32,
     lineHeight: 22,
   },
   actions: {
-    width: "100%",
+    width: '100%',
     gap: 12,
     marginBottom: 40,
   },
@@ -101,35 +101,35 @@ const styles = createSheet({
     backgroundColor: launchColors.hex_e94560,
     paddingVertical: 16,
     borderRadius: 12,
-    alignItems: "center",
+    alignItems: 'center',
   },
   primaryButtonText: {
     color: launchColors.hex_fff,
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   secondaryButton: {
-    backgroundColor: "transparent",
+    backgroundColor: 'transparent',
     borderWidth: 1,
     borderColor: launchColors.hex_9e9e9e,
     paddingVertical: 16,
     borderRadius: 12,
-    alignItems: "center",
+    alignItems: 'center',
   },
   secondaryButtonText: {
     color: launchColors.hex_9e9e9e,
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   tipsContainer: {
     backgroundColor: launchColors.hex_2a2a3e,
     borderRadius: 12,
     padding: 20,
-    width: "100%",
+    width: '100%',
   },
   tipsTitle: {
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: '600',
     color: launchColors.hex_fff,
     marginBottom: 12,
   },

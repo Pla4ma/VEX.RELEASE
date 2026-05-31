@@ -1,20 +1,20 @@
-import { useMemo } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useMemo } from 'react';
+import { useQuery } from '@tanstack/react-query';
 
-import { getStoredFocusRun } from "./repository";
+import { getStoredFocusRun } from './repository';
 import {
   buildFocusRunDisplay,
   computeFocusRunGrade,
   startFocusRun,
-} from "./service";
-import type { FocusRunDisplay, FocusRunGrade } from "./schemas";
-import type { Lane } from "../lane-engine/types";
+} from './service';
+import type { FocusRunDisplay, FocusRunGrade } from './schemas';
+import type { Lane } from '../lane-engine/types';
 
 export function useFocusRun(userId: string | null, enabled = true) {
   const query = useQuery({
     enabled: Boolean(userId) && enabled,
-    queryFn: () => getStoredFocusRun(userId ?? ""),
-    queryKey: ["focus-run", userId],
+    queryFn: () => getStoredFocusRun(userId ?? ''),
+    queryKey: ['focus-run', userId],
   });
 
   return {

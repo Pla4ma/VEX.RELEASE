@@ -1,12 +1,12 @@
-import type { IconProps } from "../../../icons";
+import type { IconProps } from '../../../icons';
 
-export type ToastType = "success" | "error" | "warning" | "info";
-export type ToastPosition = "top" | "bottom" | "center";
+export type ToastType = 'success' | 'error' | 'warning' | 'info';
+export type ToastPosition = 'top' | 'bottom' | 'center';
 
 export interface ToastAction {
   label: string;
   onPress: () => void;
-  variant?: "default" | "destructive";
+  variant?: 'default' | 'destructive';
 }
 
 export interface ToastOptions {
@@ -14,13 +14,13 @@ export interface ToastOptions {
   type?: ToastType;
   title: string;
   message?: string;
-  icon?: IconProps["name"];
+  icon?: IconProps['name'];
   duration?: number;
   position?: ToastPosition;
   action?: ToastAction;
   onDismiss?: () => void;
   persistent?: boolean;
-  priority?: "low" | "normal" | "high";
+  priority?: 'low' | 'normal' | 'high';
 }
 
 export interface ToastItem extends ToastOptions {

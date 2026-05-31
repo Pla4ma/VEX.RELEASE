@@ -1,11 +1,11 @@
-import React from "react";
-import { View, Pressable } from "react-native";
-import Animated, { FadeInUp } from "react-native-reanimated";
-import { useTheme } from "../../../theme/ThemeContext";
-import { Text, ProgressBar } from "../../../components";
-import type { PersonalQuest } from "../PersonalQuestGenerator";
-import { getQuestIcon, formatTimeRemaining } from "./questCardHelpers";
-import { buttonTap } from "../../../utils/haptics";
+import React from 'react';
+import { View, Pressable } from 'react-native';
+import Animated, { FadeInUp } from 'react-native-reanimated';
+import { useTheme } from '../../../theme/ThemeContext';
+import { Text, ProgressBar } from '../../../components';
+import type { PersonalQuest } from '../PersonalQuestGenerator';
+import { getQuestIcon, formatTimeRemaining } from './questCardHelpers';
+import { buttonTap } from '../../../utils/haptics';
 
 interface DailyQuestCardProps {
   quest: PersonalQuest | null;
@@ -34,20 +34,20 @@ export function DailyQuestCard({
         marginTop: theme.spacing[4],
         marginBottom: theme.spacing[2],
         backgroundColor: isCompleted
-          ? theme.colors.success[500] + "15"
-          : theme.colors.primary[500] + "10",
+          ? theme.colors.success[500] + '15'
+          : theme.colors.primary[500] + '10',
         borderRadius: theme.borderRadius.xl,
         borderWidth: 1,
         borderColor: isCompleted
           ? theme.colors.success[500]
           : theme.colors.primary[500],
-        overflow: "hidden",
+        overflow: 'hidden',
       }}
     >
       <Pressable
         onPress={() => { buttonTap(); onPress?.(); }}
         disabled={!onPress}
-        accessibilityLabel={`Daily quest: ${quest?.title ?? "Loading"}`}
+        accessibilityLabel={`Daily quest: ${quest?.title ?? 'Loading'}`}
         accessibilityRole="button"
         accessibilityHint="Double tap to view quest details"
       >
@@ -55,20 +55,20 @@ export function DailyQuestCard({
           {/* Header */}
           <View
             style={{
-              flexDirection: "row",
-              alignItems: "center",
+              flexDirection: 'row',
+              alignItems: 'center',
               gap: theme.spacing[2],
               marginBottom: theme.spacing[3],
             }}
           >
-            <Text fontSize={24}>{quest ? getQuestIcon(quest.type) : "🤖"}</Text>
+            <Text fontSize={24}>{quest ? getQuestIcon(quest.type) : '🤖'}</Text>
             <View style={{ flex: 1 }}>
               <Text
                 variant="h3"
-                color={isCompleted ? "success" : "primary"}
+                color={isCompleted ? 'success' : 'primary'}
                 style={{ marginBottom: 2 }}
               >
-                {isCompleted ? "Quest Complete!" : "Today's Quest"}
+                {isCompleted ? 'Quest Complete!' : "Today's Quest"}
               </Text>
               <Text variant="caption" color="secondary">
                 {`From ${coachName}`}
@@ -86,7 +86,7 @@ export function DailyQuestCard({
                 <Text
                   style={{
                     color: theme.colors.background.primary,
-                    fontWeight: "600",
+                    fontWeight: '600',
                   }}
                 >
                   ✓ Done
@@ -113,8 +113,8 @@ export function DailyQuestCard({
               <View style={{ marginBottom: theme.spacing[2] }}>
                 <View
                   style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
                     marginBottom: theme.spacing[1],
                   }}
                 >
@@ -139,9 +139,9 @@ export function DailyQuestCard({
               {/* Footer */}
               <View
                 style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center",
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
                   marginTop: theme.spacing[2],
                   paddingTop: theme.spacing[2],
                   borderTopWidth: 1,
@@ -150,8 +150,8 @@ export function DailyQuestCard({
               >
                 <View
                   style={{
-                    flexDirection: "row",
-                    alignItems: "center",
+                    flexDirection: 'row',
+                    alignItems: 'center',
                     gap: theme.spacing[1],
                   }}
                 >
@@ -168,14 +168,14 @@ export function DailyQuestCard({
           ) : (
             <View
               style={{
-                alignItems: "center",
+                alignItems: 'center',
                 paddingVertical: theme.spacing[4],
               }}
             >
               <Text
                 variant="body"
                 color="secondary"
-                style={{ textAlign: "center", marginBottom: theme.spacing[2] }}
+                style={{ textAlign: 'center', marginBottom: theme.spacing[2] }}
               >
                 No quest today — {coachName} is analyzing your patterns
               </Text>
@@ -183,7 +183,7 @@ export function DailyQuestCard({
                 style={{
                   width: 40,
                   height: 4,
-                  backgroundColor: theme.colors.primary[500] + "30",
+                  backgroundColor: theme.colors.primary[500] + '30',
                   borderRadius: theme.borderRadius.full,
                 }}
               />

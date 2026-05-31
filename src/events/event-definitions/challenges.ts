@@ -6,12 +6,12 @@
  */
 
 export type ChallengesEventType =
-  | "challenges:check_progress"
-  | "challenges:check_economy"
-  | "challenges:check_crafting"
-  | "challenges:check_level"
-  | "challenges:completed"
-  | "challenges:progress_updated";
+  | 'challenges:check_progress'
+  | 'challenges:check_economy'
+  | 'challenges:check_crafting'
+  | 'challenges:check_level'
+  | 'challenges:completed'
+  | 'challenges:progress_updated';
 
 export interface ChallengesCheckProgressEvent {
   userId: string;

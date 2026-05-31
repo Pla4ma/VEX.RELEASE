@@ -5,20 +5,20 @@
  * Shows active session or preset selection.
  */
 
-import React, { useState } from "react";
-import { View, Text, ScrollView } from "react-native";
-import { useSession } from "../../session/hooks/useSession";
-import { useSessionStats } from "../../session/hooks/useSession";
-import { ActiveSessionHUD } from "../../session/components/ActiveSessionHUD";
-import { SessionPresets } from "../../session/components/SessionPresets";
-import { SessionLoadingState } from "../../session/components/states/SessionLoadingState";
-import type { SessionPreset } from "../../session/types";
-import { createSheet } from "@/shared/ui/create-sheet";
-import { useTheme, type Theme } from "../../theme";
+import React, { useState } from 'react';
+import { View, Text, ScrollView } from 'react-native';
+import { useSession } from '../../session/hooks/useSession';
+import { useSessionStats } from '../../session/hooks/useSession';
+import { ActiveSessionHUD } from '../../session/components/ActiveSessionHUD';
+import { SessionPresets } from '../../session/components/SessionPresets';
+import { SessionLoadingState } from '../../session/components/states/SessionLoadingState';
+import type { SessionPreset } from '../../session/types';
+import { createSheet } from '@/shared/ui/create-sheet';
+import { useTheme, type Theme } from '../../theme';
 
 export default function SessionHomeScreen() {
-  const [, setActiveView] = useState<"home" | "custom">("home");
-  const userId = "current-user"; // In real app, get from auth context
+  const [, setActiveView] = useState<'home' | 'custom'>('home');
+  const userId = 'current-user'; // In real app, get from auth context
   const theme = useTheme();
 
   const styles = getStyles(theme);
@@ -37,11 +37,11 @@ export default function SessionHomeScreen() {
 
   const handleSelectPreset = async (_preset: SessionPreset) => {
     // Create and start session from preset
-    setActiveView("custom");
+    setActiveView('custom');
   };
 
   const handleCreateCustom = () => {
-    setActiveView("custom");
+    setActiveView('custom');
   };
 
   if (isLoading) {
@@ -113,7 +113,7 @@ const getStyles = ({ theme }: { theme: Theme }) =>
       backgroundColor: theme.colors.semantic.background,
     },
     statsContainer: {
-      flexDirection: "row",
+      flexDirection: 'row',
       padding: theme.spacing[4],
       gap: theme.spacing[2],
     },
@@ -122,7 +122,7 @@ const getStyles = ({ theme }: { theme: Theme }) =>
       backgroundColor: theme.colors.semantic.surface,
       borderRadius: theme.borderRadius.md,
       padding: theme.spacing[4],
-      alignItems: "center",
+      alignItems: 'center',
     },
     statValue: {
       fontSize: theme.typography.heading.h3.fontSize,
@@ -141,7 +141,7 @@ const getStyles = ({ theme }: { theme: Theme }) =>
     errorText: {
       color: theme.colors.semantic.danger,
       fontSize: 16,
-      textAlign: "center",
+      textAlign: 'center',
       marginTop: 40,
     },
   });

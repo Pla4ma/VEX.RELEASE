@@ -5,18 +5,18 @@
  * and metrics persistence for the content study feature.
  */
 
-import { captureSilentFailure } from "../../utils/silent-failure";
+import { captureSilentFailure } from '../../utils/silent-failure';
 import type {
   ContentStudyAnalyticsEvent,
   ContentStudyAnalyticsEventName,
   ContentStudyMetrics,
-} from "./types";
-import { CONTENT_STUDY_CONSTANTS } from "./types";
-import { getDefaultStorageAdapter } from "../../persistence";
-import { createDebugger } from "../../utils/debug";
+} from './types';
+import { CONTENT_STUDY_CONSTANTS } from './types';
+import { getDefaultStorageAdapter } from '../../persistence';
+import { createDebugger } from '../../utils/debug';
 
 const getStorage = () => getDefaultStorageAdapter();
-const debug = createDebugger("content-study:analytics");
+const debug = createDebugger('content-study:analytics');
 
 export interface AnalyticsProvider {
   track: (event: string, properties: Record<string, unknown>) => void;
@@ -44,7 +44,7 @@ export class ContentStudyAnalyticsService {
     this.analyticsProvider = provider;
     this.sessionId = this.generateSessionId();
     if (provider) {
-      provider.identify(userId, { feature: "content-study" });
+      provider.identify(userId, { feature: 'content-study' });
     }
     this.flushQueue();
   }
@@ -70,9 +70,9 @@ export class ContentStudyAnalyticsService {
       sessionId: this.sessionId || undefined,
       properties,
       context: {
-        appVersion: "1.0.0",
-        platform: "mobile",
-        screenSize: "default",
+        appVersion: '1.0.0',
+        platform: 'mobile',
+        screenSize: 'default',
         isOnline: this.isOnline,
       },
     };
@@ -96,7 +96,7 @@ export class ContentStudyAnalyticsService {
         context: event.context,
       });
     } catch (e) {
-      debug.error("Analytics tracking error:", e as Error);
+      debug.error('Analytics tracking error:', e as Error);
       this.queue.push(event);
     }
   }
@@ -108,7 +108,7 @@ export class ContentStudyAnalyticsService {
         JSON.stringify(this.queue),
       );
     } catch (e) {
-      debug.error("Failed to persist analytics queue:", e as Error);
+      debug.error('Failed to persist analytics queue:', e as Error);
     }
   }
 
@@ -122,9 +122,9 @@ export class ContentStudyAnalyticsService {
         this.sendToProvider(event);
       } catch (error) {
         captureSilentFailure(error, {
-          feature: "content-study",
-          operation: "ui-fallback",
-          type: "ui",
+          feature: 'content-study',
+          operation: 'ui-fallback',
+          type: 'ui',
         });
         failed.push(event);
       }
@@ -157,9 +157,9 @@ export class ContentStudyAnalyticsService {
       }
     } catch (error) {
       captureSilentFailure(error, {
-        feature: "content-study",
-        operation: "ui-fallback",
-        type: "ui",
+        feature: 'content-study',
+        operation: 'ui-fallback',
+        type: 'ui',
       });
     }
   }
@@ -172,9 +172,9 @@ export class ContentStudyAnalyticsService {
       );
     } catch (error) {
       captureSilentFailure(error, {
-        feature: "content-study",
-        operation: "ui-fallback",
-        type: "ui",
+        feature: 'content-study',
+        operation: 'ui-fallback',
+        type: 'ui',
       });
     }
   }

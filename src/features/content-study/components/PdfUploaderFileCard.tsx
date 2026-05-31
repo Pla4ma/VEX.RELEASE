@@ -1,15 +1,15 @@
-import React from "react";
-import { View, Pressable } from "react-native";
+import React from 'react';
+import { View, Pressable } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withTiming,
-} from "react-native-reanimated";
-import { Text } from "../../../components/primitives/Text";
-import { Button } from "../../../components/primitives/Button";
-import { useTheme } from "../../../theme";
-import { Icon } from "../../../icons";
-import { styles } from "./PdfUploader.styles";
+} from 'react-native-reanimated';
+import { Text } from '../../../components/primitives/Text';
+import { Button } from '../../../components/primitives/Button';
+import { useTheme } from '../../../theme';
+import { Icon } from '../../../icons';
+import { styles } from './PdfUploader.styles';
 
 interface FileCardProps {
   fileName: string;
@@ -76,7 +76,7 @@ export const PdfUploaderFileCard: React.FC<FileCardProps> = ({
             {formatFileSize(fileSize)}
             {isOversized && (
               <Text style={{ color: theme.colors.error[500] }}>
-                {" "}
+                {' '}
                 (exceeds {formatFileSize(maxSize)} limit)
               </Text>
             )}

@@ -7,10 +7,10 @@ import {
   MidSessionBossTauntsSchema,
   EvaluateMidSessionEventInputSchema,
   MidSessionEventSchema,
-} from "../schemas";
-import type { EvaluateMidSessionEventInput } from "../schemas";
+} from '../schemas';
+import type { EvaluateMidSessionEventInput } from '../schemas';
 
-describe("schemas – validation", () => {
+describe('schemas – validation', () => {
   const baseInput: EvaluateMidSessionEventInput = {
     bossHealthPercent: 80,
     elapsedSeconds: 300,
@@ -20,47 +20,47 @@ describe("schemas – validation", () => {
     sessionDurationSeconds: 1500,
   };
 
-  it("MidSessionEventTypeSchema accepts all valid types", () => {
+  it('MidSessionEventTypeSchema accepts all valid types', () => {
     const validTypes = [
-      "BOSS_TAUNT",
-      "PURITY_PULSE",
-      "COMBO_WINDOW",
-      "DISTRACTION_WAVE",
-      "FOCUS_ZONE",
-      "BOSS_RAGE",
+      'BOSS_TAUNT',
+      'PURITY_PULSE',
+      'COMBO_WINDOW',
+      'DISTRACTION_WAVE',
+      'FOCUS_ZONE',
+      'BOSS_RAGE',
     ];
     for (const type of validTypes) {
       expect(MidSessionEventTypeSchema.safeParse(type).success).toBe(true);
     }
   });
 
-  it("MidSessionEventTypeSchema rejects invalid type", () => {
-    expect(MidSessionEventTypeSchema.safeParse("INVALID").success).toBe(false);
+  it('MidSessionEventTypeSchema rejects invalid type', () => {
+    expect(MidSessionEventTypeSchema.safeParse('INVALID').success).toBe(false);
   });
 
-  it("MidSessionBossTauntsSchema accepts partial taunts", () => {
+  it('MidSessionBossTauntsSchema accepts partial taunts', () => {
     expect(
-      MidSessionBossTauntsSchema.safeParse({ spawn: "Hello" }).success,
+      MidSessionBossTauntsSchema.safeParse({ spawn: 'Hello' }).success,
     ).toBe(true);
     expect(MidSessionBossTauntsSchema.safeParse({}).success).toBe(true);
   });
 
-  it("MidSessionBossTauntsSchema rejects extra fields (strict)", () => {
+  it('MidSessionBossTauntsSchema rejects extra fields (strict)', () => {
     expect(
       MidSessionBossTauntsSchema.safeParse({
-        spawn: "Hello",
-        extra: "field",
+        spawn: 'Hello',
+        extra: 'field',
       }).success,
     ).toBe(false);
   });
 
-  it("EvaluateMidSessionEventInputSchema accepts valid input", () => {
+  it('EvaluateMidSessionEventInputSchema accepts valid input', () => {
     expect(
       EvaluateMidSessionEventInputSchema.safeParse(baseInput).success,
     ).toBe(true);
   });
 
-  it("EvaluateMidSessionEventInputSchema rejects purity > 100", () => {
+  it('EvaluateMidSessionEventInputSchema rejects purity > 100', () => {
     expect(
       EvaluateMidSessionEventInputSchema.safeParse({
         ...baseInput,
@@ -69,7 +69,7 @@ describe("schemas – validation", () => {
     ).toBe(false);
   });
 
-  it("EvaluateMidSessionEventInputSchema rejects negative elapsedSeconds", () => {
+  it('EvaluateMidSessionEventInputSchema rejects negative elapsedSeconds', () => {
     expect(
       EvaluateMidSessionEventInputSchema.safeParse({
         ...baseInput,
@@ -78,26 +78,26 @@ describe("schemas – validation", () => {
     ).toBe(false);
   });
 
-  it("MidSessionEventSchema validates a complete event", () => {
+  it('MidSessionEventSchema validates a complete event', () => {
     const result = MidSessionEventSchema.safeParse({
-      key: "mid-session:0:PURITY_PULSE",
-      type: "PURITY_PULSE",
-      title: "Focus holding",
-      message: "Purity is 75%.",
-      toastType: "info",
-      haptic: "selection",
+      key: 'mid-session:0:PURITY_PULSE',
+      type: 'PURITY_PULSE',
+      title: 'Focus holding',
+      message: 'Purity is 75%.',
+      toastType: 'info',
+      haptic: 'selection',
     });
     expect(result.success).toBe(true);
   });
 
-  it("MidSessionEventSchema rejects empty key", () => {
+  it('MidSessionEventSchema rejects empty key', () => {
     const result = MidSessionEventSchema.safeParse({
-      key: "",
-      type: "PURITY_PULSE",
-      title: "Test",
-      message: "Test",
-      toastType: "info",
-      haptic: "selection",
+      key: '',
+      type: 'PURITY_PULSE',
+      title: 'Test',
+      message: 'Test',
+      toastType: 'info',
+      haptic: 'selection',
     });
     expect(result.success).toBe(false);
   });

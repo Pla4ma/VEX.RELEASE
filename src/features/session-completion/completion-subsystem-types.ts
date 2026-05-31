@@ -1,10 +1,10 @@
-import type { SessionSummary } from "../../session/types";
-import type { CompletionLedger } from "./schemas";
+import type { SessionSummary } from '../../session/types';
+import type { CompletionLedger } from './schemas';
 import {
   SUBSYSTEM_META,
   type SubsystemMeta,
   type SubsystemKind,
-} from "./subsystem-meta";
+} from './subsystem-meta';
 
 export type CompletionSubsystemInput = {
   ledger: CompletionLedger;

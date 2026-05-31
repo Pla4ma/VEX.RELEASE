@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const SessionStudyContextSchema = z
   .object({
@@ -8,7 +8,7 @@ export const SessionStudyContextSchema = z
     studyTarget: z.string().min(1).optional(),
     learningExecutionLabel: z.string().min(1).optional(),
     learningExecutionTaskId: z.string().min(1).optional(),
-    source: z.enum(["learning-execution", "direct", "home"]).optional(),
+    source: z.enum(['learning-execution', 'direct', 'home']).optional(),
   })
   .strict();
 

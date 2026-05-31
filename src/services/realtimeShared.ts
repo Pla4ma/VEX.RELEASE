@@ -1,6 +1,6 @@
-import type { RealtimeChannel } from "@supabase/supabase-js";
+import type { RealtimeChannel } from '@supabase/supabase-js';
 
-export type PresenceStatus = "online" | "away" | "offline" | "in_session";
+export type PresenceStatus = 'online' | 'away' | 'offline' | 'in_session';
 
 export interface UserPresence {
   userId: string;
@@ -19,19 +19,19 @@ export interface SquadPresence {
 }
 
 export interface BroadcastMessage {
-  type: "activity" | "notification" | "sync" | "typing";
+  type: 'activity' | 'notification' | 'sync' | 'typing';
   payload: unknown;
   senderId: string;
   timestamp: number;
 }
 
 export const CHANNELS = {
-  global: "global:activity",
+  global: 'global:activity',
   user: (userId: string) => `user:${userId}`,
   squad: (squadId: string) => `squad:${squadId}`,
   guild: (guildId: string) => `guild:${guildId}`,
-  feed: "feed:public",
-  challenges: "challenges:active",
+  feed: 'feed:public',
+  challenges: 'challenges:active',
 } as const;
 
 export const activeChannels = new Map<string, RealtimeChannel>();

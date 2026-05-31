@@ -1,10 +1,10 @@
-export type { DeepLink, DeepLinkPath, ParsedDeepLink } from "./deep-link-types";
+export type { DeepLink, DeepLinkPath, ParsedDeepLink } from './deep-link-types';
 
-export { parseDeepLink } from "./deep-link-parser";
+export { parseDeepLink } from './deep-link-parser';
 export {
   deepLinkToNavigationParams,
   isDeepLinkDisabled,
-} from "./deep-link-routing";
+} from './deep-link-routing';
 export {
   generateDeepLink,
   generateInviteLink,
@@ -12,5 +12,5 @@ export {
   generateSessionShareLink,
   handleDeepLinkWithFallback,
   validateInviteCode,
-} from "./deep-link-utils";
-export { deepLinkToNotificationAction } from "./notification-routing";
+} from './deep-link-utils';
+export { deepLinkToNotificationAction } from './notification-routing';

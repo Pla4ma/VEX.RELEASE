@@ -6,18 +6,18 @@ export {
   StateTransitionError,
   StateMachineError,
   type CoachSignals,
-} from "./coach-state-machine";
+} from './coach-state-machine';
 
-export { evaluateInterventions } from "./intervention-engine";
+export { evaluateInterventions } from './intervention-engine';
 
 export {
   InterventionError,
   DailyLimitExceededError,
   InterventionSuppressedError,
   ExecutionSlotUnavailableError,
-} from "./intervention-engine-types";
+} from './intervention-engine-types';
 
-export { generateMessage } from "./message-generator";
+export { generateMessage } from './message-generator';
 
 export {
   processBehaviorSignal,
@@ -26,7 +26,7 @@ export {
   generateBehaviorAnalytics,
   type DetectedPattern,
   type BehaviorAnalytics,
-} from "./behavior-analytics";
+} from './behavior-analytics';
 
-export * from "./notification-support";
-export * from "./notification-permissions";
+export * from './notification-support';
+export * from './notification-permissions';

@@ -1,20 +1,20 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 // ── Schemas ─────────────────────────────────────────────────────────────────
 
 export const XPSourceSchema = z.enum([
-  "SESSION_COMPLETE",
-  "SESSION_QUALITY",
-  "STREAK_BONUS",
-  "CHALLENGE_COMPLETE",
-  "BOSS_DAMAGE",
-  "BOSS_DEFEAT",
-  "ACHIEVEMENT_UNLOCK",
-  "DAILY_LOGIN",
-  "REFERRAL",
-  "PROMOTION",
-  "ADMIN_GRANT",
-  "REFUND",
+  'SESSION_COMPLETE',
+  'SESSION_QUALITY',
+  'STREAK_BONUS',
+  'CHALLENGE_COMPLETE',
+  'BOSS_DAMAGE',
+  'BOSS_DEFEAT',
+  'ACHIEVEMENT_UNLOCK',
+  'DAILY_LOGIN',
+  'REFERRAL',
+  'PROMOTION',
+  'ADMIN_GRANT',
+  'REFUND',
 ]);
 
 export const XPTransactionSchema = z.object({
@@ -48,10 +48,10 @@ export interface ValidationResult<T> {
 }
 
 export interface Violation {
-  type: "RATE_LIMIT" | "IMPOSSIBLE" | "SUSPICIOUS" | "POLICY";
+  type: 'RATE_LIMIT' | 'IMPOSSIBLE' | 'SUSPICIOUS' | 'POLICY';
   field: string;
   message: string;
-  severity: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
+  severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   details?: Record<string, unknown>;
 }
 
@@ -68,5 +68,5 @@ export function getNumberFromMetadata(
   key: string,
 ): number | undefined {
   const value = metadata?.[key];
-  return typeof value === "number" ? value : undefined;
+  return typeof value === 'number' ? value : undefined;
 }

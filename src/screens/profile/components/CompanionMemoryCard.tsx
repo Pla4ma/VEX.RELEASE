@@ -1,6 +1,6 @@
-import React from "react";
-import { Box, Card, Text } from "../../../components/primitives";
-import type { CompanionMemory } from "../../../features/companion/memory-types";
+import React from 'react';
+import { Box, Card, Text } from '../../../components/primitives';
+import type { CompanionMemory } from '../../../features/companion/memory-types';
 
 interface CompanionMemoryCardProps {
   memory: CompanionMemory;
@@ -46,8 +46,8 @@ export function CompanionMemoryCard({
 }
 
 function formatMemoryDate(date: string): string {
-  return new Intl.DateTimeFormat("en-US", {
-    day: "numeric",
-    month: "short",
+  return new Intl.DateTimeFormat('en-US', {
+    day: 'numeric',
+    month: 'short',
   }).format(new Date(`${date}T00:00:00.000Z`));
 }

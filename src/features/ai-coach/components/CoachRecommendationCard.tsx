@@ -1,9 +1,9 @@
-import React from "react";
-import { View, Text, Pressable } from "react-native";
-import { useAnalytics } from "@/shared/analytics";
-import { CoachEvents } from "@/shared/analytics/analytics-events";
-import type { CoachRecommendation } from "./coach-chat-types";
-import { styles } from "./CoachScreen.styles";
+import React from 'react';
+import { View, Text, Pressable } from 'react-native';
+import { useAnalytics } from '@/shared/analytics';
+import { CoachEvents } from '@/shared/analytics/analytics-events';
+import type { CoachRecommendation } from './coach-chat-types';
+import { styles } from './CoachScreen.styles';
 
 interface CoachRecommendationCardProps {
   recommendation: CoachRecommendation;
@@ -29,7 +29,7 @@ export function CoachRecommendationCard({
           track(CoachEvents.COACH_CTA_CLICKED, {
             duration: recommendation.duration,
             difficulty: recommendation.difficulty,
-            source: "coach_recommendation",
+            source: 'coach_recommendation',
           });
         }}
         accessibilityLabel="Start recommended session"

@@ -1,12 +1,12 @@
-import { resolvePremiumMoment } from "../experience-resolvers";
-import { makeStats } from "./personalization.helpers";
+import { resolvePremiumMoment } from '../experience-resolvers';
+import { makeStats } from './personalization.helpers';
 
-jest.mock("@sentry/react-native", () => ({
+jest.mock('@sentry/react-native', () => ({
   addBreadcrumb: jest.fn(),
   captureException: jest.fn(),
 }));
 
-jest.mock("../../../persistence/MMKVStorageAdapter", () => ({
+jest.mock('../../../persistence/MMKVStorageAdapter', () => ({
   getMMKVStorageAdapter: () => ({
     getItem: jest.fn(() => null),
     setItem: jest.fn(),
@@ -14,37 +14,37 @@ jest.mock("../../../persistence/MMKVStorageAdapter", () => ({
   }),
 }));
 
-describe("resolvePremiumMoment", () => {
+describe('resolvePremiumMoment', () => {
   it("returns 'none' for < 5 sessions", () => {
     expect(
       resolvePremiumMoment(makeStats({ totalCompletedSessions: 3 })),
-    ).toBe("none");
+    ).toBe('none');
   });
   it("returns 'advanced_study' when user tried advanced_study", () => {
     expect(
       resolvePremiumMoment(
         makeStats({
           totalCompletedSessions: 10,
-          premiumFeatureAttempts: ["advanced_study"],
+          premiumFeatureAttempts: ['advanced_study'],
         }),
       ),
-    ).toBe("advanced_study");
+    ).toBe('advanced_study');
   });
   it("returns 'weekly_intelligence' when tried weekly_intelligence", () => {
     expect(
       resolvePremiumMoment(
         makeStats({
           totalCompletedSessions: 10,
-          premiumFeatureAttempts: ["weekly_intelligence"],
+          premiumFeatureAttempts: ['weekly_intelligence'],
         }),
       ),
-    ).toBe("weekly_intelligence");
+    ).toBe('weekly_intelligence');
   });
   it("returns 'session_value' for 10+ sessions with no specific attempt", () => {
     expect(
       resolvePremiumMoment(
-        makeStats({ totalCompletedSessions: 10, premiumFeatureAttempts: ["unknown"] }),
+        makeStats({ totalCompletedSessions: 10, premiumFeatureAttempts: ['unknown'] }),
       ),
-    ).toBe("session_value");
+    ).toBe('session_value');
   });
 });

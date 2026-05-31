@@ -1,6 +1,6 @@
-import { Dimensions, PixelRatio, Platform } from "react-native";
-import { launchColors } from "@theme/tokens/launch-colors";
-const { width, height } = Dimensions.get("window");
+import { Dimensions, PixelRatio, Platform } from 'react-native';
+import { launchColors } from '@theme/tokens/launch-colors';
+const { width, height } = Dimensions.get('window');
 export const Device = {
   width,
   height,
@@ -45,7 +45,7 @@ export const spacing = {
   md: responsive({ xs: 10, sm: 12, md: 16, default: 16 }),
   lg: responsive({ xs: 14, sm: 16, md: 24, default: 24 }),
   xl: responsive({ xs: 20, sm: 24, md: 32, default: 32 }),
-  "2xl": responsive({ xs: 28, sm: 32, md: 48, default: 48 }),
+  '2xl': responsive({ xs: 28, sm: 32, md: 48, default: 48 }),
   screenEdge: responsive({ xs: 12, sm: 16, md: 20, default: 24 }),
   section: responsive({ xs: 20, sm: 24, md: 32, default: 40 }),
   card: responsive({ xs: 12, sm: 16, md: 20, default: 24 }),
@@ -56,32 +56,32 @@ export const typography = {
   h1: {
     fontSize: responsive({ xs: 28, sm: 30, md: 32, default: 36 }),
     lineHeight: responsive({ xs: 32, sm: 36, md: 40, default: 44 }),
-    fontWeight: "700" as const,
+    fontWeight: '700' as const,
   },
   h2: {
     fontSize: responsive({ xs: 22, sm: 24, md: 26, default: 28 }),
     lineHeight: responsive({ xs: 26, sm: 28, md: 30, default: 32 }),
-    fontWeight: "700" as const,
+    fontWeight: '700' as const,
   },
   h3: {
     fontSize: responsive({ xs: 18, sm: 20, md: 22, default: 24 }),
     lineHeight: responsive({ xs: 22, sm: 24, md: 26, default: 28 }),
-    fontWeight: "600" as const,
+    fontWeight: '600' as const,
   },
   h4: {
     fontSize: responsive({ xs: 15, sm: 16, md: 18, default: 20 }),
     lineHeight: responsive({ xs: 19, sm: 20, md: 22, default: 24 }),
-    fontWeight: "600" as const,
+    fontWeight: '600' as const,
   },
   body: {
     fontSize: responsive({ xs: 14, sm: 14, md: 16, default: 16 }),
     lineHeight: responsive({ xs: 20, sm: 20, md: 24, default: 24 }),
-    fontWeight: "400" as const,
+    fontWeight: '400' as const,
   },
   caption: {
     fontSize: responsive({ xs: 11, sm: 12, md: 13, default: 14 }),
     lineHeight: responsive({ xs: 14, sm: 16, md: 18, default: 18 }),
-    fontWeight: "400" as const,
+    fontWeight: '400' as const,
   },
 };
 export const layout = {
@@ -118,9 +118,9 @@ export const animation = {
   },
 };
 export const platform = {
-  isIOS: Platform.OS === "ios",
-  isAndroid: Platform.OS === "android",
-  isWeb: Platform.OS === "web",
+  isIOS: Platform.OS === 'ios',
+  isAndroid: Platform.OS === 'android',
+  isWeb: Platform.OS === 'web',
   elevation: (level: number) => ({
     elevation: level,
     shadowColor: launchColors.hex_000,

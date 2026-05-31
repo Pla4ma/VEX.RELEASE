@@ -7,34 +7,34 @@ import {
   mockEnqueue,
   mockSetCompletionSyncState,
   setupMocks,
-} from "./exit-gate-policy.fixtures";
-import { orchestrateSessionCompletion } from "../completion-orchestrator";
+} from './exit-gate-policy.fixtures';
+import { orchestrateSessionCompletion } from '../completion-orchestrator';
 import {
   applyHomeReturnOptimisticUpdate,
   completionReturnQueryKeys,
   getNextCompletionSyncState,
   invalidateCompletionReturnQueries,
-} from "../home-return-sync";
+} from '../home-return-sync';
 
-const summary = createSummary("550e8400-e29b-41d4-a716-446655440101");
+const summary = createSummary('550e8400-e29b-41d4-a716-446655440101');
 
-describe("Phase 1 exit gate", () => {
+describe('Phase 1 exit gate', () => {
   beforeEach(() => {
     setupMocks();
   });
 
-  it("verifies start-complete-story-home sync for the launch spine", async () => {
+  it('verifies start-complete-story-home sync for the launch spine', async () => {
     const story = await orchestrateSessionCompletion({
       sessionId: summary.sessionId,
       summary,
       timestamp: 4000000,
       userId: summary.userId,
     });
-    expect(story?.gradeCard.grade).toBe("S");
+    expect(story?.gradeCard.grade).toBe('S');
     expect(story?.focusScoreDeltaCard.delta).toBe(9);
     expect(story?.streakState.newDays).toBe(6);
-    expect(story?.companionReaction.reactionId).toBe("companion-proud");
-    expect(story?.dailyMission.status).toBe("completed");
+    expect(story?.companionReaction.reactionId).toBe('companion-proud');
+    expect(story?.dailyMission.status).toBe('completed');
 
     const queryClient = createQueryClient();
     queryClient.setQueryData(
@@ -86,10 +86,10 @@ describe("Phase 1 exit gate", () => {
     );
   });
 
-  it("verifies offline completion pending banner and reconnect clear", async () => {
-    mockConnectionState.mockReturnValue("offline");
+  it('verifies offline completion pending banner and reconnect clear', async () => {
+    mockConnectionState.mockReturnValue('offline');
     const offlineSummary = createSummary(
-      "550e8400-e29b-41d4-a716-446655440102",
+      '550e8400-e29b-41d4-a716-446655440102',
     );
     const story = await orchestrateSessionCompletion({
       sessionId: offlineSummary.sessionId,
@@ -100,10 +100,10 @@ describe("Phase 1 exit gate", () => {
 
     expect(story?.pendingSync).toBe(true);
     expect(mockEnqueue).toHaveBeenCalledWith(
-      expect.objectContaining({ operation: "CREATE" }),
+      expect.objectContaining({ operation: 'CREATE' }),
     );
     expect(mockSetCompletionSyncState).toHaveBeenCalledWith(
-      expect.objectContaining({ status: "pending_sync" }),
+      expect.objectContaining({ status: 'pending_sync' }),
     );
 
     const cleared = getNextCompletionSyncState({
@@ -111,7 +111,7 @@ describe("Phase 1 exit gate", () => {
       failed: false,
       pendingSync: false,
     });
-    expect(cleared.status).toBe("synced");
+    expect(cleared.status).toBe('synced');
     expect(cleared.message).toBeNull();
   });
 });

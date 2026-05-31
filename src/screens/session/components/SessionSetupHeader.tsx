@@ -1,14 +1,14 @@
-import React from "react";
-import { Pressable } from "react-native";
-import Animated, { FadeInUp } from "react-native-reanimated";
+import React from 'react';
+import { Pressable } from 'react-native';
+import Animated, { FadeInUp } from 'react-native-reanimated';
 
-import { Box } from "../../../components/primitives/Box";
-import { Skeleton } from "../../../components/ui/Skeleton";
-import { usePersonalBestPreview } from "../../../features/personal-bests/hooks";
-import { Text } from "../../../components/primitives/Text";
-import { Icon } from "../../../icons";
-import type { SessionMode } from "../../../session/modes";
-import { useTheme } from "../../../theme";
+import { Box } from '../../../components/primitives/Box';
+import { Skeleton } from '../../../components/ui/Skeleton';
+import { usePersonalBestPreview } from '../../../features/personal-bests/hooks';
+import { Text } from '../../../components/primitives/Text';
+import { Icon } from '../../../icons';
+import type { SessionMode } from '../../../session/modes';
+import { useTheme } from '../../../theme';
 
 type SessionSetupHeaderProps = {
   durationSeconds: number;
@@ -27,7 +27,7 @@ export function SessionSetupHeader({
   const preview = usePersonalBestPreview(userId, mode, durationSeconds);
   const previewCopy = preview.data
     ? `Your best: ${Math.round(preview.data.bestPurityScore)} purity · ${preview.data.bestGrade}`
-    : "First time at this length. Focus clean.";
+    : 'First time at this length. Focus clean.';
 
   return (
     <>
@@ -45,8 +45,8 @@ export function SessionSetupHeader({
           accessibilityHint="Returns to the previous screen without starting a session"
           hitSlop={theme.spacing[2]}
           style={{
-            alignItems: "center",
-            justifyContent: "center",
+            alignItems: 'center',
+            justifyContent: 'center',
             minHeight: 44,
             minWidth: 44,
           }}

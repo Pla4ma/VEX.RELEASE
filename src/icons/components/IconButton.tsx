@@ -4,18 +4,18 @@
  * Pressable button with an icon.
  */
 
-import React, { useCallback } from "react";
-import { Pressable, type PressableProps, type ViewStyle } from "react-native";
+import React, { useCallback } from 'react';
+import { Pressable, type PressableProps, type ViewStyle } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withSpring,
-} from "react-native-reanimated";
+} from 'react-native-reanimated';
 
-import { useTheme } from "../../theme";
-import { useReducedMotion } from "../../hooks/useReducedMotion";
-import { Icon } from "./Icon";
-import type { IconButtonProps } from "../types";
+import { useTheme } from '../../theme';
+import { useReducedMotion } from '../../hooks/useReducedMotion';
+import { Icon } from './Icon';
+import type { IconButtonProps } from '../types';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
@@ -24,9 +24,9 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
  */
 export function IconButton({
   name,
-  size = "md",
-  color = "primary",
-  variant = "outline",
+  size = 'md',
+  color = 'primary',
+  variant = 'outline',
   strokeWidth,
   onPress,
   disabled = false,
@@ -106,7 +106,7 @@ export function createIconButton(
   defaultProps?: Partial<IconButtonProps>,
 ) {
   return function NamedIconButton(
-    props: Omit<IconButtonProps, "name">,
+    props: Omit<IconButtonProps, 'name'>,
   ): JSX.Element {
     return <IconButton name={name} {...defaultProps} {...props} />;
   };

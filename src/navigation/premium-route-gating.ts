@@ -3,9 +3,9 @@ import {
   isFeatureAvailableForNavigation,
   type FeatureAccessMap,
   type FeatureKey,
-} from "../features/liveops-config";
+} from '../features/liveops-config';
 
-const PAYWALL_FEATURE_KEY: FeatureKey = "premium_paywall";
+const PAYWALL_FEATURE_KEY: FeatureKey = 'premium_paywall';
 
 export function canRegisterPremiumPaywallRoute(
   features: FeatureAccessMap,

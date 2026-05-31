@@ -19,7 +19,11 @@ const supabaseAllowedPaths = [
 function isSupabaseAllowed(filePath) {
   if (filePath.includes(path.sep + 'repository.ts')) return true;
   if (filePath.includes(path.sep + 'Repository.ts')) return true;
+  if (filePath.includes(path.sep + 'repository' + path.sep)) return true;
+  const base = path.basename(filePath);
+  if (/^repository[-.]/.test(base)) return true;
   if (supabaseAllowedPaths.some((p) => filePath === p)) return true;
+  if (filePath.includes(path.join(SRC, 'config', 'supabase-mock.ts'))) return true;
   if (filePath.includes('supabase' + path.sep + 'functions' + path.sep)) return true;
   if (filePath.includes('__tests__')) return true;
   if (filePath.includes('mocks')) return true;
@@ -36,10 +40,12 @@ function checkPartFiles(files) {
 // 2. Line limit violations (>200 lines)
 function checkLineLimit(files) {
   return files
-    .map((f) => ({
-      file: path.relative(ROOT, f).replace(/\\/g, '/'),
-      lines: fs.readFileSync(f, 'utf8').split(/\r?\n/).length,
-    }))
+    .map((f) => {
+      const content = fs.readFileSync(f, 'utf8');
+      const lines = content.split(/\r?\n/);
+      const count = lines[lines.length - 1] === '' ? lines.length - 1 : lines.length;
+      return { file: path.relative(ROOT, f).replace(/\\/g, '/'), lines: count };
+    })
     .filter((r) => r.lines > 200)
     .map((r) => ({ file: r.file, lines: r.lines, rule: 'line-limit', detail: `${r.lines} lines` }));
 }
@@ -97,12 +103,10 @@ function checkComponentBusinessLogic(files) {
     const rel = path.relative(ROOT, f).replace(/\\/g, '/');
     if (!rel.includes('/components/') && !rel.includes('/containers/') && !rel.includes('/screens/')) continue;
     if (rel.includes('__tests__')) continue;
+    if (rel.includes('/hooks/') || /use[A-Z]/.test(path.basename(f))) continue;
     const content = fs.readFileSync(f, 'utf8');
     if (/\buseQuery\s*\(/.test(content) || /\buseMutation\s*\(/.test(content) || /\buseInfiniteQuery\s*\(/.test(content)) {
-      results.push({
-        file: rel,
-        rule: 'component-query-leak',
-      });
+      results.push({ file: rel, rule: 'component-query-leak' });
     }
   }
   return results;

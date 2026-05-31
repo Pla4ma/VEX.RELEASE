@@ -5,7 +5,7 @@
  * Phase 1: Content Study Unification
  */
 
-import type { SessionState } from "./index";
+import type { SessionState } from './index';
 
 // ============================================================================
 // Document Linking
@@ -14,7 +14,7 @@ import type { SessionState } from "./index";
 export interface LinkedDocument {
   id: string;
   name: string;
-  type: "PDF" | "DOC" | "TEXT" | "URL" | "OTHER";
+  type: 'PDF' | 'DOC' | 'TEXT' | 'URL' | 'OTHER';
   totalPages?: number;
   currentPage: number;
   sections?: DocumentSection[];
@@ -55,7 +55,7 @@ export interface Highlight {
   page: number;
   text: string;
   note?: string;
-  color: "YELLOW" | "GREEN" | "BLUE" | "PINK";
+  color: 'YELLOW' | 'GREEN' | 'BLUE' | 'PINK';
   createdAt: number;
 }
 
@@ -73,7 +73,7 @@ export interface StudyNote {
 // ============================================================================
 
 export interface StudySessionState extends SessionState {
-  mode: "STUDY";
+  mode: 'STUDY';
   document?: LinkedDocument;
   studyMetrics: StudySessionMetrics;
   highlights: Highlight[];
@@ -104,11 +104,11 @@ export interface StudySessionConfig {
 
 export interface StudySessionEvent {
   type:
-    | "PAGE_CHANGE"
-    | "HIGHLIGHT_CREATED"
-    | "NOTE_ADDED"
-    | "SECTION_COMPLETED"
-    | "AI_HELP_REQUESTED";
+    | 'PAGE_CHANGE'
+    | 'HIGHLIGHT_CREATED'
+    | 'NOTE_ADDED'
+    | 'SECTION_COMPLETED'
+    | 'AI_HELP_REQUESTED';
   timestamp: number;
   data: Record<string, unknown>;
 }

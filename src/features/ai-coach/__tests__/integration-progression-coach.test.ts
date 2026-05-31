@@ -1,17 +1,17 @@
-import { describe, it, expect, jest, beforeEach } from "@jest/globals";
+import { describe, it, expect, jest, beforeEach } from '@jest/globals';
 import {
   coachService,
   mockUserId,
   handleLevelUp,
-} from "./integration-test-helpers";
+} from './integration-test-helpers';
 
-describe("Cross-System Integration", () => {
+describe('Cross-System Integration', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  describe("Progression → Coach Integration", () => {
-    it("level up triggers milestone hype message", async () => {
+  describe('Progression → Coach Integration', () => {
+    it('level up triggers milestone hype message', async () => {
       const levelUpPayload = {
         userId: mockUserId,
         oldLevel: 4,
@@ -19,16 +19,16 @@ describe("Cross-System Integration", () => {
         xpGained: 250,
         totalXp: 1250,
       };
-      const mockGenerateMessage = jest.spyOn(coachService, "generateMessage");
+      const mockGenerateMessage = jest.spyOn(coachService, 'generateMessage');
       mockGenerateMessage.mockResolvedValue({
-        id: "msg-1",
+        id: 'msg-1',
         userId: mockUserId,
-        personaId: "default",
-        category: "MILESTONE_HYPE",
-        content: "Level 5! Incredible!",
-        deliveryMethod: "BOTH",
+        personaId: 'default',
+        category: 'MILESTONE_HYPE',
+        content: 'Level 5! Incredible!',
+        deliveryMethod: 'BOTH',
         priority: 9,
-        status: "SENT",
+        status: 'SENT',
         createdAt: Date.now(),
         scheduledFor: null,
         deliveredAt: null,
@@ -41,7 +41,7 @@ describe("Cross-System Integration", () => {
       expect(mockGenerateMessage).toHaveBeenCalledWith(
         expect.objectContaining({
           userId: mockUserId,
-          category: "MILESTONE_HYPE",
+          category: 'MILESTONE_HYPE',
           context: {
             milestoneLevel: 5,
             oldLevel: 4,
@@ -52,13 +52,13 @@ describe("Cross-System Integration", () => {
       );
     });
 
-    it("every 5 levels triggers difficulty adjustment", async () => {
-      const mockAdjustDifficulty = jest.spyOn(coachService, "adjustDifficulty");
+    it('every 5 levels triggers difficulty adjustment', async () => {
+      const mockAdjustDifficulty = jest.spyOn(coachService, 'adjustDifficulty');
       mockAdjustDifficulty.mockResolvedValue({
         userId: mockUserId,
-        currentDifficulty: "CHALLENGING",
+        currentDifficulty: 'CHALLENGING',
         adjustment: 1,
-        reason: "Level up to 5 - periodic review",
+        reason: 'Level up to 5 - periodic review',
       });
       const payload = {
         userId: mockUserId,
@@ -70,7 +70,7 @@ describe("Cross-System Integration", () => {
       await handleLevelUp(payload);
       expect(mockAdjustDifficulty).toHaveBeenCalledWith({
         userId: mockUserId,
-        reason: "Level up to 5 - periodic review",
+        reason: 'Level up to 5 - periodic review',
       });
     });
   });

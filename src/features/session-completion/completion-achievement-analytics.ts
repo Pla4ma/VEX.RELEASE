@@ -1,4 +1,4 @@
-import { capture } from "../../shared/analytics/analytics-service";
+import { capture } from '../../shared/analytics/analytics-service';
 
 export function trackSessionRewardMultiplierActivated(
   userId: string,
@@ -29,7 +29,7 @@ export function trackSessionRewardMultiplierActivated(
     efficiency: number;
   },
 ): void {
-  capture("session_completion_reward_multiplier_activated", {
+  capture('session_completion_reward_multiplier_activated', {
     user_id: userId,
     session_id: sessionId,
     multiplier_id: multiplierId,
@@ -54,11 +54,11 @@ export function trackSessionAchievementUnlocked(
   achievementId: string,
   achievementName: string,
   achievementType:
-    | "completion"
-    | "performance"
-    | "streak"
-    | "special"
-    | "hidden",
+    | 'completion'
+    | 'performance'
+    | 'streak'
+    | 'special'
+    | 'hidden',
   progress: {
     current: number;
     required: number;
@@ -92,7 +92,7 @@ export function trackSessionAchievementUnlocked(
     next: string;
   },
 ): void {
-  capture("session_completion_achievement_unlocked", {
+  capture('session_completion_achievement_unlocked', {
     user_id: userId,
     session_id: sessionId,
     achievement_id: achievementId,
@@ -134,7 +134,7 @@ export function trackSessionAchievementProgressUpdated(
     confidence: number;
   },
 ): void {
-  capture("session_completion_achievement_progress_updated", {
+  capture('session_completion_achievement_progress_updated', {
     user_id: userId,
     session_id: sessionId,
     achievement_id: achievementId,

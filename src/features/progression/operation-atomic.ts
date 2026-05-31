@@ -1,7 +1,7 @@
-import * as Sentry from "@sentry/react-native";
-import { z } from "zod";
-import { getSupabaseClient } from "../../config/supabase";
-import type { AddXpInput } from "./schemas";
+import * as Sentry from '@sentry/react-native';
+import { z } from 'zod';
+import { getSupabaseClient } from '../../config/supabase';
+import type { AddXpInput } from './schemas';
 
 const AtomicXpRpcResultSchema = z.object({
   success: z.boolean(),
@@ -24,7 +24,7 @@ export async function tryAtomicAddXp(
 ): Promise<AtomicXpRpcResult | null> {
   try {
     const supabase = getSupabaseClient();
-    const { data, error } = await supabase.rpc("atomic_add_xp", {
+    const { data, error } = await supabase.rpc('atomic_add_xp', {
       p_user_id: userId,
       p_amount: amount,
       p_source: input.source,
@@ -37,7 +37,7 @@ export async function tryAtomicAddXp(
 
     if (error) {
       Sentry.captureException(error, {
-        tags: { operation: "atomic_add_xp_rpc" },
+        tags: { operation: 'atomic_add_xp_rpc' },
       });
       return null;
     }
@@ -45,7 +45,7 @@ export async function tryAtomicAddXp(
     return AtomicXpRpcResultSchema.parse(data);
   } catch (error) {
     Sentry.captureException(error, {
-      tags: { operation: "tryAtomicAddXp" },
+      tags: { operation: 'tryAtomicAddXp' },
     });
     return null;
   }

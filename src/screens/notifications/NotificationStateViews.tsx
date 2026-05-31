@@ -1,8 +1,8 @@
-import React from "react";
-import { Box, Text } from "../../components/primitives";
-import { Skeleton, SkeletonList } from "../../shared/ui/primitives";
-import { ErrorState } from "../../components/states";
-import { FILTER_LABELS } from "./NotificationScreenConfig";
+import React from 'react';
+import { Box, Text } from '../../components/primitives';
+import { Skeleton, SkeletonList } from '../../shared/ui/primitives';
+import { ErrorState } from '../../components/states';
+import { FILTER_LABELS } from './NotificationScreenConfig';
 
 export function NotificationLoadingState({
   insetsTop,
@@ -68,7 +68,7 @@ export function NotificationEmptyState({
     <Box flex={1} style={{ backgroundColor }}>
       {headerElement}
       <Box flex={1} alignItems="center" justifyContent="center" px={24}>
-        <Text fontSize={48}>{"\u{1F514}"}</Text>
+        <Text fontSize={48}>{'\u{1F514}'}</Text>
         <Text variant="h4" mt={4}>
           No notifications yet
         </Text>
@@ -95,19 +95,19 @@ export function NotificationFilteredEmptyState({
       {headerElement}
       <Box flex={1} alignItems="center" justifyContent="center" px={24}>
         <Text fontSize={48} color="text.tertiary">
-          {"\u{2315}"}
+          {'\u{2315}'}
         </Text>
-        <Text variant="h4" style={{ marginTop: 16, textAlign: "center" }}>
-          No{" "}
-          {activeFilter === "all"
-            ? ""
-            : ` ${FILTER_LABELS[activeFilter] ?? activeFilter}`}{" "}
+        <Text variant="h4" style={{ marginTop: 16, textAlign: 'center' }}>
+          No{' '}
+          {activeFilter === 'all'
+            ? ''
+            : ` ${FILTER_LABELS[activeFilter] ?? activeFilter}`}{' '}
           notifications
         </Text>
         <Text
           variant="body"
           color="text.secondary"
-          style={{ marginTop: 8, textAlign: "center" }}
+          style={{ marginTop: 8, textAlign: 'center' }}
         >
           Try selecting a different filter
         </Text>

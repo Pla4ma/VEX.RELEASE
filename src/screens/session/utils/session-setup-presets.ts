@@ -1,4 +1,4 @@
-import type { SessionPreset } from "../../../session/types";
+import type { SessionPreset } from '../../../session/types';
 
 export interface PresetWithIcon extends SessionPreset {
   icon: string;
@@ -11,19 +11,19 @@ export type SmartSuggestion = {
 };
 
 export const PRESET_CATEGORIES = [
-  { key: "quick", label: "Quick", icon: "zap" },
-  { key: "standard", label: "Standard", icon: "target" },
-  { key: "deep", label: "Deep", icon: "brain" },
-  { key: "custom", label: "Custom", icon: "sliders" },
+  { key: 'quick', label: 'Quick', icon: 'zap' },
+  { key: 'standard', label: 'Standard', icon: 'target' },
+  { key: 'deep', label: 'Deep', icon: 'brain' },
+  { key: 'custom', label: 'Custom', icon: 'sliders' },
 ] as const;
 
 export const PRESETS: PresetWithIcon[] = [
   {
-    id: "quick",
-    name: "Quick Focus",
+    id: 'quick',
+    name: 'Quick Focus',
     duration: 15 * 60,
-    category: "quick",
-    icon: "zap",
+    category: 'quick',
+    icon: 'zap',
     intervals: 1,
     breakDuration: 300,
     longBreakDuration: 900,
@@ -40,11 +40,11 @@ export const PRESETS: PresetWithIcon[] = [
     updatedAt: 0,
   },
   {
-    id: "pomodoro",
-    name: "Pomodoro",
+    id: 'pomodoro',
+    name: 'Pomodoro',
     duration: 25 * 60,
-    category: "standard",
-    icon: "timer",
+    category: 'standard',
+    icon: 'timer',
     intervals: 4,
     breakDuration: 300,
     longBreakDuration: 900,
@@ -61,11 +61,11 @@ export const PRESETS: PresetWithIcon[] = [
     updatedAt: 0,
   },
   {
-    id: "deep",
-    name: "Deep Work",
+    id: 'deep',
+    name: 'Deep Work',
     duration: 60 * 60,
-    category: "deep",
-    icon: "brain",
+    category: 'deep',
+    icon: 'brain',
     intervals: 1,
     breakDuration: 600,
     longBreakDuration: 1800,
@@ -82,11 +82,11 @@ export const PRESETS: PresetWithIcon[] = [
     updatedAt: 0,
   },
   {
-    id: "study",
-    name: "Study Session",
+    id: 'study',
+    name: 'Study Session',
     duration: 45 * 60,
-    category: "deep",
-    icon: "book",
+    category: 'deep',
+    icon: 'book',
     intervals: 2,
     breakDuration: 300,
     longBreakDuration: 900,
@@ -103,11 +103,11 @@ export const PRESETS: PresetWithIcon[] = [
     updatedAt: 0,
   },
   {
-    id: "creative",
-    name: "Creative Flow",
+    id: 'creative',
+    name: 'Creative Flow',
     duration: 90 * 60,
-    category: "deep",
-    icon: "palette",
+    category: 'deep',
+    icon: 'palette',
     intervals: 1,
     breakDuration: 0,
     longBreakDuration: 0,
@@ -124,11 +124,11 @@ export const PRESETS: PresetWithIcon[] = [
     updatedAt: 0,
   },
   {
-    id: "custom",
-    name: "Custom",
+    id: 'custom',
+    name: 'Custom',
     duration: 30 * 60,
-    category: "custom",
-    icon: "sliders",
+    category: 'custom',
+    icon: 'sliders',
     intervals: 1,
     breakDuration: 300,
     longBreakDuration: 900,

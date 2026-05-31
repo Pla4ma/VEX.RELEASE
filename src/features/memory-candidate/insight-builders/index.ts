@@ -1,8 +1,8 @@
-import type { InsightCategory, LearnedItem, WhatVEXLearnedInput } from "../schemas";
-import { buildStartSessionInsights } from "./start-session-builders";
-import { buildModeNotifInsights } from "./mode-notif-builders";
-import { buildRescueProjectInsights } from "./rescue-project-builders";
-import { buildStudyGeneralInsights } from "./study-general-builders";
+import type { InsightCategory, LearnedItem, WhatVEXLearnedInput } from '../schemas';
+import { buildStartSessionInsights } from './start-session-builders';
+import { buildModeNotifInsights } from './mode-notif-builders';
+import { buildRescueProjectInsights } from './rescue-project-builders';
+import { buildStudyGeneralInsights } from './study-general-builders';
 
 export interface InsightBuilder {
   category: InsightCategory;

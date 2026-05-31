@@ -6,15 +6,15 @@
  * and offline detection.
  */
 
-import React, { Component, type ReactNode, type ErrorInfo } from "react";
+import React, { Component, type ReactNode, type ErrorInfo } from 'react';
 
-import { OfflineEmptyState } from "./EmptyState";
-import { captureException } from "../../../config/sentry";
-import { ErrorFallback } from "./ErrorFallback";
-import type { ErrorFallbackProps } from "./ErrorFallback";
+import { OfflineEmptyState } from './EmptyState';
+import { captureException } from '../../../config/sentry';
+import { ErrorFallback } from './ErrorFallback';
+import type { ErrorFallbackProps } from './ErrorFallback';
 
-export { ErrorFallback } from "./ErrorFallback";
-export type { ErrorFallbackProps } from "./ErrorFallback";
+export { ErrorFallback } from './ErrorFallback';
+export type { ErrorFallbackProps } from './ErrorFallback';
 
 export interface ScreenErrorBoundaryProps {
   children: ReactNode;
@@ -47,17 +47,17 @@ export class ScreenErrorBoundary extends Component<
       hasError: true,
       error,
       isOffline:
-        msg.includes("network") ||
-        msg.includes("offline") ||
-        msg.includes("connection"),
+        msg.includes('network') ||
+        msg.includes('offline') ||
+        msg.includes('connection'),
     };
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
     const { featureTag } = this.props;
     captureException(error, {
-      tags: { feature: featureTag ?? "screen-error-boundary" },
-      extra: { componentStack: errorInfo.componentStack ?? "" },
+      tags: { feature: featureTag ?? 'screen-error-boundary' },
+      extra: { componentStack: errorInfo.componentStack ?? '' },
     });
     this.props.onError?.(error, errorInfo);
   }

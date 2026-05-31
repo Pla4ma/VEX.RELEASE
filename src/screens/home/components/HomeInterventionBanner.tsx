@@ -1,14 +1,14 @@
-import React from "react";
+import React from 'react';
 import {
   CoachInterventionBanner,
   type InterventionType,
-} from "../../../features/ai-coach/components/CoachInterventionBanner";
-import { trackInterventionActioned } from "../../../features/ai-coach/analytics";
-import { eventBus } from "../../../events";
-import type { ExtendedRootStackParams } from "../../../navigation/types";
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import type { ActiveIntervention } from "../../../features/ai-coach/hooks";
-import { buildInterventionSessionParams } from "../buildInterventionSessionParams";
+} from '../../../features/ai-coach/components/CoachInterventionBanner';
+import { trackInterventionActioned } from '../../../features/ai-coach/analytics';
+import { eventBus } from '../../../events';
+import type { ExtendedRootStackParams } from '../../../navigation/types';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import type { ActiveIntervention } from '../../../features/ai-coach/hooks';
+import { buildInterventionSessionParams } from '../buildInterventionSessionParams';
 
 interface HomeInterventionBannerProps {
   intervention: {
@@ -45,23 +45,23 @@ export function HomeInterventionBanner({
 
       const normalized: ActiveIntervention = {
         ...activeIntervention,
-        message: "",
+        message: '',
         priority: 0,
         metadata: activeIntervention.metadata ?? {},
         type:
-          activeIntervention.type === "BURNOUT" ||
-          activeIntervention.type === "PLATEAU" ||
-          activeIntervention.type === "STREAK_RISK" ||
-          activeIntervention.type === "BOSS_FINISH"
+          activeIntervention.type === 'BURNOUT' ||
+          activeIntervention.type === 'PLATEAU' ||
+          activeIntervention.type === 'STREAK_RISK' ||
+          activeIntervention.type === 'BOSS_FINISH'
             ? activeIntervention.type
-            : "STREAK_RISK",
+            : 'STREAK_RISK',
       };
       trackInterventionActioned(
         userId,
         normalized.type,
         activeIntervention.actionLabel,
       );
-      eventBus.publish("coach:intervention_actioned", {
+      eventBus.publish('coach:intervention_actioned', {
         userId,
         interventionId: activeIntervention.id,
         type: normalized.type,
@@ -71,8 +71,8 @@ export function HomeInterventionBanner({
       const { suggestedDurationSeconds, presetMode } =
         buildInterventionSessionParams(normalized);
 
-      navigation.navigate("SessionStack", {
-        screen: "SessionSetup",
+      navigation.navigate('SessionStack', {
+        screen: 'SessionSetup',
         params: { suggestedDurationSeconds, presetMode },
       });
     },

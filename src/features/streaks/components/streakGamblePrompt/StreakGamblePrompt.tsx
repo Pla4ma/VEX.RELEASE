@@ -1,13 +1,13 @@
-import React, { useState } from "react";
-import * as Sentry from "@sentry/react-native";
+import React, { useState } from 'react';
+import * as Sentry from '@sentry/react-native';
 import type {
   StreakGamblePromptProps,
   GambleState,
   GambleOutcome,
-} from "./types";
-import { GAMBLE_SUCCESS_GRADES, GAMBLE_BONUS_XP } from "./types";
-import { PromptView } from "./PromptView";
-import { GamblingView, WonView, LostView } from "./OutcomeViews";
+} from './types';
+import { GAMBLE_SUCCESS_GRADES, GAMBLE_BONUS_XP } from './types';
+import { PromptView } from './PromptView';
+import { GamblingView, WonView, LostView } from './OutcomeViews';
 
 const StreakGamblePrompt: React.FC<StreakGamblePromptProps> = ({
   streakDays,
@@ -19,15 +19,15 @@ const StreakGamblePrompt: React.FC<StreakGamblePromptProps> = ({
   onDismiss,
   onSessionComplete,
 }) => {
-  const [gambleState, setGambleState] = useState<GambleState>("prompt");
+  const [gambleState, setGambleState] = useState<GambleState>('prompt');
   const [outcome, setOutcome] = useState<GambleOutcome | null>(null);
 
   const handleGamble = () => {
-    setGambleState("gambling");
+    setGambleState('gambling');
     onGamble();
   };
 
-  const handleSessionComplete = (grade: "S" | "A" | "B" | "C" | "D") => {
+  const handleSessionComplete = (grade: 'S' | 'A' | 'B' | 'C' | 'D') => {
     const success = GAMBLE_SUCCESS_GRADES.includes(grade);
     const newOutcome: GambleOutcome = {
       success,
@@ -36,17 +36,17 @@ const StreakGamblePrompt: React.FC<StreakGamblePromptProps> = ({
       shieldPreserved: success,
     };
     setOutcome(newOutcome);
-    setGambleState(success ? "won" : "lost");
+    setGambleState(success ? 'won' : 'lost');
     Sentry.addBreadcrumb({
-      category: "streaks",
-      message: `Streak gamble ${success ? "WON" : "LOST"}`,
-      level: success ? "info" : "warning",
+      category: 'streaks',
+      message: `Streak gamble ${success ? 'WON' : 'LOST'}`,
+      level: success ? 'info' : 'warning',
       data: { grade, streakDays, xpEarned: newOutcome.xpEarned },
     });
     onSessionComplete?.(grade);
   };
 
-  if (gambleState === "prompt") {
+  if (gambleState === 'prompt') {
     return (
       <PromptView
         streakDays={streakDays}
@@ -59,15 +59,15 @@ const StreakGamblePrompt: React.FC<StreakGamblePromptProps> = ({
     );
   }
 
-  if (gambleState === "gambling") {
+  if (gambleState === 'gambling') {
     return <GamblingView streakDays={streakDays} />;
   }
 
-  if (gambleState === "won" && outcome) {
+  if (gambleState === 'won' && outcome) {
     return <WonView outcome={outcome} onDismiss={onDismiss} />;
   }
 
-  if (gambleState === "lost" && outcome) {
+  if (gambleState === 'lost' && outcome) {
     return (
       <LostView
         outcome={outcome}

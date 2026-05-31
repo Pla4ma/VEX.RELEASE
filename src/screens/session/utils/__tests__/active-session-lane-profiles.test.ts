@@ -1,18 +1,18 @@
 import {
   SessionMode,
   resolveActiveSessionDisplayPolicy,
-} from "./active-session-display-policy-helpers";
+} from './active-session-display-policy-helpers';
 
-describe("resolveActiveSessionDisplayPolicy — lane profiles & game-like motivation", () => {
-  it("clean lane active focus is minimal with no extra widgets", () => {
+describe('resolveActiveSessionDisplayPolicy — lane profiles & game-like motivation', () => {
+  it('clean lane active focus is minimal with no extra widgets', () => {
     const policy = resolveActiveSessionDisplayPolicy({
-      focusStage: "active",
+      focusStage: 'active',
       laneProfile: {
-        primaryLane: "minimal_normal",
+        primaryLane: 'minimal_normal',
         secondaryLane: null,
         confidence: 0.9,
-        confidenceBand: "high",
-        source: "manual_override",
+        confidenceBand: 'high',
+        source: 'manual_override',
         evidence: [],
         traits: {
           needsStructure: 0.5,
@@ -22,11 +22,11 @@ describe("resolveActiveSessionDisplayPolicy — lane profiles & game-like motiva
         },
         resolvedAt: Date.now(),
       },
-      motivationStyle: "calm",
-      primaryGoal: "focus",
+      motivationStyle: 'calm',
+      primaryGoal: 'focus',
       sessionMode: SessionMode.FLOW,
     });
-    expect(policy.heroDensity).toBe("minimal");
+    expect(policy.heroDensity).toBe('minimal');
     expect(policy.showBossHUD).toBe(false);
     expect(policy.showBossTinyIndicator).toBe(false);
     expect(policy.showCompanionLayer).toBe(false);
@@ -37,15 +37,15 @@ describe("resolveActiveSessionDisplayPolicy — lane profiles & game-like motiva
     expect(policy.showModeOverlay).toBe(false);
   });
 
-  it("clean lane paused hides contract reminder, daily progress, companion", () => {
+  it('clean lane paused hides contract reminder, daily progress, companion', () => {
     const policy = resolveActiveSessionDisplayPolicy({
-      focusStage: "paused",
+      focusStage: 'paused',
       laneProfile: {
-        primaryLane: "minimal_normal",
+        primaryLane: 'minimal_normal',
         secondaryLane: null,
         confidence: 0.9,
-        confidenceBand: "high",
-        source: "manual_override",
+        confidenceBand: 'high',
+        source: 'manual_override',
         evidence: [],
         traits: {
           needsStructure: 0.5,
@@ -55,8 +55,8 @@ describe("resolveActiveSessionDisplayPolicy — lane profiles & game-like motiva
         },
         resolvedAt: Date.now(),
       },
-      motivationStyle: "calm",
-      primaryGoal: "focus",
+      motivationStyle: 'calm',
+      primaryGoal: 'focus',
       sessionMode: SessionMode.FLOW,
     });
     expect(policy.showContractReminder).toBe(false);
@@ -65,15 +65,15 @@ describe("resolveActiveSessionDisplayPolicy — lane profiles & game-like motiva
     expect(policy.showCoachBanner).toBe(true);
   });
 
-  it("project lane active focus is minimal, no game indicators", () => {
+  it('project lane active focus is minimal, no game indicators', () => {
     const policy = resolveActiveSessionDisplayPolicy({
-      focusStage: "active",
+      focusStage: 'active',
       laneProfile: {
-        primaryLane: "deep_creative",
+        primaryLane: 'deep_creative',
         secondaryLane: null,
         confidence: 0.85,
-        confidenceBand: "high",
-        source: "manual_override",
+        confidenceBand: 'high',
+        source: 'manual_override',
         evidence: [],
         traits: {
           needsStructure: 0.4,
@@ -83,11 +83,11 @@ describe("resolveActiveSessionDisplayPolicy — lane profiles & game-like motiva
         },
         resolvedAt: Date.now(),
       },
-      motivationStyle: "calm",
-      primaryGoal: "creative",
+      motivationStyle: 'calm',
+      primaryGoal: 'creative',
       sessionMode: SessionMode.CREATIVE,
     });
-    expect(policy.heroDensity).toBe("minimal");
+    expect(policy.heroDensity).toBe('minimal');
     expect(policy.showBossHUD).toBe(false);
     expect(policy.showBossTinyIndicator).toBe(false);
     expect(policy.showMomentumScore).toBe(false);
@@ -95,15 +95,15 @@ describe("resolveActiveSessionDisplayPolicy — lane profiles & game-like motiva
     expect(policy.showPurityScore).toBe(false);
   });
 
-  it("lane profile overrides heuristic lane detection", () => {
+  it('lane profile overrides heuristic lane detection', () => {
     const policy = resolveActiveSessionDisplayPolicy({
-      focusStage: "active",
+      focusStage: 'active',
       laneProfile: {
-        primaryLane: "student",
+        primaryLane: 'student',
         secondaryLane: null,
         confidence: 0.9,
-        confidenceBand: "high",
-        source: "onboarding",
+        confidenceBand: 'high',
+        source: 'onboarding',
         evidence: [],
         traits: {
           needsStructure: 0.9,
@@ -113,8 +113,8 @@ describe("resolveActiveSessionDisplayPolicy — lane profiles & game-like motiva
         },
         resolvedAt: Date.now(),
       },
-      motivationStyle: "game_like",
-      primaryGoal: "work",
+      motivationStyle: 'game_like',
+      primaryGoal: 'work',
       sessionMode: SessionMode.CHALLENGE,
     });
     expect(policy.showStudyTarget).toBe(true);
@@ -122,12 +122,12 @@ describe("resolveActiveSessionDisplayPolicy — lane profiles & game-like motiva
     expect(policy.showBossHUD).toBe(false);
   });
 
-  it("game-like lane detected via motivation shows tiny boss indicator", () => {
+  it('game-like lane detected via motivation shows tiny boss indicator', () => {
     const policy = resolveActiveSessionDisplayPolicy({
-      bossIntensity: "visible",
-      focusStage: "active",
-      motivationStyle: "intense",
-      primaryGoal: "work",
+      bossIntensity: 'visible',
+      focusStage: 'active',
+      motivationStyle: 'intense',
+      primaryGoal: 'work',
       sessionMode: SessionMode.CHALLENGE,
     });
     expect(policy.showBossTinyIndicator).toBe(true);

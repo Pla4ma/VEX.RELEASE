@@ -1,35 +1,35 @@
-import * as Sentry from "@sentry/react-native";
-import type { AddXpInput } from "./schemas";
+import * as Sentry from '@sentry/react-native';
+import type { AddXpInput } from './schemas';
 import {
   fetchProgressionEnhanced,
   recordLevelUpEnhanced,
   recordXpEntryEnhanced,
   updateProgressionEnhanced,
-} from "./repository/enhanced";
-import { createProgressionError } from "./service-errors";
-import { handleFetchFailure } from "./service-failures";
+} from './repository/enhanced';
+import { createProgressionError } from './service-errors';
+import { handleFetchFailure } from './service-failures';
 import {
   calculateLevelFromTotalXp,
   calculateLevelThreshold,
   calculateTotalXpToLevel,
-} from "./service-xp-calculations";
-import { getLevelUpRewards } from "./service-level-rewards";
-import type { AddXpOperationResult } from "./types";
-import { tryAtomicAddXp } from "./operation-atomic";
-import { publishProgressionEvents } from "./operation-events";
+} from './service-xp-calculations';
+import { getLevelUpRewards } from './service-level-rewards';
+import type { AddXpOperationResult } from './types';
+import { tryAtomicAddXp } from './operation-atomic';
+import { publishProgressionEvents } from './operation-events';
 
 type RetryOnConflict = () => Promise<AddXpOperationResult>;
 
 export async function runAddXpOperation(
   userId: string,
   input: AddXpInput,
-  breakdown: AddXpOperationResult["breakdown"],
+  breakdown: AddXpOperationResult['breakdown'],
   startTime: number,
   skipEvents: boolean | undefined,
   retryOnConflict: RetryOnConflict,
 ): Promise<AddXpOperationResult> {
   const idempotencyKey = input.metadata
-    ? `${userId}:addXp:${input.sessionId || "direct"}`
+    ? `${userId}:addXp:${input.sessionId || 'direct'}`
     : undefined;
 
   const atomicResult = await tryAtomicAddXp(userId, breakdown.total, input, idempotencyKey);
@@ -44,8 +44,8 @@ export async function runAddXpOperation(
     );
 
     Sentry.addBreadcrumb({
-      category: "progression",
-      message: "XP added (atomic RPC)",
+      category: 'progression',
+      message: 'XP added (atomic RPC)',
       data: { userId, amount: breakdown.total, levelUp: atomicResult.level_up, duplicate: atomicResult.duplicate },
     });
 
@@ -85,7 +85,7 @@ export async function runAddXpOperation(
   });
 
   if (updateResult.error) {
-    if (updateResult.error.code === "CONFLICT") {
+    if (updateResult.error.code === 'CONFLICT') {
       return retryOnConflict();
     }
     return {
@@ -98,7 +98,7 @@ export async function runAddXpOperation(
       breakdown,
       rewards: [],
       error: createProgressionError(
-        "CONFLICT",
+        'CONFLICT',
         updateResult.error.message,
         updateResult.error.isRetryable,
       ),
@@ -144,8 +144,8 @@ export async function runAddXpOperation(
   );
 
   Sentry.addBreadcrumb({
-    category: "progression",
-    message: "XP added successfully",
+    category: 'progression',
+    message: 'XP added successfully',
     data: {
       userId,
       amount: breakdown.total,

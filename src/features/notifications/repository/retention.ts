@@ -7,24 +7,24 @@ import {
   type ReminderPlanInput,
   type ReminderPlanRow,
   type RetentionUserProfile,
-} from "../schemas";
-import { v4 } from "../../../utils/uuid";
-import { RepositoryError, supabase } from "./shared";
+} from '../schemas';
+import { v4 } from '../../../utils/uuid';
+import { RepositoryError, supabase } from './shared';
 
 export async function fetchRetentionUserProfile(
   userId: string,
 ): Promise<RetentionUserProfile> {
   const { data, error } = await supabase
-    .from("users")
-    .select("id, first_name")
-    .eq("id", userId)
+    .from('users')
+    .select('id, first_name')
+    .eq('id', userId)
     .maybeSingle();
   if (error) {
-    throw new RepositoryError("fetchRetentionUserProfile", error);
+    throw new RepositoryError('fetchRetentionUserProfile', error);
   }
   return RetentionUserProfileSchema.parse({
     id: userId,
-    firstName: typeof data?.first_name === "string" ? data.first_name : null,
+    firstName: typeof data?.first_name === 'string' ? data.first_name : null,
   });
 }
 
@@ -34,25 +34,25 @@ export async function upsertReminderPlan(
   const reminder = ReminderPlanInputSchema.parse(input);
   const now = Date.now();
   const { data, error } = await supabase
-    .from("reminder_plans")
+    .from('reminder_plans')
     .upsert(
       {
         id: v4(),
         user_id: reminder.userId,
         reminder_type: reminder.type,
         scheduled_for: reminder.scheduledFor,
-        delivery_method: "BOTH",
-        status: "SCHEDULED",
+        delivery_method: 'BOTH',
+        status: 'SCHEDULED',
         context: { message: reminder.message, metadata: reminder.metadata },
         created_at: now,
         updated_at: now,
       },
-      { onConflict: "user_id,reminder_type" },
+      { onConflict: 'user_id,reminder_type' },
     )
-    .select("*")
+    .select('*')
     .single();
   if (error) {
-    throw new RepositoryError("upsertReminderPlan", error);
+    throw new RepositoryError('upsertReminderPlan', error);
   }
   return ReminderPlanRowSchema.parse(data);
 }
@@ -62,15 +62,15 @@ export async function hasScheduledReminderWithin(
   before: number,
 ): Promise<boolean> {
   const { data, error } = await supabase
-    .from("reminder_plans")
-    .select("id")
-    .eq("user_id", userId)
-    .eq("status", "SCHEDULED")
-    .gte("scheduled_for", Date.now())
-    .lte("scheduled_for", before)
+    .from('reminder_plans')
+    .select('id')
+    .eq('user_id', userId)
+    .eq('status', 'SCHEDULED')
+    .gte('scheduled_for', Date.now())
+    .lte('scheduled_for', before)
     .limit(1);
   if (error) {
-    throw new RepositoryError("hasScheduledReminderWithin", error);
+    throw new RepositoryError('hasScheduledReminderWithin', error);
   }
   return (data ?? []).length > 0;
 }
@@ -81,23 +81,23 @@ export async function fetchChallengeExpiryCandidates(
   const now = new Date();
   const nextDay = new Date(now.getTime() + 24 * 60 * 60 * 1000);
   const { data, error } = await supabase
-    .from("user_challenges")
+    .from('user_challenges')
     .select(
-      "user_id, challenge_id, current_value, expires_at, challenges(title, target_value)",
+      'user_id, challenge_id, current_value, expires_at, challenges(title, target_value)',
     )
-    .eq("user_id", userId)
-    .eq("status", "ACTIVE")
-    .gt("current_value", 0)
-    .gt("expires_at", now.toISOString())
-    .lt("expires_at", nextDay.toISOString());
+    .eq('user_id', userId)
+    .eq('status', 'ACTIVE')
+    .gt('current_value', 0)
+    .gt('expires_at', now.toISOString())
+    .lt('expires_at', nextDay.toISOString());
   if (error) {
-    throw new RepositoryError("fetchChallengeExpiryCandidates", error);
+    throw new RepositoryError('fetchChallengeExpiryCandidates', error);
   }
   return (data ?? []).map((row) => {
     const record = row as Record<string, unknown>;
     const challenge = record.challenges;
     const challengeRecord =
-      typeof challenge === "object" && challenge !== null
+      typeof challenge === 'object' && challenge !== null
         ? (challenge as Record<string, unknown>)
         : {};
     return ChallengeExpiryCandidateSchema.parse({
@@ -117,13 +117,13 @@ export async function fetchReEngagementCandidates(
   Array<{ userId: string; lastSessionAt: number; previousStreak: number }>
 > {
   const { data, error } = await supabase
-    .from("streaks")
-    .select("user_id, current_days, longest_days, last_qualifying_session_at")
-    .not("last_qualifying_session_at", "is", null)
-    .lt("last_qualifying_session_at", cutoff)
-    .gt("longest_days", 0);
+    .from('streaks')
+    .select('user_id, current_days, longest_days, last_qualifying_session_at')
+    .not('last_qualifying_session_at', 'is', null)
+    .lt('last_qualifying_session_at', cutoff)
+    .gt('longest_days', 0);
   if (error) {
-    throw new RepositoryError("fetchReEngagementCandidates", error);
+    throw new RepositoryError('fetchReEngagementCandidates', error);
   }
   return (data ?? [])
     .map((row) => {

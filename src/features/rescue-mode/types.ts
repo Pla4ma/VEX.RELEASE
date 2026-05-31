@@ -1,4 +1,4 @@
-import type { z } from "zod";
+import type { z } from 'zod';
 import {
   RescueCompletionMemorySchema,
   RescueCompletionRecordSchema,
@@ -9,7 +9,7 @@ import {
   RescuePlanSchema,
   RescueReasonSchema,
   RescueTriggerSourceSchema,
-} from "./schemas";
+} from './schemas';
 
 export type RescueReason = z.infer<typeof RescueReasonSchema>;
 export type RescueTriggerSource = z.infer<typeof RescueTriggerSourceSchema>;

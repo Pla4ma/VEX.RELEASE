@@ -2,20 +2,20 @@ import {
   buildProgress,
   buildSecondaryActions,
   buildStakes,
-} from "./priority-builders";
-import { buildHomeContextSnapshot } from "./priority-context";
+} from './priority-builders';
+import { buildHomeContextSnapshot } from './priority-context';
 import {
   checkDefaultSession,
   getPriorityCandidates,
-} from "./priority-checkers";
+} from './priority-checkers';
 import {
   HomePrioritySchema,
   type HomeContextSnapshot,
   type HomePrimaryPriority,
   type HomePriority,
   type ProductContext,
-} from "./priority-schemas";
-import type { FeatureAccessMap } from "../liveops-config";
+} from './priority-schemas';
+import type { FeatureAccessMap } from '../liveops-config';
 
 export interface SelectHomePriorityInput {
   userId: string;
@@ -47,7 +47,7 @@ export function pickHomePrimaryPriority(
     productContext,
   )[0];
   if (!primary) {
-    throw new Error("Home priority selection produced no primary action");
+    throw new Error('Home priority selection produced no primary action');
   }
   return primary;
 }

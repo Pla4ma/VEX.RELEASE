@@ -1,19 +1,19 @@
-import type { UseQueryResult } from "@tanstack/react-query";
+import type { UseQueryResult } from '@tanstack/react-query';
 import type {
   HomeController,
   SessionHistoryResult,
-} from "./home-controller-types";
-import type { HomeFeatureRuntime } from "./home-feature-runtime";
-import type { HomeViewModel } from "./home-view-model";
-import type { HomeReturnReason } from "./useHomeReturnReason";
-import type { FeatureAccessResult } from "../../../features/liveops-config";
-import type { SessionRecommendation } from "../../../features/ai-coach";
+} from './home-controller-types';
+import type { HomeFeatureRuntime } from './home-feature-runtime';
+import type { HomeViewModel } from './home-view-model';
+import type { HomeReturnReason } from './useHomeReturnReason';
+import type { FeatureAccessResult } from '../../../features/liveops-config';
+import type { SessionRecommendation } from '../../../features/ai-coach';
 import type {
   CompletionSyncState,
   HomeHighlight,
-} from "../../../store/session-state";
-import type { HomeSpineModel } from "../../../features/home-spine/schemas";
-import { createStubQuery, stubLearningExecutionLayer } from "./home-controller-stubs";
+} from '../../../store/session-state';
+import type { HomeSpineModel } from '../../../features/home-spine/schemas';
+import { createStubQuery, stubLearningExecutionLayer } from './home-controller-stubs';
 
 interface ActivatingControllerParams {
   userId: string;
@@ -28,7 +28,7 @@ interface ActivatingControllerParams {
   currentXp: number;
   todayFocusMinutes: number;
   progressPercent: number;
-  latestSession: SessionHistoryResult["history"][number] | null;
+  latestSession: SessionHistoryResult['history'][number] | null;
   primaryRecommendation: SessionRecommendation | null;
   homeSpine: HomeSpineModel;
   displayedReturnReason: HomeReturnReason | null;
@@ -41,8 +41,8 @@ interface ActivatingControllerParams {
   openSetup: (params?: Record<string, unknown>) => void;
   openProgress: () => void;
   openSocial: () => void;
-  createRecommendation: HomeController["createRecommendation"];
-  updateRecommendationStatus: HomeController["updateRecommendationStatus"];
+  createRecommendation: HomeController['createRecommendation'];
+  updateRecommendationStatus: HomeController['updateRecommendationStatus'];
 }
 
 export function buildActivatingController(

@@ -1,12 +1,12 @@
 export const DEFAULT_ANIMATION_DURATION = 300;
 
 export const DEFAULT_HAPTIC_TYPES = [
-  "light",
-  "medium",
-  "heavy",
-  "success",
-  "warning",
-  "error",
+  'light',
+  'medium',
+  'heavy',
+  'success',
+  'warning',
+  'error',
 ] as const;
 
 export type HapticType = (typeof DEFAULT_HAPTIC_TYPES)[number];

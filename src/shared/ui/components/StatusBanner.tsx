@@ -1,16 +1,16 @@
-import React, { useEffect } from "react";
-import { View, Pressable, ActivityIndicator } from "react-native";
-import Animated, { FadeInUp, FadeOutUp } from "react-native-reanimated";
-import { Text } from "../../../components/primitives/Text";
-import { Button } from "../../../components/primitives/Button";
-import { useTheme } from "../../../theme";
-import { triggerHaptic } from "../../../utils/haptics";
+import React, { useEffect } from 'react';
+import { View, Pressable, ActivityIndicator } from 'react-native';
+import Animated, { FadeInUp, FadeOutUp } from 'react-native-reanimated';
+import { Text } from '../../../components/primitives/Text';
+import { Button } from '../../../components/primitives/Button';
+import { useTheme } from '../../../theme';
+import { triggerHaptic } from '../../../utils/haptics';
 import {
   type AsyncStatus,
   type StatusFeedbackProps,
   STATUS_CONFIG,
   getStatusColor,
-} from "./StatusFeedback.types";
+} from './StatusFeedback.types';
 
 export const StatusBanner: React.FC<StatusFeedbackProps> = ({
   status,
@@ -28,7 +28,7 @@ export const StatusBanner: React.FC<StatusFeedbackProps> = ({
   const color = getStatusColor(status, theme);
 
   useEffect(() => {
-    if (status === "success" && autoDismissSuccess) {
+    if (status === 'success' && autoDismissSuccess) {
       const timer = setTimeout(() => {
         onDismiss?.();
       }, autoDismissDelay);
@@ -38,20 +38,20 @@ export const StatusBanner: React.FC<StatusFeedbackProps> = ({
   }, [status, autoDismissSuccess, autoDismissDelay, onDismiss]);
 
   useEffect(() => {
-    if (status === "success") {
-      void triggerHaptic("success");
-    } else if (status === "error") {
-      void triggerHaptic("error");
+    if (status === 'success') {
+      void triggerHaptic('success');
+    } else if (status === 'error') {
+      void triggerHaptic('error');
     }
   }, [status]);
 
-  if (status === "idle") {
+  if (status === 'idle') {
     return null;
   }
 
   const displayMessage = message || config.title;
-  const isError = status === "error";
-  const isOffline = status === "offline";
+  const isError = status === 'error';
+  const isOffline = status === 'offline';
 
   return (
     <Animated.View
@@ -76,8 +76,8 @@ export const StatusBanner: React.FC<StatusFeedbackProps> = ({
     >
       <View
         style={{
-          flexDirection: "row",
-          alignItems: "center",
+          flexDirection: 'row',
+          alignItems: 'center',
           gap: theme.spacing[3],
         }}
       >
@@ -87,18 +87,18 @@ export const StatusBanner: React.FC<StatusFeedbackProps> = ({
             height: 36,
             borderRadius: 18,
             backgroundColor: isError ? theme.colors.error[50] : `${color}20`,
-            alignItems: "center",
-            justifyContent: "center",
+            alignItems: 'center',
+            justifyContent: 'center',
           }}
         >
-          {status === "loading" || status === "retrying" ? (
+          {status === 'loading' || status === 'retrying' ? (
             <ActivityIndicator size="small" color={color} />
           ) : (
             <Text
               style={{
                 color: isError ? theme.colors.error.DEFAULT : color,
                 fontSize: 16,
-                fontWeight: "700",
+                fontWeight: '700',
               }}
             >
               {config.icon}
@@ -111,7 +111,7 @@ export const StatusBanner: React.FC<StatusFeedbackProps> = ({
             color={
               isError ? theme.colors.error.DEFAULT : theme.colors.text.primary
             }
-            style={{ fontWeight: "700" }}
+            style={{ fontWeight: '700' }}
           >
             {displayMessage}
           </Text>
@@ -136,7 +136,7 @@ export const StatusBanner: React.FC<StatusFeedbackProps> = ({
       {(onRetry || onAction) && (
         <View
           style={{
-            flexDirection: "row",
+            flexDirection: 'row',
             gap: theme.spacing[2],
             marginTop: theme.spacing[2],
           }}
@@ -161,7 +161,7 @@ export const StatusBanner: React.FC<StatusFeedbackProps> = ({
               accessibilityRole="button"
               accessibilityHint="Double tap to activate"
             >
-              {actionLabel || "Continue"}
+              {actionLabel || 'Continue'}
             </Button>
           )}
         </View>

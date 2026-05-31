@@ -6,10 +6,10 @@
  * @phase 9 - Deepening: AI Coach validation
  */
 
-import { z } from "zod";
-import { createDebugger } from "../../../utils/debug";
+import { z } from 'zod';
+import { createDebugger } from '../../../utils/debug';
 
-const debug = createDebugger("ai-coach:validation");
+const debug = createDebugger('ai-coach:validation');
 
 // ============================================================================
 // Schemas
@@ -18,9 +18,9 @@ const debug = createDebugger("ai-coach:validation");
 export const CoachMessageSchema = z.object({
   id: z.string().uuid(),
   userId: z.string(),
-  type: z.enum(["TEXT", "TIP", "CHALLENGE", "ENCOURAGEMENT", "CHECK_IN"]),
+  type: z.enum(['TEXT', 'TIP', 'CHALLENGE', 'ENCOURAGEMENT', 'CHECK_IN']),
   content: z.string().min(1).max(1000),
-  tone: z.enum(["FRIENDLY", "PROFESSIONAL", "MOTIVATIONAL", "GENTLE"]),
+  tone: z.enum(['FRIENDLY', 'PROFESSIONAL', 'MOTIVATIONAL', 'GENTLE']),
   sentAt: z.number(),
   context: z
     .object({
@@ -50,7 +50,7 @@ export function validateCoachMessage(
   // Schema validation
   const result = CoachMessageSchema.safeParse(message);
   if (!result.success) {
-    errors.push("Invalid message structure");
+    errors.push('Invalid message structure');
     return { valid: false, errors };
   }
 
@@ -58,15 +58,15 @@ export function validateCoachMessage(
 
   // Check rate limiting (max 10 messages per 24h)
   if (userContext.messageCount24h >= 10) {
-    errors.push("Daily message limit reached");
+    errors.push('Daily message limit reached');
   }
 
   // Check time since last message (min 1 hour between non-urgent messages)
-  if (userContext.lastMessageAt && data.type !== "CHECK_IN") {
+  if (userContext.lastMessageAt && data.type !== 'CHECK_IN') {
     const hoursSince =
       (Date.now() - userContext.lastMessageAt) / (60 * 60 * 1000);
     if (hoursSince < 1) {
-      errors.push("Too soon for another message");
+      errors.push('Too soon for another message');
     }
   }
 
@@ -75,16 +75,16 @@ export function validateCoachMessage(
     data.content.toLowerCase().includes(keyword.toLowerCase()),
   );
   if (hasBlocked) {
-    errors.push("Message contains blocked content");
+    errors.push('Message contains blocked content');
   }
 
   // Validate content appropriateness
   if (data.content.length < 10) {
-    errors.push("Message too short");
+    errors.push('Message too short');
   }
 
-  if (data.content.length > 500 && data.type === "TIP") {
-    errors.push("Tips should be concise (max 500 chars)");
+  if (data.content.length > 500 && data.type === 'TIP') {
+    errors.push('Tips should be concise (max 500 chars)');
   }
 
   return {
@@ -102,13 +102,13 @@ export function validatePersonalization(preferences: {
   const errors: string[] = [];
 
   // Validate tone
-  const validTones = ["FRIENDLY", "PROFESSIONAL", "MOTIVATIONAL", "GENTLE"];
+  const validTones = ['FRIENDLY', 'PROFESSIONAL', 'MOTIVATIONAL', 'GENTLE'];
   if (!validTones.includes(preferences.tone.toUpperCase())) {
     errors.push(`Invalid tone: ${preferences.tone}`);
   }
 
   // Validate frequency
-  const validFrequencies = ["LOW", "MEDIUM", "HIGH"];
+  const validFrequencies = ['LOW', 'MEDIUM', 'HIGH'];
   const normalizedFreq = preferences.frequency.toUpperCase();
   if (!validFrequencies.includes(normalizedFreq)) {
     errors.push(`Invalid frequency: ${preferences.frequency}`);
@@ -116,7 +116,7 @@ export function validatePersonalization(preferences: {
 
   // Validate focus areas (max 3)
   if (preferences.focusAreas.length > 3) {
-    errors.push("Maximum 3 focus areas allowed");
+    errors.push('Maximum 3 focus areas allowed');
   }
 
   return {
@@ -141,10 +141,10 @@ export function shouldSendCheckIn(userState: {
 }): {
   shouldSend: boolean;
   reason: string;
-  urgency: "LOW" | "MEDIUM" | "HIGH";
+  urgency: 'LOW' | 'MEDIUM' | 'HIGH';
 } {
   if (userState.optOut) {
-    return { shouldSend: false, reason: "User opted out", urgency: "LOW" };
+    return { shouldSend: false, reason: 'User opted out', urgency: 'LOW' };
   }
 
   // If no sessions in 48 hours, send check-in
@@ -155,16 +155,16 @@ export function shouldSendCheckIn(userState: {
     if (hoursSince > 48 && userState.streak > 0) {
       return {
         shouldSend: true,
-        reason: "Streak at risk",
-        urgency: "HIGH",
+        reason: 'Streak at risk',
+        urgency: 'HIGH',
       };
     }
 
     if (hoursSince > 72) {
       return {
         shouldSend: true,
-        reason: "Re-engagement",
-        urgency: "MEDIUM",
+        reason: 'Re-engagement',
+        urgency: 'MEDIUM',
       };
     }
   }
@@ -173,12 +173,12 @@ export function shouldSendCheckIn(userState: {
   if (!userState.lastMessageAt && !userState.lastSessionAt) {
     return {
       shouldSend: true,
-      reason: "Welcome message",
-      urgency: "LOW",
+      reason: 'Welcome message',
+      urgency: 'LOW',
     };
   }
 
-  return { shouldSend: false, reason: "Not needed", urgency: "LOW" };
+  return { shouldSend: false, reason: 'Not needed', urgency: 'LOW' };
 }
 
 // ============================================================================

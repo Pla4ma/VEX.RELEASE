@@ -12,4 +12,4 @@ export type {
   CoachVisibilityPolicy,
   CoachVisibilitySurface,
   CompletionPresenceSummary,
-} from "./schemas";
+} from './schemas';

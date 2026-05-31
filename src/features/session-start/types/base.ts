@@ -1,5 +1,5 @@
 export interface DeviceInfo {
-  type: "mobile" | "tablet" | "desktop" | "web";
+  type: 'mobile' | 'tablet' | 'desktop' | 'web';
   os: string;
   version: string;
   appVersion?: string;
@@ -23,9 +23,9 @@ export interface BaseSessionStartEvent {
 }
 
 export interface SessionInitiatedEvent extends BaseSessionStartEvent {
-  type: "session_initiated";
+  type: 'session_initiated';
   data: {
-    initiationType: "manual" | "auto" | "scheduled" | "triggered";
+    initiationType: 'manual' | 'auto' | 'scheduled' | 'triggered';
     initiatedAt: Date;
     trigger: {
       source: string;
@@ -48,9 +48,9 @@ export interface SessionInitiatedEvent extends BaseSessionStartEvent {
 }
 
 export interface SessionPreparationStartedEvent extends BaseSessionStartEvent {
-  type: "session_preparation_started";
+  type: 'session_preparation_started';
   data: {
-    preparationType: "standard" | "quick" | "comprehensive" | "custom";
+    preparationType: 'standard' | 'quick' | 'comprehensive' | 'custom';
     preparationSteps: Array<{
       step: string;
       required: boolean;
@@ -73,7 +73,7 @@ export interface SessionPreparationStartedEvent extends BaseSessionStartEvent {
 }
 
 export interface SessionPreparationCompletedEvent extends BaseSessionStartEvent {
-  type: "session_preparation_completed";
+  type: 'session_preparation_completed';
   data: {
     completedAt: Date;
     duration: number;
@@ -94,14 +94,14 @@ export interface SessionPreparationCompletedEvent extends BaseSessionStartEvent 
 }
 
 export interface SessionConfigurationSetEvent extends BaseSessionStartEvent {
-  type: "session_configuration_set";
+  type: 'session_configuration_set';
   data: {
     configurationType:
-      | "difficulty"
-      | "duration"
-      | "objectives"
-      | "environment"
-      | "accessibility";
+      | 'difficulty'
+      | 'duration'
+      | 'objectives'
+      | 'environment'
+      | 'accessibility';
     configuration: {
       settings: Record<string, unknown>;
       constraints: Record<string, unknown>;

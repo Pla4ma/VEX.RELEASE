@@ -1,9 +1,9 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const WeakTopicSchema = z
   .object({
     topic: z.string().min(1),
-    confidence: z.enum(["weak", "medium", "strong"]),
+    confidence: z.enum(['weak', 'medium', 'strong']),
     reviewCount: z.number().int().min(0),
     lastReviewedAt: z.number().int().min(0).nullable(),
     suggestedAction: z.string().min(1),

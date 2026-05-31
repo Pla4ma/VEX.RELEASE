@@ -5,43 +5,43 @@
  * All checks go through getFeatureAvailability — never isUnlocked/isVisible alone.
  */
 
-import { useMemo } from "react";
-import { useFeatureAccess } from "../liveops-config/hooks/useFeatureAccess";
-import { getFeatureAvailability } from "../liveops-config/feature-availability";
-import type { FeatureAvailability } from "../liveops-config/feature-availability";
-import type { FeatureKey } from "../liveops-config/feature-access";
+import { useMemo } from 'react';
+import { useFeatureAccess } from '../liveops-config/hooks/useFeatureAccess';
+import { getFeatureAvailability } from '../liveops-config/feature-availability';
+import type { FeatureAvailability } from '../liveops-config/feature-availability';
+import type { FeatureKey } from '../liveops-config/feature-access';
 
 export type FeatureGateMode =
-  | "entryPoint"
-  | "navigation"
-  | "query"
-  | "route"
-  | "event"
-  | "notification";
+  | 'entryPoint'
+  | 'navigation'
+  | 'query'
+  | 'route'
+  | 'event'
+  | 'notification';
 
 function resolveAvailable(
   availability: FeatureAvailability,
   mode?: FeatureGateMode,
 ): boolean {
-  if (mode === "entryPoint") {
+  if (mode === 'entryPoint') {
     return availability.canRenderEntryPoint;
   }
-  if (mode === "navigation") {
+  if (mode === 'navigation') {
     return availability.canNavigate && availability.canRegisterRoute;
   }
-  if (mode === "query") {
+  if (mode === 'query') {
     return availability.canQuery && availability.canUseBackend;
   }
-  if (mode === "route") {
+  if (mode === 'route') {
     return availability.canRegisterRoute;
   }
-  if (mode === "event") {
+  if (mode === 'event') {
     return availability.canSubscribeToEvents;
   }
-  if (mode === "notification") {
+  if (mode === 'notification') {
     return availability.canShowNotification;
   }
-  return availability.state === "unlocked" || availability.state === "degraded";
+  return availability.state === 'unlocked' || availability.state === 'degraded';
 }
 
 export interface UseFeatureGateResult {
@@ -81,7 +81,7 @@ export function useFeatureGate(
     availability,
     isUnlocked: featureAccess.isUnlocked,
     isVisible: featureAccess.isVisible,
-    isDegraded: availability.state === "degraded",
+    isDegraded: availability.state === 'degraded',
     lockedDescription: featureAccess.lockedDescription,
     unlockReason: featureAccess.unlockReason,
     recommendedUnlockMoment: featureAccess.recommendedUnlockMoment,

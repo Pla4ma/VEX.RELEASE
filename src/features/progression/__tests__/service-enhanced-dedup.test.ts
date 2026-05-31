@@ -3,8 +3,8 @@ import {
   generateIdempotencyKey,
   isDuplicateOperation,
   markOperationProcessed,
-} from "../service-dedup";
-import type { AddXpOperationResult } from "../types";
+} from '../service-dedup';
+import type { AddXpOperationResult } from '../types';
 
 const RESULT: AddXpOperationResult = {
   breakdown: {
@@ -27,14 +27,14 @@ const RESULT: AddXpOperationResult = {
   xpAdded: 10,
 };
 
-describe("progression idempotency", () => {
-  it("uses session context for stable idempotency keys", () => {
-    const key = generateIdempotencyKey("user-1", "addXp", "session-1");
+describe('progression idempotency', () => {
+  it('uses session context for stable idempotency keys', () => {
+    const key = generateIdempotencyKey('user-1', 'addXp', 'session-1');
 
-    expect(key).toBe("prog:user-1:addXp:session-1");
+    expect(key).toBe('prog:user-1:addXp:session-1');
   });
 
-  it("does not burn a key before a write succeeds", () => {
+  it('does not burn a key before a write succeeds', () => {
     const key = `test-key-${Date.now()}`;
 
     expect(isDuplicateOperation(key)).toBe(false);
@@ -42,7 +42,7 @@ describe("progression idempotency", () => {
     expect(isDuplicateOperation(key)).toBe(true);
   });
 
-  it("deduplicates concurrent operations without running work twice", async () => {
+  it('deduplicates concurrent operations without running work twice', async () => {
     const key = `pending-key-${Date.now()}`;
     const operation = jest.fn(async () => RESULT);
 

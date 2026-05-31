@@ -2,10 +2,10 @@ import {
   accessFor,
   HIDDEN_FEATURE_KEYS,
   getFeatureAvailability,
-} from "./product-journey-debloat-personalization-helpers";
+} from './product-journey-debloat-personalization-helpers';
 
-describe("Group 5 — Progressive Unlock Runtime", () => {
-  it("5a: locked features do not query", () => {
+describe('Group 5 — Progressive Unlock Runtime', () => {
+  it('5a: locked features do not query', () => {
     HIDDEN_FEATURE_KEYS.forEach((key) => {
       const a = getFeatureAvailability(accessFor(0)[key]);
       expect(a.canQuery).toBe(false);
@@ -17,21 +17,21 @@ describe("Group 5 — Progressive Unlock Runtime", () => {
     });
   });
 
-  it("5b: locked features do not subscribe", () => {
+  it('5b: locked features do not subscribe', () => {
     HIDDEN_FEATURE_KEYS.forEach((key) => {
       const a = getFeatureAvailability(accessFor(0)[key]);
       expect(a.canSubscribeToEvents).toBe(false);
     });
   });
 
-  it("5c: locked features do not notify", () => {
+  it('5c: locked features do not notify', () => {
     HIDDEN_FEATURE_KEYS.forEach((key) => {
       const a = getFeatureAvailability(accessFor(0)[key]);
       expect(a.canShowNotification).toBe(false);
     });
   });
 
-  it("5d: hidden features do not route (navigation disabled)", () => {
+  it('5d: hidden features do not route (navigation disabled)', () => {
     HIDDEN_FEATURE_KEYS.forEach((key) => {
       const a = getFeatureAvailability(accessFor(5)[key]);
       expect(a.canNavigate).toBe(false);
@@ -39,7 +39,7 @@ describe("Group 5 — Progressive Unlock Runtime", () => {
     });
   });
 
-  it("5e: hidden features do not render entry points", () => {
+  it('5e: hidden features do not render entry points', () => {
     HIDDEN_FEATURE_KEYS.forEach((key) => {
       const a = getFeatureAvailability(accessFor(0)[key]);
       expect(a.canRenderEntryPoint).toBe(false);

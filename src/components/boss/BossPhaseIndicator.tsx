@@ -1,9 +1,9 @@
-import React, { useMemo } from "react";
-import { View, Text } from "react-native";
-import Animated from "react-native-reanimated";
-import { launchColors } from "@theme/tokens/launch-colors";
-import { styles } from "./BossPhaseIndicator.styles";
-import { PhaseTips } from "./PhaseTips";
+import React, { useMemo } from 'react';
+import { View, Text } from 'react-native';
+import Animated from 'react-native-reanimated';
+import { launchColors } from '@theme/tokens/launch-colors';
+import { styles } from './BossPhaseIndicator.styles';
+import { PhaseTips } from './PhaseTips';
 
 /** BossPhaseIndicator — archived. Boss phases moved to archive/features/boss/ */
 type BossPhase = string;
@@ -29,36 +29,36 @@ export const BossPhaseIndicator: React.FC<BossPhaseIndicatorProps> = ({
 }) => {
   const phaseInfo = useMemo(() => {
     switch (phase) {
-      case "PHASE_1":
+      case 'PHASE_1':
         return {
-          name: "Phase 1: Standard",
+          name: 'Phase 1: Standard',
           color: launchColors.hex_38a169,
-          description: "Normal combat conditions",
+          description: 'Normal combat conditions',
         };
-      case "PHASE_2":
+      case 'PHASE_2':
         return {
-          name: "Phase 2: Enrage",
+          name: 'Phase 2: Enrage',
           color: launchColors.hex_d69e2e,
-          description: "Increased pressure - pauses deal damage!",
+          description: 'Increased pressure - pauses deal damage!',
         };
-      case "PHASE_3":
+      case 'PHASE_3':
         return {
-          name: "Phase 3: Execute",
+          name: 'Phase 3: Execute',
           color: launchColors.hex_e53e3e,
-          description: "FINAL PUSH! Maintain 90%+ purity or fail!",
+          description: 'FINAL PUSH! Maintain 90%+ purity or fail!',
         };
       default:
         return {
-          name: "Archived",
+          name: 'Archived',
           color: launchColors.hex_718096,
-          description: "Boss combat archived",
+          description: 'Boss combat archived',
         };
     }
   }, [phase]);
 
   const nextThreshold = useMemo(() => {
-    if (phase === "PHASE_1") return 50;
-    if (phase === "PHASE_2") return 25;
+    if (phase === 'PHASE_1') {return 50;}
+    if (phase === 'PHASE_2') {return 25;}
     return 0;
   }, [phase]);
 
@@ -68,7 +68,7 @@ export const BossPhaseIndicator: React.FC<BossPhaseIndicatorProps> = ({
     <View style={styles.container}>
       <View style={[styles.header, { backgroundColor: phaseInfo.color }]}>
         <Text style={styles.phaseName}>{phaseInfo.name}</Text>
-        {phase === "ENRAGED" && (
+        {phase === 'ENRAGED' && (
           <View style={styles.enragedBadge}>
             <Text style={styles.enragedText}>ENRAGED!</Text>
           </View>

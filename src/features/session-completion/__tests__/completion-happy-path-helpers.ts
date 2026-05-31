@@ -1,10 +1,10 @@
-import { SessionMode } from "../../../session/modes";
+import { SessionMode } from '../../../session/modes';
 import {
   buildCompletionPersonalization,
   buildCompletionPersonalizationResult,
-} from "../service";
-import { createSessionSummary, SESSION_ID } from "./ledger-test-utils";
-import type { Lane } from "../../lane-engine/types";
+} from '../service';
+import { createSessionSummary, SESSION_ID } from './ledger-test-utils';
+import type { Lane } from '../../lane-engine/types';
 
 export {
   SessionMode,
@@ -16,10 +16,10 @@ export {
 export type { Lane };
 
 export const LANES: Lane[] = [
-  "student",
-  "game_like",
-  "deep_creative",
-  "minimal_normal",
+  'student',
+  'game_like',
+  'deep_creative',
+  'minimal_normal',
 ];
 
 export const CLEAN_QUESTIONS: Record<Lane, number> = {

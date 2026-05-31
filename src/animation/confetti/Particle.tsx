@@ -4,8 +4,8 @@
  * Individual particle component for confetti celebration.
  */
 
-import React, { useEffect } from "react";
-import { Dimensions } from "react-native";
+import React, { useEffect } from 'react';
+import { Dimensions } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -13,16 +13,16 @@ import Animated, {
   withDecay,
   withDelay,
   runOnJS,
-} from "react-native-reanimated";
-import { ParticleConfig } from "./types";
+} from 'react-native-reanimated';
+import { ParticleConfig } from './types';
 import {
   particleStyle,
   shapeStyle,
   triangleStyle,
   FRICTION,
-} from "./constants";
+} from './constants';
 
-const { height: SCREEN_HEIGHT } = Dimensions.get("window");
+const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 interface ParticleProps {
   config: ParticleConfig;
@@ -116,7 +116,7 @@ export function Particle({ config, onComplete }: ParticleProps) {
     const size = config.size;
 
     switch (config.shape) {
-      case "circle":
+      case 'circle':
         return (
           <Animated.View
             style={[
@@ -132,7 +132,7 @@ export function Particle({ config, onComplete }: ParticleProps) {
             ]}
           />
         );
-      case "square":
+      case 'square':
         return (
           <Animated.View
             style={[
@@ -143,7 +143,7 @@ export function Particle({ config, onComplete }: ParticleProps) {
             ]}
           />
         );
-      case "triangle":
+      case 'triangle':
         return (
           <Animated.View
             style={[

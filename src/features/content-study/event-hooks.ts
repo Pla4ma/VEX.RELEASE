@@ -1,7 +1,7 @@
-import { useEffect, useRef } from "react";
-import type { ContentStudyEventMap } from "./types";
-import { captureException } from "../../config/sentry";
-import { contentStudyEvents } from "./emitters";
+import { useEffect, useRef } from 'react';
+import type { ContentStudyEventMap } from './types';
+import { captureException } from '../../config/sentry';
+import { contentStudyEvents } from './emitters';
 
 export function useContentStudyEvent<K extends keyof ContentStudyEventMap>(
   event: K,
@@ -45,15 +45,15 @@ export function composeEventHandlers<T>(
             captureException(
               error instanceof Error
                 ? error
-                : new Error("Async event handler error"),
-              { area: "content-study.events.compose" },
+                : new Error('Async event handler error'),
+              { area: 'content-study.events.compose' },
             );
           });
         }
       } catch (e) {
         captureException(
-          e instanceof Error ? e : new Error("Event handler error"),
-          { area: "content-study.events.compose" },
+          e instanceof Error ? e : new Error('Event handler error'),
+          { area: 'content-study.events.compose' },
         );
       }
     });
@@ -68,9 +68,9 @@ export function initializeContentStudyEventIntegration(appEventBus?: {
     return;
   }
   const eventsToForward: Array<keyof ContentStudyEventMap> = [
-    "content-study:session-started",
-    "content-study:session-ended",
-    "content-study:content-deleted",
+    'content-study:session-started',
+    'content-study:session-ended',
+    'content-study:content-deleted',
   ];
   eventsToForward.forEach((event) => {
     contentStudyEvents.subscribe(event, (data) => {

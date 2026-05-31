@@ -1,12 +1,12 @@
 /**
  * DataList — SelectionToolbar component
  */
-import React from "react";
-import { View, Pressable } from "react-native";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import { styles } from "./DataList.styles";
-import type { SelectionToolbarProps } from "./DataList.types";
+import React from 'react';
+import { View, Pressable } from 'react-native';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import { styles } from './DataList.styles';
+import type { SelectionToolbarProps } from './DataList.types';
 
 export const SelectionToolbar: React.FC<SelectionToolbarProps> = ({
   selectedCount,
@@ -34,7 +34,7 @@ export const SelectionToolbar: React.FC<SelectionToolbarProps> = ({
           accessibilityHint="Double tap to activate"
         >
           <Text variant="caption" color="primary.500">
-            {selectedCount === totalCount ? "Clear" : "Select All"}
+            {selectedCount === totalCount ? 'Clear' : 'Select All'}
           </Text>
         </Pressable>
       </View>
@@ -47,7 +47,7 @@ export const SelectionToolbar: React.FC<SelectionToolbarProps> = ({
               style={[
                 styles.toolbarAction,
                 action.destructive && {
-                  backgroundColor: theme.colors.error.DEFAULT + "20",
+                  backgroundColor: theme.colors.error.DEFAULT + '20',
                 },
               ]}
               accessibilityLabel="Selection action"
@@ -56,7 +56,7 @@ export const SelectionToolbar: React.FC<SelectionToolbarProps> = ({
             >
               <Text
                 variant="caption"
-                color={action.destructive ? "error.DEFAULT" : "primary.500"}
+                color={action.destructive ? 'error.DEFAULT' : 'primary.500'}
               >
                 {action.label}
               </Text>

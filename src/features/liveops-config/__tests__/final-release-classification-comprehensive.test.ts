@@ -1,1 +1,1 @@
-import "./final-release-classification.test";
+import './final-release-classification.test';

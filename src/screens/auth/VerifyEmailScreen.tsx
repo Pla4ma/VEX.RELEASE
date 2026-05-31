@@ -1,30 +1,30 @@
-import { withScreenErrorBoundary } from "../../shared/ui/components/ScreenErrorBoundary";
+import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 /**
  * Verify Email Screen
  *
  * Email verification screen with OTP input.
  */
 
-import React, { useState, useCallback, useEffect } from "react";
-import { KeyboardAvoidingView, Platform, ScrollView } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import type { NativeStackScreenProps } from "@react-navigation/native-stack";
+import React, { useState, useCallback, useEffect } from 'react';
+import { KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-import { useTheme } from "../../theme";
-import { Box, Text } from "../../components/primitives";
-import { Button, Input } from "../../components";
-import { Icon } from "../../icons";
-import type { AuthStackParams } from "../../navigation";
+import { useTheme } from '../../theme';
+import { Box, Text } from '../../components/primitives';
+import { Button, Input } from '../../components';
+import { Icon } from '../../icons';
+import type { AuthStackParams } from '../../navigation';
 
-type Props = NativeStackScreenProps<AuthStackParams, "VerifyEmail">;
+type Props = NativeStackScreenProps<AuthStackParams, 'VerifyEmail'>;
 
 export const VerifyEmailScreen: React.FC<Props> = ({ navigation, route }) => {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
   const { email } = route.params;
 
-  const [code, setCode] = useState("");
-  const [error, setError] = useState("");
+  const [code, setCode] = useState('');
+  const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [countdown, setCountdown] = useState(60);
@@ -41,10 +41,10 @@ export const VerifyEmailScreen: React.FC<Props> = ({ navigation, route }) => {
   }, [countdown]);
 
   const handleSubmit = useCallback(async () => {
-    setError("");
+    setError('');
 
     if (code.length !== 6) {
-      setError("Please enter the 6-digit code");
+      setError('Please enter the 6-digit code');
       return;
     }
 
@@ -64,19 +64,19 @@ export const VerifyEmailScreen: React.FC<Props> = ({ navigation, route }) => {
   }, []);
 
   const handleContinue = useCallback(() => {
-    navigation.navigate("Login", { email });
+    navigation.navigate('Login', { email });
   }, [navigation, email]);
 
   return (
     <KeyboardAvoidingView
       style={{ flex: 1, backgroundColor: theme.colors.background.primary }}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={insets.top + 20}
     >
       <ScrollView
         contentContainerStyle={{
           flexGrow: 1,
-          justifyContent: "center",
+          justifyContent: 'center',
           paddingHorizontal: 24,
           paddingTop: 40,
           paddingBottom: insets.bottom + 20,
@@ -95,16 +95,16 @@ export const VerifyEmailScreen: React.FC<Props> = ({ navigation, route }) => {
           >
             <Icon name="email" size={32} color={theme.colors.primary[500]} />
           </Box>
-          <Text variant="h1" style={{ textAlign: "center", marginTop: 24 }}>
-            {isSuccess ? "Email Verified!" : "Verify Your Email"}
+          <Text variant="h1" style={{ textAlign: 'center', marginTop: 24 }}>
+            {isSuccess ? 'Email Verified!' : 'Verify Your Email'}
           </Text>
           <Text
             variant="body"
             color="text.secondary"
-            style={{ textAlign: "center", marginTop: 12 }}
+            style={{ textAlign: 'center', marginTop: 12 }}
           >
             {isSuccess
-              ? "Your email has been successfully verified"
+              ? 'Your email has been successfully verified'
               : `Enter the 6-digit code sent to ${email}`}
           </Text>
         </Box>
@@ -119,7 +119,7 @@ export const VerifyEmailScreen: React.FC<Props> = ({ navigation, route }) => {
               justifyContent="center"
               alignItems="center"
               style={{
-                backgroundColor: theme.colors.success.light + "30",
+                backgroundColor: theme.colors.success.light + '30',
                 marginTop: 16,
               }}
             >
@@ -197,4 +197,4 @@ export const VerifyEmailScreen: React.FC<Props> = ({ navigation, route }) => {
   );
 };
 
-export default withScreenErrorBoundary(VerifyEmailScreen, "VerifyEmail");
+export default withScreenErrorBoundary(VerifyEmailScreen, 'VerifyEmail');

@@ -1,7 +1,7 @@
-import { loadStoredMasteryState, persistMasteryState } from "../repository";
-import { MASTERY_RANK_THRESHOLDS } from "../types";
+import { loadStoredMasteryState, persistMasteryState } from '../repository';
+import { MASTERY_RANK_THRESHOLDS } from '../types';
 
-export const TEST_USER_ID = "test-user-123";
+export const TEST_USER_ID = 'test-user-123';
 
 const mockedLoadStoredMasteryState = jest.mocked(loadStoredMasteryState);
 const mockedPersistMasteryState = jest.mocked(persistMasteryState);
@@ -34,7 +34,7 @@ export function makeBaseState(
   return {
     userId: TEST_USER_ID,
     totalMasteryPoints: 0,
-    rank: "APPRENTICE",
+    rank: 'APPRENTICE',
     techniques: {
       durationMastery: 0,
       purityMastery: 0,

@@ -1,28 +1,28 @@
-import React, { useEffect } from "react";
-import { Pressable, View } from "react-native";
-import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
+import React, { useEffect } from 'react';
+import { Pressable, View } from 'react-native';
+import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withSequence,
   withSpring,
   withTiming,
-} from "react-native-reanimated";
-import { Icon } from "../../icons";
-import { Text } from "../../components/primitives/Text";
-import { useTheme } from "../../theme";
-import { tabSwitch } from "../../utils/haptics";
-import { createSheet } from "../../shared/ui/create-sheet";
+} from 'react-native-reanimated';
+import { Icon } from '../../icons';
+import { Text } from '../../components/primitives/Text';
+import { useTheme } from '../../theme';
+import { tabSwitch } from '../../utils/haptics';
+import { createSheet } from '../../shared/ui/create-sheet';
 
 const ICONS = {
-  Home: "home",
-  Focus: "target",
-  Progress: "chart",
-  Profile: "user",
+  Home: 'home',
+  Focus: 'target',
+  Progress: 'chart',
+  Profile: 'user',
 } as const;
 
 export interface TabButtonProps {
-  route: BottomTabBarProps["state"]["routes"][number];
+  route: BottomTabBarProps['state']['routes'][number];
   focused: boolean;
   color: string;
   label: string;
@@ -108,7 +108,7 @@ export function TabButton({
               color={color}
               name={ICONS[route.name as keyof typeof ICONS]}
               size={24}
-              variant={focused ? "solid" : "outline"}
+              variant={focused ? 'solid' : 'outline'}
             />
           </Animated.View>
         </View>
@@ -138,17 +138,17 @@ export function TabButton({
 const styles = createSheet({
   pressable: { flex: 1 },
   item: {
-    alignItems: "center",
+    alignItems: 'center',
     flex: 1,
-    justifyContent: "center",
+    justifyContent: 'center',
     paddingTop: 8,
   },
   iconShell: {
-    alignItems: "center",
+    alignItems: 'center',
     height: 28,
-    justifyContent: "center",
+    justifyContent: 'center',
     minWidth: 28,
-    position: "relative",
+    position: 'relative',
   },
   label: { marginTop: 4 },
   indicator: { borderRadius: 999, height: 3, marginTop: 4, width: 14 },

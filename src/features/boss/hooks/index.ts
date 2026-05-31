@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from '@tanstack/react-query';
 
 interface BossTemplate {
   id: string;
@@ -29,7 +29,7 @@ export function useActiveBoss(..._args: unknown[]) {
   void _args;
   return useQuery<BossEncounterStub | null>({
     queryFn: () => Promise.resolve(null),
-    queryKey: ["boss", "active"],
+    queryKey: ['boss', 'active'],
   });
 }
 
@@ -43,7 +43,7 @@ export function useBossEngagementSummary(..._args: unknown[]) {
         bossDamageEventsCount: 0,
         recentSessionsWithBossProgress: 0,
       }),
-    queryKey: ["boss", "engagement"],
+    queryKey: ['boss', 'engagement'],
   });
 }
 
@@ -51,13 +51,13 @@ export function useAvailableBosses(..._args: unknown[]) {
   void _args;
   return useQuery<BossTemplate[]>({
     queryFn: () => Promise.resolve([]),
-    queryKey: ["boss", "available"],
+    queryKey: ['boss', 'available'],
   });
 }
 
 export function useBossTemplates(..._args: unknown[]) {
   return useQuery<BossTemplate[]>({
     queryFn: () => Promise.resolve([]),
-    queryKey: ["boss", "templates"],
+    queryKey: ['boss', 'templates'],
   });
 }

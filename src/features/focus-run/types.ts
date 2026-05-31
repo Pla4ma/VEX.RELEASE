@@ -8,4 +8,4 @@ export type {
   PersonalBlocker,
   PersonalBlockerEvidence,
   BlockerArchetype,
-} from "./schemas";
+} from './schemas';

@@ -1,18 +1,18 @@
-import { useMemo, useRef, useCallback } from "react";
-import type { HomeController } from "./home-controller-types";
-import type { ChallengeItem } from "../../../features/home-spine/components";
-import { useBaseHomeData } from "./useBaseHomeData";
-import { getFeatureAvailability } from "../../../features/liveops-config";
+import { useMemo, useRef, useCallback } from 'react';
+import type { HomeController } from './home-controller-types';
+import type { ChallengeItem } from '../../../features/home-spine/components';
+import { useBaseHomeData } from './useBaseHomeData';
+import { getFeatureAvailability } from '../../../features/liveops-config';
 import {
   useActiveChallenges,
   useClaimChallengeReward,
-} from "../../../features/challenges/hooks";
-import { useFreezeStreak } from "../../../features/streaks/hooks";
-import { useSavedTomorrowPreview } from "../../../features/home-spine/hooks";
-import { useActiveIntervention } from "../../../features/ai-coach/hooks";
-import { useNotificationBadge } from "../../../features/notifications/components/NotificationBadge";
-import { useToast } from "../../../shared/ui/components/Toast";
-import type { PowerUserHomeData } from "./home-data-types";
+} from '../../../features/challenges/hooks';
+import { useFreezeStreak } from '../../../features/streaks/hooks';
+import { useSavedTomorrowPreview } from '../../../features/home-spine/hooks';
+import { useActiveIntervention } from '../../../features/ai-coach/hooks';
+import { useNotificationBadge } from '../../../features/notifications/components/NotificationBadge';
+import { useToast } from '../../../shared/ui/components/Toast';
+import type { PowerUserHomeData } from './home-data-types';
 
 export function usePowerUserHomeData(
   controller: HomeController,
@@ -37,7 +37,7 @@ export function usePowerUserHomeData(
   } = useActiveIntervention(
     coachAvail.canQuery ? controller.userId || undefined : undefined,
   );
-  const savedPreview = useSavedTomorrowPreview(controller.userId ?? "");
+  const savedPreview = useSavedTomorrowPreview(controller.userId ?? '');
   const displayedInterventionIdRef = useRef<string | null>(null);
   const squadMembersFocusing: Array<Record<string, unknown>> = [];
   const { count: unreadNotificationCount } = useNotificationBadge(
@@ -45,7 +45,7 @@ export function usePowerUserHomeData(
   );
 
   const todaysChallenges: ChallengeItem[] = useMemo(() => {
-    if (!challengeAvail.canQuery) return [];
+    if (!challengeAvail.canQuery) {return [];}
     const data = challengesQuery.data as
       | Array<{
           challenge: {
@@ -64,9 +64,9 @@ export function usePowerUserHomeData(
           };
         }>
       | undefined;
-    if (!data) return [];
+    if (!data) {return [];}
     return data
-      .filter((item) => item.challenge.type === "DAILY")
+      .filter((item) => item.challenge.type === 'DAILY')
       .slice(0, 3)
       .map((item) => ({
         id: item.userChallenge.id,
@@ -75,11 +75,11 @@ export function usePowerUserHomeData(
         currentProgress: item.userChallenge.currentValue,
         targetProgress: item.challenge.targetValue,
         rewardAmount: item.challenge.rewardAmount,
-        rewardType: item.challenge.rewardType as "XP" | "COINS" | "GEMS",
+        rewardType: item.challenge.rewardType as 'XP' | 'COINS' | 'GEMS',
         isCompleted:
-          item.userChallenge.status === "COMPLETED" ||
-          item.userChallenge.status === "CLAIMED",
-        isClaimed: item.userChallenge.status === "CLAIMED",
+          item.userChallenge.status === 'COMPLETED' ||
+          item.userChallenge.status === 'CLAIMED',
+        isClaimed: item.userChallenge.status === 'CLAIMED',
         timeRemainingMinutes: item.userChallenge.expiresAt
           ? Math.max(
               0,
@@ -95,9 +95,9 @@ export function usePowerUserHomeData(
     (challengeId: string) => {
       if (!controller.userId) {
         showToast({
-          type: "error",
-          title: "Sign in required",
-          message: "You need an active profile to claim challenge rewards.",
+          type: 'error',
+          title: 'Sign in required',
+          message: 'You need an active profile to claim challenge rewards.',
         });
         return;
       }
@@ -109,22 +109,22 @@ export function usePowerUserHomeData(
           }) => {
             const rewardText = result.rewards
               .map((reward) => `+${reward.amount} ${reward.type}`)
-              .join(", ");
+              .join(', ');
             showToast({
-              type: "success",
+              type: 'success',
               title: `Reward claimed! ${rewardText}`,
             });
           },
           onError: (error: unknown) => {
             showToast({
-              type: "error",
-              title: "Reward claim failed",
+              type: 'error',
+              title: 'Reward claim failed',
               message:
                 error instanceof Error
                   ? error.message
-                  : "Try again when your connection is stable.",
+                  : 'Try again when your connection is stable.',
               action: {
-                label: "Retry",
+                label: 'Retry',
                 onPress: () => handleClaimReward(challengeId),
               },
             });
@@ -136,22 +136,22 @@ export function usePowerUserHomeData(
   );
 
   const handleFreezeStreak = useCallback(() => {
-    if (!controller.userId) return;
+    if (!controller.userId) {return;}
     freezeStreakMutation.mutate(controller.userId, {
       onSuccess: () =>
         showToast({
-          type: "success",
-          title: "Streak protected",
-          message: "Your streak freeze is active for today.",
+          type: 'success',
+          title: 'Streak protected',
+          message: 'Your streak freeze is active for today.',
         }),
       onError: (error: unknown) => {
         showToast({
-          type: "error",
-          title: "Could not freeze streak",
+          type: 'error',
+          title: 'Could not freeze streak',
           message:
             error instanceof Error
               ? error.message
-              : "Try again before your streak expires.",
+              : 'Try again before your streak expires.',
         });
       },
     });
@@ -162,7 +162,7 @@ export function usePowerUserHomeData(
     showToast,
     challengesQuery,
     claimRewardMutation:
-      claimRewardMutation as PowerUserHomeData["claimRewardMutation"],
+      claimRewardMutation as PowerUserHomeData['claimRewardMutation'],
     freezeStreakMutation: { mutate: () => {}, isPending: false },
     intervention,
     interventionLoading,

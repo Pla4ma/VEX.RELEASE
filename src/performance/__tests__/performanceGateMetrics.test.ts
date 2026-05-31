@@ -4,7 +4,7 @@ import {
   expect,
   beforeEach,
   afterEach,
-} from "@jest/globals";
+} from '@jest/globals';
 import {
   PerformanceGate,
   performanceGate,
@@ -13,9 +13,9 @@ import {
   mockPerformanceMonitor,
   mockFetch,
   mockRequestAnimationFrame,
-} from "./performanceGateSetup";
+} from './performanceGateSetup';
 
-describe("PerformanceGate", () => {
+describe('PerformanceGate', () => {
   let gate: PerformanceGate;
   beforeEach(() => {
     jest.clearAllMocks();
@@ -38,8 +38,8 @@ describe("PerformanceGate", () => {
   afterEach(() => {
     gate.cleanup();
   });
-  describe("Performance Metrics Collection", () => {
-    it("should collect FPS metrics correctly", () => {
+  describe('Performance Metrics Collection', () => {
+    it('should collect FPS metrics correctly', () => {
       gate.setTargets(PRODUCTION_TARGETS);
       gate.restartMetricsCollection();
       const frameCallback = mockRequestAnimationFrame.mock.calls[0]?.[0];
@@ -52,35 +52,35 @@ describe("PerformanceGate", () => {
       expect(metrics.fps).toBeGreaterThan(50);
       expect(metrics.jankFrames).toBeLessThan(5);
     });
-    it("should track memory usage", () => {
+    it('should track memory usage', () => {
       gate.setTargets(PRODUCTION_TARGETS);
       gate.restartMetricsCollection();
       const metrics = gate.getDiagnosticInfo().currentMetrics;
       expect(metrics.memoryUsage).toBeGreaterThanOrEqual(0);
-      expect(typeof metrics.jsHeapSize).toBe("number");
+      expect(typeof metrics.jsHeapSize).toBe('number');
     });
-    it("should monitor network requests", () => {
+    it('should monitor network requests', () => {
       gate.setTargets(PRODUCTION_TARGETS);
       gate.restartMetricsCollection();
       const diagnostics = gate.getDiagnosticInfo();
       expect(diagnostics.isMonitoring).toBe(true);
     });
-    it("should provide diagnostic information", () => {
+    it('should provide diagnostic information', () => {
       const diagnostics = gate.getDiagnosticInfo();
-      expect(diagnostics).toHaveProperty("targets");
-      expect(diagnostics).toHaveProperty("currentMetrics");
-      expect(diagnostics).toHaveProperty("isMonitoring");
+      expect(diagnostics).toHaveProperty('targets');
+      expect(diagnostics).toHaveProperty('currentMetrics');
+      expect(diagnostics).toHaveProperty('isMonitoring');
     });
   });
-  describe("Performance Thresholds", () => {
-    it("should use production targets in production", () => {
+  describe('Performance Thresholds', () => {
+    it('should use production targets in production', () => {
       const productionGate = PerformanceGate.getInstance();
       productionGate.setTargets(PRODUCTION_TARGETS);
       const targets = productionGate.getTargets();
       expect(targets.minFps).toBe(30);
       expect(targets.maxMemoryMb).toBe(150);
     });
-    it("should use development targets in development", () => {
+    it('should use development targets in development', () => {
       const devGate = PerformanceGate.getInstance();
       devGate.setTargets(DEVELOPMENT_TARGETS);
       const targets = devGate.getTargets();
@@ -88,8 +88,8 @@ describe("PerformanceGate", () => {
       expect(targets.maxMemoryMb).toBe(200);
     });
   });
-  describe("Performance Recommendations", () => {
-    it("should generate FPS-specific recommendations", async () => {
+  describe('Performance Recommendations', () => {
+    it('should generate FPS-specific recommendations', async () => {
       gate.setTargets(PRODUCTION_TARGETS);
       mockPerformanceMonitor.getMetrics.mockReturnValue({
         fps: 20,
@@ -102,13 +102,13 @@ describe("PerformanceGate", () => {
       });
       const result = await gate.evaluatePerformanceGate();
       expect(result.recommendations).toContain(
-        "Optimize rendering pipeline, reduce complexity, or enable hardware acceleration"
+        'Optimize rendering pipeline, reduce complexity, or enable hardware acceleration'
       );
       expect(result.recommendations).toContain(
-        "Profile performance bottlenecks and optimize rendering code"
+        'Profile performance bottlenecks and optimize rendering code'
       );
     });
-    it("should generate memory-specific recommendations", async () => {
+    it('should generate memory-specific recommendations', async () => {
       gate.setTargets(PRODUCTION_TARGETS);
       mockPerformanceMonitor.getMetrics.mockReturnValue({
         fps: 55,
@@ -121,48 +121,48 @@ describe("PerformanceGate", () => {
       });
       const result = await gate.evaluatePerformanceGate();
       expect(result.recommendations).toContain(
-        "Implement memory pooling and optimize data structures"
+        'Implement memory pooling and optimize data structures'
       );
       expect(result.recommendations).toContain(
-        "Reduce memory usage by optimizing data structures and implementing memory pooling"
+        'Reduce memory usage by optimizing data structures and implementing memory pooling'
       );
     });
-    it("should include network evaluation in gate results", async () => {
+    it('should include network evaluation in gate results', async () => {
       gate.setTargets(PRODUCTION_TARGETS);
       const result = await gate.evaluatePerformanceGate();
       expect(result.metrics.network).toBeDefined();
-      expect(typeof result.metrics.network.averageResponseTime).toBe("number");
-      expect(typeof result.metrics.network.limit).toBe("number");
-      expect(typeof result.metrics.network.passed).toBe("boolean");
+      expect(typeof result.metrics.network.averageResponseTime).toBe('number');
+      expect(typeof result.metrics.network.limit).toBe('number');
+      expect(typeof result.metrics.network.passed).toBe('boolean');
     });
   });
-  describe("Error Handling", () => {
-    it("should propagate performance monitor errors", async () => {
+  describe('Error Handling', () => {
+    it('should propagate performance monitor errors', async () => {
       mockPerformanceMonitor.getMetrics.mockImplementation(() => {
-        throw new Error("Performance monitor error");
+        throw new Error('Performance monitor error');
       });
       await expect(gate.evaluatePerformanceGate()).rejects.toThrow(
-        "Performance monitor error"
+        'Performance monitor error'
       );
     });
-    it("should propagate errors from diagnostics", () => {
+    it('should propagate errors from diagnostics', () => {
       mockPerformanceMonitor.getMetrics.mockImplementation(() => {
-        throw new Error("Performance monitor error");
+        throw new Error('Performance monitor error');
       });
       expect(() => gate.getDiagnosticInfo()).toThrow(
-        "Performance monitor error"
+        'Performance monitor error'
       );
     });
   });
-  describe("Integration with Performance Monitor", () => {
-    it("should integrate with existing performance monitoring", () => {
+  describe('Integration with Performance Monitor', () => {
+    it('should integrate with existing performance monitoring', () => {
       gate.restartMetricsCollection();
       const diagnostics = gate.getDiagnosticInfo();
       expect(diagnostics.isMonitoring).toBe(true);
       expect(diagnostics.targets).toBeDefined();
       expect(diagnostics.currentMetrics).toBeDefined();
     });
-    it("should cleanup resources properly", () => {
+    it('should cleanup resources properly', () => {
       gate.restartMetricsCollection();
       gate.cleanup();
       const diagnostics = gate.getDiagnosticInfo();

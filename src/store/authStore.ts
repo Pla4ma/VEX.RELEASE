@@ -1,9 +1,9 @@
-import { create } from "zustand";
-import { persist, createJSONStorage } from "zustand/middleware";
-import { immer } from "zustand/middleware/immer";
-import { getMMKVStorageAdapter } from "../persistence/MMKVStorageAdapter";
-import { createAuthActions } from "./authStoreActions";
-import type { AuthState } from "./authStoreTypes";
+import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
+import { immer } from 'zustand/middleware/immer';
+import { getMMKVStorageAdapter } from '../persistence/MMKVStorageAdapter';
+import { createAuthActions } from './authStoreActions';
+import type { AuthState } from './authStoreTypes';
 
 export const useAuthStore = create<AuthState>()(
   immer(
@@ -16,7 +16,7 @@ export const useAuthStore = create<AuthState>()(
         ...createAuthActions(set),
       }),
       {
-        name: "auth-storage",
+        name: 'auth-storage',
         storage: createJSONStorage(() => getMMKVStorageAdapter()),
         partialize: (state) => ({ isAuthenticated: state.isAuthenticated }),
       },

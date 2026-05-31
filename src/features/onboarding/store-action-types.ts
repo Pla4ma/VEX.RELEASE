@@ -1,6 +1,6 @@
-import type { OnboardingStore } from "./store";
-import type { OnboardingState } from "./schemas";
-import { useAuthStore } from "../../store";
+import type { OnboardingStore } from './store';
+import type { OnboardingState } from './schemas';
+import { useAuthStore } from '../../store';
 
 export const initialState: OnboardingState = {
   isOnboarded: false,

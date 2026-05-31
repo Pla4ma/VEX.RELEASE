@@ -1,13 +1,13 @@
-import { useCallback } from "react";
+import { useCallback } from 'react';
 
-import type { UserExperienceStage } from "../../../features/liveops-config";
-import { buildLearningSessionParams } from "../../../features/learning-execution";
-import type { LearningSessionTarget } from "../../../features/learning-execution";
+import type { UserExperienceStage } from '../../../features/liveops-config';
+import { buildLearningSessionParams } from '../../../features/learning-execution';
+import type { LearningSessionTarget } from '../../../features/learning-execution';
 import type {
   ExtendedRootStackParams,
   SessionStackParams,
-} from "../../../navigation/types";
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+} from '../../../navigation/types';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 type HomeNavigation = NativeStackNavigationProp<ExtendedRootStackParams>;
 
@@ -44,13 +44,13 @@ export function useHomeNavigationActions(input: {
   } = input;
 
   const openSetup = useCallback(
-    (params?: SessionStackParams["SessionSetup"]) => {
+    (params?: SessionStackParams['SessionSetup']) => {
       if (userId && completedSessions === 0) {
-        analytics.trackFirstSessionStarted(userId, params?.source ?? "home");
+        analytics.trackFirstSessionStarted(userId, params?.source ?? 'home');
       }
 
-      navigation.navigate("SessionStack", {
-        screen: "SessionSetup",
+      navigation.navigate('SessionStack', {
+        screen: 'SessionSetup',
         params: params ?? {},
       });
     },
@@ -58,16 +58,16 @@ export function useHomeNavigationActions(input: {
   );
 
   const openProgress = useCallback(
-    () => navigation.navigate("Main", { screen: "Progress" }),
+    () => navigation.navigate('Main', { screen: 'Progress' }),
     [navigation],
   );
   const openSocial = useCallback(
     () =>
       navigation.navigate(
-        "Main",
+        'Main',
         canNavigateSocial
-          ? { screen: "Profile", params: { tab: "social" } }
-          : { screen: "Profile", params: { tab: "stats" } },
+          ? { screen: 'Profile', params: { tab: 'social' } }
+          : { screen: 'Profile', params: { tab: 'stats' } },
       ),
     [canNavigateSocial, navigation],
   );
@@ -76,7 +76,7 @@ export function useHomeNavigationActions(input: {
       openSetup();
       return;
     }
-    navigation.navigate("ContentStudy");
+    navigation.navigate('ContentStudy');
   }, [canNavigateContentStudy, navigation, openSetup]);
   const continueStudyPlan = useCallback(() => {
     if (learningTarget) {
@@ -88,8 +88,8 @@ export function useHomeNavigationActions(input: {
       return;
     }
 
-    navigation.navigate("ContentStudy", {
-      screen: "StudyPlan",
+    navigation.navigate('ContentStudy', {
+      screen: 'StudyPlan',
       params: {
         generationId: activeStudyPlan.generationId,
         contentId: activeStudyPlan.contentId,

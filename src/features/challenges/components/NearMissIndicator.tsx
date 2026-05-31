@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -8,18 +8,18 @@ import Animated, {
   withRepeat,
   withSequence,
   FadeInUp,
-} from "react-native-reanimated";
-import { Box, Text } from "@/components/primitives";
-import { useTheme } from "@/theme";
-import * as Sentry from "@sentry/react-native";
+} from 'react-native-reanimated';
+import { Box, Text } from '@/components/primitives';
+import { useTheme } from '@/theme';
+import * as Sentry from '@sentry/react-native';
 import {
   NEAR_MISS_THRESHOLD,
   COMPLETE_THRESHOLD,
   getNearMissMessage,
   trackChallengeNearMiss,
-} from "./near-miss-helpers";
-import { NearMissProgressBar } from "./NearMissProgressBar";
-import { NearMissActions } from "./NearMissActions";
+} from './near-miss-helpers';
+import { NearMissProgressBar } from './NearMissProgressBar';
+import { NearMissActions } from './NearMissActions';
 
 interface NearMissIndicatorProps {
   challengeId: string;
@@ -48,7 +48,7 @@ export const NearMissIndicator: React.FC<NearMissIndicatorProps> = ({
   const shakeX = useSharedValue(0);
 
   useEffect(() => {
-    if (!isValidNearMiss) return;
+    if (!isValidNearMiss) {return;}
     progressWidth.value = withSpring(progressPercent / 100, {
       damping: 15,
       stiffness: 50,
@@ -82,9 +82,9 @@ export const NearMissIndicator: React.FC<NearMissIndicatorProps> = ({
 
   if (!isValidNearMiss) {
     Sentry.addBreadcrumb({
-      category: "challenges",
+      category: 'challenges',
       message: `NearMissIndicator rendered with invalid progress: ${progressPercent}%`,
-      level: "warning",
+      level: 'warning',
     });
     return null;
   }
@@ -152,4 +152,4 @@ export const NearMissIndicator: React.FC<NearMissIndicatorProps> = ({
 };
 
 export default NearMissIndicator;
-export { NEAR_MISS_THRESHOLD, COMPLETE_THRESHOLD, useIsNearMiss } from "./near-miss-helpers";
+export { NEAR_MISS_THRESHOLD, COMPLETE_THRESHOLD, useIsNearMiss } from './near-miss-helpers';

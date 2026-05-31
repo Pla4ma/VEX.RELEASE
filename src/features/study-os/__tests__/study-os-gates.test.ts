@@ -4,14 +4,14 @@
  * Covers: computeStudyOsUnlockGate, computeStudyOsPremiumGate
  */
 
-import { computeStudyOsUnlockGate, computeStudyOsPremiumGate } from "../service";
-import { StudyOsUnlockGateSchema, StudyOsPremiumGateSchema } from "../schemas";
+import { computeStudyOsUnlockGate, computeStudyOsPremiumGate } from '../service';
+import { StudyOsUnlockGateSchema, StudyOsPremiumGateSchema } from '../schemas';
 
 // ─── Mock external dependencies ──────────────────────────────────
 
 const mockStore = new Map<string, string>();
 
-jest.mock("react-native-mmkv", () => ({
+jest.mock('react-native-mmkv', () => ({
   MMKV: class MockMMKV {
     getString(key: string): string | undefined {
       return mockStore.get(key);
@@ -31,81 +31,81 @@ jest.mock("react-native-mmkv", () => ({
   },
 }));
 
-jest.mock("../../../session/modes", () => ({
+jest.mock('../../../session/modes', () => ({
   SessionMode: {
-    STUDY: "STUDY",
-    FOCUS: "FOCUS",
+    STUDY: 'STUDY',
+    FOCUS: 'FOCUS',
   },
 }));
 
-jest.mock("../../session-start/service", () => ({
+jest.mock('../../session-start/service', () => ({
   buildLaneSessionBrief: jest.fn((input: { durationSeconds: number; lane: string }) => ({
     durationSeconds: input.durationSeconds,
     lane: input.lane,
-    mode: "study",
+    mode: 'study',
   })),
 }));
 
 // ─── computeStudyOsUnlockGate ────────────────────────────────────
 
-describe("computeStudyOsUnlockGate", () => {
-  it("Day 0 user is locked with day_zero reason", () => {
+describe('computeStudyOsUnlockGate', () => {
+  it('Day 0 user is locked with day_zero reason', () => {
     const gate = computeStudyOsUnlockGate({
       completedSessions: 0,
       studyUsageRatio: 0,
     });
     expect(gate.isUnlocked).toBe(false);
     expect(gate.isDayZero).toBe(true);
-    expect(gate.unlockReason).toBe("day_zero");
+    expect(gate.unlockReason).toBe('day_zero');
   });
 
-  it("7+ sessions fully unlocks", () => {
+  it('7+ sessions fully unlocks', () => {
     const gate = computeStudyOsUnlockGate({
       completedSessions: 7,
       studyUsageRatio: 0.5,
     });
     expect(gate.isUnlocked).toBe(true);
-    expect(gate.unlockReason).toBe("full");
+    expect(gate.unlockReason).toBe('full');
   });
 
-  it("firstWeekPhase >= 7 fully unlocks", () => {
+  it('firstWeekPhase >= 7 fully unlocks', () => {
     const gate = computeStudyOsUnlockGate({
       completedSessions: 3,
       studyUsageRatio: 0.1,
       firstWeekPhase: 7,
     });
     expect(gate.isUnlocked).toBe(true);
-    expect(gate.unlockReason).toBe("full");
+    expect(gate.unlockReason).toBe('full');
   });
 
-  it("5+ sessions unlocks with evidence_sessions reason", () => {
+  it('5+ sessions unlocks with evidence_sessions reason', () => {
     const gate = computeStudyOsUnlockGate({
       completedSessions: 5,
       studyUsageRatio: 0.1,
     });
     expect(gate.isUnlocked).toBe(true);
-    expect(gate.unlockReason).toBe("evidence_sessions");
+    expect(gate.unlockReason).toBe('evidence_sessions');
   });
 
-  it("high usage ratio unlocks with evidence_usage reason", () => {
+  it('high usage ratio unlocks with evidence_usage reason', () => {
     const gate = computeStudyOsUnlockGate({
       completedSessions: 2,
       studyUsageRatio: 0.35,
     });
     expect(gate.isUnlocked).toBe(true);
-    expect(gate.unlockReason).toBe("evidence_usage");
+    expect(gate.unlockReason).toBe('evidence_usage');
   });
 
-  it("few sessions without high usage stays locked with first_week reason", () => {
+  it('few sessions without high usage stays locked with first_week reason', () => {
     const gate = computeStudyOsUnlockGate({
       completedSessions: 2,
       studyUsageRatio: 0.1,
     });
     expect(gate.isUnlocked).toBe(false);
-    expect(gate.unlockReason).toBe("first_week");
+    expect(gate.unlockReason).toBe('first_week');
   });
 
-  it("passes through completedSessions and studyUsageRatio", () => {
+  it('passes through completedSessions and studyUsageRatio', () => {
     const gate = computeStudyOsUnlockGate({
       completedSessions: 3,
       studyUsageRatio: 0.25,
@@ -117,8 +117,8 @@ describe("computeStudyOsUnlockGate", () => {
 
 // ─── computeStudyOsPremiumGate ───────────────────────────────────
 
-describe("computeStudyOsPremiumGate", () => {
-  it("full premium access when entitled and healthy", () => {
+describe('computeStudyOsPremiumGate', () => {
+  it('full premium access when entitled and healthy', () => {
     const gate = computeStudyOsPremiumGate({
       hasPremiumEntitlement: true,
       revenueCatHealthy: true,
@@ -129,26 +129,26 @@ describe("computeStudyOsPremiumGate", () => {
     expect(gate.restrictionReason).toBeNull();
   });
 
-  it("no premium depth without entitlement", () => {
+  it('no premium depth without entitlement', () => {
     const gate = computeStudyOsPremiumGate({
       hasPremiumEntitlement: false,
       revenueCatHealthy: true,
     });
     expect(gate.canAccessPremiumDepth).toBe(false);
-    expect(gate.restrictionReason).toContain("VEX+");
+    expect(gate.restrictionReason).toContain('VEX+');
   });
 
-  it("no premium depth when RevenueCat is degraded", () => {
+  it('no premium depth when RevenueCat is degraded', () => {
     const gate = computeStudyOsPremiumGate({
       hasPremiumEntitlement: true,
       revenueCatHealthy: false,
     });
     expect(gate.canAccessPremiumDepth).toBe(false);
     expect(gate.revenueCatHealthy).toBe(false);
-    expect(gate.restrictionReason).toContain("RevenueCat");
+    expect(gate.restrictionReason).toContain('RevenueCat');
   });
 
-  it("basicStudyFree is always true", () => {
+  it('basicStudyFree is always true', () => {
     expect(
       computeStudyOsPremiumGate({
         hasPremiumEntitlement: false,

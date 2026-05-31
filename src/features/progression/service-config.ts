@@ -7,7 +7,7 @@ export interface ServiceConfig {
 }
 
 const DEFAULT_CONFIG: ServiceConfig = {
-  levelUpRewardTypes: ["XP_BOOST", "COINS", "GEMS"],
+  levelUpRewardTypes: ['XP_BOOST', 'COINS', 'GEMS'],
   xpRatePerMinute: 2,
   maxLevel: 100,
   prestigeEnabled: true,

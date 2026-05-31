@@ -1,5 +1,5 @@
-import { createSheet } from "@/shared/ui/create-sheet";
-import { launchColors } from "@theme/tokens/launch-colors";
+import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
 
 export const challengeListStyles = createSheet({
   container: {
@@ -8,8 +8,8 @@ export const challengeListStyles = createSheet({
   },
   centerContainer: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: 16,
   },
   listContainer: {
@@ -21,7 +21,7 @@ export const challengeListStyles = createSheet({
   },
   headerText: {
     fontSize: 14,
-    fontWeight: "600",
+    fontWeight: '600',
     color: launchColors.hex_6b7280,
   },
   skeletonCard: {
@@ -33,7 +33,7 @@ export const challengeListStyles = createSheet({
     backgroundColor: launchColors.hex_e0e0e0,
     borderRadius: 4,
     marginBottom: 12,
-    width: "70%",
+    width: '70%',
   },
   skeletonLine: {
     height: 12,
@@ -43,19 +43,19 @@ export const challengeListStyles = createSheet({
   },
   errorCard: {
     padding: 24,
-    alignItems: "center",
+    alignItems: 'center',
     maxWidth: 400,
   },
   errorTitle: {
     fontSize: 18,
-    fontWeight: "700",
+    fontWeight: '700',
     marginBottom: 8,
     color: launchColors.hex_dc2626,
   },
   errorMessage: {
     fontSize: 14,
     color: launchColors.hex_6b7280,
-    textAlign: "center",
+    textAlign: 'center',
     marginBottom: 16,
   },
   retryButton: {
@@ -63,16 +63,16 @@ export const challengeListStyles = createSheet({
   },
   emptyCard: {
     padding: 32,
-    alignItems: "center",
+    alignItems: 'center',
   },
   emptyTitle: {
     fontSize: 18,
-    fontWeight: "600",
+    fontWeight: '600',
     marginBottom: 8,
   },
   emptyText: {
     fontSize: 14,
     color: launchColors.hex_6b7280,
-    textAlign: "center",
+    textAlign: 'center',
   },
 });

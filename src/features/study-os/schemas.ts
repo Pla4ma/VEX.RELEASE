@@ -1,12 +1,12 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const StudySourceSchema = z
   .object({
     createdAt: z.number().int().min(0),
-    extractedTextStatus: z.enum(["none", "pending", "ready", "failed"]),
+    extractedTextStatus: z.enum(['none', 'pending', 'ready', 'failed']),
     id: z.string().min(1),
     title: z.string().min(1),
-    type: z.enum(["paste", "file", "manual", "syllabus"]),
+    type: z.enum(['paste', 'file', 'manual', 'syllabus']),
     userId: z.string().min(1),
   })
   .strict();
@@ -16,8 +16,8 @@ export const StudyBlockSchema = z
     estimatedMinutes: z.number().int().min(5).max(180),
     id: z.string().min(1),
     objective: z.string().min(1),
-    priority: z.enum(["low", "medium", "high"]),
-    status: z.enum(["not_started", "scheduled", "completed", "skipped"]),
+    priority: z.enum(['low', 'medium', 'high']),
+    status: z.enum(['not_started', 'scheduled', 'completed', 'skipped']),
     studyPlanId: z.string().min(1),
     title: z.string().min(1),
   })
@@ -26,7 +26,7 @@ export const StudyBlockSchema = z
 export const ReviewItemSchema = z
   .object({
     answerHint: z.string().min(1).nullable(),
-    confidence: z.enum(["unknown", "weak", "medium", "strong"]),
+    confidence: z.enum(['unknown', 'weak', 'medium', 'strong']),
     dueAt: z.number().int().min(0).nullable(),
     id: z.string().min(1),
     prompt: z.string().min(1),
@@ -42,7 +42,7 @@ export const StudyPlanSchema = z
     id: z.string().min(1),
     reviewItems: z.array(ReviewItemSchema),
     source: StudySourceSchema,
-    status: z.enum(["active", "completed", "failed_generation"]),
+    status: z.enum(['active', 'completed', 'failed_generation']),
     title: z.string().min(1),
     userId: z.string().min(1),
   })
@@ -65,11 +65,11 @@ export const StudyOsUnlockGateSchema = z
     completedSessions: z.number().int().min(0),
     studyUsageRatio: z.number().min(0).max(1),
     unlockReason: z.enum([
-      "day_zero",
-      "evidence_sessions",
-      "evidence_usage",
-      "first_week",
-      "full",
+      'day_zero',
+      'evidence_sessions',
+      'evidence_usage',
+      'first_week',
+      'full',
     ]),
   })
   .strict();
@@ -88,7 +88,7 @@ export const RecallQuestionSchema = z
     id: z.string().min(1),
     prompt: z.string().min(1),
     answerHint: z.string().min(1).nullable(),
-    kind: z.enum(["recall", "reflection"]),
+    kind: z.enum(['recall', 'reflection']),
     studyBlockId: z.string().min(1),
     studyPlanId: z.string().min(1),
   })

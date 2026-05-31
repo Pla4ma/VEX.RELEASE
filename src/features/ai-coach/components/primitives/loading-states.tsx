@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { View, Text, ActivityIndicator } from "react-native";
+import React, { useEffect } from 'react';
+import { View, Text, ActivityIndicator } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -7,10 +7,10 @@ import Animated, {
   withRepeat,
   withSequence,
   Easing,
-} from "react-native-reanimated";
-import { launchColors } from "@theme/tokens/launch-colors";
-import { styles } from "./progress-state.styles";
-import { ProgressBar } from "./progress-indicators";
+} from 'react-native-reanimated';
+import { launchColors } from '@theme/tokens/launch-colors';
+import { styles } from './progress-state.styles';
+import { ProgressBar } from './progress-indicators';
 
 interface LoadingStateProps {
   message?: string;
@@ -20,7 +20,7 @@ interface LoadingStateProps {
 }
 
 export function LoadingState({
-  message = "Loading...",
+  message = 'Loading...',
   submessage,
   progress,
   showProgress = false,

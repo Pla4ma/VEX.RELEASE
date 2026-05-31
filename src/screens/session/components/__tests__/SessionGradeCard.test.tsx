@@ -1,18 +1,18 @@
-import React from "react";
-import { act, render } from "@testing-library/react-native";
+import React from 'react';
+import { act, render } from '@testing-library/react-native';
 
-import { triggerHaptic } from "../../../../utils/haptics";
-import { SessionGradeCard } from "../SessionGradeCard";
+import { triggerHaptic } from '../../../../utils/haptics';
+import { SessionGradeCard } from '../SessionGradeCard';
 
-jest.mock("../../../../utils/haptics", () => ({
+jest.mock('../../../../utils/haptics', () => ({
   triggerHaptic: jest.fn(() => Promise.resolve()),
 }));
 
-jest.mock("../../../../components/primitives", () => {
-  const ReactActual = jest.requireActual("react") as typeof import("react");
+jest.mock('../../../../components/primitives', () => {
+  const ReactActual = jest.requireActual('react') as typeof import('react');
   const ReactNative = jest.requireActual(
-    "react-native",
-  ) as typeof import("react-native");
+    'react-native',
+  ) as typeof import('react-native');
 
   return {
     Box: ({ children }: { children?: React.ReactNode }) =>
@@ -22,11 +22,11 @@ jest.mock("../../../../components/primitives", () => {
   };
 });
 
-jest.mock("react-native-svg", () => {
-  const ReactActual = jest.requireActual("react") as typeof import("react");
+jest.mock('react-native-svg', () => {
+  const ReactActual = jest.requireActual('react') as typeof import('react');
   const ReactNative = jest.requireActual(
-    "react-native",
-  ) as typeof import("react-native");
+    'react-native',
+  ) as typeof import('react-native');
   const SvgComponent = ({ children }: { children?: React.ReactNode }) =>
     ReactActual.createElement(ReactNative.View, null, children);
 
@@ -40,8 +40,8 @@ jest.mock("react-native-svg", () => {
   };
 });
 
-jest.mock("react-native-reanimated", () => {
-  const View = "Animated.View";
+jest.mock('react-native-reanimated', () => {
+  const View = 'Animated.View';
   const chainable = {
     damping: jest.fn(function chain(this: unknown) {
       return this;
@@ -77,7 +77,7 @@ jest.mock("react-native-reanimated", () => {
   };
 });
 
-describe("SessionGradeCard", () => {
+describe('SessionGradeCard', () => {
   beforeEach(() => {
     jest.useFakeTimers();
     jest.clearAllMocks();
@@ -87,7 +87,7 @@ describe("SessionGradeCard", () => {
     jest.useRealTimers();
   });
 
-  it("uses the shared haptic wrapper for grade reveal feedback", () => {
+  it('uses the shared haptic wrapper for grade reveal feedback', () => {
     render(
       <SessionGradeCard
         durationLabel="25:00 focused"
@@ -106,6 +106,6 @@ describe("SessionGradeCard", () => {
       jest.advanceTimersByTime(1000);
     });
 
-    expect(triggerHaptic).toHaveBeenCalledWith("impactMedium");
+    expect(triggerHaptic).toHaveBeenCalledWith('impactMedium');
   });
 });

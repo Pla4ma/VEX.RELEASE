@@ -2,21 +2,21 @@
  * Tests for Challenges — Service: updateChallengeProgress
  */
 
-import { describe, it, expect, jest, beforeEach } from "@jest/globals";
+import { describe, it, expect, jest, beforeEach } from '@jest/globals';
 
 // ─── Mocks ─────────────────────────────────────────────────────────────────
 
-jest.mock("../../../events", () => ({
+jest.mock('../../../events', () => ({
   eventBus: { publish: jest.fn(), subscribe: jest.fn(() => jest.fn()) },
 }));
-jest.mock("../repository");
-jest.mock("../../../rewards/RewardService", () => ({
+jest.mock('../repository');
+jest.mock('../../../rewards/RewardService', () => ({
   getRewardService: jest.fn(() => ({
     grantReward: jest.fn().mockResolvedValue(undefined),
   })),
 }));
-jest.mock("@sentry/react-native", () => ({ captureException: jest.fn() }));
-jest.mock("../../../config/supabase", () => ({
+jest.mock('@sentry/react-native', () => ({ captureException: jest.fn() }));
+jest.mock('../../../config/supabase', () => ({
   getSupabaseClient: jest.fn(() => ({
     from: jest.fn(() => ({
       select: jest.fn().mockReturnThis(), eq: jest.fn().mockReturnThis(),
@@ -31,25 +31,25 @@ jest.mock("../../../config/supabase", () => ({
     })),
   })),
 }));
-jest.mock("../../../analytics", () => ({
+jest.mock('../../../analytics', () => ({
   getAnalyticsService: jest.fn(() => ({ track: jest.fn() })),
 }));
-jest.mock("../../../utils/debug", () => ({
+jest.mock('../../../utils/debug', () => ({
   createDebugger: jest.fn(() => ({
     debug: jest.fn(), error: jest.fn(), log: jest.fn(), warn: jest.fn(),
   })),
 }));
-jest.mock("../../../store", () => ({
-  useAuthStore: jest.fn(() => ({ user: { id: "user-1" } })),
+jest.mock('../../../store', () => ({
+  useAuthStore: jest.fn(() => ({ user: { id: 'user-1' } })),
 }));
 
 // ─── Imports under test ─────────────────────────────────────────────────────
 
-import * as repository from "../repository";
-import { eventBus } from "../../../events";
-import { updateChallengeProgress } from "../service";
-import { ChallengeSchema, UserChallengeSchema } from "../schemas";
-import { ChallengeNotFoundError, ChallengeNotActiveError } from "../errors";
+import * as repository from '../repository';
+import { eventBus } from '../../../events';
+import { updateChallengeProgress } from '../service';
+import { ChallengeSchema, UserChallengeSchema } from '../schemas';
+import { ChallengeNotFoundError, ChallengeNotActiveError } from '../errors';
 
 const mockedRepo = jest.mocked(repository);
 const mockedEventBus = jest.mocked(eventBus);
@@ -57,52 +57,52 @@ const NOW = Date.now();
 
 function makeChallenge(overrides: Record<string, unknown> = {}) {
   return ChallengeSchema.parse({
-    id: "c-1", seasonId: "season-1", type: "DAILY", category: "SESSIONS",
-    title: "Test Challenge", description: "Do the thing", targetValue: 5,
-    targetType: "SESSIONS", rewardType: "XP", rewardAmount: 100, ...overrides,
+    id: 'c-1', seasonId: 'season-1', type: 'DAILY', category: 'SESSIONS',
+    title: 'Test Challenge', description: 'Do the thing', targetValue: 5,
+    targetType: 'SESSIONS', rewardType: 'XP', rewardAmount: 100, ...overrides,
   });
 }
 
 function makeUserChallenge(overrides: Record<string, unknown> = {}) {
   return UserChallengeSchema.parse({
-    id: "uc-1", userId: "user-1", challengeId: "c-1",
-    currentValue: 0, status: "ACTIVE", assignedAt: NOW - 10000, ...overrides,
+    id: 'uc-1', userId: 'user-1', challengeId: 'c-1',
+    currentValue: 0, status: 'ACTIVE', assignedAt: NOW - 10000, ...overrides,
   });
 }
 
-describe("Service", () => {
+describe('Service', () => {
   beforeEach(() => { jest.clearAllMocks(); });
 
-  describe("updateChallengeProgress", () => {
-    it("returns null when target not yet reached", async () => {
+  describe('updateChallengeProgress', () => {
+    it('returns null when target not yet reached', async () => {
       const challenge = makeChallenge({ targetValue: 10 });
-      const uc = makeUserChallenge({ currentValue: 0, status: "ACTIVE" });
+      const uc = makeUserChallenge({ currentValue: 0, status: 'ACTIVE' });
       mockedRepo.fetchUserChallenge.mockResolvedValue(uc);
       mockedRepo.fetchChallengeById.mockResolvedValue(challenge);
       mockedRepo.addChallengeProgress.mockResolvedValue(
-        makeUserChallenge({ currentValue: 5, status: "ACTIVE" }),
+        makeUserChallenge({ currentValue: 5, status: 'ACTIVE' }),
       );
 
       const result = await updateChallengeProgress({
-        userId: "user-1", challengeId: "c-1", delta: 5, source: "session",
+        userId: 'user-1', challengeId: 'c-1', delta: 5, source: 'session',
       });
       expect(result).toBeNull();
     });
 
-    it("returns completion result when target is reached", async () => {
+    it('returns completion result when target is reached', async () => {
       const challenge = makeChallenge({ targetValue: 5, rewardAmount: 200 });
-      const uc = makeUserChallenge({ currentValue: 0, status: "ACTIVE", assignedAt: NOW - 10000 });
+      const uc = makeUserChallenge({ currentValue: 0, status: 'ACTIVE', assignedAt: NOW - 10000 });
       mockedRepo.fetchUserChallenge.mockResolvedValue(uc);
       mockedRepo.fetchChallengeById.mockResolvedValue(challenge);
       mockedRepo.addChallengeProgress.mockResolvedValue(
-        makeUserChallenge({ currentValue: 5, status: "ACTIVE" }),
+        makeUserChallenge({ currentValue: 5, status: 'ACTIVE' }),
       );
       mockedRepo.updateUserChallenge.mockResolvedValue(
-        makeUserChallenge({ currentValue: 5, status: "COMPLETED" }),
+        makeUserChallenge({ currentValue: 5, status: 'COMPLETED' }),
       );
 
       const result = await updateChallengeProgress({
-        userId: "user-1", challengeId: "c-1", delta: 5, source: "session",
+        userId: 'user-1', challengeId: 'c-1', delta: 5, source: 'session',
       });
       expect(result).not.toBeNull();
       expect(result!.success).toBe(true);
@@ -110,44 +110,44 @@ describe("Service", () => {
       expect(result!.rewards.length).toBeGreaterThan(0);
     });
 
-    it("throws ChallengeNotFoundError when challenge does not exist", async () => {
+    it('throws ChallengeNotFoundError when challenge does not exist', async () => {
       mockedRepo.fetchUserChallenge.mockResolvedValue(null);
       mockedRepo.fetchChallengeById.mockResolvedValue(null);
       await expect(
         updateChallengeProgress({
-          userId: "user-1", challengeId: "c-missing", delta: 1, source: "test",
+          userId: 'user-1', challengeId: 'c-missing', delta: 1, source: 'test',
         }),
       ).rejects.toThrow(ChallengeNotFoundError);
     });
 
-    it("throws ChallengeNotActiveError when status is not ACTIVE", async () => {
-      const uc = makeUserChallenge({ status: "COMPLETED" });
+    it('throws ChallengeNotActiveError when status is not ACTIVE', async () => {
+      const uc = makeUserChallenge({ status: 'COMPLETED' });
       const challenge = makeChallenge();
       mockedRepo.fetchUserChallenge.mockResolvedValue(uc);
       mockedRepo.fetchChallengeById.mockResolvedValue(challenge);
       await expect(
         updateChallengeProgress({
-          userId: "user-1", challengeId: "c-1", delta: 1, source: "test",
+          userId: 'user-1', challengeId: 'c-1', delta: 1, source: 'test',
         }),
       ).rejects.toThrow(ChallengeNotActiveError);
     });
 
-    it("publishes challenge:progress event on update", async () => {
+    it('publishes challenge:progress event on update', async () => {
       const challenge = makeChallenge({ targetValue: 10 });
-      const uc = makeUserChallenge({ currentValue: 0, status: "ACTIVE" });
+      const uc = makeUserChallenge({ currentValue: 0, status: 'ACTIVE' });
       mockedRepo.fetchUserChallenge.mockResolvedValue(uc);
       mockedRepo.fetchChallengeById.mockResolvedValue(challenge);
       mockedRepo.addChallengeProgress.mockResolvedValue(
-        makeUserChallenge({ currentValue: 3, status: "ACTIVE" }),
+        makeUserChallenge({ currentValue: 3, status: 'ACTIVE' }),
       );
 
       await updateChallengeProgress({
-        userId: "user-1", challengeId: "c-1", delta: 3, source: "session",
+        userId: 'user-1', challengeId: 'c-1', delta: 3, source: 'session',
       });
       expect(mockedEventBus.publish).toHaveBeenCalledWith(
-        "challenge:progress",
+        'challenge:progress',
         expect.objectContaining({
-          userId: "user-1", challengeId: "c-1", progress: 3, target: 10,
+          userId: 'user-1', challengeId: 'c-1', progress: 3, target: 10,
         }),
       );
     });

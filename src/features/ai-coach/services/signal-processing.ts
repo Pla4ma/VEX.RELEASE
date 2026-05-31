@@ -1,6 +1,6 @@
-import type { BehaviorSignal, SignalType } from "../schemas";
-import { v4 } from "../../../utils/uuid";
-import { DEFAULT_SIGNAL_CONFIG } from "./signal-config";
+import type { BehaviorSignal, SignalType } from '../schemas';
+import { v4 } from '../../../utils/uuid';
+import { DEFAULT_SIGNAL_CONFIG } from './signal-config';
 
 export function applyDecayAndWeight(
   signals: BehaviorSignal[],
@@ -76,17 +76,17 @@ export function calculateSignalConfidence(
     COMEBACK_VELOCITY: 0.8,
   };
   let confidence = baseConfidence[signalType] || 0.7;
-  if (metadata.sampleSize && typeof metadata.sampleSize === "number") {
+  if (metadata.sampleSize && typeof metadata.sampleSize === 'number') {
     if (metadata.sampleSize < 3) {
       confidence *= 0.7;
     } else if (metadata.sampleSize < 10) {
       confidence *= 0.9;
     }
   }
-  if (metadata.quality === "high") {
+  if (metadata.quality === 'high') {
     confidence *= 1.1;
   }
-  if (metadata.quality === "low") {
+  if (metadata.quality === 'low') {
     confidence *= 0.8;
   }
   return Math.min(1, confidence);
@@ -95,23 +95,23 @@ export function calculateSignalConfidence(
 export function calculateConfidenceLevel(
   dataPoints: number,
   signals: BehaviorSignal[],
-): "LOW" | "MEDIUM" | "HIGH" {
+): 'LOW' | 'MEDIUM' | 'HIGH' {
   if (dataPoints < DEFAULT_SIGNAL_CONFIG.coldStartThreshold) {
-    return "LOW";
+    return 'LOW';
   }
   if (dataPoints >= DEFAULT_SIGNAL_CONFIG.highConfidenceThreshold) {
-    return "HIGH";
+    return 'HIGH';
   }
   const avgConfidence =
     signals.reduce((sum, s) => sum + s.confidence, 0) / signals.length;
   const { low, medium, high } = DEFAULT_SIGNAL_CONFIG.confidenceThresholds;
   if (avgConfidence >= high && dataPoints >= 15) {
-    return "HIGH";
+    return 'HIGH';
   }
   if (avgConfidence >= medium && dataPoints >= 10) {
-    return "MEDIUM";
+    return 'MEDIUM';
   }
-  return "LOW";
+  return 'LOW';
 }
 
 export function calculateExpiration(signalType: SignalType): number {

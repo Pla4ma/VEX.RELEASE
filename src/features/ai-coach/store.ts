@@ -6,11 +6,11 @@
  */
 
 // Re-export all from modular store structure
-export type { CoachUIState, CoachUIActions, CoachStore } from "./store/types";
+export type { CoachUIState, CoachUIActions, CoachStore } from './store/types';
 
-export { useCoachStore, resetCoachPreferences } from "./store/useCoachStore";
+export { useCoachStore, resetCoachPreferences } from './store/useCoachStore';
 
-export { mmkvStorage, storageConfig } from "./store/storage";
+export { mmkvStorage, storageConfig } from './store/storage';
 
 export {
   selectActiveMessage,
@@ -25,6 +25,6 @@ export {
   selectIsMessageDismissed,
   selectModalState,
   selectIsModalVisible,
-} from "./store/selectors";
+} from './store/selectors';
 
-export { shouldShowMessage, getActiveModalType } from "./store/helpers";
+export { shouldShowMessage, getActiveModalType } from './store/helpers';

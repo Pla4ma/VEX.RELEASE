@@ -1,19 +1,19 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { View } from "react-native";
-import Animated, { FadeIn, ZoomIn } from "react-native-reanimated";
+import React, { useCallback, useEffect, useState } from 'react';
+import { View } from 'react-native';
+import Animated, { FadeIn, ZoomIn } from 'react-native-reanimated';
 
-import { Box, Button, Text } from "../../../components/primitives";
-import { useReducedMotion } from "../../../hooks/useReducedMotion";
-import type { SessionSummary } from "../../../session/types";
-import type { Theme } from "../../../theme/types";
+import { Box, Button, Text } from '../../../components/primitives';
+import { useReducedMotion } from '../../../hooks/useReducedMotion';
+import type { SessionSummary } from '../../../session/types';
+import type { Theme } from '../../../theme/types';
 import {
   type CompanionGrowth,
   loadCompanionGrowth,
-} from "../../../features/companion/session-storage";
+} from '../../../features/companion/session-storage';
 import {
   type LoadState,
   buildFallbackGrowth,
-} from "./CompanionGrowthSection.helpers";
+} from './CompanionGrowthSection.helpers';
 
 type CompanionGrowthSectionProps = {
   sessionId: string;
@@ -29,21 +29,21 @@ export function CompanionGrowthSection({
   userId,
 }: CompanionGrowthSectionProps): JSX.Element {
   const { isReducedMotion } = useReducedMotion();
-  const [loadState, setLoadState] = useState<LoadState>({ status: "loading" });
+  const [loadState, setLoadState] = useState<LoadState>({ status: 'loading' });
   const load = useCallback(() => {
     if (!userId) {
-      setLoadState({ status: "empty" });
+      setLoadState({ status: 'empty' });
       return;
     }
-    setLoadState({ status: "loading" });
+    setLoadState({ status: 'loading' });
     loadCompanionGrowth(userId, sessionId)
       .then(
         (growth) => growth ?? buildFallbackGrowth(sessionId, summary, userId),
       )
-      .then((growth) => setLoadState({ status: "success", growth }))
+      .then((growth) => setLoadState({ status: 'success', growth }))
       .catch((caught: unknown) => {
         setLoadState({
-          status: "error",
+          status: 'error',
           error: caught instanceof Error ? caught : new Error(String(caught)),
         });
       });
@@ -53,7 +53,7 @@ export function CompanionGrowthSection({
     load();
   }, [load]);
 
-  if (loadState.status === "loading") {
+  if (loadState.status === 'loading') {
     return (
       <Box
         mt={6}
@@ -78,7 +78,7 @@ export function CompanionGrowthSection({
     );
   }
 
-  if (loadState.status === "error") {
+  if (loadState.status === 'error') {
     return (
       <Box
         mt={6}
@@ -106,7 +106,7 @@ export function CompanionGrowthSection({
     );
   }
 
-  if (loadState.status === "empty") {
+  if (loadState.status === 'empty') {
     return (
       <Box
         mt={6}
@@ -175,8 +175,8 @@ export function CompanionGrowthSection({
           >
             <Text variant="label" color={theme.colors.success.DEFAULT} mt={3}>
               {growth.evolved
-                ? "Evolution burst unlocked."
-                : "Companion level up."}
+                ? 'Evolution burst unlocked.'
+                : 'Companion level up.'}
             </Text>
           </Animated.View>
         ) : null}
@@ -185,5 +185,5 @@ export function CompanionGrowthSection({
   );
 }
 
-export { type LoadState } from "./CompanionGrowthSection.helpers";
-export type { CompanionGrowth } from "../../../features/companion/session-storage";
+export { type LoadState } from './CompanionGrowthSection.helpers';
+export type { CompanionGrowth } from '../../../features/companion/session-storage';

@@ -1,14 +1,14 @@
-import { describe, expect, it } from "@jest/globals";
+import { describe, expect, it } from '@jest/globals';
 import {
   isRescueEligible,
   shouldSendRescuePush,
-} from "../../features/rescue-mode/service";
+} from '../../features/rescue-mode/service';
 
-describe("Phase 17 — Rescue: Push eligibility", () => {
-  it("sends push when eligible", () => {
+describe('Phase 17 — Rescue: Push eligibility', () => {
+  it('sends push when eligible', () => {
     const eligibility = isRescueEligible({
-      userId: "u1",
-      lane: "student",
+      userId: 'u1',
+      lane: 'student',
       completedSessions: 3,
       daysSinceOnboarding: 2,
       abandonedSessionExists: true,
@@ -30,10 +30,10 @@ describe("Phase 17 — Rescue: Push eligibility", () => {
     expect(result).toBe(true);
   });
 
-  it("blocks push when user muted", () => {
+  it('blocks push when user muted', () => {
     const eligibility = isRescueEligible({
-      userId: "u1",
-      lane: "student",
+      userId: 'u1',
+      lane: 'student',
       completedSessions: 3,
       daysSinceOnboarding: 2,
       abandonedSessionExists: true,
@@ -55,10 +55,10 @@ describe("Phase 17 — Rescue: Push eligibility", () => {
     expect(result).toBe(false);
   });
 
-  it("blocks push during quiet hours", () => {
+  it('blocks push during quiet hours', () => {
     const eligibility = isRescueEligible({
-      userId: "u1",
-      lane: "student",
+      userId: 'u1',
+      lane: 'student',
       completedSessions: 3,
       daysSinceOnboarding: 2,
       abandonedSessionExists: true,

@@ -1,9 +1,9 @@
-import React from "react";
-import { Pressable } from "react-native";
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useModeRescueSurface } from "../hooks";
-import type { Lane } from "../../lane-engine/types";
+import React from 'react';
+import { Pressable } from 'react-native';
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useModeRescueSurface } from '../hooks';
+import type { Lane } from '../../lane-engine/types';
 
 interface ModeRescueSurfaceProps {
   lane: Lane | null | undefined;
@@ -69,7 +69,7 @@ export function ModeRescueSurface({
           style={({ pressed }) => ({
             paddingHorizontal: 16,
             minHeight: 44,
-            justifyContent: "center",
+            justifyContent: 'center',
             opacity: pressed ? 0.6 : 1,
           })}
         >
@@ -83,7 +83,7 @@ export function ModeRescueSurface({
 }
 
 // ── ModeActiveIndicator ────────────────────────────────────────────────
-import { useModeActiveIndicator } from "../hooks";
+import { useModeActiveIndicator } from '../hooks';
 
 interface ModeActiveIndicatorProps {
   lane: Lane | null | undefined;

@@ -1,21 +1,21 @@
-import { useEffect, useRef } from "react";
-import { useQueryClient } from "@tanstack/react-query";
-import * as Sentry from "@sentry/react-native";
-import * as ExpoNotifications from "expo-notifications";
+import { useEffect, useRef } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
+import * as Sentry from '@sentry/react-native';
+import * as ExpoNotifications from 'expo-notifications';
 import {
   type CoachMessage,
   type CoachState,
-} from "./schemas";
-import { COACH_QUERY_KEYS } from "./hooks";
-import { createDebugger } from "../../utils/debug";
+} from './schemas';
+import { COACH_QUERY_KEYS } from './hooks';
+import { createDebugger } from '../../utils/debug';
 import {
   subscribeToCoachMessages,
   subscribeToCoachState,
   subscribeToComebackPlan,
   subscribeToRecommendations,
-} from "./repository/messages";
+} from './repository/messages';
 
-const debug = createDebugger("coach:realtime");
+const debug = createDebugger('coach:realtime');
 
 type Subscription = ReturnType<typeof subscribeToCoachMessages>;
 
@@ -58,8 +58,8 @@ export function useRealtimeCoachMessages(userId: string) {
         },
       );
       if (
-        newMessage.deliveryMethod === "PUSH" ||
-        newMessage.deliveryMethod === "BOTH"
+        newMessage.deliveryMethod === 'PUSH' ||
+        newMessage.deliveryMethod === 'BOTH'
       ) {
         showLocalNotification(newMessage);
       }
@@ -136,11 +136,11 @@ export function useRealtimeCoach(userId: string) {
 async function showLocalNotification(message: CoachMessage): Promise<void> {
   try {
     const { status } = await ExpoNotifications.getPermissionsAsync();
-    if (status !== "granted") return;
+    if (status !== 'granted') {return;}
 
     await ExpoNotifications.scheduleNotificationAsync({
       content: {
-        title: "VEX Coach",
+        title: 'VEX Coach',
         body: message.content,
         data: { messageId: message.id, type: message.category },
         sound: true,
@@ -149,7 +149,7 @@ async function showLocalNotification(message: CoachMessage): Promise<void> {
     });
   } catch (error) {
     Sentry.captureException(error, {
-      tags: { feature: "coach-local-notification" },
+      tags: { feature: 'coach-local-notification' },
     });
   }
 }

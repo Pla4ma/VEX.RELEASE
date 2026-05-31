@@ -8,21 +8,21 @@
  * Data lives in classification-data-*.ts files, one per status category.
  */
 
-import { z } from "zod";
-import { ACTIVE } from "./classification-data-active";
-import { ARCHIVED } from "./classification-data-archived";
-import { INTERNAL } from "./classification-data-internal";
-import { LEGACY } from "./classification-data-v1";
-import { PROGRESSIVE } from "./classification-data-progressive";
+import { z } from 'zod';
+import { ACTIVE } from './classification-data-active';
+import { ARCHIVED } from './classification-data-archived';
+import { INTERNAL } from './classification-data-internal';
+import { LEGACY } from './classification-data-v1';
+import { PROGRESSIVE } from './classification-data-progressive';
 
 // ── Schemas ──
 
 export const ClassificationStatusSchema = z.enum([
-  "final_release_active",
-  "final_release_progressive",
-  "final_release_internal",
-  "archived_or_deactivated",
-  "test_or_legacy",
+  'final_release_active',
+  'final_release_progressive',
+  'final_release_internal',
+  'archived_or_deactivated',
+  'test_or_legacy',
 ]);
 
 export type ClassificationStatus = z.infer<typeof ClassificationStatusSchema>;

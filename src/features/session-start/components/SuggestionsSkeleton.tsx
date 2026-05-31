@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react';
 
-import { Box } from "../../../components/primitives/Box";
-import { useTheme } from "../../../theme";
+import { Box } from '../../../components/primitives/Box';
+import { useTheme } from '../../../theme';
 
 /**
  * Skeleton loading state for suggestions

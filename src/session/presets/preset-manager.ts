@@ -1,17 +1,17 @@
-import { v4 as uuidv4 } from "../../utils/uuid";
-import type { SessionPreset } from "../types";
-import { ValidateSessionPresetSchema } from "../validation/schemas";
-import { createDebugger } from "../../utils/debug";
-import { DEFAULT_PRESETS } from "./default-presets";
-import { buildExportPresets, buildImportPresets } from "./preset-io";
+import { v4 as uuidv4 } from '../../utils/uuid';
+import type { SessionPreset } from '../types';
+import { ValidateSessionPresetSchema } from '../validation/schemas';
+import { createDebugger } from '../../utils/debug';
+import { DEFAULT_PRESETS } from './default-presets';
+import { buildExportPresets, buildImportPresets } from './preset-io';
 import {
   buildCustomPresetData,
   loadUserPresetsFromStorage,
   saveUserPresetsToStorage,
   initializeSystemPresetsData,
-} from "./preset-manager-helpers";
+} from './preset-manager-helpers';
 
-const debug = createDebugger("session:presets");
+const debug = createDebugger('session:presets');
 
 export class PresetService {
   private userId: string | null = null;
@@ -28,7 +28,7 @@ export class PresetService {
   setUserId(userId: string): void {
     this.userId = userId;
     this.loadUserPresets();
-    debug.info("PresetService user set: %s", userId);
+    debug.info('PresetService user set: %s', userId);
   }
 
   private initializeSystemPresets(): void {
@@ -38,7 +38,7 @@ export class PresetService {
     PresetService.systemPresets = initializeSystemPresetsData(DEFAULT_PRESETS);
     PresetService.initialized = true;
     debug.info(
-      "Initialized %d system presets",
+      'Initialized %d system presets',
       PresetService.systemPresets.length,
     );
   }
@@ -46,11 +46,11 @@ export class PresetService {
   async createPreset(
     presetData: Omit<
       SessionPreset,
-      "id" | "createdAt" | "updatedAt" | "userId"
+      'id' | 'createdAt' | 'updatedAt' | 'userId'
     >,
   ): Promise<SessionPreset> {
     if (!this.userId) {
-      throw new Error("PresetService: No user set");
+      throw new Error('PresetService: No user set');
     }
     const now = Date.now();
     const preset: SessionPreset = {
@@ -66,16 +66,16 @@ export class PresetService {
     }
     this.userPresets.set(preset.id, preset);
     await this.saveUserPresets();
-    debug.info("Created preset: %s (%s)", preset.name, preset.id);
+    debug.info('Created preset: %s (%s)', preset.name, preset.id);
     return preset;
   }
 
   async updatePreset(
     presetId: string,
-    updates: Partial<Omit<SessionPreset, "id" | "createdAt" | "userId">>,
+    updates: Partial<Omit<SessionPreset, 'id' | 'createdAt' | 'userId'>>,
   ): Promise<SessionPreset> {
     if (!this.userId) {
-      throw new Error("PresetService: No user set");
+      throw new Error('PresetService: No user set');
     }
     const existing = this.userPresets.get(presetId);
     if (!existing) {
@@ -92,13 +92,13 @@ export class PresetService {
     }
     this.userPresets.set(presetId, updated);
     await this.saveUserPresets();
-    debug.info("Updated preset: %s", presetId);
+    debug.info('Updated preset: %s', presetId);
     return updated;
   }
 
   async deletePreset(presetId: string): Promise<void> {
     if (!this.userId) {
-      throw new Error("PresetService: No user set");
+      throw new Error('PresetService: No user set');
     }
     const existing = this.userPresets.get(presetId);
     if (!existing) {
@@ -106,7 +106,7 @@ export class PresetService {
     }
     this.userPresets.delete(presetId);
     await this.saveUserPresets();
-    debug.info("Deleted preset: %s", presetId);
+    debug.info('Deleted preset: %s', presetId);
   }
 
   getPresetById(presetId: string): SessionPreset | undefined {
@@ -190,4 +190,4 @@ export class PresetService {
   }
 }
 
-export { getPresetService } from "./preset-manager-singleton";
+export { getPresetService } from './preset-manager-singleton';

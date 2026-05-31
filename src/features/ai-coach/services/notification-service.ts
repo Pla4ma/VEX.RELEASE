@@ -1,15 +1,15 @@
-import * as Notifications from "expo-notifications";
-import { createDebugger } from "../../../utils/debug";
-import { type CoachMessage } from "../schemas";
-import { getCategoryConfig } from "./notification-config";
+import * as Notifications from 'expo-notifications';
+import { createDebugger } from '../../../utils/debug';
+import { type CoachMessage } from '../schemas';
+import { getCategoryConfig } from './notification-config';
 import {
   ensureNotificationChannel,
   requestNotificationPermissions,
-} from "./notification-permissions";
-import { getScheduledCoachNotifications } from "./notification-support";
-import { isSameCalendarDay, isQuietHours, isRateLimited } from "./notification-helpers";
+} from './notification-permissions';
+import { getScheduledCoachNotifications } from './notification-support';
+import { isSameCalendarDay, isQuietHours, isRateLimited } from './notification-helpers';
 
-const debug = createDebugger("ai-coach:notifications");
+const debug = createDebugger('ai-coach:notifications');
 
 export { requestNotificationPermissions };
 export {
@@ -19,14 +19,14 @@ export {
   getScheduledCoachNotifications,
   sendPushNotification,
   setBadgeCount,
-} from "./notification-support";
+} from './notification-support';
 
-export { isSameCalendarDay, isQuietHours, isRateLimited } from "./notification-helpers";
+export { isSameCalendarDay, isQuietHours, isRateLimited } from './notification-helpers';
 export {
   scheduleStreakReminderNotification,
   cancelNotification,
   handleNotificationResponse,
-} from "./notification-scheduling";
+} from './notification-scheduling';
 
 export function initializeNotifications(): void {
   try {
@@ -40,7 +40,7 @@ export function initializeNotifications(): void {
       }),
     });
   } catch (error) {
-    debug.warn("Notification handler setup failed", error);
+    debug.warn('Notification handler setup failed', error);
   }
   void ensureNotificationChannel();
 }
@@ -61,16 +61,16 @@ export async function scheduleLocalNotification(
         data: {
           messageId: message.id,
           category: message.category,
-          action: "OPEN_COACH_MESSAGE",
+          action: 'OPEN_COACH_MESSAGE',
         },
-        sound: "default",
+        sound: 'default',
         badge: 1,
         ...categoryConfig.androidConfig,
       },
       trigger: null,
     });
   } catch (error) {
-    debug.warn("Local notification scheduling failed", error);
+    debug.warn('Local notification scheduling failed', error);
     return null;
   }
 }
@@ -83,7 +83,7 @@ export async function scheduleReminderNotification(
 ): Promise<string | null> {
   if (triggerTime < Date.now()) {
     debug.warn(
-      "Reminder notification was skipped because it was scheduled in the past",
+      'Reminder notification was skipped because it was scheduled in the past',
     );
     return null;
   }
@@ -93,8 +93,8 @@ export async function scheduleReminderNotification(
       content: {
         title,
         body,
-        data: { ...data, action: "COACH_REMINDER" },
-        sound: "default",
+        data: { ...data, action: 'COACH_REMINDER' },
+        sound: 'default',
       },
       trigger: {
         type: Notifications.SchedulableTriggerInputTypes.DATE,
@@ -102,7 +102,7 @@ export async function scheduleReminderNotification(
       },
     });
   } catch (error) {
-    debug.warn("Reminder notification scheduling failed", error);
+    debug.warn('Reminder notification scheduling failed', error);
     return null;
   }
 }

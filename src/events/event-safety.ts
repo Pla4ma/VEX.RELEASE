@@ -31,8 +31,8 @@
  * - Subscribe without cleanup in the same scope
  * - Use event order for correctness guarantees
  */
-import type { EventChannels } from "./EventTypes";
-import { eventBus } from "./EventBus";
+import type { EventChannels } from './EventTypes';
+import { eventBus } from './EventBus';
 
 const processedKeys = new Map<string, Set<string>>();
 
@@ -51,7 +51,7 @@ export function subscribeIdempotent<T extends keyof EventChannels>(
 
   const wrappedHandler = (data: EventChannels[T]): void => {
     const key = getKey(data);
-    if (channelKeys.has(key)) return;
+    if (channelKeys.has(key)) {return;}
     channelKeys.add(key);
     if (options.ttlMs) {
       setTimeout(() => channelKeys.delete(key), options.ttlMs);

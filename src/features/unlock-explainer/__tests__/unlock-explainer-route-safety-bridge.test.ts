@@ -6,8 +6,8 @@ import {
   checkRouteSafety,
   canRegisterFeatureRouteWithSafety,
   canNavigateToRouteWithSafety,
-} from "../route-safety-bridge";
-import type { UnlockDecision } from "../types";
+} from '../route-safety-bridge';
+import type { UnlockDecision } from '../types';
 
 // ─── Fake timers for consistent Date.now() ───────────────────────
 
@@ -24,69 +24,69 @@ afterAll(() => {
 
 // ─── Route Safety Bridge ─────────────────────────────────────────
 
-describe("checkRouteSafety", () => {
+describe('checkRouteSafety', () => {
   const makeDecision = (decision: string): UnlockDecision =>
     ({
-      featureKey: "test",
+      featureKey: 'test',
       decision,
-      reasonCode: "test",
-      userFacingReason: "test reason",
+      reasonCode: 'test',
+      userFacingReason: 'test reason',
       evidence: [],
-      laneFit: "medium",
+      laneFit: 'medium',
       canHide: true,
       canReconsiderAtSessionCount: null,
     }) as unknown as UnlockDecision;
 
-  it("hidden feature cannot register or navigate", () => {
-    const result = checkRouteSafety(makeDecision("hidden"), false, false);
+  it('hidden feature cannot register or navigate', () => {
+    const result = checkRouteSafety(makeDecision('hidden'), false, false);
     expect(result.canRegisterRoute).toBe(false);
     expect(result.canNavigate).toBe(false);
     expect(result.reason).toBeTruthy();
   });
 
-  it("user-hidden feature cannot register or navigate", () => {
-    const result = checkRouteSafety(makeDecision("unlocked"), true, false);
+  it('user-hidden feature cannot register or navigate', () => {
+    const result = checkRouteSafety(makeDecision('unlocked'), true, false);
     expect(result.canRegisterRoute).toBe(false);
     expect(result.canNavigate).toBe(false);
   });
 
-  it("teased feature cannot register or navigate", () => {
-    const result = checkRouteSafety(makeDecision("teased"), false, false);
+  it('teased feature cannot register or navigate', () => {
+    const result = checkRouteSafety(makeDecision('teased'), false, false);
     expect(result.canRegisterRoute).toBe(false);
     expect(result.canNavigate).toBe(false);
   });
 
-  it("unlocked feature can register and navigate", () => {
-    const result = checkRouteSafety(makeDecision("unlocked"), false, false);
+  it('unlocked feature can register and navigate', () => {
+    const result = checkRouteSafety(makeDecision('unlocked'), false, false);
     expect(result.canRegisterRoute).toBe(true);
     expect(result.canNavigate).toBe(true);
     expect(result.reason).toBeNull();
   });
 
-  it("null decision cannot register or navigate", () => {
+  it('null decision cannot register or navigate', () => {
     const result = checkRouteSafety(null, false, false);
     expect(result.canRegisterRoute).toBe(false);
     expect(result.canNavigate).toBe(false);
   });
 });
 
-describe("canRegisterFeatureRouteWithSafety", () => {
+describe('canRegisterFeatureRouteWithSafety', () => {
   const makeDecision = (decision: string): UnlockDecision =>
     ({
-      featureKey: "test",
+      featureKey: 'test',
       decision,
-      reasonCode: "test",
-      userFacingReason: "test reason",
+      reasonCode: 'test',
+      userFacingReason: 'test reason',
       evidence: [],
-      laneFit: "medium",
+      laneFit: 'medium',
       canHide: true,
       canReconsiderAtSessionCount: null,
     }) as unknown as UnlockDecision;
 
-  it("returns true only when both safety and availability agree", () => {
+  it('returns true only when both safety and availability agree', () => {
     expect(
       canRegisterFeatureRouteWithSafety(
-        makeDecision("unlocked"),
+        makeDecision('unlocked'),
         false,
         false,
         true,
@@ -94,10 +94,10 @@ describe("canRegisterFeatureRouteWithSafety", () => {
     ).toBe(true);
   });
 
-  it("returns false when safety denies even if availability allows", () => {
+  it('returns false when safety denies even if availability allows', () => {
     expect(
       canRegisterFeatureRouteWithSafety(
-        makeDecision("hidden"),
+        makeDecision('hidden'),
         false,
         false,
         true,
@@ -105,10 +105,10 @@ describe("canRegisterFeatureRouteWithSafety", () => {
     ).toBe(false);
   });
 
-  it("returns false when availability denies even if safety allows", () => {
+  it('returns false when availability denies even if safety allows', () => {
     expect(
       canRegisterFeatureRouteWithSafety(
-        makeDecision("unlocked"),
+        makeDecision('unlocked'),
         false,
         false,
         false,
@@ -117,23 +117,23 @@ describe("canRegisterFeatureRouteWithSafety", () => {
   });
 });
 
-describe("canNavigateToRouteWithSafety", () => {
+describe('canNavigateToRouteWithSafety', () => {
   const makeDecision = (decision: string): UnlockDecision =>
     ({
-      featureKey: "test",
+      featureKey: 'test',
       decision,
-      reasonCode: "test",
-      userFacingReason: "test reason",
+      reasonCode: 'test',
+      userFacingReason: 'test reason',
       evidence: [],
-      laneFit: "medium",
+      laneFit: 'medium',
       canHide: true,
       canReconsiderAtSessionCount: null,
     }) as unknown as UnlockDecision;
 
-  it("returns true only when both safety and availability agree", () => {
+  it('returns true only when both safety and availability agree', () => {
     expect(
       canNavigateToRouteWithSafety(
-        makeDecision("unlocked"),
+        makeDecision('unlocked'),
         false,
         false,
         true,
@@ -141,10 +141,10 @@ describe("canNavigateToRouteWithSafety", () => {
     ).toBe(true);
   });
 
-  it("returns false when safety denies", () => {
+  it('returns false when safety denies', () => {
     expect(
       canNavigateToRouteWithSafety(
-        makeDecision("teased"),
+        makeDecision('teased'),
         false,
         false,
         true,

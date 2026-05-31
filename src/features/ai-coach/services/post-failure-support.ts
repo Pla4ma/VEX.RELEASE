@@ -1,15 +1,15 @@
 import {
   getOrCreateMemory,
-} from "./coach-memory";
-import type { CoachStyle } from "./personality-templates";
-import { capture } from "@/shared/analytics";
-import { CoachEvents } from "@/shared/analytics/analytics-events";
-import { createDebugger } from "@/utils/debug";
+} from './coach-memory';
+import type { CoachStyle } from './personality-templates';
+import { capture } from '@/shared/analytics';
+import { CoachEvents } from '@/shared/analytics/analytics-events';
+import { createDebugger } from '@/utils/debug';
 import {
   DAY1_EMPATHY_TEMPLATES,
   DAY2_GOAL_TEMPLATES,
   DAY3_MOMENTUM_TEMPLATES,
-} from "./post-failure-templates";
+} from './post-failure-templates';
 import {
   buildDay1Message,
   buildDay2Message,
@@ -17,18 +17,18 @@ import {
   sendSupportMessage,
   scheduleFutureMessages,
   getUserPersonalityStyle,
-} from "./post-failure-helpers";
+} from './post-failure-helpers';
 
-const debug = createDebugger("coach:post-failure");
+const debug = createDebugger('coach:post-failure');
 
 export interface FailureContext {
   userId: string;
   streakDaysBeforeBreak: number;
   breakReason?:
-    | "MISSED_DAY"
-    | "SESSION_ABANDONED"
-    | "LOW_QUALITY"
-    | "USER_INITIATED";
+    | 'MISSED_DAY'
+    | 'SESSION_ABANDONED'
+    | 'LOW_QUALITY'
+    | 'USER_INITIATED';
   daysSinceBreak: number;
   previousComebackCount: number;
 }
@@ -37,7 +37,7 @@ export interface SupportMessage {
   day: 1 | 2 | 3;
   content: string;
   actionItem: string;
-  tone: "EMPATHETIC" | "CONSTRUCTIVE" | "MOTIVATIONAL";
+  tone: 'EMPATHETIC' | 'CONSTRUCTIVE' | 'MOTIVATIONAL';
   shouldSend: boolean;
 }
 
@@ -67,7 +67,7 @@ export async function startPostFailureSupport(
     ],
   };
   capture(CoachEvents.COACH_MESSAGE_RECEIVED, {
-    category: "POST_FAILURE",
+    category: 'POST_FAILURE',
     day: 1,
     streak_before_break: context.streakDaysBeforeBreak,
     personality_style: style,
@@ -89,7 +89,7 @@ export async function completePostFailureSupport(
   userId: string,
 ): Promise<void> {
   capture(CoachEvents.COACH_MESSAGE_RECEIVED, {
-    category: "POST_FAILURE_COMPLETE",
+    category: 'POST_FAILURE_COMPLETE',
   } as Record<string, unknown>);
   debug.debug(`[Post-Failure Support] Completed for ${userId}`);
 }

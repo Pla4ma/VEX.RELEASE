@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
-import { View } from "react-native";
-import Svg, { Circle, Defs, LinearGradient, Stop } from "react-native-svg";
+import React, { useEffect } from 'react';
+import { View } from 'react-native';
+import Svg, { Circle, Defs, LinearGradient, Stop } from 'react-native-svg';
 import Animated, {
   Easing,
   FadeIn,
@@ -10,19 +10,19 @@ import Animated, {
   useSharedValue,
   withSequence,
   withTiming,
-} from "react-native-reanimated";
-import { Box, Text } from "../../../components/primitives";
+} from 'react-native-reanimated';
+import { Box, Text } from '../../../components/primitives';
 import {
   getPremiumCardStyle,
   withAlpha,
-} from "../../../components/premiumStyles";
-import { useTheme } from "../../../theme";
+} from '../../../components/premiumStyles';
+import { useTheme } from '../../../theme';
 import {
   AnimatedCircle,
   pulseCompleteHaptic,
   styles,
   type SessionGradeCardProps,
-} from "./SessionGradeCard.types";
+} from './SessionGradeCard.types';
 export type { SessionGradeCardProps };
 
 export function SessionGradeCard({
@@ -73,7 +73,7 @@ export function SessionGradeCard({
     >
       <Animated.View
         entering={FadeIn.duration(220)}
-        style={{ ...{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0 } }}
+        style={{ ...{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 } }}
       >
         <View
           style={{ flex: 1, backgroundColor: theme.colors.background.primary }}
@@ -99,8 +99,8 @@ export function SessionGradeCard({
             style={{
               width: size,
               height: size,
-              justifyContent: "center",
-              alignItems: "center",
+              justifyContent: 'center',
+              alignItems: 'center',
             }}
           >
             <Svg width={size} height={size}>
@@ -179,7 +179,7 @@ export function SessionGradeCard({
               ),
               borderWidth: 1,
               borderColor: withAlpha(gradeColor, 0.34),
-              ...getPremiumCardStyle("hero"),
+              ...getPremiumCardStyle('hero'),
             }}
           >
             <Text variant="h3" color={theme.colors.text.primary}>

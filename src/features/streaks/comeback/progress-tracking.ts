@@ -4,18 +4,18 @@
  * Functions to track quest progress and completion.
  */
 
-import { createDebugger } from "../../../utils/debug";
-import { COMEBACK_QUEST_CONFIG } from "./config";
+import { createDebugger } from '../../../utils/debug';
+import { COMEBACK_QUEST_CONFIG } from './config';
 import {
   ComebackQuestSchema,
   ComebackQuestProgressSchema,
   type ComebackQuest,
   type ComebackQuestProgress,
   type ComebackQuestStage,
-} from "./schemas";
-import { updateComebackQuestProgress } from "../repository/comeback";
+} from './schemas';
+import { updateComebackQuestProgress } from '../repository/comeback';
 
-const debug = createDebugger("streaks:comeback-quest");
+const debug = createDebugger('streaks:comeback-quest');
 
 /**
  * Check if a session completes a quest requirement
@@ -35,7 +35,7 @@ export function checkQuestCompletion(
   if (!quest.quest1Completed) {
     const quest1Met = sessionDuration >= COMEBACK_QUEST_CONFIG.quest1.duration;
     if (quest1Met) {
-      questCompleted = "QUEST_1";
+      questCompleted = 'QUEST_1';
     }
   }
   // Check Quest 2 (30 minutes, A grade)
@@ -44,7 +44,7 @@ export function checkQuestCompletion(
       sessionDuration >= COMEBACK_QUEST_CONFIG.quest2.duration &&
       gradeUpper >= COMEBACK_QUEST_CONFIG.quest2.grade!;
     if (quest2Met) {
-      questCompleted = "QUEST_2";
+      questCompleted = 'QUEST_2';
     }
   }
   // Check Quest 3 (45 minutes, A grade)
@@ -53,7 +53,7 @@ export function checkQuestCompletion(
       sessionDuration >= COMEBACK_QUEST_CONFIG.quest3.duration &&
       gradeUpper >= COMEBACK_QUEST_CONFIG.quest3.grade!;
     if (quest3Met) {
-      questCompleted = "QUEST_3";
+      questCompleted = 'QUEST_3';
     }
   }
 
@@ -107,18 +107,18 @@ export function calculateQuestProgress(
  */
 function getCurrentStage(quest: ComebackQuest): ComebackQuestStage {
   if (quest.allQuestsCompleted) {
-    return "COMPLETE";
+    return 'COMPLETE';
   }
   if (quest.quest3Completed) {
-    return "QUEST_3";
+    return 'QUEST_3';
   }
   if (quest.quest2Completed) {
-    return "QUEST_2";
+    return 'QUEST_2';
   }
   if (quest.quest1Completed) {
-    return "QUEST_2";
+    return 'QUEST_2';
   }
-  return "QUEST_1";
+  return 'QUEST_1';
 }
 
 /**
@@ -134,19 +134,19 @@ export async function updateQuestProgress(
     };
 
     switch (completedStage) {
-      case "QUEST_1": {
+      case 'QUEST_1': {
         updateData.quest1_completed = true;
-        updateData.stage = "QUEST_2";
+        updateData.stage = 'QUEST_2';
         break;
       }
-      case "QUEST_2": {
+      case 'QUEST_2': {
         updateData.quest2_completed = true;
-        updateData.stage = "QUEST_3";
+        updateData.stage = 'QUEST_3';
         break;
       }
-      case "QUEST_3": {
+      case 'QUEST_3': {
         updateData.quest3_completed = true;
-        updateData.stage = "COMPLETE";
+        updateData.stage = 'COMPLETE';
         updateData.all_quests_completed = true;
         updateData.rewards_claimed = false;
         updateData.phoenix_badge_earned = true;
@@ -157,7 +157,7 @@ export async function updateQuestProgress(
     return await updateComebackQuestProgress(questId, updateData);
   } catch (error) {
     debug.error(
-      "Error updating quest progress",
+      'Error updating quest progress',
       error instanceof Error ? error : undefined,
     );
     return null;

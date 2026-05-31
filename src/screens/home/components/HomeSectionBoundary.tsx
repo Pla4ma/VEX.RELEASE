@@ -1,9 +1,9 @@
-import React from "react";
-import { Pressable } from "react-native";
+import React from 'react';
+import { Pressable } from 'react-native';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
 
 interface HomeSectionBoundaryProps {
   children: React.ReactNode;

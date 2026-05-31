@@ -1,14 +1,14 @@
-import React, { useEffect } from "react";
-import { View, Text, type ViewStyle } from "react-native";
+import React, { useEffect } from 'react';
+import { View, Text, type ViewStyle } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withTiming,
   withSpring,
   Easing,
-} from "react-native-reanimated";
-import { launchColors } from "@theme/tokens/launch-colors";
-import { styles } from "./progress-state.styles";
+} from 'react-native-reanimated';
+import { launchColors } from '@theme/tokens/launch-colors';
+import { styles } from './progress-state.styles';
 
 interface ProgressBarProps {
   progress: number;

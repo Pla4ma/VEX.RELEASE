@@ -1,24 +1,24 @@
-import { useMemo } from "react";
+import { useMemo } from 'react';
 
 import {
   FEATURE_FLAG_DEFAULTS,
   FEATURE_FLAGS,
-} from "../../../constants/features";
-import type { SessionSummary } from "../../../session/types";
-import { selectHeadlineReward } from "../headline-reward.service";
+} from '../../../constants/features';
+import type { SessionSummary } from '../../../session/types';
+import { selectHeadlineReward } from '../headline-reward.service';
 import type {
   HeadlineReward,
   HeadlineRewardConsequences,
-} from "../headline-reward.types";
+} from '../headline-reward.types';
 import {
   buildSessionRewardPriority,
   type RewardPrioritySummary,
-} from "../reward-priority";
-import type { SessionCompletionConsequences } from "../story-consequence-service";
+} from '../reward-priority';
+import type { SessionCompletionConsequences } from '../story-consequence-service';
 
 function buildHeadlineConsequences(input: {
   consequences?: SessionCompletionConsequences;
-  contractStatus?: "done" | "partial" | "not_done" | "skipped" | null;
+  contractStatus?: 'done' | 'partial' | 'not_done' | 'skipped' | null;
   summary: SessionSummary;
 }): HeadlineRewardConsequences {
   const { consequences, contractStatus, summary } = input;
@@ -60,24 +60,24 @@ function buildHeadlineConsequences(input: {
 
 export function useSessionHeadline(input: {
   consequences?: SessionCompletionConsequences;
-  contractStatus?: "done" | "partial" | "not_done" | "skipped" | null;
+  contractStatus?: 'done' | 'partial' | 'not_done' | 'skipped' | null;
   summary: SessionSummary;
 }): HeadlineReward {
   const { consequences, contractStatus, summary } = input;
 
   return useMemo(() => {
     return selectHeadlineReward(buildHeadlineConsequences(input));
-  }, [input, consequences, contractStatus, summary]);
+  }, [input]);
 }
 
 export function useSessionRewardPriority(input: {
   consequences?: SessionCompletionConsequences;
-  contractStatus?: "done" | "partial" | "not_done" | "skipped" | null;
+  contractStatus?: 'done' | 'partial' | 'not_done' | 'skipped' | null;
   summary: SessionSummary;
 }): RewardPrioritySummary {
   const { consequences, contractStatus, summary } = input;
 
   return useMemo(() => {
     return buildSessionRewardPriority(buildHeadlineConsequences(input));
-  }, [input, consequences, contractStatus, summary]);
+  }, [input]);
 }

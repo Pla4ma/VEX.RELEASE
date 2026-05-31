@@ -1,9 +1,9 @@
-import React from "react";
-import { Pressable, View } from "react-native";
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { buttonTap } from "../../../utils/haptics";
-import type { TomorrowPreviewProps } from "./TomorrowPreview";
+import React from 'react';
+import { Pressable, View } from 'react-native';
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { buttonTap } from '../../../utils/haptics';
+import type { TomorrowPreviewProps } from './TomorrowPreview';
 
 export function TomorrowPreviewCompact({
   streakWillContinue,
@@ -11,18 +11,18 @@ export function TomorrowPreviewCompact({
   onPress,
 }: {
   streakWillContinue: boolean;
-  events: TomorrowPreviewProps["events"];
+  events: TomorrowPreviewProps['events'];
   onPress: () => void;
 }): JSX.Element {
   const firstEvent = events[0];
   const eventEmoji = firstEvent
-    ? firstEvent.type === "double_xp"
-      ? "🔥"
-      : firstEvent.type === "squad_war"
-        ? "⚔️"
-        : firstEvent.type === "boss_rush"
-          ? "👹"
-          : "🌙"
+    ? firstEvent.type === 'double_xp'
+      ? '🔥'
+      : firstEvent.type === 'squad_war'
+        ? '⚔️'
+        : firstEvent.type === 'boss_rush'
+          ? '👹'
+          : '🌙'
     : null;
   return (
     <Pressable
@@ -46,10 +46,10 @@ export function TomorrowPreviewCompact({
           </Text>
           <Text
             variant="body"
-            color={streakWillContinue ? "text.primary" : "error.DEFAULT"}
+            color={streakWillContinue ? 'text.primary' : 'error.DEFAULT'}
             fontWeight="600"
           >
-            {streakWillContinue ? "🔥 Streak continues" : "⚠️ Streak at risk"}
+            {streakWillContinue ? '🔥 Streak continues' : '⚠️ Streak at risk'}
           </Text>
           {eventEmoji && <Text fontSize={16}>{eventEmoji}</Text>}
         </Box>

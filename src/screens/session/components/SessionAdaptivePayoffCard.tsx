@@ -1,14 +1,14 @@
-import React, { useMemo } from "react";
-import Animated, { FadeInUp } from "react-native-reanimated";
+import React, { useMemo } from 'react';
+import Animated, { FadeInUp } from 'react-native-reanimated';
 
-import { Box, Text } from "../../../components/primitives";
-import { getPremiumCardStyle } from "../../../components/premiumStyles";
-import { buildCompletionAdaptivePayoff } from "../../../features/session-completion/adaptive-payoff-service";
-import type { CompletionExperiencePolicy } from "../../../features/session-completion/completion-experience-policy";
-import type { SessionCompletionConsequences } from "../../../features/session-completion/story-consequence-service";
-import type { SessionSummary } from "../../../session/types";
-import { useTheme } from "../../../theme";
-import type { StudyProgressCardData } from "../hooks/useSessionCompleteStudyProgress";
+import { Box, Text } from '../../../components/primitives';
+import { getPremiumCardStyle } from '../../../components/premiumStyles';
+import { buildCompletionAdaptivePayoff } from '../../../features/session-completion/adaptive-payoff-service';
+import type { CompletionExperiencePolicy } from '../../../features/session-completion/completion-experience-policy';
+import type { SessionCompletionConsequences } from '../../../features/session-completion/story-consequence-service';
+import type { SessionSummary } from '../../../session/types';
+import { useTheme } from '../../../theme';
+import type { StudyProgressCardData } from '../hooks/useSessionCompleteStudyProgress';
 
 type SessionAdaptivePayoffCardProps = {
   consequences?: SessionCompletionConsequences;
@@ -62,7 +62,7 @@ export function SessionAdaptivePayoffCard({
           backgroundColor: theme.colors.background.secondary,
           borderColor: theme.colors.primary[500],
           borderWidth: 1,
-          ...getPremiumCardStyle("medium"),
+          ...getPremiumCardStyle('medium'),
         }}
       >
         <Text variant="label" color={theme.colors.primary[400]}>

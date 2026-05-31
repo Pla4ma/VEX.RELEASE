@@ -1,10 +1,10 @@
-import React from "react";
-import { View } from "react-native";
+import React from 'react';
+import { View } from 'react-native';
 
-import { useTheme } from "../../theme";
-import { Text } from "../primitives/Text";
+import { useTheme } from '../../theme';
+import { Text } from '../primitives/Text';
 
-type SurfaceTone = "default" | "celebration" | "info" | "warning" | "locked";
+type SurfaceTone = 'default' | 'celebration' | 'info' | 'warning' | 'locked';
 
 interface SectionHeaderProps {
   eyebrow?: string;
@@ -47,31 +47,31 @@ interface InlineStatusRowProps {
 export function InlineStatusRow({
   label,
   value,
-  tone = "default",
+  tone = 'default',
 }: InlineStatusRowProps): JSX.Element {
   const { theme } = useTheme();
   const accent =
-    tone === "celebration"
+    tone === 'celebration'
       ? theme.colors.primary[500]
-      : tone === "warning"
+      : tone === 'warning'
         ? theme.colors.warning[500]
-        : tone === "info"
+        : tone === 'info'
           ? theme.colors.info[500]
           : theme.colors.text.secondary;
 
   return (
     <View
       style={{
-        flexDirection: "row",
-        justifyContent: "space-between",
+        flexDirection: 'row',
+        justifyContent: 'space-between',
         gap: theme.spacing[3],
-        alignItems: "center",
+        alignItems: 'center',
       }}
     >
       <Text variant="caption" color={theme.colors.text.secondary}>
         {label}
       </Text>
-      <Text variant="bodySmall" color={accent} style={{ fontWeight: "700" }}>
+      <Text variant="bodySmall" color={accent} style={{ fontWeight: '700' }}>
         {value}
       </Text>
     </View>

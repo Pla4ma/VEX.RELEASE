@@ -1,6 +1,6 @@
-import { type Insets, type ViewStyle } from "react-native";
-import { createDebugger } from "./debug";
-const debug = createDebugger("touch-target");
+import { type Insets, type ViewStyle } from 'react-native';
+import { createDebugger } from './debug';
+const debug = createDebugger('touch-target');
 export const MIN_TOUCH_TARGET = 44;
 interface TouchTargetOptions {
   minSize?: number;
@@ -64,7 +64,7 @@ export function getTouchTargetProps({
   additionalHitSlop,
 }: TouchTargetProps): {
   hitSlop: Insets;
-  accessibilityRole: "button" | "link" | "none";
+  accessibilityRole: 'button' | 'link' | 'none';
 } {
   const { hitSlop } = calculateHitSlop(width, height);
   const combinedHitSlop: Insets = additionalHitSlop
@@ -75,7 +75,7 @@ export function getTouchTargetProps({
         right: (hitSlop.right ?? 0) + (additionalHitSlop.right ?? 0),
       }
     : hitSlop;
-  return { hitSlop: combinedHitSlop, accessibilityRole: "button" };
+  return { hitSlop: combinedHitSlop, accessibilityRole: 'button' };
 }
 export function getMinTouchTargetStyle(
   width?: number,

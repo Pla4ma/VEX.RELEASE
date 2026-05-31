@@ -9,7 +9,7 @@ export {
   buildDayZeroStudyPreview,
   isContentStudyBackendAvailable,
   getManualStudyFallbackMessage,
-} from "./service-helpers-plan";
+} from './service-helpers-plan';
 
 export {
   generateRecallQuestion,
@@ -17,4 +17,4 @@ export {
   shouldGenerateRecall,
   buildMemoryContentFromBlock,
   getPlannedBlocksFromPlan,
-} from "./service-helpers-recall";
+} from './service-helpers-recall';

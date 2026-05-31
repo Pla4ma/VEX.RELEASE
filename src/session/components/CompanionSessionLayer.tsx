@@ -1,11 +1,11 @@
-import React from "react";
-import { View } from "react-native";
-import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
+import React from 'react';
+import { View } from 'react-native';
+import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 
-import { LivingCompanion } from "../../features/companion/components/LivingCompanion";
-import type { CompanionState } from "../../features/companion/types";
-import { Text } from "../../components/primitives/Text";
-import { useTheme } from "../../theme";
+import { LivingCompanion } from '../../features/companion/components/LivingCompanion';
+import type { CompanionState } from '../../features/companion/types';
+import { Text } from '../../components/primitives/Text';
+import { useTheme } from '../../theme';
 
 type CompanionSessionLayerProps = {
   companionState: CompanionState;
@@ -32,12 +32,12 @@ export function CompanionSessionLayer({
     <View
       pointerEvents="none"
       style={{
-        alignItems: "center",
+        alignItems: 'center',
         bottom: theme.spacing[24],
-        justifyContent: "center",
+        justifyContent: 'center',
         left: 0,
         opacity: 0.55,
-        position: "absolute",
+        position: 'absolute',
         right: 0,
         top: theme.spacing[16],
         zIndex: 0,
@@ -64,7 +64,7 @@ export function CompanionSessionLayer({
             borderWidth: 1,
             paddingHorizontal: theme.spacing[4],
             paddingVertical: theme.spacing[2],
-            position: "absolute",
+            position: 'absolute',
             top: theme.spacing[10],
           }}
         >

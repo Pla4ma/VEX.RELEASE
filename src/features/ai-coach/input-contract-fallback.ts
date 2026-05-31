@@ -1,4 +1,4 @@
-import type { CoachInputContract } from "./input-contract-schema";
+import type { CoachInputContract } from './input-contract-schema';
 
 export function createFallbackInsight(input: Partial<CoachInputContract>): {
   canCoach: boolean;
@@ -8,9 +8,9 @@ export function createFallbackInsight(input: Partial<CoachInputContract>): {
   if (!input.streakState?.currentStreak && !input.recentSessionGrades?.length) {
     return {
       canCoach: false,
-      reason: "Insufficient user data for personalized coaching",
+      reason: 'Insufficient user data for personalized coaching',
       fallbackMessage:
-        "Complete a few sessions to unlock personalized AI coaching!",
+        'Complete a few sessions to unlock personalized AI coaching!',
     };
   }
 
@@ -22,14 +22,14 @@ export function createFallbackInsight(input: Partial<CoachInputContract>): {
   if (dataPoints < 3) {
     return {
       canCoach: true,
-      reason: "Limited data - using general guidance",
+      reason: 'Limited data - using general guidance',
       fallbackMessage:
-        "Keep completing sessions to get more personalized advice!",
+        'Keep completing sessions to get more personalized advice!',
     };
   }
 
   return {
     canCoach: true,
-    reason: "Sufficient data for personalized coaching",
+    reason: 'Sufficient data for personalized coaching',
   };
 }

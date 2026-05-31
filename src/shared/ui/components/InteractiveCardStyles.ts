@@ -1,39 +1,39 @@
-import { StyleSheet } from "react-native";
-import { createSheet } from "@/shared/ui/create-sheet";
+import { StyleSheet } from 'react-native';
+import { createSheet } from '@/shared/ui/create-sheet';
 
 export const cardStyles = createSheet({
-  fullWidth: { width: "100%" },
-  card: { position: "relative", overflow: "hidden" },
+  fullWidth: { width: '100%' },
+  card: { position: 'relative', overflow: 'hidden' },
   selected: { borderWidth: 2 },
   error: { borderWidth: 2 },
   badge: {
-    position: "absolute",
+    position: 'absolute',
     top: -4,
     right: -4,
     minWidth: 24,
     height: 24,
     borderRadius: 12,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     paddingHorizontal: 6,
     zIndex: 10,
   },
-  badgeText: { fontSize: 12, fontWeight: "700" },
+  badgeText: { fontSize: 12, fontWeight: '700' },
   iconContainer: { marginBottom: 12 },
   content: { flex: 1 },
   overlay: {
     ...StyleSheet.absoluteFill,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     borderRadius: 16,
   },
-  overlayMessage: { marginTop: 8, textAlign: "center", paddingHorizontal: 16 },
+  overlayMessage: { marginTop: 8, textAlign: 'center', paddingHorizontal: 16 },
   spinner: {
     width: 32,
     height: 32,
     borderRadius: 16,
     borderWidth: 3,
-    borderTopColor: "transparent",
+    borderTopColor: 'transparent',
   },
   retryButton: {
     marginTop: 12,
@@ -42,15 +42,15 @@ export const cardStyles = createSheet({
     borderRadius: 8,
   },
   selectedIndicator: {
-    position: "absolute",
+    position: 'absolute',
     top: 8,
     right: 8,
     width: 24,
     height: 24,
     borderRadius: 12,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  skeletonRow: { flexDirection: "row", alignItems: "center", gap: 12 },
-  skeletonLines: { flex: 1, justifyContent: "center" },
+  skeletonRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
+  skeletonLines: { flex: 1, justifyContent: 'center' },
 });

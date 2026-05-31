@@ -1,26 +1,26 @@
-import { captureSilentFailure } from "../../../utils/silent-failure";
-import { MMKV } from "react-native-mmkv";
-import type { CoachMemory, SessionFacts, StreakFacts } from "./coach-memory-types";
+import { captureSilentFailure } from '../../../utils/silent-failure';
+import { MMKV } from 'react-native-mmkv';
+import type { CoachMemory, SessionFacts, StreakFacts } from './coach-memory-types';
 import {
   createEmptyMemory,
   updateProductiveTimeOfDay,
   updateMostUsedDuration,
   generateInsights,
-} from "./coach-memory-helpers";
-import { getMmkvEncryptionKeySync } from "../../../persistence/mmkv-key";
+} from './coach-memory-helpers';
+import { getMmkvEncryptionKeySync } from '../../../persistence/mmkv-key';
 
 export type { CoachMemory, SessionFacts, StreakFacts };
-export { generatePersonalizedMessage, getMemoryBasedSuggestions } from "./coach-memory-messages";
+export { generatePersonalizedMessage, getMemoryBasedSuggestions } from './coach-memory-messages';
 
 let _storage: MMKV | null = null;
 function getStorage(): MMKV {
   if (!_storage) {
-    _storage = new MMKV({ id: "coach-memory", encryptionKey: getMmkvEncryptionKeySync() });
+    _storage = new MMKV({ id: 'coach-memory', encryptionKey: getMmkvEncryptionKeySync() });
   }
   return _storage;
 }
 
-const STORAGE_KEY = "coach_user_memory";
+const STORAGE_KEY = 'coach_user_memory';
 
 export function getOrCreateMemory(userId: string): CoachMemory {
   const key = `${STORAGE_KEY}_${userId}`;
@@ -30,9 +30,9 @@ export function getOrCreateMemory(userId: string): CoachMemory {
       return JSON.parse(stored) as CoachMemory;
     } catch (error) {
       captureSilentFailure(error, {
-        feature: "ai-coach",
-        operation: "network-fallback",
-        type: "network",
+        feature: 'ai-coach',
+        operation: 'network-fallback',
+        type: 'network',
       });
     }
   }
@@ -137,9 +137,9 @@ export function getMemoryStats(userId: string): {
     };
   } catch (error) {
     captureSilentFailure(error, {
-      feature: "ai-coach",
-      operation: "network-fallback",
-      type: "network",
+      feature: 'ai-coach',
+      operation: 'network-fallback',
+      type: 'network',
     });
     return { exists: true, lastUpdated: null, dataSize: stored.length };
   }

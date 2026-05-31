@@ -1,5 +1,5 @@
-import { formatInTimezone } from "./timezone-core";
-import { getStartOfDay, getEndOfDay } from "./timezone-day";
+import { formatInTimezone } from './timezone-core';
+import { getStartOfDay, getEndOfDay } from './timezone-day';
 
 export function formatRelativeTime(
   timestamp: number,
@@ -12,7 +12,7 @@ export function formatRelativeTime(
   const hours = Math.floor(absDiff / (1000 * 60 * 60));
   const days = Math.floor(absDiff / (1000 * 60 * 60 * 24));
   if (minutes < 1) {
-    return diff > 0 ? "just now" : "just now";
+    return diff > 0 ? 'just now' : 'just now';
   }
   if (minutes < 60) {
     return diff > 0 ? `in ${minutes} min` : `${minutes} min ago`;
@@ -24,17 +24,17 @@ export function formatRelativeTime(
 }
 
 export function formatTimeOfDay(timestamp: number, timezone: string): string {
-  const hour = parseInt(formatInTimezone(timestamp, timezone, "H"), 10);
+  const hour = parseInt(formatInTimezone(timestamp, timezone, 'H'), 10);
   if (hour >= 5 && hour < 12) {
-    return "morning";
+    return 'morning';
   }
   if (hour >= 12 && hour < 17) {
-    return "afternoon";
+    return 'afternoon';
   }
   if (hour >= 17 && hour < 21) {
-    return "evening";
+    return 'evening';
   }
-  return "night";
+  return 'night';
 }
 
 export function mockTimezone(timezone: string): void {}

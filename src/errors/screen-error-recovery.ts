@@ -1,5 +1,5 @@
-import type { ScreenType, ScreenErrorRecoveryOptions } from "./screen-error-types";
-import { SCREEN_ERROR_CONFIGS } from "./screen-error-configs";
+import type { ScreenType, ScreenErrorRecoveryOptions } from './screen-error-types';
+import { SCREEN_ERROR_CONFIGS } from './screen-error-configs';
 
 export class ScreenErrorRecovery {
   private static instance: ScreenErrorRecovery;
@@ -20,8 +20,8 @@ export class ScreenErrorRecovery {
     const config = SCREEN_ERROR_CONFIGS[screenType];
     const attempts = this.recoveryAttempts.get(screenType) || 0;
     if (
-      error.message.includes("client") ||
-      error.message.includes("reference")
+      error.message.includes('client') ||
+      error.message.includes('reference')
     ) {
       return false;
     }

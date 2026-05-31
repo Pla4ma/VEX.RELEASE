@@ -2,28 +2,28 @@ import {
   SessionMode,
   buildCompletionPersonalizationResult,
   createSessionSummary,
-} from "./helpers";
+} from './helpers';
 
-describe("5. No chest/shop/economy", () => {
+describe('5. No chest/shop/economy', () => {
   const ECONOMY_TERMS = [
-    "chest",
-    "shop",
-    "wallet",
-    "coin",
-    "gem",
-    "battle_pass",
-    "premium_currency",
-    "inventory",
+    'chest',
+    'shop',
+    'wallet',
+    'coin',
+    'gem',
+    'battle_pass',
+    'premium_currency',
+    'inventory',
   ];
 
-  it("completion personalization output contains no economy terms", () => {
+  it('completion personalization output contains no economy terms', () => {
     const result = buildCompletionPersonalizationResult({
       deletedMemoryIds: [],
       focusScoreDelta: 8,
-      grade: "A",
+      grade: 'A',
       isPersonalBest: false,
-      lane: "student",
-      streakAction: "extended",
+      lane: 'student',
+      streakAction: 'extended',
       streakDays: 4,
       summary: createSessionSummary({ sessionMode: SessionMode.STUDY }),
       xpDelta: 120,
@@ -34,14 +34,14 @@ describe("5. No chest/shop/economy", () => {
     }
   });
 
-  it("userFacingSummary uses progress language, not reward language", () => {
+  it('userFacingSummary uses progress language, not reward language', () => {
     const result = buildCompletionPersonalizationResult({
       deletedMemoryIds: [],
       focusScoreDelta: 8,
-      grade: "A",
+      grade: 'A',
       isPersonalBest: false,
-      lane: "deep_creative",
-      streakAction: "extended",
+      lane: 'deep_creative',
+      streakAction: 'extended',
       streakDays: 3,
       summary: createSessionSummary({ sessionMode: SessionMode.FLOW }),
       xpDelta: 90,
@@ -51,14 +51,14 @@ describe("5. No chest/shop/economy", () => {
     );
   });
 
-  it("progressProof does not report coins or gems", () => {
+  it('progressProof does not report coins or gems', () => {
     const result = buildCompletionPersonalizationResult({
       deletedMemoryIds: [],
       focusScoreDelta: 5,
-      grade: "B",
+      grade: 'B',
       isPersonalBest: false,
-      lane: "minimal_normal",
-      streakAction: "maintained",
+      lane: 'minimal_normal',
+      streakAction: 'maintained',
       streakDays: 2,
       summary: createSessionSummary({ sessionMode: SessionMode.FLOW }),
       xpDelta: 60,
@@ -70,15 +70,15 @@ describe("5. No chest/shop/economy", () => {
   });
 });
 
-describe("6. XP/streak/progress still update", () => {
-  it("progressProof carries xpDelta", () => {
+describe('6. XP/streak/progress still update', () => {
+  it('progressProof carries xpDelta', () => {
     const result = buildCompletionPersonalizationResult({
       deletedMemoryIds: [],
       focusScoreDelta: 10,
-      grade: "A",
+      grade: 'A',
       isPersonalBest: false,
-      lane: "student",
-      streakAction: "extended",
+      lane: 'student',
+      streakAction: 'extended',
       streakDays: 5,
       summary: createSessionSummary({ sessionMode: SessionMode.STUDY }),
       xpDelta: 200,
@@ -86,45 +86,45 @@ describe("6. XP/streak/progress still update", () => {
     expect(result.progressProof.xpDelta).toBe(200);
   });
 
-  it("progressProof carries streak days and action", () => {
+  it('progressProof carries streak days and action', () => {
     const result = buildCompletionPersonalizationResult({
       deletedMemoryIds: [],
       focusScoreDelta: 6,
-      grade: "B",
+      grade: 'B',
       isPersonalBest: false,
-      lane: "game_like",
-      streakAction: "extended",
+      lane: 'game_like',
+      streakAction: 'extended',
       streakDays: 7,
       summary: createSessionSummary({ sessionMode: SessionMode.FLOW }),
       xpDelta: 100,
     });
     expect(result.progressProof.streakDays).toBe(7);
-    expect(result.progressProof.streakAction).toBe("extended");
+    expect(result.progressProof.streakAction).toBe('extended');
   });
 
-  it("progressProof carries grade", () => {
+  it('progressProof carries grade', () => {
     const result = buildCompletionPersonalizationResult({
       deletedMemoryIds: [],
       focusScoreDelta: 12,
-      grade: "S",
+      grade: 'S',
       isPersonalBest: false,
-      lane: "deep_creative",
-      streakAction: "extended",
+      lane: 'deep_creative',
+      streakAction: 'extended',
       streakDays: 10,
       summary: createSessionSummary({ sessionMode: SessionMode.FLOW }),
       xpDelta: 180,
     });
-    expect(result.progressProof.grade).toBe("S");
+    expect(result.progressProof.grade).toBe('S');
   });
 
-  it("progressProof carries focus score delta", () => {
+  it('progressProof carries focus score delta', () => {
     const result = buildCompletionPersonalizationResult({
       deletedMemoryIds: [],
       focusScoreDelta: 15,
-      grade: "A",
+      grade: 'A',
       isPersonalBest: false,
-      lane: "minimal_normal",
-      streakAction: "maintained",
+      lane: 'minimal_normal',
+      streakAction: 'maintained',
       streakDays: 3,
       summary: createSessionSummary({ sessionMode: SessionMode.FLOW }),
       xpDelta: 90,
@@ -132,14 +132,14 @@ describe("6. XP/streak/progress still update", () => {
     expect(result.progressProof.focusScoreDelta).toBe(15);
   });
 
-  it("progressProof carries effective minutes and completion percentage", () => {
+  it('progressProof carries effective minutes and completion percentage', () => {
     const result = buildCompletionPersonalizationResult({
       deletedMemoryIds: [],
       focusScoreDelta: 8,
-      grade: "A",
+      grade: 'A',
       isPersonalBest: false,
-      lane: "student",
-      streakAction: "extended",
+      lane: 'student',
+      streakAction: 'extended',
       streakDays: 6,
       summary: createSessionSummary({ sessionMode: SessionMode.STUDY }),
       xpDelta: 130,
@@ -148,14 +148,14 @@ describe("6. XP/streak/progress still update", () => {
     expect(result.progressProof.completionPercentage).toBe(100);
   });
 
-  it("progressProof reflects personal best", () => {
+  it('progressProof reflects personal best', () => {
     const withPB = buildCompletionPersonalizationResult({
       deletedMemoryIds: [],
       focusScoreDelta: 20,
-      grade: "S",
+      grade: 'S',
       isPersonalBest: true,
-      lane: "student",
-      streakAction: "extended",
+      lane: 'student',
+      streakAction: 'extended',
       streakDays: 8,
       summary: createSessionSummary({ sessionMode: SessionMode.STUDY }),
       xpDelta: 250,
@@ -165,10 +165,10 @@ describe("6. XP/streak/progress still update", () => {
     const withoutPB = buildCompletionPersonalizationResult({
       deletedMemoryIds: [],
       focusScoreDelta: 5,
-      grade: "B",
+      grade: 'B',
       isPersonalBest: false,
-      lane: "student",
-      streakAction: "maintained",
+      lane: 'student',
+      streakAction: 'maintained',
       streakDays: 3,
       summary: createSessionSummary({ sessionMode: SessionMode.STUDY }),
       xpDelta: 60,

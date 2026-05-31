@@ -1,8 +1,8 @@
 import {
   fetchCurrentFocusScore,
   fetchFocusScoreHistory,
-} from "./repository-focus-score";
-import type { FocusScoreHistoryPoint, FocusScoreRecord } from "./types";
+} from './repository-focus-score';
+import type { FocusScoreHistoryPoint, FocusScoreRecord } from './types';
 
 export async function getCurrentFocusScore(
   userId: string,

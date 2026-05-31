@@ -1,9 +1,9 @@
-import { TimerEngine } from "./engines/TimerEngine";
-import { ScoringEngine } from "./engines/ScoringEngine";
-import { CompletionEngine } from "./engines/CompletionEngine";
-import { AntiCheatEngine } from "./antiCheat/AntiCheatEngine";
-import { SessionEventEmitter } from "./SessionEventEmitter";
-import { getSessionRepository } from "./repository/SessionRepository";
+import { TimerEngine } from './engines/TimerEngine';
+import { ScoringEngine } from './engines/ScoringEngine';
+import { CompletionEngine } from './engines/CompletionEngine';
+import { AntiCheatEngine } from './antiCheat/AntiCheatEngine';
+import { SessionEventEmitter } from './SessionEventEmitter';
+import { getSessionRepository } from './repository/SessionRepository';
 import type {
   SessionState,
   SessionConfig,
@@ -11,26 +11,26 @@ import type {
   SessionSummary,
   InterruptionType,
   InterruptionSeverity,
-} from "./types";
-import { v4 as uuidv4 } from "../utils/uuid";
-import { createDebugger } from "../utils/debug";
-import type { OrchestratorConfig } from "./orchestrator-types";
-import * as persistence from "./SessionPersistence";
+} from './types';
+import { v4 as uuidv4 } from '../utils/uuid';
+import { createDebugger } from '../utils/debug';
+import type { OrchestratorConfig } from './orchestrator-types';
+import * as persistence from './SessionPersistence';
 import {
   createSession,
   finalizeSession as doFinalizeSession,
   finalizeAbandonedSession as doFinalizeAbandonedSession,
   createEmptyFocusMetrics,
-} from "./orchestrators/SessionCore";
+} from './orchestrators/SessionCore';
 import {
   startSession,
   pauseSession,
   resumeSession,
   backgroundSession,
   foregroundSession,
-} from "./orchestrators/SessionLifecycle";
+} from './orchestrators/SessionLifecycle';
 
-const debug = createDebugger("session:orchestrator");
+const debug = createDebugger('session:orchestrator');
 
 export abstract class SessionOrchestratorBase {
   abstract handleTimerTick(
@@ -58,12 +58,12 @@ export abstract class SessionOrchestratorBase {
   repository = getSessionRepository();
   config: OrchestratorConfig;
   focusMetrics: FocusQualityMetrics;
-  interruptions: import("./types").InterruptionRecord[] = [];
-  recoveries: import("./types").RecoveryRecord[] = [];
+  interruptions: import('./types').InterruptionRecord[] = [];
+  recoveries: import('./types').RecoveryRecord[] = [];
   isActive: boolean = false;
   countdownActive: boolean = false;
   lastSessionSummary: SessionSummary | null = null;
-  private _deviceFingerprint: string = "";
+  private _deviceFingerprint: string = '';
 
   constructor(config: OrchestratorConfig = {}) {
     this.config = {
@@ -79,11 +79,11 @@ export abstract class SessionOrchestratorBase {
     this.antiCheatEngine = new AntiCheatEngine();
     this.eventEmitter = new SessionEventEmitter();
     this.focusMetrics = createEmptyFocusMetrics();
-    debug.info("SessionOrchestrator initialized");
+    debug.info('SessionOrchestrator initialized');
   }
 
   getDeviceFingerprint(): string {
-    if (!this._deviceFingerprint) this._deviceFingerprint = uuidv4();
+    if (!this._deviceFingerprint) {this._deviceFingerprint = uuidv4();}
     return this._deviceFingerprint;
   }
   getSession(): SessionState | null {
@@ -91,7 +91,7 @@ export abstract class SessionOrchestratorBase {
   }
   async saveSessionState(): Promise<void> {
     if (this.session)
-      await persistence.saveSessionState(this.session, this.repository);
+      {await persistence.saveSessionState(this.session, this.repository);}
   }
   finalizeSession(summary: SessionSummary): void {
     doFinalizeSession(this, summary);
@@ -104,7 +104,7 @@ export abstract class SessionOrchestratorBase {
     this.userId = id;
     this.repository.setUserId(id);
     this.scoringEngine.setUserStats(0, 1);
-    debug.info("SessionOrchestrator user set: %s", id);
+    debug.info('SessionOrchestrator user set: %s', id);
   }
   createSession(config: SessionConfig): Promise<SessionState> {
     return createSession(this, config);
@@ -112,7 +112,7 @@ export abstract class SessionOrchestratorBase {
   cancelStart(): void {
     if (this.countdownActive) {
       this.countdownActive = false;
-      if (this.session) this.session.status = "PREPARING";
+      if (this.session) {this.session.status = 'PREPARING';}
     }
   }
 

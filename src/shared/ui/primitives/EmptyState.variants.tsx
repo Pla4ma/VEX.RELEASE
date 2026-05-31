@@ -1,5 +1,5 @@
-import React from "react";
-import { EmptyState } from "./EmptyState.base";
+import React from 'react';
+import { EmptyState } from './EmptyState.base';
 
 export function EmptyAnalytics({
   onStartSession,

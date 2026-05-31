@@ -10,24 +10,24 @@ import {
   SessionMode,
   baseLaneProfile,
   completionInput,
-} from "./phase3-test-helpers";
+} from './phase3-test-helpers';
 import type {
   Lane,
   NudgeDecision,
   CompletionExperiencePolicy,
-} from "./phase3-test-helpers";
+} from './phase3-test-helpers';
 
-describe("Phase 3F — Completion & Notification Proof", () => {
-  it("Completion consumes LaneProfile for lane-aware experience", () => {
+describe('Phase 3F — Completion & Notification Proof', () => {
+  it('Completion consumes LaneProfile for lane-aware experience', () => {
     const completionPolicies: Record<Lane, CompletionExperiencePolicy> = {
       student: resolveCompletionExperiencePolicy(
         completionInput({
-          lane: "student",
-          motivationStyle: "study_focused",
-          primaryGoal: "STUDY",
+          lane: 'student',
+          motivationStyle: 'study_focused',
+          primaryGoal: 'STUDY',
           sessionMode: SessionMode.STUDY,
           summary: {
-            sessionId: "arch-student",
+            sessionId: 'arch-student',
             finalScore: 92,
             focusQuality: 88,
           },
@@ -35,21 +35,21 @@ describe("Phase 3F — Completion & Notification Proof", () => {
       ),
       game_like: resolveCompletionExperiencePolicy(
         completionInput({
-          lane: "game_like",
-          motivationStyle: "game_like",
+          lane: 'game_like',
+          motivationStyle: 'game_like',
           sessionMode: SessionMode.SPRINT,
           consequences: { boss: { damage: 50 } },
-          summary: { sessionId: "arch-run", finalScore: 90, focusQuality: 85 },
+          summary: { sessionId: 'arch-run', finalScore: 90, focusQuality: 85 },
         }),
       ),
       deep_creative: resolveCompletionExperiencePolicy(
         completionInput({
-          lane: "deep_creative",
-          motivationStyle: "creator",
-          primaryGoal: "CREATIVE",
+          lane: 'deep_creative',
+          motivationStyle: 'creator',
+          primaryGoal: 'CREATIVE',
           sessionMode: SessionMode.CREATIVE,
           summary: {
-            sessionId: "arch-project",
+            sessionId: 'arch-project',
             finalScore: 88,
             plannedDuration: 1800,
             effectiveDuration: 1800,
@@ -58,10 +58,10 @@ describe("Phase 3F — Completion & Notification Proof", () => {
       ),
       minimal_normal: resolveCompletionExperiencePolicy(
         completionInput({
-          lane: "minimal_normal",
-          motivationStyle: "calm",
+          lane: 'minimal_normal',
+          motivationStyle: 'calm',
           sessionMode: SessionMode.LIGHT_FOCUS,
-          summary: { sessionId: "arch-clean", finalScore: 95 },
+          summary: { sessionId: 'arch-clean', finalScore: 95 },
         }),
       ),
     };
@@ -75,9 +75,9 @@ describe("Phase 3F — Completion & Notification Proof", () => {
     const animations = Object.values(completionPolicies).map(
       (p) => p.animationLevel,
     );
-    expect(animations).toContain("minimal");
-    expect(animations).toContain("medium_high");
-    expect(animations).toContain("low_medium");
+    expect(animations).toContain('minimal');
+    expect(animations).toContain('medium_high');
+    expect(animations).toContain('low_medium');
 
     for (const policy of Object.values(completionPolicies)) {
       expect(policy.heroBeat).toBeDefined();
@@ -86,12 +86,12 @@ describe("Phase 3F — Completion & Notification Proof", () => {
     }
   });
 
-  it("NotificationPolicy consumes LaneProfile for budget and type decisions", () => {
+  it('NotificationPolicy consumes LaneProfile for budget and type decisions', () => {
     const lanes: Lane[] = [
-      "student",
-      "game_like",
-      "deep_creative",
-      "minimal_normal",
+      'student',
+      'game_like',
+      'deep_creative',
+      'minimal_normal',
     ];
     const decisions: Record<Lane, NudgeDecision> = {} as Record<
       Lane,
@@ -105,7 +105,7 @@ describe("Phase 3F — Completion & Notification Proof", () => {
         laneProfile: profile,
         completedSessions: 5,
         daysSinceOnboarding: 5,
-        context: "weekly_ready",
+        context: 'weekly_ready',
       });
     }
 

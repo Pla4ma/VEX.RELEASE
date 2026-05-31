@@ -6,24 +6,24 @@
  */
 
 export type EconomyEventType =
-  | "economy:grant"
-  | "economy:spend"
-  | "economy:transaction"
-  | "economy:currency_added"
-  | "economy:currency_spent"
-  | "economy:conversion"
-  | "economy:purchase_complete";
+  | 'economy:grant'
+  | 'economy:spend'
+  | 'economy:transaction'
+  | 'economy:currency_added'
+  | 'economy:currency_spent'
+  | 'economy:conversion'
+  | 'economy:purchase_complete';
 
 export interface EconomyGrantEvent {
   userId: string;
-  currency: "coins" | "gems" | "seasonal";
+  currency: 'coins' | 'gems' | 'seasonal';
   amount: number;
   source:
-    | "session"
-    | "boss_defeat"
-    | "level_up"
-    | "challenge"
-    | "daily_bonus"
+    | 'session'
+    | 'boss_defeat'
+    | 'level_up'
+    | 'challenge'
+    | 'daily_bonus'
     | string;
   sourceId?: string;
   multiplier?: number;
@@ -32,16 +32,16 @@ export interface EconomyGrantEvent {
 
 export interface EconomySpendEvent {
   userId: string;
-  currency: "coins" | "gems" | "seasonal";
+  currency: 'coins' | 'gems' | 'seasonal';
   amount: number;
-  sink: "shop" | "crafting" | "gamble" | string;
+  sink: 'shop' | 'crafting' | 'gamble' | string;
   itemId?: string;
   remainingBalance: number;
 }
 
 export interface EconomyTransactionEvent {
   userId: string;
-  type: "earn" | "spend" | "convert" | "refund";
+  type: 'earn' | 'spend' | 'convert' | 'refund';
   currency: string;
   amount: number;
   balanceBefore: number;

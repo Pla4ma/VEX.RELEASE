@@ -6,21 +6,21 @@
  * "Study Plan → Start Session" without manual mode selection.
  */
 
-import React from "react";
-import { Pressable } from "react-native";
+import React from 'react';
+import { Pressable } from 'react-native';
 import Animated, {
   FadeInUp,
   useAnimatedStyle,
   useSharedValue,
   withSpring,
   withTiming,
-} from "react-native-reanimated";
+} from 'react-native-reanimated';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import type { ActiveStudyPlan } from "../hooks/helpers";
-import type { LearningExecutionCopy } from "../../learning-execution";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import type { ActiveStudyPlan } from '../hooks/helpers';
+import type { LearningExecutionCopy } from '../../learning-execution';
 
 export interface StudyPlanSuggestionCardProps {
   /** The active study plan from useActiveStudyPlan */
@@ -53,17 +53,17 @@ export function StudyPlanSuggestionCard({
   };
 
   const progressText = `${studyPlan.completedTasks}/${studyPlan.totalTasks} tasks completed (${studyPlan.progressPercent}%)`;
-  const layerName = copy?.layerName ?? "Study OS";
+  const layerName = copy?.layerName ?? 'Study OS';
   const title = copy
     ? `${copy.homeTitle}: ${studyPlan.title}`
     : `Continue studying ${studyPlan.title}`;
-  const modeLabel = copy?.layerName ?? "STUDY mode";
+  const modeLabel = copy?.layerName ?? 'STUDY mode';
 
   return (
     <Animated.View entering={FadeInUp.duration(300)} style={animatedStyle}>
       <Pressable
         onPress={handlePress}
-        accessibilityLabel={`${copy?.homeCta ?? "Continue studying"} ${studyPlan.title}`}
+        accessibilityLabel={`${copy?.homeCta ?? 'Continue studying'} ${studyPlan.title}`}
         accessibilityRole="button"
         accessibilityHint={`Starts ${layerName} with ${studyPlan.remainingMinutes} minutes recommended duration`}
       >

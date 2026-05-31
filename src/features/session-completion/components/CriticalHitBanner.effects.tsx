@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import Animated, {
   useAnimatedStyle,
   withSpring,
@@ -6,9 +6,9 @@ import Animated, {
   withTiming,
   withRepeat,
   withDelay,
-} from "react-native-reanimated";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
+} from 'react-native-reanimated';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
 
 export function LightningBolt({ delay }: { delay: number }): JSX.Element {
   const boltStyle = useAnimatedStyle(() => ({
@@ -32,7 +32,7 @@ export function LightningBolt({ delay }: { delay: number }): JSX.Element {
     ],
   }));
   return (
-    <Animated.View style={[{ position: "absolute" }, boltStyle]}>
+    <Animated.View style={[{ position: 'absolute' }, boltStyle]}>
       <Text fontSize={40}>⚡</Text>
     </Animated.View>
   );
@@ -51,7 +51,7 @@ export function EnergyBurst(): JSX.Element {
     <Animated.View
       style={[
         {
-          position: "absolute",
+          position: 'absolute',
           width: 100,
           height: 100,
           borderRadius: 50,

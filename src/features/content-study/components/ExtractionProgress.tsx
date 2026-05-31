@@ -1,36 +1,36 @@
-import React, { useEffect } from "react";
-import { View } from "react-native";
+import React, { useEffect } from 'react';
+import { View } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withRepeat,
   withSequence,
   withTiming,
-} from "react-native-reanimated";
+} from 'react-native-reanimated';
 
-import { Button, Card, Text } from "../../../components/primitives";
-import { Icon } from "../../../icons";
-import { useReducedMotion } from "../../../hooks/useReducedMotion";
-import { useTheme } from "../../../theme";
-import type { ExtractionProgressProps } from "../types";
+import { Button, Card, Text } from '../../../components/primitives';
+import { Icon } from '../../../icons';
+import { useReducedMotion } from '../../../hooks/useReducedMotion';
+import { useTheme } from '../../../theme';
+import type { ExtractionProgressProps } from '../types';
 
 const STAGES = [
-  { key: "uploading", label: "Uploading", icon: "file" },
-  { key: "processing", label: "Processing", icon: "loading" },
-  { key: "extracting", label: "Extracting", icon: "search" },
-  { key: "analyzing", label: "Analyzing", icon: "activity" },
-  { key: "complete", label: "Complete", icon: "check-circle" },
-  { key: "failed", label: "Failed", icon: "exclamation-circle" },
+  { key: 'uploading', label: 'Uploading', icon: 'file' },
+  { key: 'processing', label: 'Processing', icon: 'loading' },
+  { key: 'extracting', label: 'Extracting', icon: 'search' },
+  { key: 'analyzing', label: 'Analyzing', icon: 'activity' },
+  { key: 'complete', label: 'Complete', icon: 'check-circle' },
+  { key: 'failed', label: 'Failed', icon: 'exclamation-circle' },
 ] as const;
 const FALLBACK_STAGE = {
-  key: "processing",
-  label: "Processing",
-  icon: "loading",
+  key: 'processing',
+  label: 'Processing',
+  icon: 'loading',
 } as const;
 
 function formatTime(seconds?: number): string {
   if (!seconds || seconds < 0) {
-    return "";
+    return '';
   }
   if (seconds < 60) {
     return `${seconds}s remaining`;
@@ -55,8 +55,8 @@ export function ExtractionProgress({
     STAGES.findIndex((item) => item.key === stage),
   );
   const currentStage = STAGES[currentStageIndex] ?? FALLBACK_STAGE;
-  const isFailed = stage === "failed";
-  const isComplete = stage === "complete";
+  const isFailed = stage === 'failed';
+  const isComplete = stage === 'complete';
 
   useEffect(() => {
     fill.value = withTiming(Math.max(0, Math.min(progress, 100)), {
@@ -89,14 +89,14 @@ export function ExtractionProgress({
   return (
     <Card
       size="lg"
-      state={isFailed ? "error" : isComplete ? "success" : "default"}
+      state={isFailed ? 'error' : isComplete ? 'success' : 'default'}
       variant="glass"
     >
       <View style={{ gap: theme.spacing[4] }}>
         <View
           style={{
-            flexDirection: "row",
-            alignItems: "center",
+            flexDirection: 'row',
+            alignItems: 'center',
             gap: theme.spacing[3],
           }}
         >
@@ -106,8 +106,8 @@ export function ExtractionProgress({
                 width: theme.spacing[6],
                 height: theme.spacing[6],
                 borderRadius: theme.borderRadius.full,
-                alignItems: "center",
-                justifyContent: "center",
+                alignItems: 'center',
+                justifyContent: 'center',
                 backgroundColor: isFailed
                   ? theme.colors.error[50]
                   : theme.colors.semantic.primarySoft,
@@ -127,20 +127,20 @@ export function ExtractionProgress({
           </Animated.View>
           <View style={{ flex: 1, gap: theme.spacing[1] }}>
             <Text
-              color={isFailed ? "error.DEFAULT" : "text.primary"}
+              color={isFailed ? 'error.DEFAULT' : 'text.primary'}
               variant="h3"
             >
               {isFailed
-                ? "Processing paused"
+                ? 'Processing paused'
                 : isComplete
-                  ? "Study source ready"
+                  ? 'Study source ready'
                   : currentStage.label}
             </Text>
             <Text color="text.secondary" variant="bodySmall">
               {isFailed
-                ? (error?.message ?? "VEX could not finish this source.")
+                ? (error?.message ?? 'VEX could not finish this source.')
                 : formatTime(estimatedTimeRemaining) ||
-                  "Building your study plan without blocking the app."}
+                  'Building your study plan without blocking the app.'}
             </Text>
           </View>
         </View>
@@ -151,7 +151,7 @@ export function ExtractionProgress({
               style={{
                 height: theme.spacing[2],
                 borderRadius: theme.borderRadius.full,
-                overflow: "hidden",
+                overflow: 'hidden',
                 backgroundColor: theme.colors.semantic.backgroundMuted,
               }}
             >

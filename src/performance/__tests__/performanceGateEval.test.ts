@@ -4,7 +4,7 @@ import {
   expect,
   beforeEach,
   afterEach,
-} from "@jest/globals";
+} from '@jest/globals';
 import {
   performanceGate,
   mockPerformanceMonitor,
@@ -13,9 +13,9 @@ import {
   DEVELOPMENT_TARGETS,
   type PerformanceTargets,
   type PerformanceGate,
-} from "./performanceGateSetup";
+} from './performanceGateSetup';
 
-describe("PerformanceGate", () => {
+describe('PerformanceGate', () => {
   let gate: PerformanceGate;
   beforeEach(() => {
     jest.clearAllMocks();
@@ -26,14 +26,14 @@ describe("PerformanceGate", () => {
   afterEach(() => {
     gate.cleanup();
   });
-  describe("Configuration Management", () => {
-    it("should use production targets by default", () => {
+  describe('Configuration Management', () => {
+    it('should use production targets by default', () => {
       const targets = gate.getTargets();
       expect(targets.minFps).toBe(PRODUCTION_TARGETS.minFps);
       expect(targets.targetFps).toBe(PRODUCTION_TARGETS.targetFps);
       expect(targets.maxMemoryMb).toBe(DEVELOPMENT_TARGETS.maxMemoryMb);
     });
-    it("should allow custom target configuration", () => {
+    it('should allow custom target configuration', () => {
       const customTargets: Partial<PerformanceTargets> = {
         minFps: 45,
         targetFps: 120,
@@ -44,7 +44,7 @@ describe("PerformanceGate", () => {
       expect(targets.targetFps).toBe(120);
       expect(targets.maxMemoryMb).toBe(DEVELOPMENT_TARGETS.maxMemoryMb);
     });
-    it("should update targets dynamically", () => {
+    it('should update targets dynamically', () => {
       const initialTargets = gate.getTargets();
       gate.setTargets({ minFps: 50 });
       const updatedTargets = gate.getTargets();
@@ -52,8 +52,8 @@ describe("PerformanceGate", () => {
       expect(updatedTargets.targetFps).toBe(initialTargets.targetFps);
     });
   });
-  describe("Performance Gate Evaluation", () => {
-    it("should pass with good performance metrics", async () => {
+  describe('Performance Gate Evaluation', () => {
+    it('should pass with good performance metrics', async () => {
       mockPerformanceMonitor.getMetrics.mockReturnValue({
         fps: 60,
         avgFps: 58,
@@ -70,30 +70,30 @@ describe("PerformanceGate", () => {
       expect(result.metrics.memory.passed).toBe(true);
       expect(result.issues).toHaveLength(0);
     });
-    it("should evaluate FPS from internal monitor", async () => {
+    it('should evaluate FPS from internal monitor', async () => {
       const result = await gate.evaluatePerformanceGate();
       expect(result.metrics.fps).toBeDefined();
-      expect(typeof result.metrics.fps.current).toBe("number");
+      expect(typeof result.metrics.fps.current).toBe('number');
     });
-    it("should evaluate memory from internal monitor", async () => {
+    it('should evaluate memory from internal monitor', async () => {
       const result = await gate.evaluatePerformanceGate();
       expect(result.metrics.memory).toBeDefined();
-      expect(typeof result.metrics.memory.current).toBe("number");
+      expect(typeof result.metrics.memory.current).toBe('number');
       expect(result.metrics.memory.limit).toBe(DEVELOPMENT_TARGETS.maxMemoryMb);
     });
-    it("should evaluate bundle size", async () => {
+    it('should evaluate bundle size', async () => {
       gate.setBundleSize(500);
       const result = await gate.evaluatePerformanceGate();
       expect(result.metrics.bundle).toBeDefined();
       expect(result.metrics.bundle.size).toBe(500);
       expect(result.metrics.bundle.passed).toBe(true);
     });
-    it("should evaluate network metrics", async () => {
+    it('should evaluate network metrics', async () => {
       const result = await gate.evaluatePerformanceGate();
       expect(result.metrics.network).toBeDefined();
-      expect(typeof result.metrics.network.averageResponseTime).toBe("number");
+      expect(typeof result.metrics.network.averageResponseTime).toBe('number');
     });
-    it("should provide comprehensive performance report", async () => {
+    it('should provide comprehensive performance report', async () => {
       mockPerformanceMonitor.getMetrics.mockReturnValue({
         fps: 30,
         avgFps: 25,
@@ -105,10 +105,10 @@ describe("PerformanceGate", () => {
       });
       const result = await gate.evaluatePerformanceGate();
       const report = gate.generateReport(result);
-      expect(report).toContain("# Performance Gate Report");
-      expect(report).toContain("**Overall Status: ✅ PASSED**");
-      expect(report).toContain("### FPS");
-      expect(report).toContain("### Memory");
+      expect(report).toContain('# Performance Gate Report');
+      expect(report).toContain('**Overall Status: ✅ PASSED**');
+      expect(report).toContain('### FPS');
+      expect(report).toContain('### Memory');
     });
   });
 });

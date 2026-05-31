@@ -7,23 +7,23 @@
  * @phase 4
  */
 
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import * as Sentry from "@sentry/react-native";
-import { useState } from "react";
-import { createDebugger } from "../../../utils/debug";
-import { getSessionOrchestrator } from "../../../session/orchestrator-factory";
-import { getCoachService } from "../../ai-coach/service";
-import type { SessionConfig } from "../../../session/types";
-import { capture } from "../../../shared/analytics/analytics-service";
-import { SessionEvents } from "../../../shared/analytics/analytics-events";
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import * as Sentry from '@sentry/react-native';
+import { useState } from 'react';
+import { createDebugger } from '../../../utils/debug';
+import { getSessionOrchestrator } from '../../../session/orchestrator-factory';
+import { getCoachService } from '../../ai-coach/service';
+import type { SessionConfig } from '../../../session/types';
+import { capture } from '../../../shared/analytics/analytics-service';
+import { SessionEvents } from '../../../shared/analytics/analytics-events';
 import {
   studySessionKeys,
   getSessionMode,
   getExpectedDuration,
-} from "./useStudySession.helpers";
-import { useStudySessionReturn } from "./useStudySession.return";
+} from './useStudySession.helpers';
+import { useStudySessionReturn } from './useStudySession.return';
 
-const debug = createDebugger("session:useStudySession");
+const debug = createDebugger('session:useStudySession');
 
 export function useStudySession() {
   const queryClient = useQueryClient();
@@ -58,7 +58,7 @@ export function useStudySession() {
       return orchestrator.startSession();
     },
     onSuccess: (sessionState) => {
-      debug.info("Study session started", { sessionId: sessionState.id });
+      debug.info('Study session started', { sessionId: sessionState.id });
       queryClient.invalidateQueries({ queryKey: studySessionKeys.current() });
       capture(SessionEvents.SESSION_STARTED, {
         session_id: sessionState.id,
@@ -68,14 +68,14 @@ export function useStudySession() {
       });
     },
     onError: (error) => {
-      Sentry.captureException(error, { tags: { feature: "session-start" } });
+      Sentry.captureException(error, { tags: { feature: 'session-start' } });
     },
   });
 
   const pauseSessionMutation = useMutation({
     mutationFn: () => orchestrator.pauseSession(),
     onSuccess: (sessionState) => {
-      debug.info("Study session paused", { sessionId: sessionState.id });
+      debug.info('Study session paused', { sessionId: sessionState.id });
       queryClient.invalidateQueries({ queryKey: studySessionKeys.current() });
       capture(SessionEvents.SESSION_PAUSED, {
         session_id: sessionState.id,
@@ -85,14 +85,14 @@ export function useStudySession() {
       });
     },
     onError: (error) => {
-      Sentry.captureException(error, { tags: { feature: "session-pause" } });
+      Sentry.captureException(error, { tags: { feature: 'session-pause' } });
     },
   });
 
   const resumeSessionMutation = useMutation({
     mutationFn: () => orchestrator.resumeSession(),
     onSuccess: (sessionState) => {
-      debug.info("Study session resumed", { sessionId: sessionState.id });
+      debug.info('Study session resumed', { sessionId: sessionState.id });
       queryClient.invalidateQueries({ queryKey: studySessionKeys.current() });
       capture(SessionEvents.SESSION_RESUMED, {
         session_id: sessionState.id,
@@ -102,19 +102,19 @@ export function useStudySession() {
       });
     },
     onError: (error) => {
-      Sentry.captureException(error, { tags: { feature: "session-resume" } });
+      Sentry.captureException(error, { tags: { feature: 'session-resume' } });
     },
   });
 
   const endSessionMutation = useMutation({
     mutationFn: (reason?: string) => orchestrator.endSession(reason),
     onSuccess: async (sessionState) => {
-      debug.info("Study session ended", { sessionId: sessionState.id });
+      debug.info('Study session ended', { sessionId: sessionState.id });
       queryClient.invalidateQueries({ queryKey: studySessionKeys.current() });
       queryClient.invalidateQueries({ queryKey: studySessionKeys.history() });
       queryClient.invalidateQueries({ queryKey: studySessionKeys.stats() });
 
-      if (sessionState.status === "COMPLETED") {
+      if (sessionState.status === 'COMPLETED') {
         // Streak recording + XP granting handled by completion-subsystems.ts
         // via Supabase-backed services — no redundant in-memory calls needed.
         capture(SessionEvents.SESSION_COMPLETED, {
@@ -130,12 +130,12 @@ export function useStudySession() {
           mode: getSessionMode(sessionState),
           duration_seconds: sessionState.elapsedTime,
           progress_percentage: sessionState.completionPercentage,
-          reason: "user_abandoned",
+          reason: 'user_abandoned',
         });
       }
     },
     onError: (error) => {
-      Sentry.captureException(error, { tags: { feature: "session-end" } });
+      Sentry.captureException(error, { tags: { feature: 'session-end' } });
     },
   });
 

@@ -21,9 +21,9 @@
  *     : { damping: 15, stiffness: 300 };
  */
 
-import { useEffect, useState, useMemo } from "react";
-import { AccessibilityInfo, Platform } from "react-native";
-import { useReducedMotion as useReanimatedReducedMotion } from "react-native-reanimated";
+import { useEffect, useState, useMemo } from 'react';
+import { AccessibilityInfo, Platform } from 'react-native';
+import { useReducedMotion as useReanimatedReducedMotion } from 'react-native-reanimated';
 
 interface ReducedMotionResult {
   /** Whether user has enabled reduced motion */
@@ -66,7 +66,7 @@ export function useReducedMotion(): ReducedMotionResult {
 
     // Also subscribe to RN AccessibilityInfo for broader compatibility
     const subscription = AccessibilityInfo.addEventListener(
-      "reduceMotionChanged",
+      'reduceMotionChanged',
       (enabled) => {
         setIsReducedMotion(enabled);
       },

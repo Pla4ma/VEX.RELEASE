@@ -3,15 +3,15 @@ import type {
   RecoveryRecord,
   RecoveryType,
   InterruptionRecord,
-} from "../types";
-import { v4 as uuidv4 } from "../../utils/uuid";
+} from '../types';
+import { v4 as uuidv4 } from '../../utils/uuid';
 
-export type { RecoveryConfig } from "./recovery-analysis-types";
+export type { RecoveryConfig } from './recovery-analysis-types';
 
 export function evaluateRecovery(
   session: SessionState,
   recoveryType: RecoveryType,
-  penalties: RecoveryRecord["penalties"],
+  penalties: RecoveryRecord['penalties'],
   partialCreditThreshold: number,
 ): boolean {
   const totalPenalty =
@@ -21,15 +21,15 @@ export function evaluateRecovery(
     ) || 0;
   const maxAcceptablePenalty = session.baseScore * 0.3;
   switch (recoveryType) {
-    case "AUTO_RESUME":
+    case 'AUTO_RESUME':
       return totalPenalty < maxAcceptablePenalty * 0.5;
-    case "USER_RESUME":
+    case 'USER_RESUME':
       return totalPenalty < maxAcceptablePenalty;
-    case "STREAK_SAVE":
+    case 'STREAK_SAVE':
       return session.completionPercentage >= partialCreditThreshold * 100;
-    case "PARTIAL_CREDIT":
+    case 'PARTIAL_CREDIT':
       return session.effectiveTime > session.config.duration * 1000 * 0.15;
-    case "FULL_RESET":
+    case 'FULL_RESET':
       return true;
     default:
       return false;
@@ -39,59 +39,59 @@ export function evaluateRecovery(
 export function calculatePenalties(
   session: SessionState,
   recoveryType: RecoveryType,
-): RecoveryRecord["penalties"] {
-  const penalties: RecoveryRecord["penalties"] = [];
+): RecoveryRecord['penalties'] {
+  const penalties: RecoveryRecord['penalties'] = [];
   switch (recoveryType) {
-    case "AUTO_RESUME":
+    case 'AUTO_RESUME':
       penalties.push({
-        type: "AUTO_RECOVERY",
+        type: 'AUTO_RECOVERY',
         amount: Math.floor(session.baseScore * 0.02),
-        description: "Auto-recovery penalty",
+        description: 'Auto-recovery penalty',
       });
       break;
-    case "USER_RESUME":
+    case 'USER_RESUME':
       penalties.push({
-        type: "USER_RESUME",
+        type: 'USER_RESUME',
         amount: Math.floor(session.baseScore * 0.05),
-        description: "Session resumed by user",
+        description: 'Session resumed by user',
       });
       break;
-    case "STREAK_SAVE":
+    case 'STREAK_SAVE':
       penalties.push({
-        type: "STREAK_SAVE",
+        type: 'STREAK_SAVE',
         amount: Math.floor(session.baseScore * 0.15),
-        description: "Streak protection used",
+        description: 'Streak protection used',
       });
       penalties.push({
-        type: "PARTIAL_CREDIT_ONLY",
+        type: 'PARTIAL_CREDIT_ONLY',
         amount: Math.floor(session.baseScore * 0.1),
-        description: "Partial credit only",
+        description: 'Partial credit only',
       });
       break;
-    case "PARTIAL_CREDIT":
+    case 'PARTIAL_CREDIT':
       penalties.push({
-        type: "PARTIAL_CREDIT",
+        type: 'PARTIAL_CREDIT',
         amount: Math.floor(session.baseScore * 0.25),
-        description: "Partial completion credit",
+        description: 'Partial completion credit',
       });
       penalties.push({
-        type: "REDUCED_REWARDS",
+        type: 'REDUCED_REWARDS',
         amount: 0,
-        description: "Reduced rewards applied",
+        description: 'Reduced rewards applied',
       });
       break;
-    case "FULL_RESET":
+    case 'FULL_RESET':
       penalties.push({
-        type: "FULL_RESET",
+        type: 'FULL_RESET',
         amount: session.baseScore,
-        description: "Session reset - all progress lost",
+        description: 'Session reset - all progress lost',
       });
       break;
   }
   const recoveryCount = session.recoveryAttempts;
   if (recoveryCount > 0) {
     penalties.push({
-      type: "RECOVERY_STREAK_PENALTY",
+      type: 'RECOVERY_STREAK_PENALTY',
       amount: Math.floor(session.baseScore * 0.05 * recoveryCount),
       description: `Multiple recoveries (${recoveryCount + 1})`,
     });
@@ -106,19 +106,19 @@ export function canProtectStreak(
 ): {
   canProtect: boolean;
   reason?: string;
-  protectionType?: "STREAK_FREEZE" | "GRACE_PERIOD" | "NONE";
+  protectionType?: 'STREAK_FREEZE' | 'GRACE_PERIOD' | 'NONE';
 } {
   if (!streakProtectionEnabled) {
-    return { canProtect: false, reason: "Streak protection disabled" };
+    return { canProtect: false, reason: 'Streak protection disabled' };
   }
   if (session.completionPercentage >= 50) {
-    return { canProtect: true, protectionType: "STREAK_FREEZE" };
+    return { canProtect: true, protectionType: 'STREAK_FREEZE' };
   }
   const minTime = session.config.duration * 1000 * partialCreditThreshold;
   if (session.effectiveTime >= minTime) {
-    return { canProtect: true, protectionType: "GRACE_PERIOD" };
+    return { canProtect: true, protectionType: 'GRACE_PERIOD' };
   }
-  return { canProtect: false, reason: "Insufficient session completion" };
+  return { canProtect: false, reason: 'Insufficient session completion' };
 }
 
 export function calculatePartialCredit(
@@ -145,7 +145,7 @@ export function calculatePartialCredit(
     eligible: false,
     completionPercentage: session.completionPercentage,
     scoreMultiplier: 0,
-    reason: "Insufficient session completion for credit",
+    reason: 'Insufficient session completion for credit',
   };
 }
 
@@ -184,12 +184,12 @@ export function attemptSessionRecovery(
 export function canAutoRecoverForInterruption(
   recoveryCount: number,
   maxRecoveries: number,
-  interruptionSeverity: InterruptionRecord["severity"],
+  interruptionSeverity: InterruptionRecord['severity'],
 ): boolean {
-  if (interruptionSeverity === "MINOR") {
+  if (interruptionSeverity === 'MINOR') {
     return true;
   }
-  if (interruptionSeverity === "MODERATE") {
+  if (interruptionSeverity === 'MODERATE') {
     return recoveryCount < maxRecoveries;
   }
   return false;

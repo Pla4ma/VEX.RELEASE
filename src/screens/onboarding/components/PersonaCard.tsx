@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Pressable } from "react-native";
+import React, { useState } from 'react';
+import { Pressable } from 'react-native';
 import Animated, {
   FadeIn,
   FadeInUp,
@@ -8,11 +8,11 @@ import Animated, {
   useSharedValue,
   withTiming,
   withSequence,
-} from "react-native-reanimated";
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import type { CoachPersona } from "./persona-data";
+} from 'react-native-reanimated';
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import type { CoachPersona } from './persona-data';
 
 function ExampleMessage({
   text,
@@ -103,8 +103,8 @@ export function PersonaCard({
             <Box flex={1}>
               <Text
                 variant="h4"
-                color={isSelected ? "text.primary" : "text.primary"}
-                fontWeight={isSelected ? "700" : "600"}
+                color={isSelected ? 'text.primary' : 'text.primary'}
+                fontWeight={isSelected ? '700' : '600'}
               >
                 {persona.name}
               </Text>

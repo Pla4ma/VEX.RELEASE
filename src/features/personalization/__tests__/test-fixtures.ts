@@ -2,7 +2,7 @@ import type {
   BehaviorStats,
   FeatureAvailabilitySnapshot,
   VexPersonalizationProfile,
-} from "../types";
+} from '../types';
 
 export const available: FeatureAvailabilitySnapshot = {
   boss: true,
@@ -19,37 +19,37 @@ export const unavailable: FeatureAvailabilitySnapshot = {
 };
 
 export function profile(
-  motivationStyle: VexPersonalizationProfile["motivationStyle"],
+  motivationStyle: VexPersonalizationProfile['motivationStyle'],
   overrides: Partial<VexPersonalizationProfile> = {},
 ): VexPersonalizationProfile {
   return {
-    primaryGoal: motivationStyle === "study_focused" ? "study" : "work",
+    primaryGoal: motivationStyle === 'study_focused' ? 'study' : 'work',
     motivationStyle,
     preferredTone:
-      motivationStyle === "intense"
-        ? "direct"
-        : motivationStyle === "coach_led"
-          ? "strategic"
-          : "soft",
+      motivationStyle === 'intense'
+        ? 'direct'
+        : motivationStyle === 'coach_led'
+          ? 'strategic'
+          : 'soft',
     gamificationIntensity:
-      motivationStyle === "game_like" || motivationStyle === "intense"
-        ? "strong"
-        : "minimal",
+      motivationStyle === 'game_like' || motivationStyle === 'intense'
+        ? 'strong'
+        : 'minimal',
     coachMode:
-      motivationStyle === "study_focused"
-        ? "study_tutor"
-        : motivationStyle === "intense"
-          ? "tactical"
-          : motivationStyle === "game_like"
-            ? "game_guide"
-            : motivationStyle === "coach_led"
-              ? "mentor"
-              : "reflection",
+      motivationStyle === 'study_focused'
+        ? 'study_tutor'
+        : motivationStyle === 'intense'
+          ? 'tactical'
+          : motivationStyle === 'game_like'
+            ? 'game_guide'
+            : motivationStyle === 'coach_led'
+              ? 'mentor'
+              : 'reflection',
     studyLayerName:
-      motivationStyle === "study_focused" ? "Study OS" : "Deep Work Plan",
+      motivationStyle === 'study_focused' ? 'Study OS' : 'Deep Work Plan',
     defaultSessionDuration: 25,
-    defaultSessionMode: motivationStyle === "study_focused" ? "STUDY" : "FOCUS",
-    userStage: "new",
+    defaultSessionMode: motivationStyle === 'study_focused' ? 'STUDY' : 'FOCUS',
+    userStage: 'new',
     ...overrides,
   };
 }
@@ -57,7 +57,7 @@ export function profile(
 export function stats(overrides: Partial<BehaviorStats> = {}): BehaviorStats {
   return {
     abandonedSessionDurations: [],
-    bossChallengeEngagement: "none",
+    bossChallengeEngagement: 'none',
     coachInteractions: 0,
     comebackSessions: 0,
     completedSessionDurations: [],

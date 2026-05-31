@@ -7,16 +7,16 @@
  * @phase 1 - Deepening: Validation feedback UI
  */
 
-import React from "react";
-import { View } from "react-native";
-import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
+import React from 'react';
+import { View } from 'react-native';
+import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 
-import { Text } from "../../components/primitives/Text";
-import { Box } from "../../components/primitives/Box";
-import { Button } from "../../components/primitives/Button";
-import { useTheme } from "../../theme";
-import type { ValidationError, ValidationWarning } from "../utils/validation";
-import { formatFieldName, styles } from "./session-validation-feedback-helpers";
+import { Text } from '../../components/primitives/Text';
+import { Box } from '../../components/primitives/Box';
+import { Button } from '../../components/primitives/Button';
+import { useTheme } from '../../theme';
+import type { ValidationError, ValidationWarning } from '../utils/validation';
+import { formatFieldName, styles } from './session-validation-feedback-helpers';
 
 interface SessionValidationFeedbackProps {
   errors: ValidationError[];
@@ -65,7 +65,7 @@ export function SessionValidationFeedback({
           >
             <Text style={styles.compactIcon}>❌</Text>
             <Text variant="caption" color="error.DEFAULT" ml="xs">
-              {errors.length} error{errors.length > 1 ? "s" : ""} to fix
+              {errors.length} error{errors.length > 1 ? 's' : ''} to fix
             </Text>
           </Box>
         )}
@@ -79,7 +79,7 @@ export function SessionValidationFeedback({
           >
             <Text style={styles.compactIcon}>⚠️</Text>
             <Text variant="caption" color="warning.DEFAULT" ml="xs">
-              {warnings.length} warning{warnings.length > 1 ? "s" : ""}
+              {warnings.length} warning{warnings.length > 1 ? 's' : ''}
             </Text>
           </Box>
         )}
@@ -95,7 +95,7 @@ export function SessionValidationFeedback({
           <Box flexDirection="row" alignItems="center" mb="sm">
             <Text style={styles.sectionIcon}>❌</Text>
             <Text variant="h5" color="error.DEFAULT">
-              {errors.length} Error{errors.length > 1 ? "s" : ""}
+              {errors.length} Error{errors.length > 1 ? 's' : ''}
             </Text>
           </Box>
 
@@ -117,7 +117,7 @@ export function SessionValidationFeedback({
                   variant="ghost"
                   size="sm"
                   onPress={() => onFixError(field)}
-                  style={{ alignSelf: "flex-start", marginTop: 4 }}
+                  style={{ alignSelf: 'flex-start', marginTop: 4 }}
                   accessibilityLabel="Fix this issue"
                   accessibilityRole="button"
                   accessibilityHint="Double tap to activate"
@@ -136,7 +136,7 @@ export function SessionValidationFeedback({
           <Box flexDirection="row" alignItems="center" mb="sm">
             <Text style={styles.sectionIcon}>⚠️</Text>
             <Text variant="h5" color="warning.DEFAULT">
-              {warnings.length} Warning{warnings.length > 1 ? "s" : ""}
+              {warnings.length} Warning{warnings.length > 1 ? 's' : ''}
             </Text>
           </Box>
 
@@ -157,7 +157,7 @@ export function SessionValidationFeedback({
                     variant="ghost"
                     size="sm"
                     onPress={() => onDismissWarning(warning.field)}
-                    style={{ alignSelf: "flex-start", marginTop: 2 }}
+                    style={{ alignSelf: 'flex-start', marginTop: 2 }}
                     accessibilityLabel="Dismiss validation feedback"
                     accessibilityRole="button"
                     accessibilityHint="Double tap to activate"

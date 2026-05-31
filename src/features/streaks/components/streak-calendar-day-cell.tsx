@@ -1,5 +1,5 @@
-import React, { useMemo } from "react";
-import { View, Text } from "react-native";
+import React, { useMemo } from 'react';
+import { View, Text } from 'react-native';
 import Animated, {
   Easing,
   interpolate,
@@ -7,9 +7,9 @@ import Animated, {
   useSharedValue,
   withRepeat,
   withTiming,
-} from "react-native-reanimated";
-import type { Theme } from "@/theme";
-import type { StreakCalendarStyles } from "./streak-calendar-styles";
+} from 'react-native-reanimated';
+import type { Theme } from '@/theme';
+import type { StreakCalendarStyles } from './streak-calendar-styles';
 
 export interface DayData {
   day: number;
@@ -21,7 +21,7 @@ export interface DayData {
 
 function getIntensityColor(durationMinutes: number, theme: Theme): string {
   if (durationMinutes === 0) {
-    return "transparent";
+    return 'transparent';
   }
   if (durationMinutes < 15) {
     return `${theme.colors.warning[500]}40`;
@@ -141,7 +141,7 @@ export function DayCell({
             isToday && styles.dayTextToday,
           ]}
         >
-          {isBossDefeatDay ? "Crown" : day}
+          {isBossDefeatDay ? 'Crown' : day}
         </Text>
         {hasSession && durationMinutes >= 60 && (
           <View style={styles.fireIndicator}>

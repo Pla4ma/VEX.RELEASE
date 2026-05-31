@@ -1,10 +1,10 @@
-import { useState } from "react";
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import type { ExtendedRootStackParams } from "@/navigation/types";
-import { capture } from "../../analytics";
-import { PurchaseEvents } from "../purchase-events";
-import type { PurchasesPackageDisplayInfo } from "../revenuecat-types";
-import type { PaywallPlan, PaywallStatusMessage } from "./paywall-data";
+import { useState } from 'react';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import type { ExtendedRootStackParams } from '@/navigation/types';
+import { capture } from '../../analytics';
+import { PurchaseEvents } from '../purchase-events';
+import type { PurchasesPackageDisplayInfo } from '../revenuecat-types';
+import type { PaywallPlan, PaywallStatusMessage } from './paywall-data';
 
 type NavigationProp = NativeStackNavigationProp<ExtendedRootStackParams>;
 
@@ -43,21 +43,21 @@ export function usePaywallActions({
   const handleClose = (): void => {
     capture(PurchaseEvents.PAYWALL_DISMISSED, {
       paywall_source: source,
-      gated_feature: "premium_subscription",
+      gated_feature: 'premium_subscription',
     });
     navigation.goBack();
   };
 
   const handlePurchase = async (): Promise<void> => {
     const selectedPackage =
-      selectedPlan === "annual"
+      selectedPlan === 'annual'
         ? premiumPackages.annual
         : premiumPackages.monthly;
     if (!selectedPackage) {
       setStatusMessage({
-        tone: "warning",
-        title: "Plans loading",
-        body: "Premium options are still loading. Please wait a moment.",
+        tone: 'warning',
+        title: 'Plans loading',
+        body: 'Premium options are still loading. Please wait a moment.',
       });
       return;
     }
@@ -66,42 +66,42 @@ export function usePaywallActions({
     if (result.success) {
       await refresh();
       setStatusMessage({
-        tone: "celebration",
-        title: "Premium is active",
-        body: "Deeper coach memory, reports, and progress intelligence are active.",
+        tone: 'celebration',
+        title: 'Premium is active',
+        body: 'Deeper coach memory, reports, and progress intelligence are active.',
       });
       navigation.goBack();
       return;
     }
 
     setStatusMessage({
-      tone: "warning",
-      title: "Purchase not completed",
+      tone: 'warning',
+      title: 'Purchase not completed',
       body: "Purchase didn't go through. Your card was not charged.",
     });
   };
 
   const handleRestore = async (): Promise<void> => {
     setStatusMessage({
-      tone: "info",
-      title: "Restoring purchases",
-      body: "Checking for existing Premium subscription.",
+      tone: 'info',
+      title: 'Restoring purchases',
+      body: 'Checking for existing Premium subscription.',
     });
     const result = await restore();
     await refresh();
     setStatusMessage(
       result.success
         ? {
-            tone: "celebration",
-            title: "Purchases restored",
+            tone: 'celebration',
+            title: 'Purchases restored',
             body: isPremium
-              ? "Your Premium status is active."
-              : "No active subscriptions found.",
+              ? 'Your Premium status is active.'
+              : 'No active subscriptions found.',
           }
         : {
-            tone: "warning",
-            title: "Restore failed",
-            body: "Try again with a stronger connection.",
+            tone: 'warning',
+            title: 'Restore failed',
+            body: 'Try again with a stronger connection.',
           },
     );
   };

@@ -5,7 +5,7 @@
  * Each component handles a distinct UI section.
  */
 
-import React from "react";
+import React from 'react';
 import {
   View,
   Text,
@@ -13,10 +13,10 @@ import {
   ScrollView,
   Pressable,
   ActivityIndicator,
-} from "react-native";
-import type { StudyContent } from "../types";
-import { CONTENT_STATUS_CONFIG, UI_TEXT } from "../constants";
-import { styles } from "./ContentReviewScreen.styles";
+} from 'react-native';
+import type { StudyContent } from '../types';
+import { CONTENT_STATUS_CONFIG, UI_TEXT } from '../constants';
+import { styles } from './ContentReviewScreen.styles';
 
 /* ─── Status Badge ─── */
 

@@ -2,16 +2,16 @@
  * Verifiers: Privacy & Paywall.
  */
 
-import { getDataCategories } from "../privacy/PrivacyInventory";
+import { getDataCategories } from '../privacy/PrivacyInventory';
 import {
   paywallVerification,
   type PaywallVerificationResult,
-} from "../monetization/PaywallVerification";
-import type { PrivacyComplianceReport } from "./ExitGate.types";
-import { getErrorMessage } from "./ExitGate.verifier-utils";
+} from '../monetization/PaywallVerification';
+import type { PrivacyComplianceReport } from './ExitGate.types';
+import { getErrorMessage } from './ExitGate.verifier-utils';
 
 export async function verifyPrivacy(): Promise<{
-  status: "pass" | "fail" | "warning";
+  status: 'pass' | 'fail' | 'warning';
   score: number;
   report: PrivacyComplianceReport;
   issues: string[];
@@ -29,16 +29,16 @@ export async function verifyPrivacy(): Promise<{
     };
     const issues: string[] = [];
     if (!report.gdprCompliant) {
-      issues.push("App is not GDPR compliant");
+      issues.push('App is not GDPR compliant');
     }
     if (report.dataPoints.length > 20) {
-      issues.push("App collects more than 20 data points");
+      issues.push('App collects more than 20 data points');
     }
     if (report.securityVulnerabilities.length > 0) {
-      issues.push("Security vulnerabilities detected");
+      issues.push('Security vulnerabilities detected');
     }
-    const status: "pass" | "fail" | "warning" =
-      issues.length === 0 ? "pass" : !report.gdprCompliant ? "fail" : "warning";
+    const status: 'pass' | 'fail' | 'warning' =
+      issues.length === 0 ? 'pass' : !report.gdprCompliant ? 'fail' : 'warning';
     return { status, score: report.score, report, issues };
   } catch (error) {
     const fallback: PrivacyComplianceReport = {
@@ -51,7 +51,7 @@ export async function verifyPrivacy(): Promise<{
       timestamp: Date.now(),
     };
     return {
-      status: "fail",
+      status: 'fail',
       score: 0,
       report: fallback,
       issues: [`Privacy verification failed: ${getErrorMessage(error)}`],
@@ -60,7 +60,7 @@ export async function verifyPrivacy(): Promise<{
 }
 
 export async function verifyPaywall(): Promise<{
-  status: "pass" | "fail" | "warning";
+  status: 'pass' | 'fail' | 'warning';
   score: number;
   report: PaywallVerificationResult;
   issues: string[];
@@ -69,23 +69,23 @@ export async function verifyPaywall(): Promise<{
     const report = await paywallVerification.performFullVerification();
     const issues: string[] = [];
     if (!report.passed) {
-      issues.push("Paywall verification failed");
+      issues.push('Paywall verification failed');
     }
     if (report.score < 80) {
-      issues.push("Paywall verification score below 80");
+      issues.push('Paywall verification score below 80');
     }
     if (report.results.productCatalog.issues.length > 0) {
-      issues.push("Product catalog has issues");
+      issues.push('Product catalog has issues');
     }
     if (report.results.purchaseFlow.issues.length > 0) {
-      issues.push("Purchase flow has issues");
+      issues.push('Purchase flow has issues');
     }
-    const status: "pass" | "fail" | "warning" =
+    const status: 'pass' | 'fail' | 'warning' =
       issues.length === 0
-        ? "pass"
+        ? 'pass'
         : !report.passed || report.score < 70
-          ? "fail"
-          : "warning";
+          ? 'fail'
+          : 'warning';
     return { status, score: report.score, report, issues };
   } catch (error) {
     const fallback: PaywallVerificationResult = {
@@ -109,7 +109,7 @@ export async function verifyPaywall(): Promise<{
       timestamp: Date.now(),
     };
     return {
-      status: "fail",
+      status: 'fail',
       score: 0,
       report: fallback,
       issues: [`Paywall verification failed: ${getErrorMessage(error)}`],

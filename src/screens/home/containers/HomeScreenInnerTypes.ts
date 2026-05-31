@@ -1,14 +1,14 @@
-import type React from "react";
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import type { ExtendedRootStackParams } from "../../../navigation/types";
-import type { HomeController } from "../hooks/home-controller-types";
-import type { HomeViewModel } from "../hooks/home-view-model";
-import type { ActiveIntervention } from "../../../features/ai-coach/hooks";
+import type React from 'react';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import type { ExtendedRootStackParams } from '../../../navigation/types';
+import type { HomeController } from '../hooks/home-controller-types';
+import type { HomeViewModel } from '../hooks/home-view-model';
+import type { ActiveIntervention } from '../../../features/ai-coach/hooks';
 import type {
   ChallengeItem,
   SessionListItem,
-} from "../../../features/home-spine/components";
-import type { ToastOptions } from "../../../shared/ui/components/Toast";
+} from '../../../features/home-spine/components';
+import type { ToastOptions } from '../../../shared/ui/components/Toast';
 
 type Nav = NativeStackNavigationProp<ExtendedRootStackParams>;
 

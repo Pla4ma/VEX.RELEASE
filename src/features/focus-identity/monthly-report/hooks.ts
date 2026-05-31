@@ -4,23 +4,23 @@
  * React hooks for accessing monthly report data and state.
  */
 
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import * as service from "./service";
-import { useAuthStore } from "../../../store";
-import { launchColors } from "@theme/tokens/launch-colors";
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import * as service from './service';
+import { useAuthStore } from '../../../store';
+import { launchColors } from '@theme/tokens/launch-colors';
 
 // ============================================================================
 // Query Keys
 // ============================================================================
 
 export const monthlyReportKeys = {
-  all: ["monthly-reports"] as const,
+  all: ['monthly-reports'] as const,
   byUser: (userId: string) =>
-    [...monthlyReportKeys.all, "user", userId] as const,
+    [...monthlyReportKeys.all, 'user', userId] as const,
   report: (userId: string, year: number, month: number) =>
-    [...monthlyReportKeys.byUser(userId), "report", year, month] as const,
+    [...monthlyReportKeys.byUser(userId), 'report', year, month] as const,
   preview: (userId: string, year: number, month: number) =>
-    [...monthlyReportKeys.byUser(userId), "preview", year, month] as const,
+    [...monthlyReportKeys.byUser(userId), 'preview', year, month] as const,
 };
 
 // ============================================================================
@@ -57,7 +57,7 @@ export function useCurrentMonthlyReport() {
   const year = now.getFullYear();
   const month = now.getMonth() + 1; // JavaScript months are 0-indexed
 
-  return useMonthlyReport(userId || "", year, month);
+  return useMonthlyReport(userId || '', year, month);
 }
 
 export function useCurrentMonthlyReportPreview() {
@@ -67,7 +67,7 @@ export function useCurrentMonthlyReportPreview() {
   const year = now.getFullYear();
   const month = now.getMonth() + 1; // JavaScript months are 0-indexed
 
-  return useMonthlyReportPreview(userId || "", year, month);
+  return useMonthlyReportPreview(userId || '', year, month);
 }
 
 // ============================================================================
@@ -121,17 +121,17 @@ export function useMonthlyReportGrade(grade: string | undefined) {
 
 function getGradeColor(grade?: string): string {
   switch (grade) {
-    case "A+":
+    case 'A+':
       return launchColors.hex_ff1744;
-    case "A":
+    case 'A':
       return launchColors.hex_ff6b35;
-    case "B":
+    case 'B':
       return launchColors.hex_ffd700;
-    case "C":
+    case 'C':
       return launchColors.hex_4caf50;
-    case "D":
+    case 'D':
       return launchColors.hex_2196f3;
-    case "F":
+    case 'F':
       return launchColors.hex_9e9e9e;
     default:
       return launchColors.hex_9e9e9e;
@@ -140,19 +140,19 @@ function getGradeColor(grade?: string): string {
 
 function getGradeLabel(grade?: string): string {
   switch (grade) {
-    case "A+":
-      return "Exceptional";
-    case "A":
-      return "Excellent";
-    case "B":
-      return "Good";
-    case "C":
-      return "Average";
-    case "D":
-      return "Below Average";
-    case "F":
-      return "Needs Improvement";
+    case 'A+':
+      return 'Exceptional';
+    case 'A':
+      return 'Excellent';
+    case 'B':
+      return 'Good';
+    case 'C':
+      return 'Average';
+    case 'D':
+      return 'Below Average';
+    case 'F':
+      return 'Needs Improvement';
     default:
-      return "Not Graded";
+      return 'Not Graded';
   }
 }

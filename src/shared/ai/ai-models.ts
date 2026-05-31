@@ -1,7 +1,7 @@
 export const GEMINI_MODELS = {
-  FLASH: "gemini-2.5-flash",
-  PRO: "gemini-2.5-pro",
-  FLASH_LATEST: "gemini-flash-latest",
+  FLASH: 'gemini-2.5-flash',
+  PRO: 'gemini-2.5-pro',
+  FLASH_LATEST: 'gemini-flash-latest',
 } as const;
 export const DEFAULT_MODEL = GEMINI_MODELS.FLASH;
 export const MODEL_BY_USE_CASE: Record<string, string> = {
@@ -45,18 +45,18 @@ export const GENERATION_CONFIG = {
   },
 } as const;
 export const SAFETY_SETTINGS = [
-  { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_MEDIUM_AND_ABOVE" },
+  { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
   {
-    category: "HARM_CATEGORY_HATE_SPEECH",
-    threshold: "BLOCK_MEDIUM_AND_ABOVE",
+    category: 'HARM_CATEGORY_HATE_SPEECH',
+    threshold: 'BLOCK_MEDIUM_AND_ABOVE',
   },
   {
-    category: "HARM_CATEGORY_SEXUALLY_EXPLICIT",
-    threshold: "BLOCK_MEDIUM_AND_ABOVE",
+    category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT',
+    threshold: 'BLOCK_MEDIUM_AND_ABOVE',
   },
   {
-    category: "HARM_CATEGORY_DANGEROUS_CONTENT",
-    threshold: "BLOCK_MEDIUM_AND_ABOVE",
+    category: 'HARM_CATEGORY_DANGEROUS_CONTENT',
+    threshold: 'BLOCK_MEDIUM_AND_ABOVE',
   },
 ];
 export const AI_TIMEOUTS = {

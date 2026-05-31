@@ -1,4 +1,4 @@
-export const TEST_USER_ID = "test-user-123";
+export const TEST_USER_ID = 'test-user-123';
 
 export function createMockStorage() {
   return {
@@ -13,9 +13,9 @@ export function createCompanionProfile(
 ) {
   return {
     id: `companion_${TEST_USER_ID}`,
-    name: "Vexling",
-    type: "focus_wisp",
-    mood: "happy",
+    name: 'Vexling',
+    type: 'focus_wisp',
+    mood: 'happy',
     level: 1,
     xp: 0,
     lastFedAt: Date.now(),

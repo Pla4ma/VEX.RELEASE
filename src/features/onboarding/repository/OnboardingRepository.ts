@@ -6,22 +6,22 @@
  * @phase 2 - Deepening: Repository layer
  */
 
-import { MMKV } from "react-native-mmkv";
+import { MMKV } from 'react-native-mmkv';
 import {
   parseJsonWithSchema,
   stringifyJsonSafe,
-} from "../../../persistence/safe-json";
-import { createDebugger } from "../../../utils/debug";
+} from '../../../persistence/safe-json';
+import { createDebugger } from '../../../utils/debug';
 import {
   OnboardingStateSchema,
   OnboardingProgressSchema,
   type OnboardingState,
   type OnboardingProgress,
-} from "../schemas";
+} from '../schemas';
 
-const debug = createDebugger("onboarding:repository");
+const debug = createDebugger('onboarding:repository');
 
-const storage = new MMKV({ id: "onboarding-repo" });
+const storage = new MMKV({ id: 'onboarding-repo' });
 
 const KEYS = {
   onboardingState: (userId: string) => `onboarding:state:${userId}`,
@@ -49,7 +49,7 @@ export class OnboardingRepository {
 
       return null;
     } catch (error) {
-      debug.error("Failed to get onboarding state", toError(error));
+      debug.error('Failed to get onboarding state', toError(error));
       return null;
     }
   }
@@ -65,10 +65,10 @@ export class OnboardingRepository {
       // Also save to backup
       this.writeState(KEYS.onboardingBackup(userId), validated);
 
-      debug.info("Onboarding state saved", { userId, step: state.currentStep });
+      debug.info('Onboarding state saved', { userId, step: state.currentStep });
     } catch (error) {
-      debug.error("Failed to save onboarding state", toError(error));
-      throw new OnboardingRepositoryError("Failed to save state", {
+      debug.error('Failed to save onboarding state', toError(error));
+      throw new OnboardingRepositoryError('Failed to save state', {
         cause: error,
       });
     }
@@ -77,9 +77,9 @@ export class OnboardingRepository {
   async clearOnboardingState(userId: string): Promise<void> {
     try {
       storage.delete(KEYS.onboardingState(userId));
-      debug.info("Onboarding state cleared", { userId });
+      debug.info('Onboarding state cleared', { userId });
     } catch (error) {
-      debug.error("Failed to clear onboarding state", toError(error));
+      debug.error('Failed to clear onboarding state', toError(error));
     }
   }
 
@@ -93,13 +93,13 @@ export class OnboardingRepository {
       return null;
     }
     return parseJsonWithSchema(data, OnboardingStateSchema, {
-      feature: "onboarding",
+      feature: 'onboarding',
       key,
     });
   }
 
   private writeState(key: string, state: OnboardingState): void {
-    const encoded = stringifyJsonSafe(state, { feature: "onboarding", key });
+    const encoded = stringifyJsonSafe(state, { feature: 'onboarding', key });
     if (encoded) {
       storage.set(key, encoded);
     }
@@ -116,11 +116,11 @@ export class OnboardingRepository {
         return null;
       }
       return parseJsonWithSchema(data, OnboardingProgressSchema, {
-        feature: "onboarding",
+        feature: 'onboarding',
         key: KEYS.onboardingProgress(userId),
       });
     } catch (error) {
-      debug.error("Failed to get onboarding progress", toError(error));
+      debug.error('Failed to get onboarding progress', toError(error));
       return null;
     }
   }
@@ -132,19 +132,19 @@ export class OnboardingRepository {
     try {
       const validated = OnboardingProgressSchema.parse(progress);
       const encoded = stringifyJsonSafe(validated, {
-        feature: "onboarding",
+        feature: 'onboarding',
         key: KEYS.onboardingProgress(userId),
       });
       if (encoded) {
         storage.set(KEYS.onboardingProgress(userId), encoded);
       }
-      debug.info("Onboarding progress saved", {
+      debug.info('Onboarding progress saved', {
         userId,
         status: progress.status,
       });
     } catch (error) {
-      debug.error("Failed to save onboarding progress", toError(error));
-      throw new OnboardingRepositoryError("Failed to save progress", {
+      debug.error('Failed to save onboarding progress', toError(error));
+      throw new OnboardingRepositoryError('Failed to save progress', {
         cause: error,
       });
     }
@@ -157,7 +157,7 @@ export class OnboardingRepositoryError extends Error {
     public details?: { cause?: unknown },
   ) {
     super(message);
-    this.name = "OnboardingRepositoryError";
+    this.name = 'OnboardingRepositoryError';
   }
 }
 

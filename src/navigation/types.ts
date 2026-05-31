@@ -10,7 +10,7 @@ export type {
   SettingsStackRoute,
   StudyContext,
   WarContext,
-} from "./route-types";
+} from './route-types';
 
 export type {
   AuthStackParams,
@@ -23,4 +23,4 @@ export type {
   SessionSetupParams,
   SessionStackParams,
   SettingsStackParams,
-} from "./param-types";
+} from './param-types';

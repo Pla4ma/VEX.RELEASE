@@ -1,10 +1,10 @@
-import { z } from "zod";
+import { z } from 'zod';
 
-import { LaneProfileSchema } from "../lane-engine/schemas";
+import { LaneProfileSchema } from '../lane-engine/schemas';
 import {
   PrimaryGoalSchema,
   SessionModeSchema,
-} from "../personalization/core-schemas";
+} from '../personalization/core-schemas';
 
 export const FocusWindowSchema = z
   .object({
@@ -28,7 +28,7 @@ export const NotificationPreferenceSchema = z
     maxPerDay: z.number().int().min(0).max(3),
     quietHoursStart: z.number().int().min(0).max(23),
     quietHoursEnd: z.number().int().min(0).max(23),
-    tone: z.enum(["quiet", "supportive", "strategic"]),
+    tone: z.enum(['quiet', 'supportive', 'strategic']),
   })
   .strict();
 
@@ -42,7 +42,7 @@ export const FocusProfileSchema = z
     bestFocusWindows: z.array(FocusWindowSchema),
     riskWindows: z.array(FocusWindowSchema),
     avoidanceTriggers: z.array(z.string().min(1)),
-    frictionPreference: z.enum(["soft", "medium", "hard"]),
+    frictionPreference: z.enum(['soft', 'medium', 'hard']),
     notificationPreference: NotificationPreferenceSchema,
     memoryConsent: MemoryConsentSchema,
     updatedAt: z.number().int().min(0),

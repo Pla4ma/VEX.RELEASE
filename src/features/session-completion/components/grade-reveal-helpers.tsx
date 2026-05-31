@@ -1,9 +1,9 @@
-import React from "react";
+import React from 'react';
 import Animated, {
   useAnimatedStyle,
   type SharedValue,
-} from "react-native-reanimated";
-import { launchColors } from "@theme/tokens/launch-colors";
+} from 'react-native-reanimated';
+import { launchColors } from '@theme/tokens/launch-colors';
 
 export const PARTICLE_COUNT = 12;
 
@@ -16,16 +16,16 @@ export const GRADE_REVEAL_COLORS: Record<string, string> = {
 };
 
 export function hexToRgba(color: string, alpha: number): string {
-  if (!color.startsWith("#")) {
+  if (!color.startsWith('#')) {
     return color;
   }
   const raw =
     color.length === 4
       ? color
           .slice(1)
-          .split("")
+          .split('')
           .map((part) => `${part}${part}`)
-          .join("")
+          .join('')
       : color.slice(1);
   const red = parseInt(raw.slice(0, 2), 16);
   const green = parseInt(raw.slice(2, 4), 16);
@@ -59,7 +59,7 @@ export function BurstParticle({
           backgroundColor: color,
           borderRadius: 9999,
           height: 10,
-          position: "absolute",
+          position: 'absolute',
           width: 10,
         },
         style,

@@ -3,14 +3,14 @@ import type {
   SessionPreset,
   SessionSummary,
   SessionHistoryEntry,
-} from "./types";
+} from './types';
 import type {
   SessionStatsResult,
   CreateCustomPresetInput,
-} from "./session-service-types";
-import type { SessionOrchestrator } from "./SessionOrchestrator";
-import { getSessionRepository } from "./repository/SessionRepository";
-import { getPresetService } from "./presets";
+} from './session-service-types';
+import type { SessionOrchestrator } from './SessionOrchestrator';
+import { getSessionRepository } from './repository/SessionRepository';
+import { getPresetService } from './presets';
 
 export type { SessionStatsResult, CreateCustomPresetInput };
 
@@ -55,7 +55,7 @@ export abstract class SessionServiceQueries {
     return this.orchestrator.getCurrentPurityScore();
   }
 
-  getPurityLabel(): "Elite" | "Good" | "Okay" | "Distracted" {
+  getPurityLabel(): 'Elite' | 'Good' | 'Okay' | 'Distracted' {
     return this.orchestrator.getPurityLabel();
   }
 

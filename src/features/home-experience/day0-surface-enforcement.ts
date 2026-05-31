@@ -2,29 +2,29 @@ import type {
   HomeSurfaceDecision,
   HomeSurfaceKey,
   HomeSurfaceMap,
-} from "./surface-decision-schemas";
+} from './surface-decision-schemas';
 import {
   ALL_HOME_SURFACE_KEYS,
   BLOCKED_ON_DAY0,
   DAY0_PERMITTED,
   FULL_FEATURE_CARD_SURFACES,
-} from "./day0-surface-constants";
-import type { Day0PolicyLimits, Day0PolicyResult } from "./day0-surface-types";
-import { DEFAULT_DAY0_POLICY } from "./day0-surface-types";
+} from './day0-surface-constants';
+import type { Day0PolicyLimits, Day0PolicyResult } from './day0-surface-types';
+import { DEFAULT_DAY0_POLICY } from './day0-surface-types';
 
 function surfacePriority(value: HomeSurfaceDecision): number {
   switch (value) {
-    case "primary":
+    case 'primary':
       return 100;
-    case "spotlight":
+    case 'spotlight':
       return 80;
-    case "secondary":
+    case 'secondary':
       return 50;
-    case "tiny_tease":
+    case 'tiny_tease':
       return 20;
-    case "hidden":
+    case 'hidden':
       return 0;
-    case "blocked":
+    case 'blocked':
       return 0;
   }
 }
@@ -33,7 +33,7 @@ function getVisibleEntries(
   map: Record<HomeSurfaceKey, HomeSurfaceDecision>,
 ): [HomeSurfaceKey, HomeSurfaceDecision][] {
   return Object.entries(map).filter(
-    ([, v]) => v !== "hidden" && v !== "blocked",
+    ([, v]) => v !== 'hidden' && v !== 'blocked',
   ) as [HomeSurfaceKey, HomeSurfaceDecision][];
 }
 
@@ -47,40 +47,40 @@ export function enforceDay0SurfacePolicy(
     HomeSurfaceDecision
   >;
   for (const key of ALL_HOME_SURFACE_KEYS) {
-    corrected[key] = map[key] ?? "hidden";
+    corrected[key] = map[key] ?? 'hidden';
   }
 
   for (const key of BLOCKED_ON_DAY0) {
     const val = corrected[key];
-    if (val !== "hidden" && val !== "blocked") {
+    if (val !== 'hidden' && val !== 'blocked') {
       violations.push(
         `Surface "${key}" must be hidden or blocked on Day 0, got "${val}"`,
       );
-      corrected[key] = "hidden";
+      corrected[key] = 'hidden';
     }
   }
 
   if (limits.noFullFeatureCards) {
     for (const key of FULL_FEATURE_CARD_SURFACES) {
       const val = corrected[key];
-      if (val === "secondary" || val === "primary" || val === "spotlight") {
+      if (val === 'secondary' || val === 'primary' || val === 'spotlight') {
         violations.push(
           `Full feature card "${key}" not allowed on Day 0, got "${val}"`,
         );
-        corrected[key] = key === "study_layer" ? "tiny_tease" : "hidden";
+        corrected[key] = key === 'study_layer' ? 'tiny_tease' : 'hidden';
       }
     }
   }
 
   if (limits.noPremium) {
     if (
-      corrected.premium_tease !== "hidden" &&
-      corrected.premium_tease !== "blocked"
+      corrected.premium_tease !== 'hidden' &&
+      corrected.premium_tease !== 'blocked'
     ) {
       violations.push(
         `Premium surface not allowed on Day 0, got "${corrected.premium_tease}"`,
       );
-      corrected.premium_tease = "hidden";
+      corrected.premium_tease = 'hidden';
     }
   }
 
@@ -95,12 +95,12 @@ export function enforceDay0SurfacePolicy(
     );
     while (sorted.length > limits.maxVisibleSurfaces) {
       const [dropKey] = sorted.shift()!;
-      corrected[dropKey] = "hidden";
+      corrected[dropKey] = 'hidden';
     }
     visibleEntries = getVisibleEntries(corrected);
   }
 
-  const primaryCount = visibleEntries.filter(([, v]) => v === "primary").length;
+  const primaryCount = visibleEntries.filter(([, v]) => v === 'primary').length;
   if (primaryCount > limits.maxPrimaryCta) {
     violations.push(
       `Day 0 has ${primaryCount} primary CTAs, max ${limits.maxPrimaryCta}`,
@@ -110,11 +110,11 @@ export function enforceDay0SurfacePolicy(
       HomeSurfaceKey,
       HomeSurfaceDecision,
     ][]) {
-      if (val === "primary") {
+      if (val === 'primary') {
         if (!keptPrimary) {
           keptPrimary = true;
         } else {
-          corrected[key] = "secondary";
+          corrected[key] = 'secondary';
         }
       }
     }
@@ -122,12 +122,12 @@ export function enforceDay0SurfacePolicy(
   }
 
   if (primaryCount === 0) {
-    violations.push("Day 0 must have exactly one primary CTA");
-    corrected.start_session = "primary";
+    violations.push('Day 0 must have exactly one primary CTA');
+    corrected.start_session = 'primary';
   }
 
   const spotlightCount = visibleEntries.filter(
-    ([, v]) => v === "spotlight",
+    ([, v]) => v === 'spotlight',
   ).length;
   if (spotlightCount > limits.maxSpotlights) {
     violations.push(
@@ -138,11 +138,11 @@ export function enforceDay0SurfacePolicy(
       HomeSurfaceKey,
       HomeSurfaceDecision,
     ][]) {
-      if (val === "spotlight") {
+      if (val === 'spotlight') {
         if (!keptSpot) {
           keptSpot = true;
         } else {
-          corrected[key] = "secondary";
+          corrected[key] = 'secondary';
         }
       }
     }
@@ -150,13 +150,13 @@ export function enforceDay0SurfacePolicy(
   }
 
   const teaserCount = visibleEntries.filter(
-    ([, v]) => v === "tiny_tease",
+    ([, v]) => v === 'tiny_tease',
   ).length;
   if (teaserCount > limits.maxTeasers) {
     violations.push(
       `Day 0 has ${teaserCount} teasers, max ${limits.maxTeasers}`,
     );
-    const teasers = visibleEntries.filter(([, v]) => v === "tiny_tease");
+    const teasers = visibleEntries.filter(([, v]) => v === 'tiny_tease');
     const sorted = [...teasers].sort(([a], [b]) => {
       const idxA = DAY0_PERMITTED.indexOf(a);
       const idxB = DAY0_PERMITTED.indexOf(b);
@@ -164,16 +164,16 @@ export function enforceDay0SurfacePolicy(
     });
     while (sorted.length > limits.maxTeasers) {
       const [dropKey] = sorted.pop()!;
-      corrected[dropKey] = "hidden";
+      corrected[dropKey] = 'hidden';
     }
   }
 
   if (limits.noSocialEconomyBattlePass) {
     const socialKeys: HomeSurfaceKey[] = [];
     for (const key of socialKeys) {
-      if (corrected[key] !== "hidden" && corrected[key] !== "blocked") {
+      if (corrected[key] !== 'hidden' && corrected[key] !== 'blocked') {
         violations.push(`Social/economy surface "${key}" not allowed on Day 0`);
-        corrected[key] = "hidden";
+        corrected[key] = 'hidden';
       }
     }
   }

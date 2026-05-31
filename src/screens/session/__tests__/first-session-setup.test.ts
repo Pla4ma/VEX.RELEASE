@@ -1,2 +1,2 @@
-import "./first-session-personalization";
-import "./first-session-setup-config";
+import './first-session-personalization';
+import './first-session-setup-config';

@@ -1,8 +1,8 @@
-import React from "react";
-import Animated, { FadeInUp } from "react-native-reanimated";
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
+import React from 'react';
+import Animated, { FadeInUp } from 'react-native-reanimated';
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
 
 interface NameAvatarPreviewProps {
   name: string;

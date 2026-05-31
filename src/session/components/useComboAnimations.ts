@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from 'react';
 import {
   useSharedValue,
   useAnimatedStyle,
@@ -8,9 +8,9 @@ import {
   withRepeat,
   interpolate,
   cancelAnimation,
-} from "react-native-reanimated";
-import type { ComboTierConfig } from "./combo-meter-types";
-import { getMilestoneMessage } from "./combo-meter-helpers";
+} from 'react-native-reanimated';
+import type { ComboTierConfig } from './combo-meter-types';
+import { getMilestoneMessage } from './combo-meter-helpers';
 
 interface UseComboAnimationsOptions {
   comboMinutes: number;
@@ -32,7 +32,7 @@ export function useComboAnimations({
   onComboBroken,
 }: UseComboAnimationsOptions) {
   const [showMilestone, setShowMilestone] = useState(false);
-  const [milestoneMessage, setMilestoneMessage] = useState("");
+  const [milestoneMessage, setMilestoneMessage] = useState('');
   const [lastMilestone, setLastMilestone] = useState(0);
   const [showComboBroken, setShowComboBroken] = useState(false);
   const previousComboRef = useRef(comboMinutes);

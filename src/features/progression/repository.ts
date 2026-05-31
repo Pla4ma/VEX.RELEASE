@@ -1,21 +1,21 @@
-import { getSupabaseClient } from "../../config/supabase";
+import { getSupabaseClient } from '../../config/supabase';
 import {
   ProgressionSchema,
   XpEntrySchema,
   type Progression,
   type XpEntry,
-} from "./schemas";
-import { v4 } from "../../utils/uuid";
-import { withResilience } from "../../utils/supabase-resilience";
+} from './schemas';
+import { v4 } from '../../utils/uuid';
+import { withResilience } from '../../utils/supabase-resilience';
 class RepositoryError extends Error {
   constructor(
     public operation: string,
     public originalError: unknown,
   ) {
     super(
-      `Repository error in ${operation}: ${originalError instanceof Error ? originalError.message : "Unknown error"}`,
+      `Repository error in ${operation}: ${originalError instanceof Error ? originalError.message : 'Unknown error'}`,
     );
-    this.name = "RepositoryError";
+    this.name = 'RepositoryError';
   }
 }
 const supabase = getSupabaseClient();
@@ -23,14 +23,14 @@ export async function fetchProgression(
   userId: string,
 ): Promise<Progression | null> {
   const { data, error } = await withResilience(
-    supabase.from("progression").select("*").eq("user_id", userId).single(),
-    { operation: "fetchProgression" },
+    supabase.from('progression').select('*').eq('user_id', userId).single(),
+    { operation: 'fetchProgression' },
   );
   if (error) {
-    if (error.code === "PGRST116") {
+    if (error.code === 'PGRST116') {
       return null;
     }
-    throw new RepositoryError("fetchProgression", error);
+    throw new RepositoryError('fetchProgression', error);
   }
   if (!data) {
     return null;
@@ -51,11 +51,11 @@ export async function createProgression(userId: string): Promise<Progression> {
     updated_at: now,
   };
   const { data, error } = await withResilience(
-    supabase.from("progression").insert(newProgression).select().single(),
-    { operation: "createProgression", fallbackValue: newProgression },
+    supabase.from('progression').insert(newProgression).select().single(),
+    { operation: 'createProgression', fallbackValue: newProgression },
   );
   if (error) {
-    throw new RepositoryError("createProgression", error);
+    throw new RepositoryError('createProgression', error);
   }
   return ProgressionSchema.parse(data);
 }
@@ -71,15 +71,15 @@ export async function updateProgression(
 ): Promise<Progression> {
   const { data, error } = await withResilience(
     supabase
-      .from("progression")
+      .from('progression')
       .update({ ...updates, updated_at: Date.now() })
-      .eq("user_id", userId)
+      .eq('user_id', userId)
       .select()
       .single(),
-    { operation: "updateProgression" },
+    { operation: 'updateProgression' },
   );
   if (error) {
-    throw new RepositoryError("updateProgression", error);
+    throw new RepositoryError('updateProgression', error);
   }
   return ProgressionSchema.parse(data);
 }
@@ -88,25 +88,25 @@ export async function fetchXpHistory(
   options?: { limit?: number; since?: number },
 ): Promise<XpEntry[]> {
   let query = supabase
-    .from("xp_history")
-    .select("*")
-    .eq("user_id", userId)
-    .order("created_at", { ascending: false });
+    .from('xp_history')
+    .select('*')
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false });
   if (options?.since) {
-    query = query.gte("created_at", options.since);
+    query = query.gte('created_at', options.since);
   }
   if (options?.limit) {
     query = query.limit(options.limit);
   }
   const { data, error } = await query;
   if (error) {
-    throw new RepositoryError("fetchXpHistory", error);
+    throw new RepositoryError('fetchXpHistory', error);
   }
   return XpEntrySchema.array().parse(data);
 }
 export async function recordXpEntry(
   userId: string,
-  entry: Omit<XpEntry, "id" | "userId">,
+  entry: Omit<XpEntry, 'id' | 'userId'>,
 ): Promise<XpEntry> {
   const newEntry = {
     id: v4(),
@@ -118,11 +118,11 @@ export async function recordXpEntry(
     created_at: entry.createdAt,
   };
   const { data, error } = await withResilience(
-    supabase.from("xp_history").insert(newEntry).select().single(),
-    { operation: "recordXpEntry", fallbackValue: newEntry },
+    supabase.from('xp_history').insert(newEntry).select().single(),
+    { operation: 'recordXpEntry', fallbackValue: newEntry },
   );
   if (error) {
-    throw new RepositoryError("recordXpEntry", error);
+    throw new RepositoryError('recordXpEntry', error);
   }
   return XpEntrySchema.parse(data);
 }
@@ -132,13 +132,13 @@ export async function fetchXpForPeriod(
   endTime: number,
 ): Promise<number> {
   const { data, error } = await supabase
-    .from("xp_history")
-    .select("amount")
-    .eq("user_id", userId)
-    .gte("created_at", startTime)
-    .lte("created_at", endTime);
+    .from('xp_history')
+    .select('amount')
+    .eq('user_id', userId)
+    .gte('created_at', startTime)
+    .lte('created_at', endTime);
   if (error) {
-    throw new RepositoryError("fetchXpForPeriod", error);
+    throw new RepositoryError('fetchXpForPeriod', error);
   }
   if (!data) {
     return 0;
@@ -155,7 +155,7 @@ export async function recordLevelUp(
   xpAtLevel: number,
 ): Promise<void> {
   const { error } = await supabase
-    .from("level_up_history")
+    .from('level_up_history')
     .insert({
       id: v4(),
       user_id: userId,
@@ -164,19 +164,19 @@ export async function recordLevelUp(
       xp_at_level: xpAtLevel,
     });
   if (error) {
-    throw new RepositoryError("recordLevelUp", error);
+    throw new RepositoryError('recordLevelUp', error);
   }
 }
 export async function fetchLevelUpHistory(
   userId: string,
 ): Promise<Array<{ level: number; achievedAt: number; xpAtLevel: number }>> {
   const { data, error } = await supabase
-    .from("level_up_history")
-    .select("level, achieved_at, xp_at_level")
-    .eq("user_id", userId)
-    .order("level", { ascending: true });
+    .from('level_up_history')
+    .select('level, achieved_at, xp_at_level')
+    .eq('user_id', userId)
+    .order('level', { ascending: true });
   if (error) {
-    throw new RepositoryError("fetchLevelUpHistory", error);
+    throw new RepositoryError('fetchLevelUpHistory', error);
   }
   return (data || []).map(
     (row: { level: number; achieved_at: number; xp_at_level: number }) => ({

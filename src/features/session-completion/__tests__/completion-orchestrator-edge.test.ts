@@ -1,86 +1,86 @@
-import { eventBus } from "../../../events";
+import { eventBus } from '../../../events';
 import {
   initializeSessionCompletionOrchestrator,
   orchestrateSessionCompletion,
-} from "../completion-orchestrator";
+} from '../completion-orchestrator';
 import {
   createCompletionLedger,
   createSessionSummary,
   SESSION_ID,
   USER_ID,
-} from "./ledger-test-utils";
-import { queryClient } from "../../../api/QueryProvider";
+} from './ledger-test-utils';
+import { queryClient } from '../../../api/QueryProvider';
 
-jest.mock("../../../events", () => ({
+jest.mock('../../../events', () => ({
   eventBus: { emit: jest.fn(), subscribe: jest.fn() },
 }));
-jest.mock("../../../utils/debug", () => ({
+jest.mock('../../../utils/debug', () => ({
   createDebugger: () => ({
     error: jest.fn(),
     info: jest.fn(),
     warn: jest.fn(),
   }),
 }));
-jest.mock("../../../lib/repository/base", () => ({
-  getConnectionState: jest.fn().mockReturnValue("online"),
+jest.mock('../../../lib/repository/base', () => ({
+  getConnectionState: jest.fn().mockReturnValue('online'),
 }));
-jest.mock("../../../lib/offline/queue", () => ({ enqueue: jest.fn() }));
-jest.mock("../../../progression/ProgressionService", () => ({
+jest.mock('../../../lib/offline/queue', () => ({ enqueue: jest.fn() }));
+jest.mock('../../../progression/ProgressionService', () => ({
   getProgressionService: jest
     .fn()
     .mockReturnValue({ addXP: jest.fn().mockResolvedValue(undefined) }),
 }));
-jest.mock("../../../streaks/StreakService", () => ({
+jest.mock('../../../streaks/StreakService', () => ({
   getStreakService: jest
     .fn()
     .mockReturnValue({ recordSession: jest.fn().mockResolvedValue(undefined) }),
 }));
-jest.mock("../../../rewards/RewardService", () => ({
+jest.mock('../../../rewards/RewardService', () => ({
   getRewardService: jest
     .fn()
     .mockReturnValue({
       grantReward: jest
         .fn()
-        .mockRejectedValue(new Error("Reward service down")),
+        .mockRejectedValue(new Error('Reward service down')),
     }),
 }));
-jest.mock("../../../store/session-state", () => ({
+jest.mock('../../../store/session-state', () => ({
   useSessionUIStore: {
     getState: jest.fn().mockReturnValue({ setCompletionSyncState: jest.fn() }),
   },
 }));
-jest.mock("../../companion-promise/service", () => ({
+jest.mock('../../companion-promise/service', () => ({
   processCompletedSessionPromise: jest.fn().mockResolvedValue({
     createdPromise: null,
     fulfilledPromise: null,
     missedPromise: null,
   }),
 }));
-jest.mock("../repository", () => ({
+jest.mock('../repository', () => ({
   createCompletionLedger: jest.fn(),
   getCompletionLedgerByIdempotencyKey: jest.fn().mockResolvedValue(null),
 }));
-jest.mock("../../../api/QueryProvider", () => ({
+jest.mock('../../../api/QueryProvider', () => ({
   queryClient: { invalidateQueries: jest.fn().mockResolvedValue(undefined) },
   QueryKeys: {
-    session: ["session"],
-    streak: ["streak"],
-    achievements: ["achievements"],
-    wallet: (userId: string) => ["wallet", userId],
-    transactions: (userId: string) => ["transactions", userId],
+    session: ['session'],
+    streak: ['streak'],
+    achievements: ['achievements'],
+    wallet: (userId: string) => ['wallet', userId],
+    transactions: (userId: string) => ['transactions', userId],
   },
 }));
 
-describe("orchestrateSessionCompletion edge cases", () => {
+describe('orchestrateSessionCompletion edge cases', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    require("../repository").createCompletionLedger.mockResolvedValue(
+    require('../repository').createCompletionLedger.mockResolvedValue(
       createCompletionLedger(),
     );
   });
 
-  it("continues with degraded state when non-critical system fails", async () => {
-    const { useSessionUIStore } = require("../../../store/session-state");
+  it('continues with degraded state when non-critical system fails', async () => {
+    const { useSessionUIStore } = require('../../../store/session-state');
 
     await orchestrateSessionCompletion({
       sessionId: SESSION_ID,
@@ -90,13 +90,13 @@ describe("orchestrateSessionCompletion edge cases", () => {
 
     expect(
       useSessionUIStore.getState().setCompletionSyncState,
-    ).toHaveBeenCalledWith(expect.objectContaining({ status: "failed_sync" }));
+    ).toHaveBeenCalledWith(expect.objectContaining({ status: 'failed_sync' }));
   });
 
-  it("validates event input schema", async () => {
+  it('validates event input schema', async () => {
     await expect(
       orchestrateSessionCompletion({
-        sessionId: "not-a-uuid",
+        sessionId: 'not-a-uuid',
         summary: createSessionSummary(),
         userId: USER_ID,
       }),
@@ -106,7 +106,7 @@ describe("orchestrateSessionCompletion edge cases", () => {
       orchestrateSessionCompletion({
         sessionId: SESSION_ID,
         summary: createSessionSummary(),
-        userId: "",
+        userId: '',
       }),
     ).rejects.toThrow();
 
@@ -119,7 +119,7 @@ describe("orchestrateSessionCompletion edge cases", () => {
     ).rejects.toThrow();
   });
 
-  it("subscribes to session:completed at most once", () => {
+  it('subscribes to session:completed at most once', () => {
     initializeSessionCompletionOrchestrator();
     initializeSessionCompletionOrchestrator();
     initializeSessionCompletionOrchestrator();
@@ -129,23 +129,23 @@ describe("orchestrateSessionCompletion edge cases", () => {
     ).toBeLessThanOrEqual(1);
     if ((eventBus.subscribe as jest.Mock).mock.calls.length === 1) {
       expect(eventBus.subscribe).toHaveBeenCalledWith(
-        "session:completed",
+        'session:completed',
         expect.any(Function),
       );
     }
   });
 });
 
-describe("final release invalidation protection", () => {
+describe('final release invalidation protection', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    require("../repository").createCompletionLedger.mockResolvedValue(
+    require('../repository').createCompletionLedger.mockResolvedValue(
       createCompletionLedger(),
     );
   });
 
-  it("does not invalidate economy wallet queries after completion", async () => {
-    const sessionId = "a1e8400e-e29b-41d4-a716-446655440001";
+  it('does not invalidate economy wallet queries after completion', async () => {
+    const sessionId = 'a1e8400e-e29b-41d4-a716-446655440001';
     await orchestrateSessionCompletion({
       sessionId,
       summary: createSessionSummary({ sessionId }),
@@ -160,12 +160,12 @@ describe("final release invalidation protection", () => {
         >) ?? [],
     );
 
-    expect(allKeys).not.toContain("wallet");
-    expect(allKeys).not.toContain("transactions");
+    expect(allKeys).not.toContain('wallet');
+    expect(allKeys).not.toContain('transactions');
   });
 
-  it("still invalidates XP/progress queries after completion", async () => {
-    const sessionId = "b2e8400e-e29b-41d4-a716-446655440002";
+  it('still invalidates XP/progress queries after completion', async () => {
+    const sessionId = 'b2e8400e-e29b-41d4-a716-446655440002';
     await orchestrateSessionCompletion({
       sessionId,
       summary: createSessionSummary({ sessionId }),
@@ -180,8 +180,8 @@ describe("final release invalidation protection", () => {
         >) ?? [],
     );
 
-    expect(allKeys).toContain("session");
-    expect(allKeys).toContain("streak");
-    expect(allKeys).toContain("achievements");
+    expect(allKeys).toContain('session');
+    expect(allKeys).toContain('streak');
+    expect(allKeys).toContain('achievements');
   });
 });

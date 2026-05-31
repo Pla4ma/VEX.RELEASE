@@ -10,7 +10,7 @@ import type {
   AppearanceSettings,
   PrivacySettings,
   DataControlSettings,
-} from "./types";
+} from './types';
 
 export interface SyncState {
   userId: string;
@@ -28,7 +28,7 @@ export interface SyncConflict {
   remoteValue: SettingValue;
   localTimestamp: number;
   remoteTimestamp: number;
-  resolution?: "local" | "remote" | "merge";
+  resolution?: 'local' | 'remote' | 'merge';
 }
 export interface SettingsExport {
   version: number;

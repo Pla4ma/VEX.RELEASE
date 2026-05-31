@@ -1,9 +1,9 @@
-import React from "react";
-import { Pressable, TextInput } from "react-native";
-import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
-import { Box, Button, Text } from "../../../components/primitives";
-import { useTheme } from "../../../theme";
-import { MOODS, type Mood } from "../utils";
+import React from 'react';
+import { Pressable, TextInput } from 'react-native';
+import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet';
+import { Box, Button, Text } from '../../../components/primitives';
+import { useTheme } from '../../../theme';
+import { MOODS, type Mood } from '../utils';
 
 type SessionReflectionSheetProps = {
   bottomSheetRef: React.RefObject<BottomSheet | null>;
@@ -29,7 +29,7 @@ export function SessionReflectionSheet({
     <BottomSheet
       ref={bottomSheetRef}
       index={-1}
-      snapPoints={["52%"]}
+      snapPoints={['52%']}
       enablePanDownToClose
       backdropComponent={(props) => (
         <BottomSheetBackdrop
@@ -61,8 +61,8 @@ export function SessionReflectionSheet({
                 width: 52,
                 height: 52,
                 borderRadius: 16,
-                alignItems: "center",
-                justifyContent: "center",
+                alignItems: 'center',
+                justifyContent: 'center',
                 borderWidth: 1,
                 backgroundColor:
                   selectedMood === mood.key
@@ -88,7 +88,7 @@ export function SessionReflectionSheet({
               borderRadius: 18,
               borderWidth: 1,
               padding: 16,
-              textAlignVertical: "top",
+              textAlignVertical: 'top',
               backgroundColor: theme.colors.background.primary,
               borderColor: theme.colors.border.light,
               color: theme.colors.text.primary,

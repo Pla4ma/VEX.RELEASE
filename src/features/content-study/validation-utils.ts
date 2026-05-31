@@ -1,18 +1,18 @@
-import { CONTENT_STUDY_CONSTANTS } from "./types";
+import { CONTENT_STUDY_CONSTANTS } from './types';
 
 export function sanitizeTextForStorage(text: string): string {
   return text
-    .replace(/\x00/g, "")
-    .replace(/[\x80-\x9F]/g, "")
+    .replace(/\x00/g, '')
+    .replace(/[\x80-\x9F]/g, '')
     .trim();
 }
 
 export function truncateText(
   text: string,
   maxLength: number,
-  suffix = "...",
+  suffix = '...',
 ): string {
-  if (text.length <= maxLength) return text;
+  if (text.length <= maxLength) {return text;}
   return text.slice(0, maxLength - suffix.length) + suffix;
 }
 
@@ -20,7 +20,7 @@ export function extractYouTubeVideoId(url: string): string | null {
   const patterns = [/(?:v=|\/|shorts\/|embed\/)([\w-]{11})/, /^([\w-]{11})$/];
   for (const pattern of patterns) {
     const match = url.match(pattern);
-    if (match) return match[1] ?? null;
+    if (match) {return match[1] ?? null;}
   }
   return null;
 }
@@ -34,13 +34,13 @@ export function isValidFileType(mimeType: string): boolean {
 }
 
 export function formatValidationErrors(
-  errors: import("./types").ValidationError[],
+  errors: import('./types').ValidationError[],
 ): string {
   const errorMessages = errors
-    .filter((e) => e.severity === "error")
+    .filter((e) => e.severity === 'error')
     .map((e) => e.message);
   const warningMessages = errors
-    .filter((e) => e.severity === "warning")
+    .filter((e) => e.severity === 'warning')
     .map((e) => `Warning: ${e.message}`);
-  return [...errorMessages, ...warningMessages].join("\n");
+  return [...errorMessages, ...warningMessages].join('\n');
 }

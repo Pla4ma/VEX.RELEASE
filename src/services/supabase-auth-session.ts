@@ -1,10 +1,10 @@
-import { getSupabaseClient, handleSupabaseError } from "../config/supabase";
+import { getSupabaseClient, handleSupabaseError } from '../config/supabase';
 
-import type { User } from "../types/models";
-import { capture } from "../shared/analytics/analytics-service";
-import { AuthEvents } from "../shared/analytics/analytics-events";
-import { mapSupabaseUser } from "./supabase-user-mapper";
-import { buildUserWithOnboarding } from "./supabase-auth-helpers";
+import type { User } from '../types/models';
+import { capture } from '../shared/analytics/analytics-service';
+import { AuthEvents } from '../shared/analytics/analytics-events';
+import { mapSupabaseUser } from './supabase-user-mapper';
+import { buildUserWithOnboarding } from './supabase-auth-helpers';
 
 export async function signOut(
   userId?: string,

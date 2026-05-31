@@ -1,7 +1,7 @@
-import type { ViewStyle } from "react-native";
+import type { ViewStyle } from 'react-native';
 
-import type { Theme } from "../../theme/themeCoreTypes";
-import type { ButtonProps } from "./Button";
+import type { Theme } from '../../theme/themeCoreTypes';
+import type { ButtonProps } from './Button';
 
 interface ButtonSizeConfig {
   py: number;
@@ -11,7 +11,7 @@ interface ButtonSizeConfig {
 }
 
 export function getButtonSizes(
-  size: NonNullable<ButtonProps["size"]>,
+  size: NonNullable<ButtonProps['size']>,
   theme: Theme,
 ): ButtonSizeConfig {
   return {
@@ -43,7 +43,7 @@ export function getButtonSizes(
 }
 
 export function getButtonVariantStyle(
-  variant: NonNullable<ButtonProps["variant"]>,
+  variant: NonNullable<ButtonProps['variant']>,
   sizes: ButtonSizeConfig,
   pressed: boolean,
   fullWidth: boolean,
@@ -51,25 +51,25 @@ export function getButtonVariantStyle(
 ): ViewStyle {
   const semantic = theme.colors.semantic;
   const base: ViewStyle = {
-    alignItems: "center",
+    alignItems: 'center',
     borderRadius: theme.borderRadius.xl,
-    flexDirection: "row",
-    justifyContent: "center",
+    flexDirection: 'row',
+    justifyContent: 'center',
     minHeight: sizes.minHeight,
     paddingHorizontal: sizes.px,
     paddingVertical: sizes.py,
-    width: fullWidth ? "100%" : undefined,
+    width: fullWidth ? '100%' : undefined,
   };
-  if (variant === "primary") {
+  if (variant === 'primary') {
     return {
       ...base,
       backgroundColor: pressed ? semantic.primaryPressed : semantic.primary,
     };
   }
-  if (variant === "danger") {
+  if (variant === 'danger') {
     return { ...base, backgroundColor: semantic.danger };
   }
-  if (variant === "outline") {
+  if (variant === 'outline') {
     return {
       ...base,
       backgroundColor: pressed ? semantic.primarySoft : semantic.surfaceGlass,
@@ -77,10 +77,10 @@ export function getButtonVariantStyle(
       borderWidth: 1,
     };
   }
-  if (variant === "ghost") {
+  if (variant === 'ghost') {
     return {
       ...base,
-      backgroundColor: pressed ? semantic.surfaceGlass : "transparent",
+      backgroundColor: pressed ? semantic.surfaceGlass : 'transparent',
     };
   }
   return {
@@ -94,13 +94,13 @@ export function getButtonVariantStyle(
 }
 
 export function getButtonTextColor(
-  variant: NonNullable<ButtonProps["variant"]>,
+  variant: NonNullable<ButtonProps['variant']>,
   theme: Theme,
 ): string {
-  if (variant === "primary" || variant === "danger") {
+  if (variant === 'primary' || variant === 'danger') {
     return theme.colors.text.inverse;
   }
-  if (variant === "outline") {
+  if (variant === 'outline') {
     return theme.colors.primary[300];
   }
   return theme.colors.text.primary;

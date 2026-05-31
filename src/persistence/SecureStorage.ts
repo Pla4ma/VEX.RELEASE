@@ -1,4 +1,4 @@
-import { captureSilentFailure } from "../utils/silent-failure";
+import { captureSilentFailure } from '../utils/silent-failure';
 /**
  * Secure Storage Adapter
  *
@@ -7,16 +7,16 @@ import { captureSilentFailure } from "../utils/silent-failure";
  * Used for tokens, credentials, and private keys.
  */
 
-import * as SecureStore from "expo-secure-store";
-import { Platform } from "react-native";
-import type { Nullable } from "../types/global";
-import type { StorageAdapter, StorageResult } from "./StorageAdapter";
-import { createDebugger } from "../utils/debug";
+import * as SecureStore from 'expo-secure-store';
+import { Platform } from 'react-native';
+import type { Nullable } from '../types/global';
+import type { StorageAdapter, StorageResult } from './StorageAdapter';
+import { createDebugger } from '../utils/debug';
 
-const debug = createDebugger("storage");
+const debug = createDebugger('storage');
 
 // Web storage prefix to avoid collisions
-const WEB_STORAGE_PREFIX = "vex_secure_";
+const WEB_STORAGE_PREFIX = 'vex_secure_';
 
 /**
  * Secure storage adapter implementation
@@ -26,7 +26,7 @@ export class SecureStorage implements StorageAdapter {
   private isWeb: boolean;
 
   constructor() {
-    this.isWeb = Platform.OS === "web";
+    this.isWeb = Platform.OS === 'web';
   }
 
   /**
@@ -41,7 +41,7 @@ export class SecureStorage implements StorageAdapter {
       // Use expo-secure-store on native
       return await SecureStore.getItemAsync(key);
     } catch (error) {
-      debug.error("[SecureStorage] getItem error:", error as Error);
+      debug.error('[SecureStorage] getItem error:', error as Error);
       return null;
     }
   }
@@ -59,7 +59,7 @@ export class SecureStorage implements StorageAdapter {
       // Use expo-secure-store on native
       await SecureStore.setItemAsync(key, value);
     } catch (error) {
-      debug.error("[SecureStorage] setItem error:", error as Error);
+      debug.error('[SecureStorage] setItem error:', error as Error);
       throw error;
     }
   }
@@ -76,7 +76,7 @@ export class SecureStorage implements StorageAdapter {
       // Use expo-secure-store on native
       await SecureStore.deleteItemAsync(key);
     } catch (error) {
-      debug.error("[SecureStorage] removeItem error:", error as Error);
+      debug.error('[SecureStorage] removeItem error:', error as Error);
       throw error;
     }
   }
@@ -92,9 +92,9 @@ export class SecureStorage implements StorageAdapter {
       return (await SecureStore.getItemAsync(key)) !== null;
     } catch (error) {
       captureSilentFailure(error, {
-        feature: "persistence",
-        operation: "safe-fallback",
-        type: "data",
+        feature: 'persistence',
+        operation: 'safe-fallback',
+        type: 'data',
       });
       return false;
     }
@@ -116,7 +116,7 @@ export class SecureStorage implements StorageAdapter {
   async clear(): Promise<void> {
     // SecureStore doesn't support bulk clear
     debug.warn(
-      "[SecureStorage] clear() not supported - delete keys individually",
+      '[SecureStorage] clear() not supported - delete keys individually',
     );
   }
 
@@ -151,7 +151,7 @@ export class SecureStorage implements StorageAdapter {
       if (value) {
         return { success: true, data: value };
       }
-      return { success: false, error: new Error("No credentials found") };
+      return { success: false, error: new Error('No credentials found') };
     } catch (error) {
       return { success: false, error: error as Error };
     }
@@ -185,5 +185,5 @@ export function getSecureStorage(): SecureStorage {
   return secureStorage;
 }
 
-export { SecureStorageKeys } from "./secure-storage-keys";
-export type { SecureStorageKey } from "./secure-storage-keys";
+export { SecureStorageKeys } from './secure-storage-keys';
+export type { SecureStorageKey } from './secure-storage-keys';

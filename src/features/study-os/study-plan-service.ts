@@ -1,14 +1,14 @@
-import { listStoredStudyPlans, upsertStoredStudyPlan } from "./repository";
+import { listStoredStudyPlans, upsertStoredStudyPlan } from './repository';
 import {
   StudyPlanSchema,
   type ReviewItem,
   type StudyPlan,
-} from "./schemas";
+} from './schemas';
 import {
   firstSentence,
   planId,
   makeBlock,
-} from "./service-helpers";
+} from './service-helpers';
 
 export async function createManualStudyPlan(input: {
   deadlineAt?: number | null;
@@ -28,13 +28,13 @@ export async function createManualStudyPlan(input: {
       reviewItems: [],
       source: {
         createdAt: now,
-        extractedTextStatus: "none",
+        extractedTextStatus: 'none',
         id: `${id}:source`,
         title: input.title,
-        type: "manual",
+        type: 'manual',
         userId: input.userId,
       },
-      status: "active",
+      status: 'active',
       title: input.title,
       userId: input.userId,
     }),
@@ -59,7 +59,7 @@ export async function createPasteStudyPlan(input: {
       reviewItems: [
         {
           answerHint: objective,
-          confidence: "unknown",
+          confidence: 'unknown',
           dueAt: now + 86_400_000,
           id: `${id}:review:1`,
           prompt: `Explain ${objective}`,
@@ -68,13 +68,13 @@ export async function createPasteStudyPlan(input: {
       ],
       source: {
         createdAt: now,
-        extractedTextStatus: "ready",
+        extractedTextStatus: 'ready',
         id: `${id}:source`,
         title: input.title,
-        type: "paste",
+        type: 'paste',
         userId: input.userId,
       },
-      status: "active",
+      status: 'active',
       title: input.title,
       userId: input.userId,
     }),
@@ -92,7 +92,7 @@ export function buildFailedGenerationFallbackPlan(input: {
     blocks: [
       makeBlock(
         id,
-        "Manual study block",
+        'Manual study block',
         `Study one section from ${input.sourceTitle}`,
       ),
     ],
@@ -102,13 +102,13 @@ export function buildFailedGenerationFallbackPlan(input: {
     reviewItems: [],
     source: {
       createdAt: now,
-      extractedTextStatus: "failed",
+      extractedTextStatus: 'failed',
       id: `${id}:source`,
       title: input.sourceTitle,
-      type: "paste",
+      type: 'paste',
       userId: input.userId,
     },
-    status: "failed_generation",
+    status: 'failed_generation',
     title: input.sourceTitle,
     userId: input.userId,
   });
@@ -123,33 +123,33 @@ export async function completeStudyBlock(input: {
 }): Promise<StudyPlan> {
   const plans = await listStoredStudyPlans(input.userId);
   const plan = plans.find((item) => item.id === input.studyPlanId);
-  if (!plan) throw new Error("Study plan could not be found.");
+  if (!plan) {throw new Error('Study plan could not be found.');}
   const now = input.now ?? Date.now();
   const review: ReviewItem = {
     answerHint: input.reflection ?? null,
-    confidence: "unknown",
+    confidence: 'unknown',
     dueAt: now + 86_400_000,
     id: `${input.studyPlanId}:review:${now}`,
     prompt: input.reflection
-      ? "Review what made this block work."
-      : "Recall the main idea from this block.",
+      ? 'Review what made this block work.'
+      : 'Recall the main idea from this block.',
     studyPlanId: input.studyPlanId,
   };
   return upsertStoredStudyPlan(
     StudyPlanSchema.parse({
       ...plan,
       blocks: plan.blocks.map((block) =>
-        block.id === input.blockId ? { ...block, status: "completed" } : block,
+        block.id === input.blockId ? { ...block, status: 'completed' } : block,
       ),
       reviewItems: [...plan.reviewItems, review],
       status: plan.blocks.every(
-        (block) => block.id === input.blockId || block.status === "completed",
+        (block) => block.id === input.blockId || block.status === 'completed',
       )
-        ? "completed"
+        ? 'completed'
         : plan.status,
     }),
   );
 }
 
-export type { StudyBlockCompletionResult } from "./enhanced-block-completion";
-export { completeStudyBlockEnhanced } from "./enhanced-block-completion";
+export type { StudyBlockCompletionResult } from './enhanced-block-completion';
+export { completeStudyBlockEnhanced } from './enhanced-block-completion';

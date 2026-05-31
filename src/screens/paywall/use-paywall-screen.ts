@@ -1,27 +1,27 @@
-import { useEffect, useMemo, useState } from "react";
-import { useNavigation, useRoute, type RouteProp } from "@react-navigation/native";
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useEffect, useMemo, useState } from 'react';
+import { useNavigation, useRoute, type RouteProp } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-import type { ExtendedRootStackParams } from "../../navigation/types";
-import { capture } from "../../shared/analytics";
+import type { ExtendedRootStackParams } from '../../navigation/types';
+import { capture } from '../../shared/analytics';
 import {
   usePaywall,
   usePremiumStatus,
   type PurchasesPackageDisplayInfo,
-} from "../../shared/monetization";
+} from '../../shared/monetization';
 import {
   PurchaseEvents,
   createPaywallProperties,
-} from "../../shared/monetization/purchase-events";
+} from '../../shared/monetization/purchase-events';
 import {
   FEATURE_HIGHLIGHT_MAP,
   buildPackageSelection,
   type PaywallPlanSelection,
-} from "./paywall-copy";
-import type { PaywallStatusMessage } from "./PaywallStates";
+} from './paywall-copy';
+import type { PaywallStatusMessage } from './PaywallStates';
 
 type NavigationProp = NativeStackNavigationProp<ExtendedRootStackParams>;
-export type PaywallRouteParams = ExtendedRootStackParams["Paywall"] & {
+export type PaywallRouteParams = ExtendedRootStackParams['Paywall'] & {
   contextBody?: string;
   contextCta?: string;
   contextHeadline?: string;
@@ -29,13 +29,13 @@ export type PaywallRouteParams = ExtendedRootStackParams["Paywall"] & {
 };
 type PaywallRouteProp = RouteProp<
   ExtendedRootStackParams & { Paywall: PaywallRouteParams },
-  "Paywall"
+  'Paywall'
 >;
 
 function isPlanSelection(
   value: PaywallPlanSelection | PurchasesPackageDisplayInfo | undefined,
 ): value is PaywallPlanSelection {
-  return Boolean(value && "packageInfo" in value);
+  return Boolean(value && 'packageInfo' in value);
 }
 
 export function usePaywallScreen() {
@@ -47,8 +47,8 @@ export function usePaywallScreen() {
   const [statusMessage, setStatusMessage] =
     useState<PaywallStatusMessage | null>(null);
 
-  const source = route.params?.source ?? "unknown";
-  const gatedFeature = route.params?.gatedFeature ?? "premium_access";
+  const source = route.params?.source ?? 'unknown';
+  const gatedFeature = route.params?.gatedFeature ?? 'premium_access';
   const contextBody = route.params?.contextBody;
   const contextCta = route.params?.contextCta;
   const contextHeadline = route.params?.contextHeadline;
@@ -64,7 +64,7 @@ export function usePaywallScreen() {
     capture(
       PurchaseEvents.PAYWALL_VIEWED,
       createPaywallProperties(
-        offerings?.identifier ?? "fallback-offering",
+        offerings?.identifier ?? 'fallback-offering',
         source,
         packages.map((item) => ({
           identifier: item.identifier,
@@ -95,9 +95,9 @@ export function usePaywallScreen() {
 
     if (!packageInfo) {
       setStatusMessage({
-        tone: "warning",
-        title: "Plans are still loading",
-        body: "Live purchase options are still being prepared. Give it a moment, then try again.",
+        tone: 'warning',
+        title: 'Plans are still loading',
+        body: 'Live purchase options are still being prepared. Give it a moment, then try again.',
       });
       return;
     }
@@ -106,40 +106,40 @@ export function usePaywallScreen() {
     if (result.success) {
       await refresh();
       setStatusMessage({
-        tone: "celebration",
-        title: "Premium is active",
-        body: "Your strongest coaching, continuity support, and deeper insights are ready.",
+        tone: 'celebration',
+        title: 'Premium is active',
+        body: 'Your strongest coaching, continuity support, and deeper insights are ready.',
       });
       navigation.goBack();
       return;
     }
 
     setStatusMessage({
-      tone: "warning",
-      title: "Purchase did not go through",
-      body: "Nothing was charged here in VEX. Please try again, or restore if you already subscribed.",
+      tone: 'warning',
+      title: 'Purchase did not go through',
+      body: 'Nothing was charged here in VEX. Please try again, or restore if you already subscribed.',
     });
   };
 
   const handleRestore = async (): Promise<void> => {
     setStatusMessage({
-      tone: "info",
-      title: "Checking your purchases",
-      body: "We are refreshing your entitlements now.",
+      tone: 'info',
+      title: 'Checking your purchases',
+      body: 'We are refreshing your entitlements now.',
     });
     const result = await restore();
     await refresh();
     setStatusMessage(
       result.success
         ? {
-            tone: "celebration",
-            title: "Purchases restored",
-            body: "Your premium entitlements have been refreshed on this device.",
+            tone: 'celebration',
+            title: 'Purchases restored',
+            body: 'Your premium entitlements have been refreshed on this device.',
           }
         : {
-            tone: "warning",
-            title: "Restore did not complete",
-            body: "If you already subscribed, try again on a stronger connection or sign in with the same store account.",
+            tone: 'warning',
+            title: 'Restore did not complete',
+            body: 'If you already subscribed, try again on a stronger connection or sign in with the same store account.',
           },
     );
   };

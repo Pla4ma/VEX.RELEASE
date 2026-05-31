@@ -1,8 +1,8 @@
-import { z } from "zod";
+import { z } from 'zod';
 
-import { scheduleForLocalTime } from "../ai-coach/utils/timezone";
-import type { RetentionReminderType } from "./repository";
-import { ReminderPlanInputSchema } from "./schemas";
+import { scheduleForLocalTime } from '../ai-coach/utils/timezone';
+import type { RetentionReminderType } from './repository';
+import { ReminderPlanInputSchema } from './schemas';
 
 export const UserIdSchema = z.string().uuid();
 export const StreakInputSchema = z
@@ -39,20 +39,20 @@ export function zonedParts(
   day: number;
   hour: number;
 } {
-  const parts = new Intl.DateTimeFormat("en-US", {
+  const parts = new Intl.DateTimeFormat('en-US', {
     timeZone: timezone,
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
     hour12: false,
   }).formatToParts(new Date(timestamp));
   const values = new Map(parts.map((part) => [part.type, part.value]));
   return {
-    year: Number(values.get("year")),
-    month: Number(values.get("month")),
-    day: Number(values.get("day")),
-    hour: Number(values.get("hour")),
+    year: Number(values.get('year')),
+    month: Number(values.get('month')),
+    day: Number(values.get('day')),
+    hour: Number(values.get('hour')),
   };
 }
 

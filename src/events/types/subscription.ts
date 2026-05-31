@@ -3,7 +3,7 @@
  */
 
 export interface SubscriptionEventDefinitions {
-  "subscription:changed": {
+  'subscription:changed': {
     userId: string;
     previousTier?: string;
     newTier?: string;

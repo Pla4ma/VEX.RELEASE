@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
-import { View } from "react-native";
+import React, { useEffect, useRef, useState } from 'react';
+import { View } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -8,10 +8,10 @@ import Animated, {
   runOnJS,
   interpolateColor,
   Easing,
-} from "react-native-reanimated";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import { createSheet } from "@/shared/ui/create-sheet";
+} from 'react-native-reanimated';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import { createSheet } from '@/shared/ui/create-sheet';
 import {
   type CounterSize,
   type CounterVariant,
@@ -19,27 +19,27 @@ import {
   formatNumber,
   getCurrencySymbol,
   getSizeConfig,
-} from "./AnimatedCounter.helpers";
+} from './AnimatedCounter.helpers';
 
 export type { CounterSize, CounterVariant, AnimatedCounterProps };
 
 const TrendIndicator: React.FC<{
-  direction: "up" | "down" | "neutral";
+  direction: 'up' | 'down' | 'neutral';
   size: number;
   color?: string;
 }> = ({ direction, size, color }) => {
   const { theme } = useTheme();
   const trendColor =
     color ||
-    (direction === "up"
+    (direction === 'up'
       ? theme.colors.success.DEFAULT
-      : direction === "down"
+      : direction === 'down'
         ? theme.colors.error.DEFAULT
         : theme.colors.text.tertiary);
   return (
     <View style={[styles.trendIndicator, { width: size, height: size }]}>
       <Text style={[styles.trendArrow, { color: trendColor, fontSize: size }]}>
-        {direction === "up" ? "▲" : direction === "down" ? "▼" : "—"}
+        {direction === 'up' ? '▲' : direction === 'down' ? '▼' : '—'}
       </Text>
     </View>
   );
@@ -48,12 +48,12 @@ const TrendIndicator: React.FC<{
 export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
   value,
   previousValue,
-  variant = "default",
+  variant = 'default',
   currency,
   prefix,
   suffix,
   decimals = 0,
-  size = "md",
+  size = 'md',
   color,
   increaseColor,
   decreaseColor,
@@ -65,7 +65,7 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
   animateOnMount = true,
   showTrendIndicator = false,
   compactThreshold = 1000000,
-  locale = "en-US",
+  locale = 'en-US',
 }) => {
   const { theme } = useTheme();
   const [displayValue, setDisplayValue] = useState(value);
@@ -77,16 +77,16 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
   const effectiveDecreaseColor = decreaseColor || theme.colors.error.DEFAULT;
   const trend =
     value > previousRef.current
-      ? "up"
+      ? 'up'
       : value < previousRef.current
-        ? "down"
-        : "neutral";
+        ? 'down'
+        : 'neutral';
   useEffect(() => {
     const from = previousRef.current;
     const to = value;
     animatedValue.value = from;
     previousRef.current = value;
-    if (trend !== "neutral") {
+    if (trend !== 'neutral') {
       colorProgress.value = 0;
       colorProgress.value = withTiming(1, { duration: 300 }, () => {
         colorProgress.value = withTiming(0, { duration: 500 });
@@ -126,9 +126,9 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
       [0, 0.5, 1],
       [
         effectiveColor,
-        trend === "up"
+        trend === 'up'
           ? effectiveIncreaseColor
-          : trend === "down"
+          : trend === 'down'
             ? effectiveDecreaseColor
             : effectiveColor,
         effectiveColor,
@@ -139,22 +139,22 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
   const currencySymbol = currency ? getCurrencySymbol(currency) : null;
   const getDisplayString = () => {
     const parts: string[] = [];
-    if (prefix) parts.push(prefix);
-    if (currencySymbol) parts.push(currencySymbol);
+    if (prefix) {parts.push(prefix);}
+    if (currencySymbol) {parts.push(currencySymbol);}
     parts.push(
       formatNumber(displayValue, variant, decimals, compactThreshold, locale),
     );
-    if (suffix) parts.push(suffix);
-    return parts.join("");
+    if (suffix) {parts.push(suffix);}
+    return parts.join('');
   };
   return (
     <View style={[styles.container, style]}>
-      {showTrendIndicator && trend !== "neutral" && (
+      {showTrendIndicator && trend !== 'neutral' && (
         <TrendIndicator
           direction={trend}
           size={sizeConfig.trendSize}
           color={
-            trend === "up" ? effectiveIncreaseColor : effectiveDecreaseColor
+            trend === 'up' ? effectiveIncreaseColor : effectiveDecreaseColor
           }
         />
       )}
@@ -173,12 +173,12 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
 };
 
 const styles = createSheet({
-  container: { flexDirection: "row", alignItems: "center", gap: 4 },
-  counter: { fontVariant: ["tabular-nums"] },
-  trendIndicator: { justifyContent: "center", alignItems: "center" },
+  container: { flexDirection: 'row', alignItems: 'center', gap: 4 },
+  counter: { fontVariant: ['tabular-nums'] },
+  trendIndicator: { justifyContent: 'center', alignItems: 'center' },
   trendArrow: { lineHeight: undefined },
 });
 
 export default AnimatedCounter;
 
-export { useCountUp, useCounterAnimation } from "./AnimatedCounter.hooks";
+export { useCountUp, useCounterAnimation } from './AnimatedCounter.hooks';

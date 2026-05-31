@@ -1,82 +1,82 @@
-import { triggerHaptic, type HapticFeedbackKind } from "../utils/haptics";
+import { triggerHaptic, type HapticFeedbackKind } from '../utils/haptics';
 export type HapticEvent =
-  | "SESSION_START"
-  | "SESSION_COMPLETE"
-  | "SESSION_PAUSE"
-  | "SESSION_RESUME"
-  | "LEVEL_UP"
-  | "BOSS_HIT"
-  | "BOSS_DEFEATED"
-  | "STREAK_MILESTONE"
-  | "STREAK_BREAK"
-  | "STREAK_SAVED"
-  | "REWARD_CLAIM"
-  | "CHEST_OPEN"
-  | "CRITICAL_HIT"
-  | "RARE_LOOT"
-  | "LEGENDARY_LOOT"
-  | "PURCHASE_SUCCESS"
-  | "PURCHASE_ERROR"
-  | "BUTTON_PRESS"
-  | "SELECTION_CHANGE"
-  | "ERROR"
-  | "SUCCESS"
-  | "WARNING"
-  | "ACHIEVEMENT_UNLOCKED";
+  | 'SESSION_START'
+  | 'SESSION_COMPLETE'
+  | 'SESSION_PAUSE'
+  | 'SESSION_RESUME'
+  | 'LEVEL_UP'
+  | 'BOSS_HIT'
+  | 'BOSS_DEFEATED'
+  | 'STREAK_MILESTONE'
+  | 'STREAK_BREAK'
+  | 'STREAK_SAVED'
+  | 'REWARD_CLAIM'
+  | 'CHEST_OPEN'
+  | 'CRITICAL_HIT'
+  | 'RARE_LOOT'
+  | 'LEGENDARY_LOOT'
+  | 'PURCHASE_SUCCESS'
+  | 'PURCHASE_ERROR'
+  | 'BUTTON_PRESS'
+  | 'SELECTION_CHANGE'
+  | 'ERROR'
+  | 'SUCCESS'
+  | 'WARNING'
+  | 'ACHIEVEMENT_UNLOCKED';
 export const HapticEvents = {
-  SESSION_START: "SESSION_START",
-  SESSION_COMPLETE: "SESSION_COMPLETE",
-  SESSION_PAUSE: "SESSION_PAUSE",
-  SESSION_RESUME: "SESSION_RESUME",
-  LEVEL_UP: "LEVEL_UP",
-  BOSS_HIT: "BOSS_HIT",
-  BOSS_DEFEATED: "BOSS_DEFEATED",
-  STREAK_MILESTONE: "STREAK_MILESTONE",
-  STREAK_BREAK: "STREAK_BREAK",
-  STREAK_SAVED: "STREAK_SAVED",
-  CRITICAL_HIT: "CRITICAL_HIT",
-  RARE_LOOT: "RARE_LOOT",
-  LEGENDARY_LOOT: "LEGENDARY_LOOT",
-  REWARD_CLAIM: "REWARD_CLAIM",
-  CHEST_OPEN: "CHEST_OPEN",
-  PURCHASE_SUCCESS: "PURCHASE_SUCCESS",
-  PURCHASE_ERROR: "PURCHASE_ERROR",
-  BUTTON_PRESS: "BUTTON_PRESS",
-  SELECTION_CHANGE: "SELECTION_CHANGE",
-  ERROR: "ERROR",
-  SUCCESS: "SUCCESS",
-  WARNING: "WARNING",
-  ACHIEVEMENT_UNLOCKED: "ACHIEVEMENT_UNLOCKED",
+  SESSION_START: 'SESSION_START',
+  SESSION_COMPLETE: 'SESSION_COMPLETE',
+  SESSION_PAUSE: 'SESSION_PAUSE',
+  SESSION_RESUME: 'SESSION_RESUME',
+  LEVEL_UP: 'LEVEL_UP',
+  BOSS_HIT: 'BOSS_HIT',
+  BOSS_DEFEATED: 'BOSS_DEFEATED',
+  STREAK_MILESTONE: 'STREAK_MILESTONE',
+  STREAK_BREAK: 'STREAK_BREAK',
+  STREAK_SAVED: 'STREAK_SAVED',
+  CRITICAL_HIT: 'CRITICAL_HIT',
+  RARE_LOOT: 'RARE_LOOT',
+  LEGENDARY_LOOT: 'LEGENDARY_LOOT',
+  REWARD_CLAIM: 'REWARD_CLAIM',
+  CHEST_OPEN: 'CHEST_OPEN',
+  PURCHASE_SUCCESS: 'PURCHASE_SUCCESS',
+  PURCHASE_ERROR: 'PURCHASE_ERROR',
+  BUTTON_PRESS: 'BUTTON_PRESS',
+  SELECTION_CHANGE: 'SELECTION_CHANGE',
+  ERROR: 'ERROR',
+  SUCCESS: 'SUCCESS',
+  WARNING: 'WARNING',
+  ACHIEVEMENT_UNLOCKED: 'ACHIEVEMENT_UNLOCKED',
 } as const;
 const HAPTIC_EVENT_MAP: Record<HapticEvent, HapticFeedbackKind> = {
-  SESSION_START: "impactMedium",
-  SESSION_COMPLETE: "success",
-  SESSION_PAUSE: "impactLight",
-  SESSION_RESUME: "impactMedium",
-  LEVEL_UP: "success",
-  BOSS_HIT: "impactMedium",
-  BOSS_DEFEATED: "success",
-  STREAK_MILESTONE: "success",
-  STREAK_BREAK: "error",
-  STREAK_SAVED: "success",
-  CRITICAL_HIT: "impactHeavy",
-  RARE_LOOT: "impactMedium",
-  LEGENDARY_LOOT: "impactHeavy",
-  REWARD_CLAIM: "success",
-  CHEST_OPEN: "impactMedium",
-  PURCHASE_SUCCESS: "success",
-  PURCHASE_ERROR: "error",
-  BUTTON_PRESS: "impactLight",
-  SELECTION_CHANGE: "selection",
-  ERROR: "error",
-  SUCCESS: "success",
-  WARNING: "warning",
-  ACHIEVEMENT_UNLOCKED: "success",
+  SESSION_START: 'impactMedium',
+  SESSION_COMPLETE: 'success',
+  SESSION_PAUSE: 'impactLight',
+  SESSION_RESUME: 'impactMedium',
+  LEVEL_UP: 'success',
+  BOSS_HIT: 'impactMedium',
+  BOSS_DEFEATED: 'success',
+  STREAK_MILESTONE: 'success',
+  STREAK_BREAK: 'error',
+  STREAK_SAVED: 'success',
+  CRITICAL_HIT: 'impactHeavy',
+  RARE_LOOT: 'impactMedium',
+  LEGENDARY_LOOT: 'impactHeavy',
+  REWARD_CLAIM: 'success',
+  CHEST_OPEN: 'impactMedium',
+  PURCHASE_SUCCESS: 'success',
+  PURCHASE_ERROR: 'error',
+  BUTTON_PRESS: 'impactLight',
+  SELECTION_CHANGE: 'selection',
+  ERROR: 'error',
+  SUCCESS: 'success',
+  WARNING: 'warning',
+  ACHIEVEMENT_UNLOCKED: 'success',
 };
 export const HapticIntensity = {
-  SUBTLE: "impactLight",
-  NORMAL: "impactMedium",
-  STRONG: "impactHeavy",
+  SUBTLE: 'impactLight',
+  NORMAL: 'impactMedium',
+  STRONG: 'impactHeavy',
 } as const;
 export async function triggerHapticEvent(event: HapticEvent): Promise<void> {
   const kind = HAPTIC_EVENT_MAP[event];
@@ -91,18 +91,18 @@ export async function triggerHapticIntensity(
 export function getHapticKindForEvent(event: HapticEvent): HapticFeedbackKind {
   return HAPTIC_EVENT_MAP[event];
 }
-import { HapticPatterns, triggerHapticPattern } from "../utils/haptics";
+import { HapticPatterns, triggerHapticPattern } from '../utils/haptics';
 export async function triggerHapticPatternEvent(
   event: HapticEvent,
 ): Promise<void> {
   switch (event) {
-    case "LEGENDARY_LOOT":
+    case 'LEGENDARY_LOOT':
       await triggerHapticPattern(HapticPatterns.LEGENDARY_SEQUENCE!, 120);
       break;
-    case "LEVEL_UP":
+    case 'LEVEL_UP':
       await triggerHapticPattern(HapticPatterns.LEVEL_UP_SEQUENCE!, 200);
       break;
-    case "BOSS_DEFEATED":
+    case 'BOSS_DEFEATED':
       await triggerHapticPattern(HapticPatterns.BOSS_DEFEATED_SEQUENCE!, 180);
       break;
     default:

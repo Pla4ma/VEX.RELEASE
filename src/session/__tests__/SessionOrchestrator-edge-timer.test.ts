@@ -1,12 +1,12 @@
-import { SessionOrchestrator } from "../SessionOrchestrator";
+import { SessionOrchestrator } from '../SessionOrchestrator';
 import {
   mockConfig,
   createOrchestrator,
   TEST_USER_ID,
-} from "./SessionOrchestrator.helpers";
-import type { SessionConfig } from "../types";
+} from './SessionOrchestrator.helpers';
+import type { SessionConfig } from '../types';
 
-describe("SessionOrchestrator", () => {
+describe('SessionOrchestrator', () => {
   let orchestrator: SessionOrchestrator;
   beforeEach(() => {
     orchestrator = createOrchestrator();
@@ -15,16 +15,16 @@ describe("SessionOrchestrator", () => {
     orchestrator.destroy();
   });
 
-  describe("Edge Cases and Error Handling", () => {
-    it("should throw error when creating session without user", async () => {
+  describe('Edge Cases and Error Handling', () => {
+    it('should throw error when creating session without user', async () => {
       const orphanOrchestrator = new SessionOrchestrator();
       await expect(
         orphanOrchestrator.createSession(mockConfig),
-      ).rejects.toThrow("No user set");
+      ).rejects.toThrow('No user set');
       orphanOrchestrator.destroy();
     });
 
-    it("should handle rapid pause/resume cycles", async () => {
+    it('should handle rapid pause/resume cycles', async () => {
       await orchestrator.createSession(mockConfig);
       await orchestrator.startSession(0);
       for (let i = 0; i < 5; i++) {
@@ -33,10 +33,10 @@ describe("SessionOrchestrator", () => {
       }
       const session = orchestrator.getSession();
       expect(session?.pauses).toBe(5);
-      expect(session?.status).toBe("ACTIVE");
+      expect(session?.status).toBe('ACTIVE');
     });
 
-    it("should handle background/foreground cycles", async () => {
+    it('should handle background/foreground cycles', async () => {
       await orchestrator.createSession(mockConfig);
       await orchestrator.startSession(0);
       for (let i = 0; i < 3; i++) {
@@ -44,10 +44,10 @@ describe("SessionOrchestrator", () => {
         await orchestrator.foregroundSession();
       }
       const session = orchestrator.getSession();
-      expect(session?.status).toBe("ACTIVE");
+      expect(session?.status).toBe('ACTIVE');
     });
 
-    it("should maintain session integrity during operations", async () => {
+    it('should maintain session integrity during operations', async () => {
       await orchestrator.createSession(mockConfig);
       await orchestrator.startSession(0);
       await orchestrator.pauseSession();
@@ -61,25 +61,25 @@ describe("SessionOrchestrator", () => {
     });
   });
 
-  describe("Timer State", () => {
+  describe('Timer State', () => {
     beforeEach(async () => {
       await orchestrator.createSession(mockConfig);
       await orchestrator.startSession(0);
     });
 
-    it("should provide timer state", () => {
+    it('should provide timer state', () => {
       const timerState = orchestrator.getTimerState();
       expect(timerState).not.toBeNull();
       expect(timerState?.isRunning).toBe(true);
     });
 
-    it("should track remaining seconds", () => {
+    it('should track remaining seconds', () => {
       const remaining = orchestrator.getRemainingSeconds();
       expect(remaining).toBeGreaterThan(0);
       expect(remaining).toBeLessThanOrEqual(mockConfig.duration);
     });
 
-    it("should track elapsed seconds", async () => {
+    it('should track elapsed seconds', async () => {
       const elapsedBefore = orchestrator.getElapsedSeconds();
       await new Promise((resolve) => setTimeout(resolve, 100));
       const elapsedAfter = orchestrator.getElapsedSeconds();
@@ -87,7 +87,7 @@ describe("SessionOrchestrator", () => {
     });
   });
 
-  describe("Multi-Interval Sessions", () => {
+  describe('Multi-Interval Sessions', () => {
     const multiIntervalConfig: SessionConfig = {
       ...mockConfig,
       duration: 30,
@@ -97,7 +97,7 @@ describe("SessionOrchestrator", () => {
       longBreakDuration: 10,
     };
 
-    it("should create multi-interval session", async () => {
+    it('should create multi-interval session', async () => {
       const session = await orchestrator.createSession(multiIntervalConfig);
       expect(session.totalIntervals).toBe(4);
       expect(session.currentInterval).toBe(1);
@@ -106,7 +106,7 @@ describe("SessionOrchestrator", () => {
   });
 });
 
-describe("SessionOrchestrator Integration", () => {
+describe('SessionOrchestrator Integration', () => {
   let orchestrator: SessionOrchestrator;
   beforeEach(() => {
     orchestrator = createOrchestrator({ enableAntiCheat: true });
@@ -115,21 +115,21 @@ describe("SessionOrchestrator Integration", () => {
     orchestrator.destroy();
   });
 
-  it("should complete full session lifecycle", async () => {
+  it('should complete full session lifecycle', async () => {
     const session = await orchestrator.createSession(mockConfig);
-    expect(session.status).toBe("PREPARING");
+    expect(session.status).toBe('PREPARING');
     await orchestrator.startSession(0);
-    expect(orchestrator.getSession()?.status).toBe("ACTIVE");
+    expect(orchestrator.getSession()?.status).toBe('ACTIVE');
     await orchestrator.pauseSession();
-    expect(orchestrator.getSession()?.status).toBe("PAUSED");
+    expect(orchestrator.getSession()?.status).toBe('PAUSED');
     await orchestrator.resumeSession();
-    expect(orchestrator.getSession()?.status).toBe("ACTIVE");
-    await orchestrator.abandonSession("test complete");
-    expect(orchestrator.getSession()?.status).toBe("ABANDONED");
+    expect(orchestrator.getSession()?.status).toBe('ACTIVE');
+    await orchestrator.abandonSession('test complete');
+    expect(orchestrator.getSession()?.status).toBe('ABANDONED');
     expect(orchestrator.isSessionActive()).toBe(false);
   });
 
-  it("should handle concurrent state changes", async () => {
+  it('should handle concurrent state changes', async () => {
     await orchestrator.createSession(mockConfig);
     await orchestrator.startSession(0);
     const operations = [
@@ -138,6 +138,6 @@ describe("SessionOrchestrator Integration", () => {
     ];
     await Promise.all(operations);
     const session = orchestrator.getSession();
-    expect(["PAUSED", "BACKGROUNDED"]).toContain(session?.status);
+    expect(['PAUSED', 'BACKGROUNDED']).toContain(session?.status);
   });
 });

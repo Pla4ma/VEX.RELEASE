@@ -3,14 +3,14 @@
  * Reusable empty state for content study feature
  */
 
-import React from "react";
-import { View, Pressable } from "react-native";
-import { Text } from "../../../components/primitives/Text";
-import { Button } from "../../../components/primitives/Button";
-import { useTheme } from "../../../theme";
-import { Icon } from "../../../icons";
-import { createSheet } from "@/shared/ui/create-sheet";
-import { buttonTap } from "../../../utils/haptics";
+import React from 'react';
+import { View, Pressable } from 'react-native';
+import { Text } from '../../../components/primitives/Text';
+import { Button } from '../../../components/primitives/Button';
+import { useTheme } from '../../../theme';
+import { Icon } from '../../../icons';
+import { createSheet } from '@/shared/ui/create-sheet';
+import { buttonTap } from '../../../utils/haptics';
 
 interface EmptyStateProps {
   icon: string;
@@ -65,7 +65,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
           size="md"
           onPress={onAction}
           style={styles.actionButton}
-          accessibilityLabel={actionLabel ?? "Perform primary action"}
+          accessibilityLabel={actionLabel ?? 'Perform primary action'}
           accessibilityRole="button"
           accessibilityHint="Performs the primary action for this section"
         >
@@ -80,7 +80,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
             styles.secondaryAction,
             pressed && { opacity: 0.8 },
           ]}
-          accessibilityLabel={secondaryActionLabel ?? "Perform secondary action"}
+          accessibilityLabel={secondaryActionLabel ?? 'Perform secondary action'}
           accessibilityRole="button"
           accessibilityHint="Performs the secondary action for this section"
         >
@@ -152,27 +152,27 @@ export const ErrorEmptyState: React.FC<{
 const styles = createSheet({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     padding: 32,
   },
   iconContainer: {
     width: 80,
     height: 80,
     borderRadius: 40,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     marginBottom: 20,
   },
   title: {
     fontSize: 20,
-    fontWeight: "600",
-    textAlign: "center",
+    fontWeight: '600',
+    textAlign: 'center',
     marginBottom: 8,
   },
   description: {
     fontSize: 15,
-    textAlign: "center",
+    textAlign: 'center',
     lineHeight: 22,
     marginBottom: 24,
     maxWidth: 280,
@@ -186,6 +186,6 @@ const styles = createSheet({
   },
   secondaryText: {
     fontSize: 14,
-    fontWeight: "500",
+    fontWeight: '500',
   },
 });

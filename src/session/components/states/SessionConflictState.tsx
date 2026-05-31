@@ -1,13 +1,13 @@
-import React, { useState } from "react";
-import { ScrollView } from "react-native";
-import Animated, { FadeIn } from "react-native-reanimated";
-import { Text } from "../../../components/primitives/Text";
-import { Button } from "../../../components/primitives/Button";
-import { Box } from "../../../components/primitives/Box";
-import { useTheme } from "../../../theme";
-import { styles } from "./SessionConflictState.styles";
-import { computeDifferences, handleResolve } from "./conflict-state-helpers";
-import { ConflictDeviceCard } from "./ConflictDeviceCard";
+import React, { useState } from 'react';
+import { ScrollView } from 'react-native';
+import Animated, { FadeIn } from 'react-native-reanimated';
+import { Text } from '../../../components/primitives/Text';
+import { Button } from '../../../components/primitives/Button';
+import { Box } from '../../../components/primitives/Box';
+import { useTheme } from '../../../theme';
+import { styles } from './SessionConflictState.styles';
+import { computeDifferences, handleResolve } from './conflict-state-helpers';
+import { ConflictDeviceCard } from './ConflictDeviceCard';
 
 interface SessionState {
   progress: number;
@@ -33,7 +33,7 @@ export function SessionConflictState({
 }: SessionConflictStateProps): JSX.Element {
   const { theme } = useTheme();
   const [selectedOption, setSelectedOption] = useState<
-    "local" | "remote" | "merge" | null
+    'local' | 'remote' | 'merge' | null
   >(null);
   const [isResolving, setIsResolving] = useState(false);
   const { timeDifference, progressDifference } = computeDifferences(
@@ -41,7 +41,7 @@ export function SessionConflictState({
     remoteState,
   );
 
-  const handleResolveOption = async (option: "local" | "remote" | "merge") => {
+  const handleResolveOption = async (option: 'local' | 'remote' | 'merge') => {
     setSelectedOption(option);
     setIsResolving(true);
     try {
@@ -85,10 +85,10 @@ export function SessionConflictState({
               label="This Device"
               badgeText="LOCAL"
               badgeColor={theme.colors.success.DEFAULT}
-              isSelected={selectedOption === "local"}
-              isLoading={isResolving && selectedOption === "local"}
+              isSelected={selectedOption === 'local'}
+              isLoading={isResolving && selectedOption === 'local'}
               isDisabled={isResolving}
-              onPress={() => handleResolveOption("local")}
+              onPress={() => handleResolveOption('local')}
               buttonText="Keep This Version"
               accessibilityLabel="Keep this version"
               delay={100}
@@ -96,13 +96,13 @@ export function SessionConflictState({
 
             <ConflictDeviceCard
               state={remoteState}
-              label={remoteState.deviceName || "Other Device"}
+              label={remoteState.deviceName || 'Other Device'}
               badgeText="REMOTE"
               badgeColor={theme.colors.info.DEFAULT}
-              isSelected={selectedOption === "remote"}
-              isLoading={isResolving && selectedOption === "remote"}
+              isSelected={selectedOption === 'remote'}
+              isLoading={isResolving && selectedOption === 'remote'}
               isDisabled={isResolving}
-              onPress={() => handleResolveOption("remote")}
+              onPress={() => handleResolveOption('remote')}
               buttonText="Use Other Version"
               accessibilityLabel="Use other version"
               delay={200}
@@ -120,8 +120,8 @@ export function SessionConflictState({
               Difference Summary
             </Text>
             <Text variant="body" textAlign="center">
-              Time diff: {Math.floor(timeDifference / 60000)}m{" "}
-              {Math.floor((timeDifference % 60000) / 1000)}s • Progress diff:{" "}
+              Time diff: {Math.floor(timeDifference / 60000)}m{' '}
+              {Math.floor((timeDifference % 60000) / 1000)}s • Progress diff:{' '}
               {progressDifference.toFixed(1)}%
             </Text>
           </Box>
@@ -132,8 +132,8 @@ export function SessionConflictState({
               <Button
                 variant="ghost"
                 size="md"
-                onPress={() => handleResolveOption("merge")}
-                isLoading={isResolving && selectedOption === "merge"}
+                onPress={() => handleResolveOption('merge')}
+                isLoading={isResolving && selectedOption === 'merge'}
                 disabled={isResolving}
                 accessibilityLabel="Merge both versions"
                 accessibilityRole="button"

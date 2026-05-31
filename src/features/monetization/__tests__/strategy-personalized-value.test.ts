@@ -5,19 +5,19 @@ import {
   getLanePremiumValue,
   mapProfileToLane,
   type PremiumLane,
-} from "./helpers";
+} from './helpers';
 
-describe("premium strategy integration", () => {
-  it("hidden strategy when billing not configured", () => {
+describe('premium strategy integration', () => {
+  it('hidden strategy when billing not configured', () => {
     const strategy = resolvePremiumStrategy({
       billingConfigured: false,
       completedSessions: 0,
     });
     expect(strategy.canShowPaywall).toBe(false);
-    expect(strategy.triggerMoment).toBe("hidden_billing_unavailable");
+    expect(strategy.triggerMoment).toBe('hidden_billing_unavailable');
   });
 
-  it("hidden at session 0 even with billing", () => {
+  it('hidden at session 0 even with billing', () => {
     const strategy = resolvePremiumStrategy({
       billingConfigured: true,
       completedSessions: 0,
@@ -25,16 +25,16 @@ describe("premium strategy integration", () => {
     expect(strategy.canShowPaywall).toBe(false);
   });
 
-  it("can show after value proof (40 sessions)", () => {
+  it('can show after value proof (40 sessions)', () => {
     const strategy = resolvePremiumStrategy({
       billingConfigured: true,
       completedSessions: 40,
     });
     expect(strategy.canShowPaywall).toBe(true);
-    expect(strategy.triggerMoment).toBe("after_value");
+    expect(strategy.triggerMoment).toBe('after_value');
   });
 
-  it("premium features exclude economy", () => {
+  it('premium features exclude economy', () => {
     const strategy = resolvePremiumStrategy({
       billingConfigured: true,
       completedSessions: 40,
@@ -44,44 +44,44 @@ describe("premium strategy integration", () => {
       strategy.paywallBody,
       ...strategy.premiumFeatures,
     ]
-      .join(" ")
+      .join(' ')
       .toLowerCase();
     for (const term of blockedEconomyTerms) {
       const positiveUse = new RegExp(
         `(?<!(no|not|without|never|0)[\\s\\S]{0,30})${term}`,
-        "i",
+        'i',
       );
       expect(copy).not.toMatch(positiveUse);
     }
   });
 
-  it("free features confirm core loop stays free", () => {
+  it('free features confirm core loop stays free', () => {
     const strategy = resolvePremiumStrategy({
       billingConfigured: true,
       completedSessions: 40,
     });
-    const freeCopy = strategy.freeFeatures.join(" ").toLowerCase();
-    expect(freeCopy).toContain("focus");
-    expect(freeCopy).toContain("session");
-    expect(freeCopy).toContain("rescue");
+    const freeCopy = strategy.freeFeatures.join(' ').toLowerCase();
+    expect(freeCopy).toContain('focus');
+    expect(freeCopy).toContain('session');
+    expect(freeCopy).toContain('rescue');
   });
 });
 
-describe("personalized premium", () => {
-  it("copy excludes economy language across all lanes", () => {
+describe('personalized premium', () => {
+  it('copy excludes economy language across all lanes', () => {
     const lanes = [
-      "student",
-      "game_like",
-      "deep_creative",
-      "minimal_normal",
+      'student',
+      'game_like',
+      'deep_creative',
+      'minimal_normal',
     ] as const;
     for (const lane of lanes) {
       const result = resolvePersonalizedPremium({
         billingConfigured: true,
         completedSessions: 10,
         lane,
-        primaryGoal: "focus",
-        motivationStyle: "calm",
+        primaryGoal: 'focus',
+        motivationStyle: 'calm',
         studyUsageRatio: 0.5,
         hasTriedAdvancedStudy: false,
         hasTriedWeeklyReport: false,
@@ -94,25 +94,25 @@ describe("personalized premium", () => {
         result.premiumBody,
         ...result.premiumFeatures,
       ]
-        .join(" ")
+        .join(' ')
         .toLowerCase();
       for (const term of blockedEconomyTerms) {
         const positiveUse = new RegExp(
           `(?<!(no|not|without|never|0)[\\s\\S]{0,30})${term}`,
-          "i",
+          'i',
         );
         expect(copy).not.toMatch(positiveUse);
       }
     }
   });
 
-  it("game_like lane copy explicitly disclaims no-currency", () => {
+  it('game_like lane copy explicitly disclaims no-currency', () => {
     const result = resolvePersonalizedPremium({
       billingConfigured: true,
       completedSessions: 10,
-      lane: "game_like",
-      primaryGoal: "focus",
-      motivationStyle: "game_like",
+      lane: 'game_like',
+      primaryGoal: 'focus',
+      motivationStyle: 'game_like',
       studyUsageRatio: 0.3,
       hasTriedAdvancedStudy: false,
       hasTriedWeeklyReport: false,
@@ -125,12 +125,12 @@ describe("personalized premium", () => {
     );
   });
 
-  it("does not paywall basic focus loop", () => {
+  it('does not paywall basic focus loop', () => {
     const result = resolvePersonalizedPremium({
       billingConfigured: true,
       completedSessions: 0,
-      primaryGoal: "focus",
-      motivationStyle: "calm",
+      primaryGoal: 'focus',
+      motivationStyle: 'calm',
       studyUsageRatio: 0,
       hasTriedAdvancedStudy: false,
       hasTriedWeeklyReport: false,
@@ -138,7 +138,7 @@ describe("personalized premium", () => {
       currentStreakDays: 0,
       daysSinceOnboarding: 0,
     });
-    expect(result.triggerMoment).toBe("none");
+    expect(result.triggerMoment).toBe('none');
     expect(result.canShowPaywall).toBe(false);
   });
 });

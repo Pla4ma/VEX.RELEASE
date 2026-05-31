@@ -1,14 +1,14 @@
-import React, { useEffect } from "react";
-import { View } from "react-native";
+import React, { useEffect } from 'react';
+import { View } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withTiming,
-} from "react-native-reanimated";
+} from 'react-native-reanimated';
 
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import { CARD_WIDTH } from "./session-consequence-types";
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import { CARD_WIDTH } from './session-consequence-types';
 
 interface ChallengeImpactCardProps {
   challengeName: string;
@@ -54,20 +54,20 @@ export function ChallengeImpactCard({
     >
       <View
         style={{
-          flexDirection: "row",
-          alignItems: "center",
+          flexDirection: 'row',
+          alignItems: 'center',
           gap: theme.spacing[2],
           marginBottom: theme.spacing[2],
         }}
       >
-        <Text fontSize={24}>{wasCompleted ? "📋✅" : "📋"}</Text>
+        <Text fontSize={24}>{wasCompleted ? '📋✅' : '📋'}</Text>
         <Text
           variant="body"
           fontWeight="700"
           color="text.primary"
           numberOfLines={1}
         >
-          {wasCompleted ? "Challenge Complete!" : challengeName}
+          {wasCompleted ? 'Challenge Complete!' : challengeName}
         </Text>
       </View>
 
@@ -76,14 +76,14 @@ export function ChallengeImpactCard({
           height: 8,
           backgroundColor: theme.colors.background.primary,
           borderRadius: theme.borderRadius.full,
-          overflow: "hidden",
+          overflow: 'hidden',
           marginBottom: theme.spacing[2],
         }}
       >
         <Animated.View
           style={[
             {
-              height: "100%",
+              height: '100%',
               backgroundColor: wasCompleted
                 ? theme.colors.success[500]
                 : theme.colors.primary[500],

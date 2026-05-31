@@ -1,13 +1,13 @@
-import { resolveBossIntensity } from "../experience-resolvers";
-import { makeStats } from "./personalization.helpers";
-import * as fixtures from "./test-fixtures";
+import { resolveBossIntensity } from '../experience-resolvers';
+import { makeStats } from './personalization.helpers';
+import * as fixtures from './test-fixtures';
 
-jest.mock("@sentry/react-native", () => ({
+jest.mock('@sentry/react-native', () => ({
   addBreadcrumb: jest.fn(),
   captureException: jest.fn(),
 }));
 
-jest.mock("../../../persistence/MMKVStorageAdapter", () => ({
+jest.mock('../../../persistence/MMKVStorageAdapter', () => ({
   getMMKVStorageAdapter: () => ({
     getItem: jest.fn(() => null),
     setItem: jest.fn(),
@@ -15,34 +15,34 @@ jest.mock("../../../persistence/MMKVStorageAdapter", () => ({
   }),
 }));
 
-describe("resolveBossIntensity", () => {
+describe('resolveBossIntensity', () => {
   it("returns 'subtle' when engagement is none", () => {
     expect(
-      resolveBossIntensity(fixtures.profile("calm"), makeStats({ bossChallengeEngagement: "none" })),
-    ).toBe("subtle");
+      resolveBossIntensity(fixtures.profile('calm'), makeStats({ bossChallengeEngagement: 'none' })),
+    ).toBe('subtle');
   });
   it("returns 'game-like' for game_like motivation", () => {
     expect(
       resolveBossIntensity(
-        fixtures.profile("game_like"),
-        makeStats({ bossChallengeEngagement: "medium" }),
+        fixtures.profile('game_like'),
+        makeStats({ bossChallengeEngagement: 'medium' }),
       ),
-    ).toBe("game-like");
+    ).toBe('game-like');
   });
   it("returns 'intense' for intense motivation", () => {
     expect(
       resolveBossIntensity(
-        fixtures.profile("intense"),
-        makeStats({ bossChallengeEngagement: "high" }),
+        fixtures.profile('intense'),
+        makeStats({ bossChallengeEngagement: 'high' }),
       ),
-    ).toBe("intense");
+    ).toBe('intense');
   });
   it("returns 'standard' as default", () => {
     expect(
       resolveBossIntensity(
-        fixtures.profile("friendly"),
-        makeStats({ bossChallengeEngagement: "medium" }),
+        fixtures.profile('friendly'),
+        makeStats({ bossChallengeEngagement: 'medium' }),
       ),
-    ).toBe("standard");
+    ).toBe('standard');
   });
 });

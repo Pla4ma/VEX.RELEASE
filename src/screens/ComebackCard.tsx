@@ -1,13 +1,13 @@
-import React from "react";
-import { StyleSheet } from "react-native";
+import React from 'react';
+import { StyleSheet } from 'react-native';
 
-import { Box } from "../components/primitives/Box";
-import { Button } from "../components/primitives/Button";
-import { Text } from "../components/primitives/Text";
-import type { ExtendedRootStackParams } from "../navigation/types";
-import { useTheme } from "../theme";
+import { Box } from '../components/primitives/Box';
+import { Button } from '../components/primitives/Button';
+import { Text } from '../components/primitives/Text';
+import type { ExtendedRootStackParams } from '../navigation/types';
+import { useTheme } from '../theme';
 
-type ComebackState = ExtendedRootStackParams["Comeback"]["comebackState"];
+type ComebackState = ExtendedRootStackParams['Comeback']['comebackState'];
 
 interface ComebackCardProps {
   comebackState: ComebackState;
@@ -27,7 +27,7 @@ export function ComebackCard({
       p="xl"
       style={{
         backgroundColor: theme.colors.background.secondary,
-        borderRadius: theme.borderRadius["3xl"],
+        borderRadius: theme.borderRadius['3xl'],
         borderWidth: 1,
         borderColor: theme.colors.border.light,
         gap: theme.spacing[4],

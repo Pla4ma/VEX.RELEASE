@@ -1,14 +1,14 @@
-import { expect, jest } from "@jest/globals";
-import type { ActionGate } from "../action-utils";
+import { expect, jest } from '@jest/globals';
+import type { ActionGate } from '../action-utils';
 
 // ─── Mocks ─────────────────────────────────────────────────────────────────
 
-jest.mock("../../focus-run/service", () => ({
+jest.mock('../../focus-run/service', () => ({
   recordFocusRunEvent: jest.fn().mockImplementation(() => Promise.resolve({
-    id: "run-1",
-    userId: "u1",
+    id: 'run-1',
+    userId: 'u1',
     weekStartsAt: 0,
-    status: "active",
+    status: 'active',
     bossId: null,
     modifiers: [],
     completedEncounters: 1,
@@ -20,69 +20,69 @@ jest.mock("../../focus-run/service", () => ({
   })),
   buildFocusRunDisplay: jest.fn().mockReturnValue({
     laneAllowed: true,
-    title: "test",
-    body: "test",
+    title: 'test',
+    body: 'test',
     boss: {
-      name: "Test",
-      archetype: "cold_start_shadow" as const,
+      name: 'Test',
+      archetype: 'cold_start_shadow' as const,
       evidenceCount: 0,
       isTeaser: true,
       isEvidenceBased: false,
       observedDays: 0,
-      recoveryPrompt: "test",
+      recoveryPrompt: 'test',
     },
-    nextAction: "test",
+    nextAction: 'test',
     modifiers: [],
     completedEncounters: 0,
     cleanStarts: 0,
     recoveryWins: 0,
     reflectionUpgrades: 0,
     finalGrade: null,
-    weekSummary: "test",
+    weekSummary: 'test',
   }),
 }));
 
-jest.mock("../../study-os/service", () => ({
+jest.mock('../../study-os/service', () => ({
   createManualStudyPlan: jest.fn().mockImplementation(() => Promise.resolve({
-    id: "plan-1",
-    userId: "u1",
-    title: "Test Plan",
+    id: 'plan-1',
+    userId: 'u1',
+    title: 'Test Plan',
     blocks: [],
     reviewItems: [],
     source: {
-      id: "s1",
-      title: "Test",
-      type: "manual",
-      userId: "u1",
+      id: 's1',
+      title: 'Test',
+      type: 'manual',
+      userId: 'u1',
       createdAt: 0,
-      extractedTextStatus: "none",
+      extractedTextStatus: 'none',
     },
-    status: "active",
+    status: 'active',
     createdAt: 0,
     deadlineAt: null,
   })),
 }));
 
-jest.mock("../../project-focus/service", () => ({
+jest.mock('../../project-focus/service', () => ({
   completeProjectSession: jest.fn().mockImplementation(() => Promise.resolve({
-    id: "thread-1",
-    userId: "u1",
-    projectTitle: "Test",
-    currentObjective: "Test objective",
-    nextMove: "Test move",
-    lastSessionSummary: "ok",
+    id: 'thread-1',
+    userId: 'u1',
+    projectTitle: 'Test',
+    currentObjective: 'Test objective',
+    nextMove: 'Test move',
+    lastSessionSummary: 'ok',
     blocker: null,
     handoffNote: null,
     openQuestions: [],
-    state: "active",
-    staleRisk: "none",
-    bestSessionMode: "CREATIVE",
+    state: 'active',
+    staleRisk: 'none',
+    bestSessionMode: 'CREATIVE',
     lastTouched: 0,
     rescuedAt: null,
   })),
 }));
 
-jest.mock("../../focus-memory/service", () => ({
+jest.mock('../../focus-memory/service', () => ({
   findMemoriesForRecommendation: jest.fn().mockImplementation(() => Promise.resolve([])),
 }));
 
@@ -97,46 +97,46 @@ export function expectData(data: unknown, key: string): unknown {
 
 // ─── Test data ─────────────────────────────────────────────────────────────
 
-export const GATE_OPEN: ActionGate = { isAvailable: true, reason: "available" };
+export const GATE_OPEN: ActionGate = { isAvailable: true, reason: 'available' };
 export const GATE_CLOSED: ActionGate = {
   isAvailable: false,
-  reason: "feature is disabled",
+  reason: 'feature is disabled',
 };
 
 export const validCreateFocusSession = {
-  userId: "u1",
+  userId: 'u1',
   durationMinutes: 25,
-  category: "focus",
+  category: 'focus',
 };
 
 export const validStartSession = {
-  userId: "u1",
-  lane: "minimal_normal" as const,
+  userId: 'u1',
+  lane: 'minimal_normal' as const,
   durationSeconds: 1500,
 };
 
 export const validStartRescue = {
-  userId: "u1",
-  lane: "student" as const,
-  reason: "unclear" as const,
+  userId: 'u1',
+  lane: 'student' as const,
+  reason: 'unclear' as const,
 };
 
 export const validUpdateLaneOverride = {
-  userId: "u1",
-  manualOverride: "deep_creative" as const,
+  userId: 'u1',
+  manualOverride: 'deep_creative' as const,
 };
 
 export const validCompleteReflection = {
-  userId: "u1",
-  lane: "student" as const,
-  reflectionAnswer: "I stayed focused",
+  userId: 'u1',
+  lane: 'student' as const,
+  reflectionAnswer: 'I stayed focused',
   isComeback: false,
   summary: {
-    sessionId: "s1",
+    sessionId: 's1',
     effectiveDuration: 1500,
     completionPercentage: 100,
     interruptions: 0,
-    sessionMode: "STUDY",
-    status: "COMPLETED",
+    sessionMode: 'STUDY',
+    status: 'COMPLETED',
   },
 };

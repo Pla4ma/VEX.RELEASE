@@ -5,7 +5,7 @@ import {
   reset,
   screen,
   updateUserProperties,
-} from "../shared/analytics/analytics-service";
+} from '../shared/analytics/analytics-service';
 
 export interface AnalyticsEvent {
   id: string;

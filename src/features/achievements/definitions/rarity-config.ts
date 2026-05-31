@@ -1,5 +1,5 @@
-import type { AchievementRarity } from "../types";
-import { lightColors } from "@/theme/tokens/colors";
+import type { AchievementRarity } from '../types';
+import { lightColors } from '@/theme/tokens/colors';
 
 export const RARITY_CONFIG: Record<
   AchievementRarity,

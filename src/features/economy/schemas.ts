@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const CurrencyRpcResultSchema = z.object({
   success: z.boolean(),
@@ -17,7 +17,7 @@ export const WalletSchema = z.object({
 
 export type Wallet = z.infer<typeof WalletSchema>;
 
-export const CurrencyTypeSchema = z.enum(["COINS", "GEMS", "XP", "SEASONAL", "FOCUS_POINTS"]);
+export const CurrencyTypeSchema = z.enum(['COINS', 'GEMS', 'XP', 'SEASONAL', 'FOCUS_POINTS']);
 export type CurrencyType = z.infer<typeof CurrencyTypeSchema>;
 
 export const SpendInputSchema = z.object({

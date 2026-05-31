@@ -1,11 +1,11 @@
-import React, { useEffect, useMemo, useState } from "react";
-import * as Sentry from "@sentry/react-native";
+import React, { useEffect, useMemo, useState } from 'react';
+import * as Sentry from '@sentry/react-native';
 
-import { Box } from "../../components/primitives/Box";
-import { Button } from "../../components/primitives/Button";
-import { Text } from "../../components/primitives/Text";
-import { getQuizForStudyPlan } from "../content-study/service";
-import type { QuizItem } from "../content-study/types";
+import { Box } from '../../components/primitives/Box';
+import { Button } from '../../components/primitives/Button';
+import { Text } from '../../components/primitives/Text';
+import { getQuizForStudyPlan } from '../content-study/service';
+import type { QuizItem } from '../content-study/types';
 
 type StudyQuizBreakProps = {
   isVisible: boolean;
@@ -47,7 +47,7 @@ export function StudyQuizBreak({
           );
         }
         Sentry.captureException(caught, {
-          tags: { feature: "study-quiz-break" },
+          tags: { feature: 'study-quiz-break' },
         });
       })
       .finally(() => {
@@ -115,7 +115,7 @@ export function StudyQuizBreak({
                 key={option}
                 accessibilityLabel={`Answer ${option}`}
                 accessibilityHint="Selects this quiz answer"
-                variant={answers[item.id] === option ? "primary" : "secondary"}
+                variant={answers[item.id] === option ? 'primary' : 'secondary'}
                 size="sm"
                 onPress={() =>
                   setAnswers((current) => ({ ...current, [item.id]: option }))

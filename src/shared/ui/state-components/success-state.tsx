@@ -1,13 +1,13 @@
-import React, { useEffect } from "react";
-import { Pressable, Text } from "react-native";
-import Animated from "react-native-reanimated";
-import { useTheme } from "../../../theme";
-import { useFadeStyle, useScaleInStyle } from "./animations";
-import { styles } from "./styles";
-import type { SuccessStateProps } from "./types";
+import React, { useEffect } from 'react';
+import { Pressable, Text } from 'react-native';
+import Animated from 'react-native-reanimated';
+import { useTheme } from '../../../theme';
+import { useFadeStyle, useScaleInStyle } from './animations';
+import { styles } from './styles';
+import type { SuccessStateProps } from './types';
 
 export function SuccessState({
-  icon = "OK",
+  icon = 'OK',
   title,
   subtitle,
   autoDismiss = false,

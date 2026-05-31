@@ -1,4 +1,4 @@
-import { Easing } from "react-native-reanimated";
+import { Easing } from 'react-native-reanimated';
 type InterpolatedValue = string | number;
 type AnimatedProgress = {
   interpolate: (config: {
@@ -34,7 +34,7 @@ export const slideFromRight: StackCardStyleInterpolator = ({
 export const slideFromBottom: StackCardStyleInterpolator = ({
   current,
   layouts: { screen },
-}: Omit<TransitionParams, "next" | "inverted">) => {
+}: Omit<TransitionParams, 'next' | 'inverted'>) => {
   const translateY = current.progress.interpolate({
     inputRange: [0, 1],
     outputRange: [screen.height, 0],
@@ -43,7 +43,7 @@ export const slideFromBottom: StackCardStyleInterpolator = ({
 };
 export const fadeTransition: StackCardStyleInterpolator = ({
   current,
-}: Pick<TransitionParams, "current">) => {
+}: Pick<TransitionParams, 'current'>) => {
   const opacity = current.progress.interpolate({
     inputRange: [0, 1],
     outputRange: [0, 1],
@@ -52,7 +52,7 @@ export const fadeTransition: StackCardStyleInterpolator = ({
 };
 export const scaleTransition: StackCardStyleInterpolator = ({
   current,
-}: Pick<TransitionParams, "current">) => {
+}: Pick<TransitionParams, 'current'>) => {
   const scale = current.progress.interpolate({
     inputRange: [0, 1],
     outputRange: [0.9, 1],
@@ -65,61 +65,61 @@ export const scaleTransition: StackCardStyleInterpolator = ({
 };
 export const sharedElementTransition: StackCardStyleInterpolator = ({
   current,
-}: Pick<TransitionParams, "current">) => {
+}: Pick<TransitionParams, 'current'>) => {
   return { cardStyle: { opacity: current.progress } };
 };
 export const transitionPresets = {
   slideFromRight: {
-    gestureDirection: "horizontal",
+    gestureDirection: 'horizontal',
     transitionSpec: {
       open: {
-        animation: "timing",
+        animation: 'timing',
         config: { duration: 300, easing: Easing.bezier(0.25, 0.1, 0.25, 1) },
       },
       close: {
-        animation: "timing",
+        animation: 'timing',
         config: { duration: 300, easing: Easing.bezier(0.25, 0.1, 0.25, 1) },
       },
     },
     cardStyleInterpolator: slideFromRight,
   },
   slideFromBottom: {
-    gestureDirection: "vertical",
+    gestureDirection: 'vertical',
     transitionSpec: {
       open: {
-        animation: "timing",
+        animation: 'timing',
         config: { duration: 400, easing: Easing.out(Easing.cubic) },
       },
       close: {
-        animation: "timing",
+        animation: 'timing',
         config: { duration: 300, easing: Easing.in(Easing.cubic) },
       },
     },
     cardStyleInterpolator: slideFromBottom,
   },
   fade: {
-    gestureDirection: "horizontal",
+    gestureDirection: 'horizontal',
     transitionSpec: {
       open: {
-        animation: "timing",
+        animation: 'timing',
         config: { duration: 200, easing: Easing.linear },
       },
       close: {
-        animation: "timing",
+        animation: 'timing',
         config: { duration: 200, easing: Easing.linear },
       },
     },
     cardStyleInterpolator: fadeTransition,
   },
   scale: {
-    gestureDirection: "horizontal",
+    gestureDirection: 'horizontal',
     transitionSpec: {
       open: {
-        animation: "spring",
+        animation: 'spring',
         config: { stiffness: 1000, damping: 50, mass: 1 },
       },
       close: {
-        animation: "timing",
+        animation: 'timing',
         config: { duration: 200, easing: Easing.linear },
       },
     },

@@ -1,6 +1,6 @@
 const mockSelect = jest.fn();
 
-jest.mock("../../../config/supabase", () => ({
+jest.mock('../../../config/supabase', () => ({
   supabase: {
     from: jest.fn(() => ({
       select: mockSelect,
@@ -11,14 +11,14 @@ jest.mock("../../../config/supabase", () => ({
 import {
   fetchMonthlyFocusReportInput,
   MonthlyReportRepositoryError,
-} from "../repository";
+} from '../repository';
 
-describe("fetchMonthlyFocusReportInput — error and empty handling", () => {
+describe('fetchMonthlyFocusReportInput — error and empty handling', () => {
   beforeEach(() => {
     mockSelect.mockReset();
   });
 
-  it("throws MonthlyReportRepositoryError on Supabase error", async () => {
+  it('throws MonthlyReportRepositoryError on Supabase error', async () => {
     // Query 1: focus_score_history — .select().eq().gte().lte().order()
     mockSelect
       .mockReturnValueOnce({
@@ -27,7 +27,7 @@ describe("fetchMonthlyFocusReportInput — error and empty handling", () => {
             lte: jest.fn().mockReturnValue({
               order: jest.fn().mockResolvedValue({
                 data: null,
-                error: { message: "DB error", code: "XX000" },
+                error: { message: 'DB error', code: 'XX000' },
               }),
             }),
           }),
@@ -55,15 +55,15 @@ describe("fetchMonthlyFocusReportInput — error and empty handling", () => {
 
     await expect(
       fetchMonthlyFocusReportInput({
-        userId: "550e8400-e29b-41d4-a716-446655440000",
+        userId: '550e8400-e29b-41d4-a716-446655440000',
         month: 3,
         year: 2025,
       }),
     ).rejects.toThrow(MonthlyReportRepositoryError);
   });
 
-  it("handles empty sessions gracefully", async () => {
-    const scoreData = [{ score: 550, created_at: "2025-03-01T00:00:00Z" }];
+  it('handles empty sessions gracefully', async () => {
+    const scoreData = [{ score: 550, created_at: '2025-03-01T00:00:00Z' }];
     const factors = {};
 
     // Query 1: focus_score_history — .select().eq().gte().lte().order()
@@ -97,13 +97,13 @@ describe("fetchMonthlyFocusReportInput — error and empty handling", () => {
       });
 
     const result = await fetchMonthlyFocusReportInput({
-      userId: "550e8400-e29b-41d4-a716-446655440000",
+      userId: '550e8400-e29b-41d4-a716-446655440000',
       month: 3,
       year: 2025,
     });
 
     expect(result.sessionCount).toBe(0);
-    expect(result.bestFocusWindow).toBe("No data");
-    expect(result.strongestPattern).toBe("No data");
+    expect(result.bestFocusWindow).toBe('No data');
+    expect(result.strongestPattern).toBe('No data');
   });
 });

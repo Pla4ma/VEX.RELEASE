@@ -6,9 +6,9 @@ export {
   type Day0PolicyLimits,
   DEFAULT_DAY0_POLICY,
   type Day0PolicyResult,
-} from "./day0-surface-types";
+} from './day0-surface-types';
 
 export {
   enforceDay0SurfacePolicy,
   isDay0SurfacePolicyValid,
-} from "./day0-surface-enforcement";
+} from './day0-surface-enforcement';

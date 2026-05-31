@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from "react";
-import { Modal, Pressable, Text, View } from "react-native";
+import React, { useEffect, useState } from 'react';
+import { Modal, Pressable, Text, View } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withRepeat,
   withSequence,
   withTiming,
-} from "react-native-reanimated";
-import { styles } from "./InterruptionWarning.styles";
+} from 'react-native-reanimated';
+import { styles } from './InterruptionWarning.styles';
 import {
   type InterruptionWarningProps,
   getSeverityColor,
   getSeverityMessage,
   formatTime,
-} from "./InterruptionWarning.helpers";
-import { buttonTap } from "../../utils/haptics";
+} from './InterruptionWarning.helpers';
+import { buttonTap } from '../../utils/haptics';
 
 export const InterruptionWarning: React.FC<InterruptionWarningProps> = ({
   countdownSeconds,
@@ -150,7 +150,7 @@ export const InterruptionWarning: React.FC<InterruptionWarningProps> = ({
               <Text style={styles.abandonButtonText}>End Session</Text>
             </Pressable>
           </View>
-          {severity === "CRITICAL" ? (
+          {severity === 'CRITICAL' ? (
             <Text style={styles.penaltyWarning}>
               Ending now may affect your streak and rewards.
             </Text>
@@ -161,5 +161,5 @@ export const InterruptionWarning: React.FC<InterruptionWarningProps> = ({
   );
 };
 
-export { type InterruptionWarningProps } from "./InterruptionWarning.helpers";
+export { type InterruptionWarningProps } from './InterruptionWarning.helpers';
 export default InterruptionWarning;

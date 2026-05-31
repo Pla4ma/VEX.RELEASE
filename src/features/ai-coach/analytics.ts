@@ -1,8 +1,8 @@
-import * as Sentry from "@sentry/react-native";
-import { hashUserId, sanitizeContext } from "./analytics-helpers";
+import * as Sentry from '@sentry/react-native';
+import { hashUserId, sanitizeContext } from './analytics-helpers';
 
 // Re-export types so consumers can import from "./analytics".
-export type { InterventionType, CoachMetrics } from "./analytics-types";
+export type { InterventionType, CoachMetrics } from './analytics-types';
 
 // Re-export all tracking and metrics functions.
 export {
@@ -18,7 +18,7 @@ export {
   trackRecommendationGenerated,
   trackDifficultyAdjusted,
   trackBehaviorSignal,
-} from "./analytics-tracking";
+} from './analytics-tracking';
 
 export {
   recordCoachMetric,
@@ -31,7 +31,7 @@ export {
   getCoachAggregateMetrics,
   exportCoachMetrics,
   clearCoachMetrics,
-} from "./analytics-metrics";
+} from './analytics-metrics';
 
 // Error tracking — Sentry.captureException wrappers.
 
@@ -42,7 +42,7 @@ export function trackCoachError(
   context?: Record<string, unknown>,
 ): void {
   Sentry.captureException(error, {
-    tags: { feature: "ai-coach", operation },
+    tags: { feature: 'ai-coach', operation },
     extra: {
       userId: userId ? hashUserId(userId) : undefined,
       context: sanitizeContext(context),
@@ -56,7 +56,7 @@ export function trackDeliveryFailure(
   error: unknown,
 ): void {
   Sentry.captureException(error, {
-    tags: { feature: "ai-coach", operation: "message-delivery" },
+    tags: { feature: 'ai-coach', operation: 'message-delivery' },
     extra: { messageId, userId: hashUserId(userId) },
   });
 }
@@ -67,7 +67,7 @@ export function trackInterventionFailure(
   error: unknown,
 ): void {
   Sentry.captureException(error, {
-    tags: { feature: "ai-coach", operation: "intervention-execution" },
+    tags: { feature: 'ai-coach', operation: 'intervention-execution' },
     extra: { ruleId, userId: hashUserId(userId) },
   });
 }
@@ -78,7 +78,7 @@ export function trackIntegrationError(
   error: unknown,
 ): void {
   Sentry.captureException(error, {
-    tags: { feature: "ai-coach", operation: `integration:${operation}` },
+    tags: { feature: 'ai-coach', operation: `integration:${operation}` },
     extra: { userId: hashUserId(userId) },
   });
 }
@@ -89,7 +89,7 @@ export function trackMessageGenerationError(
   error: unknown,
 ): void {
   Sentry.captureException(error, {
-    tags: { feature: "ai-coach", operation: "message-generation" },
+    tags: { feature: 'ai-coach', operation: 'message-generation' },
     extra: { userId: hashUserId(userId), category },
   });
 }
@@ -99,6 +99,6 @@ export function trackEventHandlerError(
   error: unknown,
 ): void {
   Sentry.captureException(error, {
-    tags: { feature: "ai-coach", operation: "event-handler", eventType },
+    tags: { feature: 'ai-coach', operation: 'event-handler', eventType },
   });
 }

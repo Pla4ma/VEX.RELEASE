@@ -1,11 +1,11 @@
-import { describe, expect, it } from "@jest/globals";
-import { isRescueEligible } from "../../features/rescue-mode/service";
+import { describe, expect, it } from '@jest/globals';
+import { isRescueEligible } from '../../features/rescue-mode/service';
 
-describe("Phase 17 — Rescue: Hidden before signal", () => {
-  it("not eligible on cold Day 0", () => {
+describe('Phase 17 — Rescue: Hidden before signal', () => {
+  it('not eligible on cold Day 0', () => {
     const result = isRescueEligible({
-      userId: "u1",
-      lane: "student",
+      userId: 'u1',
+      lane: 'student',
       completedSessions: 0,
       daysSinceOnboarding: 0,
       abandonedSessionExists: false,
@@ -17,13 +17,13 @@ describe("Phase 17 — Rescue: Hidden before signal", () => {
       now: 100,
     });
     expect(result.eligible).toBe(false);
-    expect(result.reason).toContain("Day 0");
+    expect(result.reason).toContain('Day 0');
   });
 
-  it("not eligible without any trigger signal", () => {
+  it('not eligible without any trigger signal', () => {
     const result = isRescueEligible({
-      userId: "u1",
-      lane: "student",
+      userId: 'u1',
+      lane: 'student',
       completedSessions: 1,
       daysSinceOnboarding: 1,
       abandonedSessionExists: false,
@@ -38,11 +38,11 @@ describe("Phase 17 — Rescue: Hidden before signal", () => {
   });
 });
 
-describe("Phase 17 — Rescue: Visible after avoidance", () => {
-  it("eligible after abandoned session", () => {
+describe('Phase 17 — Rescue: Visible after avoidance', () => {
+  it('eligible after abandoned session', () => {
     const result = isRescueEligible({
-      userId: "u1",
-      lane: "student",
+      userId: 'u1',
+      lane: 'student',
       completedSessions: 3,
       daysSinceOnboarding: 2,
       abandonedSessionExists: true,
@@ -54,13 +54,13 @@ describe("Phase 17 — Rescue: Visible after avoidance", () => {
       now: 100,
     });
     expect(result.eligible).toBe(true);
-    expect(result.trigger).toBe("abandoned_session");
+    expect(result.trigger).toBe('abandoned_session');
   });
 
-  it("eligible after missed planned session", () => {
+  it('eligible after missed planned session', () => {
     const result = isRescueEligible({
-      userId: "u1",
-      lane: "game_like",
+      userId: 'u1',
+      lane: 'game_like',
       completedSessions: 2,
       daysSinceOnboarding: 3,
       abandonedSessionExists: false,
@@ -72,13 +72,13 @@ describe("Phase 17 — Rescue: Visible after avoidance", () => {
       now: 100,
     });
     expect(result.eligible).toBe(true);
-    expect(result.trigger).toBe("missed_planned");
+    expect(result.trigger).toBe('missed_planned');
   });
 
-  it("eligible for notification_dismissal_pattern (3+ dismissals)", () => {
+  it('eligible for notification_dismissal_pattern (3+ dismissals)', () => {
     const result = isRescueEligible({
-      userId: "u1",
-      lane: "minimal_normal",
+      userId: 'u1',
+      lane: 'minimal_normal',
       completedSessions: 3,
       daysSinceOnboarding: 2,
       abandonedSessionExists: false,
@@ -90,13 +90,13 @@ describe("Phase 17 — Rescue: Visible after avoidance", () => {
       now: 100,
     });
     expect(result.eligible).toBe(true);
-    expect(result.trigger).toBe("notification_dismissal_pattern");
+    expect(result.trigger).toBe('notification_dismissal_pattern');
   });
 
-  it("eligible when user reports task too big", () => {
+  it('eligible when user reports task too big', () => {
     const result = isRescueEligible({
-      userId: "u1",
-      lane: "deep_creative",
+      userId: 'u1',
+      lane: 'deep_creative',
       completedSessions: 3,
       daysSinceOnboarding: 2,
       abandonedSessionExists: false,
@@ -109,6 +109,6 @@ describe("Phase 17 — Rescue: Visible after avoidance", () => {
       now: 100,
     });
     expect(result.eligible).toBe(true);
-    expect(result.trigger).toBe("user_too_big");
+    expect(result.trigger).toBe('user_too_big');
   });
 });

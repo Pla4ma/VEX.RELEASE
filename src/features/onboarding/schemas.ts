@@ -5,17 +5,17 @@
  * @phase 2
  */
 
-import { z } from "zod";
-import { LaneSchema } from "../lane-engine/schemas";
+import { z } from 'zod';
+import { LaneSchema } from '../lane-engine/schemas';
 
 /**
  * Focus goal enum
  */
 export const FocusGoalSchema = z.enum([
-  "WORK",
-  "STUDY",
-  "CREATIVE",
-  "PERSONAL",
+  'WORK',
+  'STUDY',
+  'CREATIVE',
+  'PERSONAL',
 ]);
 
 /**
@@ -33,49 +33,49 @@ export const FocusDurationSchema = z.union([
  * Onboarding step enum
  */
 export const OnboardingStepSchema = z.enum([
-  "WELCOME",
-  "GOAL_SETTING",
-  "FOCUS_TIME",
-  "NAME_SETUP",
-  "MOTIVATION_STYLE",
-  "FIRST_SESSION_CTA",
+  'WELCOME',
+  'GOAL_SETTING',
+  'FOCUS_TIME',
+  'NAME_SETUP',
+  'MOTIVATION_STYLE',
+  'FIRST_SESSION_CTA',
 ]);
 
 /**
  * Coach persona type (chosen during onboarding or defaulted)
  */
 export const CoachPersonaSchema = z.enum([
-  "cheerleader",
-  "mentor",
-  "drill-sergeant",
+  'cheerleader',
+  'mentor',
+  'drill-sergeant',
 ]);
 
 /**
  * Companion element type for onboarding (chosen during onboarding or defaulted)
  */
 export const OnboardingElementSchema = z.enum([
-  "FLAME",
-  "WAVE",
-  "TERRA",
-  "ZEPHYR",
-  "VOID",
-  "LUMINA",
+  'FLAME',
+  'WAVE',
+  'TERRA',
+  'ZEPHYR',
+  'VOID',
+  'LUMINA',
 ]);
 
 /**
  * Motivation profile types derived from onboarding choices
  */
 export const MotivationProfileTypeSchema = z.enum([
-  "calm",
-  "friendly",
-  "game_like",
-  "coach_led",
-  "competitive",
-  "intense",
-  "study_focused",
-  "student",
-  "creator",
-  "worker",
+  'calm',
+  'friendly',
+  'game_like',
+  'coach_led',
+  'competitive',
+  'intense',
+  'study_focused',
+  'student',
+  'creator',
+  'worker',
 ]);
 
 /**
@@ -145,7 +145,7 @@ export const TooltipStateSchema = z.object({
 export const OnboardingProgressSchema = z
   .object({
     userId: z.string().uuid(),
-    status: z.enum(["IN_PROGRESS", "FIRST_SESSION_IN_PROGRESS", "COMPLETED"]),
+    status: z.enum(['IN_PROGRESS', 'FIRST_SESSION_IN_PROGRESS', 'COMPLETED']),
 
     steps: z.object({
       profileStarted: z.boolean(),

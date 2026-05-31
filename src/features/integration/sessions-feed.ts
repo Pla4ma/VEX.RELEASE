@@ -3,11 +3,11 @@
  * Wires completed sessions to rewards, progression, streaks, analytics, social, and challenges
  */
 
-import { eventBus } from "../../events/EventBus";
-import { addXpEnhanced } from "../progression/service-xp-core";
-import { createReward } from "../rewards/service";
-import { recordSession } from "../streaks/service";
-import * as Sentry from "@sentry/react-native";
+import { eventBus } from '../../events/EventBus';
+import { addXpEnhanced } from '../progression/service-xp-core';
+import { createReward } from '../rewards/service';
+import { recordSession } from '../streaks/service';
+import * as Sentry from '@sentry/react-native';
 
 /**
  * Initialize sessions cross-system integration
@@ -15,7 +15,7 @@ import * as Sentry from "@sentry/react-native";
  */
 export function initializeSessionsFeedIntegration(): () => void {
   const unsubscribeSessionComplete = eventBus.subscribe(
-    "sessions:completed",
+    'sessions:completed',
     async (event) => {
       if (!event || !event.userId || !event.sessionId) {
         return;
@@ -48,7 +48,7 @@ export function initializeSessionsFeedIntegration(): () => void {
           {
             userId,
             amount: calculateSessionXp(duration, qualityScore),
-            source: "SESSION_COMPLETE",
+            source: 'SESSION_COMPLETE',
             sessionId,
             metadata: {
               streakDays,
@@ -70,8 +70,8 @@ export function initializeSessionsFeedIntegration(): () => void {
 
         // 4. Track Analytics
         Sentry.addBreadcrumb({
-          category: "sessions:integration",
-          message: "Session completed cross-system processing",
+          category: 'sessions:integration',
+          message: 'Session completed cross-system processing',
           data: {
             userId,
             sessionId,
@@ -81,11 +81,11 @@ export function initializeSessionsFeedIntegration(): () => void {
             rewardsCreated: rewards.length,
             processingTime: Date.now() - startTime,
           },
-          level: "info",
+          level: 'info',
         });
       } catch (error) {
         Sentry.captureException(error, {
-          tags: { operation: "sessions:integration", sessionId },
+          tags: { operation: 'sessions:integration', sessionId },
           extra: { userId, duration, qualityScore },
         });
       }
@@ -131,9 +131,9 @@ async function createSessionRewards(
   if (durationMinutes >= 30) {
     const reward = await createReward({
       userId,
-      type: "XP",
+      type: 'XP',
       amount: Math.floor(durationMinutes * 0.5),
-      triggerType: "SESSION_COMPLETE",
+      triggerType: 'SESSION_COMPLETE',
       triggerId: userId,
     }).catch(() => null);
     if (reward) {

@@ -3,31 +3,31 @@
  * UI state types for content study feature
  */
 
-import type { ContentSourceType, ExtractionStage, InputTab } from "./enums";
-import type { StudyContent, StudyGeneration } from "./content";
-import type { SessionDifficulty } from "./enums";
+import type { ContentSourceType, ExtractionStage, InputTab } from './enums';
+import type { StudyContent, StudyGeneration } from './content';
+import type { SessionDifficulty } from './enums';
 
 export interface ValidationError {
   field: string;
   code: string;
   message: string;
-  severity: "error" | "warning" | "info";
+  severity: 'error' | 'warning' | 'info';
 }
 
 export type ErrorRecoveryAction =
-  | "retry"
-  | "refresh"
-  | "reupload"
-  | "edit_content"
-  | "contact_support"
-  | "try_again_later"
-  | "use_fallback"
-  | "go_back"
-  | "none";
+  | 'retry'
+  | 'refresh'
+  | 'reupload'
+  | 'edit_content'
+  | 'contact_support'
+  | 'try_again_later'
+  | 'use_fallback'
+  | 'go_back'
+  | 'none';
 
 export interface TextEdit {
   timestamp: number;
-  operation: "insert" | "delete" | "replace";
+  operation: 'insert' | 'delete' | 'replace';
   position: number;
   oldText?: string;
   newText?: string;

@@ -1,5 +1,5 @@
-import type { z } from "zod";
-import type { Tables, TablesInsert, TablesUpdate } from "../../types/supabase";
+import type { z } from 'zod';
+import type { Tables, TablesInsert, TablesUpdate } from '../../types/supabase';
 import {
   CompletionStatusSchema,
   CreateFocusContractRepositoryInputSchema,
@@ -8,7 +8,7 @@ import {
   FocusContractRowSchema,
   FocusContractSchema,
   ReflectionStatusSchema,
-} from "./schemas";
+} from './schemas';
 
 export type CompletionStatus = z.infer<typeof CompletionStatusSchema>;
 export type ReflectionStatus = z.infer<typeof ReflectionStatusSchema>;
@@ -21,6 +21,6 @@ export type CreateFocusContractRepositoryInput = z.infer<
   typeof CreateFocusContractRepositoryInputSchema
 >;
 export type FocusContractRow = z.infer<typeof FocusContractRowSchema>;
-export type FocusContractTableRow = Tables<"focus_contracts">;
-export type FocusContractTableInsert = TablesInsert<"focus_contracts">;
-export type FocusContractTableUpdate = TablesUpdate<"focus_contracts">;
+export type FocusContractTableRow = Tables<'focus_contracts'>;
+export type FocusContractTableInsert = TablesInsert<'focus_contracts'>;
+export type FocusContractTableUpdate = TablesUpdate<'focus_contracts'>;

@@ -4,14 +4,14 @@
  * Main service for generating personalized session recommendations.
  */
 
-import { z } from "zod";
+import { z } from 'zod';
 import {
   SessionRecommendationSchema,
   SessionRecommendationInputSchema,
   type SessionRecommendation,
   type SessionRecommendationInput,
-} from "./schemas";
-import { getPriorityRecommendation } from "./recommendation-engine";
+} from './schemas';
+import { getPriorityRecommendation } from './recommendation-engine';
 
 // Re-export types for consumers
 export type { SessionRecommendation, SessionRecommendationInput };
@@ -28,13 +28,13 @@ export function generateSessionRecommendation(
   if (parsed.hasActiveSession) {
     return SessionRecommendationSchema.parse({
       duration: 25,
-      mode: "FOCUS",
-      reason: "You already have an active session",
+      mode: 'FOCUS',
+      reason: 'You already have an active session',
       fallback: true,
       inputs: parsed,
       confidence: 1.0,
       isBlocked: true,
-      blockReason: "Active session in progress",
+      blockReason: 'Active session in progress',
     });
   }
 
@@ -64,8 +64,8 @@ export function getFallbackRecommendation(
 ): SessionRecommendation {
   return SessionRecommendationSchema.parse({
     duration: 25,
-    mode: "FOCUS",
-    reason: "Default session: A reliable 25-minute focus block",
+    mode: 'FOCUS',
+    reason: 'Default session: A reliable 25-minute focus block',
     fallback: true,
     inputs: input,
     confidence: 0.6,

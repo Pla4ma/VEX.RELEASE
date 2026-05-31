@@ -1,8 +1,8 @@
-import type { TierQuotaConfig, UserTier } from "./ai-quota-types";
+import type { TierQuotaConfig, UserTier } from './ai-quota-types';
 
 export const DEFAULT_QUOTA_STRATEGIES: Record<UserTier, TierQuotaConfig> = {
   free: {
-    tier: "free",
+    tier: 'free',
     limits: {
       coach_message: { hourly: 3, daily: 10, tokenBudget: 2000 },
       session_summary: { hourly: 2, daily: 5, tokenBudget: 8000 },
@@ -14,7 +14,7 @@ export const DEFAULT_QUOTA_STRATEGIES: Record<UserTier, TierQuotaConfig> = {
     },
   },
   paid: {
-    tier: "paid",
+    tier: 'paid',
     limits: {
       coach_message: { hourly: 15, daily: 50, tokenBudget: 10000 },
       session_summary: { hourly: 10, daily: 20, tokenBudget: 40000 },
@@ -26,7 +26,7 @@ export const DEFAULT_QUOTA_STRATEGIES: Record<UserTier, TierQuotaConfig> = {
     },
   },
   internal: {
-    tier: "internal",
+    tier: 'internal',
     limits: {
       coach_message: { hourly: 50, daily: 200, tokenBudget: 50000 },
       session_summary: { hourly: 30, daily: 100, tokenBudget: 200000 },
@@ -40,13 +40,13 @@ export const DEFAULT_QUOTA_STRATEGIES: Record<UserTier, TierQuotaConfig> = {
 };
 
 export const CATEGORY_FEATURE_STAGES: Record<string, string> = {
-  coach_message: "general",
-  session_summary: "general",
-  comeback_prompt: "general",
-  streak_nudge: "general",
-  weekly_reflection: "early_access",
-  content_study_generation: "preview",
-  quiz_generation: "preview",
+  coach_message: 'general',
+  session_summary: 'general',
+  comeback_prompt: 'general',
+  streak_nudge: 'general',
+  weekly_reflection: 'early_access',
+  content_study_generation: 'preview',
+  quiz_generation: 'preview',
 };
 
 export const HOURLY_WINDOW_MS = 60 * 60 * 1000;

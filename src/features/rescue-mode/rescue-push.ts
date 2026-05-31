@@ -3,7 +3,7 @@ import {
   type RescueCompletionMemory,
   type RescueOutcome,
   type RescuePlan,
-} from "./schemas";
+} from './schemas';
 
 export function buildRescueCompletionMemory(
   plan: RescuePlan,
@@ -11,18 +11,18 @@ export function buildRescueCompletionMemory(
 ): RescueCompletionMemory {
   const minutes = Math.round(plan.durationSeconds / 60);
   const result =
-    outcome === "completed"
-      ? "successfully"
-      : outcome === "partial"
-        ? "partially"
-        : "with a pause";
+    outcome === 'completed'
+      ? 'successfully'
+      : outcome === 'partial'
+        ? 'partially'
+        : 'with a pause';
 
   return RescueCompletionMemorySchema.parse({
     id: `${plan.id}:memory`,
-    source: "rescue_completion",
+    source: 'rescue_completion',
     text: `User completed a ${minutes}-minute rescue block ${result} for ${plan.reason}. Lane: ${plan.lane}.`,
     confidence:
-      outcome === "completed" ? 0.8 : outcome === "partial" ? 0.6 : 0.4,
+      outcome === 'completed' ? 0.8 : outcome === 'partial' ? 0.6 : 0.4,
   });
 }
 
@@ -36,11 +36,11 @@ export interface RescuePushInput {
 }
 
 export function shouldSendRescuePush(input: RescuePushInput): boolean {
-  if (!input.eligibility.eligible) return false;
-  if (input.userMuted) return false;
-  if (input.quietHoursActive) return false;
-  if (input.budgetRemaining <= 0) return false;
-  if (input.sentToday >= input.maxDaily) return false;
+  if (!input.eligibility.eligible) {return false;}
+  if (input.userMuted) {return false;}
+  if (input.quietHoursActive) {return false;}
+  if (input.budgetRemaining <= 0) {return false;}
+  if (input.sentToday >= input.maxDaily) {return false;}
   return true;
 }
 

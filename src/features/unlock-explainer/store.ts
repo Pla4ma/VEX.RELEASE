@@ -1,7 +1,7 @@
-import { create } from "zustand";
-import { persist, createJSONStorage } from "zustand/middleware";
+import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
 
-import { getMMKVStorageAdapter } from "../../persistence/MMKVStorageAdapter";
+import { getMMKVStorageAdapter } from '../../persistence/MMKVStorageAdapter';
 
 export interface UnlockExplainerState {
   /**
@@ -62,7 +62,7 @@ export const useUnlockExplainerStore = create<UnlockExplainerStore>()(
       },
     }),
     {
-      name: "unlock-explainer-store",
+      name: 'unlock-explainer-store',
       storage: createJSONStorage(() => mmkvStorage),
       partialize: (state) => ({ hiddenFeatureKeys: state.hiddenFeatureKeys }),
     },

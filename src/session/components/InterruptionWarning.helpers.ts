@@ -1,6 +1,6 @@
-import { launchColors } from "@theme/tokens/launch-colors";
+import { launchColors } from '@theme/tokens/launch-colors';
 
-export type Severity = "MINOR" | "MODERATE" | "MAJOR" | "CRITICAL";
+export type Severity = 'MINOR' | 'MODERATE' | 'MAJOR' | 'CRITICAL';
 
 export interface InterruptionWarningProps {
   isVisible: boolean;
@@ -15,13 +15,13 @@ export interface InterruptionWarningProps {
 
 export function getSeverityColor(severity: Severity): string {
   switch (severity) {
-    case "CRITICAL":
+    case 'CRITICAL':
       return launchColors.hex_f44336;
-    case "MAJOR":
+    case 'MAJOR':
       return launchColors.hex_ff6b35;
-    case "MODERATE":
+    case 'MODERATE':
       return launchColors.hex_ffa500;
-    case "MINOR":
+    case 'MINOR':
       return launchColors.hex_ffc107;
     default:
       return launchColors.hex_9e9e9e;
@@ -30,21 +30,21 @@ export function getSeverityColor(severity: Severity): string {
 
 export function getSeverityMessage(severity: Severity): string {
   switch (severity) {
-    case "CRITICAL":
-      return "Resume now to keep this session intact.";
-    case "MAJOR":
-      return "Big pause. You can still return cleanly.";
-    case "MODERATE":
-      return "Take a breath, then come back.";
-    case "MINOR":
-      return "Small pause. Keep the thread.";
+    case 'CRITICAL':
+      return 'Resume now to keep this session intact.';
+    case 'MAJOR':
+      return 'Big pause. You can still return cleanly.';
+    case 'MODERATE':
+      return 'Take a breath, then come back.';
+    case 'MINOR':
+      return 'Small pause. Keep the thread.';
     default:
-      return "Focus paused.";
+      return 'Focus paused.';
   }
 }
 
 export function formatTime(seconds: number): string {
   const mins = Math.floor(seconds / 60);
   const secs = seconds % 60;
-  return `${mins}:${secs.toString().padStart(2, "0")}`;
+  return `${mins}:${secs.toString().padStart(2, '0')}`;
 }

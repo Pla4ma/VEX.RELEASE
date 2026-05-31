@@ -3,7 +3,7 @@
  * Ensures proper mobile UX: keyboard handling, safe areas, touch targets
  */
 
-import React from "react";
+import React from 'react';
 import {
   View,
   KeyboardAvoidingView,
@@ -11,10 +11,10 @@ import {
   ScrollView,
   Dimensions,
   StatusBar,
-} from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { createSheet } from "@/shared/ui/create-sheet";
-import { launchColors } from "@theme/tokens/launch-colors";
+} from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
 
 interface MobileOptimizedContainerProps {
   children: React.ReactNode;
@@ -26,7 +26,7 @@ interface MobileOptimizedContainerProps {
   backgroundColor?: string;
 }
 
-const { height, width } = Dimensions.get("window");
+const { height, width } = Dimensions.get('window');
 const isSmallScreen = height < 700;
 const isTablet = width > 768;
 
@@ -78,7 +78,7 @@ export const MobileOptimizedContainer: React.FC<
     content
   );
 
-  if (keyboardAvoiding && Platform.OS === "ios") {
+  if (keyboardAvoiding && Platform.OS === 'ios') {
     return (
       <>
         <StatusBar barStyle="light-content" />
@@ -104,7 +104,7 @@ export const MobileOptimizedContainer: React.FC<
 const styles = createSheet({
   container: {
     flex: 1,
-    minHeight: isSmallScreen ? "auto" : "100%",
+    minHeight: isSmallScreen ? 'auto' : '100%',
   },
   scrollContent: {
     flexGrow: 1,
@@ -134,8 +134,8 @@ export const TouchTarget: React.FC<TouchTargetProps> = ({
       style={{
         minWidth: minSize,
         minHeight: minSize,
-        justifyContent: "center",
-        alignItems: "center",
+        justifyContent: 'center',
+        alignItems: 'center',
       }}
     >
       {children}
@@ -179,8 +179,8 @@ export const MobileGrid: React.FC<MobileGridProps> = ({
   return (
     <View
       style={{
-        flexDirection: "row",
-        flexWrap: "wrap",
+        flexDirection: 'row',
+        flexWrap: 'wrap',
         gap,
         marginHorizontal: -gap / 2,
       }}

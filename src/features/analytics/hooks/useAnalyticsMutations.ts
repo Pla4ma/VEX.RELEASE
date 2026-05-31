@@ -1,13 +1,13 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { z } from "zod";
-import * as service from "../service";
-import * as repository from "../repository";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { z } from 'zod';
+import * as service from '../service';
+import * as repository from '../repository';
 import {
   CreateExportJobInputSchema,
   UpdateDashboardWidgetInputSchema,
   type TimeRange,
-} from "../schemas";
-import { analyticsKeys } from "./analyticsKeys";
+} from '../schemas';
+import { analyticsKeys } from './analyticsKeys';
 
 export function useMarkInsightAsRead(userId: string) {
   const queryClient = useQueryClient();
@@ -39,12 +39,12 @@ export function useCreateExportJob(userId: string) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (
-      input: Omit<z.infer<typeof CreateExportJobInputSchema>, "userId">,
+      input: Omit<z.infer<typeof CreateExportJobInputSchema>, 'userId'>,
     ) => {
       const validated = CreateExportJobInputSchema.parse({ ...input, userId });
       return service.exportAnalyticsData(
         userId,
-        validated.format as "json" | "csv",
+        validated.format as 'json' | 'csv',
         validated.dateRange,
       );
     },
@@ -81,7 +81,7 @@ export function useGenerateInsights(userId: string) {
         queryKey: analyticsKeys.insights(userId),
       });
       queryClient.invalidateQueries({
-        queryKey: analyticsKeys.summary(userId, "last_30_days"),
+        queryKey: analyticsKeys.summary(userId, 'last_30_days'),
       });
     },
   });

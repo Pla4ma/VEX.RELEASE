@@ -1,4 +1,4 @@
-import * as repository from "./repository";
+import * as repository from './repository';
 import {
   GenerateMessageInputSchema,
   MarkMessageActionInputSchema,
@@ -6,18 +6,18 @@ import {
   type CoachMessageTemplate,
   type GenerateMessageInput,
   type MarkMessageActionInput,
-} from "./schemas";
-import { getOrCreateCoachState } from "./persona-manager";
-import { validateMessageQuality } from "./message-quality-gate";
+} from './schemas';
+import { getOrCreateCoachState } from './persona-manager';
+import { validateMessageQuality } from './message-quality-gate';
 import {
   generateAIBackedMessage,
   generateQualityFallback,
-} from "./message-ai-backend";
-import { getDefaultTemplate } from "./default-message-templates";
-export { generateMemoryAwareMessage } from "./memory-message-templates";
+} from './message-ai-backend';
+import { getDefaultTemplate } from './default-message-templates';
+export { generateMemoryAwareMessage } from './memory-message-templates';
 
-export { evaluateInterventions } from "./intervention-evaluator";
-export { generatePerformanceSummary } from "./performance-summary";
+export { evaluateInterventions } from './intervention-evaluator';
+export { generatePerformanceSummary } from './performance-summary';
 
 export async function generateMessage(
   input: GenerateMessageInput,
@@ -36,7 +36,7 @@ export async function generateMessage(
 
   if (aiContent) {
     const qualityAnalysis = validateMessageQuality(
-      "ai-msg",
+      'ai-msg',
       aiContent,
       validated.category,
     );
@@ -59,7 +59,7 @@ export async function generateMessage(
   if (bestTemplate) {
     const content = selectVariation(bestTemplate);
     const templateQualityAnalysis = validateMessageQuality(
-      "template-msg",
+      'template-msg',
       content,
       validated.category,
     );
@@ -86,7 +86,7 @@ export async function generateMessage(
     return null;
   }
   const defaultQualityAnalysis = validateMessageQuality(
-    "default-msg",
+    'default-msg',
     defaultContent,
     validated.category,
   );
@@ -123,17 +123,17 @@ export function checkConditions(
       return false;
     }
     switch (condition.operator) {
-      case "eq":
+      case 'eq':
         return contextValue === condition.value;
-      case "gt":
+      case 'gt':
         return Number(contextValue) > Number(condition.value);
-      case "lt":
+      case 'lt':
         return Number(contextValue) < Number(condition.value);
-      case "gte":
+      case 'gte':
         return Number(contextValue) >= Number(condition.value);
-      case "lte":
+      case 'lte':
         return Number(contextValue) <= Number(condition.value);
-      case "in":
+      case 'in':
         return (
           Array.isArray(condition.value) &&
           condition.value.includes(contextValue)
@@ -165,7 +165,7 @@ function createMessageFromTemplate(
     content,
     deliveryMethod: input.preferredDelivery,
     priority,
-    status: "DRAFT",
+    status: 'DRAFT',
     createdAt: Date.now(),
     scheduledFor: null,
     deliveredAt: null,

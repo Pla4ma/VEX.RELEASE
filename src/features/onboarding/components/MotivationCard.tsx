@@ -1,14 +1,14 @@
-import React from "react";
-import { Pressable } from "react-native";
+import React from 'react';
+import { Pressable } from 'react-native';
 import Animated, {
   FadeInUp,
   useAnimatedStyle,
   withSpring,
-} from "react-native-reanimated";
+} from 'react-native-reanimated';
 
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import type { MotivationProfileType } from "../schemas";
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import type { MotivationProfileType } from '../schemas';
 
 export interface MotivationOption {
   description: string;
@@ -19,34 +19,34 @@ export interface MotivationOption {
 
 export const MOTIVATION_OPTIONS: MotivationOption[] = [
   {
-    key: "calm",
-    label: "Calm",
-    shortLabel: "Calm",
-    description: "Gentle focus, low pressure.",
+    key: 'calm',
+    label: 'Calm',
+    shortLabel: 'Calm',
+    description: 'Gentle focus, low pressure.',
   },
   {
-    key: "study_focused",
-    label: "Study-focused",
-    shortLabel: "Study",
-    description: "Structure and learning tools.",
+    key: 'study_focused',
+    label: 'Study-focused',
+    shortLabel: 'Study',
+    description: 'Structure and learning tools.',
   },
   {
-    key: "game_like",
-    label: "Game-like",
-    shortLabel: "Game",
-    description: "Progress feels visual and alive.",
+    key: 'game_like',
+    label: 'Game-like',
+    shortLabel: 'Game',
+    description: 'Progress feels visual and alive.',
   },
   {
-    key: "coach_led",
-    label: "Coach-led",
-    shortLabel: "Coach",
-    description: "Direct guidance and a clear next move.",
+    key: 'coach_led',
+    label: 'Coach-led',
+    shortLabel: 'Coach',
+    description: 'Direct guidance and a clear next move.',
   },
   {
-    key: "intense",
-    label: "Intense",
-    shortLabel: "Drive",
-    description: "High drive and fewer soft edges.",
+    key: 'intense',
+    label: 'Intense',
+    shortLabel: 'Drive',
+    description: 'High drive and fewer soft edges.',
   },
 ];
 
@@ -82,7 +82,7 @@ export function MotivationCard({
   return (
     <Animated.View
       entering={FadeInUp.duration(400).delay(100 + index * 60)}
-      style={{ width: "48%" }}
+      style={{ width: '48%' }}
     >
       <Pressable
         onPress={onPress}
@@ -93,7 +93,7 @@ export function MotivationCard({
         <Animated.View
           style={[
             {
-              alignItems: "center",
+              alignItems: 'center',
               borderRadius: theme.borderRadius.lg,
               borderWidth: 2,
               gap: theme.spacing[1],
@@ -105,20 +105,20 @@ export function MotivationCard({
         >
           <Text
             variant="label"
-            color={isSelected ? "text.inverse" : "text.secondary"}
+            color={isSelected ? 'text.inverse' : 'text.secondary'}
           >
             {option.shortLabel}
           </Text>
           <Text
             variant="h4"
-            color={isSelected ? "text.inverse" : "text.primary"}
+            color={isSelected ? 'text.inverse' : 'text.primary'}
             fontWeight="600"
           >
             {option.label}
           </Text>
           <Text
             variant="caption"
-            color={isSelected ? "text.inverse" : "text.secondary"}
+            color={isSelected ? 'text.inverse' : 'text.secondary'}
             textAlign="center"
             numberOfLines={2}
           >

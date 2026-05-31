@@ -1,10 +1,10 @@
-import { getSupabaseClient, handleSupabaseError } from "../config/supabase";
+import { getSupabaseClient, handleSupabaseError } from '../config/supabase';
 
-import type { User } from "../types/models";
-import { capture } from "../shared/analytics/analytics-service";
-import { AuthEvents } from "../shared/analytics/analytics-events";
-import { mapSupabaseUser } from "./supabase-user-mapper";
-import { buildUserWithOnboarding } from "./supabase-auth-helpers";
+import type { User } from '../types/models';
+import { capture } from '../shared/analytics/analytics-service';
+import { AuthEvents } from '../shared/analytics/analytics-events';
+import { mapSupabaseUser } from './supabase-user-mapper';
+import { buildUserWithOnboarding } from './supabase-auth-helpers';
 
 export async function signUpWithEmail(
   email: string,
@@ -31,7 +31,7 @@ export async function signUpWithEmail(
     });
 
     if (error) {
-      return { user: null, error: new Error("Invalid email or password.") };
+      return { user: null, error: new Error('Invalid email or password.') };
     }
 
     if (data.user) {
@@ -39,7 +39,7 @@ export async function signUpWithEmail(
       const user = await buildUserWithOnboarding(mapped);
       capture(AuthEvents.USER_SIGNED_UP, {
         user_id: user.id,
-        method: "email",
+        method: 'email',
         is_new_user: true,
       });
       return { user, error: null };
@@ -66,7 +66,7 @@ export async function signInWithEmail(
     });
 
     if (error) {
-      return { user: null, error: new Error("Invalid email or password.") };
+      return { user: null, error: new Error('Invalid email or password.') };
     }
 
     if (data.user) {
@@ -86,7 +86,7 @@ export async function resetPassword(
   try {
     const supabase = getSupabaseClient();
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: "vex://reset-password",
+      redirectTo: 'vex://reset-password',
     });
 
     if (error) {
@@ -109,11 +109,11 @@ export async function updatePassword(
     const { error } = await supabase.auth.updateUser({ password: newPassword });
 
     if (error) {
-      return { error: new Error("Password update failed. Please try again.") };
+      return { error: new Error('Password update failed. Please try again.') };
     }
 
     return { error: null };
   } catch (err) {
-    return { error: new Error("Password update failed. Please try again.") };
+    return { error: new Error('Password update failed. Please try again.') };
   }
 }

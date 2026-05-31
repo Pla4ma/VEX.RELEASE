@@ -1,12 +1,12 @@
-import { useCallback } from "react";
-import { useClaimChallengeReward } from "../../../features/challenges/hooks";
-import { useFreezeStreak } from "../../../features/streaks/hooks";
-import { useToast } from "../../../shared/ui/components/Toast";
-import type { HomeController } from "./home-controller-types";
+import { useCallback } from 'react';
+import { useClaimChallengeReward } from '../../../features/challenges/hooks';
+import { useFreezeStreak } from '../../../features/streaks/hooks';
+import { useToast } from '../../../shared/ui/components/Toast';
+import type { HomeController } from './home-controller-types';
 
 export function useHomeDataHandlers(
   controller: HomeController,
-  showToast: ReturnType<typeof useToast>["show"],
+  showToast: ReturnType<typeof useToast>['show'],
 ) {
   const claimRewardMutation = useClaimChallengeReward();
   const freezeStreakMutation = useFreezeStreak();
@@ -15,9 +15,9 @@ export function useHomeDataHandlers(
     (challengeId: string) => {
       if (!controller.userId) {
         showToast({
-          type: "error",
-          title: "Sign in required",
-          message: "You need an active profile to claim challenge rewards.",
+          type: 'error',
+          title: 'Sign in required',
+          message: 'You need an active profile to claim challenge rewards.',
         });
         return;
       }
@@ -29,22 +29,22 @@ export function useHomeDataHandlers(
           }) => {
             const rewardText = result.rewards
               .map((reward) => `+${reward.amount} ${reward.type}`)
-              .join(", ");
+              .join(', ');
             showToast({
-              type: "success",
+              type: 'success',
               title: `Reward claimed! ${rewardText}`,
             });
           },
           onError: (error: unknown) => {
             showToast({
-              type: "error",
-              title: "Reward claim failed",
+              type: 'error',
+              title: 'Reward claim failed',
               message:
                 error instanceof Error
                   ? error.message
-                  : "Try again when your connection is stable.",
+                  : 'Try again when your connection is stable.',
               action: {
-                label: "Retry",
+                label: 'Retry',
                 onPress: () => handleClaimReward(challengeId),
               },
             });
@@ -56,23 +56,23 @@ export function useHomeDataHandlers(
   );
 
   const handleFreezeStreak = useCallback(() => {
-    if (!controller.userId) return;
+    if (!controller.userId) {return;}
     freezeStreakMutation.mutate(controller.userId, {
       onSuccess: () => {
         showToast({
-          type: "success",
-          title: "Streak protected",
-          message: "Your streak freeze is active for today.",
+          type: 'success',
+          title: 'Streak protected',
+          message: 'Your streak freeze is active for today.',
         });
       },
       onError: (error: unknown) => {
         showToast({
-          type: "error",
-          title: "Could not freeze streak",
+          type: 'error',
+          title: 'Could not freeze streak',
           message:
             error instanceof Error
               ? error.message
-              : "Try again before your streak expires.",
+              : 'Try again before your streak expires.',
         });
       },
     });

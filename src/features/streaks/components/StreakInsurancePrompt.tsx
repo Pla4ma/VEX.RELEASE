@@ -7,12 +7,12 @@
  * @phase 6 - Monetization Depth
  */
 
-import React from "react";
-import { View, Text, Pressable } from "react-native";
-import Animated, { FadeInUp, FadeOut } from "react-native-reanimated";
-import { useTheme } from "../../../theme";
-import { createSheet } from "@/shared/ui/create-sheet";
-import { launchColors } from "@theme/tokens/launch-colors";
+import React from 'react';
+import { View, Text, Pressable } from 'react-native';
+import Animated, { FadeInUp, FadeOut } from 'react-native-reanimated';
+import { useTheme } from '../../../theme';
+import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
 
 interface StreakInsurancePromptProps {
   streakDays: number;
@@ -74,7 +74,7 @@ export const StreakInsurancePrompt: React.FC<StreakInsurancePromptProps> = ({
             accessibilityHint={`Costs ${insuranceCost} coins`}
           >
             <Text style={styles.buttonText}>
-              {canAfford ? "Protect" : "Too expensive"}
+              {canAfford ? 'Protect' : 'Too expensive'}
             </Text>
           </Pressable>
 
@@ -119,11 +119,11 @@ const styles = createSheet({
     borderRadius: 12,
     borderWidth: 1,
     borderColor: launchColors.hex_e94560,
-    overflow: "hidden",
+    overflow: 'hidden',
   },
   content: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     padding: 16,
     gap: 12,
   },
@@ -132,8 +132,8 @@ const styles = createSheet({
     height: 48,
     borderRadius: 24,
     backgroundColor: launchColors.rgb_233_69_96_0_2,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   icon: {
     fontSize: 24,
@@ -143,7 +143,7 @@ const styles = createSheet({
   },
   title: {
     fontSize: 16,
-    fontWeight: "700",
+    fontWeight: '700',
     marginBottom: 2,
   },
   subtitle: {
@@ -151,7 +151,7 @@ const styles = createSheet({
   },
   actions: {
     gap: 8,
-    alignItems: "flex-end",
+    alignItems: 'flex-end',
   },
   purchaseButton: {
     paddingHorizontal: 16,
@@ -161,7 +161,7 @@ const styles = createSheet({
   buttonText: {
     color: launchColors.hex_fff,
     fontSize: 14,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   dismissButton: {
     paddingHorizontal: 8,
@@ -178,7 +178,7 @@ const styles = createSheet({
   warningText: {
     color: launchColors.hex_e94560,
     fontSize: 12,
-    textAlign: "center",
+    textAlign: 'center',
   },
 });
 

@@ -1,19 +1,19 @@
-import { useState, useCallback, useEffect, useRef } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import * as Sentry from "@sentry/react-native";
-import { useAuthStore } from "../../../store";
-import { useAnalytics } from "../../../analytics/hooks/useAnalytics";
-import { eventBus } from "../../../events";
+import { useState, useCallback, useEffect, useRef } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import * as Sentry from '@sentry/react-native';
+import { useAuthStore } from '../../../store';
+import { useAnalytics } from '../../../analytics/hooks/useAnalytics';
+import { eventBus } from '../../../events';
 import {
   calculateStreakRisk,
   checkAndSendRiskNotifications,
-} from "../streak-risk-monitor";
+} from '../streak-risk-monitor';
 import {
   fetchRiskStatusEnhanced,
   saveRiskStatusEnhanced,
   fetchStreakEnhanced,
-} from "../repository/enhanced";
-import { StreakRiskStatusSchema, type StreakRiskStatus } from "../schemas-risk-repair";
+} from '../repository/enhanced';
+import { StreakRiskStatusSchema, type StreakRiskStatus } from '../schemas-risk-repair';
 import {
   QUERY_KEYS,
   RISK_CHECK_INTERVAL,
@@ -22,7 +22,7 @@ import {
   getFlameColor,
   getUrgencyLabel,
   computeRiskStatus,
-} from "./useStreakRiskConfig";
+} from './useStreakRiskConfig';
 
 export function useStreakRisk(): UseStreakRiskReturn {
   const userId = useAuthStore((state) => state.user?.id);
@@ -36,7 +36,7 @@ export function useStreakRisk(): UseStreakRiskReturn {
     error: streakError,
     refetch: refetchStreak,
   } = useQuery({
-    queryKey: QUERY_KEYS.streak(userId || ""),
+    queryKey: QUERY_KEYS.streak(userId || ''),
     queryFn: async () => {
       if (!userId) {
         return null;
@@ -57,7 +57,7 @@ export function useStreakRisk(): UseStreakRiskReturn {
     error: riskError,
     refetch: refetchRisk,
   } = useQuery({
-    queryKey: QUERY_KEYS.riskStatus(userId || ""),
+    queryKey: QUERY_KEYS.riskStatus(userId || ''),
     queryFn: async () => {
       if (!userId) {
         return null;
@@ -99,7 +99,7 @@ export function useStreakRisk(): UseStreakRiskReturn {
           throw saveResult.error;
         }
         if (currentRisk.isAtRisk) {
-          track("streak_risk_detected", {
+          track('streak_risk_detected', {
             riskLevel: currentRisk.riskLevel,
             hoursRemaining: currentRisk.hoursRemaining,
             streakDays: currentRisk.currentDays,
@@ -118,9 +118,9 @@ export function useStreakRisk(): UseStreakRiskReturn {
     onError: (error) => {
       Sentry.captureException(error, {
         tags: {
-          feature: "streaks",
-          hook: "useStreakRisk",
-          operation: "checkRisk",
+          feature: 'streaks',
+          hook: 'useStreakRisk',
+          operation: 'checkRisk',
         },
       });
     },
@@ -149,11 +149,11 @@ export function useStreakRisk(): UseStreakRiskReturn {
         queryKey: QUERY_KEYS.riskStatus(userId),
       });
     };
-    eventBus.subscribe("streak:updated", handleStreakUpdated);
-    eventBus.subscribe("streak:session_completed", handleStreakUpdated);
+    eventBus.subscribe('streak:updated', handleStreakUpdated);
+    eventBus.subscribe('streak:session_completed', handleStreakUpdated);
     return () => {
-      eventBus.unsubscribe("streak:updated", handleStreakUpdated);
-      eventBus.unsubscribe("streak:session_completed", handleStreakUpdated);
+      eventBus.unsubscribe('streak:updated', handleStreakUpdated);
+      eventBus.unsubscribe('streak:session_completed', handleStreakUpdated);
     };
   }, [userId, queryClient]);
   const checkRisk = useCallback(async () => {
@@ -165,23 +165,23 @@ export function useStreakRisk(): UseStreakRiskReturn {
   }, [refetchStreak, refetchRisk, checkRisk]);
   const retry = useCallback(() => {
     queryClient.invalidateQueries({
-      queryKey: QUERY_KEYS.streak(userId || ""),
+      queryKey: QUERY_KEYS.streak(userId || ''),
     });
     queryClient.invalidateQueries({
-      queryKey: QUERY_KEYS.riskStatus(userId || ""),
+      queryKey: QUERY_KEYS.riskStatus(userId || ''),
     });
   }, [queryClient, userId]);
   const isLoading = isStreakLoading || isRiskLoading;
   const error = (streakError || riskError || mutationError) as Error | null;
   const isRefreshing = isMutationPending;
   const flameColor = getFlameColor(riskStatus?.flameHealthPercent ?? 100);
-  const urgencyLabel = getUrgencyLabel(riskStatus?.riskLevel || "NONE");
-  const shouldShowWarning = riskStatus?.riskLevel === "MEDIUM" || riskStatus?.riskLevel === "HIGH";
-  const shouldShowCritical = riskStatus?.riskLevel === "CRITICAL";
+  const urgencyLabel = getUrgencyLabel(riskStatus?.riskLevel || 'NONE');
+  const shouldShowWarning = riskStatus?.riskLevel === 'MEDIUM' || riskStatus?.riskLevel === 'HIGH';
+  const shouldShowCritical = riskStatus?.riskLevel === 'CRITICAL';
   const notificationSent = (riskStatus?.notificationsSent.length || 0) > 0;
   return {
     riskStatus,
-    riskLevel: riskStatus?.riskLevel || "NONE",
+    riskLevel: riskStatus?.riskLevel || 'NONE',
     hoursRemaining: riskStatus?.hoursRemaining ?? 24,
     minutesRemaining: riskStatus?.minutesRemaining ?? 1440,
     flameHealthPercent: riskStatus?.flameHealthPercent ?? 100,

@@ -1,9 +1,9 @@
-import { useState, useEffect, useCallback, useRef } from "react";
-import { getSessionService } from "../SessionService";
-import { eventBus } from "../../events";
-import { createDebugger } from "../../utils/debug";
+import { useState, useEffect, useCallback, useRef } from 'react';
+import { getSessionService } from '../SessionService';
+import { eventBus } from '../../events';
+import { createDebugger } from '../../utils/debug';
 
-const debug = createDebugger("session");
+const debug = createDebugger('session');
 
 export function useSessionStats(userId: string) {
   const serviceRef = useRef(getSessionService());
@@ -26,7 +26,7 @@ export function useSessionStats(userId: string) {
       const sessionStats = await service.getSessionStats();
       setStats(sessionStats);
     } catch (err) {
-      debug.error("Failed to load session stats:", err as Error);
+      debug.error('Failed to load session stats:', err as Error);
     } finally {
       setIsLoading(false);
     }
@@ -37,7 +37,7 @@ export function useSessionStats(userId: string) {
   }, [loadStats]);
 
   useEffect(() => {
-    const unsubscribe = eventBus.subscribe("session:completed", () => {
+    const unsubscribe = eventBus.subscribe('session:completed', () => {
       loadStats();
     });
     return () => unsubscribe();

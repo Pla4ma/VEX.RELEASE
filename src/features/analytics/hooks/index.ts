@@ -1,4 +1,4 @@
-export { analyticsKeys } from "./analyticsKeys";
+export { analyticsKeys } from './analyticsKeys';
 export {
   useAnalyticsData,
   useTrendAnalysis,
@@ -12,7 +12,7 @@ export {
   useSessionHeatmapData,
   useComparativeStats,
   useAnalyticsDegradedState,
-} from "./useAnalyticsQueries";
+} from './useAnalyticsQueries';
 export {
   useMarkInsightAsRead,
   useUpdateDashboardWidget,
@@ -21,4 +21,4 @@ export {
   useUpdateAnalyticsPreferences,
   useGenerateInsights,
   useDetectPatterns,
-} from "./useAnalyticsMutations";
+} from './useAnalyticsMutations';

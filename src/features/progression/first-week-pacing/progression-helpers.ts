@@ -1,5 +1,5 @@
-import type { FirstWeekProgress, FirstWeekSession, SessionUnlock } from "./schemas";
-import { FIRST_WEEK_CONFIG } from "./config";
+import type { FirstWeekProgress, FirstWeekSession, SessionUnlock } from './schemas';
+import { FIRST_WEEK_CONFIG } from './config';
 
 /**
  * Calculate level progress based on total XP
@@ -44,7 +44,7 @@ export function getSessionXpReward(session: FirstWeekSession): number {
  * Get companion reaction for a given session
  */
 export function getCompanionReaction(session: FirstWeekSession): string {
-  return FIRST_WEEK_CONFIG.companionReactions[session] || "";
+  return FIRST_WEEK_CONFIG.companionReactions[session] || '';
 }
 
 /**
@@ -58,7 +58,7 @@ export function getTutorialSteps(session: FirstWeekSession): string[] {
  * Check if user is in first week
  */
 export function isInFirstWeek(progress: FirstWeekProgress): boolean {
-  return progress.currentSession !== "COMPLETED";
+  return progress.currentSession !== 'COMPLETED';
 }
 
 /**

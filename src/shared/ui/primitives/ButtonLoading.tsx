@@ -1,7 +1,7 @@
-import React from "react";
-import { View, Text, ActivityIndicator } from "react-native";
-import { useTheme } from "../../../theme";
-import { overlayStyles as styles } from "./loadingOverlay.styles";
+import React from 'react';
+import { View, Text, ActivityIndicator } from 'react-native';
+import { useTheme } from '../../../theme';
+import { overlayStyles as styles } from './loadingOverlay.styles';
 
 interface ButtonLoadingProps {
   loading: boolean;

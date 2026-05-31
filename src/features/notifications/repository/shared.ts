@@ -5,12 +5,12 @@ export class RepositoryError extends Error {
   ) {
     super(
       `Repository error in ${operation}: ${
-        originalError instanceof Error ? originalError.message : "Unknown error"
+        originalError instanceof Error ? originalError.message : 'Unknown error'
       }`,
     );
-    this.name = "RepositoryError";
+    this.name = 'RepositoryError';
   }
 }
 
 /** Re-export singleton from canonical source to avoid stale module-level references */
-export { supabase } from "../../../config/supabase";
+export { supabase } from '../../../config/supabase';

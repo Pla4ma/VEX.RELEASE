@@ -1,8 +1,8 @@
-import { TimerEngine } from "../TimerEngine";
+import { TimerEngine } from '../TimerEngine';
 
 jest.useFakeTimers();
 
-const mockSessionId = "test-session-123";
+const mockSessionId = 'test-session-123';
 const mockCallbacks = {
   onTick: jest.fn(),
   onComplete: jest.fn(),

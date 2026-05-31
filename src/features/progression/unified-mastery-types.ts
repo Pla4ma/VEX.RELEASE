@@ -1,5 +1,5 @@
-import { z } from "zod";
-import { MasteryTrackSchema } from "./mastery-types";
+import { z } from 'zod';
+import { MasteryTrackSchema } from './mastery-types';
 
 export type MasteryTrack = z.infer<typeof MasteryTrackSchema>;
 
@@ -23,12 +23,12 @@ export interface UnifiedMasteryState {
 }
 
 export type MasteryRank =
-  | "APPRENTICE"
-  | "ADEPT"
-  | "EXPERT"
-  | "MASTER"
-  | "GRANDMASTER"
-  | "TRANSCENDENT";
+  | 'APPRENTICE'
+  | 'ADEPT'
+  | 'EXPERT'
+  | 'MASTER'
+  | 'GRANDMASTER'
+  | 'TRANSCENDENT';
 
 export interface SessionMasteryXp {
   track: MasteryTrack;

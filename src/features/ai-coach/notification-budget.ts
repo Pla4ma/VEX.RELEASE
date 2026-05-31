@@ -2,24 +2,24 @@ import {
   NotificationBudgetSchema,
   type NotificationBudget,
   type NotificationRequest,
-} from "./notification-budget-schema";
+} from './notification-budget-schema';
 import {
   checkPriorityRules,
   getNextActiveTime,
   isDuplicateNotification,
   isInQuietHours,
-} from "./notification-budget-rules";
+} from './notification-budget-rules';
 import {
   ensureUUID,
   generateUUID,
   getStoredNotificationBudget,
   storeNotificationBudget,
   todayKey,
-} from "./notification-budget-utils";
+} from './notification-budget-utils';
 
 export function maxDailyForLane(lane?: string): number {
   // Clean lane gets 1/day; all others (or undefined) get 2/day.
-  if (lane === "minimal_normal") return 1;
+  if (lane === 'minimal_normal') {return 1;}
   return 2;
 }
 
@@ -30,27 +30,27 @@ export {
   type NotificationBudget,
   type NotificationPriority,
   type NotificationRequest,
-} from "./notification-budget-schema";
+} from './notification-budget-schema';
 export {
   createMockNotificationBudget,
   createMockNotificationRequest,
   clearBudgetStore,
-} from "./notification-budget-utils";
+} from './notification-budget-utils';
 
 export async function canSendNotification(
   request: NotificationRequest,
   currentBudget: NotificationBudget,
 ): Promise<{ allowed: boolean; reason?: string; rescheduleAt?: number }> {
   if (currentBudget.optOut) {
-    return { allowed: false, reason: "User has opted out of notifications" };
+    return { allowed: false, reason: 'User has opted out of notifications' };
   }
   if (
-    request.priority === "STREAK_CRITICAL" ||
-    request.priority === "PENDING_SYNC"
+    request.priority === 'STREAK_CRITICAL' ||
+    request.priority === 'PENDING_SYNC'
   ) {
     if (request.respectDailyLimit) {
       if (currentBudget.sentCount >= currentBudget.maxDaily) {
-        return { allowed: false, reason: "Daily notification limit reached" };
+        return { allowed: false, reason: 'Daily notification limit reached' };
       }
     }
     return { allowed: true };
@@ -58,12 +58,12 @@ export async function canSendNotification(
   if (isInQuietHours(currentBudget)) {
     return {
       allowed: false,
-      reason: "Quiet hours in effect",
+      reason: 'Quiet hours in effect',
       rescheduleAt: getNextActiveTime(currentBudget),
     };
   }
   if (currentBudget.sentCount >= currentBudget.maxDaily) {
-    return { allowed: false, reason: "Daily notification limit reached" };
+    return { allowed: false, reason: 'Daily notification limit reached' };
   }
 
   const priorityCheck = checkPriorityRules(request, currentBudget);
@@ -71,7 +71,7 @@ export async function canSendNotification(
     return priorityCheck;
   }
   if (isDuplicateNotification(request, currentBudget)) {
-    return { allowed: false, reason: "Duplicate notification suppressed" };
+    return { allowed: false, reason: 'Duplicate notification suppressed' };
   }
 
   return { allowed: true };
@@ -130,7 +130,7 @@ export async function getOrCreateNotificationBudget(
     (preferences?.lane ? maxDailyForLane(preferences.lane) : undefined);
 
   if (storedBudget) {
-    if (!preferences) return storedBudget;
+    if (!preferences) {return storedBudget;}
     // Merge preferences into stored budget while preserving sent count and date
     return NotificationBudgetSchema.parse({
       ...storedBudget,
@@ -166,4 +166,4 @@ export function resetDailyBudget(
   return { ...budget, date: today, sentCount: 0, notificationsSent: [] };
 }
 
-export { sendCoachNotification, getNotificationBudgetStatus } from "./notification-budget-coach";
+export { sendCoachNotification, getNotificationBudgetStatus } from './notification-budget-coach';

@@ -2,19 +2,19 @@
  * SessionValidationFeedback — Message formatting and shared styles.
  */
 
-import { createSheet } from "@/shared/ui/create-sheet";
-import { launchColors } from "@theme/tokens/launch-colors";
+import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
 
 export function formatFieldName(field: string): string {
   return field
-    .split(".")
+    .split('.')
     .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join(" ");
+    .join(' ');
 }
 
 export const styles = createSheet({
   container: {
-    width: "100%",
+    width: '100%',
   },
   sectionIcon: {
     fontSize: 20,
@@ -31,6 +31,6 @@ export const styles = createSheet({
   },
   bullet: {
     marginRight: 8,
-    color: "inherit",
+    color: 'inherit',
   },
 });

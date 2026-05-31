@@ -1,10 +1,10 @@
-import React from "react";
+import React from 'react';
 import Animated, {
   useAnimatedStyle,
   withTiming,
-} from "react-native-reanimated";
-import { Box, Text } from "@/components/primitives";
-import type { SharedValue } from "react-native-reanimated";
+} from 'react-native-reanimated';
+import { Box, Text } from '@/components/primitives';
+import type { SharedValue } from 'react-native-reanimated';
 
 interface NearMissProgressBarProps {
   progressPercent: number;
@@ -28,7 +28,7 @@ export const NearMissProgressBar: React.FC<NearMissProgressBarProps> = ({
       height={12}
       borderRadius={6}
       bg={tertiaryBg}
-      style={{ overflow: "hidden" }}
+      style={{ overflow: 'hidden' }}
     >
       <Box
         position="absolute"
@@ -42,7 +42,7 @@ export const NearMissProgressBar: React.FC<NearMissProgressBarProps> = ({
       <Animated.View
         style={[
           {
-            height: "100%",
+            height: '100%',
             backgroundColor: errorColor,
             borderRadius: 6,
           },
@@ -53,7 +53,7 @@ export const NearMissProgressBar: React.FC<NearMissProgressBarProps> = ({
       <Animated.View
         style={[
           {
-            position: "absolute",
+            position: 'absolute',
             right: 0,
             top: -2,
             bottom: -2,

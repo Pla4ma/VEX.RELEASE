@@ -1,14 +1,14 @@
-import React from "react";
-import { View, Pressable } from "react-native";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import type { SessionStake } from "./SessionStakesBriefing.types";
+import React from 'react';
+import { View, Pressable } from 'react-native';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import type { SessionStake } from './SessionStakesBriefing.types';
 
 interface StakeCardProps {
   icon: string;
   title: string;
   subtitle: string;
-  urgency: SessionStake["urgency"];
+  urgency: SessionStake['urgency'];
   accentColor?: string;
   onPress?: () => void;
 }
@@ -24,19 +24,19 @@ export function StakeCard({
   const { theme } = useTheme();
   const getUrgencyStyles = () => {
     switch (urgency) {
-      case "critical":
+      case 'critical':
         return {
           borderColor: theme.colors.error[500],
           bgColor: `${theme.colors.error[500]}15`,
           iconBg: theme.colors.error[500],
         };
-      case "high":
+      case 'high':
         return {
           borderColor: theme.colors.warning[500],
           bgColor: `${theme.colors.warning[500]}10`,
           iconBg: theme.colors.warning[500],
         };
-      case "medium":
+      case 'medium':
         return {
           borderColor: accentColor || theme.colors.primary[500],
           bgColor: `${accentColor || theme.colors.primary[500]}10`,
@@ -56,8 +56,8 @@ export function StakeCard({
     <CardWrapper onPress={onPress}>
       <View
         style={{
-          flexDirection: "row",
-          alignItems: "center",
+          flexDirection: 'row',
+          alignItems: 'center',
           gap: theme.spacing[3],
           padding: theme.spacing[3],
           backgroundColor: styles.bgColor,
@@ -72,8 +72,8 @@ export function StakeCard({
             height: 36,
             borderRadius: theme.borderRadius.full,
             backgroundColor: styles.iconBg,
-            justifyContent: "center",
-            alignItems: "center",
+            justifyContent: 'center',
+            alignItems: 'center',
           }}
         >
           <Text fontSize={18}>{icon}</Text>

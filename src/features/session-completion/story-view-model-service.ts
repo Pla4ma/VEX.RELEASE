@@ -1,16 +1,16 @@
-import type { SessionSummary } from "../../session/types";
-import type { CompanionMemory } from "../companion/memory-types";
-import type { CompanionPromise } from "../companion-promise/types";
-import type { FocusContract } from "../focus-contract/types";
-import { buildCompletionReflection } from "./completion-reflection-service";
-import { CompletionLedgerSchema, type CompletionLedger, type CompletionPersonalizationResult } from "./schemas";
-import { buildPostSessionNextAction } from "./service";
-import { selectHeadlineReward } from "./headline-reward.service";
-import { PostSessionStoryViewModelSchema, type PostSessionStoryViewModel } from "./story-view-model-schema";
-import { computePersonalBestProof, buildStoryBeats } from "./story-beat-builders";
+import type { SessionSummary } from '../../session/types';
+import type { CompanionMemory } from '../companion/memory-types';
+import type { CompanionPromise } from '../companion-promise/types';
+import type { FocusContract } from '../focus-contract/types';
+import { buildCompletionReflection } from './completion-reflection-service';
+import { CompletionLedgerSchema, type CompletionLedger, type CompletionPersonalizationResult } from './schemas';
+import { buildPostSessionNextAction } from './service';
+import { selectHeadlineReward } from './headline-reward.service';
+import { PostSessionStoryViewModelSchema, type PostSessionStoryViewModel } from './story-view-model-schema';
+import { computePersonalBestProof, buildStoryBeats } from './story-beat-builders';
 
 export { PostSessionStoryViewModelSchema, type PostSessionStoryViewModel };
-export { getPostSessionStoryViewModel } from "./story-view-model-fetcher";
+export { getPostSessionStoryViewModel } from './story-view-model-fetcher';
 
 export function buildPostSessionStoryViewModel(input: {
   degradedWarnings: string[];
@@ -40,7 +40,7 @@ export function buildPostSessionStoryViewModel(input: {
     sessionMode,
   };
   const reflection = buildCompletionReflection({
-    primaryGoal: sessionMode === "STUDY" ? "STUDY" : null,
+    primaryGoal: sessionMode === 'STUDY' ? 'STUDY' : null,
     progressLabel:
       ledger.focusScoreDelta >= 0
         ? `+${ledger.focusScoreDelta} Focus Score`
@@ -50,7 +50,7 @@ export function buildPostSessionStoryViewModel(input: {
   });
   const reflectionQuestion = pr?.reflectionQuestion ?? null;
   const reflectionBody =
-    input.focusContract?.completionStatus === "done"
+    input.focusContract?.completionStatus === 'done'
       ? `${input.focusContract.taskDescription} landed. ${reflection.reflection}`
       : reflection.reflection;
   const meaningBody = reflectionQuestion
@@ -87,7 +87,7 @@ export function buildPostSessionStoryViewModel(input: {
     streak: {
       currentDays: ledger.streakResult.newDays,
       previousDays: ledger.streakResult.previousDays,
-      streakSaved: ledger.streakResult.action === "saved_by_insurance",
+      streakSaved: ledger.streakResult.action === 'saved_by_insurance',
     },
     personalBest: input.personalBest,
     contract: { status: input.focusContract?.completionStatus ?? null },
@@ -102,7 +102,7 @@ export function buildPostSessionStoryViewModel(input: {
     },
   });
   const headline =
-    headlineRaw.type === "xp_earned" && ledger.xpDelta > 0
+    headlineRaw.type === 'xp_earned' && ledger.xpDelta > 0
       ? { ...headlineRaw, value: `+${ledger.xpDelta} XP` }
       : headlineRaw;
   return PostSessionStoryViewModelSchema.parse({
@@ -142,16 +142,16 @@ export function buildPostSessionStoryViewModel(input: {
       ? {
           label: nextAction.ctaLabel,
           reason: nextAction.reason,
-          route: "SessionSetup",
+          route: 'SessionSetup',
           routeParams: nextAction.routeParams,
         }
       : {
-          label: "Return home",
-          reason: "Home will hold the next safe move for you.",
-          route: "Home",
+          label: 'Return home',
+          reason: 'Home will hold the next safe move for you.',
+          route: 'Home',
           routeParams: null,
         },
-    pendingSync: ledger.offlineSyncStatus === "pending_sync",
+    pendingSync: ledger.offlineSyncStatus === 'pending_sync',
     personalBestProof,
     personalization: pr
       ? {

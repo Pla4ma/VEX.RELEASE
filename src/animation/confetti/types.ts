@@ -13,7 +13,7 @@ export interface ParticleConfig {
   rotation: number;
   velocityX: number;
   velocityY: number;
-  shape: "circle" | "square" | "triangle";
+  shape: 'circle' | 'square' | 'triangle';
   delay: number;
 }
 

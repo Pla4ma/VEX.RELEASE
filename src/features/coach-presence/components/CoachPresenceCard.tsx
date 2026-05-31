@@ -1,10 +1,10 @@
-import React from "react";
-import { Pressable, View } from "react-native";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import { getMinTouchTargetStyle } from "../../../utils/touchTarget";
-import { buttonTap } from "../../../utils/haptics";
-import type { CoachPresence } from "../schemas";
+import React from 'react';
+import { Pressable, View } from 'react-native';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import { getMinTouchTargetStyle } from '../../../utils/touchTarget';
+import { buttonTap } from '../../../utils/haptics';
+import type { CoachPresence } from '../schemas';
 
 interface CoachPresenceCardProps {
   presence: CoachPresence;
@@ -41,18 +41,18 @@ export function CoachPresenceCard({
       >
         <View
           style={{
-            alignItems: "center",
-            flexDirection: "row",
+            alignItems: 'center',
+            flexDirection: 'row',
             gap: theme.spacing[3],
           }}
         >
           <View
             style={{
-              alignItems: "center",
+              alignItems: 'center',
               backgroundColor: theme.colors.background.tertiary,
               borderRadius: theme.spacing[6],
               height: 48,
-              justifyContent: "center",
+              justifyContent: 'center',
               width: 48,
             }}
           >
@@ -67,7 +67,7 @@ export function CoachPresenceCard({
             <Text
               variant="body"
               color="text.primary"
-              style={{ fontWeight: "700" }}
+              style={{ fontWeight: '700' }}
             >
               {presence.message}
             </Text>
@@ -90,10 +90,10 @@ export function CoachPresenceCard({
           <View
             style={{
               ...getMinTouchTargetStyle(),
-              alignItems: "center",
+              alignItems: 'center',
               backgroundColor: theme.colors.primary[500],
               borderRadius: theme.spacing[2],
-              justifyContent: "center",
+              justifyContent: 'center',
               paddingHorizontal: theme.spacing[4],
             }}
           >
@@ -108,19 +108,19 @@ export function CoachPresenceCard({
 }
 
 function getPresenceMark(
-  reaction: CoachPresence["visualCompanionState"]["reaction"],
+  reaction: CoachPresence['visualCompanionState']['reaction'],
 ): string {
-  if (reaction === "celebrating") {
-    return "*";
+  if (reaction === 'celebrating') {
+    return '*';
   }
-  if (reaction === "focused") {
-    return ">";
+  if (reaction === 'focused') {
+    return '>';
   }
-  if (reaction === "recovering") {
-    return "~";
+  if (reaction === 'recovering') {
+    return '~';
   }
-  if (reaction === "ready") {
-    return "^";
+  if (reaction === 'ready') {
+    return '^';
   }
-  return ".";
+  return '.';
 }

@@ -22,22 +22,22 @@ export interface CampaignTarget {
 export interface TargetFilter {
   field: string;
   operator:
-    | "equals"
-    | "not_equals"
-    | "contains"
-    | "greater_than"
-    | "less_than"
-    | "in"
-    | "not_in";
+    | 'equals'
+    | 'not_equals'
+    | 'contains'
+    | 'greater_than'
+    | 'less_than'
+    | 'in'
+    | 'not_in';
   value: unknown;
 }
 
 export interface CampaignSchedule {
-  type: "immediate" | "scheduled" | "recurring";
+  type: 'immediate' | 'scheduled' | 'recurring';
   startDate?: Date;
   endDate?: Date;
   timezone: string;
-  frequency?: "hourly" | "daily" | "weekly" | "monthly";
+  frequency?: 'hourly' | 'daily' | 'weekly' | 'monthly';
   sendTimes?: string[];
 }
 
@@ -49,13 +49,13 @@ export interface CampaignBudget {
 }
 
 export type CampaignStatus =
-  | "draft"
-  | "scheduled"
-  | "running"
-  | "paused"
-  | "completed"
-  | "cancelled"
-  | "failed";
+  | 'draft'
+  | 'scheduled'
+  | 'running'
+  | 'paused'
+  | 'completed'
+  | 'cancelled'
+  | 'failed';
 
 export interface CampaignMetrics {
   sent: number;

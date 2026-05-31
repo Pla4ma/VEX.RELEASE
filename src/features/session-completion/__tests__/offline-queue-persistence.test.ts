@@ -1,6 +1,6 @@
 var mockStorage: Record<string, string> | undefined;
 
-jest.mock("../../../persistence/MMKVStorageAdapter", () => ({
+jest.mock('../../../persistence/MMKVStorageAdapter', () => ({
   MMKVStorageAdapter: jest.fn().mockImplementation(() => ({
     getItemSync: jest.fn((key: string) => (mockStorage ??= {})[key] ?? null),
     setItemSync: jest.fn((key: string, value: string) => {
@@ -12,44 +12,44 @@ jest.mock("../../../persistence/MMKVStorageAdapter", () => ({
   })),
 }));
 
-jest.mock("../../../utils/silent-failure", () => ({
+jest.mock('../../../utils/silent-failure', () => ({
   captureSilentFailure: jest.fn(),
 }));
 
-jest.mock("../../../lib/repository/base", () => ({
-  getConnectionState: jest.fn(() => "offline"),
+jest.mock('../../../lib/repository/base', () => ({
+  getConnectionState: jest.fn(() => 'offline'),
   subscribeToConnectionChanges: jest.fn(),
 }));
 
-import { clearQueue, getQueue, loadQueue } from "../../../lib/offline/queue";
+import { clearQueue, getQueue, loadQueue } from '../../../lib/offline/queue';
 
-describe("offline queue persistence", () => {
+describe('offline queue persistence', () => {
   beforeEach(() => {
     mockStorage = {};
     clearQueue();
   });
 
-  it("loads persisted entries after app restart", () => {
+  it('loads persisted entries after app restart', () => {
     (mockStorage ??= {}).offline_queue_v1 = JSON.stringify([
       {
-        id: "550e8400-e29b-41d4-a716-446655440099",
-        operation: "XP_ADD",
-        feature: "progression",
+        id: '550e8400-e29b-41d4-a716-446655440099',
+        operation: 'XP_ADD',
+        feature: 'progression',
         payload: {
-          userId: "550e8400-e29b-41d4-a716-446655440001",
+          userId: '550e8400-e29b-41d4-a716-446655440001',
           amount: 120,
-          sessionId: "550e8400-e29b-41d4-a716-446655440000",
+          sessionId: '550e8400-e29b-41d4-a716-446655440000',
         },
-        idempotencyKey: "xp-add:550e8400-e29b-41d4-a716-446655440000",
+        idempotencyKey: 'xp-add:550e8400-e29b-41d4-a716-446655440000',
         createdAt: 1700001800000,
         retryCount: 0,
         maxRetries: 3,
-        priority: "high",
+        priority: 'high',
       },
     ]);
     loadQueue();
 
     expect(getQueue()).toHaveLength(1);
-    expect(getQueue()[0]?.operation).toBe("XP_ADD");
+    expect(getQueue()[0]?.operation).toBe('XP_ADD');
   });
 });

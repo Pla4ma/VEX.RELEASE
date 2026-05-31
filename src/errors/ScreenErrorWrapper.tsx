@@ -1,19 +1,19 @@
-import React from "react";
-import { ScreenErrorBoundary } from "../shared/ui/components/ScreenErrorBoundary";
+import React from 'react';
+import { ScreenErrorBoundary } from '../shared/ui/components/ScreenErrorBoundary';
 import type {
   ScreenErrorConfig,
   ScreenType,
   ScreenErrorWrapperProps,
-} from "./screen-error-types";
-import { SCREEN_ERROR_CONFIGS } from "./screen-error-configs";
+} from './screen-error-types';
+import { SCREEN_ERROR_CONFIGS } from './screen-error-configs';
 
 export type { ScreenErrorConfig, ScreenType, ScreenErrorWrapperProps };
-export type { ScreenErrorRecoveryOptions } from "./screen-error-types";
-export { SCREEN_ERROR_CONFIGS } from "./screen-error-configs";
+export type { ScreenErrorRecoveryOptions } from './screen-error-types';
+export { SCREEN_ERROR_CONFIGS } from './screen-error-configs';
 export {
   ScreenErrorRecovery,
   screenErrorRecovery,
-} from "./screen-error-recovery";
+} from './screen-error-recovery';
 
 export function ScreenErrorWrapper({
   children,
@@ -53,6 +53,6 @@ export function withScreenErrorBoundary<P extends object>(
       <WrappedComponent {...props} />
     </ScreenErrorWrapper>
   );
-  WithErrorBoundary.displayName = `withScreenErrorBoundary(${WrappedComponent.displayName || WrappedComponent.name || "Component"})`;
+  WithErrorBoundary.displayName = `withScreenErrorBoundary(${WrappedComponent.displayName || WrappedComponent.name || 'Component'})`;
   return WithErrorBoundary;
 }

@@ -16,17 +16,17 @@ export const DEFAULT_RETRY_CONFIG: RetryConfig = {
   backoffMultiplier: 2,
   jitterFactor: 0.3,
   retryableErrors: [
-    "NETWORK_ERROR",
-    "TIMEOUT",
-    "STORAGE_UNAVAILABLE",
-    "SYNC_CONFLICT",
-    "RATE_LIMIT",
+    'NETWORK_ERROR',
+    'TIMEOUT',
+    'STORAGE_UNAVAILABLE',
+    'SYNC_CONFLICT',
+    'RATE_LIMIT',
   ],
   circuitBreakerThreshold: 5,
   circuitBreakerResetTime: 60000,
 };
 
-export type CircuitState = "CLOSED" | "OPEN" | "HALF_OPEN";
+export type CircuitState = 'CLOSED' | 'OPEN' | 'HALF_OPEN';
 
 export interface CircuitBreakerState {
   state: CircuitState;

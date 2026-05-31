@@ -21,13 +21,13 @@ export {
   type SessionMasteryResult,
   type ApplyXpResult,
   calculateMasteryRank,
-} from "./mastery-types";
+} from './mastery-types';
 
 export {
   type MasteryUnlock,
   MASTERY_UNLOCKS,
   checkUnlocks,
-} from "./mastery-unlocks";
+} from './mastery-unlocks';
 
 export {
   calculateDurationMasteryXp,
@@ -35,11 +35,11 @@ export {
   calculateConsistencyMasteryXp,
   calculateComebackMasteryXp,
   calculateBossMasteryXp,
-} from "./xp-calculators";
+} from './xp-calculators';
 
 export {
   calculateMasteryXpFromSession,
   applyMasteryXp,
   createInitialMasteryState,
   migrateFromLegacyProgression,
-} from "./mastery-service";
+} from './mastery-service';

@@ -1,18 +1,18 @@
-import React, { useEffect } from "react";
-import { Pressable, View } from "react-native";
+import React, { useEffect } from 'react';
+import { Pressable, View } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withSpring,
   withTiming,
-} from "react-native-reanimated";
-import { Text } from "../../../components/primitives/Text";
-import { Icon } from "../../../icons";
-import { useTheme } from "../../../theme";
-import type { TabItemProps } from "./TabBar.types";
-import { sizeConfig } from "./TabBar.types";
-import { styles } from "./TabBar.styles";
-import { getVariantStyles } from "./TabBar.variants";
+} from 'react-native-reanimated';
+import { Text } from '../../../components/primitives/Text';
+import { Icon } from '../../../icons';
+import { useTheme } from '../../../theme';
+import type { TabItemProps } from './TabBar.types';
+import { sizeConfig } from './TabBar.types';
+import { styles } from './TabBar.styles';
+import { getVariantStyles } from './TabBar.variants';
 
 const TabItemComponent: React.FC<TabItemProps> = ({
   item,
@@ -77,7 +77,7 @@ const TabItemComponent: React.FC<TabItemProps> = ({
         {item.icon ? (
           <Icon
             name={item.icon}
-            size={size === "sm" ? "sm" : "md"}
+            size={size === 'sm' ? 'sm' : 'md'}
             color={variantStyles.icon.color}
             style={showLabels ? styles.iconWithLabel : undefined}
           />
@@ -85,11 +85,11 @@ const TabItemComponent: React.FC<TabItemProps> = ({
 
         {showLabels ? (
           <Text
-            variant={size === "sm" ? "caption" : "body"}
+            variant={size === 'sm' ? 'caption' : 'body'}
             style={[
               { fontSize: config.fontSize },
               variantStyles.text,
-              { fontWeight: isActive ? "600" : "400" },
+              { fontWeight: isActive ? '600' : '400' },
             ]}
           >
             {item.label}
@@ -101,7 +101,7 @@ const TabItemComponent: React.FC<TabItemProps> = ({
             style={[
               styles.badge,
               { backgroundColor: theme.colors.error.DEFAULT },
-              size === "sm" ? styles.badgeSmall : undefined,
+              size === 'sm' ? styles.badgeSmall : undefined,
             ]}
           >
             <Text
@@ -109,11 +109,11 @@ const TabItemComponent: React.FC<TabItemProps> = ({
               color="text.inverse"
               style={[
                 styles.badgeText,
-                size === "sm" ? styles.badgeTextSmall : undefined,
+                size === 'sm' ? styles.badgeTextSmall : undefined,
               ]}
             >
-              {typeof item.badge === "number" && item.badge > 99
-                ? "99+"
+              {typeof item.badge === 'number' && item.badge > 99
+                ? '99+'
                 : item.badge}
             </Text>
           </View>

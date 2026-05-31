@@ -1,11 +1,11 @@
-import React, { useCallback, useEffect } from "react";
-import { View, Dimensions } from "react-native";
-import { useReducedMotion } from "@/hooks";
-import { useTheme } from "@/theme";
-import { launchColors } from "@theme/tokens/launch-colors";
-import { Particle, type ParticleConfig } from "./Particle";
+import React, { useCallback, useEffect } from 'react';
+import { View, Dimensions } from 'react-native';
+import { useReducedMotion } from '@/hooks';
+import { useTheme } from '@/theme';
+import { launchColors } from '@theme/tokens/launch-colors';
+import { Particle, type ParticleConfig } from './Particle';
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 interface ConfettiCelebrationProps {
   active: boolean;
@@ -47,9 +47,9 @@ export const ConfettiCelebration: React.FC<ConfettiCelebrationProps> = ({
       rotation: Math.random() * 360,
       velocityX: (Math.random() - 0.5) * 800,
       velocityY: -Math.random() * 600 - 200,
-      shape: ["circle", "square", "triangle"][
+      shape: ['circle', 'square', 'triangle'][
         Math.floor(Math.random() * 3)
-      ] as ParticleConfig["shape"],
+      ] as ParticleConfig['shape'],
       delay: Math.random() * 200,
     }));
   }, [particleCount, colors, origin]);
@@ -77,7 +77,7 @@ export const ConfettiCelebration: React.FC<ConfettiCelebrationProps> = ({
   }
   return (
     <View
-      style={{ position: "absolute", left: 0, right: 0, top: 0, bottom: 0 }}
+      style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0 }}
       pointerEvents="none"
     >
       {particles.map((particle) => (

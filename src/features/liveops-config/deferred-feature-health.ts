@@ -1,13 +1,13 @@
-import type { FeatureKey } from "./feature-access";
-import { setDegradedFeatures } from "./feature-access-store";
-import { shouldRunHealthCheck } from "./feature-health-policy";
+import type { FeatureKey } from './feature-access';
+import { setDegradedFeatures } from './feature-access-store';
+import { shouldRunHealthCheck } from './feature-health-policy';
 
 const CHECKABLE_FEATURES: FeatureKey[] = [
-  "content_study",
-  "content_study_advanced",
-  "premium_paywall",
-  "boss_tab",
-  "ai_coach_advanced",
+  'content_study',
+  'content_study_advanced',
+  'premium_paywall',
+  'boss_tab',
+  'ai_coach_advanced',
 ];
 
 let registered = false;
@@ -26,8 +26,8 @@ async function pollFeatureHealth(
 ): Promise<void> {
   const [{ featureHealthRegistry }, { registerFeatureHealthChecks }] =
     await Promise.all([
-      import("./feature-health"),
-      import("./feature-health-checks"),
+      import('./feature-health'),
+      import('./feature-health-checks'),
     ]);
 
   if (!registered) {

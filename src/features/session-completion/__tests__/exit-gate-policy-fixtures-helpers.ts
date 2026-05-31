@@ -1,7 +1,7 @@
-import { SessionMode } from "../../../session/modes";
-import type { SessionSummary } from "../../../session/types";
-import type { CompletionLedger } from "../schemas";
-import type { CompletionSyncState } from "../../../store/session-state";
+import { SessionMode } from '../../../session/modes';
+import type { SessionSummary } from '../../../session/types';
+import type { CompletionLedger } from '../schemas';
+import type { CompletionSyncState } from '../../../store/session-state';
 import {
   mockConnectionState,
   mockFindLedger,
@@ -9,13 +9,13 @@ import {
   mockApplySubsystems,
   mockApplySideEffects,
   mockSetCompletionSyncState,
-} from "./exit-gate-policy-fixtures-mocks";
+} from './exit-gate-policy-fixtures-mocks';
 
 export const pendingSyncState: CompletionSyncState = {
-  ledgerId: "550e8400-e29b-41d4-a716-446655440201",
-  message: "One session is saved offline.",
+  ledgerId: '550e8400-e29b-41d4-a716-446655440201',
+  message: 'One session is saved offline.',
   repairCtaLabel: null,
-  status: "pending_sync",
+  status: 'pending_sync',
   updatedAt: 1,
 };
 
@@ -42,13 +42,13 @@ export function createSummary(sessionId: string): SessionSummary {
     plannedDuration: 1500,
     sessionId,
     sessionMode: SessionMode.FLOW,
-    status: "COMPLETED",
+    status: 'COMPLETED',
     streakDays: 5,
     streakIncreased: true,
     streakMaintained: true,
     streakBonus: 10,
     timeBonus: 10,
-    userId: "user-phase-1",
+    userId: 'user-phase-1',
     userLevel: 1,
     vsAverage: 0,
     vsBest: 0,
@@ -78,7 +78,7 @@ export function createQueryClient() {
       const cacheKey = JSON.stringify(key);
       cache.set(
         cacheKey,
-        typeof value === "function" ? value(cache.get(cacheKey)) : value,
+        typeof value === 'function' ? value(cache.get(cacheKey)) : value,
       );
     },
   };
@@ -86,7 +86,7 @@ export function createQueryClient() {
 
 export function setupMocks() {
   jest.clearAllMocks();
-  mockConnectionState.mockReturnValue("online");
+  mockConnectionState.mockReturnValue('online');
   mockFindLedger.mockResolvedValue(null);
   mockCreateLedger.mockImplementation(
     async (ledger: CompletionLedger) => ledger,
@@ -96,15 +96,15 @@ export function setupMocks() {
       degradedSystems: [],
       ledger: {
         ...ledger,
-        companionReactionId: "companion-proud",
+        companionReactionId: 'companion-proud',
         dailyMissionResult: {
-          missionId: "mission-focus",
+          missionId: 'mission-focus',
           progressDelta: 1,
-          status: "completed",
+          status: 'completed',
         },
         focusScoreDelta: 9,
-        rewardIds: ["reward-session"],
-        streakResult: { action: "extended", newDays: 6, previousDays: 5 },
+        rewardIds: ['reward-session'],
+        streakResult: { action: 'extended', newDays: 6, previousDays: 5 },
         xpDelta: 80,
       },
     }),
@@ -119,24 +119,24 @@ export function setupMocks() {
       degradedSystems: string[];
       summary: SessionSummary;
     }) => {
-      const pendingSync = finalLedger.offlineSyncStatus === "pending_sync";
+      const pendingSync = finalLedger.offlineSyncStatus === 'pending_sync';
       // Simulate real side effects calling setCompletionSyncState
       if (pendingSync) {
         mockSetCompletionSyncState({
           ledgerId: finalLedger.ledgerId,
-          message: "One session is saved offline. It will sync when you reconnect.",
+          message: 'One session is saved offline. It will sync when you reconnect.',
           repairCtaLabel: null,
-          status: "pending_sync",
+          status: 'pending_sync',
           updatedAt: Date.now(),
         });
       }
       return {
         beats: [
-          { accessibilityLabel: "Grade", body: `Grade ${finalLedger.grade}`, companionLine: null, id: "b1", kind: "grade", metric: null, title: "Grade" },
-          { accessibilityLabel: "XP", body: `+${finalLedger.xpDelta} XP`, companionLine: null, id: "b2", kind: "result", metric: { label: "XP", value: `${finalLedger.xpDelta}` }, title: "XP" },
-          { accessibilityLabel: "Streak", body: `${finalLedger.streakResult.newDays} days`, companionLine: null, id: "b3", kind: "result", metric: null, title: "Streak" },
-          { accessibilityLabel: "Focus", body: `Focus +${finalLedger.focusScoreDelta}`, companionLine: null, id: "b4", kind: "meaning", metric: null, title: "Focus" },
-          { accessibilityLabel: "Next", body: "Start next focus", companionLine: null, id: "b5", kind: "tomorrow", metric: null, title: "Next" },
+          { accessibilityLabel: 'Grade', body: `Grade ${finalLedger.grade}`, companionLine: null, id: 'b1', kind: 'grade', metric: null, title: 'Grade' },
+          { accessibilityLabel: 'XP', body: `+${finalLedger.xpDelta} XP`, companionLine: null, id: 'b2', kind: 'result', metric: { label: 'XP', value: `${finalLedger.xpDelta}` }, title: 'XP' },
+          { accessibilityLabel: 'Streak', body: `${finalLedger.streakResult.newDays} days`, companionLine: null, id: 'b3', kind: 'result', metric: null, title: 'Streak' },
+          { accessibilityLabel: 'Focus', body: `Focus +${finalLedger.focusScoreDelta}`, companionLine: null, id: 'b4', kind: 'meaning', metric: null, title: 'Focus' },
+          { accessibilityLabel: 'Next', body: 'Start next focus', companionLine: null, id: 'b5', kind: 'tomorrow', metric: null, title: 'Next' },
         ],
         companionReaction: { reactionId: finalLedger.companionReactionId },
         companionMemory: null,
@@ -152,11 +152,11 @@ export function setupMocks() {
           label: `Grade ${finalLedger.grade}`,
           score: finalLedger.gradeScore,
         },
-        headline: { kind: "xp", label: `+${finalLedger.xpDelta} XP`, xpAmount: finalLedger.xpDelta },
+        headline: { kind: 'xp', label: `+${finalLedger.xpDelta} XP`, xpAmount: finalLedger.xpDelta },
         nextActionCta: {
-          label: "Return home",
-          reason: "Home will hold the next safe move for you.",
-          route: "Home",
+          label: 'Return home',
+          reason: 'Home will hold the next safe move for you.',
+          route: 'Home',
           routeParams: null,
         },
         pendingSync,

@@ -1,16 +1,16 @@
-import React from "react";
-import { Pressable } from "react-native";
-import Animated, { FadeIn } from "react-native-reanimated";
-import { buttonTap } from "../../utils/haptics";
-import { Box } from "../../components/primitives/Box";
-import { Text } from "../../components/primitives/Text";
-import { useTheme } from "../../theme";
+import React from 'react';
+import { Pressable } from 'react-native';
+import Animated, { FadeIn } from 'react-native-reanimated';
+import { buttonTap } from '../../utils/haptics';
+import { Box } from '../../components/primitives/Box';
+import { Text } from '../../components/primitives/Text';
+import { useTheme } from '../../theme';
 import {
   BossDamageSkeleton,
   BossIcon,
   DamageEstimate,
-} from "./BossDamagePreview.styles";
-import { BossHealthBar, DefeatCelebration } from "./BossDamagePreview-helpers";
+} from './BossDamagePreview.styles';
+import { BossHealthBar, DefeatCelebration } from './BossDamagePreview-helpers';
 
 export interface BossDamagePreviewProps {
   bossName: string;

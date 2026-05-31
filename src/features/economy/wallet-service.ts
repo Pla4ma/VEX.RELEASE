@@ -1,11 +1,11 @@
-import { RepositoryError, grantCurrencyRpc, spendCurrencyRpc } from "./repository";
-import { CurrencyRpcResultSchema } from "./schemas";
-import type { SpendError } from "./types";
+import { RepositoryError, grantCurrencyRpc, spendCurrencyRpc } from './repository';
+import { CurrencyRpcResultSchema } from './schemas';
+import type { SpendError } from './types';
 
 export interface CurrencyGrant {
   userId: string;
   amount: number;
-  currency: "COINS" | "GEMS" | "XP" | "SEASONAL" | "FOCUS_POINTS";
+  currency: 'COINS' | 'GEMS' | 'XP' | 'SEASONAL' | 'FOCUS_POINTS';
   source: string;
   sourceId?: string | null;
   description?: string;
@@ -34,8 +34,8 @@ export async function addCurrency(grant: CurrencyGrant): Promise<boolean> {
     });
     return result.success;
   } catch (err) {
-    if (err instanceof RepositoryError) throw err;
-    throw new RepositoryError("addCurrency", err as Error);
+    if (err instanceof RepositoryError) {throw err;}
+    throw new RepositoryError('addCurrency', err as Error);
   }
 }
 
@@ -52,7 +52,7 @@ export async function spendCurrency(input: SpendRequest): Promise<{
     });
     return { success: result.success };
   } catch (err) {
-    const message = err instanceof Error ? err.message : "Spend failed";
-    return { success: false, error: { code: "DB_ERROR", message } };
+    const message = err instanceof Error ? err.message : 'Spend failed';
+    return { success: false, error: { code: 'DB_ERROR', message } };
   }
 }

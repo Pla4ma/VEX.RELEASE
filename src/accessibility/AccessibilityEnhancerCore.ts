@@ -5,7 +5,7 @@
  * Re-exports from class and helpers modules.
  */
 
-export { AccessibilityEnhancer } from "./AccessibilityEnhancer.class";
+export { AccessibilityEnhancer } from './AccessibilityEnhancer.class';
 
 export {
   accessibilityEnhancer,
@@ -15,4 +15,4 @@ export {
   useAccessibilityEnhancements,
   ACCESSIBILITY_PRESETS,
   applyAccessibilityPreset,
-} from "./AccessibilityEnhancer.helpers";
+} from './AccessibilityEnhancer.helpers';

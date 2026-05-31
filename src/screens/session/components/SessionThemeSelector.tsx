@@ -1,15 +1,15 @@
-import React from "react";
-import { Pressable } from "react-native";
-import { FlashList } from "@shopify/flash-list";
+import React from 'react';
+import { Pressable } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 
-import { FocusRing } from "../../../components/FocusRing";
-import { Box } from "../../../components/primitives/Box";
-import { Button } from "../../../components/primitives/Button";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import type { SessionTheme } from "../../../features/themes/session-themes";
-import { getSessionThemeById } from "../../../features/themes/session-themes";
-import { buildPreviewGradient } from "../utils/session-setup";
+import { FocusRing } from '../../../components/FocusRing';
+import { Box } from '../../../components/primitives/Box';
+import { Button } from '../../../components/primitives/Button';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import type { SessionTheme } from '../../../features/themes/session-themes';
+import { getSessionThemeById } from '../../../features/themes/session-themes';
+import { buildPreviewGradient } from '../utils/session-setup';
 
 type SessionThemeSelectorProps = {
   onPressTheme: (theme: SessionTheme) => void;
@@ -117,7 +117,7 @@ export function SessionThemeSelector({
                     </Box>
                     <Text variant="label">{item.name}</Text>
                     <Text variant="caption" color="text.secondary" mt="xs">
-                      {isOwned ? "Owned" : `${item.coinCost} coins`}
+                      {isOwned ? 'Owned' : `${item.coinCost} coins`}
                     </Text>
                   </Box>
                 </Pressable>
@@ -133,7 +133,7 @@ export function SessionThemeSelector({
         borderRadius="lg"
         style={{
           backgroundColor:
-            selectedTheme.backgroundTint === "transparent"
+            selectedTheme.backgroundTint === 'transparent'
               ? theme.colors.background.secondary
               : selectedTheme.backgroundTint,
           borderWidth: 1,

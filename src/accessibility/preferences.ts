@@ -2,9 +2,9 @@
  * User accessibility preference management.
  */
 
-import { eventBus } from "../events";
-import type { AccessibilityPreferences } from "./types";
-import { DEFAULT_ACCESSIBILITY } from "./types";
+import { eventBus } from '../events';
+import type { AccessibilityPreferences } from './types';
+import { DEFAULT_ACCESSIBILITY } from './types';
 
 const userPreferences = new Map<string, AccessibilityPreferences>();
 
@@ -21,7 +21,7 @@ export function updateAccessibilityPreferences(
   const current = getAccessibilityPreferences(userId);
   const updated = { ...current, ...updates };
   userPreferences.set(userId, updated);
-  eventBus.publish("accessibility:preferences_changed", {
+  eventBus.publish('accessibility:preferences_changed', {
     userId,
     preferences: updated,
     changes: Object.keys(updates),

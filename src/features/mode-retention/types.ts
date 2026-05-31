@@ -6,4 +6,4 @@ export type {
   ModeNotificationCopy,
   ModePremiumBridge,
   ModeRetentionManifest,
-} from "./schemas";
+} from './schemas';

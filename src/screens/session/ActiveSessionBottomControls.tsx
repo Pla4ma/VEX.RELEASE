@@ -1,8 +1,8 @@
-import React from "react";
-import { InterruptionWarning } from "../../session/components/InterruptionWarning";
-import { ActiveSessionControlDock } from "./components/ActiveSessionControlDock";
-import { ActiveSessionControlRecovery } from "./components/ActiveSessionControlRecovery";
-import type { ActiveSessionControlFailure } from "./utils/active-session-control-failure";
+import React from 'react';
+import { InterruptionWarning } from '../../session/components/InterruptionWarning';
+import { ActiveSessionControlDock } from './components/ActiveSessionControlDock';
+import { ActiveSessionControlRecovery } from './components/ActiveSessionControlRecovery';
+import type { ActiveSessionControlFailure } from './utils/active-session-control-failure';
 
 interface ActiveSessionBottomControlsProps {
   controlFailure: ActiveSessionControlFailure | null;
@@ -89,7 +89,7 @@ export function ActiveSessionBottomControls({
 
       <InterruptionWarning
         isVisible={showInterruption}
-        severity={elapsedSeconds > 300 ? "MAJOR" : "MINOR"}
+        severity={elapsedSeconds > 300 ? 'MAJOR' : 'MINOR'}
         countdownSeconds={30}
         interruptionType="User Initiated"
         onResume={onResume}

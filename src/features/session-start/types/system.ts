@@ -1,10 +1,10 @@
-import type { BaseSessionStartEvent } from "./base";
+import type { BaseSessionStartEvent } from './base';
 import type {
   SessionInitiatedEvent,
   SessionPreparationStartedEvent,
   SessionPreparationCompletedEvent,
   SessionConfigurationSetEvent,
-} from "./base";
+} from './base';
 import type {
   SessionEnvironmentPreparedEvent,
   SessionReadinessAssessedEvent,
@@ -13,19 +13,19 @@ import type {
   SessionGoalsSetEvent,
   SessionGoalsUpdatedEvent,
   SessionGoalProgressEvent,
-} from "./readiness";
+} from './readiness';
 import type {
   SessionMoodAssessedEvent,
   SessionMoodAdjustedEvent,
   SessionContextEstablishedEvent,
   SessionContextUpdatedEvent,
-} from "./mood-context";
+} from './mood-context';
 
 export interface SessionStartSystemMaintenanceEvent
   extends BaseSessionStartEvent {
-  type: "session_start_system_maintenance";
+  type: 'session_start_system_maintenance';
   data: {
-    maintenanceType: "scheduled" | "emergency" | "upgrade" | "migration";
+    maintenanceType: 'scheduled' | 'emergency' | 'upgrade' | 'migration';
     startTime: Date;
     endTime?: Date;
     duration?: number;
@@ -42,16 +42,16 @@ export interface SessionStartSystemMaintenanceEvent
 }
 
 export interface SessionStartSystemErrorEvent extends BaseSessionStartEvent {
-  type: "session_start_system_error";
+  type: 'session_start_system_error';
   data: {
     errorType:
-      | "initiation_error"
-      | "preparation_error"
-      | "configuration_error"
-      | "system_error";
+      | 'initiation_error'
+      | 'preparation_error'
+      | 'configuration_error'
+      | 'system_error';
     errorCode: string;
     errorMessage: string;
-    severity: "low" | "medium" | "high" | "critical";
+    severity: 'low' | 'medium' | 'high' | 'critical';
     context: {
       service: string;
       operation: string;
@@ -67,14 +67,14 @@ export interface SessionStartSystemErrorEvent extends BaseSessionStartEvent {
 }
 
 export interface SessionStartAnalyticsEvent extends BaseSessionStartEvent {
-  type: "session_start_analytics";
+  type: 'session_start_analytics';
   data: {
     analyticsType:
-      | "preparation"
-      | "readiness"
-      | "configuration"
-      | "trends"
-      | "insights";
+      | 'preparation'
+      | 'readiness'
+      | 'configuration'
+      | 'trends'
+      | 'insights';
     timeframe: string;
     metrics: Record<string, number>;
     dimensions: Record<string, unknown>;
@@ -86,7 +86,7 @@ export interface SessionStartAnalyticsEvent extends BaseSessionStartEvent {
     }>;
     trends: Array<{
       metric: string;
-      direction: "up" | "down" | "stable";
+      direction: 'up' | 'down' | 'stable';
       change: number;
       significance: string;
     }>;
@@ -96,7 +96,7 @@ export interface SessionStartAnalyticsEvent extends BaseSessionStartEvent {
 
 export interface SessionStartPerformanceReportEvent
   extends BaseSessionStartEvent {
-  type: "session_start_performance_report";
+  type: 'session_start_performance_report';
   data: {
     reportPeriod: { start: Date; end: Date };
     overview: {

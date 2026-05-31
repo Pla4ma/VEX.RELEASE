@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 import {
   AnalyticsMetricSchema,
   AnalyticsDimensionSchema,
@@ -6,7 +6,7 @@ import {
   TimeRangeSchema,
   InsightSeveritySchema,
   InsightTypeSchema,
-} from "./enums";
+} from './enums';
 
 // ── Filter & data points ─────────────────────────────────────────────────
 
@@ -14,15 +14,15 @@ export const AnalyticsFilterSchema = z
   .object({
     dimension: AnalyticsDimensionSchema,
     operator: z.enum([
-      "eq",
-      "ne",
-      "gt",
-      "gte",
-      "lt",
-      "lte",
-      "in",
-      "not_in",
-      "between",
+      'eq',
+      'ne',
+      'gt',
+      'gte',
+      'lt',
+      'lte',
+      'in',
+      'not_in',
+      'between',
     ]),
     value: z.union([
       z.string(),
@@ -47,7 +47,7 @@ export const AnalyticsDataPointSchema = z
 export const TimeSeriesDataSchema = z
   .object({
     metric: AnalyticsMetricSchema,
-    granularity: z.enum(["hour", "day", "week", "month"]),
+    granularity: z.enum(['hour', 'day', 'week', 'month']),
     points: z.array(AnalyticsDataPointSchema).min(1),
     summary: z
       .object({
@@ -105,11 +105,11 @@ export const DetectedPatternSchema = z
   .object({
     id: z.string().uuid(),
     type: z.enum([
-      "correlation",
-      "anomaly",
-      "cycle",
-      "milestone",
-      "regression",
+      'correlation',
+      'anomaly',
+      'cycle',
+      'milestone',
+      'regression',
     ]),
     metric: AnalyticsMetricSchema,
     description: z.string().min(1).max(1000),

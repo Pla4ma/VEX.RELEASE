@@ -1,10 +1,10 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from 'react';
 
-import { useProgressionSummary } from "../../../features/progression/hooks";
-import type { SessionSummary } from "../../../session/types";
-import { useSessionRewardSync } from "./useSessionRewardSync";
+import { useProgressionSummary } from '../../../features/progression/hooks';
+import type { SessionSummary } from '../../../session/types';
+import { useSessionRewardSync } from './useSessionRewardSync';
 type ProgressionSummaryData = NonNullable<
-  ReturnType<typeof useProgressionSummary>["data"]
+  ReturnType<typeof useProgressionSummary>['data']
 >;
 
 export function useSessionCompleteRewards({
@@ -40,7 +40,7 @@ export function useSessionCompleteRewards({
     duration: number;
     message: string;
     title: string;
-    type: "error" | "success";
+    type: 'error' | 'success';
   }) => void;
 }) {
   const [completionStage, setCompletionStage] = useState(0);

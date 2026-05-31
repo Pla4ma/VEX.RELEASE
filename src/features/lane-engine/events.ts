@@ -1,24 +1,24 @@
-import { z } from "zod";
+import { z } from 'zod';
 
-import { LaneProfileSchema, LaneSchema } from "./schemas";
+import { LaneProfileSchema, LaneSchema } from './schemas';
 
-export const LaneEventSchema = z.discriminatedUnion("type", [
+export const LaneEventSchema = z.discriminatedUnion('type', [
   z
     .object({
-      type: z.literal("lane_resolved"),
+      type: z.literal('lane_resolved'),
       profile: LaneProfileSchema,
     })
     .strict(),
   z
     .object({
-      type: z.literal("lane_changed"),
+      type: z.literal('lane_changed'),
       previousLane: LaneSchema,
       nextProfile: LaneProfileSchema,
     })
     .strict(),
   z
     .object({
-      type: z.literal("lane_overridden"),
+      type: z.literal('lane_overridden'),
       selectedLane: LaneSchema,
       profile: LaneProfileSchema,
     })

@@ -1,8 +1,8 @@
-import React from "react";
-import { View, Text, Pressable } from "react-native";
-import Animated, { FadeIn } from "react-native-reanimated";
-import { useTheme } from "../../../theme";
-import { createSheet } from "@/shared/ui/create-sheet";
+import React from 'react';
+import { View, Text, Pressable } from 'react-native';
+import Animated, { FadeIn } from 'react-native-reanimated';
+import { useTheme } from '../../../theme';
+import { createSheet } from '@/shared/ui/create-sheet';
 
 interface PurchaseErrorStateProps {
   error: Error;
@@ -21,19 +21,19 @@ export function PurchaseErrorState({
   const getErrorMessage = (): string => {
     const message = error.message.toLowerCase();
 
-    if (message.includes("network") || message.includes("connection")) {
-      return "VEX lost connection. Your purchase is safe. Try again?";
+    if (message.includes('network') || message.includes('connection')) {
+      return 'VEX lost connection. Your purchase is safe. Try again?';
     }
-    if (message.includes("cancel") || message.includes("user cancelled")) {
-      return "Purchase was cancelled. You can try again when ready.";
+    if (message.includes('cancel') || message.includes('user cancelled')) {
+      return 'Purchase was cancelled. You can try again when ready.';
     }
     if (
-      message.includes("already owned") ||
-      message.includes("already purchased")
+      message.includes('already owned') ||
+      message.includes('already purchased')
     ) {
-      return "You already own this item. It may take a moment to activate.";
+      return 'You already own this item. It may take a moment to activate.';
     }
-    if (message.includes("insufficient")) {
+    if (message.includes('insufficient')) {
       return "That purchase didn't go through. Check your payment method and try again.";
     }
 
@@ -124,13 +124,13 @@ export function PurchaseErrorState({
 const styles = createSheet({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: 24,
   },
   content: {
-    width: "100%",
-    alignItems: "center",
+    width: '100%',
+    alignItems: 'center',
   },
   icon: {
     fontSize: 48,
@@ -138,32 +138,32 @@ const styles = createSheet({
   },
   title: {
     fontSize: 24,
-    fontWeight: "700",
+    fontWeight: '700',
     marginBottom: 12,
   },
   message: {
     fontSize: 16,
-    textAlign: "center",
+    textAlign: 'center',
     marginBottom: 32,
     lineHeight: 22,
   },
   buttonContainer: {
-    width: "100%",
+    width: '100%',
     gap: 12,
     maxWidth: 300,
   },
   primaryButton: {
     paddingVertical: 16,
     borderRadius: 12,
-    alignItems: "center",
+    alignItems: 'center',
   },
   primaryButtonText: {
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   secondaryButton: {
     paddingVertical: 12,
-    alignItems: "center",
+    alignItems: 'center',
   },
   secondaryButtonText: {
     fontSize: 14,
@@ -172,11 +172,11 @@ const styles = createSheet({
     marginTop: 32,
     padding: 16,
     borderRadius: 12,
-    width: "100%",
+    width: '100%',
   },
   infoText: {
     fontSize: 13,
-    textAlign: "center",
+    textAlign: 'center',
     lineHeight: 18,
   },
 });

@@ -1,5 +1,5 @@
-import { z } from "zod";
-import { getSupabaseClient, handleSupabaseError } from "../../../config/supabase";
+import { z } from 'zod';
+import { getSupabaseClient, handleSupabaseError } from '../../../config/supabase';
 import {
   TimeSeriesDataSchema,
   getTimeRangeDates,
@@ -7,15 +7,15 @@ import {
   type AnalyticsFilter,
   type AnalyticsMetric,
   type TimeRange,
-} from "../schemas";
-import { aggregateDataPoints } from "./helpers";
+} from '../schemas';
+import { aggregateDataPoints } from './helpers';
 import {
   SessionHeatmapInputSchema,
   HeatmapBucketSchema,
   SessionHeatmapDataSchema,
   HEATMAP_DAYS,
   type SessionHeatmapData,
-} from "./types";
+} from './types';
 
 const supabase = getSupabaseClient();
 
@@ -23,44 +23,44 @@ export async function fetchTimeSeriesData(
   userId: string,
   metric: AnalyticsMetric,
   timeRange: TimeRange,
-  granularity: "hour" | "day" | "week" | "month",
+  granularity: 'hour' | 'day' | 'week' | 'month',
   dimensions?: AnalyticsDimension[],
   filters?: AnalyticsFilter[],
 ) {
   const { start, end } = getTimeRangeDates(timeRange);
   let query = supabase
-    .from("analytics_events")
-    .select("*")
-    .eq("user_id", userId)
-    .eq("metric_type", metric)
-    .gte("timestamp", start)
-    .lte("timestamp", end)
-    .order("timestamp", { ascending: true });
+    .from('analytics_events')
+    .select('*')
+    .eq('user_id', userId)
+    .eq('metric_type', metric)
+    .gte('timestamp', start)
+    .lte('timestamp', end)
+    .order('timestamp', { ascending: true });
   if (dimensions?.length) {
-    query = query.in("dimension_type", dimensions);
+    query = query.in('dimension_type', dimensions);
   }
   if (filters?.length) {
     for (const filter of filters) {
       switch (filter.operator) {
-        case "eq":
+        case 'eq':
           query = query.eq(filter.dimension, filter.value);
           break;
-        case "ne":
+        case 'ne':
           query = query.neq(filter.dimension, filter.value);
           break;
-        case "gt":
+        case 'gt':
           query = query.gt(filter.dimension, filter.value);
           break;
-        case "gte":
+        case 'gte':
           query = query.gte(filter.dimension, filter.value);
           break;
-        case "lt":
+        case 'lt':
           query = query.lt(filter.dimension, filter.value);
           break;
-        case "lte":
+        case 'lte':
           query = query.lte(filter.dimension, filter.value);
           break;
-        case "in":
+        case 'in':
           query = query.in(filter.dimension, filter.value as string[]);
           break;
       }
@@ -86,12 +86,12 @@ export async function fetchSessionHeatmapData(
   const validated = SessionHeatmapInputSchema.parse({ userId, weeks });
   const periodStart = Date.now() - validated.weeks * 7 * 24 * 60 * 60 * 1000;
   const { data, error } = await supabase
-    .from("analytics_events")
-    .select("timestamp")
-    .eq("user_id", validated.userId)
-    .eq("metric_type", "sessions_completed")
-    .gte("timestamp", periodStart)
-    .order("timestamp", { ascending: false });
+    .from('analytics_events')
+    .select('timestamp')
+    .eq('user_id', validated.userId)
+    .eq('metric_type', 'sessions_completed')
+    .gte('timestamp', periodStart)
+    .order('timestamp', { ascending: false });
   if (error) {
     throw handleSupabaseError(error);
   }

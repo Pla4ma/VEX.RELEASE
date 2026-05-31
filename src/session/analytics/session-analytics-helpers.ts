@@ -1,5 +1,5 @@
-import type { SessionHistoryEntry, RecoveryRecord } from "../types";
-import type { PatternMetrics } from "./session-analytics-types";
+import type { SessionHistoryEntry, RecoveryRecord } from '../types';
+import type { PatternMetrics } from './session-analytics-types';
 
 export async function calculatePatternMetricsFromHistory(
   history: SessionHistoryEntry[],
@@ -8,7 +8,7 @@ export async function calculatePatternMetricsFromHistory(
   const hourCounts = new Array(24).fill(0);
   history.forEach((h) => {
     const hour = new Date(h.startedAt).getHours();
-    if (h.status === "COMPLETED") {
+    if (h.status === 'COMPLETED') {
       hourCounts[hour]++;
     }
   });
@@ -16,7 +16,7 @@ export async function calculatePatternMetricsFromHistory(
   const dayCounts = new Array(7).fill(0);
   history.forEach((h) => {
     const day = new Date(h.startedAt).getDay();
-    if (h.status === "COMPLETED") {
+    if (h.status === 'COMPLETED') {
       dayCounts[day]++;
     }
   });

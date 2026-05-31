@@ -1,7 +1,7 @@
-import { BaseNotificationEvent } from "./notification-event-types-core";
+import { BaseNotificationEvent } from './notification-event-types-core';
 
 export interface NotificationSentEvent extends BaseNotificationEvent {
-  type: "notification_sent";
+  type: 'notification_sent';
   data: {
     notificationId: string;
     type: string;
@@ -19,7 +19,7 @@ export interface NotificationSentEvent extends BaseNotificationEvent {
   };
 }
 export interface NotificationDeliveredEvent extends BaseNotificationEvent {
-  type: "notification_delivered";
+  type: 'notification_delivered';
   data: {
     notificationId: string;
     channel: string;
@@ -36,12 +36,12 @@ export interface NotificationDeliveredEvent extends BaseNotificationEvent {
   };
 }
 export interface NotificationReadEvent extends BaseNotificationEvent {
-  type: "notification_read";
+  type: 'notification_read';
   data: {
     notificationId: string;
     readAt: Date;
     readTimeframe: number;
-    readMethod: "click" | "mark_read" | "auto_read";
+    readMethod: 'click' | 'mark_read' | 'auto_read';
     readContext: {
       device: string;
       location?: string;
@@ -50,7 +50,7 @@ export interface NotificationReadEvent extends BaseNotificationEvent {
   };
 }
 export interface NotificationClickedEvent extends BaseNotificationEvent {
-  type: "notification_clicked";
+  type: 'notification_clicked';
   data: {
     notificationId: string;
     clickedAt: Date;
@@ -66,7 +66,7 @@ export interface NotificationClickedEvent extends BaseNotificationEvent {
   };
 }
 export interface NotificationFailedEvent extends BaseNotificationEvent {
-  type: "notification_failed";
+  type: 'notification_failed';
   data: {
     notificationId: string;
     channel: string;
@@ -82,34 +82,34 @@ export interface NotificationFailedEvent extends BaseNotificationEvent {
   };
 }
 export interface NotificationExpiredEvent extends BaseNotificationEvent {
-  type: "notification_expired";
+  type: 'notification_expired';
   data: {
     notificationId: string;
     expiredAt: Date;
     originalScheduledTime: Date;
     expirationReason:
-      | "ttl_exceeded"
-      | "no_longer_relevant"
-      | "user_preference"
-      | "system_limit";
+      | 'ttl_exceeded'
+      | 'no_longer_relevant'
+      | 'user_preference'
+      | 'system_limit';
     channels: string[];
     deliveryAttempts: number;
     usersAffected: number;
   };
 }
 export interface NotificationCancelledEvent extends BaseNotificationEvent {
-  type: "notification_cancelled";
+  type: 'notification_cancelled';
   data: {
     notificationId: string;
     cancelledAt: Date;
     reason:
-      | "user_request"
-      | "system_policy"
-      | "content_update"
-      | "technical_issue";
+      | 'user_request'
+      | 'system_policy'
+      | 'content_update'
+      | 'technical_issue';
     cancelledBy: string;
     channels: string[];
     usersAffected: number;
-    refund?: { type: "credits" | "tokens" | "money"; amount: number };
+    refund?: { type: 'credits' | 'tokens' | 'money'; amount: number };
   };
 }

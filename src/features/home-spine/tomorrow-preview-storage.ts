@@ -1,11 +1,11 @@
-import * as Sentry from "@sentry/react-native";
-import { z } from "zod";
+import * as Sentry from '@sentry/react-native';
+import { z } from 'zod';
 
-import { captureSilentFailure } from "../../utils/silent-failure";
+import { captureSilentFailure } from '../../utils/silent-failure';
 import {
   TomorrowPreviewDataSchema,
   type TomorrowPreviewData,
-} from "./tomorrow-preview-schemas";
+} from './tomorrow-preview-schemas';
 
 const storageKey = (userId: string): string => `tomorrow_preview:${userId}`;
 
@@ -17,13 +17,13 @@ type PreviewStorage = {
 
 function getStorage(): PreviewStorage | null {
   try {
-    const { storage } = require("../../store/mmkv-storage");
+    const { storage } = require('../../store/mmkv-storage');
     return z.custom<PreviewStorage>().parse(storage);
   } catch (error) {
     captureSilentFailure(error, {
-      feature: "home-spine",
-      operation: "network-fallback",
-      type: "network",
+      feature: 'home-spine',
+      operation: 'network-fallback',
+      type: 'network',
     });
     return null;
   }
@@ -45,7 +45,7 @@ export function saveTomorrowPreview(
   } catch (error) {
     Sentry.captureException(error, {
       extra: { userId },
-      tags: { feature: "tomorrow-preview", operation: "save" },
+      tags: { feature: 'tomorrow-preview', operation: 'save' },
     });
   }
 }
@@ -68,7 +68,7 @@ export function loadTomorrowPreview(
   } catch (error) {
     Sentry.captureException(error, {
       extra: { userId },
-      tags: { feature: "tomorrow-preview", operation: "load" },
+      tags: { feature: 'tomorrow-preview', operation: 'load' },
     });
     return null;
   }
@@ -84,7 +84,7 @@ export function clearTomorrowPreview(userId: string): void {
   } catch (error) {
     Sentry.captureException(error, {
       extra: { userId },
-      tags: { feature: "tomorrow-preview", operation: "clear" },
+      tags: { feature: 'tomorrow-preview', operation: 'clear' },
     });
   }
 }

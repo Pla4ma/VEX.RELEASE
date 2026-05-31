@@ -4,9 +4,9 @@
  * React hook for accessing the event bus.
  */
 
-import { useCallback, useRef, useEffect } from "react";
-import { eventBus } from "../EventBus";
-import type { EventChannels } from "../EventTypes";
+import { useCallback, useRef, useEffect } from 'react';
+import { eventBus } from '../EventBus';
+import type { EventChannels } from '../EventTypes';
 
 /**
  * Hook to access the event bus instance

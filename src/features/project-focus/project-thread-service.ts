@@ -1,16 +1,16 @@
 import {
   ProjectThreadSchema,
   type ProjectThread,
-} from "./schemas";
+} from './schemas';
 import {
   listStoredProjectThreads,
   upsertStoredProjectThread,
-} from "./repository";
+} from './repository';
 import {
   trackProjectThreadCreated,
   trackProjectThreadUpdated,
   trackProjectThreadRescued,
-} from "./analytics";
+} from './analytics';
 
 const STALE_AFTER_MS = 3 * 86_400_000;
 
@@ -21,12 +21,12 @@ function threadId(userId: string, now: number): string {
 function staleRisk(
   lastTouched: number,
   now: number,
-): ProjectThread["staleRisk"] {
+): ProjectThread['staleRisk'] {
   const age = now - lastTouched;
-  if (age >= STALE_AFTER_MS * 2) return "high";
-  if (age >= STALE_AFTER_MS) return "medium";
-  if (age >= 86_400_000) return "low";
-  return "none";
+  if (age >= STALE_AFTER_MS * 2) {return 'high';}
+  if (age >= STALE_AFTER_MS) {return 'medium';}
+  if (age >= 86_400_000) {return 'low';}
+  return 'none';
 }
 
 export async function createProjectThread(input: {
@@ -39,7 +39,7 @@ export async function createProjectThread(input: {
   const now = input.now ?? Date.now();
   const thread = await upsertStoredProjectThread(
     ProjectThreadSchema.parse({
-      bestSessionMode: "CREATIVE",
+      bestSessionMode: 'CREATIVE',
       blocker: null,
       currentObjective: input.currentObjective,
       handoffNote: null,
@@ -50,8 +50,8 @@ export async function createProjectThread(input: {
       openQuestions: [],
       projectTitle: input.projectTitle,
       rescuedAt: null,
-      staleRisk: "none",
-      state: "new",
+      staleRisk: 'none',
+      state: 'new',
       userId: input.userId,
     }),
   );
@@ -66,11 +66,11 @@ export async function ensureProjectThread(input: {
 }): Promise<ProjectThread> {
   const threads = await listStoredProjectThreads(input.userId);
   const now = input.now ?? Date.now();
-  const active = threads.find((t) => t.state !== "completed");
-  if (active) return refreshProjectThreadState(active, now);
+  const active = threads.find((t) => t.state !== 'completed');
+  if (active) {return refreshProjectThreadState(active, now);}
   return createProjectThread({
     currentObjective: `Start ${input.projectTitle}`,
-    nextMove: "Open your project",
+    nextMove: 'Open your project',
     projectTitle: input.projectTitle,
     userId: input.userId,
     now,
@@ -83,11 +83,11 @@ export function rescueStaleProject(
 ): ProjectThread {
   const rescued = ProjectThreadSchema.parse({
     ...thread,
-    bestSessionMode: thread.bestSessionMode === "DEEP_WORK" ? "CREATIVE" : thread.bestSessionMode,
+    bestSessionMode: thread.bestSessionMode === 'DEEP_WORK' ? 'CREATIVE' : thread.bestSessionMode,
     lastTouched: now,
     rescuedAt: now,
-    staleRisk: "none",
-    state: "rescued",
+    staleRisk: 'none',
+    state: 'rescued',
   });
   trackProjectThreadRescued(thread.projectTitle);
   return rescued;
@@ -102,12 +102,12 @@ export function refreshProjectThreadState(
     ...thread,
     staleRisk: risk,
     state:
-      thread.state === "completed" ||
-      thread.state === "blocked" ||
-      thread.state === "rescued"
+      thread.state === 'completed' ||
+      thread.state === 'blocked' ||
+      thread.state === 'rescued'
         ? thread.state
-        : risk === "high" || risk === "medium"
-          ? "stale"
+        : risk === 'high' || risk === 'medium'
+          ? 'stale'
           : thread.state,
   });
 }

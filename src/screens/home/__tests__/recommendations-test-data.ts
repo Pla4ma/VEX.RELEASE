@@ -1,8 +1,8 @@
-import type { HomeData } from "./home-screen-recommendations-helpers";
+import type { HomeData } from './home-screen-recommendations-helpers';
 
 export function createRecommendationsHomeData(): HomeData {
   return {
-    companionMood: "steady",
+    companionMood: 'steady',
     controller: {
       activeStudyPlanQuery: { data: null },
       currentStreak: 5,
@@ -11,14 +11,14 @@ export function createRecommendationsHomeData(): HomeData {
       isOnline: true,
       openSetup: jest.fn(),
       primaryRecommendation: {
-        id: "rec-1",
-        reasoning: "6 PM is your best focus window.",
-        suggestedDifficulty: "NORMAL",
+        id: 'rec-1',
+        reasoning: '6 PM is your best focus window.',
+        suggestedDifficulty: 'NORMAL',
         suggestedDuration: 1800,
       },
       progressionQuery: { data: { level: 3 } },
-      user: { avatar: null, firstName: "Jamie" },
-      userId: "user-1",
+      user: { avatar: null, firstName: 'Jamie' },
+      userId: 'user-1',
     },
     dismissIntervention: jest.fn(),
     intervention: null,

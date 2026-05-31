@@ -1,20 +1,20 @@
-import * as Sentry from "@sentry/react-native";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useAuthStore } from "../../store";
-import { useToast } from "../../shared/ui/components/Toast";
-import * as service from "./service";
+import * as Sentry from '@sentry/react-native';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useAuthStore } from '../../store';
+import { useToast } from '../../shared/ui/components/Toast';
+import * as service from './service';
 import type {
   FocusContract,
   FocusContractInput,
   ReflectionStatus,
-} from "./types";
+} from './types';
 
 export const focusContractKeys = {
-  all: ["focus-contract"] as const,
+  all: ['focus-contract'] as const,
   session: (sessionId: string) =>
-    [...focusContractKeys.all, "session", sessionId] as const,
+    [...focusContractKeys.all, 'session', sessionId] as const,
   rate: (userId: string, windowDays: number) =>
-    [...focusContractKeys.all, "rate", userId, windowDays] as const,
+    [...focusContractKeys.all, 'rate', userId, windowDays] as const,
 };
 
 export function useContractForSession(sessionId: string | null): {
@@ -26,7 +26,7 @@ export function useContractForSession(sessionId: string | null): {
 } {
   const userId = useAuthStore((state) => state.user?.id ?? null);
   const query = useQuery({
-    queryKey: focusContractKeys.session(sessionId ?? "none"),
+    queryKey: focusContractKeys.session(sessionId ?? 'none'),
     queryFn: () => {
       if (!sessionId || !userId) {
         return null;
@@ -58,7 +58,7 @@ export function useCreateContract(): ReturnType<
   return useMutation({
     mutationFn: (input: FocusContractInput) => {
       if (!userId) {
-        throw new Error("User is required to create a focus contract.");
+        throw new Error('User is required to create a focus contract.');
       }
       return service.createContract(input, userId);
     },
@@ -73,12 +73,12 @@ export function useCreateContract(): ReturnType<
     },
     onError: (error) => {
       Sentry.captureException(error, {
-        tags: { feature: "focus-contract", operation: "create" },
+        tags: { feature: 'focus-contract', operation: 'create' },
       });
       show({
-        type: "error",
-        title: "Contract saved locally failed",
-        message: "Your session can still start.",
+        type: 'error',
+        title: 'Contract saved locally failed',
+        message: 'Your session can still start.',
       });
     },
   });
@@ -98,7 +98,7 @@ export function useReflectOnContract(): ReturnType<
   return useMutation({
     mutationFn: ({ contract, status }) => {
       if (!userId) {
-        throw new Error("User is required to reflect on a focus contract.");
+        throw new Error('User is required to reflect on a focus contract.');
       }
       return service.reflectOnContract(contract.id, status, userId);
     },
@@ -120,7 +120,7 @@ export function useReflectOnContract(): ReturnType<
       });
       if (userId) {
         void queryClient.invalidateQueries({
-          queryKey: ["focus-score", userId],
+          queryKey: ['focus-score', userId],
         });
       }
     },
@@ -129,12 +129,12 @@ export function useReflectOnContract(): ReturnType<
         queryClient.setQueryData(context.key, context.previous);
       }
       Sentry.captureException(error, {
-        tags: { feature: "focus-contract", operation: "reflect" },
+        tags: { feature: 'focus-contract', operation: 'reflect' },
       });
       show({
-        type: "error",
-        title: "Reflection did not save",
-        message: "Retry when connection returns.",
+        type: 'error',
+        title: 'Reflection did not save',
+        message: 'Retry when connection returns.',
       });
     },
   });
@@ -151,7 +151,7 @@ export function useContractCompletionRate(
   refetch: () => void;
 } {
   const query = useQuery({
-    queryKey: focusContractKeys.rate(userId ?? "none", windowDays),
+    queryKey: focusContractKeys.rate(userId ?? 'none', windowDays),
     queryFn: () =>
       userId ? service.getCompletionRate(userId, windowDays) : 0.5,
     enabled: Boolean(userId),

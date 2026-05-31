@@ -1,4 +1,4 @@
-import type { TextStyle } from "react-native";
+import type { TextStyle } from 'react-native';
 
 export interface TypographyScale {
   display: { large: TextStyle; medium: TextStyle; small: TextStyle };
@@ -26,12 +26,12 @@ export interface FontFamilies {
 }
 
 export interface FontWeights {
-  light: TextStyle["fontWeight"];
-  regular: TextStyle["fontWeight"];
-  medium: TextStyle["fontWeight"];
-  semibold: TextStyle["fontWeight"];
-  bold: TextStyle["fontWeight"];
-  heavy: TextStyle["fontWeight"];
+  light: TextStyle['fontWeight'];
+  regular: TextStyle['fontWeight'];
+  medium: TextStyle['fontWeight'];
+  semibold: TextStyle['fontWeight'];
+  bold: TextStyle['fontWeight'];
+  heavy: TextStyle['fontWeight'];
 }
 
 export interface SpacingScale {
@@ -58,8 +58,8 @@ export interface BorderRadiusScale {
   md: number;
   lg: number;
   xl: number;
-  "2xl": number;
-  "3xl": number;
+  '2xl': number;
+  '3xl': number;
   full: number;
 }
 
@@ -71,12 +71,12 @@ export interface ShadowScale {
   md: string;
   lg: string;
   xl: string;
-  "2xl": string;
+  '2xl': string;
   inner: string;
 }
 
 export interface ZIndexScale {
-  auto: "auto";
+  auto: 'auto';
   base: number;
   dropdown: number;
   sticky: number;
@@ -94,16 +94,16 @@ export interface Breakpoints {
   md: number;
   lg: number;
   xl: number;
-  "2xl": number;
+  '2xl': number;
 }
 
 export type TimingFunction =
-  | "linear"
-  | "ease"
-  | "easeIn"
-  | "easeOut"
-  | "easeInOut"
-  | "spring";
+  | 'linear'
+  | 'ease'
+  | 'easeIn'
+  | 'easeOut'
+  | 'easeInOut'
+  | 'spring';
 
 export interface AnimationTiming {
   instant: number;

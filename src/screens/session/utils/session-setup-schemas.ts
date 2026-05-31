@@ -1,7 +1,7 @@
-import { z } from "zod";
-import type { MasteryState } from "../../../features/mastery/types";
-import { PRESETS } from "./session-setup-presets";
-import type { PresetWithIcon, SmartSuggestion } from "./session-setup-presets";
+import { z } from 'zod';
+import type { MasteryState } from '../../../features/mastery/types';
+import { PRESETS } from './session-setup-presets';
+import type { PresetWithIcon, SmartSuggestion } from './session-setup-presets';
 
 export const SESSION_DRAFT_MAX_AGE_MS = 60 * 60 * 1000;
 
@@ -19,7 +19,7 @@ export const MasteryStateSchema = z.object({
   userId: z.string().optional(),
   totalMasteryPoints: z.number().optional(),
   rank: z
-    .enum(["APPRENTICE", "ADEPT", "EXPERT", "MASTER", "GRANDMASTER"])
+    .enum(['APPRENTICE', 'ADEPT', 'EXPERT', 'MASTER', 'GRANDMASTER'])
     .optional(),
   techniques: z.object({
     durationMastery: z.number(),
@@ -32,20 +32,20 @@ export const MasteryStateSchema = z.object({
     z.object({
       id: z.string(),
       technique: z.enum([
-        "durationMastery",
-        "purityMastery",
-        "consistencyMastery",
-        "comebackMastery",
-        "bossMastery",
+        'durationMastery',
+        'purityMastery',
+        'consistencyMastery',
+        'comebackMastery',
+        'bossMastery',
       ]),
       title: z.string(),
       description: z.string(),
-      difficulty: z.enum(["EASY", "MEDIUM", "HARD", "ELITE"]),
+      difficulty: z.enum(['EASY', 'MEDIUM', 'HARD', 'ELITE']),
       target: z.number(),
       current: z.number(),
       unit: z.string(),
       masteryPoints: z.number(),
-      status: z.enum(["ACTIVE", "COMPLETED", "CLAIMED"]),
+      status: z.enum(['ACTIVE', 'COMPLETED', 'CLAIMED']),
       completedAt: z.number().nullable(),
     }),
   ),
@@ -66,15 +66,15 @@ export function resolveSmartSuggestion(
   }
   if (mastery.techniques.purityMastery < 5) {
     return {
-      preset: getPresetById("quick"),
+      preset: getPresetById('quick'),
       description:
-        "Your purity scores suggest shorter sessions build better habits right now",
+        'Your purity scores suggest shorter sessions build better habits right now',
       confidence: 0.85,
     };
   }
   if (mastery.techniques.durationMastery > 15) {
     return {
-      preset: getPresetById("deep"),
+      preset: getPresetById('deep'),
       description:
         "You've consistently finished long sessions and you're ready for deep work",
       confidence: 0.82,
@@ -82,7 +82,7 @@ export function resolveSmartSuggestion(
   }
   if (mastery.techniques.consistencyMastery < 5 && currentStreak > 0) {
     return {
-      preset: getPresetById("pomodoro"),
+      preset: getPresetById('pomodoro'),
       description:
         "The Pomodoro keeps streaks alive and it's the most consistent preset",
       confidence: 0.76,
@@ -104,7 +104,7 @@ export function hydrateMasteryState(
   return {
     userId: mastery.userId ?? userId,
     totalMasteryPoints: mastery.totalMasteryPoints ?? 0,
-    rank: mastery.rank ?? "APPRENTICE",
+    rank: mastery.rank ?? 'APPRENTICE',
     techniques: mastery.techniques,
     activeChallenges: mastery.activeChallenges,
     unlockedFeatures: mastery.unlockedFeatures ?? [],

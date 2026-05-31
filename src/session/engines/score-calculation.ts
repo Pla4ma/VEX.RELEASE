@@ -2,9 +2,9 @@ import type {
   SessionState,
   ScoreCalculation,
   FocusQualityMetrics,
-} from "../types";
-import { getSessionModeConfig } from "../modes";
-import { BonusCalculator } from "./scoring/BonusCalculator";
+} from '../types';
+import { getSessionModeConfig } from '../modes';
+import { BonusCalculator } from './scoring/BonusCalculator';
 import {
   calculateTimeMultiplier,
   calculateQualityMultiplier,
@@ -15,8 +15,8 @@ import {
   calculateInterruptionPenalty,
   calculateQualityPenalty,
   calculateAntiCheatPenalty,
-} from "./scoring/scoring-helpers";
-import { calculateFinalScore } from "./scoring-utils";
+} from './scoring/scoring-helpers';
+import { calculateFinalScore } from './scoring-utils';
 
 const BASE_SCORE_PER_MINUTE = 25;
 

@@ -1,10 +1,10 @@
-import { z } from "zod";
-import { launchColors } from "@theme/tokens/launch-colors";
-import { UserPreferencesSchema, AppearanceSettingsSchema } from "./core-schemas";
-import type { AppearanceSettings } from "./core-schemas";
-import { NotificationSettingsSchema } from "./notification-schemas";
-import { CoachSettingsSchema } from "./coach-schemas";
-import { PrivacySettingsSchema, DataControlSettingsSchema } from "./core-schemas";
+import { z } from 'zod';
+import { launchColors } from '@theme/tokens/launch-colors';
+import { UserPreferencesSchema, AppearanceSettingsSchema } from './core-schemas';
+import type { AppearanceSettings } from './core-schemas';
+import { NotificationSettingsSchema } from './notification-schemas';
+import { CoachSettingsSchema } from './coach-schemas';
+import { PrivacySettingsSchema, DataControlSettingsSchema } from './core-schemas';
 
 export function createDefaultSettings(
   userId: string,
@@ -14,21 +14,21 @@ export function createDefaultSettings(
     userId,
     version: 1,
     settings: {
-      "general.language": {
+      'general.language': {
         id: crypto.randomUUID(),
         userId,
-        key: "general.language",
-        value: "en",
-        category: "general",
+        key: 'general.language',
+        value: 'en',
+        category: 'general',
         isDefault: true,
         lastModified: now,
       },
-      "general.timezone": {
+      'general.timezone': {
         id: crypto.randomUUID(),
         userId,
-        key: "general.timezone",
+        key: 'general.timezone',
         value: Intl.DateTimeFormat().resolvedOptions().timeZone,
-        category: "general",
+        category: 'general',
         isDefault: true,
         lastModified: now,
       },
@@ -49,13 +49,13 @@ export function createDefaultNotificationSettings(
         deviceTokens: [],
         timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
       },
-      email: { enabled: true, email: "user@example.com", digestFrequency: "daily" },
+      email: { enabled: true, email: 'user@example.com', digestFrequency: 'daily' },
       inApp: { enabled: true, soundEnabled: true, vibrationEnabled: true },
     },
     preferences: {
-      critical: { enabled: true, channels: ["push", "email", "in_app"] },
-      high: { enabled: true, channels: ["push", "in_app"] },
-      normal: { enabled: true, channels: ["in_app"] },
+      critical: { enabled: true, channels: ['push', 'email', 'in_app'] },
+      high: { enabled: true, channels: ['push', 'in_app'] },
+      normal: { enabled: true, channels: ['in_app'] },
       low: { enabled: false, channels: [] },
     },
     customRules: [],
@@ -68,8 +68,8 @@ export function createDefaultCoachSettings(
   return CoachSettingsSchema.parse({
     userId,
     enabled: true,
-    personality: "supportive",
-    frequency: "moderate",
+    personality: 'supportive',
+    frequency: 'moderate',
     messageTypes: {
       streakReminders: true,
       sessionTips: true,
@@ -79,8 +79,8 @@ export function createDefaultCoachSettings(
     },
     quietHours: {
       enabled: true,
-      start: "22:00",
-      end: "08:00",
+      start: '22:00',
+      end: '08:00',
       timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
     },
     customTriggers: [],
@@ -92,7 +92,7 @@ export function createDefaultAppearanceSettings(
 ): AppearanceSettings {
   return AppearanceSettingsSchema.parse({
     userId,
-    theme: "system",
+    theme: 'system',
     accentColor: launchColors.hex_6366f1,
     fontScale: 1,
     useSystemFont: true,
@@ -107,7 +107,7 @@ export function createDefaultPrivacySettings(
 ): z.infer<typeof PrivacySettingsSchema> {
   return PrivacySettingsSchema.parse({
     userId,
-    profileVisibility: "friends",
+    profileVisibility: 'friends',
     showOnlineStatus: true,
     showActivityStatus: true,
     allowDataAnalysis: true,
@@ -122,8 +122,8 @@ export function createDefaultDataControlSettings(
 ): z.infer<typeof DataControlSettingsSchema> {
   return DataControlSettingsSchema.parse({
     userId,
-    retentionPolicy: "standard",
-    autoExport: { enabled: false, frequency: "never", format: "json" },
+    retentionPolicy: 'standard',
+    autoExport: { enabled: false, frequency: 'never', format: 'json' },
     backupEnabled: true,
   });
 }

@@ -1,18 +1,18 @@
-import React from "react";
-import { Pressable, Text, View } from "react-native";
-import Animated from "react-native-reanimated";
-import { useTheme } from "../../../theme";
-import { useFadeStyle, useShakeStyle } from "./animations";
-import { styles } from "./styles";
-import type { ErrorStateProps } from "./types";
+import React from 'react';
+import { Pressable, Text, View } from 'react-native';
+import Animated from 'react-native-reanimated';
+import { useTheme } from '../../../theme';
+import { useFadeStyle, useShakeStyle } from './animations';
+import { styles } from './styles';
+import type { ErrorStateProps } from './types';
 
 export function ErrorState({
   error,
-  title = "Something went wrong",
+  title = 'Something went wrong',
   onRetry,
   onDismiss,
-  retryLabel = "Try Again",
-  dismissLabel = "Dismiss",
+  retryLabel = 'Try Again',
+  dismissLabel = 'Dismiss',
   showDetails = false,
   style,
   testID,

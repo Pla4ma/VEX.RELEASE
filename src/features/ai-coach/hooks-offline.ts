@@ -1,9 +1,9 @@
-import { useEffect, useCallback, useRef, useState } from "react";
-import { useNetInfo } from "@react-native-community/netinfo";
-import { useQueryClient } from "@tanstack/react-query";
-import { type CoachMessage, type CoachState } from "./schemas";
-import { COACH_QUERY_KEYS } from "./hooks";
-import { createDebugger } from "../../utils/debug";
+import { useEffect, useCallback, useRef, useState } from 'react';
+import { useNetInfo } from '@react-native-community/netinfo';
+import { useQueryClient } from '@tanstack/react-query';
+import { type CoachMessage, type CoachState } from './schemas';
+import { COACH_QUERY_KEYS } from './hooks';
+import { createDebugger } from '../../utils/debug';
 import {
   type QueuedMutation,
   type UseOfflineCoachResult,
@@ -12,9 +12,9 @@ import {
   getQueue,
   saveQueue,
   processMutation,
-} from "./offline-queue";
+} from './offline-queue';
 
-const debug = createDebugger("coach:offline");
+const debug = createDebugger('coach:offline');
 
 export function useOfflineCoach(userId: string): UseOfflineCoachResult {
   const netInfo = useNetInfo();
@@ -39,7 +39,7 @@ export function useOfflineCoach(userId: string): UseOfflineCoachResult {
         await processMutation(mutation, userId);
       } catch (error) {
         debug.error(
-          "Mutation failed",
+          'Mutation failed',
           error instanceof Error ? error : new Error(String(error)),
         );
         if (mutation.retryCount < 3) {
@@ -53,7 +53,7 @@ export function useOfflineCoach(userId: string): UseOfflineCoachResult {
     setIsProcessing(false);
   }, [userId]);
   const queueMutation = useCallback(
-    (mutation: Omit<QueuedMutation, "id" | "timestamp" | "retryCount">) => {
+    (mutation: Omit<QueuedMutation, 'id' | 'timestamp' | 'retryCount'>) => {
       const queue = getQueue();
       const isDuplicate = queue.some(
         (item) =>
@@ -61,7 +61,7 @@ export function useOfflineCoach(userId: string): UseOfflineCoachResult {
           JSON.stringify(item.payload) === JSON.stringify(mutation.payload),
       );
       if (isDuplicate) {
-        debug.debug("[OfflineCoach] Duplicate mutation ignored");
+        debug.debug('[OfflineCoach] Duplicate mutation ignored');
         return;
       }
       const newMutation: QueuedMutation = {
@@ -149,7 +149,7 @@ export function useOfflineCoachMessageActions(
         };
       },
     );
-    queueMutation({ type: "MARK_READ", payload: { userId, messageId } });
+    queueMutation({ type: 'MARK_READ', payload: { userId, messageId } });
   }, [userId, messageId, queueMutation, queryClient]);
   const dismiss = useCallback(async () => {
     queryClient.setQueryData(
@@ -167,7 +167,7 @@ export function useOfflineCoachMessageActions(
         };
       },
     );
-    queueMutation({ type: "DISMISS", payload: { userId, messageId } });
+    queueMutation({ type: 'DISMISS', payload: { userId, messageId } });
   }, [userId, messageId, queueMutation, queryClient]);
   return { markRead, dismiss, isProcessing };
 }
@@ -185,7 +185,7 @@ export function useOfflinePersonaSelection(userId: string) {
           return { ...old, personaId };
         },
       );
-      queueMutation({ type: "SELECT_PERSONA", payload: { userId, personaId } });
+      queueMutation({ type: 'SELECT_PERSONA', payload: { userId, personaId } });
     },
     [userId, queueMutation, queryClient],
   );

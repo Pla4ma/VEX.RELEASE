@@ -1,12 +1,12 @@
-import { Platform } from "react-native";
-import { CURRENT_CONFIG } from "../constants/app";
-import { createDebugger } from "../utils/debug";
-import { CircuitBreaker } from "./circuit-breaker";
-import { RequestDeduplicator } from "./deduplicator";
-import { calculateBackoff, isRetryableError, isRetryableErrorCode } from "./retry";
-import type { ApiConfig, ApiRequestConfig, ApiResponse, ApiError } from "./client-types";
+import { Platform } from 'react-native';
+import { CURRENT_CONFIG } from '../constants/app';
+import { createDebugger } from '../utils/debug';
+import { CircuitBreaker } from './circuit-breaker';
+import { RequestDeduplicator } from './deduplicator';
+import { calculateBackoff, isRetryableError, isRetryableErrorCode } from './retry';
+import type { ApiConfig, ApiRequestConfig, ApiResponse, ApiError } from './client-types';
 
-const debug = createDebugger("api");
+const debug = createDebugger('api');
 
 export interface RequestExecutorDeps {
   config: ApiConfig;
@@ -41,7 +41,7 @@ export function createError(
 }
 
 export function isApiError(error: unknown): error is ApiError {
-  return typeof error === "object" && error !== null && "code" in error;
+  return typeof error === 'object' && error !== null && 'code' in error;
 }
 
 export async function parseErrorResponse(
@@ -66,7 +66,7 @@ export async function executeRequest<T>(
   config: ApiRequestConfig,
 ): Promise<ApiResponse<T>> {
   if (!deps.circuitBreaker.canExecute()) {
-    throw createError("CIRCUIT_OPEN", "Service temporarily unavailable", 503);
+    throw createError('CIRCUIT_OPEN', 'Service temporarily unavailable', 503);
   }
   const url = buildURL(deps.config.baseURL, endpoint, config.params);
   const controller = new AbortController();
@@ -74,27 +74,27 @@ export async function executeRequest<T>(
 
   try {
     const headers: Record<string, string> = {
-      "Content-Type": "application/json",
-      "X-Platform": Platform.OS,
-      "X-App-Version": CURRENT_CONFIG.version,
+      'Content-Type': 'application/json',
+      'X-Platform': Platform.OS,
+      'X-App-Version': CURRENT_CONFIG.version,
       ...config.headers,
     };
     const fetchConfig: RequestInit = {
-      method: config.method ?? "GET",
+      method: config.method ?? 'GET',
       headers,
       signal: controller.signal,
     };
-    if (config.data && config.method !== "GET") {
+    if (config.data && config.method !== 'GET') {
       fetchConfig.body = JSON.stringify(config.data);
     }
-    debug.debug("API Request: %s %s", fetchConfig.method, url);
+    debug.debug('API Request: %s %s', fetchConfig.method, url);
     let response = await fetch(url, fetchConfig);
     response = await deps.runResponseInterceptors(response);
 
     if (!response.ok) {
       const errorData = await parseErrorResponse(response);
       throw createError(
-        errorData.code ?? "HTTP_ERROR",
+        errorData.code ?? 'HTTP_ERROR',
         errorData.message ?? response.statusText,
         response.status,
         errorData.details,
@@ -105,17 +105,17 @@ export async function executeRequest<T>(
       try {
         config.schema.parse(data);
       } catch (error) {
-        throw createError("VALIDATION_ERROR", "Response validation failed", response.status, { validationError: error });
+        throw createError('VALIDATION_ERROR', 'Response validation failed', response.status, { validationError: error });
       }
     }
     deps.circuitBreaker.recordSuccess();
     const result: ApiResponse<T> = { data, status: response.status, headers: parseHeaders(response.headers) };
-    debug.debug("API Response: %s %d", url, response.status);
+    debug.debug('API Response: %s %d', url, response.status);
     return result;
   } catch (error) {
     deps.circuitBreaker.recordFailure();
-    if (error instanceof Error && error.name === "AbortError") {
-      throw createError("TIMEOUT", "Request timeout", 408);
+    if (error instanceof Error && error.name === 'AbortError') {
+      throw createError('TIMEOUT', 'Request timeout', 408);
     }
     throw error;
   } finally {
@@ -129,19 +129,19 @@ export async function executeWithRetry<T>(
   config: ApiRequestConfig,
 ): Promise<ApiResponse<T>> {
   const maxRetries = config.retries ?? deps.config.retries;
-  let lastError: Error = new Error("Unknown error");
+  let lastError: Error = new Error('Unknown error');
   for (let attempt = 0; attempt <= maxRetries; attempt++) {
     try {
       return await executeRequest<T>(deps, endpoint, config);
     } catch (error) {
       lastError = error instanceof Error ? error : new Error(String(error));
-      if (attempt === maxRetries) break;
+      if (attempt === maxRetries) {break;}
       const apiError = isApiError(lastError)
         ? lastError
-        : createError("UNKNOWN", lastError.message, 0);
-      if (!isRetryableError(apiError)) break;
+        : createError('UNKNOWN', lastError.message, 0);
+      if (!isRetryableError(apiError)) {break;}
       const delay = calculateBackoff(attempt, deps.config.retryDelay);
-      debug.debug("Retrying request in %dms (attempt %d/%d)", delay, attempt + 1, maxRetries + 1);
+      debug.debug('Retrying request in %dms (attempt %d/%d)', delay, attempt + 1, maxRetries + 1);
       await new Promise((resolve) => setTimeout(resolve, delay));
     }
   }
@@ -156,6 +156,6 @@ export async function executeWithDeduplication<T>(
   if (!config.deduplicate) {
     return executeWithRetry<T>(deps, endpoint, config);
   }
-  const key = `${config.method ?? "GET"}:${endpoint}:${JSON.stringify(config.params ?? {})}:${JSON.stringify(config.data ?? {})}`;
+  const key = `${config.method ?? 'GET'}:${endpoint}:${JSON.stringify(config.params ?? {})}:${JSON.stringify(config.data ?? {})}`;
   return deps.deduplicator.deduplicate(key, () => executeWithRetry<T>(deps, endpoint, config));
 }

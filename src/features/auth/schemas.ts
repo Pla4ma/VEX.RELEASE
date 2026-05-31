@@ -1,18 +1,18 @@
-import { z } from "zod";
-import type { User } from "../../types/models";
+import { z } from 'zod';
+import type { User } from '../../types/models';
 
-const UserRoleSchema = z.enum(["user", "moderator", "admin", "superadmin"]);
-const UserStatusSchema = z.enum(["active", "inactive", "suspended", "pending"]);
+const UserRoleSchema = z.enum(['user', 'moderator', 'admin', 'superadmin']);
+const UserStatusSchema = z.enum(['active', 'inactive', 'suspended', 'pending']);
 
 const UserPreferencesSchema = z.object({
-  theme: z.enum(["light", "dark", "system"]),
+  theme: z.enum(['light', 'dark', 'system']),
   language: z.string(),
   notifications: z.object({
     push: z.boolean(),
     email: z.boolean(),
     sms: z.boolean(),
     inApp: z.boolean(),
-    digestFrequency: z.enum(["realtime", "daily", "weekly", "never"]),
+    digestFrequency: z.enum(['realtime', 'daily', 'weekly', 'never']),
     quietHours: z.object({
       enabled: z.boolean(),
       start: z.string(),
@@ -21,7 +21,7 @@ const UserPreferencesSchema = z.object({
     }),
   }),
   privacy: z.object({
-    profileVisibility: z.enum(["public", "followers", "private"]),
+    profileVisibility: z.enum(['public', 'followers', 'private']),
     activityStatus: z.boolean(),
     readReceipts: z.boolean(),
     allowTagging: z.boolean(),
@@ -34,7 +34,7 @@ const UserPreferencesSchema = z.object({
     largeText: z.boolean(),
     screenReaderOptimized: z.boolean(),
     colorBlindMode: z
-      .enum(["deuteranopia", "protanopia", "tritanopia"])
+      .enum(['deuteranopia', 'protanopia', 'tritanopia'])
       .optional(),
   }),
 });

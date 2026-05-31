@@ -1,25 +1,25 @@
-import { createSheet } from "@/shared/ui/create-sheet";
-import { launchColors } from "@theme/tokens/launch-colors";
+import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
 
 export const styles = createSheet({
-  container: { alignItems: "center" },
+  container: { alignItems: 'center' },
   iconContainer: {
     width: 80,
     height: 80,
     borderRadius: 40,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     marginBottom: 24,
   },
   icon: { fontSize: 40 },
-  impactCard: { width: "100%" },
+  impactCard: { width: '100%' },
   progressBar: {
     height: 8,
     backgroundColor: launchColors.rgb_0_0_0_0_1,
     borderRadius: 4,
-    overflow: "hidden",
+    overflow: 'hidden',
   },
-  progressFill: { height: "100%", borderRadius: 4 },
+  progressFill: { height: '100%', borderRadius: 4 },
   warningBox: {
     backgroundColor: launchColors.rgb_245_158_11_0_1,
     borderRadius: 12,

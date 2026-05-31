@@ -1,16 +1,16 @@
-import { getCoachPresenceMessage } from "../copy-service";
-import type { CoachPresenceContext } from "../copy-service";
+import { getCoachPresenceMessage } from '../copy-service';
+import type { CoachPresenceContext } from '../copy-service';
 
 function makeContext(
   overrides: Partial<CoachPresenceContext> = {},
 ): CoachPresenceContext {
   return {
-    motivationStyle: "CALM",
-    primaryGoal: "focus",
+    motivationStyle: 'CALM',
+    primaryGoal: 'focus',
     firstWeekStage: null,
     latestSession: null,
-    memoryConfidence: "none",
-    sessionMode: "inactive",
+    memoryConfidence: 'none',
+    sessionMode: 'inactive',
     comebackState: null,
     studyLayerLabel: null,
     bossIntensity: null,
@@ -21,122 +21,122 @@ function makeContext(
   };
 }
 
-describe("getCoachPresenceMessage", () => {
-  it("calm tone", () => {
+describe('getCoachPresenceMessage', () => {
+  it('calm tone', () => {
     const result = getCoachPresenceMessage(
-      makeContext({ motivationStyle: "CALM" }),
+      makeContext({ motivationStyle: 'CALM' }),
     );
-    expect(result.tone).toBe("calm");
-    expect(result.visualMood).toBe("steady");
-    expect(result.safeIntent).toBe("START_SESSION");
+    expect(result.tone).toBe('calm');
+    expect(result.visualMood).toBe('steady');
+    expect(result.safeIntent).toBe('START_SESSION');
     expect(result.message.length).toBeLessThanOrEqual(96);
   });
 
-  it("study tone", () => {
+  it('study tone', () => {
     const result = getCoachPresenceMessage(
       makeContext({
-        motivationStyle: "STUDY_FOCUSED",
-        primaryGoal: "study",
-        studyLayerLabel: "Study OS",
-        memoryConfidence: "weak",
+        motivationStyle: 'STUDY_FOCUSED',
+        primaryGoal: 'study',
+        studyLayerLabel: 'Study OS',
+        memoryConfidence: 'weak',
         latestSession: {
           durationMinutes: 22,
           focusPurityScore: 81,
           isComeback: false,
-          mode: "STUDY",
+          mode: 'STUDY',
         },
       }),
     );
-    expect(result.tone).toBe("studious");
-    expect(result.safeIntent).toBe("START_STUDY_SESSION");
-    expect(result.optionalActionLabel).toBe("Next study block");
+    expect(result.tone).toBe('studious');
+    expect(result.safeIntent).toBe('START_STUDY_SESSION');
+    expect(result.optionalActionLabel).toBe('Next study block');
     expect(result.message.length).toBeLessThanOrEqual(96);
   });
 
-  it("game-like tone", () => {
+  it('game-like tone', () => {
     const result = getCoachPresenceMessage(
       makeContext({
-        motivationStyle: "GAME_LIKE",
-        bossIntensity: "game-like",
+        motivationStyle: 'GAME_LIKE',
+        bossIntensity: 'game-like',
       }),
     );
-    expect(result.tone).toBe("playful");
-    expect(result.visualMood).toBe("celebrating");
+    expect(result.tone).toBe('playful');
+    expect(result.visualMood).toBe('celebrating');
     expect(result.message).not.toMatch(/Great job|Keep going|You can do it/i);
   });
 
-  it("coach-led tone", () => {
+  it('coach-led tone', () => {
     const result = getCoachPresenceMessage(
       makeContext({
-        motivationStyle: "COACH_LED",
-        memoryConfidence: "weak",
+        motivationStyle: 'COACH_LED',
+        memoryConfidence: 'weak',
         latestSession: {
           durationMinutes: 18,
           focusPurityScore: 78,
           isComeback: false,
-          mode: "FOCUS",
+          mode: 'FOCUS',
         },
       }),
     );
-    expect(result.tone).toBe("direct");
-    expect(result.visualMood).toBe("ready");
-    expect(result.safeIntent).toBe("START_SESSION");
+    expect(result.tone).toBe('direct');
+    expect(result.visualMood).toBe('ready');
+    expect(result.safeIntent).toBe('START_SESSION');
     expect(result.message.length).toBeLessThanOrEqual(96);
   });
 
-  it("comeback tone", () => {
+  it('comeback tone', () => {
     const result = getCoachPresenceMessage(
       makeContext({
-        motivationStyle: "CALM",
-        comebackState: "missed_week",
+        motivationStyle: 'CALM',
+        comebackState: 'missed_week',
       }),
     );
-    expect(result.message).toContain("behind");
+    expect(result.message).toContain('behind');
     expect(result.message).not.toMatch(/failed|lost/i);
     expect(result.message.length).toBeLessThanOrEqual(96);
-    expect(result.safeIntent).toBe("START_SESSION");
-    expect(result.optionalActionLabel).toBe("Start small");
+    expect(result.safeIntent).toBe('START_SESSION');
+    expect(result.optionalActionLabel).toBe('Start small');
   });
 
-  it("completion tone — first session", () => {
+  it('completion tone — first session', () => {
     const result = getCoachPresenceMessage(
       makeContext({
-        motivationStyle: "FRIENDLY",
-        completionContext: "first_session",
+        motivationStyle: 'FRIENDLY',
+        completionContext: 'first_session',
       }),
     );
-    expect(result.tone).toBe("warm");
-    expect(result.safeIntent).toBe("START_SESSION");
+    expect(result.tone).toBe('warm');
+    expect(result.safeIntent).toBe('START_SESSION');
     expect(result.message).not.toMatch(/Great job|Keep going/i);
   });
 
-  it("completion tone — comeback", () => {
+  it('completion tone — comeback', () => {
     const result = getCoachPresenceMessage(
       makeContext({
-        motivationStyle: "COACH_LED",
-        completionContext: "comeback",
+        motivationStyle: 'COACH_LED',
+        completionContext: 'comeback',
       }),
     );
-    expect(result.tone).toBe("direct");
-    expect(result.safeIntent).toBe("START_SESSION");
+    expect(result.tone).toBe('direct');
+    expect(result.safeIntent).toBe('START_SESSION');
   });
 
-  it("completion tone — study", () => {
+  it('completion tone — study', () => {
     const result = getCoachPresenceMessage(
       makeContext({
-        motivationStyle: "STUDY_FOCUSED",
-        primaryGoal: "study",
-        completionContext: "study",
+        motivationStyle: 'STUDY_FOCUSED',
+        primaryGoal: 'study',
+        completionContext: 'study',
       }),
     );
-    expect(result.safeIntent).toBe("START_STUDY_SESSION");
+    expect(result.safeIntent).toBe('START_STUDY_SESSION');
     expect(result.message.length).toBeLessThanOrEqual(96);
   });
 
-  it("AI unavailable fallback", () => {
+  it('AI unavailable fallback', () => {
     const result = getCoachPresenceMessage(
       makeContext({
-        motivationStyle: "FRIENDLY",
+        motivationStyle: 'FRIENDLY',
         aiAvailable: false,
       }),
     );
@@ -145,45 +145,45 @@ describe("getCoachPresenceMessage", () => {
     expect(result.message).not.toMatch(/error|failed|unavailable/i);
   });
 
-  it("premium moment soft tease", () => {
+  it('premium moment soft tease', () => {
     const result = getCoachPresenceMessage(
       makeContext({
-        motivationStyle: "COACH_LED",
-        memoryConfidence: "strong",
-        premiumMoment: "soft_tease",
+        motivationStyle: 'COACH_LED',
+        memoryConfidence: 'strong',
+        premiumMoment: 'soft_tease',
       }),
     );
-    expect(result.message).toContain("Pro");
+    expect(result.message).toContain('Pro');
   });
 
-  it("no raw route names in messages", () => {
+  it('no raw route names in messages', () => {
     const result = getCoachPresenceMessage(
       makeContext({
-        motivationStyle: "GAME_LIKE",
-        completionContext: "normal",
+        motivationStyle: 'GAME_LIKE',
+        completionContext: 'normal',
       }),
     );
     expect(result.message).not.toMatch(/route|screen|navigate|tab|stack/i);
   });
 
-  it("no heavy boss language for calm users", () => {
+  it('no heavy boss language for calm users', () => {
     const result = getCoachPresenceMessage(
       makeContext({
-        motivationStyle: "CALM",
-        bossIntensity: "game-like",
+        motivationStyle: 'CALM',
+        bossIntensity: 'game-like',
       }),
     );
     expect(result.message).not.toMatch(/damage|destroy|crush|defeat|beat/i);
   });
 
-  it("short and human — under 96 chars", () => {
+  it('short and human — under 96 chars', () => {
     const styles = [
-      "CALM",
-      "FRIENDLY",
-      "COACH_LED",
-      "GAME_LIKE",
-      "INTENSE",
-      "STUDY_FOCUSED",
+      'CALM',
+      'FRIENDLY',
+      'COACH_LED',
+      'GAME_LIKE',
+      'INTENSE',
+      'STUDY_FOCUSED',
     ] as const;
     for (const style of styles) {
       const result = getCoachPresenceMessage(

@@ -3,15 +3,15 @@
  * Manages study plan sessions and task completion
  */
 
-import { useState, useCallback } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useAuthStore } from "../../../store";
-import { fetchGenerationById, fetchContentById } from "../ContentStudyService";
-import { studySessionManager } from "../persistence";
-import { prepareContentStudySession } from "../integration";
-import { emitTaskCompleted } from "../events";
-import { contentStudyQueryKeys } from "./queryKeys";
-import { getStudyPlanTitle } from "./helpers";
+import { useState, useCallback } from 'react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useAuthStore } from '../../../store';
+import { fetchGenerationById, fetchContentById } from '../ContentStudyService';
+import { studySessionManager } from '../persistence';
+import { prepareContentStudySession } from '../integration';
+import { emitTaskCompleted } from '../events';
+import { contentStudyQueryKeys } from './queryKeys';
+import { getStudyPlanTitle } from './helpers';
 
 export function useStudyPlan(generationId: string) {
   const queryClient = useQueryClient();
@@ -28,7 +28,7 @@ export function useStudyPlan(generationId: string) {
   const contentQuery = useQuery({
     queryKey: [
       ...contentStudyQueryKeys.all,
-      "generation-content",
+      'generation-content',
       generationId,
     ],
     queryFn: async () => {
@@ -86,7 +86,7 @@ export function useStudyPlan(generationId: string) {
       )[0];
 
       if (!latestSession) {
-        throw new Error("Study plan progress could not be found.");
+        throw new Error('Study plan progress could not be found.');
       }
 
       const completedTasks = Array.from(
@@ -94,7 +94,7 @@ export function useStudyPlan(generationId: string) {
       );
       const generation = await fetchGenerationById(generationId);
       if (!generation) {
-        throw new Error("Study plan could not be loaded.");
+        throw new Error('Study plan could not be loaded.');
       }
 
       if (completedTasks.length >= generation.tasks.length) {
@@ -117,7 +117,7 @@ export function useStudyPlan(generationId: string) {
         queryKey: contentStudyQueryKeys.all,
       });
       await queryClient.invalidateQueries({
-        queryKey: contentStudyQueryKeys.activePlan(user?.id ?? ""),
+        queryKey: contentStudyQueryKeys.activePlan(user?.id ?? ''),
       });
     },
   });

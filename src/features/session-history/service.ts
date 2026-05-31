@@ -1,6 +1,6 @@
-import { SessionMode, resolveSessionMode } from "../../session/modes";
-import { SessionStatusSchema } from "../../session/types";
-import { fetchSessionHistoryRows } from "./repository";
+import { SessionMode, resolveSessionMode } from '../../session/modes';
+import { SessionStatusSchema } from '../../session/types';
+import { fetchSessionHistoryRows } from './repository';
 import {
   SessionHistoryMetadataSchema,
   SessionHistoryViewModelSchema,
@@ -8,34 +8,34 @@ import {
   type SessionHistoryStats,
   type SessionHistoryViewModel,
   type SupabaseSessionRow,
-} from "./schemas";
+} from './schemas';
 
 function parseTimestamp(value: string | null, fallback: string): number {
   const parsed = Date.parse(value ?? fallback);
   return Number.isNaN(parsed) ? Date.parse(fallback) : parsed;
 }
 
-function normalizeStatus(status: string): SessionHistoryItem["status"] {
+function normalizeStatus(status: string): SessionHistoryItem['status'] {
   const parsed = SessionStatusSchema.safeParse(status.toUpperCase());
-  return parsed.success ? parsed.data : "DEGRADED";
+  return parsed.success ? parsed.data : 'DEGRADED';
 }
 
 function titleForMode(mode: SessionMode): string {
   switch (mode) {
     case SessionMode.DEEP_WORK:
-      return "Deep work";
+      return 'Deep work';
     case SessionMode.STUDY:
-      return "Study focus";
+      return 'Study focus';
     case SessionMode.CREATIVE:
-      return "Creative focus";
+      return 'Creative focus';
     case SessionMode.SPRINT:
-      return "Sprint focus";
+      return 'Sprint focus';
     case SessionMode.RECOVERY:
-      return "Recovery focus";
+      return 'Recovery focus';
     case SessionMode.STARTER:
-      return "Starter focus";
+      return 'Starter focus';
     default:
-      return "Focus session";
+      return 'Focus session';
   }
 }
 
@@ -46,23 +46,23 @@ function scoreFromQuality(qualityScore: number | null): number {
   return qualityScore <= 100 ? Math.round(qualityScore * 10) : qualityScore;
 }
 
-function gradeFromScore(score: number): SessionHistoryItem["grade"] {
+function gradeFromScore(score: number): SessionHistoryItem['grade'] {
   if (score >= 900) {
-    return "S";
+    return 'S';
   }
   if (score >= 800) {
-    return "A";
+    return 'A';
   }
   if (score >= 700) {
-    return "B";
+    return 'B';
   }
   if (score >= 600) {
-    return "C";
+    return 'C';
   }
   if (score >= 500) {
-    return "D";
+    return 'D';
   }
-  return "F";
+  return 'F';
 }
 
 export function mapSessionRowToHistoryItem(
@@ -95,7 +95,7 @@ export function mapSessionRowToHistoryItem(
 }
 
 function buildStats(items: SessionHistoryItem[]): SessionHistoryStats {
-  const completed = items.filter((item) => item.status === "COMPLETED");
+  const completed = items.filter((item) => item.status === 'COMPLETED');
   const totalScore = items.reduce((sum, item) => sum + item.finalScore, 0);
 
   return {

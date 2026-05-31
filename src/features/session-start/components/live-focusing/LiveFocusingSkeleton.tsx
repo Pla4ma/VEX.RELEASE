@@ -2,8 +2,8 @@
  * Skeleton placeholder for the Live Focusing Widget.
  * Renders compact or full-size variant.
  */
-import React from "react";
-import { Box } from "../../../../components/primitives/Box";
+import React from 'react';
+import { Box } from '../../../../components/primitives/Box';
 
 interface LiveFocusingSkeletonProps {
   compact?: boolean;

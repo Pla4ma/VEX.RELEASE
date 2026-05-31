@@ -1,4 +1,4 @@
-import type { Achievement } from "../../features/achievements/types";
+import type { Achievement } from '../../features/achievements/types';
 
 export type ProfileAchievementStatus = Achievement & {
   progress: number;
@@ -12,8 +12,8 @@ export interface ProfileAchievementCard {
   title: string;
   description: string;
   icon: string;
-  statusLabel: "Unlocked" | "In Progress";
-  statusTone: "success" | "secondary";
+  statusLabel: 'Unlocked' | 'In Progress';
+  statusTone: 'success' | 'secondary';
   progressLabel: string;
   accessibilityLabel: string;
 }
@@ -52,7 +52,7 @@ export function buildProfileAchievementCards(
     .sort(compareAchievements)
     .slice(0, limit)
     .map((achievement) => {
-      const statusLabel = achievement.isUnlocked ? "Unlocked" : "In Progress";
+      const statusLabel = achievement.isUnlocked ? 'Unlocked' : 'In Progress';
       const progressLabel = achievement.isUnlocked
         ? `${achievement.pointValue} pts earned`
         : `${achievement.progress} / ${achievement.progressMax}`;
@@ -63,7 +63,7 @@ export function buildProfileAchievementCards(
         description: achievement.description,
         icon: achievement.icon,
         statusLabel,
-        statusTone: achievement.isUnlocked ? "success" : "secondary",
+        statusTone: achievement.isUnlocked ? 'success' : 'secondary',
         progressLabel,
         accessibilityLabel: achievement.isUnlocked
           ? `${achievement.title} achievement unlocked`

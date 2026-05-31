@@ -3,14 +3,14 @@
  *
  * Also exports computeFirstWeekExperience for pure-function testing without React.
  */
-import { useMemo } from "react";
-import { resolveFirstWeekExperience } from "./first-week-service";
+import { useMemo } from 'react';
+import { resolveFirstWeekExperience } from './first-week-service';
 import type {
   FirstWeekExperience,
   FirstWeekResolverInput,
-} from "./first-week-schemas";
-import type { MotivationProfileType } from "../liveops-config/feature-access";
-import type { LaneProfile } from "../lane-engine/types";
+} from './first-week-schemas';
+import type { MotivationProfileType } from '../liveops-config/feature-access';
+import type { LaneProfile } from '../lane-engine/types';
 
 export interface UseFirstWeekInput {
   completedSessions: number;
@@ -18,7 +18,7 @@ export interface UseFirstWeekInput {
   daysSinceLastSession: number | null;
   motivationStyle?: MotivationProfileType;
   primaryGoal?: string;
-  bossEngagement: "none" | "low" | "medium" | "high";
+  bossEngagement: 'none' | 'low' | 'medium' | 'high';
   studyUsageRatio: number;
   isPremium: boolean;
   laneProfile?: LaneProfile;
@@ -31,21 +31,21 @@ export interface UseFirstWeekInput {
 }
 
 const VALID_STYLES = [
-  "calm",
-  "friendly",
-  "coach_led",
-  "study_focused",
-  "game_like",
-  "intense",
+  'calm',
+  'friendly',
+  'coach_led',
+  'study_focused',
+  'game_like',
+  'intense',
 ] as const;
 const VALID_GOALS = [
-  "focus",
-  "study",
-  "work",
-  "creative",
-  "personal",
-  "personal_growth",
-  "learning",
+  'focus',
+  'study',
+  'work',
+  'creative',
+  'personal',
+  'personal_growth',
+  'learning',
 ] as const;
 
 export function computeFirstWeekExperience(
@@ -64,16 +64,16 @@ export function computeFirstWeekExperience(
     featureAvailable,
   } = input;
 
-  const style: FirstWeekResolverInput["motivationStyle"] =
+  const style: FirstWeekResolverInput['motivationStyle'] =
     motivationStyle &&
     (VALID_STYLES as readonly string[]).includes(motivationStyle)
-      ? (motivationStyle as FirstWeekResolverInput["motivationStyle"])
-      : "friendly";
+      ? (motivationStyle as FirstWeekResolverInput['motivationStyle'])
+      : 'friendly';
 
-  const goal: FirstWeekResolverInput["primaryGoal"] =
+  const goal: FirstWeekResolverInput['primaryGoal'] =
     primaryGoal && (VALID_GOALS as readonly string[]).includes(primaryGoal)
-      ? (primaryGoal as FirstWeekResolverInput["primaryGoal"])
-      : "focus";
+      ? (primaryGoal as FirstWeekResolverInput['primaryGoal'])
+      : 'focus';
 
   const resolverInput: FirstWeekResolverInput = {
     behaviorStats: { bossEngagement, studyUsageRatio },
@@ -89,10 +89,10 @@ export function computeFirstWeekExperience(
     laneProfile,
     motivationStyle: style,
     premiumState: isPremium
-      ? "active"
+      ? 'active'
       : featureAvailable.premium
-        ? "configured"
-        : "unavailable",
+        ? 'configured'
+        : 'unavailable',
     primaryGoal: goal,
   };
 
@@ -102,23 +102,5 @@ export function computeFirstWeekExperience(
 export function useFirstWeekExperience(
   input: UseFirstWeekInput,
 ): FirstWeekExperience {
-  return useMemo(
-    () => computeFirstWeekExperience(input),
-    [
-      input,
-      input.completedSessions,
-      input.daysSinceOnboarding,
-      input.daysSinceLastSession,
-      input.motivationStyle,
-      input.primaryGoal,
-      input.bossEngagement,
-      input.studyUsageRatio,
-      input.isPremium,
-      input.laneProfile,
-      input.featureAvailable.boss,
-      input.featureAvailable.premium,
-      input.featureAvailable.social,
-      input.featureAvailable.study,
-    ],
-  );
+  return useMemo(() => computeFirstWeekExperience(input), [input]);
 }

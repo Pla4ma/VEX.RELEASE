@@ -1,19 +1,19 @@
-import { captureSilentFailure } from "../../utils/silent-failure";
+import { captureSilentFailure } from '../../utils/silent-failure';
 
 export function isNonEmptyString(value: unknown): value is string {
-  return typeof value === "string" && value.length > 0;
+  return typeof value === 'string' && value.length > 0;
 }
 
 export function isPositiveInteger(value: unknown): value is number {
-  return typeof value === "number" && Number.isInteger(value) && value > 0;
+  return typeof value === 'number' && Number.isInteger(value) && value > 0;
 }
 
 export function isNonNegativeNumber(value: unknown): value is number {
-  return typeof value === "number" && !isNaN(value) && value >= 0;
+  return typeof value === 'number' && !isNaN(value) && value >= 0;
 }
 
 export function isValidEmail(value: unknown): value is string {
-  if (typeof value !== "string") {
+  if (typeof value !== 'string') {
     return false;
   }
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -21,7 +21,7 @@ export function isValidEmail(value: unknown): value is string {
 }
 
 export function isValidUUID(value: unknown): value is string {
-  if (typeof value !== "string") {
+  if (typeof value !== 'string') {
     return false;
   }
   const uuidRegex =
@@ -32,7 +32,7 @@ export function isValidUUID(value: unknown): value is string {
 export function isPlainObject(
   value: unknown,
 ): value is Record<string, unknown> {
-  return typeof value === "object" && value !== null && !Array.isArray(value);
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
 export function isValidDate(value: unknown): value is Date {
@@ -40,7 +40,7 @@ export function isValidDate(value: unknown): value is Date {
 }
 
 export function isValidURL(value: unknown): value is string {
-  if (typeof value !== "string") {
+  if (typeof value !== 'string') {
     return false;
   }
   try {
@@ -48,9 +48,9 @@ export function isValidURL(value: unknown): value is string {
     return true;
   } catch (error) {
     captureSilentFailure(error, {
-      feature: "shared",
-      operation: "safe-fallback",
-      type: "data",
+      feature: 'shared',
+      operation: 'safe-fallback',
+      type: 'data',
     });
     return false;
   }
@@ -60,7 +60,7 @@ export function isValidImageURL(value: unknown): boolean {
   if (!isValidURL(value)) {
     return false;
   }
-  const imageExtensions = [".jpg", ".jpeg", ".png", ".gif", ".webp", ".svg"];
+  const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg'];
   const url = (value as string).toLowerCase();
   return imageExtensions.some((ext) => url.endsWith(ext));
 }

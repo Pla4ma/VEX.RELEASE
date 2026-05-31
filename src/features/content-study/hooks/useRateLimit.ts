@@ -3,11 +3,11 @@
  * Tracks daily generation limits
  */
 
-import { useState, useCallback } from "react";
-import { useAuthStore } from "../../../store";
-import { fetchContentHistory } from "../ContentStudyService";
-import { CONTENT_STUDY_CONSTANTS } from "../types";
-import type { StudyContent } from "../types";
+import { useState, useCallback } from 'react';
+import { useAuthStore } from '../../../store';
+import { fetchContentHistory } from '../ContentStudyService';
+import { CONTENT_STUDY_CONSTANTS } from '../types';
+import type { StudyContent } from '../types';
 
 export function useRateLimit() {
   const { user } = useAuthStore();

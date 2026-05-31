@@ -4,14 +4,14 @@
  * Primitive layout component - the building block for all layouts.
  */
 
-import React from "react";
-import { View, type ViewStyle } from "react-native";
+import React from 'react';
+import { View, type ViewStyle } from 'react-native';
 
-import { useTheme } from "../../theme";
-import { resolveColorValue, resolveSpacingValue } from "./theme-values";
-import type { BoxProps } from "./BoxProps";
+import { useTheme } from '../../theme';
+import { resolveColorValue, resolveSpacingValue } from './theme-values';
+import type { BoxProps } from './BoxProps';
 
-export type { BoxProps } from "./BoxProps";
+export type { BoxProps } from './BoxProps';
 
 /**
  * Box component

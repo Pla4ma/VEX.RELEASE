@@ -1,12 +1,12 @@
-import type { SessionSummary } from "../../../session/types";
-import type { CompanionState } from "../../../features/companion/types";
-import type { CompanionService } from "../../../features/companion/service";
+import type { SessionSummary } from '../../../session/types';
+import type { CompanionState } from '../../../features/companion/types';
+import type { CompanionService } from '../../../features/companion/service';
 import {
   getEvolutionProgress,
   getMoodForSessionSummary,
   saveCompanionGrowth,
   saveCompanionState,
-} from "../../../features/companion/session-storage";
+} from '../../../features/companion/session-storage';
 
 export async function completeCompanionSessionImpl(
   service: CompanionService | null,

@@ -10,19 +10,19 @@
  * - Network state monitoring
  */
 
-import React, { useState, useEffect } from "react";
-import NetInfo from "@react-native-community/netinfo";
+import React, { useState, useEffect } from 'react';
+import NetInfo from '@react-native-community/netinfo';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withSpring,
   withTiming,
-} from "react-native-reanimated";
+} from 'react-native-reanimated';
 
-import { Box, Text } from "./primitives";
-import { Icon } from "../icons";
-import { launchColors } from "@theme/tokens/launch-colors";
-import { useReducedMotion } from "@/hooks";
+import { Box, Text } from './primitives';
+import { Icon } from '../icons';
+import { launchColors } from '@theme/tokens/launch-colors';
+import { useReducedMotion } from '@/hooks';
 
 interface OfflineBannerProps {
   /** Custom message to display when offline */
@@ -34,7 +34,7 @@ interface OfflineBannerProps {
 }
 
 export const OfflineBanner: React.FC<OfflineBannerProps> = ({
-  message = "Offline — changes will sync when connected",
+  message = 'Offline — changes will sync when connected',
   showSyncPending = true,
   pendingCount = 0,
 }) => {
@@ -71,7 +71,7 @@ export const OfflineBanner: React.FC<OfflineBannerProps> = ({
     });
 
     // Initial check
-    NetInfo["fetch"]().then((state) => {
+    NetInfo.fetch().then((state) => {
       const offline = !state.isConnected || !state.isInternetReachable;
       setIsOffline(offline);
       if (offline) {
@@ -98,7 +98,7 @@ export const OfflineBanner: React.FC<OfflineBannerProps> = ({
     <Animated.View
       style={[
         {
-          position: "absolute",
+          position: 'absolute',
           top: 0,
           left: 0,
           right: 0,
@@ -122,7 +122,7 @@ export const OfflineBanner: React.FC<OfflineBannerProps> = ({
       >
         <Box flexDirection="row" alignItems="center" justifyContent="center">
           <Icon
-            name={isOffline ? "wifi-off" : "wifi"}
+            name={isOffline ? 'wifi-off' : 'wifi'}
             size={16}
             color={
               isOffline ? launchColors.hex_d97706 : launchColors.hex_16a34a
@@ -132,13 +132,13 @@ export const OfflineBanner: React.FC<OfflineBannerProps> = ({
             variant="caption"
             style={{
               marginLeft: 8,
-              fontWeight: "600",
+              fontWeight: '600',
               color: isOffline
                 ? launchColors.hex_92400e
                 : launchColors.hex_166534,
             }}
           >
-            {isOffline ? message : "Back online — syncing changes..."}
+            {isOffline ? message : 'Back online — syncing changes...'}
           </Text>
 
           {showSyncPending && pendingCount > 0 && isOffline && (
@@ -155,7 +155,7 @@ export const OfflineBanner: React.FC<OfflineBannerProps> = ({
                 style={{
                   color: launchColors.hex_fff,
                   fontSize: 11,
-                  fontWeight: "700",
+                  fontWeight: '700',
                 }}
               >
                 {pendingCount}

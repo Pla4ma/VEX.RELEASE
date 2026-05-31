@@ -1,54 +1,54 @@
-import { launchColors } from "@theme/tokens/launch-colors";
-import type { ComboTierConfig } from "./combo-meter-types";
+import { launchColors } from '@theme/tokens/launch-colors';
+import type { ComboTierConfig } from './combo-meter-types';
 
 export const COMBO_TIERS: ComboTierConfig[] = [
   {
     minCombo: 0,
-    name: "Focus",
+    name: 'Focus',
     color: launchColors.hex_6b7280,
-    emoji: "⚪",
+    emoji: '⚪',
     multiplier: 1,
-    animation: "pulse",
+    animation: 'pulse',
   },
   {
     minCombo: 5,
-    name: "Bronze",
+    name: 'Bronze',
     color: launchColors.hex_b45309,
-    emoji: "🥉",
+    emoji: '🥉',
     multiplier: 1.5,
-    animation: "pulse",
+    animation: 'pulse',
   },
   {
     minCombo: 10,
-    name: "Silver",
+    name: 'Silver',
     color: launchColors.hex_9ca3af,
-    emoji: "🥈",
+    emoji: '🥈',
     multiplier: 2,
-    animation: "shake",
+    animation: 'shake',
   },
   {
     minCombo: 15,
-    name: "Gold",
+    name: 'Gold',
     color: launchColors.hex_fbbf24,
-    emoji: "🥇",
+    emoji: '🥇',
     multiplier: 3,
-    animation: "shake",
+    animation: 'shake',
   },
   {
     minCombo: 20,
-    name: "Platinum",
+    name: 'Platinum',
     color: launchColors.hex_a855f7,
-    emoji: "💜",
+    emoji: '💜',
     multiplier: 4,
-    animation: "rainbow",
+    animation: 'rainbow',
   },
   {
     minCombo: 30,
-    name: "Diamond",
+    name: 'Diamond',
     color: launchColors.hex_3b82f6,
-    emoji: "💎",
+    emoji: '💎',
     multiplier: 5,
-    animation: "rainbow",
+    animation: 'rainbow',
   },
 ];
 
@@ -75,13 +75,13 @@ export function getTierProgress(combo: number): number {
 export function getMilestoneMessage(milestone: number): string {
   const messages: Record<number, string> = {
     5: "5 minutes! You're warming up! 🔥",
-    10: "10 minutes! Keep that momentum! 💪",
+    10: '10 minutes! Keep that momentum! 💪',
     15: "15 minutes! You're in the zone! ⚡",
-    20: "20 minutes! Unstoppable! 🚀",
-    25: "25 minutes! Legendary focus! 👑",
-    30: "30 minutes! DIAMOND STATUS! 💎",
+    20: '20 minutes! Unstoppable! 🚀',
+    25: '25 minutes! Legendary focus! 👑',
+    30: '30 minutes! DIAMOND STATUS! 💎',
     45: "45 minutes! You're a machine! 🤖",
-    60: "60 MINUTES! ABSOLUTE LEGEND! 🏆",
+    60: '60 MINUTES! ABSOLUTE LEGEND! 🏆',
   };
   return messages[milestone] || `${milestone} minutes! Amazing! 🎉`;
 }

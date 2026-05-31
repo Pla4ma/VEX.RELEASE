@@ -1,13 +1,13 @@
-import React, { useEffect } from "react";
-import { View } from "react-native";
+import React, { useEffect } from 'react';
+import { View } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withTiming,
-} from "react-native-reanimated";
+} from 'react-native-reanimated';
 
-import { Text } from "../primitives";
-import { useTheme } from "../../theme";
+import { Text } from '../primitives';
+import { useTheme } from '../../theme';
 
 interface ProgressBarProps {
   progress: number;
@@ -48,13 +48,13 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
   }));
 
   return (
-    <View style={{ width: "100%" }}>
+    <View style={{ width: '100%' }}>
       {label || showPercentage ? (
         <View
           style={{
-            alignItems: "center",
-            flexDirection: "row",
-            justifyContent: "space-between",
+            alignItems: 'center',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
             marginBottom: theme.spacing[1],
           }}
         >
@@ -77,7 +77,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
           backgroundColor: bgColor,
           borderRadius: theme.borderRadius.full,
           height,
-          overflow: "hidden",
+          overflow: 'hidden',
         }}
       >
         <Animated.View
@@ -85,7 +85,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
             {
               backgroundColor: barColor,
               borderRadius: theme.borderRadius.full,
-              height: "100%",
+              height: '100%',
             },
             fillStyle,
           ]}

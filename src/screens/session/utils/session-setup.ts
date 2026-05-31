@@ -3,7 +3,7 @@ export {
   type SmartSuggestion,
   PRESET_CATEGORIES,
   PRESETS,
-} from "./session-setup-presets";
+} from './session-setup-presets';
 export {
   SESSION_DRAFT_MAX_AGE_MS,
   SessionDraftSchema,
@@ -12,4 +12,4 @@ export {
   resolveSmartSuggestion,
   buildPreviewGradient,
   hydrateMasteryState,
-} from "./session-setup-schemas";
+} from './session-setup-schemas';

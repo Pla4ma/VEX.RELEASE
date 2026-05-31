@@ -4,7 +4,7 @@
  * Focus navigation and management utilities
  */
 
-import { FocusableElement } from "./types";
+import { FocusableElement } from './types';
 
 const focusableElements: FocusableElement[] = [];
 

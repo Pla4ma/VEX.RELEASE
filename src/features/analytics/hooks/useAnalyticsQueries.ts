@@ -1,19 +1,19 @@
-import { useQuery } from "@tanstack/react-query";
-import * as service from "../service";
-import * as repository from "../repository";
+import { useQuery } from '@tanstack/react-query';
+import * as service from '../service';
+import * as repository from '../repository';
 import type {
   TimeRange,
   AnalyticsMetric,
   AnalyticsDimension,
   AnalyticsFilter,
-} from "../schemas";
-import { analyticsKeys } from "./analyticsKeys";
+} from '../schemas';
+import { analyticsKeys } from './analyticsKeys';
 
 export function useAnalyticsData(
   userId: string,
   metrics: AnalyticsMetric[],
   timeRange: TimeRange,
-  granularity: "hour" | "day" | "week" | "month" = "day",
+  granularity: 'hour' | 'day' | 'week' | 'month' = 'day',
   options?: {
     dimensions?: AnalyticsDimension[];
     filters?: AnalyticsFilter[];
@@ -135,7 +135,7 @@ export function useComparativeStats(
   timeRange: TimeRange,
 ) {
   return useQuery({
-    queryKey: [...analyticsKeys.all, "comparison", userId, metric, timeRange],
+    queryKey: [...analyticsKeys.all, 'comparison', userId, metric, timeRange],
     queryFn: () => service.getComparativeStats(userId, metric, timeRange),
     staleTime: 10 * 60 * 1000,
     enabled: !!userId,
@@ -149,11 +149,11 @@ export function useAnalyticsDegradedState(
 ) {
   return {
     isDegraded: isError,
-    degradedReason: error?.message?.includes("offline")
-      ? "offline"
-      : error?.message?.includes("rate")
-        ? "rate_limited"
-        : "server_error",
+    degradedReason: error?.message?.includes('offline')
+      ? 'offline'
+      : error?.message?.includes('rate')
+        ? 'rate_limited'
+        : 'server_error',
     canShowCached: true,
     lastSuccessfulFetch: Date.now(),
   };

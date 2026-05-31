@@ -1,20 +1,20 @@
-import React from "react";
-import { Pressable } from "react-native";
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { Icon } from "../../../icons";
-import { useTheme } from "../../../theme";
-import { triggerHaptic } from "../../../utils/haptics";
+import React from 'react';
+import { Pressable } from 'react-native';
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { Icon } from '../../../icons';
+import { useTheme } from '../../../theme';
+import { triggerHaptic } from '../../../utils/haptics';
 import {
   getMinTouchTargetStyle,
   StandardHitSlops,
-} from "../../../utils/touchTarget";
-import type { FocusContract } from "../../../features/focus-contract/types";
+} from '../../../utils/touchTarget';
+import type { FocusContract } from '../../../features/focus-contract/types';
 import {
   getContractReminderStage,
   type ContractReminderStage,
-} from "../../../features/focus-contract/service";
-import { useReducedMotion } from "../../../hooks/useReducedMotion";
+} from '../../../features/focus-contract/service';
+import { useReducedMotion } from '../../../hooks/useReducedMotion';
 
 type SessionContractReminderProps = {
   contract: FocusContract | null;
@@ -39,7 +39,7 @@ export function SessionContractReminder({
   const handleDismiss = (): void => {
     setDismissedStages((current) => Array.from(new Set([...current, stage])));
     if (!isReducedMotion) {
-      void triggerHaptic("impactLight");
+      void triggerHaptic('impactLight');
     }
   };
 
@@ -60,7 +60,7 @@ export function SessionContractReminder({
           numberOfLines={2}
           flex={1}
         >
-          {stage === "early" ? "You chose " : "Final stretch for "}
+          {stage === 'early' ? 'You chose ' : 'Final stretch for '}
           {contract.taskDescription}
         </Text>
         <Pressable

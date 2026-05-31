@@ -15,11 +15,11 @@ export const DEFAULT_RETRY_CONFIG: RetryConfig = {
   backoffMultiplier: 2,
   jitterFactor: 0.3,
   retryableErrors: [
-    "NETWORK_ERROR",
-    "TIMEOUT",
-    "RATE_LIMIT",
-    "SERVICE_UNAVAILABLE",
-    "CONNECTION_RESET",
+    'NETWORK_ERROR',
+    'TIMEOUT',
+    'RATE_LIMIT',
+    'SERVICE_UNAVAILABLE',
+    'CONNECTION_RESET',
   ],
 };
 
@@ -30,7 +30,7 @@ export class RetryableError extends Error {
     public retryable: boolean = true,
   ) {
     super(message);
-    this.name = "RetryableError";
+    this.name = 'RetryableError';
   }
 }
 
@@ -40,14 +40,14 @@ export class NonRetryableError extends Error {
     public code: string,
   ) {
     super(message);
-    this.name = "NonRetryableError";
+    this.name = 'NonRetryableError';
   }
 }
 
 export async function withRetry<T>(
   operation: () => Promise<T>,
   config: Partial<RetryConfig> = {},
-  context: string = "unknown",
+  context: string = 'unknown',
 ): Promise<T> {
   const fullConfig = { ...DEFAULT_RETRY_CONFIG, ...config };
   let lastError: Error | undefined;
@@ -97,11 +97,11 @@ function isRetryableError(error: Error, config: RetryConfig): boolean {
     return false;
   }
   if (
-    error.message.includes("network") ||
-    error.message.includes("timeout") ||
-    error.message.includes("ETIMEDOUT") ||
-    error.message.includes("ECONNRESET") ||
-    error.message.includes("ECONNREFUSED")
+    error.message.includes('network') ||
+    error.message.includes('timeout') ||
+    error.message.includes('ETIMEDOUT') ||
+    error.message.includes('ECONNRESET') ||
+    error.message.includes('ECONNREFUSED')
   ) {
     return true;
   }
@@ -109,14 +109,14 @@ function isRetryableError(error: Error, config: RetryConfig): boolean {
 }
 
 function extractErrorCode(error: Error): string {
-  if ("code" in error && typeof error.code === "string") {
+  if ('code' in error && typeof error.code === 'string') {
     return error.code;
   }
   const codeMatch = error.message.match(/\[([A-Z_]+)\]/);
   if (codeMatch && codeMatch[1]) {
     return codeMatch[1];
   }
-  return "UNKNOWN_ERROR";
+  return 'UNKNOWN_ERROR';
 }
 
 export function sleep(ms: number): Promise<void> {

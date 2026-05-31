@@ -1,21 +1,21 @@
-import { useQuery } from "@tanstack/react-query";
-import { useNetInfo } from "../../network";
-import { useAuthStore } from "../../store";
+import { useQuery } from '@tanstack/react-query';
+import { useNetInfo } from '../../network';
+import { useAuthStore } from '../../store';
 import {
   getCurrentFocusScore,
   getFocusScoreHistory,
-} from "./focus-score-service";
-import { focusScoreKeys } from "./focus-score-query-keys";
+} from './focus-score-service';
+import { focusScoreKeys } from './focus-score-query-keys';
 import type {
   FocusScoreDashboardModel,
   FocusScoreHistoryPoint,
   FocusScoreRecord,
-} from "./types";
+} from './types';
 
 type FocusScoreHookResult = {
   score: FocusScoreRecord | null;
   history: FocusScoreHistoryPoint[];
-  status: "error" | "pending" | "success";
+  status: 'error' | 'pending' | 'success';
   error: Error | null;
   refetch: () => void;
   isRefetching: boolean;
@@ -31,14 +31,14 @@ export function useFocusScore(
   const userId = requestedUserId ?? user?.id ?? null;
 
   const scoreQuery = useQuery({
-    queryKey: focusScoreKeys.current(userId ?? "none"),
-    queryFn: () => getCurrentFocusScore(userId ?? ""),
+    queryKey: focusScoreKeys.current(userId ?? 'none'),
+    queryFn: () => getCurrentFocusScore(userId ?? ''),
     enabled: Boolean(userId),
   });
 
   const historyQuery = useQuery({
-    queryKey: focusScoreKeys.history(userId ?? "none", days),
-    queryFn: () => getFocusScoreHistory(userId ?? "", days),
+    queryKey: focusScoreKeys.history(userId ?? 'none', days),
+    queryFn: () => getFocusScoreHistory(userId ?? '', days),
     enabled: Boolean(userId),
   });
 
@@ -60,7 +60,7 @@ export function useFocusScoreHistory(
   days: number = 90,
 ): {
   history: FocusScoreHistoryPoint[];
-  status: "error" | "pending" | "success";
+  status: 'error' | 'pending' | 'success';
   error: Error | null;
   refetch: () => void;
 } {
@@ -94,8 +94,8 @@ export function useFocusScoreDashboardModel(
     history: history ?? [],
     monthlyInput: null,
     isOffline: !isOnline,
-    isPending: status === "pending",
-    isError: status === "error",
+    isPending: status === 'pending',
+    isError: status === 'error',
     error: error instanceof Error ? error : null,
     isRefetching,
     isOptionalDataSyncing: false,

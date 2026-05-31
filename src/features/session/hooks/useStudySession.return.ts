@@ -1,13 +1,13 @@
-import { useCallback } from "react";
-import type { SessionConfig, SessionState } from "../../../session/types";
-import type { SessionOrchestrator } from "../../../session/SessionOrchestrator";
-import type { getCoachService } from "../../ai-coach/service";
+import { useCallback } from 'react';
+import type { SessionConfig, SessionState } from '../../../session/types';
+import type { SessionOrchestrator } from '../../../session/SessionOrchestrator';
+import type { getCoachService } from '../../ai-coach/service';
 import {
   studySessionKeys,
   getExpectedDuration,
-} from "./useStudySession.helpers";
-import type { BuildReturnArgs } from "./build-return-args";
-export type { BuildReturnArgs } from "./build-return-args";
+} from './useStudySession.helpers';
+import type { BuildReturnArgs } from './build-return-args';
+export type { BuildReturnArgs } from './build-return-args';
 
 export function useStudySessionReturn(args: BuildReturnArgs) {
   const {
@@ -101,14 +101,14 @@ export function useStudySessionReturn(args: BuildReturnArgs) {
   const sessionHistory = sessionHistoryQuery.data ?? [];
   const sessionStats = sessionStatsQuery.data;
   const activeSession = currentSession;
-  const isActive = currentSession?.status === "ACTIVE";
-  const isPaused = currentSession?.status === "PAUSED";
+  const isActive = currentSession?.status === 'ACTIVE';
+  const isPaused = currentSession?.status === 'PAUSED';
   const isBreak =
-    currentSession?.phase === "SHORT_BREAK" ||
-    currentSession?.phase === "LONG_BREAK" ||
+    currentSession?.phase === 'SHORT_BREAK' ||
+    currentSession?.phase === 'LONG_BREAK' ||
     false;
-  const isWork = currentSession?.phase === "FOCUS";
-  const isCompleted = currentSession?.status === "COMPLETED";
+  const isWork = currentSession?.phase === 'FOCUS';
+  const isCompleted = currentSession?.status === 'COMPLETED';
   const progress = currentSession?.completionPercentage ?? 0;
   const duration = getExpectedDuration(currentSession ?? undefined);
   const elapsed = currentSession?.elapsedTime ?? 0;

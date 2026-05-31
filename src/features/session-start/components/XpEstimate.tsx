@@ -1,8 +1,8 @@
-import React, { useMemo } from "react";
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import { calculateEstimatedXp } from "./duration-picker-types";
+import React, { useMemo } from 'react';
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import { calculateEstimatedXp } from './duration-picker-types';
 
 export function XpEstimate({
   minutes,

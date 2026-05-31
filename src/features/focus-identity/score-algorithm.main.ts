@@ -1,12 +1,12 @@
 import {
   FocusScoreUpdateInputSchema,
   FocusScoreUpdateResultSchema,
-} from "./schemas";
+} from './schemas';
 import type {
   FocusScoreFactorKey,
   FocusScoreUpdateInput,
   FocusScoreUpdateResult,
-} from "./types";
+} from './types';
 import {
   FACTOR_WEIGHTS,
   FACTOR_LABELS,
@@ -16,7 +16,7 @@ import {
   getGradeAdjustment,
   getModeAdjustment,
   getXpMultiplier,
-} from "./score-algorithm.helpers";
+} from './score-algorithm.helpers';
 
 export function calculateFocusScoreUpdate(
   rawInput: FocusScoreUpdateInput,
@@ -50,20 +50,20 @@ export function calculateFocusScoreUpdate(
   delta += getGradeAdjustment(input);
   delta += getModeAdjustment(input);
 
-  if (input.eventType === "comeback:completed") delta += 6;
-  if (input.eventType === "streak:updated" && input.signals.recency < 40) delta -= 4;
-  if (input.sessionMode === "recovery" && delta > 8) delta = 8;
+  if (input.eventType === 'comeback:completed') {delta += 6;}
+  if (input.eventType === 'streak:updated' && input.signals.recency < 40) {delta -= 4;}
+  if (input.sessionMode === 'recovery' && delta > 8) {delta = 8;}
   if (
-    input.eventType === "session:completed" &&
+    input.eventType === 'session:completed' &&
     input.previousScore === 550 &&
     delta < 4
-  ) delta = 4;
+  ) {delta = 4;}
   if (
-    input.grade === "S" &&
-    input.eventType === "session:completed" &&
+    input.grade === 'S' &&
+    input.eventType === 'session:completed' &&
     delta < 12 &&
-    input.sessionMode !== "recovery"
-  ) delta = 12;
+    input.sessionMode !== 'recovery'
+  ) {delta = 12;}
 
   const newScore = clampScore(input.previousScore + delta);
   const topPositive = [...factorEntries].sort((a, b) => b.delta - a.delta)[0]!;
@@ -88,59 +88,59 @@ export function calculateFocusScoreUpdate(
         weightPercent: 35,
         score: input.signals.consistency,
         delta:
-          factorEntries.find((entry) => entry.key === "consistency")?.delta ?? 0,
+          factorEntries.find((entry) => entry.key === 'consistency')?.delta ?? 0,
         explanation:
-          factorEntries.find((entry) => entry.key === "consistency")
-            ?.explanation ?? "",
+          factorEntries.find((entry) => entry.key === 'consistency')
+            ?.explanation ?? '',
       },
       streakStability: {
         weightPercent: 25,
         score: input.signals.streakStability,
         delta:
-          factorEntries.find((entry) => entry.key === "streakStability")
+          factorEntries.find((entry) => entry.key === 'streakStability')
             ?.delta ?? 0,
         explanation:
-          factorEntries.find((entry) => entry.key === "streakStability")
-            ?.explanation ?? "",
+          factorEntries.find((entry) => entry.key === 'streakStability')
+            ?.explanation ?? '',
       },
       sessionQuality: {
         weightPercent: 20,
         score: input.signals.sessionQuality,
         delta:
-          factorEntries.find((entry) => entry.key === "sessionQuality")
+          factorEntries.find((entry) => entry.key === 'sessionQuality')
             ?.delta ?? 0,
         explanation:
-          factorEntries.find((entry) => entry.key === "sessionQuality")
-            ?.explanation ?? "",
+          factorEntries.find((entry) => entry.key === 'sessionQuality')
+            ?.explanation ?? '',
       },
       intentionalDifficulty: {
         weightPercent: 7,
         score: input.signals.intentionalDifficulty,
         delta:
-          factorEntries.find((entry) => entry.key === "intentionalDifficulty")
+          factorEntries.find((entry) => entry.key === 'intentionalDifficulty')
             ?.delta ?? 0,
         explanation:
-          factorEntries.find((entry) => entry.key === "intentionalDifficulty")
-            ?.explanation ?? "",
+          factorEntries.find((entry) => entry.key === 'intentionalDifficulty')
+            ?.explanation ?? '',
       },
       contractCompletion: {
         weightPercent: 8,
         score: contractCompletionScore,
         delta:
-          factorEntries.find((entry) => entry.key === "contractCompletion")
+          factorEntries.find((entry) => entry.key === 'contractCompletion')
             ?.delta ?? 0,
         explanation:
-          factorEntries.find((entry) => entry.key === "contractCompletion")
-            ?.explanation ?? "",
+          factorEntries.find((entry) => entry.key === 'contractCompletion')
+            ?.explanation ?? '',
       },
       recency: {
         weightPercent: 5,
         score: input.signals.recency,
         delta:
-          factorEntries.find((entry) => entry.key === "recency")?.delta ?? 0,
+          factorEntries.find((entry) => entry.key === 'recency')?.delta ?? 0,
         explanation:
-          factorEntries.find((entry) => entry.key === "recency")?.explanation ??
-          "",
+          factorEntries.find((entry) => entry.key === 'recency')?.explanation ??
+          '',
       },
     },
     topPositiveFactor: topPositive.key,

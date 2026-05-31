@@ -8,41 +8,41 @@
  * - fallback toast does not mutate XP/streak/rewards
  * - fallback toast only displays UI
  */
-import { describe, it, expect } from "@jest/globals";
+import { describe, it, expect } from '@jest/globals';
 
 const mockGetOrchestratorHandle = jest.fn().mockReturnValue(true);
 const mockSetOrchestratorHandle = jest.fn();
 
-jest.mock("../../../../session/analytics/SessionAnalytics", () => ({
+jest.mock('../../../../session/analytics/SessionAnalytics', () => ({
   getOrchestratorHandlesCompletion: () => mockGetOrchestratorHandle(),
   setOrchestratorHandlesCompletion: (...args: unknown[]) =>
     mockSetOrchestratorHandle(...args),
 }));
 
-describe("Home session:completed fallback toast", () => {
+describe('Home session:completed fallback toast', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     mockGetOrchestratorHandle.mockReturnValue(true);
   });
 
-  it("orchestrator handles completion returns true by default", () => {
+  it('orchestrator handles completion returns true by default', () => {
     const {
       getOrchestratorHandlesCompletion,
-    } = require("../../../../session/analytics/SessionAnalytics");
+    } = require('../../../../session/analytics/SessionAnalytics');
     expect(getOrchestratorHandlesCompletion()).toBe(true);
   });
 
-  it("orchestrator disabled returns false for fallback mode", () => {
+  it('orchestrator disabled returns false for fallback mode', () => {
     mockGetOrchestratorHandle.mockReturnValue(false);
     const {
       getOrchestratorHandlesCompletion,
-    } = require("../../../../session/analytics/SessionAnalytics");
+    } = require('../../../../session/analytics/SessionAnalytics');
     expect(getOrchestratorHandlesCompletion()).toBe(false);
   });
 
-  it("fallback mode is detectable", () => {
+  it('fallback mode is detectable', () => {
     mockGetOrchestratorHandle.mockReturnValue(false);
-    const mod = require("../../../../session/analytics/SessionAnalytics");
+    const mod = require('../../../../session/analytics/SessionAnalytics');
     expect(mod.getOrchestratorHandlesCompletion()).toBe(false);
     expect(mod.setOrchestratorHandlesCompletion).toBeDefined();
   });

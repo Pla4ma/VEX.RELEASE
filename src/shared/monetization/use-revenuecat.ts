@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import type { CustomerInfo, PurchasesOffering } from "react-native-purchases";
-import { revenueCatService } from "./revenuecat-service";
+import { useCallback, useEffect, useRef, useState } from 'react';
+import type { CustomerInfo, PurchasesOffering } from 'react-native-purchases';
+import { revenueCatService } from './revenuecat-service';
 import type {
   EntitlementInfo,
   PurchaseResult,
@@ -8,19 +8,19 @@ import type {
   PurchasesPackageDisplayInfo,
   RevenueCatError,
   UseRevenueCatState,
-} from "./revenuecat-types";
-import { useMonetizationStore } from "./store";
-import { mapEntitlements } from "./revenuecat-service-helpers";
-import { refreshOfferings, refreshCustomer } from "./revenuecat-query-ops";
+} from './revenuecat-types';
+import { useMonetizationStore } from './store';
+import { mapEntitlements } from './revenuecat-service-helpers';
+import { refreshOfferings, refreshCustomer } from './revenuecat-query-ops';
 import {
   executePurchase,
   executeRestore,
   executeRetry,
-} from "./revenuecat-mutation-ops";
+} from './revenuecat-mutation-ops';
 
 export function useRevenueCat(): UseRevenueCatState {
   const [status, setStatus] =
-    useState<UseRevenueCatState["status"]>("uninitialized");
+    useState<UseRevenueCatState['status']>('uninitialized');
   const [isInitialized, setIsInitialized] = useState(false);
   const [isReady, setIsReady] = useState(false);
   const [offerings, setOfferings] =
@@ -83,14 +83,14 @@ export function useRevenueCat(): UseRevenueCatState {
   useEffect(() => {
     let isMounted = true;
     const initialize = async () => {
-      setStatus("initializing");
+      setStatus('initializing');
       const result = await revenueCatService.initialize();
       if (!isMounted) {
         return;
       }
       setIsInitialized(true);
       setStatus(result.status);
-      const ready = result.status === "ready" && revenueCatService.isReady();
+      const ready = result.status === 'ready' && revenueCatService.isReady();
       setIsReady(ready);
       if (ready) {
         await Promise.all([doRefreshOfferings(), doRefreshCustomer()]);
@@ -103,7 +103,7 @@ export function useRevenueCat(): UseRevenueCatState {
   }, [doRefreshCustomer, doRefreshOfferings]);
 
   useEffect(() => {
-    if (!isReady) return;
+    if (!isReady) {return;}
     const unsubscribe = revenueCatService.onCustomerInfoUpdate((info) => {
       const entitlements = mapEntitlements(info);
       setStoreCustomerInfo(info);
@@ -182,7 +182,7 @@ export function useRevenueCat(): UseRevenueCatState {
 }
 
 // Re-export derived hooks for backward compatibility
-export { usePremiumStatus, usePaywall } from "./use-revenuecat-derived";
+export { usePremiumStatus, usePaywall } from './use-revenuecat-derived';
 
 // Re-export types for backward compatibility
 export type {

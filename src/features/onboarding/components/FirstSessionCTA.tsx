@@ -8,19 +8,19 @@
  * @phase 2.6
  */
 
-import React from "react";
-import { Pressable } from "react-native";
+import React from 'react';
+import { Pressable } from 'react-native';
 import Animated, {
   FadeIn,
   FadeInUp,
-} from "react-native-reanimated";
+} from 'react-native-reanimated';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { Button } from "../../../components/primitives/Button";
-import type { FocusDuration, FocusGoal } from "../schemas";
-import { DURATION_OPTIONS } from "../service";
-import { PulseRing, SessionPreview } from "./FirstSessionCTA-parts";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { Button } from '../../../components/primitives/Button';
+import type { FocusDuration, FocusGoal } from '../schemas';
+import { DURATION_OPTIONS } from '../service';
+import { PulseRing, SessionPreview } from './FirstSessionCTA-parts';
 
 interface FirstSessionCTAProps {
   userName: string | null;
@@ -40,7 +40,7 @@ export function FirstSessionCTA({
   onStartSession,
   onBack,
 }: FirstSessionCTAProps): JSX.Element {
-  const displayName = userName || "there";
+  const displayName = userName || 'there';
   const durationOption = DURATION_OPTIONS.find((d) => d.value === duration);
 
   return (
@@ -64,7 +64,7 @@ export function FirstSessionCTA({
       {/* Session Preview */}
       <Animated.View
         entering={FadeInUp.duration(500).delay(200)}
-        style={{ width: "100%" }}
+        style={{ width: '100%' }}
       >
         <Box alignItems="center" py="xl">
           <Box justifyContent="center" alignItems="center" height={200}>
@@ -118,7 +118,7 @@ export function FirstSessionCTA({
       {/* CTA Button */}
       <Animated.View
         entering={FadeInUp.duration(400).delay(600)}
-        style={{ width: "100%" }}
+        style={{ width: '100%' }}
       >
         <Button
           variant="primary"
@@ -129,14 +129,14 @@ export function FirstSessionCTA({
           accessibilityRole="button"
           accessibilityHint="Double tap to select"
         >
-          {`Start ${durationOption?.label ?? "25-minute"} focus session →`}
+          {`Start ${durationOption?.label ?? '25-minute'} focus session →`}
         </Button>
       </Animated.View>
 
       {/* Back Option */}
       <Animated.View
         entering={FadeIn.duration(400).delay(700)}
-        style={{ marginTop: "auto" }}
+        style={{ marginTop: 'auto' }}
       >
         <Pressable
           onPress={onBack}

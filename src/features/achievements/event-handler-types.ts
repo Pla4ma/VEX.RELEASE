@@ -1,4 +1,4 @@
-import type { EventChannels } from "../../events/EventTypes";
+import type { EventChannels } from '../../events/EventTypes';
 
 export type EventHandler<T extends keyof EventChannels> = (
   data: EventChannels[T],

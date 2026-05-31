@@ -1,19 +1,19 @@
-import type { RefObject } from "react";
-import { useCallback, useEffect, useRef, useState } from "react";
-import type { TextInput, ViewStyle } from "react-native";
+import type { RefObject } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import type { TextInput, ViewStyle } from 'react-native';
 import {
   useAnimatedStyle,
   useSharedValue,
   withSequence,
   withTiming,
-} from "react-native-reanimated";
-import type { AnimatedStyle } from "react-native-reanimated";
+} from 'react-native-reanimated';
+import type { AnimatedStyle } from 'react-native-reanimated';
 
-import { useReducedMotion } from "../../../hooks/useReducedMotion";
-import { useTheme } from "../../../theme";
-import type { TextPasteInputProps, ValidationError } from "../types";
-import { CONTENT_STUDY_CONSTANTS } from "../types";
-import { validatePastedText } from "../validation";
+import { useReducedMotion } from '../../../hooks/useReducedMotion';
+import { useTheme } from '../../../theme';
+import type { TextPasteInputProps, ValidationError } from '../types';
+import { CONTENT_STUDY_CONSTANTS } from '../types';
+import { validatePastedText } from '../validation';
 
 interface UseTextPasteInputReturn {
   inputRef: RefObject<TextInput | null>;
@@ -29,7 +29,7 @@ interface UseTextPasteInputReturn {
   isOverLimit: boolean;
   isUnderMin: boolean;
   borderColor: string;
-  theme: ReturnType<typeof useTheme>["theme"];
+  theme: ReturnType<typeof useTheme>['theme'];
 }
 
 export function useTextPasteInput({
@@ -105,7 +105,7 @@ export function useTextPasteInput({
   );
 
   const clearInput = useCallback((): void => {
-    onChange("");
+    onChange('');
     inputRef.current?.focus();
   }, [onChange]);
 

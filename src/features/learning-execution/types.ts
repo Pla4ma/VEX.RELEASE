@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 import type {
   ContentStudyGateInputSchema,
   ContentStudyGateSchema,
@@ -6,7 +6,7 @@ import type {
   LearningExecutionLayerSchema,
   LearningExecutionPersonaSchema,
   LearningSessionTargetSchema,
-} from "./schemas";
+} from './schemas';
 
 export type ContentStudyGate = z.infer<typeof ContentStudyGateSchema>;
 export type ContentStudyGateInput = z.infer<typeof ContentStudyGateInputSchema>;

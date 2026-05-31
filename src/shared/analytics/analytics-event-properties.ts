@@ -3,9 +3,9 @@ export interface BaseEventProperties {
   user_id?: string;
   session_id?: string;
   timestamp?: number;
-  outcome?: "success" | "failure";
+  outcome?: 'success' | 'failure';
   error_message?: string;
-  platform?: "ios" | "android" | "web";
+  platform?: 'ios' | 'android' | 'web';
   app_version?: string;
   is_connected?: boolean;
   connection_type?: string;
@@ -26,15 +26,15 @@ export interface BaseEventProperties {
 }
 
 export interface AuthEventProperties extends BaseEventProperties {
-  method?: "email" | "google" | "apple" | "anonymous";
+  method?: 'email' | 'google' | 'apple' | 'anonymous';
   is_new_user?: boolean;
 }
 
 export interface SessionEventProperties extends BaseEventProperties {
   duration_seconds?: number;
   completion_percentage?: number;
-  session_type?: "focus" | "boss" | "challenge";
-  difficulty?: "easy" | "medium" | "hard";
+  session_type?: 'focus' | 'boss' | 'challenge';
+  difficulty?: 'easy' | 'medium' | 'hard';
   intervals_completed?: number;
   total_intervals?: number;
   was_paused?: boolean;
@@ -55,7 +55,7 @@ export interface ProgressionEventProperties extends BaseEventProperties {
 }
 
 export interface EconomyEventProperties extends BaseEventProperties {
-  currency_type?: "coins" | "gems" | "seasonal";
+  currency_type?: 'coins' | 'gems' | 'seasonal';
   amount?: number;
   item_id?: string;
   item_name?: string;
@@ -104,7 +104,7 @@ export interface SocialEventProperties extends BaseEventProperties {
   leaderboard_type?: string;
   rank_position?: number;
   duel_id?: string;
-  duel_type?: "TIMED" | "QUALITY" | "ENDURANCE";
+  duel_type?: 'TIMED' | 'QUALITY' | 'ENDURANCE';
   challenger_id?: string;
   challenged_id?: string;
   opponent_id?: string;
@@ -119,7 +119,7 @@ export interface SocialEventProperties extends BaseEventProperties {
 }
 
 export interface CoachEventProperties extends BaseEventProperties {
-  message_type?: "tip" | "encouragement" | "reminder" | "comeback";
+  message_type?: 'tip' | 'encouragement' | 'reminder' | 'comeback';
   tip_category?: string;
   was_helpful?: boolean;
 }

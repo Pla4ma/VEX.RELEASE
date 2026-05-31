@@ -1,13 +1,13 @@
-import type { User, AuthCredentials, SignUpMetadata, AuthResult } from "./types";
-import * as repository from "./repository";
-import { UserSchema } from "./schemas";
+import type { User, AuthCredentials, SignUpMetadata, AuthResult } from './types';
+import * as repository from './repository';
+import { UserSchema } from './schemas';
 
 export async function signUp(
   credentials: AuthCredentials,
   metadata: SignUpMetadata,
 ): Promise<AuthResult> {
   if (!credentials.email || !credentials.password) {
-    return { user: null, error: new Error("Email and password are required") };
+    return { user: null, error: new Error('Email and password are required') };
   }
 
   const result = await repository.signUpWithEmail(
@@ -25,7 +25,7 @@ export async function signUp(
 
 export async function signIn(credentials: AuthCredentials): Promise<AuthResult> {
   if (!credentials.email || !credentials.password) {
-    return { user: null, error: new Error("Email and password are required") };
+    return { user: null, error: new Error('Email and password are required') };
   }
 
   const result = await repository.signInWithEmail(
@@ -57,19 +57,19 @@ export async function resetPassword(email: string): Promise<{ error: Error | nul
     await repository.sendPasswordResetEmail(email);
     return { error: null };
   } catch (error) {
-    return { error: error instanceof Error ? error : new Error("Failed to send reset email") };
+    return { error: error instanceof Error ? error : new Error('Failed to send reset email') };
   }
 }
 
 export async function updatePassword(newPassword: string): Promise<{ error: Error | null }> {
   if (newPassword.length < 8) {
-    return { error: new Error("Password must be at least 8 characters") };
+    return { error: new Error('Password must be at least 8 characters') };
   }
   try {
     await repository.updateUserPassword(newPassword);
     return { error: null };
   } catch (error) {
-    return { error: error instanceof Error ? error : new Error("Failed to update password") };
+    return { error: error instanceof Error ? error : new Error('Failed to update password') };
   }
 }
 
@@ -78,6 +78,6 @@ export async function resendVerification(email: string): Promise<{ error: Error 
     await repository.resendVerificationEmail(email);
     return { error: null };
   } catch (error) {
-    return { error: error instanceof Error ? error : new Error("Failed to resend verification") };
+    return { error: error instanceof Error ? error : new Error('Failed to resend verification') };
   }
 }

@@ -1,5 +1,5 @@
-import React from "react";
-import { Pressable } from "react-native";
+import React from 'react';
+import { Pressable } from 'react-native';
 import Animated, {
   FadeInUp,
   useAnimatedStyle,
@@ -7,13 +7,13 @@ import Animated, {
   withTiming,
   withSequence,
   useSharedValue,
-} from "react-native-reanimated";
+} from 'react-native-reanimated';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import { buttonTap } from "../../../utils/haptics";
-import type { SessionSuggestion } from "./session-suggestions-types";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import { buttonTap } from '../../../utils/haptics';
+import type { SessionSuggestion } from './session-suggestions-types';
 
 /**
  * Individual suggestion card
@@ -102,7 +102,7 @@ export function SuggestionCard({
                 bg={theme.colors.background.tertiary}
               >
                 <Text variant="caption" color="text.secondary" fontSize={10}>
-                  {suggestion.mode === "solo" ? "🧘 Solo" : "🛡️ Squad"}
+                  {suggestion.mode === 'solo' ? '🧘 Solo' : '🛡️ Squad'}
                 </Text>
               </Box>
               {suggestion.confidence > 0.8 && (

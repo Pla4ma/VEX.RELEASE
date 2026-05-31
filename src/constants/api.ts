@@ -40,79 +40,79 @@ export const HTTP_STATUS = {
 export const API_ENDPOINTS = {
   // Auth
   auth: {
-    login: "/auth/login",
-    register: "/auth/register",
-    logout: "/auth/logout",
-    refresh: "/auth/refresh",
-    forgotPassword: "/auth/forgot-password",
-    resetPassword: "/auth/reset-password",
-    verifyEmail: "/auth/verify-email",
-    resendVerification: "/auth/resend-verification",
+    login: '/auth/login',
+    register: '/auth/register',
+    logout: '/auth/logout',
+    refresh: '/auth/refresh',
+    forgotPassword: '/auth/forgot-password',
+    resetPassword: '/auth/reset-password',
+    verifyEmail: '/auth/verify-email',
+    resendVerification: '/auth/resend-verification',
   },
 
   // User
   user: {
-    me: "/users/me",
-    profile: "/users/:id",
-    updateProfile: "/users/me",
-    changePassword: "/users/me/password",
-    deleteAccount: "/users/me",
-    preferences: "/users/me/preferences",
-    settings: "/users/me/settings",
+    me: '/users/me',
+    profile: '/users/:id',
+    updateProfile: '/users/me',
+    changePassword: '/users/me/password',
+    deleteAccount: '/users/me',
+    preferences: '/users/me/preferences',
+    settings: '/users/me/settings',
   },
 
   // Squads
   squads: {
-    list: "/squads",
-    detail: "/squads/:id",
-    create: "/squads",
-    update: "/squads/:id",
-    delete: "/squads/:id",
-    join: "/squads/:id/join",
-    leave: "/squads/:id/leave",
-    members: "/squads/:id/members",
-    invite: "/squads/:id/invite",
+    list: '/squads',
+    detail: '/squads/:id',
+    create: '/squads',
+    update: '/squads/:id',
+    delete: '/squads/:id',
+    join: '/squads/:id/join',
+    leave: '/squads/:id/leave',
+    members: '/squads/:id/members',
+    invite: '/squads/:id/invite',
   },
 
   // Economy
   wallet: {
-    balance: "/wallet/balance",
-    transactions: "/wallet/transactions",
-    deposit: "/wallet/deposit",
-    withdraw: "/wallet/withdraw",
-    transfer: "/wallet/transfer",
+    balance: '/wallet/balance',
+    transactions: '/wallet/transactions',
+    deposit: '/wallet/deposit',
+    withdraw: '/wallet/withdraw',
+    transfer: '/wallet/transfer',
   },
 
   // Achievements
   achievements: {
-    list: "/achievements",
-    detail: "/achievements/:id",
-    progress: "/achievements/progress",
-    claim: "/achievements/:id/claim",
+    list: '/achievements',
+    detail: '/achievements/:id',
+    progress: '/achievements/progress',
+    claim: '/achievements/:id/claim',
   },
 
   // Notifications
   notifications: {
-    list: "/notifications",
-    markRead: "/notifications/:id/read",
-    markAllRead: "/notifications/read-all",
-    delete: "/notifications/:id",
-    preferences: "/notifications/preferences",
+    list: '/notifications',
+    markRead: '/notifications/:id/read',
+    markAllRead: '/notifications/read-all',
+    delete: '/notifications/:id',
+    preferences: '/notifications/preferences',
   },
 
   // Search
   search: {
-    global: "/search",
-    users: "/search/users",
-    squads: "/search/squads",
-    suggestions: "/search/suggestions",
+    global: '/search',
+    users: '/search/users',
+    squads: '/search/squads',
+    suggestions: '/search/suggestions',
   },
 
   // Uploads
   upload: {
-    image: "/upload/image",
-    avatar: "/upload/avatar",
-    banner: "/upload/banner",
+    image: '/upload/image',
+    avatar: '/upload/avatar',
+    banner: '/upload/banner',
   },
 } as const;
 
@@ -120,26 +120,26 @@ export const API_ENDPOINTS = {
  * API header keys
  */
 export const API_HEADERS = {
-  authorization: "Authorization",
-  contentType: "Content-Type",
-  accept: "Accept",
-  apiKey: "X-API-Key",
-  requestId: "X-Request-ID",
-  clientVersion: "X-Client-Version",
-  platform: "X-Platform",
-  deviceId: "X-Device-ID",
-  timestamp: "X-Timestamp",
+  authorization: 'Authorization',
+  contentType: 'Content-Type',
+  accept: 'Accept',
+  apiKey: 'X-API-Key',
+  requestId: 'X-Request-ID',
+  clientVersion: 'X-Client-Version',
+  platform: 'X-Platform',
+  deviceId: 'X-Device-ID',
+  timestamp: 'X-Timestamp',
 } as const;
 
 /**
  * Content types
  */
 export const CONTENT_TYPES = {
-  json: "application/json",
-  formData: "multipart/form-data",
-  urlEncoded: "application/x-www-form-urlencoded",
-  text: "text/plain",
-  image: "image/*",
+  json: 'application/json',
+  formData: 'multipart/form-data',
+  urlEncoded: 'application/x-www-form-urlencoded',
+  text: 'text/plain',
+  image: 'image/*',
 } as const;
 
 /**
@@ -147,28 +147,28 @@ export const CONTENT_TYPES = {
  */
 export const WS_EVENTS = {
   connection: {
-    connect: "connect",
-    disconnect: "disconnect",
-    error: "error",
-    reconnect: "reconnect",
+    connect: 'connect',
+    disconnect: 'disconnect',
+    error: 'error',
+    reconnect: 'reconnect',
   },
   user: {
-    presence: "user.presence",
-    typing: "user.typing",
-    status: "user.status",
+    presence: 'user.presence',
+    typing: 'user.typing',
+    status: 'user.status',
   },
   notifications: {
-    new: "notification.new",
-    read: "notification.read",
+    new: 'notification.new',
+    read: 'notification.read',
   },
   squad: {
-    memberJoined: "squad.member_joined",
-    memberLeft: "squad.member_left",
-    updated: "squad.updated",
+    memberJoined: 'squad.member_joined',
+    memberLeft: 'squad.member_left',
+    updated: 'squad.updated',
   },
   economy: {
-    transaction: "economy.transaction",
-    balanceUpdate: "economy.balance_update",
+    transaction: 'economy.transaction',
+    balanceUpdate: 'economy.balance_update',
   },
 } as const;
 
@@ -177,21 +177,21 @@ export const WS_EVENTS = {
  */
 export const GRAPHQL_OPERATIONS = {
   queries: {
-    getUser: "GetUser",
-    getSquad: "GetSquad",
-    getWallet: "GetWallet",
-    search: "Search",
+    getUser: 'GetUser',
+    getSquad: 'GetSquad',
+    getWallet: 'GetWallet',
+    search: 'Search',
   },
   mutations: {
-    updateUser: "UpdateUser",
-    createSquad: "CreateSquad",
-    updateSquad: "UpdateSquad",
-    joinSquad: "JoinSquad",
-    transfer: "Transfer",
+    updateUser: 'UpdateUser',
+    createSquad: 'CreateSquad',
+    updateSquad: 'UpdateSquad',
+    joinSquad: 'JoinSquad',
+    transfer: 'Transfer',
   },
   subscriptions: {
-    onNotification: "OnNotification",
-    onMessage: "OnMessage",
-    onBalanceChange: "OnBalanceChange",
+    onNotification: 'OnNotification',
+    onMessage: 'OnMessage',
+    onBalanceChange: 'OnBalanceChange',
   },
 } as const;

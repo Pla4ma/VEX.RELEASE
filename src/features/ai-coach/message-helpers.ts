@@ -1,8 +1,8 @@
-import * as service from "./service";
-import * as repository from "./repository";
-import * as analytics from "./analytics";
-import { createCoachMessageGeneratedEvent } from "./events";
-import type { CoachMessage, MessageCategory } from "./schemas";
+import * as service from './service';
+import * as repository from './repository';
+import * as analytics from './analytics';
+import { createCoachMessageGeneratedEvent } from './events';
+import type { CoachMessage, MessageCategory } from './schemas';
 
 export async function generateAndSendMessage(
   userId: string,
@@ -13,12 +13,12 @@ export async function generateAndSendMessage(
     userId,
     category,
     context,
-    preferredDelivery: "BOTH",
+    preferredDelivery: 'BOTH',
   });
   if (message) {
     const savedMessage = await repository.createCoachMessage({
       ...message,
-      status: "SENT",
+      status: 'SENT',
       deliveredAt: Date.now(),
     });
     analytics.trackMessageGenerated(userId, savedMessage, true);
@@ -36,7 +36,7 @@ export async function generateAndSendMessage(
 }
 
 export interface IntegrationHealth {
-  status: "healthy" | "degraded" | "unhealthy";
+  status: 'healthy' | 'degraded' | 'unhealthy';
   checks: {
     serviceAvailable: boolean;
     repositoryConnected: boolean;
@@ -53,7 +53,7 @@ export async function checkIntegrationHealth(): Promise<IntegrationHealth> {
   };
   const healthy = Object.values(checks).every(Boolean);
   return {
-    status: healthy ? "healthy" : "degraded",
+    status: healthy ? 'healthy' : 'degraded',
     checks,
     lastChecked: Date.now(),
   };

@@ -5,11 +5,11 @@ export interface AccessibilityPreferences {
   animationsEnabled: boolean;
   highContrast: boolean;
   colorBlindMode:
-    | "none"
-    | "protanopia"
-    | "deuteranopia"
-    | "tritanopia"
-    | "achromatopsia";
+    | 'none'
+    | 'protanopia'
+    | 'deuteranopia'
+    | 'tritanopia'
+    | 'achromatopsia';
   textScale: number;
   boldText: boolean;
   simplifiedUI: boolean;
@@ -27,11 +27,11 @@ export interface ContrastCheck {
 }
 
 export type ColorBlindType =
-  | "none"
-  | "protanopia"
-  | "deuteranopia"
-  | "tritanopia"
-  | "achromatopsia";
+  | 'none'
+  | 'protanopia'
+  | 'deuteranopia'
+  | 'tritanopia'
+  | 'achromatopsia';
 
 export interface ColorBlindPalette {
   type: ColorBlindType;
@@ -51,7 +51,7 @@ export interface ColorBlindPalette {
 export interface ScreenReaderAnnouncement {
   id: string;
   message: string;
-  priority: "polite" | "assertive";
+  priority: 'polite' | 'assertive';
   timestamp: number;
 }
 
@@ -64,13 +64,13 @@ export interface AnimationConfig {
 export interface FocusableElement {
   id: string;
   type:
-    | "button"
-    | "link"
-    | "input"
-    | "checkbox"
-    | "radio"
-    | "select"
-    | "heading";
+    | 'button'
+    | 'link'
+    | 'input'
+    | 'checkbox'
+    | 'radio'
+    | 'select'
+    | 'heading';
   label: string;
   order: number;
 }
@@ -84,8 +84,8 @@ export interface AccessibilityAudit {
 
 export interface AccessibilityIssue {
   id: string;
-  type: "contrast" | "label" | "touch_target" | "heading" | "focus";
-  severity: "error" | "warning";
+  type: 'contrast' | 'label' | 'touch_target' | 'heading' | 'focus';
+  severity: 'error' | 'warning';
   element: string;
   message: string;
   suggestion: string;

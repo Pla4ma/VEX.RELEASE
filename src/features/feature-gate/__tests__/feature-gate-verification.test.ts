@@ -1,21 +1,21 @@
 // ── Mocks ──────────────────────────────────────────────────────────
 
 // Mock useFeatureAccess — verification.ts imports from this path
-jest.mock("../../liveops-config/hooks/useFeatureAccess", () => ({
+jest.mock('../../liveops-config/hooks/useFeatureAccess', () => ({
   useFeatureAccess: jest.fn(),
 }));
 
 // ── Imports after mocks ────────────────────────────────────────────
 
-import { getPhase3VerificationSummary } from "../verification";
+import { getPhase3VerificationSummary } from '../verification';
 
 // ── Verification ───────────────────────────────────────────────────
 
-describe("getPhase3VerificationSummary", () => {
-  it("returns passed=true when all checks pass", () => {
+describe('getPhase3VerificationSummary', () => {
+  it('returns passed=true when all checks pass', () => {
     const results = [
       {
-        feature: "rivals" as const,
+        feature: 'rivals' as const,
         isHidden: true,
         hasNoTab: true,
         hasNoHomeCard: true,
@@ -29,10 +29,10 @@ describe("getPhase3VerificationSummary", () => {
     expect(summary.failedFeatures).toEqual([]);
   });
 
-  it("returns passed=false when isHidden is false", () => {
+  it('returns passed=false when isHidden is false', () => {
     const results = [
       {
-        feature: "rivals" as const,
+        feature: 'rivals' as const,
         isHidden: false,
         hasNoTab: true,
         hasNoHomeCard: true,
@@ -43,13 +43,13 @@ describe("getPhase3VerificationSummary", () => {
     ];
     const summary = getPhase3VerificationSummary(results);
     expect(summary.passed).toBe(false);
-    expect(summary.failedFeatures).toContain("rivals");
+    expect(summary.failedFeatures).toContain('rivals');
   });
 
-  it("returns passed=false when hasNoTab fails", () => {
+  it('returns passed=false when hasNoTab fails', () => {
     const results = [
       {
-        feature: "rankings" as const,
+        feature: 'rankings' as const,
         isHidden: true,
         hasNoTab: false,
         hasNoHomeCard: true,
@@ -60,19 +60,19 @@ describe("getPhase3VerificationSummary", () => {
     ];
     const summary = getPhase3VerificationSummary(results);
     expect(summary.passed).toBe(false);
-    expect(summary.failedFeatures).toContain("rankings");
+    expect(summary.failedFeatures).toContain('rankings');
   });
 
-  it("returns passed=true for empty results", () => {
+  it('returns passed=true for empty results', () => {
     const summary = getPhase3VerificationSummary([]);
     expect(summary.passed).toBe(true);
     expect(summary.failedFeatures).toEqual([]);
   });
 
-  it("collects multiple failed features", () => {
+  it('collects multiple failed features', () => {
     const results = [
       {
-        feature: "rivals" as const,
+        feature: 'rivals' as const,
         isHidden: false,
         hasNoTab: true,
         hasNoHomeCard: true,
@@ -81,7 +81,7 @@ describe("getPhase3VerificationSummary", () => {
         analyticsBlocked: true,
       },
       {
-        feature: "rankings" as const,
+        feature: 'rankings' as const,
         isHidden: true,
         hasNoTab: true,
         hasNoHomeCard: false,
@@ -92,13 +92,13 @@ describe("getPhase3VerificationSummary", () => {
     ];
     const summary = getPhase3VerificationSummary(results);
     expect(summary.passed).toBe(false);
-    expect(summary.failedFeatures).toEqual(["rivals", "rankings"]);
+    expect(summary.failedFeatures).toEqual(['rivals', 'rankings']);
   });
 
-  it("preserves the results array reference", () => {
+  it('preserves the results array reference', () => {
     const results = [
       {
-        feature: "squads" as const,
+        feature: 'squads' as const,
         isHidden: true,
         hasNoTab: true,
         hasNoHomeCard: true,

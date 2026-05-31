@@ -1,5 +1,5 @@
-import { z } from "zod";
-import { SessionModeSchema } from "../modes";
+import { z } from 'zod';
+import { SessionModeSchema } from '../modes';
 
 export const SessionConfigSchema = z.object({
   presetId: z.string().uuid().optional(),
@@ -23,8 +23,8 @@ export const SessionConfigSchema = z.object({
   comebackMultiplier: z.number().min(1).max(3).optional(),
   sessionMode: SessionModeSchema,
   difficultyLevel: z
-    .enum(["EASY", "MEDIUM", "HARD", "EXTREME"])
-    .default("MEDIUM"),
+    .enum(['EASY', 'MEDIUM', 'HARD', 'EXTREME'])
+    .default('MEDIUM'),
   adaptiveMode: z.boolean().default(false),
   focusScorePrimary: z.boolean().default(true),
   creativeMoodBonus: z.number().optional(),
@@ -116,33 +116,33 @@ export const SessionMetricsSchema = z.object({
 export type SessionMetrics = z.infer<typeof SessionMetricsSchema>;
 
 export const SessionUIStateSchema = z.enum([
-  "PRE_SESSION",
-  "STARTING",
-  "ACTIVE",
-  "PAUSED",
-  "RESUMED",
-  "BACKGROUNDED",
-  "INTERRUPTION_RISK",
-  "RECONNECTING",
-  "DEGRADED",
-  "COMPLETION_SUCCESS",
-  "PARTIAL_COMPLETION",
-  "FAILURE_ABANDON",
-  "CONFLICT",
-  "POST_REWARD",
+  'PRE_SESSION',
+  'STARTING',
+  'ACTIVE',
+  'PAUSED',
+  'RESUMED',
+  'BACKGROUNDED',
+  'INTERRUPTION_RISK',
+  'RECONNECTING',
+  'DEGRADED',
+  'COMPLETION_SUCCESS',
+  'PARTIAL_COMPLETION',
+  'FAILURE_ABANDON',
+  'CONFLICT',
+  'POST_REWARD',
 ]);
 export type SessionUIState = z.infer<typeof SessionUIStateSchema>;
 
 export const SessionNotificationTypeSchema = z.enum([
-  "STARTING",
-  "COMPLETED",
-  "PAUSED_LONG",
-  "STREAK_AT_RISK",
-  "FOCUS_QUALITY_DROP",
-  "INTERVAL_COMPLETE",
-  "BREAK_STARTING",
-  "RECOVERY_AVAILABLE",
-  "SYNCS_CONFLICT",
+  'STARTING',
+  'COMPLETED',
+  'PAUSED_LONG',
+  'STREAK_AT_RISK',
+  'FOCUS_QUALITY_DROP',
+  'INTERVAL_COMPLETE',
+  'BREAK_STARTING',
+  'RECOVERY_AVAILABLE',
+  'SYNCS_CONFLICT',
 ]);
 export type SessionNotificationType = z.infer<
   typeof SessionNotificationTypeSchema

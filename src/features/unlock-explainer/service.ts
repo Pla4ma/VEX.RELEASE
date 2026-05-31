@@ -1,5 +1,5 @@
-export { createUnlockDecision } from "./unlock-decision";
-import type { UnlockDecision } from "./types";
+export { createUnlockDecision } from './unlock-decision';
+import type { UnlockDecision } from './types';
 
 export function getUnlockExplainerCopy(decision: UnlockDecision): {
   body: string;
@@ -8,19 +8,19 @@ export function getUnlockExplainerCopy(decision: UnlockDecision): {
 } {
   const base = {
     body: decision.userFacingReason,
-    cta: decision.canHide ? "Got it" : null,
+    cta: decision.canHide ? 'Got it' : null,
     title:
-      decision.decision === "unlocked"
+      decision.decision === 'unlocked'
         ? `${decision.featureKey} unlocked`
-        : decision.decision === "teased"
+        : decision.decision === 'teased'
           ? `${decision.featureKey} coming soon`
-          : decision.decision === "blocked"
+          : decision.decision === 'blocked'
             ? `${decision.featureKey} unavailable`
-            : "",
+            : '',
   };
   return base;
 }
 
 export function isFeatureVisible(decision: UnlockDecision): boolean {
-  return decision.decision !== "hidden";
+  return decision.decision !== 'hidden';
 }

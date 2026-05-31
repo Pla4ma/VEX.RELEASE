@@ -3,7 +3,7 @@
  */
 
 export interface MilestoneEventDefinitions {
-  "milestones:spending_reached": {
+  'milestones:spending_reached': {
     userId: string;
     milestoneId: string;
     milestone?: string;

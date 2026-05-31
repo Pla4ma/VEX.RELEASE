@@ -1,16 +1,16 @@
-import { supabase } from "../../supabase/client";
+import { supabase } from '../../supabase/client';
 import type {
   Setting,
   SettingCategory,
-} from "./types";
-import { SettingRowSchema } from "./schemas";
+} from './types';
+import { SettingRowSchema } from './schemas';
 import {
   trackPendingChange,
   clearPendingChange,
-} from "./repository-sync";
+} from './repository-sync';
 
-const TABLE_SETTINGS = "user_settings";
-const TABLE_SYNC_STATE = "settings_sync_state";
+const TABLE_SETTINGS = 'user_settings';
+const TABLE_SYNC_STATE = 'settings_sync_state';
 
 export async function fetchSetting(
   userId: string,
@@ -18,12 +18,12 @@ export async function fetchSetting(
 ): Promise<Setting | null> {
   const { data, error } = await supabase
     .from(TABLE_SETTINGS)
-    .select("*")
-    .eq("user_id", userId)
-    .eq("key", key)
+    .select('*')
+    .eq('user_id', userId)
+    .eq('key', key)
     .single();
   if (error) {
-    if (error.code === "PGRST116") {
+    if (error.code === 'PGRST116') {
       return null;
     }
     throw new Error(`Failed to fetch setting: ${error.message}`);
@@ -34,9 +34,9 @@ export async function fetchSetting(
 export async function fetchAllSettings(userId: string): Promise<Setting[]> {
   const { data, error } = await supabase
     .from(TABLE_SETTINGS)
-    .select("*")
-    .eq("user_id", userId)
-    .order("key", { ascending: true });
+    .select('*')
+    .eq('user_id', userId)
+    .order('key', { ascending: true });
   if (error) {
     throw new Error(`Failed to fetch settings: ${error.message}`);
   }
@@ -49,10 +49,10 @@ export async function fetchSettingsByCategory(
 ): Promise<Setting[]> {
   const { data, error } = await supabase
     .from(TABLE_SETTINGS)
-    .select("*")
-    .eq("user_id", userId)
-    .eq("category", category)
-    .order("key", { ascending: true });
+    .select('*')
+    .eq('user_id', userId)
+    .eq('category', category)
+    .order('key', { ascending: true });
   if (error) {
     throw new Error(`Failed to fetch settings by category: ${error.message}`);
   }
@@ -78,7 +78,7 @@ export async function upsertSetting(setting: {
   };
   const { data, error } = await supabase
     .from(TABLE_SETTINGS)
-    .upsert(dbRecord, { onConflict: "user_id,key" })
+    .upsert(dbRecord, { onConflict: 'user_id,key' })
     .select()
     .single();
   if (error) {
@@ -112,7 +112,7 @@ export async function batchUpsertSettings(
   }));
   const { data, error } = await supabase
     .from(TABLE_SETTINGS)
-    .upsert(dbRecords, { onConflict: "user_id,key" })
+    .upsert(dbRecords, { onConflict: 'user_id,key' })
     .select();
   if (error) {
     throw new Error(`Failed to batch upsert settings: ${error.message}`);
@@ -130,8 +130,8 @@ export async function deleteSetting(
   const { error } = await supabase
     .from(TABLE_SETTINGS)
     .delete()
-    .eq("user_id", userId)
-    .eq("key", key);
+    .eq('user_id', userId)
+    .eq('key', key);
   if (error) {
     throw new Error(`Failed to delete setting: ${error.message}`);
   }
@@ -145,10 +145,10 @@ export async function resetSettings(
   let query = supabase
     .from(TABLE_SETTINGS)
     .delete()
-    .eq("user_id", userId)
-    .eq("is_default", false);
+    .eq('user_id', userId)
+    .eq('is_default', false);
   if (category) {
-    query = query.eq("category", category);
+    query = query.eq('category', category);
   }
   const { error } = await query;
   if (error) {
@@ -159,8 +159,8 @@ export async function resetSettings(
 export async function getSettingsVersion(userId: string): Promise<number> {
   const { data, error } = await supabase
     .from(TABLE_SYNC_STATE)
-    .select("version")
-    .eq("user_id", userId)
+    .select('version')
+    .eq('user_id', userId)
     .single();
   if (error) {
     return 0;
@@ -174,7 +174,7 @@ function mapFromDb(row: unknown): Setting {
     id: parsed.id,
     userId: parsed.user_id,
     key: parsed.key,
-    value: parsed.value as import("./types").SettingValue,
+    value: parsed.value as import('./types').SettingValue,
     category: parsed.category,
     isDefault: parsed.is_default,
     lastModified: parsed.last_modified,

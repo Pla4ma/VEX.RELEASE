@@ -1,18 +1,18 @@
-import React from "react";
-import Animated, { FadeInUp } from "react-native-reanimated";
-import { Box, Card, Text } from "../../../components/primitives";
+import React from 'react';
+import Animated, { FadeInUp } from 'react-native-reanimated';
+import { Box, Card, Text } from '../../../components/primitives';
 import {
   type CompanionMood,
   type CompanionState,
   ELEMENT_THEMES,
-} from "../../../features/companion/types";
+} from '../../../features/companion/types';
 import {
   ELEMENT_LORE,
   MoodDot,
   PhaseProgressBar,
   ProgressToNext,
   StatCard,
-} from "./CompanionScreenSupport";
+} from './CompanionScreenSupport';
 
 export interface SessionMoodEntry {
   mood: CompanionMood;
@@ -104,7 +104,7 @@ export function CompanionStatsBar({
             <Box gap="md">
               <Text variant="bodySmall" color="text.secondary">
                 Last {moodHistory.length} session
-                {moodHistory.length === 1 ? "" : "s"}
+                {moodHistory.length === 1 ? '' : 's'}
               </Text>
               <Box flexDirection="row" gap="sm" alignItems="center">
                 {moodHistory.length > 0 ? (

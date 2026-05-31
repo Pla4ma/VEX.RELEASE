@@ -1,11 +1,11 @@
-import React from "react";
-import { Pressable } from "react-native";
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { Icon } from "../../../icons";
-import { useTheme } from "../../../theme";
-import { buttonTap } from "../../../utils/haptics";
-import { launchColors } from "@theme/tokens/launch-colors";
+import React from 'react';
+import { Pressable } from 'react-native';
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { Icon } from '../../../icons';
+import { useTheme } from '../../../theme';
+import { buttonTap } from '../../../utils/haptics';
+import { launchColors } from '@theme/tokens/launch-colors';
 
 interface FilterChipProps {
   label: string;
@@ -26,7 +26,7 @@ export function FilterChip({
       onPress={() => { buttonTap(); onPress(); }}
       accessibilityRole="button"
       accessibilityState={{ selected: isActive }}
-      accessibilityLabel={`${label} filter${isActive ? ", active" : ""}`}
+      accessibilityLabel={`${label} filter${isActive ? ', active' : ''}`}
       accessibilityHint="Double tap to toggle filter"
     >
       <Box
@@ -36,10 +36,10 @@ export function FilterChip({
         px="md"
         py="sm"
         borderRadius="full"
-        bg={isActive ? "primary.500" : "background.tertiary"}
+        bg={isActive ? 'primary.500' : 'background.tertiary'}
         style={{
           borderWidth: 1,
-          borderColor: isActive ? "transparent" : theme.colors.border.light,
+          borderColor: isActive ? 'transparent' : theme.colors.border.light,
         }}
       >
         {icon && (
@@ -57,7 +57,7 @@ export function FilterChip({
             color: isActive
               ? launchColors.hex_fff
               : theme.colors.text.secondary,
-            fontWeight: isActive ? "600" : "400",
+            fontWeight: isActive ? '600' : '400',
           }}
         >
           {label}

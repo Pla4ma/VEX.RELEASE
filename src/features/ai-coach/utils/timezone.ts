@@ -5,7 +5,7 @@ export {
   toUTC,
   toLocalTime,
   formatInTimezone,
-} from "./timezone-core";
+} from './timezone-core';
 
 export {
   getStartOfDay,
@@ -18,11 +18,11 @@ export {
   getHoursUntilStreakBreak,
   scheduleForLocalTime,
   getOptimalReminderTimes,
-} from "./timezone-day";
+} from './timezone-day';
 
 export {
   formatRelativeTime,
   formatTimeOfDay,
   mockTimezone,
   generateTestTimestamps,
-} from "./timezone-format";
+} from './timezone-format';

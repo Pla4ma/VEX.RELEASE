@@ -1,8 +1,8 @@
-import { describe, it, expect, beforeEach, jest } from "@jest/globals";
+import { describe, it, expect, beforeEach, jest } from '@jest/globals';
 import {
   fetchCurrentFocusScore,
   upsertCurrentFocusScore,
-} from "../repository-focus-score";
+} from '../repository-focus-score';
 import {
   userId,
   factors,
@@ -10,53 +10,53 @@ import {
   makeQuery,
   useQueries,
   resetMockClient,
-} from "./focus-score-test-helpers";
+} from './focus-score-test-helpers';
 
-describe("focus identity repository - current score", () => {
+describe('focus identity repository - current score', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     resetMockClient();
   });
 
-  it("fetchCurrentFocusScore returns parsed score record on success", async () => {
+  it('fetchCurrentFocusScore returns parsed score record on success', async () => {
     useQueries(makeQuery({ data: currentRow, error: null }));
     await expect(fetchCurrentFocusScore(userId)).resolves.toMatchObject({
       userId,
       currentScore: 620,
-      band: "Strong",
+      band: 'Strong',
     });
   });
 
-  it("fetchCurrentFocusScore returns null when the user has no score", async () => {
+  it('fetchCurrentFocusScore returns null when the user has no score', async () => {
     useQueries(
       makeQuery({
         data: null,
-        error: { code: "PGRST116", message: "Not found" },
+        error: { code: 'PGRST116', message: 'Not found' },
       }),
     );
     await expect(fetchCurrentFocusScore(userId)).resolves.toBeNull();
   });
 
-  it("fetchCurrentFocusScore throws typed repository error on Supabase error", async () => {
+  it('fetchCurrentFocusScore throws typed repository error on Supabase error', async () => {
     useQueries(
       makeQuery({
         data: null,
-        error: { code: "500", message: "db unavailable" },
+        error: { code: '500', message: 'db unavailable' },
       }),
     );
     await expect(fetchCurrentFocusScore(userId)).rejects.toThrow(
-      "fetchCurrentFocusScore",
+      'fetchCurrentFocusScore',
     );
   });
 
-  it("fetchCurrentFocusScore rejects invalid response shape", async () => {
+  it('fetchCurrentFocusScore rejects invalid response shape', async () => {
     useQueries(
-      makeQuery({ data: { ...currentRow, id: "invalid" }, error: null }),
+      makeQuery({ data: { ...currentRow, id: 'invalid' }, error: null }),
     );
     await expect(fetchCurrentFocusScore(userId)).rejects.toThrow();
   });
 
-  it("upsertCurrentFocusScore returns parsed score record on success", async () => {
+  it('upsertCurrentFocusScore returns parsed score record on success', async () => {
     useQueries(
       makeQuery({
         data: { ...currentRow, current_score: 631, previous_score: 620 },
@@ -67,16 +67,16 @@ describe("focus identity repository - current score", () => {
       upsertCurrentFocusScore(userId, {
         currentScore: 631,
         previousScore: 620,
-        band: "Strong",
+        band: 'Strong',
         factors,
-        lastChangeReason: "Session completed",
+        lastChangeReason: 'Session completed',
       }),
     ).resolves.toMatchObject({ currentScore: 631, previousScore: 620 });
   });
 
-  it("upsertCurrentFocusScore resolves conflict by returning existing score", async () => {
+  it('upsertCurrentFocusScore resolves conflict by returning existing score', async () => {
     useQueries(
-      makeQuery({ data: null, error: { code: "23505", message: "conflict" } }),
+      makeQuery({ data: null, error: { code: '23505', message: 'conflict' } }),
       makeQuery({
         data: { ...currentRow, current_score: 630, previous_score: 620 },
         error: null,
@@ -86,9 +86,9 @@ describe("focus identity repository - current score", () => {
       upsertCurrentFocusScore(userId, {
         currentScore: 631,
         previousScore: 620,
-        band: "Strong",
+        band: 'Strong',
         factors,
-        lastChangeReason: "Session completed",
+        lastChangeReason: 'Session completed',
       }),
     ).resolves.toMatchObject({ currentScore: 630 });
   });

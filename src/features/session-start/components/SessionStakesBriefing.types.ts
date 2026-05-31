@@ -4,7 +4,7 @@ export interface SessionStake {
   icon: string;
   title: string;
   subtitle: string;
-  urgency: "critical" | "high" | "medium" | "low";
+  urgency: 'critical' | 'high' | 'medium' | 'low';
   accentColor?: string;
 }
 

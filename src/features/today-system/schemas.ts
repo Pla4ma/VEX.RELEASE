@@ -1,5 +1,5 @@
-import { z } from "zod";
-import { LaneSchema } from "../lane-engine/schemas";
+import { z } from 'zod';
+import { LaneSchema } from '../lane-engine/schemas';
 
 export const TodayActionSchema = z
   .object({
@@ -28,7 +28,7 @@ export const TodaySystemInputSchema = z
 
 export const TodaySectionSchema = z
   .object({
-    key: z.enum(["now", "later", "done", "recovery"]),
+    key: z.enum(['now', 'later', 'done', 'recovery']),
     visible: z.boolean(),
     title: z.string().min(1).max(24),
     body: z.string().min(1).max(96),
@@ -45,7 +45,7 @@ export const TodaySectionSchema = z
 export const TodaySystemSchema = z
   .object({
     lane: LaneSchema,
-    animationLevel: z.enum(["none", "subtle"]),
+    animationLevel: z.enum(['none', 'subtle']),
     sections: z.array(TodaySectionSchema).length(4),
   })
   .strict();

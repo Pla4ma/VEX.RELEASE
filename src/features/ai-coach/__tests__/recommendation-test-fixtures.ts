@@ -1,7 +1,7 @@
-import type { ContextSnapshot } from "../context-snapshot";
+import type { ContextSnapshot } from '../context-snapshot';
 
 export const mockContext: ContextSnapshot = {
-  userId: "user-123",
+  userId: 'user-123',
   capturedAt: Date.now(),
   sessionContext: { activeSession: false, duration: 25, quality: 85 },
   streakContext: {
@@ -18,7 +18,7 @@ export const mockContext: ContextSnapshot = {
   },
   bossContext: {
     activeBoss: true,
-    bossId: "boss-123",
+    bossId: 'boss-123',
     bossHealth: 65,
     timeRemaining: 20 * 60 * 60 * 1000,
   },
@@ -35,9 +35,9 @@ export const mockContext: ContextSnapshot = {
     daysSinceJoin: 45,
   },
   behaviorContext: {
-    preferredTimeOfDay: "afternoon",
+    preferredTimeOfDay: 'afternoon',
     typicalSessionDuration: 25,
-    responseToCoach: "medium",
+    responseToCoach: 'medium',
     lastCoachMessageAt: Date.now() - 24 * 60 * 60 * 1000,
   },
 };

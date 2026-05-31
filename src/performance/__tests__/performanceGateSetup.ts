@@ -1,4 +1,4 @@
-import { jest } from "@jest/globals";
+import { jest } from '@jest/globals';
 import {
   PerformanceGate,
   performanceGate,
@@ -6,7 +6,7 @@ import {
   DEVELOPMENT_TARGETS,
   type PerformanceGateResult,
   type PerformanceTargets,
-} from "../PerformanceGate";
+} from '../PerformanceGate';
 
 export const mockPerformanceMonitor = {
   isRunning: false,
@@ -29,17 +29,17 @@ export const mockPerformanceMonitor = {
 };
 
 // Wire the mock into the singleton's internal PerformanceMonitor instance
-Object.defineProperty(performanceGate, "performanceMonitor", {
+Object.defineProperty(performanceGate, 'performanceMonitor', {
   value: mockPerformanceMonitor,
   writable: true,
   configurable: true,
 });
 
 export const mockFetch = jest.fn();
-Object.defineProperty(global, "fetch", { value: mockFetch, writable: true });
+Object.defineProperty(global, 'fetch', { value: mockFetch, writable: true });
 
 export const mockRequestAnimationFrame = jest.fn();
-Object.defineProperty(global, "requestAnimationFrame", {
+Object.defineProperty(global, 'requestAnimationFrame', {
   value: mockRequestAnimationFrame,
   writable: true,
 });

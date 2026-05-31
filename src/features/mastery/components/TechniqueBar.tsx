@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { type LayoutChangeEvent, View } from "react-native";
+import React, { useEffect, useState } from 'react';
+import { type LayoutChangeEvent, View } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withTiming,
-} from "react-native-reanimated";
-import { Text } from "../../../components/primitives";
-import { useTheme } from "../../../theme";
+} from 'react-native-reanimated';
+import { Text } from '../../../components/primitives';
+import { useTheme } from '../../../theme';
 
 type Props = { label: string; value: number; max?: 25; color: string };
 
@@ -36,9 +36,9 @@ export function TechniqueBar({
     <View style={{ gap: theme.spacing[2] }}>
       <View
         style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          alignItems: "center",
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
         }}
       >
         <Text variant="bodySmall" color={theme.colors.text.secondary}>
@@ -53,7 +53,7 @@ export function TechniqueBar({
         style={{
           height: 6,
           borderRadius: 3,
-          overflow: "hidden",
+          overflow: 'hidden',
           backgroundColor: theme.colors.background.tertiary,
         }}
       >

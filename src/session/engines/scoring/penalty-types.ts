@@ -1,11 +1,11 @@
-import type { FocusQualityMetrics } from "../../types";
+import type { FocusQualityMetrics } from '../../types';
 
 export interface PausePenaltyInput {
   pauseCount: number;
   totalPauseDurationSeconds: number;
 }
 
-export type InterruptionSeverity = "MINOR" | "MODERATE" | "MAJOR" | "CRITICAL";
+export type InterruptionSeverity = 'MINOR' | 'MODERATE' | 'MAJOR' | 'CRITICAL';
 
 export interface InterruptionPenaltyInput {
   interruptions: Array<{
@@ -22,16 +22,16 @@ export interface QualityPenaltyInput {
 }
 
 export type AntiCheatViolationType =
-  | "TIME_MANIPULATION"
-  | "DEVICE_CHANGE"
-  | "RAPID_COMPLETION"
-  | "SUSPICIOUS_PATTERN"
-  | "IMPOSSIBLE_SCORE";
+  | 'TIME_MANIPULATION'
+  | 'DEVICE_CHANGE'
+  | 'RAPID_COMPLETION'
+  | 'SUSPICIOUS_PATTERN'
+  | 'IMPOSSIBLE_SCORE';
 
 export interface AntiCheatPenaltyInput {
   violations: Array<{
     type: AntiCheatViolationType;
-    severity: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
+    severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
     timestamp: number;
   }>;
 }
@@ -59,7 +59,7 @@ export interface TotalPenaltyInput {
   baseScore: number;
 }
 
-export type PenaltyAction = "WARNING" | "PENALTY" | "DISQUALIFY" | "BAN";
+export type PenaltyAction = 'WARNING' | 'PENALTY' | 'DISQUALIFY' | 'BAN';
 
 export interface InterruptionPenaltyResult {
   total: number;

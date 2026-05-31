@@ -1,16 +1,16 @@
-import type { RiskLevel, RiskFactors } from "./riskTypes";
+import type { RiskLevel, RiskFactors } from './riskTypes';
 import {
   CRITICAL_THRESHOLD,
   HIGH_THRESHOLD,
   MEDIUM_THRESHOLD,
   DAY_HOURS,
-} from "./riskTypes";
+} from './riskTypes';
 
 export function analyzePattern(
   sessionHistory: { timestamp: number; quality: number }[],
-): "CONSISTENT" | "VARIABLE" | "DECLINING" {
+): 'CONSISTENT' | 'VARIABLE' | 'DECLINING' {
   if (sessionHistory.length < 5) {
-    return "CONSISTENT";
+    return 'CONSISTENT';
   }
   const gaps: number[] = [];
   for (let i = 1; i < sessionHistory.length; i++) {
@@ -27,11 +27,11 @@ export function analyzePattern(
   }
   const increasingRatio = increasingCount / (gaps.length - 1);
   if (increasingRatio > 0.7) {
-    return "DECLINING";
+    return 'DECLINING';
   } else if (increasingRatio > 0.3) {
-    return "VARIABLE";
+    return 'VARIABLE';
   }
-  return "CONSISTENT";
+  return 'CONSISTENT';
 }
 
 export function calculateRecentQuality(
@@ -50,63 +50,63 @@ export function getRiskLevel(
   hoursSinceLastSession: number,
 ): RiskLevel {
   if (hoursSinceLastSession >= CRITICAL_THRESHOLD || score >= 85) {
-    return "CRITICAL";
+    return 'CRITICAL';
   }
   if (hoursSinceLastSession >= HIGH_THRESHOLD || score >= 65) {
-    return "HIGH";
+    return 'HIGH';
   }
   if (hoursSinceLastSession >= MEDIUM_THRESHOLD || score >= 40) {
-    return "MEDIUM";
+    return 'MEDIUM';
   }
   if (score >= 20) {
-    return "LOW";
+    return 'LOW';
   }
-  return "NONE";
+  return 'NONE';
 }
 
 export function getUrgency(
   level: RiskLevel,
   hoursSinceLastSession: number,
   daysUntilBreak: number,
-): "NONE" | "SOON" | "URGENT" | "CRITICAL" {
-  if (level === "CRITICAL") {
-    return "CRITICAL";
+): 'NONE' | 'SOON' | 'URGENT' | 'CRITICAL' {
+  if (level === 'CRITICAL') {
+    return 'CRITICAL';
   }
-  if (level === "HIGH") {
-    return "URGENT";
+  if (level === 'HIGH') {
+    return 'URGENT';
   }
-  if (level === "MEDIUM" && hoursSinceLastSession > 18) {
-    return "URGENT";
+  if (level === 'MEDIUM' && hoursSinceLastSession > 18) {
+    return 'URGENT';
   }
-  if (level === "MEDIUM") {
-    return "SOON";
+  if (level === 'MEDIUM') {
+    return 'SOON';
   }
-  if (level === "LOW" && daysUntilBreak <= 1) {
-    return "SOON";
+  if (level === 'LOW' && daysUntilBreak <= 1) {
+    return 'SOON';
   }
-  return "NONE";
+  return 'NONE';
 }
 
 export function getSuggestedAction(
   level: RiskLevel,
   urgency: string,
-): "NONE" | "REMINDER" | "PUSH" | "INTERVENTION" {
-  if (level === "CRITICAL") {
-    return "INTERVENTION";
+): 'NONE' | 'REMINDER' | 'PUSH' | 'INTERVENTION' {
+  if (level === 'CRITICAL') {
+    return 'INTERVENTION';
   }
-  if (level === "HIGH") {
-    return "PUSH";
+  if (level === 'HIGH') {
+    return 'PUSH';
   }
-  if (level === "MEDIUM" && urgency === "URGENT") {
-    return "PUSH";
+  if (level === 'MEDIUM' && urgency === 'URGENT') {
+    return 'PUSH';
   }
-  if (level === "MEDIUM") {
-    return "REMINDER";
+  if (level === 'MEDIUM') {
+    return 'REMINDER';
   }
-  if (level === "LOW") {
-    return "REMINDER";
+  if (level === 'LOW') {
+    return 'REMINDER';
   }
-  return "NONE";
+  return 'NONE';
 }
 
 export function generateRecommendation(
@@ -115,22 +115,22 @@ export function generateRecommendation(
 ): string {
   const { hoursSinceLastSession, typicalSessionHour, weekendRisk } = factors;
   switch (level) {
-    case "CRITICAL":
-      return "Your streak is about to break! Start a session NOW to save it.";
-    case "HIGH": {
+    case 'CRITICAL':
+      return 'Your streak is about to break! Start a session NOW to save it.';
+    case 'HIGH': {
       const hoursLeft = Math.max(0, CRITICAL_THRESHOLD - hoursSinceLastSession);
       return `High risk! You have about ${Math.floor(hoursLeft)} hours left. Your typical time is ${typicalSessionHour}:00.`;
     }
-    case "MEDIUM":
+    case 'MEDIUM':
       if (weekendRisk) {
-        return "Weekend streak risk detected. Consider an earlier session today.";
+        return 'Weekend streak risk detected. Consider an earlier session today.';
       }
       return `Getting close to your usual session time (${typicalSessionHour}:00).`;
-    case "LOW":
-      return "Stay on track! Your streak is safe for now.";
-    case "NONE":
-      return "Great job maintaining your streak!";
+    case 'LOW':
+      return 'Stay on track! Your streak is safe for now.';
+    case 'NONE':
+      return 'Great job maintaining your streak!';
     default:
-      return "";
+      return '';
   }
 }

@@ -1,8 +1,8 @@
-import type { SessionPreset } from "../types";
-import { ValidateSessionPresetSchema } from "../validation/schemas";
-import { createDebugger } from "../../utils/debug";
+import type { SessionPreset } from '../types';
+import { ValidateSessionPresetSchema } from '../validation/schemas';
+import { createDebugger } from '../../utils/debug';
 
-const debug = createDebugger("session:presets:io");
+const debug = createDebugger('session:presets:io');
 
 export function buildExportPresets(
   userPresets: Map<string, SessionPreset>,
@@ -17,17 +17,17 @@ export async function buildImportPresets(
   userPresets: Map<string, SessionPreset>,
   updatePreset: (
     presetId: string,
-    updates: Partial<Omit<SessionPreset, "id" | "createdAt" | "userId">>,
+    updates: Partial<Omit<SessionPreset, 'id' | 'createdAt' | 'userId'>>,
   ) => Promise<SessionPreset>,
   createPreset: (
     presetData: Omit<
       SessionPreset,
-      "id" | "createdAt" | "updatedAt" | "userId"
+      'id' | 'createdAt' | 'updatedAt' | 'userId'
     >,
   ) => Promise<SessionPreset>,
 ): Promise<number> {
   if (!userId) {
-    throw new Error("PresetService: No user set");
+    throw new Error('PresetService: No user set');
   }
   try {
     const presets = JSON.parse(jsonData) as SessionPreset[];
@@ -65,10 +65,10 @@ export async function buildImportPresets(
         }
         imported++;
       } catch (error) {
-        debug.error("Failed to import preset", error as Error);
+        debug.error('Failed to import preset', error as Error);
       }
     }
-    debug.info("Imported %d presets", imported);
+    debug.info('Imported %d presets', imported);
     return imported;
   } catch (error) {
     throw new Error(`Failed to import presets: ${(error as Error).message}`);

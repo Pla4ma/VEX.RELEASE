@@ -1,8 +1,8 @@
-import React from "react";
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useModeWeeklyIntelligence } from "../hooks";
-import type { Lane } from "../../lane-engine/types";
+import React from 'react';
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useModeWeeklyIntelligence } from '../hooks';
+import type { Lane } from '../../lane-engine/types';
 
 interface ModeWeeklyIntelligenceProps {
   userId: string | null | undefined;

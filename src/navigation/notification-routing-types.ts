@@ -4,33 +4,33 @@
  * Every notification resolves to one of these safe intents.
  * Route mapping happens only after FeatureAvailability checks.
  */
-import type { SessionStackParams } from "./types";
+import type { SessionStackParams } from './types';
 
 export type NotificationSafeIntent =
-  | "OPEN_HOME"
-  | "START_SESSION"
-  | "START_RESCUE"
-  | "OPEN_PROGRESS"
-  | "OPEN_PROFILE"
-  | "OPEN_COACH"
-  | "OPEN_STUDY_LAYER"
-  | "OPEN_BOSS"
-  | "OPEN_SETTINGS";
+  | 'OPEN_HOME'
+  | 'START_SESSION'
+  | 'START_RESCUE'
+  | 'OPEN_PROGRESS'
+  | 'OPEN_PROFILE'
+  | 'OPEN_COACH'
+  | 'OPEN_STUDY_LAYER'
+  | 'OPEN_BOSS'
+  | 'OPEN_SETTINGS';
 
 export type NotificationActionType =
-  | "start_session"
-  | "start_rescue"
-  | "view_boss"
-  | "open_chest"
-  | "view_squad"
-  | "join_duel"
-  | "view_streak"
-  | "open_shop"
-  | "view_profile"
-  | "open_coach"
-  | "accept_invite"
-  | "view_progress"
-  | "custom";
+  | 'start_session'
+  | 'start_rescue'
+  | 'view_boss'
+  | 'open_chest'
+  | 'view_squad'
+  | 'join_duel'
+  | 'view_streak'
+  | 'open_shop'
+  | 'view_profile'
+  | 'open_coach'
+  | 'accept_invite'
+  | 'view_progress'
+  | 'custom';
 
 export interface NotificationRouteResult {
   success: boolean;
@@ -55,37 +55,37 @@ export interface NotificationNavigation {
 }
 
 export const ALLOWED_MAIN_TAB_SCREENS = new Set([
-  "Home",
-  "Progress",
-  "Profile",
+  'Home',
+  'Progress',
+  'Profile',
 ]);
 export const ALLOWED_ROOT_SCREENS = new Set([
-  "ContentStudy",
-  "AICoach",
-  "Mastery",
+  'ContentStudy',
+  'AICoach',
+  'Mastery',
 ]);
 
 export const validTypes: NotificationActionType[] = [
-  "start_session",
-  "start_rescue",
-  "view_boss",
-  "open_chest",
-  "view_squad",
-  "join_duel",
-  "view_streak",
-  "open_shop",
-  "view_profile",
-  "open_coach",
-  "accept_invite",
-  "view_progress",
-  "custom",
+  'start_session',
+  'start_rescue',
+  'view_boss',
+  'open_chest',
+  'view_squad',
+  'join_duel',
+  'view_streak',
+  'open_shop',
+  'view_profile',
+  'open_coach',
+  'accept_invite',
+  'view_progress',
+  'custom',
 ];
 
 export function blocked(screen: string): NotificationRouteResult {
   return {
     success: false,
     error: `${screen} is not available yet`,
-    screen: "Home",
+    screen: 'Home',
   };
 }
 
@@ -93,36 +93,36 @@ export function navigateToSessionSetup(
   navigation: NotificationNavigation,
   payload?: Record<string, unknown>,
 ): NotificationRouteResult {
-  const params: SessionStackParams["SessionSetup"] = {
+  const params: SessionStackParams['SessionSetup'] = {
     presetId: toOptionalString(payload?.presetId),
     comebackMultiplier: toOptionalNumber(payload?.comebackMultiplier),
-    presetMode: payload?.presetMode === "STUDY" ? "STUDY" : undefined,
-    source: payload?.source === "content-study" ? "content-study" : undefined,
+    presetMode: payload?.presetMode === 'STUDY' ? 'STUDY' : undefined,
+    source: payload?.source === 'content-study' ? 'content-study' : undefined,
   };
-  navigation.navigate("SessionStack", { screen: "SessionSetup", params });
-  return { success: true, screen: "SessionSetup" };
+  navigation.navigate('SessionStack', { screen: 'SessionSetup', params });
+  return { success: true, screen: 'SessionSetup' };
 }
 
 export function navigateToRescueSession(
   navigation: NotificationNavigation,
   payload?: Record<string, unknown>,
 ): NotificationRouteResult {
-  const params: SessionStackParams["SessionSetup"] = {
-    source: "rescue",
+  const params: SessionStackParams['SessionSetup'] = {
+    source: 'rescue',
     rescuePlanId: toOptionalString(payload?.rescuePlanId),
     rescueTaskDescription: toOptionalString(payload?.rescueTaskDescription),
     suggestedDurationSeconds: toOptionalNumber(
       payload?.suggestedDurationSeconds,
     ),
   };
-  navigation.navigate("SessionStack", { screen: "SessionSetup", params });
-  return { success: true, screen: "SessionSetup" };
+  navigation.navigate('SessionStack', { screen: 'SessionSetup', params });
+  return { success: true, screen: 'SessionSetup' };
 }
 
 export function toOptionalString(value: unknown): string | undefined {
-  return typeof value === "string" ? value : undefined;
+  return typeof value === 'string' ? value : undefined;
 }
 
 export function toOptionalNumber(value: unknown): number | undefined {
-  return typeof value === "number" ? value : undefined;
+  return typeof value === 'number' ? value : undefined;
 }

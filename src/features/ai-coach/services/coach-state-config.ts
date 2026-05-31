@@ -1,5 +1,5 @@
-import { type CoachUserState, type CoachState } from "../schemas";
-import * as repository from "../repository";
+import { type CoachUserState, type CoachState } from '../schemas';
+import * as repository from '../repository';
 
 export interface StateConfig {
   onEntry?: (
@@ -64,28 +64,28 @@ async function muteAllNotifications(userId: string): Promise<void> {
 
 export const STATE_CONFIG: Record<CoachUserState, StateConfig> = {
   COLD_START: {
-    allowedTransitions: ["LOW_CONFIDENCE", "STREAK_AT_RISK"],
+    allowedTransitions: ['LOW_CONFIDENCE', 'STREAK_AT_RISK'],
     requiredDataPoints: 0,
   },
   LOW_CONFIDENCE: {
-    allowedTransitions: ["HIGH_CONFIDENCE", "STREAK_AT_RISK", "COLD_START"],
+    allowedTransitions: ['HIGH_CONFIDENCE', 'STREAK_AT_RISK', 'COLD_START'],
     requiredDataPoints: 5,
     maxDurationHours: 168,
   },
   HIGH_CONFIDENCE: {
     allowedTransitions: [
-      "STREAK_AT_RISK",
-      "COMEBACK_MODE",
-      "OVERLOAD_PROTECTION",
-      "MUTED_MODE",
+      'STREAK_AT_RISK',
+      'COMEBACK_MODE',
+      'OVERLOAD_PROTECTION',
+      'MUTED_MODE',
     ],
     requiredDataPoints: 20,
   },
   STREAK_AT_RISK: {
     allowedTransitions: [
-      "HIGH_CONFIDENCE",
-      "POST_FAILURE_SUPPORT",
-      "MUTED_MODE",
+      'HIGH_CONFIDENCE',
+      'POST_FAILURE_SUPPORT',
+      'MUTED_MODE',
     ],
     maxDurationHours: 48,
   },
@@ -94,9 +94,9 @@ export const STATE_CONFIG: Record<CoachUserState, StateConfig> = {
       await ensureComebackPlan(state.userId);
     },
     allowedTransitions: [
-      "HIGH_CONFIDENCE",
-      "POST_FAILURE_SUPPORT",
-      "MUTED_MODE",
+      'HIGH_CONFIDENCE',
+      'POST_FAILURE_SUPPORT',
+      'MUTED_MODE',
     ],
     maxDurationHours: 168,
   },
@@ -104,14 +104,14 @@ export const STATE_CONFIG: Record<CoachUserState, StateConfig> = {
     onEntry: async (state) => {
       await sendPostFailureSupport(state.userId);
     },
-    allowedTransitions: ["COMEBACK_MODE", "LOW_CONFIDENCE", "MUTED_MODE"],
+    allowedTransitions: ['COMEBACK_MODE', 'LOW_CONFIDENCE', 'MUTED_MODE'],
     maxDurationHours: 72,
   },
   MILESTONE_HYPE: {
     onEntry: async (state) => {
       await sendMilestoneCelebration(state.userId, state);
     },
-    allowedTransitions: ["HIGH_CONFIDENCE", "STREAK_AT_RISK"],
+    allowedTransitions: ['HIGH_CONFIDENCE', 'STREAK_AT_RISK'],
     maxDurationHours: 24,
   },
   OVERLOAD_PROTECTION: {
@@ -121,7 +121,7 @@ export const STATE_CONFIG: Record<CoachUserState, StateConfig> = {
     onExit: async (state) => {
       await restoreNotifications(state.userId);
     },
-    allowedTransitions: ["HIGH_CONFIDENCE", "MUTED_MODE"],
+    allowedTransitions: ['HIGH_CONFIDENCE', 'MUTED_MODE'],
     maxDurationHours: 24,
   },
   MUTED_MODE: {
@@ -131,7 +131,7 @@ export const STATE_CONFIG: Record<CoachUserState, StateConfig> = {
     onExit: async (state) => {
       await restoreNotifications(state.userId);
     },
-    allowedTransitions: ["HIGH_CONFIDENCE", "LOW_CONFIDENCE"],
+    allowedTransitions: ['HIGH_CONFIDENCE', 'LOW_CONFIDENCE'],
     maxDurationHours: 168,
   },
 };

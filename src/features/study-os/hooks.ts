@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from '@tanstack/react-query';
 
 import {
   buildDayZeroStudyPreview,
@@ -6,15 +6,15 @@ import {
   computeStudyOsUnlockGate,
   getManualStudyFallbackMessage,
   isContentStudyBackendAvailable,
-} from "./service";
-import { listStoredStudyPlans } from "./repository";
-import type { StudyOsPremiumGate, StudyOsUnlockGate } from "./schemas";
+} from './service';
+import { listStoredStudyPlans } from './repository';
+import type { StudyOsPremiumGate, StudyOsUnlockGate } from './schemas';
 
 export function useStudyOsPlans(userId: string | null, enabled = true) {
   const query = useQuery({
     enabled: Boolean(userId) && enabled,
-    queryFn: () => listStoredStudyPlans(userId ?? ""),
-    queryKey: ["study-os", userId],
+    queryFn: () => listStoredStudyPlans(userId ?? ''),
+    queryKey: ['study-os', userId],
   });
 
   return {
@@ -42,7 +42,7 @@ export function useStudyOsPremiumGate(input: {
 }
 
 export function useStudyOsBackendAvailable(input: {
-  featureHealth: "healthy" | "degraded" | "unavailable";
+  featureHealth: 'healthy' | 'degraded' | 'unavailable';
   aiConfigured: boolean;
   storageConfigured: boolean;
 }): boolean {

@@ -1,10 +1,10 @@
-import { eventBus } from "../events";
+import { eventBus } from '../events';
 import type {
   Experiment,
   ExperimentAssignment,
   ExperimentResults,
-} from "./ab-testing/types";
-import { isUserEligible, selectVariant } from "./ab-testing/helpers";
+} from './ab-testing/types';
+import { isUserEligible, selectVariant } from './ab-testing/helpers';
 
 // Re-export all types and data for external consumers
 export type {
@@ -14,15 +14,15 @@ export type {
   ExperimentType,
   Variant,
   VariantResult,
-} from "./ab-testing/types";
-export { PREDEFINED_EXPERIMENTS } from "./ab-testing/experiments";
+} from './ab-testing/types';
+export { PREDEFINED_EXPERIMENTS } from './ab-testing/experiments';
 
 const experiments = new Map<string, Experiment>();
 const userAssignments = new Map<string, ExperimentAssignment[]>();
 const experimentResults = new Map<string, ExperimentResults>();
 
 export function createExperiment(
-  experimentData: Omit<Experiment, "id" | "startDate">,
+  experimentData: Omit<Experiment, 'id' | 'startDate'>,
 ): Experiment {
   const id = `exp-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
   const experiment: Experiment = {
@@ -31,7 +31,7 @@ export function createExperiment(
     startDate: Date.now(),
   };
   experiments.set(id, experiment);
-  eventBus.publish("experiment:created", {
+  eventBus.publish('experiment:created', {
     experimentId: id,
     name: experiment.name,
     type: experiment.type,
@@ -49,7 +49,7 @@ export function assignUserToExperiment(
   userProfile: {
     sessions: number;
     isPremium: boolean;
-    platform: "ios" | "android" | "web";
+    platform: 'ios' | 'android' | 'web';
     segment: string;
   },
 ): string | null {
@@ -57,7 +57,7 @@ export function assignUserToExperiment(
   if (!experiment) {
     return null;
   }
-  if (experiment.status !== "RUNNING") {
+  if (experiment.status !== 'RUNNING') {
     return null;
   }
   if (!isUserEligible(experiment, userProfile)) {
@@ -80,7 +80,7 @@ export function assignUserToExperiment(
   };
   userExps.push(assignment);
   userAssignments.set(userId, userExps);
-  eventBus.publish("experiment:assigned", { userId, experimentId, variantId });
+  eventBus.publish('experiment:assigned', { userId, experimentId, variantId });
   return variantId;
 }
 
@@ -119,7 +119,7 @@ export function recordExperimentEvent(
 ): void {
   const userVariant = getUserVariant(userId, experimentId);
   if (userVariant) {
-    eventBus.publish("experiment:event", {
+    eventBus.publish('experiment:event', {
       userId,
       experimentId,
       variantId: userVariant,
@@ -145,7 +145,7 @@ export function calculateResults(
     totalParticipants: 0,
     variants: [],
     confidence: 0,
-    recommendedAction: "CONTINUE",
+    recommendedAction: 'CONTINUE',
   };
   experimentResults.set(experimentId, results);
   return results;
@@ -159,15 +159,15 @@ export function completeExperiment(
   if (!experiment) {
     return null;
   }
-  experiment.status = "COMPLETED";
+  experiment.status = 'COMPLETED';
   experiment.endDate = Date.now();
   const results = calculateResults(experimentId);
   if (results && winnerVariantId) {
     results.winner = winnerVariantId;
-    results.recommendedAction = "IMPLEMENT_WINNER";
+    results.recommendedAction = 'IMPLEMENT_WINNER';
   }
   if (winnerVariantId && results) {
-    eventBus.publish("experiment:completed", {
+    eventBus.publish('experiment:completed', {
       experimentId,
       winner: winnerVariantId,
       results,
@@ -177,7 +177,7 @@ export function completeExperiment(
 }
 
 export function getActiveExperiments(): Experiment[] {
-  return Array.from(experiments.values()).filter((e) => e.status === "RUNNING");
+  return Array.from(experiments.values()).filter((e) => e.status === 'RUNNING');
 }
 
 export function getUserExperiments(userId: string): ExperimentAssignment[] {

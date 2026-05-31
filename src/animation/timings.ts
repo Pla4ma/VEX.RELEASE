@@ -8,7 +8,7 @@ import {
   Easing,
   type EasingFunction,
   type EasingFunctionFactory,
-} from "react-native-reanimated";
+} from 'react-native-reanimated';
 
 /**
  * Easing functions from Reanimated

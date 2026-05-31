@@ -1,13 +1,13 @@
-import React from "react";
-import { Pressable } from "react-native";
-import { Box, Text, Button, Card } from "../../components/primitives";
-import { Avatar } from "../../components/Avatar";
-import { launchColors } from "@theme/tokens/launch-colors";
+import React from 'react';
+import { Pressable } from 'react-native';
+import { Box, Text, Button, Card } from '../../components/primitives';
+import { Avatar } from '../../components/Avatar';
+import { launchColors } from '@theme/tokens/launch-colors';
 import type {
   Notification,
   NotificationType,
-} from "./NotificationScreenConfig";
-import { NOTIFICATION_CONFIG, FILTER_LABELS } from "./NotificationScreenConfig";
+} from './NotificationScreenConfig';
+import { NOTIFICATION_CONFIG, FILTER_LABELS } from './NotificationScreenConfig';
 
 export function NotificationFilterBar({
   availableFilterTypes,
@@ -17,9 +17,9 @@ export function NotificationFilterBar({
   secondaryBg,
   textSecondary,
 }: {
-  availableFilterTypes: ("all" | NotificationType)[];
-  activeFilter: "all" | NotificationType;
-  onFilterChange: (f: "all" | NotificationType) => void;
+  availableFilterTypes: ('all' | NotificationType)[];
+  activeFilter: 'all' | NotificationType;
+  onFilterChange: (f: 'all' | NotificationType) => void;
   primaryColor: string;
   secondaryBg: string;
   textSecondary: string;
@@ -45,7 +45,7 @@ export function NotificationFilterBar({
           <Text
             variant="caption"
             style={{
-              fontWeight: "600",
+              fontWeight: '600',
               color:
                 activeFilter === filter ? launchColors.hex_fff : textSecondary,
             }}
@@ -81,7 +81,7 @@ export function NotificationCard({
       onPress={() => onPress(item)}
       accessibilityLabel={`${item.title}: ${item.message}`}
       accessibilityRole="button"
-      accessibilityHint={`${item.read ? "Read" : "Unread"} notification. Tap to view details.`}
+      accessibilityHint={`${item.read ? 'Read' : 'Unread'} notification. Tap to view details.`}
       accessibilityState={{ selected: !item.read }}
     >
       <Box flexDirection="row" alignItems="flex-start">
@@ -107,7 +107,7 @@ export function NotificationCard({
             justifyContent="space-between"
             alignItems="flex-start"
           >
-            <Text variant="body" style={{ fontWeight: "600", flex: 1 }}>
+            <Text variant="body" style={{ fontWeight: '600', flex: 1 }}>
               {item.title}
             </Text>
             <Text variant="caption" color="text.tertiary">
@@ -126,7 +126,7 @@ export function NotificationCard({
               variant="ghost"
               size="sm"
               style={{
-                alignSelf: "flex-start",
+                alignSelf: 'flex-start',
                 marginTop: 4,
                 paddingHorizontal: 0,
               }}
@@ -160,13 +160,13 @@ export function NotificationSectionHeader({
   title: string;
   count: number;
 }): JSX.Element | null {
-  if (count === 0) return null;
+  if (count === 0) {return null;}
   return (
     <Box px={4} py={8}>
       <Text
         variant="caption"
         color="text.tertiary"
-        style={{ fontWeight: "600", textTransform: "uppercase" }}
+        style={{ fontWeight: '600', textTransform: 'uppercase' }}
       >
         {title}
       </Text>

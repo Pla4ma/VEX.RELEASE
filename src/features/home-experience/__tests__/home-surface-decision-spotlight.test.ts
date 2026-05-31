@@ -1,7 +1,7 @@
 import {
   decideHomeSurfaces,
   getSpotlightSurface,
-} from "../home-surface-decision";
+} from '../home-surface-decision';
 import {
   featureAvailability,
   studyProfile,
@@ -9,11 +9,11 @@ import {
   gameLikeProfile,
   calmProfile,
   baseStats,
-} from "./home-surface-decision.helpers";
+} from './home-surface-decision.helpers';
 
-describe("HomeSurfaceDecision", () => {
-  describe("Spotlight selection by motivation style", () => {
-    it("study-focused user gets study_layer spotlight on engaged", () => {
+describe('HomeSurfaceDecision', () => {
+  describe('Spotlight selection by motivation style', () => {
+    it('study-focused user gets study_layer spotlight on engaged', () => {
       const map = decideHomeSurfaces({
         featureAvailability,
         personalizationProfile: studyProfile,
@@ -28,17 +28,17 @@ describe("HomeSurfaceDecision", () => {
         isFirstSession: false,
       });
 
-      expect(getSpotlightSurface(map)).toBe("study_layer");
+      expect(getSpotlightSurface(map)).toBe('study_layer');
     });
 
-    it("game-like user with high boss engagement gets boss_compact spotlight", () => {
+    it('game-like user with high boss engagement gets boss_compact spotlight', () => {
       const map = decideHomeSurfaces({
         featureAvailability,
         personalizationProfile: gameLikeProfile,
         behaviorStats: {
           ...baseStats(),
           totalCompletedSessions: 8,
-          bossChallengeEngagement: "high",
+          bossChallengeEngagement: 'high',
         },
         hasActiveStudyPlan: false,
         hasActiveRecommendation: false,
@@ -47,10 +47,10 @@ describe("HomeSurfaceDecision", () => {
       });
 
       const spot = getSpotlightSurface(map);
-      expect(spot === "boss_compact" || spot === "boss_teaser").toBe(true);
+      expect(spot === 'boss_compact' || spot === 'boss_teaser').toBe(true);
     });
 
-    it("coach-led user with active recommendation gets coach_presence spotlight", () => {
+    it('coach-led user with active recommendation gets coach_presence spotlight', () => {
       const map = decideHomeSurfaces({
         featureAvailability,
         personalizationProfile: workProfile,
@@ -65,17 +65,17 @@ describe("HomeSurfaceDecision", () => {
         isFirstSession: false,
       });
 
-      expect(getSpotlightSurface(map)).toBe("coach_presence");
+      expect(getSpotlightSurface(map)).toBe('coach_presence');
     });
 
-    it("calm user does not get boss teaser in any form", () => {
+    it('calm user does not get boss teaser in any form', () => {
       const map = decideHomeSurfaces({
         featureAvailability,
         personalizationProfile: calmProfile,
         behaviorStats: {
           ...baseStats(),
           totalCompletedSessions: 10,
-          bossChallengeEngagement: "high",
+          bossChallengeEngagement: 'high',
         },
         hasActiveStudyPlan: false,
         hasActiveRecommendation: false,
@@ -83,12 +83,12 @@ describe("HomeSurfaceDecision", () => {
         isFirstSession: false,
       });
 
-      expect(map.boss_teaser).toBe("hidden");
-      expect(map.boss_compact).toBe("hidden");
-      expect(map.boss_full_cta).toBe("blocked");
+      expect(map.boss_teaser).toBe('hidden');
+      expect(map.boss_compact).toBe('hidden');
+      expect(map.boss_full_cta).toBe('blocked');
     });
 
-    it("calm user with completion streak sees progress spotlight", () => {
+    it('calm user with completion streak sees progress spotlight', () => {
       const map = decideHomeSurfaces({
         featureAvailability,
         personalizationProfile: calmProfile,
@@ -103,7 +103,7 @@ describe("HomeSurfaceDecision", () => {
         isFirstSession: false,
       });
 
-      expect(getSpotlightSurface(map)).toBe("progress_proof");
+      expect(getSpotlightSurface(map)).toBe('progress_proof');
     });
   });
 });

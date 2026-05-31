@@ -1,4 +1,4 @@
-import { createDebugger } from "../../utils/debug";
+import { createDebugger } from '../../utils/debug';
 import type {
   State,
   Event,
@@ -8,9 +8,9 @@ import type {
   StateConfig,
   StateMachineConfig,
   TransitionRecord,
-} from "./state-machine-types";
+} from './state-machine-types';
 
-const debug = createDebugger("session:stateMachine");
+const debug = createDebugger('session:stateMachine');
 
 const MAX_QUEUE_DEPTH = 10;
 
@@ -42,10 +42,10 @@ export class StateMachine<TContext> {
   async send(event: Event, payload?: unknown): Promise<boolean> {
     if (this.isTransitioning) {
       if (this.eventQueue.length >= MAX_QUEUE_DEPTH) {
-        debug.warn("Event queue full (max %d), dropping event: %s", MAX_QUEUE_DEPTH, event);
+        debug.warn('Event queue full (max %d), dropping event: %s', MAX_QUEUE_DEPTH, event);
         return false;
       }
-      debug.warn("State machine busy, queuing event: %s", event);
+      debug.warn('State machine busy, queuing event: %s', event);
       this.eventQueue.push({ event, payload });
       return false;
     }
@@ -79,7 +79,7 @@ export class StateMachine<TContext> {
       return false;
     } catch (error) {
       debug.error(
-        "Transition failed: %s",
+        'Transition failed: %s',
         error instanceof Error ? error : new Error(String(error)),
       );
       return false;
@@ -114,7 +114,7 @@ export class StateMachine<TContext> {
     const entryActions = this.config.states[toState]?.entry;
     await this.executeActions(exitActions, payload);
     if (this.abortController?.signal.aborted) {
-      throw new Error("Transition aborted");
+      throw new Error('Transition aborted');
     }
     this.currentState = toState;
     await this.executeActions(transition.actions, payload);
@@ -123,12 +123,12 @@ export class StateMachine<TContext> {
     this.history.push({
       from: fromState,
       to: toState,
-      event: "transition",
+      event: 'transition',
       timestamp: Date.now(),
       duration,
       payload,
     });
-    debug.info("Transition: %s -> %s (%dms)", fromState, toState, duration);
+    debug.info('Transition: %s -> %s (%dms)', fromState, toState, duration);
   }
 
   private async evaluateGuard(
@@ -143,7 +143,7 @@ export class StateMachine<TContext> {
       return result;
     } catch (error) {
       debug.error(
-        "Guard evaluation failed: %s",
+        'Guard evaluation failed: %s',
         error instanceof Error ? error : new Error(String(error)),
       );
       return false;
@@ -159,13 +159,13 @@ export class StateMachine<TContext> {
     }
     for (const action of actions) {
       if (this.abortController?.signal.aborted) {
-        throw new Error("Transition aborted");
+        throw new Error('Transition aborted');
       }
       try {
         await action(this.context, payload);
       } catch (error) {
         debug.error(
-          "Action execution failed: %s",
+          'Action execution failed: %s',
           error instanceof Error ? error : new Error(String(error)),
         );
         throw error;
@@ -175,7 +175,7 @@ export class StateMachine<TContext> {
 
   private isValidTransition(from: State, to: State): boolean {
     if (!this.config.states[to]) {
-      debug.error("Target state does not exist", new Error(`State: ${to}`));
+      debug.error('Target state does not exist', new Error(`State: ${to}`));
       return false;
     }
     return true;

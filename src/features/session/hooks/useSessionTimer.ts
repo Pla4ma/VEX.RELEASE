@@ -4,8 +4,8 @@
  * Timer display helper for active study sessions.
  */
 
-import { useEffect, useState } from "react";
-import { useStudySession } from "./useStudySession";
+import { useEffect, useState } from 'react';
+import { useStudySession } from './useStudySession';
 
 export function useSessionTimer() {
   const { currentSession, isActive, isPaused } = useStudySession();
@@ -39,5 +39,5 @@ export function useSessionTimer() {
 function formatSeconds(totalSeconds: number): string {
   const mins = Math.floor(totalSeconds / 60);
   const secs = totalSeconds % 60;
-  return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+  return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
 }

@@ -1,4 +1,4 @@
-import type { NotificationPayload } from "./session-notification-types";
+import type { NotificationPayload } from './session-notification-types';
 
 export class NotificationScheduler {
   private scheduledNotifications: Map<string, number> = new Map();
@@ -19,7 +19,7 @@ export class NotificationScheduler {
       this.scheduledNotifications.delete(id);
     }, delay);
     const existing = this.scheduledNotifications.get(id);
-    if (existing) clearTimeout(existing);
+    if (existing) {clearTimeout(existing);}
     this.scheduledNotifications.set(id, timeoutId);
   }
 

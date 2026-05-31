@@ -1,11 +1,11 @@
-import React from "react";
-import { View } from "react-native";
+import React from 'react';
+import { View } from 'react-native';
 import {
   Skeleton,
   SkeletonChart,
-} from "../../../shared/ui/primitives/Skeleton";
-import type { DashboardTimeRange } from "./AnalyticsDashboard.types";
-import { styles } from "./AnalyticsDashboard.styles";
+} from '../../../shared/ui/primitives/Skeleton';
+import type { DashboardTimeRange } from './AnalyticsDashboard.types';
+import { styles } from './AnalyticsDashboard.styles';
 
 export function HeatmapSkeleton(): React.JSX.Element {
   return (
@@ -19,26 +19,26 @@ export function HeatmapSkeleton(): React.JSX.Element {
 
 export function timeRangeToWeeks(timeRange: DashboardTimeRange): number {
   switch (timeRange) {
-    case "today":
+    case 'today':
       return 1;
-    case "last_7_days":
+    case 'last_7_days':
       return 1;
-    case "last_30_days":
+    case 'last_30_days':
       return 4;
-    case "this_month":
+    case 'this_month':
       return 4;
   }
 }
 
 export function formatMetricName(metric: string): string {
   return metric
-    .split("_")
+    .split('_')
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
+    .join(' ');
 }
 
 export function formatValue(value: number, metric: string): string {
-  if (metric.includes("time")) {
+  if (metric.includes('time')) {
     const hours = Math.floor(value / 3600);
     if (hours > 0) {
       return `${hours}h`;

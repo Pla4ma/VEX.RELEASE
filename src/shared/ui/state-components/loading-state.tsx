@@ -1,26 +1,26 @@
-import React from "react";
-import { ActivityIndicator, Text, View } from "react-native";
-import Animated from "react-native-reanimated";
-import { useTheme } from "../../../theme";
-import { useFadeStyle } from "./animations";
-import { Skeleton } from "./skeleton";
-import { styles } from "./styles";
-import type { LoadingStateProps } from "./types";
+import React from 'react';
+import { ActivityIndicator, Text, View } from 'react-native';
+import Animated from 'react-native-reanimated';
+import { useTheme } from '../../../theme';
+import { useFadeStyle } from './animations';
+import { Skeleton } from './skeleton';
+import { styles } from './styles';
+import type { LoadingStateProps } from './types';
 
 export function LoadingState({
-  message = "Loading...",
+  message = 'Loading...',
   submessage,
   progress,
   showProgress = false,
-  size = "large",
-  variant = "spinner",
+  size = 'large',
+  variant = 'spinner',
   skeletonItems = 3,
   style,
   testID,
 }: LoadingStateProps): JSX.Element {
   const { theme } = useTheme();
   const fadeStyle = useFadeStyle(true, 200);
-  if (variant === "skeleton") {
+  if (variant === 'skeleton') {
     return (
       <Animated.View
         style={[styles.container, style, fadeStyle]}
@@ -32,7 +32,7 @@ export function LoadingState({
   }
   return (
     <Animated.View style={[styles.container, style, fadeStyle]} testID={testID}>
-      {variant === "progress" && showProgress && progress !== undefined ? (
+      {variant === 'progress' && showProgress && progress !== undefined ? (
         <View style={styles.progressContainer}>
           <View
             style={[

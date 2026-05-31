@@ -7,12 +7,12 @@
  * @phase 4
  */
 
-import React from "react";
-import Animated, { FadeIn } from "react-native-reanimated";
+import React from 'react';
+import Animated, { FadeIn } from 'react-native-reanimated';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { CompanionWaiting } from "./CompanionWaiting";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { CompanionWaiting } from './CompanionWaiting';
 
 interface StarterSessionCompanionProps {
   sessionProgress: number; // 0-1
@@ -64,7 +64,7 @@ export function StarterSessionCompanion({
           <Text variant="bodySmall" color="text.tertiary" textAlign="center">
             {remainingMinutes > 0
               ? `${remainingMinutes} min left`
-              : "Almost done!"}
+              : 'Almost done!'}
           </Text>
         </Box>
       </Animated.View>

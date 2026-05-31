@@ -7,30 +7,30 @@ import {
   mockEventBus,
   mockRewards,
   fireEvent,
-} from "./integration-setup";
-import { initializeBossRewardsIntegration } from "../boss-rewards";
+} from './integration-setup';
+import { initializeBossRewardsIntegration } from '../boss-rewards';
 
-describe("integration", () => {
+describe('integration', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     mockActiveSubscribers.length = 0;
   });
 
-  describe("boss-rewards.ts", () => {
-    it("subscribes to boss:defeated event", () => {
+  describe('boss-rewards.ts', () => {
+    it('subscribes to boss:defeated event', () => {
       const unsub = initializeBossRewardsIntegration();
       expect(mockEventBus.eventBus.subscribe).toHaveBeenCalledWith(
-        "boss:defeated",
+        'boss:defeated',
         expect.any(Function),
       );
       unsub();
     });
 
-    it("creates XP reward when boss defeated with xp > 0", () => {
+    it('creates XP reward when boss defeated with xp > 0', () => {
       const unsub = initializeBossRewardsIntegration();
-      fireEvent("boss:defeated", {
-        userId: "u1",
-        bossId: "boss-1",
+      fireEvent('boss:defeated', {
+        userId: 'u1',
+        bossId: 'boss-1',
         won: true,
         rewards: { xp: 200 },
       });
@@ -38,11 +38,11 @@ describe("integration", () => {
         setTimeout(() => {
           expect(mockRewards.createReward).toHaveBeenCalledWith(
             expect.objectContaining({
-              userId: "u1",
-              type: "XP",
+              userId: 'u1',
+              type: 'XP',
               amount: 200,
-              triggerType: "BOSS_DEFEAT",
-              triggerId: "boss-1",
+              triggerType: 'BOSS_DEFEAT',
+              triggerId: 'boss-1',
             }),
           );
           unsub();
@@ -51,11 +51,11 @@ describe("integration", () => {
       });
     });
 
-    it("skips reward when won is false", () => {
+    it('skips reward when won is false', () => {
       const unsub = initializeBossRewardsIntegration();
-      fireEvent("boss:defeated", {
-        userId: "u1",
-        bossId: "boss-1",
+      fireEvent('boss:defeated', {
+        userId: 'u1',
+        bossId: 'boss-1',
         won: false,
         rewards: { xp: 200 },
       });
@@ -68,11 +68,11 @@ describe("integration", () => {
       });
     });
 
-    it("skips reward when xp is 0", () => {
+    it('skips reward when xp is 0', () => {
       const unsub = initializeBossRewardsIntegration();
-      fireEvent("boss:defeated", {
-        userId: "u1",
-        bossId: "boss-1",
+      fireEvent('boss:defeated', {
+        userId: 'u1',
+        bossId: 'boss-1',
         won: true,
         rewards: { xp: 0 },
       });

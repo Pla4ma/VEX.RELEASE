@@ -1,15 +1,15 @@
-import { createDebugger } from "../utils/debug";
-import { capture } from "../shared/analytics/analytics-service";
-import { StreakEvents } from "../shared/analytics/analytics-events";
-import type { StreakData, StreakUpdate } from "./streak-types";
-import { calculateStreakUpdate } from "./streak-calculations";
+import { createDebugger } from '../utils/debug';
+import { capture } from '../shared/analytics/analytics-service';
+import { StreakEvents } from '../shared/analytics/analytics-events';
+import type { StreakData, StreakUpdate } from './streak-types';
+import { calculateStreakUpdate } from './streak-calculations';
 
 export type { StreakData, StreakUpdate };
 
-const debug = createDebugger("streak-service");
+const debug = createDebugger('streak-service');
 
 class StreakService {
-  private userId: string = "";
+  private userId: string = '';
   private streakData: StreakData = {
     currentStreak: 0,
     longestStreak: 0,
@@ -21,7 +21,7 @@ class StreakService {
 
   setUserId(userId: string): void {
     this.userId = userId;
-    debug.info("Streak service initialized for user:", userId);
+    debug.info('Streak service initialized for user:', userId);
   }
 
   getStreakData(): StreakData {
@@ -30,7 +30,7 @@ class StreakService {
 
   async updateStreak(sessionDate?: string): Promise<StreakUpdate> {
     if (!this.userId) {
-      debug.error("No user ID set for streak service");
+      debug.error('No user ID set for streak service');
       return {
         newStreak: 0,
         streakMaintained: false,
@@ -57,7 +57,7 @@ class StreakService {
         streak_broken: update.streakBroken,
         new_longest_streak: update.newLongestStreak,
       });
-      debug.info("Streak updated successfully", {
+      debug.info('Streak updated successfully', {
         previousStreak,
         newStreak: update.newStreak,
         maintained: update.streakMaintained,
@@ -65,7 +65,7 @@ class StreakService {
       });
       return update;
     } catch (error) {
-      debug.error("Failed to update streak:", error);
+      debug.error('Failed to update streak:', error);
       return {
         newStreak: previousStreak,
         streakMaintained: false,
@@ -76,7 +76,7 @@ class StreakService {
   }
 
   private addToStreakHistory(sessionDate: Date, maintained: boolean): void {
-    const dateStr = sessionDate.toISOString().split("T")[0]!;
+    const dateStr = sessionDate.toISOString().split('T')[0]!;
     this.streakData.streakHistory = this.streakData.streakHistory.filter(
       (entry) => entry.date !== dateStr,
     );
@@ -122,7 +122,7 @@ class StreakService {
 
   async applyStreakFreeze(): Promise<boolean> {
     if (!this.canClaimStreakFreeze()) {
-      debug.warn("Cannot apply streak freeze - conditions not met");
+      debug.warn('Cannot apply streak freeze - conditions not met');
       return false;
     }
     try {
@@ -136,16 +136,16 @@ class StreakService {
         user_id: this.userId,
         streak_length: this.streakData.currentStreak,
       });
-      debug.info("Streak freeze applied successfully");
+      debug.info('Streak freeze applied successfully');
       return true;
     } catch (error) {
-      debug.error("Failed to apply streak freeze:", error);
+      debug.error('Failed to apply streak freeze:', error);
       return false;
     }
   }
 
   reset(): void {
-    this.userId = "";
+    this.userId = '';
     this.streakData = {
       currentStreak: 0,
       longestStreak: 0,
@@ -154,7 +154,7 @@ class StreakService {
       isAtRisk: false,
       hoursRemaining: 24,
     };
-    debug.info("Streak service reset");
+    debug.info('Streak service reset');
   }
 }
 

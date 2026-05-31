@@ -1,21 +1,21 @@
-import { describe, it, expect, jest } from "@jest/globals";
+import { describe, it, expect, jest } from '@jest/globals';
 import {
   coachService,
   mockUserId,
   handleSessionCompleted,
   handleStreakRiskDetected,
   handleLevelUp,
-} from "./integration-test-helpers";
+} from './integration-test-helpers';
 
-describe("Integration Failure Handling", () => {
-  it("session completion continues even if coach fails", async () => {
+describe('Integration Failure Handling', () => {
+  it('session completion continues even if coach fails', async () => {
     jest
-      .spyOn(coachService, "processBehaviorSignal")
-      .mockRejectedValue(new Error("Coach down"));
+      .spyOn(coachService, 'processBehaviorSignal')
+      .mockRejectedValue(new Error('Coach down'));
     await expect(
       handleSessionCompleted({
         userId: mockUserId,
-        sessionId: "session-1",
+        sessionId: 'session-1',
         duration: 1800,
         qualityScore: 85,
         completedAt: Date.now(),
@@ -23,15 +23,15 @@ describe("Integration Failure Handling", () => {
     ).resolves.not.toThrow();
   });
 
-  it("streak risk detection attempts fallback notification", async () => {
+  it('streak risk detection attempts fallback notification', async () => {
     jest
-      .spyOn(coachService, "detectStreakRisk")
-      .mockRejectedValue(new Error("Service down"));
+      .spyOn(coachService, 'detectStreakRisk')
+      .mockRejectedValue(new Error('Service down'));
     const payload = {
       userId: mockUserId,
       currentStreak: 5,
       hoursSinceLastSession: 30,
-      riskLevel: "HIGH" as const,
+      riskLevel: 'HIGH' as const,
       hoursRemaining: 12,
     };
     await expect(
@@ -39,10 +39,10 @@ describe("Integration Failure Handling", () => {
     ).resolves.not.toThrow();
   });
 
-  it("level up handles coach failure gracefully", async () => {
+  it('level up handles coach failure gracefully', async () => {
     jest
-      .spyOn(coachService, "generateMessage")
-      .mockRejectedValue(new Error("AI unavailable"));
+      .spyOn(coachService, 'generateMessage')
+      .mockRejectedValue(new Error('AI unavailable'));
     const payload = {
       userId: mockUserId,
       oldLevel: 4,

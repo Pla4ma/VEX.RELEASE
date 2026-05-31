@@ -1,19 +1,19 @@
-import { createSheet } from "@/shared/ui/create-sheet";
-import { launchColors } from "@theme/tokens/launch-colors";
+import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
 
 export const styles = createSheet({
   container: { marginVertical: 8 },
   label: {
     fontSize: 12,
-    fontWeight: "500",
+    fontWeight: '500',
     color: launchColors.hex_6b7280,
     marginBottom: 8,
     marginLeft: 4,
   },
   selector: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     padding: 12,
     borderRadius: 8,
     backgroundColor: launchColors.hex_f9fafb,
@@ -22,8 +22,8 @@ export const styles = createSheet({
   },
   selectorDisabled: { opacity: 0.5 },
   selectedContainer: {
-    flexDirection: "row",
-    flexWrap: "wrap",
+    flexDirection: 'row',
+    flexWrap: 'wrap',
     flex: 1,
     gap: 6,
   },
@@ -36,52 +36,52 @@ export const styles = createSheet({
   selectedChipText: {
     fontSize: 12,
     color: launchColors.hex_4338ca,
-    fontWeight: "500",
+    fontWeight: '500',
   },
   placeholder: { color: launchColors.hex_9ca3af, fontSize: 14 },
   chevron: { fontSize: 12, color: launchColors.hex_6b7280, marginLeft: 8 },
   overlay: {
     flex: 1,
     backgroundColor: launchColors.rgb_0_0_0_0_5,
-    justifyContent: "flex-end",
+    justifyContent: 'flex-end',
   },
   modalContent: {
     backgroundColor: launchColors.hex_ffffff,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    maxHeight: "80%",
+    maxHeight: '80%',
   },
   modalHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     padding: 16,
     borderBottomWidth: 1,
     borderBottomColor: launchColors.hex_e5e7eb,
   },
   modalTitle: {
     fontSize: 18,
-    fontWeight: "600",
+    fontWeight: '600',
     color: launchColors.hex_111827,
   },
   closeButton: {
     fontSize: 16,
     color: launchColors.hex_6366f1,
-    fontWeight: "500",
+    fontWeight: '500',
   },
   modalScroll: { padding: 16 },
   categorySection: { marginBottom: 20 },
   categoryTitle: {
     fontSize: 14,
-    fontWeight: "600",
+    fontWeight: '600',
     color: launchColors.hex_374151,
     marginBottom: 8,
-    textTransform: "uppercase",
+    textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
   metricOption: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     paddingVertical: 10,
     paddingHorizontal: 8,
     borderRadius: 6,
@@ -95,8 +95,8 @@ export const styles = createSheet({
     borderWidth: 2,
     borderColor: launchColors.hex_d1d5db,
     marginRight: 12,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   checkboxSelected: {
     backgroundColor: launchColors.hex_6366f1,
@@ -105,9 +105,9 @@ export const styles = createSheet({
   checkmark: {
     color: launchColors.hex_ffffff,
     fontSize: 12,
-    fontWeight: "700",
+    fontWeight: '700',
   },
   metricLabel: { fontSize: 14, color: launchColors.hex_374151 },
-  metricLabelSelected: { color: launchColors.hex_111827, fontWeight: "500" },
+  metricLabelSelected: { color: launchColors.hex_111827, fontWeight: '500' },
   metricLabelDisabled: { color: launchColors.hex_9ca3af },
 });

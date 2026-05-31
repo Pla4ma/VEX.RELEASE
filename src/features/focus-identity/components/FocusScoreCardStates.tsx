@@ -1,10 +1,10 @@
-import React from "react";
-import { View, Pressable } from "react-native";
-import { Text } from "../../../components/primitives/Text";
-import { Box } from "../../../components/primitives/Box";
+import React from 'react';
+import { View, Pressable } from 'react-native';
+import { Text } from '../../../components/primitives/Text';
+import { Box } from '../../../components/primitives/Box';
 
 interface FocusScoreCardSkeletonProps {
-  size: "small" | "medium" | "large";
+  size: 'small' | 'medium' | 'large';
   borderColor: string;
 }
 
@@ -14,17 +14,17 @@ export function FocusScoreCardSkeleton({
 }: FocusScoreCardSkeletonProps) {
   return (
     <Box
-      padding={size === "small" ? "md" : size === "large" ? "xl" : "lg"}
+      padding={size === 'small' ? 'md' : size === 'large' ? 'xl' : 'lg'}
       backgroundColor="surface"
       borderRadius="lg"
-      style={{ width: "100%" }}
+      style={{ width: '100%' }}
     >
       <View style={{ gap: 12 }}>
         <View
           style={{
             height: 48,
             borderRadius: 4,
-            width: "40%",
+            width: '40%',
             backgroundColor: borderColor,
           }}
         />
@@ -33,14 +33,14 @@ export function FocusScoreCardSkeleton({
             height: 24,
             borderRadius: 4,
             backgroundColor: borderColor,
-            width: "60%",
+            width: '60%',
           }}
         />
         <View
           style={{
             height: 16,
             borderRadius: 4,
-            width: "80%",
+            width: '80%',
             backgroundColor: borderColor,
           }}
         />
@@ -50,7 +50,7 @@ export function FocusScoreCardSkeleton({
 }
 
 interface FocusScoreCardErrorProps {
-  size: "small" | "medium" | "large";
+  size: 'small' | 'medium' | 'large';
   error: Error | null;
   isRetrying: boolean;
   retry: (() => void) | undefined;
@@ -66,22 +66,22 @@ export function FocusScoreCardError({
 }: FocusScoreCardErrorProps) {
   return (
     <Box
-      padding={size === "small" ? "md" : size === "large" ? "xl" : "lg"}
+      padding={size === 'small' ? 'md' : size === 'large' ? 'xl' : 'lg'}
       backgroundColor="surface"
       borderRadius="lg"
-      style={{ width: "100%", alignItems: "center", gap: 8 }}
+      style={{ width: '100%', alignItems: 'center', gap: 8 }}
     >
       <Text variant="heading3" color="error" style={{ fontSize: 32 }}>
         ⚠️
       </Text>
-      <Text variant="body" color="error" style={{ textAlign: "center" }}>
+      <Text variant="body" color="error" style={{ textAlign: 'center' }}>
         Failed to load Focus Score
       </Text>
       {error && (
         <Text
           variant="caption"
           color="textMuted"
-          style={{ textAlign: "center" }}
+          style={{ textAlign: 'center' }}
         >
           {error.message}
         </Text>
@@ -98,7 +98,7 @@ export function FocusScoreCardError({
         }}
       >
         <Text variant="button" color="background">
-          {isRetrying ? "Retrying..." : "Try Again"}
+          {isRetrying ? 'Retrying...' : 'Try Again'}
         </Text>
       </Pressable>
     </Box>
@@ -106,7 +106,7 @@ export function FocusScoreCardError({
 }
 
 interface FocusScoreCardRetryingProps {
-  size: "small" | "medium" | "large";
+  size: 'small' | 'medium' | 'large';
 }
 
 export function FocusScoreCardRetrying({
@@ -114,12 +114,12 @@ export function FocusScoreCardRetrying({
 }: FocusScoreCardRetryingProps) {
   return (
     <Box
-      padding={size === "small" ? "md" : size === "large" ? "xl" : "lg"}
+      padding={size === 'small' ? 'md' : size === 'large' ? 'xl' : 'lg'}
       backgroundColor="surface"
       borderRadius="lg"
-      style={{ width: "100%" }}
+      style={{ width: '100%' }}
     >
-      <Text variant="body" color="textMuted" style={{ textAlign: "center" }}>
+      <Text variant="body" color="textMuted" style={{ textAlign: 'center' }}>
         Retrying...
       </Text>
     </Box>
@@ -127,7 +127,7 @@ export function FocusScoreCardRetrying({
 }
 
 interface FocusScoreCardNoUserProps {
-  size: "small" | "medium" | "large";
+  size: 'small' | 'medium' | 'large';
 }
 
 export function FocusScoreCardNoUser({
@@ -135,10 +135,10 @@ export function FocusScoreCardNoUser({
 }: FocusScoreCardNoUserProps) {
   return (
     <Box
-      padding={size === "small" ? "md" : size === "large" ? "xl" : "lg"}
+      padding={size === 'small' ? 'md' : size === 'large' ? 'xl' : 'lg'}
       backgroundColor="surface"
       borderRadius="lg"
-      style={{ width: "100%" }}
+      style={{ width: '100%' }}
     >
       <Text variant="body" color="textMuted">
         Sign in to see your Focus Score
@@ -149,12 +149,12 @@ export function FocusScoreCardNoUser({
 
 export function getNextBandLabel(currentLabel: string): string {
   const progression: Record<string, string> = {
-    Building: "Fair",
-    Fair: "Good",
-    Good: "Strong",
-    Strong: "Exceptional",
-    Exceptional: "Elite",
-    Elite: "Legendary",
+    Building: 'Fair',
+    Fair: 'Good',
+    Good: 'Strong',
+    Strong: 'Exceptional',
+    Exceptional: 'Elite',
+    Elite: 'Legendary',
   };
-  return progression[currentLabel] || "Max";
+  return progression[currentLabel] || 'Max';
 }

@@ -1,9 +1,9 @@
-import React from "react";
-import { View } from "react-native";
+import React from 'react';
+import { View } from 'react-native';
 
-import { Button } from "../../components/primitives/Button";
-import type { PaywallPlanSelection } from "./paywall-copy";
-import { paywallStyles as styles } from "./paywall-styles";
+import { Button } from '../../components/primitives/Button';
+import type { PaywallPlanSelection } from './paywall-copy';
+import { paywallStyles as styles } from './paywall-styles';
 
 type PaywallFooterActionsProps = {
   hasLivePackages: boolean;
@@ -27,8 +27,8 @@ export function PaywallFooterActions({
   const annual = plans[0];
   const introPrice = annual?.packageInfo?.product.introPrice;
   const ctaLabel = introPrice
-    ? `Try Free for ${introPrice.periodNumberOfUnits} ${introPrice.periodUnit?.toLowerCase() === "day" ? "Days" : introPrice.periodUnit}`
-    : "Continue with Annual";
+    ? `Try Free for ${introPrice.periodNumberOfUnits} ${introPrice.periodUnit?.toLowerCase() === 'day' ? 'Days' : introPrice.periodUnit}`
+    : 'Continue with Annual';
   const primaryLabel = primaryCtaLabel ?? ctaLabel;
 
   return (

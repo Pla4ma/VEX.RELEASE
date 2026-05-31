@@ -1,9 +1,9 @@
-import React from "react";
-import type { StateWrapperProps } from "./types";
-import { EmptyState } from "./empty-state";
-import { ErrorState } from "./error-state";
-import { LoadingState } from "./loading-state";
-import { SuccessState } from "./success-state";
+import React from 'react';
+import type { StateWrapperProps } from './types';
+import { EmptyState } from './empty-state';
+import { ErrorState } from './error-state';
+import { LoadingState } from './loading-state';
+import { SuccessState } from './success-state';
 
 export function StateWrapper({
   isLoading,

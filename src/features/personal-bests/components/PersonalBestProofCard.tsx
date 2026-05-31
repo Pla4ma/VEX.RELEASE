@@ -1,13 +1,13 @@
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withSpring,
-} from "react-native-reanimated";
+} from 'react-native-reanimated';
 
-import { Box, Text } from "../../../components/primitives";
-import { useReducedMotion } from "../../../hooks/useReducedMotion";
-import { useTheme } from "../../../theme";
+import { Box, Text } from '../../../components/primitives';
+import { useReducedMotion } from '../../../hooks/useReducedMotion';
+import { useTheme } from '../../../theme';
 
 type PersonalBestProofCardProps = {
   achievedAt: string;

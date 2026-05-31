@@ -4,7 +4,7 @@ import {
   NotificationReadEvent,
   NotificationClickedEvent,
   NotificationEventType,
-} from "./types";
+} from './types';
 
 export function validateNotificationEvent(
   event: NotificationEventType,
@@ -16,15 +16,15 @@ export function validateNotificationEvent(
     return false;
   }
   switch (event.type) {
-    case "notification_sent":
+    case 'notification_sent':
       return validateNotificationSentEvent(event as NotificationSentEvent);
-    case "notification_delivered":
+    case 'notification_delivered':
       return validateNotificationDeliveredEvent(
         event as NotificationDeliveredEvent,
       );
-    case "notification_read":
+    case 'notification_read':
       return validateNotificationReadEvent(event as NotificationReadEvent);
-    case "notification_clicked":
+    case 'notification_clicked':
       return validateNotificationClickedEvent(
         event as NotificationClickedEvent,
       );
@@ -52,7 +52,7 @@ function validateNotificationDeliveredEvent(
     data.notificationId &&
     data.channel &&
     data.deliveryTime &&
-    typeof data.latency === "number" &&
+    typeof data.latency === 'number' &&
     data.provider
   );
 }
@@ -61,7 +61,7 @@ function validateNotificationReadEvent(event: NotificationReadEvent): boolean {
   return !!(
     data.notificationId &&
     data.readAt &&
-    typeof data.readTimeframe === "number" &&
+    typeof data.readTimeframe === 'number' &&
     data.readMethod &&
     data.readContext
   );
@@ -73,7 +73,7 @@ function validateNotificationClickedEvent(
   return !!(
     data.notificationId &&
     data.clickedAt &&
-    typeof data.clickTimeframe === "number" &&
+    typeof data.clickTimeframe === 'number' &&
     data.action &&
     data.clickContext
   );

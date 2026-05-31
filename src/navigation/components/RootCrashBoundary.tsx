@@ -1,6 +1,6 @@
-import React, { Component, type ReactNode } from "react";
-import { Pressable, Text, View } from "react-native";
-import * as Sentry from "@sentry/react-native";
+import React, { Component, type ReactNode } from 'react';
+import { Pressable, Text, View } from 'react-native';
+import * as Sentry from '@sentry/react-native';
 
 interface CrashColors {
   background: string;
@@ -49,7 +49,7 @@ export class RootCrashBoundary extends Component<
 
   componentDidCatch(error: Error): void {
     Sentry.captureException(error, {
-      tags: { feature: "navigation", operation: "root-render" },
+      tags: { feature: 'navigation', operation: 'root-render' },
     });
   }
 
@@ -62,7 +62,7 @@ export class RootCrashBoundary extends Component<
       <View
         style={{
           flex: 1,
-          justifyContent: "center",
+          justifyContent: 'center',
           padding: 24,
           backgroundColor: colors.background,
         }}
@@ -81,7 +81,7 @@ export class RootCrashBoundary extends Component<
             style={{
               color: colors.textPrimary,
               fontSize: 22,
-              fontWeight: "800",
+              fontWeight: '800',
             }}
           >
             VEX hit a startup snag
@@ -103,8 +103,8 @@ export class RootCrashBoundary extends Component<
             onPress={() => this.setState({ error: null })}
             style={{
               minHeight: 48,
-              alignItems: "center",
-              justifyContent: "center",
+              alignItems: 'center',
+              justifyContent: 'center',
               borderRadius: 16,
               backgroundColor: colors.primary,
             }}
@@ -113,7 +113,7 @@ export class RootCrashBoundary extends Component<
               style={{
                 color: colors.background,
                 fontSize: 16,
-                fontWeight: "800",
+                fontWeight: '800',
               }}
             >
               Retry

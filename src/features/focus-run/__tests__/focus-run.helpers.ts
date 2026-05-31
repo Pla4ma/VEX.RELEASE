@@ -1,5 +1,5 @@
-import { buildFocusRunDisplay, computeFocusRunGrade, resolvePersonalBlocker } from "../service";
-import type { FocusRun, FocusRunGrade } from "../schemas";
+import { buildFocusRunDisplay, computeFocusRunGrade, resolvePersonalBlocker } from '../service';
+import type { FocusRun, FocusRunGrade } from '../schemas';
 
 export const MOCK_RUN: FocusRun = {
   blockerId: null,
@@ -7,12 +7,12 @@ export const MOCK_RUN: FocusRun = {
   completedRuns: 0,
   events: [],
   finalGrade: null,
-  focusModifiers: ["Phone away", "One tab"],
-  id: "run-1",
+  focusModifiers: ['Phone away', 'One tab'],
+  id: 'run-1',
   recoveryWins: 0,
   reflectionUpgrades: 0,
-  status: "active",
-  userId: "user-1",
+  status: 'active',
+  userId: 'user-1',
   weekStartsAt: 1,
 };
 

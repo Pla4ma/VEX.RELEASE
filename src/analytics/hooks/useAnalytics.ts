@@ -4,8 +4,8 @@
  * React hook for analytics tracking.
  */
 
-import { useCallback, useRef, useEffect } from "react";
-import { getAnalyticsService } from "../AnalyticsService";
+import { useCallback, useRef, useEffect } from 'react';
+import { getAnalyticsService } from '../AnalyticsService';
 
 /**
  * Analytics hook return type
@@ -71,7 +71,7 @@ export function useAnalytics(): UseAnalyticsReturn {
   const capture = useCallback(
     (error: Error, context?: Record<string, unknown>): void => {
       // Track as error event with context
-      analytics.track("exception_captured", {
+      analytics.track('exception_captured', {
         error_message: error.message,
         error_stack: error.stack,
         ...context,

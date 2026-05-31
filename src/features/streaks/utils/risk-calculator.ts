@@ -1,7 +1,7 @@
-import { createDebugger } from "../../../utils/debug";
-import { eventBus } from "../../../events";
-import type { RiskLevel, RiskFactors, RiskAssessment } from "./riskTypes";
-import { WEIGHTS, CRITICAL_THRESHOLD } from "./riskTypes";
+import { createDebugger } from '../../../utils/debug';
+import { eventBus } from '../../../events';
+import type { RiskLevel, RiskFactors, RiskAssessment } from './riskTypes';
+import { WEIGHTS, CRITICAL_THRESHOLD } from './riskTypes';
 import {
   analyzePattern,
   calculateRecentQuality,
@@ -9,9 +9,9 @@ import {
   getUrgency,
   getSuggestedAction,
   generateRecommendation,
-} from "./riskHelpers";
+} from './riskHelpers';
 
-const debug = createDebugger("streaks:risk");
+const debug = createDebugger('streaks:risk');
 
 export function calculateStreakRisk(
   currentStreak: number,
@@ -24,9 +24,9 @@ export function calculateStreakRisk(
 ): RiskAssessment {
   const now = Date.now();
   const hoursSinceLastSession = (now - lastSessionAt) / (60 * 60 * 1000);
-  const userTime = new Date(now).toLocaleString("en-US", {
+  const userTime = new Date(now).toLocaleString('en-US', {
     timeZone: userPatterns.timezone,
-    hour: "numeric",
+    hour: 'numeric',
     hour12: false,
   });
   const currentHour = parseInt(userTime, 10);
@@ -39,11 +39,11 @@ export function calculateStreakRisk(
   const daysUntilBreak = Math.max(0, 1 - daysDifference);
   const historicalPattern = analyzePattern(userPatterns.sessionHistory);
   const recentQuality = calculateRecentQuality(userPatterns.sessionHistory);
-  const userDay = new Date(now).toLocaleString("en-US", {
+  const userDay = new Date(now).toLocaleString('en-US', {
     timeZone: userPatterns.timezone,
-    weekday: "short",
+    weekday: 'short',
   });
-  const weekendRisk = ["Sat", "Sun"].some((day) => userDay.includes(day));
+  const weekendRisk = ['Sat', 'Sun'].some((day) => userDay.includes(day));
   const factors: RiskFactors = {
     hoursSinceLastSession,
     typicalSessionHour: userPatterns.typicalSessionHour,
@@ -62,9 +62,9 @@ export function calculateStreakRisk(
   const hoursFactor = Math.min(hoursSinceLastSession / CRITICAL_THRESHOLD, 1);
   score += hoursFactor * WEIGHTS.HOURS_ELAPSED * 100;
 
-  if (historicalPattern === "DECLINING") {
+  if (historicalPattern === 'DECLINING') {
     score += WEIGHTS.PATTERN_DECLINE * 100;
-  } else if (historicalPattern === "VARIABLE") {
+  } else if (historicalPattern === 'VARIABLE') {
     score += WEIGHTS.PATTERN_DECLINE * 100 * 0.5;
   }
   if (recentQuality < 50) {
@@ -90,15 +90,15 @@ export function calculateStreakRisk(
     suggestedAction,
   };
 
-  debug.info("Streak risk calculated", {
+  debug.info('Streak risk calculated', {
     currentStreak,
     score,
     level,
     hoursSinceLastSession: hoursSinceLastSession.toFixed(1),
   });
-  if (level === "HIGH" || level === "CRITICAL") {
-    eventBus.publish("analytics:track", {
-      event: "streak_risk_alert",
+  if (level === 'HIGH' || level === 'CRITICAL') {
+    eventBus.publish('analytics:track', {
+      event: 'streak_risk_alert',
       properties: {
         currentStreak,
         riskScore: score,

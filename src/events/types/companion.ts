@@ -3,7 +3,7 @@
  */
 
 export interface CompanionEventDefinitions {
-  "companion:state_changed": {
+  'companion:state_changed': {
     userId: string;
     companionId: string;
     previousPhase?: string;
@@ -17,7 +17,7 @@ export interface CompanionEventDefinitions {
     sessionId?: string;
     timestamp: number;
   };
-  "companion:evolution": {
+  'companion:evolution': {
     userId: string;
     companionId: string;
     previousPhase: string;
@@ -26,7 +26,7 @@ export interface CompanionEventDefinitions {
     evolutionCeremony: boolean;
     timestamp: number;
   };
-  "companion:milestone_reached": {
+  'companion:milestone_reached': {
     userId: string;
     companionId: string;
     milestoneType: string;
@@ -34,14 +34,14 @@ export interface CompanionEventDefinitions {
     previousValue: number;
     timestamp: number;
   };
-  "companion:memory_created": {
+  'companion:memory_created': {
     createdAt: string;
     memoryId: string;
     sessionId: string | null;
     type: string;
     userId: string;
   };
-  "companion:milestone": {
+  'companion:milestone': {
     userId: string;
     milestoneType: string;
     sourceId?: string;

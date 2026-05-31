@@ -1,4 +1,4 @@
-import type { BehaviorProfile } from "../types";
+import type { BehaviorProfile } from '../types';
 
 type ActiveStudyPlan = {
   id?: string;
@@ -12,17 +12,17 @@ type ActiveStudyPlan = {
 };
 
 export type CoachRecommendationType =
-  | "focus_session"
-  | "study_plan"
-  | "comeback"
-  | "protect_streak"
-  | "boss_battle"
-  | "study_behind"
-  | "boss_opportunity"
-  | "momentum_building"
-  | "study_plan_complete";
+  | 'focus_session'
+  | 'study_plan'
+  | 'comeback'
+  | 'protect_streak'
+  | 'boss_battle'
+  | 'study_behind'
+  | 'boss_opportunity'
+  | 'momentum_building'
+  | 'study_plan_complete';
 
-export type UrgencyLevel = "low" | "medium" | "high" | "critical";
+export type UrgencyLevel = 'low' | 'medium' | 'high' | 'critical';
 
 export interface CoachRecommendation {
   id: string;
@@ -33,15 +33,15 @@ export interface CoachRecommendation {
   subtext: string;
   ctaText: string;
   ctaAction:
-    | "start_focus"
-    | "start_study"
-    | "view_boss"
-    | "view_streak"
-    | "view_progress";
+    | 'start_focus'
+    | 'start_study'
+    | 'view_boss'
+    | 'view_streak'
+    | 'view_progress';
   ctaParams?: Record<string, unknown>;
   coachMessage: string;
   reasoning: string;
-  visualCue: "none" | "pulse" | "glow" | "urgent";
+  visualCue: 'none' | 'pulse' | 'glow' | 'urgent';
   expiresAt?: number;
   evidence?: {
     memoryIds?: string[];
@@ -74,20 +74,20 @@ export interface RecommendationContext {
   coachPersonaId: string;
 }
 
-export type CoachPersonaId = "mentor" | "trainer" | "peer" | "professor";
+export type CoachPersonaId = 'mentor' | 'trainer' | 'peer' | 'professor';
 
 export interface CoachPersona {
   id: CoachPersonaId;
   name: string;
   voiceTone:
-    | "ENCOURAGING"
-    | "STERN"
-    | "PLAYFUL"
-    | "WISE"
-    | "COMPETITIVE"
-    | "GENTLE";
+    | 'ENCOURAGING'
+    | 'STERN'
+    | 'PLAYFUL'
+    | 'WISE'
+    | 'COMPETITIVE'
+    | 'GENTLE';
   vocabularyTraits: string[];
-  sentenceStructure: "SHORT_DIRECT" | "CONVERSATIONAL" | "MEASURED";
+  sentenceStructure: 'SHORT_DIRECT' | 'CONVERSATIONAL' | 'MEASURED';
   guidelines: {
     maxSentences: number;
     alwaysActionable: boolean;

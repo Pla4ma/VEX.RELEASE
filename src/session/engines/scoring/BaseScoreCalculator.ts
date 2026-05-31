@@ -5,7 +5,7 @@
  * Pure calculation logic, no side effects.
  */
 
-import type { SessionState } from "../../types";
+import type { SessionState } from '../../types';
 
 // ============================================================================
 // Scoring Constants
@@ -105,24 +105,24 @@ export function validateScoringInput(input: BaseScoreInput): {
   const errors: string[] = [];
 
   if (input.durationSeconds < 0) {
-    errors.push("Duration cannot be negative");
+    errors.push('Duration cannot be negative');
   }
 
   if (input.durationSeconds > 28800) {
     // 8 hours
-    errors.push("Duration exceeds maximum (8 hours)");
+    errors.push('Duration exceeds maximum (8 hours)');
   }
 
   if (input.completionPercentage < 0 || input.completionPercentage > 100) {
-    errors.push("Completion percentage must be between 0 and 100");
+    errors.push('Completion percentage must be between 0 and 100');
   }
 
   if (input.effectiveTimeSeconds < 0) {
-    errors.push("Effective time cannot be negative");
+    errors.push('Effective time cannot be negative');
   }
 
   if (input.effectiveTimeSeconds > input.durationSeconds * 2) {
-    errors.push("Effective time exceeds reasonable bounds");
+    errors.push('Effective time exceeds reasonable bounds');
   }
 
   return {

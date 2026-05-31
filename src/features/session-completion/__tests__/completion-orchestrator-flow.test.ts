@@ -1,30 +1,30 @@
-import "./orchestrator-test-mocks";
-import { orchestrateSessionCompletion } from "../completion-orchestrator";
+import './orchestrator-test-mocks';
+import { orchestrateSessionCompletion } from '../completion-orchestrator';
 import {
   createCompletionLedger,
   createSessionSummary,
   SESSION_ID,
   USER_ID,
-} from "./ledger-test-utils";
+} from './ledger-test-utils';
 
-describe("orchestrateSessionCompletion flow", () => {
+describe('orchestrateSessionCompletion flow', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    require("../idempotency").resetCompletionIdempotencyForTests();
-    require("../../../lib/repository/base").getConnectionState.mockReturnValue(
-      "online",
+    require('../idempotency').resetCompletionIdempotencyForTests();
+    require('../../../lib/repository/base').getConnectionState.mockReturnValue(
+      'online',
     );
   });
 
-  it("creates ledger and updates all systems for normal completion", async () => {
+  it('creates ledger and updates all systems for normal completion', async () => {
     const {
       createCompletionLedger: persist,
       getCompletionLedgerByIdempotencyKey,
-    } = require("../repository");
-    const { applyCompletionSubsystems } = require("../completion-subsystems");
+    } = require('../repository');
+    const { applyCompletionSubsystems } = require('../completion-subsystems');
     const {
       generateStoryForCompletedSession,
-    } = require("../../session-story/StoryGenerator");
+    } = require('../../session-story/StoryGenerator');
 
     getCompletionLedgerByIdempotencyKey.mockResolvedValue(null);
     persist.mockResolvedValue(createCompletionLedger());
@@ -44,12 +44,12 @@ describe("orchestrateSessionCompletion flow", () => {
     expect(generateStoryForCompletedSession).not.toHaveBeenCalled();
   });
 
-  it("skips processing for duplicate idempotency key", async () => {
+  it('skips processing for duplicate idempotency key', async () => {
     const {
       createCompletionLedger: persist,
       getCompletionLedgerByIdempotencyKey,
-    } = require("../repository");
-    const { useSessionUIStore } = require("../../../store/session-state");
+    } = require('../repository');
+    const { useSessionUIStore } = require('../../../store/session-state');
 
     getCompletionLedgerByIdempotencyKey.mockResolvedValue(
       createCompletionLedger({
@@ -67,15 +67,15 @@ describe("orchestrateSessionCompletion flow", () => {
     expect(persist).not.toHaveBeenCalled();
     expect(
       useSessionUIStore.getState().setCompletionSyncState,
-    ).toHaveBeenCalledWith(expect.objectContaining({ status: "synced" }));
+    ).toHaveBeenCalledWith(expect.objectContaining({ status: 'synced' }));
   });
 
-  it("handles offline mode by queuing ledger", async () => {
-    const { getConnectionState } = require("../../../lib/repository/base");
-    const { enqueue } = require("../../../lib/offline/queue");
-    const { getCompletionLedgerByIdempotencyKey } = require("../repository");
+  it('handles offline mode by queuing ledger', async () => {
+    const { getConnectionState } = require('../../../lib/repository/base');
+    const { enqueue } = require('../../../lib/offline/queue');
+    const { getCompletionLedgerByIdempotencyKey } = require('../repository');
 
-    getConnectionState.mockReturnValue("offline");
+    getConnectionState.mockReturnValue('offline');
     getCompletionLedgerByIdempotencyKey.mockResolvedValue(null);
 
     await orchestrateSessionCompletion({
@@ -86,18 +86,18 @@ describe("orchestrateSessionCompletion flow", () => {
 
     expect(enqueue).toHaveBeenCalledWith(
       expect.objectContaining({
-        feature: "sessions",
-        operation: "CREATE",
+        feature: 'sessions',
+        operation: 'CREATE',
       }),
     );
   });
 
-  it("does not run subsystems twice for concurrent duplicate completions", async () => {
+  it('does not run subsystems twice for concurrent duplicate completions', async () => {
     const {
       createCompletionLedger: persist,
       getCompletionLedgerByIdempotencyKey,
-    } = require("../repository");
-    const { applyCompletionSubsystems } = require("../completion-subsystems");
+    } = require('../repository');
+    const { applyCompletionSubsystems } = require('../completion-subsystems');
 
     getCompletionLedgerByIdempotencyKey.mockResolvedValue(null);
     persist.mockResolvedValue(createCompletionLedger());

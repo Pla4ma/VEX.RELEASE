@@ -3,34 +3,34 @@
  * Manages content review and editing state
  */
 
-import { useState, useCallback, useEffect } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useAuthStore } from "../../../store";
+import { useState, useCallback, useEffect } from 'react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useAuthStore } from '../../../store';
 import {
   fetchContentById,
   updateContentText,
   generateStudyPlan,
-} from "../ContentStudyService";
-import type { ContentReviewState } from "../types";
-import { ERROR_MESSAGES } from "../constants";
-import { contentStudyQueryKeys } from "./queryKeys";
-import { useContentExtractionPolling } from "./content-review-polling";
+} from '../ContentStudyService';
+import type { ContentReviewState } from '../types';
+import { ERROR_MESSAGES } from '../constants';
+import { contentStudyQueryKeys } from './queryKeys';
+import { useContentExtractionPolling } from './content-review-polling';
 
 function createInitialContentReviewState(): ContentReviewState {
   return {
     content: null,
-    editedText: "",
+    editedText: '',
     isEditing: false,
     isGenerating: false,
     error: null,
-    originalText: "",
+    originalText: '',
     editHistory: [],
     canUndo: false,
     canRedo: false,
     wordCount: 0,
     isExtracting: false,
     extractionProgress: 0,
-    extractionStage: "uploading",
+    extractionStage: 'uploading',
     retryCount: 0,
     autosaveEnabled: true,
   };
@@ -58,12 +58,12 @@ export function useContentReview(contentId: string) {
         editedText:
           contentQuery.data?.userEditedText ||
           contentQuery.data?.extractedText ||
-          "",
-        originalText: contentQuery.data?.extractedText || "",
+          '',
+        originalText: contentQuery.data?.extractedText || '',
         wordCount: (
           contentQuery.data?.userEditedText ||
           contentQuery.data?.extractedText ||
-          ""
+          ''
         )
           .trim()
           .split(/\s+/)
@@ -134,7 +134,7 @@ export function useContentReview(contentId: string) {
   const generateMutation = useMutation({
     mutationFn: async () => {
       if (!user?.id) {
-        throw new Error("User not authenticated");
+        throw new Error('User not authenticated');
       }
       const result = await generateStudyPlan({ contentId, userId: user.id });
       return result;
@@ -163,9 +163,9 @@ export function useContentReview(contentId: string) {
   }, [generateMutation]);
 
   const canGenerate =
-    state.content?.status === "EXTRACTED" || state.content?.status === "READY";
-  const isProcessing = ["PENDING", "EXTRACTING", "PROCESSING"].includes(
-    state.content?.status || "",
+    state.content?.status === 'EXTRACTED' || state.content?.status === 'READY';
+  const isProcessing = ['PENDING', 'EXTRACTING', 'PROCESSING'].includes(
+    state.content?.status || '',
   );
 
   return {
@@ -178,9 +178,9 @@ export function useContentReview(contentId: string) {
     canGenerate,
     isProcessing,
     isExtracted:
-      state.content?.status === "EXTRACTED" ||
-      state.content?.status === "READY",
-    isFailed: state.content?.status === "FAILED",
+      state.content?.status === 'EXTRACTED' ||
+      state.content?.status === 'READY',
+    isFailed: state.content?.status === 'FAILED',
     startEditing,
     cancelEditing,
     setEditedText,

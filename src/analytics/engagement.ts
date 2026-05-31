@@ -1,4 +1,4 @@
-import { eventBus } from "../events";
+import { eventBus } from '../events';
 
 export interface EngagementMetrics {
   userId: string;
@@ -20,11 +20,11 @@ export function recordEngagementEvent(
   userId: string,
   event: {
     type:
-      | "session_complete"
-      | "plan_start"
-      | "plan_complete"
-      | "boss_defeat"
-      | "streak_milestone";
+      | 'session_complete'
+      | 'plan_start'
+      | 'plan_complete'
+      | 'boss_defeat'
+      | 'streak_milestone';
     value?: number;
   },
 ): void {
@@ -45,7 +45,7 @@ export function recordEngagementEvent(
     };
   }
   switch (event.type) {
-    case "session_complete":
+    case 'session_complete':
       metrics.sessionsLast7Days++;
       metrics.sessionsLast30Days++;
       if (event.value) {
@@ -54,16 +54,16 @@ export function recordEngagementEvent(
           metrics.totalFocusMinutes / metrics.sessionsLast30Days;
       }
       break;
-    case "plan_start":
+    case 'plan_start':
       metrics.studyPlansStarted++;
       break;
-    case "plan_complete":
+    case 'plan_complete':
       metrics.studyPlansCompleted++;
       break;
-    case "boss_defeat":
+    case 'boss_defeat':
       metrics.bossBattlesCompleted++;
       break;
-    case "streak_milestone":
+    case 'streak_milestone':
       if (event.value) {
         metrics.streakDays = event.value;
       }
@@ -72,7 +72,7 @@ export function recordEngagementEvent(
   metrics.weeklyActive = metrics.sessionsLast7Days > 0;
   metrics.powerUser = metrics.sessionsLast7Days >= 5;
   engagementData.set(userId, metrics);
-  eventBus.publish("analytics:engagement", {
+  eventBus.publish('analytics:engagement', {
     userId,
     event: event.type,
     metrics,

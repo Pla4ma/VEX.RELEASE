@@ -1,11 +1,11 @@
-import type { ViewStyle } from "react-native";
+import type { ViewStyle } from 'react-native';
 
 export type StepStatus =
-  | "pending"
-  | "active"
-  | "completed"
-  | "error"
-  | "disabled";
+  | 'pending'
+  | 'active'
+  | 'completed'
+  | 'error'
+  | 'disabled';
 
 export interface Step {
   id: string;
@@ -20,9 +20,9 @@ export interface Step {
 export interface ProgressStepsProps {
   steps: Step[];
   currentStep: number;
-  orientation?: "horizontal" | "vertical";
-  size?: "sm" | "md" | "lg";
-  variant?: "default" | "numbers" | "dots";
+  orientation?: 'horizontal' | 'vertical';
+  size?: 'sm' | 'md' | 'lg';
+  variant?: 'default' | 'numbers' | 'dots';
   showDescriptions?: boolean;
   allowClick?: boolean;
   onStepPress?: (stepIndex: number, step: Step) => void;
@@ -32,8 +32,8 @@ export interface ProgressStepsProps {
 export interface StepIndicatorProps {
   status: StepStatus;
   index: number;
-  size?: "sm" | "md" | "lg";
-  variant?: "default" | "numbers" | "dots";
+  size?: 'sm' | 'md' | 'lg';
+  variant?: 'default' | 'numbers' | 'dots';
   icon?: string;
   title?: string;
   description?: string;

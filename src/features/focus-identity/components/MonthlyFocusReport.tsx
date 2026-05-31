@@ -1,25 +1,25 @@
-import React from "react";
-import { View, Pressable, Share } from "react-native";
+import React from 'react';
+import { View, Pressable, Share } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withSpring,
   withTiming,
-} from "react-native-reanimated";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import { useMonthlyReport } from "../hooks";
-import { useFocusScoreColor } from "../hooks";
+} from 'react-native-reanimated';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import { useMonthlyReport } from '../hooks';
+import { useFocusScoreColor } from '../hooks';
 import {
   publishMonthlyReportViewed,
   publishMonthlyReportShared,
   publishMonthlyReportDismissed,
-} from "../events";
-import { capture } from "../../../shared/analytics/analytics-service";
-import { MonthlyReportSkeleton } from "./MonthlyReportSkeleton";
-import { MonthlyReportErrorState, MonthlyReportEmptyState } from "./MonthlyReportStates";
-import { useMonthlyReportComputed } from "./useMonthlyReportComputed";
-import { ReportCards } from "./ReportCards";
+} from '../events';
+import { capture } from '../../../shared/analytics/analytics-service';
+import { MonthlyReportSkeleton } from './MonthlyReportSkeleton';
+import { MonthlyReportErrorState, MonthlyReportEmptyState } from './MonthlyReportStates';
+import { useMonthlyReportComputed } from './useMonthlyReportComputed';
+import { ReportCards } from './ReportCards';
 
 interface MonthlyFocusReportProps {
   userId: string;
@@ -79,15 +79,15 @@ export function MonthlyFocusReport({
     if (!report) {
       return;
     }
-    const shareText = `📊 Monthly Focus Report - ${report.month}\n\n${identityStatement}\n\nScore: ${report.endingScore} (${report.change > 0 ? "+" : ""}${report.change})\nGrade: ${report.grade}\nSessions: ${report.sessionsCompleted}\nPercentile: Top ${100 - percentile}%\n\n${report.highlight}\n\n#VEX #FocusProductivity`;
+    const shareText = `📊 Monthly Focus Report - ${report.month}\n\n${identityStatement}\n\nScore: ${report.endingScore} (${report.change > 0 ? '+' : ''}${report.change})\nGrade: ${report.grade}\nSessions: ${report.sessionsCompleted}\nPercentile: Top ${100 - percentile}%\n\n${report.highlight}\n\n#VEX #FocusProductivity`;
     try {
-      await Share.share({ message: shareText, title: "Monthly Focus Report" });
+      await Share.share({ message: shareText, title: 'Monthly Focus Report' });
       if (report) {
         publishMonthlyReportShared(userId, report.month, report.grade);
       }
     } catch (shareError) {
       if (shareError instanceof Error) {
-        capture("monthly_report_share_failed", { error: shareError.message });
+        capture('monthly_report_share_failed', { error: shareError.message });
       }
     }
   };
@@ -99,14 +99,14 @@ export function MonthlyFocusReport({
     onClose();
   };
 
-  if (loadingState === "loading" || loadingState === "pending") {
+  if (loadingState === 'loading' || loadingState === 'pending') {
     return <MonthlyReportSkeleton />;
   }
 
-  if (loadingState === "error") {
+  if (loadingState === 'error') {
     return (
       <MonthlyReportErrorState
-        message={error?.message || "Unable to generate your monthly focus report."}
+        message={error?.message || 'Unable to generate your monthly focus report.'}
         onRetry={refresh}
         onClose={handleClose}
       />
@@ -122,9 +122,9 @@ export function MonthlyFocusReport({
       {/* Header */}
       <View
         style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          alignItems: "center",
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
           paddingHorizontal: theme.spacing[6],
           paddingTop: theme.spacing[8],
           paddingBottom: theme.spacing[4],

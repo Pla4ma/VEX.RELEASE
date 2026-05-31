@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { View, StyleSheet, Dimensions, Text } from "react-native";
+import React, { useEffect, useState } from 'react';
+import { View, StyleSheet, Dimensions, Text } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withSequence,
   withSpring,
   withTiming,
-} from "react-native-reanimated";
-import { LinearGradient } from "expo-linear-gradient";
-import Svg, { Circle, G, Text as SvgText } from "react-native-svg";
-import { launchColors } from "@theme/tokens/launch-colors";
-import { styles } from "./xp-progress-bar.styles";
+} from 'react-native-reanimated';
+import { LinearGradient } from 'expo-linear-gradient';
+import Svg, { Circle, G, Text as SvgText } from 'react-native-svg';
+import { launchColors } from '@theme/tokens/launch-colors';
+import { styles } from './xp-progress-bar.styles';
 
 interface XpProgressBarProps {
   currentXp: number;
@@ -22,7 +22,7 @@ interface XpProgressBarProps {
   onLevelUp?: () => void;
 }
 
-const { width } = Dimensions.get("window");
+const { width } = Dimensions.get('window');
 const BAR_WIDTH = width - 48;
 const BAR_HEIGHT = 24;
 

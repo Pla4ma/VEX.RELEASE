@@ -2,35 +2,35 @@
  * Tests for: smart-system
  */
 
-import { makeSmartCtx } from "./notifications-test-setup";
+import { makeSmartCtx } from './notifications-test-setup';
 import {
   evaluateNotificationContext,
   notificationHistory,
   scheduledNotifications,
-} from "../SmartNotificationSystem";
+} from '../SmartNotificationSystem';
 
-describe("SmartNotificationSystem", () => {
+describe('SmartNotificationSystem', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     notificationHistory.clear();
     scheduledNotifications.clear();
   });
 
-  describe("SmartNotificationSystem", () => {
-    describe("evaluateNotificationContext", () => {
-      it("returns null when max daily notifications reached", () => {
+  describe('SmartNotificationSystem', () => {
+    describe('evaluateNotificationContext', () => {
+      it('returns null when max daily notifications reached', () => {
         // Add history entries to exceed maxPerDay
         const ctx = makeSmartCtx();
         notificationHistory.set(ctx.userId, [
-          { id: "1", userId: ctx.userId, type: "STREAK_PROTECTION", priority: "CRITICAL", title: "t", body: "b", scheduledAt: Date.now(), sentAt: Date.now() },
-          { id: "2", userId: ctx.userId, type: "STREAK_PROTECTION", priority: "CRITICAL", title: "t", body: "b", scheduledAt: Date.now(), sentAt: Date.now() },
-          { id: "3", userId: ctx.userId, type: "STREAK_PROTECTION", priority: "CRITICAL", title: "t", body: "b", scheduledAt: Date.now(), sentAt: Date.now() },
+          { id: '1', userId: ctx.userId, type: 'STREAK_PROTECTION', priority: 'CRITICAL', title: 't', body: 'b', scheduledAt: Date.now(), sentAt: Date.now() },
+          { id: '2', userId: ctx.userId, type: 'STREAK_PROTECTION', priority: 'CRITICAL', title: 't', body: 'b', scheduledAt: Date.now(), sentAt: Date.now() },
+          { id: '3', userId: ctx.userId, type: 'STREAK_PROTECTION', priority: 'CRITICAL', title: 't', body: 'b', scheduledAt: Date.now(), sentAt: Date.now() },
         ]);
         const result = evaluateNotificationContext(ctx);
         expect(result).toBeNull();
       });
-  
-      it("returns notification when streak is at risk", () => {
+
+      it('returns notification when streak is at risk', () => {
         const ctx = makeSmartCtx({
           streakDays: 10,
           hasCompletedSessionToday: false,
@@ -39,11 +39,11 @@ describe("SmartNotificationSystem", () => {
         });
         const result = evaluateNotificationContext(ctx);
         expect(result).not.toBeNull();
-        expect(result!.type).toBe("STREAK_PROTECTION");
-        expect(result!.priority).toBe("CRITICAL");
+        expect(result!.type).toBe('STREAK_PROTECTION');
+        expect(result!.priority).toBe('CRITICAL');
       });
-  
-      it("returns null during quiet hours for respected rules", () => {
+
+      it('returns null during quiet hours for respected rules', () => {
         const now = new Date();
         const quietHour = now.getHours(); // current hour
         const ctx = makeSmartCtx({
@@ -66,11 +66,11 @@ describe("SmartNotificationSystem", () => {
         if (ctx.streakDays > 0 && ctx.hoursUntilStreakBreak !== null && ctx.hoursUntilStreakBreak <= 4) {
           // streak protection would fire since it doesn't respect quiet hours
         } else if (result) {
-          expect(result.type).not.toBe("BOSS_OPPORTUNITY");
+          expect(result.type).not.toBe('BOSS_OPPORTUNITY');
         }
       });
-  
-      it("returns null when no rules apply", () => {
+
+      it('returns null when no rules apply', () => {
         const ctx = makeSmartCtx({
           streakDays: 0,
           hoursUntilStreakBreak: null,
@@ -83,8 +83,8 @@ describe("SmartNotificationSystem", () => {
         const result = evaluateNotificationContext(ctx);
         expect(result).toBeNull();
       });
-  
-      it("returns boss notification when boss is low health", () => {
+
+      it('returns boss notification when boss is low health', () => {
         const ctx = makeSmartCtx({
           streakDays: 0,
           hoursUntilStreakBreak: null,
@@ -103,14 +103,14 @@ describe("SmartNotificationSystem", () => {
         const midday = new Date();
         midday.setHours(12, 0, 0, 0);
         ctx.currentTime = midday.getTime();
-  
+
         const result = evaluateNotificationContext(ctx);
         if (result) {
-          expect(result.type).toBe("BOSS_OPPORTUNITY");
+          expect(result.type).toBe('BOSS_OPPORTUNITY');
         }
       });
-  
-      it("returns comeback notification when user has been away", () => {
+
+      it('returns comeback notification when user has been away', () => {
         const ctx = makeSmartCtx({
           streakDays: 0,
           hoursUntilStreakBreak: null,
@@ -128,10 +128,10 @@ describe("SmartNotificationSystem", () => {
         const midday = new Date();
         midday.setHours(12, 0, 0, 0);
         ctx.currentTime = midday.getTime();
-  
+
         const result = evaluateNotificationContext(ctx);
         if (result) {
-          expect(result.type).toBe("COMEBACK");
+          expect(result.type).toBe('COMEBACK');
         }
       });
     });

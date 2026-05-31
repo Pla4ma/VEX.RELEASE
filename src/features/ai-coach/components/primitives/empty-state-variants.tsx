@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 
-import { EmptyState } from "./empty-state";
+import { EmptyState } from './empty-state';
 
 export function NoMessagesEmptyState({
   onBrowseChallenges,

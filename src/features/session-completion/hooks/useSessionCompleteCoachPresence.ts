@@ -1,15 +1,15 @@
-import { useMemo } from "react";
+import { useMemo } from 'react';
 
 import {
   buildCompletionCoachPresence,
-} from "../../coach-presence";
-import type { CoachPresenceMemorySummary } from "../../coach-presence/schemas";
+} from '../../coach-presence';
+import type { CoachPresenceMemorySummary } from '../../coach-presence/schemas';
 import {
   getFeatureAvailability,
   type FeatureAccessMap,
-} from "../../liveops-config";
-import type { SessionSummary } from "../../../session/types";
-import { mapCompletionMotivationStyle } from "./mapCompletionMotivationStyle";
+} from '../../liveops-config';
+import type { SessionSummary } from '../../../session/types';
+import { mapCompletionMotivationStyle } from './mapCompletionMotivationStyle';
 
 interface CoachPresenceInput {
   features: FeatureAccessMap;
@@ -54,7 +54,7 @@ export function useSessionCompleteCoachPresence(
           isFirstSession: summary.streakDays <= 1 && summary.userLevel <= 1,
           isHighFocusStreak: focusPurityScore >= 90,
           isLowEnergyDay:
-            summary.mood === "STRUGGLING" || summary.mood === "DIFFICULT",
+            summary.mood === 'STRUGGLING' || summary.mood === 'DIFFICULT',
           isStreakRecovery:
             !summary.streakMaintained && summary.streakIncreased,
           sessionMode: summary.sessionMode,

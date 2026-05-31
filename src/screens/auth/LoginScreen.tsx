@@ -1,9 +1,9 @@
-import { withScreenErrorBoundary } from "../../shared/ui/components/ScreenErrorBoundary";
-import React from "react";
-import { Pressable, View } from "react-native";
-import type { NativeStackScreenProps } from "@react-navigation/native-stack";
-import * as Sentry from "@sentry/react-native";
-import Animated, { FadeInDown } from "react-native-reanimated";
+import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+import React from 'react';
+import { Pressable, View } from 'react-native';
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import * as Sentry from '@sentry/react-native';
+import Animated, { FadeInDown } from 'react-native-reanimated';
 
 import {
   AppScreen,
@@ -11,16 +11,16 @@ import {
   Button,
   Card,
   Text,
-} from "../../components/primitives";
-import { AuthValuePreview } from "./components/AuthValuePreview";
-import { FormField } from "../../shared/ui/components/FormField";
-import { useReducedMotion } from "../../hooks/useReducedMotion";
-import { useTheme } from "../../theme";
-import { getMinTouchTargetStyle } from "../../utils/touchTarget";
-import type { AuthStackParams } from "../../navigation";
-import { useLoginScreen } from "./useLoginScreen";
+} from '../../components/primitives';
+import { AuthValuePreview } from './components/AuthValuePreview';
+import { FormField } from '../../shared/ui/components/FormField';
+import { useReducedMotion } from '../../hooks/useReducedMotion';
+import { useTheme } from '../../theme';
+import { getMinTouchTargetStyle } from '../../utils/touchTarget';
+import type { AuthStackParams } from '../../navigation';
+import { useLoginScreen } from './useLoginScreen';
 
-type Props = NativeStackScreenProps<AuthStackParams, "Login">;
+type Props = NativeStackScreenProps<AuthStackParams, 'Login'>;
 
 export const LoginScreen: React.FC<Props> = ({ navigation, route }) => {
   const { theme } = useTheme();
@@ -37,7 +37,7 @@ export const LoginScreen: React.FC<Props> = ({ navigation, route }) => {
     introEntering,
     bodyEntering,
     actionEntering,
-  } = useLoginScreen(route.params?.email ?? "");
+  } = useLoginScreen(route.params?.email ?? '');
 
   return (
     <AppScreen keyboardAvoiding contentStyle={{ gap: theme.spacing[5] }}>
@@ -111,12 +111,12 @@ export const LoginScreen: React.FC<Props> = ({ navigation, route }) => {
           accessibilityLabel="Forgot password"
           accessibilityRole="link"
           onPress={() =>
-            navigation.navigate({ name: "ForgotPassword", params: undefined })
+            navigation.navigate({ name: 'ForgotPassword', params: undefined })
           }
           style={[
             getMinTouchTargetStyle(),
             {
-              alignSelf: "flex-end",
+              alignSelf: 'flex-end',
               marginBottom: theme.spacing[5],
               marginTop: theme.spacing[3],
             },
@@ -151,7 +151,7 @@ export const LoginScreen: React.FC<Props> = ({ navigation, route }) => {
             accessibilityLabel="Create a VEX account"
             accessibilityRole="link"
             onPress={() =>
-              navigation.navigate({ name: "Register", params: undefined })
+              navigation.navigate({ name: 'Register', params: undefined })
             }
             style={getMinTouchTargetStyle()}
           >
@@ -178,7 +178,7 @@ export const LoginScreen: React.FC<Props> = ({ navigation, route }) => {
             }}
           >
             <Button
-              onPress={() => Sentry.captureException(new Error("First error"))}
+              onPress={() => Sentry.captureException(new Error('First error'))}
               variant="outline"
             >
               Test Sentry
@@ -193,4 +193,4 @@ export const LoginScreen: React.FC<Props> = ({ navigation, route }) => {
   );
 };
 
-export default withScreenErrorBoundary(LoginScreen, "Login");
+export default withScreenErrorBoundary(LoginScreen, 'Login');

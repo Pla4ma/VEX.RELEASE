@@ -1,23 +1,23 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from 'react';
 import {
   shouldAutoApplySmartSuggestion,
   shouldOpenCustomizationByDefault,
-} from "../../../features/session-start/service";
-import type { MasteryState } from "../../../features/mastery/types";
-import type { SessionStackParams } from "../../../navigation/types";
-import { getDefaultStorageAdapter } from "../../../persistence/MMKVStorageAdapter";
-import { SessionMode, resolveSessionMode } from "../../../session/modes";
+} from '../../../features/session-start/service';
+import type { MasteryState } from '../../../features/mastery/types';
+import type { SessionStackParams } from '../../../navigation/types';
+import { getDefaultStorageAdapter } from '../../../persistence/MMKVStorageAdapter';
+import { SessionMode, resolveSessionMode } from '../../../session/modes';
 import {
   PRESETS,
   type PresetWithIcon,
   type SmartSuggestion,
-} from "../utils/session-setup";
+} from '../utils/session-setup';
 import {
   restoreSessionDraft,
   saveSessionDraft,
-} from "./session-setup-hydration";
+} from './session-setup-hydration';
 
-type SessionSetupParams = SessionStackParams["SessionSetup"];
+type SessionSetupParams = SessionStackParams['SessionSetup'];
 
 export function useSessionSetupState(
   userId: string,
@@ -39,7 +39,7 @@ export function useSessionSetupState(
     initialPreset!,
   );
   const [selectedCategory, setSelectedCategory] = useState(
-    initialPreset!.category ?? "standard",
+    initialPreset!.category ?? 'standard',
   );
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [customDuration, setCustomDuration] = useState(
@@ -49,12 +49,12 @@ export function useSessionSetupState(
   );
   const [draftGoal, setDraftGoal] = useState(params?.goal);
   const [selectedThemeId, setSelectedThemeId] = useState(
-    params?.selectedThemeId ?? "default",
+    params?.selectedThemeId ?? 'default',
   );
   const [selectedSessionMode, setSelectedSessionMode] = useState<SessionMode>(
     params?.presetMode
       ? resolveSessionMode(params.presetMode)
-      : params?.source === "content-study"
+      : params?.source === 'content-study'
         ? SessionMode.STUDY
         : SessionMode.LIGHT_FOCUS,
   );
@@ -76,7 +76,7 @@ export function useSessionSetupState(
       );
       if (matchedPreset) {
         setSelectedPreset(matchedPreset);
-        setSelectedCategory(matchedPreset.category ?? "standard");
+        setSelectedCategory(matchedPreset.category ?? 'standard');
       }
     }
     if (params?.selectedThemeId) {
@@ -89,7 +89,7 @@ export function useSessionSetupState(
       params?.presetDuration ?? params?.suggestedDurationSeconds;
     if (routedDurationSeconds) {
       setSelectedPreset(PRESETS[5]!);
-      setSelectedCategory("custom");
+      setSelectedCategory('custom');
       setCustomDuration(Math.max(1, Math.round(routedDurationSeconds / 60)));
     }
     if (params?.presetMode) {
@@ -108,23 +108,23 @@ export function useSessionSetupState(
         currentStreak,
         params,
       );
-      if (isCancelled) return;
+      if (isCancelled) {return;}
       setMasteryState(result.masteryState);
       setSmartSuggestion(result.smartSuggestion);
       setHasSavedDraft(result.hasSavedDraft);
-      if (result.presetOverride) setSelectedPreset(result.presetOverride);
-      if (result.categoryOverride) setSelectedCategory(result.categoryOverride);
+      if (result.presetOverride) {setSelectedPreset(result.presetOverride);}
+      if (result.categoryOverride) {setSelectedCategory(result.categoryOverride);}
       if (result.customDurationOverride !== null)
-        setCustomDuration(result.customDurationOverride);
-      if (result.themeIdOverride) setSelectedThemeId(result.themeIdOverride);
-      if (result.goalOverride !== null) setDraftGoal(result.goalOverride);
+        {setCustomDuration(result.customDurationOverride);}
+      if (result.themeIdOverride) {setSelectedThemeId(result.themeIdOverride);}
+      if (result.goalOverride !== null) {setDraftGoal(result.goalOverride);}
       if (result.showAdvancedOverride !== null)
-        setShowAdvanced(result.showAdvancedOverride);
+        {setShowAdvanced(result.showAdvancedOverride);}
       if (result.showCustomizationOverride !== null)
-        setShowCustomization(result.showCustomizationOverride);
+        {setShowCustomization(result.showCustomizationOverride);}
     };
     void run().finally(() => {
-      if (!isCancelled) setHasHydratedDraft(true);
+      if (!isCancelled) {setHasHydratedDraft(true);}
     });
     return () => {
       isCancelled = true;
@@ -144,17 +144,17 @@ export function useSessionSetupState(
   ]);
 
   useEffect(() => {
-    if (!hasHydratedDraft || hasAutoAppliedSuggestion) return;
+    if (!hasHydratedDraft || hasAutoAppliedSuggestion) {return;}
     if (
       !shouldAutoApplySmartSuggestion({
         hasSavedDraft,
         params: params ?? {},
         smartSuggestionPresetId: smartSuggestion?.preset.id ?? null,
       })
-    ) return;
-    if (!smartSuggestion) return;
+    ) {return;}
+    if (!smartSuggestion) {return;}
     setSelectedPreset(smartSuggestion.preset);
-    setSelectedCategory(smartSuggestion.preset.category ?? "standard");
+    setSelectedCategory(smartSuggestion.preset.category ?? 'standard');
     setHasAutoAppliedSuggestion(true);
   }, [
     hasAutoAppliedSuggestion,
@@ -165,7 +165,7 @@ export function useSessionSetupState(
   ]);
 
   useEffect(() => {
-    if (!userId || !hasHydratedDraft) return;
+    if (!userId || !hasHydratedDraft) {return;}
     void saveSessionDraft(storage, sessionDraftKey, {
       presetId: selectedPreset.id,
       selectedCategory,

@@ -1,5 +1,5 @@
-import { useState, useCallback, useRef } from "react";
-import { getSessionService } from "../SessionService";
+import { useState, useCallback, useRef } from 'react';
+import { getSessionService } from '../SessionService';
 
 export function useSessionPresets() {
   const serviceRef = useRef(getSessionService());

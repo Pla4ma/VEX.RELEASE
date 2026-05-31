@@ -2,7 +2,7 @@ export interface StorageUploadConfig {
   bucket: string;
   path: string;
   contentType: string;
-  encryption?: { enabled: boolean; algorithm: "AES-256-GCM" };
+  encryption?: { enabled: boolean; algorithm: 'AES-256-GCM' };
   metadata?: Record<string, string>;
 }
 
@@ -38,6 +38,6 @@ export class AnalyticsStorageError extends Error implements StorageError {
     public retryable = false,
   ) {
     super(message);
-    this.name = "AnalyticsStorageError";
+    this.name = 'AnalyticsStorageError';
   }
 }

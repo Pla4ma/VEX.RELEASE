@@ -5,7 +5,7 @@ export interface ChallengeItem {
   currentProgress: number;
   targetProgress: number;
   rewardAmount: number;
-  rewardType: "XP" | "COINS" | "GEMS";
+  rewardType: 'XP' | 'COINS' | 'GEMS';
   isCompleted: boolean;
   isClaimed: boolean;
   timeRemainingMinutes: number;

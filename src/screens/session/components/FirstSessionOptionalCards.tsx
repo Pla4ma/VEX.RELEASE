@@ -1,14 +1,14 @@
-import React from "react";
-import { TextInput } from "react-native";
-import Animated, { FadeInDown } from "react-native-reanimated";
+import React from 'react';
+import { TextInput } from 'react-native';
+import Animated, { FadeInDown } from 'react-native-reanimated';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
 
 export function CoachLine({ text }: { text: string }): JSX.Element | null {
   const { theme } = useTheme();
-  if (!text) return null;
+  if (!text) {return null;}
 
   return (
     <Box
@@ -31,20 +31,20 @@ export function CompanionVisual({
 }: {
   element: string | null;
 }): JSX.Element | null {
-  if (!element) return null;
+  if (!element) {return null;}
 
   const elementEmoji: Record<string, string> = {
-    FLAME: "🔥",
-    WAVE: "🌊",
-    TERRA: "🌍",
-    ZEPHYR: "💨",
-    VOID: "🌑",
-    LUMINA: "✨",
+    FLAME: '🔥',
+    WAVE: '🌊',
+    TERRA: '🌍',
+    ZEPHYR: '💨',
+    VOID: '🌑',
+    LUMINA: '✨',
   };
 
   return (
     <Box alignItems="center" py="md">
-      <Text fontSize={40}>{elementEmoji[element] ?? "💎"}</Text>
+      <Text fontSize={40}>{elementEmoji[element] ?? '💎'}</Text>
       <Text variant="caption" color="text.tertiary" mt="xs">
         Your companion is ready
       </Text>
@@ -62,7 +62,7 @@ export function StudyTarget({
   target: string;
 }): JSX.Element | null {
   const { theme } = useTheme();
-  if (!visible) return null;
+  if (!visible) {return null;}
 
   return (
     <Animated.View entering={FadeInDown.duration(250)}>

@@ -4,11 +4,11 @@
  * Event definitions and handlers for companion growth and reactions.
  */
 
-import { eventBus } from "../../events/EventBus";
-import type { CompanionPhase, CompanionMood, CompanionState } from "./types";
+import { eventBus } from '../../events/EventBus';
+import type { CompanionPhase, CompanionMood, CompanionState } from './types';
 
 interface CompanionEventPayloads {
-  "companion:state_changed": {
+  'companion:state_changed': {
     userId: string;
     companionId: string;
     previousPhase?: CompanionPhase;
@@ -19,16 +19,16 @@ interface CompanionEventPayloads {
     totalFocusMinutes: number;
     sessionCount: number;
     reason:
-      | "session_completed"
-      | "milestone_reached"
-      | "evolution_triggered"
-      | "focus_threshold_passed"
-      | "mood_decay"
-      | "manual_boost";
+      | 'session_completed'
+      | 'milestone_reached'
+      | 'evolution_triggered'
+      | 'focus_threshold_passed'
+      | 'mood_decay'
+      | 'manual_boost';
     sessionId?: string;
     timestamp: number;
   };
-  "companion:evolution": {
+  'companion:evolution': {
     userId: string;
     companionId: string;
     previousPhase: CompanionPhase;
@@ -37,15 +37,15 @@ interface CompanionEventPayloads {
     evolutionCeremony: boolean;
     timestamp: number;
   };
-  "companion:milestone_reached": {
+  'companion:milestone_reached': {
     userId: string;
     companionId: string;
     milestoneType:
-      | "focus_minutes"
-      | "sessions"
-      | "streak_days"
-      | "level"
-      | "phase_advancement";
+      | 'focus_minutes'
+      | 'sessions'
+      | 'streak_days'
+      | 'level'
+      | 'phase_advancement';
     value: number;
     previousValue: number;
     timestamp: number;
@@ -63,7 +63,7 @@ export function emitCompanionStateChanged(
   reason: string,
   sessionId?: string,
 ): void {
-  eventBus.publish("companion:state_changed", {
+  eventBus.publish('companion:state_changed', {
     userId,
     companionId,
     previousPhase: previousState.phase,
@@ -90,7 +90,7 @@ export function emitCompanionEvolution(
   totalFocusMinutes: number,
   evolutionCeremony: boolean = true,
 ): void {
-  eventBus.publish("companion:evolution", {
+  eventBus.publish('companion:evolution', {
     userId,
     companionId,
     previousPhase,
@@ -111,7 +111,7 @@ export function emitCompanionMilestone(
   value: number,
   previousValue: number,
 ): void {
-  eventBus.publish("companion:milestone_reached", {
+  eventBus.publish('companion:milestone_reached', {
     userId,
     companionId,
     milestoneType,
@@ -128,19 +128,19 @@ export function subscribeToCompanionEvents() {
   return {
     onStateChanged: (callback: (data: Record<string, unknown>) => void) =>
       eventBus.subscribe(
-        "companion:state_changed",
+        'companion:state_changed',
         callback as (data: unknown) => void,
       ),
 
     onEvolution: (callback: (data: Record<string, unknown>) => void) =>
       eventBus.subscribe(
-        "companion:evolution",
+        'companion:evolution',
         callback as (data: unknown) => void,
       ),
 
     onMilestone: (callback: (data: Record<string, unknown>) => void) =>
       eventBus.subscribe(
-        "companion:milestone_reached",
+        'companion:milestone_reached',
         callback as (data: unknown) => void,
       ),
   };

@@ -1,13 +1,13 @@
-import { decideHomeSurfaces } from "../home-surface-decision";
+import { decideHomeSurfaces } from '../home-surface-decision';
 import {
   featureAvailability,
   workProfile,
   baseStats,
-} from "./home-surface-decision.helpers";
+} from './home-surface-decision.helpers';
 
-describe("HomeSurfaceDecision", () => {
-  describe("Premium rules", () => {
-    it("hides premium before value is proven", () => {
+describe('HomeSurfaceDecision', () => {
+  describe('Premium rules', () => {
+    it('hides premium before value is proven', () => {
       const map = decideHomeSurfaces({
         featureAvailability,
         personalizationProfile: workProfile,
@@ -22,17 +22,17 @@ describe("HomeSurfaceDecision", () => {
         isFirstSession: false,
       });
 
-      expect(map.premium_tease).toBe("hidden");
+      expect(map.premium_tease).toBe('hidden');
     });
 
-    it("shows premium tiny_tease after user shows intent", () => {
+    it('shows premium tiny_tease after user shows intent', () => {
       const map = decideHomeSurfaces({
         featureAvailability,
         personalizationProfile: workProfile,
         behaviorStats: {
           ...baseStats(),
           totalCompletedSessions: 6,
-          premiumFeatureAttempts: ["weekly_intelligence"],
+          premiumFeatureAttempts: ['weekly_intelligence'],
         },
         hasActiveStudyPlan: false,
         hasActiveRecommendation: false,
@@ -40,7 +40,7 @@ describe("HomeSurfaceDecision", () => {
         isFirstSession: false,
       });
 
-      expect(map.premium_tease).toBe("tiny_tease");
+      expect(map.premium_tease).toBe('tiny_tease');
     });
   });
 });

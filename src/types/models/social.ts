@@ -1,4 +1,4 @@
-import type { BaseModel } from "./user";
+import type { BaseModel } from './user';
 
 export interface Achievement extends BaseModel {
   name: string;
@@ -14,19 +14,19 @@ export interface Achievement extends BaseModel {
 }
 
 export type AchievementCategory =
-  | "social"
-  | "gaming"
-  | "economy"
-  | "exploration"
-  | "mastery"
-  | "special";
+  | 'social'
+  | 'gaming'
+  | 'economy'
+  | 'exploration'
+  | 'mastery'
+  | 'special';
 
 export type AchievementTier =
-  | "bronze"
-  | "silver"
-  | "gold"
-  | "platinum"
-  | "diamond";
+  | 'bronze'
+  | 'silver'
+  | 'gold'
+  | 'platinum'
+  | 'diamond';
 
 export interface AchievementCriteria {
   type: string;
@@ -52,10 +52,10 @@ export interface SquadMember {
   contributions: number;
 }
 
-export type SquadMemberRole = "member" | "officer" | "coLeader" | "leader";
+export type SquadMemberRole = 'member' | 'officer' | 'coLeader' | 'leader';
 
 export interface SquadSettings {
-  visibility: "public" | "private" | "inviteOnly";
+  visibility: 'public' | 'private' | 'inviteOnly';
   requiresApproval: boolean;
   maxMembers: number;
   allowInvites: boolean;

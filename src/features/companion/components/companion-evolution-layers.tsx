@@ -1,14 +1,14 @@
-import React from "react";
-import { Dimensions } from "react-native";
-import Animated from "react-native-reanimated";
-import type { AnimatedStyle } from "react-native-reanimated";
-import { Box, Text } from "../../../components/primitives";
-import type { CompanionPhase } from "../types";
-import { launchColors } from "@theme/tokens/launch-colors";
-import { PHASE_NAMES, PHASE_EMOJIS } from "./companion-evolution-types";
-import type { EvolutionPhase, ElementThemeColors } from "./companion-evolution-types";
+import React from 'react';
+import { Dimensions } from 'react-native';
+import Animated from 'react-native-reanimated';
+import type { AnimatedStyle } from 'react-native-reanimated';
+import { Box, Text } from '../../../components/primitives';
+import type { CompanionPhase } from '../types';
+import { launchColors } from '@theme/tokens/launch-colors';
+import { PHASE_NAMES, PHASE_EMOJIS } from './companion-evolution-types';
+import type { EvolutionPhase, ElementThemeColors } from './companion-evolution-types';
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 export const GlowLayer: React.FC<{
   glowStyle: AnimatedStyle;
@@ -19,7 +19,7 @@ export const GlowLayer: React.FC<{
     <Animated.View
       style={[
         {
-          position: "absolute",
+          position: 'absolute',
           width: SCREEN_WIDTH,
           height: SCREEN_HEIGHT,
           backgroundColor: `${themeColors.glow}30`,
@@ -28,11 +28,11 @@ export const GlowLayer: React.FC<{
       ]}
       pointerEvents="none"
     />
-    {(ceremonyPhase === "energy-buildup" || ceremonyPhase === "flash") && (
+    {(ceremonyPhase === 'energy-buildup' || ceremonyPhase === 'flash') && (
       <Animated.View
         style={[
           {
-            position: "absolute",
+            position: 'absolute',
             width: 200,
             height: 200,
             borderRadius: 100,
@@ -52,7 +52,7 @@ export const FlashLayer: React.FC<{ flashStyle: AnimatedStyle }> = ({
   <Animated.View
     style={[
       {
-        position: "absolute",
+        position: 'absolute',
         top: 0,
         left: 0,
         right: 0,
@@ -72,7 +72,7 @@ export const OldFormLayer: React.FC<{
   previousPhase: CompanionPhase;
 }> = ({ oldFormStyle, themeColors, previousPhase }) => (
   <Animated.View
-    style={[oldFormStyle, { position: "absolute", zIndex: 10 }]}
+    style={[oldFormStyle, { position: 'absolute', zIndex: 10 }]}
   >
     <Box alignItems="center">
       <Box
@@ -106,7 +106,7 @@ export const NewFormLayer: React.FC<{
   newPhase: CompanionPhase;
 }> = ({ newFormStyle, themeColors, newPhase }) => (
   <Animated.View
-    style={[newFormStyle, { position: "absolute", zIndex: 20 }]}
+    style={[newFormStyle, { position: 'absolute', zIndex: 20 }]}
   >
     <Box alignItems="center">
       <Box

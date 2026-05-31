@@ -4,7 +4,7 @@
  * Utility functions and types split into boss-screen-utils.ts
  */
 
-export { BossScreenSections } from "./BossScreenSectionsInner";
+export { BossScreenSections } from './BossScreenSectionsInner';
 export {
   getBossScreenCopy,
   estimateDamage,
@@ -12,4 +12,4 @@ export {
   ATTACK_PRESETS,
   type BossIntensity,
   type BossScreenSectionsProps,
-} from "./boss-screen-utils";
+} from './boss-screen-utils';

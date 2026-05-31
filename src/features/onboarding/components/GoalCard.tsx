@@ -7,18 +7,18 @@
  * @phase 4
  */
 
-import React from "react";
-import { Pressable } from "react-native";
+import React from 'react';
+import { Pressable } from 'react-native';
 import Animated, {
   FadeInUp,
   useAnimatedStyle,
   withSpring,
-} from "react-native-reanimated";
+} from 'react-native-reanimated';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import type { GoalOption } from "../schemas";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import type { GoalOption } from '../schemas';
 
 interface GoalCardProps {
   option: GoalOption;
@@ -58,7 +58,7 @@ export function GoalCard({
   return (
     <Animated.View
       entering={FadeInUp.duration(400).delay(200 + index * 100)}
-      style={{ flex: 1, minWidth: "45%" }}
+      style={{ flex: 1, minWidth: '45%' }}
     >
       <Pressable
         onPress={onPress}
@@ -72,7 +72,7 @@ export function GoalCard({
               padding: theme.spacing[4],
               borderRadius: 16,
               borderWidth: 2,
-              alignItems: "center",
+              alignItems: 'center',
               gap: theme.spacing[2],
             },
             animatedStyle,
@@ -81,7 +81,7 @@ export function GoalCard({
           <Text fontSize={32}>{option.emoji}</Text>
           <Text
             variant="body"
-            color={isSelected ? "text.inverse" : "text.primary"}
+            color={isSelected ? 'text.inverse' : 'text.primary'}
             fontWeight="600"
             textAlign="center"
           >

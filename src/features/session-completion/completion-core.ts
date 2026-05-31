@@ -4,5 +4,5 @@
  * Re-exports all completion types from sub-modules.
  */
 
-export * from "./completion-performance";
-export * from "./completion-rewards";
+export * from './completion-performance';
+export * from './completion-rewards';

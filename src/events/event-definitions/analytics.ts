@@ -6,9 +6,9 @@
  */
 
 export type AnalyticsEventType =
-  | "analytics:track"
-  | "analytics:screen_view"
-  | "analytics:user_property";
+  | 'analytics:track'
+  | 'analytics:screen_view'
+  | 'analytics:user_property';
 
 export interface AnalyticsTrackEvent {
   event: string;

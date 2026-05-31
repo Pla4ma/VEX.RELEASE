@@ -1,70 +1,70 @@
-import { jest } from "@jest/globals";
-import type { FocusScoreDashboardModel } from "../hooks-focus-score";
+import { jest } from '@jest/globals';
+import type { FocusScoreDashboardModel } from '../hooks-focus-score';
 
 export const sampleFocusScore = {
-  id: "123e4567-e89b-12d3-a456-426614174111",
-  userId: "123e4567-e89b-12d3-a456-426614174000",
+  id: '123e4567-e89b-12d3-a456-426614174111',
+  userId: '123e4567-e89b-12d3-a456-426614174000',
   currentScore: 640,
   previousScore: 630,
-  band: "Strong" as const,
+  band: 'Strong' as const,
   factors: {
     consistency: {
       weightPercent: 35,
       score: 82,
       delta: 5,
-      explanation: "Good consistency.",
+      explanation: 'Good consistency.',
     },
     streakStability: {
       weightPercent: 25,
       score: 72,
       delta: 2,
-      explanation: "Stable streak.",
+      explanation: 'Stable streak.',
     },
     sessionQuality: {
       weightPercent: 20,
       score: 87,
       delta: 4,
-      explanation: "Quality up.",
+      explanation: 'Quality up.',
     },
     intentionalDifficulty: {
       weightPercent: 10,
       score: 61,
       delta: 1,
-      explanation: "Balanced challenge.",
+      explanation: 'Balanced challenge.',
     },
     recency: {
       weightPercent: 10,
       score: 78,
       delta: 2,
-      explanation: "Recent sessions.",
+      explanation: 'Recent sessions.',
     },
   },
-  updatedAt: "2026-05-06T10:00:00.000Z",
-  createdAt: "2026-05-01T10:00:00.000Z",
-  lastChangeReason: "Session quality improved",
+  updatedAt: '2026-05-06T10:00:00.000Z',
+  createdAt: '2026-05-01T10:00:00.000Z',
+  lastChangeReason: 'Session quality improved',
 };
 
 export const sampleFocusHistory = [
   {
-    timestamp: "2026-05-06T10:00:00.000Z",
+    timestamp: '2026-05-06T10:00:00.000Z',
     score: 640,
     delta: 10,
-    reason: "Quality improved",
+    reason: 'Quality improved',
   },
 ];
 
-jest.mock("@components/ui/Skeleton", () => ({
+jest.mock('@components/ui/Skeleton', () => ({
   Skeleton: () => null,
 }));
 
-jest.mock("@components/primitives/Text", () => {
-  const { Text } = require("react-native");
+jest.mock('@components/primitives/Text', () => {
+  const { Text } = require('react-native');
   return { Text };
 });
 
-jest.mock("@/shared/ui/components/StatusFeedback", () => {
-  const React = require("react");
-  const { Text, Pressable, View } = require("react-native");
+jest.mock('@/shared/ui/components/StatusFeedback', () => {
+  const React = require('react');
+  const { Text, Pressable, View } = require('react-native');
   return {
     StatusBanner: ({
       message,
@@ -84,14 +84,14 @@ jest.mock("@/shared/ui/components/StatusFeedback", () => {
           ? React.createElement(
               Pressable,
               { onPress: onRetry },
-              React.createElement(Text, null, "Retry"),
+              React.createElement(Text, null, 'Retry'),
             )
           : null,
       ),
   };
 });
 
-jest.mock("../../../theme", () => ({
+jest.mock('../../../theme', () => ({
   useTheme: () => ({
     theme: {
       spacing: { 1: 4, 2: 8, 4: 16 },
@@ -110,29 +110,29 @@ jest.mock("../../../theme", () => ({
         label: { medium: { fontSize: 12, lineHeight: 16 } },
       },
       fontWeights: {
-        regular: "400",
-        medium: "500",
-        semibold: "600",
-        bold: "700",
+        regular: '400',
+        medium: '500',
+        semibold: '600',
+        bold: '700',
       },
       colors: {
-        border: { light: "lightgray" },
-        background: { secondary: "black" },
-        surface: { selected: "dimgray" },
+        border: { light: 'lightgray' },
+        background: { secondary: 'black' },
+        surface: { selected: 'dimgray' },
         status: {
-          error: "maroon",
-          warning: "olive",
-          success: "green",
-          info: "navy",
+          error: 'maroon',
+          warning: 'olive',
+          success: 'green',
+          info: 'navy',
         },
-        text: { primary: "white", secondary: "silver" },
+        text: { primary: 'white', secondary: 'silver' },
       },
     },
   }),
 }));
 
-jest.mock("react-native-reanimated", () => {
-  const View = require("react-native").View;
+jest.mock('react-native-reanimated', () => {
+  const View = require('react-native').View;
   return {
     default: { View },
     FadeInUp: { duration: () => ({}) },

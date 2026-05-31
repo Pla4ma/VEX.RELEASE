@@ -1,5 +1,5 @@
-import { z } from "zod";
-import type { CoachUserState } from "../types";
+import { z } from 'zod';
+import type { CoachUserState } from '../types';
 
 export const CoachMessageInputSchema = z.object({
   id: z.string(),
@@ -11,7 +11,7 @@ export const CoachMessageInputSchema = z.object({
 
 export interface ChatMessage {
   id: string;
-  type: "user" | "coach" | "system";
+  type: 'user' | 'coach' | 'system';
   content: string;
   timestamp: number;
   metadata?: {

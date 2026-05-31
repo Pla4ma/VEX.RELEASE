@@ -2,10 +2,10 @@ import {
   FEATURE_HIGHLIGHT_MAP,
   FREE_BOUNDARY_COPY,
   PREMIUM_FEATURES,
-} from "../paywall-copy";
+} from '../paywall-copy';
 
-describe("paywall copy", () => {
-  it("sells deeper personalization instead of rewards or economy", () => {
+describe('paywall copy', () => {
+  it('sells deeper personalization instead of rewards or economy', () => {
     const joined = [
       FREE_BOUNDARY_COPY,
       ...PREMIUM_FEATURES.flatMap((feature) => [
@@ -16,9 +16,9 @@ describe("paywall copy", () => {
         feature.title,
         feature.benefit,
       ]),
-    ].join(" ");
+    ].join(' ');
 
-    expect(joined).toContain("Sessions");
+    expect(joined).toContain('Sessions');
     expect(joined).toMatch(
       /coach memory|progress intelligence|execution system/i,
     );

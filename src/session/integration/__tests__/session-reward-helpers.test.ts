@@ -1,14 +1,14 @@
-import { SessionMode } from "../../modes";
-import type { SessionSummary } from "../../types";
-import { calculateRewards } from "../session-reward-helpers";
+import { SessionMode } from '../../modes';
+import type { SessionSummary } from '../../types';
+import { calculateRewards } from '../session-reward-helpers';
 
 function createSummary(
   overrides: Partial<SessionSummary> = {},
 ): SessionSummary {
   return {
-    sessionId: "123e4567-e89b-12d3-a456-426614174002",
-    userId: "123e4567-e89b-12d3-a456-426614174003",
-    status: "COMPLETED",
+    sessionId: '123e4567-e89b-12d3-a456-426614174002',
+    userId: '123e4567-e89b-12d3-a456-426614174003',
+    status: 'COMPLETED',
     plannedDuration: 30 * 60000,
     actualDuration: 30 * 60000,
     effectiveDuration: 30 * 60000,
@@ -41,25 +41,25 @@ function createSummary(
   };
 }
 
-describe("session reward helpers", () => {
-  it("uses millisecond session durations for base rewards", () => {
+describe('session reward helpers', () => {
+  it('uses millisecond session durations for base rewards', () => {
     const rewards = calculateRewards(0, createSummary());
 
     expect(rewards.baseXP).toBe(300);
     expect(rewards.baseCoins).toBe(30);
   });
 
-  it("makes demanding session modes materially more rewarding when executed well", () => {
+  it('makes demanding session modes materially more rewarding when executed well', () => {
     const lightRewards = calculateRewards(
       7,
       createSummary({
-        createdAt: new Date("2026-04-28T12:00:00-04:00").getTime(),
+        createdAt: new Date('2026-04-28T12:00:00-04:00').getTime(),
       }),
     );
     const deepWorkRewards = calculateRewards(
       7,
       createSummary({
-        createdAt: new Date("2026-04-28T12:00:00-04:00").getTime(),
+        createdAt: new Date('2026-04-28T12:00:00-04:00').getTime(),
         sessionMode: SessionMode.DEEP_WORK,
       }),
     );
@@ -69,7 +69,7 @@ describe("session reward helpers", () => {
     expect(deepWorkRewards.totalXP).toBeGreaterThan(lightRewards.totalXP);
   });
 
-  it("withholds quality bonuses when disruptions drag focus below the threshold", () => {
+  it('withholds quality bonuses when disruptions drag focus below the threshold', () => {
     const rewards = calculateRewards(
       3,
       createSummary({
@@ -83,16 +83,16 @@ describe("session reward helpers", () => {
     expect(rewards.qualityBonus.xp).toBe(0);
   });
 
-  it("adds the daily modifier bonus when the mode matches today selection", () => {
+  it('adds the daily modifier bonus when the mode matches today selection', () => {
     const rewards = calculateRewards(
       0,
       createSummary({
-        createdAt: new Date("2026-04-29T12:00:00-04:00").getTime(),
+        createdAt: new Date('2026-04-29T12:00:00-04:00').getTime(),
         sessionMode: SessionMode.SPRINT,
       }),
     );
 
-    expect(rewards.dailyModifierBonus.modifierId).toBe("midweek-sprint");
+    expect(rewards.dailyModifierBonus.modifierId).toBe('midweek-sprint');
     expect(rewards.dailyModifierBonus.xp).toBeGreaterThan(0);
     expect(rewards.finalMultiplier).toBeGreaterThan(1);
   });

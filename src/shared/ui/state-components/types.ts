@@ -1,5 +1,5 @@
-import type React from "react";
-import type { ViewStyle } from "react-native";
+import type React from 'react';
+import type { ViewStyle } from 'react-native';
 
 export interface StateComponentProps {
   style?: ViewStyle;
@@ -10,8 +10,8 @@ export interface LoadingStateProps extends StateComponentProps {
   submessage?: string;
   progress?: number;
   showProgress?: boolean;
-  size?: "small" | "large";
-  variant?: "spinner" | "skeleton" | "progress";
+  size?: 'small' | 'large';
+  variant?: 'spinner' | 'skeleton' | 'progress';
   skeletonItems?: number;
 }
 export interface EmptyStateProps extends StateComponentProps {
@@ -44,7 +44,7 @@ export interface SuccessStateProps extends StateComponentProps {
 }
 export type SkeletonWidth = number | `${number}%`;
 export interface SkeletonProps extends StateComponentProps {
-  variant?: "card" | "list" | "text" | "avatar" | "chip";
+  variant?: 'card' | 'list' | 'text' | 'avatar' | 'chip';
   count?: number;
   width?: SkeletonWidth;
   height?: number;
@@ -62,10 +62,10 @@ export interface StateWrapperProps {
   error?: Error | null;
   isEmpty?: boolean;
   isSuccess?: boolean;
-  loadingProps?: Omit<LoadingStateProps, "testID">;
-  emptyProps?: Omit<EmptyStateProps, "testID">;
-  errorProps?: Omit<ErrorStateProps, "error" | "testID">;
-  successProps?: Omit<SuccessStateProps, "testID">;
+  loadingProps?: Omit<LoadingStateProps, 'testID'>;
+  emptyProps?: Omit<EmptyStateProps, 'testID'>;
+  errorProps?: Omit<ErrorStateProps, 'error' | 'testID'>;
+  successProps?: Omit<SuccessStateProps, 'testID'>;
   children: React.ReactNode;
   testID?: string;
 }

@@ -1,13 +1,13 @@
-import React, { useMemo } from "react";
-import { useNavigation } from "@react-navigation/native";
-import { useFocusScore } from "./hooks-focus-score";
-import { Box, Text, Stack, Button } from "@components/primitives";
-import { useNetInfo } from "../../network";
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import type { RootStackParams } from "../../navigation/types";
-import { withScreenErrorBoundary } from "../../shared/ui/components/ScreenErrorBoundary";
-import { FocusScoreDashboardSkeleton } from "./FocusScoreDashboard-skeleton";
-import { formatDelta, formatHistoryPoint } from "./FocusScoreDashboard-helpers";
+import React, { useMemo } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { useFocusScore } from './hooks-focus-score';
+import { Box, Text, Stack, Button } from '@components/primitives';
+import { useNetInfo } from '../../network';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import type { RootStackParams } from '../../navigation/types';
+import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+import { FocusScoreDashboardSkeleton } from './FocusScoreDashboard-skeleton';
+import { formatDelta, formatHistoryPoint } from './FocusScoreDashboard-helpers';
 
 export const FocusScoreDashboard = withScreenErrorBoundary(
   function _FocusScoreDashboard(): React.JSX.Element {
@@ -17,11 +17,11 @@ export const FocusScoreDashboard = withScreenErrorBoundary(
       useFocusScore();
     const { isOffline } = useNetInfo();
 
-    if (status === "pending") {
+    if (status === 'pending') {
       return <FocusScoreDashboardSkeleton />;
     }
 
-    if (status === "error") {
+    if (status === 'error') {
       return (
         <Box p="md" gap="md" alignItems="center">
           <Text color="error">Error: {error?.message}</Text>
@@ -72,7 +72,7 @@ export const FocusScoreDashboard = withScreenErrorBoundary(
             <Text variant="h3">Focus Score</Text>
             <Text variant="h1">{currentScore}</Text>
             <Text variant="h4">{band}</Text>
-            <Text color={delta >= 0 ? "success" : "error"}>
+            <Text color={delta >= 0 ? 'success' : 'error'}>
               {formatDelta(delta)} since last session
             </Text>
             {isRefetching && (
@@ -142,7 +142,7 @@ export const FocusScoreDashboard = withScreenErrorBoundary(
           <Box>
             <Button
               onPress={() =>
-                navigation.navigate("Analytics", {
+                navigation.navigate('Analytics', {
                   month: new Date().toISOString().slice(0, 7),
                 })
               }
@@ -155,5 +155,5 @@ export const FocusScoreDashboard = withScreenErrorBoundary(
       </Box>
     );
   },
-  "Focus Dashboard",
+  'Focus Dashboard',
 );

@@ -1,14 +1,14 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useAuthStore } from "../../../store";
-import * as service from "../basic-challenges-service";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useAuthStore } from '../../../store';
+import * as service from '../basic-challenges-service';
 import type {
   BasicChallengeProgressResult,
   BasicChallengeClaimResult,
-} from "../basic-challenges-service";
-import { createDebugger } from "../../../utils/debug";
-import type { QueryKey } from "@tanstack/react-query";
+} from '../basic-challenges-service';
+import { createDebugger } from '../../../utils/debug';
+import type { QueryKey } from '@tanstack/react-query';
 
-const debug = createDebugger("challenges:mutations");
+const debug = createDebugger('challenges:mutations');
 
 // ============================================================================
 // Challenge Progress Hook
@@ -31,7 +31,7 @@ export function useUpdateBasicChallengeProgress(
   >({
     mutationFn: ({ sessionId, sessionDuration }) => {
       if (!userId) {
-        throw new Error("User not authenticated");
+        throw new Error('User not authenticated');
       }
       return service.updateBasicChallengeProgressFromSession(
         userId,
@@ -53,13 +53,13 @@ export function useUpdateBasicChallengeProgress(
       }
 
       if (result.dailyCompleted || result.weeklyCompleted) {
-        queryClient.invalidateQueries({ queryKey: ["progression", userId] });
-        queryClient.invalidateQueries({ queryKey: ["rewards", userId] });
+        queryClient.invalidateQueries({ queryKey: ['progression', userId] });
+        queryClient.invalidateQueries({ queryKey: ['rewards', userId] });
       }
     },
     onError: (error) => {
       debug.error(
-        "Failed to update challenge progress",
+        'Failed to update challenge progress',
         error instanceof Error ? error : new Error(String(error)),
       );
     },
@@ -80,10 +80,10 @@ export function useClaimBasicChallengeReward(
   const queryClient = useQueryClient();
   const userId = useAuthStore((state) => state.user?.id ?? null);
 
-  return useMutation<BasicChallengeClaimResult, Error, "DAILY" | "WEEKLY">({
+  return useMutation<BasicChallengeClaimResult, Error, 'DAILY' | 'WEEKLY'>({
     mutationFn: (challengeType) => {
       if (!userId) {
-        throw new Error("User not authenticated");
+        throw new Error('User not authenticated');
       }
       return service.claimBasicChallengeReward(userId, challengeType);
     },
@@ -101,13 +101,13 @@ export function useClaimBasicChallengeReward(
       }
 
       if (result.success) {
-        queryClient.invalidateQueries({ queryKey: ["rewards", userId] });
-        queryClient.invalidateQueries({ queryKey: ["progression", userId] });
+        queryClient.invalidateQueries({ queryKey: ['rewards', userId] });
+        queryClient.invalidateQueries({ queryKey: ['progression', userId] });
       }
     },
     onError: (error) => {
       debug.error(
-        "Failed to claim challenge reward",
+        'Failed to claim challenge reward',
         error instanceof Error ? error : new Error(String(error)),
       );
     },

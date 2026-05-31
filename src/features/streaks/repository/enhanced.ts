@@ -1,20 +1,20 @@
-import { captureSilentFailure } from "../../../utils/silent-failure";
+import { captureSilentFailure } from '../../../utils/silent-failure';
 import {
   withRetry,
   RepositoryError,
   RepositoryErrorCode,
-} from "../../../lib/repository/base";
+} from '../../../lib/repository/base';
 import {
   enqueue,
   type OfflineQueueEntryInput,
-} from "../../../lib/offline/queue";
-import { getSupabaseClient } from "../../../config/supabase";
-import { StreakSchema, type Streak } from "../schemas";
-import { v4 } from "../../../utils/uuid";
+} from '../../../lib/offline/queue';
+import { getSupabaseClient } from '../../../config/supabase';
+import { StreakSchema, type Streak } from '../schemas';
+import { v4 } from '../../../utils/uuid';
 
 const supabase = getSupabaseClient();
 export class StreaksRepositoryError extends RepositoryError {
-  public override readonly name = "StreaksRepositoryError";
+  public override readonly name = 'StreaksRepositoryError';
   constructor(operation: string, error: unknown, code?: RepositoryErrorCode) {
     super(operation, error, code);
   }
@@ -49,9 +49,9 @@ export async function executeWithFallback<T>(
         }
       } catch (error) {
         captureSilentFailure(error, {
-          feature: "streaks",
-          operation: "network-fallback",
-          type: "network",
+          feature: 'streaks',
+          operation: 'network-fallback',
+          type: 'network',
         });
       }
     }
@@ -62,17 +62,17 @@ export async function executeWithFallback<T>(
 export async function fetchStreakEnhanced(
   userId: string,
 ): Promise<RepositoryResult<Streak>> {
-  return executeWithFallback("fetchStreak", async () => {
+  return executeWithFallback('fetchStreak', async () => {
     const { data, error } = await supabase
-      .from("streaks")
-      .select("*")
-      .eq("user_id", userId)
+      .from('streaks')
+      .select('*')
+      .eq('user_id', userId)
       .single();
     if (error) {
       throw error;
     }
     if (!data) {
-      throw new Error("No data returned");
+      throw new Error('No data returned');
     }
     return StreakSchema.parse(data);
   });
@@ -81,9 +81,9 @@ export async function fetchStreakEnhanced(
 export async function createStreakEnhanced(
   streak: Streak,
 ): Promise<RepositoryResult<Streak>> {
-  return executeWithFallback("createStreak", async () => {
+  return executeWithFallback('createStreak', async () => {
     const { data, error } = await supabase
-      .from("streaks")
+      .from('streaks')
       .insert({
         id: streak.id,
         user_id: streak.userId,
@@ -111,19 +111,19 @@ export async function updateStreakEnhanced(
   updates: Partial<Streak>,
 ): Promise<RepositoryResult<Streak>> {
   const queueEntry: OfflineQueueEntryInput = {
-    operation: "UPDATE",
-    feature: "streaks",
+    operation: 'UPDATE',
+    feature: 'streaks',
     payload: { userId, updates } as Record<string, unknown>,
     idempotencyKey: `streak:update:${userId}`,
     maxRetries: 5,
-    priority: "high",
+    priority: 'high',
   };
   enqueue(queueEntry);
-  return executeWithFallback("updateStreak", async () => {
+  return executeWithFallback('updateStreak', async () => {
     const { data, error } = await supabase
-      .from("streaks")
+      .from('streaks')
       .update({ ...updates, updated_at: Date.now() })
-      .eq("user_id", userId)
+      .eq('user_id', userId)
       .select()
       .single();
     if (error) {
@@ -138,17 +138,17 @@ export async function recordShieldUsageEnhanced(
   shieldData: { usedAt: number; reason: string },
 ): Promise<RepositoryResult<{ id: string }>> {
   const shieldQueueEntry: OfflineQueueEntryInput = {
-    operation: "UPDATE",
-    feature: "streaks",
+    operation: 'UPDATE',
+    feature: 'streaks',
     payload: { userId, shieldData } as Record<string, unknown>,
     idempotencyKey: `shield:use:${userId}:${shieldData.usedAt}`,
     maxRetries: 5,
-    priority: "high",
+    priority: 'high',
   };
   enqueue(shieldQueueEntry);
-  return executeWithFallback("recordShieldUsage", async () => {
+  return executeWithFallback('recordShieldUsage', async () => {
     const { data, error } = await supabase
-      .from("streak_shields")
+      .from('streak_shields')
       .insert({
         id: v4(),
         user_id: userId,
@@ -156,7 +156,7 @@ export async function recordShieldUsageEnhanced(
         reason: shieldData.reason,
         created_at: Date.now(),
       })
-      .select("id")
+      .select('id')
       .single();
     if (error) {
       throw error;
@@ -191,10 +191,10 @@ export {
   saveRepairQuestEnhanced,
   updateRepairQuestEnhanced,
   fetchExpiredRepairQuestsEnhanced,
-} from "./enhanced-repair-quest";
+} from './enhanced-repair-quest';
 
 export {
   saveRiskStatusEnhanced,
   fetchRiskStatusEnhanced,
   fetchUsersWithActiveStreaksEnhanced,
-} from "./enhanced-risk-status";
+} from './enhanced-risk-status';

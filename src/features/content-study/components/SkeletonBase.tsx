@@ -1,20 +1,20 @@
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react';
 import {
   View,
   Dimensions,
   type StyleProp,
   type ViewStyle,
-} from "react-native";
+} from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withRepeat,
   withTiming,
-} from "react-native-reanimated";
-import { useTheme } from "../../../theme";
-import { styles } from "./skeleton-styles";
+} from 'react-native-reanimated';
+import { useTheme } from '../../../theme';
+import { styles } from './skeleton-styles';
 
-const { width: SCREEN_WIDTH } = Dimensions.get("window");
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 interface SkeletonProps {
   width?: number | string;
@@ -24,7 +24,7 @@ interface SkeletonProps {
 }
 
 const Skeleton: React.FC<SkeletonProps> = ({
-  width = "100%",
+  width = '100%',
   height = 12,
   borderRadius = 6,
   style,
@@ -41,7 +41,7 @@ const Skeleton: React.FC<SkeletonProps> = ({
   const shimmerStyle = useAnimatedStyle(() => ({
     transform: [{ translateX: shimmerAnim.value * SCREEN_WIDTH }],
   }));
-  const widthStyle: ViewStyle = { width: width as ViewStyle["width"] };
+  const widthStyle: ViewStyle = { width: width as ViewStyle['width'] };
   return (
     <View
       style={[

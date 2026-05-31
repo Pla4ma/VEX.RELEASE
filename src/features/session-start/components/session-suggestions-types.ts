@@ -4,7 +4,7 @@ export interface SessionSuggestion {
   title: string;
   reasoning: string;
   durationMinutes: number;
-  mode: "solo" | "squad";
+  mode: 'solo' | 'squad';
   confidence: number; // 0-1
 }
 

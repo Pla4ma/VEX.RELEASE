@@ -1,4 +1,4 @@
-export { getLaneMechanicPolicy } from "./policy";
+export { getLaneMechanicPolicy } from './policy';
 
 export {
   resolveInitialLane,
@@ -6,12 +6,12 @@ export {
   mergeLaneProfiles,
   shouldReconsiderLane,
   shouldSuggestLaneReconsideration,
-} from "./lane-resolution";
+} from './lane-resolution';
 
-export type { CompletionLaneSituation } from "./lane-completion";
+export type { CompletionLaneSituation } from './lane-completion';
 
 export {
   resolveCompletionLaneProfile,
   accumulateCompletionEvidence,
   confirmInitialLane,
-} from "./lane-completion";
+} from './lane-completion';

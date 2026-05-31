@@ -13,7 +13,7 @@ export interface ErrorBoundaryReport {
 }
 
 export interface AccessibilityReport {
-  wcagComplianceLevel: "A" | "AA" | "AAA";
+  wcagComplianceLevel: 'A' | 'AA' | 'AAA';
   screenReaderSupport: number;
   keyboardNavigationSupport: number;
   colorContrastIssues: number;

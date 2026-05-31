@@ -1,15 +1,15 @@
-import type { UseQueryResult } from "@tanstack/react-query";
-import type { HomeHighlight, CompletionSyncState } from "../../../store/session-state";
-import type { FeatureAccessResult } from "../../../features/liveops-config";
-import type { HomeSpineModel } from "../../../features/home-spine/schemas";
-import type { HomeFeatureRuntime } from "../hooks/home-feature-runtime";
-import type { HomeController, SessionHistoryResult } from "../hooks/home-controller-types";
+import type { UseQueryResult } from '@tanstack/react-query';
+import type { HomeHighlight, CompletionSyncState } from '../../../store/session-state';
+import type { FeatureAccessResult } from '../../../features/liveops-config';
+import type { HomeSpineModel } from '../../../features/home-spine/schemas';
+import type { HomeFeatureRuntime } from '../hooks/home-feature-runtime';
+import type { HomeController, SessionHistoryResult } from '../hooks/home-controller-types';
 import {
   createStubQuery,
   stubCoachMutations,
   stubHomeReturnReason,
   stubLearningExecutionLayer,
-} from "../hooks/home-controller-stubs";
+} from '../hooks/home-controller-stubs';
 
 export interface ContainerControllerInput {
   userId: string;
@@ -24,7 +24,7 @@ export interface ContainerControllerInput {
   currentXp: number;
   todayFocusMinutes: number;
   progressPercent: number;
-  latestSession: SessionHistoryResult["history"][number] | null;
+  latestSession: SessionHistoryResult['history'][number] | null;
   homeSpine: HomeSpineModel;
   disclosure: FeatureAccessResult;
   runtime: HomeFeatureRuntime;
@@ -76,9 +76,9 @@ export function buildContainerController(
     openContentStudy: input.openSetup as () => void,
     continueStudyPlan: input.openSetup as () => void,
     createRecommendation: stubCoachMutations()
-      .createRecommendation as HomeController["createRecommendation"],
+      .createRecommendation as HomeController['createRecommendation'],
     updateRecommendationStatus: stubCoachMutations()
-      .updateRecommendationStatus as HomeController["updateRecommendationStatus"],
+      .updateRecommendationStatus as HomeController['updateRecommendationStatus'],
     retryAll: input.disclosure.refetchAll as () => Promise<unknown>,
     features: input.disclosure.features,
   };

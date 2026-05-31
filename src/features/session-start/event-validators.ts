@@ -6,7 +6,7 @@ import type {
   SessionPreparationStartedEvent,
   SessionReadinessAssessedEvent,
   SessionStartEventType,
-} from "./types";
+} from './types';
 
 export function validateSessionStartEvent(
   event: SessionStartEventType,
@@ -14,20 +14,20 @@ export function validateSessionStartEvent(
   if (!event.id || !event.userId || !event.sessionId || !event.timestamp) {
     return false;
   }
-  if (!event.data || !event.metadata) return false;
+  if (!event.data || !event.metadata) {return false;}
 
   switch (event.type) {
-    case "session_initiated":
+    case 'session_initiated':
       return validateSessionInitiatedEvent(event);
-    case "session_preparation_started":
+    case 'session_preparation_started':
       return validateSessionPreparationStartedEvent(event);
-    case "session_readiness_assessed":
+    case 'session_readiness_assessed':
       return validateSessionReadinessAssessedEvent(event);
-    case "session_goals_set":
+    case 'session_goals_set':
       return validateSessionGoalsSetEvent(event);
-    case "session_mood_assessed":
+    case 'session_mood_assessed':
       return validateSessionMoodAssessedEvent(event);
-    case "session_context_established":
+    case 'session_context_established':
       return validateSessionContextEstablishedEvent(event);
     default:
       return true;
@@ -60,7 +60,7 @@ function validateSessionReadinessAssessedEvent(
 ): boolean {
   return !!(
     event.data.assessmentType &&
-    typeof event.data.readinessScore === "number" &&
+    typeof event.data.readinessScore === 'number' &&
     event.data.readinessLevel &&
     event.data.factors &&
     event.data.trends &&

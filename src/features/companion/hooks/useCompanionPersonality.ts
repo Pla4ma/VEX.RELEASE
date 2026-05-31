@@ -6,12 +6,12 @@
  * the current response state to React components.
  */
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback } from 'react';
 import {
   getCompanionPersonalityEngine,
   CompanionPersonalityState,
   PersonalityEventType,
-} from "../CompanionPersonalityEngine";
+} from '../CompanionPersonalityEngine';
 
 interface UseCompanionPersonalityReturn extends CompanionPersonalityState {
   clearResponse: () => void;

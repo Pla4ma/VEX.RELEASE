@@ -1,6 +1,6 @@
-import { createEngine, mockCallbacks } from "./TimerEngine.helpers";
+import { createEngine, mockCallbacks } from './TimerEngine.helpers';
 
-describe("TimerEngine", () => {
+describe('TimerEngine', () => {
   let engine: ReturnType<typeof createEngine>;
 
   beforeEach(() => {
@@ -13,15 +13,15 @@ describe("TimerEngine", () => {
     engine.stop();
   });
 
-  describe("start", () => {
-    it("should start timer and set running state", () => {
+  describe('start', () => {
+    it('should start timer and set running state', () => {
       engine.start();
       expect(engine.isRunning()).toBe(true);
       expect(engine.isPaused()).toBe(false);
       expect(engine.getState().startTime).toBeDefined();
     });
 
-    it("should emit tick events at regular intervals", () => {
+    it('should emit tick events at regular intervals', () => {
       engine.start();
       jest.advanceTimersByTime(1000);
       expect(mockCallbacks.onTick).toHaveBeenCalledTimes(2);
@@ -29,7 +29,7 @@ describe("TimerEngine", () => {
       expect(mockCallbacks.onTick).toHaveBeenCalledTimes(4);
     });
 
-    it("should return early if already running", () => {
+    it('should return early if already running', () => {
       engine.start();
       engine.start();
       jest.advanceTimersByTime(1000);
@@ -38,8 +38,8 @@ describe("TimerEngine", () => {
     });
   });
 
-  describe("pause", () => {
-    it("should pause running timer", () => {
+  describe('pause', () => {
+    it('should pause running timer', () => {
       engine.start();
       jest.advanceTimersByTime(5000);
       engine.pause();
@@ -47,7 +47,7 @@ describe("TimerEngine", () => {
       expect(engine.getState().pauseTime).toBeDefined();
     });
 
-    it("should stop tick events when paused", () => {
+    it('should stop tick events when paused', () => {
       engine.start();
       jest.advanceTimersByTime(5000);
       const tickCount = mockCallbacks.onTick.mock.calls.length;
@@ -56,7 +56,7 @@ describe("TimerEngine", () => {
       expect(mockCallbacks.onTick).toHaveBeenCalledTimes(tickCount);
     });
 
-    it("should return early when not running or already paused", () => {
+    it('should return early when not running or already paused', () => {
       engine.pause();
       engine.start();
       engine.pause();
@@ -65,8 +65,8 @@ describe("TimerEngine", () => {
     });
   });
 
-  describe("resume", () => {
-    it("should resume paused timer", () => {
+  describe('resume', () => {
+    it('should resume paused timer', () => {
       engine.start();
       jest.advanceTimersByTime(5000);
       engine.pause();
@@ -75,7 +75,7 @@ describe("TimerEngine", () => {
       expect(engine.getState().pauseTime).toBeUndefined();
     });
 
-    it("should continue ticking after resume", () => {
+    it('should continue ticking after resume', () => {
       engine.start();
       jest.advanceTimersByTime(5000);
       engine.pause();
@@ -85,7 +85,7 @@ describe("TimerEngine", () => {
       expect(mockCallbacks.onTick.mock.calls.length).toBeGreaterThan(tickCount);
     });
 
-    it("should track total paused time", () => {
+    it('should track total paused time', () => {
       engine.start();
       jest.advanceTimersByTime(5000);
       engine.pause();
@@ -94,15 +94,15 @@ describe("TimerEngine", () => {
       expect(engine.getState().totalPausedTime).toBeGreaterThan(0);
     });
 
-    it("should return early when not paused", () => {
+    it('should return early when not paused', () => {
       engine.start();
       engine.resume();
       expect(engine.isRunning()).toBe(true);
     });
   });
 
-  describe("stop", () => {
-    it("should stop timer and reset running state", () => {
+  describe('stop', () => {
+    it('should stop timer and reset running state', () => {
       engine.start();
       jest.advanceTimersByTime(5000);
       engine.stop();
@@ -110,7 +110,7 @@ describe("TimerEngine", () => {
       expect(engine.isPaused()).toBe(false);
     });
 
-    it("should stop tick events", () => {
+    it('should stop tick events', () => {
       engine.start();
       jest.advanceTimersByTime(5000);
       const tickCount = mockCallbacks.onTick.mock.calls.length;

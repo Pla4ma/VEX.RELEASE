@@ -1,11 +1,11 @@
-import { resolveInitialLane } from "../lane-engine/service";
+import { resolveInitialLane } from '../lane-engine/service';
 import {
   FocusProfileInputSchema,
   FocusProfileSchema,
   type FocusProfile,
   type FocusProfileInput,
-} from "./schemas";
-import { getStoredFocusProfile, upsertStoredFocusProfile } from "./repository";
+} from './schemas';
+import { getStoredFocusProfile, upsertStoredFocusProfile } from './repository';
 
 function buildFallback(input: FocusProfileInput): FocusProfile {
   const updatedAt = input.updatedAt ?? Date.now();
@@ -15,19 +15,19 @@ function buildFallback(input: FocusProfileInput): FocusProfile {
   return FocusProfileSchema.parse({
     userId: input.userId,
     laneProfile: input.laneProfile ?? resolveInitialLane(laneInput),
-    primaryGoal: input.primaryGoal ?? "focus",
+    primaryGoal: input.primaryGoal ?? 'focus',
     preferredSessionDurationMinutes:
       input.preferredSessionDurationMinutes ?? 25,
-    preferredSessionMode: input.preferredSessionMode ?? "FOCUS",
+    preferredSessionMode: input.preferredSessionMode ?? 'FOCUS',
     bestFocusWindows: [],
     riskWindows: [],
     avoidanceTriggers: [],
-    frictionPreference: "soft",
+    frictionPreference: 'soft',
     notificationPreference: {
       maxPerDay: 1,
       quietHoursStart: 21,
       quietHoursEnd: 8,
-      tone: "quiet",
+      tone: 'quiet',
     },
     memoryConsent: {
       allowBehaviorMemory: true,
@@ -56,7 +56,7 @@ export async function upsertFocusProfile(
 ): Promise<FocusProfile> {
   const input = FocusProfileInputSchema.parse(rawInput);
   const existing = await getStoredFocusProfile(input.userId);
-  if (!existing) return createFocusProfile(input);
+  if (!existing) {return createFocusProfile(input);}
   return upsertStoredFocusProfile(
     FocusProfileSchema.parse({
       ...existing,

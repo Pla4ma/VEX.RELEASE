@@ -1,11 +1,11 @@
-import React from "react";
-import { View, Text, Pressable, Alert, Modal } from "react-native";
-import { styles } from "./DataExportScreen.styles";
+import React from 'react';
+import { View, Text, Pressable, Alert, Modal } from 'react-native';
+import { styles } from './DataExportScreen.styles';
 
 // ─── Types ──────────────────────────────────────────────────────────
 
-export type ExportFormat = "json" | "csv";
-export type DataCategory = "sessions" | "analytics" | "achievements" | "settings" | "all";
+export type ExportFormat = 'json' | 'csv';
+export type DataCategory = 'sessions' | 'analytics' | 'achievements' | 'settings' | 'all';
 
 export interface DataExportScreenProps {
   userId: string;
@@ -15,16 +15,16 @@ export interface DataExportScreenProps {
 // ─── Constants ──────────────────────────────────────────────────────
 
 export const CATEGORIES: Array<{ key: DataCategory; label: string; icon: string; description: string }> = [
-  { key: "all", label: "Everything", icon: "📦", description: "All your data in one export" },
-  { key: "sessions", label: "Sessions", icon: "📅", description: "Session history and stats" },
-  { key: "analytics", label: "Analytics", icon: "📊", description: "Charts, trends, and insights" },
-  { key: "achievements", label: "Achievements", icon: "🏆", description: "Badges and milestones" },
-  { key: "settings", label: "Settings", icon: "⚙️", description: "Preferences and configuration" },
+  { key: 'all', label: 'Everything', icon: '📦', description: 'All your data in one export' },
+  { key: 'sessions', label: 'Sessions', icon: '📅', description: 'Session history and stats' },
+  { key: 'analytics', label: 'Analytics', icon: '📊', description: 'Charts, trends, and insights' },
+  { key: 'achievements', label: 'Achievements', icon: '🏆', description: 'Badges and milestones' },
+  { key: 'settings', label: 'Settings', icon: '⚙️', description: 'Preferences and configuration' },
 ];
 
 export const FORMATS: Array<{ key: ExportFormat; label: string; icon: string; description: string }> = [
-  { key: "json", label: "JSON", icon: "📄", description: "Machine-readable, great for backups" },
-  { key: "csv", label: "CSV", icon: "📑", description: "Spreadsheet format, easy to analyze" },
+  { key: 'json', label: 'JSON', icon: '📄', description: 'Machine-readable, great for backups' },
+  { key: 'csv', label: 'CSV', icon: '📑', description: 'Spreadsheet format, easy to analyze' },
 ];
 
 // ─── Sub-components ─────────────────────────────────────────────────
@@ -113,20 +113,20 @@ export function DangerZoneSection() {
         style={({ pressed }) => [styles.dangerButton, pressed && { opacity: 0.8 }]}
         onPress={() => {
           Alert.alert(
-            "Delete All Data?",
-            "This will permanently delete all your data including sessions, achievements, and progress. This action cannot be undone.",
+            'Delete All Data?',
+            'This will permanently delete all your data including sessions, achievements, and progress. This action cannot be undone.',
             [
-              { text: "Cancel", style: "cancel" },
+              { text: 'Cancel', style: 'cancel' },
               {
-                text: "Delete My Data",
-                style: "destructive",
+                text: 'Delete My Data',
+                style: 'destructive',
                 onPress: () => {
                   Alert.alert(
-                    "Final Confirmation",
+                    'Final Confirmation',
                     'Are you absolutely sure? Type "DELETE" to confirm.',
                     [
-                      { text: "Cancel", style: "cancel" },
-                      { text: "Delete Forever", style: "destructive" },
+                      { text: 'Cancel', style: 'cancel' },
+                      { text: 'Delete Forever', style: 'destructive' },
                     ],
                   );
                 },
@@ -161,7 +161,7 @@ export function ConfirmExportModal({
         <View style={styles.modalContent}>
           <Text style={styles.modalTitle}>Confirm Export</Text>
           <Text style={styles.modalDescription}>
-            We'll prepare your{" "}
+            We'll prepare your{' '}
             {CATEGORIES.find((c) => c.key === selectedCategory)?.label} data as
             a {selectedFormat.toUpperCase()} file. This may take a few minutes.
           </Text>

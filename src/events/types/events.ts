@@ -3,7 +3,7 @@
  */
 
 export interface EventsEventDefinitions {
-  "events:reward_earned": {
+  'events:reward_earned': {
     userId: string;
     eventId: string;
     rewardType: string;

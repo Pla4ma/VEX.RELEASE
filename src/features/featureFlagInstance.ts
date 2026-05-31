@@ -1,5 +1,5 @@
-import type { FeatureFlagConfig } from "./featureFlagTypes";
-import { FeatureFlagService } from "./FeatureFlagService";
+import type { FeatureFlagConfig } from './featureFlagTypes';
+import { FeatureFlagService } from './FeatureFlagService';
 
 let featureFlagServiceInstance: FeatureFlagService | null = null;
 

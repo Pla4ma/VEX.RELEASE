@@ -1,5 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
-import { streakKeys } from "./hooks";
+import { useQuery } from '@tanstack/react-query';
+import { streakKeys } from './hooks';
 
 export interface StreakCalendarData {
   month: number;
@@ -18,10 +18,10 @@ export function useStreakCalendar(
   year: number,
 ) {
   return useQuery<StreakCalendarData>({
-    queryKey: [...streakKeys.byUser(userId || ""), "calendar", month, year],
+    queryKey: [...streakKeys.byUser(userId || ''), 'calendar', month, year],
     queryFn: async () => {
       if (!userId) {
-        throw new Error("User ID required");
+        throw new Error('User ID required');
       }
       // This would fetch session history and build calendar
       // Extended for Phase 23.3 with duration data and boss defeat tracking

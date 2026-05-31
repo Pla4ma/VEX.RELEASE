@@ -1,10 +1,10 @@
-import React from "react";
-import { View, ViewStyle } from "react-native";
-import { useTheme } from "../../../theme";
-import { SkeletonItem } from "./SkeletonItem";
+import React from 'react';
+import { View, ViewStyle } from 'react-native';
+import { useTheme } from '../../../theme';
+import { SkeletonItem } from './SkeletonItem';
 
 export interface SkeletonLayoutProps {
-  type: "card" | "list" | "hero" | "stats" | "text-block";
+  type: 'card' | 'list' | 'hero' | 'stats' | 'text-block';
   count?: number;
   style?: ViewStyle;
 }
@@ -27,9 +27,9 @@ export const CardSkeleton: React.FC<{ style?: ViewStyle }> = ({ style }) => {
     >
       <View
         style={{
-          flexDirection: "row",
+          flexDirection: 'row',
           gap: theme.spacing[3],
-          alignItems: "center",
+          alignItems: 'center',
         }}
       >
         <SkeletonItem variant="avatar" />
@@ -51,7 +51,7 @@ export const HeroSkeleton: React.FC<{ style?: ViewStyle }> = ({ style }) => {
       style={[
         {
           backgroundColor: theme.colors.background.secondary,
-          borderRadius: theme.borderRadius["2xl"],
+          borderRadius: theme.borderRadius['2xl'],
           padding: theme.spacing[5],
           gap: theme.spacing[4],
         },
@@ -62,14 +62,14 @@ export const HeroSkeleton: React.FC<{ style?: ViewStyle }> = ({ style }) => {
       <SkeletonItem variant="text" width="80%" />
       <View
         style={{
-          flexDirection: "row",
+          flexDirection: 'row',
           gap: theme.spacing[4],
           marginTop: theme.spacing[2],
         }}
       >
         <SkeletonItem variant="circle" width={80} height={80} />
         <View
-          style={{ flex: 1, justifyContent: "center", gap: theme.spacing[2] }}
+          style={{ flex: 1, justifyContent: 'center', gap: theme.spacing[2] }}
         >
           <SkeletonItem variant="text" width="60%" />
           <SkeletonItem variant="text" width="40%" />
@@ -96,7 +96,7 @@ export const ListSkeleton: React.FC<{ count?: number; style?: ViewStyle }> = ({
 export const StatsSkeleton: React.FC<{ style?: ViewStyle }> = ({ style }) => {
   const { theme } = useTheme();
   return (
-    <View style={[{ flexDirection: "row", gap: theme.spacing[3] }, style]}>
+    <View style={[{ flexDirection: 'row', gap: theme.spacing[3] }, style]}>
       {[1, 2, 3].map((i) => (
         <View
           key={i}
@@ -128,7 +128,7 @@ export const TextBlockSkeleton: React.FC<{
         <SkeletonItem
           key={index}
           variant="text"
-          width={index === lines - 2 ? "50%" : "100%"}
+          width={index === lines - 2 ? '50%' : '100%'}
         />
       ))}
     </View>
@@ -141,15 +141,15 @@ export const EnhancedSkeleton: React.FC<SkeletonLayoutProps> = ({
   style,
 }) => {
   switch (type) {
-    case "card":
+    case 'card':
       return <CardSkeleton style={style} />;
-    case "list":
+    case 'list':
       return <ListSkeleton count={count} style={style} />;
-    case "hero":
+    case 'hero':
       return <HeroSkeleton style={style} />;
-    case "stats":
+    case 'stats':
       return <StatsSkeleton style={style} />;
-    case "text-block":
+    case 'text-block':
       return <TextBlockSkeleton lines={count} style={style} />;
     default:
       return <CardSkeleton style={style} />;

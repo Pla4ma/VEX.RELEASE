@@ -1,46 +1,46 @@
-import { withScreenErrorBoundary } from "../../shared/ui/components/ScreenErrorBoundary";
-import React, { useCallback, useEffect, useState } from "react";
-import { Dimensions, ScrollView } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Dimensions, ScrollView } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import Animated, {
   FadeIn,
   useReducedMotion,
-} from "react-native-reanimated";
-import { Box, Text } from "../../components/primitives";
-import { ErrorState } from "../../components/states/ErrorState";
+} from 'react-native-reanimated';
+import { Box, Text } from '../../components/primitives';
+import { ErrorState } from '../../components/states/ErrorState';
 import {
   type CompanionState,
-} from "../../features/companion/types";
-import { LivingCompanion } from "../../features/companion/components/LivingCompanion";
+} from '../../features/companion/types';
+import { LivingCompanion } from '../../features/companion/components/LivingCompanion';
 import {
   loadCompanionState,
   loadRecentSessionMoods,
-} from "../../features/companion/session-storage";
-import { useCompanionMemories } from "../../features/companion/memory-hooks";
-import { useAuthStore } from "../../store";
-import { useTheme } from "../../theme";
-import { CompanionMemoryTimeline } from "../../features/companion/components/CompanionMemoryTimeline";
-import type { ExtendedRootStackParams } from "../../navigation/types";
+} from '../../features/companion/session-storage';
+import { useCompanionMemories } from '../../features/companion/memory-hooks';
+import { useAuthStore } from '../../store';
+import { useTheme } from '../../theme';
+import { CompanionMemoryTimeline } from '../../features/companion/components/CompanionMemoryTimeline';
+import type { ExtendedRootStackParams } from '../../navigation/types';
 import {
   CompanionScreenSkeleton,
   PHASE_NAMES,
-} from "./components/CompanionScreenSupport";
+} from './components/CompanionScreenSupport';
 import {
   CompanionStatsBar,
   type SessionMoodEntry,
-} from "./components/CompanionStatsBar";
+} from './components/CompanionStatsBar';
 
-const HERO_HEIGHT = Dimensions.get("window").height * 0.6;
+const HERO_HEIGHT = Dimensions.get('window').height * 0.6;
 
 type LoadState =
-  | { status: "empty" }
-  | { error: Error; status: "error" }
-  | { status: "loading" }
+  | { status: 'empty' }
+  | { error: Error; status: 'error' }
+  | { status: 'loading' }
   | {
       companion: CompanionState;
       moodHistory: SessionMoodEntry[];
-      status: "success";
+      status: 'success';
     };
 
 export function CompanionScreen(): JSX.Element {
@@ -50,24 +50,24 @@ export function CompanionScreen(): JSX.Element {
   const reducedMotion = useReducedMotion();
   const { user } = useAuthStore();
   const userId = user?.id ?? null;
-  const [loadState, setLoadState] = useState<LoadState>({ status: "loading" });
+  const [loadState, setLoadState] = useState<LoadState>({ status: 'loading' });
   const memories = useCompanionMemories(userId);
   const load = useCallback(async (): Promise<void> => {
     if (!userId) {
-      setLoadState({ status: "empty" });
+      setLoadState({ status: 'empty' });
       return;
     }
-    setLoadState({ status: "loading" });
+    setLoadState({ status: 'loading' });
     try {
       const [companion, moodHistory] = await Promise.all([
         loadCompanionState(userId),
         loadRecentSessionMoods(userId, 5),
       ]);
-      setLoadState({ companion, moodHistory, status: "success" });
+      setLoadState({ companion, moodHistory, status: 'success' });
     } catch (caught: unknown) {
       setLoadState({
         error: caught instanceof Error ? caught : new Error(String(caught)),
-        status: "error",
+        status: 'error',
       });
     }
   }, [userId]);
@@ -76,10 +76,10 @@ export function CompanionScreen(): JSX.Element {
     void load();
   }, [load]);
 
-  if (loadState.status === "loading") {
+  if (loadState.status === 'loading') {
     return <CompanionScreenSkeleton heroHeight={HERO_HEIGHT} />;
   }
-  if (loadState.status === "empty") {
+  if (loadState.status === 'empty') {
     return (
       <Box
         flex={1}
@@ -94,7 +94,7 @@ export function CompanionScreen(): JSX.Element {
       </Box>
     );
   }
-  if (loadState.status === "error") {
+  if (loadState.status === 'error') {
     return (
       <ErrorState
         title="Companion details did not load"
@@ -155,7 +155,7 @@ export function CompanionScreen(): JSX.Element {
           memories={memories.data}
           onRetry={memories.refetch}
           onStartFocus={() =>
-            navigation.navigate({ name: "SessionSetup", params: {} })
+            navigation.navigate({ name: 'SessionSetup', params: {} })
           }
         />
       </Box>
@@ -163,4 +163,4 @@ export function CompanionScreen(): JSX.Element {
   );
 }
 
-export default withScreenErrorBoundary(CompanionScreen, "Companion");
+export default withScreenErrorBoundary(CompanionScreen, 'Companion');

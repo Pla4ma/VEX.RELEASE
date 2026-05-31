@@ -1,4 +1,4 @@
-import type { ValidationResult } from "./types";
+import type { ValidationResult } from './types';
 
 // ── Level Up ────────────────────────────────────────────────────────────────
 
@@ -17,10 +17,10 @@ export function validateLevelUp(
 
   if (currentLevel < 1) {
     result.violations.push({
-      type: "IMPOSSIBLE",
-      field: "currentLevel",
-      message: "Current level cannot be less than 1",
-      severity: "CRITICAL",
+      type: 'IMPOSSIBLE',
+      field: 'currentLevel',
+      message: 'Current level cannot be less than 1',
+      severity: 'CRITICAL',
     });
     result.valid = false;
     result.riskScore = 100;
@@ -29,10 +29,10 @@ export function validateLevelUp(
 
   if (currentXP < 0 || newXP < 0) {
     result.violations.push({
-      type: "IMPOSSIBLE",
-      field: "xp",
-      message: "XP values cannot be negative",
-      severity: "CRITICAL",
+      type: 'IMPOSSIBLE',
+      field: 'xp',
+      message: 'XP values cannot be negative',
+      severity: 'CRITICAL',
     });
     result.valid = false;
     result.riskScore = 100;
@@ -41,10 +41,10 @@ export function validateLevelUp(
 
   if (newXP < currentXP) {
     result.violations.push({
-      type: "SUSPICIOUS",
-      field: "newXP",
-      message: "New XP is less than current XP (possible rollback attempt)",
-      severity: "HIGH",
+      type: 'SUSPICIOUS',
+      field: 'newXP',
+      message: 'New XP is less than current XP (possible rollback attempt)',
+      severity: 'HIGH',
     });
     result.riskScore += 40;
   }
@@ -65,10 +65,10 @@ export function validateLevelUp(
 
   if (levelsGained > 10) {
     result.violations.push({
-      type: "SUSPICIOUS",
-      field: "levelsGained",
+      type: 'SUSPICIOUS',
+      field: 'levelsGained',
       message: `Large level jump detected: +${levelsGained} levels`,
-      severity: "MEDIUM",
+      severity: 'MEDIUM',
     });
     result.riskScore += 25;
   }
@@ -76,10 +76,10 @@ export function validateLevelUp(
   const MAX_LEVEL = 100;
   if (level > MAX_LEVEL) {
     result.violations.push({
-      type: "POLICY",
-      field: "newLevel",
+      type: 'POLICY',
+      field: 'newLevel',
       message: `Level ${level} exceeds maximum ${MAX_LEVEL}`,
-      severity: "MEDIUM",
+      severity: 'MEDIUM',
     });
     level = MAX_LEVEL;
   }
@@ -108,10 +108,10 @@ export function validatePrestige(
   if (currentLevel < minLevelForPrestige) {
     result.valid = false;
     result.violations.push({
-      type: "POLICY",
-      field: "currentLevel",
+      type: 'POLICY',
+      field: 'currentLevel',
       message: `Must be level ${minLevelForPrestige} to prestige (currently ${currentLevel})`,
-      severity: "MEDIUM",
+      severity: 'MEDIUM',
     });
     result.data = { canPrestige: false, prestigeLevel: currentPrestige };
     return result;
@@ -121,10 +121,10 @@ export function validatePrestige(
   if (currentPrestige >= MAX_PRESTIGE) {
     result.valid = false;
     result.violations.push({
-      type: "POLICY",
-      field: "currentPrestige",
+      type: 'POLICY',
+      field: 'currentPrestige',
       message: `Maximum prestige level (${MAX_PRESTIGE}) already reached`,
-      severity: "MEDIUM",
+      severity: 'MEDIUM',
     });
     result.data = { canPrestige: false, prestigeLevel: currentPrestige };
     return result;

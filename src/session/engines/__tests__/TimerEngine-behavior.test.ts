@@ -1,12 +1,12 @@
-import { createEngine, mockCallbacks } from "./TimerEngine.helpers";
+import { createEngine, mockCallbacks } from './TimerEngine.helpers';
 
-describe("TimerEngine", () => {
+describe('TimerEngine', () => {
   afterEach(() => {
     jest.clearAllTimers();
   });
 
-  describe("completion", () => {
-    it("should complete when time runs out", () => {
+  describe('completion', () => {
+    it('should complete when time runs out', () => {
       const engine = createEngine(5);
       engine.start();
       jest.advanceTimersByTime(5000);
@@ -15,7 +15,7 @@ describe("TimerEngine", () => {
       expect(state.isRunning).toBe(false);
     });
 
-    it("should call onComplete only once", () => {
+    it('should call onComplete only once', () => {
       const engine = createEngine(5);
       engine.start();
       jest.advanceTimersByTime(6000);
@@ -23,15 +23,15 @@ describe("TimerEngine", () => {
     });
   });
 
-  describe("warnings", () => {
-    it("should emit warning at configured thresholds", () => {
+  describe('warnings', () => {
+    it('should emit warning at configured thresholds', () => {
       const engine = createEngine(305, { warningThresholds: [300, 60, 10] });
       engine.start();
       jest.advanceTimersByTime(5000);
       expect(mockCallbacks.onWarning).toHaveBeenCalledWith(300);
     });
 
-    it("should not emit duplicate warnings", () => {
+    it('should not emit duplicate warnings', () => {
       const engine = createEngine(305, { warningThresholds: [300] });
       engine.start();
       jest.advanceTimersByTime(5000);
@@ -41,8 +41,8 @@ describe("TimerEngine", () => {
     });
   });
 
-  describe("background handling", () => {
-    it("should handle background mode transition", () => {
+  describe('background handling', () => {
+    it('should handle background mode transition', () => {
       const engine = createEngine();
       engine.start();
       jest.advanceTimersByTime(5000);
@@ -51,7 +51,7 @@ describe("TimerEngine", () => {
       expect(engine.getIsBackgrounded()).toBe(true);
     });
 
-    it("should handle foreground mode transition", () => {
+    it('should handle foreground mode transition', () => {
       const engine = createEngine();
       engine.start();
       engine.background();
@@ -62,22 +62,22 @@ describe("TimerEngine", () => {
     });
   });
 
-  describe("edge cases", () => {
-    it("should handle very short durations", () => {
+  describe('edge cases', () => {
+    it('should handle very short durations', () => {
       const engine = createEngine(2);
       engine.start();
       jest.advanceTimersByTime(2000);
       expect(mockCallbacks.onComplete).toHaveBeenCalled();
     });
 
-    it("should handle very long durations", () => {
+    it('should handle very long durations', () => {
       const engine = createEngine(7200);
       engine.start();
       const state = engine.getState();
       expect(state.isRunning).toBe(true);
     });
 
-    it("should handle rapid pause/resume cycles", () => {
+    it('should handle rapid pause/resume cycles', () => {
       const engine = createEngine();
       engine.start();
       for (let i = 0; i < 5; i++) {
@@ -91,8 +91,8 @@ describe("TimerEngine", () => {
     });
   });
 
-  describe("time tracking", () => {
-    it("should accurately track elapsed time", () => {
+  describe('time tracking', () => {
+    it('should accurately track elapsed time', () => {
       const engine = createEngine();
       engine.start();
       jest.advanceTimersByTime(10000);
@@ -100,7 +100,7 @@ describe("TimerEngine", () => {
       expect(engine.getRemainingTime()).toBeLessThanOrEqual(290000);
     });
 
-    it("should calculate percentage correctly", () => {
+    it('should calculate percentage correctly', () => {
       const engine = createEngine();
       engine.start();
       jest.advanceTimersByTime(150000);

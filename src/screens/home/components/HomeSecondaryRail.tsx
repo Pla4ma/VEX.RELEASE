@@ -1,20 +1,20 @@
-import React from "react";
-import { View } from "react-native";
+import React from 'react';
+import { View } from 'react-native';
 
-import { PremiumSurface, SectionHeader } from "../../../components/premium";
+import { PremiumSurface, SectionHeader } from '../../../components/premium';
 import {
   getFeatureAvailability,
   type FeatureAccessMap,
   type UserExperienceStage,
-} from "../../../features/liveops-config";
-import type { SessionHistoryEntry } from "../../../session/types";
-import type { LearningExecutionCopy } from "../../../features/learning-execution";
+} from '../../../features/liveops-config';
+import type { SessionHistoryEntry } from '../../../session/types';
+import type { LearningExecutionCopy } from '../../../features/learning-execution';
 import {
   ContentStudyHeroCard,
   HistoryCard,
   RecentSessionsEmpty,
-} from "../HomeScreenCards";
-import { GoalCard } from "../HomeProgressiveBlocks";
+} from '../HomeScreenCards';
+import { GoalCard } from '../HomeProgressiveBlocks';
 
 interface HomeSecondaryRailProps {
   activePlan: {

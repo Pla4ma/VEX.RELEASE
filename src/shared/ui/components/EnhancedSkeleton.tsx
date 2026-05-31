@@ -1,9 +1,9 @@
-export { SkeletonItem } from "./SkeletonItem";
+export { SkeletonItem } from './SkeletonItem';
 export type {
   SkeletonVariant,
   SkeletonSize,
   SkeletonItemProps,
-} from "./SkeletonItem";
+} from './SkeletonItem';
 export {
   CardSkeleton,
   HeroSkeleton,
@@ -12,8 +12,8 @@ export {
   TextBlockSkeleton,
   EnhancedSkeleton,
   ScreenLoadingState,
-} from "./skeletonLayouts";
-export type { SkeletonLayoutProps } from "./skeletonLayouts";
+} from './skeletonLayouts';
+export type { SkeletonLayoutProps } from './skeletonLayouts';
 
-import { EnhancedSkeleton } from "./skeletonLayouts";
+import { EnhancedSkeleton } from './skeletonLayouts';
 export default EnhancedSkeleton;

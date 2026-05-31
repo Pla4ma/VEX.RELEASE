@@ -4,15 +4,15 @@
  * Functions to create, update, and manage comeback quests.
  */
 
-import { createDebugger } from "../../../utils/debug";
-import { checkComebackEligibility } from "./eligibility";
-import { ComebackQuestSchema, type ComebackQuest } from "./schemas";
+import { createDebugger } from '../../../utils/debug';
+import { checkComebackEligibility } from './eligibility';
+import { ComebackQuestSchema, type ComebackQuest } from './schemas';
 import {
   fetchExistingComebackQuest,
   insertComebackQuest,
-} from "../repository/comeback";
+} from '../repository/comeback';
 
-const debug = createDebugger("streaks:comeback-quest");
+const debug = createDebugger('streaks:comeback-quest');
 
 export async function createComebackQuest(
   userId: string,
@@ -36,7 +36,7 @@ export async function createComebackQuest(
       eligibility.streakBeforeBreak,
     );
 
-    debug.info("Created comeback quest", {
+    debug.info('Created comeback quest', {
       userId,
       daysAbsent: eligibility.daysAbsent,
     });
@@ -44,7 +44,7 @@ export async function createComebackQuest(
     return newQuest;
   } catch (error) {
     debug.error(
-      "Error creating comeback quest",
+      'Error creating comeback quest',
       error instanceof Error ? error : undefined,
     );
     return null;

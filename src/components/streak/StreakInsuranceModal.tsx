@@ -6,11 +6,11 @@
  * This component is blocked by feature gate (streak_insurance = deactivated).
  * Kept for archival reference only.
  */
-import React, { useMemo } from "react";
-import { View, Text, Pressable, Modal } from "react-native";
-import { useTheme } from "@/theme";
-import type { StreakInsuranceModalProps, Theme } from "./StreakInsuranceModal/types";
-import { GambleOption } from "./StreakInsuranceModal/GambleOption";
+import React, { useMemo } from 'react';
+import { View, Text, Pressable, Modal } from 'react-native';
+import { useTheme } from '@/theme';
+import type { StreakInsuranceModalProps, Theme } from './StreakInsuranceModal/types';
+import { GambleOption } from './StreakInsuranceModal/GambleOption';
 import {
   overlayStyle,
   containerStyle,
@@ -34,13 +34,13 @@ import {
   comebackTokenStyle,
   dismissStyle,
   dismissTextStyle,
-} from "./StreakInsuranceModal/styles";
+} from './StreakInsuranceModal/styles';
 
 function getRiskColor(level: string, theme: Theme): string {
-  if (level === "CRITICAL") return theme.colors.error.dark;
-  if (level === "HIGH") return theme.colors.warning.dark;
-  if (level === "MEDIUM" || level === "MODERATE")
-    return theme.colors.warning[500];
+  if (level === 'CRITICAL') {return theme.colors.error.dark;}
+  if (level === 'HIGH') {return theme.colors.warning.dark;}
+  if (level === 'MEDIUM' || level === 'MODERATE')
+    {return theme.colors.warning[500];}
   return theme.colors.success.dark;
 }
 
@@ -58,11 +58,11 @@ export const StreakInsuranceModal: React.FC<StreakInsuranceModalProps> = ({
   const insuranceCost = assessment?.insuranceCost ?? 500;
   const canAffordInsurance = userCoins >= insuranceCost;
   const riskColor = useMemo(
-    () => getRiskColor(assessment?.riskLevel ?? "NONE", theme),
+    () => getRiskColor(assessment?.riskLevel ?? 'NONE', theme),
     [assessment?.riskLevel, theme],
   );
 
-  if (!assessment) return null;
+  if (!assessment) {return null;}
 
   return (
     <Modal
@@ -130,21 +130,21 @@ export const StreakInsuranceModal: React.FC<StreakInsuranceModalProps> = ({
               type="CONSERVATIVE"
               description="Session grade B+ required, 24h to complete"
               xpBonus="+20% XP"
-              onPress={() => onStartGamble("CONSERVATIVE")}
+              onPress={() => onStartGamble('CONSERVATIVE')}
               theme={theme}
             />
             <GambleOption
               type="MODERATE"
               description="Session grade A+ required, 12h to complete"
               xpBonus="+50% XP"
-              onPress={() => onStartGamble("MODERATE")}
+              onPress={() => onStartGamble('MODERATE')}
               theme={theme}
             />
             <GambleOption
               type="AGGRESSIVE"
               description="Session grade S required, 6h to complete"
               xpBonus="+100% XP"
-              onPress={() => onStartGamble("AGGRESSIVE")}
+              onPress={() => onStartGamble('AGGRESSIVE')}
               theme={theme}
             />
             {availableTokens > 0 && (

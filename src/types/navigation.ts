@@ -1,6 +1,6 @@
-import type { NativeStackScreenProps } from "@react-navigation/native-stack";
-import type { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
-import type { CompositeScreenProps } from "@react-navigation/native";
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
+import type { CompositeScreenProps } from '@react-navigation/native';
 export type RootStackParamList = {
   Main: undefined;
   Auth: undefined;
@@ -76,21 +76,21 @@ export interface DeepLinkConfig {
 }
 export interface NavigationAnimation {
   enabled: boolean;
-  type: "slide" | "fade" | "scale" | "none";
+  type: 'slide' | 'fade' | 'scale' | 'none';
   duration: number;
 }
 export interface ScreenTransitionOptions {
   animation?: NavigationAnimation;
   gestureEnabled?: boolean;
   headerShown?: boolean;
-  presentation?: "card" | "modal" | "transparentModal" | "containedModal";
+  presentation?: 'card' | 'modal' | 'transparentModal' | 'containedModal';
 }
 export interface TabBarConfig {
   visible: boolean;
   activeTintColor: string;
   inactiveTintColor: string;
   showLabels: boolean;
-  style: "default" | "floating" | "compact";
+  style: 'default' | 'floating' | 'compact';
 }
 export interface HeaderConfig {
   visible: boolean;
@@ -120,14 +120,14 @@ export type NavigationGuard = (
   params?: Record<string, unknown>,
 ) => GuardCheckResult | Promise<GuardCheckResult>;
 export type NavigationEventType =
-  | "focus"
-  | "blur"
-  | "stateChange"
-  | "beforeRemove"
-  | "gestureStart"
-  | "gestureEnd"
-  | "transitionStart"
-  | "transitionEnd";
+  | 'focus'
+  | 'blur'
+  | 'stateChange'
+  | 'beforeRemove'
+  | 'gestureStart'
+  | 'gestureEnd'
+  | 'transitionStart'
+  | 'transitionEnd';
 export interface NavigationEvent {
   type: NavigationEventType;
   route: RouteName;

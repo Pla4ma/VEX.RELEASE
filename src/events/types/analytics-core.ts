@@ -3,63 +3,63 @@
  */
 
 export interface CoreAnalyticsEventDefinitions {
-  "analytics:track": {
+  'analytics:track': {
     event: string;
     properties?: Record<string, unknown>;
     sessionId?: string;
     timestamp?: number;
   };
-  "analytics:screen": { name: string; params?: Record<string, unknown> };
-  "analytics:insight_generated": {
+  'analytics:screen': { name: string; params?: Record<string, unknown> };
+  'analytics:insight_generated': {
     userId: string;
     insightId: string;
     type: string;
   };
-  "analytics:insight_read": { userId: string; insightId: string };
-  "analytics:insight_actioned": {
+  'analytics:insight_read': { userId: string; insightId: string };
+  'analytics:insight_actioned': {
     userId: string;
     insightId: string;
     actionType: string;
   };
-  "analytics:pattern_detected": {
+  'analytics:pattern_detected': {
     userId: string;
     patternId: string;
     type: string;
     confidence: number;
   };
-  "analytics:dashboard_updated": {
+  'analytics:dashboard_updated': {
     userId: string;
     dashboardId: string;
     changes: string[];
   };
-  "analytics:export_requested": {
+  'analytics:export_requested': {
     jobId: string;
     userId: string;
     format: string;
   };
-  "analytics:export_completed": {
+  'analytics:export_completed': {
     jobId: string;
     userId: string;
     fileUrl: string;
   };
-  "analytics:export_failed": { jobId: string; userId: string; error: string };
-  "analytics:preferences_changed": {
+  'analytics:export_failed': { jobId: string; userId: string; error: string };
+  'analytics:preferences_changed': {
     userId: string;
     changes: Record<string, unknown>;
   };
-  "analytics:data_refreshed": { userId: string; metrics: string[] };
-  "analytics:paywall": {
+  'analytics:data_refreshed': { userId: string; metrics: string[] };
+  'analytics:paywall': {
     userId: string;
     context: string;
     event: string;
     analytics: Record<string, unknown>;
   };
-  "analytics:streak": {
+  'analytics:streak': {
     userId: string;
     event: string;
     data: Record<string, unknown>;
   };
-  "daily-mission:shown": {
+  'daily-mission:shown': {
     missionId: string;
     userId?: string;
     timestamp: number;
@@ -67,37 +67,37 @@ export interface CoreAnalyticsEventDefinitions {
     priority?: number;
     targetSystem?: string;
   };
-  "daily-mission:started": {
+  'daily-mission:started': {
     missionId: string;
     userId?: string;
     timestamp: number;
     missionType?: string;
     targetSystem?: string;
   };
-  "analytics:engagement": {
+  'analytics:engagement': {
     userId: string;
     event: string;
     metrics: unknown;
   };
-  "analytics:monetization": {
+  'analytics:monetization': {
     userId: string;
     event: string;
     metrics: unknown;
   };
-  "experiment:created": {
+  'experiment:created': {
     experimentId?: string;
     name?: string;
     type?: string;
     experiment?: unknown;
   };
-  "experiment:assigned": {
+  'experiment:assigned': {
     userId?: string;
     experimentId?: string;
     variantId?: string;
     assignment?: unknown;
     experiment?: unknown;
   };
-  "experiment:event": {
+  'experiment:event': {
     userId: string;
     experimentId: string;
     variantId: string;
@@ -106,17 +106,17 @@ export interface CoreAnalyticsEventDefinitions {
     properties?: Record<string, unknown>;
     timestamp?: number;
   };
-  "experiment:completed": {
+  'experiment:completed': {
     experimentId?: string;
     winner?: string;
     results?: unknown;
     experiment?: unknown;
   };
-  "experiment:unassigned": {
+  'experiment:unassigned': {
     userId: string;
     experimentId: string;
   };
-  "experiment:assignments_cleared": {
+  'experiment:assignments_cleared': {
     userId: string;
   };
 }

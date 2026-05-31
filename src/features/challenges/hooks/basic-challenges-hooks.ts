@@ -4,23 +4,23 @@
  * React hooks for the simplified challenges system.
  */
 
-import { useQuery } from "@tanstack/react-query";
-import { useAuthStore } from "../../../store";
-import * as service from "../basic-challenges-service";
+import { useQuery } from '@tanstack/react-query';
+import { useAuthStore } from '../../../store';
+import * as service from '../basic-challenges-service';
 import {
   useUpdateBasicChallengeProgress,
   useClaimBasicChallengeReward,
-} from "./basic-challenges-mutations";
+} from './basic-challenges-mutations';
 
 // ============================================================================
 // Query Keys
 // ============================================================================
 
 export const challengesKeys = {
-  all: ["challenges"] as const,
-  status: (userId: string) => ["challenges", "status", userId] as const,
-  daily: (userId: string) => ["challenges", "daily", userId] as const,
-  weekly: (userId: string) => ["challenges", "weekly", userId] as const,
+  all: ['challenges'] as const,
+  status: (userId: string) => ['challenges', 'status', userId] as const,
+  daily: (userId: string) => ['challenges', 'daily', userId] as const,
+  weekly: (userId: string) => ['challenges', 'weekly', userId] as const,
 };
 
 // ============================================================================
@@ -31,10 +31,10 @@ export function useBasicChallengesStatus() {
   const userId = useAuthStore((state) => state.user?.id ?? null);
 
   return useQuery({
-    queryKey: challengesKeys.status(userId ?? "no-user"),
+    queryKey: challengesKeys.status(userId ?? 'no-user'),
     queryFn: () => {
       if (!userId) {
-        throw new Error("User not authenticated");
+        throw new Error('User not authenticated');
       }
       return service.getBasicChallengesStatus(userId);
     },
@@ -52,7 +52,7 @@ export function useBasicDailyChallenge() {
   const userId = useAuthStore((state) => state.user?.id ?? null);
 
   return useQuery({
-    queryKey: challengesKeys.daily(userId ?? "no-user"),
+    queryKey: challengesKeys.daily(userId ?? 'no-user'),
     queryFn: () => {
       if (!userId) {
         return null;
@@ -73,7 +73,7 @@ export function useBasicWeeklyChallenge() {
   const userId = useAuthStore((state) => state.user?.id ?? null);
 
   return useQuery({
-    queryKey: challengesKeys.weekly(userId ?? "no-user"),
+    queryKey: challengesKeys.weekly(userId ?? 'no-user'),
     queryFn: () => {
       if (!userId) {
         return null;

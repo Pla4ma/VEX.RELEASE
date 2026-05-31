@@ -1,11 +1,11 @@
-import React from "react";
-import { Pressable } from "react-native";
-import { useTheme } from "@/theme";
-import { Box, Text, Card } from "@/components/primitives";
-import { Icon } from "@/icons";
-import { launchColors } from "@theme/tokens/launch-colors";
+import React from 'react';
+import { Pressable } from 'react-native';
+import { useTheme } from '@/theme';
+import { Box, Text, Card } from '@/components/primitives';
+import { Icon } from '@/icons';
+import { launchColors } from '@theme/tokens/launch-colors';
 
-export type FontSize = "small" | "medium" | "large";
+export type FontSize = 'small' | 'medium' | 'large';
 
 interface FontSizeOption {
   id: FontSize;
@@ -14,9 +14,9 @@ interface FontSizeOption {
 }
 
 const FONT_SIZE_OPTIONS: FontSizeOption[] = [
-  { id: "small", label: "Small", sampleSize: 14 },
-  { id: "medium", label: "Medium", sampleSize: 16 },
-  { id: "large", label: "Large", sampleSize: 18 },
+  { id: 'small', label: 'Small', sampleSize: 14 },
+  { id: 'medium', label: 'Medium', sampleSize: 16 },
+  { id: 'large', label: 'Large', sampleSize: 18 },
 ];
 
 interface FontSizeControlProps {
@@ -38,20 +38,20 @@ export const FontSizeControl: React.FC<FontSizeControlProps> = ({
         style={{
           marginLeft: 12,
           marginBottom: 8,
-          fontWeight: "600",
+          fontWeight: '600',
           letterSpacing: 0.5,
         }}
       >
         FONT SIZE
       </Text>
-      <Card size="sm" style={{ overflow: "hidden" }}>
+      <Card size="sm" style={{ overflow: 'hidden' }}>
         {FONT_SIZE_OPTIONS.map((option, index) => (
           <React.Fragment key={option.id}>
             <Pressable
               onPress={() => onFontSizeChange(option.id)}
               style={{
-                flexDirection: "row",
-                alignItems: "center",
+                flexDirection: 'row',
+                alignItems: 'center',
                 paddingVertical: 16,
                 paddingHorizontal: 16,
               }}
@@ -75,7 +75,7 @@ export const FontSizeControl: React.FC<FontSizeControlProps> = ({
                 <Text
                   style={{
                     fontSize: option.sampleSize,
-                    fontWeight: "600",
+                    fontWeight: '600',
                     color:
                       fontSize === option.id
                         ? theme.colors.primary[500]
@@ -90,7 +90,7 @@ export const FontSizeControl: React.FC<FontSizeControlProps> = ({
                   variant="body"
                   style={{
                     fontSize: option.sampleSize,
-                    fontWeight: fontSize === option.id ? "600" : "400",
+                    fontWeight: fontSize === option.id ? '600' : '400',
                     color: theme.colors.text.primary,
                   }}
                 >

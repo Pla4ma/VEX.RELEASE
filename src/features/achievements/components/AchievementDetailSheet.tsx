@@ -1,16 +1,16 @@
-import React, { useCallback, useMemo } from "react";
-import { Share } from "react-native";
-import { Box, Text, Button } from "@/components/primitives";
-import { useTheme } from "@/theme";
-import type { Achievement } from "../types";
-import { getAchievementDisplayInfo } from "../definitions";
-import { triggerHaptic } from "@/utils/haptics";
-import { createDebugger } from "@/utils/debug";
-import { AchievementDetailIcon } from "./AchievementDetailIcon";
-import { AchievementUnlockStatus } from "./AchievementUnlockStatus";
-import { AchievementRewards } from "./AchievementRewards";
+import React, { useCallback, useMemo } from 'react';
+import { Share } from 'react-native';
+import { Box, Text, Button } from '@/components/primitives';
+import { useTheme } from '@/theme';
+import type { Achievement } from '../types';
+import { getAchievementDisplayInfo } from '../definitions';
+import { triggerHaptic } from '@/utils/haptics';
+import { createDebugger } from '@/utils/debug';
+import { AchievementDetailIcon } from './AchievementDetailIcon';
+import { AchievementUnlockStatus } from './AchievementUnlockStatus';
+import { AchievementRewards } from './AchievementRewards';
 
-const debug = createDebugger("achievements:detail-sheet");
+const debug = createDebugger('achievements:detail-sheet');
 
 interface AchievementDetailSheetProps {
   achievement: Achievement;
@@ -33,16 +33,16 @@ export const AchievementDetailSheet: React.FC<AchievementDetailSheetProps> = ({
   const display = getAchievementDisplayInfo(achievement, isUnlocked);
 
   const handleShare = useCallback(async () => {
-    await triggerHaptic("impactMedium");
+    await triggerHaptic('impactMedium');
     const shareText = isUnlocked
       ? `I just unlocked "${display.title}" in VEX! 🏆\n\n${display.description}\n\n${achievement.shareText}`
       : `Check out this achievement in VEX: "${display.title}"\n\nCan you unlock it?`;
     try {
-      await Share.share({ message: shareText, title: "VEX Achievement" });
+      await Share.share({ message: shareText, title: 'VEX Achievement' });
       onShare?.();
     } catch (error) {
       debug.error(
-        "Share failed",
+        'Share failed',
         error instanceof Error ? error : new Error(String(error)),
       );
     }
@@ -50,7 +50,7 @@ export const AchievementDetailSheet: React.FC<AchievementDetailSheetProps> = ({
 
   const isHiddenLegendaryLocked = useMemo(
     () =>
-      achievement.isHidden && !isUnlocked && achievement.rarity === "LEGENDARY",
+      achievement.isHidden && !isUnlocked && achievement.rarity === 'LEGENDARY',
     [achievement.isHidden, achievement.rarity, isUnlocked],
   );
 
@@ -94,7 +94,7 @@ export const AchievementDetailSheet: React.FC<AchievementDetailSheetProps> = ({
           style={{ lineHeight: 22 }}
         >
           {isHiddenLegendaryLocked
-            ? "This achievement is rumored to exist... The conditions to unlock it remain a mystery to all but the most dedicated players."
+            ? 'This achievement is rumored to exist... The conditions to unlock it remain a mystery to all but the most dedicated players.'
             : display.description}
         </Text>
 

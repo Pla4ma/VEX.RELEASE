@@ -1,10 +1,10 @@
-import React from "react";
-import { Pressable } from "react-native";
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useModeHomeSurface } from "../hooks";
-import type { Lane } from "../../lane-engine/types";
-import type { HomeContext } from "../service";
+import React from 'react';
+import { Pressable } from 'react-native';
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useModeHomeSurface } from '../hooks';
+import type { Lane } from '../../lane-engine/types';
+import type { HomeContext } from '../service';
 
 interface ModeNativeHomeProps {
   lane: Lane | null | undefined;
@@ -28,13 +28,13 @@ export function ModeNativeHome({
       {/* Mode feeling */}
       <Box gap="xs">
         <Text variant="caption" color="text.tertiary" textTransform="uppercase">
-          {surface.lane === "student"
-            ? "Study"
-            : surface.lane === "game_like"
-              ? "Run"
-              : surface.lane === "deep_creative"
-                ? "Project"
-                : "Clean"}
+          {surface.lane === 'student'
+            ? 'Study'
+            : surface.lane === 'game_like'
+              ? 'Run'
+              : surface.lane === 'deep_creative'
+                ? 'Project'
+                : 'Clean'}
         </Text>
         <Text variant="h2" color="text.primary">
           {surface.headline}
@@ -49,7 +49,7 @@ export function ModeNativeHome({
         onPress={onStart}
         accessibilityLabel={surface.primaryActionLabel}
         accessibilityRole="button"
-        accessibilityHint={surface.secondaryHint ?? "Start a session"}
+        accessibilityHint={surface.secondaryHint ?? 'Start a session'}
         style={({ pressed }) => ({
           opacity: pressed ? 0.85 : 1,
         })}

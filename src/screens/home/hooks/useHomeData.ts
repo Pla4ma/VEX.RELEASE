@@ -1,13 +1,13 @@
-import { useMemo, useRef } from "react";
-import { useActiveChallenges } from "../../../features/challenges/hooks";
-import { useSavedTomorrowPreview } from "../../../features/home-spine/hooks";
-import { useActiveIntervention } from "../../../features/ai-coach/hooks";
-import { useNotificationBadge } from "../../../features/notifications/components/NotificationBadge";
-import { useToast } from "../../../shared/ui/components/Toast";
-import type { HomeController } from "./home-controller-types";
-import type { ChallengeItem, SessionListItem } from "../../../features/home-spine/components";
-import { getQualityGrade, getHomeCompanionMood } from "../../../screens/home/utils";
-import { useHomeDataHandlers } from "./useHomeDataHandlers";
+import { useMemo, useRef } from 'react';
+import { useActiveChallenges } from '../../../features/challenges/hooks';
+import { useSavedTomorrowPreview } from '../../../features/home-spine/hooks';
+import { useActiveIntervention } from '../../../features/ai-coach/hooks';
+import { useNotificationBadge } from '../../../features/notifications/components/NotificationBadge';
+import { useToast } from '../../../shared/ui/components/Toast';
+import type { HomeController } from './home-controller-types';
+import type { ChallengeItem, SessionListItem } from '../../../features/home-spine/components';
+import { getQualityGrade, getHomeCompanionMood } from '../../../screens/home/utils';
+import { useHomeDataHandlers } from './useHomeDataHandlers';
 
 interface UseHomeDataInput {
   controller: HomeController;
@@ -28,7 +28,7 @@ export function useHomeData(input: UseHomeDataInput) {
       ? controller.userId || undefined
       : undefined,
   );
-  const savedPreview = useSavedTomorrowPreview(controller.userId ?? "");
+  const savedPreview = useSavedTomorrowPreview(controller.userId ?? '');
   const displayedInterventionIdRef = useRef<string | null>(null);
   const squadMembersFocusing: Array<Record<string, unknown>> = [];
   const { count: unreadNotificationCount } = useNotificationBadge(
@@ -53,9 +53,9 @@ export function useHomeData(input: UseHomeDataInput) {
           };
         }>
       | undefined;
-    if (!data) return [];
+    if (!data) {return [];}
     return data
-      .filter((item) => item.challenge.type === "DAILY")
+      .filter((item) => item.challenge.type === 'DAILY')
       .slice(0, 3)
       .map((item) => ({
         id: item.userChallenge.id,
@@ -64,11 +64,11 @@ export function useHomeData(input: UseHomeDataInput) {
         currentProgress: item.userChallenge.currentValue,
         targetProgress: item.challenge.targetValue,
         rewardAmount: item.challenge.rewardAmount,
-        rewardType: item.challenge.rewardType as "XP" | "COINS" | "GEMS",
+        rewardType: item.challenge.rewardType as 'XP' | 'COINS' | 'GEMS',
         isCompleted:
-          item.userChallenge.status === "COMPLETED" ||
-          item.userChallenge.status === "CLAIMED",
-        isClaimed: item.userChallenge.status === "CLAIMED",
+          item.userChallenge.status === 'COMPLETED' ||
+          item.userChallenge.status === 'CLAIMED',
+        isClaimed: item.userChallenge.status === 'CLAIMED',
         timeRemainingMinutes: item.userChallenge.expiresAt
           ? Math.max(
               0,
@@ -83,7 +83,7 @@ export function useHomeData(input: UseHomeDataInput) {
     | { nextDeadline?: number }
     | undefined;
   const streakHoursRemaining = useMemo(() => {
-    if (!streakData?.nextDeadline) return null;
+    if (!streakData?.nextDeadline) {return null;}
     return Math.max(
       0,
       Math.floor((streakData.nextDeadline - Date.now()) / (1000 * 60 * 60)),
@@ -93,15 +93,15 @@ export function useHomeData(input: UseHomeDataInput) {
     const latest = controller.historyQuery.history[0] as
       | { status?: string }
       | undefined;
-    if (!latest) return false;
-    return latest.status === "ACTIVE" || latest.status === "PAUSED";
+    if (!latest) {return false;}
+    return latest.status === 'ACTIVE' || latest.status === 'PAUSED';
   }, [controller.historyQuery.history]);
   const resumeTimeSeconds = useMemo(() => {
-    if (!hasActiveSession) return null;
+    if (!hasActiveSession) {return null;}
     const latest = controller.historyQuery.history[0] as
       | { endedAt?: number; startedAt?: number }
       | undefined;
-    if (!latest) return null;
+    if (!latest) {return null;}
     if (latest.endedAt && latest.startedAt) {
       return Math.floor((latest.endedAt - latest.startedAt) / 1000);
     }
@@ -122,7 +122,7 @@ export function useHomeData(input: UseHomeDataInput) {
       }>
     )
       .flatMap((entry) => {
-        if (!entry.endedAt || !entry.startedAt) return [];
+        if (!entry.endedAt || !entry.startedAt) {return [];}
         const durationSeconds = Math.max(
           0,
           Math.floor((entry.endedAt - entry.startedAt) / 1000),
@@ -147,10 +147,10 @@ export function useHomeData(input: UseHomeDataInput) {
     | { streakRestoreEligible?: boolean }
     | undefined;
   const comebackSessionsCompleted = useMemo(() => {
-    if (!comebackData?.streakRestoreEligible) return 0;
+    if (!comebackData?.streakRestoreEligible) {return 0;}
     return (
       controller.historyQuery.history as Array<{ status: string }>
-    ).filter((entry) => entry.status === "COMPLETED").length;
+    ).filter((entry) => entry.status === 'COMPLETED').length;
   }, [comebackData?.streakRestoreEligible, controller.historyQuery.history]);
   const companionMood = useMemo(
     () =>

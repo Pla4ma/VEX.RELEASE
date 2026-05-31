@@ -3,9 +3,9 @@
  * TanStack Query hooks for UI consumption
  */
 
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import * as service from "./service";
-import * as repository from "./repository";
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import * as service from './service';
+import * as repository from './repository';
 import {
   RecordSessionInputSchema,
   UseShieldInputSchema,
@@ -14,24 +14,24 @@ import {
   type UseShieldInput,
   type RestoreStreakInput,
   type StreakEngineResult,
-} from "./schemas";
+} from './schemas';
 
-export type { StreakCalendarData } from "./hooks-calendar";
-export { useStreakCalendar } from "./hooks-calendar";
+export type { StreakCalendarData } from './hooks-calendar';
+export { useStreakCalendar } from './hooks-calendar';
 
 // ============================================================================
 // Query Keys
 // ============================================================================
 
 export const streakKeys = {
-  all: ["streaks"] as const,
-  byUser: (userId: string) => [...streakKeys.all, "user", userId] as const,
+  all: ['streaks'] as const,
+  byUser: (userId: string) => [...streakKeys.all, 'user', userId] as const,
   summary: (userId: string) =>
-    [...streakKeys.byUser(userId), "summary"] as const,
+    [...streakKeys.byUser(userId), 'summary'] as const,
   comeback: (userId: string) =>
-    [...streakKeys.byUser(userId), "comeback"] as const,
+    [...streakKeys.byUser(userId), 'comeback'] as const,
   multiplier: (userId: string) =>
-    [...streakKeys.byUser(userId), "multiplier"] as const,
+    [...streakKeys.byUser(userId), 'multiplier'] as const,
 };
 
 // ============================================================================
@@ -40,10 +40,10 @@ export const streakKeys = {
 
 export function useStreak(userId: string | null) {
   return useQuery({
-    queryKey: streakKeys.byUser(userId || ""),
+    queryKey: streakKeys.byUser(userId || ''),
     queryFn: () => {
       if (!userId) {
-        throw new Error("User ID required");
+        throw new Error('User ID required');
       }
       return service.getOrCreateStreak(userId);
     },
@@ -54,10 +54,10 @@ export function useStreak(userId: string | null) {
 
 export function useStreakSummary(userId: string | null) {
   return useQuery({
-    queryKey: streakKeys.summary(userId || ""),
+    queryKey: streakKeys.summary(userId || ''),
     queryFn: () => {
       if (!userId) {
-        throw new Error("User ID required");
+        throw new Error('User ID required');
       }
       return service.getStreakSummary(userId);
     },
@@ -69,10 +69,10 @@ export function useStreakSummary(userId: string | null) {
 
 export function useComebackState(userId: string | null) {
   return useQuery({
-    queryKey: streakKeys.comeback(userId || ""),
+    queryKey: streakKeys.comeback(userId || ''),
     queryFn: () => {
       if (!userId) {
-        throw new Error("User ID required");
+        throw new Error('User ID required');
       }
       return service.detectComeback(userId);
     },
@@ -83,10 +83,10 @@ export function useComebackState(userId: string | null) {
 
 export function useStreakMultiplier(userId: string | null) {
   return useQuery({
-    queryKey: streakKeys.multiplier(userId || ""),
+    queryKey: streakKeys.multiplier(userId || ''),
     queryFn: () => {
       if (!userId) {
-        throw new Error("User ID required");
+        throw new Error('User ID required');
       }
       return service.getOrCreateStreak(userId).then((s) => ({
         days: s.currentDays,

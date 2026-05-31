@@ -4,13 +4,13 @@
  * Type definitions and schemas for the comeback quest system.
  */
 
-import { z } from "zod";
+import { z } from 'zod';
 
 export const ComebackQuestStageSchema = z.enum([
-  "QUEST_1",
-  "QUEST_2",
-  "QUEST_3",
-  "COMPLETE",
+  'QUEST_1',
+  'QUEST_2',
+  'QUEST_3',
+  'COMPLETE',
 ]);
 export type ComebackQuestStage = z.infer<typeof ComebackQuestStageSchema>;
 

@@ -1,11 +1,11 @@
-import React from "react";
-import { View } from "react-native";
+import React from 'react';
+import { View } from 'react-native';
 
-import { getPremiumCardStyle } from "../../../components/premiumStyles";
-import { Button } from "../../../components/primitives/Button";
-import { Text } from "../../../components/primitives/Text";
-import type { NextBestAction } from "../../../features/progression";
-import { useTheme } from "../../../theme";
+import { getPremiumCardStyle } from '../../../components/premiumStyles';
+import { Button } from '../../../components/primitives/Button';
+import { Text } from '../../../components/primitives/Text';
+import type { NextBestAction } from '../../../features/progression';
+import { useTheme } from '../../../theme';
 
 export function NextBestActionCard({
   action,
@@ -23,7 +23,7 @@ export function NextBestActionCard({
         backgroundColor: theme.colors.background.secondary,
         padding: theme.spacing[4],
         gap: theme.spacing[3],
-        ...getPremiumCardStyle("large"),
+        ...getPremiumCardStyle('large'),
       }}
     >
       <Text variant="label" color={theme.colors.primary[500]}>

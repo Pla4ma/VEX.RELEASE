@@ -1,14 +1,14 @@
 import type {
   NotificationContext as SmartNotificationContext,
-} from "../SmartNotificationSystem.types";
+} from '../SmartNotificationSystem.types';
 import type {
   NotificationContext as ServiceNotificationContext,
-} from "../service-types";
+} from '../service-types';
 
 // ─── MOCKS ────────────────────────────────────────────────────────────────
 
 // Mock expo-notifications
-jest.mock("expo-notifications", () => ({
+jest.mock('expo-notifications', () => ({
   getPermissionsAsync: jest.fn(),
   requestPermissionsAsync: jest.fn(),
   getExpoPushTokenAsync: jest.fn(),
@@ -18,7 +18,7 @@ jest.mock("expo-notifications", () => ({
   getAllScheduledNotificationsAsync: jest.fn(),
   setBadgeCountAsync: jest.fn(),
   setNotificationHandler: jest.fn(),
-  SchedulableTriggerInputTypes: { DATE: "DATE" },
+  SchedulableTriggerInputTypes: { DATE: 'DATE' },
 }));
 
 // Mock Supabase
@@ -29,33 +29,33 @@ const mockSupabaseClient = {
   channel: mockChannel,
 };
 
-jest.mock("../../../config/supabase", () => ({
+jest.mock('../../../config/supabase', () => ({
   getSupabaseClient: jest.fn(() => mockSupabaseClient),
 }));
 
 // Mock eventBus
-jest.mock("../../../events", () => ({
+jest.mock('../../../events', () => ({
   eventBus: { publish: jest.fn() },
 }));
 
 // Mock analytics
 const mockTrack = jest.fn();
-jest.mock("../../../analytics/AnalyticsService", () => ({
+jest.mock('../../../analytics/AnalyticsService', () => ({
   getAnalyticsService: jest.fn(() => ({ track: mockTrack })),
 }));
 
 // Mock sentry
-jest.mock("../../../config/sentry", () => ({
+jest.mock('../../../config/sentry', () => ({
   addBreadcrumb: jest.fn(),
 }));
 
-jest.mock("@sentry/react-native", () => ({
+jest.mock('@sentry/react-native', () => ({
   addBreadcrumb: jest.fn(),
   captureException: jest.fn(),
 }));
 
 // Mock debug
-jest.mock("../../../utils/debug", () => ({
+jest.mock('../../../utils/debug', () => ({
   createDebugger: jest.fn(() => ({
     info: jest.fn(),
     warn: jest.fn(),
@@ -64,7 +64,7 @@ jest.mock("../../../utils/debug", () => ({
 }));
 
 // Mock MMKV
-jest.mock("../../../persistence/MMKVStorageAdapter", () => {
+jest.mock('../../../persistence/MMKVStorageAdapter', () => {
   const store: Record<string, string> = {};
   return {
     MMKVStorageAdapter: jest.fn().mockImplementation(() => ({
@@ -77,13 +77,13 @@ jest.mock("../../../persistence/MMKVStorageAdapter", () => {
 });
 
 // Mock uuid
-jest.mock("../../../utils/uuid", () => ({
-  v4: jest.fn(() => "mock-uuid-1234"),
+jest.mock('../../../utils/uuid', () => ({
+  v4: jest.fn(() => 'mock-uuid-1234'),
 }));
 
 // Mock timezone utils
-jest.mock("../../ai-coach/utils/timezone", () => ({
-  getUserTimezone: jest.fn(() => "America/New_York"),
+jest.mock('../../ai-coach/utils/timezone', () => ({
+  getUserTimezone: jest.fn(() => 'America/New_York'),
   scheduleForLocalTime: jest.fn(
     (_hour: number, _min: number, _tz: string, baseDate?: Date) => {
       const d = baseDate ?? new Date();
@@ -93,22 +93,22 @@ jest.mock("../../ai-coach/utils/timezone", () => ({
 }));
 
 // Mock notification-policy
-jest.mock("../../notification-policy/service", () => ({
+jest.mock('../../notification-policy/service', () => ({
   decideNudge: jest.fn(() => ({ allowed: true })),
 }));
 
 // Mock repository/shared
-jest.mock("../repository/shared", () => {
+jest.mock('../repository/shared', () => {
   class RepositoryError extends Error {
     operation: string;
     originalError: unknown;
     constructor(operation: string, originalError: unknown) {
       super(
         `Repository error in ${operation}: ${
-          originalError instanceof Error ? originalError.message : "Unknown error"
+          originalError instanceof Error ? originalError.message : 'Unknown error'
         }`,
       );
-      this.name = "RepositoryError";
+      this.name = 'RepositoryError';
       this.operation = operation;
       this.originalError = originalError;
     }
@@ -121,7 +121,7 @@ jest.mock("../repository/shared", () => {
 });
 
 // Mock repository submodules
-jest.mock("../repository/notifications", () => ({
+jest.mock('../repository/notifications', () => ({
   fetchUnreadNotificationsCount: jest.fn(),
   fetchNotificationCenterItems: jest.fn(),
   markNotificationRead: jest.fn(),
@@ -129,7 +129,7 @@ jest.mock("../repository/notifications", () => ({
   subscribeToNotificationCenter: jest.fn(),
 }));
 
-jest.mock("../repository/retention", () => ({
+jest.mock('../repository/retention', () => ({
   fetchRetentionUserProfile: jest.fn(),
   upsertReminderPlan: jest.fn(),
   hasScheduledReminderWithin: jest.fn(),
@@ -137,7 +137,7 @@ jest.mock("../repository/retention", () => ({
   fetchReEngagementCandidates: jest.fn(),
 }));
 
-jest.mock("../repository/push", () => ({
+jest.mock('../repository/push', () => ({
   upsertPushToken: jest.fn(),
 }));
 
@@ -147,7 +147,7 @@ function makeSmartCtx(
   overrides: Partial<SmartNotificationContext> = {},
 ): SmartNotificationContext {
   return {
-    userId: "550e8400-e29b-41d4-a716-446655440000",
+    userId: '550e8400-e29b-41d4-a716-446655440000',
     currentTime: Date.now(),
     streakDays: 5,
     hasCompletedSessionToday: false,
@@ -182,11 +182,11 @@ function makeServiceCtx(
   overrides: Partial<ServiceNotificationContext> = {},
 ): ServiceNotificationContext {
   return {
-    userId: "550e8400-e29b-41d4-a716-446655440000",
+    userId: '550e8400-e29b-41d4-a716-446655440000',
     streakRisk: {
       hoursRemaining: 2,
       streakDays: 5,
-      riskLevel: "HIGH",
+      riskLevel: 'HIGH',
     },
     ...overrides,
   };

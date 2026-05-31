@@ -5,9 +5,9 @@
  * MMKV is a fast key-value storage library developed by Tencent.
  */
 
-import { MMKV } from "react-native-mmkv";
-import type { Nullable } from "../types/global";
-import { safeJsonParse } from "./safe-json";
+import { MMKV } from 'react-native-mmkv';
+import type { Nullable } from '../types/global';
+import { safeJsonParse } from './safe-json';
 
 // Singleton MMKV instance for Zustand storage
 let mmkvStorage: MMKV | null = null;
@@ -15,7 +15,7 @@ let mmkvStorage: MMKV | null = null;
 function getStorage(): MMKV {
   if (!mmkvStorage) {
     mmkvStorage = new MMKV({
-      id: "zustand-storage",
+      id: 'zustand-storage',
     });
   }
   return mmkvStorage;
@@ -45,7 +45,7 @@ export const getMMKVStorageAdapter = () => ({
 export class MMKVStorageAdapter {
   private storage: MMKV;
 
-  constructor(id: string = "vex-storage") {
+  constructor(id: string = 'vex-storage') {
     this.storage = new MMKV({ id });
   }
 
@@ -102,7 +102,7 @@ export class MMKVStorageAdapter {
     if (!json) {
       return null;
     }
-    return safeJsonParse<T>(json, { feature: "persistence", key });
+    return safeJsonParse<T>(json, { feature: 'persistence', key });
   }
 
   setJSON<T>(key: string, value: T): void {
@@ -115,7 +115,7 @@ export class MMKVStorageAdapter {
     if (!json) {
       return null;
     }
-    return safeJsonParse<T>(json, { feature: "persistence", key });
+    return safeJsonParse<T>(json, { feature: 'persistence', key });
   }
 
   setJSONSync<T>(key: string, value: T): void {

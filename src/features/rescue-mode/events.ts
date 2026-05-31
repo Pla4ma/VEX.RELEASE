@@ -1,12 +1,12 @@
-import { z } from "zod";
-import { RescueReasonSchema } from "./schemas";
+import { z } from 'zod';
+import { RescueReasonSchema } from './schemas';
 
 export const RescueModeEventSchema = z
   .object({
     type: z.enum([
-      "rescue_plan_created",
-      "rescue_plan_started",
-      "rescue_plan_completed",
+      'rescue_plan_created',
+      'rescue_plan_started',
+      'rescue_plan_completed',
     ]),
     userId: z.string().min(1),
     reason: RescueReasonSchema,

@@ -1,11 +1,11 @@
-import React from "react";
-import { Pressable } from "react-native";
-import { useTheme } from "../../theme";
-import { Box, Text, Card } from "../../components/primitives";
-import { Icon } from "../../icons";
-import { launchColors } from "@theme/tokens/launch-colors";
-import { PasswordField } from "./PasswordField";
-import { usePasswordChange } from "./usePasswordChange";
+import React from 'react';
+import { Pressable } from 'react-native';
+import { useTheme } from '../../theme';
+import { Box, Text, Card } from '../../components/primitives';
+import { Icon } from '../../icons';
+import { launchColors } from '@theme/tokens/launch-colors';
+import { PasswordField } from './PasswordField';
+import { usePasswordChange } from './usePasswordChange';
 
 export const PasswordChangeSection: React.FC = () => {
   const { theme } = useTheme();
@@ -30,19 +30,19 @@ export const PasswordChangeSection: React.FC = () => {
         style={{
           marginLeft: 12,
           marginBottom: 8,
-          fontWeight: "600",
+          fontWeight: '600',
           letterSpacing: 0.5,
         }}
       >
         PASSWORD
       </Text>
-      <Card size="sm" style={{ overflow: "hidden" }}>
+      <Card size="sm" style={{ overflow: 'hidden' }}>
         {!showPasswordFields ? (
           <Pressable
             onPress={() => setShowPasswordFields(true)}
             style={{
-              flexDirection: "row",
-              alignItems: "center",
+              flexDirection: 'row',
+              alignItems: 'center',
               paddingVertical: 16,
               paddingHorizontal: 16,
             }}
@@ -69,7 +69,7 @@ export const PasswordChangeSection: React.FC = () => {
               <Text
                 variant="body"
                 style={{
-                  fontWeight: "500",
+                  fontWeight: '500',
                   color: theme.colors.text.primary,
                 }}
               >
@@ -95,7 +95,7 @@ export const PasswordChangeSection: React.FC = () => {
             <Text
               variant="body"
               style={{
-                fontWeight: "600",
+                fontWeight: '600',
                 marginBottom: 16,
                 color: theme.colors.text.primary,
               }}
@@ -131,7 +131,7 @@ export const PasswordChangeSection: React.FC = () => {
                   backgroundColor: theme.colors.background.secondary,
                   paddingVertical: 12,
                   borderRadius: 8,
-                  alignItems: "center",
+                  alignItems: 'center',
                   marginRight: 8,
                   borderWidth: 1,
                   borderColor: theme.colors.border.light,
@@ -143,7 +143,7 @@ export const PasswordChangeSection: React.FC = () => {
                 <Text
                   style={{
                     color: theme.colors.text.primary,
-                    fontWeight: "600",
+                    fontWeight: '600',
                   }}
                 >
                   Cancel
@@ -157,7 +157,7 @@ export const PasswordChangeSection: React.FC = () => {
                   backgroundColor: theme.colors.primary[500],
                   paddingVertical: 12,
                   borderRadius: 8,
-                  alignItems: "center",
+                  alignItems: 'center',
                   marginLeft: 8,
                   opacity: isChangingPassword ? 0.7 : 1,
                 }}
@@ -166,9 +166,9 @@ export const PasswordChangeSection: React.FC = () => {
                 accessibilityHint="Double tap to change setting"
               >
                 <Text
-                  style={{ color: launchColors.hex_fff, fontWeight: "600" }}
+                  style={{ color: launchColors.hex_fff, fontWeight: '600' }}
                 >
-                  {isChangingPassword ? "Changing..." : "Change"}
+                  {isChangingPassword ? 'Changing...' : 'Change'}
                 </Text>
               </Pressable>
             </Box>

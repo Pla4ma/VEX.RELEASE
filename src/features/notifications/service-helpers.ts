@@ -1,18 +1,18 @@
-import { MMKVStorageAdapter } from "../../persistence/MMKVStorageAdapter";
+import { MMKVStorageAdapter } from '../../persistence/MMKVStorageAdapter';
 
 const MAX_NOTIFICATIONS_PER_DAY = 2;
-const notificationLimitStorage = new MMKVStorageAdapter("notification-limits");
+const notificationLimitStorage = new MMKVStorageAdapter('notification-limits');
 const DEFAULT_QUIET_START_HOUR = 22;
 const DEFAULT_QUIET_END_HOUR = 8;
 
 export function isQuietHours(
-  userTimezone: string = "UTC",
+  userTimezone: string = 'UTC',
   quietStart: number = DEFAULT_QUIET_START_HOUR,
   quietEnd: number = DEFAULT_QUIET_END_HOUR,
 ): boolean {
   const now = new Date();
   const userTime = new Date(
-    now.toLocaleString("en-US", { timeZone: userTimezone }),
+    now.toLocaleString('en-US', { timeZone: userTimezone }),
   );
   const hour = userTime.getHours();
   if (quietStart <= quietEnd) {
@@ -22,12 +22,12 @@ export function isQuietHours(
 }
 
 export function getNextNotificationWindow(
-  userTimezone: string = "UTC",
+  userTimezone: string = 'UTC',
   quietEnd: number = DEFAULT_QUIET_END_HOUR,
 ): Date {
   const now = new Date();
   const userTime = new Date(
-    now.toLocaleString("en-US", { timeZone: userTimezone }),
+    now.toLocaleString('en-US', { timeZone: userTimezone }),
   );
   const nextWindow = new Date(userTime);
   nextWindow.setHours(quietEnd, 0, 0, 0);
@@ -105,6 +105,6 @@ export function createFeedReactionNotification(
 ): { title: string; body: string } {
   return {
     title: `${reactorName} reacted ${reactionEmoji}`,
-    body: `To your post: "${postTitle.substring(0, 50)}${postTitle.length > 50 ? "..." : ""}"`,
+    body: `To your post: "${postTitle.substring(0, 50)}${postTitle.length > 50 ? '...' : ''}"`,
   };
 }

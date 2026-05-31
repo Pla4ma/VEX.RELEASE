@@ -2,7 +2,7 @@ import {
   buildCoachPresence,
   buildCompletionCoachPresence,
   resolveCoachActionIntent,
-} from "../service";
+} from '../service';
 
 const unlockedAvailability = {
   canNavigate: true,
@@ -12,8 +12,8 @@ const unlockedAvailability = {
   canShowNotification: true,
   canSubscribeToEvents: true,
   canUseBackend: true,
-  reason: "Ready",
-  state: "unlocked" as const,
+  reason: 'Ready',
+  state: 'unlocked' as const,
 };
 
 const lockedAvailability = {
@@ -23,14 +23,14 @@ const lockedAvailability = {
   canRegisterRoute: false,
   canRenderEntryPoint: false,
   canUseBackend: false,
-  reason: "Locked",
-  state: "locked" as const,
+  reason: 'Locked',
+  state: 'locked' as const,
 };
 
-describe("CoachPresence service", () => {
-  it("keeps companion reaction and coach copy aligned to calm motivation", () => {
+describe('CoachPresence service', () => {
+  it('keeps companion reaction and coach copy aligned to calm motivation', () => {
     const presence = buildCoachPresence({
-      companion: { element: "WAVE", level: 3, mood: "CONTENT", phase: "YOUNG" },
+      companion: { element: 'WAVE', level: 3, mood: 'CONTENT', phase: 'YOUNG' },
       featureAvailability: {
         focus: unlockedAvailability,
         progress: unlockedAvailability,
@@ -39,21 +39,21 @@ describe("CoachPresence service", () => {
       memorySummary: {
         companionMemoryCount: 1,
         coachMemoryCount: 2,
-        latestMemory: "Clean starts work best.",
+        latestMemory: 'Clean starts work best.',
       },
-      motivationStyle: "CALM",
+      motivationStyle: 'CALM',
       progress: { currentStreakDays: 4, highFocusStreak: 2, totalSessions: 8 },
-      surface: "HOME",
+      surface: 'HOME',
     });
 
-    expect(presence.tone.personality).toBe("steady");
-    expect(presence.memoryConfidence).toBe("strong");
+    expect(presence.tone.personality).toBe('steady');
+    expect(presence.memoryConfidence).toBe('strong');
     expect(presence.message.length).toBeLessThanOrEqual(96);
-    expect(presence.visualCompanionState.reaction).toBe("steady");
-    expect(presence.nextAction.intent).toBe("START_SESSION");
+    expect(presence.visualCompanionState.reaction).toBe('steady');
+    expect(presence.nextAction.intent).toBe('START_SESSION');
   });
 
-  it("uses study-focused copy and action when study is available", () => {
+  it('uses study-focused copy and action when study is available', () => {
     const presence = buildCoachPresence({
       companion: null,
       featureAvailability: {
@@ -66,19 +66,19 @@ describe("CoachPresence service", () => {
         coachMemoryCount: 0,
         latestMemory: null,
       },
-      motivationStyle: "STUDY_FOCUSED",
+      motivationStyle: 'STUDY_FOCUSED',
       progress: { currentStreakDays: 1, highFocusStreak: 0, totalSessions: 2 },
-      surface: "HOME",
+      surface: 'HOME',
     });
 
     expect(presence.message.length).toBeLessThanOrEqual(96);
-    expect(presence.memoryConfidence).toBe("weak");
-    expect(presence.nextAction.intent).toBe("START_STUDY_SESSION");
+    expect(presence.memoryConfidence).toBe('weak');
+    expect(presence.nextAction.intent).toBe('START_STUDY_SESSION');
   });
 
-  it("supports friendly motivation as a warm unified coach presence", () => {
+  it('supports friendly motivation as a warm unified coach presence', () => {
     const presence = buildCoachPresence({
-      companion: { element: "EMBER", level: 2, mood: "READY", phase: "YOUNG" },
+      companion: { element: 'EMBER', level: 2, mood: 'READY', phase: 'YOUNG' },
       featureAvailability: {
         focus: unlockedAvailability,
         progress: unlockedAvailability,
@@ -87,44 +87,44 @@ describe("CoachPresence service", () => {
       memorySummary: {
         companionMemoryCount: 2,
         coachMemoryCount: 2,
-        latestMemory: "Morning starts have worked.",
+        latestMemory: 'Morning starts have worked.',
       },
-      motivationStyle: "FRIENDLY",
+      motivationStyle: 'FRIENDLY',
       progress: { currentStreakDays: 1, highFocusStreak: 0, totalSessions: 3 },
-      surface: "HOME",
+      surface: 'HOME',
     });
 
-    expect(presence.tone.personality).toBe("warm");
-    expect(presence.visualCompanionState.reaction).toBe("focused");
+    expect(presence.tone.personality).toBe('warm');
+    expect(presence.visualCompanionState.reaction).toBe('focused');
     expect(presence.message.length).toBeLessThanOrEqual(96);
-    expect(presence.nextAction.intent).toBe("START_SESSION");
+    expect(presence.nextAction.intent).toBe('START_SESSION');
   });
 
-  it("does not suggest locked study or progress actions", () => {
+  it('does not suggest locked study or progress actions', () => {
     expect(
       resolveCoachActionIntent({
-        requestedIntent: "START_STUDY_SESSION",
+        requestedIntent: 'START_STUDY_SESSION',
         featureAvailability: {
           focus: unlockedAvailability,
           progress: unlockedAvailability,
           study: lockedAvailability,
         },
       }),
-    ).toBe("START_SESSION");
+    ).toBe('START_SESSION');
 
     expect(
       resolveCoachActionIntent({
-        requestedIntent: "REVIEW_PROGRESS",
+        requestedIntent: 'REVIEW_PROGRESS',
         featureAvailability: {
           focus: unlockedAvailability,
           progress: lockedAvailability,
           study: unlockedAvailability,
         },
       }),
-    ).toBe("START_SESSION");
+    ).toBe('START_SESSION');
   });
 
-  it("builds short completion reflection variants", () => {
+  it('builds short completion reflection variants', () => {
     const reflection = buildCompletionCoachPresence({
       featureAvailability: {
         focus: unlockedAvailability,
@@ -134,9 +134,9 @@ describe("CoachPresence service", () => {
       memorySummary: {
         companionMemoryCount: 2,
         coachMemoryCount: 3,
-        latestMemory: "Short wins stack.",
+        latestMemory: 'Short wins stack.',
       },
-      motivationStyle: "COACH_LED",
+      motivationStyle: 'COACH_LED',
       summary: {
         durationMinutes: 12,
         focusPurityScore: 82,
@@ -145,13 +145,13 @@ describe("CoachPresence service", () => {
         isHighFocusStreak: false,
         isLowEnergyDay: false,
         isStreakRecovery: false,
-        sessionMode: "SPRINT",
+        sessionMode: 'SPRINT',
         streakDays: 1,
       },
     });
 
     expect(reflection.sessionReflection.length).toBeGreaterThan(0);
     expect(reflection.message.length).toBeLessThanOrEqual(96);
-    expect(reflection.nextAction.intent).toBe("START_SESSION");
+    expect(reflection.nextAction.intent).toBe('START_SESSION');
   });
 });

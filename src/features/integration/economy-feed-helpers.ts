@@ -1,10 +1,10 @@
-import { eventBus } from "../../events/EventBus";
-import * as Sentry from "@sentry/react-native";
+import { eventBus } from '../../events/EventBus';
+import * as Sentry from '@sentry/react-native';
 
 export interface CurrencyTransaction {
   userId: string;
   currency: string;
-  type: "earn" | "spend";
+  type: 'earn' | 'spend';
   amount: number;
   source: string;
   itemId?: string;
@@ -13,14 +13,14 @@ export interface CurrencyTransaction {
 export interface ShopOwnership {
   userId: string;
   itemId: string;
-  price: { currency: "COINS" | "GEMS" | "SEASONAL"; amount: number };
+  price: { currency: 'COINS' | 'GEMS' | 'SEASONAL'; amount: number };
 }
 
 export async function recordShopOwnership(ownership: ShopOwnership): Promise<void> {
   Sentry.addBreadcrumb({
-    category: "economy-feed",
+    category: 'economy-feed',
     message: `Recording shop ownership for ${ownership.itemId}`,
-    level: "info",
+    level: 'info',
     data: {
       userId: ownership.userId,
       itemId: ownership.itemId,
@@ -33,26 +33,26 @@ export async function recordShopOwnership(ownership: ShopOwnership): Promise<voi
 
 export async function applyItemEffect(ownership: ShopOwnership): Promise<void> {
   switch (getShopItemType(ownership.itemId)) {
-    case "BOOST":
-      eventBus.publish("progression:activate_boost", {
+    case 'BOOST':
+      eventBus.publish('progression:activate_boost', {
         userId: ownership.userId,
-        boostType: "XP",
+        boostType: 'XP',
         multiplier: 1.5,
         duration: 24 * 60 * 60 * 1000,
       });
       break;
-    case "SHIELD":
-      eventBus.publish("streaks:add_shield", {
+    case 'SHIELD':
+      eventBus.publish('streaks:add_shield', {
         userId: ownership.userId,
-        shieldType: "STREAK_PROTECTION",
+        shieldType: 'STREAK_PROTECTION',
         duration: 24 * 60 * 60 * 1000,
       });
       break;
-    case "THEME":
-      eventBus.publish("cosmetics:unlock_theme", {
+    case 'THEME':
+      eventBus.publish('cosmetics:unlock_theme', {
         userId: ownership.userId,
         themeId: ownership.itemId,
-        source: "SHOP_PURCHASE",
+        source: 'SHOP_PURCHASE',
       });
       break;
   }
@@ -70,7 +70,7 @@ export async function checkSpendingMilestones(
   const milestones = [100, 500, 1000, 5000, 10000];
   for (const milestone of milestones) {
     if (current < milestone && newTotal >= milestone) {
-      eventBus.publish("milestones:spending_reached", {
+      eventBus.publish('milestones:spending_reached', {
         userId,
         currency,
         milestoneId: `${currency}-${milestone}`,
@@ -90,9 +90,9 @@ export async function setCumulativeSpending(
   value: number,
 ): Promise<void> {
   Sentry.addBreadcrumb({
-    category: "economy-feed",
-    message: "Persisting cumulative spending",
-    level: "info",
+    category: 'economy-feed',
+    message: 'Persisting cumulative spending',
+    level: 'info',
     data: { key, value },
   });
 }
@@ -105,21 +105,21 @@ export async function getEventBonusMultiplier(
 }
 
 export function isRareItem(itemId: string): boolean {
-  const rarePrefixes = ["legendary_", "mythic_", "epic_"];
+  const rarePrefixes = ['legendary_', 'mythic_', 'epic_'];
   return rarePrefixes.some((prefix) => itemId.startsWith(prefix));
 }
 
 export function getShopItemType(
   itemId: string,
-): "BOOST" | "COSMETIC" | "SHIELD" | "THEME" {
-  if (itemId.includes("boost")) {
-    return "BOOST";
+): 'BOOST' | 'COSMETIC' | 'SHIELD' | 'THEME' {
+  if (itemId.includes('boost')) {
+    return 'BOOST';
   }
-  if (itemId.includes("shield")) {
-    return "SHIELD";
+  if (itemId.includes('shield')) {
+    return 'SHIELD';
   }
-  if (itemId.includes("theme")) {
-    return "THEME";
+  if (itemId.includes('theme')) {
+    return 'THEME';
   }
-  return "COSMETIC";
+  return 'COSMETIC';
 }

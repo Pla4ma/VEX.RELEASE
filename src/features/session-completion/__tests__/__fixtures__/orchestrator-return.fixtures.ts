@@ -1,6 +1,6 @@
-import { SessionMode } from "../../../../session/modes";
-import type { SessionSummary } from "../../../../session/types";
-import type { CompletionLedger } from "../../schemas";
+import { SessionMode } from '../../../../session/modes';
+import type { SessionSummary } from '../../../../session/types';
+import type { CompletionLedger } from '../../schemas';
 
 export const summary: SessionSummary = {
   actualDuration: 1500,
@@ -22,15 +22,15 @@ export const summary: SessionSummary = {
   pauses: 0,
   penaltiesApplied: [],
   plannedDuration: 1500,
-  sessionId: "550e8400-e29b-41d4-a716-446655440010",
+  sessionId: '550e8400-e29b-41d4-a716-446655440010',
   sessionMode: SessionMode.FLOW,
-  status: "COMPLETED",
+  status: 'COMPLETED',
   streakBonus: 10,
   streakDays: 4,
   streakIncreased: true,
   streakMaintained: true,
   timeBonus: 10,
-  userId: "user-123",
+  userId: 'user-123',
   userLevel: 2,
   vsAverage: 0,
   vsBest: 0,
@@ -38,34 +38,34 @@ export const summary: SessionSummary = {
 };
 
 export const ledger: CompletionLedger = {
-  companionReactionId: "companion-session-complete",
+  companionReactionId: 'companion-session-complete',
   completedAt: 3000000,
   completedDurationSeconds: 1500,
   createdAt: 3000000,
   dailyMissionResult: {
-    missionId: "daily-focus-session",
+    missionId: 'daily-focus-session',
     progressDelta: 1,
-    status: "progressed",
+    status: 'progressed',
   },
   degradedSystems: [],
   effectiveFocusedSeconds: 1400,
   focusScoreDelta: 8,
-  grade: "A",
+  grade: 'A',
   gradeScore: 88,
-  idempotencyKey: "550e8400-e29b-41d4-a716-446655440010:3000000",
+  idempotencyKey: '550e8400-e29b-41d4-a716-446655440010:3000000',
   interruptionCount: 0,
-  ledgerId: "550e8400-e29b-41d4-a716-446655440011",
+  ledgerId: '550e8400-e29b-41d4-a716-446655440011',
   mode: SessionMode.FLOW,
-  offlineSyncStatus: "synced",
+  offlineSyncStatus: 'synced',
   pauseCount: 0,
   qualityScore: 88,
-  rewardIds: ["session-currency:550e8400-e29b-41d4-a716-446655440010"],
-  sessionId: "550e8400-e29b-41d4-a716-446655440010",
+  rewardIds: ['session-currency:550e8400-e29b-41d4-a716-446655440010'],
+  sessionId: '550e8400-e29b-41d4-a716-446655440010',
   startedAt: 1500000,
-  streakResult: { action: "extended", newDays: 5, previousDays: 4 },
+  streakResult: { action: 'extended', newDays: 5, previousDays: 4 },
   strictMode: false,
   targetDurationSeconds: 1500,
-  timezone: "UTC",
-  userId: "user-123",
+  timezone: 'UTC',
+  userId: 'user-123',
   xpDelta: 120,
 };

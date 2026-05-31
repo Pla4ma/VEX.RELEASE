@@ -5,7 +5,7 @@ export type {
   ModeHomeSurface,
   QuickContractQuestion,
   ModeActiveIndicator,
-} from "./schemas";
+} from './schemas';
 
 // Note: ModeQuickContract, ModeCompletionSurface, ModeRescueSurface,
 // ModeWeeklyIntelligence are both types AND components.
@@ -15,7 +15,7 @@ import type {
   ModeCompletionSurface as ModeCompletionSurfaceType,
   ModeRescueSurface as ModeRescueSurfaceType,
   ModeWeeklyIntelligence as ModeWeeklyIntelligenceType,
-} from "./schemas";
+} from './schemas';
 export type {
   ModeQuickContractType,
   ModeCompletionSurfaceType,
@@ -32,7 +32,7 @@ export {
   ModeCompletionSurfaceSchema,
   ModeRescueSurfaceSchema,
   ModeWeeklyIntelligenceSchema,
-} from "./schemas";
+} from './schemas';
 
 // ── Copy ────────────────────────────────────────────────────────────────
 export {
@@ -42,18 +42,18 @@ export {
   COMPLETION_COPY,
   RESCUE_COPY,
   WEEKLY_INTELLIGENCE_COPY,
-} from "./copy";
+} from './copy';
 
 // ── Service ─────────────────────────────────────────────────────────────
-export { deriveHomeSurface } from "./service";
-export type { HomeContext } from "./service";
-export { deriveQuickContract } from "./service";
-export { deriveActiveIndicator } from "./service";
-export { deriveRescueSurface } from "./service";
-export { deriveCompletionSurface } from "./service-surface";
-export type { CompletionContext } from "./service-surface";
-export { deriveWeeklyIntelligence } from "./service-surface";
-export type { WeeklyIntelligenceContext } from "./service-surface";
+export { deriveHomeSurface } from './service';
+export type { HomeContext } from './service';
+export { deriveQuickContract } from './service';
+export { deriveActiveIndicator } from './service';
+export { deriveRescueSurface } from './service';
+export { deriveCompletionSurface } from './service-surface';
+export type { CompletionContext } from './service-surface';
+export { deriveWeeklyIntelligence } from './service-surface';
+export type { WeeklyIntelligenceContext } from './service-surface';
 
 // ── Hooks ───────────────────────────────────────────────────────────────
 export {
@@ -63,7 +63,7 @@ export {
   useModeCompletion,
   useModeRescueSurface,
   useModeWeeklyIntelligence,
-} from "./hooks";
+} from './hooks';
 
 // ── Components ──────────────────────────────────────────────────────────
 export {
@@ -73,4 +73,4 @@ export {
   ModeRescueSurface,
   ModeActiveIndicatorBar,
   ModeWeeklyIntelligence,
-} from "./components";
+} from './components';

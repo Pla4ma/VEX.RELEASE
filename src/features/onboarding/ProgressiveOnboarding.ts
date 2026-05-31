@@ -7,8 +7,8 @@ export type {
   FeatureUnlockGate,
   StepContent,
   OnboardingProgress,
-} from "./onboarding-types";
-export { FEATURE_UNLOCK_GATES, STEP_CONTENT, STEP_ORDER } from "./onboarding-gates";
+} from './onboarding-types';
+export { FEATURE_UNLOCK_GATES, STEP_CONTENT, STEP_ORDER } from './onboarding-gates';
 
 export {
   initializeOnboarding,
@@ -16,7 +16,7 @@ export {
   advanceStep,
   skipToFirstSession,
   recordSession,
-} from "./onboarding-state";
+} from './onboarding-state';
 
 export {
   markFeatureIntroduced,
@@ -26,4 +26,4 @@ export {
   isFeatureAvailable,
   getAvailableFeatures,
   getNextFeatureUnlock,
-} from "./onboarding-progress";
+} from './onboarding-progress';

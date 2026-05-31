@@ -1,4 +1,4 @@
-import type { FocusScoreFactors } from "./FocusIdentityEngine-types";
+import type { FocusScoreFactors } from './FocusIdentityEngine-types';
 
 export function calculateSessionQualityFactorForInput(
   sessions: Array<{
@@ -7,12 +7,12 @@ export function calculateSessionQualityFactorForInput(
     duration: number;
     wasAbandoned: boolean;
   }>,
-): FocusScoreFactors["sessionQuality"] {
+): FocusScoreFactors['sessionQuality'] {
   if (sessions.length === 0) {
     return {
       score: 0,
       averageFocusPurity: 0,
-      averageGrade: "D",
+      averageGrade: 'D',
       perfectSessionsCount: 0,
       averageSessionDuration: 0,
     };
@@ -23,7 +23,7 @@ export function calculateSessionQualityFactorForInput(
   const avgDuration =
     completed.reduce((sum, s) => sum + s.duration, 0) / completed.length;
   const perfectCount = completed.filter(
-    (s) => s.grade === "S" && s.focusPurity >= 95 && s.duration >= 45,
+    (s) => s.grade === 'S' && s.focusPurity >= 95 && s.duration >= 45,
   ).length;
   const gradeCounts = completed.reduce(
     (acc, s) => {
@@ -34,19 +34,19 @@ export function calculateSessionQualityFactorForInput(
   );
   const total = completed.length;
   const avgGradeScore =
-    ((gradeCounts["S"] ?? 0) * 100 +
-      (gradeCounts["A"] ?? 0) * 85 +
-      (gradeCounts["B"] ?? 0) * 70 +
-      (gradeCounts["C"] ?? 0) * 55 +
-      (gradeCounts["D"] ?? 0) * 40) /
+    ((gradeCounts.S ?? 0) * 100 +
+      (gradeCounts.A ?? 0) * 85 +
+      (gradeCounts.B ?? 0) * 70 +
+      (gradeCounts.C ?? 0) * 55 +
+      (gradeCounts.D ?? 0) * 40) /
     total;
   let score = 0;
   score += (avgPurity / 100) * 30;
   score += (avgGradeScore / 100) * 40;
   score += Math.min(perfectCount / 5, 1) * 20;
   score += Math.min(avgDuration / 60, 1) * 10;
-  const gradeOrder = ["S", "A", "B", "C", "D"] as const;
-  let dominantGrade: (typeof gradeOrder)[number] = "D";
+  const gradeOrder = ['S', 'A', 'B', 'C', 'D'] as const;
+  let dominantGrade: (typeof gradeOrder)[number] = 'D';
   for (const grade of gradeOrder) {
     if ((gradeCounts[grade] ?? 0) > 0) {
       dominantGrade = grade;
@@ -69,7 +69,7 @@ export function calculateDiversityFactorForInput(
     dayOfWeek: number;
     context?: string;
   }>,
-): FocusScoreFactors["diversity"] {
+): FocusScoreFactors['diversity'] {
   if (sessions.length === 0) {
     return {
       score: 0,
@@ -83,10 +83,10 @@ export function calculateDiversityFactorForInput(
   const uniqueModes = new Set(sessions.map((s) => s.mode)).size;
   const timeSlots = new Set(
     sessions.map((s) => {
-      if (s.hour >= 5 && s.hour < 12) return "morning";
-      if (s.hour >= 12 && s.hour < 17) return "afternoon";
-      if (s.hour >= 17 && s.hour < 22) return "evening";
-      return "night";
+      if (s.hour >= 5 && s.hour < 12) {return 'morning';}
+      if (s.hour >= 12 && s.hour < 17) {return 'afternoon';}
+      if (s.hour >= 17 && s.hour < 22) {return 'evening';}
+      return 'night';
     }),
   ).size;
   const uniqueDays = new Set(sessions.map((s) => s.dayOfWeek)).size;
@@ -94,7 +94,7 @@ export function calculateDiversityFactorForInput(
     (s) => s.dayOfWeek === 0 || s.dayOfWeek === 6,
   ).length;
   const uniqueContexts = new Set(
-    sessions.map((s) => s.context ?? "default"),
+    sessions.map((s) => s.context ?? 'default'),
   ).size;
   let score = 0;
   score += Math.min(uniqueModes / 3, 1) * 25;
@@ -117,7 +117,7 @@ export function calculateRecencyFactorForInput(
   last7Days: number,
   last30Days: number,
   scoreHistory: Array<{ date: string; score: number }>,
-): FocusScoreFactors["recency"] {
+): FocusScoreFactors['recency'] {
   let score = 100;
   if (daysSinceLastSession === 1) {
     score -= 10;
@@ -129,18 +129,18 @@ export function calculateRecencyFactorForInput(
   score += Math.min(last7Days / 5, 1) * 20;
   score += Math.min(last30Days / 20, 1) * 15;
 
-  let trend: "UP" | "STABLE" | "DOWN" | "CONCERNING" = "STABLE";
+  let trend: 'UP' | 'STABLE' | 'DOWN' | 'CONCERNING' = 'STABLE';
   let velocity = 0;
   if (scoreHistory.length >= 7) {
     const recent = scoreHistory.slice(-7);
     const first = recent[0]!.score;
     const last = recent[recent.length - 1]!.score;
     velocity = last - first;
-    if (velocity > 10) trend = "UP";
-    else if (velocity < -10) trend = "CONCERNING";
-    else if (velocity < -5) trend = "DOWN";
+    if (velocity > 10) {trend = 'UP';}
+    else if (velocity < -10) {trend = 'CONCERNING';}
+    else if (velocity < -5) {trend = 'DOWN';}
   }
-  if (trend === "CONCERNING") score -= 20;
+  if (trend === 'CONCERNING') {score -= 20;}
 
   return {
     score: Math.round(Math.max(0, Math.min(100, score))),

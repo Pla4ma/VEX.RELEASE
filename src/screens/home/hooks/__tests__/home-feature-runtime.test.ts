@@ -1,8 +1,8 @@
-import { buildFeatureAccess } from "../../../../features/liveops-config/feature-access";
-import { buildHomeFeatureRuntime } from "../home-feature-runtime";
+import { buildFeatureAccess } from '../../../../features/liveops-config/feature-access';
+import { buildHomeFeatureRuntime } from '../home-feature-runtime';
 
-describe("buildHomeFeatureRuntime", () => {
-  it("does not query locked or teased systems on day zero", () => {
+describe('buildHomeFeatureRuntime', () => {
+  it('does not query locked or teased systems on day zero', () => {
     const access = buildFeatureAccess({ totalCompletedSessions: 0 });
     const runtime = buildHomeFeatureRuntime({
       features: access.features,

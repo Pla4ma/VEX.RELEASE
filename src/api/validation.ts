@@ -1,8 +1,8 @@
-import { captureSilentFailure } from "../utils/silent-failure";
-import { z, type ZodType, type ZodError } from "zod";
-import { getAnalyticsService } from "../analytics/AnalyticsService";
-import { createDebugger } from "../utils/debug";
-const debug = createDebugger("api:validation");
+import { captureSilentFailure } from '../utils/silent-failure';
+import { z, type ZodType, type ZodError } from 'zod';
+import { getAnalyticsService } from '../analytics/AnalyticsService';
+import { createDebugger } from '../utils/debug';
+const debug = createDebugger('api:validation');
 export interface ValidationSuccess<T> {
   success: true;
   data: T;
@@ -23,17 +23,17 @@ export function validateSchema<T>(
     return { success: true, data: parsed };
   } catch (error) {
     if (error instanceof z.ZodError) {
-      debug.error("Validation failed", new Error(JSON.stringify(error.errors)));
+      debug.error('Validation failed', new Error(JSON.stringify(error.errors)));
       const analytics = getAnalyticsService();
-      analytics.track("api_validation_error", {
+      analytics.track('api_validation_error', {
         errors: error.errors.map(
-          (e: z.ZodIssue) => `${e.path.join(".")}: ${e.message}`,
+          (e: z.ZodIssue) => `${e.path.join('.')}: ${e.message}`,
         ),
-        schema: schema.description || "unknown",
+        schema: schema.description || 'unknown',
       });
       return {
         success: false,
-        error: "Response validation failed",
+        error: 'Response validation failed',
         details: error.errors,
         rawData: data,
       };
@@ -86,16 +86,16 @@ export function createValidationInterceptor<T>(schema: ZodType<T>) {
       const data = await cloned.json();
       const result = validateSchema(schema, data);
       if (!result.success) {
-        debug.error("API response validation failed", new Error(result.error));
+        debug.error('API response validation failed', new Error(result.error));
         (
           response as Response & { __validationError?: ValidationError }
         ).__validationError = result;
       }
     } catch (error) {
       captureSilentFailure(error, {
-        feature: "api",
-        operation: "safe-fallback",
-        type: "data",
+        feature: 'api',
+        operation: 'safe-fallback',
+        type: 'data',
       });
     }
     return response;
@@ -137,7 +137,7 @@ export function logValidationMetrics(
   duration: number,
 ): void {
   const analytics = getAnalyticsService();
-  analytics.track("api_validation", {
+  analytics.track('api_validation', {
     endpoint,
     success: result.success,
     duration,

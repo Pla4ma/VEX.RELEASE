@@ -4,15 +4,15 @@
  * Shows single recall/reflection question after study block completion.
  * Displays prompt, optional answerHint, and handles user dismissal.
  */
-import React, { useState } from "react";
-import { Pressable } from "react-native";
-import Animated, { FadeInUp, FadeOutDown } from "react-native-reanimated";
+import React, { useState } from 'react';
+import { Pressable } from 'react-native';
+import Animated, { FadeInUp, FadeOutDown } from 'react-native-reanimated';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import { cardSelection } from "../../../utils/haptics";
-import type { RecallQuestion } from "../schemas";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import { cardSelection } from '../../../utils/haptics';
+import type { RecallQuestion } from '../schemas';
 
 export interface RecallQuestionCardProps {
   question: RecallQuestion;
@@ -29,7 +29,7 @@ export function RecallQuestionCard({
   const { theme } = useTheme();
   const [dismissed, setDismissed] = useState(false);
 
-  if (dismissed) return <></>;
+  if (dismissed) {return <></>;}
 
   const handleDismiss = () => {
     cardSelection();
@@ -58,7 +58,7 @@ export function RecallQuestionCard({
           alignItems="center"
         >
           <Text variant="label" color="accent.purple" textTransform="uppercase">
-            {question.kind === "reflection" ? "Reflection" : "Recall"}
+            {question.kind === 'reflection' ? 'Reflection' : 'Recall'}
           </Text>
           <Pressable
             onPress={handleDismiss}

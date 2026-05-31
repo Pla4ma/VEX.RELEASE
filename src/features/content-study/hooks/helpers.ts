@@ -3,9 +3,9 @@
  * Helper functions for content study hooks
  */
 
-import { fetchGenerationById, fetchContentById } from "../ContentStudyService";
-import { studySessionManager } from "../persistence";
-import type { StudyContent, StudyGeneration, StudyTask } from "../types";
+import { fetchGenerationById, fetchContentById } from '../ContentStudyService';
+import { studySessionManager } from '../persistence';
+import type { StudyContent, StudyGeneration, StudyTask } from '../types';
 
 export interface ActiveStudyPlan {
   generationId: string;
@@ -32,7 +32,7 @@ export function getStudyPlanTitle(
     return firstConcept;
   }
 
-  return generation.summary.overview?.slice(0, 40).trim() || "Study Plan";
+  return generation.summary.overview?.slice(0, 40).trim() || 'Study Plan';
 }
 
 export async function resolveActiveStudyPlan(): Promise<ActiveStudyPlan | null> {

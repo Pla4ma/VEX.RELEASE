@@ -1,24 +1,24 @@
-import type { BaseSessionCompletionEvent } from "./base-event-types";
+import type { BaseSessionCompletionEvent } from './base-event-types';
 
 export interface SessionMilestoneReachedEvent
   extends BaseSessionCompletionEvent {
-  type: "session_milestone_reached";
+  type: 'session_milestone_reached';
   data: {
     milestoneId: string;
     milestoneType:
-      | "score"
-      | "streak"
-      | "accuracy"
-      | "speed"
-      | "completion"
-      | "special";
+      | 'score'
+      | 'streak'
+      | 'accuracy'
+      | 'speed'
+      | 'completion'
+      | 'special';
     milestoneName: string;
     achievedAt: Date;
     value: number;
     target: number;
     previousRecord: number;
     improvement: number;
-    significance: "personal" | "session" | "daily" | "weekly" | "all_time";
+    significance: 'personal' | 'session' | 'daily' | 'weekly' | 'all_time';
     recognition: {
       badge: string;
       title: string;
@@ -35,10 +35,10 @@ export interface SessionMilestoneReachedEvent
 }
 
 export interface SessionRecordBrokenEvent extends BaseSessionCompletionEvent {
-  type: "session_record_broken";
+  type: 'session_record_broken';
   data: {
     recordType: string;
-    recordCategory: "personal" | "session" | "daily" | "weekly" | "global";
+    recordCategory: 'personal' | 'session' | 'daily' | 'weekly' | 'global';
     previousRecord: number;
     newRecord: number;
     improvement: number;
@@ -57,16 +57,16 @@ export interface SessionRecordBrokenEvent extends BaseSessionCompletionEvent {
 
 export interface SessionAchievementUnlockedEvent
   extends BaseSessionCompletionEvent {
-  type: "session_achievement_unlocked";
+  type: 'session_achievement_unlocked';
   data: {
     achievementId: string;
     achievementName: string;
     achievementType:
-      | "completion"
-      | "performance"
-      | "streak"
-      | "special"
-      | "hidden";
+      | 'completion'
+      | 'performance'
+      | 'streak'
+      | 'special'
+      | 'hidden';
     unlockedAt: Date;
     progress: { current: number; required: number; percentage: number };
     criteria: {
@@ -101,7 +101,7 @@ export interface SessionAchievementUnlockedEvent
 
 export interface SessionAchievementProgressUpdatedEvent
   extends BaseSessionCompletionEvent {
-  type: "session_achievement_progress_updated";
+  type: 'session_achievement_progress_updated';
   data: {
     achievementId: string;
     previousProgress: number;

@@ -1,14 +1,14 @@
-import React from "react";
-import { View } from "react-native";
-import { useReducedMotion } from "react-native-reanimated";
-import { useTheme } from "../../../theme";
-import { Text } from "../../../components/primitives";
-import { Button } from "../../../components";
-import { EnterAnimation } from "./EnterAnimation";
-import { createSheet } from "@/shared/ui/create-sheet";
-import { PRESETS, type EmptyStateProps } from "./EmptyState.presets";
+import React from 'react';
+import { View } from 'react-native';
+import { useReducedMotion } from 'react-native-reanimated';
+import { useTheme } from '../../../theme';
+import { Text } from '../../../components/primitives';
+import { Button } from '../../../components';
+import { EnterAnimation } from './EnterAnimation';
+import { createSheet } from '@/shared/ui/create-sheet';
+import { PRESETS, type EmptyStateProps } from './EmptyState.presets';
 
-export type { EmptyStateProps } from "./EmptyState.presets";
+export type { EmptyStateProps } from './EmptyState.presets';
 
 export const EmptyState: React.FC<EmptyStateProps> = ({
   icon,
@@ -20,15 +20,15 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
   onSecondary,
   style,
   testID,
-  variant = "default",
+  variant = 'default',
   featureName,
 }) => {
   const { theme } = useTheme();
   const reducedMotion = useReducedMotion();
   const iconContent =
-    typeof icon === "string" ? (
+    typeof icon === 'string' ? (
       <Text
-        style={[styles.icon, { fontSize: variant === "first-use" ? 80 : 64 }]}
+        style={[styles.icon, { fontSize: variant === 'first-use' ? 80 : 64 }]}
       >
         {icon}
       </Text>
@@ -36,7 +36,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
       icon
     );
   return (
-    <EnterAnimation direction="up" speed={reducedMotion ? "instant" : "normal"}>
+    <EnterAnimation direction="up" speed={reducedMotion ? 'instant' : 'normal'}>
       <View style={[styles.container, style]}>
         <View style={styles.content} testID={testID}>
           {}
@@ -53,7 +53,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
 
           {}
           <Text
-            variant={variant === "first-use" ? "h2" : "h3"}
+            variant={variant === 'first-use' ? 'h2' : 'h3'}
             style={styles.title}
             textAlign="center"
             accessibilityRole="header"
@@ -76,7 +76,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
           )}
 
           {}
-          {variant === "first-use" && featureName && (
+          {variant === 'first-use' && featureName && (
             <Text
               variant="caption"
               style={styles.featureContext}
@@ -116,7 +116,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
           </View>
 
           {}
-          {variant === "offline" && (
+          {variant === 'offline' && (
             <View
               style={[
                 styles.offlineBadge,
@@ -138,45 +138,45 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
 };
 
 export const InventoryEmptyState: React.FC<
-  Omit<EmptyStateProps, "icon" | "title" | "description">
+  Omit<EmptyStateProps, 'icon' | 'title' | 'description'>
 > = (props) => <EmptyState {...PRESETS.inventory} {...props} />;
 export const FeedEmptyState: React.FC<
-  Omit<EmptyStateProps, "icon" | "title" | "description">
+  Omit<EmptyStateProps, 'icon' | 'title' | 'description'>
 > = (props) => <EmptyState {...PRESETS.feed} {...props} />;
 export const LeaderboardEmptyState: React.FC<
-  Omit<EmptyStateProps, "icon" | "title" | "description">
+  Omit<EmptyStateProps, 'icon' | 'title' | 'description'>
 > = (props) => <EmptyState {...PRESETS.leaderboards} {...props} />;
 export const ChallengeEmptyState: React.FC<
-  Omit<EmptyStateProps, "icon" | "title" | "description">
+  Omit<EmptyStateProps, 'icon' | 'title' | 'description'>
 > = (props) => <EmptyState {...PRESETS.challenges} {...props} />;
 export const ShopEmptyState: React.FC<
-  Omit<EmptyStateProps, "icon" | "title" | "description">
+  Omit<EmptyStateProps, 'icon' | 'title' | 'description'>
 > = (props) => <EmptyState {...PRESETS.shop} {...props} />;
 export const SquadWarsEmptyState: React.FC<
-  Omit<EmptyStateProps, "icon" | "title" | "description">
+  Omit<EmptyStateProps, 'icon' | 'title' | 'description'>
 > = (props) => <EmptyState {...PRESETS.squadWars} {...props} />;
 export const OfflineEmptyState: React.FC<
-  Omit<EmptyStateProps, "icon" | "title" | "description" | "variant">
+  Omit<EmptyStateProps, 'icon' | 'title' | 'description' | 'variant'>
 > = (props) => <EmptyState {...PRESETS.offline} {...props} />;
 export const ErrorEmptyState: React.FC<
-  Omit<EmptyStateProps, "icon" | "title" | "description" | "variant">
+  Omit<EmptyStateProps, 'icon' | 'title' | 'description' | 'variant'>
 > = (props) => <EmptyState {...PRESETS.error} {...props} />;
 
 const styles = createSheet({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: 24,
   },
-  content: { alignItems: "center", maxWidth: 320 },
+  content: { alignItems: 'center', maxWidth: 320 },
   iconContainer: { marginBottom: 24 },
-  icon: { textAlign: "center" },
+  icon: { textAlign: 'center' },
   placeholderIcon: { width: 80, height: 80, borderRadius: 40 },
   title: { marginBottom: 12 },
   description: { marginBottom: 24, lineHeight: 22 },
-  featureContext: { marginBottom: 24, fontStyle: "italic" },
-  actions: { flexDirection: "column", gap: 12, width: "100%" },
+  featureContext: { marginBottom: 24, fontStyle: 'italic' },
+  actions: { flexDirection: 'column', gap: 12, width: '100%' },
   primaryAction: { minWidth: 200 },
   secondaryAction: { minWidth: 200 },
   offlineBadge: {

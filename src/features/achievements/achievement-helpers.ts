@@ -1,15 +1,15 @@
-import { eventBus } from "../../events";
-import { awardInsurance } from "../streaks/StreakEvolutionSystem";
-import type { Achievement, AchievementCategory } from "./types";
-import type { FeatureUnlock } from "./feature-unlocks";
+import { eventBus } from '../../events';
+import { awardInsurance } from '../streaks/StreakEvolutionSystem';
+import type { Achievement, AchievementCategory } from './types';
+import type { FeatureUnlock } from './feature-unlocks';
 import {
   STUDY_ACHIEVEMENTS,
-} from "./study-achievements";
+} from './study-achievements';
 import {
   BOSS_PHASE3_ACHIEVEMENTS,
   STREAK_EVOLUTION_ACHIEVEMENTS,
-} from "./boss-streak-achievements";
-import { ACHIEVEMENT_FEATURE_UNLOCKS } from "./feature-unlocks";
+} from './boss-streak-achievements';
+import { ACHIEVEMENT_FEATURE_UNLOCKS } from './feature-unlocks';
 
 export interface ProgressionGuide {
   currentAchievement: Achievement | null;
@@ -21,11 +21,11 @@ export interface ProgressionGuide {
 }
 
 const ALL_CATEGORIES: AchievementCategory[] = [
-  "STUDY",
-  "BOSS",
-  "STREAK",
-  "SESSION",
-  "SOCIAL",
+  'STUDY',
+  'BOSS',
+  'STREAK',
+  'SESSION',
+  'SOCIAL',
 ];
 
 const ALL_ACHIEVEMENTS = [
@@ -103,14 +103,14 @@ export function handleAchievementUnlock(
   const features = ACHIEVEMENT_FEATURE_UNLOCKS.filter(
     (f) => f.achievementId === achievement.id,
   );
-  if (achievement.id === "achievement-7-day-streak") {
-    awardInsurance(userId, "MILESTONE_7", 1);
-  } else if (achievement.id === "achievement-30-day-streak") {
-    awardInsurance(userId, "MILESTONE_30", 1);
-  } else if (achievement.id === "achievement-100-day-streak") {
-    awardInsurance(userId, "MILESTONE_100", 1);
+  if (achievement.id === 'achievement-7-day-streak') {
+    awardInsurance(userId, 'MILESTONE_7', 1);
+  } else if (achievement.id === 'achievement-30-day-streak') {
+    awardInsurance(userId, 'MILESTONE_30', 1);
+  } else if (achievement.id === 'achievement-100-day-streak') {
+    awardInsurance(userId, 'MILESTONE_100', 1);
   }
-  eventBus.publish("achievement:unlocked", {
+  eventBus.publish('achievement:unlocked', {
     userId,
     achievementId: achievement.id,
     unlockedAt: Date.now(),
@@ -156,11 +156,11 @@ export function getAchievementPreview(
 } {
   if (achievement.isHidden && !isUnlocked) {
     return {
-      title: "???",
-      description: "This achievement is a mystery...",
-      icon: "❓",
-      category: "HIDDEN",
-      rarity: "UNKNOWN",
+      title: '???',
+      description: 'This achievement is a mystery...',
+      icon: '❓',
+      category: 'HIDDEN',
+      rarity: 'UNKNOWN',
     };
   }
   return {

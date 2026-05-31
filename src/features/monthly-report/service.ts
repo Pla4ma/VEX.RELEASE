@@ -1,10 +1,10 @@
-import { fetchMonthlyFocusReportInput } from "./repository";
-import { MonthlyFocusReportSummarySchema } from "./schemas";
+import { fetchMonthlyFocusReportInput } from './repository';
+import { MonthlyFocusReportSummarySchema } from './schemas';
 import type {
   MonthlyFocusReportInput,
   MonthlyFocusReportSummary,
-} from "./types";
-import * as Sentry from "@sentry/react-native";
+} from './types';
+import * as Sentry from '@sentry/react-native';
 
 export class MonthlyReportServiceError extends Error {
   constructor(
@@ -23,6 +23,6 @@ export async function generateMonthlyReport(
     return MonthlyFocusReportSummarySchema.parse(report);
   } catch (error) {
     Sentry.captureException(error);
-    throw new MonthlyReportServiceError("generateReport", error);
+    throw new MonthlyReportServiceError('generateReport', error);
   }
 }

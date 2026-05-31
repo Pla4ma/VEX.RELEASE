@@ -1,9 +1,9 @@
-import type { FeatureKey } from "./feature-access";
+import type { FeatureKey } from './feature-access';
 
 /**
  * Health status for a feature dependency or backend service.
  */
-export type FeatureHealthStatus = "healthy" | "degraded" | "unavailable";
+export type FeatureHealthStatus = 'healthy' | 'degraded' | 'unavailable';
 
 /**
  * A health check that tests whether a feature's backend dependencies
@@ -67,17 +67,17 @@ class FeatureHealthRegistry {
     );
 
     if (relevant.length === 0) {
-      return "healthy";
+      return 'healthy';
     }
 
-    let worst: FeatureHealthStatus = "healthy";
+    let worst: FeatureHealthStatus = 'healthy';
     for (const check of relevant) {
       const status = await this.getCachedOrCheck(check);
-      if (status === "unavailable") {
-        return "unavailable";
+      if (status === 'unavailable') {
+        return 'unavailable';
       }
-      if (status === "degraded") {
-        worst = "degraded";
+      if (status === 'degraded') {
+        worst = 'degraded';
       }
     }
     return worst;
@@ -89,7 +89,7 @@ class FeatureHealthRegistry {
    */
   async shouldDegrade(feature: FeatureKey): Promise<boolean> {
     const status = await this.getFeatureHealth(feature);
-    return status !== "healthy";
+    return status !== 'healthy';
   }
 
   /**
@@ -99,7 +99,7 @@ class FeatureHealthRegistry {
     const results = new Set<FeatureKey>();
     for (const check of this.checks.values()) {
       const status = await this.getCachedOrCheck(check);
-      if (status !== "healthy") {
+      if (status !== 'healthy') {
         results.add(check.feature);
       }
     }
@@ -119,7 +119,7 @@ class FeatureHealthRegistry {
         continue;
       }
       const status = await this.getCachedOrCheck(check);
-      if (status !== "healthy") {
+      if (status !== 'healthy') {
         results.add(check.feature);
       }
     }

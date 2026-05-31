@@ -4,23 +4,23 @@
  * Comprehensive verification system for RevenueCat integration.
  */
 
-import { createDebugger } from "../utils/debug";
-import { verifyProductCatalog } from "./paywall-verification-catalog";
+import { createDebugger } from '../utils/debug';
+import { verifyProductCatalog } from './paywall-verification-catalog';
 import {
   verifyPurchaseFlow,
   verifySubscriptionManagement,
-} from "./paywall-verification-purchase";
+} from './paywall-verification-purchase';
 import {
   verifyReceiptValidation,
   verifyAnalyticsIntegration,
   verifyCompliance,
-} from "./paywall-verification-receipt";
+} from './paywall-verification-receipt';
 import type {
   PaywallVerificationResult,
   PaywallIssue,
   ValidationSection,
   ComplianceSection,
-} from "./paywall-verification-types";
+} from './paywall-verification-types';
 
 export type {
   PaywallVerificationResult,
@@ -29,7 +29,7 @@ export type {
   ComplianceSection,
 };
 
-const debug = createDebugger("paywall-verification");
+const debug = createDebugger('paywall-verification');
 
 export class PaywallVerification {
   private static instance: PaywallVerification;
@@ -49,13 +49,13 @@ export class PaywallVerification {
   private addVerificationResult(result: PaywallVerificationResult): void {
     this.verificationResults.push(result);
     debug.info(
-      "Paywall verification result added:",
-      result.passed ? "PASSED" : "FAILED",
+      'Paywall verification result added:',
+      result.passed ? 'PASSED' : 'FAILED',
     );
   }
 
   async performFullVerification(): Promise<PaywallVerificationResult> {
-    debug.info("Performing full paywall and monetization verification...");
+    debug.info('Performing full paywall and monetization verification...');
 
     const [
       productCatalogResult,
@@ -107,10 +107,10 @@ export class PaywallVerification {
       },
       issues: allIssues.map((issue, index) => ({
         id: `paywall-${index}`,
-        category: "general" as const,
-        severity: "moderate" as const,
+        category: 'general' as const,
+        severity: 'moderate' as const,
         message: issue,
-        recommendation: "Review and fix paywall issues",
+        recommendation: 'Review and fix paywall issues',
       })),
       recommendations: generateRecommendations(allIssues),
       timestamp: Date.now(),
@@ -118,7 +118,7 @@ export class PaywallVerification {
 
     this.addVerificationResult(result);
 
-    debug.info("Full verification completed:", {
+    debug.info('Full verification completed:', {
       passed,
       score,
       issuesCount: allIssues.length,
@@ -131,48 +131,48 @@ export class PaywallVerification {
 function generateRecommendations(issues: string[]): string[] {
   const recommendations: string[] = [];
 
-  if (issues.some((issue) => issue.includes("catalog"))) {
+  if (issues.some((issue) => issue.includes('catalog'))) {
     recommendations.push(
-      "Review product catalog structure and ensure all required fields are present",
+      'Review product catalog structure and ensure all required fields are present',
     );
-    recommendations.push("Validate all product metadata before publishing");
+    recommendations.push('Validate all product metadata before publishing');
   }
 
-  if (issues.some((issue) => issue.includes("purchase"))) {
+  if (issues.some((issue) => issue.includes('purchase'))) {
     recommendations.push(
-      "Test purchase flow thoroughly with various scenarios",
+      'Test purchase flow thoroughly with various scenarios',
     );
-    recommendations.push("Ensure proper error handling and user feedback");
+    recommendations.push('Ensure proper error handling and user feedback');
   }
 
-  if (issues.some((issue) => issue.includes("subscription"))) {
+  if (issues.some((issue) => issue.includes('subscription'))) {
     recommendations.push(
-      "Review subscription pricing and ensure clear terms of service",
+      'Review subscription pricing and ensure clear terms of service',
     );
-    recommendations.push("Test subscription cancellation and renewal flows");
+    recommendations.push('Test subscription cancellation and renewal flows');
   }
 
-  if (issues.some((issue) => issue.includes("receipt"))) {
+  if (issues.some((issue) => issue.includes('receipt'))) {
     recommendations.push(
-      "Implement proper receipt validation and server-side verification",
+      'Implement proper receipt validation and server-side verification',
     );
-    recommendations.push("Test receipt restoration and edge cases");
+    recommendations.push('Test receipt restoration and edge cases');
   }
 
-  if (issues.some((issue) => issue.includes("analytics"))) {
-    recommendations.push("Ensure all purchase events are properly tracked");
-    recommendations.push("Test analytics integration with real user scenarios");
+  if (issues.some((issue) => issue.includes('analytics'))) {
+    recommendations.push('Ensure all purchase events are properly tracked');
+    recommendations.push('Test analytics integration with real user scenarios');
   }
 
-  if (issues.some((issue) => issue.includes("compliance"))) {
-    recommendations.push("Review GDPR compliance measures and data handling");
+  if (issues.some((issue) => issue.includes('compliance'))) {
+    recommendations.push('Review GDPR compliance measures and data handling');
     recommendations.push(
-      "Conduct privacy impact assessment and update policies",
+      'Conduct privacy impact assessment and update policies',
     );
   }
 
   if (recommendations.length === 0) {
-    recommendations.push("Continue monitoring and regular security audits");
+    recommendations.push('Continue monitoring and regular security audits');
   }
 
   return recommendations;

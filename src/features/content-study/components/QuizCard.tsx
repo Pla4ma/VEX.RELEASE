@@ -1,12 +1,12 @@
-import React from "react";
-import { View, Pressable } from "react-native";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import type { QuizItemProps } from "../types";
-import { QUIZ_DIFFICULTY_CONFIG } from "../constants";
-import { quizPanelStyles } from "./QuizPanelStyles";
-import { MultipleChoiceOptions } from "./MultipleChoiceOptions";
-import { ShortAnswerInput } from "./ShortAnswerInput";
+import React from 'react';
+import { View, Pressable } from 'react-native';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import type { QuizItemProps } from '../types';
+import { QUIZ_DIFFICULTY_CONFIG } from '../constants';
+import { quizPanelStyles } from './QuizPanelStyles';
+import { MultipleChoiceOptions } from './MultipleChoiceOptions';
+import { ShortAnswerInput } from './ShortAnswerInput';
 
 type QuizAnswer = { answer: string; isCorrect?: boolean; timestamp: number };
 interface QuizCardProps {

@@ -1,4 +1,4 @@
-export { RepositoryError } from "./repository-helpers";
+export { RepositoryError } from './repository-helpers';
 
 export {
   fetchStreak,
@@ -7,7 +7,7 @@ export {
   recordShieldEarned,
   recordShieldUsed,
   getAvailableShield,
-} from "./streak-queries";
+} from './streak-queries';
 
 export {
   fetchActiveRepairQuest,
@@ -15,4 +15,4 @@ export {
   updateRepairQuest,
   fetchExpiredRepairQuests,
   fetchUsersWithActiveStreaks,
-} from "./repair-quest-queries";
+} from './repair-quest-queries';

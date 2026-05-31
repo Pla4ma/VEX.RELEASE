@@ -1,7 +1,7 @@
-import React from "react";
-import { ScrollView, Pressable, Text } from "react-native";
-import type { SettingCategory } from "../types";
-import { settingsStyles as styles } from "./settings-screen-styles";
+import React from 'react';
+import { ScrollView, Pressable, Text } from 'react-native';
+import type { SettingCategory } from '../types';
+import { settingsStyles as styles } from './settings-screen-styles';
 
 interface Category {
   key: SettingCategory;

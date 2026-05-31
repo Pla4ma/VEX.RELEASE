@@ -3,11 +3,11 @@
  * Setting row with a toggle switch
  */
 
-import React from "react";
-import { View, Text, Pressable } from "react-native";
-import { createSheet } from "@/shared/ui/create-sheet";
-import { launchColors } from "@theme/tokens/launch-colors";
-import { toggleSwitch } from "../../../utils/haptics";
+import React from 'react';
+import { View, Text, Pressable } from 'react-native';
+import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
+import { toggleSwitch } from '../../../utils/haptics';
 
 interface ToggleSettingProps {
   label: string;
@@ -35,9 +35,9 @@ export function ToggleSetting({
           value ? styles.toggleActive : styles.toggleInactive,
           pressed && { opacity: 0.8 },
         ]}
-        accessibilityLabel={`${label}, ${value ? "on" : "off"}`}
+        accessibilityLabel={`${label}, ${value ? 'on' : 'off'}`}
         accessibilityRole="button"
-        accessibilityHint={`Double tap to turn ${value ? "off" : "on"}`}
+        accessibilityHint={`Double tap to turn ${value ? 'off' : 'on'}`}
       >
         <View
           style={[
@@ -52,9 +52,9 @@ export function ToggleSetting({
 
 const styles = createSheet({
   container: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     paddingVertical: 16,
     paddingHorizontal: 16,
     backgroundColor: launchColors.hex_ffffff,
@@ -93,7 +93,7 @@ const styles = createSheet({
     backgroundColor: launchColors.hex_ffffff,
   },
   knobActive: {
-    marginLeft: "auto",
+    marginLeft: 'auto',
   },
   knobInactive: {
     marginLeft: 0,

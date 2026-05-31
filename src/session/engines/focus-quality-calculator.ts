@@ -1,12 +1,12 @@
 import type {
   SessionState,
   FocusQualityMetrics,
-} from "../types";
-import { getSessionModeConfig } from "../modes";
+} from '../types';
+import { getSessionModeConfig } from '../modes';
 import {
   calculateConsistencyScore,
   calculateRecoveryScore,
-} from "./scoring/scoring-helpers";
+} from './scoring/scoring-helpers';
 
 export function calculateFocusQuality(
   session: SessionState,
@@ -24,10 +24,10 @@ export function calculateFocusQuality(
   let timeDistracted = 0;
 
   for (const it of interruptions) {
-    if (it.severity === "CRITICAL" || it.severity === "MAJOR") {
+    if (it.severity === 'CRITICAL' || it.severity === 'MAJOR') {
       timeDistracted += it.duration;
       timeInDeepFocus -= it.duration;
-    } else if (it.severity === "MODERATE") {
+    } else if (it.severity === 'MODERATE') {
       timeInShallowFocus += it.duration;
       timeInDeepFocus -= it.duration;
     } else {

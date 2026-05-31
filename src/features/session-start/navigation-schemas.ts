@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 // ============================================================================
 // Navigation Params
@@ -9,19 +9,19 @@ export const SessionSetupNavigationParamsSchema = z.object({
   presetId: z.string().optional(),
   presetMode: z
     .enum([
-      "LIGHT_FOCUS",
-      "DEEP_WORK",
-      "SPRINT",
-      "CREATIVE",
-      "STUDY",
-      "RECOVERY",
+      'LIGHT_FOCUS',
+      'DEEP_WORK',
+      'SPRINT',
+      'CREATIVE',
+      'STUDY',
+      'RECOVERY',
     ])
     .optional(),
   selectedThemeId: z.string().optional(),
   goal: z.string().optional(),
   suggestedDurationSeconds: z.number().int().positive().optional(),
   suggestedDifficulty: z
-    .enum(["EASY", "NORMAL", "CHALLENGING", "PUSH"])
+    .enum(['EASY', 'NORMAL', 'CHALLENGING', 'PUSH'])
     .optional(),
   recommendationId: z.string().optional(),
   comebackMultiplier: z.number().positive().optional(),
@@ -45,10 +45,10 @@ export const SessionSetupNavigationParamsSchema = z.object({
   learningExecutionTaskId: z.string().optional(),
   source: z
     .enum([
-      "content-study",
-      "learning-execution",
-      "onboarding_first_session",
-      "rescue",
+      'content-study',
+      'learning-execution',
+      'onboarding_first_session',
+      'rescue',
     ])
     .optional(),
   generationId: z.string().optional(),
@@ -60,7 +60,7 @@ export const SessionSetupNavigationParamsSchema = z.object({
   rescueTaskDescription: z.string().optional(),
 });
 
-export const SESSION_SETUP_SOURCE_ONBOARDING = "onboarding_first_session";
+export const SESSION_SETUP_SOURCE_ONBOARDING = 'onboarding_first_session';
 
 export type SessionSetupNavigationParams = z.infer<
   typeof SessionSetupNavigationParamsSchema
@@ -90,12 +90,12 @@ export const FocusModeCardSchema = z.object({
   durationSeconds: z.number().int().min(60).max(3600),
   id: z.string().min(1),
   mode: z.enum([
-    "LIGHT_FOCUS",
-    "DEEP_WORK",
-    "SPRINT",
-    "CREATIVE",
-    "STUDY",
-    "RECOVERY",
+    'LIGHT_FOCUS',
+    'DEEP_WORK',
+    'SPRINT',
+    'CREATIVE',
+    'STUDY',
+    'RECOVERY',
   ]),
   title: z.string().min(1),
 });

@@ -4,7 +4,7 @@
 
 export interface ExtendedAnalyticsEventDefinitions {
   // Daily mission events
-  "daily-mission:completed": {
+  'daily-mission:completed': {
     missionId?: string;
     missionType?: string;
     priority?: number;
@@ -12,19 +12,19 @@ export interface ExtendedAnalyticsEventDefinitions {
     finalProgress?: number;
     [key: string]: unknown;
   };
-  "daily-mission:dismissed": {
+  'daily-mission:dismissed': {
     missionId?: string;
     missionType?: string;
     priority?: number;
     [key: string]: unknown;
   };
-  "daily-mission:expired": {
+  'daily-mission:expired': {
     missionId?: string;
     missionType?: string;
     priority?: number;
     [key: string]: unknown;
   };
-  "daily-mission:priority-decision": {
+  'daily-mission:priority-decision': {
     selectedType?: string;
     availableTypes?: string[];
     input?: Record<string, unknown>;
@@ -32,7 +32,7 @@ export interface ExtendedAnalyticsEventDefinitions {
     [key: string]: unknown;
   };
   // Economy / anti-duplication events
-  "anti-duplication:attempt_logged": {
+  'anti-duplication:attempt_logged': {
     userId?: string;
     id?: string;
     source?: string;
@@ -45,7 +45,7 @@ export interface ExtendedAnalyticsEventDefinitions {
     contextKey?: string;
     [key: string]: unknown;
   };
-  "anti-duplication:exploit_detected": {
+  'anti-duplication:exploit_detected': {
     userId?: string;
     id?: string;
     createdAt?: number;
@@ -54,7 +54,7 @@ export interface ExtendedAnalyticsEventDefinitions {
     severity?: string;
     [key: string]: unknown;
   };
-  "anti-duplication:exploit_alert": {
+  'anti-duplication:exploit_alert': {
     userId?: string;
     exploitId?: string;
     severity?: string;
@@ -62,65 +62,65 @@ export interface ExtendedAnalyticsEventDefinitions {
     [key: string]: unknown;
   };
   // Currency boundaries events
-  "currency-boundaries:violation_detected": {
+  'currency-boundaries:violation_detected': {
     userId?: string;
     currency?: string;
     amount?: number;
     reason?: string;
     [key: string]: unknown;
   };
-  "premium:upgrade_prompt_requested": {
+  'premium:upgrade_prompt_requested': {
     userId?: string;
     reason?: string;
     feature?: string;
     [key: string]: unknown;
   };
   // UI events
-  "ui:show_toast": {
+  'ui:show_toast': {
     message?: string;
     type?: string;
     duration?: number;
     [key: string]: unknown;
   };
   // Session recommendation events
-  "session-recommendation:generated": {
+  'session-recommendation:generated': {
     userId?: string;
     recommendation?: Record<string, unknown>;
     [key: string]: unknown;
   };
-  "session-recommendation:accepted": {
+  'session-recommendation:accepted': {
     userId?: string;
     recommendationId?: string;
     [key: string]: unknown;
   };
-  "session-recommendation:dismissed": {
+  'session-recommendation:dismissed': {
     userId?: string;
     reason?: string;
     [key: string]: unknown;
   };
-  "session-recommendation:blocked": {
+  'session-recommendation:blocked': {
     userId?: string;
     reason?: string;
     [key: string]: unknown;
   };
-  "session-recommendation:performance": {
+  'session-recommendation:performance': {
     userId?: string;
     metrics?: Record<string, unknown>;
     [key: string]: unknown;
   };
   // Performance event
-  "performance:metric": {
+  'performance:metric': {
     metricName?: string;
     value?: number;
     [key: string]: unknown;
   };
   // Squad events
-  "squad:mutation_failed": {
+  'squad:mutation_failed': {
     userId?: string;
     error?: string;
     [key: string]: unknown;
   };
-  "squad:progress_update_failed": {
+  'squad:progress_update_failed': {
     userId?: string;
     error?: string;
     [key: string]: unknown;

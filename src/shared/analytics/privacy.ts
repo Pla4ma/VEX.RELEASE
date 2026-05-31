@@ -4,49 +4,49 @@ export type SafeAnalyticsProperties = Record<string, AnalyticsPrimitive>;
 const MAX_STRING_LENGTH = 120;
 
 const SENSITIVE_KEY_PARTS = [
-  "address",
-  "body",
-  "content",
-  "description",
-  "email",
-  "file",
-  "jwt",
-  "message",
-  "name",
-  "note",
-  "password",
-  "phone",
-  "secret",
-  "stack",
-  "text",
-  "token",
-  "url",
-  "user_id",
-  "userid",
-  "username",
+  'address',
+  'body',
+  'content',
+  'description',
+  'email',
+  'file',
+  'jwt',
+  'message',
+  'name',
+  'note',
+  'password',
+  'phone',
+  'secret',
+  'stack',
+  'text',
+  'token',
+  'url',
+  'user_id',
+  'userid',
+  'username',
 ];
 
 const ALLOWED_USER_TRAITS = new Set([
-  "created_at",
-  "level",
-  "locale",
-  "plan",
-  "sessions_completed",
-  "streak",
-  "tier",
-  "timezone",
+  'created_at',
+  'level',
+  'locale',
+  'plan',
+  'sessions_completed',
+  'streak',
+  'tier',
+  'timezone',
 ]);
 
 export function sanitizeEventName(eventName: string): string {
   const normalized = eventName
     .trim()
-    .replace(/([a-z0-9])([A-Z])/g, "$1_$2")
-    .replace(/[:.\-\s]+/g, "_")
-    .replace(/[^a-zA-Z0-9_]/g, "")
-    .replace(/_+/g, "_")
+    .replace(/([a-z0-9])([A-Z])/g, '$1_$2')
+    .replace(/[:.\-\s]+/g, '_')
+    .replace(/[^a-zA-Z0-9_]/g, '')
+    .replace(/_+/g, '_')
     .toLowerCase();
 
-  return normalized || "unknown_event";
+  return normalized || 'unknown_event';
 }
 
 export function sanitizeAnalyticsProperties(
@@ -93,15 +93,15 @@ function sanitizeValue(value: unknown): AnalyticsPrimitive | undefined {
     return null;
   }
 
-  if (typeof value === "boolean") {
+  if (typeof value === 'boolean') {
     return value;
   }
 
-  if (typeof value === "number") {
+  if (typeof value === 'number') {
     return Number.isFinite(value) ? value : undefined;
   }
 
-  if (typeof value === "string") {
+  if (typeof value === 'string') {
     const trimmed = value.trim();
     if (!trimmed || looksSensitiveString(trimmed)) {
       return undefined;
@@ -121,7 +121,7 @@ function isSensitiveKey(key: string): boolean {
 }
 
 function looksSensitiveString(value: string): boolean {
-  if (value.includes("@")) {
+  if (value.includes('@')) {
     return true;
   }
 
@@ -134,9 +134,9 @@ function looksSensitiveString(value: string): boolean {
 
 function toSnakeCase(value: string): string {
   return value
-    .replace(/([a-z0-9])([A-Z])/g, "$1_$2")
-    .replace(/[^a-zA-Z0-9]+/g, "_")
-    .replace(/_+/g, "_")
-    .replace(/^_|_$/g, "")
+    .replace(/([a-z0-9])([A-Z])/g, '$1_$2')
+    .replace(/[^a-zA-Z0-9]+/g, '_')
+    .replace(/_+/g, '_')
+    .replace(/^_|_$/g, '')
     .toLowerCase();
 }

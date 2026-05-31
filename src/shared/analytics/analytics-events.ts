@@ -5,35 +5,35 @@ export {
   ProgressionEvents,
   FeatureEvents,
   OnboardingEvents,
-} from "./core-events";
+} from './core-events';
 export type {
   AuthEvent,
   SessionEvent,
   ProgressionEvent,
   FeatureEvent,
   OnboardingEvent,
-} from "./core-events";
+} from './core-events';
 
-export { EconomyEvents, RewardEvents, PurchaseFunnelEvents } from "./economy-events";
+export { EconomyEvents, RewardEvents, PurchaseFunnelEvents } from './economy-events';
 export type {
   EconomyEvent,
   PurchaseEvent,
   RewardEvent,
   PurchaseFunnelEvent,
-} from "./economy-events";
+} from './economy-events';
 
 export {
   SocialEvents,
   CoachEvents,
   StreakEvents,
   RetentionEvents,
-} from "./social-events";
+} from './social-events';
 export type {
   SocialEvent,
   CoachEvent,
   StreakEvent,
   RetentionEvent,
-} from "./social-events";
+} from './social-events';
 
 // Event property interfaces
 export type {
@@ -45,15 +45,15 @@ export type {
   SocialEventProperties,
   CoachEventProperties,
   EventProperties,
-} from "./analytics-event-properties";
+} from './analytics-event-properties';
 
 // Aggregate
-import { AuthEvents, SessionEvents, ProgressionEvents, FeatureEvents, OnboardingEvents } from "./core-events";
-import { EconomyEvents, PurchaseFunnelEvents } from "./economy-events";
-import { SocialEvents, CoachEvents, RetentionEvents } from "./social-events";
-import type { AuthEvent, SessionEvent, ProgressionEvent, FeatureEvent, OnboardingEvent } from "./core-events";
-import type { EconomyEvent, PurchaseFunnelEvent } from "./economy-events";
-import type { SocialEvent, CoachEvent, RetentionEvent } from "./social-events";
+import { AuthEvents, SessionEvents, ProgressionEvents, FeatureEvents, OnboardingEvents } from './core-events';
+import { EconomyEvents, PurchaseFunnelEvents } from './economy-events';
+import { SocialEvents, CoachEvents, RetentionEvents } from './social-events';
+import type { AuthEvent, SessionEvent, ProgressionEvent, FeatureEvent, OnboardingEvent } from './core-events';
+import type { EconomyEvent, PurchaseFunnelEvent } from './economy-events';
+import type { SocialEvent, CoachEvent, RetentionEvent } from './social-events';
 
 export const AnalyticsEvents = {
   ...AuthEvents,
@@ -79,10 +79,10 @@ export type AnalyticsEvent =
   | OnboardingEvent
   | PurchaseFunnelEvent
   | RetentionEvent
-  | "funnel_step_completed"
-  | "retention_event"
-  | "subscription_cancelled"
-  | "alert_triggered"
-  | "exception_captured"
-  | "session_configured"
-  | "coach_cta_effectiveness";
+  | 'funnel_step_completed'
+  | 'retention_event'
+  | 'subscription_cancelled'
+  | 'alert_triggered'
+  | 'exception_captured'
+  | 'session_configured'
+  | 'coach_cta_effectiveness';

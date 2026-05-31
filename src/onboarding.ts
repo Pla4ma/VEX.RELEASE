@@ -1,1 +1,1 @@
-export * from "./features/onboarding";
+export * from './features/onboarding';

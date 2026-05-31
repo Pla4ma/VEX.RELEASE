@@ -1,5 +1,5 @@
-import type { PaginationData } from "./global";
-export type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+import type { PaginationData } from './global';
+export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 export interface ApiResponse<T> {
   success: boolean;
   data: T;
@@ -58,10 +58,10 @@ export interface ApiCacheConfig {
   staleWhileRevalidate: boolean;
 }
 export type ApiRequestState<T> =
-  | { status: "idle" }
-  | { status: "loading" }
-  | { status: "success"; data: T }
-  | { status: "error"; error: ApiError };
+  | { status: 'idle' }
+  | { status: 'loading' }
+  | { status: 'success'; data: T }
+  | { status: 'error'; error: ApiError };
 export interface RetryStrategy {
   maxRetries: number;
   retryDelay: number;
@@ -90,13 +90,13 @@ export interface ApiResponseInterceptor {
   onResponseError?: (error: ApiError) => Promise<ApiError>;
 }
 export type WebSocketMessageType =
-  | "connect"
-  | "disconnect"
-  | "subscribe"
-  | "unsubscribe"
-  | "message"
-  | "ping"
-  | "pong";
+  | 'connect'
+  | 'disconnect'
+  | 'subscribe'
+  | 'unsubscribe'
+  | 'message'
+  | 'ping'
+  | 'pong';
 export interface WebSocketMessage<T = unknown> {
   type: WebSocketMessageType;
   channel?: string;
@@ -104,7 +104,7 @@ export interface WebSocketMessage<T = unknown> {
   timestamp: string;
   id: string;
 }
-export type GraphQLOperationType = "query" | "mutation" | "subscription";
+export type GraphQLOperationType = 'query' | 'mutation' | 'subscription';
 export interface GraphQLRequest<TVariables = Record<string, unknown>> {
   operationName?: string;
   query: string;
@@ -121,7 +121,7 @@ export interface GraphQLError {
   extensions?: Record<string, unknown>;
 }
 export interface ApiHealthStatus {
-  status: "healthy" | "degraded" | "unhealthy";
+  status: 'healthy' | 'degraded' | 'unhealthy';
   latency: number;
   uptime: number;
   version: string;

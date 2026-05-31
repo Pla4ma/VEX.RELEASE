@@ -1,12 +1,12 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const AIRequestTypeSchema = z.enum([
-  "GENERATE_COACH_MESSAGE",
-  "GENERATE_SESSION_SUMMARY",
-  "GENERATE_COMEBACK_PROMPT",
-  "GENERATE_STREAK_RISK_NUDGE",
-  "GENERATE_WEEKLY_REFLECTION",
-  "GENERATE_PERSONALIZED_TIP",
+  'GENERATE_COACH_MESSAGE',
+  'GENERATE_SESSION_SUMMARY',
+  'GENERATE_COMEBACK_PROMPT',
+  'GENERATE_STREAK_RISK_NUDGE',
+  'GENERATE_WEEKLY_REFLECTION',
+  'GENERATE_PERSONALIZED_TIP',
 ]);
 export type AIRequestType = z.infer<typeof AIRequestTypeSchema>;
 
@@ -20,7 +20,7 @@ export const AIBaseRequestSchema = z
       .object({
         timestamp: z.number(),
         appVersion: z.string().optional(),
-        platform: z.enum(["ios", "android"]).optional(),
+        platform: z.enum(['ios', 'android']).optional(),
       })
       .optional(),
   })
@@ -48,14 +48,14 @@ export const AIBaseResponseSchema = z
 export type AIBaseResponse = z.infer<typeof AIBaseResponseSchema>;
 
 export const AIErrorCodeSchema = z.enum([
-  "INVALID_REQUEST",
-  "PROMPT_CONSTRUCTION_FAILED",
-  "GEMINI_API_ERROR",
-  "GEMINI_RATE_LIMIT",
-  "GEMINI_SAFETY_BLOCK",
-  "OUTPUT_VALIDATION_FAILED",
-  "OUTPUT_PARSING_FAILED",
-  "TIMEOUT",
-  "INTERNAL_ERROR",
+  'INVALID_REQUEST',
+  'PROMPT_CONSTRUCTION_FAILED',
+  'GEMINI_API_ERROR',
+  'GEMINI_RATE_LIMIT',
+  'GEMINI_SAFETY_BLOCK',
+  'OUTPUT_VALIDATION_FAILED',
+  'OUTPUT_PARSING_FAILED',
+  'TIMEOUT',
+  'INTERNAL_ERROR',
 ]);
 export type AIErrorCode = z.infer<typeof AIErrorCodeSchema>;

@@ -1,9 +1,9 @@
-import React from "react";
-import { View, ViewStyle } from "react-native";
-import { useTheme } from "../../../theme";
-import { Skeleton } from "../state-components";
-import type { CardVariant, CardSize } from "./InteractiveCardTypes";
-import { cardStyles as styles } from "./InteractiveCardStyles";
+import React from 'react';
+import { View, ViewStyle } from 'react-native';
+import { useTheme } from '../../../theme';
+import { Skeleton } from '../state-components';
+import type { CardVariant, CardSize } from './InteractiveCardTypes';
+import { cardStyles as styles } from './InteractiveCardStyles';
 
 export const CardSkeleton: React.FC<{
   variant?: CardVariant;
@@ -11,7 +11,7 @@ export const CardSkeleton: React.FC<{
   lines?: number;
   hasIcon?: boolean;
   style?: ViewStyle;
-}> = ({ size = "md", lines = 2, hasIcon = true, style }) => {
+}> = ({ size = 'md', lines = 2, hasIcon = true, style }) => {
   const { theme } = useTheme();
   const sizeStyles: Record<CardSize, ViewStyle> = {
     sm: { padding: 12, borderRadius: 12 },
@@ -38,7 +38,7 @@ export const CardSkeleton: React.FC<{
               <Skeleton
                 key={i}
                 variant="text"
-                width={i === 0 ? "70%" : "50%"}
+                width={i === 0 ? '70%' : '50%'}
                 height={16}
                 style={{ marginTop: i > 0 ? 8 : 0 }}
               />

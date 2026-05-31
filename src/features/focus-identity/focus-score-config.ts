@@ -1,4 +1,4 @@
-import { launchColors } from "@theme/tokens/launch-colors";
+import { launchColors } from '@theme/tokens/launch-colors';
 
 export const FOCUS_SCORE_CONFIG = {
   MIN_SCORE: 300,
@@ -8,56 +8,56 @@ export const FOCUS_SCORE_CONFIG = {
     {
       min: 800,
       max: 850,
-      label: "Legendary",
-      title: "Focus Virtuoso",
+      label: 'Legendary',
+      title: 'Focus Virtuoso',
       color: launchColors.hex_ffd700,
       percentile: 99,
     },
     {
       min: 740,
       max: 799,
-      label: "Elite",
-      title: "Elite Performer",
+      label: 'Elite',
+      title: 'Elite Performer',
       color: launchColors.hex_c0c0c0,
       percentile: 95,
     },
     {
       min: 670,
       max: 739,
-      label: "Exceptional",
-      title: "Exceptional Focus",
+      label: 'Exceptional',
+      title: 'Exceptional Focus',
       color: launchColors.hex_cd7f32,
       percentile: 85,
     },
     {
       min: 580,
       max: 669,
-      label: "Strong",
-      title: "Strong Focus",
+      label: 'Strong',
+      title: 'Strong Focus',
       color: launchColors.hex_4caf50,
       percentile: 70,
     },
     {
       min: 500,
       max: 579,
-      label: "Good",
-      title: "Good Focus",
+      label: 'Good',
+      title: 'Good Focus',
       color: launchColors.hex_8bc34a,
       percentile: 50,
     },
     {
       min: 420,
       max: 499,
-      label: "Fair",
-      title: "Developing Focus",
+      label: 'Fair',
+      title: 'Developing Focus',
       color: launchColors.hex_ffc107,
       percentile: 30,
     },
     {
       min: 300,
       max: 419,
-      label: "Building",
-      title: "Building Habits",
+      label: 'Building',
+      title: 'Building Habits',
       color: launchColors.hex_ff9800,
       percentile: 10,
     },
@@ -82,17 +82,17 @@ export const FOCUS_SCORE_CONFIG = {
 } as const;
 
 export const IDENTITY_STATEMENTS: Record<
-  (typeof FOCUS_SCORE_CONFIG.BANDS)[number]["label"],
+  (typeof FOCUS_SCORE_CONFIG.BANDS)[number]['label'],
   string[]
 > = {
   Legendary: [
-    "You are a Focus Virtuoso. Your discipline inspires others.",
+    'You are a Focus Virtuoso. Your discipline inspires others.',
     "Focus isn't just what you do—it's who you are.",
     "You're in the top 1%. Your commitment is legendary.",
   ],
   Elite: [
-    "You are an Elite Performer. Excellence is your standard.",
-    "Your focus habits are exceptional. Keep raising the bar.",
+    'You are an Elite Performer. Excellence is your standard.',
+    'Your focus habits are exceptional. Keep raising the bar.',
     "You're among the most disciplined people using this app.",
   ],
   Exceptional: [
@@ -103,7 +103,7 @@ export const IDENTITY_STATEMENTS: Record<
   Strong: [
     "You have Strong Focus. You're developing powerful habits.",
     "You're becoming the kind of person who follows through.",
-    "Your momentum is building. Stay consistent.",
+    'Your momentum is building. Stay consistent.',
   ],
   Good: [
     "You have Good Focus. You're on the right path.",
@@ -113,11 +113,11 @@ export const IDENTITY_STATEMENTS: Record<
   Fair: [
     "You're Developing Focus. Every session makes you stronger.",
     "Progress, not perfection. You're learning to be consistent.",
-    "Your potential is there. Keep building the habit.",
+    'Your potential is there. Keep building the habit.',
   ],
   Building: [
     "You're Building Habits. Small steps lead to big changes.",
-    "Everyone starts somewhere. Your journey is just beginning.",
+    'Everyone starts somewhere. Your journey is just beginning.',
     "Focus is a muscle. You're getting stronger with each session.",
   ],
 };

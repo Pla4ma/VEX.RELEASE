@@ -1,35 +1,35 @@
-import { useState, useEffect, useCallback, useMemo } from "react";
-import { useNavigation } from "@react-navigation/native";
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { createDebugger } from "../../utils/debug";
-import { useAuthStore } from "../../store";
-import * as notificationService from "../../features/notifications/service";
-import type { ExtendedRootStackParams } from "../../navigation/types";
+import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { createDebugger } from '../../utils/debug';
+import { useAuthStore } from '../../store';
+import * as notificationService from '../../features/notifications/service';
+import type { ExtendedRootStackParams } from '../../navigation/types';
 import {
   routeNotificationAction,
   getAvailableNotificationFilters,
-} from "../../navigation/notification-routing-core";
-import { useFeatureAccess } from "../../features/liveops-config";
-import { useOnboardingStore } from "../../features/onboarding/store";
+} from '../../navigation/notification-routing-core';
+import { useFeatureAccess } from '../../features/liveops-config';
+import { useOnboardingStore } from '../../features/onboarding/store';
 import {
   NOTIFICATION_TYPE_TO_SAFE_ACTION,
   groupNotificationsByTime,
   isNotificationTypeFilterable,
   mapToNotificationAction,
-} from "./NotificationScreenConfig";
+} from './NotificationScreenConfig';
 import type {
   NotificationType,
   Notification,
   NotificationListItem,
-} from "./NotificationScreenConfig";
+} from './NotificationScreenConfig';
 
-const debug = createDebugger("notifications:screen");
+const debug = createDebugger('notifications:screen');
 type Nav = NativeStackNavigationProp<ExtendedRootStackParams>;
 
 export function useNotificationsData() {
   const navigation = useNavigation<Nav>();
   const { user } = useAuthStore();
-  const userId = user?.id ?? "";
+  const userId = user?.id ?? '';
   const disclosure = useFeatureAccess();
   const motivationStyle = useOnboardingStore(
     (state) => state.explicitMotivationStyle,
@@ -39,13 +39,13 @@ export function useNotificationsData() {
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [error, setError] = useState<Error | null>(null);
-  const [activeFilter, setActiveFilter] = useState<"all" | NotificationType>(
-    "all",
+  const [activeFilter, setActiveFilter] = useState<'all' | NotificationType>(
+    'all',
   );
 
   const availableFilterTypes = useMemo(() => {
     const safeFilters = getAvailableNotificationFilters(disclosure.features);
-    const types: ("all" | NotificationType)[] = ["all"];
+    const types: ('all' | NotificationType)[] = ['all'];
     safeFilters.forEach((safeType) => {
       const entry = Object.entries(NOTIFICATION_TYPE_TO_SAFE_ACTION).find(
         ([, v]) => v === safeType,
@@ -53,7 +53,7 @@ export function useNotificationsData() {
       if (entry) {
         const notifType = entry[0] as NotificationType;
         if (isNotificationTypeFilterable(notifType, disclosure.features))
-          types.push(notifType);
+          {types.push(notifType);}
       }
     });
     return types;
@@ -65,18 +65,18 @@ export function useNotificationsData() {
         setIsLoading(false);
         return;
       }
-      if (showLoading) setIsLoading(true);
+      if (showLoading) {setIsLoading(true);}
       setError(null);
       try {
         setNotifications(
           await notificationService.getNotificationCenterItems(userId),
         );
       } catch (err) {
-        debug.error("Failed to load notifications", err as Error);
+        debug.error('Failed to load notifications', err as Error);
         setError(
           err instanceof Error
             ? err
-            : new Error("Failed to load notifications"),
+            : new Error('Failed to load notifications'),
         );
       } finally {
         setIsLoading(false);
@@ -91,7 +91,7 @@ export function useNotificationsData() {
   }, [loadNotifications]);
 
   useEffect(() => {
-    if (!userId) return;
+    if (!userId) {return;}
     return notificationService.subscribeToNotificationCenter(userId, () =>
       loadNotifications(false),
     );
@@ -99,7 +99,7 @@ export function useNotificationsData() {
 
   const filteredNotifications = useMemo(
     () =>
-      activeFilter === "all"
+      activeFilter === 'all'
         ? notifications
         : notifications.filter((n) => n.type === activeFilter),
     [notifications, activeFilter],
@@ -116,7 +116,7 @@ export function useNotificationsData() {
 
   const handleMarkAsRead = useCallback(
     async (id: string) => {
-      if (!userId) return;
+      if (!userId) {return;}
       setNotifications((prev) =>
         prev.map((n) => (n.id === id ? { ...n, read: true } : n)),
       );
@@ -126,14 +126,14 @@ export function useNotificationsData() {
   );
 
   const handleMarkAllAsRead = useCallback(async () => {
-    if (!userId) return;
+    if (!userId) {return;}
     setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
     await notificationService.markAllNotificationsRead(userId);
   }, [userId]);
 
   const handleNotificationPress = useCallback(
     async (notification: Notification) => {
-      if (!notification.read) await handleMarkAsRead(notification.id);
+      if (!notification.read) {await handleMarkAsRead(notification.id);}
       const action = mapToNotificationAction(notification);
       const result = routeNotificationAction(
         navigation,
@@ -142,7 +142,7 @@ export function useNotificationsData() {
         motivationStyle,
       );
       if (!result.success)
-        debug.warn("Notification routing blocked:", result.error);
+        {debug.warn('Notification routing blocked:', result.error);}
     },
     [handleMarkAsRead, navigation, disclosure.features, motivationStyle],
   );
@@ -155,12 +155,12 @@ export function useNotificationsData() {
   const formatTime = useCallback((timestamp: number) => {
     const diff = Date.now() - new Date(timestamp).getTime();
     const mins = Math.floor(diff / 60000);
-    if (mins < 1) return "Just now";
-    if (mins < 60) return `${mins}m ago`;
+    if (mins < 1) {return 'Just now';}
+    if (mins < 60) {return `${mins}m ago`;}
     const hrs = Math.floor(mins / 60);
-    if (hrs < 24) return `${hrs}h ago`;
+    if (hrs < 24) {return `${hrs}h ago`;}
     const days = Math.floor(hrs / 24);
-    if (days < 7) return `${days}d ago`;
+    if (days < 7) {return `${days}d ago`;}
     return new Date(timestamp).toLocaleDateString();
   }, []);
 
@@ -168,14 +168,14 @@ export function useNotificationsData() {
     const items: NotificationListItem[] = [];
     const addGroup = (title: string, data: Notification[]) => {
       if (data.length > 0) {
-        items.push({ type: "header", title, count: data.length });
-        data.forEach((n) => items.push({ type: "notification", data: n }));
+        items.push({ type: 'header', title, count: data.length });
+        data.forEach((n) => items.push({ type: 'notification', data: n }));
       }
     };
-    addGroup("Today", grouped.today);
-    addGroup("Yesterday", grouped.yesterday);
-    addGroup("This Week", grouped.thisWeek);
-    addGroup("Earlier", grouped.earlier);
+    addGroup('Today', grouped.today);
+    addGroup('Yesterday', grouped.yesterday);
+    addGroup('This Week', grouped.thisWeek);
+    addGroup('Earlier', grouped.earlier);
     return items;
   }, [grouped]);
 

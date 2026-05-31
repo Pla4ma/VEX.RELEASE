@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { View } from "react-native";
+import React, { useEffect, useState } from 'react';
+import { View } from 'react-native';
 import Animated, {
   Easing,
   useAnimatedStyle,
@@ -7,15 +7,15 @@ import Animated, {
   withRepeat,
   withSequence,
   withTiming,
-} from "react-native-reanimated";
-import { createSheet } from "@/shared/ui/create-sheet";
-import { LivingCompanion } from "@/features/companion/components/LivingCompanion";
-import { getCompanionService } from "@/features/companion/service";
-import type { CompanionState } from "@/features/companion/types";
-import { createDebugger } from "@/utils/debug";
-import { launchColors } from "@theme/tokens/launch-colors";
+} from 'react-native-reanimated';
+import { createSheet } from '@/shared/ui/create-sheet';
+import { LivingCompanion } from '@/features/companion/components/LivingCompanion';
+import { getCompanionService } from '@/features/companion/service';
+import type { CompanionState } from '@/features/companion/types';
+import { createDebugger } from '@/utils/debug';
+import { launchColors } from '@theme/tokens/launch-colors';
 
-const debug = createDebugger("ActiveSessionHUDCompanion");
+const debug = createDebugger('ActiveSessionHUDCompanion');
 
 interface ActiveSessionHUDCompanionProps {
   userId: string;
@@ -52,7 +52,7 @@ export const ActiveSessionHUDCompanion: React.FC<
         const state = companionService.getState();
         setCompanionState(state);
       } catch (companionError) {
-        debug.error("Failed to load companion state:", companionError);
+        debug.error('Failed to load companion state:', companionError);
       }
     };
     loadCompanionState();
@@ -101,15 +101,15 @@ export const ActiveSessionHUDCompanion: React.FC<
 
 const styles = createSheet({
   companionContainer: {
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     marginVertical: 16,
     minHeight: 200,
     backgroundColor: launchColors.hex_1a1a2e,
     borderRadius: 16,
     padding: 24,
     margin: 16,
-    boxShadow: "0px 4px 8px rgba(0,0,0,0.3)",
+    boxShadow: '0px 4px 8px rgba(0,0,0,0.3)',
     elevation: 8,
   },
 });

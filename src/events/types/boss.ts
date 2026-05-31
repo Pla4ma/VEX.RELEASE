@@ -7,7 +7,7 @@
  */
 
 export interface BossEventDefinitions {
-  "boss:defeated": {
+  'boss:defeated': {
     userId: string;
     bossId: string;
     encounterId?: string;
@@ -27,7 +27,7 @@ export interface BossEventDefinitions {
     participants: string[];
     timestamp?: number;
   };
-  "boss:spawned": {
+  'boss:spawned': {
     userId: string;
     bossId: string;
     encounterId: string;
@@ -35,7 +35,7 @@ export interface BossEventDefinitions {
     timeLimit: number;
     timestamp: number;
   };
-  "boss:damage_dealt": {
+  'boss:damage_dealt': {
     userId: string;
     bossId: string;
     encounterId: string;
@@ -44,7 +44,7 @@ export interface BossEventDefinitions {
     maxHealth: number;
     timestamp: number;
   };
-  "boss:timeout": {
+  'boss:timeout': {
     userId: string;
     bossId: string;
     encounterId: string;
@@ -52,7 +52,7 @@ export interface BossEventDefinitions {
     maxHealth: number;
     timestamp: number;
   };
-  "boss:phase_changed": {
+  'boss:phase_changed': {
     userId?: string;
     bossId?: string;
     encounterId: string;
@@ -61,11 +61,11 @@ export interface BossEventDefinitions {
     healthPercent?: number;
     timestamp?: number;
   };
-  "boss:prime_time_scheduled": {
+  'boss:prime_time_scheduled': {
     encounterId: string;
     windows: Array<{ startTime: number; endTime: number }>;
   };
-  "boss:ability_used": {
+  'boss:ability_used': {
     userId: string;
     encounterId: string;
     abilityId: string;
@@ -73,50 +73,50 @@ export interface BossEventDefinitions {
     newHealth: number;
     comboBonus: number;
   };
-  "boss:phase": {
+  'boss:phase': {
     encounterId: string;
     userId: string;
     event: string;
     timestamp: number;
     data: Record<string, unknown>;
   };
-  "boss:squad_encounter_created": {
+  'boss:squad_encounter_created': {
     encounterId: string;
     squadId: string;
     bossId: string;
     memberCount: number;
   };
-  "boss:squad_damage_dealt": {
+  'boss:squad_damage_dealt': {
     encounterId: string;
     userId: string;
     damage: number;
     healthRemaining: number;
   };
-  "boss:squad_victory": {
+  'boss:squad_victory': {
     encounterId: string;
     squadId: string;
     bossId: string;
     totalDamage: number;
   };
-  "boss:squad_member_joined": {
+  'boss:squad_member_joined': {
     encounterId: string;
     userId: string;
     displayName: string;
   };
-  "boss:damage": {
+  'boss:damage': {
     encounterId: string;
     userId: string;
     damage: number;
     abilityUsed?: string;
     timestamp: number;
   };
-  "boss:regen": {
+  'boss:regen': {
     encounterId: string;
     bossId: string;
     healthRestored: number;
     timestamp: number;
   };
-  "boss:phase_change": {
+  'boss:phase_change': {
     encounterId: string;
     bossId: string;
     previousPhase: string;
@@ -124,26 +124,26 @@ export interface BossEventDefinitions {
     timestamp: number;
   };
   // Adaptive Difficulty Events
-  "adaptive_difficulty:profile_initialized": {
+  'adaptive_difficulty:profile_initialized': {
     userId: string;
     profileId: string;
     timestamp: number;
   };
-  "adaptive_difficulty:encounter_created": {
+  'adaptive_difficulty:encounter_created': {
     userId: string;
     encounterId: string;
     bossId: string;
     difficulty: number;
     timestamp: number;
   };
-  "adaptive_difficulty:real_time_adjustment": {
+  'adaptive_difficulty:real_time_adjustment': {
     userId: string;
     encounterId: string;
     adjustment: number;
     reason: string;
     timestamp: number;
   };
-  "adaptive_difficulty:encounter_completed": {
+  'adaptive_difficulty:encounter_completed': {
     userId: string;
     encounterId: string;
     bossId: string;
@@ -151,28 +151,28 @@ export interface BossEventDefinitions {
     timestamp: number;
   };
   // Weekly Raid Events
-  "raid:damage_contributed": {
+  'raid:damage_contributed': {
     userId: string;
     raidId: string;
     encounterId: string;
     damage: number;
     timestamp: number;
   };
-  "raid:activated": {
+  'raid:activated': {
     userId: string;
     raidId: string;
     startTime: number;
     endTime: number;
     timestamp: number;
   };
-  "raid:defeated": {
+  'raid:defeated': {
     userId: string;
     raidId: string;
     endTime: number;
     totalDamage: number;
     timestamp: number;
   };
-  "raid:timeout": {
+  'raid:timeout': {
     userId: string;
     raidId: string;
     endTime: number;

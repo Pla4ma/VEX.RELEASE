@@ -1,19 +1,19 @@
 import type {
   PurchasesOffering,
   PurchasesPackage,
-} from "react-native-purchases";
+} from 'react-native-purchases';
 import type {
   PurchasesOfferingDisplayInfo,
   PurchasesPackageDisplayInfo,
   RevenueCatError,
-} from "./revenuecat-types";
+} from './revenuecat-types';
 
 export function buildError(
-  code: RevenueCatError["code"],
+  code: RevenueCatError['code'],
   message: string,
 ): RevenueCatError {
   const error = new Error(message) as RevenueCatError;
-  error.name = "RevenueCatError";
+  error.name = 'RevenueCatError';
   error.code = code;
   return error;
 }

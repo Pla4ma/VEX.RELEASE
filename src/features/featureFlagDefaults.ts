@@ -1,12 +1,12 @@
-import type { FeatureFlag } from "./FeatureFlagService";
+import type { FeatureFlag } from './FeatureFlagService';
 
 const now = Date.now();
 
 export const defaultFlags: Record<string, FeatureFlag> = {
   new_design: {
-    key: "new_design",
+    key: 'new_design',
     value: false,
-    description: "Enable new UI design",
+    description: 'Enable new UI design',
     enabled: true,
     rolloutPercentage: 0,
     requiresAuth: false,
@@ -14,9 +14,9 @@ export const defaultFlags: Record<string, FeatureFlag> = {
     updatedAt: now,
   },
   dark_mode: {
-    key: "dark_mode",
+    key: 'dark_mode',
     value: true,
-    description: "Enable dark mode support",
+    description: 'Enable dark mode support',
     enabled: true,
     rolloutPercentage: 100,
     requiresAuth: false,
@@ -24,9 +24,9 @@ export const defaultFlags: Record<string, FeatureFlag> = {
     updatedAt: now,
   },
   push_notifications: {
-    key: "push_notifications",
+    key: 'push_notifications',
     value: true,
-    description: "Enable push notifications",
+    description: 'Enable push notifications',
     enabled: true,
     rolloutPercentage: 100,
     requiresAuth: true,
@@ -34,9 +34,9 @@ export const defaultFlags: Record<string, FeatureFlag> = {
     updatedAt: now,
   },
   offline_mode: {
-    key: "offline_mode",
+    key: 'offline_mode',
     value: false,
-    description: "Enable offline mode",
+    description: 'Enable offline mode',
     enabled: false,
     rolloutPercentage: 0,
     requiresAuth: false,
@@ -44,9 +44,9 @@ export const defaultFlags: Record<string, FeatureFlag> = {
     updatedAt: now,
   },
   advanced_search: {
-    key: "advanced_search",
+    key: 'advanced_search',
     value: false,
-    description: "Enable advanced search filters",
+    description: 'Enable advanced search filters',
     enabled: true,
     rolloutPercentage: 10,
     requiresAuth: false,
@@ -54,9 +54,9 @@ export const defaultFlags: Record<string, FeatureFlag> = {
     updatedAt: now,
   },
   preview_features: {
-    key: "preview_features",
+    key: 'preview_features',
     value: false,
-    description: "Enable preview features",
+    description: 'Enable preview features',
     enabled: true,
     rolloutPercentage: 0,
     requiresAuth: true,

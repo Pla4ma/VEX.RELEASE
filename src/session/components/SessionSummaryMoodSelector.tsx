@@ -1,8 +1,8 @@
-import React from "react";
-import { View, Text, Pressable, TextInput } from "react-native";
-import { launchColors } from "@theme/tokens/launch-colors";
-import { getMoodEmoji, type MoodType } from "./SessionSummary.helpers";
-import { selection } from "../../utils/haptics";
+import React from 'react';
+import { View, Text, Pressable, TextInput } from 'react-native';
+import { launchColors } from '@theme/tokens/launch-colors';
+import { getMoodEmoji, type MoodType } from './SessionSummary.helpers';
+import { selection } from '../../utils/haptics';
 
 interface SessionSummaryMoodSelectorProps {
   mood: MoodType;
@@ -14,7 +14,7 @@ interface SessionSummaryMoodSelectorProps {
 export const SessionSummaryMoodSelector: React.FC<
   SessionSummaryMoodSelectorProps
 > = ({ mood, reflection, onMoodChange, onReflectionChange }) => {
-  const moods: MoodType[] = ["GREAT", "GOOD", "NEUTRAL", "BAD", "TERRIBLE"];
+  const moods: MoodType[] = ['GREAT', 'GOOD', 'NEUTRAL', 'BAD', 'TERRIBLE'];
   return (
     <View style={styles.reflectionSection}>
       <Text style={styles.sectionTitle}>How was your session?</Text>
@@ -53,13 +53,13 @@ const styles = {
   reflectionSection: { marginBottom: 24 },
   sectionTitle: {
     fontSize: 18,
-    fontWeight: "600" as const,
+    fontWeight: '600' as const,
     color: launchColors.hex_fff,
     marginBottom: 12,
   },
   moodSelector: {
-    flexDirection: "row" as const,
-    justifyContent: "space-between" as const,
+    flexDirection: 'row' as const,
+    justifyContent: 'space-between' as const,
     marginBottom: 12,
   },
   moodButton: {
@@ -76,6 +76,6 @@ const styles = {
     color: launchColors.hex_fff,
     fontSize: 16,
     minHeight: 100,
-    textAlignVertical: "top" as const,
+    textAlignVertical: 'top' as const,
   },
 };

@@ -15,11 +15,11 @@ export {
   type HomeProgress,
   type HomeSecondaryAction,
   type HomePriority,
-} from "./priority-core-schemas";
+} from './priority-core-schemas';
 
 export {
   ProductContextSchema,
   HomeContextSnapshotSchema,
   type ProductContext,
   type HomeContextSnapshot,
-} from "./context-schemas";
+} from './context-schemas';

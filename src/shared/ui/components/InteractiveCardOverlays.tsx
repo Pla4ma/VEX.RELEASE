@@ -1,10 +1,10 @@
-import React from "react";
-import { View, Pressable } from "react-native";
-import Animated from "react-native-reanimated";
-import { Text } from "../../../components/primitives/Text";
-import { Icon } from "../../../icons";
-import type { Theme } from "../../../theme";
-import { cardStyles as styles } from "./InteractiveCardStyles";
+import React from 'react';
+import { View, Pressable } from 'react-native';
+import Animated from 'react-native-reanimated';
+import { Text } from '../../../components/primitives/Text';
+import { Icon } from '../../../icons';
+import type { Theme } from '../../../theme';
+import { cardStyles as styles } from './InteractiveCardStyles';
 
 export const LoadingOverlay: React.FC<{ message?: string; theme: Theme }> = ({
   message,
@@ -99,7 +99,7 @@ export const ErrorOverlay: React.FC<{
 );
 
 export const SelectedOverlay: React.FC<{ icon?: string; theme: Theme }> = ({
-  icon = "check-circle",
+  icon = 'check-circle',
   theme,
 }) => (
   <View

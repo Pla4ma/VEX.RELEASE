@@ -1,19 +1,19 @@
-import React from "react";
-import Animated, { FadeInUp } from "react-native-reanimated";
+import React from 'react';
+import Animated, { FadeInUp } from 'react-native-reanimated';
 
-import { Banner } from "../../../components/Banner";
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { Icon } from "../../../icons";
-import { TabBar } from "../../../shared/ui/components/TabBar";
-import { InteractiveCard } from "../../../shared/ui/components/InteractiveCard";
-import { ModeSelector } from "../../../features/session-start/components/ModeSelector";
-import { useTheme } from "../../../theme";
-import { PRESET_CATEGORIES } from "../utils/session-setup";
-import { SessionAdvancedOptions } from "./SessionAdvancedOptions";
-import { SessionThemeSelector } from "./SessionThemeSelector";
-import { ActiveChallenges } from "./ActiveChallenges";
-import type { SessionSetupCustomizationProps } from "./session-setup-customization-types";
+import { Banner } from '../../../components/Banner';
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { Icon } from '../../../icons';
+import { TabBar } from '../../../shared/ui/components/TabBar';
+import { InteractiveCard } from '../../../shared/ui/components/InteractiveCard';
+import { ModeSelector } from '../../../features/session-start/components/ModeSelector';
+import { useTheme } from '../../../theme';
+import { PRESET_CATEGORIES } from '../utils/session-setup';
+import { SessionAdvancedOptions } from './SessionAdvancedOptions';
+import { SessionThemeSelector } from './SessionThemeSelector';
+import { ActiveChallenges } from './ActiveChallenges';
+import type { SessionSetupCustomizationProps } from './session-setup-customization-types';
 
 export function SessionSetupCustomization({
   activeChallenges,
@@ -105,9 +105,9 @@ export function SessionSetupCustomization({
           >
             <InteractiveCard
               variant={
-                selectedPreset.id === preset.id ? "elevated" : "outlined"
+                selectedPreset.id === preset.id ? 'elevated' : 'outlined'
               }
-              state={selectedPreset.id === preset.id ? "selected" : "default"}
+              state={selectedPreset.id === preset.id ? 'selected' : 'default'}
               onPress={() => onSelectPreset(preset)}
             >
               <Box
@@ -125,7 +125,7 @@ export function SessionSetupCustomization({
                 <Box flex={1}>
                   <Text variant="label">{preset.name}</Text>
                   <Text variant="caption" color="text.secondary">
-                    {`${Math.round(preset.duration / 60)} min - ${preset.intervals} interval${preset.intervals !== 1 ? "s" : ""}`}
+                    {`${Math.round(preset.duration / 60)} min - ${preset.intervals} interval${preset.intervals !== 1 ? 's' : ''}`}
                   </Text>
                 </Box>
                 {selectedPreset.id === preset.id ? (

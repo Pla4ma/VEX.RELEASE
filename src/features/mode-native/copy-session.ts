@@ -1,11 +1,11 @@
-export { ACTIVE_INDICATOR_COPY, RESCUE_COPY } from "./copy-active-rescue";
+export { ACTIVE_INDICATOR_COPY, RESCUE_COPY } from './copy-active-rescue';
 export {
   EVIDENCE_COMPLETION_COPY,
   COLD_START_COMPLETION_COPY,
   COMPLETION_COPY,
-} from "./copy-completion";
+} from './copy-completion';
 export {
   EVIDENCE_WEEKLY_INTELLIGENCE_COPY,
   COLD_START_WEEKLY_INTELLIGENCE_COPY,
   WEEKLY_INTELLIGENCE_COPY,
-} from "./copy-weekly";
+} from './copy-weekly';

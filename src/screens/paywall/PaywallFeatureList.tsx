@@ -1,13 +1,13 @@
-import React from "react";
-import { View } from "react-native";
-import Animated, { FadeInDown } from "react-native-reanimated";
+import React from 'react';
+import { View } from 'react-native';
+import Animated, { FadeInDown } from 'react-native-reanimated';
 
-import { Icon } from "../../icons/components/Icon";
-import { Text } from "../../components/primitives/Text";
-import { CardEnterAnimation } from "../../shared/ui/components/EnterAnimation";
-import type { Theme } from "../../theme";
-import { FREE_BOUNDARY_COPY, PREMIUM_FEATURES } from "./paywall-copy";
-import { paywallStyles as styles } from "./paywall-styles";
+import { Icon } from '../../icons/components/Icon';
+import { Text } from '../../components/primitives/Text';
+import { CardEnterAnimation } from '../../shared/ui/components/EnterAnimation';
+import type { Theme } from '../../theme';
+import { FREE_BOUNDARY_COPY, PREMIUM_FEATURES } from './paywall-copy';
+import { paywallStyles as styles } from './paywall-styles';
 
 export function PaywallFeatureList({ theme }: { theme: Theme }): JSX.Element {
   return (

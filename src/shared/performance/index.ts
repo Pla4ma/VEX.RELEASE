@@ -1,6 +1,6 @@
-import React, { memo, useRef, useEffect } from "react";
-import { createDebugger } from "../../utils/debug";
-const debug = createDebugger("performance");
+import React, { memo, useRef, useEffect } from 'react';
+import { createDebugger } from '../../utils/debug';
+const debug = createDebugger('performance');
 export function lazyScreen<
   T extends React.ComponentType<Record<string, unknown>>,
 >(
@@ -14,7 +14,7 @@ export function lazyScreen<
       await factory();
     } catch (error) {
       debug.warn(
-        "Failed to preload screen",
+        'Failed to preload screen',
         error instanceof Error ? error : new Error(String(error)),
       );
     }
@@ -25,7 +25,7 @@ export function preloadCriticalScreens(
   screens: Array<() => Promise<void>>,
 ): void {
   const schedule =
-    typeof window !== "undefined" && "requestIdleCallback" in window
+    typeof window !== 'undefined' && 'requestIdleCallback' in window
       ? window.requestIdleCallback
       : (cb: () => void) => setTimeout(cb, 1);
   schedule(() => {
@@ -44,7 +44,7 @@ export function useDeepMemo<T>(
   });
   const isEqual = deps.every((dep, i) => {
     const prevDep = ref.current.deps[i];
-    if (typeof dep === "object" && dep !== null) {
+    if (typeof dep === 'object' && dep !== null) {
       return JSON.stringify(dep) === JSON.stringify(prevDep);
     }
     return dep === prevDep;
@@ -113,17 +113,17 @@ interface ImageOptimizationOptions {
   maxWidth?: number;
   maxHeight?: number;
   quality?: number;
-  format?: "webp" | "jpeg" | "png";
+  format?: 'webp' | 'jpeg' | 'png';
 }
 export function getOptimizedImageUrl(
   originalUrl: string,
   options: ImageOptimizationOptions = {},
 ): string {
   const { maxWidth = 800, quality = 80 } = options;
-  if (originalUrl.includes("supabase")) {
+  if (originalUrl.includes('supabase')) {
     const url = new URL(originalUrl);
-    url.searchParams.set("width", maxWidth.toString());
-    url.searchParams.set("quality", quality.toString());
+    url.searchParams.set('width', maxWidth.toString());
+    url.searchParams.set('quality', quality.toString());
     return url.toString();
   }
   return originalUrl;
@@ -152,12 +152,12 @@ export function shouldEnableFeature(featureName: string): boolean {
   const memory = (navigator as NavigatorDevice).deviceMemory || 4;
   const connection = (navigator as NavigatorDevice).connection;
   if (memory < 2) {
-    const heavyFeatures = ["animations", "analytics", "heavy-graphics"];
+    const heavyFeatures = ['animations', 'analytics', 'heavy-graphics'];
     if (heavyFeatures.includes(featureName)) {
       return false;
     }
   }
-  if (connection?.effectiveType === "2g" || connection?.saveData) {
+  if (connection?.effectiveType === '2g' || connection?.saveData) {
     return false;
   }
   return true;

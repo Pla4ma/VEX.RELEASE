@@ -1,4 +1,4 @@
-import { createDebugger } from "@/utils/debug";
+import { createDebugger } from '@/utils/debug';
 import type {
   CoachRecommendation,
   CoachRecommendationType,
@@ -6,11 +6,11 @@ import type {
   RecommendationContext,
   CoachPersona,
   CoachPersonaId,
-} from "./CoachRecommendationService-types";
-import { COACH_PERSONAS } from "./coach-persona-config";
-import { RECOMMENDATION_RULES } from "./recommendation-rules";
+} from './CoachRecommendationService-types';
+import { COACH_PERSONAS } from './coach-persona-config';
+import { RECOMMENDATION_RULES } from './recommendation-rules';
 
-const debug = createDebugger("coach:recommendation");
+const debug = createDebugger('coach:recommendation');
 
 export class CoachRecommendationService {
   private context: RecommendationContext;
@@ -29,14 +29,14 @@ export class CoachRecommendationService {
     const ctx = this.context;
     const coldStartEvidence =
       ctx.totalSessions < 3
-        ? { fallbackReason: "cold_start" as const }
+        ? { fallbackReason: 'cold_start' as const }
         : undefined;
 
     for (const rule of RECOMMENDATION_RULES) {
       try {
         if (rule.condition(this.context)) {
           const recommendation = rule.generate(this.context, persona);
-          debug.info("[CoachRecommendationService] Selected: %s", rule.name, {
+          debug.info('[CoachRecommendationService] Selected: %s', rule.name, {
             priority: recommendation.priority,
             type: recommendation.type,
             urgency: recommendation.urgency,
@@ -71,16 +71,16 @@ export class CoachRecommendationService {
   ): boolean {
     const FIVE_MINUTES = 5 * 60 * 1000;
     const timeSinceRefresh = Date.now() - lastRefreshTime;
-    if (timeSinceRefresh > FIVE_MINUTES) return true;
-    if (currentRec.expiresAt && Date.now() > currentRec.expiresAt) return true;
+    if (timeSinceRefresh > FIVE_MINUTES) {return true;}
+    if (currentRec.expiresAt && Date.now() > currentRec.expiresAt) {return true;}
 
     if (
-      currentRec.urgency === "critical" &&
-      currentRec.type === "protect_streak"
+      currentRec.urgency === 'critical' &&
+      currentRec.type === 'protect_streak'
     ) {
       const hoursLeft = this.context.hoursUntilStreakBreak ?? 24;
-      if (hoursLeft <= 1 && timeSinceRefresh > 60000) return true;
-      if (hoursLeft <= 2 && timeSinceRefresh > 300000) return true;
+      if (hoursLeft <= 1 && timeSinceRefresh > 60000) {return true;}
+      if (hoursLeft <= 2 && timeSinceRefresh > 300000) {return true;}
     }
     return false;
   }
@@ -101,14 +101,14 @@ export function convertToHomeRecommendation(coachRec: CoachRecommendation): {
   subtext: string;
   ctaText: string;
   ctaAction:
-    | "start_focus"
-    | "start_study"
-    | "view_boss"
-    | "view_streak"
-    | "view_progress";
+    | 'start_focus'
+    | 'start_study'
+    | 'view_boss'
+    | 'view_streak'
+    | 'view_progress';
   ctaParams?: Record<string, unknown>;
   aiCoachMessage?: string;
-  visualCue: "none" | "pulse" | "glow" | "urgent";
+  visualCue: 'none' | 'pulse' | 'glow' | 'urgent';
 } {
   return {
     id: coachRec.id,

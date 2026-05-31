@@ -1,7 +1,7 @@
-import { captureSilentFailure } from "../../../utils/silent-failure";
-import type { PersistedDraft } from "../types";
-import { CONTENT_STUDY_CONSTANTS } from "../types";
-import { getStorage, STORAGE_KEYS } from "../persistence";
+import { captureSilentFailure } from '../../../utils/silent-failure';
+import type { PersistedDraft } from '../types';
+import { CONTENT_STUDY_CONSTANTS } from '../types';
+import { getStorage, STORAGE_KEYS } from '../persistence';
 
 export class DraftManager {
   private static instance: DraftManager;
@@ -21,7 +21,7 @@ export class DraftManager {
   async saveDraft(
     draft: Omit<
       PersistedDraft,
-      "id" | "createdAt" | "updatedAt" | "autoSaveVersion"
+      'id' | 'createdAt' | 'updatedAt' | 'autoSaveVersion'
     >,
   ): Promise<PersistedDraft> {
     const now = Date.now();
@@ -52,14 +52,14 @@ export class DraftManager {
 
   async updateDraft(
     id: string,
-    updates: Partial<Omit<PersistedDraft, "id" | "createdAt">>,
+    updates: Partial<Omit<PersistedDraft, 'id' | 'createdAt'>>,
   ): Promise<PersistedDraft | null> {
     const drafts = await this.getAllDrafts();
     const draftIndex = drafts.findIndex((d) => d.id === id);
-    if (draftIndex === -1) return null;
+    if (draftIndex === -1) {return null;}
 
     const existing = drafts[draftIndex];
-    if (!existing) return null;
+    if (!existing) {return null;}
 
     const updatedDraft: PersistedDraft = {
       ...existing,
@@ -76,7 +76,7 @@ export class DraftManager {
 
   async getDraft(id: string): Promise<PersistedDraft | null> {
     const cached = this.memoryCache.get(id);
-    if (cached) return cached;
+    if (cached) {return cached;}
 
     const drafts = await this.getAllDrafts();
     return drafts.find((d) => d.id === id) || null;
@@ -85,22 +85,22 @@ export class DraftManager {
   async getAllDrafts(): Promise<PersistedDraft[]> {
     try {
       const data = await getStorage().getItem(STORAGE_KEYS.DRAFTS);
-      if (!data) return [];
+      if (!data) {return [];}
 
       const drafts: PersistedDraft[] = JSON.parse(data);
       return this.filterExpiredDrafts(drafts);
     } catch (error) {
       captureSilentFailure(error, {
-        feature: "content-study",
-        operation: "safe-fallback",
-        type: "data",
+        feature: 'content-study',
+        operation: 'safe-fallback',
+        type: 'data',
       });
       return [];
     }
   }
 
   async getDraftsByType(
-    type: PersistedDraft["type"],
+    type: PersistedDraft['type'],
   ): Promise<PersistedDraft[]> {
     const drafts = await this.getAllDrafts();
     return drafts.filter((d) => d.type === type);
@@ -110,7 +110,7 @@ export class DraftManager {
     const drafts = await this.getAllDrafts();
     const filtered = drafts.filter((d) => d.id !== id);
 
-    if (filtered.length === drafts.length) return false;
+    if (filtered.length === drafts.length) {return false;}
 
     this.memoryCache.delete(id);
     await getStorage().setItem(STORAGE_KEYS.DRAFTS, JSON.stringify(filtered));
@@ -129,50 +129,50 @@ export class DraftManager {
   }
 
   async autoSave(
-    type: PersistedDraft["type"],
+    type: PersistedDraft['type'],
     content: string,
     existingDraftId?: string,
   ): Promise<PersistedDraft> {
     if (existingDraftId) {
       const updates =
-        type === "paste"
+        type === 'paste'
           ? { pastedText: content }
-          : type === "youtube"
+          : type === 'youtube'
             ? { youtubeUrl: content }
             : {};
       const updated = await this.updateDraft(existingDraftId, updates);
-      if (updated) return updated;
+      if (updated) {return updated;}
     }
 
     const draftData =
-      type === "paste"
+      type === 'paste'
         ? {
             type,
             activeTab: type,
             pastedText: content,
-            youtubeUrl: "",
+            youtubeUrl: '',
             selectedFile: null,
           }
-        : type === "youtube"
+        : type === 'youtube'
           ? {
               type,
               activeTab: type,
-              pastedText: "",
+              pastedText: '',
               youtubeUrl: content,
               selectedFile: null,
             }
           : {
               type,
               activeTab: type,
-              pastedText: "",
-              youtubeUrl: "",
+              pastedText: '',
+              youtubeUrl: '',
               selectedFile: null,
             };
 
     return this.saveDraft(
       draftData as Omit<
         PersistedDraft,
-        "id" | "createdAt" | "updatedAt" | "autoSaveVersion"
+        'id' | 'createdAt' | 'updatedAt' | 'autoSaveVersion'
       >,
     );
   }

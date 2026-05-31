@@ -7,17 +7,17 @@
  * @phase 2.3
  */
 
-import React from "react";
-import { Pressable } from "react-native";
-import Animated, { FadeInUp } from "react-native-reanimated";
+import React from 'react';
+import { Pressable } from 'react-native';
+import Animated, { FadeInUp } from 'react-native-reanimated';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import { sessionStart } from "../../../utils/haptics";
-import { ComebackQuestCardSkeleton } from "./ComebackQuestCardSkeleton";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import { sessionStart } from '../../../utils/haptics';
+import { ComebackQuestCardSkeleton } from './ComebackQuestCardSkeleton';
 
-export type { ComebackQuestCardSkeleton } from "./ComebackQuestCardSkeleton";
+export type { ComebackQuestCardSkeleton } from './ComebackQuestCardSkeleton';
 
 export interface ComebackQuestCardProps {
   /** Original streak days that can be restored */
@@ -97,7 +97,7 @@ export function ComebackQuestCard({
                 Streak Restoration Quest
               </Text>
               <Text variant="caption" color={theme.colors.warning.dark}>
-                Complete {sessionsRequired} sessions to restore your{" "}
+                Complete {sessionsRequired} sessions to restore your{' '}
                 {originalStreak}-day streak
               </Text>
             </Box>
@@ -171,7 +171,7 @@ export function ComebackQuestCard({
               fontWeight="700"
             >
               {sessionsRemaining} more session
-              {sessionsRemaining !== 1 ? "s" : ""} →
+              {sessionsRemaining !== 1 ? 's' : ''} →
             </Text>
           </Box>
         </Box>

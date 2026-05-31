@@ -1,70 +1,70 @@
-import type { MessageCategory, DeliveryMethod } from "./coach-message-types";
+import type { MessageCategory, DeliveryMethod } from './coach-message-types';
 import type {
   BehaviorProfile,
   SignalType,
   TriggerType,
-} from "./coach-intervention-types";
+} from './coach-intervention-types';
 
 export type RecommendationType =
-  | "OPTIMAL_TIME"
-  | "STREAK_PROTECTION"
-  | "COMEBACK_BUILDER"
-  | "DIFFICULTY_ADJUST"
-  | "CHALLENGE_SYNC"
-  | "BOSS_PREP"
-  | "HABIT_BUILDER"
-  | "ENERGY_BASED";
+  | 'OPTIMAL_TIME'
+  | 'STREAK_PROTECTION'
+  | 'COMEBACK_BUILDER'
+  | 'DIFFICULTY_ADJUST'
+  | 'CHALLENGE_SYNC'
+  | 'BOSS_PREP'
+  | 'HABIT_BUILDER'
+  | 'ENERGY_BASED';
 
 export type RecommendationSource =
-  | "HISTORICAL_PATTERN"
-  | "STREAK_DATA"
-  | "LEVEL_PROGRESS"
-  | "CHALLENGE_DEADLINE"
-  | "BOSS_STATUS"
-  | "ENERGY_LEVEL"
-  | "TIME_OF_DAY";
+  | 'HISTORICAL_PATTERN'
+  | 'STREAK_DATA'
+  | 'LEVEL_PROGRESS'
+  | 'CHALLENGE_DEADLINE'
+  | 'BOSS_STATUS'
+  | 'ENERGY_LEVEL'
+  | 'TIME_OF_DAY';
 
 export type RecommendationStatus =
-  | "ACTIVE"
-  | "ACCEPTED"
-  | "REJECTED"
-  | "EXPIRED";
+  | 'ACTIVE'
+  | 'ACCEPTED'
+  | 'REJECTED'
+  | 'EXPIRED';
 
 export type ReminderType =
-  | "STREAK_WARNING"
-  | "STREAK_CHECK"
-  | "OPTIMAL_SESSION_TIME"
-  | "CHALLENGE_DEADLINE"
-  | "BOSS_TIMEOUT"
-  | "COMEBACK_OPPORTUNITY"
-  | "MILESTONE_APPROACHING"
-  | "PERSONALIZED_MOTIVATION"
-  | "BREAK_REMINDER";
+  | 'STREAK_WARNING'
+  | 'STREAK_CHECK'
+  | 'OPTIMAL_SESSION_TIME'
+  | 'CHALLENGE_DEADLINE'
+  | 'BOSS_TIMEOUT'
+  | 'COMEBACK_OPPORTUNITY'
+  | 'MILESTONE_APPROACHING'
+  | 'PERSONALIZED_MOTIVATION'
+  | 'BREAK_REMINDER';
 
 export type ComebackStatus =
-  | "OFFERED"
-  | "ACTIVE"
-  | "COMPLETED"
-  | "EXPIRED"
-  | "DECLINED";
+  | 'OFFERED'
+  | 'ACTIVE'
+  | 'COMPLETED'
+  | 'EXPIRED'
+  | 'DECLINED';
 
 export type CoachUserState =
-  | "COLD_START"
-  | "LOW_CONFIDENCE"
-  | "HIGH_CONFIDENCE"
-  | "STREAK_AT_RISK"
-  | "COMEBACK_MODE"
-  | "POST_FAILURE_SUPPORT"
-  | "MILESTONE_HYPE"
-  | "OVERLOAD_PROTECTION"
-  | "MUTED_MODE";
+  | 'COLD_START'
+  | 'LOW_CONFIDENCE'
+  | 'HIGH_CONFIDENCE'
+  | 'STREAK_AT_RISK'
+  | 'COMEBACK_MODE'
+  | 'POST_FAILURE_SUPPORT'
+  | 'MILESTONE_HYPE'
+  | 'OVERLOAD_PROTECTION'
+  | 'MUTED_MODE';
 
 export interface SessionRecommendation {
   id: string;
   userId: string;
   type: RecommendationType;
   suggestedDuration: number;
-  suggestedDifficulty: "EASY" | "NORMAL" | "CHALLENGING" | "PUSH";
+  suggestedDifficulty: 'EASY' | 'NORMAL' | 'CHALLENGING' | 'PUSH';
   reasoning: string;
   confidence: number;
   basedOn: RecommendationSource[];
@@ -115,7 +115,7 @@ export interface DifficultyProfile {
   adjustmentReason: string | null;
   successRateRecent: number;
   successRateOverall: number;
-  trend: "IMPROVING" | "STABLE" | "DECLINING";
+  trend: 'IMPROVING' | 'STABLE' | 'DECLINING';
 }
 
 export interface CoachState {

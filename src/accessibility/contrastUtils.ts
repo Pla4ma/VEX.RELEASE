@@ -2,7 +2,7 @@
  * Contrast calculation and accessible color utility functions.
  */
 
-import type { ContrastCheck } from "./types";
+import type { ContrastCheck } from './types';
 
 export function calculateContrastRatio(color1: string, color2: string): number {
   const luminance1 = calculateLuminance(color1);
@@ -13,7 +13,7 @@ export function calculateContrastRatio(color1: string, color2: string): number {
 }
 
 function calculateLuminance(color: string): number {
-  const hex = color.replace("#", "");
+  const hex = color.replace('#', '');
   const r = parseInt(hex.substring(0, 2), 16) / 255;
   const g = parseInt(hex.substring(2, 4), 16) / 255;
   const b = parseInt(hex.substring(4, 6), 16) / 255;
@@ -60,7 +60,7 @@ export function getAccessibleAlternatives(
 }
 
 function adjustBrightness(color: string, percent: number): string {
-  const hex = color.replace("#", "");
+  const hex = color.replace('#', '');
   const r = parseInt(hex.substring(0, 2), 16);
   const g = parseInt(hex.substring(2, 4), 16);
   const b = parseInt(hex.substring(4, 6), 16);
@@ -71,5 +71,5 @@ function adjustBrightness(color: string, percent: number): string {
   const nr = adjust(r);
   const ng = adjust(g);
   const nb = adjust(b);
-  return `#${nr.toString(16).padStart(2, "0")}${ng.toString(16).padStart(2, "0")}${nb.toString(16).padStart(2, "0")}`;
+  return `#${nr.toString(16).padStart(2, '0')}${ng.toString(16).padStart(2, '0')}${nb.toString(16).padStart(2, '0')}`;
 }

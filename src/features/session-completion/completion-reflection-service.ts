@@ -3,7 +3,7 @@ import {
   CompletionReflectionSchema,
   type CompletionReflection,
   type CompletionReflectionInput,
-} from "./schemas";
+} from './schemas';
 
 function durationMinutes(input: CompletionReflectionInput): number {
   const seconds =
@@ -15,23 +15,23 @@ function durationMinutes(input: CompletionReflectionInput): number {
 
 function resolveTone(
   input: CompletionReflectionInput,
-): CompletionReflection["tone"] {
-  if (input.motivationStyle === "student" || input.primaryGoal === "STUDY") {
-    return "study";
+): CompletionReflection['tone'] {
+  if (input.motivationStyle === 'student' || input.primaryGoal === 'STUDY') {
+    return 'study';
   }
-  if (input.motivationStyle === "coach_led") {
-    return "coach";
+  if (input.motivationStyle === 'coach_led') {
+    return 'coach';
   }
-  if (input.motivationStyle === "intense" || input.bossIntensity === "high") {
-    return "intense";
+  if (input.motivationStyle === 'intense' || input.bossIntensity === 'high') {
+    return 'intense';
   }
-  return "calm";
+  return 'calm';
 }
 
 function buildReflection(input: CompletionReflectionInput): string {
   const minutes = durationMinutes(input);
   const target =
-    input.studyTarget ?? input.primaryGoal?.toLowerCase() ?? "focus";
+    input.studyTarget ?? input.primaryGoal?.toLowerCase() ?? 'focus';
 
   if (
     input.sessionSummary.streakMaintained === false ||
@@ -58,13 +58,13 @@ function buildNextAction(input: CompletionReflectionInput): string {
   if (input.studyTarget) {
     return `Next: reopen ${input.studyTarget} for one smaller block.`;
   }
-  if (input.primaryGoal === "STUDY") {
-    return "Next: start one focused study block before adding more scope.";
+  if (input.primaryGoal === 'STUDY') {
+    return 'Next: start one focused study block before adding more scope.';
   }
-  if (input.bossIntensity === "high") {
-    return "Next: take the win, then hit one shorter block.";
+  if (input.bossIntensity === 'high') {
+    return 'Next: take the win, then hit one shorter block.';
   }
-  return "Next: return home and keep the next session simple.";
+  return 'Next: return home and keep the next session simple.';
 }
 
 export function buildCompletionReflection(

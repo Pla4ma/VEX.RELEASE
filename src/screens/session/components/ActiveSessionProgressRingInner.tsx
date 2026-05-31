@@ -1,22 +1,22 @@
-import React from "react";
+import React from 'react';
 import Svg, {
   Circle,
   Defs,
   LinearGradient as SvgLinearGradient,
   Stop,
-} from "react-native-svg";
-import Animated from "react-native-reanimated";
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { PurityHUD } from "../../../session/components/PurityHUD";
-import { AnimatedCircle } from "../hooks/useSessionAnimations";
-import { formatTime, PERFECT_PARTICLE_COUNT } from "../utils/active-session";
-import { launchColors } from "@theme/tokens/launch-colors";
-import { PerfectFocusBurstParticle } from "./PerfectFocusBurstParticle";
+} from 'react-native-svg';
+import Animated from 'react-native-reanimated';
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { PurityHUD } from '../../../session/components/PurityHUD';
+import { AnimatedCircle } from '../hooks/useSessionAnimations';
+import { formatTime, PERFECT_PARTICLE_COUNT } from '../utils/active-session';
+import { launchColors } from '@theme/tokens/launch-colors';
+import { PerfectFocusBurstParticle } from './PerfectFocusBurstParticle';
 import {
   USE_SAFE_PROGRESS_RING,
   type ActiveSessionProgressRingProps,
-} from "./progress-ring-types";
+} from './progress-ring-types';
 
 export const ActiveSessionProgressRing: React.FC<
   ActiveSessionProgressRingProps
@@ -46,12 +46,12 @@ export const ActiveSessionProgressRing: React.FC<
   const outerCircumference = 2 * Math.PI * outerRadius;
   return (
     <Animated.View
-      style={[pulseStyle, { alignItems: "center", justifyContent: "center" }]}
+      style={[pulseStyle, { alignItems: 'center', justifyContent: 'center' }]}
     >
       <Box
         style={{
-          alignItems: "center",
-          justifyContent: "center",
+          alignItems: 'center',
+          justifyContent: 'center',
           borderRadius: 999,
           ...glowStyle,
         }}
@@ -118,7 +118,7 @@ export const ActiveSessionProgressRing: React.FC<
         </Svg>
         {perfectFocusActive ? (
           <Animated.View
-            style={[{ position: "absolute" }, rotatingPerfectFocusStyle]}
+            style={[{ position: 'absolute' }, rotatingPerfectFocusStyle]}
           >
             <Svg width={RING_SIZE + 34} height={RING_SIZE + 34}>
               <Defs>

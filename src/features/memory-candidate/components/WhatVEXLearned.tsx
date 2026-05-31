@@ -1,11 +1,11 @@
-import React from "react";
-import { View } from "react-native";
-import { Pressable } from "react-native";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import { getMinTouchTargetStyle } from "../../../utils/touchTarget";
-import { LearnedItemRow } from "./LearnedItemRow";
-import type { LearnedItem, WhatVEXLearned } from "../schemas";
+import React from 'react';
+import { View } from 'react-native';
+import { Pressable } from 'react-native';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import { getMinTouchTargetStyle } from '../../../utils/touchTarget';
+import { LearnedItemRow } from './LearnedItemRow';
+import type { LearnedItem, WhatVEXLearned } from '../schemas';
 
 interface Props {
   data: WhatVEXLearned;
@@ -30,27 +30,27 @@ export function WhatVEXLearnedView({
         backgroundColor: theme.colors.semantic.surface,
         borderRadius: theme.borderRadius.md,
         padding: theme.spacing[12],
-        alignItems: "center",
+        alignItems: 'center',
       },
     }, [
       React.createElement(Text, {
-        key: "title",
+        key: 'title',
         style: {
           color: theme.colors.text.primary,
           fontSize: theme.typography.body.large.fontSize,
           fontWeight: theme.fontWeights.semibold,
           marginBottom: theme.spacing[2],
         },
-      }, "What VEX learned"),
+      }, 'What VEX learned'),
       React.createElement(Text, {
-        key: "empty",
+        key: 'empty',
         style: {
           color: theme.colors.text.secondary,
           fontSize: theme.typography.body.medium.fontSize,
           lineHeight: 20,
-          textAlign: "center",
+          textAlign: 'center',
         },
-      }, "VEX is still learning. Complete one more session to make this sharper."),
+      }, 'VEX is still learning. Complete one more session to make this sharper.'),
     ]);
   }
 
@@ -64,27 +64,27 @@ export function WhatVEXLearnedView({
     },
   }, [
     React.createElement(View, {
-      key: "header",
+      key: 'header',
       style: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
         marginBottom: theme.spacing[4],
       },
     }, [
       React.createElement(Text, {
-        key: "title",
+        key: 'title',
         style: {
           color: theme.colors.text.primary,
           fontSize: theme.typography.heading.h4.fontSize,
           fontWeight: theme.fontWeights.semibold,
         },
-      }, "What VEX learned"),
+      }, 'What VEX learned'),
       onDismiss &&
         React.createElement(Pressable, {
-          key: "dismiss",
-          accessibilityLabel: "Dismiss",
-          accessibilityRole: "button",
+          key: 'dismiss',
+          accessibilityLabel: 'Dismiss',
+          accessibilityRole: 'button',
           onPress: onDismiss,
           style: [getMinTouchTargetStyle(), { padding: theme.spacing[2] }],
         }, React.createElement(Text, {
@@ -92,7 +92,7 @@ export function WhatVEXLearnedView({
             color: theme.colors.text.tertiary,
             fontSize: theme.typography.body.large.fontSize,
           },
-        }, "\u00D7")),
+        }, '\u00D7')),
     ]),
     ...data.items.map((item) =>
       React.createElement(LearnedItemRow, {
@@ -104,7 +104,7 @@ export function WhatVEXLearnedView({
       }),
     ),
     React.createElement(View, {
-      key: "disclaimer",
+      key: 'disclaimer',
       style: {
         backgroundColor: theme.colors.warning.light,
         borderRadius: theme.borderRadius.sm,

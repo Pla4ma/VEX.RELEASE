@@ -4,8 +4,8 @@
  * Memoized selectors for accessing store state.
  */
 
-import type { CoachStore, CoachUIState } from "./types";
-import type { MessageCategory } from "../schemas";
+import type { CoachStore, CoachUIState } from './types';
+import type { MessageCategory } from '../schemas';
 
 // Message selectors
 export const selectActiveMessage = (state: CoachStore) => state.activeMessage;

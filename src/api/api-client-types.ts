@@ -4,7 +4,7 @@ import type {
   ApiRequestConfig,
   ApiResponse,
   ApiError,
-} from "./client-types";
+} from './client-types';
 
 export type {
   ApiConfig,

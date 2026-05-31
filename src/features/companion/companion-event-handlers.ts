@@ -1,4 +1,4 @@
-import type { PersonalityEventType } from "./personality-responses";
+import type { PersonalityEventType } from './personality-responses';
 
 export type TriggerFn = (
   type: PersonalityEventType,
@@ -12,9 +12,9 @@ export function handleBossDefeated(
 ): void {
   const payload = event as { bossName?: string; userId: string };
   const customDialogue = payload.bossName
-    ? [`${payload.bossName} is down!`, "Your focus was unstoppable!"]
+    ? [`${payload.bossName} is down!`, 'Your focus was unstoppable!']
     : undefined;
-  trigger("BOSS_DEFEATED", payload.userId, customDialogue);
+  trigger('BOSS_DEFEATED', payload.userId, customDialogue);
 }
 
 export function handleSessionCompleted(
@@ -26,10 +26,10 @@ export function handleSessionCompleted(
     purity?: number;
     userId: string;
   };
-  if (payload.grade === "S") {
-    trigger("S_GRADE_SESSION", payload.userId);
+  if (payload.grade === 'S') {
+    trigger('S_GRADE_SESSION', payload.userId);
   } else if (payload.purity !== undefined && payload.purity >= 95) {
-    trigger("PERFECT_SESSION", payload.userId);
+    trigger('PERFECT_SESSION', payload.userId);
   }
 }
 
@@ -41,11 +41,11 @@ export function handleStreakMilestone(
   if (payload.days === 7 || payload.days === 14 || payload.days === 30) {
     const customDialogue =
       payload.days === 7
-        ? ["One week! We are just getting started."]
+        ? ['One week! We are just getting started.']
         : payload.days === 14
-          ? ["14 days. That is not luck. That is discipline."]
-          : ["30-day streak!", "You have built something real."];
-    trigger("STREAK_MILESTONE", payload.userId, customDialogue);
+          ? ['14 days. That is not luck. That is discipline.']
+          : ['30-day streak!', 'You have built something real.'];
+    trigger('STREAK_MILESTONE', payload.userId, customDialogue);
   }
 }
 
@@ -58,10 +58,10 @@ export function handleStreakBroken(
     payload.previousStreak >= 7
       ? [
           `${payload.previousStreak}-day streak ends.`,
-          "But your skills do not. Reset with me.",
+          'But your skills do not. Reset with me.',
         ]
       : undefined;
-  trigger("STREAK_BROKEN", payload.userId, customDialogue);
+  trigger('STREAK_BROKEN', payload.userId, customDialogue);
 }
 
 export function handleUserReturned(
@@ -72,16 +72,16 @@ export function handleUserReturned(
   if (payload.daysAbsent >= 3) {
     const customDialogue =
       payload.daysAbsent >= 7
-        ? ["Been a while.", "But you are here now. That is enough."]
-        : ["You came back!", "That is what matters."];
-    trigger("COMEBACK", payload.userId, customDialogue);
+        ? ['Been a while.', 'But you are here now. That is enough.']
+        : ['You came back!', 'That is what matters.'];
+    trigger('COMEBACK', payload.userId, customDialogue);
   }
 }
 
 export function handleLevelUp(trigger: TriggerFn, event: unknown): void {
   const payload = event as { newLevel: number; userId: string };
-  trigger("LEVEL_UP", payload.userId, [
+  trigger('LEVEL_UP', payload.userId, [
     `Level ${payload.newLevel}!`,
-    "Growing stronger together.",
+    'Growing stronger together.',
   ]);
 }

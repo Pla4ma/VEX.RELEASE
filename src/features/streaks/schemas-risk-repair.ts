@@ -3,18 +3,18 @@
  * Risk monitoring and repair quest validation
  */
 
-import { z } from "zod";
+import { z } from 'zod';
 
 // ============================================================================
 // Streak Risk Monitor Schemas
 // ============================================================================
 
 export const RiskLevelSchema = z.enum([
-  "NONE",
-  "LOW",
-  "MEDIUM",
-  "HIGH",
-  "CRITICAL",
+  'NONE',
+  'LOW',
+  'MEDIUM',
+  'HIGH',
+  'CRITICAL',
 ]);
 
 export const StreakRiskStatusSchema = z.object({
@@ -40,10 +40,10 @@ export const StreakRiskCheckInputSchema = z.object({
 // ============================================================================
 
 export const RepairQuestStatusSchema = z.enum([
-  "ACTIVE",
-  "COMPLETED",
-  "EXPIRED",
-  "ABANDONED",
+  'ACTIVE',
+  'COMPLETED',
+  'EXPIRED',
+  'ABANDONED',
 ]);
 
 export const StreakRepairQuestSchema = z.object({
@@ -93,7 +93,7 @@ export const StreakRiskEventSchema = z.object({
 export const StreakRepairEventSchema = z.object({
   userId: z.string().uuid(),
   questId: z.string().uuid(),
-  eventType: z.enum(["STARTED", "PROGRESS", "COMPLETED", "EXPIRED"]),
+  eventType: z.enum(['STARTED', 'PROGRESS', 'COMPLETED', 'EXPIRED']),
   previousStreak: z.number().optional(),
   restoredDays: z.number().optional(),
   sessionsCompleted: z.number().optional(),

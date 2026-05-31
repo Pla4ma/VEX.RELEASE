@@ -1,16 +1,16 @@
-import { z } from "zod";
+import { z } from 'zod';
 import {
   isNonEmptyString, isPositiveInteger, isNonNegativeNumber,
   isValidEmail, isValidUUID, isPlainObject,
   isValidDate, isValidURL, isValidImageURL,
-} from "./type-guards";
+} from './type-guards';
 import {
   clamp, clamp01, sanitizeString, truncateString, formatNumber, parseNumber,
-} from "./format-utils";
+} from './format-utils';
 import {
   validateArray, validateDateRange, validatePassword,
   type PasswordValidationResult,
-} from "./advanced-validation";
+} from './advanced-validation';
 
 export {
   isNonEmptyString, isPositiveInteger, isNonNegativeNumber,
@@ -33,7 +33,7 @@ export function validateRange(
   max: number,
   options: { inclusive?: boolean; integer?: boolean; name?: string } = {},
 ): RangeValidationResult {
-  const { inclusive = true, integer = false, name = "value" } = options;
+  const { inclusive = true, integer = false, name = 'value' } = options;
   const violations: string[] = [];
   if (isNaN(value)) {
     return { valid: false, clamped: min, violations: [`${name} is not a valid number`] };
@@ -71,7 +71,7 @@ export function validateSchema<T>(
   const fieldErrors: Record<string, string[]> = {};
   const errors: string[] = [];
   result.error.errors.forEach((err) => {
-    const path = err.path.join(".");
+    const path = err.path.join('.');
     const message = err.message;
     if (path) {
       fieldErrors[path] = fieldErrors[path] || [];

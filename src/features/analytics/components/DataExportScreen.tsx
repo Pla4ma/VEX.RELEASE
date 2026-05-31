@@ -1,11 +1,11 @@
-import React, { useState, useCallback } from "react";
-import { View, Text, ScrollView, Pressable, Switch, Alert, Linking } from "react-native";
-import { useExportAnalytics, useExportJobs } from "../hooks";
-import { ExportProgress } from "./ExportProgress";
-import { ErrorBoundary } from "../../../errors/ErrorBoundary";
-import { SkeletonList } from "../../../shared/ui/primitives/Skeleton";
-import { launchColors } from "@theme/tokens/launch-colors";
-import { styles } from "./DataExportScreen.styles";
+import React, { useState, useCallback } from 'react';
+import { View, Text, ScrollView, Pressable, Switch, Alert, Linking } from 'react-native';
+import { useExportAnalytics, useExportJobs } from '../hooks';
+import { ExportProgress } from './ExportProgress';
+import { ErrorBoundary } from '../../../errors/ErrorBoundary';
+import { SkeletonList } from '../../../shared/ui/primitives/Skeleton';
+import { launchColors } from '@theme/tokens/launch-colors';
+import { styles } from './DataExportScreen.styles';
 import {
   type DataExportScreenProps,
   type DataCategory,
@@ -15,14 +15,14 @@ import {
   FormatSelector,
   DangerZoneSection,
   ConfirmExportModal,
-} from "./data-export-helpers";
-import * as Sentry from "@sentry/react-native";
+} from './data-export-helpers';
+import * as Sentry from '@sentry/react-native';
 
 export type { DataExportScreenProps, ExportFormat, DataCategory };
 
 export function DataExportScreen({ userId, onClose }: DataExportScreenProps) {
-  const [selectedCategory, setSelectedCategory] = useState<DataCategory>("all");
-  const [selectedFormat, setSelectedFormat] = useState<ExportFormat>("json");
+  const [selectedCategory, setSelectedCategory] = useState<DataCategory>('all');
+  const [selectedFormat, setSelectedFormat] = useState<ExportFormat>('json');
   const [includeMetadata, setIncludeMetadata] = useState(true);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const { data: exportJobs, isLoading: jobsLoading } = useExportJobs(userId);
@@ -38,30 +38,30 @@ export function DataExportScreen({ userId, onClose }: DataExportScreenProps) {
         dataTypes: [selectedCategory],
         dateRange: { start: Date.now() - 30 * 24 * 60 * 60 * 1000, end: Date.now() },
       });
-      Alert.alert("Export Started", "Your data export has been queued. You'll be notified when it's ready.", [{ text: "OK" }]);
+      Alert.alert('Export Started', "Your data export has been queued. You'll be notified when it's ready.", [{ text: 'OK' }]);
     } catch (error) {
-      Alert.alert("Export Failed", "Unable to start export. Please try again.", [{ text: "OK" }]);
+      Alert.alert('Export Failed', 'Unable to start export. Please try again.', [{ text: 'OK' }]);
     }
   }, [exportMutation, selectedFormat, selectedCategory]);
 
   const handleDownload = useCallback((jobId: string) => {
     const job = exportJobs?.find((j) => j.id === jobId);
     if (!job?.fileUrl) {
-      Alert.alert("Download", "This export is not ready yet. Please wait for it to complete.", [{ text: "OK" }]);
+      Alert.alert('Download', 'This export is not ready yet. Please wait for it to complete.', [{ text: 'OK' }]);
       return;
     }
     Sentry.addBreadcrumb({
-      category: "analytics_export",
-      message: "Downloading export file",
-      level: "info",
+      category: 'analytics_export',
+      message: 'Downloading export file',
+      level: 'info',
       data: { jobId, fileUrl: job.fileUrl },
     });
     Linking.openURL(job.fileUrl).catch((err: Error) => {
       Sentry.captureException(err, {
-        tags: { feature: "analytics_export", operation: "download" },
+        tags: { feature: 'analytics_export', operation: 'download' },
         extra: { jobId, fileUrl: job.fileUrl },
       });
-      Alert.alert("Download Failed", "Unable to open the download link. Please try again.", [{ text: "OK" }]);
+      Alert.alert('Download Failed', 'Unable to open the download link. Please try again.', [{ text: 'OK' }]);
     });
   }, [exportJobs]);
 
@@ -123,7 +123,7 @@ export function DataExportScreen({ userId, onClose }: DataExportScreenProps) {
               </View>
               <View style={styles.previewRow}>
                 <Text style={styles.previewLabel}>Metadata</Text>
-                <Text style={styles.previewValue}>{includeMetadata ? "Included" : "Excluded"}</Text>
+                <Text style={styles.previewValue}>{includeMetadata ? 'Included' : 'Excluded'}</Text>
               </View>
             </View>
           </View>
@@ -137,7 +137,7 @@ export function DataExportScreen({ userId, onClose }: DataExportScreenProps) {
             accessibilityHint="Double tap to select"
           >
             <Text style={styles.exportButtonText}>
-              {exportMutation.isPending ? "Preparing..." : "Start Export"}
+              {exportMutation.isPending ? 'Preparing...' : 'Start Export'}
             </Text>
           </Pressable>
 
@@ -154,7 +154,7 @@ export function DataExportScreen({ userId, onClose }: DataExportScreenProps) {
                   onRetry={() =>
                     exportMutation.mutateAsync({
                       format: selectedFormat,
-                      dataTypes: ["analytics"],
+                      dataTypes: ['analytics'],
                       dateRange: { start: Date.now() - 30 * 24 * 60 * 60 * 1000, end: Date.now() },
                     })
                   }

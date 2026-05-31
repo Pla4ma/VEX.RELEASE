@@ -2,19 +2,19 @@
  * Unified Mastery Repository
  * Supabase integration for 5-track mastery system
  */
-import { supabase } from "../../../config/supabase";
-import type { UnifiedMasteryState, MasteryTrack } from "../unified-mastery";
-const TABLE = "mastery_tracks";
+import { supabase } from '../../../config/supabase';
+import type { UnifiedMasteryState, MasteryTrack } from '../unified-mastery';
+const TABLE = 'mastery_tracks';
 export async function fetchMasteryTrack(
   userId: string,
 ): Promise<UnifiedMasteryState | null> {
   const { data, error } = await supabase
     .from(TABLE)
-    .select("*")
-    .eq("user_id", userId)
+    .select('*')
+    .eq('user_id', userId)
     .single();
   if (error) {
-    if (error.code === "PGRST116") {
+    if (error.code === 'PGRST116') {
       return null;
     } // No rows found
     throw error;
@@ -45,7 +45,7 @@ export async function updateMasteryTrack(
   const { error } = await supabase
     .from(TABLE)
     .update(updates)
-    .eq("user_id", userId);
+    .eq('user_id', userId);
   if (error) {
     throw error;
   }
@@ -56,7 +56,7 @@ export async function incrementTrackXp(
   xpAmount: number,
 ): Promise<void> {
   const trackKey = track.toLowerCase();
-  const { error } = await supabase.rpc("increment_track_xp", {
+  const { error } = await supabase.rpc('increment_track_xp', {
     p_user_id: userId,
     p_track: trackKey,
     p_amount: xpAmount,
@@ -65,8 +65,8 @@ export async function incrementTrackXp(
     // Fallback if RPC doesn't exist
     const { data } = await supabase
       .from(TABLE)
-      .select("*")
-      .eq("user_id", userId)
+      .select('*')
+      .eq('user_id', userId)
       .single();
     if (data) {
       await updateTrackXpFallback(userId, track, data, xpAmount);
@@ -80,10 +80,10 @@ async function updateTrackXpFallback(
   xpAmount: number,
 ): Promise<void> {
   const updates = buildTrackXpUpdate(track, row, xpAmount);
-  await supabase.from(TABLE).update(updates).eq("user_id", userId);
+  await supabase.from(TABLE).update(updates).eq('user_id', userId);
 }
 function valueToNumber(value: unknown): number {
-  return typeof value === "number" ? value : 0;
+  return typeof value === 'number' ? value : 0;
 }
 function buildTrackXpUpdate(
   track: MasteryTrack,
@@ -91,28 +91,28 @@ function buildTrackXpUpdate(
   xpAmount: number,
 ): Record<string, number> {
   switch (track) {
-    case "DURATION":
+    case 'DURATION':
       return {
         duration_xp: valueToNumber(row.duration_xp) + xpAmount,
         duration_total_xp: valueToNumber(row.duration_total_xp) + xpAmount,
       };
-    case "PURITY":
+    case 'PURITY':
       return {
         purity_xp: valueToNumber(row.purity_xp) + xpAmount,
         purity_total_xp: valueToNumber(row.purity_total_xp) + xpAmount,
       };
-    case "CONSISTENCY":
+    case 'CONSISTENCY':
       return {
         consistency_xp: valueToNumber(row.consistency_xp) + xpAmount,
         consistency_total_xp:
           valueToNumber(row.consistency_total_xp) + xpAmount,
       };
-    case "COMEBACK":
+    case 'COMEBACK':
       return {
         comeback_xp: valueToNumber(row.comeback_xp) + xpAmount,
         comeback_total_xp: valueToNumber(row.comeback_total_xp) + xpAmount,
       };
-    case "BOSS":
+    case 'BOSS':
       return {
         boss_xp: valueToNumber(row.boss_xp) + xpAmount,
         boss_total_xp: valueToNumber(row.boss_total_xp) + xpAmount,
@@ -161,7 +161,7 @@ function dbToState(row: Record<string, unknown>): UnifiedMasteryState {
       },
     },
     overallLevel: row.overall_level as number,
-    overallRank: row.overall_rank as UnifiedMasteryState["overallRank"],
+    overallRank: row.overall_rank as UnifiedMasteryState['overallRank'],
     prestigeLevel: 0, // From separate table
     prestigeBonuses: [],
     lastUpdated: new Date(row.updated_at as string).getTime(),

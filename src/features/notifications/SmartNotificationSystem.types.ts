@@ -1,13 +1,13 @@
-export type NotificationPriority = "CRITICAL" | "HIGH" | "MEDIUM" | "LOW";
+export type NotificationPriority = 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW';
 export type NotificationType =
-  | "STREAK_PROTECTION"
-  | "BOSS_OPPORTUNITY"
-  | "STUDY_REMINDER"
-  | "COMEBACK"
-  | "SQUAD_ACTIVITY"
-  | "WEEKLY_GOAL"
-  | "MILESTONE"
-  | "RE_ENGAGEMENT";
+  | 'STREAK_PROTECTION'
+  | 'BOSS_OPPORTUNITY'
+  | 'STUDY_REMINDER'
+  | 'COMEBACK'
+  | 'SQUAD_ACTIVITY'
+  | 'WEEKLY_GOAL'
+  | 'MILESTONE'
+  | 'RE_ENGAGEMENT';
 export interface SmartNotification {
   id: string;
   userId: string;

@@ -1,4 +1,4 @@
-import type { ContentSourceType } from "./enums";
+import type { ContentSourceType } from './enums';
 
 // Persistence Types
 export interface PersistedStudySession {
@@ -17,8 +17,8 @@ export interface PersistedStudySession {
 export interface PersistedDraft {
   id: string;
   userId: string;
-  type: "paste" | "pdf" | "youtube";
-  activeTab: "paste" | "pdf" | "youtube";
+  type: 'paste' | 'pdf' | 'youtube';
+  activeTab: 'paste' | 'pdf' | 'youtube';
   pastedText: string;
   youtubeUrl: string;
   selectedFile: {
@@ -37,13 +37,13 @@ export interface LocalCacheEntry<T> {
   cachedAt: number;
   expiresAt: number;
   etag?: string;
-  source: "memory" | "mmkv" | "indexedDB";
+  source: 'memory' | 'mmkv' | 'indexedDB';
 }
 
 export interface SyncQueueItem {
   id: string;
-  operation: "create" | "update" | "delete";
-  entity: "content" | "generation" | "feedback";
+  operation: 'create' | 'update' | 'delete';
+  entity: 'content' | 'generation' | 'feedback';
   payload: unknown;
   retryCount: number;
   maxRetries: number;

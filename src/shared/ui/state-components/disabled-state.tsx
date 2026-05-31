@@ -1,8 +1,8 @@
-import React from "react";
-import { Text, View } from "react-native";
-import { useTheme } from "../../../theme";
-import { styles } from "./styles";
-import type { DisabledStateProps } from "./types";
+import React from 'react';
+import { Text, View } from 'react-native';
+import { useTheme } from '../../../theme';
+import { styles } from './styles';
+import type { DisabledStateProps } from './types';
 
 export function DisabledState({
   reason,

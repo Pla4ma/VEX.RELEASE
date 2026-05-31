@@ -3,30 +3,30 @@
  * Props for content study UI components
  */
 
-import type { ContentSourceType, InputTab, ExtractionStage } from "./enums";
-import type { StudyTask, SessionPlan } from "./domain";
-import type { ValidationError, SessionPreparationData } from "./state";
+import type { ContentSourceType, InputTab, ExtractionStage } from './enums';
+import type { StudyTask, SessionPlan } from './domain';
+import type { ValidationError, SessionPreparationData } from './state';
 
 export enum ContentStudyErrorCode {
-  RATE_LIMIT_EXCEEDED = "RATE_LIMIT_EXCEEDED",
-  CONTENT_NOT_FOUND = "CONTENT_NOT_FOUND",
-  EXTRACTION_FAILED = "EXTRACTION_FAILED",
-  GENERATION_FAILED = "GENERATION_FAILED",
-  INVALID_INPUT = "INVALID_INPUT",
-  STORAGE_ERROR = "STORAGE_ERROR",
-  NETWORK_ERROR = "NETWORK_ERROR",
-  UNKNOWN_ERROR = "UNKNOWN_ERROR",
-  FILE_TOO_LARGE = "FILE_TOO_LARGE",
-  UNSUPPORTED_FILE_TYPE = "UNSUPPORTED_FILE_TYPE",
-  PDF_PARSE_ERROR = "PDF_PARSE_ERROR",
-  YOUTUBE_TRANSCRIPT_ERROR = "YOUTUBE_TRANSCRIPT_ERROR",
-  INVALID_YOUTUBE_URL = "INVALID_YOUTUBE_URL",
-  CONTENT_EXPIRED = "CONTENT_EXPIRED",
-  SESSION_INTERRUPTED = "SESSION_INTERRUPTED",
-  OFFLINE_MODE = "OFFLINE_MODE",
-  AI_TIMEOUT = "AI_TIMEOUT",
-  AI_RATE_LIMIT = "AI_RATE_LIMIT",
-  VALIDATION_ERROR = "VALIDATION_ERROR",
+  RATE_LIMIT_EXCEEDED = 'RATE_LIMIT_EXCEEDED',
+  CONTENT_NOT_FOUND = 'CONTENT_NOT_FOUND',
+  EXTRACTION_FAILED = 'EXTRACTION_FAILED',
+  GENERATION_FAILED = 'GENERATION_FAILED',
+  INVALID_INPUT = 'INVALID_INPUT',
+  STORAGE_ERROR = 'STORAGE_ERROR',
+  NETWORK_ERROR = 'NETWORK_ERROR',
+  UNKNOWN_ERROR = 'UNKNOWN_ERROR',
+  FILE_TOO_LARGE = 'FILE_TOO_LARGE',
+  UNSUPPORTED_FILE_TYPE = 'UNSUPPORTED_FILE_TYPE',
+  PDF_PARSE_ERROR = 'PDF_PARSE_ERROR',
+  YOUTUBE_TRANSCRIPT_ERROR = 'YOUTUBE_TRANSCRIPT_ERROR',
+  INVALID_YOUTUBE_URL = 'INVALID_YOUTUBE_URL',
+  CONTENT_EXPIRED = 'CONTENT_EXPIRED',
+  SESSION_INTERRUPTED = 'SESSION_INTERRUPTED',
+  OFFLINE_MODE = 'OFFLINE_MODE',
+  AI_TIMEOUT = 'AI_TIMEOUT',
+  AI_RATE_LIMIT = 'AI_RATE_LIMIT',
+  VALIDATION_ERROR = 'VALIDATION_ERROR',
 }
 
 export interface ContentStudyError {
@@ -136,7 +136,7 @@ export interface QuizItemProps {
   answer: string;
   options?: string[];
   explanation?: string;
-  difficulty: "EASY" | "MEDIUM" | "HARD";
+  difficulty: 'EASY' | 'MEDIUM' | 'HARD';
   conceptTag: string;
 }
 
@@ -144,8 +144,8 @@ export interface SessionPrepPanelProps {
   sessionPlan: SessionPlan;
   onStartSession: () => void;
   onAdjustDuration: (duration: number) => void;
-  onAdjustDifficulty: (difficulty: "EASY" | "NORMAL" | "CHALLENGING") => void;
+  onAdjustDifficulty: (difficulty: 'EASY' | 'NORMAL' | 'CHALLENGING') => void;
   isStarting?: boolean;
-  preSessionQuizResults?: SessionPreparationData["preSessionQuizResults"];
+  preSessionQuizResults?: SessionPreparationData['preSessionQuizResults'];
   suggestedFocusAreas?: string[];
 }

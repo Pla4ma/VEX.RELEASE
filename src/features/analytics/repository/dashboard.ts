@@ -1,18 +1,18 @@
-import { z } from "zod";
-import { getSupabaseClient, handleSupabaseError } from "../../../config/supabase";
-import { DashboardLayoutSchema, DashboardWidgetSchema } from "../schemas";
+import { z } from 'zod';
+import { getSupabaseClient, handleSupabaseError } from '../../../config/supabase';
+import { DashboardLayoutSchema, DashboardWidgetSchema } from '../schemas';
 
 const supabase = getSupabaseClient();
 
 export async function fetchDashboardLayouts(userId: string) {
   const { data, error } = await supabase
-    .from("dashboard_layouts")
+    .from('dashboard_layouts')
     .select(`
       *,
       widgets:dashboard_widgets(*)
     `)
-    .eq("user_id", userId)
-    .order("is_default", { ascending: false });
+    .eq('user_id', userId)
+    .order('is_default', { ascending: false });
   if (error) {
     throw handleSupabaseError(error);
   }
@@ -21,13 +21,13 @@ export async function fetchDashboardLayouts(userId: string) {
 
 export async function fetchDefaultDashboard(userId: string) {
   const { data, error } = await supabase
-    .from("dashboard_layouts")
+    .from('dashboard_layouts')
     .select(`
       *,
       widgets:dashboard_widgets(*)
     `)
-    .eq("user_id", userId)
-    .eq("is_default", true)
+    .eq('user_id', userId)
+    .eq('is_default', true)
     .single();
   if (error) {
     throw handleSupabaseError(error);
@@ -40,7 +40,7 @@ export async function createDashboardLayout(
 ) {
   const { widgets, ...layoutData } = layout;
   const { data, error } = await supabase
-    .from("dashboard_layouts")
+    .from('dashboard_layouts')
     .insert(layoutData)
     .select()
     .single();
@@ -49,7 +49,7 @@ export async function createDashboardLayout(
   }
   if (widgets?.length) {
     const { error: widgetError } = await supabase
-      .from("dashboard_widgets")
+      .from('dashboard_widgets')
       .insert(widgets.map((widget) => ({ ...widget, dashboard_id: data.id })));
     if (widgetError) {
       throw handleSupabaseError(widgetError);
@@ -63,9 +63,9 @@ export async function updateDashboardWidget(
   updates: Partial<z.infer<typeof DashboardWidgetSchema>>,
 ) {
   const { data, error } = await supabase
-    .from("dashboard_widgets")
+    .from('dashboard_widgets')
     .update({ ...updates, updated_at: Date.now() })
-    .eq("id", widgetId)
+    .eq('id', widgetId)
     .select()
     .single();
   if (error) {
@@ -76,9 +76,9 @@ export async function updateDashboardWidget(
 
 export async function deleteDashboardWidget(widgetId: string) {
   const { error } = await supabase
-    .from("dashboard_widgets")
+    .from('dashboard_widgets')
     .delete()
-    .eq("id", widgetId);
+    .eq('id', widgetId);
   if (error) {
     throw handleSupabaseError(error);
   }

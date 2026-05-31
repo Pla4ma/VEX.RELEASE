@@ -1,6 +1,6 @@
-import { z } from "zod";
-import * as Sentry from "@sentry/react-native";
-import { MMKVProvider } from "./MMKVProvider";
+import { z } from 'zod';
+import * as Sentry from '@sentry/react-native';
+import { MMKVProvider } from './MMKVProvider';
 export interface StorageProvider {
   getItem<T>(key: string): Promise<T | null>;
   setItem<T>(key: string, value: T): Promise<void>;
@@ -11,23 +11,23 @@ export interface StorageProvider {
   clear(): Promise<void>;
 }
 export type StorageKey =
-  | "boss:phase_states"
-  | "boss:taunt_history"
-  | "premium:subscriptions"
-  | "premium:paywall_history"
-  | "shop:wallets"
-  | "shop:transactions"
-  | "shop:inventories"
-  | "squads:data"
-  | "squads:activity"
-  | "notifications:history"
-  | "notifications:scheduled"
-  | "notifications:preferences"
-  | "onboarding:states"
-  | "onboarding:feature_unlocks"
-  | "analytics:metrics"
-  | "analytics:experiments"
-  | "accessibility:preferences";
+  | 'boss:phase_states'
+  | 'boss:taunt_history'
+  | 'premium:subscriptions'
+  | 'premium:paywall_history'
+  | 'shop:wallets'
+  | 'shop:transactions'
+  | 'shop:inventories'
+  | 'squads:data'
+  | 'squads:activity'
+  | 'notifications:history'
+  | 'notifications:scheduled'
+  | 'notifications:preferences'
+  | 'onboarding:states'
+  | 'onboarding:feature_unlocks'
+  | 'analytics:metrics'
+  | 'analytics:experiments'
+  | 'accessibility:preferences';
 export interface PersistenceConfig<T> {
   key: StorageKey;
   schema: z.ZodType<T>;
@@ -49,10 +49,10 @@ class PersistenceService {
   }
   async get<T>(config: PersistenceConfig<T>): Promise<T | null> {
     const cached = this.cache.get(config.key);
-    if (cached !== undefined) return cached as T;
+    if (cached !== undefined) {return cached as T;}
     try {
       const item = await this.primary.getItem<PersistedItem<T>>(config.key);
-      if (!item) return null;
+      if (!item) {return null;}
       if (item.expiresAt && Date.now() > item.expiresAt) {
         await this.remove(config);
         return null;
@@ -60,7 +60,7 @@ class PersistenceService {
       const parsed = config.schema.safeParse(item.data);
       if (!parsed.success) {
         Sentry.captureException(parsed.error, {
-          tags: { feature: "persistence", operation: "validate" },
+          tags: { feature: 'persistence', operation: 'validate' },
           extra: { key: config.key },
         });
         return null;
@@ -69,7 +69,7 @@ class PersistenceService {
       return parsed.data;
     } catch (error) {
       Sentry.captureException(error, {
-        tags: { feature: "persistence", operation: "get" },
+        tags: { feature: 'persistence', operation: 'get' },
         extra: { key: config.key },
       });
       return null;
@@ -93,7 +93,7 @@ class PersistenceService {
       this.cache.set(config.key, data);
     } catch (error) {
       Sentry.captureException(error, {
-        tags: { feature: "persistence", operation: "set" },
+        tags: { feature: 'persistence', operation: 'set' },
         extra: { key: config.key },
       });
       throw error;
@@ -136,7 +136,7 @@ class PersistenceService {
     migrationFn: (oldData: unknown, oldVersion: number) => T,
   ): Promise<void> {
     const item = await this.primary.getItem<PersistedItem<unknown>>(config.key);
-    if (!item) return;
+    if (!item) {return;}
     if (item.version < (config.version ?? 1)) {
       await this.set(config, migrationFn(item.data, item.version));
     }
@@ -150,11 +150,11 @@ class PersistenceService {
     let size = 0;
     for (const key of keys) {
       const value = await this.primary.getItem<string>(key);
-      if (value) size += key.length + JSON.stringify(value).length;
+      if (value) {size += key.length + JSON.stringify(value).length;}
     }
     return size;
   }
 }
 export const persistence = new PersistenceService();
-export { PersistenceConfigs } from "./PersistenceConfigs";
-export { usePersistence } from "./usePersistence";
+export { PersistenceConfigs } from './PersistenceConfigs';
+export { usePersistence } from './usePersistence';

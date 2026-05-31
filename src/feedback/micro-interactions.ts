@@ -7,13 +7,13 @@ export {
   HAPTIC_PATTERNS,
   ANIMATION_PATTERNS,
   SOUND_EFFECTS,
-} from "./feedbackPatterns";
+} from './feedbackPatterns';
 
-export { triggerFeedback, type FeedbackEvent } from "./feedbackTrigger";
+export { triggerFeedback, type FeedbackEvent } from './feedbackTrigger';
 
 export {
   getLoadingState,
   getErrorRecovery,
   type LoadingState,
   type ErrorRecovery,
-} from "./feedbackHelpers";
+} from './feedbackHelpers';

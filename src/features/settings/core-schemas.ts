@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 import {
   SettingCategorySchema,
   SettingValueSchema,
@@ -6,7 +6,7 @@ import {
   DataRetentionPolicySchema,
   ExportFormatSchema,
   SyncStatusSchema,
-} from "./enums";
+} from './enums';
 
 /** DB row shape from `user_settings` table */
 export const SettingRowSchema = z.object({
@@ -62,7 +62,7 @@ export const AppearanceSettingsSchema = z
 export const PrivacySettingsSchema = z
   .object({
     userId: z.string().uuid(),
-    profileVisibility: z.enum(["public", "friends", "private"]),
+    profileVisibility: z.enum(['public', 'friends', 'private']),
     showOnlineStatus: z.boolean(),
     showActivityStatus: z.boolean(),
     allowDataAnalysis: z.boolean(),
@@ -79,7 +79,7 @@ export const DataControlSettingsSchema = z
     autoExport: z
       .object({
         enabled: z.boolean(),
-        frequency: z.enum(["weekly", "monthly", "never"]),
+        frequency: z.enum(['weekly', 'monthly', 'never']),
         format: ExportFormatSchema,
         lastExport: z.number().int().positive().optional(),
       })
@@ -105,7 +105,7 @@ export const SyncStateSchema = z
           remoteValue: SettingValueSchema,
           localTimestamp: z.number().int().positive(),
           remoteTimestamp: z.number().int().positive(),
-          resolution: z.enum(["local", "remote", "merge"]).optional(),
+          resolution: z.enum(['local', 'remote', 'merge']).optional(),
         })
         .strict(),
     ),

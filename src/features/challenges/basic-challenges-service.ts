@@ -13,7 +13,7 @@ export {
   getBasicChallengesStatus,
   updateBasicChallengeProgressFromSession,
   claimBasicChallengeReward,
-} from "./basic-challenges-operations";
+} from './basic-challenges-operations';
 
 export {
   CONFIG,
@@ -22,4 +22,4 @@ export {
   type BasicChallengesStatus,
   type BasicChallengeProgressResult,
   type BasicChallengeClaimResult,
-} from "./basic-challenge-types";
+} from './basic-challenge-types';

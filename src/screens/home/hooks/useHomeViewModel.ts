@@ -5,27 +5,27 @@
  * Only the hooks required for the current stage are executed.
  * NEW_USER stage does NOT import or execute boss/squads/study/advanced coach hooks.
  */
-import { useMemo } from "react";
-import { useNetInfo } from "../../../network";
+import { useMemo } from 'react';
+import { useNetInfo } from '../../../network';
 import {
   useFeatureAccess,
   useDisclosureAnalytics,
-} from "../../../features/liveops-config";
-import { useStreakSummary } from "../../../features/streaks/hooks";
-import { useProgressionSummary } from "../../../features/progression/hooks";
-import { useSessionHistory } from "../../../session/hooks/useSession";
-import { useAuthStore } from "../../../store";
-import { buildHomeFeatureRuntime } from "./home-feature-runtime";
-import { useHomeAnalyticsEffects } from "./useHomeAnalyticsEffects";
-import type { HomeViewModel } from "./home-view-model";
-import type { HomeController } from "./home-controller-types";
+} from '../../../features/liveops-config';
+import { useStreakSummary } from '../../../features/streaks/hooks';
+import { useProgressionSummary } from '../../../features/progression/hooks';
+import { useSessionHistory } from '../../../session/hooks/useSession';
+import { useAuthStore } from '../../../store';
+import { buildHomeFeatureRuntime } from './home-feature-runtime';
+import { useHomeAnalyticsEffects } from './useHomeAnalyticsEffects';
+import type { HomeViewModel } from './home-view-model';
+import type { HomeController } from './home-controller-types';
 
-export type { HomeController } from "./home-controller-types";
-export type { HomeViewModel } from "./home-view-model";
+export type { HomeController } from './home-controller-types';
+export type { HomeViewModel } from './home-view-model';
 
 export interface HomeModelResult {
   isLoading: boolean;
-  stage: import("../../../features/liveops-config").UserExperienceStage;
+  stage: import('../../../features/liveops-config').UserExperienceStage;
   sharedInput: {
     analytics: ReturnType<typeof useDisclosureAnalytics>;
     disclosure: ReturnType<typeof useFeatureAccess>;
@@ -46,7 +46,7 @@ export interface HomeModelResult {
 export function useHomeViewModel(): HomeModelResult {
   const { isOnline } = useNetInfo();
   const { user } = useAuthStore();
-  const userId = user?.id ?? "";
+  const userId = user?.id ?? '';
   const disclosure = useFeatureAccess();
   const runtime = useMemo(
     () => buildHomeFeatureRuntime(disclosure.features, disclosure.productTier),

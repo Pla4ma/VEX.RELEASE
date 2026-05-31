@@ -1,11 +1,11 @@
-import { scoreModeRetention } from "../service";
-import { ModeRetentionScoreSchema } from "../schemas";
+import { scoreModeRetention } from '../service';
+import { ModeRetentionScoreSchema } from '../schemas';
 
-describe("mode-retention comprehensive", () => {
-  describe("scoreModeRetention", () => {
-    it("scores full retention at 52 (9+9+8+8+9+9)", () => {
+describe('mode-retention comprehensive', () => {
+  describe('scoreModeRetention', () => {
+    it('scores full retention at 52 (9+9+8+8+9+9)', () => {
       const score = scoreModeRetention({
-        lane: "student",
+        lane: 'student',
         hasNextAction: true,
         hasCompletionContext: true,
         hasMemoryInsight: true,
@@ -22,9 +22,9 @@ describe("mode-retention comprehensive", () => {
       expect(score.nudgeSpecificity).toBe(9);
     });
 
-    it("scores minimum retention at 17 (4+3+2+2+3+3)", () => {
+    it('scores minimum retention at 17 (4+3+2+2+3+3)', () => {
       const score = scoreModeRetention({
-        lane: "minimal_normal",
+        lane: 'minimal_normal',
         hasNextAction: false,
         hasCompletionContext: false,
         hasMemoryInsight: false,
@@ -37,20 +37,20 @@ describe("mode-retention comprehensive", () => {
       expect(score.memoryRelevance).toBe(2);
     });
 
-    it("summary includes return reason and score", () => {
-      const score = scoreModeRetention({ lane: "game_like" });
-      expect(score.summary).toContain("/60");
+    it('summary includes return reason and score', () => {
+      const score = scoreModeRetention({ lane: 'game_like' });
+      expect(score.summary).toContain('/60');
       expect(score.summary.length).toBeGreaterThan(0);
     });
 
-    it("validates against ModeRetentionScoreSchema", () => {
-      const score = scoreModeRetention({ lane: "deep_creative" });
+    it('validates against ModeRetentionScoreSchema', () => {
+      const score = scoreModeRetention({ lane: 'deep_creative' });
       expect(ModeRetentionScoreSchema.safeParse(score).success).toBe(true);
     });
 
-    it("score is between 0 and 60", () => {
+    it('score is between 0 and 60', () => {
       const score = scoreModeRetention({
-        lane: "student",
+        lane: 'student',
         hasNextAction: false,
         hasCompletionContext: false,
         hasMemoryInsight: false,

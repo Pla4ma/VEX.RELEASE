@@ -5,37 +5,37 @@ import {
   buildLaneSessionBrief,
   resolveLaneCopy,
   decideNudge,
-} from "./phase3-lane-polish/helpers";
-import type { Lane } from "./phase3-lane-polish/helpers";
+} from './phase3-lane-polish/helpers';
+import type { Lane } from './phase3-lane-polish/helpers';
 
-describe("Phase 3F — Session Loop and Presentation", () => {
-  it("all modes share same core session loop (SessionMode enum covers all)", () => {
+describe('Phase 3F — Session Loop and Presentation', () => {
+  it('all modes share same core session loop (SessionMode enum covers all)', () => {
     const laneSessionModes: Record<Lane, string> = {
-      student: buildLaneSessionBrief({ lane: "student" }).sessionMode,
-      game_like: buildLaneSessionBrief({ lane: "game_like" }).sessionMode,
-      deep_creative: buildLaneSessionBrief({ lane: "deep_creative" })
+      student: buildLaneSessionBrief({ lane: 'student' }).sessionMode,
+      game_like: buildLaneSessionBrief({ lane: 'game_like' }).sessionMode,
+      deep_creative: buildLaneSessionBrief({ lane: 'deep_creative' })
         .sessionMode,
-      minimal_normal: buildLaneSessionBrief({ lane: "minimal_normal" })
+      minimal_normal: buildLaneSessionBrief({ lane: 'minimal_normal' })
         .sessionMode,
     };
 
-    expect(laneSessionModes.student).toBe("STUDY");
-    expect(laneSessionModes.game_like).toBe("SPRINT");
-    expect(laneSessionModes.deep_creative).toBe("CREATIVE");
-    expect(laneSessionModes.minimal_normal).toBe("LIGHT_FOCUS");
+    expect(laneSessionModes.student).toBe('STUDY');
+    expect(laneSessionModes.game_like).toBe('SPRINT');
+    expect(laneSessionModes.deep_creative).toBe('CREATIVE');
+    expect(laneSessionModes.minimal_normal).toBe('LIGHT_FOCUS');
 
     for (const mode of Object.values(laneSessionModes)) {
       expect(mode).toBeDefined();
-      expect(typeof mode).toBe("string");
+      expect(typeof mode).toBe('string');
     }
   });
 
-  it("modes differ by presentation/policy, not separate session engines", () => {
+  it('modes differ by presentation/policy, not separate session engines', () => {
     const lanes: Lane[] = [
-      "student",
-      "game_like",
-      "deep_creative",
-      "minimal_normal",
+      'student',
+      'game_like',
+      'deep_creative',
+      'minimal_normal',
     ];
 
     const presentations = lanes.map((lane) =>
@@ -60,12 +60,12 @@ describe("Phase 3F — Session Loop and Presentation", () => {
     }
   });
 
-  it("NotificationPolicy consumes LaneProfile for budget and type decisions", () => {
+  it('NotificationPolicy consumes LaneProfile for budget and type decisions', () => {
     const lanes: Lane[] = [
-      "student",
-      "game_like",
-      "deep_creative",
-      "minimal_normal",
+      'student',
+      'game_like',
+      'deep_creative',
+      'minimal_normal',
     ];
 
     const decisions: Record<
@@ -80,7 +80,7 @@ describe("Phase 3F — Session Loop and Presentation", () => {
         laneProfile: profile,
         completedSessions: 5,
         daysSinceOnboarding: 5,
-        context: "weekly_ready",
+        context: 'weekly_ready',
       });
     }
 
@@ -94,19 +94,19 @@ describe("Phase 3F — Session Loop and Presentation", () => {
     expect(decisions.deep_creative.budgetRemaining).toBe(2);
   });
 
-  it("FeatureAvailability: LaneMechanicPolicy blockedMechanics enforces per-lane feature visibility", () => {
+  it('FeatureAvailability: LaneMechanicPolicy blockedMechanics enforces per-lane feature visibility', () => {
     const lanes: Lane[] = [
-      "student",
-      "game_like",
-      "deep_creative",
-      "minimal_normal",
+      'student',
+      'game_like',
+      'deep_creative',
+      'minimal_normal',
     ];
     const oldEconomy = [
-      "shop",
-      "gems",
-      "wagers",
-      "economy",
-      "trading",
+      'shop',
+      'gems',
+      'wagers',
+      'economy',
+      'trading',
     ] as const;
 
     for (const lane of lanes) {
@@ -120,46 +120,46 @@ describe("Phase 3F — Session Loop and Presentation", () => {
     }
 
     const cleanPolicy = getLaneMechanicPolicy(
-      baseLaneProfile({ primaryLane: "minimal_normal" }),
+      baseLaneProfile({ primaryLane: 'minimal_normal' }),
     );
-    expect(cleanPolicy.blockedMechanics).toContain("blocker_full_cta");
-    expect(cleanPolicy.blockedMechanics).toContain("challenge_spam");
-    expect(cleanPolicy.blockedMechanics).toContain("xp_first_ui");
-    expect(cleanPolicy.blockedMechanics).toContain("economy");
+    expect(cleanPolicy.blockedMechanics).toContain('blocker_full_cta');
+    expect(cleanPolicy.blockedMechanics).toContain('challenge_spam');
+    expect(cleanPolicy.blockedMechanics).toContain('xp_first_ui');
+    expect(cleanPolicy.blockedMechanics).toContain('economy');
 
     const runPolicy = getLaneMechanicPolicy(
-      baseLaneProfile({ primaryLane: "game_like" }),
+      baseLaneProfile({ primaryLane: 'game_like' }),
     );
-    expect(runPolicy.blockedMechanics).toContain("paid_saves");
-    expect(runPolicy.blockedMechanics).toContain("gems");
-    expect(runPolicy.blockedMechanics).toContain("shop");
-    expect(runPolicy.blockedMechanics).toContain("trading");
-    expect(runPolicy.blockedMechanics).toContain("wagers");
-    expect(runPolicy.blockedMechanics).toContain("generic_leaderboards");
+    expect(runPolicy.blockedMechanics).toContain('paid_saves');
+    expect(runPolicy.blockedMechanics).toContain('gems');
+    expect(runPolicy.blockedMechanics).toContain('shop');
+    expect(runPolicy.blockedMechanics).toContain('trading');
+    expect(runPolicy.blockedMechanics).toContain('wagers');
+    expect(runPolicy.blockedMechanics).toContain('generic_leaderboards');
   });
 
-  it("same core session loop produces lane-varied outputs without separate engines", () => {
+  it('same core session loop produces lane-varied outputs without separate engines', () => {
     for (const lane of [
-      "student",
-      "game_like",
-      "deep_creative",
-      "minimal_normal",
+      'student',
+      'game_like',
+      'deep_creative',
+      'minimal_normal',
     ] as const) {
       const profile = baseLaneProfile({ primaryLane: lane });
 
       const brief = buildLaneSessionBrief({ laneProfile: profile });
       const policy = getLaneMechanicPolicy(profile);
       const pres = getLanePresentationPolicy({ lane, reducedMotion: false });
-      const copy = resolveLaneCopy("DAY_0_NOT_STARTED", profile, "fallback");
+      const copy = resolveLaneCopy('DAY_0_NOT_STARTED', profile, 'fallback');
 
       expect(brief.lane).toBe(lane);
       expect(policy.lane).toBe(lane);
       expect(pres.lane).toBe(lane);
       const publicNameMap: Record<Lane, string> = {
-        student: "study",
-        game_like: "run",
-        deep_creative: "project",
-        minimal_normal: "clean",
+        student: 'study',
+        game_like: 'run',
+        deep_creative: 'project',
+        minimal_normal: 'clean',
       };
       expect(copy.laneStageTheme).toContain(publicNameMap[lane]);
     }

@@ -6,15 +6,15 @@
  * @phase 0A.3
  */
 
-import React from "react";
-import { View } from "react-native";
+import React from 'react';
+import { View } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   withSpring,
   useSharedValue,
-} from "react-native-reanimated";
-import { Box, Text } from "@/components/primitives";
-import { useTheme } from "@/theme";
+} from 'react-native-reanimated';
+import { Box, Text } from '@/components/primitives';
+import { useTheme } from '@/theme';
 
 interface BattlePassXPProgressProps {
   currentXP: number;
@@ -63,13 +63,13 @@ export function BattlePassXPProgress({
         height={12}
         borderRadius="md"
         bg={theme.colors.background.tertiary}
-        style={{ overflow: "hidden" }}
+        style={{ overflow: 'hidden' }}
       >
         {/* Animated fill */}
         <Animated.View
           style={[
             {
-              height: "100%",
+              height: '100%',
               borderRadius: 6,
               backgroundColor: theme.colors.primary[500],
             },

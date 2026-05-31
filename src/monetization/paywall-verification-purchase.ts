@@ -6,19 +6,19 @@ import type {
   PurchasesPackage,
   PurchasesOffering,
   PurchasesOfferings,
-} from "../shared/monetization/revenuecat-types";
-import { createDebugger } from "../utils/debug";
-import { revenueCatService } from "../shared/monetization/revenuecat-service";
-import type { PurchaseResult } from "../shared/monetization/revenuecat-types";
+} from '../shared/monetization/revenuecat-types';
+import { createDebugger } from '../utils/debug';
+import { revenueCatService } from '../shared/monetization/revenuecat-service';
+import type { PurchaseResult } from '../shared/monetization/revenuecat-types';
 
-const debug = createDebugger("paywall-verification:purchase");
+const debug = createDebugger('paywall-verification:purchase');
 
 export async function verifyPurchaseFlow(): Promise<{
   valid: boolean;
   issues: string[];
   warnings: string[];
 }> {
-  debug.info("Verifying purchase flow...");
+  debug.info('Verifying purchase flow...');
 
   const issues: string[] = [];
   const warnings: string[] = [];
@@ -29,14 +29,14 @@ export async function verifyPurchaseFlow(): Promise<{
     if (!offeringsResult.success) {
       return {
         valid: false,
-        issues: ["Failed to get offerings from RevenueCat"],
+        issues: ['Failed to get offerings from RevenueCat'],
         warnings: [],
       };
     }
 
     const currentOffering = offeringsResult.offerings?.current;
     if (!currentOffering || currentOffering.availablePackages.length === 0) {
-      warnings.push("No packages available for purchase flow test");
+      warnings.push('No packages available for purchase flow test');
       return { valid: true, issues, warnings };
     }
 
@@ -48,7 +48,7 @@ export async function verifyPurchaseFlow(): Promise<{
     return { valid, issues, warnings };
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    debug.error("Purchase flow verification failed:", error);
+    debug.error('Purchase flow verification failed:', error);
 
     return {
       valid: false,
@@ -66,7 +66,7 @@ async function testPurchaseFlow(pkg: PurchasesPackage): Promise<string[]> {
     const resultIssues = validatePurchaseResult(purchaseResult);
     issues.push(...resultIssues);
   } catch (error: unknown) {
-    issues.push("Purchase flow test threw an unexpected error");
+    issues.push('Purchase flow test threw an unexpected error');
   }
 
   return issues;
@@ -76,11 +76,11 @@ function validatePurchaseResult(result: PurchaseResult): string[] {
   const issues: string[] = [];
 
   if (!result.success) {
-    issues.push("Purchase result indicates failure");
+    issues.push('Purchase result indicates failure');
   }
 
   if (!result.customerInfo) {
-    issues.push("Purchase result missing customer info");
+    issues.push('Purchase result missing customer info');
   }
 
   return issues;
@@ -91,7 +91,7 @@ export async function verifySubscriptionManagement(): Promise<{
   issues: string[];
   warnings: string[];
 }> {
-  debug.info("Verifying subscription management...");
+  debug.info('Verifying subscription management...');
 
   const issues: string[] = [];
   const warnings: string[] = [];
@@ -102,7 +102,7 @@ export async function verifySubscriptionManagement(): Promise<{
     if (!offeringsResult.success) {
       return {
         valid: false,
-        issues: ["Failed to get offerings from RevenueCat"],
+        issues: ['Failed to get offerings from RevenueCat'],
         warnings: [],
       };
     }
@@ -122,7 +122,7 @@ export async function verifySubscriptionManagement(): Promise<{
     return { valid, issues, warnings };
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    debug.error("Subscription management verification failed:", error);
+    debug.error('Subscription management verification failed:', error);
 
     return {
       valid: false,
@@ -157,16 +157,16 @@ function validateSubscriptionConfiguration(
   const issues: string[] = [];
 
   if (!offerings) {
-    issues.push("Offerings object is undefined");
+    issues.push('Offerings object is undefined');
     return issues;
   }
 
   if (!offerings.current) {
-    issues.push("No current offering configured");
+    issues.push('No current offering configured');
   }
 
   if (Object.keys(offerings.all).length === 0) {
-    issues.push("No offerings available");
+    issues.push('No offerings available');
   }
 
   return issues;

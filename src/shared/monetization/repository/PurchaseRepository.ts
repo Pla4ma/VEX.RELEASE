@@ -6,12 +6,12 @@
  * @phase 6 - Deepening: Repository layer
  */
 
-import { MMKV } from "react-native-mmkv";
-import { createDebugger } from "../../../utils/debug";
+import { MMKV } from 'react-native-mmkv';
+import { createDebugger } from '../../../utils/debug';
 
-const debug = createDebugger("monetization:repository");
+const debug = createDebugger('monetization:repository');
 
-const storage = new MMKV({ id: "monetization-repo" });
+const storage = new MMKV({ id: 'monetization-repo' });
 
 const KEYS = {
   purchases: (userId: string) => `purchases:${userId}`,
@@ -24,7 +24,7 @@ export interface Purchase {
   productId: string;
   price: number;
   currency: string;
-  platform: "ios" | "android" | "stripe";
+  platform: 'ios' | 'android' | 'stripe';
   purchasedAt: number;
   receipt: string;
   userId: string;
@@ -33,10 +33,10 @@ export interface Purchase {
 export interface Subscription {
   id: string;
   productId: string;
-  status: "active" | "expired" | "cancelled" | "pending";
+  status: 'active' | 'expired' | 'cancelled' | 'pending';
   startedAt: number;
   expiresAt: number;
-  platform: "ios" | "android" | "stripe";
+  platform: 'ios' | 'android' | 'stripe';
   userId: string;
 }
 
@@ -46,7 +46,7 @@ export class PurchaseRepository {
       const data = storage.getString(KEYS.purchases(userId));
       return data ? JSON.parse(data) : [];
     } catch (error) {
-      debug.error("Failed to get purchases", error as Error);
+      debug.error('Failed to get purchases', error as Error);
       return [];
     }
   }
@@ -65,13 +65,13 @@ export class PurchaseRepository {
       }
 
       storage.set(KEYS.purchases(userId), JSON.stringify(purchases));
-      debug.info("Purchase saved", {
+      debug.info('Purchase saved', {
         userId,
         transactionId: purchase.transactionId,
       });
     } catch (error) {
-      debug.error("Failed to save purchase", error as Error);
-      throw new PurchaseRepositoryError("Failed to save purchase", {
+      debug.error('Failed to save purchase', error as Error);
+      throw new PurchaseRepositoryError('Failed to save purchase', {
         cause: error,
       });
     }
@@ -82,7 +82,7 @@ export class PurchaseRepository {
       const data = storage.getString(KEYS.subscriptions(userId));
       return data ? JSON.parse(data) : [];
     } catch (error) {
-      debug.error("Failed to get subscriptions", error as Error);
+      debug.error('Failed to get subscriptions', error as Error);
       return [];
     }
   }
@@ -104,13 +104,13 @@ export class PurchaseRepository {
       }
 
       storage.set(KEYS.subscriptions(userId), JSON.stringify(subscriptions));
-      debug.info("Subscription saved", {
+      debug.info('Subscription saved', {
         userId,
         subscriptionId: subscription.id,
       });
     } catch (error) {
-      debug.error("Failed to save subscription", error as Error);
-      throw new PurchaseRepositoryError("Failed to save subscription", {
+      debug.error('Failed to save subscription', error as Error);
+      throw new PurchaseRepositoryError('Failed to save subscription', {
         cause: error,
       });
     }
@@ -131,7 +131,7 @@ export class PurchaseRepositoryError extends Error {
     public details?: { cause?: unknown },
   ) {
     super(message);
-    this.name = "PurchaseRepositoryError";
+    this.name = 'PurchaseRepositoryError';
   }
 }
 

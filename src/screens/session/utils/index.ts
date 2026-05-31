@@ -4,5 +4,5 @@ export {
   getGrade,
   isSameLocalDay,
   resolveIsFirstSessionToday,
-} from "./session-complete-utils";
-export type { Mood } from "./session-complete-utils";
+} from './session-complete-utils';
+export type { Mood } from './session-complete-utils';

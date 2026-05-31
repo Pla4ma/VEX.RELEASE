@@ -1,7 +1,7 @@
-import { z } from "zod";
-import * as repository from "../repository";
-import { GetAnalyticsDataInputSchema } from "../schemas";
-import * as Sentry from "@sentry/react-native";
+import { z } from 'zod';
+import * as repository from '../repository';
+import { GetAnalyticsDataInputSchema } from '../schemas';
+import * as Sentry from '@sentry/react-native';
 
 export interface AnalyticsService {
   track: (eventName: string, properties?: Record<string, unknown>) => void;
@@ -10,7 +10,7 @@ export interface AnalyticsService {
 const analyticsServiceInstance: AnalyticsService = {
   track: (eventName: string, properties?: Record<string, unknown>) => {
     Sentry.addBreadcrumb({
-      category: "analytics",
+      category: 'analytics',
       message: eventName,
       data: properties,
     });

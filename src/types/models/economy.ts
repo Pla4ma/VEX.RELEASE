@@ -1,4 +1,4 @@
-import type { BaseModel } from "./user";
+import type { BaseModel } from './user';
 
 export interface Wallet extends BaseModel {
   userId: string;
@@ -22,21 +22,21 @@ export interface Transaction extends BaseModel {
 }
 
 export type TransactionType =
-  | "deposit"
-  | "withdrawal"
-  | "transfer"
-  | "purchase"
-  | "reward"
-  | "refund"
-  | "fee"
-  | "bonus";
+  | 'deposit'
+  | 'withdrawal'
+  | 'transfer'
+  | 'purchase'
+  | 'reward'
+  | 'refund'
+  | 'fee'
+  | 'bonus';
 
 export type TransactionStatus =
-  | "pending"
-  | "completed"
-  | "failed"
-  | "cancelled"
-  | "reversed";
+  | 'pending'
+  | 'completed'
+  | 'failed'
+  | 'cancelled'
+  | 'reversed';
 
 export interface WalletStats {
   totalDeposits: number;

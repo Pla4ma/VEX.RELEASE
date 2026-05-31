@@ -3,10 +3,10 @@ import {
   getFeatureAvailability,
   type FeatureAvailability,
   type FeatureKey,
-} from "../feature-access";
-import { buildRootExposureFlags } from "../../../navigation/feature-exposure";
-import { buildHomeFeatureRuntime } from "../../../screens/home/hooks/home-feature-runtime";
-import { routeNotificationAction } from "../../../navigation/notification-routing-core";
+} from '../feature-access';
+import { buildRootExposureFlags } from '../../../navigation/feature-exposure';
+import { buildHomeFeatureRuntime } from '../../../screens/home/hooks/home-feature-runtime';
+import { routeNotificationAction } from '../../../navigation/notification-routing-core';
 
 function availabilityFor(
   sessions: number,
@@ -20,12 +20,12 @@ function exposureFor(sessions: number, feature: FeatureKey): boolean {
   const { features } = buildFeatureAccess({ totalCompletedSessions: sessions });
   const flags = buildRootExposureFlags({ features, isEnabled: () => true });
   const map: Partial<Record<FeatureKey, keyof typeof flags>> = {
-    achievements: "mastery",
-    ai_coach_advanced: "coach",
-    boss_tab: "boss",
-    challenges: "challenges",
-    companion_detail: "companion",
-    content_study: "study",
+    achievements: 'mastery',
+    ai_coach_advanced: 'coach',
+    boss_tab: 'boss',
+    challenges: 'challenges',
+    companion_detail: 'companion',
+    content_study: 'study',
   };
   const key = map[feature];
   return key ? flags[key] : false;
@@ -39,23 +39,23 @@ function runtimeFor(
 }
 
 const HIDDEN_FEATURES: FeatureKey[] = [
-  "battle_pass",
-  "squads",
-  "shop",
-  "inventory",
-  "social_tab",
-  "rivals",
-  "rankings",
-  "wagers",
-  "streak_insurance",
-  "gems_prominent",
-  "boss_bounties",
-  "economy_advanced",
-  "premium_paywall",
+  'battle_pass',
+  'squads',
+  'shop',
+  'inventory',
+  'social_tab',
+  'rivals',
+  'rankings',
+  'wagers',
+  'streak_insurance',
+  'gems_prominent',
+  'boss_bounties',
+  'economy_advanced',
+  'premium_paywall',
 ];
 
-describe("Progressive unlock behavior", () => {
-  it("keeps hidden features out of UI, routes, queries, backend, and notifications", () => {
+describe('Progressive unlock behavior', () => {
+  it('keeps hidden features out of UI, routes, queries, backend, and notifications', () => {
     HIDDEN_FEATURES.forEach((feature) => {
       const avail = availabilityFor(0, feature);
       expect(avail.canRenderEntryPoint).toBe(false);
@@ -67,18 +67,18 @@ describe("Progressive unlock behavior", () => {
     });
   });
 
-  it("teases early motivation layers without allowing navigation or queries", () => {
+  it('teases early motivation layers without allowing navigation or queries', () => {
     const checks: Array<{ feature: FeatureKey; sessions: number }> = [
-      { feature: "companion_detail", sessions: 2 },
-      { feature: "challenges", sessions: 4 },
-      { feature: "boss_tab", sessions: 5 },
-      { feature: "ai_coach_advanced", sessions: 6 },
-      { feature: "content_study", sessions: 8 },
+      { feature: 'companion_detail', sessions: 2 },
+      { feature: 'challenges', sessions: 4 },
+      { feature: 'boss_tab', sessions: 5 },
+      { feature: 'ai_coach_advanced', sessions: 6 },
+      { feature: 'content_study', sessions: 8 },
     ];
 
     checks.forEach(({ feature, sessions }) => {
       const avail = availabilityFor(sessions, feature);
-      expect(avail.state).toBe("teased");
+      expect(avail.state).toBe('teased');
       expect(avail.canRenderEntryPoint).toBe(true);
       expect(avail.canNavigate).toBe(false);
       expect(avail.canQuery).toBe(false);
@@ -86,26 +86,26 @@ describe("Progressive unlock behavior", () => {
     });
   });
 
-  it("unlocks core progressive routes only after FeatureAvailability allows navigation", () => {
+  it('unlocks core progressive routes only after FeatureAvailability allows navigation', () => {
     const checks: Array<{ feature: FeatureKey; sessions: number }> = [
-      { feature: "companion_detail", sessions: 3 },
-      { feature: "challenges", sessions: 5 },
-      { feature: "achievements", sessions: 6 },
-      { feature: "boss_tab", sessions: 7 },
-      { feature: "ai_coach_advanced", sessions: 8 },
-      { feature: "content_study", sessions: 12 },
+      { feature: 'companion_detail', sessions: 3 },
+      { feature: 'challenges', sessions: 5 },
+      { feature: 'achievements', sessions: 6 },
+      { feature: 'boss_tab', sessions: 7 },
+      { feature: 'ai_coach_advanced', sessions: 8 },
+      { feature: 'content_study', sessions: 12 },
     ];
 
     checks.forEach(({ feature, sessions }) => {
       const avail = availabilityFor(sessions, feature);
-      expect(avail.state).toBe("unlocked");
+      expect(avail.state).toBe('unlocked');
       expect(avail.canNavigate).toBe(true);
       expect(avail.canRegisterRoute).toBe(true);
       expect(exposureFor(sessions, feature)).toBe(true);
     });
   });
 
-  it("derives home runtime queries from FeatureAvailability", () => {
+  it('derives home runtime queries from FeatureAvailability', () => {
     const at0 = runtimeFor(0);
     expect(at0.canQueryChallenges).toBe(false);
     expect(at0.canQueryBoss).toBe(false);
@@ -118,14 +118,14 @@ describe("Progressive unlock behavior", () => {
     expect(runtimeFor(12).canQueryStudy).toBe(true);
   });
 
-  it("keeps premium gated behind session minimum and RevenueCat availability", () => {
+  it('keeps premium gated behind session minimum and RevenueCat availability', () => {
     // premium_paywall is progressive: threshold 40 sessions, isDegraded
     // flag blocks it until RevenueCat billing is live
-    expect(availabilityFor(10, "premium_paywall").state).toBe("locked");
-    expect(availabilityFor(40, "premium_paywall").state).toBe("unlocked");
+    expect(availabilityFor(10, 'premium_paywall').state).toBe('locked');
+    expect(availabilityFor(40, 'premium_paywall').state).toBe('unlocked');
   });
 
-  it("gates notification routes through FeatureAvailability", () => {
+  it('gates notification routes through FeatureAvailability', () => {
     const locked = buildFeatureAccess({ totalCompletedSessions: 0 }).features;
     const unlocked = buildFeatureAccess({ totalCompletedSessions: 7 }).features;
     const nav = { navigate: jest.fn() };
@@ -133,17 +133,17 @@ describe("Progressive unlock behavior", () => {
     // When boss is locked, notification falls back to Home (success) — not Boss
     const lockedResult = routeNotificationAction(
       nav,
-      { type: "view_boss" },
+      { type: 'view_boss' },
       locked,
     );
     expect(lockedResult.success).toBe(true);
-    expect(lockedResult.screen).toBe("Home");
+    expect(lockedResult.screen).toBe('Home');
     const unlockedResult = routeNotificationAction(
       nav,
-      { type: "view_boss" },
+      { type: 'view_boss' },
       unlocked,
     );
     expect(unlockedResult.success).toBe(true);
-    expect(unlockedResult.screen).toBe("Boss");
+    expect(unlockedResult.screen).toBe('Boss');
   });
 });

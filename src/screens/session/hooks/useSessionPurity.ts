@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from 'react';
 import {
   Easing,
   cancelAnimation,
@@ -7,15 +7,15 @@ import {
   withRepeat,
   withSequence,
   withTiming,
-} from "react-native-reanimated";
-import { eventBus } from "../../../events";
-import type { PurityLabel } from "../utils/active-session";
+} from 'react-native-reanimated';
+import { eventBus } from '../../../events';
+import type { PurityLabel } from '../utils/active-session';
 
 type UseSessionPurityParams = {
   completionPercentage: number;
   getAntiCheatLabel: () => PurityLabel;
   getAntiCheatScore: () => number;
-  heroDensity?: "minimal" | "standard" | "rich";
+  heroDensity?: 'minimal' | 'standard' | 'rich';
   sessionId: string | undefined;
   streakMultiplier: number;
 };
@@ -29,10 +29,10 @@ export function useSessionPurity({
   streakMultiplier,
 }: UseSessionPurityParams) {
   const [purityScore, setPurityScore] = useState(100);
-  const [purityLabel, setPurityLabel] = useState<PurityLabel>("Elite");
+  const [purityLabel, setPurityLabel] = useState<PurityLabel>('Elite');
   const [perfectFocusEligible, setPerfectFocusEligible] = useState(true);
   const [momentumScores, setMomentumScores] = useState<number[]>([]);
-  const previousPurityLabelRef = useRef<PurityLabel>("Elite");
+  const previousPurityLabelRef = useRef<PurityLabel>('Elite');
   const perfectFocusTrackedRef = useRef(false);
   const perfectFocusBurstRef = useRef(false);
   const momentumScoresRef = useRef<number[]>([]);
@@ -45,16 +45,16 @@ export function useSessionPurity({
   useEffect(() => {
     setPerfectFocusEligible(true);
     setPurityScore(100);
-    setPurityLabel("Elite");
+    setPurityLabel('Elite');
     setMomentumScores([]);
     momentumScoresRef.current = [];
-    previousPurityLabelRef.current = "Elite";
+    previousPurityLabelRef.current = 'Elite';
     perfectFocusTrackedRef.current = false;
     perfectFocusBurstRef.current = false;
   }, [sessionId]);
 
   useEffect(() => {
-    if (heroDensity === "minimal") return;
+    if (heroDensity === 'minimal') {return;}
     const syncPurity = () => {
       const nextScore = getAntiCheatScore();
       const nextLabel = getAntiCheatLabel();
@@ -78,8 +78,8 @@ export function useSessionPurity({
     if (!sessionId || previousPurityLabelRef.current === purityLabel) {
       return;
     }
-    eventBus.publish("analytics:track", {
-      event: "session_purity_changed",
+    eventBus.publish('analytics:track', {
+      event: 'session_purity_changed',
       properties: {
         sessionId,
         purityScore,
@@ -96,8 +96,8 @@ export function useSessionPurity({
       return;
     }
     perfectFocusTrackedRef.current = true;
-    eventBus.publish("analytics:track", {
-      event: "session_perfect_focus_earned",
+    eventBus.publish('analytics:track', {
+      event: 'session_perfect_focus_earned',
       properties: { sessionId, purityScore, streakMultiplier },
     });
   }, [perfectFocusActive, purityScore, sessionId, streakMultiplier]);

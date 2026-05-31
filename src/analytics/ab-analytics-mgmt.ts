@@ -1,6 +1,6 @@
-import type { ExperimentResults, VariantResult } from "./ab-types";
-import type { ExperimentStatsResult, ExperimentOverviewResult } from "./ab-management-types";
-import { experiments, userAssignments } from "./ab-experiments-mgmt";
+import type { ExperimentResults, VariantResult } from './ab-types';
+import type { ExperimentStatsResult, ExperimentOverviewResult } from './ab-management-types';
+import { experiments, userAssignments } from './ab-experiments-mgmt';
 
 export function calculateResults(
   experimentId: string,
@@ -54,7 +54,7 @@ export function getExperimentStats(
   const dailyAssignments = allAssignments.reduce(
     (acc, assignment) => {
       const date =
-        new Date(assignment.assignedAt).toISOString().split("T")[0] ?? "";
+        new Date(assignment.assignedAt).toISOString().split('T')[0] ?? '';
       const existing = acc.find((d) => d.date === date);
       if (existing) {
         existing.count++;
@@ -86,9 +86,9 @@ export function getExperimentOverview(): ExperimentOverviewResult {
   );
   return {
     totalExperiments: allExperiments.length,
-    runningExperiments: allExperiments.filter((e) => e.status === "RUNNING")
+    runningExperiments: allExperiments.filter((e) => e.status === 'RUNNING')
       .length,
-    completedExperiments: allExperiments.filter((e) => e.status === "COMPLETED")
+    completedExperiments: allExperiments.filter((e) => e.status === 'COMPLETED')
       .length,
     totalAssignments: allAssignments.length,
     experimentsByType,

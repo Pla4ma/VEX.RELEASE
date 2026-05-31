@@ -2,18 +2,18 @@ import {
   DEFAULT_COMPANION_ELEMENT,
   STARTER_PRESETS,
   STEP_TITLES,
-} from "./components";
-import { DEFAULT_PERSONA_ID } from "./components/onboarding-flow-data";
+} from './components';
+import { DEFAULT_PERSONA_ID } from './components/onboarding-flow-data';
 import type {
   OnboardingGoal,
   MotivationProfileType,
-} from "../../features/onboarding";
-import type { OnboardingDraft } from "../../features/onboarding/store-helpers";
+} from '../../features/onboarding';
+import type { OnboardingDraft } from '../../features/onboarding/store-helpers';
 
 export const LAST_STEP_INDEX = STEP_TITLES.length - 1;
 
 export function clampStep(value: number | undefined): number {
-  if (typeof value !== "number" || Number.isNaN(value)) return 0;
+  if (typeof value !== 'number' || Number.isNaN(value)) {return 0;}
   return Math.min(Math.max(0, value), LAST_STEP_INDEX);
 }
 

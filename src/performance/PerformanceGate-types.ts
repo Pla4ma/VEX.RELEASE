@@ -25,8 +25,8 @@ export interface PerformanceGateResult {
 
 export interface PerformanceIssue {
   id: string;
-  category: "fps" | "memory" | "animation" | "network" | "bundle" | "general";
-  severity: "critical" | "major" | "moderate" | "minor";
+  category: 'fps' | 'memory' | 'animation' | 'network' | 'bundle' | 'general';
+  severity: 'critical' | 'major' | 'moderate' | 'minor';
   message: string;
   measurement?: number;
   target?: number;

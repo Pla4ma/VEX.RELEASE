@@ -1,11 +1,11 @@
-import type { FirstWeekExperience } from "../../../features/personalization/first-week-schemas";
+import type { FirstWeekExperience } from '../../../features/personalization/first-week-schemas';
 import type {
   BehaviorStats,
   FeatureAvailabilitySnapshot,
   MotivationStyle,
   VexExperience,
-} from "../../../features/personalization/schemas";
-import type { LaneProfile } from "../../../features/lane-engine/types";
+} from '../../../features/personalization/schemas';
+import type { LaneProfile } from '../../../features/lane-engine/types';
 
 export interface HomeResolvedExperience {
   resolvedExperience: VexExperience;
@@ -14,9 +14,9 @@ export interface HomeResolvedExperience {
   personalizationProfile: {
     motivationStyle: MotivationStyle;
     primaryGoal: string;
-    gamificationIntensity: "minimal" | "medium" | "strong";
+    gamificationIntensity: 'minimal' | 'medium' | 'strong';
     studyLayerName: string;
-    userStage: "new" | "activating" | "engaged" | "power";
+    userStage: 'new' | 'activating' | 'engaged' | 'power';
   };
   behaviorStats: {
     totalCompletedSessions: number;
@@ -25,7 +25,7 @@ export interface HomeResolvedExperience {
     learningUsageRatio: number;
     projectFocusUsageRatio: number;
     structuredExecutionUsageRatio: number;
-    bossChallengeEngagement: "none" | "low" | "medium" | "high";
+    bossChallengeEngagement: 'none' | 'low' | 'medium' | 'high';
     coachInteractions: number;
     comebackSessions: number;
     ignoredFeatures: string[];

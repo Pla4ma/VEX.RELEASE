@@ -1,8 +1,8 @@
-import { resolveInitialLane } from "../service";
-import { SessionMode } from "../../../session/modes";
-import type { SessionSummary } from "../../../session/types";
-import type { FeatureAvailability } from "../../liveops-config";
-import type { Lane, LaneProfile } from "../types";
+import { resolveInitialLane } from '../service';
+import { SessionMode } from '../../../session/modes';
+import type { SessionSummary } from '../../../session/types';
+import type { FeatureAvailability } from '../../liveops-config';
+import type { Lane, LaneProfile } from '../types';
 
 export const observedAt = 1_764_000_000_000;
 
@@ -30,14 +30,14 @@ export function summary(): SessionSummary {
     pauses: 0,
     penaltiesApplied: [],
     plannedDuration: 1_500,
-    sessionId: "session-1",
+    sessionId: 'session-1',
     sessionMode: SessionMode.SPRINT,
-    status: "COMPLETED",
+    status: 'COMPLETED',
     streakDays: 1,
     streakIncreased: true,
     streakMaintained: true,
     timeBonus: 0,
-    userId: "user-1",
+    userId: 'user-1',
     userLevel: 1,
     vsAverage: 0,
     vsBest: 0,
@@ -54,7 +54,7 @@ export function available(): FeatureAvailability {
     canShowNotification: true,
     canSubscribeToEvents: true,
     canUseBackend: true,
-    reason: "test",
-    state: "unlocked",
+    reason: 'test',
+    state: 'unlocked',
   };
 }

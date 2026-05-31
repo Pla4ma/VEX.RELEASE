@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useState } from "react";
+import { useEffect, useCallback, useState, useRef } from 'react';
 import {
   cleanupPresence,
   initializePresence,
@@ -13,9 +13,9 @@ import {
   type UserPresence,
   type SquadPresence,
   type BroadcastMessage,
-} from "../services/realtime";
-import { createDebugger } from "../utils/debug";
-const debug = createDebugger("hooks:realtime");
+} from '../services/realtime';
+import { createDebugger } from '../utils/debug';
+const debug = createDebugger('hooks:realtime');
 interface UsePresenceOptions {
   userId: string;
   initialStatus?: PresenceStatus;
@@ -23,7 +23,7 @@ interface UsePresenceOptions {
 }
 export function usePresence({
   userId,
-  initialStatus = "online",
+  initialStatus = 'online',
   onStatusChange,
 }: UsePresenceOptions) {
   const [status, setStatus] = useState<PresenceStatus>(initialStatus);
@@ -39,7 +39,7 @@ export function usePresence({
         }
       } catch (error) {
         debug.error(
-          "Failed to initialize presence",
+          'Failed to initialize presence',
           error instanceof Error ? error : new Error(String(error)),
         );
       }
@@ -106,25 +106,23 @@ export function useActivityBroadcast({
   onMessage,
 }: UseActivityBroadcastOptions) {
   const [messages, setMessages] = useState<BroadcastMessage[]>([]);
+  const onMessageRef = useRef(onMessage);
+  useEffect(() => { onMessageRef.current = onMessage; }, [onMessage]);
   useEffect(() => {
-    if (!channelName) {
-      return;
-    }
+    if (!channelName) {return;}
     const unsubscribe = subscribeToActivity(channelName, (message) => {
       setMessages((prev) => [...prev.slice(-49), message]);
-      onMessage?.(message);
+      onMessageRef.current?.(message);
     });
     return unsubscribe;
-  }, [channelName, onMessage]);
+  }, [channelName]);
   const sendActivity = useCallback(
-    async (type: BroadcastMessage["type"], payload: unknown) => {
+    async (type: BroadcastMessage['type'], payload: unknown) => {
       await broadcastActivity(channelName, type, payload);
     },
     [channelName],
   );
-  const clearMessages = useCallback(() => {
-    setMessages([]);
-  }, []);
+  const clearMessages = useCallback(() => { setMessages([]); }, []);
   return { messages, sendActivity, clearMessages };
 }
 interface UseFeedUpdatesOptions {
@@ -133,16 +131,16 @@ interface UseFeedUpdatesOptions {
 }
 export function useFeedUpdates({ userId, onUpdate }: UseFeedUpdatesOptions) {
   const [updates, setUpdates] = useState<unknown[]>([]);
+  const onUpdateRef = useRef(onUpdate);
+  useEffect(() => { onUpdateRef.current = onUpdate; }, [onUpdate]);
   useEffect(() => {
     const unsubscribe = subscribeToFeedChanges(userId, (payload) => {
       setUpdates((prev) => [...prev.slice(-19), payload]);
-      onUpdate?.(payload);
+      onUpdateRef.current?.(payload);
     });
     return unsubscribe;
-  }, [userId, onUpdate]);
-  const clearUpdates = useCallback(() => {
-    setUpdates([]);
-  }, []);
+  }, [userId]);
+  const clearUpdates = useCallback(() => { setUpdates([]); }, []);
   return { updates, clearUpdates };
 }
 interface UseSquadChangesOptions {

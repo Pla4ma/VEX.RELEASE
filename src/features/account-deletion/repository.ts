@@ -1,4 +1,4 @@
-import { getSupabaseClient } from "../../config/supabase";
+import { getSupabaseClient } from '../../config/supabase';
 
 export class AccountDeletionRepositoryError extends Error {
   constructor(
@@ -8,15 +8,15 @@ export class AccountDeletionRepositoryError extends Error {
     super(
       `Account deletion repository failed during ${operation}: ${cause instanceof Error ? cause.message : String(cause)}`,
     );
-    this.name = "AccountDeletionRepositoryError";
+    this.name = 'AccountDeletionRepositoryError';
   }
 }
 
 export async function deleteCurrentUser(): Promise<void> {
   const supabase = getSupabaseClient();
-  const { error } = await supabase.rpc("delete_current_user");
+  const { error } = await supabase.rpc('delete_current_user');
   if (error) {
-    throw new AccountDeletionRepositoryError("deleteCurrentUser", error);
+    throw new AccountDeletionRepositoryError('deleteCurrentUser', error);
   }
 }
 
@@ -24,6 +24,6 @@ export async function signOutCurrentSession(): Promise<void> {
   const supabase = getSupabaseClient();
   const { error } = await supabase.auth.signOut();
   if (error) {
-    throw new AccountDeletionRepositoryError("signOutCurrentSession", error);
+    throw new AccountDeletionRepositoryError('signOutCurrentSession', error);
   }
 }

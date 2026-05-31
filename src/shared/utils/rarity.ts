@@ -1,4 +1,4 @@
-import { launchColors } from "@theme/tokens/launch-colors";
+import { launchColors } from '@theme/tokens/launch-colors';
 /**
  * Rarity Utilities
  *
@@ -6,12 +6,12 @@ import { launchColors } from "@theme/tokens/launch-colors";
  */
 
 export type ItemRarity =
-  | "COMMON"
-  | "UNCOMMON"
-  | "RARE"
-  | "EPIC"
-  | "LEGENDARY"
-  | "MYTHIC";
+  | 'COMMON'
+  | 'UNCOMMON'
+  | 'RARE'
+  | 'EPIC'
+  | 'LEGENDARY'
+  | 'MYTHIC';
 
 /**
  * Get color for rarity level
@@ -34,12 +34,12 @@ export function getRarityColor(rarity: ItemRarity): string {
  */
 export function getRarityLabel(rarity: ItemRarity): string {
   const labels: Record<ItemRarity, string> = {
-    COMMON: "Common",
-    UNCOMMON: "Uncommon",
-    RARE: "Rare",
-    EPIC: "Epic",
-    LEGENDARY: "Legendary",
-    MYTHIC: "Mythic",
+    COMMON: 'Common',
+    UNCOMMON: 'Uncommon',
+    RARE: 'Rare',
+    EPIC: 'Epic',
+    LEGENDARY: 'Legendary',
+    MYTHIC: 'Mythic',
   };
 
   return labels[rarity] ?? rarity;

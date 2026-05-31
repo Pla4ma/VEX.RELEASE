@@ -77,7 +77,7 @@ export function createAnimatedValue(initialValue: number = 0): AnimatedValue {
       return hasListenersFlag;
     },
     interpolate(): never {
-      throw new Error("Animation interpolation is unavailable in this adapter");
+      throw new Error('Animation interpolation is unavailable in this adapter');
     },
   };
 }
@@ -100,5 +100,5 @@ export function createTiming(
 }
 
 export function easingOut(): unknown {
-  return { easing: "cubic" };
+  return { easing: 'cubic' };
 }

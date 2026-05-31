@@ -4,15 +4,15 @@
  * Core logic for progressing through the first week arc.
  */
 
-import { getSupabaseClient } from "../../../config/supabase";
-import { createDebugger } from "../../../utils/debug";
+import { getSupabaseClient } from '../../../config/supabase';
+import { createDebugger } from '../../../utils/debug';
 import {
   FirstWeekProgressSchema,
   type FirstWeekProgress,
   type FirstWeekSession,
-} from "./schemas";
-import { FIRST_WEEK_CONFIG, getNextSession, getSessionNumber } from "./config";
-import { calculateLevelProgress } from "./progression-helpers";
+} from './schemas';
+import { FIRST_WEEK_CONFIG, getNextSession, getSessionNumber } from './config';
+import { calculateLevelProgress } from './progression-helpers';
 
 export {
   calculateLevelProgress,
@@ -22,9 +22,9 @@ export {
   getTutorialSteps,
   isInFirstWeek,
   getFirstWeekCompletion,
-} from "./progression-helpers";
+} from './progression-helpers';
 
-const debug = createDebugger("progression:first-week-impl");
+const debug = createDebugger('progression:first-week-impl');
 
 /**
  * Progress to the next session in the first week
@@ -40,20 +40,20 @@ export async function progressToNextSession(
 
     // Get current progress
     const { data: currentProgress, error: fetchError } = await supabase
-      .from("first_week_progress")
-      .select("*")
-      .eq("user_id", userId)
+      .from('first_week_progress')
+      .select('*')
+      .eq('user_id', userId)
       .single();
 
     if (fetchError) {
-      debug.error("Failed to fetch current progress", fetchError);
+      debug.error('Failed to fetch current progress', fetchError);
       throw new Error(
         `Failed to fetch current progress: ${fetchError.message}`,
       );
     }
 
     if (!currentProgress) {
-      throw new Error("No first week progress found for user");
+      throw new Error('No first week progress found for user');
     }
 
     const nextSession = getNextSession(currentProgress.current_session);
@@ -113,18 +113,18 @@ export async function progressToNextSession(
     };
 
     const { data, error } = await supabase
-      .from("first_week_progress")
+      .from('first_week_progress')
       .update(updateData)
-      .eq("user_id", userId)
+      .eq('user_id', userId)
       .select()
       .single();
 
     if (error) {
-      debug.error("Failed to progress first week", error);
+      debug.error('Failed to progress first week', error);
       throw new Error(`Failed to progress first week: ${error.message}`);
     }
 
-    debug.info("Progressed to next session", {
+    debug.info('Progressed to next session', {
       userId,
       from: currentProgress.current_session,
       to: nextSession,
@@ -135,7 +135,7 @@ export async function progressToNextSession(
     return FirstWeekProgressSchema.parse(data);
   } catch (error) {
     debug.error(
-      "Error progressing first week",
+      'Error progressing first week',
       error instanceof Error ? error : undefined,
     );
     throw error;

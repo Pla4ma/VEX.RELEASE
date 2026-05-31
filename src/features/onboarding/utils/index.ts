@@ -4,7 +4,7 @@
  * @phase 2 - Deepening: Utility organization
  */
 
-export { OnboardingValidation } from "./validation";
+export { OnboardingValidation } from './validation';
 export {
   validateOnboardingStep,
   validateCompleteOnboarding,
@@ -16,9 +16,9 @@ export {
   type ValidationResult,
   type ValidationError,
   type ValidationWarning,
-} from "./validation";
+} from './validation';
 
-export { OnboardingPersistence } from "./persistence";
+export { OnboardingPersistence } from './persistence';
 export {
   persistOnboardingState,
   loadPersistedOnboarding,
@@ -28,4 +28,4 @@ export {
   getAbandonCount,
   isHighAbandonRisk,
   getPartialData,
-} from "./persistence";
+} from './persistence';

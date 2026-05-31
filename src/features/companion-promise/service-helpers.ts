@@ -1,13 +1,13 @@
-import type { CompanionPromise, CompletedSessionPromiseInput } from "./types";
+import type { CompanionPromise, CompletedSessionPromiseInput } from './types';
 
 export const MinimumPromiseMinutes = 5;
 
 export function toDateKey(timestamp: number, timeZone: string): string {
-  const parts = new Intl.DateTimeFormat("en-CA", {
-    day: "2-digit",
-    month: "2-digit",
+  const parts = new Intl.DateTimeFormat('en-CA', {
+    day: '2-digit',
+    month: '2-digit',
     timeZone,
-    year: "numeric",
+    year: 'numeric',
   }).formatToParts(new Date(timestamp));
   const map = Object.fromEntries(parts.map((part) => [part.type, part.value]));
   return `${map.year}-${map.month}-${map.day}`;
@@ -15,20 +15,20 @@ export function toDateKey(timestamp: number, timeZone: string): string {
 
 export function mapSessionModeToTargetMode(
   sessionMode: string,
-): CompanionPromise["targetMode"] {
-  if (sessionMode === "RECOVERY") {
-    return "RECOVERY";
+): CompanionPromise['targetMode'] {
+  if (sessionMode === 'RECOVERY') {
+    return 'RECOVERY';
   }
-  if (sessionMode === "STUDY") {
-    return "STUDY";
+  if (sessionMode === 'STUDY') {
+    return 'STUDY';
   }
-  if (sessionMode === "CHALLENGE") {
-    return "BOSS_PREP";
+  if (sessionMode === 'CHALLENGE') {
+    return 'BOSS_PREP';
   }
-  if (sessionMode === "CREATIVE") {
-    return "HABIT_BUILD";
+  if (sessionMode === 'CREATIVE') {
+    return 'HABIT_BUILD';
   }
-  return "FOCUS";
+  return 'FOCUS';
 }
 
 export function buildNextPromiseInput(

@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { Pressable } from "react-native";
+import React, { useEffect, useState } from 'react';
+import { Pressable } from 'react-native';
 import Animated, {
   FadeIn,
   FadeInUp,
   useAnimatedStyle,
   useSharedValue,
   withSpring,
-} from "react-native-reanimated";
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import type { FocusDuration, DurationOption } from "../schemas";
-import { DURATION_OPTIONS } from "../service";
+} from 'react-native-reanimated';
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import type { FocusDuration, DurationOption } from '../schemas';
+import { DURATION_OPTIONS } from '../service';
 interface FocusTimeScreenProps {
   onSelect: (duration: FocusDuration) => void;
   onSkip: () => void;
@@ -47,7 +47,7 @@ function DurationCard({
   return (
     <Animated.View
       entering={FadeInUp.duration(400).delay(200 + index * 100)}
-      style={{ flex: 1, minWidth: "45%" }}
+      style={{ flex: 1, minWidth: '45%' }}
     >
       <Pressable
         onPress={onPress}
@@ -61,8 +61,8 @@ function DurationCard({
               padding: theme.spacing[6],
               borderRadius: 16,
               borderWidth: 2,
-              alignItems: "center",
-              justifyContent: "center",
+              alignItems: 'center',
+              justifyContent: 'center',
               gap: theme.spacing[3],
               minHeight: 120,
               backgroundColor,
@@ -74,7 +74,7 @@ function DurationCard({
           <Text fontSize={32}>{option.emoji}</Text>
           <Text
             variant="h3"
-            color={isSelected ? "text.inverse" : "text.primary"}
+            color={isSelected ? 'text.inverse' : 'text.primary'}
             fontWeight="700"
           >
             {option.label}
@@ -158,7 +158,7 @@ export function FocusTimeScreen({
       {}
       <Animated.View
         entering={FadeIn.duration(400).delay(700)}
-        style={{ marginTop: "auto" }}
+        style={{ marginTop: 'auto' }}
       >
         <Pressable
           onPress={onSkip}

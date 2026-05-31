@@ -1,16 +1,16 @@
-import { useCallback, useMemo } from "react";
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import type { FeatureAccessResult } from "../../../features/liveops-config";
-import type { HomeFeatureRuntime } from "../hooks/home-feature-runtime";
-import type { ExtendedRootStackParams } from "../../../navigation/types";
-import type { SessionRecommendation, RecommendationStatus } from "../../../features/ai-coach";
-import type { HomeReturnReason } from "../hooks/useHomeReturnReason";
-import { navigateToMainTab } from "../../../navigation/navigation-helpers";
-import { buildLearningSessionParams } from "../../../features/learning-execution";
-import type { LearningSessionTarget } from "../../../features/learning-execution";
-import { buildHomeReturnReasonState } from "../../../features/home-spine/service";
-import type { NextBestAction } from "../../../features/progression";
-import type { ActiveStudyPlanData, ComebackData } from "./engaged-home-types";
+import { useCallback, useMemo } from 'react';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import type { FeatureAccessResult } from '../../../features/liveops-config';
+import type { HomeFeatureRuntime } from '../hooks/home-feature-runtime';
+import type { ExtendedRootStackParams } from '../../../navigation/types';
+import type { SessionRecommendation, RecommendationStatus } from '../../../features/ai-coach';
+import type { HomeReturnReason } from '../hooks/useHomeReturnReason';
+import { navigateToMainTab } from '../../../navigation/navigation-helpers';
+import { buildLearningSessionParams } from '../../../features/learning-execution';
+import type { LearningSessionTarget } from '../../../features/learning-execution';
+import { buildHomeReturnReasonState } from '../../../features/home-spine/service';
+import type { NextBestAction } from '../../../features/progression';
+import type { ActiveStudyPlanData, ComebackData } from './engaged-home-types';
 
 type Nav = NativeStackNavigationProp<ExtendedRootStackParams>;
 
@@ -18,7 +18,7 @@ interface ActionsInput {
   analytics: {
     trackFirstSessionStarted: (userId: string, source: string) => void;
     trackNextBestActionPressed: (
-      stage: import("../../../features/liveops-config").UserExperienceStage,
+      stage: import('../../../features/liveops-config').UserExperienceStage,
       completedSessions: number,
     ) => void;
   };
@@ -37,19 +37,19 @@ export function useEngagedActions(input: ActionsInput) {
     disclosure, learningExecutionLayer, navigation, openSetup,
   } = input;
   const openProgress = useCallback(
-    () => navigateToMainTab(navigation, "Progress"),
+    () => navigateToMainTab(navigation, 'Progress'),
     [navigation],
   );
   const openSocial = useCallback(() => {
     if (canNavigateSocial) {
-      navigateToMainTab(navigation, "Profile");
+      navigateToMainTab(navigation, 'Profile');
     } else {
-      navigateToMainTab(navigation, "Profile");
+      navigateToMainTab(navigation, 'Profile');
     }
   }, [canNavigateSocial, navigation]);
   const openContentStudy = useCallback(() => {
     if (!canNavigateContentStudy) { openSetup(); return; }
-    navigation.navigate("ContentStudy");
+    navigation.navigate('ContentStudy');
   }, [canNavigateContentStudy, navigation, openSetup]);
   const continueStudyPlan = useCallback(() => {
     if (!learningExecutionLayer.target) { openContentStudy(); return; }
@@ -99,7 +99,7 @@ export function useEngagedReturnReason(
         ? {
             completedTasks: studyData.completedTasks ?? 0,
             remainingMinutes: studyData.remainingMinutes ?? 0,
-            title: studyData.title ?? "",
+            title: studyData.title ?? '',
             totalTasks: studyData.totalTasks ?? 0,
           }
         : null,
@@ -109,24 +109,24 @@ export function useEngagedReturnReason(
       primaryRecommendation: primaryRecommendation
         ? {
             id: primaryRecommendation.id,
-            reasoning: primaryRecommendation.reasoning ?? "",
-            suggestedDifficulty: primaryRecommendation.suggestedDifficulty ?? "NORMAL",
+            reasoning: primaryRecommendation.reasoning ?? '',
+            suggestedDifficulty: primaryRecommendation.suggestedDifficulty ?? 'NORMAL',
             suggestedDuration: primaryRecommendation.suggestedDuration ?? 15 * 60,
             type: primaryRecommendation.recommendationType,
           }
         : null,
     });
     let onPress: () => Promise<void> | void = () => openSetup();
-    if (reasonState.intent === "continue-study-plan") {
+    if (reasonState.intent === 'continue-study-plan') {
       onPress = continueStudyPlan;
     } else if (
-      reasonState.intent === "accept-coach-recommendation" &&
+      reasonState.intent === 'accept-coach-recommendation' &&
       reasonState.recommendationId
     ) {
       onPress = async () => {
         await updateRecommendationStatus.mutateAsync({
           recommendationId: reasonState.recommendationId!,
-          status: "ACCEPTED",
+          status: 'ACCEPTED',
           userId,
         });
         openSetup({
@@ -135,7 +135,7 @@ export function useEngagedReturnReason(
           suggestedDurationSeconds: reasonState.suggestedDurationSeconds,
         });
       };
-    } else if (reasonState.source === "next-best-action") {
+    } else if (reasonState.source === 'next-best-action') {
       onPress = openNextAction;
     }
     return {

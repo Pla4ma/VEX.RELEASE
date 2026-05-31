@@ -1,28 +1,28 @@
-import { getSupabaseClient } from "../../config/supabase";
+import { getSupabaseClient } from '../../config/supabase';
 import {
   MonthInputSchema,
   MonthlyFocusReportInputSchema,
   type MonthlyFocusReportInput,
-} from "./repository-focus-score.schemas";
-import { createDebugger } from "../../utils/debug";
+} from './repository-focus-score.schemas';
+import { createDebugger } from '../../utils/debug';
 import {
   FocusIdentityRepositoryError,
   mapHistoryRowToPoint,
-} from "./repository-focus-score-mappers";
+} from './repository-focus-score-mappers';
 
-const debug = createDebugger("focus-identity:repository");
+const debug = createDebugger('focus-identity:repository');
 
 export async function fetchMonthlyFocusReportInput(
   userId: string,
   month: string,
 ): Promise<MonthlyFocusReportInput> {
   const validatedMonth = MonthInputSchema.parse(month);
-  const monthParts = validatedMonth.split("-");
+  const monthParts = validatedMonth.split('-');
   const yearPart = Number(monthParts[0]);
   const monthPart = Number(monthParts[1]);
   if (isNaN(yearPart) || isNaN(monthPart)) {
     throw new FocusIdentityRepositoryError(
-      "fetchMonthlyFocusReportInput:invalid-month",
+      'fetchMonthlyFocusReportInput:invalid-month',
       validatedMonth,
     );
   }
@@ -31,28 +31,28 @@ export async function fetchMonthlyFocusReportInput(
   try {
     const supabase = getSupabaseClient();
     const { data: historyRows, error: historyError } = await supabase
-      .from("focus_score_history")
-      .select("user_id, occurred_at, score, delta, reason")
-      .eq("user_id", userId)
-      .gte("occurred_at", monthStart.toISOString())
-      .lt("occurred_at", monthEnd.toISOString())
-      .order("occurred_at", { ascending: true });
+      .from('focus_score_history')
+      .select('user_id, occurred_at, score, delta, reason')
+      .eq('user_id', userId)
+      .gte('occurred_at', monthStart.toISOString())
+      .lt('occurred_at', monthEnd.toISOString())
+      .order('occurred_at', { ascending: true });
     if (historyError) {
-      debug.warn("Supabase history fetch failed", historyError);
+      debug.warn('Supabase history fetch failed', historyError);
     }
     const monthHistory = (historyRows ?? []).map(mapHistoryRowToPoint);
     const { data: sessionRows, error: sessionError } = await supabase
-      .from("sessions")
+      .from('sessions')
       .select(
-        "duration, effective_duration, quality_score, status, completed_at",
+        'duration, effective_duration, quality_score, status, completed_at',
       )
-      .eq("user_id", userId)
-      .eq("status", "completed")
-      .gte("completed_at", monthStart.toISOString())
-      .lt("completed_at", monthEnd.toISOString());
+      .eq('user_id', userId)
+      .eq('status', 'completed')
+      .gte('completed_at', monthStart.toISOString())
+      .lt('completed_at', monthEnd.toISOString());
     if (sessionError) {
       throw new FocusIdentityRepositoryError(
-        "fetchMonthlyFocusReportInput:sessions-failed",
+        'fetchMonthlyFocusReportInput:sessions-failed',
         sessionError,
       );
     }
@@ -61,7 +61,7 @@ export async function fetchMonthlyFocusReportInput(
       rows.reduce(
         (sum, row) =>
           sum +
-          (typeof row.effective_duration === "number"
+          (typeof row.effective_duration === 'number'
             ? row.effective_duration
             : row.duration),
         0,
@@ -73,14 +73,14 @@ export async function fetchMonthlyFocusReportInput(
     );
     const bestGrade =
       bestQuality >= 95
-        ? "S"
+        ? 'S'
         : bestQuality >= 85
-          ? "A"
+          ? 'A'
           : bestQuality >= 70
-            ? "B"
+            ? 'B'
             : bestQuality >= 55
-              ? "C"
-              : "D";
+              ? 'C'
+              : 'D';
     return MonthlyFocusReportInputSchema.parse({
       userId,
       month: validatedMonth,
@@ -91,7 +91,7 @@ export async function fetchMonthlyFocusReportInput(
     });
   } catch (err) {
     debug.error(
-      "Unexpected error in fetchMonthlyFocusReportInput",
+      'Unexpected error in fetchMonthlyFocusReportInput',
       err as Error,
     );
     return MonthlyFocusReportInputSchema.parse({
@@ -100,7 +100,7 @@ export async function fetchMonthlyFocusReportInput(
       historyPoints: [],
       sessionsCompleted: 0,
       totalFocusedMinutes: 0,
-      bestGrade: "D",
+      bestGrade: 'D',
     });
   }
 }

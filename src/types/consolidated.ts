@@ -14,7 +14,7 @@ export {
   type SessionState,
   type SessionSummary,
   type LegacySessionState,
-} from "./session-types";
+} from './session-types';
 
 export {
   BossTierSchema,
@@ -33,4 +33,4 @@ export {
   type ActiveEncounter,
   type LegacyBossState,
   type LegacyBossEncounter,
-} from "./boss-types";
+} from './boss-types';

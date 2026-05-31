@@ -1,4 +1,4 @@
-import { getProgressionServiceConfig } from "./service-config";
+import { getProgressionServiceConfig } from './service-config';
 
 export function getLevelUpRewards(newLevel: number): string[] {
   const rewards: string[] = [];
@@ -8,16 +8,16 @@ export function getLevelUpRewards(newLevel: number): string[] {
     rewards.push(`LEVEL_${newLevel}_BUNDLE`);
   }
   if (newLevel === 10) {
-    rewards.push("TITLE_ADEPT");
+    rewards.push('TITLE_ADEPT');
   }
   if (newLevel === 25) {
-    rewards.push("TITLE_EXPERT");
+    rewards.push('TITLE_EXPERT');
   }
   if (newLevel === 50) {
-    rewards.push("TITLE_MASTER");
+    rewards.push('TITLE_MASTER');
   }
   if (newLevel === 100 && prestigeEnabled) {
-    rewards.push("PRESTIGE_AVAILABLE");
+    rewards.push('PRESTIGE_AVAILABLE');
   }
 
   return rewards;
@@ -29,16 +29,16 @@ function getCelebrationRewardForLevel(level: number): string[] {
     rewards.push(`${level * 10} coin milestone reward`);
   }
   if (level === 10) {
-    rewards.push("Adept tier reached");
+    rewards.push('Adept tier reached');
   }
   if (level === 25) {
-    rewards.push("Expert tier reached");
+    rewards.push('Expert tier reached');
   }
   if (level === 50) {
-    rewards.push("Master tier reached");
+    rewards.push('Master tier reached');
   }
   if (level === 100) {
-    rewards.push("Centurion tier reached");
+    rewards.push('Centurion tier reached');
   }
   return rewards;
 }

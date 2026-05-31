@@ -1,7 +1,7 @@
-import { z } from "zod";
+import { z } from 'zod';
 
-import { SessionSummarySchema } from "../../session/types";
-import type { CompletionExperiencePolicy } from "./completion-experience-policy";
+import { SessionSummarySchema } from '../../session/types';
+import type { CompletionExperiencePolicy } from './completion-experience-policy';
 
 const CompletionPayoffSchema = z
   .object({
@@ -15,10 +15,10 @@ const CompletionPayoffSchema = z
 const BuildCompletionPayoffInputSchema = z
   .object({
     adaptivePayoff: z.enum([
-      "study_progress",
-      "boss_damage",
-      "coach_next_action",
-      "progress_insight",
+      'study_progress',
+      'boss_damage',
+      'coach_next_action',
+      'progress_insight',
     ]),
     bossDamage: z.number().nonnegative().nullable(),
     coachActionLabel: z.string().min(1).nullable(),
@@ -43,45 +43,45 @@ export function buildCompletionAdaptivePayoff(
 ): CompletionPayoff {
   const input = BuildCompletionPayoffInputSchema.parse(rawInput);
 
-  if (input.adaptivePayoff === "study_progress" && input.study) {
+  if (input.adaptivePayoff === 'study_progress' && input.study) {
     return CompletionPayoffSchema.parse({
       body: input.study.nextTopic
         ? `Next review: ${input.study.nextTopic}`
-        : "Your study plan is ready for the next focused review.",
-      label: "STUDY PROGRESS",
+        : 'Your study plan is ready for the next focused review.',
+      label: 'STUDY PROGRESS',
       title: input.study.title,
       value: input.study.progressLabel,
     });
   }
 
-  if (input.adaptivePayoff === "boss_damage") {
+  if (input.adaptivePayoff === 'boss_damage') {
     const damage = input.bossDamage ?? input.summary.damage?.totalDamage ?? 0;
     return CompletionPayoffSchema.parse({
       body:
         damage > 0
-          ? "That focus landed as visible pressure."
-          : "Boss pressure stays queued for the next focused run.",
-      label: "BOSS DAMAGE",
-      title: "Focus hit the boss.",
-      value: damage > 0 ? `${damage} damage` : "Pressure banked",
+          ? 'That focus landed as visible pressure.'
+          : 'Boss pressure stays queued for the next focused run.',
+      label: 'BOSS DAMAGE',
+      title: 'Focus hit the boss.',
+      value: damage > 0 ? `${damage} damage` : 'Pressure banked',
     });
   }
 
-  if (input.adaptivePayoff === "coach_next_action") {
+  if (input.adaptivePayoff === 'coach_next_action') {
     return CompletionPayoffSchema.parse({
-      body: "Use the next move while this session is still fresh.",
-      label: "COACH NEXT ACTION",
-      title: input.coachActionLabel ?? "Start the next clean block.",
-      value: "Next action set",
+      body: 'Use the next move while this session is still fresh.',
+      label: 'COACH NEXT ACTION',
+      title: input.coachActionLabel ?? 'Start the next clean block.',
+      value: 'Next action set',
     });
   }
 
   return CompletionPayoffSchema.parse({
     body: input.summary.focusPurityScore
       ? `${input.summary.focusPurityScore}% purity with ${input.summary.completionPercentage}% completion.`
-      : "Your session progress is saved and ready to compound.",
-    label: "PROGRESS INSIGHT",
-    title: "Progress moved forward.",
+      : 'Your session progress is saved and ready to compound.',
+    label: 'PROGRESS INSIGHT',
+    title: 'Progress moved forward.',
     value: `+${input.summary.xpEarned ?? 0} focus progress`,
   });
 }

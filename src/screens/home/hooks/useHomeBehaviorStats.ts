@@ -1,18 +1,18 @@
-import { useMemo } from "react";
+import { useMemo } from 'react';
 import {
   getBehaviorSignals,
-} from "../../../features/personalization/behavior-signal-store";
-import { resolveUserBehaviorSignals } from "../../../features/personalization/behavior-resolver";
+} from '../../../features/personalization/behavior-signal-store';
+import { resolveUserBehaviorSignals } from '../../../features/personalization/behavior-resolver';
 import type {
   BehaviorSignal,
   BehaviorResolverInput,
-} from "../../../features/personalization/behavior-signal-schemas";
-import type { BehaviorStats } from "../../../features/personalization/schemas";
+} from '../../../features/personalization/behavior-signal-schemas';
+import type { BehaviorStats } from '../../../features/personalization/schemas';
 import type {
   LegacySessionData,
-} from "./home-resolved-experience-types";
-import type { HomeController } from "./home-controller-types";
-import type { SessionHistoryEntry } from "../../../session/types";
+} from './home-resolved-experience-types';
+import type { HomeController } from './home-controller-types';
+import type { SessionHistoryEntry } from '../../../session/types';
 import {
   computeCompletedDurations,
   computeAbandonedDurations,
@@ -21,7 +21,7 @@ import {
   computeStudyUsageRatio,
   computeCoachInteractions,
   computeComebackSessions,
-} from "./home-experience-utils";
+} from './home-experience-utils';
 
 interface UseHomeBehaviorStatsInput {
   userId: string;
@@ -55,16 +55,16 @@ export function useHomeBehaviorStats(
     });
     const studySessionCount = completedSessions.filter(
       (s) =>
-        s.mode === "STUDY" ||
-        s.config?.sessionMode === "STUDY" ||
+        s.mode === 'STUDY' ||
+        s.config?.sessionMode === 'STUDY' ||
         Boolean(s.config?.studyPlanId),
     ).length;
     const deepWorkCount = completedSessions.filter(
-      (s) => s.mode === "DEEP_WORK" || s.config?.sessionMode === "DEEP_WORK",
+      (s) => s.mode === 'DEEP_WORK' || s.config?.sessionMode === 'DEEP_WORK',
     ).length;
     const learningCount = 0;
     const creativeCount = completedSessions.filter(
-      (s) => s.mode === "CREATIVE" || s.config?.sessionMode === "CREATIVE",
+      (s) => s.mode === 'CREATIVE' || s.config?.sessionMode === 'CREATIVE',
     ).length;
 
     const resolverInput: BehaviorResolverInput = {
@@ -81,7 +81,7 @@ export function useHomeBehaviorStats(
       },
       firstWeekExperience: {
         stage:
-          totalCompletedSessions === 0 ? "DAY_0_NOT_STARTED" : "POST_DAY_7",
+          totalCompletedSessions === 0 ? 'DAY_0_NOT_STARTED' : 'POST_DAY_7',
         isDayZero: totalCompletedSessions === 0,
       },
     };
@@ -92,10 +92,10 @@ export function useHomeBehaviorStats(
     totalCompletedSessions,
     abandonedSessionDurations: computeAbandonedDurations(abandonedSessions),
     bossChallengeEngagement: resolvedBehaviorSignals.bossEngagement as
-      | "none"
-      | "low"
-      | "medium"
-      | "high",
+      | 'none'
+      | 'low'
+      | 'medium'
+      | 'high',
     coachInteractions: Math.max(
       computeCoachInteractions(controller),
       resolvedBehaviorSignals.coachInteractions,
@@ -109,7 +109,7 @@ export function useHomeBehaviorStats(
       computeBestTimeOfDay(completedSessions),
     preferredSessionMode:
       (resolvedBehaviorSignals.preferredSessionMode as
-        | BehaviorStats["preferredSessionMode"]
+        | BehaviorStats['preferredSessionMode']
         | null) ?? computePreferredMode(completedSessions),
     premiumFeatureAttempts: resolvedBehaviorSignals.premiumFeatureAttempts,
     studyUsageRatio:

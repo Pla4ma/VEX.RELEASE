@@ -1,10 +1,10 @@
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import type { SessionStackParams } from "../../../navigation/types";
-import type { SessionMode } from "../../../session/modes";
-import type { PresetWithIcon } from "../utils/session-setup";
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import type { SessionStackParams } from '../../../navigation/types';
+import type { SessionMode } from '../../../session/modes';
+import type { PresetWithIcon } from '../utils/session-setup';
 
 export type SessionNavigationProp = NativeStackNavigationProp<SessionStackParams>;
-export type SessionSetupParams = SessionStackParams["SessionSetup"];
+export type SessionSetupParams = SessionStackParams['SessionSetup'];
 
 export type UseStartSessionFlowParams = {
   draftGoal: string | undefined;

@@ -1,10 +1,10 @@
-import React from "react";
-import { Pressable } from "react-native";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import { Icon } from "../../../icons";
-import { quizPanelStyles } from "./QuizPanelStyles";
-import { cardSelection } from "../../../utils/haptics";
+import React from 'react';
+import { Pressable } from 'react-native';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import { Icon } from '../../../icons';
+import { quizPanelStyles } from './QuizPanelStyles';
+import { cardSelection } from '../../../utils/haptics';
 
 interface MultipleChoiceOptionsProps {
   options: string[];
@@ -64,7 +64,7 @@ export const MultipleChoiceOptions: React.FC<MultipleChoiceOptionsProps> = ({
             ]}
             onPress={() => { cardSelection(); onSelect(option); }}
             disabled={isAnswered || readOnly}
-            accessibilityLabel={`Answer option: ${option}${isSelected ? ", selected" : ""}`}
+            accessibilityLabel={`Answer option: ${option}${isSelected ? ', selected' : ''}`}
             accessibilityRole="button"
             accessibilityHint="Double tap to select this answer"
           >

@@ -3,7 +3,7 @@
  * Final gate before production deployment.
  */
 
-import { createDebugger } from "../utils/debug";
+import { createDebugger } from '../utils/debug';
 import {
   verifyOfflineSync,
   verifyErrorBoundaries,
@@ -12,17 +12,17 @@ import {
   verifyPrivacy,
   verifyPaywall,
   verifyAppStore,
-} from "./ExitGate.verifiers";
+} from './ExitGate.verifiers';
 import type {
   Phase9ExitGateResult,
   Phase9BlockingIssue,
   Phase9GateConfig,
-} from "./ExitGate.config";
-import { DEFAULT_GATE_CONFIG } from "./ExitGate.config";
+} from './ExitGate.config';
+import { DEFAULT_GATE_CONFIG } from './ExitGate.config';
 
-const debug = createDebugger("phase9-exit-gate");
+const debug = createDebugger('phase9-exit-gate');
 
-export type { Phase9ExitGateResult, Phase9BlockingIssue, Phase9GateConfig } from "./ExitGate.config";
+export type { Phase9ExitGateResult, Phase9BlockingIssue, Phase9GateConfig } from './ExitGate.config';
 
 export class Phase9ExitGate {
   private static instance: Phase9ExitGate;
@@ -48,7 +48,7 @@ export class Phase9ExitGate {
   }
 
   async runExitGate(): Promise<Phase9ExitGateResult> {
-    debug.info("Running Phase 9 Exit Gate verification...");
+    debug.info('Running Phase 9 Exit Gate verification...');
     const [
       offlineSync,
       errorBoundaries,
@@ -86,12 +86,12 @@ export class Phase9ExitGate {
     );
     const deploymentReady =
       overallScore >= this.config.overallMinimumScore &&
-      blockingIssues.filter((i) => i.severity === "critical").length === 0 &&
+      blockingIssues.filter((i) => i.severity === 'critical').length === 0 &&
       this.config.requiredCategories.every(
-        (c) => results[c].status !== "fail",
+        (c) => results[c].status !== 'fail',
       ) &&
       (this.config.allowWarnings ||
-        Object.values(results).every((r) => r.status === "pass"));
+        Object.values(results).every((r) => r.status === 'pass'));
     const gateResult: Phase9ExitGateResult = {
       passed: deploymentReady,
       score: overallScore,
@@ -106,19 +106,19 @@ export class Phase9ExitGate {
   }
 
   private identifyBlockingIssues(
-    results: Phase9ExitGateResult["results"],
+    results: Phase9ExitGateResult['results'],
   ): Phase9BlockingIssue[] {
     const issues: Phase9BlockingIssue[] = [];
     for (const [category, result] of Object.entries(results)) {
-      if (result.status === "fail") {
+      if (result.status === 'fail') {
         issues.push({
           id: `${category}-critical-failure`,
-          category: category as Phase9BlockingIssue["category"],
-          severity: "critical",
+          category: category as Phase9BlockingIssue['category'],
+          severity: 'critical',
           message: `${category} verification failed critically`,
-          impact: "Blocks production deployment",
+          impact: 'Blocks production deployment',
           recommendation: `Fix all ${category} issues before deployment`,
-          estimatedFixTime: "2-4 hours",
+          estimatedFixTime: '2-4 hours',
         });
       }
       const minScore =
@@ -128,12 +128,12 @@ export class Phase9ExitGate {
       if (result.score < minScore) {
         issues.push({
           id: `${category}-score-below-minimum`,
-          category: category as Phase9BlockingIssue["category"],
-          severity: "major",
+          category: category as Phase9BlockingIssue['category'],
+          severity: 'major',
           message: `${category} score (${result.score}) below minimum (${minScore})`,
-          impact: "Reduces deployment confidence",
+          impact: 'Reduces deployment confidence',
           recommendation: `Improve ${category} to meet minimum score`,
-          estimatedFixTime: "1-2 hours",
+          estimatedFixTime: '1-2 hours',
         });
       }
     }
@@ -141,14 +141,14 @@ export class Phase9ExitGate {
   }
 
   private generateRecommendations(
-    results: Phase9ExitGateResult["results"],
+    results: Phase9ExitGateResult['results'],
     blockingIssues: Phase9BlockingIssue[],
   ): string[] {
     const recs: string[] = [];
     for (const [category, result] of Object.entries(results)) {
-      if (result.status === "fail") {
+      if (result.status === 'fail') {
         recs.push(`URGENT: Fix critical ${category} issues`);
-      } else if (result.status === "warning") {
+      } else if (result.status === 'warning') {
         recs.push(`Review ${category} warnings`);
       }
       if (result.score < 85) {
@@ -159,11 +159,11 @@ export class Phase9ExitGate {
       recs.push(issue.recommendation);
     }
     if (blockingIssues.length === 0) {
-      recs.push("All systems ready for production deployment");
-      recs.push("Proceed with final deployment checklist");
+      recs.push('All systems ready for production deployment');
+      recs.push('Proceed with final deployment checklist');
     } else {
-      recs.push("Address all blocking issues before deployment");
-      recs.push("Re-run exit gate after fixing issues");
+      recs.push('Address all blocking issues before deployment');
+      recs.push('Re-run exit gate after fixing issues');
     }
     return recs;
   }

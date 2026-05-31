@@ -23,7 +23,7 @@ export function sanitizeString(
     result = result.toLowerCase();
   }
   if (options.removeSpecialChars) {
-    result = result.replace(/[^a-zA-Z0-9\s]/g, "");
+    result = result.replace(/[^a-zA-Z0-9\s]/g, '');
   }
   if (options.maxLength && result.length > options.maxLength) {
     result = result.slice(0, options.maxLength);
@@ -34,7 +34,7 @@ export function sanitizeString(
 export function truncateString(
   input: string,
   maxLength: number,
-  suffix: string = "...",
+  suffix: string = '...',
 ): string {
   if (input.length <= maxLength) {
     return input;
@@ -46,10 +46,10 @@ export function formatNumber(
   value: number,
   options: { decimals?: number; compact?: boolean; locale?: string } = {},
 ): string {
-  const { decimals = 0, compact = false, locale = "en-US" } = options;
+  const { decimals = 0, compact = false, locale = 'en-US' } = options;
   if (compact && Math.abs(value) >= 1000) {
     return Intl.NumberFormat(locale, {
-      notation: "compact",
+      notation: 'compact',
       maximumFractionDigits: decimals,
     }).format(value);
   }
@@ -60,10 +60,10 @@ export function formatNumber(
 }
 
 export function parseNumber(value: unknown): number | null {
-  if (typeof value === "number") {
+  if (typeof value === 'number') {
     return value;
   }
-  if (typeof value === "string") {
+  if (typeof value === 'string') {
     const parsed = parseFloat(value);
     return isNaN(parsed) ? null : parsed;
   }

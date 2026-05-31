@@ -1,17 +1,17 @@
-import * as Sentry from "@sentry/react-native";
+import * as Sentry from '@sentry/react-native';
 
-import { createMemoryCandidate, hashEvidence } from "../focus-memory/service";
-import { createUnlockDecision } from "../unlock-explainer/service";
-import type { CompletionLedger } from "./schemas";
-import type { SessionSummary } from "../../session/types";
-import type { LaneProfile } from "../lane-engine/types";
-import type { CompletionPersonalizationResult } from "./schemas";
-import { buildCompletionPersonalizationResult } from "./completion-personalization";
-import { createDebugger } from "../../utils/debug";
-import { enqueue } from "../../lib/offline/queue";
-import { getConnectionState } from "../../lib/repository/base";
+import { createMemoryCandidate, hashEvidence } from '../focus-memory/service';
+import { createUnlockDecision } from '../unlock-explainer/service';
+import type { CompletionLedger } from './schemas';
+import type { SessionSummary } from '../../session/types';
+import type { LaneProfile } from '../lane-engine/types';
+import type { CompletionPersonalizationResult } from './schemas';
+import { buildCompletionPersonalizationResult } from './completion-personalization';
+import { createDebugger } from '../../utils/debug';
+import { enqueue } from '../../lib/offline/queue';
+import { getConnectionState } from '../../lib/repository/base';
 
-const debug = createDebugger("completion-personalization:integration");
+const debug = createDebugger('completion-personalization:integration');
 
 export interface CompletionPersonalizationInputForIntegration {
   deletedMemoryIds: string[];
@@ -29,7 +29,7 @@ function resolveHiddenFeatureKeys(
   input: CompletionPersonalizationInputForIntegration,
 ): string[] {
   if (input.sessionCount < 3) {
-    return [...input.hiddenFeatureKeys, "memory_console"];
+    return [...input.hiddenFeatureKeys, 'memory_console'];
   }
   return input.hiddenFeatureKeys;
 }
@@ -41,47 +41,47 @@ async function persistMemoryCandidates(
   userId: string,
 ): Promise<void> {
   for (const candidate of result.memoryCandidates) {
-    if (candidate.confidence < MIN_CANDIDATE_CONFIDENCE) continue;
+    if (candidate.confidence < MIN_CANDIDATE_CONFIDENCE) {continue;}
 
     try {
       const memoryType =
         candidate.confidence >= 0.7
-          ? "successful_session_pattern"
-          : "lane_evidence";
+          ? 'successful_session_pattern'
+          : 'lane_evidence';
 
       await createMemoryCandidate({
         userId,
         type: memoryType,
         summary: candidate.text,
-        source: "session_completion" as const,
+        source: 'session_completion' as const,
         confidence: candidate.confidence,
         evidenceHash: hashEvidence(`${memoryType}:${userId}:${candidate.text}`),
       });
     } catch (error) {
       // If offline, enqueue for retry. Otherwise report and drop.
-      if (getConnectionState() === "offline") {
+      if (getConnectionState() === 'offline') {
         enqueue({
-          feature: "focus-memory",
+          feature: 'focus-memory',
           idempotencyKey: `memory-candidate:${candidate.id}`,
-          operation: "MEMORY_CREATE",
+          operation: 'MEMORY_CREATE',
           payload: {
             userId,
             type:
               candidate.confidence >= 0.7
-                ? "successful_session_pattern"
-                : "lane_evidence",
+                ? 'successful_session_pattern'
+                : 'lane_evidence',
             summary: candidate.text,
-            source: "session_completion",
+            source: 'session_completion',
             confidence: candidate.confidence,
             evidenceHash: hashEvidence(
-              `${candidate.confidence >= 0.7 ? "successful_session_pattern" : "lane_evidence"}:${userId}:${candidate.text}`,
+              `${candidate.confidence >= 0.7 ? 'successful_session_pattern' : 'lane_evidence'}:${userId}:${candidate.text}`,
             ),
           },
-          priority: "low",
+          priority: 'low',
         });
       } else {
         Sentry.captureException(error, {
-          tags: { feature: "completion-memory-persistence" },
+          tags: { feature: 'completion-memory-persistence' },
         });
       }
     }
@@ -90,16 +90,16 @@ async function persistMemoryCandidates(
 
 function produceUnlockDecision(
   input: CompletionPersonalizationInputForIntegration,
-): CompletionPersonalizationResult["unlockDecision"] {
+): CompletionPersonalizationResult['unlockDecision'] {
   const lane = input.laneProfile.primaryLane;
   const featureKey =
-    lane === "student"
-      ? "study_os"
-      : lane === "game_like"
-        ? "run_board"
-        : lane === "deep_creative"
-          ? "project_thread"
-          : "today_strip";
+    lane === 'student'
+      ? 'study_os'
+      : lane === 'game_like'
+        ? 'run_board'
+        : lane === 'deep_creative'
+          ? 'project_thread'
+          : 'today_strip';
 
   try {
     const decision = createUnlockDecision({
@@ -107,31 +107,31 @@ function produceUnlockDecision(
       laneProfile: lane,
       sessionCount: input.sessionCount,
       isPremium: false,
-      hasRelatedBehavior: input.ledger.grade !== "D",
+      hasRelatedBehavior: input.ledger.grade !== 'D',
     });
 
     return {
-      hidden: decision.decision === "hidden",
-      key: decision.featureKey as CompletionPersonalizationResult["unlockDecision"]["key"],
+      hidden: decision.decision === 'hidden',
+      key: decision.featureKey as CompletionPersonalizationResult['unlockDecision']['key'],
       reason: decision.userFacingReason,
       status:
-        decision.decision === "hidden"
-          ? "blocked"
-          : decision.decision === "unlocked"
-            ? "available"
-            : decision.decision === "teased"
-              ? "teased"
-              : decision.decision === "degraded"
-                ? "blocked"
-                : "blocked",
-    } as CompletionPersonalizationResult["unlockDecision"];
+        decision.decision === 'hidden'
+          ? 'blocked'
+          : decision.decision === 'unlocked'
+            ? 'available'
+            : decision.decision === 'teased'
+              ? 'teased'
+              : decision.decision === 'degraded'
+                ? 'blocked'
+                : 'blocked',
+    } as CompletionPersonalizationResult['unlockDecision'];
   } catch (error: unknown) {
     return {
       hidden: true,
-      key: featureKey as CompletionPersonalizationResult["unlockDecision"]["key"],
-      reason: "Feature gate keeps this system out of routing and queries.",
-      status: "blocked",
-    } as CompletionPersonalizationResult["unlockDecision"];
+      key: featureKey as CompletionPersonalizationResult['unlockDecision']['key'],
+      reason: 'Feature gate keeps this system out of routing and queries.',
+      status: 'blocked',
+    } as CompletionPersonalizationResult['unlockDecision'];
   }
 }
 
@@ -150,7 +150,7 @@ export async function integrateCompletionPersonalization(
   input: CompletionPersonalizationInputForIntegration,
 ): Promise<CompletionPersonalizationResult> {
   debug.info(
-    "Integrating completion personalization for %s",
+    'Integrating completion personalization for %s',
     input.summary.sessionId,
   );
 
@@ -180,7 +180,7 @@ export async function integrateCompletionPersonalization(
   await persistMemoryCandidates(completeResult, input.ledger.userId);
 
   debug.info(
-    "Completion personalization integrated for %s",
+    'Completion personalization integrated for %s',
     input.summary.sessionId,
   );
   return completeResult;

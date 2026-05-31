@@ -1,42 +1,42 @@
-import { type AppConfig, type AppEnvironment } from "../types/global";
+import { type AppConfig, type AppEnvironment } from '../types/global';
 export const ENVIRONMENT: AppEnvironment =
-  (process.env.EXPO_PUBLIC_ENVIRONMENT as AppEnvironment) || "development";
-export const IS_DEVELOPMENT = ENVIRONMENT === "development";
-export const IS_PRODUCTION = ENVIRONMENT === "production";
-export const IS_STAGING = ENVIRONMENT === "staging";
+  (process.env.EXPO_PUBLIC_ENVIRONMENT as AppEnvironment) || 'development';
+export const IS_DEVELOPMENT = ENVIRONMENT === 'development';
+export const IS_PRODUCTION = ENVIRONMENT === 'production';
+export const IS_STAGING = ENVIRONMENT === 'staging';
 export const APP_METADATA = {
-  name: "VEX",
-  fullName: "VEX App",
-  tagline: "The ultimate mobile experience",
-  version: "1.0.0",
-  buildNumber: "100",
-  bundleId: { ios: "com.jonathan.vex", android: "com.jonathan.vex" },
+  name: 'VEX',
+  fullName: 'VEX App',
+  tagline: 'The ultimate mobile experience',
+  version: '1.0.0',
+  buildNumber: '100',
+  bundleId: { ios: 'com.jonathan.vex', android: 'com.jonathan.vex' },
   copyright: `© ${new Date().getFullYear()} VEX Inc.`,
-  supportEmail: "support@vex.app",
-  website: "https://vex.app",
-  privacyPolicy: "https://vex.app/privacy",
-  termsOfService: "https://vex.app/terms",
+  supportEmail: 'support@vex.app',
+  website: 'https://vex.app',
+  privacyPolicy: 'https://vex.app/privacy',
+  termsOfService: 'https://vex.app/terms',
 } as const;
 export const APP_CONFIG: Record<AppEnvironment, AppConfig> = {
   development: {
-    environment: "development",
-    apiUrl: "https://api-dev.vex.app/v1",
+    environment: 'development',
+    apiUrl: 'https://api-dev.vex.app/v1',
     apiTimeout: 30000,
     version: APP_METADATA.version,
     buildNumber: APP_METADATA.buildNumber,
     bundleId: APP_METADATA.bundleId.ios,
   },
   staging: {
-    environment: "staging",
-    apiUrl: "https://api-staging.vex.app/v1",
+    environment: 'staging',
+    apiUrl: 'https://api-staging.vex.app/v1',
     apiTimeout: 30000,
     version: APP_METADATA.version,
     buildNumber: APP_METADATA.buildNumber,
     bundleId: APP_METADATA.bundleId.ios,
   },
   production: {
-    environment: "production",
-    apiUrl: "https://api.vex.app/v1",
+    environment: 'production',
+    apiUrl: 'https://api.vex.app/v1',
     apiTimeout: 30000,
     version: APP_METADATA.version,
     buildNumber: APP_METADATA.buildNumber,
@@ -47,11 +47,11 @@ export const CURRENT_CONFIG = APP_CONFIG[ENVIRONMENT];
 export const ANIMATION = {
   duration: { instant: 0, fast: 150, normal: 300, slow: 500, verySlow: 800 },
   easing: {
-    default: "easeInOut",
-    linear: "linear",
-    easeIn: "easeIn",
-    easeOut: "easeOut",
-    bounce: "bounce",
+    default: 'easeInOut',
+    linear: 'linear',
+    easeIn: 'easeIn',
+    easeOut: 'easeOut',
+    bounce: 'bounce',
     spring: { stiffness: 100, damping: 10, mass: 1 },
   },
   delay: { none: 0, short: 100, medium: 250, long: 500 },
@@ -83,17 +83,17 @@ export const TIMING = {
 } as const;
 export const DATE_FORMAT = {
   display: {
-    date: "MMM d, yyyy",
-    dateTime: "MMM d, yyyy h:mm a",
-    time: "h:mm a",
-    shortDate: "MM/dd/yy",
-    monthYear: "MMMM yyyy",
-    dayOfWeek: "EEEE",
+    date: 'MMM d, yyyy',
+    dateTime: 'MMM d, yyyy h:mm a',
+    time: 'h:mm a',
+    shortDate: 'MM/dd/yy',
+    monthYear: 'MMMM yyyy',
+    dayOfWeek: 'EEEE',
   },
   api: {
     iso: "yyyy-MM-dd'T'HH:mm:ss.SSSxxx",
-    date: "yyyy-MM-dd",
-    time: "HH:mm:ss",
+    date: 'yyyy-MM-dd',
+    time: 'HH:mm:ss',
   },
 } as const;
 export const LIMITS = {
@@ -105,7 +105,7 @@ export const LIMITS = {
   squadDescription: { max: 500 },
   fileUpload: {
     maxSize: 10 * 1024 * 1024,
-    allowedTypes: ["image/jpeg", "image/png", "image/gif", "image/webp"],
+    allowedTypes: ['image/jpeg', 'image/png', 'image/gif', 'image/webp'],
     maxDimensions: { width: 4096, height: 4096 },
   },
 } as const;
@@ -129,24 +129,24 @@ export const NETWORK = {
   syncInterval: 30000,
 } as const;
 export const ERROR_CODES = {
-  AUTH_INVALID_CREDENTIALS: "AUTH001",
-  AUTH_TOKEN_EXPIRED: "AUTH002",
-  AUTH_TOKEN_INVALID: "AUTH003",
-  AUTH_UNAUTHORIZED: "AUTH004",
-  AUTH_FORBIDDEN: "AUTH005",
-  NETWORK_OFFLINE: "NET001",
-  NETWORK_TIMEOUT: "NET002",
-  NETWORK_ERROR: "NET003",
-  VALIDATION_ERROR: "VAL001",
-  VALIDATION_REQUIRED: "VAL002",
-  VALIDATION_FORMAT: "VAL003",
-  VALIDATION_LENGTH: "VAL004",
-  DATA_NOT_FOUND: "DAT001",
-  DATA_CONFLICT: "DAT002",
-  DATA_TOO_LARGE: "DAT003",
-  SYSTEM_ERROR: "SYS001",
-  SYSTEM_MAINTENANCE: "SYS002",
-  SYSTEM_RATE_LIMIT: "SYS003",
+  AUTH_INVALID_CREDENTIALS: 'AUTH001',
+  AUTH_TOKEN_EXPIRED: 'AUTH002',
+  AUTH_TOKEN_INVALID: 'AUTH003',
+  AUTH_UNAUTHORIZED: 'AUTH004',
+  AUTH_FORBIDDEN: 'AUTH005',
+  NETWORK_OFFLINE: 'NET001',
+  NETWORK_TIMEOUT: 'NET002',
+  NETWORK_ERROR: 'NET003',
+  VALIDATION_ERROR: 'VAL001',
+  VALIDATION_REQUIRED: 'VAL002',
+  VALIDATION_FORMAT: 'VAL003',
+  VALIDATION_LENGTH: 'VAL004',
+  DATA_NOT_FOUND: 'DAT001',
+  DATA_CONFLICT: 'DAT002',
+  DATA_TOO_LARGE: 'DAT003',
+  SYSTEM_ERROR: 'SYS001',
+  SYSTEM_MAINTENANCE: 'SYS002',
+  SYSTEM_RATE_LIMIT: 'SYS003',
 } as const;
 export const FEATURE_DEFAULTS = {
   darkMode: false,

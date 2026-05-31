@@ -1,14 +1,14 @@
-import type { ValidationError, ValidationResult } from "./types";
-import { validateTimeRange } from "./time-range";
+import type { ValidationError, ValidationResult } from './types';
+import { validateTimeRange } from './time-range';
 
-const VALID_FORMATS = ["json", "csv"] as const;
+const VALID_FORMATS = ['json', 'csv'] as const;
 const VALID_DATA_TYPES = [
-  "sessions",
-  "xp",
-  "streaks",
-  "boss",
-  "items",
-  "challenges",
+  'sessions',
+  'xp',
+  'streaks',
+  'boss',
+  'items',
+  'challenges',
 ] as const;
 
 export function validateExportConfig(config: {
@@ -22,22 +22,22 @@ export function validateExportConfig(config: {
 
   if (!(VALID_FORMATS as readonly string[]).includes(config.format)) {
     errors.push({
-      field: "format",
-      code: "INVALID_FORMAT",
+      field: 'format',
+      code: 'INVALID_FORMAT',
       message: `Export format "${config.format}" is not supported`,
-      severity: "error",
-      recoveryHint: `Supported formats: ${VALID_FORMATS.join(", ")}`,
+      severity: 'error',
+      recoveryHint: `Supported formats: ${VALID_FORMATS.join(', ')}`,
       value: config.format,
     });
   }
 
-  if (!config.userId || typeof config.userId !== "string") {
+  if (!config.userId || typeof config.userId !== 'string') {
     errors.push({
-      field: "userId",
-      code: "MISSING_USER_ID",
-      message: "User ID is required",
-      severity: "error",
-      recoveryHint: "Provide a valid user ID",
+      field: 'userId',
+      code: 'MISSING_USER_ID',
+      message: 'User ID is required',
+      severity: 'error',
+      recoveryHint: 'Provide a valid user ID',
     });
   }
 
@@ -45,11 +45,11 @@ export function validateExportConfig(config: {
   for (const type of dataTypes) {
     if (!(VALID_DATA_TYPES as readonly string[]).includes(type)) {
       warnings.push({
-        field: "dataTypes",
-        code: "UNKNOWN_DATA_TYPE",
+        field: 'dataTypes',
+        code: 'UNKNOWN_DATA_TYPE',
         message: `Data type "${type}" may not be available`,
-        severity: "warning",
-        recoveryHint: `Available types: ${VALID_DATA_TYPES.join(", ")}`,
+        severity: 'warning',
+        recoveryHint: `Available types: ${VALID_DATA_TYPES.join(', ')}`,
         value: type,
       });
     }
@@ -61,11 +61,11 @@ export function validateExportConfig(config: {
 
   if (estimatedSize > 50 * 1024 * 1024) {
     warnings.push({
-      field: "dateRange",
-      code: "LARGE_EXPORT",
+      field: 'dateRange',
+      code: 'LARGE_EXPORT',
       message: `Export may be very large (~${Math.round(estimatedSize / 1024 / 1024)}MB)`,
-      severity: "warning",
-      recoveryHint: "Reduce date range or select fewer data types",
+      severity: 'warning',
+      recoveryHint: 'Reduce date range or select fewer data types',
       value: estimatedSize,
     });
   }

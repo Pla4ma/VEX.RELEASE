@@ -4,4 +4,4 @@ export type {
   HomeExperienceStage,
   HomeSection,
   HomeSpotlightSystem,
-} from "./schemas";
+} from './schemas';

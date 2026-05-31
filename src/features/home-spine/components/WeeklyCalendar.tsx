@@ -1,16 +1,16 @@
-import React, { useState, useCallback } from "react";
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { DayCell } from "./DayCell";
-import { DayDetailsPopover } from "./DayDetailsPopover";
-import type { WeeklyCalendarProps } from "./weekly-calendar-types";
+import React, { useState, useCallback } from 'react';
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { DayCell } from './DayCell';
+import { DayDetailsPopover } from './DayDetailsPopover';
+import type { WeeklyCalendarProps } from './weekly-calendar-types';
 
 export type {
   WeeklyCalendarProps,
   DayData,
   DayStatus,
   EventType,
-} from "./weekly-calendar-types";
+} from './weekly-calendar-types';
 
 export function WeeklyCalendar({
   days,

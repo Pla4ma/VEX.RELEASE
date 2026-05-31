@@ -1,19 +1,19 @@
-import { captureSilentFailure } from "../../utils/silent-failure";
+import { captureSilentFailure } from '../../utils/silent-failure';
 
-import { getDefaultStorageAdapter } from "../../persistence/MMKVStorageAdapter";
+import { getDefaultStorageAdapter } from '../../persistence/MMKVStorageAdapter';
 import {
   parseJsonWithSchema,
   stringifyJsonSafe,
-} from "../../persistence/safe-json";
-import type { SessionSummary } from "../../session/types";
-import type { CompanionMood, CompanionState } from "./types";
-import { EVOLUTION_THRESHOLDS } from "./types";
+} from '../../persistence/safe-json';
+import type { SessionSummary } from '../../session/types';
+import type { CompanionMood, CompanionState } from './types';
+import { EVOLUTION_THRESHOLDS } from './types';
 import {
   companionStateSchema,
   companionGrowthSchema,
   createDefaultCompanion,
-} from "./companion-schemas";
-import type { CompanionGrowth } from "./companion-schemas";
+} from './companion-schemas';
+import type { CompanionGrowth } from './companion-schemas';
 
 export { companionStateSchema, companionGrowthSchema, createDefaultCompanion };
 export type { CompanionGrowth };
@@ -38,7 +38,7 @@ export async function loadCompanionState(
   }
   return (
     parseJsonWithSchema(raw, companionStateSchema, {
-      feature: "companion",
+      feature: 'companion',
       key,
     }) ?? createDefaultCompanion(userId)
   );
@@ -49,7 +49,7 @@ export async function saveCompanionState(
 ): Promise<CompanionState> {
   const next = { ...state, updatedAt: Date.now() };
   const key = stateKey(state.userId);
-  const encoded = stringifyJsonSafe(next, { feature: "companion", key });
+  const encoded = stringifyJsonSafe(next, { feature: 'companion', key });
   if (encoded) {
     await storage.setItem(key, encoded);
   }
@@ -61,7 +61,7 @@ export async function saveCompanionGrowth(
   growth: CompanionGrowth,
 ): Promise<void> {
   const key = growthKey(userId, growth.sessionId);
-  const encoded = stringifyJsonSafe(growth, { feature: "companion", key });
+  const encoded = stringifyJsonSafe(growth, { feature: 'companion', key });
   if (encoded) {
     await storage.setItem(key, encoded);
   }
@@ -77,7 +77,7 @@ export async function loadCompanionGrowth(
     return null;
   }
   return parseJsonWithSchema(raw, companionGrowthSchema, {
-    feature: "companion",
+    feature: 'companion',
     key,
   });
 }
@@ -88,12 +88,12 @@ export function getMoodForSessionSummary(
   const purity = summary.focusPurityScore ?? summary.focusQuality ?? 0;
   const finalScore = summary.finalScore ?? 0;
   if ((finalScore && finalScore >= 95) || (purity && purity >= 95)) {
-    return "ECSTATIC";
+    return 'ECSTATIC';
   }
   if ((finalScore && finalScore >= 70) || (purity && purity >= 70)) {
-    return "CONTENT";
+    return 'CONTENT';
   }
-  return "SLEEPY";
+  return 'SLEEPY';
 }
 
 export function getEvolutionProgress(state: CompanionState): number {
@@ -140,9 +140,9 @@ export async function loadRecentSessionMoods(
         return null;
       } catch (error) {
         captureSilentFailure(error, {
-          feature: "companion",
-          operation: "safe-fallback",
-          type: "data",
+          feature: 'companion',
+          operation: 'safe-fallback',
+          type: 'data',
         });
         return null;
       }

@@ -1,9 +1,9 @@
-import { getMMKVStorageAdapter } from "../../persistence/MMKVStorageAdapter";
-import type { SessionPreset } from "../types";
-import { createDebugger } from "../../utils/debug";
-import type { DEFAULT_PRESETS } from "./default-presets";
+import { getMMKVStorageAdapter } from '../../persistence/MMKVStorageAdapter';
+import type { SessionPreset } from '../types';
+import { createDebugger } from '../../utils/debug';
+import type { DEFAULT_PRESETS } from './default-presets';
 
-const debug = createDebugger("session:presets");
+const debug = createDebugger('session:presets');
 
 export function initializeSystemPresetsData(
   presets: typeof DEFAULT_PRESETS,
@@ -11,7 +11,7 @@ export function initializeSystemPresetsData(
   const now = Date.now();
   return presets.map((preset) => ({
     ...preset,
-    id: `system-${preset.name.toLowerCase().replace(/\s+/g, "-")}`,
+    id: `system-${preset.name.toLowerCase().replace(/\s+/g, '-')}`,
     createdAt: now,
     updatedAt: now,
   }));
@@ -26,7 +26,7 @@ export function buildCustomPresetData(config: {
   strictMode?: boolean;
   dndEnabled?: boolean;
   description?: string;
-}): Omit<SessionPreset, "id" | "createdAt" | "updatedAt" | "userId"> {
+}): Omit<SessionPreset, 'id' | 'createdAt' | 'updatedAt' | 'userId'> {
   return {
     name: config.name,
     description:
@@ -37,8 +37,8 @@ export function buildCustomPresetData(config: {
     intervals: config.intervals || 1,
     longBreakInterval: 4,
     isDefault: false,
-    category: config.category || "custom",
-    tags: ["custom"],
+    category: config.category || 'custom',
+    tags: ['custom'],
     soundEnabled: true,
     vibrationEnabled: true,
     dndEnabled: config.dndEnabled ?? false,
@@ -58,11 +58,11 @@ export async function loadUserPresetsFromStorage(
     if (data) {
       const parsed = JSON.parse(data) as Record<string, SessionPreset>;
       const presets = new Map(Object.entries(parsed));
-      debug.info("Loaded %d user presets", presets.size);
+      debug.info('Loaded %d user presets', presets.size);
       return presets;
     }
   } catch (error) {
-    debug.error("Failed to load user presets", error as Error);
+    debug.error('Failed to load user presets', error as Error);
   }
   return new Map();
 }
@@ -77,6 +77,6 @@ export async function saveUserPresetsToStorage(
     const storage = getMMKVStorageAdapter();
     await storage.setItem(key, JSON.stringify(data));
   } catch (error) {
-    debug.error("Failed to save user presets", error as Error);
+    debug.error('Failed to save user presets', error as Error);
   }
 }

@@ -1,7 +1,7 @@
 export interface SocialActivity {
   userId: string;
   activityType: string;
-  visibility: "PRIVATE" | "FRIENDS" | "SQUAD" | "PUBLIC";
+  visibility: 'PRIVATE' | 'FRIENDS' | 'SQUAD' | 'PUBLIC';
   data: Record<string, unknown>;
 }
 

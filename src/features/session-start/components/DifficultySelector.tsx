@@ -9,24 +9,24 @@
  * @phase 4
  */
 
-import React from "react";
-import { View, Pressable } from "react-native";
+import React from 'react';
+import { View, Pressable } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   withSpring,
-} from "react-native-reanimated";
+} from 'react-native-reanimated';
 
-import { useTheme } from "../../../theme";
-import { Text } from "../../../components/primitives/Text";
-import { useHaptics } from "../../../utils/haptics";
-import { eventBus } from "../../../events";
-import * as Sentry from "@sentry/react-native";
+import { useTheme } from '../../../theme';
+import { Text } from '../../../components/primitives/Text';
+import { useHaptics } from '../../../utils/haptics';
+import { eventBus } from '../../../events';
+import * as Sentry from '@sentry/react-native';
 import {
   DIFFICULTY_OPTIONS,
   type DifficultyOption,
   type DifficultySelectorProps,
   type SessionDifficulty,
-} from "./DifficultySelector.types";
+} from './DifficultySelector.types';
 
 export type { SessionDifficulty };
 
@@ -45,17 +45,17 @@ export function DifficultySelector({
     haptics.light();
 
     Sentry.addBreadcrumb({
-      category: "session",
-      message: "Difficulty selected",
+      category: 'session',
+      message: 'Difficulty selected',
       data: {
         difficulty,
         xpMultiplier: DIFFICULTY_OPTIONS.find((d) => d.id === difficulty)
           ?.xpMultiplier,
       },
-      level: "info",
+      level: 'info',
     });
 
-    eventBus.publish("session:difficulty_selected", {
+    eventBus.publish('session:difficulty_selected', {
       difficulty,
       timestamp: Date.now(),
     });
@@ -64,8 +64,8 @@ export function DifficultySelector({
   };
 
   const containerStyle = {
-    flexDirection: "row" as const,
-    justifyContent: "space-between" as const,
+    flexDirection: 'row' as const,
+    justifyContent: 'space-between' as const,
     gap: theme.spacing[2],
     paddingHorizontal: theme.spacing[4],
   };
@@ -147,7 +147,7 @@ function DifficultyCard({
         <Text
           variant="body"
           color={theme.colors.text.primary}
-          style={{ marginBottom: theme.spacing[1], fontWeight: "700" }}
+          style={{ marginBottom: theme.spacing[1], fontWeight: '700' }}
         >
           {option.name}
         </Text>
@@ -159,7 +159,7 @@ function DifficultyCard({
           <Text
             variant="caption"
             color={option.color}
-            style={{ fontWeight: "600" }}
+            style={{ fontWeight: '600' }}
           >
             {option.xpMultiplier} XP
           </Text>

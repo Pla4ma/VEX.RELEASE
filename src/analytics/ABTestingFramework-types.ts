@@ -1,19 +1,19 @@
 export type ExperimentType =
-  | "HOME_RECOMMENDATION"
-  | "PAYWALL_TIMING"
-  | "PAYWALL_COPY"
-  | "SESSION_DURATION"
-  | "COACH_FREQUENCY"
-  | "ONBOARDING_FLOW"
-  | "STREAK_UI"
-  | "BOSS_DIFFICULTY";
+  | 'HOME_RECOMMENDATION'
+  | 'PAYWALL_TIMING'
+  | 'PAYWALL_COPY'
+  | 'SESSION_DURATION'
+  | 'COACH_FREQUENCY'
+  | 'ONBOARDING_FLOW'
+  | 'STREAK_UI'
+  | 'BOSS_DIFFICULTY';
 
 export interface Experiment {
   id: string;
   name: string;
   description: string;
   type: ExperimentType;
-  status: "DRAFT" | "RUNNING" | "PAUSED" | "COMPLETED";
+  status: 'DRAFT' | 'RUNNING' | 'PAUSED' | 'COMPLETED';
   startDate: number;
   endDate?: number;
   controlVariant: Variant;
@@ -23,8 +23,8 @@ export interface Experiment {
     userSegments?: string[];
     minSessions?: number;
     maxSessions?: number;
-    platforms?: ("ios" | "android" | "web")[];
-    premiumStatus?: "free" | "premium" | "both";
+    platforms?: ('ios' | 'android' | 'web')[];
+    premiumStatus?: 'free' | 'premium' | 'both';
   };
   primaryMetric: string;
   secondaryMetrics: string[];
@@ -49,14 +49,14 @@ export interface ExperimentAssignment {
 export interface ExperimentResults {
   experimentId: string;
   experimentName: string;
-  status: "DRAFT" | "RUNNING" | "PAUSED" | "COMPLETED";
+  status: 'DRAFT' | 'RUNNING' | 'PAUSED' | 'COMPLETED';
   startDate: number;
   endDate?: number;
   totalParticipants: number;
   variants: VariantResult[];
   winner?: string;
   confidence: number;
-  recommendedAction: "CONTINUE" | "STOP" | "IMPLEMENT_WINNER";
+  recommendedAction: 'CONTINUE' | 'STOP' | 'IMPLEMENT_WINNER';
 }
 
 export interface VariantResult {

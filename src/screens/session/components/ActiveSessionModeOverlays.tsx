@@ -1,16 +1,16 @@
-import React from "react";
-import Animated, { ZoomIn } from "react-native-reanimated";
+import React from 'react';
+import Animated, { ZoomIn } from 'react-native-reanimated';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { StudyQuizBreak } from "../../../features/session/StudyQuizBreak";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { StudyQuizBreak } from '../../../features/session/StudyQuizBreak';
 import {
   CreativeMoodLogger,
   type Mood,
-} from "../../../session/components/CreativeMoodLogger";
-import { ModeIndicatorBadge } from "../../../session/components/ModeIndicatorBadge";
-import { SessionMode } from "../../../session/modes";
-import type { ActiveSessionDisplayPolicy } from "../utils/active-session-display-policy";
+} from '../../../session/components/CreativeMoodLogger';
+import { ModeIndicatorBadge } from '../../../session/components/ModeIndicatorBadge';
+import { SessionMode } from '../../../session/modes';
+import type { ActiveSessionDisplayPolicy } from '../utils/active-session-display-policy';
 
 type ActiveSessionModeOverlaysProps = {
   allowStudyQuizBreak: boolean;
@@ -99,7 +99,7 @@ function SprintOverlay({
             width={10}
             height={10}
             borderRadius="full"
-            bg={item <= chainCount ? "primary.500" : "background.tertiary"}
+            bg={item <= chainCount ? 'primary.500' : 'background.tertiary'}
           />
         ))}
       </Box>
@@ -132,8 +132,8 @@ function StudyOverlay({
     >
       <Text variant="caption" color="text.secondary">
         {completionPercentage < 50
-          ? "Planned quiz break at 50%"
-          : "Final planned quiz check at 90%"}
+          ? 'Planned quiz break at 50%'
+          : 'Final planned quiz check at 90%'}
       </Text>
     </Box>
   );

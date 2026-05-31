@@ -1,13 +1,13 @@
-import { eventBus } from "../../events";
-import type { OnboardingState, UnlockedFeature } from "./onboarding-types";
-import { FEATURE_UNLOCK_GATES, STEP_ORDER } from "./onboarding-gates";
+import { eventBus } from '../../events';
+import type { OnboardingState, UnlockedFeature } from './onboarding-types';
+import { FEATURE_UNLOCK_GATES, STEP_ORDER } from './onboarding-gates';
 
 const onboardingStates = new Map<string, OnboardingState>();
 
 export function initializeOnboarding(userId: string): OnboardingState {
   const state: OnboardingState = {
     userId,
-    currentStep: "WELCOME",
+    currentStep: 'WELCOME',
     sessionsCompleted: 0,
     firstSessionAt: null,
     skippedCustomization: false,
@@ -17,7 +17,7 @@ export function initializeOnboarding(userId: string): OnboardingState {
     preferences: { focusDuration: 15, notificationsEnabled: true },
   };
   onboardingStates.set(userId, state);
-  eventBus.publish("onboarding:started", { userId });
+  eventBus.publish('onboarding:started', { userId });
   return state;
 }
 
@@ -27,16 +27,16 @@ export function getOnboardingState(userId: string): OnboardingState | null {
 
 export function advanceStep(userId: string): OnboardingState | null {
   const state = onboardingStates.get(userId);
-  if (!state) return null;
+  if (!state) {return null;}
   const currentIndex = STEP_ORDER.indexOf(state.currentStep);
   if (currentIndex < STEP_ORDER.length - 1) {
     state.currentStep = STEP_ORDER[currentIndex + 1]!;
   }
-  if (state.currentStep === "COMPLETE") {
+  if (state.currentStep === 'COMPLETE') {
     state.completedAt = Date.now();
-    eventBus.publish("onboarding:completed", { userId });
+    eventBus.publish('onboarding:completed', { userId });
   } else {
-    eventBus.publish("onboarding:step_changed", {
+    eventBus.publish('onboarding:step_changed', {
       userId,
       step: state.currentStep,
     });
@@ -46,12 +46,12 @@ export function advanceStep(userId: string): OnboardingState | null {
 
 export function skipToFirstSession(userId: string): OnboardingState | null {
   const state = onboardingStates.get(userId);
-  if (!state) return null;
+  if (!state) {return null;}
   state.skippedCustomization = true;
-  state.currentStep = "FIRST_SESSION";
-  eventBus.publish("onboarding:skipped", {
+  state.currentStep = 'FIRST_SESSION';
+  eventBus.publish('onboarding:skipped', {
     userId,
-    step: "CUSTOMIZATION",
+    step: 'CUSTOMIZATION',
     timestamp: Date.now(),
   });
   return state;
@@ -62,12 +62,12 @@ export function recordSession(
   durationMinutes: number,
 ): OnboardingState | null {
   const state = onboardingStates.get(userId);
-  if (!state) return null;
+  if (!state) {return null;}
   state.sessionsCompleted += 1;
   if (!state.firstSessionAt) {
     state.firstSessionAt = Date.now();
-    state.currentStep = "POST_SESSION";
-    eventBus.publish("onboarding:first_session_complete", {
+    state.currentStep = 'POST_SESSION';
+    eventBus.publish('onboarding:first_session_complete', {
       userId,
       durationMinutes,
     });
@@ -79,7 +79,7 @@ export function recordSession(
 function checkFeatureUnlocks(state: OnboardingState): void {
   for (const gate of FEATURE_UNLOCK_GATES) {
     if (state.unlockedFeatures.some((f) => f.featureId === gate.featureId))
-      continue;
+      {continue;}
     if (state.sessionsCompleted >= gate.requiresSessions) {
       const unlocked: UnlockedFeature = {
         featureId: gate.featureId,
@@ -95,7 +95,7 @@ function checkFeatureUnlocks(state: OnboardingState): void {
         nextIndex < FEATURE_UNLOCK_GATES.length
           ? (FEATURE_UNLOCK_GATES[nextIndex] ?? null)
           : null;
-      eventBus.publish("onboarding:feature_unlocked", {
+      eventBus.publish('onboarding:feature_unlocked', {
         userId: state.userId,
         feature: gate.featureId,
         featureId: gate.featureId,

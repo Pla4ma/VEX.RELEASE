@@ -1,5 +1,5 @@
-import type { IntegrationState } from "./integration-types";
-import { stateCache, DEFAULT_INTEGRATION_STATE } from "./integration-types";
+import type { IntegrationState } from './integration-types';
+import { stateCache, DEFAULT_INTEGRATION_STATE } from './integration-types';
 
 export function updateIntegrationState(
   userId: string,
@@ -17,8 +17,8 @@ export function updateIntegrationState(
 
 export function getTimeOfDay(): string {
   const hour = new Date().getHours();
-  if (hour < 6) return "night";
-  if (hour < 12) return "morning";
-  if (hour < 18) return "afternoon";
-  return "evening";
+  if (hour < 6) {return 'night';}
+  if (hour < 12) {return 'morning';}
+  if (hour < 18) {return 'afternoon';}
+  return 'evening';
 }

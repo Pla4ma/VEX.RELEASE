@@ -6,22 +6,22 @@ import {
   parseSessionSetupParams,
   shouldAutoApplySmartSuggestion,
   shouldOpenCustomizationByDefault,
-} from "../service";
+} from '../service';
 
-describe("session-start service", () => {
-  it("parses valid setup params without warnings", () => {
+describe('session-start service', () => {
+  it('parses valid setup params without warnings', () => {
     const result = parseSessionSetupParams({
-      goal: "Write launch brief",
-      presetId: "pomodoro",
+      goal: 'Write launch brief',
+      presetId: 'pomodoro',
       suggestedDurationSeconds: 1500,
     });
 
-    expect(result.params.goal).toBe("Write launch brief");
-    expect(result.params.presetId).toBe("pomodoro");
+    expect(result.params.goal).toBe('Write launch brief');
+    expect(result.params.presetId).toBe('pomodoro');
     expect(result.warningMessage).toBeNull();
   });
 
-  it("falls back to safe defaults for invalid setup params", () => {
+  it('falls back to safe defaults for invalid setup params', () => {
     const result = parseSessionSetupParams({
       suggestedDurationSeconds: -10,
     });
@@ -30,38 +30,38 @@ describe("session-start service", () => {
     expect(result.warningMessage).toBeTruthy();
   });
 
-  it("builds a fast-start summary with premium-friendly labels", () => {
+  it('builds a fast-start summary with premium-friendly labels', () => {
     const summary = buildSessionStartSummary({
-      currentThemeName: "Aurora",
+      currentThemeName: 'Aurora',
       durationMinutes: 25,
       hasCustomizations: false,
     });
 
-    expect(summary.ctaLabel).toBe("Start 25 Min Session");
-    expect(summary.customizationLabel).toBe("Tune session");
-    expect(summary.subtitle).toContain("Aurora");
+    expect(summary.ctaLabel).toBe('Start 25 Min Session');
+    expect(summary.customizationLabel).toBe('Tune session');
+    expect(summary.subtitle).toContain('Aurora');
   });
 
-  it("explains offline behavior only when needed", () => {
+  it('explains offline behavior only when needed', () => {
     expect(getOfflineSessionStartMessage(false)).toBeNull();
-    expect(getOfflineSessionStartMessage(true)).toContain("offline");
+    expect(getOfflineSessionStartMessage(true)).toContain('offline');
   });
 
-  it("keeps customization collapsed for lightweight entry params", () => {
+  it('keeps customization collapsed for lightweight entry params', () => {
     expect(
       shouldOpenCustomizationByDefault({
-        goal: "Write launch brief",
-        selectedThemeId: "aurora",
+        goal: 'Write launch brief',
+        selectedThemeId: 'aurora',
       }),
     ).toBe(false);
   });
 
-  it("only auto-applies smart suggestions when route and draft do not override fast start", () => {
+  it('only auto-applies smart suggestions when route and draft do not override fast start', () => {
     expect(
       shouldAutoApplySmartSuggestion({
         hasSavedDraft: false,
         params: {},
-        smartSuggestionPresetId: "deep",
+        smartSuggestionPresetId: 'deep',
       }),
     ).toBe(true);
 
@@ -69,44 +69,44 @@ describe("session-start service", () => {
       shouldAutoApplySmartSuggestion({
         hasSavedDraft: true,
         params: {},
-        smartSuggestionPresetId: "deep",
+        smartSuggestionPresetId: 'deep',
       }),
     ).toBe(false);
   });
 
-  it("builds contextual session hero copy for comeback and onboarding flows", () => {
+  it('builds contextual session hero copy for comeback and onboarding flows', () => {
     const comebackHero = buildSessionStartHero({
       durationMinutes: 25,
       params: {
-        comebackMessage: "Welcome back",
+        comebackMessage: 'Welcome back',
         comebackMultiplier: 2,
       },
-      presetName: "Pomodoro",
+      presetName: 'Pomodoro',
       smartSuggestionDescription: null,
     });
     const onboardingHero = buildSessionStartHero({
       durationMinutes: 15,
       params: {
-        source: "onboarding_first_session",
+        source: 'onboarding_first_session',
       },
-      presetName: "Quick Focus",
+      presetName: 'Quick Focus',
       smartSuggestionDescription: null,
     });
 
-    expect(comebackHero.eyebrow).toBe("Comeback Session");
-    expect(onboardingHero.eyebrow).toBe("First Session");
+    expect(comebackHero.eyebrow).toBe('Comeback Session');
+    expect(onboardingHero.eyebrow).toBe('First Session');
   });
 
-  it("builds mode-specific focus tab cards without pushing 60-minute first choices", () => {
+  it('builds mode-specific focus tab cards without pushing 60-minute first choices', () => {
     const cards = buildFocusModeCards({ streakDays: 0 });
 
     expect(cards.map((card) => card.mode)).toEqual([
-      "SPRINT",
-      "LIGHT_FOCUS",
-      "STUDY",
-      "RECOVERY",
+      'SPRINT',
+      'LIGHT_FOCUS',
+      'STUDY',
+      'RECOVERY',
     ]);
     expect(cards.every((card) => card.durationSeconds <= 25 * 60)).toBe(true);
-    expect(cards[0]?.accessibilityLabel).toContain("15 minute sprint");
+    expect(cards[0]?.accessibilityLabel).toContain('15 minute sprint');
   });
 });

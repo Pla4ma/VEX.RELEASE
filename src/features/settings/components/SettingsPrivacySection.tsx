@@ -1,10 +1,10 @@
-import React from "react";
-import { View } from "react-native";
-import type { PrivacySettings } from "../types";
-import { ToggleSetting } from "./ToggleSetting";
-import { SettingItem } from "./SettingItem";
-import { createSheet } from "@/shared/ui/create-sheet";
-import { launchColors } from "@theme/tokens/launch-colors";
+import React from 'react';
+import { View } from 'react-native';
+import type { PrivacySettings } from '../types';
+import { ToggleSetting } from './ToggleSetting';
+import { SettingItem } from './SettingItem';
+import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
 
 interface SettingsPrivacySectionProps {
   privacy: PrivacySettings | undefined;
@@ -17,7 +17,7 @@ export function SettingsPrivacySection({
     <View style={styles.settingsGroup}>
       <SettingItem
         label="Profile Visibility"
-        value={privacy?.profileVisibility ?? "friends"}
+        value={privacy?.profileVisibility ?? 'friends'}
         onPress={() => {}}
       />
       <ToggleSetting

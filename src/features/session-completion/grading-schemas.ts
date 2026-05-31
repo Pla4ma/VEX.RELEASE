@@ -1,6 +1,6 @@
-import { z } from "zod";
-import { SessionModeSchema } from "../../session/modes";
-import { SessionCompletionGradeSchema } from "./schemas";
+import { z } from 'zod';
+import { SessionModeSchema } from '../../session/modes';
+import { SessionCompletionGradeSchema } from './schemas';
 
 export const SessionGradingInputSchema = z
   .object({
@@ -22,13 +22,13 @@ export const SessionGradeFactorSchema = z
   .object({
     contribution: z.number(),
     id: z.enum([
-      "completionRatio",
-      "effectiveFocusTime",
-      "pauseCount",
-      "interruptionCount",
-      "strictMode",
-      "sessionMode",
-      "backgroundTime",
+      'completionRatio',
+      'effectiveFocusTime',
+      'pauseCount',
+      'interruptionCount',
+      'strictMode',
+      'sessionMode',
+      'backgroundTime',
     ]),
     label: z.string(),
     reason: z.string(),
@@ -45,7 +45,7 @@ export const CompletedSessionGradingResultSchema = z
     grade: SessionCompletionGradeSchema,
     gradeLabel: z.string(),
     gradeScore: z.number().min(0).max(100),
-    kind: z.literal("completed"),
+    kind: z.literal('completed'),
     qualityScore: z.number().min(0).max(100),
     userFacingReason: z.string(),
     xpQualityMultiplier: z.number().min(0.1).max(3),
@@ -56,7 +56,7 @@ export const AbandonedSessionGradingResultSchema = z
   .object({
     abandonmentReason: z.string(),
     focusScoreImpactRecommendation: z.number().int(),
-    kind: z.literal("abandoned"),
+    kind: z.literal('abandoned'),
     userFacingReason: z.string(),
     xpQualityMultiplier: z.number().min(0.1).max(3),
   })

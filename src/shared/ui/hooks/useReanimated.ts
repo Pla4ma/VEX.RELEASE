@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback } from 'react';
 import {
   useSharedValue,
   useAnimatedStyle,
@@ -9,9 +9,9 @@ import {
   Easing,
   runOnJS,
   SharedValue,
-} from "react-native-reanimated";
+} from 'react-native-reanimated';
 interface AnimationConfig {
-  type: "fade" | "slide" | "scale" | "shimmer" | "pulse" | "bounce";
+  type: 'fade' | 'slide' | 'scale' | 'shimmer' | 'pulse' | 'bounce';
   duration?: number;
   delay?: number;
   infinite?: boolean;
@@ -30,22 +30,22 @@ export function useReanimated(config: AnimationConfig): AnimationResult {
   const getAnimation = useCallback(() => {
     const { type, duration = 300, toValue = 1, infinite = false } = config;
     switch (type) {
-      case "fade":
+      case 'fade':
         return withTiming(toValue, {
           duration,
           easing: Easing.inOut(Easing.ease),
         });
-      case "slide":
+      case 'slide':
         return withSpring(toValue, { damping: 12, stiffness: 100 });
-      case "scale":
+      case 'scale':
         return withSpring(toValue, { damping: 10, stiffness: 100 });
-      case "shimmer":
+      case 'shimmer':
         return withRepeat(
           withTiming(1, { duration, easing: Easing.linear }),
           infinite ? -1 : 1,
           false,
         );
-      case "pulse":
+      case 'pulse':
         return withRepeat(
           withSequence(
             withTiming(1, { duration, easing: Easing.inOut(Easing.ease) }),
@@ -54,7 +54,7 @@ export function useReanimated(config: AnimationConfig): AnimationResult {
           infinite ? -1 : 1,
           true,
         );
-      case "bounce":
+      case 'bounce':
         return withSpring(toValue, { damping: 6, stiffness: 150 });
       default:
         return withTiming(toValue, { duration });
@@ -94,15 +94,15 @@ export function useFadeIn(duration = 300, delay = 0) {
   return animatedStyle;
 }
 export function useSlideIn(
-  direction: "up" | "down" | "left" | "right" = "up",
+  direction: 'up' | 'down' | 'left' | 'right' = 'up',
   distance = 50,
 ) {
   const translateValue = useSharedValue(
-    direction === "up"
+    direction === 'up'
       ? distance
-      : direction === "down"
+      : direction === 'down'
         ? -distance
-        : direction === "left"
+        : direction === 'left'
           ? distance
           : -distance,
   );
@@ -113,7 +113,7 @@ export function useSlideIn(
   }, [translateValue, opacity]);
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [
-      direction === "left" || direction === "right"
+      direction === 'left' || direction === 'right'
         ? { translateX: translateValue.value }
         : { translateY: translateValue.value },
     ],
@@ -164,4 +164,4 @@ export function useCountUp(targetValue: number, duration = 1000) {
   }, [animatedValue, targetValue, duration]);
   return displayValue;
 }
-import React from "react";
+import React from 'react';

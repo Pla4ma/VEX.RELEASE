@@ -14,7 +14,7 @@ export type {
   CoachMessageTemplate,
   CoachMessage,
   CoachHistory,
-} from "./coach-message-types";
+} from './coach-message-types';
 
 export type {
   InterventionType,
@@ -31,7 +31,7 @@ export type {
   InterventionRule,
   UserResponse,
   InterventionExecution,
-} from "./coach-intervention-types";
+} from './coach-intervention-types';
 
 export type {
   RecommendationType,
@@ -56,4 +56,4 @@ export type {
   AdjustDifficultyInput,
   MarkMessageActionInput,
   UpdateCoachPreferencesInput,
-} from "./coach-state-types";
+} from './coach-state-types';

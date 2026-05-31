@@ -1,13 +1,13 @@
-import { z } from "zod";
-import * as Sentry from "@sentry/react-native";
-import { SettingCategorySchema } from "./schemas";
-import type { ValidationResult, ValidationError } from "./validation-types";
-import { validateNotificationSetting, validateAppearanceSetting } from "./validation-notification";
-import { validateCoachSetting, validatePrivacySetting, validateGeneralSetting, validateDataSetting } from "./validation-preference";
+import { z } from 'zod';
+import * as Sentry from '@sentry/react-native';
+import { SettingCategorySchema } from './schemas';
+import type { ValidationResult, ValidationError } from './validation-types';
+import { validateNotificationSetting, validateAppearanceSetting } from './validation-notification';
+import { validateCoachSetting, validatePrivacySetting, validateGeneralSetting, validateDataSetting } from './validation-preference';
 
 // Re-export types and class for backward compatibility
-export type { ValidationResult, ValidationError } from "./validation-types";
-export { SettingsValidationError } from "./validation-types";
+export type { ValidationResult, ValidationError } from './validation-types';
+export { SettingsValidationError } from './validation-types';
 
 export function validateSettingValue(
   key: string,
@@ -19,39 +19,39 @@ export function validateSettingValue(
   if (value === undefined) {
     errors.push({
       field: key,
-      code: "UNDEFINED_VALUE",
+      code: 'UNDEFINED_VALUE',
       message: `Value for "${key}" cannot be undefined`,
-      severity: "error",
-      recoveryHint: "Provide a valid value or use null",
+      severity: 'error',
+      recoveryHint: 'Provide a valid value or use null',
     });
     return { valid: false, errors, warnings };
   }
   switch (category) {
-    case "notifications":
+    case 'notifications':
       validateNotificationSetting(key, value, errors, warnings);
       break;
-    case "appearance":
+    case 'appearance':
       validateAppearanceSetting(key, value, errors, warnings);
       break;
-    case "coach":
+    case 'coach':
       validateCoachSetting(key, value, errors, warnings);
       break;
-    case "privacy":
+    case 'privacy':
       validatePrivacySetting(key, value, errors, warnings);
       break;
-    case "general":
+    case 'general':
       validateGeneralSetting(key, value, errors, warnings);
       break;
-    case "data":
+    case 'data':
       validateDataSetting(key, value, errors, warnings);
       break;
   }
-  if (!key.includes(".")) {
+  if (!key.includes('.')) {
     warnings.push({
       field: key,
-      code: "INVALID_KEY_FORMAT",
+      code: 'INVALID_KEY_FORMAT',
       message: 'Setting key should use dot notation (e.g., "category.setting")',
-      severity: "warning",
+      severity: 'warning',
       recoveryHint: 'Use format: "category.settingName"',
     });
   }
@@ -70,42 +70,42 @@ export function validateSettingsExport(
   const warnings: ValidationError[] = [];
   if (!exportData.version) {
     errors.push({
-      field: "version",
-      code: "MISSING_VERSION",
-      message: "Export data missing version field",
-      severity: "error",
+      field: 'version',
+      code: 'MISSING_VERSION',
+      message: 'Export data missing version field',
+      severity: 'error',
     });
-  } else if (typeof exportData.version !== "number" || exportData.version < 1) {
+  } else if (typeof exportData.version !== 'number' || exportData.version < 1) {
     errors.push({
-      field: "version",
-      code: "INVALID_VERSION",
-      message: "Export version must be a positive number",
-      severity: "error",
+      field: 'version',
+      code: 'INVALID_VERSION',
+      message: 'Export version must be a positive number',
+      severity: 'error',
     });
   }
   if (!exportData.userId) {
     errors.push({
-      field: "userId",
-      code: "MISSING_USER_ID",
-      message: "Export data missing userId",
-      severity: "error",
+      field: 'userId',
+      code: 'MISSING_USER_ID',
+      message: 'Export data missing userId',
+      severity: 'error',
     });
   }
   if (!exportData.exportedAt) {
     warnings.push({
-      field: "exportedAt",
-      code: "MISSING_TIMESTAMP",
-      message: "Export data missing timestamp",
-      severity: "warning",
+      field: 'exportedAt',
+      code: 'MISSING_TIMESTAMP',
+      message: 'Export data missing timestamp',
+      severity: 'warning',
     });
   }
   if (exportData.preferences) {
-    if (typeof exportData.preferences !== "object") {
+    if (typeof exportData.preferences !== 'object') {
       errors.push({
-        field: "preferences",
-        code: "INVALID_PREFERENCES",
-        message: "Preferences must be an object",
-        severity: "error",
+        field: 'preferences',
+        code: 'INVALID_PREFERENCES',
+        message: 'Preferences must be an object',
+        severity: 'error',
       });
     }
   }
@@ -154,9 +154,9 @@ export async function batchValidateSettings(
     warningCount += result.warnings.length;
     if (!continueOnError && errorCount >= maxErrors) {
       Sentry.addBreadcrumb({
-        category: "validation",
+        category: 'validation',
         message: `Batch validation stopped early after ${errorCount} errors`,
-        level: "warning",
+        level: 'warning',
       });
       break;
     }
@@ -182,5 +182,5 @@ export function formatValidationErrors(errors: ValidationError[]): string {
       }
       return msg;
     })
-    .join("\n");
+    .join('\n');
 }

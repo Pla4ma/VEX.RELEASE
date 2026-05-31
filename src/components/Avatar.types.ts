@@ -1,9 +1,9 @@
-import type { StyleProp, ViewStyle } from "react-native";
-import { launchColors } from "@theme/tokens/launch-colors";
+import type { StyleProp, ViewStyle } from 'react-native';
+import { launchColors } from '@theme/tokens/launch-colors';
 
-export type AvatarSize = "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
-export type AvatarStatus = "online" | "away" | "offline" | "busy" | "none";
-export type AvatarShape = "circle" | "rounded" | "square";
+export type AvatarSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
+export type AvatarStatus = 'online' | 'away' | 'offline' | 'busy' | 'none';
+export type AvatarShape = 'circle' | 'rounded' | 'square';
 
 export interface AvatarProps {
   source?: string | { uri: string };
@@ -25,7 +25,7 @@ export const SIZE_MAP: Record<AvatarSize, number> = {
   md: 40,
   lg: 56,
   xl: 72,
-  "2xl": 96,
+  '2xl': 96,
 };
 
 export const FONT_SIZE_MAP: Record<AvatarSize, number> = {
@@ -34,7 +34,7 @@ export const FONT_SIZE_MAP: Record<AvatarSize, number> = {
   md: 14,
   lg: 18,
   xl: 24,
-  "2xl": 32,
+  '2xl': 32,
 };
 
 export const STATUS_COLOR_MAP: Record<AvatarStatus, string> = {
@@ -42,5 +42,5 @@ export const STATUS_COLOR_MAP: Record<AvatarStatus, string> = {
   away: launchColors.hex_eab308,
   offline: launchColors.hex_94a3b8,
   busy: launchColors.hex_ef4444,
-  none: "transparent",
+  none: 'transparent',
 };

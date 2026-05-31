@@ -1,7 +1,7 @@
-import type { ProgressionError } from "./types";
+import type { ProgressionError } from './types';
 
 export function createProgressionError(
-  code: ProgressionError["code"],
+  code: ProgressionError['code'],
   message: string,
   retryable: boolean,
   context?: Record<string, unknown>,

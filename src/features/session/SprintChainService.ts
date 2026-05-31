@@ -1,10 +1,10 @@
-import { z } from "zod";
+import { z } from 'zod';
 
-import { getMMKVStorageAdapter } from "../../persistence/MMKVStorageAdapter";
+import { getMMKVStorageAdapter } from '../../persistence/MMKVStorageAdapter';
 import {
   parseJsonWithSchema,
   stringifyJsonSafe,
-} from "../../persistence/safe-json";
+} from '../../persistence/safe-json';
 
 const SPRINT_CHAIN_WINDOW_MS = 2 * 60 * 60 * 1000;
 const SPRINT_CHAIN_COMPLETE_COUNT = 4;
@@ -38,7 +38,7 @@ export class SprintChainService {
     }
 
     const parsed = parseJsonWithSchema(raw, SprintChainStateSchema, {
-      feature: "session",
+      feature: 'session',
       key,
     });
     if (!parsed) {
@@ -74,7 +74,7 @@ export class SprintChainService {
     }
 
     const key = getSprintChainKey(userId);
-    const encoded = stringifyJsonSafe(nextState, { feature: "session", key });
+    const encoded = stringifyJsonSafe(nextState, { feature: 'session', key });
     if (encoded) {
       await this.storage.setItem(key, encoded);
     }

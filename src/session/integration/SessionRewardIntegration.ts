@@ -1,16 +1,16 @@
-import { eventBus } from "../../events";
-import { createDebugger } from "../../utils/debug";
-import { SessionSummarySchema, type SessionSummary } from "../types";
-import type { RewardCalculationResult } from "./session-reward-helpers";
+import { eventBus } from '../../events';
+import { createDebugger } from '../../utils/debug';
+import { SessionSummarySchema, type SessionSummary } from '../types';
+import type { RewardCalculationResult } from './session-reward-helpers';
 import {
   handleSessionCompleted,
   handlePartialCompletion,
   handleAbandonment,
   isFullyDisabled,
   hasCompletionSideEffects,
-} from "./SessionRewardHandlers";
+} from './SessionRewardHandlers';
 
-const debug = createDebugger("session:reward-integration");
+const debug = createDebugger('session:reward-integration');
 
 export interface RewardIntegrationConfig {
   streakMultiplierEnabled: boolean;
@@ -64,14 +64,14 @@ export class SessionRewardIntegration {
 
     if (this.isFullyDisabled()) {
       debug.info(
-        "SessionRewardIntegration: fully disabled — not subscribing to any session events",
+        'SessionRewardIntegration: fully disabled — not subscribing to any session events',
       );
       return;
     }
 
     if (hasCompletionSideEffects(this.config)) {
       this.unsubscribeFns.push(
-        eventBus.subscribe("session:completed", (data) => {
+        eventBus.subscribe('session:completed', (data) => {
           if (!data) {
             return;
           }
@@ -89,7 +89,7 @@ export class SessionRewardIntegration {
 
     if (this.config.autoHandleRecoveryRewards) {
       this.unsubscribeFns.push(
-        eventBus.subscribe("session:recovery:successful", (data) => {
+        eventBus.subscribe('session:recovery:successful', (data) => {
           if (data) {
             void handlePartialCompletion(
               this.config,
@@ -104,7 +104,7 @@ export class SessionRewardIntegration {
 
     if (this.config.autoHandleAbandonmentPartialCredit) {
       this.unsubscribeFns.push(
-        eventBus.subscribe("session:abandoned", (data) => {
+        eventBus.subscribe('session:abandoned', (data) => {
           if (data) {
             void handleAbandonment(
               this.config,
@@ -127,7 +127,7 @@ export class SessionRewardIntegration {
 
   destroy(): void {
     this.teardownEventListeners();
-    debug.info("SessionRewardIntegration destroyed");
+    debug.info('SessionRewardIntegration destroyed');
   }
 
   updateConfig(config: Partial<RewardIntegrationConfig>): void {
@@ -142,7 +142,7 @@ export class SessionRewardIntegration {
   ): Promise<void> {
     if (this.processedSessionIds.has(sessionId)) {
       debug.debug(
-        "SessionRewardIntegration: session %s already processed — skipping",
+        'SessionRewardIntegration: session %s already processed — skipping',
         sessionId,
       );
       return;

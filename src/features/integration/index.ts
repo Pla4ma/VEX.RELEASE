@@ -3,11 +3,11 @@
  * Wires all feature event handlers together
  */
 
-import { initializeProgressionRewardsIntegration } from "./progression-rewards";
-import { initializeStreaksRewardsIntegration } from "./streaks-rewards";
-import { initializeBossRewardsIntegration } from "./boss-rewards";
-import { initializeSessionsFeedIntegration } from "./sessions-feed";
-import { initializeFocusScoreIntegration } from "../focus-identity/integration-focus-score";
+import { initializeProgressionRewardsIntegration } from './progression-rewards';
+import { initializeStreaksRewardsIntegration } from './streaks-rewards';
+import { initializeBossRewardsIntegration } from './boss-rewards';
+import { initializeSessionsFeedIntegration } from './sessions-feed';
+import { initializeFocusScoreIntegration } from '../focus-identity/integration-focus-score';
 
 export interface IntegrationConfig {
   enableProgressionRewards: boolean;

@@ -3,11 +3,11 @@
  * Wires progression events to reward creation
  */
 
-import { eventBus } from "../../events/EventBus";
-import { createReward } from "../rewards/service";
-import { createDebugger } from "../../utils/debug";
+import { eventBus } from '../../events/EventBus';
+import { createReward } from '../rewards/service';
+import { createDebugger } from '../../utils/debug';
 
-const debug = createDebugger("integration:progression-rewards");
+const debug = createDebugger('integration:progression-rewards');
 
 /**
  * Initialize progression-rewards integration
@@ -15,19 +15,19 @@ const debug = createDebugger("integration:progression-rewards");
  */
 export function initializeProgressionRewardsIntegration(): () => void {
   const unsubscribeLevelUp = eventBus.subscribe(
-    "progression:level_up",
+    'progression:level_up',
     (event) => {
       // Create rewards for level up
       if (event.rewards && event.rewards.length > 0) {
         event.rewards.forEach((rewardType) => {
           createReward({
             userId: event.userId,
-            type: "XP",
+            type: 'XP',
             amount: calculateLevelUpReward(event.newLevel, rewardType),
-            triggerType: "LEVEL_UP",
+            triggerType: 'LEVEL_UP',
           }).catch((error) => {
             // Log but don't fail - rewards are non-critical
-            debug.error("Failed to create level up reward:", error as Error);
+            debug.error('Failed to create level up reward:', error as Error);
           });
         });
       }
@@ -35,9 +35,9 @@ export function initializeProgressionRewardsIntegration(): () => void {
   );
 
   const unsubscribeXpAdded = eventBus.subscribe(
-    "progression:xp_added",
+    'progression:xp_added',
     (event) => {
-      debug.debug("Progression XP observed", { userId: event.userId });
+      debug.debug('Progression XP observed', { userId: event.userId });
     },
   );
 
@@ -51,10 +51,10 @@ function calculateLevelUpReward(level: number, rewardType: string): number {
   const baseReward = level * 50;
 
   switch (rewardType) {
-    case "XP_BOOST":
+    case 'XP_BOOST':
       return baseReward * 2;
-    case "COINS":
-    case "GEMS":
+    case 'COINS':
+    case 'GEMS':
       return baseReward;
     default:
       return baseReward;

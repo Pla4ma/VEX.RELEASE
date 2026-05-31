@@ -1,12 +1,12 @@
-import React, { useMemo } from "react";
-import { View, ViewStyle } from "react-native";
-import Animated, { useReducedMotion } from "react-native-reanimated";
-import { createSheet } from "@/shared/ui/create-sheet";
+import React, { useMemo } from 'react';
+import { View, ViewStyle } from 'react-native';
+import Animated, { useReducedMotion } from 'react-native-reanimated';
+import { createSheet } from '@/shared/ui/create-sheet';
 import {
   type EnterDirection,
   type EnterSpeed,
   getEnterAnimation,
-} from "./enter-animation-core";
+} from './enter-animation-core';
 
 export type { EnterDirection, EnterSpeed };
 
@@ -32,8 +32,8 @@ export interface StaggeredEnterProps {
 
 export const EnterAnimation: React.FC<EnterAnimationProps> = ({
   children,
-  direction = "up",
-  speed = "normal",
+  direction = 'up',
+  speed = 'normal',
   delay = 0,
   style,
   enabled = true,
@@ -60,8 +60,8 @@ export const EnterAnimation: React.FC<EnterAnimationProps> = ({
 
 export const StaggeredEnter: React.FC<StaggeredEnterProps> = ({
   children,
-  direction = "up",
-  speed = "normal",
+  direction = 'up',
+  speed = 'normal',
   staggerDelay = 40,
   initialDelay = 0,
   containerStyle,
@@ -114,7 +114,7 @@ export const CardEnterAnimation: React.FC<CardEnterAnimationProps> = ({
   const reducedMotion = useReducedMotion();
   const delay = Math.min(index * 80, 400);
   const entering = useMemo(() => {
-    return getEnterAnimation("up", "normal", delay, 20, reducedMotion ?? false);
+    return getEnterAnimation('up', 'normal', delay, 20, reducedMotion ?? false);
   }, [delay, reducedMotion]);
   return (
     <Animated.View entering={entering} style={style}>
@@ -129,7 +129,7 @@ export const ScreenEnterAnimation: React.FC<{
 }> = ({ children, style }) => {
   const reducedMotion = useReducedMotion();
   const entering = useMemo(() => {
-    return getEnterAnimation("fade", "normal", 0, 0, reducedMotion ?? false);
+    return getEnterAnimation('fade', 'normal', 0, 0, reducedMotion ?? false);
   }, [reducedMotion]);
   return (
     <Animated.View entering={entering} style={[styles.screenContainer, style]}>
@@ -145,7 +145,7 @@ export const HeroEnterAnimation: React.FC<{
 }> = ({ children, delay = 0, style }) => {
   const reducedMotion = useReducedMotion();
   const entering = useMemo(() => {
-    return getEnterAnimation("up", "slow", delay, 30, reducedMotion ?? false);
+    return getEnterAnimation('up', 'slow', delay, 30, reducedMotion ?? false);
   }, [delay, reducedMotion]);
   return (
     <Animated.View entering={entering} style={style}>

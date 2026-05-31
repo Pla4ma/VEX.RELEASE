@@ -1,9 +1,9 @@
-import { BaseNotificationEvent } from "./notification-event-types-core";
+import { BaseNotificationEvent } from './notification-event-types-core';
 
 export interface NotificationAnalyticsEvent extends BaseNotificationEvent {
-  type: "notification_analytics";
+  type: 'notification_analytics';
   data: {
-    analyticsType: "performance" | "engagement" | "delivery" | "user_behavior";
+    analyticsType: 'performance' | 'engagement' | 'delivery' | 'user_behavior';
     timeframe: string;
     metrics: Record<string, number>;
     dimensions: Record<string, unknown>;
@@ -17,7 +17,7 @@ export interface NotificationAnalyticsEvent extends BaseNotificationEvent {
   };
 }
 export interface NotificationPerformanceReportEvent extends BaseNotificationEvent {
-  type: "notification_performance_report";
+  type: 'notification_performance_report';
   data: {
     reportPeriod: { start: Date; end: Date };
     overview: {
@@ -62,7 +62,7 @@ export interface NotificationPerformanceReportEvent extends BaseNotificationEven
   };
 }
 export interface NotificationWebhookTriggeredEvent extends BaseNotificationEvent {
-  type: "notification_webhook_triggered";
+  type: 'notification_webhook_triggered';
   data: {
     webhookId: string;
     webhookName: string;
@@ -80,7 +80,7 @@ export interface NotificationWebhookTriggeredEvent extends BaseNotificationEvent
   };
 }
 export interface NotificationWebhookFailedEvent extends BaseNotificationEvent {
-  type: "notification_webhook_failed";
+  type: 'notification_webhook_failed';
   data: {
     webhookId: string;
     webhookName: string;
@@ -95,9 +95,9 @@ export interface NotificationWebhookFailedEvent extends BaseNotificationEvent {
   };
 }
 export interface NotificationSystemMaintenanceEvent extends BaseNotificationEvent {
-  type: "notification_system_maintenance";
+  type: 'notification_system_maintenance';
   data: {
-    maintenanceType: "scheduled" | "emergency" | "upgrade" | "migration";
+    maintenanceType: 'scheduled' | 'emergency' | 'upgrade' | 'migration';
     startTime: Date;
     endTime?: Date;
     duration?: number;
@@ -113,16 +113,16 @@ export interface NotificationSystemMaintenanceEvent extends BaseNotificationEven
   };
 }
 export interface NotificationSystemErrorEvent extends BaseNotificationEvent {
-  type: "notification_system_error";
+  type: 'notification_system_error';
   data: {
     errorType:
-      | "delivery_failure"
-      | "template_error"
-      | "rule_error"
-      | "system_error";
+      | 'delivery_failure'
+      | 'template_error'
+      | 'rule_error'
+      | 'system_error';
     errorCode: string;
     errorMessage: string;
-    severity: "low" | "medium" | "high" | "critical";
+    severity: 'low' | 'medium' | 'high' | 'critical';
     context: {
       service: string;
       operation: string;
@@ -137,27 +137,27 @@ export interface NotificationSystemErrorEvent extends BaseNotificationEvent {
   };
 }
 export interface NotificationSystemPerformanceEvent extends BaseNotificationEvent {
-  type: "notification_system_performance";
+  type: 'notification_system_performance';
   data: {
     metric: string;
     value: number;
     threshold: number;
-    status: "normal" | "warning" | "critical";
+    status: 'normal' | 'warning' | 'critical';
     service: string;
     timeframe: string;
     context: Record<string, unknown>;
   };
 }
 export interface NotificationUserInteractionEvent extends BaseNotificationEvent {
-  type: "notification_user_interaction";
+  type: 'notification_user_interaction';
   data: {
     interactionType:
-      | "dismiss"
-      | "snooze"
-      | "mute"
-      | "unmute"
-      | "mark_spam"
-      | "report_abuse";
+      | 'dismiss'
+      | 'snooze'
+      | 'mute'
+      | 'unmute'
+      | 'mark_spam'
+      | 'report_abuse';
     notificationId?: string;
     category?: string;
     channel?: string;
@@ -168,14 +168,14 @@ export interface NotificationUserInteractionEvent extends BaseNotificationEvent 
   };
 }
 export interface NotificationUserFeedbackEvent extends BaseNotificationEvent {
-  type: "notification_user_feedback";
+  type: 'notification_user_feedback';
   data: {
-    feedbackType: "rating" | "comment" | "suggestion" | "complaint";
+    feedbackType: 'rating' | 'comment' | 'suggestion' | 'complaint';
     notificationId?: string;
     category?: string;
     rating?: number;
     comment?: string;
-    sentiment?: "positive" | "neutral" | "negative";
+    sentiment?: 'positive' | 'neutral' | 'negative';
     tags?: string[];
     submittedAt: Date;
     context: { device: string; location?: string };

@@ -1,23 +1,23 @@
 const createHostComponent = (name: string) => name;
 
-export const View = createHostComponent("View");
-export const Text = createHostComponent("Text");
-export const Pressable = createHostComponent("Pressable");
-export const ScrollView = createHostComponent("ScrollView");
-export const TouchableOpacity = createHostComponent("TouchableOpacity");
-export const ActivityIndicator = createHostComponent("ActivityIndicator");
-export const RefreshControl = createHostComponent("RefreshControl");
-export const TextInput = createHostComponent("TextInput");
-export const Image = createHostComponent("Image");
-export const Switch = createHostComponent("Switch");
-export const Modal = createHostComponent("Modal");
+export const View = createHostComponent('View');
+export const Text = createHostComponent('Text');
+export const Pressable = createHostComponent('Pressable');
+export const ScrollView = createHostComponent('ScrollView');
+export const TouchableOpacity = createHostComponent('TouchableOpacity');
+export const ActivityIndicator = createHostComponent('ActivityIndicator');
+export const RefreshControl = createHostComponent('RefreshControl');
+export const TextInput = createHostComponent('TextInput');
+export const Image = createHostComponent('Image');
+export const Switch = createHostComponent('Switch');
+export const Modal = createHostComponent('Modal');
 
 export const Alert = {
   alert: jest.fn(),
 };
 
 export const Share = {
-  share: jest.fn(() => Promise.resolve({ action: "sharedAction" })),
+  share: jest.fn(() => Promise.resolve({ action: 'sharedAction' })),
 };
 
 export const StyleSheet = {
@@ -25,7 +25,7 @@ export const StyleSheet = {
   flatten: <T>(styles: T) => styles,
   hairlineWidth: 1,
   absoluteFill: {
-    position: "absolute",
+    position: 'absolute',
     top: 0,
     right: 0,
     bottom: 0,
@@ -34,8 +34,8 @@ export const StyleSheet = {
 };
 
 export const Platform = {
-  OS: "ios",
-  Version: "test",
+  OS: 'ios',
+  Version: 'test',
   select: (value: Record<string, unknown>) => value.ios ?? value.default,
 };
 
@@ -95,7 +95,7 @@ export const Linking = {
   openURL: jest.fn(),
 };
 export const AppState = {
-  currentState: "active",
+  currentState: 'active',
   addEventListener: jest.fn(() => ({
     remove: jest.fn(),
   })),

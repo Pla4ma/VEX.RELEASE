@@ -1,10 +1,10 @@
-import { getSupabaseClient } from "../../config/supabase";
+import { getSupabaseClient } from '../../config/supabase';
 import {
   classifyError,
   RepositoryError,
   RepositoryErrorCode,
-} from "./error-handling";
-import { withRetry, type RetryConfig } from "./retry";
+} from './error-handling';
+import { withRetry, type RetryConfig } from './retry';
 
 export interface VersionedEntity {
   id: string;
@@ -23,14 +23,14 @@ export async function withOptimisticLock<T extends VersionedEntity>(
     if (!entity) {
       throw new RepositoryError(
         operation,
-        { code: "PGRST116" },
+        { code: 'PGRST116' },
         RepositoryErrorCode.NOT_FOUND,
       );
     }
     if (entity.version !== expectedVersion) {
       throw new RepositoryError(
         operation,
-        { message: "Version conflict detected", code: "409" },
+        { message: 'Version conflict detected', code: '409' },
         RepositoryErrorCode.CONFLICT,
       );
     }
@@ -87,7 +87,7 @@ export function createRetryableQuery() {
         if (data === null) {
           throw new RepositoryError(
             operation,
-            { code: "PGRST116" },
+            { code: 'PGRST116' },
             RepositoryErrorCode.NOT_FOUND,
           );
         }

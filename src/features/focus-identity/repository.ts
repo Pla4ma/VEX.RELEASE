@@ -1,16 +1,16 @@
-import { getSupabaseClient } from "../../config/supabase";
-import type { FocusIdentityProfile } from "./FocusIdentityEngine";
-import { withRetry, FocusProfileRowSchema } from "./repository-helpers";
-import { transformRowToProfile } from "./repository-transforms";
+import { getSupabaseClient } from '../../config/supabase';
+import type { FocusIdentityProfile } from './FocusIdentityEngine';
+import { withRetry, FocusProfileRowSchema } from './repository-helpers';
+import { transformRowToProfile } from './repository-transforms';
 import {
   insertScoreHistory,
   insertScoreHistoryBatch,
-} from "./repository-score-history";
+} from './repository-score-history';
 
 // Re-export split modules for backward compatibility
-export { insertScoreHistory, insertScoreHistoryBatch, getScoreHistory } from "./repository-score-history";
-export { getMonthlyReportData, saveMonthlyReportData, isRepositoryHealthy } from "./repository-monthly-report";
-export type { MonthlyReportData } from "./repository-monthly-report";
+export { insertScoreHistory, insertScoreHistoryBatch, getScoreHistory } from './repository-score-history';
+export { getMonthlyReportData, saveMonthlyReportData, isRepositoryHealthy } from './repository-monthly-report';
+export type { MonthlyReportData } from './repository-monthly-report';
 
 export async function getFocusProfile(
   userId: string,
@@ -18,12 +18,12 @@ export async function getFocusProfile(
   return withRetry(async () => {
     const supabase = getSupabaseClient();
     const { data, error } = await supabase
-      .from("focus_identity_profiles")
-      .select("*")
-      .eq("user_id", userId)
+      .from('focus_identity_profiles')
+      .select('*')
+      .eq('user_id', userId)
       .single();
     if (error) {
-      if (error.code === "PGRST116") {
+      if (error.code === 'PGRST116') {
         return null;
       }
       throw error;
@@ -36,12 +36,12 @@ export async function getFocusProfile(
       throw new Error(`Invalid profile data: ${parsed.error.message}`);
     }
     return transformRowToProfile(parsed.data);
-  }, "getFocusProfile");
+  }, 'getFocusProfile');
 }
 
 export async function createFocusProfile(
   userId: string,
-  profile: Omit<FocusIdentityProfile, "userId">,
+  profile: Omit<FocusIdentityProfile, 'userId'>,
 ): Promise<FocusIdentityProfile> {
   return withRetry(async () => {
     const supabase = getSupabaseClient();
@@ -65,7 +65,7 @@ export async function createFocusProfile(
       recommended_actions: profile.recommendedActions,
     };
     const { data, error } = await supabase
-      .from("focus_identity_profiles")
+      .from('focus_identity_profiles')
       .insert(row)
       .select()
       .single();
@@ -74,7 +74,7 @@ export async function createFocusProfile(
     }
     await insertScoreHistoryBatch(userId, data.id, profile.scoreHistory);
     return transformRowToProfile(data);
-  }, "createFocusProfile");
+  }, 'createFocusProfile');
 }
 
 export async function updateFocusProfile(
@@ -130,9 +130,9 @@ export async function updateFocusProfile(
       rowUpdates.recommended_actions = updates.recommendedActions;
     }
     const { data, error } = await supabase
-      .from("focus_identity_profiles")
+      .from('focus_identity_profiles')
       .update(rowUpdates)
-      .eq("user_id", userId)
+      .eq('user_id', userId)
       .select()
       .single();
     if (error) {
@@ -143,7 +143,7 @@ export async function updateFocusProfile(
       await insertScoreHistory(userId, data.id, lastEntry);
     }
     return transformRowToProfile(data);
-  }, "updateFocusProfile");
+  }, 'updateFocusProfile');
 }
 
 export async function getFocusProfileForMigration(
@@ -158,19 +158,19 @@ export async function getFocusProfileForMigration(
       getFocusProfile(userId),
     ]);
     return { localProfile, remoteProfile };
-  }, "getFocusProfileForMigration");
+  }, 'getFocusProfileForMigration');
 }
 
 export async function deleteFocusProfile(userId: string): Promise<void> {
   return withRetry(async () => {
     const supabase = getSupabaseClient();
-    await supabase.from("focus_score_history").delete().eq("user_id", userId);
+    await supabase.from('focus_score_history').delete().eq('user_id', userId);
     const { error } = await supabase
-      .from("focus_identity_profiles")
+      .from('focus_identity_profiles')
       .delete()
-      .eq("user_id", userId);
+      .eq('user_id', userId);
     if (error) {
       throw error;
     }
-  }, "deleteFocusProfile");
+  }, 'deleteFocusProfile');
 }

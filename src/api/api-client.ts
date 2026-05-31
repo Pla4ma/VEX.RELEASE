@@ -2,24 +2,24 @@
  * API Client — HTTP client with retry, circuit breaker, and deduplication.
  */
 
-import { CURRENT_CONFIG } from "../constants/app";
-import { CircuitBreaker, CircuitState } from "./circuit-breaker";
-import { RequestDeduplicator } from "./deduplicator";
+import { CURRENT_CONFIG } from '../constants/app';
+import { CircuitBreaker, CircuitState } from './circuit-breaker';
+import { RequestDeduplicator } from './deduplicator';
 import type {
   ApiConfig,
   AuthProvider,
   ApiRequestConfig,
   ApiResponse,
-} from "./client-types";
+} from './client-types';
 import type {
   RequestInterceptor,
   ResponseInterceptor,
-} from "./api-client-types";
+} from './api-client-types';
 import {
   type RequestExecutorDeps,
   executeWithRetry,
   executeWithDeduplication,
-} from "./api-request-handler";
+} from './api-request-handler';
 
 export type { RequestInterceptor, ResponseInterceptor };
 
@@ -100,55 +100,55 @@ export class ApiClient {
 
   async get<T>(
     endpoint: string,
-    config: Omit<ApiRequestConfig, "method"> = {},
+    config: Omit<ApiRequestConfig, 'method'> = {},
   ): Promise<ApiResponse<T>> {
     const finalConfig = await this.runRequestInterceptors({
       ...config,
-      method: "GET",
+      method: 'GET',
     });
     return executeWithDeduplication<T>(this.getDeps(), endpoint, finalConfig);
   }
 
   async post<T>(
     endpoint: string,
-    config: Omit<ApiRequestConfig, "method"> = {},
+    config: Omit<ApiRequestConfig, 'method'> = {},
   ): Promise<ApiResponse<T>> {
     const finalConfig = await this.runRequestInterceptors({
       ...config,
-      method: "POST",
+      method: 'POST',
     });
     return executeWithRetry<T>(this.getDeps(), endpoint, finalConfig);
   }
 
   async put<T>(
     endpoint: string,
-    config: Omit<ApiRequestConfig, "method"> = {},
+    config: Omit<ApiRequestConfig, 'method'> = {},
   ): Promise<ApiResponse<T>> {
     const finalConfig = await this.runRequestInterceptors({
       ...config,
-      method: "PUT",
+      method: 'PUT',
     });
     return executeWithRetry<T>(this.getDeps(), endpoint, finalConfig);
   }
 
   async patch<T>(
     endpoint: string,
-    config: Omit<ApiRequestConfig, "method"> = {},
+    config: Omit<ApiRequestConfig, 'method'> = {},
   ): Promise<ApiResponse<T>> {
     const finalConfig = await this.runRequestInterceptors({
       ...config,
-      method: "PATCH",
+      method: 'PATCH',
     });
     return executeWithRetry<T>(this.getDeps(), endpoint, finalConfig);
   }
 
   async delete<T>(
     endpoint: string,
-    config: Omit<ApiRequestConfig, "method"> = {},
+    config: Omit<ApiRequestConfig, 'method'> = {},
   ): Promise<ApiResponse<T>> {
     const finalConfig = await this.runRequestInterceptors({
       ...config,
-      method: "DELETE",
+      method: 'DELETE',
     });
     return executeWithRetry<T>(this.getDeps(), endpoint, finalConfig);
   }

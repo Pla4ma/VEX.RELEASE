@@ -1,13 +1,13 @@
-import { getSupabaseClient } from "../../../config/supabase";
-import { enqueue } from "../../../lib/offline/queue";
-import { withRetry, RepositoryError } from "../../../lib/repository/base";
-import { captureSilentFailure } from "../../../utils/silent-failure";
+import { getSupabaseClient } from '../../../config/supabase';
+import { enqueue } from '../../../lib/offline/queue';
+import { withRetry, RepositoryError } from '../../../lib/repository/base';
+import { captureSilentFailure } from '../../../utils/silent-failure';
 import {
   StakesSessionRecordSchema,
   UserStakesPreferenceSchema,
   type StakesSessionRecord,
   type UserStakesPreference,
-} from "./stakes-schemas";
+} from './stakes-schemas';
 
 const supabase = getSupabaseClient();
 
@@ -19,16 +19,16 @@ export async function saveStakesSession(
 }> {
   try {
     enqueue({
-      operation: "CREATE",
-      feature: "sessions",
+      operation: 'CREATE',
+      feature: 'sessions',
       payload: record,
       idempotencyKey: `stakes:${record.session_id}`,
       maxRetries: 5,
-      priority: "high",
+      priority: 'high',
     });
-    const { data, error } = await withRetry("saveStakesSession", async () => {
+    const { data, error } = await withRetry('saveStakesSession', async () => {
       return await supabase
-        .from("stakes_sessions")
+        .from('stakes_sessions')
         .insert({
           id: record.id,
           user_id: record.user_id,
@@ -56,13 +56,13 @@ export async function saveStakesSession(
     return { data: StakesSessionRecordSchema.parse(data), error: null };
   } catch (error) {
     captureSilentFailure(error, {
-      feature: "sessions",
-      operation: "save",
-      type: "data",
+      feature: 'sessions',
+      operation: 'save',
+      type: 'data',
     });
     return {
       data: null,
-      error: new RepositoryError("saveStakesSession", error),
+      error: new RepositoryError('saveStakesSession', error),
     };
   }
 }
@@ -73,13 +73,13 @@ export async function fetchUserStakesHistory(
 ): Promise<{ data: StakesSessionRecord[]; error: RepositoryError | null }> {
   try {
     const { data, error } = await withRetry(
-      "fetchUserStakesHistory",
+      'fetchUserStakesHistory',
       async () => {
         return await supabase
-          .from("stakes_sessions")
-          .select("*")
-          .eq("user_id", userId)
-          .order("created_at", { ascending: false })
+          .from('stakes_sessions')
+          .select('*')
+          .eq('user_id', userId)
+          .order('created_at', { ascending: false })
           .limit(limit);
       },
     );
@@ -92,13 +92,13 @@ export async function fetchUserStakesHistory(
     };
   } catch (error) {
     captureSilentFailure(error, {
-      feature: "sessions",
-      operation: "fetchHistory",
-      type: "data",
+      feature: 'sessions',
+      operation: 'fetchHistory',
+      type: 'data',
     });
     return {
       data: [],
-      error: new RepositoryError("fetchUserStakesHistory", error),
+      error: new RepositoryError('fetchUserStakesHistory', error),
     };
   }
 }
@@ -111,17 +111,17 @@ export async function fetchStakesPreference(
 }> {
   try {
     const { data, error } = await withRetry(
-      "fetchStakesPreference",
+      'fetchStakesPreference',
       async () => {
         return await supabase
-          .from("user_stakes_preferences")
-          .select("*")
-          .eq("user_id", userId)
+          .from('user_stakes_preferences')
+          .select('*')
+          .eq('user_id', userId)
           .single();
       },
     );
     if (error) {
-      if (error.code === "PGRST116") {
+      if (error.code === 'PGRST116') {
         return { data: null, error: null };
       }
       throw error;
@@ -132,13 +132,13 @@ export async function fetchStakesPreference(
     };
   } catch (error) {
     captureSilentFailure(error, {
-      feature: "sessions",
-      operation: "fetchPreference",
-      type: "data",
+      feature: 'sessions',
+      operation: 'fetchPreference',
+      type: 'data',
     });
     return {
       data: null,
-      error: new RepositoryError("fetchStakesPreference", error),
+      error: new RepositoryError('fetchStakesPreference', error),
     };
   }
 }

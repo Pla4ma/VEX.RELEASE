@@ -1,15 +1,15 @@
-import { SessionMode } from "../../session/modes";
+import { SessionMode } from '../../session/modes';
 import {
   ACTIVE_SESSION_CONFIG,
   canBackground,
   getActiveSessionConfig,
-} from "./active-session-modes";
+} from './active-session-modes';
 import {
   getGlobalCooldownRemaining,
   getInterventionStats,
-} from "./coach-cooldown";
-import type { SessionViewModel, TimerState } from "./schemas";
-import { SessionPhase, SessionPurity, SessionStatus } from "./schemas";
+} from './coach-cooldown';
+import type { SessionViewModel, TimerState } from './schemas';
+import { SessionPhase, SessionPurity, SessionStatus } from './schemas';
 
 interface BuildViewModelInput {
   sessionId: string;
@@ -48,7 +48,7 @@ export function buildSessionCapabilities(
       input.elapsedSeconds >= config.minFocusSecondsBeforePause &&
       input.pauseCount < config.maxPauses,
     canComplete: input.elapsedSeconds >= 60,
-    canAbandon: input.status === "ACTIVE" || input.status === "PAUSED",
+    canAbandon: input.status === 'ACTIVE' || input.status === 'PAUSED',
     canBackground: canBackground(input.mode, input.backgroundTimeSeconds),
   };
 }
@@ -65,18 +65,18 @@ export function buildTimerState(input: BuildViewModelInput): TimerState {
 
 export function buildPurityState(input: BuildViewModelInput): SessionPurity {
   const score = Math.max(0, Math.min(100, input.purityScore));
-  let label: SessionPurity["label"];
+  let label: SessionPurity['label'];
 
   if (score >= 90) {
-    label = "EXCELLENT";
+    label = 'EXCELLENT';
   } else if (score >= 75) {
-    label = "GOOD";
+    label = 'GOOD';
   } else if (score >= 50) {
-    label = "FAIR";
+    label = 'FAIR';
   } else if (score >= 25) {
-    label = "POOR";
+    label = 'POOR';
   } else {
-    label = "CRITICAL";
+    label = 'CRITICAL';
   }
 
   return {
@@ -161,5 +161,5 @@ export function calculateProgressPercentage(
 export function formatDuration(seconds: number): string {
   const minutes = Math.floor(seconds / 60);
   const remainingSeconds = seconds % 60;
-  return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
+  return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
 }

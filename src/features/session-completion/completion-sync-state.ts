@@ -1,4 +1,4 @@
-import { useSessionUIStore } from "../../store/session-state";
+import { useSessionUIStore } from '../../store/session-state';
 
 export function setCompletionSyncState(
   ledgerId: string,
@@ -10,9 +10,9 @@ export function setCompletionSyncState(
   if (pendingSync) {
     store.setCompletionSyncState({
       ledgerId,
-      message: "One session is saved offline. It will sync when you reconnect.",
+      message: 'One session is saved offline. It will sync when you reconnect.',
       repairCtaLabel: null,
-      status: "pending_sync",
+      status: 'pending_sync',
       updatedAt: Date.now(),
     });
     return;
@@ -21,9 +21,9 @@ export function setCompletionSyncState(
   if (degradedSystems.length > 0) {
     store.setCompletionSyncState({
       ledgerId,
-      message: "Session completion synced, but some rewards need repair.",
-      repairCtaLabel: "Repair now",
-      status: "failed_sync",
+      message: 'Session completion synced, but some rewards need repair.',
+      repairCtaLabel: 'Repair now',
+      status: 'failed_sync',
       updatedAt: Date.now(),
     });
     return;
@@ -33,7 +33,7 @@ export function setCompletionSyncState(
     ledgerId,
     message: null,
     repairCtaLabel: null,
-    status: "synced",
+    status: 'synced',
     updatedAt: Date.now(),
   });
 }

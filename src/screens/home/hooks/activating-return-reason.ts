@@ -1,10 +1,10 @@
 import {
   useUpdateRecommendationStatus,
   type SessionRecommendation,
-} from "../../../features/ai-coach";
-import { buildHomeReturnReasonState } from "../../../features/home-spine/service";
-import type { HomeReturnReason } from "./useHomeReturnReason";
-import type { NextBestAction } from "../../../features/progression";
+} from '../../../features/ai-coach';
+import { buildHomeReturnReasonState } from '../../../features/home-spine/service';
+import type { HomeReturnReason } from './useHomeReturnReason';
+import type { NextBestAction } from '../../../features/progression';
 
 interface ActivatingReturnReasonParams {
   shouldShowExpansionSystems: boolean;
@@ -42,9 +42,9 @@ export function buildActivatingReturnReason(
               .reasoning as string) ??
             ((primaryRecommendation as Record<string, unknown>)
               .reason as string) ??
-            "",
+            '',
           suggestedDifficulty:
-            primaryRecommendation.suggestedDifficulty ?? "NORMAL",
+            primaryRecommendation.suggestedDifficulty ?? 'NORMAL',
           suggestedDuration:
             primaryRecommendation.suggestedDuration ?? 15 * 60,
           type: primaryRecommendation.recommendationType,
@@ -53,12 +53,12 @@ export function buildActivatingReturnReason(
   });
 
   const onPress: () => Promise<void> | void =
-    reasonState.intent === "accept-coach-recommendation" &&
+    reasonState.intent === 'accept-coach-recommendation' &&
     reasonState.recommendationId
       ? async () => {
           await updateRecommendationStatus.mutateAsync({
             recommendationId: reasonState.recommendationId!,
-            status: "ACCEPTED",
+            status: 'ACCEPTED',
             userId,
           });
           openSetup({
@@ -67,7 +67,7 @@ export function buildActivatingReturnReason(
             suggestedDurationSeconds: reasonState.suggestedDurationSeconds,
           });
         }
-      : reasonState.source === "next-best-action"
+      : reasonState.source === 'next-best-action'
         ? openNextAction
         : () => openSetup();
 

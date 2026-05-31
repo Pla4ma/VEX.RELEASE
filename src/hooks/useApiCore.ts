@@ -1,12 +1,12 @@
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useCallback, useRef, useEffect } from 'react';
 import {
   getApiClient,
   ApiRequestConfig,
   ApiError,
-} from "../api/client";
-import { createDebugger } from "../utils/debug";
+} from '../api/client';
+import { createDebugger } from '../utils/debug';
 
-const debug = createDebugger("hooks:api");
+const debug = createDebugger('hooks:api');
 
 export interface ApiState<T> {
   data: T | null;
@@ -25,7 +25,7 @@ export interface UseApiReturn<T> extends ApiState<T> {
 
 export interface UseApiOptions<T> {
   endpoint: string;
-  method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+  method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
   immediate?: boolean;
   initialData?: T | null;
   onSuccess?: (data: T) => void;
@@ -42,7 +42,7 @@ interface CacheEntry<T> {
 const cache = new Map<string, CacheEntry<unknown>>();
 
 function generateCacheKey(endpoint: string, config?: ApiRequestConfig): string {
-  return `${config?.method ?? "GET"}:${endpoint}:${JSON.stringify(config?.params)}`;
+  return `${config?.method ?? 'GET'}:${endpoint}:${JSON.stringify(config?.params)}`;
 }
 
 function isCacheValid<T>(entry: CacheEntry<T>, cacheTime: number): boolean {
@@ -54,7 +54,7 @@ export function useApi<T = unknown>(
 ): UseApiReturn<T> {
   const {
     endpoint,
-    method = "GET",
+    method = 'GET',
     immediate = false,
     initialData = null,
     onSuccess,
@@ -88,10 +88,10 @@ export function useApi<T = unknown>(
         endpoint,
         overrideConfig as ApiRequestConfig,
       );
-      if (cacheTime > 0 && method === "GET") {
+      if (cacheTime > 0 && method === 'GET') {
         const cached = cache.get(cacheKey) as CacheEntry<T> | undefined;
         if (cached && isCacheValid(cached, cacheTime)) {
-          debug.debug("Using cached data for %s", endpoint);
+          debug.debug('Using cached data for %s', endpoint);
           if (isMountedRef.current) {
             setState((prev) => ({
               ...prev,
@@ -112,7 +112,7 @@ export function useApi<T = unknown>(
       }
       lastConfigRef.current = overrideConfig as ApiRequestConfig;
       try {
-        debug.debug("Executing request: %s %s", method, endpoint);
+        debug.debug('Executing request: %s %s', method, endpoint);
         const response = await api.request<T>(endpoint, {
           method,
           ...overrideConfig,
@@ -128,11 +128,11 @@ export function useApi<T = unknown>(
           setState({ data, loading: false, error: null, retryCount: 0 });
         }
         onSuccess?.(data);
-        debug.info("Request successful: %s", endpoint);
+        debug.info('Request successful: %s', endpoint);
         return data;
       } catch (error) {
         const apiError = error as ApiError;
-        debug.error("Request failed: " + endpoint, new Error(apiError.message));
+        debug.error('Request failed: ' + endpoint, new Error(apiError.message));
         if (isMountedRef.current) {
           setState((prev) => ({ ...prev, loading: false, error: apiError }));
         }

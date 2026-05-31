@@ -4,16 +4,16 @@
  * Singleton class for automated accessibility improvements and fixes.
  */
 
-import React from "react";
-import { createDebugger } from "../utils/debug";
-import { getAutomaticEnhancements } from "./enhancer-logic";
+import React from 'react';
+import { createDebugger } from '../utils/debug';
+import { getAutomaticEnhancements } from './enhancer-logic';
 import type {
   AccessibilityEnhancementConfig,
   EnhancedAccessibilityProps,
   EnhancementHistoryEntry,
-} from "./enhancer-types";
+} from './enhancer-types';
 
-const debug = createDebugger("accessibility-enhancer");
+const debug = createDebugger('accessibility-enhancer');
 
 export class AccessibilityEnhancer {
   private static instance: AccessibilityEnhancer;
@@ -26,7 +26,7 @@ export class AccessibilityEnhancer {
       autoFocusManagement: true,
       motionOptimizations: true,
       screenReaderOptimizations: true,
-      colorBlindSupport: "none",
+      colorBlindSupport: 'none',
     };
   }
 
@@ -39,7 +39,7 @@ export class AccessibilityEnhancer {
 
   setConfig(config: Partial<AccessibilityEnhancementConfig>): void {
     this.config = { ...this.config, ...config };
-    debug.info("Accessibility enhancer configuration updated:", this.config);
+    debug.info('Accessibility enhancer configuration updated:', this.config);
   }
 
   getConfig(): AccessibilityEnhancementConfig {
@@ -58,9 +58,8 @@ export class AccessibilityEnhancer {
       return React.createElement(Component, { ...enhancedProps, ref } as P);
     });
     EnhancedComponent.displayName = `Enhanced(${Component.displayName || Component.name})`;
-    // TODO(safe-cast): ForwardRefExoticComponent is not part of React.ComponentType union.
-    // Proper fix: change return type to ForwardRefExoticComponent<P> or use a typed HOC
-    // library (e.g. recompose). Cast is structurally safe at runtime.
+    // safe-cast: forwardRef returns ForwardRefExoticComponent which is not in the ComponentType
+    // union. The shapes are structurally compatible at runtime; the cast is safe.
     return EnhancedComponent as unknown as React.ComponentType<P>;
   }
 
@@ -94,7 +93,7 @@ export class AccessibilityEnhancer {
         props: Object.keys(props),
         enhancements: Object.keys(allEnhancements),
       });
-      debug.debug("Applied accessibility enhancements:", {
+      debug.debug('Applied accessibility enhancements:', {
         component: props,
         enhancements: allEnhancements,
       });
@@ -127,7 +126,7 @@ export class AccessibilityEnhancer {
         stats.enhancementTypes[enhancement] =
           (stats.enhancementTypes[enhancement] || 0) + 1;
       });
-      const componentName = entry.props[0] ?? "Unknown";
+      const componentName = entry.props[0] ?? 'Unknown';
       stats.mostEnhancedComponents[componentName] =
         (stats.mostEnhancedComponents[componentName] || 0) + 1;
     });

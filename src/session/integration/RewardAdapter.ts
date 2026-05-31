@@ -1,15 +1,15 @@
-import { eventBus } from "../../events";
-import { getRewardService } from "../../rewards/RewardService";
-import type { SessionSummary } from "../types";
-import { createDebugger } from "../../utils/debug";
-const debug = createDebugger("session:rewardAdapter");
+import { eventBus } from '../../events';
+import { getRewardService } from '../../rewards/RewardService';
+import type { SessionSummary } from '../types';
+import { createDebugger } from '../../utils/debug';
+const debug = createDebugger('session:rewardAdapter');
 export class RewardAdapter {
   private userId: string | null = null;
   private rewardService = getRewardService();
   setUserId(userId: string): void {
     this.userId = userId;
     this.rewardService.setUserId(userId);
-    debug.info("RewardAdapter user set: %s", userId);
+    debug.info('RewardAdapter user set: %s', userId);
   }
   async distributeSessionRewards(summary: SessionSummary): Promise<{
     xpGranted: number;
@@ -18,7 +18,7 @@ export class RewardAdapter {
     bonuses: string[];
   }> {
     if (!this.userId) {
-      throw new Error("RewardAdapter: No user set");
+      throw new Error('RewardAdapter: No user set');
     }
     const rewards = {
       xpGranted: 0,
@@ -36,21 +36,21 @@ export class RewardAdapter {
         await this.grantBonus(bonus, summary);
         rewards.bonuses.push(bonus.type);
       }
-      eventBus.publish("session:rewards:granted", {
+      eventBus.publish('session:rewards:granted', {
         sessionId: summary.sessionId,
         userId: this.userId,
         rewards,
         timestamp: Date.now(),
       });
       debug.info(
-        "Rewards distributed for session %s: XP=%d, Coins=%d, Gems=%d",
+        'Rewards distributed for session %s: XP=%d, Coins=%d, Gems=%d',
         summary.sessionId,
         rewards.xpGranted,
         rewards.coinsGranted,
         rewards.gemsGranted,
       );
     } catch (error) {
-      debug.error("Failed to distribute rewards", error as Error);
+      debug.error('Failed to distribute rewards', error as Error);
     }
     return rewards;
   }
@@ -58,18 +58,18 @@ export class RewardAdapter {
     amount: number,
     _summary: SessionSummary,
   ): Promise<void> {
-    eventBus.publish("progression:add_xp", {
+    eventBus.publish('progression:add_xp', {
       userId: this.userId!,
       amount,
-      source: "SESSION_COMPLETE",
+      source: 'SESSION_COMPLETE',
     });
-    debug.debug("XP granted: %d", amount);
+    debug.debug('XP granted: %d', amount);
   }
   private async grantBonus(
     bonus: { type: string; amount: number; description: string },
     summary: SessionSummary,
   ): Promise<void> {
-    eventBus.publish("session:bonus:earned", {
+    eventBus.publish('session:bonus:earned', {
       sessionId: summary.sessionId,
       userId: this.userId!,
       type: bonus.type,
@@ -77,12 +77,12 @@ export class RewardAdapter {
       description: bonus.description,
     });
     await this.rewardService.grantReward(
-      "XP",
-      "SESSION_COMPLETE",
+      'XP',
+      'SESSION_COMPLETE',
       { baseAmount: bonus.amount, streakMultiplier: 1, levelMultiplier: 1 },
       { bonusType: bonus.type, sessionId: summary.sessionId },
     );
-    debug.debug("Bonus granted: %s = %d", bonus.type, bonus.amount);
+    debug.debug('Bonus granted: %s = %d', bonus.type, bonus.amount);
   }
   private calculateBonusRewards(
     summary: SessionSummary,
@@ -94,45 +94,45 @@ export class RewardAdapter {
     }> = [];
     if (summary.completionPercentage >= 100 && summary.focusQuality >= 90) {
       bonuses.push({
-        type: "PERFECT_SESSION",
+        type: 'PERFECT_SESSION',
         amount: 50,
-        description: "Perfect focus session completed!",
+        description: 'Perfect focus session completed!',
       });
     }
     if (summary.finalScore > 500) {
       bonuses.push({
-        type: "HIGH_SCORE",
+        type: 'HIGH_SCORE',
         amount: Math.floor(summary.finalScore * 0.1),
-        description: "Outstanding performance bonus!",
+        description: 'Outstanding performance bonus!',
       });
     }
     if (summary.streakIncreased && summary.streakDays % 7 === 0) {
       bonuses.push({
-        type: "STREAK_MILESTONE",
+        type: 'STREAK_MILESTONE',
         amount: summary.streakDays * 10,
         description: `${summary.streakDays} day streak!`,
       });
     }
     if (summary.interruptions <= 1 && summary.pauses <= 2) {
       bonuses.push({
-        type: "DEEP_FOCUS",
+        type: 'DEEP_FOCUS',
         amount: 25,
-        description: "Deep focus maintained!",
+        description: 'Deep focus maintained!',
       });
     }
     const hour = new Date().getHours();
     if (hour < 9) {
       bonuses.push({
-        type: "EARLY_BIRD",
+        type: 'EARLY_BIRD',
         amount: 20,
-        description: "Early morning focus session!",
+        description: 'Early morning focus session!',
       });
     }
     if (hour >= 21) {
       bonuses.push({
-        type: "NIGHT_OWL",
+        type: 'NIGHT_OWL',
         amount: 20,
-        description: "Late night dedication!",
+        description: 'Late night dedication!',
       });
     }
     return bonuses;
@@ -144,13 +144,13 @@ export class RewardAdapter {
     if (!this.userId) {
       return;
     }
-    eventBus.publish("session:streak:maintained", {
+    eventBus.publish('session:streak:maintained', {
       sessionId,
       userId: this.userId,
       streakDays,
       timestamp: Date.now(),
     });
-    debug.info("Streak maintained: %d days", streakDays);
+    debug.info('Streak maintained: %d days', streakDays);
   }
   async handleStreakBroken(
     sessionId: string,
@@ -159,7 +159,7 @@ export class RewardAdapter {
     if (!this.userId) {
       return;
     }
-    eventBus.publish("session:streak:broken", {
+    eventBus.publish('session:streak:broken', {
       sessionId,
       userId: this.userId,
       previousStreak,
@@ -167,19 +167,19 @@ export class RewardAdapter {
     });
     if (previousStreak >= 7) {
       await this.rewardService.grantReward(
-        "XP",
-        "COMEBACK_BONUS",
+        'XP',
+        'COMEBACK_BONUS',
         { baseAmount: 100, streakMultiplier: 1, levelMultiplier: 1 },
         { previousStreak, sessionId },
       );
     }
-    debug.info("Streak broken: was %d days", previousStreak);
+    debug.info('Streak broken: was %d days', previousStreak);
   }
   async checkSessionAchievements(summary: SessionSummary): Promise<void> {
     if (!this.userId) {
       return;
     }
-    debug.debug("Checked achievements for session %s", summary.sessionId);
+    debug.debug('Checked achievements for session %s', summary.sessionId);
   }
 }
 export function createRewardAdapter(): RewardAdapter {

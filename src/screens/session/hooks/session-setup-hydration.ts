@@ -1,7 +1,7 @@
-import { captureSilentFailure } from "../../../utils/silent-failure";
-import type { MasteryState } from "../../../features/mastery/types";
-import type { SessionStackParams } from "../../../navigation/types";
-import type { MMKVStorageAdapter } from "../../../persistence/MMKVStorageAdapter";
+import { captureSilentFailure } from '../../../utils/silent-failure';
+import type { MasteryState } from '../../../features/mastery/types';
+import type { SessionStackParams } from '../../../navigation/types';
+import type { MMKVStorageAdapter } from '../../../persistence/MMKVStorageAdapter';
 import {
   hydrateMasteryState,
   MasteryStateSchema,
@@ -11,9 +11,9 @@ import {
   SessionDraftSchema,
   type PresetWithIcon,
   type SmartSuggestion,
-} from "../utils/session-setup";
+} from '../utils/session-setup';
 
-type SessionSetupParams = SessionStackParams["SessionSetup"];
+type SessionSetupParams = SessionStackParams['SessionSetup'];
 
 export interface RestoredDraftData {
   masteryState: MasteryState | null;
@@ -104,7 +104,7 @@ export async function restoreSessionDraft(
     const showAdvancedOverride = parsedDraft.data.showAdvanced ?? null;
     const showCustomizationOverride =
       parsedDraft.data.presetId !== PRESETS[1]!.id ||
-      parsedDraft.data.selectedThemeId !== "default" ||
+      parsedDraft.data.selectedThemeId !== 'default' ||
       parsedDraft.data.showAdvanced
         ? true
         : null;
@@ -122,17 +122,17 @@ export async function restoreSessionDraft(
     };
   } catch (error) {
     captureSilentFailure(error, {
-      feature: "screens",
-      operation: "network-fallback",
-      type: "network",
+      feature: 'screens',
+      operation: 'network-fallback',
+      type: 'network',
     });
     try {
       await storage.removeItem(sessionDraftKey);
     } catch (removeError) {
       captureSilentFailure(removeError, {
-        feature: "screens",
-        operation: "network-fallback",
-        type: "network",
+        feature: 'screens',
+        operation: 'network-fallback',
+        type: 'network',
       });
     }
     return EMPTY_RESTORE;
@@ -159,9 +159,9 @@ export async function saveSessionDraft(
     await storage.setItem(sessionDraftKey, JSON.stringify(draftPayload));
   } catch (error) {
     captureSilentFailure(error, {
-      feature: "screens",
-      operation: "network-fallback",
-      type: "network",
+      feature: 'screens',
+      operation: 'network-fallback',
+      type: 'network',
     });
   }
 }

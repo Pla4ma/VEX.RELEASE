@@ -22,7 +22,7 @@ export type {
   ExportJob,
   DashboardLayout,
   DashboardWidget,
-} from "./schemas";
+} from './schemas';
 
 // Schemas
 export {
@@ -44,13 +44,13 @@ export {
   DashboardLayoutSchema,
   DashboardWidgetSchema,
   getTimeRangeDates,
-} from "./schemas";
+} from './schemas';
 
 // Repository
-export * as repository from "./repository";
+export * as repository from './repository';
 
 // Service
-export * as service from "./service";
+export * as service from './service';
 
 // Hooks
 export {
@@ -72,10 +72,10 @@ export {
   useDetectPatterns,
   useComparativeStats,
   useAnalyticsDegradedState,
-} from "./hooks";
+} from './hooks';
 
 // Events
-export type { AnalyticsEvents } from "./events";
+export type { AnalyticsEvents } from './events';
 export {
   subscribeToAnalyticsEvents,
   emitInsightGenerated,
@@ -86,13 +86,13 @@ export {
   emitExportFailed,
   emitDashboardUpdated,
   emitPreferencesChanged,
-} from "./events";
+} from './events';
 
 // Analytics Tracking
 export {
   AnalyticsTracking,
   setupAnalyticsTracking,
-} from "./analytics-tracking";
+} from './analytics-tracking';
 
 // Storage
 export {
@@ -105,7 +105,7 @@ export {
   type UploadResult,
   type DownloadResult,
   type StorageError,
-} from "./repository/storage";
+} from './repository/storage';
 
 // Validation
 export {
@@ -119,7 +119,7 @@ export {
   AnalyticsValidationError,
   type ValidationError,
   type ValidationResult,
-} from "./validation";
+} from './validation';
 
 // Integration
 export {
@@ -130,10 +130,10 @@ export {
   trackItemCrafted,
   cleanupAnalyticsData,
   initializeAnalytics,
-} from "./integration";
+} from './integration';
 
 // Re-export from types.ts for advanced use cases
-export type { AnalyticsState, DegradedAnalyticsState } from "./types";
+export type { AnalyticsState, DegradedAnalyticsState } from './types';
 
 // Components
 export {
@@ -143,4 +143,4 @@ export {
   ExportProgress,
   TimeSeriesChart,
   AnalyticsDashboard,
-} from "./components";
+} from './components';

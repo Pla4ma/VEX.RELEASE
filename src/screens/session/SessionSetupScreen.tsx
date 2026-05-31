@@ -1,32 +1,32 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   useNavigation,
   useRoute,
   type CompositeNavigationProp,
   type RouteProp,
-} from "@react-navigation/native";
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+} from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-import { Box } from "../../components/primitives/Box";
-import { Button } from "../../components/primitives/Button";
-import { Text } from "../../components/primitives/Text";
+import { Box } from '../../components/primitives/Box';
+import { Button } from '../../components/primitives/Button';
+import { Text } from '../../components/primitives/Text';
 
-import { SESSION_SETUP_SOURCE_ONBOARDING } from "../../features/session-start/schemas";
-import type { SessionDifficulty } from "../../features/session-start/components/DifficultySelector";
-import { useSessionStartController } from "../../features/session-start/hooks";
+import { SESSION_SETUP_SOURCE_ONBOARDING } from '../../features/session-start/schemas';
+import type { SessionDifficulty } from '../../features/session-start/components/DifficultySelector';
+import { useSessionStartController } from '../../features/session-start/hooks';
 import type {
   ExtendedRootStackParams,
   SessionStackParams,
-} from "../../navigation/types";
-import { FirstSessionView } from "./components/SessionSetupFirstSessionView";
-import { ReturningUserView } from "./components/SessionSetupReturningUserView";
-import { withScreenErrorBoundary } from "../../shared/ui/components/ScreenErrorBoundary";
+} from '../../navigation/types';
+import { FirstSessionView } from './components/SessionSetupFirstSessionView';
+import { ReturningUserView } from './components/SessionSetupReturningUserView';
+import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 
 type SessionNavigationProp = CompositeNavigationProp<
   NativeStackNavigationProp<SessionStackParams>,
   NativeStackNavigationProp<ExtendedRootStackParams>
 >;
-type SessionSetupRouteProp = RouteProp<SessionStackParams, "SessionSetup">;
+type SessionSetupRouteProp = RouteProp<SessionStackParams, 'SessionSetup'>;
 
 export const SessionSetupScreen = withScreenErrorBoundary(
   function _SessionSetupScreen(): React.JSX.Element {
@@ -35,9 +35,9 @@ export const SessionSetupScreen = withScreenErrorBoundary(
     const isFirstSessionSetup =
       route.params?.source === SESSION_SETUP_SOURCE_ONBOARDING;
 
-    const [contractText, setContractText] = useState("");
+    const [contractText, setContractText] = useState('');
     const [selectedDifficulty, setSelectedDifficulty] =
-      useState<SessionDifficulty>("FOCUSED");
+      useState<SessionDifficulty>('FOCUSED');
 
     const controller = useSessionStartController({
       navigation,
@@ -91,7 +91,7 @@ export const SessionSetupScreen = withScreenErrorBoundary(
       />
     );
   },
-  "Session Setup",
+  'Session Setup',
 );
 
 export default SessionSetupScreen;

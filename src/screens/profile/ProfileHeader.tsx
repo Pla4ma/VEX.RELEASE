@@ -1,15 +1,15 @@
-import React from "react";
-import { Pressable } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Avatar } from "../../components/Avatar";
-import { Badge } from "../../components/Badge";
-import { Box, Text } from "../../components/primitives";
-import { Icon } from "../../icons";
-import { useTheme } from "../../theme";
-import { launchColors } from "@theme/tokens/launch-colors";
-import { getHeroGradientColors } from "../home/HomeScreenVisuals";
-import type { User } from "../../types/models";
+import React from 'react';
+import { Pressable } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Avatar } from '../../components/Avatar';
+import { Badge } from '../../components/Badge';
+import { Box, Text } from '../../components/primitives';
+import { Icon } from '../../icons';
+import { useTheme } from '../../theme';
+import { launchColors } from '@theme/tokens/launch-colors';
+import { getHeroGradientColors } from '../home/HomeScreenVisuals';
+import type { User } from '../../types/models';
 
 interface ProfileHeaderProps {
   user: User | null;
@@ -87,22 +87,22 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
         </Box>
       </Box>
       <Box alignItems="center">
-        <Avatar name={user?.displayName ?? "User"} size="xl" status="online" />
+        <Avatar name={user?.displayName ?? 'User'} size="xl" status="online" />
         <Text
           variant="h2"
           style={{
             color: launchColors.hex_fff,
-            fontWeight: "800",
+            fontWeight: '800',
             marginTop: theme.spacing[4],
           }}
         >
-          {user?.displayName ?? "User"}
+          {user?.displayName ?? 'User'}
         </Text>
         <Text
           variant="body"
           style={{ color: launchColors.rgb_255_255_255_0_78, marginTop: 4 }}
         >
-          {user?.id ?? "No email available"}
+          {user?.id ?? 'No email available'}
         </Text>
         <Box flexDirection="row" mt={theme.spacing[3]}>
           <Badge variant="primary" size="sm" leftIcon="star">{`Level ${level}`}</Badge>

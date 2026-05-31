@@ -8,8 +8,8 @@ import type {
   Achievement,
   AchievementCategory,
   AchievementRarity,
-} from "../types";
-import { RARITY_CONFIG } from "./rarity-config";
+} from '../types';
+import { RARITY_CONFIG } from './rarity-config';
 
 export function getAchievementById(
   achievements: Achievement[],
@@ -48,12 +48,12 @@ export function getAchievementDisplayInfo(
 } {
   if (achievement.isHidden && !isUnlocked) {
     return {
-      title: "???",
+      title: '???',
       description:
-        achievement.rarity === "LEGENDARY"
-          ? "This achievement is rumored to exist..."
-          : "This achievement is a mystery...",
-      icon: "❓",
+        achievement.rarity === 'LEGENDARY'
+          ? 'This achievement is rumored to exist...'
+          : 'This achievement is a mystery...',
+      icon: '❓',
     };
   }
 
@@ -88,5 +88,5 @@ export function getActiveAchievements(
 }
 
 export function isBehaviorBasedAchievement(achievement: Achievement): boolean {
-  return !achievement.isDeprecated && achievement.category !== "ECONOMY";
+  return !achievement.isDeprecated && achievement.category !== 'ECONOMY';
 }

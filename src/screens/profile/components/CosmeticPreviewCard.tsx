@@ -1,17 +1,17 @@
-import React from "react";
-import { Pressable } from "react-native";
+import React from 'react';
+import { Pressable } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withSpring,
   withTiming,
-} from "react-native-reanimated";
-import { useTheme } from "../../../theme";
-import { Box, Text, Card } from "../../../components/primitives";
-import { Icon } from "../../../icons";
-import { launchColors } from "@theme/tokens/launch-colors";
+} from 'react-native-reanimated';
+import { useTheme } from '../../../theme';
+import { Box, Text, Card } from '../../../components/primitives';
+import { Icon } from '../../../icons';
+import { launchColors } from '@theme/tokens/launch-colors';
 
-export type CosmeticType = "avatar-frame" | "badge" | "background" | "title";
+export type CosmeticType = 'avatar-frame' | 'badge' | 'background' | 'title';
 
 export interface CosmeticItem {
   id: string;
@@ -20,7 +20,7 @@ export interface CosmeticItem {
   type: CosmeticType;
   icon: string;
   emoji: string;
-  rarity: "common" | "uncommon" | "rare" | "epic" | "legendary";
+  rarity: 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary';
   isEquipped: boolean;
   isOwned: boolean;
   previewColor?: string;
@@ -34,7 +34,7 @@ export const RARITY_COLORS: Record<string, string> = {
   legendary: launchColors.hex_f59e0b,
 };
 
-export const RARITY_ORDER = ["legendary", "epic", "rare", "uncommon", "common"];
+export const RARITY_ORDER = ['legendary', 'epic', 'rare', 'uncommon', 'common'];
 
 export const CosmeticPreviewCard: React.FC<{
   item: CosmeticItem;
@@ -56,7 +56,7 @@ export const CosmeticPreviewCard: React.FC<{
   };
   return (
     <Animated.View
-      style={[{ flex: 1, minWidth: "30%", maxWidth: "31%" }, animatedStyle]}
+      style={[{ flex: 1, minWidth: '30%', maxWidth: '31%' }, animatedStyle]}
     >
       <Pressable
         onPress={onPress}
@@ -71,8 +71,8 @@ export const CosmeticPreviewCard: React.FC<{
           style={{
             aspectRatio: 0.85,
             padding: 12,
-            alignItems: "center",
-            justifyContent: "center",
+            alignItems: 'center',
+            justifyContent: 'center',
             borderWidth: isSelected ? 3 : isEquipped ? 2 : 1,
             borderColor: isSelected
               ? theme.colors.primary[500]
@@ -82,7 +82,7 @@ export const CosmeticPreviewCard: React.FC<{
             backgroundColor: isSelected
               ? theme.colors.primary[50]
               : isEquipped
-                ? rarityColor + "08"
+                ? rarityColor + '08'
                 : theme.colors.background.secondary,
           }}
         >
@@ -123,9 +123,9 @@ export const CosmeticPreviewCard: React.FC<{
             alignItems="center"
             mb={8}
             style={{
-              backgroundColor: item.previewColor || rarityColor + "15",
+              backgroundColor: item.previewColor || rarityColor + '15',
               borderWidth: 2,
-              borderColor: rarityColor + "30",
+              borderColor: rarityColor + '30',
             }}
           >
             <Text style={{ fontSize: 28 }}>{item.emoji}</Text>
@@ -135,8 +135,8 @@ export const CosmeticPreviewCard: React.FC<{
           <Text
             variant="caption"
             style={{
-              fontWeight: isEquipped ? "700" : "600",
-              textAlign: "center",
+              fontWeight: isEquipped ? '700' : '600',
+              textAlign: 'center',
               color: isEquipped ? rarityColor : theme.colors.text.primary,
               fontSize: 11,
             }}
@@ -149,8 +149,8 @@ export const CosmeticPreviewCard: React.FC<{
           <Text
             style={{
               fontSize: 9,
-              fontWeight: "600",
-              textTransform: "uppercase",
+              fontWeight: '600',
+              textTransform: 'uppercase',
               letterSpacing: 0.5,
               color: rarityColor,
               marginTop: 4,

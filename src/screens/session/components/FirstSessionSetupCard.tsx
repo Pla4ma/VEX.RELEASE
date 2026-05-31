@@ -1,11 +1,11 @@
-import React from "react";
+import React from 'react';
 
-import { Box } from "../../../components/primitives/Box";
-import { Button } from "../../../components/primitives/Button";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import { SessionMode } from "../../../session/modes";
-import type { FirstSessionPersonalization } from "../hooks/useFirstSessionPersonalization";
+import { Box } from '../../../components/primitives/Box';
+import { Button } from '../../../components/primitives/Button';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import { SessionMode } from '../../../session/modes';
+import type { FirstSessionPersonalization } from '../hooks/useFirstSessionPersonalization';
 
 type FirstSessionSetupCardProps = {
   personalization: FirstSessionPersonalization;
@@ -18,10 +18,10 @@ type FirstSessionSetupCardProps = {
 };
 
 const MODE_LABELS: Record<string, string> = {
-  [SessionMode.STUDY]: "Start one study block.",
-  [SessionMode.LIGHT_FOCUS]: "Start one focused session.",
-  [SessionMode.DEEP_WORK]: "Protect one project block.",
-  [SessionMode.CREATIVE]: "Start one clean session.",
+  [SessionMode.STUDY]: 'Start one study block.',
+  [SessionMode.LIGHT_FOCUS]: 'Start one focused session.',
+  [SessionMode.DEEP_WORK]: 'Protect one project block.',
+  [SessionMode.CREATIVE]: 'Start one clean session.',
 };
 
 export function FirstSessionSetupCard({
@@ -39,7 +39,7 @@ export function FirstSessionSetupCard({
   };
 
   const laneCopy =
-    MODE_LABELS[personalization.defaultMode] ?? "Start one focused session.";
+    MODE_LABELS[personalization.defaultMode] ?? 'Start one focused session.';
 
   return (
     <Box px="lg" mt="md">

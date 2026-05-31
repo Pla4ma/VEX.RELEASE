@@ -7,12 +7,12 @@ export interface ComboMeterProps {
 }
 
 export type ComboTier =
-  | "NONE"
-  | "BRONZE"
-  | "SILVER"
-  | "GOLD"
-  | "PLATINUM"
-  | "DIAMOND";
+  | 'NONE'
+  | 'BRONZE'
+  | 'SILVER'
+  | 'GOLD'
+  | 'PLATINUM'
+  | 'DIAMOND';
 
 export interface ComboTierConfig {
   minCombo: number;
@@ -20,5 +20,5 @@ export interface ComboTierConfig {
   color: string;
   emoji: string;
   multiplier: number;
-  animation: "pulse" | "shake" | "rainbow";
+  animation: 'pulse' | 'shake' | 'rainbow';
 }

@@ -1,11 +1,11 @@
 /**
  * Tests for addMemoryFromRecall service
  */
-import { addMemoryFromRecall } from "../service";
+import { addMemoryFromRecall } from '../service';
 
 const mockStore = new Map<string, string>();
 
-jest.mock("react-native-mmkv", () => ({
+jest.mock('react-native-mmkv', () => ({
   MMKV: class MockMMKV {
     getString(key: string): string | undefined {
       return mockStore.get(key);
@@ -25,34 +25,34 @@ jest.mock("react-native-mmkv", () => ({
   },
 }));
 
-const userId = "test-user-mc";
+const userId = 'test-user-mc';
 
-describe("addMemoryFromRecall", () => {
+describe('addMemoryFromRecall', () => {
   afterEach(() => {
     mockStore.clear();
   });
 
-  it("includes hint when provided", async () => {
+  it('includes hint when provided', async () => {
     const mc = await addMemoryFromRecall({
-      prompt: "What is photosynthesis?",
-      answerHint: "Light energy conversion",
-      recallId: "recall-1",
+      prompt: 'What is photosynthesis?',
+      answerHint: 'Light energy conversion',
+      recallId: 'recall-1',
       userId,
     });
     expect(mc).not.toBeNull();
-    expect(mc!.content).toContain("photosynthesis");
-    expect(mc!.content).toContain("Light energy conversion");
-    expect(mc!.source).toBe("recall");
+    expect(mc!.content).toContain('photosynthesis');
+    expect(mc!.content).toContain('Light energy conversion');
+    expect(mc!.source).toBe('recall');
   });
 
-  it("omits hint section when answerHint is null", async () => {
+  it('omits hint section when answerHint is null', async () => {
     const mc = await addMemoryFromRecall({
-      prompt: "What is DNA?",
+      prompt: 'What is DNA?',
       answerHint: null,
-      recallId: "recall-2",
+      recallId: 'recall-2',
       userId,
     });
-    expect(mc!.content).not.toContain("Hint:");
-    expect(mc!.content).toContain("DNA");
+    expect(mc!.content).not.toContain('Hint:');
+    expect(mc!.content).toContain('DNA');
   });
 });

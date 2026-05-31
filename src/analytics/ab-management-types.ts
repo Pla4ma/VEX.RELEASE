@@ -1,4 +1,4 @@
-import type { Experiment } from "./ab-types";
+import type { Experiment } from './ab-types';
 
 export interface ExperimentStatsResult {
   totalAssignments: number;

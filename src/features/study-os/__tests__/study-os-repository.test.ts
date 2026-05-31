@@ -4,14 +4,14 @@
  * Covers: listStoredStudyPlans, upsertStoredStudyPlan
  */
 
-import { StudyPlanSchema } from "../schemas";
-import { listStoredStudyPlans, upsertStoredStudyPlan } from "../repository";
+import { StudyPlanSchema } from '../schemas';
+import { listStoredStudyPlans, upsertStoredStudyPlan } from '../repository';
 
 // ─── Mock external dependencies ──────────────────────────────────
 
 const mockStore = new Map<string, string>();
 
-jest.mock("react-native-mmkv", () => ({
+jest.mock('react-native-mmkv', () => ({
   MMKV: class MockMMKV {
     getString(key: string): string | undefined {
       return mockStore.get(key);
@@ -31,74 +31,74 @@ jest.mock("react-native-mmkv", () => ({
   },
 }));
 
-jest.mock("../../../session/modes", () => ({
+jest.mock('../../../session/modes', () => ({
   SessionMode: {
-    STUDY: "STUDY",
-    FOCUS: "FOCUS",
+    STUDY: 'STUDY',
+    FOCUS: 'FOCUS',
   },
 }));
 
-jest.mock("../../session-start/service", () => ({
+jest.mock('../../session-start/service', () => ({
   buildLaneSessionBrief: jest.fn((input: { durationSeconds: number; lane: string }) => ({
     durationSeconds: input.durationSeconds,
     lane: input.lane,
-    mode: "study",
+    mode: 'study',
   })),
 }));
 
 // ─── Repository ──────────────────────────────────────────────────
 
-describe("Repository", () => {
+describe('Repository', () => {
   beforeEach(() => mockStore.clear());
 
-  it("listStoredStudyPlans returns empty array for new user", async () => {
-    const plans = await listStoredStudyPlans("new-user");
+  it('listStoredStudyPlans returns empty array for new user', async () => {
+    const plans = await listStoredStudyPlans('new-user');
     expect(plans).toEqual([]);
   });
 
-  it("upsertStoredStudyPlan stores and retrieves plan", async () => {
+  it('upsertStoredStudyPlan stores and retrieves plan', async () => {
     const plan = StudyPlanSchema.parse({
       blocks: [
-        { estimatedMinutes: 25, id: "b1", objective: "Learn X", priority: "medium", status: "not_started", studyPlanId: "p1", title: "Block 1" },
+        { estimatedMinutes: 25, id: 'b1', objective: 'Learn X', priority: 'medium', status: 'not_started', studyPlanId: 'p1', title: 'Block 1' },
       ],
       createdAt: 100,
       deadlineAt: null,
-      id: "p1",
+      id: 'p1',
       reviewItems: [],
-      source: { createdAt: 100, extractedTextStatus: "none", id: "s1", title: "Test", type: "manual", userId: "user-1" },
-      status: "active",
-      title: "Test Plan",
-      userId: "user-1",
+      source: { createdAt: 100, extractedTextStatus: 'none', id: 's1', title: 'Test', type: 'manual', userId: 'user-1' },
+      status: 'active',
+      title: 'Test Plan',
+      userId: 'user-1',
     });
     await upsertStoredStudyPlan(plan);
-    const plans = await listStoredStudyPlans("user-1");
+    const plans = await listStoredStudyPlans('user-1');
     expect(plans).toHaveLength(1);
-    expect(plans[0]!.id).toBe("p1");
-    expect(plans[0]!.title).toBe("Test Plan");
+    expect(plans[0]!.id).toBe('p1');
+    expect(plans[0]!.title).toBe('Test Plan');
   });
 
-  it("upsert updates existing plan with same id", async () => {
+  it('upsert updates existing plan with same id', async () => {
     const plan1 = StudyPlanSchema.parse({
       blocks: [],
       createdAt: 100,
       deadlineAt: null,
-      id: "p1",
+      id: 'p1',
       reviewItems: [],
-      source: { createdAt: 100, extractedTextStatus: "none", id: "s1", title: "T", type: "manual", userId: "user-2" },
-      status: "active",
-      title: "Original",
-      userId: "user-2",
+      source: { createdAt: 100, extractedTextStatus: 'none', id: 's1', title: 'T', type: 'manual', userId: 'user-2' },
+      status: 'active',
+      title: 'Original',
+      userId: 'user-2',
     });
     await upsertStoredStudyPlan(plan1);
 
     const plan2 = StudyPlanSchema.parse({
       ...plan1,
-      title: "Updated",
+      title: 'Updated',
     });
     await upsertStoredStudyPlan(plan2);
 
-    const plans = await listStoredStudyPlans("user-2");
+    const plans = await listStoredStudyPlans('user-2');
     expect(plans).toHaveLength(1);
-    expect(plans[0]!.title).toBe("Updated");
+    expect(plans[0]!.title).toBe('Updated');
   });
 });

@@ -1,10 +1,10 @@
-import React, { useCallback } from "react";
-import { Pressable } from "react-native";
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import type { ModeCompletionSurface } from "../schemas";
-import { useModeCompletion } from "../hooks";
-import type { Lane } from "../../lane-engine/types";
+import React, { useCallback } from 'react';
+import { Pressable } from 'react-native';
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import type { ModeCompletionSurface } from '../schemas';
+import { useModeCompletion } from '../hooks';
+import type { Lane } from '../../lane-engine/types';
 
 interface ModeCompletionSurfaceProps {
   lane: Lane | null | undefined;
@@ -80,7 +80,7 @@ export function ModeCompletionSurface({
           accessibilityLabel={surface.secondaryHint}
           accessibilityRole="button"
           accessibilityHint="Tap for next action suggestion"
-          style={{ minHeight: 44, justifyContent: "center" }}
+          style={{ minHeight: 44, justifyContent: 'center' }}
           disabled={!onSecondaryAction}
         >
           <Box alignItems="center" gap="xs">

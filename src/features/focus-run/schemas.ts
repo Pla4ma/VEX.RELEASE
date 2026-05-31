@@ -1,38 +1,38 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 // ---------------------------------------------------------------------------
 // Enums
 // ---------------------------------------------------------------------------
 
 export const FocusRunEventTypeSchema = z.enum([
-  "run_started",
-  "run_milestone",
-  "recovery_win",
-  "clean_start",
-  "abandoned_run",
-  "reflection_upgrade",
-  "blocker_detected",
-  "run_completed",
+  'run_started',
+  'run_milestone',
+  'recovery_win',
+  'clean_start',
+  'abandoned_run',
+  'reflection_upgrade',
+  'blocker_detected',
+  'run_completed',
 ]);
 
 export const FocusRunStatusSchema = z.enum([
-  "active",
-  "completed",
-  "abandoned",
+  'active',
+  'completed',
+  'abandoned',
 ]);
 
 export const BlockerArchetypeSchema = z.enum([
-  "distraction_loop",
-  "delayed_start",
-  "unclear_scope",
-  "over_prep",
-  "context_switching",
-  "deadline_pressure",
-  "blank_start",
-  "avoidant_pattern",
+  'distraction_loop',
+  'delayed_start',
+  'unclear_scope',
+  'over_prep',
+  'context_switching',
+  'deadline_pressure',
+  'blank_start',
+  'avoidant_pattern',
 ]);
 
-export const FocusRunGradeSchema = z.enum(["S", "A", "B", "C", "D"]);
+export const FocusRunGradeSchema = z.enum(['S', 'A', 'B', 'C', 'D']);
 
 // ---------------------------------------------------------------------------
 // Focus Run

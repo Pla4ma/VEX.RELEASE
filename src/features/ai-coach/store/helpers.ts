@@ -4,8 +4,8 @@
  * Utility functions for working with coach state.
  */
 
-import type { CoachStore } from "./types";
-import type { CoachMessage } from "../schemas";
+import type { CoachStore } from './types';
+import type { CoachMessage } from '../schemas';
 
 /**
  * Check if a message should be shown (not muted, not dismissed)

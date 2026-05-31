@@ -33,7 +33,7 @@ export {
   type CoachPersonaId,
   type CoachRecommendationType,
   type UrgencyLevel,
-} from "./services/CoachRecommendationService";
+} from './services/CoachRecommendationService';
 
 export {
   generateMessage,
@@ -41,7 +41,7 @@ export {
   activateComeback,
   detectStreakRisk,
   processBehaviorSignal,
-} from "./pipeline";
+} from './pipeline';
 
 // Phase 2.3 - New Interventions
 export {
@@ -55,19 +55,19 @@ export {
   type MomentumBuildingInput,
   type ComebackReadyInput,
   type StudyPlanCompleteInput,
-} from "./intervention-service";
+} from './intervention-service';
 
 export {
   markMessageAction,
   generatePerformanceSummary,
-} from "./message-generator";
+} from './message-generator';
 
 // Repository exports for direct database operations
 export {
   markMessageRead,
   dismissMessage,
   fetchRecentMessages,
-} from "./repository";
+} from './repository';
 
 export {
   // Session Analyzer
@@ -75,7 +75,7 @@ export {
   createRecommendation,
   generateSessionSummary,
   suggestChallenges,
-} from "./session-analyzer";
+} from './session-analyzer';
 
 export {
   // Persona Manager
@@ -86,7 +86,7 @@ export {
   updateCoachState as transitionState,
   updateCoachPreferences,
   DEFAULT_PERSONA_ID,
-} from "./persona-manager";
+} from './persona-manager';
 
 export {
   // Reminder Scheduler
@@ -95,14 +95,14 @@ export {
   trackComebackSession,
   adjustDifficulty,
   COMEBACK_BONUS_MULTIPLIER,
-} from "./reminder-scheduler";
+} from './reminder-scheduler';
 
 // Phase 7 - Input Contract Integration
 import {
   validateCoachInput,
   createFallbackInsight,
   type CoachInputContract,
-} from "./input-contract";
+} from './input-contract';
 
 export {
   validateCoachInput,
@@ -110,12 +110,12 @@ export {
   containsForbiddenPII,
   CoachInputContractSchema,
   type CoachInputContract,
-} from "./input-contract";
+} from './input-contract';
 
 // Service getter for compatibility with hooks expecting service pattern
-import type { CoachRecommendation } from "./services/CoachRecommendationService";
-import { fetchActiveRecommendations as fetchActiveRecommendationsRepository } from "./repository";
-import type { SessionRecommendation } from "./schemas";
+import type { CoachRecommendation } from './services/CoachRecommendationService';
+import { fetchActiveRecommendations as fetchActiveRecommendationsRepository } from './repository';
+import type { SessionRecommendation } from './schemas';
 
 export async function fetchActiveRecommendations(
   userId: string,
@@ -145,7 +145,7 @@ export interface CoachService {
 
 const coachServiceInstance: CoachService = {
   createRecommendation: async () => null,
-  generateMessage: async () => "",
+  generateMessage: async () => '',
   getSessionAdvice: async () => null,
   validateInput: validateCoachInput,
   canCoach: createFallbackInsight,

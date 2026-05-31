@@ -1,21 +1,21 @@
-import { jest } from "@jest/globals";
-import { SessionRewardIntegration } from "../../SessionRewardIntegration";
-import { eventBus } from "../../../../events";
-import type { SessionSummary } from "../../../types";
+import { jest } from '@jest/globals';
+import { SessionRewardIntegration } from '../../SessionRewardIntegration';
+import { eventBus } from '../../../../events';
+import type { SessionSummary } from '../../../types';
 
-jest.mock("../../../../events");
+jest.mock('../../../../events');
 
 export { SessionRewardIntegration, eventBus };
 export type { SessionSummary };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 export function createMockSummary(
   overrides: Partial<SessionSummary> = {},
 ): any {
   return {
-    sessionId: "test-session",
-    userId: "test-user",
-    status: "COMPLETED",
+    sessionId: 'test-session',
+    userId: 'test-user',
+    status: 'COMPLETED',
     plannedDuration: 1500,
     actualDuration: 1500,
     effectiveDuration: 1500,

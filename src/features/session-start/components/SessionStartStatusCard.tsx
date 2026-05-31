@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react';
 
-import { Banner } from "../../../components/Banner";
-import { Box } from "../../../components/primitives/Box";
+import { Banner } from '../../../components/Banner';
+import { Box } from '../../../components/primitives/Box';
 
 type SessionStartStatusCardProps = {
   offlineMessage: string | null;

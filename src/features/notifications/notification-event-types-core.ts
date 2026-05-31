@@ -2,7 +2,7 @@ export interface BaseNotificationEvent {
   id: string;
   userId: string;
   notificationId?: string;
-  channelId?: "in_app" | "push" | "email" | "sms" | "webhook";
+  channelId?: 'in_app' | 'push' | 'email' | 'sms' | 'webhook';
   timestamp: Date;
   data: Record<string, unknown>;
   metadata: EventMetadata;
@@ -16,7 +16,7 @@ export interface EventMetadata {
   correlationId?: string;
 }
 export interface DeviceInfo {
-  type: "mobile" | "tablet" | "desktop" | "web";
+  type: 'mobile' | 'tablet' | 'desktop' | 'web';
   os: string;
   version: string;
   appVersion?: string;

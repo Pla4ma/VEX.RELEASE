@@ -1,11 +1,11 @@
-import React from "react";
-import Animated, { FadeInUp } from "react-native-reanimated";
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { Button } from "../../../components/primitives/Button";
-import { useTheme } from "../../../theme";
-import { launchColors } from "@theme/tokens/launch-colors";
-import { WeeklyReportStatsGrid } from "./WeeklyReportStatsGrid";
+import React from 'react';
+import Animated, { FadeInUp } from 'react-native-reanimated';
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { Button } from '../../../components/primitives/Button';
+import { useTheme } from '../../../theme';
+import { launchColors } from '@theme/tokens/launch-colors';
+import { WeeklyReportStatsGrid } from './WeeklyReportStatsGrid';
 
 export interface WeeklyReportCardProps {
   totalMinutes: number;
@@ -43,7 +43,7 @@ export function WeeklyReportCard({
 }: WeeklyReportCardProps): JSX.Element {
   const { theme } = useTheme();
   const isImprovement = comparison.changePercent >= 0;
-  const trendEmoji = isImprovement ? "📈" : "📉";
+  const trendEmoji = isImprovement ? '📈' : '📉';
   return (
     <Animated.View entering={FadeInUp.duration(400)}>
       <Box
@@ -66,10 +66,10 @@ export function WeeklyReportCard({
             Your Week in Focus
           </Text>
           <Text variant="caption" color="text.secondary">
-            {new Date().toLocaleDateString("en-US", {
-              month: "long",
-              day: "numeric",
-            })}{" "}
+            {new Date().toLocaleDateString('en-US', {
+              month: 'long',
+              day: 'numeric',
+            })}{' '}
             - Weekly Report
           </Text>
         </Box>
@@ -107,15 +107,15 @@ export function WeeklyReportCard({
           <Box>
             <Text
               variant="body"
-              color={isImprovement ? "success.DEFAULT" : "warning.DEFAULT"}
+              color={isImprovement ? 'success.DEFAULT' : 'warning.DEFAULT'}
               fontWeight="700"
             >
-              {isImprovement ? "+" : ""}
+              {isImprovement ? '+' : ''}
               {comparison.changePercent}% vs last week
             </Text>
             <Text variant="caption" color="text.secondary">
-              {Math.abs(comparison.changeMinutes)} minutes{" "}
-              {isImprovement ? "more" : "less"}
+              {Math.abs(comparison.changeMinutes)} minutes{' '}
+              {isImprovement ? 'more' : 'less'}
             </Text>
           </Box>
         </Box>

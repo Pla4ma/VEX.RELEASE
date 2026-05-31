@@ -1,13 +1,13 @@
-import React from "react";
-import { Box, Text, Stack } from "@components/primitives";
-import { useTheme } from "../../../theme";
-import type { MonthlyFocusReportSummary } from "../types";
+import React from 'react';
+import { Box, Text, Stack } from '@components/primitives';
+import { useTheme } from '../../../theme';
+import type { MonthlyFocusReportSummary } from '../types';
 import {
   formatTime,
   ScoreCard,
   PatternBar,
   PremiumLock,
-} from "./report-content-helpers";
+} from './report-content-helpers';
 
 export { formatTime, ScoreCard, PatternBar, PremiumLock };
 
@@ -29,7 +29,7 @@ export function ReportContent({
     report.scoreDelta >= 0
       ? theme.colors.success.DEFAULT
       : theme.colors.error.DEFAULT;
-  const deltaPrefix = report.scoreDelta >= 0 ? "+" : "";
+  const deltaPrefix = report.scoreDelta >= 0 ? '+' : '';
 
   return (
     <Stack gap="md" testID="report-content">
@@ -37,12 +37,12 @@ export function ReportContent({
         <Text variant="h4" color="textSecondary">
           {new Date(
             report.monthStartScore > 0 ? Date.now() : Date.now(),
-          ).toLocaleDateString("en-US", { month: "long", year: "numeric" })}
+          ).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
         </Text>
         <Text
           variant="display"
           color="text"
-          style={{ fontWeight: "700", marginTop: theme.spacing[1] }}
+          style={{ fontWeight: '700', marginTop: theme.spacing[1] }}
         >
           {report.monthEndScore}
         </Text>
@@ -53,7 +53,7 @@ export function ReportContent({
           variant="body"
           style={{
             color: deltaColor,
-            fontWeight: "600",
+            fontWeight: '600',
             marginTop: theme.spacing[2],
           }}
         >

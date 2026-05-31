@@ -1,23 +1,23 @@
 export interface SessionMetaEventDefinitions {
-  "session:streak:maintained": {
+  'session:streak:maintained': {
     sessionId: string;
     userId: string;
     streakDays: number;
     timestamp: number;
   };
-  "session:streak:broken": {
+  'session:streak:broken': {
     sessionId: string;
     userId: string;
     previousStreak: number;
     timestamp: number;
   };
-  "session:streak:protected": {
+  'session:streak:protected': {
     sessionId: string;
     userId: string;
     protectionType: string;
     timestamp: number;
   };
-  "session:rewards:calculated": {
+  'session:rewards:calculated': {
     sessionId: string;
     userId: string;
     rewards: unknown;
@@ -25,35 +25,35 @@ export interface SessionMetaEventDefinitions {
     milestoneReached: string | null;
     timestamp: number;
   };
-  "session:rewards:granted": {
+  'session:rewards:granted': {
     sessionId: string;
     userId: string;
     rewards: unknown;
     timestamp: number;
   };
-  "session:notification": {
+  'session:notification': {
     sessionId: string;
     type: string;
     title: string;
     body: string;
-    priority: "low" | "normal" | "high" | "urgent";
+    priority: 'low' | 'normal' | 'high' | 'urgent';
     data?: Record<string, unknown>;
   };
-  "session:analytics:milestone": {
+  'session:analytics:milestone': {
     sessionId: string;
     userId: string;
     milestone: string;
     value: number;
     timestamp: number;
   };
-  "session:analytics:engagement": {
+  'session:analytics:engagement': {
     sessionId: string;
     userId: string;
     metric: string;
     value: number;
     timestamp: number;
   };
-  "sessions:completed": {
+  'sessions:completed': {
     sessionId: string;
     userId: string;
     summary?: unknown;

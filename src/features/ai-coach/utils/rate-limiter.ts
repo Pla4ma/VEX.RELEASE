@@ -1,4 +1,4 @@
-import { sleep } from "./retry-core";
+import { sleep } from './retry-core';
 
 export class RateLimiter {
   private requests: number[] = [];

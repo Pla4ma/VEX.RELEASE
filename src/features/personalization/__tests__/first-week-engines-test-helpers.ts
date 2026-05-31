@@ -1,7 +1,7 @@
 import type {
   SessionProfile,
   FirstWeekResolverInput,
-} from "../first-week-schemas";
+} from '../first-week-schemas';
 
 export function baseProfile(overrides: Partial<SessionProfile> = {}): SessionProfile {
   return {
@@ -20,7 +20,7 @@ export function baseInput(
   overrides: Partial<FirstWeekResolverInput> = {},
 ): FirstWeekResolverInput {
   return {
-    behaviorStats: { bossEngagement: "none", studyUsageRatio: 0 },
+    behaviorStats: { bossEngagement: 'none', studyUsageRatio: 0 },
     completedSessions: 3,
     daysSinceLastSession: null,
     daysSinceOnboarding: 3,
@@ -30,9 +30,9 @@ export function baseInput(
       social: false,
       study: true,
     },
-    motivationStyle: "calm",
-    premiumState: "unavailable",
-    primaryGoal: "focus",
+    motivationStyle: 'calm',
+    premiumState: 'unavailable',
+    primaryGoal: 'focus',
     ...overrides,
   };
 }

@@ -1,34 +1,34 @@
-import React, { useEffect } from "react";
-import { View } from "react-native";
+import React, { useEffect } from 'react';
+import { View } from 'react-native';
 import Animated, {
   cancelAnimation,
   useAnimatedStyle,
   useSharedValue,
   withRepeat,
   withTiming,
-} from "react-native-reanimated";
+} from 'react-native-reanimated';
 
-import { Text } from "./primitives/Text";
-import { useTheme } from "../theme";
-import { createSheet } from "@/shared/ui/create-sheet";
-import { launchColors } from "@theme/tokens/launch-colors";
-import { useReducedMotion } from "@/hooks";
+import { Text } from './primitives/Text';
+import { useTheme } from '../theme';
+import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
+import { useReducedMotion } from '@/hooks';
 
 type StreakBadgeProps = {
   days: number;
   isAtRisk: boolean;
-  variant?: "default" | "glass";
+  variant?: 'default' | 'glass';
 };
 
 export function StreakBadge({
   days,
   isAtRisk,
-  variant = "default",
+  variant = 'default',
 }: StreakBadgeProps): JSX.Element {
   const { theme } = useTheme();
   const { isReducedMotion } = useReducedMotion();
   const pulse = useSharedValue(0);
-  const isGlass = variant === "glass";
+  const isGlass = variant === 'glass';
 
   useEffect(() => {
     if (isAtRisk && days > 0) {
@@ -112,7 +112,7 @@ export function StreakBadge({
 
 const styles = createSheet({
   badge: {
-    alignSelf: "flex-start",
+    alignSelf: 'flex-start',
     borderRadius: 999,
     borderWidth: 1.5,
     elevation: 2,

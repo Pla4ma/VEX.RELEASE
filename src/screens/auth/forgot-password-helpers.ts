@@ -1,6 +1,6 @@
-import { forgotPasswordSchema } from "./schemas";
-import { resetPassword } from "../../services/supabaseAuth";
-import { captureException } from "../../config/sentry";
+import { forgotPasswordSchema } from './schemas';
+import { resetPassword } from '../../services/supabaseAuth';
+import { captureException } from '../../config/sentry';
 
 export interface ForgotPasswordResult {
   success: boolean;
@@ -12,7 +12,7 @@ export async function submitForgotPassword(
 ): Promise<ForgotPasswordResult> {
   const result = forgotPasswordSchema.safeParse({ email });
   if (!result.success) {
-    return { success: false, error: "Please enter a valid email address" };
+    return { success: false, error: 'Please enter a valid email address' };
   }
 
   try {
@@ -25,8 +25,8 @@ export async function submitForgotPassword(
     return { success: true };
   } catch (err) {
     captureException(err instanceof Error ? err : new Error(String(err)), {
-      tags: { feature: "forgot-password" },
+      tags: { feature: 'forgot-password' },
     });
-    return { success: false, error: "Something went wrong. Please try again." };
+    return { success: false, error: 'Something went wrong. Please try again.' };
   }
 }

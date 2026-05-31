@@ -1,6 +1,6 @@
-import { useAuthStore } from "./authStore";
-import { useAppStore } from "./appStore";
-import { useUIStore } from "./uiStore";
+import { useAuthStore } from './authStore';
+import { useAppStore } from './appStore';
+import { useUIStore } from './uiStore';
 
 export { useAuthStore, useAppStore, useUIStore };
 

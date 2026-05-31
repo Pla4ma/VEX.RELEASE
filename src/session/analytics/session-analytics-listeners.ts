@@ -1,8 +1,8 @@
-import { eventBus } from "../../events";
-import { capture } from "../../shared/analytics/analytics-service";
-import { SessionEvents } from "../../shared/analytics/analytics-events";
-import { getOrchestratorHandlesCompletion } from "./SessionAnalytics";
-import { subscribeErrorEventListeners } from "./session-analytics-listener-helpers";
+import { eventBus } from '../../events';
+import { capture } from '../../shared/analytics/analytics-service';
+import { SessionEvents } from '../../shared/analytics/analytics-events';
+import { getOrchestratorHandlesCompletion } from './SessionAnalytics';
+import { subscribeErrorEventListeners } from './session-analytics-listener-helpers';
 
 type TrackFunction = (
   eventName: string,
@@ -16,16 +16,16 @@ export function setupAnalyticsEventListeners(
   let sessionDuration = 0;
   const unsubs: Array<() => void> = [];
 
-  unsubs.push(eventBus.subscribe("session:created", (data) => {
+  unsubs.push(eventBus.subscribe('session:created', (data) => {
     if (!data) { return; }
     const configObj =
-      data.config && typeof data.config === "object"
+      data.config && typeof data.config === 'object'
         ? (data.config as Record<string, unknown>)
         : {};
-    if (typeof configObj.duration === "number") {
+    if (typeof configObj.duration === 'number') {
       sessionDuration = configObj.duration;
     }
-    track("session_created", {
+    track('session_created', {
       sessionId: data.sessionId,
       userId: data.userId,
       config: data.config,
@@ -33,51 +33,51 @@ export function setupAnalyticsEventListeners(
     });
   }));
 
-  unsubs.push(eventBus.subscribe("session:started", (data) => {
+  unsubs.push(eventBus.subscribe('session:started', (data) => {
     if (!data) { return; }
     capture(SessionEvents.SESSION_STARTED, {
       session_id: data.sessionId,
       user_id: userId,
-      session_type: "focus",
+      session_type: 'focus',
       started_at: data.startedAt,
     });
-    track("session_started", {
+    track('session_started', {
       sessionId: data.sessionId,
       startedAt: data.startedAt,
       phase: data.phase,
     });
   }));
 
-  unsubs.push(eventBus.subscribe("session:completed", (data) => {
+  unsubs.push(eventBus.subscribe('session:completed', (data) => {
     if (!data) { return; }
     if (getOrchestratorHandlesCompletion()) { return; }
     const summary =
-      data.summary && typeof data.summary === "object"
+      data.summary && typeof data.summary === 'object'
         ? (data.summary as Record<string, unknown>)
         : {};
     const durationSeconds =
       data.duration ||
-      (typeof summary.effectiveDuration === "number"
+      (typeof summary.effectiveDuration === 'number'
         ? summary.effectiveDuration
         : 0);
     const completionPercentage =
-      typeof summary.completionPercentage === "number"
+      typeof summary.completionPercentage === 'number'
         ? summary.completionPercentage
         : 100;
     const xpEarned =
-      typeof summary.xpEarned === "number" ? summary.xpEarned : 0;
+      typeof summary.xpEarned === 'number' ? summary.xpEarned : 0;
     const coinsEarned =
-      typeof summary.coinsEarned === "number" ? summary.coinsEarned : 0;
+      typeof summary.coinsEarned === 'number' ? summary.coinsEarned : 0;
     capture(SessionEvents.SESSION_COMPLETED, {
       session_id: data.sessionId,
       user_id: data.userId,
       duration_seconds: durationSeconds,
       completion_percentage: completionPercentage,
-      session_type: "focus",
+      session_type: 'focus',
       xp_earned: xpEarned,
       coins_earned: coinsEarned,
     });
-    track("session_completed", {
+    track('session_completed', {
       sessionId: data.sessionId,
       userId: data.userId,
       summary: data.summary,
@@ -85,7 +85,7 @@ export function setupAnalyticsEventListeners(
     });
   }));
 
-  unsubs.push(eventBus.subscribe("session:abandoned", (data) => {
+  unsubs.push(eventBus.subscribe('session:abandoned', (data) => {
     if (!data) { return; }
     const elapsedSeconds = data.elapsedTime || 0;
     const totalDuration = sessionDuration;
@@ -96,12 +96,12 @@ export function setupAnalyticsEventListeners(
     capture(SessionEvents.SESSION_ABANDONED, {
       session_id: data.sessionId,
       user_id: data.userId,
-      reason: data.reason || "unknown",
+      reason: data.reason || 'unknown',
       elapsed_seconds: elapsedSeconds,
       completion_percentage: completionPercentage,
       purity_score: 0,
     });
-    track("session_abandoned", {
+    track('session_abandoned', {
       sessionId: data.sessionId,
       userId: data.userId,
       reason: data.reason,
@@ -110,18 +110,18 @@ export function setupAnalyticsEventListeners(
     });
   }));
 
-  unsubs.push(eventBus.subscribe("session:interruption", (data) => {
+  unsubs.push(eventBus.subscribe('session:interruption', (data) => {
     if (!data) { return; }
-    track("session_interrupted", {
+    track('session_interrupted', {
       sessionId: data.sessionId,
       userId: data.userId,
       interruption: data.interruption,
     });
   }));
 
-  unsubs.push(eventBus.subscribe("session:recovery:successful", (data) => {
+  unsubs.push(eventBus.subscribe('session:recovery:successful', (data) => {
     if (!data) { return; }
-    track("session_recovered", {
+    track('session_recovered', {
       sessionId: data.sessionId,
       userId: data.userId,
       recoveredAt: data.recoveredAt,
@@ -129,18 +129,18 @@ export function setupAnalyticsEventListeners(
     });
   }));
 
-  unsubs.push(eventBus.subscribe("session:anticheat:flag", (data) => {
+  unsubs.push(eventBus.subscribe('session:anticheat:flag', (data) => {
     if (!data) { return; }
-    track("anti_cheat_flag", {
+    track('anti_cheat_flag', {
       sessionId: data.sessionId,
       userId: data.userId,
       flag: data.flag,
     });
   }));
 
-  unsubs.push(eventBus.subscribe("session:phase:changed", (data) => {
+  unsubs.push(eventBus.subscribe('session:phase:changed', (data) => {
     if (!data) { return; }
-    track("phase_transition", {
+    track('phase_transition', {
       sessionId: data.sessionId,
       previousPhase: data.previousPhase,
       newPhase: data.newPhase,
@@ -148,9 +148,9 @@ export function setupAnalyticsEventListeners(
     });
   }));
 
-  unsubs.push(eventBus.subscribe("session:tick", (data) => {
+  unsubs.push(eventBus.subscribe('session:tick', (data) => {
     if (!data) { return; }
-    track("session_tick", {
+    track('session_tick', {
       sessionId: data.sessionId,
       elapsed: data.elapsed,
       remaining: data.remaining,
@@ -159,9 +159,9 @@ export function setupAnalyticsEventListeners(
     });
   }));
 
-  unsubs.push(eventBus.subscribe("session:rewards:granted", (data) => {
+  unsubs.push(eventBus.subscribe('session:rewards:granted', (data) => {
     if (!data) { return; }
-    track("rewards_earned", {
+    track('rewards_earned', {
       sessionId: data.sessionId,
       userId: data.userId,
       rewards: data.rewards,

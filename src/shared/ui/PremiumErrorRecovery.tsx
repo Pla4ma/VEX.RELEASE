@@ -1,28 +1,28 @@
-import React from "react";
-import { View, Text } from "react-native";
+import React from 'react';
+import { View, Text } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withTiming,
   withSequence,
   withSpring,
-} from "react-native-reanimated";
-import { useTheme } from "@/theme";
-import * as Sentry from "@sentry/react-native";
-import { styles } from "./PremiumErrorRecovery.styles";
+} from 'react-native-reanimated';
+import { useTheme } from '@/theme';
+import * as Sentry from '@sentry/react-native';
+import { styles } from './PremiumErrorRecovery.styles';
 import {
   type PremiumErrorRecoveryProps,
   DEFAULT_RETRY_CONFIG,
   ERROR_MESSAGES,
-} from "./PremiumErrorRecovery-helpers";
-import { ResolvedSuccessCard } from "./ResolvedSuccessCard";
-import { ErrorActionButtons } from "./ErrorActionButtons";
+} from './PremiumErrorRecovery-helpers';
+import { ResolvedSuccessCard } from './ResolvedSuccessCard';
+import { ErrorActionButtons } from './ErrorActionButtons';
 
-const SEVERITY_KEYS = ["high", "medium", "low"] as const;
+const SEVERITY_KEYS = ['high', 'medium', 'low'] as const;
 
 export const PremiumErrorRecovery: React.FC<PremiumErrorRecoveryProps> = ({
   error,
-  context = "general",
+  context = 'general',
   onRetry,
   onFallback,
   onDismiss,
@@ -41,7 +41,7 @@ export const PremiumErrorRecovery: React.FC<PremiumErrorRecoveryProps> = ({
   );
   const errorState = ERROR_MESSAGES[context] ?? ERROR_MESSAGES.general!;
   const errorMessage =
-    typeof error === "string" ? error : error.message || errorState.message;
+    typeof error === 'string' ? error : error.message || errorState.message;
 
   const shakeAnim = useSharedValue(0);
   const scaleAnim = useSharedValue(1);
@@ -69,7 +69,7 @@ export const PremiumErrorRecovery: React.FC<PremiumErrorRecoveryProps> = ({
   }, [errorState.severity, theme]);
 
   const handleRetry = React.useCallback(async () => {
-    if (isRetrying || !onRetry) return;
+    if (isRetrying || !onRetry) {return;}
     setIsRetrying(true);
     try {
       await onRetry();
@@ -90,7 +90,7 @@ export const PremiumErrorRecovery: React.FC<PremiumErrorRecoveryProps> = ({
         setNextRetryIn(delay);
         setTimeout(() => {
           setNextRetryIn(null);
-          if (autoRetry) handleRetry();
+          if (autoRetry) {handleRetry();}
         }, delay);
       }
       Sentry.captureException(
@@ -99,7 +99,7 @@ export const PremiumErrorRecovery: React.FC<PremiumErrorRecoveryProps> = ({
           : new Error(String(retryError)),
         {
           tags: {
-            feature: "premium-error-recovery",
+            feature: 'premium-error-recovery',
             context,
             retryCount: String(newCount),
           },

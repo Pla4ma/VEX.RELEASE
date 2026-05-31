@@ -2,8 +2,8 @@ import type {
   HomeContextSnapshot,
   HomePrimaryPriority,
   ProductContext,
-} from "./priority-schemas";
-import type { FeatureAccessMap } from "../liveops-config";
+} from './priority-schemas';
+import type { FeatureAccessMap } from '../liveops-config';
 import {
   checkStreakCritical,
   checkCompanionPromise,
@@ -11,11 +11,11 @@ import {
   checkStreakAtRisk,
   checkRecommendedSession,
   checkDefaultSession,
-} from "./priority-checkers-basic";
+} from './priority-checkers-basic';
 import {
   checkChallengeNearDone,
   checkBossActive,
-} from "./priority-checkers-gated";
+} from './priority-checkers-gated';
 
 export {
   checkStreakCritical,
@@ -24,12 +24,12 @@ export {
   checkStreakAtRisk,
   checkRecommendedSession,
   checkDefaultSession,
-} from "./priority-checkers-basic";
+} from './priority-checkers-basic';
 
 export {
   checkChallengeNearDone,
   checkBossActive,
-} from "./priority-checkers-gated";
+} from './priority-checkers-gated';
 
 export function getPriorityCandidates(
   snapshot: HomeContextSnapshot,

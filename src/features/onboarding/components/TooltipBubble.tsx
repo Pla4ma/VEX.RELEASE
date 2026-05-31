@@ -1,5 +1,5 @@
-import React from "react";
-import { Pressable, Dimensions } from "react-native";
+import React from 'react';
+import { Pressable, Dimensions } from 'react-native';
 import Animated, {
   FadeIn,
   FadeOut,
@@ -7,23 +7,23 @@ import Animated, {
   withSpring,
   withSequence,
   withTiming,
-} from "react-native-reanimated";
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
+} from 'react-native-reanimated';
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
 
-const { width: SCREEN_WIDTH } = Dimensions.get("window");
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 export interface Tooltip {
   id: number;
   title: string;
   message: string;
-  target: "streak" | "boss" | "challenges";
+  target: 'streak' | 'boss' | 'challenges';
   position: {
     x: number;
     y: number;
   };
-  arrowDirection: "up" | "down" | "left" | "right";
+  arrowDirection: 'up' | 'down' | 'left' | 'right';
 }
 
 export function TooltipBubble({
@@ -58,7 +58,7 @@ export function TooltipBubble({
       exiting={FadeOut.duration(200)}
       style={[
         {
-          position: "absolute",
+          position: 'absolute',
           left: Math.min(tooltip.position.x, SCREEN_WIDTH - 280),
           top: tooltip.position.y,
           width: 260,
@@ -112,27 +112,27 @@ export function TooltipBubble({
 
         <Box
           style={{
-            position: "absolute",
-            [tooltip.arrowDirection === "up" ? "bottom" : "top"]: -10,
-            left: "50%",
+            position: 'absolute',
+            [tooltip.arrowDirection === 'up' ? 'bottom' : 'top']: -10,
+            left: '50%',
             marginLeft: -10,
             width: 0,
             height: 0,
-            backgroundColor: "transparent",
-            borderStyle: "solid",
+            backgroundColor: 'transparent',
+            borderStyle: 'solid',
             borderLeftWidth: 10,
             borderRightWidth: 10,
-            borderTopWidth: tooltip.arrowDirection === "up" ? 0 : 10,
-            borderBottomWidth: tooltip.arrowDirection === "up" ? 10 : 0,
-            borderLeftColor: "transparent",
-            borderRightColor: "transparent",
+            borderTopWidth: tooltip.arrowDirection === 'up' ? 0 : 10,
+            borderBottomWidth: tooltip.arrowDirection === 'up' ? 10 : 0,
+            borderLeftColor: 'transparent',
+            borderRightColor: 'transparent',
             borderTopColor:
-              tooltip.arrowDirection === "up"
+              tooltip.arrowDirection === 'up'
                 ? theme.colors.primary[500]
-                : "transparent",
+                : 'transparent',
             borderBottomColor:
-              tooltip.arrowDirection === "up"
-                ? "transparent"
+              tooltip.arrowDirection === 'up'
+                ? 'transparent'
                 : theme.colors.primary[500],
           }}
         />
@@ -159,7 +159,7 @@ export function TooltipOverlay({
       entering={FadeIn.duration(300)}
       exiting={FadeOut.duration(200)}
       style={{
-        position: "absolute",
+        position: 'absolute',
         top: 0,
         left: 0,
         right: 0,

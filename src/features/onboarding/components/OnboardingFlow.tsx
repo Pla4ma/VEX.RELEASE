@@ -1,11 +1,11 @@
-import React from "react";
-import { View, ActivityIndicator } from "react-native";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import { useOnboardingProgressState } from "../hooks";
-import { OnboardingNavigator } from "./OnboardingNavigator";
-import type { FocusGoal } from "../schemas";
-import { withScreenErrorBoundary } from "../../../shared/ui/components/ScreenErrorBoundary";
+import React from 'react';
+import { View, ActivityIndicator } from 'react-native';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import { useOnboardingProgressState } from '../hooks';
+import { OnboardingNavigator } from './OnboardingNavigator';
+import type { FocusGoal } from '../schemas';
+import { withScreenErrorBoundary } from '../../../shared/ui/components/ScreenErrorBoundary';
 interface OnboardingFlowProps {
   onStartSession: (config: {
     duration: number;
@@ -24,7 +24,7 @@ function NotificationPermissionScreen({
     userId: string;
   }> | null>(null);
   React.useEffect(() => {
-    import("../../../screens/onboarding/components/OnboardingNotificationPermissionCard")
+    import('../../../screens/onboarding/components/OnboardingNotificationPermissionCard')
       .then((mod) => {
         setNotificationCard(() => mod.OnboardingNotificationPermissionCard);
       })
@@ -34,14 +34,14 @@ function NotificationPermissionScreen({
   }, [onComplete]);
   if (!NotificationCard) {
     return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <ActivityIndicator />
       </View>
     );
   }
   return (
-    <View style={{ flex: 1, padding: 20, justifyContent: "center" }}>
-      <Text style={{ fontSize: 24, fontWeight: "bold", marginBottom: 16 }}>
+    <View style={{ flex: 1, padding: 20, justifyContent: 'center' }}>
+      <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 16 }}>
         Stay on Track
       </Text>
       <Text style={{ fontSize: 16, marginBottom: 24 }}>
@@ -84,7 +84,7 @@ function FirstResultScreen({
     onComplete: () => void;
   }> | null>(null);
   React.useEffect(() => {
-    import("./FirstResultScreen")
+    import('./FirstResultScreen')
       .then((mod) => {
         setFirstResult(
           () =>
@@ -113,7 +113,7 @@ function FirstResultScreen({
   }, [onComplete]);
   if (!FirstResult) {
     return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <ActivityIndicator />
       </View>
     );
@@ -129,7 +129,7 @@ function FirstResultScreen({
         pauseCount: 0,
         interruptionCount: 0,
         backgroundTimeSeconds: 20,
-        mode: "STARTER",
+        mode: 'STARTER',
         strictMode: false,
         isAbandoned: false,
       }}
@@ -147,7 +147,7 @@ export const OnboardingFlow = withScreenErrorBoundary(function _OnboardingFlow({
     useOnboardingProgressState();
   if (isLoading || !state) {
     return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <ActivityIndicator />
       </View>
     );
@@ -165,5 +165,5 @@ export const OnboardingFlow = withScreenErrorBoundary(function _OnboardingFlow({
       onBack={onBack}
     />
   );
-}, "Onboarding");
+}, 'Onboarding');
 export default OnboardingFlow;

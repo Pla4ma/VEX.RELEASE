@@ -5,25 +5,25 @@
  * Accepts canonical personalizationProfile and behaviorStats from
  * useHomeResolvedExperience — never derives profiles from guesses.
  */
-import { useMemo } from "react";
-import { decideHomeSurfaces } from "../../../features/home-experience/home-surface-decision";
-import type { HomeSurfaceMap } from "../../../features/home-experience/surface-decision-schemas";
-import type { FirstWeekExperience } from "../../../features/personalization/first-week-schemas";
-import type { FeatureAccessResult } from "../../../features/liveops-config";
-import type { LaneProfile } from "../../../features/lane-engine/types";
+import { useMemo } from 'react';
+import { decideHomeSurfaces } from '../../../features/home-experience/home-surface-decision';
+import type { HomeSurfaceMap } from '../../../features/home-experience/surface-decision-schemas';
+import type { FirstWeekExperience } from '../../../features/personalization/first-week-schemas';
+import type { FeatureAccessResult } from '../../../features/liveops-config';
+import type { LaneProfile } from '../../../features/lane-engine/types';
 
 interface UseHomeSurfaceMapInput {
   personalizationProfile: {
     motivationStyle: string;
     primaryGoal: string;
-    gamificationIntensity: "minimal" | "medium" | "strong";
+    gamificationIntensity: 'minimal' | 'medium' | 'strong';
     studyLayerName: string;
-    userStage: "new" | "activating" | "engaged" | "power";
+    userStage: 'new' | 'activating' | 'engaged' | 'power';
   };
   behaviorStats: {
     totalCompletedSessions: number;
     studyUsageRatio: number;
-    bossChallengeEngagement: "none" | "low" | "medium" | "high";
+    bossChallengeEngagement: 'none' | 'low' | 'medium' | 'high';
     coachInteractions: number;
     comebackSessions: number;
     ignoredFeatures: string[];
@@ -58,14 +58,14 @@ export function useHomeSurfaceMap(
     const fa = featureAccess.features;
 
     const degradedFeatures: Array<
-      "content_study" | "ai_coach_advanced" | "premium_paywall" | "boss_tab"
+      'content_study' | 'ai_coach_advanced' | 'premium_paywall' | 'boss_tab'
     > = [];
-    if (fa.content_study?.isDegraded) degradedFeatures.push("content_study");
+    if (fa.content_study?.isDegraded) {degradedFeatures.push('content_study');}
     if (fa.ai_coach_advanced?.isDegraded)
-      degradedFeatures.push("ai_coach_advanced");
+      {degradedFeatures.push('ai_coach_advanced');}
     if (fa.premium_paywall?.isDegraded)
-      degradedFeatures.push("premium_paywall");
-    if (fa.boss_tab?.isDegraded) degradedFeatures.push("boss_tab");
+      {degradedFeatures.push('premium_paywall');}
+    if (fa.boss_tab?.isDegraded) {degradedFeatures.push('boss_tab');}
 
     return decideHomeSurfaces({
       featureAvailability: {
@@ -76,37 +76,37 @@ export function useHomeSurfaceMap(
       },
       personalizationProfile: {
         motivationStyle:
-          safeStyle === "calm" ||
-          safeStyle === "friendly" ||
-          safeStyle === "coach_led" ||
-          safeStyle === "game_like" ||
-          safeStyle === "intense" ||
-          safeStyle === "study_focused" ||
-          safeStyle === "student"
+          safeStyle === 'calm' ||
+          safeStyle === 'friendly' ||
+          safeStyle === 'coach_led' ||
+          safeStyle === 'game_like' ||
+          safeStyle === 'intense' ||
+          safeStyle === 'study_focused' ||
+          safeStyle === 'student'
             ? (safeStyle as
-                | "calm"
-                | "friendly"
-                | "coach_led"
-                | "game_like"
-                | "intense"
-                | "study_focused"
-                | "student")
-            : "friendly",
+                | 'calm'
+                | 'friendly'
+                | 'coach_led'
+                | 'game_like'
+                | 'intense'
+                | 'study_focused'
+                | 'student')
+            : 'friendly',
         primaryGoal:
-          p.primaryGoal === "focus" ||
-          p.primaryGoal === "study" ||
-          p.primaryGoal === "work" ||
-          p.primaryGoal === "creative" ||
-          p.primaryGoal === "personal" ||
-          p.primaryGoal === "learning"
+          p.primaryGoal === 'focus' ||
+          p.primaryGoal === 'study' ||
+          p.primaryGoal === 'work' ||
+          p.primaryGoal === 'creative' ||
+          p.primaryGoal === 'personal' ||
+          p.primaryGoal === 'learning'
             ? (p.primaryGoal as
-                | "focus"
-                | "study"
-                | "work"
-                | "creative"
-                | "personal"
-                | "learning")
-            : "focus",
+                | 'focus'
+                | 'study'
+                | 'work'
+                | 'creative'
+                | 'personal'
+                | 'learning')
+            : 'focus',
         gamificationIntensity: p.gamificationIntensity,
         studyLayerName: input.firstWeek?.studyLayerLabel ?? p.studyLayerName,
         userStage: p.userStage,
@@ -141,23 +141,17 @@ export function useHomeSurfaceMap(
     });
   }, [
     b,
-    b.totalCompletedSessions,
     safeStyle,
     p.primaryGoal,
-    b.bossChallengeEngagement,
-    b.studyUsageRatio,
-    b.coachInteractions,
     hasActiveStudyPlan,
     hasActiveRecommendation,
     hasActiveBoss,
     isFirstSession,
-    b.completionStreak,
     featureAccess.features,
     input.firstWeek,
     input.laneProfile,
     p.gamificationIntensity,
     p.studyLayerName,
     p.userStage,
-    input.laneProfile?.primaryLane,
   ]);
 }

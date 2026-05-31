@@ -1,13 +1,13 @@
-import React from "react";
+import React from 'react';
 import Animated, {
   useAnimatedStyle,
   withDelay,
   withSpring,
   useSharedValue,
-} from "react-native-reanimated";
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
+} from 'react-native-reanimated';
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
 
 export function BossPreviewSkeleton(): JSX.Element {
   const { theme } = useTheme();
@@ -93,7 +93,7 @@ export function HealthBar({
         <Animated.View
           style={[
             {
-              height: "100%",
+              height: '100%',
               borderRadius: 4,
               backgroundColor: getHealthColor(),
             },
@@ -137,11 +137,11 @@ export function EscapeTimer({
             ? theme.colors.error.DEFAULT
             : isWarning
               ? theme.colors.warning.DEFAULT
-              : "text.tertiary"
+              : 'text.tertiary'
         }
-        fontWeight={isUrgent ? "600" : "400"}
+        fontWeight={isUrgent ? '600' : '400'}
       >
-        {isUrgent ? "🚨 " : ""}
+        {isUrgent ? '🚨 ' : ''}
         Escapes in {hoursRemaining}h
       </Text>
     </Box>

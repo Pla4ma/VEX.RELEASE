@@ -1,5 +1,5 @@
-import { z } from "zod";
-import { SignalTypeSchema } from "./enums";
+import { z } from 'zod';
+import { SignalTypeSchema } from './enums';
 
 export const BehaviorSignalSchema = z
   .object({
@@ -19,7 +19,7 @@ export const BehaviorProfileSchema = z
     userId: z.string().uuid(),
     signals: z.array(BehaviorSignalSchema).max(50),
     lastUpdated: z.number().int().positive(),
-    confidenceLevel: z.enum(["LOW", "MEDIUM", "HIGH"]),
+    confidenceLevel: z.enum(['LOW', 'MEDIUM', 'HIGH']),
     coldStart: z.boolean(),
     dataPoints: z.number().int().min(0),
   })

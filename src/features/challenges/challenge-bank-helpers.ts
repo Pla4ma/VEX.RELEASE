@@ -2,9 +2,9 @@
  * Challenge bank helper functions — querying and filtering challenge templates.
  */
 
-import type { ChallengeDifficulty } from "./schemas";
-import type { ChallengeBankTemplate } from "./challenge-bank-types";
-import { EXPANDED_CHALLENGE_TEMPLATES } from "./challenge-bank-expansion";
+import type { ChallengeDifficulty } from './schemas';
+import type { ChallengeBankTemplate } from './challenge-bank-types';
+import { EXPANDED_CHALLENGE_TEMPLATES } from './challenge-bank-expansion';
 
 export function getAllChallengeTemplates(): ChallengeBankTemplate[] {
   return EXPANDED_CHALLENGE_TEMPLATES;
@@ -49,14 +49,14 @@ export function getRandomChallengeSet(
 }
 
 export function getPersonalizedChallenges(
-  preferredTimeOfDay: "morning" | "afternoon" | "evening" | "night",
-  difficulty: string = "NORMAL",
+  preferredTimeOfDay: 'morning' | 'afternoon' | 'evening' | 'night',
+  difficulty: string = 'NORMAL',
 ): ChallengeBankTemplate[] {
   const timeTags: Record<string, string[]> = {
-    morning: ["morning", "early-bird"],
-    afternoon: ["afternoon", "mid-day"],
-    evening: ["evening", "wind-down"],
-    night: ["night", "night-owl"],
+    morning: ['morning', 'early-bird'],
+    afternoon: ['afternoon', 'mid-day'],
+    evening: ['evening', 'wind-down'],
+    night: ['night', 'night-owl'],
   };
   const preferredTags = timeTags[preferredTimeOfDay] || [];
   return EXPANDED_CHALLENGE_TEMPLATES.filter(

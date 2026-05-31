@@ -1,9 +1,9 @@
-import { type EventEmitter } from "../events/EventEmitter";
-import { THEME_STORAGE_KEYS } from "./config";
-import type { ThemeMode } from "./types";
-import { createDebugger } from "../utils/debug";
+import { type EventEmitter } from '../events/EventEmitter';
+import { THEME_STORAGE_KEYS } from './config';
+import type { ThemeMode } from './types';
+import { createDebugger } from '../utils/debug';
 
-export const debug = createDebugger("theme");
+export const debug = createDebugger('theme');
 
 export interface ThemeStorage {
   set(key: string, value: string): void;
@@ -11,10 +11,10 @@ export interface ThemeStorage {
   delete(key: string): void;
 }
 
-const THEME_MODE_VALUES: readonly string[] = ["light", "dark", "system"];
+const THEME_MODE_VALUES: readonly string[] = ['light', 'dark', 'system'];
 
 export function isThemeMode(value: string | undefined): value is ThemeMode {
-  return typeof value === "string" && THEME_MODE_VALUES.includes(value);
+  return typeof value === 'string' && THEME_MODE_VALUES.includes(value);
 }
 
 /**
@@ -23,7 +23,7 @@ export function isThemeMode(value: string | undefined): value is ThemeMode {
 export class StorageError extends Error {
   constructor(message: string) {
     super(message);
-    this.name = "StorageError";
+    this.name = 'StorageError';
   }
 }
 
@@ -32,6 +32,6 @@ export class StorageError extends Error {
  */
 export interface ThemeChangeEvent {
   mode: ThemeMode;
-  effectiveMode: "light" | "dark";
+  effectiveMode: 'light' | 'dark';
   timestamp: number;
 }

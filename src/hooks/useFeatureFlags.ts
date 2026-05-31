@@ -1,12 +1,12 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from 'react';
 import {
   FeatureFlagService,
   FeatureFlag,
   FeatureFlagValue,
-} from "../features/FeatureFlagService";
-import { eventBus } from "../events";
-import { createDebugger } from "../utils/debug";
-const debug = createDebugger("hooks:feature-flags");
+} from '../features/FeatureFlagService';
+import { eventBus } from '../events';
+import { createDebugger } from '../utils/debug';
+const debug = createDebugger('hooks:feature-flags');
 export interface FeatureFlagsState {
   flags: Record<string, FeatureFlag>;
   loading: boolean;
@@ -57,7 +57,7 @@ export function useFeatureFlags(): UseFeatureFlagsReturn {
           });
         }
       } catch (error) {
-        debug.error("Failed to initialize feature flags", error as Error);
+        debug.error('Failed to initialize feature flags', error as Error);
         if (mounted) {
           setState((prev) => ({
             ...prev,
@@ -77,7 +77,7 @@ export function useFeatureFlags(): UseFeatureFlagsReturn {
     if (!state.initialized) {
       return;
     }
-    const unsubscribe = eventBus.subscribe("feature:updated", () => {
+    const unsubscribe = eventBus.subscribe('feature:updated', () => {
       setState((prev) => ({ ...prev, flags: service.getAll() }));
     });
     return unsubscribe;
@@ -119,7 +119,7 @@ export function useFeatureFlags(): UseFeatureFlagsReturn {
         initialized: true,
       });
     } catch (error) {
-      debug.error("Failed to refresh feature flags", error as Error);
+      debug.error('Failed to refresh feature flags', error as Error);
       setState((prev) => ({ ...prev, loading: false, error: error as Error }));
     }
   }, [service]);
@@ -152,7 +152,7 @@ export function useFeatureFlag(key: string): UseFeatureFlagReturn {
     }
     init();
     const unsubscribe = eventBus.subscribe(
-      "feature:updated",
+      'feature:updated',
       (payload: { key: string }) => {
         if (payload.key === key) {
           setState({

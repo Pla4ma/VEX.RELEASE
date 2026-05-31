@@ -4,7 +4,7 @@
  * 4px grid-based spacing system for consistent layout throughout the app.
  */
 
-import type { SpacingScale } from "../types";
+import type { SpacingScale } from '../types';
 
 /**
  * Base spacing unit in pixels

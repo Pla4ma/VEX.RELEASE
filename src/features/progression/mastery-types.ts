@@ -1,21 +1,21 @@
-import { z } from "zod";
-import { launchColors } from "@theme/tokens/launch-colors";
+import { z } from 'zod';
+import { launchColors } from '@theme/tokens/launch-colors';
 
 export const MasteryTrackSchema = z.enum([
-  "DURATION",
-  "PURITY",
-  "CONSISTENCY",
-  "COMEBACK",
-  "BOSS",
+  'DURATION',
+  'PURITY',
+  'CONSISTENCY',
+  'COMEBACK',
+  'BOSS',
 ]);
 export type MasteryTrack = z.infer<typeof MasteryTrackSchema>;
 
 export const MASTERY_TRACKS: MasteryTrack[] = [
-  "DURATION",
-  "PURITY",
-  "CONSISTENCY",
-  "COMEBACK",
-  "BOSS",
+  'DURATION',
+  'PURITY',
+  'CONSISTENCY',
+  'COMEBACK',
+  'BOSS',
 ];
 
 export interface MasteryTrackState {
@@ -38,12 +38,12 @@ export interface UnifiedMasteryState {
 }
 
 export type MasteryRank =
-  | "APPRENTICE"
-  | "ADEPT"
-  | "EXPERT"
-  | "MASTER"
-  | "GRANDMASTER"
-  | "TRANSCENDENT";
+  | 'APPRENTICE'
+  | 'ADEPT'
+  | 'EXPERT'
+  | 'MASTER'
+  | 'GRANDMASTER'
+  | 'TRANSCENDENT';
 
 export const RANK_CONFIG: Record<
   MasteryRank,
@@ -59,55 +59,55 @@ export const RANK_CONFIG: Record<
   APPRENTICE: {
     minLevel: 1,
     maxLevel: 10,
-    displayName: "Apprentice",
+    displayName: 'Apprentice',
     color: launchColors.hex_8b4513,
-    icon: "🌱",
-    unlocks: ["Basic bosses", "Light Focus mode"],
+    icon: '🌱',
+    unlocks: ['Basic bosses', 'Light Focus mode'],
   },
   ADEPT: {
     minLevel: 11,
     maxLevel: 20,
-    displayName: "Adept",
+    displayName: 'Adept',
     color: launchColors.hex_4a5568,
-    icon: "⚔️",
-    unlocks: ["Sprint mode", "Study mode", "Advanced challenges"],
+    icon: '⚔️',
+    unlocks: ['Sprint mode', 'Study mode', 'Advanced challenges'],
   },
   EXPERT: {
     minLevel: 21,
     maxLevel: 30,
-    displayName: "Expert",
+    displayName: 'Expert',
     color: launchColors.hex_4169e1,
-    icon: "🛡️",
+    icon: '🛡️',
     unlocks: [
-      "Deep Work mode",
-      "Creative mode",
-      "Squad access",
-      "Daily dungeons",
+      'Deep Work mode',
+      'Creative mode',
+      'Squad access',
+      'Daily dungeons',
     ],
   },
   MASTER: {
     minLevel: 31,
     maxLevel: 40,
-    displayName: "Master",
+    displayName: 'Master',
     color: launchColors.hex_9400d3,
-    icon: "👑",
-    unlocks: ["Nightmare bosses", "Rival system", "Item crafting"],
+    icon: '👑',
+    unlocks: ['Nightmare bosses', 'Rival system', 'Item crafting'],
   },
   GRANDMASTER: {
     minLevel: 41,
     maxLevel: 50,
-    displayName: "Grandmaster",
+    displayName: 'Grandmaster',
     color: launchColors.hex_ffd700,
-    icon: "⭐",
-    unlocks: ["Transcendence (Prestige)", "Legendary items", "Guild Wars"],
+    icon: '⭐',
+    unlocks: ['Transcendence (Prestige)', 'Legendary items', 'Guild Wars'],
   },
   TRANSCENDENT: {
     minLevel: 51,
     maxLevel: 999,
-    displayName: "Transcendent",
+    displayName: 'Transcendent',
     color: launchColors.hex_ff00ff,
-    icon: "✨",
-    unlocks: ["All previous + prestige bonuses"],
+    icon: '✨',
+    unlocks: ['All previous + prestige bonuses'],
   },
 };
 
@@ -143,19 +143,19 @@ export function calculateMasteryRank(
   prestigeLevel: number,
 ): MasteryRank {
   if (prestigeLevel > 0) {
-    return "TRANSCENDENT";
+    return 'TRANSCENDENT';
   }
   if (overallLevel >= 41) {
-    return "GRANDMASTER";
+    return 'GRANDMASTER';
   }
   if (overallLevel >= 31) {
-    return "MASTER";
+    return 'MASTER';
   }
   if (overallLevel >= 21) {
-    return "EXPERT";
+    return 'EXPERT';
   }
   if (overallLevel >= 11) {
-    return "ADEPT";
+    return 'ADEPT';
   }
-  return "APPRENTICE";
+  return 'APPRENTICE';
 }

@@ -1,15 +1,15 @@
 import type {
   TickRecord,
   TickValidationResult,
-} from "./anti-cheat-types";
-import type { AntiCheatFlag } from "../types";
+} from './anti-cheat-types';
+import type { AntiCheatFlag } from '../types';
 import {
   THRESHOLDS,
-} from "./AntiCheatConfig";
+} from './AntiCheatConfig';
 
 type FlagFn = (
-  type: AntiCheatFlag["type"],
-  severity: AntiCheatFlag["severity"],
+  type: AntiCheatFlag['type'],
+  severity: AntiCheatFlag['severity'],
   evidence: Record<string, unknown>,
 ) => void;
 
@@ -23,28 +23,28 @@ export function validateTick(
   if (lastTickTime > 0) {
     const timeSinceLastTick = timestamp - lastTickTime;
     if (timeSinceLastTick < 0) {
-      flagViolation("TIME_MANIPULATION", "CRITICAL", {
-        reason: "Negative time delta",
+      flagViolation('TIME_MANIPULATION', 'CRITICAL', {
+        reason: 'Negative time delta',
         lastTick: lastTickTime,
         currentTick: timestamp,
         delta: timeSinceLastTick,
       });
-      return { valid: false, warning: "Time manipulation detected" };
+      return { valid: false, warning: 'Time manipulation detected' };
     }
     if (timeSinceLastTick < THRESHOLDS.MIN_TICK_INTERVAL) {
-      flagViolation("TIME_MANIPULATION", "WARNING", {
-        reason: "Tick interval too short",
+      flagViolation('TIME_MANIPULATION', 'WARNING', {
+        reason: 'Tick interval too short',
         expected: THRESHOLDS.MIN_TICK_INTERVAL,
         actual: timeSinceLastTick,
       });
-      return { valid: false, warning: "Suspicious tick timing" };
+      return { valid: false, warning: 'Suspicious tick timing' };
     }
     if (
       timeSinceLastTick > THRESHOLDS.MAX_TICK_INTERVAL * 2 &&
       timeSinceLastTick > THRESHOLDS.MAX_TIME_JUMP
     ) {
-      flagViolation("TIME_MANIPULATION", "MODERATE", {
-        reason: "Large time gap between ticks",
+      flagViolation('TIME_MANIPULATION', 'MODERATE', {
+        reason: 'Large time gap between ticks',
         gap: timeSinceLastTick,
       });
     }
@@ -53,16 +53,16 @@ export function validateTick(
     const lastElapsed = tickHistory[tickHistory.length - 1]!.elapsed;
     const elapsedDelta = elapsed - lastElapsed;
     if (elapsedDelta < 0) {
-      flagViolation("TIME_MANIPULATION", "CRITICAL", {
-        reason: "Elapsed time decreased",
+      flagViolation('TIME_MANIPULATION', 'CRITICAL', {
+        reason: 'Elapsed time decreased',
         previous: lastElapsed,
         current: elapsed,
       });
-      return { valid: false, warning: "Time regression detected" };
+      return { valid: false, warning: 'Time regression detected' };
     }
     if (elapsedDelta > THRESHOLDS.MAX_TIME_JUMP) {
-      flagViolation("TIME_MANIPULATION", "MODERATE", {
-        reason: "Elapsed time jumped too far",
+      flagViolation('TIME_MANIPULATION', 'MODERATE', {
+        reason: 'Elapsed time jumped too far',
         delta: elapsedDelta,
       });
     }
@@ -74,12 +74,12 @@ export function validateTickPatterns(
   tickHistory: TickRecord[],
   flagViolation: FlagFn,
 ): void {
-  if (tickHistory.length < THRESHOLDS.MIN_TICK_PATTERN_SAMPLE) return;
+  if (tickHistory.length < THRESHOLDS.MIN_TICK_PATTERN_SAMPLE) {return;}
   const intervals: number[] = [];
   for (let i = 1; i < tickHistory.length; i++)
-    intervals.push(
+    {intervals.push(
       tickHistory[i]!.timestamp - tickHistory[i - 1]!.timestamp,
-    );
+    );}
   const mean = intervals.reduce((a, b) => a + b, 0) / intervals.length;
   const variance =
     intervals.reduce((sum, v) => sum + Math.pow(v - mean, 2), 0) /
@@ -89,8 +89,8 @@ export function validateTickPatterns(
     cv < THRESHOLDS.MIN_FOCUS_VARIANCE &&
     intervals.length > THRESHOLDS.VARIANCE_SAMPLE_THRESHOLD
   ) {
-    flagViolation("AUTOMATION_DETECTED", "CRITICAL", {
-      reason: "Tick intervals too consistent",
+    flagViolation('AUTOMATION_DETECTED', 'CRITICAL', {
+      reason: 'Tick intervals too consistent',
       coefficientOfVariation: cv,
       sampleSize: intervals.length,
     });

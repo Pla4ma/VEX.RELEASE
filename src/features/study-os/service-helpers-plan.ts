@@ -1,5 +1,5 @@
-import { SessionMode } from "../../session/modes";
-import { buildLaneSessionBrief } from "../session-start/service";
+import { SessionMode } from '../../session/modes';
+import { buildLaneSessionBrief } from '../session-start/service';
 import {
   StudyOsHomeSurfaceSchema,
   StudyOsPremiumGateSchema,
@@ -9,14 +9,14 @@ import {
   type StudyOsPremiumGate,
   type StudyOsUnlockGate,
   type StudyPlan,
-} from "./schemas";
+} from './schemas';
 
 export function firstSentence(text: string): string {
   return (
     text
       .split(/[.!?\n]/)
       .map((part) => part.trim())
-      .find(Boolean) ?? "Study next useful section"
+      .find(Boolean) ?? 'Study next useful section'
   );
 }
 
@@ -33,8 +33,8 @@ export function makeBlock(
     estimatedMinutes: 25,
     id: `${id}:block:1`,
     objective,
-    priority: "medium",
-    status: "not_started",
+    priority: 'medium',
+    status: 'not_started',
     studyPlanId: id,
     title,
   };
@@ -44,10 +44,10 @@ export function buildStudySessionFromBlock(block: StudyBlock) {
   return {
     ...buildLaneSessionBrief({
       durationSeconds: block.estimatedMinutes * 60,
-      lane: "student",
+      lane: 'student',
     }),
     afterCompletion:
-      "Completion will add one review prompt and update the queue.",
+      'Completion will add one review prompt and update the queue.',
     sessionMode: SessionMode.STUDY,
     successCondition: block.objective,
     title: block.title,
@@ -56,18 +56,18 @@ export function buildStudySessionFromBlock(block: StudyBlock) {
 
 export function buildStudyOsHomeSurface(input: {
   isOffline?: boolean;
-  lane: "student" | "game_like" | "deep_creative" | "minimal_normal";
+  lane: 'student' | 'game_like' | 'deep_creative' | 'minimal_normal';
   plan: StudyPlan | null;
 }): StudyOsHomeSurface {
-  const hidden = input.lane !== "student" && !input.plan;
+  const hidden = input.lane !== 'student' && !input.plan;
   return StudyOsHomeSurfaceSchema.parse({
-    ctaLabel: input.plan ? "Start study block" : "Create study block",
+    ctaLabel: input.plan ? 'Start study block' : 'Create study block',
     hidden,
     offlineFallback: input.isOffline
-      ? "Offline: start a manual study block now; import sync can retry later."
+      ? 'Offline: start a manual study block now; import sync can retry later.'
       : null,
-    riskLabel: input.plan?.deadlineAt ? "Deadline risk active" : null,
-    title: input.plan?.title ?? "Study OS",
+    riskLabel: input.plan?.deadlineAt ? 'Deadline risk active' : null,
+    title: input.plan?.title ?? 'Study OS',
   });
 }
 
@@ -85,7 +85,7 @@ export function computeStudyOsUnlockGate(input: {
       isDayZero: true,
       completedSessions,
       studyUsageRatio,
-      unlockReason: "day_zero",
+      unlockReason: 'day_zero',
     });
   }
 
@@ -95,7 +95,7 @@ export function computeStudyOsUnlockGate(input: {
       isDayZero: false,
       completedSessions,
       studyUsageRatio,
-      unlockReason: "full",
+      unlockReason: 'full',
     });
   }
 
@@ -106,7 +106,7 @@ export function computeStudyOsUnlockGate(input: {
       completedSessions,
       studyUsageRatio,
       unlockReason:
-        completedSessions >= 5 ? "evidence_sessions" : "evidence_usage",
+        completedSessions >= 5 ? 'evidence_sessions' : 'evidence_usage',
     });
   }
 
@@ -115,7 +115,7 @@ export function computeStudyOsUnlockGate(input: {
     isDayZero: false,
     completedSessions,
     studyUsageRatio,
-    unlockReason: "first_week",
+    unlockReason: 'first_week',
   });
 }
 
@@ -131,28 +131,28 @@ export function computeStudyOsPremiumGate(input: {
     restrictionReason: input.revenueCatHealthy
       ? input.hasPremiumEntitlement
         ? null
-        : "Premium study depth available with VEX+"
-      : "Premium features unavailable — RevenueCat is degraded",
+        : 'Premium study depth available with VEX+'
+      : 'Premium features unavailable — RevenueCat is degraded',
   });
 }
 
 export function buildDayZeroStudyPreview(): StudyOsHomeSurface {
   return StudyOsHomeSurfaceSchema.parse({
-    ctaLabel: "Start first study block",
+    ctaLabel: 'Start first study block',
     hidden: false,
     offlineFallback: null,
     riskLabel: null,
-    title: "VEX helps you study the right thing next",
+    title: 'VEX helps you study the right thing next',
   });
 }
 
 export function isContentStudyBackendAvailable(input: {
-  featureHealth: "healthy" | "degraded" | "unavailable";
+  featureHealth: 'healthy' | 'degraded' | 'unavailable';
   aiConfigured: boolean;
   storageConfigured: boolean;
 }): boolean {
   return (
-    input.featureHealth === "healthy" &&
+    input.featureHealth === 'healthy' &&
     input.aiConfigured &&
     input.storageConfigured
   );
@@ -160,6 +160,6 @@ export function isContentStudyBackendAvailable(input: {
 
 export function getManualStudyFallbackMessage(isOffline: boolean): string {
   if (isOffline)
-    return "You are offline. Start a manual study block — sync can retry later.";
-  return "Content tools are temporarily unavailable. Start a manual study session instead.";
+    {return 'You are offline. Start a manual study block — sync can retry later.';}
+  return 'Content tools are temporarily unavailable. Start a manual study session instead.';
 }

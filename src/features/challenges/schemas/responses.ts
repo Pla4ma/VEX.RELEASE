@@ -5,14 +5,14 @@
  * detail views, and reroll operations.
  */
 
-import { z } from "zod";
+import { z } from 'zod';
 import {
   ChallengeCategorySchema,
   ChallengeDifficultySchema,
   ChallengeStatusSchema,
   ChallengeTypeSchema,
-} from "./enums";
-import { ChallengeSchema, UserChallengeSchema } from "./core";
+} from './enums';
+import { ChallengeSchema, UserChallengeSchema } from './core';
 
 export const ChallengeRewardSchema = z
   .object({

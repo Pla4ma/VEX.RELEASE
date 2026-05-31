@@ -1,6 +1,6 @@
-import type { ContentStudyError } from "./types";
-import { CONTENT_STUDY_CONSTANTS, ContentStudyErrorCode } from "./types";
-import { isRecoverableError } from "./validation";
+import type { ContentStudyError } from './types';
+import { CONTENT_STUDY_CONSTANTS, ContentStudyErrorCode } from './types';
+import { isRecoverableError } from './validation';
 
 export interface RetryStrategy {
   maxAttempts: number;
@@ -71,5 +71,5 @@ export async function executeWithRetry<T>(
       await new Promise((resolve) => setTimeout(resolve, delay));
     }
   }
-  throw lastError || new Error("Operation failed after max retries");
+  throw lastError || new Error('Operation failed after max retries');
 }

@@ -26,7 +26,7 @@ export type {
   SettingsExport,
   SettingValidationResult,
   SettingsChangeEvent,
-} from "./types";
+} from './types';
 
 // Schemas
 export {
@@ -57,7 +57,7 @@ export {
   createDefaultAppearanceSettings,
   createDefaultPrivacySettings,
   createDefaultDataControlSettings,
-} from "./schemas";
+} from './schemas';
 
 // Service
 export {
@@ -80,7 +80,7 @@ export {
   importSettings,
   resetSettings,
   SettingsValidationError,
-} from "./service";
+} from './service';
 
 // Repository – CRUD
 export {
@@ -91,7 +91,7 @@ export {
   batchUpsertSettings,
   deleteSetting as deleteSettingFromRepo,
   resetSettings as resetSettingsInRepo,
-} from "./repository";
+} from './repository';
 
 // Repository – Sync
 export {
@@ -102,7 +102,7 @@ export {
   fetchRemoteChanges,
   applyRemoteChanges,
   resolveConflict,
-} from "./repository-sync";
+} from './repository-sync';
 
 // Hooks
 export {
@@ -126,7 +126,7 @@ export {
   useResetSettings,
   useSettingsUIState,
   settingsKeys,
-} from "./hooks";
+} from './hooks';
 
 // Events
 export {
@@ -134,7 +134,7 @@ export {
   emitSettingChange,
   emitSettingsReset,
   trackSettingsAnalytics,
-} from "./events";
+} from './events';
 
 // Validation
 export {
@@ -142,8 +142,8 @@ export {
   validateSettingsExport,
   batchValidateSettings,
   formatValidationErrors,
-} from "./validation";
-export type { ValidationResult, ValidationError } from "./validation";
+} from './validation';
+export type { ValidationResult, ValidationError } from './validation';
 
 // Components
-export { SettingsScreen } from "./components";
+export { SettingsScreen } from './components';

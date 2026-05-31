@@ -1,28 +1,28 @@
-import { deleteAccount } from "../service";
-import { deleteCurrentUser, signOutCurrentSession } from "../repository";
-import { revenueCatService } from "../../../shared/monetization/revenuecat-service";
+import { deleteAccount } from '../service';
+import { deleteCurrentUser, signOutCurrentSession } from '../repository';
+import { revenueCatService } from '../../../shared/monetization/revenuecat-service';
 import {
   getDefaultStorageAdapter,
   getMMKVStorageAdapter,
   getSecureStorage,
-} from "../../../persistence";
+} from '../../../persistence';
 
-jest.mock("../repository");
-jest.mock("../analytics", () => ({
+jest.mock('../repository');
+jest.mock('../analytics', () => ({
   captureAccountDeletionError: jest.fn(),
   trackAccountDeletionCompleted: jest.fn(),
   trackAccountDeletionStarted: jest.fn(),
 }));
-jest.mock("../events", () => ({ emitAccountDeletionCompleted: jest.fn() }));
-jest.mock("../../../config/sentry", () => ({ clearSentryUser: jest.fn() }));
-jest.mock("../../../shared/monetization/revenuecat-service", () => ({
+jest.mock('../events', () => ({ emitAccountDeletionCompleted: jest.fn() }));
+jest.mock('../../../config/sentry', () => ({ clearSentryUser: jest.fn() }));
+jest.mock('../../../shared/monetization/revenuecat-service', () => ({
   revenueCatService: { clearUserId: jest.fn() },
 }));
-jest.mock("../../../persistence", () => ({
+jest.mock('../../../persistence', () => ({
   SecureStorageKeys: {
-    AUTH_TOKEN: "vex_auth_token",
-    REFRESH_TOKEN: "vex_refresh_token",
-    USER_CREDENTIALS: "vex_user_credentials",
+    AUTH_TOKEN: 'vex_auth_token',
+    REFRESH_TOKEN: 'vex_refresh_token',
+    USER_CREDENTIALS: 'vex_user_credentials',
   },
   getDefaultStorageAdapter: jest.fn(),
   getMMKVStorageAdapter: jest.fn(),
@@ -69,7 +69,7 @@ const zustandStorageMock: ReturnType<typeof getMMKVStorageAdapter> = {
   setItem: jest.fn(),
 };
 
-describe("account deletion service", () => {
+describe('account deletion service', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     deleteCurrentUserMock.mockResolvedValue(undefined);
@@ -83,22 +83,22 @@ describe("account deletion service", () => {
     getMMKVStorageAdapterMock.mockReturnValue(zustandStorageMock);
   });
 
-  it("deletes Supabase auth and clears local secure monetization state", async () => {
+  it('deletes Supabase auth and clears local secure monetization state', async () => {
     const result = await deleteAccount({
-      userId: "550e8400-e29b-41d4-a716-446655440001",
+      userId: '550e8400-e29b-41d4-a716-446655440001',
     });
 
     expect(deleteCurrentUserMock).toHaveBeenCalledTimes(1);
     expect(clearUserIdMock).toHaveBeenCalledTimes(1);
     expect(getDefaultStorageAdapter().clear).toHaveBeenCalledTimes(1);
     expect(getMMKVStorageAdapter().removeItem).toHaveBeenCalledWith(
-      "auth-storage",
+      'auth-storage',
     );
     expect(getSecureStorage().removeItem).toHaveBeenCalledWith(
-      "vex_auth_token",
+      'vex_auth_token',
     );
     expect(result).toMatchObject({
-      userId: "550e8400-e29b-41d4-a716-446655440001",
+      userId: '550e8400-e29b-41d4-a716-446655440001',
       localStorageCleared: true,
       secureStorageCleared: true,
       monetizationSignedOut: true,

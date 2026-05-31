@@ -1,11 +1,11 @@
-import React from "react";
-import { Pressable, Switch } from "react-native";
-import type { Theme } from "../../theme";
-import { Box, Text } from "../../components/primitives";
-import { Icon } from "../../icons";
-import { launchColors } from "@theme/tokens/launch-colors";
+import React from 'react';
+import { Pressable, Switch } from 'react-native';
+import type { Theme } from '../../theme';
+import { Box, Text } from '../../components/primitives';
+import { Icon } from '../../icons';
+import { launchColors } from '@theme/tokens/launch-colors';
 
-export type SettingItemType = "toggle" | "link" | "button" | "select" | "value";
+export type SettingItemType = 'toggle' | 'link' | 'button' | 'select' | 'value';
 
 export interface SettingItem {
   id: string;
@@ -41,7 +41,7 @@ export function SettingsSectionGroup({
         style={{
           marginLeft: 12,
           marginBottom: 8,
-          fontWeight: "600",
+          fontWeight: '600',
           letterSpacing: 0.5,
         }}
       >
@@ -50,7 +50,7 @@ export function SettingsSectionGroup({
       <Box
         borderRadius={12}
         style={{
-          overflow: "hidden",
+          overflow: 'hidden',
           backgroundColor: theme.colors.surface.card,
         }}
       >
@@ -78,13 +78,13 @@ function SettingRow({ item, theme }: { item: SettingItem; theme: Theme }) {
   return (
     <Pressable
       style={{
-        flexDirection: "row",
-        alignItems: "center",
+        flexDirection: 'row',
+        alignItems: 'center',
         paddingVertical: 12,
         paddingHorizontal: 16,
       }}
-      onPress={item.type === "toggle" ? undefined : item.onPress}
-      disabled={item.type === "toggle"}
+      onPress={item.type === 'toggle' ? undefined : item.onPress}
+      disabled={item.type === 'toggle'}
       accessibilityLabel="Settings section"
       accessibilityRole="button"
       accessibilityHint="Double tap to change setting"
@@ -103,7 +103,7 @@ function SettingRow({ item, theme }: { item: SettingItem; theme: Theme }) {
         <Text
           variant="body"
           style={{
-            fontWeight: "500",
+            fontWeight: '500',
             color: item.danger
               ? theme.colors.error.DEFAULT
               : theme.colors.text.primary,
@@ -122,27 +122,27 @@ function SettingRow({ item, theme }: { item: SettingItem; theme: Theme }) {
         )}
       </Box>
       <Box flexDirection="row" alignItems="center">
-        {item.type === "toggle" && (
+        {item.type === 'toggle' && (
           <Switch
             value={item.value as boolean}
             onValueChange={item.onToggle}
             trackColor={{
               false: theme.colors.background.tertiary,
-              true: theme.colors.primary[500] + "80",
+              true: theme.colors.primary[500] + '80',
             }}
             thumbColor={
               item.value ? theme.colors.primary[500] : launchColors.hex_fff
             }
           />
         )}
-        {item.type === "link" && (
+        {item.type === 'link' && (
           <Icon
             name="arrow-right"
             size={20}
             color={theme.colors.text.tertiary}
           />
         )}
-        {item.type === "select" && (
+        {item.type === 'select' && (
           <Box flexDirection="row" alignItems="center">
             <Text variant="caption" color="text.secondary">
               {item.value}
@@ -155,7 +155,7 @@ function SettingRow({ item, theme }: { item: SettingItem; theme: Theme }) {
             />
           </Box>
         )}
-        {item.type === "value" && (
+        {item.type === 'value' && (
           <Text variant="caption" color="text.secondary">
             {item.value}
           </Text>

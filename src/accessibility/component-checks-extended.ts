@@ -8,8 +8,8 @@ import type {
   AuditableComponent,
   AuditAccessibilityIssue,
   ComponentAccessibilityConfig,
-} from "./checks-types";
-import { EXPECTED_ROLES } from "./checks-types";
+} from './checks-types';
+import { EXPECTED_ROLES } from './checks-types';
 
 export function checkMotionAccessibility(
   component: AuditableComponent,
@@ -18,14 +18,14 @@ export function checkMotionAccessibility(
   const issues: AuditAccessibilityIssue[] = [];
   if (component.props?.animated && !component.props?.useNativeDriver) {
     issues.push({
-      id: "animation-accessibility",
-      type: "warning",
-      category: "motion",
-      severity: "moderate",
-      message: "Animation may not respect reduced motion preferences",
-      recommendation: "Use useNativeDriver and check reduced motion settings",
+      id: 'animation-accessibility',
+      type: 'warning',
+      category: 'motion',
+      severity: 'moderate',
+      message: 'Animation may not respect reduced motion preferences',
+      recommendation: 'Use useNativeDriver and check reduced motion settings',
       element: config.componentName,
-      wcagGuideline: "2.3.3",
+      wcagGuideline: '2.3.3',
       automated: true,
     });
   }
@@ -40,17 +40,17 @@ export function checkSemanticHTML(
   const expectedRole = EXPECTED_ROLES[config.componentName];
   if (
     expectedRole &&
-    !expectedRole.includes(String(component.props?.accessibilityRole ?? ""))
+    !expectedRole.includes(String(component.props?.accessibilityRole ?? ''))
   ) {
     issues.push({
-      id: "incorrect-accessibility-role",
-      type: "warning",
-      category: "semantic",
-      severity: "moderate",
-      message: "Component may have incorrect accessibility role",
-      recommendation: `Set accessibilityRole to one of: ${expectedRole.join(", ")}`,
+      id: 'incorrect-accessibility-role',
+      type: 'warning',
+      category: 'semantic',
+      severity: 'moderate',
+      message: 'Component may have incorrect accessibility role',
+      recommendation: `Set accessibilityRole to one of: ${expectedRole.join(', ')}`,
       element: config.componentName,
-      wcagGuideline: "4.1.2",
+      wcagGuideline: '4.1.2',
       automated: true,
     });
   }
@@ -72,14 +72,14 @@ export function checkTouchTargets(
     const targetHeight = height || minHeight || 0;
     if (targetWidth < 44 || targetHeight < 44) {
       issues.push({
-        id: "small-touch-target",
-        type: "warning",
-        category: "touch",
-        severity: "moderate",
+        id: 'small-touch-target',
+        type: 'warning',
+        category: 'touch',
+        severity: 'moderate',
         message: `Touch target may be too small: ${targetWidth}x${targetHeight} (minimum 44x44 recommended)`,
-        recommendation: "Increase touch target size to at least 44x44 points",
+        recommendation: 'Increase touch target size to at least 44x44 points',
         element: config.componentName,
-        wcagGuideline: "2.5.5",
+        wcagGuideline: '2.5.5',
         automated: true,
       });
     }

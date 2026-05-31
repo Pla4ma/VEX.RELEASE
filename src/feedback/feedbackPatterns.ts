@@ -3,22 +3,22 @@ import {
   withSpring,
   withSequence,
   withTiming,
-} from "react-native-reanimated";
-import { haptics } from "@/shared/feedback";
+} from 'react-native-reanimated';
+import { haptics } from '@/shared/feedback';
 
 export const HAPTIC_PATTERNS = {
   STREAK_INCREMENT: () => haptics.success(),
   LEVEL_UP: () => haptics.success(),
   BOSS_DEFEAT: () => haptics.celebration(),
-  BUTTON_PRESS: () => haptics.impact("light"),
-  BUTTON_LONG_PRESS: () => haptics.impact("medium"),
-  SWIPE_COMPLETE: () => haptics.impact("light"),
+  BUTTON_PRESS: () => haptics.impact('light'),
+  BUTTON_LONG_PRESS: () => haptics.impact('medium'),
+  SWIPE_COMPLETE: () => haptics.impact('light'),
   STREAK_WARNING: () => haptics.warning(),
   PHASE_CHANGE: () => haptics.warning(),
   SESSION_INTERRUPTED: () => haptics.error(),
-  STREAK_BROKEN: () => haptics.doubleTap("heavy"),
-  REWARD_COMMON: () => haptics.impact("light"),
-  REWARD_RARE: () => haptics.doubleTap("medium"),
+  STREAK_BROKEN: () => haptics.doubleTap('heavy'),
+  REWARD_COMMON: () => haptics.impact('light'),
+  REWARD_RARE: () => haptics.doubleTap('medium'),
   REWARD_EPIC: () => haptics.celebration(),
   REWARD_LEGENDARY: () => haptics.celebration(),
 };
@@ -82,16 +82,16 @@ export const ANIMATION_PATTERNS = {
 };
 
 export const SOUND_EFFECTS = {
-  BUTTON_CLICK: "button_click.mp3",
-  STREAK_INCREMENT: "coin_collect.mp3",
-  LEVEL_UP: "level_up.mp3",
-  BOSS_HIT: "hit_impact.mp3",
-  BOSS_DEFEAT: "boss_defeat.mp3",
-  REWARD_COMMON: "reward_small.mp3",
-  REWARD_RARE: "reward_medium.mp3",
-  REWARD_EPIC: "reward_large.mp3",
-  REWARD_LEGENDARY: "reward_legendary.mp3",
-  PHASE_CHANGE: "phase_transition.mp3",
-  STREAK_WARNING: "warning_ping.mp3",
-  SESSION_COMPLETE: "success_chime.mp3",
+  BUTTON_CLICK: 'button_click.mp3',
+  STREAK_INCREMENT: 'coin_collect.mp3',
+  LEVEL_UP: 'level_up.mp3',
+  BOSS_HIT: 'hit_impact.mp3',
+  BOSS_DEFEAT: 'boss_defeat.mp3',
+  REWARD_COMMON: 'reward_small.mp3',
+  REWARD_RARE: 'reward_medium.mp3',
+  REWARD_EPIC: 'reward_large.mp3',
+  REWARD_LEGENDARY: 'reward_legendary.mp3',
+  PHASE_CHANGE: 'phase_transition.mp3',
+  STREAK_WARNING: 'warning_ping.mp3',
+  SESSION_COMPLETE: 'success_chime.mp3',
 };

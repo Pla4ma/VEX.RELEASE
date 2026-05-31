@@ -4,7 +4,7 @@
  * Predefined spring animation configurations for Reanimated.
  */
 
-import type { WithSpringConfig } from "react-native-reanimated";
+import type { WithSpringConfig } from 'react-native-reanimated';
 
 /**
  * Default spring configuration

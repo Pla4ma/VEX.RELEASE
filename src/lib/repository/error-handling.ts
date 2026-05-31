@@ -1,12 +1,12 @@
 export enum RepositoryErrorCode {
-  NETWORK_ERROR = "NETWORK_ERROR",
-  AUTH_ERROR = "AUTH_ERROR",
-  NOT_FOUND = "NOT_FOUND",
-  CONFLICT = "CONFLICT",
-  VALIDATION_ERROR = "VALIDATION_ERROR",
-  RATE_LIMIT = "RATE_LIMIT",
-  SERVER_ERROR = "SERVER_ERROR",
-  UNKNOWN = "UNKNOWN",
+  NETWORK_ERROR = 'NETWORK_ERROR',
+  AUTH_ERROR = 'AUTH_ERROR',
+  NOT_FOUND = 'NOT_FOUND',
+  CONFLICT = 'CONFLICT',
+  VALIDATION_ERROR = 'VALIDATION_ERROR',
+  RATE_LIMIT = 'RATE_LIMIT',
+  SERVER_ERROR = 'SERVER_ERROR',
+  UNKNOWN = 'UNKNOWN',
 }
 
 export class RepositoryError extends Error {
@@ -19,9 +19,9 @@ export class RepositoryError extends Error {
     error: unknown,
     code: RepositoryErrorCode = RepositoryErrorCode.UNKNOWN,
   ) {
-    const message = error instanceof Error ? error.message : "Unknown error";
+    const message = error instanceof Error ? error.message : 'Unknown error';
     super(`[${operation}] ${message}`);
-    this.name = "RepositoryError";
+    this.name = 'RepositoryError';
     this.originalError = error;
     this.code = code;
     this.isRetryable =
@@ -32,27 +32,27 @@ export class RepositoryError extends Error {
 }
 
 export function classifyError(error: unknown): RepositoryErrorCode {
-  if (!error || typeof error !== "object") {
+  if (!error || typeof error !== 'object') {
     return RepositoryErrorCode.UNKNOWN;
   }
   const err = error as { code?: string; message?: string; status?: number };
   if (err.code) {
-    if (err.code === "PGRST116") {
+    if (err.code === 'PGRST116') {
       return RepositoryErrorCode.NOT_FOUND;
     }
-    if (err.code === "23505") {
+    if (err.code === '23505') {
       return RepositoryErrorCode.CONFLICT;
     }
-    if (err.code === "PGRST301") {
+    if (err.code === 'PGRST301') {
       return RepositoryErrorCode.AUTH_ERROR;
     }
-    if (err.code.startsWith("22")) {
+    if (err.code.startsWith('22')) {
       return RepositoryErrorCode.VALIDATION_ERROR;
     }
-    if (err.code.startsWith("28")) {
+    if (err.code.startsWith('28')) {
       return RepositoryErrorCode.AUTH_ERROR;
     }
-    if (err.code.startsWith("42")) {
+    if (err.code.startsWith('42')) {
       return RepositoryErrorCode.VALIDATION_ERROR;
     }
   }
@@ -77,10 +77,10 @@ export function classifyError(error: unknown): RepositoryErrorCode {
     }
   }
   if (
-    err.message?.includes("fetch") ||
-    err.message?.includes("network") ||
-    err.message?.includes("ECONNREFUSED") ||
-    err.message?.includes("ETIMEDOUT")
+    err.message?.includes('fetch') ||
+    err.message?.includes('network') ||
+    err.message?.includes('ECONNREFUSED') ||
+    err.message?.includes('ETIMEDOUT')
   ) {
     return RepositoryErrorCode.NETWORK_ERROR;
   }

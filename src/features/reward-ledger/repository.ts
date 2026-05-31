@@ -1,10 +1,10 @@
-import { supabase } from "../../config/supabase";
+import { supabase } from '../../config/supabase';
 import {
   CreateRewardLedgerInputSchema,
   RewardLedgerRecordSchema,
-} from "./schemas";
-import type { CreateRewardLedgerInput, RewardLedgerRecord } from "./types";
-import * as z from "zod";
+} from './schemas';
+import type { CreateRewardLedgerInput, RewardLedgerRecord } from './types';
+import * as z from 'zod';
 
 export class RewardLedgerRepositoryError extends Error {
   constructor(
@@ -21,7 +21,7 @@ export async function upsertRewardLedger(
   const validated = CreateRewardLedgerInputSchema.parse(input);
 
   const { data, error } = await supabase
-    .from("reward_ledger")
+    .from('reward_ledger')
     .upsert(
       {
         user_id: validated.userId,
@@ -29,18 +29,18 @@ export async function upsertRewardLedger(
         reward_type: validated.rewardType,
         amount: validated.amount,
         currency: validated.currency,
-        status: "pending",
+        status: 'pending',
         source_event: validated.sourceEvent,
         created_at: new Date().toISOString(),
         expires_at: validated.expiresAt ?? null,
       },
-      { onConflict: "idempotency_key" },
+      { onConflict: 'idempotency_key' },
     )
     .select()
     .single();
 
   if (error) {
-    throw new RewardLedgerRepositoryError("upsert", error);
+    throw new RewardLedgerRepositoryError('upsert', error);
   }
 
   return RewardLedgerRecordSchema.parse({
@@ -63,13 +63,13 @@ export async function getRewardLedgerById(
   ledgerId: string,
 ): Promise<RewardLedgerRecord> {
   const { data, error } = await supabase
-    .from("reward_ledger")
-    .select("*")
-    .eq("id", ledgerId)
+    .from('reward_ledger')
+    .select('*')
+    .eq('id', ledgerId)
     .single();
 
   if (error) {
-    throw new RewardLedgerRepositoryError("getById", error);
+    throw new RewardLedgerRepositoryError('getById', error);
   }
 
   return RewardLedgerRecordSchema.parse({
@@ -90,24 +90,24 @@ export async function getRewardLedgerById(
 
 export async function updateRewardLedgerStatus(
   ledgerId: string,
-  status: "delivered" | "failed" | "expired",
+  status: 'delivered' | 'failed' | 'expired',
   failedReason?: string,
 ): Promise<RewardLedgerRecord> {
   const updateData: Record<string, unknown> = {
     status,
-    delivered_at: status === "delivered" ? new Date().toISOString() : null,
+    delivered_at: status === 'delivered' ? new Date().toISOString() : null,
     failed_reason: failedReason ?? null,
   };
 
   const { data, error } = await supabase
-    .from("reward_ledger")
+    .from('reward_ledger')
     .update(updateData)
-    .eq("id", ledgerId)
+    .eq('id', ledgerId)
     .select()
     .single();
 
   if (error) {
-    throw new RewardLedgerRepositoryError("updateStatus", error);
+    throw new RewardLedgerRepositoryError('updateStatus', error);
   }
 
   return RewardLedgerRecordSchema.parse({
@@ -130,13 +130,13 @@ export async function fetchPendingRewards(
   userId: string,
 ): Promise<RewardLedgerRecord[]> {
   const { data, error } = await supabase
-    .from("reward_ledger")
-    .select("*")
-    .eq("user_id", userId)
-    .eq("status", "pending");
+    .from('reward_ledger')
+    .select('*')
+    .eq('user_id', userId)
+    .eq('status', 'pending');
 
   if (error) {
-    throw new RewardLedgerRepositoryError("fetchPending", error);
+    throw new RewardLedgerRepositoryError('fetchPending', error);
   }
 
   return z.array(RewardLedgerRecordSchema).parse(

@@ -1,7 +1,7 @@
 // Barrel file — re-exports all AI type schemas and defines shared types.
 // Sub-schemas live in ai-base-schemas.ts, ai-request-schemas.ts, ai-response-schemas.ts.
 
-import { z } from "zod";
+import { z } from 'zod';
 
 // Re-export base schemas and types
 export {
@@ -13,7 +13,7 @@ export {
   type AIBaseRequest,
   type AIBaseResponse,
   type AIErrorCode,
-} from "./ai-base-schemas";
+} from './ai-base-schemas';
 
 // Re-export request schemas and types
 export {
@@ -27,7 +27,7 @@ export {
   type GenerateComebackPromptRequest,
   type GenerateStreakRiskNudgeRequest,
   type GenerateWeeklyReflectionRequest,
-} from "./ai-request-schemas";
+} from './ai-request-schemas';
 
 // Re-export response schemas and types
 export {
@@ -41,7 +41,7 @@ export {
   type GenerateComebackPromptResponse,
   type GenerateStreakRiskNudgeResponse,
   type GenerateWeeklyReflectionResponse,
-} from "./ai-response-schemas";
+} from './ai-response-schemas';
 
 // --- Discriminated unions ---
 
@@ -51,17 +51,17 @@ import {
   GenerateComebackPromptRequestSchema,
   GenerateStreakRiskNudgeRequestSchema,
   GenerateWeeklyReflectionRequestSchema,
-} from "./ai-request-schemas";
+} from './ai-request-schemas';
 import {
   GenerateCoachMessageResponseSchema,
   GenerateSessionSummaryResponseSchema,
   GenerateComebackPromptResponseSchema,
   GenerateStreakRiskNudgeResponseSchema,
   GenerateWeeklyReflectionResponseSchema,
-} from "./ai-response-schemas";
-import type { AIRequestType, AIErrorCode } from "./ai-base-schemas";
+} from './ai-response-schemas';
+import type { AIRequestType, AIErrorCode } from './ai-base-schemas';
 
-export const AIRequestSchema = z.discriminatedUnion("requestType", [
+export const AIRequestSchema = z.discriminatedUnion('requestType', [
   GenerateCoachMessageRequestSchema,
   GenerateSessionSummaryRequestSchema,
   GenerateComebackPromptRequestSchema,
@@ -70,7 +70,7 @@ export const AIRequestSchema = z.discriminatedUnion("requestType", [
 ]);
 export type AIRequest = z.infer<typeof AIRequestSchema>;
 
-export const AIResponseSchema = z.discriminatedUnion("requestType", [
+export const AIResponseSchema = z.discriminatedUnion('requestType', [
   GenerateCoachMessageResponseSchema,
   GenerateSessionSummaryResponseSchema,
   GenerateComebackPromptResponseSchema,
@@ -83,7 +83,7 @@ export type AIResponse = z.infer<typeof AIResponseSchema>;
 
 export interface GeminiAPIRequest {
   model: string;
-  contents: Array<{ role: "user" | "model"; parts: Array<{ text: string }> }>;
+  contents: Array<{ role: 'user' | 'model'; parts: Array<{ text: string }> }>;
   generationConfig?: {
     temperature?: number;
     maxOutputTokens?: number;

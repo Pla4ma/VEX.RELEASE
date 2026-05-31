@@ -3,5 +3,5 @@
  */
 
 export interface LeaderboardEventDefinitions {
-  "leaderboards:result": unknown;
+  'leaderboards:result': unknown;
 }

@@ -1,12 +1,12 @@
-import React from "react";
-import { View, TouchableOpacity } from "react-native";
-import Animated, { FadeInUp } from "react-native-reanimated";
+import React from 'react';
+import { View, TouchableOpacity } from 'react-native';
+import Animated, { FadeInUp } from 'react-native-reanimated';
 
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import { getMoodEmoji } from "../../../features/companion/components/companion-helpers";
-import { ELEMENT_THEMES } from "../../../features/companion/types";
-import type { CompanionState } from "../../../features/companion/types";
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import { getMoodEmoji } from '../../../features/companion/components/companion-helpers';
+import { ELEMENT_THEMES } from '../../../features/companion/types';
+import type { CompanionState } from '../../../features/companion/types';
 
 export function CompanionCard({
   state,
@@ -34,8 +34,8 @@ export function CompanionCard({
           borderWidth: 1,
           borderColor: theme.colors.border.light,
           padding: theme.spacing[4],
-          flexDirection: "row",
-          alignItems: "center",
+          flexDirection: 'row',
+          alignItems: 'center',
           gap: theme.spacing[4],
         }}
       >
@@ -44,9 +44,9 @@ export function CompanionCard({
             width: 48,
             height: 48,
             borderRadius: 24,
-            backgroundColor: elementTheme.primary + "20",
-            alignItems: "center",
-            justifyContent: "center",
+            backgroundColor: elementTheme.primary + '20',
+            alignItems: 'center',
+            justifyContent: 'center',
           }}
         >
           <Text variant="h3" style={{ fontSize: 24 }}>
@@ -58,7 +58,7 @@ export function CompanionCard({
           <Text
             variant="body"
             color="text.primary"
-            style={{ fontWeight: "700" }}
+            style={{ fontWeight: '700' }}
           >
             {state.element} {state.phase}
           </Text>
@@ -90,8 +90,8 @@ export function SkeletonCard(): JSX.Element {
         borderWidth: 1,
         borderColor: theme.colors.border.light,
         padding: theme.spacing[4],
-        flexDirection: "row",
-        alignItems: "center",
+        flexDirection: 'row',
+        alignItems: 'center',
         gap: theme.spacing[4],
       }}
     >

@@ -1,4 +1,4 @@
-import type { CoachMemory, SessionFacts } from "./coach-memory-types";
+import type { CoachMemory, SessionFacts } from './coach-memory-types';
 
 export function createEmptyMemory(userId: string): CoachMemory {
   return {
@@ -46,7 +46,7 @@ export function updateProductiveTimeOfDay(
   }
   if (maxTime) {
     memory.mostProductiveTimeOfDay =
-      maxTime as CoachMemory["mostProductiveTimeOfDay"];
+      maxTime as CoachMemory['mostProductiveTimeOfDay'];
   }
 }
 
@@ -70,18 +70,18 @@ export function updateMostUsedDuration(
 export function generateInsights(memory: CoachMemory): string[] {
   const insights: string[] = [];
   if (memory.longestStreak >= 14) {
-    insights.push("You have elite-level consistency (14+ day streaks)");
+    insights.push('You have elite-level consistency (14+ day streaks)');
   } else if (memory.longestStreak >= 7) {
-    insights.push("You build strong weekly habits (7+ day streaks)");
+    insights.push('You build strong weekly habits (7+ day streaks)');
   }
   if (memory.bestSessionQuality >= 90) {
-    insights.push("You are capable of elite focus sessions (90+ quality)");
+    insights.push('You are capable of elite focus sessions (90+ quality)');
   }
   if (memory.totalFocusMinutes >= 600) {
-    insights.push("You are a 10+ hour focus veteran");
+    insights.push('You are a 10+ hour focus veteran');
   }
   if (memory.comebackCount >= 2) {
-    insights.push("You have proven resilience (multiple comebacks)");
+    insights.push('You have proven resilience (multiple comebacks)');
   }
   return insights;
 }

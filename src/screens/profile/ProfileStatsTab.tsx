@@ -1,13 +1,13 @@
-import React from "react";
-import { Pressable } from "react-native";
-import { Box, Card, Text } from "../../components/primitives";
-import { Badge } from "../../components/Badge";
-import { Icon } from "../../icons";
-import { Skeleton } from "../../components/ui/Skeleton";
-import { FocusScoreCard } from "../../features/focus-identity/components/FocusScoreCard";
-import { ScoreHistoryChart } from "../../features/focus-identity/components/ScoreHistoryChart";
-import { PersonalBestsGrid } from "./components/PersonalBestsGrid";
-import type { Theme } from "../../theme/types";
+import React from 'react';
+import { Pressable } from 'react-native';
+import { Box, Card, Text } from '../../components/primitives';
+import { Badge } from '../../components/Badge';
+import { Icon } from '../../icons';
+import { Skeleton } from '../../components/ui/Skeleton';
+import { FocusScoreCard } from '../../features/focus-identity/components/FocusScoreCard';
+import { ScoreHistoryChart } from '../../features/focus-identity/components/ScoreHistoryChart';
+import { PersonalBestsGrid } from './components/PersonalBestsGrid';
+import type { Theme } from '../../theme/types';
 
 interface StatsItem {
   label: string;
@@ -43,7 +43,7 @@ interface ProfileStatsTabProps {
 const renderStatItem =
   (theme: Theme, loading: boolean) =>
   (item: StatsItem) => (
-    <Box key={item.label} style={{ width: "47%" }}>
+    <Box key={item.label} style={{ width: '47%' }}>
       <Card size="md" style={{ backgroundColor: theme.colors.background.secondary }}>
         <Icon name={item.icon} size={20} color={item.color} />
         <Text variant="caption" color="text.tertiary" style={{ marginTop: 10 }}>
@@ -57,7 +57,7 @@ const renderStatItem =
             style={{
               marginTop: 6,
               color: theme.colors.text.primary,
-              fontWeight: "800",
+              fontWeight: '800',
             }}
           >
             {item.value}

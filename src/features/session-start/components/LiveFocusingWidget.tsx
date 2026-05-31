@@ -4,21 +4,21 @@
  *
  * @phase 10.6
  */
-import React from "react";
-import { Pressable } from "react-native";
-import Animated, { FadeIn } from "react-native-reanimated";
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { launchColors } from "@theme/tokens/launch-colors";
-import type { LiveFocusingWidgetProps } from "./live-focusing/types";
-import { useCountUp, formatNumber } from "./live-focusing/helpers";
-import { PulsingLiveDot } from "./live-focusing/PulsingLiveDot";
-import { AvatarStack } from "./live-focusing/AvatarStack";
-import { TrendIndicator } from "./live-focusing/TrendIndicator";
-import { buttonTap } from "../../../utils/haptics";
+import React from 'react';
+import { Pressable } from 'react-native';
+import Animated, { FadeIn } from 'react-native-reanimated';
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { launchColors } from '@theme/tokens/launch-colors';
+import type { LiveFocusingWidgetProps } from './live-focusing/types';
+import { useCountUp, formatNumber } from './live-focusing/helpers';
+import { PulsingLiveDot } from './live-focusing/PulsingLiveDot';
+import { AvatarStack } from './live-focusing/AvatarStack';
+import { TrendIndicator } from './live-focusing/TrendIndicator';
+import { buttonTap } from '../../../utils/haptics';
 
-export { LiveFocusingSkeleton } from "./live-focusing/LiveFocusingSkeleton";
-export type { LiveFocusingData } from "./live-focusing/types";
+export { LiveFocusingSkeleton } from './live-focusing/LiveFocusingSkeleton';
+export type { LiveFocusingData } from './live-focusing/types';
 
 export function LiveFocusingWidget({
   data,

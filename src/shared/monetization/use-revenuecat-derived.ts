@@ -4,8 +4,8 @@ import type {
   PurchasesOfferingDisplayInfo,
   PurchasesPackageDisplayInfo,
   RevenueCatError,
-} from "./revenuecat-types";
-import { useRevenueCat } from "./use-revenuecat";
+} from './revenuecat-types';
+import { useRevenueCat } from './use-revenuecat';
 
 export function usePremiumStatus(): {
   isPremium: boolean;

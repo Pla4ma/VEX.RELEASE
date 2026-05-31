@@ -5,11 +5,11 @@ interface SessionData {
   duration?: number;
   createdAt?: string;
 }
-type SessionDifficulty = "CASUAL" | "FOCUSED" | "INTENSE";
+type SessionDifficulty = 'CASUAL' | 'FOCUSED' | 'INTENSE';
 export interface DifficultySuggestion {
   suggestion: SessionDifficulty | null;
   reason: string;
-  confidence: "low" | "medium" | "high";
+  confidence: 'low' | 'medium' | 'high';
   stats: {
     sessionsAnalyzed: number;
     averageGrade: number;
@@ -33,10 +33,10 @@ export function getAdaptiveDifficultySuggestion(
     return {
       suggestion: null,
       reason:
-        "Complete " +
+        'Complete ' +
         (MIN_SESSIONS - validSessions.length) +
-        " more sessions to get personalized difficulty suggestions.",
-      confidence: "low",
+        ' more sessions to get personalized difficulty suggestions.',
+      confidence: 'low',
       stats: {
         sessionsAnalyzed: validSessions.length,
         averageGrade: 0,
@@ -60,30 +60,30 @@ export function getAdaptiveDifficultySuggestion(
     averagePurity,
   };
   switch (currentDifficulty) {
-    case "CASUAL":
+    case 'CASUAL':
       if (
         averageGrade >= UPGRADE_THRESHOLD &&
         averagePurity >= UPGRADE_MIN_PURITY
       ) {
         return {
-          suggestion: "FOCUSED",
+          suggestion: 'FOCUSED',
           reason:
-            "You are crushing CASUAL difficulty. Ready for FOCUSED? You will earn 2x XP.",
-          confidence: averageGrade >= 4.8 ? "high" : "medium",
+            'You are crushing CASUAL difficulty. Ready for FOCUSED? You will earn 2x XP.',
+          confidence: averageGrade >= 4.8 ? 'high' : 'medium',
           stats,
         };
       }
       break;
-    case "FOCUSED":
+    case 'FOCUSED':
       if (
         averageGrade <= DOWNGRADE_THRESHOLD &&
         averagePurity <= DOWNGRADE_MAX_PURITY
       ) {
         return {
-          suggestion: "CASUAL",
+          suggestion: 'CASUAL',
           reason:
-            "FOCUSED is challenging for you right now. Drop to CASUAL to rebuild momentum.",
-          confidence: averageGrade <= 2.0 ? "high" : "medium",
+            'FOCUSED is challenging for you right now. Drop to CASUAL to rebuild momentum.',
+          confidence: averageGrade <= 2.0 ? 'high' : 'medium',
           stats,
         };
       }
@@ -92,23 +92,23 @@ export function getAdaptiveDifficultySuggestion(
         averagePurity >= UPGRADE_MIN_PURITY
       ) {
         return {
-          suggestion: "INTENSE",
-          reason: "You have mastered FOCUSED. Try INTENSE for maximum rewards.",
-          confidence: "medium",
+          suggestion: 'INTENSE',
+          reason: 'You have mastered FOCUSED. Try INTENSE for maximum rewards.',
+          confidence: 'medium',
           stats,
         };
       }
       break;
-    case "INTENSE":
+    case 'INTENSE':
       if (
         averageGrade <= DOWNGRADE_THRESHOLD &&
         averagePurity <= DOWNGRADE_MAX_PURITY
       ) {
         return {
-          suggestion: "FOCUSED",
+          suggestion: 'FOCUSED',
           reason:
-            "INTENSE might be too punishing. FOCUSED offers better consistency.",
-          confidence: averageGrade <= 2.0 ? "high" : "medium",
+            'INTENSE might be too punishing. FOCUSED offers better consistency.',
+          confidence: averageGrade <= 2.0 ? 'high' : 'medium',
           stats,
         };
       }
@@ -117,7 +117,7 @@ export function getAdaptiveDifficultySuggestion(
   return {
     suggestion: null,
     reason: getEncouragementMessage(currentDifficulty, averageGrade),
-    confidence: "low",
+    confidence: 'low',
     stats,
   };
 }
@@ -126,12 +126,12 @@ function getEncouragementMessage(
   averageGrade: number,
 ): string {
   if (averageGrade >= 4.0) {
-    return "You are performing well at this difficulty. Keep it up!";
+    return 'You are performing well at this difficulty. Keep it up!';
   }
   if (averageGrade >= 3.0) {
-    return "You are finding your rhythm. Consistency is key.";
+    return 'You are finding your rhythm. Consistency is key.';
   }
-  return "Focus on completing sessions. Progress comes with practice.";
+  return 'Focus on completing sessions. Progress comes with practice.';
 }
 export function shouldShowSuggestion(
   lastShownAt: number | null,
@@ -146,9 +146,9 @@ export function getDifficultyDisplayName(
   difficulty: SessionDifficulty,
 ): string {
   const names: Record<SessionDifficulty, string> = {
-    CASUAL: "Casual",
-    FOCUSED: "Focused",
-    INTENSE: "Intense",
+    CASUAL: 'Casual',
+    FOCUSED: 'Focused',
+    INTENSE: 'Intense',
   };
   return names[difficulty] || difficulty;
 }

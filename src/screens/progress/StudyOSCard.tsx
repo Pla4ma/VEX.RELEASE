@@ -1,9 +1,9 @@
-import React from "react";
-import { View } from "react-native";
-import { Button } from "../../components/primitives/Button";
-import { Text } from "../../components/primitives/Text";
-import { getPremiumCardStyle } from "../../components/premiumStyles";
-import type { Theme } from "../../theme";
+import React from 'react';
+import { View } from 'react-native';
+import { Button } from '../../components/primitives/Button';
+import { Text } from '../../components/primitives/Text';
+import { getPremiumCardStyle } from '../../components/premiumStyles';
+import type { Theme } from '../../theme';
 
 type StudyOSCardProps = {
   theme: Theme;
@@ -24,7 +24,7 @@ export function StudyOSCard({
         backgroundColor: theme.colors.background.secondary,
         padding: theme.spacing[4],
         gap: theme.spacing[3],
-        ...getPremiumCardStyle("medium"),
+        ...getPremiumCardStyle('medium'),
       }}
     >
       <Text variant="label" color={theme.colors.text.secondary}>
@@ -32,8 +32,8 @@ export function StudyOSCard({
       </Text>
       <Text variant="h4" color={theme.colors.text.primary}>
         {canOpenStudy
-          ? "Turn material into focus sessions"
-          : "Study tools unlock through sessions"}
+          ? 'Turn material into focus sessions'
+          : 'Study tools unlock through sessions'}
       </Text>
       <Text variant="body" color={theme.colors.text.secondary}>
         Plans, review, and quizzes stay tied to the same start and complete
@@ -44,13 +44,13 @@ export function StudyOSCard({
         onPress={onOpenStudy}
         accessibilityLabel={
           canOpenStudy
-            ? "Open study tools"
-            : "Start session to unlock study tools"
+            ? 'Open study tools'
+            : 'Start session to unlock study tools'
         }
         accessibilityRole="button"
         accessibilityHint="Moves you to the next study or focus action"
       >
-        {canOpenStudy ? "Open study tools" : "Start session"}
+        {canOpenStudy ? 'Open study tools' : 'Start session'}
       </Button>
     </View>
   );

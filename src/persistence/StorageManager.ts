@@ -1,17 +1,17 @@
-import { captureSilentFailure } from "../utils/silent-failure";
+import { captureSilentFailure } from '../utils/silent-failure';
 /**
  * Storage Manager
  *
  * Unified storage interface with automatic fallback.
  */
 
-import { MMKVStorage, getMMKVStorage } from "./MMKVStorage";
-import { getDefaultStorageAdapter } from "./MMKVStorageAdapter";
-import type { StorageAdapter, StorageOptions } from "./StorageAdapter";
-import type { Nullable } from "../types/global";
-import { createDebugger } from "../utils/debug";
+import { MMKVStorage, getMMKVStorage } from './MMKVStorage';
+import { getDefaultStorageAdapter } from './MMKVStorageAdapter';
+import type { StorageAdapter, StorageOptions } from './StorageAdapter';
+import type { Nullable } from '../types/global';
+import { createDebugger } from '../utils/debug';
 
-const debug = createDebugger("storage");
+const debug = createDebugger('storage');
 
 /**
  * Storage manager configuration
@@ -54,7 +54,7 @@ export class StorageManager implements StorageAdapter {
         return;
       } catch (error) {
         debug.warn(
-          "MMKV initialization failed, falling back to MMKV:",
+          'MMKV initialization failed, falling back to MMKV:',
           error as Error,
         );
       }
@@ -67,7 +67,7 @@ export class StorageManager implements StorageAdapter {
       this.active = mmkvAdapter;
       this.useFallback = true;
     } catch (error) {
-      debug.error("All storage adapters failed:", error as Error);
+      debug.error('All storage adapters failed:', error as Error);
       throw error;
     }
   }
@@ -78,7 +78,7 @@ export class StorageManager implements StorageAdapter {
   private checkInitialized(): void {
     if (!this.active) {
       throw new Error(
-        "StorageManager not initialized. Call initialize() first.",
+        'StorageManager not initialized. Call initialize() first.',
       );
     }
   }
@@ -138,9 +138,9 @@ export class StorageManager implements StorageAdapter {
       return JSON.parse(json) as T;
     } catch (error) {
       captureSilentFailure(error, {
-        feature: "persistence",
-        operation: "safe-fallback",
-        type: "data",
+        feature: 'persistence',
+        operation: 'safe-fallback',
+        type: 'data',
       });
       return null;
     }
@@ -164,7 +164,7 @@ export class StorageManager implements StorageAdapter {
     const keys = await this.getAllKeys();
     const size = await this.getSize();
     return {
-      adapter: this.useFallback ? "MMKVStorageAdapter" : "MMKV",
+      adapter: this.useFallback ? 'MMKVStorageAdapter' : 'MMKV',
       keys: keys.length,
       size,
     };

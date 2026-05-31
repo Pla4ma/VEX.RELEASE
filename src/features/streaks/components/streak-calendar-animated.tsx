@@ -1,9 +1,9 @@
-import React, { useMemo } from "react";
-import { View, Text } from "react-native";
-import { useStreakCalendar } from "../hooks";
-import { useTheme } from "@/theme";
-import { DayCell, type DayData } from "./streak-calendar-day-cell";
-import { getStyles } from "./streak-calendar-styles";
+import React, { useMemo } from 'react';
+import { View, Text } from 'react-native';
+import { useStreakCalendar } from '../hooks';
+import { useTheme } from '@/theme';
+import { DayCell, type DayData } from './streak-calendar-day-cell';
+import { getStyles } from './streak-calendar-styles';
 
 interface StreakCalendarAnimatedProps {
   userId: string;
@@ -91,8 +91,8 @@ export function StreakCalendarAnimated({
     );
   }
 
-  const monthName = new Date(year, month - 1).toLocaleString("default", {
-    month: "long",
+  const monthName = new Date(year, month - 1).toLocaleString('default', {
+    month: 'long',
   });
   const daysInMonth = new Date(year, month, 0).getDate();
   const firstDayOfMonth = new Date(year, month - 1, 1).getDay();
@@ -131,9 +131,9 @@ export function StreakCalendarAnimated({
         <Text style={styles.monthName}>{title || `${monthName} ${year}`}</Text>
         <View style={styles.statsRow}>
           <Text style={styles.statText}>
-            Current streak:{" "}
+            Current streak:{' '}
             <Text style={styles.statValueHighlight}>
-              {previewCurrentStreakDays ?? calendar?.currentStreakDays ?? 0}{" "}
+              {previewCurrentStreakDays ?? calendar?.currentStreakDays ?? 0}{' '}
               days
             </Text>
           </Text>
@@ -145,7 +145,7 @@ export function StreakCalendarAnimated({
         </View>
       </View>
       <View style={styles.weekdays}>
-        {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
+        {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
           <Text key={day} style={styles.weekdayText}>
             {day}
           </Text>

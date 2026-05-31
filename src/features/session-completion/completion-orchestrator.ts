@@ -1,39 +1,39 @@
-import * as Sentry from "@sentry/react-native";
-import { z } from "zod";
+import * as Sentry from '@sentry/react-native';
+import { z } from 'zod';
 
-import { getConnectionState } from "../../lib/repository/base";
-import { enqueue } from "../../lib/offline/queue";
-import { SessionSummarySchema } from "../../session/types";
-import { createDebugger } from "../../utils/debug";
-import { invalidateCompletionQueries } from "./completion-query-invalidation";
-import { setCompletionSyncState } from "./completion-sync-state";
-import { applyCompletionSubsystems } from "./completion-subsystems";
-import { buildCompletionLedger } from "./ledger-service";
-import { resolveCompletionPersonalBest } from "./personal-best-integration";
-import { applyCompletionSideEffects } from "./completion-side-effects";
-import { integrateCompletionPersonalization } from "./completion-personalization-integration";
-import type { CompletionPersonalizationResult } from "./schemas";
+import { getConnectionState } from '../../lib/repository/base';
+import { enqueue } from '../../lib/offline/queue';
+import { SessionSummarySchema } from '../../session/types';
+import { createDebugger } from '../../utils/debug';
+import { invalidateCompletionQueries } from './completion-query-invalidation';
+import { setCompletionSyncState } from './completion-sync-state';
+import { applyCompletionSubsystems } from './completion-subsystems';
+import { buildCompletionLedger } from './ledger-service';
+import { resolveCompletionPersonalBest } from './personal-best-integration';
+import { applyCompletionSideEffects } from './completion-side-effects';
+import { integrateCompletionPersonalization } from './completion-personalization-integration';
+import type { CompletionPersonalizationResult } from './schemas';
 import {
   createCompletionLedger,
   getCompletionLedgerByIdempotencyKey,
-} from "./repository";
-import { buildPostSessionStoryViewModel } from "./story-view-model-service";
-import type { PostSessionStoryViewModel } from "./story-view-model-service";
+} from './repository';
+import { buildPostSessionStoryViewModel } from './story-view-model-service';
+import type { PostSessionStoryViewModel } from './story-view-model-service';
 import {
   createSessionRecord,
   countCompletedSessions,
-} from "../session-history/repository";
+} from '../session-history/repository';
 import {
   beginKeyProcessing,
   markKeyProcessed,
   releaseKeyProcessing,
-} from "./idempotency";
-import { getFocusProfile } from "../focus-profile/service";
-import { resolveInitialLane } from "../lane-engine/service";
+} from './idempotency';
+import { getFocusProfile } from '../focus-profile/service';
+import { resolveInitialLane } from '../lane-engine/service';
 
-export { initializeSessionCompletionOrchestrator } from "./completion-orchestrator-init";
+export { initializeSessionCompletionOrchestrator } from './completion-orchestrator-init';
 
-const debug = createDebugger("session-completion:orchestrator");
+const debug = createDebugger('session-completion:orchestrator');
 
 const SessionCompletedEventSchema = z
   .object({
@@ -51,21 +51,21 @@ export async function orchestrateSessionCompletion(
 ): Promise<PostSessionStoryViewModel | null> {
   const parsed = SessionCompletedEventSchema.parse(event);
   const summary = SessionSummarySchema.parse(parsed.summary);
-  const isOnline = getConnectionState() !== "offline";
+  const isOnline = getConnectionState() !== 'offline';
 
   // LAYER 1: Local completion receipt — always succeeds
   const ledger = buildCompletionLedger({
     completedAt: parsed.timestamp ?? Date.now(),
-    offlineSyncStatus: isOnline ? "synced" : "pending_sync",
+    offlineSyncStatus: isOnline ? 'synced' : 'pending_sync',
     sessionId: parsed.sessionId,
     summary,
-    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone ?? "UTC",
+    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone ?? 'UTC',
     userId: parsed.userId,
   });
   const key = ledger.idempotencyKey;
 
   // LAYER 1b: Idempotency guard
-  if (!beginKeyProcessing(key)) return null;
+  if (!beginKeyProcessing(key)) {return null;}
 
   try {
     const existing = await getCompletionLedgerByIdempotencyKey(key);
@@ -87,7 +87,7 @@ export async function orchestrateSessionCompletion(
         createSessionRecord({
           sessionId: ledger.sessionId,
           userId: ledger.userId,
-          status: "COMPLETED",
+          status: 'COMPLETED',
           duration: ledger.targetDurationSeconds,
           effectiveDuration: ledger.effectiveFocusedSeconds,
           qualityScore: ledger.qualityScore,
@@ -99,26 +99,26 @@ export async function orchestrateSessionCompletion(
           endedAt: new Date(ledger.completedAt).toISOString(),
         }).catch((err: unknown) => {
           Sentry.captureException(err, {
-            tags: { feature: "session-record-creation" },
+            tags: { feature: 'session-record-creation' },
           });
         });
       } catch (error) {
         Sentry.captureException(error, {
-          tags: { feature: "session-completion-ledger" },
+          tags: { feature: 'session-completion-ledger' },
         });
         enqueue({
-          feature: "sessions",
+          feature: 'sessions',
           idempotencyKey: ledger.idempotencyKey,
-          operation: "CREATE",
+          operation: 'CREATE',
           payload: { ledger },
         });
-        persisted = { ...ledger, offlineSyncStatus: "pending_sync" };
+        persisted = { ...ledger, offlineSyncStatus: 'pending_sync' };
       }
     } else {
       enqueue({
-        feature: "sessions",
+        feature: 'sessions',
         idempotencyKey: ledger.idempotencyKey,
-        operation: "CREATE",
+        operation: 'CREATE',
         payload: { ledger },
       });
     }
@@ -151,13 +151,13 @@ export async function orchestrateSessionCompletion(
       personalizationResult = await integrateCompletionPersonalization({
         deletedMemoryIds: [],
         hiddenFeatureKeys: [
-          "shop",
-          "inventory",
-          "battle_pass",
-          "premium_currency",
-          "wagers",
+          'shop',
+          'inventory',
+          'battle_pass',
+          'premium_currency',
+          'wagers',
         ],
-        isComeback: summary.sessionMode === "RECOVERY",
+        isComeback: summary.sessionMode === 'RECOVERY',
         isPersonalBest: personalBest.isPersonalBest,
         laneProfile,
         ledger: finalLedger,
@@ -166,7 +166,7 @@ export async function orchestrateSessionCompletion(
       });
     } catch (error) {
       Sentry.captureException(error, {
-        tags: { feature: "completion-personalization" },
+        tags: { feature: 'completion-personalization' },
       });
     }
 
@@ -180,7 +180,7 @@ export async function orchestrateSessionCompletion(
       userId: parsed.userId,
     });
 
-    debug.info("Session completion orchestrated for %s", parsed.sessionId);
+    debug.info('Session completion orchestrated for %s', parsed.sessionId);
     invalidateCompletionQueries(parsed.userId);
 
     markKeyProcessed(key);

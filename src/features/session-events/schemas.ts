@@ -1,12 +1,12 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const MidSessionEventTypeSchema = z.enum([
-  "BOSS_TAUNT",
-  "PURITY_PULSE",
-  "COMBO_WINDOW",
-  "DISTRACTION_WAVE",
-  "FOCUS_ZONE",
-  "BOSS_RAGE",
+  'BOSS_TAUNT',
+  'PURITY_PULSE',
+  'COMBO_WINDOW',
+  'DISTRACTION_WAVE',
+  'FOCUS_ZONE',
+  'BOSS_RAGE',
 ]);
 
 export const MidSessionBossTauntsSchema = z
@@ -35,8 +35,8 @@ export const MidSessionEventSchema = z
     type: MidSessionEventTypeSchema,
     title: z.string().min(1),
     message: z.string().min(1),
-    toastType: z.enum(["success", "warning", "info"]),
-    haptic: z.enum(["selection", "warning", "impactLight", "impactMedium"]),
+    toastType: z.enum(['success', 'warning', 'info']),
+    haptic: z.enum(['selection', 'warning', 'impactLight', 'impactMedium']),
   })
   .strict();
 

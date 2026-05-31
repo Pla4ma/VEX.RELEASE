@@ -17,20 +17,20 @@ let streakMetrics: StreakSurvivalMetrics = {
 };
 
 export function trackStreakEvent(
-  event: "start" | "break" | "protect" | "milestone",
+  event: 'start' | 'break' | 'protect' | 'milestone',
   data?: { length?: number; insuranceUsed?: boolean },
 ): void {
   switch (event) {
-    case "start":
+    case 'start':
       streakMetrics.totalStreaksStarted++;
       break;
-    case "break":
+    case 'break':
       streakMetrics.streaksBroken++;
       break;
-    case "protect":
+    case 'protect':
       streakMetrics.streaksProtected++;
       break;
-    case "milestone":
+    case 'milestone':
       if (data?.length) {
         const totalLength =
           streakMetrics.avgStreakLength *

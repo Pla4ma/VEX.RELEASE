@@ -1,32 +1,32 @@
-import React from "react";
+import React from 'react';
 import TestRenderer, {
   type ReactTestRenderer,
   type ReactTestRendererJSON,
-} from "react-test-renderer";
+} from 'react-test-renderer';
 
-import { ActiveSessionHero } from "../ActiveSessionHero";
-import type { ActiveSessionHeroViewModel } from "../../utils/active-session-hero-view-model";
-import type { ActiveSessionDisplayPolicy } from "../../utils/active-session-display-policy";
+import { ActiveSessionHero } from '../ActiveSessionHero';
+import type { ActiveSessionHeroViewModel } from '../../utils/active-session-hero-view-model';
+import type { ActiveSessionDisplayPolicy } from '../../utils/active-session-display-policy';
 
-jest.mock("../../../../components/primitives/Box", () => {
-  const ReactActual = jest.requireActual("react");
+jest.mock('../../../../components/primitives/Box', () => {
+  const ReactActual = jest.requireActual('react');
   return {
     Box: ({ children }: { children?: React.ReactNode }) =>
-      ReactActual.createElement("Box", null, children),
+      ReactActual.createElement('Box', null, children),
   };
 });
 
-jest.mock("../../../../components/primitives/Text", () => {
-  const ReactActual = jest.requireActual("react");
+jest.mock('../../../../components/primitives/Text', () => {
+  const ReactActual = jest.requireActual('react');
   return {
     Text: ({ children }: { children?: React.ReactNode }) =>
-      ReactActual.createElement("Text", null, children),
+      ReactActual.createElement('Text', null, children),
   };
 });
 
-jest.mock("../../../../icons", () => ({ Icon: () => null }));
-jest.mock("../ActiveSessionProgressRing", () => {
-  const ReactActual = jest.requireActual("react");
+jest.mock('../../../../icons', () => ({ Icon: () => null }));
+jest.mock('../ActiveSessionProgressRing', () => {
+  const ReactActual = jest.requireActual('react');
   return {
     ActiveSessionProgressRing: ({
       perfectFocusActive,
@@ -36,19 +36,19 @@ jest.mock("../ActiveSessionProgressRing", () => {
       showPurityScore: boolean;
     }) =>
       ReactActual.createElement(
-        "Text",
+        'Text',
         null,
         perfectFocusActive
-          ? "Completion Aura"
+          ? 'Completion Aura'
           : showPurityScore
-            ? "Purity Score"
-            : "Timer Ring",
+            ? 'Purity Score'
+            : 'Timer Ring',
       ),
   };
 });
 
 export const basePolicy: ActiveSessionDisplayPolicy = {
-  heroDensity: "minimal",
+  heroDensity: 'minimal',
   showBossHUD: false,
   showBossTinyIndicator: false,
   showCoachBanner: false,
@@ -65,9 +65,9 @@ export function buildViewModel(
   overrides: Partial<ActiveSessionHeroViewModel> = {},
 ): ActiveSessionHeroViewModel {
   return {
-    phaseIcon: "clock",
-    phaseLabel: "Focus",
-    phaseAccent: "blue",
+    phaseIcon: 'clock',
+    phaseLabel: 'Focus',
+    phaseAccent: 'blue',
     studyTargetLabel: null,
     completionPercentage: 42,
     elapsedSeconds: 120,
@@ -79,10 +79,10 @@ export function buildViewModel(
     showPurityScore: false,
     perfectFocusActive: false,
     purityScore: 95,
-    purityLabel: "Elite",
+    purityLabel: 'Elite',
     streakMultiplier: 1,
-    heroDensity: "minimal",
-    laneAccent: "quiet_planner",
+    heroDensity: 'minimal',
+    laneAccent: 'quiet_planner',
     secondaryInfo: null,
     isReducedMotion: false,
     ...overrides,
@@ -97,7 +97,7 @@ export const baseProgressRingProps = {
   animatedCircleProps: {},
   glowStyle: {
     elevation: 0,
-    shadowColor: "transparent",
+    shadowColor: 'transparent',
     shadowOpacity: 0,
     shadowRadius: 0,
   },
@@ -105,7 +105,7 @@ export const baseProgressRingProps = {
   perfectFocusBurst: { value: 0 },
   pulseStyle: {},
   rotatingPerfectFocusStyle: {},
-  labelColor: "green",
+  labelColor: 'green',
   withAlpha: (color: string, _alpha?: number) => color,
 };
 
@@ -119,11 +119,11 @@ export function renderHero(
         viewModel={viewModel}
         progressRingProps={baseProgressRingProps as any}
         themeColors={{
-          error: "red",
-          inverse: "white",
-          primary300: "blue",
-          success: "green",
-          warning: "orange",
+          error: 'red',
+          inverse: 'white',
+          primary300: 'blue',
+          success: 'green',
+          warning: 'orange',
         }}
         isReducedMotion={viewModel.isReducedMotion}
       />,
@@ -139,7 +139,7 @@ export function hasText(
   if (node === null) {
     return false;
   }
-  if (typeof node === "string") {
+  if (typeof node === 'string') {
     return node === text;
   }
   if (Array.isArray(node)) {

@@ -1,15 +1,15 @@
-import React from "react";
-import Animated, { FadeIn, FadeInUp } from "react-native-reanimated";
-import { Box } from "../../../components/primitives/Box";
-import { Button } from "../../../components/primitives/Button";
-import { Text } from "../../../components/primitives/Text";
-import { GoalCard } from "./GoalCard";
+import React from 'react';
+import Animated, { FadeIn, FadeInUp } from 'react-native-reanimated';
+import { Box } from '../../../components/primitives/Box';
+import { Button } from '../../../components/primitives/Button';
+import { Text } from '../../../components/primitives/Text';
+import { GoalCard } from './GoalCard';
 
 export type OnboardingGoalType =
-  | "deep-work"
-  | "build-habit"
-  | "get-done"
-  | "beat-procrastination";
+  | 'deep-work'
+  | 'build-habit'
+  | 'get-done'
+  | 'beat-procrastination';
 
 export interface OnboardingGoal {
   id: OnboardingGoalType;
@@ -31,28 +31,28 @@ const GOALS: readonly [
   OnboardingGoal,
 ] = [
   {
-    id: "deep-work",
-    icon: "\uD83E\uDDE0",
-    title: "Deep Work",
-    description: "Studying, coding, writing — VEX finds your best focus window",
+    id: 'deep-work',
+    icon: '\uD83E\uDDE0',
+    title: 'Deep Work',
+    description: 'Studying, coding, writing — VEX finds your best focus window',
   },
   {
-    id: "build-habit",
-    icon: "\u2B55",
-    title: "Find My Rhythm",
-    description: "Let VEX learn what kind of sessions you actually finish",
+    id: 'build-habit',
+    icon: '\u2B55',
+    title: 'Find My Rhythm',
+    description: 'Let VEX learn what kind of sessions you actually finish',
   },
   {
-    id: "get-done",
-    icon: "\uD83D\uDE80",
-    title: "Start Any Project",
-    description: "One clean block, then VEX recommends the next move",
+    id: 'get-done',
+    icon: '\uD83D\uDE80',
+    title: 'Start Any Project',
+    description: 'One clean block, then VEX recommends the next move',
   },
   {
-    id: "beat-procrastination",
-    icon: "\uD83D\uDD04",
-    title: "Recover Momentum",
-    description: "VEX adapts to real sessions instead of tracking streaks",
+    id: 'beat-procrastination',
+    icon: '\uD83D\uDD04',
+    title: 'Recover Momentum',
+    description: 'VEX adapts to real sessions instead of tracking streaks',
   },
 ];
 
@@ -65,7 +65,7 @@ export function OnboardingChooseGoal({
     <Box flex={1} justifyContent="space-between" px="xl" py="2xl">
       <Animated.View entering={FadeIn.duration(400)}>
         <Box gap="md" mt="xl">
-          <Text fontSize={40}>{"\uD83C\uDFAF"}</Text>
+          <Text fontSize={40}>{'\uD83C\uDFAF'}</Text>
           <Box gap="sm">
             <Text variant="h2" color="text.primary">
               What brings you here?
@@ -116,15 +116,15 @@ export function OnboardingChooseGoal({
             fullWidth
             onPress={onContinue}
             disabled={!selectedGoal}
-            accessibilityLabel={selectedGoal ? "Continue" : "Select a goal"}
+            accessibilityLabel={selectedGoal ? 'Continue' : 'Select a goal'}
             accessibilityRole="button"
             accessibilityHint={
               selectedGoal
-                ? "Proceeds to the next step"
-                : "Select a goal first to continue"
+                ? 'Proceeds to the next step'
+                : 'Select a goal first to continue'
             }
           >
-            {selectedGoal ? "Continue" : "Select a goal"}
+            {selectedGoal ? 'Continue' : 'Select a goal'}
           </Button>
         </Box>
       </Animated.View>

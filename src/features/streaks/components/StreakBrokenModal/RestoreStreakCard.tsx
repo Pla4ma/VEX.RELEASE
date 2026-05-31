@@ -1,9 +1,9 @@
-import React from "react";
-import { Box } from "../../../../components/primitives/Box";
-import { Text } from "../../../../components/primitives/Text";
-import { Button } from "../../../../components/primitives/Button";
-import { useTheme } from "../../../../theme";
-import { calculateRestoreCost } from "./helpers";
+import React from 'react';
+import { Box } from '../../../../components/primitives/Box';
+import { Text } from '../../../../components/primitives/Text';
+import { Button } from '../../../../components/primitives/Button';
+import { useTheme } from '../../../../theme';
+import { calculateRestoreCost } from './helpers';
 
 interface RestoreStreakCardProps {
   brokenStreakDays: number;
@@ -51,7 +51,7 @@ export function RestoreStreakCard({
           </Text>
           <Text
             variant="h4"
-            color={canAfford ? "primary.DEFAULT" : "error.DEFAULT"}
+            color={canAfford ? 'primary.DEFAULT' : 'error.DEFAULT'}
           >
             {cost} 💎
           </Text>
@@ -62,14 +62,14 @@ export function RestoreStreakCard({
           </Text>
           <Text
             variant="body"
-            color={canAfford ? "text.secondary" : "error.DEFAULT"}
+            color={canAfford ? 'text.secondary' : 'error.DEFAULT'}
           >
             {gemsBalance} 💎
           </Text>
         </Box>
       </Box>
       <Button
-        variant={canAfford ? "primary" : "secondary"}
+        variant={canAfford ? 'primary' : 'secondary'}
         size="md"
         fullWidth
         onPress={onRestore}
@@ -80,7 +80,7 @@ export function RestoreStreakCard({
         accessibilityRole="button"
         accessibilityHint="Double tap to activate"
       >
-        {canAfford ? "💎 Restore Streak" : `Need ${cost} gems`}
+        {canAfford ? '💎 Restore Streak' : `Need ${cost} gems`}
       </Button>
       {!canAfford && (
         <Text variant="caption" color="error.DEFAULT" textAlign="center">

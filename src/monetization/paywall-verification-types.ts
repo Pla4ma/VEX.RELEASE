@@ -31,14 +31,14 @@ export interface ComplianceSection extends ValidationSection {
 export interface PaywallIssue {
   id: string;
   category:
-    | "product-catalog"
-    | "purchase-flow"
-    | "subscription"
-    | "receipt"
-    | "analytics"
-    | "compliance"
-    | "general";
-  severity: "critical" | "major" | "moderate" | "minor";
+    | 'product-catalog'
+    | 'purchase-flow'
+    | 'subscription'
+    | 'receipt'
+    | 'analytics'
+    | 'compliance'
+    | 'general';
+  severity: 'critical' | 'major' | 'moderate' | 'minor';
   message: string;
   recommendation: string;
   gdprArticle?: string;

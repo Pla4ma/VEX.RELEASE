@@ -1,8 +1,8 @@
-import React from "react";
-import { Circle, G, RadialGradient, Stop, Svg } from "react-native-svg";
-import type { SharedValue } from "react-native-reanimated";
+import React from 'react';
+import { Circle, G, RadialGradient, Stop, Svg } from 'react-native-svg';
+import type { SharedValue } from 'react-native-reanimated';
 
-import { CompanionPhase, CompanionElement } from "../types";
+import { CompanionPhase, CompanionElement } from '../types';
 
 interface CompanionBodyProps {
   phase: CompanionPhase;
@@ -23,7 +23,7 @@ export const CompanionBody: React.FC<CompanionBodyProps> = ({
   const center = size / 2;
 
   switch (phase) {
-    case "EGG":
+    case 'EGG':
       return (
         <>
           <RadialGradient
@@ -40,7 +40,7 @@ export const CompanionBody: React.FC<CompanionBodyProps> = ({
         </>
       );
 
-    case "HATCHING":
+    case 'HATCHING':
       return (
         <>
           <RadialGradient
@@ -75,7 +75,7 @@ export const CompanionBody: React.FC<CompanionBodyProps> = ({
         </>
       );
 
-    case "YOUNG":
+    case 'YOUNG':
       return (
         <>
           <RadialGradient
@@ -111,9 +111,9 @@ export const CompanionBody: React.FC<CompanionBodyProps> = ({
         </>
       );
 
-    case "MATURE":
-    case "AWAKENED":
-    case "TRANSCENDENT":
+    case 'MATURE':
+    case 'AWAKENED':
+    case 'TRANSCENDENT':
       return (
         <>
           <RadialGradient
@@ -134,7 +134,7 @@ export const CompanionBody: React.FC<CompanionBodyProps> = ({
             r={radius}
             fill="url(#matureGradient)"
           />
-          {phase !== "MATURE" && (
+          {phase !== 'MATURE' && (
             <>
               <Circle
                 cx={center - radius * 0.5}

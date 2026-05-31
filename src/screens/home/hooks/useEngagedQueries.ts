@@ -1,21 +1,21 @@
-import { useMemo } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useMemo } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import {
   useCreateRecommendation,
   useUpdateRecommendationStatus,
   type SessionRecommendation,
-} from "../../../features/ai-coach";
-import * as coachRepository from "../../../features/ai-coach/repository";
-import { getNextBestAction } from "../../../features/progression";
-import { useActiveStudyPlan } from "../../../features/content-study";
-import { useLearningExecutionLayer } from "../../../features/learning-execution";
-import { useComebackState } from "../../../features/streaks/hooks";
+} from '../../../features/ai-coach';
+import * as coachRepository from '../../../features/ai-coach/repository';
+import { getNextBestAction } from '../../../features/progression';
+import { useActiveStudyPlan } from '../../../features/content-study';
+import { useLearningExecutionLayer } from '../../../features/learning-execution';
+import { useComebackState } from '../../../features/streaks/hooks';
 import {
   getFeatureAvailability,
   isFeatureAvailableForNavigation,
-} from "../../../features/liveops-config";
-import { getFocusedMinutesForToday, getNextUnlockFeature } from "./home-controller-helpers";
-import type { EngagedModelInput } from "./engaged-home-types";
+} from '../../../features/liveops-config';
+import { getFocusedMinutesForToday, getNextUnlockFeature } from './home-controller-helpers';
+import type { EngagedModelInput } from './engaged-home-types';
 
 export function useEngagedQueries(input: EngagedModelInput) {
   const { disclosure, historyQuery, progressionQuery, runtime, streakQuery, userId } = input;
@@ -42,7 +42,7 @@ export function useEngagedQueries(input: EngagedModelInput) {
   const comebackQuery = useComebackState(runtime.canQueryComeback ? userId : null);
 
   const recommendationsQuery = useQuery({
-    queryKey: ["coach", "recommendations", userId],
+    queryKey: ['coach', 'recommendations', userId],
     queryFn: () => coachRepository.fetchActiveRecommendations(userId),
     enabled: runtime.canQueryCoach && Boolean(userId) && !disclosure.isLoading,
     staleTime: 1000 * 60 * 5,
@@ -53,7 +53,7 @@ export function useEngagedQueries(input: EngagedModelInput) {
       (recommendationsQuery.data ?? [])
         .filter(
           (item: { status: string; expiresAt: number }) =>
-            item.status === "ACTIVE" && item.expiresAt > Date.now(),
+            item.status === 'ACTIVE' && item.expiresAt > Date.now(),
         )
         .sort(
           (a: { confidence?: number }, b: { confidence?: number }) =>

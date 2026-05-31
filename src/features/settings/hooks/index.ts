@@ -1,4 +1,4 @@
-export { settingsKeys } from "./queryKeys";
+export { settingsKeys } from './queryKeys';
 
 export {
   useSetting,
@@ -8,14 +8,14 @@ export {
   useCoachSettings,
   useAppearanceSettings,
   usePrivacySettings,
-} from "./useSettingsQueries";
+} from './useSettingsQueries';
 
 export {
   useUpdateSetting,
   useBatchUpdateSettings,
   useDeleteSetting,
   useSyncSettings,
-} from "./useSettingMutations";
+} from './useSettingMutations';
 
 export {
   useUpdateNotificationSettings,
@@ -25,6 +25,6 @@ export {
   useExportSettings,
   useImportSettings,
   useResetSettings,
-} from "./useCategoryMutations";
+} from './useCategoryMutations';
 
-export { useSettingsUIState } from "./useSettingsUIState";
+export { useSettingsUIState } from './useSettingsUIState';

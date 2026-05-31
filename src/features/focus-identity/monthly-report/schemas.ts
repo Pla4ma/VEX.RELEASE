@@ -4,16 +4,16 @@
  * Type definitions and schemas for the monthly focus report system.
  */
 
-import { z } from "zod";
+import { z } from 'zod';
 
 export const MonthlyReportSectionSchema = z.enum([
-  "SCORE_OVERVIEW",
-  "SESSION_ANALYSIS",
-  "STREAK_HIGHLIGHTS",
-  "BEST_PERFORMANCE",
-  "WEEKLY_PATTERNS",
-  "AI_INSIGHTS",
-  "NEXT_TARGETS",
+  'SCORE_OVERVIEW',
+  'SESSION_ANALYSIS',
+  'STREAK_HIGHLIGHTS',
+  'BEST_PERFORMANCE',
+  'WEEKLY_PATTERNS',
+  'AI_INSIGHTS',
+  'NEXT_TARGETS',
 ]);
 
 export type MonthlyReportSection = z.infer<typeof MonthlyReportSectionSchema>;
@@ -29,13 +29,13 @@ export const MonthlyFocusReportSchema = z.object({
   startingScore: z.number(),
   endingScore: z.number(),
   scoreDelta: z.number(),
-  grade: z.enum(["A+", "A", "B", "C", "D", "F"]),
+  grade: z.enum(['A+', 'A', 'B', 'C', 'D', 'F']),
 
   // Session metrics
   sessionCount: z.number(),
   totalFocusedMinutes: z.number(),
   averageSessionLength: z.number(),
-  bestGrade: z.enum(["A+", "A", "B", "C", "D", "F"]),
+  bestGrade: z.enum(['A+', 'A', 'B', 'C', 'D', 'F']),
 
   // Performance insights
   bestFocusWindow: z.object({
@@ -82,7 +82,7 @@ export interface SessionAnalysis {
   sessionCount: number;
   totalFocusedMinutes: number;
   averageSessionLength: number;
-  bestGrade: "A+" | "A" | "B" | "C" | "D" | "F";
+  bestGrade: 'A+' | 'A' | 'B' | 'C' | 'D' | 'F';
   bestFocusWindow: {
     dayOfWeek: string;
     timeRange: string;

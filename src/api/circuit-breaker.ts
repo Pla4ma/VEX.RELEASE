@@ -4,14 +4,14 @@
  * Circuit breaker pattern implementation for API resilience.
  */
 
-import { createDebugger } from "../utils/debug";
+import { createDebugger } from '../utils/debug';
 
-const debug = createDebugger("circuit-breaker");
+const debug = createDebugger('circuit-breaker');
 
 export enum CircuitState {
-  CLOSED = "CLOSED",
-  OPEN = "OPEN",
-  HALF_OPEN = "HALF_OPEN",
+  CLOSED = 'CLOSED',
+  OPEN = 'OPEN',
+  HALF_OPEN = 'HALF_OPEN',
 }
 
 export class CircuitBreaker {
@@ -42,7 +42,7 @@ export class CircuitBreaker {
   recordSuccess(): void {
     this.failures = 0;
     this.state = CircuitState.CLOSED;
-    debug.debug("Circuit breaker closed");
+    debug.debug('Circuit breaker closed');
   }
 
   recordFailure(): void {
@@ -53,7 +53,7 @@ export class CircuitBreaker {
       this.state = CircuitState.OPEN;
       this.nextAttempt = Date.now() + this.resetTimeout;
       debug.debug(
-        "Circuit breaker opened, next attempt in %dms",
+        'Circuit breaker opened, next attempt in %dms',
         this.resetTimeout,
       );
     }

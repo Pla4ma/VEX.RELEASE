@@ -1,17 +1,17 @@
-import * as Sentry from "@sentry/react-native";
-import { getAvailabilityFor } from "../liveops-config/feature-access-store";
-import { CompletionLedgerSchema, type CompletionLedger } from "./schemas";
-import type { SubsystemMeta } from "./subsystem-meta";
+import * as Sentry from '@sentry/react-native';
+import { getAvailabilityFor } from '../liveops-config/feature-access-store';
+import { CompletionLedgerSchema, type CompletionLedger } from './schemas';
+import type { SubsystemMeta } from './subsystem-meta';
 
 export function subsystemShouldRun(meta: SubsystemMeta): boolean {
   if (
-    meta.kind === "CORE_REQUIRED" ||
-    meta.kind === "REQUIRED" ||
-    meta.kind === "ANALYTICS_ONLY"
+    meta.kind === 'CORE_REQUIRED' ||
+    meta.kind === 'REQUIRED' ||
+    meta.kind === 'ANALYTICS_ONLY'
   ) {
     return true;
   }
-  if (meta.kind === "FEATURE_DEPENDENT" && meta.featureKey) {
+  if (meta.kind === 'FEATURE_DEPENDENT' && meta.featureKey) {
     return getAvailabilityFor(meta.featureKey).canSubscribeToEvents;
   }
   return false;
@@ -31,7 +31,7 @@ export async function runSubsystem(
   } catch (error) {
     degradedSystems.push(label);
     Sentry.captureException(error, {
-      tags: { feature: "session-completion", subsystem: label },
+      tags: { feature: 'session-completion', subsystem: label },
     });
   }
 }

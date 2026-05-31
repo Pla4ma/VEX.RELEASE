@@ -1,30 +1,30 @@
-import { Platform } from "react-native";
-import { v4 as uuidv4 } from "../../utils/uuid";
+import { Platform } from 'react-native';
+import { v4 as uuidv4 } from '../../utils/uuid';
 import type {
   SessionState,
   SessionConfig,
   FocusQualityMetrics,
-} from "../types";
-import * as persistence from "../SessionPersistence";
-import { createDebugger } from "../../utils/debug";
+} from '../types';
+import * as persistence from '../SessionPersistence';
+import { createDebugger } from '../../utils/debug';
 
-const debug = createDebugger("session:orchestrator:core");
+const debug = createDebugger('session:orchestrator:core');
 
-import type { SessionOrchestratorBase } from "../SessionOrchestratorBase";
-import { TimerEngine } from "../engines/TimerEngine";
+import type { SessionOrchestratorBase } from '../SessionOrchestratorBase';
+import { TimerEngine } from '../engines/TimerEngine';
 
 export async function createSession(
   orch: SessionOrchestratorBase,
   config: SessionConfig,
 ): Promise<SessionState> {
-  if (!orch.userId) throw new Error("SessionOrchestrator: No user set");
+  if (!orch.userId) {throw new Error('SessionOrchestrator: No user set');}
   const sessionId = uuidv4();
   const now = Date.now();
   const session: SessionState = {
     id: sessionId,
     userId: orch.userId,
-    status: "PREPARING",
-    phase: "PREPARATION",
+    status: 'PREPARING',
+    phase: 'PREPARATION',
     config,
     remainingTime: config.duration * 1000,
     totalDuration: config.duration * 1000,
@@ -53,13 +53,13 @@ export async function createSession(
     recoveryAttempts: 0,
     maxRecoveryAttempts: 3,
     canRecover: true,
-    conflictStatus: "NONE",
-    storageStatus: "HEALTHY",
-    syncStatus: "IDLE" as const,
+    conflictStatus: 'NONE',
+    storageStatus: 'HEALTHY',
+    syncStatus: 'IDLE' as const,
     deviceId: orch.getDeviceFingerprint(),
-    appVersion: "1.0.0",
+    appVersion: '1.0.0',
     osVersion: Platform.Version.toString(),
-    antiCheatStatus: "CLEAN",
+    antiCheatStatus: 'CLEAN',
     antiCheatFlags: [],
     createdAt: now,
     updatedAt: now,
@@ -74,17 +74,17 @@ export async function createSession(
   orch.eventEmitter.attach(sessionId, orch.userId);
   await persistence.saveSessionState(session, orch.repository);
   orch.eventEmitter.emitSessionCreated(config);
-  debug.info("Session created: %s", sessionId);
+  debug.info('Session created: %s', sessionId);
   return session;
 }
 
 export function loadActiveSession(orch: SessionOrchestratorBase): void {
   void persistence.loadActiveSession(orch.repository).then((s) => {
-    if (!s) return;
+    if (!s) {return;}
     orch.session = s;
     orch.userId = s.userId;
     orch.eventEmitter.attach(s.id, s.userId);
-    if (s.status === "ACTIVE" || s.status === "PAUSED") {
+    if (s.status === 'ACTIVE' || s.status === 'PAUSED') {
       orch.timerEngine = persistence.restoreTimerEngine(
         s,
         orch.config.timerConfig || {},
@@ -94,9 +94,9 @@ export function loadActiveSession(orch: SessionOrchestratorBase): void {
           onWarning: orch.handleTimerWarning.bind(orch),
         },
       );
-      orch.isActive = s.status === "ACTIVE";
+      orch.isActive = s.status === 'ACTIVE';
     }
-    debug.info("Restored active session: %s", s.id);
+    debug.info('Restored active session: %s', s.id);
   });
 }
 
@@ -104,12 +104,12 @@ export function finalizeSession(
   orch: SessionOrchestratorBase,
   summary: Parameters<typeof persistence.finalizeSession>[1],
 ): void {
-  if (!orch.session) return;
+  if (!orch.session) {return;}
   void persistence.finalizeSession(orch.session, summary, orch.repository);
 }
 
 export function finalizeAbandonedSession(orch: SessionOrchestratorBase): void {
-  if (!orch.session) return;
+  if (!orch.session) {return;}
   void persistence.finalizeAbandonedSession(orch.session, orch.repository);
 }
 
@@ -117,7 +117,7 @@ export function createEmptyFocusMetrics(
   sessionId?: string,
 ): FocusQualityMetrics {
   return {
-    sessionId: sessionId ?? "",
+    sessionId: sessionId ?? '',
     timeInDeepFocus: 0,
     timeInShallowFocus: 0,
     timeDistracted: 0,

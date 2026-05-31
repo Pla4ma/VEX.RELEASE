@@ -1,9 +1,9 @@
-import type { BottomTabNavigationOptions } from "@react-navigation/bottom-tabs";
-import type { NavigatorScreenParams } from "@react-navigation/native";
-import type { NativeStackNavigationOptions } from "@react-navigation/native-stack";
-import type { ContentStudyStackParamList } from "../features/content-study/types";
-import type { ComebackState } from "../features/streaks/schemas";
-import type { SessionSummary } from "../session/types/schemas";
+import type { BottomTabNavigationOptions } from '@react-navigation/bottom-tabs';
+import type { NavigatorScreenParams } from '@react-navigation/native';
+import type { NativeStackNavigationOptions } from '@react-navigation/native-stack';
+import type { ContentStudyStackParamList } from '../features/content-study/types';
+import type { ComebackState } from '../features/streaks/schemas';
+import type { SessionSummary } from '../session/types/schemas';
 import type {
   AuthStackRoute,
   ComebackContext,
@@ -14,7 +14,7 @@ import type {
   SettingsStackRoute,
   StudyContext,
   WarContext,
-} from "./route-types";
+} from './route-types';
 
 export interface SessionSetupParams {
   comebackMessage?: string;
@@ -34,12 +34,12 @@ export interface SessionSetupParams {
   learningExecutionLabel?: string;
   learningExecutionTaskId?: string;
   source?:
-    | "content-study"
-    | "learning-execution"
-    | "onboarding_first_session"
-    | "rescue";
+    | 'content-study'
+    | 'learning-execution'
+    | 'onboarding_first_session'
+    | 'rescue';
   studyPlanId?: string;
-  suggestedDifficulty?: "EASY" | "NORMAL" | "CHALLENGING" | "PUSH";
+  suggestedDifficulty?: 'EASY' | 'NORMAL' | 'CHALLENGING' | 'PUSH';
   suggestedDurationSeconds?: number;
   warContext?: { squadId: string; squadWarId: string } | null;
   comeback?: ComebackContext;
@@ -91,7 +91,7 @@ export interface MainTabParams {
   Focus: undefined;
   Progress: undefined;
   Profile: {
-    tab?: "stats" | "achievements" | "activity" | "social";
+    tab?: 'stats' | 'achievements' | 'activity' | 'social';
     userId?: string;
   };
 }

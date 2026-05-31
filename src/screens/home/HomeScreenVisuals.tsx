@@ -1,2 +1,2 @@
-export { HomeHero, getHeroGradientColors } from "./HomeHero";
-export { GradientStartButton, SectionHeader } from "./GradientStartButton";
+export { HomeHero, getHeroGradientColors } from './HomeHero';
+export { GradientStartButton, SectionHeader } from './GradientStartButton';

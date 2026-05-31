@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback } from 'react';
 import {
   useSharedValue,
   useAnimatedStyle,
@@ -6,9 +6,9 @@ import {
   withSpring,
   interpolate,
   Easing,
-} from "react-native-reanimated";
-import type { EvolutionPhase } from "./companion-evolution-types";
-import { delay } from "./companion-evolution-types";
+} from 'react-native-reanimated';
+import type { EvolutionPhase } from './companion-evolution-types';
+import { delay } from './companion-evolution-types';
 
 export function useCeremonyAnimation() {
   const glowOpacity = useSharedValue(0.3);
@@ -24,7 +24,7 @@ export function useCeremonyAnimation() {
 
   const runCeremony = useCallback(
     async (setPhase: (phase: EvolutionPhase) => void) => {
-      setPhase("energy-buildup");
+      setPhase('energy-buildup');
       glowOpacity.value = withTiming(1, {
         duration: 1000,
         easing: Easing.inOut(Easing.sin),
@@ -35,14 +35,14 @@ export function useCeremonyAnimation() {
       });
       await delay(1000);
 
-      setPhase("flash");
+      setPhase('flash');
       flashOpacity.value = withTiming(1, { duration: 250 });
       oldFormOpacity.value = withTiming(0, { duration: 250 });
       await delay(250);
       flashOpacity.value = withTiming(0, { duration: 250 });
       await delay(250);
 
-      setPhase("transformation");
+      setPhase('transformation');
       newFormOpacity.value = withTiming(1, { duration: 1000 });
       newFormScale.value = withSpring(1, { damping: 12, stiffness: 100 });
       particleBurst.value = withTiming(1, {
@@ -51,12 +51,12 @@ export function useCeremonyAnimation() {
       });
       await delay(2000);
 
-      setPhase("celebration");
+      setPhase('celebration');
       textOpacity.value = withTiming(1, { duration: 500 });
       textScale.value = withSpring(1, { damping: 10, stiffness: 200 });
       await delay(1000);
 
-      setPhase("complete");
+      setPhase('complete');
     },
     [
       flashOpacity,

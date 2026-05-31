@@ -1,17 +1,17 @@
-import React from "react";
+import React from 'react';
 import Animated, {
   useAnimatedStyle,
   withSpring,
   withSequence,
   withTiming,
   useSharedValue,
-} from "react-native-reanimated";
-import { Box } from "../../components/primitives/Box";
-import { Text } from "../../components/primitives/Text";
-import { useTheme } from "../../theme";
-import { launchColors } from "@theme/tokens/launch-colors";
+} from 'react-native-reanimated';
+import { Box } from '../../components/primitives/Box';
+import { Text } from '../../components/primitives/Text';
+import { useTheme } from '../../theme';
+import { launchColors } from '@theme/tokens/launch-colors';
 
-export type QualityGrade = "S" | "A" | "B" | "C" | "D";
+export type QualityGrade = 'S' | 'A' | 'B' | 'C' | 'D';
 
 export interface QualityIndicatorProps {
   grade: QualityGrade;
@@ -31,32 +31,32 @@ export const gradeConfig: Record<
   S: {
     color: launchColors.hex_9333ea,
     bgColor: launchColors.rgb_147_51_234_0_15,
-    label: "PERFECT",
-    description: "Flawless focus",
+    label: 'PERFECT',
+    description: 'Flawless focus',
   },
   A: {
     color: launchColors.hex_22c55e,
     bgColor: launchColors.rgb_34_197_94_0_15,
-    label: "EXCELLENT",
-    description: "Great focus",
+    label: 'EXCELLENT',
+    description: 'Great focus',
   },
   B: {
     color: launchColors.hex_3b82f6,
     bgColor: launchColors.rgb_59_130_246_0_15,
-    label: "GOOD",
-    description: "Solid focus",
+    label: 'GOOD',
+    description: 'Solid focus',
   },
   C: {
     color: launchColors.hex_6b7280,
     bgColor: launchColors.rgb_107_114_128_0_15,
-    label: "FAIR",
-    description: "Some interruptions",
+    label: 'FAIR',
+    description: 'Some interruptions',
   },
   D: {
     color: launchColors.hex_ef4444,
     bgColor: launchColors.rgb_239_68_68_0_15,
-    label: "NEEDS WORK",
-    description: "Many interruptions",
+    label: 'NEEDS WORK',
+    description: 'Many interruptions',
   },
 };
 

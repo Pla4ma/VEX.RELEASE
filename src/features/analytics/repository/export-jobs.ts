@@ -1,15 +1,15 @@
-import { z } from "zod";
-import { getSupabaseClient, handleSupabaseError } from "../../../config/supabase";
-import { ExportJobSchema } from "../schemas";
+import { z } from 'zod';
+import { getSupabaseClient, handleSupabaseError } from '../../../config/supabase';
+import { ExportJobSchema } from '../schemas';
 
 const supabase = getSupabaseClient();
 
 export async function fetchExportJobs(userId: string, limit = 10) {
   const { data, error } = await supabase
-    .from("export_jobs")
-    .select("*")
-    .eq("user_id", userId)
-    .order("created_at", { ascending: false })
+    .from('export_jobs')
+    .select('*')
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false })
     .limit(limit);
   if (error) {
     throw handleSupabaseError(error);
@@ -19,7 +19,7 @@ export async function fetchExportJobs(userId: string, limit = 10) {
 
 export async function createExportJob(job: z.infer<typeof ExportJobSchema>) {
   const { data, error } = await supabase
-    .from("export_jobs")
+    .from('export_jobs')
     .insert(job)
     .select()
     .single();
@@ -39,13 +39,13 @@ export async function updateExportJobProgress(
   if (fileUrl) {
     updates.file_url = fileUrl;
     updates.file_size = fileSize;
-    updates.status = "completed";
+    updates.status = 'completed';
     updates.completed_at = Date.now();
   }
   const { data, error } = await supabase
-    .from("export_jobs")
+    .from('export_jobs')
     .update(updates)
-    .eq("id", jobId)
+    .eq('id', jobId)
     .select()
     .single();
   if (error) {
@@ -56,9 +56,9 @@ export async function updateExportJobProgress(
 
 export async function markExportJobFailed(jobId: string, errorMessage: string) {
   const { data, error } = await supabase
-    .from("export_jobs")
-    .update({ status: "failed", error_message: errorMessage })
-    .eq("id", jobId)
+    .from('export_jobs')
+    .update({ status: 'failed', error_message: errorMessage })
+    .eq('id', jobId)
     .select()
     .single();
   if (error) {

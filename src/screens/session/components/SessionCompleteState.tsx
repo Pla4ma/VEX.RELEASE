@@ -1,14 +1,14 @@
-import React from "react";
+import React from 'react';
 
-import { Box, Button, Text } from "../../../components/primitives";
-import { useTheme } from "../../../theme";
+import { Box, Button, Text } from '../../../components/primitives';
+import { useTheme } from '../../../theme';
 
 type SessionCompleteStateProps = {
   body: string;
   ctaLabel: string;
   onPress: () => void;
   title: string;
-  variant: "empty" | "error" | "loading" | "offline";
+  variant: 'empty' | 'error' | 'loading' | 'offline';
 };
 
 export function SessionCompleteState({
@@ -33,7 +33,7 @@ export function SessionCompleteState({
         style={{ backgroundColor: theme.colors.background.secondary }}
       >
         <Text variant="label" color={theme.colors.primary[400]}>
-          {variant === "loading" ? "Building your receipt" : "Session saved"}
+          {variant === 'loading' ? 'Building your receipt' : 'Session saved'}
         </Text>
         <Text variant="h3" color={theme.colors.text.primary} mt="sm">
           {title}
@@ -48,7 +48,7 @@ export function SessionCompleteState({
           fullWidth
           mt="xl"
           onPress={onPress}
-          variant={variant === "error" ? "secondary" : "primary"}
+          variant={variant === 'error' ? 'secondary' : 'primary'}
         >
           {ctaLabel}
         </Button>

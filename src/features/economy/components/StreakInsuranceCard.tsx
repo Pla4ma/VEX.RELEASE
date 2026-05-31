@@ -1,6 +1,6 @@
-import React from "react";
-import { View, Text } from "react-native";
-import type { InsuranceStatus } from "../StreakInsurance";
+import React from 'react';
+import { View, Text } from 'react-native';
+import type { InsuranceStatus } from '../StreakInsurance';
 
 type Props = {
   status: InsuranceStatus | null;
@@ -23,12 +23,12 @@ export function StreakInsuranceCard({
   return (
     <View
       accessibilityLabel="Streak protection status"
-      style={{ padding: 12, borderRadius: 8, backgroundColor: "#1a1a2e" }}
+      style={{ padding: 12, borderRadius: 8, backgroundColor: '#1a1a2e' }}
     >
-      <Text style={{ color: "#aaaacc", fontSize: 13 }}>
+      <Text style={{ color: '#aaaacc', fontSize: 13 }}>
         {hasStatus.isInsured
           ? `Protected for ${hasStatus.daysRemaining} days`
-          : "Streak protection available"}
+          : 'Streak protection available'}
       </Text>
     </View>
   );

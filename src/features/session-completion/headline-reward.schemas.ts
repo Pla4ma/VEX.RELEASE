@@ -1,16 +1,16 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const HeadlineRewardTypeSchema = z.enum([
-  "streak_saved",
-  "streak_milestone",
-  "companion_evolved",
-  "boss_defeated",
-  "level_up",
-  "challenge_complete",
-  "personal_best",
-  "comeback_complete",
-  "contract_done",
-  "xp_earned",
+  'streak_saved',
+  'streak_milestone',
+  'companion_evolved',
+  'boss_defeated',
+  'level_up',
+  'challenge_complete',
+  'personal_best',
+  'comeback_complete',
+  'contract_done',
+  'xp_earned',
 ]);
 
 export const HeadlineRewardSchema = z
@@ -41,7 +41,7 @@ export const HeadlineRewardConsequencesSchema = z
     companion: z.object({ evolved: z.boolean() }).optional(),
     contract: z
       .object({
-        status: z.enum(["done", "partial", "not_done", "skipped"]).nullable(),
+        status: z.enum(['done', 'partial', 'not_done', 'skipped']).nullable(),
       })
       .optional(),
     personalBest: z

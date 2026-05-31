@@ -4,11 +4,11 @@
  * Premium empty states with illustrations and actions
  */
 
-import React from "react";
-import { View, Text, Pressable, StyleSheet } from "react-native";
-import Animated, { FadeIn, FadeInUp } from "react-native-reanimated";
-import { createSheet } from "@/shared/ui/create-sheet";
-import { launchColors } from "@theme/tokens/launch-colors";
+import React from 'react';
+import { View, Text, Pressable, StyleSheet } from 'react-native';
+import Animated, { FadeIn, FadeInUp } from 'react-native-reanimated';
+import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
 
 interface EmptyStateProps {
   icon: string;
@@ -81,8 +81,8 @@ export function EmptyState({
 
 const styles = createSheet({
   container: {
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     padding: 32,
     flex: 1,
   },
@@ -92,22 +92,22 @@ const styles = createSheet({
   },
   title: {
     fontSize: 20,
-    fontWeight: "700",
+    fontWeight: '700',
     color: launchColors.hex_1a1a1a,
-    textAlign: "center",
+    textAlign: 'center',
     marginBottom: 8,
   },
   message: {
     fontSize: 16,
     color: launchColors.hex_666,
-    textAlign: "center",
+    textAlign: 'center',
     lineHeight: 22,
     marginBottom: 24,
     maxWidth: 280,
   },
   actions: {
     gap: 12,
-    width: "100%",
+    width: '100%',
     maxWidth: 280,
   },
   primaryButton: {
@@ -115,26 +115,26 @@ const styles = createSheet({
     paddingVertical: 14,
     paddingHorizontal: 24,
     borderRadius: 12,
-    alignItems: "center",
+    alignItems: 'center',
   },
   primaryButtonText: {
     color: launchColors.hex_fff,
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   secondaryButton: {
-    backgroundColor: "transparent",
+    backgroundColor: 'transparent',
     paddingVertical: 14,
     paddingHorizontal: 24,
     borderRadius: 12,
-    alignItems: "center",
+    alignItems: 'center',
     borderWidth: 1,
     borderColor: launchColors.hex_ddd,
   },
   secondaryButtonText: {
     color: launchColors.hex_666,
     fontSize: 16,
-    fontWeight: "500",
+    fontWeight: '500',
   },
 });
 
@@ -148,4 +148,4 @@ export {
   OfflineEmptyState,
   NoPersonasEmptyState,
   ColdStartEmptyState,
-} from "./empty-state-variants";
+} from './empty-state-variants';

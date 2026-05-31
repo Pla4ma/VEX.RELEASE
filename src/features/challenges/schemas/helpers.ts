@@ -6,7 +6,7 @@
  */
 
 export const asRecord = (value: unknown): Record<string, unknown> =>
-  typeof value === "object" && value !== null
+  typeof value === 'object' && value !== null
     ? (value as Record<string, unknown>)
     : {};
 
@@ -16,7 +16,7 @@ export const readString = (
 ): string | undefined => {
   for (const key of keys) {
     const value = row[key];
-    if (typeof value === "string" && value.length > 0) {
+    if (typeof value === 'string' && value.length > 0) {
       return value;
     }
   }
@@ -29,10 +29,10 @@ export const readNumber = (
 ): number | undefined => {
   for (const key of keys) {
     const value = row[key];
-    if (typeof value === "number" && Number.isFinite(value)) {
+    if (typeof value === 'number' && Number.isFinite(value)) {
       return value;
     }
-    if (typeof value === "string") {
+    if (typeof value === 'string') {
       const parsed = Date.parse(value);
       if (!Number.isNaN(parsed)) {
         return parsed;
@@ -52,7 +52,7 @@ export const readBoolean = (
 ): boolean | undefined => {
   for (const key of keys) {
     const value = row[key];
-    if (typeof value === "boolean") {
+    if (typeof value === 'boolean') {
       return value;
     }
   }

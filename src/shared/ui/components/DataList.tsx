@@ -7,35 +7,35 @@
  * - npm install @shopify/flash-list
  * - estimatedItemSize prop is REQUIRED
  */
-import React, { useCallback, useRef, useState } from "react";
-import { View, RefreshControl } from "react-native";
-import { FlashList } from "@shopify/flash-list";
-import { EmptyState, ErrorState, Skeleton } from "../state-components";
-import { useTheme } from "../../../theme";
-import { styles } from "./DataList.styles";
-import { ListFooter } from "./DataList.ListFooter";
-import { useItemRenderer } from "./DataList.useItemRenderer";
+import React, { useCallback, useRef, useState } from 'react';
+import { View, RefreshControl } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
+import { EmptyState, ErrorState, Skeleton } from '../state-components';
+import { useTheme } from '../../../theme';
+import { styles } from './DataList.styles';
+import { ListFooter } from './DataList.ListFooter';
+import { useItemRenderer } from './DataList.useItemRenderer';
 import type {
   DataListProps,
   DataListItem,
-} from "./DataList.types";
+} from './DataList.types';
 
-export { SelectionToolbar } from "./DataList.SelectionToolbar";
+export { SelectionToolbar } from './DataList.SelectionToolbar';
 export type {
   DataListProps,
   DataListItem,
   DataListSection,
-} from "./DataList.types";
+} from './DataList.types';
 
 export function DataList<T extends Record<string, unknown>>({
   items, sections, renderItem,
   renderSectionHeader: _renderSectionHeader,
   renderEmpty, renderFooter, keyExtractor,
   loading = false, loadingMore = false, error = null, refreshing = false,
-  emptyTitle = "No items found",
-  emptySubtitle = "Try adjusting your filters or check back later",
-  emptyIcon = "📭",
-  selectionMode = "none", selectedIds = new Set(),
+  emptyTitle = 'No items found',
+  emptySubtitle = 'Try adjusting your filters or check back later',
+  emptyIcon = '📭',
+  selectionMode = 'none', selectedIds = new Set(),
   onSelectionChange, onRefresh, onLoadMore, onRetry, onItemPress,
   estimatedItemSize,
   stickySectionHeadersEnabled = false,
@@ -54,10 +54,10 @@ export function DataList<T extends Record<string, unknown>>({
   const handleSelect = useCallback(
     (id: string) => {
       const newSet = new Set(effectiveSelectedIds);
-      if (selectionMode === "single") {
+      if (selectionMode === 'single') {
         if (newSet.has(id)) { newSet.clear(); }
         else { newSet.clear(); newSet.add(id); }
-      } else if (selectionMode === "multiple") {
+      } else if (selectionMode === 'multiple') {
         if (newSet.has(id)) { newSet.delete(id); }
         else { newSet.add(id); }
       }
@@ -68,7 +68,7 @@ export function DataList<T extends Record<string, unknown>>({
   );
   const handleItemPress = useCallback(
     (item: T, index: number, id: string) => {
-      if (selectionMode !== "none") { handleSelect(id); }
+      if (selectionMode !== 'none') { handleSelect(id); }
       else if (onItemPress) { onItemPress(item, index); }
     },
     [selectionMode, handleSelect, onItemPress],
@@ -104,7 +104,7 @@ export function DataList<T extends Record<string, unknown>>({
       <View style={[styles.container, style]}>
         <EmptyState
           icon={emptyIcon} title={emptyTitle} subtitle={emptySubtitle}
-          actionLabel={onRetry ? "Try Again" : undefined} onAction={onRetry}
+          actionLabel={onRetry ? 'Try Again' : undefined} onAction={onRetry}
         />
       </View>
     );

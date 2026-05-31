@@ -1,13 +1,13 @@
-import type { PerformanceTargets, PerformanceIssue } from "./PerformanceGate-types";
-import type { PerformanceMetrics } from "../utils/performance-monitor";
+import type { PerformanceTargets, PerformanceIssue } from './PerformanceGate-types';
+import type { PerformanceMetrics } from '../utils/performance-monitor';
 
 interface EvalMetrics { issues: PerformanceIssue[]; scorePenalty: number }
 type EvalResult<T> = T & EvalMetrics;
 
 function createIssue(
   id: string,
-  category: PerformanceIssue["category"],
-  severity: PerformanceIssue["severity"],
+  category: PerformanceIssue['category'],
+  severity: PerformanceIssue['severity'],
   message: string,
   recommendation: string,
   measurement?: number,
@@ -28,18 +28,18 @@ export function evaluateFPS(
   const minFps = targets.minFps;
   if (currentFps < minFps) {
     issues.push(createIssue(
-      "fps-below-minimum", "fps", "critical",
+      'fps-below-minimum', 'fps', 'critical',
       `Current FPS (${currentFps}) is below minimum threshold (${minFps})`,
-      "Optimize rendering pipeline, reduce complexity, or enable hardware acceleration",
+      'Optimize rendering pipeline, reduce complexity, or enable hardware acceleration',
       currentFps, minFps,
     ));
     scorePenalty += 30;
   }
   if (avgFps < targetFps * 0.9) {
     issues.push(createIssue(
-      "fps-below-target", "fps", "major",
+      'fps-below-target', 'fps', 'major',
       `Average FPS (${avgFps}) is below target (${targetFps})`,
-      "Profile performance bottlenecks and optimize rendering code",
+      'Profile performance bottlenecks and optimize rendering code',
       avgFps, targetFps,
     ));
     scorePenalty += 15;
@@ -64,9 +64,9 @@ export function evaluateMemory(
   const maxMemory = targets.maxMemoryMb;
   if (currentMemory > maxMemory) {
     issues.push(createIssue(
-      "memory-above-limit", "memory", "critical",
+      'memory-above-limit', 'memory', 'critical',
       `Memory usage (${currentMemory}MB) exceeds limit (${maxMemory}MB)`,
-      "Reduce memory usage by optimizing data structures and implementing memory pooling",
+      'Reduce memory usage by optimizing data structures and implementing memory pooling',
       currentMemory, maxMemory,
     ));
     scorePenalty += 25;
@@ -101,9 +101,9 @@ export function evaluateAnimations(
   const maxDuration = targets.maxAnimationDurationMs;
   if (avgDuration > maxDuration) {
     issues.push(createIssue(
-      "animation-too-slow", "animation", "major",
+      'animation-too-slow', 'animation', 'major',
       `Average animation duration (${avgDuration.toFixed(2)}ms) exceeds limit (${maxDuration}ms)`,
-      "Use CSS transforms instead of JavaScript animations, or reduce animation complexity",
+      'Use CSS transforms instead of JavaScript animations, or reduce animation complexity',
       avgDuration, maxDuration,
     ));
     scorePenalty += 10;
@@ -138,9 +138,9 @@ export function evaluateNetwork(
   const maxResponseTime = targets.maxNetworkRequestMs;
   if (avgResponseTime > maxResponseTime) {
     issues.push(createIssue(
-      "network-too-slow", "network", "major",
+      'network-too-slow', 'network', 'major',
       `Average network response time (${avgResponseTime.toFixed(2)}ms) exceeds limit (${maxResponseTime}ms)`,
-      "Implement request caching, optimize API calls, or use CDN for static assets",
+      'Implement request caching, optimize API calls, or use CDN for static assets',
       avgResponseTime, maxResponseTime,
     ));
     scorePenalty += 10;
@@ -163,9 +163,9 @@ export function evaluateBundle(
   const maxSize = targets.maxBundleSizeKb;
   if (bundleSize > maxSize) {
     issues.push(createIssue(
-      "bundle-too-large", "bundle", "critical",
+      'bundle-too-large', 'bundle', 'critical',
       `Bundle size (${bundleSize}KB) exceeds limit (${maxSize}KB)`,
-      "Implement code splitting, tree shaking, and remove unused dependencies",
+      'Implement code splitting, tree shaking, and remove unused dependencies',
       bundleSize, maxSize,
     ));
     scorePenalty += 20;

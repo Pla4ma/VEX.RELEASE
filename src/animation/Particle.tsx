@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { View } from "react-native";
+import React, { useEffect } from 'react';
+import { View } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -7,8 +7,8 @@ import Animated, {
   withDecay,
   withDelay,
   runOnJS,
-} from "react-native-reanimated";
-import { launchColors } from "@theme/tokens/launch-colors";
+} from 'react-native-reanimated';
+import { launchColors } from '@theme/tokens/launch-colors';
 
 export interface ParticleConfig {
   id: number;
@@ -19,7 +19,7 @@ export interface ParticleConfig {
   rotation: number;
   velocityX: number;
   velocityY: number;
-  shape: "circle" | "square" | "triangle";
+  shape: 'circle' | 'square' | 'triangle';
   delay: number;
 }
 
@@ -72,7 +72,7 @@ export const Particle: React.FC<{
     const size = config.size;
     const color = config.color;
     switch (config.shape) {
-      case "circle":
+      case 'circle':
         return (
           <View
             style={{
@@ -83,11 +83,11 @@ export const Particle: React.FC<{
             }}
           />
         );
-      case "square":
+      case 'square':
         return (
           <View style={{ width: size, height: size, backgroundColor: color }} />
         );
-      case "triangle":
+      case 'triangle':
         return (
           <View
             style={{
@@ -97,8 +97,8 @@ export const Particle: React.FC<{
               borderRightWidth: size / 2,
               borderBottomWidth: size,
               borderBottomColor: color,
-              borderLeftColor: "transparent",
-              borderRightColor: "transparent",
+              borderLeftColor: 'transparent',
+              borderRightColor: 'transparent',
             }}
           />
         );
@@ -111,4 +111,4 @@ export const Particle: React.FC<{
   );
 };
 
-const particleStyle = { position: "absolute" as const };
+const particleStyle = { position: 'absolute' as const };

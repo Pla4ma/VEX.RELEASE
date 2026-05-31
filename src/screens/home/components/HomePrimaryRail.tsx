@@ -1,18 +1,18 @@
-import React from "react";
-import { View } from "react-native";
+import React from 'react';
+import { View } from 'react-native';
 
-import { StatusBanner } from "../../../shared/ui/components/StatusFeedback";
-import { FocusScoreHomeWidget } from "../../../features/focus-identity/components/focus-score-home-widget";
-import { useFocusScoreDashboardModel } from "../../../features/focus-identity/hooks-focus-score";
-import type { HomeCard } from "../../../features/home-spine/schemas";
-import type { CompletionSyncState } from "../../../store/session-state";
-import { useAuthStore } from "../../../store";
-import type { HomeReturnReason } from "../hooks/useHomeReturnReason";
+import { StatusBanner } from '../../../shared/ui/components/StatusFeedback';
+import { FocusScoreHomeWidget } from '../../../features/focus-identity/components/focus-score-home-widget';
+import { useFocusScoreDashboardModel } from '../../../features/focus-identity/hooks-focus-score';
+import type { HomeCard } from '../../../features/home-spine/schemas';
+import type { CompletionSyncState } from '../../../store/session-state';
+import { useAuthStore } from '../../../store';
+import type { HomeReturnReason } from '../hooks/useHomeReturnReason';
 import {
   ProgressPreviewCard,
   ReturnReasonCard,
-} from "../HomeProgressiveBlocks";
-import { GradientStartButton } from "../HomeScreenVisuals";
+} from '../HomeProgressiveBlocks';
+import { GradientStartButton } from '../HomeScreenVisuals';
 
 interface HomePrimaryRailProps {
   completionSync: CompletionSyncState;
@@ -53,14 +53,14 @@ export function HomePrimaryRail({
           description="You can still start a session. VEX will sync your momentum when you reconnect."
         />
       ) : null}
-      {completionSync.status === "pending_sync" && completionSync.message ? (
+      {completionSync.status === 'pending_sync' && completionSync.message ? (
         <StatusBanner
           status="offline"
           message="Session sync pending"
           description={completionSync.message}
         />
       ) : null}
-      {completionSync.status === "failed_sync" && completionSync.message ? (
+      {completionSync.status === 'failed_sync' && completionSync.message ? (
         <StatusBanner
           status="error"
           message="Session rewards need repair"
@@ -74,8 +74,8 @@ export function HomePrimaryRail({
         eyebrow={primaryAction.eyebrow}
         onPress={onStart}
         pulse={
-          returnReason.source === "completion-highlight" ||
-          returnReason.source === "coach"
+          returnReason.source === 'completion-highlight' ||
+          returnReason.source === 'coach'
         }
         title={primaryAction.title}
       />
@@ -98,7 +98,7 @@ export function HomePrimaryRail({
         ctaLabel={returnReason.ctaLabel}
         eyebrow={returnReason.eyebrow}
         onDismiss={
-          returnReason.source === "completion-highlight"
+          returnReason.source === 'completion-highlight'
             ? onDismissHighlight
             : undefined
         }

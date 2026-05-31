@@ -1,11 +1,11 @@
-import type { StreakRiskStatus } from "../streak-risk-monitor";
-import type { Streak, RiskLevel } from "../schemas";
-import { calculateStreakRisk } from "../streak-risk-monitor";
-import { launchColors } from "@theme/tokens/launch-colors";
+import type { StreakRiskStatus } from '../streak-risk-monitor';
+import type { Streak, RiskLevel } from '../schemas';
+import { calculateStreakRisk } from '../streak-risk-monitor';
+import { launchColors } from '@theme/tokens/launch-colors';
 
 export const QUERY_KEYS = {
-  riskStatus: (userId: string) => ["streaks", "risk", userId],
-  streak: (userId: string) => ["streaks", "data", userId],
+  riskStatus: (userId: string) => ['streaks', 'risk', userId],
+  streak: (userId: string) => ['streaks', 'data', userId],
 };
 
 export const RISK_CHECK_INTERVAL = 60 * 1000;
@@ -49,11 +49,11 @@ export function getFlameColor(healthPercent: number): string {
 
 export function getUrgencyLabel(riskLevel: RiskLevel): string {
   const labels: Record<RiskLevel, string> = {
-    NONE: "Safe",
-    LOW: "Stable",
-    MEDIUM: "Warning",
-    HIGH: "Urgent",
-    CRITICAL: "CRITICAL",
+    NONE: 'Safe',
+    LOW: 'Stable',
+    MEDIUM: 'Warning',
+    HIGH: 'Urgent',
+    CRITICAL: 'CRITICAL',
   };
   return labels[riskLevel];
 }

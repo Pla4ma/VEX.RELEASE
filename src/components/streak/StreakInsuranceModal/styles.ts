@@ -1,25 +1,25 @@
-import type { ViewStyle } from "react-native";
-import type { Theme } from "./types";
+import type { ViewStyle } from 'react-native';
+import type { Theme } from './types';
 
 export const overlayStyle = (t: Theme): ViewStyle => ({
   flex: 1,
-  justifyContent: "center",
-  alignItems: "center",
+  justifyContent: 'center',
+  alignItems: 'center',
   backgroundColor: t.colors.background.overlay,
 });
 
 export const containerStyle = (t: Theme): ViewStyle => ({
   backgroundColor: t.colors.background.secondary,
   borderRadius: 16,
-  overflow: "hidden",
-  maxHeight: "90%",
+  overflow: 'hidden',
+  maxHeight: '90%',
 });
 
-export const headerStyle: ViewStyle = { padding: 20, alignItems: "center" };
+export const headerStyle: ViewStyle = { padding: 20, alignItems: 'center' };
 
 export const headerTitleStyle = (t: Theme) => ({
   fontSize: 20,
-  fontWeight: "bold" as const,
+  fontWeight: 'bold' as const,
   color: t.colors.text.inverse,
 });
 
@@ -31,7 +31,7 @@ export const streakDaysStyle = (t: Theme) => ({
 
 export const riskSectionStyle = (t: Theme): ViewStyle => ({
   padding: 20,
-  alignItems: "center",
+  alignItems: 'center',
   borderBottomWidth: 1,
   borderBottomColor: t.colors.border.DEFAULT,
 });
@@ -39,25 +39,25 @@ export const riskSectionStyle = (t: Theme): ViewStyle => ({
 export const riskLabelStyle = (t: Theme) => ({
   fontSize: 12,
   color: t.colors.text.tertiary,
-  textTransform: "uppercase" as const,
+  textTransform: 'uppercase' as const,
 });
 
 export const riskValueStyle = (t: Theme) => ({
   fontSize: 24,
-  fontWeight: "bold" as const,
+  fontWeight: 'bold' as const,
   marginTop: 4,
 });
 
 export const riskMessageStyle = (t: Theme) => ({
   fontSize: 14,
   color: t.colors.text.secondary,
-  textAlign: "center" as const,
+  textAlign: 'center' as const,
   marginTop: 8,
 });
 
 export const hoursRemainingStyle = (t: Theme) => ({
   fontSize: 16,
-  fontWeight: "600" as const,
+  fontWeight: '600' as const,
   color: t.colors.text.primary,
   marginTop: 8,
 });
@@ -65,7 +65,7 @@ export const hoursRemainingStyle = (t: Theme) => ({
 export const optionsContainerStyle: ViewStyle = { padding: 16 };
 
 export const optionRowStyle = (t: Theme): ViewStyle => ({
-  flexDirection: "row",
+  flexDirection: 'row',
   backgroundColor: t.colors.background.primary,
   borderRadius: 12,
   padding: 16,
@@ -79,8 +79,8 @@ export const optionIconStyle = (t: Theme): ViewStyle => ({
   height: 48,
   borderRadius: 24,
   backgroundColor: t.colors.background.secondary,
-  justifyContent: "center",
-  alignItems: "center",
+  justifyContent: 'center',
+  alignItems: 'center',
   marginRight: 12,
 });
 
@@ -90,7 +90,7 @@ export const optionContentStyle: ViewStyle = { flex: 1 };
 
 export const optionTitleStyle = (t: Theme) => ({
   fontSize: 16,
-  fontWeight: "bold" as const,
+  fontWeight: 'bold' as const,
   color: t.colors.text.primary,
 });
 
@@ -102,20 +102,20 @@ export const optionDescriptionStyle = (t: Theme) => ({
 
 export const costBaseStyle = (t: Theme) => ({
   fontSize: 14,
-  fontWeight: "600" as const,
+  fontWeight: '600' as const,
   marginTop: 8,
 });
 
 export const gambleHeaderStyle = (t: Theme) => ({
   fontSize: 14,
-  fontWeight: "600" as const,
+  fontWeight: '600' as const,
   color: t.colors.text.secondary,
   marginTop: 8,
   marginBottom: 12,
 });
 
 export const gambleOptionStyle = (t: Theme): ViewStyle => ({
-  flexDirection: "row",
+  flexDirection: 'row',
   backgroundColor: t.colors.background.secondary,
   borderRadius: 12,
   padding: 12,
@@ -128,14 +128,14 @@ export const gambleBadgeStyle: ViewStyle = {
   paddingVertical: 6,
   borderRadius: 8,
   marginRight: 12,
-  alignSelf: "center",
+  alignSelf: 'center',
 };
 
 export const gambleTypeTextStyle = (t: Theme) => ({
   fontSize: 12,
-  fontWeight: "700" as const,
+  fontWeight: '700' as const,
   color: t.colors.text.inverse,
-  textTransform: "uppercase" as const,
+  textTransform: 'uppercase' as const,
 });
 
 export const gambleContentStyle: ViewStyle = { flex: 1 };
@@ -147,12 +147,12 @@ export const gambleDescriptionStyle = (t: Theme) => ({
 
 export const xpBonusStyle = {
   fontSize: 14,
-  fontWeight: "600" as const,
+  fontWeight: '600' as const,
   marginTop: 4,
 };
 
 export const comebackTokenStyle = (t: Theme): ViewStyle => ({
-  flexDirection: "row",
+  flexDirection: 'row',
   backgroundColor: t.colors.primary[50],
   borderRadius: 12,
   padding: 16,
@@ -163,7 +163,7 @@ export const comebackTokenStyle = (t: Theme): ViewStyle => ({
 
 export const dismissStyle = (t: Theme): ViewStyle => ({
   padding: 16,
-  alignItems: "center",
+  alignItems: 'center',
   borderTopWidth: 1,
   borderTopColor: t.colors.border.DEFAULT,
 });

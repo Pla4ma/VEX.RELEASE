@@ -2,10 +2,10 @@ import {
   useCreateRecommendation,
   useUpdateRecommendationStatus,
   type SessionRecommendation,
-} from "../../../features/ai-coach";
-import { buildHomeReturnReasonState } from "../../../features/home-spine/service";
-import type { HomeReturnReason } from "./useHomeReturnReason";
-import type { NextBestAction } from "../../../features/progression";
+} from '../../../features/ai-coach';
+import { buildHomeReturnReasonState } from '../../../features/home-spine/service';
+import type { HomeReturnReason } from './useHomeReturnReason';
+import type { NextBestAction } from '../../../features/progression';
 
 interface ReturnReasonParams {
   activeStudyPlanData: Record<string, unknown> | undefined;
@@ -42,7 +42,7 @@ export function buildEngagedReturnReason(
           completedTasks: (activeStudyPlanData.completedTasks as number) ?? 0,
           remainingMinutes:
             (activeStudyPlanData.remainingMinutes as number) ?? 0,
-          title: (activeStudyPlanData.title as string) ?? "",
+          title: (activeStudyPlanData.title as string) ?? '',
           totalTasks: (activeStudyPlanData.totalTasks as number) ?? 0,
         }
       : null,
@@ -59,9 +59,9 @@ export function buildEngagedReturnReason(
               .reasoning as string) ??
             ((primaryRecommendation as Record<string, unknown>)
               .reason as string) ??
-            "",
+            '',
           suggestedDifficulty:
-            primaryRecommendation.suggestedDifficulty ?? "NORMAL",
+            primaryRecommendation.suggestedDifficulty ?? 'NORMAL',
           suggestedDuration:
             primaryRecommendation.suggestedDuration ?? 15 * 60,
           type: primaryRecommendation.recommendationType,
@@ -70,16 +70,16 @@ export function buildEngagedReturnReason(
   });
 
   let onPress: () => Promise<void> | void = () => openSetup();
-  if (reasonState.intent === "continue-study-plan") {
+  if (reasonState.intent === 'continue-study-plan') {
     onPress = continueStudyPlan;
   } else if (
-    reasonState.intent === "accept-coach-recommendation" &&
+    reasonState.intent === 'accept-coach-recommendation' &&
     reasonState.recommendationId
   ) {
     onPress = async () => {
       await updateRecommendationStatus.mutateAsync({
         recommendationId: reasonState.recommendationId!,
-        status: "ACCEPTED",
+        status: 'ACCEPTED',
         userId,
       });
       openSetup({
@@ -88,7 +88,7 @@ export function buildEngagedReturnReason(
         suggestedDurationSeconds: reasonState.suggestedDurationSeconds,
       });
     };
-  } else if (reasonState.source === "next-best-action") {
+  } else if (reasonState.source === 'next-best-action') {
     onPress = openNextAction;
   }
 

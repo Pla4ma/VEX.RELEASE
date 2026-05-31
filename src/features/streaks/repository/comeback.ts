@@ -1,26 +1,26 @@
-import { getSupabaseClient } from "../../../config/supabase";
-import { createDebugger } from "../../../utils/debug";
-import { ComebackQuestSchema, type ComebackQuest } from "../comeback/schemas";
+import { getSupabaseClient } from '../../../config/supabase';
+import { createDebugger } from '../../../utils/debug';
+import { ComebackQuestSchema, type ComebackQuest } from '../comeback/schemas';
 
-const debug = createDebugger("streaks:comeback-repo");
+const debug = createDebugger('streaks:comeback-repo');
 const supabase = getSupabaseClient();
 
 export async function fetchExistingComebackQuest(
   userId: string,
 ): Promise<ComebackQuest | null> {
   const { data, error } = await supabase
-    .from("comeback_quests")
-    .select("*")
-    .eq("user_id", userId)
-    .eq("all_quests_completed", false)
-    .order("created_at", { ascending: false })
+    .from('comeback_quests')
+    .select('*')
+    .eq('user_id', userId)
+    .eq('all_quests_completed', false)
+    .order('created_at', { ascending: false })
     .limit(1)
     .maybeSingle();
   if (error) {
-    debug.warn("Error checking existing quest", error);
+    debug.warn('Error checking existing quest', error);
     return null;
   }
-  if (!data) return null;
+  if (!data) {return null;}
   return ComebackQuestSchema.parse({
     id: data.id,
     userId: data.user_id,
@@ -44,10 +44,10 @@ export async function insertComebackQuest(
   streakBeforeBreak: number,
 ): Promise<ComebackQuest> {
   const { data, error } = await supabase
-    .from("comeback_quests")
+    .from('comeback_quests')
     .insert({
       user_id: userId,
-      stage: "QUEST_1",
+      stage: 'QUEST_1',
       days_absent: daysAbsent,
       streak_before_break: streakBeforeBreak,
       quest1_completed: false,
@@ -85,14 +85,14 @@ export async function fetchLastCompletedSession(
   userId: string,
 ): Promise<{ completed_at: string } | null> {
   const { data, error } = await supabase
-    .from("sessions")
-    .select("completed_at")
-    .eq("user_id", userId)
-    .eq("status", "COMPLETED")
-    .order("completed_at", { ascending: false })
+    .from('sessions')
+    .select('completed_at')
+    .eq('user_id', userId)
+    .eq('status', 'COMPLETED')
+    .order('completed_at', { ascending: false })
     .limit(1)
     .single();
-  if (error || !data) return null;
+  if (error || !data) {return null;}
   return data as { completed_at: string };
 }
 
@@ -100,11 +100,11 @@ export async function fetchUserStreakBeforeBreak(
   userId: string,
 ): Promise<number> {
   const { data, error } = await supabase
-    .from("user_streaks")
-    .select("streak_before_break")
-    .eq("user_id", userId)
+    .from('user_streaks')
+    .select('streak_before_break')
+    .eq('user_id', userId)
     .single();
-  if (error) return 0;
+  if (error) {return 0;}
   return (data?.streak_before_break ?? 0) as number;
 }
 
@@ -113,9 +113,9 @@ export async function updateComebackQuestProgress(
   updateData: Record<string, unknown>,
 ): Promise<ComebackQuest> {
   const { data, error } = await supabase
-    .from("comeback_quests")
+    .from('comeback_quests')
     .update(updateData)
-    .eq("id", questId)
+    .eq('id', questId)
     .select()
     .single();
   if (error || !data) {

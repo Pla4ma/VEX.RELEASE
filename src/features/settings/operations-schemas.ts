@@ -1,13 +1,13 @@
-import { z } from "zod";
-import { SettingCategorySchema, SettingValueSchema } from "./enums";
-import { UserPreferencesSchema } from "./core-schemas";
-import { NotificationSettingsSchema } from "./notification-schemas";
-import { CoachSettingsSchema } from "./coach-schemas";
+import { z } from 'zod';
+import { SettingCategorySchema, SettingValueSchema } from './enums';
+import { UserPreferencesSchema } from './core-schemas';
+import { NotificationSettingsSchema } from './notification-schemas';
+import { CoachSettingsSchema } from './coach-schemas';
 import {
   AppearanceSettingsSchema,
   PrivacySettingsSchema,
   DataControlSettingsSchema,
-} from "./core-schemas";
+} from './core-schemas';
 
 export const SettingsExportSchema = z
   .object({
@@ -45,7 +45,7 @@ export const ImportSettingsInputSchema = z
     userId: z.string().uuid(),
     settingsJson: z.string(),
     mergeStrategy: z
-      .enum(["merge", "replace", "local_wins", "remote_wins"])
-      .default("merge"),
+      .enum(['merge', 'replace', 'local_wins', 'remote_wins'])
+      .default('merge'),
   })
   .strict();

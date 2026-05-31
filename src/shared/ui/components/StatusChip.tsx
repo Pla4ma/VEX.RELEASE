@@ -1,19 +1,19 @@
-import React from "react";
-import { View, Pressable, ActivityIndicator, type ViewStyle } from "react-native";
+import React from 'react';
+import { View, Pressable, ActivityIndicator, type ViewStyle } from 'react-native';
 import Animated, {
   FadeInUp,
   FadeOutUp,
   useAnimatedStyle,
   useSharedValue,
   withSpring,
-} from "react-native-reanimated";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
+} from 'react-native-reanimated';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
 import {
   type AsyncStatus,
   STATUS_CONFIG,
   getStatusColor,
-} from "./StatusFeedback.types";
+} from './StatusFeedback.types';
 
 export const StatusChip: React.FC<{
   status: AsyncStatus;
@@ -29,7 +29,7 @@ export const StatusChip: React.FC<{
     transform: [{ scale: scale.value }],
   }));
 
-  if (status === "idle") {
+  if (status === 'idle') {
     return null;
   }
 
@@ -55,8 +55,8 @@ export const StatusChip: React.FC<{
         style={[
           animatedStyle,
           {
-            flexDirection: "row",
-            alignItems: "center",
+            flexDirection: 'row',
+            alignItems: 'center',
             gap: theme.spacing[1],
             backgroundColor: `${color}15`,
             paddingVertical: theme.spacing[1],
@@ -68,15 +68,15 @@ export const StatusChip: React.FC<{
           style,
         ]}
       >
-        {status === "loading" || status === "retrying" ? (
+        {status === 'loading' || status === 'retrying' ? (
           <ActivityIndicator size="small" color={color} />
         ) : (
-          <Text style={{ color, fontSize: 12, fontWeight: "700" }}>
+          <Text style={{ color, fontSize: 12, fontWeight: '700' }}>
             {config.icon}
           </Text>
         )}
         {label && (
-          <Text variant="caption" color={color} style={{ fontWeight: "600" }}>
+          <Text variant="caption" color={color} style={{ fontWeight: '600' }}>
             {label}
           </Text>
         )}

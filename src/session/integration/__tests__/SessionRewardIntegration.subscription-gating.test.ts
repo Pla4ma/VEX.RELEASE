@@ -1,16 +1,16 @@
-jest.mock("../../../events", () => ({
+jest.mock('../../../events', () => ({
   eventBus: {
     publish: jest.fn(),
     subscribe: jest.fn().mockReturnValue(jest.fn()),
   },
 }));
 
-jest.mock("../../../features/streaks/service", () => ({
+jest.mock('../../../features/streaks/service', () => ({
   getStreakSummary: jest.fn().mockResolvedValue({ currentDays: 3 }),
   restoreStreak: jest.fn(),
 }));
 
-jest.mock("../../../features/streaks/restore-quest", () => ({
+jest.mock('../../../features/streaks/restore-quest', () => ({
   clearStreakRestoreQuest: jest.fn(),
   markStreakRestoreUsed: jest.fn(),
   recordStreakRestoreSession: jest
@@ -18,7 +18,7 @@ jest.mock("../../../features/streaks/restore-quest", () => ({
     .mockResolvedValue({ shouldRestore: false, streakBefore: null }),
 }));
 
-jest.mock("../session-reward-helpers", () => ({
+jest.mock('../session-reward-helpers', () => ({
   calculateRewards: jest.fn().mockReturnValue({
     totalXP: 100,
     totalCoins: 10,
@@ -41,8 +41,8 @@ jest.mock("../session-reward-helpers", () => ({
   updateStreak: jest.fn(),
 }));
 
-import { eventBus } from "../../../events";
-import { SessionRewardIntegration } from "../SessionRewardIntegration";
+import { eventBus } from '../../../events';
+import { SessionRewardIntegration } from '../SessionRewardIntegration';
 
 const mockedEventBus = jest.mocked(eventBus);
 
@@ -82,58 +82,58 @@ const ABANDONMENT_ONLY = {
   autoHandleAbandonmentPartialCredit: true,
 };
 
-describe("SessionRewardIntegration — subscription gating", () => {
+describe('SessionRewardIntegration — subscription gating', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it("fully disabled integration has zero subscriptions", () => {
+  it('fully disabled integration has zero subscriptions', () => {
     new SessionRewardIntegration(ALL_DISABLED);
     expect(mockedEventBus.subscribe).not.toHaveBeenCalled();
   });
 
-  it("completion-only enabled subscribes only to session:completed", () => {
+  it('completion-only enabled subscribes only to session:completed', () => {
     new SessionRewardIntegration(COMPLETION_ONLY);
 
     const subscribedEvents = mockedEventBus.subscribe.mock.calls.map(
       (call) => call[0],
     );
-    expect(subscribedEvents).toContain("session:completed");
-    expect(subscribedEvents).not.toContain("session:recovery:successful");
-    expect(subscribedEvents).not.toContain("session:abandoned");
+    expect(subscribedEvents).toContain('session:completed');
+    expect(subscribedEvents).not.toContain('session:recovery:successful');
+    expect(subscribedEvents).not.toContain('session:abandoned');
     expect(subscribedEvents).toHaveLength(1);
   });
 
-  it("recovery-only enabled subscribes only to recovery", () => {
+  it('recovery-only enabled subscribes only to recovery', () => {
     new SessionRewardIntegration(RECOVERY_ONLY);
 
     const subscribedEvents = mockedEventBus.subscribe.mock.calls.map(
       (call) => call[0],
     );
-    expect(subscribedEvents).toContain("session:recovery:successful");
-    expect(subscribedEvents).not.toContain("session:completed");
-    expect(subscribedEvents).not.toContain("session:abandoned");
+    expect(subscribedEvents).toContain('session:recovery:successful');
+    expect(subscribedEvents).not.toContain('session:completed');
+    expect(subscribedEvents).not.toContain('session:abandoned');
     expect(subscribedEvents).toHaveLength(1);
   });
 
-  it("abandonment-only enabled subscribes only to abandoned", () => {
+  it('abandonment-only enabled subscribes only to abandoned', () => {
     new SessionRewardIntegration(ABANDONMENT_ONLY);
 
     const subscribedEvents = mockedEventBus.subscribe.mock.calls.map(
       (call) => call[0],
     );
-    expect(subscribedEvents).toContain("session:abandoned");
-    expect(subscribedEvents).not.toContain("session:completed");
-    expect(subscribedEvents).not.toContain("session:recovery:successful");
+    expect(subscribedEvents).toContain('session:abandoned');
+    expect(subscribedEvents).not.toContain('session:completed');
+    expect(subscribedEvents).not.toContain('session:recovery:successful');
     expect(subscribedEvents).toHaveLength(1);
   });
 
-  it("final release config has zero legacy subscriptions", () => {
+  it('final release config has zero legacy subscriptions', () => {
     new SessionRewardIntegration(ALL_DISABLED);
     expect(mockedEventBus.subscribe).not.toHaveBeenCalled();
   });
 
-  it("recovery + abandonment enabled subscribes to both but not completion", () => {
+  it('recovery + abandonment enabled subscribes to both but not completion', () => {
     new SessionRewardIntegration({
       ...ALL_DISABLED,
       autoHandleRecoveryRewards: true,
@@ -143,9 +143,9 @@ describe("SessionRewardIntegration — subscription gating", () => {
     const subscribedEvents = mockedEventBus.subscribe.mock.calls.map(
       (call) => call[0],
     );
-    expect(subscribedEvents).toContain("session:recovery:successful");
-    expect(subscribedEvents).toContain("session:abandoned");
-    expect(subscribedEvents).not.toContain("session:completed");
+    expect(subscribedEvents).toContain('session:recovery:successful');
+    expect(subscribedEvents).toContain('session:abandoned');
+    expect(subscribedEvents).not.toContain('session:completed');
     expect(subscribedEvents).toHaveLength(2);
   });
 });

@@ -3,8 +3,8 @@ import type {
   BehaviorSignal,
   SignalType,
   CoachUserState,
-} from "./schemas";
-import { HIGH_CONFIDENCE_THRESHOLD_DATA_POINTS } from "./session-analyzer-types";
+} from './schemas';
+import { HIGH_CONFIDENCE_THRESHOLD_DATA_POINTS } from './session-analyzer-types';
 
 // ─── Signal confidence mapping ──────────────────────────────────
 const BASE_CONFIDENCE: Record<SignalType, number> = {
@@ -34,14 +34,14 @@ export function calculateSignalConfidence(
 
 export function calculateConfidenceLevel(
   dataPoints: number,
-): "LOW" | "MEDIUM" | "HIGH" {
+): 'LOW' | 'MEDIUM' | 'HIGH' {
   if (dataPoints < 10) {
-    return "LOW";
+    return 'LOW';
   }
   if (dataPoints < HIGH_CONFIDENCE_THRESHOLD_DATA_POINTS) {
-    return "MEDIUM";
+    return 'MEDIUM';
   }
-  return "HIGH";
+  return 'HIGH';
 }
 
 export function aggregateSignals(signals: BehaviorSignal[]): BehaviorSignal[] {
@@ -60,10 +60,10 @@ export function determineUserState(
   profile: BehaviorProfile | null,
 ): CoachUserState {
   if (!profile || profile.coldStart) {
-    return "COLD_START";
+    return 'COLD_START';
   }
-  if (profile.confidenceLevel === "LOW") {
-    return "LOW_CONFIDENCE";
+  if (profile.confidenceLevel === 'LOW') {
+    return 'LOW_CONFIDENCE';
   }
-  return "HIGH_CONFIDENCE";
+  return 'HIGH_CONFIDENCE';
 }

@@ -1,25 +1,25 @@
 import {
   getCoachMemoryConfidence,
   getCoachPresenceMessage,
-} from "./copy-service";
+} from './copy-service';
 import {
   CoachPresenceMemorySummarySchema,
   CoachPresenceSchema,
   CompletionPresenceSummarySchema,
   type CoachPresence,
   type CoachPresenceMotivationStyle,
-} from "./schemas";
+} from './schemas';
 import type {
   CompletionPresenceInput,
-} from "./coach-presence-types";
+} from './coach-presence-types';
 import {
   goalForLane,
   styleForLane,
-} from "./service-helpers";
+} from './service-helpers';
 import {
   buildCoachPresence,
   resolveCoachActionIntent,
-} from "./service";
+} from './service';
 
 export function buildCompletionCoachPresence(
   input: CompletionPresenceInput,
@@ -34,7 +34,7 @@ export function buildCompletionCoachPresence(
   );
   const primaryGoal = goalForLane(
     input.laneProfile,
-    summary.sessionMode === "STUDY" ? "study" : "focus",
+    summary.sessionMode === 'STUDY' ? 'study' : 'focus',
   );
   const memoryConfidence = getCoachMemoryConfidence(
     summary.isFirstSession ? 1 : 3,
@@ -43,13 +43,13 @@ export function buildCompletionCoachPresence(
   const reflection = getCoachPresenceMessage({
     aiAvailable: memorySummary.syncAvailable,
     bossIntensity: null,
-    comebackState: summary.isComeback ? "missed_1_day" : null,
+    comebackState: summary.isComeback ? 'missed_1_day' : null,
     completionContext: summary.isFirstSession
-      ? "first_session"
+      ? 'first_session'
       : summary.isComeback
-        ? "comeback"
+        ? 'comeback'
         : null,
-    firstWeekStage: summary.isFirstSession ? "after_session_1" : null,
+    firstWeekStage: summary.isFirstSession ? 'after_session_1' : null,
     latestSession: {
       durationMinutes: summary.durationMinutes,
       focusPurityScore: summary.focusPurityScore,
@@ -58,10 +58,10 @@ export function buildCompletionCoachPresence(
     },
     memoryConfidence,
     motivationStyle,
-    premiumMoment: "none",
+    premiumMoment: 'none',
     primaryGoal,
-    sessionMode: "completed",
-    studyLayerLabel: primaryGoal === "study" ? "Study" : null,
+    sessionMode: 'completed',
+    studyLayerLabel: primaryGoal === 'study' ? 'Study' : null,
   });
   const base = buildCoachPresence({
     companion: null,
@@ -74,26 +74,26 @@ export function buildCompletionCoachPresence(
       highFocusStreak: summary.isHighFocusStreak ? 1 : 0,
       totalSessions: summary.isFirstSession ? 1 : 3,
     },
-    surface: "SESSION_SETUP",
+    surface: 'SESSION_SETUP',
   });
   return CoachPresenceSchema.parse({
     ...base,
-    id: "coach-presence:session-completion",
+    id: 'coach-presence:session-completion',
     message: reflection.message,
     nextAction: {
       intent: resolveCoachActionIntent({
         featureAvailability: input.featureAvailability,
         requestedIntent:
-          summary.sessionMode === "STUDY"
-            ? "START_STUDY_SESSION"
-            : "START_SESSION",
+          summary.sessionMode === 'STUDY'
+            ? 'START_STUDY_SESSION'
+            : 'START_SESSION',
       }),
       label:
-        summary.sessionMode === "STUDY" ? "Next study block" : "Next focus",
+        summary.sessionMode === 'STUDY' ? 'Next study block' : 'Next focus',
       reason:
         summary.focusPurityScore >= 90
-          ? "The rhythm is warm."
-          : "Keep the next move simple.",
+          ? 'The rhythm is warm.'
+          : 'Keep the next move simple.',
     },
     sessionReflection: reflection.message,
   });

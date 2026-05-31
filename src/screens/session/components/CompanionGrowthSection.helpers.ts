@@ -1,16 +1,16 @@
-import type { SessionSummary } from "../../../session/types";
+import type { SessionSummary } from '../../../session/types';
 import {
   type CompanionGrowth,
   getEvolutionProgress,
   getMoodForSessionSummary,
   loadCompanionState,
-} from "../../../features/companion/session-storage";
+} from '../../../features/companion/session-storage';
 
 export type LoadState =
-  | { status: "loading" }
-  | { status: "error"; error: Error }
-  | { status: "empty" }
-  | { status: "success"; growth: CompanionGrowth };
+  | { status: 'loading' }
+  | { status: 'error'; error: Error }
+  | { status: 'empty' }
+  | { status: 'success'; growth: CompanionGrowth };
 
 export async function buildFallbackGrowth(
   sessionId: string,

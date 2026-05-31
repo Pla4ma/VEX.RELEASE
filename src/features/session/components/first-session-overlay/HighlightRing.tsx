@@ -2,16 +2,16 @@
  * Highlight Ring Component
  */
 
-import React from "react";
+import React from 'react';
 import Animated, {
   FadeIn,
   useSharedValue,
   useAnimatedStyle,
   withRepeat,
   withTiming,
-} from "react-native-reanimated";
-import { useTheme } from "../../../../theme";
-import type { HighlightRingProps } from "./types";
+} from 'react-native-reanimated';
+import { useTheme } from '../../../../theme';
+import type { HighlightRingProps } from './types';
 
 export function HighlightRing({
   visible,
@@ -42,7 +42,7 @@ export function HighlightRing({
       entering={FadeIn.duration(300)}
       style={[
         {
-          position: "absolute",
+          position: 'absolute',
           left: position.x - 40,
           top: position.y - 40,
           width: 80,

@@ -1,9 +1,9 @@
-import type { CoachInputContract } from "../input-contract-schema";
+import type { CoachInputContract } from '../input-contract-schema';
 
 function generateMockUUID(): string {
-  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
     const r = Math.floor(Math.random() * 16);
-    const v = c === "x" ? r : 8 + (r % 4);
+    const v = c === 'x' ? r : 8 + (r % 4);
     return v.toString(16);
   });
 }
@@ -22,14 +22,14 @@ export function createMockCoachInput(
         grade: 85,
         duration: 1500,
         completedAt: now - 86400000,
-        difficulty: "NORMAL",
+        difficulty: 'NORMAL',
       },
       {
         sessionId: generateMockUUID(),
         grade: 92,
         duration: 1800,
         completedAt: now - 172800000,
-        difficulty: "CHALLENGING",
+        difficulty: 'CHALLENGING',
       },
     ],
     preferredSessionLengths: [1500, 1800, 2100],
@@ -43,19 +43,19 @@ export function createMockCoachInput(
     },
     focusScoreFactors: {
       currentScore: 78,
-      trend: "improving",
-      primaryFactors: ["consistency", "duration"],
+      trend: 'improving',
+      primaryFactors: ['consistency', 'duration'],
     },
     missionHistory: [
       {
         missionId: generateMockUUID(),
-        type: "daily",
+        type: 'daily',
         completed: true,
         completedAt: now - 43200000,
-        difficulty: "NORMAL",
+        difficulty: 'NORMAL',
       },
     ],
-    userGoalCategory: "focus_improvement",
+    userGoalCategory: 'focus_improvement',
     notificationPreferences: {
       enabled: true,
       quietHoursStart: 22,
@@ -64,14 +64,14 @@ export function createMockCoachInput(
     },
     premiumStatus: {
       isActive: false,
-      tier: "free",
+      tier: 'free',
       features: [],
     },
     timeContext: {
       currentHour,
       dayOfWeek,
       isWeekend: dayOfWeek === 0 || dayOfWeek === 6,
-      localTimezone: "America/New_York",
+      localTimezone: 'America/New_York',
     },
     ...overrides,
   };

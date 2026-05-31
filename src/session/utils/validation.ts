@@ -1,44 +1,44 @@
-import { z } from "zod";
-import { createDebugger } from "../../utils/debug";
+import { z } from 'zod';
+import { createDebugger } from '../../utils/debug';
 import type {
   ValidationError,
   ValidationWarning,
   ValidationResult,
-} from "./validation-types";
-import { FieldValidators } from "./field-validators";
+} from './validation-types';
+import { FieldValidators } from './field-validators';
 import {
   validateSessionStart,
   validateSessionPause,
   validateSessionCompletion,
-} from "./session-lifecycle-validators";
+} from './session-lifecycle-validators';
 
 export type {
   ValidationError,
   ValidationWarning,
   ValidationResult,
-} from "./validation-types";
-export { FieldValidators } from "./field-validators";
+} from './validation-types';
+export { FieldValidators } from './field-validators';
 export {
   validateSessionStart,
   validateSessionPause,
   validateSessionCompletion,
-} from "./session-lifecycle-validators";
+} from './session-lifecycle-validators';
 
-const debug = createDebugger("session:validation");
+const debug = createDebugger('session:validation');
 
 const SessionDurationSchema = z
   .number()
-  .min(60, "Session must be at least 1 minute")
-  .max(86400, "Session cannot exceed 24 hours");
+  .min(60, 'Session must be at least 1 minute')
+  .max(86400, 'Session cannot exceed 24 hours');
 const SessionNameSchema = z
   .string()
-  .min(1, "Session name is required")
-  .max(100, "Session name must be 100 characters or less");
+  .min(1, 'Session name is required')
+  .max(100, 'Session name must be 100 characters or less');
 const IntervalSchema = z
   .number()
   .int()
-  .min(1, "Must have at least 1 interval")
-  .max(20, "Cannot exceed 20 intervals");
+  .min(1, 'Must have at least 1 interval')
+  .max(20, 'Cannot exceed 20 intervals');
 
 export const SessionValidationSchema = z.object({
   name: SessionNameSchema.optional(),
@@ -68,16 +68,16 @@ export function validateSessionConfig(
     result.success = true;
     const logicalWarnings = performLogicalValidation(parsed);
     result.warnings = logicalWarnings;
-    debug.info("Session config validated successfully", { name: parsed.name });
+    debug.info('Session config validated successfully', { name: parsed.name });
   } catch (error) {
     if (error instanceof z.ZodError) {
       result.errors = error.errors.map((err) => ({
-        field: err.path.join("."),
+        field: err.path.join('.'),
         message: err.message,
         code: err.code,
         value: err.path.reduce<unknown>(
           (obj, key) =>
-            obj && typeof obj === "object"
+            obj && typeof obj === 'object'
               ? (obj as Record<string, unknown>)[key]
               : undefined,
           config,
@@ -85,12 +85,12 @@ export function validateSessionConfig(
       }));
     } else {
       result.errors.push({
-        field: "unknown",
+        field: 'unknown',
         message: String(error),
-        code: "UNKNOWN_ERROR",
+        code: 'UNKNOWN_ERROR',
       });
     }
-    debug.warn("Session config validation failed", { errors: result.errors });
+    debug.warn('Session config validation failed', { errors: result.errors });
   }
   return result;
 }
@@ -101,40 +101,40 @@ function performLogicalValidation(
   const warnings: ValidationWarning[] = [];
   if (config.duration > 7200 && !config.breakDuration) {
     warnings.push({
-      field: "breakDuration",
+      field: 'breakDuration',
       message:
-        "Sessions over 2 hours should include breaks to maintain focus quality",
-      code: "LONG_SESSION_NO_BREAK",
+        'Sessions over 2 hours should include breaks to maintain focus quality',
+      code: 'LONG_SESSION_NO_BREAK',
     });
   }
   const avgIntervalDuration = config.duration / config.intervals;
   if (config.intervals > 4 && avgIntervalDuration < 600) {
     warnings.push({
-      field: "intervals",
+      field: 'intervals',
       message: `Short intervals (${Math.floor(avgIntervalDuration / 60)}m each) may reduce deep focus quality`,
-      code: "SHORT_INTERVALS",
+      code: 'SHORT_INTERVALS',
     });
   }
   if (config.strictMode && !config.dndEnabled) {
     warnings.push({
-      field: "dndEnabled",
-      message: "Strict mode works best with Do Not Disturb enabled",
-      code: "STRICT_WITHOUT_DND",
+      field: 'dndEnabled',
+      message: 'Strict mode works best with Do Not Disturb enabled',
+      code: 'STRICT_WITHOUT_DND',
     });
   }
   if (config.autoStartBreaks && config.breakDuration < 300) {
     warnings.push({
-      field: "breakDuration",
+      field: 'breakDuration',
       message:
-        "Auto-starting with short breaks may not provide adequate recovery",
-      code: "SHORT_AUTO_BREAKS",
+        'Auto-starting with short breaks may not provide adequate recovery',
+      code: 'SHORT_AUTO_BREAKS',
     });
   }
   return warnings;
 }
 
 export function formatValidationErrors(errors: ValidationError[]): string {
-  return errors.map((e) => `${e.field}: ${e.message}`).join("; ");
+  return errors.map((e) => `${e.field}: ${e.message}`).join('; ');
 }
 
 export function hasErrors(result: ValidationResult<unknown>): boolean {

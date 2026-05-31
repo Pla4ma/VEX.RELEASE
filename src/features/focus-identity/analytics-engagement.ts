@@ -1,5 +1,5 @@
-import { capture } from "../../shared/analytics/analytics-service";
-import type { FocusIdentityProfile } from "./FocusIdentityEngine";
+import { capture } from '../../shared/analytics/analytics-service';
+import type { FocusIdentityProfile } from './FocusIdentityEngine';
 
 export function trackMonthlyReportViewed(
   userId: string,
@@ -7,7 +7,7 @@ export function trackMonthlyReportViewed(
   grade: string,
   scoreChange: number,
 ): void {
-  capture("focus_monthly_report_viewed", {
+  capture('focus_monthly_report_viewed', {
     user_id: userId,
     report_month: month,
     report_grade: grade,
@@ -21,7 +21,7 @@ export function trackFocusScoreShared(
   band: string,
   platform: string,
 ): void {
-  capture("focus_score_shared", {
+  capture('focus_score_shared', {
     user_id: userId,
     score,
     band,
@@ -34,7 +34,7 @@ export function trackScoreCardViewed(
   score: number,
   timeSinceLastView: number,
 ): void {
-  capture("focus_score_card_viewed", {
+  capture('focus_score_card_viewed', {
     user_id: userId,
     current_score: score,
     time_since_last_view_ms: timeSinceLastView,
@@ -45,7 +45,7 @@ export function trackScoreHistoryViewed(
   userId: string,
   daysViewed: number,
 ): void {
-  capture("focus_score_history_viewed", {
+  capture('focus_score_history_viewed', {
     user_id: userId,
     days_viewed: daysViewed,
   });
@@ -56,7 +56,7 @@ export function trackRecommendationClicked(
   recommendation: string,
   factor: string,
 ): void {
-  capture("focus_recommendation_clicked", {
+  capture('focus_recommendation_clicked', {
     user_id: userId,
     recommendation_text: recommendation,
     target_factor: factor,
@@ -67,9 +67,9 @@ export function trackChurnRiskIdentified(
   userId: string,
   score: number,
   daysSinceLastSession: number,
-  riskLevel: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL",
+  riskLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL',
 ): void {
-  capture("focus_churn_risk_identified", {
+  capture('focus_churn_risk_identified', {
     user_id: userId,
     current_score: score,
     days_since_session: daysSinceLastSession,
@@ -79,9 +79,9 @@ export function trackChurnRiskIdentified(
 
 export function trackScoreEngagement(
   userId: string,
-  engagementType: "daily_check" | "weekly_review" | "monthly_deep_dive",
+  engagementType: 'daily_check' | 'weekly_review' | 'monthly_deep_dive',
 ): void {
-  capture("focus_score_engagement", {
+  capture('focus_score_engagement', {
     user_id: userId,
     engagement_type: engagementType,
   });
@@ -93,7 +93,7 @@ export function trackFactorImprovement(
   oldScore: number,
   newScore: number,
 ): void {
-  capture("focus_factor_improved", {
+  capture('focus_factor_improved', {
     user_id: userId,
     factor_name: factor,
     previous_factor_score: oldScore,
@@ -106,7 +106,7 @@ export function setFocusIdentityUserProperties(
   userId: string,
   profile: FocusIdentityProfile,
 ): void {
-  capture("focus_identity_user_properties_set", {
+  capture('focus_identity_user_properties_set', {
     user_id: userId,
     focus_score: profile.currentScore,
     focus_band: profile.band.label,
@@ -125,14 +125,14 @@ export function setFocusIdentityUserProperties(
 export function trackFocusIdentityFunnel(
   userId: string,
   step:
-    | "profile_created"
-    | "first_score_calculated"
-    | "band_achieved"
-    | "report_viewed"
-    | "shared",
+    | 'profile_created'
+    | 'first_score_calculated'
+    | 'band_achieved'
+    | 'report_viewed'
+    | 'shared',
   band?: string,
 ): void {
-  capture("focus_identity_funnel", {
+  capture('focus_identity_funnel', {
     user_id: userId,
     funnel_step: step,
     current_band: band,
@@ -145,7 +145,7 @@ export function trackFocusIdentityError(
   errorMessage: string,
   context: Record<string, unknown>,
 ): void {
-  capture("focus_identity_error", {
+  capture('focus_identity_error', {
     user_id: userId,
     error_type: errorType,
     error_message: errorMessage,

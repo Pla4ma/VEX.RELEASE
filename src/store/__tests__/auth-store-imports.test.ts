@@ -1,7 +1,7 @@
-import fs from "fs";
-import path from "path";
+import fs from 'fs';
+import path from 'path';
 
-const sourceRoot = path.join(process.cwd(), "src");
+const sourceRoot = path.join(process.cwd(), 'src');
 
 function sourceFiles(dir: string): string[] {
   return fs.readdirSync(dir).flatMap((entry) => {
@@ -20,12 +20,12 @@ function readRelative(filePath: string): {
 } {
   return {
     relativePath: path.relative(process.cwd(), filePath),
-    source: fs.readFileSync(filePath, "utf8"),
+    source: fs.readFileSync(filePath, 'utf8'),
   };
 }
 
-describe("auth store import audit", () => {
-  it("has no file importing a legacy auth store", () => {
+describe('auth store import audit', () => {
+  it('has no file importing a legacy auth store', () => {
     const offenders = sourceFiles(sourceRoot)
       .map(readRelative)
       .filter(({ source }) => /from ["'][^"']*legacy-store["']/.test(source))
@@ -34,12 +34,12 @@ describe("auth store import audit", () => {
     expect(offenders).toEqual([]);
   });
 
-  it("has no manual token auth path competing with Supabase auth", () => {
+  it('has no manual token auth path competing with Supabase auth', () => {
     const bannedPatterns = [
-      "setSessionToken",
-      "login: (userId: string, token",
-      "getItem(TOKEN_KEY)",
-      "sstorage",
+      'setSessionToken',
+      'login: (userId: string, token',
+      'getItem(TOKEN_KEY)',
+      'sstorage',
     ];
     const offenders = sourceFiles(sourceRoot)
       .map(readRelative)

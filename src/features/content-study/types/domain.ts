@@ -8,7 +8,7 @@ import type {
   TaskPriority,
   QuizDifficulty,
   SessionDifficulty,
-} from "./enums";
+} from './enums';
 
 export interface StudyTask {
   id: string;
@@ -40,7 +40,7 @@ export interface KeyConcept {
   id: string;
   term: string;
   definition: string;
-  importance: "high" | "medium" | "low" | number;
+  importance: 'high' | 'medium' | 'low' | number;
 }
 
 export interface StudySummary {

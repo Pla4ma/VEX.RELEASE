@@ -1,8 +1,8 @@
 import type {
   NotificationPriority,
   NotificationType,
-} from "./SmartNotificationSystem.types";
-import { notificationHistory } from "./SmartNotificationSystem";
+} from './SmartNotificationSystem.types';
+import { notificationHistory } from './SmartNotificationSystem';
 
 export interface NotificationAnalytics {
   totalSent: number;
@@ -33,11 +33,11 @@ export function getNotificationAnalytics(
     { sent: number; opened: number; rate: number }
   > = {};
   for (const type of [
-    "STREAK_PROTECTION",
-    "BOSS_OPPORTUNITY",
-    "STUDY_REMINDER",
-    "COMEBACK",
-    "SQUAD_ACTIVITY",
+    'STREAK_PROTECTION',
+    'BOSS_OPPORTUNITY',
+    'STUDY_REMINDER',
+    'COMEBACK',
+    'SQUAD_ACTIVITY',
   ] as NotificationType[]) {
     const typeNotifications = history.filter((n) => n.type === type);
     const sent = typeNotifications.filter((n) => n.sentAt).length;
@@ -45,10 +45,10 @@ export function getNotificationAnalytics(
     byType[type] = { sent, opened, rate: sent > 0 ? opened / sent : 0 };
   }
   for (const priority of [
-    "CRITICAL",
-    "HIGH",
-    "MEDIUM",
-    "LOW",
+    'CRITICAL',
+    'HIGH',
+    'MEDIUM',
+    'LOW',
   ] as NotificationPriority[]) {
     const priorityNotifications = history.filter(
       (n) => n.priority === priority,

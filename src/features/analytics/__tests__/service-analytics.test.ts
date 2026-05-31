@@ -1,27 +1,27 @@
 import {
   getAnalyticsData,
-} from "../service";
-import * as repository from "../repository";
-import { eventBus } from "../../../events";
+} from '../service';
+import * as repository from '../repository';
+import { eventBus } from '../../../events';
 
-jest.mock("../repository");
+jest.mock('../repository');
 
-jest.mock("../../../events", () => ({ eventBus: { publish: jest.fn() } }));
-jest.mock("@sentry/react-native", () => ({
+jest.mock('../../../events', () => ({ eventBus: { publish: jest.fn() } }));
+jest.mock('@sentry/react-native', () => ({
   addBreadcrumb: jest.fn(),
   captureException: jest.fn(),
 }));
 
-describe("AnalyticsService", () => {
+describe('AnalyticsService', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  describe("getAnalyticsData", () => {
-    it("should fetch data for multiple metrics", async () => {
+  describe('getAnalyticsData', () => {
+    it('should fetch data for multiple metrics', async () => {
       const mockTimeSeriesData = {
-        metric: "sessions_completed",
-        granularity: "day",
+        metric: 'sessions_completed',
+        granularity: 'day',
         points: [
           { timestamp: Date.now() - 86400000, value: 5 },
           { timestamp: Date.now(), value: 3 },
@@ -39,19 +39,19 @@ describe("AnalyticsService", () => {
         mockTimeSeriesData,
       );
       const result = await getAnalyticsData({
-        userId: "550e8400-e29b-41d4-a716-446655440000",
-        metrics: ["sessions_completed", "xp_earned"],
-        timeRange: "last_7_days",
-        granularity: "day",
+        userId: '550e8400-e29b-41d4-a716-446655440000',
+        metrics: ['sessions_completed', 'xp_earned'],
+        timeRange: 'last_7_days',
+        granularity: 'day',
       });
       expect(result).toHaveLength(2);
       expect(repository.fetchTimeSeriesData).toHaveBeenCalledTimes(2);
     });
 
-    it("should apply dimensions and filters", async () => {
+    it('should apply dimensions and filters', async () => {
       const mockTimeSeriesData = {
-        metric: "sessions_completed",
-        granularity: "day",
+        metric: 'sessions_completed',
+        granularity: 'day',
         points: [],
         summary: {
           total: 0,
@@ -66,30 +66,30 @@ describe("AnalyticsService", () => {
         mockTimeSeriesData,
       );
       await getAnalyticsData({
-        userId: "550e8400-e29b-41d4-a716-446655440000",
-        metrics: ["sessions_completed"],
-        timeRange: "last_7_days",
-        granularity: "day",
-        dimensions: ["day_of_week"],
-        filters: [{ dimension: "day_of_week", operator: "eq", value: "1" }],
+        userId: '550e8400-e29b-41d4-a716-446655440000',
+        metrics: ['sessions_completed'],
+        timeRange: 'last_7_days',
+        granularity: 'day',
+        dimensions: ['day_of_week'],
+        filters: [{ dimension: 'day_of_week', operator: 'eq', value: '1' }],
       });
       expect(repository.fetchTimeSeriesData).toHaveBeenCalledWith(
-        "550e8400-e29b-41d4-a716-446655440000",
-        "sessions_completed",
-        "last_7_days",
-        "day",
-        ["day_of_week"],
-        [{ dimension: "day_of_week", operator: "eq", value: "1" }],
+        '550e8400-e29b-41d4-a716-446655440000',
+        'sessions_completed',
+        'last_7_days',
+        'day',
+        ['day_of_week'],
+        [{ dimension: 'day_of_week', operator: 'eq', value: '1' }],
       );
     });
 
-    it("should throw on validation error", async () => {
+    it('should throw on validation error', async () => {
       await expect(
         getAnalyticsData({
-          userId: "invalid-uuid",
+          userId: 'invalid-uuid',
           metrics: [],
-          timeRange: "last_7_days",
-          granularity: "day",
+          timeRange: 'last_7_days',
+          granularity: 'day',
         }),
       ).rejects.toThrow();
     });

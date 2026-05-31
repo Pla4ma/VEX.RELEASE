@@ -1,20 +1,20 @@
-import type { MutableRefObject } from "react";
-import type { PurchasesOffering } from "react-native-purchases";
-import { revenueCatService } from "./revenuecat-service";
-import { restorePurchases as restoreRevenueCatPurchases } from "./revenuecat-exports";
+import type { MutableRefObject } from 'react';
+import type { PurchasesOffering } from 'react-native-purchases';
+import { revenueCatService } from './revenuecat-service';
+import { restorePurchases as restoreRevenueCatPurchases } from './revenuecat-exports';
 import type {
   PurchaseResult,
   PurchasesOfferingDisplayInfo,
   PurchasesPackageDisplayInfo,
   RevenueCatError,
   UseRevenueCatState,
-} from "./revenuecat-types";
+} from './revenuecat-types';
 import {
   PurchaseEvents,
   createPurchaseProperties,
-} from "./purchase-events";
-import { capture, type PurchaseEvent } from "../analytics";
-import { buildError } from "./revenuecat-helpers";
+} from './purchase-events';
+import { capture, type PurchaseEvent } from '../analytics';
+import { buildError } from './revenuecat-helpers';
 
 export interface PurchaseOps {
   setIsPurchasing: (v: boolean) => void;
@@ -33,7 +33,7 @@ export interface RestoreOps {
 
 export interface RetryOps {
   clearErrors: () => void;
-  setStatus: (v: UseRevenueCatState["status"]) => void;
+  setStatus: (v: UseRevenueCatState['status']) => void;
   setIsReady: (v: boolean) => void;
   refreshOfferings: () => Promise<void>;
   refreshCustomer: () => Promise<void>;
@@ -44,7 +44,7 @@ export async function executePurchase(
   packageInfo: PurchasesPackageDisplayInfo,
 ): Promise<PurchaseResult> {
   if (!revenueCatService.isReady()) {
-    const error = buildError("CONFIGURATION_ERROR", "RevenueCat is not ready");
+    const error = buildError('CONFIGURATION_ERROR', 'RevenueCat is not ready');
     ctx.setPurchaseError(error);
     return { success: false, error, errorCode: error.code };
   }
@@ -53,8 +53,8 @@ export async function executePurchase(
   );
   if (!rawPackage) {
     const error = buildError(
-      "PRODUCT_NOT_AVAILABLE",
-      "Package not found in active offering",
+      'PRODUCT_NOT_AVAILABLE',
+      'Package not found in active offering',
     );
     ctx.setPurchaseError(error);
     return { success: false, error, errorCode: error.code };
@@ -65,7 +65,7 @@ export async function executePurchase(
     PurchaseEvents.PURCHASE_STARTED as PurchaseEvent,
     createPurchaseProperties({
       packageId: packageInfo.identifier,
-      offeringId: ctx.offerings?.identifier ?? "unknown",
+      offeringId: ctx.offerings?.identifier ?? 'unknown',
       productId: packageInfo.product.identifier,
       price: packageInfo.product.price,
       currency: packageInfo.product.currencyCode,
@@ -82,7 +82,7 @@ export async function executePurchase(
         PurchaseEvents.PURCHASE_COMPLETED as PurchaseEvent,
         createPurchaseProperties({
           packageId: packageInfo.identifier,
-          offeringId: ctx.offerings?.identifier ?? "unknown",
+          offeringId: ctx.offerings?.identifier ?? 'unknown',
           productId: packageInfo.product.identifier,
           price: packageInfo.product.price,
           currency: packageInfo.product.currencyCode,
@@ -94,17 +94,17 @@ export async function executePurchase(
       return result;
     }
     const error = buildError(
-      (result.errorCode as RevenueCatError["code"]) ?? "UNKNOWN",
-      result.error?.message ?? "Purchase failed",
+      (result.errorCode as RevenueCatError['code']) ?? 'UNKNOWN',
+      result.error?.message ?? 'Purchase failed',
     );
     ctx.setPurchaseError(error);
     capture(
-      result.errorCode === "PURCHASE_CANCELLED"
+      result.errorCode === 'PURCHASE_CANCELLED'
         ? (PurchaseEvents.PURCHASE_CANCELLED as PurchaseEvent)
         : (PurchaseEvents.PURCHASE_FAILED as PurchaseEvent),
       createPurchaseProperties({
         packageId: packageInfo.identifier,
-        offeringId: ctx.offerings?.identifier ?? "unknown",
+        offeringId: ctx.offerings?.identifier ?? 'unknown',
         productId: packageInfo.product.identifier,
         price: packageInfo.product.price,
         currency: packageInfo.product.currencyCode,
@@ -118,8 +118,8 @@ export async function executePurchase(
     return { success: false, error, errorCode: error.code };
   } catch (error) {
     const rcError = buildError(
-      "UNKNOWN",
-      error instanceof Error ? error.message : "Purchase failed",
+      'UNKNOWN',
+      error instanceof Error ? error.message : 'Purchase failed',
     );
     ctx.setPurchaseError(rcError);
     capture(PurchaseEvents.PURCHASE_FAILED as PurchaseEvent, {
@@ -135,7 +135,7 @@ export async function executePurchase(
 
 export async function executeRestore(ctx: RestoreOps): Promise<PurchaseResult> {
   if (!revenueCatService.isReady()) {
-    const error = buildError("CONFIGURATION_ERROR", "RevenueCat is not ready");
+    const error = buildError('CONFIGURATION_ERROR', 'RevenueCat is not ready');
     ctx.setPurchaseError(error);
     return { success: false, error, errorCode: error.code };
   }
@@ -154,8 +154,8 @@ export async function executeRestore(ctx: RestoreOps): Promise<PurchaseResult> {
       return result;
     }
     const error = buildError(
-      (result.errorCode as RevenueCatError["code"]) ?? "UNKNOWN",
-      result.error?.message ?? "Restore failed",
+      (result.errorCode as RevenueCatError['code']) ?? 'UNKNOWN',
+      result.error?.message ?? 'Restore failed',
     );
     ctx.setPurchaseError(error);
     capture(PurchaseEvents.RESTORE_FAILED as PurchaseEvent, {
@@ -166,8 +166,8 @@ export async function executeRestore(ctx: RestoreOps): Promise<PurchaseResult> {
     return { success: false, error, errorCode: error.code };
   } catch (error) {
     const rcError = buildError(
-      "UNKNOWN",
-      error instanceof Error ? error.message : "Restore failed",
+      'UNKNOWN',
+      error instanceof Error ? error.message : 'Restore failed',
     );
     ctx.setPurchaseError(rcError);
     capture(PurchaseEvents.RESTORE_FAILED as PurchaseEvent, {
@@ -186,7 +186,7 @@ export async function executeRetry(ctx: RetryOps): Promise<void> {
   if (!revenueCatService.isReady()) {
     const initResult = await revenueCatService.initialize();
     ctx.setStatus(initResult.status);
-    ctx.setIsReady(initResult.status === "ready" && revenueCatService.isReady());
+    ctx.setIsReady(initResult.status === 'ready' && revenueCatService.isReady());
   }
   await Promise.all([ctx.refreshOfferings(), ctx.refreshCustomer()]);
 }

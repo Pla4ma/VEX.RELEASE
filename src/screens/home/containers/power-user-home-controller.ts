@@ -1,13 +1,13 @@
-import type { UseQueryResult } from "@tanstack/react-query";
-import type { SessionRecommendation } from "../../../features/ai-coach";
-import type { LearningExecutionLayer } from "../../../features/learning-execution";
-import type { FeatureAccessResult } from "../../../features/liveops-config";
-import type { HomeController, SessionHistoryResult } from "../hooks/home-controller-types";
-import type { HomeReturnReason } from "../hooks/useHomeReturnReason";
-import type { HomeSpineModel } from "../../../features/home-spine/schemas";
-import type { HomeFeatureRuntime } from "../hooks/home-feature-runtime";
-import type { HomeHighlight, CompletionSyncState } from "../../../store/session-state";
-import { createStubQuery } from "../hooks/home-controller-stubs";
+import type { UseQueryResult } from '@tanstack/react-query';
+import type { SessionRecommendation } from '../../../features/ai-coach';
+import type { LearningExecutionLayer } from '../../../features/learning-execution';
+import type { FeatureAccessResult } from '../../../features/liveops-config';
+import type { HomeController, SessionHistoryResult } from '../hooks/home-controller-types';
+import type { HomeReturnReason } from '../hooks/useHomeReturnReason';
+import type { HomeSpineModel } from '../../../features/home-spine/schemas';
+import type { HomeFeatureRuntime } from '../hooks/home-feature-runtime';
+import type { HomeHighlight, CompletionSyncState } from '../../../store/session-state';
+import { createStubQuery } from '../hooks/home-controller-stubs';
 
 export function buildController(params: {
   userId: string;
@@ -34,8 +34,8 @@ export function buildController(params: {
   learningExecutionLayer: LearningExecutionLayer;
   comebackQuery: UseQueryResult;
   activeBossQuery: UseQueryResult | null;
-  createRecommendation: HomeController["createRecommendation"];
-  updateRecommendationStatus: HomeController["updateRecommendationStatus"];
+  createRecommendation: HomeController['createRecommendation'];
+  updateRecommendationStatus: HomeController['updateRecommendationStatus'];
   openSetup: (params?: Record<string, unknown>) => void;
   openProgress: () => void;
   openSocial: () => void;

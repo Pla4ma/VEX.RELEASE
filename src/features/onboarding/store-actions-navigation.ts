@@ -1,17 +1,17 @@
-import type { OnboardingStore } from "./store";
-import type { OnboardingState } from "./schemas";
-import { LaneSchema } from "../lane-engine/schemas";
+import type { OnboardingStore } from './store';
+import type { OnboardingState } from './schemas';
+import { LaneSchema } from '../lane-engine/schemas';
 import {
   mergeOnboardingCompletion,
   isCompletionValidForUser,
   type OnboardingDraft,
-} from "./store-helpers";
+} from './store-helpers';
 import {
   initialState,
   getCurrentUserIdForBool,
   advanceStepWithCompletionCheck,
-} from "./store-action-types";
-import { deriveMotivationProfile } from "./store-helpers";
+} from './store-action-types';
+import { deriveMotivationProfile } from './store-helpers';
 
 type SetFn = (partial: Partial<OnboardingStore>) => void;
 type GetFn = () => OnboardingStore;
@@ -27,7 +27,7 @@ export function createNavigationActions(set: SetFn, get: GetFn) {
 
     previousStep: () => {
       const { currentStep } = get();
-      if (currentStep > 0) set({ currentStep: currentStep - 1 });
+      if (currentStep > 0) {set({ currentStep: currentStep - 1 });}
     },
 
     skipOnboarding: () =>
@@ -51,7 +51,7 @@ export function createNavigationActions(set: SetFn, get: GetFn) {
 
     /** Home Preview: allowed when profile steps are done, even without first session. */
     canPreviewHome: (userId: string | null | undefined) => {
-      if (!userId) return false;
+      if (!userId) {return false;}
       const state = get();
       return state.profileStepsCompleted && !state.isOnboarded;
     },
@@ -101,8 +101,8 @@ export function createNavigationActions(set: SetFn, get: GetFn) {
           store.explicitMotivationStyle,
         );
       }
-      if (draft.focusDuration) updates.focusDuration = draft.focusDuration;
-      if (draft.displayName) updates.displayName = draft.displayName;
+      if (draft.focusDuration) {updates.focusDuration = draft.focusDuration;}
+      if (draft.displayName) {updates.displayName = draft.displayName;}
       if (draft.explicitMotivationStyle) {
         updates.explicitMotivationStyle = draft.explicitMotivationStyle;
         updates.motivationProfile = deriveMotivationProfile(
@@ -132,12 +132,12 @@ export function createNavigationActions(set: SetFn, get: GetFn) {
       }
       if (draft.chosenLane !== undefined) {
         const parsed = LaneSchema.safeParse(draft.chosenLane);
-        if (parsed.success) updates.chosenLane = parsed.data;
+        if (parsed.success) {updates.chosenLane = parsed.data;}
       }
-      if (Object.keys(updates).length > 0) set(updates);
+      if (Object.keys(updates).length > 0) {set(updates);}
     },
 
-    setChosenLane: (lane: import("../lane-engine/types").Lane | null) => {
+    setChosenLane: (lane: import('../lane-engine/types').Lane | null) => {
       set({ chosenLane: lane });
     },
   };

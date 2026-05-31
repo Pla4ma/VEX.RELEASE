@@ -1,21 +1,21 @@
-import React from "react";
-import { ScrollView } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import React from 'react';
+import { ScrollView } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-import { Text } from "../../components/primitives";
-import { Skeleton } from "../../components/ui/Skeleton";
-import { BossBattleHUD } from "../../features/boss/components/boss-battle-hud";
-import { useActiveBoss, useBossTemplates } from "../../features/boss/hooks";
-import { useProgressionSummary } from "../../features/progression/hooks";
-import { useStreakMultiplier } from "../../features/streaks/hooks";
-import type { ExtendedRootStackParams } from "../../navigation/types";
-import type { useTheme } from "../../theme";
-import { BossScreenSections } from "./BossScreenSections";
+import { Text } from '../../components/primitives';
+import { Skeleton } from '../../components/ui/Skeleton';
+import { BossBattleHUD } from '../../features/boss/components/boss-battle-hud';
+import { useActiveBoss, useBossTemplates } from '../../features/boss/hooks';
+import { useProgressionSummary } from '../../features/progression/hooks';
+import { useStreakMultiplier } from '../../features/streaks/hooks';
+import type { ExtendedRootStackParams } from '../../navigation/types';
+import type { useTheme } from '../../theme';
+import { BossScreenSections } from './BossScreenSections';
 
 type Nav = NativeStackNavigationProp<ExtendedRootStackParams>;
-type BossIntensity = "subtle" | "game-like" | "intense";
-type Theme = ReturnType<typeof useTheme>["theme"];
+type BossIntensity = 'subtle' | 'game-like' | 'intense';
+type Theme = ReturnType<typeof useTheme>['theme'];
 
 interface BossScreenContentProps {
   bossIntensity: BossIntensity;
@@ -102,16 +102,16 @@ export function BossScreenContent({
           bossIntensity={bossIntensity}
           encounter={encounter}
           onLaunchAttack={(minutes) => {
-            if (levelLocked) return;
-            navigation.navigate("SessionStack", {
-              screen: "SessionSetup",
+            if (levelLocked) {return;}
+            navigation.navigate('SessionStack', {
+              screen: 'SessionSetup',
               params: {
                 presetId:
                   minutes === 15
-                    ? "quick"
+                    ? 'quick'
                     : minutes === 25
-                      ? "pomodoro"
-                      : "deep",
+                      ? 'pomodoro'
+                      : 'deep',
               },
             });
           }}
@@ -126,7 +126,7 @@ export function BossScreenContent({
             }
           }
           userDamage={userDamage}
-          userId={userId ?? ""}
+          userId={userId ?? ''}
         />
       </ScrollView>
     </SafeAreaView>

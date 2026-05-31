@@ -1,19 +1,19 @@
-import TestRenderer, { act, type ReactTestRenderer } from "react-test-renderer";
-import { PaywallScreen } from "../PaywallScreen";
-import { capture } from "../../../shared/analytics";
-import { usePaywall, usePremiumStatus } from "../../../shared/monetization";
+import TestRenderer, { act, type ReactTestRenderer } from 'react-test-renderer';
+import { PaywallScreen } from '../PaywallScreen';
+import { capture } from '../../../shared/analytics';
+import { usePaywall, usePremiumStatus } from '../../../shared/monetization';
 import type {
   PurchasesOfferingDisplayInfo,
   PurchasesPackageDisplayInfo,
   RevenueCatError,
-} from "../../../shared/monetization";
+} from '../../../shared/monetization';
 import {
   mockGoBack,
   mockRetry,
   mockPurchase,
   mockRestore,
   mockRefresh,
-} from "./PaywallScreen-mocks";
+} from './PaywallScreen-mocks';
 
 export { mockGoBack, mockRetry, mockPurchase, mockRestore, mockRefresh };
 
@@ -22,11 +22,11 @@ export const mockedUsePremiumStatus = jest.mocked(usePremiumStatus);
 export const mockedCapture = jest.mocked(capture);
 
 export function revenueCatError(
-  code: RevenueCatError["code"],
+  code: RevenueCatError['code'],
   message: string,
 ): RevenueCatError {
   const error = new Error(message) as RevenueCatError;
-  error.name = "RevenueCatError";
+  error.name = 'RevenueCatError';
   error.code = code;
   return error;
 }
@@ -45,7 +45,7 @@ export function packageInfo(
       title: packageType,
       price: 1,
       priceString,
-      currencyCode: "USD",
+      currencyCode: 'USD',
       introPrice: null,
       discounts: [],
     },
@@ -56,13 +56,13 @@ export function mockPaywallState(
   overrides: Partial<ReturnType<typeof usePaywall>> = {},
 ): void {
   const packages = [
-    packageInfo("$rc_annual", "ANNUAL", "$49.99 / year"),
-    packageInfo("$rc_monthly", "MONTHLY", "$6.99 / month"),
+    packageInfo('$rc_annual', 'ANNUAL', '$49.99 / year'),
+    packageInfo('$rc_monthly', 'MONTHLY', '$6.99 / month'),
   ];
   mockedUsePaywall.mockReturnValue({
     offerings: {
-      identifier: "default-offering",
-      serverDescription: "Default",
+      identifier: 'default-offering',
+      serverDescription: 'Default',
       metadata: {},
       packages,
     } satisfies PurchasesOfferingDisplayInfo,
@@ -82,7 +82,7 @@ export function renderPaywall(): ReactTestRenderer {
     output = TestRenderer.create(<PaywallScreen />);
   });
   if (!output) {
-    throw new Error("Paywall did not render");
+    throw new Error('Paywall did not render');
   }
   return output;
 }

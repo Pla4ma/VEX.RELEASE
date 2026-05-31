@@ -1,14 +1,14 @@
-import { useCallback } from "react";
-import { useQueryClient } from "@tanstack/react-query";
+import { useCallback } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 
-import { useNetInfo } from "../../../network";
-import type { SessionSummary } from "../../../session/types";
-import { useSessionUIStore } from "../../../store/session-state";
+import { useNetInfo } from '../../../network';
+import type { SessionSummary } from '../../../session/types';
+import { useSessionUIStore } from '../../../store/session-state';
 import {
   applyHomeReturnOptimisticUpdate,
   getNextCompletionSyncState,
   invalidateCompletionReturnQueries,
-} from "../home-return-sync";
+} from '../home-return-sync';
 
 export function useHomeReturnCompletionSync(input: {
   sessionId: string;
@@ -33,7 +33,7 @@ export function useHomeReturnCompletionSync(input: {
         getNextCompletionSyncState({
           current: completionSync,
           failed: false,
-          pendingSync: completionSync.status === "pending_sync" && !isOnline,
+          pendingSync: completionSync.status === 'pending_sync' && !isOnline,
         }),
       );
     } catch (error: unknown) {

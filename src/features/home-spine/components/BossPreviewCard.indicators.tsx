@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo } from 'react';
 import Animated, {
   FadeInUp,
   useAnimatedStyle,
@@ -6,27 +6,27 @@ import Animated, {
   withTiming,
   withRepeat,
   withSequence,
-} from "react-native-reanimated";
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import { launchColors } from "@theme/tokens/launch-colors";
-import type { BossTier } from "./BossPreviewCard.types";
+} from 'react-native-reanimated';
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import { launchColors } from '@theme/tokens/launch-colors';
+import type { BossTier } from './BossPreviewCard.types';
 
 function getTierConfig(tier: BossTier, fallbackColor: string, fallbackBg: string) {
-  if (tier === "LEGENDARY") {
-    return { color: launchColors.hex_f59e0b, bg: launchColors.rgb_245_158_11_0_2, label: "LEGENDARY" };
+  if (tier === 'LEGENDARY') {
+    return { color: launchColors.hex_f59e0b, bg: launchColors.rgb_245_158_11_0_2, label: 'LEGENDARY' };
   }
-  if (tier === "EPIC") {
-    return { color: launchColors.hex_a855f7, bg: launchColors.rgb_168_85_247_0_2, label: "EPIC" };
+  if (tier === 'EPIC') {
+    return { color: launchColors.hex_a855f7, bg: launchColors.rgb_168_85_247_0_2, label: 'EPIC' };
   }
-  if (tier === "RARE") {
-    return { color: launchColors.hex_3b82f6, bg: launchColors.rgb_59_130_246_0_2, label: "RARE" };
+  if (tier === 'RARE') {
+    return { color: launchColors.hex_3b82f6, bg: launchColors.rgb_59_130_246_0_2, label: 'RARE' };
   }
-  if (tier === "UNCOMMON") {
-    return { color: launchColors.hex_22c55e, bg: launchColors.rgb_34_197_94_0_2, label: "UNCOMMON" };
+  if (tier === 'UNCOMMON') {
+    return { color: launchColors.hex_22c55e, bg: launchColors.rgb_34_197_94_0_2, label: 'UNCOMMON' };
   }
-  return { color: fallbackColor, bg: fallbackBg, label: "COMMON" };
+  return { color: fallbackColor, bg: fallbackBg, label: 'COMMON' };
 }
 
 export function TierBadge({ tier }: { tier: BossTier }): JSX.Element {
@@ -104,8 +104,8 @@ export function BossTauntBubble({ taunt }: { taunt: string }): JSX.Element {
             borderLeftWidth: 8,
             borderRightWidth: 8,
             borderTopWidth: 8,
-            borderLeftColor: "transparent",
-            borderRightColor: "transparent",
+            borderLeftColor: 'transparent',
+            borderRightColor: 'transparent',
             borderTopColor: theme.colors.error[500],
           }}
         />

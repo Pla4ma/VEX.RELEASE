@@ -1,11 +1,11 @@
-import { captureSilentFailure } from "../../../utils/silent-failure";
-import { useMemo, useState } from "react";
+import { captureSilentFailure } from '../../../utils/silent-failure';
+import { useMemo, useState } from 'react';
 
 import {
   useActiveStudyPlan,
   useCompleteStudyPlanTask,
-} from "../../../features/content-study";
-import { useLearningExecutionLayer } from "../../../features/learning-execution";
+} from '../../../features/content-study';
+import { useLearningExecutionLayer } from '../../../features/learning-execution';
 
 type ContentStudySessionMeta = {
   generationId: string | null;
@@ -38,7 +38,7 @@ function parseContentStudySessionMeta(
   tags?: string[],
 ): ContentStudySessionMeta {
   const isContentStudy = Boolean(
-    tags?.includes("content-study") || tags?.includes("learning-execution"),
+    tags?.includes('content-study') || tags?.includes('learning-execution'),
   );
 
   if (!notes) {
@@ -50,9 +50,9 @@ function parseContentStudySessionMeta(
     return { generationId: parsed.generationId ?? null, isContentStudy };
   } catch (error) {
     captureSilentFailure(error, {
-      feature: "screens",
-      operation: "network-fallback",
-      type: "network",
+      feature: 'screens',
+      operation: 'network-fallback',
+      type: 'network',
     });
     return { generationId: null, isContentStudy };
   }

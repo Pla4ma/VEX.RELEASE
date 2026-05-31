@@ -1,18 +1,18 @@
-import React from "react";
-import { View, Text, Pressable } from "react-native";
-import { RouteProp } from "@react-navigation/native";
+import React from 'react';
+import { View, Text, Pressable } from 'react-native';
+import { RouteProp } from '@react-navigation/native';
 import type {
   ContentStudyStackParamList,
   StudyGeneration,
   QuizItem,
   SessionPlan,
-} from "../types";
-import { UI_TEXT, TASK_PRIORITY_CONFIG, QUIZ_DIFFICULTY_CONFIG } from "../constants";
-import { useTheme } from "@/theme";
-import { launchColors } from "@theme/tokens/launch-colors";
-import { styles } from "./StudyPlanScreen.styles";
+} from '../types';
+import { UI_TEXT, TASK_PRIORITY_CONFIG, QUIZ_DIFFICULTY_CONFIG } from '../constants';
+import { useTheme } from '@/theme';
+import { launchColors } from '@theme/tokens/launch-colors';
+import { styles } from './StudyPlanScreen.styles';
 
-export type RouteProps = RouteProp<ContentStudyStackParamList, "StudyPlan">;
+export type RouteProps = RouteProp<ContentStudyStackParamList, 'StudyPlan'>;
 export type NavigationProp = { navigate: (screen: string, params?: unknown) => void; goBack: () => void };
 
 export function Icon({ name: _name, color }: { name: string; color?: string }) {
@@ -22,7 +22,7 @@ export function Icon({ name: _name, color }: { name: string; color?: string }) {
 
 export function formatDuration(seconds: number): string {
   const minutes = Math.floor(seconds / 60);
-  if (minutes < 60) return `${minutes} min`;
+  if (minutes < 60) {return `${minutes} min`;}
   const hours = Math.floor(minutes / 60);
   const remainingMinutes = minutes % 60;
   return remainingMinutes > 0 ? `${hours}h ${remainingMinutes}m` : `${hours}h`;
@@ -100,9 +100,9 @@ export function QuizSection({ quizItems, revealedAnswers, toggleAnswer }: {
             <Pressable
               style={({ pressed }) => [styles.answerToggle, pressed && { opacity: 0.8 }]}
               onPress={() => toggleAnswer(item.id)}
-              accessibilityLabel={isRevealed ? "Hide answer" : "Show answer"}
+              accessibilityLabel={isRevealed ? 'Hide answer' : 'Show answer'}
               accessibilityRole="button"
-              accessibilityHint={isRevealed ? "Hides the answer for this question" : "Reveals the answer for this question"}
+              accessibilityHint={isRevealed ? 'Hides the answer for this question' : 'Reveals the answer for this question'}
             >
               <Text style={styles.answerToggleText}>
                 {isRevealed ? UI_TEXT.QUIZ_HIDE_ANSWER : UI_TEXT.QUIZ_SHOW_ANSWER}

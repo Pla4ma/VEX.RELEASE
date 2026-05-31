@@ -1,4 +1,4 @@
-import type { TimerState, TimerConfig } from "../types";
+import type { TimerState, TimerConfig } from '../types';
 
 export type { TimerState, TimerConfig };
 

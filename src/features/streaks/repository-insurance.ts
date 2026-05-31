@@ -1,26 +1,26 @@
-import { supabase } from "../../supabase/client";
+import { supabase } from '../../supabase/client';
 import type {
   StreakInsurance,
   StreakGamble,
   ComebackToken,
-} from "./streak-insurance";
-const INSURANCE_TABLE = "streak_insurance";
-const GAMBLE_TABLE = "streak_gambles";
-const TOKEN_TABLE = "comeback_tokens";
+} from './streak-insurance';
+const INSURANCE_TABLE = 'streak_insurance';
+const GAMBLE_TABLE = 'streak_gambles';
+const TOKEN_TABLE = 'comeback_tokens';
 export async function fetchActiveInsurance(
   userId: string,
 ): Promise<StreakInsurance | null> {
   const { data, error } = await supabase
     .from(INSURANCE_TABLE)
-    .select("*")
-    .eq("user_id", userId)
-    .eq("used", false)
-    .gt("expires_at", new Date().toISOString())
-    .order("purchased_at", { ascending: false })
+    .select('*')
+    .eq('user_id', userId)
+    .eq('used', false)
+    .gt('expires_at', new Date().toISOString())
+    .order('purchased_at', { ascending: false })
     .limit(1)
     .single();
   if (error) {
-    if (error.code === "PGRST116") {
+    if (error.code === 'PGRST116') {
       return null;
     }
     throw error;
@@ -51,7 +51,7 @@ export async function markInsuranceUsed(insuranceId: string): Promise<void> {
   const { error } = await supabase
     .from(INSURANCE_TABLE)
     .update({ used: true, used_at: new Date().toISOString() })
-    .eq("id", insuranceId);
+    .eq('id', insuranceId);
   if (error) {
     throw error;
   }
@@ -61,12 +61,12 @@ export async function fetchActiveGamble(
 ): Promise<StreakGamble | null> {
   const { data, error } = await supabase
     .from(GAMBLE_TABLE)
-    .select("*")
-    .eq("user_id", userId)
-    .eq("status", "ACTIVE")
+    .select('*')
+    .eq('user_id', userId)
+    .eq('status', 'ACTIVE')
     .single();
   if (error) {
-    if (error.code === "PGRST116") {
+    if (error.code === 'PGRST116') {
       return null;
     }
     throw error;
@@ -96,7 +96,7 @@ export async function createGamble(
 }
 export async function settleGamble(
   gambleId: string,
-  status: "WON" | "LOST",
+  status: 'WON' | 'LOST',
   actualGrade: string,
 ): Promise<void> {
   const { error } = await supabase
@@ -106,7 +106,7 @@ export async function settleGamble(
       actual_grade: actualGrade,
       settled_at: new Date().toISOString(),
     })
-    .eq("id", gambleId);
+    .eq('id', gambleId);
   if (error) {
     throw error;
   }
@@ -114,9 +114,9 @@ export async function settleGamble(
 export async function fetchAvailableTokens(userId: string): Promise<number> {
   const { count, error } = await supabase
     .from(TOKEN_TABLE)
-    .select("*", { count: "exact", head: true })
-    .eq("user_id", userId)
-    .eq("used", false);
+    .select('*', { count: 'exact', head: true })
+    .eq('user_id', userId)
+    .eq('used', false);
   if (error) {
     throw error;
   }
@@ -140,7 +140,7 @@ export async function useComebackToken(tokenId: string): Promise<void> {
   const { error } = await supabase
     .from(TOKEN_TABLE)
     .update({ used: true })
-    .eq("id", tokenId);
+    .eq('id', tokenId);
   if (error) {
     throw error;
   }
@@ -164,8 +164,8 @@ function dbToGamble(row: Record<string, unknown>): StreakGamble {
     streakDaysAtRisk: row.streak_days_at_risk as number,
     startedAt: new Date(row.started_at as string).getTime(),
     sessionId: row.session_id as string,
-    status: row.status as StreakGamble["status"],
-    requiredGrade: row.required_grade as "S" | "A" | "B",
+    status: row.status as StreakGamble['status'],
+    requiredGrade: row.required_grade as 'S' | 'A' | 'B',
     actualGrade: row.actual_grade as string | undefined,
     bonusXpIfWon: row.bonus_xp_if_won as number,
     settledAt: row.settled_at

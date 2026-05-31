@@ -1,27 +1,27 @@
-import React from "react";
-import { Pressable } from "react-native";
-import Animated, { FadeIn } from "react-native-reanimated";
+import React from 'react';
+import { Pressable } from 'react-native';
+import Animated, { FadeIn } from 'react-native-reanimated';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import { AnimatedCounter } from "../../../shared/ui/components/AnimatedCounter";
-import { StreakInsuranceCard } from "../../economy/components/StreakInsuranceCard";
-import type { InsuranceStatus } from "../../economy/StreakInsurance";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import { AnimatedCounter } from '../../../shared/ui/components/AnimatedCounter';
+import { StreakInsuranceCard } from '../../economy/components/StreakInsuranceCard';
+import type { InsuranceStatus } from '../../economy/StreakInsurance';
 import {
   FlameIcon,
   MultiplierBadge,
   RiskBanner,
   StreakWidgetSkeleton,
   WagerSection,
-} from "./StreakWidget.parts";
-import type { ActiveStreakWager } from "./streak-widget-types";
+} from './StreakWidget.parts';
+import type { ActiveStreakWager } from './streak-widget-types';
 
 export interface StreakWidgetProps {
   currentDays: number;
   multiplier: number;
   hoursRemaining: number | null;
-  riskLevel: "NONE" | "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
+  riskLevel: 'NONE' | 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   longestStreak: number;
   onPress?: () => void;
   isLoading?: boolean;
@@ -64,7 +64,7 @@ export function StreakWidget({
   }
 
   const isEmpty = currentDays === 0;
-  const isUrgent = riskLevel === "CRITICAL" || riskLevel === "HIGH";
+  const isUrgent = riskLevel === 'CRITICAL' || riskLevel === 'HIGH';
 
   return (
     <Pressable
@@ -152,7 +152,7 @@ export function StreakWidget({
             </Box>
 
             <Text fontSize={20} color={theme.colors.text.tertiary}>
-              {">"}
+              {'>'}
             </Text>
           </Box>
 

@@ -1,12 +1,12 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const TomorrowPreviewTypeSchema = z.enum([
-  "STREAK_MILESTONE",
-  "BOSS_NEAR_DEATH",
-  "RIVAL_GAP",
-  "POWER_HOUR",
-  "CHALLENGE_RESET",
-  "GENERIC",
+  'STREAK_MILESTONE',
+  'BOSS_NEAR_DEATH',
+  'RIVAL_GAP',
+  'POWER_HOUR',
+  'CHALLENGE_RESET',
+  'GENERIC',
 ]);
 
 export const TomorrowPreviewDataSchema = z.object({

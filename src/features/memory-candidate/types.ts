@@ -6,4 +6,4 @@ export type {
   MemoryCandidateList,
   WhatVEXLearned,
   WhatVEXLearnedInput,
-} from "./schemas";
+} from './schemas';

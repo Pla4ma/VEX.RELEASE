@@ -1,11 +1,11 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const NotificationPrioritySchema = z.enum([
-  "STREAK_CRITICAL",
-  "PENDING_SYNC",
-  "COACH_NEXT_ACTION",
-  "DAILY_MISSION",
-  "SQUAD_HELP",
+  'STREAK_CRITICAL',
+  'PENDING_SYNC',
+  'COACH_NEXT_ACTION',
+  'DAILY_MISSION',
+  'SQUAD_HELP',
 ]);
 
 export type NotificationPriority = z.infer<typeof NotificationPrioritySchema>;

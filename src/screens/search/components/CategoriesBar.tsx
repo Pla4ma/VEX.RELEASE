@@ -1,11 +1,11 @@
-import React from "react";
-import { Pressable } from "react-native";
-import { FlashList } from "@shopify/flash-list";
-import { useTheme } from "../../../theme";
-import { Box, Text } from "../../../components/primitives";
-import { Icon } from "../../../icons";
-import { launchColors } from "@theme/tokens/launch-colors";
-import { CATEGORIES, type SearchCategory } from "../searchData";
+import React from 'react';
+import { Pressable } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
+import { useTheme } from '../../../theme';
+import { Box, Text } from '../../../components/primitives';
+import { Icon } from '../../../icons';
+import { launchColors } from '@theme/tokens/launch-colors';
+import { CATEGORIES, type SearchCategory } from '../searchData';
 
 interface CategoriesBarProps {
   activeCategory: string;
@@ -30,8 +30,8 @@ export const CategoriesBar: React.FC<CategoriesBarProps> = ({
         renderItem={({ item }: { item: SearchCategory }) => (
           <Pressable
             style={{
-              flexDirection: "row",
-              alignItems: "center",
+              flexDirection: 'row',
+              alignItems: 'center',
               paddingHorizontal: 14,
               paddingVertical: 8,
               borderRadius: 20,
@@ -58,7 +58,7 @@ export const CategoriesBar: React.FC<CategoriesBarProps> = ({
             <Text
               variant="caption"
               style={{
-                fontWeight: "600",
+                fontWeight: '600',
                 color:
                   activeCategory === item.id
                     ? launchColors.hex_fff

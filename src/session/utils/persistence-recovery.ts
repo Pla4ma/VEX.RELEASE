@@ -1,17 +1,17 @@
-import { MMKV } from "react-native-mmkv";
-import { captureSilentFailure } from "../../utils/silent-failure";
-import { getMmkvEncryptionKeySync } from "../../persistence/mmkv-key";
+import { MMKV } from 'react-native-mmkv';
+import { captureSilentFailure } from '../../utils/silent-failure';
+import { getMmkvEncryptionKeySync } from '../../persistence/mmkv-key';
 
 let _storage: MMKV | null = null;
 function getStorage(): MMKV {
   if (!_storage) {
-    _storage = new MMKV({ id: "session-persistence", encryptionKey: getMmkvEncryptionKeySync() });
+    _storage = new MMKV({ id: 'session-persistence', encryptionKey: getMmkvEncryptionKeySync() });
   }
   return _storage;
 }
 
 const KEYS = {
-  RECOVERY_ATTEMPTS: "session:recoveryAttempts",
+  RECOVERY_ATTEMPTS: 'session:recoveryAttempts',
 } as const;
 
 export interface RecoveryAttempt {
@@ -35,9 +35,9 @@ export function getRecoveryAttempts(): RecoveryAttempt[] {
     return JSON.parse(data);
   } catch (error) {
     captureSilentFailure(error, {
-      feature: "session",
-      operation: "safe-fallback",
-      type: "data",
+      feature: 'session',
+      operation: 'safe-fallback',
+      type: 'data',
     });
     return [];
   }

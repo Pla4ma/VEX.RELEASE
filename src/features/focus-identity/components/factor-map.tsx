@@ -1,8 +1,8 @@
-import React, { useMemo } from "react";
-import { View } from "react-native";
-import { Text } from "@/components/primitives/Text";
-import { useTheme } from "@/theme";
-import type { FocusScoreDashboardModel } from "../types";
+import React, { useMemo } from 'react';
+import { View } from 'react-native';
+import { Text } from '@/components/primitives/Text';
+import { useTheme } from '@/theme';
+import type { FocusScoreDashboardModel } from '../types';
 
 interface FactorMapProps {
   model: FocusScoreDashboardModel;
@@ -15,21 +15,21 @@ export function FactorMap({ model }: FactorMapProps): JSX.Element | null {
       return null;
     }
     const entries = [
-      ["Consistency", model.current.factors.consistency.score],
-      ["Streak stability", model.current.factors.streakStability.score],
-      ["Session quality", model.current.factors.sessionQuality.score],
+      ['Consistency', model.current.factors.consistency.score],
+      ['Streak stability', model.current.factors.streakStability.score],
+      ['Session quality', model.current.factors.sessionQuality.score],
       [
-        "Intentional difficulty",
+        'Intentional difficulty',
         model.current.factors.intentionalDifficulty.score,
       ],
-      ["Recency", model.current.factors.recency.score],
+      ['Recency', model.current.factors.recency.score],
     ] as const;
     const strongest = [...entries].sort((a, b) => b[1] - a[1])[0];
     const weakest = [...entries].sort((a, b) => a[1] - b[1])[0];
     return { strongest, weakest, entries };
   }, [model]);
 
-  if (!strongestWeakest) return null;
+  if (!strongestWeakest) {return null;}
 
   return (
     <View
@@ -69,10 +69,10 @@ export function FactorMap({ model }: FactorMapProps): JSX.Element | null {
         </View>
       ))}
       <Text variant="bodySmall" color={theme.colors.text.secondary}>
-        Strongest pattern: {strongestWeakest.strongest?.[0] ?? "—"}
+        Strongest pattern: {strongestWeakest.strongest?.[0] ?? '—'}
       </Text>
       <Text variant="bodySmall" color={theme.colors.text.secondary}>
-        Weakest pattern: {strongestWeakest.weakest?.[0] ?? "—"}
+        Weakest pattern: {strongestWeakest.weakest?.[0] ?? '—'}
       </Text>
     </View>
   );

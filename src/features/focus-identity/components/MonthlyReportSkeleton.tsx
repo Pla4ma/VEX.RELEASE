@@ -1,7 +1,7 @@
-import React from "react";
-import { View } from "react-native";
-import { useTheme } from "../../../theme";
-import { launchColors } from "@theme/tokens/launch-colors";
+import React from 'react';
+import { View } from 'react-native';
+import { useTheme } from '../../../theme';
+import { launchColors } from '@theme/tokens/launch-colors';
 
 export function MonthlyReportSkeleton(): JSX.Element {
   const { theme } = useTheme();
@@ -16,8 +16,8 @@ export function MonthlyReportSkeleton(): JSX.Element {
     >
       <View
         style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
+          flexDirection: 'row',
+          justifyContent: 'space-between',
           marginBottom: theme.spacing[4],
         }}
       >

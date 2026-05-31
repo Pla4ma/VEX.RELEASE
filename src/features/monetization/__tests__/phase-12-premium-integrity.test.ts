@@ -1,37 +1,37 @@
-import { resolvePremiumStrategy } from "../../../shared/monetization/premium-strategy";
-import { resolvePersonalizedPremium } from "../personalized-premium";
+import { resolvePremiumStrategy } from '../../../shared/monetization/premium-strategy';
+import { resolvePersonalizedPremium } from '../personalized-premium';
 import {
   FEATURE_GATES,
   PAYWALL_CONTEXTS,
   TIERS,
   getPaywallContext,
-} from "../PremiumTierSystem";
+} from '../PremiumTierSystem';
 
 const blockedTerms = [
-  "coin",
-  "coins",
-  "gem",
-  "gems",
-  "inventory",
-  "battle pass",
-  "rewards",
-  "chest",
-  "chests",
-  "boss tier",
-  "boss tiers",
-  "squad",
-  "squads",
-  "raid",
-  "shop",
-  "discount",
+  'coin',
+  'coins',
+  'gem',
+  'gems',
+  'inventory',
+  'battle pass',
+  'rewards',
+  'chest',
+  'chests',
+  'boss tier',
+  'boss tiers',
+  'squad',
+  'squads',
+  'raid',
+  'shop',
+  'discount',
 ];
 
 function personalizedCopy(): string {
   const result = resolvePersonalizedPremium({
     billingConfigured: true,
     completedSessions: 10,
-    primaryGoal: "study",
-    motivationStyle: "calm",
+    primaryGoal: 'study',
+    motivationStyle: 'calm',
     studyUsageRatio: 0.5,
     hasTriedAdvancedStudy: false,
     hasTriedWeeklyReport: false,
@@ -40,11 +40,11 @@ function personalizedCopy(): string {
     daysSinceOnboarding: 10,
   });
   return [result.premiumHeadline, result.premiumBody, ...result.premiumFeatures]
-    .join(" ")
+    .join(' ')
     .toLowerCase();
 }
 
-describe("phase 12 premium integrity", () => {
+describe('phase 12 premium integrity', () => {
   it.each(blockedTerms)('keeps "%s" out of paywall context copy', (term) => {
     const contextTypes = Object.keys(PAYWALL_CONTEXTS) as Array<
       keyof typeof PAYWALL_CONTEXTS
@@ -60,12 +60,12 @@ describe("phase 12 premium integrity", () => {
           data.benefit2,
         ];
       })
-      .join(" ")
+      .join(' ')
       .toLowerCase();
-    expect(allCopy).not.toMatch(new RegExp(term, "i"));
+    expect(allCopy).not.toMatch(new RegExp(term, 'i'));
   });
 
-  it("keeps premium tier and strategy copy free of forbidden economy language", () => {
+  it('keeps premium tier and strategy copy free of forbidden economy language', () => {
     const strategy = resolvePremiumStrategy({
       billingConfigured: true,
       completedSessions: 40,
@@ -77,23 +77,23 @@ describe("phase 12 premium integrity", () => {
       ...TIERS.free.highlightedFeatures,
       ...TIERS.premium.highlightedFeatures,
     ]
-      .join(" ")
+      .join(' ')
       .toLowerCase();
 
     for (const term of blockedTerms) {
-      expect(strategyCopy).not.toMatch(new RegExp(term, "i"));
-      expect(personalizedCopy()).not.toMatch(new RegExp(term, "i"));
+      expect(strategyCopy).not.toMatch(new RegExp(term, 'i'));
+      expect(personalizedCopy()).not.toMatch(new RegExp(term, 'i'));
     }
   });
 
-  it("maps premium feature gates to expected contexts", () => {
+  it('maps premium feature gates to expected contexts', () => {
     const featureToContext = {
-      advancedStudyOS: "ADVANCED_STUDY_OS",
-      deepCoachMemory: "DEEP_COACH_MEMORY",
-      premiumSessionModes: "PREMIUM_SESSION_MODES",
-      progressIntelligence: "PROGRESS_INTELLIGENCE",
-      recoveryPlanning: "RECOVERY_PLANNING",
-      visualIdentity: "VISUAL_IDENTITY",
+      advancedStudyOS: 'ADVANCED_STUDY_OS',
+      deepCoachMemory: 'DEEP_COACH_MEMORY',
+      premiumSessionModes: 'PREMIUM_SESSION_MODES',
+      progressIntelligence: 'PROGRESS_INTELLIGENCE',
+      recoveryPlanning: 'RECOVERY_PLANNING',
+      visualIdentity: 'VISUAL_IDENTITY',
     } as const;
 
     for (const [feature, expectedContext] of Object.entries(featureToContext)) {

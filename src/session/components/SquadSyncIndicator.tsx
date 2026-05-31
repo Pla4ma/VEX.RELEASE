@@ -1,28 +1,28 @@
-import React, { useCallback, useEffect, useMemo, useRef } from "react";
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 
-import { Box } from "../../components/primitives/Box";
-import { eventBus } from "../../events";
-import { SquadMemberIndicator } from "./SquadMemberIndicator";
+import { Box } from '../../components/primitives/Box';
+import { eventBus } from '../../events';
+import { SquadMemberIndicator } from './SquadMemberIndicator';
 import {
   SquadEncouragementToastView,
   SquadCompletionToastView,
-} from "./SquadSyncToasts";
+} from './SquadSyncToasts';
 import {
   SquadSyncEmptyState,
   SquadSyncHeader,
   SquadSyncLoadingState,
-} from "./SquadSyncStates";
+} from './SquadSyncStates';
 import type {
   SquadCompletionToast,
   SquadSyncIndicatorProps,
   SquadMemberSession,
-} from "./SquadSyncIndicator.types";
+} from './SquadSyncIndicator.types';
 
 export type {
   SquadCompletionToast,
   SquadMemberSession,
   SquadSyncIndicatorProps,
-} from "./SquadSyncIndicator.types";
+} from './SquadSyncIndicator.types';
 
 export function SquadSyncIndicator({
   members,
@@ -78,14 +78,14 @@ export function SquadSyncIndicator({
       return undefined;
     }
     const unsubscribe = eventBus.subscribe(
-      "squad:session_completed",
+      'squad:session_completed',
       (payload) => {
         if (payload.userId === currentUserId) {
           return;
         }
         const member = members.find((item) => item.userId === payload.userId);
         handleSquadCompletion(
-          member?.displayName || "Squadmate",
+          member?.displayName || 'Squadmate',
           Math.round(payload.duration / 60),
         );
       },
@@ -101,7 +101,7 @@ export function SquadSyncIndicator({
       encouragedMembersRef.current.add(memberId);
       onEncourageMember?.(memberId, memberName);
       if (squadId && currentUserName) {
-        eventBus.publish("squad:encouragement_sent", {
+        eventBus.publish('squad:encouragement_sent', {
           squadId,
           fromUserId: currentUserId,
           fromUserName: currentUserName,
@@ -119,7 +119,7 @@ export function SquadSyncIndicator({
       return undefined;
     }
     const unsubscribe = eventBus.subscribe(
-      "squad:encouragement_sent",
+      'squad:encouragement_sent',
       (payload) => {
         if (payload.toUserId === currentUserId) {
           setEncouragementToast(

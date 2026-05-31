@@ -1,21 +1,21 @@
-import React, { useCallback, useMemo, useState } from "react";
-import type { NativeStackScreenProps } from "@react-navigation/native-stack";
-import Animated, { FadeInDown } from "react-native-reanimated";
-import { Pressable } from "react-native";
+import React, { useCallback, useMemo, useState } from 'react';
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import Animated, { FadeInDown } from 'react-native-reanimated';
+import { Pressable } from 'react-native';
 
-import { AppScreen, Box, Button, Text } from "../../components/primitives";
-import type { AuthStackParams } from "../../navigation";
-import { withScreenErrorBoundary } from "../../shared/ui/components/ScreenErrorBoundary";
-import { FormField } from "../../shared/ui/components/FormField";
-import { useToast } from "../../shared/ui/components/Toast";
-import { useAuthStore } from "../../store/index";
-import { useReducedMotion } from "../../hooks/useReducedMotion";
-import { useTheme } from "../../theme";
-import { getMinTouchTargetStyle } from "../../utils/touchTarget";
-import { registerSchema, type RegisterFormData } from "./schemas";
-import { AuthValuePreview } from "./components/AuthValuePreview";
+import { AppScreen, Box, Button, Text } from '../../components/primitives';
+import type { AuthStackParams } from '../../navigation';
+import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+import { FormField } from '../../shared/ui/components/FormField';
+import { useToast } from '../../shared/ui/components/Toast';
+import { useAuthStore } from '../../store/index';
+import { useReducedMotion } from '../../hooks/useReducedMotion';
+import { useTheme } from '../../theme';
+import { getMinTouchTargetStyle } from '../../utils/touchTarget';
+import { registerSchema, type RegisterFormData } from './schemas';
+import { AuthValuePreview } from './components/AuthValuePreview';
 
-type Props = NativeStackScreenProps<AuthStackParams, "Register">;
+type Props = NativeStackScreenProps<AuthStackParams, 'Register'>;
 type RegisterErrors = Partial<Record<keyof RegisterFormData, string>>;
 
 function getFieldError(
@@ -30,8 +30,8 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
   const { isReducedMotion } = useReducedMotion();
   const { register, isLoading } = useAuthStore();
   const { show: showToast } = useToast();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<RegisterErrors>({});
   const entering = useMemo(
     () => (isReducedMotion ? undefined : FadeInDown.duration(420)),
@@ -52,8 +52,8 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
       agreeToTerms: true,
       confirmPassword: password,
       email,
-      firstName: "",
-      lastName: "",
+      firstName: '',
+      lastName: '',
       password,
     });
 
@@ -62,9 +62,9 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
       result.error.errors.forEach((error) => {
         const field = error.path[0];
         if (
-          field === "email" ||
-          field === "password" ||
-          field === "confirmPassword"
+          field === 'email' ||
+          field === 'password' ||
+          field === 'confirmPassword'
         ) {
           fieldErrors[field] = error.message;
         }
@@ -77,9 +77,9 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
     if (!success) {
       showToast({
         duration: 4000,
-        message: "Your account did not land. Check the details and try again.",
-        title: "Signup did not finish",
-        type: "error",
+        message: 'Your account did not land. Check the details and try again.',
+        title: 'Signup did not finish',
+        type: 'error',
       });
     }
   }, [email, password, register, showToast]);
@@ -108,13 +108,13 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
           accessibilityLabel="Account email"
           autoCapitalize="none"
           autoComplete="email"
-          error={getFieldError(errors, "email")}
+          error={getFieldError(errors, 'email')}
           keyboardType="email-address"
           label="Email"
           leftIcon="email"
           onChangeText={(value) => {
             setEmail(value);
-            clearError("email");
+            clearError('email');
           }}
           placeholder="you@example.com"
           returnKeyType="next"
@@ -125,13 +125,13 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
           accessibilityHint="Create a password for your VEX account"
           accessibilityLabel="Account password"
           autoComplete="new-password"
-          error={getFieldError(errors, "password")}
+          error={getFieldError(errors, 'password')}
           helperText="Use 8+ characters with a number and symbol."
           label="Password"
           leftIcon="lock"
           onChangeText={(value) => {
             setPassword(value);
-            clearError("password");
+            clearError('password');
           }}
           onSubmitEditing={() => {
             void handleRegister();
@@ -176,7 +176,7 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
             accessibilityHint="Returns to sign in"
             accessibilityLabel="Sign in to an existing VEX account"
             accessibilityRole="link"
-            onPress={() => navigation.navigate({ name: "Login", params: {} })}
+            onPress={() => navigation.navigate({ name: 'Login', params: {} })}
             style={getMinTouchTargetStyle()}
           >
             <Text color="primary.300" fontWeight="700" variant="body">
@@ -189,4 +189,4 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
   );
 };
 
-export default withScreenErrorBoundary(RegisterScreen, "Register");
+export default withScreenErrorBoundary(RegisterScreen, 'Register');

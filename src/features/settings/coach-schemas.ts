@@ -1,5 +1,5 @@
-import { z } from "zod";
-import { CoachPersonalitySchema, CoachFrequencySchema } from "./enums";
+import { z } from 'zod';
+import { CoachPersonalitySchema, CoachFrequencySchema } from './enums';
 
 export const CoachSettingsSchema = z
   .object({
@@ -30,7 +30,7 @@ export const CoachSettingsSchema = z
           id: z.string().uuid(),
           userId: z.string().uuid(),
           eventType: z.string(),
-          condition: z.enum(["before", "after", "during"]),
+          condition: z.enum(['before', 'after', 'during']),
           threshold: z.number().optional(),
           messageTemplate: z.string(),
           isActive: z.boolean(),

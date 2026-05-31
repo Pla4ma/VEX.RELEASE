@@ -1,10 +1,10 @@
-import type { ModeSpecificUI } from "./types";
-import { SessionMode } from "../../session/modes";
+import type { ModeSpecificUI } from './types';
+import { SessionMode } from '../../session/modes';
 
 export const MODE_SPECIFIC_UI: Partial<Record<SessionMode, ModeSpecificUI>> = {
   [SessionMode.CHALLENGE]: {
-    theme: "dark",
-    companionPosition: "bottom",
+    theme: 'dark',
+    companionPosition: 'bottom',
     showProgressBar: true,
     showPurityIndicator: true,
     showStreakFlame: true,
@@ -12,8 +12,8 @@ export const MODE_SPECIFIC_UI: Partial<Record<SessionMode, ModeSpecificUI>> = {
     allowNotes: false,
   },
   [SessionMode.FLOW]: {
-    theme: "light",
-    companionPosition: "bottom",
+    theme: 'light',
+    companionPosition: 'bottom',
     showProgressBar: true,
     showPurityIndicator: true,
     showStreakFlame: true,
@@ -21,8 +21,8 @@ export const MODE_SPECIFIC_UI: Partial<Record<SessionMode, ModeSpecificUI>> = {
     allowNotes: true,
   },
   [SessionMode.RECOVERY]: {
-    theme: "light",
-    companionPosition: "bottom",
+    theme: 'light',
+    companionPosition: 'bottom',
     showProgressBar: true,
     showPurityIndicator: false,
     showStreakFlame: false,
@@ -30,8 +30,8 @@ export const MODE_SPECIFIC_UI: Partial<Record<SessionMode, ModeSpecificUI>> = {
     allowNotes: true,
   },
   [SessionMode.STARTER]: {
-    theme: "light",
-    companionPosition: "bottom",
+    theme: 'light',
+    companionPosition: 'bottom',
     showProgressBar: true,
     showPurityIndicator: false,
     showStreakFlame: false,
@@ -39,8 +39,8 @@ export const MODE_SPECIFIC_UI: Partial<Record<SessionMode, ModeSpecificUI>> = {
     allowNotes: false,
   },
   [SessionMode.CREATIVE]: {
-    theme: "creative",
-    companionPosition: "hidden",
+    theme: 'creative',
+    companionPosition: 'hidden',
     showProgressBar: false,
     showPurityIndicator: false,
     showStreakFlame: false,

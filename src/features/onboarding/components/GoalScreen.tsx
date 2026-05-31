@@ -8,21 +8,21 @@
  * @phase 2.3
  */
 
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import Animated, {
   FadeIn,
   FadeInUp,
   useAnimatedStyle,
   withSpring,
-} from "react-native-reanimated";
+} from 'react-native-reanimated';
 
-import { Pressable } from "react-native";
+import { Pressable } from 'react-native';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import type { FocusGoal, GoalOption } from "../schemas";
-import { GOAL_OPTIONS } from "../service";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import type { FocusGoal, GoalOption } from '../schemas';
+import { GOAL_OPTIONS } from '../service';
 
 interface GoalScreenProps {
   onSelect: (goal: FocusGoal) => void;
@@ -65,7 +65,7 @@ function GoalCard({
   return (
     <Animated.View
       entering={FadeInUp.duration(400).delay(200 + index * 100)}
-      style={{ flex: 1, minWidth: "45%" }}
+      style={{ flex: 1, minWidth: '45%' }}
     >
       <Pressable
         onPress={onPress}
@@ -79,7 +79,7 @@ function GoalCard({
               padding: theme.spacing[5],
               borderRadius: 16,
               borderWidth: 2,
-              alignItems: "center",
+              alignItems: 'center',
               gap: theme.spacing[2],
             },
             animatedStyle,
@@ -88,14 +88,14 @@ function GoalCard({
           <Text fontSize={40}>{option.emoji}</Text>
           <Text
             variant="h4"
-            color={isSelected ? "text.inverse" : "text.primary"}
+            color={isSelected ? 'text.inverse' : 'text.primary'}
             fontWeight="600"
           >
             {option.label}
           </Text>
           <Text
             variant="caption"
-            color={isSelected ? "text.inverse" : "text.secondary"}
+            color={isSelected ? 'text.inverse' : 'text.secondary'}
             textAlign="center"
           >
             {option.description}
@@ -177,7 +177,7 @@ export function GoalScreen({
       {/* Skip Option */}
       <Animated.View
         entering={FadeIn.duration(400).delay(600)}
-        style={{ marginTop: "auto" }}
+        style={{ marginTop: 'auto' }}
       >
         <Pressable
           onPress={onSkip}

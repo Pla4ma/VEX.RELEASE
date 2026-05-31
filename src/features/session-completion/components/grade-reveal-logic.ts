@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef } from 'react';
 import Animated, {
   Easing,
   runOnJS,
@@ -7,9 +7,9 @@ import Animated, {
   withDelay,
   withSpring,
   withTiming,
-} from "react-native-reanimated";
-import { SessionMode } from "../../../session/modes";
-import { gradeReveal } from "../../../utils/haptics";
+} from 'react-native-reanimated';
+import { SessionMode } from '../../../session/modes';
+import { gradeReveal } from '../../../utils/haptics';
 
 const REVEAL_DURATION_MS = 2000;
 
@@ -31,11 +31,11 @@ export function getModeMessage(
   if (!mode) {
     return null;
   }
-  if (mode === SessionMode.DEEP_WORK && grade === "S") {
-    return "Flawless deep work. Elite.";
+  if (mode === SessionMode.DEEP_WORK && grade === 'S') {
+    return 'Flawless deep work. Elite.';
   }
-  if (mode === SessionMode.DEEP_WORK && grade === "A") {
-    return "Strong deep work session.";
+  if (mode === SessionMode.DEEP_WORK && grade === 'A') {
+    return 'Strong deep work session.';
   }
   if (mode === SessionMode.SPRINT && (chainCount ?? 0) >= 3) {
     return `Sprint chain × ${chainCount}. Momentum is yours.`;
@@ -44,7 +44,7 @@ export function getModeMessage(
     return `Creative session done. ${mood} energy.`;
   }
   if (mode === SessionMode.LIGHT_FOCUS) {
-    return "Streak protected. Every session counts.";
+    return 'Streak protected. Every session counts.';
   }
   return null;
 }
@@ -95,7 +95,7 @@ export function useGradeRevealSequence(
       return;
     }
     const hapticTimeout = setTimeout(() => {
-      void gradeReveal(gradeLetter as "S" | "A" | "B" | "C" | "D");
+      void gradeReveal(gradeLetter as 'S' | 'A' | 'B' | 'C' | 'D');
     }, 200);
     const shrinkTimeout = setTimeout(() => {
       letterScale.value = withTiming(0.34, {
@@ -119,7 +119,7 @@ export function useGradeRevealSequence(
         });
       }),
     );
-    if (gradeLetter === "S") {
+    if (gradeLetter === 'S') {
       particleProgress.value = withDelay(
         220,
         withTiming(1, { duration: 900, easing: Easing.out(Easing.cubic) }),

@@ -1,7 +1,7 @@
-import { createDebugger } from "../../utils/debug";
-import type { TimerConfig } from "./timer-types";
+import { createDebugger } from '../../utils/debug';
+import type { TimerConfig } from './timer-types';
 
-const debug = createDebugger("session:timer");
+const debug = createDebugger('session:timer');
 
 export interface TickResult {
   elapsed: number;
@@ -49,7 +49,7 @@ export function checkWarnings(
       warningSent.add(threshold);
       onWarning(secondsRemaining);
       debug.debug(
-        "Timer warning for session %s: %ds remaining",
+        'Timer warning for session %s: %ds remaining',
         sessionId,
         secondsRemaining,
       );
@@ -74,7 +74,7 @@ export function createIntervalManager(
 
   return {
     startTickInterval(): void {
-      if (intervalId) clearInterval(intervalId);
+      if (intervalId) {clearInterval(intervalId);}
       intervalId = setInterval(onTick, config.tickInterval);
       onTick();
     },
@@ -85,7 +85,7 @@ export function createIntervalManager(
       }
     },
     startBackgroundInterval(): void {
-      if (backgroundIntervalId) clearInterval(backgroundIntervalId);
+      if (backgroundIntervalId) {clearInterval(backgroundIntervalId);}
       backgroundIntervalId = setInterval(
         onBackgroundTick,
         config.backgroundTickInterval,

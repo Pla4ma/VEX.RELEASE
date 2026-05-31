@@ -1,19 +1,19 @@
-import React from "react";
-import { View } from "react-native";
+import React from 'react';
+import { View } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   withSpring,
-} from "react-native-reanimated";
+} from 'react-native-reanimated';
 
-import { ErrorState } from "../../../components/states/ErrorState";
-import { Button } from "../../../components/primitives/Button";
-import { Text } from "../../../components/primitives/Text";
-import { Skeleton } from "../../../components/ui/Skeleton";
-import { useReducedMotion } from "../../../hooks/useReducedMotion";
-import { useTheme } from "../../../theme";
-import { useStreakMultiplier, useStreakSummary } from "../../streaks/hooks";
-import { useProgressionSummary } from "../hooks";
-import { ProgressionStatCard } from "./progression-stat-card";
+import { ErrorState } from '../../../components/states/ErrorState';
+import { Button } from '../../../components/primitives/Button';
+import { Text } from '../../../components/primitives/Text';
+import { Skeleton } from '../../../components/ui/Skeleton';
+import { useReducedMotion } from '../../../hooks/useReducedMotion';
+import { useTheme } from '../../../theme';
+import { useStreakMultiplier, useStreakSummary } from '../../streaks/hooks';
+import { useProgressionSummary } from '../hooks';
+import { ProgressionStatCard } from './progression-stat-card';
 
 interface ProgressionDashboardProps {
   userId: string;
@@ -63,7 +63,7 @@ export function ProgressionDashboard({
           height={10}
           borderRadius={theme.borderRadius.sm}
         />
-        <View style={{ flexDirection: "row", gap: theme.spacing[3] }}>
+        <View style={{ flexDirection: 'row', gap: theme.spacing[3] }}>
           <Skeleton
             width="48%"
             height={72}
@@ -136,7 +136,7 @@ export function ProgressionDashboard({
             backgroundColor: theme.colors.surface.pressed,
             borderRadius: theme.borderRadius.sm,
             height: 10,
-            overflow: "hidden",
+            overflow: 'hidden',
           }}
         >
           <Animated.View
@@ -144,22 +144,22 @@ export function ProgressionDashboard({
               {
                 backgroundColor: theme.colors.primary[500],
                 borderRadius: theme.borderRadius.sm,
-                height: "100%",
+                height: '100%',
               },
               progressStyle,
             ]}
           />
         </View>
         <Text variant="caption" color={theme.colors.text.tertiary}>
-          {progression.xp.toLocaleString()} /{" "}
+          {progression.xp.toLocaleString()} /{' '}
           {progression.nextLevelThreshold.toLocaleString()} XP
         </Text>
       </View>
 
       <View
         style={{
-          flexDirection: "row",
-          flexWrap: "wrap",
+          flexDirection: 'row',
+          flexWrap: 'wrap',
           gap: theme.spacing[3],
         }}
       >
@@ -167,17 +167,17 @@ export function ProgressionDashboard({
           label="Current streak"
           value={`${streak?.currentDays ?? 0} days`}
           detail={
-            streak?.isAtRisk ? "Needs a session today" : "Protected by focus"
+            streak?.isAtRisk ? 'Needs a session today' : 'Protected by focus'
           }
-          tone={streak?.isAtRisk ? "warning" : "default"}
+          tone={streak?.isAtRisk ? 'warning' : 'default'}
         />
         <ProgressionStatCard
           label="XP multiplier"
           value={`x${multiplier.toFixed(2)}`}
           detail={
-            multiplier > 1 ? "Streak bonus active" : "Build a 3-day streak"
+            multiplier > 1 ? 'Streak bonus active' : 'Build a 3-day streak'
           }
-          tone={multiplier > 1 ? "success" : "default"}
+          tone={multiplier > 1 ? 'success' : 'default'}
         />
       </View>
 

@@ -5,10 +5,10 @@
  * Part of Phase 3 Information Architecture - position 1.
  */
 
-import React from "react";
-import { FocusScoreHomeWidget } from "../../../features/focus-identity/components/focus-score-home-widget";
-import { useFocusScoreDashboardModel } from "../../../features/focus-identity/hooks-focus-score";
-import { useAuthStore } from "../../../store";
+import React from 'react';
+import { FocusScoreHomeWidget } from '../../../features/focus-identity/components/focus-score-home-widget';
+import { useFocusScoreDashboardModel } from '../../../features/focus-identity/hooks-focus-score';
+import { useAuthStore } from '../../../store';
 
 interface HomeFocusScoreProps {
   onPress: () => void;

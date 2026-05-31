@@ -1,5 +1,5 @@
-import { v4 } from "../../utils/uuid";
-import * as repository from "./repository";
+import { v4 } from '../../utils/uuid';
+import * as repository from './repository';
 import {
   ProcessBehaviorSignalInputSchema,
   CreateRecommendationInputSchema,
@@ -8,43 +8,43 @@ import {
   type ProcessBehaviorSignalInput,
   type CreateRecommendationInput,
   type SessionRecommendation,
-} from "./schemas";
-import { getOrCreateCoachState, updateCoachState } from "./persona-manager";
-import { generateSessionSummary as callEdgeSessionSummary } from "../../shared/ai/edge-function-service";
-import type { GenerateSessionSummaryResponse } from "../../shared/ai";
+} from './schemas';
+import { getOrCreateCoachState, updateCoachState } from './persona-manager';
+import { generateSessionSummary as callEdgeSessionSummary } from '../../shared/ai/edge-function-service';
+import type { GenerateSessionSummaryResponse } from '../../shared/ai';
 import {
   calculateSignalConfidence,
   calculateConfidenceLevel,
   aggregateSignals,
   determineUserState,
-} from "./behavior-signal-helpers";
+} from './behavior-signal-helpers';
 import {
   buildRecommendation,
   readNumber,
-} from "./recommendation-builder";
+} from './recommendation-builder';
 import {
   enrichSessionSummaryContext,
   type SessionSummaryContext,
-} from "./session-context";
+} from './session-context';
 
-import { RISK_LEVEL_THRESHOLDS } from "./session-analyzer-types";
+import { RISK_LEVEL_THRESHOLDS } from './session-analyzer-types';
 
 function calculateRiskLevel(
   hoursSinceLastSession: number,
-): "NONE" | "LOW" | "MEDIUM" | "HIGH" | "CRITICAL" {
+): 'NONE' | 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL' {
   if (hoursSinceLastSession > RISK_LEVEL_THRESHOLDS.CRITICAL) {
-    return "CRITICAL";
+    return 'CRITICAL';
   }
   if (hoursSinceLastSession > RISK_LEVEL_THRESHOLDS.HIGH) {
-    return "HIGH";
+    return 'HIGH';
   }
   if (hoursSinceLastSession > RISK_LEVEL_THRESHOLDS.MEDIUM) {
-    return "MEDIUM";
+    return 'MEDIUM';
   }
   if (hoursSinceLastSession > RISK_LEVEL_THRESHOLDS.LOW) {
-    return "LOW";
+    return 'LOW';
   }
-  return "NONE";
+  return 'NONE';
 }
 
 // ─── State update helper ────────────────────────────────────────
@@ -114,14 +114,14 @@ export async function detectStreakRisk(
     return false;
   }
   const riskLevel = calculateRiskLevel(hoursSinceLastSession);
-  const isAtRisk = riskLevel !== "NONE";
+  const isAtRisk = riskLevel !== 'NONE';
   if (isAtRisk) {
     const state = await getOrCreateCoachState(userId);
     if (
-      state.currentState !== "STREAK_AT_RISK" &&
-      state.currentState !== "COMEBACK_MODE"
+      state.currentState !== 'STREAK_AT_RISK' &&
+      state.currentState !== 'COMEBACK_MODE'
     ) {
-      await updateCoachState(userId, "STREAK_AT_RISK", {
+      await updateCoachState(userId, 'STREAK_AT_RISK', {
         riskLevel,
         hoursSinceLastSession,
         currentStreak,
@@ -146,7 +146,7 @@ export async function createRecommendation(
     (r) => r.recommendationType === validated.type,
   );
   for (const old of sameType) {
-    await repository.updateRecommendationStatus(old.id, "EXPIRED");
+    await repository.updateRecommendationStatus(old.id, 'EXPIRED');
   }
   return repository.createRecommendation(recommendation);
 }
@@ -178,12 +178,12 @@ export async function suggestChallenges(
   }> = [];
   if (profile) {
     const consistencySignal = profile.signals.find(
-      (s) => s.signalType === "CONSISTENCY_SCORE",
+      (s) => s.signalType === 'CONSISTENCY_SCORE',
     );
     if (consistencySignal && consistencySignal.value > 0.7) {
       suggestions.push({
-        challengeId: "streak-master",
-        reason: "Your consistency shows you can maintain streaks!",
+        challengeId: 'streak-master',
+        reason: 'Your consistency shows you can maintain streaks!',
         matchScore: 0.9,
       });
     }

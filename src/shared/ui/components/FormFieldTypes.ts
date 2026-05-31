@@ -1,16 +1,16 @@
-import type { TextInputProps, TextStyle, ViewStyle } from "react-native";
+import type { TextInputProps, TextStyle, ViewStyle } from 'react-native';
 
-export type FieldSize = "sm" | "md" | "lg";
+export type FieldSize = 'sm' | 'md' | 'lg';
 
 export type FieldState =
-  | "default"
-  | "focused"
-  | "error"
-  | "success"
-  | "disabled"
-  | "loading";
+  | 'default'
+  | 'focused'
+  | 'error'
+  | 'success'
+  | 'disabled'
+  | 'loading';
 
-export interface FormFieldProps extends Omit<TextInputProps, "style"> {
+export interface FormFieldProps extends Omit<TextInputProps, 'style'> {
   label?: string;
   placeholder?: string;
   error?: string;

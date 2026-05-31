@@ -3,9 +3,9 @@
  * Extracted persistence logic from SessionOrchestrator
  */
 
-import type { SessionState, SessionSummary } from "./types";
-import type { SessionRepository } from "./repository/SessionRepository";
-import { TimerEngine } from "./engines/TimerEngine";
+import type { SessionState, SessionSummary } from './types';
+import type { SessionRepository } from './repository/SessionRepository';
+import { TimerEngine } from './engines/TimerEngine';
 
 interface RestoreConfig {
   onTick: (elapsed: number, remaining: number, percentage: number) => void;
@@ -43,8 +43,8 @@ export function restoreTimerEngine(
   engine.restore({
     elapsed: session.effectiveDuration || 0,
     duration: session.config.duration,
-    isRunning: session.status === "ACTIVE",
-    isPaused: session.status === "PAUSED",
+    isRunning: session.status === 'ACTIVE',
+    isPaused: session.status === 'PAUSED',
     totalPausedTime: session.pausedTime || 0,
     warningSent: [],
   });

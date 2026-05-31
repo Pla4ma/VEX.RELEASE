@@ -1,10 +1,10 @@
-import { TimerEngine } from "../engines/TimerEngine";
-import { createDebugger } from "../../utils/debug";
-import { pauseSession } from "./SessionLifecycle";
+import { TimerEngine } from '../engines/TimerEngine';
+import { createDebugger } from '../../utils/debug';
+import { pauseSession } from './SessionLifecycle';
 
-const debug = createDebugger("session:orchestrator:timer");
+const debug = createDebugger('session:orchestrator:timer');
 
-import type { SessionOrchestratorBase } from "../SessionOrchestratorBase";
+import type { SessionOrchestratorBase } from '../SessionOrchestratorBase';
 
 export function handleTimerTick(
   orch: SessionOrchestratorBase,
@@ -12,11 +12,11 @@ export function handleTimerTick(
   remaining: number,
   percentage: number,
 ): void {
-  if (!orch.session) return;
+  if (!orch.session) {return;}
   if (orch.config.enableAntiCheat) {
     const v = orch.antiCheatEngine.validateTick(elapsed, Date.now());
     if (!v.valid) {
-      orch.handleAntiCheatViolation(v.warning || "Invalid tick");
+      orch.handleAntiCheatViolation(v.warning || 'Invalid tick');
       return;
     }
   }
@@ -38,7 +38,7 @@ export function handleTimerTick(
   }
   orch.session.isDirty = true;
   orch.session.updatedAt = Date.now();
-  if (Math.floor(elapsed / 1000) % 5 === 0) void orch.saveSessionState();
+  if (Math.floor(elapsed / 1000) % 5 === 0) {void orch.saveSessionState();}
   orch.eventEmitter.emitTick(
     elapsed,
     remaining,
@@ -57,18 +57,18 @@ export function handleTimerWarning(
   orch: SessionOrchestratorBase,
   sec: number,
 ): void {
-  if (!orch.session) return;
+  if (!orch.session) {return;}
   orch.eventEmitter.emitNotification(
-    "TIME_WARNING",
-    "Time Running Out",
+    'TIME_WARNING',
+    'Time Running Out',
     `${sec} seconds remaining`,
-    "normal",
+    'normal',
     { secondsRemaining: sec },
   );
 }
 
 export async function startBreak(orch: SessionOrchestratorBase): Promise<void> {
-  if (!orch.session) return;
+  if (!orch.session) {return;}
   const isLong =
     (orch.session.currentInterval || 0) %
       orch.session.config.longBreakInterval ===
@@ -77,7 +77,7 @@ export async function startBreak(orch: SessionOrchestratorBase): Promise<void> {
     ? orch.session.config.longBreakDuration * 1000
     : orch.session.config.breakDuration * 1000;
   const prev = orch.session.phase;
-  orch.session.phase = isLong ? "LONG_BREAK" : "SHORT_BREAK";
+  orch.session.phase = isLong ? 'LONG_BREAK' : 'SHORT_BREAK';
   orch.session.updatedAt = Date.now();
   orch.eventEmitter.emitPhaseChanged(prev, orch.session.phase);
   orch.timerEngine?.destroy();
@@ -99,13 +99,13 @@ export async function startBreak(orch: SessionOrchestratorBase): Promise<void> {
   );
   orch.timerEngine.start();
   orch.eventEmitter.emitNotification(
-    "BREAK_STARTING",
-    isLong ? "Long Break" : "Short Break",
-    "Take a break to recharge",
-    "normal",
+    'BREAK_STARTING',
+    isLong ? 'Long Break' : 'Short Break',
+    'Take a break to recharge',
+    'normal',
   );
   debug.info(
-    "Break started: %s (%s, %dms)",
+    'Break started: %s (%s, %dms)',
     orch.session.id,
     orch.session.phase,
     bDur,
@@ -116,7 +116,7 @@ export function handleBreakTick(
   orch: SessionOrchestratorBase,
   elapsed: number,
 ): void {
-  if (!orch.session) return;
+  if (!orch.session) {return;}
   orch.session.elapsedTime = (orch.session.elapsedTime || 0) + elapsed;
   orch.session.updatedAt = Date.now();
 }
@@ -124,30 +124,30 @@ export function handleBreakTick(
 export async function handleBreakComplete(
   orch: SessionOrchestratorBase,
 ): Promise<void> {
-  if (!orch.session) return;
+  if (!orch.session) {return;}
   const prev = orch.session.phase;
-  orch.session.phase = "FOCUS";
+  orch.session.phase = 'FOCUS';
   orch.session.updatedAt = Date.now();
   orch.eventEmitter.emitPhaseChanged(prev, orch.session.phase);
   orch.timerEngine?.destroy();
   restartFocusTimer(orch);
   orch.timerEngine!.start();
   if (!orch.session.config.autoStartNextInterval) {
-    await pauseSession(orch, "break_complete");
+    await pauseSession(orch, 'break_complete');
   }
-  debug.info("Break complete: %s", orch.session.id);
+  debug.info('Break complete: %s', orch.session.id);
 }
 
 export function endBreak(orch: SessionOrchestratorBase): void {
-  if (!orch.session) return;
+  if (!orch.session) {return;}
   const prev = orch.session.phase;
-  orch.session.phase = "FOCUS";
+  orch.session.phase = 'FOCUS';
   orch.session.updatedAt = Date.now();
   orch.eventEmitter.emitPhaseChanged(prev, orch.session.phase);
   orch.timerEngine?.destroy();
   restartFocusTimer(orch);
   orch.timerEngine!.start();
-  debug.info("Break ended: %s", orch.session.id);
+  debug.info('Break ended: %s', orch.session.id);
 }
 
 function restartFocusTimer(orch: SessionOrchestratorBase): void {

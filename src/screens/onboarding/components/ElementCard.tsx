@@ -1,17 +1,17 @@
-import React from "react";
-import { Pressable, View } from "react-native";
+import React from 'react';
+import { Pressable, View } from 'react-native';
 import Animated, {
   FadeInUp,
   useSharedValue,
   useAnimatedStyle,
   withSpring,
-} from "react-native-reanimated";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import { ELEMENT_THEMES } from "../../../features/companion/types";
-import { launchColors } from "@theme/tokens/launch-colors";
-import type { ElementInfo } from "./elementData";
-import { ElementVisual } from "./ElementVisual";
+} from 'react-native-reanimated';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import { ELEMENT_THEMES } from '../../../features/companion/types';
+import { launchColors } from '@theme/tokens/launch-colors';
+import type { ElementInfo } from './elementData';
+import { ElementVisual } from './ElementVisual';
 
 interface ElementCardProps {
   element: ElementInfo;
@@ -41,13 +41,13 @@ export function ElementCard({
   return (
     <Animated.View
       entering={FadeInUp.duration(400).delay(delay)}
-      style={{ width: "48%" }}
+      style={{ width: '48%' }}
     >
       <Pressable
         onPress={onSelect}
         onPressIn={handlePressIn}
         onPressOut={handlePressOut}
-        style={{ width: "100%" }}
+        style={{ width: '100%' }}
         accessibilityLabel="Element option"
         accessibilityRole="button"
         accessibilityHint="Double tap to activate"
@@ -75,8 +75,8 @@ export function ElementCard({
               height: 56,
               borderRadius: 28,
               backgroundColor: `${themeColors.primary}25`,
-              justifyContent: "center",
-              alignItems: "center",
+              justifyContent: 'center',
+              alignItems: 'center',
               marginBottom: theme.spacing[3],
               shadowColor: themeColors.glow,
               shadowOffset: { width: 0, height: 0 },
@@ -89,7 +89,7 @@ export function ElementCard({
 
           <Text
             variant="h4"
-            color={isSelected ? themeColors.primary : "text.primary"}
+            color={isSelected ? themeColors.primary : 'text.primary'}
             style={{ marginBottom: theme.spacing[1] }}
           >
             {element.name}
@@ -109,7 +109,7 @@ export function ElementCard({
               paddingVertical: theme.spacing[1],
               borderRadius: 8,
               backgroundColor: `${themeColors.glow}20`,
-              alignSelf: "flex-start",
+              alignSelf: 'flex-start',
             }}
           >
             <Text variant="caption" color={themeColors.glow} fontWeight="600">
@@ -120,15 +120,15 @@ export function ElementCard({
           {isSelected && (
             <View
               style={{
-                position: "absolute",
+                position: 'absolute',
                 top: theme.spacing[3],
                 right: theme.spacing[3],
                 width: 24,
                 height: 24,
                 borderRadius: 12,
                 backgroundColor: themeColors.primary,
-                justifyContent: "center",
-                alignItems: "center",
+                justifyContent: 'center',
+                alignItems: 'center',
               }}
             >
               <Text style={{ color: launchColors.hex_fff, fontSize: 14 }}>

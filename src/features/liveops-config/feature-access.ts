@@ -2,8 +2,8 @@ import {
   DEFAULT_COPY,
   FEATURE_COPY,
   FEATURE_PRIORITIES,
-} from "./feature-access-config";
-import { computeFeatureAccess } from "./feature-resolution";
+} from './feature-access-config';
+import { computeFeatureAccess } from './feature-resolution';
 import type {
   UserExperienceStage,
   ProductTier,
@@ -11,7 +11,7 @@ import type {
   FeatureAccess,
   FeatureAccessMap,
   FeatureAccessInputs,
-} from "./feature-access-types";
+} from './feature-access-types';
 
 export type {
   UserExperienceStage,
@@ -23,57 +23,57 @@ export type {
   MotivationProfileType,
   MotivationProfile,
   FeatureAccessInputs,
-} from "./feature-access-types";
+} from './feature-access-types';
 
 const FEATURE_BUILD_ORDER: FeatureKey[] = [
-  "focus_session",
-  "home_tab",
-  "focus_tab",
-  "profile_tab",
-  "progress_view",
-  "ai_coach_basic",
-  "companion_detail",
-  "challenges",
-  "economy_basic",
-  "achievements",
-  "boss_tab",
-  "ai_coach_advanced",
-  "content_study",
-  "quiz_review_mode",
-  "advanced_settings",
-  "seasonal_features",
-  "content_study_advanced",
-  "premium_paywall",
-  "social_tab",
-  "inventory",
-  "economy_advanced",
-  "shop",
-  "boss_bounties",
-  "rankings",
-  "rivals",
-  "battle_pass",
-  "squads",
-  "wagers",
-  "streak_insurance",
-  "gems_prominent",
+  'focus_session',
+  'home_tab',
+  'focus_tab',
+  'profile_tab',
+  'progress_view',
+  'ai_coach_basic',
+  'companion_detail',
+  'challenges',
+  'economy_basic',
+  'achievements',
+  'boss_tab',
+  'ai_coach_advanced',
+  'content_study',
+  'quiz_review_mode',
+  'advanced_settings',
+  'seasonal_features',
+  'content_study_advanced',
+  'premium_paywall',
+  'social_tab',
+  'inventory',
+  'economy_advanced',
+  'shop',
+  'boss_bounties',
+  'rankings',
+  'rivals',
+  'battle_pass',
+  'squads',
+  'wagers',
+  'streak_insurance',
+  'gems_prominent',
 ];
 
 export function getStage(totalCompletedSessions: number): UserExperienceStage {
-  if (totalCompletedSessions <= 0) return "NEW_USER";
-  if (totalCompletedSessions < 3) return "ACTIVATING";
-  if (totalCompletedSessions < 10) return "ENGAGED";
-  return "POWER_USER";
+  if (totalCompletedSessions <= 0) {return 'NEW_USER';}
+  if (totalCompletedSessions < 3) {return 'ACTIVATING';}
+  if (totalCompletedSessions < 10) {return 'ENGAGED';}
+  return 'POWER_USER';
 }
 
 export function getProductTier(
   stage: UserExperienceStage,
   totalCompletedSessions: number,
 ): ProductTier {
-  if (totalCompletedSessions >= 40) return "SOCIAL_DEPTH";
-  if (totalCompletedSessions >= 20) return "RPG_DEPTH";
-  if (totalCompletedSessions >= 10) return "STUDY_OS";
-  if (stage === "ENGAGED") return "COACHING";
-  return "CORE_EXECUTION";
+  if (totalCompletedSessions >= 40) {return 'SOCIAL_DEPTH';}
+  if (totalCompletedSessions >= 20) {return 'RPG_DEPTH';}
+  if (totalCompletedSessions >= 10) {return 'STUDY_OS';}
+  if (stage === 'ENGAGED') {return 'COACHING';}
+  return 'CORE_EXECUTION';
 }
 
 export function buildFeatureAccess(inputs: FeatureAccessInputs): {
@@ -106,7 +106,7 @@ export function buildFeatureAccess(inputs: FeatureAccessInputs): {
       isVisible: resolved.isVisible,
       isTeased: resolved.isTeased,
       isDegraded,
-      disableOnDegraded: key === "premium_paywall",
+      disableOnDegraded: key === 'premium_paywall',
       priority: FEATURE_PRIORITIES[key] ?? 99,
       releaseState: resolved.releaseState,
     };
@@ -124,8 +124,8 @@ export {
   getFeatureAvailabilityFor,
   isFeatureAvailableForNavigation,
   isFeatureAvailableForQueries,
-} from "./feature-availability";
+} from './feature-availability';
 export type {
   FeatureAvailability,
   FeatureAvailabilityState,
-} from "./feature-availability";
+} from './feature-availability';

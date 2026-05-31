@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback } from 'react';
 import {
   cancelAnimation,
   Easing,
@@ -7,8 +7,8 @@ import {
   withRepeat,
   withSpring,
   withTiming,
-} from "react-native-reanimated";
-import type { SharedValue } from "react-native-reanimated";
+} from 'react-native-reanimated';
+import type { SharedValue } from 'react-native-reanimated';
 
 export function useRefreshAnimations(
   pullY: SharedValue<number>,

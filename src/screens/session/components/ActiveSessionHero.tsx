@@ -1,28 +1,28 @@
-import React from "react";
-import Animated, { FadeIn } from "react-native-reanimated";
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { Icon } from "../../../icons";
-import { ActiveSessionProgressRing } from "./ActiveSessionProgressRing";
+import React from 'react';
+import Animated, { FadeIn } from 'react-native-reanimated';
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { Icon } from '../../../icons';
+import { ActiveSessionProgressRing } from './ActiveSessionProgressRing';
 import {
   MomentumDots,
   DailyProgress,
   SessionStats,
-} from "./ActiveSessionHeroSecondary";
-import type { ActiveSessionHeroViewModel } from "../utils/active-session-hero-view-model";
+} from './ActiveSessionHeroSecondary';
+import type { ActiveSessionHeroViewModel } from '../utils/active-session-hero-view-model';
 
 type ProgressRingProps = Pick<
   React.ComponentProps<typeof ActiveSessionProgressRing>,
-  | "CIRCUMFERENCE"
-  | "RADIUS"
-  | "RING_SIZE"
-  | "STROKE_WIDTH"
-  | "animatedCircleProps"
-  | "glowStyle"
-  | "outerStrokeDashoffset"
-  | "perfectFocusBurst"
-  | "pulseStyle"
-  | "rotatingPerfectFocusStyle"
+  | 'CIRCUMFERENCE'
+  | 'RADIUS'
+  | 'RING_SIZE'
+  | 'STROKE_WIDTH'
+  | 'animatedCircleProps'
+  | 'glowStyle'
+  | 'outerStrokeDashoffset'
+  | 'perfectFocusBurst'
+  | 'pulseStyle'
+  | 'rotatingPerfectFocusStyle'
 > & {
   labelColor: string;
   withAlpha: (color: string, alpha: number) => string;
@@ -100,7 +100,7 @@ export const ActiveSessionHero: React.FC<ActiveSessionHeroProps> = ({
 );
 
 function SessionTargetBadge(props: {
-  phaseIcon: "clock" | "target";
+  phaseIcon: 'clock' | 'target';
   phaseLabel: string;
   phaseAccent: string;
   studyTargetLabel: string | null;
@@ -151,7 +151,7 @@ function SessionTargetBadge(props: {
 }
 
 function FocusSignalPill(props: {
-  signalPill: { type: "boss" | "focus"; label: string } | null;
+  signalPill: { type: 'boss' | 'focus'; label: string } | null;
   themeColors: { error: string; warning: string };
   isReducedMotion: boolean;
   withAlpha: (color: string, alpha: number) => string;
@@ -160,7 +160,7 @@ function FocusSignalPill(props: {
     return null;
   }
   const color =
-    props.signalPill.type === "boss"
+    props.signalPill.type === 'boss'
       ? props.themeColors.error
       : props.themeColors.warning;
   const content = (
@@ -176,7 +176,7 @@ function FocusSignalPill(props: {
         borderColor: props.withAlpha(color, 0.28),
       }}
     >
-      <Text variant="caption" style={{ color, fontWeight: "700" }}>
+      <Text variant="caption" style={{ color, fontWeight: '700' }}>
         {props.signalPill.label}
       </Text>
     </Box>

@@ -14,6 +14,6 @@ export function useBossDisplayPolicy(_context?: string): {
   return { isVisible: false, combatAllowed: false };
 }
 export function getBossDisplayCopy(): { title: string; subtitle: string } {
-  return { title: "", subtitle: "" };
+  return { title: '', subtitle: '' };
 }
 export const isBossVisibleAtHome = false;

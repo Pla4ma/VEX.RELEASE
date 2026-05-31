@@ -1,4 +1,4 @@
-import { SessionMode } from "../../../session/modes";
+import { SessionMode } from '../../../session/modes';
 
 export const MILESTONES = [25, 50, 75, 90] as const;
 
@@ -7,64 +7,64 @@ export function getMilestoneLabel(milestone: number, mode: SessionMode): string 
     case 25:
       switch (mode) {
         case SessionMode.DEEP_WORK:
-          return "Hold the line.";
+          return 'Hold the line.';
         case SessionMode.SPRINT:
-          return "Sprint 1 complete.";
+          return 'Sprint 1 complete.';
         case SessionMode.CREATIVE:
-          return "Keep the flow.";
+          return 'Keep the flow.';
         case SessionMode.STUDY:
-          return "¼ done. Stay sharp.";
+          return '¼ done. Stay sharp.';
         default:
-          return "Quarter way!";
+          return 'Quarter way!';
       }
     case 50:
       switch (mode) {
         case SessionMode.DEEP_WORK:
           return "Halfway. Don't break now.";
         case SessionMode.SPRINT:
-          return "Sprint 2 complete. Chain active.";
+          return 'Sprint 2 complete. Chain active.';
         case SessionMode.CREATIVE:
           return "You're in it. Keep going.";
         case SessionMode.STUDY:
-          return "Halfway. Quiz break soon.";
+          return 'Halfway. Quiz break soon.';
         default:
-          return "Halfway there!";
+          return 'Halfway there!';
       }
     case 75:
       switch (mode) {
         case SessionMode.DEEP_WORK:
-          return "Final stretch. Almost there.";
+          return 'Final stretch. Almost there.';
         case SessionMode.SPRINT:
-          return "Sprint 3 done. One more.";
+          return 'Sprint 3 done. One more.';
         case SessionMode.CREATIVE:
-          return "Almost done. Great mood today.";
+          return 'Almost done. Great mood today.';
         case SessionMode.STUDY:
-          return "Final quiz coming up.";
+          return 'Final quiz coming up.';
         default:
-          return "Almost there!";
+          return 'Almost there!';
       }
     case 90:
       switch (mode) {
         case SessionMode.DEEP_WORK:
           return "Final 10%. Don't you dare pause.";
         case SessionMode.SPRINT:
-          return "Last sprint. Chain bonus on the line.";
+          return 'Last sprint. Chain bonus on the line.';
         default:
           return "Final stretch! Don't break now.";
       }
     default:
-      return "Keep going.";
+      return 'Keep going.';
   }
 }
 
 export function getMilestoneHaptic(
   milestone: number,
-): "impactLight" | "impactMedium" | "impactHeavy" {
+): 'impactLight' | 'impactMedium' | 'impactHeavy' {
   if (milestone === 75) {
-    return "impactHeavy";
+    return 'impactHeavy';
   }
   if (milestone === 50) {
-    return "impactMedium";
+    return 'impactMedium';
   }
-  return "impactLight";
+  return 'impactLight';
 }

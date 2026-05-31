@@ -1,11 +1,11 @@
-import type { ViewStyle } from "react-native";
-import type { useTheme } from "@/theme";
-import type { StreakRiskAssessment } from "@/features/streaks/streak-insurance";
+import type { ViewStyle } from 'react-native';
+import type { useTheme } from '@/theme';
+import type { StreakRiskAssessment } from '@/features/streaks/streak-insurance';
 
 export type { StreakRiskAssessment };
-export type Theme = ReturnType<typeof useTheme>["theme"];
+export type Theme = ReturnType<typeof useTheme>['theme'];
 
-export type GambleType = "CONSERVATIVE" | "MODERATE" | "AGGRESSIVE";
+export type GambleType = 'CONSERVATIVE' | 'MODERATE' | 'AGGRESSIVE';
 
 export interface StreakInsuranceModalProps {
   visible: boolean;

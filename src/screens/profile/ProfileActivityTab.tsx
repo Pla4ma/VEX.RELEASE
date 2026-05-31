@@ -1,11 +1,11 @@
-import React from "react";
-import { Box, Card, Text } from "../../components/primitives";
-import { Badge } from "../../components/Badge";
-import { EmptyState } from "../../components/EmptyState";
-import { Skeleton } from "../../components/ui/Skeleton";
-import { FlashList } from "@shopify/flash-list";
-import type { Theme } from "../../theme/types";
-import type { SessionHistoryEntry } from "../../session/types";
+import React from 'react';
+import { Box, Card, Text } from '../../components/primitives';
+import { Badge } from '../../components/Badge';
+import { EmptyState } from '../../components/EmptyState';
+import { Skeleton } from '../../components/ui/Skeleton';
+import { FlashList } from '@shopify/flash-list';
+import type { Theme } from '../../theme/types';
+import type { SessionHistoryEntry } from '../../session/types';
 
 interface ProfileActivityTabProps {
   theme: Theme;
@@ -16,7 +16,7 @@ interface ProfileActivityTabProps {
 }
 
 function formatDate(ts: number): string {
-  return new Date(ts).toLocaleDateString("en-US", { month: "short", day: "numeric" });
+  return new Date(ts).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 }
 
 function formatDuration(entry: SessionHistoryEntry): string {
@@ -33,14 +33,14 @@ const renderSessionCard =
       <Box flexDirection="row" justifyContent="space-between" alignItems="center">
         <Box flex={1}>
           <Text variant="h4" color="text.primary">
-            {item.config.customName ?? "Focus Session"}
+            {item.config.customName ?? 'Focus Session'}
           </Text>
           <Text variant="caption" color="text.secondary">
             {`${formatDate(item.startedAt)} | ${formatDuration(item)}`}
           </Text>
         </Box>
         <Box alignItems="flex-end">
-          <Badge variant={item.status === "COMPLETED" ? "success" : "secondary"} size="sm">
+          <Badge variant={item.status === 'COMPLETED' ? 'success' : 'secondary'} size="sm">
             {item.status}
           </Badge>
           <Text variant="caption" color="text.tertiary" style={{ marginTop: 6 }}>

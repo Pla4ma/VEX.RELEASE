@@ -1,23 +1,23 @@
-import React, { useCallback, useState } from "react";
-import { TextInput, View } from "react-native";
+import React, { useCallback, useState } from 'react';
+import { TextInput, View } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   withTiming,
-} from "react-native-reanimated";
+} from 'react-native-reanimated';
 
-import { Text } from "../../../components/primitives/Text";
-import { Icon } from "../../../icons";
-import { useTheme } from "../../../theme";
+import { Text } from '../../../components/primitives/Text';
+import { Icon } from '../../../icons';
+import { useTheme } from '../../../theme';
 import {
   FormSection,
   type FormSectionProps,
   InputGroup,
-} from "./FormFieldParts";
+} from './FormFieldParts';
 import {
   type FieldState,
   type FormFieldProps,
   sizeConfig,
-} from "./FormFieldTypes";
+} from './FormFieldTypes';
 
 export const FormField: React.FC<FormFieldProps> = ({
   label,
@@ -31,7 +31,7 @@ export const FormField: React.FC<FormFieldProps> = ({
   loading = false,
   showCounter = false,
   maxLength,
-  size = "md",
+  size = 'md',
   leftIcon,
   rightIcon,
   containerStyle,
@@ -45,20 +45,20 @@ export const FormField: React.FC<FormFieldProps> = ({
   ...textInputProps
 }) => {
   const { theme } = useTheme();
-  const [internalValue, setInternalValue] = useState(defaultValue ?? "");
+  const [internalValue, setInternalValue] = useState(defaultValue ?? '');
   const [isFocused, setIsFocused] = useState(false);
   const [internalError, setInternalError] = useState<string | null>(null);
   const effectiveValue = value ?? internalValue;
   const state: FieldState =
     propState ??
-    (loading ? "loading" : disabled ? "disabled" : error || internalError
-      ? "error"
-      : successMessage ? "success" : isFocused ? "focused" : "default");
+    (loading ? 'loading' : disabled ? 'disabled' : error || internalError
+      ? 'error'
+      : successMessage ? 'success' : isFocused ? 'focused' : 'default');
   const semantic = theme.colors.semantic;
   const config = sizeConfig[size];
   const validate = useCallback(
     (text: string) => {
-      if (onValidate) setInternalError(onValidate(text));
+      if (onValidate) {setInternalError(onValidate(text));}
     },
     [onValidate],
   );
@@ -72,11 +72,11 @@ export const FormField: React.FC<FormFieldProps> = ({
   );
 
   const borderColor =
-    state === "error"
+    state === 'error'
       ? semantic.danger
-      : state === "success"
+      : state === 'success'
         ? semantic.success
-        : state === "focused"
+        : state === 'focused'
           ? semantic.primary
           : semantic.inputBorder;
 
@@ -86,34 +86,34 @@ export const FormField: React.FC<FormFieldProps> = ({
   const message = error ?? internalError ?? successMessage ?? helperText;
   const messageColor =
     error || internalError
-      ? "error.DEFAULT"
+      ? 'error.DEFAULT'
       : successMessage
-        ? "success.DEFAULT"
-        : "text.muted";
+        ? 'success.DEFAULT'
+        : 'text.muted';
 
   return (
     <View style={[{ marginBottom: theme.spacing[4] }, containerStyle]}>
       {label ? (
         <Text
-          color={state === "error" ? "error.DEFAULT" : "text.secondary"}
+          color={state === 'error' ? 'error.DEFAULT' : 'text.secondary'}
           mb="sm"
           variant="label"
         >
           {label}
-          {required ? " *" : ""}
+          {required ? ' *' : ''}
         </Text>
       ) : null}
       <Animated.View
         style={[
           {
-            alignItems: "center",
+            alignItems: 'center',
             backgroundColor:
-              state === "disabled"
+              state === 'disabled'
                 ? theme.colors.background.tertiary
                 : semantic.inputBackground,
             borderRadius: theme.borderRadius.xl,
             borderWidth: 1,
-            flexDirection: "row",
+            flexDirection: 'row',
             minHeight: config.minHeight,
             paddingHorizontal: config.paddingHorizontal,
             paddingVertical: config.paddingVertical,
@@ -124,7 +124,7 @@ export const FormField: React.FC<FormFieldProps> = ({
         {leftIcon ? (
           <Icon
             color={
-              state === "error" ? semantic.danger : theme.colors.text.muted
+              state === 'error' ? semantic.danger : theme.colors.text.muted
             }
             name={leftIcon}
             size="md"
@@ -171,8 +171,8 @@ export const FormField: React.FC<FormFieldProps> = ({
       </Animated.View>
       <View
         style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
+          flexDirection: 'row',
+          justifyContent: 'space-between',
           marginTop: theme.spacing[1],
           minHeight: 20,
         }}

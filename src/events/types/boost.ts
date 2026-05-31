@@ -3,13 +3,13 @@
  */
 
 export interface BoostEventDefinitions {
-  "boosts:activate": {
+  'boosts:activate': {
     userId: string;
     boostType: string;
     multiplier: number;
     duration: number;
   };
-  "progression:activate_boost": {
+  'progression:activate_boost': {
     userId: string;
     boostType: string;
     duration: number;

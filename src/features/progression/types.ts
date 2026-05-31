@@ -1,4 +1,4 @@
-import type { z } from "zod";
+import type { z } from 'zod';
 import {
   ProgressionSchema,
   ProgressionSummarySchema,
@@ -18,7 +18,7 @@ import {
   PrestigeRewardPreviewSchema,
   AddXpResultSchema,
   LevelUpResultSchema,
-} from "./schemas";
+} from './schemas';
 
 export type Progression = z.infer<typeof ProgressionSchema>;
 export type ProgressionSummary = z.infer<typeof ProgressionSummarySchema>;
@@ -55,7 +55,7 @@ export interface AddXpOperationResult {
 }
 
 export interface ProgressionError {
-  code: "VALIDATION" | "NETWORK" | "CONFLICT" | "UNKNOWN" | "RATE_LIMIT";
+  code: 'VALIDATION' | 'NETWORK' | 'CONFLICT' | 'UNKNOWN' | 'RATE_LIMIT';
   message: string;
   retryable: boolean;
   context?: Record<string, unknown>;

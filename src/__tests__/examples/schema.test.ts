@@ -1,2 +1,2 @@
-import "./schema-transaction.test";
-import "./schema-wallet-edge.test";
+import './schema-transaction.test';
+import './schema-wallet-edge.test';

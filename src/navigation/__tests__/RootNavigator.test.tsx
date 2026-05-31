@@ -1,33 +1,33 @@
-import React from "react";
-import TestRenderer, { act, type ReactTestRenderer } from "react-test-renderer";
-import { RootNavigator } from "../RootNavigator";
-import { useOnboardingStore } from "../../onboarding";
-import { useAuthStore } from "../../store";
-jest.mock("expo-notifications", () => ({
+import React from 'react';
+import TestRenderer, { act, type ReactTestRenderer } from 'react-test-renderer';
+import { RootNavigator } from '../RootNavigator';
+import { useOnboardingStore } from '../../onboarding';
+import { useAuthStore } from '../../store';
+jest.mock('expo-notifications', () => ({
   addNotificationReceivedListener: jest.fn(() => ({ remove: jest.fn() })),
   addNotificationResponseReceivedListener: jest.fn(() => ({
     remove: jest.fn(),
   })),
 }));
-jest.mock("../../store", () => ({ useAuthStore: jest.fn() }));
-jest.mock("../../onboarding", () => ({ useOnboardingStore: jest.fn() }));
-jest.mock("../../theme", () => ({
+jest.mock('../../store', () => ({ useAuthStore: jest.fn() }));
+jest.mock('../../onboarding', () => ({ useOnboardingStore: jest.fn() }));
+jest.mock('../../theme', () => ({
   useTheme: () => ({
     theme: {
       colors: {
-        background: { primary: "#ffffff", secondary: "#f5f5f5" },
-        primary: { 500: "#2563eb" },
-        text: { primary: "#111111", secondary: "#404040" },
-        border: { DEFAULT: "#d4d4d4" },
-        error: { DEFAULT: "#dc2626" },
+        background: { primary: '#ffffff', secondary: '#f5f5f5' },
+        primary: { 500: '#2563eb' },
+        text: { primary: '#111111', secondary: '#404040' },
+        border: { DEFAULT: '#d4d4d4' },
+        error: { DEFAULT: '#dc2626' },
         semantic: {
-          background: "#ffffff",
-          border: "#d4d4d4",
-          primary: "#2563eb",
-          surface: "#ffffff",
-          surfaceElevated: "#ffffff",
-          textPrimary: "#111111",
-          textSecondary: "#404040",
+          background: '#ffffff',
+          border: '#d4d4d4',
+          primary: '#2563eb',
+          surface: '#ffffff',
+          surfaceElevated: '#ffffff',
+          textPrimary: '#111111',
+          textSecondary: '#404040',
         },
       },
       spacing: [0, 4, 8, 12, 16, 20],
@@ -35,12 +35,12 @@ jest.mock("../../theme", () => ({
     isDark: false,
   }),
 }));
-jest.mock("../components/RootLoadingShell", () => ({
+jest.mock('../components/RootLoadingShell', () => ({
   RootLoadingShell: () => null,
 }));
-jest.mock("@react-navigation/native", () => {
-  const React = require("react");
-  const { View } = require("react-native");
+jest.mock('@react-navigation/native', () => {
+  const React = require('react');
+  const { View } = require('react-native');
   const NavigationContainer = React.forwardRef(
     (
       {
@@ -55,7 +55,7 @@ jest.mock("@react-navigation/native", () => {
       return React.createElement(View, null, children);
     },
   );
-  NavigationContainer.displayName = "NavigationContainerMock";
+  NavigationContainer.displayName = 'NavigationContainerMock';
   return {
     NavigationContainer,
     useNavigationContainerRef: () => ({
@@ -65,12 +65,12 @@ jest.mock("@react-navigation/native", () => {
     }),
   };
 });
-jest.mock("../../events", () => ({
+jest.mock('../../events', () => ({
   eventBus: { publish: jest.fn(), subscribe: jest.fn(() => jest.fn()) },
 }));
-jest.mock("@react-navigation/native-stack", () => ({
+jest.mock('@react-navigation/native-stack', () => ({
   createNativeStackNavigator: () => {
-    const React = require("react");
+    const React = require('react');
     const flattenChildren = (children: React.ReactNode): React.ReactNode[] =>
       React.Children.toArray(children).flatMap((child) => {
         if (React.isValidElement(child) && child.type === React.Fragment) {
@@ -96,34 +96,34 @@ jest.mock("@react-navigation/native-stack", () => ({
     };
   },
 }));
-jest.mock("../../streaks/StreakService", () => ({
+jest.mock('../../streaks/StreakService', () => ({
   getStreakService: jest.fn(() => ({
     getState: () => ({}),
     markFuneralShown: jest.fn(),
   })),
 }));
-jest.mock("../../screens/streaks/StreakFuneralScreen", () => ({
+jest.mock('../../screens/streaks/StreakFuneralScreen', () => ({
   StreakFuneralScreen: () => null,
 }));
-jest.mock("../MainNavigator", () => ({
+jest.mock('../MainNavigator', () => ({
   MainNavigator: () => {
-    const React = require("react");
-    const { Text } = require("react-native");
-    return React.createElement(Text, null, "Main App");
+    const React = require('react');
+    const { Text } = require('react-native');
+    return React.createElement(Text, null, 'Main App');
   },
 }));
-jest.mock("../OnboardingNavigator", () => ({
+jest.mock('../OnboardingNavigator', () => ({
   OnboardingNavigator: () => {
-    const React = require("react");
-    const { Text } = require("react-native");
-    return React.createElement(Text, null, "Onboarding Flow");
+    const React = require('react');
+    const { Text } = require('react-native');
+    return React.createElement(Text, null, 'Onboarding Flow');
   },
 }));
-jest.mock("../AuthNavigator", () => ({
+jest.mock('../AuthNavigator', () => ({
   AuthNavigator: () => {
-    const React = require("react");
-    const { Text } = require("react-native");
-    return React.createElement(Text, null, "Auth Flow");
+    const React = require('react');
+    const { Text } = require('react-native');
+    return React.createElement(Text, null, 'Auth Flow');
   },
 }));
 const mockedUseAuthStore = useAuthStore as jest.MockedFunction<
@@ -139,7 +139,7 @@ async function renderRootNavigator(): Promise<ReactTestRenderer> {
     await Promise.resolve();
   });
   if (!renderer) {
-    throw new Error("RootNavigator did not render");
+    throw new Error('RootNavigator did not render');
   }
   return renderer;
 }
@@ -148,13 +148,13 @@ function expectRenderedText(renderer: ReactTestRenderer, text: string): void {
     renderer.root.findAllByProps({ children: text }).length,
   ).toBeGreaterThan(0);
 }
-describe("RootNavigator", () => {
+describe('RootNavigator', () => {
   beforeEach(() => {
     mockedUseOnboardingStore.mockImplementation((selector: unknown) =>
       selector({ completedAt: null, isOnboarded: false }),
     );
   });
-  it("routes unauthenticated users into auth flow", async () => {
+  it('routes unauthenticated users into auth flow', async () => {
     mockedUseAuthStore.mockReturnValue({
       isAuthenticated: false,
       isLoading: false,
@@ -162,33 +162,33 @@ describe("RootNavigator", () => {
       user: null,
     } as any);
     const renderer = await renderRootNavigator();
-    expectRenderedText(renderer, "Auth Flow");
+    expectRenderedText(renderer, 'Auth Flow');
   });
-  it("routes authenticated users without onboarding into onboarding flow", async () => {
+  it('routes authenticated users without onboarding into onboarding flow', async () => {
     mockedUseAuthStore.mockReturnValue({
       isAuthenticated: true,
       isLoading: false,
       checkAuth: jest.fn().mockResolvedValue(undefined),
-      user: { id: "user-1", createdAt: new Date().toISOString() },
+      user: { id: 'user-1', createdAt: new Date().toISOString() },
     } as any);
     mockedUseOnboardingStore.mockImplementation((selector: unknown) =>
       selector({ completedAt: null, isOnboarded: false }),
     );
     const renderer = await renderRootNavigator();
-    expectRenderedText(renderer, "Onboarding Flow");
+    expectRenderedText(renderer, 'Onboarding Flow');
   });
-  it("routes authenticated onboarded users into the main app", async () => {
+  it('routes authenticated onboarded users into the main app', async () => {
     mockedUseAuthStore.mockReturnValue({
       isAuthenticated: true,
       isLoading: false,
       checkAuth: jest.fn().mockResolvedValue(undefined),
-      user: { id: "user-1", createdAt: new Date(0).toISOString() },
+      user: { id: 'user-1', createdAt: new Date(0).toISOString() },
     } as any);
     const completedAt = Date.now();
     mockedUseOnboardingStore.mockImplementation((selector: unknown) =>
       selector({ completedAt, isOnboarded: true }),
     );
     const renderer = await renderRootNavigator();
-    expectRenderedText(renderer, "Main App");
+    expectRenderedText(renderer, 'Main App');
   });
 });

@@ -1,13 +1,13 @@
-import React from "react";
+import React from 'react';
 import Animated, {
   FadeIn,
   useAnimatedStyle,
   withTiming,
-} from "react-native-reanimated";
-import { Dimensions } from "react-native";
-import { launchColors } from "@theme/tokens/launch-colors";
+} from 'react-native-reanimated';
+import { Dimensions } from 'react-native';
+import { launchColors } from '@theme/tokens/launch-colors';
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 function ConfettiPiece({
   index,
@@ -31,7 +31,7 @@ function ConfettiPiece({
       entering={FadeIn.duration(100).delay(index * 50)}
       style={[
         {
-          position: "absolute",
+          position: 'absolute',
           left: startX,
           top: -20,
           width: 10,

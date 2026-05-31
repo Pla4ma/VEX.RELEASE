@@ -1,7 +1,7 @@
-import React from "react";
-import { View } from "react-native";
-import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
-import { Text } from "../../components";
+import React from 'react';
+import { View } from 'react-native';
+import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
+import { Text } from '../../components';
 import {
   milestoneOverlayStyle,
   milestoneCardStyle,
@@ -14,7 +14,7 @@ import {
   comboBrokenSubtextStyle,
   warningOverlayStyle,
   warningTextStyle,
-} from "./ComboMeter.styles";
+} from './ComboMeter.styles';
 
 interface ComboOverlayProps {
   showMilestone: boolean;
@@ -101,8 +101,8 @@ export function ComboMeterOverlays({
         >
           <Text variant="caption" color="warning" style={warningTextStyle}>
             {isPaused
-              ? "⏸️ PAUSED - Combo at risk!"
-              : "⚠️ IDLE - Move to keep combo!"}
+              ? '⏸️ PAUSED - Combo at risk!'
+              : '⚠️ IDLE - Move to keep combo!'}
           </Text>
         </View>
       )}

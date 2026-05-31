@@ -1,14 +1,14 @@
-import { getSupabaseClient } from "../../config/supabase";
+import { getSupabaseClient } from '../../config/supabase';
 import {
   UserChallengeSchema,
   type ChallengeDetail,
   type UserChallenge,
-} from "./schemas";
+} from './schemas';
 import {
   RepositoryError,
   baseJoinedSelect,
   mapJoinedChallenge,
-} from "./repository-helpers";
+} from './repository-helpers';
 
 const supabase = getSupabaseClient();
 
@@ -17,13 +17,13 @@ export async function fetchUserChallenge(
   challengeId: string,
 ): Promise<UserChallenge | null> {
   const { data, error } = await supabase
-    .from("user_challenges")
-    .select("*")
-    .eq("user_id", userId)
-    .eq("challenge_id", challengeId)
+    .from('user_challenges')
+    .select('*')
+    .eq('user_id', userId)
+    .eq('challenge_id', challengeId)
     .maybeSingle();
   if (error) {
-    throw new RepositoryError("fetchUserChallenge", error);
+    throw new RepositoryError('fetchUserChallenge', error);
   }
   return data ? UserChallengeSchema.parse(data) : null;
 }
@@ -33,17 +33,17 @@ export async function fetchUserChallenges(
   filters?: { status?: string },
 ): Promise<UserChallenge[]> {
   let query = supabase
-    .from("user_challenges")
-    .select("*")
-    .eq("user_id", userId);
+    .from('user_challenges')
+    .select('*')
+    .eq('user_id', userId);
   if (filters?.status) {
-    query = query.eq("status", filters.status);
+    query = query.eq('status', filters.status);
   }
-  const { data, error } = await query.order("assigned_at", {
+  const { data, error } = await query.order('assigned_at', {
     ascending: false,
   });
   if (error) {
-    throw new RepositoryError("fetchUserChallenges", error);
+    throw new RepositoryError('fetchUserChallenges', error);
   }
   return (data ?? []).map((row) => UserChallengeSchema.parse(row));
 }
@@ -52,13 +52,13 @@ export async function fetchUserActiveChallenges(
   userId: string,
 ): Promise<UserChallenge[]> {
   const { data, error } = await supabase
-    .from("user_challenges")
-    .select("*")
-    .eq("user_id", userId)
-    .in("status", ["ACTIVE", "COMPLETED"])
-    .order("assigned_at", { ascending: false });
+    .from('user_challenges')
+    .select('*')
+    .eq('user_id', userId)
+    .in('status', ['ACTIVE', 'COMPLETED'])
+    .order('assigned_at', { ascending: false });
   if (error) {
-    throw new RepositoryError("fetchUserActiveChallenges", error);
+    throw new RepositoryError('fetchUserActiveChallenges', error);
   }
   return (data ?? []).map((row) => UserChallengeSchema.parse(row));
 }
@@ -68,14 +68,14 @@ export async function fetchActiveChallengeDetails(
 ): Promise<ChallengeDetail[]> {
   const now = new Date().toISOString();
   const { data, error } = await supabase
-    .from("user_challenges")
+    .from('user_challenges')
     .select(baseJoinedSelect)
-    .eq("user_id", userId)
-    .in("status", ["ACTIVE", "COMPLETED"])
+    .eq('user_id', userId)
+    .in('status', ['ACTIVE', 'COMPLETED'])
     .or(`expires_at.is.null,expires_at.gt.${now}`)
-    .order("assigned_at", { ascending: false });
+    .order('assigned_at', { ascending: false });
   if (error) {
-    throw new RepositoryError("fetchActiveChallengeDetails", error);
+    throw new RepositoryError('fetchActiveChallengeDetails', error);
   }
   return (data ?? []).map((row) =>
     // Cast needed: Supabase joined result type doesn't match Record<string, unknown> exactly;
@@ -89,15 +89,15 @@ export async function fetchCompletedChallengeDetails(
   limit: number,
 ): Promise<ChallengeDetail[]> {
   const { data, error } = await supabase
-    .from("user_challenges")
+    .from('user_challenges')
     .select(baseJoinedSelect)
-    .eq("user_id", userId)
-    .in("status", ["COMPLETED", "CLAIMED"])
-    .not("completed_at", "is", null)
-    .order("completed_at", { ascending: false })
+    .eq('user_id', userId)
+    .in('status', ['COMPLETED', 'CLAIMED'])
+    .not('completed_at', 'is', null)
+    .order('completed_at', { ascending: false })
     .limit(limit);
   if (error) {
-    throw new RepositoryError("fetchCompletedChallengeDetails", error);
+    throw new RepositoryError('fetchCompletedChallengeDetails', error);
   }
   return (data ?? []).map((row) =>
     // Cast needed: Supabase joined result type doesn't match Record<string, unknown> exactly;
@@ -113,12 +113,12 @@ export async function createUserChallenge(
 ): Promise<UserChallenge> {
   const now = new Date().toISOString();
   const { data, error } = await supabase
-    .from("user_challenges")
+    .from('user_challenges')
     .insert({
       user_id: userId,
       challenge_id: challengeId,
       current_value: 0,
-      status: "ACTIVE",
+      status: 'ACTIVE',
       assigned_at: now,
       completed_at: null,
       claimed_at: null,
@@ -126,10 +126,10 @@ export async function createUserChallenge(
       reroll_count: 0,
       created_at: now,
     })
-    .select("*")
+    .select('*')
     .single();
   if (error) {
-    throw new RepositoryError("createUserChallenge", error);
+    throw new RepositoryError('createUserChallenge', error);
   }
   return UserChallengeSchema.parse(data);
 }
@@ -138,7 +138,7 @@ export async function updateUserChallenge(
   userId: string,
   challengeId: string,
   updates: Partial<
-    Omit<UserChallenge, "id" | "userId" | "challengeId" | "createdAt">
+    Omit<UserChallenge, 'id' | 'userId' | 'challengeId' | 'createdAt'>
   >,
 ): Promise<UserChallenge> {
   const payload: Record<string, unknown> = {};
@@ -167,14 +167,14 @@ export async function updateUserChallenge(
     payload.reroll_count = updates.rerollCount;
   }
   const { data, error } = await supabase
-    .from("user_challenges")
+    .from('user_challenges')
     .update(payload)
-    .eq("user_id", userId)
-    .eq("challenge_id", challengeId)
-    .select("*")
+    .eq('user_id', userId)
+    .eq('challenge_id', challengeId)
+    .select('*')
     .single();
   if (error) {
-    throw new RepositoryError("updateUserChallenge", error);
+    throw new RepositoryError('updateUserChallenge', error);
   }
   return UserChallengeSchema.parse(data);
 }
@@ -187,7 +187,7 @@ export async function addChallengeProgress(
 ): Promise<UserChallenge> {
   const current = await fetchUserChallenge(userId, challengeId);
   if (!current) {
-    throw new RepositoryError("addChallengeProgress", "Challenge not found");
+    throw new RepositoryError('addChallengeProgress', 'Challenge not found');
   }
   return updateUserChallenge(userId, challengeId, {
     currentValue: current.currentValue + delta,

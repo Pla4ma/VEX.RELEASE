@@ -1,4 +1,4 @@
-import { toUTC, toLocalTime, formatInTimezone } from "./timezone-core";
+import { toUTC, toLocalTime, formatInTimezone } from './timezone-core';
 
 export function getStartOfDay(timestamp: number, timezone: string): number {
   const localDate = toLocalTime(timestamp, timezone);
@@ -17,8 +17,8 @@ export function isSameDay(
   timestamp2: number,
   timezone: string,
 ): boolean {
-  const date1 = formatInTimezone(timestamp1, timezone, "yyyy-MM-dd");
-  const date2 = formatInTimezone(timestamp2, timezone, "yyyy-MM-dd");
+  const date1 = formatInTimezone(timestamp1, timezone, 'yyyy-MM-dd');
+  const date2 = formatInTimezone(timestamp2, timezone, 'yyyy-MM-dd');
   return date1 === date2;
 }
 
@@ -87,22 +87,22 @@ export function scheduleForLocalTime(
 }
 
 export function getOptimalReminderTimes(
-  chronotype: "morning" | "evening" | "variable",
+  chronotype: 'morning' | 'evening' | 'variable',
   timezone: string,
 ): number[] {
   const now = Date.now();
   switch (chronotype) {
-    case "morning":
+    case 'morning':
       return [
         scheduleForLocalTime(8, 0, timezone),
         scheduleForLocalTime(12, 0, timezone),
       ];
-    case "evening":
+    case 'evening':
       return [
         scheduleForLocalTime(14, 0, timezone),
         scheduleForLocalTime(19, 0, timezone),
       ];
-    case "variable":
+    case 'variable':
     default:
       return [
         scheduleForLocalTime(10, 0, timezone),

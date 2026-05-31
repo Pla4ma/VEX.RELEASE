@@ -1,19 +1,19 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 import {
   buildDisplayedReturnReason,
   buildPrimaryAction,
   buildProgressSignal,
   recommendationTitleMap,
-} from "./copy";
+} from './copy';
 import {
   HomeHighlightSchema,
   HomeReturnReasonStateSchema,
   HomeSpineModelSchema,
   type HomeReturnReasonState,
   type HomeSpineModel,
-} from "./schemas";
-import type { RecommendationType } from "./types";
+} from './schemas';
+import type { RecommendationType } from './types';
 
 /*
 Dependencies: completion highlight handoff, home return-reason ranking, home primary rail UI
@@ -23,17 +23,17 @@ Consumers: home screen controller, home primary rail, future home feature entry 
 const RecommendationSchema = z.object({
   id: z.string().min(1),
   reasoning: z.string().min(1),
-  suggestedDifficulty: z.enum(["EASY", "NORMAL", "CHALLENGING", "PUSH"]),
+  suggestedDifficulty: z.enum(['EASY', 'NORMAL', 'CHALLENGING', 'PUSH']),
   suggestedDuration: z.number().int().positive(),
   type: z.enum([
-    "OPTIMAL_TIME",
-    "STREAK_PROTECTION",
-    "COMEBACK_BUILDER",
-    "DIFFICULTY_ADJUST",
-    "CHALLENGE_SYNC",
-    "BOSS_PREP",
-    "HABIT_BUILDER",
-    "ENERGY_BASED",
+    'OPTIMAL_TIME',
+    'STREAK_PROTECTION',
+    'COMEBACK_BUILDER',
+    'DIFFICULTY_ADJUST',
+    'CHALLENGE_SYNC',
+    'BOSS_PREP',
+    'HABIT_BUILDER',
+    'ENERGY_BASED',
   ]),
 });
 
@@ -87,7 +87,7 @@ export function buildHomeReturnReasonState(input: {
   primaryRecommendation: {
     id: string;
     reasoning: string;
-    suggestedDifficulty: "EASY" | "NORMAL" | "CHALLENGING" | "PUSH";
+    suggestedDifficulty: 'EASY' | 'NORMAL' | 'CHALLENGING' | 'PUSH';
     suggestedDuration: number;
     type: RecommendationType;
   } | null;
@@ -97,27 +97,27 @@ export function buildHomeReturnReasonState(input: {
   if (parsed.primaryRecommendation) {
     return HomeReturnReasonStateSchema.parse({
       body: parsed.primaryRecommendation.reasoning,
-      ctaLabel: "Take the suggestion",
-      eyebrow: "Return reason",
-      intent: "accept-coach-recommendation",
+      ctaLabel: 'Take the suggestion',
+      eyebrow: 'Return reason',
+      intent: 'accept-coach-recommendation',
       recommendationId: parsed.primaryRecommendation.id,
-      source: "coach",
+      source: 'coach',
       suggestedDifficulty: parsed.primaryRecommendation.suggestedDifficulty,
       suggestedDurationSeconds: parsed.primaryRecommendation.suggestedDuration,
       title: recommendationTitleMap[parsed.primaryRecommendation.type],
-      tone: "default",
+      tone: 'default',
     });
   }
 
   if (parsed.comebackMessage) {
     return HomeReturnReasonStateSchema.parse({
       body: parsed.comebackMessage,
-      ctaLabel: "Start comeback session",
-      eyebrow: "Return reason",
-      intent: "start-session",
-      source: "comeback",
-      title: "Momentum comes back fast",
-      tone: "warning",
+      ctaLabel: 'Start comeback session',
+      eyebrow: 'Return reason',
+      intent: 'start-session',
+      source: 'comeback',
+      title: 'Momentum comes back fast',
+      tone: 'warning',
     });
   }
 
@@ -129,23 +129,23 @@ export function buildHomeReturnReasonState(input: {
 
     return HomeReturnReasonStateSchema.parse({
       body: `You have ${parsed.activeStudyPlan.remainingMinutes} minutes left across ${remainingTasks} tasks.`,
-      ctaLabel: "Continue plan",
-      eyebrow: "Return reason",
-      intent: "continue-study-plan",
-      source: "study-plan",
+      ctaLabel: 'Continue plan',
+      eyebrow: 'Return reason',
+      intent: 'continue-study-plan',
+      source: 'study-plan',
       title: `Continue "${parsed.activeStudyPlan.title}"`,
-      tone: "info",
+      tone: 'info',
     });
   }
 
   return HomeReturnReasonStateSchema.parse({
     body: parsed.nextBestAction.description,
     ctaLabel: parsed.nextBestAction.ctaLabel,
-    eyebrow: "Return reason",
-    intent: "start-session",
-    source: "next-best-action",
+    eyebrow: 'Return reason',
+    intent: 'start-session',
+    source: 'next-best-action',
     title: parsed.nextBestAction.title,
-    tone: "default",
+    tone: 'default',
   });
 }
 

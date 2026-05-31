@@ -1,4 +1,4 @@
-import { eventBus } from "../events";
+import { eventBus } from '../events';
 
 export interface MonetizationMetrics {
   totalUsers: number;
@@ -28,32 +28,32 @@ let monetizationMetrics: MonetizationMetrics = {
 
 export function trackMonetizationEvent(event: {
   type:
-    | "subscription_start"
-    | "trial_start"
-    | "trial_convert"
-    | "cancellation"
-    | "renewal";
+    | 'subscription_start'
+    | 'trial_start'
+    | 'trial_convert'
+    | 'cancellation'
+    | 'renewal';
   userId: string;
   value?: number;
-  tier?: "FREE" | "PREMIUM";
+  tier?: 'FREE' | 'PREMIUM';
 }): void {
   switch (event.type) {
-    case "trial_start":
+    case 'trial_start':
       monetizationMetrics.trialUsers++;
       break;
-    case "trial_convert":
+    case 'trial_convert':
       monetizationMetrics.trialUsers--;
       monetizationMetrics.premiumUsers++;
       monetizationMetrics.freeUsers--;
       break;
-    case "subscription_start":
+    case 'subscription_start':
       monetizationMetrics.premiumUsers++;
       if (event.value) {
         monetizationMetrics.totalRevenue += event.value;
         monetizationMetrics.mrr += event.value / 12;
       }
       break;
-    case "cancellation":
+    case 'cancellation':
       monetizationMetrics.premiumUsers--;
       monetizationMetrics.freeUsers++;
       if (event.value) {
@@ -76,7 +76,7 @@ export function trackMonetizationEvent(event: {
     monetizationMetrics.totalUsers > 0
       ? monetizationMetrics.totalRevenue / monetizationMetrics.totalUsers
       : 0;
-  eventBus.publish("analytics:monetization", {
+  eventBus.publish('analytics:monetization', {
     event: event.type,
     userId: event.userId,
     metrics: { ...monetizationMetrics },

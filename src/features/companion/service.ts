@@ -1,6 +1,6 @@
-import { CompanionPhase, CompanionSessionEvent, CompanionState } from "./types";
-import { CompanionGrowthService } from "./growth-service";
-import { calculateMood, getMoodMessage } from "./companion-mood";
+import { CompanionPhase, CompanionSessionEvent, CompanionState } from './types';
+import { CompanionGrowthService } from './growth-service';
+import { calculateMood, getMoodMessage } from './companion-mood';
 
 export class CompanionService {
   private state: CompanionState | null = null;
@@ -17,16 +17,16 @@ export class CompanionService {
   }
 
   startSession(_sessionDurationMinutes?: number): void {
-    if (!this.state) return;
-    this.state.currentMood = "SLEEPY";
+    if (!this.state) {return;}
+    this.state.currentMood = 'SLEEPY';
     this.state.sessionProgress = 0;
     this.state.energyLevel = 50;
     this.lastMilestone = 0;
     this.currentStreakSeconds = 0;
     this.emitEvent({
-      type: "MOOD_SHIFT",
+      type: 'MOOD_SHIFT',
       timestamp: Date.now(),
-      data: { mood: "SLEEPY", message: "Your companion awakens..." },
+      data: { mood: 'SLEEPY', message: 'Your companion awakens...' },
     });
   }
   tick(
@@ -35,7 +35,7 @@ export class CompanionService {
     purityScore: number,
     isPaused: boolean,
   ): void {
-    if (!this.state) return;
+    if (!this.state) {return;}
     const progress = (elapsedSeconds / totalDurationSeconds) * 100;
     this.state.sessionProgress = progress;
     this.state.purityScore = purityScore;
@@ -48,7 +48,7 @@ export class CompanionService {
     if (nextMood !== this.state.currentMood) {
       this.state.currentMood = nextMood;
       this.emitEvent({
-        type: "MOOD_SHIFT",
+        type: 'MOOD_SHIFT',
         timestamp: Date.now(),
         data: { mood: nextMood, message: getMoodMessage(nextMood) },
       });
@@ -57,7 +57,7 @@ export class CompanionService {
     if (milestone > this.lastMilestone && milestone > 0) {
       this.lastMilestone = milestone;
       this.emitEvent({
-        type: "MILESTONE",
+        type: 'MILESTONE',
         timestamp: Date.now(),
         data: {
           progressDelta: milestone,
@@ -72,11 +72,11 @@ export class CompanionService {
     userId?: string,
     sessionId?: string,
   ): { leveledUp: boolean; evolved: boolean; newPhase?: CompanionPhase } {
-    if (!this.state) return { leveledUp: false, evolved: false };
+    if (!this.state) {return { leveledUp: false, evolved: false };}
     this.growthService.updateState(this.state);
     const result = this.growthService.processSessionCompletion(sessionMinutes, finalPurity, userId, sessionId);
     const updatedState = this.growthService.getState();
-    if (updatedState) this.state = updatedState;
+    if (updatedState) {this.state = updatedState;}
     return result;
   }
   getState(): CompanionState | null {
@@ -90,11 +90,11 @@ export class CompanionService {
   }
 
   private syncGrowth(action: () => void, createEvent: () => CompanionSessionEvent): void {
-    if (!this.state) return;
+    if (!this.state) {return;}
     this.growthService.updateState(this.state);
     action();
     const updatedState = this.growthService.getState();
-    if (updatedState) this.state = updatedState;
+    if (updatedState) {this.state = updatedState;}
     this.emitEvent(createEvent());
   }
 
@@ -102,11 +102,11 @@ export class CompanionService {
     this.syncGrowth(
       () => this.growthService.reactToStreakMaintained(userId),
       () => ({
-        type: "MILESTONE" as const,
+        type: 'MILESTONE' as const,
         timestamp: Date.now(),
         data: {
           progressDelta: 100,
-          message: "Your companion celebrates your streak consistency!",
+          message: 'Your companion celebrates your streak consistency!',
           intensity: 0.8,
         },
       }),
@@ -116,11 +116,11 @@ export class CompanionService {
     this.syncGrowth(
       () => this.growthService.reactToComebackCompleted(userId),
       () => ({
-        type: "MILESTONE" as const,
+        type: 'MILESTONE' as const,
         timestamp: Date.now(),
         data: {
           progressDelta: 100,
-          message: "Your companion admires your resilience!",
+          message: 'Your companion admires your resilience!',
           intensity: 0.9,
         },
       }),
@@ -130,13 +130,13 @@ export class CompanionService {
     this.syncGrowth(
       () => this.growthService.reactToFocusScoreChanged(userId, previousScore, newScore),
       () => ({
-        type: newScore > previousScore ? "GROWTH_PULSE" : "MOOD_SHIFT",
+        type: newScore > previousScore ? 'GROWTH_PULSE' : 'MOOD_SHIFT',
         timestamp: Date.now(),
         data: {
-          mood: this.state?.currentMood ?? "SLEEPY",
+          mood: this.state?.currentMood ?? 'SLEEPY',
           message: newScore > previousScore
-            ? "Your companion feels your focus growing!"
-            : "Your companion senses the challenge.",
+            ? 'Your companion feels your focus growing!'
+            : 'Your companion senses the challenge.',
           intensity: 0.6,
         },
       }),
@@ -146,11 +146,11 @@ export class CompanionService {
     this.syncGrowth(
       () => this.growthService.reactToDailyMissionCompleted(userId),
       () => ({
-        type: "MILESTONE" as const,
+        type: 'MILESTONE' as const,
         timestamp: Date.now(),
         data: {
           progressDelta: 100,
-          message: "Your companion nods with approval at your daily progress!",
+          message: 'Your companion nods with approval at your daily progress!',
           intensity: 0.5,
         },
       }),

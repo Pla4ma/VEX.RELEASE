@@ -7,64 +7,64 @@ import {
   AnalyticsDataPointSchema,
   TimeSeriesDataSchema,
   TrendAnalysisSchema,
-} from "../data-schemas";
+} from '../data-schemas';
 
-describe("Analytics Data Schemas", () => {
-  describe("AnalyticsFilterSchema", () => {
-    it("accepts valid filter", () => {
+describe('Analytics Data Schemas', () => {
+  describe('AnalyticsFilterSchema', () => {
+    it('accepts valid filter', () => {
       const filter = {
-        dimension: "session_category",
-        operator: "eq" as const,
-        value: "boss",
+        dimension: 'session_category',
+        operator: 'eq' as const,
+        value: 'boss',
       };
       expect(() => AnalyticsFilterSchema.parse(filter)).not.toThrow();
     });
 
-    it("accepts filter with array value", () => {
+    it('accepts filter with array value', () => {
       const filter = {
-        dimension: "boss_type",
-        operator: "in" as const,
-        value: ["dragon", "goblin"],
+        dimension: 'boss_type',
+        operator: 'in' as const,
+        value: ['dragon', 'goblin'],
       };
       expect(() => AnalyticsFilterSchema.parse(filter)).not.toThrow();
     });
 
-    it("rejects filter with invalid operator", () => {
+    it('rejects filter with invalid operator', () => {
       const filter = {
-        dimension: "session_category",
-        operator: "contains",
-        value: "boss",
+        dimension: 'session_category',
+        operator: 'contains',
+        value: 'boss',
       };
       expect(() => AnalyticsFilterSchema.parse(filter)).toThrow();
     });
   });
 
-  describe("AnalyticsDataPointSchema", () => {
-    it("accepts valid data point", () => {
+  describe('AnalyticsDataPointSchema', () => {
+    it('accepts valid data point', () => {
       const point = { timestamp: Date.now(), value: 42 };
       expect(() => AnalyticsDataPointSchema.parse(point)).not.toThrow();
     });
 
-    it("accepts data point with metadata", () => {
+    it('accepts data point with metadata', () => {
       const point = {
         timestamp: Date.now(),
         value: 42,
-        metadata: { category: "boss" },
+        metadata: { category: 'boss' },
       };
       expect(() => AnalyticsDataPointSchema.parse(point)).not.toThrow();
     });
 
-    it("rejects negative timestamp", () => {
+    it('rejects negative timestamp', () => {
       const point = { timestamp: -1, value: 42 };
       expect(() => AnalyticsDataPointSchema.parse(point)).toThrow();
     });
   });
 
-  describe("TimeSeriesDataSchema", () => {
-    it("accepts valid time series data", () => {
+  describe('TimeSeriesDataSchema', () => {
+    it('accepts valid time series data', () => {
       const data = {
-        metric: "sessions_completed",
-        granularity: "day",
+        metric: 'sessions_completed',
+        granularity: 'day',
         points: [{ timestamp: Date.now(), value: 5 }],
         summary: {
           total: 5,
@@ -78,10 +78,10 @@ describe("Analytics Data Schemas", () => {
       expect(() => TimeSeriesDataSchema.parse(data)).not.toThrow();
     });
 
-    it("rejects empty points array", () => {
+    it('rejects empty points array', () => {
       const data = {
-        metric: "sessions_completed",
-        granularity: "day",
+        metric: 'sessions_completed',
+        granularity: 'day',
         points: [],
         summary: {
           total: 0,
@@ -96,11 +96,11 @@ describe("Analytics Data Schemas", () => {
     });
   });
 
-  describe("TrendAnalysisSchema", () => {
-    it("accepts valid trend analysis", () => {
+  describe('TrendAnalysisSchema', () => {
+    it('accepts valid trend analysis', () => {
       const trend = {
-        metric: "xp_earned",
-        direction: "up",
+        metric: 'xp_earned',
+        direction: 'up',
         strength: 0.8,
         changePercent: 15.5,
         confidence: 0.9,
@@ -112,10 +112,10 @@ describe("Analytics Data Schemas", () => {
       expect(() => TrendAnalysisSchema.parse(trend)).not.toThrow();
     });
 
-    it("rejects strength > 1", () => {
+    it('rejects strength > 1', () => {
       const trend = {
-        metric: "xp_earned",
-        direction: "up",
+        metric: 'xp_earned',
+        direction: 'up',
         strength: 1.5,
         changePercent: 15.5,
         confidence: 0.9,

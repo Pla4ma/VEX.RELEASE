@@ -5,35 +5,35 @@
  * Provides sync/backup for the MMKV-based companion state.
  */
 
-import { z } from "zod";
-import { getSupabaseClient } from "../../config/supabase";
+import { z } from 'zod';
+import { getSupabaseClient } from '../../config/supabase';
 
 // ── Zod schemas ─────────────────────────────────────────────────────────
 
 const CompanionElementEnum = z.enum([
-  "FLAME",
-  "WAVE",
-  "TERRA",
-  "ZEPHYR",
-  "VOID",
-  "LUMINA",
+  'FLAME',
+  'WAVE',
+  'TERRA',
+  'ZEPHYR',
+  'VOID',
+  'LUMINA',
 ]);
 const CompanionPhaseEnum = z.enum([
-  "EGG",
-  "HATCHING",
-  "YOUNG",
-  "MATURE",
-  "AWAKENED",
-  "TRANSCENDENT",
+  'EGG',
+  'HATCHING',
+  'YOUNG',
+  'MATURE',
+  'AWAKENED',
+  'TRANSCENDENT',
 ]);
 const CompanionMoodEnum = z.enum([
-  "SLEEPY",
-  "CONTENT",
-  "FOCUSED",
-  "DETERMINED",
-  "ECSTATIC",
-  "STRUGGLING",
-  "DANGER",
+  'SLEEPY',
+  'CONTENT',
+  'FOCUSED',
+  'DETERMINED',
+  'ECSTATIC',
+  'STRUGGLING',
+  'DANGER',
 ]);
 
 export const CompanionProfileRowSchema = z
@@ -89,7 +89,7 @@ export class CompanionRepositoryError extends Error {
     public readonly cause?: unknown,
   ) {
     super(`CompanionRepository ${operation} failed`);
-    this.name = "CompanionRepositoryError";
+    this.name = 'CompanionRepositoryError';
   }
 }
 
@@ -101,18 +101,18 @@ export async function getProfile(
   try {
     const parsed = z.string().uuid().parse(userId);
     const { data, error } = await getSupabaseClient()
-      .from("companion_profiles")
-      .select("*")
-      .eq("user_id", parsed)
+      .from('companion_profiles')
+      .select('*')
+      .eq('user_id', parsed)
       .maybeSingle();
     if (error) {
-      throw new CompanionRepositoryError("getProfile", error);
+      throw new CompanionRepositoryError('getProfile', error);
     }
-    if (!data) return null;
+    if (!data) {return null;}
     return CompanionProfileRowSchema.parse(data);
   } catch (error) {
-    if (error instanceof CompanionRepositoryError) throw error;
-    throw new CompanionRepositoryError("getProfile", error);
+    if (error instanceof CompanionRepositoryError) {throw error;}
+    throw new CompanionRepositoryError('getProfile', error);
   }
 }
 
@@ -122,17 +122,17 @@ export async function upsertProfile(
   try {
     const parsed = CompanionProfileInsertSchema.parse(profile);
     const { data, error } = await getSupabaseClient()
-      .from("companion_profiles")
-      .upsert(parsed, { onConflict: "user_id" })
-      .select("*")
+      .from('companion_profiles')
+      .upsert(parsed, { onConflict: 'user_id' })
+      .select('*')
       .single();
     if (error) {
-      throw new CompanionRepositoryError("upsertProfile", error);
+      throw new CompanionRepositoryError('upsertProfile', error);
     }
     return CompanionProfileRowSchema.parse(data);
   } catch (error) {
-    if (error instanceof CompanionRepositoryError) throw error;
-    throw new CompanionRepositoryError("upsertProfile", error);
+    if (error instanceof CompanionRepositoryError) {throw error;}
+    throw new CompanionRepositoryError('upsertProfile', error);
   }
 }
 
@@ -140,14 +140,14 @@ export async function deleteProfile(userId: string): Promise<void> {
   try {
     const parsed = z.string().uuid().parse(userId);
     const { error } = await getSupabaseClient()
-      .from("companion_profiles")
+      .from('companion_profiles')
       .delete()
-      .eq("user_id", parsed);
+      .eq('user_id', parsed);
     if (error) {
-      throw new CompanionRepositoryError("deleteProfile", error);
+      throw new CompanionRepositoryError('deleteProfile', error);
     }
   } catch (error) {
-    if (error instanceof CompanionRepositoryError) throw error;
-    throw new CompanionRepositoryError("deleteProfile", error);
+    if (error instanceof CompanionRepositoryError) {throw error;}
+    throw new CompanionRepositoryError('deleteProfile', error);
   }
 }

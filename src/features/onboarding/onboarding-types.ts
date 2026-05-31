@@ -1,11 +1,11 @@
 export type OnboardingStep =
-  | "WELCOME"
-  | "QUICK_START"
-  | "FIRST_SESSION"
-  | "POST_SESSION"
-  | "HOME_INTRO"
-  | "FEATURE_UNLOCK"
-  | "COMPLETE";
+  | 'WELCOME'
+  | 'QUICK_START'
+  | 'FIRST_SESSION'
+  | 'POST_SESSION'
+  | 'HOME_INTRO'
+  | 'FEATURE_UNLOCK'
+  | 'COMPLETE';
 
 export interface OnboardingState {
   userId: string;

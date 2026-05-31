@@ -1,13 +1,13 @@
-import { eventBus } from "../../../events";
+import { eventBus } from '../../../events';
 import {
   CreateCoachMemoryInputSchema,
   type CoachMemory,
   type CreateCoachMemoryInput,
   type MemoryType,
-} from "../memory-schemas";
-import * as repository from "../repository/memories";
-import { createCoachMemoryCreatedEvent } from "../memory-events";
-import { trackMemoryCreated, trackMemoryError } from "../memory-analytics";
+} from '../memory-schemas';
+import * as repository from '../repository/memories';
+import { createCoachMemoryCreatedEvent } from '../memory-events';
+import { trackMemoryCreated, trackMemoryError } from '../memory-analytics';
 
 export async function createCoachMemory(
   input: CreateCoachMemoryInput,
@@ -24,12 +24,12 @@ export async function createCoachMemory(
     );
     trackMemoryCreated(memory);
     eventBus.publish(
-      "coach:memory_created",
+      'coach:memory_created',
       createCoachMemoryCreatedEvent(memory),
     );
     return memory;
   } catch (error: unknown) {
-    trackMemoryError("memory-create", error, parsed.userId);
+    trackMemoryError('memory-create', error, parsed.userId);
     throw error;
   }
 }
@@ -43,7 +43,7 @@ export async function fetchCoachMemories(
       ? repository.getMemoriesByType(userId, type)
       : repository.getMemoriesByUser(userId);
   } catch (error: unknown) {
-    trackMemoryError("memory-fetch", error, userId);
+    trackMemoryError('memory-fetch', error, userId);
     throw error;
   }
 }
@@ -54,7 +54,7 @@ export async function markCoachMemoryReferenced(
   try {
     await repository.markMemoryReferenced(memoryId);
   } catch (error: unknown) {
-    trackMemoryError("memory-reference", error);
+    trackMemoryError('memory-reference', error);
     throw error;
   }
 }

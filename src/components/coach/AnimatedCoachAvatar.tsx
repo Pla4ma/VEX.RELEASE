@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { View } from "react-native";
+import React, { useEffect } from 'react';
+import { View } from 'react-native';
 import Animated, {
   interpolate,
   useAnimatedStyle,
@@ -7,7 +7,7 @@ import Animated, {
   withRepeat,
   withSequence,
   withTiming,
-} from "react-native-reanimated";
+} from 'react-native-reanimated';
 import Svg, {
   Circle,
   Defs,
@@ -15,21 +15,21 @@ import Svg, {
   LinearGradient,
   Path,
   Stop,
-} from "react-native-svg";
+} from 'react-native-svg';
 
-import { useReducedMotion } from "../../hooks/useReducedMotion";
-import { useTheme } from "../../theme";
+import { useReducedMotion } from '../../hooks/useReducedMotion';
+import { useTheme } from '../../theme';
 import {
   type CoachMood,
   type AnimatedCoachAvatarProps,
   getMoodScale,
-} from "./coach-avatar-types";
+} from './coach-avatar-types';
 
-export { type CoachMood, type AnimatedCoachAvatarProps } from "./coach-avatar-types";
+export { type CoachMood, type AnimatedCoachAvatarProps } from './coach-avatar-types';
 
 export function AnimatedCoachAvatar({
   size = 112,
-  mood = "calm",
+  mood = 'calm',
   style,
 }: AnimatedCoachAvatarProps): JSX.Element {
   const { theme } = useTheme();
@@ -81,8 +81,8 @@ export function AnimatedCoachAvatar({
         {
           height: size,
           width: size,
-          alignItems: "center",
-          justifyContent: "center",
+          alignItems: 'center',
+          justifyContent: 'center',
         },
         style,
       ]}
@@ -90,7 +90,7 @@ export function AnimatedCoachAvatar({
       <Animated.View
         style={[
           {
-            position: "absolute",
+            position: 'absolute',
             height: size,
             width: size,
             borderRadius: size / 2,
@@ -154,9 +154,9 @@ export function AnimatedCoachAvatar({
           <Circle cx="71" cy="58" r="5" fill="url(#coachFace)" />
           <Path
             d={
-              mood === "celebrate"
-                ? "M48 73c7 7 17 7 24 0"
-                : "M50 73c6 4 14 4 20 0"
+              mood === 'celebrate'
+                ? 'M48 73c7 7 17 7 24 0'
+                : 'M50 73c6 4 14 4 20 0'
             }
             stroke={theme.colors.semantic.textPrimary}
             strokeLinecap="round"

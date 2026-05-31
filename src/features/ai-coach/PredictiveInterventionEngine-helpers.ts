@@ -4,7 +4,7 @@ import type {
   RiskAssessment,
   OptimalTimeResult,
   SessionRecord,
-} from "./PredictiveInterventionEngine-types";
+} from './PredictiveInterventionEngine-types';
 
 export function calculateBreakFrequency(
   history: Array<{ date: string; completed: boolean }>,
@@ -15,7 +15,7 @@ export function calculateBreakFrequency(
     if (session.completed) {
       currentStreak++;
     } else {
-      if (currentStreak > 3) breaks++;
+      if (currentStreak > 3) {breaks++;}
       currentStreak = 0;
     }
   }
@@ -35,19 +35,19 @@ export function getTopEntries(
 export function getDefaultPattern(userId: string): BehavioralPattern {
   return {
     userId,
-    patternType: "consistent",
+    patternType: 'consistent',
     daysOfWeek: [1, 2, 3, 4, 5],
     timeOfDay: [9, 14, 20],
     averageSessionDuration: 25,
     completionRate: 0.7,
     streakBreakFrequency: 1,
-    last30DaysTrend: "stable",
+    last30DaysTrend: 'stable',
   };
 }
 
 export function createRiskPrediction(
   userId: string,
-  type: RiskPrediction["type"],
+  type: RiskPrediction['type'],
   now: number,
   assessment: RiskAssessment,
   predictedToOccurAt: number,
@@ -63,7 +63,7 @@ export function createRiskPrediction(
     evidence: assessment.evidence,
     recommendedAction: assessment.action,
     interventionSent: false,
-    interventionType: "",
+    interventionType: '',
     actualOutcome: null,
     outcomeVerifiedAt: null,
   };
@@ -87,13 +87,13 @@ export function computeBehavioralPattern(
   const timeOfDay = getTopEntries(hourCounts, 3);
   const firstHalf = last30Days.slice(0, 15).filter((s) => s.completed).length;
   const secondHalf = last30Days.slice(15).filter((s) => s.completed).length;
-  let last30DaysTrend: "up" | "stable" | "down" = "stable";
-  if (secondHalf > firstHalf * 1.2) last30DaysTrend = "up";
-  else if (secondHalf < firstHalf * 0.8) last30DaysTrend = "down";
-  let patternType: BehavioralPattern["patternType"] = "consistent";
-  if (completionRate < 0.5) patternType = "inconsistent";
-  else if (last30DaysTrend === "down") patternType = "declining";
-  else if (last30DaysTrend === "up") patternType = "improving";
+  let last30DaysTrend: 'up' | 'stable' | 'down' = 'stable';
+  if (secondHalf > firstHalf * 1.2) {last30DaysTrend = 'up';}
+  else if (secondHalf < firstHalf * 0.8) {last30DaysTrend = 'down';}
+  let patternType: BehavioralPattern['patternType'] = 'consistent';
+  if (completionRate < 0.5) {patternType = 'inconsistent';}
+  else if (last30DaysTrend === 'down') {patternType = 'declining';}
+  else if (last30DaysTrend === 'up') {patternType = 'improving';}
   const avgDuration =
     last30Days.length > 0
       ? last30Days.reduce((sum, s) => sum + s.duration, 0) / last30Days.length
@@ -116,13 +116,13 @@ export function assessStreakBreakRisk(
 ): RiskAssessment {
   const evidence: string[] = [];
   let confidence = 0;
-  let severity: RiskAssessment["severity"] = "low";
+  let severity: RiskAssessment['severity'] = 'low';
   if (hoursSinceLastSession > 20) {
     evidence.push(`${Math.floor(hoursSinceLastSession)} hours since last session`);
     confidence += 0.3;
   }
-  if (pattern.patternType === "inconsistent") {
-    evidence.push("Inconsistent completion pattern detected");
+  if (pattern.patternType === 'inconsistent') {
+    evidence.push('Inconsistent completion pattern detected');
     confidence += 0.2;
   }
   if (pattern.completionRate < 0.5) {
@@ -133,24 +133,24 @@ export function assessStreakBreakRisk(
     evidence.push(`${pattern.streakBreakFrequency} streak breaks this month`);
     confidence += 0.2;
   }
-  if (pattern.last30DaysTrend === "down") {
-    evidence.push("Activity declining over last 30 days");
+  if (pattern.last30DaysTrend === 'down') {
+    evidence.push('Activity declining over last 30 days');
     confidence += 0.1;
   }
-  if (hoursSinceLastSession > 40) severity = "critical";
-  else if (hoursSinceLastSession > 30) severity = "high";
-  else if (hoursSinceLastSession > 24) severity = "medium";
+  if (hoursSinceLastSession > 40) {severity = 'critical';}
+  else if (hoursSinceLastSession > 30) {severity = 'high';}
+  else if (hoursSinceLastSession > 24) {severity = 'medium';}
   const action =
     hoursSinceLastSession > 30
-      ? "Complete a session in the next 6 hours to save your streak!"
-      : "Your streak is at risk. Complete a session today!";
+      ? 'Complete a session in the next 6 hours to save your streak!'
+      : 'Your streak is at risk. Complete a session today!';
   return { confidence: Math.min(1, confidence), severity, evidence, action };
 }
 export function assessBurnoutRisk(pattern: BehavioralPattern): RiskAssessment {
   const evidence: string[] = [];
   let confidence = 0;
   if (pattern.completionRate > 0.95) {
-    evidence.push("Very high completion rate - possible overexertion");
+    evidence.push('Very high completion rate - possible overexertion');
     confidence += 0.3;
   }
   if (pattern.averageSessionDuration > 90) {
@@ -158,20 +158,20 @@ export function assessBurnoutRisk(pattern: BehavioralPattern): RiskAssessment {
     confidence += 0.2;
   }
   if (pattern.daysOfWeek.length === 7) {
-    evidence.push("No rest days detected");
+    evidence.push('No rest days detected');
     confidence += 0.2;
   }
-  const severity: RiskAssessment["severity"] = confidence > 0.5 ? "medium" : "low";
+  const severity: RiskAssessment['severity'] = confidence > 0.5 ? 'medium' : 'low';
   return {
     confidence: Math.min(1, confidence),
     severity,
     evidence,
-    action: "Consider taking a rest day. Your streak is strong enough to handle it!",
+    action: 'Consider taking a rest day. Your streak is strong enough to handle it!',
   };
 }
 export function calculateOptimalTime(pattern: BehavioralPattern): OptimalTimeResult {
   if (pattern.timeOfDay.length === 0) {
-    return { confidence: 0, nextWindow: 0, evidence: [], action: "" };
+    return { confidence: 0, nextWindow: 0, evidence: [], action: '' };
   }
   const bestHour = pattern.timeOfDay[0]!;
   const now = new Date();
@@ -191,9 +191,9 @@ export function calculateOptimalTime(pattern: BehavioralPattern): OptimalTimeRes
 }
 
 export function generateStreakInterventionMessage(prediction: RiskPrediction): string {
-  const hours = prediction.evidence.find((e) => e.includes("hours"));
-  if (hours) return `${hours}. Your streak is your progress - don't let it slip away! 💪`;
-  return "Your streak is at risk! Complete a session today to keep your momentum! 🔥";
+  const hours = prediction.evidence.find((e) => e.includes('hours'));
+  if (hours) {return `${hours}. Your streak is your progress - don't let it slip away! 💪`;}
+  return 'Your streak is at risk! Complete a session today to keep your momentum! 🔥';
 }
 export function generateBurnoutMessage(): string {
   return "You've been incredibly consistent! Consider a lighter session today - your streak can handle one easy day. Rest is part of the journey! 🌱";

@@ -1,21 +1,21 @@
-import React from "react";
-import { Pressable } from "react-native";
+import React from 'react';
+import { Pressable } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   withRepeat,
   withSequence,
   withTiming,
-} from "react-native-reanimated";
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
+} from 'react-native-reanimated';
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
 import {
   getRiskConfig,
   type StreakRiskBannerProps,
-} from "./streak-risk-config";
-import { sessionStart } from "../../../utils/haptics";
+} from './streak-risk-config';
+import { sessionStart } from '../../../utils/haptics';
 
-export type { StreakRiskLevel, StreakRiskBannerProps } from "./streak-risk-config";
+export type { StreakRiskLevel, StreakRiskBannerProps } from './streak-risk-config';
 
 export function StreakRiskBanner({
   riskLevel,
@@ -52,7 +52,7 @@ export function StreakRiskBanner({
         )
       : config?.border,
   }));
-  if (riskLevel === "NONE" || riskLevel === "LOW") {
+  if (riskLevel === 'NONE' || riskLevel === 'LOW') {
     return null;
   }
   if (!config) {
@@ -72,7 +72,7 @@ export function StreakRiskBanner({
             marginTop: theme.spacing[4],
             borderRadius: 12,
             borderWidth: 2,
-            overflow: "hidden",
+            overflow: 'hidden',
           },
           pulseStyle,
         ]}

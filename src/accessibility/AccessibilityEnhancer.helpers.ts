@@ -4,9 +4,9 @@
  * Convenience functions, presets, and the singleton instance.
  */
 
-import React from "react";
-import { AccessibilityEnhancer } from "./AccessibilityEnhancer.class";
-import type { EnhancedAccessibilityProps } from "./enhancer-types";
+import React from 'react';
+import { AccessibilityEnhancer } from './AccessibilityEnhancer.class';
+import type { EnhancedAccessibilityProps } from './enhancer-types';
 
 export const accessibilityEnhancer = AccessibilityEnhancer.getInstance();
 
@@ -56,35 +56,35 @@ export const ACCESSIBILITY_PRESETS = {
     autoFocusManagement: true,
     motionOptimizations: true,
     screenReaderOptimizations: true,
-    colorBlindSupport: "none" as const,
+    colorBlindSupport: 'none' as const,
   },
   ESSENTIAL: {
     autoContrastFixes: true,
     autoFocusManagement: true,
     motionOptimizations: false,
     screenReaderOptimizations: true,
-    colorBlindSupport: "none" as const,
+    colorBlindSupport: 'none' as const,
   },
   VISUAL: {
     autoContrastFixes: true,
     autoFocusManagement: false,
     motionOptimizations: true,
     screenReaderOptimizations: false,
-    colorBlindSupport: "protanopia" as const,
+    colorBlindSupport: 'protanopia' as const,
   },
   MOTOR: {
     autoContrastFixes: false,
     autoFocusManagement: true,
     motionOptimizations: true,
     screenReaderOptimizations: false,
-    colorBlindSupport: "none" as const,
+    colorBlindSupport: 'none' as const,
   },
   COGNITIVE: {
     autoContrastFixes: true,
     autoFocusManagement: true,
     motionOptimizations: true,
     screenReaderOptimizations: true,
-    colorBlindSupport: "none" as const,
+    colorBlindSupport: 'none' as const,
   },
 } as const;
 

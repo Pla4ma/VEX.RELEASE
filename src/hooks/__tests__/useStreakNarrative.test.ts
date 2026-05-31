@@ -3,11 +3,11 @@
  * Integration tests for the narrative hook
  */
 
-import { renderHook } from "@testing-library/react-hooks";
-import { useStreakNarrative } from "../useStreakNarrative";
+import { renderHook } from '@testing-library/react-hooks';
+import { useStreakNarrative } from '../useStreakNarrative';
 
-describe("useStreakNarrative Hook", () => {
-  it("should return narrative for active streak", () => {
+describe('useStreakNarrative Hook', () => {
+  it('should return narrative for active streak', () => {
     const { result } = renderHook(() =>
       useStreakNarrative({
         streakDays: 7,
@@ -24,7 +24,7 @@ describe("useStreakNarrative Hook", () => {
     expect(result.current.narrative.currentChapter).toBeDefined();
   });
 
-  it("should not show risk warning for fresh streak", () => {
+  it('should not show risk warning for fresh streak', () => {
     const { result } = renderHook(() =>
       useStreakNarrative({
         streakDays: 7,
@@ -39,7 +39,7 @@ describe("useStreakNarrative Hook", () => {
     expect(result.current.riskWarning).toBeNull();
   });
 
-  it("should show risk warning when streak at risk", () => {
+  it('should show risk warning when streak at risk', () => {
     const { result } = renderHook(() =>
       useStreakNarrative({
         streakDays: 7,
@@ -55,7 +55,7 @@ describe("useStreakNarrative Hook", () => {
     expect(result.current.riskWarning?.show).toBe(true);
   });
 
-  it("should not show risk warning for short streaks", () => {
+  it('should not show risk warning for short streaks', () => {
     const { result } = renderHook(() =>
       useStreakNarrative({
         streakDays: 2,
@@ -70,7 +70,7 @@ describe("useStreakNarrative Hook", () => {
     expect(result.current.riskWarning).toBeNull();
   });
 
-  it("should show break recovery when streak is broken", () => {
+  it('should show break recovery when streak is broken', () => {
     const { result } = renderHook(() =>
       useStreakNarrative({
         streakDays: 0,
@@ -83,10 +83,10 @@ describe("useStreakNarrative Hook", () => {
     );
 
     expect(result.current.breakRecovery).not.toBeNull();
-    expect(result.current.breakRecovery?.comebackQuest).toContain("Token");
+    expect(result.current.breakRecovery?.comebackQuest).toContain('Token');
   });
 
-  it("should not show break recovery when streak is active", () => {
+  it('should not show break recovery when streak is active', () => {
     const { result } = renderHook(() =>
       useStreakNarrative({
         streakDays: 3,
@@ -101,7 +101,7 @@ describe("useStreakNarrative Hook", () => {
     expect(result.current.breakRecovery).toBeNull();
   });
 
-  it("should memoize narrative to prevent recalculation", () => {
+  it('should memoize narrative to prevent recalculation', () => {
     const { result, rerender } = renderHook(
       ({ streakDays }) =>
         useStreakNarrative({
@@ -123,7 +123,7 @@ describe("useStreakNarrative Hook", () => {
     expect(result.current.narrative).toBe(firstNarrative);
   });
 
-  it("should recalculate when streak changes", () => {
+  it('should recalculate when streak changes', () => {
     const { result, rerender } = renderHook(
       ({ streakDays }) =>
         useStreakNarrative({
@@ -145,7 +145,7 @@ describe("useStreakNarrative Hook", () => {
     expect(result.current.narrative).not.toBe(firstNarrative);
   });
 
-  it("should handle edge case of zero sessions", () => {
+  it('should handle edge case of zero sessions', () => {
     const { result } = renderHook(() =>
       useStreakNarrative({
         streakDays: 0,
@@ -158,10 +158,10 @@ describe("useStreakNarrative Hook", () => {
     );
 
     expect(result.current.narrative).toBeDefined();
-    expect(result.current.narrative.currentChapter).toBe("The Beginning");
+    expect(result.current.narrative.currentChapter).toBe('The Beginning');
   });
 
-  it("should handle extreme streak values", () => {
+  it('should handle extreme streak values', () => {
     const { result } = renderHook(() =>
       useStreakNarrative({
         streakDays: 365,

@@ -1,23 +1,23 @@
-import { SessionMode } from "../../../session/modes";
+import { SessionMode } from '../../../session/modes';
 import {
   buildCompletionLedger,
   type BuildCompletionLedgerInput,
-} from "../ledger-service";
-import { CompletionLedgerSchema } from "../schemas";
-import { createSessionSummary, SESSION_ID, USER_ID } from "./ledger-test-utils";
+} from '../ledger-service';
+import { CompletionLedgerSchema } from '../schemas';
+import { createSessionSummary, SESSION_ID, USER_ID } from './ledger-test-utils';
 
-describe("buildCompletionLedger core contract", () => {
-  it("ledger schema rejects missing required fields", () => {
+describe('buildCompletionLedger core contract', () => {
+  it('ledger schema rejects missing required fields', () => {
     expect(() =>
       CompletionLedgerSchema.parse({
-        ledgerId: "550e8400-e29b-41d4-a716-446655440001",
+        ledgerId: '550e8400-e29b-41d4-a716-446655440001',
         sessionId: SESSION_ID,
         userId: USER_ID,
       }),
     ).toThrow();
   });
 
-  it("creates a valid ledger for a normal completed session", () => {
+  it('creates a valid ledger for a normal completed session', () => {
     const ledger = buildCompletionLedger({
       sessionId: SESSION_ID,
       summary: createSessionSummary(),
@@ -27,8 +27,8 @@ describe("buildCompletionLedger core contract", () => {
     expect(ledger).toMatchObject({
       sessionId: SESSION_ID,
       userId: USER_ID,
-      offlineSyncStatus: "synced",
-      timezone: "UTC",
+      offlineSyncStatus: 'synced',
+      timezone: 'UTC',
       companionReactionId: null,
       rewardIds: [],
       degradedSystems: [],
@@ -43,79 +43,79 @@ describe("buildCompletionLedger core contract", () => {
     expect(ledger.idempotencyKey).toBeDefined();
   });
 
-  it("creates a valid pending ledger for offline mode", () => {
+  it('creates a valid pending ledger for offline mode', () => {
     const ledger = buildCompletionLedger({
-      offlineSyncStatus: "pending_sync",
-      sessionId: "550e8400-e29b-41d4-a716-446655440001",
+      offlineSyncStatus: 'pending_sync',
+      sessionId: '550e8400-e29b-41d4-a716-446655440001',
       summary: createSessionSummary(),
       userId: USER_ID,
     });
 
-    expect(ledger.offlineSyncStatus).toBe("pending_sync");
+    expect(ledger.offlineSyncStatus).toBe('pending_sync');
     expect(ledger.grade).toBeDefined();
   });
 
-  it("uses provided idempotency key and generates session-bound keys", () => {
+  it('uses provided idempotency key and generates session-bound keys', () => {
     const custom = buildCompletionLedger({
-      idempotencyKey: "custom-key-123",
-      sessionId: "550e8400-e29b-41d4-a716-446655440002",
+      idempotencyKey: 'custom-key-123',
+      sessionId: '550e8400-e29b-41d4-a716-446655440002',
       summary: createSessionSummary(),
       userId: USER_ID,
     });
     const first = buildCompletionLedger({
       completedAt: 1000000,
-      sessionId: "550e8400-e29b-41d4-a716-446655440003",
+      sessionId: '550e8400-e29b-41d4-a716-446655440003',
       summary: createSessionSummary(),
       userId: USER_ID,
     });
     const second = buildCompletionLedger({
       completedAt: 2000000,
-      sessionId: "550e8400-e29b-41d4-a716-446655440003",
+      sessionId: '550e8400-e29b-41d4-a716-446655440003',
       summary: createSessionSummary(),
       userId: USER_ID,
     });
     const different = buildCompletionLedger({
-      sessionId: "550e8400-e29b-41d4-a716-446655440004",
+      sessionId: '550e8400-e29b-41d4-a716-446655440004',
       summary: createSessionSummary(),
       userId: USER_ID,
     });
 
-    expect(custom.idempotencyKey).toBe("custom-key-123");
+    expect(custom.idempotencyKey).toBe('custom-key-123');
     // Same sessionId produces same idempotency key regardless of completedAt
     expect(first.idempotencyKey).toBe(second.idempotencyKey);
-    expect(first.idempotencyKey).toContain(":completed");
+    expect(first.idempotencyKey).toContain(':completed');
     // Different sessionId produces different key
     expect(first.idempotencyKey).not.toBe(different.idempotencyKey);
   });
 
-  it("uses custom timezone and optional integration outputs", () => {
+  it('uses custom timezone and optional integration outputs', () => {
     const missionResult = {
-      missionId: "mission-daily-1",
+      missionId: 'mission-daily-1',
       progressDelta: 25,
-      status: "progressed" as const,
+      status: 'progressed' as const,
     };
     const ledger = buildCompletionLedger({
-      companionReactionId: "reaction-happy-123",
+      companionReactionId: 'reaction-happy-123',
       dailyMissionResult: missionResult,
-      degradedSystems: ["rewards", "focus-identity"],
-      rewardIds: ["reward-1", "reward-2"],
-      sessionId: "550e8400-e29b-41d4-a716-446655440004",
+      degradedSystems: ['rewards', 'focus-identity'],
+      rewardIds: ['reward-1', 'reward-2'],
+      sessionId: '550e8400-e29b-41d4-a716-446655440004',
       summary: createSessionSummary(),
-      timezone: "America/New_York",
+      timezone: 'America/New_York',
       userId: USER_ID,
     });
 
-    expect(ledger.timezone).toBe("America/New_York");
-    expect(ledger.companionReactionId).toBe("reaction-happy-123");
-    expect(ledger.rewardIds).toEqual(["reward-1", "reward-2"]);
+    expect(ledger.timezone).toBe('America/New_York');
+    expect(ledger.companionReactionId).toBe('reaction-happy-123');
+    expect(ledger.rewardIds).toEqual(['reward-1', 'reward-2']);
     expect(ledger.dailyMissionResult).toEqual(missionResult);
-    expect(ledger.degradedSystems).toEqual(["rewards", "focus-identity"]);
+    expect(ledger.degradedSystems).toEqual(['rewards', 'focus-identity']);
   });
 
-  it("rejects invalid ledger inputs before persistence", () => {
+  it('rejects invalid ledger inputs before persistence', () => {
     expect(() =>
       buildCompletionLedger({
-        sessionId: "not-a-uuid",
+        sessionId: 'not-a-uuid',
         summary: createSessionSummary(),
         userId: USER_ID,
       } as BuildCompletionLedgerInput),
@@ -140,7 +140,7 @@ describe("buildCompletionLedger core contract", () => {
       buildCompletionLedger({
         sessionId: SESSION_ID,
         summary: createSessionSummary({
-          sessionMode: "INVALID_MODE" as SessionMode,
+          sessionMode: 'INVALID_MODE' as SessionMode,
         }),
         userId: USER_ID,
       }),

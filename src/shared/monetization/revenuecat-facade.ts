@@ -1,15 +1,15 @@
-import type { PurchasesPackage } from "react-native-purchases";
+import type { PurchasesPackage } from 'react-native-purchases';
 import type {
   CustomerInfoResult,
   OfferingsResult,
   PurchaseResult,
   RevenueCatStatus,
-} from "./revenuecat-types";
-import { revenueCatService } from "./revenuecat-service";
+} from './revenuecat-types';
+import { revenueCatService } from './revenuecat-service';
 
 export const initializeRevenueCat = (
   userId?: string | null,
-): Promise<{ status: "ready" | "missing_keys" | "error" }> =>
+): Promise<{ status: 'ready' | 'missing_keys' | 'error' }> =>
   revenueCatService.initialize(userId);
 export const getCustomerInfo = (): Promise<CustomerInfoResult> =>
   revenueCatService.getCustomerInfo();

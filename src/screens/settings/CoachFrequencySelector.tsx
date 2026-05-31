@@ -1,11 +1,11 @@
-import React from "react";
-import { Pressable } from "react-native";
-import { useTheme } from "@/theme";
-import { Box, Text, Card } from "@/components/primitives";
-import { Icon } from "@/icons";
-import { launchColors } from "@theme/tokens/launch-colors";
+import React from 'react';
+import { Pressable } from 'react-native';
+import { useTheme } from '@/theme';
+import { Box, Text, Card } from '@/components/primitives';
+import { Icon } from '@/icons';
+import { launchColors } from '@theme/tokens/launch-colors';
 
-export type MessageFrequency = "frequent" | "normal" | "minimal";
+export type MessageFrequency = 'frequent' | 'normal' | 'minimal';
 
 interface FrequencyOption {
   id: MessageFrequency;
@@ -16,22 +16,22 @@ interface FrequencyOption {
 
 const FREQUENCY_OPTIONS: FrequencyOption[] = [
   {
-    id: "frequent",
-    label: "Frequent",
-    description: "Before, during, and after sessions",
-    messagesPerDay: "5-8 messages",
+    id: 'frequent',
+    label: 'Frequent',
+    description: 'Before, during, and after sessions',
+    messagesPerDay: '5-8 messages',
   },
   {
-    id: "normal",
-    label: "Normal",
-    description: "Key moments and milestones",
-    messagesPerDay: "2-4 messages",
+    id: 'normal',
+    label: 'Normal',
+    description: 'Key moments and milestones',
+    messagesPerDay: '2-4 messages',
   },
   {
-    id: "minimal",
-    label: "Minimal",
-    description: "Only important achievements",
-    messagesPerDay: "0-1 messages",
+    id: 'minimal',
+    label: 'Minimal',
+    description: 'Only important achievements',
+    messagesPerDay: '0-1 messages',
   },
 ];
 
@@ -53,20 +53,20 @@ export const CoachFrequencySelector: React.FC<
         style={{
           marginLeft: 12,
           marginBottom: 8,
-          fontWeight: "600",
+          fontWeight: '600',
           letterSpacing: 0.5,
         }}
       >
         MESSAGE FREQUENCY
       </Text>
-      <Card size="sm" style={{ overflow: "hidden" }}>
+      <Card size="sm" style={{ overflow: 'hidden' }}>
         {FREQUENCY_OPTIONS.map((option, index) => (
           <React.Fragment key={option.id}>
             <Pressable
               onPress={() => onFrequencyChange(option.id)}
               style={{
-                flexDirection: "row",
-                alignItems: "center",
+                flexDirection: 'row',
+                alignItems: 'center',
                 paddingVertical: 16,
                 paddingHorizontal: 16,
               }}
@@ -101,7 +101,7 @@ export const CoachFrequencySelector: React.FC<
                 <Text
                   variant="body"
                   style={{
-                    fontWeight: frequency === option.id ? "600" : "500",
+                    fontWeight: frequency === option.id ? '600' : '500',
                     color: theme.colors.text.primary,
                   }}
                 >

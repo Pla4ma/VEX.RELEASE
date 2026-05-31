@@ -5,8 +5,8 @@
  * adaptive difficulty suggestions.
  */
 
-import { capture } from "../../shared/analytics/analytics-service";
-import type { DifficultySuggestion, SessionDifficulty } from "./schemas";
+import { capture } from '../../shared/analytics/analytics-service';
+import type { DifficultySuggestion, SessionDifficulty } from './schemas';
 
 /**
  * Track difficulty suggestion shown
@@ -17,7 +17,7 @@ export function trackDifficultySuggestionShown(
   suggestedDifficulty: SessionDifficulty,
   confidence: string,
 ): void {
-  capture("difficulty_suggestion_shown", {
+  capture('difficulty_suggestion_shown', {
     user_id: userId,
     current_difficulty: currentDifficulty,
     suggested_difficulty: suggestedDifficulty,
@@ -39,7 +39,7 @@ export function trackDifficultySuggestionAccepted(
     averagePurity: number;
   },
 ): void {
-  capture("difficulty_suggestion_accepted", {
+  capture('difficulty_suggestion_accepted', {
     user_id: userId,
     from_difficulty: fromDifficulty,
     to_difficulty: toDifficulty,
@@ -57,7 +57,7 @@ export function trackDifficultySuggestionDismissed(
   userId: string,
   suggestedDifficulty: SessionDifficulty,
 ): void {
-  capture("difficulty_suggestion_dismissed", {
+  capture('difficulty_suggestion_dismissed', {
     user_id: userId,
     suggested_difficulty: suggestedDifficulty,
     timestamp: Date.now(),
@@ -71,9 +71,9 @@ export function trackDifficultyChanged(
   userId: string,
   fromDifficulty: SessionDifficulty,
   toDifficulty: SessionDifficulty,
-  source: "suggestion" | "manual",
+  source: 'suggestion' | 'manual',
 ): void {
-  capture("difficulty_changed", {
+  capture('difficulty_changed', {
     user_id: userId,
     from_difficulty: fromDifficulty,
     to_difficulty: toDifficulty,
@@ -90,7 +90,7 @@ export function trackInsufficientSessionsForSuggestion(
   sessionsCount: number,
   requiredCount: number,
 ): void {
-  capture("difficulty_suggestion_insufficient_sessions", {
+  capture('difficulty_suggestion_insufficient_sessions', {
     user_id: userId,
     sessions_count: sessionsCount,
     required_count: requiredCount,

@@ -1,18 +1,18 @@
-import React, { useState, useMemo } from "react";
-import { View, Text, Pressable, ScrollView, TextInput } from "react-native";
-import { buttonTap } from "../../utils/haptics";
-import { useSessionHistory } from "../hooks/useSession";
-import { SessionHistoryCard } from "./SessionHistoryCard";
+import React, { useState, useMemo } from 'react';
+import { View, Text, Pressable, ScrollView, TextInput } from 'react-native';
+import { buttonTap } from '../../utils/haptics';
+import { useSessionHistory } from '../hooks/useSession';
+import { SessionHistoryCard } from './SessionHistoryCard';
 import {
   filterHistory,
   computeStats,
   formatDuration,
-} from "./session-history-helpers";
-import { styles } from "./SessionHistory.styles";
+} from './session-history-helpers';
+import { styles } from './SessionHistory.styles';
 
 interface SessionHistoryProps {
   userId: string;
-  onSelectSession?: (entry: import("../types").SessionHistoryEntry) => void;
+  onSelectSession?: (entry: import('../types').SessionHistoryEntry) => void;
 }
 
 export const SessionHistory: React.FC<SessionHistoryProps> = ({
@@ -20,13 +20,13 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
   onSelectSession,
 }) => {
   const { history, isLoading } = useSessionHistory(userId, 50);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
   const [filterStatus, setFilterStatus] = useState<
-    "ALL" | "COMPLETED" | "ABANDONED" | "FAILED"
-  >("ALL");
+    'ALL' | 'COMPLETED' | 'ABANDONED' | 'FAILED'
+  >('ALL');
   const [timeRange, setTimeRange] = useState<
-    "ALL" | "TODAY" | "WEEK" | "MONTH"
-  >("ALL");
+    'ALL' | 'TODAY' | 'WEEK' | 'MONTH'
+  >('ALL');
 
   const filteredHistory = useMemo(
     () => filterHistory(history, searchQuery, filterStatus, timeRange),
@@ -52,7 +52,7 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
           <Text style={styles.statBoxLabel}>Sessions</Text>
         </View>
         <View style={styles.statBox}>
-          <Text style={[styles.statBoxValue, { color: "#4caf50" }]}>
+          <Text style={[styles.statBoxValue, { color: '#4caf50' }]}>
             {stats.completed}
           </Text>
           <Text style={styles.statBoxLabel}>Completed</Text>
@@ -81,7 +81,7 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
       {}
       <View style={styles.filterRow}>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {(["ALL", "TODAY", "WEEK", "MONTH"] as const).map((range) => (
+          {(['ALL', 'TODAY', 'WEEK', 'MONTH'] as const).map((range) => (
             <Pressable
               key={range}
               style={({ pressed }) => [
@@ -109,7 +109,7 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
 
       <View style={styles.filterRow}>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {(["ALL", "COMPLETED", "ABANDONED", "FAILED"] as const).map(
+          {(['ALL', 'COMPLETED', 'ABANDONED', 'FAILED'] as const).map(
             (status) => (
               <Pressable
                 key={status}

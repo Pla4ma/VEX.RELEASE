@@ -1,9 +1,9 @@
-import React from "react";
+import React from 'react';
 
-import Animated, { FadeInUp } from "react-native-reanimated";
+import Animated, { FadeInUp } from 'react-native-reanimated';
 
-import { Box, Button } from "../../../components/primitives";
-import type { Theme } from "../../../theme/types";
+import { Box, Button } from '../../../components/primitives';
+import type { Theme } from '../../../theme/types';
 
 export function SessionCompleteFooter({
   bottomInset,

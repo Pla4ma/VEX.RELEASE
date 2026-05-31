@@ -3,7 +3,7 @@ import type {
   InterruptionRecord,
   AntiCheatFlag,
   RecoveryRecord,
-} from "../types";
+} from '../types';
 
 export interface SessionAnalyticsEvent {
   eventName: string;

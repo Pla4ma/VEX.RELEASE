@@ -3,46 +3,46 @@ import {
   getFeatureAvailability,
   type FeatureAccessMap,
   type FeatureKey,
-} from "../features/liveops-config/feature-access";
-import { resolveVexExperience } from "../features/personalization/service";
-import { resolveFirstWeekExperience } from "../features/personalization/first-week-service";
+} from '../features/liveops-config/feature-access';
+import { resolveVexExperience } from '../features/personalization/service';
+import { resolveFirstWeekExperience } from '../features/personalization/first-week-service';
 import type {
   BehaviorStats,
   FeatureAvailabilitySnapshot,
   VexPersonalizationProfile,
-} from "../features/personalization/types";
-import type { FirstWeekResolverInput } from "../features/personalization/first-week-schemas";
+} from '../features/personalization/types';
+import type { FirstWeekResolverInput } from '../features/personalization/first-week-schemas';
 
 export { getFeatureAvailability };
 export type { FeatureAccessMap, FeatureKey };
 
 export function profile(
-  motivationStyle: VexPersonalizationProfile["motivationStyle"],
+  motivationStyle: VexPersonalizationProfile['motivationStyle'],
   overrides: Partial<VexPersonalizationProfile> = {},
 ): VexPersonalizationProfile {
   return {
-    primaryGoal: motivationStyle === "study_focused" ? "study" : "work",
+    primaryGoal: motivationStyle === 'study_focused' ? 'study' : 'work',
     motivationStyle,
-    preferredTone: motivationStyle === "intense" ? "direct" : "soft",
+    preferredTone: motivationStyle === 'intense' ? 'direct' : 'soft',
     gamificationIntensity:
-      motivationStyle === "game_like" || motivationStyle === "intense"
-        ? "strong"
-        : "minimal",
+      motivationStyle === 'game_like' || motivationStyle === 'intense'
+        ? 'strong'
+        : 'minimal',
     coachMode:
-      motivationStyle === "study_focused"
-        ? "study_tutor"
-        : motivationStyle === "intense"
-          ? "tactical"
-          : motivationStyle === "game_like"
-            ? "game_guide"
-            : motivationStyle === "coach_led"
-              ? "mentor"
-              : "reflection",
+      motivationStyle === 'study_focused'
+        ? 'study_tutor'
+        : motivationStyle === 'intense'
+          ? 'tactical'
+          : motivationStyle === 'game_like'
+            ? 'game_guide'
+            : motivationStyle === 'coach_led'
+              ? 'mentor'
+              : 'reflection',
     studyLayerName:
-      motivationStyle === "study_focused" ? "Study OS" : "Deep Work Plan",
+      motivationStyle === 'study_focused' ? 'Study OS' : 'Deep Work Plan',
     defaultSessionDuration: 25,
-    defaultSessionMode: motivationStyle === "study_focused" ? "STUDY" : "FOCUS",
-    userStage: "new",
+    defaultSessionMode: motivationStyle === 'study_focused' ? 'STUDY' : 'FOCUS',
+    userStage: 'new',
     ...overrides,
   };
 }
@@ -50,7 +50,7 @@ export function profile(
 export function stats(overrides: Partial<BehaviorStats> = {}): BehaviorStats {
   return {
     abandonedSessionDurations: [],
-    bossChallengeEngagement: "none",
+    bossChallengeEngagement: 'none',
     coachInteractions: 0,
     comebackSessions: 0,
     completedSessionDurations: [],
@@ -73,7 +73,7 @@ export const avail: FeatureAvailabilitySnapshot = {
 };
 
 export function experience(
-  style: VexPersonalizationProfile["motivationStyle"],
+  style: VexPersonalizationProfile['motivationStyle'],
   statOverrides: Partial<BehaviorStats> = {},
   featureOverrides: Partial<FeatureAvailabilitySnapshot> = {},
 ) {
@@ -87,7 +87,7 @@ export function firstWeek(
   overrides: Partial<FirstWeekResolverInput> = {},
 ): ReturnType<typeof resolveFirstWeekExperience> {
   return resolveFirstWeekExperience({
-    behaviorStats: { bossEngagement: "none", studyUsageRatio: 0 },
+    behaviorStats: { bossEngagement: 'none', studyUsageRatio: 0 },
     completedSessions: 0,
     daysSinceLastSession: null,
     daysSinceOnboarding: 0,
@@ -97,9 +97,9 @@ export function firstWeek(
       social: false,
       study: true,
     },
-    motivationStyle: "calm",
-    premiumState: "unavailable",
-    primaryGoal: "work",
+    motivationStyle: 'calm',
+    premiumState: 'unavailable',
+    primaryGoal: 'work',
     ...overrides,
   });
 }
@@ -109,18 +109,18 @@ export function accessFor(sessions: number) {
 }
 
 export const HIDDEN_FEATURE_KEYS: FeatureKey[] = [
-  "battle_pass",
-  "squads",
-  "shop",
-  "inventory",
-  "social_tab",
-  "rivals",
-  "rankings",
-  "wagers",
-  "streak_insurance",
-  "gems_prominent",
-  "boss_bounties",
-  "economy_advanced",
+  'battle_pass',
+  'squads',
+  'shop',
+  'inventory',
+  'social_tab',
+  'rivals',
+  'rankings',
+  'wagers',
+  'streak_insurance',
+  'gems_prominent',
+  'boss_bounties',
+  'economy_advanced',
 ];
 
 export function assertFullyHidden(features: FeatureAccessMap, key: FeatureKey) {

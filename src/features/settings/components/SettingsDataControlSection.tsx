@@ -1,9 +1,9 @@
-import React from "react";
-import { View, Text, Pressable, Alert } from "react-native";
-import { SettingItem } from "./SettingItem";
-import { eventBus } from "../../../events";
-import { createSheet } from "@/shared/ui/create-sheet";
-import { launchColors } from "@theme/tokens/launch-colors";
+import React from 'react';
+import { View, Text, Pressable, Alert } from 'react-native';
+import { SettingItem } from './SettingItem';
+import { eventBus } from '../../../events';
+import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
 
 interface SettingsDataControlSectionProps {
   userId: string;
@@ -26,10 +26,10 @@ export function SettingsDataControlSection({
           pressed && { opacity: 0.8 },
         ]}
         onPress={() => {
-          eventBus.publish("analytics:export_requested", {
+          eventBus.publish('analytics:export_requested', {
             jobId: `export_${Date.now()}`,
             userId,
-            format: "json",
+            format: 'json',
           });
         }}
         accessibilityLabel="Export data"
@@ -51,11 +51,11 @@ export function SettingsDataControlSection({
         ]}
         onPress={() => {
           Alert.alert(
-            "Import Data",
-            "Import data from a previous export file.",
+            'Import Data',
+            'Import data from a previous export file.',
             [
-              { text: "Cancel", style: "cancel" },
-              { text: "Select File", style: "default" },
+              { text: 'Cancel', style: 'cancel' },
+              { text: 'Select File', style: 'default' },
             ],
           );
         }}
@@ -80,20 +80,20 @@ export function SettingsDataControlSection({
           ]}
           onPress={() => {
             Alert.alert(
-              "Delete All Data?",
-              "This will permanently delete all your data. This action cannot be undone.",
+              'Delete All Data?',
+              'This will permanently delete all your data. This action cannot be undone.',
               [
-                { text: "Cancel", style: "cancel" },
+                { text: 'Cancel', style: 'cancel' },
                 {
-                  text: "Delete",
-                  style: "destructive",
+                  text: 'Delete',
+                  style: 'destructive',
                   onPress: () => {
                     Alert.alert(
-                      "Final Confirmation",
+                      'Final Confirmation',
                       'Type "DELETE" to permanently delete all data.',
                       [
-                        { text: "Cancel", style: "cancel" },
-                        { text: "Delete Forever", style: "destructive" },
+                        { text: 'Cancel', style: 'cancel' },
+                        { text: 'Delete Forever', style: 'destructive' },
                       ],
                     );
                   },
@@ -119,9 +119,9 @@ const styles = createSheet({
     paddingHorizontal: 16,
   },
   actionRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     paddingVertical: 16,
     borderBottomWidth: 1,
     borderBottomColor: launchColors.hex_f3f4f6,
@@ -143,7 +143,7 @@ const styles = createSheet({
   },
   dangerTitle: {
     fontSize: 14,
-    fontWeight: "600",
+    fontWeight: '600',
     color: launchColors.hex_ef4444,
     marginBottom: 12,
   },
@@ -152,11 +152,11 @@ const styles = createSheet({
     paddingVertical: 12,
     paddingHorizontal: 16,
     borderRadius: 8,
-    alignItems: "center",
+    alignItems: 'center',
   },
   dangerActionText: {
     color: launchColors.hex_ffffff,
     fontSize: 14,
-    fontWeight: "600",
+    fontWeight: '600',
   },
 });

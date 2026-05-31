@@ -1,10 +1,10 @@
-import React from "react";
-import { Text, View } from "react-native";
+import React from 'react';
+import { Text, View } from 'react-native';
 
-import { useTheme } from "@/theme";
-import { spacing } from "@/theme/tokens/spacing";
-import { sizing } from "@/theme/tokens/sizing";
-import type { PendingAction } from "./types";
+import { useTheme } from '@/theme';
+import { spacing } from '@/theme/tokens/spacing';
+import { sizing } from '@/theme/tokens/sizing';
+import type { PendingAction } from './types';
 
 export function QueueSection({
   title,
@@ -21,8 +21,8 @@ export function QueueSection({
     <View style={{ marginBottom: spacing[3] }}>
       <View
         style={{
-          flexDirection: "row",
-          alignItems: "center",
+          flexDirection: 'row',
+          alignItems: 'center',
           marginBottom: spacing[2],
         }}
       >
@@ -49,8 +49,8 @@ export function QueueSection({
           key={item.id}
           style={{
             minHeight: sizing.touchTarget.min,
-            flexDirection: "row",
-            alignItems: "center",
+            flexDirection: 'row',
+            alignItems: 'center',
             paddingVertical: spacing[2],
             paddingLeft: spacing[4],
           }}

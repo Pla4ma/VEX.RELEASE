@@ -1,35 +1,35 @@
-import { deleteAccount } from "../service";
-import { deleteCurrentUser, signOutCurrentSession } from "../repository";
-import { revenueCatService } from "../../../shared/monetization/revenuecat-service";
+import { deleteAccount } from '../service';
+import { deleteCurrentUser, signOutCurrentSession } from '../repository';
+import { revenueCatService } from '../../../shared/monetization/revenuecat-service';
 import {
   getDefaultStorageAdapter,
   getMMKVStorageAdapter,
   getSecureStorage,
   SecureStorageKeys,
-} from "../../../persistence";
+} from '../../../persistence';
 import {
   captureAccountDeletionError,
   trackAccountDeletionCompleted,
   trackAccountDeletionStarted,
-} from "../analytics";
-import { emitAccountDeletionCompleted } from "../events";
+} from '../analytics';
+import { emitAccountDeletionCompleted } from '../events';
 
-jest.mock("../repository");
-jest.mock("../analytics", () => ({
+jest.mock('../repository');
+jest.mock('../analytics', () => ({
   captureAccountDeletionError: jest.fn(),
   trackAccountDeletionCompleted: jest.fn(),
   trackAccountDeletionStarted: jest.fn(),
 }));
-jest.mock("../events", () => ({ emitAccountDeletionCompleted: jest.fn() }));
-jest.mock("../../../config/sentry", () => ({ clearSentryUser: jest.fn() }));
-jest.mock("../../../shared/monetization/revenuecat-service", () => ({
+jest.mock('../events', () => ({ emitAccountDeletionCompleted: jest.fn() }));
+jest.mock('../../../config/sentry', () => ({ clearSentryUser: jest.fn() }));
+jest.mock('../../../shared/monetization/revenuecat-service', () => ({
   revenueCatService: { clearUserId: jest.fn() },
 }));
-jest.mock("../../../persistence", () => ({
+jest.mock('../../../persistence', () => ({
   SecureStorageKeys: {
-    AUTH_TOKEN: "vex_auth_token",
-    REFRESH_TOKEN: "vex_refresh_token",
-    USER_CREDENTIALS: "vex_user_credentials",
+    AUTH_TOKEN: 'vex_auth_token',
+    REFRESH_TOKEN: 'vex_refresh_token',
+    USER_CREDENTIALS: 'vex_user_credentials',
   },
   getDefaultStorageAdapter: jest.fn(),
   getMMKVStorageAdapter: jest.fn(),
@@ -79,7 +79,7 @@ const zustandStorageMock: ReturnType<typeof getMMKVStorageAdapter> = {
   setItem: jest.fn(),
 };
 
-describe("account deletion — comprehensive", () => {
+describe('account deletion — comprehensive', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     deleteCurrentUserMock.mockResolvedValue(undefined);
@@ -93,19 +93,19 @@ describe("account deletion — comprehensive", () => {
     getMMKVStorageAdapterMock.mockReturnValue(zustandStorageMock);
   });
 
-  it("deletes Supabase auth and clears all local state", async () => {
+  it('deletes Supabase auth and clears all local state', async () => {
     const result = await deleteAccount({
-      userId: "550e8400-e29b-41d4-a716-446655440001",
+      userId: '550e8400-e29b-41d4-a716-446655440001',
     });
 
     expect(deleteCurrentUserMock).toHaveBeenCalledTimes(1);
     expect(clearUserIdMock).toHaveBeenCalledTimes(1);
     expect(getDefaultStorageAdapter().clear).toHaveBeenCalledTimes(1);
     expect(getMMKVStorageAdapter().removeItem).toHaveBeenCalledWith(
-      "auth-storage",
+      'auth-storage',
     );
     expect(result).toMatchObject({
-      userId: "550e8400-e29b-41d4-a716-446655440001",
+      userId: '550e8400-e29b-41d4-a716-446655440001',
       localStorageCleared: true,
       secureStorageCleared: true,
       monetizationSignedOut: true,
@@ -113,30 +113,30 @@ describe("account deletion — comprehensive", () => {
     expect(result.deletedAt).toBeGreaterThan(0);
   });
 
-  it("clears all secure storage keys", async () => {
+  it('clears all secure storage keys', async () => {
     await deleteAccount({
-      userId: "550e8400-e29b-41d4-a716-446655440002",
+      userId: '550e8400-e29b-41d4-a716-446655440002',
     });
 
-    expect(secureStorageMock.removeItem).toHaveBeenCalledWith("vex_auth_token");
+    expect(secureStorageMock.removeItem).toHaveBeenCalledWith('vex_auth_token');
     expect(secureStorageMock.removeItem).toHaveBeenCalledWith(
-      "vex_refresh_token",
+      'vex_refresh_token',
     );
     expect(secureStorageMock.removeItem).toHaveBeenCalledWith(
-      "vex_user_credentials",
+      'vex_user_credentials',
     );
   });
 
-  it("tracks deletion start and completion analytics", async () => {
-    const userId = "550e8400-e29b-41d4-a716-446655440003";
+  it('tracks deletion start and completion analytics', async () => {
+    const userId = '550e8400-e29b-41d4-a716-446655440003';
     await deleteAccount({ userId });
 
     expect(trackAccountDeletionStarted).toHaveBeenCalledWith(userId);
     expect(trackAccountDeletionCompleted).toHaveBeenCalledWith(userId);
   });
 
-  it("emits deletion completed event", async () => {
-    const userId = "550e8400-e29b-41d4-a716-446655440004";
+  it('emits deletion completed event', async () => {
+    const userId = '550e8400-e29b-41d4-a716-446655440004';
     await deleteAccount({ userId });
 
     expect(emitAccountDeletionCompleted).toHaveBeenCalledTimes(1);
@@ -146,22 +146,22 @@ describe("account deletion — comprehensive", () => {
     expect(emittedResult.localStorageCleared).toBe(true);
   });
 
-  it("throws AccountDeletionServiceError when Supabase deletion fails", async () => {
-    deleteCurrentUserMock.mockRejectedValue(new Error("Supabase RPC error"));
+  it('throws AccountDeletionServiceError when Supabase deletion fails', async () => {
+    deleteCurrentUserMock.mockRejectedValue(new Error('Supabase RPC error'));
 
     await expect(
       deleteAccount({
-        userId: "550e8400-e29b-41d4-a716-446655440005",
+        userId: '550e8400-e29b-41d4-a716-446655440005',
       }),
-    ).rejects.toThrow("Account deletion failed during deleteAccount");
+    ).rejects.toThrow('Account deletion failed during deleteAccount');
     expect(captureAccountDeletionError).toHaveBeenCalled();
   });
 
-  it("continues even if monetization sign out fails", async () => {
-    clearUserIdMock.mockRejectedValue(new Error("RevenueCat error"));
+  it('continues even if monetization sign out fails', async () => {
+    clearUserIdMock.mockRejectedValue(new Error('RevenueCat error'));
 
     const result = await deleteAccount({
-      userId: "550e8400-e29b-41d4-a716-446655440006",
+      userId: '550e8400-e29b-41d4-a716-446655440006',
     });
 
     expect(result.monetizationSignedOut).toBe(false);
@@ -169,23 +169,23 @@ describe("account deletion — comprehensive", () => {
     expect(result.secureStorageCleared).toBe(true);
   });
 
-  it("continues even if session sign out fails", async () => {
-    signOutCurrentSessionMock.mockRejectedValue(new Error("Sign out error"));
+  it('continues even if session sign out fails', async () => {
+    signOutCurrentSessionMock.mockRejectedValue(new Error('Sign out error'));
 
     const result = await deleteAccount({
-      userId: "550e8400-e29b-41d4-a716-446655440007",
+      userId: '550e8400-e29b-41d4-a716-446655440007',
     });
 
     expect(result.localStorageCleared).toBe(true);
     expect(captureAccountDeletionError).toHaveBeenCalledWith(
       expect.any(Error),
-      "signOutCurrentSession",
+      'signOutCurrentSession',
     );
   });
 
-  it("rejects invalid input", async () => {
+  it('rejects invalid input', async () => {
     await expect(
-      deleteAccount({ userId: "not-a-uuid" }),
+      deleteAccount({ userId: 'not-a-uuid' }),
     ).rejects.toThrow();
   });
 });

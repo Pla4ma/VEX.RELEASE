@@ -3,7 +3,7 @@ import {
   withRepeat,
   withSequence,
   withTiming,
-} from "react-native-reanimated";
+} from 'react-native-reanimated';
 
 export interface AtRiskBannerProps {
   /** Hours remaining until streak breaks (null if not at risk) */
@@ -25,40 +25,40 @@ export function getUrgencyMessage(
 ): {
   headline: string;
   subtext: string;
-  tone: "critical" | "urgent" | "warning";
+  tone: 'critical' | 'urgent' | 'warning';
 } {
   if (hoursRemaining === null || hoursRemaining === undefined) {
     return {
-      headline: "Streak Safe",
-      subtext: "No urgent action needed",
-      tone: "warning",
+      headline: 'Streak Safe',
+      subtext: 'No urgent action needed',
+      tone: 'warning',
     };
   }
   if (hoursRemaining <= 1) {
     return {
       headline: `⚠️ FINAL HOUR — ${streakDays}-Day Streak!`,
-      subtext: "Start a session NOW to save your streak",
-      tone: "critical",
+      subtext: 'Start a session NOW to save your streak',
+      tone: 'critical',
     };
   }
   if (hoursRemaining <= 4) {
     return {
       headline: `🔥 ${hoursRemaining}h Left to Save ${streakDays}-Day Streak`,
-      subtext: "Your streak expires soon — start a focus session",
-      tone: "urgent",
+      subtext: 'Your streak expires soon — start a focus session',
+      tone: 'urgent',
     };
   }
   if (hoursRemaining <= 8) {
     return {
       headline: `⏰ ${hoursRemaining} Hours Remaining`,
       subtext: `Protect your ${streakDays}-day streak before bed`,
-      tone: "warning",
+      tone: 'warning',
     };
   }
   return {
-    headline: "Streak at Risk",
+    headline: 'Streak at Risk',
     subtext: `${hoursRemaining} hours remaining`,
-    tone: "warning",
+    tone: 'warning',
   };
 }
 

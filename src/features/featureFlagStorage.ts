@@ -1,10 +1,10 @@
-import type { StorageManager } from "../persistence/StorageManager";
-import type { FeatureFlag, FeatureFlagValue } from "./FeatureFlagService";
-import { eventBus } from "../events";
-import { getApiClient } from "../api/client";
-import { createDebugger } from "../utils/debug";
+import type { StorageManager } from '../persistence/StorageManager';
+import type { FeatureFlag, FeatureFlagValue } from './FeatureFlagService';
+import { eventBus } from '../events';
+import { getApiClient } from '../api/client';
+import { createDebugger } from '../utils/debug';
 
-const debug = createDebugger("features");
+const debug = createDebugger('features');
 
 export async function loadFlagsFromStorage(
   storage: StorageManager,
@@ -19,7 +19,7 @@ export async function loadFlagsFromStorage(
       });
     }
   } catch (error) {
-    debug.error("Failed to load feature flags:", error as Error);
+    debug.error('Failed to load feature flags:', error as Error);
   }
 }
 
@@ -32,7 +32,7 @@ export async function saveFlagsToStorage(
     const data = Object.fromEntries(flags.entries());
     await storage.setJSON(storageKey, data);
   } catch (error) {
-    debug.error("Failed to save feature flags:", error as Error);
+    debug.error('Failed to save feature flags:', error as Error);
   }
 }
 
@@ -51,7 +51,7 @@ export async function loadOverridesFromStorage(
       });
     }
   } catch (error) {
-    debug.error("Failed to load flag overrides:", error as Error);
+    debug.error('Failed to load flag overrides:', error as Error);
   }
 }
 
@@ -64,7 +64,7 @@ export async function saveOverridesToStorage(
     const data = Object.fromEntries(overrides.entries());
     await storage.setJSON(`${storageKey}-overrides`, data);
   } catch (error) {
-    debug.error("Failed to save flag overrides:", error as Error);
+    debug.error('Failed to save flag overrides:', error as Error);
   }
 }
 
@@ -74,14 +74,14 @@ export async function fetchRemoteFlags(
   storageKey: string,
   lastFetchAt: number,
 ): Promise<{ hasChanges: boolean; lastFetchAt: number }> {
-  debug.debug("Fetching remote feature flags...");
+  debug.debug('Fetching remote feature flags...');
   const api = getApiClient();
   const remoteFlags = await api.get<Record<string, FeatureFlag>>(
-    "/features/flags",
+    '/features/flags',
     { deduplicate: true, retries: 2 },
   );
   let hasChanges = false;
-  if (!remoteFlags) return { hasChanges: false, lastFetchAt };
+  if (!remoteFlags) {return { hasChanges: false, lastFetchAt };}
   Object.entries(remoteFlags).forEach(([key, remoteFlag]) => {
     const existingFlag = flags.get(key);
     if (!existingFlag) {
@@ -90,7 +90,7 @@ export async function fetchRemoteFlags(
         createdAt: Date.now(),
       });
       hasChanges = true;
-      debug.info("New feature flag added: %s", key);
+      debug.info('New feature flag added: %s', key);
     } else if (remoteFlag.updatedAt > existingFlag.updatedAt) {
       flags.set(key, {
         ...existingFlag,
@@ -100,8 +100,8 @@ export async function fetchRemoteFlags(
         updatedAt: Date.now(),
       });
       hasChanges = true;
-      debug.info("Feature flag updated: %s", key);
-      eventBus.publish("feature:updated", {
+      debug.info('Feature flag updated: %s', key);
+      eventBus.publish('feature:updated', {
         key,
         oldValue: existingFlag.value,
         newValue: remoteFlag.value,

@@ -1,27 +1,27 @@
-import { withScreenErrorBoundary } from "../shared/ui/components/ScreenErrorBoundary";
-import React, { useEffect, useMemo } from "react";
-import { StyleSheet } from "react-native";
+import { withScreenErrorBoundary } from '../shared/ui/components/ScreenErrorBoundary';
+import React, { useEffect, useMemo } from 'react';
+import { StyleSheet } from 'react-native';
 import {
   useNavigation,
   useRoute,
   type RouteProp,
-} from "@react-navigation/native";
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+} from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { Box } from "../components/primitives/Box";
-import type { ExtendedRootStackParams } from "../navigation/types";
-import { useSessionUIStore } from "../store/session-state";
-import { useTheme } from "../theme";
-import { Particle } from "./ComebackParticles";
-import { capture, RetentionEvents } from "../shared/analytics";
-import { ComebackCard } from "./ComebackCard";
+import { Box } from '../components/primitives/Box';
+import type { ExtendedRootStackParams } from '../navigation/types';
+import { useSessionUIStore } from '../store/session-state';
+import { useTheme } from '../theme';
+import { Particle } from './ComebackParticles';
+import { capture, RetentionEvents } from '../shared/analytics';
+import { ComebackCard } from './ComebackCard';
 
 type ComebackNavigationProp = NativeStackNavigationProp<
   ExtendedRootStackParams,
-  "Comeback"
+  'Comeback'
 >;
-type ComebackRoute = RouteProp<ExtendedRootStackParams, "Comeback">;
+type ComebackRoute = RouteProp<ExtendedRootStackParams, 'Comeback'>;
 
 const PARTICLE_COUNT = 20;
 
@@ -66,8 +66,8 @@ export function ComebackScreen(): JSX.Element {
       streak_restore: comebackState.streakRestoreEligible,
     });
     dismissComeback();
-    navigation.replace("SessionStack", {
-      screen: "SessionSetup",
+    navigation.replace('SessionStack', {
+      screen: 'SessionSetup',
       params: {
         comebackMultiplier: comebackState.rewardMultiplier,
         comebackMessage: comebackState.message,
@@ -115,4 +115,4 @@ export function ComebackScreen(): JSX.Element {
   );
 }
 
-export default withScreenErrorBoundary(ComebackScreen, "Comeback");
+export default withScreenErrorBoundary(ComebackScreen, 'Comeback');

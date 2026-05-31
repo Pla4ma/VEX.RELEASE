@@ -1,19 +1,19 @@
-import React from "react";
+import React from 'react';
 
-import { Box } from "../../components/primitives/Box";
-import { Text } from "../../components/primitives/Text";
-import { SessionMode } from "../modes";
+import { Box } from '../../components/primitives/Box';
+import { Text } from '../../components/primitives/Text';
+import { SessionMode } from '../modes';
 
 const MODE_LABELS: Record<SessionMode, string> = {
-  [SessionMode.DEEP_WORK]: "DEEP WORK",
-  [SessionMode.CHALLENGE]: "CHALLENGE",
-  [SessionMode.LIGHT_FOCUS]: "LIGHT FOCUS",
-  [SessionMode.FLOW]: "FLOW",
-  [SessionMode.STUDY]: "STUDY",
-  [SessionMode.CREATIVE]: "CREATIVE",
-  [SessionMode.SPRINT]: "SPRINT",
-  [SessionMode.RECOVERY]: "RECOVERY",
-  [SessionMode.STARTER]: "STARTER",
+  [SessionMode.DEEP_WORK]: 'DEEP WORK',
+  [SessionMode.CHALLENGE]: 'CHALLENGE',
+  [SessionMode.LIGHT_FOCUS]: 'LIGHT FOCUS',
+  [SessionMode.FLOW]: 'FLOW',
+  [SessionMode.STUDY]: 'STUDY',
+  [SessionMode.CREATIVE]: 'CREATIVE',
+  [SessionMode.SPRINT]: 'SPRINT',
+  [SessionMode.RECOVERY]: 'RECOVERY',
+  [SessionMode.STARTER]: 'STARTER',
 };
 
 type ModeIndicatorBadgeProps = {
@@ -26,7 +26,7 @@ export function ModeIndicatorBadge({
   mode,
 }: ModeIndicatorBadgeProps): JSX.Element {
   const suffix =
-    mode === SessionMode.SPRINT && chainCount ? ` ${chainCount}/4` : "";
+    mode === SessionMode.SPRINT && chainCount ? ` ${chainCount}/4` : '';
 
   return (
     <Box

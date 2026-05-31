@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect } from 'react';
 import {
   Easing,
   useAnimatedStyle,
@@ -8,7 +8,7 @@ import {
   withSpring,
   withTiming,
   type AnimatedStyle,
-} from "react-native-reanimated";
+} from 'react-native-reanimated';
 
 export function usePulseStyle(enabled = true): AnimatedStyle {
   const opacity = useSharedValue(enabled ? 0.5 : 1);

@@ -1,6 +1,6 @@
-import React from "react";
-import { Box, Text, Button } from "@components/primitives";
-import { useTheme } from "../../../theme";
+import React from 'react';
+import { Box, Text, Button } from '@components/primitives';
+import { useTheme } from '../../../theme';
 
 export function formatTime(seconds: number): string {
   const hours = Math.floor(seconds / 3600);
@@ -55,13 +55,13 @@ export function PatternBar({ label, isStrong }: { label: string; isStrong: boole
         {label}
       </Text>
       <Box
-        bg={isStrong ? "success" : "warning"}
+        bg={isStrong ? 'success' : 'warning'}
         borderRadius="full"
         px="sm"
         py="xs"
       >
         <Text variant="caption" color="text.inverse">
-          {isStrong ? "Strongest" : "Weakest"}
+          {isStrong ? 'Strongest' : 'Weakest'}
         </Text>
       </Box>
     </Box>
@@ -81,7 +81,7 @@ export function PremiumLock({ onOpenPaywall }: { onOpenPaywall: () => void }) {
       <Text
         variant="body"
         color="textMuted"
-        style={{ textAlign: "center", marginBottom: theme.spacing[2] }}
+        style={{ textAlign: 'center', marginBottom: theme.spacing[2] }}
       >
         Premium insight available
       </Text>

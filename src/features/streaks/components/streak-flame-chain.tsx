@@ -1,25 +1,25 @@
-import React, { useEffect } from "react";
-import { View, Text } from "react-native";
+import React, { useEffect } from 'react';
+import { View, Text } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withRepeat,
   withSequence,
   withTiming,
-} from "react-native-reanimated";
-import { launchColors } from "@theme/tokens/launch-colors";
-import { styles } from "./streak-flame-chain.styles";
+} from 'react-native-reanimated';
+import { launchColors } from '@theme/tokens/launch-colors';
+import { styles } from './streak-flame-chain.styles';
 import {
   getRiskColor,
   getFlameColor,
   getMilestoneReward,
-} from "./streak-flame-chain.utils";
+} from './streak-flame-chain.utils';
 
 interface StreakFlameChainProps {
   currentStreak: number;
   longestStreak: number;
   isAtRisk: boolean;
-  riskLevel: "NONE" | "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
+  riskLevel: 'NONE' | 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   streakDays: Array<{
     date: string;
     completed: boolean;
@@ -165,7 +165,7 @@ export const StreakFlameChain: React.FC<StreakFlameChainProps> = ({
             <View style={styles.milestoneCard}>
               <Text style={styles.milestoneEmojiSmall}>🎯</Text>
               <Text style={styles.milestoneText}>
-                {remaining} day{remaining !== 1 ? "s" : ""} until{" "}
+                {remaining} day{remaining !== 1 ? 's' : ''} until{' '}
                 {nextMilestone}-day milestone!
               </Text>
               <Text style={styles.milestoneReward}>

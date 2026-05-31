@@ -1,5 +1,5 @@
-import * as service from "./service";
-import { generateAndSendMessage } from "./message-helpers";
+import * as service from './service';
+import { generateAndSendMessage } from './message-helpers';
 
 export async function handleLevelUp(payload: {
   userId: string;
@@ -7,7 +7,7 @@ export async function handleLevelUp(payload: {
   newLevel: number;
   xpGained: number;
 }): Promise<void> {
-  await generateAndSendMessage(payload.userId, "MILESTONE_HYPE", {
+  await generateAndSendMessage(payload.userId, 'MILESTONE_HYPE', {
     milestoneLevel: payload.newLevel,
     oldLevel: payload.oldLevel,
   });
@@ -19,7 +19,7 @@ export async function handleLevelUp(payload: {
   }
   await service.processBehaviorSignal({
     userId: payload.userId,
-    signalType: "DIFFICULTY_PREFERENCE",
+    signalType: 'DIFFICULTY_PREFERENCE',
     value: payload.newLevel,
   });
 }
@@ -33,7 +33,7 @@ export async function handleChallengeExpiring(payload: {
 }): Promise<void> {
   await service.evaluateInterventions({
     userId: payload.userId,
-    trigger: "CHALLENGE_EXPIRING",
+    trigger: 'CHALLENGE_EXPIRING',
     context: {
       challengeId: payload.challengeId,
       challengeName: payload.challengeName,
@@ -50,7 +50,7 @@ export async function handleChallengeCompleted(payload: {
 }): Promise<void> {
   await service.processBehaviorSignal({
     userId: payload.userId,
-    signalType: "CHALLENGE_COMPLETION_RATE",
+    signalType: 'CHALLENGE_COMPLETION_RATE',
     value: 1.0,
     metadata: {
       challengeId: payload.challengeId,
@@ -68,7 +68,7 @@ export async function handleBossTimeoutWarning(payload: {
 }): Promise<void> {
   await service.evaluateInterventions({
     userId: payload.userId,
-    trigger: "BOSS_TIMEOUT_WARNING",
+    trigger: 'BOSS_TIMEOUT_WARNING',
     context: {
       bossId: payload.bossId,
       bossName: payload.bossName,
@@ -86,7 +86,7 @@ export async function handleUserReturned(payload: {
   if (payload.daysInactive >= 3) {
     await service.processBehaviorSignal({
       userId: payload.userId,
-      signalType: "COMEBACK_VELOCITY",
+      signalType: 'COMEBACK_VELOCITY',
       value: 1,
       metadata: { daysInactive: payload.daysInactive },
     });
@@ -105,13 +105,13 @@ export async function handleDailyCheck(payload: {
   if (hoursSinceLastSession > 24) {
     await service.evaluateInterventions({
       userId: payload.userId,
-      trigger: "NO_SESSION_24H",
+      trigger: 'NO_SESSION_24H',
       context: { hoursSinceLastSession, streakDays: payload.streakDays },
     });
   }
   await service.createRecommendation({
     userId: payload.userId,
-    type: payload.streakDays > 0 ? "STREAK_PROTECTION" : "OPTIMAL_TIME",
+    type: payload.streakDays > 0 ? 'STREAK_PROTECTION' : 'OPTIMAL_TIME',
     context: { hoursSinceLastSession, streakDays: payload.streakDays },
   });
 }

@@ -4,7 +4,7 @@ import {
   MAX_STREAK_BONUS_MULTIPLIER,
   MAX_QUALITY_BONUS,
   getNumberFromMetadata,
-} from "./types";
+} from './types';
 
 // ── Source-Specific Dispatch ────────────────────────────────────────────────
 
@@ -16,16 +16,16 @@ export function validateSourceSpecific(
   result: ValidationResult<XPTransaction>,
 ): void {
   switch (transaction.source) {
-    case "SESSION_COMPLETE":
+    case 'SESSION_COMPLETE':
       validateSessionXP(transaction, userHistory, result);
       break;
-    case "STREAK_BONUS":
+    case 'STREAK_BONUS':
       validateStreakBonus(transaction, result);
       break;
-    case "SESSION_QUALITY":
+    case 'SESSION_QUALITY':
       validateQualityBonus(transaction, result);
       break;
-    case "BOSS_DAMAGE":
+    case 'BOSS_DAMAGE':
       validateBossDamageXP(transaction, result);
       break;
   }
@@ -46,9 +46,9 @@ function validateSessionXP(
 
   if (!session) {
     result.warnings.push({
-      field: "sourceId",
-      message: "No matching session found for session XP",
-      code: "ORPHAN_SESSION_XP",
+      field: 'sourceId',
+      message: 'No matching session found for session XP',
+      code: 'ORPHAN_SESSION_XP',
     });
     return;
   }
@@ -58,10 +58,10 @@ function validateSessionXP(
 
   if (xpPerMinute > maxXPPerMinute) {
     result.violations.push({
-      type: "SUSPICIOUS",
-      field: "amount",
+      type: 'SUSPICIOUS',
+      field: 'amount',
       message: `XP per minute ratio too high: ${xpPerMinute.toFixed(1)} XP/min`,
-      severity: "HIGH",
+      severity: 'HIGH',
       details: {
         xpPerMinute,
         maxAllowed: maxXPPerMinute,
@@ -73,10 +73,10 @@ function validateSessionXP(
 
   if (session.duration < 60000 && transaction.amount > 100) {
     result.violations.push({
-      type: "SUSPICIOUS",
-      field: "amount",
-      message: "High XP for very short session",
-      severity: "MEDIUM",
+      type: 'SUSPICIOUS',
+      field: 'amount',
+      message: 'High XP for very short session',
+      severity: 'MEDIUM',
       details: { duration: session.duration, xp: transaction.amount },
     });
     result.riskScore += 15;
@@ -89,14 +89,14 @@ function validateStreakBonus(
   transaction: XPTransaction,
   result: ValidationResult<XPTransaction>,
 ): void {
-  const multiplier = getNumberFromMetadata(transaction.metadata, "multiplier");
+  const multiplier = getNumberFromMetadata(transaction.metadata, 'multiplier');
 
   if (multiplier !== undefined && multiplier > MAX_STREAK_BONUS_MULTIPLIER) {
     result.violations.push({
-      type: "POLICY",
-      field: "metadata.multiplier",
+      type: 'POLICY',
+      field: 'metadata.multiplier',
       message: `Streak multiplier ${multiplier} exceeds maximum ${MAX_STREAK_BONUS_MULTIPLIER}`,
-      severity: "MEDIUM",
+      severity: 'MEDIUM',
       details: { multiplier, max: MAX_STREAK_BONUS_MULTIPLIER },
     });
     result.riskScore += 20;
@@ -111,15 +111,15 @@ function validateQualityBonus(
 ): void {
   const multiplier = getNumberFromMetadata(
     transaction.metadata,
-    "qualityMultiplier",
+    'qualityMultiplier',
   );
 
   if (multiplier !== undefined && multiplier > MAX_QUALITY_BONUS) {
     result.violations.push({
-      type: "POLICY",
-      field: "metadata.qualityMultiplier",
+      type: 'POLICY',
+      field: 'metadata.qualityMultiplier',
       message: `Quality multiplier ${multiplier} exceeds maximum ${MAX_QUALITY_BONUS}`,
-      severity: "MEDIUM",
+      severity: 'MEDIUM',
       details: { multiplier, max: MAX_QUALITY_BONUS },
     });
     result.riskScore += 20;
@@ -132,7 +132,7 @@ function validateBossDamageXP(
   transaction: XPTransaction,
   result: ValidationResult<XPTransaction>,
 ): void {
-  const damage = getNumberFromMetadata(transaction.metadata, "damage");
+  const damage = getNumberFromMetadata(transaction.metadata, 'damage');
 
   if (damage !== undefined) {
     const expectedXP = damage / 10;
@@ -140,10 +140,10 @@ function validateBossDamageXP(
 
     if (ratio > 3) {
       result.violations.push({
-        type: "SUSPICIOUS",
-        field: "amount",
+        type: 'SUSPICIOUS',
+        field: 'amount',
         message: `Boss XP ratio suspicious: ${ratio.toFixed(1)}x expected`,
-        severity: "HIGH",
+        severity: 'HIGH',
         details: { damage, expectedXP, actualXP: transaction.amount, ratio },
       });
       result.riskScore += 25;

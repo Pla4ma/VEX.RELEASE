@@ -1,45 +1,45 @@
-import React from "react";
+import React from 'react';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withSpring,
-} from "react-native-reanimated";
-import { Box, Card, Text } from "../../../components/primitives";
+} from 'react-native-reanimated';
+import { Box, Card, Text } from '../../../components/primitives';
 import {
   type CompanionElement,
   type CompanionMood,
   type CompanionPhase,
   type CompanionState,
-} from "../../../features/companion/types";
-import { getEvolutionProgress } from "../../../features/companion/session-storage";
+} from '../../../features/companion/types';
+import { getEvolutionProgress } from '../../../features/companion/session-storage';
 
 export const PHASE_NAMES: Record<CompanionPhase, string> = {
-  AWAKENED: "Awakened",
-  EGG: "Egg",
-  HATCHING: "Hatching",
-  MATURE: "Mature",
-  TRANSCENDENT: "Transcendent",
-  YOUNG: "Young",
+  AWAKENED: 'Awakened',
+  EGG: 'Egg',
+  HATCHING: 'Hatching',
+  MATURE: 'Mature',
+  TRANSCENDENT: 'Transcendent',
+  YOUNG: 'Young',
 };
 
 export const PHASE_ORDER: CompanionPhase[] = [
-  "EGG",
-  "HATCHING",
-  "YOUNG",
-  "MATURE",
-  "AWAKENED",
-  "TRANSCENDENT",
+  'EGG',
+  'HATCHING',
+  'YOUNG',
+  'MATURE',
+  'AWAKENED',
+  'TRANSCENDENT',
 ];
 
 export const ELEMENT_LORE: Record<CompanionElement, string> = {
   FLAME:
-    "Born from determination. Flame companions thrive on intense focus sessions.",
+    'Born from determination. Flame companions thrive on intense focus sessions.',
   LUMINA:
-    "Pure and exacting. Lumina companions illuminate the path to mastery.",
-  TERRA: "Grounded in steady progress. Terra companions reward patient focus.",
-  VOID: "Mysterious and intensive. Void companions draw power from deep focus states.",
-  WAVE: "Flowing with consistency. Wave companions excel in sustained calm focus.",
-  ZEPHYR: "Swift and adaptable. Zephyr companions shine in quick focus bursts.",
+    'Pure and exacting. Lumina companions illuminate the path to mastery.',
+  TERRA: 'Grounded in steady progress. Terra companions reward patient focus.',
+  VOID: 'Mysterious and intensive. Void companions draw power from deep focus states.',
+  WAVE: 'Flowing with consistency. Wave companions excel in sustained calm focus.',
+  ZEPHYR: 'Swift and adaptable. Zephyr companions shine in quick focus bursts.',
 };
 
 export function StatCard({
@@ -82,7 +82,7 @@ export function PhaseProgressBar({
             width={32}
             height={32}
             borderRadius="full"
-            bg={index <= currentIndex ? "primary.500" : "background.tertiary"}
+            bg={index <= currentIndex ? 'primary.500' : 'background.tertiary'}
           />
           <Text
             variant="caption"
@@ -103,7 +103,7 @@ export function ProgressToNext({
 }: {
   companion: CompanionState;
 }): JSX.Element {
-  if (companion.phase === "TRANSCENDENT") {
+  if (companion.phase === 'TRANSCENDENT') {
     return (
       <Text variant="bodySmall" color="text.secondary">
         Maximum evolution reached.
@@ -112,7 +112,7 @@ export function ProgressToNext({
   }
   return (
     <Text variant="bodySmall" color="text.secondary">
-      {Math.floor(getEvolutionProgress(companion) * 100)}% to{" "}
+      {Math.floor(getEvolutionProgress(companion) * 100)}% to{' '}
       {PHASE_NAMES[getNextPhase(companion.phase)]}
     </Text>
   );

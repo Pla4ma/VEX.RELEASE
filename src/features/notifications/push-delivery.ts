@@ -1,8 +1,8 @@
-import * as Notifications from "expo-notifications";
-import { z } from "zod";
-import { createDebugger } from "../../utils/debug";
-const debug = createDebugger("notifications:push");
-export type NotificationPriority = "low" | "normal" | "high" | "critical";
+import * as Notifications from 'expo-notifications';
+import { z } from 'zod';
+import { createDebugger } from '../../utils/debug';
+const debug = createDebugger('notifications:push');
+export type NotificationPriority = 'low' | 'normal' | 'high' | 'critical';
 export interface PushNotificationPayload {
   title: string;
   body: string;
@@ -21,18 +21,18 @@ const PushNotificationPayloadSchema = z.object({
   title: z.string(),
   body: z.string(),
   data: z.record(z.unknown()).optional(),
-  priority: z.enum(["low", "normal", "high", "critical"]).optional(),
+  priority: z.enum(['low', 'normal', 'high', 'critical']).optional(),
   badge: z.number().optional(),
   sound: z.union([z.string(), z.boolean()]).optional(),
   vibrate: z.boolean().optional(),
 });
 export async function requestPushPermissions(): Promise<boolean> {
   const { status: existingStatus } = await Notifications.getPermissionsAsync();
-  if (existingStatus === "granted") {
+  if (existingStatus === 'granted') {
     return true;
   }
   const { status } = await Notifications.requestPermissionsAsync();
-  return status === "granted";
+  return status === 'granted';
 }
 export async function getPushToken(): Promise<string | null> {
   try {
@@ -40,7 +40,7 @@ export async function getPushToken(): Promise<string | null> {
     return token.data;
   } catch (error) {
     debug.error(
-      "Failed to get push token",
+      'Failed to get push token',
       error instanceof Error ? error : undefined,
     );
     return null;
@@ -60,7 +60,7 @@ export async function sendPushNotification(
     },
     trigger: null,
   });
-  debug.info("Sent push notification: %s", notificationId);
+  debug.info('Sent push notification: %s', notificationId);
   return notificationId;
 }
 export async function schedulePushNotification(
@@ -82,7 +82,7 @@ export async function schedulePushNotification(
     },
   });
   debug.info(
-    "Scheduled push notification: %s for %s",
+    'Scheduled push notification: %s for %s',
     notificationId,
     triggerDate.toISOString(),
   );
@@ -92,11 +92,11 @@ export async function cancelPushNotification(
   notificationId: string,
 ): Promise<void> {
   await Notifications.cancelScheduledNotificationAsync(notificationId);
-  debug.info("Cancelled push notification: %s", notificationId);
+  debug.info('Cancelled push notification: %s', notificationId);
 }
 export async function cancelAllPushNotifications(): Promise<void> {
   await Notifications.cancelAllScheduledNotificationsAsync();
-  debug.info("Cancelled all scheduled push notifications");
+  debug.info('Cancelled all scheduled push notifications');
 }
 export async function getScheduledPushNotifications(): Promise<
   Notifications.NotificationRequest[]
@@ -122,11 +122,11 @@ export async function presentInAppNotification(
 }
 export async function setBadgeCount(count: number): Promise<void> {
   await Notifications.setBadgeCountAsync(count);
-  debug.info("Set badge count: %d", count);
+  debug.info('Set badge count: %d', count);
 }
 export async function clearBadgeCount(): Promise<void> {
   await Notifications.setBadgeCountAsync(0);
-  debug.info("Cleared badge count");
+  debug.info('Cleared badge count');
 }
 export function handleNotificationResponse(
   response: Notifications.NotificationResponse,
@@ -139,22 +139,22 @@ export function handleNotificationResponse(
 ): void {
   const { notification } = response;
   const data = notification.request.content.data;
-  debug.info("Handling notification response: %s", data?.type);
+  debug.info('Handling notification response: %s', data?.type);
   switch (data?.type) {
-    case "SESSION_REMINDER":
+    case 'SESSION_REMINDER':
       handlers.onSessionReminder?.();
       break;
-    case "STREAK_RISK":
+    case 'STREAK_RISK':
       handlers.onStreakRisk?.();
       break;
-    case "BOSS_ESCAPE":
+    case 'BOSS_ESCAPE':
       handlers.onBossEscape?.();
       break;
-    case "SOCIAL":
+    case 'SOCIAL':
       handlers.onSocialInteraction?.();
       break;
     default:
-      debug.warn("Unknown notification type: %s", data?.type);
+      debug.warn('Unknown notification type: %s', data?.type);
   }
 }
 Notifications.setNotificationHandler({

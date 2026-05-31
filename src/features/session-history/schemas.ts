@@ -1,11 +1,11 @@
-import { z } from "zod";
+import { z } from 'zod';
 
-import { SessionModeSchema } from "../../session/modes";
+import { SessionModeSchema } from '../../session/modes';
 import {
   SessionConfigSchema,
   SessionStatusSchema,
   SessionSummarySchema,
-} from "../../session/types";
+} from '../../session/types';
 
 export const SupabaseSessionRowSchema = z.object({
   id: z.string().min(1),
@@ -44,7 +44,7 @@ export const SessionHistoryItemSchema = z.object({
   plannedDurationSeconds: z.number().min(0),
   effectiveDurationSeconds: z.number().min(0),
   finalScore: z.number().min(0),
-  grade: z.enum(["S", "A", "B", "C", "D", "F"]),
+  grade: z.enum(['S', 'A', 'B', 'C', 'D', 'F']),
   streakMaintained: z.boolean(),
   summary: SessionSummarySchema.nullable(),
 });

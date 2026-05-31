@@ -1,6 +1,6 @@
-import React from "react";
-import { Box, Text } from "@/components/primitives";
-import { useTheme } from "@/theme";
+import React from 'react';
+import { Box, Text } from '@/components/primitives';
+import { useTheme } from '@/theme';
 
 export const AchievementsHeader: React.FC<{
   total: number;
@@ -44,7 +44,7 @@ export const AchievementsHeader: React.FC<{
           height={8}
           borderRadius={4}
           bg={theme.colors.background.tertiary}
-          style={{ overflow: "hidden" }}
+          style={{ overflow: 'hidden' }}
         >
           <Box
             height="100%"

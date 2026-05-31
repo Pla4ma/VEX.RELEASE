@@ -1,24 +1,24 @@
-import { MMKV } from "react-native-mmkv";
-import { captureSilentFailure } from "../../utils/silent-failure";
-import { getMmkvEncryptionKeySync } from "../../persistence/mmkv-key";
+import { MMKV } from 'react-native-mmkv';
+import { captureSilentFailure } from '../../utils/silent-failure';
+import { getMmkvEncryptionKeySync } from '../../persistence/mmkv-key';
 
 let _storage: MMKV | null = null;
 function getStorage(): MMKV {
   if (!_storage) {
-    _storage = new MMKV({ id: "session-persistence", encryptionKey: getMmkvEncryptionKeySync() });
+    _storage = new MMKV({ id: 'session-persistence', encryptionKey: getMmkvEncryptionKeySync() });
   }
   return _storage;
 }
 
 const KEYS = {
-  SESSION_HISTORY: "session:history",
+  SESSION_HISTORY: 'session:history',
 } as const;
 
 export interface SessionHistoryEntry {
   sessionId: string;
   startedAt: number;
   endedAt: number;
-  status: "COMPLETED" | "ABANDONED" | "FAILED" | "RECOVERED";
+  status: 'COMPLETED' | 'ABANDONED' | 'FAILED' | 'RECOVERED';
   progress: number;
 }
 
@@ -38,9 +38,9 @@ export function getSessionHistory(): SessionHistoryEntry[] {
     return JSON.parse(data);
   } catch (error) {
     captureSilentFailure(error, {
-      feature: "session",
-      operation: "safe-fallback",
-      type: "data",
+      feature: 'session',
+      operation: 'safe-fallback',
+      type: 'data',
     });
     return [];
   }

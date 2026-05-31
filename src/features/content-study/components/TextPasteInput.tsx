@@ -1,11 +1,11 @@
-import React from "react";
-import { Pressable, TextInput, View } from "react-native";
-import Animated from "react-native-reanimated";
+import React from 'react';
+import { Pressable, TextInput, View } from 'react-native';
+import Animated from 'react-native-reanimated';
 
-import { Text } from "../../../components/primitives/Text";
-import type { TextPasteInputProps } from "../types";
-import { CONTENT_STUDY_CONSTANTS } from "../types";
-import { useTextPasteInput } from "./useTextPasteInput";
+import { Text } from '../../../components/primitives/Text';
+import type { TextPasteInputProps } from '../types';
+import { CONTENT_STUDY_CONSTANTS } from '../types';
+import { useTextPasteInput } from './useTextPasteInput';
 
 export function TextPasteInput({
   value,
@@ -48,7 +48,7 @@ export function TextPasteInput({
           borderRadius: theme.borderRadius.xl,
           borderColor,
           backgroundColor: theme.colors.semantic.inputBackground,
-          position: "relative",
+          position: 'relative',
         }}
       >
         <TextInput
@@ -83,14 +83,14 @@ export function TextPasteInput({
             accessibilityRole="button"
             onPress={clearInput}
             style={{
-              position: "absolute",
+              position: 'absolute',
               top: theme.spacing[3],
               right: theme.spacing[3],
               width: 44,
               height: 44,
               borderRadius: theme.borderRadius.full,
-              alignItems: "center",
-              justifyContent: "center",
+              alignItems: 'center',
+              justifyContent: 'center',
               backgroundColor: theme.colors.semantic.surfaceGlass,
             }}
           >
@@ -104,18 +104,18 @@ export function TextPasteInput({
       {showCharacterCount ? (
         <View
           style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
+            flexDirection: 'row',
+            justifyContent: 'space-between',
             marginTop: theme.spacing[2],
           }}
         >
           <Text
             color={
               isOverLimit
-                ? "error.DEFAULT"
+                ? 'error.DEFAULT'
                 : isUnderMin && showMinLengthIndicator
-                  ? "warning.DEFAULT"
-                  : "text.muted"
+                  ? 'warning.DEFAULT'
+                  : 'text.muted'
             }
             variant="caption"
           >

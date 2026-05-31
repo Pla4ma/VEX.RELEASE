@@ -1,13 +1,13 @@
-import * as Sentry from "@sentry/react-native";
-import { eventBus } from "../../events";
-import { capture } from "../../shared/analytics/analytics-service";
-import { getCompletionSignal } from "../focus-contract/service";
+import * as Sentry from '@sentry/react-native';
+import { eventBus } from '../../events';
+import { capture } from '../../shared/analytics/analytics-service';
+import { getCompletionSignal } from '../focus-contract/service';
 import {
   fetchCurrentFocusScore,
   upsertCurrentFocusScore,
   appendFocusScoreHistory,
-} from "./repository-focus-score";
-import { calculateFocusScoreUpdate } from "./score-algorithm";
+} from './repository-focus-score';
+import { calculateFocusScoreUpdate } from './score-algorithm';
 
 export interface SessionCompletionData {
   grade: string;
@@ -18,26 +18,26 @@ export interface SessionCompletionData {
   completedAt?: string;
 }
 
-function readGrade(grade: string): "S" | "A" | "B" | "C" | "D" {
+function readGrade(grade: string): 'S' | 'A' | 'B' | 'C' | 'D' {
   const g = grade.toUpperCase();
-  if (g === "S" || g === "A" || g === "B" || g === "C" || g === "D") {
+  if (g === 'S' || g === 'A' || g === 'B' || g === 'C' || g === 'D') {
     return g;
   }
-  return "B";
+  return 'B';
 }
 
 function readSessionMode(
   sessionMode: string | undefined,
-): "deep_work" | "recovery" | "starter" | "standard" {
+): 'deep_work' | 'recovery' | 'starter' | 'standard' {
   if (
-    sessionMode === "deep_work" ||
-    sessionMode === "recovery" ||
-    sessionMode === "starter" ||
-    sessionMode === "standard"
+    sessionMode === 'deep_work' ||
+    sessionMode === 'recovery' ||
+    sessionMode === 'starter' ||
+    sessionMode === 'standard'
   ) {
     return sessionMode;
   }
-  return "standard";
+  return 'standard';
 }
 
 function buildSignals(data: SessionCompletionData): {
@@ -48,7 +48,7 @@ function buildSignals(data: SessionCompletionData): {
   recency: number;
 } {
   const quality =
-    typeof data.quality === "number"
+    typeof data.quality === 'number'
       ? Math.max(0, Math.min(100, data.quality))
       : 70;
   const streakDays = data.streakDays ?? 0;
@@ -59,7 +59,7 @@ function buildSignals(data: SessionCompletionData): {
     streakStability: Math.max(0, Math.min(100, 45 + streakDays * 3)),
     sessionQuality: quality,
     intentionalDifficulty:
-      readSessionMode(data.sessionMode) === "deep_work" ? 72 : 55,
+      readSessionMode(data.sessionMode) === 'deep_work' ? 72 : 55,
     recency: Math.max(0, Math.min(100, 30 + streakDays * 5)),
   };
 }
@@ -80,7 +80,7 @@ export async function updateFocusScoreFromSessionCompletion(
     const result = calculateFocusScoreUpdate({
       userId,
       previousScore,
-      eventType: "session:completed",
+      eventType: 'session:completed',
       grade: readGrade(sessionData.grade),
       sessionMode: readSessionMode(sessionData.sessionMode),
       contractCompletionRate: contractSignal.rate,
@@ -106,7 +106,7 @@ export async function updateFocusScoreFromSessionCompletion(
       reason: result.historyPoint.reason,
     });
 
-    eventBus.publish("focus-identity:score_updated", {
+    eventBus.publish('focus-identity:score_updated', {
       userId,
       previousScore: result.previousScore,
       newScore: result.newScore,
@@ -114,7 +114,7 @@ export async function updateFocusScoreFromSessionCompletion(
       band: result.band,
       timestamp: Date.now(),
     });
-    capture("vex_focus_score_changed", {
+    capture('vex_focus_score_changed', {
       previous_score: result.previousScore,
       new_score: result.newScore,
       delta: result.delta,
@@ -123,8 +123,8 @@ export async function updateFocusScoreFromSessionCompletion(
   } catch (error) {
     Sentry.captureException(error, {
       tags: {
-        feature: "focus-identity",
-        operation: "updateFocusScoreFromSessionCompletion",
+        feature: 'focus-identity',
+        operation: 'updateFocusScoreFromSessionCompletion',
       },
     });
     throw error;

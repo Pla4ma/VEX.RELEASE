@@ -1,10 +1,10 @@
-import type { BaseSessionCompletionEvent } from "./base-event-types";
+import type { BaseSessionCompletionEvent } from './base-event-types';
 
 export interface SessionSystemMaintenanceEvent
   extends BaseSessionCompletionEvent {
-  type: "session_system_maintenance";
+  type: 'session_system_maintenance';
   data: {
-    maintenanceType: "scheduled" | "emergency" | "upgrade" | "migration";
+    maintenanceType: 'scheduled' | 'emergency' | 'upgrade' | 'migration';
     startTime: Date;
     endTime?: Date;
     duration?: number;
@@ -21,16 +21,16 @@ export interface SessionSystemMaintenanceEvent
 }
 
 export interface SessionSystemErrorEvent extends BaseSessionCompletionEvent {
-  type: "session_system_error";
+  type: 'session_system_error';
   data: {
     errorType:
-      | "completion_error"
-      | "reward_error"
-      | "analytics_error"
-      | "system_error";
+      | 'completion_error'
+      | 'reward_error'
+      | 'analytics_error'
+      | 'system_error';
     errorCode: string;
     errorMessage: string;
-    severity: "low" | "medium" | "high" | "critical";
+    severity: 'low' | 'medium' | 'high' | 'critical';
     context: {
       service: string;
       operation: string;

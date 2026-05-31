@@ -1,4 +1,4 @@
-export type BossTier = "COMMON" | "UNCOMMON" | "RARE" | "EPIC" | "LEGENDARY";
+export type BossTier = 'COMMON' | 'UNCOMMON' | 'RARE' | 'EPIC' | 'LEGENDARY';
 
 export interface BossPreviewCardProps {
   bossName: string;

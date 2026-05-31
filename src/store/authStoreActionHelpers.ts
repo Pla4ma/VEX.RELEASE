@@ -1,12 +1,12 @@
 import {
   clearSentryUser,
   setSentryUser,
-} from "../config/sentry";
-import type { User } from "../types/models";
-import { loadUserProfile } from "./authProfileStorage";
-import { deinitializeServicesAfterLogout } from "./authStoreIntegrations";
-import { initializeServicesAfterAuth } from "./authStoreIntegrations";
-import type { AuthStateSetter } from "./authStoreTypes";
+} from '../config/sentry';
+import type { User } from '../types/models';
+import { loadUserProfile } from './authProfileStorage';
+import { deinitializeServicesAfterLogout } from './authStoreIntegrations';
+import { initializeServicesAfterAuth } from './authStoreIntegrations';
+import type { AuthStateSetter } from './authStoreTypes';
 
 export function toError(error: unknown): Error {
   return error instanceof Error ? error : new Error(String(error));
@@ -52,7 +52,7 @@ export function handleAuthCheckError(
   set: AuthStateSetter,
   err: unknown,
 ): void {
-  const message = err instanceof Error ? err.message : "Auth check failed";
+  const message = err instanceof Error ? err.message : 'Auth check failed';
   const isNetworkError = /network|timeout|fetch|unreachable|abort/i.test(
     message,
   );

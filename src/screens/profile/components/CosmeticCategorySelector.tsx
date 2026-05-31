@@ -1,17 +1,17 @@
-import React from "react";
-import { Pressable } from "react-native";
-import Animated from "react-native-reanimated";
-import { useTheme } from "../../../theme";
-import { Box, Text } from "../../../components/primitives";
-import { Icon } from "../../../icons";
-import { launchColors } from "@theme/tokens/launch-colors";
-import type { CosmeticType } from "./CosmeticPreviewCard";
+import React from 'react';
+import { Pressable } from 'react-native';
+import Animated from 'react-native-reanimated';
+import { useTheme } from '../../../theme';
+import { Box, Text } from '../../../components/primitives';
+import { Icon } from '../../../icons';
+import { launchColors } from '@theme/tokens/launch-colors';
+import type { CosmeticType } from './CosmeticPreviewCard';
 
 export const TYPE_CONFIG: Record<CosmeticType, { label: string; icon: string }> = {
-  "avatar-frame": { label: "Avatar Frames", icon: "circle" },
-  badge: { label: "Badges", icon: "award" },
-  background: { label: "Backgrounds", icon: "image" },
-  title: { label: "Titles", icon: "type" },
+  'avatar-frame': { label: 'Avatar Frames', icon: 'circle' },
+  badge: { label: 'Badges', icon: 'award' },
+  background: { label: 'Backgrounds', icon: 'image' },
+  title: { label: 'Titles', icon: 'type' },
 };
 
 export const CosmeticCategoryHeader: React.FC<{
@@ -96,9 +96,9 @@ export const CosmeticEquipBar: React.FC<{
               : theme.colors.background.tertiary,
           paddingVertical: 16,
           borderRadius: 12,
-          alignItems: "center",
-          flexDirection: "row",
-          justifyContent: "center",
+          alignItems: 'center',
+          flexDirection: 'row',
+          justifyContent: 'center',
           opacity:
             !selectedId ||
             selectedId === currentEquippedId ||
@@ -118,7 +118,7 @@ export const CosmeticEquipBar: React.FC<{
               borderRadius: 10,
               borderWidth: 2,
               borderColor: launchColors.hex_fff,
-              borderTopColor: "transparent",
+              borderTopColor: 'transparent',
             }}
           />
         ) : (
@@ -127,16 +127,16 @@ export const CosmeticEquipBar: React.FC<{
         <Text
           style={{
             color: launchColors.hex_fff,
-            fontWeight: "700",
+            fontWeight: '700',
             fontSize: 16,
             marginLeft: 8,
           }}
         >
           {isEquipping
-            ? "Equipping..."
+            ? 'Equipping...'
             : selectedId === currentEquippedId
-              ? "Already Equipped"
-              : "Equip Item"}
+              ? 'Already Equipped'
+              : 'Equip Item'}
         </Text>
       </Pressable>
     </Box>

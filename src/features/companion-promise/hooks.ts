@@ -1,28 +1,28 @@
-import * as Sentry from "@sentry/react-native";
-import { useEffect, useRef } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useToast } from "../../shared/ui/components/Toast";
-import { useAuthStore } from "../../store";
-import { useNetInfo } from "../../network";
-import { QueryKeys } from "../../api/QueryProvider";
-import { trackPromiseViewed } from "./analytics";
-import * as service from "./service";
-import type { CompanionPromise, CompanionPromiseHomeState } from "./types";
+import * as Sentry from '@sentry/react-native';
+import { useEffect, useRef } from 'react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useToast } from '../../shared/ui/components/Toast';
+import { useAuthStore } from '../../store';
+import { useNetInfo } from '../../network';
+import { QueryKeys } from '../../api/QueryProvider';
+import { trackPromiseViewed } from './analytics';
+import * as service from './service';
+import type { CompanionPromise, CompanionPromiseHomeState } from './types';
 
 export const companionPromiseKeys = {
-  all: ["companion-promise"] as const,
+  all: ['companion-promise'] as const,
   home: (userId: string) =>
-    [...companionPromiseKeys.all, "home", userId] as const,
+    [...companionPromiseKeys.all, 'home', userId] as const,
 };
 
 function getTimeZone(): string {
-  return Intl.DateTimeFormat().resolvedOptions().timeZone ?? "UTC";
+  return Intl.DateTimeFormat().resolvedOptions().timeZone ?? 'UTC';
 }
 
 function hasPromise(
   state: CompanionPromiseHomeState,
 ): state is Extract<CompanionPromiseHomeState, { promise: CompanionPromise }> {
-  return "promise" in state;
+  return 'promise' in state;
 }
 
 export function useCompanionPromise(): {
@@ -40,10 +40,10 @@ export function useCompanionPromise(): {
   const { show } = useToast();
   const viewedRef = useRef<string | null>(null);
   const query = useQuery({
-    queryKey: companionPromiseKeys.home(userId ?? "none"),
+    queryKey: companionPromiseKeys.home(userId ?? 'none'),
     queryFn: async () => {
       if (!userId) {
-        return { kind: "hidden", showOfflineBanner: false } as const;
+        return { kind: 'hidden', showOfflineBanner: false } as const;
       }
       return service.getHomePromiseState(userId, isOnline, getTimeZone());
     },
@@ -57,7 +57,7 @@ export function useCompanionPromise(): {
       query.data.promise.id !== viewedRef.current
     ) {
       viewedRef.current = query.data.promise.id;
-      trackPromiseViewed(query.data.promise, "home");
+      trackPromiseViewed(query.data.promise, 'home');
     }
   }, [query.data]);
 
@@ -69,7 +69,7 @@ export function useCompanionPromise(): {
       queryKey: companionPromiseKeys.home(userId),
     });
     await queryClient.invalidateQueries({
-      queryKey: ["companion-memories", userId],
+      queryKey: ['companion-memories', userId],
     });
     await queryClient.invalidateQueries({ queryKey: QueryKeys.session });
   };
@@ -81,13 +81,13 @@ export function useCompanionPromise(): {
     },
     onError: (error) => {
       Sentry.captureException(error, {
-        tags: { feature: "companion-promise", operation: "keep" },
+        tags: { feature: 'companion-promise', operation: 'keep' },
       });
       show({
-        type: "error",
-        title: "Recovery did not save",
+        type: 'error',
+        title: 'Recovery did not save',
         message:
-          "Start small anyway. We will sync when the thread is steady again.",
+          'Start small anyway. We will sync when the thread is steady again.',
       });
     },
   });
@@ -98,19 +98,19 @@ export function useCompanionPromise(): {
     },
     onError: (error) => {
       Sentry.captureException(error, {
-        tags: { feature: "companion-promise", operation: "dismiss" },
+        tags: { feature: 'companion-promise', operation: 'dismiss' },
       });
       show({
-        type: "error",
-        title: "Could not dismiss recovery",
-        message: "Try again when your connection settles.",
+        type: 'error',
+        title: 'Could not dismiss recovery',
+        message: 'Try again when your connection settles.',
       });
     },
   });
 
   const fallbackData = isOnline
-    ? ({ kind: "hidden", showOfflineBanner: false } as const)
-    : ({ kind: "offline", showOfflineBanner: true } as const);
+    ? ({ kind: 'hidden', showOfflineBanner: false } as const)
+    : ({ kind: 'offline', showOfflineBanner: true } as const);
   const rerunQuery = (): void => {
     const refresh = query.refetch;
     void refresh();

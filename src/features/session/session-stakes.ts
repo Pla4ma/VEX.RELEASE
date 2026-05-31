@@ -7,7 +7,7 @@ export {
   type SessionStakes,
   type UserStakesPreference,
   type StakesSessionResult,
-} from "./session-stakes-schemas";
+} from './session-stakes-schemas';
 
 export {
   getStakesForDifficulty,
@@ -15,9 +15,9 @@ export {
   getRecommendedDifficulty,
   calculateStakesResult,
   recordStakesResult,
-} from "./session-stakes-service";
+} from './session-stakes-service';
 
 export {
   getDifficultyDisplay,
   formatStakesSummary,
-} from "./session-stakes-display";
+} from './session-stakes-display';

@@ -3,14 +3,14 @@
  * These are alternative palettes required for accessibility, not UI styling.
  */
 
-import { launchColors } from "@theme/tokens/launch-colors";
-import type { ColorBlindType, ColorBlindPalette } from "./types";
+import { launchColors } from '@theme/tokens/launch-colors';
+import type { ColorBlindType, ColorBlindPalette } from './types';
 
 export const COLOR_BLIND_PALETTES: Record<ColorBlindType, ColorBlindPalette> = {
   none: {
-    type: "none",
-    name: "Standard",
-    description: "Default color vision",
+    type: 'none',
+    name: 'Standard',
+    description: 'Default color vision',
     colors: {
       primary: launchColors.hex_4299e1,
       secondary: launchColors.hex_9f7aea,
@@ -19,12 +19,12 @@ export const COLOR_BLIND_PALETTES: Record<ColorBlindType, ColorBlindPalette> = {
       error: launchColors.hex_e53e3e,
       info: launchColors.hex_38b2ac,
     },
-    patterns: { success: "✓", warning: "⚠", error: "✕" },
+    patterns: { success: '✓', warning: '⚠', error: '✕' },
   },
   protanopia: {
-    type: "protanopia",
-    name: "Protanopia (Red-Blind)",
-    description: "Cannot perceive red light",
+    type: 'protanopia',
+    name: 'Protanopia (Red-Blind)',
+    description: 'Cannot perceive red light',
     colors: {
       primary: launchColors.hex_3182ce,
       secondary: launchColors.hex_805ad5,
@@ -33,12 +33,12 @@ export const COLOR_BLIND_PALETTES: Record<ColorBlindType, ColorBlindPalette> = {
       error: launchColors.hex_9b2c2c,
       info: launchColors.hex_2c7a7b,
     },
-    patterns: { success: "●", warning: "◐", error: "○" },
+    patterns: { success: '●', warning: '◐', error: '○' },
   },
   deuteranopia: {
-    type: "deuteranopia",
-    name: "Deuteranopia (Green-Blind)",
-    description: "Cannot perceive green light",
+    type: 'deuteranopia',
+    name: 'Deuteranopia (Green-Blind)',
+    description: 'Cannot perceive green light',
     colors: {
       primary: launchColors.hex_2b6cb0,
       secondary: launchColors.hex_6b46c1,
@@ -47,12 +47,12 @@ export const COLOR_BLIND_PALETTES: Record<ColorBlindType, ColorBlindPalette> = {
       error: launchColors.hex_742a2a,
       info: launchColors.hex_234e52,
     },
-    patterns: { success: "●", warning: "◐", error: "○" },
+    patterns: { success: '●', warning: '◐', error: '○' },
   },
   tritanopia: {
-    type: "tritanopia",
-    name: "Tritanopia (Blue-Blind)",
-    description: "Cannot perceive blue light",
+    type: 'tritanopia',
+    name: 'Tritanopia (Blue-Blind)',
+    description: 'Cannot perceive blue light',
     colors: {
       primary: launchColors.hex_2c5282,
       secondary: launchColors.hex_553c9a,
@@ -61,12 +61,12 @@ export const COLOR_BLIND_PALETTES: Record<ColorBlindType, ColorBlindPalette> = {
       error: launchColors.hex_9b2c2c,
       info: launchColors.hex_2c7a7b,
     },
-    patterns: { success: "●", warning: "◐", error: "○" },
+    patterns: { success: '●', warning: '◐', error: '○' },
   },
   achromatopsia: {
-    type: "achromatopsia",
-    name: "Achromatopsia (Total Color Blind)",
-    description: "Cannot perceive any color",
+    type: 'achromatopsia',
+    name: 'Achromatopsia (Total Color Blind)',
+    description: 'Cannot perceive any color',
     colors: {
       primary: launchColors.hex_4a5568,
       secondary: launchColors.hex_718096,
@@ -75,19 +75,19 @@ export const COLOR_BLIND_PALETTES: Record<ColorBlindType, ColorBlindPalette> = {
       error: launchColors.hex_1a202c,
       info: launchColors.hex_718096,
     },
-    patterns: { success: "●", warning: "◐", error: "○" },
+    patterns: { success: '●', warning: '◐', error: '○' },
   },
 };
 
 export function getAccessibleColor(
-  colorType: "primary" | "secondary" | "success" | "warning" | "error" | "info",
+  colorType: 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'info',
   colorBlindMode: ColorBlindType,
 ): string {
   return COLOR_BLIND_PALETTES[colorBlindMode].colors[colorType];
 }
 
 export function getStatusPattern(
-  status: "success" | "warning" | "error",
+  status: 'success' | 'warning' | 'error',
   colorBlindMode: ColorBlindType,
 ): string {
   return COLOR_BLIND_PALETTES[colorBlindMode].patterns[status];

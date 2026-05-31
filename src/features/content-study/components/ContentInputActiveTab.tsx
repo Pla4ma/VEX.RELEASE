@@ -1,17 +1,17 @@
-import React from "react";
+import React from 'react';
 
 import {
   ExtractionProgress,
   PdfUploader,
   TextPasteInput,
   YouTubeInput,
-} from "../components";
-import type { ContentSourceType, InputTab } from "../types";
+} from '../components';
+import type { ContentSourceType, InputTab } from '../types';
 
 const TAB_TO_CONTENT_TYPE: Record<InputTab, ContentSourceType> = {
-  paste: "PASTE",
-  pdf: "PDF",
-  youtube: "YOUTUBE",
+  paste: 'PASTE',
+  pdf: 'PDF',
+  youtube: 'YOUTUBE',
 };
 
 interface SelectedFile {
@@ -51,14 +51,14 @@ export function ContentInputActiveTab({
   if (showExtractionProgress) {
     return (
       <ExtractionProgress
-        stage={activeTab === "pdf" ? "uploading" : "processing"}
-        progress={activeTab === "pdf" ? Math.max(uploadProgress, 15) : 30}
+        stage={activeTab === 'pdf' ? 'uploading' : 'processing'}
+        progress={activeTab === 'pdf' ? Math.max(uploadProgress, 15) : 30}
         contentType={TAB_TO_CONTENT_TYPE[activeTab]}
       />
     );
   }
 
-  if (activeTab === "pdf") {
+  if (activeTab === 'pdf') {
     return (
       <PdfUploader
         selectedFile={selectedFile}
@@ -70,7 +70,7 @@ export function ContentInputActiveTab({
     );
   }
 
-  if (activeTab === "youtube") {
+  if (activeTab === 'youtube') {
     return (
       <YouTubeInput
         value={youtubeUrl}

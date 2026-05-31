@@ -4,22 +4,22 @@
  * Premium password recovery flow with Supabase email verification.
  */
 
-import React from "react";
-import { KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import type { NativeStackScreenProps } from "@react-navigation/native-stack";
-import Animated, { FadeInDown } from "react-native-reanimated";
+import React from 'react';
+import { KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import Animated, { FadeInDown } from 'react-native-reanimated';
 
-import { withScreenErrorBoundary } from "../../shared/ui/components/ScreenErrorBoundary";
-import { useTheme } from "../../theme";
-import { Box, Text } from "../../components/primitives";
-import { Button } from "../../components";
-import { Icon } from "../../icons";
-import { FormField } from "../../shared/ui/components/FormField";
-import type { AuthStackParams } from "../../navigation";
-import { useForgotPasswordForm } from "./useForgotPasswordForm";
+import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+import { useTheme } from '../../theme';
+import { Box, Text } from '../../components/primitives';
+import { Button } from '../../components';
+import { Icon } from '../../icons';
+import { FormField } from '../../shared/ui/components/FormField';
+import type { AuthStackParams } from '../../navigation';
+import { useForgotPasswordForm } from './useForgotPasswordForm';
 
-type Props = NativeStackScreenProps<AuthStackParams, "ForgotPassword">;
+type Props = NativeStackScreenProps<AuthStackParams, 'ForgotPassword'>;
 
 export const ForgotPasswordScreen: React.FC<Props> = ({ navigation }) => {
   const { theme } = useTheme();
@@ -29,7 +29,7 @@ export const ForgotPasswordScreen: React.FC<Props> = ({ navigation }) => {
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={{ flex: 1, backgroundColor: theme.colors.background.primary }}
     >
       <ScrollView
@@ -53,7 +53,7 @@ export const ForgotPasswordScreen: React.FC<Props> = ({ navigation }) => {
                   color={theme.colors.text.secondary}
                 />
               }
-              style={{ alignSelf: "flex-start", marginBottom: 24 }}
+              style={{ alignSelf: 'flex-start', marginBottom: 24 }}
               accessibilityLabel="Back to login"
               accessibilityRole="button"
               accessibilityHint="Double tap to activate"
@@ -70,8 +70,8 @@ export const ForgotPasswordScreen: React.FC<Props> = ({ navigation }) => {
                   width: 80,
                   height: 80,
                   borderRadius: 24,
-                  justifyContent: "center",
-                  alignItems: "center",
+                  justifyContent: 'center',
+                  alignItems: 'center',
                   backgroundColor: theme.colors.primary[50],
                 }}
               >
@@ -82,7 +82,7 @@ export const ForgotPasswordScreen: React.FC<Props> = ({ navigation }) => {
                 />
               </View>
               <Text variant="h1" textAlign="center" mt="lg">
-                {isSuccess ? "Email Sent!" : "Reset Password"}
+                {isSuccess ? 'Email Sent!' : 'Reset Password'}
               </Text>
               <Text
                 variant="body"
@@ -92,7 +92,7 @@ export const ForgotPasswordScreen: React.FC<Props> = ({ navigation }) => {
               >
                 {isSuccess
                   ? `We've sent password reset instructions to ${email}`
-                  : "Enter your email and we will send you instructions to reset your password"}
+                  : 'Enter your email and we will send you instructions to reset your password'}
               </Text>
             </Box>
           </Animated.View>
@@ -106,9 +106,9 @@ export const ForgotPasswordScreen: React.FC<Props> = ({ navigation }) => {
                     width: 96,
                     height: 96,
                     borderRadius: 48,
-                    justifyContent: "center",
-                    alignItems: "center",
-                    backgroundColor: theme.colors.success.light + "30",
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    backgroundColor: theme.colors.success.light + '30',
                   }}
                 >
                   <Icon
@@ -190,4 +190,4 @@ export const ForgotPasswordScreen: React.FC<Props> = ({ navigation }) => {
   );
 };
 
-export default withScreenErrorBoundary(ForgotPasswordScreen, "ForgotPassword");
+export default withScreenErrorBoundary(ForgotPasswordScreen, 'ForgotPassword');

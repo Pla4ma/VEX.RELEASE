@@ -5,25 +5,25 @@ import {
   baseLedger,
   baseSummary,
   resetMocks,
-} from "./helpers";
+} from './helpers';
 
-describe("applyCompletionSubsystems", () => {
+describe('applyCompletionSubsystems', () => {
   beforeEach(() => {
     resetMocks();
   });
 
-  it("updates core systems in completion order and enriches the ledger", async () => {
+  it('updates core systems in completion order and enriches the ledger', async () => {
     const result = await applyCompletionSubsystems({
       ledger: baseLedger,
       summary: baseSummary,
     });
 
     expect(mockOrder).toEqual([
-      "focus-identity",
-      "streak",
-      "progression",
-      "rewards",
-      "companion",
+      'focus-identity',
+      'streak',
+      'progression',
+      'rewards',
+      'companion',
     ]);
     expect(result.degradedSystems).toEqual([]);
     expect(result.ledger.streakResult.newDays).toBe(5);
@@ -31,23 +31,23 @@ describe("applyCompletionSubsystems", () => {
       `session-xp:${baseLedger.sessionId}`,
     ]);
     expect(result.ledger.companionReactionId).toBe(
-      "companion-session-complete",
+      'companion-session-complete',
     );
-    expect(result.ledger.dailyMissionResult.status).toBe("progressed");
+    expect(result.ledger.dailyMissionResult.status).toBe('progressed');
     expect(mockAddBreadcrumb).toHaveBeenCalledWith(
-      expect.objectContaining({ message: "vex_session_completed" }),
+      expect.objectContaining({ message: 'vex_session_completed' }),
     );
   });
 
-  it("calls addXP exactly once — ProgressionService owns XP mutation", async () => {
+  it('calls addXP exactly once — ProgressionService owns XP mutation', async () => {
     await applyCompletionSubsystems({
       ledger: baseLedger,
       summary: baseSummary,
     });
-    expect(require("./helpers").mockAddXP).toHaveBeenCalledTimes(1);
-    expect(require("./helpers").mockAddXP).toHaveBeenCalledWith(
+    expect(require('./helpers').mockAddXP).toHaveBeenCalledTimes(1);
+    expect(require('./helpers').mockAddXP).toHaveBeenCalledWith(
       baseLedger.xpDelta,
-      "SESSION_COMPLETE",
+      'SESSION_COMPLETE',
       { sessionId: baseLedger.sessionId },
     );
   });

@@ -10,7 +10,7 @@ export interface WalletSummary {
   gems: number;
 }
 
-export type SpendErrorCode = "INSUFFICIENT_BALANCE" | "INVALID_CURRENCY" | "DB_ERROR";
+export type SpendErrorCode = 'INSUFFICIENT_BALANCE' | 'INVALID_CURRENCY' | 'DB_ERROR';
 
 export interface SpendError {
   code: SpendErrorCode;

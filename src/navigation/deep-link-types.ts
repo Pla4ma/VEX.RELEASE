@@ -1,17 +1,17 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export type DeepLinkPath =
-  | "session"
-  | "boss"
-  | "duels"
-  | "squad"
-  | "profile"
-  | "settings"
-  | "invite"
-  | "study"
-  | "coach"
-  | "shop"
-  | "rescue";
+  | 'session'
+  | 'boss'
+  | 'duels'
+  | 'squad'
+  | 'profile'
+  | 'settings'
+  | 'invite'
+  | 'study'
+  | 'coach'
+  | 'shop'
+  | 'rescue';
 
 export interface DeepLink {
   path: DeepLinkPath;
@@ -26,24 +26,24 @@ export interface ParsedDeepLink {
 }
 
 export const DeepLinkUrlSchema = z.object({
-  scheme: z.enum(["vex", "https"]),
-  host: z.enum(["app.vex.com", "vex.app", "localhost", ""]),
+  scheme: z.enum(['vex', 'https']),
+  host: z.enum(['app.vex.com', 'vex.app', 'localhost', '']),
   path: z.string(),
   queryParams: z.record(z.string()),
 });
 
 export const VALID_DEEP_LINK_PATHS: DeepLinkPath[] = [
-  "session",
-  "boss",
-  "duels",
-  "squad",
-  "profile",
-  "settings",
-  "invite",
-  "study",
-  "coach",
-  "shop",
-  "rescue",
+  'session',
+  'boss',
+  'duels',
+  'squad',
+  'profile',
+  'settings',
+  'invite',
+  'study',
+  'coach',
+  'shop',
+  'rescue',
 ];
 
 export interface DeepLinkHandlers {

@@ -1,5 +1,5 @@
-import { z } from "zod";
-import { LaneProfileSchema } from "../lane-engine/schemas";
+import { z } from 'zod';
+import { LaneProfileSchema } from '../lane-engine/schemas';
 
 export const SessionEvidenceSchema = z
   .object({
@@ -20,24 +20,24 @@ export const PremiumPersonalizationInputSchema = z
     billingConfigured: z.boolean(),
     completedSessions: z.number().int().min(0),
     lane: z
-      .enum(["student", "game_like", "deep_creative", "minimal_normal"])
+      .enum(['student', 'game_like', 'deep_creative', 'minimal_normal'])
       .optional(),
     laneProfile: LaneProfileSchema.optional(),
     primaryGoal: z.enum([
-      "focus",
-      "study",
-      "work",
-      "creative",
-      "personal",
-      "learning",
+      'focus',
+      'study',
+      'work',
+      'creative',
+      'personal',
+      'learning',
     ]),
     motivationStyle: z.enum([
-      "calm",
-      "friendly",
-      "coach_led",
-      "game_like",
-      "intense",
-      "study_focused",
+      'calm',
+      'friendly',
+      'coach_led',
+      'game_like',
+      'intense',
+      'study_focused',
     ]),
     studyUsageRatio: z.number().min(0).max(1),
     hasTriedAdvancedStudy: z.boolean(),
@@ -53,14 +53,14 @@ export const PremiumPersonalizationInputSchema = z
 export const PremiumPersonalizationOutputSchema = z.object({
   canShowPaywall: z.boolean(),
   triggerMoment: z.enum([
-    "hidden_billing_unavailable",
-    "none",
-    "session_value",
-    "advanced_study",
-    "weekly_intelligence",
-    "custom_identity",
-    "deep_coach_memory",
-    "deep_work_plan_personalized",
+    'hidden_billing_unavailable',
+    'none',
+    'session_value',
+    'advanced_study',
+    'weekly_intelligence',
+    'custom_identity',
+    'deep_coach_memory',
+    'deep_work_plan_personalized',
   ]),
   freeVsProMatrix: z.array(
     z.object({ free: z.string().min(1), pro: z.string().min(1) }).strict(),
@@ -80,9 +80,9 @@ export type PremiumPersonalizationOutput = z.infer<
 >;
 
 export const NO_FAKE_BILLING = [
-  "Do not render purchasable plans without RevenueCat packages.",
-  "Do not mark premium active without an active entitlement.",
-  "Do not paywall the basic focus loop.",
-  "Do not sell streak saves, coins, gems, shop power, or paid failure recovery.",
-  "Show unavailable or coming-soon state instead of fake premium.",
+  'Do not render purchasable plans without RevenueCat packages.',
+  'Do not mark premium active without an active entitlement.',
+  'Do not paywall the basic focus loop.',
+  'Do not sell streak saves, coins, gems, shop power, or paid failure recovery.',
+  'Show unavailable or coming-soon state instead of fake premium.',
 ];

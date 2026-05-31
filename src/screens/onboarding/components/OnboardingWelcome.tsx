@@ -1,10 +1,10 @@
-import React from "react";
-import { useWindowDimensions } from "react-native";
-import Animated, { FadeIn, FadeInUp } from "react-native-reanimated";
-import { Box } from "../../../components/primitives/Box";
-import { Button } from "../../../components/primitives/Button";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
+import React from 'react';
+import { useWindowDimensions } from 'react-native';
+import Animated, { FadeIn, FadeInUp } from 'react-native-reanimated';
+import { Box } from '../../../components/primitives/Box';
+import { Button } from '../../../components/primitives/Button';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
 
 interface OnboardingWelcomeProps {
   onContinue: () => void;
@@ -25,7 +25,7 @@ function AdaptivePreview(): JSX.Element {
         borderWidth={2}
         borderColor={theme.colors.primary[300]}
       >
-        <Text fontSize={40}>{"\u2699\uFE0F"}</Text>
+        <Text fontSize={40}>{'\u2699\uFE0F'}</Text>
       </Box>
       <Box width={240} gap="xs">
         <Box flexDirection="row" justifyContent="space-between">
@@ -45,8 +45,8 @@ function AdaptivePreview(): JSX.Element {
           <Animated.View
             entering={FadeIn.duration(800)}
             style={{
-              height: "100%",
-              width: "40%",
+              height: '100%',
+              width: '40%',
               backgroundColor: theme.colors.primary[400],
               borderRadius: 2,
             }}
@@ -54,7 +54,7 @@ function AdaptivePreview(): JSX.Element {
         </Box>
         <Animated.View entering={FadeInUp.delay(800).duration(400)}>
           <Text variant="caption" color="text.tertiary" textAlign="center">
-            Study {"\u2022"} Run {"\u2022"} Project {"\u2022"} Clean
+            Study {'\u2022'} Run {'\u2022'} Project {'\u2022'} Clean
           </Text>
         </Animated.View>
       </Box>
@@ -95,7 +95,7 @@ export function OnboardingWelcome({
               textAlign="center"
               style={{ fontSize: 32, lineHeight: 40 }}
             >
-              {"VEX changes based on\nhow you work."}
+              {'VEX changes based on\nhow you work.'}
             </Text>
             <Text
               variant="body"

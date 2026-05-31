@@ -1,13 +1,13 @@
-import React from "react";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import React from 'react';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import type { ContentStudyStackParamList } from "../features/content-study/types";
+import type { ContentStudyStackParamList } from '../features/content-study/types';
 import {
   ContentInputScreen,
   ContentReviewScreen,
   StudyPlanScreen,
   StudyLibraryScreen,
-} from "../features/content-study/screens";
+} from '../features/content-study/screens';
 
 const Stack = createNativeStackNavigator<ContentStudyStackParamList>();
 

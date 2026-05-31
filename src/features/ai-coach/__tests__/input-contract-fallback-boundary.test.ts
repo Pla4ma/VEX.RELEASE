@@ -1,35 +1,35 @@
-import { describe, expect, it } from "@jest/globals";
+import { describe, expect, it } from '@jest/globals';
 import {
   CoachInputContractSchema,
   createFallbackInsight,
   FORBIDDEN_DATA_FIELDS,
-} from "../input-contract";
-import { createMockCoachInput } from "./input-contract-test-utils";
+} from '../input-contract';
+import { createMockCoachInput } from './input-contract-test-utils';
 
 function testUuid(): string {
-  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (char) => {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (char) => {
     const value = Math.floor(Math.random() * 16);
-    return (char === "x" ? value : 8 + (value % 4)).toString(16);
+    return (char === 'x' ? value : 8 + (value % 4)).toString(16);
   });
 }
 
-describe("Coach input fallback and boundaries", () => {
-  it("handles empty, sparse, sufficient, and streak-only fallback data", () => {
+describe('Coach input fallback and boundaries', () => {
+  it('handles empty, sparse, sufficient, and streak-only fallback data', () => {
     expect(createFallbackInsight({}).canCoach).toBe(false);
 
     const sparse = createFallbackInsight({
       recentSessionGrades: [
         {
-          sessionId: "session-1",
+          sessionId: 'session-1',
           grade: 80,
           duration: 1500,
           completedAt: Date.now(),
-          difficulty: "NORMAL",
+          difficulty: 'NORMAL',
         },
       ],
     });
     expect(sparse.canCoach).toBe(true);
-    expect(sparse.reason).toContain("Limited data");
+    expect(sparse.reason).toContain('Limited data');
 
     expect(
       createFallbackInsight(createMockCoachInput()).fallbackMessage,
@@ -47,7 +47,7 @@ describe("Coach input fallback and boundaries", () => {
     ).toBe(true);
   });
 
-  it("creates mock input with overrides and realistic time context", () => {
+  it('creates mock input with overrides and realistic time context', () => {
     const customInput = createMockCoachInput({
       streakState: {
         currentStreak: 10,
@@ -58,17 +58,17 @@ describe("Coach input fallback and boundaries", () => {
       },
       premiumStatus: {
         isActive: true,
-        tier: "premium",
-        features: ["ai_coach", "advanced_analytics"],
+        tier: 'premium',
+        features: ['ai_coach', 'advanced_analytics'],
       },
     });
 
     expect(customInput.streakState.currentStreak).toBe(10);
-    expect(customInput.premiumStatus.tier).toBe("premium");
+    expect(customInput.premiumStatus.tier).toBe('premium');
     expect(customInput.timeContext.currentHour).toBeLessThanOrEqual(23);
   });
 
-  it("handles maximum and minimum allowed values", () => {
+  it('handles maximum and minimum allowed values', () => {
     const now = Date.now();
     const maxInput = createMockCoachInput({
       recentSessionGrades: Array.from({ length: 10 }, (_, i) => ({
@@ -76,7 +76,7 @@ describe("Coach input fallback and boundaries", () => {
         grade: 100,
         duration: 7200,
         completedAt: Math.floor(now - i * 86400000),
-        difficulty: "PUSH",
+        difficulty: 'PUSH',
       })),
       preferredSessionLengths: Array.from({ length: 5 }, () => 7200),
       completionTimes: [23, 22, 21, 20, 19, 18, 17],
@@ -96,7 +96,7 @@ describe("Coach input fallback and boundaries", () => {
           grade: 0,
           duration: 60,
           completedAt: now,
-          difficulty: "EASY",
+          difficulty: 'EASY',
         },
       ],
       preferredSessionLengths: [60],
@@ -113,20 +113,20 @@ describe("Coach input fallback and boundaries", () => {
     expect(() => CoachInputContractSchema.parse(minInput)).not.toThrow();
   });
 
-  it("contains all required forbidden fields", () => {
+  it('contains all required forbidden fields', () => {
     expect(FORBIDDEN_DATA_FIELDS).toEqual(
       expect.arrayContaining([
-        "rawPrivateNotes",
-        "secrets",
-        "apiKeys",
-        "passwords",
-        "emailAddresses",
-        "phoneNumbers",
-        "realNames",
-        "locationData",
-        "unvalidatedStorageData",
-        "rawUserInput",
-        "piifield",
+        'rawPrivateNotes',
+        'secrets',
+        'apiKeys',
+        'passwords',
+        'emailAddresses',
+        'phoneNumbers',
+        'realNames',
+        'locationData',
+        'unvalidatedStorageData',
+        'rawUserInput',
+        'piifield',
       ]),
     );
   });

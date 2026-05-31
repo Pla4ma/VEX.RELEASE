@@ -1,13 +1,13 @@
-import React from "react";
+import React from 'react';
 import Animated, {
   useAnimatedStyle,
   withRepeat,
   withSequence,
   withSpring,
-} from "react-native-reanimated";
-import { Text } from "../../../components/primitives/Text";
-import { Box } from "../../../components/primitives/Box";
-import { launchColors } from "@theme/tokens/launch-colors";
+} from 'react-native-reanimated';
+import { Text } from '../../../components/primitives/Text';
+import { Box } from '../../../components/primitives/Box';
+import { launchColors } from '@theme/tokens/launch-colors';
 
 export function StreakFlame({ days }: { days: number }): JSX.Element {
   const flameStyle = useAnimatedStyle(() => ({
@@ -25,15 +25,15 @@ export function StreakFlame({ days }: { days: number }): JSX.Element {
     ],
   }));
   const getFlameSize = (): number => {
-    if (days >= 100) return 80;
-    if (days >= 60) return 70;
-    if (days >= 30) return 60;
+    if (days >= 100) {return 80;}
+    if (days >= 60) {return 70;}
+    if (days >= 30) {return 60;}
     return 50;
   };
   const getFlameColor = (): string => {
-    if (days >= 100) return launchColors.hex_f59e0b;
-    if (days >= 60) return launchColors.hex_a855f7;
-    if (days >= 30) return launchColors.hex_3b82f6;
+    if (days >= 100) {return launchColors.hex_f59e0b;}
+    if (days >= 60) {return launchColors.hex_a855f7;}
+    if (days >= 30) {return launchColors.hex_3b82f6;}
     return launchColors.hex_ef4444;
   };
   const size = getFlameSize();
@@ -45,8 +45,8 @@ export function StreakFlame({ days }: { days: number }): JSX.Element {
           height: size * 2,
           borderRadius: size,
           backgroundColor: `${getFlameColor()}30`,
-          justifyContent: "center",
-          alignItems: "center",
+          justifyContent: 'center',
+          alignItems: 'center',
           borderWidth: 3,
           borderColor: getFlameColor(),
         },
