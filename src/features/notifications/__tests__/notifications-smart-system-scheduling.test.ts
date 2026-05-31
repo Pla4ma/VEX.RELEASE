@@ -145,5 +145,4 @@ describe("SmartNotificationSystem", () => {
         // Should not throw
       });
     });
-  });
 });

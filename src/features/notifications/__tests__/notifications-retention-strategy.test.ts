@@ -2,6 +2,7 @@
  * Tests for: retention-strategy
  */
 
+jest.mock("../repository/retention");
 import * as retentionRepo from "../repository/retention";
 import {
   scheduleOnboardingNotifications,

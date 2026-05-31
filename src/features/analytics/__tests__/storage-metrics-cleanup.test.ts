@@ -6,18 +6,20 @@ import {
 import { getSupabaseClient } from "../../../config/supabase";
 
 jest.mock("../../../config/supabase", () => {
-  const mockFrom = jest.fn().mockReturnValue({
-    upload: jest.fn(),
-    download: jest.fn(),
-    remove: jest.fn(),
-    createSignedUrl: jest.fn(),
-    list: jest.fn(),
-    getPublicUrl: jest.fn().mockReturnValue({ data: { publicUrl: "https://example.com/file" } }),
-  });
-  return {
-    getSupabaseClient: jest.fn().mockReturnValue({
-      storage: { from: mockFrom },
+  const mockStorage = {
+    from: jest.fn().mockReturnValue({
+      upload: jest.fn(),
+      download: jest.fn(),
+      remove: jest.fn(),
+      createSignedUrl: jest.fn(),
+      list: jest.fn(),
+      getPublicUrl: jest.fn().mockReturnValue({ data: { publicUrl: "https://example.com/file" } }),
     }),
+  };
+  const client = { storage: mockStorage };
+  return {
+    getSupabaseClient: jest.fn().mockReturnValue(client),
+    supabase: client,
     handleSupabaseError: jest.fn((error: { message: string }) => {
       throw new Error(error.message);
     }),

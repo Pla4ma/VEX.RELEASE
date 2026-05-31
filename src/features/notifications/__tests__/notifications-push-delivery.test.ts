@@ -2,6 +2,18 @@
  * Tests for: push-delivery
  */
 
+jest.mock("expo-notifications", () => ({
+  scheduleNotificationAsync: jest.fn().mockResolvedValue("notif-id"),
+  cancelScheduledNotificationAsync: jest.fn().mockResolvedValue(undefined),
+  cancelAllScheduledNotificationsAsync: jest.fn().mockResolvedValue(undefined),
+  getAllScheduledNotificationsAsync: jest.fn().mockResolvedValue([]),
+  setBadgeCountAsync: jest.fn().mockResolvedValue(undefined),
+  setNotificationHandler: jest.fn(),
+  getPermissionsAsync: jest.fn().mockResolvedValue({ status: "granted" }),
+  requestPermissionsAsync: jest.fn().mockResolvedValue({ status: "granted" }),
+  getExpoPushTokenAsync: jest.fn().mockResolvedValue({ data: "ExponentPushToken[test]" }),
+  SchedulableTriggerInputTypes: { DATE: "DATE" },
+}));
 import * as Notifications from "expo-notifications";
 import {
   handleNotificationResponse,

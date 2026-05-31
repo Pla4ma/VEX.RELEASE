@@ -2,6 +2,7 @@
  * Tests for: retention-challenge-expiry
  */
 
+jest.mock("../repository/retention");
 import * as retentionRepo from "../repository/retention";
 import { scheduleChallengeExpiryNotifications } from "../retention-challenge-expiry";
 

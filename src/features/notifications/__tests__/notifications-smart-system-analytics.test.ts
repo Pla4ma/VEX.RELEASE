@@ -3,7 +3,7 @@
  */
 
 import { getNotificationAnalytics } from "../SmartNotificationSystem.analytics";
-import { notificationHistory } from "../SmartNotificationSystem";
+import { notificationHistory, scheduledNotifications } from "../SmartNotificationSystem";
 
 beforeEach(() => {
   jest.clearAllMocks();

@@ -7,7 +7,7 @@ import {
   getReEngagementMessage,
   shouldReEngage,
 } from "../SmartNotificationSystem.reengagement";
-import { notificationHistory } from "../SmartNotificationSystem";
+import { notificationHistory, scheduledNotifications } from "../SmartNotificationSystem";
 
 beforeEach(() => {
   jest.clearAllMocks();

@@ -188,18 +188,9 @@ export function useStreakRisk(): UseStreakRiskReturn {
     isAtRisk: riskStatus?.isAtRisk ?? false,
     isCritical: riskStatus?.isCritical ?? false,
     currentStreak: streakData?.currentDays ?? 0,
-    isLoading,
-    isChecking,
-    isRefreshing,
-    error,
-    checkRisk,
-    refresh,
-    retry,
-    flameColor,
-    urgencyLabel,
-    shouldShowWarning,
-    shouldShowCritical,
-    notificationSent,
+    isLoading, isChecking, isRefreshing, error,
+    checkRisk, refresh, retry,
+    flameColor, urgencyLabel,
+    shouldShowWarning, shouldShowCritical, notificationSent,
   };
 }
-export { useFlameHealth } from "./useFlameHealth";
