@@ -16,6 +16,7 @@ import {
   handleBreakComplete as doHandleBreakComplete,
   endBreak as doEndBreak,
 } from "./orchestrators/SessionTimer";
+import { loadActiveSession } from "./orchestrators/SessionCore";
 import {
   completeSessionInternal,
   abandonSession,
@@ -190,10 +191,13 @@ export function getSessionOrchestrator(
 ): SessionOrchestrator {
   if (!orchestratorInstance)
     orchestratorInstance = new SessionOrchestrator(config);
+  loadActiveSession(orchestratorInstance);
   return orchestratorInstance;
 }
 export function createSessionOrchestrator(
   config?: OrchestratorConfig,
 ): SessionOrchestrator {
-  return new SessionOrchestrator(config);
+  const instance = new SessionOrchestrator(config);
+  loadActiveSession(instance);
+  return instance;
 }

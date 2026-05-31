@@ -18,7 +18,6 @@ import type { OrchestratorConfig } from "./orchestrator-types";
 import * as persistence from "./SessionPersistence";
 import {
   createSession,
-  loadActiveSession,
   finalizeSession as doFinalizeSession,
   finalizeAbandonedSession as doFinalizeAbandonedSession,
   createEmptyFocusMetrics,
@@ -80,7 +79,6 @@ export abstract class SessionOrchestratorBase {
     this.antiCheatEngine = new AntiCheatEngine();
     this.eventEmitter = new SessionEventEmitter();
     this.focusMetrics = createEmptyFocusMetrics();
-    loadActiveSession(this);
     debug.info("SessionOrchestrator initialized");
   }
 
