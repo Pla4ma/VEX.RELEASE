@@ -48,7 +48,10 @@ export const NearMissIndicator: React.FC<NearMissIndicatorProps> = ({
   const shakeX = useSharedValue(0);
 
   useEffect(() => {
-    if (!isValidNearMiss) {return;}
+    if (!isValidNearMiss) {
+      return;
+    }
+
     progressWidth.value = withSpring(progressPercent / 100, {
       damping: 15,
       stiffness: 50,
@@ -70,7 +73,14 @@ export const NearMissIndicator: React.FC<NearMissIndicatorProps> = ({
       ),
     );
     trackChallengeNearMiss(challengeId, progressPercent);
-  }, [isValidNearMiss, challengeId, progressPercent, progressWidth, pulseOpacity, shakeX]);
+  }, [
+    isValidNearMiss,
+    challengeId,
+    progressPercent,
+    progressWidth,
+    pulseOpacity,
+    shakeX,
+  ]);
 
   const progressStyle = useAnimatedStyle(() => ({
     width: `${progressWidth.value * 100}%`,
