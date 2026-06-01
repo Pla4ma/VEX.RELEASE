@@ -1,33 +1,33 @@
 // Barrel re-export — original file split into modules.
 // This file re-exports everything for backward compatibility.
 
-export { STREAK_STATES, STREAK_MILESTONES } from "./constants";
+export { STREAK_STATES, STREAK_MILESTONES } from './constants';
 export {
   determineStreakState,
   calculateHoursUntilStreakBreak,
   getStreakStateInfo,
   getStreakVisualIndicator,
-} from "./helpers";
+} from './helpers';
 export {
   awardInsurance,
   getAvailableInsuranceCount,
   getUserInsurance,
   canUseInsurance,
   useInsurance,
-} from "./insurance";
+} from './insurance';
 export {
   createRecoveryPlan,
   getRecoveryPlan,
   progressRecovery,
   clearRecoveryPlan,
-} from "./recovery";
+} from './recovery';
 export {
   checkMilestones,
   getNextMilestone,
   getMilestoneProgress,
   getStreakDisplayText,
   getStreakCelebrationMessage,
-} from "./milestones";
+} from './milestones';
 export type {
   StreakState,
   StreakStateInfo,
@@ -36,4 +36,4 @@ export type {
   InsuranceSource,
   StreakRecoveryPlan,
   StreakProtectionResult,
-} from "./types";
+} from './types';

@@ -5,15 +5,15 @@
  * Shows only ONE card at a time based on priority.
  */
 
-import React from "react";
+import React from 'react';
 import {
   ComebackQuestCard,
   TodaysChallengesWidget,
   type ChallengeItem,
-} from "../../../features/home-spine/components";
-import { StudyPlanSuggestionCard } from "../../../features/content-study/components/StudyPlanSuggestionCard";
-import type { ActiveStudyPlan } from "../../../features/content-study/hooks/helpers";
-import type { LearningExecutionCopy } from "../../../features/learning-execution";
+} from '../../../features/home-spine/components';
+import { StudyPlanSuggestionCard } from '../../../features/content-study/components/StudyPlanSuggestionCard';
+import type { ActiveStudyPlan } from '../../../features/content-study/hooks/helpers';
+import type { LearningExecutionCopy } from '../../../features/learning-execution';
 
 interface HomeContextualCardsProps {
   activeStudyPlan: ActiveStudyPlan | null | undefined;

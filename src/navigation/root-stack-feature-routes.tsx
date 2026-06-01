@@ -1,35 +1,35 @@
-import React from "react";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import React from 'react';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import { canRegisterFeatureRoute } from "./feature-route-registry";
+import { canRegisterFeatureRoute } from './feature-route-registry';
 
-import type { ExtendedRootStackParams } from "./types";
-import type { FeatureAccessMap } from "../features/liveops-config";
+import type { ExtendedRootStackParams } from './types';
+import type { FeatureAccessMap } from '../features/liveops-config';
 
 type RootStack = ReturnType<
   typeof createNativeStackNavigator<ExtendedRootStackParams>
 >;
 
 const CompanionDetailScreen = React.lazy(
-  () => import("../screens/companion/CompanionDetailScreen"),
+  () => import('../screens/companion/CompanionDetailScreen'),
 );
-const BossScreen = React.lazy(() => import("../screens/boss/BossScreen"));
+const BossScreen = React.lazy(() => import('../screens/boss/BossScreen'));
 const NotificationsScreen = React.lazy(
-  () => import("../screens/notifications/NotificationsScreen"),
+  () => import('../screens/notifications/NotificationsScreen'),
 );
 const ChallengesScreen = React.lazy(
-  () => import("../screens/challenges/ChallengesScreen"),
+  () => import('../screens/challenges/ChallengesScreen'),
 );
 const CoachScreen = React.lazy(() =>
-  import("../features/ai-coach/components/CoachScreen").then((module) => ({
+  import('../features/ai-coach/components/CoachScreen').then((module) => ({
     default: module.CoachScreen,
   })),
 );
 const MasteryScreen = React.lazy(
-  () => import("../screens/profile/MasteryScreen"),
+  () => import('../screens/profile/MasteryScreen'),
 );
 const ContentStudyNavigator = React.lazy(
-  () => import("./ContentStudyNavigator"),
+  () => import('./ContentStudyNavigator'),
 );
 
 interface RootStackFeatureRoutesProps {
@@ -43,7 +43,7 @@ export function RootStackFeatureRoutes({
 }: RootStackFeatureRoutesProps): React.JSX.Element {
   return (
     <>
-      {canRegisterFeatureRoute(features, "CompanionDetail") ? (
+      {canRegisterFeatureRoute(features, 'CompanionDetail') ? (
         <Stack.Screen name="CompanionDetail">
           {() => (
             <React.Suspense fallback={null}>
@@ -53,7 +53,7 @@ export function RootStackFeatureRoutes({
         </Stack.Screen>
       ) : null}
 
-      {canRegisterFeatureRoute(features, "Boss") ? (
+      {canRegisterFeatureRoute(features, 'Boss') ? (
         <Stack.Screen name="Boss">
           {() => (
             <React.Suspense fallback={null}>
@@ -71,7 +71,7 @@ export function RootStackFeatureRoutes({
         )}
       </Stack.Screen>
 
-      {canRegisterFeatureRoute(features, "Challenges") ? (
+      {canRegisterFeatureRoute(features, 'Challenges') ? (
         <Stack.Screen name="Challenges">
           {() => (
             <React.Suspense fallback={null}>
@@ -81,7 +81,7 @@ export function RootStackFeatureRoutes({
         </Stack.Screen>
       ) : null}
 
-      {canRegisterFeatureRoute(features, "AICoach") ? (
+      {canRegisterFeatureRoute(features, 'AICoach') ? (
         <Stack.Screen name="AICoach">
           {() => (
             <React.Suspense fallback={null}>
@@ -91,11 +91,11 @@ export function RootStackFeatureRoutes({
         </Stack.Screen>
       ) : null}
 
-      {canRegisterFeatureRoute(features, "Mastery") ? (
+      {canRegisterFeatureRoute(features, 'Mastery') ? (
         <Stack.Screen name="Mastery" component={MasteryScreen} />
       ) : null}
 
-      {canRegisterFeatureRoute(features, "ContentStudy") ? (
+      {canRegisterFeatureRoute(features, 'ContentStudy') ? (
         <Stack.Screen name="ContentStudy">
           {() => (
             <React.Suspense fallback={null}>

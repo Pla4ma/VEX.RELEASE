@@ -2,19 +2,19 @@ import {
   CompletedSessionPromiseInputSchema,
   CompanionPromiseHomeStateSchema,
   CompanionPromiseLifecycleResultSchema,
-} from "./schemas";
+} from './schemas';
 import {
   publishPromiseCreated,
   publishPromiseFulfilled,
   publishPromiseMissed,
   publishPromiseRecovered,
-} from "./events";
+} from './events';
 import {
   trackPromiseCreated,
   trackPromiseFulfilled,
   trackPromiseMissed,
   trackPromiseRecovered,
-} from "./analytics";
+} from './analytics';
 import {
   createPromise,
   dismissRecoveryPromise,
@@ -23,19 +23,19 @@ import {
   getRecentPromises,
   markPromiseMissed,
   replacePromise,
-} from "./repository";
+} from './repository';
 import type {
   CompanionPromise,
   CompanionPromiseHomeState,
   CompanionPromiseLifecycleResult,
   CompletedSessionPromiseInput,
-} from "./types";
+} from './types';
 import {
   toDateKey,
   isMatchOrBetter,
   buildNextPromiseInput,
   MinimumPromiseMinutes,
-} from "./service-helpers";
+} from './service-helpers';
 
 async function markExpiredPromise(
   pendingPromise: CompanionPromise | null,
@@ -116,14 +116,14 @@ export async function getHomePromiseState(
   const resolvedMiss = await markExpiredPromise(pendingPromise, today, nowIso);
   if (resolvedMiss) {
     return CompanionPromiseHomeStateSchema.parse({
-      kind: "missed",
+      kind: 'missed',
       promise: resolvedMiss,
       showOfflineBanner: !isOnline,
     });
   }
   if (pendingPromise) {
     return CompanionPromiseHomeStateSchema.parse({
-      kind: "pending",
+      kind: 'pending',
       promise: pendingPromise,
       showOfflineBanner: !isOnline,
     });
@@ -131,26 +131,26 @@ export async function getHomePromiseState(
   const latestPromise = (await getRecentPromises(userId, 3))[0] ?? null;
   if (!latestPromise) {
     return CompanionPromiseHomeStateSchema.parse({
-      kind: isOnline ? "hidden" : "offline",
+      kind: isOnline ? 'hidden' : 'offline',
       showOfflineBanner: !isOnline,
     });
   }
-  if (latestPromise.status === "fulfilled") {
+  if (latestPromise.status === 'fulfilled') {
     return CompanionPromiseHomeStateSchema.parse({
-      kind: "fulfilled",
+      kind: 'fulfilled',
       promise: latestPromise,
       showOfflineBanner: !isOnline,
     });
   }
-  if (latestPromise.status === "missed") {
+  if (latestPromise.status === 'missed') {
     return CompanionPromiseHomeStateSchema.parse({
-      kind: "missed",
+      kind: 'missed',
       promise: latestPromise,
       showOfflineBanner: !isOnline,
     });
   }
   return CompanionPromiseHomeStateSchema.parse({
-    kind: isOnline ? "hidden" : "offline",
+    kind: isOnline ? 'hidden' : 'offline',
     showOfflineBanner: !isOnline,
   });
 }

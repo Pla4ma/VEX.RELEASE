@@ -1,13 +1,13 @@
-import React from "react";
-import { View, Text, Pressable, ActivityIndicator } from "react-native";
-import { launchColors } from "@theme/tokens/launch-colors";
+import React from 'react';
+import { View, Text, Pressable, ActivityIndicator } from 'react-native';
+import { launchColors } from '@theme/tokens/launch-colors';
 import {
   type ExportProgressProps,
   STATUS_CONFIG,
   formatDate,
   formatFileSize,
-} from "./export-progress-helpers";
-import { styles } from "./ExportProgress.styles";
+} from './export-progress-helpers';
+import { styles } from './ExportProgress.styles';
 
 export function ExportProgress({
   job,
@@ -16,9 +16,9 @@ export function ExportProgress({
   onRetry,
 }: ExportProgressProps) {
   const status = STATUS_CONFIG[job.status] ?? STATUS_CONFIG.pending;
-  const isActive = job.status === "pending" || job.status === "processing";
-  const isComplete = job.status === "completed";
-  const isFailed = job.status === "failed";
+  const isActive = job.status === 'pending' || job.status === 'processing';
+  const isComplete = job.status === 'completed';
+  const isFailed = job.status === 'failed';
   return (
     <View style={[styles.container, { borderColor: status.color }]}>
       <View style={styles.header}>
@@ -30,7 +30,7 @@ export function ExportProgress({
           </Text>
         </View>
         <View
-          style={[styles.statusBadge, { backgroundColor: status.color + "20" }]}
+          style={[styles.statusBadge, { backgroundColor: status.color + '20' }]}
         >
           <Text style={[styles.statusText, { color: status.color }]}>
             {status.label}
@@ -60,7 +60,7 @@ export function ExportProgress({
       {isComplete && job.fileUrl && (
         <View style={styles.fileInfo}>
           <Text style={styles.fileSize}>
-            {job.fileSize ? formatFileSize(job.fileSize) : "Unknown size"}
+            {job.fileSize ? formatFileSize(job.fileSize) : 'Unknown size'}
           </Text>
           <Text style={styles.fileUrl} numberOfLines={1}>
             {job.fileUrl}

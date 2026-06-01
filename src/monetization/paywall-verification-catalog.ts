@@ -2,18 +2,18 @@
  * Paywall Verification - Product Catalog Validator
  */
 
-import type { PurchasesOffering } from "../shared/monetization/revenuecat-types";
-import { createDebugger } from "../utils/debug";
-import { revenueCatService } from "../shared/monetization/revenuecat-service";
+import type { PurchasesOffering } from '../shared/monetization/revenuecat-types';
+import { createDebugger } from '../utils/debug';
+import { revenueCatService } from '../shared/monetization/revenuecat-service';
 
-const debug = createDebugger("paywall-verification:catalog");
+const debug = createDebugger('paywall-verification:catalog');
 
 export async function verifyProductCatalog(): Promise<{
   valid: boolean;
   issues: string[];
   warnings: string[];
 }> {
-  debug.info("Verifying product catalog...");
+  debug.info('Verifying product catalog...');
 
   const issues: string[] = [];
   const warnings: string[] = [];
@@ -24,7 +24,7 @@ export async function verifyProductCatalog(): Promise<{
     if (!offeringsResult.success) {
       return {
         valid: false,
-        issues: ["Failed to get offerings from RevenueCat"],
+        issues: ['Failed to get offerings from RevenueCat'],
         warnings: [],
       };
     }
@@ -33,13 +33,13 @@ export async function verifyProductCatalog(): Promise<{
     const currentOffering = offerings?.current;
 
     if (!currentOffering) {
-      warnings.push("No current offering configured");
+      warnings.push('No current offering configured');
       return { valid: true, issues, warnings };
     }
 
     const packages = currentOffering.availablePackages;
     if (packages.length === 0) {
-      issues.push("Current offering has no available packages");
+      issues.push('Current offering has no available packages');
       return { valid: false, issues, warnings };
     }
 
@@ -58,7 +58,7 @@ export async function verifyProductCatalog(): Promise<{
     return { valid, issues, warnings };
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    debug.error("Product catalog verification failed:", error);
+    debug.error('Product catalog verification failed:', error);
 
     return {
       valid: false,
@@ -69,28 +69,28 @@ export async function verifyProductCatalog(): Promise<{
 }
 
 function validateProductPackage(
-  pkg: PurchasesOffering["availablePackages"][number],
+  pkg: PurchasesOffering['availablePackages'][number],
 ): string[] {
   const issues: string[] = [];
 
   if (!pkg.identifier) {
-    issues.push("Package missing required identifier");
+    issues.push('Package missing required identifier');
   }
 
   if (!pkg.product.description) {
-    issues.push("Package product missing required description");
+    issues.push('Package product missing required description');
   }
 
   return issues;
 }
 
 function validateProductPricing(
-  pkg: PurchasesOffering["availablePackages"][number],
+  pkg: PurchasesOffering['availablePackages'][number],
 ): string[] {
   const issues: string[] = [];
   const { price } = pkg.product;
 
-  if (typeof price !== "number" || price <= 0) {
+  if (typeof price !== 'number' || price <= 0) {
     issues.push(`Package has invalid price: ${price}`);
     return issues;
   }
@@ -102,17 +102,17 @@ function validateProductPricing(
   }
 
   if (!pkg.product.currencyCode) {
-    issues.push("Package product missing currency code");
+    issues.push('Package product missing currency code');
   }
 
   return issues;
 }
 
 function validateProductMetadata(
-  pkg: PurchasesOffering["availablePackages"][number],
+  pkg: PurchasesOffering['availablePackages'][number],
 ): string[] {
   const issues: string[] = [];
-  const requiredFields: (keyof typeof pkg)[] = ["identifier"];
+  const requiredFields: (keyof typeof pkg)[] = ['identifier'];
 
   for (const field of requiredFields) {
     if (!pkg[field]) {
@@ -121,7 +121,7 @@ function validateProductMetadata(
   }
 
   if (!pkg.product.title) {
-    issues.push("Package product missing required title");
+    issues.push('Package product missing required title');
   }
 
   return issues;

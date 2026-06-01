@@ -1,30 +1,30 @@
-import { createSheet } from "@/shared/ui/create-sheet";
-import { launchColors } from "@theme/tokens/launch-colors";
+import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
 
 export const styles = createSheet({
   container: { flex: 1, backgroundColor: launchColors.hex_1a1a2e, padding: 24 },
   warningBanner: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: launchColors.hex_ffa500,
     paddingVertical: 12,
     borderRadius: 8,
     marginBottom: 24,
   },
   warningIcon: { fontSize: 20, marginRight: 8 },
-  warningText: { color: launchColors.hex_000, fontSize: 16, fontWeight: "700" },
+  warningText: { color: launchColors.hex_000, fontSize: 16, fontWeight: '700' },
   title: {
     fontSize: 24,
-    fontWeight: "700",
+    fontWeight: '700',
     color: launchColors.hex_fff,
-    textAlign: "center",
+    textAlign: 'center',
     marginBottom: 8,
   },
   reason: {
     fontSize: 14,
     color: launchColors.hex_9e9e9e,
-    textAlign: "center",
+    textAlign: 'center',
     marginBottom: 24,
   },
   featuresContainer: {
@@ -35,14 +35,14 @@ export const styles = createSheet({
   },
   featuresTitle: {
     fontSize: 14,
-    fontWeight: "600",
+    fontWeight: '600',
     color: launchColors.hex_9e9e9e,
     marginBottom: 12,
-    textTransform: "uppercase",
+    textTransform: 'uppercase',
   },
   featureRow: {
-    flexDirection: "row",
-    alignItems: "flex-start",
+    flexDirection: 'row',
+    alignItems: 'flex-start',
     paddingVertical: 8,
     borderBottomWidth: 1,
     borderBottomColor: launchColors.hex_3a3a4e,
@@ -52,7 +52,7 @@ export const styles = createSheet({
   featureName: { fontSize: 15, color: launchColors.hex_fff },
   featureUnavailable: {
     color: launchColors.hex_9e9e9e,
-    textDecorationLine: "line-through",
+    textDecorationLine: 'line-through',
   },
   featureReason: { fontSize: 12, color: launchColors.hex_ffa500, marginTop: 2 },
   actions: { gap: 12, marginBottom: 24 },
@@ -60,27 +60,27 @@ export const styles = createSheet({
     backgroundColor: launchColors.hex_e94560,
     paddingVertical: 16,
     borderRadius: 12,
-    alignItems: "center",
+    alignItems: 'center',
   },
   primaryButtonText: {
     color: launchColors.hex_fff,
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   secondaryButton: {
-    backgroundColor: "transparent",
+    backgroundColor: 'transparent',
     borderWidth: 1,
     borderColor: launchColors.hex_9e9e9e,
     paddingVertical: 16,
     borderRadius: 12,
-    alignItems: "center",
+    alignItems: 'center',
   },
   secondaryButtonText: {
     color: launchColors.hex_9e9e9e,
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: '600',
   },
-  endButton: { paddingVertical: 12, alignItems: "center" },
+  endButton: { paddingVertical: 12, alignItems: 'center' },
   endButtonText: { color: launchColors.hex_e94560, fontSize: 14 },
   explanation: {
     backgroundColor: launchColors.rgb_255_165_0_0_1,
@@ -91,7 +91,7 @@ export const styles = createSheet({
   },
   explanationTitle: {
     fontSize: 14,
-    fontWeight: "600",
+    fontWeight: '600',
     color: launchColors.hex_ffa500,
     marginBottom: 8,
   },

@@ -1,4 +1,4 @@
-import { RepositoryError, supabase } from "./repository-helpers";
+import { RepositoryError, supabase } from './repository-helpers';
 
 export async function fetchActiveRepairQuest(
   userId: string,
@@ -11,21 +11,21 @@ export async function fetchActiveRepairQuest(
   sessionsRequired: number;
   startedAt: number;
   expiresAt: number;
-  status: "ACTIVE" | "COMPLETED" | "EXPIRED" | "ABANDONED";
+  status: 'ACTIVE' | 'COMPLETED' | 'EXPIRED' | 'ABANDONED';
   sessionIds: string[];
   completedAt: number | null;
 } | null> {
   const { data, error } = await supabase
-    .from("streak_repair_quests")
-    .select("*")
-    .eq("user_id", userId)
-    .eq("status", "ACTIVE")
+    .from('streak_repair_quests')
+    .select('*')
+    .eq('user_id', userId)
+    .eq('status', 'ACTIVE')
     .single();
   if (error) {
-    if (error.code === "PGRST116") {
+    if (error.code === 'PGRST116') {
       return null;
     }
-    throw new RepositoryError("fetchActiveRepairQuest", error);
+    throw new RepositoryError('fetchActiveRepairQuest', error);
   }
   if (!data) {
     return null;
@@ -40,11 +40,11 @@ export async function fetchActiveRepairQuest(
     startedAt: data.started_at,
     expiresAt: data.expires_at,
     status:
-      data.status === "COMPLETED" ||
-      data.status === "EXPIRED" ||
-      data.status === "ABANDONED"
+      data.status === 'COMPLETED' ||
+      data.status === 'EXPIRED' ||
+      data.status === 'ABANDONED'
         ? data.status
-        : "ACTIVE",
+        : 'ACTIVE',
     sessionIds: data.session_ids || [],
     completedAt: data.completed_at ?? null,
   };
@@ -63,7 +63,7 @@ export async function saveRepairQuest(quest: {
   sessionIds: string[];
 }): Promise<void> {
   const { error } = await supabase
-    .from("streak_repair_quests")
+    .from('streak_repair_quests')
     .insert({
       id: quest.id,
       user_id: quest.userId,
@@ -77,7 +77,7 @@ export async function saveRepairQuest(quest: {
       session_ids: quest.sessionIds,
     });
   if (error) {
-    throw new RepositoryError("saveRepairQuest", error);
+    throw new RepositoryError('saveRepairQuest', error);
   }
 }
 
@@ -92,7 +92,7 @@ export async function updateRepairQuest(
   },
 ): Promise<void> {
   const { error } = await supabase
-    .from("streak_repair_quests")
+    .from('streak_repair_quests')
     .update({
       sessions_completed: updates.sessionsCompleted,
       session_ids: updates.sessionIds,
@@ -100,10 +100,10 @@ export async function updateRepairQuest(
       completed_at: updates.completedAt,
       updated_at: Date.now(),
     })
-    .eq("id", questId)
-    .eq("user_id", userId);
+    .eq('id', questId)
+    .eq('user_id', userId);
   if (error) {
-    throw new RepositoryError("updateRepairQuest", error);
+    throw new RepositoryError('updateRepairQuest', error);
   }
 }
 
@@ -117,12 +117,12 @@ export async function fetchExpiredRepairQuests(): Promise<
   }>
 > {
   const { data, error } = await supabase
-    .from("streak_repair_quests")
-    .select("id, user_id, previous_streak, status, expires_at")
-    .eq("status", "ACTIVE")
-    .lt("expires_at", Date.now());
+    .from('streak_repair_quests')
+    .select('id, user_id, previous_streak, status, expires_at')
+    .eq('status', 'ACTIVE')
+    .lt('expires_at', Date.now());
   if (error) {
-    throw new RepositoryError("fetchExpiredRepairQuests", error);
+    throw new RepositoryError('fetchExpiredRepairQuests', error);
   }
   return (data || []).map((row: Record<string, unknown>) => ({
     id: row.id as string,
@@ -135,11 +135,11 @@ export async function fetchExpiredRepairQuests(): Promise<
 
 export async function fetchUsersWithActiveStreaks(): Promise<string[]> {
   const { data, error } = await supabase
-    .from("streaks")
-    .select("user_id")
-    .gt("current_days", 0);
+    .from('streaks')
+    .select('user_id')
+    .gt('current_days', 0);
   if (error) {
-    throw new RepositoryError("fetchUsersWithActiveStreaks", error);
+    throw new RepositoryError('fetchUsersWithActiveStreaks', error);
   }
   return (data || []).map((row: { user_id: string }) => row.user_id);
 }

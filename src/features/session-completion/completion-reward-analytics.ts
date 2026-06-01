@@ -1,22 +1,22 @@
-import { capture } from "../../shared/analytics/analytics-service";
+import { capture } from '../../shared/analytics/analytics-service';
 
 export function trackSessionMilestoneReached(
   userId: string,
   sessionId: string,
   milestoneId: string,
   milestoneType:
-    | "score"
-    | "streak"
-    | "accuracy"
-    | "speed"
-    | "completion"
-    | "special",
+    | 'score'
+    | 'streak'
+    | 'accuracy'
+    | 'speed'
+    | 'completion'
+    | 'special',
   milestoneName: string,
   value: number,
   target: number,
   previousRecord: number,
   improvement: number,
-  significance: "personal" | "session" | "daily" | "weekly" | "all_time",
+  significance: 'personal' | 'session' | 'daily' | 'weekly' | 'all_time',
   recognition: {
     badge: string;
     title: string;
@@ -30,7 +30,7 @@ export function trackSessionMilestoneReached(
     unlocks: string[];
   },
 ): void {
-  capture("session_completion_milestone_reached", {
+  capture('session_completion_milestone_reached', {
     user_id: userId,
     session_id: sessionId,
     milestone_id: milestoneId,
@@ -50,7 +50,7 @@ export function trackSessionRecordBroken(
   userId: string,
   sessionId: string,
   recordType: string,
-  recordCategory: "personal" | "session" | "daily" | "weekly" | "global",
+  recordCategory: 'personal' | 'session' | 'daily' | 'weekly' | 'global',
   previousRecord: number,
   newRecord: number,
   improvement: number,
@@ -69,7 +69,7 @@ export function trackSessionRecordBroken(
     public: boolean;
   },
 ): void {
-  capture("session_completion_record_broken", {
+  capture('session_completion_record_broken', {
     user_id: userId,
     session_id: sessionId,
     record_type: recordType,
@@ -130,7 +130,7 @@ export function trackSessionRewardsCalculated(
     items: unknown[];
   },
 ): void {
-  capture("session_completion_rewards_calculated", {
+  capture('session_completion_rewards_calculated', {
     user_id: userId,
     session_id: sessionId,
     base_rewards: baseRewards,
@@ -145,7 +145,7 @@ export function trackSessionRewardsClaimed(
   userId: string,
   sessionId: string,
   claimedAt: Date,
-  claimMethod: "auto" | "manual" | "delayed",
+  claimMethod: 'auto' | 'manual' | 'delayed',
   rewards: {
     experience: number;
     currency: number;
@@ -169,7 +169,7 @@ export function trackSessionRewardsClaimed(
     overflow: unknown;
   },
 ): void {
-  capture("session_completion_rewards_claimed", {
+  capture('session_completion_rewards_claimed', {
     user_id: userId,
     session_id: sessionId,
     claimed_at: claimedAt.toISOString(),

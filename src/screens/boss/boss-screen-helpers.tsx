@@ -1,25 +1,25 @@
-import React from "react";
+import React from 'react';
 
-import { LockedFeatureScreen } from "../../components/LockedFeatureScreen";
-import { useTheme } from "../../theme";
+import { LockedFeatureScreen } from '../../components/LockedFeatureScreen';
+import { useTheme } from '../../theme';
 
-export type BossIntensity = "subtle" | "game-like" | "intense";
+export type BossIntensity = 'subtle' | 'game-like' | 'intense';
 
 const BOSS_COPY: Record<string, { title: string; description: string }> = {
   subtle: {
-    title: "Focus Momentum",
+    title: 'Focus Momentum',
     description:
-      "Each session you complete adds to your momentum. A quiet marker tracks the focus you have already earned.",
+      'Each session you complete adds to your momentum. A quiet marker tracks the focus you have already earned.',
   },
-  "game-like": {
-    title: "Boss Battle",
+  'game-like': {
+    title: 'Boss Battle',
     description:
-      "Your focus sessions push the creature back, one block at a time. Every minute focused counts as damage.",
+      'Your focus sessions push the creature back, one block at a time. Every minute focused counts as damage.',
   },
   intense: {
-    title: "Boss Battle — Full Assault",
+    title: 'Boss Battle — Full Assault',
     description:
-      "Every session hits harder. Longer sessions deal critical damage. Your streak multiplies everything. Press the attack.",
+      'Every session hits harder. Longer sessions deal critical damage. Your streak multiplies everything. Press the attack.',
   },
 };
 
@@ -32,12 +32,12 @@ export function getBossCopy(bossIntensity: string): {
 
 export function toScreenIntensity(intensity: string): BossIntensity {
   if (
-    intensity === "game-like" ||
-    intensity === "intense" ||
-    intensity === "subtle"
+    intensity === 'game-like' ||
+    intensity === 'intense' ||
+    intensity === 'subtle'
   )
-    return intensity;
-  return "subtle";
+    {return intensity;}
+  return 'subtle';
 }
 
 export const nextResetLabel = (): string => {
@@ -67,16 +67,16 @@ export const BossFallback: React.FC<{
 }> = ({ intensity, onStartSession, unlockReason, stage, resetLabel }) => {
   const { theme } = useTheme();
   const copy = getBossCopy(intensity);
-  const isSubtle = intensity === "subtle";
+  const isSubtle = intensity === 'subtle';
   return (
     <LockedFeatureScreen
       ctaLabel="Start a focus session"
       description={copy.description}
       feature="boss_tab"
-      icon={isSubtle ? "\u{1F4CA}" : "\u{1F409}"}
+      icon={isSubtle ? '\u{1F4CA}' : '\u{1F409}'}
       onPress={onStartSession}
       progressLabel={resetLabel}
-      stage={stage as "NEW_USER" | "ACTIVATING" | "ENGAGED" | "POWER_USER"}
+      stage={stage as 'NEW_USER' | 'ACTIVATING' | 'ENGAGED' | 'POWER_USER'}
       title={copy.title}
       unlockLabel={unlockReason}
       whyItMatters="Boss progress moves only when you complete focus sessions. No shop items, no premium boosts — just real focus time."

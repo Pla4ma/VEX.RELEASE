@@ -1,19 +1,19 @@
-import * as Sentry from "@sentry/react-native";
+import * as Sentry from '@sentry/react-native';
 
 export function trackAccountDeletionStarted(userId: string): void {
   Sentry.addBreadcrumb({
-    category: "account-deletion",
-    message: "Account deletion started",
-    level: "info",
+    category: 'account-deletion',
+    message: 'Account deletion started',
+    level: 'info',
     data: { userId },
   });
 }
 
 export function trackAccountDeletionCompleted(userId: string): void {
   Sentry.addBreadcrumb({
-    category: "account-deletion",
-    message: "Account deletion completed",
-    level: "info",
+    category: 'account-deletion',
+    message: 'Account deletion completed',
+    level: 'info',
     data: { userId },
   });
 }
@@ -23,6 +23,6 @@ export function captureAccountDeletionError(
   operation: string,
 ): void {
   Sentry.captureException(error, {
-    tags: { feature: "account-deletion", operation },
+    tags: { feature: 'account-deletion', operation },
   });
 }

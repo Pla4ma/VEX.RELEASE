@@ -1,24 +1,24 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   View,
   Text,
   ScrollView,
   Pressable,
   ActivityIndicator,
-} from "react-native";
-import { FlashList, type ListRenderItem } from "@shopify/flash-list";
-import { useThemeObject } from "../../../theme";
-import { Card, Badge, ProgressBar } from "../../../components";
-import { useActiveChallenges, useChallengeSummaries } from "../hooks";
-import { ChallengeCard } from "./ChallengeCard";
-import { type UserChallengeSummary } from "../schemas";
-import { styles } from "./challenge-hub-styles";
+} from 'react-native';
+import { FlashList, type ListRenderItem } from '@shopify/flash-list';
+import { useThemeObject } from '../../../theme';
+import { Card, Badge, ProgressBar } from '../../../components';
+import { useActiveChallenges, useChallengeSummaries } from '../hooks';
+import { ChallengeCard } from './ChallengeCard';
+import { type UserChallengeSummary } from '../schemas';
+import { styles } from './challenge-hub-styles';
 import {
   type ChallengeFilter,
   FILTER_OPTIONS,
   getFilteredChallenges,
   getChallengeStats,
-} from "./challenge-hub-helpers";
+} from './challenge-hub-helpers';
 
 interface ChallengeHubProps {
   userId: string;
@@ -31,7 +31,7 @@ export const ChallengeHub: React.FC<ChallengeHubProps> = ({
   onClaimReward,
 }) => {
   const theme = useThemeObject();
-  const [activeFilter, setActiveFilter] = useState<ChallengeFilter>("ALL");
+  const [activeFilter, setActiveFilter] = useState<ChallengeFilter>('ALL');
   const { isLoading: isLoadingAll } = useActiveChallenges(userId);
   const { data: challengeSummaries, isLoading: isLoadingSummaries } =
     useChallengeSummaries(userId);
@@ -116,7 +116,7 @@ export const ChallengeHub: React.FC<ChallengeHubProps> = ({
         ))}
       </ScrollView>
 
-      {(activeFilter === "ALL" || activeFilter === "DAILY") && (
+      {(activeFilter === 'ALL' || activeFilter === 'DAILY') && (
         <Card style={styles.streakCard}>
           <View style={styles.streakHeader}>
             <Text style={styles.streakTitle}>🔥 Daily Streak</Text>
@@ -126,7 +126,7 @@ export const ChallengeHub: React.FC<ChallengeHubProps> = ({
             Complete daily challenges to maintain your streak and earn bonus rewards!
           </Text>
           <View style={styles.streakDays}>
-            {["M", "T", "W", "T", "F", "S", "S"].map((day, index) => (
+            {['M', 'T', 'W', 'T', 'F', 'S', 'S'].map((day, index) => (
               <View
                 key={index}
                 style={[styles.streakDay, index < 3 && styles.streakDayCompleted]}
@@ -142,16 +142,16 @@ export const ChallengeHub: React.FC<ChallengeHubProps> = ({
 
       <View style={styles.listSection}>
         <Text style={styles.listTitle}>
-          {activeFilter === "ALL" ? "All Challenges" : `${activeFilter} Challenges`}
+          {activeFilter === 'ALL' ? 'All Challenges' : `${activeFilter} Challenges`}
         </Text>
         {filteredChallenges.length === 0 ? (
           <Card style={styles.emptyCard}>
             <Text style={styles.emptyIcon}>🎯</Text>
             <Text style={styles.emptyTitle}>No challenges found</Text>
             <Text style={styles.emptyText}>
-              {activeFilter === "COMPLETED"
-                ? "Complete some challenges to see them here!"
-                : "Check back later for new challenges."}
+              {activeFilter === 'COMPLETED'
+                ? 'Complete some challenges to see them here!'
+                : 'Check back later for new challenges.'}
             </Text>
           </Card>
         ) : (

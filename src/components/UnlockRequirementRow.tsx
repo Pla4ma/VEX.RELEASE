@@ -1,8 +1,8 @@
-import React from "react";
-import { View } from "react-native";
+import React from 'react';
+import { View } from 'react-native';
 
-import { Text } from "./primitives/Text";
-import { useTheme } from "../theme";
+import { Text } from './primitives/Text';
+import { useTheme } from '../theme';
 
 interface UnlockRequirementRowProps {
   label: string;
@@ -18,9 +18,9 @@ export function UnlockRequirementRow({
   return (
     <View
       style={{
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-between",
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
         borderWidth: 1,
         borderColor: theme.colors.border.light,
         backgroundColor: theme.colors.background.primary,

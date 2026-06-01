@@ -6,13 +6,13 @@
  * During first week: progress indicator
  * Unlocked: hidden
  */
-import React from "react";
-import Animated, { FadeInUp } from "react-native-reanimated";
+import React from 'react';
+import Animated, { FadeInUp } from 'react-native-reanimated';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import type { StudyOsUnlockGate } from "../schemas";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import type { StudyOsUnlockGate } from '../schemas';
 
 const UNLOCK_SESSIONS_TARGET = 5;
 
@@ -26,7 +26,7 @@ export function UnlockBanner({
   currentSessions,
 }: UnlockBannerProps): JSX.Element {
   const { theme } = useTheme();
-  if (gate.isUnlocked) return <></>;
+  if (gate.isUnlocked) {return <></>;}
 
   const remaining = Math.max(
     0,
@@ -54,8 +54,8 @@ export function UnlockBanner({
         </Text>
         <Text variant="bodySmall" color="text.secondary" mt={1}>
           {gate.isDayZero
-            ? "Complete your first study block to begin unlocking Study OS."
-            : `${remaining} more session${remaining !== 1 ? "s" : ""} to unlock full Study OS.`}
+            ? 'Complete your first study block to begin unlocking Study OS.'
+            : `${remaining} more session${remaining !== 1 ? 's' : ''} to unlock full Study OS.`}
         </Text>
 
         <Box
@@ -64,7 +64,7 @@ export function UnlockBanner({
           borderRadius="sm"
           style={{
             backgroundColor: theme.colors.border.light,
-            overflow: "hidden",
+            overflow: 'hidden',
           }}
         >
           <Box

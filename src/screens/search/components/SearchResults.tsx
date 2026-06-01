@@ -1,11 +1,11 @@
-import React from "react";
-import { FlashList } from "@shopify/flash-list";
-import { useTheme } from "../../../theme";
-import { Box, Text, Card } from "../../../components/primitives";
-import { Badge } from "../../../components/Badge";
-import { Icon } from "../../../icons";
-import { Loading } from "../../../components/states";
-import { MOCK_RESULTS, type SearchResult } from "../searchData";
+import React from 'react';
+import { FlashList } from '@shopify/flash-list';
+import { useTheme } from '../../../theme';
+import { Box, Text, Card } from '../../../components/primitives';
+import { Badge } from '../../../components/Badge';
+import { Icon } from '../../../icons';
+import { Loading } from '../../../components/states';
+import { MOCK_RESULTS, type SearchResult } from '../searchData';
 
 interface SearchResultsProps {
   isSearching: boolean;
@@ -30,7 +30,7 @@ export const SearchResults: React.FC<SearchResultsProps> = ({ isSearching }) => 
       estimatedItemSize={80}
       renderItem={({ item }: { item: SearchResult }) => (
         <Card
-          style={{ flexDirection: "row", alignItems: "center" }}
+          style={{ flexDirection: 'row', alignItems: 'center' }}
           size="md"
           onPress={() => {}}
         >
@@ -42,11 +42,11 @@ export const SearchResults: React.FC<SearchResultsProps> = ({ isSearching }) => 
             alignItems="center"
             style={{
               backgroundColor:
-                item.type === "session"
+                item.type === 'session'
                   ? theme.colors.primary[100]
-                  : item.type === "challenge"
+                  : item.type === 'challenge'
                     ? theme.colors.warning.light
-                    : item.type === "user"
+                    : item.type === 'user'
                       ? theme.colors.success.light
                       : theme.colors.info.light,
             }}
@@ -55,18 +55,18 @@ export const SearchResults: React.FC<SearchResultsProps> = ({ isSearching }) => 
               name={item.icon}
               size={20}
               color={
-                item.type === "session"
+                item.type === 'session'
                   ? theme.colors.primary[500]
-                  : item.type === "challenge"
+                  : item.type === 'challenge'
                     ? theme.colors.warning.DEFAULT
-                    : item.type === "user"
+                    : item.type === 'user'
                       ? theme.colors.success.DEFAULT
                       : theme.colors.info.DEFAULT
               }
             />
           </Box>
           <Box flex={1} ml={12}>
-            <Text variant="body" style={{ fontWeight: "600" }}>
+            <Text variant="body" style={{ fontWeight: '600' }}>
               {item.title}
             </Text>
             <Text variant="caption" color="text.secondary">
@@ -75,13 +75,13 @@ export const SearchResults: React.FC<SearchResultsProps> = ({ isSearching }) => 
           </Box>
           <Badge
             variant={
-              item.type === "session"
-                ? "primary"
-                : item.type === "challenge"
-                  ? "warning"
-                  : item.type === "user"
-                    ? "success"
-                    : "info"
+              item.type === 'session'
+                ? 'primary'
+                : item.type === 'challenge'
+                  ? 'warning'
+                  : item.type === 'user'
+                    ? 'success'
+                    : 'info'
             }
             size="sm"
           >
@@ -92,13 +92,13 @@ export const SearchResults: React.FC<SearchResultsProps> = ({ isSearching }) => 
       ListEmptyComponent={
         <Box alignItems="center" py={48}>
           <Icon name="search" size={48} color={theme.colors.text.tertiary} />
-          <Text variant="h4" style={{ marginTop: 16, textAlign: "center" }}>
+          <Text variant="h4" style={{ marginTop: 16, textAlign: 'center' }}>
             No Results Found
           </Text>
           <Text
             variant="body"
             color="text.secondary"
-            style={{ marginTop: 8, textAlign: "center" }}
+            style={{ marginTop: 8, textAlign: 'center' }}
           >
             Try adjusting your search terms
           </Text>

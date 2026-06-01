@@ -1,11 +1,11 @@
-import { validateCoachInput, type CoachInputContract } from "./input-contract";
-import { validateMessageQuality } from "./message-quality-gate";
+import { validateCoachInput, type CoachInputContract } from './input-contract';
+import { validateMessageQuality } from './message-quality-gate';
 import {
   analyzeSessionPatterns,
   generateRecommendationMessage,
   generateUUID,
-} from "./ai-helpers";
-import { CoachSuggestionSchema, type CoachSuggestion } from "./suggestion-schemas";
+} from './ai-helpers';
+import { CoachSuggestionSchema, type CoachSuggestion } from './suggestion-schemas';
 
 export async function generateSessionRecommendation(
   userId: string,
@@ -25,9 +25,9 @@ export async function generateSessionRecommendation(
 
   const messageContent = await generateRecommendationMessage(recommendation);
   const qualityAnalysis = validateMessageQuality(
-    "session-recommendation",
+    'session-recommendation',
     messageContent,
-    "SESSION_SUGGESTION",
+    'SESSION_SUGGESTION',
   );
   if (!qualityAnalysis.passesQualityGate) {
     return null;
@@ -35,7 +35,7 @@ export async function generateSessionRecommendation(
 
   return CoachSuggestionSchema.parse({
     id: generateUUID(),
-    type: "SESSION_RECOMMENDATION",
+    type: 'SESSION_RECOMMENDATION',
     title: `${recommendation.duration}min ${recommendation.difficulty} Session`,
     description: messageContent,
     priority: recommendation.priority,

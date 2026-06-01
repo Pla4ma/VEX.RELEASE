@@ -1,29 +1,29 @@
-import * as Sentry from "@sentry/react-native";
-import { AddXpInputSchema, type AddXpInput } from "./schemas";
+import * as Sentry from '@sentry/react-native';
+import { AddXpInputSchema, type AddXpInput } from './schemas';
 import {
   deduplicateConcurrent,
   generateIdempotencyKey,
   isDuplicateOperation,
   markOperationProcessed,
-} from "./service-dedup";
-import { createProgressionError } from "./service-errors";
-import { calculateXpBreakdown } from "./service-xp-calculations";
-import { runAddXpOperation } from "./service-operation";
-import type { AddXpOperationResult } from "./types";
+} from './service-dedup';
+import { createProgressionError } from './service-errors';
+import { calculateXpBreakdown } from './service-xp-calculations';
+import { runAddXpOperation } from './service-operation';
+import type { AddXpOperationResult } from './types';
 
 export type {
   AddXpOperationResult,
   ProgressionError,
-} from "./types";
-export { configureProgressionService } from "./service-config";
-export { getDailyProgress } from "./service-daily-progress";
+} from './types';
+export { configureProgressionService } from './service-config';
+export { getDailyProgress } from './service-daily-progress';
 export {
   calculateLevelFromTotalXp,
   calculateLevelThreshold,
   calculateProgressPercent,
   calculateTotalXpToLevel,
   calculateXpBreakdown,
-} from "./service-xp-calculations";
+} from './service-xp-calculations';
 
 const ZERO_BREAKDOWN = {
   base: 0,
@@ -45,7 +45,7 @@ export async function addXpEnhanced(
     AddXpInputSchema.parse(input);
   } catch (error) {
     Sentry.captureException(error, {
-      tags: { operation: "addXp", phase: "validation" },
+      tags: { operation: 'addXp', phase: 'validation' },
     });
     return {
       success: false,
@@ -57,8 +57,8 @@ export async function addXpEnhanced(
       breakdown: ZERO_BREAKDOWN,
       rewards: [],
       error: createProgressionError(
-        "VALIDATION",
-        `Invalid input: ${error instanceof Error ? error.message : "Unknown"}`,
+        'VALIDATION',
+        `Invalid input: ${error instanceof Error ? error.message : 'Unknown'}`,
         false,
       ),
       offlineQueued: false,
@@ -75,7 +75,7 @@ export async function addXpEnhanced(
   });
   const idempotencyKey =
     options?.idempotencyKey ||
-    generateIdempotencyKey(userId, "addXp", input.sessionId);
+    generateIdempotencyKey(userId, 'addXp', input.sessionId);
 
   if (isDuplicateOperation(idempotencyKey)) {
     return {
@@ -130,8 +130,8 @@ export async function batchAddXp(
             breakdown: ZERO_BREAKDOWN,
             rewards: [],
             error: createProgressionError(
-              "UNKNOWN",
-              error instanceof Error ? error.message : "Unknown",
+              'UNKNOWN',
+              error instanceof Error ? error.message : 'Unknown',
               false,
             ),
             offlineQueued: false,

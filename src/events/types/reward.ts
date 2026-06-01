@@ -1,50 +1,50 @@
 export interface RewardEventDefinitions {
-  "reward:granted": {
+  'reward:granted': {
     type?: string;
     userId?: string;
     amount?: number;
     source?: string;
     [key: string]: unknown;
   };
-  "reward:claimed": {
+  'reward:claimed': {
     rewardId: string;
     userId: string;
     claimedAt: number;
     actualValue: number;
     appliedBoosts: string[];
   };
-  "reward:expired": {
+  'reward:expired': {
     rewardId: string;
     userId: string;
     expiredAt: number;
     unclaimedValue: number;
   };
-  "reward:batch_granted": {
+  'reward:batch_granted': {
     userId?: string;
     count: number;
     totalXP?: number;
     totalCurrency?: number;
     rewards?: unknown[];
   };
-  "rewards:badge-granted": { userId: string; badgeId: string; rarity?: string };
-  "rewards:title-granted": { userId: string; titleId: string };
-  "rewards:cosmetic-unlocked": { userId: string; cosmeticId: string };
-  "rewards:coin_reward_queued": {
+  'rewards:badge-granted': { userId: string; badgeId: string; rarity?: string };
+  'rewards:title-granted': { userId: string; titleId: string };
+  'rewards:cosmetic-unlocked': { userId: string; cosmeticId: string };
+  'rewards:coin_reward_queued': {
     userId: string;
     amount: number;
     warId: string;
   };
-  "rewards:badge_reward_queued": {
+  'rewards:badge_reward_queued': {
     userId: string;
     badgeId: string;
     warId: string;
   };
-  "rewards:title_reward_queued": {
+  'rewards:title_reward_queued': {
     userId: string;
     titleId: string;
     warId: string;
   };
-  "economy:grant_reward": {
+  'economy:grant_reward': {
     userId: string;
     rewardType: string;
     amount: number;
@@ -161,7 +161,7 @@ export interface RewardEventDefinitions {
     type: string;
     cosmeticName: string;
   };
-  "daily_reward:claimed": {
+  'daily_reward:claimed': {
     userId: string;
     day: number;
     reward?: unknown;
@@ -170,24 +170,24 @@ export interface RewardEventDefinitions {
     newStreak?: number;
     timestamp?: number;
   };
-  "daily_reward:weekly_completed": {
+  'daily_reward:weekly_completed': {
     userId: string;
     weekNumber: number;
     timestamp?: number;
   };
-  "daily_reward:streak_reset": {
+  'daily_reward:streak_reset': {
     userId: string;
     previousStreak: number;
     reason: string;
     timestamp?: number;
   };
-  "chest:opened": {
+  'chest:opened': {
     userId: string;
     chestId: string;
     rewards: unknown[];
     multiplier?: number;
   };
-  "mystery_multiplier:applied": {
+  'mystery_multiplier:applied': {
     userId: string;
     multiplierId: string;
     multiplierValue: number;

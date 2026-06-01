@@ -3,10 +3,10 @@
  */
 
 export interface FeedbackEventDefinitions {
-  "feedback:visual": {
+  'feedback:visual': {
     userId?: string;
     type: string;
-    intensity?: "low" | "medium" | "high";
+    intensity?: 'low' | 'medium' | 'high';
     timestamp?: number;
   };
 }

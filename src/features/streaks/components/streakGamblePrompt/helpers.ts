@@ -1,6 +1,6 @@
-import * as Sentry from "@sentry/react-native";
-import { getAnalyticsService } from "@/analytics/AnalyticsService";
-import { CRITICAL_HOURS_THRESHOLD } from "./types";
+import * as Sentry from '@sentry/react-native';
+import { getAnalyticsService } from '@/analytics/AnalyticsService';
+import { CRITICAL_HOURS_THRESHOLD } from './types';
 
 export interface RiskInfo {
   text: string;
@@ -13,27 +13,27 @@ export function getRiskText(
   warningColor: string,
 ): RiskInfo {
   if (hours < 1) {
-    return { text: "CRITICAL - About to break!", color: errorColor };
+    return { text: 'CRITICAL - About to break!', color: errorColor };
   }
   if (hours < 2) {
-    return { text: "HIGH RISK", color: errorColor };
+    return { text: 'HIGH RISK', color: errorColor };
   }
-  return { text: "AT RISK", color: warningColor };
+  return { text: 'AT RISK', color: warningColor };
 }
 
 export function trackStreakGambleDecision(
   userId: string,
-  decision: "shield" | "gamble" | "dismiss",
+  decision: 'shield' | 'gamble' | 'dismiss',
   streakDays: number,
   hoursRemaining: number,
 ): void {
   Sentry.addBreadcrumb({
-    category: "streaks",
+    category: 'streaks',
     message: `Streak gamble decision: ${decision}`,
-    level: "info",
+    level: 'info',
     data: { userId, decision, streakDays, hoursRemaining },
   });
-  getAnalyticsService().track("streak_gamble_decision", {
+  getAnalyticsService().track('streak_gamble_decision', {
     user_id: userId,
     decision,
     streak_days: streakDays,

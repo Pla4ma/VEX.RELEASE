@@ -2,10 +2,10 @@
  * Paywall Verification - Receipt, Analytics & Compliance Validator
  */
 
-import { createDebugger } from "../utils/debug";
-import { revenueCatService } from "../shared/monetization/revenuecat-service";
+import { createDebugger } from '../utils/debug';
+import { revenueCatService } from '../shared/monetization/revenuecat-service';
 
-const debug = createDebugger("paywall-verification:receipt");
+const debug = createDebugger('paywall-verification:receipt');
 
 interface ReceiptData {
   transactionId: string;
@@ -19,16 +19,16 @@ export async function verifyReceiptValidation(): Promise<{
   issues: string[];
   warnings: string[];
 }> {
-  debug.info("Verifying receipt validation...");
+  debug.info('Verifying receipt validation...');
 
   const issues: string[] = [];
   const warnings: string[] = [];
 
   try {
     const mockReceipt: ReceiptData = {
-      transactionId: "test-transaction",
-      productId: "test-product",
-      purchaseDate: "2024-01-01T00:00:00.000Z",
+      transactionId: 'test-transaction',
+      productId: 'test-product',
+      purchaseDate: '2024-01-01T00:00:00.000Z',
       acknowledged: true,
     };
 
@@ -39,7 +39,7 @@ export async function verifyReceiptValidation(): Promise<{
     return { valid, issues, warnings };
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    debug.error("Receipt validation verification failed:", error);
+    debug.error('Receipt validation verification failed:', error);
 
     return {
       valid: false,
@@ -53,14 +53,14 @@ function validateReceipt(receipt: ReceiptData): string[] {
   const issues: string[] = [];
 
   if (!receipt.transactionId) {
-    issues.push("Receipt missing transaction ID");
+    issues.push('Receipt missing transaction ID');
   }
 
   const requiredFields: (keyof ReceiptData)[] = [
-    "transactionId",
-    "productId",
-    "purchaseDate",
-    "acknowledged",
+    'transactionId',
+    'productId',
+    'purchaseDate',
+    'acknowledged',
   ];
   for (const field of requiredFields) {
     if (!(field in receipt)) {
@@ -76,7 +76,7 @@ export async function verifyAnalyticsIntegration(): Promise<{
   issues: string[];
   warnings: string[];
 }> {
-  debug.info("Verifying analytics integration...");
+  debug.info('Verifying analytics integration...');
 
   const issues: string[] = [];
   const warnings: string[] = [];
@@ -84,21 +84,21 @@ export async function verifyAnalyticsIntegration(): Promise<{
   try {
     const status = revenueCatService.getStatus();
 
-    if (status !== "ready") {
-      issues.push("RevenueCat service not ready for analytics integration");
+    if (status !== 'ready') {
+      issues.push('RevenueCat service not ready for analytics integration');
     }
 
     const analyticsEvents = getAnalyticsEvents();
 
     if (analyticsEvents.length === 0) {
-      warnings.push("No analytics events detected for purchase tracking");
+      warnings.push('No analytics events detected for purchase tracking');
     }
 
     const valid = issues.length === 0;
     return { valid, issues, warnings };
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    debug.error("Analytics integration verification failed:", error);
+    debug.error('Analytics integration verification failed:', error);
 
     return {
       valid: false,
@@ -110,10 +110,10 @@ export async function verifyAnalyticsIntegration(): Promise<{
 
 function getAnalyticsEvents(): string[] {
   return [
-    "purchase-completed",
-    "purchase-started",
-    "purchase-failed",
-    "subscription-started",
+    'purchase-completed',
+    'purchase-started',
+    'purchase-failed',
+    'subscription-started',
   ];
 }
 
@@ -123,7 +123,7 @@ export async function verifyCompliance(): Promise<{
   warnings: string[];
   gdprCompliant: boolean;
 }> {
-  debug.info("Verifying GDPR compliance...");
+  debug.info('Verifying GDPR compliance...');
 
   const issues: string[] = [];
   const warnings: string[] = [];
@@ -133,11 +133,11 @@ export async function verifyCompliance(): Promise<{
     const dataPoints = getAnalyticsEvents();
 
     if (dataPoints.length === 0) {
-      warnings.push("No data collection points found for analytics");
+      warnings.push('No data collection points found for analytics');
     }
 
     if (dataPoints.length === 0) {
-      warnings.push("No consent records found for analytics");
+      warnings.push('No consent records found for analytics');
     }
 
     gdprCompliant = checkGDPRRequirements();
@@ -152,7 +152,7 @@ export async function verifyCompliance(): Promise<{
     };
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    debug.error("Compliance verification failed:", error);
+    debug.error('Compliance verification failed:', error);
 
     return {
       valid: false,

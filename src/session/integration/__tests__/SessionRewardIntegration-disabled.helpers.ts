@@ -1,19 +1,19 @@
-import { SessionRewardIntegration } from "../SessionRewardIntegration";
-import { eventBus } from "../../../events";
+import { SessionRewardIntegration } from '../SessionRewardIntegration';
+import { eventBus } from '../../../events';
 
-jest.mock("../../../events", () => ({
+jest.mock('../../../events', () => ({
   eventBus: {
     publish: jest.fn(),
     subscribe: jest.fn().mockReturnValue(jest.fn()),
   },
 }));
 
-jest.mock("../../../features/streaks/service", () => ({
+jest.mock('../../../features/streaks/service', () => ({
   getStreakSummary: jest.fn().mockResolvedValue({ currentDays: 3 }),
   restoreStreak: jest.fn(),
 }));
 
-jest.mock("../../../features/streaks/restore-quest", () => ({
+jest.mock('../../../features/streaks/restore-quest', () => ({
   clearStreakRestoreQuest: jest.fn(),
   markStreakRestoreUsed: jest.fn(),
   recordStreakRestoreSession: jest
@@ -21,7 +21,7 @@ jest.mock("../../../features/streaks/restore-quest", () => ({
     .mockResolvedValue({ shouldRestore: false, streakBefore: null }),
 }));
 
-jest.mock("../session-reward-helpers", () => ({
+jest.mock('../session-reward-helpers', () => ({
   calculateRewards: jest.fn().mockReturnValue({
     totalXP: 100,
     totalCoins: 10,
@@ -47,9 +47,9 @@ jest.mock("../session-reward-helpers", () => ({
 export { SessionRewardIntegration, eventBus };
 
 export const createMockSummary = () => ({
-  sessionId: "test-session-id",
-  userId: "test-user-id",
-  sessionMode: "standard" as const,
+  sessionId: 'test-session-id',
+  userId: 'test-user-id',
+  sessionMode: 'standard' as const,
   plannedDuration: 1500000,
   actualDuration: 1500000,
   effectiveDuration: 1500000,
@@ -63,5 +63,5 @@ export const createMockSummary = () => ({
   modeBonus: 0,
   baseScore: 100,
   createdAt: Date.now(),
-  status: "COMPLETED" as const,
+  status: 'COMPLETED' as const,
 });

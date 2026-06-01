@@ -1,4 +1,4 @@
-import { eventBus } from "../../events";
+import { eventBus } from '../../events';
 
 type TrackFunction = (
   eventName: string,
@@ -6,11 +6,11 @@ type TrackFunction = (
 ) => void;
 
 export function subscribeErrorEventListeners(track: TrackFunction): () => void {
-  const unsub1 = eventBus.subscribe("session:failed", (data) => {
+  const unsub1 = eventBus.subscribe('session:failed', (data) => {
     if (!data) {
       return;
     }
-    track("session_error", {
+    track('session_error', {
       sessionId: data.sessionId,
       userId: data.userId,
       error: data.error,
@@ -18,11 +18,11 @@ export function subscribeErrorEventListeners(track: TrackFunction): () => void {
     });
   });
 
-  const unsub2 = eventBus.subscribe("session:sync:failed", (data) => {
+  const unsub2 = eventBus.subscribe('session:sync:failed', (data) => {
     if (!data) {
       return;
     }
-    track("sync_failure", {
+    track('sync_failure', {
       sessionId: data.sessionId,
       userId: data.userId,
       error: data.error,

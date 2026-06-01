@@ -1,6 +1,6 @@
-import { launchColors } from "@theme/tokens/launch-colors";
-import { STREAK_STATES } from "./constants";
-import type { StreakState, StreakStateInfo } from "./types";
+import { launchColors } from '@theme/tokens/launch-colors';
+import { STREAK_STATES } from './constants';
+import type { StreakState, StreakStateInfo } from './types';
 
 export function determineStreakState(
   streakDays: number,
@@ -8,18 +8,18 @@ export function determineStreakState(
   hoursRemaining: number | null,
 ): StreakState {
   if (hasInsurance) {
-    return "PROTECTED";
+    return 'PROTECTED';
   }
   if (hoursRemaining === null || hoursRemaining <= 0) {
-    return "BROKEN";
+    return 'BROKEN';
   }
   if (streakDays === 0) {
-    return "RECOVERING";
+    return 'RECOVERING';
   }
   if (hoursRemaining <= 20) {
-    return "AT_RISK";
+    return 'AT_RISK';
   }
-  return "ACTIVE";
+  return 'ACTIVE';
 }
 
 export function calculateHoursUntilStreakBreak(
@@ -35,13 +35,13 @@ export function getStreakStateInfo(state: StreakState): StreakStateInfo {
   return (
     STREAK_STATES[state] ?? {
       state: state,
-      label: "Unknown",
-      description: "Unknown state",
+      label: 'Unknown',
+      description: 'Unknown state',
       color: launchColors.hex_718096,
-      icon: "❓",
-      animation: "none",
-      urgency: "none",
-      coachMessage: "",
+      icon: '❓',
+      animation: 'none',
+      urgency: 'none',
+      coachMessage: '',
     }
   );
 }
@@ -59,23 +59,23 @@ export function getStreakVisualIndicator(
     PROTECTED: 0.8,
   };
   switch (state) {
-    case "ACTIVE":
+    case 'ACTIVE':
       return {
-        type: "flame",
+        type: 'flame',
         intensity: intensityMap.ACTIVE,
-        animation: streakDays >= 7 ? "milestone-glow" : "glow",
+        animation: streakDays >= 7 ? 'milestone-glow' : 'glow',
       };
-    case "AT_RISK":
-      return { type: "pulse", intensity: 0.6, animation: "warning-pulse" };
-    case "CRITICAL":
-      return { type: "critical", intensity: 1.0, animation: "shake" };
-    case "BROKEN":
-      return { type: "broken", intensity: 0, animation: "none" };
-    case "RECOVERING":
-      return { type: "recover", intensity: 0.3, animation: "gentle-pulse" };
-    case "PROTECTED":
-      return { type: "shield", intensity: 0.8, animation: "shield" };
+    case 'AT_RISK':
+      return { type: 'pulse', intensity: 0.6, animation: 'warning-pulse' };
+    case 'CRITICAL':
+      return { type: 'critical', intensity: 1.0, animation: 'shake' };
+    case 'BROKEN':
+      return { type: 'broken', intensity: 0, animation: 'none' };
+    case 'RECOVERING':
+      return { type: 'recover', intensity: 0.3, animation: 'gentle-pulse' };
+    case 'PROTECTED':
+      return { type: 'shield', intensity: 0.8, animation: 'shield' };
     default:
-      return { type: "flame", intensity: 0, animation: "none" };
+      return { type: 'flame', intensity: 0, animation: 'none' };
   }
 }

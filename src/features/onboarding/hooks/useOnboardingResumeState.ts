@@ -1,13 +1,13 @@
-import { useEffect, useState } from "react";
-import { triggerHapticEvent, HapticEvents } from "../../../constants/haptics";
-import { eventBus } from "../../../events";
+import { useEffect, useState } from 'react';
+import { triggerHapticEvent, HapticEvents } from '../../../constants/haptics';
+import { eventBus } from '../../../events';
 import {
   OnboardingPersistence,
   getPartialData,
   getAbandonCount,
   isHighAbandonRisk,
-} from "../utils/persistence";
-import type { OnboardingStep } from "../types";
+} from '../utils/persistence';
+import type { OnboardingStep } from '../types';
 
 interface ResumeState {
   step: OnboardingStep | null;
@@ -18,19 +18,19 @@ interface ResumeState {
 }
 
 const ONBOARDING_STEPS: OnboardingStep[] = [
-  "WELCOME",
-  "GOAL_SETTING",
-  "FOCUS_TIME",
-  "NAME_SETUP",
-  "FIRST_SESSION_CTA",
+  'WELCOME',
+  'GOAL_SETTING',
+  'FOCUS_TIME',
+  'NAME_SETUP',
+  'FIRST_SESSION_CTA',
 ];
 
 const STEP_LABELS: Record<OnboardingStep, string> = {
-  WELCOME: "Welcome",
-  GOAL_SETTING: "Goal Setting",
-  FOCUS_TIME: "Focus Duration",
-  NAME_SETUP: "Name Setup",
-  FIRST_SESSION_CTA: "First Session",
+  WELCOME: 'Welcome',
+  GOAL_SETTING: 'Goal Setting',
+  FOCUS_TIME: 'Focus Duration',
+  NAME_SETUP: 'Name Setup',
+  FIRST_SESSION_CTA: 'First Session',
 };
 
 function getStepNumber(step: OnboardingStep): number {
@@ -42,14 +42,14 @@ export function getStepLabel(step: OnboardingStep): string {
 }
 
 function getProgressSummary(state: ResumeState | null): string {
-  if (!state) return "";
+  if (!state) {return '';}
   const completed: string[] = [];
-  if (state.partialData.goal) completed.push("goal");
-  if (state.partialData.focusDuration) completed.push("focus duration");
-  if (state.partialData.displayName) completed.push("name");
+  if (state.partialData.goal) {completed.push('goal');}
+  if (state.partialData.focusDuration) {completed.push('focus duration');}
+  if (state.partialData.displayName) {completed.push('name');}
   if (completed.length === 0)
-    return "You started but didn't complete any steps.";
-  return `You've already set your ${completed.join(", ")}.`;
+    {return "You started but didn't complete any steps.";}
+  return `You've already set your ${completed.join(', ')}.`;
 }
 
 export function useOnboardingResumeState(
@@ -63,7 +63,7 @@ export function useOnboardingResumeState(
 
   useEffect(() => {
     const hasIncomplete = OnboardingPersistence.hasIncomplete();
-    if (!hasIncomplete) return;
+    if (!hasIncomplete) {return;}
     const step = OnboardingPersistence.getResumeStep();
     const partialData = getPartialData() || {};
     const abandonCount = getAbandonCount();
@@ -73,17 +73,17 @@ export function useOnboardingResumeState(
       setState({ step, stepNumber, partialData, abandonCount, isHighRisk });
       setIsVisible(true);
       triggerHapticEvent(HapticEvents.WARNING);
-      eventBus.publish("analytics:track", {
-        event: "onboarding_resume_prompt_shown",
+      eventBus.publish('analytics:track', {
+        event: 'onboarding_resume_prompt_shown',
         properties: { step, stepNumber, abandonCount, isHighRisk },
       });
     }
   }, []);
 
   const handleResume = () => {
-    setSelectedAction("resume");
-    eventBus.publish("analytics:track", {
-      event: "onboarding_resume_selected",
+    setSelectedAction('resume');
+    eventBus.publish('analytics:track', {
+      event: 'onboarding_resume_selected',
       properties: { step: state?.step, abandonCount: state?.abandonCount },
     });
     onResume();
@@ -91,9 +91,9 @@ export function useOnboardingResumeState(
   };
 
   const handleRestart = () => {
-    setSelectedAction("restart");
-    eventBus.publish("analytics:track", {
-      event: "onboarding_restart_selected",
+    setSelectedAction('restart');
+    eventBus.publish('analytics:track', {
+      event: 'onboarding_restart_selected',
       properties: { step: state?.step, abandonCount: state?.abandonCount },
     });
     OnboardingPersistence.clear();
@@ -102,9 +102,9 @@ export function useOnboardingResumeState(
   };
 
   const handleDismiss = () => {
-    setSelectedAction("dismiss");
-    eventBus.publish("analytics:track", {
-      event: "onboarding_resume_dismissed",
+    setSelectedAction('dismiss');
+    eventBus.publish('analytics:track', {
+      event: 'onboarding_resume_dismissed',
       properties: { step: state?.step, abandonCount: state?.abandonCount },
     });
     onDismiss();

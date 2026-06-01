@@ -1,25 +1,25 @@
-import React from "react";
-import { ScrollView, View } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import React from 'react';
+import { ScrollView, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-import { Button } from "../../components/primitives/Button";
-import { Text } from "../../components/primitives/Text";
-import { getPremiumCardStyle } from "../../components/premiumStyles";
-import { Skeleton } from "../../components/ui/Skeleton";
-import { useFeatureAccess } from "../../features/liveops-config";
-import { FocusScoreDashboard } from "../../features/focus-identity/components/focus-score-dashboard";
-import { useFocusScoreDashboardModel } from "../../features/focus-identity/hooks-focus-score";
-import { ProgressionDashboard } from "../../features/progression/components";
-import { PersonalBestsGrid } from "../profile/components/PersonalBestsGrid";
-import { useSessionStats } from "../../session/hooks/useSession";
-import { useAuthStore } from "../../store";
-import { useTheme } from "../../theme";
-import type { ExtendedRootStackParams } from "../../navigation/types";
-import { withScreenErrorBoundary } from "../../shared/ui/components/ScreenErrorBoundary";
-import { resolveMonthlyReportAction } from "./progress-actions";
-import { StudyOSCard } from "./StudyOSCard";
+import { Button } from '../../components/primitives/Button';
+import { Text } from '../../components/primitives/Text';
+import { getPremiumCardStyle } from '../../components/premiumStyles';
+import { Skeleton } from '../../components/ui/Skeleton';
+import { useFeatureAccess } from '../../features/liveops-config';
+import { FocusScoreDashboard } from '../../features/focus-identity/components/focus-score-dashboard';
+import { useFocusScoreDashboardModel } from '../../features/focus-identity/hooks-focus-score';
+import { ProgressionDashboard } from '../../features/progression/components';
+import { PersonalBestsGrid } from '../profile/components/PersonalBestsGrid';
+import { useSessionStats } from '../../session/hooks/useSession';
+import { useAuthStore } from '../../store';
+import { useTheme } from '../../theme';
+import type { ExtendedRootStackParams } from '../../navigation/types';
+import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+import { resolveMonthlyReportAction } from './progress-actions';
+import { StudyOSCard } from './StudyOSCard';
 
 const formatHours = (totalMilliseconds: number): string =>
   `${(totalMilliseconds / 3600000).toFixed(totalMilliseconds >= 36000000 ? 0 : 1)}h`;
@@ -30,7 +30,7 @@ export function ProgressScreen(): JSX.Element {
   const navigation =
     useNavigation<NativeStackNavigationProp<ExtendedRootStackParams>>();
   const disclosure = useFeatureAccess();
-  const userId = useAuthStore((state) => state.user?.id ?? "");
+  const userId = useAuthStore((state) => state.user?.id ?? '');
   const focusDashboardModel = useFocusScoreDashboardModel(userId || null, 30);
   const { stats, isLoading: isStatsLoading, refresh } = useSessionStats(userId);
   const canOpenStudy = disclosure.features.content_study.isUnlocked;
@@ -40,26 +40,26 @@ export function ProgressScreen(): JSX.Element {
 
   const statCards = [
     {
-      label: "Focus Hours",
-      value: stats ? formatHours(stats.totalFocusTime) : "--",
+      label: 'Focus Hours',
+      value: stats ? formatHours(stats.totalFocusTime) : '--',
     },
     {
-      label: "Completed Sessions",
-      value: stats ? String(stats.completedSessions) : "--",
+      label: 'Completed Sessions',
+      value: stats ? String(stats.completedSessions) : '--',
     },
     {
-      label: "Longest Streak",
-      value: stats ? `${stats.longestStreak} days` : "--",
+      label: 'Longest Streak',
+      value: stats ? `${stats.longestStreak} days` : '--',
     },
   ];
 
   const openSession = (): void => {
-    navigation.navigate("SessionStack", { screen: "SessionSetup", params: {} });
+    navigation.navigate('SessionStack', { screen: 'SessionSetup', params: {} });
   };
 
   const openStudy = (): void => {
     if (canOpenStudy) {
-      navigation.navigate("ContentStudy");
+      navigation.navigate('ContentStudy');
       return;
     }
     openSession();
@@ -97,10 +97,10 @@ export function ProgressScreen(): JSX.Element {
         onRetry={retryFocusDashboard}
         onStartSession={openSession}
         onOpenMonthlyReport={() => {
-          if (monthlyReportAction === "paywall") {
-            navigation.navigate("Paywall", {
-              source: "focus-monthly-report",
-              gatedFeature: "monthly_focus_report",
+          if (monthlyReportAction === 'paywall') {
+            navigation.navigate('Paywall', {
+              source: 'focus-monthly-report',
+              gatedFeature: 'monthly_focus_report',
             });
             return;
           }
@@ -124,23 +124,23 @@ export function ProgressScreen(): JSX.Element {
         </Text>
         <View
           style={{
-            flexDirection: "row",
+            flexDirection: 'row',
             gap: theme.spacing[3],
-            flexWrap: "wrap",
+            flexWrap: 'wrap',
           }}
         >
           {statCards.map((item) => (
             <View
               key={item.label}
               style={{
-                minWidth: "30%",
+                minWidth: '30%',
                 flexGrow: 1,
                 borderWidth: 1,
                 borderColor: theme.colors.border.light,
                 backgroundColor: theme.colors.background.secondary,
                 padding: theme.spacing[4],
                 gap: theme.spacing[1],
-                ...getPremiumCardStyle("small"),
+                ...getPremiumCardStyle('small'),
               }}
             >
               <Text variant="label" color={theme.colors.text.secondary}>
@@ -172,4 +172,4 @@ export function ProgressScreen(): JSX.Element {
   );
 }
 
-export default withScreenErrorBoundary(ProgressScreen, "Progress");
+export default withScreenErrorBoundary(ProgressScreen, 'Progress');

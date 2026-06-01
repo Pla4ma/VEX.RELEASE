@@ -1,16 +1,16 @@
-import React, { useState, useCallback, useMemo } from "react";
-import { Pressable, ViewStyle } from "react-native";
-import { useTheme } from "../../../theme";
-import { Box, Text } from "../../../components/primitives";
-import { Icon } from "../../../icons";
-import { launchColors } from "@theme/tokens/launch-colors";
+import React, { useState, useCallback, useMemo } from 'react';
+import { Pressable, ViewStyle } from 'react-native';
+import { useTheme } from '../../../theme';
+import { Box, Text } from '../../../components/primitives';
+import { Icon } from '../../../icons';
+import { launchColors } from '@theme/tokens/launch-colors';
 import {
   type FeaturedAchievement,
   AchievementSlot,
   LockedSlot,
-} from "./AchievementShowcaseCard";
+} from './AchievementShowcaseCard';
 
-export type { FeaturedAchievement } from "./AchievementShowcaseCard";
+export type { FeaturedAchievement } from './AchievementShowcaseCard';
 
 interface AchievementShowcaseProps {
   achievements: FeaturedAchievement[];
@@ -86,8 +86,8 @@ export const AchievementShowcase: React.FC<AchievementShowcaseProps> = ({
             onPress={handleEditToggle}
             accessibilityLabel={
               isEditMode
-                ? "Finish editing featured achievements"
-                : "Edit featured achievements"
+                ? 'Finish editing featured achievements'
+                : 'Edit featured achievements'
             }
             accessibilityRole="button"
             accessibilityHint="Changes the order of the achievements shown on this profile"
@@ -108,7 +108,7 @@ export const AchievementShowcase: React.FC<AchievementShowcaseProps> = ({
             >
               <Box flexDirection="row" alignItems="center">
                 <Icon
-                  name={isEditMode ? "check" : "edit-2"}
+                  name={isEditMode ? 'check' : 'edit-2'}
                   size={14}
                   color={
                     isEditMode
@@ -120,13 +120,13 @@ export const AchievementShowcase: React.FC<AchievementShowcaseProps> = ({
                   variant="caption"
                   style={{
                     marginLeft: 6,
-                    fontWeight: "600",
+                    fontWeight: '600',
                     color: isEditMode
                       ? theme.colors.success.DEFAULT
                       : theme.colors.text.secondary,
                   }}
                 >
-                  {isEditMode ? "Done" : "Edit"}
+                  {isEditMode ? 'Done' : 'Edit'}
                 </Text>
               </Box>
             </Box>
@@ -168,7 +168,7 @@ export const AchievementShowcase: React.FC<AchievementShowcaseProps> = ({
           style={{
             backgroundColor: theme.colors.primary[50],
             borderWidth: 1,
-            borderColor: theme.colors.primary[500] + "30",
+            borderColor: theme.colors.primary[500] + '30',
           }}
         >
           <Box flexDirection="row" alignItems="center">
@@ -178,7 +178,7 @@ export const AchievementShowcase: React.FC<AchievementShowcaseProps> = ({
               style={{
                 marginLeft: 8,
                 color: theme.colors.primary[600],
-                fontWeight: "500",
+                fontWeight: '500',
               }}
             >
               Tap and drag to rearrange featured achievements

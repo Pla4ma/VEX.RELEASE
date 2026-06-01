@@ -8,12 +8,12 @@ export interface InterventionScenario {
 
 export interface InterventionMessage {
   content: string;
-  tone: "supportive" | "urgent" | "motivational" | "strategic";
+  tone: 'supportive' | 'urgent' | 'motivational' | 'strategic';
   quickResponses: string[];
 }
 
 export interface InterventionAction {
-  type: "SUGGEST_SESSION" | "AUTO_CREATE_SESSION" | "SEND_NOTIFICATION";
+  type: 'SUGGEST_SESSION' | 'AUTO_CREATE_SESSION' | 'SEND_NOTIFICATION';
   data: Record<string, unknown>;
 }
 
@@ -27,7 +27,7 @@ export interface PlateauInput {
   xpGrowthRate7d: number;
   xpGrowthRatePrev7d: number;
   currentLevel: number;
-  sessionsPerWeekTrend: "INCREASING" | "STABLE" | "DECREASING";
+  sessionsPerWeekTrend: 'INCREASING' | 'STABLE' | 'DECREASING';
 }
 
 export interface StreakRescueInput {
@@ -46,7 +46,7 @@ export interface BossStrategyInput {
 
 export interface BossStrategy {
   recommendedDuration: number;
-  targetQuality: "S" | "A" | "B";
+  targetQuality: 'S' | 'A' | 'B';
   expectedDamage: number;
 }
 
@@ -91,7 +91,7 @@ export interface StudyStuckInput {
 export interface DistractionDetectedInput {
   sessionId: string;
   currentPurityScore: number;
-  purityScoreTrend: "IMPROVING" | "STABLE" | "DECLINING";
+  purityScoreTrend: 'IMPROVING' | 'STABLE' | 'DECLINING';
   pausesInLast10Min: number;
   backgroundSwitches: number;
 }
@@ -99,9 +99,9 @@ export interface DistractionDetectedInput {
 export interface OptimalBreakInput {
   sessionDuration: number;
   currentPurityScore: number;
-  focusPattern: "DEEP" | "MODERATE" | "FRAGMENTED";
+  focusPattern: 'DEEP' | 'MODERATE' | 'FRAGMENTED';
   timeSinceLastBreak: number;
   userPreferredBreakInterval?: number;
 }
 
-export type CoachPersona = "MENTOR" | "CHEERLEADER" | "DRILL_SERGEANT";
+export type CoachPersona = 'MENTOR' | 'CHEERLEADER' | 'DRILL_SERGEANT';

@@ -3,9 +3,9 @@ import type {
   RecoveryRecord,
   RecoveryType,
   InterruptionRecord,
-} from "../types";
-import { createDebugger } from "../../utils/debug";
-import type { RecoveryConfig } from "./recovery-analysis-types";
+} from '../types';
+import { createDebugger } from '../../utils/debug';
+import type { RecoveryConfig } from './recovery-analysis-types';
 import {
   evaluateRecovery,
   calculatePenalties,
@@ -13,15 +13,15 @@ import {
   calculatePartialCredit,
   attemptSessionRecovery,
   canAutoRecoverForInterruption,
-} from "./recovery-analysis";
+} from './recovery-analysis';
 
-export type { RecoveryConfig } from "./recovery-analysis-types";
+export type { RecoveryConfig } from './recovery-analysis-types';
 export {
   createRecoveryService,
   getRecoveryService,
-} from "./recovery-service-factory";
+} from './recovery-service-factory';
 
-const debug = createDebugger("session:recovery");
+const debug = createDebugger('session:recovery');
 
 export class RecoveryService {
   private config: RecoveryConfig;
@@ -38,7 +38,7 @@ export class RecoveryService {
       maxRecoveriesPerSession: 3,
       ...config,
     };
-    debug.info("RecoveryService initialized");
+    debug.info('RecoveryService initialized');
   }
 
   scheduleAutoRecovery(session: SessionState, onRecover: () => void): boolean {
@@ -48,7 +48,7 @@ export class RecoveryService {
     if (
       this.getRecoveryCount(session.id) >= this.config.maxRecoveriesPerSession
     ) {
-      debug.warn("Max recoveries reached for session %s", session.id);
+      debug.warn('Max recoveries reached for session %s', session.id);
       return false;
     }
     this.clearPendingRecovery(session.id);
@@ -58,7 +58,7 @@ export class RecoveryService {
     }, this.config.autoRecoveryDelay);
     this.pendingRecoveries.set(session.id, timeoutId);
     debug.info(
-      "Auto-recovery scheduled for session %s in %dms",
+      'Auto-recovery scheduled for session %s in %dms',
       session.id,
       this.config.autoRecoveryDelay,
     );
@@ -74,7 +74,7 @@ export class RecoveryService {
     if (timeoutId) {
       clearTimeout(timeoutId);
       this.pendingRecoveries.delete(sessionId);
-      debug.debug("Pending recovery cleared for session %s", sessionId);
+      debug.debug('Pending recovery cleared for session %s', sessionId);
       return true;
     }
     return false;
@@ -93,7 +93,7 @@ export class RecoveryService {
     );
     this.recordRecovery(session.id, recovery);
     debug.info(
-      "Recovery attempted: %s (type: %s, success: %s)",
+      'Recovery attempted: %s (type: %s, success: %s)',
       session.id,
       recoveryType,
       recovery.success,
@@ -113,14 +113,14 @@ export class RecoveryService {
     const protection = this.canProtectStreak(session);
     if (!protection.canProtect) {
       debug.warn(
-        "Cannot protect streak for session %s: %s",
+        'Cannot protect streak for session %s: %s',
         session.id,
         protection.reason,
       );
       return false;
     }
     debug.info(
-      "Streak protected for session %s (type: %s)",
+      'Streak protected for session %s (type: %s)',
       session.id,
       protection.protectionType,
     );
@@ -183,7 +183,7 @@ export class RecoveryService {
 
   updateConfig(config: Partial<RecoveryConfig>): void {
     this.config = { ...this.config, ...config };
-    debug.info("RecoveryService config updated");
+    debug.info('RecoveryService config updated');
   }
 
   getConfig(): RecoveryConfig {
@@ -192,6 +192,6 @@ export class RecoveryService {
 
   destroy(): void {
     this.clearHistory();
-    debug.info("RecoveryService destroyed");
+    debug.info('RecoveryService destroyed');
   }
 }

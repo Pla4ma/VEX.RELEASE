@@ -1,24 +1,24 @@
 import type {
   NotificationContext,
   NotificationRuleResult,
-} from "./service-types";
+} from './service-types';
 
 export function shouldNotifyStreakAtRisk(
   context: NotificationContext,
 ): NotificationRuleResult {
   const { streakRisk } = context;
   if (!streakRisk || streakRisk.hoursRemaining > 12) {
-    return { shouldSend: false, priority: 0, message: { title: "", body: "" } };
+    return { shouldSend: false, priority: 0, message: { title: '', body: '' } };
   }
   const urgency =
-    streakRisk.riskLevel === "CRITICAL"
-      ? "🚨 LAST CHANCE"
-      : streakRisk.riskLevel === "HIGH"
-        ? "⚠️ Streak at Risk"
-        : "⏰ Streak Warning";
+    streakRisk.riskLevel === 'CRITICAL'
+      ? '🚨 LAST CHANCE'
+      : streakRisk.riskLevel === 'HIGH'
+        ? '⚠️ Streak at Risk'
+        : '⏰ Streak Warning';
   return {
     shouldSend: true,
-    priority: streakRisk.riskLevel === "CRITICAL" ? 10 : 8,
+    priority: streakRisk.riskLevel === 'CRITICAL' ? 10 : 8,
     message: {
       title: urgency,
       body: `Your 🔥 ${streakRisk.streakDays}-day streak ends in ${streakRisk.hoursRemaining} hours! Start a session now.`,
@@ -31,13 +31,13 @@ export function shouldNotifyBossEscape(
 ): NotificationRuleResult {
   const { bossEscape } = context;
   if (!bossEscape || bossEscape.hoursRemaining > 4) {
-    return { shouldSend: false, priority: 0, message: { title: "", body: "" } };
+    return { shouldSend: false, priority: 0, message: { title: '', body: '' } };
   }
   return {
     shouldSend: true,
     priority: 9,
     message: {
-      title: "👹 Boss Escaping Soon!",
+      title: '👹 Boss Escaping Soon!',
       body: `${bossEscape.bossName} has ${bossEscape.healthPercent.toFixed(0)}% health and escapes in ${bossEscape.hoursRemaining}h! Defeat them now!`,
     },
   };
@@ -48,13 +48,13 @@ export function shouldNotifySquadStreakAtRisk(
 ): NotificationRuleResult {
   const { squadStreak } = context;
   if (!squadStreak) {
-    return { shouldSend: false, priority: 0, message: { title: "", body: "" } };
+    return { shouldSend: false, priority: 0, message: { title: '', body: '' } };
   }
   return {
     shouldSend: true,
     priority: 7,
     message: {
-      title: "🔥 Squad Streak at Risk!",
+      title: '🔥 Squad Streak at Risk!',
       body: `${squadStreak.atRiskMemberName} hasn't focused today — your ${squadStreak.streakDays}-day squad streak is at risk!`,
     },
   };
@@ -65,14 +65,14 @@ export function shouldNotifyRivalAhead(
 ): NotificationRuleResult {
   const { rivalUpdate } = context;
   if (!rivalUpdate || rivalUpdate.myScore >= rivalUpdate.theirScore) {
-    return { shouldSend: false, priority: 0, message: { title: "", body: "" } };
+    return { shouldSend: false, priority: 0, message: { title: '', body: '' } };
   }
   const diff = rivalUpdate.theirScore - rivalUpdate.myScore;
   return {
     shouldSend: true,
     priority: 6,
     message: {
-      title: "⚔️ Rival Alert!",
+      title: '⚔️ Rival Alert!',
       body: `${rivalUpdate.rivalName} just focused for ${rivalUpdate.theirNewSessionMinutes} min. You're ${diff} min behind this week!`,
     },
   };
@@ -83,13 +83,13 @@ export function shouldNotifyChestFull(
 ): NotificationRuleResult {
   const { chestStatus } = context;
   if (!chestStatus || chestStatus.unopenedCount < chestStatus.maxCapacity) {
-    return { shouldSend: false, priority: 0, message: { title: "", body: "" } };
+    return { shouldSend: false, priority: 0, message: { title: '', body: '' } };
   }
   return {
     shouldSend: true,
     priority: 5,
     message: {
-      title: "🎁 Chests Full!",
+      title: '🎁 Chests Full!',
       body: `Your chest inventory is full (${chestStatus.unopenedCount}/${chestStatus.maxCapacity}). Open one to make room for more!`,
     },
   };
@@ -104,13 +104,13 @@ export function shouldNotifyChallengeExpiring(
     challengeExpiry.hoursRemaining > 2 ||
     challengeExpiry.progressPercent >= 50
   ) {
-    return { shouldSend: false, priority: 0, message: { title: "", body: "" } };
+    return { shouldSend: false, priority: 0, message: { title: '', body: '' } };
   }
   return {
     shouldSend: true,
     priority: 4,
     message: {
-      title: "⏰ Challenge Ending!",
+      title: '⏰ Challenge Ending!',
       body: `"${challengeExpiry.challengeName}" expires in ${challengeExpiry.hoursRemaining}h and you're only ${challengeExpiry.progressPercent}% complete!`,
     },
   };
@@ -125,13 +125,13 @@ export function shouldNotifySeasonEnding(
     seasonEnding.hoursRemaining > 24 ||
     seasonEnding.unclaimedTiers === 0
   ) {
-    return { shouldSend: false, priority: 0, message: { title: "", body: "" } };
+    return { shouldSend: false, priority: 0, message: { title: '', body: '' } };
   }
   return {
     shouldSend: true,
     priority: 8,
     message: {
-      title: "🌙 Season Ending!",
+      title: '🌙 Season Ending!',
       body: `Season ends in ${Math.floor(seasonEnding.hoursRemaining)} hours! You have ${seasonEnding.unclaimedTiers} unclaimed reward tiers!`,
     },
   };

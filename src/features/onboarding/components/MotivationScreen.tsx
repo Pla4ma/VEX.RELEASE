@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import { Pressable } from "react-native";
-import Animated, { FadeIn } from "react-native-reanimated";
+import React, { useState } from 'react';
+import { Pressable } from 'react-native';
+import Animated, { FadeIn } from 'react-native-reanimated';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import type { MotivationProfileType } from "../schemas";
-import { MotivationCard, MOTIVATION_OPTIONS } from "./MotivationCard";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import type { MotivationProfileType } from '../schemas';
+import { MotivationCard, MOTIVATION_OPTIONS } from './MotivationCard';
 
 interface MotivationScreenProps {
   onSelect: (style: MotivationProfileType) => void;
@@ -80,10 +80,10 @@ export function MotivationScreen({
       <Box flex={1} minHeight={20} />
       <Animated.View
         entering={FadeIn.duration(400).delay(300)}
-        style={{ marginTop: "auto" }}
+        style={{ marginTop: 'auto' }}
       >
         <Pressable
-          onPress={() => handleSelect("coach_led")}
+          onPress={() => handleSelect('coach_led')}
           accessibilityLabel="Use coach-led motivation style"
           accessibilityRole="button"
           accessibilityHint="Applies a balanced coach style and continues to the first session"

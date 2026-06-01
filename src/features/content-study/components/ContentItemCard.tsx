@@ -1,17 +1,17 @@
-import React from "react";
-import { Pressable, Alert } from "react-native";
-import Animated, { FadeInUp } from "react-native-reanimated";
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { Icon } from "../../../icons";
-import { useTheme } from "../../../theme";
-import { buttonTap } from "../../../utils/haptics";
-import type { StudyContent } from "../types";
+import React from 'react';
+import { Pressable, Alert } from 'react-native';
+import Animated, { FadeInUp } from 'react-native-reanimated';
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { Icon } from '../../../icons';
+import { useTheme } from '../../../theme';
+import { buttonTap } from '../../../utils/haptics';
+import type { StudyContent } from '../types';
 import {
   STATUS_CONFIG,
   SOURCE_TYPE_ICONS,
   statusColor,
-} from "../screens/StudyLibraryScreen.constants";
+} from '../screens/StudyLibraryScreen.constants';
 
 interface ContentItemCardProps {
   content: StudyContent;
@@ -32,11 +32,11 @@ export function ContentItemCard({
 
   const handleDelete = (): void => {
     Alert.alert(
-      "Delete Study Content?",
-      `This will permanently remove "${content.title || "Untitled"}" and all associated study plans.`,
+      'Delete Study Content?',
+      `This will permanently remove "${content.title || 'Untitled'}" and all associated study plans.`,
       [
-        { text: "Cancel", style: "cancel" },
-        { text: "Delete", style: "destructive", onPress: onDelete },
+        { text: 'Cancel', style: 'cancel' },
+        { text: 'Delete', style: 'destructive', onPress: onDelete },
       ],
     );
   };
@@ -47,7 +47,7 @@ export function ContentItemCard({
     <Animated.View entering={FadeInUp.delay(index * 50).springify()}>
       <Pressable
         onPress={() => { buttonTap(); onPress(); }}
-        accessibilityLabel={`${content.title || "Untitled"} study content`}
+        accessibilityLabel={`${content.title || 'Untitled'} study content`}
         accessibilityRole="button"
         accessibilityHint="Double tap to view content details"
       >
@@ -82,7 +82,7 @@ export function ContentItemCard({
                 fontWeight="600"
                 numberOfLines={1}
               >
-                {content.title || "Untitled Study Content"}
+                {content.title || 'Untitled Study Content'}
               </Text>
 
               <Box flexDirection="row" alignItems="center" gap="sm">
@@ -106,7 +106,7 @@ export function ContentItemCard({
                     variant="caption"
                     style={{
                       color: resolvedStatusColor,
-                      fontWeight: "600",
+                      fontWeight: '600',
                     }}
                   >
                     {status.label}
@@ -122,18 +122,18 @@ export function ContentItemCard({
                 </Text>
               </Box>
 
-              {(content.status === "PENDING" ||
-                content.status === "EXTRACTING") && (
+              {(content.status === 'PENDING' ||
+                content.status === 'EXTRACTING') && (
                 <Box mt="xs">
                   <Text variant="caption" color="text.secondary">
-                    {content.status === "PENDING"
-                      ? "Waiting to extract..."
-                      : "Extracting content..."}
+                    {content.status === 'PENDING'
+                      ? 'Waiting to extract...'
+                      : 'Extracting content...'}
                   </Text>
                 </Box>
               )}
 
-              {content.status === "FAILED" && content.errorMessage && (
+              {content.status === 'FAILED' && content.errorMessage && (
                 <Box mt="xs">
                   <Text
                     variant="caption"

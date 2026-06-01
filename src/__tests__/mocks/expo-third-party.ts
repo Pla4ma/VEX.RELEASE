@@ -10,7 +10,7 @@ function recordSetupFallback(error: unknown): void {
   void error;
 }
 
-jest.mock("react-native-purchases", () => {
+jest.mock('react-native-purchases', () => {
   return {
     __esModule: true,
     default: {
@@ -32,28 +32,28 @@ jest.mock("react-native-purchases", () => {
     },
     LOG_LEVEL: { DEBUG: 0, ERROR: 1 },
     PURCHASES_ERROR_CODE: {
-      PURCHASE_CANCELLED_ERROR: "PURCHASE_CANCELLED_ERROR",
+      PURCHASE_CANCELLED_ERROR: 'PURCHASE_CANCELLED_ERROR',
     },
   };
 });
 
 try {
-  jest.mock("expo-secure-store", () => ({
+  jest.mock('expo-secure-store', () => ({
     getItemAsync: jest.fn(() => Promise.resolve(null)),
     setItemAsync: jest.fn(() => Promise.resolve()),
     deleteItemAsync: jest.fn(() => Promise.resolve()),
   }));
-  jest.mock("expo-linear-gradient", () => ({
-    LinearGradient: "LinearGradient",
+  jest.mock('expo-linear-gradient', () => ({
+    LinearGradient: 'LinearGradient',
   }));
-  jest.mock("expo-document-picker", () => ({
+  jest.mock('expo-document-picker', () => ({
     getDocumentAsync: jest.fn(() =>
       Promise.resolve({ canceled: true, assets: [] }),
     ),
-    DocumentPicker: { types: jest.fn(() => "application/pdf") },
+    DocumentPicker: { types: jest.fn(() => 'application/pdf') },
     isCanceled: jest.fn(() => false),
   }));
-  jest.mock("@react-native-async-storage/async-storage", () => ({
+  jest.mock('@react-native-async-storage/async-storage', () => ({
     setItem: jest.fn(() => Promise.resolve()),
     getItem: jest.fn(() => Promise.resolve(null)),
     removeItem: jest.fn(() => Promise.resolve()),
@@ -65,17 +65,17 @@ try {
     multiRemove: jest.fn(() => Promise.resolve()),
     multiMerge: jest.fn(() => Promise.resolve()),
   }));
-  jest.mock("@react-native-community/netinfo", () => ({
+  jest.mock('@react-native-community/netinfo', () => ({
     addEventListener: jest.fn(() => jest.fn()),
     fetch: jest.fn(() =>
       Promise.resolve({
-        type: "wifi",
+        type: 'wifi',
         isConnected: true,
         isInternetReachable: true,
       }),
     ),
     useNetInfo: jest.fn(() => ({
-      type: "wifi",
+      type: 'wifi',
       isConnected: true,
       isInternetReachable: true,
     })),

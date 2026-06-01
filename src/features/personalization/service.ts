@@ -7,7 +7,7 @@ import {
   type FeatureAvailabilitySnapshot,
   type VexExperience,
   type VexPersonalizationProfile,
-} from "./schemas";
+} from './schemas';
 import {
   resolveBehavior,
   resolveBoss,
@@ -19,9 +19,9 @@ import {
   resolveHomeLayoutVariant,
   resolvePremium,
   resolvePremiumMoment,
-} from "./experience-service-helpers";
-import { resolveUserStage, resolveHiddenSystems } from "./experience-resolvers";
-export { resolveUserStage, resolveHiddenSystems } from "./experience-resolvers";
+} from './experience-service-helpers';
+import { resolveUserStage, resolveHiddenSystems } from './experience-resolvers';
+export { resolveUserStage, resolveHiddenSystems } from './experience-resolvers';
 
 export function resolveVexExperience(
   userProfile: VexPersonalizationProfile,
@@ -37,89 +37,89 @@ export function resolveVexExperience(
   const home = resolveHome({ boss, profile, stats });
   const completion = resolveCompletion({ availability, boss, stats });
   const companionIntensity = resolveCompanionIntensity(profile);
-  const isStudyRelevant = home.sections.includes("study_layer");
+  const isStudyRelevant = home.sections.includes('study_layer');
   const systems = resolveHiddenSystems(profile, stats);
   const bossMode = !boss.isVisible
-    ? "hidden"
-    : boss.intensity === "subtle"
-      ? "momentum"
-      : "personal_boss";
+    ? 'hidden'
+    : boss.intensity === 'subtle'
+      ? 'momentum'
+      : 'personal_boss';
 
   return VexExperienceSchema.parse({
     version: 3,
     userStage: resolveUserStage(stats),
     primaryHomeCTA: {
-      intent: isStudyRelevant ? "CONTINUE_STUDY_PATH" : "START_SESSION",
+      intent: isStudyRelevant ? 'CONTINUE_STUDY_PATH' : 'START_SESSION',
       label: isStudyRelevant
         ? `Continue ${profile.studyLayerName}`
-        : "Start session",
+        : 'Start session',
     },
     secondaryHomeCTA:
       stats.totalCompletedSessions > 0
-        ? { intent: "OPEN_PROGRESS", label: "Review progress" }
+        ? { intent: 'OPEN_PROGRESS', label: 'Review progress' }
         : null,
     homeSections: home.sections,
     homeSpotlight:
       stats.totalCompletedSessions === 0
-        ? "none"
+        ? 'none'
         : isStudyRelevant
-          ? "study_layer"
+          ? 'study_layer'
           : boss.isVisible
-            ? "boss_momentum"
-            : "progress_proof",
+            ? 'boss_momentum'
+            : 'progress_proof',
     coachMessageStyle: resolveCoachMode(profile),
     companionMode:
-      companionIntensity === "active"
-        ? "active_partner"
-        : companionIntensity === "subtle"
-          ? "quiet_presence"
-          : "visual_coach",
+      companionIntensity === 'active'
+        ? 'active_partner'
+        : companionIntensity === 'subtle'
+          ? 'quiet_presence'
+          : 'visual_coach',
     companionVisualIntensity: companionIntensity,
     bossMode,
     bossCopyStyle:
-      boss.intensity === "intense"
-        ? "controlled_intensity"
-        : boss.intensity === "game-like"
-          ? "boss_health"
-          : "subtle_momentum",
+      boss.intensity === 'intense'
+        ? 'controlled_intensity'
+        : boss.intensity === 'game-like'
+          ? 'boss_health'
+          : 'subtle_momentum',
     homeLayoutVariant: resolveHomeLayoutVariant(profile, stats),
     coachTone: profile.preferredTone,
     companionIntensity,
     bossIntensity: resolveBossIntensity(profile, stats),
     studyLayerLabel: profile.studyLayerName,
     studyLayerProminence: isStudyRelevant
-      ? "spotlight"
+      ? 'spotlight'
       : availability.study
-        ? "supporting"
-        : "hidden",
+        ? 'supporting'
+        : 'hidden',
     sessionSuggestion: behavior.sessionSuggestion,
     completionSequence: completion.sequence,
     progressEmphasis:
       stats.totalCompletedSessions >= 7
-        ? "intelligence"
+        ? 'intelligence'
         : stats.totalCompletedSessions >= 2
-          ? "rhythm"
-          : "basic",
+          ? 'rhythm'
+          : 'basic',
     premiumMoment: resolvePremiumMoment(stats),
     ...systems,
     allowedRoutes: [
-      "SessionStack.SessionSetup",
-      "Main.Progress",
-      ...(availability.study ? ["ContentStudy"] : []),
-      ...(availability.boss && boss.isVisible && boss.intensity !== "subtle"
-        ? ["Boss"]
+      'SessionStack.SessionSetup',
+      'Main.Progress',
+      ...(availability.study ? ['ContentStudy'] : []),
+      ...(availability.boss && boss.isVisible && boss.intensity !== 'subtle'
+        ? ['Boss']
         : []),
     ],
     allowedNotificationTypes: [
-      "gentle_return",
-      "progress_milestone",
-      ...(availability.study ? ["study_continuation"] : []),
-      ...(availability.boss && boss.isVisible && boss.intensity !== "subtle"
-        ? ["boss_momentum"]
+      'gentle_return',
+      'progress_milestone',
+      ...(availability.study ? ['study_continuation'] : []),
+      ...(availability.boss && boss.isVisible && boss.intensity !== 'subtle'
+        ? ['boss_momentum']
         : []),
     ],
     nextBestAction: {
-      intent: isStudyRelevant ? "CONTINUE_STUDY_PATH" : "START_SESSION",
+      intent: isStudyRelevant ? 'CONTINUE_STUDY_PATH' : 'START_SESSION',
       label: behavior.sessionSuggestion,
     },
     behaviorAdaptations: behavior.adaptations,
@@ -130,27 +130,27 @@ export function resolveVexExperience(
     release: {
       hidden: systems.hiddenSystems,
       included: [
-        "motivation_onboarding",
-        "adaptive_home",
-        "start_session",
-        "completion_sequence",
-        "study_layer",
+        'motivation_onboarding',
+        'adaptive_home',
+        'start_session',
+        'completion_sequence',
+        'study_layer',
       ],
       productionProof: [
-        "real_device_first_session_qa",
-        "restart_persistence_qa",
-        "offline_slow_network_qa",
+        'real_device_first_session_qa',
+        'restart_persistence_qa',
+        'offline_slow_network_qa',
       ],
       teasedOnly: systems.teasedSystems.concat([
-        "deep_coach_memory",
-        "weekly_intelligence",
-        "visual_identity_depth",
+        'deep_coach_memory',
+        'weekly_intelligence',
+        'visual_identity_depth',
       ]),
     },
     routeGates: {
       boss: {
         canNavigate:
-          availability.boss && boss.isVisible && boss.intensity !== "subtle",
+          availability.boss && boss.isVisible && boss.intensity !== 'subtle',
         canQuery: availability.boss && stats.totalCompletedSessions > 0,
       },
       premium: {

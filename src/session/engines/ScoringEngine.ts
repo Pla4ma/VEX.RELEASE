@@ -3,34 +3,34 @@ import type {
   ScoreCalculation,
   DamageCalculation,
   FocusQualityMetrics,
-} from "../types";
-import { BonusCalculator } from "./scoring/BonusCalculator";
-import { calculateDamage } from "./DamageCalculator";
-import { createDebugger } from "../../utils/debug";
-import { calculateSessionScore } from "./score-calculation";
+} from '../types';
+import { BonusCalculator } from './scoring/BonusCalculator';
+import { calculateDamage } from './DamageCalculator';
+import { createDebugger } from '../../utils/debug';
+import { calculateSessionScore } from './score-calculation';
 import {
   calculateFocusQuality as calcFocusQuality,
   calculateFocusPurityScore as calcFocusPurityScore,
-} from "./focus-quality-calculator";
+} from './focus-quality-calculator';
 import {
   calculateFinalScore as calcFinalScore,
   isEligibleForRewards as checkEligible,
   getCompletionTier as resolveTier,
   serializeCalculation as serialize,
-} from "./scoring-utils";
+} from './scoring-utils';
 
 export {
   calculateFinalScore,
   isEligibleForRewards,
   getCompletionTier,
   serializeCalculation,
-} from "./scoring-utils";
+} from './scoring-utils';
 export {
   calculateFocusQuality,
   calculateFocusPurityScore,
-} from "./focus-quality-calculator";
+} from './focus-quality-calculator';
 
-const debug = createDebugger("session:scoring");
+const debug = createDebugger('session:scoring');
 
 export class ScoringEngine {
   private userStreak: number = 0;
@@ -55,7 +55,7 @@ export class ScoringEngine {
       this.userStreak,
     );
     debug.info(
-      "Score calculated for session %s: base=%d, final=%d, isPerfect=%s",
+      'Score calculated for session %s: base=%d, final=%d, isPerfect=%s',
       session.id,
       calculation.basePoints,
       calcFinalScore(calculation),
@@ -70,7 +70,7 @@ export class ScoringEngine {
 
   calculateDamage(
     session: SessionState,
-    reason: "ABANDON" | "INTERRUPTION" | "TIMEOUT" | "ANTI_CHEAT",
+    reason: 'ABANDON' | 'INTERRUPTION' | 'TIMEOUT' | 'ANTI_CHEAT',
   ): DamageCalculation {
     return calculateDamage(session, this.userStreak, reason);
   }
@@ -96,7 +96,7 @@ export class ScoringEngine {
 
   getCompletionTier(
     completionPercentage: number,
-  ): "NONE" | "PARTIAL" | "FULL" | "PERFECT" {
+  ): 'NONE' | 'PARTIAL' | 'FULL' | 'PERFECT' {
     return resolveTier(completionPercentage);
   }
 

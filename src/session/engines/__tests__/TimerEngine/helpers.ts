@@ -1,10 +1,10 @@
-import { TimerEngine } from "../../TimerEngine";
+import { TimerEngine } from '../../TimerEngine';
 
 jest.useFakeTimers();
 
 export { TimerEngine };
 
-export const mockSessionId = "test-session-123";
+export const mockSessionId = 'test-session-123';
 export const mockCallbacks = {
   onTick: jest.fn(),
   onComplete: jest.fn(),

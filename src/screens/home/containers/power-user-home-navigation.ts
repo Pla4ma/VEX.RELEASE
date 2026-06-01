@@ -1,17 +1,17 @@
-import { useCallback } from "react";
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useCallback } from 'react';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import {
   getFeatureAvailability,
   isFeatureAvailableForNavigation,
   type FeatureAccessResult,
-} from "../../../features/liveops-config";
-import type { ExtendedRootStackParams } from "../../../navigation/types";
+} from '../../../features/liveops-config';
+import type { ExtendedRootStackParams } from '../../../navigation/types';
 import {
   navigateToSessionStackScreen,
   navigateToMainTab,
-} from "../../../navigation/navigation-helpers";
-import type { LearningExecutionLayer } from "../../../features/learning-execution";
-import { buildLearningSessionParams } from "../../../features/learning-execution";
+} from '../../../navigation/navigation-helpers';
+import type { LearningExecutionLayer } from '../../../features/learning-execution';
+import { buildLearningSessionParams } from '../../../features/learning-execution';
 
 type Nav = NativeStackNavigationProp<ExtendedRootStackParams>;
 
@@ -22,11 +22,11 @@ export function usePowerUserNavigation(params: {
   analytics: {
     trackFirstSessionStarted: (userId: string, source: string) => void;
     trackNextBestActionPressed: (
-      stage: import("../../../features/liveops-config").UserExperienceStage,
+      stage: import('../../../features/liveops-config').UserExperienceStage,
       completedSessions: number,
     ) => void;
   };
-  learningExecutionTarget: LearningExecutionLayer["target"];
+  learningExecutionTarget: LearningExecutionLayer['target'];
 }) {
   const {
     navigation,
@@ -46,20 +46,20 @@ export function usePowerUserNavigation(params: {
   const openSetup = useCallback(
     (setupParams: Record<string, unknown> = {}): void => {
       if (userId && disclosure.inputs.totalCompletedSessions === 0) {
-        analytics.trackFirstSessionStarted(userId, "home");
+        analytics.trackFirstSessionStarted(userId, 'home');
       }
-      navigateToSessionStackScreen(navigation, "SessionSetup", setupParams);
+      navigateToSessionStackScreen(navigation, 'SessionSetup', setupParams);
     },
     [analytics, disclosure.inputs.totalCompletedSessions, navigation, userId],
   );
 
   const openProgress = useCallback(
-    () => navigateToMainTab(navigation, "Progress"),
+    () => navigateToMainTab(navigation, 'Progress'),
     [navigation],
   );
 
   const openSocial = useCallback(() => {
-    navigateToMainTab(navigation, "Profile");
+    navigateToMainTab(navigation, 'Profile');
   }, [navigation]);
 
   const openContentStudy = useCallback(() => {
@@ -67,7 +67,7 @@ export function usePowerUserNavigation(params: {
       openSetup();
       return;
     }
-    navigation.navigate("ContentStudy");
+    navigation.navigate('ContentStudy');
   }, [canNavigateContentStudy, navigation, openSetup]);
 
   const continueStudyPlan = useCallback(() => {

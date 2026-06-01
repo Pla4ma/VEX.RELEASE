@@ -1,19 +1,19 @@
-import React, { useState, useMemo } from "react";
-import { Pressable } from "react-native";
-import Animated, { FadeIn, FadeInUp, Layout } from "react-native-reanimated";
-import { Box } from "../../../components/primitives/Box";
-import { Button } from "../../../components/primitives/Button";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
+import React, { useState, useMemo } from 'react';
+import { Pressable } from 'react-native';
+import Animated, { FadeIn, FadeInUp, Layout } from 'react-native-reanimated';
+import { Box } from '../../../components/primitives/Box';
+import { Button } from '../../../components/primitives/Button';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
 import {
   ChallengesWidgetSkeleton,
   ChallengesErrorState,
   ChallengesEmptyState,
-} from "./TodaysChallengesStates";
-import { ChallengeProgressRow } from "./ChallengeProgressRow";
-import type { TodaysChallengesWidgetProps } from "./todays-challenges-types";
+} from './TodaysChallengesStates';
+import { ChallengeProgressRow } from './ChallengeProgressRow';
+import type { TodaysChallengesWidgetProps } from './todays-challenges-types';
 
-export type { TodaysChallengesWidgetProps, ChallengeItem } from "./todays-challenges-types";
+export type { TodaysChallengesWidgetProps, ChallengeItem } from './todays-challenges-types';
 
 /**
  * Main challenges widget component
@@ -87,7 +87,7 @@ export function TodaysChallengesWidget({
                         color="success.DEFAULT"
                         fontWeight="600"
                       >
-                        {" "}
+                        {' '}
                         · {stats.claimable} to claim!
                       </Text>
                     )}
@@ -99,7 +99,7 @@ export function TodaysChallengesWidget({
             <Text
               fontSize={20}
               color={theme.colors.text.tertiary}
-              style={{ transform: [{ rotate: isExpanded ? "90deg" : "0deg" }] }}
+              style={{ transform: [{ rotate: isExpanded ? '90deg' : '0deg' }] }}
             >
               ›
             </Text>
@@ -135,7 +135,7 @@ export function TodaysChallengesWidget({
                     variant="ghost"
                     size="sm"
                     onPress={onViewAll}
-                    style={{ alignSelf: "center" }}
+                    style={{ alignSelf: 'center' }}
                     accessibilityLabel="View all challenges"
                     accessibilityRole="button"
                     accessibilityHint="Double tap to view challenges"

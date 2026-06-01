@@ -1,22 +1,22 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useCallback, useEffect } from "react";
-import { eventBus } from "../../../events";
-import * as service from "../service";
-import * as queries from "../queries";
-import * as repository from "../repository";
-import { economyKeys } from "../../economy/hooks";
-import type { UpdateChallengeProgressInput } from "../schemas";
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useCallback, useEffect } from 'react';
+import { eventBus } from '../../../events';
+import * as service from '../service';
+import * as queries from '../queries';
+import * as repository from '../repository';
+import { economyKeys } from '../../economy/hooks';
+import type { UpdateChallengeProgressInput } from '../schemas';
 export const challengeKeys = {
-  all: ["challenges"] as const,
+  all: ['challenges'] as const,
   byId: (id: string) => [...challengeKeys.all, id] as const,
   byType: (seasonId: string, type: string) =>
-    [...challengeKeys.all, "type", seasonId, type] as const,
-  byUser: (userId: string) => [...challengeKeys.all, "user", userId] as const,
+    [...challengeKeys.all, 'type', seasonId, type] as const,
+  byUser: (userId: string) => [...challengeKeys.all, 'user', userId] as const,
   userChallenge: (userId: string, challengeId: string) =>
-    [...challengeKeys.all, "user-challenge", userId, challengeId] as const,
-  active: (userId: string) => [...challengeKeys.all, "active", userId] as const,
+    [...challengeKeys.all, 'user-challenge', userId, challengeId] as const,
+  active: (userId: string) => [...challengeKeys.all, 'active', userId] as const,
   completable: (userId: string) =>
-    [...challengeKeys.all, "completable", userId] as const,
+    [...challengeKeys.all, 'completable', userId] as const,
 };
 export function useChallenge(challengeId: string) {
   return useQuery({
@@ -28,7 +28,7 @@ export function useChallenge(challengeId: string) {
 }
 export function useChallengesByType(
   seasonId: string,
-  type: "DAILY" | "WEEKLY" | "EVENT",
+  type: 'DAILY' | 'WEEKLY' | 'EVENT',
 ) {
   return useQuery({
     queryKey: challengeKeys.byType(seasonId, type),
@@ -58,7 +58,7 @@ export function useActiveChallenges(
 }
 export function useChallengeSummaries(userId: string) {
   return useQuery({
-    queryKey: [...challengeKeys.all, "summaries", userId],
+    queryKey: [...challengeKeys.all, 'summaries', userId],
     queryFn: () => queries.getUserChallengeSummaries(userId),
     enabled: Boolean(userId),
     staleTime: 1000 * 30,
@@ -85,7 +85,7 @@ export function useClaimChallengeReward() {
     mutationFn: async (input: { userId: string; challengeId: string }) => {
       const result = await service.claimChallengeReward(input);
       if (!result.success) {
-        throw new Error(result.error ?? "Challenge reward claim failed");
+        throw new Error(result.error ?? 'Challenge reward claim failed');
       }
       return result;
     },
@@ -108,8 +108,8 @@ export function useChallengeProgress(userId: string) {
   const total = challenges.length;
   const completed = challenges.filter(
     (item) =>
-      item.userChallenge.status === "COMPLETED" ||
-      item.userChallenge.status === "CLAIMED",
+      item.userChallenge.status === 'COMPLETED' ||
+      item.userChallenge.status === 'CLAIMED',
   ).length;
   return {
     ...query,
@@ -153,7 +153,7 @@ export function useChallengeEvents(userId: string, canSubscribe?: boolean) {
       return;
     }
     const unsubscribe = eventBus.subscribe(
-      "challenge:completed",
+      'challenge:completed',
       handleChallengeCompleted,
     );
     return unsubscribe;
@@ -161,7 +161,7 @@ export function useChallengeEvents(userId: string, canSubscribe?: boolean) {
 }
 export function useRerollEligibility(userId: string, challengeId: string) {
   return useQuery({
-    queryKey: [...challengeKeys.all, "reroll-eligibility", userId, challengeId],
+    queryKey: [...challengeKeys.all, 'reroll-eligibility', userId, challengeId],
     queryFn: () => queries.checkRerollEligibility(userId, challengeId),
     enabled: Boolean(userId) && Boolean(challengeId),
     staleTime: 1000 * 30,

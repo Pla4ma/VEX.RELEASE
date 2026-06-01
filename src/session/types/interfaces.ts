@@ -1,6 +1,6 @@
-import type { SessionState, SessionConfig, SessionSummary } from "./schemas";
-import type { SessionStatus } from "./enums";
-import type { SessionMode } from "../modes";
+import type { SessionState, SessionConfig, SessionSummary } from './schemas';
+import type { SessionStatus } from './enums';
+import type { SessionMode } from '../modes';
 
 export interface SessionHistoryEntry {
   sessionId: string;
@@ -78,34 +78,34 @@ export interface AntiCheatFlag {
   timestamp?: number;
   flagType?: string;
   type: string;
-  severity: "LOW" | "MEDIUM" | "HIGH" | "WARNING" | "MODERATE" | "CRITICAL";
+  severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'WARNING' | 'MODERATE' | 'CRITICAL';
   description?: string;
   detectedAt?: number;
   evidence?: Record<string, unknown>;
-  actionTaken?: "NONE" | "FLAGGED" | "SCORE_REDUCED" | "SESSION_INVALIDATED";
+  actionTaken?: 'NONE' | 'FLAGGED' | 'SCORE_REDUCED' | 'SESSION_INVALIDATED';
   score?: number;
 }
 
 export type InterruptionType =
-  | "EXTERNAL"
-  | "INTERNAL"
-  | "SYSTEM"
-  | "USER"
-  | "USER_PAUSE";
+  | 'EXTERNAL'
+  | 'INTERNAL'
+  | 'SYSTEM'
+  | 'USER'
+  | 'USER_PAUSE';
 export type InterruptionSeverity =
-  | "LOW"
-  | "MEDIUM"
-  | "HIGH"
-  | "CRITICAL"
-  | "MODERATE"
-  | "MINOR";
+  | 'LOW'
+  | 'MEDIUM'
+  | 'HIGH'
+  | 'CRITICAL'
+  | 'MODERATE'
+  | 'MINOR';
 export type RecoveryType =
-  | "AUTO_RESUME"
-  | "USER_RESUME"
-  | "MANUAL_RECOVERY"
-  | "STREAK_SAVE"
-  | "PARTIAL_CREDIT"
-  | "FULL_RESET";
+  | 'AUTO_RESUME'
+  | 'USER_RESUME'
+  | 'MANUAL_RECOVERY'
+  | 'STREAK_SAVE'
+  | 'PARTIAL_CREDIT'
+  | 'FULL_RESET';
 
 export interface FocusQualityMetrics {
   sessionId: string;

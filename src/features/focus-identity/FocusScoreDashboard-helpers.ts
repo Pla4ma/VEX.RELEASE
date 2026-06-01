@@ -1,12 +1,12 @@
-import type { FocusScoreHistoryPoint } from "./types";
+import type { FocusScoreHistoryPoint } from './types';
 
 export function formatDelta(delta: number): string {
-  return `${delta >= 0 ? "+" : ""}${delta}`;
+  return `${delta >= 0 ? '+' : ''}${delta}`;
 }
 
 export function formatFactorName(key: string): string {
   return key
-    .replace(/([A-Z])/g, " $1")
+    .replace(/([A-Z])/g, ' $1')
     .replace(/^./, (char) => char.toUpperCase());
 }
 

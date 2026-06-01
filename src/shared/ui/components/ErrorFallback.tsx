@@ -5,13 +5,13 @@
  * offline detection, and retry / go-back actions.
  */
 
-import React from "react";
-import { ScrollView } from "react-native";
+import React from 'react';
+import { ScrollView } from 'react-native';
 
-import { useTheme } from "../../../theme";
-import { Text } from "../../../components/primitives";
-import { Button } from "../../../components";
-import { useNetInfo } from "../../../network";
+import { useTheme } from '../../../theme';
+import { Text } from '../../../components/primitives';
+import { Button } from '../../../components';
+import { useNetInfo } from '../../../network';
 
 export interface ErrorFallbackProps {
   screenName: string;
@@ -29,43 +29,43 @@ export function ErrorFallback({
   const { theme } = useTheme();
   const { isOffline } = useNetInfo();
 
-  const errorMessage = error?.message?.toLowerCase() ?? "";
+  const errorMessage = error?.message?.toLowerCase() ?? '';
   const message = isOffline
-    ? "You are offline. Please check your connection and try again."
-    : errorMessage.includes("network") ||
-        errorMessage.includes("fetch") ||
-        errorMessage.includes("timeout")
-      ? "Connection lost. Please check your internet and try again."
-      : errorMessage.includes("auth") ||
-          errorMessage.includes("unauthorized") ||
-          errorMessage.includes("token")
-        ? "Your session expired. Please sign in again."
+    ? 'You are offline. Please check your connection and try again.'
+    : errorMessage.includes('network') ||
+        errorMessage.includes('fetch') ||
+        errorMessage.includes('timeout')
+      ? 'Connection lost. Please check your internet and try again.'
+      : errorMessage.includes('auth') ||
+          errorMessage.includes('unauthorized') ||
+          errorMessage.includes('token')
+        ? 'Your session expired. Please sign in again.'
         : `We couldn't load ${screenName}. Please try again.`;
 
-  const offlineNotice = isOffline ? " Retry when reconnected." : "";
+  const offlineNotice = isOffline ? ' Retry when reconnected.' : '';
 
   return (
     <ScrollView
       style={{ flex: 1, backgroundColor: theme.colors.background.primary }}
       contentContainerStyle={{
         flexGrow: 1,
-        justifyContent: "center",
-        alignItems: "center",
+        justifyContent: 'center',
+        alignItems: 'center',
         padding: theme.spacing[6],
       }}
     >
       <Text
         variant="display"
-        style={{ marginBottom: theme.spacing[6], textAlign: "center" }}
+        style={{ marginBottom: theme.spacing[6], textAlign: 'center' }}
       >
-        {isOffline ? "📡" : "⚠️"}
+        {isOffline ? '📡' : '⚠️'}
       </Text>
       <Text
         variant="h3"
         color="text.primary"
-        style={{ marginBottom: theme.spacing[3], textAlign: "center" }}
+        style={{ marginBottom: theme.spacing[3], textAlign: 'center' }}
       >
-        {isOffline ? "You are offline" : "Something went wrong"}
+        {isOffline ? 'You are offline' : 'Something went wrong'}
       </Text>
       <Text
         variant="body"
@@ -74,7 +74,7 @@ export function ErrorFallback({
           marginBottom: theme.spacing[6],
           maxWidth: 280,
           lineHeight: 22,
-          textAlign: "center",
+          textAlign: 'center',
         }}
       >
         {message}
@@ -83,7 +83,7 @@ export function ErrorFallback({
       <Button
         variant="primary"
         onPress={onRetry}
-        style={{ width: "100%", maxWidth: 280 }}
+        style={{ width: '100%', maxWidth: 280 }}
         accessibilityLabel="Try again"
         accessibilityRole="button"
         accessibilityHint="Retries the screen operation"
@@ -94,7 +94,7 @@ export function ErrorFallback({
         <Button
           variant="ghost"
           onPress={onGoBack}
-          style={{ width: "100%", maxWidth: 280, marginTop: theme.spacing[3] }}
+          style={{ width: '100%', maxWidth: 280, marginTop: theme.spacing[3] }}
           accessibilityLabel="Go back"
           accessibilityRole="button"
           accessibilityHint="Navigates back to the previous screen"

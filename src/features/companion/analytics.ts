@@ -4,9 +4,9 @@
  * Analytics tracking for companion personality responses and interactions.
  */
 
-import { capture } from "../../shared/analytics/analytics-service";
-import type { PersonalityEventType } from "./CompanionPersonalityEngine";
-import type { CompanionPhase, CompanionMood } from "./types";
+import { capture } from '../../shared/analytics/analytics-service';
+import type { PersonalityEventType } from './CompanionPersonalityEngine';
+import type { CompanionPhase, CompanionMood } from './types';
 
 /**
  * Track personality response triggered
@@ -17,7 +17,7 @@ export function trackPersonalityResponse(
   animation: string,
   dialogueLength: number,
 ): void {
-  capture("companion_personality_response", {
+  capture('companion_personality_response', {
     user_id: userId,
     event_type: eventType,
     animation,
@@ -34,7 +34,7 @@ export function trackDialogueViewed(
   dialogueIndex: number,
   totalDialogues: number,
 ): void {
-  capture("companion_dialogue_viewed", {
+  capture('companion_dialogue_viewed', {
     user_id: userId,
     dialogue_index: dialogueIndex,
     total_dialogues: totalDialogues,
@@ -49,7 +49,7 @@ export function trackAnimationCompleted(
   animation: string,
   duration: number,
 ): void {
-  capture("companion_animation_completed", {
+  capture('companion_animation_completed', {
     user_id: userId,
     animation,
     duration_ms: duration,
@@ -65,7 +65,7 @@ export function trackMoodChange(
   newMood: string,
   reason: string,
 ): void {
-  capture("companion_mood_change", {
+  capture('companion_mood_change', {
     user_id: userId,
     previous_mood: previousMood,
     new_mood: newMood,
@@ -92,11 +92,11 @@ export function setCompanionUserProperties(
 export function trackCompanionGrowth(
   userId: string,
   reason:
-    | "session_completed"
-    | "streak_maintained"
-    | "comeback_completed"
-    | "focus_score_changed"
-    | "daily_mission_completed",
+    | 'session_completed'
+    | 'streak_maintained'
+    | 'comeback_completed'
+    | 'focus_score_changed'
+    | 'daily_mission_completed',
   previousPhase?: CompanionPhase,
   newPhase?: CompanionPhase,
   previousMood?: CompanionMood,
@@ -104,7 +104,7 @@ export function trackCompanionGrowth(
   level?: number,
   sessionId?: string,
 ): void {
-  capture("vex_companion_growth", {
+  capture('vex_companion_growth', {
     user_id: userId,
     reason,
     previous_phase: previousPhase,
@@ -127,7 +127,7 @@ export function trackCompanionEvolution(
   totalFocusMinutes: number,
   evolutionCeremony: boolean,
 ): void {
-  capture("vex_companion_evolution", {
+  capture('vex_companion_evolution', {
     user_id: userId,
     previous_phase: previousPhase,
     new_phase: newPhase,
@@ -142,11 +142,11 @@ export function trackCompanionEvolution(
  */
 export function trackCompanionMilestone(
   userId: string,
-  milestoneType: "level" | "sessions" | "focus_minutes" | "perfect_sessions",
+  milestoneType: 'level' | 'sessions' | 'focus_minutes' | 'perfect_sessions',
   value: number,
   previousValue: number,
 ): void {
-  capture("vex_companion_milestone", {
+  capture('vex_companion_milestone', {
     user_id: userId,
     milestone_type: milestoneType,
     value,

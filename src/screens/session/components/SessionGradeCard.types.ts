@@ -1,8 +1,8 @@
-import { StyleSheet } from "react-native";
-import { Circle } from "react-native-svg";
-import Animated from "react-native-reanimated";
-import { triggerHaptic } from "../../../utils/haptics";
-import { createSheet } from "@/shared/ui/create-sheet";
+import { StyleSheet } from 'react-native';
+import { Circle } from 'react-native-svg';
+import Animated from 'react-native-reanimated';
+import { triggerHaptic } from '../../../utils/haptics';
+import { createSheet } from '@/shared/ui/create-sheet';
 
 export const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
@@ -19,13 +19,13 @@ export type SessionGradeCardProps = {
 };
 
 export async function pulseCompleteHaptic(): Promise<void> {
-  await triggerHaptic("impactMedium");
+  await triggerHaptic('impactMedium');
 }
 
 export const styles = createSheet({
   center: {
     ...StyleSheet.absoluteFill,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

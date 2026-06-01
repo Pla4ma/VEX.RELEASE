@@ -1,10 +1,10 @@
-import React from "react";
-import Animated, { FadeInUp } from "react-native-reanimated";
-import { Box, Text } from "../../../components/primitives";
-import { getPremiumCardStyle } from "../../../components/premiumStyles";
-import { Icon } from "../../../icons";
-import { useTheme } from "../../../theme";
-import type { ProgressMetric } from "./SessionProgressionCard.types";
+import React from 'react';
+import Animated, { FadeInUp } from 'react-native-reanimated';
+import { Box, Text } from '../../../components/primitives';
+import { getPremiumCardStyle } from '../../../components/premiumStyles';
+import { Icon } from '../../../icons';
+import { useTheme } from '../../../theme';
+import type { ProgressMetric } from './SessionProgressionCard.types';
 
 export function isProgressMetric(
   metric: ProgressMetric | null,
@@ -28,7 +28,7 @@ export function MetricRow({
           backgroundColor: theme.colors.background.secondary,
           borderWidth: 1,
           borderColor: theme.colors.border.light,
-          ...getPremiumCardStyle("medium"),
+          ...getPremiumCardStyle('medium'),
         }}
       >
         <Box

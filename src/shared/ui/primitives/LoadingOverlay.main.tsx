@@ -1,15 +1,15 @@
-import React from "react";
-import { View, Text, ViewStyle, Modal, ActivityIndicator } from "react-native";
+import React from 'react';
+import { View, Text, ViewStyle, Modal, ActivityIndicator } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withRepeat,
   withTiming,
   withSequence,
-} from "react-native-reanimated";
-import { useFadeIn } from "../hooks/useReanimated";
-import { useTheme } from "../../../theme";
-import { overlayStyles as styles } from "./loadingOverlay.styles";
+} from 'react-native-reanimated';
+import { useFadeIn } from '../hooks/useReanimated';
+import { useTheme } from '../../../theme';
+import { overlayStyles as styles } from './loadingOverlay.styles';
 
 interface LoadingOverlayProps {
   visible: boolean;
@@ -37,7 +37,7 @@ function usePulseAnimation() {
 
 export function LoadingOverlay({
   visible,
-  message = "Loading...",
+  message = 'Loading...',
   progress,
   showProgress = false,
   blur = true,

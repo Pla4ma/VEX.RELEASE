@@ -5,19 +5,19 @@
  * completed, abandoned, purity changes, and perfect focus.
  */
 
-import type { SessionSummary, SessionConfig } from "../../session/types";
+import type { SessionSummary, SessionConfig } from '../../session/types';
 
 export type SessionEventType =
-  | "session:created"
-  | "session:started"
-  | "session:paused"
-  | "session:resumed"
-  | "session:completed"
-  | "session:abandoned"
-  | "session:failed"
-  | "session:tick"
-  | "session:purity_changed"
-  | "session:perfect_focus_earned";
+  | 'session:created'
+  | 'session:started'
+  | 'session:paused'
+  | 'session:resumed'
+  | 'session:completed'
+  | 'session:abandoned'
+  | 'session:failed'
+  | 'session:tick'
+  | 'session:purity_changed'
+  | 'session:perfect_focus_earned';
 
 export interface SessionCreatedEvent {
   sessionId: string;
@@ -87,8 +87,8 @@ export interface SessionPurityChangedEvent {
   sessionId: string;
   userId: string;
   purityScore: number;
-  purityLabel: "Elite" | "Good" | "Okay" | "Distracted";
-  previousLabel: "Elite" | "Good" | "Okay" | "Distracted";
+  purityLabel: 'Elite' | 'Good' | 'Okay' | 'Distracted';
+  previousLabel: 'Elite' | 'Good' | 'Okay' | 'Distracted';
   streakMultiplier: number;
 }
 

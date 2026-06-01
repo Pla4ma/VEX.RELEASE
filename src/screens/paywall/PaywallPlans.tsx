@@ -1,12 +1,12 @@
-import React from "react";
-import { Pressable, View } from "react-native";
+import React from 'react';
+import { Pressable, View } from 'react-native';
 
-import { Text } from "../../components/primitives/Text";
-import { CardEnterAnimation } from "../../shared/ui/components/EnterAnimation";
-import type { Theme } from "../../theme";
-import type { PaywallPlanSelection } from "./paywall-copy";
-import { paywallStyles as styles } from "./paywall-styles";
-export { PaywallFooterActions } from "./PaywallFooterActions";
+import { Text } from '../../components/primitives/Text';
+import { CardEnterAnimation } from '../../shared/ui/components/EnterAnimation';
+import type { Theme } from '../../theme';
+import type { PaywallPlanSelection } from './paywall-copy';
+import { paywallStyles as styles } from './paywall-styles';
+export { PaywallFooterActions } from './PaywallFooterActions';
 
 type PaywallPlanListProps = {
   plans: readonly PaywallPlanSelection[];
@@ -51,10 +51,10 @@ function PaywallPlanCard({
         {
           backgroundColor: theme.colors.background.secondary,
           borderColor:
-            plan.id === "annual"
+            plan.id === 'annual'
               ? theme.colors.primary[500]
               : theme.colors.border.DEFAULT,
-          borderWidth: plan.id === "annual" ? 2 : 1,
+          borderWidth: plan.id === 'annual' ? 2 : 1,
         },
       ]}
       accessibilityLabel={`Choose ${plan.title} Premium plan`}
@@ -84,7 +84,7 @@ function PaywallPlanCard({
               styles.planBadge,
               {
                 backgroundColor:
-                  plan.id === "annual"
+                  plan.id === 'annual'
                     ? theme.colors.primary[500]
                     : theme.colors.background.tertiary,
               },
@@ -95,7 +95,7 @@ function PaywallPlanCard({
                 styles.planBadgeText,
                 {
                   color:
-                    plan.id === "annual"
+                    plan.id === 'annual'
                       ? theme.colors.text.inverse
                       : theme.colors.text.secondary,
                 },
@@ -111,7 +111,7 @@ function PaywallPlanCard({
       </Text>
       {hasTrial && plan.packageInfo?.product.introPrice ? (
         <Text style={[styles.trialText, { color: theme.colors.success[500] }]}>
-          {plan.packageInfo.product.introPrice.periodNumberOfUnits}{" "}
+          {plan.packageInfo.product.introPrice.periodNumberOfUnits}{' '}
           {plan.packageInfo.product.introPrice.periodUnit?.toLowerCase()} free,
           then {plan.displayPrice.toLowerCase()}
         </Text>

@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
-import { View } from "react-native";
-import Svg, { Circle, Defs, LinearGradient, Stop } from "react-native-svg";
+import React, { useEffect } from 'react';
+import { View } from 'react-native';
+import Svg, { Circle, Defs, LinearGradient, Stop } from 'react-native-svg';
 import Animated, {
   Easing,
   FadeIn,
@@ -10,19 +10,18 @@ import Animated, {
   useSharedValue,
   withSequence,
   withTiming,
-} from "react-native-reanimated";
-import { Box, Text } from "../../../components/primitives";
-import {
-  getPremiumCardStyle,
-  withAlpha,
-} from "../../../components/premiumStyles";
-import { useTheme } from "../../../theme";
+} from 'react-native-reanimated';
+import { Box, Text } from '../../../components/primitives';
+import { BreathingGlow } from '../../../components/primitives/BreathingGlow';
+import { withAlpha } from '../../../components/premiumStyles';
+import { useTheme } from '../../../theme';
 import {
   AnimatedCircle,
   pulseCompleteHaptic,
   styles,
   type SessionGradeCardProps,
-} from "./SessionGradeCard.types";
+} from './SessionGradeCard.types';
+import { SessionGradePurityProof } from './SessionGradePurityProof';
 export type { SessionGradeCardProps };
 
 export function SessionGradeCard({
@@ -73,7 +72,7 @@ export function SessionGradeCard({
     >
       <Animated.View
         entering={FadeIn.duration(220)}
-        style={{ ...{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0 } }}
+        style={{ ...{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 } }}
       >
         <View
           style={{ flex: 1, backgroundColor: theme.colors.background.primary }}
@@ -99,10 +98,19 @@ export function SessionGradeCard({
             style={{
               width: size,
               height: size,
-              justifyContent: "center",
-              alignItems: "center",
+              justifyContent: 'center',
+              alignItems: 'center',
             }}
           >
+            <BreathingGlow
+              color={gradeColor}
+              size={size * 0.9}
+              intensity={0.22}
+              style={{
+                top: size * 0.05,
+                left: size * 0.05,
+              }}
+            />
             <Svg width={size} height={size}>
               <Defs>
                 <LinearGradient
@@ -166,33 +174,13 @@ export function SessionGradeCard({
             </View>
           </View>
         </Animated.View>
-        <Animated.View entering={FadeInUp.delay(380).springify()}>
-          <Box
-            mt={24}
-            px={24}
-            py={20}
-            alignItems="center"
-            style={{
-              backgroundColor: withAlpha(
-                theme.colors.background.secondary,
-                0.92,
-              ),
-              borderWidth: 1,
-              borderColor: withAlpha(gradeColor, 0.34),
-              ...getPremiumCardStyle("hero"),
-            }}
-          >
-            <Text variant="h3" color={theme.colors.text.primary}>
-              {clampedPurity}% purity
-            </Text>
-            <Text variant="body" color={purityColor} mt={8}>
-              {purityLabel}
-            </Text>
-            <Text variant="caption" color={theme.colors.text.secondary} mt={14}>
-              {durationLabel}
-            </Text>
-          </Box>
-        </Animated.View>
+        <SessionGradePurityProof
+          clampedPurity={clampedPurity}
+          purityColor={purityColor}
+          purityLabel={purityLabel}
+          durationLabel={durationLabel}
+          gradeColor={gradeColor}
+        />
       </Box>
     </Box>
   );

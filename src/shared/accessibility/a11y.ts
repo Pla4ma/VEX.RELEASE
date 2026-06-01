@@ -1,7 +1,7 @@
-import { AccessibilityInfo, Platform } from "react-native";
+import { AccessibilityInfo, Platform } from 'react-native';
 
 export function announce(message: string): void {
-  if (Platform.OS === "ios") {
+  if (Platform.OS === 'ios') {
     AccessibilityInfo.announceForAccessibility(message);
   }
 }
@@ -23,13 +23,13 @@ export function getButtonA11yProps(
   hint?: string,
 ): {
   accessible: true;
-  accessibilityRole: "button";
+  accessibilityRole: 'button';
   accessibilityLabel: string;
   accessibilityHint?: string;
 } {
   return {
     accessible: true,
-    accessibilityRole: "button",
+    accessibilityRole: 'button',
     accessibilityLabel: label,
     accessibilityHint: hint,
   };
@@ -41,13 +41,13 @@ export function getProgressA11yProps(
   label: string,
 ): {
   accessible: true;
-  accessibilityRole: "progressbar";
+  accessibilityRole: 'progressbar';
   accessibilityLabel: string;
   accessibilityValue: { min: number; max: number; now: number; text: string };
 } {
   return {
     accessible: true,
-    accessibilityRole: "progressbar",
+    accessibilityRole: 'progressbar',
     accessibilityLabel: label,
     accessibilityValue: {
       min: 0,

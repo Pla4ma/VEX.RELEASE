@@ -1,16 +1,16 @@
-import React, { useEffect, useCallback } from "react";
-import { View } from "react-native";
-import { createSheet } from "@/shared/ui/create-sheet";
+import React, { useEffect, useCallback } from 'react';
+import { View } from 'react-native';
+import { createSheet } from '@/shared/ui/create-sheet';
 import Animated, {
   useAnimatedStyle,
   FadeIn,
   FadeOut,
-} from "react-native-reanimated";
+} from 'react-native-reanimated';
 import {
   useTransitionAnimation,
   createAnimatedStyles,
   type TransitionWrapperProps,
-} from "./transition-config";
+} from './transition-config';
 
 interface StaggerContainerProps {
   children: React.ReactNode;
@@ -41,8 +41,8 @@ function StaggerContainer({
 export const TransitionWrapper: React.FC<TransitionWrapperProps> = ({
   children,
   visible,
-  enterConfig = { preset: "fade", duration: 300, easing: "ease" },
-  exitConfig = { preset: "fade", duration: 200, easing: "ease" },
+  enterConfig = { preset: 'fade', duration: 300, easing: 'ease' },
+  exitConfig = { preset: 'fade', duration: 200, easing: 'ease' },
   onEnterComplete,
   onExitComplete,
   style,
@@ -97,7 +97,7 @@ export const TransitionWrapper: React.FC<TransitionWrapperProps> = ({
 interface LayoutTransitionProps {
   children: React.ReactNode;
   layoutId: string;
-  style?: import("react-native").ViewStyle;
+  style?: import('react-native').ViewStyle;
 }
 export const LayoutTransition: React.FC<LayoutTransitionProps> = ({
   children,

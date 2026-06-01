@@ -21,9 +21,9 @@ export function useBossEngagementSignals(
 ): BossEngagementInputs & { signals: BossEngagementSignal[] } {
   return { signals: [], ...inputs };
 }
-export type BossEngagementLevel = "none" | "low" | "medium" | "high";
+export type BossEngagementLevel = 'none' | 'low' | 'medium' | 'high';
 export function deriveBossEngagementLevel(
   _inputs: BossEngagementInputs,
 ): BossEngagementLevel {
-  return "none";
+  return 'none';
 }

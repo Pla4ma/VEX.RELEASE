@@ -2,7 +2,7 @@
  * Tests for Challenges — Response Schemas
  */
 
-import { describe, it, expect } from "@jest/globals";
+import { describe, it, expect } from '@jest/globals';
 
 import {
   ChallengeRewardSchema,
@@ -13,21 +13,21 @@ import {
   RerollEligibilitySchema,
   ChallengeSchema,
   UserChallengeSchema,
-} from "../schemas";
+} from '../schemas';
 
 const NOW = Date.now();
 
 function makeChallenge(overrides: Record<string, unknown> = {}) {
   return ChallengeSchema.parse({
-    id: "c-1",
-    seasonId: "season-1",
-    type: "DAILY",
-    category: "SESSIONS",
-    title: "Test Challenge",
-    description: "Do the thing",
+    id: 'c-1',
+    seasonId: 'season-1',
+    type: 'DAILY',
+    category: 'SESSIONS',
+    title: 'Test Challenge',
+    description: 'Do the thing',
     targetValue: 5,
-    targetType: "SESSIONS",
-    rewardType: "XP",
+    targetType: 'SESSIONS',
+    rewardType: 'XP',
     rewardAmount: 100,
     ...overrides,
   });
@@ -35,39 +35,39 @@ function makeChallenge(overrides: Record<string, unknown> = {}) {
 
 function makeUserChallenge(overrides: Record<string, unknown> = {}) {
   return UserChallengeSchema.parse({
-    id: "uc-1",
-    userId: "user-1",
-    challengeId: "c-1",
+    id: 'uc-1',
+    userId: 'user-1',
+    challengeId: 'c-1',
     currentValue: 0,
-    status: "ACTIVE",
+    status: 'ACTIVE',
     assignedAt: NOW - 10000,
     ...overrides,
   });
 }
 
-describe("Response Schemas", () => {
-  it("ChallengeRewardSchema validates a reward", () => {
+describe('Response Schemas', () => {
+  it('ChallengeRewardSchema validates a reward', () => {
     const reward = ChallengeRewardSchema.parse({
-      type: "XP",
+      type: 'XP',
       amount: 100,
       itemId: null,
       delivered: false,
       deliveredAt: null,
     });
-    expect(reward.type).toBe("XP");
+    expect(reward.type).toBe('XP');
   });
 
-  it("ChallengeRewardSchema rejects negative amount", () => {
+  it('ChallengeRewardSchema rejects negative amount', () => {
     expect(() =>
-      ChallengeRewardSchema.parse({ type: "XP", amount: -1, itemId: null, delivered: false, deliveredAt: null }),
+      ChallengeRewardSchema.parse({ type: 'XP', amount: -1, itemId: null, delivered: false, deliveredAt: null }),
     ).toThrow();
   });
 
-  it("ChallengeCompletionResultSchema validates a result", () => {
+  it('ChallengeCompletionResultSchema validates a result', () => {
     const result = ChallengeCompletionResultSchema.parse({
       success: true,
-      challengeId: "c-1",
-      userId: "u-1",
+      challengeId: 'c-1',
+      userId: 'u-1',
       completedAt: NOW,
       rewards: [],
       xpEarned: 100,
@@ -80,22 +80,22 @@ describe("Response Schemas", () => {
     expect(result.xpEarned).toBe(100);
   });
 
-  it("UserChallengeSummarySchema validates a summary", () => {
+  it('UserChallengeSummarySchema validates a summary', () => {
     const summary = UserChallengeSummarySchema.parse({
-      challengeId: "c-1",
-      title: "Test",
-      description: "desc",
-      category: "SESSIONS",
-      type: "DAILY",
-      difficulty: "MEDIUM",
+      challengeId: 'c-1',
+      title: 'Test',
+      description: 'desc',
+      category: 'SESSIONS',
+      type: 'DAILY',
+      difficulty: 'MEDIUM',
       currentValue: 2,
       targetValue: 5,
       progressPercent: 40,
-      status: "ACTIVE",
+      status: 'ACTIVE',
       isClaimable: false,
       isExpired: false,
       expiresInMs: 3600000,
-      rewardType: "XP",
+      rewardType: 'XP',
       rewardAmount: 100,
       canReroll: true,
       rerollCost: 10,
@@ -105,7 +105,7 @@ describe("Response Schemas", () => {
     expect(summary.progressPercent).toBe(40);
   });
 
-  it("ChallengeDetailSchema validates a detail", () => {
+  it('ChallengeDetailSchema validates a detail', () => {
     const detail = ChallengeDetailSchema.parse({
       challenge: makeChallenge(),
       userChallenge: makeUserChallenge(),
@@ -117,22 +117,22 @@ describe("Response Schemas", () => {
     expect(detail.requiredCount).toBe(5);
   });
 
-  it("RerollResultSchema validates a result", () => {
+  it('RerollResultSchema validates a result', () => {
     const result = RerollResultSchema.parse({
       success: false,
-      oldChallengeId: "c-1",
-      newChallengeId: "",
+      oldChallengeId: 'c-1',
+      newChallengeId: '',
       newChallenge: null,
       gemsSpent: 0,
       freeRerollUsed: false,
-      error: "not eligible",
+      error: 'not eligible',
       remainingGems: 0,
       remainingFreeRerollsToday: 0,
     });
     expect(result.success).toBe(false);
   });
 
-  it("RerollEligibilitySchema validates eligibility", () => {
+  it('RerollEligibilitySchema validates eligibility', () => {
     const eligibility = RerollEligibilitySchema.parse({
       canReroll: true,
       reason: null,

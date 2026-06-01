@@ -14,11 +14,11 @@ import {
   getPlannedBlocksFromPlan,
   isContentStudyBackendAvailable,
   shouldGenerateRecall,
-} from "../service";
+} from '../service';
 
 const mockStore = new Map<string, string>();
 
-jest.mock("react-native-mmkv", () => ({
+jest.mock('react-native-mmkv', () => ({
   MMKV: class MockMMKV {
     getString(key: string): string | undefined {
       return mockStore.get(key);

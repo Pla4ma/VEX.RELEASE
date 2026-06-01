@@ -1,8 +1,8 @@
-import React from "react";
-import { Box, Text } from "@/components/primitives";
-import { useTheme } from "@/theme";
-import type { Achievement } from "../types";
-import { getRarityColor } from "../definitions";
+import React from 'react';
+import { Box, Text } from '@/components/primitives';
+import { useTheme } from '@/theme';
+import type { Achievement } from '../types';
+import { getRarityColor } from '../definitions';
 
 interface AchievementRewardsProps {
   achievement: Achievement;

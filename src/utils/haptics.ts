@@ -1,8 +1,8 @@
-import { useCallback } from "react";
+import { useCallback } from 'react';
 import {
   triggerHaptic,
   triggerHapticPattern,
-} from "./haptics-types";
+} from './haptics-types';
 
 export {
   type HapticFeedbackKind,
@@ -10,7 +10,7 @@ export {
   HapticPatterns,
   triggerHaptic,
   triggerHapticPattern,
-} from "./haptics-types";
+} from './haptics-types';
 
 export {
   sessionStart,
@@ -39,22 +39,22 @@ export {
   deepLinkOpened,
   featureUnlocked,
   selection,
-} from "./haptics-actions";
+} from './haptics-actions';
 
 export function useHaptics() {
-  const light = useCallback(() => triggerHaptic("impactLight"), []);
-  const medium = useCallback(() => triggerHaptic("impactMedium"), []);
-  const heavy = useCallback(() => triggerHaptic("impactHeavy"), []);
-  const success = useCallback(() => triggerHaptic("success"), []);
-  const warning = useCallback(() => triggerHaptic("warning"), []);
-  const err = useCallback(() => triggerHaptic("error"), []);
-  const selection = useCallback(() => triggerHaptic("selection"), []);
-  const primaryAction = useCallback(() => triggerHaptic("impactMedium"), []);
+  const light = useCallback(() => triggerHaptic('impactLight'), []);
+  const medium = useCallback(() => triggerHaptic('impactMedium'), []);
+  const heavy = useCallback(() => triggerHaptic('impactHeavy'), []);
+  const success = useCallback(() => triggerHaptic('success'), []);
+  const warning = useCallback(() => triggerHaptic('warning'), []);
+  const err = useCallback(() => triggerHaptic('error'), []);
+  const selection = useCallback(() => triggerHaptic('selection'), []);
+  const primaryAction = useCallback(() => triggerHaptic('impactMedium'), []);
   const pullToRefreshHaptic = useCallback(
-    () => triggerHaptic("selection"),
+    () => triggerHaptic('selection'),
     [],
   );
-  const tabSwitchHaptic = useCallback(() => triggerHaptic("selection"), []);
+  const tabSwitchHaptic = useCallback(() => triggerHaptic('selection'), []);
   return {
     light,
     medium,

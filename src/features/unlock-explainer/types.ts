@@ -1,4 +1,4 @@
-import type { z } from "zod";
+import type { z } from 'zod';
 
 import type {
   LaneFitSchema,
@@ -7,7 +7,7 @@ import type {
   UnlockEvidenceSchema,
   UnlockExplainerInputSchema,
   UnlockReasonCodeSchema,
-} from "./schemas";
+} from './schemas';
 
 export type UnlockDecisionType = z.infer<typeof UnlockDecisionTypeSchema>;
 export type LaneFit = z.infer<typeof LaneFitSchema>;

@@ -1,9 +1,9 @@
-import React from "react";
-import { Pressable } from "react-native";
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import type { ChallengeItem } from "./todays-challenges-types";
+import React from 'react';
+import { Pressable } from 'react-native';
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import type { ChallengeItem } from './todays-challenges-types';
 
 export function ChallengeProgressRow({
   challenge,
@@ -19,14 +19,14 @@ export function ChallengeProgressRow({
   );
   const getRewardIcon = () => {
     switch (challenge.rewardType) {
-      case "XP":
-        return "⭐";
-      case "GEMS":
-        return "💎";
-      case "COINS":
-        return "🪙";
+      case 'XP':
+        return '⭐';
+      case 'GEMS':
+        return '💎';
+      case 'COINS':
+        return '🪙';
       default:
-        return "🎁";
+        return '🎁';
     }
   };
   return (
@@ -39,15 +39,15 @@ export function ChallengeProgressRow({
       >
         <Text
           variant="bodySmall"
-          color={challenge.isCompleted ? "success.DEFAULT" : "text.primary"}
-          fontWeight={challenge.isCompleted ? "600" : "400"}
+          color={challenge.isCompleted ? 'success.DEFAULT' : 'text.primary'}
+          fontWeight={challenge.isCompleted ? '600' : '400'}
           style={
             challenge.isClaimed
-              ? { textDecorationLine: "line-through", opacity: 0.6 }
+              ? { textDecorationLine: 'line-through', opacity: 0.6 }
               : undefined
           }
         >
-          {challenge.isCompleted ? "✓ " : ""}
+          {challenge.isCompleted ? '✓ ' : ''}
           {challenge.title}
         </Text>
         <Box flexDirection="row" alignItems="center" gap="xs">
@@ -85,7 +85,7 @@ export function ChallengeProgressRow({
           {challenge.currentProgress}/{challenge.targetProgress}
           {challenge.isCompleted && !challenge.isClaimed && (
             <Text variant="caption" color="success.DEFAULT" fontWeight="600">
-              {" "}
+              {' '}
               · Ready to claim!
             </Text>
           )}

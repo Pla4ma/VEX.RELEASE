@@ -1,15 +1,15 @@
-import { z } from "zod";
+import { z } from 'zod';
 
-import type { EntitlementInfo } from "./revenuecat-types";
+import type { EntitlementInfo } from './revenuecat-types';
 
 const PremiumEntitlementIdSchema = z.enum([
-  "premium",
-  "vex_premium",
-  "premium_access",
-  "vip",
-  "vex_vip",
-  "pro",
-  "season_premium",
+  'premium',
+  'vex_premium',
+  'premium_access',
+  'vip',
+  'vex_vip',
+  'pro',
+  'season_premium',
 ]);
 
 export type PremiumEntitlementId = z.infer<typeof PremiumEntitlementIdSchema>;
@@ -29,7 +29,7 @@ function normalizeEntitlementId(identifier: string): string {
   return identifier
     .trim()
     .toLowerCase()
-    .replace(/[-\s]+/g, "_");
+    .replace(/[-\s]+/g, '_');
 }
 
 export function isPremiumEntitlementIdentifier(identifier: string): boolean {
@@ -37,10 +37,10 @@ export function isPremiumEntitlementIdentifier(identifier: string): boolean {
 
   return (
     PremiumEntitlementIdSchema.safeParse(normalized).success ||
-    normalized.startsWith("premium_") ||
-    normalized.endsWith("_premium") ||
-    normalized.startsWith("vex_premium") ||
-    normalized.startsWith("vip_")
+    normalized.startsWith('premium_') ||
+    normalized.endsWith('_premium') ||
+    normalized.startsWith('vex_premium') ||
+    normalized.startsWith('vip_')
   );
 }
 

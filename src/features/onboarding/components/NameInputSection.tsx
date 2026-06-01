@@ -7,18 +7,18 @@
  * @phase 4
  */
 
-import React, { useState, useEffect, useRef } from "react";
-import { TextInput, Keyboard } from "react-native";
+import React, { useState, useEffect, useRef } from 'react';
+import { TextInput, Keyboard } from 'react-native';
 import Animated, {
   FadeIn,
   FadeInUp,
   useAnimatedStyle,
   withSpring,
-} from "react-native-reanimated";
+} from 'react-native-reanimated';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
 
 interface NameInputSectionProps {
   name: string;
@@ -78,7 +78,7 @@ export function NameInputSection({
       {/* Name Input Section */}
       <Animated.View
         entering={FadeInUp.duration(500).delay(200)}
-        style={{ width: "100%" }}
+        style={{ width: '100%' }}
       >
         <Animated.View
           style={[
@@ -105,9 +105,9 @@ export function NameInputSection({
             editable={!showGoals}
             style={{
               fontSize: 24,
-              fontWeight: "600",
+              fontWeight: '600',
               color: theme.colors.text.primary,
-              textAlign: "center",
+              textAlign: 'center',
             }}
           />
         </Animated.View>
@@ -117,11 +117,11 @@ export function NameInputSection({
           <Text
             variant="caption"
             color={
-              name.length > 0 && !isValid ? "error.DEFAULT" : "text.tertiary"
+              name.length > 0 && !isValid ? 'error.DEFAULT' : 'text.tertiary'
             }
           >
             {name.length > 0 && !isValid
-              ? "Name must be at least 2 characters"
+              ? 'Name must be at least 2 characters'
               : `${name.length}/30 characters`}
           </Text>
         </Box>

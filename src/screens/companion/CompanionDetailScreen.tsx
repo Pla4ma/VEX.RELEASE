@@ -1,34 +1,34 @@
-import { withScreenErrorBoundary } from "../../shared/ui/components/ScreenErrorBoundary";
-import React, { useCallback, useEffect, useState } from "react";
+import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+import React, { useCallback, useEffect, useState } from 'react';
 
-import { Box, Button, Text } from "../../components/primitives";
-import { loadCompanionState } from "../../features/companion/session-storage";
-import type { CompanionState } from "../../features/companion/types";
-import { useAuthStore } from "../../store";
-import { useTheme } from "../../theme";
+import { Box, Button, Text } from '../../components/primitives';
+import { loadCompanionState } from '../../features/companion/session-storage';
+import type { CompanionState } from '../../features/companion/types';
+import { useAuthStore } from '../../store';
+import { useTheme } from '../../theme';
 
 type LoadState =
-  | { status: "loading" }
-  | { status: "empty" }
-  | { status: "error"; error: Error }
-  | { status: "success"; companion: CompanionState };
+  | { status: 'loading' }
+  | { status: 'empty' }
+  | { status: 'error'; error: Error }
+  | { status: 'success'; companion: CompanionState };
 
 export function CompanionDetailScreen(): JSX.Element {
   const { theme } = useTheme();
   const { user } = useAuthStore();
-  const userId = user?.id ?? "";
-  const [loadState, setLoadState] = useState<LoadState>({ status: "loading" });
+  const userId = user?.id ?? '';
+  const [loadState, setLoadState] = useState<LoadState>({ status: 'loading' });
   const load = useCallback(() => {
     if (!userId) {
-      setLoadState({ status: "empty" });
+      setLoadState({ status: 'empty' });
       return;
     }
-    setLoadState({ status: "loading" });
+    setLoadState({ status: 'loading' });
     loadCompanionState(userId)
-      .then((companion) => setLoadState({ status: "success", companion }))
+      .then((companion) => setLoadState({ status: 'success', companion }))
       .catch((caught: unknown) => {
         setLoadState({
-          status: "error",
+          status: 'error',
           error: caught instanceof Error ? caught : new Error(String(caught)),
         });
       });
@@ -38,7 +38,7 @@ export function CompanionDetailScreen(): JSX.Element {
     load();
   }, [load]);
 
-  if (loadState.status === "loading") {
+  if (loadState.status === 'loading') {
     return (
       <Box flex={1} bg="background.primary" p="lg" justifyContent="center">
         <Box
@@ -57,7 +57,7 @@ export function CompanionDetailScreen(): JSX.Element {
     );
   }
 
-  if (loadState.status === "empty") {
+  if (loadState.status === 'empty') {
     return (
       <Box flex={1} bg="background.primary" p="lg" justifyContent="center">
         <Text variant="h4" color="text.primary">
@@ -67,7 +67,7 @@ export function CompanionDetailScreen(): JSX.Element {
     );
   }
 
-  if (loadState.status === "error") {
+  if (loadState.status === 'error') {
     return (
       <Box flex={1} bg="background.primary" p="lg" justifyContent="center">
         <Text variant="h4" color={theme.colors.error.DEFAULT}>
@@ -122,5 +122,5 @@ export function CompanionDetailScreen(): JSX.Element {
 
 export default withScreenErrorBoundary(
   CompanionDetailScreen,
-  "CompanionDetail",
+  'CompanionDetail',
 );

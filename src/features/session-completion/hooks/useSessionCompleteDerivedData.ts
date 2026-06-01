@@ -1,17 +1,17 @@
-import * as Sentry from "@sentry/react-native";
-import { useMemo } from "react";
+import * as Sentry from '@sentry/react-native';
+import { useMemo } from 'react';
 
-import type { SessionSummary } from "../../../session/types";
-import type { Theme } from "../../../theme";
+import type { SessionSummary } from '../../../session/types';
+import type { Theme } from '../../../theme';
 import {
   getGradeDisplay,
   getPurityDisplay,
-} from "../../../screens/session/utils/session-complete-display";
+} from '../../../screens/session/utils/session-complete-display';
 import {
   buildPostSessionNextAction,
   buildSessionCompletionHero,
   buildSessionCompletionReturnPlan,
-} from "../service";
+} from '../service';
 
 interface ProgressionData {
   level: number;
@@ -76,7 +76,7 @@ export function useSessionCompleteDerivedData(input: DerivedDataInput) {
       return buildPostSessionNextAction({ summary });
     } catch (error) {
       Sentry.captureException(error, {
-        tags: { feature: "session-completion", operation: "next-action" },
+        tags: { feature: 'session-completion', operation: 'next-action' },
       });
       return null;
     }
@@ -89,8 +89,8 @@ export function useSessionCompleteDerivedData(input: DerivedDataInput) {
     !progressionError && progressionData
       ? {
           accent: theme.colors.primary[500],
-          id: "level",
-          label: "Level XP",
+          id: 'level',
+          label: 'Level XP',
           progress: progressionData.progressPercent / 100,
           reward: `+${summary.xpEarned ?? 0} XP`,
           value: `Level ${progressionData.level} ${progressionData.xp}/${progressionData.nextLevelThreshold} XP`,

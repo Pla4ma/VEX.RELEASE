@@ -1,4 +1,4 @@
-import { describe, it, expect, jest } from "@jest/globals";
+import { describe, it, expect, jest } from '@jest/globals';
 import {
   coachService,
   coachRepository,
@@ -7,12 +7,12 @@ import {
   handleStreakRiskDetected,
   handleStreakBroken,
   handleChallengeExpiring,
-} from "./integration-test-helpers";
-import type { BehaviorProfile, ComebackPlan } from "../schemas";
+} from './integration-test-helpers';
+import type { BehaviorProfile, ComebackPlan } from '../schemas';
 
-describe("Concurrency and Race Conditions", () => {
-  it("handles rapid session completions", async () => {
-    const mockProcessSignal = jest.spyOn(coachService, "processBehaviorSignal");
+describe('Concurrency and Race Conditions', () => {
+  it('handles rapid session completions', async () => {
+    const mockProcessSignal = jest.spyOn(coachService, 'processBehaviorSignal');
     mockProcessSignal.mockImplementation(async () => {
       await new Promise((r) => setTimeout(r, 50));
       return {} as BehaviorProfile;
@@ -30,8 +30,8 @@ describe("Concurrency and Race Conditions", () => {
     expect(mockProcessSignal).toHaveBeenCalledTimes(15);
   });
 
-  it("handles simultaneous intervention evaluations", async () => {
-    const mockEvaluate = jest.spyOn(coachService, "evaluateInterventions");
+  it('handles simultaneous intervention evaluations', async () => {
+    const mockEvaluate = jest.spyOn(coachService, 'evaluateInterventions');
     mockEvaluate.mockImplementation(async () => {
       await new Promise((r) => setTimeout(r, 30));
       return [];
@@ -40,20 +40,20 @@ describe("Concurrency and Race Conditions", () => {
       userId: mockUserId,
       currentStreak: 5,
       hoursSinceLastSession: 30,
-      riskLevel: "MEDIUM" as const,
+      riskLevel: 'MEDIUM' as const,
       hoursRemaining: 18,
     };
     const riskHIGH = {
       userId: mockUserId,
       currentStreak: 5,
       hoursSinceLastSession: 36,
-      riskLevel: "HIGH" as const,
+      riskLevel: 'HIGH' as const,
       hoursRemaining: 12,
     };
     const challengeExpiring = {
       userId: mockUserId,
-      challengeId: "c1",
-      challengeName: "Test",
+      challengeId: 'c1',
+      challengeName: 'Test',
       hoursRemaining: 24,
       progress: 75,
       xpReward: 500,
@@ -67,17 +67,17 @@ describe("Concurrency and Race Conditions", () => {
     expect(mockEvaluate).toHaveBeenCalledTimes(3);
   });
 
-  it("prevents duplicate comeback activations", async () => {
+  it('prevents duplicate comeback activations', async () => {
     const mockFetchComeback = jest.spyOn(
       coachRepository,
-      "fetchActiveComebackPlan",
+      'fetchActiveComebackPlan',
     );
     mockFetchComeback.mockResolvedValue({
-      id: "existing-comeback",
+      id: 'existing-comeback',
       userId: mockUserId,
       previousStreak: 5,
       daysInactive: 2,
-      status: "ACTIVE",
+      status: 'ACTIVE',
       startedAt: Date.now(),
       expiresAt: Date.now() + 86400000,
       sessionsCompleted: 1,
@@ -85,7 +85,7 @@ describe("Concurrency and Race Conditions", () => {
       bonusMultiplier: 2,
       messages: [],
     } as ComebackPlan);
-    const mockActivate = jest.spyOn(coachService, "activateComeback");
+    const mockActivate = jest.spyOn(coachService, 'activateComeback');
     const breakPayload = {
       userId: mockUserId,
       previousStreak: 5,

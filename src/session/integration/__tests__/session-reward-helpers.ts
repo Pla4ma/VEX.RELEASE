@@ -1,14 +1,14 @@
-import { eventBus } from "../../../events";
-import type { SessionSummary } from "../../types";
+import { eventBus } from '../../../events';
+import type { SessionSummary } from '../../types';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 export function createMockSummary(
   overrides: Partial<SessionSummary> = {},
 ): any {
   return {
-    sessionId: "test-session",
-    userId: "test-user",
-    status: "COMPLETED",
+    sessionId: 'test-session',
+    userId: 'test-user',
+    status: 'COMPLETED',
     plannedDuration: 1500,
     actualDuration: 1500,
     effectiveDuration: 1500,
@@ -36,12 +36,12 @@ export function setupMockEventBus() {
   jest.restoreAllMocks();
 
   const publish = jest
-    .spyOn(eventBus, "publish")
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    .spyOn(eventBus, 'publish')
+
     .mockImplementation((() => {}) as any);
   const subscribe = jest
-    .spyOn(eventBus, "subscribe")
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    .spyOn(eventBus, 'subscribe')
+
     .mockImplementation((() => () => {}) as any);
 
   return { publish, subscribe };

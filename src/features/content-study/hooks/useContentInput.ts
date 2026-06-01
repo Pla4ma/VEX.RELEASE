@@ -3,23 +3,23 @@
  * Manages content input state and submission
  */
 
-import { useState, useCallback } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useAuthStore } from "../../../store";
-import { captureException } from "../../../config/sentry";
+import { useState, useCallback } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useAuthStore } from '../../../store';
+import { captureException } from '../../../config/sentry';
 import {
   submitContent,
   extractContent,
   uploadStudyFile,
-} from "../ContentStudyService";
-import { ContentInputState, InputTab, SubmitContentRequest } from "../types";
-import { VALIDATION_RULES } from "../constants";
-import { contentStudyQueryKeys } from "./queryKeys";
+} from '../ContentStudyService';
+import { ContentInputState, InputTab, SubmitContentRequest } from '../types';
+import { VALIDATION_RULES } from '../constants';
+import { contentStudyQueryKeys } from './queryKeys';
 import {
   createInitialContentInputState,
   getUserFacingSubmitError,
-} from "./contentInputHelpers";
-import { computeValidationErrors } from "./contentInputValidation";
+} from './contentInputHelpers';
+import { computeValidationErrors } from './contentInputValidation';
 
 export function useContentInput() {
   const { user } = useAuthStore();
@@ -44,10 +44,10 @@ export function useContentInput() {
         ? []
         : [
             {
-              field: "pastedText",
-              code: "MIN_LENGTH",
+              field: 'pastedText',
+              code: 'MIN_LENGTH',
               message: `Please enter at least ${VALIDATION_RULES.MIN_CONTENT_LENGTH} characters of content.`,
-              severity: "error" as const,
+              severity: 'error' as const,
             },
           ];
     setState((prev) => ({
@@ -96,45 +96,45 @@ export function useContentInput() {
       isValid: errors.length === 0,
     }));
     return errors.length === 0;
-  }, [state.activeTab, state.pastedText, state.youtubeUrl, state.selectedFile]);
+  }, [state]);
 
   const submitMutation = useMutation({
     mutationFn: async () => {
       if (!user) {
-        throw new Error("User not authenticated");
+        throw new Error('User not authenticated');
       }
       if (!validateInput()) {
-        throw new Error("Validation failed");
+        throw new Error('Validation failed');
       }
 
       let request: SubmitContentRequest;
 
-      if (state.activeTab === "paste") {
-        request = { type: "PASTE", content: state.pastedText };
-      } else if (state.activeTab === "youtube") {
-        request = { type: "YOUTUBE", url: state.youtubeUrl.trim() };
-      } else if (state.activeTab === "pdf" && state.selectedFile) {
+      if (state.activeTab === 'paste') {
+        request = { type: 'PASTE', content: state.pastedText };
+      } else if (state.activeTab === 'youtube') {
+        request = { type: 'YOUTUBE', url: state.youtubeUrl.trim() };
+      } else if (state.activeTab === 'pdf' && state.selectedFile) {
         const fileId = await uploadStudyFile(
           state.selectedFile.uri,
           state.selectedFile.name,
           user.id,
         );
-        request = { type: "PDF", fileId };
+        request = { type: 'PDF', fileId };
       } else {
-        throw new Error("Invalid input state");
+        throw new Error('Invalid input state');
       }
 
       const response = await submitContent(user.id, request);
 
-      if (request.type === "PDF" || request.type === "YOUTUBE") {
+      if (request.type === 'PDF' || request.type === 'YOUTUBE') {
         void extractContent({ contentId: response.contentId }).catch(
           (error: unknown) => {
             captureException(
               error instanceof Error
                 ? error
-                : new Error("Failed to trigger content extraction"),
+                : new Error('Failed to trigger content extraction'),
               {
-                area: "content-study.submit.extract",
+                area: 'content-study.submit.extract',
                 contentId: response.contentId,
               },
             );
@@ -162,8 +162,8 @@ export function useContentInput() {
       captureException(
         err instanceof Error
           ? err
-          : new Error("Content study submission failed"),
-        { area: "content-study.submit" },
+          : new Error('Content study submission failed'),
+        { area: 'content-study.submit' },
       );
       setState((prev) => ({ ...prev, error: message }));
       throw err;

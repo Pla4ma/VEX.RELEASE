@@ -1,10 +1,10 @@
-import React from "react";
-import { View } from "react-native";
-import type { CoachSettings } from "../types";
-import { ToggleSetting } from "./ToggleSetting";
-import { SettingItem } from "./SettingItem";
-import { createSheet } from "@/shared/ui/create-sheet";
-import { launchColors } from "@theme/tokens/launch-colors";
+import React from 'react';
+import { View } from 'react-native';
+import type { CoachSettings } from '../types';
+import { ToggleSetting } from './ToggleSetting';
+import { SettingItem } from './SettingItem';
+import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
 
 interface SettingsCoachSectionProps {
   coach: CoachSettings | undefined;
@@ -20,12 +20,12 @@ export function SettingsCoachSection({ coach }: SettingsCoachSectionProps) {
       />
       <SettingItem
         label="Personality"
-        value={coach?.personality ?? "supportive"}
+        value={coach?.personality ?? 'supportive'}
         onPress={() => {}}
       />
       <SettingItem
         label="Frequency"
-        value={coach?.frequency ?? "moderate"}
+        value={coach?.frequency ?? 'moderate'}
         onPress={() => {}}
       />
       <ToggleSetting

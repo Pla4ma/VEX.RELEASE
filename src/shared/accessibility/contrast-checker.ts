@@ -1,8 +1,8 @@
-import type { ColorPalette } from "../../theme/types";
-import { darkColors, lightColors } from "../../theme/tokens/colors";
-import { createDebugger } from "../../utils/debug";
+import type { ColorPalette } from '../../theme/types';
+import { darkColors, lightColors } from '../../theme/tokens/colors';
+import { createDebugger } from '../../utils/debug';
 
-const debug = createDebugger("accessibility:contrast");
+const debug = createDebugger('accessibility:contrast');
 const WCAG_AA_NORMAL_TEXT = 4.5;
 
 type ContrastPair = {
@@ -57,20 +57,20 @@ export function getContrastRatio(
 
 function buildPairs(name: string, colors: ColorPalette): ContrastPair[] {
   const backgrounds = [
-    ["primary background", colors.background.primary],
-    ["secondary background", colors.background.secondary],
-    ["card surface", colors.surface.card],
-    ["button surface", colors.surface.button],
+    ['primary background', colors.background.primary],
+    ['secondary background', colors.background.secondary],
+    ['card surface', colors.surface.card],
+    ['button surface', colors.surface.button],
   ] as const;
   const foregrounds = [
-    ["primary text", colors.text.primary],
-    ["secondary text", colors.text.secondary],
-    ["muted text", colors.text.muted],
-    ["link text", colors.text.link],
-    ["success text", colors.success.DEFAULT],
-    ["warning text", colors.warning.DEFAULT],
-    ["error text", colors.error.DEFAULT],
-    ["info text", colors.info.DEFAULT],
+    ['primary text', colors.text.primary],
+    ['secondary text', colors.text.secondary],
+    ['muted text', colors.text.muted],
+    ['link text', colors.text.link],
+    ['success text', colors.success.DEFAULT],
+    ['warning text', colors.warning.DEFAULT],
+    ['error text', colors.error.DEFAULT],
+    ['info text', colors.info.DEFAULT],
   ] as const;
 
   return backgrounds.flatMap(([backgroundLabel, background]) =>
@@ -98,12 +98,12 @@ export function initializeDevContrastChecker(): void {
   }
 
   const failures = auditColorContrast([
-    ...buildPairs("light", lightColors),
-    ...buildPairs("dark", darkColors),
+    ...buildPairs('light', lightColors),
+    ...buildPairs('dark', darkColors),
   ]);
 
   if (failures.length === 0) {
     return;
   }
-  debug.warn("WCAG AA contrast failures detected", { failures });
+  debug.warn('WCAG AA contrast failures detected', { failures });
 }

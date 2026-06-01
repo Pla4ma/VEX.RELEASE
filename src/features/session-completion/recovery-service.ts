@@ -1,11 +1,11 @@
-import { SessionMode } from "../../session/modes";
-import { SessionSummarySchema, type SessionSummary } from "../../session/types";
-import { getCompletionLedgerBySessionId } from "./repository";
+import { SessionMode } from '../../session/modes';
+import { SessionSummarySchema, type SessionSummary } from '../../session/types';
+import { getCompletionLedgerBySessionId } from './repository';
 import {
   SessionCompletionNavigationParamsSchema,
   type CompletionLedger,
   type SessionCompletionNavigationParams,
-} from "./schemas";
+} from './schemas';
 
 function calculateCompletionPercentage(ledger: CompletionLedger): number {
   if (ledger.targetDurationSeconds <= 0) {
@@ -20,7 +20,7 @@ function calculateCompletionPercentage(ledger: CompletionLedger): number {
 }
 
 function resolveRecoveredMode(ledger: CompletionLedger): SessionMode {
-  return ledger.mode === "UNKNOWN" ? SessionMode.FLOW : ledger.mode;
+  return ledger.mode === 'UNKNOWN' ? SessionMode.FLOW : ledger.mode;
 }
 
 export function buildSessionSummaryFromCompletionLedger(
@@ -51,11 +51,11 @@ export function buildSessionSummaryFromCompletionLedger(
     plannedDuration: ledger.targetDurationSeconds,
     sessionId: ledger.sessionId,
     sessionMode: resolveRecoveredMode(ledger),
-    status: "COMPLETED",
+    status: 'COMPLETED',
     streakBonus: 0,
     streakDays: ledger.streakResult.newDays,
-    streakIncreased: ledger.streakResult.action === "extended",
-    streakMaintained: ledger.streakResult.action !== "broken",
+    streakIncreased: ledger.streakResult.action === 'extended',
+    streakMaintained: ledger.streakResult.action !== 'broken',
     timeBonus: 0,
     userId: ledger.userId,
     userLevel: 1,

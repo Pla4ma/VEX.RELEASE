@@ -6,13 +6,13 @@ export type {
   ModeNotificationCopy,
   ModePremiumBridge,
   ModeRetentionManifest,
-} from "./schemas";
+} from './schemas';
 
 export {
   ModeRetentionScoreSchema,
   ModeReturnHookSchema,
   ModeRetentionManifestSchema,
-} from "./schemas";
+} from './schemas';
 
 export {
   MODE_RETURN_HOOK,
@@ -24,7 +24,7 @@ export {
   MODE_NOTIFICATION_COPY,
   MODE_PREMIUM_BRIDGE,
   MODE_RETENTION_MANIFEST,
-} from "./copy";
+} from './copy';
 
 export {
   getModeRetentionManifest,
@@ -36,9 +36,9 @@ export {
   scoreModeRetention,
   scoreAllModes,
   buildDefaultAuditScores,
-} from "./service";
+} from './service';
 
-export type { RetentionScoreInput } from "./service";
+export type { RetentionScoreInput } from './service';
 
 export {
   useModeReturnHook,
@@ -47,4 +47,4 @@ export {
   useModeNotificationCopy,
   useModePremiumBridge,
   useModeRetentionScore,
-} from "./hooks";
+} from './hooks';

@@ -1,4 +1,4 @@
-import type { OnboardingStore } from "./store";
+import type { OnboardingStore } from './store';
 import {
   type CoachPersona,
   type FocusDuration,
@@ -6,14 +6,14 @@ import {
   type MotivationProfileType,
   type OnboardingElement,
   type OnboardingState,
-} from "./schemas";
+} from './schemas';
 import {
   deriveMotivationProfile,
-} from "./store-helpers";
+} from './store-helpers';
 import {
   initialState,
   advanceStepWithCompletionCheck,
-} from "./store-action-types";
+} from './store-action-types';
 
 type SetFn = (partial: Partial<OnboardingStore>) => void;
 type GetFn = () => OnboardingStore;
@@ -23,14 +23,14 @@ export function createProfileActions(
   get: GetFn,
 ): Pick<
   OnboardingStore,
-  | "startOnboarding"
-  | "setGoal"
-  | "setFocusDuration"
-  | "setDisplayName"
-  | "setPersona"
-  | "setElement"
-  | "setExplicitMotivationStyle"
-  | "recomputeMotivationProfile"
+  | 'startOnboarding'
+  | 'setGoal'
+  | 'setFocusDuration'
+  | 'setDisplayName'
+  | 'setPersona'
+  | 'setElement'
+  | 'setExplicitMotivationStyle'
+  | 'recomputeMotivationProfile'
 > {
   return {
     startOnboarding: () => {
@@ -72,7 +72,7 @@ export function createProfileActions(
 
     setDisplayName: (name: string) => {
       const trimmed = name.trim();
-      if (trimmed.length >= 2) set({ displayName: trimmed });
+      if (trimmed.length >= 2) {set({ displayName: trimmed });}
     },
 
     setPersona: (persona: CoachPersona) => {

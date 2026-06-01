@@ -1,17 +1,17 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Easing,
   runOnJS,
   useAnimatedReaction,
   useSharedValue,
   withTiming,
-} from "react-native-reanimated";
-import { getStreakMultiplier } from "../../../features/streaks/service";
-import type { SessionTheme } from "../../../features/themes/session-themes";
-import type { SessionHistoryEntry } from "../../../session/types";
-import { useTheme } from "../../../theme";
-import { useSessionAnimations } from "./useSessionAnimations";
-import { useSessionPurity } from "./useSessionPurity";
+} from 'react-native-reanimated';
+import { getStreakMultiplier } from '../../../features/streaks/service';
+import type { SessionTheme } from '../../../features/themes/session-themes';
+import type { SessionHistoryEntry } from '../../../session/types';
+import { useTheme } from '../../../theme';
+import { useSessionAnimations } from './useSessionAnimations';
+import { useSessionPurity } from './useSessionPurity';
 import {
   clamp,
   DAILY_GOAL_SECONDS,
@@ -21,13 +21,13 @@ import {
   type GradientState,
   type PurityLabel,
   withAlpha,
-} from "../utils/active-session";
+} from '../utils/active-session';
 type UseActiveSessionMetricsParams = {
   completionPercentage: number;
   elapsedSeconds: number;
   getAntiCheatLabel: () => PurityLabel;
   getAntiCheatScore: () => number;
-  heroDensity?: "minimal" | "standard" | "rich";
+  heroDensity?: 'minimal' | 'standard' | 'rich';
   history: SessionHistoryEntry[];
   isActive: boolean;
   isPaused: boolean;
@@ -70,19 +70,19 @@ export function useActiveSessionMetrics({
   });
 
   const phaseAccent =
-    phase === "SHORT_BREAK" || phase === "LONG_BREAK"
+    phase === 'SHORT_BREAK' || phase === 'LONG_BREAK'
       ? theme.colors.success.DEFAULT
-      : purityLabel === "Distracted" || purityLabel === "Okay"
+      : purityLabel === 'Distracted' || purityLabel === 'Okay'
         ? theme.colors.warning.DEFAULT
-        : purityLabel === "Good"
+        : purityLabel === 'Good'
           ? theme.colors.success.DEFAULT
           : sessionTheme.previewColor;
   const labelColor =
-    purityLabel === "Elite"
+    purityLabel === 'Elite'
       ? theme.colors.primary[500]
-      : purityLabel === "Good"
+      : purityLabel === 'Good'
         ? theme.colors.success.DEFAULT
-        : purityLabel === "Okay"
+        : purityLabel === 'Okay'
           ? theme.colors.warning.DEFAULT
           : theme.colors.error.DEFAULT;
   const glowStyle = useMemo(
@@ -104,7 +104,7 @@ export function useActiveSessionMetrics({
           : total,
       0,
     );
-    return (historical || 0) + (phase === "FOCUS" ? elapsedSeconds || 0 : 0);
+    return (historical || 0) + (phase === 'FOCUS' ? elapsedSeconds || 0 : 0);
   }, [elapsedSeconds, history, phase]);
   const animations = useSessionAnimations({
     completionPercentage,
@@ -121,7 +121,7 @@ export function useActiveSessionMetrics({
   const visualState = useSharedValue(2);
 
   useEffect(() => {
-    if (heroDensity === "minimal") return;
+    if (heroDensity === 'minimal') {return;}
     visualState.value = withTiming(getVisualStateIndex(phase, purityLabel), {
       duration: 450,
       easing: Easing.out(Easing.cubic),

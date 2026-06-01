@@ -1,5 +1,5 @@
-import * as Sentry from "@sentry/react-native";
-import type { ValidationError, ValidationResult } from "./types";
+import * as Sentry from '@sentry/react-native';
+import type { ValidationError, ValidationResult } from './types';
 
 export async function batchValidate<T>(
   items: T[],
@@ -40,9 +40,9 @@ export async function batchValidate<T>(
 
       if (!continueOnError && errorCount >= maxErrors) {
         Sentry.addBreadcrumb({
-          category: "validation",
+          category: 'validation',
           message: `Batch validation stopped early after ${errorCount} errors`,
-          level: "warning",
+          level: 'warning',
         });
         break;
       }
@@ -53,10 +53,10 @@ export async function batchValidate<T>(
           valid: false,
           errors: [
             {
-              field: "unknown",
-              code: "VALIDATION_EXCEPTION",
-              message: error instanceof Error ? error.message : "Unknown error",
-              severity: "error",
+              field: 'unknown',
+              code: 'VALIDATION_EXCEPTION',
+              message: error instanceof Error ? error.message : 'Unknown error',
+              severity: 'error',
             },
           ],
           warnings: [],
@@ -87,5 +87,5 @@ export function formatValidationErrors(errors: ValidationError[]): string {
       }
       return msg;
     })
-    .join("\n");
+    .join('\n');
 }

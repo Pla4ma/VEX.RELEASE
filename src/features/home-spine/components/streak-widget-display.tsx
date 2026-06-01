@@ -1,16 +1,16 @@
-import React from "react";
+import React from 'react';
 import Animated, {
   FadeIn,
   useAnimatedStyle,
   withRepeat,
   withSequence,
   withSpring,
-} from "react-native-reanimated";
+} from 'react-native-reanimated';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import type { StreakWidgetProps } from "./StreakWidget";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import type { StreakWidgetProps } from './StreakWidget';
 
 export function StreakWidgetSkeleton(): JSX.Element {
   const { theme } = useTheme();
@@ -48,19 +48,19 @@ export function FlameIcon({
   currentDays,
   size = 48,
 }: {
-  riskLevel: StreakWidgetProps["riskLevel"];
+  riskLevel: StreakWidgetProps['riskLevel'];
   currentDays: number;
   size?: number;
 }): JSX.Element {
   const flameAnimation = useAnimatedStyle(() => {
     const intensity =
-      riskLevel === "CRITICAL" ? 1.5 : riskLevel === "HIGH" ? 1.3 : 1;
+      riskLevel === 'CRITICAL' ? 1.5 : riskLevel === 'HIGH' ? 1.3 : 1;
 
     return {
       transform: [
         {
           scale:
-            riskLevel === "CRITICAL" || riskLevel === "HIGH"
+            riskLevel === 'CRITICAL' || riskLevel === 'HIGH'
               ? withRepeat(
                   withSequence(
                     withSpring(1.1 * intensity, { damping: 3, stiffness: 200 }),
@@ -78,7 +78,7 @@ export function FlameIcon({
     };
   });
 
-  const icon = riskLevel === "MEDIUM" ? "!" : currentDays > 0 ? "*" : "+";
+  const icon = riskLevel === 'MEDIUM' ? '!' : currentDays > 0 ? '*' : '+';
 
   return (
     <Animated.Text style={[{ fontSize: size }, flameAnimation]}>
@@ -91,17 +91,17 @@ export function RiskBanner({
   riskLevel,
   hoursRemaining,
 }: {
-  riskLevel: StreakWidgetProps["riskLevel"];
+  riskLevel: StreakWidgetProps['riskLevel'];
   hoursRemaining: number | null;
 }): JSX.Element | null {
   const { theme } = useTheme();
 
-  if (riskLevel === "NONE" || riskLevel === "LOW" || hoursRemaining === null) {
+  if (riskLevel === 'NONE' || riskLevel === 'LOW' || hoursRemaining === null) {
     return null;
   }
 
-  const isCritical = riskLevel === "CRITICAL";
-  const isHigh = riskLevel === "HIGH";
+  const isCritical = riskLevel === 'CRITICAL';
+  const isHigh = riskLevel === 'HIGH';
   const bg = isCritical
     ? `${theme.colors.error[500]}30`
     : isHigh

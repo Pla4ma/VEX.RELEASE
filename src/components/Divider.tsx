@@ -4,14 +4,14 @@
  * Horizontal or vertical divider for separating content.
  */
 
-import React from "react";
-import { View, type ViewStyle } from "react-native";
-import { createSheet } from "@/shared/ui/create-sheet";
-import { launchColors } from "@theme/tokens/launch-colors";
+import React from 'react';
+import { View, type ViewStyle } from 'react-native';
+import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
 
 export interface DividerProps {
   /** Orientation of the divider */
-  orientation?: "horizontal" | "vertical";
+  orientation?: 'horizontal' | 'vertical';
   /** Thickness of the divider */
   thickness?: number;
   /** Color of the divider */
@@ -23,13 +23,13 @@ export interface DividerProps {
 }
 
 export const Divider: React.FC<DividerProps> = ({
-  orientation = "horizontal",
+  orientation = 'horizontal',
   thickness = 1,
   color = launchColors.hex_e2e8f0,
   style,
   spacing = 16,
 }) => {
-  const isHorizontal = orientation === "horizontal";
+  const isHorizontal = orientation === 'horizontal';
 
   const dividerStyle = [
     styles.divider,
@@ -44,7 +44,7 @@ export const Divider: React.FC<DividerProps> = ({
 
 const styles = createSheet({
   divider: {
-    alignSelf: "stretch",
+    alignSelf: 'stretch',
   },
 });
 

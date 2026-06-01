@@ -1,14 +1,14 @@
-import type { FocusScoreFactors, ScoreBand } from "./FocusIdentityEngine-types";
-import { FOCUS_SCORE_CONFIG } from "./focus-score-config";
+import type { FocusScoreFactors, ScoreBand } from './FocusIdentityEngine-types';
+import { FOCUS_SCORE_CONFIG } from './focus-score-config';
 import {
   calculateConsistencyFactorForInput,
   calculateStreakStabilityFactorForInput,
-} from "./habit-calculators";
+} from './habit-calculators';
 import {
   calculateSessionQualityFactorForInput,
   calculateDiversityFactorForInput,
   calculateRecencyFactorForInput,
-} from "./session-factors";
+} from './session-factors';
 
 export interface CalculateScoreInput {
   sessionsLast30Days: number;

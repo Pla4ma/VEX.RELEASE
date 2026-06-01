@@ -5,9 +5,9 @@
  * All checks go through getFeatureAvailability — never isUnlocked/isVisible alone.
  */
 
-import React from "react";
-import { useFeatureGate, type FeatureGateMode } from "./hooks";
-import type { FeatureKey } from "../liveops-config/feature-access";
+import React from 'react';
+import { useFeatureGate, type FeatureGateMode } from './hooks';
+import type { FeatureKey } from '../liveops-config/feature-access';
 
 interface FeatureGateProps {
   feature: FeatureKey;

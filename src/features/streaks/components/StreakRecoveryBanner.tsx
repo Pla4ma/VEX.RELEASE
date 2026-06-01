@@ -8,12 +8,12 @@
  * @phase 3C.3
  */
 
-import React from "react";
+import React from 'react';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import { RecoveryProgress, ComebackKingBadge } from "./RecoverySubComponents";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import { RecoveryProgress, ComebackKingBadge } from './RecoverySubComponents';
 
 export interface StreakRecoveryBannerProps {
   /** Original streak that was lost */
@@ -94,11 +94,11 @@ export function StreakRecoveryBanner({
 
       {/* Goal */}
       <Text variant="body" color="text.secondary">
-        Complete{" "}
+        Complete{' '}
         <Text color="accent.orange" fontWeight="700">
           {sessionsNeeded} sessions
-        </Text>{" "}
-        to restore your{" "}
+        </Text>{' '}
+        to restore your{' '}
         <Text color="text.primary" fontWeight="700">
           {originalStreak}-day streak
         </Text>
@@ -112,8 +112,8 @@ export function StreakRecoveryBanner({
         <Box p="sm" borderRadius="lg" bg={`${theme.colors.accent.orange}20`}>
           <Text variant="caption" color="accent.orange" textAlign="center">
             {sessionsCompleted === sessionsNeeded - 1
-              ? "🔥 One more session to restore your streak!"
-              : "💪 Keep going! Each session brings you closer."}
+              ? '🔥 One more session to restore your streak!'
+              : '💪 Keep going! Each session brings you closer.'}
           </Text>
         </Box>
       )}

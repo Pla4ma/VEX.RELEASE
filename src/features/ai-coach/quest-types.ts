@@ -1,15 +1,15 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export type QuestType =
-  | "PEAK_TIME_FOCUS"
-  | "BEAT_PERSONAL_BEST"
-  | "NO_PAUSE_CHALLENGE"
-  | "STREAK_PROTECTION"
-  | "QUALITY_GRADE_TARGET"
-  | "DURATION_MILESTONE"
-  | "BOSS_DAMAGE_DEALT"
-  | "RIVAL_OUTFOCUS"
-  | "SQUAD_SUPPORT";
+  | 'PEAK_TIME_FOCUS'
+  | 'BEAT_PERSONAL_BEST'
+  | 'NO_PAUSE_CHALLENGE'
+  | 'STREAK_PROTECTION'
+  | 'QUALITY_GRADE_TARGET'
+  | 'DURATION_MILESTONE'
+  | 'BOSS_DAMAGE_DEALT'
+  | 'RIVAL_OUTFOCUS'
+  | 'SQUAD_SUPPORT';
 
 export interface PersonalQuest {
   id: string;
@@ -40,7 +40,7 @@ export interface UserPatterns {
   preferredSessionTimes: number[];
   commonPauseReasons: string[];
   lastBossEncounter: number | null;
-  rivalStatus: "AHEAD" | "BEHIND" | "NONE";
+  rivalStatus: 'AHEAD' | 'BEHIND' | 'NONE';
   squadContribution: number;
 }
 

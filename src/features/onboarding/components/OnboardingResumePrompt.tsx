@@ -1,13 +1,13 @@
-import React from "react";
-import { View } from "react-native";
-import Animated, { FadeIn, FadeInUp, FadeOut } from "react-native-reanimated";
-import { Text } from "../../../components/primitives/Text";
-import { Button } from "../../../components/primitives/Button";
-import { Box } from "../../../components/primitives/Box";
-import { useTheme } from "../../../theme";
-import { createSheet } from "@/shared/ui/create-sheet";
-import { launchColors } from "@theme/tokens/launch-colors";
-import { useOnboardingResumeState } from "../hooks/useOnboardingResumeState";
+import React from 'react';
+import { View } from 'react-native';
+import Animated, { FadeIn, FadeInUp, FadeOut } from 'react-native-reanimated';
+import { Text } from '../../../components/primitives/Text';
+import { Button } from '../../../components/primitives/Button';
+import { Box } from '../../../components/primitives/Box';
+import { useTheme } from '../../../theme';
+import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
+import { useOnboardingResumeState } from '../hooks/useOnboardingResumeState';
 
 interface OnboardingResumePromptProps {
   onResume: () => void;
@@ -32,7 +32,7 @@ export function OnboardingResumePrompt({
     handleDismiss,
   } = useOnboardingResumeState(onResume, onRestart, onDismiss);
 
-  if (!isVisible || !state) return null;
+  if (!isVisible || !state) {return null;}
 
   return (
     <Box
@@ -103,7 +103,7 @@ export function OnboardingResumePrompt({
                 size="lg"
                 onPress={handleResume}
                 disabled={selectedAction !== null}
-                isLoading={selectedAction === "resume"}
+                isLoading={selectedAction === 'resume'}
                 accessibilityLabel="Continue setup"
                 accessibilityRole="button"
                 accessibilityHint="Double tap to select"
@@ -115,7 +115,7 @@ export function OnboardingResumePrompt({
                 size="md"
                 onPress={handleRestart}
                 disabled={selectedAction !== null}
-                isLoading={selectedAction === "restart"}
+                isLoading={selectedAction === 'restart'}
                 accessibilityLabel="Start fresh"
                 accessibilityRole="button"
                 accessibilityHint="Double tap to select"
@@ -149,9 +149,9 @@ const styles = createSheet({
     width: 60,
     height: 60,
     borderRadius: 30,
-    alignItems: "center",
-    justifyContent: "center",
-    alignSelf: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
     marginBottom: 16,
   },
   icon: { fontSize: 30 },
@@ -159,8 +159,8 @@ const styles = createSheet({
     height: 6,
     backgroundColor: launchColors.rgb_0_0_0_0_1,
     borderRadius: 3,
-    overflow: "hidden",
+    overflow: 'hidden',
   },
-  progressFill: { height: "100%", borderRadius: 3 },
+  progressFill: { height: '100%', borderRadius: 3 },
 });
 export default OnboardingResumePrompt;

@@ -1,15 +1,15 @@
-import React from "react";
-import { Pressable } from "react-native";
+import React from 'react';
+import { Pressable } from 'react-native';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { SessionMode, SESSION_MODE_CONFIG } from "../../../session/modes";
-import { useTheme } from "../../../theme";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { SessionMode, SESSION_MODE_CONFIG } from '../../../session/modes';
+import { useTheme } from '../../../theme';
 import {
   isFeatureUnlocked,
   type UnlockableFeature,
-} from "../../mastery/components/mastery-unlock-gate-data";
-import type { MasteryRank } from "../../mastery/types";
+} from '../../mastery/components/mastery-unlock-gate-data';
+import type { MasteryRank } from '../../mastery/types';
 
 export type { SessionMode };
 
@@ -22,34 +22,34 @@ type ModeCard = {
 
 const MODE_CARDS: ModeCard[] = [
   {
-    description: "High intensity — for hard, uninterrupted work",
-    icon: "BRAIN",
+    description: 'High intensity — for hard, uninterrupted work',
+    icon: 'BRAIN',
     mode: SessionMode.DEEP_WORK,
-    name: "Deep Work",
+    name: 'Deep Work',
   },
   {
-    description: "Steady, low-pressure — protect a single thread",
-    icon: "LEAF",
+    description: 'Steady, low-pressure — protect a single thread',
+    icon: 'LEAF',
     mode: SessionMode.LIGHT_FOCUS,
-    name: "Light Focus",
+    name: 'Light Focus',
   },
   {
-    description: "Named study blocks with recall and review built in",
-    icon: "BOOK",
+    description: 'Named study blocks with recall and review built in',
+    icon: 'BOOK',
     mode: SessionMode.STUDY,
-    name: "Study",
+    name: 'Study',
   },
   {
-    description: "Open-ended creative flow — no pressure, no timers",
-    icon: "PALETTE",
+    description: 'Open-ended creative flow — no pressure, no timers',
+    icon: 'PALETTE',
     mode: SessionMode.CREATIVE,
-    name: "Creative",
+    name: 'Creative',
   },
   {
-    description: "Short blocks — chain them for momentum",
-    icon: "BOLT",
+    description: 'Short blocks — chain them for momentum',
+    icon: 'BOLT',
     mode: SessionMode.SPRINT,
-    name: "Sprint",
+    name: 'Sprint',
   },
 ];
 
@@ -66,16 +66,16 @@ function getDisabledReason(
   userMasteryRank?: MasteryRank,
 ): string | null {
   if (mode === SessionMode.STUDY && !hasActiveStudyPlan) {
-    return "Requires an active study plan";
+    return 'Requires an active study plan';
   }
 
   if (mode === SessionMode.DEEP_WORK && userMasteryRank) {
     const isUnlocked = isFeatureUnlocked(
       userMasteryRank,
-      "DEEP_WORK" as UnlockableFeature,
+      'DEEP_WORK' as UnlockableFeature,
     );
     if (!isUnlocked) {
-      return "Unlocks at Adept mastery rank";
+      return 'Unlocks at Adept mastery rank';
     }
   }
 
@@ -122,7 +122,7 @@ export function ModeSelector({
                 minHeight={76}
                 px="md"
                 py="sm"
-                bg={isSelected ? "background.elevated" : "background.secondary"}
+                bg={isSelected ? 'background.elevated' : 'background.secondary'}
                 borderRadius="lg"
                 style={{
                   borderWidth: 1,
@@ -156,10 +156,10 @@ export function ModeSelector({
                   <Box alignItems="flex-end">
                     <Text variant="caption" color="text.secondary">
                       {config.minimumQualifyingDurationSeconds >= 45 * 60
-                        ? "Full session"
+                        ? 'Full session'
                         : config.minimumQualifyingDurationSeconds >= 20 * 60
-                          ? "Standard"
-                          : "Short block"}
+                          ? 'Standard'
+                          : 'Short block'}
                     </Text>
                   </Box>
                 </Box>

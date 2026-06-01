@@ -6,34 +6,34 @@
  * Squad content removed for final release.
  * Boss damage maps directly to focus/study sessions — no economy/shop dependency.
  */
-import React, { useEffect, useRef, useState } from "react";
-import { useNavigation } from "@react-navigation/native";
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import React, { useEffect, useRef, useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-import { withScreenErrorBoundary } from "../../shared/ui/components/ScreenErrorBoundary";
+import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 import {
   useFeatureAccess,
   getFeatureAvailability,
   isFeatureAvailableForNavigation,
-} from "../../features/liveops-config";
-import { getDegradedFeatures } from "../../features/liveops-config/feature-access-store";
-import { useResolvedVexExperienceRuntime } from "../../features/personalization";
-import { useStreakSummary } from "../../features/streaks/hooks";
-import { trackBossRouteOpened } from "../../features/boss/analytics";
+} from '../../features/liveops-config';
+import { getDegradedFeatures } from '../../features/liveops-config/feature-access-store';
+import { useResolvedVexExperienceRuntime } from '../../features/personalization';
+import { useStreakSummary } from '../../features/streaks/hooks';
+import { trackBossRouteOpened } from '../../features/boss/analytics';
 import {
   useBossEngagementSignals,
   type BossEngagementInputs,
-} from "../../features/boss/boss-engagement-signals";
-import { useBossEngagementSummary } from "../../features/boss/hooks/useBossEngagementSummary";
-import type { ExtendedRootStackParams } from "../../navigation/types";
-import { BossScreenContent } from "./BossScreenContent";
-import { useAuthStore } from "../../store";
-import { useTheme } from "../../theme";
+} from '../../features/boss/boss-engagement-signals';
+import { useBossEngagementSummary } from '../../features/boss/hooks/useBossEngagementSummary';
+import type { ExtendedRootStackParams } from '../../navigation/types';
+import { BossScreenContent } from './BossScreenContent';
+import { useAuthStore } from '../../store';
+import { useTheme } from '../../theme';
 import {
   BossFallback,
   toScreenIntensity,
   nextResetLabel,
-} from "./boss-screen-helpers";
+} from './boss-screen-helpers';
 
 type Nav = NativeStackNavigationProp<ExtendedRootStackParams>;
 
@@ -48,7 +48,7 @@ export const BossScreen = (): JSX.Element => {
     (streakQuery.data as { currentStreak?: number } | undefined)
       ?.currentStreak ?? 0;
   const degradedFeatures = getDegradedFeatures();
-  const bossIgnored = degradedFeatures.has("boss_tab");
+  const bossIgnored = degradedFeatures.has('boss_tab');
 
   const bossEngagementQuery = useBossEngagementSummary(userId);
   const summaryData = bossEngagementQuery.data ?? {
@@ -73,12 +73,12 @@ export const BossScreen = (): JSX.Element => {
   const resolved = useResolvedVexExperienceRuntime({
     behaviorStats: {
       abandonedSessionDurations: [],
-      bossChallengeEngagement: "low",
+      bossChallengeEngagement: 'low',
       coachInteractions: 0,
       comebackSessions: 0,
       completedSessionDurations: [],
       completionStreak,
-      ignoredFeatures: bossIgnored ? ["boss_tab"] : [],
+      ignoredFeatures: bossIgnored ? ['boss_tab'] : [],
       mostSuccessfulTimeOfDay: null,
       preferredSessionMode: null,
       premiumFeatureAttempts: [],
@@ -110,22 +110,22 @@ export const BossScreen = (): JSX.Element => {
   const trackedOpenRef = useRef(false);
 
   useEffect(() => {
-    if (!userId) return;
-    if (trackedOpenRef.current) return;
+    if (!userId) {return;}
+    if (trackedOpenRef.current) {return;}
     trackedOpenRef.current = true;
     trackBossRouteOpened(userId, bossIntensity, canQueryBoss);
   }, [userId, bossIntensity, canQueryBoss]);
 
   if (
     !canNavigateBoss ||
-    disclosure.features.boss_tab.releaseState === "final_release_deactivated"
+    disclosure.features.boss_tab.releaseState === 'final_release_deactivated'
   ) {
     return (
       <BossFallback
         intensity={toScreenIntensity(bossIntensity)}
         onStartSession={() =>
-          navigation.navigate("SessionStack", {
-            screen: "SessionSetup",
+          navigation.navigate('SessionStack', {
+            screen: 'SessionSetup',
             params: {},
           })
         }
@@ -148,4 +148,4 @@ export const BossScreen = (): JSX.Element => {
   );
 };
 
-export default withScreenErrorBoundary(BossScreen, "Boss");
+export default withScreenErrorBoundary(BossScreen, 'Boss');

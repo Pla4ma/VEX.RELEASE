@@ -1,13 +1,13 @@
-import React from "react";
-import { View, Pressable } from "react-native";
-import Animated from "react-native-reanimated";
-import { Text } from "../../../components/primitives/Text";
-import { Box } from "../../../components/primitives/Box";
-import { launchColors } from "@theme/tokens/launch-colors";
-import { getNextBandLabel } from "./FocusScoreCardStates";
+import React from 'react';
+import { View, Pressable } from 'react-native';
+import Animated from 'react-native-reanimated';
+import { Text } from '../../../components/primitives/Text';
+import { Box } from '../../../components/primitives/Box';
+import { launchColors } from '@theme/tokens/launch-colors';
+import { getNextBandLabel } from './FocusScoreCardStates';
 
 interface FocusScoreCardContentProps {
-  size: "small" | "medium" | "large";
+  size: 'small' | 'medium' | 'large';
   handlePress: () => void;
   onPress: (() => void) | undefined;
   animatedStyles: object;
@@ -47,31 +47,31 @@ export function FocusScoreCardContent({
     <Pressable onPress={handlePress} disabled={!onPress}>
       <Animated.View style={[animatedStyles]}>
         <Box
-          padding={size === "small" ? "md" : size === "large" ? "xl" : "lg"}
+          padding={size === 'small' ? 'md' : size === 'large' ? 'xl' : 'lg'}
           backgroundColor="surface"
           borderRadius="lg"
-          style={{ width: "100%", borderColor: scoreColor, borderWidth: 2 }}
+          style={{ width: '100%', borderColor: scoreColor, borderWidth: 2 }}
         >
           <View
             style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "flex-start",
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'flex-start',
             }}
           >
             <View>
               <Text
                 variant={
-                  size === "large"
-                    ? "display"
-                    : size === "small"
-                      ? "heading3"
-                      : "heading2"
+                  size === 'large'
+                    ? 'display'
+                    : size === 'small'
+                      ? 'heading3'
+                      : 'heading2'
                 }
                 color="text"
-                style={{ fontWeight: "700", color: scoreColor }}
+                style={{ fontWeight: '700', color: scoreColor }}
               >
-                {currentScore || "---"}
+                {currentScore || '---'}
               </Text>
               <Text variant="caption" color="textMuted">
                 Focus Score
@@ -84,12 +84,12 @@ export function FocusScoreCardContent({
                   paddingHorizontal: 12,
                   paddingVertical: 4,
                   borderRadius: 12,
-                  backgroundColor: scoreColor + "20",
+                  backgroundColor: scoreColor + '20',
                 }}
               >
                 <Text
                   variant="caption"
-                  style={{ fontWeight: "600", color: scoreColor }}
+                  style={{ fontWeight: '600', color: scoreColor }}
                 >
                   {currentBand.label}
                 </Text>
@@ -102,7 +102,7 @@ export function FocusScoreCardContent({
               <Text
                 variant="body"
                 style={{
-                  fontWeight: "500",
+                  fontWeight: '500',
                   color: isPositiveChange
                     ? successColor
                     : isNegativeChange
@@ -110,7 +110,7 @@ export function FocusScoreCardContent({
                       : undefined,
                 }}
               >
-                {isPositiveChange ? "↑" : "↓"} {Math.abs(scoreChange)} from
+                {isPositiveChange ? '↑' : '↓'} {Math.abs(scoreChange)} from
                 last check
               </Text>
             </View>
@@ -132,7 +132,7 @@ export function FocusScoreCardContent({
           <Text
             variant="body"
             color="text"
-            style={{ marginTop: 12, fontStyle: "italic" }}
+            style={{ marginTop: 12, fontStyle: 'italic' }}
           >
             {identityStatement}
           </Text>
@@ -149,12 +149,12 @@ export function FocusScoreCardContent({
               backgroundColor: launchColors.hex_e0e0e0,
               borderRadius: 2,
               marginTop: 12,
-              overflow: "hidden",
+              overflow: 'hidden',
             }}
           >
             <View
               style={{
-                height: "100%",
+                height: '100%',
                 borderRadius: 2,
                 backgroundColor: scoreColor,
                 width: `${scoreProgress * 100}%`,
@@ -166,9 +166,9 @@ export function FocusScoreCardContent({
             <Text
               variant="caption"
               color="textMuted"
-              style={{ marginTop: 4, textAlign: "right" }}
+              style={{ marginTop: 4, textAlign: 'right' }}
             >
-              {currentBand.max + 1 - currentScore} points to{" "}
+              {currentBand.max + 1 - currentScore} points to{' '}
               {getNextBandLabel(currentBand.label)}
             </Text>
           )}

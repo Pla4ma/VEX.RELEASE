@@ -1,5 +1,5 @@
-import { useMemo } from "react";
-import type { Lane } from "../lane-engine/types";
+import { useMemo } from 'react';
+import type { Lane } from '../lane-engine/types';
 import {
   getModeReturnHook,
   getModeRescueCopy,
@@ -7,8 +7,8 @@ import {
   getModePremiumBridge,
   getModeDayCopy,
   scoreModeRetention,
-} from "./service";
-import type { RetentionScoreInput } from "./service";
+} from './service';
+import type { RetentionScoreInput } from './service';
 import type {
   ModeReturnHook,
   ModeDayCopy,
@@ -16,7 +16,7 @@ import type {
   ModeNotificationCopy,
   ModePremiumBridge,
   ModeRetentionScore,
-} from "./schemas";
+} from './schemas';
 
 export function useModeReturnHook(input: { lane: Lane }): ModeReturnHook {
   return useMemo(() => getModeReturnHook(input.lane), [input.lane]);
@@ -51,13 +51,5 @@ export function useModePremiumBridge(input: {
 export function useModeRetentionScore(
   input: RetentionScoreInput,
 ): ModeRetentionScore {
-  return useMemo(() => scoreModeRetention(input), [
-    input.lane,
-    input.hasNextAction,
-    input.hasCompletionContext,
-    input.hasMemoryInsight,
-    input.hasWeeklyIntelligence,
-    input.nudgeCopyIsSpecific,
-    input.returnReasonIsModeSpecific,
-  ]);
+  return useMemo(() => scoreModeRetention(input), [input]);
 }

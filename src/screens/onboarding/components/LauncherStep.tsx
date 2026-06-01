@@ -1,16 +1,16 @@
-import React from "react";
-import { View } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
-import Animated, { FadeInDown, FadeInUp } from "react-native-reanimated";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import React from 'react';
+import { View } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { Button } from "../../../components/primitives/Button";
-import { Text } from "../../../components/primitives/Text";
-import { useReducedMotion } from "../../../hooks/useReducedMotion";
-import { useTheme } from "../../../theme";
-import { getHeroGradientColors } from "../../home/HomeScreenVisuals";
-import { styles } from "../styles";
-import type { StarterPreset } from "./onboarding-flow-data";
+import { Button } from '../../../components/primitives/Button';
+import { Text } from '../../../components/primitives/Text';
+import { useReducedMotion } from '../../../hooks/useReducedMotion';
+import { useTheme } from '../../../theme';
+import { getHeroGradientColors } from '../../home/HomeScreenVisuals';
+import { styles } from '../styles';
+import type { StarterPreset } from './onboarding-flow-data';
 
 type LauncherStepProps = {
   firstSessionXp: number;
@@ -74,9 +74,9 @@ export function LauncherStep({
         </Animated.View>
         <View style={styles.celebrationStats}>
           {[
-            "Session complete",
-            "Progress saved",
-            "VEX is learning",
+            'Session complete',
+            'Progress saved',
+            'VEX is learning',
           ].map((stat, index) => (
             <Animated.View
               entering={
@@ -110,7 +110,7 @@ export function LauncherStep({
             fullWidth
             onPress={() =>
               onFinishOnboarding(
-                "Your first session is complete. Come back tomorrow.",
+                'Your first session is complete. Come back tomorrow.',
               )
             }
             isDisabled={isFinishing}
@@ -134,7 +134,7 @@ export function LauncherStep({
           style={[
             styles.launchGradientCard,
             {
-              borderRadius: theme.borderRadius["3xl"],
+              borderRadius: theme.borderRadius['3xl'],
               padding: theme.spacing[5],
             },
           ]}
@@ -168,14 +168,14 @@ export function LauncherStep({
           accessibilityLabel={
             selectedPreset
               ? `Start ${selectedPreset.durationLabel} session`
-              : "Start session"
+              : 'Start session'
           }
           accessibilityRole="button"
           accessibilityHint="Opens the session setup screen with your starter session selected"
         >
           {selectedPreset
             ? `Start ${selectedPreset.durationLabel} Session`
-            : "Start Session"}
+            : 'Start Session'}
         </Button>
       </View>
       <Text

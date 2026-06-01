@@ -1,8 +1,6 @@
 [
-  "src/features/ai-coach/repository/messages.ts",
-  "src/features/analytics/repository/storage.ts",
-  "src/features/progression/repository/prestige.ts",
-  "src/features/progression/repository/unified.ts",
-  "src/features/session/repository/stakes.ts",
-  "src/services/supabaseAuth.ts"
+  "src/features/economy/service.ts",
+  "src/features/progression/operation-atomic.ts",
+  "src/services/supabase-auth-credentials.ts",
+  "src/services/supabase-auth-session.ts"
 ]

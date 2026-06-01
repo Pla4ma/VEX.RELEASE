@@ -1,10 +1,10 @@
-import { z } from "zod";
+import { z } from 'zod';
 import {
   TriggerTypeSchema,
   ActionTypeSchema,
   DeliveryMethodSchema,
   ExecutionStatusSchema,
-} from "./enums";
+} from './enums';
 
 export const InterventionTriggerSchema = z
   .object({ type: TriggerTypeSchema, threshold: z.number().optional() })
@@ -13,7 +13,7 @@ export const InterventionTriggerSchema = z
 export const InterventionConditionSchema = z
   .object({
     field: z.string(),
-    operator: z.enum(["eq", "gt", "lt", "gte", "lte", "in"]),
+    operator: z.enum(['eq', 'gt', 'lt', 'gte', 'lte', 'in']),
     value: z.unknown(),
   })
   .strict();
@@ -44,11 +44,11 @@ export const InterventionRuleSchema = z
 export const UserResponseSchema = z
   .object({
     action: z.enum([
-      "STARTED_SESSION",
-      "DISMISSED",
-      "ENGAGED",
-      "IGNORED",
-      "MUTED",
+      'STARTED_SESSION',
+      'DISMISSED',
+      'ENGAGED',
+      'IGNORED',
+      'MUTED',
     ]),
     timestamp: z.number().int().positive(),
     metadata: z.record(z.unknown()),

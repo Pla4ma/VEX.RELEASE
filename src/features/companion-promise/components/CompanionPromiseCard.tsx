@@ -1,17 +1,17 @@
-import React from "react";
-import { View } from "react-native";
-import Animated, { FadeInUp } from "react-native-reanimated";
-import { Button } from "../../../components/primitives/Button";
-import { Text } from "../../../components/primitives/Text";
-import { useReducedMotion } from "../../../hooks/useReducedMotion";
-import { useTheme } from "../../../theme";
-import { getMinTouchTargetStyle } from "../../../utils/touchTarget";
-import type { CompanionPromiseHomeState } from "../types";
+import React from 'react';
+import { View } from 'react-native';
+import Animated, { FadeInUp } from 'react-native-reanimated';
+import { Button } from '../../../components/primitives/Button';
+import { Text } from '../../../components/primitives/Text';
+import { useReducedMotion } from '../../../hooks/useReducedMotion';
+import { useTheme } from '../../../theme';
+import { getMinTouchTargetStyle } from '../../../utils/touchTarget';
+import type { CompanionPromiseHomeState } from '../types';
 import {
   getModeCopy,
   getBodyCopy,
   getCtaLabel,
-} from "./CompanionPromiseCard.helpers";
+} from './CompanionPromiseCard.helpers';
 
 interface CompanionPromiseCardProps {
   onDismissRecovery: () => void;
@@ -46,7 +46,7 @@ export function CompanionPromiseSkeleton(): JSX.Element {
           borderRadius: theme.spacing[1],
           height: 18,
           marginTop: theme.spacing[3],
-          width: "100%",
+          width: '100%',
         }}
       />
       <View
@@ -55,7 +55,7 @@ export function CompanionPromiseSkeleton(): JSX.Element {
           borderRadius: theme.spacing[1],
           height: 18,
           marginTop: theme.spacing[2],
-          width: "82%",
+          width: '82%',
         }}
       />
       <View
@@ -64,7 +64,7 @@ export function CompanionPromiseSkeleton(): JSX.Element {
           borderRadius: theme.spacing[2],
           height: 44,
           marginTop: theme.spacing[4],
-          width: "100%",
+          width: '100%',
         }}
       />
     </View>
@@ -81,7 +81,7 @@ export function CompanionPromiseCard({
   const { isReducedMotion } = useReducedMotion();
   const entering = isReducedMotion ? undefined : FadeInUp.duration(220);
 
-  if (state.kind === "offline") {
+  if (state.kind === 'offline') {
     return (
       <View
         style={{
@@ -121,7 +121,7 @@ export function CompanionPromiseCard({
       style={{
         backgroundColor: theme.colors.background.elevated,
         borderColor:
-          state.kind === "fulfilled"
+          state.kind === 'fulfilled'
             ? theme.colors.success[500]
             : theme.colors.border.light,
         borderRadius: theme.spacing[4],
@@ -156,13 +156,13 @@ export function CompanionPromiseCard({
         {getBodyCopy(state)}
       </Text>
 
-      {"promise" in state ? (
+      {'promise' in state ? (
         <Text
           variant="caption"
           color="text.secondary"
           style={{ marginTop: theme.spacing[2] }}
         >
-          {state.promise.targetDurationMinutes} minutes ·{" "}
+          {state.promise.targetDurationMinutes} minutes ·{' '}
           {getModeCopy(state.promise.targetMode)}
         </Text>
       ) : null}
@@ -176,7 +176,7 @@ export function CompanionPromiseCard({
         {getCtaLabel(state)}
       </Button>
 
-      {state.kind === "missed" ? (
+      {state.kind === 'missed' ? (
         <Button
           accessibilityHint="Dismisses the recovery card"
           accessibilityLabel="Dismiss recovery card"

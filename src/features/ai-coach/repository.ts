@@ -13,4 +13,4 @@
  * - messages: Coach messages
  */
 
-export * from "./repository/index";
+export * from './repository/index';

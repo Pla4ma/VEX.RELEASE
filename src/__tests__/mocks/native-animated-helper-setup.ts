@@ -92,7 +92,7 @@ function mockCreateNativeAnimatedHelper(): NativeAnimatedHelperModule {
 }
 
 try {
-  jest.mock("react-native/src/private/animated/NativeAnimatedHelper", () => {
+  jest.mock('react-native/src/private/animated/NativeAnimatedHelper', () => {
     const helper = mockCreateNativeAnimatedHelper();
     return {
       __esModule: true,

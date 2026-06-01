@@ -7,7 +7,7 @@ import {
   getUpgradeMessage,
   TIER_CONFIGS,
   trackLadderInteraction,
-} from "../value-ladder";
+} from '../value-ladder';
 
 export {
   calculateLadderPosition,

@@ -4,33 +4,33 @@
  * Root navigation container for auth, onboarding, tabs, and feature stacks.
  */
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   NavigationContainer,
   useNavigationContainerRef,
-} from "@react-navigation/native";
+} from '@react-navigation/native';
 
-import { useAuthStore } from "../store";
-import { useTheme } from "../theme";
-import { useOnboardingStore } from "../onboarding";
-import { useFeatureAccess } from "../features/liveops-config";
+import { useAuthStore } from '../store';
+import { useTheme } from '../theme';
+import { useOnboardingStore } from '../onboarding';
+import { useFeatureAccess } from '../features/liveops-config';
 
-import { RootCrashBoundary } from "./components/RootCrashBoundary";
-import { useNotificationNavigation } from "./hooks/useNotificationNavigation";
-import { useStreakFuneralNavigation } from "./hooks/useStreakFuneralNavigation";
-import { RootStackScreens } from "./RootStackScreens";
-import { markColdStart } from "../app/cold-start-performance";
-import { createLinkingConfig } from "./linking-config";
+import { RootCrashBoundary } from './components/RootCrashBoundary';
+import { useNotificationNavigation } from './hooks/useNotificationNavigation';
+import { useStreakFuneralNavigation } from './hooks/useStreakFuneralNavigation';
+import { RootStackScreens } from './RootStackScreens';
+import { markColdStart } from '../app/cold-start-performance';
+import { createLinkingConfig } from './linking-config';
 
-import type { ExtendedRootStackParams } from "./types";
+import type { ExtendedRootStackParams } from './types';
 
 function readOnboardingCompletedAt(user: unknown): string | null {
-  if (!user || typeof user !== "object" || !("onboardingCompletedAt" in user)) {
+  if (!user || typeof user !== 'object' || !('onboardingCompletedAt' in user)) {
     return null;
   }
 
   const value = user.onboardingCompletedAt;
-  return typeof value === "string" ? value : null;
+  return typeof value === 'string' ? value : null;
 }
 
 export const RootNavigator: React.FC = () => {
@@ -140,7 +140,7 @@ export const RootNavigator: React.FC = () => {
       ref={navigationRef}
       linking={linking}
       onReady={() => {
-        markColdStart("root_navigator_ready");
+        markColdStart('root_navigator_ready');
         setIsNavigationReady(true);
       }}
       theme={{
@@ -164,7 +164,7 @@ export const RootNavigator: React.FC = () => {
           textPrimary: theme.colors.semantic.textPrimary,
           textSecondary: theme.colors.semantic.textSecondary,
         }}
-        resetKey={`${user?.id ?? "signed-out"}:${hasCompletedOnboarding ? "main" : "setup"}`}
+        resetKey={`${user?.id ?? 'signed-out'}:${hasCompletedOnboarding ? 'main' : 'setup'}`}
       >
         <RootStackScreens
           hasCompletedOnboarding={hasCompletedOnboarding}

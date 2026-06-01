@@ -1,8 +1,8 @@
-import React from "react";
+import React from 'react';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
 
 interface CapacityIndicatorProps {
   current: number;
@@ -35,13 +35,13 @@ export function CapacityIndicator({
       }
       mb="lg"
     >
-      <Text fontSize={16}>{isFull ? "⚠️" : "📦"}</Text>
+      <Text fontSize={16}>{isFull ? '⚠️' : '📦'}</Text>
       <Box flex={1}>
         <Text
           variant="bodySmall"
-          color={isFull ? "warning.DEFAULT" : "text.secondary"}
+          color={isFull ? 'warning.DEFAULT' : 'text.secondary'}
         >
-          {isFull ? "Vault Full!" : "Vault Capacity"}
+          {isFull ? 'Vault Full!' : 'Vault Capacity'}
         </Text>
         <Box
           height={4}
@@ -62,7 +62,7 @@ export function CapacityIndicator({
       </Box>
       <Text
         variant="caption"
-        color={isFull ? "warning.DEFAULT" : "text.secondary"}
+        color={isFull ? 'warning.DEFAULT' : 'text.secondary'}
       >
         {current}/{max}
       </Text>

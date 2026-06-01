@@ -1,15 +1,15 @@
-import React from "react";
-import { View, Image, Pressable } from "react-native";
-import { useTheme } from "../theme";
-import { buttonTap } from "../utils/haptics";
-import { Text } from "./primitives";
-import { launchColors } from "@theme/tokens/launch-colors";
-import { SIZE_MAP, FONT_SIZE_MAP, STATUS_COLOR_MAP } from "./Avatar.types";
-import { avatarStyles } from "./Avatar.styles";
-import type { AvatarProps, AvatarShape } from "./Avatar.types";
+import React from 'react';
+import { View, Image, Pressable } from 'react-native';
+import { useTheme } from '../theme';
+import { buttonTap } from '../utils/haptics';
+import { Text } from './primitives';
+import { launchColors } from '@theme/tokens/launch-colors';
+import { SIZE_MAP, FONT_SIZE_MAP, STATUS_COLOR_MAP } from './Avatar.types';
+import { avatarStyles } from './Avatar.styles';
+import type { AvatarProps, AvatarShape } from './Avatar.types';
 
 function getInitials(name: string): string {
-  const parts = name.trim().split(" ");
+  const parts = name.trim().split(' ');
   if (parts.length === 1) {
     return parts[0]!.charAt(0).toUpperCase();
   }
@@ -20,11 +20,11 @@ function getInitials(name: string): string {
 
 function getBorderRadius(shape: AvatarShape, sizeValue: number): number {
   switch (shape) {
-    case "circle":
+    case 'circle':
       return sizeValue / 2;
-    case "rounded":
+    case 'rounded':
       return sizeValue / 4;
-    case "square":
+    case 'square':
       return 4;
     default:
       return sizeValue / 2;
@@ -33,16 +33,16 @@ function getBorderRadius(shape: AvatarShape, sizeValue: number): number {
 
 export const Avatar: React.FC<AvatarProps> = ({
   source,
-  name = "?",
-  size = "md",
-  status = "none",
+  name = '?',
+  size = 'md',
+  status = 'none',
   badge,
   borderColor,
   borderWidth = 0,
   onPress,
   style,
   backgroundColor,
-  shape = "circle",
+  shape = 'circle',
 }) => {
   const { theme } = useTheme();
   const sizeValue = SIZE_MAP[size];
@@ -50,7 +50,7 @@ export const Avatar: React.FC<AvatarProps> = ({
 
   const renderContent = () => {
     if (source) {
-      const imageSource = typeof source === "string" ? { uri: source } : source;
+      const imageSource = typeof source === 'string' ? { uri: source } : source;
       return (
         <Image
           source={imageSource}
@@ -86,7 +86,7 @@ export const Avatar: React.FC<AvatarProps> = ({
         <Text
           style={[
             avatarStyles.initials,
-            { fontSize, color: launchColors.hex_ffffff, fontWeight: "600" },
+            { fontSize, color: launchColors.hex_ffffff, fontWeight: '600' },
           ]}
         >
           {getInitials(name)}
@@ -96,7 +96,7 @@ export const Avatar: React.FC<AvatarProps> = ({
   };
 
   const renderStatus = () => {
-    if (status === "none") {
+    if (status === 'none') {
       return null;
     }
     const statusSize = Math.max(8, sizeValue / 5);
@@ -125,7 +125,7 @@ export const Avatar: React.FC<AvatarProps> = ({
       return null;
     }
     const badgeSize = Math.max(18, sizeValue / 3);
-    const displayBadge = badge > 99 ? "99+" : badge.toString();
+    const displayBadge = badge > 99 ? '99+' : badge.toString();
     return (
       <View
         style={[

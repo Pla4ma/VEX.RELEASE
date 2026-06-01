@@ -1,7 +1,7 @@
-import React from "react";
-import { View } from "react-native";
-import type { CompanionElement } from "../../../features/onboarding/types";
-import { launchColors } from "@theme/tokens/launch-colors";
+import React from 'react';
+import { View } from 'react-native';
+import type { CompanionElement } from '../../../features/onboarding/types';
+import { launchColors } from '@theme/tokens/launch-colors';
 
 interface ElementVisualProps {
   element: CompanionElement;
@@ -14,7 +14,7 @@ export function ElementVisual({
 }: ElementVisualProps): JSX.Element {
   const visuals: Record<CompanionElement, JSX.Element> = {
     FLAME: (
-      <View style={{ alignItems: "center" }}>
+      <View style={{ alignItems: 'center' }}>
         <View
           style={{
             width: 8,
@@ -35,7 +35,7 @@ export function ElementVisual({
       </View>
     ),
     WAVE: (
-      <View style={{ flexDirection: "row", gap: 2, alignItems: "center" }}>
+      <View style={{ flexDirection: 'row', gap: 2, alignItems: 'center' }}>
         <View
           style={{
             width: 4,
@@ -63,7 +63,7 @@ export function ElementVisual({
       </View>
     ),
     TERRA: (
-      <View style={{ alignItems: "center" }}>
+      <View style={{ alignItems: 'center' }}>
         <View
           style={{
             width: 24,
@@ -84,7 +84,7 @@ export function ElementVisual({
       </View>
     ),
     ZEPHYR: (
-      <View style={{ alignItems: "center" }}>
+      <View style={{ alignItems: 'center' }}>
         <View
           style={{
             width: 28,
@@ -115,7 +115,7 @@ export function ElementVisual({
       </View>
     ),
     VOID: (
-      <View style={{ alignItems: "center", justifyContent: "center" }}>
+      <View style={{ alignItems: 'center', justifyContent: 'center' }}>
         <View
           style={{
             width: 28,
@@ -131,13 +131,13 @@ export function ElementVisual({
             height: 12,
             borderRadius: 6,
             backgroundColor: launchColors.hex_fff,
-            position: "absolute",
+            position: 'absolute',
           }}
         />
       </View>
     ),
     LUMINA: (
-      <View style={{ alignItems: "center", justifyContent: "center" }}>
+      <View style={{ alignItems: 'center', justifyContent: 'center' }}>
         <View
           style={{
             width: 24,
@@ -153,7 +153,7 @@ export function ElementVisual({
             borderRadius: 16,
             borderWidth: 2,
             borderColor: color,
-            position: "absolute",
+            position: 'absolute',
             opacity: 0.5,
           }}
         />

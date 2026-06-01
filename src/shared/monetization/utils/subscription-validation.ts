@@ -1,14 +1,14 @@
-import type { ValidationResult } from "./purchase-validation";
+import type { ValidationResult } from './purchase-validation';
 
 export interface Subscription {
   userId: string;
   subscriptionId: string;
   productId: string;
-  status: "active" | "expired" | "cancelled" | "pending";
+  status: 'active' | 'expired' | 'cancelled' | 'pending';
   startedAt: number;
   expiresAt: number;
   autoRenew: boolean;
-  platform: "ios" | "android" | "stripe";
+  platform: 'ios' | 'android' | 'stripe';
 }
 
 export function validateSubscription(
@@ -18,37 +18,37 @@ export function validateSubscription(
   const result: ValidationResult<Subscription> = {
     valid: true,
     errors: [],
-    fraudRisk: "NONE",
+    fraudRisk: 'NONE',
   };
   const hasActive = userHistory.previousSubscriptions.some(
     (s) =>
-      s.status === "active" && s.subscriptionId !== subscription.subscriptionId,
+      s.status === 'active' && s.subscriptionId !== subscription.subscriptionId,
   );
-  if (hasActive && subscription.status === "active") {
+  if (hasActive && subscription.status === 'active') {
     result.errors.push({
-      field: "subscriptionId",
-      message: "User already has active subscription",
-      code: "OVERLAPPING_SUBSCRIPTION",
-      severity: "MEDIUM",
+      field: 'subscriptionId',
+      message: 'User already has active subscription',
+      code: 'OVERLAPPING_SUBSCRIPTION',
+      severity: 'MEDIUM',
     });
   }
   if (userHistory.totalRefunds > 3) {
     result.errors.push({
-      field: "refundHistory",
+      field: 'refundHistory',
       message: `User has ${userHistory.totalRefunds} refunds`,
-      code: "HIGH_REFUND_HISTORY",
-      severity: "LOW",
+      code: 'HIGH_REFUND_HISTORY',
+      severity: 'LOW',
     });
-    result.fraudRisk = "LOW";
+    result.fraudRisk = 'LOW';
   }
   if (subscription.expiresAt < subscription.startedAt) {
     result.errors.push({
-      field: "expiresAt",
-      message: "Expiry before start date",
-      code: "INVALID_DATES",
-      severity: "HIGH",
+      field: 'expiresAt',
+      message: 'Expiry before start date',
+      code: 'INVALID_DATES',
+      severity: 'HIGH',
     });
-    result.fraudRisk = "HIGH";
+    result.fraudRisk = 'HIGH';
     result.valid = false;
   }
   const previousPlatforms = new Set(
@@ -59,10 +59,10 @@ export function validateSubscription(
     !previousPlatforms.has(subscription.platform)
   ) {
     result.errors.push({
-      field: "platform",
-      message: "Subscription platform mismatch",
-      code: "PLATFORM_INCONSISTENCY",
-      severity: "LOW",
+      field: 'platform',
+      message: 'Subscription platform mismatch',
+      code: 'PLATFORM_INCONSISTENCY',
+      severity: 'LOW',
     });
   }
   return result;

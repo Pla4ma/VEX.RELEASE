@@ -1,4 +1,4 @@
-import type { BlockerArchetype, PersonalBlocker } from "./schemas";
+import type { BlockerArchetype, PersonalBlocker } from './schemas';
 
 // ---------------------------------------------------------------------------
 // Blocker copy (productivity language, not game language)
@@ -6,40 +6,40 @@ import type { BlockerArchetype, PersonalBlocker } from "./schemas";
 
 const BLOCKER_COPY: Record<
   BlockerArchetype,
-  Pick<PersonalBlocker, "name" | "recoveryPrompt">
+  Pick<PersonalBlocker, 'name' | 'recoveryPrompt'>
 > = {
   blank_start: {
-    name: "The Blank Page",
-    recoveryPrompt: "Start one small run before judging the day.",
+    name: 'The Blank Page',
+    recoveryPrompt: 'Start one small run before judging the day.',
   },
   deadline_pressure: {
-    name: "Deadline Pressure",
-    recoveryPrompt: "Pick the nearest deadline action and make it visible.",
+    name: 'Deadline Pressure',
+    recoveryPrompt: 'Pick the nearest deadline action and make it visible.',
   },
   distraction_loop: {
-    name: "The Distraction Loop",
-    recoveryPrompt: "Put feeds away and restart with five clean minutes.",
+    name: 'The Distraction Loop',
+    recoveryPrompt: 'Put feeds away and restart with five clean minutes.',
   },
   unclear_scope: {
-    name: "Unclear Scope",
-    recoveryPrompt: "Rewrite the task until the first move is obvious.",
+    name: 'Unclear Scope',
+    recoveryPrompt: 'Rewrite the task until the first move is obvious.',
   },
   delayed_start: {
-    name: "The Delayed Start",
-    recoveryPrompt: "Use a short start window before the day drifts.",
+    name: 'The Delayed Start',
+    recoveryPrompt: 'Use a short start window before the day drifts.',
   },
   over_prep: {
-    name: "The Over-Prep Trap",
-    recoveryPrompt: "Ship one rough move instead of polishing the plan.",
+    name: 'The Over-Prep Trap',
+    recoveryPrompt: 'Ship one rough move instead of polishing the plan.',
   },
   context_switching: {
-    name: "Context Switching",
-    recoveryPrompt: "Close competing contexts and protect one thread.",
+    name: 'Context Switching',
+    recoveryPrompt: 'Close competing contexts and protect one thread.',
   },
   avoidant_pattern: {
-    name: "The Avoidance Pattern",
+    name: 'The Avoidance Pattern',
     recoveryPrompt:
-      "Start the work for just two minutes and let momentum pull you in.",
+      'Start the work for just two minutes and let momentum pull you in.',
   },
 };
 
@@ -62,20 +62,20 @@ function daysSinceFirstSession(firstActiveDay: number, now: number): number {
 }
 
 function detectArchetype(joined: string): BlockerArchetype {
-  if (joined.includes("deadline")) return "deadline_pressure";
-  if (joined.includes("switch") || joined.includes("context"))
-    return "context_switching";
-  if (joined.includes("late") || joined.includes("delay"))
-    return "delayed_start";
-  if (joined.includes("unclear") || joined.includes("fog"))
-    return "unclear_scope";
-  if (joined.includes("perfect") || joined.includes("overprep"))
-    return "over_prep";
-  if (joined.includes("scroll") || joined.includes("distraction"))
-    return "distraction_loop";
-  if (joined.includes("avoid") || joined.includes("procrastinat"))
-    return "avoidant_pattern";
-  return "blank_start";
+  if (joined.includes('deadline')) {return 'deadline_pressure';}
+  if (joined.includes('switch') || joined.includes('context'))
+    {return 'context_switching';}
+  if (joined.includes('late') || joined.includes('delay'))
+    {return 'delayed_start';}
+  if (joined.includes('unclear') || joined.includes('fog'))
+    {return 'unclear_scope';}
+  if (joined.includes('perfect') || joined.includes('overprep'))
+    {return 'over_prep';}
+  if (joined.includes('scroll') || joined.includes('distraction'))
+    {return 'distraction_loop';}
+  if (joined.includes('avoid') || joined.includes('procrastinat'))
+    {return 'avoidant_pattern';}
+  return 'blank_start';
 }
 
 export function resolvePersonalBlocker(input: {
@@ -95,7 +95,7 @@ export function resolvePersonalBlocker(input: {
   if (evidenceCount === 0) {
     const fallback = BLOCKER_COPY.blank_start;
     return {
-      archetype: "blank_start",
+      archetype: 'blank_start',
       evidenceCount: 0,
       isEvidenceBased: false,
       isTeaser: true,
@@ -105,7 +105,7 @@ export function resolvePersonalBlocker(input: {
     };
   }
 
-  const joined = signals.join(" ").toLowerCase();
+  const joined = signals.join(' ').toLowerCase();
   const archetype = detectArchetype(joined);
   const copy = BLOCKER_COPY[archetype];
 

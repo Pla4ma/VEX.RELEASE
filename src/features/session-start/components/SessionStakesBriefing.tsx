@@ -1,14 +1,14 @@
-import React from "react";
-import { View } from "react-native";
-import Animated, { FadeInUp } from "react-native-reanimated";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import type { SessionStakesBriefingProps } from "./SessionStakesBriefing.types";
-import { StakeCard } from "./StakeCard";
-import { EmptyStakesMessage } from "./EmptyStakesMessage";
-import { buildStakes } from "./buildStakes";
+import React from 'react';
+import { View } from 'react-native';
+import Animated, { FadeInUp } from 'react-native-reanimated';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import type { SessionStakesBriefingProps } from './SessionStakesBriefing.types';
+import { StakeCard } from './StakeCard';
+import { EmptyStakesMessage } from './EmptyStakesMessage';
+import { buildStakes } from './buildStakes';
 
-export type { SessionStake, SessionStakesBriefingProps } from "./SessionStakesBriefing.types";
+export type { SessionStake, SessionStakesBriefingProps } from './SessionStakesBriefing.types';
 
 export function SessionStakesBriefing({
   bossStake,
@@ -29,8 +29,8 @@ export function SessionStakesBriefing({
         {}
         <View
           style={{
-            flexDirection: "row",
-            alignItems: "center",
+            flexDirection: 'row',
+            alignItems: 'center',
             gap: theme.spacing[2],
           }}
         >

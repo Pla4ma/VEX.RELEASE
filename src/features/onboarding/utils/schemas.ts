@@ -1,11 +1,11 @@
-import { z } from "zod";
-import type { FocusGoal, FocusDuration } from "../types";
+import { z } from 'zod';
+import type { FocusGoal, FocusDuration } from '../types';
 
-const ValidGoals = ["WORK", "STUDY", "CREATIVE", "PERSONAL"] as const;
+const ValidGoals = ['WORK', 'STUDY', 'CREATIVE', 'PERSONAL'] as const;
 const ValidDurations = [15, 25, 45, 60] as const;
 
 export const OnboardingGoalSchema = z.enum(ValidGoals, {
-  errorMap: () => ({ message: "Please select a valid focus goal" }),
+  errorMap: () => ({ message: 'Please select a valid focus goal' }),
 });
 
 export const OnboardingDurationSchema = z
@@ -15,26 +15,26 @@ export const OnboardingDurationSchema = z
       ValidDurations.includes(val as FocusDuration),
     {
       message:
-        "Please select a valid focus duration (15, 25, 45, or 60 minutes)",
+        'Please select a valid focus duration (15, 25, 45, or 60 minutes)',
     },
   );
 
 export const OnboardingNameSchema = z
   .string()
-  .min(2, "Name must be at least 2 characters")
-  .max(30, "Name must be 30 characters or less")
+  .min(2, 'Name must be at least 2 characters')
+  .max(30, 'Name must be 30 characters or less')
   .regex(
     /^[a-zA-Z0-9\s_-]+$/,
-    "Name can only contain letters, numbers, spaces, hyphens, and underscores",
+    'Name can only contain letters, numbers, spaces, hyphens, and underscores',
   )
   .transform((val) => val.trim());
 
 export const OnboardingStepSchema = z.enum([
-  "WELCOME",
-  "GOAL_SETTING",
-  "FOCUS_TIME",
-  "NAME_SETUP",
-  "FIRST_SESSION_CTA",
+  'WELCOME',
+  'GOAL_SETTING',
+  'FOCUS_TIME',
+  'NAME_SETUP',
+  'FIRST_SESSION_CTA',
 ]);
 
 export const OnboardingStateSchema = z.object({

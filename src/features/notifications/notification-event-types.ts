@@ -2,7 +2,7 @@ export type {
   BaseNotificationEvent,
   EventMetadata,
   DeviceInfo,
-} from "./notification-event-types-core";
+} from './notification-event-types-core';
 export type {
   NotificationSentEvent,
   NotificationDeliveredEvent,
@@ -11,14 +11,14 @@ export type {
   NotificationFailedEvent,
   NotificationExpiredEvent,
   NotificationCancelledEvent,
-} from "./notification-event-types-delivery";
+} from './notification-event-types-delivery';
 export type {
   NotificationTemplateCreatedEvent,
   NotificationTemplateUpdatedEvent,
   NotificationTemplateDeletedEvent,
   NotificationPreferencesUpdatedEvent,
   NotificationChannelPreferencesUpdatedEvent,
-} from "./notification-event-types-template";
+} from './notification-event-types-template';
 export type {
   NotificationCampaignCreatedEvent,
   NotificationCampaignStartedEvent,
@@ -27,7 +27,7 @@ export type {
   NotificationRuleTriggeredEvent,
   NotificationRuleCreatedEvent,
   NotificationRuleUpdatedEvent,
-} from "./notification-event-types-campaign";
+} from './notification-event-types-campaign';
 export type {
   NotificationAnalyticsEvent,
   NotificationPerformanceReportEvent,
@@ -38,7 +38,7 @@ export type {
   NotificationSystemPerformanceEvent,
   NotificationUserInteractionEvent,
   NotificationUserFeedbackEvent,
-} from "./notification-event-types-system";
+} from './notification-event-types-system';
 
 import type {
   NotificationSentEvent,
@@ -48,14 +48,14 @@ import type {
   NotificationFailedEvent,
   NotificationExpiredEvent,
   NotificationCancelledEvent,
-} from "./notification-event-types-delivery";
+} from './notification-event-types-delivery';
 import type {
   NotificationTemplateCreatedEvent,
   NotificationTemplateUpdatedEvent,
   NotificationTemplateDeletedEvent,
   NotificationPreferencesUpdatedEvent,
   NotificationChannelPreferencesUpdatedEvent,
-} from "./notification-event-types-template";
+} from './notification-event-types-template';
 import type {
   NotificationCampaignCreatedEvent,
   NotificationCampaignStartedEvent,
@@ -64,7 +64,7 @@ import type {
   NotificationRuleTriggeredEvent,
   NotificationRuleCreatedEvent,
   NotificationRuleUpdatedEvent,
-} from "./notification-event-types-campaign";
+} from './notification-event-types-campaign';
 import type {
   NotificationAnalyticsEvent,
   NotificationPerformanceReportEvent,
@@ -75,7 +75,7 @@ import type {
   NotificationSystemPerformanceEvent,
   NotificationUserInteractionEvent,
   NotificationUserFeedbackEvent,
-} from "./notification-event-types-system";
+} from './notification-event-types-system';
 
 export type NotificationEventType =
   | NotificationSentEvent

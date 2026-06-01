@@ -8,22 +8,22 @@
  * @phase 4
  */
 
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   Pressable,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
-} from "react-native";
-import Animated, { FadeIn, FadeInUp } from "react-native-reanimated";
+} from 'react-native';
+import Animated, { FadeIn, FadeInUp } from 'react-native-reanimated';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import type { FocusGoal } from "../schemas";
-import { GOAL_OPTIONS } from "../service";
-import { GoalCard } from "./GoalCard";
-import { NameInputSection } from "./NameInputSection";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import type { FocusGoal } from '../schemas';
+import { GOAL_OPTIONS } from '../service';
+import { GoalCard } from './GoalCard';
+import { NameInputSection } from './NameInputSection';
 
 interface NameAndGoalScreenProps {
   onContinue: (name: string, goal: FocusGoal) => void;
@@ -37,7 +37,7 @@ export function NameAndGoalScreen({
   onBack,
 }: NameAndGoalScreenProps): JSX.Element {
   const { theme } = useTheme();
-  const [name, setName] = useState("");
+  const [name, setName] = useState('');
   const [isFocused, setIsFocused] = useState(false);
   const [selectedGoal, setSelectedGoal] = useState<FocusGoal | null>(null);
   const [isAdvancing, setIsAdvancing] = useState(false);
@@ -60,7 +60,7 @@ export function NameAndGoalScreen({
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={{ flex: 1 }}
     >
       <ScrollView
@@ -87,13 +87,13 @@ export function NameAndGoalScreen({
               </Text>
               <Text variant="h2" color="text.primary">
                 {showGoals
-                  ? "What do you mainly want to focus on?"
-                  : "What should we call you?"}
+                  ? 'What do you mainly want to focus on?'
+                  : 'What should we call you?'}
               </Text>
               <Text variant="body" color="text.secondary">
                 {showGoals
-                  ? "Pick one — this sets your default session category."
-                  : "What should your focus companion call you?"}
+                  ? 'Pick one — this sets your default session category.'
+                  : 'What should your focus companion call you?'}
               </Text>
             </Box>
           </Animated.View>
@@ -134,7 +134,7 @@ export function NameAndGoalScreen({
 
           <Animated.View
             entering={FadeIn.duration(400).delay(500)}
-            style={{ marginTop: "auto" }}
+            style={{ marginTop: 'auto' }}
           >
             <Pressable
               onPress={onSkip}

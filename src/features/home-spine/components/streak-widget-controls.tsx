@@ -1,10 +1,10 @@
-import React from "react";
-import { Pressable } from "react-native";
+import React from 'react';
+import { Pressable } from 'react-native';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import type { ActiveStreakWager } from "./streak-widget-types";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import type { ActiveStreakWager } from './streak-widget-types';
 
 export function MultiplierBadge({
   multiplier,
@@ -33,9 +33,9 @@ export function MultiplierBadge({
       <Text
         variant="caption"
         color={color}
-        fontWeight={multiplier > 1 ? "700" : undefined}
+        fontWeight={multiplier > 1 ? '700' : undefined}
       >
-        {multiplier.toFixed(1)}x{multiplier > 1 ? " multiplier" : ""}
+        {multiplier.toFixed(1)}x{multiplier > 1 ? ' multiplier' : ''}
       </Text>
     </Box>
   );
@@ -60,35 +60,35 @@ export function WagerSection({
     <Pressable
       onPress={onWagerPress}
       style={{
-        alignItems: "center",
+        alignItems: 'center',
         borderTopColor: theme.colors.border.light,
         borderTopWidth: 1,
-        flexDirection: "row",
-        justifyContent: "space-between",
+        flexDirection: 'row',
+        justifyContent: 'space-between',
         marginTop: theme.spacing[3],
         paddingTop: theme.spacing[3],
       }}
       accessibilityLabel={
-        activeWager ? "View active wager progress" : "Place a streak wager"
+        activeWager ? 'View active wager progress' : 'Place a streak wager'
       }
       accessibilityRole="button"
       accessibilityHint={
         activeWager
-          ? "Opens your wager progress sheet"
-          : "Bet on your streak performance for rewards"
+          ? 'Opens your wager progress sheet'
+          : 'Bet on your streak performance for rewards'
       }
     >
       <Text variant="caption" color="text.secondary">
-        {activeWager ? "Wager active" : "Place a wager"}
+        {activeWager ? 'Wager active' : 'Place a wager'}
       </Text>
       <Text
         variant="caption"
-        color={activeWager ? "primary.500" : "text.tertiary"}
-        fontWeight={activeWager ? "700" : undefined}
+        color={activeWager ? 'primary.500' : 'text.tertiary'}
+        fontWeight={activeWager ? '700' : undefined}
       >
         {activeWager
           ? `${activeWager.currentProgress}/${activeWager.target} ${activeWager.progressUnit}`
-          : "Bet on your streak"}
+          : 'Bet on your streak'}
       </Text>
     </Pressable>
   );

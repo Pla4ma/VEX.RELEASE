@@ -1,15 +1,15 @@
 import type {
   NotificationBudget,
   NotificationRequest,
-} from "./notification-budget-schema";
+} from './notification-budget-schema';
 
 export function checkPriorityRules(
   request: NotificationRequest,
   budget: NotificationBudget,
 ): { allowed: boolean; reason?: string } {
   if (
-    request.priority === "STREAK_CRITICAL" ||
-    request.priority === "PENDING_SYNC"
+    request.priority === 'STREAK_CRITICAL' ||
+    request.priority === 'PENDING_SYNC'
   ) {
     return { allowed: true };
   }
@@ -18,20 +18,20 @@ export function checkPriorityRules(
   if (remainingBudget <= 0) {
     return {
       allowed: false,
-      reason: "No remaining budget for this priority level",
+      reason: 'No remaining budget for this priority level',
     };
   }
-  if (request.priority === "COACH_NEXT_ACTION" && remainingBudget === 1) {
+  if (request.priority === 'COACH_NEXT_ACTION' && remainingBudget === 1) {
     return { allowed: true };
   }
-  if (request.priority === "DAILY_MISSION" && remainingBudget === 1) {
+  if (request.priority === 'DAILY_MISSION' && remainingBudget === 1) {
     return {
       allowed: false,
-      reason: "Reserving budget for higher priority notifications",
+      reason: 'Reserving budget for higher priority notifications',
     };
   }
-  if (request.priority === "SQUAD_HELP" && remainingBudget <= 1) {
-    return { allowed: false, reason: "Squad help is lowest priority" };
+  if (request.priority === 'SQUAD_HELP' && remainingBudget <= 1) {
+    return { allowed: false, reason: 'Squad help is lowest priority' };
   }
 
   return { allowed: true };

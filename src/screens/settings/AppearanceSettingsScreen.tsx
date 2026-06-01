@@ -1,30 +1,30 @@
-import { withScreenErrorBoundary } from "../../shared/ui/components/ScreenErrorBoundary";
-import React, { useState, useCallback } from "react";
-import { ScrollView, Pressable } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import type { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useTheme, type ThemeMode } from "../../theme";
-import { Box, Text } from "../../components/primitives";
-import { Icon } from "../../icons";
-import type { SettingsStackParams } from "../../navigation";
-import { ThemePicker } from "./ThemePicker";
-import { FontSizeControl, type FontSize } from "./FontSizeControl";
+import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+import React, { useState, useCallback } from 'react';
+import { ScrollView, Pressable } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useTheme, type ThemeMode } from '../../theme';
+import { Box, Text } from '../../components/primitives';
+import { Icon } from '../../icons';
+import type { SettingsStackParams } from '../../navigation';
+import { ThemePicker } from './ThemePicker';
+import { FontSizeControl, type FontSize } from './FontSizeControl';
 import {
   ColorSchemeToggle,
   type AccentColor,
   type TimerFormat,
-} from "./ColorSchemeToggle";
-import { AppearancePreviewCard } from "./AppearancePreviewCard";
+} from './ColorSchemeToggle';
+import { AppearancePreviewCard } from './AppearancePreviewCard';
 
-type Props = NativeStackScreenProps<SettingsStackParams, "AppearanceSettings">;
+type Props = NativeStackScreenProps<SettingsStackParams, 'AppearanceSettings'>;
 
 export const AppearanceSettingsScreen: React.FC<Props> = ({ navigation }) => {
   const { theme, mode, setMode } = useTheme();
   const insets = useSafeAreaInsets();
   const [selectedTheme, setSelectedTheme] = useState<ThemeMode>(mode);
-  const [accentColor, setAccentColor] = useState<AccentColor>("indigo");
-  const [fontSize, setFontSize] = useState<FontSize>("medium");
-  const [timerFormat, setTimerFormat] = useState<TimerFormat>("countdown");
+  const [accentColor, setAccentColor] = useState<AccentColor>('indigo');
+  const [fontSize, setFontSize] = useState<FontSize>('medium');
+  const [timerFormat, setTimerFormat] = useState<TimerFormat>('countdown');
 
   const handleThemeChange = useCallback(
     (newTheme: ThemeMode) => {
@@ -48,9 +48,9 @@ export const AppearanceSettingsScreen: React.FC<Props> = ({ navigation }) => {
 
   const getFontSizeMultiplier = (): number => {
     switch (fontSize) {
-      case "small":
+      case 'small':
         return 0.875;
-      case "large":
+      case 'large':
         return 1.125;
       default:
         return 1;
@@ -110,17 +110,17 @@ export const AppearanceSettingsScreen: React.FC<Props> = ({ navigation }) => {
         <Box px={16} mb={24}>
           <Pressable
             onPress={() => {
-              setSelectedTheme("dark");
-              setMode("dark");
-              setAccentColor("indigo");
-              setFontSize("medium");
-              setTimerFormat("countdown");
+              setSelectedTheme('dark');
+              setMode('dark');
+              setAccentColor('indigo');
+              setFontSize('medium');
+              setTimerFormat('countdown');
             }}
             style={{
               backgroundColor: theme.colors.background.secondary,
               paddingVertical: 16,
               borderRadius: 12,
-              alignItems: "center",
+              alignItems: 'center',
               borderWidth: 1,
               borderColor: theme.colors.border.light,
             }}
@@ -131,7 +131,7 @@ export const AppearanceSettingsScreen: React.FC<Props> = ({ navigation }) => {
             <Text
               style={{
                 color: theme.colors.text.primary,
-                fontWeight: "600",
+                fontWeight: '600',
                 fontSize: 16,
               }}
             >
@@ -148,5 +148,5 @@ export const AppearanceSettingsScreen: React.FC<Props> = ({ navigation }) => {
 
 export default withScreenErrorBoundary(
   AppearanceSettingsScreen,
-  "AppearanceSettings",
+  'AppearanceSettings',
 );

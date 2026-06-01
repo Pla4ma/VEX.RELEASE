@@ -5,16 +5,16 @@
  * @phase 23.2 — Loading states have wit
  */
 
-import React from "react";
-import { View, TextStyle } from "react-native";
-import Animated, { FadeIn } from "react-native-reanimated";
-import { Skeleton } from "../primitives/Skeleton";
-import { useTheme } from "../../../theme";
-import { Text } from "../../../components/primitives/Text";
+import React from 'react';
+import { View, TextStyle } from 'react-native';
+import Animated, { FadeIn } from 'react-native-reanimated';
+import { Skeleton } from '../primitives/Skeleton';
+import { useTheme } from '../../../theme';
+import { Text } from '../../../components/primitives/Text';
 import {
   type LoadingContext,
   getRandomMessage,
-} from "./witty-loading-messages";
+} from './witty-loading-messages';
 
 export type { LoadingContext };
 
@@ -39,13 +39,13 @@ export function WittyLoadingState({
 
   // Replace placeholders with actual names
   if (bossName) {
-    message = message.replace("The boss", bossName);
+    message = message.replace('The boss', bossName);
   }
   if (coachName) {
-    message = message.replace("Your coach", coachName);
+    message = message.replace('Your coach', coachName);
   }
   if (squadName) {
-    message = message.replace("your squad", squadName);
+    message = message.replace('your squad', squadName);
   }
 
   return (
@@ -54,19 +54,19 @@ export function WittyLoadingState({
       style={[
         {
           flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
+          justifyContent: 'center',
+          alignItems: 'center',
           padding: 32,
         },
         style,
       ]}
     >
       <Skeleton width={120} height={120} variant="circular" />
-      <View style={{ marginTop: 24, alignItems: "center" }}>
+      <View style={{ marginTop: 24, alignItems: 'center' }}>
         <Text
           variant="body"
           color={theme.colors.text.secondary}
-          style={{ textAlign: "center" }}
+          style={{ textAlign: 'center' }}
         >
           {message}
         </Text>

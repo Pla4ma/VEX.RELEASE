@@ -1,17 +1,17 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo } from 'react';
 import Animated, {
   Easing,
   FadeInUp,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
-} from "react-native-reanimated";
+} from 'react-native-reanimated';
 
-import { Box, Text } from "../../../components/primitives";
-import { getPremiumCardStyle } from "../../../components/premiumStyles";
-import { AnimatedCounter } from "../../../shared/ui/components/AnimatedCounter";
-import type { SessionSummary } from "../../../session/types";
-import { useTheme } from "../../../theme";
+import { Box, Text } from '../../../components/primitives';
+import { getPremiumCardStyle } from '../../../components/premiumStyles';
+import { AnimatedCounter } from '../../../shared/ui/components/AnimatedCounter';
+import type { SessionSummary } from '../../../session/types';
+import { useTheme } from '../../../theme';
 
 type XPEarnAnimationProps = {
   levelProgress: number | null;
@@ -41,29 +41,29 @@ function buildXpLineItems(
     (summary.finalScore ?? 0) >= 800
       ? Math.max(0, Math.round(totalXp * 0.08))
       : 0;
-  const squadBonus = getBonusAmount(summary, "squad");
+  const squadBonus = getBonusAmount(summary, 'squad');
   const knownBonuses =
     (summary.streakBonus ?? 0) + summary.modeBonus + qualityBonus + squadBonus;
   const baseXp = Math.max(0, totalXp - knownBonuses);
   const items: XpLineItem[] = [
-    { amount: baseXp, id: "base", label: "Session progress" },
+    { amount: baseXp, id: 'base', label: 'Session progress' },
   ];
 
   if ((summary.streakBonus ?? 0) > 0) {
     items.push({
       amount: summary.streakBonus ?? 0,
-      id: "streak",
-      label: "Consistency bonus",
+      id: 'streak',
+      label: 'Consistency bonus',
     });
   }
   if (summary.modeBonus > 0) {
-    items.push({ amount: summary.modeBonus, id: "mode", label: "Mode Bonus" });
+    items.push({ amount: summary.modeBonus, id: 'mode', label: 'Mode Bonus' });
   }
   if (qualityBonus > 0) {
-    items.push({ amount: qualityBonus, id: "quality", label: "Quality Bonus" });
+    items.push({ amount: qualityBonus, id: 'quality', label: 'Quality Bonus' });
   }
   if (squadBonus > 0) {
-    items.push({ amount: squadBonus, id: "squad", label: "Squad Bonus" });
+    items.push({ amount: squadBonus, id: 'squad', label: 'Squad Bonus' });
   }
 
   return items;
@@ -101,7 +101,7 @@ export function XPEarnAnimation({
           backgroundColor: theme.colors.background.secondary,
           borderColor: theme.colors.border.light,
           borderWidth: 1,
-          ...getPremiumCardStyle("large"),
+          ...getPremiumCardStyle('large'),
         }}
       >
         <Text variant="label" color={theme.colors.primary[400]}>
@@ -164,7 +164,7 @@ export function XPEarnAnimation({
               {
                 backgroundColor: theme.colors.primary[500],
                 borderRadius: theme.borderRadius.full,
-                height: "100%",
+                height: '100%',
               },
               fillStyle,
             ]}

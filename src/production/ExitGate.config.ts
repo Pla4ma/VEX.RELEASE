@@ -2,58 +2,58 @@
  * Phase 9 Exit Gate - Result, Blocking Issue, and Config types
  */
 
-import type { OfflineSyncReport } from "../features/session-completion/offline-sync-service";
-import type { PaywallVerificationResult } from "../monetization/PaywallVerification";
+import type { OfflineSyncReport } from '../features/session-completion/offline-sync-service';
+import type { PaywallVerificationResult } from '../monetization/PaywallVerification';
 import type {
   ErrorBoundaryReport,
   AccessibilityReport,
   PerformanceReport,
   PrivacyComplianceReport,
   AppStoreSubmissionResult,
-} from "./ExitGate.types";
+} from './ExitGate.types';
 
 export interface Phase9ExitGateResult {
   passed: boolean;
   score: number;
   results: {
     offlineSync: {
-      status: "pass" | "fail" | "warning";
+      status: 'pass' | 'fail' | 'warning';
       score: number;
       report: OfflineSyncReport;
       issues: string[];
     };
     errorBoundaries: {
-      status: "pass" | "fail" | "warning";
+      status: 'pass' | 'fail' | 'warning';
       score: number;
       report: ErrorBoundaryReport;
       issues: string[];
     };
     accessibility: {
-      status: "pass" | "fail" | "warning";
+      status: 'pass' | 'fail' | 'warning';
       score: number;
       report: AccessibilityReport;
       issues: string[];
     };
     performance: {
-      status: "pass" | "fail" | "warning";
+      status: 'pass' | 'fail' | 'warning';
       score: number;
       report: PerformanceReport;
       issues: string[];
     };
     privacy: {
-      status: "pass" | "fail" | "warning";
+      status: 'pass' | 'fail' | 'warning';
       score: number;
       report: PrivacyComplianceReport;
       issues: string[];
     };
     paywall: {
-      status: "pass" | "fail" | "warning";
+      status: 'pass' | 'fail' | 'warning';
       score: number;
       report: PaywallVerificationResult;
       issues: string[];
     };
     appStore: {
-      status: "pass" | "fail" | "warning";
+      status: 'pass' | 'fail' | 'warning';
       score: number;
       report: AppStoreSubmissionResult;
       issues: string[];
@@ -68,15 +68,15 @@ export interface Phase9ExitGateResult {
 export interface Phase9BlockingIssue {
   id: string;
   category:
-    | "offline-sync"
-    | "error-boundaries"
-    | "accessibility"
-    | "performance"
-    | "privacy"
-    | "paywall"
-    | "app-store"
-    | "general";
-  severity: "critical" | "major";
+    | 'offline-sync'
+    | 'error-boundaries'
+    | 'accessibility'
+    | 'performance'
+    | 'privacy'
+    | 'paywall'
+    | 'app-store'
+    | 'general';
+  severity: 'critical' | 'major';
   message: string;
   impact: string;
   recommendation: string;
@@ -95,7 +95,7 @@ export interface Phase9GateConfig {
   };
   overallMinimumScore: number;
   allowWarnings: boolean;
-  requiredCategories: Array<keyof Phase9ExitGateResult["results"]>;
+  requiredCategories: Array<keyof Phase9ExitGateResult['results']>;
 }
 
 export const DEFAULT_GATE_CONFIG: Phase9GateConfig = {
@@ -111,12 +111,12 @@ export const DEFAULT_GATE_CONFIG: Phase9GateConfig = {
   overallMinimumScore: 85,
   allowWarnings: false,
   requiredCategories: [
-    "offlineSync",
-    "errorBoundaries",
-    "accessibility",
-    "performance",
-    "privacy",
-    "paywall",
-    "appStore",
+    'offlineSync',
+    'errorBoundaries',
+    'accessibility',
+    'performance',
+    'privacy',
+    'paywall',
+    'appStore',
   ],
 };

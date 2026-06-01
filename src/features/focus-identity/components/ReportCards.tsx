@@ -1,11 +1,11 @@
-import React from "react";
-import { View } from "react-native";
-import Animated, { FadeIn, SlideInDown } from "react-native-reanimated";
-import { Text } from "../../../components/primitives/Text";
-import { Box } from "../../../components/primitives/Box";
-import { Button } from "../../../components/primitives/Button";
-import type { Theme } from "../../../theme";
-import { ScoreOverviewCard } from "./ScoreOverviewCard";
+import React from 'react';
+import { View } from 'react-native';
+import Animated, { FadeIn, SlideInDown } from 'react-native-reanimated';
+import { Text } from '../../../components/primitives/Text';
+import { Box } from '../../../components/primitives/Box';
+import { Button } from '../../../components/primitives/Button';
+import type { Theme } from '../../../theme';
+import { ScoreOverviewCard } from './ScoreOverviewCard';
 
 interface ScoreDriver {
   name: string;
@@ -75,9 +75,9 @@ export function ReportCards({
                 <View
                   key={index}
                   style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems: "center",
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
                   }}
                 >
                   <Text variant="body" color="text">
@@ -86,8 +86,8 @@ export function ReportCards({
                   <Text
                     variant="body"
                     style={{
-                      fontWeight: "600",
-                      color: driver.value.startsWith("+")
+                      fontWeight: '600',
+                      color: driver.value.startsWith('+')
                         ? theme.colors.success.DEFAULT
                         : theme.colors.error.DEFAULT,
                     }}
@@ -154,7 +154,7 @@ export function ReportCards({
           <Text
             variant="body"
             color="text"
-            style={{ fontStyle: "italic", lineHeight: 24 }}
+            style={{ fontStyle: 'italic', lineHeight: 24 }}
           >
             {identityStatement}
           </Text>

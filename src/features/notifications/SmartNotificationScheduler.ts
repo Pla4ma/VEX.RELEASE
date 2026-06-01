@@ -1,18 +1,18 @@
-import { getSupabaseClient } from "../../config/supabase";
-import { createDebugger } from "../../utils/debug";
-import { useState, useEffect, useCallback } from "react";
-import { ANALYSIS_WINDOW_DAYS, DEFAULT_PEAK_HOUR } from "./SmartNotificationScheduler-types";
-import type { PeakFocusWindow } from "./SmartNotificationScheduler-types";
-import { selectNotificationType } from "./SmartNotificationScheduler-generators";
-import { checkRateLimit, recordNotificationSent } from "./SmartNotificationScheduler-rankReport";
+import { getSupabaseClient } from '../../config/supabase';
+import { createDebugger } from '../../utils/debug';
+import { useState, useEffect, useCallback } from 'react';
+import { ANALYSIS_WINDOW_DAYS, DEFAULT_PEAK_HOUR } from './SmartNotificationScheduler-types';
+import type { PeakFocusWindow } from './SmartNotificationScheduler-types';
+import { selectNotificationType } from './SmartNotificationScheduler-generators';
+import { checkRateLimit, recordNotificationSent } from './SmartNotificationScheduler-rankReport';
 
-const debug = createDebugger("notifications:smart-scheduler");
+const debug = createDebugger('notifications:smart-scheduler');
 
-const DEFAULT_RESULT: Omit<PeakFocusWindow, "userId"> = {
+const DEFAULT_RESULT: Omit<PeakFocusWindow, 'userId'> = {
   peakHour: DEFAULT_PEAK_HOUR,
   confidence: 0,
   sessionCount: 0,
-  pattern: "NEW",
+  pattern: 'NEW',
   hourDistribution: {},
 };
 
@@ -23,22 +23,22 @@ export async function analyzePeakFocusWindow(
     const fromDate = new Date();
     fromDate.setDate(fromDate.getDate() - ANALYSIS_WINDOW_DAYS);
     const { data: sessions, error } = await getSupabaseClient()
-      .from("sessions")
-      .select("started_at, timezone")
-      .eq("user_id", userId)
-      .eq("status", "COMPLETED")
-      .gte("started_at", fromDate.toISOString())
-      .order("started_at", { ascending: false });
+      .from('sessions')
+      .select('started_at, timezone')
+      .eq('user_id', userId)
+      .eq('status', 'COMPLETED')
+      .gte('started_at', fromDate.toISOString())
+      .order('started_at', { ascending: false });
     if (error || !sessions || sessions.length === 0) {
       return { userId, ...DEFAULT_RESULT };
     }
     const hourDistribution: Record<number, number> = {};
     for (const session of sessions) {
-      const timezone = session.timezone || "UTC";
+      const timezone = session.timezone || 'UTC';
       const sessionDate = new Date(session.started_at);
-      const hourString = sessionDate.toLocaleString("en-US", {
+      const hourString = sessionDate.toLocaleString('en-US', {
         timeZone: timezone,
-        hour: "numeric",
+        hour: 'numeric',
         hour12: false,
       });
       const hour = parseInt(hourString, 10);
@@ -54,17 +54,17 @@ export async function analyzePeakFocusWindow(
     }
     const totalSessions = sessions.length;
     const confidence = Math.min(maxCount / totalSessions, 1);
-    let pattern: PeakFocusWindow["pattern"] = "CONSISTENT";
+    let pattern: PeakFocusWindow['pattern'] = 'CONSISTENT';
     if (totalSessions < 5) {
-      pattern = "NEW";
+      pattern = 'NEW';
     } else if (confidence < 0.3) {
-      pattern = "ERRATIC";
+      pattern = 'ERRATIC';
     } else if (confidence < 0.6) {
-      pattern = "VARIABLE";
+      pattern = 'VARIABLE';
     }
     return { userId, peakHour, confidence, sessionCount: totalSessions, pattern, hourDistribution };
   } catch (error) {
-    debug.error("Error analyzing peak focus window", error instanceof Error ? error : undefined);
+    debug.error('Error analyzing peak focus window', error instanceof Error ? error : undefined);
     return { userId, ...DEFAULT_RESULT };
   }
 }
@@ -79,18 +79,18 @@ export function isInPeakWindow(peakHour: number, windowSize = 2): boolean {
 export async function processSmartNotifications(): Promise<void> {
   try {
     const { data: users, error } = await getSupabaseClient()
-      .from("users")
-      .select("id, timezone")
-      .eq("notifications_enabled", true);
+      .from('users')
+      .select('id, timezone')
+      .eq('notifications_enabled', true);
     if (error || !users) {
-      debug.error("Failed to fetch users", error instanceof Error ? error : undefined);
+      debug.error('Failed to fetch users', error instanceof Error ? error : undefined);
       return;
     }
     for (const user of users) {
-      await processUserSmartNotification(user.id, user.timezone || "UTC");
+      await processUserSmartNotification(user.id, user.timezone || 'UTC');
     }
   } catch (error) {
-    debug.error("Error processing smart notifications", error instanceof Error ? error : undefined);
+    debug.error('Error processing smart notifications', error instanceof Error ? error : undefined);
   }
 }
 
@@ -101,25 +101,25 @@ export async function processUserSmartNotification(
   try {
     const canSend = await checkRateLimit(userId);
     if (!canSend) {
-      debug.info("Rate limit reached for user", { userId });
+      debug.info('Rate limit reached for user', { userId });
       return;
     }
     const peakWindow = await analyzePeakFocusWindow(userId);
     if (!isInPeakWindow(peakWindow.peakHour)) {
-      debug.info("Not in peak window", { userId, peakHour: peakWindow.peakHour });
+      debug.info('Not in peak window', { userId, peakHour: peakWindow.peakHour });
       return;
     }
     const content = await selectNotificationType(userId, [
-      "COMEBACK", "BOSS", "STREAK", "SOCIAL", "POSITIVE",
+      'COMEBACK', 'BOSS', 'STREAK', 'SOCIAL', 'POSITIVE',
     ]);
     if (!content) {
-      debug.info("No notification content generated", { userId });
+      debug.info('No notification content generated', { userId });
       return;
     }
-    debug.info("Would send smart notification", { userId, title: content.title });
+    debug.info('Would send smart notification', { userId, title: content.title });
     await recordNotificationSent(userId);
   } catch (error) {
-    debug.error("Error processing user notification", error instanceof Error ? error : undefined);
+    debug.error('Error processing user notification', error instanceof Error ? error : undefined);
   }
 }
 

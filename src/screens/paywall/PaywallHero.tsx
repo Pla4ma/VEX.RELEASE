@@ -1,20 +1,20 @@
-import React from "react";
-import { View } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
-import Animated, { FadeInDown } from "react-native-reanimated";
+import React from 'react';
+import { View } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+import Animated, { FadeInDown } from 'react-native-reanimated';
 
-import { Button } from "../../components/primitives/Button";
-import { Text } from "../../components/primitives/Text";
-import { Icon } from "../../icons/components/Icon";
-import { CardEnterAnimation } from "../../shared/ui/components/EnterAnimation";
-import type { Theme } from "../../theme";
+import { Button } from '../../components/primitives/Button';
+import { Text } from '../../components/primitives/Text';
+import { Icon } from '../../icons/components/Icon';
+import { CardEnterAnimation } from '../../shared/ui/components/EnterAnimation';
+import type { Theme } from '../../theme';
 import {
   VALUE_PROPOSITION,
   type PaywallFeatureHighlight,
-} from "./paywall-copy";
-import { LANE_PREMIUM_HERO_COPY, type PremiumLane } from "./lane-hero-copy";
-import { PaywallFeatureList, FreeBoundaryCard } from "./PaywallFeatureList";
-import { paywallStyles as styles } from "./paywall-styles";
+} from './paywall-copy';
+import { LANE_PREMIUM_HERO_COPY, type PremiumLane } from './lane-hero-copy';
+import { PaywallFeatureList, FreeBoundaryCard } from './PaywallFeatureList';
+import { paywallStyles as styles } from './paywall-styles';
 
 type PaywallHeroProps = {
   contextBody?: string;
@@ -28,12 +28,12 @@ type PaywallHeroProps = {
 };
 
 function resolveLane(lane?: string): PremiumLane | null {
-  if (!lane) return null;
+  if (!lane) {return null;}
   const lower = lane.toLowerCase();
-  if (lower.includes("study") || lower.includes("student")) return "study";
-  if (lower.includes("game") || lower.includes("run")) return "run";
-  if (lower.includes("deep") || lower.includes("creative") || lower.includes("project")) return "project";
-  if (lower.includes("minimal") || lower.includes("clean") || lower.includes("normal")) return "clean";
+  if (lower.includes('study') || lower.includes('student')) {return 'study';}
+  if (lower.includes('game') || lower.includes('run')) {return 'run';}
+  if (lower.includes('deep') || lower.includes('creative') || lower.includes('project')) {return 'project';}
+  if (lower.includes('minimal') || lower.includes('clean') || lower.includes('normal')) {return 'clean';}
   return null;
 }
 
@@ -50,8 +50,8 @@ export function PaywallHero({
   const premiumLane = resolveLane(lane);
   const laneCopy = premiumLane ? LANE_PREMIUM_HERO_COPY[premiumLane] : null;
 
-  const heroHeadline = contextHeadline ?? laneCopy?.headline ?? "VEX remembers more. Adapts deeper.";
-  const heroBody = contextBody ?? laneCopy?.body ?? "Free sessions, basic progress, and Rescue stay free forever. Premium adds memory, weekly intelligence, and mode-matched depth.";
+  const heroHeadline = contextHeadline ?? laneCopy?.headline ?? 'VEX remembers more. Adapts deeper.';
+  const heroBody = contextBody ?? laneCopy?.body ?? 'Free sessions, basic progress, and Rescue stay free forever. Premium adds memory, weekly intelligence, and mode-matched depth.';
 
   return (
     <>
@@ -61,7 +61,7 @@ export function PaywallHero({
             VEX Premium
           </Text>
           <Text style={[styles.title, { color: theme.colors.text.primary }]}>
-            {isPremium ? "Premium is active" : VALUE_PROPOSITION}
+            {isPremium ? 'Premium is active' : VALUE_PROPOSITION}
           </Text>
         </View>
         <Button

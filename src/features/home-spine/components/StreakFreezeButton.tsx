@@ -7,20 +7,20 @@
  * @phase 2.4
  */
 
-import React from "react";
-import { Pressable } from "react-native";
+import React from 'react';
+import { Pressable } from 'react-native';
 import Animated, {
   FadeIn,
   useAnimatedStyle,
   withRepeat,
   withSequence,
   withTiming,
-} from "react-native-reanimated";
+} from 'react-native-reanimated';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import { buttonTap } from "../../../utils/haptics";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import { buttonTap } from '../../../utils/haptics';
 
 export interface StreakFreezeButtonProps {
   /** Whether freeze is available today */
@@ -116,7 +116,7 @@ export function StreakFreezeButton({
               color={theme.colors.info.dark}
               fontWeight="600"
             >
-              {isFreezing ? "Freezing..." : "Freeze"}
+              {isFreezing ? 'Freezing...' : 'Freeze'}
             </Text>
           </Box>
         </Pressable>
@@ -163,7 +163,7 @@ export function StreakFreezeButton({
               color={theme.colors.text.primary}
               fontWeight="600"
             >
-              {isFreezing ? "Freezing streak..." : "Freeze Your Streak"}
+              {isFreezing ? 'Freezing streak...' : 'Freeze Your Streak'}
             </Text>
             <Text variant="caption" color={theme.colors.text.secondary}>
               Skip today without breaking your streak

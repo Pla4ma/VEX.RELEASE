@@ -1,25 +1,25 @@
-import type { FocusQualityMetrics, SessionState } from "../types";
-import { createDebugger } from "../../utils/debug";
-import type { ScoringEngine } from "./ScoringEngine";
+import type { FocusQualityMetrics, SessionState } from '../types';
+import { createDebugger } from '../../utils/debug';
+import type { ScoringEngine } from './ScoringEngine';
 import type {
   CompletionResult,
   AbandonResult,
   SessionStatsResult,
   CompletionEligibility,
-} from "./completion-types";
-import { validateEligibility } from "./completion-types";
+} from './completion-types';
+import { validateEligibility } from './completion-types';
 import {
   createSessionSummary,
   computeAbandonResult,
   computeFailResult,
   computeCompletionStats,
-} from "./completion-summary";
+} from './completion-summary';
 import {
   executePartialCompletion,
   attemptSessionRecovery,
-} from "./completion-recovery";
+} from './completion-recovery';
 
-const debug = createDebugger("session:completion");
+const debug = createDebugger('session:completion');
 
 export class CompletionEngine {
   private scoringEngine: ScoringEngine;
@@ -33,11 +33,11 @@ export class CompletionEngine {
     focusMetrics: FocusQualityMetrics,
     userStreak: number,
     reflection?: string,
-    mood?: "GREAT" | "GOOD" | "OKAY" | "STRUGGLING" | "DIFFICULT",
+    mood?: 'GREAT' | 'GOOD' | 'OKAY' | 'STRUGGLING' | 'DIFFICULT',
     tasksCompleted?: number,
   ): CompletionResult {
     const now = Date.now();
-    session.status = "COMPLETED";
+    session.status = 'COMPLETED';
     session.completedAt = now;
     session.endedAt = now;
     session.completionPercentage = 100;
@@ -61,14 +61,14 @@ export class CompletionEngine {
     );
     const streakMaintained = true;
     debug.info(
-      "Session %s completed successfully. Score: %d, Streak maintained: %s",
+      'Session %s completed successfully. Score: %d, Streak maintained: %s',
       session.id,
       finalScore,
       streakMaintained,
     );
     return {
       success: true,
-      status: "COMPLETED",
+      status: 'COMPLETED',
       summary,
       rewardsGranted: true,
       streakMaintained,
@@ -82,7 +82,7 @@ export class CompletionEngine {
     userStreak: number,
     reason: string,
     reflection?: string,
-    mood?: "GREAT" | "GOOD" | "OKAY" | "STRUGGLING" | "DIFFICULT",
+    mood?: 'GREAT' | 'GOOD' | 'OKAY' | 'STRUGGLING' | 'DIFFICULT',
   ): CompletionResult {
     return executePartialCompletion(
       this.scoringEngine,
@@ -98,9 +98,9 @@ export class CompletionEngine {
   abandonSession(session: SessionState, reason?: string): AbandonResult {
     const result = computeAbandonResult(this.scoringEngine, session, reason);
     debug.info(
-      "Session %s abandoned (reason: %s). Damage: %d, Can recover: %s",
+      'Session %s abandoned (reason: %s). Damage: %d, Can recover: %s',
       session.id,
-      reason || "none",
+      reason || 'none',
       result.damage.totalDamage,
       result.canRecover,
     );
@@ -119,7 +119,7 @@ export class CompletionEngine {
       canRecover,
     );
     debug.info(
-      "Session %s failed (error: %s). Damage: %d",
+      'Session %s failed (error: %s). Damage: %d',
       session.id,
       error,
       result.damage.totalDamage,
@@ -129,7 +129,7 @@ export class CompletionEngine {
 
   attemptRecovery(
     session: SessionState,
-    recoveryType: "USER_RESUME" | "STREAK_SAVE" | "PARTIAL_CREDIT",
+    recoveryType: 'USER_RESUME' | 'STREAK_SAVE' | 'PARTIAL_CREDIT',
     focusMetrics: FocusQualityMetrics,
     userStreak: number,
   ): CompletionResult {

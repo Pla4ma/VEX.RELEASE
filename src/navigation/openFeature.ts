@@ -1,18 +1,18 @@
-import type { NavigationProp } from "@react-navigation/native";
-import { getFeatureAvailabilityFor } from "../features/liveops-config/feature-availability";
+import type { NavigationProp } from '@react-navigation/native';
+import { getFeatureAvailabilityFor } from '../features/liveops-config/feature-availability';
 import type {
   FeatureAccess,
   FeatureKey,
-} from "../features/liveops-config/feature-access";
-import { createDebugger } from "../utils/debug";
-import * as Sentry from "@sentry/react-native";
+} from '../features/liveops-config/feature-access';
+import { createDebugger } from '../utils/debug';
+import * as Sentry from '@sentry/react-native';
 
-const debug = createDebugger("navigation:openFeature");
+const debug = createDebugger('navigation:openFeature');
 
 export interface OpenFeatureResult {
   success: boolean;
   navigated: boolean;
-  state: "hidden" | "teased" | "locked" | "unlocked" | "disabled" | "degraded";
+  state: 'hidden' | 'teased' | 'locked' | 'unlocked' | 'disabled' | 'degraded';
   reason: string;
   fallbackTaken: boolean;
 }
@@ -36,7 +36,7 @@ export function openFeature(
 ): OpenFeatureResult {
   const availability = getFeatureAvailabilityFor(feature, featureAccess);
 
-  const base: Omit<OpenFeatureResult, "navigated" | "fallbackTaken"> = {
+  const base: Omit<OpenFeatureResult, 'navigated' | 'fallbackTaken'> = {
     success: false,
     state: availability.state,
     reason: availability.reason,
@@ -44,13 +44,13 @@ export function openFeature(
 
   if (!availability.canNavigate || !availability.canRegisterRoute) {
     debug.warn(
-      "Feature %s is %s: %s",
+      'Feature %s is %s: %s',
       feature,
       availability.state,
       availability.reason,
     );
 
-    if (availability.state === "teased") {
+    if (availability.state === 'teased') {
       if (options?.fallbackAction) {
         options.fallbackAction();
         return { ...base, navigated: false, fallbackTaken: true };
@@ -62,10 +62,10 @@ export function openFeature(
   }
 
   if (!navigation) {
-    debug.warn("Navigation not available for feature %s", feature);
+    debug.warn('Navigation not available for feature %s', feature);
     Sentry.captureMessage(
       `openFeature: navigation ref missing for ${feature}`,
-      { level: "warning" },
+      { level: 'warning' },
     );
     return { ...base, navigated: false, fallbackTaken: false };
   }
@@ -76,7 +76,7 @@ export function openFeature(
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
     debug.error(
-      "Navigation to %s failed for feature %s: %s",
+      'Navigation to %s failed for feature %s: %s',
       targetRoute,
       feature,
       errorMessage,

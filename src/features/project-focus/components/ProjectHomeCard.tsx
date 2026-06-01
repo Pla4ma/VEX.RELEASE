@@ -1,6 +1,6 @@
-import React from "react";
-import { type ProjectThread } from "../schemas";
-import { Skeleton, EmptyState, ActiveCard } from "./ProjectHomeCardStates";
+import React from 'react';
+import { type ProjectThread } from '../schemas';
+import { Skeleton, EmptyState, ActiveCard } from './ProjectHomeCardStates';
 
 type Props = {
   isLoading: boolean;
@@ -15,7 +15,7 @@ export function ProjectHomeCard({
   onPressCreate,
   thread,
 }: Props): React.ReactElement {
-  if (isLoading) return <Skeleton />;
-  if (!thread) return <EmptyState onPressCreate={onPressCreate} />;
+  if (isLoading) {return <Skeleton />;}
+  if (!thread) {return <EmptyState onPressCreate={onPressCreate} />;}
   return <ActiveCard onPressResume={onPressResume} thread={thread} />;
 }

@@ -1,13 +1,13 @@
-import { eventBus } from "../../events/EventBus";
-import { createDebugger } from "../../utils/debug";
-import { getAvailabilityFor } from "../liveops-config/feature-access-store";
-import { trackPersonalityResponse } from "./analytics";
+import { eventBus } from '../../events/EventBus';
+import { createDebugger } from '../../utils/debug';
+import { getAvailabilityFor } from '../liveops-config/feature-access-store';
+import { trackPersonalityResponse } from './analytics';
 import type {
   PersonalityEventType,
   ActiveResponse,
   CompanionPersonalityState,
-} from "./personality-responses";
-import { RESPONSES } from "./personality-responses";
+} from './personality-responses';
+import { RESPONSES } from './personality-responses';
 import {
   handleBossDefeated,
   handleSessionCompleted,
@@ -16,10 +16,10 @@ import {
   handleUserReturned,
   handleLevelUp,
   type TriggerFn,
-} from "./companion-event-handlers";
+} from './companion-event-handlers';
 
-const debug = createDebugger("companion-personality");
-const FEATURE_KEY = "companion_detail" as const;
+const debug = createDebugger('companion-personality');
+const FEATURE_KEY = 'companion_detail' as const;
 
 export type { PersonalityEventType, ActiveResponse, CompanionPersonalityState };
 
@@ -37,32 +37,32 @@ class CompanionPersonalityEngine {
   initialize(): void {
     const availability = getAvailabilityFor(FEATURE_KEY);
     if (!availability.canSubscribeToEvents) {
-      debug.info("CompanionPersonalityEngine skipped — feature not available");
+      debug.info('CompanionPersonalityEngine skipped — feature not available');
       return;
     }
     this.unsubscribeFunctions = [
       eventBus.subscribe(
-        "boss:defeated",
+        'boss:defeated',
         this.wrapHandler((e) => handleBossDefeated(this.trigger, e)),
       ),
       eventBus.subscribe(
-        "session:completed",
+        'session:completed',
         this.wrapHandler((e) => handleSessionCompleted(this.trigger, e)),
       ),
       eventBus.subscribe(
-        "streak:milestone",
+        'streak:milestone',
         this.wrapHandler((e) => handleStreakMilestone(this.trigger, e)),
       ),
       eventBus.subscribe(
-        "streak:broken",
+        'streak:broken',
         this.wrapHandler((e) => handleStreakBroken(this.trigger, e)),
       ),
       eventBus.subscribe(
-        "coach:comeback_detected",
+        'coach:comeback_detected',
         this.wrapHandler((e) => handleUserReturned(this.trigger, e)),
       ),
       eventBus.subscribe(
-        "progression:level_up",
+        'progression:level_up',
         this.wrapHandler((e) => handleLevelUp(this.trigger, e)),
       ),
     ];
@@ -74,7 +74,7 @@ class CompanionPersonalityEngine {
         handler(event);
       } catch (error) {
         debug.error(
-          "Error handling event",
+          'Error handling event',
           error instanceof Error ? error : new Error(String(error)),
         );
       }
@@ -100,9 +100,9 @@ class CompanionPersonalityEngine {
 
   private trigger: TriggerFn = (type, userId, customDialogue) => {
     const responses = RESPONSES[type];
-    if (!responses || responses.length === 0) return;
+    if (!responses || responses.length === 0) {return;}
     const response = responses[Math.floor(Math.random() * responses.length)];
-    if (!response) return;
+    if (!response) {return;}
     const activeResponse: ActiveResponse = {
       type,
       response: customDialogue
@@ -144,11 +144,11 @@ class CompanionPersonalityEngine {
 let instance: CompanionPersonalityEngine | null = null;
 
 export function getCompanionPersonalityEngine(): CompanionPersonalityEngine {
-  if (!instance) instance = new CompanionPersonalityEngine();
+  if (!instance) {instance = new CompanionPersonalityEngine();}
   return instance;
 }
 
 export function resetCompanionPersonalityEngine(): void {
-  if (instance) instance.cleanup();
+  if (instance) {instance.cleanup();}
   instance = null;
 }

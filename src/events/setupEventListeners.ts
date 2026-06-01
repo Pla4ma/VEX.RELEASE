@@ -5,8 +5,8 @@
  * Extracted from EventService to keep file sizes under 200 lines.
  */
 
-import { eventBus } from "./EventBus";
-import type { ChallengeManager } from "./ChallengeManager";
+import { eventBus } from './EventBus';
+import type { ChallengeManager } from './ChallengeManager';
 
 export function setupEventListeners(
   getUserId: () => string | null,
@@ -16,12 +16,12 @@ export function setupEventListeners(
 
   unsubscribers.push(
     eventBus.subscribe(
-      "session:completed",
+      'session:completed',
       (payload: { userId: string; duration: number }) => {
         if (payload.userId === getUserId()) {
-          challengeManager.updateChallengeProgress("SESSION_COUNT", 1);
+          challengeManager.updateChallengeProgress('SESSION_COUNT', 1);
           challengeManager.updateChallengeProgress(
-            "SESSION_DURATION",
+            'SESSION_DURATION',
             payload.duration,
           );
         }
@@ -31,10 +31,10 @@ export function setupEventListeners(
 
   unsubscribers.push(
     eventBus.subscribe(
-      "progression:xp_added",
+      'progression:xp_added',
       (payload: { userId: string; amount: number }) => {
         if (payload.userId === getUserId()) {
-          challengeManager.updateChallengeProgress("XP_EARNED", payload.amount);
+          challengeManager.updateChallengeProgress('XP_EARNED', payload.amount);
         }
       },
     ),
@@ -42,11 +42,11 @@ export function setupEventListeners(
 
   unsubscribers.push(
     eventBus.subscribe(
-      "streak:updated",
+      'streak:updated',
       (payload: { userId: string; state: { currentStreak: number } }) => {
         if (payload.userId === getUserId()) {
           challengeManager.updateChallengeProgress(
-            "STREAK_DAYS",
+            'STREAK_DAYS',
             payload.state.currentStreak,
           );
         }
@@ -56,11 +56,11 @@ export function setupEventListeners(
 
   unsubscribers.push(
     eventBus.subscribe(
-      "progression:level_up",
+      'progression:level_up',
       (payload: { userId: string; newLevel: number }) => {
         if (payload.userId === getUserId()) {
           challengeManager.updateChallengeProgress(
-            "LEVEL_REACHED",
+            'LEVEL_REACHED',
             payload.newLevel,
           );
         }
@@ -69,9 +69,9 @@ export function setupEventListeners(
   );
 
   unsubscribers.push(
-    eventBus.subscribe("achievement:unlock", (payload: { userId: string }) => {
+    eventBus.subscribe('achievement:unlock', (payload: { userId: string }) => {
       if (payload.userId === getUserId()) {
-        challengeManager.updateChallengeProgress("ACHIEVEMENT_UNLOCKED", 1);
+        challengeManager.updateChallengeProgress('ACHIEVEMENT_UNLOCKED', 1);
       }
     }),
   );

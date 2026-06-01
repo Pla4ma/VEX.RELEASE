@@ -1,19 +1,19 @@
-import React from "react";
-import { ScrollView, Pressable, Linking } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import type { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useTheme, ThemeMode } from "../../theme";
-import { Box, Text } from "../../components/primitives";
-import { useAuthStore } from "../../store";
-import type { SettingsStackParams } from "../../navigation";
-import { withScreenErrorBoundary } from "../../shared/ui/components/ScreenErrorBoundary";
-import { isFeatureHidden } from "../../features/liveops-config/final-release-feature-map";
-import { useSettingsStore } from "../../features/settings/store";
-import { SettingsProfileRow } from "./SettingsProfileRow";
-import { SettingsSectionGroup } from "./SettingsSectionGroup";
-import { buildSettingsGroups } from "./buildSettingsGroups";
+import React from 'react';
+import { ScrollView, Pressable, Linking } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useTheme, ThemeMode } from '../../theme';
+import { Box, Text } from '../../components/primitives';
+import { useAuthStore } from '../../store';
+import type { SettingsStackParams } from '../../navigation';
+import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+import { isFeatureHidden } from '../../features/liveops-config/final-release-feature-map';
+import { useSettingsStore } from '../../features/settings/store';
+import { SettingsProfileRow } from './SettingsProfileRow';
+import { SettingsSectionGroup } from './SettingsSectionGroup';
+import { buildSettingsGroups } from './buildSettingsGroups';
 
-type Props = NativeStackScreenProps<SettingsStackParams, "SettingsMain">;
+type Props = NativeStackScreenProps<SettingsStackParams, 'SettingsMain'>;
 
 export const SettingsScreen = withScreenErrorBoundary(function _SettingsScreen({
   navigation,
@@ -34,52 +34,52 @@ export const SettingsScreen = withScreenErrorBoundary(function _SettingsScreen({
     setPreference,
   } = useSettingsStore();
   const showEconomyToggles =
-    !isFeatureHidden("boss_tab") &&
-    !isFeatureHidden("challenges") &&
-    !isFeatureHidden("wagers");
+    !isFeatureHidden('boss_tab') &&
+    !isFeatureHidden('challenges') &&
+    !isFeatureHidden('wagers');
 
   const handleThemeChange = (newMode: ThemeMode) => setMode(newMode);
-  const openPrivacyPolicy = () => Linking.openURL("https://vex.app/privacy");
-  const openTerms = () => Linking.openURL("https://vex.app/terms");
-  const openSupport = () => Linking.openURL("mailto:support@vex.app");
+  const openPrivacyPolicy = () => Linking.openURL('https://vex.app/privacy');
+  const openTerms = () => Linking.openURL('https://vex.app/terms');
+  const openSupport = () => Linking.openURL('mailto:support@vex.app');
 
   const settingGroups = buildSettingsGroups({
-    streakReminders, setStreakReminders: (v) => setPreference("streakReminders", v),
-    bossAlerts, setBossAlerts: (v) => setPreference("bossAlerts", v),
-    squadNotifications, setSquadNotifications: (v) => setPreference("squadNotifications", v),
-    rivalNotifications, setRivalNotifications: (v) => setPreference("rivalNotifications", v),
-    coachMessages, setCoachMessages: (v) => setPreference("coachMessages", v),
-    achievementUnlocks, setAchievementUnlocks: (v) => setPreference("achievementUnlocks", v),
-    soundEffects, setSoundEffects: (v) => setPreference("soundEffects", v),
-    haptics, setHaptics: (v) => setPreference("haptics", v),
-    analyticsEnabled, setAnalyticsEnabled: (v) => setPreference("analyticsEnabled", v),
+    streakReminders, setStreakReminders: (v) => setPreference('streakReminders', v),
+    bossAlerts, setBossAlerts: (v) => setPreference('bossAlerts', v),
+    squadNotifications, setSquadNotifications: (v) => setPreference('squadNotifications', v),
+    rivalNotifications, setRivalNotifications: (v) => setPreference('rivalNotifications', v),
+    coachMessages, setCoachMessages: (v) => setPreference('coachMessages', v),
+    achievementUnlocks, setAchievementUnlocks: (v) => setPreference('achievementUnlocks', v),
+    soundEffects, setSoundEffects: (v) => setPreference('soundEffects', v),
+    haptics, setHaptics: (v) => setPreference('haptics', v),
+    analyticsEnabled, setAnalyticsEnabled: (v) => setPreference('analyticsEnabled', v),
     mode, handleThemeChange, navigation,
     openSupport, openPrivacyPolicy, openTerms,
-    navigateToCoach: () => navigation.navigate("CoachSettings"),
-    navigateToNotifications: () => navigation.navigate("NotificationSettings"),
-    navigateToAppearance: () => navigation.navigate("AppearanceSettings"),
-    navigateToPrivacy: () => navigation.navigate("PrivacySettings"),
-    navigateToAccount: () => navigation.navigate("AccountSettings"),
-    navigateToLaneMode: () => navigation.navigate("LaneMode"),
-    navigateToDataExport: () => navigation.navigate("DataExport"),
+    navigateToCoach: () => navigation.navigate('CoachSettings'),
+    navigateToNotifications: () => navigation.navigate('NotificationSettings'),
+    navigateToAppearance: () => navigation.navigate('AppearanceSettings'),
+    navigateToPrivacy: () => navigation.navigate('PrivacySettings'),
+    navigateToAccount: () => navigation.navigate('AccountSettings'),
+    navigateToLaneMode: () => navigation.navigate('LaneMode'),
+    navigateToDataExport: () => navigation.navigate('DataExport'),
   });
 
   const filteredGroups = settingGroups
     .filter(
       (g) =>
-        g.title !== "Notifications" ||
+        g.title !== 'Notifications' ||
         showEconomyToggles ||
         g.items.length > 1,
     )
     .map((g) => ({
       ...g,
       items:
-        g.title === "Notifications"
+        g.title === 'Notifications'
           ? g.items.filter(
               (i) =>
-                (i.id !== "boss-alerts" &&
-                  i.id !== "squad-notifications" &&
-                  i.id !== "rival-notifications") ||
+                (i.id !== 'boss-alerts' &&
+                  i.id !== 'squad-notifications' &&
+                  i.id !== 'rival-notifications') ||
                 showEconomyToggles,
             )
           : g.items,
@@ -93,10 +93,10 @@ export const SettingsScreen = withScreenErrorBoundary(function _SettingsScreen({
         </Box>
 
         <SettingsProfileRow
-          displayName={user?.displayName || "User"}
-          userId={user?.id || "user@example.com"}
+          displayName={user?.displayName || 'User'}
+          userId={user?.id || 'user@example.com'}
           theme={theme}
-          onPress={() => navigation.navigate("Main", { screen: "Profile" })}
+          onPress={() => navigation.navigate('Main', { screen: 'Profile' })}
         />
 
         <Box px={16}>
@@ -126,7 +126,7 @@ export const SettingsScreen = withScreenErrorBoundary(function _SettingsScreen({
           style={{
             marginHorizontal: 16,
             paddingVertical: 16,
-            alignItems: "center",
+            alignItems: 'center',
             borderRadius: 12,
             backgroundColor: theme.colors.error.light,
             marginBottom: 16,
@@ -137,7 +137,7 @@ export const SettingsScreen = withScreenErrorBoundary(function _SettingsScreen({
           accessibilityHint="Double tap to change setting"
         >
           <Text
-            style={{ color: theme.colors.error.DEFAULT, fontWeight: "600" }}
+            style={{ color: theme.colors.error.DEFAULT, fontWeight: '600' }}
           >
             Log Out
           </Text>
@@ -147,6 +147,6 @@ export const SettingsScreen = withScreenErrorBoundary(function _SettingsScreen({
       </ScrollView>
     </Box>
   );
-}, "Settings");
+}, 'Settings');
 
 export default SettingsScreen;

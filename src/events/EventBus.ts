@@ -2,11 +2,11 @@ import {
   EventEmitter,
   globalEventEmitter,
   type EventHandler,
-} from "./EventEmitter";
-import type { EventChannels } from "./EventTypes";
-import { createDebugger } from "../utils/debug";
-const debug = createDebugger("events:bus");
-const isDevRuntime = typeof __DEV__ !== "undefined" && __DEV__;
+} from './EventEmitter';
+import type { EventChannels } from './EventTypes';
+import { createDebugger } from '../utils/debug';
+const debug = createDebugger('events:bus');
+const isDevRuntime = typeof __DEV__ !== 'undefined' && __DEV__;
 interface EventBusOptions {
   debug?: boolean;
   maxListeners?: number;
@@ -41,7 +41,7 @@ export class EventBus {
     options: { once?: boolean; priority?: number } = {},
   ): () => void {
     if (this.options.debug) {
-      this.log("subscribe", channel as string);
+      this.log('subscribe', channel as string);
     }
     return this.emitter.on(channel as string, handler, options);
   }
@@ -62,7 +62,7 @@ export class EventBus {
     data: EventChannels[T],
   ): void {
     if (this.options.debug) {
-      this.log("publish", channel as string, data);
+      this.log('publish', channel as string, data);
     }
     if (this.options.enableHistory) {
       this.addToHistory(channel as string, data);
@@ -77,7 +77,7 @@ export class EventBus {
   }
   private publishUntyped(channel: string, data: unknown): void {
     if (this.options.debug) {
-      this.log("emit", channel, data);
+      this.log('emit', channel, data);
     }
     if (this.options.enableHistory) {
       this.addToHistory(channel, data);
@@ -89,7 +89,7 @@ export class EventBus {
     data: EventChannels[T],
   ): Promise<void> {
     if (this.options.debug) {
-      this.log("publishAsync", channel as string, data);
+      this.log('publishAsync', channel as string, data);
     }
     if (this.options.enableHistory) {
       this.addToHistory(channel as string, data);
@@ -105,7 +105,7 @@ export class EventBus {
       const unsubscribe = this.subscribeOnce(
         channel,
         ((data: EventChannels[T]) => {
-          if (timer !== undefined) clearTimeout(timer);
+          if (timer !== undefined) {clearTimeout(timer);}
           resolve(data);
         }) as EventHandler<EventChannels[T]>,
       );
@@ -144,7 +144,7 @@ export class EventBus {
   }
   private log(operation: string, channel: string, data?: unknown): void {
     const dataStr =
-      data !== undefined ? JSON.stringify(data).slice(0, 100) : "";
+      data !== undefined ? JSON.stringify(data).slice(0, 100) : '';
     debug.debug(`[EventBus] ${operation}: ${channel} ${dataStr}`);
   }
 }

@@ -1,19 +1,19 @@
-import React from "react";
-import { InlineStatus } from "./InlineStatus";
-import { StatusBanner } from "./StatusBanner";
-import { CardStatusOverlay } from "./CardStatusOverlay";
-import type { StatusFeedbackProps } from "./StatusFeedback.types";
+import React from 'react';
+import { InlineStatus } from './InlineStatus';
+import { StatusBanner } from './StatusBanner';
+import { CardStatusOverlay } from './CardStatusOverlay';
+import type { StatusFeedbackProps } from './StatusFeedback.types';
 
-export { InlineStatus } from "./InlineStatus";
-export { StatusChip } from "./StatusChip";
-export { StatusBanner } from "./StatusBanner";
-export { CardStatusOverlay } from "./CardStatusOverlay";
-export type { AsyncStatus, StatusFeedbackProps } from "./StatusFeedback.types";
-export { STATUS_CONFIG, getStatusColor } from "./StatusFeedback.types";
+export { InlineStatus } from './InlineStatus';
+export { StatusChip } from './StatusChip';
+export { StatusBanner } from './StatusBanner';
+export { CardStatusOverlay } from './CardStatusOverlay';
+export type { AsyncStatus, StatusFeedbackProps } from './StatusFeedback.types';
+export { STATUS_CONFIG, getStatusColor } from './StatusFeedback.types';
 
 export const StatusFeedback: React.FC<StatusFeedbackProps> = (props) => {
   switch (props.variant) {
-    case "inline":
+    case 'inline':
       return (
         <InlineStatus
           status={props.status}
@@ -21,9 +21,9 @@ export const StatusFeedback: React.FC<StatusFeedbackProps> = (props) => {
           style={props.style}
         />
       );
-    case "banner":
+    case 'banner':
       return <StatusBanner {...props} />;
-    case "card":
+    case 'card':
       return (
         <CardStatusOverlay
           status={props.status}

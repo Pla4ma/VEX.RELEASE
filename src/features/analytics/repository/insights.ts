@@ -1,6 +1,6 @@
-import { z } from "zod";
-import { getSupabaseClient, handleSupabaseError } from "../../../config/supabase";
-import { InsightSchema } from "../schemas";
+import { z } from 'zod';
+import { getSupabaseClient, handleSupabaseError } from '../../../config/supabase';
+import { InsightSchema } from '../schemas';
 
 const supabase = getSupabaseClient();
 
@@ -14,18 +14,18 @@ export async function fetchInsights(
   },
 ) {
   let query = supabase
-    .from("insights")
-    .select("*")
-    .eq("user_id", userId)
-    .order("detected_at", { ascending: false });
+    .from('insights')
+    .select('*')
+    .eq('user_id', userId)
+    .order('detected_at', { ascending: false });
   if (options?.unreadOnly) {
-    query = query.eq("is_read", false);
+    query = query.eq('is_read', false);
   }
   if (options?.types?.length) {
-    query = query.in("type", options.types);
+    query = query.in('type', options.types);
   }
   if (options?.severities?.length) {
-    query = query.in("severity", options.severities);
+    query = query.in('severity', options.severities);
   }
   if (options?.limit) {
     query = query.limit(options.limit);
@@ -39,7 +39,7 @@ export async function fetchInsights(
 
 export async function createInsight(insight: z.infer<typeof InsightSchema>) {
   const { data, error } = await supabase
-    .from("insights")
+    .from('insights')
     .insert(insight)
     .select()
     .single();
@@ -51,10 +51,10 @@ export async function createInsight(insight: z.infer<typeof InsightSchema>) {
 
 export async function markInsightAsRead(userId: string, insightId: string) {
   const { data, error } = await supabase
-    .from("insights")
+    .from('insights')
     .update({ is_read: true })
-    .eq("id", insightId)
-    .eq("user_id", userId)
+    .eq('id', insightId)
+    .eq('user_id', userId)
     .select()
     .single();
   if (error) {
@@ -70,14 +70,14 @@ export async function markInsightAsActioned(
   actionPayload?: Record<string, unknown>,
 ) {
   const { data, error } = await supabase
-    .from("insights")
+    .from('insights')
     .update({
       is_actioned: true,
       action_type: actionType,
       action_payload: actionPayload,
     })
-    .eq("id", insightId)
-    .eq("user_id", userId)
+    .eq('id', insightId)
+    .eq('user_id', userId)
     .select()
     .single();
   if (error) {

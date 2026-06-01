@@ -1,2 +1,2 @@
-import "./streak-system-core";
-import "./streak-system-monitoring";
+import './streak-system-core';
+import './streak-system-monitoring';

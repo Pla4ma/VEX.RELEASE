@@ -3,7 +3,7 @@
  * Type definitions for the session orchestration system
  */
 
-import type { TimerConfig } from "./types";
+import type { TimerConfig } from './types';
 
 export interface OrchestratorConfig {
   timerConfig?: Partial<TimerConfig>;

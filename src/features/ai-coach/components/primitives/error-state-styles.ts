@@ -1,10 +1,10 @@
-import { createSheet } from "@/shared/ui/create-sheet";
-import { launchColors } from "@theme/tokens/launch-colors";
+import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
 
 export const errorStateStyles = createSheet({
   container: {
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     padding: 24,
     backgroundColor: launchColors.hex_fff,
     borderRadius: 12,
@@ -18,21 +18,21 @@ export const errorStateStyles = createSheet({
   icon: { fontSize: 48, marginBottom: 12 },
   title: {
     fontSize: 18,
-    fontWeight: "700",
+    fontWeight: '700',
     color: launchColors.hex_1a1a1a,
-    textAlign: "center",
+    textAlign: 'center',
     marginBottom: 8,
   },
   message: {
     fontSize: 14,
     color: launchColors.hex_666,
-    textAlign: "center",
+    textAlign: 'center',
     lineHeight: 20,
     marginBottom: 16,
   },
   errorCodeContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 6,
     marginBottom: 16,
   },
@@ -40,38 +40,38 @@ export const errorStateStyles = createSheet({
   errorCode: {
     fontSize: 12,
     color: launchColors.hex_999,
-    fontFamily: "monospace",
+    fontFamily: 'monospace',
     backgroundColor: launchColors.hex_f5f5f5,
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 4,
   },
   attemptsText: { fontSize: 12, color: launchColors.hex_999, marginBottom: 12 },
-  actions: { gap: 8, width: "100%" },
+  actions: { gap: 8, width: '100%' },
   retryButton: {
     backgroundColor: launchColors.hex_ff6b6b,
     paddingVertical: 12,
     paddingHorizontal: 24,
     borderRadius: 8,
-    alignItems: "center",
+    alignItems: 'center',
     minWidth: 120,
   },
   retryButtonText: {
     color: launchColors.hex_fff,
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   buttonDisabled: { opacity: 0.6 },
-  dismissButton: { paddingVertical: 12, alignItems: "center" },
+  dismissButton: { paddingVertical: 12, alignItems: 'center' },
   dismissButtonText: {
     color: launchColors.hex_666,
     fontSize: 14,
-    fontWeight: "500",
+    fontWeight: '500',
   },
   maxRetriesText: {
     fontSize: 12,
     color: launchColors.hex_999,
-    textAlign: "center",
+    textAlign: 'center',
     marginTop: 8,
   },
   degradedBadge: {
@@ -83,12 +83,12 @@ export const errorStateStyles = createSheet({
   },
   degradedBadgeText: {
     fontSize: 12,
-    fontWeight: "600",
+    fontWeight: '600',
     color: launchColors.hex_333,
   },
   inlineContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 6,
     padding: 8,
     backgroundColor: launchColors.hex_ffebee,

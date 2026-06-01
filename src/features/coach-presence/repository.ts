@@ -1,9 +1,9 @@
-import { z } from "zod";
-import { getSupabaseClient } from "../../config/supabase";
+import { z } from 'zod';
+import { getSupabaseClient } from '../../config/supabase';
 import {
   CoachPresenceMemorySummarySchema,
   type CoachPresenceMemorySummary,
-} from "./schemas";
+} from './schemas';
 
 const CoachMemorySummaryRowSchema = z
   .object({
@@ -25,7 +25,7 @@ export class CoachPresenceRepositoryError extends Error {
     public readonly cause?: unknown,
   ) {
     super(`CoachPresenceRepository ${operation} failed`);
-    this.name = "CoachPresenceRepositoryError";
+    this.name = 'CoachPresenceRepositoryError';
   }
 }
 
@@ -36,28 +36,28 @@ export async function fetchCoachPresenceMemorySummary(
     const parsedUserId = z.string().uuid().parse(userId);
     const [coachResult, companionResult] = await Promise.all([
       getSupabaseClient()
-        .from("coach_memories")
-        .select("title, description")
-        .eq("user_id", parsedUserId)
-        .order("occurred_at", { ascending: false })
+        .from('coach_memories')
+        .select('title, description')
+        .eq('user_id', parsedUserId)
+        .order('occurred_at', { ascending: false })
         .limit(3),
       getSupabaseClient()
-        .from("companion_memories")
-        .select("title, body")
-        .eq("user_id", parsedUserId)
-        .order("created_at", { ascending: false })
+        .from('companion_memories')
+        .select('title, body')
+        .eq('user_id', parsedUserId)
+        .order('created_at', { ascending: false })
         .limit(3),
     ]);
 
     if (coachResult.error) {
       throw new CoachPresenceRepositoryError(
-        "fetchCoachMemories",
+        'fetchCoachMemories',
         coachResult.error,
       );
     }
     if (companionResult.error) {
       throw new CoachPresenceRepositoryError(
-        "fetchCompanionMemories",
+        'fetchCompanionMemories',
         companionResult.error,
       );
     }
@@ -84,6 +84,6 @@ export async function fetchCoachPresenceMemorySummary(
     if (error instanceof CoachPresenceRepositoryError) {
       throw error;
     }
-    throw new CoachPresenceRepositoryError("fetchMemorySummary", error);
+    throw new CoachPresenceRepositoryError('fetchMemorySummary', error);
   }
 }

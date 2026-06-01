@@ -12,7 +12,7 @@ export interface BehaviorAnalytics {
   signalsCount: number;
   patternsDetected: number;
   confidenceLevel: string;
-  dominantChronotype?: "morning" | "evening" | "variable";
+  dominantChronotype?: 'morning' | 'evening' | 'variable';
   consistencyScore: number;
   engagementScore: number;
 }

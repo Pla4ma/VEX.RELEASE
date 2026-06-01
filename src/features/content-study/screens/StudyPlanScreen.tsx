@@ -1,11 +1,11 @@
-import React, { useState, useCallback } from "react";
-import { View, Text, Pressable, ScrollView, ActivityIndicator } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { useNavigation, useRoute } from "@react-navigation/native";
-import { useStudyPlan } from "../hooks";
-import { UI_TEXT } from "../constants";
-import { launchColors } from "@theme/tokens/launch-colors";
-import { styles } from "./StudyPlanScreen.styles";
+import React, { useState, useCallback } from 'react';
+import { View, Text, Pressable, ScrollView, ActivityIndicator } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { useStudyPlan } from '../hooks';
+import { UI_TEXT } from '../constants';
+import { launchColors } from '@theme/tokens/launch-colors';
+import { styles } from './StudyPlanScreen.styles';
 import {
   type RouteProps,
   type NavigationProp,
@@ -14,7 +14,7 @@ import {
   QuizSection,
   SessionPlanSection,
   RatingSection,
-} from "./study-plan-helpers";
+} from './study-plan-helpers';
 
 export function StudyPlanScreen() {
   const navigation = useNavigation<NavigationProp>();
@@ -46,8 +46,8 @@ export function StudyPlanScreen() {
   const handleStartSession = useCallback(async () => {
     const sessionConfig = await startSession();
     if (sessionConfig && generation) {
-      navigation.navigate("SessionStack", {
-        screen: "SessionSetup",
+      navigation.navigate('SessionStack', {
+        screen: 'SessionSetup',
         params: {
           suggestedDurationSeconds: sessionConfig.duration,
           suggestedDifficulty: sessionConfig.difficulty,
@@ -55,7 +55,7 @@ export function StudyPlanScreen() {
           focusAreas: generation.keyConcepts.slice(0, 3),
           sessionCategory: sessionConfig.category,
           sessionTags: sessionConfig.tags,
-          source: "content-study",
+          source: 'content-study',
           generationId,
           studyPlanId: generationId,
           contentId,

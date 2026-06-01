@@ -8,11 +8,11 @@ import {
   createProjectThread,
   refreshProjectThreadState,
   rescueStaleProject,
-} from "../service";
+} from '../service';
 
 const mockStore = new Map<string, string>();
 
-jest.mock("react-native-mmkv", () => ({
+jest.mock('react-native-mmkv', () => ({
   MMKV: class MockMMKV {
     getString(key: string): string | undefined {
       return mockStore.get(key);
@@ -34,144 +34,144 @@ jest.mock("react-native-mmkv", () => ({
 
 const DAY_MS = 86_400_000;
 
-describe("project-focus — session", () => {
+describe('project-focus — session', () => {
   beforeEach(() => mockStore.clear());
 
   // ──────────────────── buildProjectSessionBrief ────────────────────
 
-  describe("buildProjectSessionBrief", () => {
-    it("creates normal resume brief", async () => {
+  describe('buildProjectSessionBrief', () => {
+    it('creates normal resume brief', async () => {
       const thread = await createProjectThread({
-        currentObjective: "Build",
-        nextMove: "Write tests",
+        currentObjective: 'Build',
+        nextMove: 'Write tests',
         now: 100,
-        projectTitle: "VEX",
-        userId: "user-6",
+        projectTitle: 'VEX',
+        userId: 'user-6',
       });
       const brief = buildProjectSessionBrief(thread, 100);
       expect(brief.durationSeconds).toBe(25 * 60);
-      expect(brief.title).toContain("Resume");
-      expect(brief.title).toContain("VEX");
-      expect(brief.successCondition).toBe("Write tests");
+      expect(brief.title).toContain('Resume');
+      expect(brief.title).toContain('VEX');
+      expect(brief.successCondition).toBe('Write tests');
     });
 
-    it("creates rescued session brief with 10-minute duration", async () => {
+    it('creates rescued session brief with 10-minute duration', async () => {
       const thread = await createProjectThread({
-        currentObjective: "Compose",
-        nextMove: "Find motif",
+        currentObjective: 'Compose',
+        nextMove: 'Find motif',
         now: 100,
-        projectTitle: "Track",
-        userId: "user-6b",
+        projectTitle: 'Track',
+        userId: 'user-6b',
       });
       const stale = refreshProjectThreadState(thread, 100 + 7 * DAY_MS);
       const rescued = rescueStaleProject(stale, 100 + 7 * DAY_MS);
       const brief = buildProjectSessionBrief(rescued, 200);
       expect(brief.durationSeconds).toBe(10 * 60);
-      expect(brief.title).toContain("Recover");
+      expect(brief.title).toContain('Recover');
     });
 
-    it("creates high-stale-risk session brief with 15-minute duration", async () => {
+    it('creates high-stale-risk session brief with 15-minute duration', async () => {
       const thread = await createProjectThread({
-        currentObjective: "Build",
-        nextMove: "Code",
+        currentObjective: 'Build',
+        nextMove: 'Code',
         now: 100,
-        projectTitle: "App",
-        userId: "user-6c",
+        projectTitle: 'App',
+        userId: 'user-6c',
       });
       const stale = refreshProjectThreadState(thread, 100 + 7 * DAY_MS);
       const brief = buildProjectSessionBrief(stale, 100 + 7 * DAY_MS);
       expect(brief.durationSeconds).toBe(15 * 60);
     });
 
-    it("uses lastSessionSummary as warmup when available", async () => {
+    it('uses lastSessionSummary as warmup when available', async () => {
       const thread = await createProjectThread({
-        currentObjective: "Build",
-        nextMove: "Code",
+        currentObjective: 'Build',
+        nextMove: 'Code',
         now: 100,
-        projectTitle: "App",
-        userId: "user-6d",
+        projectTitle: 'App',
+        userId: 'user-6d',
       });
       const completed = await completeProjectSession({
-        lastSessionSummary: "Finished auth module",
-        nextMove: "Add tests",
+        lastSessionSummary: 'Finished auth module',
+        nextMove: 'Add tests',
         now: 200,
         threadId: thread.id,
-        userId: "user-6d",
+        userId: 'user-6d',
       });
       const brief = buildProjectSessionBrief(completed, 300);
-      expect(brief.warmup).toContain("Finished auth module");
+      expect(brief.warmup).toContain('Finished auth module');
     });
   });
 
   // ──────────────────── buildProjectResumeBrief ────────────────────
 
-  describe("buildProjectResumeBrief", () => {
-    it("returns same structure as buildProjectSessionBrief", async () => {
+  describe('buildProjectResumeBrief', () => {
+    it('returns same structure as buildProjectSessionBrief', async () => {
       const thread = await createProjectThread({
-        currentObjective: "Design",
-        nextMove: "Sketch wireframes",
+        currentObjective: 'Design',
+        nextMove: 'Sketch wireframes',
         now: 100,
-        projectTitle: "UI",
-        userId: "user-7",
+        projectTitle: 'UI',
+        userId: 'user-7',
       });
       const brief = buildProjectResumeBrief(thread, 100);
-      expect(brief.title).toContain("Resume");
-      expect(brief.successCondition).toBe("Sketch wireframes");
+      expect(brief.title).toContain('Resume');
+      expect(brief.successCondition).toBe('Sketch wireframes');
     });
   });
 
   // ──────────────────── completeProjectSession ────────────────────
 
-  describe("completeProjectSession", () => {
-    it("throws when thread not found", async () => {
+  describe('completeProjectSession', () => {
+    it('throws when thread not found', async () => {
       await expect(
         completeProjectSession({
-          lastSessionSummary: "Done",
-          nextMove: "Continue",
+          lastSessionSummary: 'Done',
+          nextMove: 'Continue',
           now: 200,
-          threadId: "nonexistent",
-          userId: "user-8",
+          threadId: 'nonexistent',
+          userId: 'user-8',
         }),
-      ).rejects.toThrow("Project thread could not be found.");
+      ).rejects.toThrow('Project thread could not be found.');
     });
 
-    it("sets state to blocked when blocker is provided", async () => {
+    it('sets state to blocked when blocker is provided', async () => {
       const thread = await createProjectThread({
-        currentObjective: "Build",
-        nextMove: "Code",
+        currentObjective: 'Build',
+        nextMove: 'Code',
         now: 100,
-        projectTitle: "App",
-        userId: "user-8b",
+        projectTitle: 'App',
+        userId: 'user-8b',
       });
       const updated = await completeProjectSession({
-        lastSessionSummary: "Hit an issue",
-        nextMove: "Wait for API key",
-        blocker: "Need API access from admin",
+        lastSessionSummary: 'Hit an issue',
+        nextMove: 'Wait for API key',
+        blocker: 'Need API access from admin',
         now: 200,
         threadId: thread.id,
-        userId: "user-8b",
+        userId: 'user-8b',
       });
-      expect(updated.state).toBe("blocked");
-      expect(updated.blocker).toBe("Need API access from admin");
+      expect(updated.state).toBe('blocked');
+      expect(updated.blocker).toBe('Need API access from admin');
     });
 
-    it("appends open questions", async () => {
+    it('appends open questions', async () => {
       const thread = await createProjectThread({
-        currentObjective: "Research",
-        nextMove: "Read papers",
+        currentObjective: 'Research',
+        nextMove: 'Read papers',
         now: 100,
-        projectTitle: "Thesis",
-        userId: "user-8c",
+        projectTitle: 'Thesis',
+        userId: 'user-8c',
       });
       const updated = await completeProjectSession({
-        lastSessionSummary: "Read 3 papers",
-        nextMove: "Summarize",
-        openQuestion: "Which methodology is best?",
+        lastSessionSummary: 'Read 3 papers',
+        nextMove: 'Summarize',
+        openQuestion: 'Which methodology is best?',
         now: 200,
         threadId: thread.id,
-        userId: "user-8c",
+        userId: 'user-8c',
       });
-      expect(updated.openQuestions).toContain("Which methodology is best?");
+      expect(updated.openQuestions).toContain('Which methodology is best?');
     });
   });
 });

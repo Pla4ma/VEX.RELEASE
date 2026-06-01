@@ -1,50 +1,50 @@
-import type { Nullable } from "../types/global";
+import type { Nullable } from '../types/global';
 
 export type RootStackRoute =
-  | "Main"
-  | "Auth"
-  | "Onboarding"
-  | "Paywall"
-  | "Splash"
-  | "Settings"
-  | "SessionStack"
-  | "CompanionDetail"
-  | "Comeback"
-  | "StreakFuneral"
-  | "FocusScoreDashboard"
-  | "VipPaywall"
-  | "MemoryConsole";
+  | 'Main'
+  | 'Auth'
+  | 'Onboarding'
+  | 'Paywall'
+  | 'Splash'
+  | 'Settings'
+  | 'SessionStack'
+  | 'CompanionDetail'
+  | 'Comeback'
+  | 'StreakFuneral'
+  | 'FocusScoreDashboard'
+  | 'VipPaywall'
+  | 'MemoryConsole';
 
 export type AuthStackRoute =
-  | "Login"
-  | "Register"
-  | "ForgotPassword"
-  | "ResetPassword"
-  | "VerifyEmail";
+  | 'Login'
+  | 'Register'
+  | 'ForgotPassword'
+  | 'ResetPassword'
+  | 'VerifyEmail';
 
-export type MainTabRoute = "Home" | "Focus" | "Progress" | "Profile";
+export type MainTabRoute = 'Home' | 'Focus' | 'Progress' | 'Profile';
 
 export type SettingsStackRoute =
-  | "SettingsMain"
-  | "AccountSettings"
-  | "NotificationSettings"
-  | "PrivacySettings"
-  | "AppearanceSettings"
-  | "DataExport";
+  | 'SettingsMain'
+  | 'AccountSettings'
+  | 'NotificationSettings'
+  | 'PrivacySettings'
+  | 'AppearanceSettings'
+  | 'DataExport';
 
 export type SessionStackRoute =
-  | "SessionSetup"
-  | "ActiveSession"
-  | "SessionComplete"
-  | "SessionHistory";
+  | 'SessionSetup'
+  | 'ActiveSession'
+  | 'SessionComplete'
+  | 'SessionHistory';
 
 export type SessionSetupMode =
-  | "LIGHT_FOCUS"
-  | "DEEP_WORK"
-  | "SPRINT"
-  | "CREATIVE"
-  | "STUDY"
-  | "RECOVERY";
+  | 'LIGHT_FOCUS'
+  | 'DEEP_WORK'
+  | 'SPRINT'
+  | 'CREATIVE'
+  | 'STUDY'
+  | 'RECOVERY';
 
 export interface ComebackContext {
   comebackMessage?: string;
@@ -58,7 +58,7 @@ export interface StudyContext {
   generationId?: string;
   goal?: string;
   studyPlanId?: string;
-  suggestedDifficulty?: "EASY" | "NORMAL" | "CHALLENGING" | "PUSH";
+  suggestedDifficulty?: 'EASY' | 'NORMAL' | 'CHALLENGING' | 'PUSH';
   suggestedDurationSeconds?: number;
 }
 
@@ -67,16 +67,16 @@ export interface WarContext {
 }
 
 export type MainStackRoute =
-  | "Boss"
-  | "Notifications"
-  | "ContentStudy"
-  | "AICoach"
-  | "Challenges"
-  | "Mastery"
-  | "CompanionDetail"
-  | "MemoryConsole"
-  | "Achievements"
-  | "Analytics";
+  | 'Boss'
+  | 'Notifications'
+  | 'ContentStudy'
+  | 'AICoach'
+  | 'Challenges'
+  | 'Mastery'
+  | 'CompanionDetail'
+  | 'MemoryConsole'
+  | 'Achievements'
+  | 'Analytics';
 
 export interface NavigationState {
   currentRoute: string;

@@ -1,38 +1,38 @@
-import React from "react";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import React from 'react';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import { MainNavigator } from "./MainNavigator";
-import { OnboardingNavigator } from "./OnboardingNavigator";
-import { SettingsNavigator } from "./SettingsNavigator";
-import { RootStackFeatureRoutes } from "./root-stack-feature-routes";
-import { type FeatureAccessMap } from "../features/liveops-config";
-import type { ExtendedRootStackParams } from "./types";
-import { canRegisterPremiumPaywallRoute } from "./premium-route-gating";
+import { MainNavigator } from './MainNavigator';
+import { OnboardingNavigator } from './OnboardingNavigator';
+import { SettingsNavigator } from './SettingsNavigator';
+import { RootStackFeatureRoutes } from './root-stack-feature-routes';
+import { type FeatureAccessMap } from '../features/liveops-config';
+import type { ExtendedRootStackParams } from './types';
+import { canRegisterPremiumPaywallRoute } from './premium-route-gating';
 
 type RootStack = ReturnType<
   typeof createNativeStackNavigator<ExtendedRootStackParams>
 >;
 
 const PaywallScreen = React.lazy(
-  () => import("../screens/paywall/PaywallScreen"),
+  () => import('../screens/paywall/PaywallScreen'),
 );
 const VipPaywallScreen = React.lazy(
-  () => import("../shared/monetization/components/VipPaywallScreen"),
+  () => import('../shared/monetization/components/VipPaywallScreen'),
 );
 const StreakFuneralScreen = React.lazy(
-  () => import("../screens/streaks/StreakFuneralScreen"),
+  () => import('../screens/streaks/StreakFuneralScreen'),
 );
-const ComebackScreen = React.lazy(() => import("../screens/ComebackScreen"));
+const ComebackScreen = React.lazy(() => import('../screens/ComebackScreen'));
 const FocusScoreDashboard = React.lazy(() =>
-  import("../features/focus-identity/FocusScoreDashboard").then((module) => ({
+  import('../features/focus-identity/FocusScoreDashboard').then((module) => ({
     default: module.FocusScoreDashboard,
   })),
 );
 const AchievementsScreen = React.lazy(
-  () => import("../screens/profile/AchievementsScreen"),
+  () => import('../screens/profile/AchievementsScreen'),
 );
 const AnalyticsScreen = React.lazy(
-  () => import("../screens/analytics/AnalyticsScreen"),
+  () => import('../screens/analytics/AnalyticsScreen'),
 );
 
 export function RootStackAuthenticatedRoutes({
@@ -59,13 +59,13 @@ export function RootStackAuthenticatedRoutes({
       <Stack.Screen
         name="Settings"
         component={SettingsNavigator}
-        options={{ animation: "slide_from_bottom" }}
+        options={{ animation: 'slide_from_bottom' }}
       />
 
       {canRegisterPaywall ? (
         <Stack.Screen
           name="Paywall"
-          options={{ animation: "slide_from_bottom", presentation: "modal" }}
+          options={{ animation: 'slide_from_bottom', presentation: 'modal' }}
         >
           {() => (
             <React.Suspense fallback={null}>
@@ -77,7 +77,7 @@ export function RootStackAuthenticatedRoutes({
       {canRegisterPaywall ? (
         <Stack.Screen
           name="VipPaywall"
-          options={{ animation: "slide_from_bottom", presentation: "modal" }}
+          options={{ animation: 'slide_from_bottom', presentation: 'modal' }}
         >
           {() => (
             <React.Suspense fallback={null}>
@@ -89,8 +89,8 @@ export function RootStackAuthenticatedRoutes({
       <Stack.Screen
         name="StreakFuneral"
         options={{
-          animation: "slide_from_bottom",
-          presentation: "fullScreenModal",
+          animation: 'slide_from_bottom',
+          presentation: 'fullScreenModal',
         }}
       >
         {() => (
@@ -102,8 +102,8 @@ export function RootStackAuthenticatedRoutes({
       <Stack.Screen
         name="Comeback"
         options={{
-          animation: "slide_from_bottom",
-          presentation: "fullScreenModal",
+          animation: 'slide_from_bottom',
+          presentation: 'fullScreenModal',
         }}
       >
         {() => (

@@ -1,5 +1,5 @@
-import * as Sentry from "@sentry/react-native";
-import { z } from "zod";
+import * as Sentry from '@sentry/react-native';
+import { z } from 'zod';
 
 export class RepositoryError extends Error {
   constructor(
@@ -7,7 +7,7 @@ export class RepositoryError extends Error {
     public originalError: unknown,
   ) {
     super(`Repository error in ${operation}: ${originalError}`);
-    this.name = "RepositoryError";
+    this.name = 'RepositoryError';
   }
 }
 
@@ -25,7 +25,7 @@ export async function withRetry<T>(
       lastError = error;
       if (attempt === maxRetries) {
         Sentry.captureException(error, {
-          tags: { repository: "focus-identity", operation: operationName },
+          tags: { repository: 'focus-identity', operation: operationName },
           extra: { attempt, maxRetries },
         });
         throw new RepositoryError(operationName, error);

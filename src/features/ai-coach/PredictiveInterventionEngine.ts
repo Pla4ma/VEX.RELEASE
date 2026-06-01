@@ -1,12 +1,12 @@
-import { featureFlags } from "../../feature-flags/FeatureFlagEngine";
-import { eventBus } from "../../events";
-import { createDebugger } from "../../utils/debug";
+import { featureFlags } from '../../feature-flags/FeatureFlagEngine';
+import { eventBus } from '../../events';
+import { createDebugger } from '../../utils/debug';
 import type {
   BehavioralPattern,
   RiskPrediction,
   InterventionResult,
   SessionRecord,
-} from "./PredictiveInterventionEngine-types";
+} from './PredictiveInterventionEngine-types';
 import {
   getDefaultPattern,
   createRiskPrediction,
@@ -16,9 +16,9 @@ import {
   calculateOptimalTime,
   generateStreakInterventionMessage,
   generateBurnoutMessage,
-} from "./PredictiveInterventionEngine-helpers";
+} from './PredictiveInterventionEngine-helpers';
 
-const debug = createDebugger("predictive-intervention");
+const debug = createDebugger('predictive-intervention');
 
 export class PredictiveInterventionEngine {
   private predictions: Map<string, RiskPrediction[]> = new Map();
@@ -27,17 +27,17 @@ export class PredictiveInterventionEngine {
   private checkInterval: ReturnType<typeof setInterval> | null = null;
 
   static isEnabled(): boolean {
-    return featureFlags.isEnabled("predictive_interventions");
+    return featureFlags.isEnabled('predictive_interventions');
   }
 
   start(): void {
     if (!PredictiveInterventionEngine.isEnabled()) {
-      debug.info("Disabled via feature flag");
+      debug.info('Disabled via feature flag');
       return;
     }
     this.checkInterval = setInterval(() => this.analyzeAllUsers(), 3600000);
     this.analyzeAllUsers();
-    debug.info("Started");
+    debug.info('Started');
   }
 
   stop(): void {
@@ -67,27 +67,27 @@ export class PredictiveInterventionEngine {
     _lastSessionDate: string | null,
     hoursSinceLastSession: number,
   ): RiskPrediction[] {
-    if (!PredictiveInterventionEngine.isEnabled()) return [];
+    if (!PredictiveInterventionEngine.isEnabled()) {return [];}
     const predictions: RiskPrediction[] = [];
     const now = Date.now();
     const streakRisk = assessStreakBreakRisk(pattern, hoursSinceLastSession);
     if (streakRisk.confidence > 0.3) {
       predictions.push(
-        createRiskPrediction(userId, "STREAK_AT_RISK", now, streakRisk, now + 86400000),
+        createRiskPrediction(userId, 'STREAK_AT_RISK', now, streakRisk, now + 86400000),
       );
     }
     const burnoutRisk = assessBurnoutRisk(pattern);
     if (burnoutRisk.confidence > 0.4) {
       predictions.push(
-        createRiskPrediction(userId, "BURNOUT_DETECTED", now, burnoutRisk, now + 604800000),
+        createRiskPrediction(userId, 'BURNOUT_DETECTED', now, burnoutRisk, now + 604800000),
       );
     }
     const optimalTime = calculateOptimalTime(pattern);
     if (optimalTime.confidence > 0.6) {
       predictions.push(
-        createRiskPrediction(userId, "OPTIMAL_TIME_WINDOW", now, {
+        createRiskPrediction(userId, 'OPTIMAL_TIME_WINDOW', now, {
           confidence: optimalTime.confidence,
-          severity: "low",
+          severity: 'low',
           evidence: optimalTime.evidence,
           action: optimalTime.action,
         }, optimalTime.nextWindow),
@@ -98,12 +98,12 @@ export class PredictiveInterventionEngine {
   }
   async sendIntervention(
     prediction: RiskPrediction,
-    channel: "push" | "in_app" | "coach_message",
+    channel: 'push' | 'in_app' | 'coach_message',
   ): Promise<boolean> {
-    if (!PredictiveInterventionEngine.isEnabled()) return false;
+    if (!PredictiveInterventionEngine.isEnabled()) {return false;}
     const content = this.getInterventionContent(prediction);
-    if (!content) return false;
-    eventBus.publish("coach:intervention_triggered", {
+    if (!content) {return false;}
+    eventBus.publish('coach:intervention_triggered', {
       userId: prediction.userId,
       interventionId: prediction.id,
       type: prediction.type,
@@ -114,7 +114,7 @@ export class PredictiveInterventionEngine {
       channel,
       message: content.message,
       userResponded: false,
-      outcome: "unknown",
+      outcome: 'unknown',
     };
     const userInterventions = this.interventions.get(prediction.userId) || [];
     userInterventions.push(result);
@@ -130,18 +130,18 @@ export class PredictiveInterventionEngine {
     const predictions = this.predictions.get(userId) || [];
     for (const prediction of predictions) {
       const match = actualEvents.find((e) =>
-        prediction.type === "STREAK_AT_RISK" && e.type === "streak_broken"
+        prediction.type === 'STREAK_AT_RISK' && e.type === 'streak_broken'
           ? Math.abs(e.timestamp - prediction.predictedToOccurAt) < 86400000
           : false,
       );
       if (match) {
-        prediction.actualOutcome = match.prevented ? "prevented" : "occurred";
+        prediction.actualOutcome = match.prevented ? 'prevented' : 'occurred';
         prediction.outcomeVerifiedAt = Date.now();
         const intervention = this.interventions
           .get(userId)
           ?.find((i) => i.predictionId === prediction.id);
         if (intervention) {
-          intervention.outcome = match.prevented ? "prevented" : "ignored";
+          intervention.outcome = match.prevented ? 'prevented' : 'ignored';
         }
       }
     }
@@ -149,7 +149,7 @@ export class PredictiveInterventionEngine {
 
   getCurrentRiskLevel(userId: string): {
     hasActivePredictions: boolean;
-    highestSeverity: RiskPrediction["severity"] | null;
+    highestSeverity: RiskPrediction['severity'] | null;
     activePredictions: RiskPrediction[];
     recommendedAction: string;
   } {
@@ -160,10 +160,10 @@ export class PredictiveInterventionEngine {
         hasActivePredictions: false,
         highestSeverity: null,
         activePredictions: [],
-        recommendedAction: "Continue your current routine",
+        recommendedAction: 'Continue your current routine',
       };
     }
-    const severities: RiskPrediction["severity"][] = ["low", "medium", "high", "critical"];
+    const severities: RiskPrediction['severity'][] = ['low', 'medium', 'high', 'critical'];
     const highestSeverity = active.reduce(
       (max, p) => (severities.indexOf(p.severity) > severities.indexOf(max) ? p.severity : max),
       active[0]!.severity,
@@ -173,28 +173,28 @@ export class PredictiveInterventionEngine {
       highestSeverity,
       activePredictions: active,
       recommendedAction:
-        active.find((p) => p.type === "STREAK_AT_RISK")?.recommendedAction ||
-        "Complete a session soon",
+        active.find((p) => p.type === 'STREAK_AT_RISK')?.recommendedAction ||
+        'Complete a session soon',
     };
   }
   private getInterventionContent(prediction: RiskPrediction): { title: string; message: string } | null {
     switch (prediction.type) {
-      case "STREAK_AT_RISK":
-        return { title: "Streak at Risk! ⚠️", message: generateStreakInterventionMessage(prediction) };
-      case "BURNOUT_DETECTED":
-        return { title: "Taking a Break?", message: generateBurnoutMessage() };
-      case "OPTIMAL_TIME_WINDOW":
-        return { title: "Perfect Time to Focus", message: prediction.recommendedAction };
+      case 'STREAK_AT_RISK':
+        return { title: 'Streak at Risk! ⚠️', message: generateStreakInterventionMessage(prediction) };
+      case 'BURNOUT_DETECTED':
+        return { title: 'Taking a Break?', message: generateBurnoutMessage() };
+      case 'OPTIMAL_TIME_WINDOW':
+        return { title: 'Perfect Time to Focus', message: prediction.recommendedAction };
       default:
         return null;
     }
   }
   private analyzeAllUsers(): void {
-    debug.info("Would analyze all users");
+    debug.info('Would analyze all users');
   }
 }
 let engine: PredictiveInterventionEngine | null = null;
 export function getPredictiveInterventionEngine(): PredictiveInterventionEngine {
-  if (!engine) engine = new PredictiveInterventionEngine();
+  if (!engine) {engine = new PredictiveInterventionEngine();}
   return engine;
 }

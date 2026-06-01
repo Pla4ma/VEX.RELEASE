@@ -1,14 +1,16 @@
-import React from "react";
-import { TextInput } from "react-native";
-import Animated, { FadeInDown } from "react-native-reanimated";
+import React from 'react';
+import { TextInput, View } from 'react-native';
+import Animated, { FadeInDown } from 'react-native-reanimated';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { ELEMENT_THEMES } from '../../../features/companion/types';
+import type { CompanionElement } from '../../../features/companion/types';
+import { glow } from '../../../theme/tokens/elevation';
+import { useTheme } from '../../../theme';
 
 export function CoachLine({ text }: { text: string }): JSX.Element | null {
-  const { theme } = useTheme();
-  if (!text) return null;
+  if (!text) {return null;}
 
   return (
     <Box
@@ -31,20 +33,22 @@ export function CompanionVisual({
 }: {
   element: string | null;
 }): JSX.Element | null {
-  if (!element) return null;
+  if (!element) {return null;}
 
-  const elementEmoji: Record<string, string> = {
-    FLAME: "🔥",
-    WAVE: "🌊",
-    TERRA: "🌍",
-    ZEPHYR: "💨",
-    VOID: "🌑",
-    LUMINA: "✨",
-  };
+  const elementTheme =
+    ELEMENT_THEMES[element as CompanionElement] ?? ELEMENT_THEMES.LUMINA;
 
   return (
     <Box alignItems="center" py="md">
-      <Text fontSize={40}>{elementEmoji[element] ?? "💎"}</Text>
+      <View
+        style={{
+          width: 56,
+          height: 56,
+          borderRadius: 28,
+          backgroundColor: elementTheme.primary,
+          ...glow(elementTheme.glow, 'soft'),
+        }}
+      />
       <Text variant="caption" color="text.tertiary" mt="xs">
         Your companion is ready
       </Text>
@@ -62,7 +66,7 @@ export function StudyTarget({
   target: string;
 }): JSX.Element | null {
   const { theme } = useTheme();
-  if (!visible) return null;
+  if (!visible) {return null;}
 
   return (
     <Animated.View entering={FadeInDown.duration(250)}>

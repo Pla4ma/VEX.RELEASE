@@ -4,8 +4,8 @@
  * Accessibility helpers for screen readers and focus management.
  */
 
-import { useCallback } from "react";
-import { AccessibilityInfo } from "react-native";
+import { useCallback } from 'react';
+import { AccessibilityInfo } from 'react-native';
 
 /**
  * Accessibility hook return type
@@ -62,14 +62,14 @@ export function getButtonAccessibilityProps(
   disabled?: boolean,
 ): {
   accessible: boolean;
-  accessibilityRole: "button";
+  accessibilityRole: 'button';
   accessibilityLabel: string;
   accessibilityHint?: string;
   accessibilityState: { disabled: boolean };
 } {
   return {
     accessible: true,
-    accessibilityRole: "button",
+    accessibilityRole: 'button',
     accessibilityLabel: label,
     ...(hint && { accessibilityHint: hint }),
     accessibilityState: { disabled: disabled ?? false },
@@ -84,13 +84,13 @@ export function getLinkAccessibilityProps(
   hint?: string,
 ): {
   accessible: boolean;
-  accessibilityRole: "link";
+  accessibilityRole: 'link';
   accessibilityLabel: string;
   accessibilityHint?: string;
 } {
   return {
     accessible: true,
-    accessibilityRole: "link",
+    accessibilityRole: 'link',
     accessibilityLabel: label,
     ...(hint && { accessibilityHint: hint }),
   };
@@ -101,12 +101,12 @@ export function getLinkAccessibilityProps(
  */
 export function getHeaderAccessibilityProps(level: 1 | 2 | 3 | 4): {
   accessible: boolean;
-  accessibilityRole: "header";
+  accessibilityRole: 'header';
   accessibilityLevel: number;
 } {
   return {
     accessible: true,
-    accessibilityRole: "header",
+    accessibilityRole: 'header',
     accessibilityLevel: level,
   };
 }

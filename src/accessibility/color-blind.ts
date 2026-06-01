@@ -4,35 +4,35 @@
  * Color-blind friendly palettes and utilities
  */
 
-import { ColorBlindType, ColorBlindPalette } from "./types";
-import { COLOR_BLIND_PALETTES } from "./constants";
-import { checkContrast } from "./contrast";
-const FALLBACK_COLOR = "#000000";
+import { ColorBlindType, ColorBlindPalette } from './types';
+import { COLOR_BLIND_PALETTES } from './constants';
+import { checkContrast } from './contrast';
+const FALLBACK_COLOR = '#000000';
 
 const STATUS_PATTERNS: Record<
   ColorBlindType,
-  Record<"success" | "warning" | "error", string>
+  Record<'success' | 'warning' | 'error', string>
 > = {
-  none: { success: "solid", warning: "solid", error: "solid" },
+  none: { success: 'solid', warning: 'solid', error: 'solid' },
   protanopia: {
-    success: "diagonal-stripes",
-    warning: "dots",
-    error: "cross-hatch",
+    success: 'diagonal-stripes',
+    warning: 'dots',
+    error: 'cross-hatch',
   },
   deuteranopia: {
-    success: "diagonal-stripes",
-    warning: "dots",
-    error: "cross-hatch",
+    success: 'diagonal-stripes',
+    warning: 'dots',
+    error: 'cross-hatch',
   },
   tritanopia: {
-    success: "horizontal-stripes",
-    warning: "dots",
-    error: "vertical-stripes",
+    success: 'horizontal-stripes',
+    warning: 'dots',
+    error: 'vertical-stripes',
   },
   achromatopsia: {
-    success: "diagonal-stripes",
-    warning: "dots",
-    error: "cross-hatch",
+    success: 'diagonal-stripes',
+    warning: 'dots',
+    error: 'cross-hatch',
   },
 };
 
@@ -40,7 +40,7 @@ const STATUS_PATTERNS: Record<
  * Get accessible color for current color blind mode
  */
 export function getAccessibleColor(
-  colorType: "primary" | "secondary" | "success" | "warning" | "error" | "info",
+  colorType: 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'info',
   colorBlindMode: ColorBlindType,
 ): string {
   const palette = COLOR_BLIND_PALETTES[colorBlindMode];
@@ -55,7 +55,7 @@ export function getAccessibleColor(
  * encoding so users with color blindness can still distinguish state.
  */
 export function getStatusPattern(
-  status: "success" | "warning" | "error",
+  status: 'success' | 'warning' | 'error',
   colorBlindMode: ColorBlindType,
 ): string {
   return STATUS_PATTERNS[colorBlindMode][status];
@@ -74,7 +74,7 @@ export function getColorBlindPalettes(): Record<string, ColorBlindPalette> {
 export function isColorAccessibleForColorBlind(
   color: string,
   colorBlindMode: ColorBlindType,
-  backgroundColor: string = "#FFFFFF",
+  backgroundColor: string = '#FFFFFF',
 ): boolean {
   const palette = COLOR_BLIND_PALETTES[colorBlindMode];
 
@@ -90,4 +90,4 @@ export function isColorAccessibleForColorBlind(
 }
 
 // Re-export checkContrast for convenience
-export { checkContrast } from "./contrast";
+export { checkContrast } from './contrast';

@@ -1,31 +1,31 @@
-import React from "react";
-import { View, ViewStyle, DimensionValue } from "react-native";
+import React from 'react';
+import { View, ViewStyle, DimensionValue } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withRepeat,
   withTiming,
   interpolate,
-} from "react-native-reanimated";
-import { useTheme } from "../../../theme";
-import { createSheet } from "@/shared/ui/create-sheet";
+} from 'react-native-reanimated';
+import { useTheme } from '../../../theme';
+import { createSheet } from '@/shared/ui/create-sheet';
 interface SkeletonProps {
   width?: number | string;
   height?: number;
   borderRadius?: number;
   mt?: number;
-  variant?: "text" | "circular" | "rectangular" | "rounded";
+  variant?: 'text' | 'circular' | 'rectangular' | 'rounded';
   lines?: number;
   spacing?: number;
   style?: ViewStyle;
   animated?: boolean;
 }
 export function Skeleton({
-  width = "100%",
+  width = '100%',
   height = 16,
   borderRadius,
   mt,
-  variant = "text",
+  variant = 'text',
   lines = 1,
   spacing = 8,
   style,
@@ -49,23 +49,23 @@ export function Skeleton({
   }));
   const getBorderRadius = () => {
     switch (variant) {
-      case "circular":
-        return typeof height === "number" ? height / 2 : 50;
-      case "rounded":
+      case 'circular':
+        return typeof height === 'number' ? height / 2 : 50;
+      case 'rounded':
         return 8;
-      case "rectangular":
+      case 'rectangular':
         return 0;
-      case "text":
+      case 'text':
       default:
         return 4;
     }
   };
   const renderLine = (index: number) => {
     const lineWidth =
-      variant === "text" && lines > 1 && index === lines - 1
-        ? typeof width === "number"
+      variant === 'text' && lines > 1 && index === lines - 1
+        ? typeof width === 'number'
           ? width * 0.6
-          : "60%"
+          : '60%'
         : width;
     return (
       <View
@@ -157,10 +157,10 @@ export function SkeletonChart({ height = 200 }: { height?: number }) {
   );
 }
 const styles = createSheet({
-  container: { overflow: "hidden" },
-  skeleton: { overflow: "hidden", position: "relative" },
+  container: { overflow: 'hidden' },
+  skeleton: { overflow: 'hidden', position: 'relative' },
   shimmer: {
-    position: "absolute",
+    position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
@@ -169,10 +169,10 @@ const styles = createSheet({
     width: 100,
   },
   card: {
-    flexDirection: "row",
+    flexDirection: 'row',
     padding: 16,
     borderRadius: 12,
-    alignItems: "center",
+    alignItems: 'center',
   },
   cardContent: { flex: 1, marginLeft: 16, gap: 8 },
   cardTitle: { marginBottom: 8 },
@@ -180,9 +180,9 @@ const styles = createSheet({
   listItem: { marginBottom: 8 },
   chart: { borderRadius: 12, padding: 16 },
   chartBars: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "flex-end",
-    height: "100%",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
+    height: '100%',
   },
 });

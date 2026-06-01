@@ -4,44 +4,44 @@
  * Zod schemas own all types — types are inferred, never hand-written.
  */
 
-import { z } from "zod";
+import { z } from 'zod';
 
 // ── Enums ────────────────────────────────────────────────────────────
 
 export const EventTypeSchema = z.enum([
-  "DAILY",
-  "WEEKLY",
-  "WEEKEND",
-  "SEASONAL",
-  "SPECIAL",
-  "COMPETITION",
-  "COMMUNITY",
+  'DAILY',
+  'WEEKLY',
+  'WEEKEND',
+  'SEASONAL',
+  'SPECIAL',
+  'COMPETITION',
+  'COMMUNITY',
 ]);
 
 export const EventStatusSchema = z.enum([
-  "UPCOMING",
-  "ACTIVE",
-  "ENDING_SOON",
-  "ENDED",
+  'UPCOMING',
+  'ACTIVE',
+  'ENDING_SOON',
+  'ENDED',
 ]);
 
 export const ChallengeTypeSchema = z.enum([
-  "SESSION_COUNT",
-  "SESSION_DURATION",
-  "STREAK_DAYS",
-  "XP_EARNED",
-  "CURRENCY_EARNED",
-  "SOCIAL_SHARES",
-  "LEVEL_REACHED",
-  "ACHIEVEMENT_UNLOCKED",
+  'SESSION_COUNT',
+  'SESSION_DURATION',
+  'STREAK_DAYS',
+  'XP_EARNED',
+  'CURRENCY_EARNED',
+  'SOCIAL_SHARES',
+  'LEVEL_REACHED',
+  'ACHIEVEMENT_UNLOCKED',
 ]);
 
 export const ChallengeStatusSchema = z.enum([
-  "LOCKED",
-  "ACTIVE",
-  "COMPLETED",
-  "CLAIMED",
-  "EXPIRED",
+  'LOCKED',
+  'ACTIVE',
+  'COMPLETED',
+  'CLAIMED',
+  'EXPIRED',
 ]);
 
 // ── Inferred Types ───────────────────────────────────────────────────
@@ -98,7 +98,7 @@ export const ChallengeSchema = z.object({
   rewards: z.array(z.object({ type: z.string(), amount: z.number() })),
   startAt: z.number(),
   endAt: z.number(),
-  difficulty: z.enum(["EASY", "MEDIUM", "HARD", "EXPERT"]),
+  difficulty: z.enum(['EASY', 'MEDIUM', 'HARD', 'EXPERT']),
   prerequisites: z.array(z.string()).optional(),
   participants: z.array(z.string()).default([]),
   completedBy: z.array(z.string()).default([]),
@@ -120,13 +120,13 @@ export function calculateEventStatus(
 ): EventStatus {
   const now = Date.now();
   if (now < startAt) {
-    return "UPCOMING";
+    return 'UPCOMING';
   }
   if (now > endAt) {
-    return "ENDED";
+    return 'ENDED';
   }
   if (endAt - now < ONE_DAY_MS) {
-    return "ENDING_SOON";
+    return 'ENDING_SOON';
   }
-  return "ACTIVE";
+  return 'ACTIVE';
 }

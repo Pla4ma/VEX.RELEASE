@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from '@tanstack/react-query';
 
 export interface BossEngagementSummaryData {
   bossRouteOpenedCount: number;
@@ -19,7 +19,7 @@ export function useBossEngagementSummaryForCoach(userId: string | null) {
     enabled: Boolean(userId),
     placeholderData: empty,
     queryFn: () => Promise.resolve(empty),
-    queryKey: ["boss", "coach", userId],
+    queryKey: ['boss', 'coach', userId],
   });
 }
 

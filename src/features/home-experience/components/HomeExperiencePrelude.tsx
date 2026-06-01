@@ -1,19 +1,19 @@
-import React from "react";
-import { Pressable, View } from "react-native";
+import React from 'react';
+import { Pressable, View } from 'react-native';
 
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import { useOnboardingStore } from "../../onboarding/store";
-import type { ExplicitMotivationStyle, HomeExperienceModel } from "../schemas";
-import type { FirstWeekExperience } from "../../personalization/first-week-schemas";
-import type { HomeSurfaceMap } from "../surface-decision-schemas";
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import { useOnboardingStore } from '../../onboarding/store';
+import type { ExplicitMotivationStyle, HomeExperienceModel } from '../schemas';
+import type { FirstWeekExperience } from '../../personalization/first-week-schemas';
+import type { HomeSurfaceMap } from '../surface-decision-schemas';
 
 const OPTIONS: Array<{ label: string; value: ExplicitMotivationStyle }> = [
-  { label: "Calm", value: "calm" },
-  { label: "Study-focused", value: "study_focused" },
-  { label: "Game-like", value: "game_like" },
-  { label: "Coach-led", value: "coach_led" },
-  { label: "Intense", value: "intense" },
+  { label: 'Calm', value: 'calm' },
+  { label: 'Study-focused', value: 'study_focused' },
+  { label: 'Game-like', value: 'game_like' },
+  { label: 'Coach-led', value: 'coach_led' },
+  { label: 'Intense', value: 'intense' },
 ];
 
 interface HomeExperiencePreludeProps {
@@ -35,22 +35,22 @@ export function HomeExperiencePrelude({
 
   const showMotivationPicker = firstWeekExperience
     ? firstWeekExperience.allowedHomeSurfaces.includes(
-        "motivation_confirmation",
+        'motivation_confirmation',
       )
-    : model.visibleSections.includes("motivation_style");
+    : model.visibleSections.includes('motivation_style');
   const showEvolutionTeaser = firstWeekExperience
     ? firstWeekExperience.unlockTease !== null &&
-      firstWeekExperience.currentDayStage !== "POST_DAY_7"
+      firstWeekExperience.currentDayStage !== 'POST_DAY_7'
     : model.teasedElements.length > 0;
   const showCoachLine = firstWeekExperience
     ? firstWeekExperience.allowedHomeSurfaces.includes(
-        "coach_presence_line",
+        'coach_presence_line',
       )
     : true;
   const isBossVisible = firstWeekExperience
-    ? firstWeekExperience.bossIntensity !== "hidden" && surfaceMap
-      ? surfaceMap.boss_teaser !== "hidden" &&
-        surfaceMap.boss_teaser !== "blocked"
+    ? firstWeekExperience.bossIntensity !== 'hidden' && surfaceMap
+      ? surfaceMap.boss_teaser !== 'hidden' &&
+        surfaceMap.boss_teaser !== 'blocked'
       : false
     : false;
 
@@ -72,8 +72,8 @@ export function HomeExperiencePrelude({
       {showMotivationPicker ? (
         <View
           style={{
-            flexDirection: "row",
-            flexWrap: "wrap",
+            flexDirection: 'row',
+            flexWrap: 'wrap',
             gap: theme.spacing[2],
           }}
         >
@@ -100,7 +100,7 @@ export function HomeExperiencePrelude({
               <Text
                 variant="bodySmall"
                 color={
-                  selected === option.value ? "text.inverse" : "text.primary"
+                  selected === option.value ? 'text.inverse' : 'text.primary'
                 }
               >
                 {option.label}

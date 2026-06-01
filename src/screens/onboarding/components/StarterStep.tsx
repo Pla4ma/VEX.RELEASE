@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import { Pressable, View } from "react-native";
+import React, { useState } from 'react';
+import { Pressable, View } from 'react-native';
 
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import { styles } from "../styles";
-import { getStarterPresetsForDisplay } from "./starter-presets";
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import { styles } from '../styles';
+import { getStarterPresetsForDisplay } from './starter-presets';
 
 type StarterStepProps = {
   starterPresetId: string | undefined;
@@ -17,7 +17,7 @@ export function StarterStep({
 }: StarterStepProps): JSX.Element {
   const { theme } = useTheme();
   const [showMoreOptions, setShowMoreOptions] = useState(
-    starterPresetId === "deep",
+    starterPresetId === 'deep',
   );
   const presets = getStarterPresetsForDisplay(showMoreOptions);
 

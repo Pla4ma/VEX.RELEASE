@@ -1,16 +1,16 @@
-import React from "react";
-import { Pressable } from "react-native";
+import React from 'react';
+import { Pressable } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   withSpring,
   useSharedValue,
   withTiming,
   withSequence,
-} from "react-native-reanimated";
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import { cardSelection } from "../../../utils/haptics";
+} from 'react-native-reanimated';
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import { cardSelection } from '../../../utils/haptics';
 
 export function DurationChip({
   minutes,
@@ -61,8 +61,8 @@ export function DurationChip({
       >
         <Text
           variant="body"
-          color={isSelected ? "text.inverse" : "text.primary"}
-          fontWeight={isSelected ? "700" : "500"}
+          color={isSelected ? 'text.inverse' : 'text.primary'}
+          fontWeight={isSelected ? '700' : '500'}
         >
           {minutes} min
         </Text>

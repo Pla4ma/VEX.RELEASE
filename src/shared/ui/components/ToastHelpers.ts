@@ -1,13 +1,13 @@
-import { useCallback } from "react";
-import { useToast } from "./ToastProvider";
-import type { ToastOptions } from "./Toast.types";
+import { useCallback } from 'react';
+import { useToast } from './ToastProvider';
+import type { ToastOptions } from './Toast.types';
 
 export function useToastHelpers() {
   const { show, dismiss } = useToast();
 
   const success = useCallback(
     (title: string, message?: string, options?: Partial<ToastOptions>) => {
-      return show({ type: "success", title, message, ...options });
+      return show({ type: 'success', title, message, ...options });
     },
     [show],
   );
@@ -15,7 +15,7 @@ export function useToastHelpers() {
   const error = useCallback(
     (title: string, message?: string, options?: Partial<ToastOptions>) => {
       return show({
-        type: "error",
+        type: 'error',
         title,
         message,
         duration: 8000,
@@ -27,14 +27,14 @@ export function useToastHelpers() {
 
   const warning = useCallback(
     (title: string, message?: string, options?: Partial<ToastOptions>) => {
-      return show({ type: "warning", title, message, ...options });
+      return show({ type: 'warning', title, message, ...options });
     },
     [show],
   );
 
   const info = useCallback(
     (title: string, message?: string, options?: Partial<ToastOptions>) => {
-      return show({ type: "info", title, message, ...options });
+      return show({ type: 'info', title, message, ...options });
     },
     [show],
   );
@@ -50,7 +50,7 @@ export function useToastHelpers() {
       options?: Partial<ToastOptions>,
     ): Promise<T> => {
       const id = show({
-        type: "info",
+        type: 'info',
         title: messages.loading,
         persistent: true,
         ...options,
@@ -59,9 +59,9 @@ export function useToastHelpers() {
         const data = await promise;
         dismiss(id);
         show({
-          type: "success",
+          type: 'success',
           title:
-            typeof messages.success === "function"
+            typeof messages.success === 'function'
               ? messages.success(data)
               : messages.success,
           ...options,
@@ -70,9 +70,9 @@ export function useToastHelpers() {
       } catch (err) {
         dismiss(id);
         show({
-          type: "error",
+          type: 'error',
           title:
-            typeof messages.error === "function"
+            typeof messages.error === 'function'
               ? messages.error(err as Error)
               : messages.error,
           ...options,

@@ -1,22 +1,22 @@
-import { createDebugger } from "../utils/debug";
+import { createDebugger } from '../utils/debug';
 import type {
   AccessibilityIssue,
   AccessibilityAuditResult,
   ComponentAccessibilityConfig,
   AuditElement,
-} from "./AccessibilityAuditor-types";
+} from './AccessibilityAuditor-types';
 import {
   createAuditResult,
   createPassingResult,
   getComponentDisplayName,
-} from "./AccessibilityAuditor-helpers";
+} from './AccessibilityAuditor-helpers';
 import {
   checkScreenStructure,
   checkNavigationOrder,
   checkScreenReaderAnnouncements,
   checkMotionPreferences,
   checkColorBlindSupport,
-} from "./AccessibilityAuditor-utils";
+} from './AccessibilityAuditor-utils';
 import {
   checkAccessibilityLabels,
   checkFocusManagement,
@@ -25,9 +25,9 @@ import {
   checkMotionAccessibility,
   checkSemanticHTML,
   checkTouchTargets,
-} from "./AccessibilityAuditor-checks";
+} from './AccessibilityAuditor-checks';
 
-const debug = createDebugger("accessibility-auditor");
+const debug = createDebugger('accessibility-auditor');
 
 export class AccessibilityAuditor {
   private auditHistory: AccessibilityAuditResult[] = [];
@@ -41,40 +41,40 @@ export class AccessibilityAuditor {
   private initializeDefaultConfigs(): void {
     const defaultConfigs: ComponentAccessibilityConfig[] = [
       {
-        componentName: "Button",
+        componentName: 'Button',
         requiresTesting: true,
-        interactiveElements: ["button"],
-        requiredLabels: ["accessibilityLabel"],
+        interactiveElements: ['button'],
+        requiredLabels: ['accessibilityLabel'],
       },
       {
-        componentName: "TextInput",
+        componentName: 'TextInput',
         requiresTesting: true,
-        interactiveElements: ["input", "textarea"],
-        requiredLabels: ["accessibilityLabel", "accessibilityPlaceholder"],
+        interactiveElements: ['input', 'textarea'],
+        requiredLabels: ['accessibilityLabel', 'accessibilityPlaceholder'],
       },
       {
-        componentName: "TouchableOpacity",
+        componentName: 'TouchableOpacity',
         requiresTesting: true,
-        interactiveElements: ["button", "link"],
-        requiredLabels: ["accessibilityLabel"],
+        interactiveElements: ['button', 'link'],
+        requiredLabels: ['accessibilityLabel'],
       },
       {
-        componentName: "Modal",
+        componentName: 'Modal',
         requiresTesting: true,
-        interactiveElements: ["dialog"],
-        requiredLabels: ["accessibilityLabel", "accessibilityRole"],
+        interactiveElements: ['dialog'],
+        requiredLabels: ['accessibilityLabel', 'accessibilityRole'],
       },
       {
-        componentName: "VirtualizedList",
+        componentName: 'VirtualizedList',
         requiresTesting: true,
-        interactiveElements: ["list", "listitem"],
-        requiredLabels: ["accessibilityLabel"],
+        interactiveElements: ['list', 'listitem'],
+        requiredLabels: ['accessibilityLabel'],
       },
       {
-        componentName: "TabBar",
+        componentName: 'TabBar',
         requiresTesting: true,
-        interactiveElements: ["tab"],
-        requiredLabels: ["accessibilityLabel"],
+        interactiveElements: ['tab'],
+        requiredLabels: ['accessibilityLabel'],
       },
     ];
     defaultConfigs.forEach((config) => {
@@ -98,12 +98,12 @@ export class AccessibilityAuditor {
       (componentDisplayName
         ? this.componentConfigs.get(componentDisplayName)
         : undefined) || {
-        componentName: componentDisplayName || "Unknown",
+        componentName: componentDisplayName || 'Unknown',
         requiresTesting: false,
       };
     if (!componentConfig.requiresTesting) {
       return createPassingResult(
-        "Component does not require accessibility testing",
+        'Component does not require accessibility testing',
       );
     }
     debug.info(`Auditing component: ${componentConfig.componentName}`);
@@ -118,7 +118,7 @@ export class AccessibilityAuditor {
     issues.push(...checkSemanticHTML(component, componentConfig));
     issues.push(...checkTouchTargets(component, componentConfig));
     issues.forEach((issue) => {
-      if (issue.type === "error") {
+      if (issue.type === 'error') {
         failedChecks.push(issue.id);
       } else {
         passedChecks.push(issue.id);
@@ -141,7 +141,7 @@ export class AccessibilityAuditor {
     issues.push(...checkMotionPreferences(screenElement));
     issues.push(...checkColorBlindSupport(screenElement));
     issues.forEach((issue) => {
-      if (issue.type === "error") {
+      if (issue.type === 'error') {
         failedChecks.push(issue.id);
       } else {
         passedChecks.push(issue.id);
@@ -156,20 +156,20 @@ export class AccessibilityAuditor {
 
   clearAuditHistory(): void {
     this.auditHistory = [];
-    debug.info("Accessibility audit history cleared");
+    debug.info('Accessibility audit history cleared');
   }
 
   generateReport(auditResult: AccessibilityAuditResult): string {
     const { score, issues, summary } = auditResult;
-    let report = "# Accessibility Audit Report\n\n";
+    let report = '# Accessibility Audit Report\n\n';
     report += `**Overall Score: ${score}/100**\n\n`;
-    report += "## Issue Summary\n";
+    report += '## Issue Summary\n';
     report += `- Critical: ${summary.critical}\n`;
     report += `- Major: ${summary.major}\n`;
     report += `- Moderate: ${summary.moderate}\n`;
     report += `- Minor: ${summary.minor}\n\n`;
     if (issues.length > 0) {
-      report += "## Issues Found\n\n";
+      report += '## Issues Found\n\n';
       issues.forEach((issue) => {
         report += `### ${issue.category.toUpperCase()}: ${issue.message}\n`;
         report += `- **Severity:** ${issue.severity}\n`;
@@ -178,10 +178,10 @@ export class AccessibilityAuditor {
         if (issue.element) {
           report += `- **Element:** ${issue.element}\n`;
         }
-        report += `- **Automated:** ${issue.automated ? "Yes" : "No"}\n\n`;
+        report += `- **Automated:** ${issue.automated ? 'Yes' : 'No'}\n\n`;
       });
     } else {
-      report += "## ✅ No accessibility issues found!\n";
+      report += '## ✅ No accessibility issues found!\n';
     }
     return report;
   }
@@ -195,4 +195,4 @@ export type {
   ComponentAccessibilityConfig,
   AccessibilityRule,
   AuditElement,
-} from "./AccessibilityAuditor-types";
+} from './AccessibilityAuditor-types';

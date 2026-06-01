@@ -1,7 +1,7 @@
-import type { UnifiedMasteryState } from "./unified-mastery";
-import type { PrestigeState, PrestigeResult, NightmareModeConfig, PrestigeBonus } from "./prestige-types";
-import { calculatePrestigeBonuses } from "./prestige-bonuses";
-import { calculateMasteryRank } from "./mastery-types";
+import type { UnifiedMasteryState } from './unified-mastery';
+import type { PrestigeState, PrestigeResult, NightmareModeConfig, PrestigeBonus } from './prestige-types';
+import { calculatePrestigeBonuses } from './prestige-bonuses';
+import { calculateMasteryRank } from './mastery-types';
 
 export function canPrestige(
   masteryState: UnifiedMasteryState,
@@ -16,7 +16,7 @@ export function canPrestige(
       .map(([name]) => name);
     return {
       canPrestige: false,
-      reason: `Max all 5 tracks first. Maxed: ${maxedTracks.join(", ") || "none"}`,
+      reason: `Max all 5 tracks first. Maxed: ${maxedTracks.join(', ') || 'none'}`,
       recommended: false,
     };
   }
@@ -46,7 +46,7 @@ export function executePrestige(
       newState: masteryState,
       prestigeState,
       bonusesGained: [],
-      message: check.reason || "Cannot prestige",
+      message: check.reason || 'Cannot prestige',
     };
   }
   const totalXp = Object.values(masteryState.tracks).reduce(
@@ -128,9 +128,9 @@ export function getNightmareConfig(
     xpMultiplier: 2 * baseMultiplier,
     dropChanceMultiplier: 1.5 * baseMultiplier,
     exclusiveRewards: [
-      "nightmare_cosmetics",
-      "prestige_titles",
-      "legendary_crafting_materials",
+      'nightmare_cosmetics',
+      'prestige_titles',
+      'legendary_crafting_materials',
     ],
   };
 }

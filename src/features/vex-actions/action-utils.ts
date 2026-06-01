@@ -5,7 +5,7 @@
  * Shared between service.ts wrappers and action tests.
  */
 
-import type { VexActionName, VexActionResult } from "./schemas";
+import type { VexActionName, VexActionResult } from './schemas';
 
 // ============================================================================
 // Feature gate
@@ -13,9 +13,9 @@ import type { VexActionName, VexActionResult } from "./schemas";
 
 /** Feature keys that gate specific actions. Matches `FeatureKey` in liveops-config. */
 export type ActionFeatureKey =
-  | "focus_session"
-  | "content_study"
-  | "focus_memory";
+  | 'focus_session'
+  | 'content_study'
+  | 'focus_memory';
 
 /** Simplified gate: caller provides `isAvailable` from FeatureAvailability.canQuery */
 export interface ActionGate {
@@ -28,15 +28,15 @@ export const ACTION_FEATURE_MAP: Record<
   VexActionName,
   { featureKey: ActionFeatureKey | null; gateMode: string }
 > = {
-  create_focus_session: { featureKey: "focus_session", gateMode: "query" },
-  start_session: { featureKey: "focus_session", gateMode: "query" },
-  complete_reflection: { featureKey: "focus_session", gateMode: "query" },
-  start_rescue: { featureKey: "focus_session", gateMode: "query" },
-  schedule_focus_window: { featureKey: "focus_session", gateMode: "query" },
-  create_study_block: { featureKey: "content_study", gateMode: "query" },
-  update_project_thread: { featureKey: "focus_session", gateMode: "query" },
-  read_memory_summary: { featureKey: "focus_memory", gateMode: "query" },
-  update_lane_override: { featureKey: null, gateMode: "none" },
+  create_focus_session: { featureKey: 'focus_session', gateMode: 'query' },
+  start_session: { featureKey: 'focus_session', gateMode: 'query' },
+  complete_reflection: { featureKey: 'focus_session', gateMode: 'query' },
+  start_rescue: { featureKey: 'focus_session', gateMode: 'query' },
+  schedule_focus_window: { featureKey: 'focus_session', gateMode: 'query' },
+  create_study_block: { featureKey: 'content_study', gateMode: 'query' },
+  update_project_thread: { featureKey: 'focus_session', gateMode: 'query' },
+  read_memory_summary: { featureKey: 'focus_memory', gateMode: 'query' },
+  update_lane_override: { featureKey: null, gateMode: 'none' },
 };
 
 // ============================================================================
@@ -44,7 +44,7 @@ export const ACTION_FEATURE_MAP: Record<
 // ============================================================================
 
 export function success<T>(data: T): VexActionResult<T> {
-  return { status: "success", errorMessage: null, data };
+  return { status: 'success', errorMessage: null, data };
 }
 
 export function blocked<T = null>(
@@ -52,7 +52,7 @@ export function blocked<T = null>(
   reason: string,
 ): VexActionResult<T> {
   return {
-    status: "feature_blocked",
+    status: 'feature_blocked',
     errorMessage: `Action "${actionName}" blocked: ${reason}`,
     data: null as T,
   };
@@ -63,7 +63,7 @@ export function validationError<T = null>(
   message: string,
 ): VexActionResult<T> {
   return {
-    status: "validation_error",
+    status: 'validation_error',
     errorMessage: `Action "${actionName}" validation failed: ${message}`,
     data: null as T,
   };
@@ -74,7 +74,7 @@ export function repoError<T = null>(
   message: string,
 ): VexActionResult<T> {
   return {
-    status: "repository_error",
+    status: 'repository_error',
     errorMessage: `Action "${actionName}" repository error: ${message}`,
     data: null as T,
   };
@@ -85,7 +85,7 @@ export function notFound<T = null>(
   message: string,
 ): VexActionResult<T> {
   return {
-    status: "not_found",
+    status: 'not_found',
     errorMessage: `Action "${actionName}" not found: ${message}`,
     data: null as T,
   };
@@ -100,7 +100,7 @@ export function checkFeatureGate<T = null>(
   gate: ActionGate | null,
 ): VexActionResult<T> | null {
   const mapping = ACTION_FEATURE_MAP[actionName];
-  if (!mapping || mapping.featureKey === null || mapping.gateMode === "none") {
+  if (!mapping || mapping.featureKey === null || mapping.gateMode === 'none') {
     return null;
   }
   if (!gate) {

@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 import {
   BossIntensitySchema,
   CompletionStepSchema,
@@ -7,14 +7,14 @@ import {
   SessionModeSchema,
   StudyLayerNameSchema,
   VexSystemToDisableSchema,
-} from "./core-schemas";
+} from './core-schemas';
 
 export const HomeLayoutVariantSchema = z.enum([
-  "compact_starter",
-  "coach_first",
-  "study_centered",
-  "game_centered",
-  "full_expanded",
+  'compact_starter',
+  'coach_first',
+  'study_centered',
+  'game_centered',
+  'full_expanded',
 ]);
 
 export const VexExperienceSchema = z
@@ -25,33 +25,33 @@ export const VexExperienceSchema = z
     behaviorAdaptations: z.array(z.string().min(1)),
     boss: z
       .object({
-        completionEffect: z.enum(["none", "smooth_pulse", "session_damage"]),
+        completionEffect: z.enum(['none', 'smooth_pulse', 'session_damage']),
         copy: z.string().min(1),
         dayZeroTeaserAllowed: z.boolean(),
         homePlacement: z.enum([
-          "hidden",
-          "top_tiny",
-          "compact_card",
-          "optional_screen",
+          'hidden',
+          'top_tiny',
+          'compact_card',
+          'optional_screen',
         ]),
         intensity: BossIntensitySchema,
         isVisible: z.boolean(),
-        progressSource: z.enum(["none", "completed_focus_sessions"]),
+        progressSource: z.enum(['none', 'completed_focus_sessions']),
         systemsDisabled: z.array(VexSystemToDisableSchema),
       })
       .strict(),
     bossCopyStyle: z.enum([
-      "subtle_momentum",
-      "boss_health",
-      "controlled_intensity",
+      'subtle_momentum',
+      'boss_health',
+      'controlled_intensity',
     ]),
     bossIntensity: BossIntensitySchema,
-    bossMode: z.enum(["hidden", "momentum", "personal_boss"]),
+    bossMode: z.enum(['hidden', 'momentum', 'personal_boss']),
     coachMessageStyle: z.string().min(1),
     coachTone: PreferredToneSchema,
-    companionIntensity: z.enum(["none", "subtle", "present", "active"]),
-    companionMode: z.enum(["visual_coach", "quiet_presence", "active_partner"]),
-    companionVisualIntensity: z.enum(["none", "subtle", "present", "active"]),
+    companionIntensity: z.enum(['none', 'subtle', 'present', 'active']),
+    companionMode: z.enum(['visual_coach', 'quiet_presence', 'active_partner']),
+    companionVisualIntensity: z.enum(['none', 'subtle', 'present', 'active']),
     completion: z
       .object({
         fallback: z.string().min(1),
@@ -70,18 +70,18 @@ export const VexExperienceSchema = z
     homeLayoutVariant: HomeLayoutVariantSchema,
     homeSections: z.array(HomeSectionSchema),
     homeSpotlight: z.enum([
-      "none",
-      "coach_presence",
-      "progress_proof",
-      "study_layer",
-      "boss_momentum",
+      'none',
+      'coach_presence',
+      'progress_proof',
+      'study_layer',
+      'boss_momentum',
     ]),
     nextBestAction: z
       .object({
         intent: z.enum([
-          "START_SESSION",
-          "CONTINUE_STUDY_PATH",
-          "OPEN_PROGRESS",
+          'START_SESSION',
+          'CONTINUE_STUDY_PATH',
+          'OPEN_PROGRESS',
         ]),
         label: z.string().min(1),
       })
@@ -92,28 +92,28 @@ export const VexExperienceSchema = z
         mustRemainFree: z.array(z.string().min(1)),
         shouldTease: z.boolean(),
         trigger: z.enum([
-          "none",
-          "session_value",
-          "advanced_study",
-          "weekly_intelligence",
-          "custom_identity",
+          'none',
+          'session_value',
+          'advanced_study',
+          'weekly_intelligence',
+          'custom_identity',
         ]),
       })
       .strict(),
     premiumMoment: z.enum([
-      "none",
-      "session_value",
-      "advanced_study",
-      "weekly_intelligence",
-      "custom_identity",
+      'none',
+      'session_value',
+      'advanced_study',
+      'weekly_intelligence',
+      'custom_identity',
     ]),
     primaryHomeCTA: z
       .object({
-        intent: z.enum(["START_SESSION", "CONTINUE_STUDY_PATH"]),
+        intent: z.enum(['START_SESSION', 'CONTINUE_STUDY_PATH']),
         label: z.string().min(1),
       })
       .strict(),
-    progressEmphasis: z.enum(["basic", "rhythm", "intelligence"]),
+    progressEmphasis: z.enum(['basic', 'rhythm', 'intelligence']),
     release: z
       .object({
         hidden: z.array(z.string().min(1)),
@@ -134,7 +134,7 @@ export const VexExperienceSchema = z
       .strict(),
     secondaryHomeCTA: z
       .object({
-        intent: z.enum(["OPEN_PROGRESS", "OPEN_COACH"]),
+        intent: z.enum(['OPEN_PROGRESS', 'OPEN_COACH']),
         label: z.string().min(1),
       })
       .nullable(),
@@ -147,9 +147,9 @@ export const VexExperienceSchema = z
       .strict(),
     sessionSuggestion: z.string().min(1),
     studyLayerLabel: StudyLayerNameSchema,
-    studyLayerProminence: z.enum(["hidden", "supporting", "spotlight"]),
+    studyLayerProminence: z.enum(['hidden', 'supporting', 'spotlight']),
     teasedSystems: z.array(z.string().min(1)),
-    userStage: z.enum(["new_user", "activating", "engaged", "power_user"]),
+    userStage: z.enum(['new_user', 'activating', 'engaged', 'power_user']),
     version: z.literal(3),
   })
   .strict();

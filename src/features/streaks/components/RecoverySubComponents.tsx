@@ -4,17 +4,17 @@
  * @phase 3C.3
  */
 
-import React from "react";
+import React from 'react';
 import Animated, {
   useAnimatedStyle,
   withSpring,
   withRepeat,
   withSequence,
-} from "react-native-reanimated";
+} from 'react-native-reanimated';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
 
 /**
  * Progress bar for recovery
@@ -44,7 +44,7 @@ export function RecoveryProgress({
         <Animated.View
           style={[
             {
-              height: "100%",
+              height: '100%',
               borderRadius: 4,
               backgroundColor: theme.colors.accent.orange,
             },

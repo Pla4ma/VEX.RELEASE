@@ -1,14 +1,14 @@
-import React from "react";
-import { View, Text, Pressable } from "react-native";
-import { InsightSchema } from "../schemas";
-import type { z } from "zod";
+import React from 'react';
+import { View, Text, Pressable } from 'react-native';
+import { InsightSchema } from '../schemas';
+import type { z } from 'zod';
 import {
   SEVERITY_CONFIG,
   formatMetricName,
   formatDate,
   formatActionLabel,
   styles,
-} from "./InsightCardStyles";
+} from './InsightCardStyles';
 
 type Insight = z.infer<typeof InsightSchema>;
 interface InsightCardProps {
@@ -60,7 +60,7 @@ export function InsightCard({
       {insight.metric && (
         <View style={styles.tagContainer}>
           <View
-            style={[styles.tag, { backgroundColor: severity.color + "30" }]}
+            style={[styles.tag, { backgroundColor: severity.color + '30' }]}
           >
             <Text style={[styles.tagText, { color: severity.color }]}>
               {formatMetricName(insight.metric)}

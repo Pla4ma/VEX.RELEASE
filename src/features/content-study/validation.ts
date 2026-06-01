@@ -1,36 +1,36 @@
-import { ContentSourceType, ContentStudyErrorCode } from "./types";
+import { ContentSourceType, ContentStudyErrorCode } from './types';
 import type {
   ValidationError,
   ContentStudyError,
   ErrorRecoveryAction,
-} from "./types";
-import { CONTENT_STUDY_CONSTANTS } from "./types";
-import type { ValidationResult } from "./validators";
+} from './types';
+import { CONTENT_STUDY_CONSTANTS } from './types';
+import type { ValidationResult } from './validators';
 import {
   validateYouTubeUrl,
   validatePastedText,
-} from "./validators";
+} from './validators';
 import {
   validateFileUpload,
   validateTitle,
-} from "./validators-file";
+} from './validators-file';
 
 export {
   YouTubeUrlSchema,
   FileUploadSchema,
   PastedTextSchema,
   TitleSchema,
-} from "./validation-schemas";
+} from './validation-schemas';
 export {
   sanitizeTextForStorage,
   truncateText,
   extractYouTubeVideoId,
   isValidFileType,
   formatValidationErrors,
-} from "./validation-utils";
-export type { ValidationResult } from "./validators";
-export { validateYouTubeUrl, validatePastedText } from "./validators";
-export { validateFileUpload, validateTitle } from "./validators-file";
+} from './validation-utils';
+export type { ValidationResult } from './validators';
+export { validateYouTubeUrl, validatePastedText } from './validators';
+export { validateFileUpload, validateTitle } from './validators-file';
 
 export function validateContentSubmission(
   type: ContentSourceType,
@@ -43,37 +43,37 @@ export function validateContentSubmission(
 ): ValidationResult {
   const errors: ValidationError[] = [];
   const warnings: ValidationError[] = [];
-  let metadata: ValidationResult["metadata"] = {};
-  if (type === "PASTE") {
-    const r = validatePastedText(data.text || "");
+  let metadata: ValidationResult['metadata'] = {};
+  if (type === 'PASTE') {
+    const r = validatePastedText(data.text || '');
     errors.push(...r.errors);
     warnings.push(...r.warnings);
     metadata = { ...metadata, ...r.metadata };
-  } else if (type === "PDF") {
+  } else if (type === 'PDF') {
     const r = validateFileUpload(data.file || null);
     errors.push(...r.errors);
     warnings.push(...r.warnings);
     metadata = { ...metadata, ...r.metadata };
-  } else if (type === "YOUTUBE") {
-    const r = validateYouTubeUrl(data.url || "");
+  } else if (type === 'YOUTUBE') {
+    const r = validateYouTubeUrl(data.url || '');
     errors.push(...r.errors);
     warnings.push(...r.warnings);
     metadata = { ...metadata, ...r.metadata };
-  } else if (type === "URL") {
+  } else if (type === 'URL') {
     if (!data.url || !data.url.trim())
-      errors.push({
-        field: "url",
-        code: "REQUIRED",
-        message: "URL is required",
-        severity: "error",
-      });
+      {errors.push({
+        field: 'url',
+        code: 'REQUIRED',
+        message: 'URL is required',
+        severity: 'error',
+      });}
     else if (!/^https?:\/\/.+/.test(data.url))
-      errors.push({
-        field: "url",
-        code: "INVALID_FORMAT",
-        message: "Please enter a valid URL starting with http:// or https://",
-        severity: "error",
-      });
+      {errors.push({
+        field: 'url',
+        code: 'INVALID_FORMAT',
+        message: 'Please enter a valid URL starting with http:// or https://',
+        severity: 'error',
+      });}
   }
   const tr = validateTitle(data.title);
   errors.push(...tr.errors);
@@ -88,25 +88,25 @@ export function buildError(
   recoverable = false,
 ): ContentStudyError {
   const actions: Record<ContentStudyErrorCode, ErrorRecoveryAction> = {
-    [ContentStudyErrorCode.RATE_LIMIT_EXCEEDED]: "try_again_later",
-    [ContentStudyErrorCode.CONTENT_NOT_FOUND]: "go_back",
-    [ContentStudyErrorCode.EXTRACTION_FAILED]: "retry",
-    [ContentStudyErrorCode.GENERATION_FAILED]: "retry",
-    [ContentStudyErrorCode.INVALID_INPUT]: "edit_content",
-    [ContentStudyErrorCode.STORAGE_ERROR]: "retry",
-    [ContentStudyErrorCode.NETWORK_ERROR]: "retry",
-    [ContentStudyErrorCode.UNKNOWN_ERROR]: "contact_support",
-    [ContentStudyErrorCode.FILE_TOO_LARGE]: "reupload",
-    [ContentStudyErrorCode.UNSUPPORTED_FILE_TYPE]: "reupload",
-    [ContentStudyErrorCode.PDF_PARSE_ERROR]: "reupload",
-    [ContentStudyErrorCode.YOUTUBE_TRANSCRIPT_ERROR]: "retry",
-    [ContentStudyErrorCode.INVALID_YOUTUBE_URL]: "edit_content",
-    [ContentStudyErrorCode.CONTENT_EXPIRED]: "go_back",
-    [ContentStudyErrorCode.SESSION_INTERRUPTED]: "retry",
-    [ContentStudyErrorCode.OFFLINE_MODE]: "try_again_later",
-    [ContentStudyErrorCode.AI_TIMEOUT]: "retry",
-    [ContentStudyErrorCode.AI_RATE_LIMIT]: "try_again_later",
-    [ContentStudyErrorCode.VALIDATION_ERROR]: "edit_content",
+    [ContentStudyErrorCode.RATE_LIMIT_EXCEEDED]: 'try_again_later',
+    [ContentStudyErrorCode.CONTENT_NOT_FOUND]: 'go_back',
+    [ContentStudyErrorCode.EXTRACTION_FAILED]: 'retry',
+    [ContentStudyErrorCode.GENERATION_FAILED]: 'retry',
+    [ContentStudyErrorCode.INVALID_INPUT]: 'edit_content',
+    [ContentStudyErrorCode.STORAGE_ERROR]: 'retry',
+    [ContentStudyErrorCode.NETWORK_ERROR]: 'retry',
+    [ContentStudyErrorCode.UNKNOWN_ERROR]: 'contact_support',
+    [ContentStudyErrorCode.FILE_TOO_LARGE]: 'reupload',
+    [ContentStudyErrorCode.UNSUPPORTED_FILE_TYPE]: 'reupload',
+    [ContentStudyErrorCode.PDF_PARSE_ERROR]: 'reupload',
+    [ContentStudyErrorCode.YOUTUBE_TRANSCRIPT_ERROR]: 'retry',
+    [ContentStudyErrorCode.INVALID_YOUTUBE_URL]: 'edit_content',
+    [ContentStudyErrorCode.CONTENT_EXPIRED]: 'go_back',
+    [ContentStudyErrorCode.SESSION_INTERRUPTED]: 'retry',
+    [ContentStudyErrorCode.OFFLINE_MODE]: 'try_again_later',
+    [ContentStudyErrorCode.AI_TIMEOUT]: 'retry',
+    [ContentStudyErrorCode.AI_RATE_LIMIT]: 'try_again_later',
+    [ContentStudyErrorCode.VALIDATION_ERROR]: 'edit_content',
   };
   return {
     code,
@@ -133,7 +133,7 @@ export function shouldRetry(
   error: ContentStudyErrorCode,
   attemptCount: number,
 ): boolean {
-  if (!isRecoverableError(error)) return false;
+  if (!isRecoverableError(error)) {return false;}
   return attemptCount < CONTENT_STUDY_CONSTANTS.MAX_RETRY_ATTEMPTS;
 }
 

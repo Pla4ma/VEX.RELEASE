@@ -7,18 +7,18 @@
  * @phase 4
  */
 
-import React from "react";
-import { Pressable } from "react-native";
+import React from 'react';
+import { Pressable } from 'react-native';
 import Animated, {
   FadeInUp,
   useAnimatedStyle,
   withSpring,
-} from "react-native-reanimated";
+} from 'react-native-reanimated';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import type { DurationOption } from "../schemas";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import type { DurationOption } from '../schemas';
 
 interface DurationCardProps {
   option: DurationOption;
@@ -63,7 +63,7 @@ export function DurationCard({
   return (
     <Animated.View
       entering={FadeInUp.duration(400).delay(200 + index * 100)}
-      style={{ flex: 1, minWidth: "45%" }}
+      style={{ flex: 1, minWidth: '45%' }}
     >
       <Pressable
         onPress={onPress}
@@ -76,11 +76,11 @@ export function DurationCard({
             {
               padding: theme.spacing[5],
               borderRadius: 16,
-              alignItems: "center",
-              justifyContent: "center",
+              alignItems: 'center',
+              justifyContent: 'center',
               gap: theme.spacing[3],
               minHeight: 100,
-              position: "relative",
+              position: 'relative',
             },
             animatedStyle,
           ]}
@@ -105,7 +105,7 @@ export function DurationCard({
           <Text fontSize={28}>{option.emoji}</Text>
           <Text
             variant="h3"
-            color={isSelected ? "text.inverse" : "text.primary"}
+            color={isSelected ? 'text.inverse' : 'text.primary'}
             fontWeight="700"
           >
             {option.label}

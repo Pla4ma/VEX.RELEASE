@@ -1,7 +1,7 @@
-import { buildSessionCompletionReturnPlan } from "../service";
+import { buildSessionCompletionReturnPlan } from '../service';
 
-describe("learning execution completion return plan", () => {
-  it("uses plan wording instead of school-only copy for tied follow-ups", () => {
+describe('learning execution completion return plan', () => {
+  it('uses plan wording instead of school-only copy for tied follow-ups', () => {
     const plan = buildSessionCompletionReturnPlan({
       completionPercentage: 100,
       hasStudyFollowUp: true,
@@ -14,9 +14,9 @@ describe("learning execution completion return plan", () => {
       plan.highlightTitle,
       plan.returnReasonBody,
       plan.returnReasonTitle,
-    ].join(" ");
+    ].join(' ');
 
-    expect(joined).toContain("plan");
+    expect(joined).toContain('plan');
     expect(joined.toLowerCase()).not.toMatch(/study|quiz|homework/);
   });
 });

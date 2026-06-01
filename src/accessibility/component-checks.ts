@@ -8,13 +8,13 @@ import type {
   AuditableComponent,
   AuditAccessibilityIssue,
   ComponentAccessibilityConfig,
-} from "./checks-types";
-import { checkContrast } from "./AccessibilitySystem";
+} from './checks-types';
+import { checkContrast } from './AccessibilitySystem';
 import {
   checkMotionAccessibility,
   checkSemanticHTML,
   checkTouchTargets,
-} from "./component-checks-extended";
+} from './component-checks-extended';
 
 function checkAccessibilityLabels(
   component: AuditableComponent,
@@ -29,13 +29,13 @@ function checkAccessibilityLabels(
     if (!component.props || component.props[requiredLabel] === undefined) {
       issues.push({
         id: `missing-${requiredLabel}`,
-        type: "error",
-        category: "screen-reader",
-        severity: "critical",
+        type: 'error',
+        category: 'screen-reader',
+        severity: 'critical',
         message: `Missing required accessibility property: ${requiredLabel}`,
         recommendation: `Add ${requiredLabel} prop to provide context for screen readers`,
         element: config.componentName,
-        wcagGuideline: "1.1.1",
+        wcagGuideline: '1.1.1',
         automated: true,
       });
     }
@@ -51,15 +51,15 @@ function checkFocusManagement(
   if (config.interactiveElements && config.interactiveElements.length > 0) {
     if (component.props?.accessible === false) {
       issues.push({
-        id: "focusable-not-accessible",
-        type: "error",
-        category: "focus",
-        severity: "major",
-        message: "Interactive component is marked as not accessible",
+        id: 'focusable-not-accessible',
+        type: 'error',
+        category: 'focus',
+        severity: 'major',
+        message: 'Interactive component is marked as not accessible',
         recommendation:
-          "Remove accessible={false} or make component non-interactive",
+          'Remove accessible={false} or make component non-interactive',
         element: config.componentName,
-        wcagGuideline: "2.1.1",
+        wcagGuideline: '2.1.1',
         automated: true,
       });
     }
@@ -73,18 +73,18 @@ function checkKeyboardNavigation(
 ): AuditAccessibilityIssue[] {
   const issues: AuditAccessibilityIssue[] = [];
   if (
-    config.interactiveElements?.includes("button") &&
+    config.interactiveElements?.includes('button') &&
     !component.props?.onPress
   ) {
     issues.push({
-      id: "no-keyboard-handler",
-      type: "warning",
-      category: "keyboard",
-      severity: "moderate",
-      message: "Button may not be keyboard accessible",
-      recommendation: "Ensure button can be activated with keyboard/Enter key",
+      id: 'no-keyboard-handler',
+      type: 'warning',
+      category: 'keyboard',
+      severity: 'moderate',
+      message: 'Button may not be keyboard accessible',
+      recommendation: 'Ensure button can be activated with keyboard/Enter key',
       element: config.componentName,
-      wcagGuideline: "2.1.1",
+      wcagGuideline: '2.1.1',
       automated: true,
     });
   }
@@ -102,14 +102,14 @@ function checkColorContrast(
     const contrast = checkContrast(String(s.color), String(s.backgroundColor));
     if (!contrast.passesAA) {
       issues.push({
-        id: "poor-contrast",
-        type: "error",
-        category: "contrast",
-        severity: "critical",
+        id: 'poor-contrast',
+        type: 'error',
+        category: 'contrast',
+        severity: 'critical',
         message: `Poor color contrast: ${contrast.ratio.toFixed(2)} (minimum 4.5 required)`,
-        recommendation: "Increase color contrast to meet WCAG AA standards",
+        recommendation: 'Increase color contrast to meet WCAG AA standards',
         element: config.componentName,
-        wcagGuideline: "1.4.3",
+        wcagGuideline: '1.4.3',
         automated: true,
       });
     }

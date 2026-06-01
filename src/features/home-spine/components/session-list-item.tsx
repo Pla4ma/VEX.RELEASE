@@ -1,17 +1,17 @@
-import React from "react";
-import { Pressable } from "react-native";
-import Animated, { FadeIn } from "react-native-reanimated";
+import React from 'react';
+import { Pressable } from 'react-native';
+import Animated, { FadeIn } from 'react-native-reanimated';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import { buttonTap } from "../../../utils/haptics";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import { buttonTap } from '../../../utils/haptics';
 import {
   type SessionListItem,
   formatDuration,
   formatTimeAgo,
   getGradeColor,
-} from "./session-list-utils";
+} from './session-list-utils';
 
 export function SessionItemSkeleton(): JSX.Element {
   const { theme } = useTheme();
@@ -113,7 +113,7 @@ export function SessionRow({
             {hasInterruptions && (
               <Text variant="caption" color="text.tertiary">
                 {session.interruptions} interruption
-                {session.interruptions > 1 ? "s" : ""}
+                {session.interruptions > 1 ? 's' : ''}
               </Text>
             )}
           </Box>

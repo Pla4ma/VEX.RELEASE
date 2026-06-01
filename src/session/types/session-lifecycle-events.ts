@@ -4,71 +4,71 @@ import type {
   InterruptionRecord,
   RecoveryRecord,
   AntiCheatFlag,
-} from "./index";
+} from './index';
 
 export interface SessionLifecycleEvents {
-  "session:created": {
+  'session:created': {
     sessionId: string;
     userId: string;
     config: unknown;
     timestamp: number;
   };
-  "session:starting": {
+  'session:starting': {
     sessionId: string;
     countdown: number;
     timestamp: number;
   };
-  "session:started": { sessionId: string; startedAt: number; phase: string };
-  "session:paused": {
+  'session:started': { sessionId: string; startedAt: number; phase: string };
+  'session:paused': {
     sessionId: string;
     pausedAt: number;
     reason?: string;
     userId: string;
   };
-  "session:resumed": {
+  'session:resumed': {
     sessionId: string;
     resumedAt: number;
     pausedDuration: number;
     userId: string;
   };
-  "session:phase:changed": {
+  'session:phase:changed': {
     sessionId: string;
     previousPhase: string;
     newPhase: string;
     timestamp: number;
   };
-  "session:interval:completed": {
+  'session:interval:completed': {
     sessionId: string;
     interval: number;
     totalIntervals: number;
     timestamp: number;
   };
-  "session:completing": {
+  'session:completing': {
     sessionId: string;
     timestamp: number;
     completionPercentage: number;
   };
-  "session:completed": {
+  'session:completed': {
     sessionId: string;
     userId: string;
     summary: SessionSummary;
     timestamp: number;
   };
-  "session:partial": {
+  'session:partial': {
     sessionId: string;
     userId: string;
     summary: SessionSummary;
     timestamp: number;
     partialReason: string;
   };
-  "session:abandoned": {
+  'session:abandoned': {
     sessionId: string;
     userId: string;
     abandonedAt: number;
     reason?: string;
     elapsedTime: number;
   };
-  "session:failed": {
+  'session:failed': {
     sessionId: string;
     userId: string;
     error: string;

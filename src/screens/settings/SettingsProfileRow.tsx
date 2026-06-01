@@ -1,9 +1,9 @@
-import React from "react";
-import type { Theme } from "../../theme";
-import { Box, Text, Card } from "../../components/primitives";
-import { Avatar } from "../../components/Avatar";
-import { Badge } from "../../components/Badge";
-import { Icon } from "../../icons";
+import React from 'react';
+import type { Theme } from '../../theme';
+import { Box, Text, Card } from '../../components/primitives';
+import { Avatar } from '../../components/Avatar';
+import { Badge } from '../../components/Badge';
+import { Icon } from '../../icons';
 
 interface SettingsProfileRowProps {
   displayName: string;

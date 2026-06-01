@@ -1,17 +1,17 @@
-import React, { useMemo } from "react";
-import { Pressable } from "react-native";
-import Animated, { FadeIn } from "react-native-reanimated";
+import React, { useMemo } from 'react';
+import { Pressable } from 'react-native';
+import Animated, { FadeIn } from 'react-native-reanimated';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
 import {
   type AtRiskBannerProps,
   getUrgencyMessage,
   usePulseAnimation,
-} from "./at-risk-banner-urgency";
+} from './at-risk-banner-urgency';
 
-export type { AtRiskBannerProps } from "./at-risk-banner-urgency";
+export type { AtRiskBannerProps } from './at-risk-banner-urgency';
 
 export function AtRiskBanner({
   hoursRemaining,
@@ -26,8 +26,8 @@ export function AtRiskBanner({
     [hoursRemaining, currentStreak],
   );
 
-  const isCritical = tone === "critical";
-  const isUrgent = tone === "urgent";
+  const isCritical = tone === 'critical';
+  const isUrgent = tone === 'urgent';
 
   const pulseStyle = usePulseAnimation(isCritical);
 
@@ -114,7 +114,7 @@ export function AtRiskBanner({
               justifyContent="center"
               alignItems="center"
             >
-              <Text fontSize={24}>{isCritical ? "🚨" : "🔥"}</Text>
+              <Text fontSize={24}>{isCritical ? '🚨' : '🔥'}</Text>
             </Box>
 
             <Box flex={1}>

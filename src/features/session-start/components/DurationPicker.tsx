@@ -1,16 +1,16 @@
-import React from "react";
-import { ScrollView } from "react-native";
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
+import React from 'react';
+import { ScrollView } from 'react-native';
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
 import {
   type DurationPickerProps,
   type DurationPreset,
   PRESETS,
-} from "./duration-picker-types";
-import { DurationChip } from "./DurationChip";
-import { CustomDurationInput } from "./CustomDurationInput";
-import { XpEstimate } from "./XpEstimate";
+} from './duration-picker-types';
+import { DurationChip } from './DurationChip';
+import { CustomDurationInput } from './CustomDurationInput';
+import { XpEstimate } from './XpEstimate';
 
 export type { DurationPickerProps, DurationPreset };
 

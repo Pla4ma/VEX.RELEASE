@@ -1,6 +1,6 @@
-import { z } from "zod";
+import { z } from 'zod';
 
-import { SessionSummarySchema, type SessionSummary } from "../types";
+import { SessionSummarySchema, type SessionSummary } from '../types';
 
 const SessionProgressAwardInputSchema = z.object({
   companionXpMultiplier: z.number().min(0).default(1),
@@ -63,13 +63,13 @@ export function buildSessionProgressAward(
     metadata: {
       bossActive: Boolean(damage.success ? damage.data.totalDamage : 0),
       comebackActive: (bonuses.success ? bonuses.data : []).some(
-        (bonus) => bonus.type === "COMEBACK_BONUS",
+        (bonus) => bonus.type === 'COMEBACK_BONUS',
       ),
       effectiveDurationMs: parsed.summary.effectiveDuration,
       focusQuality:
         parsed.summary.focusPurityScore ?? parsed.summary.focusQuality,
       perfectSession: isPerfectSession(parsed.summary),
-      sourceVersion: "session-progress-award/v1",
+      sourceVersion: 'session-progress-award/v1',
       streakDays: parsed.newStreakDays,
       tasksCompleted: parsed.summary.tasksCompleted ?? 0,
     },

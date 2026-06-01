@@ -1,27 +1,27 @@
-import { useMemo, useCallback } from "react";
-import { useNavigation } from "@react-navigation/native";
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { useSessionUIStore } from "../../../store/session-state";
-import { useHomeSpineModel } from "../../../features/home-spine/hooks";
-import { getNextBestAction } from "../../../features/progression";
-import type { FeatureAccessResult } from "../../../features/liveops-config";
-import type { HomeFeatureRuntime } from "../hooks/home-feature-runtime";
-import type { HomeViewModel } from "../hooks/home-view-model";
-import type { HomeController } from "../hooks/home-controller-types";
-import type { ExtendedRootStackParams } from "../../../navigation/types";
+import { useMemo, useCallback } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useSessionUIStore } from '../../../store/session-state';
+import { useHomeSpineModel } from '../../../features/home-spine/hooks';
+import { getNextBestAction } from '../../../features/progression';
+import type { FeatureAccessResult } from '../../../features/liveops-config';
+import type { HomeFeatureRuntime } from '../hooks/home-feature-runtime';
+import type { HomeViewModel } from '../hooks/home-view-model';
+import type { HomeController } from '../hooks/home-controller-types';
+import type { ExtendedRootStackParams } from '../../../navigation/types';
 import {
   navigateToSessionStackScreen,
   navigateToMainTab,
-} from "../../../navigation/navigation-helpers";
+} from '../../../navigation/navigation-helpers';
 import {
   getFocusedMinutesForToday,
   getNextUnlockFeature,
-} from "../hooks/home-controller-helpers";
-import type { UseQueryResult } from "@tanstack/react-query";
+} from '../hooks/home-controller-helpers';
+import type { UseQueryResult } from '@tanstack/react-query';
 import {
   stubNavigationActions,
-} from "../hooks/home-controller-stubs";
-import { buildContainerController } from "./new-user-container-controller-builder";
+} from '../hooks/home-controller-stubs';
+import { buildContainerController } from './new-user-container-controller-builder';
 
 type Nav = NativeStackNavigationProp<ExtendedRootStackParams>;
 
@@ -36,13 +36,13 @@ interface ProgressionQueryData {
 
 export interface NewUserContainerInput {
   analytics: ReturnType<
-    typeof import("../../../features/liveops-config").useDisclosureAnalytics
+    typeof import('../../../features/liveops-config').useDisclosureAnalytics
   >;
   disclosure: ReturnType<
-    typeof import("../../../features/liveops-config").useFeatureAccess
+    typeof import('../../../features/liveops-config').useFeatureAccess
   >;
   historyQuery: ReturnType<
-    typeof import("../../../session/hooks/useSession").useSessionHistory
+    typeof import('../../../session/hooks/useSession').useSessionHistory
   >;
   isOnline: boolean;
   progressionQuery: UseQueryResult;
@@ -97,15 +97,15 @@ export function useNewUserContainerModel(
   const openSetup = useCallback(
     (params: Record<string, unknown> = {}): void => {
       if (userId && disclosure.inputs.totalCompletedSessions === 0) {
-        analytics.trackFirstSessionStarted(userId, "home");
+        analytics.trackFirstSessionStarted(userId, 'home');
       }
-      navigateToSessionStackScreen(navigation, "SessionSetup", params);
+      navigateToSessionStackScreen(navigation, 'SessionSetup', params);
     },
     [analytics, disclosure.inputs.totalCompletedSessions, navigation, userId],
   );
 
   const openProgress = useCallback((): void => {
-    navigateToMainTab(navigation, "Progress");
+    navigateToMainTab(navigation, 'Progress');
   }, [navigation]);
 
   const nextUnlockFeature = useMemo(
@@ -130,11 +130,11 @@ export function useNewUserContainerModel(
     returnReason: {
       body: nextBestAction.description,
       ctaLabel: nextBestAction.ctaLabel,
-      eyebrow: "Return reason",
-      intent: "start-session" as const,
-      source: "next-best-action" as const,
+      eyebrow: 'Return reason',
+      intent: 'start-session' as const,
+      source: 'next-best-action' as const,
       title: nextBestAction.title,
-      tone: "default" as const,
+      tone: 'default' as const,
     },
     todayFocusMinutes,
   });

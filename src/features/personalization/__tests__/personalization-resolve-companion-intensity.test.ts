@@ -1,12 +1,12 @@
-import { resolveCompanionIntensity } from "../experience-resolvers";
-import * as fixtures from "./test-fixtures";
+import { resolveCompanionIntensity } from '../experience-resolvers';
+import * as fixtures from './test-fixtures';
 
-jest.mock("@sentry/react-native", () => ({
+jest.mock('@sentry/react-native', () => ({
   addBreadcrumb: jest.fn(),
   captureException: jest.fn(),
 }));
 
-jest.mock("../../../persistence/MMKVStorageAdapter", () => ({
+jest.mock('../../../persistence/MMKVStorageAdapter', () => ({
   getMMKVStorageAdapter: () => ({
     getItem: jest.fn(() => null),
     setItem: jest.fn(),
@@ -14,18 +14,18 @@ jest.mock("../../../persistence/MMKVStorageAdapter", () => ({
   }),
 }));
 
-describe("resolveCompanionIntensity", () => {
+describe('resolveCompanionIntensity', () => {
   it("returns 'active' for strong gamification", () => {
-    expect(resolveCompanionIntensity(fixtures.profile("game_like"))).toBe("active");
+    expect(resolveCompanionIntensity(fixtures.profile('game_like'))).toBe('active');
   });
   it("returns 'present' for medium gamification", () => {
     expect(
       resolveCompanionIntensity(
-        fixtures.profile("friendly", { gamificationIntensity: "medium" }),
+        fixtures.profile('friendly', { gamificationIntensity: 'medium' }),
       ),
-    ).toBe("present");
+    ).toBe('present');
   });
   it("returns 'subtle' for calm motivation", () => {
-    expect(resolveCompanionIntensity(fixtures.profile("calm"))).toBe("subtle");
+    expect(resolveCompanionIntensity(fixtures.profile('calm'))).toBe('subtle');
   });
 });

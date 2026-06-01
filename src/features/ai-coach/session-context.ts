@@ -1,16 +1,16 @@
-import { captureSilentFailure } from "../../utils/silent-failure";
-import { getSessionRepository } from "../../session/repository/SessionRepository";
-import { getSessionService } from "../../session/SessionService";
-import type { SessionHistoryEntry } from "../../session/types";
-import type { z } from "zod";
-import type { GenerationRecord } from "./session-analyzer-types";
-import { SessionNotesSchema } from "./session-analyzer-types";
+import { captureSilentFailure } from '../../utils/silent-failure';
+import { getSessionRepository } from '../../session/repository/SessionRepository';
+import { getSessionService } from '../../session/SessionService';
+import type { SessionHistoryEntry } from '../../session/types';
+import type { z } from 'zod';
+import type { GenerationRecord } from './session-analyzer-types';
+import { SessionNotesSchema } from './session-analyzer-types';
 
 // ─── Generation record stub ─────────────────────────────────────
 const fetchGenerationRecord = async (
   _docId: string,
 ): Promise<GenerationRecord> => {
-  return { lastStudiedAt: null, keyConcepts: [], summary: { overview: "" } };
+  return { lastStudiedAt: null, keyConcepts: [], summary: { overview: '' } };
 };
 
 // ─── Public: session summary enrichment ─────────────────────────
@@ -39,10 +39,10 @@ export async function enrichSessionSummaryContext(
   const latestSessionContext = await getLatestSessionAIContext(userId);
   return {
     ...context,
-    ...(typeof latestSessionContext.sessionDurationMinutes === "number"
+    ...(typeof latestSessionContext.sessionDurationMinutes === 'number'
       ? { sessionDurationMinutes: latestSessionContext.sessionDurationMinutes }
       : {}),
-    ...(typeof latestSessionContext.purityScore === "number"
+    ...(typeof latestSessionContext.purityScore === 'number'
       ? { purityScore: latestSessionContext.purityScore }
       : {}),
     ...(latestSessionContext.subjectHint
@@ -72,7 +72,7 @@ export async function getLatestSessionAIContext(
     (await sessionRepository.getSessionSummary(latestSession.sessionId));
 
   const parsedNotes = parseSessionNotes(latestSession.config.notes);
-  const generationId = latestSession.config.tags.includes("content-study")
+  const generationId = latestSession.config.tags.includes('content-study')
     ? (parsedNotes?.generationId ??
       findGenerationIdInTags(latestSession.config.tags))
     : undefined;
@@ -83,7 +83,7 @@ export async function getLatestSessionAIContext(
   );
 
   return {
-    ...(typeof summary?.actualDuration === "number"
+    ...(typeof summary?.actualDuration === 'number'
       ? {
           sessionDurationMinutes: Math.max(
             1,
@@ -91,7 +91,7 @@ export async function getLatestSessionAIContext(
           ),
         }
       : {}),
-    ...(typeof summary?.focusPurityScore === "number"
+    ...(typeof summary?.focusPurityScore === 'number'
       ? { purityScore: Math.round(summary.focusPurityScore) }
       : {}),
     ...(subjectHint ? { subjectHint } : {}),
@@ -121,8 +121,8 @@ function hasRecentSessionsMethod(
   ) => Promise<SessionHistoryEntry[]>;
 } {
   return (
-    "getRecentSessions" in service &&
-    typeof service.getRecentSessions === "function"
+    'getRecentSessions' in service &&
+    typeof service.getRecentSessions === 'function'
   );
 }
 
@@ -137,9 +137,9 @@ function parseSessionNotes(
     return SessionNotesSchema.parse(JSON.parse(notes) as unknown);
   } catch (error) {
     captureSilentFailure(error, {
-      feature: "ai-coach",
-      operation: "ui-fallback",
-      type: "ui",
+      feature: 'ai-coach',
+      operation: 'ui-fallback',
+      type: 'ui',
     });
     return null;
   }
@@ -147,7 +147,7 @@ function parseSessionNotes(
 
 // ─── Tag/generation helpers ─────────────────────────────────────
 function findGenerationIdInTags(tags: string[]): string | undefined {
-  return tags.find((tag) => tag !== "content-study" && tag.length > 8);
+  return tags.find((tag) => tag !== 'content-study' && tag.length > 8);
 }
 
 async function deriveSubjectHint(
@@ -168,6 +168,6 @@ async function deriveSubjectHint(
   }
   return (
     generation.keyConcepts[0]?.term ??
-    generation.summary.overview?.split(".").shift()
+    generation.summary.overview?.split('.').shift()
   );
 }

@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback } from 'react';
 import {
   View,
   Text,
@@ -7,21 +7,21 @@ import {
   Platform,
   SafeAreaView,
   Pressable,
-} from "react-native";
-import { FlashList, type ListRenderItem } from "@shopify/flash-list";
-import { styles } from "./CoachScreen.styles";
-import { launchColors } from "@theme/tokens/launch-colors";
-import type { ChatMessage } from "./coach-chat-types";
+} from 'react-native';
+import { FlashList, type ListRenderItem } from '@shopify/flash-list';
+import { styles } from './CoachScreen.styles';
+import { launchColors } from '@theme/tokens/launch-colors';
+import type { ChatMessage } from './coach-chat-types';
 import {
   getPersonalityName,
   getPersonalityEmoji,
   formatState,
   getStateColor,
-} from "./coach-helpers";
-import { ChatMessageItem } from "./ChatMessageItem";
-import { ChatInputBar } from "./ChatInputBar";
-import { CoachRecommendationCard } from "./CoachRecommendationCard";
-import { useCoachChat } from "./useCoachChat";
+} from './coach-helpers';
+import { ChatMessageItem } from './ChatMessageItem';
+import { ChatInputBar } from './ChatInputBar';
+import { CoachRecommendationCard } from './CoachRecommendationCard';
+import { useCoachChat } from './useCoachChat';
 
 export function CoachScreen(): JSX.Element {
   const {
@@ -94,8 +94,8 @@ export function CoachScreen(): JSX.Element {
 
       <KeyboardAvoidingView
         style={styles.chatContainer}
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 0}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
       >
         <FlashList
           ref={flashListRef}

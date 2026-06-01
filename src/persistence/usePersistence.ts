@@ -1,5 +1,5 @@
-import React from "react";
-import { persistence, type PersistenceConfig } from "./PersistenceService";
+import React from 'react';
+import { persistence, type PersistenceConfig } from './PersistenceService';
 
 export function usePersistence<T>(config: PersistenceConfig<T>): {
   data: T | null;
@@ -20,7 +20,7 @@ export function usePersistence<T>(config: PersistenceConfig<T>): {
         setData(result);
         setError(null);
       } catch (err) {
-        setError(err instanceof Error ? err : new Error("Unknown error"));
+        setError(err instanceof Error ? err : new Error('Unknown error'));
       } finally {
         setLoading(false);
       }
@@ -35,7 +35,7 @@ export function usePersistence<T>(config: PersistenceConfig<T>): {
         setData(newData);
         return true;
       } catch (err) {
-        setError(err instanceof Error ? err : new Error("Save failed"));
+        setError(err instanceof Error ? err : new Error('Save failed'));
         return false;
       }
     },

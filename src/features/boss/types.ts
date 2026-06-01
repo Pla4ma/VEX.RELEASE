@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 /**
  * Personal Blocker — an adaptive friction pattern VEX detects.
@@ -9,7 +9,7 @@ export const PersonalBlockerBlockSchema = z.object({
   id: z.string(),
   label: z.string(),
   triggerAfterSessions: z.number().int().min(0),
-  motivationStyle: z.enum(["calm", "study", "game_like", "intense"]).optional(),
+  motivationStyle: z.enum(['calm', 'study', 'game_like', 'intense']).optional(),
 });
 
 export type PersonalBlockerBlock = z.infer<typeof PersonalBlockerBlockSchema>;
@@ -20,7 +20,7 @@ export type PersonalBossBlock = PersonalBlockerBlock;
 /** @deprecated Use PersonalBlockerBlockSchema */
 export const PersonalBossBlockSchema = PersonalBlockerBlockSchema;
 
-export type BlockerVisibility = "hidden" | "teaser" | "subtle" | "visible";
+export type BlockerVisibility = 'hidden' | 'teaser' | 'subtle' | 'visible';
 /** @deprecated Use BlockerVisibility */
 export type BossVisibility = BlockerVisibility;
 

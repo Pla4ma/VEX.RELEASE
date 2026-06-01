@@ -1,28 +1,28 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const BossTierSchema = z.enum([
-  "COMMON",
-  "UNCOMMON",
-  "RARE",
-  "EPIC",
-  "LEGENDARY",
+  'COMMON',
+  'UNCOMMON',
+  'RARE',
+  'EPIC',
+  'LEGENDARY',
 ]);
 export type BossTier = z.infer<typeof BossTierSchema>;
 
 export const BossPhaseSchema = z.enum([
-  "CALM",
-  "AGITATED",
-  "ENRAGED",
-  "DESPERATE",
+  'CALM',
+  'AGITATED',
+  'ENRAGED',
+  'DESPERATE',
 ]);
 export type BossPhase = z.infer<typeof BossPhaseSchema>;
 
 export const BossAttackPatternSchema = z.enum([
-  "DISTRACTION_WAVE",
-  "PROCRASTINATION_BEAM",
-  "NOTIFICATION_BLAST",
-  "SOCIAL_MEDIA_TRAP",
-  "MULTITASKING_TEMPEST",
+  'DISTRACTION_WAVE',
+  'PROCRASTINATION_BEAM',
+  'NOTIFICATION_BLAST',
+  'SOCIAL_MEDIA_TRAP',
+  'MULTITASKING_TEMPEST',
 ]);
 export type BossAttackPattern = z.infer<typeof BossAttackPatternSchema>;
 
@@ -64,7 +64,7 @@ export interface BossEncounter {
   totalDamageDealt: number;
   attacksDodged: number;
   attacksHit: number;
-  status: "ACTIVE" | "VICTORY" | "DEFEAT" | "TIMED_OUT";
+  status: 'ACTIVE' | 'VICTORY' | 'DEFEAT' | 'TIMED_OUT';
   tier: BossTier;
 }
 
@@ -73,11 +73,11 @@ export interface BossState {
   damageThisSession: DamageCalculation;
   estimatedKill: KillEstimate;
   combatState:
-    | "ENCOUNTER_START"
-    | "COMBAT_ACTIVE"
-    | "BOSS_RAGE"
-    | "NEAR_DEATH"
-    | "VICTORY";
+    | 'ENCOUNTER_START'
+    | 'COMBAT_ACTIVE'
+    | 'BOSS_RAGE'
+    | 'NEAR_DEATH'
+    | 'VICTORY';
   showDamageFlash: boolean;
   recentDamage: number;
   isLoading: boolean;
@@ -133,7 +133,7 @@ export interface ActiveEncounter {
   totalDamageDealt: number;
   attacksDodged: number;
   attacksHit: number;
-  status: "ACTIVE" | "VICTORY" | "DEFEAT" | "TIMED_OUT";
+  status: 'ACTIVE' | 'VICTORY' | 'DEFEAT' | 'TIMED_OUT';
 }
 
 export type LegacyBossState = BossState;

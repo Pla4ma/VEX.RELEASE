@@ -1,10 +1,10 @@
-import React from "react";
-import { Pressable } from "react-native";
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import { buttonTap } from "../../../utils/haptics";
-import type { ComebackQuestProgress } from "../ComebackQuestSystem";
+import React from 'react';
+import { Pressable } from 'react-native';
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import { buttonTap } from '../../../utils/haptics';
+import type { ComebackQuestProgress } from '../ComebackQuestSystem';
 
 export function ComebackQuestCompact({
   progress,
@@ -43,13 +43,13 @@ export function ComebackQuestCompact({
             Comeback Quest: {completedCount}/3 Complete
           </Text>
           <Text variant="caption" color="text.secondary">
-            {progress.currentStage === "QUEST_1" &&
-              "First step: 15 min session"}
-            {progress.currentStage === "QUEST_2" && "Step 2: 30 min, Grade A+"}
-            {progress.currentStage === "QUEST_3" &&
-              "Final step: 45 min, Grade A+"}
-            {progress.currentStage === "COMPLETE" &&
-              "All complete! Claim rewards"}
+            {progress.currentStage === 'QUEST_1' &&
+              'First step: 15 min session'}
+            {progress.currentStage === 'QUEST_2' && 'Step 2: 30 min, Grade A+'}
+            {progress.currentStage === 'QUEST_3' &&
+              'Final step: 45 min, Grade A+'}
+            {progress.currentStage === 'COMPLETE' &&
+              'All complete! Claim rewards'}
           </Text>
         </Box>
         <Text fontSize={20}>→</Text>

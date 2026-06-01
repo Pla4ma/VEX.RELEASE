@@ -1,11 +1,11 @@
 /**
  * First-week lane-specific copy — Day 1 and Day 2 tests
  */
-import { resolveFirstWeekExperience } from "../first-week-service";
-import type { FirstWeekResolverInput } from "../first-week-schemas";
+import { resolveFirstWeekExperience } from '../first-week-service';
+import type { FirstWeekResolverInput } from '../first-week-schemas';
 
 const baseInput: FirstWeekResolverInput = {
-  behaviorStats: { bossEngagement: "none", studyUsageRatio: 0 },
+  behaviorStats: { bossEngagement: 'none', studyUsageRatio: 0 },
   completedSessions: 0,
   daysSinceLastSession: null,
   daysSinceOnboarding: 0,
@@ -15,15 +15,15 @@ const baseInput: FirstWeekResolverInput = {
     social: false,
     study: true,
   },
-  motivationStyle: "calm",
-  premiumState: "unavailable",
-  primaryGoal: "work",
+  motivationStyle: 'calm',
+  premiumState: 'unavailable',
+  primaryGoal: 'work',
 };
 
-type Goal = FirstWeekResolverInput["primaryGoal"];
-type Style = FirstWeekResolverInput["motivationStyle"];
+type Goal = FirstWeekResolverInput['primaryGoal'];
+type Style = FirstWeekResolverInput['motivationStyle'];
 
-describe("Day 1 return copy per lane", () => {
+describe('Day 1 return copy per lane', () => {
   const cases: Array<{
     goal: Goal;
     style: Style;
@@ -33,36 +33,36 @@ describe("Day 1 return copy per lane", () => {
     unlock: string;
   }> = [
     {
-      goal: "study",
-      style: "study_focused",
-      lane: "student",
-      theme: "study_return",
-      msg: "Pick up",
-      unlock: "Study OS",
+      goal: 'study',
+      style: 'study_focused',
+      lane: 'student',
+      theme: 'study_return',
+      msg: 'Pick up',
+      unlock: 'Study OS',
     },
     {
-      goal: "work",
-      style: "game_like",
-      lane: "game_like",
-      theme: "run_return",
-      msg: "Your next clean run",
-      unlock: "Run Board",
+      goal: 'work',
+      style: 'game_like',
+      lane: 'game_like',
+      theme: 'run_return',
+      msg: 'Your next clean run',
+      unlock: 'Run Board',
     },
     {
-      goal: "creative",
-      style: "coach_led",
-      lane: "deep_creative",
-      theme: "project_return",
-      msg: "Your project thread",
-      unlock: "next-move memory",
+      goal: 'creative',
+      style: 'coach_led',
+      lane: 'deep_creative',
+      theme: 'project_return',
+      msg: 'Your project thread',
+      unlock: 'next-move memory',
     },
     {
-      goal: "personal",
-      style: "calm",
-      lane: "minimal_normal",
-      theme: "clean_return",
-      msg: "One clean block",
-      unlock: "Today Strip",
+      goal: 'personal',
+      style: 'calm',
+      lane: 'minimal_normal',
+      theme: 'clean_return',
+      msg: 'One clean block',
+      unlock: 'Today Strip',
     },
   ];
 
@@ -75,7 +75,7 @@ describe("Day 1 return copy per lane", () => {
         primaryGoal: goal,
         motivationStyle: style,
       });
-      expect(result.currentDayStage).toBe("DAY_1_RETURN");
+      expect(result.currentDayStage).toBe('DAY_1_RETURN');
       expect(result.lane).toBe(lane);
       expect(result.laneStageTheme).toContain(theme);
       expect(result.primaryMessage).toContain(msg);
@@ -84,7 +84,7 @@ describe("Day 1 return copy per lane", () => {
   });
 });
 
-describe("Day 2 proof copy per lane", () => {
+describe('Day 2 proof copy per lane', () => {
   const cases: Array<{
     goal: Goal;
     style: Style;
@@ -93,32 +93,32 @@ describe("Day 2 proof copy per lane", () => {
     msg: string;
   }> = [
     {
-      goal: "study",
-      style: "study_focused",
-      lane: "student",
-      theme: "study_proof",
-      msg: "Two study blocks",
+      goal: 'study',
+      style: 'study_focused',
+      lane: 'student',
+      theme: 'study_proof',
+      msg: 'Two study blocks',
     },
     {
-      goal: "work",
-      style: "game_like",
-      lane: "game_like",
-      theme: "run_proof",
-      msg: "Two encounters",
+      goal: 'work',
+      style: 'game_like',
+      lane: 'game_like',
+      theme: 'run_proof',
+      msg: 'Two encounters',
     },
     {
-      goal: "creative",
-      style: "coach_led",
-      lane: "deep_creative",
-      theme: "project_proof",
-      msg: "Two project blocks",
+      goal: 'creative',
+      style: 'coach_led',
+      lane: 'deep_creative',
+      theme: 'project_proof',
+      msg: 'Two project blocks',
     },
     {
-      goal: "personal",
-      style: "calm",
-      lane: "minimal_normal",
-      theme: "clean_proof",
-      msg: "Two clean sessions",
+      goal: 'personal',
+      style: 'calm',
+      lane: 'minimal_normal',
+      theme: 'clean_proof',
+      msg: 'Two clean sessions',
     },
   ];
 
@@ -131,10 +131,10 @@ describe("Day 2 proof copy per lane", () => {
         primaryGoal: goal,
         motivationStyle: style,
       });
-      expect(result.currentDayStage).toBe("DAY_2_PROGRESS_PROOF");
+      expect(result.currentDayStage).toBe('DAY_2_PROGRESS_PROOF');
       expect(result.laneStageTheme).toContain(theme);
       expect(result.primaryMessage).toContain(msg);
-      expect(result.spotlightSurface).toBe("progress_proof");
+      expect(result.spotlightSurface).toBe('progress_proof');
     });
   });
 });

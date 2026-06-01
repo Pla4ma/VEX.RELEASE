@@ -1,4 +1,4 @@
-import type { AccessibilityAudit } from "./types";
+import type { AccessibilityAudit } from './types';
 
 export function auditScreen(screenId: string): AccessibilityAudit {
   return {

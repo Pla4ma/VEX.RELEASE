@@ -1,8 +1,8 @@
-import type { UseQueryResult } from "@tanstack/react-query";
-import type { FeatureAccessResult } from "../../../features/liveops-config";
-import type { SessionHistoryResult } from "../hooks/home-controller-types";
-import { getFocusedMinutesForToday } from "../hooks/home-controller-helpers";
-import type { StreakQueryData, ProgressionQueryData } from "./ActivatingHomeContainer.types";
+import type { UseQueryResult } from '@tanstack/react-query';
+import type { FeatureAccessResult } from '../../../features/liveops-config';
+import type { SessionHistoryResult } from '../hooks/home-controller-types';
+import { getFocusedMinutesForToday } from '../hooks/home-controller-helpers';
+import type { StreakQueryData, ProgressionQueryData } from './ActivatingHomeContainer.types';
 
 interface ActivatingDerivedState {
   streakData: StreakQueryData | undefined;

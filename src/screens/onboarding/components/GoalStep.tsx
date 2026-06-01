@@ -1,14 +1,14 @@
-import React from "react";
-import { Pressable, View } from "react-native";
+import React from 'react';
+import { Pressable, View } from 'react-native';
 
-import { Text } from "../../../components/primitives/Text";
+import { Text } from '../../../components/primitives/Text';
 import {
   ONBOARDING_GOALS,
   type OnboardingGoal,
-} from "../../../features/onboarding";
-import { useTheme } from "../../../theme";
-import { styles } from "../styles";
-import { OnboardingAdaptationPreview } from "./OnboardingAdaptationPreview";
+} from '../../../features/onboarding';
+import { useTheme } from '../../../theme';
+import { styles } from '../styles';
+import { OnboardingAdaptationPreview } from './OnboardingAdaptationPreview';
 
 type GoalStepProps = {
   goal: OnboardingGoal | undefined;

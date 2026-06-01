@@ -1,15 +1,15 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { Pressable, View } from "react-native";
-import Animated, { FadeInUp, FadeOutUp } from "react-native-reanimated";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import { usePremiumStatus } from "../use-revenuecat";
+import React, { useCallback, useEffect, useState } from 'react';
+import { Pressable, View } from 'react-native';
+import Animated, { FadeInUp, FadeOutUp } from 'react-native-reanimated';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import { usePremiumStatus } from '../use-revenuecat';
 import {
   type PaywallTriggerType,
   getTriggerMessage,
   canShowBanner,
   recordBannerShown,
-} from "./paywall-banner-helpers";
+} from './paywall-banner-helpers';
 
 interface ContextualPaywallBannerProps {
   trigger: PaywallTriggerType;
@@ -66,7 +66,7 @@ export function ContextualPaywallBanner({
       entering={FadeInUp.duration(400)}
       exiting={FadeOutUp.duration(300)}
       style={{
-        position: "absolute",
+        position: 'absolute',
         bottom: 80,
         left: 16,
         right: 16,
@@ -93,7 +93,7 @@ export function ContextualPaywallBanner({
           accessibilityRole="button"
           accessibilityHint="Double tap to activate"
         >
-          <View style={{ flexDirection: "row", gap: 12, alignItems: "center" }}>
+          <View style={{ flexDirection: 'row', gap: 12, alignItems: 'center' }}>
             <Text fontSize={28}>{message.emoji}</Text>
             <View style={{ flex: 1, gap: 4 }}>
               <Text
@@ -129,7 +129,7 @@ export function ContextualPaywallBanner({
         {}
         <Pressable
           onPress={handleDismiss}
-          style={{ position: "absolute", top: 8, right: 8, padding: 4 }}
+          style={{ position: 'absolute', top: 8, right: 8, padding: 4 }}
           accessibilityLabel="✕ button"
           accessibilityRole="button"
           accessibilityHint="Double tap to activate"

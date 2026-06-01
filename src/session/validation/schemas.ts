@@ -1,10 +1,10 @@
-import { z } from "zod";
+import { z } from 'zod';
 import {
   ValidateSessionConfigSchema,
   ValidateSessionStateSchema,
   ValidateSessionSummarySchema,
   ValidateSessionPresetSchema,
-} from "./session-state-schemas";
+} from './session-state-schemas';
 import {
   ValidateInterruptionSchema,
   ValidateRecoveryRecordSchema,
@@ -14,11 +14,11 @@ import {
   ValidateFocusQualityMetricsSchema,
   ValidatePurityHUDSchema,
   ValidateTimerConfigSchema,
-} from "./session-event-schemas";
+} from './session-event-schemas';
 
-export * from "./primitive-schemas";
-export * from "./session-state-schemas";
-export * from "./session-event-schemas";
+export * from './primitive-schemas';
+export * from './session-state-schemas';
+export * from './session-event-schemas';
 
 export const StartSessionSchema = z.object({
   userId: z.string(),
@@ -44,7 +44,7 @@ export const CompleteSessionSchema = z.object({
   sessionId: z.string().uuid(),
   userId: z.string(),
   reflection: z.string().max(2000).optional(),
-  mood: z.enum(["GREAT", "GOOD", "OKAY", "STRUGGLING", "DIFFICULT"]).optional(),
+  mood: z.enum(['GREAT', 'GOOD', 'OKAY', 'STRUGGLING', 'DIFFICULT']).optional(),
   tasksCompleted: z.number().int().min(0).optional(),
   timestamp: z.number(),
 });
@@ -58,11 +58,11 @@ export const RecoverSessionSchema = z.object({
   sessionId: z.string().uuid(),
   userId: z.string(),
   recoveryType: z.enum([
-    "AUTO_RESUME",
-    "USER_RESUME",
-    "STREAK_SAVE",
-    "PARTIAL_CREDIT",
-    "FULL_RESET",
+    'AUTO_RESUME',
+    'USER_RESUME',
+    'STREAK_SAVE',
+    'PARTIAL_CREDIT',
+    'FULL_RESET',
   ]),
   timestamp: z.number(),
 });

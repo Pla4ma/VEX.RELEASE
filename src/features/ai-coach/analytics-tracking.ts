@@ -1,13 +1,13 @@
-import * as Sentry from "@sentry/react-native";
+import * as Sentry from '@sentry/react-native';
 import {
   type CoachMessage,
   type MessageCategory,
   type CoachUserState,
   type TriggerType,
   type SessionRecommendation,
-} from "./schemas";
-import type { InterventionType } from "./analytics-types";
-import { hashUserId, sanitizeContext } from "./analytics-helpers";
+} from './schemas';
+import type { InterventionType } from './analytics-types';
+import { hashUserId, sanitizeContext } from './analytics-helpers';
 
 export function trackStateChange(
   userId: string,
@@ -16,9 +16,9 @@ export function trackStateChange(
   context?: Record<string, unknown>,
 ): void {
   Sentry.addBreadcrumb({
-    category: "coach.state",
+    category: 'coach.state',
     message: `Coach state changed: ${previousState} -> ${newState}`,
-    level: "info",
+    level: 'info',
     data: {
       userId: hashUserId(userId),
       previousState,
@@ -33,9 +33,9 @@ export function trackMessageGenerated(
   templateMatched: boolean,
 ): void {
   Sentry.addBreadcrumb({
-    category: "coach.message",
+    category: 'coach.message',
     message: `Generated ${message.category} message`,
-    level: "info",
+    level: 'info',
     data: {
       userId: hashUserId(userId),
       messageId: message.id,
@@ -53,9 +53,9 @@ export function trackMessageDelivered(
   deliveryMethod: string,
 ): void {
   Sentry.addBreadcrumb({
-    category: "coach.delivery",
+    category: 'coach.delivery',
     message: `Message delivered via ${deliveryMethod}`,
-    level: "info",
+    level: 'info',
     data: { userId: hashUserId(userId), messageId, category, deliveryMethod },
   });
 }
@@ -66,9 +66,9 @@ export function trackMessageAction(
   timeToAction?: number,
 ): void {
   Sentry.addBreadcrumb({
-    category: "coach.action",
+    category: 'coach.action',
     message: `User ${action} on message`,
-    level: "info",
+    level: 'info',
     data: {
       userId: hashUserId(userId),
       messageId,
@@ -84,9 +84,9 @@ export function trackInterventionTriggered(
   action: string,
 ): void {
   Sentry.addBreadcrumb({
-    category: "coach.intervention",
+    category: 'coach.intervention',
     message: `Intervention triggered: ${trigger}`,
-    level: "info",
+    level: 'info',
     data: { userId: hashUserId(userId), ruleId, trigger, action },
   });
 }
@@ -96,9 +96,9 @@ export function trackInterventionDisplayed(
   hoursRemaining?: number,
 ): void {
   Sentry.addBreadcrumb({
-    category: "coach.intervention",
+    category: 'coach.intervention',
     message: `Intervention displayed: ${interventionType}`,
-    level: "info",
+    level: 'info',
     data: { userId: hashUserId(userId), interventionType, hoursRemaining },
   });
 }
@@ -108,9 +108,9 @@ export function trackInterventionActioned(
   actionLabel: string,
 ): void {
   Sentry.addBreadcrumb({
-    category: "coach.intervention",
+    category: 'coach.intervention',
     message: `Intervention actioned: ${interventionType}`,
-    level: "info",
+    level: 'info',
     data: { userId: hashUserId(userId), interventionType, actionLabel },
   });
 }
@@ -121,9 +121,9 @@ export function trackStreakRiskDetected(
   hoursSinceLastSession: number,
 ): void {
   Sentry.addBreadcrumb({
-    category: "coach.risk",
+    category: 'coach.risk',
     message: `Streak risk detected: ${riskLevel}`,
-    level: riskLevel === "CRITICAL" ? "warning" : "info",
+    level: riskLevel === 'CRITICAL' ? 'warning' : 'info',
     data: {
       userId: hashUserId(userId),
       currentStreak,
@@ -139,9 +139,9 @@ export function trackComebackActivated(
   daysInactive: number,
 ): void {
   Sentry.addBreadcrumb({
-    category: "coach.comeback",
-    message: "Comeback mode activated",
-    level: "info",
+    category: 'coach.comeback',
+    message: 'Comeback mode activated',
+    level: 'info',
     data: {
       userId: hashUserId(userId),
       comebackId,
@@ -155,9 +155,9 @@ export function trackRecommendationGenerated(
   recommendation: SessionRecommendation,
 ): void {
   Sentry.addBreadcrumb({
-    category: "coach.recommendation",
+    category: 'coach.recommendation',
     message: `Recommendation generated: ${recommendation.recommendationType}`,
-    level: "info",
+    level: 'info',
     data: {
       userId: hashUserId(userId),
       recommendationId: recommendation.id,
@@ -173,9 +173,9 @@ export function trackDifficultyAdjusted(
   reason: string,
 ): void {
   Sentry.addBreadcrumb({
-    category: "coach.difficulty",
+    category: 'coach.difficulty',
     message: `Difficulty adjusted: ${previousDifficulty} -> ${newDifficulty}`,
-    level: "info",
+    level: 'info',
     data: {
       userId: hashUserId(userId),
       previousDifficulty,
@@ -191,9 +191,9 @@ export function trackBehaviorSignal(
   confidence: number,
 ): void {
   Sentry.addBreadcrumb({
-    category: "coach.behavior",
+    category: 'coach.behavior',
     message: `Behavior signal: ${signalType}`,
-    level: "info",
+    level: 'info',
     data: { userId: hashUserId(userId), signalType, value, confidence },
   });
 }

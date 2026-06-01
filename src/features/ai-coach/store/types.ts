@@ -4,7 +4,7 @@
  * Type definitions for the coach Zustand store.
  */
 
-import type { CoachMessage, MessageCategory } from "../schemas";
+import type { CoachMessage, MessageCategory } from '../schemas';
 
 export interface CoachUIState {
   // Active message being displayed
@@ -22,7 +22,7 @@ export interface CoachUIState {
 
   // Modal states
   isModalVisible: boolean;
-  modalType: "message" | "persona" | "history" | "difficulty" | null;
+  modalType: 'message' | 'persona' | 'history' | 'difficulty' | null;
 }
 
 export interface CoachUIActions {

@@ -1,11 +1,11 @@
-import type { SessionSummary } from "../../session/types";
-import type { SessionConsequenceCardsProps } from "../../screens/session/components/SessionConsequenceCards";
+import type { SessionSummary } from '../../session/types';
+import type { SessionConsequenceCardsProps } from '../../screens/session/components/SessionConsequenceCards';
 
 export type SessionCompletionConsequences = {
-  boss?: SessionConsequenceCardsProps["bossConsequence"];
-  challenge?: SessionConsequenceCardsProps["challengeConsequence"];
-  rival?: SessionConsequenceCardsProps["rivalConsequence"];
-  streak?: SessionConsequenceCardsProps["streakConsequence"];
+  boss?: SessionConsequenceCardsProps['bossConsequence'];
+  challenge?: SessionConsequenceCardsProps['challengeConsequence'];
+  rival?: SessionConsequenceCardsProps['rivalConsequence'];
+  streak?: SessionConsequenceCardsProps['streakConsequence'];
 };
 
 type ActiveBossInput = {
@@ -41,8 +41,8 @@ export function buildSessionCompletionConsequences(input: {
 function buildBossConsequence(
   summary: SessionSummary,
   activeBoss: ActiveBossInput | null | undefined,
-): SessionCompletionConsequences["boss"] {
-  if (!activeBoss || activeBoss.status !== "ACTIVE") {
+): SessionCompletionConsequences['boss'] {
+  if (!activeBoss || activeBoss.status !== 'ACTIVE') {
     return null;
   }
   const sessionMinutes = Math.floor(
@@ -59,7 +59,7 @@ function buildBossConsequence(
   );
 
   return {
-    bossName: activeBoss.bossName || "The Procrastinator",
+    bossName: activeBoss.bossName || 'The Procrastinator',
     damageDealt,
     hadCriticalHit: purityMultiplier > 1.2,
     healthAfter,
@@ -70,7 +70,7 @@ function buildBossConsequence(
 
 function buildChallengeConsequence(
   activeChallenges: ActiveChallengeInput[] | null | undefined,
-): SessionCompletionConsequences["challenge"] {
+): SessionCompletionConsequences['challenge'] {
   const detail = activeChallenges?.[0];
   if (!detail) {
     return null;
@@ -94,7 +94,7 @@ function buildChallengeConsequence(
 function buildStreakConsequence(
   summary: SessionSummary,
   streakSummary: StreakSummaryInput | null | undefined,
-): SessionCompletionConsequences["streak"] {
+): SessionCompletionConsequences['streak'] {
   if (!streakSummary) {
     return null;
   }

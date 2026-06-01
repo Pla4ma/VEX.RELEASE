@@ -1,25 +1,25 @@
-import { z } from "zod";
-import { SessionModeSchema } from "../../session/modes";
+import { z } from 'zod';
+import { SessionModeSchema } from '../../session/modes';
 
-export { SessionMode } from "../../session/modes";
+export { SessionMode } from '../../session/modes';
 
 export const SessionStatusSchema = z.enum([
-  "PENDING",
-  "ACTIVE",
-  "PAUSED",
-  "DEGRADED",
-  "COMPLETED",
-  "ABANDONED",
-  "RECOVERING",
+  'PENDING',
+  'ACTIVE',
+  'PAUSED',
+  'DEGRADED',
+  'COMPLETED',
+  'ABANDONED',
+  'RECOVERING',
 ]);
 
 export const SessionPhaseSchema = z.enum([
-  "IDLE",
-  "PREPARING",
-  "FOCUSING",
-  "RESTING",
-  "REFLECTING",
-  "COMPLETING",
+  'IDLE',
+  'PREPARING',
+  'FOCUSING',
+  'RESTING',
+  'REFLECTING',
+  'COMPLETING',
 ]);
 
 export const TimerStateSchema = z.object({
@@ -32,7 +32,7 @@ export const TimerStateSchema = z.object({
 
 export const SessionPuritySchema = z.object({
   score: z.number().min(0).max(100),
-  label: z.enum(["EXCELLENT", "GOOD", "FAIR", "POOR", "CRITICAL"]),
+  label: z.enum(['EXCELLENT', 'GOOD', 'FAIR', 'POOR', 'CRITICAL']),
   pauseCount: z.number().min(0),
   totalPauseSeconds: z.number().min(0),
   backgroundTimeSeconds: z.number().min(0),

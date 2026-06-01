@@ -1,9 +1,9 @@
-import { renderHook, act, waitFor } from "@testing-library/react-native";
-import { useSession } from "../useSession";
-import { getSessionService } from "../../SessionService";
-jest.mock("../../SessionService");
-describe("useSession", () => {
-  const mockUserId = "test-user-123";
+import { renderHook, act, waitFor } from '@testing-library/react-native';
+import { useSession } from '../useSession';
+import { getSessionService } from '../../SessionService';
+jest.mock('../../SessionService');
+describe('useSession', () => {
+  const mockUserId = 'test-user-123';
   const mockSessionService = {
     setUserId: jest.fn(),
     getCurrentSession: jest.fn(),
@@ -35,8 +35,8 @@ describe("useSession", () => {
     mockSessionService.getCompletionPercentage.mockReturnValue(0);
     (getSessionService as jest.Mock).mockReturnValue(mockSessionService);
   });
-  describe("Initialization", () => {
-    it("should initialize with no session", async () => {
+  describe('Initialization', () => {
+    it('should initialize with no session', async () => {
       mockSessionService.getCurrentSession.mockReturnValue(null);
       const { result } = renderHook(() => useSession(mockUserId));
       await waitFor(() => {
@@ -45,8 +45,8 @@ describe("useSession", () => {
       expect(result.current.session).toBeNull();
       expect(result.current.isActive).toBe(false);
     });
-    it("should load active session on mount", async () => {
-      const mockSession = { id: "session-1", status: "ACTIVE", phase: "FOCUS" };
+    it('should load active session on mount', async () => {
+      const mockSession = { id: 'session-1', status: 'ACTIVE', phase: 'FOCUS' };
       mockSessionService.getCurrentSession.mockReturnValue(mockSession);
       mockSessionService.isSessionActive.mockReturnValue(true);
       const { result } = renderHook(() => useSession(mockUserId));
@@ -56,10 +56,10 @@ describe("useSession", () => {
       expect(mockSessionService.setUserId).toHaveBeenCalledWith(mockUserId);
     });
   });
-  describe("Session Creation", () => {
-    it("should create session from config", async () => {
-      const mockConfig = { duration: 1500, category: "Deep Work" };
-      const mockNewSession = { id: "session-2", status: "CREATED" };
+  describe('Session Creation', () => {
+    it('should create session from config', async () => {
+      const mockConfig = { duration: 1500, category: 'Deep Work' };
+      const mockNewSession = { id: 'session-2', status: 'CREATED' };
       mockSessionService.createCustomSession.mockResolvedValue(mockNewSession);
       const { result } = renderHook(() => useSession(mockUserId));
       await act(async () => {
@@ -69,9 +69,9 @@ describe("useSession", () => {
         mockConfig,
       );
     });
-    it("should create custom session", async () => {
-      const mockConfig = { duration: 1800, category: "Study" };
-      const mockNewSession = { id: "session-3", status: "CREATED" };
+    it('should create custom session', async () => {
+      const mockConfig = { duration: 1800, category: 'Study' };
+      const mockNewSession = { id: 'session-3', status: 'CREATED' };
       mockSessionService.createCustomSession.mockResolvedValue(mockNewSession);
       const { result } = renderHook(() => useSession(mockUserId));
       await act(async () => {
@@ -82,15 +82,15 @@ describe("useSession", () => {
       );
     });
   });
-  describe("Session Control", () => {
+  describe('Session Control', () => {
     beforeEach(() => {
       mockSessionService.getCurrentSession.mockReturnValue({
-        id: "session-1",
-        status: "ACTIVE",
+        id: 'session-1',
+        status: 'ACTIVE',
       });
       mockSessionService.isSessionActive.mockReturnValue(true);
     });
-    it("should start session", async () => {
+    it('should start session', async () => {
       mockSessionService.startSession.mockResolvedValue(undefined);
       const { result } = renderHook(() => useSession(mockUserId));
       await waitFor(() => expect(result.current.isLoading).toBe(false));
@@ -99,18 +99,18 @@ describe("useSession", () => {
       });
       expect(mockSessionService.startSession).toHaveBeenCalled();
     });
-    it("should pause session", async () => {
+    it('should pause session', async () => {
       mockSessionService.pauseSession.mockResolvedValue(undefined);
       const { result } = renderHook(() => useSession(mockUserId));
       await waitFor(() => expect(result.current.isLoading).toBe(false));
       await act(async () => {
-        await result.current.pauseSession("Test reason");
+        await result.current.pauseSession('Test reason');
       });
       expect(mockSessionService.pauseSession).toHaveBeenCalledWith(
-        "Test reason",
+        'Test reason',
       );
     });
-    it("should resume session", async () => {
+    it('should resume session', async () => {
       mockSessionService.resumeSession.mockResolvedValue(undefined);
       const { result } = renderHook(() => useSession(mockUserId));
       await waitFor(() => expect(result.current.isLoading).toBe(false));
@@ -119,35 +119,35 @@ describe("useSession", () => {
       });
       expect(mockSessionService.resumeSession).toHaveBeenCalled();
     });
-    it("should abandon session", async () => {
+    it('should abandon session', async () => {
       mockSessionService.abandonSession.mockResolvedValue(undefined);
       const { result } = renderHook(() => useSession(mockUserId));
       await waitFor(() => expect(result.current.isLoading).toBe(false));
       await act(async () => {
-        await result.current.abandonSession("Test abandon");
+        await result.current.abandonSession('Test abandon');
       });
       expect(mockSessionService.abandonSession).toHaveBeenCalledWith(
-        "Test abandon",
+        'Test abandon',
       );
     });
   });
-  describe("Recovery", () => {
-    it("should attempt recovery", async () => {
+  describe('Recovery', () => {
+    it('should attempt recovery', async () => {
       mockSessionService.attemptRecovery.mockResolvedValue(true);
       const { result } = renderHook(() => useSession(mockUserId));
       await waitFor(() => expect(result.current.isLoading).toBe(false));
       const recoveryResult = await act(async () => {
-        return await result.current.attemptRecovery("USER_RESUME");
+        return await result.current.attemptRecovery('USER_RESUME');
       });
       expect(mockSessionService.attemptRecovery).toHaveBeenCalledWith(
-        "USER_RESUME",
+        'USER_RESUME',
       );
       expect(recoveryResult).toBe(true);
     });
   });
-  describe("Error Handling", () => {
-    it("should handle service errors", async () => {
-      const error = new Error("Service error");
+  describe('Error Handling', () => {
+    it('should handle service errors', async () => {
+      const error = new Error('Service error');
       mockSessionService.getCurrentSession.mockImplementation(() => {
         throw error;
       });
@@ -157,13 +157,13 @@ describe("useSession", () => {
       });
       expect(result.current.isLoading).toBe(false);
     });
-    it("should clear error on refresh", async () => {
-      const error = new Error("Service error");
+    it('should clear error on refresh', async () => {
+      const error = new Error('Service error');
       mockSessionService.getCurrentSession
         .mockImplementationOnce(() => {
           throw error;
         })
-        .mockReturnValueOnce({ id: "session-1", status: "ACTIVE" });
+        .mockReturnValueOnce({ id: 'session-1', status: 'ACTIVE' });
       const { result } = renderHook(() => useSession(mockUserId));
       await waitFor(() => expect(result.current.error).toEqual(error));
       await act(async () => {
@@ -172,10 +172,10 @@ describe("useSession", () => {
       expect(result.current.error).toBeNull();
     });
   });
-  describe("State Updates", () => {
-    it("should update state on refresh", async () => {
-      const initialSession = { id: "session-1", status: "ACTIVE" };
-      const updatedSession = { id: "session-1", status: "COMPLETED" };
+  describe('State Updates', () => {
+    it('should update state on refresh', async () => {
+      const initialSession = { id: 'session-1', status: 'ACTIVE' };
+      const updatedSession = { id: 'session-1', status: 'COMPLETED' };
       mockSessionService.getCurrentSession
         .mockReturnValueOnce(initialSession)
         .mockReturnValueOnce(updatedSession);

@@ -1,10 +1,10 @@
-import React from "react";
-import { View, Text } from "react-native";
-import Animated from "react-native-reanimated";
-import { LinearGradient } from "expo-linear-gradient";
-import { launchColors } from "@theme/tokens/launch-colors";
-import type { ConfettiPiece } from "./level-up-types";
-import { levelUpStyles as styles } from "./level-up-styles";
+import React from 'react';
+import { View, Text } from 'react-native';
+import Animated from 'react-native-reanimated';
+import { LinearGradient } from 'expo-linear-gradient';
+import { launchColors } from '@theme/tokens/launch-colors';
+import type { ConfettiPiece } from './level-up-types';
+import { levelUpStyles as styles } from './level-up-styles';
 
 interface ConfettiFieldProps {
   confetti: ConfettiPiece[];
@@ -67,13 +67,13 @@ export const RewardsSection: React.FC<RewardsSectionProps> = ({ rewards }) => {
               style={styles.rewardGradient}
             >
               <Text style={styles.rewardIcon}>
-                {reward.type === "XP"
-                  ? "⭐"
-                  : reward.type === "COINS"
-                    ? "🪙"
-                    : reward.type === "GEMS"
-                      ? "💎"
-                      : "🎁"}
+                {reward.type === 'XP'
+                  ? '⭐'
+                  : reward.type === 'COINS'
+                    ? '🪙'
+                    : reward.type === 'GEMS'
+                      ? '💎'
+                      : '🎁'}
               </Text>
               <Text style={styles.rewardAmount}>+{reward.amount}</Text>
               <Text style={styles.rewardType}>{reward.type}</Text>

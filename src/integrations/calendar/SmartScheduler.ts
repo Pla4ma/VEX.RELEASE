@@ -1,17 +1,17 @@
-import { createDebugger } from "../../utils/debug";
+import { createDebugger } from '../../utils/debug';
 import type {
   FreeBusyInfo,
   CalendarGap,
   StudyScheduleSuggestion,
-} from "./types";
+} from './types';
 import {
   type UserPatterns,
   scoreGapQuality,
   generateGapReason,
   calculateConfidence,
-} from "./scheduler-helpers";
+} from './scheduler-helpers';
 
-const debug = createDebugger("calendar:scheduler");
+const debug = createDebugger('calendar:scheduler');
 
 export class SmartScheduler {
   private userPatterns: UserPatterns;
@@ -60,11 +60,11 @@ export class SmartScheduler {
     freeBusy: FreeBusyInfo,
     totalMinutesNeeded: number,
     deadline?: Date,
-    userLevel: "beginner" | "intermediate" | "advanced" = "intermediate",
+    userLevel: 'beginner' | 'intermediate' | 'advanced' = 'intermediate',
   ): StudyScheduleSuggestion {
     const gaps = this.findBestGaps(
       freeBusy,
-      userLevel === "beginner" ? 15 : 25,
+      userLevel === 'beginner' ? 15 : 25,
       90,
       5,
     );
@@ -73,9 +73,9 @@ export class SmartScheduler {
         gap.duration,
         this.userPatterns.averageSessionDuration,
       );
-      if (userLevel === "advanced" && gap.duration >= 45) {
+      if (userLevel === 'advanced' && gap.duration >= 45) {
         suggestedDuration = 45;
-      } else if (userLevel === "beginner") {
+      } else if (userLevel === 'beginner') {
         suggestedDuration = Math.min(suggestedDuration, 25);
       }
       const confidence = calculateConfidence(gap, userLevel);
@@ -132,7 +132,7 @@ export class SmartScheduler {
       .filter((h) => h.quality > 70)
       .sort((a, b) => b.quality - a.quality)
       .slice(0, 3);
-    debug.info("Updated user patterns:", this.userPatterns);
+    debug.info('Updated user patterns:', this.userPatterns);
   }
   analyzeDeadlines(
     events: Array<{ title: string; startTime: Date; description?: string }>,
@@ -140,33 +140,33 @@ export class SmartScheduler {
     title: string;
     deadline: Date;
     suggestedStudyTimes: number;
-    urgency: "HIGH" | "MEDIUM" | "LOW";
+    urgency: 'HIGH' | 'MEDIUM' | 'LOW';
   }> {
     const deadlineKeywords = [
-      "exam",
-      "test",
-      "quiz",
-      "deadline",
-      "due",
-      "final",
-      "midterm",
+      'exam',
+      'test',
+      'quiz',
+      'deadline',
+      'due',
+      'final',
+      'midterm',
     ];
     return events
       .filter((event) => {
-        const text = `${event.title} ${event.description || ""}`.toLowerCase();
+        const text = `${event.title} ${event.description || ''}`.toLowerCase();
         return deadlineKeywords.some((kw) => text.includes(kw));
       })
       .map((event) => {
         const daysUntil = Math.ceil(
           (event.startTime.getTime() - Date.now()) / (1000 * 60 * 60 * 24),
         );
-        let urgency: "HIGH" | "MEDIUM" | "LOW" = "LOW";
+        let urgency: 'HIGH' | 'MEDIUM' | 'LOW' = 'LOW';
         let suggestedMinutes = 60;
         if (daysUntil <= 2) {
-          urgency = "HIGH";
+          urgency = 'HIGH';
           suggestedMinutes = 180;
         } else if (daysUntil <= 7) {
-          urgency = "MEDIUM";
+          urgency = 'MEDIUM';
           suggestedMinutes = 120;
         }
         return {

@@ -1,12 +1,12 @@
-import React from "react";
-import { Pressable, View } from "react-native";
-import { Text } from "../../../components/primitives/Text";
-import type { BreadcrumbProps } from "./TabBar.types";
-import { styles } from "./TabBar.styles";
+import React from 'react';
+import { Pressable, View } from 'react-native';
+import { Text } from '../../../components/primitives/Text';
+import type { BreadcrumbProps } from './TabBar.types';
+import { styles } from './TabBar.styles';
 
 export const Breadcrumb: React.FC<BreadcrumbProps> = ({
   items,
-  separator = "/",
+  separator = '/',
   style,
 }) => {
   return (
@@ -33,7 +33,7 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = ({
             <Text
               variant="caption"
               color={
-                index === items.length - 1 ? "text.primary" : "primary.500"
+                index === items.length - 1 ? 'text.primary' : 'primary.500'
               }
               style={[
                 styles.breadcrumbItem,

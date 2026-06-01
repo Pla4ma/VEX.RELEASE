@@ -1,6 +1,6 @@
-import { z } from "zod";
+import { z } from 'zod';
 
-import { captureSilentFailure } from "../utils/silent-failure";
+import { captureSilentFailure } from '../utils/silent-failure';
 
 interface PersistedJsonContext {
   feature: string;
@@ -17,8 +17,8 @@ export function safeJsonParse<T = unknown>(
   } catch (error) {
     captureSilentFailure(error, {
       feature: context.feature,
-      operation: "safe-fallback",
-      type: "data",
+      operation: 'safe-fallback',
+      type: 'data',
     });
     return null;
   }
@@ -38,8 +38,8 @@ export function parseJsonWithSchema<TSchema extends z.ZodTypeAny>(
   if (!parsedSchema.success) {
     captureSilentFailure(parsedSchema.error, {
       feature: context.feature,
-      operation: "safe-fallback",
-      type: "data",
+      operation: 'safe-fallback',
+      type: 'data',
     });
     return null;
   }
@@ -56,8 +56,8 @@ export function stringifyJsonSafe(
   } catch (error) {
     captureSilentFailure(error, {
       feature: context.feature,
-      operation: "safe-fallback",
-      type: "data",
+      operation: 'safe-fallback',
+      type: 'data',
     });
     return null;
   }

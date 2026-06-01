@@ -1,12 +1,12 @@
-import { eventBus } from "../../events";
-import * as Sentry from "@sentry/react-native";
+import { eventBus } from '../../events';
+import * as Sentry from '@sentry/react-native';
 import {
   DIFFICULTY_CONFIG,
   SessionStakesSchema,
   type SessionDifficulty,
   type SessionStakes,
   type StakesSessionResult,
-} from "./session-stakes-schemas";
+} from './session-stakes-schemas';
 
 export function getStakesForDifficulty(
   difficulty: SessionDifficulty,
@@ -27,8 +27,8 @@ export function canSelectDifficulty(
   userLevel: number,
   difficulty: SessionDifficulty,
 ): { allowed: boolean; reason?: string } {
-  if (difficulty === "DEEP_WORK" && userLevel < 3) {
-    return { allowed: false, reason: "Deep Work unlocks at level 3" };
+  if (difficulty === 'DEEP_WORK' && userLevel < 3) {
+    return { allowed: false, reason: 'Deep Work unlocks at level 3' };
   }
   return { allowed: true };
 }
@@ -39,15 +39,15 @@ export function getRecommendedDifficulty(
   currentStreak: number,
 ): SessionDifficulty {
   if (userLevel < 2) {
-    return "CASUAL";
+    return 'CASUAL';
   }
   if (recentCompletionRate < 0.6) {
-    return "CASUAL";
+    return 'CASUAL';
   }
   if (currentStreak >= 7 && recentCompletionRate > 0.85 && userLevel >= 5) {
-    return "DEEP_WORK";
+    return 'DEEP_WORK';
   }
-  return "FOCUSED";
+  return 'FOCUSED';
 }
 
 export function calculateStakesResult(
@@ -67,17 +67,17 @@ export function calculateStakesResult(
   let newWinStreak = userWinStreak;
   if (completed) {
     xpEarned = Math.floor(baseXp * stakes.xpMultiplier);
-    if (difficulty === "DEEP_WORK") {
+    if (difficulty === 'DEEP_WORK') {
       gemsWon = stakes.gemWager;
       gemsWon += Math.min(3, Math.floor(totalDuration / 30 / 60));
       newWinStreak = userWinStreak + 1;
     }
   } else {
-    if (stakes.failureConsequence === "LOSE_WAGER" && stakes.gemWager > 0) {
+    if (stakes.failureConsequence === 'LOSE_WAGER' && stakes.gemWager > 0) {
       gemsLost = stakes.gemWager;
     }
     newWinStreak = 0;
-    if (stakes.failureConsequence === "REDUCED_XP") {
+    if (stakes.failureConsequence === 'REDUCED_XP') {
       xpEarned = Math.floor(baseXp * 0.25);
     }
   }
@@ -103,26 +103,26 @@ export async function recordStakesResult(
   result: StakesSessionResult,
 ): Promise<void> {
   try {
-    eventBus.publish("session:stakes_completed", result);
-    if (result.difficulty === "DEEP_WORK" && result.completed) {
+    eventBus.publish('session:stakes_completed', result);
+    if (result.difficulty === 'DEEP_WORK' && result.completed) {
       if (result.winStreakUpdated >= 3) {
-        eventBus.publish("achievement:unlocked", {
+        eventBus.publish('achievement:unlocked', {
           userId: result.userId,
-          achievementId: "deep_work_streak_3",
+          achievementId: 'deep_work_streak_3',
           unlockedAt: Date.now(),
         });
       }
       if (result.winStreakUpdated >= 7) {
-        eventBus.publish("achievement:unlocked", {
+        eventBus.publish('achievement:unlocked', {
           userId: result.userId,
-          achievementId: "deep_work_streak_7",
+          achievementId: 'deep_work_streak_7',
           unlockedAt: Date.now(),
         });
       }
     }
     Sentry.addBreadcrumb({
-      category: "session_stakes",
-      message: `Session completed with ${result.difficulty}: ${result.completed ? "success" : "abandoned"}`,
+      category: 'session_stakes',
+      message: `Session completed with ${result.difficulty}: ${result.completed ? 'success' : 'abandoned'}`,
       data: {
         difficulty: result.difficulty,
         xpEarned: result.xpEarned,
@@ -132,7 +132,7 @@ export async function recordStakesResult(
     });
   } catch (error) {
     Sentry.captureException(error, {
-      tags: { feature: "session_stakes", action: "record_result" },
+      tags: { feature: 'session_stakes', action: 'record_result' },
     });
   }
 }

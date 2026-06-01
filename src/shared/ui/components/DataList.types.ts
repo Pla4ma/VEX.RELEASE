@@ -1,8 +1,8 @@
 /**
  * DataList — type definitions
  */
-import type { ReactElement } from "react";
-import type { ViewStyle } from "react-native";
+import type { ReactElement } from 'react';
+import type { ViewStyle } from 'react-native';
 
 export interface DataListItem<T> {
   id: string;
@@ -36,7 +36,7 @@ export type DataListProps<T> = {
   emptyTitle?: string;
   emptySubtitle?: string;
   emptyIcon?: string;
-  selectionMode?: "none" | "single" | "multiple";
+  selectionMode?: 'none' | 'single' | 'multiple';
   selectedIds?: Set<string>;
   onSelectionChange?: (ids: Set<string>) => void;
   onRefresh?: () => void | Promise<void>;

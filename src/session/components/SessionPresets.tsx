@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import { View, Text, Pressable, ScrollView } from "react-native";
-import { useSessionPresets } from "../hooks/useSession";
-import type { SessionPreset } from "../types";
-import { createSheet } from "@/shared/ui/create-sheet";
-import { launchColors } from "@theme/tokens/launch-colors";
-import { PresetCard } from "./PresetCard";
-import { CreatePresetForm } from "./CreatePresetForm";
-import { cardSelection } from "../../utils/haptics";
+import React, { useState } from 'react';
+import { View, Text, Pressable, ScrollView } from 'react-native';
+import { useSessionPresets } from '../hooks/useSession';
+import type { SessionPreset } from '../types';
+import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
+import { PresetCard } from './PresetCard';
+import { CreatePresetForm } from './CreatePresetForm';
+import { cardSelection } from '../../utils/haptics';
 
 interface SessionPresetsProps {
   userId: string;
@@ -22,13 +22,13 @@ export const SessionPresets: React.FC<SessionPresetsProps> = ({
   const { presets, createPreset, deletePreset } = useSessionPresets();
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const categories = ["All", "Focus", "Study", "Work", "Creative", "Health"];
+  const categories = ['All', 'Focus', 'Study', 'Work', 'Creative', 'Health'];
   const filteredPresets =
-    selectedCategory && selectedCategory !== "All"
+    selectedCategory && selectedCategory !== 'All'
       ? presets.filter(
           (p) =>
             p.category === selectedCategory ||
-            (selectedCategory === "Focus" && !p.category),
+            (selectedCategory === 'Focus' && !p.category),
         )
       : presets;
 
@@ -36,7 +36,7 @@ export const SessionPresets: React.FC<SessionPresetsProps> = ({
     createPreset({
       name,
       duration: durationSeconds,
-      category: "custom",
+      category: 'custom',
     });
     setShowCreateModal(false);
   };
@@ -58,7 +58,7 @@ export const SessionPresets: React.FC<SessionPresetsProps> = ({
               pressed && { opacity: 0.8 },
             ]}
             onPress={() =>
-              setSelectedCategory(category === "All" ? null : category)
+              setSelectedCategory(category === 'All' ? null : category)
             }
             accessibilityLabel={`Select ${category} category`}
             accessibilityRole="button"
@@ -128,25 +128,25 @@ const styles = createSheet({
   categoryChipText: {
     color: launchColors.hex_9e9e9e,
     fontSize: 14,
-    fontWeight: "500",
+    fontWeight: '500',
   },
   categoryChipTextActive: { color: launchColors.hex_fff },
   presetsContainer: { flex: 1 },
-  grid: { flexDirection: "row", flexWrap: "wrap", gap: 12, padding: 4 },
+  grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 12, padding: 4 },
   createButton: {
     margin: 16,
     padding: 16,
-    backgroundColor: "transparent",
+    backgroundColor: 'transparent',
     borderWidth: 2,
     borderColor: launchColors.hex_e94560,
-    borderStyle: "dashed",
+    borderStyle: 'dashed',
     borderRadius: 12,
-    alignItems: "center",
+    alignItems: 'center',
   },
   createButtonText: {
     color: launchColors.hex_e94560,
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: '600',
   },
 });
 

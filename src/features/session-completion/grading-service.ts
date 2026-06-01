@@ -3,9 +3,9 @@ import {
   SessionGradingResultSchema,
   type SessionGradingInput,
   type SessionGradingResult,
-} from "./grading-schemas";
-import { clamp, scoreToGrade, gradeToLabel, gradeToXpMultiplier, gradeToFocusDelta } from "./grading-helpers";
-import { buildFactors } from "./grading-factors";
+} from './grading-schemas';
+import { clamp, scoreToGrade, gradeToLabel, gradeToXpMultiplier, gradeToFocusDelta } from './grading-helpers';
+import { buildFactors } from './grading-factors';
 
 export function calculateSessionGrade(
   rawInput: SessionGradingInput,
@@ -14,11 +14,11 @@ export function calculateSessionGrade(
   if (input.isAbandoned) {
     return SessionGradingResultSchema.parse({
       abandonmentReason:
-        "Session ended before a full completion result could be scored.",
+        'Session ended before a full completion result could be scored.',
       focusScoreImpactRecommendation: -8,
-      kind: "abandoned",
+      kind: 'abandoned',
       userFacingReason:
-        "Session was abandoned, so this result is tracked as recovery-needed.",
+        'Session was abandoned, so this result is tracked as recovery-needed.',
       xpQualityMultiplier: 0.4,
     });
   }
@@ -57,7 +57,7 @@ export function calculateSessionGrade(
     grade,
     gradeLabel: gradeToLabel(grade),
     gradeScore: roundedScore,
-    kind: "completed",
+    kind: 'completed',
     qualityScore: roundedScore,
     userFacingReason,
     xpQualityMultiplier: gradeToXpMultiplier(grade),

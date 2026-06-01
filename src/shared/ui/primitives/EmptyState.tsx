@@ -1,4 +1,4 @@
-export { EmptyState } from "./EmptyState.base";
+export { EmptyState } from './EmptyState.base';
 export {
   EmptyAnalytics,
   EmptyInsights,
@@ -8,4 +8,4 @@ export {
   EmptyFeed,
   EmptyRivals,
   EmptyAchievements,
-} from "./EmptyState.variants";
+} from './EmptyState.variants';

@@ -1,23 +1,23 @@
-import { useMemo, useCallback, useRef, useState, useEffect } from "react";
-import * as Sentry from "@sentry/react-native";
-import { useActiveStudyPlan } from "../../content-study/hooks/useActiveStudyPlan";
-import { useStreakSummary } from "../../streaks/hooks";
-import { useProgressionSummary } from "../../progression/hooks";
-import { useActiveBoss } from "../../boss/hooks";
-import { useSessionStats } from "../../../session/hooks/useSession";
-import { useAuthStore } from "../../../store";
-import { buildBehaviorProfile } from "../session-analyzer";
-import { getOrCreateCoachState } from "../persona-manager";
+import { useMemo, useCallback, useRef, useState, useEffect } from 'react';
+import * as Sentry from '@sentry/react-native';
+import { useActiveStudyPlan } from '../../content-study/hooks/useActiveStudyPlan';
+import { useStreakSummary } from '../../streaks/hooks';
+import { useProgressionSummary } from '../../progression/hooks';
+import { useActiveBoss } from '../../boss/hooks';
+import { useSessionStats } from '../../../session/hooks/useSession';
+import { useAuthStore } from '../../../store';
+import { buildBehaviorProfile } from '../session-analyzer';
+import { getOrCreateCoachState } from '../persona-manager';
 import {
   CoachRecommendationService,
   type CoachRecommendation,
   type RecommendationContext,
   convertToHomeRecommendation,
-} from "../services/CoachRecommendationService";
+} from '../services/CoachRecommendationService';
 function getLastSessionAt(stats: unknown): number {
-  if (stats && typeof stats === "object" && "lastSessionAt" in stats) {
-    const value = Reflect.get(stats, "lastSessionAt");
-    if (typeof value === "number") {
+  if (stats && typeof stats === 'object' && 'lastSessionAt' in stats) {
+    const value = Reflect.get(stats, 'lastSessionAt');
+    if (typeof value === 'number') {
       return value;
     }
   }
@@ -31,7 +31,7 @@ export interface UseCoachRecommendationReturn {
 }
 export function useCoachRecommendation(): UseCoachRecommendationReturn {
   const { user } = useAuthStore();
-  const userId = user?.id ?? "";
+  const userId = user?.id ?? '';
   const { data: activeStudyPlan, isLoading: studyLoading } =
     useActiveStudyPlan();
   const { data: streak, isLoading: streakLoading } = useStreakSummary(userId);
@@ -39,9 +39,9 @@ export function useCoachRecommendation(): UseCoachRecommendationReturn {
     useProgressionSummary(userId);
   const { data: activeBoss, isLoading: bossLoading } = useActiveBoss(userId);
   const { stats, isLoading: statsLoading } = useSessionStats(userId);
-  const [coachPersonaId, setCoachPersonaId] = useState<string>("mentor");
+  const [coachPersonaId, setCoachPersonaId] = useState<string>('mentor');
   const [behaviorProfile, setBehaviorProfile] =
-    useState<RecommendationContext["behaviorProfile"]>(null);
+    useState<RecommendationContext['behaviorProfile']>(null);
   const [recommendation, setRecommendation] =
     useState<CoachRecommendation | null>(null);
   const lastRefreshRef = useRef<number>(0);
@@ -53,14 +53,14 @@ export function useCoachRecommendation(): UseCoachRecommendationReturn {
     async function fetchCoachState(): Promise<void> {
       try {
         const state = await getOrCreateCoachState(userId);
-        setCoachPersonaId(state.personaId || "mentor");
+        setCoachPersonaId(state.personaId || 'mentor');
         const profile = await buildBehaviorProfile(userId);
         setBehaviorProfile(profile);
       } catch (error) {
         Sentry.captureException(error, {
           tags: {
-            feature: "ai-coach",
-            operation: "fetch-coach-recommendation-state",
+            feature: 'ai-coach',
+            operation: 'fetch-coach-recommendation-state',
           },
         });
       }
@@ -154,12 +154,12 @@ export function useCoachRecommendation(): UseCoachRecommendationReturn {
   }, [generateRecommendation]);
   const getPersonaName = useCallback(() => {
     const names: Record<string, string> = {
-      mentor: "Mentor",
-      trainer: "Trainer",
-      peer: "Peer",
-      professor: "Professor",
+      mentor: 'Mentor',
+      trainer: 'Trainer',
+      peer: 'Peer',
+      professor: 'Professor',
     };
-    return names[coachPersonaId] || "Mentor";
+    return names[coachPersonaId] || 'Mentor';
   }, [coachPersonaId]);
   const isLoading =
     studyLoading || streakLoading || progLoading || bossLoading || statsLoading;

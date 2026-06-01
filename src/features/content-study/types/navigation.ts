@@ -3,7 +3,7 @@
  * Stack navigation type definitions
  */
 
-import type { ContentSourceType, InputTab } from "./enums";
+import type { ContentSourceType, InputTab } from './enums';
 
 export type ContentStudyStackParamList = {
   ContentInput: {
@@ -14,7 +14,7 @@ export type ContentStudyStackParamList = {
   ContentReview: {
     contentId: string;
     autoStartGeneration?: boolean;
-    highlightSection?: "text" | "metadata";
+    highlightSection?: 'text' | 'metadata';
   };
   StudyPlan: {
     generationId: string;
@@ -23,11 +23,11 @@ export type ContentStudyStackParamList = {
     focusTaskId?: string;
   };
   ContentHistory: {
-    filter?: ContentSourceType | "all";
-    sortBy?: "newest" | "oldest" | "most-used";
+    filter?: ContentSourceType | 'all';
+    sortBy?: 'newest' | 'oldest' | 'most-used';
   };
   ContentDetail: {
     contentId: string;
-    tab?: "overview" | "tasks" | "quiz" | "sessions";
+    tab?: 'overview' | 'tasks' | 'quiz' | 'sessions';
   };
 };

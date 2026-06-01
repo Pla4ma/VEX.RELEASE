@@ -1,23 +1,23 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from '@tanstack/react-query';
 import type {
   Achievement,
   AchievementCategory,
   AchievementRarity,
   UserAchievement,
-} from "./types";
-import { ALL_ACHIEVEMENTS, getAchievementById } from "./definitions";
-import * as repository from "./repository";
+} from './types';
+import { ALL_ACHIEVEMENTS, getAchievementById } from './definitions';
+import * as repository from './repository';
 export const achievementKeys = {
-  all: ["achievements"] as const,
-  byUser: (userId: string) => [...achievementKeys.all, "user", userId] as const,
+  all: ['achievements'] as const,
+  byUser: (userId: string) => [...achievementKeys.all, 'user', userId] as const,
   list: (userId: string) =>
-    [...achievementKeys.byUser(userId), "list"] as const,
+    [...achievementKeys.byUser(userId), 'list'] as const,
   detail: (userId: string, achievementId: string) =>
-    [...achievementKeys.byUser(userId), "detail", achievementId] as const,
+    [...achievementKeys.byUser(userId), 'detail', achievementId] as const,
   recent: (userId: string) =>
-    [...achievementKeys.byUser(userId), "recent"] as const,
+    [...achievementKeys.byUser(userId), 'recent'] as const,
   stats: (userId: string) =>
-    [...achievementKeys.byUser(userId), "stats"] as const,
+    [...achievementKeys.byUser(userId), 'stats'] as const,
 };
 export interface AchievementWithStatus extends Achievement {
   progress: number;
@@ -83,7 +83,7 @@ export function useAchievements(userId: string): UseAchievementsResult {
       } catch (err) {
         throw err instanceof Error
           ? err
-          : new Error("Failed to fetch achievements");
+          : new Error('Failed to fetch achievements');
       }
     },
     staleTime: 5 * 60 * 1000,
@@ -129,7 +129,7 @@ export function useAchievementProgress(
       } catch (err) {
         throw err instanceof Error
           ? err
-          : new Error("Failed to fetch achievement progress");
+          : new Error('Failed to fetch achievement progress');
       }
     },
     staleTime: 5 * 60 * 1000,
@@ -169,7 +169,7 @@ export function useRecentUnlocks(userId: string): UseRecentUnlocksResult {
       } catch (err) {
         throw err instanceof Error
           ? err
-          : new Error("Failed to fetch recent unlocks");
+          : new Error('Failed to fetch recent unlocks');
       }
     },
     staleTime: 2 * 60 * 1000,

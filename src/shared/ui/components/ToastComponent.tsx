@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useCallback } from "react";
-import { View, Pressable } from "react-native";
+import React, { useEffect, useRef, useCallback } from 'react';
+import { View, Pressable } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -12,13 +12,13 @@ import Animated, {
   SlideOutUp,
   SlideInDown,
   SlideOutDown,
-} from "react-native-reanimated";
-import { GestureDetector, Gesture } from "react-native-gesture-handler";
-import { Text } from "../../../components/primitives/Text";
-import { Icon } from "../../../icons";
-import { useTheme } from "../../../theme";
-import { styles, getToastTypeStyle } from "./Toast.styles";
-import type { ToastProps } from "./Toast.types";
+} from 'react-native-reanimated';
+import { GestureDetector, Gesture } from 'react-native-gesture-handler';
+import { Text } from '../../../components/primitives/Text';
+import { Icon } from '../../../icons';
+import { useTheme } from '../../../theme';
+import { styles, getToastTypeStyle } from './Toast.styles';
+import type { ToastProps } from './Toast.types';
 
 export const ToastComponent: React.FC<ToastProps> = ({ toast, onDismiss }) => {
   const { theme } = useTheme();
@@ -90,8 +90,8 @@ export const ToastComponent: React.FC<ToastProps> = ({ toast, onDismiss }) => {
     width: `${progress.value * 100}%`,
   }));
 
-  const enteringAnimation = toast.position === "top" ? SlideInUp : SlideInDown;
-  const exitingAnimation = toast.position === "top" ? SlideOutUp : SlideOutDown;
+  const enteringAnimation = toast.position === 'top' ? SlideInUp : SlideInDown;
+  const exitingAnimation = toast.position === 'top' ? SlideOutUp : SlideOutDown;
 
   return (
     <Animated.View
@@ -136,7 +136,7 @@ export const ToastComponent: React.FC<ToastProps> = ({ toast, onDismiss }) => {
               style={({ pressed }) => [
                 styles.action,
                 { backgroundColor: rgaOverlay },
-                toastAction.variant === "destructive" && {
+                toastAction.variant === 'destructive' && {
                   backgroundColor: `${theme.colors.error.dark}4D`,
                 },
                 pressed && { opacity: 0.8 },

@@ -4,6 +4,6 @@ export interface MonthlyReportData {
   endingScore: number;
   change: number;
   sessionsCompleted: number;
-  grade: "A+" | "A" | "B+" | "B" | "C" | "D";
+  grade: 'A+' | 'A' | 'B+' | 'B' | 'C' | 'D';
   highlight: string;
 }

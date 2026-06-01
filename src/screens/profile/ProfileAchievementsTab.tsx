@@ -1,10 +1,10 @@
-import React from "react";
-import { Pressable } from "react-native";
-import { Box, Card, Text } from "../../components/primitives";
-import { Badge } from "../../components/Badge";
-import { EmptyState } from "../../components/EmptyState";
-import { Skeleton } from "../../components/ui/Skeleton";
-import type { Theme } from "../../theme/types";
+import React from 'react';
+import { Pressable } from 'react-native';
+import { Box, Card, Text } from '../../components/primitives';
+import { Badge } from '../../components/Badge';
+import { EmptyState } from '../../components/EmptyState';
+import { Skeleton } from '../../components/ui/Skeleton';
+import type { Theme } from '../../theme/types';
 
 interface AchievementCard {
   id: string;
@@ -13,7 +13,7 @@ interface AchievementCard {
   description: string;
   progressLabel: string;
   statusLabel: string;
-  statusTone: "success" | "secondary";
+  statusTone: 'success' | 'secondary';
   accessibilityLabel: string;
 }
 
@@ -84,7 +84,7 @@ export const ProfileAchievementsTab: React.FC<ProfileAchievementsTabProps> = ({
             size="md"
             style={{
               backgroundColor: theme.colors.background.secondary,
-              opacity: item.statusTone === "success" ? 1 : 0.7,
+              opacity: item.statusTone === 'success' ? 1 : 0.7,
             }}
           >
             <Box flexDirection="row" alignItems="center" gap={12}>
@@ -96,7 +96,7 @@ export const ProfileAchievementsTab: React.FC<ProfileAchievementsTabProps> = ({
                 alignItems="center"
                 style={{
                   backgroundColor:
-                    item.statusTone === "success"
+                    item.statusTone === 'success'
                       ? theme.colors.primary[100]
                       : theme.colors.background.tertiary,
                 }}

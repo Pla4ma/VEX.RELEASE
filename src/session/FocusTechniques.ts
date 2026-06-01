@@ -1,4 +1,4 @@
-import { launchColors } from "@theme/tokens/launch-colors";
+import { launchColors } from '@theme/tokens/launch-colors';
 /**
  * Focus Techniques Configuration
  *
@@ -7,11 +7,11 @@ import { launchColors } from "@theme/tokens/launch-colors";
  */
 
 export type FocusTechnique =
-  | "POMODORO"
-  | "FLOWTIME"
-  | "ULTRADIAN"
-  | "DEEP_WORK"
-  | "CUSTOM";
+  | 'POMODORO'
+  | 'FLOWTIME'
+  | 'ULTRADIAN'
+  | 'DEEP_WORK'
+  | 'CUSTOM';
 
 export interface FocusTechniqueConfig {
   id: FocusTechnique;
@@ -31,10 +31,10 @@ export interface FocusTechniqueConfig {
 
 export const FOCUS_TECHNIQUES: Record<FocusTechnique, FocusTechniqueConfig> = {
   POMODORO: {
-    id: "POMODORO",
-    name: "Pomodoro",
+    id: 'POMODORO',
+    name: 'Pomodoro',
     description:
-      "25 minutes of focus, 5 minute break. Classic time management.",
+      '25 minutes of focus, 5 minute break. Classic time management.',
     duration: 25 * 60,
     breakDuration: 5 * 60,
     longBreakDuration: 15 * 60,
@@ -42,15 +42,15 @@ export const FOCUS_TECHNIQUES: Record<FocusTechnique, FocusTechniqueConfig> = {
     longBreakInterval: 4,
     minDuration: 15 * 60,
     maxDuration: 45 * 60,
-    icon: "timer",
+    icon: 'timer',
     color: launchColors.hex_ff6b6b,
-    bestFor: ["tasks", "studying", "writing", "beginners"],
+    bestFor: ['tasks', 'studying', 'writing', 'beginners'],
   },
   FLOWTIME: {
-    id: "FLOWTIME",
-    name: "Flowtime",
+    id: 'FLOWTIME',
+    name: 'Flowtime',
     description:
-      "Flexible duration based on your natural flow. Break when needed.",
+      'Flexible duration based on your natural flow. Break when needed.',
     duration: 45 * 60,
     breakDuration: 10 * 60,
     longBreakDuration: 30 * 60,
@@ -58,15 +58,15 @@ export const FOCUS_TECHNIQUES: Record<FocusTechnique, FocusTechniqueConfig> = {
     longBreakInterval: 3,
     minDuration: 20 * 60,
     maxDuration: 90 * 60,
-    icon: "wave",
+    icon: 'wave',
     color: launchColors.hex_4ecdc4,
-    bestFor: ["creative work", "coding", "design", "experienced users"],
+    bestFor: ['creative work', 'coding', 'design', 'experienced users'],
   },
   ULTRADIAN: {
-    id: "ULTRADIAN",
-    name: "52/17 Rule",
+    id: 'ULTRADIAN',
+    name: '52/17 Rule',
     description:
-      "52 minutes focus, 17 minute break. Matches natural ultradian rhythms.",
+      '52 minutes focus, 17 minute break. Matches natural ultradian rhythms.',
     duration: 52 * 60,
     breakDuration: 17 * 60,
     longBreakDuration: 30 * 60,
@@ -74,15 +74,15 @@ export const FOCUS_TECHNIQUES: Record<FocusTechnique, FocusTechniqueConfig> = {
     longBreakInterval: 2,
     minDuration: 45 * 60,
     maxDuration: 60 * 60,
-    icon: "pulse",
+    icon: 'pulse',
     color: launchColors.hex_95e1d3,
-    bestFor: ["sustained focus", "deep work", "professionals"],
+    bestFor: ['sustained focus', 'deep work', 'professionals'],
   },
   DEEP_WORK: {
-    id: "DEEP_WORK",
-    name: "Deep Work",
+    id: 'DEEP_WORK',
+    name: 'Deep Work',
     description:
-      "90 minutes of uninterrupted focus. For complex cognitive tasks.",
+      '90 minutes of uninterrupted focus. For complex cognitive tasks.',
     duration: 90 * 60,
     breakDuration: 20 * 60,
     longBreakDuration: 45 * 60,
@@ -90,14 +90,14 @@ export const FOCUS_TECHNIQUES: Record<FocusTechnique, FocusTechniqueConfig> = {
     longBreakInterval: 1,
     minDuration: 60 * 60,
     maxDuration: 120 * 60,
-    icon: "brain",
+    icon: 'brain',
     color: launchColors.hex_a8e6cf,
-    bestFor: ["complex problems", "learning", "research", "writing"],
+    bestFor: ['complex problems', 'learning', 'research', 'writing'],
   },
   CUSTOM: {
-    id: "CUSTOM",
-    name: "Custom",
-    description: "Define your own focus and break durations.",
+    id: 'CUSTOM',
+    name: 'Custom',
+    description: 'Define your own focus and break durations.',
     duration: 30 * 60,
     breakDuration: 5 * 60,
     longBreakDuration: 15 * 60,
@@ -105,9 +105,9 @@ export const FOCUS_TECHNIQUES: Record<FocusTechnique, FocusTechniqueConfig> = {
     longBreakInterval: 4,
     minDuration: 5 * 60,
     maxDuration: 180 * 60,
-    icon: "settings",
+    icon: 'settings',
     color: launchColors.hex_ffd93d,
-    bestFor: ["personal preference", "experimenting"],
+    bestFor: ['personal preference', 'experimenting'],
   },
 };
 
@@ -165,25 +165,25 @@ export function createConfigFromTechnique(
  * Suggest technique based on user preferences and history
  */
 export function suggestTechnique(
-  userLevel: "beginner" | "intermediate" | "advanced",
+  userLevel: 'beginner' | 'intermediate' | 'advanced',
   activityType: string,
   preferredDuration?: number,
 ): FocusTechnique {
-  if (userLevel === "beginner") {
-    return "POMODORO";
+  if (userLevel === 'beginner') {
+    return 'POMODORO';
   }
 
-  if (activityType === "creative" || activityType === "coding") {
-    return "FLOWTIME";
+  if (activityType === 'creative' || activityType === 'coding') {
+    return 'FLOWTIME';
   }
 
-  if (activityType === "deep" || activityType === "research") {
-    return "DEEP_WORK";
+  if (activityType === 'deep' || activityType === 'research') {
+    return 'DEEP_WORK';
   }
 
   if (preferredDuration && preferredDuration >= 45 * 60) {
-    return "ULTRADIAN";
+    return 'ULTRADIAN';
   }
 
-  return "POMODORO";
+  return 'POMODORO';
 }

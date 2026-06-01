@@ -1,6 +1,6 @@
-import { z } from "zod";
-import { LaneSchema } from "../lane-engine/schemas";
-import { SessionModeSchema } from "../../session/modes";
+import { z } from 'zod';
+import { LaneSchema } from '../lane-engine/schemas';
+import { SessionModeSchema } from '../../session/modes';
 
 // ============================================================================
 // Session Stake Schema (Phase 2) — @deprecated Replaced by LaneSessionBrief
@@ -14,13 +14,13 @@ export const SessionStakeSchema = z
     // User choices
     selectedDurationSeconds: z.number().min(60).max(14400),
     selectedMode: z.enum([
-      "LIGHT_FOCUS",
-      "DEEP_WORK",
-      "SPRINT",
-      "CREATIVE",
-      "STUDY",
-      "RECOVERY",
-      "STARTER",
+      'LIGHT_FOCUS',
+      'DEEP_WORK',
+      'SPRINT',
+      'CREATIVE',
+      'STUDY',
+      'RECOVERY',
+      'STARTER',
     ]),
     selectedLoadout: z.array(z.string().min(1)).optional(),
 
@@ -40,7 +40,7 @@ export const SessionStakeSchema = z
     // Streak stakes
     streak: z.object({
       currentDays: z.number(),
-      status: z.enum(["SAFE", "AT_RISK", "CRITICAL"]),
+      status: z.enum(['SAFE', 'AT_RISK', 'CRITICAL']),
       hoursRemaining: z.number().optional(),
     }),
 
@@ -66,7 +66,7 @@ export type SessionStake = z.infer<typeof SessionStakeSchema>;
 export const LaneSessionBriefSchema = z
   .object({
     lane: LaneSchema,
-    userFacingModeName: z.enum(["Study", "Run", "Project", "Clean"]),
+    userFacingModeName: z.enum(['Study', 'Run', 'Project', 'Clean']),
     title: z.string().min(1),
     body: z.string().min(1),
     successCondition: z.string().min(1),
@@ -79,18 +79,18 @@ export const LaneSessionBriefSchema = z
     risk: z
       .object({
         type: z.enum([
-          "deadline",
-          "avoidance",
-          "streak",
-          "project_stale",
-          "none",
+          'deadline',
+          'avoidance',
+          'streak',
+          'project_stale',
+          'none',
         ]),
         label: z.string().min(1),
       })
       .nullable(),
     friction: z
       .object({
-        level: z.enum(["none", "soft", "medium", "hard"]),
+        level: z.enum(['none', 'soft', 'medium', 'hard']),
         reason: z.string().min(1),
       })
       .nullable(),

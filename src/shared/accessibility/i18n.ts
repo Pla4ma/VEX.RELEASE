@@ -1,12 +1,12 @@
-import { I18nManager } from "react-native";
-import type { SupportedLanguage, TranslationKeys } from "./types";
-import { TRANSLATIONS } from "./translations";
+import { I18nManager } from 'react-native';
+import type { SupportedLanguage, TranslationKeys } from './types';
+import { TRANSLATIONS } from './translations';
 
-let currentLanguage: SupportedLanguage = "en";
+let currentLanguage: SupportedLanguage = 'en';
 
 export function setLanguage(lang: SupportedLanguage): void {
   currentLanguage = lang;
-  const isRTLLanguage = lang === "ar" || lang === "he";
+  const isRTLLanguage = lang === 'ar' || lang === 'he';
   I18nManager.allowRTL(isRTLLanguage);
   I18nManager.forceRTL(isRTLLanguage);
 }
@@ -26,7 +26,7 @@ export function tInterpolated(
 ): string {
   let text = t(key);
   for (const [k, v] of Object.entries(values)) {
-    text = text.replace(new RegExp(`{{${k}}}`, "g"), String(v));
+    text = text.replace(new RegExp(`{{${k}}}`, 'g'), String(v));
   }
   return text;
 }

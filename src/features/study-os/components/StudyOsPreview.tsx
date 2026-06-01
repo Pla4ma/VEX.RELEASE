@@ -4,15 +4,15 @@
  * Day 0 tiny Study OS preview for student lane.
  * Shows "Start first study block" CTA — no upload/import/AI.
  */
-import React from "react";
-import { Pressable } from "react-native";
-import Animated, { FadeInUp } from "react-native-reanimated";
+import React from 'react';
+import { Pressable } from 'react-native';
+import Animated, { FadeInUp } from 'react-native-reanimated';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import { buttonTap } from "../../../utils/haptics";
-import type { StudyOsHomeSurface } from "../schemas";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import { buttonTap } from '../../../utils/haptics';
+import type { StudyOsHomeSurface } from '../schemas';
 
 export interface StudyOsPreviewProps {
   surface: StudyOsHomeSurface;
@@ -26,7 +26,7 @@ export function StudyOsPreview({
   isLoading = false,
 }: StudyOsPreviewProps): JSX.Element {
   const { theme } = useTheme();
-  if (surface.hidden) return <></>;
+  if (surface.hidden) {return <></>;}
 
   return (
     <Animated.View entering={FadeInUp.duration(400).delay(200)}>

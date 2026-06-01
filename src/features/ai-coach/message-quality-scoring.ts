@@ -1,8 +1,8 @@
 import {
   MessageQualityElementValues,
   type MessageQualityElement,
-} from "./message-quality-schema";
-import { GENERIC_PATTERNS, QUALITY_PATTERNS } from "./message-quality-patterns";
+} from './message-quality-schema';
+import { GENERIC_PATTERNS, QUALITY_PATTERNS } from './message-quality-patterns';
 
 export function detectGenericPatterns(content: string): {
   isGeneric: boolean;
@@ -12,24 +12,24 @@ export function detectGenericPatterns(content: string): {
   let isGeneric = false;
   const lowerContent = content.toLowerCase();
   const genericPhrases = [
-    "keep going",
-    "you are doing great",
-    "try focusing more",
-    "come back today",
-    "good job",
-    "nice work",
-    "well done",
-    "awesome",
-    "fantastic",
-    "you can do it",
-    "believe in yourself",
-    "stay strong",
-    "keep it up",
+    'keep going',
+    'you are doing great',
+    'try focusing more',
+    'come back today',
+    'good job',
+    'nice work',
+    'well done',
+    'awesome',
+    'fantastic',
+    'you can do it',
+    'believe in yourself',
+    'stay strong',
+    'keep it up',
   ];
 
   for (const phrase of genericPhrases) {
     const pattern = GENERIC_PATTERNS.find((candidate) =>
-      candidate.source.includes(phrase.replace(/\s+/g, "\\s+")),
+      candidate.source.includes(phrase.replace(/\s+/g, '\\s+')),
     );
     if (lowerContent.includes(phrase) || pattern?.test(content)) {
       isGeneric = true;
@@ -42,18 +42,18 @@ export function detectGenericPatterns(content: string): {
 
   if (content.length < 25) {
     isGeneric = true;
-    reasons.push("Message too short (< 20 chars)");
+    reasons.push('Message too short (< 20 chars)');
   }
   if (
     !containsSpecificData(content) ||
-    lowerContent.includes("try focusing more")
+    lowerContent.includes('try focusing more')
   ) {
     isGeneric = true;
-    reasons.push("No specific user data referenced");
+    reasons.push('No specific user data referenced');
   }
   if (isAllEncouragement(content)) {
     isGeneric = true;
-    reasons.push("Only generic encouragement, no specific guidance");
+    reasons.push('Only generic encouragement, no specific guidance');
   }
 
   return { isGeneric, reasons };
@@ -93,14 +93,14 @@ export function determineSuggestedAction(
   isGeneric: boolean,
   qualityElementCount: number,
   confidence: number,
-): "approve" | "reject" | "improve" {
+): 'approve' | 'reject' | 'improve' {
   if (isGeneric && qualityElementCount < 2) {
-    return "reject";
+    return 'reject';
   }
   if (confidence < 0.4 || qualityElementCount < 2) {
-    return "improve";
+    return 'improve';
   }
-  return "approve";
+  return 'approve';
 }
 
 function containsSpecificData(content: string): boolean {
@@ -117,22 +117,22 @@ function containsSpecificData(content: string): boolean {
 
 function isAllEncouragement(content: string): boolean {
   const encouragementWords = [
-    "great",
-    "amazing",
-    "fantastic",
-    "wonderful",
-    "excellent",
-    "good",
-    "nice",
-    "awesome",
-    "incredible",
-    "unstoppable",
-    "keep",
-    "going",
-    "continue",
-    "believe",
-    "trust",
-    "stay",
+    'great',
+    'amazing',
+    'fantastic',
+    'wonderful',
+    'excellent',
+    'good',
+    'nice',
+    'awesome',
+    'incredible',
+    'unstoppable',
+    'keep',
+    'going',
+    'continue',
+    'believe',
+    'trust',
+    'stay',
   ];
   const words = content.toLowerCase().split(/\s+/);
   const encouragementCount = words.filter((word) =>

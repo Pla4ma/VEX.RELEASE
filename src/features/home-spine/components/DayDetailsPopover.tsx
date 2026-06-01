@@ -1,13 +1,13 @@
-import React from "react";
-import { Pressable } from "react-native";
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
+import React from 'react';
+import { Pressable } from 'react-native';
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
 import {
   EVENT_ICONS,
   EVENT_LABELS,
   type DayData,
-} from "./weekly-calendar-types";
+} from './weekly-calendar-types';
 
 export function DayDetailsPopover({
   day,
@@ -17,10 +17,10 @@ export function DayDetailsPopover({
   onClose: () => void;
 }): JSX.Element {
   const { theme } = useTheme();
-  const formattedDate = day.date.toLocaleDateString("en-US", {
-    weekday: "long",
-    month: "short",
-    day: "numeric",
+  const formattedDate = day.date.toLocaleDateString('en-US', {
+    weekday: 'long',
+    month: 'short',
+    day: 'numeric',
   });
   return (
     <Box
@@ -57,18 +57,18 @@ export function DayDetailsPopover({
         </Text>
         <Box flexDirection="row" alignItems="center" gap="sm">
           <Text fontSize={24}>
-            {day.status === "completed"
-              ? "✅"
-              : day.status === "partial"
-                ? "◐"
-                : day.status === "missed"
-                  ? "❌"
-                  : "📅"}
+            {day.status === 'completed'
+              ? '✅'
+              : day.status === 'partial'
+                ? '◐'
+                : day.status === 'missed'
+                  ? '❌'
+                  : '📅'}
           </Text>
           <Text variant="body" color="text.primary">
             {day.sessionsCompleted > 0
-              ? `${day.sessionsCompleted} session${day.sessionsCompleted !== 1 ? "s" : ""}`
-              : "No sessions"}
+              ? `${day.sessionsCompleted} session${day.sessionsCompleted !== 1 ? 's' : ''}`
+              : 'No sessions'}
           </Text>
         </Box>
       </Box>

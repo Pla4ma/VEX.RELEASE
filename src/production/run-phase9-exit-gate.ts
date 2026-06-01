@@ -5,19 +5,19 @@
  * to ensure all production hardening systems are ready.
  */
 
-import { Phase9ExitGate } from "./ExitGate.js";
-import { createDebugger } from "../utils/debug";
+import { Phase9ExitGate } from './ExitGate.js';
+import { createDebugger } from '../utils/debug';
 
-const debug = createDebugger("phase9-exit-gate");
+const debug = createDebugger('phase9-exit-gate');
 
 async function runPhase9ExitGate() {
-  debug.info("Starting PHASE 9 EXIT GATE verification...");
+  debug.info('Starting PHASE 9 EXIT GATE verification...');
 
   try {
     const exitGate = Phase9ExitGate.getInstance();
     const result = await exitGate.runExitGate();
 
-    debug.info("PHASE 9 EXIT GATE RESULTS", {
+    debug.info('PHASE 9 EXIT GATE RESULTS', {
       passed: result.passed,
       score: result.score,
       deploymentReady: result.deploymentReady,
@@ -36,7 +36,7 @@ async function runPhase9ExitGate() {
     });
 
     if (result.blockingIssues.length > 0) {
-      debug.warn("Blocking issues found", {
+      debug.warn('Blocking issues found', {
         count: result.blockingIssues.length,
         issues: result.blockingIssues.map((i) => ({
           category: i.category,
@@ -46,17 +46,17 @@ async function runPhase9ExitGate() {
     }
 
     if (result.passed && result.deploymentReady) {
-      debug.info("PHASE 9 EXIT GATE PASSED - Ready for deployment");
+      debug.info('PHASE 9 EXIT GATE PASSED - Ready for deployment');
     } else {
       debug.error(
-        "PHASE 9 EXIT GATE FAILED - Address blocking issues before deployment",
+        'PHASE 9 EXIT GATE FAILED - Address blocking issues before deployment',
       );
     }
 
     process.exit(result.passed && result.deploymentReady ? 0 : 1);
   } catch (error) {
     debug.error(
-      "PHASE 9 EXIT GATE EXECUTION FAILED",
+      'PHASE 9 EXIT GATE EXECUTION FAILED',
       error instanceof Error ? error : new Error(String(error)),
     );
     process.exit(1);

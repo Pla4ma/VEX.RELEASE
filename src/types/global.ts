@@ -1,4 +1,4 @@
-import { type ReactNode } from "react";
+import { type ReactNode } from 'react';
 export type Nullable<T> = T | null | undefined;
 export type Maybe<T> = T | null;
 export type DeepPartial<T> = {
@@ -14,12 +14,12 @@ export type StrictRecord<K extends keyof any, T> = Record<K, T>;
 export type AsyncResult<T, E = Error> =
   | { success: true; data: T; error: null }
   | { success: false; data: null; error: E };
-export type LoadingState = "idle" | "loading" | "success" | "error";
+export type LoadingState = 'idle' | 'loading' | 'success' | 'error';
 export type RequestState<T> =
-  | { status: "idle"; data: null; error: null }
-  | { status: "loading"; data: null; error: null }
-  | { status: "success"; data: T; error: null }
-  | { status: "error"; data: T | null; error: Error };
+  | { status: 'idle'; data: null; error: null }
+  | { status: 'loading'; data: null; error: null }
+  | { status: 'success'; data: T; error: null }
+  | { status: 'error'; data: T | null; error: Error };
 export interface PaginationData<T> {
   data: T[];
   page: number;
@@ -27,23 +27,23 @@ export interface PaginationData<T> {
   total: number;
   hasMore: boolean;
 }
-export type SortDirection = "asc" | "desc";
+export type SortDirection = 'asc' | 'desc';
 export interface SortConfig<T> {
   key: keyof T;
   direction: SortDirection;
 }
 export type FilterOperator =
-  | "eq"
-  | "neq"
-  | "gt"
-  | "gte"
-  | "lt"
-  | "lte"
-  | "contains"
-  | "startsWith"
-  | "endsWith"
-  | "in"
-  | "between";
+  | 'eq'
+  | 'neq'
+  | 'gt'
+  | 'gte'
+  | 'lt'
+  | 'lte'
+  | 'contains'
+  | 'startsWith'
+  | 'endsWith'
+  | 'in'
+  | 'between';
 export interface FilterConfig<T> {
   key: keyof T;
   operator: FilterOperator;
@@ -87,14 +87,14 @@ export interface ValidationError {
   code?: string;
 }
 export interface DeviceInfo {
-  platform: "ios" | "android" | "windows" | "macos" | "web";
+  platform: 'ios' | 'android' | 'windows' | 'macos' | 'web';
   version: string;
   model: string;
   brand: string;
   isTablet: boolean;
   isEmulator: boolean;
 }
-export type AppEnvironment = "development" | "staging" | "production";
+export type AppEnvironment = 'development' | 'staging' | 'production';
 export interface AppConfig {
   environment: AppEnvironment;
   apiUrl: string;
@@ -140,7 +140,7 @@ export interface Coordinates {
   longitude: number;
   accuracy?: number;
 }
-export type StringLiteral<T extends string> = T & { __brand: "StringLiteral" };
+export type StringLiteral<T extends string> = T & { __brand: 'StringLiteral' };
 export type TypeGuard<T> = (value: unknown) => value is T;
 export type Awaited<T> = T extends Promise<infer R> ? R : T;
 export type DeepNonNullable<T> = {

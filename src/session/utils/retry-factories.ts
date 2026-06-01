@@ -1,5 +1,5 @@
-import type { RetryConfig } from "./retry-strategy-types";
-import { RetryStrategy } from "./RetryStrategy";
+import type { RetryConfig } from './retry-strategy-types';
+import { RetryStrategy } from './RetryStrategy';
 
 export function createRetryStrategy(
   config?: Partial<RetryConfig>,
@@ -9,7 +9,7 @@ export function createRetryStrategy(
 
 let strategyInstance: RetryStrategy | null = null;
 export function getRetryStrategy(config?: Partial<RetryConfig>): RetryStrategy {
-  if (!strategyInstance) strategyInstance = new RetryStrategy(config);
+  if (!strategyInstance) {strategyInstance = new RetryStrategy(config);}
   return strategyInstance;
 }
 

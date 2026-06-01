@@ -1,15 +1,15 @@
-export { default as StreakGamblePrompt } from "./StreakGamblePrompt";
+export { default as StreakGamblePrompt } from './StreakGamblePrompt';
 export {
   trackStreakGambleDecision,
   useShouldShowGamblePrompt,
-} from "./helpers";
+} from './helpers';
 export {
   CRITICAL_HOURS_THRESHOLD,
   GAMBLE_SUCCESS_GRADES,
   GAMBLE_BONUS_XP,
-} from "./types";
+} from './types';
 export type {
   StreakGamblePromptProps,
   GambleState,
   GambleOutcome,
-} from "./types";
+} from './types';

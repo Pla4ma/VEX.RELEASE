@@ -1,7 +1,7 @@
-import * as Sentry from "@sentry/react-native";
-import { eventBus } from "../../events";
-import { getRewardService } from "../../rewards/RewardService";
-import * as repository from "./repository";
+import * as Sentry from '@sentry/react-native';
+import { eventBus } from '../../events';
+import { getRewardService } from '../../rewards/RewardService';
+import * as repository from './repository';
 import {
   AssignChallengeInputSchema,
   ChallengeProgressCheckResultSchema,
@@ -17,10 +17,10 @@ import {
   type DailyChallengeTriggerType,
   type UpdateChallengeProgressInput,
   type UserChallenge,
-} from "./schemas";
-import { ChallengeError, ChallengeNotFoundError, ChallengeNotActiveError } from "./errors";
-import { CONFIG, inferTriggerDelta, rewardBundleFor, toCompletionResult } from "./helpers";
-import { getActiveChallenges, getCompletedChallenges } from "./queries";
+} from './schemas';
+import { ChallengeError, ChallengeNotFoundError, ChallengeNotActiveError } from './errors';
+import { CONFIG, inferTriggerDelta, rewardBundleFor, toCompletionResult } from './helpers';
+import { getActiveChallenges, getCompletedChallenges } from './queries';
 
 export async function assignChallenge(
   input: AssignChallengeInput,
@@ -29,8 +29,8 @@ export async function assignChallenge(
   const challengeId = validated.challengeId;
   if (!challengeId) {
     throw new ChallengeError(
-      "A concrete challengeId is required for assignment",
-      "CHALLENGE_ID_REQUIRED",
+      'A concrete challengeId is required for assignment',
+      'CHALLENGE_ID_REQUIRED',
     );
   }
   return repository.createUserChallenge(
@@ -51,7 +51,7 @@ export async function updateChallengeProgress(
   if (!userChallenge || !challenge) {
     throw new ChallengeNotFoundError(validated.challengeId);
   }
-  if (userChallenge.status !== "ACTIVE") {
+  if (userChallenge.status !== 'ACTIVE') {
     throw new ChallengeNotActiveError(
       validated.challengeId,
       userChallenge.status,
@@ -63,7 +63,7 @@ export async function updateChallengeProgress(
     validated.delta,
     validated.source,
   );
-  eventBus.publish("challenge:progress", {
+  eventBus.publish('challenge:progress', {
     userId: validated.userId,
     challengeId: validated.challengeId,
     progress: updated.currentValue,
@@ -97,7 +97,7 @@ export async function checkChallengeProgress(
     const updated: ChallengeDetail[] = [];
     const completed: ChallengeCompletionResult[] = [];
     for (const detail of details) {
-      if (detail.userChallenge.status !== "ACTIVE") {
+      if (detail.userChallenge.status !== 'ACTIVE') {
         continue;
       }
       const delta = inferTriggerDelta(
@@ -123,7 +123,7 @@ export async function checkChallengeProgress(
     return ChallengeProgressCheckResultSchema.parse({ updated, completed });
   } catch (error) {
     Sentry.captureException(error, {
-      tags: { feature: "challenges", action: "check-progress" },
+      tags: { feature: 'challenges', action: 'check-progress' },
     });
     throw error;
   }
@@ -142,22 +142,22 @@ export async function claimChallengeReward(input: {
       (item) => item.challenge.id === validated.challengeId,
     );
     if (!detail) {
-      return { success: false, rewards: [], error: "Challenge not completed" };
+      return { success: false, rewards: [], error: 'Challenge not completed' };
     }
-    if (detail.userChallenge.status === "CLAIMED") {
-      return { success: false, rewards: [], error: "Reward already claimed" };
+    if (detail.userChallenge.status === 'CLAIMED') {
+      return { success: false, rewards: [], error: 'Reward already claimed' };
     }
     const rewardService = getRewardService(validated.userId);
     const rewards: ChallengeReward[] = [];
     if (detail.xpReward > 0) {
       await rewardService.grantReward(
-        "XP",
-        "CHALLENGE_COMPLETE",
+        'XP',
+        'CHALLENGE_COMPLETE',
         { baseAmount: 1 },
         { exactAmount: detail.xpReward, challengeId: validated.challengeId },
       );
       rewards.push({
-        type: "XP",
+        type: 'XP',
         amount: detail.xpReward,
         itemId: null,
         delivered: true,
@@ -165,20 +165,20 @@ export async function claimChallengeReward(input: {
       });
     }
     if (detail.coinReward > 0) {
-      /* coin rewards archived */ rewards.push({
-        type: "COINS",
+      rewards.push({
+        type: 'COINS',
         amount: detail.coinReward,
         itemId: null,
-        delivered: true,
-        deliveredAt: Date.now(),
+        delivered: false,
+        deliveredAt: null,
       });
     }
     await repository.updateUserChallenge(
       validated.userId,
       validated.challengeId,
-      { status: "CLAIMED", claimedAt: Date.now() },
+      { status: 'CLAIMED', claimedAt: Date.now() },
     );
-    eventBus.publish("challenge:reward_claimed", {
+    eventBus.publish('challenge:reward_claimed', {
       userId: validated.userId,
       challengeId: validated.challengeId,
       claimedAt: Date.now(),
@@ -186,7 +186,7 @@ export async function claimChallengeReward(input: {
     return { success: true, rewards, error: null };
   } catch (error) {
     Sentry.captureException(error, {
-      tags: { feature: "challenges", action: "claim-reward" },
+      tags: { feature: 'challenges', action: 'claim-reward' },
     });
     return {
       success: false,
@@ -194,7 +194,7 @@ export async function claimChallengeReward(input: {
       error:
         error instanceof Error
           ? error.message
-          : "Unknown challenge reward error",
+          : 'Unknown challenge reward error',
     };
   }
 }

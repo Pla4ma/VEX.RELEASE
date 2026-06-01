@@ -1,13 +1,13 @@
-import React from "react";
-import { Pressable, View, Text } from "react-native";
-import { useSession } from "../hooks/useSession";
-import { ActiveSessionHUDCompanion } from "./ActiveSessionHUDCompanion";
+import React from 'react';
+import { Pressable, View, Text } from 'react-native';
+import { useSession } from '../hooks/useSession';
+import { ActiveSessionHUDCompanion } from './ActiveSessionHUDCompanion';
 import {
   formatTime,
   getPhaseLabel,
   getStatusColor,
-} from "./ActiveSessionHUD.helpers";
-import styles from "./ActiveSessionHUD.styles";
+} from './ActiveSessionHUD.helpers';
+import styles from './ActiveSessionHUD.styles';
 
 interface ActiveSessionHUDProps {
   userId: string;
@@ -57,7 +57,7 @@ export const ActiveSessionHUD: React.FC<ActiveSessionHUDProps> = ({
           ]}
         >
           <Text style={styles.statusText}>
-            {isPaused ? "PAUSED" : isActive ? "ACTIVE" : "INACTIVE"}
+            {isPaused ? 'PAUSED' : isActive ? 'ACTIVE' : 'INACTIVE'}
           </Text>
         </View>
       </View>

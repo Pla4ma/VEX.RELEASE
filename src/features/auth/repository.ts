@@ -1,7 +1,7 @@
-import { getSupabaseClient, handleSupabaseError } from "../../config/supabase";
-import { mapSupabaseUser, attachOnboardingCompletion } from "../../services/supabase-user-mapper";
-import type { User } from "./types";
-import type { SignUpMetadata, AuthResult } from "./types";
+import { getSupabaseClient, handleSupabaseError } from '../../config/supabase';
+import { mapSupabaseUser, attachOnboardingCompletion } from '../../services/supabase-user-mapper';
+import type { User } from './types';
+import type { SignUpMetadata, AuthResult } from './types';
 
 const supabase = getSupabaseClient();
 
@@ -31,7 +31,7 @@ export async function signUpWithEmail(
     return { user, error: null };
   }
 
-  return { user: null, error: new Error("No user returned from sign up") };
+  return { user: null, error: new Error('No user returned from sign up') };
 }
 
 export async function signInWithEmail(
@@ -80,7 +80,7 @@ export async function updateUserPassword(newPassword: string): Promise<void> {
 }
 
 export async function resendVerificationEmail(email: string): Promise<void> {
-  const { error } = await supabase.auth.resend({ type: "signup", email });
+  const { error } = await supabase.auth.resend({ type: 'signup', email });
   if (error) {
     throw handleSupabaseError(error);
   }

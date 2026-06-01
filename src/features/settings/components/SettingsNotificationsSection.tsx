@@ -1,10 +1,10 @@
-import React from "react";
-import { View } from "react-native";
-import type { NotificationSettings } from "../types";
-import { ToggleSetting } from "./ToggleSetting";
-import { SettingItem } from "./SettingItem";
-import { createSheet } from "@/shared/ui/create-sheet";
-import { launchColors } from "@theme/tokens/launch-colors";
+import React from 'react';
+import { View } from 'react-native';
+import type { NotificationSettings } from '../types';
+import { ToggleSetting } from './ToggleSetting';
+import { SettingItem } from './SettingItem';
+import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
 
 interface SettingsNotificationsSectionProps {
   notifications: NotificationSettings | undefined;

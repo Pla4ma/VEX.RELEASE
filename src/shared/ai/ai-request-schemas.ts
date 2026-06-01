@@ -1,23 +1,23 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 // Request schemas — each requestType has its own schema for the discriminated union.
 
 export const GenerateCoachMessageRequestSchema = z.object({
-  requestType: z.literal("GENERATE_COACH_MESSAGE"),
+  requestType: z.literal('GENERATE_COACH_MESSAGE'),
   userId: z.string().uuid(),
   context: z.object({
     category: z.enum([
-      "STREAK_RISK",
-      "SESSION_SUGGESTION",
-      "MILESTONE_HYPE",
-      "COMEBACK_SUPPORT",
-      "POST_FAILURE",
-      "PROGRESS_REMINDER",
-      "DIFFICULTY_ADJUST",
-      "CHALLENGE_PROMPT",
-      "MOTIVATION_BOOST",
-      "BREAK_SUGGESTION",
-      "OVERLOAD_WARNING",
+      'STREAK_RISK',
+      'SESSION_SUGGESTION',
+      'MILESTONE_HYPE',
+      'COMEBACK_SUPPORT',
+      'POST_FAILURE',
+      'PROGRESS_REMINDER',
+      'DIFFICULTY_ADJUST',
+      'CHALLENGE_PROMPT',
+      'MOTIVATION_BOOST',
+      'BREAK_SUGGESTION',
+      'OVERLOAD_WARNING',
     ]),
     currentStreak: z.number().optional(),
     hoursSinceLastSession: z.number().optional(),
@@ -26,12 +26,12 @@ export const GenerateCoachMessageRequestSchema = z.object({
     daysInactive: z.number().optional(),
     personaStyle: z
       .enum([
-        "CHEERLEADER",
-        "DRILL_SERGEANT",
-        "FRIEND",
-        "MENTOR",
-        "RIVAL",
-        "MINDFUL",
+        'CHEERLEADER',
+        'DRILL_SERGEANT',
+        'FRIEND',
+        'MENTOR',
+        'RIVAL',
+        'MINDFUL',
       ])
       .optional(),
   }),
@@ -42,7 +42,7 @@ export type GenerateCoachMessageRequest = z.infer<
 >;
 
 export const GenerateSessionSummaryRequestSchema = z.object({
-  requestType: z.literal("GENERATE_SESSION_SUMMARY"),
+  requestType: z.literal('GENERATE_SESSION_SUMMARY'),
   userId: z.string().uuid(),
   context: z.object({
     sessionCount: z.number(),
@@ -61,7 +61,7 @@ export type GenerateSessionSummaryRequest = z.infer<
 >;
 
 export const GenerateComebackPromptRequestSchema = z.object({
-  requestType: z.literal("GENERATE_COMEBACK_PROMPT"),
+  requestType: z.literal('GENERATE_COMEBACK_PROMPT'),
   userId: z.string().uuid(),
   context: z.object({
     previousStreak: z.number(),
@@ -71,12 +71,12 @@ export const GenerateComebackPromptRequestSchema = z.object({
     bonusMultiplier: z.number(),
     personaStyle: z
       .enum([
-        "CHEERLEADER",
-        "DRILL_SERGEANT",
-        "FRIEND",
-        "MENTOR",
-        "RIVAL",
-        "MINDFUL",
+        'CHEERLEADER',
+        'DRILL_SERGEANT',
+        'FRIEND',
+        'MENTOR',
+        'RIVAL',
+        'MINDFUL',
       ])
       .optional(),
   }),
@@ -86,21 +86,21 @@ export type GenerateComebackPromptRequest = z.infer<
 >;
 
 export const GenerateStreakRiskNudgeRequestSchema = z.object({
-  requestType: z.literal("GENERATE_STREAK_RISK_NUDGE"),
+  requestType: z.literal('GENERATE_STREAK_RISK_NUDGE'),
   userId: z.string().uuid(),
   context: z.object({
     currentStreak: z.number(),
     hoursRemaining: z.number(),
-    riskLevel: z.enum(["low", "medium", "high", "critical"]),
+    riskLevel: z.enum(['low', 'medium', 'high', 'critical']),
     lastSessionQuality: z.number().optional(),
     personaStyle: z
       .enum([
-        "CHEERLEADER",
-        "DRILL_SERGEANT",
-        "FRIEND",
-        "MENTOR",
-        "RIVAL",
-        "MINDFUL",
+        'CHEERLEADER',
+        'DRILL_SERGEANT',
+        'FRIEND',
+        'MENTOR',
+        'RIVAL',
+        'MINDFUL',
       ])
       .optional(),
   }),
@@ -110,7 +110,7 @@ export type GenerateStreakRiskNudgeRequest = z.infer<
 >;
 
 export const GenerateWeeklyReflectionRequestSchema = z.object({
-  requestType: z.literal("GENERATE_WEEKLY_REFLECTION"),
+  requestType: z.literal('GENERATE_WEEKLY_REFLECTION'),
   userId: z.string().uuid(),
   context: z.object({
     weekNumber: z.number(),

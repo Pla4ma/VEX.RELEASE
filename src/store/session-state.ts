@@ -1,4 +1,4 @@
-import { create } from "zustand";
+import { create } from 'zustand';
 
 /**
  * Client-only UI state (Zustand — not server state).
@@ -11,14 +11,14 @@ import { create } from "zustand";
 export interface HomeHighlight {
   title: string;
   message: string;
-  tone: "celebration" | "info" | "warning";
+  tone: 'celebration' | 'info' | 'warning';
 }
 
 export interface CompletionSyncState {
   ledgerId: string | null;
   message: string | null;
   repairCtaLabel: string | null;
-  status: "idle" | "pending_sync" | "synced" | "failed_sync";
+  status: 'idle' | 'pending_sync' | 'synced' | 'failed_sync';
   updatedAt: number | null;
 }
 
@@ -40,7 +40,7 @@ export const useSessionUIStore = create<SessionUIState>((set) => ({
     ledgerId: null,
     message: null,
     repairCtaLabel: null,
-    status: "idle",
+    status: 'idle',
     updatedAt: null,
   },
   homeHighlight: null,
@@ -50,7 +50,7 @@ export const useSessionUIStore = create<SessionUIState>((set) => ({
         ledgerId: null,
         message: null,
         repairCtaLabel: null,
-        status: "idle",
+        status: 'idle',
         updatedAt: null,
       },
     }),

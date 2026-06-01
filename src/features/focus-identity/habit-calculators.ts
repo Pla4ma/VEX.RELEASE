@@ -1,10 +1,10 @@
-import type { FocusScoreFactors } from "./FocusIdentityEngine-types";
+import type { FocusScoreFactors } from './FocusIdentityEngine-types';
 
 export function calculateConsistencyFactorForInput(
   sessionsLast30Days: number,
   targetPerWeek: number,
   missedDays: number,
-): FocusScoreFactors["consistency"] {
+): FocusScoreFactors['consistency'] {
   const targetSessions = targetPerWeek * 4;
   const actualConsistency = Math.min(sessionsLast30Days / targetSessions, 1);
   let score = actualConsistency * 100;
@@ -27,7 +27,7 @@ export function calculateStreakStabilityFactorForInput(
     end: number | null;
     length: number;
   }>,
-): FocusScoreFactors["streakStability"] {
+): FocusScoreFactors['streakStability'] {
   const completedStreaks = streakHistory.filter((s) => s.end !== null);
   const avgLength =
     completedStreaks.length > 0

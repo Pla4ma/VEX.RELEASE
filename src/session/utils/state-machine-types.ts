@@ -51,6 +51,6 @@ export interface SessionMachineContext {
   canRecover: boolean;
   recoveryAttempts: number;
   syncAttempts: number;
-  storageStatus: "HEALTHY" | "DEGRADED" | "UNAVAILABLE";
-  networkStatus: "ONLINE" | "OFFLINE" | "UNSTABLE";
+  storageStatus: 'HEALTHY' | 'DEGRADED' | 'UNAVAILABLE';
+  networkStatus: 'ONLINE' | 'OFFLINE' | 'UNSTABLE';
 }

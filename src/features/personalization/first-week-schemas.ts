@@ -1,61 +1,61 @@
-import { z } from "zod";
+import { z } from 'zod';
 
-import { LaneProfileSchema, LaneSchema } from "../lane-engine/schemas";
+import { LaneProfileSchema, LaneSchema } from '../lane-engine/schemas';
 
 export const FirstWeekStageSchema = z.enum([
-  "DAY_0_NOT_STARTED",
-  "DAY_0_FIRST_SESSION_STARTED",
-  "DAY_1_RETURN",
-  "DAY_2_PROGRESS_PROOF",
-  "DAY_3_COMPANION_CONNECTION",
-  "DAY_4_RECOVERY",
-  "DAY_5_PATH_FORMING",
-  "DAY_6_WEEKLY_PREP",
-  "DAY_7_DEEPER_MODE",
-  "POST_DAY_7",
+  'DAY_0_NOT_STARTED',
+  'DAY_0_FIRST_SESSION_STARTED',
+  'DAY_1_RETURN',
+  'DAY_2_PROGRESS_PROOF',
+  'DAY_3_COMPANION_CONNECTION',
+  'DAY_4_RECOVERY',
+  'DAY_5_PATH_FORMING',
+  'DAY_6_WEEKLY_PREP',
+  'DAY_7_DEEPER_MODE',
+  'POST_DAY_7',
 ]);
 
 export const ComebackStateSchema = z.enum([
-  "none",
-  "missed_1_day",
-  "missed_2_3_days",
-  "missed_week",
-  "returning_after_long_gap",
+  'none',
+  'missed_1_day',
+  'missed_2_3_days',
+  'missed_week',
+  'returning_after_long_gap',
 ]);
 
 export const FirstWeekSurfaceSchema = z.enum([
-  "motivation_confirmation",
-  "coach_presence_line",
-  "start_session",
-  "tiny_unlock_preview",
-  "progress_proof",
-  "companion_continuity",
-  "study_deep_work_path",
-  "tiny_boss_teaser",
-  "subtle_momentum",
-  "weekly_insight",
-  "recovery_cta",
+  'motivation_confirmation',
+  'coach_presence_line',
+  'start_session',
+  'tiny_unlock_preview',
+  'progress_proof',
+  'companion_continuity',
+  'study_deep_work_path',
+  'tiny_boss_teaser',
+  'subtle_momentum',
+  'weekly_insight',
+  'recovery_cta',
 ]);
 
 export const HiddenFirstWeekSurfaceSchema = z.enum([
-  "boss_full",
-  "shop",
-  "inventory",
-  "battle_pass",
-  "wagers",
-  "rivals",
-  "squads",
-  "leaderboards",
-  "premium_currency",
-  "premium_hard_sell",
-  "advanced_economy",
+  'boss_full',
+  'shop',
+  'inventory',
+  'battle_pass',
+  'wagers',
+  'rivals',
+  'squads',
+  'leaderboards',
+  'premium_currency',
+  'premium_hard_sell',
+  'advanced_economy',
 ]);
 
 export const FirstWeekSafeIntentSchema = z.enum([
-  "START_SESSION",
-  "CONTINUE_STUDY_PATH",
-  "OPEN_PROGRESS",
-  "OPEN_WEEKLY_INSIGHT",
+  'START_SESSION',
+  'CONTINUE_STUDY_PATH',
+  'OPEN_PROGRESS',
+  'OPEN_WEEKLY_INSIGHT',
 ]);
 
 export const SessionProfileSchema = z
@@ -76,7 +76,7 @@ export const FirstWeekInputSchema = z
   .object({
     behaviorStats: z
       .object({
-        bossEngagement: z.enum(["none", "low", "medium", "high"]),
+        bossEngagement: z.enum(['none', 'low', 'medium', 'high']),
         studyUsageRatio: z.number().min(0).max(1),
       })
       .strict(),
@@ -92,22 +92,22 @@ export const FirstWeekInputSchema = z
       })
       .strict(),
     motivationStyle: z.enum([
-      "calm",
-      "friendly",
-      "coach_led",
-      "study_focused",
-      "game_like",
-      "intense",
+      'calm',
+      'friendly',
+      'coach_led',
+      'study_focused',
+      'game_like',
+      'intense',
     ]),
-    premiumState: z.enum(["unavailable", "configured", "active"]),
+    premiumState: z.enum(['unavailable', 'configured', 'active']),
     primaryGoal: z.enum([
-      "focus",
-      "study",
-      "work",
-      "creative",
-      "personal",
-      "personal_growth",
-      "learning",
+      'focus',
+      'study',
+      'work',
+      'creative',
+      'personal',
+      'personal_growth',
+      'learning',
     ]),
     laneProfile: LaneProfileSchema.optional(),
     sessionProfile: SessionProfileSchema.optional(),
@@ -117,7 +117,7 @@ export const FirstWeekInputSchema = z
 export const FirstWeekExperienceSchema = z
   .object({
     allowedHomeSurfaces: z.array(FirstWeekSurfaceSchema),
-    bossIntensity: z.enum(["hidden", "subtle", "tiny_tease", "visible"]),
+    bossIntensity: z.enum(['hidden', 'subtle', 'tiny_tease', 'visible']),
     coachMessageType: z.string().min(1),
     comebackState: ComebackStateSchema,
     completionEmphasis: z.string().min(1),
@@ -127,7 +127,7 @@ export const FirstWeekExperienceSchema = z
     laneConfidence: z.number().min(0).max(1),
     laneStageTheme: z.string().min(1),
     notificationAllowedTypes: z.array(z.string().min(1)),
-    premiumMoment: z.enum(["none", "soft_tease", "weekly_value", "hidden"]),
+    premiumMoment: z.enum(['none', 'soft_tease', 'weekly_value', 'hidden']),
     primaryCTA: z
       .object({
         intent: FirstWeekSafeIntentSchema,
@@ -142,12 +142,12 @@ export const FirstWeekExperienceSchema = z
       })
       .nullable(),
     spotlightSurface: z.enum([
-      "none",
-      "progress_proof",
-      "study_deep_work_path",
-      "tiny_boss_teaser",
-      "weekly_insight",
-      "companion_continuity",
+      'none',
+      'progress_proof',
+      'study_deep_work_path',
+      'tiny_boss_teaser',
+      'weekly_insight',
+      'companion_continuity',
     ]),
     blockedSurfaceReasons: z.array(z.string().min(1)),
     firstWeekExperiment: z
@@ -158,11 +158,11 @@ export const FirstWeekExperienceSchema = z
       .strict()
       .nullable(),
     studyLayerLabel: z.enum([
-      "Study OS",
-      "Deep Work Plan",
-      "Learning OS",
-      "Project Focus Path",
-      "Growth Path",
+      'Study OS',
+      'Deep Work Plan',
+      'Learning OS',
+      'Project Focus Path',
+      'Growth Path',
     ]),
     unlockExplanation: z.string().min(1),
     unlockTease: z.string().min(1).nullable(),

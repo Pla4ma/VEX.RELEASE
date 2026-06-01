@@ -1,31 +1,31 @@
-import { useEffect, useMemo, useState } from "react";
-import { AppState, BackHandler } from "react-native";
-import * as Sentry from "@sentry/react-native";
+import { useEffect, useMemo, useState } from 'react';
+import { AppState, BackHandler } from 'react-native';
+import * as Sentry from '@sentry/react-native';
 import {
   useNavigation,
   useRoute,
   type RouteProp,
-} from "@react-navigation/native";
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { useProgressionSummary } from "../../../features/progression/hooks";
-import { useStreak } from "../../../features/streaks/hooks";
-import { getSessionThemeById } from "../../../features/themes/session-themes";
-import type { SessionStackParams } from "../../../navigation/types";
-import type { Mood } from "../../../session/components/CreativeMoodLogger";
+} from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useProgressionSummary } from '../../../features/progression/hooks';
+import { useStreak } from '../../../features/streaks/hooks';
+import { getSessionThemeById } from '../../../features/themes/session-themes';
+import type { SessionStackParams } from '../../../navigation/types';
+import type { Mood } from '../../../session/components/CreativeMoodLogger';
 import {
   useSession,
   useSessionHistory,
-} from "../../../session/hooks/useSession";
-import { resolveSessionMode } from "../../../session/modes";
-import { useAuthStore } from "../../../store";
-import { useTheme } from "../../../theme";
-import type { ActiveSessionControlFailure } from "../utils/active-session-control-failure";
-import { useActiveSessionMetrics } from "./useActiveSessionMetrics";
-import { useCompanionSession } from "./useCompanionSession";
-import { useActiveSessionHandlers } from "./useActiveSessionHandlers";
+} from '../../../session/hooks/useSession';
+import { resolveSessionMode } from '../../../session/modes';
+import { useAuthStore } from '../../../store';
+import { useTheme } from '../../../theme';
+import type { ActiveSessionControlFailure } from '../utils/active-session-control-failure';
+import { useActiveSessionMetrics } from './useActiveSessionMetrics';
+import { useCompanionSession } from './useCompanionSession';
+import { useActiveSessionHandlers } from './useActiveSessionHandlers';
 
 type SessionNavigationProp = NativeStackNavigationProp<SessionStackParams>;
-type ActiveSessionRouteProp = RouteProp<SessionStackParams, "ActiveSession">;
+type ActiveSessionRouteProp = RouteProp<SessionStackParams, 'ActiveSession'>;
 
 export function useActiveSessionController() {
   const navigation = useNavigation<SessionNavigationProp>();
@@ -33,7 +33,7 @@ export function useActiveSessionController() {
   const { theme } = useTheme();
   const { user } = useAuthStore();
   const { sessionId, selectedThemeId } = route.params;
-  const userId = user?.id ?? "";
+  const userId = user?.id ?? '';
   const [dismissDegradedState, setDismissDegradedState] = useState(false);
   const [showInterruption, setShowInterruption] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
@@ -48,8 +48,8 @@ export function useActiveSessionController() {
   );
   const { data: progressionSummary } = useProgressionSummary(userId || null);
   const { data: streak } = useStreak(userId || null);
-  const { history } = useSessionHistory(userId || "", 100);
-  const sessionQuery = useSession(userId || "");
+  const { history } = useSessionHistory(userId || '', 100);
+  const sessionQuery = useSession(userId || '');
   const totalSeconds = Math.max(
     sessionQuery.session?.config.duration ??
       sessionQuery.elapsedSeconds + sessionQuery.remainingSeconds,
@@ -68,8 +68,8 @@ export function useActiveSessionController() {
     userId,
   });
   const isDegradedSession =
-    (sessionQuery.session?.status === "DEGRADED" ||
-      sessionQuery.session?.storageStatus === "DEGRADED") &&
+    (sessionQuery.session?.status === 'DEGRADED' ||
+      sessionQuery.session?.storageStatus === 'DEGRADED') &&
     !dismissDegradedState;
   const metrics = useActiveSessionMetrics({
     completionPercentage: sessionQuery.completionPercentage,
@@ -87,9 +87,9 @@ export function useActiveSessionController() {
 
   useEffect(() => {
     const backHandler = BackHandler.addEventListener(
-      "hardwareBackPress",
+      'hardwareBackPress',
       () => {
-        if (isExiting) return false;
+        if (isExiting) {return false;}
         setShowInterruption(true);
         return true;
       },
@@ -98,21 +98,21 @@ export function useActiveSessionController() {
   }, [isExiting]);
 
   useEffect(() => {
-    const subscription = AppState.addEventListener("change", (nextState) => {
-      if (!sessionQuery.session?.id || !sessionQuery.isActive) return;
+    const subscription = AppState.addEventListener('change', (nextState) => {
+      if (!sessionQuery.session?.id || !sessionQuery.isActive) {return;}
       const action =
-        nextState === "background" || nextState === "inactive"
+        nextState === 'background' || nextState === 'inactive'
           ? sessionQuery.backgroundSession
-          : nextState === "active"
+          : nextState === 'active'
             ? sessionQuery.foregroundSession
             : null;
       action?.().catch((caught) => {
         Sentry.captureException(caught, {
           tags: {
             feature:
-              nextState === "active"
-                ? "session-foreground"
-                : "session-background",
+              nextState === 'active'
+                ? 'session-foreground'
+                : 'session-background',
           },
         });
       });
@@ -122,10 +122,10 @@ export function useActiveSessionController() {
 
   useEffect(
     () => () => {
-      if (!sessionQuery.session?.id || !sessionQuery.isActive) return;
+      if (!sessionQuery.session?.id || !sessionQuery.isActive) {return;}
       sessionQuery.backgroundSession().catch((caught) => {
         Sentry.captureException(caught, {
-          tags: { feature: "session-background-unmount" },
+          tags: { feature: 'session-background-unmount' },
         });
       });
     },
@@ -171,7 +171,7 @@ export function useActiveSessionController() {
     streak,
     theme,
     themeBackgroundColor:
-      sessionTheme.backgroundTint === "transparent"
+      sessionTheme.backgroundTint === 'transparent'
         ? theme.colors.background.primary
         : sessionTheme.backgroundTint,
     userId,

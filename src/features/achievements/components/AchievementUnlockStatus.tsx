@@ -1,8 +1,8 @@
-import React, { useMemo } from "react";
-import { Box, Text } from "@/components/primitives";
-import { useTheme } from "@/theme";
-import type { Achievement } from "../types";
-import { getRarityColor } from "../definitions";
+import React, { useMemo } from 'react';
+import { Box, Text } from '@/components/primitives';
+import { useTheme } from '@/theme';
+import type { Achievement } from '../types';
+import { getRarityColor } from '../definitions';
 
 interface AchievementUnlockStatusProps {
   achievement: Achievement;
@@ -28,15 +28,15 @@ export const AchievementUnlockStatus: React.FC<
     if (!unlockedAt) {
       return null;
     }
-    return new Date(unlockedAt).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
+    return new Date(unlockedAt).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
     });
   }, [unlockedAt]);
 
   const isHiddenLegendaryLocked =
-    achievement.isHidden && !isUnlocked && achievement.rarity === "LEGENDARY";
+    achievement.isHidden && !isUnlocked && achievement.rarity === 'LEGENDARY';
 
   if (isUnlocked) {
     return (
@@ -96,7 +96,7 @@ export const AchievementUnlockStatus: React.FC<
           variant="body"
           color={theme.colors.text.secondary}
           textAlign="center"
-          style={{ fontStyle: "italic" }}
+          style={{ fontStyle: 'italic' }}
         >
           ???
         </Text>
@@ -109,8 +109,8 @@ export const AchievementUnlockStatus: React.FC<
             mb={3}
           >
             {achievement.isHidden
-              ? "This is a hidden achievement. Keep playing to discover how to unlock it!"
-              : `Complete ${achievement.progressMax > 1 ? `${achievement.progressMax} ` : ""}${achievement.unlockCondition.type.toLowerCase().replace(/_/g, " ")}${achievement.unlockCondition.context ? " with specific conditions" : ""}`}
+              ? 'This is a hidden achievement. Keep playing to discover how to unlock it!'
+              : `Complete ${achievement.progressMax > 1 ? `${achievement.progressMax} ` : ''}${achievement.unlockCondition.type.toLowerCase().replace(/_/g, ' ')}${achievement.unlockCondition.context ? ' with specific conditions' : ''}`}
           </Text>
 
           {progress > 0 && (
@@ -119,7 +119,7 @@ export const AchievementUnlockStatus: React.FC<
                 height={8}
                 borderRadius={4}
                 bg={theme.colors.background.tertiary}
-                style={{ overflow: "hidden" }}
+                style={{ overflow: 'hidden' }}
               >
                 <Box
                   height="100%"

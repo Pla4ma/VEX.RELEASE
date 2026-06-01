@@ -1,5 +1,5 @@
-import { triggerHapticEvent, HapticEvents } from "../../../constants/haptics";
-import { eventBus } from "../../../events";
+import { triggerHapticEvent, HapticEvents } from '../../../constants/haptics';
+import { eventBus } from '../../../events';
 
 export const formatTime = (ms: number): string => {
   const minutes = Math.floor(ms / 60000);
@@ -21,7 +21,7 @@ export const computeDifferences = (
 };
 
 export const handleResolve = async (
-  option: "local" | "remote" | "merge",
+  option: 'local' | 'remote' | 'merge',
   localState: { progress: number; elapsedTime: number },
   remoteState: { progress: number; elapsedTime: number },
   onResolveLocal: () => Promise<void> | void,
@@ -32,8 +32,8 @@ export const handleResolve = async (
     localState.elapsedTime - remoteState.elapsedTime,
   );
   triggerHapticEvent(HapticEvents.BUTTON_PRESS);
-  eventBus.publish("analytics:track", {
-    event: "session_conflict_resolution",
+  eventBus.publish('analytics:track', {
+    event: 'session_conflict_resolution',
     properties: {
       resolution: option,
       localProgress: localState.progress,
@@ -42,11 +42,11 @@ export const handleResolve = async (
     },
   });
 
-  if (option === "local") {
+  if (option === 'local') {
     await onResolveLocal();
-  } else if (option === "remote") {
+  } else if (option === 'remote') {
     await onResolveRemote();
-  } else if (option === "merge" && onMerge) {
+  } else if (option === 'merge' && onMerge) {
     await onMerge();
   }
 };

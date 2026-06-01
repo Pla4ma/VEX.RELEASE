@@ -1,30 +1,30 @@
-import type { PersonalQuest, QuestType, UserPatterns } from "./quest-types";
+import type { PersonalQuest, QuestType, UserPatterns } from './quest-types';
 
 export function selectQuestType(patterns: UserPatterns): QuestType {
   const options: QuestType[] = [];
   if (patterns.peakFocusHour !== null) {
-    options.push("PEAK_TIME_FOCUS");
+    options.push('PEAK_TIME_FOCUS');
   }
   if (patterns.daysSinceNoPauseSession > 3) {
-    options.push("NO_PAUSE_CHALLENGE");
+    options.push('NO_PAUSE_CHALLENGE');
   }
   if (patterns.avgQualityScore < 80) {
-    options.push("QUALITY_GRADE_TARGET");
+    options.push('QUALITY_GRADE_TARGET');
   }
   if (patterns.avgSessionDuration > patterns.maxSessionDuration * 0.8) {
-    options.push("BEAT_PERSONAL_BEST");
+    options.push('BEAT_PERSONAL_BEST');
   }
   if (
     patterns.lastBossEncounter &&
     Date.now() - patterns.lastBossEncounter < 172800000
   ) {
-    options.push("BOSS_DAMAGE_DEALT");
+    options.push('BOSS_DAMAGE_DEALT');
   }
-  if (patterns.rivalStatus === "BEHIND") {
-    options.push("RIVAL_OUTFOCUS");
+  if (patterns.rivalStatus === 'BEHIND') {
+    options.push('RIVAL_OUTFOCUS');
   }
   return (
-    options[Math.floor(Math.random() * options.length)] || "DURATION_MILESTONE"
+    options[Math.floor(Math.random() * options.length)] || 'DURATION_MILESTONE'
   );
 }
 
@@ -38,12 +38,12 @@ export function generatePeakTimeQuest(
   return {
     id: `quest-${Date.now()}-peak`,
     userId,
-    type: "PEAK_TIME_FOCUS",
-    title: "Peak Performance",
+    type: 'PEAK_TIME_FOCUS',
+    title: 'Peak Performance',
     description: `Focus at your peak time (${hourFormatted}) today. Your historical data shows this is when you do your best work.`,
     target: 30,
     current: 0,
-    unit: "minutes",
+    unit: 'minutes',
     rewardXp: 150,
     rewardBonus: 1.5,
     expiresAt,
@@ -62,12 +62,12 @@ export function generatePersonalBestQuest(
   return {
     id: `quest-${Date.now()}-pb`,
     userId,
-    type: "BEAT_PERSONAL_BEST",
-    title: "Personal Best Challenge",
+    type: 'BEAT_PERSONAL_BEST',
+    title: 'Personal Best Challenge',
     description: `Beat your longest session record! Your current best is ${patterns.maxSessionDuration} minutes. Can you reach ${targetDuration}?`,
     target: targetDuration,
     current: 0,
-    unit: "minutes",
+    unit: 'minutes',
     rewardXp: 200,
     rewardBonus: 1.5,
     expiresAt,
@@ -86,12 +86,12 @@ export function generateNoPauseQuest(
   return {
     id: `quest-${Date.now()}-nopause`,
     userId,
-    type: "NO_PAUSE_CHALLENGE",
-    title: "Uninterrupted Flow",
+    type: 'NO_PAUSE_CHALLENGE',
+    title: 'Uninterrupted Flow',
     description: `Complete a ${duration}-minute session without pausing. Your last pause-free session was ${patterns.daysSinceNoPauseSession} days ago.`,
     target: duration,
     current: 0,
-    unit: "minutes (no pauses)",
+    unit: 'minutes (no pauses)',
     rewardXp: 180,
     rewardBonus: 1.5,
     expiresAt,
@@ -106,22 +106,22 @@ export function generateQualityQuest(
   patterns: UserPatterns,
   expiresAt: number,
 ): PersonalQuest {
-  const targetGrade = patterns.avgQualityScore >= 70 ? "A" : "B";
+  const targetGrade = patterns.avgQualityScore >= 70 ? 'A' : 'B';
   return {
     id: `quest-${Date.now()}-quality`,
     userId,
-    type: "QUALITY_GRADE_TARGET",
+    type: 'QUALITY_GRADE_TARGET',
     title: `${targetGrade}-Grade Focus`,
     description: `Achieve a ${targetGrade} grade or higher on your next session. Quality over quantity — minimize pauses and stay focused.`,
-    target: targetGrade === "A" ? 85 : 70,
+    target: targetGrade === 'A' ? 85 : 70,
     current: 0,
-    unit: "quality score",
+    unit: 'quality score',
     rewardXp: 150,
     rewardBonus: 1.5,
     expiresAt,
     completedAt: null,
     createdAt: Date.now(),
-    reasoning: `Your average quality score is ${patterns.avgQualityScore}% — targeting ${targetGrade === "A" ? "85" : "70"}% to push your limits`,
+    reasoning: `Your average quality score is ${patterns.avgQualityScore}% — targeting ${targetGrade === 'A' ? '85' : '70'}% to push your limits`,
   };
 }
 
@@ -133,20 +133,20 @@ export function generateBossQuest(
   return {
     id: `quest-${Date.now()}-boss`,
     userId,
-    type: "BOSS_DAMAGE_DEALT",
-    title: "Boss Slayer",
+    type: 'BOSS_DAMAGE_DEALT',
+    title: 'Boss Slayer',
     description:
-      "Deal 50+ damage to the active boss in one session. Your streak multiplier is active — this is the time to strike!",
+      'Deal 50+ damage to the active boss in one session. Your streak multiplier is active — this is the time to strike!',
     target: 50,
     current: 0,
-    unit: "damage",
+    unit: 'damage',
     rewardXp: 175,
     rewardBonus: 1.5,
     expiresAt,
     completedAt: null,
     createdAt: Date.now(),
     reasoning:
-      "Boss encounter detected — perfect time to challenge yourself with high-damage session",
+      'Boss encounter detected — perfect time to challenge yourself with high-damage session',
   };
 }
 
@@ -159,12 +159,12 @@ export function generateRivalQuest(
   return {
     id: `quest-${Date.now()}-rival`,
     userId,
-    type: "RIVAL_OUTFOCUS",
-    title: "Rival Showdown",
+    type: 'RIVAL_OUTFOCUS',
+    title: 'Rival Showdown',
     description: `Focus for ${targetMinutes} minutes today to catch up with your rival. You're behind — time to fight back!`,
     target: targetMinutes,
     current: 0,
-    unit: "minutes today",
+    unit: 'minutes today',
     rewardXp: 160,
     rewardBonus: 1.5,
     expiresAt,
@@ -182,17 +182,17 @@ export function generateDefaultQuest(
   return {
     id: `quest-${Date.now()}-default`,
     userId,
-    type: "DURATION_MILESTONE",
-    title: "Daily Focus Goal",
+    type: 'DURATION_MILESTONE',
+    title: 'Daily Focus Goal',
     description: `Complete ${patterns.avgSessionDuration} minutes of focused time today. You've got this!`,
     target: patterns.avgSessionDuration,
     current: 0,
-    unit: "minutes",
+    unit: 'minutes',
     rewardXp: 100,
     rewardBonus: 1.5,
     expiresAt,
     completedAt: null,
     createdAt: Date.now(),
-    reasoning: "Daily quest based on your average session duration",
+    reasoning: 'Daily quest based on your average session duration',
   };
 }

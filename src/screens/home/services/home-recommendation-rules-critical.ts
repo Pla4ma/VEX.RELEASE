@@ -1,9 +1,9 @@
-import type { RecommendationRule } from "./home-recommendation-types";
-import { getHoursUntilEndOfDay } from "./home-recommendation-utils";
+import type { RecommendationRule } from './home-recommendation-types';
+import { getHoursUntilEndOfDay } from './home-recommendation-utils';
 
 export const CRITICAL_RECOMMENDATION_RULES: RecommendationRule[] = [
   {
-    name: "streak_critical",
+    name: 'streak_critical',
     priority: 100,
     condition: (ctx) => {
       if (
@@ -18,20 +18,20 @@ export const CRITICAL_RECOMMENDATION_RULES: RecommendationRule[] = [
     },
     generate: (ctx) => ({
       id: `streak-critical-${Date.now()}`,
-      type: "protect_streak",
+      type: 'protect_streak',
       priority: 100,
-      urgency: "critical",
+      urgency: 'critical',
       headline: `Protect your ${ctx.streak?.currentDays ?? 0}-day streak`,
       subtext: `${getHoursUntilEndOfDay(ctx.currentTime)} hours left today`,
-      ctaText: "Quick 15-min session",
-      ctaAction: "start_focus",
-      ctaParams: { duration: 15, reason: "streak_protection" },
+      ctaText: 'Quick 15-min session',
+      ctaAction: 'start_focus',
+      ctaParams: { duration: 15, reason: 'streak_protection' },
       aiCoachMessage: `Your ${ctx.streak?.currentDays ?? 0}-day streak needs protection. One short session keeps it alive.`,
-      visualCue: "urgent",
+      visualCue: 'urgent',
     }),
   },
   {
-    name: "streak_at_risk",
+    name: 'streak_at_risk',
     priority: 90,
     condition: (ctx) => {
       if (
@@ -46,20 +46,20 @@ export const CRITICAL_RECOMMENDATION_RULES: RecommendationRule[] = [
     },
     generate: (ctx) => ({
       id: `streak-risk-${Date.now()}`,
-      type: "protect_streak",
+      type: 'protect_streak',
       priority: 90,
-      urgency: "high",
-      headline: "Keep your momentum going",
+      urgency: 'high',
+      headline: 'Keep your momentum going',
       subtext: `${ctx.streak?.currentDays ?? 0} days strong - do not break the chain`,
-      ctaText: "Start focus session",
-      ctaAction: "start_focus",
-      ctaParams: { reason: "streak_maintenance" },
+      ctaText: 'Start focus session',
+      ctaAction: 'start_focus',
+      ctaParams: { reason: 'streak_maintenance' },
       aiCoachMessage: `You are building something. ${ctx.streak?.currentDays ?? 0} days is commitment.`,
-      visualCue: "glow",
+      visualCue: 'glow',
     }),
   },
   {
-    name: "boss_opportunity",
+    name: 'boss_opportunity',
     priority: 85,
     condition: (ctx) => {
       if (!ctx.activeBoss) {
@@ -71,15 +71,15 @@ export const CRITICAL_RECOMMENDATION_RULES: RecommendationRule[] = [
     },
     generate: () => ({
       id: `boss-opportunity-${Date.now()}`,
-      type: "boss_battle",
+      type: 'boss_battle',
       priority: 85,
-      urgency: "high",
-      headline: "Boss is nearly defeated",
-      subtext: "One strong session could finish this",
-      ctaText: "Attack now",
-      ctaAction: "view_boss",
-      aiCoachMessage: "The boss is faltering. This is your moment.",
-      visualCue: "pulse",
+      urgency: 'high',
+      headline: 'Boss is nearly defeated',
+      subtext: 'One strong session could finish this',
+      ctaText: 'Attack now',
+      ctaAction: 'view_boss',
+      aiCoachMessage: 'The boss is faltering. This is your moment.',
+      visualCue: 'pulse',
     }),
   },
 ];

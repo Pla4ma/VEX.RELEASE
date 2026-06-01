@@ -1,8 +1,8 @@
-import type { NotificationRule } from "./SmartNotificationSystem.types";
+import type { NotificationRule } from './SmartNotificationSystem.types';
 
 export const STREAK_PROTECTION_RULE: NotificationRule = {
-  type: "STREAK_PROTECTION",
-  priority: "CRITICAL",
+  type: 'STREAK_PROTECTION',
+  priority: 'CRITICAL',
   condition: (ctx) => {
     if (!ctx.streakDays || ctx.hasCompletedSessionToday) {
       return false;
@@ -16,16 +16,16 @@ export const STREAK_PROTECTION_RULE: NotificationRule = {
     const hours = Math.ceil(ctx.hoursUntilStreakBreak || 0);
     if (hours <= 1) {
       return {
-        title: "\uD83D\uDEA8 Streak breaks in 1 hour!",
+        title: '\uD83D\uDEA8 Streak breaks in 1 hour!',
         body: `Your ${ctx.streakDays}-day streak is about to break. Start a quick session now!`,
-        data: { urgency: "critical", streakDays: ctx.streakDays },
+        data: { urgency: 'critical', streakDays: ctx.streakDays },
       };
     }
     return {
       title: `\u23F0 ${hours} hours to save your streak`,
       body: `Protect your ${ctx.streakDays}-day streak with a quick focus session.`,
       data: {
-        urgency: "high",
+        urgency: 'high',
         streakDays: ctx.streakDays,
         hoursRemaining: hours,
       },
@@ -38,8 +38,8 @@ export const STREAK_PROTECTION_RULE: NotificationRule = {
 };
 
 export const BOSS_OPPORTUNITY_RULE: NotificationRule = {
-  type: "BOSS_OPPORTUNITY",
-  priority: "HIGH",
+  type: 'BOSS_OPPORTUNITY',
+  priority: 'HIGH',
   condition: (ctx) => {
     if (!ctx.hasActiveBoss) {
       return false;
@@ -74,8 +74,8 @@ export const BOSS_OPPORTUNITY_RULE: NotificationRule = {
 };
 
 export const STUDY_REMINDER_RULE: NotificationRule = {
-  type: "STUDY_REMINDER",
-  priority: "MEDIUM",
+  type: 'STUDY_REMINDER',
+  priority: 'MEDIUM',
   condition: (ctx) => {
     if (!ctx.hasActiveStudyPlan) {
       return false;
@@ -92,7 +92,7 @@ export const STUDY_REMINDER_RULE: NotificationRule = {
     return true;
   },
   message: (ctx) => ({
-    title: "\uD83D\uDCDA Continue your study plan",
+    title: '\uD83D\uDCDA Continue your study plan',
     body: `${ctx.studyTasksRemaining} tasks remaining. One session makes real progress.`,
     data: {
       tasksRemaining: ctx.studyTasksRemaining,
@@ -106,8 +106,8 @@ export const STUDY_REMINDER_RULE: NotificationRule = {
 };
 
 export const SQUAD_ACTIVITY_RULE: NotificationRule = {
-  type: "SQUAD_ACTIVITY",
-  priority: "LOW",
+  type: 'SQUAD_ACTIVITY',
+  priority: 'LOW',
   condition: (ctx) => {
     if (ctx.squadMemberCount < 2) {
       return false;
@@ -120,7 +120,7 @@ export const SQUAD_ACTIVITY_RULE: NotificationRule = {
   message: (ctx) => {
     const progress = Math.round(ctx.squadWeeklyProgress);
     return {
-      title: "\uD83D\uDC65 Squad needs you!",
+      title: '\uD83D\uDC65 Squad needs you!',
       body: `Your squad is at ${progress}% of their weekly goal. Join a session and contribute!`,
       data: { squadProgress: progress },
     };
@@ -132,8 +132,8 @@ export const SQUAD_ACTIVITY_RULE: NotificationRule = {
 };
 
 export const COMEBACK_RULE: NotificationRule = {
-  type: "COMEBACK",
-  priority: "HIGH",
+  type: 'COMEBACK',
+  priority: 'HIGH',
   condition: (ctx) => {
     if (!ctx.lastSessionAt) {
       return false;
@@ -144,21 +144,21 @@ export const COMEBACK_RULE: NotificationRule = {
     const days = ctx.daysSinceLastSession;
     if (days <= 3) {
       return {
-        title: "We miss you! \uD83D\uDC99",
+        title: 'We miss you! \uD83D\uDC99',
         body: "Life happens. When you're ready, your streak can start again.",
         data: { daysAbsent: days },
       };
     }
     if (days <= 7) {
       return {
-        title: "Your progress is waiting \uD83C\uDF31",
-        body: "You were building something great. Ready to continue?",
+        title: 'Your progress is waiting \uD83C\uDF31',
+        body: 'You were building something great. Ready to continue?',
         data: { daysAbsent: days },
       };
     }
     return {
-      title: "Fresh start, same you \u2728",
-      body: "New boss available. Perfect time to jump back in!",
+      title: 'Fresh start, same you \u2728',
+      body: 'New boss available. Perfect time to jump back in!',
       data: { daysAbsent: days },
     };
   },

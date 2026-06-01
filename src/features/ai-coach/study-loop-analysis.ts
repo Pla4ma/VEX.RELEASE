@@ -1,4 +1,4 @@
-import type { StudyPlan } from "./study-loop";
+import type { StudyPlan } from './study-loop';
 
 export function getStudyStreakMessage(plan: StudyPlan): string {
   const progress = calculateStudyProgress(plan);
@@ -48,7 +48,7 @@ export function needsAttention(
   plan: StudyPlan,
   lastSessionAt?: number,
 ): boolean {
-  if (plan.status !== "active") {
+  if (plan.status !== 'active') {
     return false;
   }
   if (lastSessionAt && Date.now() - lastSessionAt > 48 * 60 * 60 * 1000) {
@@ -65,10 +65,10 @@ export function adjustStudyDifficulty(
   plan: StudyPlan,
   averageSessionQuality: number,
 ): StudyPlan {
-  const difficulties: StudyPlan["difficulty"][] = [
-    "beginner",
-    "intermediate",
-    "advanced",
+  const difficulties: StudyPlan['difficulty'][] = [
+    'beginner',
+    'intermediate',
+    'advanced',
   ];
   const currentIndex = difficulties.indexOf(plan.difficulty);
   let newIndex = currentIndex;
@@ -84,7 +84,7 @@ export function adjustStudyDifficulty(
 }
 
 export function abandonStudyPlan(plan: StudyPlan, reason?: string): StudyPlan {
-  return { ...plan, status: "abandoned" };
+  return { ...plan, status: 'abandoned' };
 }
 
 export function getStudyInsights(plan: StudyPlan): {
@@ -101,9 +101,9 @@ export function getStudyInsights(plan: StudyPlan): {
       : 0;
   const completionRate = (plan.sessionsCompleted / plan.sessionsTotal) * 100;
   return {
-    strongAreas: completionRate > 75 ? ["Consistency", "Focus duration"] : [],
+    strongAreas: completionRate > 75 ? ['Consistency', 'Focus duration'] : [],
     improvementAreas:
-      completionRate < 50 ? ["Session completion", "Regular practice"] : [],
+      completionRate < 50 ? ['Session completion', 'Regular practice'] : [],
     avgSessionDuration,
     completionRate,
   };
@@ -112,31 +112,31 @@ export function getStudyInsights(plan: StudyPlan): {
 export function getNextStudyReminder(plan: StudyPlan): {
   shouldRemind: boolean;
   message: string;
-  urgency: "low" | "medium" | "high";
+  urgency: 'low' | 'medium' | 'high';
 } {
   const progress = calculateStudyProgress(plan);
   const nextSession = plan.sessions.find((s) => !s.completed) ?? null;
   if (!nextSession) {
-    return { shouldRemind: false, message: "", urgency: "low" };
+    return { shouldRemind: false, message: '', urgency: 'low' };
   }
   if (progress.sessionsRemaining === 1) {
     return {
       shouldRemind: true,
       message: `Final session of ${plan.subject}! Complete your plan.`,
-      urgency: "high",
+      urgency: 'high',
     };
   }
   if (progress.percentage > 75) {
     return {
       shouldRemind: true,
       message: `You are ${progress.percentage}% through your study plan. Keep going!`,
-      urgency: "medium",
+      urgency: 'medium',
     };
   }
   return {
     shouldRemind: true,
     message: `Time for your next ${plan.subject} session.`,
-    urgency: "low",
+    urgency: 'low',
   };
 }
 

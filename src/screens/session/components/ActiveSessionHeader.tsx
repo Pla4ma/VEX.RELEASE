@@ -1,15 +1,15 @@
-import React from "react";
-import { Pressable } from "react-native";
+import React from 'react';
+import { Pressable } from 'react-native';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { Icon } from "../../../icons";
-import type { useTheme } from "../../../theme";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { Icon } from '../../../icons';
+import type { useTheme } from '../../../theme';
 
 type ActiveSessionHeaderProps = {
   isPaused: boolean;
   onInterrupt: () => void;
-  theme: ReturnType<typeof useTheme>["theme"];
+  theme: ReturnType<typeof useTheme>['theme'];
 };
 
 export function ActiveSessionHeader({
@@ -63,10 +63,10 @@ export function ActiveSessionHeader({
           width={8}
           height={8}
           borderRadius="full"
-          bg={isPaused ? "warning.DEFAULT" : "success.DEFAULT"}
+          bg={isPaused ? 'warning.DEFAULT' : 'success.DEFAULT'}
         />
         <Text variant="caption" color="text.secondary">
-          {isPaused ? "Paused" : "In Session"}
+          {isPaused ? 'Paused' : 'In Session'}
         </Text>
       </Box>
       <Box width={72} />

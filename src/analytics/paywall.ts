@@ -18,7 +18,7 @@ const paywallAnalytics: PaywallAnalytics = {
 };
 
 export function trackPaywallEvent(
-  event: "show" | "dismiss" | "convert",
+  event: 'show' | 'dismiss' | 'convert',
   context: string,
 ): void {
   if (!paywallAnalytics.byContext[context]) {
@@ -29,14 +29,14 @@ export function trackPaywallEvent(
     return;
   }
   switch (event) {
-    case "show":
+    case 'show':
       paywallAnalytics.totalShows++;
       data.shows++;
       break;
-    case "dismiss":
+    case 'dismiss':
       paywallAnalytics.totalDismisses++;
       break;
-    case "convert":
+    case 'convert':
       paywallAnalytics.totalConversions++;
       data.conversions++;
       break;

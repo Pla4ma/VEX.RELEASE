@@ -1,12 +1,12 @@
-import type { z } from "zod";
-import type { Database } from "../../types/supabase";
+import type { z } from 'zod';
+import type { Database } from '../../types/supabase';
 import type {
   CompanionPromiseHomeStateSchema,
   CompanionPromiseLifecycleResultSchema,
   CompanionPromiseSchema,
   CompletedSessionPromiseInputSchema,
   CreateCompanionPromiseInputSchema,
-} from "./schemas";
+} from './schemas';
 
 export type CompanionPromise = z.infer<typeof CompanionPromiseSchema>;
 export type CompanionPromiseHomeState = z.infer<
@@ -22,8 +22,8 @@ export type CreateCompanionPromiseInput = z.infer<
   typeof CreateCompanionPromiseInputSchema
 >;
 export type CompanionPromiseRow =
-  Database["public"]["Tables"]["companion_promises"]["Row"];
+  Database['public']['Tables']['companion_promises']['Row'];
 export type CompanionPromiseInsert =
-  Database["public"]["Tables"]["companion_promises"]["Insert"];
+  Database['public']['Tables']['companion_promises']['Insert'];
 export type CompanionPromiseUpdate =
-  Database["public"]["Tables"]["companion_promises"]["Update"];
+  Database['public']['Tables']['companion_promises']['Update'];

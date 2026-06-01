@@ -1,22 +1,22 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { MasteryService } from "../../features/mastery/service";
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { MasteryService } from '../../features/mastery/service';
 import {
   getMasteryRankDisplay,
   MASTERY_RANK_THRESHOLDS,
   type MasteryRank,
   type MasteryState,
-} from "../../features/mastery/types";
+} from '../../features/mastery/types';
 
 function calculatePointsToNextRank(
   currentPoints: number,
   currentRank: MasteryRank,
 ): number {
   const ranks: MasteryRank[] = [
-    "APPRENTICE",
-    "ADEPT",
-    "EXPERT",
-    "MASTER",
-    "GRANDMASTER",
+    'APPRENTICE',
+    'ADEPT',
+    'EXPERT',
+    'MASTER',
+    'GRANDMASTER',
   ];
   const currentIndex = ranks.indexOf(currentRank);
   if (currentIndex >= ranks.length - 1) {
@@ -43,7 +43,7 @@ export function useMasteryState(userId: string | null) {
       setState(masteryState);
     } catch (err) {
       setError(
-        err instanceof Error ? err : new Error("Failed to load mastery state"),
+        err instanceof Error ? err : new Error('Failed to load mastery state'),
       );
     } finally {
       setIsLoading(false);
@@ -76,23 +76,23 @@ export function useMasteryState(userId: string | null) {
   const pointsToNext = state
     ? calculatePointsToNextRank(
         state.totalMasteryPoints,
-        state.rank ?? "APPRENTICE",
+        state.rank ?? 'APPRENTICE',
       )
     : 0;
   const nextRankName = useMemo(() => {
     if (!state) {
-      return "";
+      return '';
     }
     const ranks: MasteryRank[] = [
-      "APPRENTICE",
-      "ADEPT",
-      "EXPERT",
-      "MASTER",
-      "GRANDMASTER",
+      'APPRENTICE',
+      'ADEPT',
+      'EXPERT',
+      'MASTER',
+      'GRANDMASTER',
     ];
-    const currentIndex = ranks.indexOf(state.rank ?? "APPRENTICE");
+    const currentIndex = ranks.indexOf(state.rank ?? 'APPRENTICE');
     if (currentIndex >= ranks.length - 1) {
-      return "Max Rank";
+      return 'Max Rank';
     }
     return getMasteryRankDisplay(ranks[currentIndex + 1]!).title;
   }, [state]);

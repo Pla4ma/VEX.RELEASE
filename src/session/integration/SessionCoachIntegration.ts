@@ -1,8 +1,8 @@
-import { eventBus } from "../../events";
-import { getAvailabilityFor } from "../../features/liveops-config/feature-access-store";
-import type { SessionHistoryEntry } from "./sessionCoachContext";
-import type { CoachIntegrationConfig } from "./coach-config";
-import { FEATURE_KEY, debug, DEFAULT_CONFIG } from "./coach-config";
+import { eventBus } from '../../events';
+import { getAvailabilityFor } from '../../features/liveops-config/feature-access-store';
+import type { SessionHistoryEntry } from './sessionCoachContext';
+import type { CoachIntegrationConfig } from './coach-config';
+import { FEATURE_KEY, debug, DEFAULT_CONFIG } from './coach-config';
 import {
   handleSessionStarted,
   handleInterruptionRisk,
@@ -12,9 +12,9 @@ import {
   handleSuccessfulRecovery,
   sendCoachMessage,
   type CoachHandlerState,
-} from "./coach-handlers";
+} from './coach-handlers';
 
-export type { CoachIntegrationConfig } from "./coach-config";
+export type { CoachIntegrationConfig } from './coach-config';
 
 export class SessionCoachIntegration {
   private readonly config: CoachIntegrationConfig;
@@ -40,36 +40,36 @@ export class SessionCoachIntegration {
       !getAvailabilityFor(FEATURE_KEY).canSubscribeToEvents ||
       !this.config.enabled
     ) {
-      debug.info("SessionCoachIntegration skipped - feature not available");
+      debug.info('SessionCoachIntegration skipped - feature not available');
       return;
     }
 
     this.unsubscribers.push(
       eventBus.subscribe(
-        "session:started",
+        'session:started',
         (data) =>
-          data && handleSessionStarted(this.handlerState, data.sessionId, ""),
+          data && handleSessionStarted(this.handlerState, data.sessionId, ''),
       ),
       eventBus.subscribe(
-        "session:interruption:risk",
-        (data) => data && handleInterruptionRisk("", data.riskLevel),
+        'session:interruption:risk',
+        (data) => data && handleInterruptionRisk('', data.riskLevel),
       ),
       eventBus.subscribe(
-        "session:paused",
-        (data) => data && handleSessionPaused("", data.reason),
+        'session:paused',
+        (data) => data && handleSessionPaused('', data.reason),
       ),
       eventBus.subscribe(
-        "session:abandoned",
+        'session:abandoned',
         (data) =>
           data &&
           handleSessionAbandoned(
             this.handlerState,
-            data.userId || "",
+            data.userId || '',
             data.elapsedTime || 0,
           ),
       ),
       eventBus.subscribe(
-        "session:completed",
+        'session:completed',
         (data) =>
           data &&
           handleSessionCompleted(
@@ -79,7 +79,7 @@ export class SessionCoachIntegration {
           ),
       ),
       eventBus.subscribe(
-        "session:recovery:successful",
+        'session:recovery:successful',
         (data) => data && handleSuccessfulRecovery(data.userId),
       ),
     );

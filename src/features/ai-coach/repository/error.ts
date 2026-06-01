@@ -4,8 +4,8 @@ export class RepositoryError extends Error {
     public originalError: unknown,
   ) {
     super(
-      `Repository error in ${operation}: ${originalError instanceof Error ? originalError.message : "Unknown error"}`,
+      `Repository error in ${operation}: ${originalError instanceof Error ? originalError.message : 'Unknown error'}`,
     );
-    this.name = "RepositoryError";
+    this.name = 'RepositoryError';
   }
 }

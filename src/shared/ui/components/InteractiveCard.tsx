@@ -1,33 +1,33 @@
-import React, { useCallback, useState } from "react";
-import { View, ViewStyle, AccessibilityProps, Pressable } from "react-native";
+import React, { useCallback, useState } from 'react';
+import { View, ViewStyle, AccessibilityProps, Pressable } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withSpring,
-} from "react-native-reanimated";
-import { Text } from "../../../components/primitives/Text";
-import { Icon } from "../../../icons";
-import { useTheme } from "../../../theme";
-import type { InteractiveCardProps, CardVariant, CardSize } from "./InteractiveCardTypes";
-import { cardStyles as styles } from "./InteractiveCardStyles";
+} from 'react-native-reanimated';
+import { Text } from '../../../components/primitives/Text';
+import { Icon } from '../../../icons';
+import { useTheme } from '../../../theme';
+import type { InteractiveCardProps, CardVariant, CardSize } from './InteractiveCardTypes';
+import { cardStyles as styles } from './InteractiveCardStyles';
 import {
   LoadingOverlay,
   DisabledOverlay,
   ErrorOverlay,
   SelectedOverlay,
-} from "./InteractiveCardOverlays";
+} from './InteractiveCardOverlays';
 
-export type { InteractiveCardProps } from "./InteractiveCardTypes";
-export { CardSkeleton } from "./CardSkeleton";
+export type { InteractiveCardProps } from './InteractiveCardTypes';
+export { CardSkeleton } from './CardSkeleton';
 
 export const InteractiveCard: React.FC<InteractiveCardProps> = ({
   children,
   onPress,
   onLongPress,
-  variant = "default",
-  size = "md",
+  variant = 'default',
+  size = 'md',
   style,
-  state = "default",
+  state = 'default',
   loadingMessage,
   disabledReason,
   errorMessage,
@@ -52,8 +52,8 @@ export const InteractiveCard: React.FC<InteractiveCardProps> = ({
   const scale = useSharedValue(1);
   const opacity = useSharedValue(1);
   const isDisabled =
-    propDisabled || state === "disabled" || state === "loading";
-  const isError = state === "error";
+    propDisabled || state === 'disabled' || state === 'loading';
+  const isError = state === 'error';
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ scale: scale.value }],
@@ -61,7 +61,7 @@ export const InteractiveCard: React.FC<InteractiveCardProps> = ({
   }));
 
   const handlePress = useCallback(async () => {
-    if (isDisabled || !onPress) return;
+    if (isDisabled || !onPress) {return;}
     if (hapticOnPress) {
       // haptics handled externally
     }
@@ -99,11 +99,11 @@ export const InteractiveCard: React.FC<InteractiveCardProps> = ({
       elevation: 4,
     },
     outlined: {
-      backgroundColor: "transparent",
+      backgroundColor: 'transparent',
       borderWidth: 1,
       borderColor: theme.colors.border.DEFAULT,
     },
-    ghost: { backgroundColor: "transparent", borderWidth: 0 },
+    ghost: { backgroundColor: 'transparent', borderWidth: 0 },
   };
 
   const sizeStyles: Record<CardSize, ViewStyle> = {
@@ -112,10 +112,10 @@ export const InteractiveCard: React.FC<InteractiveCardProps> = ({
     lg: { padding: 20, borderRadius: 20 },
   };
 
-  const accessibilityState: AccessibilityProps["accessibilityState"] = {
+  const accessibilityState: AccessibilityProps['accessibilityState'] = {
     disabled: isDisabled,
     selected,
-    busy: state === "loading",
+    busy: state === 'loading',
   };
 
   return (
@@ -161,7 +161,7 @@ export const InteractiveCard: React.FC<InteractiveCardProps> = ({
                 color="text.inverse"
                 style={styles.badgeText}
               >
-                {typeof badge === "number" && badge > 99 ? "99+" : badge}
+                {typeof badge === 'number' && badge > 99 ? '99+' : badge}
               </Text>
             </View>
           )}
@@ -175,13 +175,13 @@ export const InteractiveCard: React.FC<InteractiveCardProps> = ({
             </View>
           )}
           <View style={styles.content}>{children}</View>
-          {state === "loading" && (
+          {state === 'loading' && (
             <LoadingOverlay message={loadingMessage} theme={theme} />
           )}
-          {state === "disabled" && (
+          {state === 'disabled' && (
             <DisabledOverlay reason={disabledReason} theme={theme} />
           )}
-          {state === "error" && (
+          {state === 'error' && (
             <ErrorOverlay
               message={errorMessage}
               onRetry={onRetry}

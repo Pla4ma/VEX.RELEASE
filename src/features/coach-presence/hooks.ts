@@ -1,17 +1,17 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from '@tanstack/react-query';
 import {
   getFeatureAvailability,
   type FeatureAccessMap,
-} from "../liveops-config";
-import { useOnboardingStore } from "../onboarding/store";
-import type { CompanionState } from "../companion/types";
-import { fetchCoachPresenceMemorySummary } from "./repository";
-import { buildCoachPresence } from "./service";
+} from '../liveops-config';
+import { useOnboardingStore } from '../onboarding/store';
+import type { CompanionState } from '../companion/types';
+import { fetchCoachPresenceMemorySummary } from './repository';
+import { buildCoachPresence } from './service';
 import {
   type CoachPresence,
   type CoachPresenceMemorySummary,
   type CoachPresenceMotivationStyle,
-} from "./schemas";
+} from './schemas';
 
 const EMPTY_MEMORY: CoachPresenceMemorySummary = {
   coachMemoryCount: 0,
@@ -49,8 +49,8 @@ export function useCoachPresence(input: UseCoachPresenceInput): {
   const enabled = Boolean(input.userId && input.isOnline);
   const memoryQuery = useQuery({
     enabled,
-    queryFn: () => fetchCoachPresenceMemorySummary(input.userId ?? ""),
-    queryKey: ["coach-presence", "memory-summary", input.userId],
+    queryFn: () => fetchCoachPresenceMemorySummary(input.userId ?? ''),
+    queryKey: ['coach-presence', 'memory-summary', input.userId],
     staleTime: 300000,
   });
   const fallbackMemory = enabled ? UNAVAILABLE_MEMORY : EMPTY_MEMORY;
@@ -70,7 +70,7 @@ export function useCoachPresence(input: UseCoachPresenceInput): {
           highFocusStreak: input.highFocusStreak,
           totalSessions: input.totalSessions,
         },
-        surface: "HOME",
+        surface: 'HOME',
       })
     : undefined;
 
@@ -88,20 +88,20 @@ export function useCoachPresence(input: UseCoachPresenceInput): {
 function mapMotivationStyle(
   input: string | undefined,
 ): CoachPresenceMotivationStyle {
-  if (input === "calm") {
-    return "CALM";
+  if (input === 'calm') {
+    return 'CALM';
   }
-  if (input === "student") {
-    return "STUDY_FOCUSED";
+  if (input === 'student') {
+    return 'STUDY_FOCUSED';
   }
-  if (input === "game_like" || input === "competitive") {
-    return "GAME_LIKE";
+  if (input === 'game_like' || input === 'competitive') {
+    return 'GAME_LIKE';
   }
-  if (input === "coach_led") {
-    return "COACH_LED";
+  if (input === 'coach_led') {
+    return 'COACH_LED';
   }
-  if (input === "intense") {
-    return "INTENSE";
+  if (input === 'intense') {
+    return 'INTENSE';
   }
-  return "CALM";
+  return 'CALM';
 }

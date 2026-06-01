@@ -1,10 +1,10 @@
-import React from "react";
-import Animated, { FadeInUp } from "react-native-reanimated";
-import { Box, Button, Text } from "../../../components/primitives";
-import { getPremiumCardStyle } from "../../../components/premiumStyles";
-import { Icon } from "../../../icons";
-import { useTheme } from "../../../theme";
-import type { StudyProgress } from "./SessionProgressionCard.types";
+import React from 'react';
+import Animated, { FadeInUp } from 'react-native-reanimated';
+import { Box, Button, Text } from '../../../components/primitives';
+import { getPremiumCardStyle } from '../../../components/premiumStyles';
+import { Icon } from '../../../icons';
+import { useTheme } from '../../../theme';
+import type { StudyProgress } from './SessionProgressionCard.types';
 
 export function StudyProgressPanel({
   studyProgress,
@@ -21,7 +21,7 @@ export function StudyProgressPanel({
           backgroundColor: `${theme.colors.primary[500]}08`,
           borderWidth: 1,
           borderColor: theme.colors.primary[500],
-          ...getPremiumCardStyle("medium"),
+          ...getPremiumCardStyle('medium'),
         }}
       >
         {/* Header with Plan Title */}
@@ -136,7 +136,7 @@ export function StudyProgressPanel({
               {studyProgress.nextSessionGoal.topic}
             </Text>
             <Text variant="caption" color="text.tertiary" mt={4}>
-              Suggested:{" "}
+              Suggested:{' '}
               {studyProgress.nextSessionGoal.suggestedDurationMinutes} min
             </Text>
           </Box>

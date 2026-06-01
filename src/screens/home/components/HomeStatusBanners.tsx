@@ -4,9 +4,9 @@
  * Renders status banners for offline mode, sync states, and errors.
  */
 
-import React from "react";
-import { StatusBanner } from "../../../shared/ui/components/StatusFeedback";
-import type { CompletionSyncState } from "../../../store/session-state";
+import React from 'react';
+import { StatusBanner } from '../../../shared/ui/components/StatusFeedback';
+import type { CompletionSyncState } from '../../../store/session-state';
 
 interface HomeStatusBannersProps {
   isOnline: boolean;
@@ -33,7 +33,7 @@ export function HomeStatusBanners({
       ) : null}
 
       {/* Sync pending banner */}
-      {completionSync.status === "pending_sync" && completionSync.message ? (
+      {completionSync.status === 'pending_sync' && completionSync.message ? (
         <StatusBanner
           status="offline"
           message="Session sync pending"
@@ -42,7 +42,7 @@ export function HomeStatusBanners({
       ) : null}
 
       {/* Sync failed banner */}
-      {completionSync.status === "failed_sync" && completionSync.message ? (
+      {completionSync.status === 'failed_sync' && completionSync.message ? (
         <StatusBanner
           status="error"
           message="Session rewards need repair"

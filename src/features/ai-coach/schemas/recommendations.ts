@@ -1,11 +1,11 @@
-import { z } from "zod";
+import { z } from 'zod';
 import {
   RecommendationTypeSchema,
   RecommendationSourceSchema,
   RecommendationStatusSchema,
   ReminderTypeSchema,
   ComebackStatusSchema,
-} from "./enums";
+} from './enums';
 
 export const SessionRecommendationSchema = z
   .object({
@@ -19,7 +19,7 @@ export const SessionRecommendationSchema = z
     metadata: z.record(z.unknown()).default({}),
     suggestedDuration: z.number().int().min(60).max(7200).optional(),
     suggestedDifficulty: z
-      .enum(["EASY", "NORMAL", "CHALLENGING", "PUSH"])
+      .enum(['EASY', 'NORMAL', 'CHALLENGING', 'PUSH'])
       .optional(),
     reasoning: z.string().max(500).optional(),
     confidence: z.number().min(0).max(1).optional(),
@@ -82,7 +82,7 @@ export const DifficultyProfileSchema = z
     adjustmentReason: z.string().max(200).nullable(),
     successRateRecent: z.number().min(0).max(1),
     successRateOverall: z.number().min(0).max(1),
-    trend: z.enum(["IMPROVING", "STABLE", "DECLINING"]),
+    trend: z.enum(['IMPROVING', 'STABLE', 'DECLINING']),
   })
   .strict();
 

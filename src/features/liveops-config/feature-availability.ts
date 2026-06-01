@@ -1,19 +1,19 @@
-import type { FeatureAccess, FeatureKey } from "./feature-access";
+import type { FeatureAccess, FeatureKey } from './feature-access';
 export {
   DEGRADED_SURFACE_BLOCKS,
   getDegradedBlockedSurfaces,
   getDegradedFallbackSurface,
   shouldBlockFullSurface,
   type DegradedFeatureKey,
-} from "./degraded-surfaces";
+} from './degraded-surfaces';
 
 export type FeatureAvailabilityState =
-  | "hidden"
-  | "teased"
-  | "locked"
-  | "unlocked"
-  | "disabled"
-  | "degraded";
+  | 'hidden'
+  | 'teased'
+  | 'locked'
+  | 'unlocked'
+  | 'disabled'
+  | 'degraded';
 
 /**
  * Single source of truth for feature availability.
@@ -62,7 +62,7 @@ function resolveFeatureAvailability(
 ): FeatureAvailability {
   if (!feature) {
     return {
-      state: "disabled",
+      state: 'disabled',
       canRenderEntryPoint: false,
       canNavigate: false,
       canQuery: false,
@@ -70,18 +70,18 @@ function resolveFeatureAvailability(
       canRegisterRoute: false,
       canSubscribeToEvents: false,
       canShowNotification: false,
-      reason: "Feature not configured.",
+      reason: 'Feature not configured.',
     };
   }
 
   const disabled =
     !feature.isVisible ||
-    feature.releaseState === "final_release_deactivated" ||
-    feature.releaseState === "archived";
+    feature.releaseState === 'final_release_deactivated' ||
+    feature.releaseState === 'archived';
 
   if (disabled) {
     return {
-      state: "disabled",
+      state: 'disabled',
       canRenderEntryPoint: false,
       canNavigate: false,
       canQuery: false,
@@ -97,7 +97,7 @@ function resolveFeatureAvailability(
     if (feature.isDegraded === true) {
       if (feature.disableOnDegraded) {
         return {
-          state: "disabled",
+          state: 'disabled',
           canRenderEntryPoint: false,
           canNavigate: false,
           canQuery: false,
@@ -109,7 +109,7 @@ function resolveFeatureAvailability(
         };
       }
       return {
-        state: "degraded",
+        state: 'degraded',
         canRenderEntryPoint: true,
         canNavigate: false,
         canQuery: false,
@@ -122,7 +122,7 @@ function resolveFeatureAvailability(
     }
 
     return {
-      state: "unlocked",
+      state: 'unlocked',
       canRenderEntryPoint: true,
       canNavigate: true,
       canQuery: true,
@@ -136,7 +136,7 @@ function resolveFeatureAvailability(
 
   if (feature.isTeased) {
     return {
-      state: "teased",
+      state: 'teased',
       canRenderEntryPoint: true,
       canNavigate: false,
       canQuery: false,
@@ -149,7 +149,7 @@ function resolveFeatureAvailability(
   }
 
   return {
-    state: "locked",
+    state: 'locked',
     canRenderEntryPoint: false,
     canNavigate: false,
     canQuery: false,

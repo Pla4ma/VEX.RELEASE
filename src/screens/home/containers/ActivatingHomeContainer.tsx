@@ -1,18 +1,18 @@
-import { useMemo, useCallback } from "react";
-import { useNavigation } from "@react-navigation/native";
-import type { UseQueryResult } from "@tanstack/react-query";
-import { useSessionUIStore } from "../../../store/session-state";
-import { useHomeSpineModel } from "../../../features/home-spine/hooks";
-import { getNextBestAction } from "../../../features/progression";
-import { navigateToSessionStackScreen, navigateToMainTab } from "../../../navigation/navigation-helpers";
-import { getNextUnlockFeature } from "../hooks/home-controller-helpers";
-import { buildHomeReturnReasonState } from "../../../features/home-spine/service";
-import type { HomeReturnReason } from "../hooks/useHomeReturnReason";
-import { createStubQuery, stubLearningExecutionLayer, stubNavigationActions, stubCoachMutations } from "../hooks/home-controller-stubs";
-import type { HomeController } from "../hooks/home-controller-types";
-import type { HomeViewModel } from "../hooks/home-view-model";
-import { computeActivatingState } from "./ActivatingHomeContainer.state";
-import type { Nav, ActivatingContainerInput } from "./ActivatingHomeContainer.types";
+import { useMemo, useCallback } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import type { UseQueryResult } from '@tanstack/react-query';
+import { useSessionUIStore } from '../../../store/session-state';
+import { useHomeSpineModel } from '../../../features/home-spine/hooks';
+import { getNextBestAction } from '../../../features/progression';
+import { navigateToSessionStackScreen, navigateToMainTab } from '../../../navigation/navigation-helpers';
+import { getNextUnlockFeature } from '../hooks/home-controller-helpers';
+import { buildHomeReturnReasonState } from '../../../features/home-spine/service';
+import type { HomeReturnReason } from '../hooks/useHomeReturnReason';
+import { createStubQuery, stubLearningExecutionLayer, stubNavigationActions, stubCoachMutations } from '../hooks/home-controller-stubs';
+import type { HomeController } from '../hooks/home-controller-types';
+import type { HomeViewModel } from '../hooks/home-view-model';
+import { computeActivatingState } from './ActivatingHomeContainer.state';
+import type { Nav, ActivatingContainerInput } from './ActivatingHomeContainer.types';
 
 export function useActivatingContainerModel(
   input: ActivatingContainerInput,
@@ -47,15 +47,15 @@ export function useActivatingContainerModel(
   const openSetup = useCallback(
     (params: Record<string, unknown> = {}): void => {
       if (userId && disclosure.inputs.totalCompletedSessions === 0) {
-        analytics.trackFirstSessionStarted(userId, "home");
+        analytics.trackFirstSessionStarted(userId, 'home');
       }
-      navigateToSessionStackScreen(navigation, "SessionSetup", params);
+      navigateToSessionStackScreen(navigation, 'SessionSetup', params);
     },
     [analytics, disclosure.inputs.totalCompletedSessions, navigation, userId],
   );
 
   const openProgress = useCallback(() => {
-    navigateToMainTab(navigation, "Progress");
+    navigateToMainTab(navigation, 'Progress');
   }, [navigation]);
   const openNextAction = useCallback(() => {
     analytics.trackNextBestActionPressed(
@@ -89,7 +89,7 @@ export function useActivatingContainerModel(
       primaryRecommendation: null,
     });
     const onPress =
-      reasonState.source === "next-best-action"
+      reasonState.source === 'next-best-action'
         ? openNextAction
         : () => openSetup();
     return {
@@ -167,9 +167,9 @@ export function useActivatingContainerModel(
     openContentStudy: openSetup as () => void,
     continueStudyPlan: openSetup as () => void,
     createRecommendation: stubCoachMutations()
-      .createRecommendation as HomeController["createRecommendation"],
+      .createRecommendation as HomeController['createRecommendation'],
     updateRecommendationStatus: stubCoachMutations()
-      .updateRecommendationStatus as HomeController["updateRecommendationStatus"],
+      .updateRecommendationStatus as HomeController['updateRecommendationStatus'],
     retryAll: disclosure.refetchAll as () => Promise<unknown>,
     features: disclosure.features,
   };

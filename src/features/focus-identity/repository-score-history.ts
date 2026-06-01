@@ -1,5 +1,5 @@
-import { getSupabaseClient } from "../../config/supabase";
-import { withRetry } from "./repository-helpers";
+import { getSupabaseClient } from '../../config/supabase';
+import { withRetry } from './repository-helpers';
 
 export async function insertScoreHistory(
   userId: string,
@@ -9,7 +9,7 @@ export async function insertScoreHistory(
   return withRetry(async () => {
     const supabase = getSupabaseClient();
     const { error } = await supabase
-      .from("focus_score_history")
+      .from('focus_score_history')
       .insert({
         user_id: userId,
         profile_id: profileId,
@@ -20,7 +20,7 @@ export async function insertScoreHistory(
     if (error) {
       throw error;
     }
-  }, "insertScoreHistory");
+  }, 'insertScoreHistory');
 }
 
 export async function insertScoreHistoryBatch(
@@ -37,11 +37,11 @@ export async function insertScoreHistoryBatch(
       score: entry.score,
       reason: entry.reason,
     }));
-    const { error } = await supabase.from("focus_score_history").insert(rows);
+    const { error } = await supabase.from('focus_score_history').insert(rows);
     if (error) {
       throw error;
     }
-  }, "insertScoreHistoryBatch");
+  }, 'insertScoreHistoryBatch');
 }
 
 export async function getScoreHistory(
@@ -53,14 +53,14 @@ export async function getScoreHistory(
     const cutoffDate = new Date();
     cutoffDate.setDate(cutoffDate.getDate() - days);
     const { data, error } = await supabase
-      .from("focus_score_history")
-      .select("date, score, reason")
-      .eq("user_id", userId)
-      .gte("date", cutoffDate.toISOString().split("T")[0])
-      .order("date", { ascending: true });
+      .from('focus_score_history')
+      .select('date, score, reason')
+      .eq('user_id', userId)
+      .gte('date', cutoffDate.toISOString().split('T')[0])
+      .order('date', { ascending: true });
     if (error) {
       throw error;
     }
     return data || [];
-  }, "getScoreHistory");
+  }, 'getScoreHistory');
 }

@@ -1,5 +1,5 @@
-import { useState, useCallback, useEffect } from "react";
-import { useApi, type UseApiOptions, type UseApiReturn } from "./useApiCore";
+import { useState, useCallback, useEffect } from 'react';
+import { useApi, type UseApiOptions, type UseApiReturn } from './useApiCore';
 
 export interface UsePaginatedApiReturn<T> extends UseApiReturn<T[]> {
   page: number;
@@ -10,7 +10,7 @@ export interface UsePaginatedApiReturn<T> extends UseApiReturn<T[]> {
 
 export function usePaginatedApi<T = unknown>(
   endpoint: string,
-  options?: Omit<UseApiOptions<T[]>, "endpoint"> & { pageSize?: number },
+  options?: Omit<UseApiOptions<T[]>, 'endpoint'> & { pageSize?: number },
 ): UsePaginatedApiReturn<T> {
   const pageSize = options?.pageSize ?? 20;
   const [page, setPage] = useState(1);

@@ -1,4 +1,4 @@
-import type { PaywallContextType } from "./PremiumTierSystem";
+import type { PaywallContextType } from './PremiumTierSystem';
 
 interface ConversionMetrics {
   userId: string;
@@ -31,18 +31,18 @@ export function recordConversion(
 
 export function getConversionRate(context: PaywallContextType): number {
   const metrics = conversionMetrics.filter((m) => m.context === context);
-  if (metrics.length === 0) return 0;
+  if (metrics.length === 0) {return 0;}
   return metrics.filter((m) => m.converted).length / metrics.length;
 }
 
 export function getBestConvertingContext(): PaywallContextType | null {
   const contexts: PaywallContextType[] = [
-    "DEEP_COACH_MEMORY",
-    "ADVANCED_STUDY_OS",
-    "PROGRESS_INTELLIGENCE",
-    "VISUAL_IDENTITY",
-    "PREMIUM_SESSION_MODES",
-    "RECOVERY_PLANNING",
+    'DEEP_COACH_MEMORY',
+    'ADVANCED_STUDY_OS',
+    'PROGRESS_INTELLIGENCE',
+    'VISUAL_IDENTITY',
+    'PREMIUM_SESSION_MODES',
+    'RECOVERY_PLANNING',
   ];
   let best: PaywallContextType | null = null;
   let bestRate = 0;

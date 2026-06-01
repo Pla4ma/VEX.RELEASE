@@ -1,11 +1,11 @@
-import React from "react";
-import { useWindowDimensions } from "react-native";
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { SessionGradeCard } from "./SessionGradeCard";
-import { PerfectSessionBanner } from "../../../features/session-completion/components/PerfectSessionBanner";
-import type { useSessionCompleteController } from "../../../features/session-completion/hooks";
-import type { SessionSummary } from "../../../session/types";
+import React from 'react';
+import { useWindowDimensions } from 'react-native';
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { SessionGradeCard } from './SessionGradeCard';
+import { PerfectSessionBanner } from '../../../features/session-completion/components/PerfectSessionBanner';
+import type { useSessionCompleteController } from '../../../features/session-completion/hooks';
+import type { SessionSummary } from '../../../session/types';
 
 type SessionCompleteController = ReturnType<
   typeof useSessionCompleteController

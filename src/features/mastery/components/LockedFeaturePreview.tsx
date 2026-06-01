@@ -1,16 +1,16 @@
-import React from "react";
-import { Pressable, View } from "react-native";
-import { Box, Card, Text } from "../../../components/primitives";
-import { Icon } from "../../../icons";
-import { useTheme } from "../../../theme";
-import { buttonTap } from "../../../utils/haptics";
-import { getMasteryRankDisplay, type MasteryRank } from "../types";
+import React from 'react';
+import { Pressable, View } from 'react-native';
+import { Box, Card, Text } from '../../../components/primitives';
+import { Icon } from '../../../icons';
+import { useTheme } from '../../../theme';
+import { buttonTap } from '../../../utils/haptics';
+import { getMasteryRankDisplay, type MasteryRank } from '../types';
 import {
   FEATURE_INFO,
   FEATURE_REQUIREMENTS,
   getPointsToUnlock,
   type UnlockableFeature,
-} from "./mastery-unlock-gate-data";
+} from './mastery-unlock-gate-data';
 
 interface LockedFeaturePreviewProps {
   feature: UnlockableFeature;
@@ -54,8 +54,8 @@ export function LockedFeaturePreview({
               height: 40,
               borderRadius: 20,
               backgroundColor: `${rankDisplay.color}20`,
-              alignItems: "center",
-              justifyContent: "center",
+              alignItems: 'center',
+              justifyContent: 'center',
             }}
           >
             <Icon name="lock" size={18} color={rankDisplay.color} />
@@ -72,8 +72,8 @@ export function LockedFeaturePreview({
 
           <View
             style={{
-              flexDirection: "row",
-              alignItems: "center",
+              flexDirection: 'row',
+              alignItems: 'center',
               gap: 4,
               paddingHorizontal: theme.spacing[2],
               paddingVertical: theme.spacing[1],

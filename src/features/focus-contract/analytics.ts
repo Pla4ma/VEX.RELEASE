@@ -1,12 +1,12 @@
-import * as Sentry from "@sentry/react-native";
-import { capture } from "../../shared/analytics/analytics-service";
-import type { ReflectionStatus } from "./types";
+import * as Sentry from '@sentry/react-native';
+import { capture } from '../../shared/analytics/analytics-service';
+import type { ReflectionStatus } from './types';
 
 export const FocusContractAnalyticsEvents = {
-  CREATED: "focus_contract_created",
-  REFLECTED: "focus_contract_reflected",
-  SKIPPED: "focus_contract_skipped",
-  COMPLETION_RATE: "focus_contract_completion_rate",
+  CREATED: 'focus_contract_created',
+  REFLECTED: 'focus_contract_reflected',
+  SKIPPED: 'focus_contract_skipped',
+  COMPLETION_RATE: 'focus_contract_completion_rate',
 } as const;
 
 export function trackContractCreated(
@@ -15,9 +15,9 @@ export function trackContractCreated(
   hasTask: boolean,
 ): void {
   Sentry.addBreadcrumb({
-    category: "focus-contract",
-    message: "Focus contract created",
-    level: "info",
+    category: 'focus-contract',
+    message: 'Focus contract created',
+    level: 'info',
     data: { userId, sessionId, hasTask },
   });
   capture(FocusContractAnalyticsEvents.CREATED, {
@@ -33,9 +33,9 @@ export function trackContractReflected(
   sessionDuration: number,
 ): void {
   Sentry.addBreadcrumb({
-    category: "focus-contract",
-    message: "Focus contract reflected",
-    level: "info",
+    category: 'focus-contract',
+    message: 'Focus contract reflected',
+    level: 'info',
     data: { userId, status, sessionDuration },
   });
   capture(FocusContractAnalyticsEvents.REFLECTED, {
@@ -47,9 +47,9 @@ export function trackContractReflected(
 
 export function trackContractSkipped(userId: string, sessionId: string): void {
   Sentry.addBreadcrumb({
-    category: "focus-contract",
-    message: "Focus contract skipped",
-    level: "info",
+    category: 'focus-contract',
+    message: 'Focus contract skipped',
+    level: 'info',
     data: { userId, sessionId },
   });
   capture(FocusContractAnalyticsEvents.SKIPPED, {

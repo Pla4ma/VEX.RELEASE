@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -8,18 +8,18 @@ import Animated, {
   withRepeat,
   withSequence,
   FadeInUp,
-} from "react-native-reanimated";
-import { Box, Text } from "@/components/primitives";
-import { useTheme } from "@/theme";
-import * as Sentry from "@sentry/react-native";
+} from 'react-native-reanimated';
+import { Box, Text } from '@/components/primitives';
+import { useTheme } from '@/theme';
+import * as Sentry from '@sentry/react-native';
 import {
   NEAR_MISS_THRESHOLD,
   COMPLETE_THRESHOLD,
   getNearMissMessage,
   trackChallengeNearMiss,
-} from "./near-miss-helpers";
-import { NearMissProgressBar } from "./NearMissProgressBar";
-import { NearMissActions } from "./NearMissActions";
+} from './near-miss-helpers';
+import { NearMissProgressBar } from './NearMissProgressBar';
+import { NearMissActions } from './NearMissActions';
 
 interface NearMissIndicatorProps {
   challengeId: string;
@@ -43,20 +43,12 @@ export const NearMissIndicator: React.FC<NearMissIndicatorProps> = ({
     progressPercent >= NEAR_MISS_THRESHOLD &&
     progressPercent < COMPLETE_THRESHOLD;
 
-  if (!isValidNearMiss) {
-    Sentry.addBreadcrumb({
-      category: "challenges",
-      message: `NearMissIndicator rendered with invalid progress: ${progressPercent}%`,
-      level: "warning",
-    });
-    return null;
-  }
-
   const pulseOpacity = useSharedValue(0.6);
   const progressWidth = useSharedValue(0);
   const shakeX = useSharedValue(0);
 
   useEffect(() => {
+    if (!isValidNearMiss) {return;}
     progressWidth.value = withSpring(progressPercent / 100, {
       damping: 15,
       stiffness: 50,
@@ -78,7 +70,7 @@ export const NearMissIndicator: React.FC<NearMissIndicatorProps> = ({
       ),
     );
     trackChallengeNearMiss(challengeId, progressPercent);
-  }, [challengeId, progressPercent, progressWidth, pulseOpacity, shakeX]);
+  }, [isValidNearMiss, challengeId, progressPercent, progressWidth, pulseOpacity, shakeX]);
 
   const progressStyle = useAnimatedStyle(() => ({
     width: `${progressWidth.value * 100}%`,
@@ -87,6 +79,15 @@ export const NearMissIndicator: React.FC<NearMissIndicatorProps> = ({
   const shakeStyle = useAnimatedStyle(() => ({
     transform: [{ translateX: shakeX.value }],
   }));
+
+  if (!isValidNearMiss) {
+    Sentry.addBreadcrumb({
+      category: 'challenges',
+      message: `NearMissIndicator rendered with invalid progress: ${progressPercent}%`,
+      level: 'warning',
+    });
+    return null;
+  }
 
   return (
     <Animated.View entering={FadeInUp.springify()}>
@@ -151,4 +152,4 @@ export const NearMissIndicator: React.FC<NearMissIndicatorProps> = ({
 };
 
 export default NearMissIndicator;
-export { NEAR_MISS_THRESHOLD, COMPLETE_THRESHOLD, useIsNearMiss } from "./near-miss-helpers";
+export { NEAR_MISS_THRESHOLD, COMPLETE_THRESHOLD, useIsNearMiss } from './near-miss-helpers';

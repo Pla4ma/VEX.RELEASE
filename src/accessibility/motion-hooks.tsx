@@ -5,19 +5,19 @@
  * Uses Reanimated-compatible interface stubs — no react-native Animated.
  */
 
-import React from "react";
-import type { MotionPreferences, AnimationConfig } from "./motion-preferences";
-import { motionAccessibilityManager } from "./motion-manager";
+import React from 'react';
+import type { MotionPreferences, AnimationConfig } from './motion-preferences';
+import { motionAccessibilityManager } from './motion-manager';
 import type {
   CompositeAnimation,
   AnimatedValue,
-} from "./motion-animation-stubs";
+} from './motion-animation-stubs';
 
 export function useMotionAccessibility(): MotionPreferences & {
   updatePreferences: (updates: Partial<MotionPreferences>) => void;
   createAnimation: (config: AnimationConfig) => CompositeAnimation;
   triggerHaptic: (
-    type: "light" | "medium" | "heavy" | "success" | "warning" | "error",
+    type: 'light' | 'medium' | 'heavy' | 'success' | 'warning' | 'error',
   ) => void;
 } {
   const [preferences, setPreferences] = React.useState<MotionPreferences>(
@@ -43,7 +43,7 @@ export function useMotionAccessibility(): MotionPreferences & {
   }, []);
 
   const triggerHaptic = React.useCallback(
-    (type: "light" | "medium" | "heavy" | "success" | "warning" | "error") => {
+    (type: 'light' | 'medium' | 'heavy' | 'success' | 'warning' | 'error') => {
       motionAccessibilityManager.triggerHapticFeedback(type);
     },
     [],
@@ -71,28 +71,28 @@ export function withMotionAccessibility<P extends object>(
 
 export const ACCESSIBLE_ANIMATION_PRESETS = {
   SUBTLE: {
-    type: "fade" as const,
+    type: 'fade' as const,
     duration: 150,
     useNativeDriver: true,
-    reducedMotionAlternative: "none" as const,
+    reducedMotionAlternative: 'none' as const,
   },
   STANDARD: {
-    type: "fade" as const,
+    type: 'fade' as const,
     duration: 300,
     useNativeDriver: true,
-    reducedMotionAlternative: "fade" as const,
+    reducedMotionAlternative: 'fade' as const,
   },
   EMPHATIC: {
-    type: "spring" as const,
+    type: 'spring' as const,
     duration: 400,
     useNativeDriver: true,
-    reducedMotionAlternative: "fade" as const,
+    reducedMotionAlternative: 'fade' as const,
   },
   BACKGROUND: {
-    type: "parallax" as const,
+    type: 'parallax' as const,
     duration: 500,
     useNativeDriver: true,
-    reducedMotionAlternative: "none" as const,
+    reducedMotionAlternative: 'none' as const,
   },
 } as const;
 
@@ -114,16 +114,16 @@ export function setReducedMotion(enabled: boolean): void {
 }
 
 export function triggerHapticFeedback(
-  type: "light" | "medium" | "heavy" | "success" | "warning" | "error",
+  type: 'light' | 'medium' | 'heavy' | 'success' | 'warning' | 'error',
 ): void {
   motionAccessibilityManager.triggerHapticFeedback(type);
 }
 
 export type AnimationType =
-  | "fade"
-  | "slide"
-  | "scale"
-  | "rotate"
-  | "spring"
-  | "parallax"
-  | "transition";
+  | 'fade'
+  | 'slide'
+  | 'scale'
+  | 'rotate'
+  | 'spring'
+  | 'parallax'
+  | 'transition';

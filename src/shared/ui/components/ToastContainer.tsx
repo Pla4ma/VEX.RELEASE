@@ -1,18 +1,18 @@
-import React from "react";
-import { View, ViewStyle, Dimensions } from "react-native";
-import { styles } from "./Toast.styles";
-import { ToastComponent } from "./ToastComponent";
-import type { ToastPosition, ToastItem, ToastContainerProps } from "./Toast.types";
+import React from 'react';
+import { View, ViewStyle, Dimensions } from 'react-native';
+import { styles } from './Toast.styles';
+import { ToastComponent } from './ToastComponent';
+import type { ToastPosition, ToastItem, ToastContainerProps } from './Toast.types';
 
-const POSITIONS: ToastPosition[] = ["top", "bottom", "center"];
+const POSITIONS: ToastPosition[] = ['top', 'bottom', 'center'];
 
 function getPositionStyle(position: ToastPosition, height: number): ViewStyle {
   switch (position) {
-    case "top":
+    case 'top':
       return { top: 60 };
-    case "center":
+    case 'center':
       return { top: height / 2 - 50 };
-    case "bottom":
+    case 'bottom':
     default:
       return { bottom: 100 };
   }
@@ -23,7 +23,7 @@ function groupToastsByPosition(
 ): Partial<Record<ToastPosition, ToastItem[]>> {
   const grouped: Partial<Record<ToastPosition, ToastItem[]>> = {};
   for (const toast of toasts) {
-    const pos = toast.position || "bottom";
+    const pos = toast.position || 'bottom';
     if (!grouped[pos]) {
       grouped[pos] = [];
     }
@@ -36,7 +36,7 @@ export const ToastContainer: React.FC<ToastContainerProps> = ({
   toasts,
   onDismiss,
 }) => {
-  const { height } = Dimensions.get("window");
+  const { height } = Dimensions.get('window');
   const grouped = groupToastsByPosition(toasts);
 
   return (
@@ -50,7 +50,7 @@ export const ToastContainer: React.FC<ToastContainerProps> = ({
               getPositionStyle(position, height),
               {
                 zIndex:
-                  9999 + (position === "center" ? 2 : position === "top" ? 1 : 0),
+                  9999 + (position === 'center' ? 2 : position === 'top' ? 1 : 0),
               },
             ]}
             pointerEvents="box-none"

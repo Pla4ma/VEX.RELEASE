@@ -1,20 +1,20 @@
-import { withScreenErrorBoundary } from "../../shared/ui/components/ScreenErrorBoundary";
-import React, { useState, useCallback } from "react";
-import { Keyboard } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useTheme } from "../../theme";
-import { Box } from "../../components/primitives";
-import { SearchBar } from "./components/SearchBar";
-import { CategoriesBar } from "./components/CategoriesBar";
-import { RecentSearches } from "./components/RecentSearches";
-import { SearchResults } from "./components/SearchResults";
-import { TrendingTags } from "./components/TrendingTags";
+import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+import React, { useState, useCallback } from 'react';
+import { Keyboard } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTheme } from '../../theme';
+import { Box } from '../../components/primitives';
+import { SearchBar } from './components/SearchBar';
+import { CategoriesBar } from './components/CategoriesBar';
+import { RecentSearches } from './components/RecentSearches';
+import { SearchResults } from './components/SearchResults';
+import { TrendingTags } from './components/TrendingTags';
 
 export const SearchScreen: React.FC = () => {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
-  const [query, setQuery] = useState("");
-  const [activeCategory, setActiveCategory] = useState("all");
+  const [query, setQuery] = useState('');
+  const [activeCategory, setActiveCategory] = useState('all');
   const [isSearching, setIsSearching] = useState(false);
   const [showResults, setShowResults] = useState(false);
 
@@ -31,7 +31,7 @@ export const SearchScreen: React.FC = () => {
   }, [query]);
 
   const handleClear = () => {
-    setQuery("");
+    setQuery('');
     setShowResults(false);
   };
 
@@ -66,4 +66,4 @@ export const SearchScreen: React.FC = () => {
   );
 };
 
-export default withScreenErrorBoundary(SearchScreen, "Search");
+export default withScreenErrorBoundary(SearchScreen, 'Search');

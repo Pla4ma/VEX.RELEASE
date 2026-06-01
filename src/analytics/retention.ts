@@ -5,16 +5,16 @@
  * Tracks and calculates user retention metrics.
  */
 
-import { MMKV } from "react-native-mmkv";
-import type { RetentionCohort } from "./types";
+import { MMKV } from 'react-native-mmkv';
+import type { RetentionCohort } from './types';
 
-const retentionStorage = new MMKV({ id: "retention" });
+const retentionStorage = new MMKV({ id: 'retention' });
 const retentionCohorts = new Map<string, RetentionCohort>();
 
 function loadCohortsFromStorage(): void {
   try {
-    const stored = retentionStorage.getString("retention_cohorts");
-    if (!stored) return;
+    const stored = retentionStorage.getString('retention_cohorts');
+    if (!stored) {return;}
     const parsed = JSON.parse(stored) as Record<string, RetentionCohort>;
     for (const [key, value] of Object.entries(parsed)) {
       retentionCohorts.set(key, value);
@@ -30,7 +30,7 @@ function persistCohorts(): void {
     for (const [key, value] of retentionCohorts) {
       obj[key] = value;
     }
-    retentionStorage.set("retention_cohorts", JSON.stringify(obj));
+    retentionStorage.set('retention_cohorts', JSON.stringify(obj));
   } catch {
     // Persistence failure is non-fatal for retention tracking
   }
@@ -41,16 +41,16 @@ loadCohortsFromStorage();
 
 export function trackRetentionEvent(
   userId: string,
-  event: "first_open" | "session" | "return",
+  event: 'first_open' | 'session' | 'return',
 ): void {
-  const todayParts = new Date().toISOString().split("T");
+  const todayParts = new Date().toISOString().split('T');
   const today = todayParts[0];
-  if (!today) return;
+  if (!today) {return;}
 
-  if (event === "first_open") {
+  if (event === 'first_open') {
     // Check if user already has a first-open date stored
     const storedDate = getUserFirstOpen(userId);
-    if (storedDate) return; // Already tracked
+    if (storedDate) {return;} // Already tracked
 
     const existing = retentionCohorts.get(today);
     const cohort: RetentionCohort = existing ?? {
@@ -68,11 +68,11 @@ export function trackRetentionEvent(
   }
 
   const userFirstOpen = getUserFirstOpen(userId);
-  if (!userFirstOpen) return;
+  if (!userFirstOpen) {return;}
 
   const daysSince = daysBetween(userFirstOpen, today);
   const cohort = retentionCohorts.get(userFirstOpen);
-  if (!cohort) return;
+  if (!cohort) {return;}
 
   if (daysSince === 1) {
     cohort.day1++;

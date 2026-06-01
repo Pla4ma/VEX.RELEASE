@@ -1,45 +1,45 @@
-import { z } from "zod";
+import { z } from 'zod';
 import {
   FocusContractInputSchema,
   FocusContractReflectionInputSchema,
-} from "./schemas";
+} from './schemas';
 import {
   publishContractCreated,
   publishContractDoneMilestone,
   publishContractReflected,
   publishContractSkipped,
-} from "./events";
+} from './events';
 import {
   trackContractCompletionRate,
   trackContractCreated,
   trackContractReflected,
   trackContractSkipped,
-} from "./analytics";
-import * as repository from "./repository";
+} from './analytics';
+import * as repository from './repository';
 import type {
   FocusContract,
   FocusContractInput,
   ReflectionStatus,
-} from "./types";
+} from './types';
 
 const UserIdSchema = z.string().uuid();
-export type ContractReminderStage = "early" | "late";
+export type ContractReminderStage = 'early' | 'late';
 
 export function getReflectionCopy(status: ReflectionStatus): string {
-  if (status === "done") {
+  if (status === 'done') {
     return "That's focus. Your companion noticed.";
   }
-  if (status === "partial") {
-    return "Partial is honest. Keep showing up.";
+  if (status === 'partial') {
+    return 'Partial is honest. Keep showing up.';
   }
-  return "That happens. Next session, try again.";
+  return 'That happens. Next session, try again.';
 }
 
 function normalizeTaskDescription(input: FocusContractInput): string {
   const parsed = FocusContractInputSchema.parse(input);
-  const task = parsed.taskDescription?.trim() ?? "";
+  const task = parsed.taskDescription?.trim() ?? '';
   if (task.length < 3) {
-    throw new Error("Focus contract task must be at least 3 characters.");
+    throw new Error('Focus contract task must be at least 3 characters.');
   }
   return task;
 }
@@ -81,7 +81,7 @@ export async function reflectOnContract(
     userId: parsedUserId,
   });
   trackContractReflected(parsedUserId, input.completionStatus, 0);
-  if (input.completionStatus === "done") {
+  if (input.completionStatus === 'done') {
     publishContractDoneMilestone({
       contractId: input.contractId,
       userId: parsedUserId,
@@ -132,7 +132,7 @@ export async function getCompletionSignal(
   const rate =
     reflectedCount === 0
       ? 0.5
-      : contracts.filter((contract) => contract.completionStatus === "done")
+      : contracts.filter((contract) => contract.completionStatus === 'done')
           .length / reflectedCount;
   return {
     rate: Math.max(0, Math.min(1, rate)),
@@ -159,10 +159,10 @@ export function getContractReminderStage(
   }
   const progress = Math.max(0, Math.min(100, progressPercentage));
   if (progress >= 10 && progress <= 20) {
-    return "early";
+    return 'early';
   }
   if (progress >= 90) {
-    return "late";
+    return 'late';
   }
   return null;
 }

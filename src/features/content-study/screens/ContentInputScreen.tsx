@@ -1,28 +1,28 @@
-import { captureSilentFailure } from "../../../utils/silent-failure";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { View } from "react-native";
+import { captureSilentFailure } from '../../../utils/silent-failure';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { View } from 'react-native';
 import {
   useNavigation,
   useRoute,
   type RouteProp,
-} from "@react-navigation/native";
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+} from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-import { AppScreen, Button, Card } from "../../../components/primitives";
-import { Text } from "../../../components/primitives/Text";
-import { ContentInputActiveTab, InputTypeSelector } from "../components";
-import { UI_TEXT } from "../constants";
-import { useContentInput } from "../hooks";
-import { useTheme } from "../../../theme";
-import type { ContentStudyStackParamList } from "../types";
+import { AppScreen, Button, Card } from '../../../components/primitives';
+import { Text } from '../../../components/primitives/Text';
+import { ContentInputActiveTab, InputTypeSelector } from '../components';
+import { UI_TEXT } from '../constants';
+import { useContentInput } from '../hooks';
+import { useTheme } from '../../../theme';
+import type { ContentStudyStackParamList } from '../types';
 
 type ContentInputRouteProp = RouteProp<
   ContentStudyStackParamList,
-  "ContentInput"
+  'ContentInput'
 >;
 type ContentInputNavigationProp = NativeStackNavigationProp<
   ContentStudyStackParamList,
-  "ContentInput"
+  'ContentInput'
 >;
 
 export function ContentInputScreen(): JSX.Element {
@@ -81,16 +81,16 @@ export function ContentInputScreen(): JSX.Element {
   );
 
   const handleSubmit = useCallback(async () => {
-    setShowExtractionProgress(state.activeTab !== "paste");
+    setShowExtractionProgress(state.activeTab !== 'paste');
 
     try {
       const result = await submit();
-      navigation.navigate("ContentReview", { contentId: result.contentId });
+      navigation.navigate('ContentReview', { contentId: result.contentId });
     } catch (submitError) {
       captureSilentFailure(submitError, {
-        feature: "content-study",
-        operation: "ui-fallback",
-        type: "ui",
+        feature: 'content-study',
+        operation: 'ui-fallback',
+        type: 'ui',
       });
       setShowExtractionProgress(false);
     }

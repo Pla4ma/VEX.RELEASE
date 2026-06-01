@@ -1,22 +1,22 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const SessionBehaviorSignalTypeSchema = z.enum([
-  "session_started",
-  "session_completed",
-  "session_abandoned",
-  "session_paused",
-  "session_resumed",
-  "app_opened_no_session",
-  "cta_dismissed",
-  "notification_dismissed",
-  "rescue_offered",
-  "rescue_started",
-  "rescue_completed",
-  "reflection_saved",
-  "next_action_saved",
-  "mode_changed",
-  "study_target_completed",
-  "project_handoff_saved",
+  'session_started',
+  'session_completed',
+  'session_abandoned',
+  'session_paused',
+  'session_resumed',
+  'app_opened_no_session',
+  'cta_dismissed',
+  'notification_dismissed',
+  'rescue_offered',
+  'rescue_started',
+  'rescue_completed',
+  'reflection_saved',
+  'next_action_saved',
+  'mode_changed',
+  'study_target_completed',
+  'project_handoff_saved',
 ]);
 
 export type SessionBehaviorSignalType = z.infer<
@@ -24,18 +24,18 @@ export type SessionBehaviorSignalType = z.infer<
 >;
 
 export const SessionModeAtSignalSchema = z.enum([
-  "FOCUS",
-  "STUDY",
-  "DEEP_WORK",
-  "SPRINT",
-  "CREATIVE",
-  "RECOVERY",
+  'FOCUS',
+  'STUDY',
+  'DEEP_WORK',
+  'SPRINT',
+  'CREATIVE',
+  'RECOVERY',
 ]);
 
 export const SignalConfidenceLevelSchema = z.enum([
-  "low",
-  "medium",
-  "high",
+  'low',
+  'medium',
+  'high',
 ]);
 
 export const SessionBehaviorSignalSchema = z
@@ -118,7 +118,7 @@ export const AdaptationRuleInputSchema = z
     summary: SessionBehaviorSummarySchema,
     currentDurationMinutes: z.number().min(5).max(180).optional().default(25),
     currentMode: SessionModeAtSignalSchema.optional(),
-    lane: z.enum(["student", "game_like", "deep_creative", "minimal_normal"]).optional(),
+    lane: z.enum(['student', 'game_like', 'deep_creative', 'minimal_normal']).optional(),
   })
   .strict();
 

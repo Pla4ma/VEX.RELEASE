@@ -6,11 +6,11 @@
  * @phase 2 - Deepening: Error state
  */
 
-import React from "react";
-import { View, Text, Pressable } from "react-native";
-import Animated, { FadeIn } from "react-native-reanimated";
-import { createSheet } from "@/shared/ui/create-sheet";
-import { launchColors } from "@theme/tokens/launch-colors";
+import React from 'react';
+import { View, Text, Pressable } from 'react-native';
+import Animated, { FadeIn } from 'react-native-reanimated';
+import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
 
 interface OnboardingErrorStateProps {
   error: Error;
@@ -26,17 +26,17 @@ export function OnboardingErrorState({
   const getErrorMessage = (): string => {
     const message = error.message.toLowerCase();
 
-    if (message.includes("network") || message.includes("connection")) {
-      return "Connection issue. Please check your internet and try again.";
+    if (message.includes('network') || message.includes('connection')) {
+      return 'Connection issue. Please check your internet and try again.';
     }
-    if (message.includes("timeout")) {
-      return "Request timed out. Please retry.";
+    if (message.includes('timeout')) {
+      return 'Request timed out. Please retry.';
     }
-    if (message.includes("already exists") || message.includes("duplicate")) {
-      return "This information is already registered. You can skip onboarding.";
+    if (message.includes('already exists') || message.includes('duplicate')) {
+      return 'This information is already registered. You can skip onboarding.';
     }
 
-    return "Something went wrong. Please try again.";
+    return 'Something went wrong. Please try again.';
   };
 
   return (
@@ -91,13 +91,13 @@ const styles = createSheet({
   container: {
     flex: 1,
     backgroundColor: launchColors.hex_1a1a2e,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: 24,
   },
   content: {
-    width: "100%",
-    alignItems: "center",
+    width: '100%',
+    alignItems: 'center',
   },
   icon: {
     fontSize: 48,
@@ -105,19 +105,19 @@ const styles = createSheet({
   },
   title: {
     fontSize: 24,
-    fontWeight: "700",
+    fontWeight: '700',
     color: launchColors.hex_fff,
     marginBottom: 12,
   },
   message: {
     fontSize: 16,
     color: launchColors.hex_9e9e9e,
-    textAlign: "center",
+    textAlign: 'center',
     marginBottom: 32,
     lineHeight: 22,
   },
   buttonContainer: {
-    width: "100%",
+    width: '100%',
     gap: 12,
     maxWidth: 300,
   },
@@ -125,16 +125,16 @@ const styles = createSheet({
     backgroundColor: launchColors.hex_e94560,
     paddingVertical: 16,
     borderRadius: 12,
-    alignItems: "center",
+    alignItems: 'center',
   },
   primaryButtonText: {
     color: launchColors.hex_fff,
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   secondaryButton: {
     paddingVertical: 12,
-    alignItems: "center",
+    alignItems: 'center',
   },
   secondaryButtonText: {
     color: launchColors.hex_9e9e9e,

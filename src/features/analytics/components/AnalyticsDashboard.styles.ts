@@ -1,15 +1,15 @@
-import { Dimensions } from "react-native";
-import { createSheet } from "@/shared/ui/create-sheet";
-import { launchColors } from "@theme/tokens/launch-colors";
+import { Dimensions } from 'react-native';
+import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
 
-const { width: screenWidth } = Dimensions.get("window");
+const { width: screenWidth } = Dimensions.get('window');
 
 export const styles = createSheet({
   container: { flex: 1, backgroundColor: launchColors.hex_f9fafb },
   header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     padding: 16,
     backgroundColor: launchColors.hex_ffffff,
     borderBottomWidth: 1,
@@ -17,16 +17,16 @@ export const styles = createSheet({
   },
   headerTitle: {
     fontSize: 20,
-    fontWeight: "700",
+    fontWeight: '700',
     color: launchColors.hex_111827,
   },
-  headerActions: { flexDirection: "row", gap: 8 },
+  headerActions: { flexDirection: 'row', gap: 8 },
   iconButton: {
     padding: 8,
     borderRadius: 8,
     backgroundColor: launchColors.hex_f3f4f6,
   },
-  iconButtonText: { fontSize: 12, fontWeight: "700" },
+  iconButtonText: { fontSize: 12, fontWeight: '700' },
   filtersContainer: {
     backgroundColor: launchColors.hex_ffffff,
     paddingHorizontal: 16,
@@ -37,8 +37,8 @@ export const styles = createSheet({
   scrollView: { flex: 1 },
   scrollContent: { padding: 16, paddingBottom: 32 },
   summaryContainer: {
-    flexDirection: "row",
-    flexWrap: "wrap",
+    flexDirection: 'row',
+    flexWrap: 'wrap',
     gap: 12,
     marginBottom: 16,
   },
@@ -56,17 +56,17 @@ export const styles = createSheet({
   },
   summaryValue: {
     fontSize: 24,
-    fontWeight: "700",
+    fontWeight: '700',
     color: launchColors.hex_111827,
   },
   summaryLabel: {
     fontSize: 12,
     color: launchColors.hex_6b7280,
     marginTop: 4,
-    textTransform: "capitalize",
+    textTransform: 'capitalize',
   },
   changeBadge: {
-    alignSelf: "flex-start",
+    alignSelf: 'flex-start',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
@@ -76,26 +76,26 @@ export const styles = createSheet({
   changeNegative: { backgroundColor: launchColors.hex_fee2e2 },
   changeText: {
     fontSize: 12,
-    fontWeight: "600",
+    fontWeight: '600',
     color: launchColors.hex_374151,
   },
   chartsContainer: { marginBottom: 16 },
   insightsSection: { marginTop: 8 },
   sectionHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: 12,
   },
   sectionTitle: {
     fontSize: 18,
-    fontWeight: "600",
+    fontWeight: '600',
     color: launchColors.hex_111827,
   },
   seeAllText: {
     fontSize: 14,
     color: launchColors.hex_6366f1,
-    fontWeight: "500",
+    fontWeight: '500',
   },
   partialWarning: {
     backgroundColor: launchColors.hex_fef3c7,
@@ -106,11 +106,11 @@ export const styles = createSheet({
   partialText: {
     fontSize: 12,
     color: launchColors.hex_92400e,
-    textAlign: "center",
+    textAlign: 'center',
   },
   skeletonContainer: { padding: 16, gap: 16 },
   skeletonTitle: { marginBottom: 8 },
-  skeletonFilters: { flexDirection: "row", gap: 12, marginBottom: 8 },
+  skeletonFilters: { flexDirection: 'row', gap: 12, marginBottom: 8 },
   heatmapSkeleton: {
     backgroundColor: launchColors.hex_ffffff,
     borderRadius: 16,
@@ -128,7 +128,7 @@ export const styles = createSheet({
   },
   infoTitle: {
     fontSize: 18,
-    fontWeight: "700",
+    fontWeight: '700',
     color: launchColors.hex_111827,
     marginBottom: 6,
   },

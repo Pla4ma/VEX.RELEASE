@@ -1,10 +1,10 @@
 import {
   downloadExportData,
   deleteExportData,
-} from "../repository/storage";
-import { getSupabaseClient } from "../../../config/supabase";
+} from '../repository/storage';
+import { getSupabaseClient } from '../../../config/supabase';
 
-jest.mock("../../../config/supabase", () => {
+jest.mock('../../../config/supabase', () => {
   const mockFrom = jest.fn().mockReturnValue({
     upload: jest.fn(),
     download: jest.fn(),
@@ -12,25 +12,25 @@ jest.mock("../../../config/supabase", () => {
     createSignedUrl: jest.fn(),
     list: jest.fn(),
     getPublicUrl: jest.fn().mockReturnValue({
-      data: { publicUrl: "https://example.com/file" },
+      data: { publicUrl: 'https://example.com/file' },
     }),
   });
+  const mockClient = { storage: { from: mockFrom } };
   return {
-    getSupabaseClient: jest.fn().mockReturnValue({
-      storage: { from: mockFrom },
-    }),
+    supabase: mockClient,
+    getSupabaseClient: jest.fn().mockReturnValue(mockClient),
     handleSupabaseError: jest.fn((error: { message: string }) => {
       throw new Error(error.message);
     }),
   };
 });
 
-jest.mock("@sentry/react-native", () => ({
+jest.mock('@sentry/react-native', () => ({
   addBreadcrumb: jest.fn(),
   captureException: jest.fn(),
 }));
 
-describe("AnalyticsStorage - download & delete", () => {
+describe('AnalyticsStorage - download & delete', () => {
   let mockSupabase: { storage: { from: jest.Mock } };
 
   beforeEach(() => {
@@ -43,73 +43,73 @@ describe("AnalyticsStorage - download & delete", () => {
       createSignedUrl: jest.fn(),
       list: jest.fn(),
       getPublicUrl: jest.fn().mockReturnValue({
-        data: { publicUrl: "https://example.com/file" },
+        data: { publicUrl: 'https://example.com/file' },
       }),
     });
   });
 
-  describe("downloadExportData", () => {
-    it("should download data successfully", async () => {
-      const mockBlob = new Blob(["test data"], { type: "application/json" });
+  describe('downloadExportData', () => {
+    it('should download data successfully', async () => {
+      const mockBlob = new Blob(['test data'], { type: 'application/json' });
       mockSupabase.storage
         .from()
         .download.mockResolvedValue({ data: mockBlob, error: null });
       const result = await downloadExportData(
-        "test-job-id",
-        "user-123",
-        "json",
+        'test-job-id',
+        'user-123',
+        'json',
       );
       expect(result.data).toBe(mockBlob);
-      expect(result.contentType).toBe("application/json");
+      expect(result.contentType).toBe('application/json');
       expect(result.size).toBe(mockBlob.size);
       expect(result.checksum).toMatch(/^[a-f0-9]{64}$/);
     });
 
-    it("should throw on download failure", async () => {
+    it('should throw on download failure', async () => {
       mockSupabase.storage
         .from()
         .download.mockResolvedValue({
           data: null,
-          error: { name: "NotFound", message: "File not found" },
+          error: { name: 'NotFound', message: 'File not found' },
         });
       await expect(
-        downloadExportData("test-job-id", "user-123", "json"),
-      ).rejects.toThrow("Download failed");
+        downloadExportData('test-job-id', 'user-123', 'json'),
+      ).rejects.toThrow('Download failed');
     });
 
-    it("should throw on empty response", async () => {
+    it('should throw on empty response', async () => {
       mockSupabase.storage
         .from()
         .download.mockResolvedValue({ data: null, error: null });
       await expect(
-        downloadExportData("test-job-id", "user-123", "json"),
-      ).rejects.toThrow("No data returned from download");
+        downloadExportData('test-job-id', 'user-123', 'json'),
+      ).rejects.toThrow('No data returned from download');
     });
   });
 
-  describe("deleteExportData", () => {
-    it("should delete data successfully", async () => {
+  describe('deleteExportData', () => {
+    it('should delete data successfully', async () => {
       mockSupabase.storage
         .from()
         .remove.mockResolvedValue({
-          data: { message: "Deleted" },
+          data: { message: 'Deleted' },
           error: null,
         });
       await expect(
-        deleteExportData("test-job-id", "user-123", "json"),
+        deleteExportData('test-job-id', 'user-123', 'json'),
       ).resolves.not.toThrow();
     });
 
-    it("should throw on delete failure", async () => {
+    it('should throw on delete failure', async () => {
       mockSupabase.storage
         .from()
         .remove.mockResolvedValue({
           data: null,
-          error: { name: "DeleteFailed", message: "Cannot delete file" },
+          error: { name: 'DeleteFailed', message: 'Cannot delete file' },
         });
       await expect(
-        deleteExportData("test-job-id", "user-123", "json"),
-      ).rejects.toThrow("Delete failed");
+        deleteExportData('test-job-id', 'user-123', 'json'),
+      ).rejects.toThrow('Delete failed');
     });
   });
 });

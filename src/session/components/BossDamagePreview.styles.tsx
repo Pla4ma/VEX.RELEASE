@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react';
 import Animated, {
   useAnimatedStyle,
   withSpring,
@@ -7,10 +7,10 @@ import Animated, {
   withTiming,
   useSharedValue,
   FadeInUp,
-} from "react-native-reanimated";
-import { Box } from "../../components/primitives/Box";
-import { Text } from "../../components/primitives/Text";
-import { useTheme } from "../../theme";
+} from 'react-native-reanimated';
+import { Box } from '../../components/primitives/Box';
+import { Text } from '../../components/primitives/Text';
+import { useTheme } from '../../theme';
 
 export function BossDamageSkeleton(): JSX.Element {
   const { theme } = useTheme();
@@ -90,7 +90,7 @@ export function BossIcon({ willDefeat }: { willDefeat: boolean }): JSX.Element {
           willDefeat ? theme.colors.success.DEFAULT : theme.colors.border.light
         }
       >
-        <Text fontSize={24}>{willDefeat ? "⚔️" : "👹"}</Text>
+        <Text fontSize={24}>{willDefeat ? '⚔️' : '👹'}</Text>
       </Box>
     </Animated.View>
   );
@@ -109,10 +109,10 @@ export function DamageEstimate({
       <Text fontSize={12}>⚔️</Text>
       <Text
         variant="caption"
-        color={willDefeat ? theme.colors.success.DEFAULT : "text.secondary"}
-        fontWeight={willDefeat ? "700" : "500"}
+        color={willDefeat ? theme.colors.success.DEFAULT : 'text.secondary'}
+        fontWeight={willDefeat ? '700' : '500'}
       >
-        {willDefeat ? "DEFEATING BLOW: " : "This session: "}
+        {willDefeat ? 'DEFEATING BLOW: ' : 'This session: '}
         {damage} dmg
       </Text>
       {willDefeat && <Text fontSize={12}>🎉</Text>}

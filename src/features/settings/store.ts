@@ -1,8 +1,8 @@
-import { create } from "zustand";
-import { persist, createJSONStorage } from "zustand/middleware";
-import { immer } from "zustand/middleware/immer";
-import { z } from "zod";
-import { getMMKVStorageAdapter } from "../../persistence/MMKVStorageAdapter";
+import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
+import { immer } from 'zustand/middleware/immer';
+import { z } from 'zod';
+import { getMMKVStorageAdapter } from '../../persistence/MMKVStorageAdapter';
 
 export const UserPreferencesSchema = z.object({
   streakReminders: z.boolean().default(true),
@@ -36,7 +36,7 @@ export const useSettingsStore = create<SettingsState>()(
           }),
       }),
       {
-        name: "user-settings",
+        name: 'user-settings',
         storage: createJSONStorage(() => getMMKVStorageAdapter()),
       },
     ),

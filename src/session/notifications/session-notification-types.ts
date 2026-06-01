@@ -3,7 +3,7 @@ export interface NotificationPayload {
   body: string;
   data?: Record<string, unknown>;
   sound?: string;
-  priority?: "high" | "normal" | "low";
+  priority?: 'high' | 'normal' | 'low';
 }
 
 export interface StreakMilestoneResult {

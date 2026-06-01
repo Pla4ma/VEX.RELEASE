@@ -6,24 +6,24 @@
  * difficulty recommendations.
  */
 
-import { useEffect, useState, useCallback, useMemo } from "react";
-import * as Sentry from "@sentry/react-native";
+import { useEffect, useState, useCallback, useMemo } from 'react';
+import * as Sentry from '@sentry/react-native';
 import {
   getAdaptiveDifficultySuggestion,
   shouldShowSuggestion,
-} from "../service/adaptiveDifficulty";
+} from '../service/adaptiveDifficulty';
 import {
   getDifficultyPreference,
   saveDifficultyPreference,
   updateCurrentDifficulty,
-} from "../repository";
+} from '../repository';
 import {
   trackDifficultySuggestionShown,
   trackDifficultySuggestionAccepted,
   trackDifficultySuggestionDismissed,
-} from "../analytics";
-import type { DifficultySuggestion, SessionDifficulty } from "../schemas";
-import { MMKVStorageAdapter } from "../../../persistence/MMKVStorageAdapter";
+} from '../analytics';
+import type { DifficultySuggestion, SessionDifficulty } from '../schemas';
+import { MMKVStorageAdapter } from '../../../persistence/MMKVStorageAdapter';
 
 // Local type definition for session data
 interface SessionData {
@@ -42,8 +42,8 @@ interface UseAdaptiveDifficultyReturn {
   isLoading: boolean;
 }
 
-const STORAGE_KEY_PREFIX = "adaptive_difficulty_dismissed_";
-const dismissStorage = new MMKVStorageAdapter("adaptive-difficulty");
+const STORAGE_KEY_PREFIX = 'adaptive_difficulty_dismissed_';
+const dismissStorage = new MMKVStorageAdapter('adaptive-difficulty');
 
 export function useAdaptiveDifficulty(
   userId: string | null,
@@ -126,8 +126,8 @@ export function useAdaptiveDifficulty(
     } catch (error) {
       Sentry.captureException(error, {
         tags: {
-          feature: "session-start",
-          operation: "persist-difficulty-dismissal",
+          feature: 'session-start',
+          operation: 'persist-difficulty-dismissal',
         },
       });
     }
@@ -166,8 +166,8 @@ export function useAdaptiveDifficulty(
     } catch (error) {
       Sentry.captureException(error, {
         tags: {
-          feature: "session-start",
-          operation: "accept-difficulty-suggestion",
+          feature: 'session-start',
+          operation: 'accept-difficulty-suggestion',
         },
       });
     } finally {

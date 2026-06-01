@@ -2,12 +2,12 @@ export {
   createUnlockDecision,
   getUnlockExplainerCopy,
   isFeatureVisible,
-} from "./service";
+} from './service';
 
-export { useUnlockDecision, useUnlockWithHide } from "./hooks";
-export type { UnlockWithHide } from "./hooks";
+export { useUnlockDecision, useUnlockWithHide } from './hooks';
+export type { UnlockWithHide } from './hooks';
 
-export { buildUserFacingReason, UnlockReasonCodeSchema } from "./schemas";
+export { buildUserFacingReason, UnlockReasonCodeSchema } from './schemas';
 
 export {
   computeFeatureSafetyGates,
@@ -15,29 +15,29 @@ export {
   canDegradedPremiumTease,
   isNeverUnlockFeature,
   NEVER_UNLOCK_FEATURES,
-} from "./safety";
-export type { FeatureSafetyGates } from "./safety";
+} from './safety';
+export type { FeatureSafetyGates } from './safety';
 
-export { useUnlockExplainerStore } from "./store";
+export { useUnlockExplainerStore } from './store';
 export type {
   UnlockExplainerActions,
   UnlockExplainerState,
   UnlockExplainerStore,
-} from "./store";
+} from './store';
 
 export {
   checkRouteSafety,
   canRegisterFeatureRouteWithSafety,
   canNavigateToRouteWithSafety,
-} from "./route-safety-bridge";
-export type { RouteSafetyCheck } from "./route-safety-bridge";
+} from './route-safety-bridge';
+export type { RouteSafetyCheck } from './route-safety-bridge';
 
 export {
   buildCompletionUnlock,
   unlockDecisionToCompletion,
-} from "./completion-bridge";
+} from './completion-bridge';
 
-export { UnlockExplainerCard } from "./components/UnlockExplainerCard";
+export { UnlockExplainerCard } from './components/UnlockExplainerCard';
 
 export type {
   LaneFit,
@@ -46,4 +46,4 @@ export type {
   UnlockEvidence,
   UnlockExplainerInput,
   UnlockReasonCode,
-} from "./types";
+} from './types';

@@ -2,7 +2,7 @@
  * First Session Overlay Types
  */
 
-export type TooltipTarget = "timer" | "quality" | "boss";
+export type TooltipTarget = 'timer' | 'quality' | 'boss';
 
 export interface TooltipStep {
   target: TooltipTarget;

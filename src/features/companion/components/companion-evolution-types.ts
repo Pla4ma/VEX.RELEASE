@@ -1,12 +1,12 @@
-import type { CompanionPhase, CompanionState } from "../types";
-import { ELEMENT_THEMES } from "../types";
+import type { CompanionPhase, CompanionState } from '../types';
+import { ELEMENT_THEMES } from '../types';
 
 export type EvolutionPhase =
-  | "energy-buildup"
-  | "flash"
-  | "transformation"
-  | "celebration"
-  | "complete";
+  | 'energy-buildup'
+  | 'flash'
+  | 'transformation'
+  | 'celebration'
+  | 'complete';
 
 export interface CompanionEvolutionCeremonyProps {
   previousState: CompanionState;
@@ -15,21 +15,21 @@ export interface CompanionEvolutionCeremonyProps {
 }
 
 export const PHASE_NAMES: Record<CompanionPhase, string> = {
-  EGG: "Egg",
-  HATCHING: "Hatching",
-  YOUNG: "Young",
-  MATURE: "Mature",
-  AWAKENED: "Awakened",
-  TRANSCENDENT: "Transcendent",
+  EGG: 'Egg',
+  HATCHING: 'Hatching',
+  YOUNG: 'Young',
+  MATURE: 'Mature',
+  AWAKENED: 'Awakened',
+  TRANSCENDENT: 'Transcendent',
 };
 
 export const PHASE_EMOJIS: Record<CompanionPhase, string> = {
-  EGG: "🥚",
-  HATCHING: "🐣",
-  YOUNG: "🐤",
-  MATURE: "🦅",
-  AWAKENED: "🐉",
-  TRANSCENDENT: "🌟",
+  EGG: '🥚',
+  HATCHING: '🐣',
+  YOUNG: '🐤',
+  MATURE: '🦅',
+  AWAKENED: '🐉',
+  TRANSCENDENT: '🌟',
 };
 
 export const delay = (ms: number): Promise<void> =>
@@ -37,6 +37,6 @@ export const delay = (ms: number): Promise<void> =>
 
 export type ElementThemeColors = ReturnType<typeof getElementThemeColors>;
 
-export function getElementThemeColors(element: CompanionState["element"]) {
+export function getElementThemeColors(element: CompanionState['element']) {
   return ELEMENT_THEMES[element];
 }

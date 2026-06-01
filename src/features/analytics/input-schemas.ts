@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 import {
   AnalyticsMetricSchema,
   AnalyticsDimensionSchema,
@@ -6,8 +6,8 @@ import {
   InsightTypeSchema,
   InsightSeveritySchema,
   ExportFormatSchema,
-} from "./enums";
-import { AnalyticsFilterSchema } from "./data-schemas";
+} from './enums';
+import { AnalyticsFilterSchema } from './data-schemas';
 
 // ── Query inputs ─────────────────────────────────────────────────────────
 
@@ -16,7 +16,7 @@ export const GetAnalyticsDataInputSchema = z
     userId: z.string().uuid(),
     metrics: z.array(AnalyticsMetricSchema).min(1),
     timeRange: TimeRangeSchema,
-    granularity: z.enum(["hour", "day", "week", "month"]),
+    granularity: z.enum(['hour', 'day', 'week', 'month']),
     dimensions: z.array(AnalyticsDimensionSchema).optional(),
     filters: z.array(AnalyticsFilterSchema).optional(),
     includeComparison: z.boolean().optional(),
@@ -87,30 +87,30 @@ export function getTimeRangeDates(range: z.infer<typeof TimeRangeSchema>): {
   const now = Date.now();
   const oneDay = 24 * 60 * 60 * 1000;
   switch (range) {
-    case "today":
+    case 'today':
       return { start: new Date(now).setHours(0, 0, 0, 0), end: now };
-    case "yesterday":
+    case 'yesterday':
       return {
         start: new Date(now - oneDay).setHours(0, 0, 0, 0),
         end: new Date(now - oneDay).setHours(23, 59, 59, 999),
       };
-    case "last_7_days":
+    case 'last_7_days':
       return { start: now - 7 * oneDay, end: now };
-    case "last_30_days":
+    case 'last_30_days':
       return { start: now - 30 * oneDay, end: now };
-    case "this_week": {
+    case 'this_week': {
       const currentWeekDay = new Date(now).getDay();
       return { start: now - currentWeekDay * oneDay, end: now };
     }
-    case "this_month": {
+    case 'this_month': {
       const currentMonthDay = new Date(now).getDate();
       return { start: now - (currentMonthDay - 1) * oneDay, end: now };
     }
-    case "this_year": {
+    case 'this_year': {
       const startOfYear = new Date(now).setMonth(0, 1);
       return { start: startOfYear, end: now };
     }
-    case "all_time":
+    case 'all_time':
       return { start: 0, end: now };
     default:
       return { start: now - 7 * oneDay, end: now };

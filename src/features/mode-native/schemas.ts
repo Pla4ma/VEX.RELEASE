@@ -1,28 +1,28 @@
-import { z } from "zod";
-import { LaneSchema } from "../lane-engine/schemas";
+import { z } from 'zod';
+import { LaneSchema } from '../lane-engine/schemas';
 
 // ── Mode-native surface identifiers ────────────────────────────────────
 export const SurfaceIdSchema = z.enum([
-  "home",
-  "quick_contract",
-  "active_session",
-  "pause",
-  "completion",
-  "rescue",
-  "day3_memory",
-  "weekly_intelligence",
-  "premium_trigger",
+  'home',
+  'quick_contract',
+  'active_session',
+  'pause',
+  'completion',
+  'rescue',
+  'day3_memory',
+  'weekly_intelligence',
+  'premium_trigger',
 ]);
 
 export const PrimaryActionSchema = z.enum([
-  "start_session",
-  "resume_project",
-  "review_weak_topics",
-  "start_study_block",
-  "start_clean_run",
-  "start_project_block",
-  "re_enter_project",
-  "do_mini_session",
+  'start_session',
+  'resume_project',
+  'review_weak_topics',
+  'start_study_block',
+  'start_clean_run',
+  'start_project_block',
+  're_enter_project',
+  'do_mini_session',
 ]);
 
 // ── Home surface content ───────────────────────────────────────────────
@@ -70,7 +70,7 @@ export const ModeActiveIndicatorSchema = z
     showProgressBar: z.boolean(),
     showCompanion: z.boolean(),
     allowNotes: z.boolean(),
-    density: z.enum(["low", "medium", "medium_high"]),
+    density: z.enum(['low', 'medium', 'medium_high']),
     quiet: z.boolean(),
   })
   .strict();

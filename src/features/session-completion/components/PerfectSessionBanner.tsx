@@ -5,13 +5,13 @@
  * Renders BETWEEN GradeRevealAnimation settling and ChestReveal
  */
 
-import React from "react";
-import Animated, { ZoomIn } from "react-native-reanimated";
-import { LinearGradient } from "expo-linear-gradient";
+import React from 'react';
+import Animated, { ZoomIn } from 'react-native-reanimated';
+import { LinearGradient } from 'expo-linear-gradient';
 
-import { Box } from "../../../components/primitives";
-import { Text } from "../../../components/primitives";
-import { useTheme } from "../../../theme";
+import { Box } from '../../../components/primitives';
+import { Text } from '../../../components/primitives';
+import { useTheme } from '../../../theme';
 
 interface PerfectSessionBannerProps {
   isPerfect: boolean;
@@ -49,8 +49,8 @@ export function PerfectSessionBanner({
       >
         <LinearGradient
           colors={[
-            theme.colors.warning.DEFAULT + "40", // 25% opacity
-            theme.colors.warning.light + "20", // 12% opacity
+            theme.colors.warning.DEFAULT + '40', // 25% opacity
+            theme.colors.warning.light + '20', // 12% opacity
             theme.colors.background.elevated,
           ]}
           locations={[0, 0.3, 1]}
@@ -71,14 +71,14 @@ export function PerfectSessionBanner({
               variant="h3"
               color="warning.DEFAULT"
               weight="bold"
-              style={{ textAlign: "center" }}
+              style={{ textAlign: 'center' }}
             >
               PERFECT SESSION
             </Text>
             <Text
               variant="body"
               color="text.secondary"
-              style={{ textAlign: "center", marginTop: theme.spacing[2] }}
+              style={{ textAlign: 'center', marginTop: theme.spacing[2] }}
             >
               Flawless block. Zero interruptions. VEX will carry this pattern forward.
             </Text>

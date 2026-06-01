@@ -1,5 +1,5 @@
-import { UseShieldInputSchema, FreezeStreakInputSchema, RestoreStreakInputSchema, type Streak, type UseShieldInput, type RestoreStreakInput } from "./schemas";
-import * as repository from "./repository";
+import { UseShieldInputSchema, FreezeStreakInputSchema, RestoreStreakInputSchema, type Streak, type UseShieldInput, type RestoreStreakInput } from './schemas';
+import * as repository from './repository';
 
 async function getOrCreateStreak(userId: string): Promise<Streak> {
   let streak = await repository.fetchStreak(userId);
@@ -63,11 +63,11 @@ export async function restoreStreak(
   targetDays?: number,
 ): Promise<boolean> {
   const validated =
-    typeof inputOrUserId === "string"
+    typeof inputOrUserId === 'string'
       ? RestoreStreakInputSchema.parse({
           userId: inputOrUserId,
           targetDays,
-          source: "SPECIAL_EVENT",
+          source: 'SPECIAL_EVENT',
         })
       : RestoreStreakInputSchema.parse(inputOrUserId);
   const streak = await getOrCreateStreak(validated.userId);

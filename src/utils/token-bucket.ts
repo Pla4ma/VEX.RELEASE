@@ -4,13 +4,13 @@
  * Implements a token bucket algorithm for rate limiting.
  */
 
-import { captureSilentFailure } from "./silent-failure";
-import { MMKV } from "react-native-mmkv";
+import { captureSilentFailure } from './silent-failure';
+import { MMKV } from 'react-native-mmkv';
 
 let _storage: MMKV | null = null;
 function getStorage(): MMKV {
   if (!_storage) {
-    _storage = new MMKV({ id: "rate-limiter" });
+    _storage = new MMKV({ id: 'rate-limiter' });
   }
   return _storage;
 }
@@ -77,9 +77,9 @@ export class TokenBucketLimiter {
       }
     } catch (error) {
       captureSilentFailure(error, {
-        feature: "utils",
-        operation: "safe-fallback",
-        type: "data",
+        feature: 'utils',
+        operation: 'safe-fallback',
+        type: 'data',
       });
     }
     return { tokens: this.config.capacity, lastRefill: Date.now() };

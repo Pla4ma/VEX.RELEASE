@@ -1,8 +1,8 @@
-import React from "react";
-import { View, Text } from "react-native";
-import { useStreakCalendar } from "../hooks";
-import { createSheet } from "@/shared/ui/create-sheet";
-import { launchColors } from "@theme/tokens/launch-colors";
+import React from 'react';
+import { View, Text } from 'react-native';
+import { useStreakCalendar } from '../hooks';
+import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
 interface StreakCalendarProps {
   userId: string;
   month: number;
@@ -38,8 +38,8 @@ export function StreakCalendar({
       </View>
     );
   }
-  const monthName = new Date(year, month - 1).toLocaleString("default", {
-    month: "long",
+  const monthName = new Date(year, month - 1).toLocaleString('default', {
+    month: 'long',
   });
   const daysInMonth = new Date(year, month, 0).getDate();
   const firstDayOfMonth = new Date(year, month - 1, 1).getDay();
@@ -78,9 +78,9 @@ export function StreakCalendar({
         <Text style={styles.monthName}>{title || `${monthName} ${year}`}</Text>
         <View style={styles.stats}>
           <Text style={styles.statText}>
-            Current streak:{" "}
+            Current streak:{' '}
             <Text style={styles.statValue}>
-              {previewCurrentStreakDays ?? calendar?.currentStreakDays ?? 0}{" "}
+              {previewCurrentStreakDays ?? calendar?.currentStreakDays ?? 0}{' '}
               days
             </Text>
           </Text>
@@ -89,7 +89,7 @@ export function StreakCalendar({
 
       {}
       <View style={styles.weekdays}>
-        {["S", "M", "T", "W", "T", "F", "S"].map((day, i) => (
+        {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, i) => (
           <Text key={i} style={styles.weekdayText}>
             {day}
           </Text>
@@ -127,42 +127,42 @@ const styles = createSheet({
   header: { marginBottom: 16 },
   monthName: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     color: launchColors.hex_f3f4f6,
     marginBottom: 4,
   },
-  stats: { flexDirection: "row" },
+  stats: { flexDirection: 'row' },
   statText: { fontSize: 12, color: launchColors.hex_9ca3af },
-  statValue: { color: launchColors.hex_fbbf24, fontWeight: "600" },
+  statValue: { color: launchColors.hex_fbbf24, fontWeight: '600' },
   weekdays: {
-    flexDirection: "row",
-    justifyContent: "space-around",
+    flexDirection: 'row',
+    justifyContent: 'space-around',
     marginBottom: 8,
   },
   weekdayText: {
     width: 36,
-    textAlign: "center",
+    textAlign: 'center',
     fontSize: 12,
     color: launchColors.hex_6b7280,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   calendar: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "flex-start",
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'flex-start',
   },
   day: {
     width: 36,
     height: 36,
     margin: 2,
     borderRadius: 18,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   dayActive: { backgroundColor: launchColors.hex_3b82f6 },
   dayToday: { borderWidth: 2, borderColor: launchColors.hex_fbbf24 },
   dayText: { fontSize: 14, color: launchColors.hex_9ca3af },
-  dayTextActive: { color: launchColors.hex_ffffff, fontWeight: "600" },
+  dayTextActive: { color: launchColors.hex_ffffff, fontWeight: '600' },
   dayDot: {
     width: 4,
     height: 4,
@@ -171,13 +171,13 @@ const styles = createSheet({
     marginTop: 2,
   },
   legend: {
-    flexDirection: "row",
+    flexDirection: 'row',
     marginTop: 16,
     paddingTop: 12,
     borderTopWidth: 1,
     borderTopColor: launchColors.hex_374151,
   },
-  legendItem: { flexDirection: "row", alignItems: "center", marginRight: 16 },
+  legendItem: { flexDirection: 'row', alignItems: 'center', marginRight: 16 },
   legendDot: { width: 8, height: 8, borderRadius: 4, marginRight: 6 },
   legendActive: { backgroundColor: launchColors.hex_3b82f6 },
   legendToday: { backgroundColor: launchColors.hex_fbbf24 },

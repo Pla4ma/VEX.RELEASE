@@ -1,11 +1,11 @@
 export const Calendar = {
-  requestCalendarPermissionsAsync: async () => ({ status: "denied" as const }),
+  requestCalendarPermissionsAsync: async () => ({ status: 'denied' as const }),
   getCalendarsAsync: async (_entityType: string) => [
-    { id: "default", allowsModifications: true },
+    { id: 'default', allowsModifications: true },
   ],
-  EntityTypes: { EVENT: "event" },
+  EntityTypes: { EVENT: 'event' },
   createEventAsync: async (_calendarId: string, _eventData: unknown) =>
-    "event-id",
+    'event-id',
   updateEventAsync: async (
     _calendarId: string,
     _eventId: string,

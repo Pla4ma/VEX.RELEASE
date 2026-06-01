@@ -1,31 +1,31 @@
-import { useMemo, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { useSelectableThemes } from "../themes/hooks";
+import { useMemo, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useSelectableThemes } from '../themes/hooks';
 import {
   getSessionThemeById,
   type SessionTheme,
-} from "../themes/session-themes";
-import { useStreak } from "../streaks/hooks";
-import { useNetInfo } from "../../network";
-import type { SessionStackParams } from "../../navigation/types";
-import { useAuthStore } from "../../store";
-import { useActiveStudyPlan } from "../content-study/hooks";
-import { useLearningExecutionLayer } from "../learning-execution";
+} from '../themes/session-themes';
+import { useStreak } from '../streaks/hooks';
+import { useNetInfo } from '../../network';
+import type { SessionStackParams } from '../../navigation/types';
+import { useAuthStore } from '../../store';
+import { useActiveStudyPlan } from '../content-study/hooks';
+import { useLearningExecutionLayer } from '../learning-execution';
 import {
   parseSessionSetupParams,
   buildSessionStartHero,
   buildSessionStartSummary,
   getOfflineSessionStartMessage,
   buildSessionStake,
-} from "./service";
-import type { SessionStake } from "./schemas";
-import { useSessionSetupState } from "../../screens/session/hooks/useSessionSetupState";
-import { useStartSessionFlow } from "../../screens/session/hooks/useStartSessionFlow";
-import { PRESETS } from "../../screens/session/utils/session-setup";
-import { isFeatureHidden } from "../liveops-config/final-release-feature-map";
+} from './service';
+import type { SessionStake } from './schemas';
+import { useSessionSetupState } from '../../screens/session/hooks/useSessionSetupState';
+import { useStartSessionFlow } from '../../screens/session/hooks/useStartSessionFlow';
+import { PRESETS } from '../../screens/session/utils/session-setup';
+import { isFeatureHidden } from '../liveops-config/final-release-feature-map';
 
-type SessionSetupRouteParams = SessionStackParams["SessionSetup"];
+type SessionSetupRouteParams = SessionStackParams['SessionSetup'];
 type SessionNavigationProp = NativeStackNavigationProp<SessionStackParams>;
 
 export function useSessionStartController(input: {
@@ -46,7 +46,7 @@ export function useSessionStartController(input: {
     () => parseSessionSetupParams(routeParams),
     [routeParams],
   );
-  const userId = user?.id ?? "";
+  const userId = user?.id ?? '';
   const setupState = useSessionSetupState(
     userId,
     parsedRoute.params,
@@ -62,7 +62,7 @@ export function useSessionStartController(input: {
     [setupState.selectedThemeId],
   );
   const selectedDurationSeconds =
-    setupState.selectedPreset.id === "custom"
+    setupState.selectedPreset.id === 'custom'
       ? setupState.customDuration * 60
       : setupState.selectedPreset.duration;
   const filteredPresets = useMemo(
@@ -76,9 +76,9 @@ export function useSessionStartController(input: {
     () =>
       setupState.masteryState?.activeChallenges.filter(
         (challenge) =>
-          challenge.status === "ACTIVE" &&
-          (challenge.technique === "durationMastery" ||
-            challenge.technique === "purityMastery"),
+          challenge.status === 'ACTIVE' &&
+          (challenge.technique === 'durationMastery' ||
+            challenge.technique === 'purityMastery'),
       ) ?? [],
     [setupState.masteryState],
   );
@@ -184,10 +184,10 @@ export function useSessionStake(
   selectedLoadout?: string[],
 ) {
   const enabled =
-    !isFeatureHidden("boss_tab") || !isFeatureHidden("challenges");
+    !isFeatureHidden('boss_tab') || !isFeatureHidden('challenges');
 
   return useQuery<SessionStake>({
-    queryKey: ["session-stake", userId, durationSeconds, mode, selectedLoadout],
+    queryKey: ['session-stake', userId, durationSeconds, mode, selectedLoadout],
     queryFn: () =>
       buildSessionStake(userId, durationSeconds, mode, selectedLoadout),
     enabled: enabled && !!userId && durationSeconds > 0,

@@ -1,26 +1,26 @@
-import { StyleSheet } from "react-native";
-import { createSheet } from "@/shared/ui/create-sheet";
-import { launchColors } from "@theme/tokens/launch-colors";
+import { StyleSheet } from 'react-native';
+import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
 
 export const levelUpStyles = createSheet({
-  container: { flex: 1, justifyContent: "center", alignItems: "center" },
+  container: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   background: { ...StyleSheet.absoluteFill },
-  confetti: { position: "absolute", borderRadius: 2 },
-  content: { alignItems: "center", width: "100%" as const },
+  confetti: { position: 'absolute', borderRadius: 2 },
+  content: { alignItems: 'center', width: '100%' as const },
   levelBadge: {
     width: 120,
     height: 120,
     borderRadius: 60,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     marginBottom: 24,
   },
   badgeGradient: {
     width: 100,
     height: 100,
     borderRadius: 50,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     shadowColor: launchColors.hex_ffd700,
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.8,
@@ -35,7 +35,7 @@ export const levelUpStyles = createSheet({
   },
   levelNumber: {
     fontSize: 48,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     color: launchColors.hex_fff,
     textShadowColor: launchColors.rgb_0_0_0_0_3,
     textShadowOffset: { width: 2, height: 2 },
@@ -43,7 +43,7 @@ export const levelUpStyles = createSheet({
   },
   levelUpText: {
     fontSize: 36,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     color: launchColors.hex_ffd700,
     textShadowColor: launchColors.hex_ffd700,
     textShadowOffset: { width: 0, height: 0 },
@@ -51,55 +51,55 @@ export const levelUpStyles = createSheet({
     marginBottom: 16,
   },
   levelChangeRow: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: 8,
   },
   previousLevel: {
     fontSize: 20,
     color: launchColors.rgb_255_255_255_0_5,
-    textDecorationLine: "line-through",
+    textDecorationLine: 'line-through',
   },
   arrow: {
     fontSize: 24,
     color: launchColors.hex_ffd700,
     marginHorizontal: 12,
   },
-  newLevel: { fontSize: 28, fontWeight: "bold" },
+  newLevel: { fontSize: 28, fontWeight: 'bold' },
   tierTitle: {
     fontSize: 18,
-    fontWeight: "600",
+    fontWeight: '600',
     marginBottom: 24,
     textShadowColor: launchColors.rgb_0_0_0_0_5,
     textShadowOffset: { width: 1, height: 1 },
     textShadowRadius: 2,
   },
-  rewardsSection: { alignItems: "center", marginBottom: 24 },
+  rewardsSection: { alignItems: 'center', marginBottom: 24 },
   rewardsLabel: {
     fontSize: 14,
     color: launchColors.rgb_255_255_255_0_6,
     marginBottom: 12,
     letterSpacing: 2,
   },
-  rewardsRow: { flexDirection: "row", gap: 12 },
+  rewardsRow: { flexDirection: 'row', gap: 12 },
   rewardBadge: {
     width: 80,
     height: 100,
     borderRadius: 16,
-    overflow: "hidden",
+    overflow: 'hidden',
     borderWidth: 2,
     borderColor: launchColors.rgb_255_255_255_0_2,
   },
   rewardGradient: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: 8,
   },
   rewardIcon: { fontSize: 24, marginBottom: 4 },
   rewardAmount: {
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     color: launchColors.hex_fff,
   },
   rewardType: {
@@ -108,7 +108,7 @@ export const levelUpStyles = createSheet({
     marginTop: 2,
   },
   unlocksSection: {
-    width: "100%",
+    width: '100%',
     marginBottom: 24,
     paddingHorizontal: 24,
   },
@@ -116,12 +116,12 @@ export const levelUpStyles = createSheet({
     fontSize: 14,
     color: launchColors.rgb_255_255_255_0_6,
     marginBottom: 12,
-    textAlign: "center",
+    textAlign: 'center',
     letterSpacing: 2,
   },
   unlockItem: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: launchColors.rgb_255_255_255_0_1,
     padding: 12,
     borderRadius: 12,
@@ -131,22 +131,22 @@ export const levelUpStyles = createSheet({
   unlockText: {
     fontSize: 14,
     color: launchColors.hex_fff,
-    fontWeight: "500",
+    fontWeight: '500',
   },
   continueButton: {
     width: 200,
     borderRadius: 12,
-    overflow: "hidden",
+    overflow: 'hidden',
     shadowColor: launchColors.hex_ffd700,
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.5,
     shadowRadius: 20,
     elevation: 10,
   },
-  continueGradient: { paddingVertical: 16, alignItems: "center" },
+  continueGradient: { paddingVertical: 16, alignItems: 'center' },
   continueText: {
     color: launchColors.hex_fff,
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
 });

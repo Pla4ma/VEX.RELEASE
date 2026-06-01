@@ -1,12 +1,12 @@
 import {
   type StudyPlan,
   type RecallQuestion,
-} from "./schemas";
+} from './schemas';
 import {
   generateRecallQuestion,
   buildMemoryContentFromBlock,
-} from "./service-helpers";
-import { completeStudyBlock } from "./study-plan-service";
+} from './service-helpers';
+import { completeStudyBlock } from './study-plan-service';
 
 export interface StudyBlockCompletionResult {
   plan: StudyPlan;
@@ -43,10 +43,10 @@ export async function completeStudyBlockEnhanced(input: {
   });
   const memoryContent = buildMemoryContentFromBlock(block, input.reflection);
   const memoryTags = [
-    block.title.toLowerCase().replace(/\s+/g, "-"),
-    "study-block",
+    block.title.toLowerCase().replace(/\s+/g, '-'),
+    'study-block',
   ];
-  const nextBlock = plan.blocks.find((b) => b.status === "not_started");
+  const nextBlock = plan.blocks.find((b) => b.status === 'not_started');
   const suggestedNextBlock = nextBlock
     ? { title: nextBlock.title, objective: nextBlock.objective }
     : null;

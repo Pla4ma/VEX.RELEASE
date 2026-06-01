@@ -1,15 +1,15 @@
-import { PENALTY_CONSTANTS } from "./penalty-constants";
+import { PENALTY_CONSTANTS } from './penalty-constants';
 import type {
   PausePenaltyInput,
   InterruptionSeverity,
   InterruptionPenaltyInput,
   QualityPenaltyInput,
   InterruptionPenaltyResult,
-} from "./penalty-types";
+} from './penalty-types';
 
 export function calculatePausePenalty(input: PausePenaltyInput): number {
   const { pauseCount, totalPauseDurationSeconds } = input;
-  if (pauseCount === 0) return 0;
+  if (pauseCount === 0) {return 0;}
   const basePenalty = pauseCount * PENALTY_CONSTANTS.PAUSE_PENALTY_BASE;
   const pauseMinutes = totalPauseDurationSeconds / 60;
   const durationPenalty =
@@ -58,15 +58,15 @@ export function calculateInterruptionPenalty(
 export function getSeverityFromTimeLost(
   timeLostSeconds: number,
 ): InterruptionSeverity {
-  if (timeLostSeconds > 300) return "CRITICAL";
-  if (timeLostSeconds > 120) return "MAJOR";
-  if (timeLostSeconds > 30) return "MODERATE";
-  return "MINOR";
+  if (timeLostSeconds > 300) {return 'CRITICAL';}
+  if (timeLostSeconds > 120) {return 'MAJOR';}
+  if (timeLostSeconds > 30) {return 'MODERATE';}
+  return 'MINOR';
 }
 
 export function calculateQualityPenalty(input: QualityPenaltyInput): number {
   const { focusMetrics, distractionTime, totalSessionTime } = input;
-  if (totalSessionTime === 0) return 0;
+  if (totalSessionTime === 0) {return 0;}
   const distractionRatio = distractionTime / totalSessionTime;
   const overallScore = focusMetrics.overallScore;
   let penalty = 0;

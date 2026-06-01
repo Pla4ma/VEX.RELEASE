@@ -1,11 +1,11 @@
-import React, { useMemo, useState } from "react";
-import { Pressable } from "react-native";
-import Animated, { FadeInUp } from "react-native-reanimated";
+import React, { useMemo, useState } from 'react';
+import { Pressable } from 'react-native';
+import Animated, { FadeInUp } from 'react-native-reanimated';
 
-import { Box, Text } from "../../../components/primitives";
-import { getPremiumCardStyle } from "../../../components/premiumStyles";
-import type { SessionSummary } from "../../../session/types";
-import { useTheme } from "../../../theme";
+import { Box, Text } from '../../../components/primitives';
+import { getPremiumCardStyle } from '../../../components/premiumStyles';
+import type { SessionSummary } from '../../../session/types';
+import { useTheme } from '../../../theme';
 
 type SessionCompletionFollowThroughProps = {
   summary: SessionSummary;
@@ -22,19 +22,19 @@ function buildChallengeLines(summary: SessionSummary): ChallengeLine[] {
 
   if (summary.tasksPlanned && summary.tasksCompleted !== undefined) {
     lines.push({
-      id: "tasks",
-      label: "Planned work",
+      id: 'tasks',
+      label: 'Planned work',
       value: `${summary.tasksCompleted}/${summary.tasksPlanned}`,
     });
   }
   if (summary.streakIncreased) {
-    lines.push({ id: "streak", label: "Streak challenge", value: "+1 day" });
+    lines.push({ id: 'streak', label: 'Streak challenge', value: '+1 day' });
   }
   if (summary.completionPercentage >= 100) {
     lines.push({
-      id: "completion",
-      label: "Completion challenge",
-      value: "Cleared",
+      id: 'completion',
+      label: 'Completion challenge',
+      value: 'Cleared',
     });
   }
 
@@ -60,7 +60,7 @@ function FollowThroughCard({
           backgroundColor: theme.colors.background.secondary,
           borderColor: theme.colors.border.light,
           borderWidth: 1,
-          ...getPremiumCardStyle("medium"),
+          ...getPremiumCardStyle('medium'),
         }}
       >
         <Text variant="label" color={theme.colors.primary[400]}>
@@ -106,10 +106,10 @@ export function SessionCompletionFollowThrough({
             >
               {challengeLines.length > 0
                 ? `${challengeLines.length} updates ready`
-                : "No challenge changes from this run"}
+                : 'No challenge changes from this run'}
             </Text>
             <Text variant="caption" color={theme.colors.text.secondary}>
-              {challengesExpanded ? "Collapse" : "Review"}
+              {challengesExpanded ? 'Collapse' : 'Review'}
             </Text>
           </Box>
         </Pressable>

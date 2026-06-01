@@ -3,4 +3,4 @@ export type {
   MidSessionBossTaunts,
   MidSessionEvent,
   MidSessionEventType,
-} from "./schemas";
+} from './schemas';

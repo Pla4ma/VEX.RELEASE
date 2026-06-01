@@ -1,21 +1,21 @@
-export type ChallengeType = "DAILY" | "WEEKLY" | "EVENT";
+export type ChallengeType = 'DAILY' | 'WEEKLY' | 'EVENT';
 export type ChallengeStatus =
-  | "ACTIVE"
-  | "COMPLETED"
-  | "CLAIMED"
-  | "EXPIRED"
-  | "REROLLED"
-  | "ABANDONED";
+  | 'ACTIVE'
+  | 'COMPLETED'
+  | 'CLAIMED'
+  | 'EXPIRED'
+  | 'REROLLED'
+  | 'ABANDONED';
 export type ChallengeCategory =
-  | "SESSIONS"
-  | "MINUTES"
-  | "STREAK"
-  | "BOSS_DAMAGE"
-  | "SQUAD_ACTIVITY"
-  | "SHOP_PURCHASE"
-  | "LEVEL_UP"
-  | "ACHIEVEMENT"
-  | "SOCIAL";
+  | 'SESSIONS'
+  | 'MINUTES'
+  | 'STREAK'
+  | 'BOSS_DAMAGE'
+  | 'SQUAD_ACTIVITY'
+  | 'SHOP_PURCHASE'
+  | 'LEVEL_UP'
+  | 'ACHIEVEMENT'
+  | 'SOCIAL';
 export interface Challenge {
   id: string;
   seasonId: string;
@@ -32,7 +32,7 @@ export interface Challenge {
   startAt: number | null;
   endAt: number | null;
   isActive: boolean;
-  difficulty: "EASY" | "MEDIUM" | "HARD" | "EXPERT";
+  difficulty: 'EASY' | 'MEDIUM' | 'HARD' | 'EXPERT';
   xpBonus: number;
   createdAt: number;
 }

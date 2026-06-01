@@ -7,51 +7,51 @@
  */
 
 export interface ChallengeEventDefinitions {
-  "event:created": { eventId: string; title: string; type: string };
-  "event:joined": { userId: string; eventId: string; joinedAt: number };
-  "event:left": { userId: string; eventId: string };
-  "event:all_challenges_complete": {
+  'event:created': { eventId: string; title: string; type: string };
+  'event:joined': { userId: string; eventId: string; joinedAt: number };
+  'event:left': { userId: string; eventId: string };
+  'event:all_challenges_complete': {
     userId?: string;
     eventId: string;
     completedAt: number;
   };
-  "challenge:assigned": {
+  'challenge:assigned': {
     userId: string;
     challengeId: string;
     type: string;
     assignedAt: number;
   };
-  "challenge:completed": {
+  'challenge:completed': {
     userId: string;
     challengeId: string;
     completedAt: number;
   };
-  "challenge:weekly_completed": {
+  'challenge:weekly_completed': {
     userId: string;
     challengeId: string;
     completedAt: number;
   };
-  "challenge:progress": {
+  'challenge:progress': {
     userId: string;
     challengeId: string;
     progress: number;
     target: number;
     percent: number;
   };
-  "challenge:reward_claimed": {
+  'challenge:reward_claimed': {
     userId?: string;
     challengeId: string;
     claimedAt: number;
   };
-  "challenge:rerolled": {
+  'challenge:rerolled': {
     userId: string;
     oldChallengeId: string;
     newChallengeId: string;
     wasPaid: boolean;
     gemsSpent: number;
   };
-  "challenges:check_level": { userId?: string; level: number };
-  "challenges:check_progress": {
+  'challenges:check_level': { userId?: string; level: number };
+  'challenges:check_progress': {
     userId: string;
     challengeIds: string[];
     progress: {
@@ -60,18 +60,18 @@ export interface ChallengeEventDefinitions {
       xpEarned: number;
     };
   };
-  "challenges:check_economy": {
+  'challenges:check_economy': {
     userId: string;
     currency: string;
     amount: number;
     type: string;
   };
-  "challenges:check_crafting": {
+  'challenges:check_crafting': {
     userId: string;
     itemType: string;
     rarity: string;
   };
-  "challenges:completed": {
+  'challenges:completed': {
     userId: string;
     challengeId: string;
     challengeType: string;

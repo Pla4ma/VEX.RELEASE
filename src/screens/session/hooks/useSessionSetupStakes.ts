@@ -1,10 +1,10 @@
-import React from "react";
+import React from 'react';
 
-import { useActiveBoss } from "../../../features/boss/hooks";
-import { useActiveChallenges } from "../../../features/challenges/hooks";
-import { useStreakSummary } from "../../../features/streaks/hooks";
-import type { SessionStakesBriefingProps } from "../../../features/session-start/components/SessionStakesBriefing";
-import { isFeatureHidden } from "../../../features/liveops-config/final-release-feature-map";
+import { useActiveBoss } from '../../../features/boss/hooks';
+import { useActiveChallenges } from '../../../features/challenges/hooks';
+import { useStreakSummary } from '../../../features/streaks/hooks';
+import type { SessionStakesBriefingProps } from '../../../features/session-start/components/SessionStakesBriefing';
+import { isFeatureHidden } from '../../../features/liveops-config/final-release-feature-map';
 
 type UseSessionSetupStakesInput = {
   currentStreakDays: number | null;
@@ -14,7 +14,7 @@ type UseSessionSetupStakesInput = {
 
 type SessionSetupStakes = Pick<
   SessionStakesBriefingProps,
-  "bossStake" | "challengeStake" | "rivalStake" | "streakStake"
+  'bossStake' | 'challengeStake' | 'rivalStake' | 'streakStake'
 >;
 
 export function useSessionSetupStakes({
@@ -23,16 +23,16 @@ export function useSessionSetupStakes({
   userId,
 }: UseSessionSetupStakesInput): SessionSetupStakes {
   const economyEnabled =
-    !isFeatureHidden("boss_tab") && !isFeatureHidden("challenges");
+    !isFeatureHidden('boss_tab') && !isFeatureHidden('challenges');
 
-  const { data: activeBoss } = useActiveBoss(economyEnabled ? userId : "");
+  const { data: activeBoss } = useActiveBoss(economyEnabled ? userId : '');
   const { data: activeChallenges } = useActiveChallenges(
-    economyEnabled ? userId : "",
+    economyEnabled ? userId : '',
   );
   const { data: streakSummary } = useStreakSummary(userId);
 
-  const bossStake = React.useMemo<SessionSetupStakes["bossStake"]>(() => {
-    if (!activeBoss || activeBoss.status !== "ACTIVE") {
+  const bossStake = React.useMemo<SessionSetupStakes['bossStake']>(() => {
+    if (!activeBoss || activeBoss.status !== 'ACTIVE') {
       return null;
     }
 
@@ -40,7 +40,7 @@ export function useSessionSetupStakes({
       (activeBoss.healthRemaining / activeBoss.maxHealth) * 100;
 
     return {
-      bossName: activeBoss.bossName || "The Procrastinator",
+      bossName: activeBoss.bossName || 'The Procrastinator',
       estimatedDamage: Math.floor((selectedDurationSeconds / 60) * 0.8),
       healthPercent,
       isFinalStrike: healthPercent <= 15,
@@ -48,7 +48,7 @@ export function useSessionSetupStakes({
     };
   }, [activeBoss, selectedDurationSeconds]);
 
-  const streakStake = React.useMemo<SessionSetupStakes["streakStake"]>(() => {
+  const streakStake = React.useMemo<SessionSetupStakes['streakStake']>(() => {
     if (currentStreakDays === null || !streakSummary) {
       return null;
     }
@@ -72,7 +72,7 @@ export function useSessionSetupStakes({
   }, [currentStreakDays, streakSummary]);
 
   const challengeStake = React.useMemo<
-    SessionSetupStakes["challengeStake"]
+    SessionSetupStakes['challengeStake']
   >(() => {
     const detail = activeChallenges?.[0];
     if (!detail) {
@@ -90,7 +90,7 @@ export function useSessionSetupStakes({
     };
   }, [activeChallenges]);
 
-  const rivalStake = React.useMemo<SessionSetupStakes["rivalStake"]>(() => {
+  const rivalStake = React.useMemo<SessionSetupStakes['rivalStake']>(() => {
     return null;
   }, []);
 

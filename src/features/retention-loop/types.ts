@@ -1,4 +1,4 @@
-import type { z } from "zod";
+import type { z } from 'zod';
 import {
   JourneyDaySchema,
   JourneyHomeMessageSchema,
@@ -12,7 +12,7 @@ import {
   JourneyStateSchema,
   LaneCopyMapSchema,
   RetentionJourneyCopySchema,
-} from "./schemas";
+} from './schemas';
 
 export type JourneyDay = z.infer<typeof JourneyDaySchema>;
 export type JourneyPhase = z.infer<typeof JourneyPhaseSchema>;

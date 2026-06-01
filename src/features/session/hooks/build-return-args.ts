@@ -1,7 +1,7 @@
-import type { QueryClient } from "@tanstack/react-query";
-import type { SessionConfig, SessionState } from "../../../session/types";
-import type { SessionOrchestrator } from "../../../session/SessionOrchestrator";
-import type { getCoachService } from "../../ai-coach/service";
+import type { QueryClient } from '@tanstack/react-query';
+import type { SessionConfig, SessionState } from '../../../session/types';
+import type { SessionOrchestrator } from '../../../session/SessionOrchestrator';
+import type { getCoachService } from '../../ai-coach/service';
 
 export interface BuildReturnArgs {
   queryClient: QueryClient;

@@ -1,29 +1,29 @@
-import { createSheet } from "@/shared/ui/create-sheet";
+import { createSheet } from '@/shared/ui/create-sheet';
 
 export function interpolateColor(
   progress: number,
   _inputRange: [number, number],
   [start, end]: [string, string],
 ): string {
-  "worklet";
+  'worklet';
   return progress > 0.5 ? end : start;
 }
 
 export const progressStepsStyles = createSheet({
-  container: { flexDirection: "row" },
+  container: { flexDirection: 'row' },
   containerHorizontal: {
-    flexDirection: "row",
-    alignItems: "flex-start",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
   },
-  containerVertical: { flexDirection: "column", alignItems: "flex-start" },
-  stepContainer: { alignItems: "center" },
-  indicator: { justifyContent: "center", alignItems: "center", borderWidth: 2 },
+  containerVertical: { flexDirection: 'column', alignItems: 'flex-start' },
+  stepContainer: { alignItems: 'center' },
+  indicator: { justifyContent: 'center', alignItems: 'center', borderWidth: 2 },
   dotIndicator: { borderWidth: 0, width: 8, height: 8 },
-  stepNumber: { fontWeight: "700" },
-  stepTextContainer: { marginTop: 8, alignItems: "center", maxWidth: 100 },
-  stepTitle: { fontWeight: "600", textAlign: "center" },
-  stepDescription: { marginTop: 4, textAlign: "center" },
+  stepNumber: { fontWeight: '700' },
+  stepTextContainer: { marginTop: 8, alignItems: 'center', maxWidth: 100 },
+  stepTitle: { fontWeight: '600', textAlign: 'center' },
+  stepDescription: { marginTop: 4, textAlign: 'center' },
   connector: {},
   connectorHorizontal: {
     flex: 1,

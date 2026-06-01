@@ -1,12 +1,12 @@
-import React from "react";
-import { Modal } from "react-native";
-import type BottomSheet from "@gorhom/bottom-sheet";
-import { LevelUpCelebration } from "../../../components/LevelUpCelebration";
-import { GradeRevealAnimation } from "../../../features/session-completion/components/GradeRevealAnimation";
-import { SessionReflectionSheet } from "./SessionReflectionSheet";
-import { GRADE_REVEAL_COLORS } from "../../../features/session-completion/components/grade-reveal-helpers";
-import { useSessionCompleteController } from "../../../features/session-completion/hooks";
-import type { SessionSummary } from "../../../session/types";
+import React from 'react';
+import { Modal } from 'react-native';
+import type BottomSheet from '@gorhom/bottom-sheet';
+import { LevelUpCelebration } from '../../../components/LevelUpCelebration';
+import { GradeRevealAnimation } from '../../../features/session-completion/components/GradeRevealAnimation';
+import { SessionReflectionSheet } from './SessionReflectionSheet';
+import { GRADE_REVEAL_COLORS } from '../../../features/session-completion/components/grade-reveal-helpers';
+import { useSessionCompleteController } from '../../../features/session-completion/hooks';
+import type { SessionSummary } from '../../../session/types';
 
 type SessionCompleteController = ReturnType<
   typeof useSessionCompleteController

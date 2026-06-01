@@ -1,13 +1,13 @@
-import { resolveVexExperience } from "../index";
-import { makeStats } from "./personalization.helpers";
-import * as fixtures from "./test-fixtures";
+import { resolveVexExperience } from '../index';
+import { makeStats } from './personalization.helpers';
+import * as fixtures from './test-fixtures';
 
-jest.mock("@sentry/react-native", () => ({
+jest.mock('@sentry/react-native', () => ({
   addBreadcrumb: jest.fn(),
   captureException: jest.fn(),
 }));
 
-jest.mock("../../../persistence/MMKVStorageAdapter", () => ({
+jest.mock('../../../persistence/MMKVStorageAdapter', () => ({
   getMMKVStorageAdapter: () => ({
     getItem: jest.fn(() => null),
     setItem: jest.fn(),
@@ -15,75 +15,75 @@ jest.mock("../../../persistence/MMKVStorageAdapter", () => ({
   }),
 }));
 
-describe("resolveVexExperience", () => {
-  it("returns version 3 experience for new user", () => {
+describe('resolveVexExperience', () => {
+  it('returns version 3 experience for new user', () => {
     const exp = resolveVexExperience(
-      fixtures.profile("calm"),
+      fixtures.profile('calm'),
       makeStats(),
       fixtures.unavailable,
     );
     expect(exp.version).toBe(3);
-    expect(exp.userStage).toBe("new_user");
+    expect(exp.userStage).toBe('new_user');
   });
-  it("returns power_user stage for engaged user", () => {
+  it('returns power_user stage for engaged user', () => {
     const exp = resolveVexExperience(
-      fixtures.profile("game_like"),
+      fixtures.profile('game_like'),
       makeStats({ totalCompletedSessions: 15 }),
       fixtures.available,
     );
-    expect(exp.userStage).toBe("power_user");
+    expect(exp.userStage).toBe('power_user');
   });
-  it("uses START_SESSION intent for non-study users", () => {
+  it('uses START_SESSION intent for non-study users', () => {
     const exp = resolveVexExperience(
-      fixtures.profile("calm"),
+      fixtures.profile('calm'),
       makeStats(),
       fixtures.unavailable,
     );
-    expect(exp.primaryHomeCTA.intent).toBe("START_SESSION");
+    expect(exp.primaryHomeCTA.intent).toBe('START_SESSION');
   });
-  it("sets progress emphasis to basic for < 2 sessions", () => {
+  it('sets progress emphasis to basic for < 2 sessions', () => {
     const exp = resolveVexExperience(
-      fixtures.profile("calm"),
+      fixtures.profile('calm'),
       makeStats({ totalCompletedSessions: 0 }),
       fixtures.unavailable,
     );
-    expect(exp.progressEmphasis).toBe("basic");
+    expect(exp.progressEmphasis).toBe('basic');
   });
-  it("sets progress emphasis to rhythm for 2-6 sessions", () => {
+  it('sets progress emphasis to rhythm for 2-6 sessions', () => {
     const exp = resolveVexExperience(
-      fixtures.profile("calm"),
+      fixtures.profile('calm'),
       makeStats({ totalCompletedSessions: 3 }),
       fixtures.unavailable,
     );
-    expect(exp.progressEmphasis).toBe("rhythm");
+    expect(exp.progressEmphasis).toBe('rhythm');
   });
-  it("sets progress emphasis to intelligence for 7+ sessions", () => {
+  it('sets progress emphasis to intelligence for 7+ sessions', () => {
     const exp = resolveVexExperience(
-      fixtures.profile("calm"),
+      fixtures.profile('calm'),
       makeStats({ totalCompletedSessions: 7 }),
       fixtures.unavailable,
     );
-    expect(exp.progressEmphasis).toBe("intelligence");
+    expect(exp.progressEmphasis).toBe('intelligence');
   });
-  it("bans gamification surfaces for calm motivation", () => {
+  it('bans gamification surfaces for calm motivation', () => {
     const exp = resolveVexExperience(
-      fixtures.profile("calm"),
+      fixtures.profile('calm'),
       makeStats(),
       fixtures.unavailable,
     );
-    expect(exp.bannedSurfaces).toContain("boss_full_cta");
+    expect(exp.bannedSurfaces).toContain('boss_full_cta');
   });
-  it("includes study continuation in allowed notifications when study available", () => {
+  it('includes study continuation in allowed notifications when study available', () => {
     const exp = resolveVexExperience(
-      fixtures.profile("study_focused"),
+      fixtures.profile('study_focused'),
       makeStats(),
       { ...fixtures.available, study: true },
     );
-    expect(exp.allowedNotificationTypes).toContain("study_continuation");
+    expect(exp.allowedNotificationTypes).toContain('study_continuation');
   });
-  it("routeGates boss canNavigate is false when boss not visible", () => {
+  it('routeGates boss canNavigate is false when boss not visible', () => {
     const exp = resolveVexExperience(
-      fixtures.profile("calm"),
+      fixtures.profile('calm'),
       makeStats(),
       fixtures.unavailable,
     );

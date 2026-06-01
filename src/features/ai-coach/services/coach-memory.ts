@@ -1,34 +1,38 @@
-import { captureSilentFailure } from "../../../utils/silent-failure";
-import { MMKV } from "react-native-mmkv";
-import type { CoachMemory, SessionFacts, StreakFacts } from "./coach-memory-types";
+import { captureSilentFailure } from '../../../utils/silent-failure';
+import { MMKV } from 'react-native-mmkv';
+import type { CoachMemory, SessionFacts, StreakFacts } from './coach-memory-types';
 import {
   createEmptyMemory,
   updateProductiveTimeOfDay,
   updateMostUsedDuration,
   generateInsights,
-} from "./coach-memory-helpers";
+} from './coach-memory-helpers';
+import { getMmkvEncryptionKeySync } from '../../../persistence/mmkv-key';
 
 export type { CoachMemory, SessionFacts, StreakFacts };
-export { generatePersonalizedMessage, getMemoryBasedSuggestions } from "./coach-memory-messages";
+export { generatePersonalizedMessage, getMemoryBasedSuggestions } from './coach-memory-messages';
 
-const storage = new MMKV({
-  id: "coach-memory",
-  encryptionKey: "coach-memory-key",
-});
+let _storage: MMKV | null = null;
+function getStorage(): MMKV {
+  if (!_storage) {
+    _storage = new MMKV({ id: 'coach-memory', encryptionKey: getMmkvEncryptionKeySync() });
+  }
+  return _storage;
+}
 
-const STORAGE_KEY = "coach_user_memory";
+const STORAGE_KEY = 'coach_user_memory';
 
 export function getOrCreateMemory(userId: string): CoachMemory {
   const key = `${STORAGE_KEY}_${userId}`;
-  const stored = storage.getString(key);
+  const stored = getStorage().getString(key);
   if (stored) {
     try {
       return JSON.parse(stored) as CoachMemory;
     } catch (error) {
       captureSilentFailure(error, {
-        feature: "ai-coach",
-        operation: "network-fallback",
-        type: "network",
+        feature: 'ai-coach',
+        operation: 'network-fallback',
+        type: 'network',
       });
     }
   }
@@ -37,7 +41,7 @@ export function getOrCreateMemory(userId: string): CoachMemory {
 
 export function saveMemory(memory: CoachMemory): void {
   const key = `${STORAGE_KEY}_${memory.userId}`;
-  storage.set(key, JSON.stringify({ ...memory, lastUpdated: Date.now() }));
+  getStorage().set(key, JSON.stringify({ ...memory, lastUpdated: Date.now() }));
 }
 
 export function updateMemoryAfterSession(
@@ -111,7 +115,7 @@ export function getPersonalizedContext(
 
 export function clearMemory(userId: string): void {
   const key = `${STORAGE_KEY}_${userId}`;
-  storage.delete(key);
+  getStorage().delete(key);
 }
 
 export function getMemoryStats(userId: string): {
@@ -120,7 +124,7 @@ export function getMemoryStats(userId: string): {
   dataSize: number;
 } {
   const key = `${STORAGE_KEY}_${userId}`;
-  const stored = storage.getString(key);
+  const stored = getStorage().getString(key);
   if (!stored) {
     return { exists: false, lastUpdated: null, dataSize: 0 };
   }
@@ -133,9 +137,9 @@ export function getMemoryStats(userId: string): {
     };
   } catch (error) {
     captureSilentFailure(error, {
-      feature: "ai-coach",
-      operation: "network-fallback",
-      type: "network",
+      feature: 'ai-coach',
+      operation: 'network-fallback',
+      type: 'network',
     });
     return { exists: true, lastUpdated: null, dataSize: stored.length };
   }

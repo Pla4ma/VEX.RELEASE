@@ -1,9 +1,9 @@
-import type { CalendarGap } from "./types";
+import type { CalendarGap } from './types';
 
-export type CalendarProvider = "GOOGLE" | "APPLE";
+export type CalendarProvider = 'GOOGLE' | 'APPLE';
 
 export interface CalendarConfig {
-  google?: import("./GoogleCalendarAdapter").GoogleCalendarConfig;
+  google?: import('./GoogleCalendarAdapter').GoogleCalendarConfig;
   apple?: boolean;
 }
 
@@ -11,7 +11,7 @@ export type DeadlineAnalysis = Array<{
   title: string;
   deadline: Date;
   suggestedStudyTimes: number;
-  urgency: "HIGH" | "MEDIUM" | "LOW";
+  urgency: 'HIGH' | 'MEDIUM' | 'LOW';
 }>;
 
 export function mergeBusySlots(
@@ -76,10 +76,10 @@ export function getSmartSessionSuggestionFromGaps(
   startTime?: Date;
   duration?: number;
   reason?: string;
-  action: "START_NOW" | "SCHEDULE" | "NO_SUITABLE_TIME";
+  action: 'START_NOW' | 'SCHEDULE' | 'NO_SUITABLE_TIME';
 } {
   if (gaps.length === 0) {
-    return { suggested: false, action: "NO_SUITABLE_TIME" };
+    return { suggested: false, action: 'NO_SUITABLE_TIME' };
   }
   const bestGap = gaps[0]!;
   const now = new Date();
@@ -93,7 +93,7 @@ export function getSmartSessionSuggestionFromGaps(
       startTime: gapStart,
       duration: Math.min(bestGap.duration, 60),
       reason: bestGap.reason,
-      action: "START_NOW",
+      action: 'START_NOW',
     };
   }
   return {
@@ -101,6 +101,6 @@ export function getSmartSessionSuggestionFromGaps(
     startTime: gapStart,
     duration: Math.min(bestGap.duration, 60),
     reason: bestGap.reason,
-    action: "SCHEDULE",
+    action: 'SCHEDULE',
   };
 }

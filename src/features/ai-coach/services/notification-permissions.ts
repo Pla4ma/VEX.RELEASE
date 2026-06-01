@@ -1,13 +1,13 @@
-import * as Notifications from "expo-notifications";
-import { Platform } from "react-native";
+import * as Notifications from 'expo-notifications';
+import { Platform } from 'react-native';
 
-import { STORAGE_KEYS } from "../../../constants/storage";
-import { getMMKVStorageAdapter } from "../../../persistence/MMKVStorageAdapter";
-import { createDebugger } from "../../../utils/debug";
-import { NOTIFICATION_CONFIG } from "./notification-config";
-import { launchColors } from "@theme/tokens/launch-colors";
+import { STORAGE_KEYS } from '../../../constants/storage';
+import { getMMKVStorageAdapter } from '../../../persistence/MMKVStorageAdapter';
+import { createDebugger } from '../../../utils/debug';
+import { NOTIFICATION_CONFIG } from './notification-config';
+import { launchColors } from '@theme/tokens/launch-colors';
 
-const debug = createDebugger("ai-coach:notifications");
+const debug = createDebugger('ai-coach:notifications');
 
 type PromptState = Record<string, true>;
 
@@ -22,7 +22,7 @@ async function readPromptState(): Promise<PromptState> {
   try {
     return JSON.parse(raw) as PromptState;
   } catch (error) {
-    debug.warn("Failed to parse onboarding notification prompt state", error);
+    debug.warn('Failed to parse onboarding notification prompt state', error);
     return {};
   }
 }
@@ -47,12 +47,12 @@ export async function markOnboardingNotificationPromptRequested(
       }),
     );
   } catch (error) {
-    debug.warn("Failed to persist onboarding notification prompt state", error);
+    debug.warn('Failed to persist onboarding notification prompt state', error);
   }
 }
 
 export async function ensureNotificationChannel(): Promise<void> {
-  if (Platform.OS !== "android") {
+  if (Platform.OS !== 'android') {
     return;
   }
 
@@ -68,7 +68,7 @@ export async function ensureNotificationChannel(): Promise<void> {
       },
     );
   } catch (error) {
-    debug.warn("Notification channel setup failed", error);
+    debug.warn('Notification channel setup failed', error);
   }
 }
 
@@ -91,12 +91,12 @@ export async function requestNotificationPermissions(): Promise<boolean> {
         Notifications.IosAuthorizationStatus.PROVISIONAL;
 
     if (!granted) {
-      debug.warn("Notification permission denied");
+      debug.warn('Notification permission denied');
     }
 
     return granted;
   } catch (error) {
-    debug.warn("Notification permission request failed", error);
+    debug.warn('Notification permission request failed', error);
     return false;
   }
 }

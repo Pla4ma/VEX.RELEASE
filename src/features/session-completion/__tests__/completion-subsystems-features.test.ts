@@ -4,95 +4,95 @@ const mockCaptureException = jest.fn();
 const mockAddBreadcrumb = jest.fn();
 const mockRecordSession = jest.fn(
   async (): Promise<{ currentStreak: number }> => {
-    mockOrder.push("streak");
+    mockOrder.push('streak');
     return { currentStreak: 5 };
   },
 );
 const mockAddXP = jest.fn(async (): Promise<void> => {
-  mockOrder.push("progression");
+  mockOrder.push('progression');
 });
 const mockGrantReward = jest.fn(async (): Promise<void> => {
-  mockOrder.push("rewards");
+  mockOrder.push('rewards');
 });
 const mockCompleteSession = jest.fn(
   (): { evolved: boolean; leveledUp: boolean } => {
-    mockOrder.push("companion");
+    mockOrder.push('companion');
     return { evolved: false, leveledUp: true };
   },
 );
 
 /* ── top-level jest.mock calls (hoisted by Babel) ── */
 
-jest.mock("@sentry/react-native", () => ({
+jest.mock('@sentry/react-native', () => ({
   addBreadcrumb: (...args: unknown[]) => mockAddBreadcrumb(...args),
   captureException: (...args: unknown[]) => mockCaptureException(...args),
 }));
 
-jest.mock("../../focus-identity/update-focus-score.helper", () => ({
+jest.mock('../../focus-identity/update-focus-score.helper', () => ({
   updateFocusScoreFromSessionCompletion: jest.fn(
     async (): Promise<void> => {
-      mockOrder.push("focus-identity");
+      mockOrder.push('focus-identity');
     },
   ),
 }));
 
-jest.mock("../../../streaks/StreakService", () => ({
+jest.mock('../../../streaks/StreakService', () => ({
   getStreakService: jest.fn(() => ({ recordSession: mockRecordSession })),
 }));
 
-jest.mock("../../../progression/ProgressionService", () => ({
+jest.mock('../../../progression/ProgressionService', () => ({
   getProgressionService: jest.fn(() => ({ addXP: mockAddXP })),
 }));
 
-jest.mock("../../../rewards/RewardService", () => ({
+jest.mock('../../../rewards/RewardService', () => ({
   getRewardService: jest.fn(() => ({ grantReward: mockGrantReward })),
 }));
 
-jest.mock("../../companion/service", () => ({
+jest.mock('../../companion/service', () => ({
   getCompanionService: jest.fn(() => ({
     completeSession: mockCompleteSession,
   })),
 }));
 
-jest.mock("../completion-analytics", () => ({
+jest.mock('../completion-analytics', () => ({
   trackCompletionAnalytics: jest.fn(),
 }));
 
 /* ── now safe to import the module under test ── */
 
-import { applyCompletionSubsystems } from "../completion-subsystems";
-import { setFeatureAccessMap } from "../../liveops-config/feature-access-store";
-import type { FeatureAccessMap } from "../../liveops-config/feature-access";
+import { applyCompletionSubsystems } from '../completion-subsystems';
+import { setFeatureAccessMap } from '../../liveops-config/feature-access-store';
+import type { FeatureAccessMap } from '../../liveops-config/feature-access';
 import {
   baseLedger,
   baseSummary,
   defaultFeatureAccess,
-} from "./completion-subsystems.helpers";
+} from './completion-subsystems.helpers';
 
-describe("applyCompletionSubsystems", () => {
+describe('applyCompletionSubsystems', () => {
   beforeEach(() => {
     mockOrder.length = 0;
     jest.clearAllMocks();
     setFeatureAccessMap(defaultFeatureAccess);
   });
 
-  it("skips feature-dependent subsystems when feature is locked", async () => {
+  it('skips feature-dependent subsystems when feature is locked', async () => {
     setFeatureAccessMap({
       companion_detail: {
         isUnlocked: false,
         isVisible: false,
-        lockedDescription: "locked",
-        recommendedUnlockMoment: "",
-        unlockReason: "",
-        releaseState: "final_release_progressive",
+        lockedDescription: 'locked',
+        recommendedUnlockMoment: '',
+        unlockReason: '',
+        releaseState: 'final_release_progressive',
       },
       challenges: {
         isUnlocked: false,
         isVisible: false,
-        lockedDescription: "locked",
-        recommendedUnlockMoment: "",
-        unlockReason: "",
-        releaseState: "final_release_progressive",
+        lockedDescription: 'locked',
+        recommendedUnlockMoment: '',
+        unlockReason: '',
+        releaseState: 'final_release_progressive',
       },
     } as FeatureAccessMap);
 
@@ -103,13 +103,13 @@ describe("applyCompletionSubsystems", () => {
 
     expect(result.degradedSystems).toEqual([]);
     expect(mockOrder).toEqual([
-      "focus-identity",
-      "streak",
-      "progression",
-      "rewards",
+      'focus-identity',
+      'streak',
+      'progression',
+      'rewards',
     ]);
     expect(result.ledger.companionReactionId).toBeNull();
-    expect(result.ledger.dailyMissionResult.status).toBe("unchanged");
+    expect(result.ledger.dailyMissionResult.status).toBe('unchanged');
     expect(mockCompleteSession).not.toHaveBeenCalled();
   });
 });

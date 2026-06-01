@@ -5,10 +5,10 @@ import {
   FadeInLeft,
   FadeInRight,
   Easing,
-} from "react-native-reanimated";
+} from 'react-native-reanimated';
 
-export type EnterDirection = "up" | "down" | "left" | "right" | "fade";
-export type EnterSpeed = "instant" | "fast" | "normal" | "slow";
+export type EnterDirection = 'up' | 'down' | 'left' | 'right' | 'fade';
+export type EnterSpeed = 'instant' | 'fast' | 'normal' | 'slow';
 
 export const SPEED_CONFIGS: Record<
   EnterSpeed,
@@ -28,28 +28,28 @@ export const getEnterAnimation = (
   reducedMotion: boolean,
 ) => {
   const config = SPEED_CONFIGS[speed];
-  if (reducedMotion || speed === "instant") {
+  if (reducedMotion || speed === 'instant') {
     return FadeIn.duration(0).delay(0);
   }
   const baseDelay = delay;
   switch (direction) {
-    case "up":
+    case 'up':
       return FadeInUp.duration(config.duration)
         .delay(baseDelay)
         .easing(config.easing);
-    case "down":
+    case 'down':
       return FadeInDown.duration(config.duration)
         .delay(baseDelay)
         .easing(config.easing);
-    case "left":
+    case 'left':
       return FadeInLeft.duration(config.duration)
         .delay(baseDelay)
         .easing(config.easing);
-    case "right":
+    case 'right':
       return FadeInRight.duration(config.duration)
         .delay(baseDelay)
         .easing(config.easing);
-    case "fade":
+    case 'fade':
     default:
       return FadeIn.duration(config.duration)
         .delay(baseDelay)

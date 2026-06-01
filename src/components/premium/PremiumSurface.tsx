@@ -1,13 +1,13 @@
-import React from "react";
-import { View, type ViewStyle } from "react-native";
+import React from 'react';
+import { View, type ViewStyle } from 'react-native';
 
-import { useTheme } from "../../theme";
-import { getPremiumCardStyle } from "../premiumStyles";
-import { Button } from "../primitives/Button";
-import { Text } from "../primitives/Text";
-import { buttonTap } from "../../utils/haptics";
+import { useTheme } from '../../theme';
+import { getPremiumCardStyle } from '../premiumStyles';
+import { Button } from '../primitives/Button';
+import { Text } from '../primitives/Text';
+import { buttonTap } from '../../utils/haptics';
 
-type SurfaceTone = "default" | "celebration" | "info" | "warning" | "locked";
+type SurfaceTone = 'default' | 'celebration' | 'info' | 'warning' | 'locked';
 
 interface PremiumSurfaceProps {
   children?: React.ReactNode;
@@ -29,7 +29,7 @@ export function PremiumSurface({
   body,
   eyebrow,
   icon,
-  tone = "default",
+  tone = 'default',
   actionLabel,
   onAction,
   secondaryActionLabel,
@@ -64,7 +64,7 @@ export function PremiumSurface({
   return (
     <View
       style={[
-        getPremiumCardStyle("large"),
+        getPremiumCardStyle('large'),
         {
           borderWidth: 1,
           padding: theme.spacing[4],
@@ -99,14 +99,14 @@ export function PremiumSurface({
       {actionLabel && onAction ? (
         <View
           style={{
-            flexDirection: "row",
+            flexDirection: 'row',
             gap: theme.spacing[3],
-            flexWrap: "wrap",
+            flexWrap: 'wrap',
           }}
         >
           <Button
             onPress={onAction}
-            accessibilityLabel={actionLabel ?? "Perform action"}
+            accessibilityLabel={actionLabel ?? 'Perform action'}
             accessibilityRole="button"
             accessibilityHint="Performs the primary action for this section"
           >
@@ -116,7 +116,7 @@ export function PremiumSurface({
             <Button
               variant="outline"
               onPress={onSecondaryAction}
-              accessibilityLabel={secondaryActionLabel ?? "Perform secondary action"}
+              accessibilityLabel={secondaryActionLabel ?? 'Perform secondary action'}
               accessibilityRole="button"
               accessibilityHint="Performs the secondary action for this section"
               >
@@ -129,4 +129,4 @@ export function PremiumSurface({
   );
 }
 
-export { SectionHeader, InlineStatusRow } from "./premium-surface-extras";
+export { SectionHeader, InlineStatusRow } from './premium-surface-extras';

@@ -1,12 +1,12 @@
-import React from "react";
-import { View } from "react-native";
-import { Text } from "../../../components/primitives";
-import { useTheme } from "../../../theme";
+import React from 'react';
+import { View } from 'react-native';
+import { Text } from '../../../components/primitives';
+import { useTheme } from '../../../theme';
 
 const previewSteps = [
-  { label: "Start", value: "15m guided focus" },
-  { label: "Finish", value: "Grade, XP, boss damage" },
-  { label: "Return", value: "Tomorrow promise saved" },
+  { label: 'Start', value: '15m guided focus' },
+  { label: 'Finish', value: 'Grade, XP, boss damage' },
+  { label: 'Return', value: 'Tomorrow promise saved' },
 ] as const;
 
 export function AuthValuePreview(): JSX.Element {
@@ -40,8 +40,8 @@ export function AuthValuePreview(): JSX.Element {
           <View
             key={step.label}
             style={{
-              alignItems: "center",
-              flexDirection: "row",
+              alignItems: 'center',
+              flexDirection: 'row',
               gap: theme.spacing[3],
             }}
           >

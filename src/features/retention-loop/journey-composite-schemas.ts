@@ -1,5 +1,5 @@
-import { z } from "zod";
-import { LaneSchema } from "../lane-engine/schemas";
+import { z } from 'zod';
+import { LaneSchema } from '../lane-engine/schemas';
 import {
   JourneyDaySchema,
   JourneyPhaseSchema,
@@ -10,7 +10,7 @@ import {
   JourneyReturnReasonSchema,
   JourneyPremiumMomentSchema,
   JourneyNudgePolicySchema,
-} from "./journey-element-schemas";
+} from './journey-element-schemas';
 
 // ── Lane copy map ──────────────────────────────────────────────────────
 export const LaneCopyMapSchema = z

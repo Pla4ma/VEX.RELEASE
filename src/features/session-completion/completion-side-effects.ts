@@ -1,16 +1,16 @@
-import * as Sentry from "@sentry/react-native";
-import { recordCompletionCompanionMemories } from "./companion-memory-integration";
-import { processCompletedSessionPromise } from "../companion-promise/service";
+import * as Sentry from '@sentry/react-native';
+import { recordCompletionCompanionMemories } from './companion-memory-integration';
+import { processCompletedSessionPromise } from '../companion-promise/service';
 import {
   buildPostSessionStoryViewModel,
   type PostSessionStoryViewModel,
-} from "./story-view-model-service";
-import { setCompletionSyncState } from "./completion-sync-state";
-import type { SessionSummary } from "../../session/types";
+} from './story-view-model-service';
+import { setCompletionSyncState } from './completion-sync-state';
+import type { SessionSummary } from '../../session/types';
 import type {
   CompletionLedger,
   CompletionPersonalizationResult,
-} from "./schemas";
+} from './schemas';
 
 interface CompletionSideEffectInput {
   degradedSystems: string[];
@@ -36,7 +36,7 @@ export async function applyCompletionSideEffects(
 
   try {
     const { recordRescueCompletion } =
-      await import("../rescue-mode/completion-integration");
+      await import('../rescue-mode/completion-integration');
     await recordRescueCompletion({
       actualDurationSeconds: summary.actualDuration,
       completionPercentage: summary.completionPercentage,

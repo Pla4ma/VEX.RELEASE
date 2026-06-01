@@ -1,7 +1,7 @@
-import { captureSilentFailure } from "../../../utils/silent-failure";
-import type { SyncQueueItem } from "../types";
-import { CONTENT_STUDY_CONSTANTS } from "../types";
-import { getStorage, STORAGE_KEYS } from "./storage-config";
+import { captureSilentFailure } from '../../../utils/silent-failure';
+import type { SyncQueueItem } from '../types';
+import { CONTENT_STUDY_CONSTANTS } from '../types';
+import { getStorage, STORAGE_KEYS } from '../persistence';
 
 export class SyncQueueManager {
   private static instance: SyncQueueManager;
@@ -18,16 +18,16 @@ export class SyncQueueManager {
   }
 
   async enqueue(
-    item: Omit<SyncQueueItem, "id" | "createdAt" | "retryCount">,
+    item: Omit<SyncQueueItem, 'id' | 'createdAt' | 'retryCount'>,
   ): Promise<SyncQueueItem> {
     const queue = await this.getQueue();
 
     if (queue.length >= CONTENT_STUDY_CONSTANTS.OFFLINE_QUEUE_MAX_SIZE) {
-      const nonCriticalIndex = queue.findIndex((i) => i.entity !== "content");
+      const nonCriticalIndex = queue.findIndex((i) => i.entity !== 'content');
       if (nonCriticalIndex >= 0) {
         queue.splice(nonCriticalIndex, 1);
       } else {
-        throw new Error("Sync queue is full");
+        throw new Error('Sync queue is full');
       }
     }
 
@@ -49,9 +49,9 @@ export class SyncQueueManager {
       return data ? JSON.parse(data) : [];
     } catch (error) {
       captureSilentFailure(error, {
-        feature: "content-study",
-        operation: "safe-fallback",
-        type: "data",
+        feature: 'content-study',
+        operation: 'safe-fallback',
+        type: 'data',
       });
       return [];
     }
@@ -65,7 +65,7 @@ export class SyncQueueManager {
     const queue = await this.getQueue();
     const filtered = queue.filter((item) => item.id !== id);
 
-    if (filtered.length === queue.length) return false;
+    if (filtered.length === queue.length) {return false;}
 
     await this.saveQueue(filtered);
     return true;
@@ -78,7 +78,7 @@ export class SyncQueueManager {
     const queue = await this.getQueue();
     const item = queue.find((i) => i.id === id);
 
-    if (!item) return null;
+    if (!item) {return null;}
 
     item.retryCount++;
     item.lastAttempt = Date.now();

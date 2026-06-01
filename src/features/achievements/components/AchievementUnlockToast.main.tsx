@@ -1,5 +1,5 @@
-import React, { useEffect, useCallback } from "react";
-import { Pressable } from "react-native";
+import React, { useEffect, useCallback } from 'react';
+import { Pressable } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -7,13 +7,13 @@ import Animated, {
   withTiming,
   withDelay,
   runOnJS,
-} from "react-native-reanimated";
-import { Box, Text } from "@/components/primitives";
-import { useTheme } from "@/theme";
-import { achievementUnlocked } from "@/utils/haptics";
-import type { AchievementRarity } from "../types";
-import type { Achievement } from "../types";
-import { getAchievementDisplayInfo, getRarityColor } from "../definitions";
+} from 'react-native-reanimated';
+import { Box, Text } from '@/components/primitives';
+import { useTheme } from '@/theme';
+import { achievementUnlocked } from '@/utils/haptics';
+import type { AchievementRarity } from '../types';
+import type { Achievement } from '../types';
+import { getAchievementDisplayInfo, getRarityColor } from '../definitions';
 
 const DISMISS_DURATIONS: Record<AchievementRarity, number> = {
   COMMON: 3500,
@@ -39,14 +39,14 @@ export const AchievementUnlockToast: React.FC<AchievementUnlockToastProps> = ({
   const display = getAchievementDisplayInfo(achievement, true);
   const rarityColor = getRarityColor(achievement.rarity);
   const isHighRarity =
-    achievement.rarity === "EPIC" || achievement.rarity === "LEGENDARY";
+    achievement.rarity === 'EPIC' || achievement.rarity === 'LEGENDARY';
   const translateY = useSharedValue(-200);
   const opacity = useSharedValue(0);
   const scale = useSharedValue(0.8);
   const glowOpacity = useSharedValue(0);
   const handleDismiss = useCallback(() => {
     translateY.value = withTiming(-200, { duration: 300 }, () => {
-      "worklet";
+      'worklet';
       runOnJS(onDismiss)();
     });
     opacity.value = withTiming(0, { duration: 200 });
@@ -94,11 +94,11 @@ export const AchievementUnlockToast: React.FC<AchievementUnlockToastProps> = ({
     opacity: opacity.value,
   }));
   const glowStyle = useAnimatedStyle(() => ({ opacity: glowOpacity.value }));
-  if (!visible) return null;
+  if (!visible) {return null;}
   return (
     <Animated.View
       style={[
-        { position: "absolute", top: 0, left: 16, right: 16, zIndex: 1000 },
+        { position: 'absolute', top: 0, left: 16, right: 16, zIndex: 1000 },
         containerStyle,
       ]}
     >
@@ -112,7 +112,7 @@ export const AchievementUnlockToast: React.FC<AchievementUnlockToastProps> = ({
           <Animated.View
             style={[
               {
-                position: "absolute",
+                position: 'absolute',
                 top: -10,
                 left: -10,
                 right: -10,
@@ -165,7 +165,7 @@ export const AchievementUnlockToast: React.FC<AchievementUnlockToastProps> = ({
                 🏆 ACHIEVEMENT UNLOCKED
               </Text>
               <Text
-                variant={isHighRarity ? "h4" : "body"}
+                variant={isHighRarity ? 'h4' : 'body'}
                 color={theme.colors.text.primary}
                 fontWeight="semibold"
                 numberOfLines={1}
@@ -186,7 +186,7 @@ export const AchievementUnlockToast: React.FC<AchievementUnlockToastProps> = ({
             </Box>
           </Box>
 
-          {achievement.rarity === "LEGENDARY" && (
+          {achievement.rarity === 'LEGENDARY' && (
             <Box mt={3} alignItems="center">
               <Text variant="caption" color={theme.colors.warning.DEFAULT}>
                 ✨ LEGENDARY RARITY ✨

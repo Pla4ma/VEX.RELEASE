@@ -1,22 +1,22 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { ActivityIndicator, ScrollView, View } from "react-native";
-import { useNavigation, useRoute, type RouteProp } from "@react-navigation/native";
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Button } from "../../../components/primitives/Button";
-import { Text } from "../../../components/primitives/Text";
-import type { ExtendedRootStackParams } from "../../../navigation/types";
-import { capture } from "../../analytics";
-import { StatusBanner } from "../../ui/components/StatusFeedback";
-import { useTheme } from "../../../theme";
-import { PurchaseEvents, createPaywallProperties } from "../purchase-events";
-import { usePaywall, usePremiumStatus } from "../use-revenuecat";
-import { PREMIUM_BENEFITS, type PaywallPlan } from "./paywall-data";
-import { PlanCard, BenefitList } from "./PaywallComponents";
-import { usePaywallActions } from "./usePaywallActions";
+import React, { useEffect, useMemo, useState } from 'react';
+import { ActivityIndicator, ScrollView, View } from 'react-native';
+import { useNavigation, useRoute, type RouteProp } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Button } from '../../../components/primitives/Button';
+import { Text } from '../../../components/primitives/Text';
+import type { ExtendedRootStackParams } from '../../../navigation/types';
+import { capture } from '../../analytics';
+import { StatusBanner } from '../../ui/components/StatusFeedback';
+import { useTheme } from '../../../theme';
+import { PurchaseEvents, createPaywallProperties } from '../purchase-events';
+import { usePaywall, usePremiumStatus } from '../use-revenuecat';
+import { PREMIUM_BENEFITS, type PaywallPlan } from './paywall-data';
+import { PlanCard, BenefitList } from './PaywallComponents';
+import { usePaywallActions } from './usePaywallActions';
 
 type NavigationProp = NativeStackNavigationProp<ExtendedRootStackParams>;
-type VipPaywallRouteProp = RouteProp<ExtendedRootStackParams, "VipPaywall">;
+type VipPaywallRouteProp = RouteProp<ExtendedRootStackParams, 'VipPaywall'>;
 
 export function VipPaywallScreen(): JSX.Element {
   const navigation = useNavigation<NavigationProp>();
@@ -26,17 +26,17 @@ export function VipPaywallScreen(): JSX.Element {
   const { offerings, packages, isLoading, error, purchase, restore, retry } =
     usePaywall();
   const { isPremium, isLoading: isLoadingPremium, refresh } = usePremiumStatus();
-  const [selectedPlan, setSelectedPlan] = useState<PaywallPlan>("annual");
-  const source = route.params?.source ?? "unknown";
+  const [selectedPlan, setSelectedPlan] = useState<PaywallPlan>('annual');
+  const source = route.params?.source ?? 'unknown';
   const spacing = theme.spacing;
 
   const premiumPackages = useMemo(
     () => ({
       annual: packages.find(
-        (item) => item.packageType.toUpperCase() === "ANNUAL",
+        (item) => item.packageType.toUpperCase() === 'ANNUAL',
       ),
       monthly: packages.find(
-        (item) => item.packageType.toUpperCase() === "MONTHLY",
+        (item) => item.packageType.toUpperCase() === 'MONTHLY',
       ),
     }),
     [packages],
@@ -57,7 +57,7 @@ export function VipPaywallScreen(): JSX.Element {
     capture(
       PurchaseEvents.PAYWALL_VIEWED,
       createPaywallProperties(
-        offerings?.identifier ?? "premium-offering",
+        offerings?.identifier ?? 'premium-offering',
         source,
         packages.map((item) => ({
           identifier: item.identifier,
@@ -76,18 +76,18 @@ export function VipPaywallScreen(): JSX.Element {
           gap: spacing[4],
         }}
       >
-        <View style={{ flexDirection: "row", justifyContent: "space-between", gap: spacing[4] }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap: spacing[4] }}>
           <View style={{ flex: 1, gap: spacing[2] }}>
             <Text variant="caption" color="text.secondary">
               VEX Premium
             </Text>
             <Text variant="h1" color="text.primary">
-              {isPremium ? "Premium is active" : "Turn sessions into a system"}
+              {isPremium ? 'Premium is active' : 'Turn sessions into a system'}
             </Text>
             <Text variant="body" color="text.secondary">
               {isPremium
-                ? "Your deeper execution tools are active."
-                : "Premium adds deeper coach memory, progress intelligence, and advanced work systems. The free focus loop stays useful."}
+                ? 'Your deeper execution tools are active.'
+                : 'Premium adds deeper coach memory, progress intelligence, and advanced work systems. The free focus loop stays useful.'}
             </Text>
           </View>
           <Button
@@ -105,11 +105,11 @@ export function VipPaywallScreen(): JSX.Element {
         {statusMessage ? (
           <StatusBanner
             status={
-              statusMessage.tone === "warning"
-                ? "error"
-                : statusMessage.tone === "celebration"
-                  ? "success"
-                  : "loading"
+              statusMessage.tone === 'warning'
+                ? 'error'
+                : statusMessage.tone === 'celebration'
+                  ? 'success'
+                  : 'loading'
             }
             message={statusMessage.title}
             description={statusMessage.body}
@@ -118,7 +118,7 @@ export function VipPaywallScreen(): JSX.Element {
         ) : null}
 
         {isLoading || isLoadingPremium ? (
-          <View style={{ alignItems: "center", paddingVertical: spacing[6], gap: spacing[3] }}>
+          <View style={{ alignItems: 'center', paddingVertical: spacing[6], gap: spacing[3] }}>
             <ActivityIndicator color={theme.colors.primary[500]} size="large" />
             <Text variant="bodySmall" color="text.secondary">
               Loading Premium options...
@@ -137,13 +137,13 @@ export function VipPaywallScreen(): JSX.Element {
               <>
                 <PlanCard
                   plan="annual"
-                  isSelected={selectedPlan === "annual"}
+                  isSelected={selectedPlan === 'annual'}
                   priceString={premiumPackages.annual?.product.priceString}
                   onSelect={setSelectedPlan}
                 />
                 <PlanCard
                   plan="monthly"
-                  isSelected={selectedPlan === "monthly"}
+                  isSelected={selectedPlan === 'monthly'}
                   priceString={premiumPackages.monthly?.product.priceString}
                   onSelect={setSelectedPlan}
                 />
@@ -173,7 +173,7 @@ export function VipPaywallScreen(): JSX.Element {
             accessibilityRole="button"
             accessibilityHint="Starts the store purchase flow for the selected plan."
           >
-            Subscribe {selectedPlan === "annual" ? "Annual" : "Monthly"}
+            Subscribe {selectedPlan === 'annual' ? 'Annual' : 'Monthly'}
           </Button>
         ) : null}
       </ScrollView>

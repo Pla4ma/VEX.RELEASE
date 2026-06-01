@@ -4,13 +4,13 @@
  * Displays a personalized session recommendation
  */
 
-import React from "react";
-import { View, Text, Pressable } from "react-native";
-import Animated, { FadeInUp } from "react-native-reanimated";
-import type { SessionRecommendation } from "../schemas";
-import { TYPE_CONFIG, styles } from "./session-suggestion-card-styles";
+import React from 'react';
+import { View, Text, Pressable } from 'react-native';
+import Animated, { FadeInUp } from 'react-native-reanimated';
+import type { SessionRecommendation } from '../schemas';
+import { TYPE_CONFIG, styles } from './session-suggestion-card-styles';
 
-export { TYPE_CONFIG, styles } from "./session-suggestion-card-styles";
+export { TYPE_CONFIG, styles } from './session-suggestion-card-styles';
 
 export interface SessionSuggestionCardProps {
   recommendation: SessionRecommendation;

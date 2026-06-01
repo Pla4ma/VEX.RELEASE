@@ -1,32 +1,32 @@
-import { SessionMode } from "../../../session/modes";
-import * as repository from "../repository";
-import { checkAndUpdatePersonalBest } from "../service";
+import { SessionMode } from '../../../session/modes';
+import * as repository from '../repository';
+import { checkAndUpdatePersonalBest } from '../service';
 
-jest.mock("../repository");
+jest.mock('../repository');
 
-const userId = "123e4567-e89b-12d3-a456-426614174000";
+const userId = '123e4567-e89b-12d3-a456-426614174000';
 
 function makeBest(overrides: Record<string, unknown> = {}) {
   return {
-    id: "123e4567-e89b-12d3-a456-426614174111",
+    id: '123e4567-e89b-12d3-a456-426614174111',
     userId,
     sessionMode: SessionMode.SPRINT,
-    durationBucket: "15" as const,
+    durationBucket: '15' as const,
     bestPurityScore: 82,
-    bestGrade: "B" as const,
+    bestGrade: 'B' as const,
     totalSessions: 3,
-    achievedAt: "2026-05-14T12:00:00.000Z",
-    updatedAt: "2026-05-14T12:00:00.000Z",
+    achievedAt: '2026-05-14T12:00:00.000Z',
+    updatedAt: '2026-05-14T12:00:00.000Z',
     ...overrides,
   };
 }
 
-describe("checkAndUpdatePersonalBest", () => {
+describe('checkAndUpdatePersonalBest', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it("returns isNewRecord=false when existing score is higher", async () => {
+  it('returns isNewRecord=false when existing score is higher', async () => {
     jest.mocked(repository.getPersonalBest).mockResolvedValue(makeBest());
 
     const result = await checkAndUpdatePersonalBest(
@@ -34,7 +34,7 @@ describe("checkAndUpdatePersonalBest", () => {
       SessionMode.SPRINT,
       900,
       70,
-      "C",
+      'C',
     );
 
     expect(result.isNewRecord).toBe(false);
@@ -43,7 +43,7 @@ describe("checkAndUpdatePersonalBest", () => {
     expect(repository.upsertPersonalBest).not.toHaveBeenCalled();
   });
 
-  it("returns isNewRecord=false when score equals existing best", async () => {
+  it('returns isNewRecord=false when score equals existing best', async () => {
     jest.mocked(repository.getPersonalBest).mockResolvedValue(makeBest());
 
     const result = await checkAndUpdatePersonalBest(
@@ -51,25 +51,25 @@ describe("checkAndUpdatePersonalBest", () => {
       SessionMode.SPRINT,
       900,
       82,
-      "B",
+      'B',
     );
 
     expect(result.isNewRecord).toBe(false);
     expect(repository.upsertPersonalBest).not.toHaveBeenCalled();
   });
 
-  it("returns isNewRecord=true and margin when score beats existing", async () => {
+  it('returns isNewRecord=true and margin when score beats existing', async () => {
     jest.mocked(repository.getPersonalBest).mockResolvedValue(makeBest());
     jest
       .mocked(repository.upsertPersonalBest)
-      .mockResolvedValue(makeBest({ bestPurityScore: 95, bestGrade: "S" }));
+      .mockResolvedValue(makeBest({ bestPurityScore: 95, bestGrade: 'S' }));
 
     const result = await checkAndUpdatePersonalBest(
       userId,
       SessionMode.SPRINT,
       900,
       95,
-      "S",
+      'S',
     );
 
     expect(result.isNewRecord).toBe(true);
@@ -77,18 +77,18 @@ describe("checkAndUpdatePersonalBest", () => {
     expect(result.margin).toBe(13);
   });
 
-  it("creates first record when none exists", async () => {
+  it('creates first record when none exists', async () => {
     jest.mocked(repository.getPersonalBest).mockResolvedValue(null);
     jest
       .mocked(repository.upsertPersonalBest)
-      .mockResolvedValue(makeBest({ bestPurityScore: 75, bestGrade: "B" }));
+      .mockResolvedValue(makeBest({ bestPurityScore: 75, bestGrade: 'B' }));
 
     const result = await checkAndUpdatePersonalBest(
       userId,
       SessionMode.SPRINT,
       900,
       75,
-      "B",
+      'B',
     );
 
     expect(result.isNewRecord).toBe(true);
@@ -97,37 +97,37 @@ describe("checkAndUpdatePersonalBest", () => {
     expect(repository.upsertPersonalBest).toHaveBeenCalled();
   });
 
-  it("resolves duration bucket correctly for 10-minute session", async () => {
+  it('resolves duration bucket correctly for 10-minute session', async () => {
     jest.mocked(repository.getPersonalBest).mockResolvedValue(null);
     jest
       .mocked(repository.upsertPersonalBest)
-      .mockResolvedValue(makeBest({ durationBucket: "10" }));
+      .mockResolvedValue(makeBest({ durationBucket: '10' }));
 
-    await checkAndUpdatePersonalBest(userId, SessionMode.SPRINT, 600, 80, "B");
+    await checkAndUpdatePersonalBest(userId, SessionMode.SPRINT, 600, 80, 'B');
 
     expect(repository.getPersonalBest).toHaveBeenCalledWith(
       userId,
       SessionMode.SPRINT,
-      "10",
+      '10',
     );
   });
 
-  it("passes mode through to repository", async () => {
+  it('passes mode through to repository', async () => {
     jest.mocked(repository.getPersonalBest).mockResolvedValue(null);
     jest
       .mocked(repository.upsertPersonalBest)
       .mockResolvedValue(makeBest({ sessionMode: SessionMode.STUDY }));
 
-    await checkAndUpdatePersonalBest(userId, SessionMode.STUDY, 1200, 85, "A");
+    await checkAndUpdatePersonalBest(userId, SessionMode.STUDY, 1200, 85, 'A');
 
     expect(repository.getPersonalBest).toHaveBeenCalledWith(
       userId,
       SessionMode.STUDY,
-      "25",
+      '25',
     );
   });
 
-  it("validates the output through the schema", async () => {
+  it('validates the output through the schema', async () => {
     jest.mocked(repository.getPersonalBest).mockResolvedValue(makeBest());
 
     const result = await checkAndUpdatePersonalBest(
@@ -135,12 +135,12 @@ describe("checkAndUpdatePersonalBest", () => {
       SessionMode.SPRINT,
       900,
       80,
-      "B",
+      'B',
     );
 
-    expect(result).toHaveProperty("current");
-    expect(result).toHaveProperty("isNewRecord");
-    expect(result).toHaveProperty("previousBest");
-    expect(result).toHaveProperty("margin");
+    expect(result).toHaveProperty('current');
+    expect(result).toHaveProperty('isNewRecord');
+    expect(result).toHaveProperty('previousBest');
+    expect(result).toHaveProperty('margin');
   });
 });

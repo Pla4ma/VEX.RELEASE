@@ -1,14 +1,14 @@
-import { renderHook, act, waitFor } from "@testing-library/react-native";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import React from "react";
+import { renderHook, act, waitFor } from '@testing-library/react-native';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import React from 'react';
 
-jest.mock("../../../store", () => ({
+jest.mock('../../../store', () => ({
   useAuthStore: () => ({
-    user: { id: "test-user-id", email: "test@example.com" },
+    user: { id: 'test-user-id', email: 'test@example.com' },
   }),
 }));
 
-jest.mock("../ContentStudyService", () => ({
+jest.mock('../ContentStudyService', () => ({
   __esModule: true,
   submitContent: jest.fn(),
   extractContent: jest.fn(),
@@ -23,9 +23,9 @@ jest.mock("../ContentStudyService", () => ({
   deleteContent: jest.fn(),
 }));
 
-import * as service from "../ContentStudyService";
-import { useContentHistory, useRateLimit } from "../hooks";
-import { contentStudyQueryKeys } from "../hooks/queryKeys";
+import * as service from '../ContentStudyService';
+import { useContentHistory, useRateLimit } from '../hooks';
+import { contentStudyQueryKeys } from '../hooks/queryKeys';
 
 const createWrapper = (queryClient: QueryClient) => {
   const wrapper = ({ children }: { children: React.ReactNode }) =>
@@ -33,7 +33,7 @@ const createWrapper = (queryClient: QueryClient) => {
   return wrapper;
 };
 
-describe("useContentHistory", () => {
+describe('useContentHistory', () => {
   let queryClient: QueryClient;
 
   beforeEach(() => {
@@ -43,14 +43,14 @@ describe("useContentHistory", () => {
     jest.clearAllMocks();
   });
 
-  it("should fetch content history", async () => {
+  it('should fetch content history', async () => {
     const mockHistory = [
-      { id: "content-1", source_type: "PASTE" },
-      { id: "content-2", source_type: "YOUTUBE" },
+      { id: 'content-1', source_type: 'PASTE' },
+      { id: 'content-2', source_type: 'YOUTUBE' },
     ];
     // Pre-populate the query cache since dynamic import() bypasses jest.mock
     queryClient.setQueryData(
-      contentStudyQueryKeys.history("test-user-id"),
+      contentStudyQueryKeys.history('test-user-id'),
       mockHistory,
     );
     const wrapper = createWrapper(queryClient);
@@ -63,10 +63,10 @@ describe("useContentHistory", () => {
     );
   });
 
-  it("should refresh history", async () => {
-    const mockHistory = [{ id: "content-1", source_type: "PASTE" }];
+  it('should refresh history', async () => {
+    const mockHistory = [{ id: 'content-1', source_type: 'PASTE' }];
     queryClient.setQueryData(
-      contentStudyQueryKeys.history("test-user-id"),
+      contentStudyQueryKeys.history('test-user-id'),
       mockHistory,
     );
     const wrapper = createWrapper(queryClient);
@@ -82,11 +82,11 @@ describe("useContentHistory", () => {
       queryKey: contentStudyQueryKeys.all,
     });
     // After invalidation, content should be stale but refetch should be available
-    expect(typeof result.current.refetch).toBe("function");
+    expect(typeof result.current.refetch).toBe('function');
   });
 });
 
-describe("useRateLimit", () => {
+describe('useRateLimit', () => {
   let queryClient: QueryClient;
 
   beforeEach(() => {
@@ -96,10 +96,10 @@ describe("useRateLimit", () => {
     jest.clearAllMocks();
   });
 
-  it("should check rate limit and return remaining", async () => {
+  it('should check rate limit and return remaining', async () => {
     const mockHistory = [
       {
-        id: "content-1",
+        id: 'content-1',
         lastGenerationDate: new Date().toISOString().slice(0, 10),
       },
     ];
@@ -113,9 +113,9 @@ describe("useRateLimit", () => {
     expect(result.current.isChecking).toBe(false);
   });
 
-  it("should handle rate limit errors", async () => {
+  it('should handle rate limit errors', async () => {
     (service.fetchContentHistory as jest.Mock).mockRejectedValue(
-      new Error("Rate limit check failed"),
+      new Error('Rate limit check failed'),
     );
     const wrapper = createWrapper(queryClient);
     const { result } = renderHook(() => useRateLimit(), { wrapper });

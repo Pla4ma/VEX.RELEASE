@@ -1,30 +1,30 @@
 import type {
   NotificationAction,
   NotificationActionType,
-} from "../../navigation/notification-routing-types";
-import { launchColors } from "@theme/tokens/launch-colors";
-import { isFeatureHidden } from "../../features/liveops-config/final-release-feature-map";
+} from '../../navigation/notification-routing-types';
+import { launchColors } from '@theme/tokens/launch-colors';
+import { isFeatureHidden } from '../../features/liveops-config/final-release-feature-map';
 import {
   getFeatureAvailabilityFor,
   isFeatureAvailableForNavigation,
-} from "../../features/liveops-config/feature-availability";
-import type { FeatureAccessMap } from "../../features/liveops-config/feature-access";
-import type { NotificationCenterItem } from "../../features/notifications/service";
+} from '../../features/liveops-config/feature-availability';
+import type { FeatureAccessMap } from '../../features/liveops-config/feature-access';
+import type { NotificationCenterItem } from '../../features/notifications/service';
 
 export type NotificationType =
-  | "ACHIEVEMENT"
-  | "STREAK_RISK"
-  | "BOSS"
-  | "SQUAD"
-  | "RIVAL"
-  | "COACH"
-  | "REWARD"
-  | "LEVEL_UP";
+  | 'ACHIEVEMENT'
+  | 'STREAK_RISK'
+  | 'BOSS'
+  | 'SQUAD'
+  | 'RIVAL'
+  | 'COACH'
+  | 'REWARD'
+  | 'LEVEL_UP';
 
 export type Notification = NotificationCenterItem;
 
 export type NotificationListItem = {
-  type: "header" | "notification";
+  type: 'header' | 'notification';
   data?: Notification;
   title?: string;
   count?: number;
@@ -42,42 +42,42 @@ export const NOTIFICATION_CONFIG: Record<
   { icon: string; color: string; bgColor: string }
 > = {
   ACHIEVEMENT: {
-    icon: "\u{1F3C6}",
+    icon: '\u{1F3C6}',
     color: launchColors.hex_eab308,
     bgColor: launchColors.hex_fef9c3,
   },
   STREAK_RISK: {
-    icon: "\u{1F525}",
+    icon: '\u{1F525}',
     color: launchColors.hex_ef4444,
     bgColor: launchColors.hex_fee2e2,
   },
   BOSS: {
-    icon: "\u{1F480}",
+    icon: '\u{1F480}',
     color: launchColors.hex_a855f7,
     bgColor: launchColors.hex_f3e8ff,
   },
   SQUAD: {
-    icon: "\u{1F6E1}",
+    icon: '\u{1F6E1}',
     color: launchColors.hex_3b82f6,
     bgColor: launchColors.hex_dbeafe,
   },
   RIVAL: {
-    icon: "\u{2694}",
+    icon: '\u{2694}',
     color: launchColors.hex_ef4444,
     bgColor: launchColors.hex_fee2e2,
   },
   COACH: {
-    icon: "\u{1F4AC}",
+    icon: '\u{1F4AC}',
     color: launchColors.hex_22c55e,
     bgColor: launchColors.hex_dcfce7,
   },
   REWARD: {
-    icon: "\u{1F381}",
+    icon: '\u{1F381}',
     color: launchColors.hex_f59e0b,
     bgColor: launchColors.hex_fef3c7,
   },
   LEVEL_UP: {
-    icon: "\u{2B50}",
+    icon: '\u{2B50}',
     color: launchColors.hex_8b5cf6,
     bgColor: launchColors.hex_ede9fe,
   },
@@ -87,29 +87,29 @@ export const NOTIFICATION_TYPE_TO_SAFE_ACTION: Record<
   NotificationType,
   NotificationActionType
 > = {
-  ACHIEVEMENT: "view_progress",
-  STREAK_RISK: "view_streak",
-  BOSS: "view_boss",
-  SQUAD: "view_squad",
-  RIVAL: "join_duel",
-  COACH: "open_coach",
-  REWARD: "view_progress",
-  LEVEL_UP: "view_progress",
+  ACHIEVEMENT: 'view_progress',
+  STREAK_RISK: 'view_streak',
+  BOSS: 'view_boss',
+  SQUAD: 'view_squad',
+  RIVAL: 'join_duel',
+  COACH: 'open_coach',
+  REWARD: 'view_progress',
+  LEVEL_UP: 'view_progress',
 };
 
 const FINAL_RELEASE_HIDDEN_NOTIFICATION_TYPES: NotificationType[] = [
-  "SQUAD",
-  "RIVAL",
+  'SQUAD',
+  'RIVAL',
 ];
 
 export const FILTER_LABELS: Record<string, string> = {
-  all: "All",
-  ACHIEVEMENT: "Achievements",
-  STREAK_RISK: "Streaks",
-  BOSS: "Momentum",
-  COACH: "Coach",
-  REWARD: "Progress",
-  LEVEL_UP: "Levels",
+  all: 'All',
+  ACHIEVEMENT: 'Achievements',
+  STREAK_RISK: 'Streaks',
+  BOSS: 'Momentum',
+  COACH: 'Coach',
+  REWARD: 'Progress',
+  LEVEL_UP: 'Levels',
 };
 
 export function groupNotificationsByTime(
@@ -153,11 +153,11 @@ export function isNotificationTypeFilterable(
   type: NotificationType,
   features: FeatureAccessMap,
 ): boolean {
-  if (FINAL_RELEASE_HIDDEN_NOTIFICATION_TYPES.includes(type)) return false;
-  if (type === "BOSS") {
-    if (isFeatureHidden("boss_tab")) return false;
+  if (FINAL_RELEASE_HIDDEN_NOTIFICATION_TYPES.includes(type)) {return false;}
+  if (type === 'BOSS') {
+    if (isFeatureHidden('boss_tab')) {return false;}
     const bossAvailability = getFeatureAvailabilityFor(
-      "boss_tab",
+      'boss_tab',
       features.boss_tab,
     );
     return (
@@ -165,10 +165,10 @@ export function isNotificationTypeFilterable(
       isFeatureAvailableForNavigation(bossAvailability)
     );
   }
-  if (type === "COACH") {
-    if (isFeatureHidden("ai_coach_advanced")) return false;
+  if (type === 'COACH') {
+    if (isFeatureHidden('ai_coach_advanced')) {return false;}
     const coachAvailability = getFeatureAvailabilityFor(
-      "ai_coach_advanced",
+      'ai_coach_advanced',
       features.ai_coach_advanced,
     );
     return (
@@ -183,7 +183,7 @@ export function mapToNotificationAction(
   notification: Notification,
 ): NotificationAction {
   const type = notification.type as NotificationType;
-  const mappedType = NOTIFICATION_TYPE_TO_SAFE_ACTION[type] ?? "view_progress";
+  const mappedType = NOTIFICATION_TYPE_TO_SAFE_ACTION[type] ?? 'view_progress';
   return {
     type: mappedType,
     payload: notification.actionParams as Record<string, unknown> | undefined,

@@ -1,7 +1,7 @@
-import React from "react";
-import { ScrollView } from "react-native";
-import { Box, Card, Text } from "../../components/primitives";
-import type { Theme } from "../../theme/types";
+import React from 'react';
+import { ScrollView } from 'react-native';
+import { Box, Card, Text } from '../../components/primitives';
+import type { Theme } from '../../theme/types';
 
 interface Challenge {
   id: string;

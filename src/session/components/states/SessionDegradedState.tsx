@@ -1,6 +1,6 @@
-import React from "react";
-import { View, Text, Pressable } from "react-native";
-import { styles } from "./SessionDegradedState.styles";
+import React from 'react';
+import { View, Text, Pressable } from 'react-native';
+import { styles } from './SessionDegradedState.styles';
 
 interface DegradedFeature {
   name: string;
@@ -41,7 +41,7 @@ export const SessionDegradedState: React.FC<SessionDegradedStateProps> = ({
         {features.map((feature, index) => (
           <View key={index} style={styles.featureRow}>
             <Text style={styles.featureIcon}>
-              {feature.available ? "✅" : "❌"}
+              {feature.available ? '✅' : '❌'}
             </Text>
             <View style={styles.featureInfo}>
               <Text

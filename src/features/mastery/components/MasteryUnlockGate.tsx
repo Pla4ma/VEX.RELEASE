@@ -1,17 +1,17 @@
-import React from "react";
-import { View } from "react-native";
-import { Card, Text } from "../../../components/primitives";
-import { Button } from "../../../components/primitives/Button";
-import { Icon } from "../../../icons";
-import { useTheme } from "../../../theme";
-import { getMasteryRankDisplay, type MasteryRank } from "../types";
+import React from 'react';
+import { View } from 'react-native';
+import { Card, Text } from '../../../components/primitives';
+import { Button } from '../../../components/primitives/Button';
+import { Icon } from '../../../icons';
+import { useTheme } from '../../../theme';
+import { getMasteryRankDisplay, type MasteryRank } from '../types';
 import {
   FEATURE_INFO,
   FEATURE_REQUIREMENTS,
   getPointsToUnlock,
   isFeatureUnlocked,
   type UnlockableFeature,
-} from "./mastery-unlock-gate-data";
+} from './mastery-unlock-gate-data';
 
 interface MasteryUnlockGateProps {
   userRank: MasteryRank;
@@ -44,24 +44,24 @@ export function MasteryUnlockGate({
         backgroundColor: theme.colors.background.secondary,
         borderWidth: 1,
         borderColor: `${rankDisplay.color}40`,
-        borderStyle: "dashed",
+        borderStyle: 'dashed',
       }}
     >
-      <View style={{ gap: theme.spacing[3], alignItems: "center" }}>
+      <View style={{ gap: theme.spacing[3], alignItems: 'center' }}>
         <View
           style={{
             width: 48,
             height: 48,
             borderRadius: 24,
             backgroundColor: `${rankDisplay.color}20`,
-            alignItems: "center",
-            justifyContent: "center",
+            alignItems: 'center',
+            justifyContent: 'center',
           }}
         >
           <Icon name="lock" size={24} color={rankDisplay.color} />
         </View>
 
-        <View style={{ alignItems: "center" }}>
+        <View style={{ alignItems: 'center' }}>
           <Text variant="h4" color="text.primary" textAlign="center">
             {featureInfo.name} Locked
           </Text>
@@ -77,8 +77,8 @@ export function MasteryUnlockGate({
 
         <View
           style={{
-            flexDirection: "row",
-            alignItems: "center",
+            flexDirection: 'row',
+            alignItems: 'center',
             gap: theme.spacing[2],
             paddingHorizontal: theme.spacing[3],
             paddingVertical: theme.spacing[2],
@@ -122,8 +122,8 @@ export function MasteryUnlockGate({
 
         <View
           style={{
-            flexDirection: "row",
-            alignItems: "center",
+            flexDirection: 'row',
+            alignItems: 'center',
             gap: theme.spacing[1],
             padding: theme.spacing[2],
             backgroundColor: theme.colors.background.tertiary,

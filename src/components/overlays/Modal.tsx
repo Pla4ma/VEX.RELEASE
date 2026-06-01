@@ -1,17 +1,17 @@
-import React, { useCallback, type ReactNode } from "react";
+import React, { useCallback, type ReactNode } from 'react';
 import {
   View,
   StyleSheet,
   TouchableWithoutFeedback,
   type ViewStyle,
-} from "react-native";
-import Animated from "react-native-reanimated";
-import { useTheme } from "../../theme";
-import { Box, Text } from "../primitives";
-import { IconButton } from "../../icons";
-import { createSheet } from "@/shared/ui/create-sheet";
-import { launchColors } from "@theme/tokens/launch-colors";
-import { useModalAnimation } from "./useModalAnimation";
+} from 'react-native';
+import Animated from 'react-native-reanimated';
+import { useTheme } from '../../theme';
+import { Box, Text } from '../primitives';
+import { IconButton } from '../../icons';
+import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
+import { useModalAnimation } from './useModalAnimation';
 
 export interface ModalProps {
   visible: boolean;
@@ -23,7 +23,7 @@ export interface ModalProps {
   closeOnBackButton?: boolean;
   header?: ReactNode;
   footer?: ReactNode;
-  animation?: "fade" | "slide" | "scale";
+  animation?: 'fade' | 'slide' | 'scale';
   style?: ViewStyle;
   contentStyle?: ViewStyle;
   testID?: string;
@@ -39,7 +39,7 @@ export const Modal: React.FC<ModalProps> = ({
   closeOnBackButton = true,
   header,
   footer,
-  animation = "slide",
+  animation = 'slide',
   style,
   contentStyle,
   testID,
@@ -119,21 +119,21 @@ export const Modal: React.FC<ModalProps> = ({
 const styles = createSheet({
   container: {
     ...StyleSheet.absoluteFill,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     zIndex: 1000,
   },
   backdrop: { ...StyleSheet.absoluteFill },
   content: {
-    width: "90%",
+    width: '90%',
     maxWidth: 400,
-    maxHeight: "80%",
-    boxShadow: "0px 2px 4px rgba(0,0,0,0.25)",
+    maxHeight: '80%',
+    boxShadow: '0px 2px 4px rgba(0,0,0,0.25)',
     elevation: 5,
   },
   header: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     paddingHorizontal: 16,
     paddingTop: 16,
     paddingBottom: 8,

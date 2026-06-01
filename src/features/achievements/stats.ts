@@ -1,6 +1,6 @@
-import { type Achievement } from "./types";
-import { ALL_ACHIEVEMENTS, getAchievementById } from "./definitions";
-import * as repository from "./repository";
+import { type Achievement } from './types';
+import { ALL_ACHIEVEMENTS, getAchievementById } from './definitions';
+import * as repository from './repository';
 
 export async function getAllAchievementsWithProgress(
   userId: string,
@@ -111,7 +111,7 @@ export function revealHiddenAchievement(achievementId: string): {
 } {
   const achievement = getAchievementById(achievementId);
   if (!achievement) {
-    return { name: "???", description: "Unknown achievement", icon: "❓" };
+    return { name: '???', description: 'Unknown achievement', icon: '❓' };
   }
   return {
     name: achievement.title,

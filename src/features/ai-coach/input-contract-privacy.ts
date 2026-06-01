@@ -1,17 +1,17 @@
-import type { CoachInputContract } from "./input-contract-schema";
+import type { CoachInputContract } from './input-contract-schema';
 
 export const FORBIDDEN_DATA_FIELDS = [
-  "rawPrivateNotes",
-  "secrets",
-  "apiKeys",
-  "passwords",
-  "emailAddresses",
-  "phoneNumbers",
-  "realNames",
-  "locationData",
-  "unvalidatedStorageData",
-  "rawUserInput",
-  "piifield",
+  'rawPrivateNotes',
+  'secrets',
+  'apiKeys',
+  'passwords',
+  'emailAddresses',
+  'phoneNumbers',
+  'realNames',
+  'locationData',
+  'unvalidatedStorageData',
+  'rawUserInput',
+  'piifield',
 ] as const;
 
 export function sanitizeCoachInput(
@@ -24,7 +24,7 @@ export function sanitizeCoachInput(
       ...input.timeContext,
       localTimezone: input.timeContext.localTimezone.match(/^[A-Za-z_/+-]+$/)
         ? input.timeContext.localTimezone
-        : "UTC",
+        : 'UTC',
     },
   };
 }

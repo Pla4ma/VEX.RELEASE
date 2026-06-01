@@ -1,19 +1,19 @@
-import React, { useEffect, useState, useCallback } from "react";
-import { View, Pressable, useWindowDimensions } from "react-native";
+import React, { useEffect, useState, useCallback } from 'react';
+import { View, Pressable, useWindowDimensions } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withSpring,
   withTiming,
-} from "react-native-reanimated";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import NetInfo, { type NetInfoState } from "@react-native-community/netinfo";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import { capture } from "../../analytics";
-import { FeatureEvents } from "../../analytics/analytics-events";
-import { createSheet } from "@/shared/ui/create-sheet";
-import { useReducedMotion } from "@/hooks";
+} from 'react-native-reanimated';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import NetInfo, { type NetInfoState } from '@react-native-community/netinfo';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import { capture } from '../../analytics';
+import { FeatureEvents } from '../../analytics/analytics-events';
+import { createSheet } from '@/shared/ui/create-sheet';
+import { useReducedMotion } from '@/hooks';
 const DISMISS_DURATION = 30 * 1000;
 export interface OfflineBannerProps {
   message?: string;
@@ -45,7 +45,7 @@ export function OfflineBanner({
         });
       }
     });
-    NetInfo["fetch"]().then((state) => {
+    NetInfo.fetch().then((state) => {
       setIsConnected(state.isConnected ?? true);
     });
     return () => {
@@ -141,7 +141,7 @@ export function OfflineBanner({
 }
 const styles = createSheet({
   container: {
-    position: "absolute",
+    position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
@@ -149,8 +149,8 @@ const styles = createSheet({
     elevation: 999,
   },
   content: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     paddingHorizontal: 16,
     paddingBottom: 12,
     gap: 10,
@@ -159,18 +159,18 @@ const styles = createSheet({
     width: 28,
     height: 28,
     borderRadius: 14,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   icon: { fontSize: 14 },
-  message: { flex: 1, fontWeight: "600" },
+  message: { flex: 1, fontWeight: '600' },
   dismissButton: {
     width: 28,
     height: 28,
     borderRadius: 14,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  dismissText: { fontSize: 14, fontWeight: "700" },
+  dismissText: { fontSize: 14, fontWeight: '700' },
 });
 export default OfflineBanner;

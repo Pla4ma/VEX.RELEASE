@@ -1,23 +1,23 @@
-import React from "react";
-import { Box } from "../../components/primitives/Box";
-import { CompanionSessionLayer } from "../../session/components/CompanionSessionLayer";
-import { DeepWorkVignette } from "../../session/components/DeepWorkVignette";
-import { SessionMode } from "../../session/modes";
-import { ActiveSessionBackground } from "./components/ActiveSessionBackground";
-import { ActiveSessionHeader } from "./components/ActiveSessionHeader";
-import { ActiveSessionHero } from "./components/ActiveSessionHero";
-import { ActiveSessionModeOverlays } from "./components/ActiveSessionModeOverlays";
-import { SessionContractReminder } from "./components/SessionContractReminder";
-import { CoachSessionBannerLazy } from "./components/CoachSessionBannerLazy";
-import { ActiveSessionBottomControls } from "./ActiveSessionBottomControls";
-import { ModeActiveIndicatorBar } from "../../features/mode-native/components/ModeRescueSurface";
+import React from 'react';
+import { Box } from '../../components/primitives/Box';
+import { CompanionSessionLayer } from '../../session/components/CompanionSessionLayer';
+import { DeepWorkVignette } from '../../session/components/DeepWorkVignette';
+import { SessionMode } from '../../session/modes';
+import { ActiveSessionBackground } from './components/ActiveSessionBackground';
+import { ActiveSessionHeader } from './components/ActiveSessionHeader';
+import { ActiveSessionHero } from './components/ActiveSessionHero';
+import { ActiveSessionModeOverlays } from './components/ActiveSessionModeOverlays';
+import { SessionContractReminder } from './components/SessionContractReminder';
+import { CoachSessionBannerLazy } from './components/CoachSessionBannerLazy';
+import { ActiveSessionBottomControls } from './ActiveSessionBottomControls';
+import { ModeActiveIndicatorBar } from '../../features/mode-native/components/ModeRescueSurface';
 import {
   ENABLE_SESSION_COMPANION_LAYER,
   ENABLE_SESSION_COACH_BANNER,
   ENABLE_SESSION_MODE_OVERLAYS,
   ENABLE_SESSION_HERO,
   type ActiveSessionContentProps,
-} from "./ActiveSessionContent.types";
+} from './ActiveSessionContent.types';
 
 export type { ActiveSessionContentProps };
 
@@ -60,6 +60,7 @@ export function ActiveSessionContent({
     >
       <ActiveSessionBackground
         accentOverlay={metrics.withAlpha(metrics.phaseAccent, 0.06)}
+        accentColor={metrics.phaseAccent}
         colors={[
           metrics.gradientState.top,
           metrics.gradientState.middle,
@@ -67,7 +68,7 @@ export function ActiveSessionContent({
         ]}
       />
 
-      {currentMode === SessionMode.DEEP_WORK && focusStage !== "active" ? (
+      {currentMode === SessionMode.DEEP_WORK && focusStage !== 'active' ? (
         <DeepWorkVignette />
       ) : null}
 

@@ -1,14 +1,14 @@
-import React from "react";
+import React from 'react';
 import Animated, {
   FadeInUp,
   useAnimatedStyle,
   withSpring,
   useSharedValue,
-} from "react-native-reanimated";
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import { launchColors } from "@theme/tokens/launch-colors";
+} from 'react-native-reanimated';
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import { launchColors } from '@theme/tokens/launch-colors';
 
 export interface PermissionBenefit {
   icon: string;
@@ -18,19 +18,19 @@ export interface PermissionBenefit {
 
 export const BENEFITS: PermissionBenefit[] = [
   {
-    icon: "🔥",
-    title: "Streak at Risk Alerts",
-    description: "Get notified when your streak is about to break",
+    icon: '🔥',
+    title: 'Streak at Risk Alerts',
+    description: 'Get notified when your streak is about to break',
   },
   {
-    icon: "👹",
-    title: "Boss Spawn Alerts",
-    description: "Never miss a boss encounter opportunity",
+    icon: '👹',
+    title: 'Boss Spawn Alerts',
+    description: 'Never miss a boss encounter opportunity',
   },
   {
-    icon: "⚔️",
-    title: "Squad Challenges",
-    description: "Get notified when squad wars start",
+    icon: '⚔️',
+    title: 'Squad Challenges',
+    description: 'Get notified when squad wars start',
   },
 ];
 

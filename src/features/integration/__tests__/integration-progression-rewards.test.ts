@@ -7,44 +7,44 @@ import {
   mockEventBus,
   mockRewards,
   fireEvent,
-} from "./integration-setup";
-import { initializeProgressionRewardsIntegration } from "../progression-rewards";
+} from './integration-setup';
+import { initializeProgressionRewardsIntegration } from '../progression-rewards';
 
-describe("integration", () => {
+describe('integration', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     mockActiveSubscribers.length = 0;
   });
 
-  describe("progression-rewards.ts", () => {
-    it("subscribes to progression:level_up and progression:xp_added", () => {
+  describe('progression-rewards.ts', () => {
+    it('subscribes to progression:level_up and progression:xp_added', () => {
       const unsub = initializeProgressionRewardsIntegration();
       expect(mockEventBus.eventBus.subscribe).toHaveBeenCalledWith(
-        "progression:level_up",
+        'progression:level_up',
         expect.any(Function),
       );
       expect(mockEventBus.eventBus.subscribe).toHaveBeenCalledWith(
-        "progression:xp_added",
+        'progression:xp_added',
         expect.any(Function),
       );
       unsub();
     });
 
-    it("creates reward on level up event with rewards", () => {
+    it('creates reward on level up event with rewards', () => {
       const unsub = initializeProgressionRewardsIntegration();
-      fireEvent("progression:level_up", {
-        userId: "u1",
+      fireEvent('progression:level_up', {
+        userId: 'u1',
         newLevel: 5,
-        rewards: ["COINS"],
+        rewards: ['COINS'],
       });
       return new Promise<void>((resolve) => {
         setTimeout(() => {
           expect(mockRewards.createReward).toHaveBeenCalledWith(
             expect.objectContaining({
-              userId: "u1",
-              type: "XP",
+              userId: 'u1',
+              type: 'XP',
               amount: 250,
-              triggerType: "LEVEL_UP",
+              triggerType: 'LEVEL_UP',
             }),
           );
           unsub();
@@ -53,10 +53,10 @@ describe("integration", () => {
       });
     });
 
-    it("does NOT create reward when rewards array is empty", () => {
+    it('does NOT create reward when rewards array is empty', () => {
       const unsub = initializeProgressionRewardsIntegration();
-      fireEvent("progression:level_up", {
-        userId: "u1",
+      fireEvent('progression:level_up', {
+        userId: 'u1',
         newLevel: 3,
         rewards: [],
       });
@@ -69,9 +69,9 @@ describe("integration", () => {
       });
     });
 
-    it("does NOT create reward when rewards is missing", () => {
+    it('does NOT create reward when rewards is missing', () => {
       const unsub = initializeProgressionRewardsIntegration();
-      fireEvent("progression:level_up", { userId: "u1", newLevel: 3 });
+      fireEvent('progression:level_up', { userId: 'u1', newLevel: 3 });
       return new Promise<void>((resolve) => {
         setTimeout(() => {
           expect(mockRewards.createReward).not.toHaveBeenCalled();
@@ -81,12 +81,12 @@ describe("integration", () => {
       });
     });
 
-    it("applies 2x multiplier for XP_BOOST reward type", () => {
+    it('applies 2x multiplier for XP_BOOST reward type', () => {
       const unsub = initializeProgressionRewardsIntegration();
-      fireEvent("progression:level_up", {
-        userId: "u1",
+      fireEvent('progression:level_up', {
+        userId: 'u1',
         newLevel: 4,
-        rewards: ["XP_BOOST"],
+        rewards: ['XP_BOOST'],
       });
       return new Promise<void>((resolve) => {
         setTimeout(() => {
@@ -99,12 +99,12 @@ describe("integration", () => {
       });
     });
 
-    it("applies base reward for GEMS type", () => {
+    it('applies base reward for GEMS type', () => {
       const unsub = initializeProgressionRewardsIntegration();
-      fireEvent("progression:level_up", {
-        userId: "u1",
+      fireEvent('progression:level_up', {
+        userId: 'u1',
         newLevel: 3,
-        rewards: ["GEMS"],
+        rewards: ['GEMS'],
       });
       return new Promise<void>((resolve) => {
         setTimeout(() => {
@@ -117,7 +117,7 @@ describe("integration", () => {
       });
     });
 
-    it("unsubscribes cleanly", () => {
+    it('unsubscribes cleanly', () => {
       const unsub = initializeProgressionRewardsIntegration();
       const countBefore = mockActiveSubscribers.length;
       unsub();

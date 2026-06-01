@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -7,10 +7,10 @@ import Animated, {
   withRepeat,
   withSequence,
   runOnJS,
-} from "react-native-reanimated";
-import { Box, Text, Button } from "@/components/primitives";
-import { useTheme } from "@/theme";
-import { GAMBLE_BONUS_XP } from "./types";
+} from 'react-native-reanimated';
+import { Box, Text, Button } from '@/components/primitives';
+import { useTheme } from '@/theme';
+import { GAMBLE_BONUS_XP } from './types';
 
 interface GambleActionButtonsProps {
   shieldsAvailable: number;
@@ -78,7 +78,7 @@ export const GambleActionButtons: React.FC<GambleActionButtonsProps> = ({
               >
                 {shieldsAvailable > 0
                   ? `Save streak guaranteed (${shieldsAvailable} available)`
-                  : "No shields available"}
+                  : 'No shields available'}
               </Text>
             </Box>
           </Box>
@@ -135,7 +135,7 @@ export const GambleActionButtons: React.FC<GambleActionButtonsProps> = ({
             textAlign="center"
           >
             ⚡ If you score S or A: Streak saved + {GAMBLE_BONUS_XP} bonus
-            XP!{"\n"}
+            XP!{'\n'}
             If below A: Streak breaks, no shield used
           </Text>
         </Box>

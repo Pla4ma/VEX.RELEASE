@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { Image, Pressable } from "react-native";
+import React, { useEffect } from 'react';
+import { Image, Pressable } from 'react-native';
 import Animated, {
   FadeInUp,
   useAnimatedStyle,
@@ -8,17 +8,17 @@ import Animated, {
   withSequence,
   withSpring,
   withTiming,
-} from "react-native-reanimated";
+} from 'react-native-reanimated';
 
-import { Box } from "../../components/primitives/Box";
-import { Text } from "../../components/primitives/Text";
-import { useTheme } from "../../theme";
-import type { SquadMemberSession } from "./SquadSyncIndicator.types";
+import { Box } from '../../components/primitives/Box';
+import { Text } from '../../components/primitives/Text';
+import { useTheme } from '../../theme';
+import type { SquadMemberSession } from './SquadSyncIndicator.types';
 
 function formatDuration(seconds: number): string {
   const mins = Math.floor(seconds / 60);
   const secs = seconds % 60;
-  return `${mins}:${secs.toString().padStart(2, "0")}`;
+  return `${mins}:${secs.toString().padStart(2, '0')}`;
 }
 
 interface MemberIndicatorProps {
@@ -112,7 +112,7 @@ export function SquadMemberIndicator({
               <Image
                 source={{ uri: member.avatarUrl }}
                 resizeMode="cover"
-                style={{ width: "100%", height: "100%" }}
+                style={{ width: '100%', height: '100%' }}
               />
             ) : (
               <Box flex={1} justifyContent="center" alignItems="center">
@@ -129,12 +129,12 @@ export function SquadMemberIndicator({
               color={
                 member.isFocusing
                   ? theme.colors.success.DEFAULT
-                  : "text.tertiary"
+                  : 'text.tertiary'
               }
             >
               {member.isFocusing
                 ? `🔥 ${formatDuration(member.elapsedSeconds)}`
-                : "✓ Completed"}
+                : '✓ Completed'}
             </Text>
           </Box>
           {hasBeenEncouraged && (

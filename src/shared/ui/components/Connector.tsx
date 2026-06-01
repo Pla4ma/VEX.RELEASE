@@ -1,15 +1,15 @@
-import React from "react";
+import React from 'react';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withTiming,
-} from "react-native-reanimated";
-import type { Theme } from "../../../theme";
-import { progressStepsStyles as styles, interpolateColor } from "./progress-steps-styles";
+} from 'react-native-reanimated';
+import type { Theme } from '../../../theme';
+import { progressStepsStyles as styles, interpolateColor } from './progress-steps-styles';
 
 export const Connector: React.FC<{
   completed: boolean;
-  orientation: "horizontal" | "vertical";
+  orientation: 'horizontal' | 'vertical';
   theme: Theme;
 }> = ({ completed, orientation, theme }) => {
   const progress = useSharedValue(completed ? 1 : 0);
@@ -27,7 +27,7 @@ export const Connector: React.FC<{
     <Animated.View
       style={[
         styles.connector,
-        orientation === "horizontal"
+        orientation === 'horizontal'
           ? styles.connectorHorizontal
           : styles.connectorVertical,
         animatedStyle,

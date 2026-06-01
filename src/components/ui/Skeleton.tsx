@@ -1,29 +1,29 @@
-import React from "react";
-import { View } from "react-native";
+import React from 'react';
+import { View } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withRepeat,
   withSequence,
   withTiming,
-} from "react-native-reanimated";
-import { useTheme } from "../../theme";
-import { createSheet } from "@/shared/ui/create-sheet";
-type SkeletonWidth = number | `${number}%` | "auto";
+} from 'react-native-reanimated';
+import { useTheme } from '../../theme';
+import { createSheet } from '@/shared/ui/create-sheet';
+type SkeletonWidth = number | `${number}%` | 'auto';
 interface SkeletonProps {
   width?: SkeletonWidth;
   height?: number;
   borderRadius?: number;
-  variant?: "text" | "circular" | "rectangular" | "rounded";
+  variant?: 'text' | 'circular' | 'rectangular' | 'rounded';
   lines?: number;
   spacing?: number;
   animate?: boolean;
 }
 export const Skeleton: React.FC<SkeletonProps> = ({
-  width = "100%",
+  width = '100%',
   height = 16,
   borderRadius,
-  variant = "text",
+  variant = 'text',
   lines = 1,
   spacing = 8,
   animate = true,
@@ -50,11 +50,11 @@ export const Skeleton: React.FC<SkeletonProps> = ({
       return borderRadius;
     }
     switch (variant) {
-      case "circular":
+      case 'circular':
         return height / 2;
-      case "rounded":
+      case 'rounded':
         return 8;
-      case "rectangular":
+      case 'rectangular':
         return 0;
       default:
         return 4;
@@ -119,7 +119,7 @@ export const SkeletonCard: React.FC<{ lines?: number; height?: number }> = ({
         {Array.from({ length: lines }).map((_, i) => (
           <Skeleton
             key={i}
-            width={i === lines - 1 ? "80%" : "100%"}
+            width={i === lines - 1 ? '80%' : '100%'}
             height={14}
             animate={false}
           />
@@ -148,16 +148,16 @@ export const SkeletonList: React.FC<{
   );
 };
 const styles = createSheet({
-  container: { width: "100%" },
-  skeleton: { overflow: "hidden" },
+  container: { width: '100%' },
+  skeleton: { overflow: 'hidden' },
   card: { borderRadius: 12, padding: 16, marginVertical: 8 },
-  cardHeader: { flexDirection: "row", alignItems: "center", marginBottom: 12 },
+  cardHeader: { flexDirection: 'row', alignItems: 'center', marginBottom: 12 },
   cardHeaderText: { marginLeft: 12, gap: 4 },
   cardContent: { gap: 8 },
   list: { gap: 8 },
   listItem: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     paddingHorizontal: 16,
     gap: 12,
   },

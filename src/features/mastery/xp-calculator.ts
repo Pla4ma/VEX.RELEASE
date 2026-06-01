@@ -1,4 +1,4 @@
-import type { MasteryState } from "./types";
+import type { MasteryState } from './types';
 
 export function calculateTechniqueXp(
   sessionMinutes: number,
@@ -7,7 +7,7 @@ export function calculateTechniqueXp(
   streakDays: number,
   bossDefeated: boolean,
   bossHealthPercent: number,
-): Record<keyof MasteryState["techniques"], number> {
+): Record<keyof MasteryState['techniques'], number> {
   return {
     durationMastery: wasInterrupted
       ? 0

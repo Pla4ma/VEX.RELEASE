@@ -1,6 +1,6 @@
-import * as Sentry from "@sentry/react-native";
+import * as Sentry from '@sentry/react-native';
 
-type SilentFailureType = "data" | "network" | "ui";
+type SilentFailureType = 'data' | 'network' | 'ui';
 
 interface SilentFailureContext {
   feature: string;
@@ -20,7 +20,7 @@ export function captureSilentFailure(
     },
     extra: {
       fallback:
-        "Existing safe fallback preserved after previously empty catch.",
+        'Existing safe fallback preserved after previously empty catch.',
     },
   });
 }

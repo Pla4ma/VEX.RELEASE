@@ -1,18 +1,18 @@
-import React from "react";
-import { Pressable } from "react-native";
+import React from 'react';
+import { Pressable } from 'react-native';
 
-import { Avatar } from "../../../components/Avatar";
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import type { CompanionMood } from "../../companion/types";
+import { Avatar } from '../../../components/Avatar';
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import type { CompanionMood } from '../../companion/types';
 import {
   StreakIndicator,
   LevelBadge,
   getCompanionMoodSymbol,
-} from "./GreetingHeaderBadges";
+} from './GreetingHeaderBadges';
 
-export { StreakIndicator, LevelBadge } from "./GreetingHeaderBadges";
+export { StreakIndicator, LevelBadge } from './GreetingHeaderBadges';
 
 export function GreetingHeaderSkeleton(): JSX.Element {
   const { theme } = useTheme();
@@ -90,8 +90,8 @@ export function CompanionHeaderAvatar({
       style={{
         minHeight: 44,
         minWidth: 44,
-        alignItems: "center",
-        justifyContent: "center",
+        alignItems: 'center',
+        justifyContent: 'center',
       }}
     >
       <Box

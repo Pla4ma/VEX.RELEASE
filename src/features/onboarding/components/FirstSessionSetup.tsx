@@ -8,18 +8,18 @@
  * @phase 4
  */
 
-import React, { useState } from "react";
-import { Pressable } from "react-native";
-import Animated, { FadeIn, FadeInUp } from "react-native-reanimated";
+import React, { useState } from 'react';
+import { Pressable } from 'react-native';
+import Animated, { FadeIn, FadeInUp } from 'react-native-reanimated';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { Button } from "../../../components/primitives/Button";
-import { useTheme } from "../../../theme";
-import type { FocusDuration, FocusGoal } from "../schemas";
-import { DURATION_OPTIONS } from "../service";
-import { DurationCard } from "./DurationCard";
-import { SessionPreview } from "./SessionPreview";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { Button } from '../../../components/primitives/Button';
+import { useTheme } from '../../../theme';
+import type { FocusDuration, FocusGoal } from '../schemas';
+import { DURATION_OPTIONS } from '../service';
+import { DurationCard } from './DurationCard';
+import { SessionPreview } from './SessionPreview';
 
 interface FirstSessionSetupProps {
   userName: string;
@@ -44,7 +44,7 @@ export function FirstSessionSetup({
   const [selectedDuration, setSelectedDuration] = useState<FocusDuration>(10); // Default to 10 minutes
   const [isAdvancing, setIsAdvancing] = useState(false);
 
-  const displayName = userName || "there";
+  const displayName = userName || 'there';
 
   const handleDurationSelect = (duration: FocusDuration) => {
     setSelectedDuration(duration);
@@ -95,7 +95,7 @@ export function FirstSessionSetup({
       {/* Duration Options */}
       <Animated.View
         entering={FadeInUp.duration(500).delay(200)}
-        style={{ width: "100%" }}
+        style={{ width: '100%' }}
       >
         <Box
           flexDirection="row"
@@ -120,9 +120,9 @@ export function FirstSessionSetup({
       {/* Session Preview */}
       <Animated.View
         entering={FadeInUp.duration(400).delay(400)}
-        style={{ width: "100%" }}
+        style={{ width: '100%' }}
       >
-        <SessionPreview duration={selectedDuration} goal={goal ?? ""} />
+        <SessionPreview duration={selectedDuration} goal={goal ?? ''} />
       </Animated.View>
 
       {/* Benefits list */}
@@ -155,7 +155,7 @@ export function FirstSessionSetup({
       {/* CTA Button */}
       <Animated.View
         entering={FadeInUp.duration(400).delay(800)}
-        style={{ width: "100%" }}
+        style={{ width: '100%' }}
       >
         <Button
           variant="primary"
@@ -168,7 +168,7 @@ export function FirstSessionSetup({
           accessibilityHint="Double tap to select"
         >
           {isAdvancing
-            ? "Starting..."
+            ? 'Starting...'
             : `Start ${selectedDuration}-minute focus session →`}
         </Button>
       </Animated.View>
@@ -176,7 +176,7 @@ export function FirstSessionSetup({
       {/* Back Option */}
       <Animated.View
         entering={FadeIn.duration(400).delay(900)}
-        style={{ marginTop: "auto" }}
+        style={{ marginTop: 'auto' }}
       >
         <Pressable
           onPress={onBack}

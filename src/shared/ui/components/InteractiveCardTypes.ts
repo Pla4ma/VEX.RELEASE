@@ -1,12 +1,12 @@
-import type { ViewStyle, PressableProps } from "react-native";
+import type { ViewStyle, PressableProps } from 'react-native';
 
-export type CardVariant = "default" | "elevated" | "outlined" | "ghost";
-export type CardSize = "sm" | "md" | "lg";
-export type CardState = "default" | "loading" | "disabled" | "error" | "selected";
+export type CardVariant = 'default' | 'elevated' | 'outlined' | 'ghost';
+export type CardSize = 'sm' | 'md' | 'lg';
+export type CardState = 'default' | 'loading' | 'disabled' | 'error' | 'selected';
 
 export interface InteractiveCardProps extends Omit<
   PressableProps,
-  "onPress" | "style"
+  'onPress' | 'style'
 > {
   children: React.ReactNode;
   onPress?: () => void | Promise<void>;

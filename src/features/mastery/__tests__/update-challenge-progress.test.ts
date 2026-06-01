@@ -6,23 +6,23 @@ import {
   createDefaultState,
   updateChallengeProgress,
   type TechniqueXpGains,
-} from "../mastery-helpers";
+} from '../mastery-helpers';
 
 // ─── Mocks (needed because mastery-helpers imports challenge-generator & repository) ───
-jest.mock("../repository", () => ({
+jest.mock('../repository', () => ({
   loadStoredMasteryState: jest.fn().mockReturnValue(null),
   loadMasteryState: jest.fn().mockResolvedValue(null),
   persistMasteryState: jest.fn((state: Record<string, unknown>) => ({ ...state, updatedAt: Date.now() })),
 }));
 
-jest.mock("../../../persistence/MMKVStorageAdapter", () => ({
+jest.mock('../../../persistence/MMKVStorageAdapter', () => ({
   getDefaultStorageAdapter: () => ({
     getJSONSync: jest.fn().mockReturnValue(null),
     setJSONSync: jest.fn(),
   }),
 }));
 
-jest.mock("../../../persistence/MMKVStorage", () => ({
+jest.mock('../../../persistence/MMKVStorage', () => ({
   getMMKVStorage: () => ({
     initialize: jest.fn().mockResolvedValue(undefined),
     getItem: jest.fn().mockResolvedValue(null),
@@ -30,7 +30,7 @@ jest.mock("../../../persistence/MMKVStorage", () => ({
   }),
 }));
 
-jest.mock("../../../config/supabase", () => ({
+jest.mock('../../../config/supabase', () => ({
   supabase: {
     from: jest.fn(() => ({
       select: jest.fn().mockReturnThis(),
@@ -41,57 +41,57 @@ jest.mock("../../../config/supabase", () => ({
   },
 }));
 
-jest.mock("../../../utils/silent-failure", () => ({
+jest.mock('../../../utils/silent-failure', () => ({
   captureSilentFailure: jest.fn(),
 }));
 
-jest.mock("../challenge-generator", () => ({
+jest.mock('../challenge-generator', () => ({
   generateMasteryChallenges: jest.fn().mockReturnValue([
     {
-      id: "test-challenge-1",
-      technique: "durationMastery",
-      title: "Test Challenge",
-      description: "A test challenge",
-      difficulty: "EASY",
+      id: 'test-challenge-1',
+      technique: 'durationMastery',
+      title: 'Test Challenge',
+      description: 'A test challenge',
+      difficulty: 'EASY',
       target: 10,
       current: 0,
-      unit: "sessions",
+      unit: 'sessions',
       masteryPoints: 3,
-      status: "ACTIVE",
+      status: 'ACTIVE',
       completedAt: null,
     },
     {
-      id: "test-challenge-2",
-      technique: "purityMastery",
-      title: "Test Challenge 2",
-      description: "Another test challenge",
-      difficulty: "MEDIUM",
+      id: 'test-challenge-2',
+      technique: 'purityMastery',
+      title: 'Test Challenge 2',
+      description: 'Another test challenge',
+      difficulty: 'MEDIUM',
       target: 5,
       current: 0,
-      unit: "sessions",
+      unit: 'sessions',
       masteryPoints: 5,
-      status: "ACTIVE",
+      status: 'ACTIVE',
       completedAt: null,
     },
     {
-      id: "test-challenge-3",
-      technique: "consistencyMastery",
-      title: "Test Challenge 3",
-      description: "Third test challenge",
-      difficulty: "EASY",
+      id: 'test-challenge-3',
+      technique: 'consistencyMastery',
+      title: 'Test Challenge 3',
+      description: 'Third test challenge',
+      difficulty: 'EASY',
       target: 3,
       current: 0,
-      unit: "days",
+      unit: 'days',
       masteryPoints: 3,
-      status: "ACTIVE",
+      status: 'ACTIVE',
       completedAt: null,
     },
   ]),
 }));
 
-describe("updateChallengeProgress", () => {
-  it("updates ACTIVE challenge progress with XP gains", () => {
-    const state = createDefaultState("user-1");
+describe('updateChallengeProgress', () => {
+  it('updates ACTIVE challenge progress with XP gains', () => {
+    const state = createDefaultState('user-1');
     const xpGains: TechniqueXpGains = {
       durationMastery: 5,
       purityMastery: 0,
@@ -101,16 +101,16 @@ describe("updateChallengeProgress", () => {
     };
     const updated = updateChallengeProgress(state, xpGains);
     const durationChallenge = updated.activeChallenges.find(
-      (c) => c.technique === "durationMastery",
+      (c) => c.technique === 'durationMastery',
     );
     expect(durationChallenge?.current).toBe(5);
-    expect(durationChallenge?.status).toBe("ACTIVE");
+    expect(durationChallenge?.status).toBe('ACTIVE');
   });
 
-  it("completes challenge when target is met", () => {
-    const state = createDefaultState("user-1");
+  it('completes challenge when target is met', () => {
+    const state = createDefaultState('user-1');
     const firstChallenge = state.activeChallenges[0];
-    if (!firstChallenge) throw new Error("No challenge found");
+    if (!firstChallenge) {throw new Error('No challenge found');}
 
     const xpGains: TechniqueXpGains = {
       durationMastery: firstChallenge.target + 10,
@@ -123,16 +123,16 @@ describe("updateChallengeProgress", () => {
     const target = updated.activeChallenges.find(
       (c) => c.id === firstChallenge.id,
     );
-    expect(target?.status).toBe("COMPLETED");
+    expect(target?.status).toBe('COMPLETED');
     expect(target?.completedAt).toBeTruthy();
     expect(target?.current).toBe(firstChallenge.target);
   });
 
-  it("does not update COMPLETED or CLAIMED challenges", () => {
-    const state = createDefaultState("user-1");
+  it('does not update COMPLETED or CLAIMED challenges', () => {
+    const state = createDefaultState('user-1');
     const completedChallenge = {
       ...state.activeChallenges[0]!,
-      status: "COMPLETED" as const,
+      status: 'COMPLETED' as const,
       current: state.activeChallenges[0]!.target,
       completedAt: Date.now(),
     };

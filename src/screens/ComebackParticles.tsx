@@ -1,14 +1,14 @@
-import React, { useEffect } from "react";
-import { StyleSheet } from "react-native";
+import React, { useEffect } from 'react';
+import { StyleSheet } from 'react-native';
 import Animated, {
   Easing,
   useAnimatedStyle,
   useSharedValue,
   withRepeat,
   withTiming,
-} from "react-native-reanimated";
-import { createSheet } from "@/shared/ui/create-sheet";
-import { useReducedMotion } from "@/hooks";
+} from 'react-native-reanimated';
+import { createSheet } from '@/shared/ui/create-sheet';
+import { useReducedMotion } from '@/hooks';
 
 interface ParticleProps {
   index: number;
@@ -68,6 +68,6 @@ export function Particle({
 
 const styles = createSheet({
   particle: {
-    position: "absolute",
+    position: 'absolute',
   },
 });

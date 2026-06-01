@@ -1,13 +1,13 @@
-import { z } from "zod";
+import { z } from 'zod';
 
-import { LaneSchema } from "../lane-engine/schemas";
-import { SessionSummarySchema } from "../../session/types";
+import { LaneSchema } from '../lane-engine/schemas';
+import { SessionSummarySchema } from '../../session/types';
 
 export const CompletionMemoryCandidateSchema = z
   .object({
     confidence: z.number().min(0).max(1),
     id: z.string().min(1),
-    source: z.enum(["session_completion", "reflection", "lane_signal"]),
+    source: z.enum(['session_completion', 'reflection', 'lane_signal']),
     text: z.string().min(1),
   })
   .strict();
@@ -16,14 +16,14 @@ export const CompletionUnlockDecisionSchema = z
   .object({
     hidden: z.boolean(),
     key: z.enum([
-      "study_os",
-      "run_board",
-      "project_thread",
-      "today_strip",
-      "weekly_intelligence",
+      'study_os',
+      'run_board',
+      'project_thread',
+      'today_strip',
+      'weekly_intelligence',
     ]),
     reason: z.string().min(1),
-    status: z.enum(["available", "teased", "blocked"]),
+    status: z.enum(['available', 'teased', 'blocked']),
   })
   .strict();
 

@@ -1,41 +1,41 @@
-import React from "react";
-import { View } from "react-native";
-import { Card, Text } from "../../components/primitives";
-import { TechniqueBar } from "../../features/mastery/components/TechniqueBar";
-import type { MasteryState } from "../../features/mastery/types";
-import { useTheme } from "../../theme";
-import { launchColors } from "@theme/tokens/launch-colors";
+import React from 'react';
+import { View } from 'react-native';
+import { Card, Text } from '../../components/primitives';
+import { TechniqueBar } from '../../features/mastery/components/TechniqueBar';
+import type { MasteryState } from '../../features/mastery/types';
+import { useTheme } from '../../theme';
+import { launchColors } from '@theme/tokens/launch-colors';
 
 export const TECHNIQUES = [
   {
-    key: "durationMastery" as const,
-    label: "Duration Focus",
+    key: 'durationMastery' as const,
+    label: 'Duration Focus',
     color: launchColors.hex_6366f1,
-    description: "Long sessions without interruption",
+    description: 'Long sessions without interruption',
   },
   {
-    key: "purityMastery" as const,
-    label: "Purity",
+    key: 'purityMastery' as const,
+    label: 'Purity',
     color: launchColors.hex_14b8a6,
-    description: "Sustained high focus scores",
+    description: 'Sustained high focus scores',
   },
   {
-    key: "consistencyMastery" as const,
-    label: "Consistency",
+    key: 'consistencyMastery' as const,
+    label: 'Consistency',
     color: launchColors.hex_f97316,
-    description: "Daily streaks maintained",
+    description: 'Daily streaks maintained',
   },
   {
-    key: "comebackMastery" as const,
-    label: "Comeback",
+    key: 'comebackMastery' as const,
+    label: 'Comeback',
     color: launchColors.hex_ec4899,
-    description: "Recovering from broken streaks",
+    description: 'Recovering from broken streaks',
   },
   {
-    key: "bossMastery" as const,
-    label: "Boss",
+    key: 'bossMastery' as const,
+    label: 'Boss',
     color: launchColors.hex_eab308,
-    description: "Boss defeat efficiency",
+    description: 'Boss defeat efficiency',
   },
 ] as const;
 

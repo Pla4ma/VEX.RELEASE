@@ -1,9 +1,9 @@
-import type { Experiment } from "./types";
+import type { Experiment } from './types';
 
 type UserProfile = {
   sessions: number;
   isPremium: boolean;
-  platform: "ios" | "android" | "web";
+  platform: 'ios' | 'android' | 'web';
   segment: string;
 };
 
@@ -18,10 +18,10 @@ export function isUserEligible(
   if (targeting.maxSessions && profile.sessions > targeting.maxSessions) {
     return false;
   }
-  if (targeting.premiumStatus === "free" && profile.isPremium) {
+  if (targeting.premiumStatus === 'free' && profile.isPremium) {
     return false;
   }
-  if (targeting.premiumStatus === "premium" && !profile.isPremium) {
+  if (targeting.premiumStatus === 'premium' && !profile.isPremium) {
     return false;
   }
   if (

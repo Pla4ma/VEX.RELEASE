@@ -1,15 +1,15 @@
-import React from "react";
-import { Pressable, View } from "react-native";
+import React from 'react';
+import { Pressable, View } from 'react-native';
 
-import { Text } from "../../../components/primitives/Text";
+import { Text } from '../../../components/primitives/Text';
 import type {
   FocusGoal,
   MotivationProfileType,
-} from "../../../features/onboarding/schemas";
-import { useTheme } from "../../../theme";
-import { styles } from "../styles";
-import { OnboardingAdaptationPreview } from "./OnboardingAdaptationPreview";
-import { MOTIVATION_STYLE_OPTIONS } from "./onboarding-flow-data";
+} from '../../../features/onboarding/schemas';
+import { useTheme } from '../../../theme';
+import { styles } from '../styles';
+import { OnboardingAdaptationPreview } from './OnboardingAdaptationPreview';
+import { MOTIVATION_STYLE_OPTIONS } from './onboarding-flow-data';
 
 type MotivationStyleStepProps = {
   goal: FocusGoal | undefined;

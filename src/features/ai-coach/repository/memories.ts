@@ -8,7 +8,7 @@ export {
   hasEvidenceConflict,
   createMemory,
   getMemoriesByUser,
-} from "./memories-core";
+} from './memories-core';
 export {
   getMemoriesByType,
   markMemoryReferenced,
@@ -16,4 +16,4 @@ export {
   getMemoriesByTypes,
   getMostRecentMemoryByType,
   hasMemoryOfType,
-} from "./memories-operations";
+} from './memories-operations';

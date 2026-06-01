@@ -1,9 +1,9 @@
-import * as Sentry from "@sentry/react-native";
-import { loadCompanionState } from "../companion/session-storage";
-import { checkAndRecordSessionMemories } from "../companion/memory-service";
-import type { CompanionMemory } from "../companion/memory-types";
-import type { SessionSummary } from "../../session/types";
-import type { CompletionLedger } from "./schemas";
+import * as Sentry from '@sentry/react-native';
+import { loadCompanionState } from '../companion/session-storage';
+import { checkAndRecordSessionMemories } from '../companion/memory-service';
+import type { CompanionMemory } from '../companion/memory-types';
+import type { SessionSummary } from '../../session/types';
+import type { CompletionLedger } from './schemas';
 
 export async function recordCompletionCompanionMemories(input: {
   isPersonalBest: boolean;
@@ -30,7 +30,7 @@ export async function recordCompletionCompanionMemories(input: {
     });
   } catch (error) {
     Sentry.captureException(error, {
-      tags: { feature: "companion-memory", operation: "completion-check" },
+      tags: { feature: 'companion-memory', operation: 'completion-check' },
     });
     return [];
   }

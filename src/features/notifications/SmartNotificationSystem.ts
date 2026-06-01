@@ -1,11 +1,11 @@
-import { eventBus } from "../../events";
+import { eventBus } from '../../events';
 import type {
   SmartNotification,
   NotificationContext,
   NotificationType,
   NotificationPriority,
-} from "./SmartNotificationSystem.types";
-import { NOTIFICATION_RULES } from "./SmartNotificationSystem.rules";
+} from './SmartNotificationSystem.types';
+import { NOTIFICATION_RULES } from './SmartNotificationSystem.rules';
 
 // Re-exports from sub-modules (backward compatibility)
 export {
@@ -15,28 +15,28 @@ export {
   STUDY_REMINDER_RULE,
   SQUAD_ACTIVITY_RULE,
   COMEBACK_RULE,
-} from "./SmartNotificationSystem.rules";
+} from './SmartNotificationSystem.rules';
 export {
   RE_ENGAGEMENT_STAGES,
   getReEngagementMessage,
   shouldReEngage,
-} from "./SmartNotificationSystem.reengagement";
-export type { ReEngagementStage } from "./SmartNotificationSystem.reengagement";
-export { getNotificationAnalytics } from "./SmartNotificationSystem.analytics";
-export type { NotificationAnalytics } from "./SmartNotificationSystem.analytics";
+} from './SmartNotificationSystem.reengagement';
+export type { ReEngagementStage } from './SmartNotificationSystem.reengagement';
+export { getNotificationAnalytics } from './SmartNotificationSystem.analytics';
+export type { NotificationAnalytics } from './SmartNotificationSystem.analytics';
 
 export const notificationHistory = new Map<string, SmartNotification[]>();
 export const scheduledNotifications = new Map<string, SmartNotification[]>();
 
 function isOptedIn(ctx: NotificationContext, type: NotificationType): boolean {
   switch (type) {
-    case "STREAK_PROTECTION":
+    case 'STREAK_PROTECTION':
       return ctx.notificationPrefs.streakProtectionEnabled;
-    case "BOSS_OPPORTUNITY":
+    case 'BOSS_OPPORTUNITY':
       return ctx.notificationPrefs.bossAlertsEnabled;
-    case "STUDY_REMINDER":
+    case 'STUDY_REMINDER':
       return ctx.notificationPrefs.studyRemindersEnabled;
-    case "SQUAD_ACTIVITY":
+    case 'SQUAD_ACTIVITY':
       return ctx.notificationPrefs.squadActivityEnabled;
     default:
       return true;
@@ -163,7 +163,7 @@ export function sendScheduledNotification(
   notificationHistory.set(userId, history);
   scheduled.splice(index, 1);
   scheduledNotifications.set(userId, scheduled);
-  eventBus.publish("notification:sent", {
+  eventBus.publish('notification:sent', {
     userId,
     notificationId,
     type: notification.type,

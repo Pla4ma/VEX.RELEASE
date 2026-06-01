@@ -1,16 +1,16 @@
-import { useCallback, useRef, useState } from "react";
-import { useMMKVNumber } from "react-native-mmkv";
-import { createDebugger } from "../../utils/debug";
-import { eventBus } from "../../events";
-import { triggerHapticEvent, HapticEvents } from "../../constants/haptics";
+import { useCallback, useRef, useState } from 'react';
+import { useMMKVNumber } from 'react-native-mmkv';
+import { createDebugger } from '../../utils/debug';
+import { eventBus } from '../../events';
+import { triggerHapticEvent, HapticEvents } from '../../constants/haptics';
 import {
   useSessionTimerSubscriptions,
   type UseSessionTimerOptions,
   type UseSessionTimerReturn,
-} from "./useSessionTimerSubscriptions";
-import { useTimerActions } from "./useTimerActions";
+} from './useSessionTimerSubscriptions';
+import { useTimerActions } from './useTimerActions';
 
-const debug = createDebugger("session:timer");
+const debug = createDebugger('session:timer');
 const DEFAULT_TICK_INTERVAL = 1000;
 const SYSTEM_TIME_CHANGE_THRESHOLD = 30000;
 
@@ -29,10 +29,10 @@ export function useSessionTimer(
   } = options;
 
   const [elapsedTimeStored, setElapsedTime] = useMMKVNumber(
-    "session:timer:elapsed",
+    'session:timer:elapsed',
   );
   const [remainingTimeStored, setRemainingTime] = useMMKVNumber(
-    "session:timer:remaining",
+    'session:timer:remaining',
   );
 
   const elapsedTime = elapsedTimeStored ?? 0;
@@ -59,9 +59,9 @@ export function useSessionTimer(
     if (hapticEnabled) {
       triggerHapticEvent(HapticEvents.SUCCESS);
     }
-    debug.info("Session timer completed");
-    eventBus.publish("analytics:track", {
-      event: "session_timer_completed",
+    debug.info('Session timer completed');
+    eventBus.publish('analytics:track', {
+      event: 'session_timer_completed',
       properties: {
         elapsed: elapsedTime,
         backgroundTime: backgroundTimeRef.current,
@@ -78,10 +78,10 @@ export function useSessionTimer(
       const expectedElapsed = now - lastTickRef.current;
       const drift = Math.abs(expectedElapsed - tickInterval);
       if (drift > SYSTEM_TIME_CHANGE_THRESHOLD) {
-        debug.warn("System time change detected", { drift });
+        debug.warn('System time change detected', { drift });
         systemTimeOffsetRef.current += expectedElapsed - tickInterval;
-        eventBus.publish("analytics:track", {
-          event: "session_timer_system_time_change",
+        eventBus.publish('analytics:track', {
+          event: 'session_timer_system_time_change',
           properties: { drift, offset: systemTimeOffsetRef.current },
         });
       }
@@ -127,20 +127,20 @@ export function useSessionTimer(
 
   // Wrap start/pause/resume/stop to also update local state
   const start = useCallback(() => {
-    if (isRunning) return;
+    if (isRunning) {return;}
     setIsRunning(true);
     setIsPaused(false);
     actions.start();
   }, [actions, isRunning]);
 
   const pause = useCallback(() => {
-    if (!isRunning || isPaused) return;
+    if (!isRunning || isPaused) {return;}
     setIsPaused(true);
     actions.pause();
   }, [actions, isPaused, isRunning]);
 
   const resume = useCallback(() => {
-    if (!isPaused) return;
+    if (!isPaused) {return;}
     setIsPaused(false);
     actions.resume();
   }, [actions, isPaused]);

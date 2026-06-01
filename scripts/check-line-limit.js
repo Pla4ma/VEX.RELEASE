@@ -23,7 +23,9 @@ function walk(directory) {
 }
 
 function lineCount(filePath) {
-  return fs.readFileSync(filePath, 'utf8').split(/\r?\n/).length;
+  const content = fs.readFileSync(filePath, 'utf8');
+  const lines = content.split(/\r?\n/);
+  return lines[lines.length - 1] === '' ? lines.length - 1 : lines.length;
 }
 
 const violations = walk(SRC)

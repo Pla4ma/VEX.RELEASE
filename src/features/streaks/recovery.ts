@@ -1,5 +1,5 @@
-import { eventBus } from "../../events";
-import type { StreakRecoveryPlan } from "./types";
+import { eventBus } from '../../events';
+import type { StreakRecoveryPlan } from './types';
 
 const recoveryPlans = new Map<string, StreakRecoveryPlan>();
 
@@ -20,13 +20,13 @@ export function createRecoveryPlan(
     sessionsRequired,
     currentProgress: 0,
     completed: false,
-    reward: { type: "XP", value: Math.max(100, daysLost * 50) },
+    reward: { type: 'XP', value: Math.max(100, daysLost * 50) },
     expiresAt: Date.now() + 7 * 24 * 60 * 60 * 1000,
     previousStreak: daysLost,
     isRecovering: true,
   };
   recoveryPlans.set(userId, plan);
-  eventBus.publish("streak:recovery_plan_created", { userId, planId: userId });
+  eventBus.publish('streak:recovery_plan_created', { userId, planId: userId });
   return plan;
 }
 

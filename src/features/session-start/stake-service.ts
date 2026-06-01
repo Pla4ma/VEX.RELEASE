@@ -1,33 +1,33 @@
-import { fetchBossTemplate, fetchActiveEncounter } from "../boss/repository";
-import { fetchActiveChallengeDetails } from "../challenges/repository";
-import { fetchStreak } from "../streaks/repository";
-import { SessionStakeSchema, type SessionStake } from "./schemas";
+import { fetchBossTemplate, fetchActiveEncounter } from '../boss/repository';
+import { fetchActiveChallengeDetails } from '../challenges/repository';
+import { fetchStreak } from '../streaks/repository';
+import { SessionStakeSchema, type SessionStake } from './schemas';
 
 type StakeMode =
-  | "LIGHT_FOCUS"
-  | "DEEP_WORK"
-  | "SPRINT"
-  | "CREATIVE"
-  | "STUDY"
-  | "RECOVERY"
-  | "STARTER";
+  | 'LIGHT_FOCUS'
+  | 'DEEP_WORK'
+  | 'SPRINT'
+  | 'CREATIVE'
+  | 'STUDY'
+  | 'RECOVERY'
+  | 'STARTER';
 
 function normalizeStakeMode(mode: string): StakeMode {
   switch (mode) {
-    case "DEEP_WORK":
-      return "DEEP_WORK";
-    case "SPRINT":
-      return "SPRINT";
-    case "CREATIVE":
-      return "CREATIVE";
-    case "STUDY":
-      return "STUDY";
-    case "RECOVERY":
-      return "RECOVERY";
-    case "STARTER":
-      return "STARTER";
+    case 'DEEP_WORK':
+      return 'DEEP_WORK';
+    case 'SPRINT':
+      return 'SPRINT';
+    case 'CREATIVE':
+      return 'CREATIVE';
+    case 'STUDY':
+      return 'STUDY';
+    case 'RECOVERY':
+      return 'RECOVERY';
+    case 'STARTER':
+      return 'STARTER';
     default:
-      return "LIGHT_FOCUS";
+      return 'LIGHT_FOCUS';
   }
 }
 
@@ -50,22 +50,22 @@ function calculateStreakRisk(streak: {
   currentDays: number;
   lastQualifyingSessionAt: number | null;
   shieldsAvailable: number;
-}): "SAFE" | "AT_RISK" | "CRITICAL" {
+}): 'SAFE' | 'AT_RISK' | 'CRITICAL' {
   if (streak.currentDays === 0 || !streak.lastQualifyingSessionAt)
-    return "SAFE";
+    {return 'SAFE';}
   const hoursRemaining = Math.floor(
     (streak.lastQualifyingSessionAt + 86400000 - Date.now()) / 3600000,
   );
   if (hoursRemaining <= 0)
-    return streak.shieldsAvailable > 0 ? "AT_RISK" : "CRITICAL";
-  if (hoursRemaining <= 4) return "CRITICAL";
-  return hoursRemaining <= 12 ? "AT_RISK" : "SAFE";
+    {return streak.shieldsAvailable > 0 ? 'AT_RISK' : 'CRITICAL';}
+  if (hoursRemaining <= 4) {return 'CRITICAL';}
+  return hoursRemaining <= 12 ? 'AT_RISK' : 'SAFE';
 }
 
 function calculateHoursRemaining(streak: {
   lastQualifyingSessionAt: number | null;
 }): number | undefined {
-  if (!streak.lastQualifyingSessionAt) return undefined;
+  if (!streak.lastQualifyingSessionAt) {return undefined;}
   const hoursRemaining = Math.floor(
     (streak.lastQualifyingSessionAt + 86400000 - Date.now()) / 3600000,
   );
@@ -104,7 +104,7 @@ export async function buildSessionStake(
             healthRemaining: bossEncounter.healthRemaining,
             isFinalStrike: bossDamage.max >= bossEncounter.healthRemaining,
             maxHealth: bossEncounter.maxHealth,
-            name: bossTemplate?.name ?? "The Procrastinator",
+            name: bossTemplate?.name ?? 'The Procrastinator',
           }
         : undefined,
     challenges: challenges.map((c) => {
@@ -131,7 +131,7 @@ export async function buildSessionStake(
       currentDays: streak?.currentDays ?? 0,
       hoursRemaining: streak ? calculateHoursRemaining(streak) : undefined,
       insuranceAvailable: false,
-      status: streak ? calculateStreakRisk(streak) : "SAFE",
+      status: streak ? calculateStreakRisk(streak) : 'SAFE',
     },
     userId,
   });

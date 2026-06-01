@@ -1,24 +1,24 @@
 import {
   getMemoryBasedSuggestions,
   type CoachMemory,
-} from "./coach-memory";
-import { generateMessage } from "./message-generator";
-import type { CoachStyle } from "./personality-templates";
-import { capture } from "@/shared/analytics";
-import { CoachEvents } from "@/shared/analytics/analytics-events";
-import { createDebugger } from "@/utils/debug";
+} from './coach-memory';
+import { generateMessage } from './message-generator';
+import type { CoachStyle } from './personality-templates';
+import { capture } from '@/shared/analytics';
+import { CoachEvents } from '@/shared/analytics/analytics-events';
+import { createDebugger } from '@/utils/debug';
 import {
   DAY1_EMPATHY_TEMPLATES,
   DAY2_GOAL_TEMPLATES,
   DAY3_MOMENTUM_TEMPLATES,
-} from "./post-failure-templates";
+} from './post-failure-templates';
 import type {
   FailureContext,
   SupportMessage,
   SupportSequence,
-} from "./post-failure-support";
+} from './post-failure-support';
 
-const debug = createDebugger("coach:post-failure-helpers");
+const debug = createDebugger('coach:post-failure-helpers');
 
 export function buildDay1Message(
   context: FailureContext,
@@ -33,14 +33,14 @@ export function buildDay1Message(
   );
   const suggestions = getMemoryBasedSuggestions(
     context.userId,
-    "COMEBACK_SUPPORT",
+    'COMEBACK_SUPPORT',
   );
-  if (suggestions.length > 0) content += `\n\n${suggestions[0]!}`;
+  if (suggestions.length > 0) {content += `\n\n${suggestions[0]!}`;}
   return {
     day: 1,
     content,
-    actionItem: "Reflect on what happened (no judgment)",
-    tone: "EMPATHETIC",
+    actionItem: 'Reflect on what happened (no judgment)',
+    tone: 'EMPATHETIC',
     shouldSend: true,
   };
 }
@@ -58,8 +58,8 @@ export function buildDay2Message(
       /\{\{streakDaysBeforeBreak\}\}/g,
       String(context.streakDaysBeforeBreak),
     ),
-    actionItem: "Complete one 15-minute session",
-    tone: "CONSTRUCTIVE",
+    actionItem: 'Complete one 15-minute session',
+    tone: 'CONSTRUCTIVE',
     shouldSend: true,
   };
 }
@@ -77,8 +77,8 @@ export function buildDay3Message(
       /\{\{streakDaysBeforeBreak\}\}/g,
       String(context.streakDaysBeforeBreak),
     ),
-    actionItem: "Complete one 20-minute session",
-    tone: "MOTIVATIONAL",
+    actionItem: 'Complete one 20-minute session',
+    tone: 'MOTIVATIONAL',
     shouldSend: true,
   };
 }
@@ -92,24 +92,24 @@ export async function sendSupportMessage(
     message.content,
   );
   capture(CoachEvents.COACH_MESSAGE_RECEIVED, {
-    category: "POST_FAILURE",
+    category: 'POST_FAILURE',
     day: message.day,
     tone: message.tone,
   } as Record<string, unknown>);
   try {
     await generateMessage({
       userId,
-      category: "POST_FAILURE",
+      category: 'POST_FAILURE',
       context: {
         day: message.day,
         content: message.content,
         actionItem: message.actionItem,
       },
-      preferredDelivery: "PUSH",
+      preferredDelivery: 'PUSH',
     });
   } catch (error) {
     debug.error(
-      "Failed to generate post-failure message",
+      'Failed to generate post-failure message',
       error instanceof Error ? error : new Error(String(error)),
     );
   }
@@ -130,5 +130,5 @@ export async function scheduleFutureMessages(
 export async function getUserPersonalityStyle(
   _userId: string,
 ): Promise<CoachStyle> {
-  return "FRIEND";
+  return 'FRIEND';
 }

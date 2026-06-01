@@ -1,40 +1,40 @@
-import { useMemo, useCallback } from "react";
-import { useNavigation } from "@react-navigation/native";
-import type { UseQueryResult } from "@tanstack/react-query";
-import { useSessionUIStore } from "../../../store/session-state";
-import { useHomeSpineModel } from "../../../features/home-spine/hooks";
+import { useMemo, useCallback } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import type { UseQueryResult } from '@tanstack/react-query';
+import { useSessionUIStore } from '../../../store/session-state';
+import { useHomeSpineModel } from '../../../features/home-spine/hooks';
 import {
   useCreateRecommendation,
   useUpdateRecommendationStatus,
   useActiveCoachRecommendations,
-} from "../../../features/ai-coach";
-import { useActiveStudyPlan } from "../../../features/content-study";
+} from '../../../features/ai-coach';
+import { useActiveStudyPlan } from '../../../features/content-study';
 import {
   buildLearningSessionParams,
   useLearningExecutionLayer,
-} from "../../../features/learning-execution";
-import { useComebackState } from "../../../features/streaks/hooks";
-import { getNextBestAction } from "../../../features/progression";
+} from '../../../features/learning-execution';
+import { useComebackState } from '../../../features/streaks/hooks';
+import { getNextBestAction } from '../../../features/progression';
 import {
   getFeatureAvailability,
   isFeatureAvailableForNavigation,
-} from "../../../features/liveops-config";
-import type { HomeViewModel } from "../hooks/home-view-model";
-import type { HomeController } from "../hooks/home-controller-types";
-import { navigateToSessionStackScreen } from "../../../navigation/navigation-helpers";
+} from '../../../features/liveops-config';
+import type { HomeViewModel } from '../hooks/home-view-model';
+import type { HomeController } from '../hooks/home-controller-types';
+import { navigateToSessionStackScreen } from '../../../navigation/navigation-helpers';
 import {
   getFocusedMinutesForToday,
   getNextUnlockFeature,
   buildDisplayedReturnReason,
-} from "../hooks/home-controller-helpers";
+} from '../hooks/home-controller-helpers';
 import type {
   EngagedContainerInput,
   Nav,
   StreakQueryData,
   ProgressionQueryData,
-} from "./engaged-home-types";
-import { useEngagedActions, useEngagedReturnReason } from "./engaged-home-helpers";
-import { buildHomeController } from "./engaged-home-controller";
+} from './engaged-home-types';
+import { useEngagedActions, useEngagedReturnReason } from './engaged-home-helpers';
+import { buildHomeController } from './engaged-home-controller';
 
 export function useEngagedContainerModel(
   input: EngagedContainerInput,
@@ -79,9 +79,9 @@ export function useEngagedContainerModel(
   const openSetup = useCallback(
     (params: Record<string, unknown> = {}): void => {
       if (userId && disclosure.inputs.totalCompletedSessions === 0) {
-        analytics.trackFirstSessionStarted(userId, "home");
+        analytics.trackFirstSessionStarted(userId, 'home');
       }
-      navigateToSessionStackScreen(navigation, "SessionSetup", params);
+      navigateToSessionStackScreen(navigation, 'SessionSetup', params);
     },
     [analytics, disclosure.inputs.totalCompletedSessions, navigation, userId],
   );

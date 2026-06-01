@@ -1,116 +1,116 @@
-import { describe, it, expect, beforeEach, jest } from "@jest/globals";
-import { screen } from "@testing-library/react-native";
+import { describe, it, expect, beforeEach, jest } from '@jest/globals';
+import { screen } from '@testing-library/react-native';
 import {
   resetFeatureMocks,
   renderGuardedFeature,
   mockIsEnabled,
-} from "./test-helpers";
+} from './test-helpers';
 
-describe("Navigation Guard - Restrictions & Compliance", () => {
+describe('Navigation Guard - Restrictions & Compliance', () => {
   beforeEach(() => {
     resetFeatureMocks();
   });
 
-  describe("Disabled Features Verification", () => {
-    it("should block all explicitly disabled features", () => {
+  describe('Disabled Features Verification', () => {
+    it('should block all explicitly disabled features', () => {
       const disabledFeatures = [
-        "social-feed",
-        "duels",
-        "rankings",
-        "squad-wars",
-        "rivals",
-        "trading",
-        "emergency-gem-sinks",
-        "complex-crafting",
-        "ar-experimental",
+        'social-feed',
+        'duels',
+        'rankings',
+        'squad-wars',
+        'rivals',
+        'trading',
+        'emergency-gem-sinks',
+        'complex-crafting',
+        'ar-experimental',
       ];
       disabledFeatures.forEach((feature: string) => {
         mockIsEnabled.mockReturnValue(false);
         renderGuardedFeature(feature);
-        expect(screen.queryByTestId("protected-content")).toBeFalsy();
-        expect(screen.getByTestId("fallback-content")).toBeTruthy();
+        expect(screen.queryByTestId('protected-content')).toBeFalsy();
+        expect(screen.getByTestId('fallback-content')).toBeTruthy();
       });
     });
-    it("should verify banned features are properly blocked", () => {
+    it('should verify banned features are properly blocked', () => {
       const bannedFeatures = [
-        "social-feed",
-        "duels",
-        "rankings",
-        "squad-wars",
-        "rivals",
-        "trading",
+        'social-feed',
+        'duels',
+        'rankings',
+        'squad-wars',
+        'rivals',
+        'trading',
       ];
       bannedFeatures.forEach((feature: string) => {
         mockIsEnabled.mockReturnValue(false);
         renderGuardedFeature(feature);
-        expect(screen.queryByTestId("protected-content")).toBeFalsy();
-        expect(screen.getByTestId("fallback-content")).toBeTruthy();
+        expect(screen.queryByTestId('protected-content')).toBeFalsy();
+        expect(screen.getByTestId('fallback-content')).toBeTruthy();
       });
     });
   });
 
-  describe("Core Features Access", () => {
-    it("should allow access to all core features", () => {
+  describe('Core Features Access', () => {
+    it('should allow access to all core features', () => {
       const coreFeatures = [
-        "sessions",
-        "focus-timer",
-        "streaks",
-        "rewards",
-        "progression",
+        'sessions',
+        'focus-timer',
+        'streaks',
+        'rewards',
+        'progression',
       ];
       coreFeatures.forEach((feature: string) => {
         mockIsEnabled.mockReturnValue(true);
         renderGuardedFeature(feature);
-        expect(screen.getByTestId("protected-content")).toBeTruthy();
+        expect(screen.getByTestId('protected-content')).toBeTruthy();
       });
     });
   });
 
-  describe("Error Handling", () => {
-    it("should handle unknown features gracefully", () => {
+  describe('Error Handling', () => {
+    it('should handle unknown features gracefully', () => {
       // Unknown features are not enabled by default (isEnabled returns false)
-      renderGuardedFeature("unknown-feature");
-      expect(screen.queryByTestId("protected-content")).toBeFalsy();
-      expect(screen.getByTestId("fallback-content")).toBeTruthy();
+      renderGuardedFeature('unknown-feature');
+      expect(screen.queryByTestId('protected-content')).toBeFalsy();
+      expect(screen.getByTestId('fallback-content')).toBeTruthy();
     });
-    it("should handle feature flag errors gracefully", () => {
+    it('should handle feature flag errors gracefully', () => {
       mockIsEnabled.mockImplementation(() => {
-        throw new Error("Feature flag error");
+        throw new Error('Feature flag error');
       });
       const consoleSpy = jest
-        .spyOn(console, "error")
+        .spyOn(console, 'error')
         .mockImplementation(() => {});
-      expect(() => renderGuardedFeature("sessions")).toThrow(
-        "Feature flag error",
+      expect(() => renderGuardedFeature('sessions')).toThrow(
+        'Feature flag error',
       );
       consoleSpy.mockRestore();
     });
   });
 
-  describe("PHASE 8 Compliance", () => {
-    it("should ensure navigation respects PHASE 8 feature configuration", () => {
+  describe('PHASE 8 Compliance', () => {
+    it('should ensure navigation respects PHASE 8 feature configuration', () => {
       const testFeatures = {
-        enabled: ["sessions", "focus-timer", "streaks"],
-        disabled: ["social-feed", "duels", "rankings"],
+        enabled: ['sessions', 'focus-timer', 'streaks'],
+        disabled: ['social-feed', 'duels', 'rankings'],
       };
       Object.entries(testFeatures).forEach(([category, features]) => {
         features.forEach((feature: string) => {
-          mockIsEnabled.mockReturnValue(category === "enabled");
+          mockIsEnabled.mockReturnValue(category === 'enabled');
           renderGuardedFeature(feature);
-          if (category === "enabled") {
-            expect(screen.getByTestId("protected-content")).toBeTruthy();
+          if (category === 'enabled') {
+            expect(screen.getByTestId('protected-content')).toBeTruthy();
           } else {
-            expect(screen.queryByTestId("protected-content")).toBeFalsy();
-            expect(screen.getByTestId("fallback-content")).toBeTruthy();
+            expect(screen.queryByTestId('protected-content')).toBeFalsy();
+            expect(screen.getByTestId('fallback-content')).toBeTruthy();
           }
         });
       });
     });
-    it("should prevent navigation to experimental features", () => {
+    it('should prevent navigation to experimental features', () => {
       mockIsEnabled.mockReturnValue(false);
-      renderGuardedFeature("ar-experimental");
-      expect(screen.queryByTestId("protected-content")).toBeFalsy();
-      expect(screen.getByTestId("fallback-content")).toBeTruthy();
+      renderGuardedFeature('ar-experimental');
+      expect(screen.queryByTestId('protected-content')).toBeFalsy();
+      expect(screen.getByTestId('fallback-content')).toBeTruthy();
     });
   });
 });

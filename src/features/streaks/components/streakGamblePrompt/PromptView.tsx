@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -6,12 +6,12 @@ import Animated, {
   withRepeat,
   withSequence,
   FadeInUp,
-} from "react-native-reanimated";
-import { Box, Text, Button } from "@/components/primitives";
-import { useTheme } from "@/theme";
-import * as Sentry from "@sentry/react-native";
-import { getRiskText } from "./helpers";
-import { GambleActionButtons } from "./GambleActionButtons";
+} from 'react-native-reanimated';
+import { Box, Text, Button } from '@/components/primitives';
+import { useTheme } from '@/theme';
+import * as Sentry from '@sentry/react-native';
+import { getRiskText } from './helpers';
+import { GambleActionButtons } from './GambleActionButtons';
 
 interface PromptViewProps {
   streakDays: number;
@@ -53,9 +53,9 @@ export const PromptView: React.FC<PromptViewProps> = ({
       true,
     );
     Sentry.addBreadcrumb({
-      category: "streaks",
-      message: "Streak gamble prompt shown",
-      level: "warning",
+      category: 'streaks',
+      message: 'Streak gamble prompt shown',
+      level: 'warning',
       data: { streakDays, hoursRemaining, shieldsAvailable },
     });
   }, [countdownScale, hoursRemaining, shakeX, shieldsAvailable, streakDays]);

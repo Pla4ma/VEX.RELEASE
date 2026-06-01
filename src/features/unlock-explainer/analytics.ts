@@ -1,4 +1,4 @@
-import type { UnlockDecision } from "./types";
+import type { UnlockDecision } from './types';
 
 export function trackUnlockDecisionResolved(decision: UnlockDecision): void {
   // Intentionally no-op: analytics wiring deferred until PostHog/Sentry integration planned.

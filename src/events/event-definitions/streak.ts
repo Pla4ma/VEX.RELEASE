@@ -6,12 +6,12 @@
  */
 
 export type StreakEventType =
-  | "streak:updated"
-  | "streak:broken"
-  | "streak:session_completed"
-  | "streak:milestone"
-  | "streak:at_risk"
-  | "streak:freeze_used";
+  | 'streak:updated'
+  | 'streak:broken'
+  | 'streak:session_completed'
+  | 'streak:milestone'
+  | 'streak:at_risk'
+  | 'streak:freeze_used';
 
 export interface StreakUpdatedEvent {
   userId: string;

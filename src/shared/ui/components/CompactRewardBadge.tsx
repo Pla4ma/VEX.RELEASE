@@ -1,13 +1,13 @@
-import React from "react";
-import type { ViewStyle } from "react-native";
-import Animated, { FadeInUp } from "react-native-reanimated";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
+import React from 'react';
+import type { ViewStyle } from 'react-native';
+import Animated, { FadeInUp } from 'react-native-reanimated';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
 import {
   REWARD_CONFIG,
   getRewardColor,
   type RewardType,
-} from "./micro-reward-helpers";
+} from './micro-reward-helpers';
 
 export interface CompactRewardBadgeProps {
   type: RewardType;
@@ -27,8 +27,8 @@ export const CompactRewardBadge: React.FC<CompactRewardBadgeProps> = ({
       entering={FadeInUp.duration(200)}
       style={[
         {
-          flexDirection: "row",
-          alignItems: "center",
+          flexDirection: 'row',
+          alignItems: 'center',
           gap: theme.spacing[1],
           backgroundColor: `${color}15`,
           paddingVertical: theme.spacing[1],
@@ -41,7 +41,7 @@ export const CompactRewardBadge: React.FC<CompactRewardBadgeProps> = ({
       ]}
     >
       <Text fontSize={12}>{REWARD_CONFIG[type].icon}</Text>
-      <Text variant="caption" color={color} style={{ fontWeight: "700" }}>
+      <Text variant="caption" color={color} style={{ fontWeight: '700' }}>
         +{amount.toLocaleString()}
       </Text>
     </Animated.View>

@@ -1,10 +1,10 @@
-import { z } from "zod";
-import type { AnalyticsBucket, AggregatedPoint } from "./types";
-import type { AnalyticsMetric } from "../schemas";
+import { z } from 'zod';
+import type { AnalyticsBucket, AggregatedPoint } from './types';
+import type { AnalyticsMetric } from '../schemas';
 
 export function aggregateDataPoints(
   rawData: unknown[],
-  granularity: "hour" | "day" | "week" | "month",
+  granularity: 'hour' | 'day' | 'week' | 'month',
   metric: AnalyticsMetric,
 ): {
   points: AggregatedPoint[];
@@ -49,7 +49,7 @@ export function aggregateDataPoints(
       timestamp: bucket.timestamp,
       value:
         bucket.values.reduce((sum, value) => sum + value, 0) /
-        (metric.includes("average") ? bucket.values.length : 1),
+        (metric.includes('average') ? bucket.values.length : 1),
       metadata: bucket.metadata,
     }));
   const values = points.map((point) => point.value);
@@ -69,23 +69,23 @@ export function aggregateDataPoints(
 
 export function getBucketTimestamp(
   timestamp: number,
-  granularity: "hour" | "day" | "week" | "month",
+  granularity: 'hour' | 'day' | 'week' | 'month',
 ): number {
   const date = new Date(timestamp);
   switch (granularity) {
-    case "hour":
+    case 'hour':
       date.setMinutes(0, 0, 0);
       break;
-    case "day":
+    case 'day':
       date.setHours(0, 0, 0, 0);
       break;
-    case "week": {
+    case 'week': {
       const day = date.getDay();
       date.setDate(date.getDate() - day);
       date.setHours(0, 0, 0, 0);
       break;
     }
-    case "month":
+    case 'month':
       date.setDate(1);
       date.setHours(0, 0, 0, 0);
       break;

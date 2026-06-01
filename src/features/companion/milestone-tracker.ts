@@ -4,9 +4,9 @@
  * Handles milestone detection and emission for companion growth.
  */
 
-import { CompanionState } from "./types";
-import { emitCompanionMilestone } from "./events";
-import { trackCompanionMilestone } from "./analytics";
+import { CompanionState } from './types';
+import { emitCompanionMilestone } from './events';
+import { trackCompanionMilestone } from './analytics';
 
 /**
  * Check and emit milestone events
@@ -24,11 +24,11 @@ export function checkMilestones(
     emitCompanionMilestone(
       userId,
       state.id,
-      "level",
+      'level',
       state.level,
       previousLevel,
     );
-    trackCompanionMilestone(userId, "level", state.level, previousLevel);
+    trackCompanionMilestone(userId, 'level', state.level, previousLevel);
   }
 
   // Session milestone (every 10 sessions)
@@ -39,13 +39,13 @@ export function checkMilestones(
     emitCompanionMilestone(
       userId,
       state.id,
-      "sessions",
+      'sessions',
       state.sessionCount,
       previousSessionCount,
     );
     trackCompanionMilestone(
       userId,
-      "sessions",
+      'sessions',
       state.sessionCount,
       previousSessionCount,
     );
@@ -59,13 +59,13 @@ export function checkMilestones(
     emitCompanionMilestone(
       userId,
       state.id,
-      "focus_minutes",
+      'focus_minutes',
       state.totalFocusMinutes,
       previousFocusMinutes,
     );
     trackCompanionMilestone(
       userId,
-      "focus_minutes",
+      'focus_minutes',
       state.totalFocusMinutes,
       previousFocusMinutes,
     );
@@ -79,13 +79,13 @@ export function checkMilestones(
     emitCompanionMilestone(
       userId,
       state.id,
-      "perfect_sessions",
+      'perfect_sessions',
       state.perfectSessions,
       previousPerfectSessions,
     );
     trackCompanionMilestone(
       userId,
-      "perfect_sessions",
+      'perfect_sessions',
       state.perfectSessions,
       previousPerfectSessions,
     );

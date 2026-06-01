@@ -1,14 +1,14 @@
-import React from "react";
-import { View, Text, ActivityIndicator, Pressable } from "react-native";
-import { launchColors } from "@theme/tokens/launch-colors";
-import { settingsStyles as styles } from "./settings-screen-styles";
+import React from 'react';
+import { View, Text, ActivityIndicator, Pressable } from 'react-native';
+import { launchColors } from '@theme/tokens/launch-colors';
+import { settingsStyles as styles } from './settings-screen-styles';
 
 interface SettingsLoadingStateProps {
   message?: string;
 }
 
 export function SettingsLoadingState({
-  message = "Loading settings...",
+  message = 'Loading settings...',
 }: SettingsLoadingStateProps) {
   return (
     <View style={styles.centerContainer}>
@@ -32,7 +32,7 @@ export function SettingsErrorState({
       <Text style={styles.errorIcon}>⚠️</Text>
       <Text style={styles.errorTitle}>Failed to load settings</Text>
       <Text style={styles.errorMessage}>
-        {error instanceof Error ? error.message : "Unknown error"}
+        {error instanceof Error ? error.message : 'Unknown error'}
       </Text>
       <Pressable
         style={({ pressed }) => [

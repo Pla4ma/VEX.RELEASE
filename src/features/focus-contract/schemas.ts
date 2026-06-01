@@ -1,12 +1,12 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const CompletionStatusSchema = z.enum([
-  "done",
-  "partial",
-  "not_done",
-  "skipped",
+  'done',
+  'partial',
+  'not_done',
+  'skipped',
 ]);
-export const ReflectionStatusSchema = z.enum(["done", "partial", "not_done"]);
+export const ReflectionStatusSchema = z.enum(['done', 'partial', 'not_done']);
 
 const trimmedTask = z.string().trim().min(3).max(80);
 

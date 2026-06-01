@@ -1,8 +1,8 @@
 // Barrel re-export — base schemas live in journey-element-schemas.ts,
 // composite schemas and derived types live in journey-composite-schemas.ts
 
-import { z } from "zod";
-import { JourneyDayCopySchema } from "./journey-composite-schemas";
+import { z } from 'zod';
+import { JourneyDayCopySchema } from './journey-composite-schemas';
 
 export {
   JourneyDaySchema,
@@ -15,7 +15,7 @@ export {
   JourneyReturnReasonSchema,
   JourneyPremiumMomentSchema,
   JourneyNudgePolicySchema,
-} from "./journey-element-schemas";
+} from './journey-element-schemas';
 
 export {
   LaneCopyMapSchema,
@@ -35,7 +35,7 @@ export {
   type JourneyNudgePolicy,
   type LaneCopyMap,
   type RetentionJourneyCopy,
-} from "./journey-composite-schemas";
+} from './journey-composite-schemas';
 
 // Inferred type for consumers
 export type JourneyDayCopy = z.infer<typeof JourneyDayCopySchema>;

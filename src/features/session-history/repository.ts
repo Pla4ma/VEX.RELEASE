@@ -1,15 +1,15 @@
-import { z } from "zod";
-import { getSupabaseClient } from "../../config/supabase";
-import { SupabaseSessionRowSchema, type SupabaseSessionRow } from "./schemas";
-import { createDebugger } from "../../utils/debug";
+import { z } from 'zod';
+import { getSupabaseClient } from '../../config/supabase';
+import { SupabaseSessionRowSchema, type SupabaseSessionRow } from './schemas';
+import { createDebugger } from '../../utils/debug';
 
-const debug = createDebugger("session-history:repository");
+const debug = createDebugger('session-history:repository');
 
 export class SessionHistoryRepositoryError extends Error {
   constructor(operation: string, cause: unknown) {
     const message = cause instanceof Error ? cause.message : String(cause);
     super(`Session history ${operation} failed: ${message}`);
-    this.name = "SessionHistoryRepositoryError";
+    this.name = 'SessionHistoryRepositoryError';
   }
 }
 
@@ -55,31 +55,31 @@ export async function fetchSessionHistoryRows(
   limit: number,
 ): Promise<SupabaseSessionRow[]> {
   const { data, error } = await getSupabaseClient()
-    .from("sessions")
+    .from('sessions')
     .select(
       [
-        "id",
-        "user_id",
-        "status",
-        "duration",
-        "effective_duration",
-        "quality_score",
-        "mode",
-        "difficulty",
-        "metadata",
-        "started_at",
-        "completed_at",
-        "ended_at",
-        "created_at",
-        "updated_at",
-      ].join(","),
+        'id',
+        'user_id',
+        'status',
+        'duration',
+        'effective_duration',
+        'quality_score',
+        'mode',
+        'difficulty',
+        'metadata',
+        'started_at',
+        'completed_at',
+        'ended_at',
+        'created_at',
+        'updated_at',
+      ].join(','),
     )
-    .eq("user_id", userId)
-    .order("started_at", { ascending: false })
+    .eq('user_id', userId)
+    .order('started_at', { ascending: false })
     .limit(limit);
 
   if (error) {
-    throw new SessionHistoryRepositoryError("fetch", error);
+    throw new SessionHistoryRepositoryError('fetch', error);
   }
 
   return SupabaseSessionRowSchema.array().parse(data ?? []);
@@ -93,48 +93,48 @@ export async function createSessionRecord(
   const row = toSessionRow(validated);
 
   const { data, error } = await supabase
-    .from("sessions")
+    .from('sessions')
     .insert(row)
-    .select("*")
+    .select('*')
     .single();
 
   if (error) {
-    if (error.code === "23505" || error.code === "409") {
+    if (error.code === '23505' || error.code === '409') {
       const existing = await supabase
-        .from("sessions")
-        .select("*")
-        .eq("id", validated.sessionId)
+        .from('sessions')
+        .select('*')
+        .eq('id', validated.sessionId)
         .single();
 
       if (existing.data) {
-        debug.info("Session record already exists: %s", validated.sessionId);
+        debug.info('Session record already exists: %s', validated.sessionId);
         return SupabaseSessionRowSchema.parse(existing.data);
       }
     }
-    throw new SessionHistoryRepositoryError("create", error);
+    throw new SessionHistoryRepositoryError('create', error);
   }
 
   const parsed = SupabaseSessionRowSchema.safeParse(data);
   if (!parsed.success) {
     throw new SessionHistoryRepositoryError(
-      "create:invalid-response",
+      'create:invalid-response',
       parsed.error,
     );
   }
 
-  debug.info("Session record persisted: %s", parsed.data.id);
+  debug.info('Session record persisted: %s', parsed.data.id);
   return parsed.data;
 }
 
 export async function countCompletedSessions(userId: string): Promise<number> {
   const { count, error } = await getSupabaseClient()
-    .from("sessions")
-    .select("*", { count: "exact", head: true })
-    .eq("user_id", userId)
-    .eq("status", "COMPLETED");
+    .from('sessions')
+    .select('*', { count: 'exact', head: true })
+    .eq('user_id', userId)
+    .eq('status', 'COMPLETED');
 
   if (error) {
-    throw new SessionHistoryRepositoryError("countCompletedSessions", error);
+    throw new SessionHistoryRepositoryError('countCompletedSessions', error);
   }
 
   return count ?? 0;

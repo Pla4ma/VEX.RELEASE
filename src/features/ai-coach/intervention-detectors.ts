@@ -3,7 +3,7 @@ export {
   detectPlateau,
   detectStreakRescueNeeded,
   detectBossStrategyOpportunity,
-} from "./intervention-detectors-core";
+} from './intervention-detectors-core';
 
 export {
   detectStudyStuck,
@@ -14,4 +14,4 @@ export {
   detectMomentumBuilding,
   detectComebackReady,
   detectStudyPlanComplete,
-} from "./intervention-detectors-situational";
+} from './intervention-detectors-situational';

@@ -6,22 +6,22 @@
  */
 
 // Re-export CompanionElement from companion feature
-export type { CompanionElement } from "../companion/types";
+export type { CompanionElement } from '../companion/types';
 
 /**
  * Onboarding step identifier
  */
 export type OnboardingStep =
-  | "WELCOME"
-  | "GOAL_SETTING"
-  | "FOCUS_TIME"
-  | "NAME_SETUP"
-  | "FIRST_SESSION_CTA";
+  | 'WELCOME'
+  | 'GOAL_SETTING'
+  | 'FOCUS_TIME'
+  | 'NAME_SETUP'
+  | 'FIRST_SESSION_CTA';
 
 /**
  * User focus goal category
  */
-export type FocusGoal = "WORK" | "STUDY" | "CREATIVE" | "PERSONAL";
+export type FocusGoal = 'WORK' | 'STUDY' | 'CREATIVE' | 'PERSONAL';
 
 /**
  * Focus duration preference

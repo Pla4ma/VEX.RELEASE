@@ -1,14 +1,14 @@
-import { z } from "zod";
-import { eventBus } from "../../events";
-import * as repository from "./repository";
-import type { NotificationContext } from "./service-types";
+import { z } from 'zod';
+import { eventBus } from '../../events';
+import * as repository from './repository';
+import type { NotificationContext } from './service-types';
 import {
   isQuietHours,
   getNextNotificationWindow,
   checkDailyNotificationLimit,
   recordNotificationSent,
-} from "./service-helpers";
-import { evaluateNotificationRules } from "./notification-rules";
+} from './service-helpers';
+import { evaluateNotificationRules } from './notification-rules';
 
 const UserIdSchema = z.string().min(1);
 const UnreadNotificationsCountSchema = z.number().int().nonnegative();
@@ -23,7 +23,7 @@ export async function getUnreadNotificationsCount(
 
 export async function dispatchUrgencyNotification(
   context: NotificationContext,
-  userTimezone: string = "UTC",
+  userTimezone: string = 'UTC',
   quietStart: number = 22,
   quietEnd: number = 8,
 ): Promise<{
@@ -35,25 +35,25 @@ export async function dispatchUrgencyNotification(
   if (isQuietHours(userTimezone, quietStart, quietEnd)) {
     return {
       sent: false,
-      reason: "quiet_hours",
+      reason: 'quiet_hours',
       deferred: true,
       nextWindow: getNextNotificationWindow(userTimezone, quietEnd),
     };
   }
   const limit = checkDailyNotificationLimit(context.userId);
   if (!limit.canSend) {
-    return { sent: false, reason: "daily_limit_reached" };
+    return { sent: false, reason: 'daily_limit_reached' };
   }
   const evaluation = evaluateNotificationRules(context);
   if (!evaluation.shouldSend) {
-    return { sent: false, reason: "no_urgent_context" };
+    return { sent: false, reason: 'no_urgent_context' };
   }
-  eventBus.publish("notification:send", {
+  eventBus.publish('notification:send', {
     userId: context.userId,
-    type: "URGENCY",
-    title: evaluation.notification?.title ?? "VEX",
-    body: evaluation.notification?.body ?? "You have an update waiting.",
-    priority: "high",
+    type: 'URGENCY',
+    title: evaluation.notification?.title ?? 'VEX',
+    body: evaluation.notification?.body ?? 'You have an update waiting.',
+    priority: 'high',
   });
   recordNotificationSent(context.userId);
   return { sent: true };
@@ -111,4 +111,4 @@ export function subscribeToNotificationCenter(
   );
 }
 
-export type { NotificationCenterItem } from "./schemas";
+export type { NotificationCenterItem } from './schemas';

@@ -3,12 +3,12 @@ import type {
   SeverityLevel,
   EngineStatus,
   ActionResult,
-} from "./anti-cheat-types";
-import type { AntiCheatFlag } from "../types";
+} from './anti-cheat-types';
+import type { AntiCheatFlag } from '../types';
 import {
   PURITY_SCORING,
   FLAG_CRITICAL_THRESHOLD,
-} from "./AntiCheatConfig";
+} from './AntiCheatConfig';
 
 export function calculatePurityScore(
   backgroundSwitches: number,
@@ -38,53 +38,53 @@ export function calculatePurityScore(
 }
 
 export function getPurityLabel(score: number): PurityLabel {
-  if (score >= PURITY_SCORING.ELITE_THRESHOLD) return "Elite";
-  if (score >= PURITY_SCORING.GOOD_THRESHOLD) return "Good";
-  if (score >= PURITY_SCORING.OKAY_THRESHOLD) return "Okay";
-  return "Distracted";
+  if (score >= PURITY_SCORING.ELITE_THRESHOLD) {return 'Elite';}
+  if (score >= PURITY_SCORING.GOOD_THRESHOLD) {return 'Good';}
+  if (score >= PURITY_SCORING.OKAY_THRESHOLD) {return 'Okay';}
+  return 'Distracted';
 }
 
 export function getSeverity(flags: AntiCheatFlag[]): SeverityLevel {
-  if (flags.length === 0) return "CLEAN";
-  if (flags.some((f) => f.severity === "CRITICAL")) return "CRITICAL";
-  if (flags.some((f) => f.severity === "MODERATE")) return "MODERATE";
-  if (flags.some((f) => f.severity === "WARNING")) return "WARNING";
-  return "CLEAN";
+  if (flags.length === 0) {return 'CLEAN';}
+  if (flags.some((f) => f.severity === 'CRITICAL')) {return 'CRITICAL';}
+  if (flags.some((f) => f.severity === 'MODERATE')) {return 'MODERATE';}
+  if (flags.some((f) => f.severity === 'WARNING')) {return 'WARNING';}
+  return 'CLEAN';
 }
 
 export function getStatus(
   flags: AntiCheatFlag[],
   severity: SeverityLevel,
 ): EngineStatus {
-  if (severity === "CLEAN") return "CLEAN";
-  if (severity === "WARNING") return "WARNING";
-  if (severity === "MODERATE") return "FLAGGED";
+  if (severity === 'CLEAN') {return 'CLEAN';}
+  if (severity === 'WARNING') {return 'WARNING';}
+  if (severity === 'MODERATE') {return 'FLAGGED';}
   return flags.length > FLAG_CRITICAL_THRESHOLD
-    ? "INVALIDATED"
-    : "FAILED";
+    ? 'INVALIDATED'
+    : 'FAILED';
 }
 
 export function determineAction(status: EngineStatus): ActionResult {
   switch (status) {
-    case "FAILED":
+    case 'FAILED':
       return {
-        action: "SESSION_INVALIDATED",
+        action: 'SESSION_INVALIDATED',
         scoreReduction: 1,
         shouldInvalidate: true,
       };
-    case "FLAGGED":
+    case 'FLAGGED':
       return {
-        action: "SCORE_REDUCED",
+        action: 'SCORE_REDUCED',
         scoreReduction: 0.3,
         shouldInvalidate: false,
       };
-    case "WARNING":
+    case 'WARNING':
       return {
-        action: "FLAGGED",
+        action: 'FLAGGED',
         scoreReduction: 0.05,
         shouldInvalidate: false,
       };
     default:
-      return { action: "NONE", scoreReduction: 0, shouldInvalidate: false };
+      return { action: 'NONE', scoreReduction: 0, shouldInvalidate: false };
   }
 }

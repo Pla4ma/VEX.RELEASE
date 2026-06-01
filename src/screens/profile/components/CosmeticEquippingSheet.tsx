@@ -1,27 +1,27 @@
-import React, { useState, useCallback } from "react";
-import { Modal, Pressable, ScrollView, ViewStyle } from "react-native";
+import React, { useState, useCallback } from 'react';
+import { Modal, Pressable, ScrollView, ViewStyle } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withSpring,
-} from "react-native-reanimated";
-import { useTheme } from "../../../theme";
-import { Box, Card } from "../../../components/primitives";
-import { useUIStore } from "../../../store/index";
-import { launchColors } from "@theme/tokens/launch-colors";
+} from 'react-native-reanimated';
+import { useTheme } from '../../../theme';
+import { Box, Card } from '../../../components/primitives';
+import { useUIStore } from '../../../store/index';
+import { launchColors } from '@theme/tokens/launch-colors';
 import {
   type CosmeticItem,
   type CosmeticType,
   RARITY_ORDER,
   CosmeticPreviewCard,
-} from "./CosmeticPreviewCard";
+} from './CosmeticPreviewCard';
 import {
   TYPE_CONFIG,
   CosmeticCategoryHeader,
   CosmeticEquipBar,
-} from "./CosmeticCategorySelector";
+} from './CosmeticCategorySelector';
 
-export type { CosmeticType, CosmeticItem } from "./CosmeticPreviewCard";
+export type { CosmeticType, CosmeticItem } from './CosmeticPreviewCard';
 
 interface CosmeticEquippingSheetProps {
   type: CosmeticType | null;
@@ -78,8 +78,8 @@ export const CosmeticEquippingSheet: React.FC<CosmeticEquippingSheetProps> = ({
     setIsEquipping(false);
     const item = items.find((i) => i.id === selectedId);
     showToast({
-      message: `Equipped ${item?.name || "item"}!`,
-      type: "success",
+      message: `Equipped ${item?.name || 'item'}!`,
+      type: 'success',
       duration: 2000,
     });
     onClose();
@@ -114,7 +114,7 @@ export const CosmeticEquippingSheet: React.FC<CosmeticEquippingSheetProps> = ({
         flex={1}
         style={{
           backgroundColor: launchColors.rgb_0_0_0_0_7,
-          justifyContent: "flex-end",
+          justifyContent: 'flex-end',
         }}
       >
         <Pressable
@@ -131,7 +131,7 @@ export const CosmeticEquippingSheet: React.FC<CosmeticEquippingSheetProps> = ({
             style={{
               borderBottomLeftRadius: 0,
               borderBottomRightRadius: 0,
-              maxHeight: "85%",
+              maxHeight: '85%',
             }}
           >
             {}

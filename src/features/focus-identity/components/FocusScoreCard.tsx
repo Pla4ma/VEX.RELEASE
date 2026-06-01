@@ -1,23 +1,23 @@
-import React, { useMemo } from "react";
-import { useSharedValue, useAnimatedStyle, withSpring, withTiming } from "react-native-reanimated";
-import { useTheme } from "../../../theme";
+import React, { useMemo } from 'react';
+import { useSharedValue, useAnimatedStyle, withSpring, withTiming } from 'react-native-reanimated';
+import { useTheme } from '../../../theme';
 import {
   useFocusIdentity,
   useFocusScoreColor,
   useIdentityStatement,
-} from "../hooks";
+} from '../hooks';
 import {
   FocusScoreCardSkeleton,
   FocusScoreCardError,
   FocusScoreCardRetrying,
   FocusScoreCardNoUser,
-} from "./FocusScoreCardStates";
-import { FocusScoreCardContent } from "./FocusScoreCardContent";
+} from './FocusScoreCardStates';
+import { FocusScoreCardContent } from './FocusScoreCardContent';
 
 interface FocusScoreCardProps {
   userId: string;
   onPress?: () => void;
-  size?: "small" | "medium" | "large";
+  size?: 'small' | 'medium' | 'large';
   showTrend?: boolean;
   animate?: boolean;
 }
@@ -25,7 +25,7 @@ interface FocusScoreCardProps {
 export function FocusScoreCard({
   userId,
   onPress,
-  size = "medium",
+  size = 'medium',
   showTrend = true,
   animate = true,
 }: FocusScoreCardProps) {
@@ -68,7 +68,7 @@ export function FocusScoreCard({
       onPress();
     }
   };
-  if (loadingState === "pending") {
+  if (loadingState === 'pending') {
     return (
       <FocusScoreCardSkeleton
         size={size}
@@ -76,7 +76,7 @@ export function FocusScoreCard({
       />
     );
   }
-  if (loadingState === "error" && !profile) {
+  if (loadingState === 'error' && !profile) {
     return (
       <FocusScoreCardError
         size={size}

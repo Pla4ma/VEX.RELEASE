@@ -1,9 +1,9 @@
-import React, { useCallback, useState } from "react";
-import { Alert, Pressable, Switch } from "react-native";
-import { useTheme } from "../../theme";
-import { Box, Text, Card } from "../../components/primitives";
-import { Icon } from "../../icons";
-import { launchColors } from "@theme/tokens/launch-colors";
+import React, { useCallback, useState } from 'react';
+import { Alert, Pressable, Switch } from 'react-native';
+import { useTheme } from '../../theme';
+import { Box, Text, Card } from '../../components/primitives';
+import { Icon } from '../../icons';
+import { launchColors } from '@theme/tokens/launch-colors';
 
 interface QuietHours {
   enabled: boolean;
@@ -15,28 +15,28 @@ export const NotificationScheduleSection: React.FC = () => {
   const { theme } = useTheme();
   const [quietHours, setQuietHours] = useState<QuietHours>({
     enabled: false,
-    start: "22:00",
-    end: "08:00",
+    start: '22:00',
+    end: '08:00',
   });
 
   const handleQuietHoursToggle = useCallback(() => {
     setQuietHours((prev) => ({ ...prev, enabled: !prev.enabled }));
   }, []);
 
-  const updateQuietTime = (type: "start" | "end", time: string) => {
+  const updateQuietTime = (type: 'start' | 'end', time: string) => {
     setQuietHours((prev) => ({ ...prev, [type]: time }));
   };
 
-  const handleSetQuietHours = useCallback((type: "start" | "end") => {
+  const handleSetQuietHours = useCallback((type: 'start' | 'end') => {
     Alert.alert(
-      `Set ${type === "start" ? "Start" : "End"} Time`,
-      "Choose a time",
+      `Set ${type === 'start' ? 'Start' : 'End'} Time`,
+      'Choose a time',
       [
-        { text: "20:00", onPress: () => updateQuietTime(type, "20:00") },
-        { text: "21:00", onPress: () => updateQuietTime(type, "21:00") },
-        { text: "22:00", onPress: () => updateQuietTime(type, "22:00") },
-        { text: "23:00", onPress: () => updateQuietTime(type, "23:00") },
-        { text: "Cancel", style: "cancel" },
+        { text: '20:00', onPress: () => updateQuietTime(type, '20:00') },
+        { text: '21:00', onPress: () => updateQuietTime(type, '21:00') },
+        { text: '22:00', onPress: () => updateQuietTime(type, '22:00') },
+        { text: '23:00', onPress: () => updateQuietTime(type, '23:00') },
+        { text: 'Cancel', style: 'cancel' },
       ],
     );
   }, []);
@@ -49,17 +49,17 @@ export const NotificationScheduleSection: React.FC = () => {
         style={{
           marginLeft: 12,
           marginBottom: 8,
-          fontWeight: "600",
+          fontWeight: '600',
           letterSpacing: 0.5,
         }}
       >
         QUIET HOURS
       </Text>
-      <Card size="sm" style={{ overflow: "hidden" }}>
+      <Card size="sm" style={{ overflow: 'hidden' }}>
         <Pressable
           style={{
-            flexDirection: "row",
-            alignItems: "center",
+            flexDirection: 'row',
+            alignItems: 'center',
             paddingVertical: 16,
             paddingHorizontal: 16,
           }}
@@ -94,7 +94,7 @@ export const NotificationScheduleSection: React.FC = () => {
             <Text
               variant="body"
               style={{
-                fontWeight: "500",
+                fontWeight: '500',
                 color: theme.colors.text.primary,
               }}
             >
@@ -113,7 +113,7 @@ export const NotificationScheduleSection: React.FC = () => {
             onValueChange={handleQuietHoursToggle}
             trackColor={{
               false: theme.colors.background.tertiary,
-              true: theme.colors.primary[500] + "80",
+              true: theme.colors.primary[500] + '80',
             }}
             thumbColor={
               quietHours.enabled
@@ -131,7 +131,7 @@ export const NotificationScheduleSection: React.FC = () => {
             <Box flexDirection="row" px={16} py={12}>
               <Pressable
                 style={{ flex: 1, marginRight: 8 }}
-                onPress={() => handleSetQuietHours("start")}
+                onPress={() => handleSetQuietHours('start')}
                 accessibilityLabel="Set notification start time"
                 accessibilityRole="button"
                 accessibilityHint="Double tap to change setting"
@@ -150,7 +150,7 @@ export const NotificationScheduleSection: React.FC = () => {
                   </Text>
                   <Text
                     variant="body"
-                    style={{ fontWeight: "600", marginTop: 4 }}
+                    style={{ fontWeight: '600', marginTop: 4 }}
                   >
                     {quietHours.start}
                   </Text>
@@ -165,7 +165,7 @@ export const NotificationScheduleSection: React.FC = () => {
               </Box>
               <Pressable
                 style={{ flex: 1, marginLeft: 8 }}
-                onPress={() => handleSetQuietHours("end")}
+                onPress={() => handleSetQuietHours('end')}
                 accessibilityLabel="Set notification end time"
                 accessibilityRole="button"
                 accessibilityHint="Double tap to change setting"
@@ -184,7 +184,7 @@ export const NotificationScheduleSection: React.FC = () => {
                   </Text>
                   <Text
                     variant="body"
-                    style={{ fontWeight: "600", marginTop: 4 }}
+                    style={{ fontWeight: '600', marginTop: 4 }}
                   >
                     {quietHours.end}
                   </Text>

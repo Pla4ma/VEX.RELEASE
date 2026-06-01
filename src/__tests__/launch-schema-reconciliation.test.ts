@@ -1,32 +1,32 @@
-import { readdirSync, readFileSync } from "fs";
-import { join } from "path";
+import { readdirSync, readFileSync } from 'fs';
+import { join } from 'path';
 
 const migrationPath = join(
   process.cwd(),
-  "supabase",
-  "migrations",
-  "202605150001_launch_schema_reconciliation.sql",
+  'supabase',
+  'migrations',
+  '202605150001_launch_schema_reconciliation.sql',
 );
 
 const requiredTables = [
-  "sessions",
-  "session_completion_ledgers",
-  "reward_ledger",
-  "wallet_transactions",
-  "streaks",
-  "streak_shields",
-  "streak_repair_quests",
-  "notifications",
-  "reminder_plans",
-  "push_tokens",
-  "purchase_attempts",
-  "companion_promises",
-  "companion_memories",
-  "focus_contracts",
+  'sessions',
+  'session_completion_ledgers',
+  'reward_ledger',
+  'wallet_transactions',
+  'streaks',
+  'streak_shields',
+  'streak_repair_quests',
+  'notifications',
+  'reminder_plans',
+  'push_tokens',
+  'purchase_attempts',
+  'companion_promises',
+  'companion_memories',
+  'focus_contracts',
 ];
 
-const sourceRoot = join(process.cwd(), "src");
-const migrationsRoot = join(process.cwd(), "supabase", "migrations");
+const sourceRoot = join(process.cwd(), 'src');
+const migrationsRoot = join(process.cwd(), 'supabase', 'migrations');
 
 function readFiles(root: string, matcher: RegExp): string {
   return readdirSync(root, { withFileTypes: true })
@@ -35,9 +35,9 @@ function readFiles(root: string, matcher: RegExp): string {
       if (entry.isDirectory()) {
         return readFiles(fullPath, matcher);
       }
-      return matcher.test(entry.name) ? readFileSync(fullPath, "utf8") : "";
+      return matcher.test(entry.name) ? readFileSync(fullPath, 'utf8') : '';
     })
-    .join("\n");
+    .join('\n');
 }
 
 function usedTables(): string[] {
@@ -71,16 +71,16 @@ function enableRlsPattern(table: string): RegExp {
   );
 }
 
-describe("launch schema reconciliation migration", () => {
-  it("keeps Supabase queries out of screen components", () => {
-    const screens = readFiles(join(sourceRoot, "screens"), /\.tsx?$/);
+describe('launch schema reconciliation migration', () => {
+  it('keeps Supabase queries out of screen components', () => {
+    const screens = readFiles(join(sourceRoot, 'screens'), /\.tsx?$/);
 
     expect(screens.match(/supabase\.(from|rpc)\(/g) ?? []).toEqual([]);
   });
 
-  it("keeps notification components out of Supabase transport", () => {
+  it('keeps notification components out of Supabase transport', () => {
     const notificationComponents = readFiles(
-      join(sourceRoot, "features", "notifications", "components"),
+      join(sourceRoot, 'features', 'notifications', 'components'),
       /\.tsx?$/,
     );
 
@@ -90,19 +90,19 @@ describe("launch schema reconciliation migration", () => {
     ).toEqual([]);
   });
 
-  it("keeps every referenced Supabase table in committed SQL", () => {
+  it('keeps every referenced Supabase table in committed SQL', () => {
     const declared = new Set(committedTables());
 
     const archivedFeatureTables = new Set([
-      "daily_missions",
-      "focus_memories",
-      "rescue_memories",
-      "session_narratives",
-      "squad_members",
-      "squads",
-      "transactions",
-      "users",
-      "wallets",
+      'daily_missions',
+      'focus_memories',
+      'rescue_memories',
+      'session_narratives',
+      'squad_members',
+      'squads',
+      'transactions',
+      'users',
+      'wallets',
     ]);
 
     expect(
@@ -112,7 +112,7 @@ describe("launch schema reconciliation migration", () => {
     ).toEqual([]);
   });
 
-  it("declares launch-critical repository tables", () => {
+  it('declares launch-critical repository tables', () => {
     const sql = readFiles(migrationsRoot, /\.sql$/).toLowerCase();
 
     for (const table of requiredTables) {
@@ -121,11 +121,11 @@ describe("launch schema reconciliation migration", () => {
     }
   });
 
-  it("uses owner-scoped policies for user-owned tables", () => {
-    const sql = readFileSync(migrationPath, "utf8").toLowerCase();
+  it('uses owner-scoped policies for user-owned tables', () => {
+    const sql = readFileSync(migrationPath, 'utf8').toLowerCase();
 
-    expect(sql).toContain("auth.uid() = user_id");
-    expect(sql).toContain("with check (auth.uid() = user_id)");
-    expect(sql).not.toContain("using (true)");
+    expect(sql).toContain('auth.uid() = user_id');
+    expect(sql).toContain('with check (auth.uid() = user_id)');
+    expect(sql).not.toContain('using (true)');
   });
 });

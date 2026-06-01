@@ -7,7 +7,7 @@ import {
   NotificationPreferencesUpdatedEvent,
   EventMetadata,
   DeviceInfo,
-} from "./types";
+} from './types';
 
 export function createNotificationSentEvent(
   userId: string,
@@ -17,11 +17,11 @@ export function createNotificationSentEvent(
   priority: string,
   channels: string[],
   template: string,
-  personalization: NotificationSentEvent["data"]["personalization"],
+  personalization: NotificationSentEvent['data']['personalization'],
 ): NotificationSentEvent {
   return {
     id: generateEventId(),
-    type: "notification_sent",
+    type: 'notification_sent',
     userId,
     notificationId,
     timestamp: new Date(),
@@ -36,16 +36,16 @@ export function createNotificationSentEvent(
       delivery: {
         attempts: 1,
         maxAttempts: 3,
-        retryPolicy: "exponential_backoff",
+        retryPolicy: 'exponential_backoff',
       },
     },
-    metadata: createEventMetadata("notifications"),
+    metadata: createEventMetadata('notifications'),
   };
 }
 export function createNotificationDeliveredEvent(
   userId: string,
   notificationId: string,
-  channel: "push" | "email" | "sms" | "in_app" | "webhook",
+  channel: 'push' | 'email' | 'sms' | 'in_app' | 'webhook',
   deliveryTime: Date,
   latency: number,
   provider: string,
@@ -53,7 +53,7 @@ export function createNotificationDeliveredEvent(
 ): NotificationDeliveredEvent {
   return {
     id: generateEventId(),
-    type: "notification_delivered",
+    type: 'notification_delivered',
     userId,
     notificationId,
     channelId: channel,
@@ -65,9 +65,9 @@ export function createNotificationDeliveredEvent(
       latency,
       provider,
       messageId,
-      deliveryDetails: { status: "delivered" },
+      deliveryDetails: { status: 'delivered' },
     },
-    metadata: createEventMetadata("notifications"),
+    metadata: createEventMetadata('notifications'),
   };
 }
 export function createNotificationReadEvent(
@@ -75,12 +75,12 @@ export function createNotificationReadEvent(
   notificationId: string,
   readAt: Date,
   readTimeframe: number,
-  readMethod: "click" | "mark_read" | "auto_read",
-  readContext: NotificationReadEvent["data"]["readContext"],
+  readMethod: 'click' | 'mark_read' | 'auto_read',
+  readContext: NotificationReadEvent['data']['readContext'],
 ): NotificationReadEvent {
   return {
     id: generateEventId(),
-    type: "notification_read",
+    type: 'notification_read',
     userId,
     notificationId,
     timestamp: new Date(),
@@ -91,7 +91,7 @@ export function createNotificationReadEvent(
       readMethod,
       readContext,
     },
-    metadata: createEventMetadata("notifications"),
+    metadata: createEventMetadata('notifications'),
   };
 }
 export function createNotificationClickedEvent(
@@ -101,12 +101,12 @@ export function createNotificationClickedEvent(
   clickTimeframe: number,
   action: string,
   actionUrl?: string,
-  actionData?: NotificationClickedEvent["data"]["actionData"],
-  clickContext?: NotificationClickedEvent["data"]["clickContext"],
+  actionData?: NotificationClickedEvent['data']['actionData'],
+  clickContext?: NotificationClickedEvent['data']['clickContext'],
 ): NotificationClickedEvent {
   return {
     id: generateEventId(),
-    type: "notification_clicked",
+    type: 'notification_clicked',
     userId,
     notificationId,
     timestamp: new Date(),
@@ -117,15 +117,15 @@ export function createNotificationClickedEvent(
       action,
       actionUrl,
       actionData,
-      clickContext: clickContext || { device: "unknown" },
+      clickContext: clickContext || { device: 'unknown' },
     },
-    metadata: createEventMetadata("notifications"),
+    metadata: createEventMetadata('notifications'),
   };
 }
 export function createNotificationFailedEvent(
   userId: string,
   notificationId: string,
-  channel: "push" | "email" | "sms" | "in_app" | "webhook",
+  channel: 'push' | 'email' | 'sms' | 'in_app' | 'webhook',
   failureReason: string,
   errorCode: string,
   errorDetails: string,
@@ -135,7 +135,7 @@ export function createNotificationFailedEvent(
 ): NotificationFailedEvent {
   return {
     id: generateEventId(),
-    type: "notification_failed",
+    type: 'notification_failed',
     userId,
     notificationId,
     channelId: channel,
@@ -152,18 +152,18 @@ export function createNotificationFailedEvent(
       provider,
       affectedUsers: 1,
     },
-    metadata: createEventMetadata("notifications"),
+    metadata: createEventMetadata('notifications'),
   };
 }
 export function createNotificationPreferencesUpdatedEvent(
   userId: string,
-  preferences: NotificationPreferencesUpdatedEvent["data"]["preferences"],
+  preferences: NotificationPreferencesUpdatedEvent['data']['preferences'],
   updatedFields: string[],
-  updatedBy: "user" | "system" | "admin",
+  updatedBy: 'user' | 'system' | 'admin',
 ): NotificationPreferencesUpdatedEvent {
   return {
     id: generateEventId(),
-    type: "notification_preferences_updated",
+    type: 'notification_preferences_updated',
     userId,
     timestamp: new Date(),
     data: {
@@ -171,18 +171,18 @@ export function createNotificationPreferencesUpdatedEvent(
       updatedFields,
       updatedBy,
     },
-    metadata: createEventMetadata("notifications"),
+    metadata: createEventMetadata('notifications'),
   };
 }
 function generateEventId(): string {
   return `evt_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 }
 function createEventMetadata(source: string): EventMetadata {
-  return { source, version: "1.0.0", platform: getPlatform() };
+  return { source, version: '1.0.0', platform: getPlatform() };
 }
 function getPlatform(): string {
-  if (typeof window !== "undefined") {
-    return "web";
+  if (typeof window !== 'undefined') {
+    return 'web';
   }
-  return "unknown";
+  return 'unknown';
 }

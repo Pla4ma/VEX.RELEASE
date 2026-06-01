@@ -1,13 +1,13 @@
 export enum ImpactFeedbackStyle {
-  Light = "light",
-  Medium = "medium",
-  Heavy = "heavy",
+  Light = 'light',
+  Medium = 'medium',
+  Heavy = 'heavy',
 }
 
 export enum NotificationFeedbackType {
-  Success = "success",
-  Warning = "warning",
-  Error = "error",
+  Success = 'success',
+  Warning = 'warning',
+  Error = 'error',
 }
 
 export const impactAsync = jest.fn(() => Promise.resolve());

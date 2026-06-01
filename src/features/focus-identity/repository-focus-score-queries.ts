@@ -1,20 +1,20 @@
-import { getSupabaseClient } from "../../config/supabase";
-import type { FocusScoreHistoryPoint, FocusScoreRecord } from "./types";
+import { getSupabaseClient } from '../../config/supabase';
+import type { FocusScoreHistoryPoint, FocusScoreRecord } from './types';
 import {
   AppendFocusScoreHistoryEventSchema,
   type AppendFocusScoreHistoryEvent,
   type UpsertCurrentFocusScoreInput,
   UpsertCurrentFocusScoreInputSchema,
-} from "./repository-focus-score.schemas";
-import { createDebugger } from "../../utils/debug";
-import { withResilience } from "../../utils/supabase-resilience";
+} from './repository-focus-score.schemas';
+import { createDebugger } from '../../utils/debug';
+import { withResilience } from '../../utils/supabase-resilience';
 import {
   FocusIdentityRepositoryError,
   mapCurrentRowToRecord,
   mapHistoryRowToPoint,
-} from "./repository-focus-score-mappers";
+} from './repository-focus-score-mappers';
 
-const debug = createDebugger("focus-identity:repository");
+const debug = createDebugger('focus-identity:repository');
 
 export async function fetchCurrentFocusScore(
   userId: string,
@@ -22,17 +22,17 @@ export async function fetchCurrentFocusScore(
   const supabase = getSupabaseClient();
   const { data, error } = await withResilience(
     supabase
-      .from("focus_score_current")
-      .select("*")
-      .eq("user_id", userId)
+      .from('focus_score_current')
+      .select('*')
+      .eq('user_id', userId)
       .single(),
-    { operation: "fetchCurrentFocusScore" },
+    { operation: 'fetchCurrentFocusScore' },
   );
   if (error) {
-    if (error.code === "PGRST116") {
+    if (error.code === 'PGRST116') {
       return null;
     }
-    throw new FocusIdentityRepositoryError("fetchCurrentFocusScore", error);
+    throw new FocusIdentityRepositoryError('fetchCurrentFocusScore', error);
   }
   return mapCurrentRowToRecord(data);
 }
@@ -45,7 +45,7 @@ export async function upsertCurrentFocusScore(
   const supabase = getSupabaseClient();
   const { data, error } = await withResilience(
     supabase
-      .from("focus_score_current")
+      .from('focus_score_current')
       .upsert(
         {
           user_id: userId,
@@ -57,20 +57,20 @@ export async function upsertCurrentFocusScore(
           top_positive_factor: input.topPositiveFactor,
           top_negative_factor: input.topNegativeFactor,
         },
-        { onConflict: "user_id" },
+        { onConflict: 'user_id' },
       )
-      .select("*")
+      .select('*')
       .single(),
-    { operation: "upsertCurrentFocusScore" },
+    { operation: 'upsertCurrentFocusScore' },
   );
   if (error) {
-    if (error.code === "23505") {
+    if (error.code === '23505') {
       const existing = await fetchCurrentFocusScore(userId);
       if (existing) {
         return existing;
       }
     }
-    throw new FocusIdentityRepositoryError("upsertCurrentFocusScore", error);
+    throw new FocusIdentityRepositoryError('upsertCurrentFocusScore', error);
   }
   return mapCurrentRowToRecord(data);
 }
@@ -82,7 +82,7 @@ export async function appendFocusScoreHistory(
   const supabase = getSupabaseClient();
   const { data, error } = await withResilience(
     supabase
-      .from("focus_score_history")
+      .from('focus_score_history')
       .insert({
         user_id: validatedEvent.userId,
         occurred_at: validatedEvent.timestamp,
@@ -90,12 +90,12 @@ export async function appendFocusScoreHistory(
         delta: validatedEvent.delta,
         reason: validatedEvent.reason,
       })
-      .select("user_id, occurred_at, score, delta, reason")
+      .select('user_id, occurred_at, score, delta, reason')
       .single(),
-    { operation: "appendFocusScoreHistory" },
+    { operation: 'appendFocusScoreHistory' },
   );
   if (error) {
-    throw new FocusIdentityRepositoryError("appendFocusScoreHistory", error);
+    throw new FocusIdentityRepositoryError('appendFocusScoreHistory', error);
   }
   return mapHistoryRowToPoint(data);
 }
@@ -109,21 +109,21 @@ export async function fetchFocusScoreHistory(
     cutoff.setUTCDate(cutoff.getUTCDate() - days);
     const supabase = getSupabaseClient();
     const { data, error } = await supabase
-      .from("focus_score_history")
-      .select("user_id, occurred_at, score, delta, reason")
-      .eq("user_id", userId)
-      .gte("occurred_at", cutoff.toISOString())
-      .order("occurred_at", { ascending: true });
+      .from('focus_score_history')
+      .select('user_id, occurred_at, score, delta, reason')
+      .eq('user_id', userId)
+      .gte('occurred_at', cutoff.toISOString())
+      .order('occurred_at', { ascending: true });
     if (error) {
       debug.warn(
-        "Supabase fetchFocusScoreHistory failed, returning empty fallback",
+        'Supabase fetchFocusScoreHistory failed, returning empty fallback',
         error,
       );
       return [];
     }
     return (data ?? []).map(mapHistoryRowToPoint);
   } catch (err) {
-    debug.error("Unexpected error in fetchFocusScoreHistory", err as Error);
+    debug.error('Unexpected error in fetchFocusScoreHistory', err as Error);
     return [];
   }
 }

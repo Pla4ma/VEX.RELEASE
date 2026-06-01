@@ -1,11 +1,11 @@
-import Purchases, { type PurchasesPackage } from "react-native-purchases";
-import * as Sentry from "@sentry/react-native";
-import type { PurchaseResult } from "./revenuecat-types";
+import Purchases, { type PurchasesPackage } from 'react-native-purchases';
+import * as Sentry from '@sentry/react-native';
+import type { PurchaseResult } from './revenuecat-types';
 import {
   createServiceError,
   isUserCancelled,
   normalizeError,
-} from "./revenuecat-service-helpers";
+} from './revenuecat-service-helpers';
 
 export interface PurchaseServiceDeps {
   isReady(): boolean;
@@ -21,8 +21,8 @@ export async function purchasePackage(
     return {
       success: false,
       error: createServiceError(
-        "CONFIGURATION_ERROR",
-        "RevenueCat not initialized",
+        'CONFIGURATION_ERROR',
+        'RevenueCat not initialized',
       ),
     };
   }
@@ -34,17 +34,17 @@ export async function purchasePackage(
       return {
         success: false,
         error: createServiceError(
-          "PURCHASE_CANCELLED",
-          "User cancelled the purchase",
+          'PURCHASE_CANCELLED',
+          'User cancelled the purchase',
         ),
-        errorCode: "PURCHASE_CANCELLED",
+        errorCode: 'PURCHASE_CANCELLED',
       };
     }
     const err = normalizeError(error);
     Sentry.captureException(err.underlyingError || new Error(err.message), {
       tags: {
-        component: "RevenueCatService",
-        operation: "purchasePackage",
+        component: 'RevenueCatService',
+        operation: 'purchasePackage',
         productId: pkg.product.identifier,
       },
       extra: {
@@ -63,8 +63,8 @@ export async function restorePurchases(
     return {
       success: false,
       error: createServiceError(
-        "CONFIGURATION_ERROR",
-        "RevenueCat not initialized",
+        'CONFIGURATION_ERROR',
+        'RevenueCat not initialized',
       ),
     };
   }
@@ -74,7 +74,7 @@ export async function restorePurchases(
   } catch (error) {
     const err = normalizeError(error);
     deps.reportError(
-      "restorePurchases",
+      'restorePurchases',
       err.underlyingError || new Error(err.message),
     );
     return { success: false, error: err, errorCode: err.code };
@@ -84,12 +84,12 @@ export async function restorePurchases(
 export async function syncPurchases(
   deps: PurchaseServiceDeps,
 ): Promise<boolean> {
-  if (!deps.isReady()) return false;
+  if (!deps.isReady()) {return false;}
   try {
     await Purchases.syncPurchases();
     return true;
   } catch (error) {
-    deps.reportError("syncPurchases", normalizeError(error));
+    deps.reportError('syncPurchases', normalizeError(error));
     return false;
   }
 }

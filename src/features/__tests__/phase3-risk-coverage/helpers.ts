@@ -1,25 +1,25 @@
 import {
   hasActiveStudyFollowUp,
   extractStudyContextFromSession,
-} from "../../session-completion/study-context";
-import { buildPostSessionNextAction } from "../../session-completion/post-session-next-action";
+} from '../../session-completion/study-context';
+import { buildPostSessionNextAction } from '../../session-completion/post-session-next-action';
 import {
   computeWeakTopics,
   computeWeeklyIntelligence,
   hasWeeklyIntelligenceData,
-} from "../../study-intelligence/service";
-import type { StudyPlan } from "../../study-os/schemas";
-import { resolveFirstWeekExperience } from "../../personalization/first-week-service";
-import type { FirstWeekResolverInput } from "../../personalization/first-week-schemas";
-import { resolveCompletionExperiencePolicy } from "../../session-completion/completion-experience-policy";
-import type { CompletionExperiencePolicyInput } from "../../session-completion/completion-experience-policy-schemas";
-import { resolveLaneCopy } from "../../personalization/first-week-lane-copy";
-import { getLaneMechanicPolicy } from "../../lane-engine/service";
-import { decideNudge } from "../../notification-policy/service";
-import { decideHomeSurfaces } from "../../home-experience/home-surface-decision";
-import { buildLaneSessionBrief } from "../../session-start/service";
-import { SessionMode } from "../../../session/modes";
-import type { Lane, LaneProfile } from "../../lane-engine/types";
+} from '../../study-intelligence/service';
+import type { StudyPlan } from '../../study-os/schemas';
+import { resolveFirstWeekExperience } from '../../personalization/first-week-service';
+import type { FirstWeekResolverInput } from '../../personalization/first-week-schemas';
+import { resolveCompletionExperiencePolicy } from '../../session-completion/completion-experience-policy';
+import type { CompletionExperiencePolicyInput } from '../../session-completion/completion-experience-policy-schemas';
+import { resolveLaneCopy } from '../../personalization/first-week-lane-copy';
+import { getLaneMechanicPolicy } from '../../lane-engine/service';
+import { decideNudge } from '../../notification-policy/service';
+import { decideHomeSurfaces } from '../../home-experience/home-surface-decision';
+import { buildLaneSessionBrief } from '../../session-start/service';
+import { SessionMode } from '../../../session/modes';
+import type { Lane, LaneProfile } from '../../lane-engine/types';
 
 export {
   hasActiveStudyFollowUp,
@@ -46,17 +46,17 @@ export type {
   LaneProfile,
 };
 
-export const TEST_UUID = "550e8400-e29b-41d4-a716-446655440000";
+export const TEST_UUID = '550e8400-e29b-41d4-a716-446655440000';
 
 export function baseLaneProfile(
   overrides: Partial<LaneProfile> = {},
 ): LaneProfile {
   return {
-    primaryLane: overrides.primaryLane ?? "minimal_normal",
+    primaryLane: overrides.primaryLane ?? 'minimal_normal',
     secondaryLane: overrides.secondaryLane ?? null,
     confidence: overrides.confidence ?? 0.8,
-    confidenceBand: overrides.confidenceBand ?? "high",
-    source: overrides.source ?? "onboarding",
+    confidenceBand: overrides.confidenceBand ?? 'high',
+    source: overrides.source ?? 'onboarding',
     evidence: overrides.evidence ?? [],
     traits: overrides.traits ?? {
       needsStructure: 0.5,
@@ -81,7 +81,7 @@ export function sess(overrides: {
   return {
     sessionId: overrides.sessionId ?? TEST_UUID,
     userId: overrides.userId ?? TEST_UUID,
-    status: "COMPLETED" as const,
+    status: 'COMPLETED' as const,
     sessionMode: overrides.sessionMode ?? SessionMode.LIGHT_FOCUS,
     plannedDuration: overrides.plannedDuration ?? 1500,
     actualDuration: 1500,
@@ -118,43 +118,43 @@ export function makeStudyPlan(overrides: Partial<StudyPlan> = {}): StudyPlan {
   return {
     blocks: [
       {
-        id: "block-1",
-        title: "Cell Biology",
-        objective: "Understand mitochondrial function",
+        id: 'block-1',
+        title: 'Cell Biology',
+        objective: 'Understand mitochondrial function',
         estimatedMinutes: 30,
-        status: "completed" as const,
-        priority: "medium" as const,
-        studyPlanId: overrides.id ?? "plan-1",
+        status: 'completed' as const,
+        priority: 'medium' as const,
+        studyPlanId: overrides.id ?? 'plan-1',
       },
     ],
     createdAt: now,
     deadlineAt: null,
-    id: overrides.id ?? "plan-1",
+    id: overrides.id ?? 'plan-1',
     reviewItems: [
       {
-        id: "review-1",
-        prompt: "Explain the Krebs cycle",
-        confidence: "weak" as const,
-        studyPlanId: overrides.id ?? "plan-1",
+        id: 'review-1',
+        prompt: 'Explain the Krebs cycle',
+        confidence: 'weak' as const,
+        studyPlanId: overrides.id ?? 'plan-1',
         answerHint: null,
         dueAt: now + 86400000,
       },
     ],
     source: {
       createdAt: now,
-      extractedTextStatus: "none" as const,
-      id: "source-1",
-      title: overrides.title ?? "Biology Review",
-      type: "manual" as const,
+      extractedTextStatus: 'none' as const,
+      id: 'source-1',
+      title: overrides.title ?? 'Biology Review',
+      type: 'manual' as const,
       userId: overrides.userId ?? TEST_UUID,
     },
-    status: "active" as const,
-    title: overrides.title ?? "Biology Review",
+    status: 'active' as const,
+    title: overrides.title ?? 'Biology Review',
     userId: overrides.userId ?? TEST_UUID,
   };
 }
 
 export const baseStats = {
-  bossEngagement: "none" as const,
+  bossEngagement: 'none' as const,
   studyUsageRatio: 0,
 };

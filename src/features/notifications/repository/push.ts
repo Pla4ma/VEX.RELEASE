@@ -1,4 +1,4 @@
-import { RepositoryError, supabase } from "./shared";
+import { RepositoryError, supabase } from './shared';
 
 export async function upsertPushToken(
   userId: string,
@@ -6,7 +6,7 @@ export async function upsertPushToken(
   platform: string,
 ): Promise<void> {
   const { error } = await supabase
-    .from("push_tokens")
+    .from('push_tokens')
     .upsert(
       {
         user_id: userId,
@@ -14,9 +14,9 @@ export async function upsertPushToken(
         platform,
         updated_at: new Date().toISOString(),
       },
-      { onConflict: "user_id" },
+      { onConflict: 'user_id' },
     );
   if (error) {
-    throw new RepositoryError("upsertPushToken", error);
+    throw new RepositoryError('upsertPushToken', error);
   }
 }

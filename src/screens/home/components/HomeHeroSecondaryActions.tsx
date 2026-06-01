@@ -1,8 +1,8 @@
-import React from "react";
-import { Pressable, View } from "react-native";
-import { Icon } from "../../../icons";
-import { Text } from "../../../components/primitives/Text";
-import { launchColors } from "@theme/tokens/launch-colors";
+import React from 'react';
+import { Pressable, View } from 'react-native';
+import { Icon } from '../../../icons';
+import { Text } from '../../../components/primitives/Text';
+import { launchColors } from '@theme/tokens/launch-colors';
 
 export function HomeHeroSecondaryActions({
   onPress,

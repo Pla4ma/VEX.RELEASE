@@ -1,36 +1,36 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ScrollView } from "react-native";
-import BottomSheet from "@gorhom/bottom-sheet";
-import Animated, { FadeIn } from "react-native-reanimated";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { ScrollView } from 'react-native';
+import BottomSheet from '@gorhom/bottom-sheet';
+import Animated, { FadeIn } from 'react-native-reanimated';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { sessionComplete } from "../../../utils/haptics";
+import { sessionComplete } from '../../../utils/haptics';
 import {
   type CompletionSurface,
   resolveCompletionExperiencePolicy,
-} from "../../../features/session-completion/completion-experience-policy";
-import { useSessionCompleteController } from "../../../features/session-completion/hooks";
-import { useTomorrowPreviewForSession } from "../../../features/home-spine/hooks";
+} from '../../../features/session-completion/completion-experience-policy';
+import { useSessionCompleteController } from '../../../features/session-completion/hooks';
+import { useTomorrowPreviewForSession } from '../../../features/home-spine/hooks';
 import {
   useContractForSession,
   useReflectOnContract,
-} from "../../../features/focus-contract/hooks";
-import type { ReflectionStatus } from "../../../features/focus-contract/types";
-import { saveTomorrowPreview } from "../../../features/home-spine/tomorrowPreviewService";
-import { useFeatureAccess } from "../../../features/liveops-config";
-import { useOnboardingStore } from "../../../features/onboarding/store";
-import { usePremiumStatus } from "../../../shared/monetization";
-import { ModeCompletionSurface } from "../../../features/mode-native/components/ModeCompletionSurface";
+} from '../../../features/focus-contract/hooks';
+import type { ReflectionStatus } from '../../../features/focus-contract/types';
+import { saveTomorrowPreview } from '../../../features/home-spine/tomorrowPreviewService';
+import { useFeatureAccess } from '../../../features/liveops-config';
+import { useOnboardingStore } from '../../../features/onboarding/store';
+import { usePremiumStatus } from '../../../shared/monetization';
+import { ModeCompletionSurface } from '../../../features/mode-native/components/ModeCompletionSurface';
 
-import { SessionCompleteHeroSection } from "./SessionCompleteHeroSection";
-import { SessionCompleteRewardsPhase } from "./SessionCompleteRewardsPhase";
-import { SessionCompleteNextSteps } from "./SessionCompleteNextSteps";
-import { SessionCompleteOverlays } from "./SessionCompleteOverlays";
-import { SessionContractReflectionCard } from "./SessionContractReflectionCard";
+import { SessionCompleteHeroSection } from './SessionCompleteHeroSection';
+import { SessionCompleteRewardsPhase } from './SessionCompleteRewardsPhase';
+import { SessionCompleteNextSteps } from './SessionCompleteNextSteps';
+import { SessionCompleteOverlays } from './SessionCompleteOverlays';
+import { SessionContractReflectionCard } from './SessionContractReflectionCard';
 import {
   SESSION_MODE_TO_LANE,
   type SessionCompleteContentProps,
-} from "./SessionCompleteContent.types";
+} from './SessionCompleteContent.types';
 
 export function SessionCompleteContent({
   sessionId,
@@ -59,14 +59,14 @@ export function SessionCompleteContent({
       study: featureAccess.features.content_study.isVisible,
     },
     firstWeekStage: featureAccess.stage,
-    motivationStyle: motivationProfile?.primary ?? "calm",
-    premiumState: premiumStatus.isPremium ? "premium" : "free",
+    motivationStyle: motivationProfile?.primary ?? 'calm',
+    premiumState: premiumStatus.isPremium ? 'premium' : 'free',
     primaryGoal,
     sessionMode: summary.sessionMode,
     summary,
   });
   const revealedGradeLetter =
-    controller.grade.letter === "F" ? "D" : controller.grade.letter;
+    controller.grade.letter === 'F' ? 'D' : controller.grade.letter;
   const isHidden = useCallback(
     (surface: CompletionSurface) =>
       policy.hiddenCompletionSurfaces.includes(surface),
@@ -74,9 +74,9 @@ export function SessionCompleteContent({
   );
 
   const tomorrowPreview = useTomorrowPreviewForSession(
-    controller.userId ?? "",
+    controller.userId ?? '',
     {
-      userId: controller.userId ?? "",
+      userId: controller.userId ?? '',
       currentStreakDays: summary.streakDays ?? 0,
       streakWillContinue: summary.streakMaintained,
       bossData: consequences?.boss
@@ -100,7 +100,7 @@ export function SessionCompleteContent({
   }, []);
 
   const lane = useMemo(
-    () => SESSION_MODE_TO_LANE[summary.sessionMode] ?? "minimal_normal",
+    () => SESSION_MODE_TO_LANE[summary.sessionMode] ?? 'minimal_normal',
     [summary.sessionMode],
   );
 
@@ -141,7 +141,7 @@ export function SessionCompleteContent({
             summary={summary}
           />
 
-          {!isHidden("contract_reflection_card") ? (
+          {!isHidden('contract_reflection_card') ? (
             <SessionContractReflectionCard
               contract={contractQuery.contract}
               isPending={reflectContract.isPending}
@@ -156,7 +156,7 @@ export function SessionCompleteContent({
             project={contractQuery.contract?.taskDescription}
             action={contractQuery.contract?.taskDescription}
             onPrimaryAction={() => {
-              controller.navigation.navigate({ name: "Home", params: {} });
+              controller.navigation.navigate({ name: 'Home', params: {} });
             }}
           />
 

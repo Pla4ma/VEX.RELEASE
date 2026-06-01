@@ -1,12 +1,12 @@
-import type { SessionTheme } from "../../../features/themes/session-themes";
-import type { SessionMode } from "../../../session/modes";
+import type { SessionTheme } from '../../../features/themes/session-themes';
+import type { SessionMode } from '../../../session/modes';
 import type {
   PresetWithIcon,
   SmartSuggestion,
-} from "../utils/session-setup";
+} from '../utils/session-setup';
 
 type Challenge = NonNullable<
-  import("../../../features/mastery/types").MasteryState["activeChallenges"]
+  import('../../../features/mastery/types').MasteryState['activeChallenges']
 >[number];
 
 export type SessionSetupCustomizationProps = {
@@ -19,7 +19,7 @@ export type SessionSetupCustomizationProps = {
   onSelectSmartSuggestion: () => void;
   onToggleAdvanced: () => void;
   onUpdateCategory: (category: string) => void;
-  routeSuggestedDifficulty?: "EASY" | "NORMAL" | "CHALLENGING" | "PUSH";
+  routeSuggestedDifficulty?: 'EASY' | 'NORMAL' | 'CHALLENGING' | 'PUSH';
   selectedCategory: string;
   selectedDurationSeconds: number;
   selectedPreset: PresetWithIcon;

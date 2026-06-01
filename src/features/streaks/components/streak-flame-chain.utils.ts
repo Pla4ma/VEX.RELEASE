@@ -1,14 +1,14 @@
-import { launchColors } from "@theme/tokens/launch-colors";
+import { launchColors } from '@theme/tokens/launch-colors';
 
 export const getRiskColor = (riskLevel: string): string => {
   switch (riskLevel) {
-    case "CRITICAL":
+    case 'CRITICAL':
       return launchColors.hex_f44336;
-    case "HIGH":
+    case 'HIGH':
       return launchColors.hex_ff9800;
-    case "MEDIUM":
+    case 'MEDIUM':
       return launchColors.hex_ffc107;
-    case "LOW":
+    case 'LOW':
       return launchColors.hex_ffeb3b;
     default:
       return launchColors.hex_4caf50;
@@ -37,14 +37,14 @@ export const getFlameColor = (
 
 export const getMilestoneReward = (days: number): string => {
   const rewards: Record<number, string> = {
-    3: "100 Coins",
-    7: "250 Coins",
-    14: "25 Gems",
-    30: "Streak Shield",
-    60: "100 Gems",
-    100: "250 Gems",
-    180: "500 Gems",
-    365: "1000 Gems + Legendary Badge",
+    3: '100 Coins',
+    7: '250 Coins',
+    14: '25 Gems',
+    30: 'Streak Shield',
+    60: '100 Gems',
+    100: '250 Gems',
+    180: '500 Gems',
+    365: '1000 Gems + Legendary Badge',
   };
-  return rewards[days] || "Special Reward";
+  return rewards[days] || 'Special Reward';
 };

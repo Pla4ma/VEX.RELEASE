@@ -1,15 +1,15 @@
-import React, { useCallback, useState } from "react";
-import { Pressable, ActivityIndicator } from "react-native";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import { Icon } from "../../../icons";
-import { captureException } from "../../../config/sentry";
-import * as DocumentPicker from "expo-document-picker";
-import type { PdfUploaderProps } from "../types";
-import { validateFileUpload } from "../validation";
-import { CONTENT_STUDY_CONSTANTS } from "../types";
-import { styles } from "./PdfUploader.styles";
-import { PdfUploaderFileCard } from "./PdfUploaderFileCard";
+import React, { useCallback, useState } from 'react';
+import { Pressable, ActivityIndicator } from 'react-native';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import { Icon } from '../../../icons';
+import { captureException } from '../../../config/sentry';
+import * as DocumentPicker from 'expo-document-picker';
+import type { PdfUploaderProps } from '../types';
+import { validateFileUpload } from '../validation';
+import { CONTENT_STUDY_CONSTANTS } from '../types';
+import { styles } from './PdfUploader.styles';
+import { PdfUploaderFileCard } from './PdfUploaderFileCard';
 
 export const PdfUploader: React.FC<PdfUploaderProps> = ({
   selectedFile,
@@ -24,11 +24,11 @@ export const PdfUploader: React.FC<PdfUploaderProps> = ({
   const [isPicking, setIsPicking] = useState(false);
 
   const pickDocument = useCallback(async () => {
-    if (disabled || isPicking) return;
+    if (disabled || isPicking) {return;}
     setIsPicking(true);
     try {
       const result = await DocumentPicker.getDocumentAsync({
-        type: ["application/pdf", "text/plain", "text/markdown"],
+        type: ['application/pdf', 'text/plain', 'text/markdown'],
         copyToCacheDirectory: true,
       });
       if (result.canceled) {
@@ -44,14 +44,14 @@ export const PdfUploader: React.FC<PdfUploaderProps> = ({
         uri: asset.uri,
         name: asset.name,
         size: asset.size || 0,
-        type: asset.mimeType || "application/octet-stream",
+        type: asset.mimeType || 'application/octet-stream',
       };
       validateFileUpload(file);
       onFileSelect(file);
     } catch (error) {
       captureException(
-        error instanceof Error ? error : new Error("Document picker failed"),
-        { area: "content-study.pdf-uploader.pick-document" },
+        error instanceof Error ? error : new Error('Document picker failed'),
+        { area: 'content-study.pdf-uploader.pick-document' },
       );
     } finally {
       setIsPicking(false);
@@ -63,17 +63,17 @@ export const PdfUploader: React.FC<PdfUploaderProps> = ({
   }, [onFileSelect]);
 
   const formatFileSize = (bytes: number): string => {
-    if (bytes === 0) return "0 B";
+    if (bytes === 0) {return '0 B';}
     const k = 1024;
-    const sizes = ["B", "KB", "MB", "GB"];
+    const sizes = ['B', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + " " + sizes[i];
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
   };
 
   const getFileIcon = (mimeType: string): string => {
-    if (mimeType.includes("pdf")) return "file-pdf";
-    if (mimeType.includes("text")) return "file-text";
-    return "file";
+    if (mimeType.includes('pdf')) {return 'file-pdf';}
+    if (mimeType.includes('text')) {return 'file-text';}
+    return 'file';
   };
 
   const isOversized = selectedFile ? selectedFile.size > maxSize : false;

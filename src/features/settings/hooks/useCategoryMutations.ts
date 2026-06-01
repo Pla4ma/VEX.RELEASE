@@ -1,5 +1,5 @@
-import { useMutation, useQueryClient, type UseMutationOptions } from "@tanstack/react-query";
-import * as service from "../service";
+import { useMutation, useQueryClient, type UseMutationOptions } from '@tanstack/react-query';
+import * as service from '../service';
 import {
   type NotificationSettings,
   type CoachSettings,
@@ -7,8 +7,8 @@ import {
   type PrivacySettings,
   type SettingCategory,
   type SettingsExport,
-} from "../types";
-import { settingsKeys } from "./queryKeys";
+} from '../types';
+import { settingsKeys } from './queryKeys';
 
 export function useUpdateNotificationSettings(
   userId: string,
@@ -18,7 +18,7 @@ export function useUpdateNotificationSettings(
       Error,
       Partial<NotificationSettings>
     >,
-    "mutationFn"
+    'mutationFn'
   >,
 ) {
   const queryClient = useQueryClient();
@@ -39,7 +39,7 @@ export function useUpdateCoachSettings(
   userId: string,
   options?: Omit<
     UseMutationOptions<CoachSettings, Error, Partial<CoachSettings>>,
-    "mutationFn"
+    'mutationFn'
   >,
 ) {
   const queryClient = useQueryClient();
@@ -59,7 +59,7 @@ export function useUpdateAppearanceSettings(
   userId: string,
   options?: Omit<
     UseMutationOptions<AppearanceSettings, Error, Partial<AppearanceSettings>>,
-    "mutationFn"
+    'mutationFn'
   >,
 ) {
   const queryClient = useQueryClient();
@@ -80,7 +80,7 @@ export function useUpdatePrivacySettings(
   userId: string,
   options?: Omit<
     UseMutationOptions<PrivacySettings, Error, Partial<PrivacySettings>>,
-    "mutationFn"
+    'mutationFn'
   >,
 ) {
   const queryClient = useQueryClient();
@@ -98,7 +98,7 @@ export function useUpdatePrivacySettings(
 
 export function useExportSettings(
   userId: string,
-  options?: Omit<UseMutationOptions<SettingsExport, Error, void>, "mutationFn">,
+  options?: Omit<UseMutationOptions<SettingsExport, Error, void>, 'mutationFn'>,
 ) {
   return useMutation({
     mutationFn: () => service.exportSettings(userId),
@@ -114,7 +114,7 @@ export function useImportSettings(
       Error,
       SettingsExport
     >,
-    "mutationFn"
+    'mutationFn'
   >,
 ) {
   const queryClient = useQueryClient();
@@ -131,7 +131,7 @@ export function useResetSettings(
   userId: string,
   options?: Omit<
     UseMutationOptions<void, Error, { category?: SettingCategory }>,
-    "mutationFn"
+    'mutationFn'
   >,
 ) {
   const queryClient = useQueryClient();

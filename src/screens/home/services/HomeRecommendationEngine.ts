@@ -1,25 +1,25 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { useActiveBoss } from "../../../features/boss/hooks";
-import { useActiveStudyPlan } from "../../../features/content-study/hooks/useActiveStudyPlan";
-import { useProgressionSummary } from "../../../features/progression/hooks";
-import { useStreakSummary } from "../../../features/streaks/hooks";
-import { useSessionStats } from "../../../session/hooks/useSession";
-import { useAuthStore } from "../../../store";
-import { debug } from "../../../utils/debug";
-import { RECOMMENDATION_RULES } from "./home-recommendation-rules";
+import { useActiveBoss } from '../../../features/boss/hooks';
+import { useActiveStudyPlan } from '../../../features/content-study/hooks/useActiveStudyPlan';
+import { useProgressionSummary } from '../../../features/progression/hooks';
+import { useStreakSummary } from '../../../features/streaks/hooks';
+import { useSessionStats } from '../../../session/hooks/useSession';
+import { useAuthStore } from '../../../store';
+import { debug } from '../../../utils/debug';
+import { RECOMMENDATION_RULES } from './home-recommendation-rules';
 import type {
   HomeRecommendation,
   RecommendationContext,
   UrgencyLevel,
-} from "./home-recommendation-types";
+} from './home-recommendation-types';
 
 export type { HomeRecommendation, RecommendationContext, UrgencyLevel };
 
 function toError(error: unknown): Error {
   return error instanceof Error
     ? error
-    : new Error("Home recommendation rule failed");
+    : new Error('Home recommendation rule failed');
 }
 
 export class HomeRecommendationEngine {
@@ -75,7 +75,7 @@ export function useHomeRecommendation(): {
   refresh: () => void;
 } {
   const { user } = useAuthStore();
-  const userId = user?.id ?? "";
+  const userId = user?.id ?? '';
   const { data: activeStudyPlan, isLoading: studyLoading } =
     useActiveStudyPlan();
   const { data: streak, isLoading: streakLoading } = useStreakSummary(userId);

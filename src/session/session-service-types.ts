@@ -1,4 +1,4 @@
-import type { SessionConfig, SessionPreset, TimerConfig } from "./types";
+import type { SessionConfig, SessionPreset, TimerConfig } from './types';
 
 export interface SessionServiceOptions {
   autoSave?: boolean;

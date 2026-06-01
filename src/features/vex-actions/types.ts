@@ -13,4 +13,4 @@ export type {
   VexActionName,
   VexActionResult,
   VexActionStatus,
-} from "./schemas";
+} from './schemas';

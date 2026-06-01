@@ -1,13 +1,13 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 // ============================================================================
 // Adaptive Difficulty Suggestion Schemas (BONUS PHASE)
 // ============================================================================
 
 export const SessionDifficultySchema = z.enum([
-  "CASUAL",
-  "FOCUSED",
-  "INTENSE",
+  'CASUAL',
+  'FOCUSED',
+  'INTENSE',
 ]);
 
 export const DifficultySuggestionStatsSchema = z.object({
@@ -19,7 +19,7 @@ export const DifficultySuggestionStatsSchema = z.object({
 export const DifficultySuggestionSchema = z.object({
   suggestion: SessionDifficultySchema.nullable(),
   reason: z.string().min(1).max(500),
-  confidence: z.enum(["low", "medium", "high"]),
+  confidence: z.enum(['low', 'medium', 'high']),
   stats: DifficultySuggestionStatsSchema,
 });
 

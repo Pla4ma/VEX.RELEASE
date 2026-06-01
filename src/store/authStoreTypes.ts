@@ -1,5 +1,5 @@
-import type { Nullable } from "../types/global";
-import type { User } from "../types/models";
+import type { Nullable } from '../types/global';
+import type { User } from '../types/models';
 
 export interface RegisterInput {
   email: string;

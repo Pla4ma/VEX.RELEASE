@@ -1,4 +1,4 @@
-import { FEATURE_FLAGS } from "./feature-flags";
+import { FEATURE_FLAGS } from './feature-flags';
 
 export const FEATURE_FLAG_DEFAULTS: Record<string, boolean> = {
   [FEATURE_FLAGS.SESSIONS]: true,

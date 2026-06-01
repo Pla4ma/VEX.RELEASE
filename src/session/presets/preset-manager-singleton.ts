@@ -1,4 +1,4 @@
-import { PresetService } from "./preset-manager";
+import { PresetService } from './preset-manager';
 
 let presetServiceInstance: PresetService | null = null;
 

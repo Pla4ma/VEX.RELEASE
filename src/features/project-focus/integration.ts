@@ -1,16 +1,16 @@
-import { type ProjectThread } from "./schemas";
+import { type ProjectThread } from './schemas';
 import {
   ensureProjectThread,
   rescueStaleProject,
   buildProjectSessionBrief,
   completeProjectSession,
   buildProjectMemoryCandidate,
-} from "./service";
+} from './service';
 import {
   trackProjectThreadCreated,
   trackProjectSessionStarted,
   trackProjectThreadRescued,
-} from "./analytics";
+} from './analytics';
 
 export interface ProjectFocusIntegration {
   ensureThread(userId: string, title: string): Promise<ProjectThread>;

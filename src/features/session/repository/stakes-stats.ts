@@ -1,15 +1,15 @@
-import { getSupabaseClient } from "../../../config/supabase";
-import { enqueue } from "../../../lib/offline/queue";
-import { withRetry, RepositoryError } from "../../../lib/repository/base";
-import { captureSilentFailure } from "../../../utils/silent-failure";
+import { getSupabaseClient } from '../../../config/supabase';
+import { enqueue } from '../../../lib/offline/queue';
+import { withRetry, RepositoryError } from '../../../lib/repository/base';
+import { captureSilentFailure } from '../../../utils/silent-failure';
 import {
   UserStakesPreferenceSchema,
+  StakesStatsSchema,
+  type StakesStats,
   type StakesSessionRecord,
   type UserStakesPreference,
-} from "./stakes-schemas";
-import { saveStakesSession } from "./stakes-queries";
-
-const supabase = getSupabaseClient();
+} from './stakes-schemas';
+import { saveStakesSession } from './stakes-queries';
 
 export async function updateStakesPreference(
   userId: string,
@@ -20,21 +20,22 @@ export async function updateStakesPreference(
 }> {
   try {
     enqueue({
-      operation: "UPDATE",
-      feature: "sessions",
+      operation: 'UPDATE',
+      feature: 'sessions',
       payload: { userId, updates },
       idempotencyKey: `stakes-pref:${userId}:${Date.now()}`,
       maxRetries: 5,
-      priority: "normal",
+      priority: 'normal',
     });
+    const supabase = getSupabaseClient();
     const { data, error } = await withRetry(
-      "updateStakesPreference",
+      'updateStakesPreference',
       async () => {
         return await supabase
-          .from("user_stakes_preferences")
+          .from('user_stakes_preferences')
           .upsert(
             { user_id: userId, ...updates, updated_at: Date.now() },
-            { onConflict: "user_id" },
+            { onConflict: 'user_id' },
           )
           .select()
           .single();
@@ -46,13 +47,13 @@ export async function updateStakesPreference(
     return { data: UserStakesPreferenceSchema.parse(data), error: null };
   } catch (error) {
     captureSilentFailure(error, {
-      feature: "sessions",
-      operation: "updatePreference",
-      type: "data",
+      feature: 'sessions',
+      operation: 'updatePreference',
+      type: 'data',
     });
     return {
       data: null,
-      error: new RepositoryError("updateStakesPreference", error),
+      error: new RepositoryError('updateStakesPreference', error),
     };
   }
 }
@@ -60,32 +61,27 @@ export async function updateStakesPreference(
 export async function fetchStakesStats(
   userId: string,
 ): Promise<{
-  data: {
-    totalSessions: number;
-    completedSessions: number;
-    completionRate: number;
-    totalXpEarned: number;
-    netGems: number;
-  } | null;
+  data: StakesStats | null;
   error: RepositoryError | null;
 }> {
   try {
-    const { data, error } = await withRetry("fetchStakesStats", async () => {
-      return await supabase.rpc("get_stakes_stats", { p_user_id: userId });
+    const supabase = getSupabaseClient();
+    const { data, error } = await withRetry('fetchStakesStats', async () => {
+      return await supabase.rpc('get_stakes_stats', { p_user_id: userId });
     });
     if (error) {
       throw error;
     }
-    return { data, error: null };
+    return { data: StakesStatsSchema.parse(data), error: null };
   } catch (error) {
     captureSilentFailure(error, {
-      feature: "sessions",
-      operation: "fetchStats",
-      type: "data",
+      feature: 'sessions',
+      operation: 'fetchStats',
+      type: 'data',
     });
     return {
       data: null,
-      error: new RepositoryError("fetchStakesStats", error),
+      error: new RepositoryError('fetchStakesStats', error),
     };
   }
 }

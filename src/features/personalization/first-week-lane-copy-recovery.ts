@@ -1,4 +1,4 @@
-import type { Lane } from "../lane-engine/types";
+import type { Lane } from '../lane-engine/types';
 
 type LaneCopy = {
   laneStageTheme: string;
@@ -8,55 +8,55 @@ type LaneCopy = {
 
 const DAY_4_RECOVERY: Record<Lane, LaneCopy> = {
   student: {
-    laneStageTheme: "study_recovery",
-    primaryMessage: "Need a shorter study block today?",
+    laneStageTheme: 'study_recovery',
+    primaryMessage: 'Need a shorter study block today?',
     unlockExplanation:
-      "VEX helps you stay on track even when energy dips. A recovery session counts.",
+      'VEX helps you stay on track even when energy dips. A recovery session counts.',
   },
   game_like: {
-    laneStageTheme: "run_recovery",
-    primaryMessage: "A recovery run still counts as movement.",
+    laneStageTheme: 'run_recovery',
+    primaryMessage: 'A recovery run still counts as movement.',
     unlockExplanation:
-      "Not every encounter needs full intensity. VEX tracks recovery as part of your rhythm.",
+      'Not every encounter needs full intensity. VEX tracks recovery as part of your rhythm.',
   },
   deep_creative: {
-    laneStageTheme: "project_recovery",
-    primaryMessage: "Return to your project with one small move.",
+    laneStageTheme: 'project_recovery',
+    primaryMessage: 'Return to your project with one small move.',
     unlockExplanation:
-      "Creative flow has natural pauses. VEX preserves your thread through recovery days.",
+      'Creative flow has natural pauses. VEX preserves your thread through recovery days.',
   },
   minimal_normal: {
-    laneStageTheme: "clean_recovery",
-    primaryMessage: "One tiny block keeps the momentum alive.",
+    laneStageTheme: 'clean_recovery',
+    primaryMessage: 'One tiny block keeps the momentum alive.',
     unlockExplanation:
-      "Clean mode means not forcing it. VEX stays present without pressure.",
+      'Clean mode means not forcing it. VEX stays present without pressure.',
   },
 };
 
 const DAY_6_WEEKLY_PREP: Record<Lane, LaneCopy> = {
   student: {
-    laneStageTheme: "study_weekly_prep",
-    primaryMessage: "One more study block before weekly intelligence.",
+    laneStageTheme: 'study_weekly_prep',
+    primaryMessage: 'One more study block before weekly intelligence.',
     unlockExplanation:
-      "Six study sessions built real evidence. VEX prepares your first-week analysis.",
+      'Six study sessions built real evidence. VEX prepares your first-week analysis.',
   },
   game_like: {
-    laneStageTheme: "run_weekly_prep",
+    laneStageTheme: 'run_weekly_prep',
     primaryMessage: "One more run to complete the week's data.",
     unlockExplanation:
-      "Six encounters give VEX enough signal to report back on what worked.",
+      'Six encounters give VEX enough signal to report back on what worked.',
   },
   deep_creative: {
-    laneStageTheme: "project_weekly_prep",
-    primaryMessage: "One more project session to complete the full picture.",
+    laneStageTheme: 'project_weekly_prep',
+    primaryMessage: 'One more project session to complete the full picture.',
     unlockExplanation:
-      "Six project blocks for VEX to analyze creative continuity patterns.",
+      'Six project blocks for VEX to analyze creative continuity patterns.',
   },
   minimal_normal: {
-    laneStageTheme: "clean_weekly_prep",
-    primaryMessage: "One more clean block before the weekly view.",
+    laneStageTheme: 'clean_weekly_prep',
+    primaryMessage: 'One more clean block before the weekly view.',
     unlockExplanation:
-      "Six sessions of quiet rhythm. VEX has enough signal for a meaningful insight.",
+      'Six sessions of quiet rhythm. VEX has enough signal for a meaningful insight.',
   },
 };
 

@@ -5,10 +5,10 @@
  * Part of Phase 3 Information Architecture - position 3.
  */
 
-import React from "react";
-import { StartSessionButton } from "../../../features/home-spine/components";
-import { SessionRecommendationCard } from "../../../features/session-recommendation/components/SessionRecommendationCard";
-import type { SessionRecommendation } from "../../../features/session-recommendation/types";
+import React from 'react';
+import { StartSessionButton } from '../../../features/home-spine/components';
+import { SessionRecommendationCard } from '../../../features/session-recommendation/components/SessionRecommendationCard';
+import type { SessionRecommendation } from '../../../features/session-recommendation/types';
 
 interface HomeSessionControlProps {
   hasActiveSession: boolean;
@@ -17,7 +17,7 @@ interface HomeSessionControlProps {
   resumeTimeSeconds?: number;
   squadMembersFocusing?: number;
   streakHoursRemaining?: number | null;
-  streakRiskLevel?: "NONE" | "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
+  streakRiskLevel?: 'NONE' | 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   recommendation?: SessionRecommendation | null;
 }
 
@@ -51,7 +51,7 @@ export function HomeSessionControl({
       resumeTimeSeconds={resumeTimeSeconds}
       squadMembersFocusing={squadMembersFocusing}
       streakHoursRemaining={streakHoursRemaining}
-      streakRiskLevel={streakRiskLevel ?? "NONE"}
+      streakRiskLevel={streakRiskLevel ?? 'NONE'}
     />
   );
 }

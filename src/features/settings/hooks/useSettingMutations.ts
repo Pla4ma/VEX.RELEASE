@@ -1,12 +1,12 @@
-import { useMutation, useQueryClient, type UseMutationOptions } from "@tanstack/react-query";
-import * as service from "../service";
+import { useMutation, useQueryClient, type UseMutationOptions } from '@tanstack/react-query';
+import * as service from '../service';
 import {
   type Setting,
   type SyncState,
   type SettingCategory,
   type SettingValue,
-} from "../types";
-import { settingsKeys } from "./queryKeys";
+} from '../types';
+import { settingsKeys } from './queryKeys';
 
 export function useUpdateSetting(
   userId: string,
@@ -16,7 +16,7 @@ export function useUpdateSetting(
       Error,
       { key: string; value: SettingValue; category: SettingCategory }
     >,
-    "mutationFn"
+    'mutationFn'
   >,
 ) {
   const queryClient = useQueryClient();
@@ -47,7 +47,7 @@ export function useBatchUpdateSettings(
       Error,
       Array<{ key: string; value: SettingValue; category: SettingCategory }>
     >,
-    "mutationFn"
+    'mutationFn'
   >,
 ) {
   const queryClient = useQueryClient();
@@ -62,7 +62,7 @@ export function useBatchUpdateSettings(
 
 export function useDeleteSetting(
   userId: string,
-  options?: Omit<UseMutationOptions<boolean, Error, string>, "mutationFn">,
+  options?: Omit<UseMutationOptions<boolean, Error, string>, 'mutationFn'>,
 ) {
   const queryClient = useQueryClient();
   return useMutation({
@@ -85,9 +85,9 @@ export function useSyncSettings(
     UseMutationOptions<
       SyncState,
       Error,
-      { force?: boolean; direction?: "up" | "down" | "both" }
+      { force?: boolean; direction?: 'up' | 'down' | 'both' }
     >,
-    "mutationFn"
+    'mutationFn'
   >,
 ) {
   const queryClient = useQueryClient();

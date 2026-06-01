@@ -1,32 +1,32 @@
-import { createSheet } from "@/shared/ui/create-sheet";
-import type { ToastType } from "./Toast.types";
+import { createSheet } from '@/shared/ui/create-sheet';
+import type { ToastType } from './Toast.types';
 
 export const styles = createSheet({
   container: {
-    position: "absolute",
+    position: 'absolute',
     left: 16,
     right: 16,
-    alignItems: "center",
+    alignItems: 'center',
   },
   toastContainer: {
-    width: "100%",
+    width: '100%',
     marginBottom: 8,
     borderRadius: 12,
-    overflow: "hidden",
+    overflow: 'hidden',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.15,
     shadowRadius: 8,
     elevation: 5,
   },
   toast: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     padding: 16,
     minHeight: 64,
   },
   iconContainer: { marginRight: 12 },
   content: { flex: 1 },
-  title: { fontWeight: "600" },
+  title: { fontWeight: '600' },
   message: { marginTop: 2, opacity: 0.9 },
   action: {
     marginLeft: 12,
@@ -44,10 +44,10 @@ interface ToastTypeStyle {
 }
 
 const TYPE_FALLBACKS: Record<ToastType, string> = {
-  success: "check-circle",
-  error: "alert-circle",
-  warning: "alert-triangle",
-  info: "info",
+  success: 'check-circle',
+  error: 'alert-circle',
+  warning: 'alert-triangle',
+  info: 'info',
 };
 
 export function getToastTypeStyle(
@@ -60,16 +60,16 @@ export function getToastTypeStyle(
     primary: { 500: string };
   },
 ): ToastTypeStyle {
-  const fallback = type ?? "info";
+  const fallback = type ?? 'info';
   const icon = iconOverride ?? TYPE_FALLBACKS[fallback];
   switch (type) {
-    case "success":
+    case 'success':
       return { backgroundColor: themeColors.success.DEFAULT, icon };
-    case "error":
+    case 'error':
       return { backgroundColor: themeColors.error.DEFAULT, icon };
-    case "warning":
+    case 'warning':
       return { backgroundColor: themeColors.warning.DEFAULT, icon };
-    case "info":
+    case 'info':
     default:
       return { backgroundColor: themeColors.primary[500], icon };
   }

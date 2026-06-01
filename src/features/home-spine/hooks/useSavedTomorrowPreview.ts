@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 import {
   clearTomorrowPreview,
   loadTomorrowPreview,
   type TomorrowPreviewData,
-} from "../tomorrowPreviewService";
+} from '../tomorrowPreviewService';
 
 export function useSavedTomorrowPreview(
   userId: string,

@@ -1,12 +1,12 @@
-import React from "react";
-import { View } from "react-native";
-import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useTheme } from "../../theme";
-import { useAuthStore } from "../../store";
-import { useStreakSummary } from "../../features/streaks/hooks";
-import { createSheet } from "../../shared/ui/create-sheet";
-import { TabButton } from "./TabButton";
+import React from 'react';
+import { View } from 'react-native';
+import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTheme } from '../../theme';
+import { useAuthStore } from '../../store';
+import { useStreakSummary } from '../../features/streaks/hooks';
+import { createSheet } from '../../shared/ui/create-sheet';
+import { TabButton } from './TabButton';
 
 export function VexTabBar({
   state,
@@ -45,7 +45,7 @@ export function VexTabBar({
           : theme.colors.semantic.tabInactive;
         const onPress = () => {
           const event = navigation.emit({
-            type: "tabPress",
+            type: 'tabPress',
             target: route.key,
             canPreventDefault: true,
           });
@@ -61,7 +61,7 @@ export function VexTabBar({
             key={route.key}
             label={descriptors[route.key]?.options.title ?? route.name}
             onLongPress={() =>
-              navigation.emit({ type: "tabLongPress", target: route.key })
+              navigation.emit({ type: 'tabLongPress', target: route.key })
             }
             onPress={onPress}
             route={route}
@@ -76,7 +76,7 @@ const styles = createSheet({
   container: {
     borderRadius: 28,
     borderWidth: 1,
-    flexDirection: "row",
+    flexDirection: 'row',
     paddingHorizontal: 8,
   },
 });

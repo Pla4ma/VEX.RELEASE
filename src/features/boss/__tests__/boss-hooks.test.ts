@@ -9,14 +9,14 @@ import {
   useBossEngagementSummary,
   useAvailableBosses,
   useBossTemplates,
-} from "../hooks/index";
+} from '../hooks/index';
 import {
   useBossEngagementSummaryForCoach,
   useBossEngagementSummary as useBossEngagementSummaryAlias,
-} from "../hooks/useBossEngagementSummary";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import React from "react";
-import { renderHook, waitFor } from "@testing-library/react-native";
+} from '../hooks/useBossEngagementSummary';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import React from 'react';
+import { renderHook, waitFor } from '@testing-library/react-native';
 
 function createWrapper() {
   const queryClient = new QueryClient({
@@ -31,8 +31,8 @@ function createWrapper() {
   };
 }
 
-describe("useActiveBoss", () => {
-  it("returns null data (archived)", async () => {
+describe('useActiveBoss', () => {
+  it('returns null data (archived)', async () => {
     const { result } = renderHook(() => useActiveBoss(), {
       wrapper: createWrapper(),
     });
@@ -41,8 +41,8 @@ describe("useActiveBoss", () => {
   });
 });
 
-describe("useBossEngagementSummary", () => {
-  it("returns zeroed engagement data", async () => {
+describe('useBossEngagementSummary', () => {
+  it('returns zeroed engagement data', async () => {
     const { result } = renderHook(() => useBossEngagementSummary(), {
       wrapper: createWrapper(),
     });
@@ -56,8 +56,8 @@ describe("useBossEngagementSummary", () => {
   });
 });
 
-describe("useAvailableBosses", () => {
-  it("returns empty array", async () => {
+describe('useAvailableBosses', () => {
+  it('returns empty array', async () => {
     const { result } = renderHook(() => useAvailableBosses(), {
       wrapper: createWrapper(),
     });
@@ -66,8 +66,8 @@ describe("useAvailableBosses", () => {
   });
 });
 
-describe("useBossTemplates", () => {
-  it("returns empty array", async () => {
+describe('useBossTemplates', () => {
+  it('returns empty array', async () => {
     const { result } = renderHook(() => useBossTemplates(), {
       wrapper: createWrapper(),
     });
@@ -76,8 +76,8 @@ describe("useBossTemplates", () => {
   });
 });
 
-describe("hooks/useBossEngagementSummary", () => {
-  it("useBossEngagementSummaryForCoach is disabled when userId is null", async () => {
+describe('hooks/useBossEngagementSummary', () => {
+  it('useBossEngagementSummaryForCoach is disabled when userId is null', async () => {
     const { result } = renderHook(
       () => useBossEngagementSummaryForCoach(null),
       { wrapper: createWrapper() },
@@ -86,9 +86,9 @@ describe("hooks/useBossEngagementSummary", () => {
     expect(result.current.isFetching).toBe(false);
   });
 
-  it("useBossEngagementSummaryForCoach fetches when userId provided", async () => {
+  it('useBossEngagementSummaryForCoach fetches when userId provided', async () => {
     const { result } = renderHook(
-      () => useBossEngagementSummaryForCoach("user-1"),
+      () => useBossEngagementSummaryForCoach('user-1'),
       { wrapper: createWrapper() },
     );
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
@@ -100,7 +100,7 @@ describe("hooks/useBossEngagementSummary", () => {
     });
   });
 
-  it("useBossEngagementSummary is an alias", () => {
+  it('useBossEngagementSummary is an alias', () => {
     expect(useBossEngagementSummaryAlias).toBe(useBossEngagementSummaryForCoach);
   });
 });

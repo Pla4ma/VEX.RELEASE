@@ -6,12 +6,12 @@ import {
   calculateFocusScore,
   getScoreBand,
   calculateScoreChange,
-} from "../focus-score-calculators";
-import { FOCUS_SCORE_CONFIG } from "../focus-score-config";
+} from '../focus-score-calculators';
+import { FOCUS_SCORE_CONFIG } from '../focus-score-config';
 import {
   MIN_FOCUS_SCORE,
   MAX_FOCUS_SCORE,
-} from "../schemas";
+} from '../schemas';
 
 // ─── FIXTURES ────────────────────────────────────────────────────────────────
 
@@ -26,9 +26,9 @@ function makeScoreInput(overrides: Record<string, unknown> = {}) {
       { start: Date.now() - 30 * 86400000, end: Date.now() - 1 * 86400000, length: 29 },
     ],
     sessionDetails: [
-      { focusPurity: 85, grade: "A", duration: 45, wasAbandoned: false, mode: "deep_work", startTime: "2025-05-28T09:00:00Z", context: "home" },
-      { focusPurity: 90, grade: "S", duration: 60, wasAbandoned: false, mode: "standard", startTime: "2025-05-27T14:00:00Z", context: "office" },
-      { focusPurity: 75, grade: "B", duration: 30, wasAbandoned: false, mode: "recovery", startTime: "2025-05-26T19:00:00Z", context: "home" },
+      { focusPurity: 85, grade: 'A', duration: 45, wasAbandoned: false, mode: 'deep_work', startTime: '2025-05-28T09:00:00Z', context: 'home' },
+      { focusPurity: 90, grade: 'S', duration: 60, wasAbandoned: false, mode: 'standard', startTime: '2025-05-27T14:00:00Z', context: 'office' },
+      { focusPurity: 75, grade: 'B', duration: 30, wasAbandoned: false, mode: 'recovery', startTime: '2025-05-26T19:00:00Z', context: 'home' },
     ],
     daysSinceLastSession: 0,
     last7DaySessions: 5,
@@ -43,15 +43,15 @@ function makeScoreInput(overrides: Record<string, unknown> = {}) {
 
 // ─── TESTS ───────────────────────────────────────────────────────────────────
 
-describe("calculateFocusScore", () => {
-  test("returns score within [300, 850] range", () => {
+describe('calculateFocusScore', () => {
+  test('returns score within [300, 850] range', () => {
     const result = calculateFocusScore(makeScoreInput());
     expect(result.score).toBeGreaterThanOrEqual(MIN_FOCUS_SCORE);
     expect(result.score).toBeLessThanOrEqual(MAX_FOCUS_SCORE);
     expect(result.factors).toBeDefined();
   });
 
-  test("returns higher score for better input data", () => {
+  test('returns higher score for better input data', () => {
     const excellent = calculateFocusScore(
       makeScoreInput({
         sessionsLast30Days: 30,
@@ -72,14 +72,14 @@ describe("calculateFocusScore", () => {
   });
 });
 
-describe("getScoreBand", () => {
-  test("returns correct band for various scores", () => {
-    expect(getScoreBand(850).label).toBe("Legendary");
-    expect(getScoreBand(550).label).toBe("Good");
-    expect(getScoreBand(300).label).toBe("Building");
+describe('getScoreBand', () => {
+  test('returns correct band for various scores', () => {
+    expect(getScoreBand(850).label).toBe('Legendary');
+    expect(getScoreBand(550).label).toBe('Good');
+    expect(getScoreBand(300).label).toBe('Building');
   });
 
-  test("always returns a band (no undefined)", () => {
+  test('always returns a band (no undefined)', () => {
     for (const score of [300, 400, 500, 600, 700, 800, 850]) {
       const band = getScoreBand(score);
       expect(band).toBeDefined();
@@ -88,31 +88,31 @@ describe("getScoreBand", () => {
   });
 });
 
-describe("calculateScoreChange", () => {
-  test("SESSION_COMPLETE returns positive change", () => {
-    const change = calculateScoreChange("SESSION_COMPLETE", {});
+describe('calculateScoreChange', () => {
+  test('SESSION_COMPLETE returns positive change', () => {
+    const change = calculateScoreChange('SESSION_COMPLETE', {});
     expect(change).toBeGreaterThan(0);
   });
 
-  test("STREAK_BREAK returns negative change", () => {
-    const change = calculateScoreChange("STREAK_BREAK", {});
+  test('STREAK_BREAK returns negative change', () => {
+    const change = calculateScoreChange('STREAK_BREAK', {});
     expect(change).toBeLessThan(0);
   });
 
-  test("grade S/A gives bonus to positive changes", () => {
-    const baseChange = calculateScoreChange("SESSION_COMPLETE", {});
-    const sChange = calculateScoreChange("SESSION_COMPLETE", { sessionGrade: "S" });
+  test('grade S/A gives bonus to positive changes', () => {
+    const baseChange = calculateScoreChange('SESSION_COMPLETE', {});
+    const sChange = calculateScoreChange('SESSION_COMPLETE', { sessionGrade: 'S' });
     expect(sChange).toBeGreaterThan(baseChange);
   });
 
-  test("recovery multiplier increases positive changes", () => {
-    const base = calculateScoreChange("SESSION_COMPLETE", {});
-    const recovery = calculateScoreChange("SESSION_COMPLETE", { isInRecovery: true });
+  test('recovery multiplier increases positive changes', () => {
+    const base = calculateScoreChange('SESSION_COMPLETE', {});
+    const recovery = calculateScoreChange('SESSION_COMPLETE', { isInRecovery: true });
     expect(recovery).toBeGreaterThan(base);
   });
 
-  test("change is clamped to max range", () => {
-    const change = calculateScoreChange("PERFECT_SESSION", { streakLength: 100, sessionGrade: "S" });
+  test('change is clamped to max range', () => {
+    const change = calculateScoreChange('PERFECT_SESSION', { streakLength: 100, sessionGrade: 'S' });
     expect(change).toBeLessThanOrEqual(FOCUS_SCORE_CONFIG.SCORE_CHANGES.PERFECT_SESSION.max);
   });
 });

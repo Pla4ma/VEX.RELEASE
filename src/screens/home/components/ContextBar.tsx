@@ -7,12 +7,12 @@
  * @phase 1 - Foundation
  */
 
-import React from "react";
-import { View } from "react-native";
-import { useTheme } from "../../../theme";
-import { Text } from "../../../components/primitives/Text";
-import { Icon } from "../../../icons";
-import { useStreakSummary } from "../../../features/streaks/hooks";
+import React from 'react';
+import { View } from 'react-native';
+import { useTheme } from '../../../theme';
+import { Text } from '../../../components/primitives/Text';
+import { Icon } from '../../../icons';
+import { useStreakSummary } from '../../../features/streaks/hooks';
 
 interface ContextBarProps {
   userId: string;
@@ -21,35 +21,35 @@ interface ContextBarProps {
 function getGreeting(): string {
   const hour = new Date().getHours();
   if (hour < 6) {
-    return "Early start";
+    return 'Early start';
   }
   if (hour < 12) {
-    return "Good morning";
+    return 'Good morning';
   }
   if (hour < 17) {
-    return "Good afternoon";
+    return 'Good afternoon';
   }
   if (hour < 21) {
-    return "Good evening";
+    return 'Good evening';
   }
-  return "Night owl";
+  return 'Night owl';
 }
 
 function getTimeBasedMessage(): string {
   const hour = new Date().getHours();
   if (hour < 6) {
-    return "The quiet hours are powerful";
+    return 'The quiet hours are powerful';
   }
   if (hour < 12) {
-    return "Start the day with intention";
+    return 'Start the day with intention';
   }
   if (hour < 17) {
-    return "Keep the momentum going";
+    return 'Keep the momentum going';
   }
   if (hour < 21) {
-    return "Finish strong today";
+    return 'Finish strong today';
   }
-  return "One session before rest";
+  return 'One session before rest';
 }
 
 export function ContextBar({ userId }: ContextBarProps): JSX.Element {
@@ -57,9 +57,9 @@ export function ContextBar({ userId }: ContextBarProps): JSX.Element {
   const { data: streak } = useStreakSummary(userId || null);
 
   const containerStyle = {
-    flexDirection: "row" as const,
-    justifyContent: "space-between" as const,
-    alignItems: "center" as const,
+    flexDirection: 'row' as const,
+    justifyContent: 'space-between' as const,
+    alignItems: 'center' as const,
     paddingHorizontal: theme.spacing[4],
     paddingTop: theme.spacing[2],
     paddingBottom: theme.spacing[3],
@@ -78,8 +78,8 @@ export function ContextBar({ userId }: ContextBarProps): JSX.Element {
   };
 
   const streakBadgeStyle = {
-    flexDirection: "row" as const,
-    alignItems: "center" as const,
+    flexDirection: 'row' as const,
+    alignItems: 'center' as const,
     backgroundColor: streak?.currentDays
       ? `${theme.colors.success[500]}15`
       : theme.colors.background.secondary,
@@ -97,7 +97,7 @@ export function ContextBar({ userId }: ContextBarProps): JSX.Element {
   };
 
   const streakTextStyle = {
-    fontWeight: "600" as const,
+    fontWeight: '600' as const,
   };
 
   const greeting = getGreeting();

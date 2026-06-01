@@ -6,17 +6,17 @@ import {
   getBossEngagementSignals,
   useBossEngagementSignals,
   deriveBossEngagementLevel,
-} from "../boss-engagement-signals";
-import type { BossEngagementInputs } from "../boss-engagement-signals";
+} from '../boss-engagement-signals';
+import type { BossEngagementInputs } from '../boss-engagement-signals';
 
-describe("boss-engagement-signals", () => {
+describe('boss-engagement-signals', () => {
   const emptyInputs: BossEngagementInputs = {};
 
-  it("getBossEngagementSignals returns empty array", () => {
+  it('getBossEngagementSignals returns empty array', () => {
     expect(getBossEngagementSignals(emptyInputs)).toEqual([]);
   });
 
-  it("getBossEngagementSignals handles populated inputs", () => {
+  it('getBossEngagementSignals handles populated inputs', () => {
     const inputs: BossEngagementInputs = {
       bossIgnored: false,
       bossUnlocked: true,
@@ -29,7 +29,7 @@ describe("boss-engagement-signals", () => {
     expect(getBossEngagementSignals(inputs)).toEqual([]);
   });
 
-  it("useBossEngagementSignals returns inputs with empty signals", () => {
+  it('useBossEngagementSignals returns inputs with empty signals', () => {
     const inputs: BossEngagementInputs = { bossUnlocked: true };
     const result = useBossEngagementSignals(inputs);
     expect(result.signals).toEqual([]);
@@ -37,7 +37,7 @@ describe("boss-engagement-signals", () => {
   });
 
   it("deriveBossEngagementLevel returns 'none'", () => {
-    expect(deriveBossEngagementLevel(emptyInputs)).toBe("none");
+    expect(deriveBossEngagementLevel(emptyInputs)).toBe('none');
   });
 
   it("deriveBossEngagementLevel returns 'none' with high activity", () => {
@@ -46,6 +46,6 @@ describe("boss-engagement-signals", () => {
       bossCTAClickedCount: 50,
       bossDamageEventsCount: 200,
     };
-    expect(deriveBossEngagementLevel(inputs)).toBe("none");
+    expect(deriveBossEngagementLevel(inputs)).toBe('none');
   });
 });

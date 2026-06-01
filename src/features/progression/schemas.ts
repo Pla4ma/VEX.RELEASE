@@ -1,5 +1,5 @@
-import { z } from "zod";
-import { XpSourceSchema } from "./schemas-xp";
+import { z } from 'zod';
+import { XpSourceSchema } from './schemas-xp';
 
 export { XpSourceSchema };
 
@@ -75,15 +75,15 @@ export const XpBreakdownSchema = z
   })
   .strict();
 export const UnlockTypeSchema = z.enum([
-  "FEATURE",
-  "BLOCKER_INSIGHT",
-  "SHOP_ITEM",
-  "COSMETIC",
-  "TITLE",
-  "MODE_ADAPTATION",
+  'FEATURE',
+  'BLOCKER_INSIGHT',
+  'SHOP_ITEM',
+  'COSMETIC',
+  'TITLE',
+  'MODE_ADAPTATION',
   // Legacy — preserved for DB compatibility
-  "BOSS",
-  "GAME_MODE",
+  'BOSS',
+  'GAME_MODE',
 ]);
 export const UnlockSchema = z
   .object({
@@ -97,21 +97,21 @@ export const UnlockSchema = z
   })
   .strict();
 export const MilestoneTypeSchema = z.enum([
-  "LEVEL",
-  "XP_TOTAL",
-  "SESSIONS_COMPLETED",
-  "DAYS_ACTIVE",
+  'LEVEL',
+  'XP_TOTAL',
+  'SESSIONS_COMPLETED',
+  'DAYS_ACTIVE',
 ]);
 export const MilestoneRewardTypeSchema = z.enum([
-  "PROGRESS_PROOF",
-  "INSIGHT",
-  "ITEM",
-  "TITLE",
-  "COSMETIC",
+  'PROGRESS_PROOF',
+  'INSIGHT',
+  'ITEM',
+  'TITLE',
+  'COSMETIC',
   // Legacy economy rewards — deprecated, kept for DB compatibility
-  "XP",
-  "COINS",
-  "GEMS",
+  'XP',
+  'COINS',
+  'GEMS',
 ]);
 export const MilestoneSchema = z
   .object({
@@ -193,4 +193,4 @@ export type {
   XpBreakdown, LevelUpRecord, UnlockType, Unlock, MilestoneType,
   MilestoneRewardType, Milestone, ProgressionTier, AddXpInput,
   PrestigeInput, PrestigeRewardPreview, AddXpResult, LevelUpResult,
-} from "./types";
+} from './types';

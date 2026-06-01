@@ -4,8 +4,8 @@ const mockSelect = jest.fn();
 const mockSingle = jest.fn();
 const mockGetUser = jest.fn();
 
-jest.mock("../repository", () => {
-  const actual = jest.requireActual("../repository");
+jest.mock('../repository', () => {
+  const actual = jest.requireActual('../repository');
   return {
     ...actual,
     getSupabase: jest.fn(() => ({
@@ -24,23 +24,23 @@ jest.mock("../repository", () => {
   };
 });
 
-import { RepositoryError } from "../repository";
+import { RepositoryError } from '../repository';
 import {
   getOrCreateWallet,
   getWalletSummary,
   getBalance,
-} from "../service";
+} from '../service';
 
 beforeEach(() => {
   jest.clearAllMocks();
 });
 
-describe("getOrCreateWallet", () => {
-  it("returns wallet coins and gems on success", async () => {
+describe('getOrCreateWallet', () => {
+  it('returns wallet coins and gems on success', async () => {
     mockSingle.mockResolvedValue({
       data: {
-        id: "550e8400-e29b-41d4-a716-446655440000",
-        user_id: "550e8400-e29b-41d4-a716-446655440001",
+        id: '550e8400-e29b-41d4-a716-446655440000',
+        user_id: '550e8400-e29b-41d4-a716-446655440001',
         coins: 150,
         gems: 7,
         created_at: 1000,
@@ -49,36 +49,36 @@ describe("getOrCreateWallet", () => {
       error: null,
     });
 
-    const wallet = await getOrCreateWallet("550e8400-e29b-41d4-a716-446655440001");
+    const wallet = await getOrCreateWallet('550e8400-e29b-41d4-a716-446655440001');
     expect(wallet.coins).toBe(150);
     expect(wallet.gems).toBe(7);
   });
 
-  it("throws RepositoryError on supabase error", async () => {
+  it('throws RepositoryError on supabase error', async () => {
     mockSingle.mockResolvedValue({
       data: null,
-      error: { message: "duplicate key", code: "23505" },
+      error: { message: 'duplicate key', code: '23505' },
     });
 
     await expect(
-      getOrCreateWallet("550e8400-e29b-41d4-a716-446655440001"),
+      getOrCreateWallet('550e8400-e29b-41d4-a716-446655440001'),
     ).rejects.toThrow(RepositoryError);
   });
 
-  it("throws on invalid wallet data (schema validation)", async () => {
+  it('throws on invalid wallet data (schema validation)', async () => {
     mockSingle.mockResolvedValue({
       data: { invalid: true },
       error: null,
     });
 
     await expect(
-      getOrCreateWallet("550e8400-e29b-41d4-a716-446655440001"),
+      getOrCreateWallet('550e8400-e29b-41d4-a716-446655440001'),
     ).rejects.toThrow();
   });
 });
 
-describe("getWalletSummary", () => {
-  it("returns {coins:0, gems:0} when no user", async () => {
+describe('getWalletSummary', () => {
+  it('returns {coins:0, gems:0} when no user', async () => {
     mockGetUser.mockResolvedValue({
       data: { user: null },
       error: null,
@@ -88,15 +88,15 @@ describe("getWalletSummary", () => {
     expect(summary).toEqual({ coins: 0, gems: 0 });
   });
 
-  it("returns wallet when user exists", async () => {
+  it('returns wallet when user exists', async () => {
     mockGetUser.mockResolvedValue({
-      data: { user: { id: "550e8400-e29b-41d4-a716-446655440001" } },
+      data: { user: { id: '550e8400-e29b-41d4-a716-446655440001' } },
       error: null,
     });
     mockSingle.mockResolvedValue({
       data: {
-        id: "550e8400-e29b-41d4-a716-446655440000",
-        user_id: "550e8400-e29b-41d4-a716-446655440001",
+        id: '550e8400-e29b-41d4-a716-446655440000',
+        user_id: '550e8400-e29b-41d4-a716-446655440001',
         coins: 200,
         gems: 15,
         created_at: 1000,
@@ -111,12 +111,12 @@ describe("getWalletSummary", () => {
   });
 });
 
-describe("getBalance", () => {
-  it("returns coins from wallet", async () => {
+describe('getBalance', () => {
+  it('returns coins from wallet', async () => {
     mockSingle.mockResolvedValue({
       data: {
-        id: "550e8400-e29b-41d4-a716-446655440000",
-        user_id: "550e8400-e29b-41d4-a716-446655440001",
+        id: '550e8400-e29b-41d4-a716-446655440000',
+        user_id: '550e8400-e29b-41d4-a716-446655440001',
         coins: 500,
         gems: 20,
         created_at: 1000,
@@ -125,7 +125,7 @@ describe("getBalance", () => {
       error: null,
     });
 
-    const balance = await getBalance("550e8400-e29b-41d4-a716-446655440001");
+    const balance = await getBalance('550e8400-e29b-41d4-a716-446655440001');
     expect(balance).toBe(500);
   });
 });

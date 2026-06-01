@@ -1,54 +1,54 @@
-import * as repository from "../repository";
+import * as repository from '../repository';
 import {
   signUp,
   signIn,
-} from "../service";
-import type { AuthCredentials, SignUpMetadata } from "../types";
+} from '../service';
+import type { AuthCredentials, SignUpMetadata } from '../types';
 
-jest.mock("../repository");
+jest.mock('../repository');
 
 // ── Fixtures ───────────────────────────────────────────────────────────────
 
 const validCredentials: AuthCredentials = {
-  email: "test@example.com",
-  password: "Password1!",
+  email: 'test@example.com',
+  password: 'Password1!',
 };
 
 const validMetadata: SignUpMetadata = {
-  firstName: "Test",
-  lastName: "User",
+  firstName: 'Test',
+  lastName: 'User',
 };
 
 const mockUser = {
-  id: "550e8400-e29b-41d4-a716-446655440000",
-  createdAt: "2025-01-01T00:00:00Z",
-  updatedAt: "2025-01-01T00:00:00Z",
-  username: "testuser",
-  email: "test@example.com",
-  firstName: "Test",
-  lastName: "User",
-  displayName: "Test User",
+  id: '550e8400-e29b-41d4-a716-446655440000',
+  createdAt: '2025-01-01T00:00:00Z',
+  updatedAt: '2025-01-01T00:00:00Z',
+  username: 'testuser',
+  email: 'test@example.com',
+  firstName: 'Test',
+  lastName: 'User',
+  displayName: 'Test User',
   verified: true,
-  role: "user" as const,
-  status: "active" as const,
+  role: 'user' as const,
+  status: 'active' as const,
   preferences: {
-    theme: "system" as const,
-    language: "en",
+    theme: 'system' as const,
+    language: 'en',
     notifications: {
       push: true,
       email: false,
       sms: false,
       inApp: true,
-      digestFrequency: "daily" as const,
+      digestFrequency: 'daily' as const,
       quietHours: {
         enabled: false,
-        start: "22:00",
-        end: "07:00",
-        timezone: "UTC",
+        start: '22:00',
+        end: '07:00',
+        timezone: 'UTC',
       },
     },
     privacy: {
-      profileVisibility: "private" as const,
+      profileVisibility: 'private' as const,
       activityStatus: true,
       readReceipts: false,
       allowTagging: true,
@@ -67,31 +67,31 @@ const mockUser = {
 
 // ── signUp ─────────────────────────────────────────────────────────────────
 
-describe("signUp", () => {
+describe('signUp', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it("returns error when email is empty", async () => {
+  it('returns error when email is empty', async () => {
     const result = await signUp(
-      { email: "", password: "Password1!" },
+      { email: '', password: 'Password1!' },
       validMetadata,
     );
     expect(result.user).toBeNull();
     expect(result.error).toBeTruthy();
-    expect(result.error?.message).toContain("Email and password are required");
+    expect(result.error?.message).toContain('Email and password are required');
   });
 
-  it("returns error when password is empty", async () => {
+  it('returns error when password is empty', async () => {
     const result = await signUp(
-      { email: "test@example.com", password: "" },
+      { email: 'test@example.com', password: '' },
       validMetadata,
     );
     expect(result.user).toBeNull();
     expect(result.error).toBeTruthy();
   });
 
-  it("delegates to repository.signUpWithEmail with correct args", async () => {
+  it('delegates to repository.signUpWithEmail with correct args', async () => {
     jest
       .mocked(repository.signUpWithEmail)
       .mockResolvedValue({ user: mockUser, error: null });
@@ -107,37 +107,37 @@ describe("signUp", () => {
     expect(result.error).toBeNull();
   });
 
-  it("propagates repository errors", async () => {
+  it('propagates repository errors', async () => {
     jest
       .mocked(repository.signUpWithEmail)
-      .mockResolvedValue({ user: null, error: new Error("Email taken") });
+      .mockResolvedValue({ user: null, error: new Error('Email taken') });
 
     const result = await signUp(validCredentials, validMetadata);
     expect(result.user).toBeNull();
-    expect(result.error?.message).toBe("Email taken");
+    expect(result.error?.message).toBe('Email taken');
   });
 });
 
 // ── signIn ─────────────────────────────────────────────────────────────────
 
-describe("signIn", () => {
+describe('signIn', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it("returns error when email is empty", async () => {
-    const result = await signIn({ email: "", password: "Password1!" });
+  it('returns error when email is empty', async () => {
+    const result = await signIn({ email: '', password: 'Password1!' });
     expect(result.user).toBeNull();
     expect(result.error).toBeTruthy();
   });
 
-  it("returns error when password is empty", async () => {
-    const result = await signIn({ email: "test@example.com", password: "" });
+  it('returns error when password is empty', async () => {
+    const result = await signIn({ email: 'test@example.com', password: '' });
     expect(result.user).toBeNull();
     expect(result.error).toBeTruthy();
   });
 
-  it("delegates to repository.signInWithEmail", async () => {
+  it('delegates to repository.signInWithEmail', async () => {
     jest
       .mocked(repository.signInWithEmail)
       .mockResolvedValue({ user: mockUser, error: null });
@@ -152,13 +152,13 @@ describe("signIn", () => {
     expect(result.error).toBeNull();
   });
 
-  it("propagates sign-in errors from repository", async () => {
+  it('propagates sign-in errors from repository', async () => {
     jest
       .mocked(repository.signInWithEmail)
-      .mockResolvedValue({ user: null, error: new Error("Invalid credentials") });
+      .mockResolvedValue({ user: null, error: new Error('Invalid credentials') });
 
     const result = await signIn(validCredentials);
     expect(result.user).toBeNull();
-    expect(result.error?.message).toBe("Invalid credentials");
+    expect(result.error?.message).toBe('Invalid credentials');
   });
 });

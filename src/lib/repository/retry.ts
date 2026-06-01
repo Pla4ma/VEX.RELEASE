@@ -1,7 +1,7 @@
 import {
   classifyError,
   RepositoryError,
-} from "./error-handling";
+} from './error-handling';
 
 export interface RetryConfig {
   maxAttempts: number;
@@ -54,9 +54,9 @@ export async function withRetry<T>(
   throw lastError;
 }
 
-export type ConnectionState = "online" | "offline" | "unknown";
+export type ConnectionState = 'online' | 'offline' | 'unknown';
 
-let currentConnectionState: ConnectionState = "unknown";
+let currentConnectionState: ConnectionState = 'unknown';
 const connectionListeners: Set<(state: ConnectionState) => void> = new Set();
 
 export function getConnectionState(): ConnectionState {

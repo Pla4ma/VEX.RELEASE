@@ -2,7 +2,7 @@ export interface ValidationError {
   field: string;
   code: string;
   message: string;
-  severity: "error" | "warning";
+  severity: 'error' | 'warning';
   recoveryHint?: string;
   value?: unknown;
 }
@@ -23,6 +23,6 @@ export class AnalyticsValidationError extends Error {
     public value?: unknown,
   ) {
     super(message);
-    this.name = "AnalyticsValidationError";
+    this.name = 'AnalyticsValidationError';
   }
 }

@@ -1,18 +1,18 @@
-import React from "react";
-import { useNavigation } from "@react-navigation/native";
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import type { RootStackParams } from "../../../navigation/types";
-import { useFeatureGate } from "../../../features/feature-gate/hooks";
-import type { HomeController } from "../hooks/home-controller-types";
-import type { ActiveStudyPlan } from "../../../features/content-study";
-import { HomeSecondaryRail } from "./HomeSecondaryRail";
-import { HomeFocusScore } from "./HomeFocusScore";
-import { HomeContextualCards } from "./HomeContextualCards";
-import { HomeMemoryInsight } from "./HomeMemoryInsight";
-import type { ChallengeItem } from "../../../features/home-spine/components";
-import type { useHomeData } from "../hooks/useHomeData";
-import type { HomeSurfaceMap } from "../../../features/home-experience/surface-decision-schemas";
-import { buildLearningSessionParams } from "../../../features/learning-execution";
+import React from 'react';
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import type { RootStackParams } from '../../../navigation/types';
+import { useFeatureGate } from '../../../features/feature-gate/hooks';
+import type { HomeController } from '../hooks/home-controller-types';
+import type { ActiveStudyPlan } from '../../../features/content-study';
+import { HomeSecondaryRail } from './HomeSecondaryRail';
+import { HomeFocusScore } from './HomeFocusScore';
+import { HomeContextualCards } from './HomeContextualCards';
+import { HomeMemoryInsight } from './HomeMemoryInsight';
+import type { ChallengeItem } from '../../../features/home-spine/components';
+import type { useHomeData } from '../hooks/useHomeData';
+import type { HomeSurfaceMap } from '../../../features/home-experience/surface-decision-schemas';
+import { buildLearningSessionParams } from '../../../features/learning-execution';
 
 type HomeData = ReturnType<typeof useHomeData>;
 type NavigationProp = NativeStackNavigationProp<RootStackParams>;
@@ -23,7 +23,7 @@ interface HomeContentLowerProps {
   missionInput: Record<string, never>;
   handleClaimReward: (rewardId: string) => void;
   streakHoursRemaining: number;
-  features: HomeController["features"];
+  features: HomeController['features'];
   comebackSessionsCompleted: number;
   surfaceMap: HomeSurfaceMap;
 }
@@ -39,14 +39,14 @@ export const HomeContentLower: React.FC<HomeContentLowerProps> = ({
   surfaceMap,
 }) => {
   const navigation = useNavigation<NavigationProp>();
-  const { isAvailable } = useFeatureGate("challenges", "entryPoint");
+  const { isAvailable } = useFeatureGate('challenges', 'entryPoint');
   const { isAvailable: canNavChallenges } = useFeatureGate(
-    "challenges",
-    "navigation",
+    'challenges',
+    'navigation',
   );
   const openChallenges = (): void => {
     if (canNavChallenges) {
-      navigation.navigate("Challenges");
+      navigation.navigate('Challenges');
       return;
     }
     controller.openSetup();
@@ -54,29 +54,29 @@ export const HomeContentLower: React.FC<HomeContentLowerProps> = ({
 
   const stage = controller.disclosure.stage;
   const isDayZero = controller.disclosure.inputs.totalCompletedSessions === 0;
-  if (isDayZero) return null;
+  if (isDayZero) {return null;}
 
   const sm = surfaceMap;
   const showSecondary =
-    sm.challenge_teaser !== "hidden" ||
-    sm.boss_teaser !== "hidden" ||
-    sm.study_layer !== "hidden";
+    sm.challenge_teaser !== 'hidden' ||
+    sm.boss_teaser !== 'hidden' ||
+    sm.study_layer !== 'hidden';
   const showContextualCards =
-    sm.study_layer !== "hidden" || sm.boss_teaser !== "hidden";
+    sm.study_layer !== 'hidden' || sm.boss_teaser !== 'hidden';
   const showSecondaryRail =
-    sm.study_layer !== "hidden" && sm.study_layer !== "blocked";
+    sm.study_layer !== 'hidden' && sm.study_layer !== 'blocked';
 
-  const isNewOrActivating = stage === "ACTIVATING" || stage === "NEW_USER";
+  const isNewOrActivating = stage === 'ACTIVATING' || stage === 'NEW_USER';
   const showFocusScore =
-    (sm as Record<string, string>).focus_score !== "hidden" &&
-    (sm as Record<string, string>).focus_score !== "blocked";
+    (sm as Record<string, string>).focus_score !== 'hidden' &&
+    (sm as Record<string, string>).focus_score !== 'blocked';
   const canOpenProgressDetail =
-    (sm as Record<string, string>).progress_detail !== "hidden" &&
-    (sm as Record<string, string>).progress_detail !== "blocked" &&
-    (sm as Record<string, string>).progress_detail !== "tiny_tease";
+    (sm as Record<string, string>).progress_detail !== 'hidden' &&
+    (sm as Record<string, string>).progress_detail !== 'blocked' &&
+    (sm as Record<string, string>).progress_detail !== 'tiny_tease';
   const handleFocusScorePress = (): void => {
-    if (isNewOrActivating || !canOpenProgressDetail) return;
-    navigation.navigate("FocusScoreDashboard");
+    if (isNewOrActivating || !canOpenProgressDetail) {return;}
+    navigation.navigate('FocusScoreDashboard');
   };
 
   const todaysChallenges: ChallengeItem[] = isAvailable
@@ -122,12 +122,12 @@ export const HomeContentLower: React.FC<HomeContentLowerProps> = ({
           startLearningTarget={startLearningTarget}
           showToast={(toastData) =>
             void data.showToast({
-              type: toastData.type as "success" | "error" | "warning" | "info",
+              type: toastData.type as 'success' | 'error' | 'warning' | 'info',
               title: toastData.title,
               message: toastData.message,
             })
           }
-          userId={controller.userId ?? ""}
+          userId={controller.userId ?? ''}
         />
       ) : null}
 

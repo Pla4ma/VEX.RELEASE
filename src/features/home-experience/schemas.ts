@@ -1,47 +1,47 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const ExplicitMotivationStyleSchema = z.enum([
-  "calm",
-  "study_focused",
-  "game_like",
-  "coach_led",
-  "intense",
+  'calm',
+  'study_focused',
+  'game_like',
+  'coach_led',
+  'intense',
 ]);
 
 export const HomeExperienceStageSchema = z.enum([
-  "STAGE_0",
-  "STAGE_1",
-  "STAGE_2",
-  "STAGE_3",
-  "STAGE_4",
+  'STAGE_0',
+  'STAGE_1',
+  'STAGE_2',
+  'STAGE_3',
+  'STAGE_4',
 ]);
 
 export const HomeSectionSchema = z.enum([
-  "motivation_style",
-  "coach_line",
-  "primary_session",
-  "single_evolution_teaser",
-  "session_reflection",
-  "progress_signal",
-  "study_layer",
-  "companion_thread",
-  "adaptive_challenge",
+  'motivation_style',
+  'coach_line',
+  'primary_session',
+  'single_evolution_teaser',
+  'session_reflection',
+  'progress_signal',
+  'study_layer',
+  'companion_thread',
+  'adaptive_challenge',
 ]);
 
 export const HomeTeaserSchema = z
   .object({
     copy: z.string().min(1),
-    system: z.enum(["coach", "study", "companion", "rpg", "progress"]),
+    system: z.enum(['coach', 'study', 'companion', 'rpg', 'progress']),
   })
   .strict();
 
 export const HomeSpotlightSystemSchema = z.enum([
-  "none",
-  "study",
-  "coach",
-  "boss_progress",
-  "progress_rhythm",
-  "companion",
+  'none',
+  'study',
+  'coach',
+  'boss_progress',
+  'progress_rhythm',
+  'companion',
 ]);
 
 export type HomeSpotlightSystem = z.infer<typeof HomeSpotlightSystemSchema>;

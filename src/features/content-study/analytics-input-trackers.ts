@@ -5,9 +5,9 @@
  * review, and generation lifecycle events.
  */
 
-import type { ContentSourceType, ContentStudyErrorCode } from "./types";
-import { CONTENT_STUDY_CONSTANTS } from "./types";
-import { contentStudyAnalytics } from "./analytics-service";
+import type { ContentSourceType, ContentStudyErrorCode } from './types';
+import { CONTENT_STUDY_CONSTANTS } from './types';
+import { contentStudyAnalytics } from './analytics-service';
 
 export function hashString(str: string): string {
   let hash = 0;
@@ -21,25 +21,25 @@ export function hashString(str: string): string {
 
 export const inputTrackers = {
   inputOpened(preferredTab?: string): void {
-    contentStudyAnalytics.track("content_study_input_opened", {
+    contentStudyAnalytics.track('content_study_input_opened', {
       preferred_tab: preferredTab,
     });
   },
   tabSwitched(from: string, to: string): void {
-    contentStudyAnalytics.track("content_study_tab_switched", {
+    contentStudyAnalytics.track('content_study_tab_switched', {
       from_tab: from,
       to_tab: to,
     });
   },
   textPasted(characterCount: number, wordCount: number): void {
-    contentStudyAnalytics.track("content_study_text_pasted", {
+    contentStudyAnalytics.track('content_study_text_pasted', {
       character_count: characterCount,
       word_count: wordCount,
       estimated_read_time: Math.ceil(wordCount / 200),
     });
   },
   fileSelected(fileType: string, fileSize: number, fileName: string): void {
-    contentStudyAnalytics.track("content_study_file_selected", {
+    contentStudyAnalytics.track('content_study_file_selected', {
       file_type: fileType,
       file_size_bytes: fileSize,
       file_size_mb: Math.round((fileSize / (1024 * 1024)) * 100) / 100,
@@ -47,7 +47,7 @@ export const inputTrackers = {
     });
   },
   youtubeEntered(url: string, isValid: boolean): void {
-    contentStudyAnalytics.track("content_study_youtube_entered", {
+    contentStudyAnalytics.track('content_study_youtube_entered', {
       url_valid: isValid,
       url_length: url.length,
     });
@@ -60,7 +60,7 @@ export const inputTrackers = {
       warningCount: number;
     },
   ): void {
-    contentStudyAnalytics.track("content_study_submitted", {
+    contentStudyAnalytics.track('content_study_submitted', {
       source_type: type,
       validation_passed: validationResult.isValid,
       validation_errors: validationResult.errorCount,
@@ -68,7 +68,7 @@ export const inputTrackers = {
     });
   },
   extractionStarted(contentId: string, sourceType: ContentSourceType): void {
-    contentStudyAnalytics.track("content_study_extraction_started", {
+    contentStudyAnalytics.track('content_study_extraction_started', {
       content_id: contentId,
       source_type: sourceType,
     });
@@ -78,7 +78,7 @@ export const inputTrackers = {
     progress: number,
     stage: string,
   ): void {
-    contentStudyAnalytics.track("content_study_extraction_progress", {
+    contentStudyAnalytics.track('content_study_extraction_progress', {
       content_id: contentId,
       progress_percent: progress,
       stage,
@@ -90,7 +90,7 @@ export const inputTrackers = {
     extractedLength: number,
     durationMs: number,
   ): void {
-    contentStudyAnalytics.track("content_study_extraction_completed", {
+    contentStudyAnalytics.track('content_study_extraction_completed', {
       content_id: contentId,
       source_type: sourceType,
       extracted_length: extractedLength,
@@ -103,7 +103,7 @@ export const inputTrackers = {
     errorCode: ContentStudyErrorCode,
     retryAttempt: number,
   ): void {
-    contentStudyAnalytics.track("content_study_extraction_failed", {
+    contentStudyAnalytics.track('content_study_extraction_failed', {
       content_id: contentId,
       error_code: errorCode,
       retry_attempt: retryAttempt,
@@ -111,24 +111,24 @@ export const inputTrackers = {
     });
   },
   reviewOpened(contentId: string, sourceType: ContentSourceType): void {
-    contentStudyAnalytics.track("content_study_review_opened", {
+    contentStudyAnalytics.track('content_study_review_opened', {
       content_id: contentId,
       source_type: sourceType,
     });
   },
   textEdited(
     contentId: string,
-    editType: "insert" | "delete" | "replace",
+    editType: 'insert' | 'delete' | 'replace',
     editLength: number,
   ): void {
-    contentStudyAnalytics.track("content_study_text_edited", {
+    contentStudyAnalytics.track('content_study_text_edited', {
       content_id: contentId,
       edit_type: editType,
       edit_length: editLength,
     });
   },
   generationStarted(contentId: string): void {
-    contentStudyAnalytics.track("content_study_generation_started", {
+    contentStudyAnalytics.track('content_study_generation_started', {
       content_id: contentId,
     });
   },
@@ -139,7 +139,7 @@ export const inputTrackers = {
     durationMs: number,
     model: string,
   ): void {
-    contentStudyAnalytics.track("content_study_generation_completed", {
+    contentStudyAnalytics.track('content_study_generation_completed', {
       generation_id: generationId,
       task_count: taskCount,
       quiz_count: quizCount,
@@ -152,7 +152,7 @@ export const inputTrackers = {
     errorCode: ContentStudyErrorCode,
     retryAttempt: number,
   ): void {
-    contentStudyAnalytics.track("content_study_generation_failed", {
+    contentStudyAnalytics.track('content_study_generation_failed', {
       content_id: contentId,
       error_code: errorCode,
       retry_attempt: retryAttempt,

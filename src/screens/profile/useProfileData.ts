@@ -1,16 +1,16 @@
-import { useEffect, useMemo, useState } from "react";
-import { captureSilentFailure } from "../../utils/silent-failure";
-import { useProgressionSummary } from "../../features/progression/hooks";
-import { useStreakSummary } from "../../features/streaks/hooks";
-import { useSessionStats } from "../../session/hooks/useSession";
-import { useWallet } from "../../features/economy/hooks";
-import { getFeatureStatus } from "../../features/liveops-config/final-release-feature-map";
+import { useEffect, useMemo, useState } from 'react';
+import { captureSilentFailure } from '../../utils/silent-failure';
+import { useProgressionSummary } from '../../features/progression/hooks';
+import { useStreakSummary } from '../../features/streaks/hooks';
+import { useSessionStats } from '../../session/hooks/useSession';
+import { useWallet } from '../../features/economy/hooks';
+import { getFeatureStatus } from '../../features/liveops-config/final-release-feature-map';
 import {
   getMasteryRankDisplay,
   type MasteryState,
-} from "../../features/mastery/types";
-import { MasteryService } from "../../features/mastery/service";
-import { useTheme } from "../../theme";
+} from '../../features/mastery/types';
+import { MasteryService } from '../../features/mastery/service';
+import { useTheme } from '../../theme';
 
 export interface ProfileStatsItem {
   label: string;
@@ -37,7 +37,7 @@ function makeMastery(userId: string): MasteryState {
   return {
     userId,
     totalMasteryPoints: 0,
-    rank: "APPRENTICE",
+    rank: 'APPRENTICE',
     techniques: {
       durationMastery: 0, purityMastery: 0, consistencyMastery: 0,
       comebackMastery: 0, bossMastery: 0,
@@ -55,13 +55,13 @@ export function useProfileData(
   userId: string | null,
 ): UseProfileDataResult {
   const { theme } = useTheme();
-  const [mastery, setMastery] = useState<MasteryState>(makeMastery(userId ?? "guest"));
+  const [mastery, setMastery] = useState<MasteryState>(makeMastery(userId ?? 'guest'));
   const [masteryLoading, setMasteryLoading] = useState(true);
   const progressionQuery = useProgressionSummary(userId);
   const streakQuery = useStreakSummary(userId);
-  const statsQuery = useSessionStats(userId ?? "");
-  const walletQuery = useWallet(userId ?? "", {
-    enabled: getFeatureStatus("economy_advanced") !== "hidden",
+  const statsQuery = useSessionStats(userId ?? '');
+  const walletQuery = useWallet(userId ?? '', {
+    enabled: getFeatureStatus('economy_advanced') !== 'hidden',
   });
   const rankDisplay = getMasteryRankDisplay(mastery.rank);
   const xpPercent = Math.max(0, Math.min(100, progressionQuery.data?.progressPercent ?? 0));
@@ -70,27 +70,27 @@ export function useProfileData(
   const hasStatsError = !!(progressionQuery.error || streakQuery.error || walletQuery.error);
 
   const stats = useMemo<ProfileStatsItem[]>(() => [
-    { label: "Current Streak", value: `${streakQuery.data?.currentDays ?? 0} days`, icon: "fire", color: theme.colors.warning.DEFAULT },
-    { label: "Longest Streak", value: `${streakQuery.data?.longestDays ?? 0} days`, icon: "calendar", color: theme.colors.error.DEFAULT },
-    { label: "Level", value: `${progressionQuery.data?.level ?? 1}`, icon: "star", color: theme.colors.primary[500] },
-    { label: "Total Sessions", value: `${statsQuery.stats?.totalSessions ?? 0}`, icon: "activity", color: theme.colors.info.DEFAULT },
-    { label: "Focus Hours", value: hours(statsQuery.stats?.totalFocusTime ?? 0), icon: "clock", color: theme.colors.success.DEFAULT },
-    { label: "Coins", value: `${walletQuery.data?.coins ?? 0}`, icon: "gem", color: theme.colors.warning.DEFAULT },
+    { label: 'Current Streak', value: `${streakQuery.data?.currentDays ?? 0} days`, icon: 'fire', color: theme.colors.warning.DEFAULT },
+    { label: 'Longest Streak', value: `${streakQuery.data?.longestDays ?? 0} days`, icon: 'calendar', color: theme.colors.error.DEFAULT },
+    { label: 'Level', value: `${progressionQuery.data?.level ?? 1}`, icon: 'star', color: theme.colors.primary[500] },
+    { label: 'Total Sessions', value: `${statsQuery.stats?.totalSessions ?? 0}`, icon: 'activity', color: theme.colors.info.DEFAULT },
+    { label: 'Focus Hours', value: hours(statsQuery.stats?.totalFocusTime ?? 0), icon: 'clock', color: theme.colors.success.DEFAULT },
+    { label: 'Coins', value: `${walletQuery.data?.coins ?? 0}`, icon: 'gem', color: theme.colors.warning.DEFAULT },
   ], [streakQuery.data, progressionQuery.data, statsQuery.stats, walletQuery.data, theme]);
 
   useEffect(() => {
     let mounted = true;
     const load = async (): Promise<void> => {
-      if (!userId) { if (mounted) { setMastery(makeMastery("guest")); setMasteryLoading(false); } return; }
+      if (!userId) { if (mounted) { setMastery(makeMastery('guest')); setMasteryLoading(false); } return; }
       setMasteryLoading(true);
       try {
         const next = await MasteryService.getOrCreateMasteryStateAsync(userId);
-        if (mounted) setMastery(next);
+        if (mounted) {setMastery(next);}
       } catch (error) {
-        captureSilentFailure(error, { feature: "screens", operation: "mastery-load", type: "network" });
-        if (mounted) setMastery(MasteryService.getOrCreateMasteryState(userId));
+        captureSilentFailure(error, { feature: 'screens', operation: 'mastery-load', type: 'network' });
+        if (mounted) {setMastery(MasteryService.getOrCreateMasteryState(userId));}
       } finally {
-        if (mounted) setMasteryLoading(false);
+        if (mounted) {setMasteryLoading(false);}
       }
     };
     void load();

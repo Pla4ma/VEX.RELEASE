@@ -1,17 +1,17 @@
-import NetInfo, { type NetInfoState } from "@react-native-community/netinfo";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Pressable, Text, View } from "react-native";
-import Animated from "react-native-reanimated";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import NetInfo, { type NetInfoState } from '@react-native-community/netinfo';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { Pressable, Text, View } from 'react-native';
+import Animated from 'react-native-reanimated';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { haptics } from "@/shared/feedback";
-import { useTheme } from "@/theme";
-import { semanticOpacity } from "@/theme/tokens/opacity";
-import { spacing } from "@/theme/tokens/spacing";
-import { sizing } from "@/theme/tokens/sizing";
-import { SyncQueueDetails } from "./smart-offline/SyncQueueDetails";
-import type { PendingAction } from "./smart-offline/types";
-import { useOfflineAnimation } from "./smart-offline/useOfflineAnimation";
+import { haptics } from '@/shared/feedback';
+import { useTheme } from '@/theme';
+import { semanticOpacity } from '@/theme/tokens/opacity';
+import { spacing } from '@/theme/tokens/spacing';
+import { sizing } from '@/theme/tokens/sizing';
+import { SyncQueueDetails } from './smart-offline/SyncQueueDetails';
+import type { PendingAction } from './smart-offline/types';
+import { useOfflineAnimation } from './smart-offline/useOfflineAnimation';
 
 interface SmartOfflineIndicatorProps {
   syncQueue: PendingAction[];
@@ -35,13 +35,13 @@ export const SmartOfflineIndicator: React.FC<SmartOfflineIndicatorProps> = ({
   const [isConnected, setIsConnected] = useState(true);
   const [isExpanded, setIsExpanded] = useState(false);
   const [lastSyncTime, setLastSyncTime] = useState<number | null>(null);
-  const hiddenOffset = -(sizing.height["2xl"] + insets.top + spacing[12]);
+  const hiddenOffset = -(sizing.height['2xl'] + insets.top + spacing[12]);
 
   const grouped = useMemo(
     () => ({
-      high: syncQueue.filter((item) => item.priority === "high"),
-      medium: syncQueue.filter((item) => item.priority === "medium"),
-      low: syncQueue.filter((item) => item.priority === "low"),
+      high: syncQueue.filter((item) => item.priority === 'high'),
+      medium: syncQueue.filter((item) => item.priority === 'medium'),
+      low: syncQueue.filter((item) => item.priority === 'low'),
     }),
     [syncQueue],
   );
@@ -66,22 +66,22 @@ export const SmartOfflineIndicator: React.FC<SmartOfflineIndicatorProps> = ({
   const statusText = !isConnected
     ? syncQueue.length > 0
       ? `Offline - ${syncQueue.length} pending`
-      : "Offline"
+      : 'Offline'
     : syncQueue.length > 0
       ? `${syncQueue.length} items waiting to sync`
       : lastSyncTime
         ? `Online - synced ${formatTime(lastSyncTime)}`
-        : "Online";
+        : 'Online';
 
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener((state: NetInfoState) => {
       const connected = state.isConnected ?? true;
       setIsConnected(connected);
       if (connected) {
-        void haptics.success("light");
+        void haptics.success('light');
         setLastSyncTime(Date.now());
       } else {
-        void haptics.warning("light");
+        void haptics.warning('light');
       }
     });
     return () => {
@@ -95,7 +95,7 @@ export const SmartOfflineIndicator: React.FC<SmartOfflineIndicatorProps> = ({
   }, [animateOut, onDismiss]);
 
   const handleSync = useCallback(() => {
-    void haptics.impact("medium");
+    void haptics.impact('medium');
     handleScale();
     onManualSync?.();
   }, [handleScale, onManualSync]);
@@ -108,7 +108,7 @@ export const SmartOfflineIndicator: React.FC<SmartOfflineIndicatorProps> = ({
     <Animated.View
       style={[
         {
-          position: "absolute",
+          position: 'absolute',
           top: 0,
           left: 0,
           right: 0,
@@ -131,8 +131,8 @@ export const SmartOfflineIndicator: React.FC<SmartOfflineIndicatorProps> = ({
           accessibilityHint="Expands offline and sync details. Long press dismisses the banner."
           accessibilityLabel={
             isConnected
-              ? "Open sync queue details"
-              : "Open offline sync details"
+              ? 'Open sync queue details'
+              : 'Open offline sync details'
           }
           accessibilityRole="button"
           onLongPress={handleDismiss}
@@ -142,8 +142,8 @@ export const SmartOfflineIndicator: React.FC<SmartOfflineIndicatorProps> = ({
           }}
           style={({ pressed }) => ({
             minHeight: sizing.touchTarget.min,
-            flexDirection: "row",
-            alignItems: "center",
+            flexDirection: 'row',
+            alignItems: 'center',
             opacity: pressed ? semanticOpacity.pressed : semanticOpacity.hover,
           })}
         >
@@ -171,7 +171,7 @@ export const SmartOfflineIndicator: React.FC<SmartOfflineIndicatorProps> = ({
               ...theme.typography.ui.caption,
             }}
           >
-            {isExpanded ? "Hide" : "Details"}
+            {isExpanded ? 'Hide' : 'Details'}
           </Text>
         </Pressable>
 

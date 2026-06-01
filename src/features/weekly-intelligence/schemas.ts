@@ -1,5 +1,5 @@
-import { z } from "zod";
-import { LaneSchema } from "../lane-engine/schemas";
+import { z } from 'zod';
+import { LaneSchema } from '../lane-engine/schemas';
 
 // ── Weekly session summary input ──────────────────────────────────────
 export const WeeklyInsightInputSchema = z
@@ -31,9 +31,9 @@ export const WeeklyInsightInputSchema = z
 // ── What helped / what got in the way ────────────────────────────────
 export const InsightFindingSchema = z
   .object({
-    category: z.enum(["helped", "blocked"]),
+    category: z.enum(['helped', 'blocked']),
     observation: z.string().min(1).max(300),
-    confidence: z.enum(["weak", "medium", "strong"]),
+    confidence: z.enum(['weak', 'medium', 'strong']),
   })
   .strict();
 
@@ -47,7 +47,7 @@ export const WeeklyIntelligenceSchema = z
     whatHelped: z.array(InsightFindingSchema).max(3),
     whatGotInWay: z.array(InsightFindingSchema).max(3),
     bestNextSessionType: z
-      .enum(["STUDY", "DEEP_WORK", "SPRINT", "LIGHT_FOCUS", "RECOVERY", "REVIEW"])
+      .enum(['STUDY', 'DEEP_WORK', 'SPRINT', 'LIGHT_FOCUS', 'RECOVERY', 'REVIEW'])
       .optional(),
     suggestedFocusWindow: z.string().min(1).optional(),
     recommendedAdjustment: z.string().min(1).max(300),

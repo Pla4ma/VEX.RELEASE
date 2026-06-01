@@ -1,21 +1,21 @@
-import React, { useState, useCallback, useMemo } from "react";
-import { ScrollView } from "react-native";
-import { FlashList, type ListRenderItem } from "@shopify/flash-list";
-import { useNavigation } from "@react-navigation/native";
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { Button } from "../../../components/primitives/Button";
-import type { ContentStudyStackParamList } from "../types";
-import type { StudyContent, ContentStatus, ContentSourceType } from "../types";
-import { useContentHistory } from "../hooks";
-import { ContentItemCard } from "../components/ContentItemCard";
-import { FilterChip } from "../components/FilterChip";
-import { EmptyLibraryState } from "../components/EmptyLibraryState";
+import React, { useState, useCallback, useMemo } from 'react';
+import { ScrollView } from 'react-native';
+import { FlashList, type ListRenderItem } from '@shopify/flash-list';
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { Button } from '../../../components/primitives/Button';
+import type { ContentStudyStackParamList } from '../types';
+import type { StudyContent, ContentStatus, ContentSourceType } from '../types';
+import { useContentHistory } from '../hooks';
+import { ContentItemCard } from '../components/ContentItemCard';
+import { FilterChip } from '../components/FilterChip';
+import { EmptyLibraryState } from '../components/EmptyLibraryState';
 import {
   STATUS_FILTERS,
   TYPE_FILTERS,
-} from "./StudyLibraryScreen.constants";
+} from './StudyLibraryScreen.constants';
 
 type ContentStudyNavigationProp =
   NativeStackNavigationProp<ContentStudyStackParamList>;
@@ -24,26 +24,26 @@ export function StudyLibraryScreen(): JSX.Element {
   const navigation = useNavigation<ContentStudyNavigationProp>();
   const { content, isLoading, error, refetch, deleteContent } =
     useContentHistory();
-  const [statusFilter, setStatusFilter] = useState<ContentStatus | "all">(
-    "all",
+  const [statusFilter, setStatusFilter] = useState<ContentStatus | 'all'>(
+    'all',
   );
-  const [typeFilter, setTypeFilter] = useState<ContentSourceType | "all">(
-    "all",
+  const [typeFilter, setTypeFilter] = useState<ContentSourceType | 'all'>(
+    'all',
   );
 
   const filteredContent = useMemo(() => {
     return content.filter((item: StudyContent) => {
       const matchesStatus =
-        statusFilter === "all" || item.status === statusFilter;
+        statusFilter === 'all' || item.status === statusFilter;
       const matchesType =
-        typeFilter === "all" || item.sourceType === typeFilter;
+        typeFilter === 'all' || item.sourceType === typeFilter;
       return matchesStatus && matchesType;
     });
   }, [content, statusFilter, typeFilter]);
 
   const handleContentPress = useCallback(
     (contentId: string) => {
-      navigation.navigate("ContentReview", { contentId });
+      navigation.navigate('ContentReview', { contentId });
     },
     [navigation],
   );
@@ -81,13 +81,13 @@ export function StudyLibraryScreen(): JSX.Element {
               Study Library
             </Text>
             <Text variant="caption" color="text.secondary" mt="xs">
-              {content.length} saved {content.length === 1 ? "item" : "items"}
+              {content.length} saved {content.length === 1 ? 'item' : 'items'}
             </Text>
           </Box>
           <Button
             variant="outline"
             size="sm"
-            onPress={() => navigation.navigate("ContentInput", {})}
+            onPress={() => navigation.navigate('ContentInput', {})}
             accessibilityLabel="Add new content"
             accessibilityRole="button"
             accessibilityHint="Double tap to activate"
@@ -144,7 +144,7 @@ export function StudyLibraryScreen(): JSX.Element {
             hasContent={content.length > 0}
             hasFilteredResults={filteredContent.length > 0}
             onRetry={handleRefresh}
-            onAddContent={() => navigation.navigate("ContentInput", {})}
+            onAddContent={() => navigation.navigate('ContentInput', {})}
           />
         }
       />

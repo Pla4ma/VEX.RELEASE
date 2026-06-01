@@ -1,6 +1,6 @@
-import React from "react";
-import { View, Text, Pressable } from "react-native";
-import { settingsStyles as styles } from "./settings-screen-styles";
+import React from 'react';
+import { View, Text, Pressable } from 'react-native';
+import { settingsStyles as styles } from './settings-screen-styles';
 
 interface SettingsActionsProps {
   settingsState: string;
@@ -21,13 +21,13 @@ export function SettingsActions({
           pressed && { opacity: 0.8 },
         ]}
         onPress={onSync}
-        disabled={settingsState === "syncing"}
+        disabled={settingsState === 'syncing'}
         accessibilityLabel="Sync settings"
         accessibilityRole="button"
         accessibilityHint="Double tap to activate"
       >
         <Text style={styles.actionButtonText}>
-          {settingsState === "syncing" ? "Syncing..." : "Sync Now"}
+          {settingsState === 'syncing' ? 'Syncing...' : 'Sync Now'}
         </Text>
       </Pressable>
       <Pressable
@@ -37,7 +37,7 @@ export function SettingsActions({
           pressed && { opacity: 0.8 },
         ]}
         onPress={onReset}
-        disabled={settingsState === "saving"}
+        disabled={settingsState === 'saving'}
         accessibilityLabel="Reset to defaults"
         accessibilityRole="button"
         accessibilityHint="Double tap to activate"

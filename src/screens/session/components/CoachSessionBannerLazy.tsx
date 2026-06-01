@@ -1,9 +1,9 @@
-import React from "react";
+import React from 'react';
 import {
   CoachSessionBanner,
   type CoachPersonaStyle,
-} from "../../../features/ai-coach/components/CoachSessionBanner";
-import { useCoachState } from "../../../features/ai-coach/hooks";
+} from '../../../features/ai-coach/components/CoachSessionBanner';
+import { useCoachState } from '../../../features/ai-coach/hooks';
 
 type CoachSessionBannerLazyProps = {
   userId: string | undefined;
@@ -44,9 +44,9 @@ function CoachBannerInternal({
     return null;
   }
   const personaStyle: CoachPersonaStyle =
-    coachState.currentState === "OVERLOAD_PROTECTION"
-      ? "DRILL_SERGEANT"
-      : "MENTOR";
+    coachState.currentState === 'OVERLOAD_PROTECTION'
+      ? 'DRILL_SERGEANT'
+      : 'MENTOR';
   return (
     <CoachSessionBanner
       coachName="Coach"

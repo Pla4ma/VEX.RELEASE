@@ -1,13 +1,13 @@
-import { Platform } from "react-native";
-import { createDebugger } from "../../utils/debug";
-import type { CalendarEvent, FreeBusyInfo } from "./types";
+import { Platform } from 'react-native';
+import { createDebugger } from '../../utils/debug';
+import type { CalendarEvent, FreeBusyInfo } from './types';
 import {
   Calendar,
   mergeBusySlots,
   calculateFreeSlots,
-} from "./AppleCalendarAdapter.utils";
+} from './AppleCalendarAdapter.utils';
 
-const debug = createDebugger("calendar:apple");
+const debug = createDebugger('calendar:apple');
 
 export class AppleCalendarAdapter {
   private defaultCalendarId: string | null = null;
@@ -15,11 +15,11 @@ export class AppleCalendarAdapter {
   async initialize(): Promise<boolean> {
     try {
       const { status } = await Calendar.requestCalendarPermissionsAsync();
-      if (status === "denied") {
-        debug.warn("Calendar permission not granted");
+      if (status === 'denied') {
+        debug.warn('Calendar permission not granted');
         return false;
       }
-      const calendars = await Calendar.getCalendarsAsync("event");
+      const calendars = await Calendar.getCalendarsAsync('event');
       const defaultCal = calendars.find(
         (cal: { allowsModifications: boolean; id?: string }) =>
           cal.allowsModifications,
@@ -27,13 +27,13 @@ export class AppleCalendarAdapter {
       this.defaultCalendarId = defaultCal?.id || null;
       return true;
     } catch (error) {
-      debug.error("Failed to initialize:", error as Error);
+      debug.error('Failed to initialize:', error as Error);
       return false;
     }
   }
 
   isAvailable(): boolean {
-    return Platform.OS === "ios" || Platform.OS === "macos";
+    return Platform.OS === 'ios' || Platform.OS === 'macos';
   }
 
   async fetchEvents(
@@ -42,12 +42,12 @@ export class AppleCalendarAdapter {
     calendarId?: string,
   ): Promise<CalendarEvent[]> {
     if (!this.isAvailable()) {
-      throw new Error("Apple Calendar only available on iOS/macOS");
+      throw new Error('Apple Calendar only available on iOS/macOS');
     }
     try {
       const targetCalendarId = calendarId || this.defaultCalendarId;
       if (!targetCalendarId) {
-        throw new Error("No calendar available");
+        throw new Error('No calendar available');
       }
       const events = await Calendar.getEventsAsync(
         [targetCalendarId],
@@ -58,7 +58,7 @@ export class AppleCalendarAdapter {
         this.mapAppleEvent(event),
       );
     } catch (error) {
-      debug.error("Failed to fetch events:", error as Error);
+      debug.error('Failed to fetch events:', error as Error);
       throw error;
     }
   }
@@ -66,14 +66,14 @@ export class AppleCalendarAdapter {
   private mapAppleEvent(event: Record<string, unknown>): CalendarEvent {
     return {
       id: event.id as string,
-      title: (event.title as string) || "Untitled",
+      title: (event.title as string) || 'Untitled',
       description: event.notes as string | undefined,
       startTime: new Date(event.startDate as string),
       endTime: new Date(event.endDate as string),
       isAllDay: event.allDay as boolean,
       location: event.location as string | undefined,
-      calendarId: (event.calendarId as string) || "",
-      calendarName: "Apple Calendar",
+      calendarId: (event.calendarId as string) || '',
+      calendarName: 'Apple Calendar',
       color: event.color as string | undefined,
     };
   }
@@ -81,20 +81,20 @@ export class AppleCalendarAdapter {
   async createFocusEvent(
     startTime: Date,
     duration: number,
-    title: string = "Focus Time",
+    title: string = 'Focus Time',
   ): Promise<CalendarEvent> {
     if (!this.isAvailable()) {
-      throw new Error("Apple Calendar only available on iOS/macOS");
+      throw new Error('Apple Calendar only available on iOS/macOS');
     }
     try {
       const endTime = new Date(startTime.getTime() + duration * 60 * 1000);
       const calendarId = this.defaultCalendarId;
       if (!calendarId) {
-        throw new Error("No calendar available");
+        throw new Error('No calendar available');
       }
       const eventId = await Calendar.createEventAsync(calendarId, {
         title,
-        notes: "Focused work session via VEX",
+        notes: 'Focused work session via VEX',
         startDate: startTime,
         endDate: endTime,
         allDay: false,
@@ -108,10 +108,10 @@ export class AppleCalendarAdapter {
         endTime,
         isAllDay: false,
         calendarId,
-        calendarName: "Apple Calendar",
+        calendarName: 'Apple Calendar',
       };
     } catch (error) {
-      debug.error("Failed to create focus event:", error);
+      debug.error('Failed to create focus event:', error);
       throw error;
     }
   }
@@ -124,14 +124,14 @@ export class AppleCalendarAdapter {
       await Calendar.deleteEventAsync(calendarId, eventId);
       return true;
     } catch (error) {
-      debug.error("Failed to delete event:", error);
+      debug.error('Failed to delete event:', error);
       return false;
     }
   }
 
   async getFreeBusy(timeMin: Date, timeMax: Date): Promise<FreeBusyInfo> {
     if (!this.isAvailable()) {
-      throw new Error("Apple Calendar only available on iOS/macOS");
+      throw new Error('Apple Calendar only available on iOS/macOS');
     }
     try {
       const events = await this.fetchEvents(timeMin, timeMax);
@@ -144,7 +144,7 @@ export class AppleCalendarAdapter {
       const freeSlots = calculateFreeSlots(merged, timeMin, timeMax);
       return { busySlots: merged, freeSlots };
     } catch (error) {
-      debug.error("Failed to get free/busy:", error);
+      debug.error('Failed to get free/busy:', error);
       throw error;
     }
   }

@@ -2,8 +2,8 @@
  * Unlock Explainer — Analytics Tests
  */
 
-import { createUnlockDecision } from "../unlock-decision";
-import { trackUnlockDecisionResolved, trackUnlockDecisionDismissed } from "../analytics";
+import { createUnlockDecision } from '../unlock-decision';
+import { trackUnlockDecisionResolved, trackUnlockDecisionDismissed } from '../analytics';
 
 // ─── Fake timers for consistent Date.now() ───────────────────────
 
@@ -20,16 +20,16 @@ afterAll(() => {
 
 // ─── Analytics ───────────────────────────────────────────────────
 
-describe("analytics", () => {
-  it("trackUnlockDecisionResolved is callable without error", () => {
+describe('analytics', () => {
+  it('trackUnlockDecisionResolved is callable without error', () => {
     const decision = createUnlockDecision({
-      featureKey: "study_os",
+      featureKey: 'study_os',
       sessionCount: 5,
     });
     expect(() => trackUnlockDecisionResolved(decision)).not.toThrow();
   });
 
-  it("trackUnlockDecisionDismissed is callable without error", () => {
-    expect(() => trackUnlockDecisionDismissed("study_os")).not.toThrow();
+  it('trackUnlockDecisionDismissed is callable without error', () => {
+    expect(() => trackUnlockDecisionDismissed('study_os')).not.toThrow();
   });
 });

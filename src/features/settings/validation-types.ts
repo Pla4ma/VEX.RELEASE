@@ -9,7 +9,7 @@ export interface ValidationError {
   field: string;
   code: string;
   message: string;
-  severity: "error" | "warning";
+  severity: 'error' | 'warning';
   recoveryHint?: string;
 }
 
@@ -21,6 +21,6 @@ export class SettingsValidationError extends Error {
     public recoveryHint?: string,
   ) {
     super(message);
-    this.name = "SettingsValidationError";
+    this.name = 'SettingsValidationError';
   }
 }

@@ -4,14 +4,14 @@
  * Display for error states with retry functionality.
  */
 
-import React from "react";
-import { type ViewStyle } from "react-native";
+import React from 'react';
+import { type ViewStyle } from 'react-native';
 
-import { useTheme } from "../../theme";
-import { Box } from "../primitives/Box";
-import { Button } from "../primitives/Button";
-import { Text } from "../primitives/Text";
-import { launchColors } from "@theme/tokens/launch-colors";
+import { useTheme } from '../../theme';
+import { Box } from '../primitives/Box';
+import { Button } from '../primitives/Button';
+import { Text } from '../primitives/Text';
+import { launchColors } from '@theme/tokens/launch-colors';
 
 /**
  * ErrorState props
@@ -41,12 +41,12 @@ export interface ErrorStateProps {
  * ErrorState component
  */
 export const ErrorState: React.FC<ErrorStateProps> = ({
-  title = "Boss Interference Detected",
+  title = 'Boss Interference Detected',
   description = "Something disrupted your focus flow. Try again and show that boss who's in control.",
   errorCode,
-  retryLabel = "Try Again",
+  retryLabel = 'Try Again',
   onRetry,
-  degradedLabel = "Continue Anyway",
+  degradedLabel = 'Continue Anyway',
   onDegraded,
   style,
   testID,
@@ -82,8 +82,8 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
             borderColor:
               theme?.colors?.semantic?.danger || launchColors.hex_b91c1c,
             borderWidth: 1,
-            alignItems: "center",
-            justifyContent: "center",
+            alignItems: 'center',
+            justifyContent: 'center',
           }}
         >
           <Text
@@ -139,7 +139,7 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
             variant="caption"
             style={{
               color: theme?.colors?.text?.tertiary || launchColors.hex_64748b,
-              fontFamily: "monospace",
+              fontFamily: 'monospace',
             }}
           >
             Error: {errorCode}
@@ -150,7 +150,7 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
       {/* Actions */}
       <Box
         flexDirection="column"
-        style={{ gap: theme?.spacing?.[3] || 12, width: "100%", maxWidth: 300 }}
+        style={{ gap: theme?.spacing?.[3] || 12, width: '100%', maxWidth: 300 }}
       >
         {onRetry && (
           <Button

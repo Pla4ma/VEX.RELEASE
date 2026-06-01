@@ -3,7 +3,7 @@
  */
 
 export interface SeasonsEventDefinitions {
-  "seasons:challenge_progress": {
+  'seasons:challenge_progress': {
     userId: string;
     challengeId: string;
     progress: number;

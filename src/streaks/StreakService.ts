@@ -1,6 +1,6 @@
-import { eventBus } from "../events";
-import { recordSession } from "../features/streaks/service";
-import { v4 } from "../utils/uuid";
+import { eventBus } from '../events';
+import { recordSession } from '../features/streaks/service';
+import { v4 } from '../utils/uuid';
 
 type LegacyStreakState = {
   currentStreak: number;
@@ -37,7 +37,7 @@ export function getStreakService(userId?: string): StreakService {
       if (!userId) {
         return;
       }
-      eventBus.publish("streak:funeral_shown", {
+      eventBus.publish('streak:funeral_shown', {
         userId,
         previousStreak: 0,
         diedAt: Date.now(),

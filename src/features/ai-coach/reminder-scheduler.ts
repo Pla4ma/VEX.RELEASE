@@ -1,4 +1,4 @@
-import * as repository from "./repository";
+import * as repository from './repository';
 import {
   ScheduleReminderInputSchema,
   AdjustDifficultyInputSchema,
@@ -8,15 +8,15 @@ import {
   type MessageCategory,
   type ScheduleReminderInput,
   type AdjustDifficultyInput,
-} from "./schemas";
-import { generateMessage } from "./message-generator";
+} from './schemas';
+import { generateMessage } from './message-generator';
 import {
   activateComeback,
   acceptComeback,
   trackComebackSession,
   COMEBACK_BONUS_MULTIPLIER,
   COMEBACK_TARGET_SESSIONS,
-} from "./comeback-manager";
+} from './comeback-manager';
 
 const MUTE_DURATION_HOURS = 24;
 
@@ -29,10 +29,10 @@ export async function scheduleReminder(
     userId: validated.userId,
     category,
     context: {},
-    preferredDelivery: "PUSH",
+    preferredDelivery: 'PUSH',
   });
   if (!message) {
-    throw new Error("Failed to generate reminder message");
+    throw new Error('Failed to generate reminder message');
   }
   const savedMessage = await repository.createCoachMessage(message);
   const reminder: ReminderPlan = {
@@ -52,15 +52,15 @@ export async function scheduleReminder(
 
 function reminderTypeToCategory(reminderType: ReminderType): MessageCategory {
   const mapping: Record<ReminderType, MessageCategory> = {
-    STREAK_WARNING: "STREAK_RISK",
-    STREAK_CHECK: "STREAK_RISK",
-    OPTIMAL_SESSION_TIME: "SESSION_SUGGESTION",
-    CHALLENGE_DEADLINE: "CHALLENGE_PROMPT",
-    BOSS_TIMEOUT: "CHALLENGE_PROMPT",
-    COMEBACK_OPPORTUNITY: "COMEBACK_SUPPORT",
-    MILESTONE_APPROACHING: "MILESTONE_HYPE",
-    PERSONALIZED_MOTIVATION: "MOTIVATION_BOOST",
-    BREAK_REMINDER: "BREAK_SUGGESTION",
+    STREAK_WARNING: 'STREAK_RISK',
+    STREAK_CHECK: 'STREAK_RISK',
+    OPTIMAL_SESSION_TIME: 'SESSION_SUGGESTION',
+    CHALLENGE_DEADLINE: 'CHALLENGE_PROMPT',
+    BOSS_TIMEOUT: 'CHALLENGE_PROMPT',
+    COMEBACK_OPPORTUNITY: 'COMEBACK_SUPPORT',
+    MILESTONE_APPROACHING: 'MILESTONE_HYPE',
+    PERSONALIZED_MOTIVATION: 'MOTIVATION_BOOST',
+    BREAK_REMINDER: 'BREAK_SUGGESTION',
   };
   return mapping[reminderType];
 }
@@ -79,7 +79,7 @@ export async function adjustDifficulty(
       adjustmentReason: null,
       successRateRecent: 0.8,
       successRateOverall: 0.8,
-      trend: "STABLE",
+      trend: 'STABLE',
     };
   }
   let recommendedDifficulty = profile.currentDifficulty;
@@ -95,12 +95,12 @@ export async function adjustDifficulty(
       recommendedDifficulty = profile.currentDifficulty + 1;
     }
   }
-  const trend: "IMPROVING" | "STABLE" | "DECLINING" =
+  const trend: 'IMPROVING' | 'STABLE' | 'DECLINING' =
     recommendedDifficulty > profile.currentDifficulty
-      ? "IMPROVING"
+      ? 'IMPROVING'
       : recommendedDifficulty < profile.currentDifficulty
-        ? "DECLINING"
-        : "STABLE";
+        ? 'DECLINING'
+        : 'STABLE';
   const updatedProfile: DifficultyProfile = {
     ...profile,
     recommendedDifficulty,

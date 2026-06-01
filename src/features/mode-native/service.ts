@@ -1,5 +1,5 @@
-import { LaneSchema } from "../lane-engine/schemas";
-import type { Lane } from "../lane-engine/types";
+import { LaneSchema } from '../lane-engine/schemas';
+import type { Lane } from '../lane-engine/types';
 import {
   HOME_COPY,
   QUICK_CONTRACT_COPY,
@@ -7,25 +7,25 @@ import {
   RESCUE_COPY,
   EVIDENCE_HOME_COPY,
   COLD_START_HOME_COPY,
-} from "./copy";
+} from './copy';
 import {
   ModeHomeSurfaceSchema,
   ModeQuickContractSchema,
   ModeActiveIndicatorSchema,
   ModeRescueSurfaceSchema,
-} from "./schemas";
+} from './schemas';
 import type {
   ModeHomeSurface,
   ModeQuickContract,
   ModeActiveIndicator,
   ModeRescueSurface,
-} from "./schemas";
+} from './schemas';
 
 // ── Helpers ────────────────────────────────────────────────────────────
 
 function resolveLane(raw: unknown): Lane {
   const parsed = LaneSchema.safeParse(raw);
-  return parsed.success ? parsed.data : "minimal_normal";
+  return parsed.success ? parsed.data : 'minimal_normal';
 }
 
 // ── Home context ───────────────────────────────────────────────────────
@@ -45,7 +45,7 @@ export interface HomeContext {
 export function deriveHomeSurface(context: HomeContext): ModeHomeSurface {
   const lane = context.laneOverride
     ? resolveLane(context.laneOverride)
-    : "minimal_normal";
+    : 'minimal_normal';
 
   const hasEvidence = (context.completedSessions ?? 0) >= 3;
   const base = hasEvidence
@@ -57,28 +57,28 @@ export function deriveHomeSurface(context: HomeContext): ModeHomeSurface {
   // Only apply evidence-backed enrichment when evidence exists
   if (hasEvidence) {
     if (
-      lane === "deep_creative" &&
+      lane === 'deep_creative' &&
       context.hasActiveProject &&
       context.nextMove
     ) {
       body = `Next move: ${context.nextMove}. Pick up where you stopped.`;
     }
     if (
-      lane === "student" &&
+      lane === 'student' &&
       context.recentTopic &&
       context.weakTopicCount !== undefined &&
       context.weakTopicCount > 0
     ) {
-      body = `Review "${context.recentTopic}" — ${context.weakTopicCount} topic${context.weakTopicCount === 1 ? "" : "s"} need${context.weakTopicCount === 1 ? "s" : ""} attention. ${base.suggestedDurationMinutes} minutes.`;
-    } else if (lane === "student" && context.recentTopic) {
+      body = `Review "${context.recentTopic}" — ${context.weakTopicCount} topic${context.weakTopicCount === 1 ? '' : 's'} need${context.weakTopicCount === 1 ? 's' : ''} attention. ${base.suggestedDurationMinutes} minutes.`;
+    } else if (lane === 'student' && context.recentTopic) {
       body = `Your next study block: "${context.recentTopic}" for ${base.suggestedDurationMinutes} minutes.`;
     }
     if (
-      lane === "game_like" &&
+      lane === 'game_like' &&
       context.cleanStartsThisWeek !== undefined &&
       context.cleanStartsThisWeek > 0
     ) {
-      body = `${context.cleanStartsThisWeek} clean start${context.cleanStartsThisWeek === 1 ? "" : "s"} this week. Keep the momentum going.`;
+      body = `${context.cleanStartsThisWeek} clean start${context.cleanStartsThisWeek === 1 ? '' : 's'} this week. Keep the momentum going.`;
     }
   }
 

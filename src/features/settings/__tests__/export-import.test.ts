@@ -1,20 +1,20 @@
-import type { SettingsExport } from "../types";
+import type { SettingsExport } from '../types';
 import {
   getUserPreferences,
   importSettings,
   resetSettings,
   SettingsValidationError,
-} from "../service";
-import * as repository from "../repository";
-import { eventBus } from "../../../events";
+} from '../service';
+import * as repository from '../repository';
+import { eventBus } from '../../../events';
 
-jest.mock("../repository");
-jest.mock("../../../events", () => ({ eventBus: { publish: jest.fn() } }));
-jest.mock("@sentry/react-native", () => ({
+jest.mock('../repository');
+jest.mock('../../../events', () => ({ eventBus: { publish: jest.fn() } }));
+jest.mock('@sentry/react-native', () => ({
   addBreadcrumb: jest.fn(),
   captureException: jest.fn(),
 }));
-jest.mock("../settings-domain", () => ({
+jest.mock('../settings-domain', () => ({
   getNotificationSettings: jest.fn().mockResolvedValue({}),
   getCoachSettings: jest.fn().mockResolvedValue({}),
   getAppearanceSettings: jest.fn().mockResolvedValue({}),
@@ -25,7 +25,7 @@ jest.mock("../settings-domain", () => ({
   updatePrivacySettings: jest.fn(),
 }));
 
-const mockUserId = "user-123";
+const mockUserId = 'user-123';
 
 function createMinimalExport(
   overrides: Partial<SettingsExport> = {},
@@ -44,14 +44,14 @@ function createMinimalExport(
     notificationSettings: {
       userId: mockUserId,
       channels: {
-        push: { enabled: true, deviceTokens: [], timezone: "UTC" },
-        email: { enabled: false, email: "", digestFrequency: "daily" },
+        push: { enabled: true, deviceTokens: [], timezone: 'UTC' },
+        email: { enabled: false, email: '', digestFrequency: 'daily' },
         inApp: { enabled: true, soundEnabled: true, vibrationEnabled: true },
       },
       preferences: {
-        critical: { enabled: true, channels: ["push", "email", "in_app"] },
-        high: { enabled: true, channels: ["push", "in_app"] },
-        normal: { enabled: true, channels: ["in_app"] },
+        critical: { enabled: true, channels: ['push', 'email', 'in_app'] },
+        high: { enabled: true, channels: ['push', 'in_app'] },
+        normal: { enabled: true, channels: ['in_app'] },
         low: { enabled: false, channels: [] },
       },
       customRules: [],
@@ -59,8 +59,8 @@ function createMinimalExport(
     coachSettings: {
       userId: mockUserId,
       enabled: true,
-      personality: "supportive",
-      frequency: "moderate",
+      personality: 'supportive',
+      frequency: 'moderate',
       messageTypes: {
         streakReminders: true,
         sessionTips: true,
@@ -70,16 +70,16 @@ function createMinimalExport(
       },
       quietHours: {
         enabled: true,
-        start: "22:00",
-        end: "08:00",
-        timezone: "UTC",
+        start: '22:00',
+        end: '08:00',
+        timezone: 'UTC',
       },
       customTriggers: [],
     },
     appearanceSettings: {
       userId: mockUserId,
-      theme: "system",
-      accentColor: "#6366f1",
+      theme: 'system',
+      accentColor: '#6366f1',
       fontScale: 1,
       useSystemFont: true,
       reduceMotion: false,
@@ -88,7 +88,7 @@ function createMinimalExport(
     },
     privacySettings: {
       userId: mockUserId,
-      profileVisibility: "friends",
+      profileVisibility: 'friends',
       showOnlineStatus: true,
       showActivityStatus: true,
       allowDataAnalysis: true,
@@ -98,28 +98,28 @@ function createMinimalExport(
     },
     dataControlSettings: {
       userId: mockUserId,
-      retentionPolicy: "standard",
-      autoExport: { enabled: false, frequency: "never", format: "json" },
+      retentionPolicy: 'standard',
+      autoExport: { enabled: false, frequency: 'never', format: 'json' },
       backupEnabled: false,
     },
     ...overrides,
   };
 }
 
-describe("SettingsService", () => {
+describe('SettingsService', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  describe("export/import", () => {
-    it("should export settings", async () => {
+  describe('export/import', () => {
+    it('should export settings', async () => {
       const mockSettings = [
         {
-          id: "1",
+          id: '1',
           userId: mockUserId,
-          key: "general.language",
-          value: "en",
-          category: "general" as const,
+          key: 'general.language',
+          value: 'en',
+          category: 'general' as const,
           isDefault: true,
           lastModified: Date.now(),
         },
@@ -133,19 +133,19 @@ describe("SettingsService", () => {
       expect(result.settings).toBeDefined();
     });
 
-    it("should import settings", async () => {
+    it('should import settings', async () => {
       (repository.batchUpsertSettings as jest.Mock).mockResolvedValue([]);
       const exportData = createMinimalExport({
         preferences: {
           userId: mockUserId,
           version: 1,
           settings: {
-            "general.language": {
-              id: "1",
+            'general.language': {
+              id: '1',
               userId: mockUserId,
-              key: "general.language",
-              value: "es",
-              category: "general" as const,
+              key: 'general.language',
+              value: 'es',
+              category: 'general' as const,
               isDefault: false,
               lastModified: Date.now(),
             },
@@ -159,7 +159,7 @@ describe("SettingsService", () => {
       expect(result.errors).toHaveLength(0);
     });
 
-    it("should reject invalid export version", async () => {
+    it('should reject invalid export version', async () => {
       const exportData = createMinimalExport({ version: 999 });
       await expect(importSettings(mockUserId, exportData)).rejects.toThrow(
         SettingsValidationError,
@@ -167,21 +167,21 @@ describe("SettingsService", () => {
     });
   });
 
-  describe("resetSettings", () => {
-    it("should reset settings by category", async () => {
+  describe('resetSettings', () => {
+    it('should reset settings by category', async () => {
       (repository.resetSettings as jest.Mock).mockResolvedValue(undefined);
-      await resetSettings(mockUserId, "appearance");
+      await resetSettings(mockUserId, 'appearance');
       expect(repository.resetSettings).toHaveBeenCalledWith(
         mockUserId,
-        "appearance",
+        'appearance',
       );
       expect(eventBus.publish).toHaveBeenCalledWith(
-        "settings:reset",
+        'settings:reset',
         expect.any(Object),
       );
     });
 
-    it("should reset all settings", async () => {
+    it('should reset all settings', async () => {
       (repository.resetSettings as jest.Mock).mockResolvedValue(undefined);
       await resetSettings(mockUserId);
       expect(repository.resetSettings).toHaveBeenCalledWith(

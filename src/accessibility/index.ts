@@ -7,7 +7,7 @@ export {
   getButtonAccessibilityProps,
   getLinkAccessibilityProps,
   getHeaderAccessibilityProps,
-} from "./hooks/useAccessibility";
+} from './hooks/useAccessibility';
 
 // Phase 6.3 - Accessibility & Inclusivity
 export {
@@ -41,4 +41,4 @@ export {
   type AccessibilityAudit,
   type AccessibilityIssue,
   type ColorBlindType,
-} from "./AccessibilitySystem";
+} from './AccessibilitySystem';

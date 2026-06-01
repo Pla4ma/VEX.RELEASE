@@ -1,9 +1,9 @@
-import { createDebugger } from "../../utils/debug";
-import type { SessionStatus } from "../types";
-import type { CoachSessionInsight } from "./sessionCoachContext";
+import { createDebugger } from '../../utils/debug';
+import type { SessionStatus } from '../types';
+import type { CoachSessionInsight } from './sessionCoachContext';
 
-export const FEATURE_KEY = "ai_coach_basic" as const;
-export const debug = createDebugger("session:coach-integration");
+export const FEATURE_KEY = 'ai_coach_basic' as const;
+export const debug = createDebugger('session:coach-integration');
 
 export interface CoachIntegrationConfig {
   enabled: boolean;
@@ -29,6 +29,6 @@ export type CoachMessage = {
   type: string;
   message: string;
   context: string;
-  priority: "low" | "normal" | "high";
+  priority: 'low' | 'normal' | 'high';
   actionButton?: { label: string; action: string };
 };

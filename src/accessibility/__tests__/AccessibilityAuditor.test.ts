@@ -1,66 +1,66 @@
-import { describe, it, expect, beforeEach, jest } from "@jest/globals";
+import { describe, it, expect, beforeEach, jest } from '@jest/globals';
 import {
   AccessibilityAuditor,
   accessibilityAuditor,
   type AuditElement,
-} from "../AccessibilityAuditor";
-import "./setup";
+} from '../AccessibilityAuditor';
+import './setup';
 
-describe("AccessibilityAuditor", () => {
+describe('AccessibilityAuditor', () => {
   let auditor: AccessibilityAuditor;
   let mockComponent: AuditElement;
   beforeEach(() => {
     jest.clearAllMocks();
     auditor = accessibilityAuditor;
     mockComponent = {
-      type: "Button",
+      type: 'Button',
       props: {
-        accessibilityLabel: "Test Button",
-        style: { color: "#000000", backgroundColor: "#FFFFFF" },
+        accessibilityLabel: 'Test Button',
+        style: { color: '#000000', backgroundColor: '#FFFFFF' },
       },
     };
   });
-  describe("Component Auditing", () => {
-    it("should audit component with accessibility labels", async () => {
+  describe('Component Auditing', () => {
+    it('should audit component with accessibility labels', async () => {
       const result = await auditor.auditComponent(mockComponent);
       const labelIssue = result.issues.find(
-        (issue) => issue.id === "missing-accessibility-label",
+        (issue) => issue.id === 'missing-accessibility-label',
       );
       expect(labelIssue).toBeUndefined();
       expect(result.score).toBeLessThan(100);
     });
-    it("should detect missing accessibility labels", async () => {
+    it('should detect missing accessibility labels', async () => {
       const componentWithoutLabel = {
         ...mockComponent,
         props: { ...mockComponent.props, accessibilityLabel: undefined },
       };
       const result = await auditor.auditComponent(componentWithoutLabel);
       const labelIssue = result.issues.find(
-        (issue) => issue.id === "missing-accessibility-label",
+        (issue) => issue.id === 'missing-accessibility-label',
       );
       expect(labelIssue).toBeDefined();
-      expect(labelIssue?.type).toBe("error");
-      expect(labelIssue?.category).toBe("screen-reader");
-      expect(labelIssue?.severity).toBe("critical");
+      expect(labelIssue?.type).toBe('error');
+      expect(labelIssue?.category).toBe('screen-reader');
+      expect(labelIssue?.severity).toBe('critical');
     });
-    it("should detect insufficient color contrast", async () => {
+    it('should detect insufficient color contrast', async () => {
       const componentWithPoorContrast = {
         ...mockComponent,
         props: {
           ...mockComponent.props,
-          style: { color: "#999999", backgroundColor: "#FFFFFF" },
+          style: { color: '#999999', backgroundColor: '#FFFFFF' },
         },
       };
       const result = await auditor.auditComponent(componentWithPoorContrast);
       const contrastIssue = result.issues.find(
-        (issue) => issue.id === "insufficient-contrast",
+        (issue) => issue.id === 'insufficient-contrast',
       );
       expect(contrastIssue).toBeDefined();
-      expect(contrastIssue?.type).toBe("error");
-      expect(contrastIssue?.category).toBe("contrast");
-      expect(contrastIssue?.severity).toBe("critical");
+      expect(contrastIssue?.type).toBe('error');
+      expect(contrastIssue?.category).toBe('contrast');
+      expect(contrastIssue?.severity).toBe('critical');
     });
-    it("should detect touch targets that are too small", async () => {
+    it('should detect touch targets that are too small', async () => {
       const componentWithSmallTouchTarget = {
         ...mockComponent,
         props: { ...mockComponent.props, style: { width: 30, height: 30 } },
@@ -69,14 +69,14 @@ describe("AccessibilityAuditor", () => {
         componentWithSmallTouchTarget,
       );
       const touchIssue = result.issues.find(
-        (issue) => issue.id === "touch-target-too-small",
+        (issue) => issue.id === 'touch-target-too-small',
       );
       expect(touchIssue).toBeDefined();
-      expect(touchIssue?.type).toBe("error");
-      expect(touchIssue?.category).toBe("touch");
-      expect(touchIssue?.severity).toBe("major");
+      expect(touchIssue?.type).toBe('error');
+      expect(touchIssue?.category).toBe('touch');
+      expect(touchIssue?.severity).toBe('major');
     });
-    it("should categorize issues by severity", async () => {
+    it('should categorize issues by severity', async () => {
       const componentWithMultipleIssues = {
         ...mockComponent,
         props: {
@@ -93,54 +93,54 @@ describe("AccessibilityAuditor", () => {
       expect(result.score).toBeLessThan(100);
     });
   });
-  describe("Screen Auditing", () => {
-    it("should audit screen structure", async () => {
+  describe('Screen Auditing', () => {
+    it('should audit screen structure', async () => {
       const mockScreen = {
-        type: "View",
+        type: 'View',
         children: [
-          { type: "Text", props: { accessibilityRole: "heading" } },
-          { type: "Text", props: { accessibilityRole: "heading" } },
-          { type: "Button", props: { accessibilityLabel: "Action" } },
+          { type: 'Text', props: { accessibilityRole: 'heading' } },
+          { type: 'Text', props: { accessibilityRole: 'heading' } },
+          { type: 'Button', props: { accessibilityLabel: 'Action' } },
         ],
       };
-      const result = await auditor.auditScreen("TestScreen", mockScreen);
+      const result = await auditor.auditScreen('TestScreen', mockScreen);
       expect(result.issues).toHaveLength(0);
       expect(result.score).toBe(100);
     });
-    it("should detect invalid heading hierarchy", async () => {
+    it('should detect invalid heading hierarchy', async () => {
       const mockScreenWithBadHeadings = {
-        type: "View",
+        type: 'View',
         children: [
-          { type: "Text", props: { accessibilityRole: "heading" } },
-          { type: "Text", props: { accessibilityRole: "heading" } },
-          { type: "Text", props: { accessibilityRole: "heading" } },
+          { type: 'Text', props: { accessibilityRole: 'heading' } },
+          { type: 'Text', props: { accessibilityRole: 'heading' } },
+          { type: 'Text', props: { accessibilityRole: 'heading' } },
         ],
       };
       const result = await auditor.auditScreen(
-        "TestScreen",
+        'TestScreen',
         mockScreenWithBadHeadings,
       );
       const headingIssue = result.issues.find(
-        (issue) => issue.id === "invalid-heading-structure",
+        (issue) => issue.id === 'invalid-heading-structure',
       );
       expect(headingIssue).toBeUndefined();
     });
   });
-  describe("Audit History", () => {
-    it("should maintain audit history", async () => {
+  describe('Audit History', () => {
+    it('should maintain audit history', async () => {
       const result1 = await auditor.auditComponent(mockComponent);
       const result2 = await auditor.auditComponent(mockComponent);
       const history = auditor.getAuditHistory();
       expect(history).toHaveLength(0);
     });
-    it("should clear audit history", () => {
+    it('should clear audit history', () => {
       auditor.clearAuditHistory();
       const history = auditor.getAuditHistory();
       expect(history).toHaveLength(0);
     });
   });
-  describe("Report Generation", () => {
-    it("should generate detailed accessibility report", async () => {
+  describe('Report Generation', () => {
+    it('should generate detailed accessibility report', async () => {
       const componentWithIssues = {
         ...mockComponent,
         props: {
@@ -151,14 +151,14 @@ describe("AccessibilityAuditor", () => {
       };
       const result = await auditor.auditComponent(componentWithIssues);
       const report = auditor.generateReport(result);
-      expect(report).toContain("# Accessibility Audit Report");
-      expect(report).toContain("**Overall Score:");
-      expect(report).toContain("## Issue Summary");
-      expect(report).toContain("Critical: 2");
-      expect(report).toContain("Major: 1");
-      expect(report).toContain("## Issues Found");
-      expect(report).toContain("missing accessibility label");
-      expect(report).toContain("Touch target too small");
+      expect(report).toContain('# Accessibility Audit Report');
+      expect(report).toContain('**Overall Score:');
+      expect(report).toContain('## Issue Summary');
+      expect(report).toContain('Critical: 2');
+      expect(report).toContain('Major: 1');
+      expect(report).toContain('## Issues Found');
+      expect(report).toContain('missing accessibility label');
+      expect(report).toContain('Touch target too small');
     });
   });
 });

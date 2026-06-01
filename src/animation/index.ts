@@ -3,7 +3,7 @@
  */
 
 // Hooks
-export * from "./hooks";
+export * from './hooks';
 
 // Spring configs
 export {
@@ -17,10 +17,10 @@ export {
   keyboardSpring,
   scrollSpring,
   springs,
-} from "./springs";
+} from './springs';
 
 // Timing configs
-export { easings, durations, timings, createTiming } from "./timings";
+export { easings, durations, timings, createTiming } from './timings';
 
 // Transitions
 export {
@@ -30,4 +30,4 @@ export {
   scaleTransition,
   sharedElementTransition,
   transitionPresets,
-} from "./transitions";
+} from './transitions';

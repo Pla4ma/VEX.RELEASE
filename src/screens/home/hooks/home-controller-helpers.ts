@@ -1,6 +1,6 @@
-import type { FeatureKey } from "../../../features/liveops-config";
-import type { SessionHistoryEntry } from "../../../session/types";
-import type { HomeReturnReason } from "./useHomeReturnReason";
+import type { FeatureKey } from '../../../features/liveops-config';
+import type { SessionHistoryEntry } from '../../../session/types';
+import type { HomeReturnReason } from './useHomeReturnReason';
 
 export function getFocusedMinutesForToday(entry: SessionHistoryEntry): number {
   const endedAt = entry.endedAt ?? 0;
@@ -34,9 +34,9 @@ export function buildDisplayedReturnReason(
   displayState: {
     body: string;
     eyebrow: string;
-    source: HomeReturnReason["source"];
+    source: HomeReturnReason['source'];
     title: string;
-    tone: HomeReturnReason["tone"];
+    tone: HomeReturnReason['tone'];
   },
   returnReason: HomeReturnReason,
 ): HomeReturnReason {
@@ -55,4 +55,4 @@ export {
   buildEmotionalReturnReason,
   buildSessionStakesReason,
   type EmotionalContext,
-} from "./home-emotional-helpers";
+} from './home-emotional-helpers';

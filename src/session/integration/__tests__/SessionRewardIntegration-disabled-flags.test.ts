@@ -2,18 +2,18 @@ import {
   SessionRewardIntegration,
   eventBus,
   createMockSummary,
-} from "./SessionRewardIntegration-disabled.helpers";
+} from './SessionRewardIntegration-disabled.helpers';
 
-describe("SessionRewardIntegration - disabled (all flags false)", () => {
+describe('SessionRewardIntegration - disabled (all flags false)', () => {
   const mockedEventBus = jest.mocked(eventBus);
-  const helpers = jest.requireMock("../session-reward-helpers");
+  const helpers = jest.requireMock('../session-reward-helpers');
 
   beforeEach(() => {
     jest.clearAllMocks();
     mockedEventBus.subscribe.mockReturnValue(jest.fn());
   });
 
-  it("should NOT subscribe to any event when fully disabled", () => {
+  it('should NOT subscribe to any event when fully disabled', () => {
     new SessionRewardIntegration({
       autoGrantRewards: false,
       autoUpdateStreak: false,
@@ -30,7 +30,7 @@ describe("SessionRewardIntegration - disabled (all flags false)", () => {
     expect(mockedEventBus.subscribe).not.toHaveBeenCalled();
   });
 
-  it("should deduplicate via in-memory Set when enabled", async () => {
+  it('should deduplicate via in-memory Set when enabled', async () => {
     new SessionRewardIntegration({
       autoGrantRewards: true,
       autoUpdateStreak: true,
@@ -43,12 +43,12 @@ describe("SessionRewardIntegration - disabled (all flags false)", () => {
     });
 
     const handler = mockedEventBus.subscribe.mock.calls.find(
-      (call) => call[0] === "session:completed",
+      (call) => call[0] === 'session:completed',
     )?.[1];
 
     const event = {
-      sessionId: "test-session-id",
-      userId: "test-user-id",
+      sessionId: 'test-session-id',
+      userId: 'test-user-id',
       summary: createMockSummary(),
     };
 

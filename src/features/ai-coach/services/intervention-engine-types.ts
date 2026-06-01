@@ -21,27 +21,27 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
 export class InterventionError extends Error {
   constructor(message: string) {
     super(message);
-    this.name = "InterventionError";
+    this.name = 'InterventionError';
   }
 }
 
 export class DailyLimitExceededError extends InterventionError {
   constructor(message: string) {
     super(message);
-    this.name = "DailyLimitExceededError";
+    this.name = 'DailyLimitExceededError';
   }
 }
 
 export class InterventionSuppressedError extends InterventionError {
   constructor(message: string) {
     super(message);
-    this.name = "InterventionSuppressedError";
+    this.name = 'InterventionSuppressedError';
   }
 }
 
 export class ExecutionSlotUnavailableError extends InterventionError {
   constructor(message: string) {
     super(message);
-    this.name = "ExecutionSlotUnavailableError";
+    this.name = 'ExecutionSlotUnavailableError';
   }
 }

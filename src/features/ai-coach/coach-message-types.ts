@@ -1,58 +1,58 @@
 export type VoiceTone =
-  | "ENCOURAGING"
-  | "STERN"
-  | "PLAYFUL"
-  | "WISE"
-  | "COMPETITIVE"
-  | "GENTLE";
+  | 'ENCOURAGING'
+  | 'STERN'
+  | 'PLAYFUL'
+  | 'WISE'
+  | 'COMPETITIVE'
+  | 'GENTLE';
 
 export type CoachStyle =
-  | "CHEERLEADER"
-  | "DRILL_SERGEANT"
-  | "FRIEND"
-  | "MENTOR"
-  | "RIVAL"
-  | "MINDFUL";
+  | 'CHEERLEADER'
+  | 'DRILL_SERGEANT'
+  | 'FRIEND'
+  | 'MENTOR'
+  | 'RIVAL'
+  | 'MINDFUL';
 
 export type MessageCategory =
-  | "STREAK_RISK"
-  | "SESSION_SUGGESTION"
-  | "MILESTONE_HYPE"
-  | "COMEBACK_SUPPORT"
-  | "POST_FAILURE"
-  | "PROGRESS_REMINDER"
-  | "DIFFICULTY_ADJUST"
-  | "CHALLENGE_PROMPT"
-  | "MOTIVATION_BOOST"
-  | "BREAK_SUGGESTION"
-  | "OVERLOAD_WARNING";
+  | 'STREAK_RISK'
+  | 'SESSION_SUGGESTION'
+  | 'MILESTONE_HYPE'
+  | 'COMEBACK_SUPPORT'
+  | 'POST_FAILURE'
+  | 'PROGRESS_REMINDER'
+  | 'DIFFICULTY_ADJUST'
+  | 'CHALLENGE_PROMPT'
+  | 'MOTIVATION_BOOST'
+  | 'BREAK_SUGGESTION'
+  | 'OVERLOAD_WARNING';
 
 export type ConditionType =
-  | "STREAK_DAYS"
-  | "STREAK_RISK_LEVEL"
-  | "SESSIONS_TODAY"
-  | "SESSIONS_WEEK"
-  | "LAST_SESSION_HOURS"
-  | "CURRENT_LEVEL"
-  | "TIME_OF_DAY"
-  | "DAY_OF_WEEK"
-  | "DAYS_INACTIVE"
-  | "HAS_ACTIVE_BOSS"
-  | "IS_PREMIUM"
-  | "PREFERRED_SESSION_TIME"
-  | "AVERAGE_SESSION_QUALITY"
-  | "FAILED_SESSIONS_RECENT";
+  | 'STREAK_DAYS'
+  | 'STREAK_RISK_LEVEL'
+  | 'SESSIONS_TODAY'
+  | 'SESSIONS_WEEK'
+  | 'LAST_SESSION_HOURS'
+  | 'CURRENT_LEVEL'
+  | 'TIME_OF_DAY'
+  | 'DAY_OF_WEEK'
+  | 'DAYS_INACTIVE'
+  | 'HAS_ACTIVE_BOSS'
+  | 'IS_PREMIUM'
+  | 'PREFERRED_SESSION_TIME'
+  | 'AVERAGE_SESSION_QUALITY'
+  | 'FAILED_SESSIONS_RECENT';
 
 export type MessageStatus =
-  | "DRAFT"
-  | "SCHEDULED"
-  | "SENT"
-  | "DELIVERED"
-  | "READ"
-  | "DISMISSED"
-  | "EXPIRED";
+  | 'DRAFT'
+  | 'SCHEDULED'
+  | 'SENT'
+  | 'DELIVERED'
+  | 'READ'
+  | 'DISMISSED'
+  | 'EXPIRED';
 
-export type DeliveryMethod = "IN_APP" | "PUSH" | "BOTH" | "DEFERRED";
+export type DeliveryMethod = 'IN_APP' | 'PUSH' | 'BOTH' | 'DEFERRED';
 
 export interface CoachPersona {
   id: string;
@@ -67,7 +67,7 @@ export interface CoachPersona {
 
 export interface MessageCondition {
   type: ConditionType;
-  operator: "eq" | "gt" | "lt" | "gte" | "lte" | "in" | "between";
+  operator: 'eq' | 'gt' | 'lt' | 'gte' | 'lte' | 'in' | 'between';
   value: unknown;
   field?: string;
 }

@@ -4,7 +4,7 @@
  * Individual event tracking functions for challenge engagement.
  */
 
-import { getAnalyticsService } from "../../../analytics";
+import { getAnalyticsService } from '../../../analytics';
 
 const analytics = getAnalyticsService();
 
@@ -17,7 +17,7 @@ export function trackChallengeView(
   challengeType: string,
   difficulty: string,
 ): void {
-  analytics.track("challenge_viewed", {
+  analytics.track('challenge_viewed', {
     userId,
     challengeId,
     challengeType,
@@ -33,9 +33,9 @@ export function trackChallengeAssigned(
   userId: string,
   challengeId: string,
   challengeType: string,
-  assignmentMethod: "AUTO" | "MANUAL" | "REROLL",
+  assignmentMethod: 'AUTO' | 'MANUAL' | 'REROLL',
 ): void {
-  analytics.track("challenge_assigned", {
+  analytics.track('challenge_assigned', {
     userId,
     challengeId,
     challengeType,
@@ -55,7 +55,7 @@ export function trackProgressUpdate(
   targetValue: number,
   source: string,
 ): void {
-  analytics.track("challenge_progress_updated", {
+  analytics.track('challenge_progress_updated', {
     userId,
     challengeId,
     delta,
@@ -78,7 +78,7 @@ export function trackChallengeCompleted(
   rewardType: string,
   rewardAmount: number,
 ): void {
-  analytics.track("challenge_completed", {
+  analytics.track('challenge_completed', {
     userId,
     challengeId,
     challengeType,
@@ -99,7 +99,7 @@ export function trackRewardClaimed(
   rewardAmount: number,
   timeToClaim: number,
 ): void {
-  analytics.track("challenge_reward_claimed", {
+  analytics.track('challenge_reward_claimed', {
     userId,
     challengeId,
     rewardType,
@@ -116,10 +116,10 @@ export function trackChallengeReroll(
   userId: string,
   oldChallengeId: string,
   newChallengeId: string,
-  rerollType: "FREE" | "PAID",
+  rerollType: 'FREE' | 'PAID',
   gemsSpent: number,
 ): void {
-  analytics.track("challenge_rerolled", {
+  analytics.track('challenge_rerolled', {
     userId,
     oldChallengeId,
     newChallengeId,
@@ -138,7 +138,7 @@ export function trackChallengeExpired(
   challengeType: string,
   progressPercent: number,
 ): void {
-  analytics.track("challenge_expired", {
+  analytics.track('challenge_expired', {
     userId,
     challengeId,
     challengeType,

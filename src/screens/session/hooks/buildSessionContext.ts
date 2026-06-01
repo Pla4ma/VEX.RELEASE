@@ -1,6 +1,6 @@
-import { SessionMode } from "../../../session/modes";
-import type { PresetWithIcon } from "../utils/session-setup";
-import type { SessionSetupParams, SessionContextResult } from "./sessionFlowTypes";
+import { SessionMode } from '../../../session/modes';
+import type { PresetWithIcon } from '../utils/session-setup';
+import type { SessionSetupParams, SessionContextResult } from './sessionFlowTypes';
 
 export function buildSessionContext(
   params: SessionSetupParams | undefined,
@@ -19,17 +19,17 @@ export function buildSessionContext(
   const notesPayload: Record<string, unknown> = {};
 
   if (
-    params?.source === "content-study" ||
-    params?.source === "learning-execution"
+    params?.source === 'content-study' ||
+    params?.source === 'learning-execution'
   ) {
-    if (!sessionTags.includes("content-study")) {
-      sessionTags.push("content-study");
+    if (!sessionTags.includes('content-study')) {
+      sessionTags.push('content-study');
     }
     if (
-      params.source === "learning-execution" &&
-      !sessionTags.includes("learning-execution")
+      params.source === 'learning-execution' &&
+      !sessionTags.includes('learning-execution')
     ) {
-      sessionTags.push("learning-execution");
+      sessionTags.push('learning-execution');
     }
     if (params.studyPlanId && !sessionTags.includes(params.studyPlanId)) {
       sessionTags.push(params.studyPlanId);
@@ -56,16 +56,16 @@ export function buildSessionContext(
   }
 
   if (params?.comebackMultiplier && params.comebackMultiplier > 1) {
-    if (!sessionTags.includes("comeback-session")) {
-      sessionTags.push("comeback-session");
+    if (!sessionTags.includes('comeback-session')) {
+      sessionTags.push('comeback-session');
     }
     notesPayload.comebackMultiplier = params.comebackMultiplier;
     notesPayload.comebackMessage = params.comebackMessage;
   }
 
   if (params?.comebackQuest) {
-    if (!sessionTags.includes("streak-restore-quest")) {
-      sessionTags.push("streak-restore-quest");
+    if (!sessionTags.includes('streak-restore-quest')) {
+      sessionTags.push('streak-restore-quest');
     }
     notesPayload.comebackQuest = params.comebackQuest;
   }

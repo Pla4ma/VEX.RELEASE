@@ -1,4 +1,4 @@
-import type { AdaptationResult } from "./session-behavior-signal-schemas";
+import type { AdaptationResult } from './session-behavior-signal-schemas';
 
 /**
  * Returns user-facing copy that proves VEX adapted based on real behavior.
@@ -27,12 +27,12 @@ export function getRescueAdaptationCopy(trigger: string): string | null {
     make_it_smaller:
       "A few sessions didn't finish recently. Let's make this one smaller.",
     recovery_pattern:
-      "You came back after a rescue before. Another small block might help.",
+      'You came back after a rescue before. Another small block might help.',
     notification_dismissal_pattern:
       "VEX noticed you prefer fewer nudges. Here's a quiet option.",
-    missed_planned: "Missed your planned session. VEX has a quick alternative.",
-    streak_risk: "Your streak might break. A quick session saves it.",
-    user_too_big: "That plan feels big. VEX can break it into something smaller.",
+    missed_planned: 'Missed your planned session. VEX has a quick alternative.',
+    streak_risk: 'Your streak might break. A quick session saves it.',
+    user_too_big: 'That plan feels big. VEX can break it into something smaller.',
   };
   return map[trigger] ?? null;
 }
@@ -41,7 +41,7 @@ export function getCompletionAdaptationCopy(
   adaptation: AdaptationResult,
 ): string {
   if (!adaptation.userFacingAdaptation) {
-    return "VEX is still learning from your sessions. Each one helps.";
+    return 'VEX is still learning from your sessions. Each one helps.';
   }
   return adaptation.userFacingAdaptation;
 }
@@ -62,10 +62,10 @@ export function getWeeklyAdaptationCopy(
   adaptation: AdaptationResult,
 ): string | null {
   if (adaptation.shouldSuggestShorterSessions) {
-    return "Your session durations this week suggest shorter blocks work better for you.";
+    return 'Your session durations this week suggest shorter blocks work better for you.';
   }
   if (adaptation.shouldReduceGameLanguage) {
-    return "You switched to a quieter mode this week. VEX adjusted the tone accordingly.";
+    return 'You switched to a quieter mode this week. VEX adjusted the tone accordingly.';
   }
   if (adaptation.modeChangeDetected && adaptation.fromMode && adaptation.toMode) {
     return `You moved from ${adaptation.fromMode} to ${adaptation.toMode} this week. VEX adjusted your surfaces.`;
@@ -83,7 +83,7 @@ export function getHomeNextActionAdaptationCopy(
     return `Review "${adaptation.studyReviewTarget}" — your last study target`;
   }
   if (adaptation.shouldShowRescue && adaptation.rescueReason) {
-    return "VEX noticed a pattern and adjusted this session.";
+    return 'VEX noticed a pattern and adjusted this session.';
   }
   return null;
 }
@@ -92,7 +92,7 @@ export function getNotificationAdaptationCopy(
   adaptation: AdaptationResult,
 ): string | null {
   if (adaptation.shouldQuietEveningNudges) {
-    return "VEX noticed you prefer fewer evening nudges and adjusted accordingly.";
+    return 'VEX noticed you prefer fewer evening nudges and adjusted accordingly.';
   }
   return null;
 }

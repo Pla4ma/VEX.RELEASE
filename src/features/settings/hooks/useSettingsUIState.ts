@@ -1,8 +1,8 @@
-import { useUserPreferences } from "./useSettingsQueries";
-import { useNotificationSettings } from "./useSettingsQueries";
-import { useCoachSettings } from "./useSettingsQueries";
-import { useAppearanceSettings } from "./useSettingsQueries";
-import { usePrivacySettings } from "./useSettingsQueries";
+import { useUserPreferences } from './useSettingsQueries';
+import { useNotificationSettings } from './useSettingsQueries';
+import { useCoachSettings } from './useSettingsQueries';
+import { useAppearanceSettings } from './useSettingsQueries';
+import { usePrivacySettings } from './useSettingsQueries';
 
 export function useSettingsUIState(userId: string) {
   const preferencesQuery = useUserPreferences(userId);

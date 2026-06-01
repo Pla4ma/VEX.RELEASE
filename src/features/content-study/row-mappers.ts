@@ -1,29 +1,29 @@
-import { z } from "zod";
+import { z } from 'zod';
 import {
   StudyContentSchema,
   StudyGenerationSchema,
-} from "./types";
+} from './types';
 
 export const contentRowSchema = z.object({
   id: z.string(),
   user_id: z.string(),
-  source_type: z.enum(["PASTE", "PDF", "YOUTUBE", "URL"]),
+  source_type: z.enum(['PASTE', 'PDF', 'YOUTUBE', 'URL']),
   source_url: z.string().nullable().optional(),
   original_filename: z.string().nullable().optional(),
   storage_path: z.string().nullable().optional(),
   title: z.string().nullable().optional(),
-  extracted_text: z.string().default(""),
+  extracted_text: z.string().default(''),
   extracted_length: z.number().default(0),
-  language: z.string().default("en"),
+  language: z.string().default('en'),
   user_edited_text: z.string().nullable().optional(),
   is_user_edited: z.boolean().default(false),
   status: z.enum([
-    "PENDING",
-    "EXTRACTING",
-    "EXTRACTED",
-    "PROCESSING",
-    "READY",
-    "FAILED",
+    'PENDING',
+    'EXTRACTING',
+    'EXTRACTED',
+    'PROCESSING',
+    'READY',
+    'FAILED',
   ]),
   error_message: z.string().nullable().optional(),
   generation_count_today: z.number().default(0),
@@ -90,7 +90,7 @@ export function mapGenerationRow(row: unknown) {
     model: parsed.model,
     generationVersion: parsed.generation_version,
     processingTimeMs: parsed.processing_time_ms ?? undefined,
-    summary: typeof parsed.summary === "string"
+    summary: typeof parsed.summary === 'string'
       ? JSON.parse(parsed.summary) as Record<string, unknown>
       : parsed.summary,
     keyConcepts: parsed.key_concepts,

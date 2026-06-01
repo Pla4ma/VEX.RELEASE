@@ -1,5 +1,5 @@
-import { validateCoachInput, type CoachInputContract } from "./input-contract";
-import { validateMessageQuality } from "./message-quality-gate";
+import { validateCoachInput, type CoachInputContract } from './input-contract';
+import { validateMessageQuality } from './message-quality-gate';
 import {
   createDailyMissionFromSuggestion,
   determineCoachPriority,
@@ -9,8 +9,8 @@ import {
   generateUUID,
   trackCoachSuggestionAccepted,
   trackCoachSuggestionConversionFailed,
-} from "./ai-helpers";
-import { CoachSuggestionSchema, type CoachSuggestion } from "./suggestion-schemas";
+} from './ai-helpers';
+import { CoachSuggestionSchema, type CoachSuggestion } from './suggestion-schemas';
 
 export async function generateMissionSuggestion(
   userId: string,
@@ -18,7 +18,7 @@ export async function generateMissionSuggestion(
 ): Promise<CoachSuggestion | null> {
   const validatedInput = validateCoachInput(inputContract);
   const priority = determineCoachPriority(validatedInput);
-  if (priority === "low") {
+  if (priority === 'low') {
     return null;
   }
 
@@ -27,9 +27,9 @@ export async function generateMissionSuggestion(
     priority,
   );
   const qualityAnalysis = validateMessageQuality(
-    "mission-suggestion",
+    'mission-suggestion',
     messageContent,
-    "SESSION_SUGGESTION",
+    'SESSION_SUGGESTION',
   );
   if (!qualityAnalysis.passesQualityGate) {
     return null;
@@ -37,7 +37,7 @@ export async function generateMissionSuggestion(
 
   return CoachSuggestionSchema.parse({
     id: generateUUID(),
-    type: "DAILY_MISSION",
+    type: 'DAILY_MISSION',
     title: extractSuggestionTitle(messageContent),
     description: messageContent,
     priority,
@@ -54,7 +54,7 @@ export async function convertSuggestionToMission(
   suggestion: CoachSuggestion,
 ): Promise<{ missionId: string; success: boolean }> {
   if (!suggestion.canBecomeMission) {
-    return { missionId: "", success: false };
+    return { missionId: '', success: false };
   }
 
   try {
@@ -62,10 +62,10 @@ export async function convertSuggestionToMission(
       userId,
       suggestion,
     );
-    trackCoachSuggestionAccepted(userId, suggestion.id, "mission_created");
+    trackCoachSuggestionAccepted(userId, suggestion.id, 'mission_created');
     return { missionId, success: true };
   } catch (error) {
     trackCoachSuggestionConversionFailed(userId, suggestion.id, error);
-    return { missionId: "", success: false };
+    return { missionId: '', success: false };
   }
 }

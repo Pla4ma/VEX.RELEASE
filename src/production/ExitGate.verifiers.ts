@@ -9,7 +9,7 @@
  *   ExitGate.verifiers.appstore.ts   — app store submission
  */
 
-export { verifyOfflineSync, verifyErrorBoundaries } from "./ExitGate.verifiers.sync";
-export { verifyAccessibility, verifyPerformance } from "./ExitGate.verifiers.ux";
-export { verifyPrivacy, verifyPaywall } from "./ExitGate.verifiers.compliance";
-export { verifyAppStore } from "./ExitGate.verifiers.appstore";
+export { verifyOfflineSync, verifyErrorBoundaries } from './ExitGate.verifiers.sync';
+export { verifyAccessibility, verifyPerformance } from './ExitGate.verifiers.ux';
+export { verifyPrivacy, verifyPaywall } from './ExitGate.verifiers.compliance';
+export { verifyAppStore } from './ExitGate.verifiers.appstore';

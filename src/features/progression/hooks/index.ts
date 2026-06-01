@@ -3,40 +3,40 @@
  * TanStack Query hooks for UI consumption
  */
 
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import * as service from "../service";
-import * as repository from "../repository";
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import * as service from '../service';
+import * as repository from '../repository';
 import {
   getProgressionEnhanced,
   getProgressionSummaryEnhanced,
-} from "../service-read";
+} from '../service-read';
 import {
   AddXpInputSchema,
   PrestigeInputSchema,
   type AddXpInput,
   type PrestigeInput,
-} from "../schemas";
+} from '../schemas';
 import {
   getProgressionService,
-} from "../../../progression/ProgressionService";
-import type { AddXpOperationResult } from "../service-xp-core";
-export { useOptimisticXp } from "./use-optimistic-xp";
+} from '../../../progression/ProgressionService';
+import type { AddXpOperationResult } from '../service-xp-core';
+export { useOptimisticXp } from './use-optimistic-xp';
 
 // ============================================================================
 // Query Keys
 // ============================================================================
 
 export const progressionKeys = {
-  all: ["progression"] as const,
+  all: ['progression'] as const,
   byUser: (userId: string) => [...progressionKeys.all, userId] as const,
   summary: (userId: string) =>
-    [...progressionKeys.byUser(userId), "summary"] as const,
+    [...progressionKeys.byUser(userId), 'summary'] as const,
   history: (userId: string) =>
-    [...progressionKeys.byUser(userId), "history"] as const,
+    [...progressionKeys.byUser(userId), 'history'] as const,
   daily: (userId: string, date: string) =>
-    [...progressionKeys.byUser(userId), "daily", date] as const,
+    [...progressionKeys.byUser(userId), 'daily', date] as const,
   weekly: (userId: string, weekStart: string) =>
-    [...progressionKeys.byUser(userId), "weekly", weekStart] as const,
+    [...progressionKeys.byUser(userId), 'weekly', weekStart] as const,
 };
 
 // ============================================================================
@@ -45,10 +45,10 @@ export const progressionKeys = {
 
 export function useProgression(userId: string | null) {
   return useQuery({
-    queryKey: progressionKeys.byUser(userId || ""),
+    queryKey: progressionKeys.byUser(userId || ''),
     queryFn: () => {
       if (!userId) {
-        throw new Error("User ID required");
+        throw new Error('User ID required');
       }
       return getProgressionEnhanced(userId);
     },
@@ -59,10 +59,10 @@ export function useProgression(userId: string | null) {
 
 export function useProgressionSummary(userId: string | null) {
   return useQuery({
-    queryKey: progressionKeys.summary(userId || ""),
+    queryKey: progressionKeys.summary(userId || ''),
     queryFn: () => {
       if (!userId) {
-        throw new Error("User ID required");
+        throw new Error('User ID required');
       }
       return getProgressionSummaryEnhanced(userId);
     },
@@ -76,10 +76,10 @@ export function useXpHistory(
   options?: { limit?: number; since?: number },
 ) {
   return useQuery({
-    queryKey: [...progressionKeys.history(userId || ""), options],
+    queryKey: [...progressionKeys.history(userId || ''), options],
     queryFn: () => {
       if (!userId) {
-        throw new Error("User ID required");
+        throw new Error('User ID required');
       }
       return repository.fetchXpHistory(userId, options);
     },
@@ -90,10 +90,10 @@ export function useXpHistory(
 
 export function useDailyProgress(userId: string | null, date: string) {
   return useQuery({
-    queryKey: progressionKeys.daily(userId || "", date),
+    queryKey: progressionKeys.daily(userId || '', date),
     queryFn: () => {
       if (!userId) {
-        throw new Error("User ID required");
+        throw new Error('User ID required');
       }
       return service.getDailyProgress(userId);
     },
@@ -133,7 +133,7 @@ export function usePrestige() {
       const validated = PrestigeInputSchema.parse(input);
       const progressionService = getProgressionService(validated.userId);
       if (!progressionService.canPrestige()) {
-        throw new Error("Prestige is not available");
+        throw new Error('Prestige is not available');
       }
       await progressionService.prestige();
     },

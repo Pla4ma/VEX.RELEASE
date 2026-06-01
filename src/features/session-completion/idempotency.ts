@@ -1,10 +1,10 @@
-import { z } from "zod";
+import { z } from 'zod';
 
-import { MMKVStorageAdapter } from "../../persistence/MMKVStorageAdapter";
+import { MMKVStorageAdapter } from '../../persistence/MMKVStorageAdapter';
 
 const MAX_IDEMPOTENCY_KEYS = 1000;
-const STORAGE_KEY = "session_completion_processed_keys_v1";
-const storage = new MMKVStorageAdapter("session-completion-idempotency");
+const STORAGE_KEY = 'session_completion_processed_keys_v1';
+const storage = new MMKVStorageAdapter('session-completion-idempotency');
 
 const PersistedKeysSchema = z
   .object({
@@ -39,7 +39,7 @@ export function markKeyProcessed(key: string): void {
     const toRemove = Math.floor(processedIdempotencyKeys.size * 0.5);
     let count = 0;
     for (const k of processedIdempotencyKeys) {
-      if (count >= toRemove) break;
+      if (count >= toRemove) {break;}
       processedIdempotencyKeys.delete(k);
       count += 1;
     }

@@ -1,10 +1,10 @@
-import React from "react";
-import { View } from "react-native";
-import { Button } from "@/components/primitives/Button";
-import { Text } from "@/components/primitives/Text";
-import { useTheme } from "@/theme";
-import { MAX_FOCUS_SCORE } from "../schemas";
-import type { FocusScoreDashboardModel } from "../types";
+import React from 'react';
+import { View } from 'react-native';
+import { Button } from '@/components/primitives/Button';
+import { Text } from '@/components/primitives/Text';
+import { useTheme } from '@/theme';
+import { MAX_FOCUS_SCORE } from '../schemas';
+import type { FocusScoreDashboardModel } from '../types';
 
 interface WhatChangedProps {
   model: FocusScoreDashboardModel;
@@ -16,7 +16,7 @@ export function WhatChanged({
   onOpenMonthlyReport,
 }: WhatChangedProps): JSX.Element | null {
   const { theme } = useTheme();
-  if (!model.current) return null;
+  if (!model.current) {return null;}
 
   const nextTarget = Math.min(MAX_FOCUS_SCORE, model.current.currentScore + 20);
 

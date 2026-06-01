@@ -1,18 +1,18 @@
-import { captureSilentFailure } from "./silent-failure";
-import { MMKV } from "react-native-mmkv";
-import { createDebugger } from "./debug";
-import { eventBus } from "../events";
-import { TokenBucketLimiter } from "./token-bucket";
-import type { RateLimitResult } from "./token-bucket";
+import { captureSilentFailure } from './silent-failure';
+import { MMKV } from 'react-native-mmkv';
+import { createDebugger } from './debug';
+import { eventBus } from '../events';
+import { TokenBucketLimiter } from './token-bucket';
+import type { RateLimitResult } from './token-bucket';
 
-export { TokenBucketLimiter } from "./token-bucket";
-export type { RateLimitResult, TokenBucketConfig } from "./token-bucket";
+export { TokenBucketLimiter } from './token-bucket';
+export type { RateLimitResult, TokenBucketConfig } from './token-bucket';
 
-const debug = createDebugger("rate-limiter");
+const debug = createDebugger('rate-limiter');
 let _storage: MMKV | null = null;
 function getStorage(): MMKV {
   if (!_storage) {
-    _storage = new MMKV({ id: "rate-limiter" });
+    _storage = new MMKV({ id: 'rate-limiter' });
   }
   return _storage;
 }
@@ -43,9 +43,9 @@ export class SlidingWindowLimiter {
         ? oldestRecord.timestamp + this.config.windowMs
         : now;
       const retryAfter = Math.ceil((resetAt - now) / 1000);
-      debug.warn("Rate limit exceeded", { key, userId, count: currentCount });
-      eventBus.publish("analytics:track", {
-        event: "rate_limit_exceeded",
+      debug.warn('Rate limit exceeded', { key, userId, count: currentCount });
+      eventBus.publish('analytics:track', {
+        event: 'rate_limit_exceeded',
         properties: { key, userId, limit: this.config.maxRequests },
       });
       return { allowed: false, remaining: 0, resetAt, retryAfter };
@@ -78,9 +78,9 @@ export class SlidingWindowLimiter {
       return data ? JSON.parse(data) : [];
     } catch (error) {
       captureSilentFailure(error, {
-        feature: "utils",
-        operation: "safe-fallback",
-        type: "data",
+        feature: 'utils',
+        operation: 'safe-fallback',
+        type: 'data',
       });
       return [];
     }
@@ -90,38 +90,38 @@ export class SlidingWindowLimiter {
   }
 }
 export const RateLimits = {
-  API_GENERAL: { maxRequests: 100, windowMs: 60 * 1000, key: "api:general" },
-  API_SENSITIVE: { maxRequests: 10, windowMs: 60 * 1000, key: "api:sensitive" },
+  API_GENERAL: { maxRequests: 100, windowMs: 60 * 1000, key: 'api:general' },
+  API_SENSITIVE: { maxRequests: 10, windowMs: 60 * 1000, key: 'api:sensitive' },
   SESSION_CREATE: {
     maxRequests: 5,
     windowMs: 60 * 60 * 1000,
-    key: "session:create",
+    key: 'session:create',
   },
   CHALLENGE_SUBMIT: {
     maxRequests: 20,
     windowMs: 60 * 60 * 1000,
-    key: "challenge:submit",
+    key: 'challenge:submit',
   },
   DUEL_REQUEST: {
     maxRequests: 10,
     windowMs: 60 * 60 * 1000,
-    key: "duel:request",
+    key: 'duel:request',
   },
   FRIEND_REQUEST: {
     maxRequests: 20,
     windowMs: 24 * 60 * 60 * 1000,
-    key: "social:friend",
+    key: 'social:friend',
   },
   MESSAGE_SEND: {
     maxRequests: 100,
     windowMs: 60 * 60 * 1000,
-    key: "social:message",
+    key: 'social:message',
   },
-  POST_CREATE: { maxRequests: 10, windowMs: 60 * 60 * 1000, key: "feed:post" },
+  POST_CREATE: { maxRequests: 10, windowMs: 60 * 60 * 1000, key: 'feed:post' },
   COMMENT_CREATE: {
     maxRequests: 50,
     windowMs: 60 * 60 * 1000,
-    key: "feed:comment",
+    key: 'feed:comment',
   },
 } as const;
 export async function checkRateLimit(
@@ -146,7 +146,7 @@ export async function requireRateLimit(
 export class RateLimitError extends Error {
   constructor(message: string) {
     super(message);
-    this.name = "RateLimitError";
+    this.name = 'RateLimitError';
   }
 }
 export const RateLimiter = {

@@ -7,61 +7,61 @@ import {
   mockEventBus,
   mockStreaks,
   fireEvent,
-} from "./integration-setup";
-import { initializeStreaksRewardsIntegration } from "../streaks-rewards";
+} from './integration-setup';
+import { initializeStreaksRewardsIntegration } from '../streaks-rewards';
 
-describe("integration", () => {
+describe('integration', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     mockActiveSubscribers.length = 0;
   });
 
-  describe("streaks-rewards.ts", () => {
-    it("subscribes to social:streak_milestone and streak:broken", () => {
+  describe('streaks-rewards.ts', () => {
+    it('subscribes to social:streak_milestone and streak:broken', () => {
       const unsub = initializeStreaksRewardsIntegration();
       expect(mockEventBus.eventBus.subscribe).toHaveBeenCalledWith(
-        "social:streak_milestone",
+        'social:streak_milestone',
         expect.any(Function),
       );
       expect(mockEventBus.eventBus.subscribe).toHaveBeenCalledWith(
-        "streak:broken",
+        'streak:broken',
         expect.any(Function),
       );
       unsub();
     });
 
-    it("handles streak:broken event without throwing", () => {
+    it('handles streak:broken event without throwing', () => {
       const unsub = initializeStreaksRewardsIntegration();
       expect(() =>
-        fireEvent("streak:broken", { userId: "u1" }),
+        fireEvent('streak:broken', { userId: 'u1' }),
       ).not.toThrow();
       unsub();
     });
 
-    it("ignores streak_milestone with null event", () => {
+    it('ignores streak_milestone with null event', () => {
       const unsub = initializeStreaksRewardsIntegration();
-      fireEvent("social:streak_milestone", null);
+      fireEvent('social:streak_milestone', null);
       expect(mockStreaks.checkMilestone).not.toHaveBeenCalled();
       unsub();
     });
 
-    it("ignores streak_milestone with no streak field", () => {
+    it('ignores streak_milestone with no streak field', () => {
       const unsub = initializeStreaksRewardsIntegration();
-      fireEvent("social:streak_milestone", { userId: "u1" });
+      fireEvent('social:streak_milestone', { userId: 'u1' });
       expect(mockStreaks.checkMilestone).not.toHaveBeenCalled();
       unsub();
     });
 
-    it("ignores streak_milestone with no userId", () => {
+    it('ignores streak_milestone with no userId', () => {
       const unsub = initializeStreaksRewardsIntegration();
-      fireEvent("social:streak_milestone", { streak: 5 });
+      fireEvent('social:streak_milestone', { streak: 5 });
       expect(mockStreaks.checkMilestone).not.toHaveBeenCalled();
       unsub();
     });
 
-    it("calls checkMilestone when streak and userId present", () => {
+    it('calls checkMilestone when streak and userId present', () => {
       const unsub = initializeStreaksRewardsIntegration();
-      fireEvent("social:streak_milestone", { userId: "u1", streak: 7 });
+      fireEvent('social:streak_milestone', { userId: 'u1', streak: 7 });
       expect(mockStreaks.checkMilestone).toHaveBeenCalledWith(7);
       unsub();
     });

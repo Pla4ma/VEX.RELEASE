@@ -1,12 +1,12 @@
-import React, { useRef, useState, useCallback } from "react";
-import { View, PanResponder, ActivityIndicator } from "react-native";
-import Animated from "react-native-reanimated";
-import { useSharedValue } from "react-native-reanimated";
-import { useTheme } from "@/theme";
-import { useReducedMotion } from "@/hooks";
-import { haptics } from "@/shared/feedback";
-import { useRefreshAnimations } from "./PremiumPullToRefresh-animations";
-import { styles } from "./PremiumPullToRefresh-styles";
+import React, { useRef, useState, useCallback } from 'react';
+import { View, PanResponder, ActivityIndicator } from 'react-native';
+import Animated from 'react-native-reanimated';
+import { useSharedValue } from 'react-native-reanimated';
+import { useTheme } from '@/theme';
+import { useReducedMotion } from '@/hooks';
+import { haptics } from '@/shared/feedback';
+import { useRefreshAnimations } from './PremiumPullToRefresh-animations';
+import { styles } from './PremiumPullToRefresh-styles';
 
 interface PremiumPullToRefreshProps {
   onRefresh: () => Promise<void>;
@@ -18,7 +18,7 @@ interface PremiumPullToRefreshProps {
   enabled?: boolean;
 }
 
-type RefreshState = "idle" | "pulling" | "willRefresh" | "refreshing";
+type RefreshState = 'idle' | 'pulling' | 'willRefresh' | 'refreshing';
 
 export const PremiumPullToRefresh: React.FC<PremiumPullToRefreshProps> = ({
   onRefresh,
@@ -31,7 +31,7 @@ export const PremiumPullToRefresh: React.FC<PremiumPullToRefreshProps> = ({
 }) => {
   const { theme } = useTheme();
   const { isReducedMotion } = useReducedMotion();
-  const [refreshState, setRefreshState] = useState<RefreshState>("idle");
+  const [refreshState, setRefreshState] = useState<RefreshState>('idle');
   const pullY = useSharedValue(0);
   const indicatorRotation = useSharedValue(0);
   const indicatorScale = useSharedValue(1);
@@ -39,13 +39,13 @@ export const PremiumPullToRefresh: React.FC<PremiumPullToRefreshProps> = ({
   const hapticTriggered = useRef(false);
 
   const resetHapticTriggered = useCallback(() => {
-    setRefreshState("idle");
+    setRefreshState('idle');
     hapticTriggered.current = false;
   }, []);
 
   React.useEffect(() => {
     if (controlledRefreshing !== undefined) {
-      setRefreshState(controlledRefreshing ? "refreshing" : "idle");
+      setRefreshState(controlledRefreshing ? 'refreshing' : 'idle');
     }
   }, [controlledRefreshing]);
 
@@ -75,13 +75,13 @@ export const PremiumPullToRefresh: React.FC<PremiumPullToRefreshProps> = ({
   const panResponder = useRef(
     PanResponder.create({
       onMoveShouldSetPanResponder: (_, gestureState) => {
-        if (!enabled || refreshState === "refreshing") {
+        if (!enabled || refreshState === 'refreshing') {
           return false;
         }
         return gestureState.dy > 0 && gestureState.vy > 0;
       },
       onPanResponderMove: (_, gestureState) => {
-        if (refreshState === "refreshing") {
+        if (refreshState === 'refreshing') {
           return;
         }
         const pullProgress = Math.min(gestureState.dy / pullDistance, 1);
@@ -91,24 +91,24 @@ export const PremiumPullToRefresh: React.FC<PremiumPullToRefreshProps> = ({
         indicatorRotation.value = pullProgress * 0.5;
         if (
           gestureState.dy >= triggerDistance &&
-          refreshState !== "willRefresh"
+          refreshState !== 'willRefresh'
         ) {
-          setRefreshState("willRefresh");
+          setRefreshState('willRefresh');
           if (!hapticTriggered.current && !isReducedMotion) {
-            haptics.impact("light");
+            haptics.impact('light');
             hapticTriggered.current = true;
           }
         } else if (
           gestureState.dy < triggerDistance &&
-          refreshState !== "pulling"
+          refreshState !== 'pulling'
         ) {
-          setRefreshState("pulling");
+          setRefreshState('pulling');
           hapticTriggered.current = false;
         }
       },
       onPanResponderRelease: (_, gestureState) => {
         if (gestureState.dy >= triggerDistance) {
-          haptics.success("light");
+          haptics.success('light');
           animateToRefreshing();
           handleRefresh();
         } else {
@@ -119,7 +119,7 @@ export const PremiumPullToRefresh: React.FC<PremiumPullToRefreshProps> = ({
   ).current;
 
   const renderIndicator = () => {
-    if (refreshState === "refreshing") {
+    if (refreshState === 'refreshing') {
       return (
         <ActivityIndicator size="small" color={theme.colors.primary[500]} />
       );

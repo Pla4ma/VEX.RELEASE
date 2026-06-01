@@ -1,6 +1,6 @@
-import React from "react";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
+import React from 'react';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
 
 export function CharacterCounter({
   current,
@@ -15,8 +15,8 @@ export function CharacterCounter({
   return (
     <Text
       variant="caption"
-      color={isNearLimit ? "warning.DEFAULT" : "text.tertiary"}
-      fontWeight={isNearLimit ? "600" : "400"}
+      color={isNearLimit ? 'warning.DEFAULT' : 'text.tertiary'}
+      fontWeight={isNearLimit ? '600' : '400'}
     >
       {current}/{max}
     </Text>

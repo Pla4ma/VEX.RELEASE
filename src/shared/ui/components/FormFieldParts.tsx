@@ -1,8 +1,8 @@
-import React from "react";
-import { View, type ViewStyle } from "react-native";
+import React from 'react';
+import { View, type ViewStyle } from 'react-native';
 
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
 
 export interface FormSectionProps {
   title?: string;
@@ -57,8 +57,8 @@ export function InputGroup({
     <View
       style={[
         {
-          alignItems: inline ? "flex-start" : undefined,
-          flexDirection: inline ? "row" : "column",
+          alignItems: inline ? 'flex-start' : undefined,
+          flexDirection: inline ? 'row' : 'column',
           gap,
         },
         style,

@@ -1,10 +1,10 @@
-import * as repository from "../repository";
+import * as repository from '../repository';
 import {
   type TimeRange,
   type AnalyticsMetric,
   type TrendDirection,
-} from "../schemas";
-import { generateInsights } from "./insights";
+} from '../schemas';
+import { generateInsights } from './insights';
 
 export async function getAnalyticsSummary(
   userId: string,
@@ -29,10 +29,10 @@ export async function getAnalyticsSummary(
 async function generateAggregatedStats(userId: string, period: TimeRange) {
   const now = Date.now();
   const metrics = [
-    "sessions_completed",
-    "total_focus_time",
-    "xp_earned",
-    "streak_days",
+    'sessions_completed',
+    'total_focus_time',
+    'xp_earned',
+    'streak_days',
   ] as AnalyticsMetric[];
   const metricData = await Promise.all(
     metrics.map(async (metric) => {
@@ -40,7 +40,7 @@ async function generateAggregatedStats(userId: string, period: TimeRange) {
         userId,
         metric,
         period,
-        "day",
+        'day',
       );
       return {
         metric,
@@ -48,10 +48,10 @@ async function generateAggregatedStats(userId: string, period: TimeRange) {
         previousValue: 0,
         changePercent: data.summary.changePercent,
         trend: (data.summary.changePercent > 5
-          ? "up"
+          ? 'up'
           : data.summary.changePercent < -5
-            ? "down"
-            : "flat") as TrendDirection,
+            ? 'down'
+            : 'flat') as TrendDirection,
       };
     }),
   );
@@ -62,7 +62,7 @@ async function generateAggregatedStats(userId: string, period: TimeRange) {
     metrics: Object.fromEntries(metricData.map((m) => [m.metric, m])),
     insights: [],
     patterns: [],
-    topPerforming: { dayOfWeek: 1, hourOfDay: 9, category: "work" },
+    topPerforming: { dayOfWeek: 1, hourOfDay: 9, category: 'work' },
   };
   await repository.storeAggregatedStats(stats);
   return stats;

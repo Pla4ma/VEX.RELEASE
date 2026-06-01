@@ -1,10 +1,11 @@
-import { getSupabase, RepositoryError } from "./repository";
-import type { SpendError } from "./types";
+import { RepositoryError, grantCurrencyRpc, spendCurrencyRpc } from './repository';
+import { CurrencyRpcResultSchema } from './schemas';
+import type { SpendError } from './types';
 
 export interface CurrencyGrant {
   userId: string;
   amount: number;
-  currency: "COINS" | "GEMS" | "XP" | "SEASONAL" | "FOCUS_POINTS";
+  currency: 'COINS' | 'GEMS' | 'XP' | 'SEASONAL' | 'FOCUS_POINTS';
   source: string;
   sourceId?: string | null;
   description?: string;
@@ -22,21 +23,19 @@ export interface SpendRequest {
 }
 
 export async function addCurrency(grant: CurrencyGrant): Promise<boolean> {
-  const supabase = getSupabase();
   try {
-    const { data, error } = await supabase.rpc("grant_currency", {
-      p_user_id: grant.userId,
-      p_currency: grant.currency,
-      p_amount: grant.amount,
-      p_source: grant.source,
-      p_source_id: grant.sourceId ?? null,
-      p_description: grant.description ?? null,
+    const result = await grantCurrencyRpc({
+      userId: grant.userId,
+      currency: grant.currency,
+      amount: grant.amount,
+      source: grant.source,
+      sourceId: grant.sourceId ?? null,
+      description: grant.description ?? null,
     });
-    if (error) throw new RepositoryError("addCurrency", error);
-    return (data as { success: boolean }).success;
+    return result.success;
   } catch (err) {
-    if (err instanceof RepositoryError) throw err;
-    throw new RepositoryError("addCurrency", err as Error);
+    if (err instanceof RepositoryError) {throw err;}
+    throw new RepositoryError('addCurrency', err as Error);
   }
 }
 
@@ -44,18 +43,16 @@ export async function spendCurrency(input: SpendRequest): Promise<{
   success: boolean;
   error?: SpendError;
 }> {
-  const supabase = getSupabase();
   try {
-    const { data, error } = await supabase.rpc("atomic_spend_currency", {
-      p_user_id: input.userId,
-      p_currency: input.currency,
-      p_amount: input.amount,
-      p_sink: input.sink,
+    const result = await spendCurrencyRpc({
+      userId: input.userId,
+      currency: input.currency,
+      amount: input.amount,
+      sink: input.sink,
     });
-    if (error) throw new RepositoryError("spendCurrency", error);
-    return { success: (data as { success: boolean }).success };
+    return { success: result.success };
   } catch (err) {
-    const message = err instanceof Error ? err.message : "Spend failed";
-    return { success: false, error: { code: "DB_ERROR", message } };
+    const message = err instanceof Error ? err.message : 'Spend failed';
+    return { success: false, error: { code: 'DB_ERROR', message } };
   }
 }

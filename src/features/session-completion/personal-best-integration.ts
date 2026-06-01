@@ -1,9 +1,9 @@
-import * as Sentry from "@sentry/react-native";
-import { z } from "zod";
+import * as Sentry from '@sentry/react-native';
+import { z } from 'zod';
 
-import { SessionSummarySchema } from "../../session/types";
-import { checkAndUpdatePersonalBest } from "../personal-bests/service";
-import { buildCompletionLedger } from "./ledger-service";
+import { SessionSummarySchema } from '../../session/types';
+import { checkAndUpdatePersonalBest } from '../personal-bests/service';
+import { buildCompletionLedger } from './ledger-service';
 
 export type CompletionPersonalBestResult = {
   achievedAt?: string;
@@ -22,7 +22,7 @@ export async function resolveCompletionPersonalBest(
   try {
     const comparison = await checkAndUpdatePersonalBest(
       userId,
-      ledger.mode === "UNKNOWN" ? summary.sessionMode : ledger.mode,
+      ledger.mode === 'UNKNOWN' ? summary.sessionMode : ledger.mode,
       ledger.targetDurationSeconds,
       summary.focusPurityScore ?? ledger.qualityScore,
       ledger.grade,
@@ -37,7 +37,7 @@ export async function resolveCompletionPersonalBest(
     };
   } catch (error) {
     Sentry.captureException(error, {
-      tags: { feature: "personal-bests", operation: "completion-check" },
+      tags: { feature: 'personal-bests', operation: 'completion-check' },
     });
     return { isPersonalBest: false };
   }

@@ -4,17 +4,17 @@ import {
   featureAvailability,
   studyProfile,
   baseStats,
-} from "./product-journey-helpers";
-import { getHomeStage } from "../service";
+} from './product-journey-helpers';
+import { getHomeStage } from '../service';
 
-describe("product journey — Day 3 companion continuity", () => {
-  it("companion thread visible for friendly style", () => {
+describe('product journey — Day 3 companion continuity', () => {
+  it('companion thread visible for friendly style', () => {
     const surfaces = decideHomeSurfaces({
       featureAvailability,
       personalizationProfile: {
         ...studyProfile,
-        motivationStyle: "friendly",
-        primaryGoal: "creative",
+        motivationStyle: 'friendly',
+        primaryGoal: 'creative',
       },
       behaviorStats: {
         ...baseStats(3),
@@ -26,15 +26,15 @@ describe("product journey — Day 3 companion continuity", () => {
       hasActiveBoss: false,
       isFirstSession: false,
     });
-    expect(surfaces.companion_thread).not.toBe("hidden");
+    expect(surfaces.companion_thread).not.toBe('hidden');
   });
 
-  it("stage transitions correctly", () => {
-    expect(getHomeStage(3)).toBe("STAGE_2");
+  it('stage transitions correctly', () => {
+    expect(getHomeStage(3)).toBe('STAGE_2');
     const model = buildHomeExperienceModel({
       explicitMotivationStyle: null,
       totalCompletedSessions: 3,
     });
-    expect(model.stage).toBe("STAGE_2");
+    expect(model.stage).toBe('STAGE_2');
   });
 });

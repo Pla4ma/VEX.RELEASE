@@ -1,14 +1,14 @@
-import { z } from "zod";
-import { LaneProfileSchema, LaneSchema } from "../lane-engine/schemas";
+import { z } from 'zod';
+import { LaneProfileSchema, LaneSchema } from '../lane-engine/schemas';
 
 export const NudgeTypeSchema = z.enum([
-  "none",
-  "gentle_return",
-  "rescue",
-  "study_deadline",
-  "project_resume",
-  "run_continue",
-  "weekly_insight",
+  'none',
+  'gentle_return',
+  'rescue',
+  'study_deadline',
+  'project_resume',
+  'run_continue',
+  'weekly_insight',
 ]);
 
 export const NudgeDecisionSchema = z
@@ -20,7 +20,7 @@ export const NudgeDecisionSchema = z
     scheduledFor: z.number().int().min(0).nullable(),
     reason: z.string().min(1),
     lane: LaneSchema,
-    priority: z.enum(["low", "medium", "high"]),
+    priority: z.enum(['low', 'medium', 'high']),
     budgetRemaining: z.number().int().min(0),
   })
   .strict();
@@ -43,29 +43,29 @@ export const NudgePolicyInputSchema = z
       .default(() => Date.now()),
     context: z
       .enum([
-        "none",
-        "avoidance",
-        "deadline",
-        "project_stale",
-        "run_open",
-        "weekly_ready",
+        'none',
+        'avoidance',
+        'deadline',
+        'project_stale',
+        'run_open',
+        'weekly_ready',
       ])
-      .default("none"),
+      .default('none'),
     memoryConfidence: z.number().min(0).max(1).optional(),
     pausedCategories: z
-      .array(z.enum(["study", "run", "project", "clean"]))
+      .array(z.enum(['study', 'run', 'project', 'clean']))
       .default([]),
     journeyNudgeType: NudgeTypeSchema.optional(),
   })
   .strict();
 
 export const NudgeSignalTypeSchema = z.enum([
-  "sent",
-  "opened",
-  "dismissed",
-  "ignored",
-  "rescue_started",
-  "session_completed",
+  'sent',
+  'opened',
+  'dismissed',
+  'ignored',
+  'rescue_started',
+  'session_completed',
 ]);
 
 export const NudgeSignalRecordSchema = z

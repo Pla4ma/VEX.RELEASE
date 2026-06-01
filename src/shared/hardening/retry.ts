@@ -14,10 +14,10 @@ const DEFAULT_RETRY_CONFIG: RetryConfig = {
   maxDelayMs: 30000,
   backoffMultiplier: 2,
   retryableErrors: [
-    "network_error",
-    "timeout",
-    "rate_limited",
-    "temporarily_unavailable",
+    'network_error',
+    'timeout',
+    'rate_limited',
+    'temporarily_unavailable',
   ],
 };
 
@@ -52,7 +52,7 @@ export async function withRetry<T>(
       await sleep(delay + jitter);
     }
   }
-  const finalError = lastError ?? new Error("Unknown error");
+  const finalError = lastError ?? new Error('Unknown error');
   fullConfig.onExhausted?.(finalError);
   throw finalError;
 }

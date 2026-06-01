@@ -1,18 +1,18 @@
-import { useMemo } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useMemo } from 'react';
+import { useQuery } from '@tanstack/react-query';
 
-import { buildHomeSpineModel } from "./service";
+import { buildHomeSpineModel } from './service';
 import {
   selectHomePriority,
   type SelectHomePriorityInput,
-} from "./priority-service";
-import type { HomePriority, ProductContext } from "./priority-schemas";
-export { useSavedTomorrowPreview } from "./hooks/useSavedTomorrowPreview";
+} from './priority-service';
+import type { HomePriority, ProductContext } from './priority-schemas';
+export { useSavedTomorrowPreview } from './hooks/useSavedTomorrowPreview';
 
 export {
   useStreakDefense,
   type StreakDefenseState,
-} from "./hooks/useStreakDefense";
+} from './hooks/useStreakDefense';
 
 // PHASE 7.4: Tomorrow Preview Service
 export {
@@ -26,7 +26,7 @@ export {
   type TomorrowPreviewType,
   type TomorrowPreviewData,
   type ComputeTomorrowPreviewInput,
-} from "./tomorrowPreviewService";
+} from './tomorrowPreviewService';
 
 type HomeSpineInput = Parameters<typeof buildHomeSpineModel>[0];
 type HomeSpineModel = ReturnType<typeof buildHomeSpineModel>;
@@ -107,11 +107,11 @@ export function useHomeSpineModel(input: HomeSpineInput): HomeSpineModel {
 // Phase 4: Home Priority Hook
 // ============================================================================
 
-const HOME_PRIORITY_KEY = "home-priority";
+const HOME_PRIORITY_KEY = 'home-priority';
 
 export function useHomePriority(
   userId: string | null | undefined,
-  featureAccess?: import("../liveops-config").FeatureAccessMap,
+  featureAccess?: import('../liveops-config').FeatureAccessMap,
   productContext?: ProductContext,
 ) {
   return useQuery<HomePriority>({

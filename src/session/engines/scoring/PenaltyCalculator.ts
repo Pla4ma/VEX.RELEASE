@@ -1,15 +1,15 @@
-import { PENALTY_CONSTANTS, severityRankings } from "./penalty-constants";
+import { PENALTY_CONSTANTS, severityRankings } from './penalty-constants';
 import {
   calculatePausePenalty,
   calculateInterruptionPenalty,
   getSeverityFromTimeLost,
   calculateQualityPenalty,
-} from "./penalty-basic";
+} from './penalty-basic';
 import {
   calculateAntiCheatPenalty,
   calculateAbandonPenalty,
   calculateTotalPenalty,
-} from "./penalty-advanced";
+} from './penalty-advanced';
 
 export { PENALTY_CONSTANTS, severityRankings };
 export {
@@ -36,7 +36,7 @@ export type {
   InterruptionPenaltyResult,
   AntiCheatPenaltyResult,
   TotalPenaltyResult,
-} from "./penalty-types";
+} from './penalty-types';
 
 export const PenaltyCalculator = {
   calculatePausePenalty,

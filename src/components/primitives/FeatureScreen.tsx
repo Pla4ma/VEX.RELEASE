@@ -5,18 +5,18 @@
  * Provides consistent header, loading states, and error handling.
  */
 
-import React from "react";
-import { ScrollView } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { useNavigation } from "@react-navigation/native";
-import Animated, { FadeIn } from "react-native-reanimated";
-import { Pressable } from "react-native";
+import React from 'react';
+import { ScrollView } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
+import Animated, { FadeIn } from 'react-native-reanimated';
+import { Pressable } from 'react-native';
 
-import { Box } from "./Box";
-import { Text } from "./Text";
-import { Icon } from "../../icons";
-import { useTheme } from "../../theme";
-import { ErrorState, Skeleton } from "../../shared/ui/state-components";
+import { Box } from './Box';
+import { Text } from './Text';
+import { Icon } from '../../icons';
+import { useTheme } from '../../theme';
+import { ErrorState, Skeleton } from '../../shared/ui/state-components';
 
 interface FeatureScreenProps {
   title: string;
@@ -38,7 +38,7 @@ export const FeatureScreen: React.FC<FeatureScreenProps> = ({
   subtitle,
   isLoading = false,
   isError = false,
-  errorMessage = "Something went wrong",
+  errorMessage = 'Something went wrong',
   onRetry,
   showBackButton = true,
   rightAction,
@@ -60,7 +60,7 @@ export const FeatureScreen: React.FC<FeatureScreenProps> = ({
   return (
     <SafeAreaView
       style={{ flex: 1, backgroundColor: theme.colors.background.primary }}
-      edges={["top"]}
+      edges={['top']}
     >
       {/* Standard Header */}
       <Box

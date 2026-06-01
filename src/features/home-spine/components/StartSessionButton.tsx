@@ -1,5 +1,5 @@
-import React, { useMemo } from "react";
-import { Pressable, ActivityIndicator } from "react-native";
+import React, { useMemo } from 'react';
+import { Pressable, ActivityIndicator } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   withSpring,
@@ -7,15 +7,15 @@ import Animated, {
   withSequence,
   cancelAnimation,
   useSharedValue,
-} from "react-native-reanimated";
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import { StartSessionButtonCompact } from "./StartSessionButtonCompact";
-import { useStartSessionButtonColors } from "./start-session-button-colors";
-import type { StartSessionButtonProps } from "./start-session-button-types";
-import { formatTime } from "./start-session-button-types";
-import { sessionStart } from "../../../utils/haptics";
+} from 'react-native-reanimated';
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import { StartSessionButtonCompact } from './StartSessionButtonCompact';
+import { useStartSessionButtonColors } from './start-session-button-colors';
+import type { StartSessionButtonProps } from './start-session-button-types';
+import { formatTime } from './start-session-button-types';
+import { sessionStart } from '../../../utils/haptics';
 export type { StartSessionButtonProps };
 
 export function StartSessionButton({
@@ -23,7 +23,7 @@ export function StartSessionButton({
   subtitle,
   resumeTimeSeconds,
   squadMembersFocusing,
-  streakRiskLevel = "NONE",
+  streakRiskLevel = 'NONE',
   streakHoursRemaining,
   isLoading = false,
   hasActiveSession = false,
@@ -40,7 +40,7 @@ export function StartSessionButton({
     isFinalStrike,
   );
   React.useEffect(() => {
-    if (streakRiskLevel === "CRITICAL" || streakRiskLevel === "HIGH") {
+    if (streakRiskLevel === 'CRITICAL' || streakRiskLevel === 'HIGH') {
       scale.value = withRepeat(
         withSequence(
           withSpring(1.02, { damping: 3, stiffness: 150 }),
@@ -65,12 +65,12 @@ export function StartSessionButton({
       return label;
     }
     if (hasActiveSession) {
-      return "Resume Session";
+      return 'Resume Session';
     }
     if (isFinalStrike && bossName) {
       return `⚔️ Defeat ${bossName} Now`;
     }
-    return "Start Focus Session";
+    return 'Start Focus Session';
   }, [label, hasActiveSession, isFinalStrike, bossName]);
   const subtitleText = useMemo(() => {
     if (subtitle) {
@@ -80,22 +80,22 @@ export function StartSessionButton({
       return `${formatTime(resumeTimeSeconds)} elapsed`;
     }
     if (isFinalStrike) {
-      return "🔥 Final Strike mode — guaranteed defeat this session!";
+      return '🔥 Final Strike mode — guaranteed defeat this session!';
     }
     if (squadMembersFocusing && squadMembersFocusing > 0) {
-      return `${squadMembersFocusing} squad member${squadMembersFocusing > 1 ? "s" : ""} currently focusing`;
+      return `${squadMembersFocusing} squad member${squadMembersFocusing > 1 ? 's' : ''} currently focusing`;
     }
-    if (streakRiskLevel === "CRITICAL" && streakHoursRemaining !== null) {
+    if (streakRiskLevel === 'CRITICAL' && streakHoursRemaining !== null) {
       return `⚠️ ${streakHoursRemaining}h left to save your streak!`;
     }
-    if (streakRiskLevel === "HIGH" && streakHoursRemaining !== null) {
+    if (streakRiskLevel === 'HIGH' && streakHoursRemaining !== null) {
       return `⏰ ${streakHoursRemaining} hours remaining`;
     }
-    return "Tap to begin your focus session";
+    return 'Tap to begin your focus session';
   }, [subtitle, hasActiveSession, resumeTimeSeconds, isFinalStrike, squadMembersFocusing, streakRiskLevel, streakHoursRemaining]);
   const isUrgent =
-    streakRiskLevel === "CRITICAL" ||
-    streakRiskLevel === "HIGH" ||
+    streakRiskLevel === 'CRITICAL' ||
+    streakRiskLevel === 'HIGH' ||
     isFinalStrike;
   return (
     <Animated.View style={animatedStyle} testID={testID}>
@@ -167,7 +167,7 @@ export function StartSessionButton({
                 alignItems="center"
               >
                 <Text fontSize={20} color={theme.colors.text.inverse}>
-                  {hasActiveSession ? "▶" : "›"}
+                  {hasActiveSession ? '▶' : '›'}
                 </Text>
               </Box>
             )}

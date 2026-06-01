@@ -4,7 +4,7 @@
  * Screen reader announcements and utilities
  */
 
-import { ScreenReaderAnnouncement } from "./types";
+import { ScreenReaderAnnouncement } from './types';
 
 const announcements: ScreenReaderAnnouncement[] = [];
 
@@ -13,7 +13,7 @@ const announcements: ScreenReaderAnnouncement[] = [];
  */
 export function announce(
   message: string,
-  priority: "polite" | "assertive" = "polite",
+  priority: 'polite' | 'assertive' = 'polite',
 ): void {
   const announcement: ScreenReaderAnnouncement = {
     id: generateId(),
@@ -30,7 +30,7 @@ export function announce(
   }
 
   // Send to React Native
-  if (priority === "assertive") {
+  if (priority === 'assertive') {
     // Use assertive region - would integrate with React Native AccessibilityInfo
     // AccessibilityInfo.announceForAccessibility(message);
   } else {
@@ -73,7 +73,7 @@ export function generateAccessibleLabel(
     parts.push(description);
   }
 
-  return parts.join(", ");
+  return parts.join(', ');
 }
 
 /**

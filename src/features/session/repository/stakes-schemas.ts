@@ -1,10 +1,10 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const StakesSessionRecordSchema = z.object({
   id: z.string().uuid(),
   user_id: z.string().uuid(),
   session_id: z.string().uuid(),
-  difficulty: z.enum(["CASUAL", "FOCUSED", "DEEP_WORK"]),
+  difficulty: z.enum(['CASUAL', 'FOCUSED', 'DEEP_WORK']),
   xp_multiplier: z.number(),
   max_pauses: z.number(),
   gem_wager: z.number(),
@@ -22,8 +22,8 @@ export const StakesSessionRecordSchema = z.object({
 export const UserStakesPreferenceSchema = z.object({
   user_id: z.string().uuid(),
   default_difficulty: z
-    .enum(["CASUAL", "FOCUSED", "DEEP_WORK"])
-    .default("FOCUSED"),
+    .enum(['CASUAL', 'FOCUSED', 'DEEP_WORK'])
+    .default('FOCUSED'),
   total_deep_work_completed: z.number().default(0),
   total_gems_wagered: z.number().default(0),
   total_gems_won: z.number().default(0),
@@ -32,5 +32,14 @@ export const UserStakesPreferenceSchema = z.object({
   updated_at: z.number(),
 });
 
+export const StakesStatsSchema = z.object({
+  totalSessions: z.number(),
+  completedSessions: z.number(),
+  completionRate: z.number(),
+  totalXpEarned: z.number(),
+  netGems: z.number(),
+});
+
+export type StakesStats = z.infer<typeof StakesStatsSchema>;
 export type StakesSessionRecord = z.infer<typeof StakesSessionRecordSchema>;
 export type UserStakesPreference = z.infer<typeof UserStakesPreferenceSchema>;

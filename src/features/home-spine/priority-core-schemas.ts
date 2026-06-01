@@ -1,22 +1,22 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const HomePriorityTypeSchema = z.enum([
-  "STREAK_CRITICAL",
-  "COMPANION_PROMISE",
-  "PROMISE_RECOVERY",
-  "STREAK_AT_RISK",
-  "RECOMMENDED_SESSION",
-  "CHALLENGE_NEAR_DONE",
-  "BOSS_ACTIVE",
-  "DEFAULT_SESSION",
+  'STREAK_CRITICAL',
+  'COMPANION_PROMISE',
+  'PROMISE_RECOVERY',
+  'STREAK_AT_RISK',
+  'RECOMMENDED_SESSION',
+  'CHALLENGE_NEAR_DONE',
+  'BOSS_ACTIVE',
+  'DEFAULT_SESSION',
 ]);
 
 export type HomePriorityType = z.infer<typeof HomePriorityTypeSchema>;
 
 export const HomePriorityCTAActionSchema = z.enum([
-  "OPEN_BOSS",
-  "OPEN_CHALLENGES",
-  "OPEN_SESSION_SETUP",
+  'OPEN_BOSS',
+  'OPEN_CHALLENGES',
+  'OPEN_SESSION_SETUP',
 ]);
 
 export type HomePriorityCTAAction = z.infer<typeof HomePriorityCTAActionSchema>;

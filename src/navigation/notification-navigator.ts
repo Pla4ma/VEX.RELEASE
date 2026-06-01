@@ -7,9 +7,9 @@ import {
   blocked,
   navigateToSessionSetup,
   navigateToRescueSession,
-} from "./notification-routing-types";
-import { canUseFeature, type FeatureAccessCheck } from "./notification-filters";
-import { resolveNotificationAction } from "./notification-resolver";
+} from './notification-routing-types';
+import { canUseFeature, type FeatureAccessCheck } from './notification-filters';
+import { resolveNotificationAction } from './notification-resolver';
 
 export function navigateFromSafeIntent(
   navigation: NotificationNavigation,
@@ -18,40 +18,40 @@ export function navigateFromSafeIntent(
   featureAccess?: FeatureAccessCheck,
 ): NotificationRouteResult {
   switch (intent) {
-    case "START_SESSION":
+    case 'START_SESSION':
       return navigateToSessionSetup(navigation, params);
-    case "START_RESCUE":
+    case 'START_RESCUE':
       return navigateToRescueSession(navigation, params);
-    case "OPEN_BOSS": {
-      if (!canUseFeature(featureAccess, "boss_tab")) return blocked("Boss");
-      navigation.navigate("Boss", undefined);
-      return { success: true, screen: "Boss" };
+    case 'OPEN_BOSS': {
+      if (!canUseFeature(featureAccess, 'boss_tab')) {return blocked('Boss');}
+      navigation.navigate('Boss', undefined);
+      return { success: true, screen: 'Boss' };
     }
-    case "OPEN_PROGRESS":
-      navigation.navigate("Main", { screen: "Progress" });
-      return { success: true, screen: "Progress" };
-    case "OPEN_PROFILE":
-      navigation.navigate("Main", { screen: "Profile" });
-      return { success: true, screen: "Profile" };
-    case "OPEN_COACH": {
-      if (!canUseFeature(featureAccess, "ai_coach_advanced"))
-        return blocked("AICoach");
-      navigation.navigate("AICoach", undefined);
-      return { success: true, screen: "AICoach" };
+    case 'OPEN_PROGRESS':
+      navigation.navigate('Main', { screen: 'Progress' });
+      return { success: true, screen: 'Progress' };
+    case 'OPEN_PROFILE':
+      navigation.navigate('Main', { screen: 'Profile' });
+      return { success: true, screen: 'Profile' };
+    case 'OPEN_COACH': {
+      if (!canUseFeature(featureAccess, 'ai_coach_advanced'))
+        {return blocked('AICoach');}
+      navigation.navigate('AICoach', undefined);
+      return { success: true, screen: 'AICoach' };
     }
-    case "OPEN_STUDY_LAYER": {
-      if (!canUseFeature(featureAccess, "content_study"))
-        return blocked("ContentStudy");
-      navigation.navigate("ContentStudy", undefined);
-      return { success: true, screen: "ContentStudy" };
+    case 'OPEN_STUDY_LAYER': {
+      if (!canUseFeature(featureAccess, 'content_study'))
+        {return blocked('ContentStudy');}
+      navigation.navigate('ContentStudy', undefined);
+      return { success: true, screen: 'ContentStudy' };
     }
-    case "OPEN_SETTINGS":
-      navigation.navigate("Settings", {});
-      return { success: true, screen: "Settings" };
-    case "OPEN_HOME":
+    case 'OPEN_SETTINGS':
+      navigation.navigate('Settings', {});
+      return { success: true, screen: 'Settings' };
+    case 'OPEN_HOME':
     default:
-      navigation.navigate("Main", { screen: "Home" });
-      return { success: true, screen: "Home" };
+      navigation.navigate('Main', { screen: 'Home' });
+      return { success: true, screen: 'Home' };
   }
 }
 
@@ -62,7 +62,7 @@ export function routeNotificationAction(
   motivationStyle?: string | null,
 ): NotificationRouteResult {
   if (!navigation) {
-    return { success: false, error: "Navigation not available" };
+    return { success: false, error: 'Navigation not available' };
   }
 
   const resolved = resolveNotificationAction(
@@ -81,8 +81,8 @@ export function routeNotificationAction(
 export function isValidNotificationAction(
   action: unknown,
 ): action is NotificationAction {
-  if (!action || typeof action !== "object" || !("type" in action))
-    return false;
-  const type = Reflect.get(action, "type");
+  if (!action || typeof action !== 'object' || !('type' in action))
+    {return false;}
+  const type = Reflect.get(action, 'type');
   return validTypes.some((validType) => validType === type);
 }

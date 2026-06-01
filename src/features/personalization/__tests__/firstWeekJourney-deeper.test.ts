@@ -3,8 +3,8 @@
  *
  * Verifies late-week stages and feature-gating logic.
  */
-import { computeFirstWeekRuntime } from "../useFirstWeekExperienceRuntime";
-import type { FirstWeekRuntimeInput } from "../useFirstWeekExperienceRuntime";
+import { computeFirstWeekRuntime } from '../useFirstWeekExperienceRuntime';
+import type { FirstWeekRuntimeInput } from '../useFirstWeekExperienceRuntime';
 
 function baseInput(
   overrides: Partial<FirstWeekRuntimeInput> = {},
@@ -13,9 +13,9 @@ function baseInput(
     completedSessions: 0,
     daysSinceOnboarding: 0,
     daysSinceLastSession: null,
-    motivationStyle: "calm",
-    primaryGoal: "focus",
-    bossEngagement: "none",
+    motivationStyle: 'calm',
+    primaryGoal: 'focus',
+    bossEngagement: 'none',
     studyUsageRatio: 0,
     isPremium: false,
     featureAvailable: { boss: true, premium: true, social: false, study: true },
@@ -23,9 +23,9 @@ function baseInput(
   };
 }
 
-describe("FirstWeekExperience — deeper journey + gating", () => {
-  describe("Day 7 deeper mode", () => {
-    it("Day 7 — weekly insight + premium value moment", () => {
+describe('FirstWeekExperience — deeper journey + gating', () => {
+  describe('Day 7 deeper mode', () => {
+    it('Day 7 — weekly insight + premium value moment', () => {
       const result = computeFirstWeekRuntime(
         baseInput({
           completedSessions: 7,
@@ -40,13 +40,13 @@ describe("FirstWeekExperience — deeper journey + gating", () => {
         }),
       );
 
-      expect(result.currentDayStage).toBe("DAY_7_DEEPER_MODE");
-      expect(result.premiumMoment).toBe("weekly_value");
+      expect(result.currentDayStage).toBe('DAY_7_DEEPER_MODE');
+      expect(result.premiumMoment).toBe('weekly_value');
     });
   });
 
-  describe("Premium gating", () => {
-    it("premium unavailable — premiumMoment is none", () => {
+  describe('Premium gating', () => {
+    it('premium unavailable — premiumMoment is none', () => {
       const result = computeFirstWeekRuntime(
         baseInput({
           completedSessions: 7,
@@ -60,10 +60,10 @@ describe("FirstWeekExperience — deeper journey + gating", () => {
         }),
       );
 
-      expect(result.premiumMoment).toBe("none");
+      expect(result.premiumMoment).toBe('none');
     });
 
-    it("premium configured but not active — premium moment follows stage", () => {
+    it('premium configured but not active — premium moment follows stage', () => {
       const result = computeFirstWeekRuntime(
         baseInput({
           completedSessions: 5,
@@ -78,15 +78,15 @@ describe("FirstWeekExperience — deeper journey + gating", () => {
         }),
       );
 
-      expect(result.premiumMoment).toBe("soft_tease");
+      expect(result.premiumMoment).toBe('soft_tease');
     });
   });
 
-  describe("Boss gating", () => {
-    it("boss unavailable — bossIntensity hidden", () => {
+  describe('Boss gating', () => {
+    it('boss unavailable — bossIntensity hidden', () => {
       const result = computeFirstWeekRuntime(
         baseInput({
-          motivationStyle: "game_like",
+          motivationStyle: 'game_like',
           completedSessions: 5,
           featureAvailable: {
             boss: false,
@@ -97,13 +97,13 @@ describe("FirstWeekExperience — deeper journey + gating", () => {
         }),
       );
 
-      expect(result.bossIntensity).toBe("hidden");
+      expect(result.bossIntensity).toBe('hidden');
     });
 
-    it("minimal user — boss stays hidden", () => {
+    it('minimal user — boss stays hidden', () => {
       const result = computeFirstWeekRuntime(
         baseInput({
-          motivationStyle: "calm",
+          motivationStyle: 'calm',
           completedSessions: 5,
           featureAvailable: {
             boss: true,
@@ -114,15 +114,15 @@ describe("FirstWeekExperience — deeper journey + gating", () => {
         }),
       );
 
-      expect(result.bossIntensity).toBe("hidden");
+      expect(result.bossIntensity).toBe('hidden');
     });
   });
 
-  describe("Content study gating", () => {
-    it("study degraded — study surfaces may be limited", () => {
+  describe('Content study gating', () => {
+    it('study degraded — study surfaces may be limited', () => {
       const result = computeFirstWeekRuntime(
         baseInput({
-          motivationStyle: "study_focused",
+          motivationStyle: 'study_focused',
           completedSessions: 5,
           featureAvailable: {
             boss: true,
@@ -133,7 +133,7 @@ describe("FirstWeekExperience — deeper journey + gating", () => {
         }),
       );
 
-      expect(result.currentDayStage).toBe("DAY_5_PATH_FORMING");
+      expect(result.currentDayStage).toBe('DAY_5_PATH_FORMING');
     });
   });
 });

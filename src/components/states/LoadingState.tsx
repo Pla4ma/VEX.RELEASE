@@ -6,10 +6,10 @@
  * @phase 4
  */
 
-import React from "react";
-import { View, ActivityIndicator } from "react-native";
-import { useTheme } from "../../theme";
-import { Text } from "../primitives";
+import React from 'react';
+import { View, ActivityIndicator } from 'react-native';
+import { useTheme } from '../../theme';
+import { Text } from '../primitives';
 
 // ============================================================================
 // Types
@@ -19,7 +19,7 @@ export interface LoadingStateProps {
   /** Optional loading message */
   message?: string;
   /** Size of the spinner */
-  size?: "small" | "large";
+  size?: 'small' | 'large';
   /** Whether to fill the screen */
   fullScreen?: boolean;
 }
@@ -30,7 +30,7 @@ export interface LoadingStateProps {
 
 export const LoadingState: React.FC<LoadingStateProps> = ({
   message,
-  size = "large",
+  size = 'large',
   fullScreen = false,
 }) => {
   const { theme } = useTheme();
@@ -39,8 +39,8 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
     <View
       style={{
         flex: fullScreen ? 1 : undefined,
-        alignItems: "center",
-        justifyContent: "center",
+        alignItems: 'center',
+        justifyContent: 'center',
         padding: theme.spacing[8],
         backgroundColor: fullScreen
           ? theme.colors.background.primary
@@ -55,7 +55,7 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
           color="text.secondary"
           style={{
             marginTop: theme.spacing[4],
-            textAlign: "center",
+            textAlign: 'center',
           }}
         >
           {message}

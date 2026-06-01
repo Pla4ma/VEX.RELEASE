@@ -1,7 +1,7 @@
-import type { NavigationProp } from "@react-navigation/native";
-import { createDebugger } from "../utils/debug";
+import type { NavigationProp } from '@react-navigation/native';
+import { createDebugger } from '../utils/debug';
 
-const debug = createDebugger("navigation:safety");
+const debug = createDebugger('navigation:safety');
 
 export function isNavigationReady(
   navigation:
@@ -12,7 +12,7 @@ export function isNavigationReady(
   return (
     navigation !== null &&
     navigation !== undefined &&
-    typeof navigation.navigate === "function"
+    typeof navigation.navigate === 'function'
   );
 }
 
@@ -25,7 +25,7 @@ export function safeNavigate(
   params?: Record<string, unknown>,
 ): boolean {
   if (!isNavigationReady(navigation)) {
-    debug.warn("Navigation not ready, cannot navigate to %s", screen);
+    debug.warn('Navigation not ready, cannot navigate to %s', screen);
     return false;
   }
   try {
@@ -33,7 +33,7 @@ export function safeNavigate(
     return true;
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    debug.error("Navigation failed: %s", new Error(errorMessage));
+    debug.error('Navigation failed: %s', new Error(errorMessage));
     return false;
   }
 }
@@ -73,7 +73,7 @@ export function safeGoBack(
     return false;
   }
   if (!navigation.canGoBack()) {
-    debug.warn("Cannot go back - no routes in history");
+    debug.warn('Cannot go back - no routes in history');
     return false;
   }
   navigation.goBack();

@@ -1,26 +1,26 @@
-import type { SessionMilestoneReachedEvent } from "./types";
-import { generateEventId, createEventMetadata } from "./event-helpers";
+import type { SessionMilestoneReachedEvent } from './types';
+import { generateEventId, createEventMetadata } from './event-helpers';
 
 export function createSessionMilestoneReachedEvent(
   userId: string,
   sessionId: string,
   milestoneId: string,
   milestoneType:
-    | "score"
-    | "streak"
-    | "accuracy"
-    | "speed"
-    | "completion"
-    | "special",
+    | 'score'
+    | 'streak'
+    | 'accuracy'
+    | 'speed'
+    | 'completion'
+    | 'special',
   milestoneName: string,
   value: number,
   target: number,
   previousRecord: number,
-  significance: "personal" | "session" | "daily" | "weekly" | "all_time",
+  significance: 'personal' | 'session' | 'daily' | 'weekly' | 'all_time',
 ): SessionMilestoneReachedEvent {
   return {
     id: generateEventId(),
-    type: "session_milestone_reached",
+    type: 'session_milestone_reached',
     userId,
     sessionId,
     timestamp: new Date(),
@@ -47,6 +47,6 @@ export function createSessionMilestoneReachedEvent(
         unlocks: [],
       },
     },
-    metadata: createEventMetadata("session-completion"),
+    metadata: createEventMetadata('session-completion'),
   };
 }

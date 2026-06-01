@@ -1,11 +1,11 @@
-import { useCallback, useRef } from "react";
+import { useCallback, useRef } from 'react';
 import {
   analyticsService,
   capture,
   identify,
   reset,
   updateUserProperties,
-} from "./analytics-service";
+} from './analytics-service';
 import {
   AnalyticsEvent,
   EventProperties,
@@ -16,7 +16,7 @@ import {
   SocialEvents,
   CoachEvents,
   FeatureEvents,
-} from "./analytics-events";
+} from './analytics-events';
 interface UseAnalyticsReturn {
   track: (eventName: AnalyticsEvent, properties?: EventProperties) => void;
   trackAuth: (
@@ -153,9 +153,9 @@ export function useAnalytics(): UseAnalyticsReturn {
       const cleanTraits = Object.fromEntries(
         Object.entries(traits).filter(
           ([, v]) =>
-            typeof v === "string" ||
-            typeof v === "number" ||
-            typeof v === "boolean",
+            typeof v === 'string' ||
+            typeof v === 'number' ||
+            typeof v === 'boolean',
         ),
       ) as { level?: number; streak?: number };
       updateUserProperties(cleanTraits);
@@ -173,7 +173,7 @@ export function useAnalytics(): UseAnalyticsReturn {
   );
   const captureError = useCallback(
     (error: Error, context?: Record<string, unknown>) => {
-      capture("exception_captured", {
+      capture('exception_captured', {
         error_message: error.message,
         error_stack: error.stack,
         ...context,

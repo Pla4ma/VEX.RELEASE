@@ -4,11 +4,11 @@
  * React hook for analytics tracking and metrics calculation.
  */
 
-import { useCallback, useRef } from "react";
-import type { ContentStudyMetrics, ContentStudyErrorCode } from "./types";
-import { inputTrackers } from "./analytics-input-trackers";
-import { studyTrackers } from "./analytics-study-trackers";
-import { contentStudyAnalytics } from "./analytics-service";
+import { useCallback, useRef } from 'react';
+import type { ContentStudyMetrics, ContentStudyErrorCode } from './types';
+import { inputTrackers } from './analytics-input-trackers';
+import { studyTrackers } from './analytics-study-trackers';
+import { contentStudyAnalytics } from './analytics-service';
 
 const composedAnalytics = { ...inputTrackers, ...studyTrackers };
 

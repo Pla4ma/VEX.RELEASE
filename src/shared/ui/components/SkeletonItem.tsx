@@ -1,23 +1,23 @@
-import React, { useMemo } from "react";
-import { DimensionValue, ViewStyle } from "react-native";
+import React, { useMemo } from 'react';
+import { DimensionValue, ViewStyle } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withRepeat,
   withTiming,
   interpolate,
-} from "react-native-reanimated";
-import { useTheme } from "../../../theme";
+} from 'react-native-reanimated';
+import { useTheme } from '../../../theme';
 
 export type SkeletonVariant =
-  | "text"
-  | "title"
-  | "avatar"
-  | "card"
-  | "circle"
-  | "button";
+  | 'text'
+  | 'title'
+  | 'avatar'
+  | 'card'
+  | 'circle'
+  | 'button';
 
-export type SkeletonSize = "sm" | "md" | "lg" | "full";
+export type SkeletonSize = 'sm' | 'md' | 'lg' | 'full';
 
 export interface SkeletonItemProps {
   variant?: SkeletonVariant;
@@ -28,7 +28,7 @@ export interface SkeletonItemProps {
 }
 
 export const SkeletonItem: React.FC<SkeletonItemProps> = ({
-  variant = "text",
+  variant = 'text',
   width,
   height,
   circle = false,
@@ -48,25 +48,25 @@ export const SkeletonItem: React.FC<SkeletonItemProps> = ({
   }));
   const dimensions = useMemo(() => {
     switch (variant) {
-      case "title":
-        return { width: width ?? "70%", height: height ?? 24 };
-      case "avatar":
+      case 'title':
+        return { width: width ?? '70%', height: height ?? 24 };
+      case 'avatar':
         return { width: width ?? 48, height: height ?? 48 };
-      case "card":
-        return { width: width ?? "100%", height: height ?? 120 };
-      case "button":
+      case 'card':
+        return { width: width ?? '100%', height: height ?? 120 };
+      case 'button':
         return { width: width ?? 120, height: height ?? 44 };
-      case "circle":
+      case 'circle':
         return { width: width ?? 64, height: height ?? 64 };
-      case "text":
+      case 'text':
       default:
-        return { width: width ?? "100%", height: height ?? 16 };
+        return { width: width ?? '100%', height: height ?? 16 };
     }
   }, [variant, width, height]);
   const borderRadius =
-    circle || variant === "avatar" || variant === "circle"
+    circle || variant === 'avatar' || variant === 'circle'
       ? Math.max(Number(dimensions.width) || 0, dimensions.height) / 2
-      : variant === "button"
+      : variant === 'button'
         ? 12
         : 8;
   return (

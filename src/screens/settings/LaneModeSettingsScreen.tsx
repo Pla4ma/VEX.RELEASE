@@ -1,38 +1,38 @@
-import React, { useCallback } from "react";
-import { Pressable, ScrollView, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import React, { useCallback } from 'react';
+import { Pressable, ScrollView, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { Box } from "../../components/primitives/Box";
-import { Text } from "../../components/primitives/Text";
-import { useTheme } from "../../theme";
-import { useOnboardingStore } from "../../features/onboarding/store";
-import type { Lane } from "../../features/lane-engine";
-import type { NativeStackScreenProps } from "@react-navigation/native-stack";
-import type { SettingsStackParams } from "../../navigation";
-import { withScreenErrorBoundary } from "../../shared/ui/components/ScreenErrorBoundary";
+import { Box } from '../../components/primitives/Box';
+import { Text } from '../../components/primitives/Text';
+import { useTheme } from '../../theme';
+import { useOnboardingStore } from '../../features/onboarding/store';
+import type { Lane } from '../../features/lane-engine';
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import type { SettingsStackParams } from '../../navigation';
+import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 import {
   LANE_LABELS,
   LANE_EMOJI,
-} from "../onboarding/components/LaneConfirmationStep";
+} from '../onboarding/components/LaneConfirmationStep';
 
-type Props = NativeStackScreenProps<SettingsStackParams, "LaneMode">;
+type Props = NativeStackScreenProps<SettingsStackParams, 'LaneMode'>;
 
 const ALL_LANES: Lane[] = [
-  "student",
-  "game_like",
-  "deep_creative",
-  "minimal_normal",
+  'student',
+  'game_like',
+  'deep_creative',
+  'minimal_normal',
 ];
 
 const LANE_DESCRIPTIONS: Record<Lane, string> = {
   student:
-    "Recall cards, deadline tracking, and learning sessions. Best for students and learners.",
+    'Recall cards, deadline tracking, and learning sessions. Best for students and learners.',
   game_like:
-    "Visible momentum, energetic goals, and quick rewards. Turns focus into progress.",
+    'Visible momentum, energetic goals, and quick rewards. Turns focus into progress.',
   deep_creative:
-    "Continuity for deeper work, flow windows, and project memory. For long-form creativity.",
+    'Continuity for deeper work, flow windows, and project memory. For long-form creativity.',
   minimal_normal:
-    "Clean sessions, quiet progress, low notifications. Minimal and calm.",
+    'Clean sessions, quiet progress, low notifications. Minimal and calm.',
 };
 
 export const LaneModeSettingsScreen = withScreenErrorBoundary(
@@ -80,8 +80,8 @@ export const LaneModeSettingsScreen = withScreenErrorBoundary(
                   key={lane}
                   onPress={() => handleSelectLane(lane)}
                   style={{
-                    flexDirection: "row",
-                    alignItems: "center",
+                    flexDirection: 'row',
+                    alignItems: 'center',
                     padding: 16,
                     borderRadius: 16,
                     borderWidth: isSelected ? 2 : 1,
@@ -102,7 +102,7 @@ export const LaneModeSettingsScreen = withScreenErrorBoundary(
                     <Text
                       variant="body"
                       style={{
-                        fontWeight: "600",
+                        fontWeight: '600',
                         color: theme.colors.text.primary,
                       }}
                     >
@@ -125,8 +125,8 @@ export const LaneModeSettingsScreen = withScreenErrorBoundary(
                       alignItems="center"
                       style={{ backgroundColor: theme.colors.primary[500] }}
                     >
-                      <Text style={{ color: "#fff", fontSize: 14 }}>
-                        {"\u2713"}
+                      <Text style={{ color: '#fff', fontSize: 14 }}>
+                        {'\u2713'}
                       </Text>
                     </Box>
                   )}
@@ -140,7 +140,7 @@ export const LaneModeSettingsScreen = withScreenErrorBoundary(
       </Box>
     );
   },
-  "LaneMode",
+  'LaneMode',
 );
 
 export default LaneModeSettingsScreen;

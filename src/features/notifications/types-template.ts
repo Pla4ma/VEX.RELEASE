@@ -3,7 +3,7 @@ import type {
   NotificationCategory,
   NotificationChannel,
   NotificationPriority,
-} from "./types-core";
+} from './types-core';
 
 export interface NotificationTemplate {
   id: string;
@@ -22,7 +22,7 @@ export interface NotificationTemplate {
 
 export interface TemplateVariable {
   name: string;
-  type: "string" | "number" | "boolean" | "date" | "object";
+  type: 'string' | 'number' | 'boolean' | 'date' | 'object';
   required: boolean;
   defaultValue?: unknown;
   description: string;
@@ -57,19 +57,19 @@ export interface NotificationRule {
 export interface RuleCondition {
   field: string;
   operator:
-    | "equals"
-    | "not_equals"
-    | "contains"
-    | "not_contains"
-    | "greater_than"
-    | "less_than"
-    | "in"
-    | "not_in";
+    | 'equals'
+    | 'not_equals'
+    | 'contains'
+    | 'not_contains'
+    | 'greater_than'
+    | 'less_than'
+    | 'in'
+    | 'not_in';
   value: unknown;
-  logicalOperator?: "and" | "or";
+  logicalOperator?: 'and' | 'or';
 }
 
 export interface RuleAction {
-  type: "send" | "schedule" | "transform" | "filter" | "route" | "suppress";
+  type: 'send' | 'schedule' | 'transform' | 'filter' | 'route' | 'suppress';
   parameters: Record<string, unknown>;
 }

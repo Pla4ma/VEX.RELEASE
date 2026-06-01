@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import { Pressable } from "react-native";
-import Animated, { SlideInDown, FadeOut } from "react-native-reanimated";
-import { Box } from "../../components/primitives/Box";
-import { Text } from "../../components/primitives/Text";
-import { useTheme } from "../../theme";
-import { selection } from "../../utils/haptics";
+import React, { useState } from 'react';
+import { Pressable } from 'react-native';
+import Animated, { SlideInDown, FadeOut } from 'react-native-reanimated';
+import { Box } from '../../components/primitives/Box';
+import { Text } from '../../components/primitives/Text';
+import { useTheme } from '../../theme';
+import { selection } from '../../utils/haptics';
 
 /**
  * CreativeMoodLogger
@@ -15,11 +15,11 @@ import { selection } from "../../utils/haptics";
  */
 
 const MOODS = [
-  { emoji: "🔥", label: "On fire", bonus: 10 },
-  { emoji: "💡", label: "Inspired", bonus: 8 },
-  { emoji: "😌", label: "Calm", bonus: 5 },
-  { emoji: "😤", label: "Frustrated", bonus: 3 },
-  { emoji: "🤔", label: "Exploring", bonus: 5 },
+  { emoji: '🔥', label: 'On fire', bonus: 10 },
+  { emoji: '💡', label: 'Inspired', bonus: 8 },
+  { emoji: '😌', label: 'Calm', bonus: 5 },
+  { emoji: '😤', label: 'Frustrated', bonus: 3 },
+  { emoji: '🤔', label: 'Exploring', bonus: 5 },
 ] as const;
 
 type Mood = (typeof MOODS)[number];
@@ -47,7 +47,7 @@ export function CreativeMoodLogger({
       entering={SlideInDown.duration(400).springify()}
       exiting={FadeOut.duration(200)}
       style={{
-        position: "absolute",
+        position: 'absolute',
         bottom: theme.spacing[24],
         left: theme.spacing[4],
         right: theme.spacing[4],
@@ -77,14 +77,14 @@ export function CreativeMoodLogger({
               borderRadius: theme.borderRadius.lg,
               backgroundColor:
                 selected?.emoji === mood.emoji
-                  ? theme.colors.primary[500] + "30"
+                  ? theme.colors.primary[500] + '30'
                   : theme.colors.background.tertiary,
               borderWidth: 1,
               borderColor:
                 selected?.emoji === mood.emoji
                   ? theme.colors.primary[500]
-                  : "transparent",
-              alignItems: "center",
+                  : 'transparent',
+              alignItems: 'center',
             }}
             accessibilityLabel={`${mood.label} mood`}
             accessibilityRole="button"
@@ -99,7 +99,7 @@ export function CreativeMoodLogger({
 
       <Pressable
         onPress={onSkip}
-        style={{ marginTop: theme.spacing[3], alignSelf: "flex-end" }}
+        style={{ marginTop: theme.spacing[3], alignSelf: 'flex-end' }}
         accessibilityLabel="Skip mood logging"
         accessibilityRole="button"
       >

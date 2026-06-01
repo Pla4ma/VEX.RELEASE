@@ -1,21 +1,21 @@
-import { useMemo } from "react";
+import { useMemo } from 'react';
 
 import {
   useInitialLane,
   type Lane,
   type LaneProfile,
   type ResolveInitialLaneInput,
-} from "../../../features/lane-engine";
-import type { MotivationStyle } from "../../../features/personalization/schemas";
+} from '../../../features/lane-engine';
+import type { MotivationStyle } from '../../../features/personalization/schemas';
 
-function normalizeGoal(goal: string): ResolveInitialLaneInput["primaryGoal"] {
+function normalizeGoal(goal: string): ResolveInitialLaneInput['primaryGoal'] {
   switch (goal) {
-    case "focus":
-    case "study":
-    case "work":
-    case "creative":
-    case "personal":
-    case "learning":
+    case 'focus':
+    case 'study':
+    case 'work':
+    case 'creative':
+    case 'personal':
+    case 'learning':
       return goal;
     default:
       return null;
@@ -26,7 +26,7 @@ export function useHomeLaneProfile(input: {
   chosenLane: Lane | null;
   motivationStyle: MotivationStyle;
   preferredSessionMode:
-    | ResolveInitialLaneInput["sessionMode"]
+    | ResolveInitialLaneInput['sessionMode']
     | null
     | undefined;
   primaryGoal: string;

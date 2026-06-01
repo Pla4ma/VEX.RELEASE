@@ -1,37 +1,37 @@
-import * as Sentry from "@sentry/react-native";
-import { eventBus } from "../../events";
+import * as Sentry from '@sentry/react-native';
+import { eventBus } from '../../events';
 import {
   TIER_CONFIG,
   MILESTONE_BLOCKS,
   getTierConfig,
-} from "./tower-constants";
-import type { TowerBlock, FocusTower } from "./tower-constants";
+} from './tower-constants';
+import type { TowerBlock, FocusTower } from './tower-constants';
 
-export type { TowerBlock, FocusTower } from "./tower-constants";
-export { TowerBlockSchema, FocusTowerSchema } from "./tower-constants";
+export type { TowerBlock, FocusTower } from './tower-constants';
+export { TowerBlockSchema, FocusTowerSchema } from './tower-constants';
 
 function calculateTotalBonuses(
   tower: FocusTower,
   newBlock: TowerBlock,
-): FocusTower["totalBonuses"] {
+): FocusTower['totalBonuses'] {
   const bonuses = { ...tower.totalBonuses };
   switch (newBlock.bonusType) {
-    case "PROGRESS_ACCELERATION":
-    case "XP_BOOST":
+    case 'PROGRESS_ACCELERATION':
+    case 'XP_BOOST':
       bonuses.progressAcceleration += newBlock.bonusValue;
       break;
-    case "MOMENTUM_RESISTANCE":
-    case "STREAK_RESISTANCE":
+    case 'MOMENTUM_RESISTANCE':
+    case 'STREAK_RESISTANCE':
       bonuses.momentumResistanceHours += newBlock.bonusValue;
       break;
-    case "ENERGY_REGEN":
+    case 'ENERGY_REGEN':
       bonuses.energyRegenBonus += newBlock.bonusValue;
       break;
-    case "FOCUS_RESILIENCE":
-    case "BOSS_DAMAGE":
+    case 'FOCUS_RESILIENCE':
+    case 'BOSS_DAMAGE':
       bonuses.focusResilienceBonus += newBlock.bonusValue;
       break;
-    case "FOCUS_DURATION":
+    case 'FOCUS_DURATION':
       bonuses.focusDurationBonus += newBlock.bonusValue;
       break;
   }
@@ -48,7 +48,7 @@ export function addTowerBlock(
   newBlock: TowerBlock;
   tierUp: boolean;
   milestoneReached: number | null;
-  totalBonuses: FocusTower["totalBonuses"];
+  totalBonuses: FocusTower['totalBonuses'];
 } {
   const tierConfig = getTierConfig(tower.currentTier);
   const isMilestone = MILESTONE_BLOCKS.includes(tower.totalBlocks + 1);
@@ -64,7 +64,7 @@ export function addTowerBlock(
     blockNumber: tower.blocksThisTier + 1,
     sessionId,
     earnedAt: now,
-    bonusType: tierConfig.bonusType as TowerBlock["bonusType"],
+    bonusType: tierConfig.bonusType as TowerBlock['bonusType'],
     bonusValue: Math.round(bonusValue * 10) / 10,
     isSpecial,
   };
@@ -77,7 +77,7 @@ export function addTowerBlock(
   const totalBonuses = calculateTotalBonuses(tower, newBlock);
   const newAchievements = [...tower.achievementsUnlocked];
   if (milestoneReached === 100) {
-    newAchievements.push("tower_100_blocks");
+    newAchievements.push('tower_100_blocks');
   }
   if (newTier > tower.currentTier) {
     newAchievements.push(`tower_tier_${newTier}`);
@@ -93,7 +93,7 @@ export function addTowerBlock(
     totalBonuses,
     achievementsUnlocked: newAchievements,
   };
-  eventBus.publish("focus_tower:block_added", {
+  eventBus.publish('focus_tower:block_added', {
     userId: tower.userId,
     block: newBlock,
     newTotal: newTotalBlocks,
@@ -101,14 +101,14 @@ export function addTowerBlock(
     milestoneReached: milestoneReached ?? undefined,
   });
   if (tierUp) {
-    eventBus.publish("focus_tower:tier_up", {
+    eventBus.publish('focus_tower:tier_up', {
       userId: tower.userId,
       newTier,
       tierName: getTierConfig(newTier).name,
     });
   }
   if (milestoneReached) {
-    eventBus.publish("focus_tower:milestone", {
+    eventBus.publish('focus_tower:milestone', {
       userId: tower.userId,
       milestone: milestoneReached,
       totalBlocks: newTotalBlocks,
@@ -147,7 +147,7 @@ export function getTowerDisplay(tower: FocusTower): {
     tierColor: tierConfig.color,
     nextMilestone,
     progressToMilestone,
-    totalBonusesText: bonuses.join(" | ") || "Build your tower for bonuses!",
+    totalBonusesText: bonuses.join(' | ') || 'Build your tower for bonuses!',
   };
 }
 
@@ -158,7 +158,7 @@ export function formatTowerBlockVisual(block: TowerBlock): {
 } {
   const tierConfig = getTierConfig(block.tier);
   return {
-    icon: block.isSpecial ? "star" : "block",
+    icon: block.isSpecial ? 'star' : 'block',
     color: tierConfig.color,
     glow: block.isSpecial,
   };
@@ -166,13 +166,13 @@ export function formatTowerBlockVisual(block: TowerBlock): {
 
 export function getTowerHeightComparison(tower: FocusTower): string {
   const heights = [
-    { blocks: 0, label: "Foundation" },
-    { blocks: 10, label: "House" },
-    { blocks: 50, label: "Tower" },
-    { blocks: 100, label: "Skyscraper" },
-    { blocks: 250, label: "Mountain" },
-    { blocks: 500, label: "Cloud City" },
-    { blocks: 1000, label: "Space Station" },
+    { blocks: 0, label: 'Foundation' },
+    { blocks: 10, label: 'House' },
+    { blocks: 50, label: 'Tower' },
+    { blocks: 100, label: 'Skyscraper' },
+    { blocks: 250, label: 'Mountain' },
+    { blocks: 500, label: 'Cloud City' },
+    { blocks: 1000, label: 'Space Station' },
   ];
   const current =
     heights.findLast((h) => tower.totalBlocks >= h.blocks) ?? heights[0]!;

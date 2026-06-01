@@ -1,14 +1,14 @@
-import type { NavigationContainerRefWithCurrent } from "@react-navigation/native";
+import type { NavigationContainerRefWithCurrent } from '@react-navigation/native';
 
-import { addBreadcrumb } from "../../config/sentry";
-import { eventBus } from "../../events";
-import type { FeatureAccessMap } from "../../features/liveops-config/feature-access";
-import { routeNotificationAction } from "../notification-routing-core";
-import type { ExtendedRootStackParams } from "../types";
+import { addBreadcrumb } from '../../config/sentry';
+import { eventBus } from '../../events';
+import type { FeatureAccessMap } from '../../features/liveops-config/feature-access';
+import { routeNotificationAction } from '../notification-routing-core';
+import type { ExtendedRootStackParams } from '../types';
 import {
   isHiddenV1Type,
   isNotificationTypeHiddenByV1FeatureMap,
-} from "./notification-type-guards";
+} from './notification-type-guards';
 
 export {
   HIDDEN_V1_NOTIFICATION_TYPES,
@@ -18,7 +18,7 @@ export {
   getNotificationType,
   getErrorMessage,
   notificationTypeToAction,
-} from "./notification-type-guards";
+} from './notification-type-guards';
 
 export function navigateFromNotification(
   type: string,
@@ -29,14 +29,14 @@ export function navigateFromNotification(
   if (isHiddenV1Type(type) || isNotificationTypeHiddenByV1FeatureMap(type)) {
     addBreadcrumb(
       `Blocked hidden final-release notification type: ${type}`,
-      "notifications.hidden_block",
+      'notifications.hidden_block',
       {
         notificationType: type,
       },
     );
     routeNotificationAction(
       navigationRef,
-      { type: "custom", payload: { screen: "Home" } },
+      { type: 'custom', payload: { screen: 'Home' } },
       featureAccess ?? undefined,
       motivationStyle,
     );
@@ -44,96 +44,96 @@ export function navigateFromNotification(
   }
 
   switch (type) {
-    case "streak_reminder":
-    case "session_prompt":
-    case "RETENTION_STREAK_PROTECTION":
+    case 'streak_reminder':
+    case 'session_prompt':
+    case 'RETENTION_STREAK_PROTECTION':
       routeNotificationAction(
         navigationRef,
-        { type: "start_session" },
+        { type: 'start_session' },
         featureAccess ?? undefined,
         motivationStyle,
       );
       return;
-    case "challenge_reminder":
-    case "level_up":
-    case "RETENTION_CHALLENGE_EXPIRY":
+    case 'challenge_reminder':
+    case 'level_up':
+    case 'RETENTION_CHALLENGE_EXPIRY':
       routeNotificationAction(
         navigationRef,
-        { type: "view_progress" },
+        { type: 'view_progress' },
         featureAccess ?? undefined,
         motivationStyle,
       );
       return;
-    case "boss_timeout_warning":
+    case 'boss_timeout_warning':
       routeNotificationAction(
         navigationRef,
-        { type: "view_boss" },
+        { type: 'view_boss' },
         featureAccess ?? undefined,
         motivationStyle,
       );
       return;
-    case "welcome_back":
-    case "comeback":
-    case "RETENTION_RE_ENGAGEMENT":
+    case 'welcome_back':
+    case 'comeback':
+    case 'RETENTION_RE_ENGAGEMENT':
       routeNotificationAction(
         navigationRef,
-        { type: "custom", payload: { screen: "Home" } },
+        { type: 'custom', payload: { screen: 'Home' } },
         featureAccess ?? undefined,
         motivationStyle,
       );
       return;
-    case "boss_encounter":
-    case "boss_defeated":
+    case 'boss_encounter':
+    case 'boss_defeated':
       routeNotificationAction(
         navigationRef,
-        { type: "view_boss" },
+        { type: 'view_boss' },
         featureAccess ?? undefined,
         motivationStyle,
       );
       return;
-    case "rival_challenge":
-    case "rival_defeated":
-    case "rival_activity":
+    case 'rival_challenge':
+    case 'rival_defeated':
+    case 'rival_activity':
       routeNotificationAction(
         navigationRef,
-        { type: "custom", payload: { screen: "Home" } },
+        { type: 'custom', payload: { screen: 'Home' } },
         featureAccess ?? undefined,
         motivationStyle,
       );
       return;
-    case "squad_war_start":
-    case "squad_war_end":
-    case "squad_war_reminder":
+    case 'squad_war_start':
+    case 'squad_war_end':
+    case 'squad_war_reminder':
       routeNotificationAction(
         navigationRef,
-        { type: "view_squad" },
+        { type: 'view_squad' },
         featureAccess ?? undefined,
         motivationStyle,
       );
       return;
-    case "achievement_unlocked":
-    case "achievement_milestone":
+    case 'achievement_unlocked':
+    case 'achievement_milestone':
       routeNotificationAction(
         navigationRef,
-        { type: "view_profile" },
+        { type: 'view_profile' },
         featureAccess ?? undefined,
         motivationStyle,
       );
       return;
-    case "streak_risk":
-    case "streak_at_risk":
+    case 'streak_risk':
+    case 'streak_at_risk':
       routeNotificationAction(
         navigationRef,
-        { type: "custom", payload: { screen: "Home" } },
+        { type: 'custom', payload: { screen: 'Home' } },
         featureAccess ?? undefined,
         motivationStyle,
       );
-      eventBus.publish("streak:show_risk_banner", { priority: "high" });
+      eventBus.publish('streak:show_risk_banner', { priority: 'high' });
       return;
-    case "mastery_rank_up":
+    case 'mastery_rank_up':
       routeNotificationAction(
         navigationRef,
-        { type: "custom", payload: { screen: "Mastery" } },
+        { type: 'custom', payload: { screen: 'Mastery' } },
         featureAccess ?? undefined,
         motivationStyle,
       );
@@ -141,7 +141,7 @@ export function navigateFromNotification(
     default:
       routeNotificationAction(
         navigationRef,
-        { type: "custom", payload: { screen: "Home" } },
+        { type: 'custom', payload: { screen: 'Home' } },
         featureAccess ?? undefined,
         motivationStyle,
       );

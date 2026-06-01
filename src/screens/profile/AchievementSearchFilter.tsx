@@ -1,32 +1,32 @@
-import React from "react";
-import { Pressable } from "react-native";
-import { FlashList } from "@shopify/flash-list";
-import { Box, Text } from "@/components/primitives";
-import { useTheme } from "@/theme";
-import type { AchievementCategory } from "@/features/achievements/types";
-import { launchColors } from "@theme/tokens/launch-colors";
+import React from 'react';
+import { Pressable } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
+import { Box, Text } from '@/components/primitives';
+import { useTheme } from '@/theme';
+import type { AchievementCategory } from '@/features/achievements/types';
+import { launchColors } from '@theme/tokens/launch-colors';
 
-export type FilterType = "ALL" | "UNLOCKED" | "LOCKED";
-export type SortType = "RARITY" | "RECENT" | "CATEGORY";
+export type FilterType = 'ALL' | 'UNLOCKED' | 'LOCKED';
+export type SortType = 'RARITY' | 'RECENT' | 'CATEGORY';
 
 type CategoryItem = {
-  id: AchievementCategory | "ALL";
+  id: AchievementCategory | 'ALL';
   label: string;
   icon: string;
 };
 
 export const CATEGORIES: CategoryItem[] = [
-  { id: "ALL", label: "All", icon: "🏆" },
-  { id: "SESSION", label: "Session", icon: "📚" },
-  { id: "STREAK", label: "Streak", icon: "🔥" },
-  { id: "BOSS", label: "Boss", icon: "⚔️" },
-  { id: "SOCIAL", label: "Social", icon: "👥" },
-  { id: "PROGRESSION", label: "Progression", icon: "📈" },
+  { id: 'ALL', label: 'All', icon: '🏆' },
+  { id: 'SESSION', label: 'Session', icon: '📚' },
+  { id: 'STREAK', label: 'Streak', icon: '🔥' },
+  { id: 'BOSS', label: 'Boss', icon: '⚔️' },
+  { id: 'SOCIAL', label: 'Social', icon: '👥' },
+  { id: 'PROGRESSION', label: 'Progression', icon: '📈' },
 ];
 
 export const CategoryTabs: React.FC<{
-  selected: AchievementCategory | "ALL";
-  onSelect: (category: AchievementCategory | "ALL") => void;
+  selected: AchievementCategory | 'ALL';
+  onSelect: (category: AchievementCategory | 'ALL') => void;
 }> = ({ selected, onSelect }) => {
   const { theme } = useTheme();
   return (
@@ -67,7 +67,7 @@ export const CategoryTabs: React.FC<{
                         ? launchColors.hex_ffffff
                         : theme.colors.text.secondary
                     }
-                    fontWeight={isSelected ? "semibold" : "normal"}
+                    fontWeight={isSelected ? 'semibold' : 'normal'}
                   >
                     {item.label}
                   </Text>
@@ -101,7 +101,7 @@ export const FilterSortBar: React.FC<{
       }}
     >
       <Box flexDirection="row" gap={2}>
-        {(["ALL", "UNLOCKED", "LOCKED"] as FilterType[]).map((f) => (
+        {(['ALL', 'UNLOCKED', 'LOCKED'] as FilterType[]).map((f) => (
           <Pressable
             key={f}
             onPress={() => onFilterChange(f)}
@@ -113,7 +113,7 @@ export const FilterSortBar: React.FC<{
               px={3}
               py={1}
               borderRadius={12}
-              bg={filter === f ? theme.colors.accent.purple : "transparent"}
+              bg={filter === f ? theme.colors.accent.purple : 'transparent'}
               style={{
                 borderWidth: 1,
                 borderColor:
@@ -130,7 +130,7 @@ export const FilterSortBar: React.FC<{
                     : theme.colors.text.secondary
                 }
               >
-                {f === "ALL" ? "All" : f === "UNLOCKED" ? "Unlocked" : "Locked"}
+                {f === 'ALL' ? 'All' : f === 'UNLOCKED' ? 'Unlocked' : 'Locked'}
               </Text>
             </Box>
           </Pressable>
@@ -143,7 +143,7 @@ export const FilterSortBar: React.FC<{
         </Text>
         <Pressable
           onPress={() => {
-            const sorts: SortType[] = ["RARITY", "RECENT", "CATEGORY"];
+            const sorts: SortType[] = ['RARITY', 'RECENT', 'CATEGORY'];
             const currentIndex = sorts.indexOf(sort);
             const nextIndex =
               currentIndex === -1 ? 0 : (currentIndex + 1) % sorts.length;
@@ -155,11 +155,11 @@ export const FilterSortBar: React.FC<{
         >
           <Box flexDirection="row" alignItems="center" gap={1}>
             <Text variant="caption" color={theme.colors.primary[500]}>
-              {sort === "RARITY"
-                ? "Rarity"
-                : sort === "RECENT"
-                  ? "Recent"
-                  : "Category"}
+              {sort === 'RARITY'
+                ? 'Rarity'
+                : sort === 'RECENT'
+                  ? 'Recent'
+                  : 'Category'}
             </Text>
             <Text style={{ fontSize: 12 }}>↕️</Text>
           </Box>

@@ -1,31 +1,31 @@
-import React from "react";
-import { fireEvent, render, screen } from "@testing-library/react-native";
+import React from 'react';
+import { fireEvent, render, screen } from '@testing-library/react-native';
 
-import { captureException } from "../../../../config/sentry";
-import { Text } from "../../../../components/primitives";
+import { captureException } from '../../../../config/sentry';
+import { Text } from '../../../../components/primitives';
 import {
   ScreenErrorBoundary,
   withScreenErrorBoundary,
-} from "../ScreenErrorBoundary";
+} from '../ScreenErrorBoundary';
 
-jest.mock("../../../../theme", () => ({
+jest.mock('../../../../theme', () => ({
   useTheme: () => ({
     theme: {
-      colors: { background: { primary: "white" } },
+      colors: { background: { primary: 'white' } },
       spacing: [0, 4, 8, 12, 16, 20, 24],
     },
   }),
 }));
 
-jest.mock("../../../../components/primitives", () => ({
+jest.mock('../../../../components/primitives', () => ({
   Text: ({ children }: { children: React.ReactNode }) => {
-    const ReactRuntime = require("react");
-    const { Text: NativeText } = require("react-native");
+    const ReactRuntime = require('react');
+    const { Text: NativeText } = require('react-native');
     return ReactRuntime.createElement(NativeText, null, children);
   },
 }));
 
-jest.mock("../../../../components", () => ({
+jest.mock('../../../../components', () => ({
   Button: (props: {
     children: React.ReactNode;
     onPress: () => void;
@@ -33,8 +33,8 @@ jest.mock("../../../../components", () => ({
     accessibilityRole: string;
     accessibilityHint: string;
   }) => {
-    const ReactRuntime = require("react");
-    const { Pressable, Text: NativeText } = require("react-native");
+    const ReactRuntime = require('react');
+    const { Pressable, Text: NativeText } = require('react-native');
     return ReactRuntime.createElement(
       Pressable,
       {
@@ -48,51 +48,51 @@ jest.mock("../../../../components", () => ({
   },
 }));
 
-jest.mock("../../../../network", () => ({
+jest.mock('../../../../network', () => ({
   useNetInfo: () => ({ isOffline: false }),
 }));
 
-jest.mock("../../../../config/sentry", () => ({
+jest.mock('../../../../config/sentry', () => ({
   captureException: jest.fn(),
 }));
 
 const ThrowingComponent: React.FC<{
   shouldThrow?: boolean;
   message?: string;
-}> = ({ shouldThrow, message = "Test error" }) => {
+}> = ({ shouldThrow, message = 'Test error' }) => {
   if (shouldThrow) {
     throw new Error(message);
   }
   return <Text>Normal content</Text>;
 };
 
-describe("ScreenErrorBoundary", () => {
+describe('ScreenErrorBoundary', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it("renders children when no error occurs", () => {
+  it('renders children when no error occurs', () => {
     render(
       <ScreenErrorBoundary screenName="TestScreen">
         <Text>Normal content</Text>
       </ScreenErrorBoundary>,
     );
 
-    expect(screen.getByText("Normal content")).toBeTruthy();
+    expect(screen.getByText('Normal content')).toBeTruthy();
   });
 
-  it("shows fallback UI instead of crashing on render errors", () => {
+  it('shows fallback UI instead of crashing on render errors', () => {
     render(
       <ScreenErrorBoundary screenName="TestScreen">
         <ThrowingComponent shouldThrow />
       </ScreenErrorBoundary>,
     );
 
-    expect(screen.getByText("Something went wrong")).toBeTruthy();
+    expect(screen.getByText('Something went wrong')).toBeTruthy();
     expect(screen.getByText(/couldn't load TestScreen/)).toBeTruthy();
   });
 
-  it("captures the configured feature tag in Sentry", () => {
+  it('captures the configured feature tag in Sentry', () => {
     render(
       <ScreenErrorBoundary screenName="TestScreen" featureTag="phase-16-test">
         <ThrowingComponent shouldThrow />
@@ -101,11 +101,11 @@ describe("ScreenErrorBoundary", () => {
 
     expect(captureException).toHaveBeenCalledWith(
       expect.any(Error),
-      expect.objectContaining({ tags: { feature: "phase-16-test" } }),
+      expect.objectContaining({ tags: { feature: 'phase-16-test' } }),
     );
   });
 
-  it("calls onError when an error occurs", () => {
+  it('calls onError when an error occurs', () => {
     const onError = jest.fn();
     render(
       <ScreenErrorBoundary screenName="TestScreen" onError={onError}>
@@ -119,11 +119,11 @@ describe("ScreenErrorBoundary", () => {
     );
   });
 
-  it("resets and remounts children when retry is pressed", () => {
+  it('resets and remounts children when retry is pressed', () => {
     let shouldThrow = true;
     const RetryComponent = (): JSX.Element => {
       if (shouldThrow) {
-        throw new Error("Test error");
+        throw new Error('Test error');
       }
       return <Text>Normal content</Text>;
     };
@@ -132,20 +132,20 @@ describe("ScreenErrorBoundary", () => {
         <RetryComponent />
       </ScreenErrorBoundary>,
     );
-    expect(screen.getByText("Something went wrong")).toBeTruthy();
+    expect(screen.getByText('Something went wrong')).toBeTruthy();
 
     shouldThrow = false;
-    fireEvent.press(screen.getByText("Try Again"));
+    fireEvent.press(screen.getByText('Try Again'));
     rerender(
       <ScreenErrorBoundary screenName="TestScreen">
         <RetryComponent />
       </ScreenErrorBoundary>,
     );
 
-    expect(screen.getByText("Normal content")).toBeTruthy();
+    expect(screen.getByText('Normal content')).toBeTruthy();
   });
 
-  it("uses network and auth-specific messages", () => {
+  it('uses network and auth-specific messages', () => {
     render(
       <ScreenErrorBoundary screenName="TestScreen">
         <ThrowingComponent shouldThrow message="Network connection lost" />
@@ -154,10 +154,10 @@ describe("ScreenErrorBoundary", () => {
     expect(screen.getByText(/Connection lost/)).toBeTruthy();
   });
 
-  it("supports the HOC wrapper", () => {
+  it('supports the HOC wrapper', () => {
     const WrappedComponent = withScreenErrorBoundary(
       ThrowingComponent,
-      "WrappedScreen",
+      'WrappedScreen',
     );
     render(<WrappedComponent shouldThrow />);
 

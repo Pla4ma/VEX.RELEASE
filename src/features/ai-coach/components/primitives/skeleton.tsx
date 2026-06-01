@@ -1,13 +1,13 @@
-import React, { useEffect } from "react";
-import { View, type ViewStyle } from "react-native";
+import React, { useEffect } from 'react';
+import { View, type ViewStyle } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withRepeat,
   withSequence,
   withTiming,
-} from "react-native-reanimated";
-import { skeletonStyles as styles } from "./skeleton-styles";
+} from 'react-native-reanimated';
+import { skeletonStyles as styles } from './skeleton-styles';
 interface SkeletonProps {
   width?: number | string;
   height?: number;
@@ -16,7 +16,7 @@ interface SkeletonProps {
   shimmer?: boolean;
 }
 export function Skeleton({
-  width = "100%",
+  width = '100%',
   height = 16,
   borderRadius = 4,
   style,
@@ -42,7 +42,7 @@ export function Skeleton({
     <View
       style={[
         styles.container,
-        { width: width as ViewStyle["width"], height, borderRadius },
+        { width: width as ViewStyle['width'], height, borderRadius },
         style,
       ]}
     >
@@ -52,7 +52,7 @@ export function Skeleton({
 }
 export function TextSkeleton({
   lines = 3,
-  lastLineWidth = "60%",
+  lastLineWidth = '60%',
 }: {
   lines?: number;
   lastLineWidth?: string | number;
@@ -63,7 +63,7 @@ export function TextSkeleton({
         <Skeleton
           key={i}
           height={14}
-          width={i === lines - 1 ? lastLineWidth : "100%"}
+          width={i === lines - 1 ? lastLineWidth : '100%'}
           style={styles.textLine}
         />
       ))}

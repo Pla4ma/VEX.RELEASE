@@ -1,11 +1,11 @@
-import { createSheet } from "@/shared/ui/create-sheet";
-import { launchColors } from "@theme/tokens/launch-colors";
+import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
 
 export const styles = createSheet({
   container: {
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 12,
-    overflow: "hidden",
+    overflow: 'hidden',
     margin: 16,
     shadowColor: launchColors.hex_000,
     shadowOffset: { width: 0, height: 2 },
@@ -15,29 +15,29 @@ export const styles = createSheet({
   },
   header: {
     padding: 16,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
-  phaseName: { fontSize: 16, fontWeight: "bold", color: "white" },
+  phaseName: { fontSize: 16, fontWeight: 'bold', color: 'white' },
   enragedBadge: {
     backgroundColor: launchColors.rgb_0_0_0_0_3,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 4,
   },
-  enragedText: { color: "white", fontSize: 12, fontWeight: "bold" },
+  enragedText: { color: 'white', fontSize: 12, fontWeight: 'bold' },
   progressSection: {
     padding: 16,
     borderBottomWidth: 1,
     borderBottomColor: launchColors.hex_e2e8f0,
   },
   thresholds: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     marginBottom: 8,
   },
-  thresholdContainer: { alignItems: "center" },
+  thresholdContainer: { alignItems: 'center' },
   thresholdDot: {
     width: 8,
     height: 8,
@@ -57,19 +57,19 @@ export const styles = createSheet({
     color: launchColors.hex_a0aec0,
     marginTop: 4,
   },
-  thresholdLabelActive: { color: launchColors.hex_4a5568, fontWeight: "600" },
-  healthBarContainer: { flexDirection: "row", alignItems: "center", gap: 8 },
+  thresholdLabelActive: { color: launchColors.hex_4a5568, fontWeight: '600' },
+  healthBarContainer: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   healthBarBackground: {
     flex: 1,
     height: 12,
     backgroundColor: launchColors.hex_e2e8f0,
     borderRadius: 6,
-    overflow: "hidden",
+    overflow: 'hidden',
   },
-  healthBar: { height: "100%", borderRadius: 6 },
+  healthBar: { height: '100%', borderRadius: 6 },
   healthPercent: {
     fontSize: 12,
-    fontWeight: "600",
+    fontWeight: '600',
     color: launchColors.hex_4a5568,
     minWidth: 45,
   },
@@ -77,7 +77,7 @@ export const styles = createSheet({
     fontSize: 12,
     color: launchColors.hex_718096,
     marginTop: 8,
-    fontStyle: "italic",
+    fontStyle: 'italic',
   },
   descriptionSection: {
     padding: 16,
@@ -88,29 +88,29 @@ export const styles = createSheet({
   description: {
     fontSize: 14,
     color: launchColors.hex_4a5568,
-    fontStyle: "italic",
+    fontStyle: 'italic',
   },
   mechanicWarning: {
     backgroundColor: launchColors.hex_fed7d7,
     padding: 12,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   mechanicTitle: {
     fontSize: 12,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     color: launchColors.hex_c53030,
   },
   mechanicTimer: {
     fontSize: 14,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     color: launchColors.hex_c53030,
   },
   tipsSection: { padding: 16 },
   tipsHeader: {
     fontSize: 12,
-    fontWeight: "600",
+    fontWeight: '600',
     color: launchColors.hex_718096,
     marginBottom: 8,
   },

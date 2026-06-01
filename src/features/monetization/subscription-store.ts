@@ -1,13 +1,29 @@
-import { mmkvStorage } from "../../store/mmkv-storage";
-import type { UserSubscription } from "./PremiumTierSystem";
+import { z } from 'zod';
+import { mmkvStorage } from '../../store/mmkv-storage';
+import type { UserSubscription } from './PremiumTierSystem';
 
-const STORE_KEY = "vex:subscriptions";
+const STORE_KEY = 'vex:subscriptions';
+
+const UserSubscriptionSchema = z.object({
+  userId: z.string(),
+  tier: z.string(),
+  startedAt: z.number(),
+  expiresAt: z.number().nullable(),
+  isTrial: z.boolean(),
+  trialEndsAt: z.number().nullable(),
+  autoRenew: z.boolean(),
+  platform: z.enum(['ios', 'android', 'web']),
+});
+
+const SubscriptionMapSchema = z.record(UserSubscriptionSchema);
 
 function loadAll(): Record<string, UserSubscription> {
   try {
     const raw = mmkvStorage.getItem(STORE_KEY);
-    return raw ? (JSON.parse(raw) as Record<string, UserSubscription>) : {};
-  } catch (error: unknown) {
+    if (!raw) {return {};}
+    const parsed = SubscriptionMapSchema.safeParse(JSON.parse(raw));
+    return parsed.success ? (parsed.data as Record<string, UserSubscription>) : {};
+  } catch {
     return {};
   }
 }

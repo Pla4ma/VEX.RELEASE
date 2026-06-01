@@ -1,40 +1,40 @@
-import type { ErrorCategory } from "./ErrorBoundary.types";
+import type { ErrorCategory } from './ErrorBoundary.types';
 
 export function categorizeError(error: Error): ErrorCategory {
   const message = error.message.toLowerCase();
   const name = error.name.toLowerCase();
   if (
-    message.includes("network") ||
-    message.includes("fetch") ||
-    message.includes("timeout")
+    message.includes('network') ||
+    message.includes('fetch') ||
+    message.includes('timeout')
   ) {
-    return "network";
+    return 'network';
   }
   if (
-    message.includes("auth") ||
-    message.includes("unauthorized") ||
-    message.includes("token")
+    message.includes('auth') ||
+    message.includes('unauthorized') ||
+    message.includes('token')
   ) {
-    return "auth";
+    return 'auth';
   }
-  if (message.includes("validation") || message.includes("invalid")) {
-    return "validation";
+  if (message.includes('validation') || message.includes('invalid')) {
+    return 'validation';
   }
   if (
-    message.includes("server") ||
-    message.includes("500") ||
-    message.includes("503")
+    message.includes('server') ||
+    message.includes('500') ||
+    message.includes('503')
   ) {
-    return "server";
+    return 'server';
   }
   if (
-    name.includes("error") &&
-    !name.includes("reference") &&
-    !name.includes("type")
+    name.includes('error') &&
+    !name.includes('reference') &&
+    !name.includes('type')
   ) {
-    return "client";
+    return 'client';
   }
-  return "unknown";
+  return 'unknown';
 }
 
 export function calculateRetryDelay(attempt: number, baseDelay: number): number {

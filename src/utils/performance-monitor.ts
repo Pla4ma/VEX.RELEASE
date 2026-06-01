@@ -1,6 +1,6 @@
-import { createDebugger } from "./debug";
-import { eventBus } from "../events";
-const debug = createDebugger("performance:monitor");
+import { createDebugger } from './debug';
+import { eventBus } from '../events';
+const debug = createDebugger('performance:monitor');
 interface PerformanceMemorySnapshot {
   usedJSHeapSize: number;
   totalJSHeapSize: number;
@@ -49,14 +49,14 @@ export class PerformanceMonitor {
     this.isRunning = true;
     this.lastFrameTime = performance.now();
     this.monitorFrame();
-    debug.info("Performance monitoring started");
+    debug.info('Performance monitoring started');
   }
   stop(): void {
     this.isRunning = false;
     if (this.rafId !== null) {
       cancelAnimationFrame(this.rafId);
     }
-    debug.info("Performance monitoring stopped");
+    debug.info('Performance monitoring stopped');
   }
   onJank(callback: (metrics: PerformanceMetrics) => void): void {
     this.onJankCallback = callback;
@@ -64,8 +64,8 @@ export class PerformanceMonitor {
   recordLongTask(duration: number): void {
     if (duration > 50) {
       this.longTaskCount++;
-      eventBus.publish("analytics:track", {
-        event: "performance_long_task",
+      eventBus.publish('analytics:track', {
+        event: 'performance_long_task',
         properties: { duration },
       });
     }
@@ -117,9 +117,9 @@ export class PerformanceMonitor {
   };
   private reportJank(fps: number, delta: number): void {
     const metrics = this.getMetrics();
-    debug.warn("Jank detected", { fps, delta: Math.round(delta) });
-    eventBus.publish("analytics:track", {
-      event: "performance_jank",
+    debug.warn('Jank detected', { fps, delta: Math.round(delta) });
+    eventBus.publish('analytics:track', {
+      event: 'performance_jank',
       properties: {
         fps,
         frameDuration: Math.round(delta),
@@ -166,8 +166,8 @@ export async function measureAsyncExecutionTime<T>(
   const duration = performance.now() - start;
   if (duration > 100) {
     debug.warn(`Slow async execution: ${label} took ${duration.toFixed(2)}ms`);
-    eventBus.publish("analytics:track", {
-      event: "performance_slow_operation",
+    eventBus.publish('analytics:track', {
+      event: 'performance_slow_operation',
       properties: { operation: label, duration },
     });
   }

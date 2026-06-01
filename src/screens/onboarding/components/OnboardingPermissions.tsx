@@ -1,18 +1,18 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import Animated, {
   FadeIn,
   FadeInUp,
-} from "react-native-reanimated";
-import { Box } from "../../../components/primitives/Box";
-import { Button } from "../../../components/primitives/Button";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
+} from 'react-native-reanimated';
+import { Box } from '../../../components/primitives/Box';
+import { Button } from '../../../components/primitives/Button';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
 import {
   BENEFITS,
   BenefitCard,
   SuccessAnimation,
   type PermissionBenefit,
-} from "./OnboardingPermissions.helpers";
+} from './OnboardingPermissions.helpers';
 
 export type { PermissionBenefit };
 
@@ -27,18 +27,18 @@ export function OnboardingPermissions({
 }: OnboardingPermissionsProps): JSX.Element {
   const { theme } = useTheme();
   const [status, setStatus] = useState<
-    "idle" | "requesting" | "granted" | "denied"
-  >("idle");
+    'idle' | 'requesting' | 'granted' | 'denied'
+  >('idle');
   const [error, setError] = useState<string | null>(null);
   const handleRequest = async () => {
-    setStatus("requesting");
+    setStatus('requesting');
     setError(null);
     try {
       const granted = await onRequestPermission();
-      setStatus(granted ? "granted" : "denied");
+      setStatus(granted ? 'granted' : 'denied');
     } catch (err) {
-      setStatus("denied");
-      setError("Could not request permission");
+      setStatus('denied');
+      setError('Could not request permission');
     }
   };
   return (
@@ -60,7 +60,7 @@ export function OnboardingPermissions({
 
       {}
       <Box flex={1} justifyContent="center" gap="md">
-        {status === "granted" ? (
+        {status === 'granted' ? (
           <SuccessAnimation />
         ) : (
           BENEFITS.map((benefit, index) => (
@@ -72,7 +72,7 @@ export function OnboardingPermissions({
       {}
       <Animated.View entering={FadeInUp.delay(400).duration(400)}>
         <Box gap="md">
-          {status === "idle" && (
+          {status === 'idle' && (
             <Button
               size="lg"
               variant="primary"
@@ -87,7 +87,7 @@ export function OnboardingPermissions({
             </Button>
           )}
 
-          {status === "granted" && (
+          {status === 'granted' && (
             <Button
               size="lg"
               variant="primary"
@@ -101,7 +101,7 @@ export function OnboardingPermissions({
             </Button>
           )}
 
-          {(status === "denied" || status === "idle") && (
+          {(status === 'denied' || status === 'idle') && (
             <Button
               size="lg"
               variant="ghost"
@@ -111,13 +111,13 @@ export function OnboardingPermissions({
               accessibilityRole="button"
               accessibilityHint="Double tap to activate"
             >
-              {status === "denied"
-                ? "Continue without notifications"
-                : "Skip for now"}
+              {status === 'denied'
+                ? 'Continue without notifications'
+                : 'Skip for now'}
             </Button>
           )}
 
-          {status === "denied" && (
+          {status === 'denied' && (
             <Text variant="caption" color="text.tertiary" textAlign="center">
               You can enable notifications later in Settings
             </Text>

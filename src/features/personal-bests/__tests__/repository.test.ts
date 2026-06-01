@@ -1,38 +1,38 @@
 const mockFrom = jest.fn();
 
-jest.mock("../../../config/supabase", () => ({
+jest.mock('../../../config/supabase', () => ({
   getSupabaseClient: () => ({
     from: (...args: unknown[]) => mockFrom(...args),
   }),
 }));
 
-import { SessionMode } from "../../../session/modes";
+import { SessionMode } from '../../../session/modes';
 import {
   PersonalBestsRepositoryError,
   getPersonalBest,
   getUserPersonalBests,
   upsertPersonalBest,
-} from "../repository";
+} from '../repository';
 
-const userId = "123e4567-e89b-12d3-a456-426614174000";
+const userId = '123e4567-e89b-12d3-a456-426614174000';
 const row = {
-  id: "123e4567-e89b-12d3-a456-426614174111",
+  id: '123e4567-e89b-12d3-a456-426614174111',
   user_id: userId,
   session_mode: SessionMode.SPRINT,
-  duration_bucket: "15",
+  duration_bucket: '15',
   best_purity_score: 82,
-  best_grade: "B",
+  best_grade: 'B',
   total_sessions: 3,
-  achieved_at: "2026-05-14T12:00:00.000Z",
-  updated_at: "2026-05-14T12:00:00.000Z",
+  achieved_at: '2026-05-14T12:00:00.000Z',
+  updated_at: '2026-05-14T12:00:00.000Z',
 };
 
-describe("personal bests repository", () => {
+describe('personal bests repository', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it("returns null when no personal best exists", async () => {
+  it('returns null when no personal best exists', async () => {
     const maybeSingle = jest
       .fn()
       .mockResolvedValue({ data: null, error: null });
@@ -44,11 +44,11 @@ describe("personal bests repository", () => {
     });
 
     await expect(
-      getPersonalBest(userId, SessionMode.SPRINT, "15"),
+      getPersonalBest(userId, SessionMode.SPRINT, '15'),
     ).resolves.toBeNull();
   });
 
-  it("inserts the first personal best record", async () => {
+  it('inserts the first personal best record', async () => {
     const maybeSingle = jest
       .fn()
       .mockResolvedValueOnce({ data: null, error: null });
@@ -76,21 +76,21 @@ describe("personal bests repository", () => {
     const result = await upsertPersonalBest({
       userId,
       sessionMode: SessionMode.SPRINT,
-      durationBucket: "15",
+      durationBucket: '15',
       bestPurityScore: 82,
-      bestGrade: "B",
+      bestGrade: 'B',
     });
 
     expect(result.bestPurityScore).toBe(82);
   });
 
-  it("updates only when the candidate score is better", async () => {
+  it('updates only when the candidate score is better', async () => {
     const maybeSingle = jest.fn().mockResolvedValue({ data: row, error: null });
     const single = jest.fn().mockResolvedValue({
       data: {
         ...row,
         best_purity_score: 91,
-        best_grade: "A",
+        best_grade: 'A',
         total_sessions: 4,
       },
       error: null,
@@ -124,15 +124,15 @@ describe("personal bests repository", () => {
     const result = await upsertPersonalBest({
       userId,
       sessionMode: SessionMode.SPRINT,
-      durationBucket: "15",
+      durationBucket: '15',
       bestPurityScore: 91,
-      bestGrade: "A",
+      bestGrade: 'A',
     });
 
     expect(result.bestPurityScore).toBe(91);
   });
 
-  it("does not update when the candidate score is worse", async () => {
+  it('does not update when the candidate score is worse', async () => {
     const maybeSingle = jest.fn().mockResolvedValue({ data: row, error: null });
     const update = jest.fn();
     mockFrom
@@ -154,19 +154,19 @@ describe("personal bests repository", () => {
     const result = await upsertPersonalBest({
       userId,
       sessionMode: SessionMode.SPRINT,
-      durationBucket: "15",
+      durationBucket: '15',
       bestPurityScore: 80,
-      bestGrade: "B",
+      bestGrade: 'B',
     });
 
     expect(result.bestPurityScore).toBe(82);
     expect(update).not.toHaveBeenCalled();
   });
 
-  it("throws on Supabase errors", async () => {
+  it('throws on Supabase errors', async () => {
     const maybeSingle = jest
       .fn()
-      .mockResolvedValue({ data: null, error: { message: "denied" } });
+      .mockResolvedValue({ data: null, error: { message: 'denied' } });
     mockFrom.mockReturnValue({
       select: jest.fn().mockReturnValue({
         eq: jest
@@ -182,11 +182,11 @@ describe("personal bests repository", () => {
     });
 
     await expect(
-      getPersonalBest(userId, SessionMode.SPRINT, "15"),
+      getPersonalBest(userId, SessionMode.SPRINT, '15'),
     ).rejects.toThrow(PersonalBestsRepositoryError);
   });
 
-  it("fetches profile records", async () => {
+  it('fetches profile records', async () => {
     mockFrom.mockReturnValue({
       select: jest.fn().mockReturnValue({
         eq: jest.fn().mockReturnValue({

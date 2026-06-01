@@ -1,14 +1,14 @@
-import React from "react";
+import React from 'react';
 import Animated, {
   useAnimatedStyle,
   withRepeat,
   withSpring,
-} from "react-native-reanimated";
+} from 'react-native-reanimated';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import type { CompanionMood } from "../../companion/types";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import type { CompanionMood } from '../../companion/types';
 
 export function StreakIndicator({
   days,
@@ -60,7 +60,7 @@ export function StreakIndicator({
         <Text fontSize={16}>F</Text>
         <Text
           variant="caption"
-          color={isAtRisk ? "error.DEFAULT" : "text.secondary"}
+          color={isAtRisk ? 'error.DEFAULT' : 'text.secondary'}
           fontWeight="600"
         >
           {days}
@@ -68,7 +68,7 @@ export function StreakIndicator({
         {isAtRisk && hoursRemaining !== null ? (
           <Text
             variant="caption"
-            color={isCritical ? "error.DEFAULT" : "warning.DEFAULT"}
+            color={isCritical ? 'error.DEFAULT' : 'warning.DEFAULT'}
           >
             - {hoursRemaining}h
           </Text>
@@ -95,13 +95,13 @@ export function LevelBadge({ level }: { level: number }): JSX.Element {
 
 export function getCompanionMoodSymbol(mood: CompanionMood): string {
   const symbols: Record<CompanionMood, string> = {
-    SLEEPY: "o",
-    CONTENT: "+",
-    FOCUSED: "#",
-    DETERMINED: "^",
-    ECSTATIC: "*",
-    STRUGGLING: "~",
-    DANGER: "!",
+    SLEEPY: 'o',
+    CONTENT: '+',
+    FOCUSED: '#',
+    DETERMINED: '^',
+    ECSTATIC: '*',
+    STRUGGLING: '~',
+    DANGER: '!',
   };
   return symbols[mood];
 }

@@ -1,7 +1,7 @@
-import React from "react";
-import { View, Text, Pressable, ActivityIndicator } from "react-native";
-import { launchColors } from "@theme/tokens/launch-colors";
-import { styles } from "./PremiumErrorRecovery.styles";
+import React from 'react';
+import { View, Text, Pressable, ActivityIndicator } from 'react-native';
+import { launchColors } from '@theme/tokens/launch-colors';
+import { styles } from './PremiumErrorRecovery.styles';
 
 interface ErrorActionButtonsProps {
   hasMoreRetries: boolean;
@@ -54,7 +54,7 @@ export const ErrorActionButtons: React.FC<ErrorActionButtonsProps> = ({
           <ActivityIndicator size="small" color={launchColors.hex_fff} />
         ) : (
           <Text style={styles.retryButtonText}>
-            {retryCount > 0 ? "Try Again" : "Retry Now"}
+            {retryCount > 0 ? 'Try Again' : 'Retry Now'}
           </Text>
         )}
       </Pressable>

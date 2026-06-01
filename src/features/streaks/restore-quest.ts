@@ -1,11 +1,11 @@
-import { captureSilentFailure } from "../../utils/silent-failure";
-import { z } from "zod";
+import { captureSilentFailure } from '../../utils/silent-failure';
+import { z } from 'zod';
 
-import { MMKVStorageAdapter } from "../../persistence/MMKVStorageAdapter";
+import { MMKVStorageAdapter } from '../../persistence/MMKVStorageAdapter';
 
 const QUEST_DURATION_MS = 7 * 24 * 60 * 60 * 1000;
 const REQUIRED_SESSIONS = 3;
-const storage = new MMKVStorageAdapter("streak-restore-quest");
+const storage = new MMKVStorageAdapter('streak-restore-quest');
 
 const RestoreQuestSchema = z.object({
   started: z.number(),
@@ -26,7 +26,7 @@ function getUsageKey(userId: string, monthKey: string): string {
 
 function getMonthKey(timestamp: number): string {
   const date = new Date(timestamp);
-  return `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, "0")}`;
+  return `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, '0')}`;
 }
 
 async function saveQuest(userId: string, quest: RestoreQuest): Promise<void> {
@@ -50,9 +50,9 @@ export async function getStreakRestoreQuest(
     return quest;
   } catch (error) {
     captureSilentFailure(error, {
-      feature: "streaks",
-      operation: "network-fallback",
-      type: "network",
+      feature: 'streaks',
+      operation: 'network-fallback',
+      type: 'network',
     });
     await storage.removeItem(getQuestKey(userId));
     return null;
@@ -65,11 +65,11 @@ export async function hasUsedStreakRestoreThisMonth(
   const value = await storage.getItem(
     getUsageKey(userId, getMonthKey(Date.now())),
   );
-  return value === "true";
+  return value === 'true';
 }
 
 export async function markStreakRestoreUsed(userId: string): Promise<void> {
-  await storage.setItem(getUsageKey(userId, getMonthKey(Date.now())), "true");
+  await storage.setItem(getUsageKey(userId, getMonthKey(Date.now())), 'true');
 }
 
 export async function startStreakRestoreQuest(

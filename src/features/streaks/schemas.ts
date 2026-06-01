@@ -1,10 +1,10 @@
-import { z } from "zod";
+import { z } from 'zod';
 export const RiskLevelSchema = z.enum([
-  "NONE",
-  "LOW",
-  "MEDIUM",
-  "HIGH",
-  "CRITICAL",
+  'NONE',
+  'LOW',
+  'MEDIUM',
+  'HIGH',
+  'CRITICAL',
 ]);
 export const StreakSchema = z
   .object({
@@ -17,7 +17,7 @@ export const StreakSchema = z
     frozenUntil: z.number().nullable().default(null),
     shieldsAvailable: z.number().min(0).default(0),
     gracePeriodUsed: z.boolean().default(false),
-    timezone: z.string().default("UTC"),
+    timezone: z.string().default('UTC'),
     createdAt: z.number(),
     updatedAt: z.number(),
   })
@@ -36,7 +36,7 @@ export const StreakSummarySchema = z
   })
   .strict();
 const StreakTimestampSchema = z.preprocess((value) => {
-  if (typeof value === "string") {
+  if (typeof value === 'string') {
     return Date.parse(value);
   }
   return value;
@@ -52,18 +52,18 @@ export const StreakRowSchema = z
     frozen_until: StreakTimestampSchema.nullable().default(null),
     shields_available: z.number().min(0).default(0),
     grace_period_used: z.boolean().default(false),
-    timezone: z.string().default("UTC"),
+    timezone: z.string().default('UTC'),
     created_at: StreakTimestampSchema,
     updated_at: StreakTimestampSchema,
   })
   .passthrough();
 export const MilestoneRewardTypeSchema = z.enum([
-  "XP",
-  "COINS",
-  "GEMS",
-  "ITEM",
-  "BADGE",
-  "STREAK_SHIELD",
+  'XP',
+  'COINS',
+  'GEMS',
+  'ITEM',
+  'BADGE',
+  'STREAK_SHIELD',
 ]);
 export const StreakMilestoneSchema = z
   .object({
@@ -80,10 +80,10 @@ export const StreakMilestoneSchema = z
   })
   .strict();
 export const ShieldSourceSchema = z.enum([
-  "MILESTONE_30",
-  "BOSS_DEFEAT",
-  "SHOP_PURCHASE",
-  "PROMOTIONAL",
+  'MILESTONE_30',
+  'BOSS_DEFEAT',
+  'SHOP_PURCHASE',
+  'PROMOTIONAL',
 ]);
 export const StreakShieldSchema = z
   .object({
@@ -97,10 +97,10 @@ export const StreakShieldSchema = z
   })
   .strict();
 export const RecoverySourceSchema = z.enum([
-  "SHIELD",
-  "PURCHASE",
-  "SPECIAL_EVENT",
-  "MANUAL",
+  'SHIELD',
+  'PURCHASE',
+  'SPECIAL_EVENT',
+  'MANUAL',
 ]);
 export const ComebackStateSchema = z
   .object({
@@ -123,13 +123,13 @@ export const StreakCalendarDaySchema = z
   })
   .strict();
 export const StreakActionSchema = z.enum([
-  "INCREMENTED",
-  "MAINTAINED",
-  "BROKEN",
-  "SHIELD_PROTECTED",
-  "FROZEN",
-  "COME_BACK",
-  "ALREADY_TODAY",
+  'INCREMENTED',
+  'MAINTAINED',
+  'BROKEN',
+  'SHIELD_PROTECTED',
+  'FROZEN',
+  'COME_BACK',
+  'ALREADY_TODAY',
 ]);
 export const StreakEngineResultSchema = z
   .object({
@@ -150,7 +150,7 @@ export const RecordSessionInputSchema = z
   })
   .strict();
 export const UseShieldInputSchema = z
-  .object({ userId: z.string().uuid(), reason: z.enum(["MANUAL", "AUTO"]) })
+  .object({ userId: z.string().uuid(), reason: z.enum(['MANUAL', 'AUTO']) })
   .strict();
 export const FreezeStreakInputSchema = z
   .object({

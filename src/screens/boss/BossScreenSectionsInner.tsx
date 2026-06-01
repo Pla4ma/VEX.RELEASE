@@ -1,23 +1,23 @@
-import React, { useCallback, useMemo, useState } from "react";
-import { Pressable, View } from "react-native";
+import React, { useCallback, useMemo, useState } from 'react';
+import { Pressable, View } from 'react-native';
 
-import { Text } from "../../components/primitives";
-import { trackBossCTAClicked } from "../../features/boss/analytics";
-import { useSessionHistory } from "../../session/hooks/useSession";
-import { useTheme } from "../../theme";
+import { Text } from '../../components/primitives';
+import { trackBossCTAClicked } from '../../features/boss/analytics';
+import { useSessionHistory } from '../../session/hooks/useSession';
+import { useTheme } from '../../theme';
 import {
   ATTACK_PRESETS,
   estimateDamage,
   formatDuration,
   getBossScreenCopy,
   type BossScreenSectionsProps,
-} from "./boss-screen-utils";
+} from './boss-screen-utils';
 
-function cardStyle(theme: ReturnType<typeof useTheme>["theme"]) {
+function cardStyle(theme: ReturnType<typeof useTheme>['theme']) {
   return {
     backgroundColor: theme.colors.background.secondary,
     borderColor: theme.colors.border.light,
-    borderRadius: theme.borderRadius["2xl"],
+    borderRadius: theme.borderRadius['2xl'],
     borderWidth: 1,
     gap: theme.spacing[3],
     padding: theme.spacing[5],
@@ -25,7 +25,7 @@ function cardStyle(theme: ReturnType<typeof useTheme>["theme"]) {
 }
 
 export function BossScreenSections({
-  bossIntensity = "subtle",
+  bossIntensity = 'subtle',
   onLaunchAttack,
   streakMultiplier,
   userDamage,
@@ -69,7 +69,7 @@ export function BossScreenSections({
         <Text variant="bodySmall" color={theme.colors.text.secondary}>
           {copy.intro}
         </Text>
-        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <View>
             <Text variant="caption" color={theme.colors.text.secondary}>
               {copy.metricLabel}
@@ -78,7 +78,7 @@ export function BossScreenSections({
               {userDamage.toLocaleString()}
             </Text>
           </View>
-          <View style={{ alignItems: "flex-end" }}>
+          <View style={{ alignItems: 'flex-end' }}>
             <Text variant="caption" color={theme.colors.text.secondary}>
               Focus multiplier
             </Text>
@@ -114,7 +114,7 @@ export function BossScreenSections({
         {recentSessions.map((entry) => (
           <View
             key={`${entry.endedAt}-${entry.duration}`}
-            style={{ flexDirection: "row", justifyContent: "space-between" }}
+            style={{ flexDirection: 'row', justifyContent: 'space-between' }}
           >
             <Text variant="body" color={theme.colors.text.primary}>
               {formatDuration(entry.duration)}
@@ -171,7 +171,7 @@ export function BossScreenSections({
                     : theme.colors.text.secondary
                 }
               >
-                {`${estimateDamage(preset.minutes, streakMultiplier)} ${bossIntensity === "subtle" ? "momentum" : "damage"}`}
+                {`${estimateDamage(preset.minutes, streakMultiplier)} ${bossIntensity === 'subtle' ? 'momentum' : 'damage'}`}
               </Text>
             </Pressable>
           );

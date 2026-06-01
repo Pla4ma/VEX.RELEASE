@@ -1,22 +1,22 @@
-import { calculateRetentionRates } from "./VEXAnalyticsInfrastructure";
+import { calculateRetentionRates } from './VEXAnalyticsInfrastructure';
 import {
   getAverageSessionsPerWeek,
   getStudyPlanCompletionRate,
   calculatePowerUserPercentage,
-} from "./engagement";
+} from './engagement';
 import {
   getMonetizationMetrics,
   type MonetizationMetrics,
-} from "./monetization";
-import { getPaywallAnalytics, type PaywallAnalytics } from "./paywall";
+} from './monetization';
+import { getPaywallAnalytics, type PaywallAnalytics } from './paywall';
 import {
   getStreakSurvivalMetrics,
   type StreakSurvivalMetrics,
-} from "./streaks";
+} from './streaks';
 import {
   TARGET_METRICS,
   type VEXSuccessMetrics,
-} from "./VEXAnalyticsInfrastructure.types";
+} from './VEXAnalyticsInfrastructure.types';
 
 export interface VEXDashboard {
   generatedAt: number;
@@ -49,77 +49,77 @@ export function generateDashboardReport(): VEXDashboard {
     day1Retention: {
       current: retention.day1,
       target: TARGET_METRICS.day1Retention.target,
-      trend: "flat",
+      trend: 'flat',
     },
     day7Retention: {
       current: retention.day7,
       target: TARGET_METRICS.day7Retention.target,
-      trend: "flat",
+      trend: 'flat',
     },
     day30Retention: {
       current: retention.day30,
       target: TARGET_METRICS.day30Retention.target,
-      trend: "flat",
+      trend: 'flat',
     },
     sessionsPerWeek: {
       current: engagement.avgSessionsPerWeek,
       target: TARGET_METRICS.sessionsPerWeek.target,
-      trend: "flat",
+      trend: 'flat',
     },
     studyPlanCompletionRate: {
       current: engagement.studyPlanCompletionRate,
       target: TARGET_METRICS.studyPlanCompletionRate.target,
-      trend: "flat",
+      trend: 'flat',
     },
     appStoreRating: {
       current: 0,
       target: TARGET_METRICS.appStoreRating.target,
-      trend: "flat",
+      trend: 'flat',
     },
     supportTicketsPerWeek: {
       current: 0,
       target: TARGET_METRICS.supportTicketsPerWeek.target,
-      trend: "flat",
+      trend: 'flat',
     },
     crashFreeRate: {
       current: 0.98,
       target: TARGET_METRICS.crashFreeRate.target,
-      trend: "flat",
+      trend: 'flat',
     },
     premiumConversionRate: {
       current: monetizationMetrics.conversionRate,
       target: TARGET_METRICS.premiumConversionRate.target,
-      trend: "flat",
+      trend: 'flat',
     },
     ltv: {
       current: monetizationMetrics.averageLTV,
       target: TARGET_METRICS.ltv.target,
-      trend: "flat",
+      trend: 'flat',
     },
     paywallConversionRate: {
       current: paywallAnalytics.conversionRate,
       target: TARGET_METRICS.paywallConversionRate.target,
-      trend: "flat",
+      trend: 'flat',
     },
     npsScore: {
       current: 0,
       target: TARGET_METRICS.npsScore.target,
-      trend: "flat",
+      trend: 'flat',
     },
     clarityScore: {
       current: 0,
       target: TARGET_METRICS.clarityScore.target,
-      trend: "flat",
+      trend: 'flat',
     },
     helpfulnessScore: {
       current: 0,
       target: TARGET_METRICS.helpfulnessScore.target,
-      trend: "flat",
+      trend: 'flat',
     },
     returnIntentScore: {
       current: 0,
       target: TARGET_METRICS.returnIntentScore.target,
-      trend: "flat",
+      trend: 'flat',
     },
   };
   return {

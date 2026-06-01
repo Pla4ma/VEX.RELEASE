@@ -5,13 +5,13 @@ export class ChallengeError extends Error {
     public context?: Record<string, unknown>,
   ) {
     super(message);
-    this.name = "ChallengeError";
+    this.name = 'ChallengeError';
   }
 }
 
 export class ChallengeNotFoundError extends ChallengeError {
   constructor(challengeId: string) {
-    super(`Challenge not found: ${challengeId}`, "CHALLENGE_NOT_FOUND", {
+    super(`Challenge not found: ${challengeId}`, 'CHALLENGE_NOT_FOUND', {
       challengeId,
     });
   }
@@ -19,7 +19,7 @@ export class ChallengeNotFoundError extends ChallengeError {
 
 export class ChallengeNotActiveError extends ChallengeError {
   constructor(challengeId: string, status: string) {
-    super(`Challenge is not active: ${challengeId}`, "CHALLENGE_NOT_ACTIVE", {
+    super(`Challenge is not active: ${challengeId}`, 'CHALLENGE_NOT_ACTIVE', {
       challengeId,
       status,
     });

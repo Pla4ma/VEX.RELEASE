@@ -1,12 +1,12 @@
-import React from "react";
-import { View } from "react-native";
-import Animated, { FadeInUp } from "react-native-reanimated";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import type { CompanionElement } from "../../../features/onboarding/types";
-import { ELEMENT_THEMES } from "../../../features/companion/types";
-import { ELEMENTS } from "./elementData";
-import { ElementCard } from "./ElementCard";
+import React from 'react';
+import { View } from 'react-native';
+import Animated, { FadeInUp } from 'react-native-reanimated';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import type { CompanionElement } from '../../../features/onboarding/types';
+import { ELEMENT_THEMES } from '../../../features/companion/types';
+import { ELEMENTS } from './elementData';
+import { ElementCard } from './ElementCard';
 
 interface OnboardingChooseElementProps {
   selectedElement?: CompanionElement;
@@ -27,14 +27,14 @@ export function OnboardingChooseElement({
         <Text
           variant="h2"
           color="text.primary"
-          style={{ textAlign: "center", marginBottom: theme.spacing[2] }}
+          style={{ textAlign: 'center', marginBottom: theme.spacing[2] }}
         >
           Choose Your Element
         </Text>
         <Text
           variant="body"
           color="text.secondary"
-          style={{ textAlign: "center" }}
+          style={{ textAlign: 'center' }}
         >
           Your companion's element shapes its personality and grants unique
           bonuses.
@@ -43,9 +43,9 @@ export function OnboardingChooseElement({
 
       <View
         style={{
-          flexDirection: "row",
-          flexWrap: "wrap",
-          justifyContent: "space-between",
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          justifyContent: 'space-between',
           gap: theme.spacing[3],
         }}
       >
@@ -75,7 +75,7 @@ export function OnboardingChooseElement({
           <Text
             variant="body"
             color={ELEMENT_THEMES[selectedElement].primary}
-            style={{ textAlign: "center" }}
+            style={{ textAlign: 'center' }}
           >
             {ELEMENTS.find((e) => e.id === selectedElement)?.lore}
           </Text>

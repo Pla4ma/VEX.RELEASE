@@ -1,16 +1,16 @@
-import React, { useEffect } from "react";
-import { Pressable } from "react-native";
+import React, { useEffect } from 'react';
+import { Pressable } from 'react-native';
 import Animated, {
   FadeIn,
   FadeInUp,
   useAnimatedStyle,
   useSharedValue,
   withSpring,
-} from "react-native-reanimated";
-import { Box, Text } from "./primitives";
-import { useTheme } from "../theme";
-import { useReducedMotion } from "@/hooks";
-import { buttonTap } from "../utils/haptics";
+} from 'react-native-reanimated';
+import { Box, Text } from './primitives';
+import { useTheme } from '../theme';
+import { useReducedMotion } from '@/hooks';
+import { buttonTap } from '../utils/haptics';
 
 type LevelUpCelebrationProps = {
   oldLevel: number;

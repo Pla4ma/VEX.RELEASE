@@ -2,34 +2,34 @@
  * Animation configuration and typography scaling utilities.
  */
 
-import type { AnimationConfig } from "./types";
+import type { AnimationConfig } from './types';
 
 export function getAnimationConfig(
   baseDuration: number,
   reducedMotion: boolean,
 ): AnimationConfig {
   if (reducedMotion) {
-    return { duration: 0, easing: "linear", useReducedMotion: true };
+    return { duration: 0, easing: 'linear', useReducedMotion: true };
   }
   return {
     duration: baseDuration,
-    easing: "ease-in-out",
+    easing: 'ease-in-out',
     useReducedMotion: false,
   };
 }
 
 export function getAnimationStyles(
-  animation: "fade" | "slide" | "scale" | "none",
+  animation: 'fade' | 'slide' | 'scale' | 'none',
   reducedMotion: boolean,
 ): Record<string, string | number> {
-  if (reducedMotion || animation === "none") {
-    return { transition: "none", animation: "none" };
+  if (reducedMotion || animation === 'none') {
+    return { transition: 'none', animation: 'none' };
   }
   const configs = {
-    fade: { transition: "opacity 300ms ease-in-out" },
-    slide: { transition: "transform 300ms ease-in-out" },
+    fade: { transition: 'opacity 300ms ease-in-out' },
+    slide: { transition: 'transform 300ms ease-in-out' },
     scale: {
-      transition: "transform 300ms ease-in-out, opacity 300ms ease-in-out",
+      transition: 'transform 300ms ease-in-out, opacity 300ms ease-in-out',
     },
   } satisfies Record<string, Record<string, string | number>>;
   return configs[animation] ?? configs.fade;

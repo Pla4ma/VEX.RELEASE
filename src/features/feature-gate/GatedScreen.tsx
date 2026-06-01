@@ -5,11 +5,11 @@
  * Uses 'navigation' mode to check canNavigate && canRegisterRoute.
  */
 
-import React from "react";
-import { FeatureGate } from "./FeatureGate";
-import { NavigationGate } from "./NavigationGate";
-import type { FeatureKey } from "../liveops-config/feature-access";
-import type { ExtendedRootStackParams } from "../../navigation/types";
+import React from 'react';
+import { FeatureGate } from './FeatureGate';
+import { NavigationGate } from './NavigationGate';
+import type { FeatureKey } from '../liveops-config/feature-access';
+import type { ExtendedRootStackParams } from '../../navigation/types';
 
 interface GatedScreenProps {
   feature: FeatureKey;
@@ -23,8 +23,8 @@ export function GatedScreen({
   feature,
   featureName,
   children,
-  fallbackRoute = "Main",
-  fallbackAction = "Return to Home",
+  fallbackRoute = 'Main',
+  fallbackAction = 'Return to Home',
 }: GatedScreenProps): JSX.Element {
   return (
     <FeatureGate

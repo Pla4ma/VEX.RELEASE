@@ -1,26 +1,26 @@
-import React, { useEffect, useState } from "react";
-import { Platform, StyleSheet, View } from "react-native";
-import * as Notifications from "expo-notifications";
-import { Button } from "../../../components/primitives/Button";
-import { Text } from "../../../components/primitives/Text";
-import { Skeleton } from "../../../components/ui/Skeleton";
-import { useTheme } from "../../../theme";
-import { createDebugger } from "../../../utils/debug";
+import React, { useEffect, useState } from 'react';
+import { Platform, StyleSheet, View } from 'react-native';
+import * as Notifications from 'expo-notifications';
+import { Button } from '../../../components/primitives/Button';
+import { Text } from '../../../components/primitives/Text';
+import { Skeleton } from '../../../components/ui/Skeleton';
+import { useTheme } from '../../../theme';
+import { createDebugger } from '../../../utils/debug';
 import {
   hasRequestedOnboardingNotificationPrompt,
   markOnboardingNotificationPromptRequested,
-} from "../../../features/ai-coach/services";
-import { scheduleOnboardingNotifications } from "../../../features/notifications/retention-strategy";
-import { trackNotificationPermission } from "../../../features/notifications/analytics";
-import { registerPushToken } from "../../../features/notifications/service";
-import { createSheet } from "@/shared/ui/create-sheet";
+} from '../../../features/ai-coach/services';
+import { scheduleOnboardingNotifications } from '../../../features/notifications/retention-strategy';
+import { trackNotificationPermission } from '../../../features/notifications/analytics';
+import { registerPushToken } from '../../../features/notifications/service';
+import { createSheet } from '@/shared/ui/create-sheet';
 type PermissionCardState =
-  | "loading"
-  | "idle"
-  | "submitting"
-  | "complete"
-  | "hidden";
-const debug = createDebugger("onboarding:notifications");
+  | 'loading'
+  | 'idle'
+  | 'submitting'
+  | 'complete'
+  | 'hidden';
+const debug = createDebugger('onboarding:notifications');
 interface OnboardingNotificationPermissionCardProps {
   userId: string;
 }
@@ -28,8 +28,8 @@ export function OnboardingNotificationPermissionCard({
   userId,
 }: OnboardingNotificationPermissionCardProps): JSX.Element | null {
   const { theme } = useTheme();
-  const [state, setState] = useState<PermissionCardState>("loading");
-  const [statusMessage, setStatusMessage] = useState<string>("");
+  const [state, setState] = useState<PermissionCardState>('loading');
+  const [statusMessage, setStatusMessage] = useState<string>('');
   useEffect(() => {
     let isMounted = true;
     const loadPromptState = async () => {
@@ -38,7 +38,7 @@ export function OnboardingNotificationPermissionCard({
       if (!isMounted) {
         return;
       }
-      setState(hasRequested ? "hidden" : "idle");
+      setState(hasRequested ? 'hidden' : 'idle');
     };
     void loadPromptState();
     return () => {
@@ -46,25 +46,25 @@ export function OnboardingNotificationPermissionCard({
     };
   }, [userId]);
   const handleMaybeLater = async () => {
-    setState("submitting");
+    setState('submitting');
     try {
       await markOnboardingNotificationPromptRequested(userId);
       setStatusMessage(
-        "No pressure. You can turn reminders on later in settings.",
+        'No pressure. You can turn reminders on later in settings.',
       );
     } catch (error) {
       debug.warn(
-        "Failed to update notification prompt state after deferral",
+        'Failed to update notification prompt state after deferral',
         error,
       );
       setStatusMessage(
-        "We could not save that preference just now. You can try again later.",
+        'We could not save that preference just now. You can try again later.',
       );
     }
-    setState("complete");
+    setState('complete');
   };
   const handleEnableReminders = async () => {
-    setState("submitting");
+    setState('submitting');
     try {
       const existingPermissions = await Notifications.getPermissionsAsync();
       const alreadyGranted =
@@ -79,7 +79,7 @@ export function OnboardingNotificationPermissionCard({
           permissions.ios?.status ===
             Notifications.IosAuthorizationStatus.PROVISIONAL;
       }
-      trackNotificationPermission(userId, granted, "onboarding");
+      trackNotificationPermission(userId, granted, 'onboarding');
       if (granted) {
         try {
           const pushToken = await Notifications.getExpoPushTokenAsync();
@@ -89,13 +89,13 @@ export function OnboardingNotificationPermissionCard({
               token: pushToken.data,
               platform: Platform.OS,
             });
-            debug.info("Push token stored for user: %s", userId);
+            debug.info('Push token stored for user: %s', userId);
           }
           await scheduleOnboardingNotifications(userId);
-          debug.info("Onboarding notifications scheduled for user: %s", userId);
+          debug.info('Onboarding notifications scheduled for user: %s', userId);
         } catch (tokenError) {
           debug.warn(
-            "Failed to store push token or schedule notifications",
+            'Failed to store push token or schedule notifications',
             tokenError,
           );
         }
@@ -103,22 +103,22 @@ export function OnboardingNotificationPermissionCard({
       await markOnboardingNotificationPromptRequested(userId);
       setStatusMessage(
         granted
-          ? "Reminders are on. We will only send one streak reminder per day."
-          : "Notifications stayed off for now. You can enable them later in settings.",
+          ? 'Reminders are on. We will only send one streak reminder per day.'
+          : 'Notifications stayed off for now. You can enable them later in settings.',
       );
     } catch (error) {
       debug.warn(
-        "Notification permission request failed during onboarding",
+        'Notification permission request failed during onboarding',
         error,
       );
       setStatusMessage(
-        "We could not enable reminders just now. You can try again later.",
+        'We could not enable reminders just now. You can try again later.',
       );
     } finally {
-      setState("complete");
+      setState('complete');
     }
   };
-  if (state === "hidden") {
+  if (state === 'hidden') {
     return null;
   }
   return (
@@ -144,12 +144,12 @@ export function OnboardingNotificationPermissionCard({
         </Text>
       </View>
 
-      {state === "loading" ? (
-        <View style={{ paddingVertical: 16, alignItems: "center", gap: 8 }}>
+      {state === 'loading' ? (
+        <View style={{ paddingVertical: 16, alignItems: 'center', gap: 8 }}>
           <Skeleton width="80%" height={16} />
           <Skeleton width="60%" height={16} />
         </View>
-      ) : state === "complete" ? (
+      ) : state === 'complete' ? (
         <Text style={[styles.status, { color: theme.colors.text.secondary }]}>
           {statusMessage}
         </Text>
@@ -160,8 +160,8 @@ export function OnboardingNotificationPermissionCard({
             onPress={() => {
               void handleEnableReminders();
             }}
-            isDisabled={state === "submitting"}
-            isLoading={state === "submitting"}
+            isDisabled={state === 'submitting'}
+            isLoading={state === 'submitting'}
             fullWidth
             accessibilityLabel="Enable notification reminders"
             accessibilityRole="button"
@@ -174,7 +174,7 @@ export function OnboardingNotificationPermissionCard({
             onPress={() => {
               void handleMaybeLater();
             }}
-            isDisabled={state === "submitting"}
+            isDisabled={state === 'submitting'}
             fullWidth
             accessibilityLabel="Skip notification setup"
             accessibilityRole="button"
@@ -189,8 +189,8 @@ export function OnboardingNotificationPermissionCard({
 }
 const styles = createSheet({
   card: { borderWidth: 1, marginTop: 12 },
-  title: { fontSize: 20, fontWeight: "700", lineHeight: 24 },
+  title: { fontSize: 20, fontWeight: '700', lineHeight: 24 },
   body: { fontSize: 14, lineHeight: 20 },
   status: { fontSize: 14, lineHeight: 20 },
-  actions: { width: "100%" },
+  actions: { width: '100%' },
 });

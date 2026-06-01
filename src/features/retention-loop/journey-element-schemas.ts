@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 // ── Journey Day ────────────────────────────────────────────────────────
 export const JourneyDaySchema = z.union([
@@ -14,26 +14,26 @@ export const JourneyDaySchema = z.union([
 
 // ── Journey Phase ──────────────────────────────────────────────────────
 export const JourneyPhaseSchema = z.enum([
-  "onboarding",
-  "return",
-  "proof",
-  "insight",
-  "rescue",
-  "lane_forming",
-  "weekly_prep",
-  "weekly_intelligence",
+  'onboarding',
+  'return',
+  'proof',
+  'insight',
+  'rescue',
+  'lane_forming',
+  'weekly_prep',
+  'weekly_intelligence',
 ]);
 
 // ── Emotional state ────────────────────────────────────────────────────
 export const EmotionalStateSchema = z.enum([
-  "curious",
-  "familiar",
-  "validated",
-  "trusting",
-  "struggling",
-  "forming",
-  "ready",
-  "valuable",
+  'curious',
+  'familiar',
+  'validated',
+  'trusting',
+  'struggling',
+  'forming',
+  'ready',
+  'valuable',
 ]);
 
 // ── Home message ───────────────────────────────────────────────────────
@@ -41,7 +41,7 @@ export const JourneyHomeMessageSchema = z
   .object({
     headline: z.string().min(1).max(120),
     subtext: z.string().min(1).max(200),
-    tone: z.enum(["warm", "direct", "humble", "encouraging", "proof"]),
+    tone: z.enum(['warm', 'direct', 'humble', 'encouraging', 'proof']),
   })
   .strict();
 
@@ -49,7 +49,7 @@ export const JourneyHomeMessageSchema = z
 export const JourneySessionSuggestionSchema = z
   .object({
     durationMinutes: z.number().int().min(5).max(60),
-    type: z.enum(["STUDY", "DEEP_WORK", "SPRINT", "LIGHT_FOCUS", "RECOVERY"]),
+    type: z.enum(['STUDY', 'DEEP_WORK', 'SPRINT', 'LIGHT_FOCUS', 'RECOVERY']),
     taskPrompt: z.string().min(1).max(200),
   })
   .strict();
@@ -67,7 +67,7 @@ export const JourneyCompletionPayoffSchema = z
 // ── Memory / learning moment ───────────────────────────────────────────
 export const JourneyMomentSchema = z
   .object({
-    type: z.enum(["none", "what_vex_learned", "proof_signal", "weekly_insight"]),
+    type: z.enum(['none', 'what_vex_learned', 'proof_signal', 'weekly_insight']),
     requiresSessions: z.number().int().min(0),
     canHide: z.boolean(),
   })
@@ -91,12 +91,12 @@ export const JourneyPremiumMomentSchema = z
   .object({
     day: JourneyDaySchema,
     trigger: z.enum([
-      "after_weekly_insight",
-      "deep_insight_tap",
-      "advanced_action",
-      "none",
+      'after_weekly_insight',
+      'deep_insight_tap',
+      'advanced_action',
+      'none',
     ]),
-    copyKey: z.enum(["study", "run", "project", "clean", "none"]),
+    copyKey: z.enum(['study', 'run', 'project', 'clean', 'none']),
   })
   .strict();
 
@@ -106,12 +106,12 @@ export const JourneyNudgePolicySchema = z
     canSend: z.boolean(),
     type: z
       .enum([
-        "none",
-        "gentle_return",
-        "proof_nudge",
-        "memory_nudge",
-        "rescue",
-        "weekly_insight",
+        'none',
+        'gentle_return',
+        'proof_nudge',
+        'memory_nudge',
+        'rescue',
+        'weekly_insight',
       ])
       .nullable(),
     condition: z.string().min(1).max(200),

@@ -1,4 +1,4 @@
-import { capture } from "./index";
+import { capture } from './index';
 
 export interface Cohort {
   id: string;
@@ -21,7 +21,7 @@ export interface RetentionData {
 export function calculateCohortRetention(
   cohortUsers: string[],
   activeUsersByDay: Map<string, Set<string>>,
-): Cohort["retention"] {
+): Cohort['retention'] {
   if (cohortUsers.length === 0) {
     return { day1: 0, day7: 0, day30: 0, day90: 0 };
   }
@@ -45,7 +45,7 @@ export function trackRetentionEvent(
   day: number,
   isActive: boolean,
 ): void {
-  capture("retention_event", { user_id: userId, day, is_active: isActive });
+  capture('retention_event', { user_id: userId, day, is_active: isActive });
 }
 
 export interface RevenueMetrics {
@@ -65,11 +65,11 @@ export interface PurchaseEvent {
   currency: string;
   timestamp: number;
   isSubscription: boolean;
-  subscriptionPeriod?: "monthly" | "yearly";
+  subscriptionPeriod?: 'monthly' | 'yearly';
 }
 
 export function trackPurchase(event: PurchaseEvent): void {
-  capture("purchase_completed", {
+  capture('purchase_completed', {
     user_id: event.userId,
     product_id: event.productId,
     amount: event.amount,
@@ -78,7 +78,7 @@ export function trackPurchase(event: PurchaseEvent): void {
     subscription_period: event.subscriptionPeriod,
   } as Record<string, unknown>);
   if (event.isSubscription) {
-    capture("subscription_started", {
+    capture('subscription_started', {
       user_id: event.userId,
       product_id: event.productId,
       period: event.subscriptionPeriod,
@@ -91,7 +91,7 @@ export function trackSubscriptionCancellation(
   productId: string,
   reason?: string,
 ): void {
-  capture("subscription_cancelled", {
+  capture('subscription_cancelled', {
     user_id: userId,
     product_id: productId,
     reason,
@@ -118,7 +118,7 @@ export function calculateRevenueMetrics(
   const mrr = purchases
     .filter((p) => p.isSubscription)
     .reduce((sum, p) => {
-      if (p.subscriptionPeriod === "yearly") {
+      if (p.subscriptionPeriod === 'yearly') {
         return sum + p.amount / 12;
       }
       return sum + p.amount;

@@ -1,4 +1,4 @@
-export type CircuitState = "closed" | "open" | "half-open";
+export type CircuitState = 'closed' | 'open' | 'half-open';
 
 export interface CircuitBreakerConfig {
   failureThreshold: number;
@@ -8,7 +8,7 @@ export interface CircuitBreakerConfig {
 }
 
 export class CircuitBreaker {
-  private state: CircuitState = "closed";
+  private state: CircuitState = 'closed';
   private failureCount = 0;
   private successCount = 0;
   private lastFailureTime?: number;
@@ -25,20 +25,20 @@ export class CircuitBreaker {
   }
 
   async execute<T>(fn: () => Promise<T>): Promise<T> {
-    if (this.state === "open") {
+    if (this.state === 'open') {
       if (this.shouldAttemptReset()) {
-        this.transitionTo("half-open");
+        this.transitionTo('half-open');
       } else {
-        throw new Error("Circuit breaker is OPEN");
+        throw new Error('Circuit breaker is OPEN');
       }
     }
     if (
-      this.state === "half-open" &&
+      this.state === 'half-open' &&
       this.halfOpenCalls >= this.config.halfOpenMaxCalls
     ) {
-      throw new Error("Circuit breaker half-open call limit reached");
+      throw new Error('Circuit breaker half-open call limit reached');
     }
-    if (this.state === "half-open") {
+    if (this.state === 'half-open') {
       this.halfOpenCalls++;
     }
     try {
@@ -52,10 +52,10 @@ export class CircuitBreaker {
   }
 
   private onSuccess(): void {
-    if (this.state === "half-open") {
+    if (this.state === 'half-open') {
       this.successCount++;
       if (this.successCount >= this.config.halfOpenMaxCalls) {
-        this.transitionTo("closed");
+        this.transitionTo('closed');
       }
     } else {
       this.failureCount = 0;
@@ -66,7 +66,7 @@ export class CircuitBreaker {
     this.failureCount++;
     this.lastFailureTime = Date.now();
     if (this.failureCount >= this.config.failureThreshold) {
-      this.transitionTo("open");
+      this.transitionTo('open');
     }
   }
 

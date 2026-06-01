@@ -1,12 +1,12 @@
-import type { ReactNode, ErrorInfo } from "react";
+import type { ReactNode, ErrorInfo } from 'react';
 
 export type ErrorCategory =
-  | "network"
-  | "auth"
-  | "validation"
-  | "server"
-  | "client"
-  | "unknown";
+  | 'network'
+  | 'auth'
+  | 'validation'
+  | 'server'
+  | 'client'
+  | 'unknown';
 
 export interface ErrorState {
   hasError: boolean;

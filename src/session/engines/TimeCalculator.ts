@@ -1,4 +1,4 @@
-import type { TimeBreakdown } from "../types";
+import type { TimeBreakdown } from '../types';
 import {
   TIME_CONSTANTS,
   calculateElapsedTime,
@@ -9,9 +9,9 @@ import {
   shouldTriggerWarning,
   getTimeStatus,
   calculateCurrentInterval,
-} from "./time-calculations";
+} from './time-calculations';
 
-export { TIME_CONSTANTS } from "./time-calculations";
+export { TIME_CONSTANTS } from './time-calculations';
 export {
   calculateElapsedTime,
   calculateRemainingTime,
@@ -21,7 +21,7 @@ export {
   shouldTriggerWarning,
   getTimeStatus,
   calculateCurrentInterval,
-} from "./time-calculations";
+} from './time-calculations';
 
 export function breakdownDuration(totalSeconds: number): TimeBreakdown {
   const hours = Math.floor(
@@ -48,7 +48,7 @@ export function formatDuration(
   minutes: number,
   seconds: number,
 ): string {
-  const pad = (n: number) => n.toString().padStart(2, "0");
+  const pad = (n: number) => n.toString().padStart(2, '0');
   if (hours > 0) {
     return `${hours}:${pad(minutes)}:${pad(seconds)}`;
   }
@@ -66,14 +66,14 @@ export function formatDurationLong(totalSeconds: number): string {
   if (breakdown.seconds > 0 || parts.length === 0) {
     parts.push(`${breakdown.seconds}s`);
   }
-  return parts.join(" ");
+  return parts.join(' ');
 }
 export function validateDuration(duration: number): {
   valid: boolean;
   error?: string;
 } {
   if (!Number.isFinite(duration)) {
-    return { valid: false, error: "Duration must be a finite number" };
+    return { valid: false, error: 'Duration must be a finite number' };
   }
   if (duration < TIME_CONSTANTS.MIN_SESSION_DURATION_SECONDS) {
     return {
@@ -94,16 +94,16 @@ export function validateTimestamp(timestamp: number): {
   error?: string;
 } {
   if (!Number.isFinite(timestamp)) {
-    return { valid: false, error: "Timestamp must be a finite number" };
+    return { valid: false, error: 'Timestamp must be a finite number' };
   }
   const now = Date.now();
   const oneYearAgo = now - 365 * 24 * 60 * 60 * 1000;
   const oneYearFromNow = now + 365 * 24 * 60 * 60 * 1000;
   if (timestamp < oneYearAgo) {
-    return { valid: false, error: "Timestamp is too far in the past" };
+    return { valid: false, error: 'Timestamp is too far in the past' };
   }
   if (timestamp > oneYearFromNow) {
-    return { valid: false, error: "Timestamp is too far in the future" };
+    return { valid: false, error: 'Timestamp is too far in the future' };
   }
   return { valid: true };
 }

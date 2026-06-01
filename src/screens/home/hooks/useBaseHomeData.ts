@@ -1,20 +1,20 @@
-import { useMemo } from "react";
-import type { HomeController } from "./home-controller-types";
+import { useMemo } from 'react';
+import type { HomeController } from './home-controller-types';
 import type {
   ChallengeItem,
   SessionListItem,
-} from "../../../features/home-spine/components";
+} from '../../../features/home-spine/components';
 import {
   getQualityGrade,
   getHomeCompanionMood,
-} from "../../../screens/home/utils";
+} from '../../../screens/home/utils';
 
 export function useBaseHomeData(controller: HomeController) {
   const streakData = controller.streakQuery.data as
     | { nextDeadline?: number }
     | undefined;
   const streakHoursRemaining = useMemo(() => {
-    if (!streakData?.nextDeadline) return null;
+    if (!streakData?.nextDeadline) {return null;}
     return Math.max(
       0,
       Math.floor((streakData.nextDeadline - Date.now()) / (1000 * 60 * 60)),
@@ -25,16 +25,16 @@ export function useBaseHomeData(controller: HomeController) {
     const latest = controller.historyQuery.history[0] as
       | { status?: string }
       | undefined;
-    if (!latest) return false;
-    return latest.status === "ACTIVE" || latest.status === "PAUSED";
+    if (!latest) {return false;}
+    return latest.status === 'ACTIVE' || latest.status === 'PAUSED';
   }, [controller.historyQuery.history]);
 
   const resumeTimeSeconds = useMemo(() => {
-    if (!hasActiveSession) return null;
+    if (!hasActiveSession) {return null;}
     const latest = controller.historyQuery.history[0] as
       | { endedAt?: number; startedAt?: number }
       | undefined;
-    if (!latest) return null;
+    if (!latest) {return null;}
     if (latest.endedAt && latest.startedAt) {
       return Math.floor((latest.endedAt - latest.startedAt) / 1000);
     }
@@ -56,7 +56,7 @@ export function useBaseHomeData(controller: HomeController) {
       }>
     )
       .flatMap((entry) => {
-        if (!entry.endedAt || !entry.startedAt) return [];
+        if (!entry.endedAt || !entry.startedAt) {return [];}
         const durationSeconds = Math.max(
           0,
           Math.floor((entry.endedAt - entry.startedAt) / 1000),
@@ -91,10 +91,10 @@ export function useBaseHomeData(controller: HomeController) {
     | { streakRestoreEligible?: boolean }
     | undefined;
   const comebackSessionsCompleted = useMemo(() => {
-    if (!comebackData?.streakRestoreEligible) return 0;
+    if (!comebackData?.streakRestoreEligible) {return 0;}
     return (
       controller.historyQuery.history as Array<{ status: string }>
-    ).filter((entry) => entry.status === "COMPLETED").length;
+    ).filter((entry) => entry.status === 'COMPLETED').length;
   }, [comebackData?.streakRestoreEligible, controller.historyQuery.history]);
 
   return {

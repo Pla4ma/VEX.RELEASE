@@ -1,20 +1,20 @@
-import React, { useMemo } from "react";
-import { resolveSessionMode } from "../../session/modes";
-import { SessionMode } from "../../session/modes";
-import { useContractForSession } from "../../features/focus-contract/hooks";
-import { withScreenErrorBoundary } from "../../shared/ui/components/ScreenErrorBoundary";
-import { ActiveSessionGuardStates } from "./components/ActiveSessionGuardStates";
-import { useActiveSessionController } from "./hooks/useActiveSessionController";
-import { useStudyQuizBreak } from "./hooks/useStudyQuizBreak";
-import { useActiveSessionDisplay } from "./hooks/useActiveSessionDisplay";
-import { ActiveSessionContent } from "./ActiveSessionContent";
-import type { Lane } from "../../features/lane-engine/types";
+import React, { useMemo } from 'react';
+import { resolveSessionMode } from '../../session/modes';
+import { SessionMode } from '../../session/modes';
+import { useContractForSession } from '../../features/focus-contract/hooks';
+import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+import { ActiveSessionGuardStates } from './components/ActiveSessionGuardStates';
+import { useActiveSessionController } from './hooks/useActiveSessionController';
+import { useStudyQuizBreak } from './hooks/useStudyQuizBreak';
+import { useActiveSessionDisplay } from './hooks/useActiveSessionDisplay';
+import { ActiveSessionContent } from './ActiveSessionContent';
+import type { Lane } from '../../features/lane-engine/types';
 
 const SESSION_MODE_TO_LANE: Record<string, Lane> = {
-  [SessionMode.STUDY]: "student",
-  [SessionMode.LIGHT_FOCUS]: "game_like",
-  [SessionMode.DEEP_WORK]: "deep_creative",
-  [SessionMode.CREATIVE]: "minimal_normal",
+  [SessionMode.STUDY]: 'student',
+  [SessionMode.LIGHT_FOCUS]: 'game_like',
+  [SessionMode.DEEP_WORK]: 'deep_creative',
+  [SessionMode.CREATIVE]: 'minimal_normal',
 };
 
 export const ActiveSessionScreen = withScreenErrorBoundary(
@@ -39,7 +39,7 @@ export const ActiveSessionScreen = withScreenErrorBoundary(
       sessionQuery.session?.config.sessionMode,
     );
     const lane = useMemo(
-      () => SESSION_MODE_TO_LANE[currentMode] ?? "minimal_normal",
+      () => SESSION_MODE_TO_LANE[currentMode] ?? 'minimal_normal',
       [currentMode],
     );
     const { displayPolicy, heroViewModel } = useActiveSessionDisplay({
@@ -64,10 +64,10 @@ export const ActiveSessionScreen = withScreenErrorBoundary(
       2 * Math.PI * (metrics.RADIUS + 16) * (1 - metrics.dailyProgress / 100);
     const plannedQuizBreakOptedIn = false;
     const focusStage = showInterruption
-      ? "interruption"
+      ? 'interruption'
       : sessionQuery.isPaused
-        ? "paused"
-        : "active";
+        ? 'paused'
+        : 'active';
 
     const studyQuizBreak = useStudyQuizBreak({
       currentMode,
@@ -94,7 +94,7 @@ export const ActiveSessionScreen = withScreenErrorBoundary(
           onBrowsePresets={() => navigation.goBack()}
           onContinueDegraded={() => actions.setDismissDegradedState(true)}
           onCreateSession={() =>
-            navigation.navigate({ name: "SessionSetup", params: {} })
+            navigation.navigate({ name: 'SessionSetup', params: {} })
           }
           onEndSession={() => actions.setShowInterruption(true)}
           onGoBack={() => navigation.goBack()}
@@ -118,7 +118,7 @@ export const ActiveSessionScreen = withScreenErrorBoundary(
       />
     );
   },
-  "Active Session",
+  'Active Session',
 );
 
 export default ActiveSessionScreen;

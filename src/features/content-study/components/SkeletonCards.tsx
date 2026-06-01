@@ -1,8 +1,8 @@
-import React from "react";
-import { View } from "react-native";
-import { useTheme } from "../../../theme";
-import { Skeleton } from "./SkeletonBase";
-import { styles } from "./skeleton-styles";
+import React from 'react';
+import { View } from 'react-native';
+import { useTheme } from '../../../theme';
+import { Skeleton } from './SkeletonBase';
+import { styles } from './skeleton-styles';
 
 export const StudyPlanSkeleton: React.FC = () => {
   const { theme } = useTheme();

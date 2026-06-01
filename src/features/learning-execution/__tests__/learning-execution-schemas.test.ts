@@ -6,24 +6,24 @@ import {
   LearningExecutionPersonaSchema,
   ContentStudyGateInputSchema,
   LearningSessionTargetSchema,
-} from "../schemas";
+} from '../schemas';
 
-describe("schemas – validation", () => {
-  it("LearningExecutionPersonaSchema accepts all 5 personae", () => {
-    for (const p of ["student", "work", "creative", "growth", "learning"]) {
+describe('schemas – validation', () => {
+  it('LearningExecutionPersonaSchema accepts all 5 personae', () => {
+    for (const p of ['student', 'work', 'creative', 'growth', 'learning']) {
       expect(LearningExecutionPersonaSchema.safeParse(p).success).toBe(true);
     }
   });
 
-  it("LearningExecutionPersonaSchema rejects invalid value", () => {
-    expect(LearningExecutionPersonaSchema.safeParse("invalid").success).toBe(false);
+  it('LearningExecutionPersonaSchema rejects invalid value', () => {
+    expect(LearningExecutionPersonaSchema.safeParse('invalid').success).toBe(false);
   });
 
-  it("ContentStudyGateInputSchema validates valid input", () => {
+  it('ContentStudyGateInputSchema validates valid input', () => {
     const result = ContentStudyGateInputSchema.safeParse({
       aiConfigured: true,
-      featureHealth: "healthy",
-      goal: "STUDY",
+      featureHealth: 'healthy',
+      goal: 'STUDY',
       hasPrivacyDisclosure: true,
       rateLimitsConfigured: true,
       storageConfigured: true,
@@ -32,11 +32,11 @@ describe("schemas – validation", () => {
     expect(result.success).toBe(true);
   });
 
-  it("ContentStudyGateInputSchema rejects negative session count", () => {
+  it('ContentStudyGateInputSchema rejects negative session count', () => {
     const result = ContentStudyGateInputSchema.safeParse({
       aiConfigured: true,
-      featureHealth: "healthy",
-      goal: "STUDY",
+      featureHealth: 'healthy',
+      goal: 'STUDY',
       hasPrivacyDisclosure: true,
       rateLimitsConfigured: true,
       storageConfigured: true,
@@ -45,10 +45,10 @@ describe("schemas – validation", () => {
     expect(result.success).toBe(false);
   });
 
-  it("ContentStudyGateInputSchema accepts null goal", () => {
+  it('ContentStudyGateInputSchema accepts null goal', () => {
     const result = ContentStudyGateInputSchema.safeParse({
       aiConfigured: false,
-      featureHealth: "degraded",
+      featureHealth: 'degraded',
       goal: null,
       hasPrivacyDisclosure: false,
       rateLimitsConfigured: false,
@@ -58,28 +58,28 @@ describe("schemas – validation", () => {
     expect(result.success).toBe(true);
   });
 
-  it("LearningSessionTargetSchema rejects empty contentId", () => {
+  it('LearningSessionTargetSchema rejects empty contentId', () => {
     const result = LearningSessionTargetSchema.safeParse({
-      contentId: "",
+      contentId: '',
       focusAreas: [],
-      generationId: "g1",
+      generationId: 'g1',
       nextTaskId: null,
-      persona: "student",
+      persona: 'student',
       remainingMinutes: 10,
-      title: "Test",
+      title: 'Test',
     });
     expect(result.success).toBe(false);
   });
 
-  it("LearningSessionTargetSchema rejects remainingMinutes < 1", () => {
+  it('LearningSessionTargetSchema rejects remainingMinutes < 1', () => {
     const result = LearningSessionTargetSchema.safeParse({
-      contentId: "c1",
+      contentId: 'c1',
       focusAreas: [],
-      generationId: "g1",
+      generationId: 'g1',
       nextTaskId: null,
-      persona: "student",
+      persona: 'student',
       remainingMinutes: 0,
-      title: "Test",
+      title: 'Test',
     });
     expect(result.success).toBe(false);
   });

@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const ProductContextSchema = z
   .object({
@@ -6,35 +6,35 @@ export const ProductContextSchema = z
       .record(
         z.string().min(1),
         z.enum([
-          "hidden",
-          "tiny_tease",
-          "spotlight",
-          "secondary",
-          "primary",
-          "blocked",
+          'hidden',
+          'tiny_tease',
+          'spotlight',
+          'secondary',
+          'primary',
+          'blocked',
         ]),
       )
       .optional(),
     firstWeekExperience: z
       .object({
-        bossIntensity: z.enum(["hidden", "subtle", "tiny_tease", "visible"]),
+        bossIntensity: z.enum(['hidden', 'subtle', 'tiny_tease', 'visible']),
         currentDayStage: z.string().min(1),
-        premiumMoment: z.enum(["none", "soft_tease", "weekly_value", "hidden"]),
+        premiumMoment: z.enum(['none', 'soft_tease', 'weekly_value', 'hidden']),
         allowedHomeSurfaces: z.array(z.string().min(1)),
       })
       .strict()
       .optional(),
     motivationStyle: z
       .enum([
-        "calm",
-        "friendly",
-        "coach_led",
-        "game_like",
-        "intense",
-        "study_focused",
+        'calm',
+        'friendly',
+        'coach_led',
+        'game_like',
+        'intense',
+        'study_focused',
       ])
       .optional(),
-    userStage: z.enum(["new", "activating", "engaged", "power"]).optional(),
+    userStage: z.enum(['new', 'activating', 'engaged', 'power']).optional(),
     totalCompletedSessions: z.number().int().min(0).optional(),
   })
   .partial();
@@ -42,16 +42,16 @@ export const ProductContextSchema = z
 export type ProductContext = z.infer<typeof ProductContextSchema>;
 
 const PromiseModeSchema = z.enum([
-  "FOCUS",
-  "RECOVERY",
-  "STUDY",
-  "BOSS_PREP",
-  "HABIT_BUILD",
+  'FOCUS',
+  'RECOVERY',
+  'STUDY',
+  'BOSS_PREP',
+  'HABIT_BUILD',
 ]);
 
 const CompanionPromiseStateSchema = z
   .object({
-    kind: z.enum(["hidden", "offline", "pending", "fulfilled", "missed"]),
+    kind: z.enum(['hidden', 'offline', 'pending', 'fulfilled', 'missed']),
     targetDurationMinutes: z.number().int().positive().optional(),
     targetMode: PromiseModeSchema.optional(),
   })

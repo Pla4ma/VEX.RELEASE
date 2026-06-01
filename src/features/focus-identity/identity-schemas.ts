@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const FocusScoreFactorsSchema = z.object({
   consistency: z.object({
@@ -19,7 +19,7 @@ export const FocusScoreFactorsSchema = z.object({
   sessionQuality: z.object({
     score: z.number().min(0).max(100),
     averageFocusPurity: z.number().min(0).max(100),
-    averageGrade: z.enum(["S", "A", "B", "C", "D"]),
+    averageGrade: z.enum(['S', 'A', 'B', 'C', 'D']),
     perfectSessionsCount: z.number(),
     averageSessionDuration: z.number(),
   }),
@@ -36,7 +36,7 @@ export const FocusScoreFactorsSchema = z.object({
     daysSinceLastSession: z.number(),
     last7DayActivity: z.number(),
     last30DayActivity: z.number(),
-    trendDirection: z.enum(["UP", "STABLE", "DOWN", "CONCERNING"]),
+    trendDirection: z.enum(['UP', 'STABLE', 'DOWN', 'CONCERNING']),
     velocity: z.number(),
   }),
 });
@@ -67,18 +67,18 @@ export const FocusIdentityProfileSchema = z.object({
   recoveryProgress: z.number().min(0).max(100),
   preLapseScore: z.number().nullable(),
   topStrength: z.enum([
-    "consistency",
-    "streakStability",
-    "sessionQuality",
-    "diversity",
-    "recency",
+    'consistency',
+    'streakStability',
+    'sessionQuality',
+    'diversity',
+    'recency',
   ]),
   topWeakness: z.enum([
-    "consistency",
-    "streakStability",
-    "sessionQuality",
-    "diversity",
-    "recency",
+    'consistency',
+    'streakStability',
+    'sessionQuality',
+    'diversity',
+    'recency',
   ]),
   recommendedActions: z.array(z.string()),
   monthlyReport: z
@@ -88,7 +88,7 @@ export const FocusIdentityProfileSchema = z.object({
       endingScore: z.number(),
       change: z.number(),
       sessionsCompleted: z.number(),
-      grade: z.enum(["A+", "A", "B+", "B", "C", "D"]),
+      grade: z.enum(['A+', 'A', 'B+', 'B', 'C', 'D']),
       highlight: z.string(),
     })
     .nullable(),

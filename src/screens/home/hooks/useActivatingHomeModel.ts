@@ -1,28 +1,28 @@
-import { useMemo } from "react";
-import { useNavigation } from "@react-navigation/native";
-import { useQuery } from "@tanstack/react-query";
-import type { UseQueryResult } from "@tanstack/react-query";
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { useSessionUIStore } from "../../../store/session-state";
-import { useHomeSpineModel } from "../../../features/home-spine/hooks";
+import { useMemo } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { useQuery } from '@tanstack/react-query';
+import type { UseQueryResult } from '@tanstack/react-query';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useSessionUIStore } from '../../../store/session-state';
+import { useHomeSpineModel } from '../../../features/home-spine/hooks';
 import {
   useCreateRecommendation,
   useUpdateRecommendationStatus,
   type SessionRecommendation,
-} from "../../../features/ai-coach";
-import * as coachRepository from "../../../features/ai-coach/repository";
-import { getNextBestAction } from "../../../features/progression";
-import type { FeatureAccessResult } from "../../../features/liveops-config";
-import type { HomeFeatureRuntime } from "./home-feature-runtime";
-import type { HomeViewModel } from "./home-view-model";
-import type { HomeController, SessionHistoryResult } from "./home-controller-types";
-import type { ExtendedRootStackParams } from "../../../navigation/types";
-import { getFocusedMinutesForToday, getNextUnlockFeature, buildDisplayedReturnReason } from "./home-controller-helpers";
-import type { HomeReturnReason } from "./useHomeReturnReason";
-import { stubNavigationActions } from "./home-controller-stubs";
-import { buildActivatingReturnReason } from "./activating-return-reason";
-import { buildActivatingController, buildActivatingHomeReturnValue } from "./activating-home-controller";
-import { useActivatingNavigation } from "./useActivatingNavigation";
+} from '../../../features/ai-coach';
+import * as coachRepository from '../../../features/ai-coach/repository';
+import { getNextBestAction } from '../../../features/progression';
+import type { FeatureAccessResult } from '../../../features/liveops-config';
+import type { HomeFeatureRuntime } from './home-feature-runtime';
+import type { HomeViewModel } from './home-view-model';
+import type { HomeController, SessionHistoryResult } from './home-controller-types';
+import type { ExtendedRootStackParams } from '../../../navigation/types';
+import { getFocusedMinutesForToday, getNextUnlockFeature, buildDisplayedReturnReason } from './home-controller-helpers';
+import type { HomeReturnReason } from './useHomeReturnReason';
+import { stubNavigationActions } from './home-controller-stubs';
+import { buildActivatingReturnReason } from './activating-return-reason';
+import { buildActivatingController, buildActivatingHomeReturnValue } from './activating-home-controller';
+import { useActivatingNavigation } from './useActivatingNavigation';
 
 type Nav = NativeStackNavigationProp<ExtendedRootStackParams>;
 
@@ -30,7 +30,7 @@ interface ActivatingModelInput {
   analytics: {
     trackFirstSessionStarted: (userId: string, source: string) => void;
     trackNextBestActionPressed: (
-      stage: import("../../../features/liveops-config").UserExperienceStage,
+      stage: import('../../../features/liveops-config').UserExperienceStage,
       completedSessions: number,
     ) => void;
   };
@@ -77,7 +77,7 @@ export function useActivatingHomeModel(
   const updateRecommendationStatus = useUpdateRecommendationStatus();
 
   const recommendationsQuery = useQuery({
-    queryKey: ["coach", "recommendations", userId],
+    queryKey: ['coach', 'recommendations', userId],
     queryFn: () => coachRepository.fetchActiveRecommendations(userId),
     enabled: runtime.canQueryCoach && Boolean(userId) && !disclosure.isLoading,
     staleTime: 1000 * 60 * 5,
@@ -87,7 +87,7 @@ export function useActivatingHomeModel(
     () =>
       (recommendationsQuery.data ?? [])
         .filter((item: { status: string; expiresAt: number }) =>
-          item.status === "ACTIVE" && item.expiresAt > Date.now())
+          item.status === 'ACTIVE' && item.expiresAt > Date.now())
         .sort((a: { confidence?: number }, b: { confidence?: number }) =>
           (b.confidence ?? 0) - (a.confidence ?? 0))[0] ?? null,
     [recommendationsQuery.data],
@@ -151,8 +151,8 @@ export function useActivatingHomeModel(
     recommendationsQuery,
     openSetup: openSetup as (params?: Record<string, unknown>) => void,
     openProgress, openSocial: stubActions.openSocial,
-    createRecommendation: createRecommendation as HomeController["createRecommendation"],
-    updateRecommendationStatus: updateRecommendationStatus as HomeController["updateRecommendationStatus"],
+    createRecommendation: createRecommendation as HomeController['createRecommendation'],
+    updateRecommendationStatus: updateRecommendationStatus as HomeController['updateRecommendationStatus'],
   });
 
   return buildActivatingHomeReturnValue(controller, {

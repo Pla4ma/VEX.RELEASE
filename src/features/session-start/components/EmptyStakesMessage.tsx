@@ -1,15 +1,15 @@
-import React from "react";
-import { View } from "react-native";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
+import React from 'react';
+import { View } from 'react-native';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
 
 export function EmptyStakesMessage(): JSX.Element {
   const { theme } = useTheme();
   return (
     <View
       style={{
-        flexDirection: "row",
-        alignItems: "center",
+        flexDirection: 'row',
+        alignItems: 'center',
         gap: theme.spacing[3],
         padding: theme.spacing[3],
         backgroundColor: theme.colors.background.primary,

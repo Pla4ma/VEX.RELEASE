@@ -3,7 +3,7 @@ import type {
   NotificationCategory,
   NotificationChannel,
   NotificationPriority,
-} from "./types-core";
+} from './types-core';
 
 export interface NotificationPreferences {
   userId: string;
@@ -37,7 +37,7 @@ export interface CategoryNotificationSettings {
 export interface TypeNotificationSettings {
   enabled: boolean;
   channels: NotificationChannel[];
-  frequency: "immediate" | "hourly" | "daily" | "weekly";
+  frequency: 'immediate' | 'hourly' | 'daily' | 'weekly';
   maxPerDay: number;
 }
 

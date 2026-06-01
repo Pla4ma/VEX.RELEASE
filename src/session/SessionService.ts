@@ -1,21 +1,21 @@
-import { getSessionOrchestrator } from "./orchestrator-factory";
-import { SessionOrchestrator } from "./SessionOrchestrator";
-import { getSessionRepository } from "./repository/SessionRepository";
-import { getSessionEventEmitter } from "./SessionEventEmitter";
-import { getRewardAdapter } from "./integration/RewardAdapter";
-import { getPresetService } from "./presets";
-import { SessionMode } from "./modes";
-import { SessionServiceQueries } from "./SessionServiceQueries";
+import { getSessionOrchestrator } from './orchestrator-factory';
+import { SessionOrchestrator } from './SessionOrchestrator';
+import { getSessionRepository } from './repository/SessionRepository';
+import { getSessionEventEmitter } from './SessionEventEmitter';
+import { getRewardAdapter } from './integration/RewardAdapter';
+import { getPresetService } from './presets';
+import { SessionMode } from './modes';
+import { SessionServiceQueries } from './SessionServiceQueries';
 import type {
   SessionState,
   SessionConfig,
   SessionPreset,
   SessionSummary,
-} from "./types";
-import type { SessionServiceOptions } from "./session-service-types";
-import { createDebugger } from "../utils/debug";
+} from './types';
+import type { SessionServiceOptions } from './session-service-types';
+import { createDebugger } from '../utils/debug';
 
-const debug = createDebugger("session:service");
+const debug = createDebugger('session:service');
 
 export type { SessionServiceOptions };
 export { SessionServiceQueries };
@@ -42,7 +42,7 @@ export class SessionService extends SessionServiceQueries {
       timerConfig: this.options.timerConfig,
       enableAntiCheat: this.options.enableAntiCheat,
     });
-    debug.info("SessionService initialized");
+    debug.info('SessionService initialized');
   }
 
   setUserId(userId: string): void {
@@ -51,8 +51,8 @@ export class SessionService extends SessionServiceQueries {
     this.repository.setUserId(userId);
     this.rewardAdapter.setUserId(userId);
     this.presetService.setUserId(userId);
-    this.eventEmitter.attach("", userId);
-    debug.info("SessionService user set: %s", userId);
+    this.eventEmitter.attach('', userId);
+    debug.info('SessionService user set: %s', userId);
   }
 
   async createSessionFromPreset(
@@ -78,7 +78,7 @@ export class SessionService extends SessionServiceQueries {
       autoStartNextInterval: preset.autoStartNextInterval,
       category: preset.category,
       tags: preset.tags,
-      difficultyLevel: "MEDIUM",
+      difficultyLevel: 'MEDIUM',
       adaptiveMode: false,
       focusScorePrimary: true,
       ...customizations,
@@ -89,17 +89,17 @@ export class SessionService extends SessionServiceQueries {
 
   async createCustomSession(config: SessionConfig): Promise<SessionState> {
     if (!this.userId) {
-      throw new Error("SessionService: No user set");
+      throw new Error('SessionService: No user set');
     }
     const activeSession = await this.getActiveSession();
     if (activeSession && this.isSessionActive()) {
-      throw new Error("Cannot create new session: one is already active");
+      throw new Error('Cannot create new session: one is already active');
     }
     const session = await this.orchestrator.createSession(config);
     this.eventEmitter.attach(session.id, this.userId);
     this.eventEmitter.emitSessionCreated(config);
     if (this.options.enableAnalytics) {
-      this.trackAnalytics("session_created", {
+      this.trackAnalytics('session_created', {
         duration: config.duration,
         intervals: config.intervals,
         category: config.category,
@@ -111,7 +111,7 @@ export class SessionService extends SessionServiceQueries {
   async startSession(countdownSeconds: number = 0): Promise<void> {
     await this.orchestrator.startSession(countdownSeconds);
     if (this.options.enableAnalytics) {
-      this.trackAnalytics("session_started", {});
+      this.trackAnalytics('session_started', {});
     }
   }
 
@@ -119,10 +119,10 @@ export class SessionService extends SessionServiceQueries {
     await this.orchestrator.pauseSession(reason);
     if (this.options.enableNotifications) {
       this.eventEmitter.emitNotification(
-        "SESSION_PAUSED",
-        "Session Paused",
-        reason || "Your session has been paused",
-        "normal",
+        'SESSION_PAUSED',
+        'Session Paused',
+        reason || 'Your session has been paused',
+        'normal',
       );
     }
   }
@@ -131,10 +131,10 @@ export class SessionService extends SessionServiceQueries {
     await this.orchestrator.resumeSession();
     if (this.options.enableNotifications) {
       this.eventEmitter.emitNotification(
-        "SESSION_RESUMED",
-        "Session Resumed",
-        "Your session is now active",
-        "normal",
+        'SESSION_RESUMED',
+        'Session Resumed',
+        'Your session is now active',
+        'normal',
       );
     }
   }
@@ -160,7 +160,7 @@ export class SessionService extends SessionServiceQueries {
   }
 
   attemptRecovery(
-    recoveryType: "USER_RESUME" | "STREAK_SAVE" | "PARTIAL_CREDIT",
+    recoveryType: 'USER_RESUME' | 'STREAK_SAVE' | 'PARTIAL_CREDIT',
   ): Promise<boolean> {
     return this.orchestrator.attemptRecovery(recoveryType);
   }
@@ -172,12 +172,12 @@ export class SessionService extends SessionServiceQueries {
     if (!this.options.enableAnalytics || !this.userId) {
       return;
     }
-    debug.debug("Analytics: %s %o", event, properties);
+    debug.debug('Analytics: %s %o', event, properties);
   }
 
   destroy(): void {
     this.orchestrator.destroy();
-    debug.info("SessionService destroyed");
+    debug.info('SessionService destroyed');
   }
 }
 

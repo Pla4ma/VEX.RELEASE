@@ -1,22 +1,22 @@
-import { validateCoachInput } from "./input-contract";
-import { validateMessageQuality } from "./message-quality-gate";
-import { buildInputContractFromStreakData } from "./input-builders";
+import { validateCoachInput } from './input-contract';
+import { validateMessageQuality } from './message-quality-gate';
+import { buildInputContractFromStreakData } from './input-builders';
 import {
   extractActionFromMessage,
   generateStreakProtectionMessage,
   generateUUID,
-} from "./ai-helpers";
-import { CoachSuggestionSchema, type CoachSuggestion } from "./suggestion-schemas";
+} from './ai-helpers';
+import { CoachSuggestionSchema, type CoachSuggestion } from './suggestion-schemas';
 
 export async function handleStreakRiskIntegration(
   userId: string,
   streakData: {
     currentStreak: number;
     hoursSinceLastSession: number;
-    riskLevel: "low" | "medium" | "high" | "critical";
+    riskLevel: 'low' | 'medium' | 'high' | 'critical';
   },
 ): Promise<CoachSuggestion | null> {
-  if (streakData.riskLevel === "low") {
+  if (streakData.riskLevel === 'low') {
     return null;
   }
 
@@ -30,9 +30,9 @@ export async function handleStreakRiskIntegration(
     streakData,
   );
   const qualityAnalysis = validateMessageQuality(
-    "streak-protection",
+    'streak-protection',
     messageContent,
-    "STREAK_RISK",
+    'STREAK_RISK',
   );
   if (!qualityAnalysis.passesQualityGate) {
     return null;
@@ -40,10 +40,10 @@ export async function handleStreakRiskIntegration(
 
   return CoachSuggestionSchema.parse({
     id: generateUUID(),
-    type: "STREAK_PROTECTION",
-    title: "Protect Your Streak!",
+    type: 'STREAK_PROTECTION',
+    title: 'Protect Your Streak!',
     description: messageContent,
-    priority: streakData.riskLevel === "critical" ? "critical" : "high",
+    priority: streakData.riskLevel === 'critical' ? 'critical' : 'high',
     suggestedAction: extractActionFromMessage(messageContent),
     confidence: qualityAnalysis.confidence,
     expiresAt:

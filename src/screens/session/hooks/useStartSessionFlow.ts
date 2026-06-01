@@ -1,21 +1,21 @@
-import { captureSilentFailure } from "../../../utils/silent-failure";
-import { useCallback, useMemo, useState } from "react";
-import * as Sentry from "@sentry/react-native";
-import { getSprintChainService } from "../../../features/session/SprintChainService";
-import { startStreakRestoreQuest } from "../../../features/streaks/restore-quest";
-import { getMMKVStorageAdapter } from "../../../persistence/MMKVStorageAdapter";
-import { SessionMode } from "../../../session/modes";
-import { useSession } from "../../../session/hooks/useSession";
-import { SessionConfigSchema } from "../../../session/types";
-import { sessionStart } from "../../../utils/haptics";
+import { captureSilentFailure } from '../../../utils/silent-failure';
+import { useCallback, useMemo, useState } from 'react';
+import * as Sentry from '@sentry/react-native';
+import { getSprintChainService } from '../../../features/session/SprintChainService';
+import { startStreakRestoreQuest } from '../../../features/streaks/restore-quest';
+import { getMMKVStorageAdapter } from '../../../persistence/MMKVStorageAdapter';
+import { SessionMode } from '../../../session/modes';
+import { useSession } from '../../../session/hooks/useSession';
+import { SessionConfigSchema } from '../../../session/types';
+import { sessionStart } from '../../../utils/haptics';
 import {
   createContract,
   skipContract,
-} from "../../../features/focus-contract/service";
+} from '../../../features/focus-contract/service';
 import type {
   UseStartSessionFlowParams,
-} from "./sessionFlowTypes";
-import { buildSessionContext } from "./buildSessionContext";
+} from './sessionFlowTypes';
+import { buildSessionContext } from './buildSessionContext';
 
 export function useStartSessionFlow({
   draftGoal,
@@ -92,12 +92,12 @@ export function useStartSessionFlow({
       });
 
       Sentry.addBreadcrumb({
-        category: "session-start",
-        message: "Creating session from setup flow",
-        level: "info",
+        category: 'session-start',
+        message: 'Creating session from setup flow',
+        level: 'info',
       });
       const session = await createSession(config);
-      const contractTask = focusContractText?.trim() ?? "";
+      const contractTask = focusContractText?.trim() ?? '';
       try {
         if (contractTask.length >= 3) {
           await createContract(
@@ -110,8 +110,8 @@ export function useStartSessionFlow({
       } catch (error) {
         Sentry.captureException(error, {
           tags: {
-            feature: "focus-contract",
-            operation: "session-start-create",
+            feature: 'focus-contract',
+            operation: 'session-start-create',
           },
         });
       }
@@ -127,20 +127,20 @@ export function useStartSessionFlow({
         }, 120);
       }
 
-      navigation.navigate("ActiveSession", {
+      navigation.navigate('ActiveSession', {
         sessionId: session.id,
-        selectedThemeId: selectedThemeOwned ? selectedThemeId : "default",
+        selectedThemeId: selectedThemeOwned ? selectedThemeId : 'default',
       });
     } catch (error: unknown) {
       const errorMessage =
         error instanceof Error
           ? error.message
-          : "Unexpected session start failure";
+          : 'Unexpected session start failure';
       setStartError(errorMessage);
       Sentry.captureException(error, {
         tags: {
-          feature: "session-start",
-          phase: "start-flow",
+          feature: 'session-start',
+          phase: 'start-flow',
         },
       });
     } finally {
@@ -150,9 +150,9 @@ export function useStartSessionFlow({
           await storage.removeItem(sessionDraftKey);
         } catch (error) {
           captureSilentFailure(error, {
-            feature: "screens",
-            operation: "network-fallback",
-            type: "network",
+            feature: 'screens',
+            operation: 'network-fallback',
+            type: 'network',
           });
         }
       }

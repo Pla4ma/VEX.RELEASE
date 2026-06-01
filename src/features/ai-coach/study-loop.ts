@@ -1,7 +1,7 @@
-import { z } from "zod";
-import { createDebugger } from "../../utils/debug";
+import { z } from 'zod';
+import { createDebugger } from '../../utils/debug';
 
-const debug = createDebugger("ai-coach:study-loop");
+const debug = createDebugger('ai-coach:study-loop');
 
 export const StudyPlanSchema = z.object({
   id: z.string(),
@@ -13,8 +13,8 @@ export const StudyPlanSchema = z.object({
   sessionsTotal: z.number(),
   sessionsCompleted: z.number(),
   estimatedMinutesPerSession: z.number(),
-  difficulty: z.enum(["beginner", "intermediate", "advanced"]),
-  status: z.enum(["draft", "active", "completed", "abandoned"]),
+  difficulty: z.enum(['beginner', 'intermediate', 'advanced']),
+  status: z.enum(['draft', 'active', 'completed', 'abandoned']),
   createdAt: z.number(),
   startedAt: z.number().optional(),
   completedAt: z.number().optional(),
@@ -48,7 +48,7 @@ export async function createStudyPlan(
     goal: string;
     sessionsTotal: number;
     estimatedMinutesPerSession: number;
-    difficulty: StudyPlan["difficulty"];
+    difficulty: StudyPlan['difficulty'];
   },
 ): Promise<StudyPlan> {
   const now = Date.now();
@@ -68,19 +68,19 @@ export async function createStudyPlan(
     sessionsCompleted: 0,
     estimatedMinutesPerSession: input.estimatedMinutesPerSession,
     difficulty: input.difficulty,
-    status: "draft",
+    status: 'draft',
     createdAt: now,
     sessions,
   };
-  debug.info("Created study plan %s for user %s", plan.id, userId);
+  debug.info('Created study plan %s for user %s', plan.id, userId);
   return StudyPlanSchema.parse(plan);
 }
 
 export function startStudyPlan(plan: StudyPlan): StudyPlan {
-  if (plan.status !== "draft") {
-    throw new Error("Can only start plans in draft status");
+  if (plan.status !== 'draft') {
+    throw new Error('Can only start plans in draft status');
   }
-  return { ...plan, status: "active", startedAt: Date.now() };
+  return { ...plan, status: 'active', startedAt: Date.now() };
 }
 
 export function completeStudySession(
@@ -105,14 +105,14 @@ export function completeStudySession(
     ...plan,
     sessions,
     sessionsCompleted: completedCount,
-    status: isComplete ? "completed" : "active",
+    status: isComplete ? 'completed' : 'active',
     completedAt: isComplete ? Date.now() : plan.completedAt,
   };
 }
 
 export function getNextSession(
   plan: StudyPlan,
-): StudyPlan["sessions"][0] | null {
+): StudyPlan['sessions'][0] | null {
   return plan.sessions.find((s) => !s.completed) ?? null;
 }
 
@@ -125,4 +125,4 @@ export {
   getStudyInsights,
   getNextStudyReminder,
   compareStudyPlans,
-} from "./study-loop-analysis";
+} from './study-loop-analysis';

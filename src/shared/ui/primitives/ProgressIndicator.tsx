@@ -1,9 +1,9 @@
-import React from "react";
-import { View, Text, ViewStyle } from "react-native";
-import Animated from "react-native-reanimated";
-import { useFadeIn } from "../hooks/useReanimated";
-import { useTheme } from "../../../theme";
-import { progressStyles as styles } from "./loadingOverlay.styles";
+import React from 'react';
+import { View, Text, ViewStyle } from 'react-native';
+import Animated from 'react-native-reanimated';
+import { useFadeIn } from '../hooks/useReanimated';
+import { useTheme } from '../../../theme';
+import { progressStyles as styles } from './loadingOverlay.styles';
 
 interface ProgressIndicatorProps {
   progress: number;
@@ -14,7 +14,7 @@ interface ProgressIndicatorProps {
 
 export function ProgressIndicator({
   progress,
-  message = "Processing...",
+  message = 'Processing...',
   submessage,
   style,
 }: ProgressIndicatorProps) {

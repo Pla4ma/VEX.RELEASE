@@ -1,10 +1,10 @@
-import * as repository from "../repository";
+import * as repository from '../repository';
 import {
   DetectedPatternSchema,
   type TimeRange,
   type DetectedPattern,
-} from "../schemas";
-import { calculateTrend } from "./trends";
+} from '../schemas';
+import { calculateTrend } from './trends';
 
 function calculateCorrelation(x: number[], y: number[]): number {
   const n = Math.min(x.length, y.length);
@@ -33,11 +33,11 @@ export async function detectPatterns(
   const [sessionsData, xpData] = await Promise.all([
     repository.fetchTimeSeriesData(
       userId,
-      "sessions_completed",
+      'sessions_completed',
       timeRange,
-      "day",
+      'day',
     ),
-    repository.fetchTimeSeriesData(userId, "xp_earned", timeRange, "day"),
+    repository.fetchTimeSeriesData(userId, 'xp_earned', timeRange, 'day'),
   ]);
   if (sessionsData.points.length > 3 && xpData.points.length > 3) {
     const correlation = calculateCorrelation(
@@ -52,34 +52,34 @@ export async function detectPatterns(
         patterns.push(
           DetectedPatternSchema.parse({
             id: crypto.randomUUID(),
-            type: "correlation",
-            metric: "sessions_completed",
+            type: 'correlation',
+            metric: 'sessions_completed',
             description:
-              "Strong correlation detected between daily sessions and XP earned. More sessions = more XP!",
+              'Strong correlation detected between daily sessions and XP earned. More sessions = more XP!',
             confidence: correlation,
             detectedAt: Date.now(),
             startDate: firstSessionPoint.timestamp,
             endDate: lastSessionPoint.timestamp,
             relatedEvents: [],
             recommendations: [
-              "Try increasing your daily session count for more XP",
-              "Focus on consistency",
+              'Try increasing your daily session count for more XP',
+              'Focus on consistency',
             ],
           }),
         );
       }
     }
   }
-  const trend = await calculateTrend(userId, "sessions_completed", timeRange);
-  if (trend.direction === "up" && trend.strength > 0.5) {
+  const trend = await calculateTrend(userId, 'sessions_completed', timeRange);
+  if (trend.direction === 'up' && trend.strength > 0.5) {
     const firstTrendPoint = trend.points[0];
     const lastTrendPoint = trend.points[trend.points.length - 1];
     if (firstTrendPoint && lastTrendPoint) {
       patterns.push(
         DetectedPatternSchema.parse({
           id: crypto.randomUUID(),
-          type: "milestone",
-          metric: "sessions_completed",
+          type: 'milestone',
+          metric: 'sessions_completed',
           description: `Your focus time is trending upward with ${trend.changePercent.toFixed(1)}% improvement!`,
           confidence: trend.confidence,
           detectedAt: Date.now(),
@@ -87,8 +87,8 @@ export async function detectPatterns(
           endDate: lastTrendPoint.timestamp,
           relatedEvents: [],
           recommendations: [
-            "Keep up the great work!",
-            "Your consistency is paying off",
+            'Keep up the great work!',
+            'Your consistency is paying off',
           ],
         }),
       );

@@ -1,13 +1,13 @@
-import React from "react";
-import { View } from "react-native";
+import React from 'react';
+import { View } from 'react-native';
 
-import { Button } from "../../components/primitives/Button";
-import { Text } from "../../components/primitives/Text";
-import { getPremiumCardStyle } from "../../components/premiumStyles";
-import { Skeleton } from "../../components/ui/Skeleton";
-import { useTheme } from "../../theme";
-import type { LearningExecutionCopy } from "../../features/learning-execution";
-import { styles, formatMinutes } from "./homeScreenCardStyles";
+import { Button } from '../../components/primitives/Button';
+import { Text } from '../../components/primitives/Text';
+import { getPremiumCardStyle } from '../../components/premiumStyles';
+import { Skeleton } from '../../components/ui/Skeleton';
+import { useTheme } from '../../theme';
+import type { LearningExecutionCopy } from '../../features/learning-execution';
+import { styles, formatMinutes } from './homeScreenCardStyles';
 
 export interface ContentStudyHeroCardProps {
   activePlan: {
@@ -42,7 +42,7 @@ export function ContentStudyHeroCard({
       <View
         style={[
           styles.card,
-          getPremiumCardStyle("large"),
+          getPremiumCardStyle('large'),
           styles.studyCard,
           {
             backgroundColor: theme.colors.background.secondary,
@@ -65,7 +65,7 @@ export function ContentStudyHeroCard({
       <View
         style={[
           styles.card,
-          getPremiumCardStyle("large"),
+          getPremiumCardStyle('large'),
           styles.studyCard,
           {
             backgroundColor: theme.colors.background.secondary,
@@ -97,7 +97,7 @@ export function ContentStudyHeroCard({
       <View
         style={[
           styles.card,
-          getPremiumCardStyle("large"),
+          getPremiumCardStyle('large'),
           styles.studyCard,
           {
             backgroundColor: theme.colors.background.secondary,
@@ -111,7 +111,7 @@ export function ContentStudyHeroCard({
           color={theme.colors.primary[500]}
         >{`${copy.homeTitle}: "${activePlan.title}"`}</Text>
         <View style={{ gap: theme.spacing[2] }}>
-          <View style={[styles.row, { alignItems: "center" }]}>
+          <View style={[styles.row, { alignItems: 'center' }]}>
             <Text
               variant="bodySmall"
               color={theme.colors.text.primary}
@@ -154,7 +154,7 @@ export function ContentStudyHeroCard({
     <View
       style={[
         styles.card,
-        getPremiumCardStyle("large"),
+        getPremiumCardStyle('large'),
         styles.studyCard,
         {
           backgroundColor: theme.colors.background.secondary,
@@ -171,9 +171,9 @@ export function ContentStudyHeroCard({
       </Text>
       <View
         style={{
-          flexDirection: "row",
+          flexDirection: 'row',
           gap: theme.spacing[3],
-          flexWrap: "wrap",
+          flexWrap: 'wrap',
         }}
       >
         <Button

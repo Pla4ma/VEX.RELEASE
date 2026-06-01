@@ -1,17 +1,17 @@
-import { useState, useEffect, useCallback, useRef } from "react";
-import { type FlashListRef } from "@shopify/flash-list";
-import { useAnalytics } from "@/shared/analytics";
-import { CoachEvents } from "@/shared/analytics/analytics-events";
-import { getCurrentRecommendation } from "../services/coach-screen-service";
-import { useAskCoachQuestionMutation, useCoachScreenState } from "../hooks";
-import type { ChatMessage } from "./coach-chat-types";
-import { CoachMessageInputSchema } from "./coach-chat-types";
-import { getWelcomeMessage } from "./coach-helpers";
+import { useState, useEffect, useCallback, useRef } from 'react';
+import { type FlashListRef } from '@shopify/flash-list';
+import { useAnalytics } from '@/shared/analytics';
+import { CoachEvents } from '@/shared/analytics/analytics-events';
+import { getCurrentRecommendation } from '../services/coach-screen-service';
+import { useAskCoachQuestionMutation, useCoachScreenState } from '../hooks';
+import type { ChatMessage } from './coach-chat-types';
+import { CoachMessageInputSchema } from './coach-chat-types';
+import { getWelcomeMessage } from './coach-helpers';
 
 export function useCoachChat() {
   const { track } = useAnalytics();
   const flashListRef = useRef<FlashListRef<ChatMessage> | null>(null);
-  const [inputText, setInputText] = useState("");
+  const [inputText, setInputText] = useState('');
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const [isTyping, setIsTyping] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -27,7 +27,7 @@ export function useCoachChat() {
       setIsTyping(false);
       const coachMsg: ChatMessage = {
         id: `coach-${Date.now()}`,
-        type: "coach",
+        type: 'coach',
         content: response.message,
         timestamp: Date.now(),
         metadata: {
@@ -55,17 +55,17 @@ export function useCoachChat() {
           const parsed = CoachMessageInputSchema.parse(msg);
           return {
             id: parsed.id,
-            type: parsed.sender === "user" ? "user" : "coach",
+            type: parsed.sender === 'user' ? 'user' : 'coach',
             content: parsed.content,
             timestamp: parsed.createdAt,
             // Validated Zod parse boundary — metadata shape matches ChatMessage
-            metadata: parsed.metadata as ChatMessage["metadata"],
+            metadata: parsed.metadata as ChatMessage['metadata'],
           };
         });
       if (initialMessages.length === 0) {
         initialMessages.push({
-          id: "welcome",
-          type: "coach",
+          id: 'welcome',
+          type: 'coach',
           content: getWelcomeMessage(coachState),
           timestamp: Date.now(),
           metadata: { state: coachState?.currentState },
@@ -84,16 +84,16 @@ export function useCoachChat() {
   }, [chatMessages]);
 
   const handleSend = useCallback(() => {
-    if (!inputText.trim()) return;
+    if (!inputText.trim()) {return;}
     const question = inputText.trim();
     const userMsg: ChatMessage = {
       id: `user-${Date.now()}`,
-      type: "user",
+      type: 'user',
       content: question,
       timestamp: Date.now(),
     };
     setChatMessages((prev) => [...prev, userMsg]);
-    setInputText("");
+    setInputText('');
     track(CoachEvents.COACH_QUESTION_ASKED, {
       question: question.substring(0, 50),
     });
@@ -102,21 +102,21 @@ export function useCoachChat() {
 
   const handleActionPress = useCallback(
     (message: ChatMessage) => {
-      if (!message.metadata?.actionData) return;
+      if (!message.metadata?.actionData) {return;}
       const action = message.metadata.actionData;
       switch (action.type) {
-        case "START_SESSION":
+        case 'START_SESSION':
           track(CoachEvents.COACH_CTA_CLICKED, {
-            cta_type: "start_session",
+            cta_type: 'start_session',
             session_duration:
-              typeof action.duration === "number" ? action.duration : 0,
+              typeof action.duration === 'number' ? action.duration : 0,
           });
           break;
-        case "VIEW_STREAK":
-          track(CoachEvents.COACH_CTA_CLICKED, { cta_type: "view_streak" });
+        case 'VIEW_STREAK':
+          track(CoachEvents.COACH_CTA_CLICKED, { cta_type: 'view_streak' });
           break;
-        case "VIEW_PROGRESS":
-          track(CoachEvents.COACH_CTA_CLICKED, { cta_type: "view_progress" });
+        case 'VIEW_PROGRESS':
+          track(CoachEvents.COACH_CTA_CLICKED, { cta_type: 'view_progress' });
           break;
         default:
           break;

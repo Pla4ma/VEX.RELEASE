@@ -1,17 +1,17 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect } from 'react';
 import {
   BackHandler,
   type ViewStyle,
-} from "react-native";
+} from 'react-native';
 import {
   useSharedValue,
   useAnimatedStyle,
   withTiming,
   withSpring,
   runOnJS,
-} from "react-native-reanimated";
+} from 'react-native-reanimated';
 
-type AnimationType = "fade" | "slide" | "scale";
+type AnimationType = 'fade' | 'slide' | 'scale';
 
 interface UseModalAnimationOptions {
   visible: boolean;
@@ -36,11 +36,11 @@ export function useModalAnimation({
 
   const contentAnimatedStyle = useAnimatedStyle(() => {
     switch (animation) {
-      case "fade":
+      case 'fade':
         return { opacity: opacity.value };
-      case "scale":
+      case 'scale':
         return { opacity: opacity.value, transform: [{ scale: scale.value }] };
-      case "slide":
+      case 'slide':
       default:
         return {
           opacity: opacity.value,
@@ -52,10 +52,10 @@ export function useModalAnimation({
   const open = useCallback(() => {
     opacity.value = withTiming(1, { duration: 200 });
     switch (animation) {
-      case "scale":
+      case 'scale':
         scale.value = withSpring(1, { damping: 20, stiffness: 200 });
         break;
-      case "slide":
+      case 'slide':
       default:
         translateY.value = withSpring(0, { damping: 25, stiffness: 300 });
         break;
@@ -67,10 +67,10 @@ export function useModalAnimation({
       runOnJS(onClose)();
     });
     switch (animation) {
-      case "scale":
+      case 'scale':
         scale.value = withTiming(0.9, { duration: 150 });
         break;
-      case "slide":
+      case 'slide':
       default:
         translateY.value = withTiming(500, { duration: 200 });
         break;
@@ -88,7 +88,7 @@ export function useModalAnimation({
       return;
     }
     const backHandler = BackHandler.addEventListener(
-      "hardwareBackPress",
+      'hardwareBackPress',
       () => {
         close();
         return true;

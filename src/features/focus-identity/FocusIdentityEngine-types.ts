@@ -26,7 +26,7 @@ export interface FocusScoreFactors {
   sessionQuality: {
     score: number;
     averageFocusPurity: number;
-    averageGrade: "S" | "A" | "B" | "C" | "D";
+    averageGrade: 'S' | 'A' | 'B' | 'C' | 'D';
     perfectSessionsCount: number;
     averageSessionDuration: number;
   };
@@ -43,7 +43,7 @@ export interface FocusScoreFactors {
     daysSinceLastSession: number;
     last7DayActivity: number;
     last30DayActivity: number;
-    trendDirection: "UP" | "STABLE" | "DOWN" | "CONCERNING";
+    trendDirection: 'UP' | 'STABLE' | 'DOWN' | 'CONCERNING';
     velocity: number;
   };
 }
@@ -73,7 +73,7 @@ export interface FocusIdentityProfile {
     endingScore: number;
     change: number;
     sessionsCompleted: number;
-    grade: "A+" | "A" | "B+" | "B" | "C" | "D";
+    grade: 'A+' | 'A' | 'B+' | 'B' | 'C' | 'D';
     highlight: string;
   } | null;
   updatedAt: number;

@@ -1,11 +1,11 @@
-import React from "react";
+import React from 'react';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
 
 type Challenge = NonNullable<
-  import("../../../features/mastery/types").MasteryState["activeChallenges"]
+  import('../../../features/mastery/types').MasteryState['activeChallenges']
 >[number];
 
 export function ActiveChallenges({
@@ -15,7 +15,7 @@ export function ActiveChallenges({
 }): JSX.Element | null {
   const { theme } = useTheme();
 
-  if (challenges.length === 0) return null;
+  if (challenges.length === 0) {return null;}
 
   return (
     <Box px="lg" mt="lg">

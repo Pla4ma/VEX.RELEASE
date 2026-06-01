@@ -1,10 +1,10 @@
-import React from "react";
-import { View, ActivityIndicator, StyleSheet, type ViewStyle } from "react-native";
-import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
-import { Text } from "../../../components/primitives/Text";
-import { Button } from "../../../components/primitives/Button";
-import { useTheme } from "../../../theme";
-import type { AsyncStatus } from "./StatusFeedback.types";
+import React from 'react';
+import { View, ActivityIndicator, StyleSheet, type ViewStyle } from 'react-native';
+import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
+import { Text } from '../../../components/primitives/Text';
+import { Button } from '../../../components/primitives/Button';
+import { useTheme } from '../../../theme';
+import type { AsyncStatus } from './StatusFeedback.types';
 
 export const CardStatusOverlay: React.FC<{
   status: AsyncStatus;
@@ -14,7 +14,7 @@ export const CardStatusOverlay: React.FC<{
 }> = ({ status, message, onRetry, style }) => {
   const { theme } = useTheme();
 
-  if (status === "idle" || status === "success") {
+  if (status === 'idle' || status === 'success') {
     return null;
   }
 
@@ -27,15 +27,15 @@ export const CardStatusOverlay: React.FC<{
           ...StyleSheet.absoluteFill,
           backgroundColor: `${theme.colors.background.primary}E0`,
           borderRadius: theme.borderRadius.xl,
-          alignItems: "center",
-          justifyContent: "center",
+          alignItems: 'center',
+          justifyContent: 'center',
           padding: theme.spacing[4],
           gap: theme.spacing[3],
         },
         style,
       ]}
     >
-      {status === "loading" || status === "retrying" ? (
+      {status === 'loading' || status === 'retrying' ? (
         <>
           <ActivityIndicator
             size="large"
@@ -47,7 +47,7 @@ export const CardStatusOverlay: React.FC<{
             </Text>
           )}
         </>
-      ) : status === "error" ? (
+      ) : status === 'error' ? (
         <>
           <View
             style={{
@@ -55,8 +55,8 @@ export const CardStatusOverlay: React.FC<{
               height: 48,
               borderRadius: 24,
               backgroundColor: theme.colors.error[50],
-              alignItems: "center",
-              justifyContent: "center",
+              alignItems: 'center',
+              justifyContent: 'center',
             }}
           >
             <Text style={{ color: theme.colors.error.DEFAULT, fontSize: 24 }}>

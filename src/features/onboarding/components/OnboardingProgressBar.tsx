@@ -7,15 +7,15 @@
  * @phase 2.1
  */
 
-import React from "react";
+import React from 'react';
 import Animated, {
   useAnimatedStyle,
   withSpring,
-} from "react-native-reanimated";
+} from 'react-native-reanimated';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
 
 interface OnboardingProgressBarProps {
   currentStep: number; // 0-4
@@ -57,7 +57,7 @@ export function OnboardingProgressBar({
         <Animated.View
           style={[
             {
-              height: "100%",
+              height: '100%',
               borderRadius: 2,
               backgroundColor: theme.colors.primary[500],
             },

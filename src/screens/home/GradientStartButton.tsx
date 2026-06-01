@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
-import { View } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
+import React, { useEffect } from 'react';
+import { View } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import Animated, {
   cancelAnimation,
   useAnimatedStyle,
@@ -8,12 +8,14 @@ import Animated, {
   withRepeat,
   withSequence,
   withTiming,
-} from "react-native-reanimated";
-import { Button } from "../../components/primitives/Button";
-import { Text } from "../../components/primitives/Text";
-import { useTheme } from "../../theme";
-import { createSheet } from "@/shared/ui/create-sheet";
-import { launchColors } from "@theme/tokens/launch-colors";
+} from 'react-native-reanimated';
+import { Button } from '../../components/primitives/Button';
+import { Text } from '../../components/primitives/Text';
+import { ShimmerSweep } from '../../components/primitives/ShimmerSweep';
+import { useTheme } from '../../theme';
+import { glow } from '../../theme/tokens/elevation';
+import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
 
 const WHITE_MUTED = launchColors.rgb_255_255_255_0_72;
 
@@ -57,18 +59,24 @@ export function GradientStartButton({
     <Animated.View style={animatedStyle}>
       <LinearGradient
         colors={[
-          theme.colors.primary[600] ?? launchColors.hex_7c3aed,
-          theme.colors.primary[500] ?? launchColors.hex_4f46e5,
+          theme.colors.primary[500] ?? launchColors.hex_7c3aed,
+          theme.colors.primary[600] ?? launchColors.hex_4f46e5,
+          theme.colors.primary[700] ?? launchColors.hex_4f46e5,
         ]}
+        start={{ x: 0.1, y: 0 }}
+        end={{ x: 0.9, y: 1 }}
+        locations={[0, 0.55, 1]}
         style={[
           styles.ctaGradient,
+          glow(theme.colors.semantic.primary, 'soft'),
           {
-            borderRadius: theme.borderRadius["2xl"],
+            borderRadius: theme.borderRadius['2xl'],
             gap: theme.spacing[3],
             padding: theme.spacing[4],
           },
         ]}
       >
+        <ShimmerSweep borderRadius={theme.borderRadius['2xl']} />
         <Text variant="label" color={WHITE_MUTED}>
           {eyebrow}
         </Text>
@@ -85,8 +93,8 @@ export function GradientStartButton({
           size="lg"
           variant="primary"
           style={{
-            backgroundColor: "transparent",
-            borderRadius: theme.borderRadius["2xl"],
+            backgroundColor: 'transparent',
+            borderRadius: theme.borderRadius['2xl'],
             minHeight: 58,
           }}
           onPress={onPress}
@@ -119,7 +127,7 @@ export function SectionHeader({ title }: { title: string }): JSX.Element {
 }
 
 const styles = createSheet({
-  ctaGradient: { overflow: "hidden" },
+  ctaGradient: { overflow: 'hidden' },
   sectionAccent: { borderRadius: 2, height: 18, marginRight: 8, width: 3 },
-  sectionHeader: { alignItems: "center", flexDirection: "row" },
+  sectionHeader: { alignItems: 'center', flexDirection: 'row' },
 });

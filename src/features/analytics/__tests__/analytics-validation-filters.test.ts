@@ -5,85 +5,85 @@
 import {
   validateExportConfig,
   validateFilter,
-} from "../validation";
+} from '../validation';
 
 // ── Validation: validateFilter ────────────────────────────────────────────────
 
-describe("Validation: validateFilter", () => {
-  it("accepts valid filter", () => {
+describe('Validation: validateFilter', () => {
+  it('accepts valid filter', () => {
     const result = validateFilter({
-      dimension: "session_category",
-      operator: "eq",
-      value: "boss",
+      dimension: 'session_category',
+      operator: 'eq',
+      value: 'boss',
     });
     expect(result.valid).toBe(true);
   });
 
-  it("rejects invalid dimension", () => {
+  it('rejects invalid dimension', () => {
     const result = validateFilter({
-      dimension: "invalid_dim",
-      operator: "eq",
-      value: "boss",
+      dimension: 'invalid_dim',
+      operator: 'eq',
+      value: 'boss',
     });
     expect(result.valid).toBe(false);
-    expect(result.errors[0]!.code).toBe("INVALID_DIMENSION");
+    expect(result.errors[0]!.code).toBe('INVALID_DIMENSION');
   });
 
-  it("rejects invalid operator", () => {
+  it('rejects invalid operator', () => {
     const result = validateFilter({
-      dimension: "session_category",
-      operator: "contains",
-      value: "boss",
+      dimension: 'session_category',
+      operator: 'contains',
+      value: 'boss',
     });
     expect(result.valid).toBe(false);
-    expect(result.errors[0]!.code).toBe("INVALID_OPERATOR");
+    expect(result.errors[0]!.code).toBe('INVALID_OPERATOR');
   });
 
   it("rejects non-array value for 'in' operator", () => {
     const result = validateFilter({
-      dimension: "session_category",
-      operator: "in",
-      value: "boss",
+      dimension: 'session_category',
+      operator: 'in',
+      value: 'boss',
     });
     expect(result.valid).toBe(false);
-    expect(result.errors[0]!.code).toBe("INVALID_VALUE_TYPE");
+    expect(result.errors[0]!.code).toBe('INVALID_VALUE_TYPE');
   });
 });
 
 // ── Validation: validateExportConfig ──────────────────────────────────────────
 
-describe("Validation: validateExportConfig", () => {
+describe('Validation: validateExportConfig', () => {
   const validConfig = {
-    format: "json",
-    dataTypes: ["sessions"],
+    format: 'json',
+    dataTypes: ['sessions'],
     dateRange: { start: Date.now() - 86400000, end: Date.now() },
-    userId: "user-123",
+    userId: 'user-123',
   };
 
-  it("accepts valid config", () => {
+  it('accepts valid config', () => {
     const result = validateExportConfig(validConfig);
     expect(result.valid).toBe(true);
   });
 
-  it("rejects invalid format", () => {
-    const result = validateExportConfig({ ...validConfig, format: "xml" });
+  it('rejects invalid format', () => {
+    const result = validateExportConfig({ ...validConfig, format: 'xml' });
     expect(result.valid).toBe(false);
-    expect(result.errors.some((e) => e.code === "INVALID_FORMAT")).toBe(true);
+    expect(result.errors.some((e) => e.code === 'INVALID_FORMAT')).toBe(true);
   });
 
-  it("rejects missing userId", () => {
-    const result = validateExportConfig({ ...validConfig, userId: "" });
+  it('rejects missing userId', () => {
+    const result = validateExportConfig({ ...validConfig, userId: '' });
     expect(result.valid).toBe(false);
-    expect(result.errors.some((e) => e.code === "MISSING_USER_ID")).toBe(true);
+    expect(result.errors.some((e) => e.code === 'MISSING_USER_ID')).toBe(true);
   });
 
-  it("warns on unknown data type", () => {
+  it('warns on unknown data type', () => {
     const result = validateExportConfig({
       ...validConfig,
-      dataTypes: ["sessions", "unknown_type"],
+      dataTypes: ['sessions', 'unknown_type'],
     });
     expect(
-      result.warnings.some((w) => w.code === "UNKNOWN_DATA_TYPE"),
+      result.warnings.some((w) => w.code === 'UNKNOWN_DATA_TYPE'),
     ).toBe(true);
   });
 });

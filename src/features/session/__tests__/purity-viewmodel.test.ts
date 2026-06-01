@@ -1,22 +1,22 @@
-import { SessionMode } from "../../../session/modes";
+import { SessionMode } from '../../../session/modes';
 import {
   buildPurityState,
   buildSessionViewModel,
-} from "../service";
+} from '../service';
 import {
   ACTIVE_SESSION_CONFIG,
   canBackground,
   canPause,
   getActiveSessionConfig,
   getModeSpecificUI,
-} from "../active-session-modes";
+} from '../active-session-modes';
 
-describe("buildPurityState", () => {
+describe('buildPurityState', () => {
   const basePurityInput = {
-    sessionId: "test",
-    userId: "user",
-    status: "ACTIVE" as const,
-    phase: "FOCUSING" as const,
+    sessionId: 'test',
+    userId: 'user',
+    status: 'ACTIVE' as const,
+    phase: 'FOCUSING' as const,
     mode: SessionMode.LIGHT_FOCUS,
     elapsedSeconds: 100,
     remainingSeconds: 1700,
@@ -30,14 +30,14 @@ describe("buildPurityState", () => {
     isOffline: false,
   };
 
-  it("assigns EXCELLENT for score >= 90", () => {
+  it('assigns EXCELLENT for score >= 90', () => {
     const purity = buildPurityState({
       ...basePurityInput,
       purityScore: 95,
     });
-    expect(purity.label).toBe("EXCELLENT");
+    expect(purity.label).toBe('EXCELLENT');
   });
-  it("assigns CRITICAL for score < 25", () => {
+  it('assigns CRITICAL for score < 25', () => {
     const purity = buildPurityState({
       ...basePurityInput,
       purityScore: 10,
@@ -46,9 +46,9 @@ describe("buildPurityState", () => {
       backgroundTimeSeconds: 30,
       focusInterruptions: 3,
     });
-    expect(purity.label).toBe("CRITICAL");
+    expect(purity.label).toBe('CRITICAL');
   });
-  it("clamps score to 0-100 range", () => {
+  it('clamps score to 0-100 range', () => {
     const highPurity = buildPurityState({
       ...basePurityInput,
       purityScore: 150,
@@ -62,13 +62,13 @@ describe("buildPurityState", () => {
   });
 });
 
-describe("buildSessionViewModel", () => {
-  it("builds complete view model", () => {
+describe('buildSessionViewModel', () => {
+  it('builds complete view model', () => {
     const input = {
-      sessionId: "session-123",
-      userId: "user-456",
-      status: "ACTIVE" as const,
-      phase: "FOCUSING" as const,
+      sessionId: 'session-123',
+      userId: 'user-456',
+      status: 'ACTIVE' as const,
+      phase: 'FOCUSING' as const,
       mode: SessionMode.DEEP_WORK,
       elapsedSeconds: 600,
       remainingSeconds: 1200,
@@ -83,9 +83,9 @@ describe("buildSessionViewModel", () => {
       isOffline: false,
     };
     const viewModel = buildSessionViewModel(input);
-    expect(viewModel.id).toBe("session-123");
-    expect(viewModel.userId).toBe("user-456");
-    expect(viewModel.status).toBe("ACTIVE");
+    expect(viewModel.id).toBe('session-123');
+    expect(viewModel.userId).toBe('user-456');
+    expect(viewModel.status).toBe('ACTIVE');
     expect(viewModel.mode).toBe(SessionMode.DEEP_WORK);
     expect(viewModel.canPause).toBe(true);
     expect(viewModel.canComplete).toBe(true);
@@ -93,22 +93,22 @@ describe("buildSessionViewModel", () => {
   });
 });
 
-describe("Active Session Modes", () => {
-  describe("getActiveSessionConfig", () => {
-    it("returns config for each mode", () => {
+describe('Active Session Modes', () => {
+  describe('getActiveSessionConfig', () => {
+    it('returns config for each mode', () => {
       Object.values(SessionMode).forEach((mode) => {
         const config = getActiveSessionConfig(mode);
         expect(config).toBeDefined();
         expect(config.mode).toBe(mode);
       });
     });
-    it("returns light focus config as fallback", () => {
-      const config = getActiveSessionConfig("UNKNOWN" as SessionMode);
+    it('returns light focus config as fallback', () => {
+      const config = getActiveSessionConfig('UNKNOWN' as SessionMode);
       expect(config.mode).toBe(SessionMode.FLOW);
     });
   });
-  describe("getModeSpecificUI", () => {
-    it("returns UI config for each mode", () => {
+  describe('getModeSpecificUI', () => {
+    it('returns UI config for each mode', () => {
       Object.values(SessionMode).forEach((mode) => {
         const ui = getModeSpecificUI(mode);
         expect(ui).toBeDefined();
@@ -116,45 +116,45 @@ describe("Active Session Modes", () => {
       });
     });
   });
-  describe("canPause", () => {
-    it("allows pause in light focus mode with conditions met", () => {
+  describe('canPause', () => {
+    it('allows pause in light focus mode with conditions met', () => {
       expect(canPause(SessionMode.LIGHT_FOCUS, 120, 0)).toBe(true);
     });
-    it("disallows pause in sprint mode", () => {
+    it('disallows pause in sprint mode', () => {
       expect(canPause(SessionMode.SPRINT, 120, 0)).toBe(false);
     });
-    it("disallows pause when max pauses reached", () => {
+    it('disallows pause when max pauses reached', () => {
       expect(canPause(SessionMode.LIGHT_FOCUS, 120, 5)).toBe(false);
     });
-    it("disallows pause before minimum focus time", () => {
+    it('disallows pause before minimum focus time', () => {
       expect(canPause(SessionMode.DEEP_WORK, 300, 0)).toBe(false);
     });
   });
-  describe("canBackground", () => {
-    it("allows background in creative mode", () => {
+  describe('canBackground', () => {
+    it('allows background in creative mode', () => {
       expect(canBackground(SessionMode.CREATIVE, 300)).toBe(true);
     });
-    it("disallows background in sprint mode", () => {
+    it('disallows background in sprint mode', () => {
       expect(canBackground(SessionMode.SPRINT, 1)).toBe(false);
     });
-    it("disallows background when exceeding limit", () => {
+    it('disallows background when exceeding limit', () => {
       expect(canBackground(SessionMode.LIGHT_FOCUS, 400)).toBe(false);
     });
   });
-  describe("mode configurations", () => {
-    it("sprint mode has correct strict settings", () => {
+  describe('mode configurations', () => {
+    it('sprint mode has correct strict settings', () => {
       const config = ACTIVE_SESSION_CONFIG[SessionMode.SPRINT];
       expect(config.allowPauses).toBe(false);
       expect(config.allowBackground).toBe(false);
       expect(config.strictMode).toBe(true);
     });
-    it("deep work mode has correct settings", () => {
+    it('deep work mode has correct settings', () => {
       const config = ACTIVE_SESSION_CONFIG[SessionMode.DEEP_WORK];
       expect(config.maxPauses).toBe(1);
       expect(config.minFocusSecondsBeforePause).toBe(600);
       expect(config.strictMode).toBe(true);
     });
-    it("creative mode allows many pauses", () => {
+    it('creative mode allows many pauses', () => {
       const config = ACTIVE_SESSION_CONFIG[SessionMode.CREATIVE];
       expect(config.maxPauses).toBe(10);
       expect(config.companionEnabled).toBe(false);

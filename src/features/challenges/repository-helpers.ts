@@ -1,10 +1,10 @@
-import { getSupabaseClient } from "../../config/supabase";
+import { getSupabaseClient } from '../../config/supabase';
 import {
   ChallengeDetailSchema,
   ChallengeSchema,
   UserChallengeSchema,
   type ChallengeDetail,
-} from "./schemas";
+} from './schemas';
 
 const supabase = getSupabaseClient();
 
@@ -14,7 +14,7 @@ export class RepositoryError extends Error {
     public originalError: unknown,
   ) {
     super(`Repository error in ${operation}: ${String(originalError)}`);
-    this.name = "RepositoryError";
+    this.name = 'RepositoryError';
   }
 }
 

@@ -2,12 +2,12 @@
  * Verifier: App Store Submission.
  */
 
-import { APP_STORE_METADATA } from "../app-store/AppStoreSubmissionPack";
-import type { AppStoreSubmissionResult } from "./ExitGate.types";
-import { getErrorMessage } from "./ExitGate.verifier-utils";
+import { APP_STORE_METADATA } from '../app-store/AppStoreSubmissionPack';
+import type { AppStoreSubmissionResult } from './ExitGate.types';
+import { getErrorMessage } from './ExitGate.verifier-utils';
 
 export async function verifyAppStore(): Promise<{
-  status: "pass" | "fail" | "warning";
+  status: 'pass' | 'fail' | 'warning';
   score: number;
   report: AppStoreSubmissionResult;
   issues: string[];
@@ -31,18 +31,18 @@ export async function verifyAppStore(): Promise<{
           keywords: APP_STORE_METADATA.keywords,
           category: APP_STORE_METADATA.primaryCategory,
           contentRating: APP_STORE_METADATA.ageRating,
-          size: "",
-          version: "",
-          buildNumber: "",
-          releaseNotes: "",
+          size: '',
+          version: '',
+          buildNumber: '',
+          releaseNotes: '',
         },
-        privacyPolicy: { generated: false, content: "", lastUpdated: "" },
-        termsOfService: { generated: false, content: "", lastUpdated: "" },
+        privacyPolicy: { generated: false, content: '', lastUpdated: '' },
+        termsOfService: { generated: false, content: '', lastUpdated: '' },
         screenshots: { iPhone: [], iPad: [], AppleTV: [] },
         appIcon: { generated: false, sizes: {} },
         testingAccounts: {
-          demo: { username: "", password: "", description: "" },
-          premium: { username: "", password: "", description: "" },
+          demo: { username: '', password: '', description: '' },
+          premium: { username: '', password: '', description: '' },
         },
         appStoreConnect: {
           appInformation: {},
@@ -56,23 +56,23 @@ export async function verifyAppStore(): Promise<{
     };
     const issues: string[] = [];
     if (!report.ready) {
-      issues.push("App Store submission not ready");
+      issues.push('App Store submission not ready');
     }
     if (report.score < 90) {
-      issues.push("App Store submission score below 90");
+      issues.push('App Store submission score below 90');
     }
     if (report.results.metadata.issues.length > 0) {
-      issues.push("App metadata has issues");
+      issues.push('App metadata has issues');
     }
     if (report.results.assets.issues.length > 0) {
-      issues.push("App assets have issues");
+      issues.push('App assets have issues');
     }
-    const status: "pass" | "fail" | "warning" =
+    const status: 'pass' | 'fail' | 'warning' =
       issues.length === 0
-        ? "pass"
+        ? 'pass'
         : !report.ready || report.score < 80
-          ? "fail"
-          : "warning";
+          ? 'fail'
+          : 'warning';
     return { status, score: report.score, report, issues };
   } catch (error) {
     const fallback: AppStoreSubmissionResult = {
@@ -87,24 +87,24 @@ export async function verifyAppStore(): Promise<{
       },
       materials: {
         metadata: {
-          appName: "",
-          subtitle: "",
-          description: "",
+          appName: '',
+          subtitle: '',
+          description: '',
           keywords: [],
-          category: "",
-          contentRating: "",
-          size: "",
-          version: "",
-          buildNumber: "",
-          releaseNotes: "",
+          category: '',
+          contentRating: '',
+          size: '',
+          version: '',
+          buildNumber: '',
+          releaseNotes: '',
         },
-        privacyPolicy: { generated: false, content: "", lastUpdated: "" },
-        termsOfService: { generated: false, content: "", lastUpdated: "" },
+        privacyPolicy: { generated: false, content: '', lastUpdated: '' },
+        termsOfService: { generated: false, content: '', lastUpdated: '' },
         screenshots: { iPhone: [], iPad: [], AppleTV: [] },
         appIcon: { generated: false, sizes: {} },
         testingAccounts: {
-          demo: { username: "", password: "", description: "" },
-          premium: { username: "", password: "", description: "" },
+          demo: { username: '', password: '', description: '' },
+          premium: { username: '', password: '', description: '' },
         },
         appStoreConnect: {
           appInformation: {},
@@ -117,7 +117,7 @@ export async function verifyAppStore(): Promise<{
       timestamp: Date.now(),
     };
     return {
-      status: "fail",
+      status: 'fail',
       score: 0,
       report: fallback,
       issues: [`App Store verification failed: ${getErrorMessage(error)}`],

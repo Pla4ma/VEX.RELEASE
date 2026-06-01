@@ -2,15 +2,15 @@
  * Mastery Feature — generateMasteryChallenges (real implementation) Tests
  */
 
-import type { MasteryState, MasteryRank } from "../types";
+import type { MasteryState, MasteryRank } from '../types';
 
-describe("generateMasteryChallenges (real implementation)", () => {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const actual = jest.requireActual("../challenge-generator") as {
-    generateMasteryChallenges: (techniques: MasteryState["techniques"], rank: MasteryRank) => Array<{ technique: string; difficulty: string; status: string; current: number; completedAt: null }>;
+describe('generateMasteryChallenges (real implementation)', () => {
+
+  const actual = jest.requireActual('../challenge-generator') as {
+    generateMasteryChallenges: (techniques: MasteryState['techniques'], rank: MasteryRank) => Array<{ technique: string; difficulty: string; status: string; current: number; completedAt: null }>;
   };
 
-  it("generates 1-2 challenges", () => {
+  it('generates 1-2 challenges', () => {
     const techniques = {
       durationMastery: 0,
       purityMastery: 5,
@@ -18,12 +18,12 @@ describe("generateMasteryChallenges (real implementation)", () => {
       comebackMastery: 15,
       bossMastery: 20,
     };
-    const challenges = actual.generateMasteryChallenges(techniques, "APPRENTICE");
+    const challenges = actual.generateMasteryChallenges(techniques, 'APPRENTICE');
     expect(challenges.length).toBeGreaterThanOrEqual(1);
     expect(challenges.length).toBeLessThanOrEqual(2);
   });
 
-  it("focuses on the lowest technique", () => {
+  it('focuses on the lowest technique', () => {
     const techniques = {
       durationMastery: 0,
       purityMastery: 10,
@@ -31,11 +31,11 @@ describe("generateMasteryChallenges (real implementation)", () => {
       comebackMastery: 10,
       bossMastery: 10,
     };
-    const challenges = actual.generateMasteryChallenges(techniques, "APPRENTICE");
-    expect(challenges[0]?.technique).toBe("durationMastery");
+    const challenges = actual.generateMasteryChallenges(techniques, 'APPRENTICE');
+    expect(challenges[0]?.technique).toBe('durationMastery');
   });
 
-  it("uses EASY difficulty for lowest technique level < 5 when EASY template exists", () => {
+  it('uses EASY difficulty for lowest technique level < 5 when EASY template exists', () => {
     // consistencyMastery has an EASY template
     const techniques = {
       durationMastery: 10,
@@ -44,11 +44,11 @@ describe("generateMasteryChallenges (real implementation)", () => {
       comebackMastery: 10,
       bossMastery: 10,
     };
-    const challenges = actual.generateMasteryChallenges(techniques, "APPRENTICE");
-    expect(challenges[0]?.difficulty).toBe("EASY");
+    const challenges = actual.generateMasteryChallenges(techniques, 'APPRENTICE');
+    expect(challenges[0]?.difficulty).toBe('EASY');
   });
 
-  it("falls back to first template when no matching difficulty exists", () => {
+  it('falls back to first template when no matching difficulty exists', () => {
     // durationMastery has no EASY template — falls back to first (MEDIUM)
     const techniques = {
       durationMastery: 2,
@@ -57,11 +57,11 @@ describe("generateMasteryChallenges (real implementation)", () => {
       comebackMastery: 10,
       bossMastery: 10,
     };
-    const challenges = actual.generateMasteryChallenges(techniques, "APPRENTICE");
-    expect(challenges[0]?.difficulty).toBe("MEDIUM");
+    const challenges = actual.generateMasteryChallenges(techniques, 'APPRENTICE');
+    expect(challenges[0]?.difficulty).toBe('MEDIUM');
   });
 
-  it("all generated challenges have status ACTIVE and current 0", () => {
+  it('all generated challenges have status ACTIVE and current 0', () => {
     const techniques = {
       durationMastery: 3,
       purityMastery: 10,
@@ -69,9 +69,9 @@ describe("generateMasteryChallenges (real implementation)", () => {
       comebackMastery: 10,
       bossMastery: 10,
     };
-    const challenges = actual.generateMasteryChallenges(techniques, "ADEPT");
+    const challenges = actual.generateMasteryChallenges(techniques, 'ADEPT');
     for (const c of challenges) {
-      expect(c.status).toBe("ACTIVE");
+      expect(c.status).toBe('ACTIVE');
       expect(c.current).toBe(0);
       expect(c.completedAt).toBeNull();
     }

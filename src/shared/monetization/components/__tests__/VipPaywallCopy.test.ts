@@ -1,28 +1,28 @@
-import { readFileSync } from "fs";
-import { join } from "path";
+import { readFileSync } from 'fs';
+import { join } from 'path';
 
 const source = readFileSync(
-  join(__dirname, "..", "paywall-data.ts"),
-  "utf8",
+  join(__dirname, '..', 'paywall-data.ts'),
+  'utf8',
 );
 
 const actions = readFileSync(
-  join(__dirname, "..", "usePaywallActions.ts"),
-  "utf8",
+  join(__dirname, '..', 'usePaywallActions.ts'),
+  'utf8',
 );
 
-describe("VipPaywallScreen copy", () => {
-  it("sells insight and growth instead of daily currency incentives", () => {
-    expect(source).toContain("Deep Coach Memory");
-    expect(source).toContain("Monthly Focus Report");
-    expect(source).toContain("Progress Intelligence");
+describe('VipPaywallScreen copy', () => {
+  it('sells insight and growth instead of daily currency incentives', () => {
+    expect(source).toContain('Deep Coach Memory');
+    expect(source).toContain('Monthly Focus Report');
+    expect(source).toContain('Progress Intelligence');
     expect(source).not.toMatch(
       /Daily Gem Drop|gems\/day|2x Mystery Chests|2x chests/i,
     );
     expect(source).not.toMatch(/season track|extra personal quests/i);
   });
 
-  it("uses the approved purchase failure message", () => {
+  it('uses the approved purchase failure message', () => {
     expect(actions).toContain(
       "Purchase didn't go through. Your card was not charged.",
     );

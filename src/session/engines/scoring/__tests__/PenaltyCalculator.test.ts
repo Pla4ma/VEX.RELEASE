@@ -7,8 +7,8 @@ import {
   calculateQualityPenalty,
   calculateTotalPenalty,
   getSeverityFromTimeLost,
-} from "../PenaltyCalculator";
-import type { FocusQualityMetrics } from "../../../types";
+} from '../PenaltyCalculator';
+import type { FocusQualityMetrics } from '../../../types';
 
 function createFocusMetrics(overallScore: number): FocusQualityMetrics {
   return {
@@ -18,16 +18,16 @@ function createFocusMetrics(overallScore: number): FocusQualityMetrics {
     focusSegments: [],
     overallScore,
     recoveryScore: overallScore,
-    sessionId: "550e8400-e29b-41d4-a716-446655440000",
+    sessionId: '550e8400-e29b-41d4-a716-446655440000',
     timeDistracted: 0,
     timeInDeepFocus: 1_200,
     timeInShallowFocus: 300,
   };
 }
 
-describe("PenaltyCalculator", () => {
-  describe("calculatePausePenalty", () => {
-    it("returns no penalty when the session was never paused", () => {
+describe('PenaltyCalculator', () => {
+  describe('calculatePausePenalty', () => {
+    it('returns no penalty when the session was never paused', () => {
       expect(
         calculatePausePenalty({
           pauseCount: 0,
@@ -36,7 +36,7 @@ describe("PenaltyCalculator", () => {
       ).toBe(0);
     });
 
-    it("caps repeated long pauses at the maximum pause penalty", () => {
+    it('caps repeated long pauses at the maximum pause penalty', () => {
       const penalty = calculatePausePenalty({
         pauseCount: 50,
         totalPauseDurationSeconds: 60 * 60,
@@ -46,13 +46,13 @@ describe("PenaltyCalculator", () => {
     });
   });
 
-  describe("calculateInterruptionPenalty", () => {
-    it("weights interruption severity and softens auto-recovered interruptions", () => {
+  describe('calculateInterruptionPenalty', () => {
+    it('weights interruption severity and softens auto-recovered interruptions', () => {
       const result = calculateInterruptionPenalty({
         interruptions: [
-          { autoRecovered: true, duration: 15, severity: "MINOR" },
-          { autoRecovered: false, duration: 180, severity: "MAJOR" },
-          { autoRecovered: false, duration: 420, severity: "CRITICAL" },
+          { autoRecovered: true, duration: 15, severity: 'MINOR' },
+          { autoRecovered: false, duration: 180, severity: 'MAJOR' },
+          { autoRecovered: false, duration: 420, severity: 'CRITICAL' },
         ],
       });
 
@@ -62,16 +62,16 @@ describe("PenaltyCalculator", () => {
       expect(result.total).toBe(62.5);
     });
 
-    it("maps time lost into user-visible interruption severity bands", () => {
-      expect(getSeverityFromTimeLost(30)).toBe("MINOR");
-      expect(getSeverityFromTimeLost(31)).toBe("MODERATE");
-      expect(getSeverityFromTimeLost(121)).toBe("MAJOR");
-      expect(getSeverityFromTimeLost(301)).toBe("CRITICAL");
+    it('maps time lost into user-visible interruption severity bands', () => {
+      expect(getSeverityFromTimeLost(30)).toBe('MINOR');
+      expect(getSeverityFromTimeLost(31)).toBe('MODERATE');
+      expect(getSeverityFromTimeLost(121)).toBe('MAJOR');
+      expect(getSeverityFromTimeLost(301)).toBe('CRITICAL');
     });
   });
 
-  describe("calculateQualityPenalty", () => {
-    it("combines distraction ratio and poor focus quality without penalizing empty timers", () => {
+  describe('calculateQualityPenalty', () => {
+    it('combines distraction ratio and poor focus quality without penalizing empty timers', () => {
       expect(
         calculateQualityPenalty({
           distractionTime: 900,
@@ -93,34 +93,34 @@ describe("PenaltyCalculator", () => {
     });
   });
 
-  describe("calculateAntiCheatPenalty", () => {
-    it("escalates action to the highest violation severity", () => {
+  describe('calculateAntiCheatPenalty', () => {
+    it('escalates action to the highest violation severity', () => {
       const result = calculateAntiCheatPenalty({
         violations: [
           {
-            severity: "LOW",
+            severity: 'LOW',
             timestamp: 1_700_000_000_000,
-            type: "DEVICE_CHANGE",
+            type: 'DEVICE_CHANGE',
           },
           {
-            severity: "HIGH",
+            severity: 'HIGH',
             timestamp: 1_700_000_000_500,
-            type: "RAPID_COMPLETION",
+            type: 'RAPID_COMPLETION',
           },
         ],
       });
 
-      expect(result.actionRequired).toBe("DISQUALIFY");
+      expect(result.actionRequired).toBe('DISQUALIFY');
       expect(result.total).toBe(725);
       expect(result.violations).toEqual([
-        { penalty: 125, type: "DEVICE_CHANGE" },
-        { penalty: 600, type: "RAPID_COMPLETION" },
+        { penalty: 125, type: 'DEVICE_CHANGE' },
+        { penalty: 600, type: 'RAPID_COMPLETION' },
       ]);
     });
   });
 
-  describe("calculateAbandonPenalty", () => {
-    it("preserves streaks only when a streak save exists and grants partial credit after halfway", () => {
+  describe('calculateAbandonPenalty', () => {
+    it('preserves streaks only when a streak save exists and grants partial credit after halfway', () => {
       const result = calculateAbandonPenalty({
         hasStreakSave: true,
         progressPercentage: 75,
@@ -134,7 +134,7 @@ describe("PenaltyCalculator", () => {
       expect(result.scorePenalty).toBe(156.25);
     });
 
-    it("doubles the abandon penalty when the streak is at risk without a save", () => {
+    it('doubles the abandon penalty when the streak is at risk without a save', () => {
       const protectedResult = calculateAbandonPenalty({
         hasStreakSave: true,
         progressPercentage: 50,
@@ -152,8 +152,8 @@ describe("PenaltyCalculator", () => {
     });
   });
 
-  describe("calculateTotalPenalty", () => {
-    it("caps total penalties at 80 percent of base score and keeps the raw breakdown", () => {
+  describe('calculateTotalPenalty', () => {
+    it('caps total penalties at 80 percent of base score and keeps the raw breakdown', () => {
       const result = calculateTotalPenalty({
         antiCheatPenalty: 500,
         baseScore: 400,
@@ -168,7 +168,7 @@ describe("PenaltyCalculator", () => {
       expect(result.breakdown.antiCheat).toBe(500);
     });
 
-    it("does not produce invalid percentages when base score is zero", () => {
+    it('does not produce invalid percentages when base score is zero', () => {
       const result = calculateTotalPenalty({
         antiCheatPenalty: 10,
         baseScore: 0,

@@ -1,7 +1,7 @@
-import { BaseNotificationEvent } from "./notification-event-types-core";
+import { BaseNotificationEvent } from './notification-event-types-core';
 
 export interface NotificationCampaignCreatedEvent extends BaseNotificationEvent {
-  type: "notification_campaign_created";
+  type: 'notification_campaign_created';
   data: {
     campaignId: string;
     name: string;
@@ -32,7 +32,7 @@ export interface NotificationCampaignCreatedEvent extends BaseNotificationEvent 
   };
 }
 export interface NotificationCampaignStartedEvent extends BaseNotificationEvent {
-  type: "notification_campaign_started";
+  type: 'notification_campaign_started';
   data: {
     campaignId: string;
     startedAt: Date;
@@ -43,7 +43,7 @@ export interface NotificationCampaignStartedEvent extends BaseNotificationEvent 
   };
 }
 export interface NotificationCampaignCompletedEvent extends BaseNotificationEvent {
-  type: "notification_campaign_completed";
+  type: 'notification_campaign_completed';
   data: {
     campaignId: string;
     completedAt: Date;
@@ -64,7 +64,7 @@ export interface NotificationCampaignCompletedEvent extends BaseNotificationEven
   };
 }
 export interface NotificationCampaignPausedEvent extends BaseNotificationEvent {
-  type: "notification_campaign_paused";
+  type: 'notification_campaign_paused';
   data: {
     campaignId: string;
     pausedAt: Date;
@@ -75,7 +75,7 @@ export interface NotificationCampaignPausedEvent extends BaseNotificationEvent {
   };
 }
 export interface NotificationRuleTriggeredEvent extends BaseNotificationEvent {
-  type: "notification_rule_triggered";
+  type: 'notification_rule_triggered';
   data: {
     ruleId: string;
     ruleName: string;
@@ -99,7 +99,7 @@ export interface NotificationRuleTriggeredEvent extends BaseNotificationEvent {
   };
 }
 export interface NotificationRuleCreatedEvent extends BaseNotificationEvent {
-  type: "notification_rule_created";
+  type: 'notification_rule_created';
   data: {
     ruleId: string;
     name: string;
@@ -113,7 +113,7 @@ export interface NotificationRuleCreatedEvent extends BaseNotificationEvent {
   };
 }
 export interface NotificationRuleUpdatedEvent extends BaseNotificationEvent {
-  type: "notification_rule_updated";
+  type: 'notification_rule_updated';
   data: {
     ruleId: string;
     changes: {

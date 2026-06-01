@@ -1,11 +1,11 @@
-import React from "react";
-import Animated, { FadeInUp } from "react-native-reanimated";
-import { Box, Button, Text } from "../../../components/primitives";
-import { getPremiumCardStyle } from "../../../components/premiumStyles";
-import { useTheme } from "../../../theme";
-import { MetricRow, isProgressMetric } from "./MetricRow";
-import { StudyProgressPanel } from "./StudyProgressPanel";
-import type { SessionProgressionCardProps } from "./SessionProgressionCard.types";
+import React from 'react';
+import Animated, { FadeInUp } from 'react-native-reanimated';
+import { Box, Button, Text } from '../../../components/primitives';
+import { getPremiumCardStyle } from '../../../components/premiumStyles';
+import { useTheme } from '../../../theme';
+import { MetricRow, isProgressMetric } from './MetricRow';
+import { StudyProgressPanel } from './StudyProgressPanel';
+import type { SessionProgressionCardProps } from './SessionProgressionCard.types';
 
 export type { SessionProgressionCardProps };
 
@@ -23,19 +23,19 @@ export function SessionProgressionCard({
   const { theme } = useTheme();
   const metrics = [levelMetric].filter(isProgressMetric);
   const rewardStatusMessage =
-    rewardCreditStatus === "crediting"
-      ? "Saving progress..."
-      : rewardCreditStatus === "retrying"
-        ? "Retrying progress sync..."
-        : rewardCreditStatus === "success"
-          ? "Progress saved"
-          : rewardCreditStatus === "failed"
-            ? "Progress is waiting to sync"
+    rewardCreditStatus === 'crediting'
+      ? 'Saving progress...'
+      : rewardCreditStatus === 'retrying'
+        ? 'Retrying progress sync...'
+        : rewardCreditStatus === 'success'
+          ? 'Progress saved'
+          : rewardCreditStatus === 'failed'
+            ? 'Progress is waiting to sync'
             : null;
   const rewardStatusColor =
-    rewardCreditStatus === "success"
+    rewardCreditStatus === 'success'
       ? theme.colors.success.DEFAULT
-      : rewardCreditStatus === "failed"
+      : rewardCreditStatus === 'failed'
         ? theme.colors.warning.DEFAULT
         : theme.colors.text.secondary;
 
@@ -66,7 +66,7 @@ export function SessionProgressionCard({
               backgroundColor: theme.colors.background.secondary,
               borderWidth: 1,
               borderColor: theme.colors.border.light,
-              ...getPremiumCardStyle("medium"),
+              ...getPremiumCardStyle('medium'),
             }}
           >
             <Text variant="body" color={theme.colors.text.secondary}>
@@ -82,7 +82,7 @@ export function SessionProgressionCard({
             backgroundColor: theme.colors.background.secondary,
             borderWidth: 1,
             borderColor: theme.colors.border.light,
-            ...getPremiumCardStyle("medium"),
+            ...getPremiumCardStyle('medium'),
           }}
         >
           <Box

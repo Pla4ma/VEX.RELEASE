@@ -4,27 +4,27 @@
  * Accepts stage-specific data via a minimal common interface.
  * Wires controller + data to the existing HomeContent component.
  */
-import React from "react";
-import { useNavigation } from "@react-navigation/native";
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import React from 'react';
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-import { HomeContent } from "../components/HomeContent";
-import { HomeInterventionBanner } from "../components/HomeInterventionBanner";
-import { useCompletionSyncAutoRepair } from "../../../features/session-completion/hooks";
-import { AppScreen } from "../../../components/primitives";
-import { useHomeSurfaceMap } from "../hooks/useHomeSurfaceMap";
-import { useHomeResolvedExperience } from "../hooks/useHomeResolvedExperience";
-import { useInterventionVisibility } from "../hooks/useInterventionVisibility";
-import { ModeNativeHome } from "../../../features/mode-native/components/ModeNativeHome";
-import type { HomeSurfaceMap } from "../../../features/home-experience/surface-decision-schemas";
-import type { ExtendedRootStackParams } from "../../../navigation/types";
-import type { HomeData } from "../hooks/useHomeData";
-import type { FeatureAccessMap } from "../../../features/liveops-config/feature-access";
+import { HomeContent } from '../components/HomeContent';
+import { HomeInterventionBanner } from '../components/HomeInterventionBanner';
+import { useCompletionSyncAutoRepair } from '../../../features/session-completion/hooks';
+import { AppScreen } from '../../../components/primitives';
+import { useHomeSurfaceMap } from '../hooks/useHomeSurfaceMap';
+import { useHomeResolvedExperience } from '../hooks/useHomeResolvedExperience';
+import { useInterventionVisibility } from '../hooks/useInterventionVisibility';
+import { ModeNativeHome } from '../../../features/mode-native/components/ModeNativeHome';
+import type { HomeSurfaceMap } from '../../../features/home-experience/surface-decision-schemas';
+import type { ExtendedRootStackParams } from '../../../navigation/types';
+import type { HomeData } from '../hooks/useHomeData';
+import type { FeatureAccessMap } from '../../../features/liveops-config/feature-access';
 
-import type { HomeScreenInnerProps } from "./HomeScreenInnerTypes";
-import { useHomeScreenInnerEffects } from "./useHomeScreenInnerEffects";
+import type { HomeScreenInnerProps } from './HomeScreenInnerTypes';
+import { useHomeScreenInnerEffects } from './useHomeScreenInnerEffects';
 
-export type { HomeDataProps, HomeScreenInnerProps } from "./HomeScreenInnerTypes";
+export type { HomeDataProps, HomeScreenInnerProps } from './HomeScreenInnerTypes';
 
 type Nav = NativeStackNavigationProp<ExtendedRootStackParams>;
 
@@ -123,7 +123,7 @@ export function HomeScreenInner({
           interventionLoading={interventionLoading}
           dismissIntervention={dismissIntervention}
           navigation={navigation}
-          userId={controller.userId ?? ""}
+          userId={controller.userId ?? ''}
         />
       )}
       <ModeNativeHome

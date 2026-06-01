@@ -1,19 +1,19 @@
-import { z } from "zod";
-import { invokeContentStudy } from "./repository";
-import { buildError } from "./validation";
-import { ERROR_MESSAGES } from "./constants";
-import { ContentStudyErrorCode } from "./types";
+import { z } from 'zod';
+import { invokeContentStudy } from './repository';
+import { buildError } from './validation';
+import { ERROR_MESSAGES } from './constants';
+import { ContentStudyErrorCode } from './types';
 
 export const submitContentResponseSchema = z.object({
   success: z.boolean(),
   contentId: z.string(),
   status: z.enum([
-    "PENDING",
-    "EXTRACTING",
-    "EXTRACTED",
-    "PROCESSING",
-    "READY",
-    "FAILED",
+    'PENDING',
+    'EXTRACTING',
+    'EXTRACTED',
+    'PROCESSING',
+    'READY',
+    'FAILED',
   ]),
   message: z.string(),
   error: z.string().optional(),
@@ -24,12 +24,12 @@ export const extractContentResponseSchema = z.object({
   contentId: z.string(),
   extractedLength: z.number().default(0),
   status: z.enum([
-    "PENDING",
-    "EXTRACTING",
-    "EXTRACTED",
-    "PROCESSING",
-    "READY",
-    "FAILED",
+    'PENDING',
+    'EXTRACTING',
+    'EXTRACTED',
+    'PROCESSING',
+    'READY',
+    'FAILED',
   ]),
   error: z.string().optional(),
 });
@@ -51,12 +51,12 @@ export const statusResponseSchema = z.object({
   success: z.boolean(),
   contentId: z.string(),
   status: z.enum([
-    "PENDING",
-    "EXTRACTING",
-    "EXTRACTED",
-    "PROCESSING",
-    "READY",
-    "FAILED",
+    'PENDING',
+    'EXTRACTING',
+    'EXTRACTED',
+    'PROCESSING',
+    'READY',
+    'FAILED',
   ]),
   extractedLength: z.number().default(0),
   errorMessage: z.string().optional(),
@@ -98,7 +98,7 @@ export async function invokeAndParse<T>(
   path: string,
   schema: z.ZodSchema<T>,
   body?: unknown,
-  method?: "GET" | "POST",
+  method?: 'GET' | 'POST',
 ): Promise<T> {
   const { data, error } = await invokeContentStudy(path, body, method);
   if (error) {

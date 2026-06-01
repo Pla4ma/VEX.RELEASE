@@ -1,7 +1,7 @@
 /**
  * Live Focusing Widget — utility functions and hooks
  */
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 
 /**
  * Animated count-up hook with ease-out cubic easing.
@@ -31,10 +31,10 @@ export function useCountUp(target: number, duration: number = 1000): number {
  */
 export function formatNumber(num: number): string {
   if (num >= 1000000) {
-    return (num / 1000000).toFixed(1) + "M";
+    return (num / 1000000).toFixed(1) + 'M';
   }
   if (num >= 1000) {
-    return (num / 1000).toFixed(1) + "K";
+    return (num / 1000).toFixed(1) + 'K';
   }
   return num.toLocaleString();
 }

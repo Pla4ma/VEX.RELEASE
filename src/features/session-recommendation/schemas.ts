@@ -4,14 +4,14 @@
  * Defines the structure for session recommendations and inputs.
  */
 
-import { z } from "zod";
+import { z } from 'zod';
 
 export const SessionModeSchema = z.enum([
-  "FOCUS",
-  "RECOVERY",
-  "STUDY",
-  "BOSS_PREP",
-  "HABIT_BUILD",
+  'FOCUS',
+  'RECOVERY',
+  'STUDY',
+  'BOSS_PREP',
+  'HABIT_BUILD',
 ]);
 
 export type SessionMode = z.infer<typeof SessionModeSchema>;
@@ -27,9 +27,9 @@ export const SessionRecommendationSchema = z.object({
     recentGrade: z.string().optional(),
     timeOfDay: z.number().int().min(0).max(23).optional(),
     streakUrgency: z
-      .enum(["none", "low", "medium", "high", "critical"])
+      .enum(['none', 'low', 'medium', 'high', 'critical'])
       .optional(),
-    recoveryStatus: z.enum(["none", "needed", "urgent"]).optional(),
+    recoveryStatus: z.enum(['none', 'needed', 'urgent']).optional(),
     dailyMissionType: z.string().optional(),
   }),
   confidence: z.number().min(0).max(1),
@@ -44,8 +44,8 @@ export const SessionRecommendationInputSchema = z.object({
   recentSessionLength: z.number().int().min(0).optional(),
   recentGrade: z.string().optional(),
   timeOfDay: z.number().int().min(0).max(23),
-  streakUrgency: z.enum(["none", "low", "medium", "high", "critical"]),
-  recoveryStatus: z.enum(["none", "needed", "urgent"]),
+  streakUrgency: z.enum(['none', 'low', 'medium', 'high', 'critical']),
+  recoveryStatus: z.enum(['none', 'needed', 'urgent']),
   dailyMissionType: z.string().optional(),
   isFirstSession: z.boolean(),
   hasActiveSession: z.boolean(),

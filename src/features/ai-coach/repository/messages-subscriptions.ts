@@ -1,4 +1,4 @@
-import { getSupabaseClient } from "../../../config/supabase";
+import { getSupabaseClient } from '../../../config/supabase';
 
 const supabase = getSupabaseClient();
 
@@ -9,11 +9,11 @@ export function subscribeToCoachMessages(
   return supabase
     .channel(`coach-messages-${userId}`)
     .on(
-      "postgres_changes",
+      'postgres_changes',
       {
-        event: "INSERT",
-        schema: "public",
-        table: "coach_messages",
+        event: 'INSERT',
+        schema: 'public',
+        table: 'coach_messages',
         filter: `user_id=eq.${userId}`,
       },
       (payload) => onInsert(payload),
@@ -28,11 +28,11 @@ export function subscribeToCoachState(
   return supabase
     .channel(`coach-state-${userId}`)
     .on(
-      "postgres_changes",
+      'postgres_changes',
       {
-        event: "UPDATE",
-        schema: "public",
-        table: "coach_states",
+        event: 'UPDATE',
+        schema: 'public',
+        table: 'coach_states',
         filter: `user_id=eq.${userId}`,
       },
       (payload) => onUpdate(payload),
@@ -47,11 +47,11 @@ export function subscribeToComebackPlan(
   return supabase
     .channel(`comeback-${userId}`)
     .on(
-      "postgres_changes",
+      'postgres_changes',
       {
-        event: "*",
-        schema: "public",
-        table: "comeback_plans",
+        event: '*',
+        schema: 'public',
+        table: 'comeback_plans',
         filter: `user_id=eq.${userId}`,
       },
       () => onAny(),
@@ -66,11 +66,11 @@ export function subscribeToRecommendations(
   return supabase
     .channel(`recommendations-${userId}`)
     .on(
-      "postgres_changes",
+      'postgres_changes',
       {
-        event: "*",
-        schema: "public",
-        table: "session_recommendations",
+        event: '*',
+        schema: 'public',
+        table: 'session_recommendations',
         filter: `user_id=eq.${userId}`,
       },
       () => onAny(),

@@ -1,17 +1,17 @@
-import React from "react";
-import { View } from "react-native";
-import Animated from "react-native-reanimated";
+import React from 'react';
+import { View } from 'react-native';
+import Animated from 'react-native-reanimated';
 
-import { useTheme } from "../../theme/ThemeContext";
-import { Text } from "../../components";
-import type { ComboMeterProps } from "./combo-meter-types";
+import { useTheme } from '../../theme/ThemeContext';
+import { Text } from '../../components';
+import type { ComboMeterProps } from './combo-meter-types';
 import {
   COMBO_TIERS,
   getCurrentTier,
   getTierProgress,
   formatCombo,
-} from "./combo-meter-helpers";
-import { useComboAnimations } from "./useComboAnimations";
+} from './combo-meter-helpers';
+import { useComboAnimations } from './useComboAnimations';
 import {
   containerStyle,
   glowStyle,
@@ -29,10 +29,10 @@ import {
   progressBarStyle,
   nextTierTextStyle,
   maxTierTextStyle,
-} from "./ComboMeter.styles";
-import { ComboMeterOverlays } from "./ComboMeterOverlays";
+} from './ComboMeter.styles';
+import { ComboMeterOverlays } from './ComboMeterOverlays';
 
-export type { ComboMeterProps } from "./combo-meter-types";
+export type { ComboMeterProps } from './combo-meter-types';
 export function ComboMeter({
   comboMinutes,
   isPaused,
@@ -116,7 +116,7 @@ export function ComboMeter({
 
         {nextTier && (
           <Text variant="caption" color="secondary" style={nextTierTextStyle}>
-            {nextTier.minCombo - comboMinutes} min to {nextTier.emoji}{" "}
+            {nextTier.minCombo - comboMinutes} min to {nextTier.emoji}{' '}
             {nextTier.name} ({nextTier.multiplier}x)
           </Text>
         )}
@@ -143,7 +143,7 @@ export function ComboMeter({
         isPaused={isPaused}
         isIdle={isIdle}
         comboMinutes={comboMinutes}
-        warningBg={theme.colors.warning.DEFAULT + "20"}
+        warningBg={theme.colors.warning.DEFAULT + '20'}
       />
     </Animated.View>
   );

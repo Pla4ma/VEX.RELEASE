@@ -1,7 +1,7 @@
-import { useState, useEffect, useCallback, useRef } from "react";
-import { getSessionService } from "../SessionService";
-import { eventBus } from "../../events";
-import type { SessionHistoryEntry } from "../types";
+import { useState, useEffect, useCallback, useRef } from 'react';
+import { getSessionService } from '../SessionService';
+import { eventBus } from '../../events';
+import type { SessionHistoryEntry } from '../types';
 
 export function useSessionHistory(userId: string, limit: number = 50) {
   const serviceRef = useRef(getSessionService());
@@ -29,7 +29,7 @@ export function useSessionHistory(userId: string, limit: number = 50) {
   }, [loadHistory]);
 
   useEffect(() => {
-    const unsubscribe = eventBus.subscribe("session:completed", () => {
+    const unsubscribe = eventBus.subscribe('session:completed', () => {
       loadHistory();
     });
     return () => unsubscribe();

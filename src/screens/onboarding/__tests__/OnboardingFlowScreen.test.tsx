@@ -1,13 +1,13 @@
-import React from "react";
-import { Pressable, Text } from "react-native";
-import renderer, { act, type ReactTestInstance } from "react-test-renderer";
+import React from 'react';
+import { Pressable, Text } from 'react-native';
+import renderer, { act, type ReactTestInstance } from 'react-test-renderer';
 
-import "./OnboardingFlowScreen.test.mocks";
-import { OnboardingFlowScreen } from "../OnboardingFlowScreen";
-import { useDisclosureAnalytics } from "../../../features/liveops-config";
-import { useSessionHistory } from "../../../session/hooks/useSession";
-import { useOnboardingStore } from "../../../onboarding";
-import { useAuthStore } from "../../../store";
+import './OnboardingFlowScreen.test.mocks';
+import { OnboardingFlowScreen } from '../OnboardingFlowScreen';
+import { useDisclosureAnalytics } from '../../../features/liveops-config';
+import { useSessionHistory } from '../../../session/hooks/useSession';
+import { useOnboardingStore } from '../../../onboarding';
+import { useAuthStore } from '../../../store';
 import {
   mockNavigate,
   mockReplace,
@@ -17,7 +17,7 @@ import {
   mockTrackGoalSet,
   mockTrackOnboardingCompleted,
   mockTrackOnboardingStarted,
-} from "./OnboardingFlowScreen.test.mocks";
+} from './OnboardingFlowScreen.test.mocks';
 
 const mockedUseAuthStore = useAuthStore as jest.MockedFunction<
   typeof useAuthStore
@@ -32,15 +32,15 @@ const mockedUseSessionHistory = useSessionHistory as jest.MockedFunction<
 >;
 
 function textFromChildren(children: unknown): string {
-  if (typeof children === "string" || typeof children === "number") {
+  if (typeof children === 'string' || typeof children === 'number') {
     return String(children);
   }
 
   if (Array.isArray(children)) {
-    return children.map(textFromChildren).join("");
+    return children.map(textFromChildren).join('');
   }
 
-  return "";
+  return '';
 }
 
 function pressByText(root: ReactTestInstance, label: string): void {
@@ -54,7 +54,7 @@ function pressByText(root: ReactTestInstance, label: string): void {
         ),
     );
 
-  if (!target || typeof target.props.onPress !== "function") {
+  if (!target || typeof target.props.onPress !== 'function') {
     throw new Error(`Missing pressable text: ${label}`);
   }
 
@@ -63,10 +63,10 @@ function pressByText(root: ReactTestInstance, label: string): void {
   });
 }
 
-describe("OnboardingFlowScreen", () => {
+describe('OnboardingFlowScreen', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    mockedUseAuthStore.mockReturnValue({ user: { id: "user-1" } } as ReturnType<
+    mockedUseAuthStore.mockReturnValue({ user: { id: 'user-1' } } as ReturnType<
       typeof useAuthStore
     >);
     mockedUseSessionHistory.mockReturnValue({ history: [] } as ReturnType<
@@ -88,45 +88,45 @@ describe("OnboardingFlowScreen", () => {
     );
   });
 
-  it("sends a new user to a first session quickly", () => {
+  it('sends a new user to a first session quickly', () => {
     const tree = renderer.create(<OnboardingFlowScreen />);
 
-    pressByText(tree.root, "Build consistency");
-    pressByText(tree.root, "Continue");
-    pressByText(tree.root, "Continue");
-    pressByText(tree.root, "Start 15 min Session");
+    pressByText(tree.root, 'Build consistency');
+    pressByText(tree.root, 'Continue');
+    pressByText(tree.root, 'Continue');
+    pressByText(tree.root, 'Start 15 min Session');
 
     expect(mockTrackGoalSet).toHaveBeenCalledWith(
-      "user-1",
-      "build_consistency",
+      'user-1',
+      'build_consistency',
     );
     expect(mockTrackFirstSessionStarted).toHaveBeenCalledWith(
-      "user-1",
-      "onboarding",
+      'user-1',
+      'onboarding',
     );
-    expect(mockNavigate).toHaveBeenCalledWith("SessionStack", {
-      screen: "SessionSetup",
+    expect(mockNavigate).toHaveBeenCalledWith('SessionStack', {
+      screen: 'SessionSetup',
       params: {
-        goal: "Build consistency",
-        presetId: "quick",
-        source: "onboarding_first_session",
+        goal: 'Build consistency',
+        presetId: 'quick',
+        source: 'onboarding_first_session',
       },
     });
   });
 
-  it("does not expose a no-proof exit before the first session is completed", () => {
+  it('does not expose a no-proof exit before the first session is completed', () => {
     const tree = renderer.create(<OnboardingFlowScreen />);
 
-    pressByText(tree.root, "Build consistency");
-    pressByText(tree.root, "Continue");
-    pressByText(tree.root, "Continue");
+    pressByText(tree.root, 'Build consistency');
+    pressByText(tree.root, 'Continue');
+    pressByText(tree.root, 'Continue');
 
     const skipControls = tree.root
       .findAllByType(Text)
       .filter(
         (node) =>
           textFromChildren(node.props.children) ===
-          "Skip first session for now",
+          'Skip first session for now',
       );
     expect(skipControls).toHaveLength(0);
     expect(mockCompleteOnboarding).not.toHaveBeenCalled();

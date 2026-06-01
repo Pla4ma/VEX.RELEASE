@@ -1,10 +1,10 @@
-import React from "react";
-import { View } from "react-native";
-import { Text } from "@/components/primitives/Text";
-import { StatusBanner } from "@/shared/ui/components/StatusFeedback";
-import { useTheme } from "@/theme";
-import { MAX_FOCUS_SCORE } from "../schemas";
-import type { FocusScoreDashboardModel } from "../types";
+import React from 'react';
+import { View } from 'react-native';
+import { Text } from '@/components/primitives/Text';
+import { StatusBanner } from '@/shared/ui/components/StatusFeedback';
+import { useTheme } from '@/theme';
+import { MAX_FOCUS_SCORE } from '../schemas';
+import type { FocusScoreDashboardModel } from '../types';
 
 interface ScoreCardProps {
   model: FocusScoreDashboardModel;
@@ -12,7 +12,7 @@ interface ScoreCardProps {
 
 export function ScoreCard({ model }: ScoreCardProps): JSX.Element | null {
   const { theme } = useTheme();
-  if (!model.current) return null;
+  if (!model.current) {return null;}
 
   const latestDelta =
     model.history[model.history.length - 1]?.delta ??
@@ -68,7 +68,7 @@ export function ScoreCard({ model }: ScoreCardProps): JSX.Element | null {
           {model.current.currentScore} · {model.current.band}
         </Text>
         <Text variant="bodySmall" color={theme.colors.text.secondary}>
-          Last session delta:{" "}
+          Last session delta:{' '}
           {latestDelta >= 0 ? `+${latestDelta}` : latestDelta}
         </Text>
         <Text variant="bodySmall" color={theme.colors.text.secondary}>

@@ -1,23 +1,23 @@
-import React from "react";
-import { View, Pressable } from "react-native";
+import React from 'react';
+import { View, Pressable } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withSpring,
   interpolate,
   Extrapolation,
-} from "react-native-reanimated";
-import { Text } from "../../../components/primitives/Text";
-import { Icon } from "../../../icons";
-import { useTheme } from "../../../theme";
-import { progressStepsStyles as styles } from "./progress-steps-styles";
-import type { StepIndicatorProps } from "./progress-steps-types";
+} from 'react-native-reanimated';
+import { Text } from '../../../components/primitives/Text';
+import { Icon } from '../../../icons';
+import { useTheme } from '../../../theme';
+import { progressStepsStyles as styles } from './progress-steps-styles';
+import type { StepIndicatorProps } from './progress-steps-types';
 
 export const StepIndicator: React.FC<StepIndicatorProps> = ({
   status,
   index,
-  size = "md",
-  variant = "default",
+  size = 'md',
+  variant = 'default',
   icon,
   title,
   description,
@@ -27,11 +27,11 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({
 }) => {
   const { theme } = useTheme();
   const progress = useSharedValue(
-    status === "completed" ? 1 : status === "active" ? 0.5 : 0,
+    status === 'completed' ? 1 : status === 'active' ? 0.5 : 0,
   );
   React.useEffect(() => {
     progress.value = withSpring(
-      status === "completed" ? 1 : status === "active" ? 0.5 : 0,
+      status === 'completed' ? 1 : status === 'active' ? 0.5 : 0,
       { damping: 15, stiffness: 150 },
     );
   }, [status, progress]);
@@ -48,41 +48,41 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({
     ],
   }));
   const sizeConfig = {
-    sm: { width: 24, fontSize: 12, iconSize: "sm" as const },
-    md: { width: 32, fontSize: 14, iconSize: "md" as const },
-    lg: { width: 40, fontSize: 16, iconSize: "lg" as const },
+    sm: { width: 24, fontSize: 12, iconSize: 'sm' as const },
+    md: { width: 32, fontSize: 14, iconSize: 'md' as const },
+    lg: { width: 40, fontSize: 16, iconSize: 'lg' as const },
   };
   const { width, fontSize, iconSize } = sizeConfig[size];
   const getStatusColors = () => {
     switch (status) {
-      case "completed":
+      case 'completed':
         return {
           background: theme.colors.success.DEFAULT,
           border: theme.colors.success.DEFAULT,
           text: theme.colors.text.inverse,
         };
-      case "active":
+      case 'active':
         return {
           background: theme.colors.primary[500],
           border: theme.colors.primary[500],
           text: theme.colors.text.inverse,
         };
-      case "error":
+      case 'error':
         return {
           background: theme.colors.error[50],
           border: theme.colors.error.DEFAULT,
           text: theme.colors.error.DEFAULT,
         };
-      case "disabled":
+      case 'disabled':
         return {
           background: theme.colors.surface.button,
           border: theme.colors.border.DEFAULT,
           text: theme.colors.text.disabled,
         };
-      case "pending":
+      case 'pending':
       default:
         return {
-          background: "transparent",
+          background: 'transparent',
           border: theme.colors.border.DEFAULT,
           text: theme.colors.text.tertiary,
         };
@@ -90,30 +90,30 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({
   };
   const colors = getStatusColors();
   const renderContent = () => {
-    if (status === "completed") {
+    if (status === 'completed') {
       return (
         <Icon
-          name={icon || "check"}
+          name={icon || 'check'}
           size={iconSize}
           color={theme.colors.text.inverse}
         />
       );
     }
-    if (status === "error") {
+    if (status === 'error') {
       return (
         <Text style={[styles.stepNumber, { fontSize, color: colors.text }]}>
           !
         </Text>
       );
     }
-    if (status === "active" && variant === "numbers") {
+    if (status === 'active' && variant === 'numbers') {
       return (
         <Text style={[styles.stepNumber, { fontSize, color: colors.text }]}>
           {index + 1}
         </Text>
       );
     }
-    if (variant === "dots") {
+    if (variant === 'dots') {
       return null;
     }
     return (
@@ -133,15 +133,15 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({
           backgroundColor: colors.background,
           borderColor: colors.border,
         },
-        variant === "dots" && status === "pending" && styles.dotIndicator,
+        variant === 'dots' && status === 'pending' && styles.dotIndicator,
         animatedStyle,
       ]}
     >
-      {" "}
-      {renderContent()}{" "}
+      {' '}
+      {renderContent()}{' '}
     </Animated.View>
   );
-  if (variant === "dots" && !title) {
+  if (variant === 'dots' && !title) {
     return indicatorContent;
   }
   return (
@@ -153,11 +153,11 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({
       accessibilityRole="button"
       accessibilityHint="Double tap to activate"
     >
-      {" "}
+      {' '}
       {indicatorContent}
       {(title || (description && showDescription)) && (
         <View style={styles.stepTextContainer}>
-          {" "}
+          {' '}
           {title && (
             <Text
               variant="body"
@@ -165,30 +165,30 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({
                 styles.stepTitle,
                 {
                   color:
-                    status === "active"
+                    status === 'active'
                       ? theme.colors.text.primary
-                      : status === "disabled" || status === "pending"
+                      : status === 'disabled' || status === 'pending'
                         ? theme.colors.text.tertiary
                         : theme.colors.text.secondary,
                 },
               ]}
             >
-              {" "}
-              {title}{" "}
+              {' '}
+              {title}{' '}
             </Text>
-          )}{" "}
+          )}{' '}
           {description && showDescription && (
             <Text
               variant="caption"
-              color={status === "error" ? "error.DEFAULT" : "text.tertiary"}
+              color={status === 'error' ? 'error.DEFAULT' : 'text.tertiary'}
               style={styles.stepDescription}
             >
-              {" "}
-              {description}{" "}
+              {' '}
+              {description}{' '}
             </Text>
-          )}{" "}
+          )}{' '}
         </View>
-      )}{" "}
+      )}{' '}
     </Pressable>
   );
 };

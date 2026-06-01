@@ -1,5 +1,5 @@
-import { createDebugger } from "../utils/debug";
-const debug = createDebugger("events");
+import { createDebugger } from '../utils/debug';
+const debug = createDebugger('events');
 export type EventHandler<T = unknown> = (
   data: T,
 ) => void | Promise<void> | Promise<unknown>;
@@ -90,9 +90,9 @@ export class EventEmitter {
         const result = subscription.handler(data);
         if (
           result &&
-          typeof result === "object" &&
-          "then" in result &&
-          typeof (result as Promise<unknown>).then === "function"
+          typeof result === 'object' &&
+          'then' in result &&
+          typeof (result as Promise<unknown>).then === 'function'
         ) {
           await (result as Promise<unknown>);
         }
@@ -132,9 +132,9 @@ export class EventEmitter {
   private handleError(error: unknown, event: string, data: unknown): void {
     if (__DEV__) {
       debug.error(`Error in event handler for "${event}":`, error as Error);
-      debug.debug("Event data:", data);
+      debug.debug('Event data:', data);
     }
-    this.emit("error:handler", {
+    this.emit('error:handler', {
       originalEvent: event,
       error,
       data,
@@ -167,7 +167,7 @@ export function createNamespacedEmitter(namespace: string): EventEmitter {
       baseEmitter
         .eventNames()
         .filter((name) => name.startsWith(`${namespace}:`))
-        .map((name) => name.replace(`${namespace}:`, "")),
+        .map((name) => name.replace(`${namespace}:`, '')),
     removeAllListeners: (event?: string) =>
       event
         ? baseEmitter.removeAllListeners(`${namespace}:${event}`)

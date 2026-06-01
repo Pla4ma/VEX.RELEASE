@@ -1,10 +1,10 @@
-import React from "react";
-import { View, TouchableOpacity } from "react-native";
+import React from 'react';
+import { View, TouchableOpacity } from 'react-native';
 
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import type { HomeCompanionStatus } from "../hooks/useHomeCompanion";
-import { CompanionCard, SkeletonCard } from "./HomeCompanionWidget.cards";
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import type { HomeCompanionStatus } from '../hooks/useHomeCompanion';
+import { CompanionCard, SkeletonCard } from './HomeCompanionWidget.cards';
 
 interface HomeCompanionWidgetProps {
   status: HomeCompanionStatus;
@@ -19,13 +19,13 @@ export function HomeCompanionWidget({
 }: HomeCompanionWidgetProps): JSX.Element | null {
   const { theme } = useTheme();
 
-  if (status.kind === "loading") {
+  if (status.kind === 'loading') {
     return <SkeletonCard />;
   }
 
-  if (status.kind === "empty") {
+  if (status.kind === 'empty') {
     return (
-      <View style={{ padding: theme.spacing[4], alignItems: "center" }}>
+      <View style={{ padding: theme.spacing[4], alignItems: 'center' }}>
         <Text variant="caption" color="text.secondary">
           Your companion will appear after your first focus session.
         </Text>
@@ -33,7 +33,7 @@ export function HomeCompanionWidget({
     );
   }
 
-  if (status.kind === "error") {
+  if (status.kind === 'error') {
     return (
       <TouchableOpacity
         onPress={onRetry}
@@ -48,7 +48,7 @@ export function HomeCompanionWidget({
             borderWidth: 1,
             borderColor: theme.colors.error.light,
             padding: theme.spacing[4],
-            alignItems: "center",
+            alignItems: 'center',
           }}
         >
           <Text variant="body" color="error.DEFAULT">
@@ -66,7 +66,7 @@ export function HomeCompanionWidget({
     );
   }
 
-  if (status.kind === "offline") {
+  if (status.kind === 'offline') {
     return (
       <View
         style={{
@@ -75,7 +75,7 @@ export function HomeCompanionWidget({
           borderWidth: 1,
           borderColor: theme.colors.border.light,
           padding: theme.spacing[4],
-          alignItems: "center",
+          alignItems: 'center',
           opacity: 0.7,
         }}
       >

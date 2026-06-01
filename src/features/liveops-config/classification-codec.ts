@@ -14,11 +14,11 @@ import {
   INTERNAL,
   ARCHIVED,
   LEGACY,
-} from "./final-release-classification";
+} from './final-release-classification';
 import type {
   FeatureClassificationEntry,
   ClassificationStatus,
-} from "./final-release-classification";
+} from './final-release-classification';
 
 export type { FeatureClassificationEntry, ClassificationStatus };
 
@@ -28,7 +28,7 @@ const _archivedFolders: ReadonlySet<string> = new Set(
   [...ARCHIVED, ...LEGACY]
     .filter(
       (e) =>
-        e.status === "archived_or_deactivated" || e.status === "test_or_legacy",
+        e.status === 'archived_or_deactivated' || e.status === 'test_or_legacy',
     )
     .map((e) => e.folder),
 );
@@ -74,8 +74,8 @@ export function getAllEntries(): FeatureClassificationEntry[] {
 export function isFolderActive(folder: string): boolean {
   return FINAL_RELEASE_CLASSIFICATION.filter((e) => e.folder === folder).some(
     (e) =>
-      e.status === "final_release_active" ||
-      e.status === "final_release_progressive",
+      e.status === 'final_release_active' ||
+      e.status === 'final_release_progressive',
   );
 }
 
@@ -83,10 +83,10 @@ export function isFolderArchived(folder: string): boolean {
   const entries = FINAL_RELEASE_CLASSIFICATION.filter(
     (e) => e.folder === folder,
   );
-  if (entries.length === 0) return false;
+  if (entries.length === 0) {return false;}
   return entries.every(
     (e) =>
-      e.status === "archived_or_deactivated" || e.status === "test_or_legacy",
+      e.status === 'archived_or_deactivated' || e.status === 'test_or_legacy',
   );
 }
 

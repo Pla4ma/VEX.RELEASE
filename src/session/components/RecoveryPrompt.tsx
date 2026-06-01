@@ -1,8 +1,8 @@
-import React from "react";
-import { View, Text, Pressable, Modal } from "react-native";
-import type { RecoveryType } from "../types";
-import { buttonTap } from "../../utils/haptics";
-import { styles } from "./RecoveryPrompt.styles";
+import React from 'react';
+import { View, Text, Pressable, Modal } from 'react-native';
+import type { RecoveryType } from '../types';
+import { buttonTap } from '../../utils/haptics';
+import { styles } from './RecoveryPrompt.styles';
 
 interface RecoveryOption {
   type: RecoveryType;
@@ -32,35 +32,35 @@ export const RecoveryPrompt: React.FC<RecoveryPromptProps> = ({
 }) => {
   const recoveryOptions: RecoveryOption[] = [
     {
-      type: "AUTO_RESUME",
-      label: "Auto Resume",
-      description: "Continue from where you left",
-      icon: "\u25B6\uFE0F",
-      penalty: "No penalty — if resumed quickly",
+      type: 'AUTO_RESUME',
+      label: 'Auto Resume',
+      description: 'Continue from where you left',
+      icon: '\u25B6\uFE0F',
+      penalty: 'No penalty — if resumed quickly',
       available: timeLost < 300,
     },
     {
-      type: "USER_RESUME",
-      label: "Resume Session",
-      description: "Pick up with a small adjustment",
-      icon: "\uD83D\uDC46",
-      penalty: "VEX adjusts quality slightly",
+      type: 'USER_RESUME',
+      label: 'Resume Session',
+      description: 'Pick up with a small adjustment',
+      icon: '\uD83D\uDC46',
+      penalty: 'VEX adjusts quality slightly',
       available: true,
     },
     {
-      type: "STREAK_SAVE",
-      label: "Protect Your Rhythm",
+      type: 'STREAK_SAVE',
+      label: 'Protect Your Rhythm',
       description: `Keep your ${streakDays}-day pattern intact`,
-      icon: "\uD83D\uDD04",
-      penalty: "Uses one rhythm protection",
+      icon: '\uD83D\uDD04',
+      penalty: 'Uses one rhythm protection',
       available: hasStreakSave,
     },
     {
-      type: "PARTIAL_CREDIT",
-      label: "Save What You Did",
-      description: "Keep credit for completed time",
-      icon: "\u2705",
-      penalty: "Partial session credit retained",
+      type: 'PARTIAL_CREDIT',
+      label: 'Save What You Did',
+      description: 'Keep credit for completed time',
+      icon: '\u2705',
+      penalty: 'Partial session credit retained',
       available: timeLost > 0,
     },
   ];

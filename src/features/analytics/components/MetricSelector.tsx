@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import { View, Text, Modal, ScrollView, Pressable } from "react-native";
-import { AnalyticsMetricSchema } from "../schemas";
-import type { z } from "zod";
-import { styles } from "./metric-selector.styles";
+import React, { useState } from 'react';
+import { View, Text, Modal, ScrollView, Pressable } from 'react-native';
+import { AnalyticsMetricSchema } from '../schemas';
+import type { z } from 'zod';
+import { styles } from './metric-selector.styles';
 
 type AnalyticsMetric = z.infer<typeof AnalyticsMetricSchema>;
 
@@ -18,18 +18,18 @@ const AVAILABLE_METRICS: {
   label: string;
   category: string;
 }[] = [
-  { value: "sessions_completed", label: "Sessions Completed", category: "Sessions" },
-  { value: "sessions_abandoned", label: "Sessions Abandoned", category: "Sessions" },
-  { value: "total_focus_time", label: "Total Focus Time", category: "Sessions" },
-  { value: "average_session_duration", label: "Avg Session Duration", category: "Sessions" },
-  { value: "streak_days", label: "Streak Days", category: "Progress" },
-  { value: "longest_streak", label: "Longest Streak", category: "Progress" },
-  { value: "xp_earned", label: "XP Earned", category: "Progress" },
-  { value: "level_progression", label: "Level Progression", category: "Progress" },
-  { value: "boss_damage_dealt", label: "Boss Damage", category: "Combat" },
-  { value: "items_crafted", label: "Items Crafted", category: "Economy" },
-  { value: "coins_spent", label: "Coins Spent", category: "Economy" },
-  { value: "challenges_completed", label: "Challenges Completed", category: "Social" },
+  { value: 'sessions_completed', label: 'Sessions Completed', category: 'Sessions' },
+  { value: 'sessions_abandoned', label: 'Sessions Abandoned', category: 'Sessions' },
+  { value: 'total_focus_time', label: 'Total Focus Time', category: 'Sessions' },
+  { value: 'average_session_duration', label: 'Avg Session Duration', category: 'Sessions' },
+  { value: 'streak_days', label: 'Streak Days', category: 'Progress' },
+  { value: 'longest_streak', label: 'Longest Streak', category: 'Progress' },
+  { value: 'xp_earned', label: 'XP Earned', category: 'Progress' },
+  { value: 'level_progression', label: 'Level Progression', category: 'Progress' },
+  { value: 'boss_damage_dealt', label: 'Boss Damage', category: 'Combat' },
+  { value: 'items_crafted', label: 'Items Crafted', category: 'Economy' },
+  { value: 'coins_spent', label: 'Coins Spent', category: 'Economy' },
+  { value: 'challenges_completed', label: 'Challenges Completed', category: 'Social' },
 ];
 
 export function MetricSelector({
@@ -85,14 +85,14 @@ export function MetricSelector({
             <Text style={styles.placeholder}>Select metrics...</Text>
           ) : (
             <Text style={styles.selectedChipText}>
-              {selected.length} selected:{" "}
+              {selected.length} selected:{' '}
               {selected
                 .map(
                   (metric) =>
                     AVAILABLE_METRICS.find((m) => m.value === metric)?.label ||
                     metric,
                 )
-                .join(", ")}
+                .join(', ')}
             </Text>
           )}
         </View>

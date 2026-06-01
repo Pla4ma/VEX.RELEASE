@@ -1,13 +1,13 @@
-import type { UseQueryResult } from "@tanstack/react-query";
-import type { SessionRecommendation } from "../../../features/ai-coach";
-import type { HomeFeatureRuntime } from "./home-feature-runtime";
-import type { HomeController, SessionHistoryResult } from "./home-controller-types";
-import type { HomeViewModel } from "./home-view-model";
-import type { HomeReturnReason } from "./useHomeReturnReason";
-import type { FeatureAccessResult } from "../../../features/liveops-config";
-import type { HomeSpineModel } from "../../../features/home-spine/schemas";
-import type { LearningExecutionLayer } from "../../../features/learning-execution";
-import type { HomeHighlight, CompletionSyncState } from "../../../store/session-state";
+import type { UseQueryResult } from '@tanstack/react-query';
+import type { SessionRecommendation } from '../../../features/ai-coach';
+import type { HomeFeatureRuntime } from './home-feature-runtime';
+import type { HomeController, SessionHistoryResult } from './home-controller-types';
+import type { HomeViewModel } from './home-view-model';
+import type { HomeReturnReason } from './useHomeReturnReason';
+import type { FeatureAccessResult } from '../../../features/liveops-config';
+import type { HomeSpineModel } from '../../../features/home-spine/schemas';
+import type { LearningExecutionLayer } from '../../../features/learning-execution';
+import type { HomeHighlight, CompletionSyncState } from '../../../store/session-state';
 
 interface BuildControllerParams {
   userId: string;
@@ -61,7 +61,7 @@ export function buildHomeController(p: BuildControllerParams): HomeController {
     currentXp: p.currentXp,
     todayFocusMinutes: p.todayFocusMinutes,
     progressPercent: p.progressPercent,
-    latestSession: p.latestSession as HomeController["latestSession"],
+    latestSession: p.latestSession as HomeController['latestSession'],
     primaryRecommendation: p.primaryRecommendation,
     homeSpine: p.homeSpine as HomeSpineModel,
     returnReason: p.displayedReturnReason,
@@ -83,8 +83,8 @@ export function buildHomeController(p: BuildControllerParams): HomeController {
     openSocial: p.openSocial,
     openContentStudy: p.openContentStudy,
     continueStudyPlan: p.continueStudyPlan,
-    createRecommendation: p.createRecommendation as HomeController["createRecommendation"],
-    updateRecommendationStatus: p.updateRecommendationStatus as HomeController["updateRecommendationStatus"],
+    createRecommendation: p.createRecommendation as HomeController['createRecommendation'],
+    updateRecommendationStatus: p.updateRecommendationStatus as HomeController['updateRecommendationStatus'],
     retryAll: p.disclosure.refetchAll as () => Promise<unknown>,
     features: p.disclosure.features,
   };

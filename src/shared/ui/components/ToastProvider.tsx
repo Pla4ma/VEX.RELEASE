@@ -4,21 +4,21 @@ import React, {
   useCallback,
   createContext,
   useContext,
-} from "react";
-import { ToastContainer } from "./ToastContainer";
+} from 'react';
+import { ToastContainer } from './ToastContainer';
 import type {
   ToastItem,
   ToastOptions,
   ToastContextValue,
   ToastProviderProps,
-} from "./Toast.types";
+} from './Toast.types';
 
 const ToastContext = createContext<ToastContextValue | undefined>(undefined);
 
 export const useToast = (): ToastContextValue => {
   const context = useContext(ToastContext);
   if (!context) {
-    throw new Error("useToast must be used within a ToastProvider");
+    throw new Error('useToast must be used within a ToastProvider');
   }
   return context;
 };
@@ -36,12 +36,12 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({
       setToasts((prev) => {
         const updated = [
           ...prev.filter(
-            (t) => options.priority !== "high" || t.priority !== "high",
+            (t) => options.priority !== 'high' || t.priority !== 'high',
           ),
           { ...options, id, createdAt: Date.now() },
         ];
-        if (options.priority === "high") {
-          const highCount = updated.filter((t) => t.priority === "high").length;
+        if (options.priority === 'high') {
+          const highCount = updated.filter((t) => t.priority === 'high').length;
           return highCount > maxToasts
             ? updated.slice(highCount - maxToasts)
             : updated;

@@ -8,7 +8,7 @@ export const mockSelect = jest.fn();
 export const mockEq = jest.fn();
 export const mockFrom = jest.fn();
 
-jest.mock("../../../config/supabase", () => ({
+jest.mock('../../../config/supabase', () => ({
   supabase: {
     from: (...args: unknown[]) => mockFrom(...args),
   },

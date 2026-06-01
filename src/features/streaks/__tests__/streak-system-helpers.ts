@@ -1,5 +1,5 @@
-import { jest } from "@jest/globals";
-import type { Streak } from "../schemas";
+import { jest } from '@jest/globals';
+import type { Streak } from '../schemas';
 
 export const mockRepository = {
   fetchStreak: jest.fn<() => Promise<Streak | null>>(),
@@ -15,11 +15,11 @@ export const mockRepository = {
   fetchUsersWithActiveStreaks: jest.fn<() => Promise<unknown[]>>(),
 };
 
-jest.mock("../repository", () => mockRepository);
+jest.mock('../repository', () => mockRepository);
 
 export const mockStreak = (overrides: Partial<Streak> = {}): Streak => ({
-  id: "streak-1",
-  userId: "user-1",
+  id: 'streak-1',
+  userId: 'user-1',
   currentDays: 5,
   longestDays: 10,
   lastQualifyingSessionAt: Date.now() - 12 * 60 * 60 * 1000,
@@ -27,7 +27,7 @@ export const mockStreak = (overrides: Partial<Streak> = {}): Streak => ({
   frozenUntil: null,
   shieldsAvailable: 1,
   gracePeriodUsed: false,
-  timezone: "America/New_York",
+  timezone: 'America/New_York',
   createdAt: Date.now() - 30 * 24 * 60 * 60 * 1000,
   updatedAt: Date.now(),
   ...overrides,

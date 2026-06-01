@@ -1,14 +1,14 @@
-import React from "react";
-import { View, Pressable, type ViewStyle } from "react-native";
-import { Badge, Button, Card, Text } from "../../../components";
-import { useTheme } from "../../../theme";
-import type { UserChallengeSummary } from "../schemas";
+import React from 'react';
+import { View, Pressable, type ViewStyle } from 'react-native';
+import { Badge, Button, Card, Text } from '../../../components';
+import { useTheme } from '../../../theme';
+import type { UserChallengeSummary } from '../schemas';
 import {
   getStatusBadge,
   getDifficultyVariant,
   formatDuration,
   challengeCardStyles as styles,
-} from "./challengeCardHelpers";
+} from './challengeCardHelpers';
 
 interface ChallengeCardProps {
   challenge: UserChallengeSummary;
@@ -25,7 +25,7 @@ export function ChallengeCard({
 }: ChallengeCardProps): JSX.Element {
   const { theme } = useTheme();
   const isActionable =
-    challenge.status === "ACTIVE" || challenge.status === "COMPLETED";
+    challenge.status === 'ACTIVE' || challenge.status === 'COMPLETED';
   const cardStyle: ViewStyle = challenge.isExpired
     ? { ...styles.container, ...styles.expiredContainer }
     : styles.container;
@@ -54,7 +54,7 @@ export function ChallengeCard({
         </Text>
       </View>
 
-      {challenge.status === "ACTIVE" && (
+      {challenge.status === 'ACTIVE' && (
         <View style={styles.progressSection}>
           <View style={styles.progressRow}>
             <Text style={styles.progressText}>
@@ -118,7 +118,7 @@ export function ChallengeCard({
             { borderTopColor: theme.colors.border.light },
           ]}
         >
-          {challenge.status === "COMPLETED" && onClaim && (
+          {challenge.status === 'COMPLETED' && onClaim && (
             <Button
               variant="primary"
               onPress={onClaim}
@@ -133,7 +133,7 @@ export function ChallengeCard({
             </Button>
           )}
 
-          {challenge.status === "ACTIVE" && challenge.canReroll && onReroll && (
+          {challenge.status === 'ACTIVE' && challenge.canReroll && onReroll && (
             <Pressable
               onPress={onReroll}
               style={({ pressed }) => [
@@ -147,7 +147,7 @@ export function ChallengeCard({
             >
               <Badge variant="outline">
                 {challenge.freeRerollAvailable
-                  ? "Free Reroll"
+                  ? 'Free Reroll'
                   : `${challenge.rerollCost} Gems`}
               </Badge>
             </Pressable>

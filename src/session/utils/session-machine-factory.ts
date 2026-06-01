@@ -1,13 +1,13 @@
-import { createDebugger } from "../../utils/debug";
+import { createDebugger } from '../../utils/debug';
 import type {
   StateMachineConfig,
   StateConfig,
   SessionMachineContext,
-} from "./state-machine-types";
-import { StateMachine } from "./StateMachine";
-import { createAdvancedStates } from "./session-machine-states";
+} from './state-machine-types';
+import { StateMachine } from './StateMachine';
+import { createAdvancedStates } from './session-machine-states';
 
-const debug = createDebugger("session:stateMachine");
+const debug = createDebugger('session:stateMachine');
 
 function createCoreStates(
   sessionId: string,
@@ -17,8 +17,8 @@ function createCoreStates(
     IDLE: {
       on: {
         CREATE: {
-          target: "CREATING",
-          actions: [() => debug.debug("Creating session...")],
+          target: 'CREATING',
+          actions: [() => debug.debug('Creating session...')],
         },
       },
     },
@@ -30,9 +30,9 @@ function createCoreStates(
         },
       ],
       on: {
-        CREATE_SUCCESS: { target: "PREPARING" },
+        CREATE_SUCCESS: { target: 'PREPARING' },
         CREATE_FAILURE: {
-          target: "ERROR",
+          target: 'ERROR',
           actions: [
             (ctx, payload) => {
               ctx.lastError = payload as Error;
@@ -40,15 +40,15 @@ function createCoreStates(
             },
           ],
         },
-        RETRY: { target: "CREATING", guard: (ctx) => ctx.errorCount < 3 },
+        RETRY: { target: 'CREATING', guard: (ctx) => ctx.errorCount < 3 },
       },
     },
     PREPARING: {
-      entry: [() => debug.info("Session preparing - waiting for start")],
+      entry: [() => debug.info('Session preparing - waiting for start')],
       on: {
-        START: { target: "STARTING" },
-        ABORT: { target: "ABANDONED" },
-        TIMEOUT: { target: "ERROR" },
+        START: { target: 'STARTING' },
+        ABORT: { target: 'ABANDONED' },
+        TIMEOUT: { target: 'ERROR' },
       },
     },
     STARTING: {
@@ -57,21 +57,21 @@ function createCoreStates(
           ctx.startTime = Date.now();
           return undefined;
         },
-        () => debug.info("Session starting..."),
+        () => debug.info('Session starting...'),
       ],
       on: {
-        COUNTDOWN_COMPLETE: { target: "ACTIVE" },
-        CANCEL: { target: "ABANDONED" },
-        ERROR: { target: "ERROR" },
+        COUNTDOWN_COMPLETE: { target: 'ACTIVE' },
+        CANCEL: { target: 'ABANDONED' },
+        ERROR: { target: 'ERROR' },
       },
     },
     ACTIVE: {
-      entry: [() => debug.info("Session now active")],
+      entry: [() => debug.info('Session now active')],
       on: {
-        PAUSE: { target: "PAUSED" },
-        BACKGROUND: { target: "BACKGROUNDED" },
+        PAUSE: { target: 'PAUSED' },
+        BACKGROUND: { target: 'BACKGROUNDED' },
         INTERRUPTION: {
-          target: "INTERRUPTION_RISK",
+          target: 'INTERRUPTION_RISK',
           actions: [
             (ctx) => {
               ctx.interruptions++;
@@ -79,27 +79,27 @@ function createCoreStates(
             },
           ],
         },
-        DEGRADED_MODE: { target: "DEGRADED" },
-        COMPLETE: { target: "COMPLETING" },
-        FAIL: { target: "FAILED" },
-        ABORT: { target: "ABANDONED" },
+        DEGRADED_MODE: { target: 'DEGRADED' },
+        COMPLETE: { target: 'COMPLETING' },
+        FAIL: { target: 'FAILED' },
+        ABORT: { target: 'ABANDONED' },
       },
     },
     PAUSED: {
-      entry: [() => debug.info("Session paused")],
+      entry: [() => debug.info('Session paused')],
       on: {
-        RESUME: { target: "ACTIVE" },
-        ABORT: { target: "ABANDONED" },
-        TIMEOUT: { target: "FAILED" },
+        RESUME: { target: 'ACTIVE' },
+        ABORT: { target: 'ABANDONED' },
+        TIMEOUT: { target: 'FAILED' },
       },
     },
     BACKGROUNDED: {
-      entry: [() => debug.info("Session backgrounded")],
+      entry: [() => debug.info('Session backgrounded')],
       on: {
-        FOREGROUND: { target: "ACTIVE" },
-        AUTO_PAUSE: { target: "PAUSED" },
-        ABORT: { target: "ABANDONED" },
-        TIMEOUT: { target: "FAILED" },
+        FOREGROUND: { target: 'ACTIVE' },
+        AUTO_PAUSE: { target: 'PAUSED' },
+        ABORT: { target: 'ABANDONED' },
+        TIMEOUT: { target: 'FAILED' },
       },
     },
   };
@@ -120,12 +120,12 @@ export function createSessionStateMachine(
     canRecover: true,
     recoveryAttempts: 0,
     syncAttempts: 0,
-    storageStatus: "HEALTHY",
-    networkStatus: "ONLINE",
+    storageStatus: 'HEALTHY',
+    networkStatus: 'ONLINE',
   };
   const config: StateMachineConfig<SessionMachineContext> = {
     id: `session-${sessionId}`,
-    initial: "IDLE",
+    initial: 'IDLE',
     context: initialContext,
     states: {
       ...createCoreStates(sessionId, userId),

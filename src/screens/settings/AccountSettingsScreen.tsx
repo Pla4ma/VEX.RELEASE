@@ -1,18 +1,18 @@
-import { withScreenErrorBoundary } from "../../shared/ui/components/ScreenErrorBoundary";
-import React from "react";
-import { ScrollView, Pressable } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import type { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useTheme } from "../../theme";
-import { Box, Text } from "../../components/primitives";
-import { Icon } from "../../icons";
-import { useAuthStore } from "../../store/index";
-import type { SettingsStackParams } from "../../navigation";
-import { EmailChangeSection } from "./EmailChangeSection";
-import { TwoFactorSection } from "./TwoFactorSection";
-import { PasswordChangeSection } from "./PasswordChangeSection";
+import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+import React from 'react';
+import { ScrollView, Pressable } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useTheme } from '../../theme';
+import { Box, Text } from '../../components/primitives';
+import { Icon } from '../../icons';
+import { useAuthStore } from '../../store/index';
+import type { SettingsStackParams } from '../../navigation';
+import { EmailChangeSection } from './EmailChangeSection';
+import { TwoFactorSection } from './TwoFactorSection';
+import { PasswordChangeSection } from './PasswordChangeSection';
 
-type Props = NativeStackScreenProps<SettingsStackParams, "AccountSettings">;
+type Props = NativeStackScreenProps<SettingsStackParams, 'AccountSettings'>;
 
 export const AccountSettingsScreen: React.FC<Props> = ({ navigation }) => {
   const { theme } = useTheme();
@@ -57,5 +57,5 @@ export const AccountSettingsScreen: React.FC<Props> = ({ navigation }) => {
 
 export default withScreenErrorBoundary(
   AccountSettingsScreen,
-  "AccountSettings",
+  'AccountSettings',
 );

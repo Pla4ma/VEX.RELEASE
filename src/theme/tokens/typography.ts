@@ -1,28 +1,28 @@
-import type { TextStyle } from "react-native";
-import type { FontFamilies, FontWeights, TypographyScale } from "../types";
+import type { TextStyle } from 'react-native';
+import type { FontFamilies, FontWeights, TypographyScale } from '../types';
 
 export const fontFamilies: FontFamilies = {
-  primary: "Inter",
-  secondary: "Inter",
-  mono: "JetBrains Mono",
+  primary: 'Inter',
+  secondary: 'Inter',
+  mono: 'JetBrains Mono',
 };
 
 export const fontWeights: FontWeights = {
-  light: "300",
-  regular: "400",
-  medium: "500",
-  semibold: "600",
-  bold: "700",
-  heavy: "800",
+  light: '300',
+  regular: '400',
+  medium: '500',
+  semibold: '600',
+  bold: '700',
+  heavy: '800',
 };
 
 const baseTextStyle: TextStyle = {
-  color: "#F8FAFC",
+  color: '#F8FAFC',
   fontFamily: fontFamilies.primary,
   fontWeight: fontWeights.regular,
 };
 
-export const displayTypography: TypographyScale["display"] = {
+export const displayTypography: TypographyScale['display'] = {
   large: {
     ...baseTextStyle,
     fontSize: 48,
@@ -46,7 +46,7 @@ export const displayTypography: TypographyScale["display"] = {
   },
 };
 
-export const headingTypography: TypographyScale["heading"] = {
+export const headingTypography: TypographyScale['heading'] = {
   h1: {
     ...baseTextStyle,
     fontSize: 32,
@@ -90,7 +90,7 @@ export const headingTypography: TypographyScale["heading"] = {
   },
 };
 
-export const bodyTypography: TypographyScale["body"] = {
+export const bodyTypography: TypographyScale['body'] = {
   large: {
     ...baseTextStyle,
     fontSize: 18,
@@ -111,7 +111,7 @@ export const bodyTypography: TypographyScale["body"] = {
   },
 };
 
-export const uiTypography: TypographyScale["ui"] = {
+export const uiTypography: TypographyScale['ui'] = {
   button: {
     ...baseTextStyle,
     fontSize: 16,
@@ -125,7 +125,7 @@ export const uiTypography: TypographyScale["ui"] = {
     fontWeight: fontWeights.semibold,
     letterSpacing: 1.2,
     lineHeight: 16,
-    textTransform: "uppercase",
+    textTransform: 'uppercase',
   },
   caption: {
     ...baseTextStyle,
@@ -140,7 +140,7 @@ export const uiTypography: TypographyScale["ui"] = {
     fontWeight: fontWeights.medium,
     letterSpacing: 0.5,
     lineHeight: 16,
-    textTransform: "uppercase",
+    textTransform: 'uppercase',
   },
 };
 

@@ -1,8 +1,8 @@
-import type { AchievementCategory, AchievementRarity } from "./types";
+import type { AchievementCategory, AchievementRarity } from './types';
 import {
   useAchievements,
   type UseAchievementsResult,
-} from "./hooks";
+} from './hooks';
 
 export function useAchievementsByCategory(
   userId: string,
@@ -61,12 +61,12 @@ export function useAchievementStats(userId: string): {
     .filter((a) => a.isUnlocked)
     .reduce((sum, a) => sum + a.pointValue, 0);
   const categories: AchievementCategory[] = [
-    "SESSION",
-    "STREAK",
-    "BOSS",
-    "SOCIAL",
-    "PROGRESSION",
-    "ECONOMY",
+    'SESSION',
+    'STREAK',
+    'BOSS',
+    'SOCIAL',
+    'PROGRESSION',
+    'ECONOMY',
   ];
   const byCategory: Record<
     AchievementCategory,
@@ -83,11 +83,11 @@ export function useAchievementStats(userId: string): {
     {} as Record<AchievementCategory, { total: number; unlocked: number }>,
   );
   const rarities: AchievementRarity[] = [
-    "COMMON",
-    "UNCOMMON",
-    "RARE",
-    "EPIC",
-    "LEGENDARY",
+    'COMMON',
+    'UNCOMMON',
+    'RARE',
+    'EPIC',
+    'LEGENDARY',
   ];
   const byRarity: Record<
     AchievementRarity,

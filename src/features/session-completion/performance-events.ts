@@ -1,8 +1,8 @@
-import type { BaseSessionCompletionEvent } from "./base-event-types";
+import type { BaseSessionCompletionEvent } from './base-event-types';
 
 export interface SessionPerformanceCalculatedEvent
   extends BaseSessionCompletionEvent {
-  type: "session_performance_calculated";
+  type: 'session_performance_calculated';
   data: {
     performanceMetrics: {
       overall: {
@@ -44,14 +44,14 @@ export interface SessionPerformanceCalculatedEvent
 
 export interface SessionAnalyticsGeneratedEvent
   extends BaseSessionCompletionEvent {
-  type: "session_analytics_generated";
+  type: 'session_analytics_generated';
   data: {
     analyticsType:
-      | "performance"
-      | "progress"
-      | "trends"
-      | "predictions"
-      | "insights";
+      | 'performance'
+      | 'progress'
+      | 'trends'
+      | 'predictions'
+      | 'insights';
     timeframe: string;
     metrics: Record<string, number>;
     dimensions: Record<string, unknown>;
@@ -63,7 +63,7 @@ export interface SessionAnalyticsGeneratedEvent
     }[];
     trends: {
       metric: string;
-      direction: "up" | "down" | "stable";
+      direction: 'up' | 'down' | 'stable';
       change: number;
       significance: string;
     }[];
@@ -79,7 +79,7 @@ export interface SessionAnalyticsGeneratedEvent
 
 export interface SessionPerformanceReportEvent
   extends BaseSessionCompletionEvent {
-  type: "session_performance_report";
+  type: 'session_performance_report';
   data: {
     reportPeriod: { start: Date; end: Date };
     overview: {

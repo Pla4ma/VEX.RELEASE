@@ -1,17 +1,17 @@
-import { createDebugger } from "../../utils/debug";
+import { createDebugger } from '../../utils/debug';
 import type {
   RetryConfig,
   CircuitState,
   CircuitBreakerState,
   RetryContext,
-} from "./retry-strategy-types";
-import { DEFAULT_RETRY_CONFIG } from "./retry-strategy-types";
+} from './retry-strategy-types';
+import { DEFAULT_RETRY_CONFIG } from './retry-strategy-types';
 export type { RetryConfig, CircuitState, CircuitBreakerState, RetryContext };
 export { DEFAULT_RETRY_CONFIG };
 
-export { createRetryStrategy, getRetryStrategy, withRetry } from "./retry-factories";
+export { createRetryStrategy, getRetryStrategy, withRetry } from './retry-factories';
 
-const debug = createDebugger("session:retry");
+const debug = createDebugger('session:retry');
 
 export class RetryStrategy {
   private config: RetryConfig;
@@ -27,7 +27,7 @@ export class RetryStrategy {
     const config = { ...this.config, ...customConfig };
     const circuitKey = operationName;
     if (this.isCircuitOpen(circuitKey))
-      throw new Error(`Circuit breaker open for: ${operationName}`);
+      {throw new Error(`Circuit breaker open for: ${operationName}`);}
     const context: RetryContext = {
       attempt: 1,
       startTime: Date.now(),
@@ -36,7 +36,7 @@ export class RetryStrategy {
     while (context.attempt <= config.maxAttempts) {
       try {
         debug.debug(
-          "Attempting %s (attempt %d/%d)",
+          'Attempting %s (attempt %d/%d)',
           operationName,
           context.attempt,
           config.maxAttempts,
@@ -44,7 +44,7 @@ export class RetryStrategy {
         const result = await operation(context);
         this.recordSuccess(circuitKey);
         debug.info(
-          "%s succeeded on attempt %d",
+          '%s succeeded on attempt %d',
           operationName,
           context.attempt,
         );
@@ -54,15 +54,15 @@ export class RetryStrategy {
           error instanceof Error ? error : new Error(String(error));
         if (!this.isRetryableError(context.lastError, config)) {
           debug.error(
-            "%s failed with non-retryable error",
-            context.lastError || new Error("Unknown error"),
+            '%s failed with non-retryable error',
+            context.lastError || new Error('Unknown error'),
           );
           throw context.lastError;
         }
         this.recordFailure(circuitKey);
         if (context.attempt >= config.maxAttempts) {
           debug.error(
-            "%s failed after %d attempts",
+            '%s failed after %d attempts',
             new Error(`${operationName} exhausted retries`),
             config.maxAttempts,
           );
@@ -74,7 +74,7 @@ export class RetryStrategy {
         const delay = this.calculateDelay(context.attempt, config);
         context.accumulatedDelay += delay;
         debug.warn(
-          "%s failed (attempt %d), retrying in %dms: %s",
+          '%s failed (attempt %d), retrying in %dms: %s',
           operationName,
           context.attempt,
           delay,
@@ -84,7 +84,7 @@ export class RetryStrategy {
         context.attempt++;
       }
     }
-    throw new Error("Retry logic exhausted without resolution");
+    throw new Error('Retry logic exhausted without resolution');
   }
   async executeWithFallback<T>(
     operation: (context: RetryContext) => Promise<T>,
@@ -95,7 +95,7 @@ export class RetryStrategy {
     try {
       return await this.execute(operation, operationName, config);
     } catch (error) {
-      debug.warn("%s failed, executing fallback", operationName);
+      debug.warn('%s failed, executing fallback', operationName);
       return fallback();
     }
   }
@@ -108,13 +108,13 @@ export class RetryStrategy {
   }
   private isRetryableError(error: Error, config: RetryConfig): boolean {
     for (const errorType of config.retryableErrors) {
-      if (error.message.includes(errorType)) return true;
+      if (error.message.includes(errorType)) {return true;}
     }
     const retryableNames = [
-      "NetworkError",
-      "TimeoutError",
-      "StorageError",
-      "SyncError",
+      'NetworkError',
+      'TimeoutError',
+      'StorageError',
+      'SyncError',
     ];
     return retryableNames.some(
       (name) => error.name === name || error.name.includes(name),
@@ -122,11 +122,11 @@ export class RetryStrategy {
   }
   private isCircuitOpen(key: string): boolean {
     const state = this.circuitBreaker.get(key);
-    if (!state) return false;
-    if (state.state === "OPEN") {
+    if (!state) {return false;}
+    if (state.state === 'OPEN') {
       if (Date.now() >= state.nextAttempt) {
-        state.state = "HALF_OPEN";
-        debug.info("Circuit breaker half-open for: %s", key);
+        state.state = 'HALF_OPEN';
+        debug.info('Circuit breaker half-open for: %s', key);
         return false;
       }
       return true;
@@ -136,9 +136,9 @@ export class RetryStrategy {
   private recordSuccess(key: string): void {
     const state = this.circuitBreaker.get(key);
     if (state) {
-      if (state.state === "HALF_OPEN") {
+      if (state.state === 'HALF_OPEN') {
         this.circuitBreaker.delete(key);
-        debug.info("Circuit breaker closed for: %s", key);
+        debug.info('Circuit breaker closed for: %s', key);
       } else {
         state.failures = 0;
       }
@@ -146,7 +146,7 @@ export class RetryStrategy {
   }
   private recordFailure(key: string): void {
     const state = this.circuitBreaker.get(key) || {
-      state: "CLOSED" as CircuitState,
+      state: 'CLOSED' as CircuitState,
       failures: 0,
       lastFailure: 0,
       nextAttempt: 0,
@@ -154,10 +154,10 @@ export class RetryStrategy {
     state.failures++;
     state.lastFailure = Date.now();
     if (state.failures >= this.config.circuitBreakerThreshold) {
-      state.state = "OPEN";
+      state.state = 'OPEN';
       state.nextAttempt = Date.now() + this.config.circuitBreakerResetTime;
       debug.error(
-        "Circuit breaker opened for: %s (reset in %dms)",
+        'Circuit breaker opened for: %s (reset in %dms)',
         new Error(`Circuit breaker: ${key}`),
         this.config.circuitBreakerResetTime,
       );
@@ -170,11 +170,11 @@ export class RetryStrategy {
   getCircuitStatus(
     key?: string,
   ): Map<string, CircuitBreakerState> | CircuitBreakerState | null {
-    if (key) return this.circuitBreaker.get(key) || null;
+    if (key) {return this.circuitBreaker.get(key) || null;}
     return new Map(this.circuitBreaker);
   }
   resetCircuit(key?: string): void {
-    if (key) this.circuitBreaker.delete(key);
-    else this.circuitBreaker.clear();
+    if (key) {this.circuitBreaker.delete(key);}
+    else {this.circuitBreaker.clear();}
   }
 }

@@ -1,13 +1,13 @@
-import React, { useEffect, useRef } from "react";
-import { Box } from "../../../components/primitives/Box";
-import { XPEarnAnimation } from "../../../features/session-completion/components/XPEarnAnimation";
-import { SessionCompletionRewardsSection } from "./SessionCompletionRewardsSection";
-import { CompanionGrowthSection } from "./CompanionGrowthSection";
-import { SessionCompletionFollowThrough } from "./SessionCompletionFollowThrough";
-import { useSessionCompleteController } from "../../../features/session-completion/hooks";
-import type { CompletionExperiencePolicy } from "../../../features/session-completion/completion-experience-policy";
-import type { SessionCompletionConsequences } from "../../../features/session-completion/story-consequence-service";
-import type { SessionSummary } from "../../../session/types";
+import React, { useEffect, useRef } from 'react';
+import { Box } from '../../../components/primitives/Box';
+import { XPEarnAnimation } from '../../../features/session-completion/components/XPEarnAnimation';
+import { SessionCompletionRewardsSection } from './SessionCompletionRewardsSection';
+import { CompanionGrowthSection } from './CompanionGrowthSection';
+import { SessionCompletionFollowThrough } from './SessionCompletionFollowThrough';
+import { useSessionCompleteController } from '../../../features/session-completion/hooks';
+import type { CompletionExperiencePolicy } from '../../../features/session-completion/completion-experience-policy';
+import type { SessionCompletionConsequences } from '../../../features/session-completion/story-consequence-service';
+import type { SessionSummary } from '../../../session/types';
 
 type SessionCompleteController = ReturnType<
   typeof useSessionCompleteController
@@ -71,7 +71,7 @@ export function SessionCompleteRewardsPhase({
             hiddenSurfaces={hidden}
             setMasteryState={controller.setMasteryState}
             studyProgress={
-              hidden.includes("study_progress_card")
+              hidden.includes('study_progress_card')
                 ? null
                 : controller.studyProgress
             }
@@ -79,12 +79,12 @@ export function SessionCompleteRewardsPhase({
             userId={controller.userId}
             onStartNewSession={() =>
               controller.navigation.navigate({
-                name: "SessionSetup",
+                name: 'SessionSetup',
                 params: {},
               })
             }
           />
-          {!hidden.includes("companion_growth_card") ? (
+          {!hidden.includes('companion_growth_card') ? (
             <Box px={6}>
               <CompanionGrowthSection
                 sessionId={sessionId}
@@ -95,7 +95,7 @@ export function SessionCompleteRewardsPhase({
             </Box>
           ) : null}
 
-          {!hidden.includes("follow_through_cards") ? (
+          {!hidden.includes('follow_through_cards') ? (
             <SessionCompletionFollowThrough summary={summary} />
           ) : null}
         </>

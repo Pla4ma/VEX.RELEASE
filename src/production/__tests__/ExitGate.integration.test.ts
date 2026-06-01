@@ -1,25 +1,25 @@
-import { Phase9ExitGate } from "../ExitGate";
-import { offlineSyncService } from "../../features/session-completion/offline-sync-service";
-import { ScreenErrorBoundary } from "../../errors/ScreenErrorBoundary";
-import { AccessibilityAudit } from "../../accessibility/AccessibilityAudit";
-import { PerformanceGate } from "../../performance/PerformanceGate";
-import { PrivacyInventory } from "../../privacy/PrivacyInventory";
-import { PaywallVerification } from "../../monetization/PaywallVerification";
-import { AppStoreSubmissionPack } from "../../app-store/AppStoreSubmissionPack";
+import { Phase9ExitGate } from '../ExitGate';
+import { offlineSyncService } from '../../features/session-completion/offline-sync-service';
+import { ScreenErrorBoundary } from '../../errors/ScreenErrorBoundary';
+import { AccessibilityAudit } from '../../accessibility/AccessibilityAudit';
+import { PerformanceGate } from '../../performance/PerformanceGate';
+import { PrivacyInventory } from '../../privacy/PrivacyInventory';
+import { PaywallVerification } from '../../monetization/PaywallVerification';
+import { AppStoreSubmissionPack } from '../../app-store/AppStoreSubmissionPack';
 import {
   setupGreenMocks,
   setupCriticalMocks,
   setupModerateMocks,
   type ExitGateMocks,
-} from "./ExitGate.test-helpers.integration";
+} from './ExitGate.test-helpers.integration';
 
-jest.mock("../../features/session-completion/offline-sync-service");
-jest.mock("../../errors/ScreenErrorBoundary");
-jest.mock("../../accessibility/AccessibilityAudit");
-jest.mock("../../performance/PerformanceGate");
-jest.mock("../../privacy/PrivacyInventory");
-jest.mock("../../monetization/PaywallVerification");
-jest.mock("../../app-store/AppStoreSubmissionPack");
+jest.mock('../../features/session-completion/offline-sync-service');
+jest.mock('../../errors/ScreenErrorBoundary');
+jest.mock('../../accessibility/AccessibilityAudit');
+jest.mock('../../performance/PerformanceGate');
+jest.mock('../../privacy/PrivacyInventory');
+jest.mock('../../monetization/PaywallVerification');
+jest.mock('../../app-store/AppStoreSubmissionPack');
 
 const mockOfflineSyncService = offlineSyncService as jest.Mocked<
   typeof offlineSyncService
@@ -55,7 +55,7 @@ const mocks: ExitGateMocks = {
   appStoreSubmissionPack: mockAppStoreSubmissionPack,
 };
 
-describe("Phase9ExitGate", () => {
+describe('Phase9ExitGate', () => {
   let exitGate: Phase9ExitGate;
 
   beforeEach(() => {
@@ -63,8 +63,8 @@ describe("Phase9ExitGate", () => {
     jest.clearAllMocks();
   });
 
-  describe("Full Exit Gate Execution", () => {
-    it("should pass exit gate with all systems green", async () => {
+  describe('Full Exit Gate Execution', () => {
+    it('should pass exit gate with all systems green', async () => {
       setupGreenMocks(mocks);
       const result = await exitGate.runExitGate();
       expect(result.passed).toBe(true);
@@ -74,7 +74,7 @@ describe("Phase9ExitGate", () => {
       expect(result.timestamp).toBeGreaterThan(0);
     });
 
-    it("should fail exit gate with critical issues", async () => {
+    it('should fail exit gate with critical issues', async () => {
       setupCriticalMocks(mocks);
       const result = await exitGate.runExitGate();
       expect(result.passed).toBe(false);
@@ -83,33 +83,33 @@ describe("Phase9ExitGate", () => {
       expect(result.blockingIssues.length).toBeGreaterThan(0);
     });
 
-    it("should generate appropriate recommendations", async () => {
+    it('should generate appropriate recommendations', async () => {
       setupModerateMocks(mocks);
       const result = await exitGate.runExitGate();
       expect(result.recommendations).toContain(
-        "Review and address offline-sync warnings",
+        'Review and address offline-sync warnings',
       );
       expect(result.recommendations).toContain(
-        "Review and address error-boundaries warnings",
+        'Review and address error-boundaries warnings',
       );
       expect(result.recommendations).toContain(
-        "Review and address accessibility warnings",
+        'Review and address accessibility warnings',
       );
       expect(result.recommendations).toContain(
-        "Improve performance score from 78 to 85+",
+        'Improve performance score from 78 to 85+',
       );
       expect(result.recommendations).toContain(
-        "Review and address privacy warnings",
+        'Review and address privacy warnings',
       );
       expect(result.recommendations).toContain(
-        "Review and address paywall warnings",
+        'Review and address paywall warnings',
       );
       expect(result.recommendations).toContain(
-        "Review and address app-store warnings",
+        'Review and address app-store warnings',
       );
     });
 
-    it("should track gate results", async () => {
+    it('should track gate results', async () => {
       setupGreenMocks(mocks);
       const result = await exitGate.runExitGate();
       const gateResults = (

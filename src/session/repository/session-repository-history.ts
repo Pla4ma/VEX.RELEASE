@@ -1,8 +1,8 @@
-import type { SessionHistoryEntry } from "../types";
-import { parseSessionHistoryJson } from "./SessionRepositoryParsers";
-import { createDebugger } from "../../utils/debug";
+import type { SessionHistoryEntry } from '../types';
+import { parseSessionHistoryJson } from './SessionRepositoryParsers';
+import { createDebugger } from '../../utils/debug';
 
-const debug = createDebugger("session:repository:history");
+const debug = createDebugger('session:repository:history');
 
 export async function getSessionHistoryFromStorage(
   getString: (key: string) => Promise<string | null>,
@@ -11,10 +11,10 @@ export async function getSessionHistoryFromStorage(
 ): Promise<SessionHistoryEntry[]> {
   try {
     const data = await getString(storageKey);
-    if (data) return parseSessionHistoryJson(data, limit);
+    if (data) {return parseSessionHistoryJson(data, limit);}
   } catch (error) {
     debug.error(
-      "Failed to load history",
+      'Failed to load history',
       error instanceof Error ? error : new Error(String(error)),
     );
   }
@@ -47,11 +47,11 @@ export async function addToHistoryInStorage(
       1000,
     );
     history.unshift(entry);
-    if (history.length > 1000) history = history.slice(0, 1000);
+    if (history.length > 1000) {history = history.slice(0, 1000);}
     await setString(storageKey, JSON.stringify(history));
   } catch (error) {
     debug.error(
-      "Failed to add to history",
+      'Failed to add to history',
       error instanceof Error ? error : new Error(String(error)),
     );
     throw error;

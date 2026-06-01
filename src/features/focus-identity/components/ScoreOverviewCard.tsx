@@ -1,9 +1,9 @@
-import React from "react";
-import { View } from "react-native";
-import Animated, { FadeIn } from "react-native-reanimated";
-import { Text } from "../../../components/primitives/Text";
-import { Box } from "../../../components/primitives/Box";
-import type { Theme } from "../../../theme";
+import React from 'react';
+import { View } from 'react-native';
+import Animated, { FadeIn } from 'react-native-reanimated';
+import { Text } from '../../../components/primitives/Text';
+import { Box } from '../../../components/primitives/Box';
+import type { Theme } from '../../../theme';
 
 interface ScoreOverviewCardProps {
   theme: Theme;
@@ -32,22 +32,22 @@ export function ScoreOverviewCard({
       >
         <View
           style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "flex-start",
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'flex-start',
           }}
         >
           <View>
             <Text variant="heading3" color="textSecondary">
-              {new Date(month + "-01").toLocaleDateString("en-US", {
-                month: "long",
-                year: "numeric",
+              {new Date(month + '-01').toLocaleDateString('en-US', {
+                month: 'long',
+                year: 'numeric',
               })}
             </Text>
             <Text
               variant="display"
               color="text"
-              style={{ marginTop: theme.spacing[2], fontWeight: "700" }}
+              style={{ marginTop: theme.spacing[2], fontWeight: '700' }}
             >
               {endingScore}
             </Text>
@@ -60,14 +60,14 @@ export function ScoreOverviewCard({
               paddingHorizontal: theme.spacing[3],
               paddingVertical: theme.spacing[2],
               borderRadius: theme.borderRadius.lg,
-              backgroundColor: scoreColor + "20",
+              backgroundColor: scoreColor + '20',
               minWidth: 60,
-              alignItems: "center",
+              alignItems: 'center',
             }}
           >
             <Text
               variant="heading2"
-              style={{ fontWeight: "700", color: scoreColor }}
+              style={{ fontWeight: '700', color: scoreColor }}
             >
               {grade}
             </Text>
@@ -77,14 +77,14 @@ export function ScoreOverviewCard({
           <Text
             variant="body"
             style={{
-              fontWeight: "600",
+              fontWeight: '600',
               color:
                 change > 0
                   ? theme.colors.success.DEFAULT
                   : theme.colors.error.DEFAULT,
             }}
           >
-            {change > 0 ? "↑" : "↓"} {Math.abs(change)} from last month
+            {change > 0 ? '↑' : '↓'} {Math.abs(change)} from last month
           </Text>
         </View>
       </Box>

@@ -1,8 +1,8 @@
-import type { NotificationChannel, NotificationCategory } from "./types-core";
+import type { NotificationChannel, NotificationCategory } from './types-core';
 
 export interface NotificationAnalytics {
   userId: string;
-  timeframe: "hourly" | "daily" | "weekly" | "monthly";
+  timeframe: 'hourly' | 'daily' | 'weekly' | 'monthly';
   metrics: {
     totalReceived: number;
     totalRead: number;
@@ -22,7 +22,7 @@ export interface TrendData {
   timestamp: Date;
   value: number;
   change: number;
-  significance: "low" | "medium" | "high";
+  significance: 'low' | 'medium' | 'high';
 }
 
 export interface NotificationDelivery {
@@ -39,12 +39,12 @@ export interface NotificationDelivery {
 }
 
 export type DeliveryStatus =
-  | "pending"
-  | "processing"
-  | "sent"
-  | "delivered"
-  | "failed"
-  | "cancelled";
+  | 'pending'
+  | 'processing'
+  | 'sent'
+  | 'delivered'
+  | 'failed'
+  | 'cancelled';
 
 export interface DeliveryAttempt {
   attempt: number;
@@ -58,7 +58,7 @@ export interface DeliveryAttempt {
 export interface DeliveryError {
   code: string;
   message: string;
-  type: "temporary" | "permanent";
+  type: 'temporary' | 'permanent';
   retryable: boolean;
   retryAfter?: number;
 }
@@ -73,12 +73,12 @@ export interface DeliveryMetadata {
 
 export interface NotificationEvent {
   type:
-    | "notification_sent"
-    | "notification_delivered"
-    | "notification_read"
-    | "notification_clicked"
-    | "notification_failed"
-    | "preferences_updated";
+    | 'notification_sent'
+    | 'notification_delivered'
+    | 'notification_read'
+    | 'notification_clicked'
+    | 'notification_failed'
+    | 'preferences_updated';
   userId: string;
   notificationId?: string;
   channelId?: NotificationChannel;
@@ -90,7 +90,7 @@ export interface NotificationWebhook {
   id: string;
   name: string;
   url: string;
-  events: NotificationEvent["type"][];
+  events: NotificationEvent['type'][];
   secret: string;
   active: boolean;
   retryPolicy: WebhookRetryPolicy;
@@ -102,12 +102,12 @@ export interface NotificationWebhook {
 export interface WebhookRetryPolicy {
   enabled: boolean;
   maxRetries: number;
-  backoffStrategy: "linear" | "exponential" | "fixed";
+  backoffStrategy: 'linear' | 'exponential' | 'fixed';
   retryDelay: number;
 }
 
 export interface WebhookPayload {
-  event: NotificationEvent["type"];
+  event: NotificationEvent['type'];
   data: Record<string, unknown>;
   timestamp: Date;
   signature: string;

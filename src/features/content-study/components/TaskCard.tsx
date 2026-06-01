@@ -1,12 +1,12 @@
-import React from "react";
-import { View, Pressable } from "react-native";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import { Icon } from "../../../icons";
-import type { StudyTask } from "../types";
-import { TASK_PRIORITY_CONFIG } from "../constants";
-import { styles } from "./study-task-list-styles";
-import { buttonTap, stepCompleted } from "../../../utils/haptics";
+import React from 'react';
+import { View, Pressable } from 'react-native';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import { Icon } from '../../../icons';
+import type { StudyTask } from '../types';
+import { TASK_PRIORITY_CONFIG } from '../constants';
+import { styles } from './study-task-list-styles';
+import { buttonTap, stepCompleted } from '../../../utils/haptics';
 
 interface TaskCardProps {
   task: StudyTask;
@@ -53,7 +53,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
       disabled={isLocked || readOnly}
       accessibilityRole="button"
       accessibilityState={{ selected: isActive, disabled: isLocked }}
-      accessibilityLabel={`${task.content}${isActive ? ", active" : ""}${isLocked ? ", locked" : ""}`}
+      accessibilityLabel={`${task.content}${isActive ? ', active' : ''}${isLocked ? ', locked' : ''}`}
       accessibilityHint="Double tap to select task"
     >
       {}
@@ -66,7 +66,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
               : theme.colors.border.DEFAULT,
             backgroundColor: isCompleted
               ? theme.colors.success[500]
-              : "transparent",
+              : 'transparent',
             opacity: pressed && !isLocked && !readOnly ? 0.8 : 1,
           },
         ]}
@@ -92,7 +92,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
             styles.taskText,
             {
               color: theme.colors.text.primary,
-              textDecorationLine: isCompleted ? "line-through" : "none",
+              textDecorationLine: isCompleted ? 'line-through' : 'none',
             },
           ]}
         >
@@ -151,7 +151,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
                   ]}
                 >
                   {task.dependsOn.length} prerequisite
-                  {task.dependsOn.length > 1 ? "s" : ""}
+                  {task.dependsOn.length > 1 ? 's' : ''}
                 </Text>
               </View>
             )}

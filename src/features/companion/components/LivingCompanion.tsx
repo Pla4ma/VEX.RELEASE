@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from "react";
-import { View } from "react-native";
+import React, { useEffect, useRef } from 'react';
+import { View } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -9,17 +9,18 @@ import Animated, {
   withSequence,
   interpolate,
   Easing,
-} from "react-native-reanimated";
-import { Svg, Circle, G } from "react-native-svg";
+} from 'react-native-reanimated';
+import { Svg, Circle, G } from 'react-native-svg';
 
-import { Text } from "../../../components/primitives/Text";
-import { CompanionState, ELEMENT_THEMES } from "../types";
-import { CompanionService } from "../service";
-import { getCompanionService } from "../service-instance";
-import { CompanionBody } from "./CompanionBody";
-import { CompanionParticles } from "./CompanionParticles";
-import { getPhaseMultiplier, getMoodEmoji } from "./companion-helpers";
-import { COMPANION_SIZE, PARTICLE_COUNT, companionStyles as styles } from "./LivingCompanion.styles";
+import { Text } from '../../../components/primitives/Text';
+import { CompanionState, ELEMENT_THEMES } from '../types';
+import { CompanionService } from '../service';
+import { getCompanionService } from '../service-instance';
+import { CompanionBody } from './CompanionBody';
+import { CompanionParticles } from './CompanionParticles';
+import { getPhaseMultiplier } from './companion-helpers';
+import { MoodIndicator } from './MoodIndicator';
+import { COMPANION_SIZE, PARTICLE_COUNT, companionStyles as styles } from './LivingCompanion.styles';
 
 interface LivingCompanionProps {
   companionState: CompanionState;
@@ -54,13 +55,13 @@ export const LivingCompanion: React.FC<LivingCompanionProps> = ({
 
     const unsubscribe = serviceRef.current.onEvent((event) => {
       if (
-        event.type === "MILESTONE" &&
+        event.type === 'MILESTONE' &&
         event.data.progressDelta &&
         onMilestone
       ) {
         onMilestone(event.data.progressDelta);
       }
-      if (event.type === "PURE_FOCUS_BURST") {
+      if (event.type === 'PURE_FOCUS_BURST') {
         scale.value = withSequence(
           withSpring(1.3, { damping: 10 }),
           withSpring(1, { damping: 15 }),
@@ -70,7 +71,7 @@ export const LivingCompanion: React.FC<LivingCompanionProps> = ({
           withTiming(0.7, { duration: 1000 }),
         );
       }
-      if (event.type === "DANGER_WARN") {
+      if (event.type === 'DANGER_WARN') {
         scale.value = withRepeat(
           withSequence(
             withSpring(0.95, { damping: 5 }),
@@ -178,13 +179,7 @@ export const LivingCompanion: React.FC<LivingCompanionProps> = ({
       </Animated.View>
 
       <View style={styles.statusContainer}>
-        <Text
-          variant="bodySmall"
-          style={[styles.moodText, { color: theme.primary }]}
-        >
-          {getMoodEmoji(companionState.currentMood)}{" "}
-          {companionState.currentMood}
-        </Text>
+        <MoodIndicator mood={companionState.currentMood} />
         <Text variant="caption" style={styles.phaseText}>
           {companionState.phase} Level {companionState.level}
         </Text>
@@ -193,4 +188,4 @@ export const LivingCompanion: React.FC<LivingCompanionProps> = ({
   );
 };
 
-export { COMPANION_SIZE, PARTICLE_COUNT, companionStyles } from "./LivingCompanion.styles";
+export { COMPANION_SIZE, PARTICLE_COUNT, companionStyles } from './LivingCompanion.styles';

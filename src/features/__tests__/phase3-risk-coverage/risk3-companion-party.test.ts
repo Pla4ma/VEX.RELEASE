@@ -5,49 +5,49 @@ import {
   SessionMode,
   baseLaneProfile,
   baseStats,
-} from "./helpers";
+} from './helpers';
 
-describe("Risk 3 — Run Companion Party-Mode Gating", () => {
-  it("companion_party_member and optional_party_mode only in game_like", () => {
+describe('Risk 3 — Run Companion Party-Mode Gating', () => {
+  it('companion_party_member and optional_party_mode only in game_like', () => {
     const runPolicy = getLaneMechanicPolicy(
-      baseLaneProfile({ primaryLane: "game_like" }),
+      baseLaneProfile({ primaryLane: 'game_like' }),
     );
-    expect(runPolicy.preferredMechanics).toContain("companion_party_member");
-    expect(runPolicy.preferredMechanics).toContain("optional_party_mode");
+    expect(runPolicy.preferredMechanics).toContain('companion_party_member');
+    expect(runPolicy.preferredMechanics).toContain('optional_party_mode');
 
     for (const lane of [
-      "student",
-      "deep_creative",
-      "minimal_normal",
+      'student',
+      'deep_creative',
+      'minimal_normal',
     ] as const) {
       const policy = getLaneMechanicPolicy(
         baseLaneProfile({ primaryLane: lane }),
       );
-      expect(policy.preferredMechanics).not.toContain("companion_party_member");
-      expect(policy.preferredMechanics).not.toContain("optional_party_mode");
+      expect(policy.preferredMechanics).not.toContain('companion_party_member');
+      expect(policy.preferredMechanics).not.toContain('optional_party_mode');
     }
   });
 
-  it("Clean blocks companion_chores; game_like omits chores from preferred", () => {
+  it('Clean blocks companion_chores; game_like omits chores from preferred', () => {
     const cleanPolicy = getLaneMechanicPolicy(
-      baseLaneProfile({ primaryLane: "minimal_normal" }),
+      baseLaneProfile({ primaryLane: 'minimal_normal' }),
     );
-    expect(cleanPolicy.blockedMechanics).toContain("companion_chores");
+    expect(cleanPolicy.blockedMechanics).toContain('companion_chores');
 
     const runPolicy = getLaneMechanicPolicy(
-      baseLaneProfile({ primaryLane: "game_like" }),
+      baseLaneProfile({ primaryLane: 'game_like' }),
     );
-    expect(runPolicy.preferredMechanics).not.toContain("companion_chores");
+    expect(runPolicy.preferredMechanics).not.toContain('companion_chores');
   });
 
-  it("Run brief has encounter CTA, no party/squad language", () => {
-    const brief = buildLaneSessionBrief({ lane: "game_like" });
+  it('Run brief has encounter CTA, no party/squad language', () => {
+    const brief = buildLaneSessionBrief({ lane: 'game_like' });
     expect(brief.sessionMode).toBe(SessionMode.SPRINT);
-    expect(brief.ctaLabel).toBe("Start clean run");
-    expect(brief.title).not.toContain("party");
+    expect(brief.ctaLabel).toBe('Start clean run');
+    expect(brief.title).not.toContain('party');
   });
 
-  it("Run Day 0: game_like gets tiny_boss_teaser, others do not", () => {
+  it('Run Day 0: game_like gets tiny_boss_teaser, others do not', () => {
     const runDay0 = resolveFirstWeekExperience({
       behaviorStats: baseStats,
       completedSessions: 0,
@@ -59,17 +59,17 @@ describe("Risk 3 — Run Companion Party-Mode Gating", () => {
         social: false,
         study: false,
       },
-      motivationStyle: "game_like",
-      premiumState: "unavailable",
-      primaryGoal: "work",
-      laneProfile: baseLaneProfile({ primaryLane: "game_like" }),
+      motivationStyle: 'game_like',
+      premiumState: 'unavailable',
+      primaryGoal: 'work',
+      laneProfile: baseLaneProfile({ primaryLane: 'game_like' }),
     });
-    expect(runDay0.allowedHomeSurfaces).toContain("tiny_boss_teaser");
+    expect(runDay0.allowedHomeSurfaces).toContain('tiny_boss_teaser');
 
     for (const lane of [
-      "student",
-      "deep_creative",
-      "minimal_normal",
+      'student',
+      'deep_creative',
+      'minimal_normal',
     ] as const) {
       const result = resolveFirstWeekExperience({
         behaviorStats: baseStats,
@@ -82,12 +82,12 @@ describe("Risk 3 — Run Companion Party-Mode Gating", () => {
           social: false,
           study: true,
         },
-        motivationStyle: "calm",
-        premiumState: "unavailable",
-        primaryGoal: "work",
+        motivationStyle: 'calm',
+        premiumState: 'unavailable',
+        primaryGoal: 'work',
         laneProfile: baseLaneProfile({ primaryLane: lane }),
       });
-      expect(result.allowedHomeSurfaces).not.toContain("tiny_boss_teaser");
+      expect(result.allowedHomeSurfaces).not.toContain('tiny_boss_teaser');
     }
   });
 });

@@ -1,12 +1,12 @@
-import React from "react";
-import { View } from "react-native";
+import React from 'react';
+import { View } from 'react-native';
 
-import { EmptyState } from "../../components/EmptyState";
-import { Button } from "../../components/primitives/Button";
-import { Text } from "../../components/primitives/Text";
-import { getPremiumCardStyle } from "../../components/premiumStyles";
-import { useTheme } from "../../theme";
-import { styles } from "./homeScreenCardStyles";
+import { EmptyState } from '../../components/EmptyState';
+import { Button } from '../../components/primitives/Button';
+import { Text } from '../../components/primitives/Text';
+import { getPremiumCardStyle } from '../../components/premiumStyles';
+import { useTheme } from '../../theme';
+import { styles } from './homeScreenCardStyles';
 
 export function RecentSessionsEmpty({
   isFirstRun,
@@ -21,7 +21,7 @@ export function RecentSessionsEmpty({
       <View
         style={[
           styles.card,
-          getPremiumCardStyle("large"),
+          getPremiumCardStyle('large'),
           styles.studyCard,
           {
             backgroundColor: theme.colors.background.secondary,
@@ -52,7 +52,7 @@ export function RecentSessionsEmpty({
     <View
       style={[
         styles.card,
-        getPremiumCardStyle("large"),
+        getPremiumCardStyle('large'),
         {
           backgroundColor: theme.colors.background.secondary,
           borderColor: theme.colors.border.light,

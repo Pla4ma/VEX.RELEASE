@@ -1,14 +1,14 @@
-import { eventBus } from "../../events";
-import { v4 } from "../../utils/uuid";
-import * as repository from "./repository";
-import { expireRepairQuest, completeRepairQuest } from "./streak-repair-lifecycle";
+import { eventBus } from '../../events';
+import { v4 } from '../../utils/uuid';
+import * as repository from './repository';
+import { expireRepairQuest, completeRepairQuest } from './streak-repair-lifecycle';
 
 export {
   expireRepairQuest,
   completeRepairQuest,
   getRepairQuestStatus,
   processExpiredRepairQuests,
-} from "./streak-repair-lifecycle";
+} from './streak-repair-lifecycle';
 
 const REPAIR_QUEST_CONFIG = {
   sessionsRequired: 3,
@@ -26,7 +26,7 @@ export interface StreakRepairQuest {
   sessionsRequired: number;
   startedAt: number;
   expiresAt: number;
-  status: "ACTIVE" | "COMPLETED" | "EXPIRED" | "ABANDONED";
+  status: 'ACTIVE' | 'COMPLETED' | 'EXPIRED' | 'ABANDONED';
   sessionIds: string[];
   completedAt: number | null;
 }
@@ -65,23 +65,23 @@ export async function createRepairQuest(
     sessionsRequired: REPAIR_QUEST_CONFIG.sessionsRequired,
     startedAt: now,
     expiresAt: now + REPAIR_QUEST_CONFIG.timeWindowHours * 60 * 60 * 1000,
-    status: "ACTIVE" as const,
+    status: 'ACTIVE' as const,
     sessionIds: [],
     completedAt: null,
   };
   await repository.saveRepairQuest(quest);
-  eventBus.publish("streak:repair_quest_created", {
+  eventBus.publish('streak:repair_quest_created', {
     userId,
     questId: quest.id,
     daysToRecover: targetRestoreDays,
     deadline: quest.expiresAt,
   });
-  eventBus.publish("notification:send", {
+  eventBus.publish('notification:send', {
     userId,
-    type: "STREAK_REPAIR_QUEST",
-    title: "🔥 Streak Repair Quest Started!",
+    type: 'STREAK_REPAIR_QUEST',
+    title: '🔥 Streak Repair Quest Started!',
     body: `Complete 3 sessions in 24h to restore your ${previousStreak}-day streak to ${targetRestoreDays} days!`,
-    data: { questId: quest.id, action: "VIEW_REPAIR_QUEST" },
+    data: { questId: quest.id, action: 'VIEW_REPAIR_QUEST' },
   });
   return quest;
 }
@@ -98,7 +98,7 @@ export async function recordRepairQuestSession(
   restoredToDays: number;
 }> {
   const quest = await repository.fetchActiveRepairQuest(userId);
-  if (!quest || quest.status !== "ACTIVE") {
+  if (!quest || quest.status !== 'ACTIVE') {
     return {
       questUpdated: false,
       questCompleted: false,
@@ -150,11 +150,11 @@ export async function recordRepairQuestSession(
   }
   const remainingSessions =
     REPAIR_QUEST_CONFIG.sessionsRequired - sessionsCompleted;
-  eventBus.publish("notification:send", {
+  eventBus.publish('notification:send', {
     userId,
-    type: "STREAK_REPAIR_PROGRESS",
+    type: 'STREAK_REPAIR_PROGRESS',
     title: `🔥 Repair Quest: ${sessionsCompleted}/3 Complete`,
-    body: `${remainingSessions} more session${remainingSessions === 1 ? "" : "s"} to restore your streak!`,
+    body: `${remainingSessions} more session${remainingSessions === 1 ? '' : 's'} to restore your streak!`,
     data: {
       questId: quest.id,
       sessionsCompleted,

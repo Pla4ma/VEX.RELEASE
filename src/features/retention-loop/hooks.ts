@@ -1,7 +1,7 @@
-import { useMemo } from "react";
-import type { JourneyState } from "./schemas";
-import type { Lane } from "../lane-engine/types";
-import { computeJourneyState } from "./service";
+import { useMemo } from 'react';
+import type { JourneyState } from './schemas';
+import type { Lane } from '../lane-engine/types';
+import { computeJourneyState } from './service';
 
 /**
  * Hook to derive retention journey state for the current user.
@@ -19,19 +19,5 @@ export function useRetentionDay(input: {
   inactivityDays: number;
   hasInsightReady: boolean;
 }): JourneyState {
-  return useMemo(
-    () => computeJourneyState(input),
-    [
-      input.userId,
-      input.daysSinceOnboarding,
-      input.completedSessions,
-      input.hasCompletedToday,
-      input.hasSeenMemoryInsight,
-      input.lane,
-      input.rescueCompleted,
-      input.recentDismissals,
-      input.inactivityDays,
-      input.hasInsightReady,
-    ],
-  );
+  return useMemo(() => computeJourneyState(input), [input]);
 }

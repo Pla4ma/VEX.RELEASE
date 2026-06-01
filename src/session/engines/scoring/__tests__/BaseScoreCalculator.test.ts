@@ -7,12 +7,12 @@ import {
   calculateBaseScoreFromSession,
   validateScoringInput,
   SCORING_CONSTANTS,
-} from "../BaseScoreCalculator";
-import type { SessionState } from "../../../types";
+} from '../BaseScoreCalculator';
+import type { SessionState } from '../../../types';
 
-describe("BaseScoreCalculator", () => {
-  describe("calculateBaseScore", () => {
-    it("should calculate base score for completed session", () => {
+describe('BaseScoreCalculator', () => {
+  describe('calculateBaseScore', () => {
+    it('should calculate base score for completed session', () => {
       const result = calculateBaseScore({
         durationSeconds: 1500, // 25 minutes
         completionPercentage: 100,
@@ -24,7 +24,7 @@ describe("BaseScoreCalculator", () => {
       expect(result.completionMultiplier).toBe(1.0);
     });
 
-    it("should return 0 for sessions below minimum completion", () => {
+    it('should return 0 for sessions below minimum completion', () => {
       const result = calculateBaseScore({
         durationSeconds: 1500,
         completionPercentage: 40, // Below 50% threshold
@@ -35,7 +35,7 @@ describe("BaseScoreCalculator", () => {
       expect(result.meetsMinimumCompletion).toBe(false);
     });
 
-    it("should apply completion multiplier", () => {
+    it('should apply completion multiplier', () => {
       const fullResult = calculateBaseScore({
         durationSeconds: 1500,
         completionPercentage: 100,
@@ -53,7 +53,7 @@ describe("BaseScoreCalculator", () => {
       expect(partialResult.completionMultiplier).toBe(0.75);
     });
 
-    it("should cap at maximum base score", () => {
+    it('should cap at maximum base score', () => {
       const result = calculateBaseScore({
         durationSeconds: 100000, // Very long session
         completionPercentage: 100,
@@ -64,7 +64,7 @@ describe("BaseScoreCalculator", () => {
       expect(result.basePoints).toBe(SCORING_CONSTANTS.MAX_BASE_SCORE);
     });
 
-    it("should calculate correct duration points", () => {
+    it('should calculate correct duration points', () => {
       const result = calculateBaseScore({
         durationSeconds: 600, // 10 minutes
         completionPercentage: 100,
@@ -75,8 +75,8 @@ describe("BaseScoreCalculator", () => {
     });
   });
 
-  describe("calculateBaseScoreFromSession", () => {
-    it("should extract values from session state", () => {
+  describe('calculateBaseScoreFromSession', () => {
+    it('should extract values from session state', () => {
       const session: Partial<SessionState> = {
         config: { duration: 1800 } as any,
         completionPercentage: 90,
@@ -90,8 +90,8 @@ describe("BaseScoreCalculator", () => {
     });
   });
 
-  describe("validateScoringInput", () => {
-    it("should validate valid input", () => {
+  describe('validateScoringInput', () => {
+    it('should validate valid input', () => {
       const result = validateScoringInput({
         durationSeconds: 1500,
         completionPercentage: 100,
@@ -102,7 +102,7 @@ describe("BaseScoreCalculator", () => {
       expect(result.errors).toHaveLength(0);
     });
 
-    it("should reject negative duration", () => {
+    it('should reject negative duration', () => {
       const result = validateScoringInput({
         durationSeconds: -100,
         completionPercentage: 100,
@@ -110,10 +110,10 @@ describe("BaseScoreCalculator", () => {
       });
 
       expect(result.valid).toBe(false);
-      expect(result.errors).toContain("Duration cannot be negative");
+      expect(result.errors).toContain('Duration cannot be negative');
     });
 
-    it("should reject duration exceeding max", () => {
+    it('should reject duration exceeding max', () => {
       const result = validateScoringInput({
         durationSeconds: 30000, // > 8 hours
         completionPercentage: 100,
@@ -121,10 +121,10 @@ describe("BaseScoreCalculator", () => {
       });
 
       expect(result.valid).toBe(false);
-      expect(result.errors).toContain("Duration exceeds maximum (8 hours)");
+      expect(result.errors).toContain('Duration exceeds maximum (8 hours)');
     });
 
-    it("should reject invalid completion percentage", () => {
+    it('should reject invalid completion percentage', () => {
       const result = validateScoringInput({
         durationSeconds: 1500,
         completionPercentage: 150, // > 100%
@@ -133,11 +133,11 @@ describe("BaseScoreCalculator", () => {
 
       expect(result.valid).toBe(false);
       expect(result.errors).toContain(
-        "Completion percentage must be between 0 and 100",
+        'Completion percentage must be between 0 and 100',
       );
     });
 
-    it("should reject negative effective time", () => {
+    it('should reject negative effective time', () => {
       const result = validateScoringInput({
         durationSeconds: 1500,
         completionPercentage: 100,
@@ -145,7 +145,7 @@ describe("BaseScoreCalculator", () => {
       });
 
       expect(result.valid).toBe(false);
-      expect(result.errors).toContain("Effective time cannot be negative");
+      expect(result.errors).toContain('Effective time cannot be negative');
     });
   });
 });

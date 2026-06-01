@@ -1,15 +1,15 @@
-import { useCallback } from "react";
-import type { FeatureAccessResult } from "../../../features/liveops-config";
-import { buildLearningSessionParams } from "../../../features/learning-execution";
-import type { LearningSessionTarget } from "../../../features/learning-execution";
-import type { SessionStackParams } from "../../../navigation/types";
-import type { Nav } from "./engaged-home-types";
+import { useCallback } from 'react';
+import type { FeatureAccessResult } from '../../../features/liveops-config';
+import { buildLearningSessionParams } from '../../../features/learning-execution';
+import type { LearningSessionTarget } from '../../../features/learning-execution';
+import type { SessionStackParams } from '../../../navigation/types';
+import type { Nav } from './engaged-home-types';
 
 interface EngagedNavigationParams {
   analytics: {
     trackFirstSessionStarted: (userId: string, source: string) => void;
     trackNextBestActionPressed: (
-      stage: import("../../../features/liveops-config").UserExperienceStage,
+      stage: import('../../../features/liveops-config').UserExperienceStage,
       completedSessions: number,
     ) => void;
   };
@@ -37,29 +37,29 @@ export function useEngagedNavigation(params: EngagedNavigationParams) {
       if (userId && disclosure.inputs.totalCompletedSessions === 0) {
         analytics.trackFirstSessionStarted(
           userId,
-          (params as SessionStackParams["SessionSetup"] | undefined)?.source ??
-            "home",
+          (params as SessionStackParams['SessionSetup'] | undefined)?.source ??
+            'home',
         );
       }
-      navigation.navigate("SessionStack", {
-        screen: "SessionSetup",
-        params: (params ?? {}) as SessionStackParams["SessionSetup"],
+      navigation.navigate('SessionStack', {
+        screen: 'SessionSetup',
+        params: (params ?? {}) as SessionStackParams['SessionSetup'],
       });
     },
     [analytics, disclosure.inputs.totalCompletedSessions, navigation, userId],
   );
 
   const openProgress = useCallback(
-    () => navigation.navigate("Main", { screen: "Progress" }),
+    () => navigation.navigate('Main', { screen: 'Progress' }),
     [navigation],
   );
 
   const openSocial = useCallback(() => {
     navigation.navigate(
-      "Main",
+      'Main',
       canNavigateSocial
-        ? { screen: "Profile", params: { tab: "social" } }
-        : { screen: "Profile", params: { tab: "stats" } },
+        ? { screen: 'Profile', params: { tab: 'social' } }
+        : { screen: 'Profile', params: { tab: 'stats' } },
     );
   }, [canNavigateSocial, navigation]);
 
@@ -68,7 +68,7 @@ export function useEngagedNavigation(params: EngagedNavigationParams) {
       openSetup();
       return;
     }
-    navigation.navigate("ContentStudy");
+    navigation.navigate('ContentStudy');
   }, [canNavigateContentStudy, navigation, openSetup]);
 
   const continueStudyPlan = useCallback(() => {

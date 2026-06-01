@@ -1,10 +1,10 @@
-import { z } from "zod";
+import { z } from 'zod';
 import {
   MessageCategorySchema,
   TriggerTypeSchema,
   RecommendationTypeSchema,
   CoachUserStateSchema,
-} from "./schemas";
+} from './schemas';
 
 export const CoachMessageGeneratedEventSchema = z.object({
   userId: z.string().uuid(),
@@ -12,7 +12,7 @@ export const CoachMessageGeneratedEventSchema = z.object({
   category: MessageCategorySchema,
   content: z.string(),
   priority: z.number(),
-  deliveryMethod: z.enum(["IN_APP", "PUSH", "BOTH", "DEFERRED"]),
+  deliveryMethod: z.enum(['IN_APP', 'PUSH', 'BOTH', 'DEFERRED']),
   timestamp: z.number(),
 });
 
@@ -51,21 +51,21 @@ export const InterventionTriggeredEventSchema = z.object({
 export const BehaviorSignalDetectedEventSchema = z.object({
   userId: z.string().uuid(),
   signalType: z.enum([
-    "SESSION_FREQUENCY",
-    "SESSION_QUALITY_TREND",
-    "STREAK_MAINTENANCE_RATE",
-    "PREFERRED_TIME_OF_DAY",
-    "FOCUS_DURATION_PREFERENCE",
-    "DIFFICULTY_PREFERENCE",
-    "SOCIAL_ENGAGEMENT",
-    "CHALLENGE_COMPLETION_RATE",
-    "BOSS_PARTICIPATION",
-    "MORNING_PERSON",
-    "NIGHT_OWL",
-    "WEEKEND_WARRIOR",
-    "CONSISTENCY_SCORE",
-    "RESPONSIVENESS_TO_REMINDERS",
-    "COMEBACK_VELOCITY",
+    'SESSION_FREQUENCY',
+    'SESSION_QUALITY_TREND',
+    'STREAK_MAINTENANCE_RATE',
+    'PREFERRED_TIME_OF_DAY',
+    'FOCUS_DURATION_PREFERENCE',
+    'DIFFICULTY_PREFERENCE',
+    'SOCIAL_ENGAGEMENT',
+    'CHALLENGE_COMPLETION_RATE',
+    'BOSS_PARTICIPATION',
+    'MORNING_PERSON',
+    'NIGHT_OWL',
+    'WEEKEND_WARRIOR',
+    'CONSISTENCY_SCORE',
+    'RESPONSIVENESS_TO_REMINDERS',
+    'COMEBACK_VELOCITY',
   ]),
   value: z.number(),
   confidence: z.number(),
@@ -76,7 +76,7 @@ export const StreakRiskDetectedEventSchema = z.object({
   userId: z.string().uuid(),
   currentStreak: z.number(),
   hoursSinceLastSession: z.number(),
-  riskLevel: z.enum(["NONE", "LOW", "MEDIUM", "HIGH", "CRITICAL"]),
+  riskLevel: z.enum(['NONE', 'LOW', 'MEDIUM', 'HIGH', 'CRITICAL']),
   detectedAt: z.number(),
 });
 
@@ -102,7 +102,7 @@ export const RecommendationGeneratedEventSchema = z.object({
   recommendationId: z.string().uuid(),
   type: RecommendationTypeSchema,
   suggestedDuration: z.number(),
-  suggestedDifficulty: z.enum(["EASY", "NORMAL", "CHALLENGING", "PUSH"]),
+  suggestedDifficulty: z.enum(['EASY', 'NORMAL', 'CHALLENGING', 'PUSH']),
   reasoning: z.string(),
   generatedAt: z.number(),
 });

@@ -1,8 +1,8 @@
-import type { z } from "zod";
+import type { z } from 'zod';
 import type {
   MonthlyFocusReportInputSchema,
   MonthlyFocusReportSummarySchema,
-} from "./schemas";
+} from './schemas';
 
 export type MonthlyFocusReportInput = z.infer<
   typeof MonthlyFocusReportInputSchema

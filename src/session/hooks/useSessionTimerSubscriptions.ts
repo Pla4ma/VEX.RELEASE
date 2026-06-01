@@ -1,9 +1,9 @@
-import { useEffect, type RefObject } from "react";
-import { AppState, type AppStateStatus } from "react-native";
-import { createDebugger } from "../../utils/debug";
-import { eventBus } from "../../events";
+import { useEffect, type RefObject } from 'react';
+import { AppState, type AppStateStatus } from 'react-native';
+import { createDebugger } from '../../utils/debug';
+import { eventBus } from '../../events';
 
-const debug = createDebugger("session:timer");
+const debug = createDebugger('session:timer');
 
 const MAX_BACKGROUND_DRIFT = 5000;
 
@@ -89,27 +89,27 @@ export function useSessionTimerSubscriptions(
 
   useEffect(() => {
     const handleAppStateChange = (nextAppState: AppStateStatus) => {
-      if (nextAppState === "background" && isRunning && !isPaused) {
+      if (nextAppState === 'background' && isRunning && !isPaused) {
         backgroundedAtRef.current = Date.now();
         if (intervalRef.current) {
           clearInterval(intervalRef.current);
           intervalRef.current = null;
         }
-        debug.info("Timer paused due to background");
-        eventBus.publish("analytics:track", {
-          event: "session_timer_backgrounded",
+        debug.info('Timer paused due to background');
+        eventBus.publish('analytics:track', {
+          event: 'session_timer_backgrounded',
           properties: { elapsed: elapsedTime },
         });
         if (onBackground) {
           onBackground(0);
         }
       }
-      if (nextAppState === "active" && isRunning && backgroundedAtRef.current) {
+      if (nextAppState === 'active' && isRunning && backgroundedAtRef.current) {
         const backgroundDuration = Date.now() - backgroundedAtRef.current;
         backgroundTimeRef.current += backgroundDuration;
         backgroundedAtRef.current = null;
         if (backgroundDuration > MAX_BACKGROUND_DRIFT) {
-          debug.warn("Extended background time detected", {
+          debug.warn('Extended background time detected', {
             duration: backgroundDuration,
           });
           const adjustedElapsed = elapsedTime + backgroundDuration;
@@ -123,9 +123,9 @@ export function useSessionTimerSubscriptions(
         }
         lastTickRef.current = Date.now();
         intervalRef.current = setInterval(tick, tickInterval);
-        debug.info("Timer resumed after foreground", { backgroundDuration });
-        eventBus.publish("analytics:track", {
-          event: "session_timer_foregrounded",
+        debug.info('Timer resumed after foreground', { backgroundDuration });
+        eventBus.publish('analytics:track', {
+          event: 'session_timer_foregrounded',
           properties: {
             elapsed: elapsedTime,
             backgroundDuration,
@@ -138,7 +138,7 @@ export function useSessionTimerSubscriptions(
       }
     };
     const subscription = AppState.addEventListener(
-      "change",
+      'change',
       handleAppStateChange,
     );
     return () => {

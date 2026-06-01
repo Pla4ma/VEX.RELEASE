@@ -8,15 +8,15 @@
 export {
   ContentStudyAnalyticsService,
   contentStudyAnalytics,
-} from "./analytics-service";
-export type { AnalyticsProvider } from "./analytics-service";
+} from './analytics-service';
+export type { AnalyticsProvider } from './analytics-service';
 
-export { hashString } from "./analytics-input-trackers";
+export { hashString } from './analytics-input-trackers';
 
-export { calculateMetrics, useContentStudyAnalytics } from "./analytics-hooks";
+export { calculateMetrics, useContentStudyAnalytics } from './analytics-hooks';
 
-import { inputTrackers } from "./analytics-input-trackers";
-import { studyTrackers } from "./analytics-study-trackers";
+import { inputTrackers } from './analytics-input-trackers';
+import { studyTrackers } from './analytics-study-trackers';
 
 /** Combined convenience analytics event trackers */
 export const analytics = {

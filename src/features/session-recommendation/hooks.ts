@@ -4,17 +4,17 @@
  * Provides hooks for consuming the session recommendation system in React components.
  */
 
-import { useMemo, useCallback } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { useAuthStore } from "../../store";
+import { useMemo, useCallback } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { useAuthStore } from '../../store';
 import {
   generateSessionRecommendation,
   isRecommendationValid,
   getFallbackRecommendation,
   type SessionRecommendation,
   type SessionRecommendationInput,
-} from "./service";
-import { triggerHaptic } from "../../utils/haptics";
+} from './service';
+import { triggerHaptic } from '../../utils/haptics';
 
 /**
  * Hook for getting the current session recommendation
@@ -30,12 +30,12 @@ export function useSessionRecommendation(
       recentSessionLength: input.recentSessionLength,
       recentGrade: input.recentGrade,
       timeOfDay: input.timeOfDay ?? new Date().getHours(),
-      streakUrgency: input.streakUrgency ?? "none",
-      recoveryStatus: input.recoveryStatus ?? "none",
+      streakUrgency: input.streakUrgency ?? 'none',
+      recoveryStatus: input.recoveryStatus ?? 'none',
       dailyMissionType: input.dailyMissionType,
       isFirstSession: input.isFirstSession ?? false,
       hasActiveSession: input.hasActiveSession ?? false,
-      userId: userId ?? "",
+      userId: userId ?? '',
     }),
     [input, userId],
   );
@@ -83,7 +83,7 @@ export function useSessionRecommendationActions() {
       onStartSession: (duration: number, mode: string) => void,
     ) => {
       // Trigger haptic feedback
-      triggerHaptic("impactLight");
+      triggerHaptic('impactLight');
 
       // Start the session with recommended parameters
       onStartSession(recommendation.duration, recommendation.mode);
@@ -94,7 +94,7 @@ export function useSessionRecommendationActions() {
   const dismissRecommendation = useCallback(
     (recommendation: SessionRecommendation, onDismiss: () => void) => {
       // Trigger haptic feedback
-      triggerHaptic("impactLight");
+      triggerHaptic('impactLight');
 
       // Dismiss the recommendation
       onDismiss();
@@ -137,11 +137,11 @@ export function useSessionRecommendationAnalytics(
  * Query key factory for session recommendation queries
  */
 export const sessionRecommendationKeys = {
-  all: ["session-recommendation"] as const,
+  all: ['session-recommendation'] as const,
   current: (userId: string) =>
-    [...sessionRecommendationKeys.all, "current", userId] as const,
+    [...sessionRecommendationKeys.all, 'current', userId] as const,
   analytics: (userId: string) =>
-    [...sessionRecommendationKeys.all, "analytics", userId] as const,
+    [...sessionRecommendationKeys.all, 'analytics', userId] as const,
 };
 
 /**
@@ -149,7 +149,7 @@ export const sessionRecommendationKeys = {
  */
 export function useRecommendationHistory(userId: string | null) {
   return useQuery({
-    queryKey: sessionRecommendationKeys.analytics(userId ?? ""),
+    queryKey: sessionRecommendationKeys.analytics(userId ?? ''),
     queryFn: async () => {
       if (!userId) {
         return [];

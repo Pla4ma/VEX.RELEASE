@@ -6,10 +6,10 @@
  */
 
 export type IntegrationEventType =
-  | "integration:session_rewards"
-  | "integration:session_challenges"
-  | "integration:session_social"
-  | "integration:economy_progression";
+  | 'integration:session_rewards'
+  | 'integration:session_challenges'
+  | 'integration:session_social'
+  | 'integration:economy_progression';
 
 export interface IntegrationSessionRewardsEvent {
   sessionId: string;
@@ -51,7 +51,7 @@ export interface IntegrationSessionSocialEvent {
 export interface IntegrationEconomyProgressionEvent {
   userId: string;
   transaction: {
-    type: "earn" | "spend";
+    type: 'earn' | 'spend';
     currency: string;
     amount: number;
     source: string;

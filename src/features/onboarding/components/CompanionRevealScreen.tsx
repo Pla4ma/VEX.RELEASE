@@ -8,15 +8,15 @@
  * @phase 4
  */
 
-import React from "react";
-import { Pressable } from "react-native";
-import Animated, { FadeIn, FadeInUp } from "react-native-reanimated";
+import React from 'react';
+import { Pressable } from 'react-native';
+import Animated, { FadeIn, FadeInUp } from 'react-native-reanimated';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { Button } from "../../../components/primitives/Button";
-import { useTheme } from "../../../theme";
-import { CompanionCreature } from "./CompanionCreature";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { Button } from '../../../components/primitives/Button';
+import { useTheme } from '../../../theme';
+import { CompanionCreature } from './CompanionCreature';
 
 interface CompanionRevealScreenProps {
   userName: string;
@@ -33,7 +33,7 @@ export function CompanionRevealScreen({
   onBack,
 }: CompanionRevealScreenProps): JSX.Element {
   const { theme } = useTheme();
-  const displayName = userName || "there";
+  const displayName = userName || 'there';
 
   return (
     <Box flex={1} bg="background.primary" px="lg" py="xl">
@@ -68,7 +68,7 @@ export function CompanionRevealScreen({
       {/* Companion Reveal */}
       <Animated.View
         entering={FadeInUp.duration(600).delay(200)}
-        style={{ width: "100%" }}
+        style={{ width: '100%' }}
       >
         <Box alignItems="center" py="xl">
           <CompanionCreature />
@@ -105,7 +105,7 @@ export function CompanionRevealScreen({
       {/* CTA Button */}
       <Animated.View
         entering={FadeInUp.duration(400).delay(800)}
-        style={{ width: "100%" }}
+        style={{ width: '100%' }}
       >
         <Button
           variant="primary"
@@ -123,7 +123,7 @@ export function CompanionRevealScreen({
       {/* Back Option */}
       <Animated.View
         entering={FadeIn.duration(400).delay(900)}
-        style={{ marginTop: "auto" }}
+        style={{ marginTop: 'auto' }}
       >
         <Pressable
           onPress={onBack}

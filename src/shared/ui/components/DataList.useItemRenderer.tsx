@@ -1,11 +1,11 @@
 /**
  * DataList — renderItemWrapper hook
  */
-import React, { useCallback } from "react";
-import { View, ActivityIndicator, Pressable } from "react-native";
-import { styles } from "./DataList.styles";
-import type { DataListItem } from "./DataList.types";
-import type { Theme } from "../../../theme";
+import React, { useCallback } from 'react';
+import { View, ActivityIndicator, Pressable } from 'react-native';
+import { styles } from './DataList.styles';
+import type { DataListItem } from './DataList.types';
+import type { Theme } from '../../../theme';
 
 interface UseItemRendererOptions<T> {
   renderItem: (

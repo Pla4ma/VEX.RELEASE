@@ -1,8 +1,8 @@
-import { z } from "zod";
-import { SessionMode, SessionModeSchema } from "../../session/modes";
-import { SessionSummarySchema, type SessionSummary } from "../../session/types";
-import { calculateSessionGrade } from "./grading-service";
-import { CompletionLedgerSchema, type CompletionLedger } from "./schemas";
+import { z } from 'zod';
+import { SessionMode, SessionModeSchema } from '../../session/modes';
+import { SessionSummarySchema, type SessionSummary } from '../../session/types';
+import { calculateSessionGrade } from './grading-service';
+import { CompletionLedgerSchema, type CompletionLedger } from './schemas';
 
 const BuildCompletionLedgerInputSchemaBase = z.object({
   backgroundTimeSeconds: z.number().int().min(0).default(0),
@@ -17,14 +17,14 @@ const BuildCompletionLedgerInputSchemaBase = z.object({
   isAbandoned: z.boolean().default(false),
   isRecoverySession: z.boolean().default(false),
   offlineSyncStatus:
-    CompletionLedgerSchema.shape.offlineSyncStatus.default("synced"),
+    CompletionLedgerSchema.shape.offlineSyncStatus.default('synced'),
   pauseCount: z.number().int().min(0).optional(),
   rewardIds: z.array(z.string()).default([]),
   sessionId: z.string().uuid(),
   startedAt: z.number().int().nonnegative().optional(),
   strictMode: z.boolean().optional(),
   summary: SessionSummarySchema,
-  timezone: z.string().min(1).default("UTC"),
+  timezone: z.string().min(1).default('UTC'),
   userId: z.string().min(1),
   xpDelta: z.number().int().optional(),
 });
@@ -36,14 +36,14 @@ export type BuildCompletionLedgerInput = {
   backgroundTimeSeconds?: number;
   companionReactionId?: string | null;
   completedAt?: number;
-  dailyMissionResult?: CompletionLedger["dailyMissionResult"];
+  dailyMissionResult?: CompletionLedger['dailyMissionResult'];
   degradedSystems?: string[];
   focusScoreDelta?: number;
   idempotencyKey?: string;
   interruptionCount?: number;
   isAbandoned?: boolean;
   isRecoverySession?: boolean;
-  offlineSyncStatus?: CompletionLedger["offlineSyncStatus"];
+  offlineSyncStatus?: CompletionLedger['offlineSyncStatus'];
   pauseCount?: number;
   rewardIds?: string[];
   startedAt?: number;
@@ -90,10 +90,10 @@ export function buildCompletionLedger(
     targetDurationSeconds: input.summary.plannedDuration,
   });
 
-  const grade = grading.kind === "completed" ? grading.grade : "D";
+  const grade = grading.kind === 'completed' ? grading.grade : 'D';
   const gradeScore =
-    grading.kind === "completed" ? Math.round(grading.gradeScore) : 20;
-  const qualityScore = grading.kind === "completed" ? grading.qualityScore : 20;
+    grading.kind === 'completed' ? Math.round(grading.gradeScore) : 20;
+  const qualityScore = grading.kind === 'completed' ? grading.qualityScore : 20;
   const focusScoreDelta =
     input.focusScoreDelta ?? grading.focusScoreImpactRecommendation;
   const xpDelta =
@@ -108,7 +108,7 @@ export function buildCompletionLedger(
     dailyMissionResult: input.dailyMissionResult ?? {
       missionId: null,
       progressDelta: 0,
-      status: "unchanged",
+      status: 'unchanged',
     },
     degradedSystems: input.degradedSystems,
     effectiveFocusedSeconds: input.summary.effectiveDuration,
@@ -127,7 +127,7 @@ export function buildCompletionLedger(
     sessionId: input.sessionId,
     startedAt,
     streakResult: {
-      action: input.summary.streakIncreased ? "extended" : "maintained",
+      action: input.summary.streakIncreased ? 'extended' : 'maintained',
       newDays: input.summary.streakDays ?? 0,
       previousDays: Math.max(
         0,

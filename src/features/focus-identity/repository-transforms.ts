@@ -1,10 +1,10 @@
-import type { z } from "zod";
-import { launchColors } from "@theme/tokens/launch-colors";
+import type { z } from 'zod';
+import { launchColors } from '@theme/tokens/launch-colors';
 import type {
   FocusIdentityProfile,
   FocusScoreFactors,
-} from "./FocusIdentityEngine";
-import type { FocusProfileRowSchema } from "./repository-helpers";
+} from './FocusIdentityEngine';
+import type { FocusProfileRowSchema } from './repository-helpers';
 
 export function transformRowToProfile(
   row: z.infer<typeof FocusProfileRowSchema>,
@@ -68,7 +68,7 @@ export function transformRowToProfile(
       sessionQuality: {
         score: 50,
         averageFocusPurity: 0,
-        averageGrade: "D",
+        averageGrade: 'D',
         perfectSessionsCount: 0,
         averageSessionDuration: 0,
       },
@@ -85,7 +85,7 @@ export function transformRowToProfile(
         daysSinceLastSession: 999,
         last7DayActivity: 0,
         last30DayActivity: 0,
-        trendDirection: "STABLE",
+        trendDirection: 'STABLE',
         velocity: 0,
       },
     },

@@ -14,11 +14,11 @@ export function sanitizeContext(
   if (!context) {
     return undefined;
   }
-  const sensitiveKeys = ["email", "name", "phone", "address", "ip", "location"];
+  const sensitiveKeys = ['email', 'name', 'phone', 'address', 'ip', 'location'];
   const sanitized: Record<string, unknown> = {};
   for (const [key, value] of Object.entries(context)) {
     if (sensitiveKeys.some((sk) => key.toLowerCase().includes(sk))) {
-      sanitized[key] = "[REDACTED]";
+      sanitized[key] = '[REDACTED]';
     } else {
       sanitized[key] = value;
     }
@@ -30,20 +30,20 @@ export function sanitizeProperties(
   properties: Record<string, unknown>,
 ): Record<string, unknown> {
   const sensitiveKeys = [
-    "email",
-    "name",
-    "phone",
-    "address",
-    "content",
-    "message",
+    'email',
+    'name',
+    'phone',
+    'address',
+    'content',
+    'message',
   ];
   const sanitized: Record<string, unknown> = {};
   for (const [key, value] of Object.entries(properties)) {
     if (sensitiveKeys.some((sk) => key.toLowerCase().includes(sk))) {
-      if (key === "content" || key === "message") {
-        sanitized[key] = "[CONTENT_REDACTED]";
+      if (key === 'content' || key === 'message') {
+        sanitized[key] = '[CONTENT_REDACTED]';
       } else {
-        sanitized[key] = "[REDACTED]";
+        sanitized[key] = '[REDACTED]';
       }
     } else {
       sanitized[key] = value;

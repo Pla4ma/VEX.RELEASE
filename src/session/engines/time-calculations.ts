@@ -1,4 +1,4 @@
-import type { TimeBreakdown, TimeProgressMetrics } from "../types";
+import type { TimeBreakdown, TimeProgressMetrics } from '../types';
 
 export const TIME_CONSTANTS = {
   MILLISECONDS_PER_SECOND: 1000,
@@ -98,20 +98,20 @@ export function getTimeStatus(
   elapsed: number,
   duration: number,
   isPaused: boolean,
-): "PENDING" | "ACTIVE" | "PAUSED" | "COMPLETE" | "OVERDUE" {
+): 'PENDING' | 'ACTIVE' | 'PAUSED' | 'COMPLETE' | 'OVERDUE' {
   if (elapsed <= 0 && !isPaused) {
-    return "PENDING";
+    return 'PENDING';
   }
   if (isPaused) {
-    return "PAUSED";
+    return 'PAUSED';
   }
   if (elapsed >= duration) {
-    return "COMPLETE";
+    return 'COMPLETE';
   }
   if (elapsed > duration * 1.5) {
-    return "OVERDUE";
+    return 'OVERDUE';
   }
-  return "ACTIVE";
+  return 'ACTIVE';
 }
 
 export function calculateCurrentInterval(
@@ -122,12 +122,12 @@ export function calculateCurrentInterval(
   intervalsBeforeLongBreak: number,
 ): {
   interval: number;
-  phase: "FOCUS" | "BREAK" | "LONG_BREAK";
+  phase: 'FOCUS' | 'BREAK' | 'LONG_BREAK';
   timeInPhase: number;
 } {
   let timeRemaining = elapsed;
   let interval = 1;
-  let phase: "FOCUS" | "BREAK" | "LONG_BREAK" = "FOCUS";
+  let phase: 'FOCUS' | 'BREAK' | 'LONG_BREAK' = 'FOCUS';
   let timeInPhase = 0;
   while (timeRemaining > 0) {
     const isLongBreakInterval =
@@ -141,12 +141,12 @@ export function calculateCurrentInterval(
       if (timeRemaining >= currentBreakDuration) {
         timeRemaining -= currentBreakDuration;
       } else {
-        phase = isLongBreakInterval ? "LONG_BREAK" : "BREAK";
+        phase = isLongBreakInterval ? 'LONG_BREAK' : 'BREAK';
         timeInPhase = timeRemaining;
         timeRemaining = 0;
       }
     } else {
-      phase = "FOCUS";
+      phase = 'FOCUS';
       timeInPhase = timeRemaining;
       timeRemaining = 0;
     }

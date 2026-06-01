@@ -2,11 +2,11 @@ export type {
   WeeklyInsightInput,
   InsightFinding,
   WeeklyIntelligence,
-} from "./schemas";
+} from './schemas';
 
 export {
   WeeklyInsightInputSchema,
   WeeklyIntelligenceSchema,
-} from "./schemas";
+} from './schemas';
 
-export { buildWeeklyIntelligence } from "./service";
+export { buildWeeklyIntelligence } from './service';

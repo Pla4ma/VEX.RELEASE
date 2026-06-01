@@ -1,6 +1,6 @@
-import { z } from "zod";
-import { createDebugger } from "../../utils/debug";
-const debug = createDebugger("ai-coach:context");
+import { z } from 'zod';
+import { createDebugger } from '../../utils/debug';
+const debug = createDebugger('ai-coach:context');
 export const ContextSnapshotSchema = z.object({
   userId: z.string(),
   capturedAt: z.number(),
@@ -42,9 +42,9 @@ export const ContextSnapshotSchema = z.object({
     daysSinceJoin: z.number(),
   }),
   behaviorContext: z.object({
-    preferredTimeOfDay: z.enum(["morning", "afternoon", "evening", "night"]),
+    preferredTimeOfDay: z.enum(['morning', 'afternoon', 'evening', 'night']),
     typicalSessionDuration: z.number(),
-    responseToCoach: z.enum(["high", "medium", "low"]),
+    responseToCoach: z.enum(['high', 'medium', 'low']),
     lastCoachMessageAt: z.number().optional(),
   }),
 });
@@ -73,7 +73,7 @@ export async function generateContextSnapshot(
     },
     bossContext: {
       activeBoss: true,
-      bossId: "boss-123",
+      bossId: 'boss-123',
       bossHealth: 65,
       timeRemaining: 48 * 60 * 60 * 1000,
     },
@@ -92,59 +92,59 @@ export async function generateContextSnapshot(
     behaviorContext: {
       preferredTimeOfDay: getPreferredTime(hour),
       typicalSessionDuration: 25,
-      responseToCoach: "medium",
+      responseToCoach: 'medium',
       lastCoachMessageAt: now - 24 * 60 * 60 * 1000,
     },
   };
-  debug.info("Generated context snapshot for user %s", userId);
+  debug.info('Generated context snapshot for user %s', userId);
   return ContextSnapshotSchema.parse(snapshot);
 }
 function getPreferredTime(
   hour: number,
-): "morning" | "afternoon" | "evening" | "night" {
+): 'morning' | 'afternoon' | 'evening' | 'night' {
   if (hour >= 5 && hour < 12) {
-    return "morning";
+    return 'morning';
   }
   if (hour >= 12 && hour < 17) {
-    return "afternoon";
+    return 'afternoon';
   }
   if (hour >= 17 && hour < 22) {
-    return "evening";
+    return 'evening';
   }
-  return "night";
+  return 'night';
 }
 export function determineInterventionPriority(
   snapshot: ContextSnapshot,
-): "critical" | "high" | "medium" | "low" {
+): 'critical' | 'high' | 'medium' | 'low' {
   if (snapshot.streakContext.streakAtRisk) {
-    return "critical";
+    return 'critical';
   }
   if (
     snapshot.bossContext.activeBoss &&
     snapshot.bossContext.timeRemaining &&
     snapshot.bossContext.timeRemaining < 24 * 60 * 60 * 1000
   ) {
-    return "high";
+    return 'high';
   }
   if (snapshot.streakContext.hoursSinceLastSession > 20) {
-    return "medium";
+    return 'medium';
   }
-  return "low";
+  return 'low';
 }
 export function generateCoachPrompt(snapshot: ContextSnapshot): string {
   const priority = determineInterventionPriority(snapshot);
   const basePrompt = `You are VEX AI Coach. User context:
-- Streak: ${snapshot.streakContext.currentStreak} days (${snapshot.streakContext.streakAtRisk ? "AT RISK" : "stable"})
+- Streak: ${snapshot.streakContext.currentStreak} days (${snapshot.streakContext.streakAtRisk ? 'AT RISK' : 'stable'})
 - Level: ${snapshot.progressContext.currentLevel}
 - Sessions this week: ${snapshot.progressContext.sessionsThisWeek}
-- Active boss: ${snapshot.bossContext.activeBoss ? "YES" : "NO"}
-- Time: ${snapshot.temporalContext.hourOfDay}:00 (${snapshot.temporalContext.isWeekend ? "weekend" : "weekday"})
+- Active boss: ${snapshot.bossContext.activeBoss ? 'YES' : 'NO'}
+- Time: ${snapshot.temporalContext.hourOfDay}:00 (${snapshot.temporalContext.isWeekend ? 'weekend' : 'weekday'})
 - Preferred time: ${snapshot.behaviorContext.preferredTimeOfDay}
 - Response rate: ${snapshot.behaviorContext.responseToCoach}`;
-  if (priority === "critical") {
+  if (priority === 'critical') {
     return `${basePrompt}\n\nPRIORITY: CRITICAL - User's streak is at risk. Send urgent motivational message.`;
   }
-  if (priority === "high") {
+  if (priority === 'high') {
     return `${basePrompt}\n\nPRIORITY: HIGH - Boss battle ending soon. Encourage session to defeat boss.`;
   }
   return `${basePrompt}\n\nPRIORITY: ${priority.toUpperCase()} - Provide supportive, personalized coaching.`;
@@ -178,5 +178,5 @@ export function shouldCoachIntervene(
 }
 export function getContextHash(snapshot: ContextSnapshot): string {
   const key = `${snapshot.userId}:${snapshot.capturedAt}:${snapshot.streakContext.currentStreak}`;
-  return `ctx-${Buffer.from(key).toString("base64").slice(0, 16)}`;
+  return `ctx-${Buffer.from(key).toString('base64').slice(0, 16)}`;
 }

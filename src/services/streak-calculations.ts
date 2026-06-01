@@ -3,10 +3,10 @@
  * Extracted from streakService.ts to keep files under the 200-line limit.
  */
 
-import { createDebugger } from "../utils/debug";
-import type { StreakData, StreakUpdate } from "./streak-types";
+import { createDebugger } from '../utils/debug';
+import type { StreakData, StreakUpdate } from './streak-types';
 
-const debug = createDebugger("streak-calculations");
+const debug = createDebugger('streak-calculations');
 
 const ONE_DAY_MS = 24 * 60 * 60 * 1000;
 
@@ -48,7 +48,7 @@ export function calculateStreakUpdate(
       streakMaintained = true;
     }
   } else if (sessionDay.getTime() > today.getTime()) {
-    debug.warn("Session date is in the future, ignoring");
+    debug.warn('Session date is in the future, ignoring');
     return {
       newStreak: streakData.currentStreak,
       streakMaintained: false,

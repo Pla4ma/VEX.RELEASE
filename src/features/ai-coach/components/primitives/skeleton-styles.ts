@@ -1,11 +1,11 @@
-import { createSheet } from "@/shared/ui/create-sheet";
-import { launchColors } from "@theme/tokens/launch-colors";
+import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
 
 export const skeletonStyles = createSheet({
-  container: { backgroundColor: launchColors.hex_e1e4e8, overflow: "hidden" },
+  container: { backgroundColor: launchColors.hex_e1e4e8, overflow: 'hidden' },
   shimmer: {
-    width: "100%",
-    height: "100%",
+    width: '100%',
+    height: '100%',
     backgroundColor: launchColors.rgb_255_255_255_0_3,
   },
   textContainer: { gap: 8 },
@@ -16,13 +16,13 @@ export const skeletonStyles = createSheet({
     borderRadius: 12,
     gap: 12,
   },
-  cardHeader: { flexDirection: "row", alignItems: "center", gap: 12 },
+  cardHeader: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   headerText: { flex: 1, gap: 6 },
   headerLine: { marginBottom: 4 },
   button: { marginTop: 8 },
-  personaContainer: { flexDirection: "row", gap: 12 },
+  personaContainer: { flexDirection: 'row', gap: 12 },
   personaCard: {
-    alignItems: "center",
+    alignItems: 'center',
     gap: 8,
     padding: 16,
     backgroundColor: launchColors.hex_fff,
@@ -32,8 +32,8 @@ export const skeletonStyles = createSheet({
   personaName: { marginTop: 8 },
   listContainer: { gap: 12 },
   listItem: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 12,
     padding: 12,
     backgroundColor: launchColors.hex_fff,
@@ -43,7 +43,7 @@ export const skeletonStyles = createSheet({
   listLine: { marginBottom: 4 },
   streakContainer: { gap: 16 },
   streakContent: { padding: 16, gap: 12 },
-  streakBadge: { alignSelf: "center" },
+  streakBadge: { alignSelf: 'center' },
   comebackContainer: {
     padding: 16,
     backgroundColor: launchColors.hex_fff,

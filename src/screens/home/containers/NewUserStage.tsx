@@ -1,11 +1,11 @@
-import React from "react";
+import React from 'react';
 
-import { useNewUserHomeData } from "../hooks/useNewUserHomeData";
+import { useNewUserHomeData } from '../hooks/useNewUserHomeData';
 import {
   useNewUserContainerModel,
   type NewUserContainerInput,
-} from "./NewUserHomeContainer";
-import { HomeScreenInner } from "./HomeScreenInner";
+} from './NewUserHomeContainer';
+import { HomeScreenInner } from './HomeScreenInner';
 
 interface StageProps {
   sharedInput: NewUserContainerInput;

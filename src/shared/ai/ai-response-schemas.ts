@@ -1,16 +1,16 @@
-import { z } from "zod";
-import { AIBaseResponseSchema } from "./ai-base-schemas";
+import { z } from 'zod';
+import { AIBaseResponseSchema } from './ai-base-schemas';
 
 // Response schemas — each requestType has its own response schema for the discriminated union.
 
 export const GenerateCoachMessageResponseSchema = AIBaseResponseSchema.extend({
-  requestType: z.literal("GENERATE_COACH_MESSAGE"),
+  requestType: z.literal('GENERATE_COACH_MESSAGE'),
   content: z.string().max(1000),
   structuredData: z
     .object({
       message: z.string(),
       emoji: z.string().optional(),
-      urgency: z.enum(["low", "medium", "high"]).optional(),
+      urgency: z.enum(['low', 'medium', 'high']).optional(),
       suggestedAction: z.string().optional(),
     })
     .optional(),
@@ -21,7 +21,7 @@ export type GenerateCoachMessageResponse = z.infer<
 
 export const GenerateSessionSummaryResponseSchema = AIBaseResponseSchema.extend(
   {
-    requestType: z.literal("GENERATE_SESSION_SUMMARY"),
+    requestType: z.literal('GENERATE_SESSION_SUMMARY'),
     content: z.string().max(1500),
     structuredData: z.object({
       headline: z.string(),
@@ -37,7 +37,7 @@ export type GenerateSessionSummaryResponse = z.infer<
 
 export const GenerateComebackPromptResponseSchema = AIBaseResponseSchema.extend(
   {
-    requestType: z.literal("GENERATE_COMEBACK_PROMPT"),
+    requestType: z.literal('GENERATE_COMEBACK_PROMPT'),
     content: z.string().max(800),
     structuredData: z.object({
       message: z.string(),
@@ -52,7 +52,7 @@ export type GenerateComebackPromptResponse = z.infer<
 
 export const GenerateStreakRiskNudgeResponseSchema =
   AIBaseResponseSchema.extend({
-    requestType: z.literal("GENERATE_STREAK_RISK_NUDGE"),
+    requestType: z.literal('GENERATE_STREAK_RISK_NUDGE'),
     content: z.string().max(600),
     structuredData: z.object({
       urgencyMessage: z.string(),
@@ -67,7 +67,7 @@ export type GenerateStreakRiskNudgeResponse = z.infer<
 
 export const GenerateWeeklyReflectionResponseSchema =
   AIBaseResponseSchema.extend({
-    requestType: z.literal("GENERATE_WEEKLY_REFLECTION"),
+    requestType: z.literal('GENERATE_WEEKLY_REFLECTION'),
     content: z.string().max(2000),
     structuredData: z.object({
       headline: z.string(),

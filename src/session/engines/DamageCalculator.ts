@@ -1,11 +1,11 @@
-import type { SessionState, DamageCalculation } from "../types";
+import type { SessionState, DamageCalculation } from '../types';
 
 const BASE_SCORE_PER_MINUTE = 25;
 
 export function calculateDamage(
   session: SessionState,
   userStreak: number,
-  reason: "ABANDON" | "INTERRUPTION" | "TIMEOUT" | "ANTI_CHEAT",
+  reason: 'ABANDON' | 'INTERRUPTION' | 'TIMEOUT' | 'ANTI_CHEAT',
 ): DamageCalculation {
   const baseDamage = session.baseScore * 0.1;
   let pauseDamage = 0;
@@ -14,20 +14,20 @@ export function calculateDamage(
   let antiCheatDamage = 0;
 
   switch (reason) {
-    case "ABANDON":
+    case 'ABANDON':
       abandonDamage = baseDamage * 3;
       pauseDamage = session.pauses * 2;
       interruptionDamage = session.interruptions * 5;
       break;
-    case "INTERRUPTION":
+    case 'INTERRUPTION':
       interruptionDamage = baseDamage * 2;
       pauseDamage = session.pauses;
       break;
-    case "TIMEOUT":
+    case 'TIMEOUT':
       abandonDamage = baseDamage * 2;
       pauseDamage = session.pauses * 1.5;
       break;
-    case "ANTI_CHEAT":
+    case 'ANTI_CHEAT':
       antiCheatDamage = baseDamage * 5;
       break;
   }

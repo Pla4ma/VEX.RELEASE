@@ -1,19 +1,19 @@
-import { useCallback } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import * as Sentry from "@sentry/react-native";
-import { useAuthStore } from "../../../store";
-import { fetchActiveRepairQuestEnhanced } from "../repository/enhanced";
-import { StreakRepairQuestSchema } from "../schemas-risk-repair";
-import type { StreakRepairQuest } from "../schemas-risk-repair";
-import type { UseStreakRepairQuestReturn } from "./types";
-import { useRepairQuestStatus } from "./useRepairQuestStatus";
-import { useRepairQuestMutations } from "./use-repair-quest-mutations";
+import { useCallback } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import * as Sentry from '@sentry/react-native';
+import { useAuthStore } from '../../../store';
+import { fetchActiveRepairQuestEnhanced } from '../repository/enhanced';
+import { StreakRepairQuestSchema } from '../schemas-risk-repair';
+import type { StreakRepairQuest } from '../schemas-risk-repair';
+import type { UseStreakRepairQuestReturn } from './types';
+import { useRepairQuestStatus } from './useRepairQuestStatus';
+import { useRepairQuestMutations } from './use-repair-quest-mutations';
 
 const QUERY_KEYS = {
-  repairQuest: (userId: string) => ["streaks", "repairQuest", userId],
+  repairQuest: (userId: string) => ['streaks', 'repairQuest', userId],
   repairQuestStatus: (userId: string) => [
-    "streaks",
-    "repairQuestStatus",
+    'streaks',
+    'repairQuestStatus',
     userId,
   ],
 } as const;
@@ -40,20 +40,20 @@ export function useStreakRepairQuest(): UseStreakRepairQuestReturn {
     error,
     refetch: refetchQuest,
   } = useQuery({
-    queryKey: QUERY_KEYS.repairQuest(userId ?? ""),
+    queryKey: QUERY_KEYS.repairQuest(userId ?? ''),
     queryFn: async (): Promise<StreakRepairQuest | null> => {
-      if (!userId) return null;
+      if (!userId) {return null;}
       try {
         const result = await fetchActiveRepairQuestEnhanced(userId);
-        if (result.error) throw result.error;
-        if (!result.data) return null;
+        if (result.error) {throw result.error;}
+        if (!result.data) {return null;}
         return StreakRepairQuestSchema.parse(result.data);
       } catch (err) {
         Sentry.captureException(err, {
           tags: {
-            feature: "streaks",
-            hook: "useStreakRepairQuest",
-            operation: "fetchQuest",
+            feature: 'streaks',
+            hook: 'useStreakRepairQuest',
+            operation: 'fetchQuest',
           },
         });
         throw err;
@@ -69,8 +69,8 @@ export function useStreakRepairQuest(): UseStreakRepairQuestReturn {
   const { createQuestMutation, recordSessionMutation } =
     useRepairQuestMutations({
       userId,
-      queryKey: QUERY_KEYS.repairQuest(userId ?? ""),
-      statusQueryKey: QUERY_KEYS.repairQuestStatus(userId ?? ""),
+      queryKey: QUERY_KEYS.repairQuest(userId ?? ''),
+      statusQueryKey: QUERY_KEYS.repairQuestStatus(userId ?? ''),
       quest,
     });
 

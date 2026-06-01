@@ -1,39 +1,39 @@
-import { useMemo } from "react";
-import { useNavigation } from "@react-navigation/native";
-import { useQuery } from "@tanstack/react-query";
-import type { UseQueryResult } from "@tanstack/react-query";
-import { useSessionUIStore } from "../../../store/session-state";
-import { useHomeSpineModel } from "../../../features/home-spine/hooks";
+import { useMemo } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { useQuery } from '@tanstack/react-query';
+import type { UseQueryResult } from '@tanstack/react-query';
+import { useSessionUIStore } from '../../../store/session-state';
+import { useHomeSpineModel } from '../../../features/home-spine/hooks';
 import {
   useCreateRecommendation,
   useUpdateRecommendationStatus,
   type SessionRecommendation,
-} from "../../../features/ai-coach";
-import * as coachRepository from "../../../features/ai-coach/repository";
-import { useActiveStudyPlan } from "../../../features/content-study";
+} from '../../../features/ai-coach';
+import * as coachRepository from '../../../features/ai-coach/repository';
+import { useActiveStudyPlan } from '../../../features/content-study';
 import {
   buildLearningSessionParams,
   useLearningExecutionLayer,
-} from "../../../features/learning-execution";
-import { useActiveBoss } from "../../../features/boss/hooks";
-import { useComebackState } from "../../../features/streaks/hooks";
-import { getNextBestAction } from "../../../features/progression";
+} from '../../../features/learning-execution';
+import { useActiveBoss } from '../../../features/boss/hooks';
+import { useComebackState } from '../../../features/streaks/hooks';
+import { getNextBestAction } from '../../../features/progression';
 import {
   getFeatureAvailability,
   isFeatureAvailableForNavigation,
-} from "../../../features/liveops-config";
-import type { HomeViewModel } from "./home-view-model";
-import type { HomeController } from "./home-controller-types";
+} from '../../../features/liveops-config';
+import type { HomeViewModel } from './home-view-model';
+import type { HomeController } from './home-controller-types';
 import {
   getFocusedMinutesForToday,
   getNextUnlockFeature,
   buildDisplayedReturnReason,
-} from "./home-controller-helpers";
-import { createStubQuery } from "./home-controller-stubs";
-import type { Nav, PowerUserModelInput } from "./power-user-home-types";
-import { buildNavigationCallbacks } from "./power-user-home-navigation";
-import { buildReturnReason } from "./power-user-home-return-reason";
-import { buildHomeController } from "./power-user-home-controller";
+} from './home-controller-helpers';
+import { createStubQuery } from './home-controller-stubs';
+import type { Nav, PowerUserModelInput } from './power-user-home-types';
+import { useNavigationCallbacks } from './power-user-home-navigation';
+import { buildReturnReason } from './power-user-home-return-reason';
+import { buildHomeController } from './power-user-home-controller';
 
 export function usePowerUserHomeModel(
   input: PowerUserModelInput,
@@ -67,7 +67,7 @@ export function usePowerUserHomeModel(
   const activeBossQuery = useActiveBoss(runtime.canQueryBoss ? userId || null : null);
 
   const recommendationsQuery = useQuery({
-    queryKey: ["coach", "recommendations", userId],
+    queryKey: ['coach', 'recommendations', userId],
     queryFn: () => coachRepository.fetchActiveRecommendations(userId),
     enabled: runtime.canQueryCoach && Boolean(userId) && !disclosure.isLoading,
     staleTime: 1000 * 60 * 5,
@@ -76,7 +76,7 @@ export function usePowerUserHomeModel(
   const primaryRecommendation = useMemo<SessionRecommendation | null>(
     () => (recommendationsQuery.data ?? [])
       .filter((item: { status: string; expiresAt: number }) =>
-        item.status === "ACTIVE" && item.expiresAt > Date.now())
+        item.status === 'ACTIVE' && item.expiresAt > Date.now())
       .sort((a: { confidence?: number }, b: { confidence?: number }) =>
         (b.confidence ?? 0) - (a.confidence ?? 0))[0] ?? null,
     [recommendationsQuery.data],
@@ -87,7 +87,7 @@ export function usePowerUserHomeModel(
   const canNavigateSocial = isFeatureAvailableForNavigation(
     getFeatureAvailability(disclosure.features.social_tab));
 
-  const nav = buildNavigationCallbacks({
+  const nav = useNavigationCallbacks({
     navigation, userId, disclosure, analytics,
     canNavigateSocial, canNavigateContentStudy,
     learningExecutionTarget: learningExecutionLayer.target,

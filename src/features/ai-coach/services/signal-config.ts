@@ -1,4 +1,4 @@
-import type { SignalType } from "../schemas";
+import type { SignalType } from '../schemas';
 
 export interface SignalProcessingConfig {
   signalWeights: Record<SignalType, number>;

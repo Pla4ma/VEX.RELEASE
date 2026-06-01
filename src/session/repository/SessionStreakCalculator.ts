@@ -1,20 +1,20 @@
-import type { SessionHistoryEntry } from "../types";
+import type { SessionHistoryEntry } from '../types';
 
 export function calculateSessionStreaks(history: SessionHistoryEntry[]): {
   currentStreak: number;
   longestStreak: number;
 } {
-  if (history.length === 0) return { currentStreak: 0, longestStreak: 0 };
+  if (history.length === 0) {return { currentStreak: 0, longestStreak: 0 };}
 
   const sorted = [...history].sort((a, b) => b.startedAt - a.startedAt);
   const completedDays = new Set(
     sorted
-      .filter((h) => h.status === "COMPLETED" || h.status === "PARTIAL")
+      .filter((h) => h.status === 'COMPLETED' || h.status === 'PARTIAL')
       .map((h) => new Date(h.startedAt).toDateString()),
   );
   const completedDaysArray = Array.from(completedDays);
   if (completedDaysArray.length === 0)
-    return { currentStreak: 0, longestStreak: 0 };
+    {return { currentStreak: 0, longestStreak: 0 };}
 
   let currentStreak = 1;
   const today = new Date().toDateString();
@@ -30,7 +30,7 @@ export function calculateSessionStreaks(history: SessionHistoryEntry[]): {
   for (let i = 1; i < completedDaysArray.length; i++) {
     const prevDay = completedDaysArray[i - 1];
     const currDay = completedDaysArray[i];
-    if (prevDay === undefined || currDay === undefined) break;
+    if (prevDay === undefined || currDay === undefined) {break;}
     const prevDate = new Date(prevDay);
     const currDate = new Date(currDay);
     const diffDays =
@@ -47,7 +47,7 @@ export function calculateSessionStreaks(history: SessionHistoryEntry[]): {
   for (let i = 1; i < completedDaysArray.length; i++) {
     const prevDay = completedDaysArray[i - 1];
     const currDay = completedDaysArray[i];
-    if (prevDay === undefined || currDay === undefined) break;
+    if (prevDay === undefined || currDay === undefined) {break;}
     const prevDate = new Date(prevDay);
     const currDate = new Date(currDay);
     const diffDays =

@@ -1,10 +1,10 @@
-import React from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
+import React from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { Box } from "../../components/primitives/Box";
-import { Text } from "../../components/primitives/Text";
-import { useTheme } from "../../theme";
-import { withScreenErrorBoundary } from "../../shared/ui/components/ScreenErrorBoundary";
+import { Box } from '../../components/primitives/Box';
+import { Text } from '../../components/primitives/Text';
+import { useTheme } from '../../theme';
+import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 
 export function VaultScreen(): JSX.Element {
   const { theme } = useTheme();
@@ -26,8 +26,8 @@ export function VaultScreen(): JSX.Element {
         </Text>
         <Text variant="body" color="text.secondary" textAlign="center">
           Chests and collectibles are archived.
-          {"\n"}Your progress comes from focus sessions,
-          {"\n"}not loot drops.
+          {'\n'}Your progress comes from focus sessions,
+          {'\n'}not loot drops.
         </Text>
         <Text variant="caption" color="text.tertiary">
           Keep building your rhythm — that is the real reward.
@@ -37,4 +37,4 @@ export function VaultScreen(): JSX.Element {
   );
 }
 
-export default withScreenErrorBoundary(VaultScreen, "Vault");
+export default withScreenErrorBoundary(VaultScreen, 'Vault');

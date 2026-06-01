@@ -1,24 +1,24 @@
 import {
   type CoachState, type InterventionExecution,
   type InterventionRule, type TriggerType,
-} from "../schemas";
-import * as repository from "../repository";
-import { withRetry } from "../utils/retry";
+} from '../schemas';
+import * as repository from '../repository';
+import { withRetry } from '../utils/retry';
 import {
   DEFAULT_ENGINE_CONFIG,
   DailyLimitExceededError,
   InterventionSuppressedError,
   ExecutionSlotUnavailableError,
-} from "./intervention-engine-types";
+} from './intervention-engine-types';
 import {
   engineState, fetchRulesWithCache, executeAction,
-} from "./intervention-engine-state";
+} from './intervention-engine-state';
 import {
   evaluateConditions, generateExecutionId,
   logInterventionError, fetchCoachStateWithRetry,
   fetchTodaysExecutionsWithRetry, isInCooldown, isGloballyMuted,
   updateInterventionCount, deferExecution,
-} from "./intervention-engine-helpers";
+} from './intervention-engine-helpers';
 
 export async function evaluateInterventions(
   userId: string,
@@ -42,7 +42,7 @@ export async function evaluateInterventions(
       }
       if (isGloballyMuted(coachState)) {
         throw new InterventionSuppressedError(
-          "User has muted all interventions",
+          'User has muted all interventions',
         );
       }
       const rules = await fetchRulesWithCache(trigger);
@@ -97,7 +97,7 @@ async function executeIntervention(
   const executionId = generateExecutionId();
   if (!(await engineState.acquireExecutionSlot(executionId))) {
     throw new ExecutionSlotUnavailableError(
-      "Max concurrent executions reached",
+      'Max concurrent executions reached',
     );
   }
   const execution: InterventionExecution = {
@@ -105,7 +105,7 @@ async function executeIntervention(
     userId,
     ruleId: rule.id,
     triggerType: rule.trigger.type,
-    status: "PENDING",
+    status: 'PENDING',
     triggeredAt: Date.now(),
     executedAt: null,
     messageId: null,
@@ -116,10 +116,10 @@ async function executeIntervention(
     await withRetry(
       () => repository.createInterventionExecution(execution),
       { maxAttempts: 3 },
-      "persist-execution",
+      'persist-execution',
     );
     const result = await executeAction(userId, rule, context);
-    execution.status = "EXECUTED";
+    execution.status = 'EXECUTED';
     execution.executedAt = Date.now();
     execution.messageId = result.messageId;
     await withRetry(
@@ -130,11 +130,11 @@ async function executeIntervention(
           execution.result ?? undefined,
         ),
       { maxAttempts: 3 },
-      "update-execution",
+      'update-execution',
     );
     await updateInterventionCount(userId);
   } catch (error) {
-    execution.status = "FAILED";
+    execution.status = 'FAILED';
     await repository.updateInterventionExecution(
       execution.id,
       execution.status,

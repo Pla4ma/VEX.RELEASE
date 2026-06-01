@@ -1,6 +1,22 @@
 [
+  "src/accessibility/AccessibilityEnhancer.class.ts",
+  "src/config/supabase-mock.ts",
+  "src/features/__tests__/FeatureFlagService.advanced.test.ts",
+  "src/features/ai-coach/__tests__/coachService.break-and-advice.test.ts",
   "src/features/ai-coach/__tests__/memories-repository.test.ts",
+  "src/features/ai-coach/components/CoachInterventionBanner.tsx",
+  "src/features/liveops-config/__tests__/liveops-feature-access-store.test.ts",
+  "src/features/mode-native/__tests__/derive-home-surface.test.ts",
+  "src/features/mode-native/__tests__/derive-quick-contract.test.ts",
+  "src/features/session-completion/__tests__/exit-gate-policy-fixtures-mocks.ts",
   "src/features/session-start/__tests__/adaptiveDifficulty.test.ts",
+  "src/features/today-system/__tests__/today-system-comprehensive.test.ts",
+  "src/features/unlock-explainer/__tests__/unlock-explainer-route-safety-bridge.test.ts",
+  "src/features/unlock-explainer/__tests__/unlock-explainer-safety.test.ts",
   "src/screens/home/__tests__/home-data-type-splitting.test.ts",
-  "src/screens/session/hooks/__tests__/useCompanionSession.test.ts"
+  "src/screens/home/hooks/__tests__/useInterventionVisibility-helpers.ts",
+  "src/screens/session/components/__tests__/active-session-focus-sanctuary.helpers.tsx",
+  "src/screens/session/components/__tests__/helpers.tsx",
+  "src/screens/session/hooks/__tests__/useCompanionSession.test.ts",
+  "src/screens/settings/__tests__/buildSettingsGroups.test.ts"
 ]

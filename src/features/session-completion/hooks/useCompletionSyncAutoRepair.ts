@@ -1,11 +1,11 @@
-import { useEffect } from "react";
-import { useQueryClient } from "@tanstack/react-query";
+import { useEffect } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 
-import { useSessionUIStore } from "../../../store/session-state";
+import { useSessionUIStore } from '../../../store/session-state';
 import {
   getNextCompletionSyncState,
   invalidateCompletionReturnUserQueries,
-} from "../home-return-sync";
+} from '../home-return-sync';
 
 export function useCompletionSyncAutoRepair(input: {
   isOnline: boolean;
@@ -21,7 +21,7 @@ export function useCompletionSyncAutoRepair(input: {
     if (
       !input.isOnline ||
       !input.userId ||
-      completionSync.status !== "pending_sync"
+      completionSync.status !== 'pending_sync'
     ) {
       return;
     }

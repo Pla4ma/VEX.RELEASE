@@ -1,18 +1,18 @@
-import * as Sentry from "@sentry/react-native";
+import * as Sentry from '@sentry/react-native';
 import {
   NotificationPolicyEventSchema,
   NudgeSignalEventSchema,
   type NotificationPolicyEvent,
   type NudgeSignalEvent,
-} from "./events";
+} from './events';
 
 export function trackNotificationPolicyEvent(
   event: NotificationPolicyEvent,
 ): void {
   const parsed = NotificationPolicyEventSchema.parse(event);
   Sentry.addBreadcrumb({
-    category: "notification_policy",
-    level: "info",
+    category: 'notification_policy',
+    level: 'info',
     message: parsed.type,
     data: {
       nudgeType: parsed.nudgeType,
@@ -25,8 +25,8 @@ export function trackNotificationPolicyEvent(
 export function trackNudgeSignal(event: NudgeSignalEvent): void {
   const parsed = NudgeSignalEventSchema.parse(event);
   Sentry.addBreadcrumb({
-    category: "nudge_signal",
-    level: "info",
+    category: 'nudge_signal',
+    level: 'info',
     message: `nudge_${parsed.signal}`,
     data: {
       nudgeType: parsed.nudgeType,
@@ -36,13 +36,13 @@ export function trackNudgeSignal(event: NudgeSignalEvent): void {
     },
   });
 
-  if (parsed.signal === "dismissed" || parsed.signal === "ignored") {
+  if (parsed.signal === 'dismissed' || parsed.signal === 'ignored') {
     Sentry.captureMessage(
       `Nudge ${parsed.signal} — may trigger category pause`,
       {
-        level: "info",
+        level: 'info',
         tags: {
-          feature: "nudge-budget",
+          feature: 'nudge-budget',
           signal: parsed.signal,
           lane: parsed.lane,
         },

@@ -1,6 +1,6 @@
-import type { User as SupabaseUser } from "@supabase/supabase-js";
+import type { User as SupabaseUser } from '@supabase/supabase-js';
 
-import type { User } from "../types/models";
+import type { User } from '../types/models';
 
 export function mapSupabaseUser(
   sbUser: SupabaseUser,
@@ -12,17 +12,17 @@ export function mapSupabaseUser(
   const now = new Date().toISOString();
   const metadata = sbUser.user_metadata || {};
 
-  const firstName = overrideMetadata?.firstName || metadata.first_name || "";
-  const lastName = overrideMetadata?.lastName || metadata.last_name || "";
+  const firstName = overrideMetadata?.firstName || metadata.first_name || '';
+  const lastName = overrideMetadata?.lastName || metadata.last_name || '';
   const displayName =
     firstName && lastName
       ? `${firstName} ${lastName}`
-      : sbUser.email?.split("@")[0] || "";
+      : sbUser.email?.split('@')[0] || '';
 
   return {
     id: sbUser.id,
-    email: sbUser.email || "",
-    username: metadata.username || sbUser.email?.split("@")[0] || "",
+    email: sbUser.email || '',
+    username: metadata.username || sbUser.email?.split('@')[0] || '',
     firstName,
     lastName,
     displayName,
@@ -30,26 +30,26 @@ export function mapSupabaseUser(
     avatar: metadata.avatar_url || undefined,
     bio: metadata.bio || undefined,
     verified: Boolean(metadata.verified),
-    role: metadata.role || "user",
-    status: "active",
+    role: metadata.role || 'user',
+    status: 'active',
     preferences: {
-      theme: metadata.theme || "system",
-      language: metadata.language || "en",
+      theme: metadata.theme || 'system',
+      language: metadata.language || 'en',
       notifications: {
         push: true,
         email: true,
         sms: false,
         inApp: true,
-        digestFrequency: "daily",
+        digestFrequency: 'daily',
         quietHours: {
           enabled: false,
-          start: "22:00",
-          end: "08:00",
-          timezone: "UTC",
+          start: '22:00',
+          end: '08:00',
+          timezone: 'UTC',
         },
       },
       privacy: {
-        profileVisibility: "public",
+        profileVisibility: 'public',
         activityStatus: true,
         readReceipts: true,
         allowTagging: true,

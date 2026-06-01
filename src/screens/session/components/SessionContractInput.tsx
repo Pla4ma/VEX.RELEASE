@@ -1,13 +1,13 @@
-import React from "react";
-import { Pressable, TextInput } from "react-native";
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { Icon } from "../../../icons";
-import { useTheme } from "../../../theme";
+import React from 'react';
+import { Pressable, TextInput } from 'react-native';
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { Icon } from '../../../icons';
+import { useTheme } from '../../../theme';
 import {
   getMinTouchTargetStyle,
   StandardHitSlops,
-} from "../../../utils/touchTarget";
+} from '../../../utils/touchTarget';
 
 type SessionContractInputProps = {
   value: string;
@@ -26,7 +26,7 @@ export function SessionContractInput({
   const showGuidance = trimmedLength > 0 && trimmedLength < 3;
 
   const handleChange = (next: string): void => {
-    onChangeText(next.replace(/\r?\n/g, "").slice(0, 80));
+    onChangeText(next.replace(/\r?\n/g, '').slice(0, 80));
   };
 
   return (
@@ -62,7 +62,7 @@ export function SessionContractInput({
               accessibilityLabel="Clear focus contract"
               accessibilityRole="button"
               hitSlop={StandardHitSlops.ICON}
-              onPress={() => onChangeText("")}
+              onPress={() => onChangeText('')}
               style={getMinTouchTargetStyle()}
             >
               <Box flex={1} alignItems="center" justifyContent="center">

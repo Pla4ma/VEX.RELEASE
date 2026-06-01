@@ -1,6 +1,6 @@
-import { create } from "zustand";
-import { immer } from "zustand/middleware/immer";
-import type { Nullable } from "../types/global";
+import { create } from 'zustand';
+import { immer } from 'zustand/middleware/immer';
+import type { Nullable } from '../types/global';
 
 export interface AppState {
   isInitialized: boolean;

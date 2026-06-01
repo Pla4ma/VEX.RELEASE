@@ -1,14 +1,14 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from 'react';
 
-import { eventBus } from "../events";
+import { eventBus } from '../events';
 
 export function useOnlineUsers() {
   const [onlineUsers, setOnlineUsers] = useState<Set<string>>(new Set());
   useEffect(() => {
     const unsubscribe = eventBus.subscribe(
-      "realtime:presence_update",
+      'realtime:presence_update',
       (event) => {
-        if (event.status === "online" || event.status === "in_session") {
+        if (event.status === 'online' || event.status === 'in_session') {
           setOnlineUsers((prev) => new Set([...prev, event.userId]));
         } else {
           setOnlineUsers((prev) => {

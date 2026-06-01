@@ -1,23 +1,23 @@
-import { z } from "zod";
-import { getSupabaseClient } from "../../config/supabase";
+import { z } from 'zod';
+import { getSupabaseClient } from '../../config/supabase';
 import {
   CompanionPromiseRepositoryRowSchema,
   CompanionPromiseSchema,
   CreateCompanionPromiseInputSchema,
-} from "./schemas";
+} from './schemas';
 import type {
   CompanionPromise,
   CompanionPromiseInsert,
   CompanionPromiseUpdate,
   CreateCompanionPromiseInput,
-} from "./types";
+} from './types';
 
 const DomainStatusByDatabaseStatus = {
-  active: "pending",
-  fulfilled: "fulfilled",
-  missed: "missed",
-  recovered: "replaced",
-  skipped: "replaced",
+  active: 'pending',
+  fulfilled: 'fulfilled',
+  missed: 'missed',
+  recovered: 'replaced',
+  skipped: 'replaced',
 } as const;
 
 export class CompanionPromiseRepositoryError extends Error {
@@ -26,7 +26,7 @@ export class CompanionPromiseRepositoryError extends Error {
     public readonly cause?: unknown,
   ) {
     super(`CompanionPromiseRepository ${operation} failed`);
-    this.name = "CompanionPromiseRepositoryError";
+    this.name = 'CompanionPromiseRepositoryError';
   }
 }
 
@@ -41,7 +41,7 @@ function mapRow(row: unknown): CompanionPromise {
     status:
       DomainStatusByDatabaseStatus[
         parsed.status as keyof typeof DomainStatusByDatabaseStatus
-      ] ?? "pending",
+      ] ?? 'pending',
     targetDate: parsed.promised_for,
     targetDurationMinutes: parsed.recommended_duration_minutes,
     targetMode: parsed.recommended_mode,
@@ -61,13 +61,13 @@ async function updatePromiseById(
   patch: CompanionPromiseUpdate,
 ): Promise<CompanionPromise> {
   const { data, error } = await getSupabaseClient()
-    .from("companion_promises")
+    .from('companion_promises')
     .update(patch)
-    .eq("id", promiseId)
-    .select("*")
+    .eq('id', promiseId)
+    .select('*')
     .single();
   if (error) {
-    throw new CompanionPromiseRepositoryError("update", error);
+    throw new CompanionPromiseRepositoryError('update', error);
   }
   return mapRow(data);
 }
@@ -85,7 +85,7 @@ export async function createPromise(
       recommended_duration_minutes: parsed.targetDurationMinutes,
       recommended_mode: parsed.targetMode,
       source_session_id: parsed.sourceSessionId,
-      status: "active",
+      status: 'active',
       target_date: parsed.targetDate,
       target_duration_minutes: parsed.targetDurationMinutes,
       target_mode: parsed.targetMode,
@@ -94,12 +94,12 @@ export async function createPromise(
       window_start: legacyWindow.start,
     };
     const { data, error } = await getSupabaseClient()
-      .from("companion_promises")
+      .from('companion_promises')
       .insert(row)
-      .select("*")
+      .select('*')
       .single();
     if (error) {
-      throw new CompanionPromiseRepositoryError("create", error);
+      throw new CompanionPromiseRepositoryError('create', error);
     }
     return mapRow(data);
   } catch (error) {
@@ -109,7 +109,7 @@ export async function createPromise(
     ) {
       throw error;
     }
-    throw new CompanionPromiseRepositoryError("create", error);
+    throw new CompanionPromiseRepositoryError('create', error);
   }
 }
 
@@ -118,13 +118,13 @@ export async function getRecentPromises(
   limit = 3,
 ): Promise<CompanionPromise[]> {
   const { data, error } = await getSupabaseClient()
-    .from("companion_promises")
-    .select("*")
-    .eq("user_id", userId)
-    .order("created_at", { ascending: false })
+    .from('companion_promises')
+    .select('*')
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false })
     .limit(limit);
   if (error) {
-    throw new CompanionPromiseRepositoryError("getRecent", error);
+    throw new CompanionPromiseRepositoryError('getRecent', error);
   }
   return z
     .array(CompanionPromiseRepositoryRowSchema)
@@ -136,13 +136,13 @@ export async function getPendingPromise(
   userId: string,
 ): Promise<CompanionPromise | null> {
   const promises = await getRecentPromises(userId, 5);
-  return promises.find((promise) => promise.status === "pending") ?? null;
+  return promises.find((promise) => promise.status === 'pending') ?? null;
 }
 
 export async function replacePromise(
   promiseId: string,
 ): Promise<CompanionPromise> {
-  return updatePromiseById(promiseId, { status: "skipped" });
+  return updatePromiseById(promiseId, { status: 'skipped' });
 }
 
 export async function fulfillPromise(
@@ -153,7 +153,7 @@ export async function fulfillPromise(
   return updatePromiseById(promiseId, {
     fulfilled_at: fulfilledAt,
     fulfilled_session_id: sessionId,
-    status: "fulfilled",
+    status: 'fulfilled',
   });
 }
 
@@ -163,12 +163,12 @@ export async function markPromiseMissed(
 ): Promise<CompanionPromise> {
   return updatePromiseById(promiseId, {
     missed_at: missedAt,
-    status: "missed",
+    status: 'missed',
   });
 }
 
 export async function dismissRecoveryPromise(
   promiseId: string,
 ): Promise<CompanionPromise> {
-  return updatePromiseById(promiseId, { status: "skipped" });
+  return updatePromiseById(promiseId, { status: 'skipped' });
 }

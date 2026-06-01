@@ -1,9 +1,9 @@
-import React, { useCallback } from "react";
-import { Alert, Pressable } from "react-native";
-import { useTheme } from "../../theme";
-import { Box, Text, Card } from "../../components/primitives";
-import { useUIStore } from "../../store/index";
-import { launchColors } from "@theme/tokens/launch-colors";
+import React, { useCallback } from 'react';
+import { Alert, Pressable } from 'react-native';
+import { useTheme } from '../../theme';
+import { Box, Text, Card } from '../../components/primitives';
+import { useUIStore } from '../../store/index';
+import { launchColors } from '@theme/tokens/launch-colors';
 
 interface EmailChangeSectionProps {
   email: string | undefined;
@@ -17,16 +17,16 @@ export const EmailChangeSection: React.FC<EmailChangeSectionProps> = ({
 
   const handleChangeEmail = useCallback(() => {
     Alert.alert(
-      "Change Email Address",
-      "A verification link will be sent to your new email address.",
+      'Change Email Address',
+      'A verification link will be sent to your new email address.',
       [
-        { text: "Cancel", style: "cancel" },
+        { text: 'Cancel', style: 'cancel' },
         {
-          text: "Continue",
+          text: 'Continue',
           onPress: () => {
             showToast({
-              message: "Email change flow started",
-              type: "info",
+              message: 'Email change flow started',
+              type: 'info',
               duration: 3000,
             });
           },
@@ -43,13 +43,13 @@ export const EmailChangeSection: React.FC<EmailChangeSectionProps> = ({
         style={{
           marginLeft: 12,
           marginBottom: 8,
-          fontWeight: "600",
+          fontWeight: '600',
           letterSpacing: 0.5,
         }}
       >
         EMAIL ADDRESS
       </Text>
-      <Card size="sm" style={{ overflow: "hidden" }}>
+      <Card size="sm" style={{ overflow: 'hidden' }}>
         <Box p={16}>
           <Text
             variant="body"
@@ -60,9 +60,9 @@ export const EmailChangeSection: React.FC<EmailChangeSectionProps> = ({
           </Text>
           <Text
             variant="body"
-            style={{ fontWeight: "500", marginBottom: 12 }}
+            style={{ fontWeight: '500', marginBottom: 12 }}
           >
-            {email || "user@example.com"}
+            {email || 'user@example.com'}
           </Text>
           <Pressable
             onPress={handleChangeEmail}
@@ -71,14 +71,14 @@ export const EmailChangeSection: React.FC<EmailChangeSectionProps> = ({
               paddingVertical: 12,
               paddingHorizontal: 16,
               borderRadius: 8,
-              alignItems: "center",
+              alignItems: 'center',
             }}
             accessibilityLabel="Change email"
             accessibilityRole="button"
             accessibilityHint="Double tap to change setting"
           >
             <Text
-              style={{ color: launchColors.hex_fff, fontWeight: "600" }}
+              style={{ color: launchColors.hex_fff, fontWeight: '600' }}
             >
               Change Email
             </Text>

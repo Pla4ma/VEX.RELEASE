@@ -1,4 +1,4 @@
-import { useStreakRisk } from "./useStreakRisk";
+import { useStreakRisk } from './useStreakRisk';
 
 export function useFlameHealth(): {
   healthPercent: number;

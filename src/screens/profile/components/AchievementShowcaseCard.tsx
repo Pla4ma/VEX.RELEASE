@@ -1,15 +1,15 @@
-import React from "react";
-import { Pressable } from "react-native";
+import React from 'react';
+import { Pressable } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withSpring,
   withTiming,
-} from "react-native-reanimated";
-import { useTheme } from "../../../theme";
-import { Box, Text, Card } from "../../../components/primitives";
-import { Icon } from "../../../icons";
-import { launchColors } from "@theme/tokens/launch-colors";
+} from 'react-native-reanimated';
+import { useTheme } from '../../../theme';
+import { Box, Text, Card } from '../../../components/primitives';
+import { Icon } from '../../../icons';
+import { launchColors } from '@theme/tokens/launch-colors';
 
 export interface FeaturedAchievement {
   id: string;
@@ -18,7 +18,7 @@ export interface FeaturedAchievement {
   icon: string;
   emoji: string;
   unlockedAt: number;
-  rarity: "common" | "rare" | "epic" | "legendary";
+  rarity: 'common' | 'rare' | 'epic' | 'legendary';
 }
 
 export const RARITY_COLORS = {
@@ -51,7 +51,7 @@ export const LockedSlot: React.FC<{
           aspectRatio: 1,
           backgroundColor: theme.colors.background.secondary,
           borderWidth: 2,
-          borderStyle: "dashed",
+          borderStyle: 'dashed',
           borderColor: theme.colors.border.light,
           opacity: isEditable ? 0.7 : 0.5,
         }}
@@ -109,11 +109,11 @@ export const AchievementSlot: React.FC<{
           size="md"
           style={{
             flex: 1,
-            justifyContent: "center",
-            alignItems: "center",
+            justifyContent: 'center',
+            alignItems: 'center',
             borderWidth: 2,
-            borderColor: rarityColor + "50",
-            backgroundColor: rarityColor + "08",
+            borderColor: rarityColor + '50',
+            backgroundColor: rarityColor + '08',
           }}
         >
           {}
@@ -122,7 +122,7 @@ export const AchievementSlot: React.FC<{
             width={60}
             height={60}
             borderRadius={30}
-            style={{ backgroundColor: rarityColor + "15" }}
+            style={{ backgroundColor: rarityColor + '15' }}
           />
 
           {}
@@ -134,8 +134,8 @@ export const AchievementSlot: React.FC<{
           <Text
             variant="caption"
             style={{
-              fontWeight: "700",
-              textAlign: "center",
+              fontWeight: '700',
+              textAlign: 'center',
               color: rarityColor,
               fontSize: 11,
             }}

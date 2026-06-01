@@ -1,9 +1,9 @@
-import React, { type ReactNode } from "react";
-import { View } from "react-native";
+import React, { type ReactNode } from 'react';
+import { View } from 'react-native';
 
-import { Card, Button, Text } from "../primitives";
-import { useTheme } from "../../theme";
-import { AnimatedCoachAvatar } from "./AnimatedCoachAvatar";
+import { Card, Button, Text } from '../primitives';
+import { useTheme } from '../../theme';
+import { AnimatedCoachAvatar } from './AnimatedCoachAvatar';
 
 interface SmartCoachHintProps {
   eyebrow?: string;
@@ -11,17 +11,17 @@ interface SmartCoachHintProps {
   body: string;
   actionLabel?: string;
   onAction?: () => void;
-  mood?: "calm" | "active" | "celebrate";
+  mood?: 'calm' | 'active' | 'celebrate';
   children?: ReactNode;
 }
 
 export function SmartCoachHint({
-  eyebrow = "VEX coach",
+  eyebrow = 'VEX coach',
   title,
   body,
   actionLabel,
   onAction,
-  mood = "active",
+  mood = 'active',
   children,
 }: SmartCoachHintProps): JSX.Element {
   const { theme } = useTheme();
@@ -37,8 +37,8 @@ export function SmartCoachHint({
     >
       <View
         style={{
-          flexDirection: "row",
-          alignItems: "center",
+          flexDirection: 'row',
+          alignItems: 'center',
           gap: theme.spacing[4],
         }}
       >

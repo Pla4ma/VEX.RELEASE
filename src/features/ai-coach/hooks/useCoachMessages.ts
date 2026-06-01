@@ -8,11 +8,11 @@ import {
   useQuery,
   type QueryObserverResult,
   type RefetchOptions,
-} from "@tanstack/react-query";
-import * as repository from "../repository";
-import { COACH_QUERY_KEYS, RETRY_CONFIG } from "../constants";
-import { useNetworkStatus } from "./useNetworkStatus";
-import type { CoachMessage } from "../types";
+} from '@tanstack/react-query';
+import * as repository from '../repository';
+import { COACH_QUERY_KEYS, RETRY_CONFIG } from '../constants';
+import { useNetworkStatus } from './useNetworkStatus';
+import type { CoachMessage } from '../types';
 
 export interface UseCoachMessagesResult {
   data: CoachMessage[];
@@ -39,7 +39,7 @@ export function useCoachMessages(userId: string): UseCoachMessagesResult {
     gcTime: 5 * 60 * 1000,
     retry: RETRY_CONFIG.maxRetries,
     retryDelay: RETRY_CONFIG.retryDelay,
-    networkMode: "offlineFirst",
+    networkMode: 'offlineFirst',
   });
 
   return {

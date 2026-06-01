@@ -3,8 +3,8 @@ import {
   NotificationRequestSchema,
   type NotificationBudget,
   type NotificationRequest,
-} from "./notification-budget-schema";
-import { v4 } from "../../utils/uuid";
+} from './notification-budget-schema';
+import { v4 } from '../../utils/uuid';
 
 const budgetStore = new Map<string, NotificationBudget>();
 
@@ -20,14 +20,14 @@ export function ensureUUID(userId: string): string {
   }
   const hex = Array.from(userId)
     .map((char) => (char.charCodeAt(0) % 16).toString(16))
-    .join("")
-    .padEnd(32, "0")
+    .join('')
+    .padEnd(32, '0')
     .slice(0, 32);
   return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-4${hex.slice(13, 16)}-8${hex.slice(17, 20)}-${hex.slice(20, 32)}`;
 }
 
 export function todayKey(): string {
-  return new Date().toISOString().split("T")[0] ?? "unknown";
+  return new Date().toISOString().split('T')[0] ?? 'unknown';
 }
 
 export function createMockNotificationBudget(
@@ -56,9 +56,9 @@ export function createMockNotificationRequest(
 ): NotificationRequest {
   return NotificationRequestSchema.parse({
     userId: ensureUUID(userId),
-    priority: "COACH_NEXT_ACTION",
-    type: "coach_session_suggestion",
-    content: "Try a 25-minute session today.",
+    priority: 'COACH_NEXT_ACTION',
+    type: 'coach_session_suggestion',
+    content: 'Try a 25-minute session today.',
     ...overrides,
   });
 }

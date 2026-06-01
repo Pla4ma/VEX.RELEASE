@@ -1,8 +1,8 @@
-import React from "react";
-import { View, TextInput } from "react-native";
-import { Button } from "../../../components/primitives/Button";
-import { useTheme } from "../../../theme";
-import { quizPanelStyles } from "./QuizPanelStyles";
+import React from 'react';
+import { View, TextInput } from 'react-native';
+import { Button } from '../../../components/primitives/Button';
+import { useTheme } from '../../../theme';
+import { quizPanelStyles } from './QuizPanelStyles';
 
 interface ShortAnswerInputProps {
   value: string;

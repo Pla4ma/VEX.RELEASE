@@ -1,7 +1,7 @@
-import React from "react";
-import { Box } from "@/components/primitives";
-import type { Achievement } from "../types";
-import { AchievementUnlockToast } from "./AchievementUnlockToast.main";
+import React from 'react';
+import { Box } from '@/components/primitives';
+import type { Achievement } from '../types';
+import { AchievementUnlockToast } from './AchievementUnlockToast.main';
 
 export function useAchievementUnlockToast(
   userId: string,
@@ -23,12 +23,12 @@ export function useAchievementUnlockToast(
       achievementId: string;
       unlockedAt: number;
     }) => {
-      if (event.userId !== userId) return;
-      const { getAchievementById } = require("../definitions");
+      if (event.userId !== userId) {return;}
+      const { getAchievementById } = require('../definitions');
       const achievement = getAchievementById(event.achievementId);
-      if (!achievement) return;
+      if (!achievement) {return;}
       toastQueue.current.push(achievement);
-      if (!currentToast) showNextToast();
+      if (!currentToast) {showNextToast();}
     };
     return () => {};
   }, [userId, currentToast, showNextToast]);

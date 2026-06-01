@@ -1,4 +1,4 @@
-import { launchColors } from "@theme/tokens/launch-colors";
+import { launchColors } from '@theme/tokens/launch-colors';
 
 export interface HeatmapData {
   day: string;
@@ -11,10 +11,10 @@ export interface HeatmapProps {
   title?: string;
   subtitle?: string;
   onCellPress?: (day: string, hour: number, value: number) => void;
-  colorScheme?: "blue" | "green" | "purple";
+  colorScheme?: 'blue' | 'green' | 'purple';
 }
 
-export const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+export const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 export const HOURS = Array.from({ length: 24 }, (_, i) => i);
 export const COLOR_SCHEMES = {
   blue: [
@@ -42,10 +42,10 @@ export const COLOR_SCHEMES = {
 
 export function formatHour(hour: number): string {
   if (hour === 0) {
-    return "12am";
+    return '12am';
   }
   if (hour === 12) {
-    return "12pm";
+    return '12pm';
   }
   if (hour < 12) {
     return `${hour}am`;
@@ -61,7 +61,7 @@ export function calculatePeakDay(data: HeatmapData[]): string {
       .reduce((sum, d) => sum + d.value, 0),
   }));
   const peak = dayTotals.sort((a, b) => b.total - a.total)[0];
-  return peak?.day ?? "-";
+  return peak?.day ?? '-';
 }
 
 export function calculatePeakHour(data: HeatmapData[]): string {
@@ -73,13 +73,13 @@ export function calculatePeakHour(data: HeatmapData[]): string {
   }));
   const peak = hourTotals.sort((a, b) => b.total - a.total)[0];
   if (!peak) {
-    return "-";
+    return '-';
   }
   if (peak.hour === 0) {
-    return "12am";
+    return '12am';
   }
   if (peak.hour === 12) {
-    return "12pm";
+    return '12pm';
   }
   if (peak.hour < 12) {
     return `${peak.hour}am`;

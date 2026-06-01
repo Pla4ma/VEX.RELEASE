@@ -1,10 +1,10 @@
-import { getDefaultStorageAdapter } from "../../persistence/MMKVStorageAdapter";
-import { getSupabaseClient } from "../../config/supabase";
-import type { AIRequestCategory, QuotaUsageRecord } from "./ai-quota-types";
-import { QuotaUsageRecordSchema } from "./ai-quota-types";
-import { HOURLY_WINDOW_MS, DAILY_WINDOW_MS } from "./ai-quota-strategies";
+import { getDefaultStorageAdapter } from '../../persistence/MMKVStorageAdapter';
+import { getSupabaseClient } from '../../config/supabase';
+import type { AIRequestCategory, QuotaUsageRecord } from './ai-quota-types';
+import { QuotaUsageRecordSchema } from './ai-quota-types';
+import { HOURLY_WINDOW_MS, DAILY_WINDOW_MS } from './ai-quota-strategies';
 
-const QUOTA_STORE_KEY = "ai_quota_usage";
+const QUOTA_STORE_KEY = 'ai_quota_usage';
 const MAX_STORED_RECORDS = 200;
 
 function buildRecordKey(userId: string, category: AIRequestCategory): string {
@@ -19,7 +19,7 @@ function loadRecords(
     const raw = getDefaultStorageAdapter().getItemSync(
       buildRecordKey(userId, category),
     );
-    if (!raw) return [];
+    if (!raw) {return [];}
     const parsed = JSON.parse(raw) as unknown[];
     return parsed.map((r) => QuotaUsageRecordSchema.parse(r));
   } catch (error: unknown) {
@@ -85,7 +85,7 @@ export async function syncQuotaToSupabase(
 ): Promise<void> {
   try {
     const { error } = await getSupabaseClient()
-      .from("ai_quota_log")
+      .from('ai_quota_log')
       .insert({
         user_id: userId,
         category,

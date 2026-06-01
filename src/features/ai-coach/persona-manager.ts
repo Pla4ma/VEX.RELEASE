@@ -8,7 +8,7 @@
  * - Schemas (validation)
  */
 
-import * as repository from "./repository";
+import * as repository from './repository';
 import {
   UpdateCoachPreferencesInputSchema,
   type CoachPersona,
@@ -18,13 +18,13 @@ import {
   type BehaviorProfile,
   type BehaviorSignal,
   type SignalType,
-} from "./schemas";
+} from './schemas';
 
 // ============================================================================
 // Constants
 // ============================================================================
 
-const DEFAULT_PERSONA_ID = "encouraging-mentor";
+const DEFAULT_PERSONA_ID = 'encouraging-mentor';
 const COLD_START_THRESHOLD_DAYS = 7;
 const HIGH_CONFIDENCE_THRESHOLD_DATA_POINTS = 20;
 
@@ -99,10 +99,10 @@ async function buildBehaviorProfileForState(
 
 function calculateConfidenceLevel(
   dataPoints: number,
-): "LOW" | "MEDIUM" | "HIGH" {
-  if (dataPoints < 10) return "LOW";
-  if (dataPoints < HIGH_CONFIDENCE_THRESHOLD_DATA_POINTS) return "MEDIUM";
-  return "HIGH";
+): 'LOW' | 'MEDIUM' | 'HIGH' {
+  if (dataPoints < 10) {return 'LOW';}
+  if (dataPoints < HIGH_CONFIDENCE_THRESHOLD_DATA_POINTS) {return 'MEDIUM';}
+  return 'HIGH';
 }
 
 function aggregateSignals(signals: BehaviorSignal[]): BehaviorSignal[] {
@@ -177,14 +177,14 @@ function determineUserState(
   profile: { coldStart: boolean; confidenceLevel: string } | null,
 ): CoachUserState {
   if (!profile || profile.coldStart) {
-    return "COLD_START";
+    return 'COLD_START';
   }
 
-  if (profile.confidenceLevel === "LOW") {
-    return "LOW_CONFIDENCE";
+  if (profile.confidenceLevel === 'LOW') {
+    return 'LOW_CONFIDENCE';
   }
 
-  return "HIGH_CONFIDENCE";
+  return 'HIGH_CONFIDENCE';
 }
 
 // Export threshold for use in other modules

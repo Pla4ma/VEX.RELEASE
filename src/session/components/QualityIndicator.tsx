@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import Animated, {
   FadeIn,
   useAnimatedStyle,
@@ -6,10 +6,10 @@ import Animated, {
   withSequence,
   withTiming,
   useSharedValue,
-} from "react-native-reanimated";
-import { Box } from "../../components/primitives/Box";
-import { Text } from "../../components/primitives/Text";
-import { useTheme } from "../../theme";
+} from 'react-native-reanimated';
+import { Box } from '../../components/primitives/Box';
+import { Text } from '../../components/primitives/Text';
+import { useTheme } from '../../theme';
 import {
   type QualityGrade,
   type QualityIndicatorProps,
@@ -17,7 +17,7 @@ import {
   QualityIndicatorSkeleton,
   StrictModeBadge,
   GradeBadge,
-} from "./QualityIndicator-helpers";
+} from './QualityIndicator-helpers';
 
 function XpEstimatePreview({
   xpEstimate,
@@ -84,7 +84,7 @@ function PurityBar({
       >
         <Animated.View
           style={[
-            { height: "100%", borderRadius: 3, backgroundColor: config.color },
+            { height: '100%', borderRadius: 3, backgroundColor: config.color },
             animatedStyle,
           ]}
         />
@@ -136,7 +136,7 @@ export function QualityIndicator({
 
           {}
           <Text variant="bodySmall" color="text.secondary">
-            {isPaused ? "⏸ Paused - quality at risk" : config.description}
+            {isPaused ? '⏸ Paused - quality at risk' : config.description}
           </Text>
 
           {}

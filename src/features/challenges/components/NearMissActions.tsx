@@ -1,7 +1,7 @@
-import React from "react";
-import Animated, { FadeIn } from "react-native-reanimated";
-import { Box, Text, Button } from "@/components/primitives";
-import { formatTimeUntil } from "./near-miss-helpers";
+import React from 'react';
+import Animated, { FadeIn } from 'react-native-reanimated';
+import { Box, Text, Button } from '@/components/primitives';
+import { formatTimeUntil } from './near-miss-helpers';
 
 interface NearMissActionsProps {
   userName?: string;
@@ -40,7 +40,7 @@ export const NearMissActions: React.FC<NearMissActionsProps> = ({
       </Box>
       <Text variant="bodySmall" color={secondaryText}>
         Near-misses like this mean you're on the right track.
-        {userName ? `${userName}, y` : "Y"}ou were just
+        {userName ? `${userName}, y` : 'Y'}ou were just
         {Math.round(100 - progressPercent)}% away from completing this
         challenge.
       </Text>

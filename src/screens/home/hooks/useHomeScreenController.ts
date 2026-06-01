@@ -1,26 +1,26 @@
-import { useMemo } from "react";
-import { useNavigation } from "@react-navigation/native";
-import { useActiveCoachRecommendations, useCreateRecommendation, useUpdateRecommendationStatus, type SessionRecommendation } from "../../../features/ai-coach";
-import { useActiveStudyPlan } from "../../../features/content-study";
-import { useLearningExecutionLayer } from "../../../features/learning-execution";
-import { useActiveBoss } from "../../../features/boss/hooks";
-import { useHomeSpineModel } from "../../../features/home-spine/hooks";
-import { getFeatureAvailability, isFeatureAvailableForNavigation, useDisclosureAnalytics, useFeatureAccess } from "../../../features/liveops-config";
-import { getNextBestAction } from "../../../features/progression";
-import { useProgressionSummary } from "../../../features/progression/hooks";
-import { useComebackState, useStreakSummary } from "../../../features/streaks/hooks";
-import { useNetInfo } from "../../../network";
-import type { ExtendedRootStackParams } from "../../../navigation/types";
-import { useSessionHistory } from "../../../session/hooks/useSession";
-import { useAuthStore } from "../../../store";
-import { useSessionUIStore } from "../../../store/session-state";
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { buildHomeFeatureRuntime } from "./home-feature-runtime";
-import { buildDisplayedReturnReason, getFocusedMinutesForToday, getNextUnlockFeature } from "./home-controller-helpers";
-import { useHomeAnalyticsEffects } from "./useHomeAnalyticsEffects";
-import { useHomeNavigationActions } from "./useHomeNavigationActions";
-import { useHomeReturnReason } from "./useHomeReturnReason";
-import { createStubQuery } from "./home-controller-stubs";
+import { useMemo } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { useActiveCoachRecommendations, useCreateRecommendation, useUpdateRecommendationStatus, type SessionRecommendation } from '../../../features/ai-coach';
+import { useActiveStudyPlan } from '../../../features/content-study';
+import { useLearningExecutionLayer } from '../../../features/learning-execution';
+import { useActiveBoss } from '../../../features/boss/hooks';
+import { useHomeSpineModel } from '../../../features/home-spine/hooks';
+import { getFeatureAvailability, isFeatureAvailableForNavigation, useDisclosureAnalytics, useFeatureAccess } from '../../../features/liveops-config';
+import { getNextBestAction } from '../../../features/progression';
+import { useProgressionSummary } from '../../../features/progression/hooks';
+import { useComebackState, useStreakSummary } from '../../../features/streaks/hooks';
+import { useNetInfo } from '../../../network';
+import type { ExtendedRootStackParams } from '../../../navigation/types';
+import { useSessionHistory } from '../../../session/hooks/useSession';
+import { useAuthStore } from '../../../store';
+import { useSessionUIStore } from '../../../store/session-state';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { buildHomeFeatureRuntime } from './home-feature-runtime';
+import { buildDisplayedReturnReason, getFocusedMinutesForToday, getNextUnlockFeature } from './home-controller-helpers';
+import { useHomeAnalyticsEffects } from './useHomeAnalyticsEffects';
+import { useHomeNavigationActions } from './useHomeNavigationActions';
+import { useHomeReturnReason } from './useHomeReturnReason';
+import { createStubQuery } from './home-controller-stubs';
 export function useHomeScreenController() {
   const navigation =
     useNavigation<NativeStackNavigationProp<ExtendedRootStackParams>>();
@@ -31,7 +31,7 @@ export function useHomeScreenController() {
   const clearHomeHighlight = useSessionUIStore(
     (state) => state.clearHomeHighlight,
   );
-  const userId = user?.id ?? "";
+  const userId = user?.id ?? '';
   const disclosure = useFeatureAccess();
   const runtime = useMemo(
     () =>
@@ -97,7 +97,7 @@ export function useHomeScreenController() {
     () =>
       (recommendationsQuery.data ?? [])
         .filter(
-          (item) => item.status === "ACTIVE" && item.expiresAt > Date.now(),
+          (item) => item.status === 'ACTIVE' && item.expiresAt > Date.now(),
         )
         .sort((a, b) => (b.confidence ?? 0) - (a.confidence ?? 0))[0] ?? null,
     [recommendationsQuery.data],

@@ -1,25 +1,25 @@
-import { z } from "zod";
-import { LaneProfileSchema, LaneSchema } from "../lane-engine/schemas";
-import { SessionModeSchema } from "../../session/modes";
+import { z } from 'zod';
+import { LaneProfileSchema, LaneSchema } from '../lane-engine/schemas';
+import { SessionModeSchema } from '../../session/modes';
 
 // ── Reasons ────────────────────────────────────────────────────────────
 export const RescueReasonSchema = z.enum([
-  "too_big",
-  "tired",
-  "distracted",
-  "anxious",
-  "unclear",
-  "no_time",
+  'too_big',
+  'tired',
+  'distracted',
+  'anxious',
+  'unclear',
+  'no_time',
 ]);
 
 // ── Trigger sources ────────────────────────────────────────────────────
 export const RescueTriggerSourceSchema = z.enum([
-  "abandoned_session",
-  "missed_planned",
-  "repeated_dismissals",
-  "streak_risk",
-  "user_too_big",
-  "notification_dismissal_pattern",
+  'abandoned_session',
+  'missed_planned',
+  'repeated_dismissals',
+  'streak_risk',
+  'user_too_big',
+  'notification_dismissal_pattern',
 ]);
 
 // ── Eligibility ────────────────────────────────────────────────────────
@@ -78,7 +78,7 @@ export const RescuePlanSchema = z
       .max(12 * 60),
     sessionMode: SessionModeSchema,
     taskDescription: z.string().min(1).max(120),
-    frictionLevel: z.enum(["none", "soft", "medium"]),
+    frictionLevel: z.enum(['none', 'soft', 'medium']),
     createdAt: z.number().int().min(0),
   })
   .strict();
@@ -102,9 +102,9 @@ export const RescuePlanInputSchema = z
 
 // ── Completion / Memory ────────────────────────────────────────────────
 export const RescueOutcomeSchema = z.enum([
-  "completed",
-  "partial",
-  "abandoned",
+  'completed',
+  'partial',
+  'abandoned',
 ]);
 
 export const RescueCompletionRecordSchema = z
@@ -125,7 +125,7 @@ export const RescueCompletionRecordSchema = z
 export const RescueCompletionMemorySchema = z
   .object({
     id: z.string().min(1),
-    source: z.literal("rescue_completion"),
+    source: z.literal('rescue_completion'),
     text: z.string().min(1),
     confidence: z.number().min(0).max(1),
   })

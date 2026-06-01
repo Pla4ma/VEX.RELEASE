@@ -1,8 +1,8 @@
-import React from "react";
-import { View, Text, Pressable, ScrollView, StyleSheet } from "react-native";
-import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
-import type { NotificationItem, NotificationCenterProps } from "./notification-types";
-import { styles, priorityStyles, formatTimestamp } from "./notification-styles";
+import React from 'react';
+import { View, Text, Pressable, ScrollView, StyleSheet } from 'react-native';
+import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
+import type { NotificationItem, NotificationCenterProps } from './notification-types';
+import { styles, priorityStyles, formatTimestamp } from './notification-styles';
 
 export type { NotificationItem };
 
@@ -81,13 +81,13 @@ export function NotificationCenter({
                       onPress={() => onAction(notification)}
                     >
                       <Text style={styles.actionButtonText}>
-                        {notification.action.type === "start_session" &&
-                          "Start Session"}
-                        {notification.action.type === "view_boss" &&
-                          "View Boss"}
-                        {notification.action.type === "open_chest" &&
-                          "Open Chest"}
-                        {notification.action.type === "dismiss" && "Dismiss"}
+                        {notification.action.type === 'start_session' &&
+                          'Start Session'}
+                        {notification.action.type === 'view_boss' &&
+                          'View Boss'}
+                        {notification.action.type === 'open_chest' &&
+                          'Open Chest'}
+                        {notification.action.type === 'dismiss' && 'Dismiss'}
                       </Text>
                     </Pressable>
                   )}

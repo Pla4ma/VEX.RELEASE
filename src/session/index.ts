@@ -19,12 +19,12 @@ export type {
   DamageCalculation,
   AntiCheatFlag,
   SessionNotificationType,
-} from "./types";
+} from './types';
 export type {
   SessionEventChannel,
   SessionEventPayload,
   SessionEventChannels,
-} from "./types/events";
+} from './types/events';
 export {
   ValidateSessionConfigSchema,
   ValidateSessionStateSchema,
@@ -54,50 +54,50 @@ export {
   validateDamageCalculation,
   validateFocusQualityMetrics,
   validateTimerConfig,
-} from "./validation/schemas";
+} from './validation/schemas';
 export {
   SessionService,
   createSessionService,
   getSessionService,
-} from "./SessionService";
-export type { SessionServiceOptions } from "./SessionService";
-export { SessionOrchestrator } from "./SessionOrchestrator";
-export { createSessionOrchestrator, getSessionOrchestrator } from "./orchestrator-factory";
+} from './SessionService';
+export type { SessionServiceOptions } from './SessionService';
+export { SessionOrchestrator } from './SessionOrchestrator';
+export { createSessionOrchestrator, getSessionOrchestrator } from './orchestrator-factory';
 export {
   SessionEventEmitter,
   createSessionEventEmitter,
   getSessionEventEmitter,
-} from "./SessionEventEmitter";
-export { TimerEngine, createTimerEngine } from "./engines/TimerEngine";
-export { ScoringEngine, createScoringEngine } from "./engines/ScoringEngine";
+} from './SessionEventEmitter';
+export { TimerEngine, createTimerEngine } from './engines/TimerEngine';
+export { ScoringEngine, createScoringEngine } from './engines/ScoringEngine';
 export {
   CompletionEngine,
   createCompletionEngine,
-} from "./engines/CompletionEngine";
+} from './engines/CompletionEngine';
 export type {
   CompletionResult,
   AbandonResult,
-} from "./engines/completion-types";
+} from './engines/completion-types';
 export {
   AntiCheatEngine,
   createAntiCheatEngine,
-} from "./antiCheat/AntiCheatEngine";
+} from './antiCheat/AntiCheatEngine';
 export {
   SessionRepository,
   getSessionRepository,
-} from "./repository/SessionRepository";
-export { PresetService, getPresetService, DEFAULT_PRESETS } from "./presets";
+} from './repository/SessionRepository';
+export { PresetService, getPresetService, DEFAULT_PRESETS } from './presets';
 export {
   RewardAdapter,
   createRewardAdapter,
   getRewardAdapter,
-} from "./integration/RewardAdapter";
+} from './integration/RewardAdapter';
 export {
   useSession,
   useSessionHistory,
   useSessionPresets,
   useSessionStats,
-} from "./hooks/useSession";
+} from './hooks/useSession';
 export const SESSION_CONSTANTS = {
   MIN_SESSION_DURATION: 60,
   MAX_SESSION_DURATION: 86400,
@@ -111,4 +111,4 @@ export const SESSION_CONSTANTS = {
   MIN_TICK_INTERVAL: 900,
   MAX_TICK_INTERVAL: 1100,
 } as const;
-export { getSessionService as default } from "./SessionService";
+export { getSessionService as default } from './SessionService';

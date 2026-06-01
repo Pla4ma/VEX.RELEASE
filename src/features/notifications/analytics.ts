@@ -4,21 +4,21 @@
  * Track notification interactions for A/B testing and optimization.
  */
 
-import { z } from "zod";
+import { z } from 'zod';
 
-import { getAnalyticsService } from "../../analytics/AnalyticsService";
-import { addBreadcrumb } from "../../config/sentry";
-import { createDebugger } from "../../utils/debug";
+import { getAnalyticsService } from '../../analytics/AnalyticsService';
+import { addBreadcrumb } from '../../config/sentry';
+import { createDebugger } from '../../utils/debug';
 
-const debug = createDebugger("notifications:analytics");
+const debug = createDebugger('notifications:analytics');
 
 /**
  * Notification event types
  */
 export const NotificationEventTypeSchema = z.enum([
-  "opened",
-  "delivered",
-  "dismissed",
+  'opened',
+  'delivered',
+  'dismissed',
 ]);
 
 export type NotificationEventType = z.infer<typeof NotificationEventTypeSchema>;
@@ -27,19 +27,19 @@ export type NotificationEventType = z.infer<typeof NotificationEventTypeSchema>;
  * Notification type schema for validation
  */
 export const NotificationTypeSchema = z.enum([
-  "streak_reminder",
-  "session_prompt",
-  "challenge_reminder",
-  "level_up",
-  "boss_timeout_warning",
-  "welcome_back",
-  "comeback",
-  "RETENTION_ONBOARDING_DAY_1",
-  "RETENTION_ONBOARDING_DAY_3",
-  "RETENTION_ONBOARDING_DAY_7",
-  "RETENTION_STREAK_PROTECTION",
-  "RETENTION_RE_ENGAGEMENT",
-  "RETENTION_CHALLENGE_EXPIRY",
+  'streak_reminder',
+  'session_prompt',
+  'challenge_reminder',
+  'level_up',
+  'boss_timeout_warning',
+  'welcome_back',
+  'comeback',
+  'RETENTION_ONBOARDING_DAY_1',
+  'RETENTION_ONBOARDING_DAY_3',
+  'RETENTION_ONBOARDING_DAY_7',
+  'RETENTION_STREAK_PROTECTION',
+  'RETENTION_RE_ENGAGEMENT',
+  'RETENTION_CHALLENGE_EXPIRY',
 ]);
 
 export type NotificationType = z.infer<typeof NotificationTypeSchema>;
@@ -56,7 +56,7 @@ export function trackNotificationOpened(
   try {
     const validatedType = NotificationTypeSchema.parse(type);
 
-    getAnalyticsService().track("notification_opened", {
+    getAnalyticsService().track('notification_opened', {
       notification_type: validatedType,
       notification_id: notificationId,
       user_id: userId,
@@ -65,13 +65,13 @@ export function trackNotificationOpened(
 
     addBreadcrumb(
       `Notification opened: ${validatedType}`,
-      "notification.interaction",
+      'notification.interaction',
       { notificationId, userId, type: validatedType },
     );
 
-    debug.info("[Analytics] Notification opened: %s", validatedType);
+    debug.info('[Analytics] Notification opened: %s', validatedType);
   } catch (error) {
-    debug.warn("Failed to track notification opened", error);
+    debug.warn('Failed to track notification opened', error);
   }
 }
 
@@ -83,7 +83,7 @@ export function trackNotificationDelivered(type: string, userId: string): void {
   try {
     const validatedType = NotificationTypeSchema.parse(type);
 
-    getAnalyticsService().track("notification_delivered", {
+    getAnalyticsService().track('notification_delivered', {
       notification_type: validatedType,
       user_id: userId,
       timestamp: Date.now(),
@@ -91,13 +91,13 @@ export function trackNotificationDelivered(type: string, userId: string): void {
 
     addBreadcrumb(
       `Notification delivered: ${validatedType}`,
-      "notification.delivery",
+      'notification.delivery',
       { userId, type: validatedType },
     );
 
-    debug.info("[Analytics] Notification delivered: %s", validatedType);
+    debug.info('[Analytics] Notification delivered: %s', validatedType);
   } catch (error) {
-    debug.warn("Failed to track notification delivered", error);
+    debug.warn('Failed to track notification delivered', error);
   }
 }
 
@@ -109,7 +109,7 @@ export function trackNotificationDismissed(type: string, userId: string): void {
   try {
     const validatedType = NotificationTypeSchema.parse(type);
 
-    getAnalyticsService().track("notification_dismissed", {
+    getAnalyticsService().track('notification_dismissed', {
       notification_type: validatedType,
       user_id: userId,
       timestamp: Date.now(),
@@ -117,13 +117,13 @@ export function trackNotificationDismissed(type: string, userId: string): void {
 
     addBreadcrumb(
       `Notification dismissed: ${validatedType}`,
-      "notification.interaction",
+      'notification.interaction',
       { userId, type: validatedType },
     );
 
-    debug.info("[Analytics] Notification dismissed: %s", validatedType);
+    debug.info('[Analytics] Notification dismissed: %s', validatedType);
   } catch (error) {
-    debug.warn("Failed to track notification dismissed", error);
+    debug.warn('Failed to track notification dismissed', error);
   }
 }
 
@@ -139,16 +139,16 @@ export function trackNotificationScheduled(
   try {
     const validatedType = NotificationTypeSchema.parse(type);
 
-    getAnalyticsService().track("notification_scheduled", {
+    getAnalyticsService().track('notification_scheduled', {
       notification_type: validatedType,
       user_id: userId,
       scheduled_for: scheduledFor,
       timestamp: Date.now(),
     });
 
-    debug.info("[Analytics] Notification scheduled: %s", validatedType);
+    debug.info('[Analytics] Notification scheduled: %s', validatedType);
   } catch (error) {
-    debug.warn("Failed to track notification scheduled", error);
+    debug.warn('Failed to track notification scheduled', error);
   }
 }
 
@@ -159,10 +159,10 @@ export function trackNotificationScheduled(
 export function trackNotificationPermission(
   userId: string,
   granted: boolean,
-  source: "onboarding" | "settings" | "prompt",
+  source: 'onboarding' | 'settings' | 'prompt',
 ): void {
   try {
-    getAnalyticsService().track("notification_permission", {
+    getAnalyticsService().track('notification_permission', {
       user_id: userId,
       granted,
       source,
@@ -170,17 +170,17 @@ export function trackNotificationPermission(
     });
 
     addBreadcrumb(
-      `Notification permission ${granted ? "granted" : "denied"}`,
-      "notification.permission",
+      `Notification permission ${granted ? 'granted' : 'denied'}`,
+      'notification.permission',
       { userId, granted, source },
     );
 
     debug.info(
-      "[Analytics] Notification permission: granted=%s, source=%s",
+      '[Analytics] Notification permission: granted=%s, source=%s',
       granted,
       source,
     );
   } catch (error) {
-    debug.warn("Failed to track notification permission", error);
+    debug.warn('Failed to track notification permission', error);
   }
 }

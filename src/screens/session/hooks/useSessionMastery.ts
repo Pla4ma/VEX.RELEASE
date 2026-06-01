@@ -1,13 +1,13 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import { MasteryService } from "../../../features/mastery/service";
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { MasteryService } from '../../../features/mastery/service';
 import {
   calculateTechniqueXp,
   getMasteryRankDisplay,
   type MasteryState,
-} from "../../../features/mastery";
+} from '../../../features/mastery';
 
 type ToastFn = (input: {
-  type: "success";
+  type: 'success';
   title: string;
   message: string;
   duration: number;
@@ -62,8 +62,8 @@ export function useSessionMastery(userId: string, showToast: ToastFn) {
       }
       if (masteryResult.rankChanged && masteryResult.newRank) {
         showToast({
-          type: "success",
-          title: "🎖️ Mastery Rank Up!",
+          type: 'success',
+          title: '🎖️ Mastery Rank Up!',
           message: `You've reached ${getMasteryRankDisplay(masteryResult.newRank).title}`,
           duration: 4000,
         });

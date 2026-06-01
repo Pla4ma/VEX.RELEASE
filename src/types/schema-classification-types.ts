@@ -1,9 +1,9 @@
 export type SchemaClass =
-  | "core"
-  | "progressive"
-  | "disabled"
-  | "internal"
-  | "deprecated";
+  | 'core'
+  | 'progressive'
+  | 'disabled'
+  | 'internal'
+  | 'deprecated';
 
 export interface TableClassification {
   table: string;

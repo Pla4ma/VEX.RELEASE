@@ -1,21 +1,21 @@
-import { withScreenErrorBoundary } from "../../shared/ui/components/ScreenErrorBoundary";
-import React, { useCallback, useState } from "react";
-import { ScrollView, Pressable, Alert } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import type { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useTheme } from "../../theme";
-import { Box, Text, Card } from "../../components/primitives";
-import { Icon } from "../../icons";
-import { useUIStore } from "../../store/index";
-import type { SettingsStackParams } from "../../navigation";
-import { launchColors } from "@theme/tokens/launch-colors";
-import { NotificationCategoryToggle } from "./NotificationCategoryToggle";
-import { NotificationScheduleSection } from "./NotificationScheduleSection";
-import { notificationGroups } from "./notification-groups";
+import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+import React, { useCallback, useState } from 'react';
+import { ScrollView, Pressable, Alert } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useTheme } from '../../theme';
+import { Box, Text, Card } from '../../components/primitives';
+import { Icon } from '../../icons';
+import { useUIStore } from '../../store/index';
+import type { SettingsStackParams } from '../../navigation';
+import { launchColors } from '@theme/tokens/launch-colors';
+import { NotificationCategoryToggle } from './NotificationCategoryToggle';
+import { NotificationScheduleSection } from './NotificationScheduleSection';
+import { notificationGroups } from './notification-groups';
 
 type Props = NativeStackScreenProps<
   SettingsStackParams,
-  "NotificationSettings"
+  'NotificationSettings'
 >;
 
 export const NotificationSettingsScreen: React.FC<Props> = ({
@@ -42,9 +42,9 @@ export const NotificationSettingsScreen: React.FC<Props> = ({
 
   const handleSendTestNotification = useCallback(() => {
     Alert.alert(
-      "Test Notification",
-      "A test notification has been scheduled.",
-      [{ text: "OK" }],
+      'Test Notification',
+      'A test notification has been scheduled.',
+      [{ text: 'OK' }],
     );
   }, []);
 
@@ -84,13 +84,13 @@ export const NotificationSettingsScreen: React.FC<Props> = ({
               style={{
                 marginLeft: 12,
                 marginBottom: 8,
-                fontWeight: "600",
+                fontWeight: '600',
                 letterSpacing: 0.5,
               }}
             >
               {group.title.toUpperCase()}
             </Text>
-            <Card size="sm" style={{ overflow: "hidden" }}>
+            <Card size="sm" style={{ overflow: 'hidden' }}>
               {group.items.map((item, index) => (
                 <React.Fragment key={item.id}>
                   <NotificationCategoryToggle
@@ -118,7 +118,7 @@ export const NotificationSettingsScreen: React.FC<Props> = ({
               backgroundColor: theme.colors.primary[500],
               paddingVertical: 16,
               borderRadius: 12,
-              alignItems: "center",
+              alignItems: 'center',
             }}
             accessibilityLabel="Send test notification"
             accessibilityRole="button"
@@ -129,7 +129,7 @@ export const NotificationSettingsScreen: React.FC<Props> = ({
               <Text
                 style={{
                   color: launchColors.hex_fff,
-                  fontWeight: "600",
+                  fontWeight: '600',
                   fontSize: 16,
                   marginLeft: 8,
                 }}
@@ -148,5 +148,5 @@ export const NotificationSettingsScreen: React.FC<Props> = ({
 
 export default withScreenErrorBoundary(
   NotificationSettingsScreen,
-  "NotificationSettings",
+  'NotificationSettings',
 );

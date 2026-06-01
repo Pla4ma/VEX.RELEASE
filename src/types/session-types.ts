@@ -1,29 +1,29 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const SessionStatusSchema = z.enum([
-  "PREPARING",
-  "STARTING",
-  "ACTIVE",
-  "PAUSED",
-  "BACKGROUNDED",
-  "INTERRUPTION_RISK",
-  "DEGRADED",
-  "COMPLETING",
-  "COMPLETED",
-  "PARTIAL",
-  "ABANDONED",
-  "FAILED",
-  "RECOVERING",
-  "CONFLICT",
+  'PREPARING',
+  'STARTING',
+  'ACTIVE',
+  'PAUSED',
+  'BACKGROUNDED',
+  'INTERRUPTION_RISK',
+  'DEGRADED',
+  'COMPLETING',
+  'COMPLETED',
+  'PARTIAL',
+  'ABANDONED',
+  'FAILED',
+  'RECOVERING',
+  'CONFLICT',
 ]);
 export type SessionStatus = z.infer<typeof SessionStatusSchema>;
 
 export const SessionPhaseSchema = z.enum([
-  "FOCUS",
-  "SHORT_BREAK",
-  "LONG_BREAK",
-  "PREPARATION",
-  "REVIEW",
+  'FOCUS',
+  'SHORT_BREAK',
+  'LONG_BREAK',
+  'PREPARATION',
+  'REVIEW',
 ]);
 export type SessionPhase = z.infer<typeof SessionPhaseSchema>;
 
@@ -75,12 +75,12 @@ export interface SessionState {
   recoveryAttempts: number;
   maxRecoveryAttempts: number;
   canRecover: boolean;
-  conflictStatus: "NONE" | "DETECTED" | "RESOLVED";
-  storageStatus: "HEALTHY" | "CORRUPTED" | "MISSING";
+  conflictStatus: 'NONE' | 'DETECTED' | 'RESOLVED';
+  storageStatus: 'HEALTHY' | 'CORRUPTED' | 'MISSING';
   deviceId: string;
   appVersion: string;
   osVersion: string;
-  antiCheatStatus: "CLEAN" | "SUSPICIOUS" | "FLAGGED";
+  antiCheatStatus: 'CLEAN' | 'SUSPICIOUS' | 'FLAGGED';
   antiCheatFlags: string[];
   createdAt: number;
   updatedAt: number;

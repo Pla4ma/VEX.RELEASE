@@ -1,38 +1,38 @@
-import React from "react";
-import { ScrollView } from "react-native";
+import React from 'react';
+import { ScrollView } from 'react-native';
 import {
   type CompositeNavigationProp,
   type RouteProp,
-} from "@react-navigation/native";
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+} from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-import { Box } from "../../../components/primitives/Box";
-import { SessionStartStatusCard } from "../../../features/session-start/components/SessionStartStatusCard";
-import type { SessionDifficulty } from "../../../features/session-start/components/DifficultySelector";
-import { useSessionStartController } from "../../../features/session-start/hooks";
-import { SessionMode } from "../../../session/modes";
+import { Box } from '../../../components/primitives/Box';
+import { SessionStartStatusCard } from '../../../features/session-start/components/SessionStartStatusCard';
+import type { SessionDifficulty } from '../../../features/session-start/components/DifficultySelector';
+import { useSessionStartController } from '../../../features/session-start/hooks';
+import { SessionMode } from '../../../session/modes';
 import type {
   ExtendedRootStackParams,
   SessionStackParams,
-} from "../../../navigation/types";
-import type { ActiveStudyPlan } from "../../../features/content-study/hooks";
-import { SessionQuickStartCard } from "../SessionQuickStartCard";
-import { SessionContractInput } from "./SessionContractInput";
-import { SessionSetupCustomizationSection } from "./SessionSetupCustomizationSection";
-import { SessionSetupDifficultyCard } from "./SessionSetupDifficultyCard";
-import { SessionSetupFooter } from "./SessionSetupFooter";
-import { SessionSetupHeader } from "./SessionSetupHeader";
-import { SessionSetupStakesCard } from "./SessionSetupStakesCard";
-import { SessionSetupStudyPlanCard } from "./SessionSetupStudyPlanCard";
-import { useSessionSetupStakes } from "../hooks/useSessionSetupStakes";
-import { buildLearningSessionParams } from "../../../features/learning-execution";
-import { isFeatureHidden } from "../../../features/liveops-config/final-release-feature-map";
+} from '../../../navigation/types';
+import type { ActiveStudyPlan } from '../../../features/content-study/hooks';
+import { SessionQuickStartCard } from '../SessionQuickStartCard';
+import { SessionContractInput } from './SessionContractInput';
+import { SessionSetupCustomizationSection } from './SessionSetupCustomizationSection';
+import { SessionSetupDifficultyCard } from './SessionSetupDifficultyCard';
+import { SessionSetupFooter } from './SessionSetupFooter';
+import { SessionSetupHeader } from './SessionSetupHeader';
+import { SessionSetupStakesCard } from './SessionSetupStakesCard';
+import { SessionSetupStudyPlanCard } from './SessionSetupStudyPlanCard';
+import { useSessionSetupStakes } from '../hooks/useSessionSetupStakes';
+import { buildLearningSessionParams } from '../../../features/learning-execution';
+import { isFeatureHidden } from '../../../features/liveops-config/final-release-feature-map';
 
 type SessionNavigationProp = CompositeNavigationProp<
   NativeStackNavigationProp<SessionStackParams>,
   NativeStackNavigationProp<ExtendedRootStackParams>
 >;
-type SessionSetupRouteProp = RouteProp<SessionStackParams, "SessionSetup">;
+type SessionSetupRouteProp = RouteProp<SessionStackParams, 'SessionSetup'>;
 
 type ReturningUserViewProps = {
   controller: ReturnType<typeof useSessionStartController>;
@@ -56,10 +56,10 @@ export function ReturningUserView({
   const stakes = useSessionSetupStakes({
     currentStreakDays: controller.streak?.currentDays ?? null,
     selectedDurationSeconds: controller.selectedDurationSeconds,
-    userId: controller.userId || "",
+    userId: controller.userId || '',
   });
   const showStakes =
-    !isFeatureHidden("boss_tab") || !isFeatureHidden("challenges");
+    !isFeatureHidden('boss_tab') || !isFeatureHidden('challenges');
 
   const handleStudyPlanSelect = (studyPlan: ActiveStudyPlan) => {
     const target = controller.learningExecutionLayer.target;
@@ -67,9 +67,9 @@ export function ReturningUserView({
       navigation.setParams(buildLearningSessionParams(target));
     }
     controller.setupState.setSelectedSessionMode(
-      target?.persona === "creative"
+      target?.persona === 'creative'
         ? SessionMode.CREATIVE
-        : target?.persona === "student" || target?.persona === "learning"
+        : target?.persona === 'student' || target?.persona === 'learning'
           ? SessionMode.STUDY
           : SessionMode.DEEP_WORK,
     );

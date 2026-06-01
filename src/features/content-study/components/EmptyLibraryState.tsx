@@ -1,10 +1,10 @@
-import React from "react";
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { Button } from "../../../components/primitives/Button";
-import { Icon } from "../../../icons";
-import { useTheme } from "../../../theme";
-import { Skeleton } from "./SkeletonCard";
+import React from 'react';
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { Button } from '../../../components/primitives/Button';
+import { Icon } from '../../../icons';
+import { useTheme } from '../../../theme';
+import { Skeleton } from './SkeletonCard';
 
 interface EmptyLibraryStateProps {
   isLoading: boolean;
@@ -82,8 +82,8 @@ export function EmptyLibraryState({
           textAlign="center"
         >
           {hasContent
-            ? "No content matches your filters"
-            : "No study content yet"}
+            ? 'No content matches your filters'
+            : 'No study content yet'}
         </Text>
         {!hasContent && (
           <Button

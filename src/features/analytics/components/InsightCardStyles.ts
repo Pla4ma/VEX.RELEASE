@@ -1,12 +1,12 @@
-import { createSheet } from "@/shared/ui/create-sheet";
-import { launchColors } from "@theme/tokens/launch-colors";
+import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
 
 export type SeverityLevel =
-  | "info"
-  | "positive"
-  | "warning"
-  | "critical"
-  | "celebration";
+  | 'info'
+  | 'positive'
+  | 'warning'
+  | 'critical'
+  | 'celebration';
 
 export const SEVERITY_CONFIG: Record<
   SeverityLevel,
@@ -15,35 +15,35 @@ export const SEVERITY_CONFIG: Record<
   info: {
     color: launchColors.hex_3b82f6,
     bgColor: launchColors.hex_dbeafe,
-    icon: "ℹ️",
+    icon: 'ℹ️',
   },
   positive: {
     color: launchColors.hex_10b981,
     bgColor: launchColors.hex_d1fae5,
-    icon: "✅",
+    icon: '✅',
   },
   warning: {
     color: launchColors.hex_f59e0b,
     bgColor: launchColors.hex_fef3c7,
-    icon: "⚠️",
+    icon: '⚠️',
   },
   critical: {
     color: launchColors.hex_ef4444,
     bgColor: launchColors.hex_fee2e2,
-    icon: "🚨",
+    icon: '🚨',
   },
   celebration: {
     color: launchColors.hex_8b5cf6,
     bgColor: launchColors.hex_ede9fe,
-    icon: "🎉",
+    icon: '🎉',
   },
 };
 
 export function formatMetricName(metric: string): string {
   return metric
-    .split("_")
+    .split('_')
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
+    .join(' ');
 }
 
 export function formatDate(timestamp: number): string {
@@ -53,7 +53,7 @@ export function formatDate(timestamp: number): string {
   const hours = Math.floor(diff / (1000 * 60 * 60));
   const days = Math.floor(hours / 24);
   if (hours < 1) {
-    return "Just now";
+    return 'Just now';
   }
   if (hours < 24) {
     return `${hours}h ago`;
@@ -66,12 +66,12 @@ export function formatDate(timestamp: number): string {
 
 export function formatActionLabel(actionType: string): string {
   const labels: Record<string, string> = {
-    start_session: "Start Session",
-    view_progress: "View Progress",
-    check_challenges: "Check Challenges",
-    invite_friends: "Invite Friends",
-    upgrade_plan: "Upgrade Plan",
-    customize_settings: "Settings",
+    start_session: 'Start Session',
+    view_progress: 'View Progress',
+    check_challenges: 'Check Challenges',
+    invite_friends: 'Invite Friends',
+    upgrade_plan: 'Upgrade Plan',
+    customize_settings: 'Settings',
   };
   return labels[actionType] || actionType;
 }
@@ -85,9 +85,9 @@ export const styles = createSheet({
     borderLeftWidth: 4,
   },
   readContainer: { opacity: 0.8 },
-  header: { flexDirection: "row", alignItems: "center", marginBottom: 8 },
+  header: { flexDirection: 'row', alignItems: 'center', marginBottom: 8 },
   icon: { fontSize: 20, marginRight: 8 },
-  title: { fontSize: 16, fontWeight: "600", flex: 1 },
+  title: { fontSize: 16, fontWeight: '600', flex: 1 },
   badge: {
     paddingHorizontal: 8,
     paddingVertical: 2,
@@ -97,7 +97,7 @@ export const styles = createSheet({
   badgeText: {
     color: launchColors.hex_ffffff,
     fontSize: 10,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   unreadDot: { width: 8, height: 8, borderRadius: 4, marginLeft: 8 },
   description: {
@@ -107,30 +107,30 @@ export const styles = createSheet({
     marginBottom: 12,
   },
   tagContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   tag: { paddingHorizontal: 8, paddingVertical: 4, borderRadius: 8 },
-  tagText: { fontSize: 12, fontWeight: "500" },
+  tagText: { fontSize: 12, fontWeight: '500' },
   date: { fontSize: 12, color: launchColors.hex_9ca3af },
-  actions: { flexDirection: "row", marginTop: 12, gap: 12 },
+  actions: { flexDirection: 'row', marginTop: 12, gap: 12 },
   actionButton: {
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 20,
     flex: 1,
-    alignItems: "center",
+    alignItems: 'center',
   },
   actionButtonText: {
     color: launchColors.hex_ffffff,
-    fontWeight: "600",
+    fontWeight: '600',
     fontSize: 14,
   },
   dismissButton: {
     paddingHorizontal: 16,
     paddingVertical: 8,
-    alignItems: "center",
+    alignItems: 'center',
   },
-  dismissText: { fontWeight: "500", fontSize: 14 },
+  dismissText: { fontWeight: '500', fontSize: 14 },
 });

@@ -7,26 +7,26 @@
  * @phase 2.3
  */
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from 'react';
 import {
   TextInput,
   Pressable,
   KeyboardAvoidingView,
   Platform,
-} from "react-native";
+} from 'react-native';
 import Animated, {
   FadeIn,
   FadeInUp,
   useAnimatedStyle,
   withSpring,
   useSharedValue,
-} from "react-native-reanimated";
+} from 'react-native-reanimated';
 
-import { Box } from "../../../components/primitives/Box";
-import { Button } from "../../../components/primitives/Button";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import { CharacterCounter } from "./CharacterCounter";
+import { Box } from '../../../components/primitives/Box';
+import { Button } from '../../../components/primitives/Button';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import { CharacterCounter } from './CharacterCounter';
 
 interface OnboardingSetNameProps {
   initialName?: string;
@@ -34,7 +34,7 @@ interface OnboardingSetNameProps {
   onSkip: () => void;
 }
 
-const DEFAULT_NAME = "Champion";
+const DEFAULT_NAME = 'Champion';
 const MAX_LENGTH = 20;
 
 /**
@@ -46,7 +46,7 @@ export function OnboardingSetName({
   onSkip,
 }: OnboardingSetNameProps): JSX.Element {
   const { theme } = useTheme();
-  const [name, setName] = useState(initialName || "");
+  const [name, setName] = useState(initialName || '');
   const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef<TextInput>(null);
   const scaleAnim = useSharedValue(1);
@@ -79,7 +79,7 @@ export function OnboardingSetName({
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={{ flex: 1 }}
     >
       <Box flex={1} justifyContent="space-between" px="xl" py="2xl">
@@ -129,7 +129,7 @@ export function OnboardingSetName({
                 autoCorrect={false}
                 style={{
                   fontSize: 28,
-                  fontWeight: "700",
+                  fontWeight: '700',
                   color: theme.colors.text.primary,
                   padding: 0,
                 }}
@@ -144,10 +144,10 @@ export function OnboardingSetName({
             >
               <Text variant="caption" color="text.tertiary">
                 {trimmedName.length === 0
-                  ? "Required to continue"
+                  ? 'Required to continue'
                   : isValid
-                    ? "Looks good!"
-                    : "Name is too long"}
+                    ? 'Looks good!'
+                    : 'Name is too long'}
               </Text>
               <CharacterCounter current={name.length} max={MAX_LENGTH} />
             </Box>

@@ -1,4 +1,4 @@
-import { capture } from "./index";
+import { capture } from './index';
 
 export interface FunnelStep {
   name: string;
@@ -17,12 +17,12 @@ export interface Funnel {
 }
 
 const ONBOARDING_FUNNEL_STEPS = [
-  { name: "App Open", event: "app_opened" },
-  { name: "Started Onboarding", event: "onboarding_started" },
-  { name: "Completed Profile", event: "profile_completed" },
-  { name: "First Session Started", event: "session_started" },
-  { name: "First Session Completed", event: "session_completed" },
-  { name: "Joined Squad", event: "squad_joined" },
+  { name: 'App Open', event: 'app_opened' },
+  { name: 'Started Onboarding', event: 'onboarding_started' },
+  { name: 'Completed Profile', event: 'profile_completed' },
+  { name: 'First Session Started', event: 'session_started' },
+  { name: 'First Session Completed', event: 'session_completed' },
+  { name: 'Joined Squad', event: 'squad_joined' },
 ];
 
 export function trackFunnelEvent(
@@ -31,7 +31,7 @@ export function trackFunnelEvent(
   userId: string,
   metadata?: Record<string, unknown>,
 ): void {
-  capture("funnel_step_completed", {
+  capture('funnel_step_completed', {
     funnel_id: funnelId,
     step_name: stepName,
     user_id: userId,
@@ -61,7 +61,7 @@ export function calculateFunnelMetrics(
   const totalConversionRate = first > 0 ? (last / first) * 100 : 0;
   return {
     id: funnelId,
-    name: "Onboarding Funnel",
+    name: 'Onboarding Funnel',
     steps,
     totalConversionRate,
     averageTimeToConvert: 0,

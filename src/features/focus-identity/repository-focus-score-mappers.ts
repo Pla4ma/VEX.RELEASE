@@ -1,8 +1,8 @@
-import type { FocusScoreHistoryPoint, FocusScoreRecord } from "./types";
+import type { FocusScoreHistoryPoint, FocusScoreRecord } from './types';
 import {
   CurrentFocusScoreRowSchema,
   FocusScoreHistoryRowSchema,
-} from "./repository-focus-score.schemas";
+} from './repository-focus-score.schemas';
 
 export class FocusIdentityRepositoryError extends Error {
   constructor(
@@ -12,7 +12,7 @@ export class FocusIdentityRepositoryError extends Error {
     super(
       `Focus identity repository failed during ${operation}: ${cause instanceof Error ? cause.message : String(cause)}`,
     );
-    this.name = "FocusIdentityRepositoryError";
+    this.name = 'FocusIdentityRepositoryError';
   }
 }
 

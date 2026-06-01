@@ -1,4 +1,4 @@
-import type { UnlockDecision } from "./types";
+import type { UnlockDecision } from './types';
 
 /**
  * Safety contract for all hidden features.
@@ -80,11 +80,11 @@ function blockedDisplayOnly(): FeatureSafetyGates {
  * never a broken/paywall fake CTA.
  */
 const PREMIUM_GATED_FEATURES = new Set([
-  "ai_coach_advanced",
-  "streak_insurance",
-  "premium_currency",
-  "premium_hard_sell",
-  "advanced_economy",
+  'ai_coach_advanced',
+  'streak_insurance',
+  'premium_currency',
+  'premium_hard_sell',
+  'advanced_economy',
 ]);
 
 /**
@@ -106,27 +106,27 @@ export function computeFeatureSafetyGates(
   }
 
   // Degraded premium: may show fallback explanation, no fake CTA
-  if (isDegradedPremium && decision?.decision === "degraded") {
+  if (isDegradedPremium && decision?.decision === 'degraded') {
     return blockedDisplayOnly();
   }
 
   // System-hidden: fully inert
-  if (!decision || decision.decision === "hidden") {
+  if (!decision || decision.decision === 'hidden') {
     return fullyInert();
   }
 
   // Blocked: display fallback only, no navigation/queries
-  if (decision.decision === "blocked") {
+  if (decision.decision === 'blocked') {
     return blockedDisplayOnly();
   }
 
   // Teased: entry point visible, nothing else
-  if (decision.decision === "teased") {
+  if (decision.decision === 'teased') {
     return teaseOnly();
   }
 
   // Unlocked: full access
-  if (decision.decision === "unlocked") {
+  if (decision.decision === 'unlocked') {
     return fullyActive();
   }
 
@@ -156,15 +156,15 @@ export function isPremiumGatedFeature(featureKey: string): boolean {
  * Features that must NEVER unlock — no monetization, no gamble, no store.
  */
 export const NEVER_UNLOCK_FEATURES = new Set([
-  "shop",
-  "inventory",
-  "wagers",
-  "battle_pass",
-  "premium_currency",
-  "streak_insurance",
-  "gems_prominent",
-  "economy_advanced",
-  "economy_basic",
+  'shop',
+  'inventory',
+  'wagers',
+  'battle_pass',
+  'premium_currency',
+  'streak_insurance',
+  'gems_prominent',
+  'economy_advanced',
+  'economy_basic',
 ]);
 
 /**

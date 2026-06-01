@@ -11,10 +11,10 @@ import {
   FEATURE_FLAGS,
   FEATURE_FLAG_DEFAULTS,
   FEATURE_GROUPS,
-} from "../features";
+} from '../features';
 
-describe("Feature Flag Matrix - PHASE 8", () => {
-  describe("Core Features - Launch Enabled by Default", () => {
+describe('Feature Flag Matrix - PHASE 8', () => {
+  describe('Core Features - Launch Enabled by Default', () => {
     const coreFeatures = [
       FEATURE_FLAGS.SESSIONS,
       FEATURE_FLAGS.SESSION_GRADING,
@@ -41,7 +41,7 @@ describe("Feature Flag Matrix - PHASE 8", () => {
     });
   });
 
-  describe("Optional Features - Launch Optional", () => {
+  describe('Optional Features - Launch Optional', () => {
     const optionalFeatures = [
       FEATURE_FLAGS.BASIC_SOLO_BOSS,
       FEATURE_FLAGS.BASIC_CHALLENGES,
@@ -60,7 +60,7 @@ describe("Feature Flag Matrix - PHASE 8", () => {
     });
   });
 
-  describe("Disabled Features - Launch Disabled", () => {
+  describe('Disabled Features - Launch Disabled', () => {
     const disabledFeatures = [
       FEATURE_FLAGS.SOCIAL_FEED,
       FEATURE_FLAGS.DUELS,
@@ -84,8 +84,8 @@ describe("Feature Flag Matrix - PHASE 8", () => {
     });
   });
 
-  describe("Feature Group Completeness", () => {
-    it("should have all features defined in exactly one launch group", () => {
+  describe('Feature Group Completeness', () => {
+    it('should have all features defined in exactly one launch group', () => {
       const allLaunchFeatures = [
         ...FEATURE_GROUPS.core,
         ...FEATURE_GROUPS.optional,
@@ -105,21 +105,21 @@ describe("Feature Flag Matrix - PHASE 8", () => {
       expect(uniqueFeatures.size).toBe(allLaunchFeatures.length);
     });
 
-    it("should have exactly 12 core features", () => {
+    it('should have exactly 12 core features', () => {
       expect(FEATURE_GROUPS.core).toHaveLength(12);
     });
 
-    it("should have exactly 4 optional features", () => {
+    it('should have exactly 4 optional features', () => {
       expect(FEATURE_GROUPS.optional).toHaveLength(4);
     });
 
-    it("should have exactly 9 disabled features", () => {
+    it('should have exactly 9 disabled features', () => {
       expect(FEATURE_GROUPS.disabled).toHaveLength(9);
     });
   });
 
-  describe("Navigation Safety", () => {
-    it("should not have any disabled features in core navigation paths", () => {
+  describe('Navigation Safety', () => {
+    it('should not have any disabled features in core navigation paths', () => {
       const navigationCriticalFeatures = [
         FEATURE_FLAGS.SESSIONS,
         FEATURE_FLAGS.SESSION_GRADING,
@@ -134,7 +134,7 @@ describe("Feature Flag Matrix - PHASE 8", () => {
       });
     });
 
-    it("should have social features properly disabled", () => {
+    it('should have social features properly disabled', () => {
       const socialFeatures = [
         FEATURE_FLAGS.SOCIAL_FEED,
         FEATURE_FLAGS.DUELS,

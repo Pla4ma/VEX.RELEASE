@@ -1,16 +1,16 @@
-import React, { useState, useEffect, useRef } from "react";
-import { TextInput, Pressable, Keyboard } from "react-native";
+import React, { useState, useEffect, useRef } from 'react';
+import { TextInput, Pressable, Keyboard } from 'react-native';
 import Animated, {
   FadeIn,
   FadeInUp,
   useAnimatedStyle,
   withSpring,
-} from "react-native-reanimated";
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { Button } from "../../../components/primitives/Button";
-import { useTheme } from "../../../theme";
-import { NameAvatarPreview } from "./NameAvatarPreview";
+} from 'react-native-reanimated';
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { Button } from '../../../components/primitives/Button';
+import { useTheme } from '../../../theme';
+import { NameAvatarPreview } from './NameAvatarPreview';
 interface NameScreenProps {
   onContinue: (name: string) => void;
   onSkip: () => void;
@@ -21,7 +21,7 @@ export function NameScreen({
   onBack,
 }: NameScreenProps & { onBack?: () => void }): JSX.Element {
   const { theme } = useTheme();
-  const [name, setName] = useState("");
+  const [name, setName] = useState('');
   const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef<TextInput>(null);
   const isValid = name.trim().length >= 2;
@@ -84,7 +84,7 @@ export function NameScreen({
       {}
       <Animated.View
         entering={FadeInUp.duration(500).delay(200)}
-        style={{ width: "100%" }}
+        style={{ width: '100%' }}
       >
         <Animated.View
           style={[
@@ -110,9 +110,9 @@ export function NameScreen({
             maxLength={30}
             style={{
               fontSize: 24,
-              fontWeight: "600",
+              fontWeight: '600',
               color: theme.colors.text.primary,
-              textAlign: "center",
+              textAlign: 'center',
             }}
           />
         </Animated.View>
@@ -122,11 +122,11 @@ export function NameScreen({
           <Text
             variant="caption"
             color={
-              name.length > 0 && !isValid ? "error.DEFAULT" : "text.tertiary"
+              name.length > 0 && !isValid ? 'error.DEFAULT' : 'text.tertiary'
             }
           >
             {name.length > 0 && !isValid
-              ? "Name must be at least 2 characters"
+              ? 'Name must be at least 2 characters'
               : `${name.length}/30 characters`}
           </Text>
         </Box>
@@ -141,7 +141,7 @@ export function NameScreen({
       {}
       <Animated.View
         entering={FadeInUp.duration(400).delay(400)}
-        style={{ width: "100%" }}
+        style={{ width: '100%' }}
       >
         <Button
           variant="primary"
@@ -160,7 +160,7 @@ export function NameScreen({
       {}
       <Animated.View
         entering={FadeIn.duration(400).delay(500)}
-        style={{ marginTop: "auto" }}
+        style={{ marginTop: 'auto' }}
       >
         <Pressable
           onPress={onSkip}

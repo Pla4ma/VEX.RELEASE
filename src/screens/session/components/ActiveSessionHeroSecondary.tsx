@@ -1,8 +1,8 @@
-import React from "react";
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { formatTime } from "../utils/active-session";
-import type { ActiveSessionHeroViewModel } from "../utils/active-session-hero-view-model";
+import React from 'react';
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { formatTime } from '../utils/active-session';
+import type { ActiveSessionHeroViewModel } from '../utils/active-session-hero-view-model';
 
 export function MomentumDots({
   viewModel,
@@ -75,7 +75,7 @@ export function SessionStats({
   viewModel: ActiveSessionHeroViewModel;
   labelColor: string;
 }): React.JSX.Element | null {
-  if (viewModel.heroDensity === "minimal") {
+  if (viewModel.heroDensity === 'minimal') {
     return null;
   }
   return (
@@ -99,7 +99,7 @@ function Stat(props: {
     <Box alignItems="center">
       <Text
         variant="h4"
-        color={props.color ? undefined : "text.primary"}
+        color={props.color ? undefined : 'text.primary'}
         style={props.color ? { color: props.color } : undefined}
       >
         {props.value}

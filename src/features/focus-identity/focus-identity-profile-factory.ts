@@ -1,12 +1,12 @@
-import { FOCUS_SCORE_CONFIG, IDENTITY_STATEMENTS } from "./focus-score-config";
-import type { FocusIdentityProfile, ScoreBand } from "./FocusIdentityEngine";
+import { FOCUS_SCORE_CONFIG, IDENTITY_STATEMENTS } from './focus-score-config';
+import type { FocusIdentityProfile, ScoreBand } from './FocusIdentityEngine';
 
 export const createInitialFocusIdentityProfile = (
   userId: string,
   band: ScoreBand,
 ): FocusIdentityProfile => {
   const now = new Date();
-  const today = now.toISOString().split("T")[0]!;
+  const today = now.toISOString().split('T')[0]!;
 
   return {
     userId,
@@ -16,7 +16,7 @@ export const createInitialFocusIdentityProfile = (
       {
         date: today,
         score: FOCUS_SCORE_CONFIG.INITIAL_SCORE,
-        reason: "Initial score",
+        reason: 'Initial score',
       },
     ],
     percentileRank: 50,
@@ -40,7 +40,7 @@ export const createInitialFocusIdentityProfile = (
       sessionQuality: {
         score: 50,
         averageFocusPurity: 0,
-        averageGrade: "D",
+        averageGrade: 'D',
         perfectSessionsCount: 0,
         averageSessionDuration: 0,
       },
@@ -57,7 +57,7 @@ export const createInitialFocusIdentityProfile = (
         daysSinceLastSession: 999,
         last7DayActivity: 0,
         last30DayActivity: 0,
-        trendDirection: "STABLE",
+        trendDirection: 'STABLE',
         velocity: 0,
       },
     },
@@ -69,12 +69,12 @@ export const createInitialFocusIdentityProfile = (
     recoveryStartDate: null,
     recoveryProgress: 0,
     preLapseScore: null,
-    topStrength: "consistency",
-    topWeakness: "recency",
+    topStrength: 'consistency',
+    topWeakness: 'recency',
     recommendedActions: [
-      "Complete your first session to activate your Focus Score",
-      "Set a weekly goal of 3-4 sessions to build consistency",
-      "Try different session modes to improve diversity",
+      'Complete your first session to activate your Focus Score',
+      'Set a weekly goal of 3-4 sessions to build consistency',
+      'Try different session modes to improve diversity',
     ],
     monthlyReport: null,
     updatedAt: Date.now(),

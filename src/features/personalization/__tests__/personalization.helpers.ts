@@ -1,23 +1,23 @@
-import { resolveVexExperience } from "../service";
+import { resolveVexExperience } from '../service';
 import type {
   VexPersonalizationProfile,
   BehaviorStats,
   FeatureAvailabilitySnapshot,
-} from "../schemas";
+} from '../schemas';
 
 export function makeProfile(
   overrides: Partial<VexPersonalizationProfile> = {},
 ): VexPersonalizationProfile {
   return {
-    primaryGoal: "work",
-    motivationStyle: "calm",
-    preferredTone: "soft",
-    gamificationIntensity: "minimal",
-    coachMode: "reflection",
-    studyLayerName: "Deep Work Plan",
+    primaryGoal: 'work',
+    motivationStyle: 'calm',
+    preferredTone: 'soft',
+    gamificationIntensity: 'minimal',
+    coachMode: 'reflection',
+    studyLayerName: 'Deep Work Plan',
     defaultSessionDuration: 25,
-    defaultSessionMode: "FOCUS",
-    userStage: "new",
+    defaultSessionMode: 'FOCUS',
+    userStage: 'new',
     ...overrides,
   };
 }
@@ -27,7 +27,7 @@ export function makeStats(
 ): BehaviorStats {
   return {
     abandonedSessionDurations: [],
-    bossChallengeEngagement: "none",
+    bossChallengeEngagement: 'none',
     coachInteractions: 0,
     comebackSessions: 0,
     completedSessionDurations: [],

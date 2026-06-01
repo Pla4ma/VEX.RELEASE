@@ -1,48 +1,48 @@
-import type { PurchasesPackageDisplayInfo } from "../../shared/monetization";
-import { launchColors } from "@theme/tokens/launch-colors";
+import type { PurchasesPackageDisplayInfo } from '../../shared/monetization';
+import { launchColors } from '@theme/tokens/launch-colors';
 
 export const VALUE_PROPOSITION =
-  "Your VEX. Smarter over time. Deeper where it matters.";
+  'Your VEX. Smarter over time. Deeper where it matters.';
 export const FREE_BOUNDARY_COPY =
-  "Sessions, progress, and Rescue stay free forever. Premium adds personalized intelligence that grows with your rhythm.";
+  'Sessions, progress, and Rescue stay free forever. Premium adds personalized intelligence that grows with your rhythm.';
 export const PREMIUM_BOUNDARY_COPY =
-  "Premium unlocks lane-specific intelligence: deeper memory, weekly patterns, smarter planning, and advanced controls. Free sessions always work.";
+  'Premium unlocks lane-specific intelligence: deeper memory, weekly patterns, smarter planning, and advanced controls. Free sessions always work.';
 
 const FALLBACK_PRICING = {
-  monthly: "Live pricing unavailable",
-  annual: "Live pricing unavailable",
+  monthly: 'Live pricing unavailable',
+  annual: 'Live pricing unavailable',
 };
 
 export const PREMIUM_FEATURES = [
   {
-    iconName: "check",
-    title: "Deep Coach Memory",
+    iconName: 'check',
+    title: 'Deep Coach Memory',
     description:
-      "VEX remembers patterns, comeback style, best focus windows, and preferred push style",
+      'VEX remembers patterns, comeback style, best focus windows, and preferred push style',
   },
   {
-    iconName: "book-open",
-    title: "Advanced Study / Deep Work OS",
+    iconName: 'book-open',
+    title: 'Advanced Study / Deep Work OS',
     description:
-      "Turn sessions into review loops, project breakdowns, quizzes, and smart next actions",
+      'Turn sessions into review loops, project breakdowns, quizzes, and smart next actions',
   },
   {
-    iconName: "bar-chart-3",
-    title: "Progress Intelligence",
+    iconName: 'bar-chart-3',
+    title: 'Progress Intelligence',
     description:
-      "See rhythm, focus risk, recovery plans, and consistency forecasts",
+      'See rhythm, focus risk, recovery plans, and consistency forecasts',
   },
   {
-    iconName: "brain",
-    title: "Memory Console & Controls",
+    iconName: 'brain',
+    title: 'Memory Console & Controls',
     description:
-      "View, edit, and manage memory with source, confidence, and expiry. Control what VEX remembers.",
+      'View, edit, and manage memory with source, confidence, and expiry. Control what VEX remembers.',
   },
   {
-    iconName: "zap",
-    title: "Advanced Friction Modes",
+    iconName: 'zap',
+    title: 'Advanced Friction Modes',
     description:
-      "Lane-matched depth: Exam Sprint, Boss Focus, Deep Work, and Quiet Planning per lane",
+      'Lane-matched depth: Exam Sprint, Boss Focus, Deep Work, and Quiet Planning per lane',
   },
 ];
 
@@ -55,51 +55,51 @@ export type PaywallFeatureHighlight = {
 
 export const FEATURE_HIGHLIGHT_MAP: Record<string, PaywallFeatureHighlight> = {
   deep_coach_memory: {
-    title: "Deep Coach Memory",
+    title: 'Deep Coach Memory',
     benefit:
-      "VEX remembers patterns, comeback style, best focus windows, and preferred push intensity across all sessions.",
-    iconName: "brain",
+      'VEX remembers patterns, comeback style, best focus windows, and preferred push intensity across all sessions.',
+    iconName: 'brain',
     gradient: [launchColors.hex_4f46e5, launchColors.hex_7c3aed],
   },
   progress_intelligence: {
-    title: "Weekly Focus Intelligence",
+    title: 'Weekly Focus Intelligence',
     benefit:
-      "See your best rhythm, focus risk, recovery plan, consistency forecast, and calendar-aware planning.",
-    iconName: "bar-chart-3",
+      'See your best rhythm, focus risk, recovery plan, consistency forecast, and calendar-aware planning.',
+    iconName: 'bar-chart-3',
     gradient: [launchColors.hex_0f766e, launchColors.hex_0d9488],
   },
   advanced_study_os: {
-    title: "Advanced Study & Deep Work",
+    title: 'Advanced Study & Deep Work',
     benefit:
-      "Advanced import, review intelligence, deadline risk, weak-topic plan, and smart next actions from your material.",
-    iconName: "book-open",
+      'Advanced import, review intelligence, deadline risk, weak-topic plan, and smart next actions from your material.',
+    iconName: 'book-open',
     gradient: [launchColors.hex_d97706, launchColors.hex_f59e0b],
   },
   recovery_planning: {
-    title: "Recovery & Continuity",
+    title: 'Recovery & Continuity',
     benefit:
-      "Build a recovery plan without shame. Long project memory and context restoration keep flow alive across sessions.",
-    iconName: "shield",
+      'Build a recovery plan without shame. Long project memory and context restoration keep flow alive across sessions.',
+    iconName: 'shield',
     gradient: [launchColors.hex_059669, launchColors.hex_10b981],
   },
   premium_session_modes: {
-    title: "Advanced Friction Modes",
+    title: 'Advanced Friction Modes',
     benefit:
-      "Custom modifiers, personal blocker depth, advanced run recap — no currency, no gimmicks.",
-    iconName: "zap",
+      'Custom modifiers, personal blocker depth, advanced run recap — no currency, no gimmicks.',
+    iconName: 'zap',
     gradient: [launchColors.hex_4f46e5, launchColors.hex_7c3aed],
   },
   visual_identity: {
-    title: "Memory Console & Identity",
+    title: 'Memory Console & Identity',
     benefit:
-      "Editable long memory with source, confidence, and expiry. Shape companion forms and focus worlds.",
-    iconName: "award",
+      'Editable long memory with source, confidence, and expiry. Shape companion forms and focus worlds.',
+    iconName: 'award',
     gradient: [launchColors.hex_0f766e, launchColors.hex_0d9488],
   },
 };
 
 export type PaywallPlanSelection = {
-  id: "annual" | "monthly";
+  id: 'annual' | 'monthly';
   title: string;
   subtitle: string;
   displayPrice: string;
@@ -111,27 +111,27 @@ export function buildPackageSelection(
   packages: readonly PurchasesPackageDisplayInfo[],
 ): PaywallPlanSelection[] {
   const annual = packages.find(
-    (item) => item.packageType.toUpperCase() === "ANNUAL",
+    (item) => item.packageType.toUpperCase() === 'ANNUAL',
   );
   const monthly = packages.find(
-    (item) => item.packageType.toUpperCase() === "MONTHLY",
+    (item) => item.packageType.toUpperCase() === 'MONTHLY',
   );
 
   return [
     {
-      id: "annual",
-      title: "Annual",
-      subtitle: "Best value for committed users",
+      id: 'annual',
+      title: 'Annual',
+      subtitle: 'Best value for committed users',
       displayPrice: annual?.product.priceString ?? FALLBACK_PRICING.annual,
-      badge: "Best value",
+      badge: 'Best value',
       packageInfo: annual,
     },
     {
-      id: "monthly",
-      title: "Monthly",
-      subtitle: "Flexible entry point",
+      id: 'monthly',
+      title: 'Monthly',
+      subtitle: 'Flexible entry point',
       displayPrice: monthly?.product.priceString ?? FALLBACK_PRICING.monthly,
-      badge: "Most flexible",
+      badge: 'Most flexible',
       packageInfo: monthly,
     },
   ];

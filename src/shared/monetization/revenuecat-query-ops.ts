@@ -1,20 +1,20 @@
-import type { MutableRefObject } from "react";
-import type { CustomerInfo, PurchasesOffering } from "react-native-purchases";
-import { revenueCatService } from "./revenuecat-service";
-import { getCustomerInfo, getOfferings } from "./revenuecat-exports";
+import type { MutableRefObject } from 'react';
+import type { CustomerInfo, PurchasesOffering } from 'react-native-purchases';
+import { revenueCatService } from './revenuecat-service';
+import { getCustomerInfo, getOfferings } from './revenuecat-exports';
 import type {
   EntitlementInfo,
   PurchasesOfferingDisplayInfo,
   PurchasesPackageDisplayInfo,
   RevenueCatError,
-} from "./revenuecat-types";
+} from './revenuecat-types';
 import {
   PurchaseEvents,
   createOfferingProperties,
-} from "./purchase-events";
-import { hasPremiumEntitlement } from "./entitlements";
-import { capture, type PurchaseEvent } from "../analytics";
-import { buildError, mapOfferingToDisplayInfo } from "./revenuecat-helpers";
+} from './purchase-events';
+import { hasPremiumEntitlement } from './entitlements';
+import { capture, type PurchaseEvent } from '../analytics';
+import { buildError, mapOfferingToDisplayInfo } from './revenuecat-helpers';
 
 export interface OfferingsOps {
   setIsLoading: (v: boolean) => void;
@@ -34,7 +34,7 @@ export interface CustomerOps {
 
 export async function refreshOfferings(ctx: OfferingsOps): Promise<void> {
   if (!revenueCatService.isReady()) {
-    const error = buildError("CONFIGURATION_ERROR", "RevenueCat is not ready");
+    const error = buildError('CONFIGURATION_ERROR', 'RevenueCat is not ready');
     ctx.setOfferings(null);
     ctx.setPackages([]);
     ctx.setError(error);
@@ -49,8 +49,8 @@ export async function refreshOfferings(ctx: OfferingsOps): Promise<void> {
       ctx.setOfferings(null);
       ctx.setPackages([]);
       const error = result.error
-        ? buildError("OFFERINGS_NOT_LOADED", result.error.message)
-        : buildError("EMPTY_OFFERINGS", "No active offerings found");
+        ? buildError('OFFERINGS_NOT_LOADED', result.error.message)
+        : buildError('EMPTY_OFFERINGS', 'No active offerings found');
       ctx.setError(error);
       capture(PurchaseEvents.OFFERING_EMPTY as PurchaseEvent, {
         error_code: error.code,
@@ -72,8 +72,8 @@ export async function refreshOfferings(ctx: OfferingsOps): Promise<void> {
     );
   } catch (error) {
     const rcError = buildError(
-      "OFFERINGS_NOT_LOADED",
-      error instanceof Error ? error.message : "Failed to load offerings",
+      'OFFERINGS_NOT_LOADED',
+      error instanceof Error ? error.message : 'Failed to load offerings',
     );
     ctx.setOfferings(null);
     ctx.setPackages([]);
@@ -89,7 +89,7 @@ export async function refreshOfferings(ctx: OfferingsOps): Promise<void> {
 
 export async function refreshCustomer(ctx: CustomerOps): Promise<void> {
   if (!revenueCatService.isReady()) {
-    const error = buildError("CONFIGURATION_ERROR", "RevenueCat is not ready");
+    const error = buildError('CONFIGURATION_ERROR', 'RevenueCat is not ready');
     ctx.setError(error);
     return;
   }
@@ -99,8 +99,8 @@ export async function refreshCustomer(ctx: CustomerOps): Promise<void> {
     const result = await getCustomerInfo();
     if (!result.success) {
       const error = buildError(
-        "CONFIGURATION_ERROR",
-        result.error?.message ?? "Failed to load customer info",
+        'CONFIGURATION_ERROR',
+        result.error?.message ?? 'Failed to load customer info',
       );
       ctx.setCustomerInfo(null);
       ctx.setEntitlements([]);
@@ -113,8 +113,8 @@ export async function refreshCustomer(ctx: CustomerOps): Promise<void> {
     ctx.setIsPremium(hasPremiumEntitlement(result.entitlements));
   } catch (error) {
     const rcError = buildError(
-      "CONFIGURATION_ERROR",
-      error instanceof Error ? error.message : "Failed to load customer info",
+      'CONFIGURATION_ERROR',
+      error instanceof Error ? error.message : 'Failed to load customer info',
     );
     ctx.setCustomerInfo(null);
     ctx.setEntitlements([]);

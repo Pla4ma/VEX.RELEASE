@@ -1,32 +1,32 @@
-import { eventBus } from "../../events";
-import { createDebugger } from "../../utils/debug";
-import * as repository from "./repository";
-import type { Streak, RiskLevel } from "./schemas";
-const debug = createDebugger("streak-risk-monitor");
+import { eventBus } from '../../events';
+import { createDebugger } from '../../utils/debug';
+import * as repository from './repository';
+import type { Streak, RiskLevel } from './schemas';
+const debug = createDebugger('streak-risk-monitor');
 const NOTIFICATION_THRESHOLDS = [
   {
     hoursRemaining: 20,
-    urgency: "MEDIUM",
+    urgency: 'MEDIUM',
     message:
-      "A quick 10-minute session keeps your streak alive. You have got this.",
+      'A quick 10-minute session keeps your streak alive. You have got this.',
   },
   {
     hoursRemaining: 22,
-    urgency: "HIGH",
+    urgency: 'HIGH',
     message:
-      "Your streak is within reach. A short session today keeps your momentum going.",
+      'Your streak is within reach. A short session today keeps your momentum going.',
   },
   {
     hoursRemaining: 23,
-    urgency: "CRITICAL",
+    urgency: 'CRITICAL',
     message:
-      "One small session today preserves your streak. Start small and keep building.",
+      'One small session today preserves your streak. Start small and keep building.',
   },
   {
     hoursRemaining: 23.5,
-    urgency: "CRITICAL",
+    urgency: 'CRITICAL',
     message:
-      "A 10-minute Recovery session keeps the chain alive. You are stronger than the gap.",
+      'A 10-minute Recovery session keeps the chain alive. You are stronger than the gap.',
   },
 ];
 const FLAME_HEALTH_SEGMENTS = 24;
@@ -52,7 +52,7 @@ export function calculateStreakRisk(
       currentDays: streak.currentDays,
       hoursRemaining: 24,
       minutesRemaining: 24 * 60,
-      riskLevel: "NONE",
+      riskLevel: 'NONE',
       flameHealthPercent: 100,
       isAtRisk: false,
       isCritical: false,
@@ -63,25 +63,25 @@ export function calculateStreakRisk(
   const remainingMs = deadline - now;
   const remainingHours = remainingMs / (60 * 60 * 1000);
   const remainingMinutes = remainingMs / (60 * 1000);
-  let riskLevel: RiskLevel = "NONE";
+  let riskLevel: RiskLevel = 'NONE';
   let isAtRisk = false;
   let isCritical = false;
   if (remainingHours <= 0) {
-    riskLevel = "CRITICAL";
+    riskLevel = 'CRITICAL';
     isAtRisk = true;
     isCritical = true;
   } else if (remainingHours <= 1) {
-    riskLevel = "CRITICAL";
+    riskLevel = 'CRITICAL';
     isAtRisk = true;
     isCritical = true;
   } else if (remainingHours <= 4) {
-    riskLevel = "HIGH";
+    riskLevel = 'HIGH';
     isAtRisk = true;
   } else if (remainingHours <= 8) {
-    riskLevel = "MEDIUM";
+    riskLevel = 'MEDIUM';
     isAtRisk = true;
   } else if (remainingHours <= 12) {
-    riskLevel = "LOW";
+    riskLevel = 'LOW';
   }
   const flameHealthPercent = Math.max(
     0,
@@ -115,22 +115,22 @@ export async function checkAndSendRiskNotifications(
       riskStatus.hoursRemaining <= threshold.hoursRemaining &&
       riskStatus.hoursRemaining > threshold.hoursRemaining - 0.5
     ) {
-      eventBus.publish("notification:send", {
+      eventBus.publish('notification:send', {
         userId,
-        type: "STREAK_AT_RISK",
+        type: 'STREAK_AT_RISK',
         title: `${streak.currentDays}-day streak within reach`,
         body: threshold.message,
         data: {
           streakDays: streak.currentDays,
           hoursRemaining: riskStatus.hoursRemaining,
           urgency: threshold.urgency,
-          action: "START_SESSION",
+          action: 'START_SESSION',
         },
-        priority: threshold.urgency === "CRITICAL" ? "high" : "normal",
+        priority: threshold.urgency === 'CRITICAL' ? 'high' : 'normal',
       });
     }
   }
-  eventBus.publish("streak:risk_updated", riskStatus);
+  eventBus.publish('streak:risk_updated', riskStatus);
 }
 export async function checkAllStreaksAtRisk(): Promise<StreakRiskStatus[]> {
   const atRiskUsers = await repository.fetchUsersWithActiveStreaks();
@@ -179,17 +179,17 @@ async function breakStreakInternal(
     lastQualifyingSessionAt: null,
     currentDayCompletedAt: null,
   });
-  eventBus.publish("streak:broken", {
+  eventBus.publish('streak:broken', {
     userId,
     previousStreak: brokenDays,
     wasComeback: false,
     diedAt: Date.now(),
   });
-  eventBus.publish("notification:send", {
+  eventBus.publish('notification:send', {
     userId,
-    type: "STREAK_BROKEN",
-    title: "You missed a few days",
+    type: 'STREAK_BROKEN',
+    title: 'You missed a few days',
     body: `Start small and rebuild momentum. Your ${brokenDays}-day streak shows what you are capable of.`,
-    data: { previousStreak: brokenDays, action: "START_REPAIR_QUEST" },
+    data: { previousStreak: brokenDays, action: 'START_REPAIR_QUEST' },
   });
 }

@@ -3,17 +3,17 @@ import {
   captureException,
   syncPendingRewards,
   mockRecord,
-} from "./helpers";
+} from './helpers';
 
-describe("reward-ledger service", () => {
+describe('reward-ledger service', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  describe("syncPendingRewards", () => {
-    const userId = "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb";
+  describe('syncPendingRewards', () => {
+    const userId = 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb';
 
-    it("syncs all pending rewards for a user", async () => {
+    it('syncs all pending rewards for a user', async () => {
       (repository.fetchPendingRewards as jest.Mock).mockResolvedValue([
         mockRecord,
       ]);
@@ -22,19 +22,19 @@ describe("reward-ledger service", () => {
       );
       (repository.updateRewardLedgerStatus as jest.Mock).mockResolvedValue({
         ...mockRecord,
-        status: "delivered" as const,
-        deliveredAt: "2026-01-01T00:05:00.000Z",
+        status: 'delivered' as const,
+        deliveredAt: '2026-01-01T00:05:00.000Z',
       });
       const results = await syncPendingRewards(userId);
       expect(results).toHaveLength(1);
-      expect(results[0]!.status).toBe("delivered");
+      expect(results[0]!.status).toBe('delivered');
     });
 
-    it("continues syncing after individual delivery failure", async () => {
+    it('continues syncing after individual delivery failure', async () => {
       const secondRecord = {
         ...mockRecord,
-        id: "cccccccc-cccc-cccc-cccc-cccccccccccc",
-        idempotencyKey: "evt_002",
+        id: 'cccccccc-cccc-cccc-cccc-cccccccccccc',
+        idempotencyKey: 'evt_002',
       };
       (repository.fetchPendingRewards as jest.Mock).mockResolvedValue([
         mockRecord,
@@ -42,30 +42,30 @@ describe("reward-ledger service", () => {
       ]);
       const getByIdMock = repository.getRewardLedgerById as jest.Mock;
       getByIdMock
-        .mockRejectedValueOnce(new Error("delivery failed"))
+        .mockRejectedValueOnce(new Error('delivery failed'))
         .mockResolvedValueOnce(secondRecord);
       (repository.updateRewardLedgerStatus as jest.Mock).mockResolvedValue({
         ...secondRecord,
-        status: "delivered" as const,
-        deliveredAt: "2026-01-01T00:05:00.000Z",
+        status: 'delivered' as const,
+        deliveredAt: '2026-01-01T00:05:00.000Z',
       });
       const results = await syncPendingRewards(userId);
       expect(results).toHaveLength(1);
-      expect(results[0]!.id).toBe("cccccccc-cccc-cccc-cccc-cccccccccccc");
+      expect(results[0]!.id).toBe('cccccccc-cccc-cccc-cccc-cccccccccccc');
     });
 
-    it("returns empty array when no pending rewards", async () => {
+    it('returns empty array when no pending rewards', async () => {
       (repository.fetchPendingRewards as jest.Mock).mockResolvedValue([]);
       const results = await syncPendingRewards(userId);
       expect(results).toHaveLength(0);
     });
 
-    it("captures Sentry on fetch failure", async () => {
+    it('captures Sentry on fetch failure', async () => {
       (repository.fetchPendingRewards as jest.Mock).mockRejectedValue(
-        new Error("fetch failed"),
+        new Error('fetch failed'),
       );
       await expect(syncPendingRewards(userId)).rejects.toThrow(
-        "RewardLedgerService syncPendingRewards failed",
+        'RewardLedgerService syncPendingRewards failed',
       );
       expect(captureException).toHaveBeenCalled();
     });

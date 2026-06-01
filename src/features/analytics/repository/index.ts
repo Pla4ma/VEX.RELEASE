@@ -1,16 +1,16 @@
-export type { SessionHeatmapData } from "./types";
+export type { SessionHeatmapData } from './types';
 
 export {
   fetchTimeSeriesData,
   fetchSessionHeatmapData,
-} from "./time-series";
+} from './time-series';
 
 export {
   fetchInsights,
   createInsight,
   markInsightAsRead,
   markInsightAsActioned,
-} from "./insights";
+} from './insights';
 
 export {
   fetchDashboardLayouts,
@@ -18,14 +18,14 @@ export {
   createDashboardLayout,
   updateDashboardWidget,
   deleteDashboardWidget,
-} from "./dashboard";
+} from './dashboard';
 
 export {
   fetchExportJobs,
   createExportJob,
   updateExportJobProgress,
   markExportJobFailed,
-} from "./export-jobs";
+} from './export-jobs';
 
 export {
   fetchAnalyticsPreferences,
@@ -36,4 +36,4 @@ export {
   storeDetectedPattern,
   deleteOldAnalyticsData,
   bulkInsertAnalyticsEvents,
-} from "./stats";
+} from './stats';

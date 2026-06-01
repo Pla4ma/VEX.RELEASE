@@ -5,26 +5,26 @@ import {
   LANE_CONFIRMATION_COPY,
   LANE_USER_FACING_NAMES,
   type CompletionEvidenceInput,
-} from "./schemas";
-import { makeEvidence } from "./scoring";
+} from './schemas';
+import { makeEvidence } from './scoring';
 import type {
   Lane,
   LaneConfirmation,
   LaneEvidence,
   LaneProfile,
   ResolveInitialLaneInput,
-} from "./types";
+} from './types';
 import {
   confidenceBand,
   manualProfile,
-} from "./lane-engine-helpers";
-import { resolveInitialLane } from "./lane-resolution";
+} from './lane-engine-helpers';
+import { resolveInitialLane } from './lane-resolution';
 
 export type CompletionLaneSituation =
-  | "clean"
-  | "partial"
-  | "abandoned"
-  | "comeback";
+  | 'clean'
+  | 'partial'
+  | 'abandoned'
+  | 'comeback';
 
 export function resolveCompletionLaneProfile(input: {
   lane: Lane;
@@ -32,20 +32,20 @@ export function resolveCompletionLaneProfile(input: {
   observedAt?: number;
 }): LaneProfile {
   const observedAt = input.observedAt ?? Date.now();
-  const confidence = input.situation === "clean" ? 0.6 : 0.35;
+  const confidence = input.situation === 'clean' ? 0.6 : 0.35;
   return LaneProfileSchema.parse({
     ...manualProfile(input.lane, observedAt),
     confidence,
     confidenceBand: confidenceBand(confidence),
     evidence: [
       makeEvidence(
-        "session_mode",
+        'session_mode',
         `completion:${input.situation}`,
         0.25,
         observedAt,
       ),
     ],
-    source: "behavior",
+    source: 'behavior',
   });
 }
 
@@ -56,20 +56,20 @@ export function accumulateCompletionEvidence(
   const evidence: LaneEvidence[] = [];
   const observedAt = Date.now();
 
-  if (input.sessionMode === "STUDY") {
-    evidence.push(makeEvidence("study_usage", "completion", 0.3, observedAt));
+  if (input.sessionMode === 'STUDY') {
+    evidence.push(makeEvidence('study_usage', 'completion', 0.3, observedAt));
   } else if (
-    input.sessionMode === "CREATIVE" ||
-    input.sessionMode === "DEEP_WORK"
+    input.sessionMode === 'CREATIVE' ||
+    input.sessionMode === 'DEEP_WORK'
   ) {
     evidence.push(
-      makeEvidence("creative_usage", "completion", 0.3, observedAt),
+      makeEvidence('creative_usage', 'completion', 0.3, observedAt),
     );
   } else {
     evidence.push(
       makeEvidence(
-        "session_mode",
-        input.sessionMode ?? "FLOW",
+        'session_mode',
+        input.sessionMode ?? 'FLOW',
         0.15,
         observedAt,
       ),
@@ -78,12 +78,12 @@ export function accumulateCompletionEvidence(
 
   if (input.completionPercentage >= 100) {
     evidence.push(
-      makeEvidence("session_mode", "clean_finish", 0.2, observedAt),
+      makeEvidence('session_mode', 'clean_finish', 0.2, observedAt),
     );
   }
 
   evidence.push({
-    source: "session_mode",
+    source: 'session_mode',
     value: `grade:${input.grade}`,
     weight: Math.min(
       0.25,

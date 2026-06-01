@@ -5,23 +5,23 @@
 import {
   getLaneMechanicPolicy,
   getLanePresentationPolicy,
-} from "../../lane-engine";
+} from '../../lane-engine';
 import type {
   Lane,
   LaneProfile,
   LaneMechanicPolicy,
-} from "../../lane-engine/types";
-import { buildLaneSessionBrief } from "../../session-start/service";
-import { decideNudge } from "../../notification-policy/service";
-import { resolveCompletionExperiencePolicy } from "../../session-completion/completion-experience-policy";
+} from '../../lane-engine/types';
+import { buildLaneSessionBrief } from '../../session-start/service';
+import { decideNudge } from '../../notification-policy/service';
+import { resolveCompletionExperiencePolicy } from '../../session-completion/completion-experience-policy';
 import type {
   CompletionExperiencePolicy,
   CompletionExperiencePolicyInput,
-} from "../../session-completion/completion-experience-policy-schemas";
-import { resolveLaneCopy } from "../../personalization/first-week-lane-copy";
-import { LANE_USER_FACING_NAMES } from "../../lane-engine/schemas";
-import { decideHomeSurfaces } from "../../home-experience/home-surface-decision";
-import { SessionMode } from "../../../session/modes";
+} from '../../session-completion/completion-experience-policy-schemas';
+import { resolveLaneCopy } from '../../personalization/first-week-lane-copy';
+import { LANE_USER_FACING_NAMES } from '../../lane-engine/schemas';
+import { decideHomeSurfaces } from '../../home-experience/home-surface-decision';
+import { SessionMode } from '../../../session/modes';
 
 type SessionModeString = (typeof SessionMode)[keyof typeof SessionMode];
 
@@ -49,11 +49,11 @@ export type {
 export const baseLaneProfile = (
   overrides: Partial<LaneProfile>,
 ): LaneProfile => ({
-  primaryLane: "minimal_normal",
+  primaryLane: 'minimal_normal',
   secondaryLane: null,
   confidence: 0.8,
-  confidenceBand: "high",
-  source: "onboarding",
+  confidenceBand: 'high',
+  source: 'onboarding',
   evidence: [],
   traits: {
     needsStructure: 0.5,
@@ -73,7 +73,7 @@ export const featureAvailability = {
 };
 
 export const baseStats = {
-  bossChallengeEngagement: "none" as const,
+  bossChallengeEngagement: 'none' as const,
   coachInteractions: 0,
   comebackSessions: 0,
   completionStreak: 0,
@@ -84,11 +84,11 @@ export const baseStats = {
 };
 
 export const baseProfile = {
-  gamificationIntensity: "medium" as const,
-  motivationStyle: "coach_led" as const,
-  primaryGoal: "work" as const,
-  studyLayerName: "Deep Work Plan",
-  userStage: "engaged" as const,
+  gamificationIntensity: 'medium' as const,
+  motivationStyle: 'coach_led' as const,
+  primaryGoal: 'work' as const,
+  studyLayerName: 'Deep Work Plan',
+  userStage: 'engaged' as const,
 };
 
 export function sessionSummary(overrides: {
@@ -102,12 +102,12 @@ export function sessionSummary(overrides: {
   finalScore?: number;
   streakMaintained?: boolean;
   createdAt?: number;
-}): CompletionExperiencePolicyInput["summary"] {
+}): CompletionExperiencePolicyInput['summary'] {
   const now = Date.now();
   return {
-    sessionId: overrides.sessionId ?? "test-summary-id",
-    userId: overrides.userId ?? "test-user",
-    status: "COMPLETED",
+    sessionId: overrides.sessionId ?? 'test-summary-id',
+    userId: overrides.userId ?? 'test-user',
+    status: 'COMPLETED',
     sessionMode: overrides.sessionMode ?? SessionMode.LIGHT_FOCUS,
     plannedDuration: overrides.plannedDuration ?? 1500,
     actualDuration: 1500,
@@ -141,13 +141,13 @@ export function sessionSummary(overrides: {
 
 export function completionInput(overrides: {
   lane?: Lane;
-  motivationStyle?: CompletionExperiencePolicyInput["motivationStyle"];
-  premiumState?: CompletionExperiencePolicyInput["premiumState"];
-  primaryGoal?: CompletionExperiencePolicyInput["primaryGoal"];
-  sessionMode?: CompletionExperiencePolicyInput["sessionMode"];
-  featureAvailability?: CompletionExperiencePolicyInput["featureAvailability"];
-  consequences?: CompletionExperiencePolicyInput["consequences"];
-  summary?: Partial<CompletionExperiencePolicyInput["summary"]>;
+  motivationStyle?: CompletionExperiencePolicyInput['motivationStyle'];
+  premiumState?: CompletionExperiencePolicyInput['premiumState'];
+  primaryGoal?: CompletionExperiencePolicyInput['primaryGoal'];
+  sessionMode?: CompletionExperiencePolicyInput['sessionMode'];
+  featureAvailability?: CompletionExperiencePolicyInput['featureAvailability'];
+  consequences?: CompletionExperiencePolicyInput['consequences'];
+  summary?: Partial<CompletionExperiencePolicyInput['summary']>;
 }): CompletionExperiencePolicyInput {
   return {
     consequences: overrides.consequences ?? undefined,
@@ -159,10 +159,10 @@ export function completionInput(overrides: {
       contractUsed: false,
     },
     firstWeekStage: null,
-    lane: overrides.lane ?? "minimal_normal",
-    motivationStyle: overrides.motivationStyle ?? "calm",
-    premiumState: overrides.premiumState ?? "free",
-    primaryGoal: overrides.primaryGoal ?? "WORK",
+    lane: overrides.lane ?? 'minimal_normal',
+    motivationStyle: overrides.motivationStyle ?? 'calm',
+    premiumState: overrides.premiumState ?? 'free',
+    primaryGoal: overrides.primaryGoal ?? 'WORK',
     sessionMode: overrides.sessionMode ?? SessionMode.LIGHT_FOCUS,
     summary: sessionSummary({
       sessionMode: overrides.sessionMode,
@@ -171,4 +171,4 @@ export function completionInput(overrides: {
   };
 }
 
-export { auditLane } from "./audit-lane";
+export { auditLane } from './audit-lane';

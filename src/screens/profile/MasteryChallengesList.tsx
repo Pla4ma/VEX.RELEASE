@@ -1,12 +1,12 @@
-import React from "react";
-import { View } from "react-native";
-import { Box, Card, Text } from "../../components/primitives";
-import { Button } from "../../components/primitives/Button";
-import { EmptyState } from "../../components/EmptyState";
-import type { MasteryChallenge } from "../../features/mastery/types";
-import { Icon } from "../../icons";
-import { useTheme } from "../../theme";
-import { launchColors } from "@theme/tokens/launch-colors";
+import React from 'react';
+import { View } from 'react-native';
+import { Box, Card, Text } from '../../components/primitives';
+import { Button } from '../../components/primitives/Button';
+import { EmptyState } from '../../components/EmptyState';
+import type { MasteryChallenge } from '../../features/mastery/types';
+import { Icon } from '../../icons';
+import { useTheme } from '../../theme';
+import { launchColors } from '@theme/tokens/launch-colors';
 
 const DIFFICULTY_COLORS = {
   EASY: launchColors.hex_10b981,
@@ -36,9 +36,9 @@ function ChallengeCard({
       <View style={{ gap: theme.spacing[3] }}>
         <View
           style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "flex-start",
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'flex-start',
           }}
         >
           <View style={{ flex: 1, gap: theme.spacing[1] }}>
@@ -67,7 +67,7 @@ function ChallengeCard({
             style={{
               height: 8,
               borderRadius: 4,
-              overflow: "hidden",
+              overflow: 'hidden',
               backgroundColor: theme.colors.background.tertiary,
             }}
           >
@@ -82,9 +82,9 @@ function ChallengeCard({
           </View>
           <View
             style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
             }}
           >
             <Text variant="caption" color="text.tertiary">
@@ -95,7 +95,7 @@ function ChallengeCard({
             </Text>
           </View>
         </View>
-        {challenge.status === "COMPLETED" && (
+        {challenge.status === 'COMPLETED' && (
           <Button
             size="sm"
             variant="primary"

@@ -1,11 +1,11 @@
-import React from "react";
-import type { HomeController } from "./home-controller-types";
+import React from 'react';
+import type { HomeController } from './home-controller-types';
 import type {
   ChallengeItem,
   SessionListItem,
-} from "../../../features/home-spine/components";
-import type { ActiveIntervention } from "../../../features/ai-coach/hooks";
-import type { ToastOptions } from "../../../shared/ui/components/Toast";
+} from '../../../features/home-spine/components';
+import type { ActiveIntervention } from '../../../features/ai-coach/hooks';
+import type { ToastOptions } from '../../../shared/ui/components/Toast';
 
 export interface BaseHomeData {
   controller: HomeController;

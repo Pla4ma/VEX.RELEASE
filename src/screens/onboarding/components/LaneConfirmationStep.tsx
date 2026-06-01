@@ -1,26 +1,26 @@
-import React, { useMemo } from "react";
-import { Pressable, View } from "react-native";
-import Animated, { FadeInDown, FadeInUp } from "react-native-reanimated";
+import React, { useMemo } from 'react';
+import { Pressable, View } from 'react-native';
+import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 
-import { Button } from "../../../components/primitives/Button";
-import { Text } from "../../../components/primitives/Text";
-import { useReducedMotion } from "../../../hooks/useReducedMotion";
-import { useTheme } from "../../../theme";
-import { styles } from "../styles";
-import type { Lane, LaneConfirmation } from "../../../features/lane-engine";
+import { Button } from '../../../components/primitives/Button';
+import { Text } from '../../../components/primitives/Text';
+import { useReducedMotion } from '../../../hooks/useReducedMotion';
+import { useTheme } from '../../../theme';
+import { styles } from '../styles';
+import type { Lane, LaneConfirmation } from '../../../features/lane-engine';
 
 const LANE_EMOJI: Record<Lane, string> = {
-  student: "\uD83D\uDCDA",
-  game_like: "\uD83C\uDFC3",
-  deep_creative: "\uD83D\uDCA1",
-  minimal_normal: "\u2728",
+  student: '\uD83D\uDCDA',
+  game_like: '\uD83C\uDFC3',
+  deep_creative: '\uD83D\uDCA1',
+  minimal_normal: '\u2728',
 };
 
 const LANE_LABELS: Record<Lane, string> = {
-  student: "Study Mode",
-  game_like: "Run Mode",
-  deep_creative: "Project Mode",
-  minimal_normal: "Clean Mode",
+  student: 'Study Mode',
+  game_like: 'Run Mode',
+  deep_creative: 'Project Mode',
+  minimal_normal: 'Clean Mode',
 };
 
 type LaneConfirmationStepProps = {
@@ -38,7 +38,7 @@ export function LaneConfirmationStep({
 }: LaneConfirmationStepProps): JSX.Element {
   const { theme } = useTheme();
   const { isReducedMotion } = useReducedMotion();
-  const lane = confirmation?.recommendedLane ?? "minimal_normal";
+  const lane = confirmation?.recommendedLane ?? 'minimal_normal';
   const laneLabel = LANE_LABELS[lane];
   const laneEmoji = LANE_EMOJI[lane];
 
@@ -80,8 +80,8 @@ export function LaneConfirmationStep({
         <View style={cardStyle}>
           <View
             style={{
-              flexDirection: "row",
-              alignItems: "center",
+              flexDirection: 'row',
+              alignItems: 'center',
               gap: theme.spacing[3],
             }}
           >
@@ -90,7 +90,7 @@ export function LaneConfirmationStep({
               <Text
                 style={{
                   fontSize: 28,
-                  fontWeight: "700",
+                  fontWeight: '700',
                   color: theme.colors.text.primary,
                 }}
               >
@@ -104,7 +104,7 @@ export function LaneConfirmationStep({
                 }}
               >
                 {confirmation?.reason ??
-                  "VEX will start with the mode that best matches your answers."}
+                  'VEX will start with the mode that best matches your answers.'}
               </Text>
             </View>
           </View>

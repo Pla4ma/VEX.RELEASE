@@ -1,5 +1,5 @@
-import { z } from "zod";
-import { getSupabaseClient, handleSupabaseError } from "../../../config/supabase";
+import { z } from 'zod';
+import { getSupabaseClient, handleSupabaseError } from '../../../config/supabase';
 import {
   AnalyticsPreferencesSchema,
   AggregatedStatsSchema,
@@ -7,17 +7,17 @@ import {
   type AnalyticsDimension,
   type AnalyticsMetric,
   type TimeRange,
-} from "../schemas";
+} from '../schemas';
 
 const supabase = getSupabaseClient();
 
 export async function fetchAnalyticsPreferences(userId: string) {
   const { data, error } = await supabase
-    .from("analytics_preferences")
-    .select("*")
-    .eq("user_id", userId)
+    .from('analytics_preferences')
+    .select('*')
+    .eq('user_id', userId)
     .single();
-  if (error && error.code !== "PGRST116") {
+  if (error && error.code !== 'PGRST116') {
     throw handleSupabaseError(error);
   }
   return data ? AnalyticsPreferencesSchema.parse(data) : null;
@@ -28,7 +28,7 @@ export async function updateAnalyticsPreferences(
   preferences: Partial<z.infer<typeof AnalyticsPreferencesSchema>>,
 ) {
   const { data, error } = await supabase
-    .from("analytics_preferences")
+    .from('analytics_preferences')
     .upsert({ user_id: userId, ...preferences, updated_at: Date.now() })
     .select()
     .single();
@@ -40,12 +40,12 @@ export async function updateAnalyticsPreferences(
 
 export async function fetchAggregatedStats(userId: string, period: TimeRange) {
   const { data, error } = await supabase
-    .from("aggregated_stats")
-    .select("*")
-    .eq("user_id", userId)
-    .eq("period", period)
+    .from('aggregated_stats')
+    .select('*')
+    .eq('user_id', userId)
+    .eq('period', period)
     .single();
-  if (error && error.code !== "PGRST116") {
+  if (error && error.code !== 'PGRST116') {
     throw handleSupabaseError(error);
   }
   return data ? AggregatedStatsSchema.parse(data) : null;
@@ -55,7 +55,7 @@ export async function storeAggregatedStats(
   stats: z.infer<typeof AggregatedStatsSchema>,
 ) {
   const { data, error } = await supabase
-    .from("aggregated_stats")
+    .from('aggregated_stats')
     .upsert(stats)
     .select()
     .single();
@@ -70,18 +70,18 @@ export async function fetchDetectedPatterns(
   options?: { since?: number; types?: string[]; minConfidence?: number },
 ) {
   let query = supabase
-    .from("detected_patterns")
-    .select("*")
-    .eq("user_id", userId)
-    .order("detected_at", { ascending: false });
+    .from('detected_patterns')
+    .select('*')
+    .eq('user_id', userId)
+    .order('detected_at', { ascending: false });
   if (options?.since) {
-    query = query.gte("detected_at", options.since);
+    query = query.gte('detected_at', options.since);
   }
   if (options?.types?.length) {
-    query = query.in("type", options.types);
+    query = query.in('type', options.types);
   }
   if (options?.minConfidence !== undefined) {
-    query = query.gte("confidence", options.minConfidence);
+    query = query.gte('confidence', options.minConfidence);
   }
   const { data, error } = await query;
   if (error) {
@@ -94,7 +94,7 @@ export async function storeDetectedPattern(
   pattern: z.infer<typeof DetectedPatternSchema>,
 ) {
   const { data, error } = await supabase
-    .from("detected_patterns")
+    .from('detected_patterns')
     .insert(pattern)
     .select()
     .single();
@@ -109,10 +109,10 @@ export async function deleteOldAnalyticsData(
   olderThan: number,
 ) {
   const { error } = await supabase
-    .from("analytics_events")
+    .from('analytics_events')
     .delete()
-    .eq("user_id", userId)
-    .lt("timestamp", olderThan);
+    .eq('user_id', userId)
+    .lt('timestamp', olderThan);
   if (error) {
     throw handleSupabaseError(error);
   }
@@ -129,7 +129,7 @@ export async function bulkInsertAnalyticsEvents(
     metadata?: Record<string, unknown>;
   }>,
 ) {
-  const { error } = await supabase.from("analytics_events").insert(events);
+  const { error } = await supabase.from('analytics_events').insert(events);
   if (error) {
     throw handleSupabaseError(error);
   }

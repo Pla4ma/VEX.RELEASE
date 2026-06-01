@@ -3,6 +3,6 @@
  */
 
 export interface StorageEventDefinitions {
-  "storage:quota:warning": { usage: number; limit: number };
-  "storage:error": { operation: string; error: Error };
+  'storage:quota:warning': { usage: number; limit: number };
+  'storage:error': { operation: string; error: Error };
 }

@@ -5,7 +5,7 @@ export {
   trackScoreBandChange,
   trackRecoveryStarted,
   trackRecoveryCompleted,
-} from "./analytics-score";
+} from './analytics-score';
 
 export {
   trackMonthlyReportViewed,
@@ -19,4 +19,4 @@ export {
   setFocusIdentityUserProperties,
   trackFocusIdentityFunnel,
   trackFocusIdentityError,
-} from "./analytics-engagement";
+} from './analytics-engagement';

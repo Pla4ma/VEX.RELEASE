@@ -1,18 +1,18 @@
-import React, { useEffect } from "react";
-import { ScrollView, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import React, { useEffect } from 'react';
+import { ScrollView, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { getPremiumCardStyle } from "./premiumStyles";
-import { Button } from "./primitives/Button";
-import { Text } from "./primitives/Text";
-import { useTheme } from "../theme";
-import { UnlockRequirementRow } from "./UnlockRequirementRow";
-import { buttonTap } from "../utils/haptics";
-import { useDisclosureAnalytics } from "../features/liveops-config";
+import { getPremiumCardStyle } from './premiumStyles';
+import { Button } from './primitives/Button';
+import { Text } from './primitives/Text';
+import { useTheme } from '../theme';
+import { UnlockRequirementRow } from './UnlockRequirementRow';
+import { buttonTap } from '../utils/haptics';
+import { useDisclosureAnalytics } from '../features/liveops-config';
 import type {
   FeatureKey,
   UserExperienceStage,
-} from "../features/liveops-config";
+} from '../features/liveops-config';
 
 interface LockedFeatureScreenProps {
   feature: FeatureKey;
@@ -45,7 +45,7 @@ export function LockedFeatureScreen(
         contentContainerStyle={{
           padding: theme.spacing[5],
           gap: theme.spacing[4],
-          justifyContent: "center",
+          justifyContent: 'center',
           flexGrow: 1,
         }}
         showsVerticalScrollIndicator={false}
@@ -55,10 +55,10 @@ export function LockedFeatureScreen(
             borderWidth: 1,
             borderColor: theme.colors.primary[100],
             backgroundColor: theme.colors.background.secondary,
-            borderRadius: theme.borderRadius["3xl"],
+            borderRadius: theme.borderRadius['3xl'],
             padding: theme.spacing[5],
             gap: theme.spacing[4],
-            ...getPremiumCardStyle("large"),
+            ...getPremiumCardStyle('large'),
           }}
         >
           <View style={{ gap: theme.spacing[2] }}>

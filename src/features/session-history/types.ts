@@ -3,4 +3,4 @@ export type {
   SessionHistoryStats,
   SessionHistoryViewModel,
   SupabaseSessionRow,
-} from "./schemas";
+} from './schemas';

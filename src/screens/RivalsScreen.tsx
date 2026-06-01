@@ -1,14 +1,14 @@
-import { withScreenErrorBoundary } from "../shared/ui/components/ScreenErrorBoundary";
-import React from "react";
-import { ScrollView } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import Animated, { FadeInUp } from "react-native-reanimated";
+import { withScreenErrorBoundary } from '../shared/ui/components/ScreenErrorBoundary';
+import React from 'react';
+import { ScrollView } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import Animated, { FadeInUp } from 'react-native-reanimated';
 
-import { Text } from "../components/primitives";
-import { EmptyState } from "../components/EmptyState";
-import { Skeleton } from "../components/ui/Skeleton";
-import { useTheme } from "../theme";
-import { useAuthStore } from "../store";
+import { Text } from '../components/primitives';
+import { EmptyState } from '../components/EmptyState';
+import { Skeleton } from '../components/ui/Skeleton';
+import { useTheme } from '../theme';
+import { useAuthStore } from '../store';
 // Rivals feature not implemented - stubbing imports
 // import {
 //   ActiveChallengesSection,
@@ -133,4 +133,4 @@ export function RivalsScreen(): JSX.Element {
   );
 }
 
-export default withScreenErrorBoundary(RivalsScreen, "Rivals");
+export default withScreenErrorBoundary(RivalsScreen, 'Rivals');

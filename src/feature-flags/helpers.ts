@@ -1,9 +1,9 @@
-import { Platform } from "react-native";
+import { Platform } from 'react-native';
 import type {
   FeatureFlagConfig,
   FlagEvaluation,
   UserContext,
-} from "./types";
+} from './types';
 
 export function getUserBucket(userId: string, flagKey: string): number {
   const str = `${userId}:${flagKey}`;
@@ -17,8 +17,8 @@ export function getUserBucket(userId: string, flagKey: string): number {
 }
 
 export function checkVersion(current: string, constraint: string): boolean {
-  const currentParts = current.split(".").map(Number);
-  const constraintParts = constraint.replace(">=", "").split(".").map(Number);
+  const currentParts = current.split('.').map(Number);
+  const constraintParts = constraint.replace('>=', '').split('.').map(Number);
   for (
     let i = 0;
     i < Math.max(currentParts.length, constraintParts.length);
@@ -41,15 +41,15 @@ export function evaluateFlag(
   userContext: UserContext | null,
 ): FlagEvaluation {
   let value = flag.defaultValue;
-  let source: FlagEvaluation["source"] = "default";
+  let source: FlagEvaluation['source'] = 'default';
 
   if (flag.platform && flag.platform.length > 0) {
-    const currentPlatform = Platform.OS as "ios" | "android" | "web";
+    const currentPlatform = Platform.OS as 'ios' | 'android' | 'web';
     if (!flag.platform.includes(currentPlatform)) {
       return {
         key: flag.key,
         value: false,
-        source: "default",
+        source: 'default',
         evaluatedAt: Date.now(),
       };
     }
@@ -61,7 +61,7 @@ export function evaluateFlag(
       return {
         key: flag.key,
         value: false,
-        source: "default",
+        source: 'default',
         evaluatedAt: Date.now(),
       };
     }
@@ -72,7 +72,7 @@ export function evaluateFlag(
       return {
         key: flag.key,
         value: false,
-        source: "default",
+        source: 'default',
         evaluatedAt: Date.now(),
       };
     }
@@ -83,7 +83,7 @@ export function evaluateFlag(
       return {
         key: flag.key,
         value: false,
-        source: "default",
+        source: 'default',
         evaluatedAt: Date.now(),
       };
     }
@@ -92,12 +92,12 @@ export function evaluateFlag(
   if (
     flag.rolloutPercentage !== undefined &&
     userContext &&
-    typeof flag.defaultValue === "boolean"
+    typeof flag.defaultValue === 'boolean'
   ) {
     const userBucket = getUserBucket(userContext.userId, flag.key);
     value =
       flag.defaultValue === true && userBucket <= flag.rolloutPercentage;
-    source = userBucket <= flag.rolloutPercentage ? "local" : "default";
+    source = userBucket <= flag.rolloutPercentage ? 'local' : 'default';
   }
 
   return { key: flag.key, value, source, evaluatedAt: Date.now() };

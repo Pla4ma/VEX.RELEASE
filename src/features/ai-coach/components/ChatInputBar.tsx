@@ -1,7 +1,7 @@
-import React from "react";
-import { View, TextInput, Pressable, Text } from "react-native";
-import { styles } from "./CoachScreen.styles";
-import { launchColors } from "@theme/tokens/launch-colors";
+import React from 'react';
+import { View, TextInput, Pressable, Text } from 'react-native';
+import { styles } from './CoachScreen.styles';
+import { launchColors } from '@theme/tokens/launch-colors';
 
 interface ChatInputBarProps {
   value: string;

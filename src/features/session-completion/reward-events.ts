@@ -1,8 +1,8 @@
-import type { BaseSessionCompletionEvent } from "./base-event-types";
+import type { BaseSessionCompletionEvent } from './base-event-types';
 
 export interface SessionRewardsCalculatedEvent
   extends BaseSessionCompletionEvent {
-  type: "session_rewards_calculated";
+  type: 'session_rewards_calculated';
   data: {
     baseRewards: {
       experience: number;
@@ -38,10 +38,10 @@ export interface SessionRewardsCalculatedEvent
 
 export interface SessionRewardsClaimedEvent
   extends BaseSessionCompletionEvent {
-  type: "session_rewards_claimed";
+  type: 'session_rewards_claimed';
   data: {
     claimedAt: Date;
-    claimMethod: "auto" | "manual" | "delayed";
+    claimMethod: 'auto' | 'manual' | 'delayed';
     rewards: {
       experience: number;
       currency: number;
@@ -61,7 +61,7 @@ export interface SessionRewardsClaimedEvent
 
 export interface SessionRewardMultiplierActivatedEvent
   extends BaseSessionCompletionEvent {
-  type: "session_reward_multiplier_activated";
+  type: 'session_reward_multiplier_activated';
   data: {
     multiplierId: string;
     multiplierType: string;

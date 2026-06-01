@@ -1,4 +1,4 @@
-import { captureException } from "../../config/sentry";
+import { captureException } from '../../config/sentry';
 
 export class EventEmitter<Events extends object> {
   private listeners: Map<keyof Events, Array<(data: unknown) => void>> =
@@ -33,7 +33,7 @@ export class EventEmitter<Events extends object> {
             e instanceof Error
               ? e
               : new Error(`Event listener error for ${String(event)}`),
-            { area: "content-study.events.emit", event: String(event) },
+            { area: 'content-study.events.emit', event: String(event) },
           );
         }
       });

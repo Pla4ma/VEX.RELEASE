@@ -1,21 +1,21 @@
-import { create } from "zustand";
-import { persist, createJSONStorage } from "zustand/middleware";
+import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
 
-import { getMMKVStorageAdapter } from "../../persistence/MMKVStorageAdapter";
+import { getMMKVStorageAdapter } from '../../persistence/MMKVStorageAdapter';
 
-import type { OnboardingState } from "./schemas";
-import { createStoreActions } from "./store-actions";
-import { createRehydrationHandler } from "./store-helpers";
+import type { OnboardingState } from './schemas';
+import { createStoreActions } from './store-actions';
+import { createRehydrationHandler } from './store-helpers';
 
 export interface OnboardingActions {
   startOnboarding: () => void;
-  setGoal: (goal: import("./schemas").FocusGoal) => void;
-  setFocusDuration: (duration: import("./schemas").FocusDuration) => void;
+  setGoal: (goal: import('./schemas').FocusGoal) => void;
+  setFocusDuration: (duration: import('./schemas').FocusDuration) => void;
   setDisplayName: (name: string) => void;
-  setPersona: (persona: import("./schemas").CoachPersona) => void;
-  setElement: (element: import("./schemas").OnboardingElement) => void;
+  setPersona: (persona: import('./schemas').CoachPersona) => void;
+  setElement: (element: import('./schemas').OnboardingElement) => void;
   setExplicitMotivationStyle: (
-    style: import("./schemas").MotivationProfileType,
+    style: import('./schemas').MotivationProfileType,
   ) => void;
   recomputeMotivationProfile: () => void;
   nextStep: () => void;
@@ -31,13 +31,13 @@ export interface OnboardingActions {
   markFirstSessionCompleted: () => void;
   markHomePreviewEntered: () => void;
   setCompletionFromBackend: (userId: string, completedAt: number) => void;
-  setChosenLane: (lane: import("../lane-engine/types").Lane | null) => void;
+  setChosenLane: (lane: import('../lane-engine/types').Lane | null) => void;
   getDraft: (
     userId: string,
-  ) => import("./store-helpers").OnboardingDraft | undefined;
+  ) => import('./store-helpers').OnboardingDraft | undefined;
   saveDraft: (
     userId: string,
-    draft: import("./store-helpers").OnboardingDraft,
+    draft: import('./store-helpers').OnboardingDraft,
   ) => void;
 }
 
@@ -72,7 +72,7 @@ export const useOnboardingStore = create(
       ...createStoreActions(set, get),
     }),
     {
-      name: "onboarding-storage",
+      name: 'onboarding-storage',
       storage: createJSONStorage(() => ({
         getItem: async (name: string): Promise<string | null> =>
           mmkvStorage.getItem(name),

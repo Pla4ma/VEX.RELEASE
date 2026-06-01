@@ -1,14 +1,14 @@
-import React from "react";
-import { Pressable } from "react-native";
+import React from 'react';
+import { Pressable } from 'react-native';
 import Animated, {
   FadeInUp,
   useAnimatedStyle,
   withSpring,
-} from "react-native-reanimated";
+} from 'react-native-reanimated';
 
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import type { MotivationProfileType } from "../../onboarding/schemas";
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import type { MotivationProfileType } from '../../onboarding/schemas';
 
 export interface ModeOption {
   key: MotivationProfileType;
@@ -20,28 +20,28 @@ export interface ModeOption {
 
 export const MODE_OPTIONS: ModeOption[] = [
   {
-    key: "calm",
-    label: "Calm Companion",
-    emoji: "🌿",
-    tagline: "Gentle focus, low pressure",
+    key: 'calm',
+    label: 'Calm Companion',
+    emoji: '🌿',
+    tagline: 'Gentle focus, low pressure',
     description:
-      "VEX stays quiet and supportive. Sessions feel light. Progress at your pace.",
+      'VEX stays quiet and supportive. Sessions feel light. Progress at your pace.',
   },
   {
-    key: "student",
-    label: "Study Coach",
-    emoji: "📚",
-    tagline: "Structure and deep learning",
+    key: 'student',
+    label: 'Study Coach',
+    emoji: '📚',
+    tagline: 'Structure and deep learning',
     description:
-      "Content mastery, study plans, and AI coaching for real comprehension.",
+      'Content mastery, study plans, and AI coaching for real comprehension.',
   },
   {
-    key: "game_like",
-    label: "Focus Game",
-    emoji: "🎮",
-    tagline: "Bosses, XP, and unlocks",
+    key: 'game_like',
+    label: 'Focus Game',
+    emoji: '🎮',
+    tagline: 'Bosses, XP, and unlocks',
     description:
-      "Your focus sessions become battles, streaks become achievements. Progress feels like play.",
+      'Your focus sessions become battles, streaks become achievements. Progress feels like play.',
   },
 ];
 
@@ -78,7 +78,7 @@ export function ModeCard({
   return (
     <Animated.View
       entering={FadeInUp.duration(400).delay(200 + index * 150)}
-      style={{ width: "100%" }}
+      style={{ width: '100%' }}
     >
       <Pressable
         onPress={onPress}
@@ -92,7 +92,7 @@ export function ModeCard({
               padding: theme.spacing[5],
               borderRadius: 16,
               borderWidth: 2,
-              alignItems: "center",
+              alignItems: 'center',
               gap: theme.spacing[2],
               marginBottom: theme.spacing[3],
             },
@@ -102,21 +102,21 @@ export function ModeCard({
           <Text fontSize={36}>{option.emoji}</Text>
           <Text
             variant="h3"
-            color={isSelected ? "text.inverse" : "text.primary"}
+            color={isSelected ? 'text.inverse' : 'text.primary'}
             fontWeight="700"
           >
             {option.label}
           </Text>
           <Text
             variant="bodySmall"
-            color={isSelected ? "text.inverse" : "primary.500"}
+            color={isSelected ? 'text.inverse' : 'primary.500'}
             fontWeight="600"
           >
             {option.tagline}
           </Text>
           <Text
             variant="body"
-            color={isSelected ? "text.inverse" : "text.secondary"}
+            color={isSelected ? 'text.inverse' : 'text.secondary'}
             textAlign="center"
           >
             {option.description}

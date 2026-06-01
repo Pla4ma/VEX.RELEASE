@@ -1,14 +1,14 @@
 export type PredictionType =
-  | "STREAK_AT_RISK"
-  | "SESSION_ABANDON_RISK"
-  | "BURNOUT_DETECTED"
-  | "OPTIMAL_TIME_WINDOW"
-  | "DIFFICULTY_MISMATCH"
-  | "SOCIAL_ISOLATION"
-  | "CREATURE_NEGLECT"
-  | "RAID_PARTICIPATION_DROP"
-  | "PRIME_TIME_MISSED"
-  | "CREATURE_EVOLUTION_STALL";
+  | 'STREAK_AT_RISK'
+  | 'SESSION_ABANDON_RISK'
+  | 'BURNOUT_DETECTED'
+  | 'OPTIMAL_TIME_WINDOW'
+  | 'DIFFICULTY_MISMATCH'
+  | 'SOCIAL_ISOLATION'
+  | 'CREATURE_NEGLECT'
+  | 'RAID_PARTICIPATION_DROP'
+  | 'PRIME_TIME_MISSED'
+  | 'CREATURE_EVOLUTION_STALL';
 
 export interface SessionRecord {
   date: string;
@@ -20,13 +20,13 @@ export interface SessionRecord {
 
 export interface BehavioralPattern {
   userId: string;
-  patternType: "consistent" | "inconsistent" | "declining" | "improving";
+  patternType: 'consistent' | 'inconsistent' | 'declining' | 'improving';
   daysOfWeek: number[];
   timeOfDay: number[];
   averageSessionDuration: number;
   completionRate: number;
   streakBreakFrequency: number;
-  last30DaysTrend: "up" | "stable" | "down";
+  last30DaysTrend: 'up' | 'stable' | 'down';
 }
 
 export interface RiskPrediction {
@@ -36,27 +36,27 @@ export interface RiskPrediction {
   confidence: number;
   predictedAt: number;
   predictedToOccurAt: number;
-  severity: "low" | "medium" | "high" | "critical";
+  severity: 'low' | 'medium' | 'high' | 'critical';
   evidence: string[];
   recommendedAction: string;
   interventionSent: boolean;
   interventionType: string;
-  actualOutcome: "prevented" | "occurred" | "unknown" | null;
+  actualOutcome: 'prevented' | 'occurred' | 'unknown' | null;
   outcomeVerifiedAt: number | null;
 }
 
 export interface InterventionResult {
   predictionId: string;
   sentAt: number;
-  channel: "push" | "in_app" | "coach_message";
+  channel: 'push' | 'in_app' | 'coach_message';
   message: string;
   userResponded: boolean;
-  outcome: "prevented" | "ignored" | "unknown";
+  outcome: 'prevented' | 'ignored' | 'unknown';
 }
 
 export interface RiskAssessment {
   confidence: number;
-  severity: RiskPrediction["severity"];
+  severity: RiskPrediction['severity'];
   evidence: string[];
   action: string;
 }

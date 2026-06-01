@@ -1,13 +1,13 @@
-import { z } from "zod";
-import * as Sentry from "@sentry/react-native";
+import { z } from 'zod';
+import * as Sentry from '@sentry/react-native';
 import {
   BehaviorSignalSchema,
   type BehaviorSignal,
   type BehaviorSignalType,
   type BehaviorSignalSource,
-} from "./behavior-signal-schemas";
+} from './behavior-signal-schemas';
 
-const SIGNAL_KEY_PREFIX = "vex_behavior_signals:";
+const SIGNAL_KEY_PREFIX = 'vex_behavior_signals:';
 
 interface StoredSignalWindow {
   signals: BehaviorSignal[];
@@ -32,11 +32,11 @@ let mmkvAdapter: {
 } | null = null;
 
 function getStorage(): NonNullable<typeof mmkvAdapter> {
-  if (mmkvAdapter) return mmkvAdapter;
+  if (mmkvAdapter) {return mmkvAdapter;}
   try {
     const {
       getMMKVStorageAdapter,
-    } = require("../../persistence/MMKVStorageAdapter");
+    } = require('../../persistence/MMKVStorageAdapter');
     mmkvAdapter = getMMKVStorageAdapter();
     return mmkvAdapter!;
   } catch (error: unknown) {
@@ -57,13 +57,13 @@ function getStorage(): NonNullable<typeof mmkvAdapter> {
 function loadWindow(userId: string): StoredSignalWindow {
   try {
     const raw = getStorage().getItem(getWindowKey(userId));
-    if (!raw) return { signals: [], updatedAt: 0 };
+    if (!raw) {return { signals: [], updatedAt: 0 };}
     return StoredSignalWindowSchema.parse(JSON.parse(raw));
   } catch (error) {
     Sentry.addBreadcrumb({
-      category: "behavior-signals",
-      message: "Failed to load signal window, resetting",
-      level: "warning",
+      category: 'behavior-signals',
+      message: 'Failed to load signal window, resetting',
+      level: 'warning',
     });
     getStorage().removeItem(getWindowKey(userId));
     return { signals: [], updatedAt: 0 };
@@ -75,9 +75,9 @@ function saveWindow(userId: string, window: StoredSignalWindow): void {
     getStorage().setItem(getWindowKey(userId), JSON.stringify(window));
   } catch (error) {
     Sentry.addBreadcrumb({
-      category: "behavior-signals",
-      message: "Failed to persist signal window",
-      level: "warning",
+      category: 'behavior-signals',
+      message: 'Failed to persist signal window',
+      level: 'warning',
     });
   }
 }
@@ -98,7 +98,7 @@ export function recordBehaviorSignal(
   signalType: BehaviorSignalType,
   surfaceKey: string,
   source: BehaviorSignalSource,
-  metadata?: BehaviorSignal["metadata"],
+  metadata?: BehaviorSignal['metadata'],
 ): void {
   try {
     const signal: BehaviorSignal = BehaviorSignalSchema.parse({
@@ -117,9 +117,9 @@ export function recordBehaviorSignal(
     saveWindow(userId, window);
   } catch (error) {
     Sentry.addBreadcrumb({
-      category: "behavior-signals",
+      category: 'behavior-signals',
       message: `Failed to record signal: ${signalType}`,
-      level: "warning",
+      level: 'warning',
     });
   }
 }

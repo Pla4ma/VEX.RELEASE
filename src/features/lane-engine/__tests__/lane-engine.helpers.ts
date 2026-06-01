@@ -5,6 +5,6 @@ import {
   resolveBehaviorLane,
   resolveInitialLane,
   shouldReconsiderLane,
-} from "../service";
+} from '../service';
 
 export const observedAt = 1_764_000_000_000;

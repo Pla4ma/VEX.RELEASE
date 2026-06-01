@@ -4,16 +4,16 @@
  * React hook for spring animations with Reanimated.
  */
 
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo } from 'react';
 import {
   useSharedValue,
   useAnimatedStyle,
   withSpring,
   type WithSpringConfig,
   type SharedValue,
-} from "react-native-reanimated";
+} from 'react-native-reanimated';
 
-import { defaultSpring } from "../springs";
+import { defaultSpring } from '../springs';
 
 /**
  * Spring animation options
@@ -40,15 +40,10 @@ interface UseSpringResult {
  * Hook for spring animations
  */
 export function useSpring(options: UseSpringOptions = {}): UseSpringResult {
-  const { initialValue = 0, ...springConfig } = options;
+  const { initialValue = 0, stiffness, damping, mass, overshootClamping } = options;
   const config = useMemo(
-    () => ({ ...defaultSpring, ...springConfig }),
-    [
-      springConfig.damping,
-      springConfig.mass,
-      springConfig.overshootClamping,
-      springConfig.stiffness,
-    ],
+    () => ({ ...defaultSpring, stiffness, damping, mass, overshootClamping }),
+    [stiffness, damping, mass, overshootClamping],
   );
 
   const value = useSharedValue(initialValue);
@@ -88,15 +83,10 @@ export function useSpringStyle(
   styleFactory: (val: SharedValue<number>) => Record<string, unknown>,
   options: UseSpringOptions = {},
 ): UseSpringResult {
-  const { initialValue = 0, ...springConfig } = options;
+  const { initialValue = 0, stiffness, damping, mass, overshootClamping } = options;
   const config = useMemo(
-    () => ({ ...defaultSpring, ...springConfig }),
-    [
-      springConfig.damping,
-      springConfig.mass,
-      springConfig.overshootClamping,
-      springConfig.stiffness,
-    ],
+    () => ({ ...defaultSpring, stiffness, damping, mass, overshootClamping }),
+    [stiffness, damping, mass, overshootClamping],
   );
 
   const value = useSharedValue(initialValue);

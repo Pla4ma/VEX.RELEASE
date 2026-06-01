@@ -1,12 +1,12 @@
-import type { SessionSummary } from "../../session/types";
-import { BonusCalculator } from "../engines/scoring/BonusCalculator";
+import type { SessionSummary } from '../../session/types';
+import { BonusCalculator } from '../engines/scoring/BonusCalculator';
 import {
   getRecoveryChainMultiplier,
   getSessionModeConfig,
   resolveSessionMode,
   SessionMode,
-} from "../modes";
-import type { RewardCalculationResult } from "./session-reward-types";
+} from '../modes';
+import type { RewardCalculationResult } from './session-reward-types';
 
 export function calculateRewards(
   streakDays: number,

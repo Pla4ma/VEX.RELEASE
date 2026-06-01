@@ -1,4 +1,4 @@
-import * as Sentry from "@sentry/react-native";
+import * as Sentry from '@sentry/react-native';
 
 export interface MutationErrorHandlerOptions<TError = Error> {
   feature: string;
@@ -16,7 +16,7 @@ export function createMutationErrorHandler<TError = Error>(
       extra: { variables },
     });
     if (opts.errorToast) {
-      showToast({ message: opts.errorToast, type: "error", duration: 4000 });
+      showToast({ message: opts.errorToast, type: 'error', duration: 4000 });
     }
     opts.onError?.(error, variables, _context);
   };

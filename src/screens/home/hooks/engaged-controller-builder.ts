@@ -1,21 +1,21 @@
-import type { UseQueryResult } from "@tanstack/react-query";
+import type { UseQueryResult } from '@tanstack/react-query';
 import type {
   HomeController,
   SessionHistoryResult,
-} from "./home-controller-types";
-import type { HomeFeatureRuntime } from "./home-feature-runtime";
-import type { HomeViewModel } from "./home-view-model";
-import type { HomeReturnReason } from "./useHomeReturnReason";
-import type { FeatureAccessResult } from "../../../features/liveops-config";
-import type { LearningExecutionLayer } from "../../../features/learning-execution";
-import type { SessionRecommendation } from "../../../features/ai-coach";
+} from './home-controller-types';
+import type { HomeFeatureRuntime } from './home-feature-runtime';
+import type { HomeViewModel } from './home-view-model';
+import type { HomeReturnReason } from './useHomeReturnReason';
+import type { FeatureAccessResult } from '../../../features/liveops-config';
+import type { LearningExecutionLayer } from '../../../features/learning-execution';
+import type { SessionRecommendation } from '../../../features/ai-coach';
 import type {
   CompletionSyncState,
   HomeHighlight,
-} from "../../../store/session-state";
-import type { SessionHistoryEntry } from "../../../session/types";
-import type { HomeSpineModel } from "../../../features/home-spine/schemas";
-import { createStubQuery } from "./home-controller-stubs";
+} from '../../../store/session-state';
+import type { SessionHistoryEntry } from '../../../session/types';
+import type { HomeSpineModel } from '../../../features/home-spine/schemas';
+import { createStubQuery } from './home-controller-stubs';
 
 interface ControllerParams {
   userId: string;
@@ -48,8 +48,8 @@ interface ControllerParams {
   openSocial: () => void;
   openContentStudy: () => void;
   continueStudyPlan: () => void;
-  createRecommendation: HomeController["createRecommendation"];
-  updateRecommendationStatus: HomeController["updateRecommendationStatus"];
+  createRecommendation: HomeController['createRecommendation'];
+  updateRecommendationStatus: HomeController['updateRecommendationStatus'];
 }
 
 export function buildEngagedController(
@@ -92,9 +92,9 @@ export function buildEngagedController(
     openContentStudy: params.openContentStudy,
     continueStudyPlan: params.continueStudyPlan,
     createRecommendation:
-      params.createRecommendation as HomeController["createRecommendation"],
+      params.createRecommendation as HomeController['createRecommendation'],
     updateRecommendationStatus:
-      params.updateRecommendationStatus as HomeController["updateRecommendationStatus"],
+      params.updateRecommendationStatus as HomeController['updateRecommendationStatus'],
     retryAll: params.disclosure.refetchAll as () => Promise<unknown>,
     features: params.disclosure.features,
   };

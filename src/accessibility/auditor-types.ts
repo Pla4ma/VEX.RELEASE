@@ -1,16 +1,16 @@
 export interface AccessibilityIssue {
   id: string;
-  type: "error" | "warning" | "info";
+  type: 'error' | 'warning' | 'info';
   category:
-    | "contrast"
-    | "focus"
-    | "keyboard"
-    | "screen-reader"
-    | "motion"
-    | "color"
-    | "semantic"
-    | "touch";
-  severity: "critical" | "major" | "moderate" | "minor";
+    | 'contrast'
+    | 'focus'
+    | 'keyboard'
+    | 'screen-reader'
+    | 'motion'
+    | 'color'
+    | 'semantic'
+    | 'touch';
+  severity: 'critical' | 'major' | 'moderate' | 'minor';
   message: string;
   recommendation: string;
   element?: string;
@@ -39,8 +39,8 @@ export interface AccessibilityRule {
   id: string;
   description: string;
   check: (element: AuditElement) => AccessibilityIssue | null;
-  category: AccessibilityIssue["category"];
-  severity: AccessibilityIssue["severity"];
+  category: AccessibilityIssue['category'];
+  severity: AccessibilityIssue['severity'];
   wcagGuideline: string;
 }
 

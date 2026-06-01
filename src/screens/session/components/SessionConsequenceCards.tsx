@@ -12,22 +12,22 @@
  * Displayed in horizontal scroll row, ordered by most impactful.
  */
 
-import React from "react";
-import { ScrollView, View } from "react-native";
-import Animated, { FadeInRight } from "react-native-reanimated";
+import React from 'react';
+import { ScrollView, View } from 'react-native';
+import Animated, { FadeInRight } from 'react-native-reanimated';
 
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import { BossImpactCard } from "./BossImpactCard";
-import { StreakConsequenceCard } from "./StreakConsequenceCard";
-import { ChallengeImpactCard } from "./ChallengeImpactCard";
-import { RivalImpactCard } from "./RivalImpactCard";
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import { BossImpactCard } from './BossImpactCard';
+import { StreakConsequenceCard } from './StreakConsequenceCard';
+import { ChallengeImpactCard } from './ChallengeImpactCard';
+import { RivalImpactCard } from './RivalImpactCard';
 import {
   CARD_WIDTH,
   type SessionConsequenceCardsProps,
-} from "./session-consequence-types";
+} from './session-consequence-types';
 
-export { type SessionConsequenceCardsProps } from "./session-consequence-types";
+export { type SessionConsequenceCardsProps } from './session-consequence-types';
 
 export function SessionConsequenceCards({
   bossConsequence,
@@ -62,8 +62,8 @@ export function SessionConsequenceCards({
       <View style={{ marginVertical: theme.spacing[4] }}>
         <View
           style={{
-            flexDirection: "row",
-            alignItems: "center",
+            flexDirection: 'row',
+            alignItems: 'center',
             gap: theme.spacing[2],
             marginBottom: theme.spacing[3],
             paddingHorizontal: theme.spacing[6],

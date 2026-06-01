@@ -1,11 +1,11 @@
-import type { Streak } from "../streaks/schemas";
+import type { Streak } from '../streaks/schemas';
 import {
   getSessionThemeById,
   SESSION_THEMES,
   type SessionTheme,
-} from "./session-themes";
+} from './session-themes';
 
-const LEGENDARY_THEME_ID = "legendary";
+const LEGENDARY_THEME_ID = 'legendary';
 
 export interface PurchaseThemeResult {
   success: boolean;
@@ -23,7 +23,7 @@ export async function getOwnedSessionThemeIds(
 
 export async function getSelectableThemes(
   userId: string,
-  streak: Pick<Streak, "longestDays"> | null,
+  streak: Pick<Streak, 'longestDays'> | null,
 ): Promise<SessionTheme[]> {
   const ownedIds = await getOwnedSessionThemeIds(userId);
   const longestDays = streak?.longestDays ?? 0;
@@ -33,14 +33,14 @@ export async function getSelectableThemes(
     isOwned: theme.isFree || ownedIds.includes(theme.id),
     description:
       theme.id === LEGENDARY_THEME_ID && longestDays < 30
-        ? "Reach a 30 day streak record to unlock purchase"
+        ? 'Reach a 30 day streak record to unlock purchase'
         : theme.description,
   }));
 }
 
 export function canPurchaseTheme(
   themeId: string,
-  streak: Pick<Streak, "longestDays"> | null,
+  streak: Pick<Streak, 'longestDays'> | null,
 ): { allowed: boolean; message: string | null } {
   const theme = getSessionThemeById(themeId);
   if (theme.isFree) {
@@ -50,7 +50,7 @@ export function canPurchaseTheme(
   if (theme.id === LEGENDARY_THEME_ID && (streak?.longestDays ?? 0) < 30) {
     return {
       allowed: false,
-      message: "Legendary Focus unlocks after your first 30 day streak record.",
+      message: 'Legendary Focus unlocks after your first 30 day streak record.',
     };
   }
 
@@ -60,7 +60,7 @@ export function canPurchaseTheme(
 export async function purchaseTheme(
   userId: string,
   themeId: string,
-  streak: Pick<Streak, "longestDays"> | null,
+  streak: Pick<Streak, 'longestDays'> | null,
 ): Promise<PurchaseThemeResult> {
   const theme = getSessionThemeById(themeId);
   const gate = canPurchaseTheme(themeId, streak);
@@ -76,6 +76,6 @@ export async function purchaseTheme(
 
   return {
     success: false,
-    errorMessage: "Theme purchases are not available in this release.",
+    errorMessage: 'Theme purchases are not available in this release.',
   };
 }

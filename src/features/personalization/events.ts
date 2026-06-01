@@ -1,19 +1,19 @@
-import { z } from "zod";
+import { z } from 'zod';
 
-import { MotivationStyleSchema } from "./schemas";
+import { MotivationStyleSchema } from './schemas';
 
-export const PersonalizationEventSchema = z.discriminatedUnion("type", [
+export const PersonalizationEventSchema = z.discriminatedUnion('type', [
   z
     .object({
       motivationStyle: MotivationStyleSchema,
       timestamp: z.number().int().min(0),
-      type: z.literal("personalization:motivation-style-changed"),
+      type: z.literal('personalization:motivation-style-changed'),
     })
     .strict(),
   z
     .object({
       timestamp: z.number().int().min(0),
-      type: z.literal("personalization:reset-requested"),
+      type: z.literal('personalization:reset-requested'),
     })
     .strict(),
 ]);

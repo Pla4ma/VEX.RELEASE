@@ -1,8 +1,8 @@
-import React from "react";
-import { Pressable, View } from "react-native";
-import { Text } from "@/components/primitives/Text";
-import { useTheme } from "@/theme";
-import type { PaywallPlan } from "./paywall-data";
+import React from 'react';
+import { Pressable, View } from 'react-native';
+import { Text } from '@/components/primitives/Text';
+import { useTheme } from '@/theme';
+import type { PaywallPlan } from './paywall-data';
 
 interface PlanCardProps {
   plan: PaywallPlan;
@@ -39,10 +39,10 @@ export function PlanCard({
       accessibilityHint="Selects this subscription option."
     >
       <Text variant="h4" color="text.primary">
-        {plan === "annual" ? "Annual Premium" : "Monthly Premium"}
+        {plan === 'annual' ? 'Annual Premium' : 'Monthly Premium'}
       </Text>
       <Text variant="bodySmall" color="text.secondary">
-        {priceString ?? "Live pricing loading"}
+        {priceString ?? 'Live pricing loading'}
       </Text>
     </Pressable>
   );

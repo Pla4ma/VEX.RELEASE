@@ -5,14 +5,14 @@ import {
   baseLedger,
   baseSummary,
   resetMocks,
-} from "./helpers";
+} from './helpers';
 
-describe("applyCompletionSubsystems", () => {
+describe('applyCompletionSubsystems', () => {
   beforeEach(() => {
     resetMocks();
   });
 
-  it("calls addXP exactly once — ProgressionService owns XP mutation", async () => {
+  it('calls addXP exactly once — ProgressionService owns XP mutation', async () => {
     await applyCompletionSubsystems({
       ledger: baseLedger,
       summary: baseSummary,
@@ -20,12 +20,12 @@ describe("applyCompletionSubsystems", () => {
     expect(mockAddXP).toHaveBeenCalledTimes(1);
     expect(mockAddXP).toHaveBeenCalledWith(
       baseLedger.xpDelta,
-      "SESSION_COMPLETE",
+      'SESSION_COMPLETE',
       { sessionId: baseLedger.sessionId },
     );
   });
 
-  it("rewards subsystem is receipt-only — not a second XP mutation", async () => {
+  it('rewards subsystem is receipt-only — not a second XP mutation', async () => {
     const result = await applyCompletionSubsystems({
       ledger: baseLedger,
       summary: baseSummary,
@@ -33,8 +33,8 @@ describe("applyCompletionSubsystems", () => {
 
     expect(mockAddXP).toHaveBeenCalledTimes(1);
     expect(mockGrantReward).toHaveBeenCalledWith(
-      "XP",
-      "SESSION_COMPLETE",
+      'XP',
+      'SESSION_COMPLETE',
       expect.objectContaining({ baseAmount: expect.any(Number) }),
       expect.objectContaining({ sessionId: baseLedger.sessionId }),
     );

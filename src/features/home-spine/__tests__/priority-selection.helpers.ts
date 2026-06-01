@@ -1,5 +1,5 @@
-import { pickHomePrimaryPriority } from "../priority-service";
-import type { HomeContextSnapshot } from "../priority-schemas";
+import { pickHomePrimaryPriority } from '../priority-service';
+import type { HomeContextSnapshot } from '../priority-schemas';
 
 export { pickHomePrimaryPriority };
 
@@ -25,7 +25,7 @@ export function createSnapshot(
       interventionType: undefined,
     },
     companionPromise: {
-      kind: "hidden",
+      kind: 'hidden',
       targetDurationMinutes: undefined,
       targetMode: undefined,
     },
@@ -56,7 +56,7 @@ export function createSnapshot(
       itemsDue: 0,
     },
     timestamp: 1_700_000_000_000,
-    userId: "11111111-1111-4111-8111-111111111111",
+    userId: '11111111-1111-4111-8111-111111111111',
     ...overrides,
   };
 }

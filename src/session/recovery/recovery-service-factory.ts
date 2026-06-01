@@ -1,5 +1,5 @@
-import type { RecoveryConfig } from "./recovery-analysis";
-import { RecoveryService } from "./RecoveryService";
+import type { RecoveryConfig } from './recovery-analysis';
+import { RecoveryService } from './RecoveryService';
 
 export function createRecoveryService(
   config?: Partial<RecoveryConfig>,

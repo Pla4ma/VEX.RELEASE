@@ -1,12 +1,12 @@
-import React from "react";
+import React from 'react';
 import Animated, {
   useAnimatedStyle,
   withSpring,
-} from "react-native-reanimated";
-import { Box, Text } from "@/components/primitives";
-import { useTheme } from "@/theme";
-import type { Achievement } from "../types";
-import { getAchievementDisplayInfo, getRarityColor } from "../definitions";
+} from 'react-native-reanimated';
+import { Box, Text } from '@/components/primitives';
+import { useTheme } from '@/theme';
+import type { Achievement } from '../types';
+import { getAchievementDisplayInfo, getRarityColor } from '../definitions';
 
 interface AchievementDetailIconProps {
   achievement: Achievement;
@@ -24,7 +24,7 @@ export const AchievementDetailIcon: React.FC<AchievementDetailIconProps> = ({
   const glowStyle = useAnimatedStyle(() => ({
     transform: [
       {
-        scale: withSpring(achievement.rarity === "LEGENDARY" ? 1.05 : 1, {
+        scale: withSpring(achievement.rarity === 'LEGENDARY' ? 1.05 : 1, {
           damping: 10,
         }),
       },
@@ -34,7 +34,7 @@ export const AchievementDetailIcon: React.FC<AchievementDetailIconProps> = ({
   return (
     <Box alignItems="center" mb={6}>
       <Animated.View
-        style={achievement.rarity === "LEGENDARY" ? glowStyle : undefined}
+        style={achievement.rarity === 'LEGENDARY' ? glowStyle : undefined}
       >
         <Box
           width={120}
@@ -52,7 +52,7 @@ export const AchievementDetailIcon: React.FC<AchievementDetailIconProps> = ({
             borderColor: isUnlocked
               ? rarityColor
               : theme.colors.border.DEFAULT,
-            shadowColor: isUnlocked ? rarityColor : "transparent",
+            shadowColor: isUnlocked ? rarityColor : 'transparent',
             shadowOffset: { width: 0, height: 0 },
             shadowOpacity: isUnlocked ? 0.5 : 0,
             shadowRadius: isUnlocked ? 20 : 0,

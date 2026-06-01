@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react';
 import Animated, {
   FadeInUp,
   useAnimatedStyle,
@@ -7,10 +7,10 @@ import Animated, {
   withSequence,
   withTiming,
   useSharedValue,
-} from "react-native-reanimated";
-import { Box } from "../../components/primitives/Box";
-import { Text } from "../../components/primitives/Text";
-import { useTheme } from "../../theme";
+} from 'react-native-reanimated';
+import { Box } from '../../components/primitives/Box';
+import { Text } from '../../components/primitives/Text';
+import { useTheme } from '../../theme';
 
 export function BossHealthBar({
   healthPercent,
@@ -31,10 +31,10 @@ export function BossHealthBar({
     width: `${progressValue.value * 100}%`,
   }));
   const getHealthColor = () => {
-    if (willDefeat) return theme.colors.success.DEFAULT;
-    if (healthPercent <= 15) return theme.colors.error.DEFAULT;
-    if (healthPercent <= 30) return theme.colors.warning.DEFAULT;
-    if (healthPercent <= 50) return theme.colors.accent.orange;
+    if (willDefeat) {return theme.colors.success.DEFAULT;}
+    if (healthPercent <= 15) {return theme.colors.error.DEFAULT;}
+    if (healthPercent <= 30) {return theme.colors.warning.DEFAULT;}
+    if (healthPercent <= 50) {return theme.colors.accent.orange;}
     return theme.colors.error.DEFAULT;
   };
   return (
@@ -57,7 +57,7 @@ export function BossHealthBar({
         <Animated.View
           style={[
             {
-              height: "100%",
+              height: '100%',
               borderRadius: 3,
               backgroundColor: getHealthColor(),
             },

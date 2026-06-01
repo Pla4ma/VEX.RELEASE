@@ -1,7 +1,7 @@
-import type { TimerState } from "../types";
-import type { SerializedTimerState, TimerCallbacks } from "./timer-types";
-import type { TimerConfig } from "../types";
-import { TimerEngineBase, debug } from "./timer-engine-core";
+import type { TimerState } from '../types';
+import type { SerializedTimerState, TimerCallbacks } from './timer-types';
+import type { TimerConfig } from '../types';
+import { TimerEngineBase, debug } from './timer-engine-core';
 
 export class TimerEngine extends TimerEngineBase {
   getState(): TimerState {
@@ -42,13 +42,13 @@ export class TimerEngine extends TimerEngineBase {
 
   adjustTime(deltaMs: number): void {
     this.elapsed = Math.max(0, this.elapsed + deltaMs);
-    debug.debug("Timer adjusted for session %s: %dms", this.sessionId, deltaMs);
+    debug.debug('Timer adjusted for session %s: %dms', this.sessionId, deltaMs);
   }
 
   setTime(elapsedMs: number): void {
     this.elapsed = Math.max(0, Math.min(this.duration, elapsedMs));
     debug.debug(
-      "Timer set for session %s: %dms elapsed",
+      'Timer set for session %s: %dms elapsed',
       this.sessionId,
       elapsedMs,
     );
@@ -57,7 +57,7 @@ export class TimerEngine extends TimerEngineBase {
   addTime(additionalMs: number): void {
     this.duration += additionalMs;
     debug.debug(
-      "Timer extended for session %s: +%dms",
+      'Timer extended for session %s: +%dms',
       this.sessionId,
       additionalMs,
     );
@@ -82,12 +82,12 @@ export class TimerEngine extends TimerEngineBase {
     this.state.totalPausedTime = state.totalPausedTime;
     this.warningSent = new Set(state.warningSent);
     if (this.state.isRunning && !this.state.isPaused)
-      this.intervals.startTickInterval();
-    debug.info("Timer restored for session %s", this.sessionId);
+      {this.intervals.startTickInterval();}
+    debug.info('Timer restored for session %s', this.sessionId);
   }
 }
 
-export { TimerEngineBase } from "./timer-engine-core";
+export { TimerEngineBase } from './timer-engine-core';
 
 export function createTimerEngine(
   sessionId: string,

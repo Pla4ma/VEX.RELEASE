@@ -1,26 +1,26 @@
-import React, { useCallback } from "react";
-import { Pressable } from "react-native";
-import { FlashList, type ListRenderItem } from "@shopify/flash-list";
-import Animated, { FadeIn } from "react-native-reanimated";
+import React, { useCallback } from 'react';
+import { Pressable } from 'react-native';
+import { FlashList, type ListRenderItem } from '@shopify/flash-list';
+import Animated, { FadeIn } from 'react-native-reanimated';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
 import {
   type SessionListItem,
   type RecentSessionsListProps,
-} from "./session-list-utils";
+} from './session-list-utils';
 import {
   RecentSessionsSkeleton,
   EmptyState,
   SessionRow,
-} from "./session-list-item";
+} from './session-list-item';
 
 export type {
   SessionListItem,
   RecentSessionsListProps,
-} from "./session-list-utils";
-export { formatDuration, formatTimeAgo, getGradeColor } from "./session-list-utils";
+} from './session-list-utils';
+export { formatDuration, formatTimeAgo, getGradeColor } from './session-list-utils';
 
 export function RecentSessionsList({
   sessions,

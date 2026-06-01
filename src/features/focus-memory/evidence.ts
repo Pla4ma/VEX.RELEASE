@@ -1,11 +1,11 @@
-import { contentScopeForSource } from "./expiry";
+import { contentScopeForSource } from './expiry';
 import {
   ColdStartReasonSchema,
   RecommendationEvidenceSchema,
   type ColdStartReason,
   type FocusMemory,
   type RecommendationEvidence,
-} from "./schemas";
+} from './schemas';
 
 export function hashEvidence(evidence: string): string {
   let hash = 0;
@@ -24,8 +24,8 @@ export function buildColdStartEvidence(
   const validated = ColdStartReasonSchema.parse(reason);
   return RecommendationEvidenceSchema.parse({
     fallbackReason: validated,
-    source: "cold_start",
-    lane: lane ?? "minimal_normal",
+    source: 'cold_start',
+    lane: lane ?? 'minimal_normal',
   });
 }
 
@@ -34,17 +34,17 @@ export function buildMemoryEvidence(
   lane?: string,
 ): RecommendationEvidence {
   if (memories.length === 0) {
-    return buildColdStartEvidence("insufficient_data", lane);
+    return buildColdStartEvidence('insufficient_data', lane);
   }
   const avgConfidence =
     memories.reduce((sum, m) => sum + m.confidence, 0) / memories.length;
   return RecommendationEvidenceSchema.parse({
     memoryIds: memories.map((m) => m.id),
-    evidenceSummary: memories.map((m) => m.summary).join("; "),
+    evidenceSummary: memories.map((m) => m.summary).join('; '),
     confidence: Math.round(avgConfidence * 100) / 100,
     fallbackReason: undefined,
-    source: "behavior",
-    lane: lane ?? "minimal_normal",
+    source: 'behavior',
+    lane: lane ?? 'minimal_normal',
   });
 }
 
@@ -54,9 +54,9 @@ export function generateRecommendationEvidence(
   lane?: string,
   fallbackReason?: ColdStartReason,
 ): RecommendationEvidence {
-  const resolvedLane = lane ?? "minimal_normal";
+  const resolvedLane = lane ?? 'minimal_normal';
   if (sessionCount < 3) {
-    return buildColdStartEvidence("cold_start", resolvedLane);
+    return buildColdStartEvidence('cold_start', resolvedLane);
   }
   if (fallbackReason) {
     return buildColdStartEvidence(fallbackReason, resolvedLane);
@@ -70,9 +70,9 @@ export function canClaimStrongPattern(sessionCount: number): boolean {
 
 export function scopeMessageForSource(
   message: string,
-  source: FocusMemory["source"],
+  source: FocusMemory['source'],
 ): { message: string; scoped: boolean } {
-  if (source === "import") {
+  if (source === 'import') {
     return {
       message: `[From your content] ${message}`,
       scoped: true,
@@ -82,7 +82,7 @@ export function scopeMessageForSource(
 }
 
 export function isImportSourceMemory(memory: FocusMemory): boolean {
-  return memory.source === "import";
+  return memory.source === 'import';
 }
 
 export function filterImportMemories(memories: FocusMemory[]): {
@@ -92,7 +92,7 @@ export function filterImportMemories(memories: FocusMemory[]): {
   const taskScoped: FocusMemory[] = [];
   const excluded: FocusMemory[] = [];
   for (const memory of memories) {
-    if (contentScopeForSource(memory.source) === "task_only") {
+    if (contentScopeForSource(memory.source) === 'task_only') {
       excluded.push(memory);
     } else {
       taskScoped.push(memory);

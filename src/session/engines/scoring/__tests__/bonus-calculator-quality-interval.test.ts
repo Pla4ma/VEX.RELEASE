@@ -2,13 +2,13 @@ import {
   calculateQualityBonus,
   calculateIntervalBonus,
   BONUS_CONSTANTS,
-} from "./bonus-calculator-helpers";
-import type { FocusQualityMetrics } from "./bonus-calculator-helpers";
+} from './bonus-calculator-helpers';
+import type { FocusQualityMetrics } from './bonus-calculator-helpers';
 
-describe("BonusCalculator", () => {
-  describe("calculateQualityBonus", () => {
+describe('BonusCalculator', () => {
+  describe('calculateQualityBonus', () => {
     const createMetrics = (overallScore: number): FocusQualityMetrics => ({
-      sessionId: "test",
+      sessionId: 'test',
       timeInDeepFocus: 1000,
       timeInShallowFocus: 200,
       timeDistracted: 100,
@@ -20,7 +20,7 @@ describe("BonusCalculator", () => {
       calculatedAt: Date.now(),
     });
 
-    it("should award excellent bonus for high quality", () => {
+    it('should award excellent bonus for high quality', () => {
       const bonus = calculateQualityBonus({
         focusMetrics: createMetrics(95),
         interruptions: 0,
@@ -29,7 +29,7 @@ describe("BonusCalculator", () => {
       expect(bonus).toBe(BONUS_CONSTANTS.EXCELLENT_QUALITY_BONUS);
     });
 
-    it("should award good bonus for moderate quality", () => {
+    it('should award good bonus for moderate quality', () => {
       const bonus = calculateQualityBonus({
         focusMetrics: createMetrics(80),
         interruptions: 0,
@@ -38,7 +38,7 @@ describe("BonusCalculator", () => {
       expect(bonus).toBe(BONUS_CONSTANTS.GOOD_QUALITY_BONUS);
     });
 
-    it("should award average bonus for acceptable quality", () => {
+    it('should award average bonus for acceptable quality', () => {
       const bonus = calculateQualityBonus({
         focusMetrics: createMetrics(60),
         interruptions: 1,
@@ -47,7 +47,7 @@ describe("BonusCalculator", () => {
       expect(bonus).toBe(BONUS_CONSTANTS.AVERAGE_QUALITY_BONUS);
     });
 
-    it("should not award bonus for poor quality", () => {
+    it('should not award bonus for poor quality', () => {
       const bonus = calculateQualityBonus({
         focusMetrics: createMetrics(30),
         interruptions: 5,
@@ -56,7 +56,7 @@ describe("BonusCalculator", () => {
       expect(bonus).toBe(0);
     });
 
-    it("should reduce bonus for disruptions", () => {
+    it('should reduce bonus for disruptions', () => {
       const cleanBonus = calculateQualityBonus({
         focusMetrics: createMetrics(95),
         interruptions: 0,
@@ -71,8 +71,8 @@ describe("BonusCalculator", () => {
     });
   });
 
-  describe("calculateIntervalBonus", () => {
-    it("should award bonus for multiple intervals", () => {
+  describe('calculateIntervalBonus', () => {
+    it('should award bonus for multiple intervals', () => {
       const bonus = calculateIntervalBonus({
         completedIntervals: 4,
         totalIntervals: 4,
@@ -81,7 +81,7 @@ describe("BonusCalculator", () => {
       expect(bonus).toBeGreaterThan(0);
     });
 
-    it("should award larger bonus for completing all intervals", () => {
+    it('should award larger bonus for completing all intervals', () => {
       const partial = calculateIntervalBonus({
         completedIntervals: 3,
         totalIntervals: 4,
@@ -98,7 +98,7 @@ describe("BonusCalculator", () => {
       );
     });
 
-    it("should scale with interval count", () => {
+    it('should scale with interval count', () => {
       const small = calculateIntervalBonus({
         completedIntervals: 2,
         totalIntervals: 4,

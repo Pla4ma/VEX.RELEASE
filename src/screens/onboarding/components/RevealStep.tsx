@@ -1,17 +1,17 @@
-import React, { useEffect } from "react";
-import { View } from "react-native";
+import React, { useEffect } from 'react';
+import { View } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withSpring,
-} from "react-native-reanimated";
+} from 'react-native-reanimated';
 
-import { ProgressBar } from "../../../components/ProgressBar";
-import { getPremiumCardStyle } from "../../../components/premiumStyles";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import { ONBOARDING_GOALS } from "../../../features/onboarding";
-import { styles } from "../styles";
+import { ProgressBar } from '../../../components/ProgressBar';
+import { getPremiumCardStyle } from '../../../components/premiumStyles';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import { ONBOARDING_GOALS } from '../../../features/onboarding';
+import { styles } from '../styles';
 
 type StarterPreset = {
   id: string;
@@ -64,7 +64,7 @@ export function RevealStep({
         style={[
           animatedStyle,
           styles.identityCard,
-          getPremiumCardStyle("large"),
+          getPremiumCardStyle('large'),
           {
             backgroundColor: theme.colors.background.secondary,
             borderColor: theme.colors.primary[100],
@@ -90,7 +90,7 @@ export function RevealStep({
           <Text
             style={[styles.identityValue, { color: theme.colors.text.primary }]}
           >
-            {goal?.label ?? "Choose a goal"}
+            {goal?.label ?? 'Choose a goal'}
           </Text>
           <Text
             style={[
@@ -98,7 +98,7 @@ export function RevealStep({
               { color: theme.colors.text.secondary },
             ]}
           >
-            {goal?.description ?? "Pick the outcome you want first."}
+            {goal?.description ?? 'Pick the outcome you want first.'}
           </Text>
         </View>
 
@@ -114,7 +114,7 @@ export function RevealStep({
           <Text
             style={[styles.identityValue, { color: theme.colors.text.primary }]}
           >
-            {persona?.name ?? "Pick your coach"}
+            {persona?.name ?? 'Pick your coach'}
           </Text>
           <Text
             style={[
@@ -123,7 +123,7 @@ export function RevealStep({
             ]}
           >
             {persona?.description ??
-              "Your coach voice will shape the tone of VEX."}
+              'Your coach voice will shape the tone of VEX.'}
           </Text>
         </View>
 
@@ -141,7 +141,7 @@ export function RevealStep({
           >
             {preset
               ? `${preset.title} · ${preset.durationLabel}`
-              : "Choose your first session"}
+              : 'Choose your first session'}
           </Text>
           <Text
             style={[
@@ -150,7 +150,7 @@ export function RevealStep({
             ]}
           >
             {preset?.subtitle ??
-              "Your first session sets the tone for day one."}
+              'Your first session sets the tone for day one.'}
           </Text>
         </View>
 

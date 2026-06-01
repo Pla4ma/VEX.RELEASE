@@ -1,9 +1,9 @@
-import { create } from "zustand";
-import { immer } from "zustand/middleware/immer";
-import type { CustomerInfo } from "react-native-purchases";
-import type { EntitlementInfo } from "./revenuecat-types";
+import { create } from 'zustand';
+import { immer } from 'zustand/middleware/immer';
+import type { CustomerInfo } from 'react-native-purchases';
+import type { EntitlementInfo } from './revenuecat-types';
 
-export type { EntitlementInfo } from "./revenuecat-types";
+export type { EntitlementInfo } from './revenuecat-types';
 
 interface MonetizationState {
   isPurchasing: boolean;
@@ -30,7 +30,7 @@ export const useMonetizationStore = create<MonetizationState>()(
       set((s) => {
         s.activeEntitlements = e;
         s.isPremium = e.some(
-          (ent) => ent.isActive && ent.identifier === "premium",
+          (ent) => ent.isActive && ent.identifier === 'premium',
         );
       }),
     setCustomerInfo: (info) =>

@@ -7,18 +7,18 @@
  * @phase 1B.4
  */
 
-import React from "react";
-import { Pressable } from "react-native";
-import Animated, { FadeIn } from "react-native-reanimated";
+import React from 'react';
+import { Pressable } from 'react-native';
+import Animated, { FadeIn } from 'react-native-reanimated';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import { SuggestionCard } from "./SuggestionCard";
-import { SuggestionsSkeleton } from "./SuggestionsSkeleton";
-import type { SessionSuggestionsProps } from "./session-suggestions-types";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import { SuggestionCard } from './SuggestionCard';
+import { SuggestionsSkeleton } from './SuggestionsSkeleton';
+import type { SessionSuggestionsProps } from './session-suggestions-types';
 
-export type { SessionSuggestion, SessionSuggestionsProps } from "./session-suggestions-types";
+export type { SessionSuggestion, SessionSuggestionsProps } from './session-suggestions-types';
 
 /**
  * Main session suggestions component
@@ -51,7 +51,7 @@ export function SessionSuggestions({
           flexDirection="row"
           alignItems="center"
           justifyContent="space-between"
-          mb={isExpanded ? "md" : undefined}
+          mb={isExpanded ? 'md' : undefined}
         >
           <Box flexDirection="row" alignItems="center" gap="sm">
             <Text fontSize={16}>🤖</Text>
@@ -62,7 +62,7 @@ export function SessionSuggestions({
           <Text
             fontSize={20}
             color={theme.colors.text.tertiary}
-            style={{ transform: [{ rotate: isExpanded ? "90deg" : "0deg" }] }}
+            style={{ transform: [{ rotate: isExpanded ? '90deg' : '0deg' }] }}
           >
             ›
           </Text>
@@ -93,7 +93,7 @@ export function SessionSuggestions({
       {!isExpanded && !isLoading && suggestions.length > 0 && (
         <Box mt="xs">
           <Text variant="caption" color="text.tertiary">
-            {suggestions.length} suggestion{suggestions.length > 1 ? "s" : ""}{" "}
+            {suggestions.length} suggestion{suggestions.length > 1 ? 's' : ''}{' '}
             based on your patterns
           </Text>
         </Box>

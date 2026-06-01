@@ -4,19 +4,19 @@
  * Automatic enhancement logic for accessibility improvements.
  */
 
-import { createDebugger } from "../utils/debug";
+import { createDebugger } from '../utils/debug';
 import {
   getAccessibleColor,
   getAccessibleAlternatives,
   checkContrast,
-} from "./AccessibilitySystem";
-import type { ColorBlindType } from "./types";
+} from './AccessibilitySystem';
+import type { ColorBlindType } from './types';
 import type {
   EnhancedAccessibilityProps,
   AccessibilityEnhancementConfig,
-} from "./enhancer-types";
+} from './enhancer-types';
 
-const debug = createDebugger("accessibility-enhancer");
+const debug = createDebugger('accessibility-enhancer');
 
 interface PropsWithStyle {
   style?: { color?: string; backgroundColor?: string; [key: string]: unknown };
@@ -64,11 +64,11 @@ function getContrastEnhancements(
   const sourceProps = props as PropsWithStyle;
   const style = sourceProps?.style;
 
-  if (style && typeof style === "object" && !Array.isArray(style)) {
+  if (style && typeof style === 'object' && !Array.isArray(style)) {
     const styleColor =
-      typeof style.color === "string" ? style.color : undefined;
+      typeof style.color === 'string' ? style.color : undefined;
     const styleBackground =
-      typeof style.backgroundColor === "string"
+      typeof style.backgroundColor === 'string'
         ? style.backgroundColor
         : undefined;
 
@@ -81,7 +81,7 @@ function getContrastEnhancements(
         );
         if (alternatives.length > 0) {
           enhancements.style = { ...style, color: alternatives[0] };
-          debug.info("Applied contrast enhancement:", {
+          debug.info('Applied contrast enhancement:', {
             original: styleColor,
             improved: alternatives[0],
             ratio: contrast.ratio,
@@ -90,17 +90,17 @@ function getContrastEnhancements(
       }
     }
 
-    if (colorBlindSupport !== "none") {
+    if (colorBlindSupport !== 'none') {
       if (styleColor) {
         enhancements.style = {
           ...(enhancements.style ?? style),
-          color: getAccessibleColor("primary", colorBlindSupport),
+          color: getAccessibleColor('primary', colorBlindSupport),
         };
       }
       if (styleBackground) {
         enhancements.style = {
           ...(enhancements.style ?? style),
-          backgroundColor: getAccessibleColor("secondary", colorBlindSupport),
+          backgroundColor: getAccessibleColor('secondary', colorBlindSupport),
         };
       }
     }
@@ -115,17 +115,17 @@ function getFocusEnhancements(
   const enhancements: Partial<EnhancedAccessibilityProps> = {};
   const sourceProps = props as PropsWithStyle;
 
-  if ("onPress" in sourceProps || "onLongPress" in sourceProps) {
-    if (!("accessible" in sourceProps)) {
+  if ('onPress' in sourceProps || 'onLongPress' in sourceProps) {
+    if (!('accessible' in sourceProps)) {
       enhancements.accessible = true;
     }
-    if (!("accessibilityRole" in sourceProps)) {
-      enhancements.accessibilityRole = "button";
+    if (!('accessibilityRole' in sourceProps)) {
+      enhancements.accessibilityRole = 'button';
     }
   }
 
-  if ("onPress" in sourceProps && !("accessibilityHint" in sourceProps)) {
-    enhancements.accessibilityHint = "Double tap to activate";
+  if ('onPress' in sourceProps && !('accessibilityHint' in sourceProps)) {
+    enhancements.accessibilityHint = 'Double tap to activate';
   }
 
   return enhancements;
@@ -137,7 +137,7 @@ function getMotionEnhancements(
   const enhancements: Partial<EnhancedAccessibilityProps> = {};
   const sourceProps = props as PropsWithStyle;
 
-  if ("animated" in sourceProps || "useNativeDriver" in sourceProps) {
+  if ('animated' in sourceProps || 'useNativeDriver' in sourceProps) {
     enhancements.accessibilityReduceMotion = true;
   }
 
@@ -150,22 +150,22 @@ function getScreenReaderEnhancements(
   const enhancements: Partial<EnhancedAccessibilityProps> = {};
   const sourceProps = props as PropsWithStyle;
 
-  if ("title" in sourceProps && !("accessibilityRole" in sourceProps)) {
+  if ('title' in sourceProps && !('accessibilityRole' in sourceProps)) {
     const title =
-      typeof sourceProps.title === "string" ? sourceProps.title : undefined;
+      typeof sourceProps.title === 'string' ? sourceProps.title : undefined;
     if (title) {
-      enhancements.accessibilityRole = "header";
+      enhancements.accessibilityRole = 'header';
       enhancements.accessibilityLabel = title;
     }
   }
 
-  if ("children" in sourceProps) {
+  if ('children' in sourceProps) {
     const children = sourceProps.children;
     if (
-      typeof children === "string" &&
-      (children.includes("Loading") || children.includes("Error"))
+      typeof children === 'string' &&
+      (children.includes('Loading') || children.includes('Error'))
     ) {
-      enhancements.accessibilityLiveRegion = "polite";
+      enhancements.accessibilityLiveRegion = 'polite';
     }
   }
 
@@ -180,7 +180,7 @@ export function applyEnhancements(
   const allEnhancements = { ...automaticEnhancements, ...manualEnhancements };
 
   if (Object.keys(allEnhancements).length > 0) {
-    debug.debug("Applied accessibility enhancements:", {
+    debug.debug('Applied accessibility enhancements:', {
       props,
       enhancements: allEnhancements,
     });

@@ -1,6 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from '@tanstack/react-query';
 
-import { countCompletedSessions } from "../session-history/repository";
+import { countCompletedSessions } from '../session-history/repository';
 
 const MEMORY_CONSOLE_MIN_SESSIONS = 3;
 
@@ -11,9 +11,9 @@ export function useMemoryConsoleVisibility(
   | { isVisible: false; isLoading: false; error: Error }
   | { isVisible: boolean; isLoading: false; error: null } {
   const query = useQuery({
-    queryKey: ["memory-console-visible", userId],
+    queryKey: ['memory-console-visible', userId],
     queryFn: async () => {
-      if (!userId) return false;
+      if (!userId) {return false;}
       const count = await countCompletedSessions(userId);
       return count >= MEMORY_CONSOLE_MIN_SESSIONS;
     },

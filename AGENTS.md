@@ -12,7 +12,7 @@ Always use `rtk` (bash) for every command. Never use task agents, explore agents
 - Zustand — persistent client state only
 - Zod — schemas are the source of truth, all types inferred via z.infer<>
 - React Navigation v6 — fully typed, all routes in RootStackParamList
-- Reanimated 3 — the ONLY animation library. Never use from react-native.
+- Reanimated 4.3.1 — the ONLY animation library. Never use from react-native.
 - Supabase — Postgres + Auth + Realtime + Storage
 - MMKV — non-sensitive fast storage only
 - expo-secure-store — auth tokens and secrets only, via the existing SecureStorage wrapper

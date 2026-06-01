@@ -6,14 +6,14 @@
  */
 
 export type ExperimentType =
-  | "HOME_RECOMMENDATION"
-  | "PAYWALL_TIMING"
-  | "PAYWALL_COPY"
-  | "SESSION_DURATION"
-  | "COACH_FREQUENCY"
-  | "ONBOARDING_FLOW"
-  | "STREAK_UI"
-  | "BOSS_DIFFICULTY";
+  | 'HOME_RECOMMENDATION'
+  | 'PAYWALL_TIMING'
+  | 'PAYWALL_COPY'
+  | 'SESSION_DURATION'
+  | 'COACH_FREQUENCY'
+  | 'ONBOARDING_FLOW'
+  | 'STREAK_UI'
+  | 'BOSS_DIFFICULTY';
 
 export interface Variant {
   id: string;
@@ -27,7 +27,7 @@ export interface Experiment {
   name: string;
   description: string;
   type: ExperimentType;
-  status: "DRAFT" | "RUNNING" | "PAUSED" | "COMPLETED";
+  status: 'DRAFT' | 'RUNNING' | 'PAUSED' | 'COMPLETED';
   startDate: number;
   endDate?: number;
   controlVariant: Variant;
@@ -37,8 +37,8 @@ export interface Experiment {
     userSegments?: string[];
     minSessions?: number;
     maxSessions?: number;
-    platforms?: ("ios" | "android" | "web")[];
-    premiumStatus?: "free" | "premium" | "both";
+    platforms?: ('ios' | 'android' | 'web')[];
+    premiumStatus?: 'free' | 'premium' | 'both';
   };
   primaryMetric: string;
   secondaryMetrics: string[];

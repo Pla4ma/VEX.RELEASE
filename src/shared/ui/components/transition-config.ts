@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect } from 'react';
 import {
   useSharedValue,
   withTiming,
@@ -8,15 +8,15 @@ import {
   Easing,
   runOnJS,
   type SharedValue,
-} from "react-native-reanimated";
+} from 'react-native-reanimated';
 
 export type TransitionPreset =
-  | "fade" | "slideRight" | "slideLeft"
-  | "slideUp" | "slideDown" | "zoom"
-  | "flip" | "scale" | "none";
+  | 'fade' | 'slideRight' | 'slideLeft'
+  | 'slideUp' | 'slideDown' | 'zoom'
+  | 'flip' | 'scale' | 'none';
 export type TransitionEasing =
-  | "linear" | "ease" | "easeIn"
-  | "easeOut" | "easeInOut" | "spring" | "bounce";
+  | 'linear' | 'ease' | 'easeIn'
+  | 'easeOut' | 'easeInOut' | 'spring' | 'bounce';
 export interface TransitionConfig {
   preset: TransitionPreset;
   duration?: number;
@@ -36,7 +36,7 @@ export interface TransitionWrapperProps {
   exitConfig?: TransitionConfig;
   onEnterComplete?: () => void;
   onExitComplete?: () => void;
-  style?: import("react-native").ViewStyle;
+  style?: import('react-native').ViewStyle;
   maintainLayout?: boolean;
   staggerChildren?: number;
   childDelay?: number;
@@ -69,17 +69,17 @@ export function useTransitionAnimation(
 ) {
   const progress = useSharedValue(visible ? 1 : 0);
   const isAnimating = useSharedValue(false);
-  const { duration = 300, easing = "ease", springConfig } = config;
+  const { duration = 300, easing = 'ease', springConfig } = config;
   useEffect(() => {
     isAnimating.value = true;
     const targetValue = visible ? 1 : 0;
     const easingFn = EASING_MAP[easing];
     const callback = (finished?: boolean) => {
-      "worklet";
-      if (finished && onComplete) runOnJS(onComplete)();
+      'worklet';
+      if (finished && onComplete) {runOnJS(onComplete)();}
       isAnimating.value = false;
     };
-    if (easing === "spring") {
+    if (easing === 'spring') {
       progress.value = withSpring(
         targetValue,
         { ...DEFAULT_SPRING_CONFIG, ...springConfig },
@@ -98,7 +98,7 @@ export function useTransitionAnimation(
 
 const C = Extrapolation.CLAMP;
 function lerp(v: number, from: number, to: number): number {
-  "worklet";
+  'worklet';
   return interpolate(v, [0, 1], [from, to], C);
 }
 
@@ -106,25 +106,25 @@ export function createAnimatedStyles(
   preset: TransitionPreset,
   progress: SharedValue<number>,
 ) {
-  "worklet";
+  'worklet';
   const p = progress.value;
   switch (preset) {
-    case "fade":
+    case 'fade':
       return { opacity: p };
-    case "slideRight":
+    case 'slideRight':
       return { opacity: p, transform: [{ translateX: lerp(p, 100, 0) }] };
-    case "slideLeft":
+    case 'slideLeft':
       return { opacity: p, transform: [{ translateX: lerp(p, -100, 0) }] };
-    case "slideUp":
+    case 'slideUp':
       return { opacity: p, transform: [{ translateY: lerp(p, 50, 0) }] };
-    case "slideDown":
+    case 'slideDown':
       return { opacity: p, transform: [{ translateY: lerp(p, -50, 0) }] };
-    case "zoom":
-    case "scale":
+    case 'zoom':
+    case 'scale':
       return { opacity: p, transform: [{ scale: lerp(p, 0.8, 1) }] };
-    case "flip":
+    case 'flip':
       return { opacity: p, transform: [{ rotateY: `${lerp(p, -90, 0)}deg` }] };
-    case "none":
+    case 'none':
     default:
       return {};
   }

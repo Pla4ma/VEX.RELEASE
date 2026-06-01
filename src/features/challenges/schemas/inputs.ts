@@ -5,12 +5,12 @@
  * reward claims, generation config, and progress check results.
  */
 
-import { z } from "zod";
-import { ChallengeTypeSchema } from "./enums";
+import { z } from 'zod';
+import { ChallengeTypeSchema } from './enums';
 import {
   ChallengeCompletionResultSchema,
   ChallengeDetailSchema,
-} from "./responses";
+} from './responses';
 
 export const AssignChallengeInputSchema = z
   .object({

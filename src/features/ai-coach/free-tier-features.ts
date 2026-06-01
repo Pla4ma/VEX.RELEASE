@@ -1,8 +1,8 @@
-import type { MasteryRank } from "../progression/unified-mastery";
-import type { CoachPersona } from "./coach-personas";
-import { getUnlockedPersonas } from "./coach-personas";
-import type { CoachQuest } from "./coach-quests";
-import { generateDailyQuest } from "./coach-quests";
+import type { MasteryRank } from '../progression/unified-mastery';
+import type { CoachPersona } from './coach-personas';
+import { getUnlockedPersonas } from './coach-personas';
+import type { CoachQuest } from './coach-quests';
+import { generateDailyQuest } from './coach-quests';
 
 export interface FreeTierFeatures {
   dailyReminders: boolean;
@@ -38,7 +38,7 @@ export const COACH_FEATURE_MATRIX = {
   dailyQuest: { free: true, premium: true },
   questSlots: { free: 1, premium: 3 },
   customQuests: { free: false, premium: true },
-  questRewards: { free: "standard", premium: "enhanced" },
+  questRewards: { free: 'standard', premium: 'enhanced' },
   textMessages: { free: true, premium: true },
   voiceMessages: { free: false, premium: true },
   videoMessages: { free: false, premium: true },
@@ -50,36 +50,36 @@ export function canUseFeature(
   isPremium: boolean,
 ): boolean {
   const config = COACH_FEATURE_MATRIX[feature];
-  if (typeof config.free === "boolean") {
+  if (typeof config.free === 'boolean') {
     return config.free || isPremium;
   }
-  if (typeof config.free === "number") {
+  if (typeof config.free === 'number') {
     return true;
   }
   return isPremium;
 }
 
 export const FREE_TIPS: string[] = [
-  "Start with a 25-minute session to build momentum",
-  "Your phone is the #1 distraction. Put it in another room.",
-  "Take 3 deep breaths before starting your session",
-  "The first 5 minutes are hardest. Push through!",
-  "Use Deep Work mode for complex tasks",
-  "A 7-day streak unlocks bonus rewards",
-  "Defeating bosses earns coins for upgrades",
-  "Your purity score affects damage dealt",
-  "Try different session modes to find your style",
-  "Consistency beats intensity - show up every day",
-  "Use the Pomodoro technique: 25 min work, 5 min break",
-  "Clear your workspace before starting",
-  "Set one clear goal for each session",
-  "Track your energy levels throughout the day",
-  "Join a squad for bonus XP and accountability",
+  'Start with a 25-minute session to build momentum',
+  'Your phone is the #1 distraction. Put it in another room.',
+  'Take 3 deep breaths before starting your session',
+  'The first 5 minutes are hardest. Push through!',
+  'Use Deep Work mode for complex tasks',
+  'A 7-day streak unlocks bonus rewards',
+  'Defeating bosses earns coins for upgrades',
+  'Your purity score affects damage dealt',
+  'Try different session modes to find your style',
+  'Consistency beats intensity - show up every day',
+  'Use the Pomodoro technique: 25 min work, 5 min break',
+  'Clear your workspace before starting',
+  'Set one clear goal for each session',
+  'Track your energy levels throughout the day',
+  'Join a squad for bonus XP and accountability',
   "Don't break the chain - any session counts",
-  "Use Light Focus mode on low-energy days",
-  "The best time to start was yesterday. The second best is now.",
-  "Focus is a muscle - it gets stronger with practice",
-  "Celebrate small wins to build momentum",
+  'Use Light Focus mode on low-energy days',
+  'The best time to start was yesterday. The second best is now.',
+  'Focus is a muscle - it gets stronger with practice',
+  'Celebrate small wins to build momentum',
 ];
 
 export function getRandomTip(): string {
@@ -112,15 +112,15 @@ export function migrateToFreeTierSystem(
 } {
   const freeFeatures = createInitialFreeTier();
   const isPremium = hadCoachAccess;
-  let rank: MasteryRank = "APPRENTICE";
+  let rank: MasteryRank = 'APPRENTICE';
   if (userLevel >= 40) {
-    rank = "GRANDMASTER";
+    rank = 'GRANDMASTER';
   } else if (userLevel >= 30) {
-    rank = "MASTER";
+    rank = 'MASTER';
   } else if (userLevel >= 20) {
-    rank = "EXPERT";
+    rank = 'EXPERT';
   } else if (userLevel >= 10) {
-    rank = "ADEPT";
+    rank = 'ADEPT';
   }
   const unlockedPersonas = getUnlockedPersonas(isPremium, rank);
   freeFeatures.activeQuests.push(generateDailyQuest(userLevel, 0));

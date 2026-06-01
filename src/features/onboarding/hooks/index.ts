@@ -6,19 +6,19 @@
  * @phase 3
  */
 
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useAuthStore } from "../../../store";
-import { onboardingRepository } from "../repository/index";
-import type { OnboardingProgress } from "../schemas";
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useAuthStore } from '../../../store';
+import { onboardingRepository } from '../repository/index';
+import type { OnboardingProgress } from '../schemas';
 
-const ONBOARDING_PROGRESS_KEY = "onboarding-progress";
+const ONBOARDING_PROGRESS_KEY = 'onboarding-progress';
 
 /**
  * Default initial onboarding progress state
  */
 const defaultProgress = (userId: string): OnboardingProgress => ({
   userId,
-  status: "IN_PROGRESS",
+  status: 'IN_PROGRESS',
   steps: {
     profileStarted: false,
     goalSelected: false,
@@ -57,7 +57,7 @@ export function useOnboardingProgressState() {
   const updateMutation = useMutation({
     mutationFn: async (updates: Partial<OnboardingProgress>) => {
       if (!userId) {
-        throw new Error("No user ID");
+        throw new Error('No user ID');
       }
       const current = await onboardingRepository.getProgress(userId);
       const updated = { ...(current ?? defaultProgress(userId)), ...updates };
@@ -72,7 +72,7 @@ export function useOnboardingProgressState() {
   const markFirstSessionStarted = async (sessionId: string) => {
     const currentSteps = query.data?.steps ?? defaultProgress(userId!).steps;
     await updateMutation.mutateAsync({
-      status: "FIRST_SESSION_IN_PROGRESS",
+      status: 'FIRST_SESSION_IN_PROGRESS',
       steps: {
         profileStarted: currentSteps.profileStarted,
         goalSelected: currentSteps.goalSelected,

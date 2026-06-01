@@ -1,10 +1,10 @@
-import React from "react";
-import { useFocusScore } from "../hooks-focus-score";
-import { Box, Text, Stack, Skeleton } from "../../../components/primitives";
-import { TouchableOpacity } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import type { RootStackParams } from "../../../navigation/types";
+import React from 'react';
+import { useFocusScore } from '../hooks-focus-score';
+import { Box, Text, Stack, Skeleton } from '../../../components/primitives';
+import { TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import type { RootStackParams } from '../../../navigation/types';
 
 const FocusScoreWidgetSkeleton = () => (
   <Box p="md" bg="surface" borderRadius="md">
@@ -22,14 +22,14 @@ export const FocusScoreWidget = () => {
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
   const handlePress = () => {
-    navigation.navigate("FocusScoreDashboard");
+    navigation.navigate('FocusScoreDashboard');
   };
 
-  if (status === "pending") {
+  if (status === 'pending') {
     return <FocusScoreWidgetSkeleton />;
   }
 
-  if (status === "error") {
+  if (status === 'error') {
     return (
       <Box>
         <Text>Error: {error?.message}</Text>

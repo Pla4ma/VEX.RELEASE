@@ -1,32 +1,33 @@
-import { getSupabaseClient } from "../config/supabase";
-import { eventBus } from "../events";
-import { createDebugger } from "../utils/debug";
+import { getSupabaseClient } from '../config/supabase';
+import { eventBus } from '../events';
+import { createDebugger } from '../utils/debug';
 import {
   activeChannels,
   CHANNELS,
   getCurrentUserId,
   type BroadcastMessage,
-} from "./realtimeShared";
+} from './realtimeShared';
 
-const debug = createDebugger("realtime");
+const debug = createDebugger('realtime');
 
 export async function broadcastActivity(
   channelName: string,
-  type: BroadcastMessage["type"],
+  type: BroadcastMessage['type'],
   payload: unknown,
 ): Promise<void> {
   const client = getSupabaseClient();
   const fullChannelName = getActivityChannelName(channelName);
-  let channel = activeChannels.get(fullChannelName);
+  const txKey = `tx:${fullChannelName}`;
+  let channel = activeChannels.get(txKey);
   if (!channel) {
-    const newChannel = client.channel(fullChannelName);
+    const newChannel = client.channel(`${fullChannelName}:tx:${Date.now()}`);
     await newChannel.subscribe();
-    activeChannels.set(fullChannelName, newChannel);
+    activeChannels.set(txKey, newChannel);
     channel = newChannel;
   }
   if (channel) {
     await channel.send({
-      type: "broadcast",
+      type: 'broadcast',
       event: type,
       payload: {
         ...(payload as Record<string, unknown>),
@@ -36,11 +37,12 @@ export async function broadcastActivity(
     });
   }
 
-  // Schedule cleanup after 5 seconds to prevent channel leaks
   const channelToClean = channel;
   setTimeout(() => {
     void channelToClean?.unsubscribe();
-    activeChannels.delete(fullChannelName);
+    if (activeChannels.get(txKey) === channelToClean) {
+      activeChannels.delete(txKey);
+    }
   }, 5_000);
 }
 
@@ -52,9 +54,9 @@ export function subscribeToActivity(
   const fullChannelName = getActivityChannelName(channelName);
   const channel = client
     .channel(fullChannelName)
-    .on("broadcast", { event: "*" }, (payload) => {
+    .on('broadcast', { event: '*' }, (payload) => {
       callback({
-        type: payload.event as BroadcastMessage["type"],
+        type: payload.event as BroadcastMessage['type'],
         payload: payload.payload,
         senderId: payload.payload?.senderId,
         timestamp: payload.payload?.timestamp || Date.now(),
@@ -77,21 +79,21 @@ export function subscribeToFeedChanges(
   const channel = client
     .channel(channelName)
     .on(
-      "postgres_changes",
+      'postgres_changes',
       {
-        event: "*",
-        schema: "public",
-        table: "feed_items",
+        event: '*',
+        schema: 'public',
+        table: 'feed_items',
         filter: `user_id=eq.${userId}`,
       },
       (payload) => {
         callback(payload);
         const newRecord = payload.new as Record<string, unknown> | undefined;
-        eventBus.publish("realtime:feed_update", {
+        eventBus.publish('realtime:feed_update', {
           itemId:
             (newRecord?.id as string) ||
             ((payload.old as Record<string, unknown>)?.id as string),
-          event: payload.eventType as "INSERT" | "UPDATE" | "DELETE",
+          event: payload.eventType as 'INSERT' | 'UPDATE' | 'DELETE',
           data: newRecord,
         });
       },
@@ -113,24 +115,24 @@ export function subscribeToSquadChanges(
   const channel = client
     .channel(channelName)
     .on(
-      "postgres_changes",
+      'postgres_changes',
       {
-        event: "*",
-        schema: "public",
-        table: "squad_members",
+        event: '*',
+        schema: 'public',
+        table: 'squad_members',
         filter: `squad_id=eq.${squadId}`,
       },
       (payload) => {
         callback(payload);
         const newData = payload.new as Record<string, unknown> | undefined;
-        eventBus.publish("realtime:squad_update", {
+        eventBus.publish('realtime:squad_update', {
           squadId,
           event:
-            payload.eventType === "INSERT"
-              ? "member_joined"
-              : payload.eventType === "DELETE"
-                ? "member_left"
-                : "progress_update",
+            payload.eventType === 'INSERT'
+              ? 'member_joined'
+              : payload.eventType === 'DELETE'
+                ? 'member_left'
+                : 'progress_update',
           data: newData,
         });
       },
@@ -152,20 +154,20 @@ export function subscribeToGuildQuests(
   const channel = client
     .channel(channelName)
     .on(
-      "postgres_changes",
+      'postgres_changes',
       {
-        event: "*",
-        schema: "public",
-        table: "guild_quests",
+        event: '*',
+        schema: 'public',
+        table: 'guild_quests',
         filter: `guild_id=eq.${guildId}`,
       },
       callback,
     )
-    .on("broadcast", { event: "quest_progress" }, (payload) => {
+    .on('broadcast', { event: 'quest_progress' }, (payload) => {
       callback(payload);
     })
-    .on("broadcast", { event: "message" }, ({ payload }) => {
-      debug.debug("Broadcast received:", payload);
+    .on('broadcast', { event: 'message' }, ({ payload }) => {
+      debug.debug('Broadcast received:', payload);
     });
   channel.subscribe();
   activeChannels.set(channelName, channel);
@@ -176,9 +178,9 @@ export function subscribeToGuildQuests(
 }
 
 function getActivityChannelName(channelName: string): string {
-  return channelName.startsWith("squad:") ||
-    channelName.startsWith("guild:") ||
-    channelName.startsWith("user:")
+  return channelName.startsWith('squad:') ||
+    channelName.startsWith('guild:') ||
+    channelName.startsWith('user:')
     ? channelName
     : `activity:${channelName}`;
 }

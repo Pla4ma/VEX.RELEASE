@@ -1,21 +1,21 @@
-import { useMemo } from "react";
-import { useQuery } from "@tanstack/react-query";
-import type { Lane } from "../lane-engine/types";
+import { useMemo } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import type { Lane } from '../lane-engine/types';
 import {
   deriveHomeSurface,
   deriveQuickContract,
   deriveActiveIndicator,
   deriveRescueSurface,
-} from "./service";
-import type { HomeContext } from "./service";
+} from './service';
+import type { HomeContext } from './service';
 import {
   deriveCompletionSurface,
   deriveWeeklyIntelligence,
-} from "./service-surface";
+} from './service-surface';
 import type {
   CompletionContext,
   WeeklyIntelligenceContext,
-} from "./service-surface";
+} from './service-surface';
 import type {
   ModeHomeSurface,
   ModeQuickContract,
@@ -23,20 +23,14 @@ import type {
   ModeCompletionSurface,
   ModeRescueSurface,
   ModeWeeklyIntelligence,
-} from "./schemas";
+} from './schemas';
 
 // ── Mode Home Hook ─────────────────────────────────────────────────────
 
 export function useModeHomeSurface(
   context: HomeContext,
 ): ModeHomeSurface {
-  return useMemo(() => deriveHomeSurface(context), [
-    context.laneOverride,
-    context.hasActiveProject,
-    context.projectTitle,
-    context.nextMove,
-    context.recentTopic,
-  ]);
+  return useMemo(() => deriveHomeSurface(context), [context]);
 }
 
 // ── Quick Contract Hook ────────────────────────────────────────────────
@@ -62,7 +56,7 @@ export function useModeCompletion(
 ): ModeCompletionSurface {
   return useMemo(
     () => deriveCompletionSurface(context),
-    [context.laneOverride, context.topic, context.task, context.project, context.action],
+    [context],
   );
 }
 
@@ -76,7 +70,7 @@ export function useModeRescueSurface(
 
 // ── Weekly Intelligence Hook ───────────────────────────────────────────
 
-const WEEKLY_INTELLIGENCE_KEY = "mode-native-weekly-intelligence";
+const WEEKLY_INTELLIGENCE_KEY = 'mode-native-weekly-intelligence';
 
 export function useModeWeeklyIntelligence(
   userId: string | null | undefined,

@@ -1,16 +1,16 @@
-import React from "react";
-import { Pressable, Text, View } from "react-native";
-import { eventBus } from "../../../events";
-import { EmptyAnalytics, NetworkError } from "../../../shared/ui/primitives/EmptyState";
-import { Skeleton, SkeletonChart, SkeletonList } from "../../../shared/ui/primitives/Skeleton";
-import type { Insight, TimeSeriesData } from "../types";
-import type { SessionHeatmapData } from "../repository";
-import type { DashboardError, DashboardState } from "./AnalyticsDashboard.types";
-import { Heatmap } from "./Heatmap";
-import { HeatmapSkeleton, formatMetricName, formatValue } from "./AnalyticsDashboard.helpers";
-import { InsightCard } from "./InsightCard";
-import { TimeSeriesChart } from "./TimeSeriesChart";
-import { styles } from "./AnalyticsDashboard.styles";
+import React from 'react';
+import { Pressable, Text, View } from 'react-native';
+import { eventBus } from '../../../events';
+import { EmptyAnalytics, NetworkError } from '../../../shared/ui/primitives/EmptyState';
+import { Skeleton, SkeletonChart, SkeletonList } from '../../../shared/ui/primitives/Skeleton';
+import type { Insight, TimeSeriesData } from '../types';
+import type { SessionHeatmapData } from '../repository';
+import type { DashboardError, DashboardState } from './AnalyticsDashboard.types';
+import { Heatmap } from './Heatmap';
+import { HeatmapSkeleton, formatMetricName, formatValue } from './AnalyticsDashboard.helpers';
+import { InsightCard } from './InsightCard';
+import { TimeSeriesChart } from './TimeSeriesChart';
+import { styles } from './AnalyticsDashboard.styles';
 
 const MIN_HEATMAP_SESSIONS = 5;
 
@@ -30,7 +30,7 @@ interface HeatmapSectionProps {
 }
 
 function HeatmapSection({ loading, error, data }: HeatmapSectionProps): React.JSX.Element {
-  if (loading) return <HeatmapSkeleton />;
+  if (loading) {return <HeatmapSkeleton />;}
   if (error || !data) {
     return <InfoCard title="Activity Pattern" subtitle="We couldn&apos;t load your session pattern right now." />;
   }
@@ -64,7 +64,7 @@ export function DashboardContent({
   error, insights, userId, onInsightPress,
 }: DashboardContentProps): React.JSX.Element | null {
   switch (state) {
-    case "loading":
+    case 'loading':
       return (
         <View style={styles.skeletonContainer}>
           <Skeleton width="60%" height={24} style={styles.skeletonTitle} />
@@ -76,20 +76,20 @@ export function DashboardContent({
           <SkeletonList count={3} />
         </View>
       );
-    case "error":
+    case 'error':
       return <NetworkError onRetry={error?.recoverable ? error.action : undefined} />;
-    case "empty":
+    case 'empty':
       return (
         <EmptyAnalytics
           onStartSession={() => {
-            eventBus.publish("session:created", {
+            eventBus.publish('session:created', {
               sessionId: `session_${Date.now()}`, userId, config: {}, timestamp: Date.now(),
             });
           }}
         />
       );
-    case "partial":
-    case "ready":
+    case 'partial':
+    case 'ready':
       return (
         <>
           <View style={styles.summaryContainer}>
@@ -103,7 +103,7 @@ export function DashboardContent({
                     data.summary.changePercent > 0 ? styles.changePositive : styles.changeNegative,
                   ]}>
                     <Text style={styles.changeText}>
-                      {data.summary.changePercent > 0 ? "+" : ""}{data.summary.changePercent.toFixed(1)}%
+                      {data.summary.changePercent > 0 ? '+' : ''}{data.summary.changePercent.toFixed(1)}%
                     </Text>
                   </View>
                 )}
@@ -136,7 +136,7 @@ export function DashboardContent({
               ))}
             </View>
           )}
-          {state === "partial" && (
+          {state === 'partial' && (
             <View style={styles.partialWarning}>
               <Text style={styles.partialText}>
                 Some metrics may have limited data for this time period.

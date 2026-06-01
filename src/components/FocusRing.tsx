@@ -1,17 +1,17 @@
-import React, { useEffect } from "react";
-import { StyleSheet, View } from "react-native";
-import Svg, { Circle, Defs, LinearGradient, Stop } from "react-native-svg";
+import React, { useEffect } from 'react';
+import { StyleSheet, View } from 'react-native';
+import Svg, { Circle, Defs, LinearGradient, Stop } from 'react-native-svg';
 import Animated, {
   Easing,
   useAnimatedProps,
   useSharedValue,
   withTiming,
-} from "react-native-reanimated";
+} from 'react-native-reanimated';
 
-import { Text } from "./primitives/Text";
-import { useTheme } from "../theme";
-import { createSheet } from "@/shared/ui/create-sheet";
-import { useReducedMotion } from "@/hooks";
+import { Text } from './primitives/Text';
+import { useTheme } from '../theme';
+import { createSheet } from '@/shared/ui/create-sheet';
+import { useReducedMotion } from '@/hooks';
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
@@ -102,5 +102,5 @@ export function FocusRing({
 }
 
 const styles = createSheet({
-  center: { alignItems: "center", justifyContent: "center" },
+  center: { alignItems: 'center', justifyContent: 'center' },
 });

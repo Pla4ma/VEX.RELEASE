@@ -1,22 +1,22 @@
-import { getApiClient } from "../../api/client";
-import { createDebugger } from "../../utils/debug";
-import type { CalendarEvent, FreeBusyInfo } from "./types";
+import { getApiClient } from '../../api/client';
+import { createDebugger } from '../../utils/debug';
+import type { CalendarEvent, FreeBusyInfo } from './types';
 import type {
   GoogleCalendarConfig,
   GoogleCalendarEventRaw,
   GoogleCalendarListResponse,
   GoogleFreeBusyResponse,
-} from "./google-calendar-types";
+} from './google-calendar-types';
 import {
   mapGoogleEvent,
   mergeBusySlots,
   calculateFreeSlots,
-} from "./google-calendar-helpers";
+} from './google-calendar-helpers';
 
-export type { GoogleCalendarConfig } from "./google-calendar-types";
+export type { GoogleCalendarConfig } from './google-calendar-types';
 
-const debug = createDebugger("calendar:google");
-const GOOGLE_CALENDAR_BASE_URL = "https://www.googleapis.com/calendar/v3";
+const debug = createDebugger('calendar:google');
+const GOOGLE_CALENDAR_BASE_URL = 'https://www.googleapis.com/calendar/v3';
 
 export class GoogleCalendarAdapter {
   private config: GoogleCalendarConfig;
@@ -34,17 +34,17 @@ export class GoogleCalendarAdapter {
       const response = await getApiClient().post<{
         accessToken: string;
         expiresIn?: number;
-      }>("/auth/google/refresh", { refreshToken: this.config.refreshToken });
+      }>('/auth/google/refresh', { refreshToken: this.config.refreshToken });
       if (response?.accessToken) {
         this.config.accessToken = response.accessToken;
         this.config.expiresAt =
           Date.now() + (response.expiresIn || 3600) * 1000;
-        debug.info("Token refreshed successfully");
+        debug.info('Token refreshed successfully');
         return true;
       }
       return false;
     } catch (error) {
-      debug.error("Failed to refresh token:", error);
+      debug.error('Failed to refresh token:', error);
       return false;
     }
   }
@@ -59,7 +59,7 @@ export class GoogleCalendarAdapter {
   async fetchEvents(
     timeMin: Date,
     timeMax: Date,
-    calendarId: string = "primary",
+    calendarId: string = 'primary',
   ): Promise<CalendarEvent[]> {
     try {
       const authHeader = await this.getAuthHeader();
@@ -71,14 +71,14 @@ export class GoogleCalendarAdapter {
             timeMin: timeMin.toISOString(),
             timeMax: timeMax.toISOString(),
             singleEvents: true,
-            orderBy: "startTime",
+            orderBy: 'startTime',
           },
         },
       );
       const events = response?.items || [];
       return events.map((event) => mapGoogleEvent(event));
     } catch (error) {
-      debug.error("Failed to fetch events:", error);
+      debug.error('Failed to fetch events:', error);
       throw error;
     }
   }
@@ -86,7 +86,7 @@ export class GoogleCalendarAdapter {
   async createFocusEvent(
     startTime: Date,
     duration: number,
-    title: string = "Focus Time",
+    title: string = 'Focus Time',
   ): Promise<CalendarEvent> {
     try {
       const authHeader = await this.getAuthHeader();
@@ -97,7 +97,7 @@ export class GoogleCalendarAdapter {
           headers: { Authorization: authHeader },
           data: {
             summary: title,
-            description: "Focused work session via VEX",
+            description: 'Focused work session via VEX',
             start: {
               dateTime: startTime.toISOString(),
               timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
@@ -106,15 +106,15 @@ export class GoogleCalendarAdapter {
               dateTime: endTime.toISOString(),
               timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
             },
-            colorId: "7",
-            transparency: "opaque",
-            visibility: "private",
+            colorId: '7',
+            transparency: 'opaque',
+            visibility: 'private',
           },
         },
       );
       return mapGoogleEvent(response);
     } catch (error) {
-      debug.error("Failed to create focus event:", error);
+      debug.error('Failed to create focus event:', error);
       throw error;
     }
   }
@@ -128,7 +128,7 @@ export class GoogleCalendarAdapter {
       );
       return true;
     } catch (error) {
-      debug.error("Failed to delete event:", error);
+      debug.error('Failed to delete event:', error);
       return false;
     }
   }
@@ -136,7 +136,7 @@ export class GoogleCalendarAdapter {
   async getFreeBusy(
     timeMin: Date,
     timeMax: Date,
-    calendarIds: string[] = ["primary"],
+    calendarIds: string[] = ['primary'],
   ): Promise<FreeBusyInfo> {
     try {
       const authHeader = await this.getAuthHeader();
@@ -170,7 +170,7 @@ export class GoogleCalendarAdapter {
       const freeSlots = calculateFreeSlots(merged, timeMin, timeMax);
       return { busySlots: merged, freeSlots };
     } catch (error) {
-      debug.error("Failed to get free/busy:", error);
+      debug.error('Failed to get free/busy:', error);
       throw error;
     }
   }

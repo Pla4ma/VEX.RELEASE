@@ -20,8 +20,11 @@ const rules = [
 
 const allowedBoundaries = new Map([
   ['src/api/api-client.ts:raw-fetch', 'Canonical API client owns fetch.'],
+  ['src/api/api-request-handler.ts:raw-fetch', 'Canonical API request handler owns fetch.'],
   ['src/utils/haptics.ts:expo-haptics-direct', 'Canonical haptics wrapper owns expo-haptics.'],
+  ['src/utils/haptics-types.ts:expo-haptics-direct', 'Canonical haptics implementation owns expo-haptics.'],
   ['src/accessibility/checks.ts:flatlist', 'Static accessibility role map, not a FlatList import/use.'],
+  ['src/accessibility/checks-types.ts:flatlist', 'Static accessibility role map, not a FlatList import/use.'],
 ]);
 
 function walk(directory) {

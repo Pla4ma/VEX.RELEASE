@@ -1,30 +1,30 @@
-import { useNavigation } from "@react-navigation/native";
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import * as Sentry from "@sentry/react-native";
-import { useQuery } from "@tanstack/react-query";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { BackHandler, ScrollView } from "react-native";
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import * as Sentry from '@sentry/react-native';
+import { useQuery } from '@tanstack/react-query';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { BackHandler, ScrollView } from 'react-native';
 
-import { fetchCoachPresenceMemorySummary } from "../../coach-presence/repository";
-import { useFeatureAccess } from "../../liveops-config";
-import { useOnboardingStore } from "../../onboarding/store";
-import { useProgressionSummary } from "../../progression/hooks";
-import { useStreakMultiplier } from "../../streaks/hooks";
-import type { SessionStackParams } from "../../../navigation/types";
-import { getSessionService } from "../../../session/SessionService";
-import type { SessionSummary } from "../../../session/types";
-import { useAuthStore } from "../../../store";
-import { useSessionUIStore } from "../../../store/session-state";
-import { useToast } from "../../../shared/ui/components/Toast";
-import { useTheme } from "../../../theme";
-import { useSessionCompleteRewards } from "../../../screens/session/hooks/useSessionCompleteRewards";
-import { useSessionCompleteStudyProgress } from "../../../screens/session/hooks/useSessionCompleteStudyProgress";
-import { useSessionMastery } from "../../../screens/session/hooks/useSessionMastery";
-import { formatDuration } from "../../../screens/session/utils";
-import { useHomeReturnCompletionSync } from "./useHomeReturnCompletionSync";
-import { useSessionCompleteCoachPresence } from "./useSessionCompleteCoachPresence";
-import { useSessionCompleteDerivedData } from "./useSessionCompleteDerivedData";
-import { useSessionCompleteActions } from "./useSessionCompleteActions";
+import { fetchCoachPresenceMemorySummary } from '../../coach-presence/repository';
+import { useFeatureAccess } from '../../liveops-config';
+import { useOnboardingStore } from '../../onboarding/store';
+import { useProgressionSummary } from '../../progression/hooks';
+import { useStreakMultiplier } from '../../streaks/hooks';
+import type { SessionStackParams } from '../../../navigation/types';
+import { getSessionService } from '../../../session/SessionService';
+import type { SessionSummary } from '../../../session/types';
+import { useAuthStore } from '../../../store';
+import { useSessionUIStore } from '../../../store/session-state';
+import { useToast } from '../../../shared/ui/components/Toast';
+import { useTheme } from '../../../theme';
+import { useSessionCompleteRewards } from '../../../screens/session/hooks/useSessionCompleteRewards';
+import { useSessionCompleteStudyProgress } from '../../../screens/session/hooks/useSessionCompleteStudyProgress';
+import { useSessionMastery } from '../../../screens/session/hooks/useSessionMastery';
+import { formatDuration } from '../../../screens/session/utils';
+import { useHomeReturnCompletionSync } from './useHomeReturnCompletionSync';
+import { useSessionCompleteCoachPresence } from './useSessionCompleteCoachPresence';
+import { useSessionCompleteDerivedData } from './useSessionCompleteDerivedData';
+import { useSessionCompleteActions } from './useSessionCompleteActions';
 
 type SessionNavigationProp = NativeStackNavigationProp<SessionStackParams>;
 
@@ -46,10 +46,10 @@ export function useSessionCompleteController(input: {
   );
   const scrollRef = useRef<ScrollView>(null);
   const [selectedMood, setSelectedMood] = useState<
-    "BAD" | "GOOD" | "GREAT" | "NEUTRAL" | "TERRIBLE" | null
+    'BAD' | 'GOOD' | 'GREAT' | 'NEUTRAL' | 'TERRIBLE' | null
   >(null);
-  const [reflection, setReflection] = useState("");
-  const userId = user?.id ?? "";
+  const [reflection, setReflection] = useState('');
+  const userId = user?.id ?? '';
   const focusedDuration =
     summary.effectiveDuration ||
     summary.actualDuration ||
@@ -60,7 +60,7 @@ export function useSessionCompleteController(input: {
   const coachMemoryQuery = useQuery({
     enabled: Boolean(userId),
     queryFn: () => fetchCoachPresenceMemorySummary(userId),
-    queryKey: ["coach-presence", "completion-memory", userId],
+    queryKey: ['coach-presence', 'completion-memory', userId],
     staleTime: 300000,
   });
   const syncHomeReturn = useHomeReturnCompletionSync({
@@ -80,7 +80,7 @@ export function useSessionCompleteController(input: {
       sessionService.setUserId(userId);
       return sessionService.getSessionById(sessionId);
     },
-    queryKey: ["session-history-entry", userId, sessionId],
+    queryKey: ['session-history-entry', userId, sessionId],
     staleTime: 30000,
   });
   const studyProgressState = useSessionCompleteStudyProgress({
@@ -137,9 +137,9 @@ export function useSessionCompleteController(input: {
 
   useEffect(() => {
     Sentry.addBreadcrumb({
-      category: "session",
-      level: "info",
-      message: "Session complete screen viewed",
+      category: 'session',
+      level: 'info',
+      message: 'Session complete screen viewed',
     });
   }, []);
   useEffect(() => {
@@ -152,9 +152,9 @@ export function useSessionCompleteController(input: {
   }, [rewards.completionStage]);
   useEffect(() => {
     const backHandler = BackHandler.addEventListener(
-      "hardwareBackPress",
+      'hardwareBackPress',
       () => {
-        navigation.navigate({ name: "Main", params: {} });
+        navigation.navigate({ name: 'Main', params: {} });
         return true;
       },
     );

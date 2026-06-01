@@ -1,29 +1,29 @@
-import { useMemo, useCallback } from "react";
-import { useNavigation } from "@react-navigation/native";
-import type { UseQueryResult } from "@tanstack/react-query";
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { useSessionUIStore } from "../../../store/session-state";
-import { useHomeSpineModel } from "../../../features/home-spine/hooks";
-import { getNextBestAction } from "../../../features/progression";
-import type { FeatureAccessResult } from "../../../features/liveops-config";
-import type { HomeFeatureRuntime } from "./home-feature-runtime";
-import type { HomeViewModel } from "./home-view-model";
+import { useMemo, useCallback } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import type { UseQueryResult } from '@tanstack/react-query';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useSessionUIStore } from '../../../store/session-state';
+import { useHomeSpineModel } from '../../../features/home-spine/hooks';
+import { getNextBestAction } from '../../../features/progression';
+import type { FeatureAccessResult } from '../../../features/liveops-config';
+import type { HomeFeatureRuntime } from './home-feature-runtime';
+import type { HomeViewModel } from './home-view-model';
 import type {
   HomeController,
   SessionHistoryResult,
-} from "./home-controller-types";
+} from './home-controller-types';
 import type {
   ExtendedRootStackParams,
   SessionStackParams,
-} from "../../../navigation/types";
+} from '../../../navigation/types';
 import {
   getFocusedMinutesForToday,
   getNextUnlockFeature,
-} from "./home-controller-helpers";
+} from './home-controller-helpers';
 import {
   stubNavigationActions,
-} from "./home-controller-stubs";
-import { buildNewUserController } from "./new-user-home-controller-builder";
+} from './home-controller-stubs';
+import { buildNewUserController } from './new-user-home-controller-builder';
 
 type Nav = NativeStackNavigationProp<ExtendedRootStackParams>;
 
@@ -85,20 +85,20 @@ export function useNewUserHomeModel(input: NewUserModelInput): HomeViewModel & {
       if (userId && disclosure.inputs.totalCompletedSessions === 0) {
         analytics.trackFirstSessionStarted(
           userId,
-          (params as SessionStackParams["SessionSetup"] | undefined)?.source ??
-            "home",
+          (params as SessionStackParams['SessionSetup'] | undefined)?.source ??
+            'home',
         );
       }
-      navigation.navigate("SessionStack", {
-        screen: "SessionSetup",
-        params: (params ?? {}) as SessionStackParams["SessionSetup"],
+      navigation.navigate('SessionStack', {
+        screen: 'SessionSetup',
+        params: (params ?? {}) as SessionStackParams['SessionSetup'],
       });
     },
     [analytics, disclosure.inputs.totalCompletedSessions, navigation, userId],
   );
 
   const openProgress = useCallback((): void => {
-    navigation.navigate("Main", { screen: "Progress" });
+    navigation.navigate('Main', { screen: 'Progress' });
   }, [navigation]);
 
   const nextUnlockFeature = useMemo(
@@ -129,11 +129,11 @@ export function useNewUserHomeModel(input: NewUserModelInput): HomeViewModel & {
     returnReason: {
       body: nextBestAction.description,
       ctaLabel: nextBestAction.ctaLabel,
-      eyebrow: "Return reason",
-      intent: "start-session" as const,
-      source: "next-best-action" as const,
+      eyebrow: 'Return reason',
+      intent: 'start-session' as const,
+      source: 'next-best-action' as const,
       title: nextBestAction.title,
-      tone: "default" as const,
+      tone: 'default' as const,
     },
     todayFocusMinutes,
   });

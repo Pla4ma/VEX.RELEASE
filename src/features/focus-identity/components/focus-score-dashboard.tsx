@@ -1,13 +1,13 @@
-import React from "react";
-import { View } from "react-native";
-import { EmptyState } from "../../../components/EmptyState";
-import { ErrorState } from "../../../components/states/ErrorState";
-import { useTheme } from "../../../theme";
-import type { FocusScoreDashboardModel } from "../types";
-import { loadingSkeleton } from "./loading-skeleton";
-import { ScoreCard } from "./score-card";
-import { FactorMap } from "./factor-map";
-import { WhatChanged } from "./what-changed";
+import React from 'react';
+import { View } from 'react-native';
+import { EmptyState } from '../../../components/EmptyState';
+import { ErrorState } from '../../../components/states/ErrorState';
+import { useTheme } from '../../../theme';
+import type { FocusScoreDashboardModel } from '../types';
+import { loadingSkeleton } from './loading-skeleton';
+import { ScoreCard } from './score-card';
+import { FactorMap } from './factor-map';
+import { WhatChanged } from './what-changed';
 
 interface FocusScoreDashboardProps {
   model: FocusScoreDashboardModel;
@@ -36,7 +36,7 @@ export function FocusScoreDashboard({
       <ErrorState
         title="Focus Score couldn't load"
         description={
-          model.error?.message ?? "Your score data is temporarily unavailable."
+          model.error?.message ?? 'Your score data is temporarily unavailable.'
         }
         retryLabel="Retry"
         onRetry={onRetry}
@@ -64,7 +64,7 @@ export function FocusScoreDashboard({
   );
 }
 
-export { loadingSkeleton } from "./loading-skeleton";
-export { ScoreCard } from "./score-card";
-export { FactorMap } from "./factor-map";
-export { WhatChanged } from "./what-changed";
+export { loadingSkeleton } from './loading-skeleton';
+export { ScoreCard } from './score-card';
+export { FactorMap } from './factor-map';
+export { WhatChanged } from './what-changed';

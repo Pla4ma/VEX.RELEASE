@@ -1,4 +1,4 @@
-import type { ScoreCalculation } from "../types";
+import type { ScoreCalculation } from '../types';
 
 const MIN_COMPLETION_FOR_CREDIT = 0.5;
 
@@ -20,12 +20,12 @@ export function isEligibleForRewards(completionPercentage: number): boolean {
 
 export function getCompletionTier(
   completionPercentage: number,
-): "NONE" | "PARTIAL" | "FULL" | "PERFECT" {
-  if (completionPercentage >= 100) return "PERFECT";
-  if (completionPercentage >= 90) return "FULL";
+): 'NONE' | 'PARTIAL' | 'FULL' | 'PERFECT' {
+  if (completionPercentage >= 100) {return 'PERFECT';}
+  if (completionPercentage >= 90) {return 'FULL';}
   if (completionPercentage >= MIN_COMPLETION_FOR_CREDIT * 100)
-    return "PARTIAL";
-  return "NONE";
+    {return 'PARTIAL';}
+  return 'NONE';
 }
 
 export function serializeCalculation(

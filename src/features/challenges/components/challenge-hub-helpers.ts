@@ -1,13 +1,13 @@
-import { type UserChallengeSummary } from "../schemas";
+import { type UserChallengeSummary } from '../schemas';
 
-export type ChallengeFilter = "ALL" | "DAILY" | "WEEKLY" | "EVENT" | "COMPLETED";
+export type ChallengeFilter = 'ALL' | 'DAILY' | 'WEEKLY' | 'EVENT' | 'COMPLETED';
 
 export const FILTER_OPTIONS: ChallengeFilter[] = [
-  "ALL",
-  "DAILY",
-  "WEEKLY",
-  "EVENT",
-  "COMPLETED",
+  'ALL',
+  'DAILY',
+  'WEEKLY',
+  'EVENT',
+  'COMPLETED',
 ];
 
 export function getFilteredChallenges(
@@ -18,24 +18,24 @@ export function getFilteredChallenges(
     return [];
   }
   switch (activeFilter) {
-    case "DAILY":
+    case 'DAILY':
       return challengeSummaries.filter(
-        (c: UserChallengeSummary) => c.type === "DAILY",
+        (c: UserChallengeSummary) => c.type === 'DAILY',
       );
-    case "WEEKLY":
+    case 'WEEKLY':
       return challengeSummaries.filter(
-        (c: UserChallengeSummary) => c.type === "WEEKLY",
+        (c: UserChallengeSummary) => c.type === 'WEEKLY',
       );
-    case "EVENT":
+    case 'EVENT':
       return challengeSummaries.filter(
-        (c: UserChallengeSummary) => c.type === "EVENT",
+        (c: UserChallengeSummary) => c.type === 'EVENT',
       );
-    case "COMPLETED":
+    case 'COMPLETED':
       return challengeSummaries.filter(
         (c: UserChallengeSummary) =>
-          c.status === "COMPLETED" || c.status === "CLAIMED",
+          c.status === 'COMPLETED' || c.status === 'CLAIMED',
       );
-    case "ALL":
+    case 'ALL':
     default:
       return challengeSummaries;
   }
@@ -51,13 +51,13 @@ export function getChallengeStats(challengeSummaries: UserChallengeSummary[] | u
     return { total: 0, completed: 0, claimed: 0, available: 0 };
   }
   const completed = challengeSummaries.filter(
-    (c: UserChallengeSummary) => c.status === "COMPLETED",
+    (c: UserChallengeSummary) => c.status === 'COMPLETED',
   ).length;
   const claimed = challengeSummaries.filter(
-    (c: UserChallengeSummary) => c.status === "CLAIMED",
+    (c: UserChallengeSummary) => c.status === 'CLAIMED',
   ).length;
   const available = challengeSummaries.filter(
-    (c: UserChallengeSummary) => c.status === "ACTIVE",
+    (c: UserChallengeSummary) => c.status === 'ACTIVE',
   ).length;
   return { total: challengeSummaries.length, completed, claimed, available };
 }

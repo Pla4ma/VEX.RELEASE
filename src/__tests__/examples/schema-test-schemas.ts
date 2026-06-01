@@ -1,10 +1,10 @@
-import { z } from "zod";
+import { z } from 'zod';
 
-export const CurrencySchema = z.enum(["COINS", "GEMS", "SEASONAL"]);
+export const CurrencySchema = z.enum(['COINS', 'GEMS', 'SEASONAL']);
 export const TransactionSchema = z.object({
   id: z.string().uuid(),
   userId: z.string().min(1),
-  type: z.enum(["EARN", "SPEND", "CONVERT", "REFUND"]),
+  type: z.enum(['EARN', 'SPEND', 'CONVERT', 'REFUND']),
   currency: CurrencySchema,
   amount: z.number().positive(),
   description: z.string().max(255).optional(),

@@ -4,8 +4,8 @@
  * React hook for network connectivity state and monitoring.
  */
 
-import { useEffect, useState, useCallback } from "react";
-import { getNetInfoAdapter, type NetworkState } from "./NetInfoAdapter";
+import { useEffect, useState, useCallback } from 'react';
+import { getNetInfoAdapter, type NetworkState } from './NetInfoAdapter';
 
 /**
  * NetInfo hook return type
@@ -55,9 +55,9 @@ export function useNetInfo(): UseNetInfoReturn {
     ...state,
     isOnline: state.isConnected && (state.isInternetReachable ?? false),
     isOffline: !state.isConnected || state.isInternetReachable === false,
-    isMetered: state.type === "cellular",
-    isWifi: state.type === "wifi",
-    isCellular: state.type === "cellular",
+    isMetered: state.type === 'cellular',
+    isWifi: state.type === 'wifi',
+    isCellular: state.type === 'cellular',
     refresh,
   };
 }

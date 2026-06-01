@@ -2,9 +2,9 @@ import {
   createService,
   getSessionOrchestrator,
   type SessionConfig,
-} from "./SessionService.helpers";
+} from './SessionService.helpers';
 
-describe("SessionService", () => {
+describe('SessionService', () => {
   let service: ReturnType<typeof createService>;
   let mockOrchestrator: Record<string, jest.Mock>;
 
@@ -22,32 +22,32 @@ describe("SessionService", () => {
     };
     (getSessionOrchestrator as jest.Mock).mockReturnValue(mockOrchestrator);
     service = createService();
-    service.setUserId("test-user-id");
+    service.setUserId('test-user-id');
   });
 
-  describe("completeSession", () => {
-    it("should complete session and calculate XP correctly", async () => {
+  describe('completeSession', () => {
+    it('should complete session and calculate XP correctly', async () => {
       const mockSummary = {
-        sessionId: "session-1",
-        status: "completed",
+        sessionId: 'session-1',
+        status: 'completed',
         duration: 25 * 60 * 1000,
         xpEarned: 250,
         coinsEarned: 10,
         multiplier: 1.5,
         streakBonus: 50,
       };
-      mockOrchestrator.getSessionStatus.mockReturnValue({ status: "active" });
+      mockOrchestrator.getSessionStatus.mockReturnValue({ status: 'active' });
       mockOrchestrator.completeSession.mockResolvedValue(mockSummary);
       const summary = await service.completeSession();
       expect(mockOrchestrator.completeSession).toHaveBeenCalled();
       expect(summary.xpEarned).toBe(250);
-      expect(summary.status).toBe("completed");
+      expect(summary.status).toBe('completed');
     });
 
-    it("should calculate XP with multiple multipliers", async () => {
+    it('should calculate XP with multiple multipliers', async () => {
       const mockSummary = {
-        sessionId: "session-1",
-        status: "completed",
+        sessionId: 'session-1',
+        status: 'completed',
         duration: 25 * 60 * 1000,
         xpEarned: 375,
         baseXP: 250,
@@ -61,48 +61,48 @@ describe("SessionService", () => {
       expect(summary.baseXP * summary.streakMultiplier).toBe(375);
     });
 
-    it("should throw error when completing non-active session", async () => {
-      mockOrchestrator.getSessionStatus.mockReturnValue({ status: "idle" });
+    it('should throw error when completing non-active session', async () => {
+      mockOrchestrator.getSessionStatus.mockReturnValue({ status: 'idle' });
       mockOrchestrator.completeSession.mockRejectedValue(
-        new Error("No active session to complete"),
+        new Error('No active session to complete'),
       );
       await expect(service.completeSession()).rejects.toThrow(
-        "No active session to complete",
+        'No active session to complete',
       );
     });
   });
 
-  describe("abandonSession", () => {
-    it("should abandon session with no XP awarded", async () => {
-      mockOrchestrator.getSessionStatus.mockReturnValue({ status: "active" });
+  describe('abandonSession', () => {
+    it('should abandon session with no XP awarded', async () => {
+      mockOrchestrator.getSessionStatus.mockReturnValue({ status: 'active' });
       mockOrchestrator.abandonSession.mockResolvedValue(undefined);
-      await service.abandonSession("user_cancelled");
+      await service.abandonSession('user_cancelled');
       expect(mockOrchestrator.abandonSession).toHaveBeenCalledWith(
-        "user_cancelled",
+        'user_cancelled',
       );
     });
 
-    it("should not award streak credit when abandoned", async () => {
+    it('should not award streak credit when abandoned', async () => {
       mockOrchestrator.abandonSession.mockResolvedValue(undefined);
       await service.abandonSession();
       expect(mockOrchestrator.abandonSession).toHaveBeenCalled();
     });
 
-    it("should throw error when abandoning completed session", async () => {
+    it('should throw error when abandoning completed session', async () => {
       mockOrchestrator.getSessionStatus.mockReturnValue({
-        status: "completed",
+        status: 'completed',
       });
       mockOrchestrator.abandonSession.mockRejectedValue(
-        new Error("Cannot abandon completed session"),
+        new Error('Cannot abandon completed session'),
       );
       await expect(service.abandonSession()).rejects.toThrow(
-        "Cannot abandon completed session",
+        'Cannot abandon completed session',
       );
     });
   });
 
-  describe("offline queue fallback", () => {
-    it("should queue session when Supabase call fails", async () => {
+  describe('offline queue fallback', () => {
+    it('should queue session when Supabase call fails', async () => {
       const validConfig: SessionConfig = {
         duration: 25 * 60 * 1000,
         breakDuration: 5 * 60 * 1000,
@@ -115,18 +115,18 @@ describe("SessionService", () => {
         strictMode: false,
         autoStartBreaks: false,
         autoStartNextInterval: false,
-        category: "focus",
-        tags: ["work"],
+        category: 'focus',
+        tags: ['work'],
       };
       mockOrchestrator.createSession.mockRejectedValue(
-        new Error("Network error"),
+        new Error('Network error'),
       );
       await expect(service.createCustomSession(validConfig)).rejects.toThrow(
-        "Network error",
+        'Network error',
       );
     });
 
-    it("should retry queued sessions when connection restored", async () => {
+    it('should retry queued sessions when connection restored', async () => {
       expect(true).toBe(true);
     });
   });

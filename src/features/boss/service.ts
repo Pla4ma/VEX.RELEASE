@@ -23,7 +23,7 @@ export function canUserFightBoss(): Promise<{
   allowed: boolean;
   reason: string | null;
 }> {
-  return Promise.resolve({ allowed: false, reason: "archived" });
+  return Promise.resolve({ allowed: false, reason: 'archived' });
 }
 
 /** @deprecated Bounty system archived — stub for backward compat */

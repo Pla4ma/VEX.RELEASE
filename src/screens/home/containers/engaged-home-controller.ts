@@ -1,21 +1,21 @@
-import type { UseQueryResult } from "@tanstack/react-query";
-import type { HomeFeatureRuntime } from "../hooks/home-feature-runtime";
-import type { HomeController, SessionHistoryResult } from "../hooks/home-controller-types";
-import type { SessionRecommendation } from "../../../features/ai-coach";
-import type { FeatureAccessResult } from "../../../features/liveops-config";
-import type { HomeSpineModel } from "../../../features/home-spine/schemas";
-import type { HomeReturnReason } from "../hooks/useHomeReturnReason";
-import type { LearningExecutionLayer } from "../../../features/learning-execution";
-import type { HomeHighlight, CompletionSyncState } from "../../../store/session-state";
-import type { StreakQueryData, ProgressionQueryData } from "./engaged-home-types";
-import { createStubQuery } from "../hooks/home-controller-stubs";
+import type { UseQueryResult } from '@tanstack/react-query';
+import type { HomeFeatureRuntime } from '../hooks/home-feature-runtime';
+import type { HomeController, SessionHistoryResult } from '../hooks/home-controller-types';
+import type { SessionRecommendation } from '../../../features/ai-coach';
+import type { FeatureAccessResult } from '../../../features/liveops-config';
+import type { HomeSpineModel } from '../../../features/home-spine/schemas';
+import type { HomeReturnReason } from '../hooks/useHomeReturnReason';
+import type { LearningExecutionLayer } from '../../../features/learning-execution';
+import type { HomeHighlight, CompletionSyncState } from '../../../store/session-state';
+import type { StreakQueryData, ProgressionQueryData } from './engaged-home-types';
+import { createStubQuery } from '../hooks/home-controller-stubs';
 
 interface BuildControllerInput {
   activeStudyPlanQuery: UseQueryResult;
   clearHomeHighlight: () => void;
   completionSync: CompletionSyncState;
   comebackQuery: UseQueryResult;
-  createRecommendation: HomeController["createRecommendation"];
+  createRecommendation: HomeController['createRecommendation'];
   currentStreak: number;
   currentXp: number;
   disclosure: FeatureAccessResult;
@@ -34,7 +34,7 @@ interface BuildControllerInput {
   runtime: HomeFeatureRuntime;
   streakQuery: UseQueryResult;
   todayFocusMinutes: number;
-  updateRecommendationStatus: HomeController["updateRecommendationStatus"];
+  updateRecommendationStatus: HomeController['updateRecommendationStatus'];
   userId: string;
   actions: {
     openSetup: (params?: Record<string, unknown>) => void;
@@ -112,9 +112,9 @@ export function buildHomeController(input: BuildControllerInput): HomeController
     openContentStudy: actions.openContentStudy,
     continueStudyPlan: actions.continueStudyPlan,
     createRecommendation:
-      createRecommendation as HomeController["createRecommendation"],
+      createRecommendation as HomeController['createRecommendation'],
     updateRecommendationStatus:
-      updateRecommendationStatus as HomeController["updateRecommendationStatus"],
+      updateRecommendationStatus as HomeController['updateRecommendationStatus'],
     retryAll: disclosure.refetchAll as () => Promise<unknown>,
     features: disclosure.features,
   };

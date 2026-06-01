@@ -1,6 +1,6 @@
-import type { JourneyState } from "../retention-loop/schemas";
+import type { JourneyState } from '../retention-loop/schemas';
 
-export type RetentionMoment = "day_1" | "day_3" | "day_7";
+export type RetentionMoment = 'day_1' | 'day_3' | 'day_7';
 
 export interface RetentionMessage {
   moment: RetentionMoment;
@@ -16,13 +16,13 @@ export function coachMomentFromJourneyState(
 ): RetentionMessage | null {
   const { day, phase } = state;
 
-  if (day === 0) return null;
+  if (day === 0) {return null;}
 
-  if (phase === "onboarding") return null;
+  if (phase === 'onboarding') {return null;}
 
-  if (phase === "return" || day === 1) {
+  if (phase === 'return' || day === 1) {
     return {
-      moment: "day_1",
+      moment: 'day_1',
       headline: state.homeMessage.headline,
       cta: state.primaryCta,
       showWhatVEXLearned: false,
@@ -31,26 +31,26 @@ export function coachMomentFromJourneyState(
     };
   }
 
-  if (phase === "insight" || day === 3) {
+  if (phase === 'insight' || day === 3) {
     return {
-      moment: "day_3",
-      headline: state.momentType.type === "what_vex_learned"
+      moment: 'day_3',
+      headline: state.momentType.type === 'what_vex_learned'
         ? state.homeMessage.headline
         : state.homeMessage.headline,
       cta: state.primaryCta,
-      showWhatVEXLearned: state.momentType.type === "what_vex_learned",
+      showWhatVEXLearned: state.momentType.type === 'what_vex_learned',
       showWeeklyIntelligence: false,
       shouldShow: true,
     };
   }
 
-  if (phase === "weekly_intelligence" || day === 7) {
+  if (phase === 'weekly_intelligence' || day === 7) {
     return {
-      moment: "day_7",
+      moment: 'day_7',
       headline: state.homeMessage.headline,
       cta: state.primaryCta,
-      showWhatVEXLearned: state.momentType.type === "weekly_insight",
-      showWeeklyIntelligence: state.momentType.type === "weekly_insight",
+      showWhatVEXLearned: state.momentType.type === 'weekly_insight',
+      showWeeklyIntelligence: state.momentType.type === 'weekly_insight',
       shouldShow: true,
     };
   }
@@ -63,8 +63,8 @@ export function shouldShowRetentionMoment(input: {
   lastRetentionShownDay: number | null;
 }): RetentionMoment | null {
   const day = input.daysSinceFirstSession;
-  if (day <= 0) return null;
-  if (input.lastRetentionShownDay === day) return null;
+  if (day <= 0) {return null;}
+  if (input.lastRetentionShownDay === day) {return null;}
   if (day === 1 || day === 3 || day === 7) {
     return `day_${day}` as RetentionMoment;
   }

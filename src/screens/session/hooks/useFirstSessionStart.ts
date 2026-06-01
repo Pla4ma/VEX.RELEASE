@@ -1,14 +1,14 @@
-import { useCallback, useState } from "react";
-import * as Sentry from "@sentry/react-native";
+import { useCallback, useState } from 'react';
+import * as Sentry from '@sentry/react-native';
 
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-import type { SessionStackParams } from "../../../navigation/types";
-import { useSession } from "../../../session/hooks/useSession";
-import { SessionMode } from "../../../session/modes";
-import { SessionConfigSchema } from "../../../session/types";
-import { sessionStart } from "../../../utils/haptics";
-import type { PresetWithIcon } from "../utils/session-setup";
+import type { SessionStackParams } from '../../../navigation/types';
+import { useSession } from '../../../session/hooks/useSession';
+import { SessionMode } from '../../../session/modes';
+import { SessionConfigSchema } from '../../../session/types';
+import { sessionStart } from '../../../utils/haptics';
+import type { PresetWithIcon } from '../utils/session-setup';
 
 type SessionNavigationProp = NativeStackNavigationProp<SessionStackParams>;
 
@@ -24,11 +24,11 @@ type FirstSessionConfig = {
 };
 
 const FIRST_SESSION_PRESET: PresetWithIcon = {
-  id: "pomodoro",
-  name: "Pomodoro",
+  id: 'pomodoro',
+  name: 'Pomodoro',
   duration: 25 * 60,
-  category: "standard",
-  icon: "timer",
+  category: 'standard',
+  icon: 'timer',
   intervals: 1,
   breakDuration: 300,
   longBreakDuration: 900,
@@ -57,13 +57,13 @@ export function useFirstSessionStart({
       setIsStarting(true);
 
       try {
-        const sessionTags: string[] = ["first-session", "onboarding"];
+        const sessionTags: string[] = ['first-session', 'onboarding'];
 
         if (config.goal) {
           sessionTags.push(`goal:${config.goal}`);
         }
         if (config.mode === SessionMode.STUDY) {
-          sessionTags.push("study-session");
+          sessionTags.push('study-session');
         }
 
         const sessionConfig = SessionConfigSchema.parse({
@@ -72,7 +72,7 @@ export function useFirstSessionStart({
           longBreakDuration: FIRST_SESSION_PRESET.longBreakDuration,
           intervals: FIRST_SESSION_PRESET.intervals,
           longBreakInterval: FIRST_SESSION_PRESET.longBreakInterval,
-          category: "standard",
+          category: 'standard',
           tags: sessionTags,
           soundEnabled: FIRST_SESSION_PRESET.soundEnabled,
           vibrationEnabled: FIRST_SESSION_PRESET.vibrationEnabled,
@@ -81,17 +81,17 @@ export function useFirstSessionStart({
           sessionMode: config.mode,
           autoStartBreaks: FIRST_SESSION_PRESET.autoStartBreaks,
           autoStartNextInterval: FIRST_SESSION_PRESET.autoStartNextInterval,
-          goal: config.goal ?? "First session",
+          goal: config.goal ?? 'First session',
           notes:
             config.mode === SessionMode.STUDY && config.goal
-              ? JSON.stringify({ source: "direct", studyTarget: config.goal })
+              ? JSON.stringify({ source: 'direct', studyTarget: config.goal })
               : undefined,
         });
 
         Sentry.addBreadcrumb({
-          category: "session-start",
-          message: "Creating first session from setup flow",
-          level: "info",
+          category: 'session-start',
+          message: 'Creating first session from setup flow',
+          level: 'info',
         });
 
         const session = await createSession(sessionConfig);
@@ -105,19 +105,19 @@ export function useFirstSessionStart({
           }, 120);
         }
 
-        navigation.navigate("ActiveSession", {
+        navigation.navigate('ActiveSession', {
           sessionId: session.id,
-          selectedThemeId: "default",
+          selectedThemeId: 'default',
         });
       } catch (error: unknown) {
         const errorMessage =
           error instanceof Error
             ? error.message
-            : "Unexpected session start failure";
+            : 'Unexpected session start failure';
         Sentry.captureException(error, {
           tags: {
-            feature: "session-start",
-            phase: "first-session-start-flow",
+            feature: 'session-start',
+            phase: 'first-session-start-flow',
           },
         });
         throw new Error(errorMessage);

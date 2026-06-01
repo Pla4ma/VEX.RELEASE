@@ -2,7 +2,7 @@ import {
   RecommendationEvidenceSchema,
   type CoachMemory,
   type RecommendationEvidence,
-} from "./memory-schemas";
+} from './memory-schemas';
 
 export function hashEvidence(evidence: string): string {
   let hash = 0;
@@ -15,7 +15,7 @@ export function hashEvidence(evidence: string): string {
 }
 
 export function buildColdStartEvidence(
-  reason: "cold_start" | "insufficient_data" | "user_override",
+  reason: 'cold_start' | 'insufficient_data' | 'user_override',
 ): RecommendationEvidence {
   return RecommendationEvidenceSchema.parse({ fallbackReason: reason });
 }
@@ -24,17 +24,17 @@ export function buildMemoryEvidence(
   memories: CoachMemory[],
 ): RecommendationEvidence {
   if (memories.length === 0) {
-    return buildColdStartEvidence("insufficient_data");
+    return buildColdStartEvidence('insufficient_data');
   }
   const avgConfidence =
     memories.reduce((sum, m) => {
       const conf =
-        typeof m.metadata.confidence === "number" ? m.metadata.confidence : 0.7;
+        typeof m.metadata.confidence === 'number' ? m.metadata.confidence : 0.7;
       return sum + conf;
     }, 0) / memories.length;
   return RecommendationEvidenceSchema.parse({
     memoryIds: memories.map((m) => m.id),
-    evidenceSummary: memories.map((m) => m.title).join("; "),
+    evidenceSummary: memories.map((m) => m.title).join('; '),
     confidence: Math.round(avgConfidence * 100) / 100,
     fallbackReason: undefined,
   });
@@ -43,10 +43,10 @@ export function buildMemoryEvidence(
 export function generateRecommendationEvidence(
   memories: CoachMemory[],
   sessionCount: number,
-  fallbackReason?: "cold_start" | "insufficient_data" | "user_override",
+  fallbackReason?: 'cold_start' | 'insufficient_data' | 'user_override',
 ): RecommendationEvidence {
   if (sessionCount < 3) {
-    return buildColdStartEvidence("cold_start");
+    return buildColdStartEvidence('cold_start');
   }
   if (fallbackReason) {
     return buildColdStartEvidence(fallbackReason);

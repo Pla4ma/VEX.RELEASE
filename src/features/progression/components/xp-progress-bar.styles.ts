@@ -1,41 +1,41 @@
-import { StyleSheet } from "react-native";
-import { createSheet } from "@/shared/ui/create-sheet";
-import { launchColors } from "@theme/tokens/launch-colors";
+import { StyleSheet } from 'react-native';
+import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
 
 const BAR_HEIGHT = 24;
 
 export const styles = createSheet({
-  container: { alignItems: "center", paddingVertical: 16 },
+  container: { alignItems: 'center', paddingVertical: 16 },
   levelBadgeContainer: { marginBottom: 12 },
   barContainer: {
-    position: "relative",
+    position: 'relative',
     height: BAR_HEIGHT,
-    justifyContent: "center",
+    justifyContent: 'center',
   },
   track: {
     height: BAR_HEIGHT,
     borderRadius: 12,
-    overflow: "hidden",
+    overflow: 'hidden',
     backgroundColor: launchColors.hex_1a1a2e,
   },
   progressFill: {
-    position: "absolute",
+    position: 'absolute',
     left: 0,
     top: 0,
     height: BAR_HEIGHT,
     borderRadius: 12,
-    overflow: "hidden",
+    overflow: 'hidden',
   },
   shine: {
-    position: "absolute",
+    position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
-    height: "50%",
+    height: '50%',
     backgroundColor: launchColors.rgb_255_255_255_0_2,
   },
   tipGlow: {
-    position: "absolute",
+    position: 'absolute',
     right: -4,
     top: -2,
     width: 8,
@@ -47,25 +47,25 @@ export const styles = createSheet({
     elevation: 10,
   },
   particle: {
-    position: "absolute",
+    position: 'absolute',
     width: 4,
     height: 4,
     borderRadius: 2,
     opacity: 0.8,
   },
   xpTextContainer: {
-    position: "absolute",
+    position: 'absolute',
     left: 0,
     right: 0,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  xpText: { flexDirection: "row", fontSize: 12, fontWeight: "700" },
-  xpCurrent: { fontWeight: "bold" },
+  xpText: { flexDirection: 'row', fontSize: 12, fontWeight: '700' },
+  xpCurrent: { fontWeight: 'bold' },
   xpSeparator: { color: launchColors.rgb_255_255_255_0_5 },
   xpThreshold: { color: launchColors.rgb_255_255_255_0_6 },
   levelUpBadge: {
-    position: "absolute",
+    position: 'absolute',
     right: 10,
     top: -30,
     backgroundColor: launchColors.hex_ffd700,
@@ -80,7 +80,7 @@ export const styles = createSheet({
   },
   levelUpText: {
     color: launchColors.hex_1a1a2e,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     fontSize: 11,
   },
   totalXp: {

@@ -20,7 +20,7 @@ function setupConsoleSuppression(): void {
 
   testConsole.error = (...args: unknown[]) => {
     if (
-      typeof args[0] === "string" &&
+      typeof args[0] === 'string' &&
       /Warning.*not wrapped in act|Native module cannot be null|TurboModuleRegistry\.getEnforcing/.test(
         args[0],
       )
@@ -31,7 +31,7 @@ function setupConsoleSuppression(): void {
   };
 
   testConsole.warn = (...args: unknown[]) => {
-    if (typeof args[0] === "string" && /has been renamed/.test(args[0])) {
+    if (typeof args[0] === 'string' && /has been renamed/.test(args[0])) {
       return;
     }
     originalConsoleWarn.call(testConsole, ...args);
@@ -61,7 +61,7 @@ expect.extend({
   },
 });
 
-declare module "expect" {
+declare module 'expect' {
   interface AsymmetricMatchers {
     toBeWithinRange(floor: number, ceiling: number): void;
   }

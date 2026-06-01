@@ -5,9 +5,9 @@ import type {
   InterruptionRecord,
   RecoveryRecord,
   SessionSummary,
-} from "./types";
-import type { OrchestratorConfig } from "./orchestrator-types";
-import { SessionOrchestratorBase } from "./SessionOrchestratorBase";
+} from './types';
+import type { OrchestratorConfig } from './orchestrator-types';
+import { SessionOrchestratorBase } from './SessionOrchestratorBase';
 import {
   handleTimerTick as doHandleTimerTick,
   handleTimerWarning,
@@ -15,12 +15,12 @@ import {
   handleBreakTick,
   handleBreakComplete as doHandleBreakComplete,
   endBreak as doEndBreak,
-} from "./orchestrators/SessionTimer";
-import { loadActiveSession } from "./orchestrators/SessionCore";
+} from './orchestrators/SessionTimer';
+import { loadActiveSession } from './orchestrators/SessionCore';
 import {
   completeSessionInternal,
   abandonSession,
-} from "./orchestrators/SessionCompletion";
+} from './orchestrators/SessionCompletion';
 import {
   attemptRecovery,
   completeLastInterruption,
@@ -28,7 +28,7 @@ import {
   handleAntiCheatViolation,
   logInterruption,
   logRecovery,
-} from "./orchestrators/SessionRecovery";
+} from './orchestrators/SessionRecovery';
 import {
   getActiveSession as getActiveSessionAccessor,
   getTimerState as getTimerStateAccessor,
@@ -47,7 +47,7 @@ import {
   removeDocument as removeDocumentAccessor,
   getSessionHistory as getSessionHistoryAccessor,
   getSessionStats as getSessionStatsAccessor,
-} from "./orchestrator-accessors";
+} from './orchestrator-accessors';
 
 export class SessionOrchestrator extends SessionOrchestratorBase {
   handleTimerTick(
@@ -61,7 +61,7 @@ export class SessionOrchestrator extends SessionOrchestratorBase {
     handleTimerWarning(this, sec);
   }
   async handleTimerComplete(): Promise<void> {
-    if (!this.session) return;
+    if (!this.session) {return;}
     if (
       (this.session.currentInterval || 0) >= (this.session.totalIntervals || 0)
     ) {
@@ -84,16 +84,16 @@ export class SessionOrchestrator extends SessionOrchestratorBase {
   }
 
   async completeSession(): Promise<SessionSummary> {
-    if (!this.session) throw new Error("No active session");
+    if (!this.session) {throw new Error('No active session');}
     await completeSessionInternal(this);
-    if (!this.lastSessionSummary) throw new Error("No session summary");
+    if (!this.lastSessionSummary) {throw new Error('No session summary');}
     return this.lastSessionSummary;
   }
   async endSession(_reason?: string): Promise<SessionState> {
-    if (!this.session) throw new Error("No active session");
+    if (!this.session) {throw new Error('No active session');}
     await completeSessionInternal(this);
     const s = this.getSession();
-    if (!s) throw new Error("Failed to get session state");
+    if (!s) {throw new Error('Failed to get session state');}
     return s;
   }
   abandonSession(reason?: string): Promise<void> {
@@ -101,7 +101,7 @@ export class SessionOrchestrator extends SessionOrchestratorBase {
   }
 
   attemptRecovery(
-    type: "USER_RESUME" | "STREAK_SAVE" | "PARTIAL_CREDIT",
+    type: 'USER_RESUME' | 'STREAK_SAVE' | 'PARTIAL_CREDIT',
   ): Promise<boolean> {
     return attemptRecovery(this, type);
   }
@@ -110,7 +110,7 @@ export class SessionOrchestrator extends SessionOrchestratorBase {
   }
   recordInterruption(
     type: InterruptionType,
-    severity: InterruptionSeverity = "MODERATE",
+    severity: InterruptionSeverity = 'MODERATE',
   ): void {
     recordInterruption(this, type, severity);
   }
@@ -148,7 +148,7 @@ export class SessionOrchestrator extends SessionOrchestratorBase {
   getCurrentPurityScore(): number {
     return getCurrentPurityScoreAccessor(this);
   }
-  getPurityLabel(): "Elite" | "Good" | "Okay" | "Distracted" {
+  getPurityLabel(): 'Elite' | 'Good' | 'Okay' | 'Distracted' {
     return getPurityLabelAccessor(this);
   }
   getInterruptions(): InterruptionRecord[] {
@@ -187,7 +187,7 @@ export class SessionOrchestrator extends SessionOrchestratorBase {
 
 let orchestratorInstance: SessionOrchestrator | null = null;
 export function getSessionOrchestrator(config?: OrchestratorConfig): SessionOrchestrator {
-  if (!orchestratorInstance) orchestratorInstance = new SessionOrchestrator(config);
+  if (!orchestratorInstance) {orchestratorInstance = new SessionOrchestrator(config);}
   loadActiveSession(orchestratorInstance);
   return orchestratorInstance;
 }

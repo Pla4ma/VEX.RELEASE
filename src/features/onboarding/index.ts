@@ -7,16 +7,16 @@
  * @phase 2
  */
 
-export * from "./schemas";
-export * from "./constants";
-export * from "./store";
-export * from "./store-hooks";
-export * from "./service";
-export * from "./components";
-export * from "./repository";
-export * from "./utils";
-export * from "./language-tier";
-export * from "./reward-alignment";
+export * from './schemas';
+export * from './constants';
+export * from './store';
+export * from './store-hooks';
+export * from './service';
+export * from './components';
+export * from './repository';
+export * from './utils';
+export * from './language-tier';
+export * from './reward-alignment';
 
 // Phase 5.3 - Progressive Onboarding
 export {
@@ -41,4 +41,4 @@ export {
   type FeatureUnlockGate,
   type OnboardingProgress,
   type StepContent,
-} from "./ProgressiveOnboarding";
+} from './ProgressiveOnboarding';

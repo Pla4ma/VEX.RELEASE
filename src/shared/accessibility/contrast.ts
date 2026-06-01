@@ -7,7 +7,7 @@ export function getContrastRatio(color1: string, color2: string): number {
 }
 
 function getLuminance(color: string): number {
-  const hex = color.replace("#", "");
+  const hex = color.replace('#', '');
   const r = parseInt(hex.substr(0, 2), 16) / 255;
   const g = parseInt(hex.substr(2, 2), 16) / 255;
   const b = parseInt(hex.substr(4, 2), 16) / 255;

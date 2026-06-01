@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import Svg, {
   Path,
   Line,
@@ -7,10 +7,10 @@ import Svg, {
   Defs,
   LinearGradient,
   Stop,
-} from "react-native-svg";
-import type { FocusScoreHistoryPoint } from "../types";
-import { launchColors } from "@theme/tokens/launch-colors";
-import type { ChartPadding } from "./chartHelpers";
+} from 'react-native-svg';
+import type { FocusScoreHistoryPoint } from '../types';
+import { launchColors } from '@theme/tokens/launch-colors';
+import type { ChartPadding } from './chartHelpers';
 
 interface ScoreChartSvgProps {
   history: FocusScoreHistoryPoint[];
@@ -121,9 +121,9 @@ export function ScoreChartSvg({
             fill={launchColors.hex_666}
             textAnchor="middle"
           >
-            {new Date(history[i]!.timestamp).toLocaleDateString("en-US", {
-              month: "short",
-              day: "numeric",
+            {new Date(history[i]!.timestamp).toLocaleDateString('en-US', {
+              month: 'short',
+              day: 'numeric',
             })}
           </SvgText>
         ),

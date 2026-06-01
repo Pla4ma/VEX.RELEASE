@@ -1,15 +1,15 @@
-import React, { useEffect } from "react";
-import { View, Text, ActivityIndicator } from "react-native";
+import React, { useEffect } from 'react';
+import { View, Text, ActivityIndicator } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withSpring,
-} from "react-native-reanimated";
-import { launchColors } from "@theme/tokens/launch-colors";
-import { styles } from "./progress-state.styles";
+} from 'react-native-reanimated';
+import { launchColors } from '@theme/tokens/launch-colors';
+import { styles } from './progress-state.styles';
 
-export { ProgressBar, SegmentedProgress, CircularProgress } from "./progress-indicators";
-export { LoadingState, LoadingDots } from "./loading-states";
+export { ProgressBar, SegmentedProgress, CircularProgress } from './progress-indicators';
+export { LoadingState, LoadingDots } from './loading-states';
 
 interface StepProgressProps {
   steps: string[];
@@ -77,7 +77,7 @@ interface SuccessStateProps {
 }
 
 export function SuccessState({
-  title = "Success!",
+  title = 'Success!',
   message,
   onComplete,
   autoDismiss = false,
@@ -109,7 +109,7 @@ export function SuccessState({
 interface ProcessingStateProps {
   steps: {
     label: string;
-    status: "pending" | "processing" | "completed" | "error";
+    status: 'pending' | 'processing' | 'completed' | 'error';
   }[];
 }
 
@@ -121,26 +121,26 @@ export function ProcessingState({ steps }: ProcessingStateProps) {
           <View
             style={[
               styles.processingDot,
-              step.status === "completed" && styles.processingDotCompleted,
-              step.status === "error" && styles.processingDotError,
-              step.status === "processing" && styles.processingDotProcessing,
+              step.status === 'completed' && styles.processingDotCompleted,
+              step.status === 'error' && styles.processingDotError,
+              step.status === 'processing' && styles.processingDotProcessing,
             ]}
           >
-            {step.status === "completed" && (
+            {step.status === 'completed' && (
               <Text style={styles.processingCheck}>✓</Text>
             )}
-            {step.status === "error" && (
+            {step.status === 'error' && (
               <Text style={styles.processingError}>✕</Text>
             )}
-            {step.status === "processing" && (
+            {step.status === 'processing' && (
               <ActivityIndicator size="small" color={launchColors.hex_fff} />
             )}
           </View>
           <Text
             style={[
               styles.processingLabel,
-              step.status === "completed" && styles.processingLabelCompleted,
-              step.status === "error" && styles.processingLabelError,
+              step.status === 'completed' && styles.processingLabelCompleted,
+              step.status === 'error' && styles.processingLabelError,
             ]}
           >
             {step.label}

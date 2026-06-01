@@ -3,25 +3,25 @@
  * Main screen for reviewing extracted content before study plan generation.
  */
 
-import { captureSilentFailure } from "../../../utils/silent-failure";
-import React, { useCallback } from "react";
+import { captureSilentFailure } from '../../../utils/silent-failure';
+import React, { useCallback } from 'react';
 import {
   View,
   Text,
   Pressable,
   ScrollView,
   ActivityIndicator,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { useNavigation, useRoute, RouteProp } from "@react-navigation/native";
-import { ContentStudyStackParamList } from "../types";
-import { useContentReview } from "../hooks";
-import { UI_TEXT } from "../constants";
-import { launchColors } from "@theme/tokens/launch-colors";
-import { styles } from "./ContentReviewScreen.styles";
-import { StatusBadge, ContentView, ErrorDisplay } from "./ContentReviewScreen.helpers";
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import { ContentStudyStackParamList } from '../types';
+import { useContentReview } from '../hooks';
+import { UI_TEXT } from '../constants';
+import { launchColors } from '@theme/tokens/launch-colors';
+import { styles } from './ContentReviewScreen.styles';
+import { StatusBadge, ContentView, ErrorDisplay } from './ContentReviewScreen.helpers';
 
-type RouteProps = RouteProp<ContentStudyStackParamList, "ContentReview">;
+type RouteProps = RouteProp<ContentStudyStackParamList, 'ContentReview'>;
 type NavigationProp = {
   navigate: (
     screen: keyof ContentStudyStackParamList,
@@ -56,15 +56,15 @@ export function ContentReviewScreen() {
   const handleGenerate = useCallback(async () => {
     try {
       const result = await generate();
-      navigation.navigate("StudyPlan", {
+      navigation.navigate('StudyPlan', {
         generationId: result.generationId,
         contentId: result.contentId,
       });
     } catch (err) {
       captureSilentFailure(err, {
-        feature: "content-study",
-        operation: "ui-fallback",
-        type: "ui",
+        feature: 'content-study',
+        operation: 'ui-fallback',
+        type: 'ui',
       });
     }
   }, [generate, navigation]);
@@ -145,8 +145,8 @@ export function ContentReviewScreen() {
           <View style={styles.processingNote}>
             <Text style={styles.processingNoteText}>
               {isExtracted
-                ? "AI is analyzing your content..."
-                : "Extracting content from source..."}
+                ? 'AI is analyzing your content...'
+                : 'Extracting content from source...'}
             </Text>
           </View>
         )}

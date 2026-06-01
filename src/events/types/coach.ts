@@ -3,55 +3,55 @@
  */
 
 export interface CoachEventDefinitions {
-  "coach:comeback_activated": {
+  'coach:comeback_activated': {
     userId: string;
     planId: string;
     targetSessions: number;
     bonusMultiplier: number;
     expiresAt: number;
   };
-  "coach:comeback_detected": {
+  'coach:comeback_detected': {
     userId: string;
     previousStreak?: number;
     comebackStreak?: number;
   };
-  "coach:difficulty_adjusted": {
+  'coach:difficulty_adjusted': {
     userId: string;
     newDifficulty: number;
     reason: string;
   };
-  "coach:message_sent": {
+  'coach:message_sent': {
     userId: string;
     messageId: string;
     category: string;
   };
-  "coach:recommendation_accepted": {
+  'coach:recommendation_accepted': {
     userId: string;
     recommendationId: string;
   };
-  "coach:intervention_triggered": {
+  'coach:intervention_triggered': {
     userId: string;
     interventionId: string;
     type: string;
   };
-  "coach:intervention_dismissed": {
+  'coach:intervention_dismissed': {
     userId: string;
     interventionId: string;
     type: string;
   };
-  "coach:intervention_actioned": {
+  'coach:intervention_actioned': {
     userId: string;
     interventionId: string;
     type: string;
     actionLabel: string;
   };
-  "coach:streak_at_risk": {
+  'coach:streak_at_risk': {
     userId: string;
     hoursRemaining?: number;
     riskLevel: string;
     streak?: number;
   };
-  "coach:streak_at_risk_session": {
+  'coach:streak_at_risk_session': {
     userId: string;
     sessionId: string;
     config: {
@@ -69,7 +69,7 @@ export interface CoachEventDefinitions {
     mode?: string;
     strictMode?: boolean;
   };
-  "coach:session_triggered": {
+  'coach:session_triggered': {
     userId: string;
     sessionId: string;
     config: {
@@ -86,32 +86,32 @@ export interface CoachEventDefinitions {
       };
     };
   };
-  "coach:trigger": {
+  'coach:trigger': {
     userId: string;
     trigger?: string;
     triggerType?: string;
     context?: Record<string, unknown>;
     data?: Record<string, unknown>;
   };
-  "coach:session_feedback": {
+  'coach:session_feedback': {
     userId: string;
     sessionId: string;
     duration: number;
     quality: number;
     streakDay: number;
   };
-  "coach:message": {
+  'coach:message': {
     userId: string;
     message: string;
     type: string;
     timestamp: number;
   };
-  "coach:profile_initialized": {
+  'coach:profile_initialized': {
     userId: string;
     profileId: string;
     timestamp: number;
   };
-  "coach:messages_queued": {
+  'coach:messages_queued': {
     userId: string;
     messages: Array<{
       id: string;
@@ -121,14 +121,14 @@ export interface CoachEventDefinitions {
     }>;
     timestamp: number;
   };
-  "coach:memory_created": {
+  'coach:memory_created': {
     userId: string;
     memoryId: string;
     type: string;
     occurredAt: number;
     timestamp: number;
   };
-  "coach:intent": {
+  'coach:intent': {
     userId: string;
     context?: string;
     message?: string;

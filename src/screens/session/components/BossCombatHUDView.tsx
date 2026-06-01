@@ -1,14 +1,14 @@
-import React from "react";
-import { View } from "react-native";
-import Animated, { type AnimatedStyle } from "react-native-reanimated";
-import { Text } from "../../../components/primitives/Text";
-import { Button } from "../../../components/primitives/Button";
-import { useTheme } from "../../../theme";
+import React from 'react';
+import { View } from 'react-native';
+import Animated, { type AnimatedStyle } from 'react-native-reanimated';
+import { Text } from '../../../components/primitives/Text';
+import { Button } from '../../../components/primitives/Button';
+import { useTheme } from '../../../theme';
 
 interface BossCombatHUDViewProps {
   phaseColor: string;
   healthPercent: number;
-  currentPhase: "CALM" | "AGITATED" | "ENRAGED" | "DESPERATE";
+  currentPhase: 'CALM' | 'AGITATED' | 'ENRAGED' | 'DESPERATE';
   currentAttackPattern?: string | null;
   attackName: string;
   showToast: boolean;
@@ -44,7 +44,7 @@ export function BossCombatHUDView({
   return (
     <View
       style={{
-        position: "absolute",
+        position: 'absolute',
         bottom: theme.spacing[8] + theme.spacing[10],
         left: theme.spacing[4],
         right: theme.spacing[4],
@@ -63,7 +63,7 @@ export function BossCombatHUDView({
       {showToast && (
         <View
           style={{
-            position: "absolute",
+            position: 'absolute',
             top: -theme.spacing[10],
             left: 0,
             right: 0,
@@ -71,7 +71,7 @@ export function BossCombatHUDView({
             paddingVertical: theme.spacing[2],
             paddingHorizontal: theme.spacing[3],
             borderRadius: theme.borderRadius.lg,
-            alignItems: "center",
+            alignItems: 'center',
           }}
         >
           <Text variant="bodySmall" color={theme.colors.text.inverse}>
@@ -85,13 +85,13 @@ export function BossCombatHUDView({
           height: theme.spacing[2],
           backgroundColor: theme.colors.background.tertiary,
           borderRadius: theme.borderRadius.full,
-          overflow: "hidden",
+          overflow: 'hidden',
           marginBottom: theme.spacing[2],
         }}
       >
         <View
           style={{
-            height: "100%",
+            height: '100%',
             width: `${healthPercent}%`,
             backgroundColor: phaseColor,
             borderRadius: theme.borderRadius.full,
@@ -100,9 +100,9 @@ export function BossCombatHUDView({
       </View>
       <View
         style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          alignItems: "center",
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
           marginBottom: theme.spacing[2],
         }}
       >
@@ -117,9 +117,9 @@ export function BossCombatHUDView({
           <Text
             style={{
               color: theme.colors.text.inverse,
-              fontWeight: "700",
+              fontWeight: '700',
               fontSize: theme.typography.ui.caption.fontSize ?? 12,
-              textTransform: "uppercase",
+              textTransform: 'uppercase',
             }}
           >
             {currentPhase}
@@ -150,7 +150,7 @@ export function BossCombatHUDView({
       )}
       <Animated.View
         style={[
-          { flexDirection: "row", alignItems: "center", gap: theme.spacing[2] },
+          { flexDirection: 'row', alignItems: 'center', gap: theme.spacing[2] },
           cooldownStyle,
         ]}
       >

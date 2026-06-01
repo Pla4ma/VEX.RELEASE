@@ -4,13 +4,13 @@ import type {
   RecoveryRecord,
   SessionSummary,
   FocusQualityMetrics,
-} from "./types";
-import type { TimerEngine } from "./engines/TimerEngine";
-import type { AntiCheatEngine } from "./antiCheat/AntiCheatEngine";
-import type { SessionRepository } from "./repository/SessionRepository";
-import { createDebugger } from "../utils/debug";
+} from './types';
+import type { TimerEngine } from './engines/TimerEngine';
+import type { AntiCheatEngine } from './antiCheat/AntiCheatEngine';
+import type { SessionRepository } from './repository/SessionRepository';
+import { createDebugger } from '../utils/debug';
 
-const debug = createDebugger("session:orchestrator:accessors");
+const debug = createDebugger('session:orchestrator:accessors');
 
 export interface SessionAccessorHost {
   session: SessionState | null;
@@ -29,7 +29,7 @@ export interface SessionAccessorHost {
 export function getActiveSession(
   orch: SessionAccessorHost,
 ): SessionState | null {
-  debug.info("getActiveSession");
+  debug.info('getActiveSession');
   return orch.session ? { ...orch.session } : null;
 }
 
@@ -54,7 +54,7 @@ export function isSessionActive(orch: SessionAccessorHost): boolean {
 }
 
 export function isPaused(orch: SessionAccessorHost): boolean {
-  return orch.session?.status === "PAUSED";
+  return orch.session?.status === 'PAUSED';
 }
 
 export function getCurrentPurityScore(orch: SessionAccessorHost): number {
@@ -63,7 +63,7 @@ export function getCurrentPurityScore(orch: SessionAccessorHost): number {
 
 export function getPurityLabel(
   orch: SessionAccessorHost,
-): "Elite" | "Good" | "Okay" | "Distracted" {
+): 'Elite' | 'Good' | 'Okay' | 'Distracted' {
   return orch.antiCheatEngine.getPurityLabel();
 }
 
@@ -81,7 +81,7 @@ export function applyStudyQuizBonus(
   orch: SessionAccessorHost,
   correctAnswers: number,
 ): void {
-  if (!orch.session) return;
+  if (!orch.session) {return;}
   orch.session.config = {
     ...orch.session.config,
     quizBonusPoints: Math.max(0, correctAnswers) * 5,
@@ -99,7 +99,7 @@ export function updateFocusQuality(
   orch: SessionAccessorHost,
   quality: number,
 ): void {
-  if (!orch.session) return;
+  if (!orch.session) {return;}
   orch.focusMetrics.overallScore = Math.max(0, Math.min(100, quality));
   orch.focusMetrics.calculatedAt = Date.now();
   orch.session.updatedAt = Date.now();
@@ -111,7 +111,7 @@ export function addDocument(
   orch: SessionAccessorHost,
   documentId: string,
 ): void {
-  if (!orch.session) return;
+  if (!orch.session) {return;}
   const docs: string[] = (orch.session.metadata?.documents as string[]) ?? [];
   if (!docs.includes(documentId)) {
     docs.push(documentId);
@@ -129,7 +129,7 @@ export function removeDocument(
   orch: SessionAccessorHost,
   documentId: string,
 ): void {
-  if (!orch.session) return;
+  if (!orch.session) {return;}
   const docs: string[] = (orch.session.metadata?.documents as string[]) ?? [];
   const updated = docs.filter((id) => id !== documentId);
   orch.session.metadata = {
@@ -145,7 +145,7 @@ export async function getSessionHistory(
   orch: SessionAccessorHost,
   limit: number = 10,
 ): Promise<SessionState[]> {
-  if (!orch.userId) return [];
+  if (!orch.userId) {return [];}
   try {
     const history = await orch.repository.getSessionHistory(limit);
     return history.map(
@@ -153,9 +153,9 @@ export async function getSessionHistory(
         ({
           id: entry.sessionId,
           userId: orch.userId ?? entry.userId,
-          config: entry.config as SessionState["config"],
-          status: entry.status as SessionState["status"],
-          phase: "FOCUS" as const,
+          config: entry.config as SessionState['config'],
+          status: entry.status as SessionState['status'],
+          phase: 'FOCUS' as const,
           actualDuration: entry.duration ?? 0,
           effectiveDuration: entry.effectiveDuration ?? 0,
           completionPercentage: entry.completionPercentage ?? 0,
@@ -172,7 +172,7 @@ export async function getSessionHistory(
     );
   } catch (err) {
     debug.error(
-      "Failed to fetch session history: %s",
+      'Failed to fetch session history: %s',
       err instanceof Error ? err : new Error(String(err)),
     );
     return [];
@@ -185,7 +185,7 @@ export function getSessionStats(orch: SessionAccessorHost): {
   averageDuration: number;
   completionRate: number;
 } {
-  const completed = orch.session?.status === "COMPLETED" ? 1 : 0;
+  const completed = orch.session?.status === 'COMPLETED' ? 1 : 0;
   const duration = orch.session?.actualDuration ?? 0;
   return {
     totalSessions: orch.lastSessionSummary ? 1 : 0,

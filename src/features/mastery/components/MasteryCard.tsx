@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { View } from "react-native";
-import { Button, Text } from "../../../components/primitives";
+import React, { useEffect, useState } from 'react';
+import { View } from 'react-native';
+import { Button, Text } from '../../../components/primitives';
 import {
   getPremiumCardStyle,
   withAlpha,
-} from "../../../components/premiumStyles";
-import { useTheme } from "../../../theme";
-import { MasteryService } from "../service";
-import type { MasteryState } from "../types";
-import { MasteryRankBadge } from "./MasteryRankBadge";
-import { TechniqueBar } from "./TechniqueBar";
-import { TECHNIQUES, difficultyColors } from "./mastery-card-constants";
+} from '../../../components/premiumStyles';
+import { useTheme } from '../../../theme';
+import { MasteryService } from '../service';
+import type { MasteryState } from '../types';
+import { MasteryRankBadge } from './MasteryRankBadge';
+import { TechniqueBar } from './TechniqueBar';
+import { TECHNIQUES, difficultyColors } from './mastery-card-constants';
 
 type Props = {
   userId: string;
@@ -47,7 +47,7 @@ export function MasteryCard({
         backgroundColor: theme.colors.background.secondary,
         padding: theme.spacing[4],
         gap: theme.spacing[4],
-        ...getPremiumCardStyle("medium"),
+        ...getPremiumCardStyle('medium'),
       }}
     >
       <View style={{ gap: theme.spacing[2] }}>
@@ -68,7 +68,7 @@ export function MasteryCard({
             label={item.label}
             value={cardState.techniques[item.key]}
             color={
-              item.key === "durationMastery"
+              item.key === 'durationMastery'
                 ? theme.colors.primary[500]
                 : item.color
             }
@@ -100,9 +100,9 @@ export function MasteryCard({
             >
               <View
                 style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "flex-start",
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'flex-start',
                   gap: theme.spacing[2],
                 }}
               >
@@ -136,7 +136,7 @@ export function MasteryCard({
                   style={{
                     height: 6,
                     borderRadius: 3,
-                    overflow: "hidden",
+                    overflow: 'hidden',
                     backgroundColor: theme.colors.background.tertiary,
                   }}
                 >
@@ -150,9 +150,9 @@ export function MasteryCard({
                 </View>
                 <View
                   style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems: "center",
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
                   }}
                 >
                   <Text variant="caption" color={theme.colors.text.secondary}>
@@ -163,7 +163,7 @@ export function MasteryCard({
                   </Text>
                 </View>
               </View>
-              {challenge.status === "COMPLETED" ? (
+              {challenge.status === 'COMPLETED' ? (
                 <Button
                   size="sm"
                   variant="outline"

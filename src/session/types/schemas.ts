@@ -1,5 +1,5 @@
-import { z } from "zod";
-import { SessionModeSchema } from "../modes";
+import { z } from 'zod';
+import { SessionModeSchema } from '../modes';
 import {
   SessionStatusSchema,
   SessionPhaseSchema,
@@ -7,7 +7,7 @@ import {
   StorageStatusSchema,
   SyncStatusSchema,
   AntiCheatStatusSchema,
-} from "./enums";
+} from './enums';
 
 export { SessionStatusSchema, SessionPhaseSchema, ConflictStatusSchema };
 export { StorageStatusSchema, SyncStatusSchema, AntiCheatStatusSchema };
@@ -21,7 +21,7 @@ export {
   SessionMetricsSchema,
   SessionUIStateSchema,
   SessionNotificationTypeSchema,
-} from "./config-schemas";
+} from './config-schemas';
 export type {
   SessionConfig,
   SessionPreset,
@@ -31,7 +31,7 @@ export type {
   SessionMetrics,
   SessionUIState,
   SessionNotificationType,
-} from "./config-schemas";
+} from './config-schemas';
 
 export const SessionProgressSchema = z.object({
   elapsedTime: z.number().default(0),
@@ -76,9 +76,9 @@ export const SessionOutcomeSchema = z.object({
 export type SessionOutcome = z.infer<typeof SessionOutcomeSchema>;
 
 export const SessionSyncMetaSchema = z.object({
-  conflictStatus: ConflictStatusSchema.default("NONE"),
-  storageStatus: StorageStatusSchema.default("HEALTHY"),
-  syncStatus: SyncStatusSchema.default("IDLE"),
+  conflictStatus: ConflictStatusSchema.default('NONE'),
+  storageStatus: StorageStatusSchema.default('HEALTHY'),
+  syncStatus: SyncStatusSchema.default('IDLE'),
   lastSyncAt: z.number().optional(),
   syncedAt: z.number().optional(),
   isDirty: z.boolean().default(false),
@@ -87,7 +87,7 @@ export const SessionSyncMetaSchema = z.object({
   maxRecoveryAttempts: z.number().default(3),
   lastRecoveryAt: z.number().optional(),
   canRecover: z.boolean().default(false),
-  antiCheatStatus: AntiCheatStatusSchema.default("CLEAN"),
+  antiCheatStatus: AntiCheatStatusSchema.default('CLEAN'),
   antiCheatFlags: z.array(z.string()).default([]),
   deviceId: z.string().optional(),
   appVersion: z.string().optional(),
@@ -96,7 +96,7 @@ export const SessionSyncMetaSchema = z.object({
 });
 export type SessionSyncMeta = z.infer<typeof SessionSyncMetaSchema>;
 
-import { SessionConfigSchema } from "./config-schemas";
+import { SessionConfigSchema } from './config-schemas';
 
 export const SessionStateSchema = z
   .object({
@@ -163,7 +163,7 @@ export const SessionSummarySchema = z.object({
   vsAverage: z.number(),
   vsBest: z.number(),
   reflection: z.string().optional(),
-  mood: z.enum(["GREAT", "GOOD", "OKAY", "STRUGGLING", "DIFFICULT"]).optional(),
+  mood: z.enum(['GREAT', 'GOOD', 'OKAY', 'STRUGGLING', 'DIFFICULT']).optional(),
   isPerfect: z.boolean().optional(),
   completedAt: z.number().optional(),
 });
@@ -173,15 +173,15 @@ export const SessionEventSchema = z.object({
   id: z.string().uuid(),
   sessionId: z.string().uuid(),
   type: z.enum([
-    "SESSION_STARTED",
-    "SESSION_PAUSED",
-    "SESSION_RESUMED",
-    "SESSION_COMPLETED",
-    "SESSION_ABANDONED",
-    "FOCUS_QUALITY_UPDATE",
-    "INTERRUPTION_DETECTED",
-    "PHASE_CHANGE",
-    "MODE_BONUS_EARNED",
+    'SESSION_STARTED',
+    'SESSION_PAUSED',
+    'SESSION_RESUMED',
+    'SESSION_COMPLETED',
+    'SESSION_ABANDONED',
+    'FOCUS_QUALITY_UPDATE',
+    'INTERRUPTION_DETECTED',
+    'PHASE_CHANGE',
+    'MODE_BONUS_EARNED',
   ]),
   timestamp: z.number(),
   data: z.record(z.unknown()).optional(),

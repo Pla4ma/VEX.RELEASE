@@ -8,7 +8,7 @@
  * Check challenges system health
  */
 export async function checkChallengesHealth(): Promise<{
-  status: "healthy" | "degraded" | "unhealthy";
+  status: 'healthy' | 'degraded' | 'unhealthy';
   issues: string[];
   metrics: {
     activeChallenges: number;
@@ -27,10 +27,10 @@ export async function checkChallengesHealth(): Promise<{
 
   const status =
     issues.length === 0
-      ? "healthy"
+      ? 'healthy'
       : issues.length < 3
-        ? "degraded"
-        : "unhealthy";
+        ? 'degraded'
+        : 'unhealthy';
 
   return { status, issues, metrics };
 }

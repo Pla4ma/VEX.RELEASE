@@ -1,19 +1,19 @@
-import React from "react";
-import { useWindowDimensions, View } from "react-native";
-import Animated from "react-native-reanimated";
-import { Text } from "../../../components/primitives";
-import { useReducedMotion } from "../../../hooks/useReducedMotion";
-import { useTheme } from "../../../theme";
+import React from 'react';
+import { useWindowDimensions, View } from 'react-native';
+import Animated from 'react-native-reanimated';
+import { Text } from '../../../components/primitives';
+import { useReducedMotion } from '../../../hooks/useReducedMotion';
+import { useTheme } from '../../../theme';
 import {
   BurstParticle,
   hexToRgba,
   PARTICLE_COUNT,
-} from "./grade-reveal-helpers";
+} from './grade-reveal-helpers';
 import {
   useGradeRevealSequence,
   type GradeRevealAnimationProps,
-} from "./grade-reveal-logic";
-import { launchColors } from "@theme/tokens/launch-colors";
+} from './grade-reveal-logic';
+import { launchColors } from '@theme/tokens/launch-colors';
 
 export function GradeRevealAnimation({
   chainCount,
@@ -49,12 +49,12 @@ export function GradeRevealAnimation({
       pointerEvents="none"
       style={[
         {
-          alignItems: "center",
+          alignItems: 'center',
           backgroundColor: launchColors.hex_000000,
           bottom: 0,
-          justifyContent: "center",
+          justifyContent: 'center',
           left: 0,
-          position: "absolute",
+          position: 'absolute',
           right: 0,
           top: 0,
           zIndex: theme.zIndex.modal,
@@ -68,15 +68,15 @@ export function GradeRevealAnimation({
             backgroundColor: hexToRgba(gradeColor, 1),
             bottom: 0,
             left: 0,
-            position: "absolute",
+            position: 'absolute',
             right: 0,
             top: 0,
           },
           flashStyle,
         ]}
       />
-      <View style={{ alignItems: "center", justifyContent: "center" }}>
-        {gradeLetter === "S"
+      <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+        {gradeLetter === 'S'
           ? Array.from({ length: PARTICLE_COUNT }).map((_, index) => (
               <BurstParticle
                 key={`grade-reveal-particle-${index}`}
@@ -91,10 +91,10 @@ export function GradeRevealAnimation({
             color={gradeColor}
             style={{
               fontSize: 156,
-              fontVariant: ["tabular-nums"],
+              fontVariant: ['tabular-nums'],
               fontWeight: theme.fontWeights.heavy,
               lineHeight: 168,
-              textAlign: "center",
+              textAlign: 'center',
             }}
           >
             {gradeLetter}
@@ -106,7 +106,7 @@ export function GradeRevealAnimation({
                 fontSize: 16,
                 fontWeight: theme.fontWeights.medium,
                 marginTop: theme.spacing[2],
-                textAlign: "center",
+                textAlign: 'center',
               }}
             >
               {modeMessage}

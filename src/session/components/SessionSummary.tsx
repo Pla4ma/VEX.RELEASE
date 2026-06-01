@@ -1,16 +1,16 @@
-import React, { useState } from "react";
-import { View, Text, Pressable, ScrollView } from "react-native";
+import React, { useState } from 'react';
+import { View, Text, Pressable, ScrollView } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withSpring,
-} from "react-native-reanimated";
-import type { SessionSummary as SessionSummaryType } from "../types";
-import { getGrade, type MoodType } from "./SessionSummary.helpers";
-import { SessionSummaryMoodSelector } from "./SessionSummaryMoodSelector";
-import { SessionSummaryStats } from "./SessionSummaryStats";
-import styles from "./SessionSummary.styles";
-import { buttonTap } from "../../utils/haptics";
+} from 'react-native-reanimated';
+import type { SessionSummary as SessionSummaryType } from '../types';
+import { getGrade, type MoodType } from './SessionSummary.helpers';
+import { SessionSummaryMoodSelector } from './SessionSummaryMoodSelector';
+import { SessionSummaryStats } from './SessionSummaryStats';
+import styles from './SessionSummary.styles';
+import { buttonTap } from '../../utils/haptics';
 
 interface SessionSummaryProps {
   summary: SessionSummaryType;
@@ -25,7 +25,7 @@ export const SessionSummary: React.FC<SessionSummaryProps> = ({
   onShare,
   onStartNew,
 }) => {
-  const [reflection, setReflection] = useState("");
+  const [reflection, setReflection] = useState('');
   const [mood, setMood] = useState<MoodType>(null);
   const scaleAnim = useSharedValue(0);
   React.useEffect(() => {
@@ -41,9 +41,9 @@ export const SessionSummary: React.FC<SessionSummaryProps> = ({
         <View style={styles.header}>
           <Text style={styles.title}>Session Complete! 🎉</Text>
           <Text style={styles.subtitle}>
-            {summary.status === "COMPLETED"
-              ? "Great job staying focused!"
-              : "Session ended"}
+            {summary.status === 'COMPLETED'
+              ? 'Great job staying focused!'
+              : 'Session ended'}
           </Text>
         </View>
 

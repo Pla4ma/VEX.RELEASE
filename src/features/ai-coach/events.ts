@@ -11,7 +11,7 @@ export type {
   RecommendationGeneratedEvent,
   DifficultyAdjustedEvent,
   CoachPreferencesUpdatedEvent,
-} from "./event-schemas";
+} from './event-schemas';
 
 export {
   CoachMessageGeneratedEventSchema,
@@ -26,7 +26,7 @@ export {
   RecommendationGeneratedEventSchema,
   DifficultyAdjustedEventSchema,
   CoachPreferencesUpdatedEventSchema,
-} from "./event-schemas";
+} from './event-schemas';
 
 export {
   createCoachMessageGeneratedEvent,
@@ -36,7 +36,7 @@ export {
   createBehaviorSignalDetectedEvent,
   createStateTransitionEvent,
   createInterventionExecutedEvent,
-} from "./event-factories";
+} from './event-factories';
 
 import type {
   CoachMessageGeneratedEvent,
@@ -51,7 +51,7 @@ import type {
   RecommendationGeneratedEvent,
   DifficultyAdjustedEvent,
   CoachPreferencesUpdatedEvent,
-} from "./event-schemas";
+} from './event-schemas';
 
 import {
   CoachMessageGeneratedEventSchema,
@@ -66,21 +66,21 @@ import {
   RecommendationGeneratedEventSchema,
   DifficultyAdjustedEventSchema,
   CoachPreferencesUpdatedEventSchema,
-} from "./event-schemas";
+} from './event-schemas';
 
 export const AI_COACH_EVENT_CHANNELS = {
-  MESSAGE_GENERATED: "coach:messageGenerated",
-  MESSAGE_DELIVERED: "coach:messageDelivered",
-  MESSAGE_ACTION_TAKEN: "coach:messageActionTaken",
-  STATE_CHANGED: "coach:stateChanged",
-  INTERVENTION_TRIGGERED: "coach:interventionTriggered",
-  BEHAVIOR_SIGNAL_DETECTED: "coach:behaviorSignalDetected",
-  STREAK_RISK_DETECTED: "coach:streakRiskDetected",
-  COMEBACK_ACTIVATED: "coach:comebackActivated",
-  COMEBACK_COMPLETED: "coach:comebackCompleted",
-  RECOMMENDATION_GENERATED: "coach:recommendationGenerated",
-  DIFFICULTY_ADJUSTED: "coach:difficultyAdjusted",
-  PREFERENCES_UPDATED: "coach:preferencesUpdated",
+  MESSAGE_GENERATED: 'coach:messageGenerated',
+  MESSAGE_DELIVERED: 'coach:messageDelivered',
+  MESSAGE_ACTION_TAKEN: 'coach:messageActionTaken',
+  STATE_CHANGED: 'coach:stateChanged',
+  INTERVENTION_TRIGGERED: 'coach:interventionTriggered',
+  BEHAVIOR_SIGNAL_DETECTED: 'coach:behaviorSignalDetected',
+  STREAK_RISK_DETECTED: 'coach:streakRiskDetected',
+  COMEBACK_ACTIVATED: 'coach:comebackActivated',
+  COMEBACK_COMPLETED: 'coach:comebackCompleted',
+  RECOMMENDATION_GENERATED: 'coach:recommendationGenerated',
+  DIFFICULTY_ADJUSTED: 'coach:difficultyAdjusted',
+  PREFERENCES_UPDATED: 'coach:preferencesUpdated',
 } as const;
 
 export interface AICoachEventPayloadMap {
@@ -175,16 +175,16 @@ export type AICoachEventHandler<T extends keyof AICoachEventPayloadMap> = (
 ) => void | Promise<void>;
 
 export interface AICoachEventHandlers {
-  onMessageGenerated?: AICoachEventHandler<"coach:messageGenerated">;
-  onMessageDelivered?: AICoachEventHandler<"coach:messageDelivered">;
-  onMessageActionTaken?: AICoachEventHandler<"coach:messageActionTaken">;
-  onStateChanged?: AICoachEventHandler<"coach:stateChanged">;
-  onInterventionTriggered?: AICoachEventHandler<"coach:interventionTriggered">;
-  onBehaviorSignalDetected?: AICoachEventHandler<"coach:behaviorSignalDetected">;
-  onStreakRiskDetected?: AICoachEventHandler<"coach:streakRiskDetected">;
-  onComebackActivated?: AICoachEventHandler<"coach:comebackActivated">;
-  onComebackCompleted?: AICoachEventHandler<"coach:comebackCompleted">;
-  onRecommendationGenerated?: AICoachEventHandler<"coach:recommendationGenerated">;
-  onDifficultyAdjusted?: AICoachEventHandler<"coach:difficultyAdjusted">;
-  onPreferencesUpdated?: AICoachEventHandler<"coach:preferencesUpdated">;
+  onMessageGenerated?: AICoachEventHandler<'coach:messageGenerated'>;
+  onMessageDelivered?: AICoachEventHandler<'coach:messageDelivered'>;
+  onMessageActionTaken?: AICoachEventHandler<'coach:messageActionTaken'>;
+  onStateChanged?: AICoachEventHandler<'coach:stateChanged'>;
+  onInterventionTriggered?: AICoachEventHandler<'coach:interventionTriggered'>;
+  onBehaviorSignalDetected?: AICoachEventHandler<'coach:behaviorSignalDetected'>;
+  onStreakRiskDetected?: AICoachEventHandler<'coach:streakRiskDetected'>;
+  onComebackActivated?: AICoachEventHandler<'coach:comebackActivated'>;
+  onComebackCompleted?: AICoachEventHandler<'coach:comebackCompleted'>;
+  onRecommendationGenerated?: AICoachEventHandler<'coach:recommendationGenerated'>;
+  onDifficultyAdjusted?: AICoachEventHandler<'coach:difficultyAdjusted'>;
+  onPreferencesUpdated?: AICoachEventHandler<'coach:preferencesUpdated'>;
 }

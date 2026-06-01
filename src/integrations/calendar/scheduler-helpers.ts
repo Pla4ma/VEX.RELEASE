@@ -1,4 +1,4 @@
-import type { FreeBusyInfo, CalendarGap } from "./types";
+import type { FreeBusyInfo, CalendarGap } from './types';
 
 export interface UserPatterns {
   preferredStartTimes: number[];
@@ -10,7 +10,7 @@ export interface UserPatterns {
 export function scoreGapQuality(
   patterns: UserPatterns,
   slot: { start: Date; end: Date; duration: number },
-): "EXCELLENT" | "GOOD" | "FAIR" | "POOR" {
+): 'EXCELLENT' | 'GOOD' | 'FAIR' | 'POOR' {
   const startHour = slot.start.getHours();
   const dayOfWeek = slot.start.getDay();
   let score = 0;
@@ -32,15 +32,15 @@ export function scoreGapQuality(
     score += 2;
   }
   if (score >= 6) {
-    return "EXCELLENT";
+    return 'EXCELLENT';
   }
   if (score >= 4) {
-    return "GOOD";
+    return 'GOOD';
   }
   if (score >= 2) {
-    return "FAIR";
+    return 'FAIR';
   }
-  return "POOR";
+  return 'POOR';
 }
 
 export function generateGapReason(
@@ -48,23 +48,23 @@ export function generateGapReason(
   quality: string,
 ): string {
   const hour = slot.start.getHours();
-  const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   const day = dayNames[slot.start.getDay()];
   const timeLabels: Record<number, string> = {
-    6: "Early morning",
-    9: "Morning",
-    12: "Midday",
-    14: "Afternoon",
-    17: "Late afternoon",
-    20: "Evening",
-    22: "Night",
+    6: 'Early morning',
+    9: 'Morning',
+    12: 'Midday',
+    14: 'Afternoon',
+    17: 'Late afternoon',
+    20: 'Evening',
+    22: 'Night',
   };
   const timeLabel = timeLabels[hour] || `${hour}:00`;
-  if (quality === "EXCELLENT") {
+  if (quality === 'EXCELLENT') {
     return `Your peak performance time (${day} ${timeLabel})`;
-  } else if (quality === "GOOD") {
+  } else if (quality === 'GOOD') {
     return `Good focus time (${day} ${timeLabel})`;
-  } else if (quality === "FAIR") {
+  } else if (quality === 'FAIR') {
     return `Available slot (${day} ${timeLabel})`;
   } else {
     return `Short window (${day} ${timeLabel})`;
@@ -81,7 +81,7 @@ export function calculateConfidence(gap: CalendarGap, userLevel: string): number
   };
   confidence += qualityBoosts[gap.quality] || 0;
   const idealDuration =
-    userLevel === "beginner" ? 25 : userLevel === "advanced" ? 45 : 30;
+    userLevel === 'beginner' ? 25 : userLevel === 'advanced' ? 45 : 30;
   const durationDiff = Math.abs(gap.duration - idealDuration);
   if (durationDiff <= 5) {
     confidence += 0.2;

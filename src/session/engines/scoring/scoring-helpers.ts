@@ -1,11 +1,11 @@
-import type { SessionState, FocusQualityMetrics } from "../../types";
+import type { SessionState, FocusQualityMetrics } from '../../types';
 import {
   getSessionModeConfig,
   getSprintChainMultiplier,
   resolveSessionMode,
   SessionMode,
-} from "../../modes";
-import { BonusCalculator } from "../scoring/BonusCalculator";
+} from '../../modes';
+import { BonusCalculator } from '../scoring/BonusCalculator';
 
 export const QUALITY_THRESHOLDS = {
   EXCELLENT: 95,
@@ -16,11 +16,11 @@ export const QUALITY_THRESHOLDS = {
 } as const;
 
 export function calculateTimeMultiplier(completionPercentage: number): number {
-  if (completionPercentage >= 100) return 1.5;
-  if (completionPercentage >= 90) return 1.3;
-  if (completionPercentage >= 75) return 1.15;
-  if (completionPercentage >= 50) return 1;
-  if (completionPercentage >= 25) return 0.7;
+  if (completionPercentage >= 100) {return 1.5;}
+  if (completionPercentage >= 90) {return 1.3;}
+  if (completionPercentage >= 75) {return 1.15;}
+  if (completionPercentage >= 50) {return 1;}
+  if (completionPercentage >= 25) {return 0.7;}
   return 0.5;
 }
 
@@ -29,11 +29,11 @@ export function calculateQualityMultiplier(
   passThreshold: number = QUALITY_THRESHOLDS.AVERAGE,
 ): number {
   const score = focusMetrics.overallScore;
-  if (score >= QUALITY_THRESHOLDS.EXCELLENT) return 1.5;
-  if (score >= QUALITY_THRESHOLDS.GOOD) return 1.3;
-  if (score >= passThreshold) return 1.1;
-  if (score >= QUALITY_THRESHOLDS.POOR) return 0.9;
-  if (score >= QUALITY_THRESHOLDS.BAD) return 0.7;
+  if (score >= QUALITY_THRESHOLDS.EXCELLENT) {return 1.5;}
+  if (score >= QUALITY_THRESHOLDS.GOOD) {return 1.3;}
+  if (score >= passThreshold) {return 1.1;}
+  if (score >= QUALITY_THRESHOLDS.POOR) {return 0.9;}
+  if (score >= QUALITY_THRESHOLDS.BAD) {return 0.7;}
   return 0.5;
 }
 
@@ -58,7 +58,7 @@ export function calculateModeBonus(
     );
   }
   if (mode === SessionMode.CREATIVE)
-    return session.config.creativeMoodBonus ?? 0;
+    {return session.config.creativeMoodBonus ?? 0;}
   if (mode === SessionMode.SPRINT) {
     const chainMultiplier = getSprintChainMultiplier(
       session.config.sprintChainCount ?? 1,
@@ -70,7 +70,7 @@ export function calculateModeBonus(
 
 function getCompletedQuizBonus(session: SessionState): number {
   const raw = session.metadata?.studyQuizCorrectAnswers;
-  return typeof raw === "number" ? Math.max(0, raw * 5) : 0;
+  return typeof raw === 'number' ? Math.max(0, raw * 5) : 0;
 }
 
 export function calculateComebackBonus(
@@ -82,7 +82,7 @@ export function calculateComebackBonus(
   penaltyMultiplier: number,
   comebackMultiplier: number,
 ): number {
-  if (comebackMultiplier <= 1) return 0;
+  if (comebackMultiplier <= 1) {return 0;}
   const subtotal =
     basePoints *
       timeMultiplier *
@@ -105,7 +105,7 @@ export function calculatePausePenalty(
 
 export function calculateModePausePenalty(session: SessionState): number {
   const mode = resolveSessionMode(session.config.sessionMode);
-  if (mode !== SessionMode.CHALLENGE) return 0;
+  if (mode !== SessionMode.CHALLENGE) {return 0;}
   return session.pausedTime > 30000
     ? Math.max(30, (session.baseScore ?? 0) * 0.25)
     : 0;
@@ -118,18 +118,18 @@ export function calculateInterruptionPenalty(interruptions: number): number {
 export function calculateQualityPenalty(
   focusMetrics: FocusQualityMetrics,
 ): number {
-  if (focusMetrics.overallScore < QUALITY_THRESHOLDS.BAD) return 30;
-  if (focusMetrics.overallScore < QUALITY_THRESHOLDS.POOR) return 15;
+  if (focusMetrics.overallScore < QUALITY_THRESHOLDS.BAD) {return 30;}
+  if (focusMetrics.overallScore < QUALITY_THRESHOLDS.POOR) {return 15;}
   return 0;
 }
 
 export function calculateAntiCheatPenalty(session: SessionState): number {
   switch (session.antiCheatStatus) {
-    case "FAILED":
+    case 'FAILED':
       return session.baseScore * 0.5;
-    case "FLAGGED":
+    case 'FLAGGED':
       return session.baseScore * 0.2;
-    case "WARNING":
+    case 'WARNING':
       return session.baseScore * 0.05;
     default:
       return 0;
@@ -140,7 +140,7 @@ export function calculateConsistencyScore(
   interruptions: Array<{ duration: number }>,
   totalDuration: number,
 ): number {
-  if (interruptions.length === 0) return 100;
+  if (interruptions.length === 0) {return 100;}
   const interruptionPenalty = interruptions.length * 10;
   const totalInterruptionTime = interruptions.reduce(
     (sum, i) => sum + i.duration,
@@ -153,7 +153,7 @@ export function calculateConsistencyScore(
 export function calculateRecoveryScore(
   interruptions: Array<{ autoRecovered?: boolean }>,
 ): number {
-  if (interruptions.length === 0) return 100;
+  if (interruptions.length === 0) {return 100;}
   const recoveredCount = interruptions.filter((i) => i.autoRecovered).length;
   return Math.round((recoveredCount / interruptions.length) * 100);
 }

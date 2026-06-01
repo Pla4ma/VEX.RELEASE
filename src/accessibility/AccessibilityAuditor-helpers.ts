@@ -2,13 +2,13 @@ import type {
   AccessibilityAuditResult,
   AccessibilityIssue,
   AuditElement,
-} from "./AccessibilityAuditor-types";
+} from './AccessibilityAuditor-types';
 
 export function makeIssue(
   id: string,
-  type: AccessibilityIssue["type"],
-  category: AccessibilityIssue["category"],
-  severity: AccessibilityIssue["severity"],
+  type: AccessibilityIssue['type'],
+  category: AccessibilityIssue['category'],
+  severity: AccessibilityIssue['severity'],
   message: string,
   recommendation: string,
   wcagGuideline: string,
@@ -81,10 +81,10 @@ export function createAuditResult(
   failedChecks: string[],
 ): AccessibilityAuditResult {
   const summary = {
-    critical: issues.filter((i) => i.severity === "critical").length,
-    major: issues.filter((i) => i.severity === "major").length,
-    moderate: issues.filter((i) => i.severity === "moderate").length,
-    minor: issues.filter((i) => i.severity === "minor").length,
+    critical: issues.filter((i) => i.severity === 'critical').length,
+    major: issues.filter((i) => i.severity === 'major').length,
+    moderate: issues.filter((i) => i.severity === 'moderate').length,
+    minor: issues.filter((i) => i.severity === 'minor').length,
   };
   const criticalWeight = 10;
   const majorWeight = 5;
@@ -113,7 +113,7 @@ export function createPassingResult(
   return {
     score: 100,
     issues: [],
-    passedChecks: ["no-audit-required"],
+    passedChecks: ['no-audit-required'],
     failedChecks: [],
     summary: { critical: 0, major: 0, moderate: 0, minor: 0 },
     timestamp: Date.now(),
@@ -123,11 +123,11 @@ export function createPassingResult(
 export function getComponentDisplayName(
   component: AuditElement,
 ): string | undefined {
-  if (typeof component.type === "string") return component.type;
+  if (typeof component.type === 'string') {return component.type;}
   return component.type?.displayName;
 }
 
 export function getElementName(element: AuditElement): string | undefined {
-  if (typeof element.type === "string") return element.type;
+  if (typeof element.type === 'string') {return element.type;}
   return element.type?.displayName;
 }

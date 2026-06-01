@@ -1,14 +1,14 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import * as Sentry from "@sentry/react-native";
-import * as service from "./service";
-import { useAuthStore } from "../../store/authStore";
-import { saveUserProfile } from "../../store/authProfileStorage";
-import { setSentryUser } from "../../config/sentry";
-import { initializeServicesAfterAuth } from "../../store/authStoreIntegrations";
-import type { AuthCredentials, SignUpMetadata, User } from "./types";
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import * as Sentry from '@sentry/react-native';
+import * as service from './service';
+import { useAuthStore } from '../../store/authStore';
+import { saveUserProfile } from '../../store/authProfileStorage';
+import { setSentryUser } from '../../config/sentry';
+import { initializeServicesAfterAuth } from '../../store/authStoreIntegrations';
+import type { AuthCredentials, SignUpMetadata, User } from './types';
 
 const AUTH_QUERY_KEYS = {
-  currentUser: ["auth", "currentUser"] as const,
+  currentUser: ['auth', 'currentUser'] as const,
 };
 
 export function useCurrentUser() {
@@ -24,7 +24,7 @@ export function useCurrentUser() {
 
 function setupUserServices(user: User): void {
   saveUserProfile(user).catch((err) => {
-    Sentry.captureException(err, { tags: { feature: "auth-save-profile" } });
+    Sentry.captureException(err, { tags: { feature: 'auth-save-profile' } });
   });
   setSentryUser(user.id, user.email, user.username);
   initializeServicesAfterAuth(user);
@@ -51,7 +51,7 @@ export function useSignUp() {
       queryClient.invalidateQueries({ queryKey: AUTH_QUERY_KEYS.currentUser });
     },
     onError: (error) => {
-      Sentry.captureException(error, { tags: { feature: "auth-signup" } });
+      Sentry.captureException(error, { tags: { feature: 'auth-signup' } });
     },
   });
 }
@@ -71,7 +71,7 @@ export function useSignIn() {
       queryClient.invalidateQueries({ queryKey: AUTH_QUERY_KEYS.currentUser });
     },
     onError: (error) => {
-      Sentry.captureException(error, { tags: { feature: "auth-signin" } });
+      Sentry.captureException(error, { tags: { feature: 'auth-signin' } });
     },
   });
 }
@@ -87,7 +87,7 @@ export function useSignOut() {
       await logout();
     },
     onError: (error) => {
-      Sentry.captureException(error, { tags: { feature: "auth-logout" } });
+      Sentry.captureException(error, { tags: { feature: 'auth-logout' } });
     },
   });
 }
@@ -96,7 +96,7 @@ export function useResetPassword() {
   return useMutation({
     mutationFn: (email: string) => service.resetPassword(email),
     onError: (error) => {
-      Sentry.captureException(error, { tags: { feature: "auth-reset-password" } });
+      Sentry.captureException(error, { tags: { feature: 'auth-reset-password' } });
     },
   });
 }
@@ -105,7 +105,7 @@ export function useUpdatePassword() {
   return useMutation({
     mutationFn: (newPassword: string) => service.updatePassword(newPassword),
     onError: (error) => {
-      Sentry.captureException(error, { tags: { feature: "auth-update-password" } });
+      Sentry.captureException(error, { tags: { feature: 'auth-update-password' } });
     },
   });
 }
@@ -115,7 +115,7 @@ export function useResendVerification() {
     mutationFn: (email: string) => service.resendVerification(email),
     onError: (error) => {
       Sentry.captureException(error, {
-        tags: { feature: "auth-resend-verification" },
+        tags: { feature: 'auth-resend-verification' },
       });
     },
   });

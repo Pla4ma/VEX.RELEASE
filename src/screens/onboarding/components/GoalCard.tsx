@@ -1,5 +1,5 @@
-import React from "react";
-import { Pressable } from "react-native";
+import React from 'react';
+import { Pressable } from 'react-native';
 import Animated, {
   FadeInUp,
   useAnimatedStyle,
@@ -7,11 +7,11 @@ import Animated, {
   useSharedValue,
   withTiming,
   withSequence,
-} from "react-native-reanimated";
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import type { OnboardingGoal } from "./OnboardingChooseGoal";
+} from 'react-native-reanimated';
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import type { OnboardingGoal } from './OnboardingChooseGoal';
 
 interface GoalCardProps {
   goal: OnboardingGoal;
@@ -53,7 +53,7 @@ export function GoalCard({
       >
         <Box
           p="lg"
-          borderRadius={theme.borderRadius["2xl"]}
+          borderRadius={theme.borderRadius['2xl']}
           bg={
             isSelected
               ? `${theme.colors.primary[500]}15`
@@ -71,8 +71,8 @@ export function GoalCard({
           <Box gap="xs">
             <Text
               variant="h4"
-              color={isSelected ? "primary.DEFAULT" : "text.primary"}
-              fontWeight={isSelected ? "700" : "600"}
+              color={isSelected ? 'primary.DEFAULT' : 'text.primary'}
+              fontWeight={isSelected ? '700' : '600'}
             >
               {goal.title}
             </Text>
@@ -104,7 +104,7 @@ export function GoalCard({
           >
             {isSelected && (
               <Text fontSize={14} color={theme.colors.text.inverse}>
-                {"\u2713"}
+                {'\u2713'}
               </Text>
             )}
           </Box>

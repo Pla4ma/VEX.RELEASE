@@ -1,15 +1,15 @@
-import React, { useCallback } from "react";
-import { View } from "react-native";
+import React, { useCallback } from 'react';
+import { View } from 'react-native';
 
-import { Box } from "../../../components/primitives/Box";
-import { useOnboardingStore } from "../store";
-import { useOnboardingProgress } from "../store-hooks";
-import type { FocusGoal, MotivationProfileType } from "../schemas";
-import { goToNextStep, goToPreviousStep, completeOnboarding } from "../service";
-import { WelcomeScreen } from "./WelcomeScreen";
-import { MotivationScreen } from "./MotivationScreen";
-import { FirstSessionSetup } from "./FirstSessionSetup";
-import { OnboardingDots } from "./OnboardingProgressBar";
+import { Box } from '../../../components/primitives/Box';
+import { useOnboardingStore } from '../store';
+import { useOnboardingProgress } from '../store-hooks';
+import type { FocusGoal, MotivationProfileType } from '../schemas';
+import { goToNextStep, goToPreviousStep, completeOnboarding } from '../service';
+import { WelcomeScreen } from './WelcomeScreen';
+import { MotivationScreen } from './MotivationScreen';
+import { FirstSessionSetup } from './FirstSessionSetup';
+import { OnboardingDots } from './OnboardingProgressBar';
 
 interface OnboardingNavigatorProps {
   onStartSession: (config: {
@@ -66,7 +66,7 @@ export function OnboardingNavigator({
       case 2:
         return (
           <FirstSessionSetup
-            userName={store.displayName || ""}
+            userName={store.displayName || ''}
             goal={store.goal}
             onStartSession={handleSessionStart}
             onBack={handleSessionBack}

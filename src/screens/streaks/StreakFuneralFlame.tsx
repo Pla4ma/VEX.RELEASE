@@ -1,12 +1,12 @@
-import React from "react";
+import React from 'react';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withSequence,
   withTiming,
-} from "react-native-reanimated";
+} from 'react-native-reanimated';
 
-import { Text } from "../../components/primitives";
+import { Text } from '../../components/primitives';
 
 export function StreakFuneralFlame(): React.JSX.Element {
   const flameScale = useSharedValue(1);

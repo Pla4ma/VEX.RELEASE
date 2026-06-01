@@ -1,40 +1,40 @@
-import type { ReactNode } from "react";
-import { ActivityIndicator } from "react-native";
-import { Box, Text } from "../components/primitives";
-import { Button } from "../components";
-import { useTheme } from "../theme";
-import { launchColors } from "@theme/tokens/launch-colors";
-import type { ErrorFallbackProps, ErrorCategory } from "./ErrorBoundary.types";
+import type { ReactNode } from 'react';
+import { ActivityIndicator } from 'react-native';
+import { Box, Text } from '../components/primitives';
+import { Button } from '../components';
+import { useTheme } from '../theme';
+import { launchColors } from '@theme/tokens/launch-colors';
+import type { ErrorFallbackProps, ErrorCategory } from './ErrorBoundary.types';
 
 function getErrorMessage(category: ErrorCategory, error: Error | null): string {
   switch (category) {
-    case "network":
-      return "Connection lost. Check your internet and try again.";
-    case "auth":
-      return "Session expired. Please sign in again.";
-    case "server":
-      return "Our servers are having issues. Please try again later.";
-    case "validation":
-      return "Invalid data. Please check your input.";
-    case "client":
-      return "An unexpected error occurred. Please restart the app.";
+    case 'network':
+      return 'Connection lost. Check your internet and try again.';
+    case 'auth':
+      return 'Session expired. Please sign in again.';
+    case 'server':
+      return 'Our servers are having issues. Please try again later.';
+    case 'validation':
+      return 'Invalid data. Please check your input.';
+    case 'client':
+      return 'An unexpected error occurred. Please restart the app.';
     default:
-      return error?.message || "Something went wrong";
+      return error?.message || 'Something went wrong';
   }
 }
 
 function getErrorIcon(category: ErrorCategory): string {
   switch (category) {
-    case "network":
-      return "📡";
-    case "auth":
-      return "🔐";
-    case "server":
-      return "🔧";
-    case "validation":
-      return "⚠️";
+    case 'network':
+      return '📡';
+    case 'auth':
+      return '🔐';
+    case 'server':
+      return '🔧';
+    case 'validation':
+      return '⚠️';
     default:
-      return "❌";
+      return '❌';
   }
 }
 
@@ -62,7 +62,7 @@ export function ErrorFallback({
 
       <Text
         variant="body"
-        style={{ color: launchColors.hex_6b7280, textAlign: "center" }}
+        style={{ color: launchColors.hex_6b7280, textAlign: 'center' }}
         mb="lg"
       >
         {getErrorMessage(category, error)}

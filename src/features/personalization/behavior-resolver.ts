@@ -3,13 +3,13 @@ import {
   BehaviorSignalSummarySchema,
   type BehaviorResolverInput,
   type BehaviorSignalSummary,
-} from "./behavior-signal-schemas";
+} from './behavior-signal-schemas';
 import {
   countByType,
   countDistinctSurfaces,
   hasSurfacesDismissedMultipleTimes,
   hasSurfacesClickedMultipleTimes,
-} from "./behavior-resolver-helpers";
+} from './behavior-resolver-helpers';
 
 const PREMIUM_SESSION_MINIMUM = 5;
 const SIGNIFICANT_CLICK_WINDOW = 2;
@@ -29,33 +29,33 @@ export function resolveUserBehaviorSignals(
 
   const premiumGateClickedCount = countByType(
     recentSignals,
-    "premium_gate_clicked",
+    'premium_gate_clicked',
   );
-  const premiumGateSeenCount = countByType(recentSignals, "premium_gate_seen");
+  const premiumGateSeenCount = countByType(recentSignals, 'premium_gate_seen');
   const premiumAttemptSurfaces = countDistinctSurfaces(
     recentSignals,
-    "premium_gate_clicked",
+    'premium_gate_clicked',
   );
   const premiumFeatureAttempts =
     premiumGateClickedCount >= SIGNIFICANT_CLICK_WINDOW
       ? Array.from(premiumAttemptSurfaces)
       : [];
 
-  const bossCtaClicked = countByType(recentSignals, "boss_cta_clicked");
-  const bossRouteOpened = countByType(recentSignals, "boss_route_opened");
+  const bossCtaClicked = countByType(recentSignals, 'boss_cta_clicked');
+  const bossRouteOpened = countByType(recentSignals, 'boss_route_opened');
   const totalBossSignals = bossCtaClicked + bossRouteOpened;
-  let bossEngagement: BehaviorSignalSummary["bossEngagement"] = "none";
-  if (totalBossSignals >= 5 && reinforcedSurfaces.includes("boss_compact")) {
-    bossEngagement = "high";
+  let bossEngagement: BehaviorSignalSummary['bossEngagement'] = 'none';
+  if (totalBossSignals >= 5 && reinforcedSurfaces.includes('boss_compact')) {
+    bossEngagement = 'high';
   } else if (totalBossSignals >= 2) {
-    bossEngagement = "medium";
+    bossEngagement = 'medium';
   } else if (totalBossSignals >= 1) {
-    bossEngagement = "low";
+    bossEngagement = 'low';
   }
 
   const coachSurfaceClicked = countByType(
     recentSignals,
-    "coach_surface_clicked",
+    'coach_surface_clicked',
   );
   const coachInteractions = Math.max(
     recentSessions.completedSessions > 0 ? 1 : 0,
@@ -64,7 +64,7 @@ export function resolveUserBehaviorSignals(
 
   const studySurfaceClicked = countByType(
     recentSignals,
-    "study_surface_clicked",
+    'study_surface_clicked',
   );
   const studyUsageRatio =
     recentSessions.totalSessions > 0
@@ -109,17 +109,17 @@ export function resolveUserBehaviorSignals(
     recentSessions.completedSessions >= PREMIUM_SESSION_MINIMUM;
   const highIntentPremiumActions: string[] = [];
   if (hasSufficientSessions && premiumAttemptCount >= 1) {
-    highIntentPremiumActions.push("premium_tease");
+    highIntentPremiumActions.push('premium_tease');
   }
   if (hasSufficientSessions && premiumGateClickedCount >= 3) {
-    highIntentPremiumActions.push("premium_moment");
+    highIntentPremiumActions.push('premium_moment');
   }
 
   if (firstWeekExperience.isDayZero) {
     return BehaviorSignalSummarySchema.parse({
       ignoredFeatures: [],
       premiumFeatureAttempts: [],
-      bossEngagement: "none",
+      bossEngagement: 'none',
       coachInteractions: 0,
       studyUsageRatio: 0,
       deepWorkUsageRatio: 0,

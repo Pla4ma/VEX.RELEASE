@@ -1,10 +1,10 @@
-import React from "react";
-import Animated from "react-native-reanimated";
-import type { AnimatedStyle } from "react-native-reanimated";
-import { Box, Text } from "../../../components/primitives";
-import type { CompanionPhase } from "../types";
-import { PHASE_NAMES } from "./companion-evolution-types";
-import type { EvolutionPhase, ElementThemeColors } from "./companion-evolution-types";
+import React from 'react';
+import Animated from 'react-native-reanimated';
+import type { AnimatedStyle } from 'react-native-reanimated';
+import { Box, Text } from '../../../components/primitives';
+import type { CompanionPhase } from '../types';
+import { PHASE_NAMES } from './companion-evolution-types';
+import type { EvolutionPhase, ElementThemeColors } from './companion-evolution-types';
 
 export const ParticleLayer: React.FC<{
   particleStyle: AnimatedStyle;
@@ -12,7 +12,7 @@ export const ParticleLayer: React.FC<{
 }> = ({ particleStyle, themeColors }) => (
   <Animated.View
     style={[
-      { position: "absolute", width: 300, height: 300 },
+      { position: 'absolute', width: 300, height: 300 },
       particleStyle,
     ]}
     pointerEvents="none"
@@ -47,7 +47,7 @@ export const CelebrationLayer: React.FC<{
   <Animated.View
     style={[
       textStyle,
-      { position: "absolute", bottom: 120, zIndex: 30 },
+      { position: 'absolute', bottom: 120, zIndex: 30 },
     ]}
   >
     <Box alignItems="center" gap="sm">
@@ -72,7 +72,7 @@ export const CelebrationLayer: React.FC<{
         textAlign="center"
         mt="xs"
       >
-        Your companion has grown through{" "}
+        Your companion has grown through{' '}
         {Math.floor(totalFocusMinutes)} minutes of focused
         time together.
       </Text>
@@ -93,21 +93,21 @@ export const PhaseIndicators: React.FC<{
   >
     {(
       [
-        "energy-buildup",
-        "flash",
-        "transformation",
-        "celebration",
+        'energy-buildup',
+        'flash',
+        'transformation',
+        'celebration',
       ] as EvolutionPhase[]
     ).map((phase) => {
       const isActive =
         ceremonyPhase === phase ||
-        (ceremonyPhase === "complete" && phase === "celebration");
+        (ceremonyPhase === 'complete' && phase === 'celebration');
       const isPast =
-        ceremonyPhase !== "complete" &&
-        ["transformation", "celebration", "complete"].includes(
+        ceremonyPhase !== 'complete' &&
+        ['transformation', 'celebration', 'complete'].includes(
           ceremonyPhase,
         ) &&
-        ["energy-buildup", "flash"].includes(phase);
+        ['energy-buildup', 'flash'].includes(phase);
       return (
         <Box
           key={phase}
@@ -119,7 +119,7 @@ export const PhaseIndicators: React.FC<{
               ? themeColors.primary
               : isPast
                 ? themeColors.glow
-                : "background.tertiary"
+                : 'background.tertiary'
           }
           style={{ opacity: isActive || isPast ? 1 : 0.4 }}
         />

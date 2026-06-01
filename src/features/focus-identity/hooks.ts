@@ -4,15 +4,15 @@
  * Centralized hooks for focus identity functionality
  */
 
-import { useMemo } from "react";
-import { useFocusScore } from "./hooks-focus-score";
+import { useMemo } from 'react';
+import { useFocusScore } from './hooks-focus-score';
 import {
   FocusIdentityEngine,
   type ScoreBand,
   type FocusIdentityProfile,
-} from "./FocusIdentityEngine";
+} from './FocusIdentityEngine';
 
-export { useFocusScoreColor, useIdentityStatement } from "./hooks-display";
+export { useFocusScoreColor, useIdentityStatement } from './hooks-display';
 
 /**
  * Hook for accessing focus identity data and state
@@ -20,7 +20,7 @@ export { useFocusScoreColor, useIdentityStatement } from "./hooks-display";
 export function useFocusIdentity(userId: string) {
   const { score, history, status, error, refetch } = useFocusScore();
 
-  const engine = useMemo(() => new FocusIdentityEngine(), [userId]);
+  const engine = useMemo(() => new FocusIdentityEngine(), []);
 
   // Transform the data to match the expected interface
   const profile: FocusIdentityProfile | null = useMemo(() => {
@@ -56,7 +56,7 @@ export function useFocusIdentity(userId: string) {
         sessionQuality: {
           score: score.factors.sessionQuality.score,
           averageFocusPurity: 0,
-          averageGrade: "D",
+          averageGrade: 'D',
           perfectSessionsCount: 0,
           averageSessionDuration: 0,
         },
@@ -73,7 +73,7 @@ export function useFocusIdentity(userId: string) {
           daysSinceLastSession: 0,
           last7DayActivity: 0,
           last30DayActivity: 0,
-          trendDirection: "STABLE",
+          trendDirection: 'STABLE',
           velocity: 0,
         },
       },
@@ -85,8 +85,8 @@ export function useFocusIdentity(userId: string) {
       recoveryStartDate: null,
       recoveryProgress: 0,
       preLapseScore: null,
-      topStrength: "consistency",
-      topWeakness: "recency",
+      topStrength: 'consistency',
+      topWeakness: 'recency',
       recommendedActions: [],
       monthlyReport: null,
       updatedAt: Date.now(),
@@ -110,7 +110,7 @@ export function useFocusIdentity(userId: string) {
   }, [history]);
 
   const loadingState = status;
-  const isRetrying = status === "pending" && !!score;
+  const isRetrying = status === 'pending' && !!score;
 
   return {
     profile,
@@ -130,6 +130,6 @@ export function useMonthlyReport(userId: string, year: number, month: number) {
   // Import from the new monthly report system
   const {
     useMonthlyReport: useMonthlyReportImpl,
-  } = require("./monthly-report");
+  } = require('./monthly-report');
   return useMonthlyReportImpl(userId, year, month);
 }

@@ -6,10 +6,10 @@
  * @phase 0A.3
  */
 
-import React from "react";
-import { Box, Text } from "@/components/primitives";
-import { useTheme } from "@/theme";
-import { launchColors } from "@theme/tokens/launch-colors";
+import React from 'react';
+import { Box, Text } from '@/components/primitives';
+import { useTheme } from '@/theme';
+import { launchColors } from '@theme/tokens/launch-colors';
 
 interface BattlePassSeasonHeaderProps {
   seasonName: string;
@@ -50,7 +50,7 @@ export function BattlePassSeasonHeader({
             color={launchColors.hex_ffffff}
             fontWeight="bold"
           >
-            {isUrgent ? "⏰ " : ""}
+            {isUrgent ? '⏰ ' : ''}
             {daysRemaining} days left
           </Text>
         </Box>

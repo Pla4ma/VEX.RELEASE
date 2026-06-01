@@ -1,11 +1,11 @@
-import * as service from "./service";
-import * as repository from "./repository";
-import * as analytics from "./analytics";
+import * as service from './service';
+import * as repository from './repository';
+import * as analytics from './analytics';
 import {
   createStreakRiskDetectedEvent,
   createComebackActivatedEvent,
-} from "./events";
-import { generateAndSendMessage } from "./message-helpers";
+} from './events';
+import { generateAndSendMessage } from './message-helpers';
 
 export async function handleSessionCompleted(payload: {
   userId: string;
@@ -16,24 +16,24 @@ export async function handleSessionCompleted(payload: {
 }): Promise<void> {
   await service.processBehaviorSignal({
     userId: payload.userId,
-    signalType: "SESSION_QUALITY_TREND",
+    signalType: 'SESSION_QUALITY_TREND',
     value: payload.qualityScore,
     metadata: { sessionId: payload.sessionId, duration: payload.duration },
   });
   const state = await service.getOrCreateCoachState(payload.userId);
-  if (state.currentState === "STREAK_AT_RISK") {
+  if (state.currentState === 'STREAK_AT_RISK') {
     await service.evaluateInterventions({
       userId: payload.userId,
-      trigger: "NO_SESSION_24H",
+      trigger: 'NO_SESSION_24H',
       context: { sessionCompleted: true, qualityScore: payload.qualityScore },
     });
   }
   const comeback = await repository.fetchActiveComebackPlan(payload.userId);
-  if (comeback && comeback.status === "ACTIVE") {
+  if (comeback && comeback.status === 'ACTIVE') {
     await service.trackComebackSession(payload.userId, true);
   }
   if (payload.qualityScore >= 95) {
-    await generateAndSendMessage(payload.userId, "MOTIVATION_BOOST", {
+    await generateAndSendMessage(payload.userId, 'MOTIVATION_BOOST', {
       qualityScore: payload.qualityScore,
     });
   }
@@ -47,7 +47,7 @@ export async function handleSessionAbandoned(payload: {
 }): Promise<void> {
   await service.evaluateInterventions({
     userId: payload.userId,
-    trigger: "SESSION_ABANDONED",
+    trigger: 'SESSION_ABANDONED',
     context: {
       sessionId: payload.sessionId,
       duration: payload.duration,
@@ -56,7 +56,7 @@ export async function handleSessionAbandoned(payload: {
   });
   await service.processBehaviorSignal({
     userId: payload.userId,
-    signalType: "SESSION_QUALITY_TREND",
+    signalType: 'SESSION_QUALITY_TREND',
     value: 0.3,
     metadata: { abandoned: true, duration: payload.duration },
   });
@@ -85,8 +85,8 @@ export async function handleStreakRiskDetected(payload: {
     payload.hoursSinceLastSession,
     payload.riskLevel,
   );
-  if (payload.riskLevel === "HIGH" || payload.riskLevel === "CRITICAL") {
-    await generateAndSendMessage(payload.userId, "STREAK_RISK", {
+  if (payload.riskLevel === 'HIGH' || payload.riskLevel === 'CRITICAL') {
+    await generateAndSendMessage(payload.userId, 'STREAK_RISK', {
       currentStreak: payload.currentStreak,
       hoursRemaining: Math.max(0, 48 - payload.hoursSinceLastSession),
       riskLevel: payload.riskLevel,
@@ -119,7 +119,7 @@ export async function handleStreakBroken(payload: {
       2.0,
     );
   } else {
-    await generateAndSendMessage(payload.userId, "POST_FAILURE", {
+    await generateAndSendMessage(payload.userId, 'POST_FAILURE', {
       previousStreak: payload.previousStreak,
     });
   }

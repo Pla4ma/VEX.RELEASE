@@ -1,7 +1,7 @@
-import { SessionOrchestrator } from "../SessionOrchestrator";
-import type { SessionConfig } from "../types";
+import { SessionOrchestrator } from '../SessionOrchestrator';
+import type { SessionConfig } from '../types';
 
-export const TEST_USER_ID = "test-user-123";
+export const TEST_USER_ID = 'test-user-123';
 
 export const mockConfig: SessionConfig = {
   duration: 60,
@@ -15,10 +15,10 @@ export const mockConfig: SessionConfig = {
   strictMode: false,
   autoStartBreaks: false,
   autoStartNextInterval: false,
-  tags: ["test"],
+  tags: ['test'],
 };
 
-jest.mock("react-native-mmkv", () => ({
+jest.mock('react-native-mmkv', () => ({
   MMKV: jest.fn().mockImplementation(() => ({
     set: jest.fn(),
     getString: jest.fn(),

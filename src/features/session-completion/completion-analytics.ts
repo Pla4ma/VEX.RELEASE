@@ -1,29 +1,29 @@
-import * as Sentry from "@sentry/react-native";
+import * as Sentry from '@sentry/react-native';
 
-import type { SessionSummary } from "../../session/types";
-import { trackSessionCompleted } from "./analytics";
-import type { CompletionLedger } from "./schemas";
+import type { SessionSummary } from '../../session/types';
+import { trackSessionCompleted } from './analytics';
+import type { CompletionLedger } from './schemas';
 
 export function trackCompletionAnalytics(
   ledger: CompletionLedger,
   summary: SessionSummary,
 ): void {
-  const isAbandoned = ledger.grade === "D";
-  const completionType = isAbandoned ? "abandoned" : "natural";
+  const isAbandoned = ledger.grade === 'D';
+  const completionType = isAbandoned ? 'abandoned' : 'natural';
   const efficiency =
     ledger.completedDurationSeconds > 0
       ? ledger.effectiveFocusedSeconds / ledger.completedDurationSeconds
       : 0;
 
   Sentry.addBreadcrumb({
-    category: "session-completion",
+    category: 'session-completion',
     data: {
       grade: ledger.grade,
       sessionId: ledger.sessionId,
       userId: ledger.userId,
     },
-    level: "info",
-    message: "vex_session_completed",
+    level: 'info',
+    message: 'vex_session_completed',
   });
 
   trackSessionCompleted(
@@ -46,15 +46,15 @@ export function trackCompletionAnalytics(
       speed: 0,
     },
     {
-      completionCriteria: ["target_duration_met"],
+      completionCriteria: ['target_duration_met'],
       failureReason: isAbandoned ? `Session graded ${ledger.grade}` : undefined,
       metCriteria:
         ledger.completedDurationSeconds >= ledger.targetDurationSeconds
-          ? ["target_duration_met"]
+          ? ['target_duration_met']
           : [],
       missedCriteria:
         ledger.completedDurationSeconds < ledger.targetDurationSeconds
-          ? ["target_duration_not_met"]
+          ? ['target_duration_not_met']
           : [],
       success: !isAbandoned,
     },

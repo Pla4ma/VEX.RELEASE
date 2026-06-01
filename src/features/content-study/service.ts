@@ -1,5 +1,5 @@
-import { buildError } from "./validation";
-import { CONTENT_STUDY_API, ERROR_MESSAGES } from "./constants";
+import { buildError } from './validation';
+import { CONTENT_STUDY_API, ERROR_MESSAGES } from './constants';
 import {
   CONTENT_STUDY_CONSTANTS,
   ContentStudyErrorCode,
@@ -7,7 +7,7 @@ import {
   type GenerateStudyPlanRequest,
   type SubmitContentRequest,
   type SubmitFeedbackRequest,
-} from "./types";
+} from './types';
 import {
   submitContentResponseSchema,
   extractContentResponseSchema,
@@ -18,10 +18,10 @@ import {
   type ContentStudyTimeoutFallback,
   normalizeError,
   invokeAndParse,
-} from "./api-schemas";
+} from './api-schemas';
 
-export { ContentStudyTimeoutFallbackSchema } from "./api-schemas";
-export type { ContentStudyTimeoutFallback } from "./api-schemas";
+export { ContentStudyTimeoutFallbackSchema } from './api-schemas';
+export type { ContentStudyTimeoutFallback } from './api-schemas';
 export {
   uploadStudyFile,
   deleteStudyFile,
@@ -31,7 +31,7 @@ export {
   getQuizForStudyPlan,
   updateContentText,
   deleteContent,
-} from "./service-crud";
+} from './service-crud';
 
 export async function submitContent(
   userId: string,
@@ -85,7 +85,7 @@ export async function generateStudyPlan(request: GenerateStudyPlanRequest) {
     request,
   );
   if (!response.success) {
-    const code = response.error?.toLowerCase().includes("limit")
+    const code = response.error?.toLowerCase().includes('limit')
       ? ContentStudyErrorCode.RATE_LIMIT_EXCEEDED
       : ContentStudyErrorCode.GENERATION_FAILED;
     throw buildError(
@@ -103,12 +103,12 @@ export async function getContentStatus(contentId: string) {
     `${CONTENT_STUDY_API.ENDPOINTS.STATUS}/${contentId}`,
     statusResponseSchema,
     undefined,
-    "GET",
+    'GET',
   );
   if (!response.success) {
     throw buildError(
       ContentStudyErrorCode.CONTENT_NOT_FOUND,
-      response.error ?? "Content not found",
+      response.error ?? 'Content not found',
       undefined,
       false,
     );
@@ -126,9 +126,9 @@ export async function submitFeedback(request: SubmitFeedbackRequest) {
 
 export function buildContentStudyTimeoutFallback(): ContentStudyTimeoutFallback {
   return ContentStudyTimeoutFallbackSchema.parse({
-    body: "Start a focused study session now. VEX can retry content generation when service health recovers.",
-    ctaLabel: "Start study session",
-    title: "Content generation is still warming up",
+    body: 'Start a focused study session now. VEX can retry content generation when service health recovers.',
+    ctaLabel: 'Start study session',
+    title: 'Content generation is still warming up',
   });
 }
 
@@ -144,9 +144,9 @@ export async function pollContentStatus(
     const status = await getContentStatus(contentId);
     onUpdate?.(status);
     if (
-      status.status === "READY" ||
-      status.status === "FAILED" ||
-      status.status === "EXTRACTED"
+      status.status === 'READY' ||
+      status.status === 'FAILED' ||
+      status.status === 'EXTRACTED'
     ) {
       return status;
     }
@@ -156,7 +156,7 @@ export async function pollContentStatus(
   }
   throw buildError(
     ContentStudyErrorCode.AI_TIMEOUT,
-    "Processing is taking longer than expected.",
+    'Processing is taking longer than expected.',
     undefined,
     true,
   );

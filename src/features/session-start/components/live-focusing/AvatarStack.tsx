@@ -1,11 +1,11 @@
 /**
  * Overlapping avatar stack with overflow counter.
  */
-import React from "react";
-import { Box } from "../../../../components/primitives/Box";
-import { Text } from "../../../../components/primitives/Text";
-import { Avatar } from "../../../../components/Avatar";
-import { useTheme } from "../../../../theme";
+import React from 'react';
+import { Box } from '../../../../components/primitives/Box';
+import { Text } from '../../../../components/primitives/Text';
+import { Avatar } from '../../../../components/Avatar';
+import { useTheme } from '../../../../theme';
 
 interface AvatarStackProps {
   avatars?: Array<{ url?: string; initials: string }>;
@@ -52,7 +52,7 @@ export function AvatarStack({
               borderRadius="full"
               borderWidth={2}
               borderColor="background.primary"
-              style={{ overflow: "hidden" }}
+              style={{ overflow: 'hidden' }}
             >
               <Avatar
                 size="sm"

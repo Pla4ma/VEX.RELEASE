@@ -8,65 +8,65 @@ import {
   trackDifficultySuggestionDismissed,
   trackDifficultyChanged,
   trackInsufficientSessionsForSuggestion,
-} from "../analytics";
+} from '../analytics';
 
-jest.mock("../../../shared/analytics/analytics-service", () => ({
+jest.mock('../../../shared/analytics/analytics-service', () => ({
   capture: jest.fn(),
 }));
 
-describe("session-start: analytics", () => {
+describe('session-start: analytics', () => {
   let captureMock: jest.Mock;
 
   beforeEach(() => {
     jest.clearAllMocks();
-    captureMock = require("../../../shared/analytics/analytics-service").capture;
+    captureMock = require('../../../shared/analytics/analytics-service').capture;
   });
 
-  it("trackDifficultySuggestionShown calls capture with correct event name", () => {
-    trackDifficultySuggestionShown("u1", "CASUAL", "FOCUSED", "high");
+  it('trackDifficultySuggestionShown calls capture with correct event name', () => {
+    trackDifficultySuggestionShown('u1', 'CASUAL', 'FOCUSED', 'high');
     expect(captureMock).toHaveBeenCalledWith(
-      "difficulty_suggestion_shown",
+      'difficulty_suggestion_shown',
       expect.objectContaining({
-        user_id: "u1",
-        current_difficulty: "CASUAL",
-        suggested_difficulty: "FOCUSED",
-        confidence: "high",
+        user_id: 'u1',
+        current_difficulty: 'CASUAL',
+        suggested_difficulty: 'FOCUSED',
+        confidence: 'high',
       }),
     );
   });
 
-  it("trackDifficultySuggestionAccepted includes stats", () => {
-    trackDifficultySuggestionAccepted("u1", "CASUAL", "FOCUSED", {
+  it('trackDifficultySuggestionAccepted includes stats', () => {
+    trackDifficultySuggestionAccepted('u1', 'CASUAL', 'FOCUSED', {
       sessionsAnalyzed: 10,
       averageGrade: 4.5,
       averagePurity: 88,
     });
     expect(captureMock).toHaveBeenCalledWith(
-      "difficulty_suggestion_accepted",
+      'difficulty_suggestion_accepted',
       expect.objectContaining({ sessions_analyzed: 10 }),
     );
   });
 
-  it("trackDifficultySuggestionDismissed captures event", () => {
-    trackDifficultySuggestionDismissed("u1", "FOCUSED");
+  it('trackDifficultySuggestionDismissed captures event', () => {
+    trackDifficultySuggestionDismissed('u1', 'FOCUSED');
     expect(captureMock).toHaveBeenCalledWith(
-      "difficulty_suggestion_dismissed",
-      expect.objectContaining({ suggested_difficulty: "FOCUSED" }),
+      'difficulty_suggestion_dismissed',
+      expect.objectContaining({ suggested_difficulty: 'FOCUSED' }),
     );
   });
 
-  it("trackDifficultyChanged captures source", () => {
-    trackDifficultyChanged("u1", "CASUAL", "FOCUSED", "manual");
+  it('trackDifficultyChanged captures source', () => {
+    trackDifficultyChanged('u1', 'CASUAL', 'FOCUSED', 'manual');
     expect(captureMock).toHaveBeenCalledWith(
-      "difficulty_changed",
-      expect.objectContaining({ source: "manual" }),
+      'difficulty_changed',
+      expect.objectContaining({ source: 'manual' }),
     );
   });
 
-  it("trackInsufficientSessionsForSuggestion captures counts", () => {
-    trackInsufficientSessionsForSuggestion("u1", 2, 5);
+  it('trackInsufficientSessionsForSuggestion captures counts', () => {
+    trackInsufficientSessionsForSuggestion('u1', 2, 5);
     expect(captureMock).toHaveBeenCalledWith(
-      "difficulty_suggestion_insufficient_sessions",
+      'difficulty_suggestion_insufficient_sessions',
       expect.objectContaining({ sessions_count: 2, required_count: 5 }),
     );
   });

@@ -8,7 +8,7 @@ export interface StartSessionButtonProps {
   /** Number of squad members currently focusing */
   squadMembersFocusing?: number;
   /** Streak risk level for urgency styling */
-  streakRiskLevel?: "NONE" | "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
+  streakRiskLevel?: 'NONE' | 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   /** Hours remaining until streak breaks */
   streakHoursRemaining?: number | null;
   /** Loading state while creating session */
@@ -28,5 +28,5 @@ export interface StartSessionButtonProps {
 export function formatTime(seconds: number): string {
   const mins = Math.floor(seconds / 60);
   const secs = seconds % 60;
-  return `${mins}:${secs.toString().padStart(2, "0")}`;
+  return `${mins}:${secs.toString().padStart(2, '0')}`;
 }

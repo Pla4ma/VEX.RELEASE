@@ -3,13 +3,13 @@ import {
   UnlockDecisionSchema,
   UnlockExplainerInputSchema,
   buildUserFacingReason,
-} from "./schemas";
+} from './schemas';
 import type {
   UnlockDecision,
   UnlockExplainerInput,
   UnlockReasonCode,
-} from "./types";
-import { NEVER_UNLOCK, resolveLaneFit, resolveMinSessions } from "./lane-fit";
+} from './types';
+import { NEVER_UNLOCK, resolveLaneFit, resolveMinSessions } from './lane-fit';
 
 export function createUnlockDecision(
   rawInput: UnlockExplainerInput,
@@ -21,14 +21,14 @@ export function createUnlockDecision(
   if (NEVER_UNLOCK.has(input.featureKey)) {
     return UnlockDecisionSchema.parse({
       featureKey: input.featureKey,
-      decision: "hidden",
-      reasonCode: "final_release_deactivated",
-      userFacingReason: buildUserFacingReason("never_unlock_baseline", {
+      decision: 'hidden',
+      reasonCode: 'final_release_deactivated',
+      userFacingReason: buildUserFacingReason('never_unlock_baseline', {
         featureKey: input.featureKey,
         lane: input.laneProfile,
         sessionCount: input.sessionCount,
         minSessions: 0,
-        laneFit: "blocked",
+        laneFit: 'blocked',
         isPremium: input.isPremium,
         hasRelatedBehavior: input.hasRelatedBehavior,
       }),
@@ -43,60 +43,60 @@ export function createUnlockDecision(
     return UnlockDecisionSchema.parse({
       featureKey: input.featureKey,
       decision: input.manualOverride,
-      reasonCode: "manual_override",
-      userFacingReason: "You chose this setting.",
+      reasonCode: 'manual_override',
+      userFacingReason: 'You chose this setting.',
       evidence: [
         {
-          source: "manual_override",
+          source: 'manual_override',
           detail: input.manualOverride,
           observedAt: now,
         },
       ],
       laneFit,
-      canHide: input.manualOverride !== "hidden",
+      canHide: input.manualOverride !== 'hidden',
       canReconsiderAtSessionCount: null,
     });
   }
 
   if (input.sessionCount === 0) {
-    if (laneFit === "blocked") {
+    if (laneFit === 'blocked') {
       return UnlockDecisionSchema.parse({
         featureKey: input.featureKey,
-        decision: "blocked",
-        reasonCode: "lane_blocked",
-        userFacingReason: buildUserFacingReason("lane_blocked", {
+        decision: 'blocked',
+        reasonCode: 'lane_blocked',
+        userFacingReason: buildUserFacingReason('lane_blocked', {
           featureKey: input.featureKey,
           lane: input.laneProfile,
           sessionCount: input.sessionCount,
           minSessions: 3,
-          laneFit: "blocked",
+          laneFit: 'blocked',
           isPremium: input.isPremium,
           hasRelatedBehavior: input.hasRelatedBehavior,
         }),
         evidence: [
           {
-            source: "lane_profile",
-            detail: `lane:${input.laneProfile ?? "unknown"}`,
+            source: 'lane_profile',
+            detail: `lane:${input.laneProfile ?? 'unknown'}`,
             observedAt: now,
           },
         ],
-        laneFit: "blocked",
+        laneFit: 'blocked',
         canHide: false,
         canReconsiderAtSessionCount: input.sessionCount + 3,
       });
     }
     const isCoreFeature = [
-      "focus_session",
-      "home_tab",
-      "profile_tab",
-      "focus_tab",
+      'focus_session',
+      'home_tab',
+      'profile_tab',
+      'focus_tab',
     ].includes(input.featureKey);
     const reasonCode: UnlockReasonCode = isCoreFeature
-      ? "day_zero_core"
-      : "day_zero_tease";
+      ? 'day_zero_core'
+      : 'day_zero_tease';
     return UnlockDecisionSchema.parse({
       featureKey: input.featureKey,
-      decision: isCoreFeature ? "unlocked" : "teased",
+      decision: isCoreFeature ? 'unlocked' : 'teased',
       reasonCode,
       userFacingReason: buildUserFacingReason(reasonCode, {
         featureKey: input.featureKey,
@@ -109,7 +109,7 @@ export function createUnlockDecision(
       }),
       evidence: [
         {
-          source: "cold_start",
+          source: 'cold_start',
           detail: `sessionCount:${input.sessionCount}`,
           observedAt: now,
         },
@@ -120,28 +120,28 @@ export function createUnlockDecision(
     });
   }
 
-  if (laneFit === "blocked") {
+  if (laneFit === 'blocked') {
     return UnlockDecisionSchema.parse({
       featureKey: input.featureKey,
-      decision: "blocked",
-      reasonCode: "lane_blocked",
-      userFacingReason: buildUserFacingReason("lane_blocked", {
+      decision: 'blocked',
+      reasonCode: 'lane_blocked',
+      userFacingReason: buildUserFacingReason('lane_blocked', {
         featureKey: input.featureKey,
         lane: input.laneProfile,
         sessionCount: input.sessionCount,
         minSessions: 3,
-        laneFit: "blocked",
+        laneFit: 'blocked',
         isPremium: input.isPremium,
         hasRelatedBehavior: input.hasRelatedBehavior,
       }),
       evidence: [
         {
-          source: "lane_profile",
-          detail: `lane:${input.laneProfile ?? "unknown"}`,
+          source: 'lane_profile',
+          detail: `lane:${input.laneProfile ?? 'unknown'}`,
           observedAt: now,
         },
       ],
-      laneFit: "blocked",
+      laneFit: 'blocked',
       canHide: false,
       canReconsiderAtSessionCount: input.sessionCount + 3,
     });
@@ -150,12 +150,12 @@ export function createUnlockDecision(
   const minSessions = resolveMinSessions(laneFit, input.laneProfile);
   const isUnlocked = input.sessionCount >= minSessions;
   const reasonCode: UnlockReasonCode = isUnlocked
-    ? "unlocked_after_sessions"
-    : "teased_before_sessions";
+    ? 'unlocked_after_sessions'
+    : 'teased_before_sessions';
 
   return UnlockDecisionSchema.parse({
     featureKey: input.featureKey,
-    decision: isUnlocked ? "unlocked" : "teased",
+    decision: isUnlocked ? 'unlocked' : 'teased',
     reasonCode,
     userFacingReason: buildUserFacingReason(reasonCode, {
       featureKey: input.featureKey,
@@ -168,13 +168,13 @@ export function createUnlockDecision(
     }),
     evidence: [
       {
-        source: "session_count",
+        source: 'session_count',
         detail: `sessions:${input.sessionCount}`,
         observedAt: now,
       },
       {
-        source: "lane_profile",
-        detail: `lane:${input.laneProfile ?? "unknown"}`,
+        source: 'lane_profile',
+        detail: `lane:${input.laneProfile ?? 'unknown'}`,
         observedAt: now,
       },
     ],

@@ -4,14 +4,14 @@
  * Analytics tracking for skill expression and perfect sessions.
  */
 
-import * as Sentry from "@sentry/react-native";
+import * as Sentry from '@sentry/react-native';
 
 /**
  * Hash user ID for privacy in analytics
  */
 function hashUserId(userId: string): string {
   // Simple hash for privacy - in production, use a proper hashing algorithm
-  return userId.slice(0, 4) + "..." + userId.slice(-4);
+  return userId.slice(0, 4) + '...' + userId.slice(-4);
 }
 
 /**
@@ -24,9 +24,9 @@ export function trackPerfectSession(
   score: number,
 ): void {
   Sentry.addBreadcrumb({
-    category: "mastery.perfect_session",
-    message: "Perfect session completed",
-    level: "info",
+    category: 'mastery.perfect_session',
+    message: 'Perfect session completed',
+    level: 'info',
     data: {
       userId: hashUserId(userId),
       sessionId,
@@ -45,9 +45,9 @@ export function trackSGradeStreakMilestone(
   milestone: 3 | 5 | 10,
 ): void {
   Sentry.addBreadcrumb({
-    category: "mastery.s_grade_streak",
+    category: 'mastery.s_grade_streak',
     message: `S-grade streak milestone: ${milestone}`,
-    level: "info",
+    level: 'info',
     data: {
       userId: hashUserId(userId),
       streakCount,
@@ -64,9 +64,9 @@ export function trackPerfectSessionBannerDisplayed(
   sessionId: string,
 ): void {
   Sentry.addBreadcrumb({
-    category: "mastery.perfect_session_banner",
-    message: "Perfect session banner displayed",
-    level: "info",
+    category: 'mastery.perfect_session_banner',
+    message: 'Perfect session banner displayed',
+    level: 'info',
     data: {
       userId: hashUserId(userId),
       sessionId,

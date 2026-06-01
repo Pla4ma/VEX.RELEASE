@@ -1,6 +1,6 @@
-import React from "react";
-import { View, type StyleProp, type ViewStyle } from "react-native";
-import { useTheme } from "../../theme";
+import React from 'react';
+import { View, type StyleProp, type ViewStyle } from 'react-native';
+import { useTheme } from '../../theme';
 
 export function CardHeader({
   children,
@@ -15,9 +15,9 @@ export function CardHeader({
     <View
       style={[
         {
-          alignItems: "center",
-          flexDirection: "row",
-          justifyContent: "space-between",
+          alignItems: 'center',
+          flexDirection: 'row',
+          justifyContent: 'space-between',
           marginBottom: 12,
         },
         style,

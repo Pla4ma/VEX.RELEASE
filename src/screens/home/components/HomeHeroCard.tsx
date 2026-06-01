@@ -1,51 +1,53 @@
-import React from "react";
-import { View } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
+import React from 'react';
+import { View } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 
-import { Button } from "../../../components/primitives/Button";
-import { Text } from "../../../components/primitives/Text";
+import { Button } from '../../../components/primitives/Button';
+import { Text } from '../../../components/primitives/Text';
+import { AuroraField } from '../../../components/primitives/AuroraField';
 import type {
   HomePrimaryPriority,
   HomeStakes,
-} from "../../../features/home-spine/priority-schemas";
-import { useTheme } from "../../../theme";
-import { launchColors } from "@theme/tokens/launch-colors";
+} from '../../../features/home-spine/priority-schemas';
+import { useTheme } from '../../../theme';
+import { glow } from '../../../theme/tokens/elevation';
+import { launchColors } from '@theme/tokens/launch-colors';
 
-function getHeroTitle(type: HomePrimaryPriority["type"]): string {
+function getHeroTitle(type: HomePrimaryPriority['type']): string {
   switch (type) {
-    case "STREAK_CRITICAL":
-      return "Your streak needs one clean save";
-    case "COMPANION_PROMISE":
-      return "Keep the promise alive today";
-    case "PROMISE_RECOVERY":
-      return "Start small and rebuild the thread";
-    case "STREAK_AT_RISK":
-      return "Protect the habit before it slips";
-    case "RECOMMENDED_SESSION":
-      return "VEX already has the next session ready";
-    case "CHALLENGE_NEAR_DONE":
-      return "You are close enough to finish this today";
-    case "BOSS_ACTIVE":
-      return "The battle is already in motion";
-    case "DEFAULT_SESSION":
-      return "VEX changes based on how you work";
+    case 'STREAK_CRITICAL':
+      return 'Your streak needs one clean save';
+    case 'COMPANION_PROMISE':
+      return 'Keep the promise alive today';
+    case 'PROMISE_RECOVERY':
+      return 'Start small and rebuild the thread';
+    case 'STREAK_AT_RISK':
+      return 'Protect the habit before it slips';
+    case 'RECOMMENDED_SESSION':
+      return 'VEX already has the next session ready';
+    case 'CHALLENGE_NEAR_DONE':
+      return 'You are close enough to finish this today';
+    case 'BOSS_ACTIVE':
+      return 'The battle is already in motion';
+    case 'DEFAULT_SESSION':
+      return 'VEX changes based on how you work';
   }
 }
 
-function getHeroEyebrow(type: HomePrimaryPriority["type"]): string {
+function getHeroEyebrow(type: HomePrimaryPriority['type']): string {
   switch (type) {
-    case "COMPANION_PROMISE":
-    case "PROMISE_RECOVERY":
-      return "Companion thread";
-    case "CHALLENGE_NEAR_DONE":
-      return "Challenge";
-    case "BOSS_ACTIVE":
-      return "Boss run";
-    case "STREAK_AT_RISK":
-    case "STREAK_CRITICAL":
-      return "Habit protection";
+    case 'COMPANION_PROMISE':
+    case 'PROMISE_RECOVERY':
+      return 'Companion thread';
+    case 'CHALLENGE_NEAR_DONE':
+      return 'Challenge';
+    case 'BOSS_ACTIVE':
+      return 'Boss run';
+    case 'STREAK_AT_RISK':
+    case 'STREAK_CRITICAL':
+      return 'Habit protection';
     default:
-      return "Right next session";
+      return 'Right next session';
   }
 }
 
@@ -89,65 +91,86 @@ export function HomeHeroCard({
   }
 
   return (
-    <LinearGradient
-      colors={[
-        theme.colors.primary[600] ?? launchColors.hex_4f46e5,
-        theme.colors.primary[500] ?? launchColors.hex_7c3aed,
-      ]}
+    <View
       style={{
-        borderRadius: theme.borderRadius.xl,
-        gap: theme.spacing[3],
-        overflow: "hidden",
-        padding: theme.spacing[5],
+        borderRadius: theme.borderRadius['2xl'],
+        ...glow(theme.colors.semantic.primary, 'soft'),
       }}
     >
-      <Text variant="label" color={launchColors.rgb_255_255_255_0_72}>
-        {getHeroEyebrow(priority.type)}
-      </Text>
-      <Text variant="h3" color={theme.colors.text.inverse}>
-        {getHeroTitle(priority.type)}
-      </Text>
-      <Text variant="body" color={launchColors.rgb_255_255_255_0_9}>
-        {priority.reason}
-      </Text>
-      {stakes ? (
-        <View
-          style={{
-            backgroundColor: launchColors.rgb_255_255_255_0_15,
-            borderRadius: theme.borderRadius.lg,
-            gap: theme.spacing[2],
-            padding: theme.spacing[4],
-          }}
-        >
-          <Text variant="label" color={launchColors.rgb_255_255_255_0_72}>
-            What matters now
-          </Text>
-          <Text variant="body" color={theme.colors.text.inverse}>
-            {stakes.what}
-          </Text>
-          {stakes.atRisk ? (
-            <Text variant="bodySmall" color={launchColors.rgb_255_255_255_0_9}>
-              At risk: {stakes.atRisk}
-            </Text>
-          ) : null}
-          {stakes.potentialGain ? (
-            <Text variant="bodySmall" color={launchColors.rgb_255_255_255_0_9}>
-              Gain: {stakes.potentialGain}
-            </Text>
-          ) : null}
-        </View>
-      ) : null}
-      <Button
-        fullWidth
-        size="lg"
-        variant="primary"
-        onPress={onPressPrimary}
-        accessibilityLabel={priority.cta.text}
-        accessibilityRole="button"
-        accessibilityHint="Starts the highest-priority action for today"
+      <LinearGradient
+        colors={[
+          theme.colors.primary[500] ?? launchColors.hex_7c3aed,
+          theme.colors.primary[600] ?? launchColors.hex_4f46e5,
+          theme.colors.primary[700] ?? launchColors.hex_4f46e5,
+        ]}
+        start={{ x: 0.1, y: 0 }}
+        end={{ x: 0.9, y: 1 }}
+        locations={[0, 0.55, 1]}
+        style={{
+          borderRadius: theme.borderRadius['2xl'],
+          gap: theme.spacing[3],
+          overflow: 'hidden',
+          padding: theme.spacing[5],
+        }}
       >
-        {priority.cta.text}
-      </Button>
-    </LinearGradient>
+        <AuroraField
+          colors={[
+            launchColors.rgb_255_255_255_0_15,
+            theme.colors.primary[300] ?? launchColors.hex_7c3aed,
+            launchColors.rgb_255_255_255_0_15,
+          ]}
+          size={280}
+          intensity={0.5}
+          style={{ top: -130, right: -90 }}
+        />
+        <Text variant="label" color={launchColors.rgb_255_255_255_0_72}>
+          {getHeroEyebrow(priority.type)}
+        </Text>
+        <Text variant="h3" color={theme.colors.text.inverse}>
+          {getHeroTitle(priority.type)}
+        </Text>
+        <Text variant="body" color={launchColors.rgb_255_255_255_0_9}>
+          {priority.reason}
+        </Text>
+        {stakes ? (
+          <View
+            style={{
+              backgroundColor: launchColors.rgb_255_255_255_0_15,
+              borderRadius: theme.borderRadius.lg,
+              gap: theme.spacing[2],
+              padding: theme.spacing[4],
+            }}
+          >
+            <Text variant="label" color={launchColors.rgb_255_255_255_0_72}>
+              What matters now
+            </Text>
+            <Text variant="body" color={theme.colors.text.inverse}>
+              {stakes.what}
+            </Text>
+            {stakes.atRisk ? (
+              <Text variant="bodySmall" color={launchColors.rgb_255_255_255_0_9}>
+                At risk: {stakes.atRisk}
+              </Text>
+            ) : null}
+            {stakes.potentialGain ? (
+              <Text variant="bodySmall" color={launchColors.rgb_255_255_255_0_9}>
+                Gain: {stakes.potentialGain}
+              </Text>
+            ) : null}
+          </View>
+        ) : null}
+        <Button
+          fullWidth
+          size="lg"
+          variant="primary"
+          onPress={onPressPrimary}
+          accessibilityLabel={priority.cta.text}
+          accessibilityRole="button"
+          accessibilityHint="Starts the highest-priority action for today"
+        >
+          {priority.cta.text}
+        </Button>
+      </LinearGradient>
+    </View>
   );
 }

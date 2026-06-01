@@ -13,7 +13,7 @@ export const mockActiveSubscribers: Array<{
   handler: (...args: unknown[]) => void;
 }> = [];
 
-jest.mock("../../../events/EventBus", () => ({
+jest.mock('../../../events/EventBus', () => ({
   eventBus: {
     publish: jest.fn(),
     subscribe: jest.fn(
@@ -23,14 +23,14 @@ jest.mock("../../../events/EventBus", () => ({
           const idx = mockActiveSubscribers.findIndex(
             (s) => s.event === event && s.handler === handler,
           );
-          if (idx >= 0) mockActiveSubscribers.splice(idx, 1);
+          if (idx >= 0) {mockActiveSubscribers.splice(idx, 1);}
         });
       },
     ),
   },
 }));
 
-jest.mock("../../../utils/debug", () => ({
+jest.mock('../../../utils/debug', () => ({
   createDebugger: () => ({
     debug: jest.fn(),
     error: jest.fn(),
@@ -39,11 +39,11 @@ jest.mock("../../../utils/debug", () => ({
   }),
 }));
 
-jest.mock("../../rewards/service", () => ({
-  createReward: jest.fn().mockResolvedValue({ id: "reward-1" }),
+jest.mock('../../rewards/service', () => ({
+  createReward: jest.fn().mockResolvedValue({ id: 'reward-1' }),
 }));
 
-jest.mock("../../progression/service-xp-core", () => ({
+jest.mock('../../progression/service-xp-core', () => ({
   addXpEnhanced: jest.fn().mockResolvedValue({ xpAdded: 10 }),
   calculateXpBreakdown: jest.fn((input: { baseAmount: number }) => ({
     total: input.baseAmount,
@@ -53,46 +53,46 @@ jest.mock("../../progression/service-xp-core", () => ({
   })),
 }));
 
-jest.mock("../../streaks/service", () => ({
+jest.mock('../../streaks/service', () => ({
   recordSession: jest
     .fn()
-    .mockResolvedValue({ action: "recorded", milestoneReached: null }),
+    .mockResolvedValue({ action: 'recorded', milestoneReached: null }),
   checkMilestone: jest.fn().mockReturnValue(null),
 }));
 
-jest.mock("@sentry/react-native", () => ({
+jest.mock('@sentry/react-native', () => ({
   addBreadcrumb: jest.fn(),
   captureException: jest.fn(),
 }));
 
-jest.mock("../../focus-identity/integration-focus-score", () => ({
+jest.mock('../../focus-identity/integration-focus-score', () => ({
   initializeFocusScoreIntegration: jest.fn(() => jest.fn()),
 }));
 
 /* ─── Retrieve mocks ──────────────────────────────────────────── */
 
-export const mockEventBus = jest.requireMock("../../../events/EventBus") as {
+export const mockEventBus = jest.requireMock('../../../events/EventBus') as {
   eventBus: { publish: jest.Mock; subscribe: jest.Mock };
 };
-export const mockRewards = jest.requireMock("../../rewards/service") as {
+export const mockRewards = jest.requireMock('../../rewards/service') as {
   createReward: jest.Mock;
 };
 export const mockProgression = jest.requireMock(
-  "../../progression/service-xp-core",
+  '../../progression/service-xp-core',
 ) as {
   addXpEnhanced: jest.Mock;
   calculateXpBreakdown: jest.Mock;
 };
-export const mockStreaks = jest.requireMock("../../streaks/service") as {
+export const mockStreaks = jest.requireMock('../../streaks/service') as {
   recordSession: jest.Mock;
   checkMilestone: jest.Mock;
 };
-export const mockSentry = jest.requireMock("@sentry/react-native") as {
+export const mockSentry = jest.requireMock('@sentry/react-native') as {
   addBreadcrumb: jest.Mock;
   captureException: jest.Mock;
 };
 export const mockFocusIdentity = jest.requireMock(
-  "../../focus-identity/integration-focus-score",
+  '../../focus-identity/integration-focus-score',
 ) as { initializeFocusScoreIntegration: jest.Mock };
 
 /* ─── Helpers ─────────────────────────────────────────────────── */

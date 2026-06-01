@@ -1,20 +1,20 @@
-import React from "react";
-import { Pressable } from "react-native";
-import Animated, { FadeIn } from "react-native-reanimated";
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import * as Haptics from "../../../utils/haptics";
-import type { BossPreviewCardProps } from "./BossPreviewCard.types";
-import { BossPreviewSkeleton, HealthBar, EscapeTimer } from "./BossPreviewCard.subcomponents";
+import React from 'react';
+import { Pressable } from 'react-native';
+import Animated, { FadeIn } from 'react-native-reanimated';
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import * as Haptics from '../../../utils/haptics';
+import type { BossPreviewCardProps } from './BossPreviewCard.types';
+import { BossPreviewSkeleton, HealthBar, EscapeTimer } from './BossPreviewCard.subcomponents';
 import {
   TierBadge,
   BossTauntBubble,
   DefeatIndicator,
   FinalStrikeIndicator,
-} from "./BossPreviewCard.indicators";
+} from './BossPreviewCard.indicators';
 
-export type { BossPreviewCardProps } from "./BossPreviewCard.types";
+export type { BossPreviewCardProps } from './BossPreviewCard.types';
 
 export function BossPreviewCard({
   bossName,
@@ -93,7 +93,7 @@ export function BossPreviewCard({
                   : theme.colors.border.DEFAULT
               }
             >
-              <Text fontSize={28}>{showFinalStrike ? "🔥" : "👹"}</Text>
+              <Text fontSize={28}>{showFinalStrike ? '🔥' : '👹'}</Text>
             </Box>
             <Box flex={1} gap="xs">
               <Box flexDirection="row" alignItems="center" gap="sm">
@@ -152,7 +152,7 @@ export function BossPreviewCard({
               </Box>
               <Pressable
                 onPress={() => {
-                  void Haptics.triggerHaptic("impactLight");
+                  void Haptics.triggerHaptic('impactLight');
                   onPlaceBounty?.();
                 }}
                 disabled={
@@ -177,7 +177,7 @@ export function BossPreviewCard({
                   fontWeight="600"
                   color="background.primary"
                 >
-                  {isPlacingBounty ? "..." : "50 🪙"}
+                  {isPlacingBounty ? '...' : '50 🪙'}
                 </Text>
               </Pressable>
             </Box>

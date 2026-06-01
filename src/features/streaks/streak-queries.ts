@@ -1,26 +1,26 @@
-import * as Sentry from "@sentry/react-native";
-import { v4 } from "../../utils/uuid";
-import type { Streak } from "./schemas";
-import { RepositoryError, supabase, parseStreakRow } from "./repository-helpers";
+import * as Sentry from '@sentry/react-native';
+import { v4 } from '../../utils/uuid';
+import type { Streak } from './schemas';
+import { RepositoryError, supabase, parseStreakRow } from './repository-helpers';
 
 export async function fetchStreak(userId: string): Promise<Streak | null> {
   const { data, error } = await supabase
-    .from("streaks")
-    .select("*")
-    .eq("user_id", userId)
+    .from('streaks')
+    .select('*')
+    .eq('user_id', userId)
     .single();
   if (error) {
-    if (error.code === "PGRST116") {
+    if (error.code === 'PGRST116') {
       return null;
     }
-    throw new RepositoryError("fetchStreak", error);
+    throw new RepositoryError('fetchStreak', error);
   }
   return parseStreakRow(data);
 }
 
 export async function createStreak(
   userId: string,
-  timezone: string = "UTC",
+  timezone: string = 'UTC',
 ): Promise<Streak> {
   const now = Date.now();
   const newStreak = {
@@ -38,12 +38,12 @@ export async function createStreak(
     updated_at: now,
   };
   const { data, error } = await supabase
-    .from("streaks")
+    .from('streaks')
     .insert(newStreak)
     .select()
     .single();
   if (error) {
-    throw new RepositoryError("createStreak", error);
+    throw new RepositoryError('createStreak', error);
   }
   return parseStreakRow(data);
 }
@@ -61,7 +61,7 @@ export async function updateStreak(
   }>,
 ): Promise<Streak> {
   const { data, error } = await supabase
-    .from("streaks")
+    .from('streaks')
     .update({
       current_days: updates.currentDays,
       longest_days: updates.longestDays,
@@ -72,11 +72,11 @@ export async function updateStreak(
       grace_period_used: updates.gracePeriodUsed,
       updated_at: Date.now(),
     })
-    .eq("user_id", userId)
+    .eq('user_id', userId)
     .select()
     .single();
   if (error) {
-    throw new RepositoryError("updateStreak", error);
+    throw new RepositoryError('updateStreak', error);
   }
   return parseStreakRow(data);
 }
@@ -86,7 +86,7 @@ export async function recordShieldEarned(
   source: string,
 ): Promise<void> {
   const { error } = await supabase
-    .from("streak_shields")
+    .from('streak_shields')
     .insert({
       id: v4(),
       user_id: userId,
@@ -95,17 +95,17 @@ export async function recordShieldEarned(
       created_at: Date.now(),
     });
   if (error) {
-    throw new RepositoryError("recordShieldEarned:insert", error);
+    throw new RepositoryError('recordShieldEarned:insert', error);
   }
 
   const { error: rpcError } = await supabase
-    .rpc("increment_shield_count", { p_user_id: userId });
+    .rpc('increment_shield_count', { p_user_id: userId });
   if (rpcError) {
     Sentry.captureException(rpcError, {
-      tags: { operation: "increment_shield_count" },
+      tags: { operation: 'increment_shield_count' },
       extra: { userId, source },
     });
-    throw new RepositoryError("recordShieldEarned:increment", rpcError);
+    throw new RepositoryError('recordShieldEarned:increment', rpcError);
   }
 }
 
@@ -114,11 +114,11 @@ export async function recordShieldUsed(
   shieldId: string,
 ): Promise<void> {
   const { error } = await supabase
-    .from("streak_shields")
+    .from('streak_shields')
     .update({ used: true, used_at: Date.now() })
-    .eq("id", shieldId);
+    .eq('id', shieldId);
   if (error) {
-    throw new RepositoryError("recordShieldUsed", error);
+    throw new RepositoryError('recordShieldUsed', error);
   }
 }
 
@@ -126,15 +126,15 @@ export async function getAvailableShield(
   userId: string,
 ): Promise<string | null> {
   const { data, error } = await supabase
-    .from("streak_shields")
-    .select("id")
-    .eq("user_id", userId)
-    .eq("used", false)
-    .order("created_at", { ascending: true })
+    .from('streak_shields')
+    .select('id')
+    .eq('user_id', userId)
+    .eq('used', false)
+    .order('created_at', { ascending: true })
     .limit(1)
     .maybeSingle();
   if (error) {
-    throw new RepositoryError("getAvailableShield", error);
+    throw new RepositoryError('getAvailableShield', error);
   }
   return data?.id || null;
 }

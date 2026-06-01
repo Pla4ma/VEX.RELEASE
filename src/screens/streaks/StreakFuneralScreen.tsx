@@ -1,24 +1,24 @@
-import { withScreenErrorBoundary } from "../../shared/ui/components/ScreenErrorBoundary";
-import React, { useCallback } from "react";
-import { ScrollView } from "react-native";
-import Animated, { FadeIn, FadeInUp } from "react-native-reanimated";
+import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+import React, { useCallback } from 'react';
+import { ScrollView } from 'react-native';
+import Animated, { FadeIn, FadeInUp } from 'react-native-reanimated';
 import {
   useNavigation,
   useRoute,
   type RouteProp,
-} from "@react-navigation/native";
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import * as Sentry from "@sentry/react-native";
-import { Box, Text } from "../../components/primitives";
-import { Button } from "../../components/primitives/Button";
-import { useAuthStore } from "../../store";
-import { getStreakService } from "../../streaks/StreakService";
-import { useTheme } from "../../theme";
-import { useToast } from "../../shared/ui/components/Toast";
-import type { ExtendedRootStackParams } from "../../navigation/types";
-import { StreakFuneralFlame } from "./StreakFuneralFlame";
+} from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import * as Sentry from '@sentry/react-native';
+import { Box, Text } from '../../components/primitives';
+import { Button } from '../../components/primitives/Button';
+import { useAuthStore } from '../../store';
+import { getStreakService } from '../../streaks/StreakService';
+import { useTheme } from '../../theme';
+import { useToast } from '../../shared/ui/components/Toast';
+import type { ExtendedRootStackParams } from '../../navigation/types';
+import { StreakFuneralFlame } from './StreakFuneralFlame';
 
-type StreakFuneralRoute = RouteProp<ExtendedRootStackParams, "StreakFuneral">;
+type StreakFuneralRoute = RouteProp<ExtendedRootStackParams, 'StreakFuneral'>;
 type StreakFuneralNavigation = NativeStackNavigationProp<ExtendedRootStackParams>;
 
 export const StreakFuneralScreen: React.FC = () => {
@@ -40,15 +40,15 @@ export const StreakFuneralScreen: React.FC = () => {
 
   const handleStartFresh = useCallback(() => {
     Sentry.addBreadcrumb({
-      category: "streaks",
-      message: "User acknowledged streak pause and started fresh",
-      level: "info",
+      category: 'streaks',
+      message: 'User acknowledged streak pause and started fresh',
+      level: 'info',
       data: { previousStreak, diedAt },
     });
     showToast({
-      type: "success",
-      title: "New rhythm started!",
-      message: "Every day is a clean start.",
+      type: 'success',
+      title: 'New rhythm started!',
+      message: 'Every day is a clean start.',
       duration: 3000,
     });
     completeFuneral();
@@ -56,9 +56,9 @@ export const StreakFuneralScreen: React.FC = () => {
 
   const handleReminisce = useCallback((): void => {
     Sentry.addBreadcrumb({
-      category: "streaks",
-      message: "User chose to view streak history",
-      level: "info",
+      category: 'streaks',
+      message: 'User chose to view streak history',
+      level: 'info',
     });
     completeFuneral();
   }, [completeFuneral]);
@@ -66,7 +66,7 @@ export const StreakFuneralScreen: React.FC = () => {
     <Box flex={1} bg="background.primary" px="lg" pt="xl">
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ flexGrow: 1, justifyContent: "center" }}
+        contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}
       >
         <Animated.View entering={FadeIn.delay(200)}>
           <Box alignItems="center" mb="2xl">
@@ -80,8 +80,8 @@ export const StreakFuneralScreen: React.FC = () => {
             </Text>
             <Text variant="body" color="text.secondary" textAlign="center">
               {daysSinceDeath > 0
-                ? `${daysSinceDeath} day${daysSinceDeath !== 1 ? "s" : ""} ago`
-                : `${hoursSinceDeath} hour${hoursSinceDeath !== 1 ? "s" : ""} ago`}
+                ? `${daysSinceDeath} day${daysSinceDeath !== 1 ? 's' : ''} ago`
+                : `${hoursSinceDeath} hour${hoursSinceDeath !== 1 ? 's' : ''} ago`}
             </Text>
           </Box>
         </Animated.View>
@@ -108,12 +108,12 @@ export const StreakFuneralScreen: React.FC = () => {
             <Text
               variant="hero"
               color="primary.500"
-              style={{ fontSize: 72, fontWeight: "800" }}
+              style={{ fontSize: 72, fontWeight: '800' }}
             >
               {previousStreak}
             </Text>
             <Text variant="h4" color="text.primary">
-              {previousStreak === 1 ? "day" : "days"}
+              {previousStreak === 1 ? 'day' : 'days'}
             </Text>
           </Box>
         </Animated.View>
@@ -164,4 +164,4 @@ export const StreakFuneralScreen: React.FC = () => {
     </Box>
   );
 };
-export default withScreenErrorBoundary(StreakFuneralScreen, "StreakFuneral");
+export default withScreenErrorBoundary(StreakFuneralScreen, 'StreakFuneral');

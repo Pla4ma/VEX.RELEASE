@@ -2,13 +2,13 @@ import {
   type MessageCategory,
   type InterventionExecution,
   type ComebackPlan,
-} from "./schemas";
-import type { CoachMetrics } from "./analytics-types";
+} from './schemas';
+import type { CoachMetrics } from './analytics-types';
 import {
   hashUserId,
   sanitizeProperties,
   calculateEffectivenessScore,
-} from "./analytics-helpers";
+} from './analytics-helpers';
 
 const coachMetrics: CoachMetrics[] = [];
 
@@ -37,7 +37,7 @@ export function trackMessageEffectiveness(
   actionTaken: boolean,
   subsequentSessionCompleted: boolean,
 ): void {
-  recordCoachMetric(userId, "message.effectiveness", {
+  recordCoachMetric(userId, 'message.effectiveness', {
     messageId,
     category,
     opened,
@@ -56,14 +56,14 @@ export function trackSessionProcessed(
   sessionId: string,
   qualityScore: number,
 ): void {
-  recordCoachMetric(userId, "session.processed", { sessionId, qualityScore });
+  recordCoachMetric(userId, 'session.processed', { sessionId, qualityScore });
 }
 
 export function trackInterventionEffectiveness(
   execution: InterventionExecution,
-  outcome: "success" | "partial" | "failure",
+  outcome: 'success' | 'partial' | 'failure',
 ): void {
-  recordCoachMetric(execution.userId, "intervention.effectiveness", {
+  recordCoachMetric(execution.userId, 'intervention.effectiveness', {
     ruleId: execution.ruleId,
     interventionId: execution.id,
     outcome,
@@ -75,7 +75,7 @@ export function trackComebackProgress(
   plan: ComebackPlan,
   sessionCompleted: boolean,
 ): void {
-  recordCoachMetric(plan.userId, "comeback.progress", {
+  recordCoachMetric(plan.userId, 'comeback.progress', {
     comebackId: plan.id,
     sessionsCompleted: plan.sessionsCompleted,
     targetSessions: plan.targetSessions,
@@ -86,9 +86,9 @@ export function trackComebackProgress(
 
 export function trackCoachEngagement(
   userId: string,
-  engagementType: "opened" | "dismissed" | "interacted" | "muted",
+  engagementType: 'opened' | 'dismissed' | 'interacted' | 'muted',
 ): void {
-  recordCoachMetric(userId, "engagement", { type: engagementType });
+  recordCoachMetric(userId, 'engagement', { type: engagementType });
 }
 
 export function trackPersonalizationAccuracy(
@@ -97,7 +97,7 @@ export function trackPersonalizationAccuracy(
   wasAccepted: boolean,
   confidenceAtGeneration: number,
 ): void {
-  recordCoachMetric(userId, "personalization.accuracy", {
+  recordCoachMetric(userId, 'personalization.accuracy', {
     recommendationType,
     wasAccepted,
     confidenceAtGeneration,
@@ -113,7 +113,7 @@ export function getCoachAggregateMetrics(): {
   engagementRate: number;
   topCategories: Array<{ category: string; count: number }>;
 } {
-  const messages = coachMetrics.filter((m) => m.event.startsWith("message."));
+  const messages = coachMetrics.filter((m) => m.event.startsWith('message.'));
   const totalMessages = messages.length;
   const delivered = messages.filter(
     (m) => m.properties.delivered === true,
@@ -126,7 +126,7 @@ export function getCoachAggregateMetrics(): {
   const categoryCounts = new Map<string, number>();
   messages.forEach((m) => {
     const category = m.properties.category;
-    if (typeof category === "string") {
+    if (typeof category === 'string') {
       categoryCounts.set(category, (categoryCounts.get(category) || 0) + 1);
     }
   });

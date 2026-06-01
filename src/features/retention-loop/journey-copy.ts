@@ -1,12 +1,12 @@
-import type { RetentionJourneyCopy } from "./schemas";
-import { DAY0_COPY } from "./copy/day0";
-import { DAY1_COPY } from "./copy/day1";
-import { DAY2_COPY } from "./copy/day2";
-import { DAY3_COPY } from "./copy/day3";
-import { DAY4_COPY } from "./copy/day4";
-import { DAY5_COPY } from "./copy/day5";
-import { DAY6_COPY } from "./copy/day6";
-import { DAY7_COPY } from "./copy/day7";
+import type { RetentionJourneyCopy } from './schemas';
+import { DAY0_COPY } from './copy/day0';
+import { DAY1_COPY } from './copy/day1';
+import { DAY2_COPY } from './copy/day2';
+import { DAY3_COPY } from './copy/day3';
+import { DAY4_COPY } from './copy/day4';
+import { DAY5_COPY } from './copy/day5';
+import { DAY6_COPY } from './copy/day6';
+import { DAY7_COPY } from './copy/day7';
 
 export const RETENTION_JOURNEY_COPY: RetentionJourneyCopy = {
   day0: DAY0_COPY,

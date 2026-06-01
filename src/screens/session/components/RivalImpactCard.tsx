@@ -1,9 +1,9 @@
-import React from "react";
-import { View } from "react-native";
+import React from 'react';
+import { View } from 'react-native';
 
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import { CARD_WIDTH } from "./session-consequence-types";
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import { CARD_WIDTH } from './session-consequence-types';
 
 interface RivalImpactCardProps {
   rivalName: string;
@@ -41,13 +41,13 @@ export function RivalImpactCard({
     >
       <View
         style={{
-          flexDirection: "row",
-          alignItems: "center",
+          flexDirection: 'row',
+          alignItems: 'center',
           gap: theme.spacing[2],
           marginBottom: theme.spacing[2],
         }}
       >
-        <Text fontSize={24}>{nowAhead ? "⚔️👑" : "⚔️"}</Text>
+        <Text fontSize={24}>{nowAhead ? '⚔️👑' : '⚔️'}</Text>
         <Text variant="body" fontWeight="700" color="text.primary">
           {rivalName}
         </Text>
@@ -67,9 +67,9 @@ export function RivalImpactCard({
 
       <View
         style={{
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
           padding: theme.spacing[3],
           backgroundColor: theme.colors.background.primary,
           borderRadius: theme.borderRadius.lg,
@@ -81,27 +81,27 @@ export function RivalImpactCard({
           </Text>
           <Text
             variant="body"
-            color={gapBefore <= 0 ? "success.DEFAULT" : "error.DEFAULT"}
+            color={gapBefore <= 0 ? 'success.DEFAULT' : 'error.DEFAULT'}
           >
             {gapBefore === 0
-              ? "Tied"
+              ? 'Tied'
               : gapBefore < 0
                 ? `${Math.abs(gapBefore)} min ahead`
                 : `${gapBefore} min behind`}
           </Text>
         </View>
-        <Text fontSize={20}>{gainedGround ? "→" : "←"}</Text>
-        <View style={{ alignItems: "flex-end" }}>
+        <Text fontSize={20}>{gainedGround ? '→' : '←'}</Text>
+        <View style={{ alignItems: 'flex-end' }}>
           <Text variant="caption" color="text.tertiary">
             NOW
           </Text>
           <Text
             variant="body"
-            color={gapAfter <= 0 ? "success.DEFAULT" : "error.DEFAULT"}
+            color={gapAfter <= 0 ? 'success.DEFAULT' : 'error.DEFAULT'}
             fontWeight="600"
           >
             {gapAfter === 0
-              ? "Tied"
+              ? 'Tied'
               : gapAfter < 0
                 ? `${Math.abs(gapAfter)} min ahead`
                 : `${gapAfter} min behind`}

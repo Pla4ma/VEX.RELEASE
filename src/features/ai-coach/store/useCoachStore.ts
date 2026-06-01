@@ -5,12 +5,12 @@
  * Persists via MMKV
  */
 
-import { create, type StoreApi } from "zustand";
-import { persist, createJSONStorage } from "zustand/middleware";
+import { create, type StoreApi } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
 
-import type { CoachStore, CoachUIState } from "./types";
-import type { CoachMessage, MessageCategory } from "../schemas";
-import { mmkvStorage, storageConfig } from "./storage";
+import type { CoachStore, CoachUIState } from './types';
+import type { CoachMessage, MessageCategory } from '../schemas';
+import { mmkvStorage, storageConfig } from './storage';
 
 const initialState: CoachUIState = {
   activeMessage: null,
@@ -27,8 +27,8 @@ const initialState: CoachUIState = {
 export const useCoachStore = create<CoachStore>()(
   persist(
     (
-      set: StoreApi<CoachStore>["setState"],
-      get: StoreApi<CoachStore>["getState"],
+      set: StoreApi<CoachStore>['setState'],
+      get: StoreApi<CoachStore>['getState'],
     ) => ({
       ...initialState,
 
@@ -36,7 +36,7 @@ export const useCoachStore = create<CoachStore>()(
       setActiveMessage: (message: CoachMessage | null) => {
         set({ activeMessage: message });
         if (message) {
-          set({ isModalVisible: true, modalType: "message" });
+          set({ isModalVisible: true, modalType: 'message' });
         }
       },
 
@@ -125,19 +125,19 @@ export const useCoachStore = create<CoachStore>()(
 
       // Modal actions
       openMessageModal: () => {
-        set({ isModalVisible: true, modalType: "message" });
+        set({ isModalVisible: true, modalType: 'message' });
       },
 
       openPersonaModal: () => {
-        set({ isModalVisible: true, modalType: "persona" });
+        set({ isModalVisible: true, modalType: 'persona' });
       },
 
       openHistoryModal: () => {
-        set({ isModalVisible: true, modalType: "history" });
+        set({ isModalVisible: true, modalType: 'history' });
       },
 
       openDifficultyModal: () => {
-        set({ isModalVisible: true, modalType: "difficulty" });
+        set({ isModalVisible: true, modalType: 'difficulty' });
       },
 
       closeModal: () => {

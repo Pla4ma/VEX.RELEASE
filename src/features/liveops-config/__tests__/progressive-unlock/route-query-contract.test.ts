@@ -6,14 +6,14 @@ import {
   buildRootExposureFlags,
   buildHomeFeatureRuntime,
   allFlagsOn,
-} from "./helpers";
+} from './helpers';
 
 // ============================================================================
 // 0.9 — Route registration contract: locked features must not register routes
 // ============================================================================
 
-describe("route registration contract", () => {
-  it("does not register routes for final-release deactivated features", () => {
+describe('route registration contract', () => {
+  it('does not register routes for final-release deactivated features', () => {
     const { features } = buildFeatureAccess({ totalCompletedSessions: 99 });
     const show = buildRootExposureFlags({ features, isEnabled: allFlagsOn });
 
@@ -24,7 +24,7 @@ describe("route registration contract", () => {
     expect(show.guild).toBe(false);
   });
 
-  it("does not register routes for new users", () => {
+  it('does not register routes for new users', () => {
     const { features } = buildFeatureAccess({ totalCompletedSessions: 0 });
     const show = buildRootExposureFlags({ features, isEnabled: allFlagsOn });
 
@@ -34,14 +34,14 @@ describe("route registration contract", () => {
     expect(show.coach).toBe(false);
   });
 
-  it("registers challenge route after unlock", () => {
+  it('registers challenge route after unlock', () => {
     const { features } = buildFeatureAccess({ totalCompletedSessions: 5 });
     const show = buildRootExposureFlags({ features, isEnabled: allFlagsOn });
 
     expect(show.challenges).toBe(true);
   });
 
-  it("registers boss route for gamer profile at 5 sessions", () => {
+  it('registers boss route for gamer profile at 5 sessions', () => {
     const { features } = buildFeatureAccess({
       totalCompletedSessions: 5,
       motivationProfile: GAMER_PROFILE,
@@ -51,7 +51,7 @@ describe("route registration contract", () => {
     expect(show.boss).toBe(true);
   });
 
-  it("does not register boss route for calm profile at 5 sessions", () => {
+  it('does not register boss route for calm profile at 5 sessions', () => {
     const { features } = buildFeatureAccess({
       totalCompletedSessions: 5,
       motivationProfile: CALM_PROFILE,
@@ -61,7 +61,7 @@ describe("route registration contract", () => {
     expect(show.boss).toBe(false);
   });
 
-  it("registers study route for student profile at 5 sessions", () => {
+  it('registers study route for student profile at 5 sessions', () => {
     const { features } = buildFeatureAccess({
       totalCompletedSessions: 5,
       motivationProfile: STUDENT_PROFILE,
@@ -71,7 +71,7 @@ describe("route registration contract", () => {
     expect(show.study).toBe(true);
   });
 
-  it("does not register study route for default profile at 5 sessions", () => {
+  it('does not register study route for default profile at 5 sessions', () => {
     const { features } = buildFeatureAccess({
       totalCompletedSessions: 5,
     });
@@ -85,8 +85,8 @@ describe("route registration contract", () => {
 // 0.9 — Query gating contract: locked features must not fire queries
 // ============================================================================
 
-describe("query gating contract", () => {
-  it("blocks challenge queries before unlock", () => {
+describe('query gating contract', () => {
+  it('blocks challenge queries before unlock', () => {
     const { features, productTier } = buildFeatureAccess({
       totalCompletedSessions: 0,
     });
@@ -94,7 +94,7 @@ describe("query gating contract", () => {
     expect(runtime.canQueryChallenges).toBe(false);
   });
 
-  it("allows challenge queries after unlock", () => {
+  it('allows challenge queries after unlock', () => {
     const { features, productTier } = buildFeatureAccess({
       totalCompletedSessions: 5,
     });
@@ -106,7 +106,7 @@ describe("query gating contract", () => {
     expect(runtime.canQueryChallenges).toBe(true);
   });
 
-  it("blocks boss query before unlock", () => {
+  it('blocks boss query before unlock', () => {
     const { features, productTier } = buildFeatureAccess({
       totalCompletedSessions: 3,
     });
@@ -114,7 +114,7 @@ describe("query gating contract", () => {
     expect(runtime.canQueryBoss).toBe(false);
   });
 
-  it("blocks study query before unlock", () => {
+  it('blocks study query before unlock', () => {
     const { features, productTier } = buildFeatureAccess({
       totalCompletedSessions: 5,
     });
@@ -122,7 +122,7 @@ describe("query gating contract", () => {
     expect(runtime.canQueryStudy).toBe(false);
   });
 
-  it("blocks economy query for new users", () => {
+  it('blocks economy query for new users', () => {
     const { features, productTier } = buildFeatureAccess({
       totalCompletedSessions: 0,
     });
@@ -130,7 +130,7 @@ describe("query gating contract", () => {
     expect(runtime.canQueryEconomy).toBe(false);
   });
 
-  it("blocks coach query for new users", () => {
+  it('blocks coach query for new users', () => {
     const { features, productTier } = buildFeatureAccess({
       totalCompletedSessions: 0,
     });

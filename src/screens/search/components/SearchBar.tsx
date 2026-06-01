@@ -1,8 +1,8 @@
-import React from "react";
-import { TextInput, Pressable } from "react-native";
-import { useTheme } from "../../../theme";
-import { Box } from "../../../components/primitives";
-import { Icon } from "../../../icons";
+import React from 'react';
+import { TextInput, Pressable } from 'react-native';
+import { useTheme } from '../../../theme';
+import { Box } from '../../../components/primitives';
+import { Icon } from '../../../icons';
 
 interface SearchBarProps {
   query: string;
@@ -46,7 +46,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
           style={{
             flex: 1,
             fontSize: 16,
-            height: "100%",
+            height: '100%',
             color: theme.colors.text.primary,
           }}
           placeholder="Search sessions, challenges, users..."

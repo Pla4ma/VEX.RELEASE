@@ -1,13 +1,13 @@
-import * as Sentry from "@sentry/react-native";
+import * as Sentry from '@sentry/react-native';
 
-import { getUserTimezone } from "../ai-coach/utils/timezone";
-import { decideNudge } from "../notification-policy/service";
+import { getUserTimezone } from '../ai-coach/utils/timezone';
+import { decideNudge } from '../notification-policy/service';
 import {
   fetchRetentionUserProfile,
   hasScheduledReminderWithin,
   upsertReminderPlan,
-} from "./repository";
-import { ReminderPlanInputSchema } from "./schemas";
+} from './repository';
+import { ReminderPlanInputSchema } from './schemas';
 import {
   UserIdSchema,
   StreakInputSchema,
@@ -17,8 +17,8 @@ import {
   respectQuietHours,
   daysLaterAt,
   type ReminderDraft,
-} from "./retention-strategy-config";
-export { scheduleChallengeExpiryNotifications } from "./retention-challenge-expiry";
+} from './retention-strategy-config';
+export { scheduleChallengeExpiryNotifications } from './retention-challenge-expiry';
 
 async function scheduleReminder(
   userId: string,
@@ -30,26 +30,26 @@ async function scheduleReminder(
     );
   } catch (error) {
     Sentry.addBreadcrumb({
-      category: "notifications.retention",
-      message: "Retention reminder scheduling failed",
-      level: "error",
+      category: 'notifications.retention',
+      message: 'Retention reminder scheduling failed',
+      level: 'error',
       data: { userId, type: draft.type, scheduledFor: draft.scheduledFor },
     });
     Sentry.captureException(error, {
-      tags: { feature: "retention-notifications", reminderType: draft.type },
+      tags: { feature: 'retention-notifications', reminderType: draft.type },
       extra: { userId },
     });
   }
 }
 
 function streakProtectionAllowed(
-  lane: "minimal_normal" | "game_like" | "deep_creative" | "student",
+  lane: 'minimal_normal' | 'game_like' | 'deep_creative' | 'student',
 ): boolean {
   const decision = decideNudge({
     lane,
     completedSessions: 1,
     daysSinceOnboarding: 1,
-    context: "none",
+    context: 'none',
     now: Date.now(),
     sentToday: 0,
     recentDismissals: 0,
@@ -68,22 +68,22 @@ export async function scheduleOnboardingNotifications(
     const validatedUserId = UserIdSchema.parse(userId);
     const timezone = getUserTimezone(validatedUserId);
     const profile = await fetchRetentionUserProfile(validatedUserId);
-    const firstName = profile.firstName?.trim() || "Someone";
+    const firstName = profile.firstName?.trim() || 'Someone';
     const reminders: ReminderDraft[] = [
       {
-        type: "RETENTION_ONBOARDING_DAY_1",
+        type: 'RETENTION_ONBOARDING_DAY_1',
         scheduledFor: daysLaterAt(1, 9, timezone),
-        message: "Your streak starts now. One session today keeps it alive.",
+        message: 'Your streak starts now. One session today keeps it alive.',
         metadata: { day: 1, timezone },
       },
       {
-        type: "RETENTION_ONBOARDING_DAY_3",
+        type: 'RETENTION_ONBOARDING_DAY_3',
         scheduledFor: daysLaterAt(3, 19, timezone),
-        message: "3 days since you started. Quick check-in?",
+        message: '3 days since you started. Quick check-in?',
         metadata: { day: 3, timezone },
       },
       {
-        type: "RETENTION_ONBOARDING_DAY_7",
+        type: 'RETENTION_ONBOARDING_DAY_7',
         scheduledFor: daysLaterAt(7, 9, timezone),
         message: `One week in. ${firstName} is on the leaderboard.`,
         metadata: { day: 7, timezone, firstName },
@@ -95,15 +95,15 @@ export async function scheduleOnboardingNotifications(
     );
   } catch (error) {
     Sentry.addBreadcrumb({
-      category: "notifications.retention",
-      message: "Onboarding notifications scheduling failed",
-      level: "error",
+      category: 'notifications.retention',
+      message: 'Onboarding notifications scheduling failed',
+      level: 'error',
       data: { userId },
     });
     Sentry.captureException(error, {
       tags: {
-        feature: "retention-notifications",
-        operation: "schedule-onboarding",
+        feature: 'retention-notifications',
+        operation: 'schedule-onboarding',
       },
       extra: { userId },
     });
@@ -128,9 +128,9 @@ export async function scheduleStreakProtectionNotification(
   const message =
     input.streak >= 7
       ? `🔥 ${input.streak}-day streak. Protect it today.`
-      : "Day 1 streak — do it again tomorrow.";
+      : 'Day 1 streak — do it again tomorrow.';
   await scheduleReminder(input.userId, {
-    type: "RETENTION_STREAK_PROTECTION",
+    type: 'RETENTION_STREAK_PROTECTION',
     scheduledFor: respectQuietHours(
       input.lastSessionAt + 20 * HOUR_MS,
       timezone,
@@ -156,7 +156,7 @@ export async function scheduleReEngagementNotification(
   });
   const messages: Record<number, string> = {
     1: "Yesterday's session was good. One more today keeps the chain.",
-    2: "2 days away. Comebacks earn 1.5x XP for the next 3 sessions.",
+    2: '2 days away. Comebacks earn 1.5x XP for the next 3 sessions.',
     3: `Still here. Your ${input.previousStreak}-day streak can restart anytime.`,
   };
   const message = messages[input.daysSinceLastSession];
@@ -166,7 +166,7 @@ export async function scheduleReEngagementNotification(
 
   const timezone = getUserTimezone(input.userId);
   await scheduleReminder(input.userId, {
-    type: "RETENTION_RE_ENGAGEMENT",
+    type: 'RETENTION_RE_ENGAGEMENT',
     scheduledFor: respectQuietHours(Date.now() + HOUR_MS, timezone),
     message,
     metadata: {

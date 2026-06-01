@@ -1,10 +1,10 @@
-import type { BaseSessionCompletionEvent } from "./base-event-types";
+import type { BaseSessionCompletionEvent } from './base-event-types';
 
 export interface SessionFeedbackRequestedEvent
   extends BaseSessionCompletionEvent {
-  type: "session_feedback_requested";
+  type: 'session_feedback_requested';
   data: {
-    feedbackType: "rating" | "survey" | "comment" | "suggestion" | "bug_report";
+    feedbackType: 'rating' | 'survey' | 'comment' | 'suggestion' | 'bug_report';
     requestedAt: Date;
     context: {
       sessionType: string;
@@ -26,7 +26,7 @@ export interface SessionFeedbackRequestedEvent
 
 export interface SessionFeedbackSubmittedEvent
   extends BaseSessionCompletionEvent {
-  type: "session_feedback_submitted";
+  type: 'session_feedback_submitted';
   data: {
     feedbackId: string;
     feedbackType: string;
@@ -34,7 +34,7 @@ export interface SessionFeedbackSubmittedEvent
     responses: { questionId: string; answer: unknown; timeSpent: number }[];
     rating?: number;
     comment?: string;
-    sentiment?: "positive" | "neutral" | "negative";
+    sentiment?: 'positive' | 'neutral' | 'negative';
     context: { device: string; location?: string; sessionState: string };
     followUp: {
       requested: boolean;
@@ -45,14 +45,14 @@ export interface SessionFeedbackSubmittedEvent
 }
 
 export interface SessionSharedEvent extends BaseSessionCompletionEvent {
-  type: "session_shared";
+  type: 'session_shared';
   data: {
     shareType:
-      | "achievement"
-      | "record"
-      | "milestone"
-      | "completion"
-      | "performance";
+      | 'achievement'
+      | 'record'
+      | 'milestone'
+      | 'completion'
+      | 'performance';
     sharedAt: Date;
     platform: string;
     content: {
@@ -63,7 +63,7 @@ export interface SessionSharedEvent extends BaseSessionCompletionEvent {
       stats: unknown;
     };
     audience: {
-      type: "public" | "friends" | "group" | "private";
+      type: 'public' | 'friends' | 'group' | 'private';
       recipients?: string[];
     };
     engagement: {
@@ -77,9 +77,9 @@ export interface SessionSharedEvent extends BaseSessionCompletionEvent {
 }
 
 export interface SessionComparedEvent extends BaseSessionCompletionEvent {
-  type: "session_compared";
+  type: 'session_compared';
   data: {
-    comparisonType: "peer" | "friend" | "leaderboard" | "global" | "historical";
+    comparisonType: 'peer' | 'friend' | 'leaderboard' | 'global' | 'historical';
     comparisonTarget: string;
     metrics: {
       user: number;

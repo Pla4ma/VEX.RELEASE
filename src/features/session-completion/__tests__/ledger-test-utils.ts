@@ -1,9 +1,9 @@
-import { SessionMode } from "../../../session/modes";
-import type { SessionSummary } from "../../../session/types";
-import type { CompletionLedger } from "../schemas";
+import { SessionMode } from '../../../session/modes';
+import type { SessionSummary } from '../../../session/types';
+import type { CompletionLedger } from '../schemas';
 
-export const SESSION_ID = "550e8400-e29b-41d4-a716-446655440000";
-export const USER_ID = "user-123";
+export const SESSION_ID = '550e8400-e29b-41d4-a716-446655440000';
+export const USER_ID = 'user-123';
 
 export function createSessionSummary(
   overrides: Partial<SessionSummary> = {},
@@ -30,7 +30,7 @@ export function createSessionSummary(
     plannedDuration: 1500,
     sessionId: SESSION_ID,
     sessionMode: SessionMode.FLOW,
-    status: "COMPLETED",
+    status: 'COMPLETED',
     streakBonus: 10,
     streakDays: 4,
     streakIncreased: true,
@@ -56,27 +56,27 @@ export function createCompletionLedger(
     dailyMissionResult: {
       missionId: null,
       progressDelta: 0,
-      status: "unchanged",
+      status: 'unchanged',
     },
     degradedSystems: [],
     effectiveFocusedSeconds: 1400,
     focusScoreDelta: 8,
-    grade: "A",
+    grade: 'A',
     gradeScore: 86,
     idempotencyKey: `${SESSION_ID}:1710001500000`,
     interruptionCount: 0,
-    ledgerId: "550e8400-e29b-41d4-a716-446655440001",
+    ledgerId: '550e8400-e29b-41d4-a716-446655440001',
     mode: SessionMode.FLOW,
-    offlineSyncStatus: "synced",
+    offlineSyncStatus: 'synced',
     pauseCount: 0,
     qualityScore: 90,
     rewardIds: [],
     sessionId: SESSION_ID,
     startedAt: 1710000000000,
-    streakResult: { action: "extended", newDays: 4, previousDays: 3 },
+    streakResult: { action: 'extended', newDays: 4, previousDays: 3 },
     strictMode: false,
     targetDurationSeconds: 1500,
-    timezone: "UTC",
+    timezone: 'UTC',
     userId: USER_ID,
     xpDelta: 120,
     ...overrides,

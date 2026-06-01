@@ -1,10 +1,10 @@
-import { useEffect, useRef } from "react";
-import { analyticsService } from "./analytics-service";
+import { useEffect, useRef } from 'react';
+import { analyticsService } from './analytics-service';
 import {
   ProgressionEvents,
   SessionEvents,
-} from "./analytics-events";
-import { useAnalytics } from "./use-analytics-core";
+} from './analytics-events';
+import { useAnalytics } from './use-analytics-core';
 
 export function useScreenTracking(
   screenName: string,
@@ -49,7 +49,7 @@ export function useProgressionTracking(
 export function useSessionTracking(
   sessionId: string | null,
   isActive: boolean,
-  sessionType: "focus" | "boss" | "challenge",
+  sessionType: 'focus' | 'boss' | 'challenge',
 ): void {
   const { trackSession } = useAnalytics();
   const startTime = useRef<number | null>(null);

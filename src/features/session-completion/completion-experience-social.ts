@@ -1,4 +1,4 @@
-import type { ShareableCustomization, ShareableTemplate } from "./types";
+import type { ShareableCustomization, ShareableTemplate } from './types';
 
 export interface ShareableContent {
   type: ShareableType;
@@ -12,14 +12,14 @@ export interface ShareableContent {
 }
 
 export type ShareableType =
-  | "achievement"
-  | "performance"
-  | "milestone"
-  | "streak"
-  | "rank_up"
-  | "unlock"
-  | "completion"
-  | "story";
+  | 'achievement'
+  | 'performance'
+  | 'milestone'
+  | 'streak'
+  | 'rank_up'
+  | 'unlock'
+  | 'completion'
+  | 'story';
 
 export interface ShareableData {
   score: number;
@@ -33,12 +33,12 @@ export interface ShareableData {
 }
 
 export type SocialPlatform =
-  | "twitter"
-  | "facebook"
-  | "instagram"
-  | "linkedin"
-  | "reddit"
-  | "discord"
-  | "slack"
-  | "whatsapp"
-  | "telegram";
+  | 'twitter'
+  | 'facebook'
+  | 'instagram'
+  | 'linkedin'
+  | 'reddit'
+  | 'discord'
+  | 'slack'
+  | 'whatsapp'
+  | 'telegram';

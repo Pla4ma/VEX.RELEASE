@@ -1,10 +1,10 @@
-import React from "react";
-import { Box, Text, Card } from "../../components/primitives";
-import { Icon } from "../../icons";
-import { launchColors } from "@theme/tokens/launch-colors";
-import type { AccentColor, TimerFormat } from "./ColorSchemeToggle";
-import { ACCENT_COLORS, TIMER_FORMAT_OPTIONS } from "./ColorSchemeToggle";
-import type { Theme } from "../../theme";
+import React from 'react';
+import { Box, Text, Card } from '../../components/primitives';
+import { Icon } from '../../icons';
+import { launchColors } from '@theme/tokens/launch-colors';
+import type { AccentColor, TimerFormat } from './ColorSchemeToggle';
+import { ACCENT_COLORS, TIMER_FORMAT_OPTIONS } from './ColorSchemeToggle';
+import type { Theme } from '../../theme';
 
 type AppearancePreviewCardProps = {
   theme: Theme;
@@ -27,7 +27,7 @@ export function AppearancePreviewCard({
         style={{
           marginLeft: 12,
           marginBottom: 8,
-          fontWeight: "600",
+          fontWeight: '600',
           letterSpacing: 0.5,
         }}
       >
@@ -37,8 +37,8 @@ export function AppearancePreviewCard({
         size="md"
         style={{
           backgroundColor: theme.colors.background.secondary,
-          alignItems: "center",
-          justifyContent: "center",
+          alignItems: 'center',
+          justifyContent: 'center',
           paddingVertical: 32,
         }}
       >
@@ -61,12 +61,12 @@ export function AppearancePreviewCard({
           variant="h3"
           style={{
             fontSize: 36 * fontSizeMultiplier,
-            fontWeight: "700",
+            fontWeight: '700',
             color: theme.colors.text.primary,
           }}
         >
           {TIMER_FORMAT_OPTIONS.find((f) => f.id === timerFormat)
-            ?.preview || "24:59"}
+            ?.preview || '24:59'}
         </Text>
         <Text
           variant="body"

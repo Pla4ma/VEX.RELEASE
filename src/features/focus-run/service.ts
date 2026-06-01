@@ -2,11 +2,11 @@ import {
   FocusRunSchema,
   type FocusRun,
   type FocusRunEventType,
-} from "./schemas";
-import { getStoredFocusRun, upsertStoredFocusRun } from "./repository";
+} from './schemas';
+import { getStoredFocusRun, upsertStoredFocusRun } from './repository';
 
-export { buildFocusRunDisplay, computeFocusRunGrade } from "./display";
-export { resolvePersonalBlocker } from "./blocker-resolution";
+export { buildFocusRunDisplay, computeFocusRunGrade } from './display';
+export { resolvePersonalBlocker } from './blocker-resolution';
 
 // ---------------------------------------------------------------------------
 // Helper
@@ -30,7 +30,7 @@ export async function startFocusRun(
   const existing = await getStoredFocusRun(userId);
   if (
     existing &&
-    existing.status === "active" &&
+    existing.status === 'active' &&
     existing.weekStartsAt === weekStart(now)
   ) {
     return existing;
@@ -46,15 +46,15 @@ export async function startFocusRun(
           id: `${userId}:${now}:start`,
           occurredAt: now,
           signal: null,
-          type: "run_started",
+          type: 'run_started',
         },
       ],
       finalGrade: null,
-      focusModifiers: ["Phone away", "One tab", "Reflection upgrade"],
+      focusModifiers: ['Phone away', 'One tab', 'Reflection upgrade'],
       id: `${userId}:${ws}`,
       recoveryWins: 0,
       reflectionUpgrades: 0,
-      status: "active",
+      status: 'active',
       userId,
       weekStartsAt: ws,
     }),
@@ -82,20 +82,20 @@ export async function recordFocusRunEvent(input: {
 
   const updates: Partial<FocusRun> = { events: updatedEvents };
 
-  if (input.eventType === "run_milestone") {
+  if (input.eventType === 'run_milestone') {
     updates.completedRuns = (run.completedRuns ?? 0) + 1;
   }
-  if (input.eventType === "clean_start") {
+  if (input.eventType === 'clean_start') {
     updates.cleanStarts = (run.cleanStarts ?? 0) + 1;
   }
-  if (input.eventType === "recovery_win") {
+  if (input.eventType === 'recovery_win') {
     updates.recoveryWins = (run.recoveryWins ?? 0) + 1;
   }
-  if (input.eventType === "reflection_upgrade") {
+  if (input.eventType === 'reflection_upgrade') {
     updates.reflectionUpgrades = (run.reflectionUpgrades ?? 0) + 1;
   }
-  if (input.eventType === "run_completed") {
-    updates.status = "completed";
+  if (input.eventType === 'run_completed') {
+    updates.status = 'completed';
   }
 
   return upsertStoredFocusRun(FocusRunSchema.parse({ ...run, ...updates }));

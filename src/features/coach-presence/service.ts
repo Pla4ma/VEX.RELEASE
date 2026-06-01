@@ -2,62 +2,62 @@ import {
   ACTION_LABELS,
   PROGRESS_REACTIONS,
   STYLE_ADAPTATION,
-} from "./copy";
+} from './copy';
 import {
   getCoachMemoryConfidence,
   getCoachPresenceMessage,
-} from "./copy-service";
+} from './copy-service';
 import {
   CoachPresenceMemorySummarySchema,
   CoachPresenceProgressInputSchema,
   CoachPresenceSchema,
   type CoachActionIntent,
   type CoachPresence,
-} from "./schemas";
+} from './schemas';
 import type {
   BuildPresenceInput,
   PresenceAvailability,
-} from "./coach-presence-types";
+} from './coach-presence-types';
 import {
   getActionReason,
   getTone,
   getVisualState,
   goalForLane,
   styleForLane,
-} from "./service-helpers";
+} from './service-helpers';
 
-export { buildCompletionCoachPresence } from "./completion-presence";
-export { getActionReason, getTone, getVisualState, goalForLane, styleForLane } from "./service-helpers";
+export { buildCompletionCoachPresence } from './completion-presence';
+export { getActionReason, getTone, getVisualState, goalForLane, styleForLane } from './service-helpers';
 
 export function resolveCoachActionIntent(input: {
   requestedIntent: CoachActionIntent;
   featureAvailability: PresenceAvailability;
 }): CoachActionIntent {
   if (
-    input.requestedIntent === "START_STUDY_SESSION" &&
+    input.requestedIntent === 'START_STUDY_SESSION' &&
     input.featureAvailability.study.canNavigate
   ) {
-    return "START_STUDY_SESSION";
+    return 'START_STUDY_SESSION';
   }
   if (
-    input.requestedIntent === "REVIEW_PROGRESS" &&
+    input.requestedIntent === 'REVIEW_PROGRESS' &&
     input.featureAvailability.progress.canNavigate
   ) {
-    return "REVIEW_PROGRESS";
+    return 'REVIEW_PROGRESS';
   }
   if (
-    (input.requestedIntent === "CONTINUE_PLAN" ||
-      input.requestedIntent === "REFLECT") &&
+    (input.requestedIntent === 'CONTINUE_PLAN' ||
+      input.requestedIntent === 'REFLECT') &&
     input.featureAvailability.study.canNavigate
   ) {
     return input.requestedIntent;
   }
-  if (input.requestedIntent === "TAKE_BREAK") {
-    return "TAKE_BREAK";
+  if (input.requestedIntent === 'TAKE_BREAK') {
+    return 'TAKE_BREAK';
   }
   return input.featureAvailability.focus.canNavigate
-    ? "START_SESSION"
-    : "TAKE_BREAK";
+    ? 'START_SESSION'
+    : 'TAKE_BREAK';
 }
 
 export function buildCoachPresence(input: BuildPresenceInput): CoachPresence {
@@ -71,43 +71,43 @@ export function buildCoachPresence(input: BuildPresenceInput): CoachPresence {
   );
   const primaryGoal = goalForLane(
     input.laneProfile,
-    input.motivationStyle === "STUDY_FOCUSED" ? "study" : "focus",
+    input.motivationStyle === 'STUDY_FOCUSED' ? 'study' : 'focus',
   );
   const memoryConfidence = getCoachMemoryConfidence(
     progress.totalSessions,
     memorySummary.syncAvailable,
   );
   const premiumMoment =
-    input.surface === "PREMIUM"
-      ? "session_value"
-      : input.surface === "RESCUE"
-        ? "none"
+    input.surface === 'PREMIUM'
+      ? 'session_value'
+      : input.surface === 'RESCUE'
+        ? 'none'
         : progress.totalSessions >= 5
-          ? "soft_tease"
-          : "none";
+          ? 'soft_tease'
+          : 'none';
 
-  const sessionMode = input.surface === "RESCUE" ? "active_risk" : "inactive";
+  const sessionMode = input.surface === 'RESCUE' ? 'active_risk' : 'inactive';
 
   const completionContext =
-    input.surface === "RESCUE"
-      ? "comeback"
-      : input.surface === "PREMIUM"
+    input.surface === 'RESCUE'
+      ? 'comeback'
+      : input.surface === 'PREMIUM'
         ? null
         : null;
 
   const resolved = getCoachPresenceMessage({
     aiAvailable: memorySummary.syncAvailable,
     bossIntensity: null,
-    comebackState: input.surface === "RESCUE" ? "missed_1_day" : null,
+    comebackState: input.surface === 'RESCUE' ? 'missed_1_day' : null,
     completionContext,
-    firstWeekStage: progress.totalSessions === 0 ? "day_0" : null,
+    firstWeekStage: progress.totalSessions === 0 ? 'day_0' : null,
     latestSession: null,
     memoryConfidence,
     motivationStyle,
     premiumMoment,
     primaryGoal,
     sessionMode,
-    studyLayerLabel: primaryGoal === "study" ? "Study" : null,
+    studyLayerLabel: primaryGoal === 'study' ? 'Study' : null,
   });
   const intent = resolveCoachActionIntent({
     featureAvailability: input.featureAvailability,

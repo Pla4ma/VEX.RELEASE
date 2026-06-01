@@ -33,7 +33,7 @@ export const criticalOfflineSyncReport = {
   averageRetryCount: 4,
   lastSyncTime: new Date().toISOString(),
   isHealthy: false,
-  issues: ["Critical sync issues"],
+  issues: ['Critical sync issues'],
   timestamp: Date.now(),
 };
 
@@ -67,7 +67,7 @@ export const criticalErrorBoundaryReport = {
   allScreensProtected: false,
   lastErrorTime: new Date().toISOString(),
   isHealthy: false,
-  issues: ["Critical error boundary issues"],
+  issues: ['Critical error boundary issues'],
   timestamp: Date.now(),
 };
 
@@ -76,7 +76,7 @@ export const criticalErrorBoundaryReport = {
 // ---------------------------------------------------------------------------
 
 export const greenAccessibilityReport = {
-  wcagComplianceLevel: "AA" as const,
+  wcagComplianceLevel: 'AA' as const,
   screenReaderSupport: 95,
   keyboardNavigationSupport: 98,
   colorContrastIssues: 2,
@@ -88,7 +88,7 @@ export const greenAccessibilityReport = {
 };
 
 export const moderateAccessibilityReport = {
-  wcagComplianceLevel: "AA" as const,
+  wcagComplianceLevel: 'AA' as const,
   screenReaderSupport: 88,
   keyboardNavigationSupport: 92,
   colorContrastIssues: 8,
@@ -100,14 +100,14 @@ export const moderateAccessibilityReport = {
 };
 
 export const criticalAccessibilityReport = {
-  wcagComplianceLevel: "A" as const,
+  wcagComplianceLevel: 'A' as const,
   screenReaderSupport: 75,
   keyboardNavigationSupport: 80,
   colorContrastIssues: 15,
   motionReductionSupport: false,
   highContrastSupport: false,
   overallScore: 65,
-  issues: ["Critical accessibility issues"],
+  issues: ['Critical accessibility issues'],
   timestamp: Date.now(),
 };
 
@@ -164,10 +164,10 @@ export const criticalPerformanceReport = {
 export const greenPrivacyReport = {
   gdprCompliant: true,
   dataPoints: [
-    { id: "email", category: "personal", purpose: "authentication", retention: "365 days" },
-    { id: "usage", category: "analytics", purpose: "improvement", retention: "90 days" },
+    { id: 'email', category: 'personal', purpose: 'authentication', retention: '365 days' },
+    { id: 'usage', category: 'analytics', purpose: 'improvement', retention: '90 days' },
   ],
-  consentRecords: [{ id: "analytics", granted: true, timestamp: new Date().toISOString() }],
+  consentRecords: [{ id: 'analytics', granted: true, timestamp: new Date().toISOString() }],
   securityVulnerabilities: [],
   issues: [],
   score: 98,
@@ -177,13 +177,13 @@ export const greenPrivacyReport = {
 export const moderatePrivacyReport = {
   gdprCompliant: true,
   dataPoints: Array(25).fill({
-    id: "test",
-    category: "analytics",
-    purpose: "test",
-    retention: "30 days",
+    id: 'test',
+    category: 'analytics',
+    purpose: 'test',
+    retention: '30 days',
   }),
-  consentRecords: [{ id: "analytics", granted: true, timestamp: new Date().toISOString() }],
-  securityVulnerabilities: [{ id: "minor", severity: "low", description: "Minor security issue" }],
+  consentRecords: [{ id: 'analytics', granted: true, timestamp: new Date().toISOString() }],
+  securityVulnerabilities: [{ id: 'minor', severity: 'low', description: 'Minor security issue' }],
   issues: [],
   score: 82,
   timestamp: Date.now(),
@@ -193,8 +193,8 @@ export const criticalPrivacyReport = {
   gdprCompliant: false,
   dataPoints: [],
   consentRecords: [],
-  securityVulnerabilities: [{ id: "critical", severity: "high", description: "Critical security issue" }],
-  issues: ["GDPR compliance issues"],
+  securityVulnerabilities: [{ id: 'critical', severity: 'high', description: 'Critical security issue' }],
+  issues: ['GDPR compliance issues'],
   score: 45,
   timestamp: Date.now(),
 };

@@ -1,5 +1,5 @@
-import type { z } from "zod";
-import type { UserRoleSchema, UserStatusSchema, UserSchema } from "./schemas";
+import type { z } from 'zod';
+import type { UserRoleSchema, UserStatusSchema, UserSchema } from './schemas';
 
 export type UserRole = z.infer<typeof UserRoleSchema>;
 export type UserStatus = z.infer<typeof UserStatusSchema>;

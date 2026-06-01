@@ -1,11 +1,11 @@
-import React, { useState, useCallback, useMemo } from "react";
-import { View, ScrollView } from "react-native";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import { Icon } from "../../../icons";
-import type { QuizPanelProps } from "../types";
-import { quizPanelStyles } from "./QuizPanelStyles";
-import { QuizCard } from "./QuizCard";
+import React, { useState, useCallback, useMemo } from 'react';
+import { View, ScrollView } from 'react-native';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import { Icon } from '../../../icons';
+import type { QuizPanelProps } from '../types';
+import { quizPanelStyles } from './QuizPanelStyles';
+import { QuizCard } from './QuizCard';
 
 export const QuizPanel: React.FC<QuizPanelProps> = ({
   items,
@@ -121,7 +121,7 @@ export const QuizPanel: React.FC<QuizPanelProps> = ({
             readOnly={readOnly}
             onOptionSelect={handleOptionSelect}
             onReveal={handleReveal}
-            shortAnswerValue={shortAnswers[quiz.id] || ""}
+            shortAnswerValue={shortAnswers[quiz.id] || ''}
             onShortAnswerChange={(text) =>
               setShortAnswers((prev) => ({ ...prev, [quiz.id]: text }))
             }

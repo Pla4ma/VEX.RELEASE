@@ -1,7 +1,7 @@
-import React from "react";
-import { View, Text, Pressable, ScrollView } from "react-native";
-import { createSheet } from "@/shared/ui/create-sheet";
-import { launchColors } from "@theme/tokens/launch-colors";
+import React from 'react';
+import { View, Text, Pressable, ScrollView } from 'react-native';
+import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
 import {
   DAYS,
   HOURS,
@@ -12,16 +12,16 @@ import {
   calculateTotal,
   type HeatmapData,
   type HeatmapProps,
-} from "./Heatmap.types";
+} from './Heatmap.types';
 
-export type { HeatmapData, HeatmapProps } from "./Heatmap.types";
+export type { HeatmapData, HeatmapProps } from './Heatmap.types';
 
 export function Heatmap({
   data,
   title,
   subtitle,
   onCellPress,
-  colorScheme = "blue",
+  colorScheme = 'blue',
 }: HeatmapProps) {
   const colors = COLOR_SCHEMES[colorScheme];
   const getCellValue = (day: string, hour: number): number => {
@@ -131,30 +131,30 @@ const styles = createSheet({
     marginVertical: 8,
   },
   header: { marginBottom: 16 },
-  title: { fontSize: 18, fontWeight: "700", color: launchColors.hex_111827 },
+  title: { fontSize: 18, fontWeight: '700', color: launchColors.hex_111827 },
   subtitle: { fontSize: 14, color: launchColors.hex_6b7280, marginTop: 4 },
   heatmap: { gap: 4 },
-  row: { flexDirection: "row", alignItems: "center", gap: 4 },
+  row: { flexDirection: 'row', alignItems: 'center', gap: 4 },
   dayLabel: {
     width: 40,
     fontSize: 12,
     color: launchColors.hex_6b7280,
-    fontWeight: "500",
+    fontWeight: '500',
   },
   hourLabel: {
     width: 32,
     fontSize: 10,
     color: launchColors.hex_9ca3af,
-    textAlign: "center",
+    textAlign: 'center',
   },
   cell: { width: 12, height: 28, borderRadius: 2, marginHorizontal: 1 },
   hiddenCell: { opacity: 0.3 },
   activeCell: { borderWidth: 1, borderColor: launchColors.rgb_0_0_0_0_1 },
   intensityIndicator: { flex: 1, backgroundColor: launchColors.rgb_0_0_0_0_2 },
   legend: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     marginTop: 16,
     gap: 4,
   },
@@ -165,17 +165,17 @@ const styles = createSheet({
   },
   legendCell: { width: 16, height: 16, borderRadius: 4 },
   stats: {
-    flexDirection: "row",
-    justifyContent: "space-around",
+    flexDirection: 'row',
+    justifyContent: 'space-around',
     marginTop: 16,
     paddingTop: 16,
     borderTopWidth: 1,
     borderTopColor: launchColors.hex_f3f4f6,
   },
-  statItem: { alignItems: "center" },
+  statItem: { alignItems: 'center' },
   statValue: {
     fontSize: 16,
-    fontWeight: "700",
+    fontWeight: '700',
     color: launchColors.hex_111827,
   },
   statLabel: { fontSize: 12, color: launchColors.hex_9ca3af, marginTop: 4 },

@@ -1,13 +1,13 @@
-import { useState, useEffect, useCallback, useRef } from "react";
-import { getSessionService } from "../SessionService";
-import { eventBus } from "../../events";
-import type { SessionConfig, SessionState, SessionSummary } from "../types";
-import type { SessionActions } from "./useSessionActions";
-import { createSessionActions } from "./useSessionActions";
+import { useState, useEffect, useCallback, useRef } from 'react';
+import { getSessionService } from '../SessionService';
+import { eventBus } from '../../events';
+import type { SessionConfig, SessionState, SessionSummary } from '../types';
+import type { SessionActions } from './useSessionActions';
+import { createSessionActions } from './useSessionActions';
 
-export { useSessionHistory } from "./useSessionHistory";
-export { useSessionPresets } from "./useSessionPresets";
-export { useSessionStats } from "./useSessionStats";
+export { useSessionHistory } from './useSessionHistory';
+export { useSessionPresets } from './useSessionPresets';
+export { useSessionStats } from './useSessionStats';
 
 interface UseSessionState {
   session: SessionState | null;
@@ -83,7 +83,7 @@ export function useSession(userId: string): UseSessionReturn {
   useEffect(() => {
     const unsubscribers: Array<() => void> = [];
     unsubscribers.push(
-      eventBus.subscribe("session:tick", (data) => {
+      eventBus.subscribe('session:tick', (data) => {
         if (data.sessionId === sessionIdRef.current) {
           setState((prev) => ({
             ...prev,
@@ -95,35 +95,35 @@ export function useSession(userId: string): UseSessionReturn {
       }),
     );
     unsubscribers.push(
-      eventBus.subscribe("session:started", (data) => {
+      eventBus.subscribe('session:started', (data) => {
         if (data.sessionId === sessionIdRef.current) {
           setState((prev) => ({ ...prev, isActive: true, isPaused: false }));
         }
       }),
     );
     unsubscribers.push(
-      eventBus.subscribe("session:paused", (data) => {
+      eventBus.subscribe('session:paused', (data) => {
         if (data.sessionId === sessionIdRef.current) {
           setState((prev) => ({ ...prev, isPaused: true }));
         }
       }),
     );
     unsubscribers.push(
-      eventBus.subscribe("session:resumed", (data) => {
+      eventBus.subscribe('session:resumed', (data) => {
         if (data.sessionId === sessionIdRef.current) {
           setState((prev) => ({ ...prev, isPaused: false }));
         }
       }),
     );
     unsubscribers.push(
-      eventBus.subscribe("session:completed", (data) => {
+      eventBus.subscribe('session:completed', (data) => {
         if (data.sessionId === sessionIdRef.current) {
           setState((prev) => ({ ...prev, isActive: false, isPaused: false }));
         }
       }),
     );
     unsubscribers.push(
-      eventBus.subscribe("session:abandoned", (data) => {
+      eventBus.subscribe('session:abandoned', (data) => {
         if (data.sessionId === sessionIdRef.current) {
           setState((prev) => ({ ...prev, isActive: false, isPaused: false }));
         }

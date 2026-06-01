@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 import {
   FocusScoreBandLabelSchema,
   FocusScoreFactorsSchema,
@@ -6,7 +6,7 @@ import {
   FocusScoreHistoryPointSchema,
   MAX_FOCUS_SCORE,
   MIN_FOCUS_SCORE,
-} from "./schemas";
+} from './schemas';
 
 export const MonthInputSchema = z.string().regex(/^\d{4}-\d{2}$/);
 
@@ -65,7 +65,7 @@ export const MonthlyFocusReportInputSchema = z
     historyPoints: z.array(FocusScoreHistoryPointSchema),
     sessionsCompleted: z.number().int().nonnegative(),
     totalFocusedMinutes: z.number().int().nonnegative(),
-    bestGrade: z.enum(["S", "A", "B", "C", "D"]),
+    bestGrade: z.enum(['S', 'A', 'B', 'C', 'D']),
   })
   .strict();
 

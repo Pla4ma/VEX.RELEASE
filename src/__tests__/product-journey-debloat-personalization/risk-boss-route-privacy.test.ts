@@ -11,6 +11,6 @@
 
 // All tests live in the split files above.
 // This barrel file ensures the test runner discovers them if imported directly.
-import "./risk-boss-route-privacy-boss.test";
-import "./risk-boss-route-privacy-route.test";
-import "./risk-boss-route-privacy-privacy.test";
+import './risk-boss-route-privacy-boss.test';
+import './risk-boss-route-privacy-route.test';
+import './risk-boss-route-privacy-privacy.test';

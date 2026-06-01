@@ -1,15 +1,15 @@
-import React, { useMemo } from "react";
-import { useWindowDimensions, View } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
-import { FocusRing } from "../../components/FocusRing";
-import { StreakBadge } from "../../components/StreakBadge";
-import { Text } from "../../components/primitives/Text";
-import { Skeleton } from "../../components/ui/Skeleton";
-import { SimpleWalletBadge } from "../../features/economy/components/SimpleWalletBadge";
-import { getPremiumCardStyle } from "../../components/premiumStyles";
-import { useTheme } from "../../theme";
-import { createSheet } from "@/shared/ui/create-sheet";
-import { launchColors } from "@theme/tokens/launch-colors";
+import React, { useMemo } from 'react';
+import { useWindowDimensions, View } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+import { FocusRing } from '../../components/FocusRing';
+import { StreakBadge } from '../../components/StreakBadge';
+import { Text } from '../../components/primitives/Text';
+import { Skeleton } from '../../components/ui/Skeleton';
+import { SimpleWalletBadge } from '../../features/economy/components/SimpleWalletBadge';
+import { getPremiumCardStyle } from '../../components/premiumStyles';
+import { useTheme } from '../../theme';
+import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
 
 const WHITE_MUTED = launchColors.rgb_255_255_255_0_72;
 const WHITE_SOFT = launchColors.rgb_255_255_255_0_18;
@@ -69,7 +69,7 @@ export function HomeHero({
       style={[
         styles.hero,
         {
-          flexDirection: isCompact ? "column" : "row",
+          flexDirection: isCompact ? 'column' : 'row',
           paddingBottom: theme.spacing[6],
           paddingHorizontal: theme.spacing[5],
           paddingTop: insetsTop + theme.spacing[5],
@@ -79,7 +79,7 @@ export function HomeHero({
       {userId ? (
         <View
           style={{
-            position: "absolute",
+            position: 'absolute',
             top: insetsTop + 16,
             right: theme.spacing[5],
           }}
@@ -98,7 +98,7 @@ export function HomeHero({
         <Text variant="h2" color={theme.colors.text.inverse}>
           {userFirstName
             ? `Welcome back, ${userFirstName}`
-            : "Ready to lock in?"}
+            : 'Ready to lock in?'}
         </Text>
         {isLoading ? (
           <View style={{ gap: theme.spacing[2] }}>
@@ -131,13 +131,13 @@ export function HomeHero({
         style={[
           styles.heroRight,
           {
-            alignItems: isCompact ? "stretch" : "center",
+            alignItems: isCompact ? 'stretch' : 'center',
             gap: theme.spacing[2],
           },
         ]}
       >
         {isLoading ? (
-          <View style={{ alignItems: "center", gap: theme.spacing[2] }}>
+          <View style={{ alignItems: 'center', gap: theme.spacing[2] }}>
             <Skeleton width={132} height={132} variant="circular" />
             <Skeleton width={88} height={14} />
           </View>
@@ -145,7 +145,7 @@ export function HomeHero({
           <View
             style={[
               styles.onboardPanel,
-              getPremiumCardStyle("medium"),
+              getPremiumCardStyle('medium'),
               {
                 backgroundColor: WHITE_SOFT,
                 borderColor: launchColors.rgb_255_255_255_0_22,
@@ -176,15 +176,15 @@ export function HomeHero({
 }
 
 const styles = createSheet({
-  eyebrow: { textTransform: "uppercase", letterSpacing: 1.2 },
-  focusValue: { fontSize: 42, fontWeight: "800", lineHeight: 48 },
+  eyebrow: { textTransform: 'uppercase', letterSpacing: 1.2 },
+  focusValue: { fontSize: 42, fontWeight: '800', lineHeight: 48 },
   hero: {
     borderBottomLeftRadius: 24,
     borderBottomRightRadius: 24,
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: 16,
   },
   heroColumn: { flex: 1 },
-  heroRight: { alignItems: "center", justifyContent: "center", minWidth: 148 },
+  heroRight: { alignItems: 'center', justifyContent: 'center', minWidth: 148 },
   onboardPanel: { borderWidth: 1, gap: 8, padding: 16 },
 });

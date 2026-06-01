@@ -1,15 +1,15 @@
-import { createDebugger } from "../../../../utils/debug";
-import { eventBus } from "../../../../events";
+import { createDebugger } from '../../../../utils/debug';
+import { eventBus } from '../../../../events';
 import {
   XPTransactionSchema,
   type XPTransaction,
   type ValidationResult,
   MAX_XP_PER_SESSION,
   MAX_XP_PER_HOUR,
-} from "./types";
-import { validateSourceSpecific } from "./source-validators";
+} from './types';
+import { validateSourceSpecific } from './source-validators';
 
-const debug = createDebugger("progression:validation");
+const debug = createDebugger('progression:validation');
 
 export function validateXPTransaction(
   transaction: XPTransaction,
@@ -32,10 +32,10 @@ export function validateXPTransaction(
   if (!schemaResult.success) {
     result.valid = false;
     result.violations.push({
-      type: "POLICY",
-      field: "transaction",
-      message: "Invalid transaction structure",
-      severity: "HIGH",
+      type: 'POLICY',
+      field: 'transaction',
+      message: 'Invalid transaction structure',
+      severity: 'HIGH',
       details: { errors: schemaResult.error.errors },
     });
     result.riskScore = 100;
@@ -46,10 +46,10 @@ export function validateXPTransaction(
   // Per-session cap
   if (transaction.amount > MAX_XP_PER_SESSION) {
     result.violations.push({
-      type: "IMPOSSIBLE",
-      field: "amount",
+      type: 'IMPOSSIBLE',
+      field: 'amount',
       message: `XP amount ${transaction.amount} exceeds maximum ${MAX_XP_PER_SESSION}`,
-      severity: "CRITICAL",
+      severity: 'CRITICAL',
       details: { amount: transaction.amount, max: MAX_XP_PER_SESSION },
     });
     result.riskScore += 40;
@@ -63,10 +63,10 @@ export function validateXPTransaction(
 
   if (recentXP + transaction.amount > MAX_XP_PER_HOUR) {
     result.violations.push({
-      type: "RATE_LIMIT",
-      field: "amount",
+      type: 'RATE_LIMIT',
+      field: 'amount',
       message: `Hourly XP cap exceeded: ${recentXP + transaction.amount}/${MAX_XP_PER_HOUR}`,
-      severity: "HIGH",
+      severity: 'HIGH',
       details: {
         recentXP,
         newAmount: transaction.amount,
@@ -83,10 +83,10 @@ export function validateXPTransaction(
   const timeDrift = Date.now() - transaction.timestamp;
   if (timeDrift < 0 || timeDrift > 24 * 60 * 60 * 1000) {
     result.violations.push({
-      type: "SUSPICIOUS",
-      field: "timestamp",
-      message: "Transaction timestamp is suspicious (future or very old)",
-      severity: "MEDIUM",
+      type: 'SUSPICIOUS',
+      field: 'timestamp',
+      message: 'Transaction timestamp is suspicious (future or very old)',
+      severity: 'MEDIUM',
       details: { timestamp: transaction.timestamp, drift: timeDrift },
     });
     result.riskScore += 20;
@@ -99,10 +99,10 @@ export function validateXPTransaction(
   );
   if (isDuplicate) {
     result.violations.push({
-      type: "POLICY",
-      field: "sourceId",
-      message: "Duplicate transaction detected",
-      severity: "MEDIUM",
+      type: 'POLICY',
+      field: 'sourceId',
+      message: 'Duplicate transaction detected',
+      severity: 'MEDIUM',
       details: { sourceId: transaction.sourceId },
     });
     result.riskScore += 15;
@@ -115,8 +115,8 @@ export function validateXPTransaction(
 
   // Telemetry
   if (result.violations.length > 0) {
-    eventBus.publish("analytics:track", {
-      event: "progression_xp_validation_alert",
+    eventBus.publish('analytics:track', {
+      event: 'progression_xp_validation_alert',
       properties: {
         userId: transaction.userId,
         riskScore: result.riskScore,
@@ -126,7 +126,7 @@ export function validateXPTransaction(
     });
   }
 
-  debug.info("XP transaction validated", {
+  debug.info('XP transaction validated', {
     valid: result.valid,
     riskScore: result.riskScore,
     violations: result.violations.length,

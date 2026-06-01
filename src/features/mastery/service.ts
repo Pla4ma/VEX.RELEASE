@@ -1,4 +1,4 @@
-import type { MasteryRank, MasteryState } from "./types";
+import type { MasteryRank, MasteryState } from './types';
 import {
   type TechniqueXpGains,
   type TechniqueKey,
@@ -8,8 +8,8 @@ import {
   loadStateAsync,
   updateChallengeProgress,
   updateTechniqueProgress,
-} from "./mastery-helpers";
-import { persistMasteryState } from "./repository";
+} from './mastery-helpers';
+import { persistMasteryState } from './repository';
 
 export async function recordSessionMasteryProgress(
   userId: string,
@@ -25,25 +25,25 @@ export async function recordSessionMasteryProgress(
   const qualityBonus = sessionData.focusQuality >= 90 ? 1 : 0;
   updateTechniqueProgress(
     userId,
-    "durationMastery",
+    'durationMastery',
     sessionMinutes > 45 ? 1 : 0,
     sessionMinutes > 45 ? 1 + qualityBonus : 0,
   );
   updateTechniqueProgress(
     userId,
-    "purityMastery",
+    'purityMastery',
     sessionData.purityScore > 85 ? 1 : 0,
     sessionData.purityScore > 85 ? 1 + qualityBonus : 0,
   );
   updateTechniqueProgress(
     userId,
-    "consistencyMastery",
+    'consistencyMastery',
     sessionData.streak > 0 ? 1 : 0,
     sessionData.streak > 0 ? 1 : 0,
   );
   updateTechniqueProgress(
     userId,
-    "bossMastery",
+    'bossMastery',
     sessionData.hasBossActive ? 1 : 0,
     sessionData.hasBossActive ? 1 + qualityBonus : 0,
   );
@@ -121,7 +121,7 @@ export const MasteryService = {
     const challenge = state.activeChallenges.find(
       (item) => item.id === challengeId,
     );
-    if (!challenge || challenge.status !== "COMPLETED") return false;
+    if (!challenge || challenge.status !== 'COMPLETED') {return false;}
     const totalMasteryPoints =
       state.totalMasteryPoints + challenge.masteryPoints;
     persistMasteryState(

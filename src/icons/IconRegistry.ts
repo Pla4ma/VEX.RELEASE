@@ -1,9 +1,9 @@
-import type { IconCollection, IconRegistryEntry } from "./types";
-import { appIcons } from "./appIcons";
-import { navigationIcons } from "./navigationIcons";
-import { actionIcons } from "./actionIcons";
-import { statusIcons } from "./statusIcons";
-import { socialIcons } from "./socialIcons";
+import type { IconCollection, IconRegistryEntry } from './types';
+import { appIcons } from './appIcons';
+import { navigationIcons } from './navigationIcons';
+import { actionIcons } from './actionIcons';
+import { statusIcons } from './statusIcons';
+import { socialIcons } from './socialIcons';
 
 export const iconRegistry: IconCollection = {
   ...appIcons,

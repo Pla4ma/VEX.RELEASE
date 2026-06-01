@@ -1,9 +1,9 @@
-import { jest } from "@jest/globals";
-import { SessionRewardIntegration } from "../../SessionRewardIntegration";
-import { eventBus } from "../../../events";
-import type { SessionSummary } from "../../types";
+import { jest } from '@jest/globals';
+import { SessionRewardIntegration } from '../../SessionRewardIntegration';
+import { eventBus } from '../../../events';
+import type { SessionSummary } from '../../types';
 
-jest.mock("../../../events");
+jest.mock('../../../events');
 
 export { eventBus, SessionRewardIntegration };
 export type { SessionSummary };
@@ -13,9 +13,9 @@ export let mockEventBus: { publish: jest.Mock; subscribe: jest.Mock };
 export const createMockSummary = (
   overrides: Partial<SessionSummary> = {},
 ): SessionSummary => ({
-  sessionId: "test-session",
-  userId: "test-user",
-  status: "COMPLETED",
+  sessionId: 'test-session',
+  userId: 'test-user',
+  status: 'COMPLETED',
   plannedDuration: 1500,
   actualDuration: 1500,
   effectiveDuration: 1500,

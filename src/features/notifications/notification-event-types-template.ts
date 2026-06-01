@@ -1,7 +1,7 @@
-import { BaseNotificationEvent } from "./notification-event-types-core";
+import { BaseNotificationEvent } from './notification-event-types-core';
 
 export interface NotificationTemplateCreatedEvent extends BaseNotificationEvent {
-  type: "notification_template_created";
+  type: 'notification_template_created';
   data: {
     templateId: string;
     name: string;
@@ -23,7 +23,7 @@ export interface NotificationTemplateCreatedEvent extends BaseNotificationEvent 
   };
 }
 export interface NotificationTemplateUpdatedEvent extends BaseNotificationEvent {
-  type: "notification_template_updated";
+  type: 'notification_template_updated';
   data: {
     templateId: string;
     changes: {
@@ -38,7 +38,7 @@ export interface NotificationTemplateUpdatedEvent extends BaseNotificationEvent 
   };
 }
 export interface NotificationTemplateDeletedEvent extends BaseNotificationEvent {
-  type: "notification_template_deleted";
+  type: 'notification_template_deleted';
   data: {
     templateId: string;
     deletedAt: Date;
@@ -49,7 +49,7 @@ export interface NotificationTemplateDeletedEvent extends BaseNotificationEvent 
   };
 }
 export interface NotificationPreferencesUpdatedEvent extends BaseNotificationEvent {
-  type: "notification_preferences_updated";
+  type: 'notification_preferences_updated';
   data: {
     preferences: {
       globalSettings: {
@@ -102,11 +102,11 @@ export interface NotificationPreferencesUpdatedEvent extends BaseNotificationEve
       };
     };
     updatedFields: string[];
-    updatedBy: "user" | "system" | "admin";
+    updatedBy: 'user' | 'system' | 'admin';
   };
 }
 export interface NotificationChannelPreferencesUpdatedEvent extends BaseNotificationEvent {
-  type: "notification_channel_preferences_updated";
+  type: 'notification_channel_preferences_updated';
   data: {
     channel: string;
     preferences: {

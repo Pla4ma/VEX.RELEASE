@@ -8,14 +8,14 @@ import {
   buildLaneSessionBrief,
   decideHomeSurfaces,
   SessionMode,
-} from "./phase3-lane-polish/helpers";
+} from './phase3-lane-polish/helpers';
 import type {
   Lane,
   CompletionExperiencePolicy,
-} from "./phase3-lane-polish/helpers";
+} from './phase3-lane-polish/helpers';
 
-describe("Phase 3F — Consumers", () => {
-  it("Home consumes LaneProfile to decide surfaces per lane", () => {
+describe('Phase 3F — Consumers', () => {
+  it('Home consumes LaneProfile to decide surfaces per lane', () => {
     const input = {
       behaviorStats: { ...baseStats, totalCompletedSessions: 4 },
       featureAvailability,
@@ -28,51 +28,51 @@ describe("Phase 3F — Consumers", () => {
 
     const studentMap = decideHomeSurfaces({
       ...input,
-      laneProfile: baseLaneProfile({ primaryLane: "student" }),
+      laneProfile: baseLaneProfile({ primaryLane: 'student' }),
     });
-    expect(studentMap.study_os).not.toBe("hidden");
+    expect(studentMap.study_os).not.toBe('hidden');
 
     const runMap = decideHomeSurfaces({
       ...input,
       behaviorStats: {
         ...input.behaviorStats,
-        bossChallengeEngagement: "medium",
+        bossChallengeEngagement: 'medium',
       },
       hasActiveBoss: true,
       hasActiveStudyPlan: false,
-      personalizationProfile: { ...baseProfile, motivationStyle: "game_like" },
-      laneProfile: baseLaneProfile({ primaryLane: "game_like" }),
+      personalizationProfile: { ...baseProfile, motivationStyle: 'game_like' },
+      laneProfile: baseLaneProfile({ primaryLane: 'game_like' }),
     });
-    expect(runMap.run_board).not.toBe("hidden");
+    expect(runMap.run_board).not.toBe('hidden');
 
     const projectMap = decideHomeSurfaces({
       ...input,
       behaviorStats: { ...input.behaviorStats, projectFocusUsageRatio: 0.6 },
       hasActiveStudyPlan: false,
-      personalizationProfile: { ...baseProfile, primaryGoal: "creative" },
-      laneProfile: baseLaneProfile({ primaryLane: "deep_creative" }),
+      personalizationProfile: { ...baseProfile, primaryGoal: 'creative' },
+      laneProfile: baseLaneProfile({ primaryLane: 'deep_creative' }),
     });
-    expect(projectMap.project_thread).not.toBe("hidden");
+    expect(projectMap.project_thread).not.toBe('hidden');
 
     const cleanMap = decideHomeSurfaces({
       ...input,
       hasActiveStudyPlan: false,
       personalizationProfile: {
         ...baseProfile,
-        motivationStyle: "calm",
-        gamificationIntensity: "minimal",
+        motivationStyle: 'calm',
+        gamificationIntensity: 'minimal',
       },
-      laneProfile: baseLaneProfile({ primaryLane: "minimal_normal" }),
+      laneProfile: baseLaneProfile({ primaryLane: 'minimal_normal' }),
     });
-    expect(cleanMap.today_strip).not.toBe("hidden");
+    expect(cleanMap.today_strip).not.toBe('hidden');
   });
 
-  it("SessionStart consumes LaneProfile to produce lane-aware brief", () => {
+  it('SessionStart consumes LaneProfile to produce lane-aware brief', () => {
     const lanes: Lane[] = [
-      "student",
-      "game_like",
-      "deep_creative",
-      "minimal_normal",
+      'student',
+      'game_like',
+      'deep_creative',
+      'minimal_normal',
     ];
     const briefs = lanes.map((lane) =>
       buildLaneSessionBrief({
@@ -86,10 +86,10 @@ describe("Phase 3F — Consumers", () => {
     expect(uniqueCtas.size).toBe(4);
 
     const expectedCtas = [
-      "Start study block",
-      "Start clean run",
-      "Resume project block",
-      "Start clean action",
+      'Start study block',
+      'Start clean run',
+      'Resume project block',
+      'Start clean action',
     ];
     for (const expected of expectedCtas) {
       expect(ctaLabels).toContain(expected);
@@ -103,16 +103,16 @@ describe("Phase 3F — Consumers", () => {
     }
   });
 
-  it("Completion consumes LaneProfile for lane-aware experience", () => {
+  it('Completion consumes LaneProfile for lane-aware experience', () => {
     const completionPolicies: Record<Lane, CompletionExperiencePolicy> = {
       student: resolveCompletionExperiencePolicy(
         completionInput({
-          lane: "student",
-          motivationStyle: "study_focused",
-          primaryGoal: "STUDY",
+          lane: 'student',
+          motivationStyle: 'study_focused',
+          primaryGoal: 'STUDY',
           sessionMode: SessionMode.STUDY,
           summary: {
-            sessionId: "arch-student",
+            sessionId: 'arch-student',
             finalScore: 92,
             focusQuality: 88,
           },
@@ -120,21 +120,21 @@ describe("Phase 3F — Consumers", () => {
       ),
       game_like: resolveCompletionExperiencePolicy(
         completionInput({
-          lane: "game_like",
-          motivationStyle: "game_like",
+          lane: 'game_like',
+          motivationStyle: 'game_like',
           sessionMode: SessionMode.SPRINT,
           consequences: { boss: { damage: 50 } },
-          summary: { sessionId: "arch-run", finalScore: 90, focusQuality: 85 },
+          summary: { sessionId: 'arch-run', finalScore: 90, focusQuality: 85 },
         }),
       ),
       deep_creative: resolveCompletionExperiencePolicy(
         completionInput({
-          lane: "deep_creative",
-          motivationStyle: "creator",
-          primaryGoal: "CREATIVE",
+          lane: 'deep_creative',
+          motivationStyle: 'creator',
+          primaryGoal: 'CREATIVE',
           sessionMode: SessionMode.CREATIVE,
           summary: {
-            sessionId: "arch-project",
+            sessionId: 'arch-project',
             finalScore: 88,
             plannedDuration: 1800,
             effectiveDuration: 1800,
@@ -143,10 +143,10 @@ describe("Phase 3F — Consumers", () => {
       ),
       minimal_normal: resolveCompletionExperiencePolicy(
         completionInput({
-          lane: "minimal_normal",
-          motivationStyle: "calm",
+          lane: 'minimal_normal',
+          motivationStyle: 'calm',
           sessionMode: SessionMode.LIGHT_FOCUS,
-          summary: { sessionId: "arch-clean", finalScore: 95 },
+          summary: { sessionId: 'arch-clean', finalScore: 95 },
         }),
       ),
     };
@@ -160,9 +160,9 @@ describe("Phase 3F — Consumers", () => {
     const animations = Object.values(completionPolicies).map(
       (p) => p.animationLevel,
     );
-    expect(animations).toContain("minimal");
-    expect(animations).toContain("medium_high");
-    expect(animations).toContain("low_medium");
+    expect(animations).toContain('minimal');
+    expect(animations).toContain('medium_high');
+    expect(animations).toContain('low_medium');
 
     for (const policy of Object.values(completionPolicies)) {
       expect(policy.heroBeat).toBeDefined();

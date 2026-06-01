@@ -4,8 +4,8 @@ import {
   type FeatureAccessMap,
   type FeatureKey,
   type ProductTier,
-} from "../feature-access";
-import { buildHomeFeatureRuntime } from "../../../screens/home/hooks/home-feature-runtime";
+} from '../feature-access';
+import { buildHomeFeatureRuntime } from '../../../screens/home/hooks/home-feature-runtime';
 
 function featuresAt(totalCompletedSessions: number): {
   features: FeatureAccessMap;
@@ -14,30 +14,30 @@ function featuresAt(totalCompletedSessions: number): {
   return buildFeatureAccess({ totalCompletedSessions });
 }
 
-describe("debloat feature contract", () => {
-  it("uses execution/study/coaching/RPG/social product tiers", () => {
-    expect(featuresAt(0).productTier).toBe("CORE_EXECUTION");
-    expect(featuresAt(5).productTier).toBe("COACHING");
-    expect(featuresAt(12).productTier).toBe("STUDY_OS");
-    expect(featuresAt(20).productTier).toBe("RPG_DEPTH");
+describe('debloat feature contract', () => {
+  it('uses execution/study/coaching/RPG/social product tiers', () => {
+    expect(featuresAt(0).productTier).toBe('CORE_EXECUTION');
+    expect(featuresAt(5).productTier).toBe('COACHING');
+    expect(featuresAt(12).productTier).toBe('STUDY_OS');
+    expect(featuresAt(20).productTier).toBe('RPG_DEPTH');
   });
 
-  it("keeps final-release deactivated features fully unavailable at high session counts", () => {
+  it('keeps final-release deactivated features fully unavailable at high session counts', () => {
     const { features } = featuresAt(999);
     const disabled: FeatureKey[] = [
-      "battle_pass",
-      "boss_bounties",
-      "economy_advanced",
-      "gems_prominent",
-      "inventory",
-      "rankings",
-      "rivals",
-      "seasonal_features",
-      "shop",
-      "social_tab",
-      "squads",
-      "streak_insurance",
-      "wagers",
+      'battle_pass',
+      'boss_bounties',
+      'economy_advanced',
+      'gems_prominent',
+      'inventory',
+      'rankings',
+      'rivals',
+      'seasonal_features',
+      'shop',
+      'social_tab',
+      'squads',
+      'streak_insurance',
+      'wagers',
     ];
 
     disabled.forEach((feature) => {
@@ -52,7 +52,7 @@ describe("debloat feature contract", () => {
     });
   });
 
-  it("keeps home runtime queries focused on execution, study, and coach depth", () => {
+  it('keeps home runtime queries focused on execution, study, and coach depth', () => {
     const { features, productTier } = featuresAt(999);
     const runtime = buildHomeFeatureRuntime({
       features,

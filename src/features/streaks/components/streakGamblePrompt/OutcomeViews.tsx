@@ -1,8 +1,8 @@
-import React from "react";
-import Animated, { FadeIn, FadeInUp } from "react-native-reanimated";
-import { Box, Text, Button } from "@/components/primitives";
-import { useTheme } from "@/theme";
-import type { GambleOutcome } from "./types";
+import React from 'react';
+import Animated, { FadeIn, FadeInUp } from 'react-native-reanimated';
+import { Box, Text, Button } from '@/components/primitives';
+import { useTheme } from '@/theme';
+import type { GambleOutcome } from './types';
 
 interface GamblingViewProps {
   streakDays: number;
@@ -30,7 +30,7 @@ export const GamblingView: React.FC<GamblingViewProps> = ({ streakDays }) => {
             textAlign="center"
             mt={2}
           >
-            Focus and give it your best shot!{"\n"}
+            Focus and give it your best shot!{'\n'}
             Score S or A to save your {streakDays}-day streak.
           </Text>
 
@@ -159,7 +159,7 @@ export const LostView: React.FC<LostViewProps> = ({
               color={theme.colors.text.secondary}
               textAlign="center"
             >
-              You gave it your best shot!{"\n"}
+              You gave it your best shot!{'\n'}
               Your {streakDays}-day streak will reset.
             </Text>
           </Box>

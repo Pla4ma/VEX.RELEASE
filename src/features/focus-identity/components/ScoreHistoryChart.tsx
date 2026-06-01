@@ -1,8 +1,8 @@
-import { View, useWindowDimensions } from "react-native";
-import { Text } from "../../../components/primitives/Text";
-import { Box } from "../../../components/primitives/Box";
-import { useTheme } from "../../../theme";
-import { useFocusScoreHistory } from "../hooks-focus-score";
+import { View, useWindowDimensions } from 'react-native';
+import { Text } from '../../../components/primitives/Text';
+import { Box } from '../../../components/primitives/Box';
+import { useTheme } from '../../../theme';
+import { useFocusScoreHistory } from '../hooks-focus-score';
 import {
   buildScaleX,
   buildScaleY,
@@ -10,8 +10,8 @@ import {
   buildAreaD,
   getScoreColor,
   computeScoreBounds,
-} from "./chartHelpers";
-import { ScoreChartSvg } from "./ScoreChartSvg";
+} from './chartHelpers';
+import { ScoreChartSvg } from './ScoreChartSvg';
 
 interface ScoreHistoryChartProps {
   userId: string;
@@ -35,13 +35,13 @@ export function ScoreHistoryChart({
   const graphHeight = height - padding.top - padding.bottom;
   const safeHistory = history ?? [];
 
-  if (status === "pending") {
+  if (status === 'pending') {
     return (
       <Box
         padding="lg"
         backgroundColor="surface"
         borderRadius="lg"
-        style={{ width: "100%" }}
+        style={{ width: '100%' }}
       >
         <View
           style={{
@@ -54,13 +54,13 @@ export function ScoreHistoryChart({
     );
   }
 
-  if (status === "error") {
+  if (status === 'error') {
     return (
       <Box
         padding="lg"
         backgroundColor="surface"
         borderRadius="lg"
-        style={{ width: "100%" }}
+        style={{ width: '100%' }}
       >
         <Text
           variant="body"
@@ -82,7 +82,7 @@ export function ScoreHistoryChart({
         padding="lg"
         backgroundColor="surface"
         borderRadius="lg"
-        style={{ width: "100%" }}
+        style={{ width: '100%' }}
       >
         <Text
           variant="body"
@@ -91,7 +91,7 @@ export function ScoreHistoryChart({
         >
           Score History
         </Text>
-        <View style={{ alignItems: "center", paddingVertical: 40 }}>
+        <View style={{ alignItems: 'center', paddingVertical: 40 }}>
           <Text style={{ fontSize: 48, marginBottom: theme.spacing[2] }}>
             📊
           </Text>
@@ -116,7 +116,7 @@ export function ScoreHistoryChart({
       padding="lg"
       backgroundColor="surface"
       borderRadius="lg"
-      style={{ width: "100%" }}
+      style={{ width: '100%' }}
     >
       <Text variant="heading3" style={{ marginBottom: theme.spacing[4] }}>
         Score History
@@ -142,8 +142,8 @@ export function ScoreHistoryChart({
 
       <View
         style={{
-          flexDirection: "row",
-          alignItems: "center",
+          flexDirection: 'row',
+          alignItems: 'center',
           marginTop: 12,
           gap: 8,
         }}

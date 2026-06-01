@@ -1,20 +1,20 @@
-import React, { useEffect } from "react";
-import { View, ViewStyle, Pressable } from "react-native";
+import React, { useEffect } from 'react';
+import { View, ViewStyle, Pressable } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withSpring,
   FadeInUp,
   FadeOutUp,
-} from "react-native-reanimated";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import { triggerHaptic } from "../../../utils/haptics";
+} from 'react-native-reanimated';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import { triggerHaptic } from '../../../utils/haptics';
 import {
   REWARD_CONFIG,
   getRewardColor,
   type RewardType,
-} from "./micro-reward-helpers";
+} from './micro-reward-helpers';
 
 export interface MicroRewardBannerProps {
   type: RewardType;
@@ -49,7 +49,7 @@ export const MicroRewardBanner: React.FC<MicroRewardBannerProps> = ({
   const displayLabel = customLabel || config.label;
   const displayColor = getRewardColor(type, theme);
   useEffect(() => {
-    void triggerHaptic("success");
+    void triggerHaptic('success');
   }, []);
   useEffect(() => {
     if (!autoDismiss) {
@@ -75,8 +75,8 @@ export const MicroRewardBanner: React.FC<MicroRewardBannerProps> = ({
   const innerContent = (
     <View
       style={{
-        flexDirection: "row",
-        alignItems: "center",
+        flexDirection: 'row',
+        alignItems: 'center',
         gap: theme.spacing[3],
         flex: 1,
       }}
@@ -87,8 +87,8 @@ export const MicroRewardBanner: React.FC<MicroRewardBannerProps> = ({
           height: 40,
           borderRadius: 20,
           backgroundColor: `${displayColor}20`,
-          alignItems: "center",
-          justifyContent: "center",
+          alignItems: 'center',
+          justifyContent: 'center',
         }}
       >
         <Text fontSize={20}>{displayIcon}</Text>
@@ -96,15 +96,15 @@ export const MicroRewardBanner: React.FC<MicroRewardBannerProps> = ({
       <View style={{ flex: 1, gap: 2 }}>
         <View
           style={{
-            flexDirection: "row",
-            alignItems: "center",
+            flexDirection: 'row',
+            alignItems: 'center',
             gap: theme.spacing[2],
           }}
         >
           <Text
             variant="bodySmall"
             color={theme.colors.text.primary}
-            style={{ fontWeight: "700" }}
+            style={{ fontWeight: '700' }}
           >
             {displayLabel}
           </Text>
@@ -112,7 +112,7 @@ export const MicroRewardBanner: React.FC<MicroRewardBannerProps> = ({
             <Text
               variant="bodySmall"
               color={displayColor}
-              style={{ fontWeight: "800" }}
+              style={{ fontWeight: '800' }}
             >
               {amountText}
             </Text>
@@ -138,8 +138,8 @@ export const MicroRewardBanner: React.FC<MicroRewardBannerProps> = ({
           borderWidth: 1,
           borderColor: theme.colors.border.light,
           padding: theme.spacing[3],
-          flexDirection: "row",
-          alignItems: "center",
+          flexDirection: 'row',
+          alignItems: 'center',
           gap: theme.spacing[3],
           shadowColor: theme.colors.text.primary,
           shadowOffset: { width: 0, height: 2 },
@@ -152,7 +152,7 @@ export const MicroRewardBanner: React.FC<MicroRewardBannerProps> = ({
     >
       <Animated.View
         style={[
-          { flex: 1, flexDirection: "row", alignItems: "center" },
+          { flex: 1, flexDirection: 'row', alignItems: 'center' },
           animatedStyle,
         ]}
       >
@@ -162,8 +162,8 @@ export const MicroRewardBanner: React.FC<MicroRewardBannerProps> = ({
             onPressIn={handlePressIn}
             onPressOut={handlePressOut}
             style={{
-              flexDirection: "row",
-              alignItems: "center",
+              flexDirection: 'row',
+              alignItems: 'center',
               gap: theme.spacing[3],
               flex: 1,
             }}
@@ -195,5 +195,5 @@ export const MicroRewardBanner: React.FC<MicroRewardBannerProps> = ({
     </Animated.View>
   );
 };
-export { CompactRewardBadge, type CompactRewardBadgeProps } from "./CompactRewardBadge";
+export { CompactRewardBadge, type CompactRewardBadgeProps } from './CompactRewardBadge';
 export default MicroRewardBanner;

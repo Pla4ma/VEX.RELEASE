@@ -1,12 +1,12 @@
-import type { CoachPersona, CoachPersonaId } from "./CoachRecommendationService-types";
+import type { CoachPersona, CoachPersonaId } from './CoachRecommendationService-types';
 
 export const COACH_PERSONAS: Record<CoachPersonaId, CoachPersona> = {
   mentor: {
-    id: "mentor",
-    name: "The Mentor",
-    voiceTone: "WISE",
-    vocabularyTraits: ["warm", "strategic", "encouraging", "measured"],
-    sentenceStructure: "MEASURED",
+    id: 'mentor',
+    name: 'The Mentor',
+    voiceTone: 'WISE',
+    vocabularyTraits: ['warm', 'strategic', 'encouraging', 'measured'],
+    sentenceStructure: 'MEASURED',
     guidelines: {
       maxSentences: 2,
       alwaysActionable: true,
@@ -15,11 +15,11 @@ export const COACH_PERSONAS: Record<CoachPersonaId, CoachPersona> = {
     },
   },
   trainer: {
-    id: "trainer",
-    name: "The Trainer",
-    voiceTone: "STERN",
-    vocabularyTraits: ["direct", "challenging", "results-focused", "action-oriented"],
-    sentenceStructure: "SHORT_DIRECT",
+    id: 'trainer',
+    name: 'The Trainer',
+    voiceTone: 'STERN',
+    vocabularyTraits: ['direct', 'challenging', 'results-focused', 'action-oriented'],
+    sentenceStructure: 'SHORT_DIRECT',
     guidelines: {
       maxSentences: 2,
       alwaysActionable: true,
@@ -28,11 +28,11 @@ export const COACH_PERSONAS: Record<CoachPersonaId, CoachPersona> = {
     },
   },
   peer: {
-    id: "peer",
-    name: "The Peer",
-    voiceTone: "PLAYFUL",
-    vocabularyTraits: ["casual", "relatable", "slang", "we-re-in-this-together"],
-    sentenceStructure: "CONVERSATIONAL",
+    id: 'peer',
+    name: 'The Peer',
+    voiceTone: 'PLAYFUL',
+    vocabularyTraits: ['casual', 'relatable', 'slang', 'we-re-in-this-together'],
+    sentenceStructure: 'CONVERSATIONAL',
     guidelines: {
       maxSentences: 2,
       alwaysActionable: true,
@@ -41,11 +41,11 @@ export const COACH_PERSONAS: Record<CoachPersonaId, CoachPersona> = {
     },
   },
   professor: {
-    id: "professor",
-    name: "The Professor",
-    voiceTone: "WISE",
-    vocabularyTraits: ["academic", "methodical", "knowledge-focused", "precise"],
-    sentenceStructure: "MEASURED",
+    id: 'professor',
+    name: 'The Professor',
+    voiceTone: 'WISE',
+    vocabularyTraits: ['academic', 'methodical', 'knowledge-focused', 'precise'],
+    sentenceStructure: 'MEASURED',
     guidelines: {
       maxSentences: 2,
       alwaysActionable: true,

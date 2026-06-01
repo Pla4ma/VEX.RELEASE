@@ -4,12 +4,12 @@
  * Weekly leaderboard notification generator plus notification rate limit helpers.
  */
 
-import { getSupabaseClient } from "../../config/supabase";
-import { createDebugger } from "../../utils/debug";
-import type { NotificationContent } from "./SmartNotificationScheduler-types";
-import { MAX_NOTIFICATIONS_PER_DAY } from "./SmartNotificationScheduler-types";
+import { getSupabaseClient } from '../../config/supabase';
+import { createDebugger } from '../../utils/debug';
+import type { NotificationContent } from './SmartNotificationScheduler-types';
+import { MAX_NOTIFICATIONS_PER_DAY } from './SmartNotificationScheduler-types';
 
-const debug = createDebugger("notifications:smart-scheduler");
+const debug = createDebugger('notifications:smart-scheduler');
 
 export async function generateRankReportNotification(
   userId: string,
@@ -24,11 +24,11 @@ export async function generateRankReportNotification(
     const weekStart = new Date();
     weekStart.setDate(weekStart.getDate() - 7);
     const { data: sessions, error } = await getSupabaseClient()
-      .from("sessions")
-      .select("duration_seconds")
-      .eq("user_id", userId)
-      .eq("status", "COMPLETED")
-      .gte("completed_at", weekStart.toISOString());
+      .from('sessions')
+      .select('duration_seconds')
+      .eq('user_id', userId)
+      .eq('status', 'COMPLETED')
+      .gte('completed_at', weekStart.toISOString());
     if (error) {
       return null;
     }
@@ -37,9 +37,9 @@ export async function generateRankReportNotification(
       0,
     );
     const { data: leaderboard, error: lbError } = await getSupabaseClient()
-      .from("weekly_leaderboard")
-      .select("user_id, focus_minutes")
-      .order("focus_minutes", { ascending: false });
+      .from('weekly_leaderboard')
+      .select('user_id, focus_minutes')
+      .order('focus_minutes', { ascending: false });
     if (lbError || !leaderboard) {
       return null;
     }
@@ -63,7 +63,7 @@ export async function generateRankReportNotification(
       title: `Weekly Rank: ${tierIcon} ${tier}`,
       body,
       data: {
-        type: "RANK_REPORT",
+        type: 'RANK_REPORT',
         tier,
         percentile: Math.round(percentile),
         weeklyMinutes: Math.round(weeklyMinutes),
@@ -83,39 +83,39 @@ function calculateTier(
 ): { tier: string; tierIcon: string; sessionsToNext: number | null } {
   const notInRank = totalUsers - rankPosition;
   if (percentile >= 99) {
-    return { tier: "LEGEND", tierIcon: "👑", sessionsToNext: null };
+    return { tier: 'LEGEND', tierIcon: '👑', sessionsToNext: null };
   }
   if (percentile >= 95) {
     return {
-      tier: "DIAMOND",
-      tierIcon: "💎",
+      tier: 'DIAMOND',
+      tierIcon: '💎',
       sessionsToNext: Math.ceil((0.99 * totalUsers - notInRank) * 25),
     };
   }
   if (percentile >= 90) {
     return {
-      tier: "PLATINUM",
-      tierIcon: "⭐",
+      tier: 'PLATINUM',
+      tierIcon: '⭐',
       sessionsToNext: Math.ceil((0.95 * totalUsers - notInRank) * 25),
     };
   }
   if (percentile >= 75) {
     return {
-      tier: "GOLD",
-      tierIcon: "🥇",
+      tier: 'GOLD',
+      tierIcon: '🥇',
       sessionsToNext: Math.ceil((0.9 * totalUsers - notInRank) * 25),
     };
   }
   if (percentile >= 50) {
     return {
-      tier: "SILVER",
-      tierIcon: "🥈",
+      tier: 'SILVER',
+      tierIcon: '🥈',
       sessionsToNext: Math.ceil((0.75 * totalUsers - notInRank) * 25),
     };
   }
   return {
-    tier: "BRONZE",
-    tierIcon: "🥉",
+    tier: 'BRONZE',
+    tierIcon: '🥉',
     sessionsToNext: Math.ceil((0.5 * totalUsers - notInRank) * 25),
   };
 }
@@ -125,13 +125,13 @@ export async function checkRateLimit(userId: string): Promise<boolean> {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const { count, error } = await getSupabaseClient()
-      .from("notifications_sent")
-      .select("*", { count: "exact", head: true })
-      .eq("user_id", userId)
-      .eq("notification_type", "SMART_REMINDER")
-      .gte("sent_at", today.toISOString());
+      .from('notifications_sent')
+      .select('*', { count: 'exact', head: true })
+      .eq('user_id', userId)
+      .eq('notification_type', 'SMART_REMINDER')
+      .gte('sent_at', today.toISOString());
     if (error) {
-      debug.warn("Error checking rate limit", error);
+      debug.warn('Error checking rate limit', error);
       return false;
     }
     return (count ?? 0) < MAX_NOTIFICATIONS_PER_DAY;
@@ -143,15 +143,15 @@ export async function checkRateLimit(userId: string): Promise<boolean> {
 export async function recordNotificationSent(userId: string): Promise<void> {
   try {
     await getSupabaseClient()
-      .from("notifications_sent")
+      .from('notifications_sent')
       .insert({
         user_id: userId,
-        notification_type: "SMART_REMINDER",
+        notification_type: 'SMART_REMINDER',
         sent_at: new Date().toISOString(),
       });
   } catch (error) {
     debug.warn(
-      "Failed to record notification",
+      'Failed to record notification',
       error instanceof Error ? error : undefined,
     );
   }

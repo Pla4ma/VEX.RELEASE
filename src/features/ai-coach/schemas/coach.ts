@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 import {
   VoiceToneSchema,
   CoachStyleSchema,
@@ -7,8 +7,8 @@ import {
   DeliveryMethodSchema,
   MessageStatusSchema,
   CoachUserStateSchema,
-} from "./enums";
-import { BehaviorProfileSchema } from "./behavior";
+} from './enums';
+import { BehaviorProfileSchema } from './behavior';
 
 export const CoachPersonaSchema = z
   .object({
@@ -26,7 +26,7 @@ export const CoachPersonaSchema = z
 export const MessageConditionSchema = z
   .object({
     type: ConditionTypeSchema,
-    operator: z.enum(["eq", "gt", "lt", "gte", "lte", "in", "between"]),
+    operator: z.enum(['eq', 'gt', 'lt', 'gte', 'lte', 'in', 'between']),
     value: z.unknown(),
     field: z.string().optional(),
   })

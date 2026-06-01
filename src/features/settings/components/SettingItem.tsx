@@ -3,10 +3,10 @@
  * Single setting row with label, value, and optional toggle
  */
 
-import React from "react";
-import { View, Text, Pressable } from "react-native";
-import { createSheet } from "@/shared/ui/create-sheet";
-import { launchColors } from "@theme/tokens/launch-colors";
+import React from 'react';
+import { View, Text, Pressable } from 'react-native';
+import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
 
 interface SettingItemProps {
   label: string;
@@ -43,9 +43,9 @@ export function SettingItem({
 
 const styles = createSheet({
   container: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     paddingVertical: 16,
     paddingHorizontal: 16,
     backgroundColor: launchColors.hex_ffffff,

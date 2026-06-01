@@ -1,6 +1,6 @@
-import { buildSessionCompletionConsequences } from "../story-consequence-service";
-import { SessionMode } from "../../../session/modes";
-import type { SessionSummary } from "../../../session/types";
+import { buildSessionCompletionConsequences } from '../story-consequence-service';
+import { SessionMode } from '../../../session/modes';
+import type { SessionSummary } from '../../../session/types';
 
 const summary: SessionSummary = {
   actualDuration: 1500,
@@ -21,33 +21,33 @@ const summary: SessionSummary = {
   pauses: 0,
   penaltiesApplied: [],
   plannedDuration: 1500,
-  sessionId: "session-1",
+  sessionId: 'session-1',
   sessionMode: SessionMode.FLOW,
-  status: "COMPLETED",
+  status: 'COMPLETED',
   streakDays: 4,
   streakIncreased: true,
   streakMaintained: true,
   timeBonus: 12,
-  userId: "user-1",
+  userId: 'user-1',
   userLevel: 2,
   vsAverage: 8,
   vsBest: -2,
   xpEarned: 50,
 };
 
-describe("buildSessionCompletionConsequences", () => {
-  it("builds boss, streak, and challenge consequences from fetched systems", () => {
+describe('buildSessionCompletionConsequences', () => {
+  it('builds boss, streak, and challenge consequences from fetched systems', () => {
     const result = buildSessionCompletionConsequences({
       activeBoss: {
-        bossName: "Distraction Wall",
+        bossName: 'Distraction Wall',
         healthRemaining: 100,
         maxHealth: 200,
-        status: "ACTIVE",
+        status: 'ACTIVE',
       },
       activeChallenges: [
         {
-          challenge: { targetValue: 3, title: "Finish three sessions" },
-          userChallenge: { currentValue: 3, status: "COMPLETED" },
+          challenge: { targetValue: 3, title: 'Finish three sessions' },
+          userChallenge: { currentValue: 3, status: 'COMPLETED' },
         },
       ],
       streakSummary: { currentDays: 4, isAtRisk: true },
@@ -60,7 +60,7 @@ describe("buildSessionCompletionConsequences", () => {
     expect(result.challenge?.wasCompleted).toBe(true);
   });
 
-  it("returns empty consequence sections when optional systems are absent", () => {
+  it('returns empty consequence sections when optional systems are absent', () => {
     const result = buildSessionCompletionConsequences({
       activeBoss: null,
       activeChallenges: [],

@@ -1,15 +1,15 @@
-import React from "react";
-import { Pressable } from "react-native";
+import React from 'react';
+import { Pressable } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   withSpring,
   FadeIn,
-} from "react-native-reanimated";
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import { DAY_WIDTH, EVENT_ICONS, type DayData } from "./weekly-calendar-types";
-import { buttonTap } from "../../../utils/haptics";
+} from 'react-native-reanimated';
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import { DAY_WIDTH, EVENT_ICONS, type DayData } from './weekly-calendar-types';
+import { buttonTap } from '../../../utils/haptics';
 
 export function DayCell({
   day,
@@ -27,11 +27,11 @@ export function DayCell({
   const { theme } = useTheme();
   const getStatusColor = () => {
     switch (day.status) {
-      case "completed":
+      case 'completed':
         return theme.colors.success.DEFAULT;
-      case "partial":
+      case 'partial':
         return theme.colors.warning.DEFAULT;
-      case "missed":
+      case 'missed':
         return theme.colors.error.DEFAULT;
       default:
         return theme.colors.text.tertiary;
@@ -39,14 +39,14 @@ export function DayCell({
   };
   const getStatusIcon = () => {
     switch (day.status) {
-      case "completed":
-        return "✓";
-      case "partial":
-        return "◐";
-      case "missed":
-        return "✕";
+      case 'completed':
+        return '✓';
+      case 'partial':
+        return '◐';
+      case 'missed':
+        return '✕';
       default:
-        return "";
+        return '';
     }
   };
   const animatedStyle = useAnimatedStyle(() => ({
@@ -64,7 +64,7 @@ export function DayCell({
       ? theme.colors.primary[500]
       : theme.colors.border.light,
   }));
-  const dayName = day.date.toLocaleDateString("en-US", { weekday: "narrow" });
+  const dayName = day.date.toLocaleDateString('en-US', { weekday: 'narrow' });
   const dayNum = day.date.getDate();
   return (
     <Animated.View
@@ -82,23 +82,23 @@ export function DayCell({
             variant="caption"
             color={
               isSelected
-                ? "text.inverse"
+                ? 'text.inverse'
                 : isToday
-                  ? "primary.500"
-                  : "text.tertiary"
+                  ? 'primary.500'
+                  : 'text.tertiary'
             }
-            fontWeight={isToday ? "700" : "400"}
+            fontWeight={isToday ? '700' : '400'}
           >
             {dayName}
           </Text>
           <Text
             variant="h4"
-            color={isSelected ? "text.inverse" : "text.primary"}
-            fontWeight={isToday || isSelected ? "700" : "400"}
+            color={isSelected ? 'text.inverse' : 'text.primary'}
+            fontWeight={isToday || isSelected ? '700' : '400'}
           >
             {dayNum}
           </Text>
-          {day.status !== "upcoming" && (
+          {day.status !== 'upcoming' && (
             <Text
               fontSize={12}
               color={isSelected ? theme.colors.text.inverse : getStatusColor()}

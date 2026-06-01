@@ -6,11 +6,11 @@ export type {
   AnalyticsEvent,
   UserProperties,
   AnalyticsConfig,
-} from "./AnalyticsService";
+} from './AnalyticsService';
 
-export { AnalyticsService, getAnalyticsService } from "./AnalyticsService";
+export { AnalyticsService, getAnalyticsService } from './AnalyticsService';
 
-export { useAnalytics, useScreenTracking } from "./hooks/useAnalytics";
+export { useAnalytics, useScreenTracking } from './hooks/useAnalytics';
 
 // Phase 6.2 - Analytics Infrastructure & Experimentation
 export {
@@ -35,7 +35,7 @@ export {
   type PaywallAnalytics,
   type StreakSurvivalMetrics,
   type VEXDashboard,
-} from "./VEXAnalyticsInfrastructure";
+} from './VEXAnalyticsInfrastructure';
 
 export {
   PREDEFINED_EXPERIMENTS,
@@ -55,4 +55,4 @@ export {
   type ExperimentAssignment,
   type ExperimentResults,
   type VariantResult,
-} from "./ABTestingFramework";
+} from './ABTestingFramework';

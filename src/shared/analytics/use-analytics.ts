@@ -1,9 +1,9 @@
-export { useAnalytics } from "./use-analytics-core";
+export { useAnalytics } from './use-analytics-core';
 export {
   useScreenTracking,
   useProgressionTracking,
   useSessionTracking,
-} from "./use-analytics-tracking";
+} from './use-analytics-tracking';
 
 export {
   AuthEvents,
@@ -13,6 +13,6 @@ export {
   SocialEvents,
   CoachEvents,
   FeatureEvents,
-} from "./analytics-events";
+} from './analytics-events';
 
-export type { AnalyticsEvent, EventProperties } from "./analytics-events";
+export type { AnalyticsEvent, EventProperties } from './analytics-events';

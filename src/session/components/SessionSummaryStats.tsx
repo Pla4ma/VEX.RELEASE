@@ -1,8 +1,8 @@
-import React from "react";
-import { View, Text } from "react-native";
-import { launchColors } from "@theme/tokens/launch-colors";
-import { formatDuration } from "./SessionSummary.helpers";
-import type { SessionSummary as SessionSummaryType } from "../types";
+import React from 'react';
+import { View, Text } from 'react-native';
+import { launchColors } from '@theme/tokens/launch-colors';
+import { formatDuration } from './SessionSummary.helpers';
+import type { SessionSummary as SessionSummaryType } from '../types';
 
 interface SessionSummaryStatsProps {
   summary: SessionSummaryType;
@@ -41,21 +41,21 @@ export const SessionSummaryStats: React.FC<SessionSummaryStatsProps> = ({
 
 const styles = {
   statsGrid: {
-    flexDirection: "row" as const,
-    flexWrap: "wrap" as const,
+    flexDirection: 'row' as const,
+    flexWrap: 'wrap' as const,
     gap: 12,
     marginBottom: 24,
   },
   statCard: {
-    width: "48%" as const,
+    width: '48%' as const,
     backgroundColor: launchColors.hex_2a2a3e,
     borderRadius: 12,
     padding: 16,
-    alignItems: "center" as const,
+    alignItems: 'center' as const,
   },
   statValue: {
     fontSize: 20,
-    fontWeight: "700" as const,
+    fontWeight: '700' as const,
     color: launchColors.hex_e94560,
     marginBottom: 4,
   },

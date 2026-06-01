@@ -5,17 +5,17 @@ import {
   type TodaySection,
   type TodaySystem,
   type TodaySystemInput,
-} from "./schemas";
+} from './schemas';
 
 const DEFAULT_NOW: TodayAction = {
-  id: "clean-session",
-  label: "Name one task. Run the block. That is enough.",
-  ctaLabel: "Start clean block",
+  id: 'clean-session',
+  label: 'Name one task. Run the block. That is enough.',
+  ctaLabel: 'Start clean block',
   durationSeconds: 25 * 60,
 };
 
 function section(
-  key: TodaySection["key"],
+  key: TodaySection['key'],
   visible: boolean,
   title: string,
   body: string,
@@ -33,41 +33,41 @@ function section(
 
 export function buildTodaySystem(rawInput: TodaySystemInput): TodaySystem {
   const input = TodaySystemInputSchema.parse(rawInput);
-  const hidden = input.hiddenFeatureKeys.includes("today_strip");
-  const isMinimal = input.lane === "minimal_normal";
+  const hidden = input.hiddenFeatureKeys.includes('today_strip');
+  const isMinimal = input.lane === 'minimal_normal';
   const now = input.nowAction ?? DEFAULT_NOW;
   const recovery: TodayAction = {
-    id: "five-minute-recovery",
-    label: "Five minutes. No pressure. Just keep the thread alive.",
-    ctaLabel: "Recover",
+    id: 'five-minute-recovery',
+    label: 'Five minutes. No pressure. Just keep the thread alive.',
+    ctaLabel: 'Recover',
     durationSeconds: 5 * 60,
   };
 
   return TodaySystemSchema.parse({
     lane: input.lane,
-    animationLevel: input.reducedMotion || !isMinimal ? "none" : "subtle",
+    animationLevel: input.reducedMotion || !isMinimal ? 'none' : 'subtle',
     sections: [
-      section("now", !hidden, "Now", now.label, now),
+      section('now', !hidden, 'Now', now.label, now),
       section(
-        "later",
+        'later',
         !hidden && input.laterAction !== null,
-        "Later",
-        input.laterAction?.label ?? "No later action needed.",
+        'Later',
+        input.laterAction?.label ?? 'No later action needed.',
         input.laterAction,
       ),
       section(
-        "done",
+        'done',
         !hidden,
-        "Done",
+        'Done',
         input.completedToday > 0
-          ? `${input.completedToday} clean block${input.completedToday === 1 ? "" : "s"} banked. Quiet progress.`
-          : "Nothing banked yet. The first block is the hardest.",
+          ? `${input.completedToday} clean block${input.completedToday === 1 ? '' : 's'} banked. Quiet progress.`
+          : 'Nothing banked yet. The first block is the hardest.',
         null,
       ),
       section(
-        "recovery",
+        'recovery',
         !hidden && input.dayFeelsMessy,
-        "Recovery",
+        'Recovery',
         recovery.label,
         recovery,
       ),

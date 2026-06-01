@@ -1,11 +1,11 @@
 /**
  * DataList — ListFooter helper component
  */
-import React from "react";
-import { View, ActivityIndicator } from "react-native";
-import { Text } from "../../../components/primitives/Text";
-import { styles } from "./DataList.styles";
-import type { Theme } from "../../../theme";
+import React from 'react';
+import { View, ActivityIndicator } from 'react-native';
+import { Text } from '../../../components/primitives/Text';
+import { styles } from './DataList.styles';
+import type { Theme } from '../../../theme';
 
 interface ListFooterProps {
   loading: boolean;

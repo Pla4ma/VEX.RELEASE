@@ -1,11 +1,11 @@
-import { useMemo } from "react";
-import { useOnboardingStore } from "../store";
+import { useMemo } from 'react';
+import { useOnboardingStore } from '../store';
 import {
   getLanguageTier,
   getActiveLanguage,
   type LanguageTier,
   type LanguageSet,
-} from "../language-tier";
+} from '../language-tier';
 
 export function useLanguageTier(): {
   tier: LanguageTier;

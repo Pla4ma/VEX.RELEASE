@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const CoachInputContractSchema = z.object({
   recentSessionGrades: z
@@ -8,7 +8,7 @@ export const CoachInputContractSchema = z.object({
         grade: z.number().min(0).max(100),
         duration: z.number().min(60).max(7200),
         completedAt: z.number().int().positive(),
-        difficulty: z.enum(["EASY", "NORMAL", "CHALLENGING", "PUSH"]),
+        difficulty: z.enum(['EASY', 'NORMAL', 'CHALLENGING', 'PUSH']),
       }),
     )
     .max(10),
@@ -23,10 +23,10 @@ export const CoachInputContractSchema = z.object({
   }),
   focusScoreFactors: z.object({
     currentScore: z.number().min(0).max(100),
-    trend: z.enum(["improving", "stable", "declining"]),
+    trend: z.enum(['improving', 'stable', 'declining']),
     primaryFactors: z
       .array(
-        z.enum(["consistency", "duration", "quality", "timing", "difficulty"]),
+        z.enum(['consistency', 'duration', 'quality', 'timing', 'difficulty']),
       )
       .max(3),
   }),
@@ -34,20 +34,20 @@ export const CoachInputContractSchema = z.object({
     .array(
       z.object({
         missionId: z.string().uuid(),
-        type: z.enum(["daily", "weekly", "milestone"]),
+        type: z.enum(['daily', 'weekly', 'milestone']),
         completed: z.boolean(),
         completedAt: z.number().int().positive().optional(),
-        difficulty: z.enum(["EASY", "NORMAL", "CHALLENGING"]),
+        difficulty: z.enum(['EASY', 'NORMAL', 'CHALLENGING']),
       }),
     )
     .max(7),
   userGoalCategory: z.enum([
-    "stress_reduction",
-    "focus_improvement",
-    "habit_building",
-    "productivity",
-    "meditation",
-    "learning",
+    'stress_reduction',
+    'focus_improvement',
+    'habit_building',
+    'productivity',
+    'meditation',
+    'learning',
   ]),
   notificationPreferences: z.object({
     enabled: z.boolean(),
@@ -57,7 +57,7 @@ export const CoachInputContractSchema = z.object({
   }),
   premiumStatus: z.object({
     isActive: z.boolean(),
-    tier: z.enum(["free", "premium", "premium_plus"]).default("free"),
+    tier: z.enum(['free', 'premium', 'premium_plus']).default('free'),
     features: z.array(z.string()).default([]),
   }),
   timeContext: z.object({

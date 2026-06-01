@@ -1,7 +1,7 @@
-import { CompanionState, CompanionPhase } from "./types";
-import { emitCompanionStateChanged, emitCompanionEvolution } from "./events";
-import { trackCompanionGrowth, trackCompanionEvolution } from "./analytics";
-import { checkMilestones } from "./milestone-tracker";
+import { CompanionState, CompanionPhase } from './types';
+import { emitCompanionStateChanged, emitCompanionEvolution } from './events';
+import { trackCompanionGrowth, trackCompanionEvolution } from './analytics';
+import { checkMilestones } from './milestone-tracker';
 
 export class CompanionGrowthServiceCore {
   protected state: CompanionState | null = null;
@@ -40,12 +40,12 @@ export class CompanionGrowthServiceCore {
 
     const currentThreshold = this.getEvolutionThreshold(this.state.phase);
     const phases: CompanionPhase[] = [
-      "EGG",
-      "HATCHING",
-      "YOUNG",
-      "MATURE",
-      "AWAKENED",
-      "TRANSCENDENT",
+      'EGG',
+      'HATCHING',
+      'YOUNG',
+      'MATURE',
+      'AWAKENED',
+      'TRANSCENDENT',
     ];
     const minutesInPhase =
       this.state.totalFocusMinutes -
@@ -58,7 +58,7 @@ export class CompanionGrowthServiceCore {
 
     if (
       minutesInPhase >= currentThreshold &&
-      this.state.phase !== "TRANSCENDENT"
+      this.state.phase !== 'TRANSCENDENT'
     ) {
       const previousPhase = this.state.phase;
       this.state.phase = phases[phases.indexOf(this.state.phase) + 1]!;
@@ -96,12 +96,12 @@ export class CompanionGrowthServiceCore {
         this.state.id,
         previousState,
         this.state,
-        "session_completed",
+        'session_completed',
         sessionId,
       );
       trackCompanionGrowth(
         userId,
-        "session_completed",
+        'session_completed',
         previousState.phase,
         this.state.phase,
         previousState.currentMood,

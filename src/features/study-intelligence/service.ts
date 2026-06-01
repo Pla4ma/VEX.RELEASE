@@ -3,8 +3,8 @@ import {
   WeakTopicSchema,
   type WeakTopic,
   type WeeklyIntelligence,
-} from "./schemas";
-import type { ReviewItem, StudyPlan } from "../study-os/schemas";
+} from './schemas';
+import type { ReviewItem, StudyPlan } from '../study-os/schemas';
 
 function wordFreq(text: string): Map<string, number> {
   const freq = new Map<string, number>();
@@ -24,7 +24,7 @@ function extractTopicKeywords(
   const topics = new Map<string, { count: number; lastSeen: number }>();
   for (const plan of plans) {
     for (const block of plan.blocks) {
-      const blockWords = wordFreq(block.title + " " + block.objective);
+      const blockWords = wordFreq(block.title + ' ' + block.objective);
       for (const [word, wc] of blockWords) {
         const existing = topics.get(word);
         if (existing) {
@@ -52,9 +52,9 @@ export function computeWeakTopics(
       const words = wordFreq(item.prompt);
       for (const w of words.keys()) {
         const score =
-          item.confidence === "weak"
+          item.confidence === 'weak'
             ? 0
-            : item.confidence === "medium"
+            : item.confidence === 'medium'
               ? 0.5
               : 1;
         reviewConfidence.set(
@@ -72,7 +72,7 @@ export function computeWeakTopics(
     const isWeak = reviewScore < 0.5 || (daysSince > 7 && reviewScore < 0.8);
 
     if (isWeak && data.count >= 1) {
-      const confidence = reviewScore < 0.3 ? "weak" : ("medium" as const);
+      const confidence = reviewScore < 0.3 ? 'weak' : ('medium' as const);
       weakTopics.push(
         WeakTopicSchema.parse({
           topic,
@@ -80,7 +80,7 @@ export function computeWeakTopics(
           reviewCount: Math.round(data.count),
           lastReviewedAt: data.lastSeen,
           suggestedAction:
-            confidence === "weak"
+            confidence === 'weak'
               ? `Revisit ${topic} with a focused review block`
               : `Refresh ${topic} — it has been ${Math.round(daysSince)} days`,
         }),
@@ -98,7 +98,7 @@ export function computeWeeklyIntelligence(input: {
 }): WeeklyIntelligence {
   const now = input.now ?? Date.now();
   const completedBlocks = input.plans.reduce(
-    (sum, p) => sum + p.blocks.filter((b) => b.status === "completed").length,
+    (sum, p) => sum + p.blocks.filter((b) => b.status === 'completed').length,
     0,
   );
   const totalStudyMinutes = input.plans.reduce(
@@ -115,10 +115,10 @@ export function computeWeeklyIntelligence(input: {
 
   const suggestion =
     completedBlocks === 0
-      ? "Start your first study block to begin building study intelligence."
+      ? 'Start your first study block to begin building study intelligence.'
       : weakTopics.length > 0
-        ? `${weakTopics.length} topic${weakTopics.length > 1 ? "s" : ""} need${weakTopics.length === 1 ? "s" : ""} review. Start with "${weakTopics[0]?.topic ?? "the weakest topic"}".`
-        : "All topics look strong. Keep the streak going.";
+        ? `${weakTopics.length} topic${weakTopics.length > 1 ? 's' : ''} need${weakTopics.length === 1 ? 's' : ''} review. Start with "${weakTopics[0]?.topic ?? 'the weakest topic'}".`
+        : 'All topics look strong. Keep the streak going.';
 
   return WeeklyIntelligenceSchema.parse({
     generatedAt: now,
@@ -132,6 +132,6 @@ export function computeWeeklyIntelligence(input: {
 }
 
 export function hasWeeklyIntelligenceData(plans: StudyPlan[]): boolean {
-  if (plans.length === 0) return false;
-  return plans.some((p) => p.blocks.some((b) => b.status === "completed"));
+  if (plans.length === 0) {return false;}
+  return plans.some((p) => p.blocks.some((b) => b.status === 'completed'));
 }

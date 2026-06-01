@@ -1,10 +1,10 @@
-import * as repository from "../repository";
+import * as repository from '../repository';
 import {
   TrendAnalysisSchema,
   type TimeRange,
   type AnalyticsMetric,
   type TrendAnalysis,
-} from "../schemas";
+} from '../schemas';
 
 interface TimeSeriesPoint {
   timestamp: number;
@@ -43,13 +43,13 @@ export async function calculateTrend(
     userId,
     metric,
     timeRange,
-    "day",
+    'day',
   );
   const points = data.points as TimeSeriesPoint[];
   if (points.length < 2) {
     return TrendAnalysisSchema.parse({
       metric,
-      direction: "flat",
+      direction: 'flat',
       strength: 0,
       changePercent: 0,
       confidence: 0,
@@ -76,9 +76,9 @@ export async function calculateTrend(
     return sum + Math.pow(p.value - predicted, 2);
   }, 0);
   const rSquared = ssTotal > 0 ? 1 - ssResidual / ssTotal : 0;
-  let direction: TrendAnalysis["direction"] = "flat";
+  let direction: TrendAnalysis['direction'] = 'flat';
   if (Math.abs(slope) > 0.01) {
-    direction = slope > 0 ? "up" : "down";
+    direction = slope > 0 ? 'up' : 'down';
   }
   const seasonalityDetected = detectSeasonality(points);
   const values = points.map((p) => p.value);

@@ -1,4 +1,4 @@
-import * as Sentry from "@sentry/react-native";
+import * as Sentry from '@sentry/react-native';
 interface AlertContext {
   userId?: string;
   sessionId?: string;
@@ -14,23 +14,23 @@ export function alertRevenueWebhookFailure(
   },
 ): void {
   Sentry.withScope((scope) => {
-    scope.setLevel("fatal");
-    scope.setTag("alert_type", "revenue_webhook_failure");
-    scope.setTag("critical_path", "true");
-    scope.setTag("business_impact", "revenue");
-    scope.setContext("purchase", {
+    scope.setLevel('fatal');
+    scope.setTag('alert_type', 'revenue_webhook_failure');
+    scope.setTag('critical_path', 'true');
+    scope.setTag('business_impact', 'revenue');
+    scope.setContext('purchase', {
       user_id: context.userId,
       product_id: context.productId,
       transaction_id: context.transactionId,
       gems_expected: calculateExpectedGems(context.productId),
     });
     if (context.webhookPayload) {
-      scope.setContext("webhook_payload", context.webhookPayload);
+      scope.setContext('webhook_payload', context.webhookPayload);
     }
     scope.addBreadcrumb({
-      category: "revenue",
+      category: 'revenue',
       message: `RevenueCat webhook failed for ${context.productId}`,
-      level: "error",
+      level: 'error',
       data: { user_id: context.userId, transaction_id: context.transactionId },
     });
     Sentry.captureException(error);
@@ -41,16 +41,16 @@ export function alertWalletCreditFailure(
   context: {
     userId: string;
     purchaseId: string;
-    currency: "GEMS" | "COINS";
+    currency: 'GEMS' | 'COINS';
     amount: number;
   },
 ): void {
   Sentry.withScope((scope) => {
-    scope.setLevel("fatal");
-    scope.setTag("alert_type", "wallet_credit_failure");
-    scope.setTag("critical_path", "true");
-    scope.setTag("business_impact", "user_trust");
-    scope.setContext("wallet_credit", {
+    scope.setLevel('fatal');
+    scope.setTag('alert_type', 'wallet_credit_failure');
+    scope.setTag('critical_path', 'true');
+    scope.setTag('business_impact', 'user_trust');
+    scope.setContext('wallet_credit', {
       user_id: context.userId,
       purchase_id: context.purchaseId,
       currency: context.currency,
@@ -65,23 +65,23 @@ export function alertAnalyticsFailure(
   context?: AlertContext,
 ): void {
   const criticalEvents = [
-    "purchase_completed",
-    "purchase_failed",
-    "subscription_started",
-    "vip_subscribed",
-    "streak_broken",
-    "session_abandoned",
+    'purchase_completed',
+    'purchase_failed',
+    'subscription_started',
+    'vip_subscribed',
+    'streak_broken',
+    'session_abandoned',
   ];
   if (!criticalEvents.includes(eventName)) {
     return;
   }
   Sentry.withScope((scope) => {
-    scope.setLevel("error");
-    scope.setTag("alert_type", "analytics_failure");
-    scope.setTag("event_name", eventName);
-    scope.setTag("critical_path", "true");
+    scope.setLevel('error');
+    scope.setTag('alert_type', 'analytics_failure');
+    scope.setTag('event_name', eventName);
+    scope.setTag('critical_path', 'true');
     if (context) {
-      scope.setContext("analytics_context", context);
+      scope.setContext('analytics_context', context);
     }
     Sentry.captureException(error);
   });
@@ -96,11 +96,11 @@ export function alertSuspiciousActivity(
   },
 ): void {
   Sentry.withScope((scope) => {
-    scope.setLevel("warning");
-    scope.setTag("alert_type", "suspicious_activity");
-    scope.setTag("activity", activity);
+    scope.setLevel('warning');
+    scope.setTag('alert_type', 'suspicious_activity');
+    scope.setTag('activity', activity);
     scope.setUser({ id: context.userId });
-    scope.setContext("suspicious_activity", {
+    scope.setContext('suspicious_activity', {
       activity_type: activity,
       session_count: context.sessionCount,
       time_window: context.timeWindow,
@@ -108,7 +108,7 @@ export function alertSuspiciousActivity(
     });
     Sentry.captureMessage(
       `Suspicious activity detected: ${activity}`,
-      "warning",
+      'warning',
     );
   });
 }
@@ -117,11 +117,11 @@ export function alertDatabaseDegradation(
   context: { operation: string; table: string; retryCount: number },
 ): void {
   Sentry.withScope((scope) => {
-    scope.setLevel("error");
-    scope.setTag("alert_type", "database_degradation");
-    scope.setTag("operation", context.operation);
-    scope.setTag("table", context.table);
-    scope.setContext("database", {
+    scope.setLevel('error');
+    scope.setTag('alert_type', 'database_degradation');
+    scope.setTag('operation', context.operation);
+    scope.setTag('table', context.table);
+    scope.setContext('database', {
       operation: context.operation,
       table: context.table,
       retry_count: context.retryCount,

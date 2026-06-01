@@ -4,18 +4,18 @@
  * Displays the active session timer with progress visualization.
  */
 
-import React from "react";
-import { View, Text } from "react-native";
-import { useTheme } from "../../theme";
-import { fontFamilies } from "../../theme/tokens";
-import { EnterAnimation } from "../../shared/ui/components/EnterAnimation";
-import { createSheet } from "@/shared/ui/create-sheet";
+import React from 'react';
+import { View, Text } from 'react-native';
+import { useTheme } from '../../theme';
+import { fontFamilies } from '../../theme/tokens';
+import { EnterAnimation } from '../../shared/ui/components/EnterAnimation';
+import { createSheet } from '@/shared/ui/create-sheet';
 
 interface SessionTimerProps {
   elapsedSeconds: number;
   totalSeconds: number;
   isPaused: boolean;
-  size?: "sm" | "md" | "lg" | "hero";
+  size?: 'sm' | 'md' | 'lg' | 'hero';
   showProgress?: boolean;
 }
 
@@ -23,7 +23,7 @@ export const SessionTimer: React.FC<SessionTimerProps> = ({
   elapsedSeconds,
   totalSeconds,
   isPaused,
-  size = "lg",
+  size = 'lg',
 }) => {
   const { theme } = useTheme();
   const progress = Math.min(elapsedSeconds / totalSeconds, 1);
@@ -32,7 +32,7 @@ export const SessionTimer: React.FC<SessionTimerProps> = ({
   const formatTime = (seconds: number): string => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
   const sizeStyles = {
@@ -80,7 +80,7 @@ export const SessionTimer: React.FC<SessionTimerProps> = ({
             {
               width: s.size,
               height: s.size,
-              transform: [{ rotate: "-90deg" }],
+              transform: [{ rotate: '-90deg' }],
             },
           ]}
         >
@@ -95,8 +95,8 @@ export const SessionTimer: React.FC<SessionTimerProps> = ({
                 borderColor: isPaused
                   ? theme.colors.warning.DEFAULT
                   : theme.colors.success.DEFAULT,
-                borderLeftColor: "transparent",
-                borderBottomColor: "transparent",
+                borderLeftColor: 'transparent',
+                borderBottomColor: 'transparent',
                 transform: [{ rotate: `${progress * 360}deg` }],
               },
             ]}
@@ -111,7 +111,7 @@ export const SessionTimer: React.FC<SessionTimerProps> = ({
               {
                 fontSize: s.fontSize,
                 color: theme.colors.text.primary,
-                fontFamily: fontFamilies.mono ?? "monospace",
+                fontFamily: fontFamilies.mono ?? 'monospace',
               },
             ]}
           >
@@ -135,30 +135,30 @@ export const SessionTimer: React.FC<SessionTimerProps> = ({
 
 const styles = createSheet({
   container: {
-    justifyContent: "center",
-    alignItems: "center",
-    position: "relative",
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative',
   },
   circle: {
-    position: "absolute",
+    position: 'absolute',
   },
   backgroundRing: {
-    position: "absolute",
+    position: 'absolute',
   },
   progressRing: {
-    position: "absolute",
+    position: 'absolute',
   },
   timeContainer: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   timeText: {
-    fontWeight: "700",
+    fontWeight: '700',
     letterSpacing: 2,
   },
   pausedText: {
     fontSize: 12,
-    fontWeight: "600",
+    fontWeight: '600',
     marginTop: 4,
   },
 });

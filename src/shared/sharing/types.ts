@@ -1,6 +1,6 @@
-import { z } from "zod";
+import { z } from 'zod';
 
-export type ShareTarget = "session" | "achievement" | "profile";
+export type ShareTarget = 'session' | 'achievement' | 'profile';
 
 export interface ShareResult {
   success: boolean;

@@ -1,11 +1,11 @@
-import type { z } from "zod";
-import type { Lane as CanonicalLane } from "./types";
+import type { z } from 'zod';
+import type { Lane as CanonicalLane } from './types';
 import {
   LaneAnimationPolicySchema,
   LaneCopyToneSchema,
   LaneDensitySchema,
   LanePresentationPolicySchema,
-} from "./presentation-schemas";
+} from './presentation-schemas';
 
 export type Lane = CanonicalLane;
 export type LaneAnimationPolicy = z.infer<typeof LaneAnimationPolicySchema>;

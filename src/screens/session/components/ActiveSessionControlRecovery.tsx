@@ -1,9 +1,9 @@
-import React from "react";
-import { Pressable } from "react-native";
+import React from 'react';
+import { Pressable } from 'react-native';
 
-import { Box, Card, Text } from "../../../components/primitives";
-import { Icon } from "../../../icons";
-import type { ActiveSessionControlFailure } from "../utils/active-session-control-failure";
+import { Box, Card, Text } from '../../../components/primitives';
+import { Icon } from '../../../icons';
+import type { ActiveSessionControlFailure } from '../utils/active-session-control-failure';
 
 type ActiveSessionControlRecoveryProps = {
   failure: ActiveSessionControlFailure;

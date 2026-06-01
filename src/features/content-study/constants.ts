@@ -6,7 +6,7 @@ export {
   CONTENT_STUDY_API,
   CONTENT_SOURCES,
   CONTENT_STATUS_CONFIG,
-} from "./content-study-api-constants";
+} from './content-study-api-constants';
 export {
   STUDY_PLAN_CONFIG,
   TASK_PRIORITY_CONFIG,
@@ -16,4 +16,4 @@ export {
   VALIDATION_RULES,
   ANIMATION_CONFIG,
   ANALYTICS_EVENTS,
-} from "./content-study-ui-constants";
+} from './content-study-ui-constants';

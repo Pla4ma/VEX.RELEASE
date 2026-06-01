@@ -5,7 +5,7 @@
  * for backward compatibility with repository files.
  */
 
-import { getSupabaseClient } from "../config/supabase";
+import { getSupabaseClient } from '../config/supabase';
 
 // Export the supabase client instance
 export const supabase = getSupabaseClient();

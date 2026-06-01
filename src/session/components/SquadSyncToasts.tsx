@@ -1,10 +1,10 @@
-import { useEffect } from "react";
-import Animated, { FadeInUp, FadeOut } from "react-native-reanimated";
+import { useEffect } from 'react';
+import Animated, { FadeInUp, FadeOut } from 'react-native-reanimated';
 
-import { Box } from "../../components/primitives/Box";
-import { Text } from "../../components/primitives/Text";
-import { useTheme } from "../../theme";
-import type { SquadCompletionToast } from "./SquadSyncIndicator.types";
+import { Box } from '../../components/primitives/Box';
+import { Text } from '../../components/primitives/Text';
+import { useTheme } from '../../theme';
+import type { SquadCompletionToast } from './SquadSyncIndicator.types';
 
 interface CompletionToastProps {
   toast: SquadCompletionToast;
@@ -23,7 +23,7 @@ export function SquadCompletionToastView({
   }, [onDismiss]);
 
   const durationText =
-    toast.durationMinutes > 0 ? `${toast.durationMinutes}-min` : "";
+    toast.durationMinutes > 0 ? `${toast.durationMinutes}-min` : '';
   const message = durationText
     ? `${toast.memberName} just finished a ${durationText} session! 💪`
     : `${toast.memberName} completed their session! 💪`;

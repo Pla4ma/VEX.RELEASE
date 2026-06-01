@@ -1,20 +1,20 @@
-import React, { useEffect, useCallback } from "react";
-import { View, type ViewStyle } from "react-native";
+import React, { useEffect, useCallback } from 'react';
+import { View, type ViewStyle } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withTiming,
   withSpring,
   runOnJS,
-} from "react-native-reanimated";
-import { useTheme } from "../../theme";
-import { Box, Text } from "../primitives";
-import { Icon } from "../../icons";
-import { createSheet } from "@/shared/ui/create-sheet";
-import { launchColors } from "@theme/tokens/launch-colors";
+} from 'react-native-reanimated';
+import { useTheme } from '../../theme';
+import { Box, Text } from '../primitives';
+import { Icon } from '../../icons';
+import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
 type IconName = string;
-export type ToastType = "info" | "success" | "warning" | "error";
-export type ToastPosition = "top" | "bottom" | "center";
+export type ToastType = 'info' | 'success' | 'warning' | 'error';
+export type ToastPosition = 'top' | 'bottom' | 'center';
 export interface ToastProps {
   message: string;
   type?: ToastType;
@@ -26,12 +26,12 @@ export interface ToastProps {
   style?: ViewStyle;
 }
 const typeIconMap: Record<ToastType, IconName> = {
-  info: "info",
-  success: "check",
-  warning: "warning",
-  error: "alert",
+  info: 'info',
+  success: 'check',
+  warning: 'warning',
+  error: 'alert',
 };
-const getTypeColors = (theme: ReturnType<typeof useTheme>["theme"]) => ({
+const getTypeColors = (theme: ReturnType<typeof useTheme>['theme']) => ({
   info: {
     bg: theme.colors.primary[50],
     border: theme.colors.primary[100],
@@ -55,8 +55,8 @@ const getTypeColors = (theme: ReturnType<typeof useTheme>["theme"]) => ({
 });
 export const Toast: React.FC<ToastProps> = ({
   message,
-  type = "info",
-  position = "top",
+  type = 'info',
+  position = 'top',
   visible,
   duration = 3000,
   onHide,
@@ -77,13 +77,13 @@ export const Toast: React.FC<ToastProps> = ({
   const show = useCallback(() => {
     opacity.value = withTiming(1, { duration: 200 });
     scale.value = withSpring(1, { damping: 20, stiffness: 300 });
-    const targetY = position === "top" ? 60 : position === "center" ? 0 : -60;
+    const targetY = position === 'top' ? 60 : position === 'center' ? 0 : -60;
     translateY.value = withSpring(targetY, { damping: 20, stiffness: 300 });
   }, [opacity, scale, translateY, position]);
   const hide = useCallback(() => {
     opacity.value = withTiming(0, { duration: 150 });
     scale.value = withTiming(0.8, { duration: 150 });
-    const targetY = position === "top" ? -100 : position === "bottom" ? 100 : 0;
+    const targetY = position === 'top' ? -100 : position === 'bottom' ? 100 : 0;
     translateY.value = withTiming(targetY, { duration: 200 }, () => {
       if (onHide) {
         runOnJS(onHide)();
@@ -105,12 +105,12 @@ export const Toast: React.FC<ToastProps> = ({
     return null;
   }
   const positionStyle: ViewStyle = {
-    position: "absolute",
+    position: 'absolute',
     left: 16,
     right: 16,
-    ...(position === "top" && { top: 0 }),
-    ...(position === "center" && { top: "50%", marginTop: -50 }),
-    ...(position === "bottom" && { bottom: 100 }),
+    ...(position === 'top' && { top: 0 }),
+    ...(position === 'center' && { top: '50%', marginTop: -50 }),
+    ...(position === 'bottom' && { bottom: 100 }),
   };
   return (
     <Animated.View
@@ -142,7 +142,7 @@ const styles = createSheet({
   container: {
     paddingHorizontal: 16,
     paddingVertical: 12,
-    boxShadow: "0px 2px 4px rgba(0,0,0,0.1)",
+    boxShadow: '0px 2px 4px rgba(0,0,0,0.1)',
     elevation: 4,
     zIndex: 2000,
   },

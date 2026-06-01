@@ -3,15 +3,15 @@ export {
   ensureProjectThread,
   rescueStaleProject,
   refreshProjectThreadState,
-} from "./project-thread-service";
+} from './project-thread-service';
 export {
   buildProjectSessionBrief,
   buildProjectResumeBrief,
   buildProjectMemoryCandidate,
   completeProjectSession,
   type ProjectMemoryCandidate,
-} from "./project-session-service";
+} from './project-session-service';
 export {
   shouldShowProjectSurface,
   buildProjectHomeSurface,
-} from "./project-home-surface";
+} from './project-home-surface';

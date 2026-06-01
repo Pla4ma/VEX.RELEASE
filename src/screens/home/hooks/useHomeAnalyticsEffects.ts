@@ -1,9 +1,9 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef } from 'react';
 
 import type {
   FeatureKey,
   UserExperienceStage,
-} from "../../../features/liveops-config";
+} from '../../../features/liveops-config';
 
 export function useHomeAnalyticsEffects(input: {
   analytics: {

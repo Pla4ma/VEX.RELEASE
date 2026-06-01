@@ -1,7 +1,7 @@
-import { storage } from "../../store/mmkv-storage";
-import { ProjectThreadSchema, type ProjectThread } from "./schemas";
+import { storage } from '../../store/mmkv-storage';
+import { ProjectThreadSchema, type ProjectThread } from './schemas';
 
-const KEY_PREFIX = "project-focus:";
+const KEY_PREFIX = 'project-focus:';
 
 function keyFor(userId: string): string {
   return `${KEY_PREFIX}${userId}`;
@@ -12,7 +12,7 @@ export async function listStoredProjectThreads(
 ): Promise<ProjectThread[]> {
   try {
     const raw = storage.getString(keyFor(userId));
-    if (!raw) return [];
+    if (!raw) {return [];}
     return ProjectThreadSchema.array().parse(JSON.parse(raw));
   } catch (error: unknown) {
     return [];

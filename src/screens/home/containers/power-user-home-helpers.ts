@@ -1,11 +1,11 @@
-import type { SessionRecommendation, RecommendationStatus } from "../../../features/ai-coach";
-import type { HomeReturnReason } from "../hooks/useHomeReturnReason";
-import { buildHomeReturnReasonState } from "../../../features/home-spine/service";
-import type { NextBestAction } from "../../../features/progression";
+import type { SessionRecommendation, RecommendationStatus } from '../../../features/ai-coach';
+import type { HomeReturnReason } from '../hooks/useHomeReturnReason';
+import { buildHomeReturnReasonState } from '../../../features/home-spine/service';
+import type { NextBestAction } from '../../../features/progression';
 import type {
   ActiveStudyPlanData,
   ComebackData,
-} from "./power-user-home-types";
+} from './power-user-home-types';
 
 export function buildReturnReasonConfig(params: {
   activeStudyPlanData: ActiveStudyPlanData | undefined;
@@ -43,7 +43,7 @@ export function buildReturnReasonConfig(params: {
         ? {
             completedTasks: activeStudyPlanData.completedTasks ?? 0,
             remainingMinutes: activeStudyPlanData.remainingMinutes ?? 0,
-            title: activeStudyPlanData.title ?? "",
+            title: activeStudyPlanData.title ?? '',
             totalTasks: activeStudyPlanData.totalTasks ?? 0,
           }
         : null,
@@ -55,9 +55,9 @@ export function buildReturnReasonConfig(params: {
       primaryRecommendation: primaryRecommendation
       ? {
           id: primaryRecommendation.id,
-          reasoning: primaryRecommendation.reasoning ?? "",
+          reasoning: primaryRecommendation.reasoning ?? '',
           suggestedDifficulty:
-            primaryRecommendation.suggestedDifficulty ?? "NORMAL",
+            primaryRecommendation.suggestedDifficulty ?? 'NORMAL',
           suggestedDuration:
             primaryRecommendation.suggestedDuration ?? 15 * 60,
           type: primaryRecommendation.recommendationType,
@@ -66,16 +66,16 @@ export function buildReturnReasonConfig(params: {
   });
 
   let onPress: () => Promise<void> | void = () => openSetup();
-  if (reasonState.intent === "continue-study-plan") {
+  if (reasonState.intent === 'continue-study-plan') {
     onPress = continueStudyPlan;
   } else if (
-    reasonState.intent === "accept-coach-recommendation" &&
+    reasonState.intent === 'accept-coach-recommendation' &&
     reasonState.recommendationId
   ) {
     onPress = async () => {
       await updateRecommendationStatus.mutateAsync({
         recommendationId: reasonState.recommendationId!,
-        status: "ACCEPTED",
+        status: 'ACCEPTED',
         userId,
       });
       openSetup({
@@ -84,7 +84,7 @@ export function buildReturnReasonConfig(params: {
         suggestedDurationSeconds: reasonState.suggestedDurationSeconds,
       });
     };
-  } else if (reasonState.source === "next-best-action") {
+  } else if (reasonState.source === 'next-best-action') {
     onPress = openNextAction;
   }
 

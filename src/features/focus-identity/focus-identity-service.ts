@@ -1,15 +1,15 @@
-import { MMKVStorageAdapter } from "../../persistence/MMKVStorageAdapter";
-import { eventBus } from "../../events";
-import { FOCUS_SCORE_CONFIG } from "./focus-score-config";
-import type { FocusIdentityProfile } from "./FocusIdentityEngine";
+import { MMKVStorageAdapter } from '../../persistence/MMKVStorageAdapter';
+import { eventBus } from '../../events';
+import { FOCUS_SCORE_CONFIG } from './focus-score-config';
+import type { FocusIdentityProfile } from './FocusIdentityEngine';
 import {
   FocusIdentityProfileSchema,
   FocusIdentityEngine,
-} from "./FocusIdentityEngine";
-import { createMonthlyFocusReport } from "./focus-identity-monthly-report";
-import { createInitialFocusIdentityProfile } from "./focus-identity-profile-factory";
+} from './FocusIdentityEngine';
+import { createMonthlyFocusReport } from './focus-identity-monthly-report';
+import { createInitialFocusIdentityProfile } from './focus-identity-profile-factory';
 
-const identityStorage = new MMKVStorageAdapter("focus-identity");
+const identityStorage = new MMKVStorageAdapter('focus-identity');
 
 export class FocusIdentityService {
   private engine: FocusIdentityEngine;
@@ -21,23 +21,23 @@ export class FocusIdentityService {
   }
 
   public async getProfile(): Promise<FocusIdentityProfile | null> {
-    const raw = identityStorage.getItemSync("focus-identity:" + this.userId);
-    if (!raw) return null;
+    const raw = identityStorage.getItemSync('focus-identity:' + this.userId);
+    if (!raw) {return null;}
     return FocusIdentityProfileSchema.parse(JSON.parse(raw));
   }
 
   public async initializeProfile(): Promise<FocusIdentityProfile> {
     const existing = await this.getProfile();
-    if (existing) return existing;
+    if (existing) {return existing;}
     const profile = createInitialFocusIdentityProfile(
       this.userId,
       this.engine.getScoreBand(FOCUS_SCORE_CONFIG.INITIAL_SCORE),
     );
     identityStorage.setItemSync(
-      "focus-identity:" + this.userId,
+      'focus-identity:' + this.userId,
       JSON.stringify(profile),
     );
-    eventBus.publish("FOCUS_IDENTITY_CREATED", {
+    eventBus.publish('FOCUS_IDENTITY_CREATED', {
       userId: this.userId,
       initialScore: profile.currentScore,
       band: profile.band.label,
@@ -48,7 +48,7 @@ export class FocusIdentityService {
   public async saveProfile(profile: FocusIdentityProfile): Promise<void> {
     const validated = FocusIdentityProfileSchema.parse(profile);
     identityStorage.setItemSync(
-      "focus-identity:" + this.userId,
+      'focus-identity:' + this.userId,
       JSON.stringify(validated),
     );
   }
@@ -77,12 +77,12 @@ export class FocusIdentityService {
     profile.previousScore = previousScore;
     profile.currentScore = newScore;
     profile.scoreHistory.push({
-      date: new Date().toISOString().split("T")[0]!,
+      date: new Date().toISOString().split('T')[0]!,
       score: newScore,
-      reason: eventType + ": " + (change > 0 ? "+" : "") + change,
+      reason: eventType + ': ' + (change > 0 ? '+' : '') + change,
     });
     if (profile.scoreHistory.length > 90)
-      profile.scoreHistory = profile.scoreHistory.slice(-90);
+      {profile.scoreHistory = profile.scoreHistory.slice(-90);}
     const newBand = this.engine.getScoreBand(newScore);
     const bandChanged = newBand.label !== oldBand.label;
     if (bandChanged) {
@@ -92,7 +92,7 @@ export class FocusIdentityService {
         newBand.label,
         0,
       );
-      eventBus.publish("FOCUS_SCORE_BAND_CHANGE", {
+      eventBus.publish('FOCUS_SCORE_BAND_CHANGE', {
         userId: this.userId,
         oldBand: oldBand.label,
         newBand: newBand.label,
@@ -105,10 +105,10 @@ export class FocusIdentityService {
         profile.streakInCurrentBand,
       );
     }
-    if (eventType === "MISSED_DAY" || eventType === "STREAK_BREAK") {
+    if (eventType === 'MISSED_DAY' || eventType === 'STREAK_BREAK') {
       if (!profile.isInRecovery) {
         profile.isInRecovery = true;
-        profile.recoveryStartDate = new Date().toISOString().split("T")[0]!;
+        profile.recoveryStartDate = new Date().toISOString().split('T')[0]!;
         profile.preLapseScore = previousScore;
         profile.recoveryProgress = 0;
       }
@@ -119,7 +119,7 @@ export class FocusIdentityService {
         profile.recoveryStartDate = null;
         profile.preLapseScore = null;
         profile.recoveryProgress = 0;
-        eventBus.publish("FOCUS_RECOVERY_COMPLETE", {
+        eventBus.publish('FOCUS_RECOVERY_COMPLETE', {
           userId: this.userId,
           finalScore: newScore,
         });
@@ -130,7 +130,7 @@ export class FocusIdentityService {
     );
     profile.updatedAt = Date.now();
     await this.saveProfile(profile);
-    eventBus.publish("FOCUS_SCORE_UPDATED", {
+    eventBus.publish('FOCUS_SCORE_UPDATED', {
       userId: this.userId,
       previousScore,
       newScore,
@@ -142,10 +142,10 @@ export class FocusIdentityService {
   }
 
   public async getMonthlyReport(): Promise<
-    FocusIdentityProfile["monthlyReport"]
+    FocusIdentityProfile['monthlyReport']
   > {
     const profile = await this.getProfile();
-    if (!profile) return null;
+    if (!profile) {return null;}
     return createMonthlyFocusReport(profile);
   }
 }

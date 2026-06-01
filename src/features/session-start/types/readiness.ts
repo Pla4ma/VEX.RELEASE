@@ -1,12 +1,12 @@
-import type { BaseSessionStartEvent } from "./base";
+import type { BaseSessionStartEvent } from './base';
 
 export interface SessionEnvironmentPreparedEvent extends BaseSessionStartEvent {
-  type: "session_environment_prepared";
+  type: 'session_environment_prepared';
   data: {
-    environmentType: "physical" | "digital" | "mixed";
+    environmentType: 'physical' | 'digital' | 'mixed';
     preparationSteps: Array<{
       step: string;
-      status: "completed" | "skipped" | "failed";
+      status: 'completed' | 'skipped' | 'failed';
       duration: number;
       result: Record<string, unknown>;
     }>;
@@ -23,11 +23,11 @@ export interface SessionEnvironmentPreparedEvent extends BaseSessionStartEvent {
 }
 
 export interface SessionReadinessAssessedEvent extends BaseSessionStartEvent {
-  type: "session_readiness_assessed";
+  type: 'session_readiness_assessed';
   data: {
-    assessmentType: "comprehensive" | "quick" | "targeted";
+    assessmentType: 'comprehensive' | 'quick' | 'targeted';
     readinessScore: number;
-    readinessLevel: "low" | "medium" | "high" | "optimal";
+    readinessLevel: 'low' | 'medium' | 'high' | 'optimal';
     factors: Array<{
       factor: string;
       score: number;
@@ -38,7 +38,7 @@ export interface SessionReadinessAssessedEvent extends BaseSessionStartEvent {
     trends: {
       current: number;
       previous: number;
-      trend: "improving" | "declining" | "stable";
+      trend: 'improving' | 'declining' | 'stable';
       significance: string;
     };
     recommendations: {
@@ -50,14 +50,14 @@ export interface SessionReadinessAssessedEvent extends BaseSessionStartEvent {
 }
 
 export interface SessionReadinessImprovedEvent extends BaseSessionStartEvent {
-  type: "session_readiness_improved";
+  type: 'session_readiness_improved';
   data: {
     improvementType:
-      | "preparation"
-      | "exercise"
-      | "break"
-      | "environment"
-      | "motivation";
+      | 'preparation'
+      | 'exercise'
+      | 'break'
+      | 'environment'
+      | 'motivation';
     previousScore: number;
     currentScore: number;
     improvement: number;
@@ -78,9 +78,9 @@ export interface SessionReadinessImprovedEvent extends BaseSessionStartEvent {
 
 export interface SessionReadinessInsufficientEvent
   extends BaseSessionStartEvent {
-  type: "session_readiness_insufficient";
+  type: 'session_readiness_insufficient';
   data: {
-    thresholdType: "minimum" | "recommended" | "optimal";
+    thresholdType: 'minimum' | 'recommended' | 'optimal';
     currentScore: number;
     requiredScore: number;
     gap: number;
@@ -105,9 +105,9 @@ export interface SessionReadinessInsufficientEvent
 }
 
 export interface SessionGoalsSetEvent extends BaseSessionStartEvent {
-  type: "session_goals_set";
+  type: 'session_goals_set';
   data: {
-    goalType: "primary" | "secondary" | "stretch" | "maintenance";
+    goalType: 'primary' | 'secondary' | 'stretch' | 'maintenance';
     goals: Array<{
       id: string;
       type: string;
@@ -135,14 +135,14 @@ export interface SessionGoalsSetEvent extends BaseSessionStartEvent {
 }
 
 export interface SessionGoalsUpdatedEvent extends BaseSessionStartEvent {
-  type: "session_goals_updated";
+  type: 'session_goals_updated';
   data: {
     updateType:
-      | "addition"
-      | "modification"
-      | "removal"
-      | "reordering"
-      | "reprioritization";
+      | 'addition'
+      | 'modification'
+      | 'removal'
+      | 'reordering'
+      | 'reprioritization';
     changes: Array<{
       goalId: string;
       changeType: string;
@@ -165,10 +165,10 @@ export interface SessionGoalsUpdatedEvent extends BaseSessionStartEvent {
 }
 
 export interface SessionGoalProgressEvent extends BaseSessionStartEvent {
-  type: "session_goal_progress";
+  type: 'session_goal_progress';
   data: {
     goalId: string;
-    progressType: "milestone" | "increment" | "setback" | "completion";
+    progressType: 'milestone' | 'increment' | 'setback' | 'completion';
     currentProgress: number;
     targetProgress: number;
     increment: number;

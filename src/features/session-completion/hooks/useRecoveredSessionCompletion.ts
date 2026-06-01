@@ -1,13 +1,13 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from '@tanstack/react-query';
 
-import { recoverSessionCompletionParams } from "../service";
-import type { SessionCompletionNavigationParams } from "../schemas";
+import { recoverSessionCompletionParams } from '../service';
+import type { SessionCompletionNavigationParams } from '../schemas';
 
 const recoveredCompletionKeys = {
   detail: (sessionId: string | null) => [
-    "session-completion",
-    "recovered",
-    sessionId ?? "none",
+    'session-completion',
+    'recovered',
+    sessionId ?? 'none',
   ],
 };
 

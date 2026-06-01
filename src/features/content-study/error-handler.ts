@@ -1,13 +1,13 @@
-import { captureSilentFailure } from "../../utils/silent-failure";
-import type { ContentStudyError, ErrorRecoveryAction } from "./types";
-import { ContentStudyErrorCode } from "./types";
+import { captureSilentFailure } from '../../utils/silent-failure';
+import type { ContentStudyError, ErrorRecoveryAction } from './types';
+import { ContentStudyErrorCode } from './types';
 import {
   buildError,
   isRecoverableError,
   shouldRetry,
   getRetryDelay,
-} from "./validation";
-import { captureException } from "../../config/sentry";
+} from './validation';
+import { captureException } from '../../config/sentry';
 
 export class ContentStudyErrorHandler {
   private retryAttempts: Map<string, number> = new Map();
@@ -83,8 +83,8 @@ export class ContentStudyErrorHandler {
           captureException(
             e instanceof Error
               ? e
-              : new Error("Content study error callback failed"),
-            { area: "content-study.error-callback" },
+              : new Error('Content study error callback failed'),
+            { area: 'content-study.error-callback' },
           );
         }
       });
@@ -117,65 +117,65 @@ export async function executeRecoveryAction(
   },
 ): Promise<boolean> {
   switch (action) {
-    case "retry":
+    case 'retry':
       if (context.retryCallback) {
         try {
           await context.retryCallback();
           return true;
         } catch (error) {
           captureSilentFailure(error, {
-            feature: "content-study",
-            operation: "ui-fallback",
-            type: "ui",
+            feature: 'content-study',
+            operation: 'ui-fallback',
+            type: 'ui',
           });
           return false;
         }
       }
       return false;
-    case "refresh":
+    case 'refresh':
       if (context.refreshCallback) {
         try {
           await context.refreshCallback();
           return true;
         } catch (error) {
           captureSilentFailure(error, {
-            feature: "content-study",
-            operation: "ui-fallback",
-            type: "ui",
+            feature: 'content-study',
+            operation: 'ui-fallback',
+            type: 'ui',
           });
           return false;
         }
       }
       return false;
-    case "reupload":
+    case 'reupload':
       if (context.goBackCallback) {
         context.goBackCallback();
         return true;
       }
       return false;
-    case "edit_content":
+    case 'edit_content':
       if (context.editCallback) {
         context.editCallback();
         return true;
       }
       return false;
-    case "contact_support":
+    case 'contact_support':
       captureException(new Error(context.error.message), {
-        area: "content-study.contact-support",
+        area: 'content-study.contact-support',
         code: context.error.code,
       });
       return true;
-    case "try_again_later":
+    case 'try_again_later':
       return true;
-    case "use_fallback":
+    case 'use_fallback':
       return true;
-    case "go_back":
+    case 'go_back':
       if (context.goBackCallback) {
         context.goBackCallback();
         return true;
       }
       return false;
-    case "none":
+    case 'none':
     default:
       return true;
   }

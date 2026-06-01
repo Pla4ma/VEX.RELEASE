@@ -6,8 +6,8 @@ import {
   deleteStudyFileRecord,
   updateContentTextRecord,
   uploadStudyFileRecord,
-} from "./repository";
-import type { QuizItem } from "./types";
+} from './repository';
+import type { QuizItem } from './types';
 
 export async function uploadStudyFile(
   fileUri: string,

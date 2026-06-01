@@ -1,13 +1,13 @@
-import { type ProjectThread } from "./schemas";
-import { buildProjectMemoryCandidate } from "./service";
-import { trackProjectHandoffStored } from "./analytics";
+import { type ProjectThread } from './schemas';
+import { buildProjectMemoryCandidate } from './service';
+import { trackProjectHandoffStored } from './analytics';
 
 export interface ProjectMemoryHandoff {
   content: string;
   projectTitle: string;
   state: string;
   threadId: string;
-  type: "project_handoff";
+  type: 'project_handoff';
 }
 
 export function buildProjectHandoffForMemory(
@@ -25,8 +25,8 @@ export function buildProjectHandoffForMemory(
 
 export function shouldExportProjectMemory(thread: ProjectThread): boolean {
   return (
-    thread.state === "active" ||
-    thread.state === "blocked" ||
-    thread.state === "completed"
+    thread.state === 'active' ||
+    thread.state === 'blocked' ||
+    thread.state === 'completed'
   );
 }

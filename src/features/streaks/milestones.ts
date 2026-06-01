@@ -1,5 +1,5 @@
-import { STREAK_MILESTONES } from "./constants";
-import type { StreakMilestone, StreakState } from "./types";
+import { STREAK_MILESTONES } from './constants';
+import type { StreakMilestone, StreakState } from './types';
 
 export function checkMilestones(streakDays: number): StreakMilestone[] {
   return STREAK_MILESTONES.filter((m) => m.days === streakDays);
@@ -35,27 +35,27 @@ export function getStreakDisplayText(
   _state?: StreakState,
   _isRecovering?: boolean,
 ): string {
-  return `${streakDays} Day${streakDays === 1 ? "" : "s"}`;
+  return `${streakDays} Day${streakDays === 1 ? '' : 's'}`;
 }
 
 export function getStreakCelebrationMessage(streakDays: number): string {
   if (streakDays === 1) {
-    return "Day 1! Your streak begins.";
+    return 'Day 1! Your streak begins.';
   }
   if (streakDays === 3) {
-    return "3 days! Building momentum.";
+    return '3 days! Building momentum.';
   }
   if (streakDays === 7) {
-    return "Week Warrior! 7 days strong.";
+    return 'Week Warrior! 7 days strong.';
   }
   if (streakDays === 14) {
-    return "Fortnight Focused! 14 days!";
+    return 'Fortnight Focused! 14 days!';
   }
   if (streakDays === 30) {
-    return "Monthly Master! Incredible dedication.";
+    return 'Monthly Master! Incredible dedication.';
   }
   if (streakDays === 100) {
-    return "Century Club! You are legendary.";
+    return 'Century Club! You are legendary.';
   }
   return `${streakDays} days! Keep it going!`;
 }

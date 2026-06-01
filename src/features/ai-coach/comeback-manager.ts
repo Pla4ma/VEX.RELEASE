@@ -1,12 +1,12 @@
-import * as repository from "./repository";
+import * as repository from './repository';
 import {
   ActivateComebackInputSchema,
   type ComebackPlan,
   type ComebackStatus,
   type ActivateComebackInput,
-} from "./schemas";
-import { updateCoachState } from "./persona-manager";
-import { generateMessage } from "./message-generator";
+} from './schemas';
+import { updateCoachState } from './persona-manager';
+import { generateMessage } from './message-generator';
 
 const COMEBACK_BONUS_MULTIPLIER = 2.0;
 const COMEBACK_TARGET_SESSIONS = 3;
@@ -18,10 +18,10 @@ export async function activateComeback(
   const validated = ActivateComebackInputSchema.parse(input);
   const existing = await repository.fetchActiveComebackPlan(validated.userId);
   if (existing) {
-    if (existing.status === "DECLINED") {
-      throw new Error("Comeback was previously declined");
+    if (existing.status === 'DECLINED') {
+      throw new Error('Comeback was previously declined');
     }
-    if (existing.status === "ACTIVE") {
+    if (existing.status === 'ACTIVE') {
       return existing;
     }
   }
@@ -31,7 +31,7 @@ export async function activateComeback(
     userId: validated.userId,
     previousStreak: validated.previousStreak,
     daysInactive: validated.daysInactive,
-    status: "OFFERED" as ComebackStatus,
+    status: 'OFFERED' as ComebackStatus,
     startedAt: now,
     expiresAt: now + COMEBACK_EXPIRY_DAYS * 24 * 60 * 60 * 1000,
     sessionsCompleted: 0,
@@ -40,7 +40,7 @@ export async function activateComeback(
     messages: generateComebackMessages(),
   };
   const saved = await repository.upsertComebackPlan(plan);
-  await updateCoachState(validated.userId, "COMEBACK_MODE", {
+  await updateCoachState(validated.userId, 'COMEBACK_MODE', {
     previousStreak: validated.previousStreak,
     daysInactive: validated.daysInactive,
   });
@@ -58,7 +58,7 @@ function generateComebackMessages(): Array<{
     {
       day: 1,
       content:
-        "Welcome back! 💪 Your comeback story starts today. First session gets {{bonusMultiplier}}x XP!",
+        'Welcome back! 💪 Your comeback story starts today. First session gets {{bonusMultiplier}}x XP!',
     },
     {
       day: 2,
@@ -84,7 +84,7 @@ export async function acceptComeback(
   userId: string,
   planId: string,
 ): Promise<ComebackPlan> {
-  const plan = await repository.updateComebackPlanStatus(planId, "ACTIVE");
+  const plan = await repository.updateComebackPlanStatus(planId, 'ACTIVE');
   const firstMessage = plan.messages[0];
   if (firstMessage) {
   }
@@ -96,30 +96,30 @@ export async function trackComebackSession(
   sessionCompleted: boolean,
 ): Promise<ComebackPlan | null> {
   const plan = await repository.fetchActiveComebackPlan(userId);
-  if (!plan || plan.status !== "ACTIVE") {
+  if (!plan || plan.status !== 'ACTIVE') {
     return null;
   }
   if (sessionCompleted) {
     const newCount = plan.sessionsCompleted + 1;
     if (newCount >= plan.targetSessions) {
-      await repository.updateComebackPlanStatus(plan.id, "COMPLETED", newCount);
-      await updateCoachState(userId, "HIGH_CONFIDENCE", {
+      await repository.updateComebackPlanStatus(plan.id, 'COMPLETED', newCount);
+      await updateCoachState(userId, 'HIGH_CONFIDENCE', {
         comebackCompleted: true,
       });
       const completionMessage = await generateMessage({
         userId,
-        category: "MILESTONE_HYPE",
+        category: 'MILESTONE_HYPE',
         context: {
           milestoneDays: plan.targetSessions,
           comebackMultiplier: plan.bonusMultiplier,
         },
-        preferredDelivery: "BOTH",
+        preferredDelivery: 'BOTH',
       });
       if (completionMessage) {
         await repository.createCoachMessage(completionMessage);
       }
     } else {
-      await repository.updateComebackPlanStatus(plan.id, "ACTIVE", newCount);
+      await repository.updateComebackPlanStatus(plan.id, 'ACTIVE', newCount);
       const nextMessage = plan.messages[newCount];
       if (nextMessage && !nextMessage.sent) {
       }

@@ -1,15 +1,15 @@
-import { captureSilentFailure } from "../utils/silent-failure";
+import { captureSilentFailure } from '../utils/silent-failure';
 /**
  * MMKV Storage Implementation
  *
  * High-performance storage using MMKV.
  */
 
-import type { StorageAdapter, StorageOptions } from "./StorageAdapter";
-import type { Nullable } from "../types/global";
-import { createDebugger } from "../utils/debug";
+import type { StorageAdapter, StorageOptions } from './StorageAdapter';
+import type { Nullable } from '../types/global';
+import { createDebugger } from '../utils/debug';
 
-const debug = createDebugger("storage:mmkv");
+const debug = createDebugger('storage:mmkv');
 
 /**
  * MMKV storage adapter
@@ -33,16 +33,16 @@ export class MMKVStorage implements StorageAdapter {
 
     try {
       // Dynamic import to avoid errors when module not installed
-      const MMKV = require("react-native-mmkv").MMKV;
+      const MMKV = require('react-native-mmkv').MMKV;
 
       this.mmkv = new MMKV({
-        id: "vex-storage",
+        id: 'vex-storage',
         encryptionKey: this.options.encryptionKey,
       });
 
       this.initialized = true;
     } catch (error) {
-      debug.error("Failed to initialize MMKV:", error as Error);
+      debug.error('Failed to initialize MMKV:', error as Error);
       throw error;
     }
   }
@@ -52,7 +52,7 @@ export class MMKVStorage implements StorageAdapter {
    */
   private checkInitialized(): void {
     if (!this.initialized || !this.mmkv) {
-      throw new Error("MMKV not initialized. Call initialize() first.");
+      throw new Error('MMKV not initialized. Call initialize() first.');
     }
   }
 
@@ -117,9 +117,9 @@ export class MMKVStorage implements StorageAdapter {
       return JSON.parse(json) as T;
     } catch (error) {
       captureSilentFailure(error, {
-        feature: "persistence",
-        operation: "safe-fallback",
-        type: "data",
+        feature: 'persistence',
+        operation: 'safe-fallback',
+        type: 'data',
       });
       return null;
     }

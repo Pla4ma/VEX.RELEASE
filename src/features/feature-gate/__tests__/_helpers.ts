@@ -9,7 +9,7 @@ export function createTestHelpers(
 ) {
   function makeAvailability(overrides: Record<string, unknown> = {}) {
     return {
-      state: "unlocked",
+      state: 'unlocked',
       canRenderEntryPoint: true,
       canNavigate: true,
       canQuery: true,
@@ -17,22 +17,22 @@ export function createTestHelpers(
       canRegisterRoute: true,
       canSubscribeToEvents: true,
       canShowNotification: true,
-      reason: "Unlocked",
+      reason: 'Unlocked',
       ...overrides,
     };
   }
 
   function makeFeatureAccess(overrides: Record<string, unknown> = {}) {
     return {
-      key: "challenges",
+      key: 'challenges',
       isUnlocked: true,
       isVisible: true,
       isTeased: false,
       isDegraded: false,
-      lockedDescription: "Locked feature",
-      recommendedUnlockMoment: "After 5 sessions",
-      unlockReason: "Feature unlocked",
-      releaseState: "final_release_progressive",
+      lockedDescription: 'Locked feature',
+      recommendedUnlockMoment: 'After 5 sessions',
+      unlockReason: 'Feature unlocked',
+      releaseState: 'final_release_progressive',
       priority: 10,
       ...overrides,
     };

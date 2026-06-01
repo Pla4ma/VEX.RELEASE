@@ -14,12 +14,12 @@ export {
   UserStageSchema,
   VexPersonalizationProfileSchema,
   VexSystemToDisableSchema,
-} from "./core-schemas";
+} from './core-schemas';
 
 export {
   HomeLayoutVariantSchema,
   VexExperienceSchema,
-} from "./experience-schemas";
+} from './experience-schemas';
 
 export type {
   BehaviorStats,
@@ -34,6 +34,6 @@ export type {
   StudyLayerName,
   VexPersonalizationProfile,
   VexSystemToDisable,
-} from "./core-schemas";
+} from './core-schemas';
 
-export type { HomeLayoutVariant, VexExperience } from "./experience-schemas";
+export type { HomeLayoutVariant, VexExperience } from './experience-schemas';

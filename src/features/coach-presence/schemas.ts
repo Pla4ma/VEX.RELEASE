@@ -1,44 +1,44 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const CoachPresenceMotivationStyleSchema = z.enum([
-  "CALM",
-  "FRIENDLY",
-  "STUDY_FOCUSED",
-  "GAME_LIKE",
-  "COACH_LED",
-  "INTENSE",
+  'CALM',
+  'FRIENDLY',
+  'STUDY_FOCUSED',
+  'GAME_LIKE',
+  'COACH_LED',
+  'INTENSE',
 ]);
 
 export const CoachActionIntentSchema = z.enum([
-  "START_SESSION",
-  "START_STUDY_SESSION",
-  "REVIEW_PROGRESS",
-  "TAKE_BREAK",
-  "CONTINUE_PLAN",
-  "REFLECT",
+  'START_SESSION',
+  'START_STUDY_SESSION',
+  'REVIEW_PROGRESS',
+  'TAKE_BREAK',
+  'CONTINUE_PLAN',
+  'REFLECT',
 ]);
 
 export const CoachPresenceSurfaceSchema = z.enum([
-  "HOME",
-  "SESSION_SETUP",
-  "SESSION_COMPLETION",
-  "CHAT",
-  "RESCUE",
-  "PREMIUM",
+  'HOME',
+  'SESSION_SETUP',
+  'SESSION_COMPLETION',
+  'CHAT',
+  'RESCUE',
+  'PREMIUM',
 ]);
 
 export const CoachPresenceToneSchema = z
   .object({
     motivationStyle: CoachPresenceMotivationStyleSchema,
     personality: z.enum([
-      "steady",
-      "warm",
-      "studious",
-      "playful",
-      "directive",
-      "sharp",
+      'steady',
+      'warm',
+      'studious',
+      'playful',
+      'directive',
+      'sharp',
     ]),
-    intensity: z.enum(["low", "medium", "high"]),
+    intensity: z.enum(['low', 'medium', 'high']),
   })
   .strict();
 
@@ -49,11 +49,11 @@ export const CoachPresenceVisualStateSchema = z
     mood: z.string().min(1),
     phase: z.string().min(1),
     reaction: z.enum([
-      "steady",
-      "focused",
-      "celebrating",
-      "recovering",
-      "ready",
+      'steady',
+      'focused',
+      'celebrating',
+      'recovering',
+      'ready',
     ]),
   })
   .strict();
@@ -68,10 +68,10 @@ export const CoachPresenceMemorySummarySchema = z
   .strict();
 
 export const CoachMemoryConfidenceSchema = z.enum([
-  "none",
-  "weak",
-  "medium",
-  "strong",
+  'none',
+  'weak',
+  'medium',
+  'strong',
 ]);
 
 export const CoachPresenceActionSchema = z
@@ -121,25 +121,25 @@ export const CompletionPresenceSummarySchema = z
 
 // ── Coach visibility policy ────────────────────────────────────────────
 export const CoachVisibilitySurfaceSchema = z.enum([
-  "ONBOARDING",
-  "DAY_0_HOME",
-  "SESSION_SETUP",
-  "ACTIVE_SESSION",
-  "PAUSE_INTERRUPTION",
-  "COMPLETION",
-  "RESCUE",
-  "PREMIUM",
-  "RETURN_HOME",
+  'ONBOARDING',
+  'DAY_0_HOME',
+  'SESSION_SETUP',
+  'ACTIVE_SESSION',
+  'PAUSE_INTERRUPTION',
+  'COMPLETION',
+  'RESCUE',
+  'PREMIUM',
+  'RETURN_HOME',
 ]);
 export type CoachVisibilitySurface = z.infer<
   typeof CoachVisibilitySurfaceSchema
 >;
 
 export const CoachVisibilityDecisionSchema = z.enum([
-  "VISIBLE",
-  "HIDDEN",
-  "SUBTLE_ONE_LINE",
-  "AVAILABLE_ON_REQUEST",
+  'VISIBLE',
+  'HIDDEN',
+  'SUBTLE_ONE_LINE',
+  'AVAILABLE_ON_REQUEST',
 ]);
 export type CoachVisibilityDecision = z.infer<
   typeof CoachVisibilityDecisionSchema
@@ -148,7 +148,7 @@ export type CoachVisibilityDecision = z.infer<
 export const CoachVisibilityPolicySchema = z
   .object({
     surface: CoachVisibilitySurfaceSchema,
-    lane: z.enum(["student", "game_like", "deep_creative", "minimal_normal"]),
+    lane: z.enum(['student', 'game_like', 'deep_creative', 'minimal_normal']),
     decision: CoachVisibilityDecisionSchema,
     maxMessageLength: z.number().int().min(0).max(96).default(96),
     reason: z.string().min(1),

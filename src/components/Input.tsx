@@ -4,20 +4,20 @@
  * Text input with label, error handling, and icons.
  */
 
-import React, { useState, useCallback, forwardRef } from "react";
+import React, { useState, useCallback, forwardRef } from 'react';
 import {
   TextInput,
   View,
   type TextInputProps,
-} from "react-native";
+} from 'react-native';
 
-import { useTheme } from "../theme";
-import { Text } from "./primitives";
-import { Icon } from "../icons";
-import { createSheet } from "@/shared/ui/create-sheet";
-import { type InputProps } from "./input-types";
+import { useTheme } from '../theme';
+import { Text } from './primitives';
+import { Icon } from '../icons';
+import { createSheet } from '@/shared/ui/create-sheet';
+import { type InputProps } from './input-types';
 
-export type { InputProps } from "./input-types";
+export type { InputProps } from './input-types';
 
 /**
  * Input component
@@ -43,7 +43,7 @@ export const Input = forwardRef<TextInput, InputProps>(
 
     // Handle focus
     const handleFocus = useCallback(
-      (e: Parameters<NonNullable<TextInputProps["onFocus"]>>[0]) => {
+      (e: Parameters<NonNullable<TextInputProps['onFocus']>>[0]) => {
         setIsFocused(true);
         onFocus?.(e);
       },
@@ -52,7 +52,7 @@ export const Input = forwardRef<TextInput, InputProps>(
 
     // Handle blur
     const handleBlur = useCallback(
-      (e: Parameters<NonNullable<TextInputProps["onBlur"]>>[0]) => {
+      (e: Parameters<NonNullable<TextInputProps['onBlur']>>[0]) => {
         setIsFocused(false);
         onBlur?.(e);
       },
@@ -73,7 +73,7 @@ export const Input = forwardRef<TextInput, InputProps>(
       <View style={containerStyle}>
         {/* Label */}
         {label && (
-          <Text variant="body" fontWeight={"500" as const} mb="xs">
+          <Text variant="body" fontWeight={'500' as const} mb="xs">
             {label}
           </Text>
         )}
@@ -157,15 +157,15 @@ export const Input = forwardRef<TextInput, InputProps>(
 
 const styles = createSheet({
   container: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     borderWidth: 1,
     minHeight: 52,
   },
   input: {
     flex: 1,
     paddingVertical: 14,
-    fontFamily: "System",
+    fontFamily: 'System',
   },
   leftIcon: {
     paddingLeft: 12,

@@ -1,11 +1,11 @@
-import React from "react";
-import { View, Text } from "react-native";
-import Animated from "react-native-reanimated";
-import { styles } from "./PremiumErrorRecovery.styles";
+import React from 'react';
+import { View, Text, type ViewStyle } from 'react-native';
+import Animated from 'react-native-reanimated';
+import type { AnimatedStyle } from 'react-native-reanimated';
+import { styles } from './PremiumErrorRecovery.styles';
 
 interface ResolvedSuccessCardProps {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  animatedStyle: any;
+  animatedStyle: AnimatedStyle<ViewStyle>;
   successBg: string;
   successColor: string;
 }
@@ -18,7 +18,7 @@ export const ResolvedSuccessCard: React.FC<ResolvedSuccessCardProps> = ({
   <Animated.View style={animatedStyle}>
     <View style={[styles.successCard, { backgroundColor: successBg }]}>
       <Text style={[styles.successIcon, { color: successColor }]}>
-        {"\u2713"}
+        {'\u2713'}
       </Text>
       <Text style={[styles.successText, { color: successColor }]}>
         Problem solved! Back to your journey.

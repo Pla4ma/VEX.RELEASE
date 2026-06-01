@@ -1,10 +1,10 @@
-import { createDebugger } from "../../utils/debug";
-import type { SessionState } from "../types";
-import { TimeCalculator } from "../engines/TimeCalculator";
+import { createDebugger } from '../../utils/debug';
+import type { SessionState } from '../types';
+import { TimeCalculator } from '../engines/TimeCalculator';
 export interface TickHandler {
   (payload: { sessionId: string; timestamp: number; deltaMs: number }): void;
 }
-const debug = createDebugger("session:timer");
+const debug = createDebugger('session:timer');
 export interface TimerConfig {
   tickIntervalMs: number;
   warningThresholds: number[];
@@ -27,10 +27,10 @@ export class SessionTimerService {
   }
   startTimer(sessionId: string): boolean {
     if (this.intervals.has(sessionId)) {
-      debug.warn("Timer already running for session %s", sessionId);
+      debug.warn('Timer already running for session %s', sessionId);
       return false;
     }
-    debug.info("Starting timer for session %s", sessionId);
+    debug.info('Starting timer for session %s', sessionId);
     this.lastTick.set(sessionId, Date.now());
     this.tickHandlers.set(sessionId, new Set());
     const intervalId = window.setInterval(() => {
@@ -42,10 +42,10 @@ export class SessionTimerService {
   stopTimer(sessionId: string): boolean {
     const intervalId = this.intervals.get(sessionId);
     if (!intervalId) {
-      debug.warn("No timer running for session %s", sessionId);
+      debug.warn('No timer running for session %s', sessionId);
       return false;
     }
-    debug.info("Stopping timer for session %s", sessionId);
+    debug.info('Stopping timer for session %s', sessionId);
     clearInterval(intervalId);
     this.intervals.delete(sessionId);
     this.lastTick.delete(sessionId);
@@ -53,11 +53,11 @@ export class SessionTimerService {
     return true;
   }
   pauseTimer(sessionId: string): void {
-    debug.info("Pausing timer for session %s", sessionId);
+    debug.info('Pausing timer for session %s', sessionId);
     this.stopTimer(sessionId);
   }
   resumeTimer(sessionId: string): void {
-    debug.info("Resuming timer for session %s", sessionId);
+    debug.info('Resuming timer for session %s', sessionId);
     this.startTimer(sessionId);
   }
   private tick(sessionId: string): void {
@@ -73,7 +73,7 @@ export class SessionTimerService {
           handler(tickPayload);
         } catch (error) {
           debug.error(
-            "Tick handler error for session " + sessionId,
+            'Tick handler error for session ' + sessionId,
             error instanceof Error ? error : new Error(String(error)),
           );
         }
@@ -84,7 +84,7 @@ export class SessionTimerService {
     const handlers = this.tickHandlers.get(sessionId);
     if (!handlers) {
       debug.warn(
-        "No timer running for session %s, handler not registered",
+        'No timer running for session %s, handler not registered',
         sessionId,
       );
       return () => {};
@@ -146,32 +146,32 @@ export class SessionTimerService {
       return {
         shouldTransition: true,
         nextPhase: this.getNextPhase(session.phase),
-        reason: "interval_complete",
+        reason: 'interval_complete',
       };
     }
     if (remaining === 0) {
       return {
         shouldTransition: true,
-        nextPhase: "COMPLETED",
-        reason: "duration_complete",
+        nextPhase: 'COMPLETED',
+        reason: 'duration_complete',
       };
     }
     return { shouldTransition: false };
   }
   private getNextPhase(currentPhase: string): string {
     const transitions: Record<string, string> = {
-      FOCUS: "SHORT_BREAK",
-      SHORT_BREAK: "FOCUS",
-      LONG_BREAK: "FOCUS",
-      PREPARATION: "FOCUS",
+      FOCUS: 'SHORT_BREAK',
+      SHORT_BREAK: 'FOCUS',
+      LONG_BREAK: 'FOCUS',
+      PREPARATION: 'FOCUS',
     };
-    return transitions[currentPhase] || "FOCUS";
+    return transitions[currentPhase] || 'FOCUS';
   }
   cleanup(): void {
-    debug.info("Cleaning up all timers");
+    debug.info('Cleaning up all timers');
     for (const [sessionId, intervalId] of this.intervals) {
       clearInterval(intervalId);
-      debug.debug("Stopped timer for session %s", sessionId);
+      debug.debug('Stopped timer for session %s', sessionId);
     }
     this.intervals.clear();
     this.lastTick.clear();

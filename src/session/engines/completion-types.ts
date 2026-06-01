@@ -5,7 +5,7 @@ import type {
   SessionState,
   SessionSummary,
   SessionStatus,
-} from "../types";
+} from '../types';
 
 export interface CompletionResult {
   success: boolean;
@@ -27,7 +27,7 @@ export interface AbandonResult {
 
 export interface SessionStatsResult {
   efficiency: number;
-  focusRating: "EXCELLENT" | "GOOD" | "AVERAGE" | "NEEDS_IMPROVEMENT";
+  focusRating: 'EXCELLENT' | 'GOOD' | 'AVERAGE' | 'NEEDS_IMPROVEMENT';
   productivity: number;
   recommendations: string[];
 }
@@ -40,19 +40,19 @@ export interface CompletionEligibility {
 export function validateEligibility(
   session: SessionState,
 ): CompletionEligibility {
-  if (session.status === "COMPLETED") {
-    return { eligible: false, reason: "Session already completed" };
+  if (session.status === 'COMPLETED') {
+    return { eligible: false, reason: 'Session already completed' };
   }
-  if (session.status === "ABANDONED") {
-    return { eligible: false, reason: "Session was abandoned" };
+  if (session.status === 'ABANDONED') {
+    return { eligible: false, reason: 'Session was abandoned' };
   }
   if (!session.startedAt) {
-    return { eligible: false, reason: "Session was never started" };
+    return { eligible: false, reason: 'Session was never started' };
   }
-  if (session.antiCheatStatus === "FAILED") {
+  if (session.antiCheatStatus === 'FAILED') {
     return {
       eligible: false,
-      reason: "Session failed anti-cheat validation",
+      reason: 'Session failed anti-cheat validation',
     };
   }
   return { eligible: true };

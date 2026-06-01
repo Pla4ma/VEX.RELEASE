@@ -3,17 +3,17 @@ import {
   SessionMode,
   createMockSession,
   createMockFocusMetrics,
-} from "./ScoringEngine.helpers";
+} from './ScoringEngine.helpers';
 
-describe("ScoringEngine", () => {
+describe('ScoringEngine', () => {
   let engine: ScoringEngine;
 
   beforeEach(() => {
     engine = new ScoringEngine();
   });
 
-  describe("Score Calculation", () => {
-    it("should calculate base points from session duration", () => {
+  describe('Score Calculation', () => {
+    it('should calculate base points from session duration', () => {
       const session = createMockSession();
       const metrics = createMockFocusMetrics();
       const calculation = engine.calculateScore(session, metrics);
@@ -21,7 +21,7 @@ describe("ScoringEngine", () => {
       expect(calculation.basePoints).toBe(625);
     });
 
-    it("should apply time multiplier based on completion", () => {
+    it('should apply time multiplier based on completion', () => {
       const fullSession = createMockSession({ completionPercentage: 100 });
       const partialSession = createMockSession({ completionPercentage: 50 });
       const metrics = createMockFocusMetrics();
@@ -32,7 +32,7 @@ describe("ScoringEngine", () => {
       );
     });
 
-    it("should calculate pause penalties", () => {
+    it('should calculate pause penalties', () => {
       const noPause = createMockSession({ pauses: 0 });
       const withPauses = createMockSession({ pauses: 5 });
       const metrics = createMockFocusMetrics();
@@ -43,7 +43,7 @@ describe("ScoringEngine", () => {
       );
     });
 
-    it("should calculate interruption penalties", () => {
+    it('should calculate interruption penalties', () => {
       const noInterrupt = createMockSession({ interruptions: 0 });
       const withInterrupts = createMockSession({ interruptions: 3 });
       const metrics = createMockFocusMetrics();
@@ -54,7 +54,7 @@ describe("ScoringEngine", () => {
       );
     });
 
-    it("should calculate final score", () => {
+    it('should calculate final score', () => {
       const session = createMockSession();
       const metrics = createMockFocusMetrics();
       const calculation = engine.calculateScore(session, metrics);
@@ -62,7 +62,7 @@ describe("ScoringEngine", () => {
       expect(finalScore).toBeGreaterThan(0);
     });
 
-    it("should apply comeback multiplier bonus when configured", () => {
+    it('should apply comeback multiplier bonus when configured', () => {
       const session = createMockSession({
         config: { ...createMockSession().config, comebackMultiplier: 2 },
       });
@@ -73,8 +73,8 @@ describe("ScoringEngine", () => {
     });
   });
 
-  describe("Streak Multipliers", () => {
-    it("should apply streak multiplier", () => {
+  describe('Streak Multipliers', () => {
+    it('should apply streak multiplier', () => {
       engine.setUserStats(7, 1);
       const session = createMockSession();
       const metrics = createMockFocusMetrics();
@@ -82,7 +82,7 @@ describe("ScoringEngine", () => {
       expect(calculation.streakMultiplier).toBe(1.25);
     });
 
-    it("should calculate streak bonus", () => {
+    it('should calculate streak bonus', () => {
       engine.setUserStats(7, 1);
       const session = createMockSession();
       const metrics = createMockFocusMetrics();
@@ -91,8 +91,8 @@ describe("ScoringEngine", () => {
     });
   });
 
-  describe("Quality Multipliers", () => {
-    it("should apply quality multiplier from focus metrics", () => {
+  describe('Quality Multipliers', () => {
+    it('should apply quality multiplier from focus metrics', () => {
       const highQuality = createMockFocusMetrics({ overallScore: 95 });
       const lowQuality = createMockFocusMetrics({ overallScore: 40 });
       const session = createMockSession();

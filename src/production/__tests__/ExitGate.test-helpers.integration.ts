@@ -19,7 +19,7 @@ import {
   moderateAccessibilityReport,
   moderatePerformanceReport,
   moderatePrivacyReport,
-} from "./ExitGate.test-helpers";
+} from './ExitGate.test-helpers';
 import {
   greenPaywallResult,
   criticalPaywallResult,
@@ -27,7 +27,7 @@ import {
   greenAppStoreResult,
   criticalAppStoreResult,
   moderateAppStoreResult,
-} from "./ExitGate.test-helpers.monetization";
+} from './ExitGate.test-helpers.monetization';
 
 export interface ExitGateMocks {
   offlineSyncService: { generateHealthReport: jest.Mock };

@@ -1,18 +1,18 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
-import { featureHealthRegistry } from "../feature-health";
-import { registerFeatureHealthChecks } from "../feature-health-checks";
-import { setDegradedFeatures as setGlobalDegradedFeatures } from "../feature-access-store";
-import { shouldRunHealthCheck } from "../feature-health-policy";
-import type { FeatureKey } from "../feature-access";
+import { featureHealthRegistry } from '../feature-health';
+import { registerFeatureHealthChecks } from '../feature-health-checks';
+import { setDegradedFeatures as setGlobalDegradedFeatures } from '../feature-access-store';
+import { shouldRunHealthCheck } from '../feature-health-policy';
+import type { FeatureKey } from '../feature-access';
 
 let registered = false;
 const ALL_CHECKABLE_FEATURES: FeatureKey[] = [
-  "content_study",
-  "content_study_advanced",
-  "premium_paywall",
-  "boss_tab",
-  "ai_coach_advanced",
+  'content_study',
+  'content_study_advanced',
+  'premium_paywall',
+  'boss_tab',
+  'ai_coach_advanced',
 ];
 
 function ensureRegistered(): void {
@@ -84,7 +84,7 @@ export function useFeatureHealth(totalCompletedSessions: number): {
       cancelled = true;
       clearInterval(interval);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [totalCompletedSessions]);
 
   return { degradedFeatures, isPolling };

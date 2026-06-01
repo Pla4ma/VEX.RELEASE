@@ -1,4 +1,4 @@
-import { I18nManager } from "react-native";
+import { I18nManager } from 'react-native';
 
 export function isRTL(): boolean {
   return I18nManager.isRTL;
@@ -12,11 +12,11 @@ export function getDirectionalStyles<T extends Record<string, unknown>>(
   }
   const rtlStyles: Record<string, unknown> = { ...styles };
   const swapKeys: [string, string][] = [
-    ["marginLeft", "marginRight"],
-    ["paddingLeft", "paddingRight"],
-    ["borderLeftWidth", "borderRightWidth"],
-    ["borderLeftColor", "borderRightColor"],
-    ["left", "right"],
+    ['marginLeft', 'marginRight'],
+    ['paddingLeft', 'paddingRight'],
+    ['borderLeftWidth', 'borderRightWidth'],
+    ['borderLeftColor', 'borderRightColor'],
+    ['left', 'right'],
   ];
   for (const [left, right] of swapKeys) {
     if (left in rtlStyles && right in rtlStyles) {

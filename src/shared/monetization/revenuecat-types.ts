@@ -2,12 +2,12 @@ import {
   CustomerInfo,
   PurchasesOfferings,
   PurchasesOffering,
-} from "react-native-purchases";
+} from 'react-native-purchases';
 
 // Re-export RevenueCat SDK types so all consumers import through this layer
-export type { CustomerInfo } from "react-native-purchases";
-export type { PurchasesOffering, PurchasesOfferings } from "react-native-purchases";
-export type { PurchasesPackage } from "react-native-purchases";
+export type { CustomerInfo } from 'react-native-purchases';
+export type { PurchasesOffering, PurchasesOfferings } from 'react-native-purchases';
+export type { PurchasesPackage } from 'react-native-purchases';
 export interface RevenueCatConfig {
   iosApiKey: string;
   androidApiKey: string;
@@ -17,19 +17,19 @@ export interface RevenueCatConfig {
   usesStoreKit2IfAvailable?: boolean;
 }
 export type RevenueCatStatus =
-  | "uninitialized"
-  | "initializing"
-  | "ready"
-  | "missing_keys"
-  | "error";
+  | 'uninitialized'
+  | 'initializing'
+  | 'ready'
+  | 'missing_keys'
+  | 'error';
 export type PurchaseState =
-  | "idle"
-  | "loading_offerings"
-  | "loading_customer"
-  | "purchasing"
-  | "restoring"
-  | "success"
-  | "error";
+  | 'idle'
+  | 'loading_offerings'
+  | 'loading_customer'
+  | 'purchasing'
+  | 'restoring'
+  | 'success'
+  | 'error';
 export interface PurchaseResult {
   success: boolean;
   customerInfo?: CustomerInfo;
@@ -105,33 +105,33 @@ export interface PurchasesOfferingDisplayInfo {
   weekly?: PurchasesPackageDisplayInfo | null;
 }
 export type RevenueCatErrorCode =
-  | "UNKNOWN"
-  | "PURCHASE_CANCELLED"
-  | "STORE_PROBLEM"
-  | "PURCHASE_NOT_ALLOWED"
-  | "PURCHASE_INVALID"
-  | "PRODUCT_NOT_AVAILABLE"
-  | "PRODUCT_ALREADY_PURCHASED"
-  | "RECEIPT_ALREADY_IN_USE"
-  | "INVALID_RECEIPT"
-  | "MISSING_RECEIPT_FILE"
-  | "NETWORK_ERROR"
-  | "INVALID_CREDENTIALS"
-  | "UNEXPECTED_BACKEND_ERROR"
-  | "INVALID_APP_USER_ID"
-  | "OPERATION_ALREADY_IN_PROGRESS"
-  | "INVALID_SUBSCRIBER_ATTRIBUTES"
-  | "CONFIGURATION_ERROR"
-  | "UNSUPPORTED"
-  | "EMPTY_OFFERINGS"
-  | "PAYWALL_NOT_LOADED"
-  | "OFFERINGS_NOT_LOADED"
-  | "PURCHASE_PENDING"
-  | "BILLING_ISSUE";
+  | 'UNKNOWN'
+  | 'PURCHASE_CANCELLED'
+  | 'STORE_PROBLEM'
+  | 'PURCHASE_NOT_ALLOWED'
+  | 'PURCHASE_INVALID'
+  | 'PRODUCT_NOT_AVAILABLE'
+  | 'PRODUCT_ALREADY_PURCHASED'
+  | 'RECEIPT_ALREADY_IN_USE'
+  | 'INVALID_RECEIPT'
+  | 'MISSING_RECEIPT_FILE'
+  | 'NETWORK_ERROR'
+  | 'INVALID_CREDENTIALS'
+  | 'UNEXPECTED_BACKEND_ERROR'
+  | 'INVALID_APP_USER_ID'
+  | 'OPERATION_ALREADY_IN_PROGRESS'
+  | 'INVALID_SUBSCRIBER_ATTRIBUTES'
+  | 'CONFIGURATION_ERROR'
+  | 'UNSUPPORTED'
+  | 'EMPTY_OFFERINGS'
+  | 'PAYWALL_NOT_LOADED'
+  | 'OFFERINGS_NOT_LOADED'
+  | 'PURCHASE_PENDING'
+  | 'BILLING_ISSUE';
 export interface RevenueCatError extends Error {
   code: RevenueCatErrorCode;
   message: string;
-  name: "RevenueCatError";
+  name: 'RevenueCatError';
   underlyingError?: Error;
 }
 export interface PurchaseAnalyticsProperties {
@@ -147,7 +147,7 @@ export interface PurchaseAnalyticsProperties {
 export interface EntitlementAnalyticsProperties {
   entitlement_id: string;
   is_active: boolean;
-  source?: "purchase" | "restore" | "initial";
+  source?: 'purchase' | 'restore' | 'initial';
 }
 export interface UseRevenueCatState {
   isInitialized: boolean;

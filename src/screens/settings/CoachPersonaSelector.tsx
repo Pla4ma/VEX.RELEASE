@@ -1,13 +1,13 @@
-import React from "react";
-import { Pressable } from "react-native";
-import { useTheme } from "@/theme";
-import { Box, Text, Card } from "@/components/primitives";
-import { Icon } from "@/icons";
-import { launchColors } from "@theme/tokens/launch-colors";
+import React from 'react';
+import { Pressable } from 'react-native';
+import { useTheme } from '@/theme';
+import { Box, Text, Card } from '@/components/primitives';
+import { Icon } from '@/icons';
+import { launchColors } from '@theme/tokens/launch-colors';
 import {
   PERSONA_OPTIONS,
   type CoachPersona,
-} from "./persona-data";
+} from './persona-data';
 
 export type { CoachPersona };
 export { PERSONA_OPTIONS };
@@ -33,7 +33,7 @@ export const CoachPersonaSelector: React.FC<CoachPersonaSelectorProps> = ({
           style={{
             marginLeft: 12,
             marginBottom: 8,
-            fontWeight: "600",
+            fontWeight: '600',
             letterSpacing: 0.5,
           }}
         >
@@ -42,7 +42,7 @@ export const CoachPersonaSelector: React.FC<CoachPersonaSelectorProps> = ({
         <Card
           size="md"
           style={{
-            overflow: "hidden",
+            overflow: 'hidden',
             backgroundColor: theme.colors.background.secondary,
           }}
         >
@@ -87,7 +87,7 @@ export const CoachPersonaSelector: React.FC<CoachPersonaSelectorProps> = ({
                   <Text
                     variant="body"
                     color="text.secondary"
-                    style={{ fontStyle: "italic" }}
+                    style={{ fontStyle: 'italic' }}
                   >
                     "{message}"
                   </Text>
@@ -105,20 +105,20 @@ export const CoachPersonaSelector: React.FC<CoachPersonaSelectorProps> = ({
           style={{
             marginLeft: 12,
             marginBottom: 8,
-            fontWeight: "600",
+            fontWeight: '600',
             letterSpacing: 0.5,
           }}
         >
           COACH PERSONA
         </Text>
-        <Card size="sm" style={{ overflow: "hidden" }}>
+        <Card size="sm" style={{ overflow: 'hidden' }}>
           {PERSONA_OPTIONS.map((option, index) => (
             <React.Fragment key={option.id}>
               <Pressable
                 onPress={() => onSelectPersona(option.id)}
                 style={{
-                  flexDirection: "row",
-                  alignItems: "center",
+                  flexDirection: 'row',
+                  alignItems: 'center',
                   paddingVertical: 16,
                   paddingHorizontal: 16,
                 }}
@@ -133,7 +133,7 @@ export const CoachPersonaSelector: React.FC<CoachPersonaSelectorProps> = ({
                   justifyContent="center"
                   alignItems="center"
                   style={{
-                    backgroundColor: option.color + "20",
+                    backgroundColor: option.color + '20',
                     borderWidth: selectedPersona === option.id ? 2 : 0,
                     borderColor: option.color,
                   }}
@@ -145,7 +145,7 @@ export const CoachPersonaSelector: React.FC<CoachPersonaSelectorProps> = ({
                     variant="body"
                     style={{
                       fontWeight:
-                        selectedPersona === option.id ? "600" : "500",
+                        selectedPersona === option.id ? '600' : '500',
                       color: theme.colors.text.primary,
                     }}
                   >

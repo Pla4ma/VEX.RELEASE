@@ -6,14 +6,14 @@
  * Uses MMKV storage for persistence.
  */
 
-import { getDefaultStorageAdapter } from "../../persistence/MMKVStorageAdapter";
-import { z } from "zod";
+import { getDefaultStorageAdapter } from '../../persistence/MMKVStorageAdapter';
+import { z } from 'zod';
 
 const _profileSchema = z.object({
   id: z.string(),
   name: z.string(),
   type: z.string(),
-  mood: z.enum(["happy", "neutral", "sad", "starving"]),
+  mood: z.enum(['happy', 'neutral', 'sad', 'starving']),
   level: z.number().min(1),
   xp: z.number().min(0),
   lastFedAt: z.number(),
@@ -21,7 +21,7 @@ const _profileSchema = z.object({
   specialAbilityCharge: z.number().min(0),
   equippedItems: z.array(z.string()),
   unlockedAbilities: z.array(
-    z.enum(["xp_boost_5pct", "coin_boost_10pct", "streak_protection"]),
+    z.enum(['xp_boost_5pct', 'coin_boost_10pct', 'streak_protection']),
   ),
 });
 
@@ -31,26 +31,26 @@ function _profileKey(userId: string): string {
   return `companion_profile_${userId}`;
 }
 
-function _getMoodFromFeedTime(lastFedAt: number): _CompanionProfile["mood"] {
+function _getMoodFromFeedTime(lastFedAt: number): _CompanionProfile['mood'] {
   const hours = (Date.now() - lastFedAt) / (1000 * 60 * 60);
   if (hours < 12) {
-    return "happy";
+    return 'happy';
   }
   if (hours < 24) {
-    return "neutral";
+    return 'neutral';
   }
   if (hours < 48) {
-    return "sad";
+    return 'sad';
   }
-  return "starving";
+  return 'starving';
 }
 
 function _getDefaultProfile(userId: string): _CompanionProfile {
   return {
     id: `companion_${userId}`,
-    name: "Vexling",
-    type: "focus_wisp",
-    mood: "happy",
+    name: 'Vexling',
+    type: 'focus_wisp',
+    mood: 'happy',
     level: 1,
     xp: 0,
     lastFedAt: Date.now(),
@@ -83,21 +83,21 @@ async function _saveProfile(
 
 function _getAbilityUnlocks(
   level: number,
-): _CompanionProfile["unlockedAbilities"] {
+): _CompanionProfile['unlockedAbilities'] {
   return [
-    ...(level >= 5 ? (["xp_boost_5pct"] as const) : []),
-    ...(level >= 10 ? (["coin_boost_10pct"] as const) : []),
-    ...(level >= 20 ? (["streak_protection"] as const) : []),
+    ...(level >= 5 ? (['xp_boost_5pct'] as const) : []),
+    ...(level >= 10 ? (['coin_boost_10pct'] as const) : []),
+    ...(level >= 20 ? (['streak_protection'] as const) : []),
   ];
 }
 
 type SessionEvent =
   | {
-      type: "session_complete";
+      type: 'session_complete';
       duration: number;
-      quality: "good" | "average" | "poor";
+      quality: 'good' | 'average' | 'poor';
     }
-  | { type: "streak_milestone"; streakDays: number };
+  | { type: 'streak_milestone'; streakDays: number };
 
 export async function getCompanion(userId: string): Promise<_CompanionProfile> {
   return _loadProfile(userId);
@@ -113,7 +113,7 @@ export async function feedCompanion(
     ...current,
     xp: current.xp + 50,
     lastFedAt: Date.now(),
-    mood: "happy",
+    mood: 'happy',
   });
 }
 
@@ -141,11 +141,11 @@ export async function processSessionEvent(
   const current = await _loadProfile(userId);
   let xpGain = 0;
   let chargeGain = 0;
-  if (event.type === "session_complete") {
+  if (event.type === 'session_complete') {
     const qualityMultiplier =
       { good: 1.5, average: 1.0, poor: 0.5 }[event.quality] ?? 1;
     xpGain = Math.floor(event.duration * 4 * qualityMultiplier);
-  } else if (event.type === "streak_milestone") {
+  } else if (event.type === 'streak_milestone') {
     chargeGain = Math.min(50, event.streakDays * 5);
   }
   return _saveProfile(userId, {
@@ -163,9 +163,9 @@ export async function getCompanionBonuses(
 ): Promise<{ xpBoost: number; coinBoost: number; streakProtection: boolean }> {
   const profile = await _loadProfile(userId);
   return {
-    xpBoost: profile.unlockedAbilities.includes("xp_boost_5pct") ? 0.05 : 0,
-    coinBoost: profile.unlockedAbilities.includes("coin_boost_10pct") ? 0.1 : 0,
-    streakProtection: profile.unlockedAbilities.includes("streak_protection"),
+    xpBoost: profile.unlockedAbilities.includes('xp_boost_5pct') ? 0.05 : 0,
+    coinBoost: profile.unlockedAbilities.includes('coin_boost_10pct') ? 0.1 : 0,
+    streakProtection: profile.unlockedAbilities.includes('streak_protection'),
   };
 }
 
@@ -179,8 +179,8 @@ export async function useSpecialAbility(
 ): Promise<{ success: boolean; effect: string }> {
   const profile = await _loadProfile(userId);
   if (profile.specialAbilityCharge < 100) {
-    throw new Error("Special ability not charged");
+    throw new Error('Special ability not charged');
   }
   await _saveProfile(userId, { ...profile, specialAbilityCharge: 0 });
-  return { success: true, effect: "xp_boost" };
+  return { success: true, effect: 'xp_boost' };
 }

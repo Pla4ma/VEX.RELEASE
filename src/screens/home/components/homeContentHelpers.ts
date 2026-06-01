@@ -1,10 +1,10 @@
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import {
   getFeatureAvailability,
   isFeatureAvailableForNavigation,
-} from "../../../features/liveops-config";
-import type { ExtendedRootStackParams, SessionStackParams } from "../../../navigation/types";
-import type { HomeController } from "../hooks/home-controller-types";
+} from '../../../features/liveops-config';
+import type { ExtendedRootStackParams, SessionStackParams } from '../../../navigation/types';
+import type { HomeController } from '../hooks/home-controller-types';
 
 export type NavigationProp = NativeStackNavigationProp<ExtendedRootStackParams>;
 
@@ -19,16 +19,16 @@ export const staggeredEnterStyle = {
 
 export function buildPromiseSessionParams(promise: {
   targetDurationMinutes: number;
-  targetMode: "FOCUS" | "RECOVERY" | "STUDY" | "BOSS_PREP" | "HABIT_BUILD";
-}): SessionStackParams["SessionSetup"] {
-  const presetMode: SessionStackParams["SessionSetup"]["presetMode"] =
-    promise.targetMode === "RECOVERY"
-      ? "LIGHT_FOCUS"
-      : promise.targetMode === "STUDY"
-        ? "STUDY"
-        : promise.targetMode === "HABIT_BUILD"
-          ? "SPRINT"
-          : "DEEP_WORK";
+  targetMode: 'FOCUS' | 'RECOVERY' | 'STUDY' | 'BOSS_PREP' | 'HABIT_BUILD';
+}): SessionStackParams['SessionSetup'] {
+  const presetMode: SessionStackParams['SessionSetup']['presetMode'] =
+    promise.targetMode === 'RECOVERY'
+      ? 'LIGHT_FOCUS'
+      : promise.targetMode === 'STUDY'
+        ? 'STUDY'
+        : promise.targetMode === 'HABIT_BUILD'
+          ? 'SPRINT'
+          : 'DEEP_WORK';
   return {
     presetMode,
     suggestedDurationSeconds: promise.targetDurationMinutes * 60,
@@ -43,7 +43,7 @@ export function openChallenges(
   if (
     isFeatureAvailableForNavigation(getFeatureAvailability(challengesAccess))
   ) {
-    navigation.navigate("Challenges");
+    navigation.navigate('Challenges');
     return;
   }
   controller.openSetup();
@@ -57,7 +57,7 @@ export function openCompanion(
   if (
     isFeatureAvailableForNavigation(getFeatureAvailability(companionAccess))
   ) {
-    navigation.navigate("CompanionDetail");
+    navigation.navigate('CompanionDetail');
     return;
   }
   controller.openSetup();

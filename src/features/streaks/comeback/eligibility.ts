@@ -4,14 +4,14 @@
  * Functions to check if user qualifies for comeback quest.
  */
 
-import { createDebugger } from "../../../utils/debug";
-import { COMEBACK_QUEST_CONFIG } from "./config";
+import { createDebugger } from '../../../utils/debug';
+import { COMEBACK_QUEST_CONFIG } from './config';
 import {
   fetchLastCompletedSession,
   fetchUserStreakBeforeBreak,
-} from "../repository/comeback";
+} from '../repository/comeback';
 
-const debug = createDebugger("streaks:comeback-quest");
+const debug = createDebugger('streaks:comeback-quest');
 
 export async function checkComebackEligibility(userId: string): Promise<{
   eligible: boolean;
@@ -39,7 +39,7 @@ export async function checkComebackEligibility(userId: string): Promise<{
     return { eligible: true, daysAbsent, streakBeforeBreak };
   } catch (error) {
     debug.error(
-      "Error checking comeback eligibility",
+      'Error checking comeback eligibility',
       error instanceof Error ? error : undefined,
     );
     return { eligible: false, daysAbsent: 0, streakBeforeBreak: 0 };

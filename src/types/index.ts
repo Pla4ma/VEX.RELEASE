@@ -5,7 +5,7 @@
  * used throughout the VEX application.
  */
 
-export * from "./global";
-export * from "./api";
-export * from "./models";
-export * from "./navigation";
+export * from './global';
+export * from './api';
+export * from './models';
+export * from './navigation';

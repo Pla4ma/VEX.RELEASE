@@ -1,14 +1,14 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef } from 'react';
 
-import { useToast } from "../../shared/ui/components/Toast";
-import { triggerHaptic } from "../../utils/haptics";
-import { trackMidSessionEvent } from "./analytics";
-import { evaluateMidSessionEvent } from "./service";
-import type { EvaluateMidSessionEventInput } from "./schemas";
+import { useToast } from '../../shared/ui/components/Toast';
+import { triggerHaptic } from '../../utils/haptics';
+import { trackMidSessionEvent } from './analytics';
+import { evaluateMidSessionEvent } from './service';
+import type { EvaluateMidSessionEventInput } from './schemas';
 
 type UseMidSessionEventsInput = Omit<
   EvaluateMidSessionEventInput,
-  "lastEventKey"
+  'lastEventKey'
 > & {
   enabled: boolean;
   sessionId: string;
@@ -44,8 +44,8 @@ export function useMidSessionEvents(input: UseMidSessionEventsInput): void {
       title: event.title,
       message: event.message,
       duration: 4500,
-      position: "top",
-      priority: event.toastType === "warning" ? "high" : "normal",
+      position: 'top',
+      priority: event.toastType === 'warning' ? 'high' : 'normal',
     });
     trackMidSessionEvent(event);
     void triggerHaptic(event.haptic);

@@ -1,4 +1,4 @@
-import type { InterventionType } from "./intervention-types";
+import type { InterventionType } from './intervention-types';
 
 interface BannerColors {
   bg: string;
@@ -24,25 +24,25 @@ export function getBannerColors(
 ): BannerColors {
   const resolveColor = SEVERITY_COLOR_MAP[type] ?? SEVERITY_COLOR_MAP.MOMENTUM_BUILDING;
   const color = resolveColor(theme);
-  return { bg: color + "15", border: color, accent: color };
+  return { bg: color + '15', border: color, accent: color };
 }
 
 const ICON_MAP: Record<InterventionType, string> = {
-  BURNOUT: "🔥",
-  PLATEAU: "📊",
-  STREAK_RISK: "⏰",
-  BOSS_FINISH: "⚔️",
-  BOSS_OPPORTUNITY: "🎯",
-  STUDY_BEHIND: "📚",
-  MOMENTUM_BUILDING: "📈",
-  COMEBACK_READY: "🔄",
-  STUDY_PLAN_COMPLETE: "🏆",
+  BURNOUT: '🔥',
+  PLATEAU: '📊',
+  STREAK_RISK: '⏰',
+  BOSS_FINISH: '⚔️',
+  BOSS_OPPORTUNITY: '🎯',
+  STUDY_BEHIND: '📚',
+  MOMENTUM_BUILDING: '📈',
+  COMEBACK_READY: '🔄',
+  STUDY_PLAN_COMPLETE: '🏆',
 };
 
 export function getIcon(type: InterventionType): string {
-  return ICON_MAP[type] ?? "💡";
+  return ICON_MAP[type] ?? '💡';
 }
 
 export function isNonDismissable(type: InterventionType, hours?: number): boolean {
-  return type === "STREAK_RISK" && hours !== undefined && hours < 4;
+  return type === 'STREAK_RISK' && hours !== undefined && hours < 4;
 }

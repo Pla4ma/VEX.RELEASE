@@ -1,25 +1,25 @@
-import { createDebugger } from "../../../utils/debug";
-import type { FocusGoal, FocusDuration } from "../types";
-import type { ValidationResult } from "./goal-validators";
-import { GoalValidators } from "./goal-validators";
-import { DurationValidators } from "./duration-validators";
-import { NameValidators } from "./name-validators";
-import { getNextRecommendedStep, canSkipStep } from "./step-navigation";
+import { createDebugger } from '../../../utils/debug';
+import type { FocusGoal, FocusDuration } from '../types';
+import type { ValidationResult } from './goal-validators';
+import { GoalValidators } from './goal-validators';
+import { DurationValidators } from './duration-validators';
+import { NameValidators } from './name-validators';
+import { getNextRecommendedStep, canSkipStep } from './step-navigation';
 
-const debug = createDebugger("onboarding:validation");
+const debug = createDebugger('onboarding:validation');
 
-export type { ValidationResult, ValidationError, ValidationWarning } from "./goal-validators";
-export { GoalValidators } from "./goal-validators";
-export { DurationValidators } from "./duration-validators";
-export { NameValidators } from "./name-validators";
-export { getNextRecommendedStep, canSkipStep } from "./step-navigation";
+export type { ValidationResult, ValidationError, ValidationWarning } from './goal-validators';
+export { GoalValidators } from './goal-validators';
+export { DurationValidators } from './duration-validators';
+export { NameValidators } from './name-validators';
+export { getNextRecommendedStep, canSkipStep } from './step-navigation';
 export {
   OnboardingGoalSchema,
   OnboardingDurationSchema,
   OnboardingNameSchema,
   OnboardingStepSchema,
   OnboardingStateSchema,
-} from "./schemas";
+} from './schemas';
 
 export function validateOnboardingStep(
   step: string,
@@ -31,9 +31,9 @@ export function validateOnboardingStep(
     warnings: [],
   };
   switch (step) {
-    case "WELCOME":
+    case 'WELCOME':
       break;
-    case "GOAL_SETTING": {
+    case 'GOAL_SETTING': {
       const goalResult = GoalValidators.validate(data.goal);
       if (!goalResult.success) {
         result.success = false;
@@ -41,7 +41,7 @@ export function validateOnboardingStep(
       }
       break;
     }
-    case "FOCUS_TIME": {
+    case 'FOCUS_TIME': {
       const durationResult = DurationValidators.validate(data.focusDuration);
       if (!durationResult.success) {
         result.success = false;
@@ -53,15 +53,15 @@ export function validateOnboardingStep(
         );
         if (!recommended.includes(durationResult.data!)) {
           result.warnings.push({
-            field: "focusDuration",
-            message: `For ${String(data.goal)} goals, we recommend ${recommended.slice(0, 2).join(" or ")} minute sessions`,
-            code: "DURATION_NOT_RECOMMENDED_FOR_GOAL",
+            field: 'focusDuration',
+            message: `For ${String(data.goal)} goals, we recommend ${recommended.slice(0, 2).join(' or ')} minute sessions`,
+            code: 'DURATION_NOT_RECOMMENDED_FOR_GOAL',
           });
         }
       }
       break;
     }
-    case "NAME_SETUP": {
+    case 'NAME_SETUP': {
       const nameResult = NameValidators.validate(data.displayName);
       if (!nameResult.success) {
         result.success = false;
@@ -69,23 +69,23 @@ export function validateOnboardingStep(
       }
       break;
     }
-    case "FIRST_SESSION_CTA": {
-      const requiredFields = ["goal", "focusDuration", "displayName"];
+    case 'FIRST_SESSION_CTA': {
+      const requiredFields = ['goal', 'focusDuration', 'displayName'];
       for (const field of requiredFields) {
         if (!data[field])
-          result.warnings.push({
+          {result.warnings.push({
             field,
             message: `${field} is missing from onboarding data`,
-            code: "MISSING_ONBOARDING_DATA",
-          });
+            code: 'MISSING_ONBOARDING_DATA',
+          });}
       }
       break;
     }
     default:
       result.errors.push({
-        field: "step",
+        field: 'step',
         message: `Unknown onboarding step: ${step}`,
-        code: "UNKNOWN_STEP",
+        code: 'UNKNOWN_STEP',
       });
       result.success = false;
   }
@@ -107,16 +107,16 @@ export function validateCompleteOnboarding(
   const goalResult = GoalValidators.validate(state.goal);
   const durationResult = DurationValidators.validate(state.focusDuration);
   const nameResult = NameValidators.validate(state.displayName);
-  if (!goalResult.success) result.errors.push(...goalResult.errors);
-  if (!durationResult.success) result.errors.push(...durationResult.errors);
-  if (!nameResult.success) result.errors.push(...nameResult.errors);
+  if (!goalResult.success) {result.errors.push(...goalResult.errors);}
+  if (!durationResult.success) {result.errors.push(...durationResult.errors);}
+  if (!nameResult.success) {result.errors.push(...nameResult.errors);}
   if (goalResult.success && durationResult.success) {
     const recommended = DurationValidators.recommendForGoal(goalResult.data!);
     if (!recommended.includes(durationResult.data!)) {
       result.warnings.push({
-        field: "consistency",
+        field: 'consistency',
         message: `Your chosen duration may not be optimal for ${String(goalResult.data)} goals`,
-        code: "GOAL_DURATION_MISMATCH",
+        code: 'GOAL_DURATION_MISMATCH',
       });
     }
   }
@@ -126,18 +126,18 @@ export function validateCompleteOnboarding(
     const duration = completedAt - startedAt;
     if (duration < 5000) {
       result.warnings.push({
-        field: "timing",
+        field: 'timing',
         message:
-          "Onboarding completed very quickly. Make sure you understood all the options.",
-        code: "RAPID_COMPLETION",
+          'Onboarding completed very quickly. Make sure you understood all the options.',
+        code: 'RAPID_COMPLETION',
       });
     }
     if (duration > 30 * 60 * 1000) {
       result.warnings.push({
-        field: "timing",
+        field: 'timing',
         message:
-          "Onboarding took over 30 minutes. You can always change these settings later.",
-        code: "SLOW_COMPLETION",
+          'Onboarding took over 30 minutes. You can always change these settings later.',
+        code: 'SLOW_COMPLETION',
       });
     }
   }
@@ -149,7 +149,7 @@ export function validateCompleteOnboarding(
       displayName: nameResult.data!,
     };
   }
-  debug.info("Complete onboarding validation", {
+  debug.info('Complete onboarding validation', {
     success: result.success,
     errors: result.errors.length,
     warnings: result.warnings.length,

@@ -1,13 +1,13 @@
-import React from "react";
-import { Pressable, Text, View } from "react-native";
-import Animated from "react-native-reanimated";
-import { useTheme } from "../../../theme";
-import { useFadeStyle, useScaleInStyle } from "./animations";
-import { styles } from "./styles";
-import type { EmptyStateProps } from "./types";
+import React from 'react';
+import { Pressable, Text, View } from 'react-native';
+import Animated from 'react-native-reanimated';
+import { useTheme } from '../../../theme';
+import { useFadeStyle, useScaleInStyle } from './animations';
+import { styles } from './styles';
+import type { EmptyStateProps } from './types';
 
 export function EmptyState({
-  icon = "[ ]",
+  icon = '[ ]',
   title,
   subtitle,
   actionLabel,

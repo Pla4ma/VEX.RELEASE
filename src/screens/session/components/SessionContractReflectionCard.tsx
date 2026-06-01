@@ -1,14 +1,14 @@
-import React from "react";
-import { Box } from "../../../components/primitives/Box";
-import { Button } from "../../../components/primitives/Button";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import { triggerHaptic } from "../../../utils/haptics";
+import React from 'react';
+import { Box } from '../../../components/primitives/Box';
+import { Button } from '../../../components/primitives/Button';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import { triggerHaptic } from '../../../utils/haptics';
 import type {
   FocusContract,
   ReflectionStatus,
-} from "../../../features/focus-contract/types";
-import { getReflectionCopy } from "../../../features/focus-contract/service";
+} from '../../../features/focus-contract/types';
+import { getReflectionCopy } from '../../../features/focus-contract/service';
 
 type SessionContractReflectionCardProps = {
   contract: FocusContract | null;
@@ -22,19 +22,19 @@ const options: Array<{
   hint: string;
 }> = [
   {
-    status: "done",
-    label: "Done",
-    hint: "Marks your focus contract as completed",
+    status: 'done',
+    label: 'Done',
+    hint: 'Marks your focus contract as completed',
   },
   {
-    status: "partial",
-    label: "Partial",
-    hint: "Marks your focus contract as partly completed",
+    status: 'partial',
+    label: 'Partial',
+    hint: 'Marks your focus contract as partly completed',
   },
   {
-    status: "not_done",
-    label: "Not this time",
-    hint: "Marks your focus contract as not completed",
+    status: 'not_done',
+    label: 'Not this time',
+    hint: 'Marks your focus contract as not completed',
   },
 ];
 
@@ -45,7 +45,7 @@ export function SessionContractReflectionCard({
 }: SessionContractReflectionCardProps): React.JSX.Element | null {
   const { theme } = useTheme();
   const reflectedStatus =
-    contract?.completionStatus && contract.completionStatus !== "skipped"
+    contract?.completionStatus && contract.completionStatus !== 'skipped'
       ? contract.completionStatus
       : null;
 
@@ -54,7 +54,7 @@ export function SessionContractReflectionCard({
   }
 
   const handleReflect = (status: ReflectionStatus): void => {
-    void triggerHaptic(status === "done" ? "success" : "impactLight");
+    void triggerHaptic(status === 'done' ? 'success' : 'impactLight');
     onReflect(status);
   };
 
@@ -84,7 +84,7 @@ export function SessionContractReflectionCard({
             haptic="none"
             mb="sm"
             onPress={() => handleReflect(option.status)}
-            variant={reflectedStatus === option.status ? "primary" : "outline"}
+            variant={reflectedStatus === option.status ? 'primary' : 'outline'}
           >
             {option.label}
           </Button>

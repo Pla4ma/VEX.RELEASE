@@ -1,10 +1,10 @@
-import React, { useCallback, useMemo } from "react";
-import { Pressable, Text, View } from "react-native";
-import { useTheme } from "../../../theme/ThemeContext";
-import type { RescueEligibilityResult } from "../schemas";
-import type { Lane } from "../../lane-engine/types";
-import { deriveRescueSurface } from "../../mode-native/service";
-import { sessionStart, buttonTap } from "../../../utils/haptics";
+import React, { useCallback, useMemo } from 'react';
+import { Pressable, Text, View } from 'react-native';
+import { useTheme } from '../../../theme/ThemeContext';
+import type { RescueEligibilityResult } from '../schemas';
+import type { Lane } from '../../lane-engine/types';
+import { deriveRescueSurface } from '../../mode-native/service';
+import { sessionStart, buttonTap } from '../../../utils/haptics';
 
 interface RescueBannerProps {
   eligibility: RescueEligibilityResult;
@@ -20,8 +20,8 @@ export function RescueBanner({
   onStartRescue,
   onDismiss,
   lane,
-  accessibilityLabel = "Rescue mode available. Tap to start a short focus block.",
-  accessibilityHint = "Opens a low-pressure 5 to 12 minute rescue session.",
+  accessibilityLabel = 'Rescue mode available. Tap to start a short focus block.',
+  accessibilityHint = 'Opens a low-pressure 5 to 12 minute rescue session.',
 }: RescueBannerProps) {
   const { theme } = useTheme();
   const { colors } = theme;
@@ -30,17 +30,6 @@ export function RescueBanner({
     () => (lane ? deriveRescueSurface(lane) : null),
     [lane],
   );
-
-  if (!eligibility.eligible) return null;
-
-  const minutes = Math.round(eligibility.recommendedDurationSeconds / 60);
-  const headline = rescueSurface?.headline ?? "Small step, big impact";
-  const body =
-    rescueSurface?.body ??
-    `A ${minutes}-minute rescue block is available. No pressure, no judgment — just one small action to keep moving forward.`;
-  const actionLabel = rescueSurface
-    ? `${rescueSurface.actionLabel} (${minutes}m)`
-    : `Start ${minutes} min`;
 
   const handleStart = useCallback(() => {
     sessionStart();
@@ -51,6 +40,17 @@ export function RescueBanner({
     buttonTap();
     onDismiss();
   }, [onDismiss]);
+
+  if (!eligibility.eligible) {return null;}
+
+  const minutes = Math.round(eligibility.recommendedDurationSeconds / 60);
+  const headline = rescueSurface?.headline ?? 'Small step, big impact';
+  const body =
+    rescueSurface?.body ??
+    `A ${minutes}-minute rescue block is available. No pressure, no judgment — just one small action to keep moving forward.`;
+  const actionLabel = rescueSurface
+    ? `${rescueSurface.actionLabel} (${minutes}m)`
+    : `Start ${minutes} min`;
 
   return (
     <View
@@ -68,7 +68,7 @@ export function RescueBanner({
       <Text
         style={{
           fontSize: 15,
-          fontWeight: "600",
+          fontWeight: '600',
           color: colors.semantic.primary,
         }}
         accessibilityRole="header"
@@ -88,7 +88,7 @@ export function RescueBanner({
 
       <View
         style={{
-          flexDirection: "row",
+          flexDirection: 'row',
           gap: theme.spacing[3],
           marginTop: theme.spacing[1],
         }}
@@ -105,15 +105,15 @@ export function RescueBanner({
             borderRadius: theme.borderRadius.md,
             backgroundColor: colors.semantic.primary,
             opacity: pressed ? 0.85 : 1,
-            alignItems: "center" as const,
+            alignItems: 'center' as const,
             minHeight: 44,
-            justifyContent: "center" as const,
+            justifyContent: 'center' as const,
           })}
         >
           <Text
             style={{
               fontSize: 14,
-              fontWeight: "600",
+              fontWeight: '600',
               color: colors.text.inverse,
             }}
           >
@@ -132,13 +132,13 @@ export function RescueBanner({
             borderRadius: theme.borderRadius.md,
             opacity: pressed ? 0.6 : 1,
             minHeight: 44,
-            justifyContent: "center" as const,
+            justifyContent: 'center' as const,
           })}
         >
           <Text
             style={{
               fontSize: 13,
-              fontWeight: "500",
+              fontWeight: '500',
               color: colors.semantic.textMuted,
             }}
           >

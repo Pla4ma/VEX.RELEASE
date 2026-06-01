@@ -1,17 +1,17 @@
-import { useMemo } from "react";
-import { useNavigation } from "@react-navigation/native";
-import type { UseQueryResult } from "@tanstack/react-query";
-import { useSessionUIStore } from "../../../store/session-state";
-import { useHomeSpineModel } from "../../../features/home-spine/hooks";
-import type { HomeController } from "./home-controller-types";
-import { buildDisplayedReturnReason } from "./home-controller-helpers";
-import type { HomeReturnReason } from "./useHomeReturnReason";
-import type { HomeViewModel } from "./home-view-model";
-import type { Nav, EngagedModelInput } from "./engaged-home-types";
-import { useEngagedQueries } from "./useEngagedQueries";
-import { useEngagedNavigation } from "./useEngagedNavigation";
-import { buildEngagedReturnReason } from "./engaged-return-reason";
-import { buildEngagedController } from "./engaged-controller-builder";
+import { useMemo } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import type { UseQueryResult } from '@tanstack/react-query';
+import { useSessionUIStore } from '../../../store/session-state';
+import { useHomeSpineModel } from '../../../features/home-spine/hooks';
+import type { HomeController } from './home-controller-types';
+import { buildDisplayedReturnReason } from './home-controller-helpers';
+import type { HomeReturnReason } from './useHomeReturnReason';
+import type { HomeViewModel } from './home-view-model';
+import type { Nav, EngagedModelInput } from './engaged-home-types';
+import { useEngagedQueries } from './useEngagedQueries';
+import { useEngagedNavigation } from './useEngagedNavigation';
+import { buildEngagedReturnReason } from './engaged-return-reason';
+import { buildEngagedController } from './engaged-controller-builder';
 
 export function useEngagedHomeModel(
   input: EngagedModelInput,
@@ -123,8 +123,8 @@ export function useEngagedHomeModel(
     openSocial,
     openContentStudy,
     continueStudyPlan,
-    createRecommendation: q.createRecommendation as HomeController["createRecommendation"],
-    updateRecommendationStatus: q.updateRecommendationStatus as HomeController["updateRecommendationStatus"],
+    createRecommendation: q.createRecommendation as HomeController['createRecommendation'],
+    updateRecommendationStatus: q.updateRecommendationStatus as HomeController['updateRecommendationStatus'],
   });
 
   return {

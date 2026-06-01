@@ -4,14 +4,14 @@
  * Enhanced accessibility props and configuration for the enhancer.
  */
 
-import type { ColorBlindType } from "./types";
+import type { ColorBlindType } from './types';
 
 export interface EnhancedAccessibilityProps {
   accessible?: boolean;
   accessibilityLabel?: string;
   accessibilityHint?: string;
   accessibilityRole?: string;
-  accessibilityLiveRegion?: "none" | "polite" | "assertive";
+  accessibilityLiveRegion?: 'none' | 'polite' | 'assertive';
   accessibilityDescribedBy?: string;
   accessibilityLabelledBy?: string;
   accessibilityExpanded?: boolean;
@@ -42,13 +42,13 @@ interface EnhancementHistoryEntry {
 
 export interface AccessibilityEnhancement {
   type:
-    | "contrast"
-    | "focus"
-    | "motion"
-    | "screen-reader"
-    | "touch"
-    | "keyboard";
-  priority: "critical" | "major" | "moderate" | "minor";
+    | 'contrast'
+    | 'focus'
+    | 'motion'
+    | 'screen-reader'
+    | 'touch'
+    | 'keyboard';
+  priority: 'critical' | 'major' | 'moderate' | 'minor';
   enhancement: unknown;
   description: string;
   wcagGuideline: string;

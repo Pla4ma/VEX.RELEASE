@@ -1,26 +1,26 @@
-import { createDebugger } from "@/utils/debug";
-import { MMKV } from "react-native-mmkv";
-import { DEFAULT_FLAGS } from "./defaults";
-import { evaluateFlag } from "./helpers";
+import { createDebugger } from '@/utils/debug';
+import { MMKV } from 'react-native-mmkv';
+import { DEFAULT_FLAGS } from './defaults';
+import { evaluateFlag } from './helpers';
 import type {
   FeatureFlagConfig,
   FeatureFlagValue,
   FlagEvaluation,
   UserContext,
-} from "./types";
-import { CACHE_DURATION_MS, STORAGE_KEY } from "./types";
+} from './types';
+import { CACHE_DURATION_MS, STORAGE_KEY } from './types';
 
 export type { FeatureFlagValue, FeatureFlagConfig, UserContext, FlagEvaluation };
-export { DEFAULT_FLAGS } from "./defaults";
+export { DEFAULT_FLAGS } from './defaults';
 
-const debug = createDebugger("feature-flags");
+const debug = createDebugger('feature-flags');
 
 class FeatureFlagEngine {
   private flags: Map<string, FeatureFlagConfig> = new Map();
   private evaluations: Map<string, FlagEvaluation> = new Map();
   private userContext: UserContext | null = null;
   private lastSync: number = 0;
-  private storage = new MMKV({ id: "feature-flags" });
+  private storage = new MMKV({ id: 'feature-flags' });
 
   constructor() {
     this.loadDefaults();
@@ -31,7 +31,7 @@ class FeatureFlagEngine {
     DEFAULT_FLAGS.forEach((flag) => {
       this.flags.set(flag.key, flag);
     });
-    debug.info("Loaded %d default flags", DEFAULT_FLAGS.length);
+    debug.info('Loaded %d default flags', DEFAULT_FLAGS.length);
   }
 
   private loadFromStorage(): void {
@@ -45,11 +45,11 @@ class FeatureFlagEngine {
             this.flags.set(flag.key, { ...existing, ...flag });
           }
         });
-        debug.info("Loaded %d flags from storage", parsed.length);
+        debug.info('Loaded %d flags from storage', parsed.length);
       }
     } catch (error) {
       debug.warn(
-        "Failed to load flags from storage: %s",
+        'Failed to load flags from storage: %s',
         error instanceof Error ? error.message : String(error),
       );
     }
@@ -61,7 +61,7 @@ class FeatureFlagEngine {
       this.storage.set(STORAGE_KEY, JSON.stringify(flagsArray));
     } catch (error) {
       debug.warn(
-        "Failed to save flags to storage: %s",
+        'Failed to save flags to storage: %s',
         error instanceof Error ? error.message : String(error),
       );
     }
@@ -69,13 +69,13 @@ class FeatureFlagEngine {
 
   setUserContext(context: UserContext): void {
     this.userContext = context;
-    debug.info("User context set: %s", context.userId);
+    debug.info('User context set: %s', context.userId);
   }
 
   clearUserContext(): void {
     this.userContext = null;
     this.evaluations.clear();
-    debug.info("User context cleared");
+    debug.info('User context cleared');
   }
 
   isEnabled(key: string): boolean {
@@ -102,7 +102,7 @@ class FeatureFlagEngine {
   }
 
   async syncRemoteFlags(remoteFlags: FeatureFlagConfig[]): Promise<void> {
-    debug.info("Syncing %d remote flags", remoteFlags.length);
+    debug.info('Syncing %d remote flags', remoteFlags.length);
     remoteFlags.forEach((flag) => {
       const existing = this.flags.get(flag.key);
       if (existing) {
@@ -118,7 +118,7 @@ class FeatureFlagEngine {
 
   registerFlag(flag: FeatureFlagConfig): void {
     this.flags.set(flag.key, flag);
-    debug.info("Registered flag: %s", flag.key);
+    debug.info('Registered flag: %s', flag.key);
   }
 
   overrideFlag(key: string, value: FeatureFlagValue): void {
@@ -127,10 +127,10 @@ class FeatureFlagEngine {
       this.evaluations.set(key, {
         key,
         value,
-        source: "local",
+        source: 'local',
         evaluatedAt: Date.now(),
       });
-      debug.info("Overrode flag %s to %s", key, String(value));
+      debug.info('Overrode flag %s to %s', key, String(value));
     }
   }
 

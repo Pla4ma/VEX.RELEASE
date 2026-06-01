@@ -1,6 +1,6 @@
-import { Phase9ExitGate, phase9ExitGate } from "../ExitGate";
+import { Phase9ExitGate, phase9ExitGate } from '../ExitGate';
 
-describe("Phase9ExitGate", () => {
+describe('Phase9ExitGate', () => {
   let exitGate: Phase9ExitGate;
 
   beforeEach(() => {
@@ -8,20 +8,20 @@ describe("Phase9ExitGate", () => {
     jest.clearAllMocks();
   });
 
-  describe("Singleton Pattern", () => {
-    it("should return the same instance", () => {
+  describe('Singleton Pattern', () => {
+    it('should return the same instance', () => {
       const instance1 = Phase9ExitGate.getInstance();
       const instance2 = Phase9ExitGate.getInstance();
       expect(instance1).toBe(instance2);
     });
 
-    it("should export singleton instance", () => {
+    it('should export singleton instance', () => {
       expect(phase9ExitGate).toBeInstanceOf(Phase9ExitGate);
     });
   });
 
-  describe("Configuration Management", () => {
-    it("should have default configuration", () => {
+  describe('Configuration Management', () => {
+    it('should have default configuration', () => {
       const config = exitGate.getConfig();
       expect(config.minimumScores.offlineSync).toBe(85);
       expect(config.minimumScores.errorBoundaries).toBe(90);
@@ -35,7 +35,7 @@ describe("Phase9ExitGate", () => {
       expect(config.requiredCategories).toHaveLength(7);
     });
 
-    it("should allow configuration updates", () => {
+    it('should allow configuration updates', () => {
       exitGate.setConfig({ overallMinimumScore: 90, allowWarnings: true });
       const config = exitGate.getConfig();
       expect(config.overallMinimumScore).toBe(90);

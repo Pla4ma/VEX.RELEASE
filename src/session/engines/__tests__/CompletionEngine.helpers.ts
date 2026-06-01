@@ -1,15 +1,15 @@
-import { CompletionEngine } from "../CompletionEngine";
-import { ScoringEngine } from "../ScoringEngine";
-import type { SessionState, FocusQualityMetrics } from "../../types";
+import { CompletionEngine } from '../CompletionEngine';
+import { ScoringEngine } from '../ScoringEngine';
+import type { SessionState, FocusQualityMetrics } from '../../types';
 
 export function createMockSession(
   overrides: Partial<SessionState> = {},
 ): SessionState {
   return {
-    id: "test-session",
-    userId: "test-user",
-    status: "ACTIVE",
-    phase: "FOCUS",
+    id: 'test-session',
+    userId: 'test-user',
+    status: 'ACTIVE',
+    phase: 'FOCUS',
     config: {
       duration: 1500,
       breakDuration: 300,
@@ -22,7 +22,7 @@ export function createMockSession(
       strictMode: false,
       autoStartBreaks: false,
       autoStartNextInterval: false,
-      sessionMode: "FLOW" as const,
+      sessionMode: 'FLOW' as const,
     },
     currentInterval: 1,
     totalIntervals: 4,
@@ -45,7 +45,7 @@ export function createMockMetrics(
   overrides: Partial<FocusQualityMetrics> = {},
 ): FocusQualityMetrics {
   return {
-    sessionId: "test-session",
+    sessionId: 'test-session',
     timeInDeepFocus: 1200,
     timeInShallowFocus: 200,
     timeDistracted: 100,

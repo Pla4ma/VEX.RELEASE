@@ -2,18 +2,18 @@
  * Comprehensive Onboarding Feature Tests — Store Action Types
  */
 
-import "./onboarding-mock-setup";
+import './onboarding-mock-setup';
 
 import {
   initialState,
   advanceStepWithCompletionCheck,
-} from "../store-action-types";
+} from '../store-action-types';
 
 // ── Store Action Types ────────────────────────────────────────────────────────
 
-describe("Store Action Types", () => {
-  describe("initialState", () => {
-    it("has all required fields", () => {
+describe('Store Action Types', () => {
+  describe('initialState', () => {
+    it('has all required fields', () => {
       expect(initialState.isOnboarded).toBe(false);
       expect(initialState.currentStep).toBe(0);
       expect(initialState.goal).toBeNull();
@@ -27,8 +27,8 @@ describe("Store Action Types", () => {
     });
   });
 
-  describe("advanceStepWithCompletionCheck", () => {
-    it("advances to target step", () => {
+  describe('advanceStepWithCompletionCheck', () => {
+    it('advances to target step', () => {
       const setMock = jest.fn();
       const getMock = jest.fn(() => ({ currentStep: 0 }));
       advanceStepWithCompletionCheck(setMock, getMock, 3);
@@ -37,7 +37,7 @@ describe("Store Action Types", () => {
       );
     });
 
-    it("marks profileStepsCompleted at step 5", () => {
+    it('marks profileStepsCompleted at step 5', () => {
       const setMock = jest.fn();
       const getMock = jest.fn(() => ({ currentStep: 4 }));
       advanceStepWithCompletionCheck(setMock, getMock, 5);
@@ -49,7 +49,7 @@ describe("Store Action Types", () => {
       );
     });
 
-    it("does not mark profileStepsCompleted below step 5", () => {
+    it('does not mark profileStepsCompleted below step 5', () => {
       const setMock = jest.fn();
       const getMock = jest.fn(() => ({ currentStep: 2 }));
       advanceStepWithCompletionCheck(setMock, getMock, 3);

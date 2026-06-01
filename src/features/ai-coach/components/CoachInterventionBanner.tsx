@@ -1,20 +1,20 @@
-import { captureSilentFailure } from "../../../utils/silent-failure";
-import { buttonTap } from "../../../utils/haptics";
-import React, { useCallback, useEffect, useState } from "react";
-import { View, Pressable } from "react-native";
-import Animated, { FadeInDown, FadeOutUp } from "react-native-reanimated";
-import { useTheme } from "../../../theme/ThemeContext";
-import { Text } from "../../../components";
-import { MMKVStorageAdapter } from "../../../persistence/MMKVStorageAdapter";
-import type { Intervention, CoachInterventionBannerProps } from "./intervention-types";
-import { DISMISSAL_STORAGE_KEY, DISMISSAL_TTL_HOURS } from "./intervention-types";
+import { captureSilentFailure } from '../../../utils/silent-failure';
+import { buttonTap } from '../../../utils/haptics';
+import React, { useCallback, useEffect, useState } from 'react';
+import { View, Pressable } from 'react-native';
+import Animated, { FadeInDown, FadeOutUp } from 'react-native-reanimated';
+import { useTheme } from '../../../theme/ThemeContext';
+import { Text } from '../../../components';
+import { MMKVStorageAdapter } from '../../../persistence/MMKVStorageAdapter';
+import type { Intervention, CoachInterventionBannerProps } from './intervention-types';
+import { DISMISSAL_STORAGE_KEY, DISMISSAL_TTL_HOURS } from './intervention-types';
 import {
   getBannerColors,
   getIcon,
   isNonDismissable,
-} from "./intervention-helpers";
+} from './intervention-helpers';
 
-export type { InterventionType, Intervention, CoachInterventionBannerProps } from "./intervention-types";
+export type { InterventionType, Intervention, CoachInterventionBannerProps } from './intervention-types';
 
 export function CoachInterventionBanner({
   intervention,
@@ -26,7 +26,7 @@ export function CoachInterventionBanner({
   const { theme } = useTheme();
   const [isDismissed, setIsDismissed] = useState(false);
   const [storage] = useState(
-    () => new MMKVStorageAdapter("coach-interventions"),
+    () => new MMKVStorageAdapter('coach-interventions'),
   );
 
   useEffect(() => {
@@ -58,9 +58,9 @@ export function CoachInterventionBanner({
         }
       } catch (error) {
         captureSilentFailure(error, {
-          feature: "ai-coach",
-          operation: "ui-fallback",
-          type: "ui",
+          feature: 'ai-coach',
+          operation: 'ui-fallback',
+          type: 'ui',
         });
         setIsDismissed(false);
       }
@@ -113,14 +113,14 @@ export function CoachInterventionBanner({
         borderRadius: theme.borderRadius.xl,
         borderWidth: 1,
         borderColor: colors.border,
-        overflow: "hidden",
+        overflow: 'hidden',
       }}
     >
       <View style={{ padding: theme.spacing[4] }}>
         <View
           style={{
-            flexDirection: "row",
-            alignItems: "center",
+            flexDirection: 'row',
+            alignItems: 'center',
             gap: theme.spacing[2],
             marginBottom: theme.spacing[2],
           }}
@@ -128,7 +128,7 @@ export function CoachInterventionBanner({
           <Text fontSize={20}>{coachAvatar || getIcon(intervention.type)}</Text>
           <View style={{ flex: 1 }}>
             <Text variant="caption" color="secondary" weight="semibold">
-              {coachName} • {intervention.type.replace("_", " ")}
+              {coachName} • {intervention.type.replace('_', ' ')}
             </Text>
           </View>
           {canDismiss && (
@@ -150,7 +150,7 @@ export function CoachInterventionBanner({
           variant="body"
           style={{ marginBottom: theme.spacing[3], lineHeight: 20 }}
         >
-          {(intervention.message ?? "").slice(0, 600)}
+          {(intervention.message ?? '').slice(0, 600)}
         </Text>
 
         <Pressable
@@ -160,7 +160,7 @@ export function CoachInterventionBanner({
             borderRadius: theme.borderRadius.lg,
             paddingVertical: theme.spacing[2],
             paddingHorizontal: theme.spacing[4],
-            alignSelf: "flex-start",
+            alignSelf: 'flex-start',
           }}
           accessibilityLabel={intervention.actionLabel}
           accessibilityRole="button"
@@ -169,7 +169,7 @@ export function CoachInterventionBanner({
           <Text
             style={{
               color: theme.colors.background.primary,
-              fontWeight: "600",
+              fontWeight: '600',
               fontSize: 14,
             }}
           >

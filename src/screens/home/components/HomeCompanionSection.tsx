@@ -1,14 +1,14 @@
-import React from "react";
+import React from 'react';
 
-import { useCompanionPromise } from "../../../features/companion-promise/hooks";
+import { useCompanionPromise } from '../../../features/companion-promise/hooks';
 import {
   CoachPresenceCard,
   useCoachPresence,
-} from "../../../features/coach-presence";
-import type { FeatureAccessMap } from "../../../features/liveops-config";
-import { HomeCompanionWidget } from "./HomeCompanionWidget";
-import { HomeSectionBoundary } from "./HomeSectionBoundary";
-import { useHomeCompanion } from "../hooks/useHomeCompanion";
+} from '../../../features/coach-presence';
+import type { FeatureAccessMap } from '../../../features/liveops-config';
+import { HomeCompanionWidget } from './HomeCompanionWidget';
+import { HomeSectionBoundary } from './HomeSectionBoundary';
+import { useHomeCompanion } from '../hooks/useHomeCompanion';
 
 interface HomeCompanionSectionProps {
   currentStreakDays: number;
@@ -37,7 +37,7 @@ export function HomeCompanionSection({
   const companionPromise = useCompanionPromise();
   const coachPresence = useCoachPresence({
     companion:
-      companionStatus.kind === "success" ? companionStatus.state : null,
+      companionStatus.kind === 'success' ? companionStatus.state : null,
     currentStreakDays,
     features,
     highFocusStreak,
@@ -46,14 +46,14 @@ export function HomeCompanionSection({
     userId,
   });
   const showCompanionContext =
-    companionPromise.data.kind !== "pending" &&
-    companionPromise.data.kind !== "missed";
+    companionPromise.data.kind !== 'pending' &&
+    companionPromise.data.kind !== 'missed';
 
   if (!showCompanionContext) {
     return null;
   }
 
-  if (companionStatus.kind === "success" && coachPresence.data) {
+  if (companionStatus.kind === 'success' && coachPresence.data) {
     return (
       <HomeSectionBoundary sectionName="Coach Presence">
         <CoachPresenceCard

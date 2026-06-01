@@ -1,5 +1,5 @@
-import React from "react";
-import { ErrorState } from "./error-state";
+import React from 'react';
+import { ErrorState } from './error-state';
 
 export function NetworkErrorState({
   onRetry,
@@ -68,7 +68,7 @@ export function ValidationErrorState({
 }
 
 export function NotFoundErrorState({
-  resource = "item",
+  resource = 'item',
   onDismiss,
 }: {
   resource?: string;
@@ -103,7 +103,7 @@ export function RateLimitErrorState({ retryAfter }: { retryAfter?: number }) {
   return (
     <ErrorState
       title="Too Many Requests"
-      message={`You've made too many requests. Please wait ${retryAfter ? `${retryAfter} seconds` : "a moment"} before trying again.`}
+      message={`You've made too many requests. Please wait ${retryAfter ? `${retryAfter} seconds` : 'a moment'} before trying again.`}
       errorCode="RATE_LIMIT"
     />
   );

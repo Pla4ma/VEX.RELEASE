@@ -1,10 +1,10 @@
-import { createSheet } from "@/shared/ui/create-sheet";
+import { createSheet } from '@/shared/ui/create-sheet';
 
 export const styles = createSheet({
-  barFill: { height: "100%" },
-  barTrack: { flex: 1, height: 10, overflow: "hidden" },
+  barFill: { height: '100%' },
+  barTrack: { flex: 1, height: 10, overflow: 'hidden' },
   card: { borderWidth: 1 },
-  row: { flexDirection: "row", gap: 12, justifyContent: "space-between" },
+  row: { flexDirection: 'row', gap: 12, justifyContent: 'space-between' },
   studyCard: { gap: 12 },
 });
 

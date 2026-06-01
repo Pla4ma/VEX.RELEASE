@@ -1,13 +1,13 @@
-import { z } from "zod";
-import { SessionModeSchema, type SessionMode } from "../../session/modes";
-import { SessionCompletionGradeSchema } from "../session-completion/schemas";
-import { PersonalBestComparisonSchema } from "./schemas";
-import * as repository from "./repository";
+import { z } from 'zod';
+import { SessionModeSchema, type SessionMode } from '../../session/modes';
+import { SessionCompletionGradeSchema } from '../session-completion/schemas';
+import { PersonalBestComparisonSchema } from './schemas';
+import * as repository from './repository';
 import type {
   DurationBucket,
   PersonalBest,
   PersonalBestComparison,
-} from "./types";
+} from './types';
 
 const UserIdSchema = z.string().uuid();
 const DurationSecondsSchema = z.number().int().min(0);
@@ -16,18 +16,18 @@ const PurityScoreSchema = z.number().min(0).max(100);
 export function getDurationBucket(durationSeconds: number): DurationBucket {
   const seconds = DurationSecondsSchema.parse(durationSeconds);
   if (seconds < 750) {
-    return "10";
+    return '10';
   }
   if (seconds < 1200) {
-    return "15";
+    return '15';
   }
   if (seconds < 2100) {
-    return "25";
+    return '25';
   }
   if (seconds < 3300) {
-    return "45";
+    return '45';
   }
-  return "60+";
+  return '60+';
 }
 
 export async function checkAndUpdatePersonalBest(

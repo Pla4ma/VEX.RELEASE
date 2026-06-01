@@ -1,2 +1,2 @@
-import "./risk5-lane-theme";
-import "./risk5-experience";
+import './risk5-lane-theme';
+import './risk5-experience';

@@ -1,21 +1,21 @@
-import { z } from "zod";
+import { z } from 'zod';
 
-import type { MasteryChallenge, MasteryState } from "./types";
+import type { MasteryChallenge, MasteryState } from './types';
 
 export const TECHNIQUE_KEYS = [
-  "durationMastery",
-  "purityMastery",
-  "consistencyMastery",
-  "comebackMastery",
-  "bossMastery",
+  'durationMastery',
+  'purityMastery',
+  'consistencyMastery',
+  'comebackMastery',
+  'bossMastery',
 ] as const;
 
 export const rankSchema = z.enum([
-  "APPRENTICE",
-  "ADEPT",
-  "EXPERT",
-  "MASTER",
-  "GRANDMASTER",
+  'APPRENTICE',
+  'ADEPT',
+  'EXPERT',
+  'MASTER',
+  'GRANDMASTER',
 ]);
 
 export const challengeSchema: z.ZodType<MasteryChallenge> = z.object({
@@ -23,12 +23,12 @@ export const challengeSchema: z.ZodType<MasteryChallenge> = z.object({
   technique: z.enum(TECHNIQUE_KEYS),
   title: z.string(),
   description: z.string(),
-  difficulty: z.enum(["EASY", "MEDIUM", "HARD", "ELITE"]),
+  difficulty: z.enum(['EASY', 'MEDIUM', 'HARD', 'ELITE']),
   target: z.number(),
   current: z.number(),
   unit: z.string(),
   masteryPoints: z.number(),
-  status: z.enum(["ACTIVE", "COMPLETED", "CLAIMED"]),
+  status: z.enum(['ACTIVE', 'COMPLETED', 'CLAIMED']),
   completedAt: z.number().nullable(),
 });
 

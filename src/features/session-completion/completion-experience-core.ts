@@ -4,7 +4,7 @@ export interface AchievementUnlock {
   name: string;
   description: string;
   category: string;
-  rarity: "common" | "rare" | "epic" | "legendary";
+  rarity: 'common' | 'rare' | 'epic' | 'legendary';
   points: number;
   progress: AchievementProgress;
   unlockedAt: Date;
@@ -35,21 +35,21 @@ export interface ProgressUpdate {
   current: number;
   change: number;
   percentage: number;
-  significance: "low" | "medium" | "high";
+  significance: 'low' | 'medium' | 'high';
   context: string;
 }
 
 export type ProgressType =
-  | "skill_level"
-  | "experience"
-  | "streak"
-  | "rank"
-  | "title"
-  | "unlock"
-  | "reputation"
-  | "currency"
-  | "achievement"
-  | "milestone";
+  | 'skill_level'
+  | 'experience'
+  | 'streak'
+  | 'rank'
+  | 'title'
+  | 'unlock'
+  | 'reputation'
+  | 'currency'
+  | 'achievement'
+  | 'milestone';
 
 export interface CompletionExperience {
   flow: FlowExperience;
@@ -74,24 +74,24 @@ export interface FlowFactor {
   factor: string;
   impact: number; // -100 to 100
   description: string;
-  category: "positive" | "negative" | "neutral";
+  category: 'positive' | 'negative' | 'neutral';
 }
 
 export interface SatisfactionScore {
   overall: number; // 0-100
   components: SatisfactionComponent[];
-  trend: "improving" | "stable" | "declining";
+  trend: 'improving' | 'stable' | 'declining';
   drivers: SatisfactionDriver[];
 }
 
 export interface SatisfactionComponent {
   aspect:
-    | "challenge"
-    | "skill"
-    | "control"
-    | "goals"
-    | "feedback"
-    | "immersion";
+    | 'challenge'
+    | 'skill'
+    | 'control'
+    | 'goals'
+    | 'feedback'
+    | 'immersion';
   score: number; // 0-100
   weight: number;
   importance: number;
@@ -141,18 +141,18 @@ export interface Emotion {
 }
 
 export type EmotionType =
-  | "joy"
-  | "excitement"
-  | "pride"
-  | "satisfaction"
-  | "relief"
-  | "frustration"
-  | "anger"
-  | "disappointment"
-  | "anxiety"
-  | "boredom"
-  | "confusion"
-  | "surprise";
+  | 'joy'
+  | 'excitement'
+  | 'pride'
+  | 'satisfaction'
+  | 'relief'
+  | 'frustration'
+  | 'anger'
+  | 'disappointment'
+  | 'anxiety'
+  | 'boredom'
+  | 'confusion'
+  | 'surprise';
 
 export interface UserFeedback {
   rating: number; // 1-5

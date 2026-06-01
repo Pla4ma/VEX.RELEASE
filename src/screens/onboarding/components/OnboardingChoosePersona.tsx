@@ -1,11 +1,11 @@
-import React from "react";
-import { Pressable } from "react-native";
-import Animated, { FadeIn, FadeInUp } from "react-native-reanimated";
-import { Box } from "../../../components/primitives/Box";
-import { Button } from "../../../components/primitives/Button";
-import { Text } from "../../../components/primitives/Text";
-import { PERSONAS, type CoachPersonaType } from "./persona-data";
-import { PersonaCard } from "./PersonaCard";
+import React from 'react';
+import { Pressable } from 'react-native';
+import Animated, { FadeIn, FadeInUp } from 'react-native-reanimated';
+import { Box } from '../../../components/primitives/Box';
+import { Button } from '../../../components/primitives/Button';
+import { Text } from '../../../components/primitives/Text';
+import { PERSONAS, type CoachPersonaType } from './persona-data';
+import { PersonaCard } from './PersonaCard';
 
 interface OnboardingChoosePersonaProps {
   selectedPersona: CoachPersonaType | null;
@@ -63,7 +63,7 @@ export function OnboardingChoosePersona({
             accessibilityRole="button"
             accessibilityHint="Double tap to activate"
           >
-            {selectedPersona ? "Continue" : "Select a coach"}
+            {selectedPersona ? 'Continue' : 'Select a coach'}
           </Button>
 
           <Pressable
@@ -84,6 +84,6 @@ export function OnboardingChoosePersona({
   );
 }
 
-export { type CoachPersonaType, type CoachPersona, PERSONAS } from "./persona-data";
-export { PersonaCard } from "./PersonaCard";
+export { type CoachPersonaType, type CoachPersona, PERSONAS } from './persona-data';
+export { PersonaCard } from './PersonaCard';
 export default OnboardingChoosePersona;

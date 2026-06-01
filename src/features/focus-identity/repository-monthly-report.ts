@@ -1,6 +1,6 @@
-import { captureSilentFailure } from "../../utils/silent-failure";
-import { getSupabaseClient } from "../../config/supabase";
-import { RepositoryError, withRetry } from "./repository-helpers";
+import { captureSilentFailure } from '../../utils/silent-failure';
+import { getSupabaseClient } from '../../config/supabase';
+import { RepositoryError, withRetry } from './repository-helpers';
 
 export interface MonthlyReportData {
   month: string;
@@ -8,7 +8,7 @@ export interface MonthlyReportData {
   endingScore: number;
   change: number;
   sessionsCompleted: number;
-  grade: "A+" | "A" | "B+" | "B" | "C" | "D";
+  grade: 'A+' | 'A' | 'B+' | 'B' | 'C' | 'D';
   highlight: string;
 }
 
@@ -19,16 +19,16 @@ export async function getMonthlyReportData(
   return withRetry(async () => {
     const supabase = getSupabaseClient();
     const { data, error } = await supabase
-      .from("focus_monthly_reports")
-      .select("*")
-      .eq("user_id", userId)
-      .eq("month", yearMonth)
+      .from('focus_monthly_reports')
+      .select('*')
+      .eq('user_id', userId)
+      .eq('month', yearMonth)
       .single();
     if (error) {
-      if (error.code === "PGRST116") {
+      if (error.code === 'PGRST116') {
         return null;
       }
-      throw new RepositoryError("getMonthlyReportData", error);
+      throw new RepositoryError('getMonthlyReportData', error);
     }
     return {
       month: data.month,
@@ -39,7 +39,7 @@ export async function getMonthlyReportData(
       grade: data.grade,
       highlight: data.highlight,
     };
-  }, "getMonthlyReportData");
+  }, 'getMonthlyReportData');
 }
 
 export async function saveMonthlyReportData(
@@ -49,7 +49,7 @@ export async function saveMonthlyReportData(
   return withRetry(async () => {
     const supabase = getSupabaseClient();
     const { error } = await supabase
-      .from("focus_monthly_reports")
+      .from('focus_monthly_reports')
       .upsert({
         user_id: userId,
         month: report.month,
@@ -62,23 +62,23 @@ export async function saveMonthlyReportData(
         updated_at: new Date().toISOString(),
       });
     if (error) {
-      throw new RepositoryError("saveMonthlyReportData", error);
+      throw new RepositoryError('saveMonthlyReportData', error);
     }
-  }, "saveMonthlyReportData");
+  }, 'saveMonthlyReportData');
 }
 
 export async function isRepositoryHealthy(): Promise<boolean> {
   try {
     const supabase = getSupabaseClient();
     const { error } = await supabase
-      .from("focus_identity_profiles")
-      .select("count", { count: "exact", head: true });
+      .from('focus_identity_profiles')
+      .select('count', { count: 'exact', head: true });
     return !error;
   } catch (error) {
     captureSilentFailure(error, {
-      feature: "focus-identity",
-      operation: "network-fallback",
-      type: "network",
+      feature: 'focus-identity',
+      operation: 'network-fallback',
+      type: 'network',
     });
     return false;
   }

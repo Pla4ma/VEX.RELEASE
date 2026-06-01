@@ -1,12 +1,12 @@
-import React from "react";
-import { View } from "react-native";
-import Animated, { FadeInUp } from "react-native-reanimated";
-import { Text } from "../../../components/primitives/Text";
-import { Button } from "../../../components/primitives/Button";
-import { Box } from "../../../components/primitives/Box";
-import { launchColors } from "@theme/tokens/launch-colors";
-import { styles } from "./SessionConflictState.styles";
-import { formatTime } from "./conflict-state-helpers";
+import React from 'react';
+import { View } from 'react-native';
+import Animated, { FadeInUp } from 'react-native-reanimated';
+import { Text } from '../../../components/primitives/Text';
+import { Button } from '../../../components/primitives/Button';
+import { Box } from '../../../components/primitives/Box';
+import { launchColors } from '@theme/tokens/launch-colors';
+import { styles } from './SessionConflictState.styles';
+import { formatTime } from './conflict-state-helpers';
 
 interface SessionState {
   progress: number;
@@ -45,17 +45,17 @@ export function ConflictDeviceCard({
   return (
     <Animated.View entering={FadeInUp.delay(delay)}>
       <Box
-        bg={isSelected ? "primary.light" : "background.secondary"}
+        bg={isSelected ? 'primary.light' : 'background.secondary'}
         p="md"
         borderRadius="lg"
         style={
           isSelected
             ? {
-                width: "100%",
+                width: '100%',
                 borderWidth: 2,
                 borderColor: launchColors.hex_3b82f6,
               }
-            : { width: "100%" }
+            : { width: '100%' }
         }
       >
         <Box
@@ -98,7 +98,7 @@ export function ConflictDeviceCard({
         </Box>
 
         <Button
-          variant={isSelected ? "primary" : "secondary"}
+          variant={isSelected ? 'primary' : 'secondary'}
           size="sm"
           onPress={onPress}
           isLoading={isLoading}

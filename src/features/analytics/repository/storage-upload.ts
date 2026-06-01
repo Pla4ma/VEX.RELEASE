@@ -1,29 +1,29 @@
-import { captureSilentFailure } from "../../../utils/silent-failure";
-import { withRetry, withTimeout } from "../../../shared/hardening";
-import * as Sentry from "@sentry/react-native";
-import type { UploadResult } from "./storage-types";
-import { AnalyticsStorageError } from "./storage-types";
+import { captureSilentFailure } from '../../../utils/silent-failure';
+import { withRetry, withTimeout } from '../../../shared/hardening';
+import * as Sentry from '@sentry/react-native';
+import type { UploadResult } from './storage-types';
+import { AnalyticsStorageError } from './storage-types';
 import {
   supabase,
   storageCircuitBreaker,
   calculateChecksum,
   convertToCSV,
   isRetryableStorageError,
-} from "./storage-helpers";
+} from './storage-helpers';
 
 export async function uploadExportData(
   jobId: string,
   data: unknown,
-  format: "json" | "csv",
+  format: 'json' | 'csv',
   userId: string,
 ): Promise<UploadResult> {
   return storageCircuitBreaker.execute(async () => {
-    const bucket = "analytics-exports";
+    const bucket = 'analytics-exports';
     const path = `${userId}/${jobId}.${format}`;
     const content =
-      format === "json" ? JSON.stringify(data, null, 2) : convertToCSV(data);
+      format === 'json' ? JSON.stringify(data, null, 2) : convertToCSV(data);
     const blob = new Blob([content], {
-      type: format === "json" ? "application/json" : "text/csv",
+      type: format === 'json' ? 'application/json' : 'text/csv',
     });
     const fileSize = blob.size;
     const checksum = await calculateChecksum(content);
@@ -36,7 +36,7 @@ export async function uploadExportData(
           supabase.storage
             .from(bucket)
             .upload(path, blob, {
-              contentType: format === "json" ? "application/json" : "text/csv",
+              contentType: format === 'json' ? 'application/json' : 'text/csv',
               upsert: false,
               metadata: {
                 jobId,
@@ -47,7 +47,7 @@ export async function uploadExportData(
               },
             }),
           60000,
-          "Storage upload timeout",
+          'Storage upload timeout',
         );
         if (error) {
           throw new AnalyticsStorageError(
@@ -62,7 +62,7 @@ export async function uploadExportData(
           .from(bucket)
           .createSignedUrl(path, 7 * 24 * 60 * 60);
         return {
-          url: urlData?.signedUrl || "",
+          url: urlData?.signedUrl || '',
           size: fileSize,
           checksum,
           uploadedAt: Date.now(),
@@ -72,12 +72,12 @@ export async function uploadExportData(
       {
         maxAttempts: 3,
         baseDelayMs: 1000,
-        retryableErrors: ["network_error", "timeout", "rate_limited"],
+        retryableErrors: ['network_error', 'timeout', 'rate_limited'],
         onRetry: (attempt: number, error: Error) => {
           Sentry.addBreadcrumb({
-            category: "storage",
+            category: 'storage',
             message: `Retrying upload attempt ${attempt}`,
-            level: "warning",
+            level: 'warning',
             data: { jobId, error: error.message },
           });
         },
@@ -113,7 +113,7 @@ async function uploadLargeFile(
               chunks: totalChunks.toString(),
               uploadedAt: Date.now().toString(),
             },
-            duplex: "half",
+            duplex: 'half',
           } as { [key: string]: unknown }),
         300000,
         `Large file upload timeout (attempt ${attempt})`,
@@ -139,7 +139,7 @@ async function uploadLargeFile(
         .from(bucket)
         .createSignedUrl(path, 7 * 24 * 60 * 60);
       return {
-        url: urlData?.signedUrl || "",
+        url: urlData?.signedUrl || '',
         size: blob.size,
         checksum,
         uploadedAt: Date.now(),
@@ -151,14 +151,14 @@ async function uploadLargeFile(
           await supabase.storage.from(bucket).remove([path]);
         } catch (cleanupError) {
           captureSilentFailure(cleanupError, {
-            feature: "analytics",
-            operation: "safe-fallback",
-            type: "data",
+            feature: 'analytics',
+            operation: 'safe-fallback',
+            type: 'data',
           });
         }
         throw error;
       }
     }
   }
-  throw lastError || new Error("Upload failed after all retries");
+  throw lastError || new Error('Upload failed after all retries');
 }

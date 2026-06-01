@@ -4,7 +4,7 @@
  * Utility for generating unique session and component IDs.
  */
 
-import { v4 } from "../../utils/uuid";
+import { v4 } from '../../utils/uuid';
 
 let lastTimestamp = 0;
 let counter = 0;
@@ -22,7 +22,7 @@ export function generateSessionId(): string {
 
   // Format: sess_{timestamp}_{random}_{counter}
   const random = Math.floor(Math.random() * 10000).toString(36);
-  const count = counter.toString(36).padStart(2, "0");
+  const count = counter.toString(36).padStart(2, '0');
 
   return `sess_${timestamp.toString(36)}_${random}_${count}`;
 }

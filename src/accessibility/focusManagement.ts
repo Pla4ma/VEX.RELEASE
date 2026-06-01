@@ -2,7 +2,7 @@
  * Focus navigation and element registration utilities.
  */
 
-import type { FocusableElement } from "./types";
+import type { FocusableElement } from './types';
 
 const focusableElements = new Map<string, FocusableElement[]>();
 

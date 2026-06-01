@@ -1,16 +1,16 @@
-import { createDebugger } from "../utils/debug";
-import { PerformanceMonitor, type PerformanceMetrics } from "../utils/performance-monitor";
-import { eventBus } from "../events";
+import { createDebugger } from '../utils/debug';
+import { PerformanceMonitor, type PerformanceMetrics } from '../utils/performance-monitor';
+import { eventBus } from '../events';
 import {
   type PerformanceTargets, type PerformanceGateResult, type PerformanceIssue,
   PRODUCTION_TARGETS, DEVELOPMENT_TARGETS,
-} from "./PerformanceGate-types";
+} from './PerformanceGate-types';
 import {
   evaluateFPS, evaluateMemory, evaluateAnimations, evaluateNetwork, evaluateBundle,
-} from "./PerformanceGate-evaluators";
-import { generateRecommendations, generateReport as buildReport } from "./PerformanceGate-report";
+} from './PerformanceGate-evaluators';
+import { generateRecommendations, generateReport as buildReport } from './PerformanceGate-report';
 
-const debug = createDebugger("performance-gate");
+const debug = createDebugger('performance-gate');
 
 export class PerformanceGate {
   private static instance: PerformanceGate;
@@ -35,7 +35,7 @@ export class PerformanceGate {
 
   setTargets(targets: Partial<PerformanceTargets>): void {
     this.targets = { ...this.targets, ...targets };
-    debug.info("Performance gate targets updated:", this.targets);
+    debug.info('Performance gate targets updated:', this.targets);
   }
 
   getTargets(): PerformanceTargets {
@@ -49,11 +49,11 @@ export class PerformanceGate {
   private initializeMetricsCollection(): void {
     this.performanceMonitor.start();
     this.performanceMonitor.onJank((metrics) => {
-      this.recordPerformanceMetrics("jank", metrics);
+      this.recordPerformanceMetrics('jank', metrics);
     });
     this.setupNetworkMonitoring();
     this.setupAnimationMonitoring();
-    debug.info("Performance metrics collection initialized");
+    debug.info('Performance metrics collection initialized');
   }
 
   private setupNetworkMonitoring(): void {
@@ -98,11 +98,11 @@ export class PerformanceGate {
     type: string,
     metrics: PerformanceMetrics,
   ): void {
-    eventBus.publish("performance:metric", { type, metrics, timestamp: Date.now() });
+    eventBus.publish('performance:metric', { type, metrics, timestamp: Date.now() });
   }
 
   async evaluatePerformanceGate(): Promise<PerformanceGateResult> {
-    debug.info("Evaluating performance gate...");
+    debug.info('Evaluating performance gate...');
     const currentMetrics = this.performanceMonitor.getMetrics();
     const issues: PerformanceIssue[] = [];
     let score = 100;
@@ -141,7 +141,7 @@ export class PerformanceGate {
       recommendations: generateRecommendations(issues),
       timestamp: Date.now(),
     };
-    debug.info("Performance gate evaluation complete:", {
+    debug.info('Performance gate evaluation complete:', {
       passed: result.passed,
       score: result.score,
       issuesCount: issues.length,
@@ -162,7 +162,7 @@ export class PerformanceGate {
     return {
       targets: this.targets,
       currentMetrics: this.performanceMonitor.getMetrics(),
-      isMonitoring: this.performanceMonitor["isRunning"],
+      isMonitoring: this.performanceMonitor.isRunning,
     };
   }
 
@@ -174,7 +174,7 @@ export class PerformanceGate {
     this.performanceMonitor.stop();
     this.networkMetrics = [];
     this.animationMetrics = [];
-    debug.info("Performance gate cleaned up");
+    debug.info('Performance gate cleaned up');
   }
 }
 
@@ -186,4 +186,4 @@ export {
   type PerformanceIssue,
   PRODUCTION_TARGETS,
   DEVELOPMENT_TARGETS,
-} from "./PerformanceGate-types";
+} from './PerformanceGate-types';

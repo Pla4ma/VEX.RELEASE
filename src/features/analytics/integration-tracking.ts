@@ -1,9 +1,9 @@
-import { eventBus } from "../../events";
-import * as Sentry from "@sentry/react-native";
-import { integrationCache } from "./integration-types";
-import * as repository from "./repository";
-import { generateInsights } from "./service";
-import { updateIntegrationState, getTimeOfDay } from "./integration-helpers";
+import { eventBus } from '../../events';
+import * as Sentry from '@sentry/react-native';
+import { integrationCache } from './integration-types';
+import * as repository from './repository';
+import { generateInsights } from './service';
+import { updateIntegrationState, getTimeOfDay } from './integration-helpers';
 
 export async function trackSessionCompleted(
   userId: string,
@@ -20,7 +20,7 @@ export async function trackSessionCompleted(
   },
 ): Promise<void> {
   const cacheKey = `session-${sessionData.sessionId}`;
-  if (integrationCache.get(cacheKey)) return;
+  if (integrationCache.get(cacheKey)) {return;}
   integrationCache.set(cacheKey, { processed: true });
 
   try {
@@ -32,15 +32,15 @@ export async function trackSessionCompleted(
       lastSync: Date.now(),
     });
 
-    eventBus.publish("analytics:data_refreshed", {
+    eventBus.publish('analytics:data_refreshed', {
       userId,
-      metrics: ["sessions_completed", "xp_earned", "streak_days"],
+      metrics: ['sessions_completed', 'xp_earned', 'streak_days'],
     });
 
     Sentry.addBreadcrumb({
-      category: "analytics_session",
-      message: "Session completed and tracked",
-      level: "info",
+      category: 'analytics_session',
+      message: 'Session completed and tracked',
+      level: 'info',
       data: {
         userId,
         sessionId: sessionData.sessionId,
@@ -56,32 +56,32 @@ export async function trackSessionCompleted(
     await repository.bulkInsertAnalyticsEvents([
       {
         user_id: userId,
-        metric_type: "sessions_completed",
+        metric_type: 'sessions_completed',
         value: 1,
-        dimension_type: "session_category",
-        dimension_value: sessionData.bossActive ? "boss" : "standard",
+        dimension_type: 'session_category',
+        dimension_value: sessionData.bossActive ? 'boss' : 'standard',
         timestamp: Date.now(),
       },
       {
         user_id: userId,
-        metric_type: "xp_earned",
+        metric_type: 'xp_earned',
         value: sessionData.xpEarned,
-        dimension_type: "session_category",
-        dimension_value: sessionData.bossActive ? "boss" : "standard",
+        dimension_type: 'session_category',
+        dimension_value: sessionData.bossActive ? 'boss' : 'standard',
         timestamp: Date.now(),
       },
       {
         user_id: userId,
-        metric_type: "total_focus_time",
+        metric_type: 'total_focus_time',
         value: sessionData.duration,
-        dimension_type: "time_of_day",
+        dimension_type: 'time_of_day',
         dimension_value: getTimeOfDay(),
         timestamp: Date.now(),
       },
     ]);
   } catch (error) {
     Sentry.captureException(error, {
-      tags: { integration: "analytics_session" },
+      tags: { integration: 'analytics_session' },
       extra: { userId, sessionId: sessionData.sessionId },
     });
     throw error;
@@ -101,22 +101,22 @@ export async function trackBossEncounter(
     await repository.bulkInsertAnalyticsEvents([
       {
         user_id: userId,
-        metric_type: "boss_damage_dealt",
+        metric_type: 'boss_damage_dealt',
         value: bossData.damageDealt,
-        dimension_type: "boss_type",
+        dimension_type: 'boss_type',
         dimension_value: bossData.bossId,
         timestamp: Date.now(),
       },
     ]);
-    if (bossData.won) await generateInsights(userId);
+    if (bossData.won) {await generateInsights(userId);}
 
-    eventBus.publish("analytics:data_refreshed", {
+    eventBus.publish('analytics:data_refreshed', {
       userId,
-      metrics: ["boss_damage_dealt"],
+      metrics: ['boss_damage_dealt'],
     });
   } catch (error) {
     Sentry.captureException(error, {
-      tags: { integration: "analytics_boss" },
+      tags: { integration: 'analytics_boss' },
       extra: { userId, bossId: bossData.bossId },
     });
   }
@@ -130,28 +130,28 @@ export async function trackItemCrafted(
     await repository.bulkInsertAnalyticsEvents([
       {
         user_id: userId,
-        metric_type: "items_crafted",
+        metric_type: 'items_crafted',
         value: 1,
-        dimension_type: "item_type",
+        dimension_type: 'item_type',
         dimension_value: itemData.rarity,
         timestamp: Date.now(),
       },
       {
         user_id: userId,
-        metric_type: "coins_spent",
+        metric_type: 'coins_spent',
         value: itemData.coinsSpent,
-        dimension_type: "item_type",
+        dimension_type: 'item_type',
         dimension_value: itemData.rarity,
         timestamp: Date.now(),
       },
     ]);
-    eventBus.publish("analytics:data_refreshed", {
+    eventBus.publish('analytics:data_refreshed', {
       userId,
-      metrics: ["items_crafted", "coins_spent"],
+      metrics: ['items_crafted', 'coins_spent'],
     });
   } catch (error) {
     Sentry.captureException(error, {
-      tags: { integration: "analytics_crafting" },
+      tags: { integration: 'analytics_crafting' },
       extra: { userId, itemId: itemData.itemId },
     });
   }

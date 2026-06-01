@@ -1,11 +1,11 @@
-import React, { useState, useCallback } from "react";
-import { Pressable, TextInput } from "react-native";
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import type { QuickContractQuestion } from "../schemas";
-import { useModeQuickContract } from "../hooks";
-import type { Lane } from "../../lane-engine/types";
+import React, { useState, useCallback } from 'react';
+import { Pressable, TextInput } from 'react-native';
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import type { QuickContractQuestion } from '../schemas';
+import { useModeQuickContract } from '../hooks';
+import type { Lane } from '../../lane-engine/types';
 
 interface ModeQuickContractProps {
   lane: Lane | null | undefined;
@@ -30,7 +30,7 @@ export function ModeQuickContract({
   }, []);
 
   const allAnswered = contract.questions.every(
-    (q: QuickContractQuestion) => (answers[q.key] ?? "").trim().length >= 3,
+    (q: QuickContractQuestion) => (answers[q.key] ?? '').trim().length >= 3,
   );
 
   return (
@@ -49,7 +49,7 @@ export function ModeQuickContract({
           accessibilityLabel="Go back"
           accessibilityRole="button"
           accessibilityHint="Returns to the home screen"
-          style={{ minHeight: 44, minWidth: 44, justifyContent: "center" }}
+          style={{ minHeight: 44, minWidth: 44, justifyContent: 'center' }}
         >
           <Text variant="body" color="text.secondary">
             ← Back
@@ -75,7 +75,7 @@ export function ModeQuickContract({
                 {q.label}
               </Text>
               <TextInput
-                value={answers[q.key] ?? ""}
+                value={answers[q.key] ?? ''}
                 onChangeText={(text) => handleAnswer(q.key, text)}
                 placeholder={q.placeholder}
                 placeholderTextColor={theme.colors.text.tertiary}
@@ -89,7 +89,7 @@ export function ModeQuickContract({
                   borderRadius: theme.borderRadius.md,
                   borderWidth: 1,
                   borderColor:
-                    (answers[q.key] ?? "").trim().length >= 3
+                    (answers[q.key] ?? '').trim().length >= 3
                       ? theme.colors.primary[500]
                       : theme.colors.border.light,
                   color: theme.colors.text.primary,
@@ -114,7 +114,7 @@ export function ModeQuickContract({
               py="sm"
             >
               <Text variant="caption" color="text.tertiary">
-                {showAdvanced ? "Hide advanced settings" : "Advanced settings"}
+                {showAdvanced ? 'Hide advanced settings' : 'Advanced settings'}
               </Text>
             </Box>
           </Pressable>
@@ -135,7 +135,7 @@ export function ModeQuickContract({
           accessibilityHint={
             allAnswered
               ? `Starts a ${contract.lane} session`
-              : "Fill in all questions first"
+              : 'Fill in all questions first'
           }
           style={({ pressed }) => ({
             opacity: !allAnswered || isStarting ? 0.4 : pressed ? 0.85 : 1,
@@ -153,7 +153,7 @@ export function ModeQuickContract({
               color="text.inverse"
               fontWeight="600"
             >
-              {isStarting ? "Starting..." : contract.startLabel}
+              {isStarting ? 'Starting...' : contract.startLabel}
             </Text>
           </Box>
         </Pressable>

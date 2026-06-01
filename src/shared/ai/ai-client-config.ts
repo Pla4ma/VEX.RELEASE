@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 import type {
   AIRequest,
   AIResponse,
@@ -12,16 +12,16 @@ import type {
   GenerateComebackPromptResponse,
   GenerateStreakRiskNudgeResponse,
   GenerateWeeklyReflectionResponse,
-} from "./ai-types";
+} from './ai-types';
 
 export const AIClientErrorCodeSchema = z.enum([
-  "NETWORK_ERROR",
-  "TIMEOUT",
-  "INVALID_REQUEST",
-  "SERVER_ERROR",
-  "AI_UNAVAILABLE",
-  "FALLBACK_USED",
-  "UNKNOWN_ERROR",
+  'NETWORK_ERROR',
+  'TIMEOUT',
+  'INVALID_REQUEST',
+  'SERVER_ERROR',
+  'AI_UNAVAILABLE',
+  'FALLBACK_USED',
+  'UNKNOWN_ERROR',
 ]);
 
 export type AIClientErrorCode = z.infer<typeof AIClientErrorCodeSchema>;
@@ -37,40 +37,40 @@ export interface AIClientError {
 export interface AIAPIClient {
   sendRequest(request: AIRequest): Promise<AIResponse>;
   generateCoachMessage(
-    request: Omit<GenerateCoachMessageRequest, "requestType">,
+    request: Omit<GenerateCoachMessageRequest, 'requestType'>,
   ): Promise<GenerateCoachMessageResponse>;
   generateSessionSummary(
-    request: Omit<GenerateSessionSummaryRequest, "requestType">,
+    request: Omit<GenerateSessionSummaryRequest, 'requestType'>,
   ): Promise<GenerateSessionSummaryResponse>;
   generateComebackPrompt(
-    request: Omit<GenerateComebackPromptRequest, "requestType">,
+    request: Omit<GenerateComebackPromptRequest, 'requestType'>,
   ): Promise<GenerateComebackPromptResponse>;
   generateStreakRiskNudge(
-    request: Omit<GenerateStreakRiskNudgeRequest, "requestType">,
+    request: Omit<GenerateStreakRiskNudgeRequest, 'requestType'>,
   ): Promise<GenerateStreakRiskNudgeResponse>;
   generateWeeklyReflection(
-    request: Omit<GenerateWeeklyReflectionRequest, "requestType">,
+    request: Omit<GenerateWeeklyReflectionRequest, 'requestType'>,
   ): Promise<GenerateWeeklyReflectionResponse>;
 }
 
 export const CLIENT_FALLBACKS = {
   COACH_MESSAGE: {
-    category: "MOTIVATION_BOOST",
+    category: 'MOTIVATION_BOOST',
     content: "You're doing great! Keep showing up for yourself.",
-    emoji: "✨",
+    emoji: '✨',
   },
   SESSION_SUMMARY: {
-    headline: "Session Summary",
-    content: "Great work on your focus sessions! Consistency is key.",
+    headline: 'Session Summary',
+    content: 'Great work on your focus sessions! Consistency is key.',
   },
-  COMEBACK_PROMPT: { content: "Fresh start! You've got this!", emoji: "💪" },
+  COMEBACK_PROMPT: { content: "Fresh start! You've got this!", emoji: '💪' },
   STREAK_RISK_NUDGE: {
-    content: "Save your streak with a quick session!",
-    emoji: "🔥",
-    urgency: "high",
+    content: 'Save your streak with a quick session!',
+    emoji: '🔥',
+    urgency: 'high',
   },
   WEEKLY_REFLECTION: {
-    headline: "Weekly Reflection",
+    headline: 'Weekly Reflection',
     content: "Another week of progress! You're building strong habits.",
   },
 } as const;
@@ -78,7 +78,7 @@ export const CLIENT_FALLBACKS = {
 export const AIRequestMetadataSchema = z.object({
   timestamp: z.number(),
   appVersion: z.string().optional(),
-  platform: z.enum(["ios", "android"]).optional(),
+  platform: z.enum(['ios', 'android']).optional(),
   deviceModel: z.string().optional(),
   osVersion: z.string().optional(),
   screenSize: z.string().optional(),
@@ -111,7 +111,7 @@ export function generateCacheKey(request: AIRequest): string {
     request.userId,
     JSON.stringify(request.context),
   ];
-  return keyParts.join("|");
+  return keyParts.join('|');
 }
 
 export const CLIENT_RETRY_CONFIG = {
@@ -120,9 +120,9 @@ export const CLIENT_RETRY_CONFIG = {
   MAX_DELAY_MS: 3000,
   BACKOFF_MULTIPLIER: 1.5,
   RETRYABLE_CODES: [
-    "NETWORK_ERROR",
-    "TIMEOUT",
-    "AI_UNAVAILABLE",
+    'NETWORK_ERROR',
+    'TIMEOUT',
+    'AI_UNAVAILABLE',
   ] as AIClientErrorCode[],
 } as const;
 

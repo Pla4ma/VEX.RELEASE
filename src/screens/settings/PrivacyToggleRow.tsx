@@ -1,10 +1,10 @@
-import React from "react";
-import { Pressable, Switch } from "react-native";
-import { useTheme } from "../../theme";
-import { Box, Text } from "../../components/primitives";
-import { Icon } from "../../icons";
+import React from 'react';
+import { Pressable, Switch } from 'react-native';
+import { useTheme } from '../../theme';
+import { Box, Text } from '../../components/primitives';
+import { Icon } from '../../icons';
 
-type ToggleKey = "activitySharing" | "squadFeed" | "analytics";
+type ToggleKey = 'activitySharing' | 'squadFeed' | 'analytics';
 
 interface ToggleRowData {
   key: ToggleKey;
@@ -34,8 +34,8 @@ export const PrivacyToggleRow: React.FC<PrivacyToggleRowProps> = ({
       accessibilityState={{ checked: value }}
       onPress={() => onToggle(row.key)}
       style={{
-        alignItems: "center",
-        flexDirection: "row",
+        alignItems: 'center',
+        flexDirection: 'row',
         minHeight: 56,
         paddingVertical: theme.spacing[2],
       }}

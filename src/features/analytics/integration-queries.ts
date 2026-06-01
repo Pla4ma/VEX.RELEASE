@@ -1,8 +1,8 @@
-import { eventBus } from "../../events";
-import * as Sentry from "@sentry/react-native";
-import { stateCache, DEFAULT_INTEGRATION_STATE } from "./integration-types";
-import * as repository from "./repository";
-import { generateInsights } from "./service";
+import { eventBus } from '../../events';
+import * as Sentry from '@sentry/react-native';
+import { stateCache, DEFAULT_INTEGRATION_STATE } from './integration-types';
+import * as repository from './repository';
+import { generateInsights } from './service';
 
 export async function syncAnalyticsData(
   userId: string,
@@ -17,7 +17,7 @@ export async function syncAnalyticsData(
   let failed = 0;
   try {
     const [stats, _insights, _patterns] = await Promise.all([
-      repository.fetchAggregatedStats(userId, "today").catch((e) => {
+      repository.fetchAggregatedStats(userId, 'today').catch((e) => {
         errors.push(`Stats fetch failed: ${e.message}`);
         failed++;
         return null;
@@ -33,9 +33,9 @@ export async function syncAnalyticsData(
         return [];
       }),
     ]);
-    if (stats) synced++;
+    if (stats) {synced++;}
 
-    eventBus.publish("network:sync:complete", { synced, failed });
+    eventBus.publish('network:sync:complete', { synced, failed });
 
     if (stats) {
       const currentState = stateCache.get(userId) || DEFAULT_INTEGRATION_STATE;
@@ -44,9 +44,9 @@ export async function syncAnalyticsData(
 
     return { success: failed === 0, synced, failed, errors };
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Unknown error";
+    const message = error instanceof Error ? error.message : 'Unknown error';
     Sentry.captureException(error, {
-      tags: { integration: "analytics_sync" },
+      tags: { integration: 'analytics_sync' },
       extra: { userId },
     });
     return {
@@ -87,7 +87,7 @@ export async function getRealtimeAnalytics(
   }
   try {
     const [todayStats, insights] = await Promise.all([
-      repository.fetchAggregatedStats(userId, "today"),
+      repository.fetchAggregatedStats(userId, 'today'),
       repository.fetchInsights(userId, { unreadOnly: false, limit: 3 }),
     ]);
     stateCache.set(userId, {
@@ -114,7 +114,7 @@ export async function getRealtimeAnalytics(
     };
   } catch (error) {
     Sentry.captureException(error, {
-      tags: { integration: "analytics_realtime" },
+      tags: { integration: 'analytics_realtime' },
       extra: { userId },
     });
     return {
@@ -139,17 +139,17 @@ export async function cleanupAnalyticsData(
   try {
     await repository.deleteOldAnalyticsData(userId, cutoff);
     Sentry.addBreadcrumb({
-      category: "analytics_cleanup",
+      category: 'analytics_cleanup',
       message: `Cleaned up analytics data older than ${retentionDays} days`,
-      level: "info",
+      level: 'info',
       data: { userId, retentionDays },
     });
     return { deleted: 1, errors };
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Unknown error";
+    const message = error instanceof Error ? error.message : 'Unknown error';
     errors.push(message);
     Sentry.captureException(error, {
-      tags: { integration: "analytics_cleanup" },
+      tags: { integration: 'analytics_cleanup' },
       extra: { userId, retentionDays },
     });
     return { deleted: 0, errors };
@@ -172,7 +172,7 @@ export async function initializeAnalytics(
     if (!syncResult.success) {
       return {
         success: false,
-        error: `Sync failed: ${syncResult.errors.join(", ")}`,
+        error: `Sync failed: ${syncResult.errors.join(', ')}`,
       };
     }
     const realtime = await getRealtimeAnalytics(userId);
@@ -189,9 +189,9 @@ export async function initializeAnalytics(
       },
     };
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Unknown error";
+    const message = error instanceof Error ? error.message : 'Unknown error';
     Sentry.captureException(error, {
-      tags: { integration: "analytics_init" },
+      tags: { integration: 'analytics_init' },
       extra: { userId },
     });
     return { success: false, error: message };

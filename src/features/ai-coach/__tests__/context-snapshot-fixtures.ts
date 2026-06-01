@@ -1,5 +1,5 @@
-import { z } from "zod";
-import { ContextSnapshotSchema } from "../context-snapshot";
+import { z } from 'zod';
+import { ContextSnapshotSchema } from '../context-snapshot';
 
 export type ContextSnapshot = z.infer<typeof ContextSnapshotSchema>;
 
@@ -8,7 +8,7 @@ type DeepPartial<T> = {
 };
 
 const BASE_SNAPSHOT: ContextSnapshot = {
-  userId: "user-123",
+  userId: 'user-123',
   capturedAt: Date.now(),
   sessionContext: { activeSession: false },
   streakContext: {
@@ -37,9 +37,9 @@ const BASE_SNAPSHOT: ContextSnapshot = {
     daysSinceJoin: 30,
   },
   behaviorContext: {
-    preferredTimeOfDay: "morning",
+    preferredTimeOfDay: 'morning',
     typicalSessionDuration: 25,
-    responseToCoach: "medium",
+    responseToCoach: 'medium',
   },
 };
 

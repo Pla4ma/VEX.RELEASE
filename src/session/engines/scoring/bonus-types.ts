@@ -1,4 +1,4 @@
-import type { FocusQualityMetrics, SessionState } from "../../types";
+import type { FocusQualityMetrics, SessionState } from '../../types';
 
 export interface TimeBonusInput {
   plannedDuration: number;

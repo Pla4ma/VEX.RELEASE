@@ -1,4 +1,4 @@
-import type { ColorPalette, ThemeMode } from "./colorTypes";
+import type { ColorPalette, ThemeMode } from './colorTypes';
 import type {
   TypographyScale,
   FontFamilies,
@@ -10,7 +10,7 @@ import type {
   Breakpoints,
   AnimationTiming,
   OpacityScale,
-} from "./scaleTypes";
+} from './scaleTypes';
 
 export interface Theme {
   name: string;

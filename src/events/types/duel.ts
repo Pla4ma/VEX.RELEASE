@@ -3,7 +3,7 @@
  */
 
 export interface DuelEventDefinitions {
-  "duel:completed": {
+  'duel:completed': {
     winnerId?: string;
     challengerId?: string;
     challengedId?: string;

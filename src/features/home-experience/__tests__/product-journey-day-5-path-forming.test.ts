@@ -5,10 +5,10 @@ import {
   calmProfile,
   studyProfile,
   baseStats,
-} from "./product-journey-helpers";
+} from './product-journey-helpers';
 
-describe("product journey — Day 5 path forming", () => {
-  it("study user gets study spotlight on Day 5", () => {
+describe('product journey — Day 5 path forming', () => {
+  it('study user gets study spotlight on Day 5', () => {
     const surfaces = decideHomeSurfaces({
       featureAvailability,
       personalizationProfile: studyProfile,
@@ -18,10 +18,10 @@ describe("product journey — Day 5 path forming", () => {
       hasActiveBoss: false,
       isFirstSession: false,
     });
-    expect(getSpotlightSurface(surfaces)).toBe("study_layer");
+    expect(getSpotlightSurface(surfaces)).toBe('study_layer');
   });
 
-  it("no feature museum — at most limited visible surfaces", () => {
+  it('no feature museum — at most limited visible surfaces', () => {
     const surfaces = decideHomeSurfaces({
       featureAvailability,
       personalizationProfile: calmProfile,
@@ -32,13 +32,13 @@ describe("product journey — Day 5 path forming", () => {
       isFirstSession: false,
     });
     const visible = Object.entries(surfaces)
-      .filter(([, v]) => v !== "hidden" && v !== "blocked")
+      .filter(([, v]) => v !== 'hidden' && v !== 'blocked')
       .map(([k, v]) => `${k}:${v}`);
     expect(visible.length).toBeLessThan(8);
-    expect(visible.every((v) => !v.includes("boss_full_cta"))).toBe(true);
+    expect(visible.every((v) => !v.includes('boss_full_cta'))).toBe(true);
   });
 
-  it("unlock strip visible for new user (1-2 sessions)", () => {
+  it('unlock strip visible for new user (1-2 sessions)', () => {
     const surfaces = decideHomeSurfaces({
       featureAvailability,
       personalizationProfile: studyProfile,
@@ -48,6 +48,6 @@ describe("product journey — Day 5 path forming", () => {
       hasActiveBoss: false,
       isFirstSession: false,
     });
-    expect(surfaces.unlock_strip).toBe("secondary");
+    expect(surfaces.unlock_strip).toBe('secondary');
   });
 });

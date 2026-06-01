@@ -4,17 +4,17 @@
  * Skeleton/loading screen for session operations.
  */
 
-import React from "react";
-import { View, Text, ActivityIndicator } from "react-native";
-import { createSheet } from "@/shared/ui/create-sheet";
-import { launchColors } from "@theme/tokens/launch-colors";
+import React from 'react';
+import { View, Text, ActivityIndicator } from 'react-native';
+import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
 
 interface SessionLoadingStateProps {
   message?: string;
 }
 
 export const SessionLoadingState: React.FC<SessionLoadingStateProps> = ({
-  message = "Loading session...",
+  message = 'Loading session...',
 }) => {
   return (
     <View style={styles.container}>
@@ -39,8 +39,8 @@ const styles = createSheet({
   container: {
     flex: 1,
     backgroundColor: launchColors.hex_1a1a2e,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: 24,
   },
   message: {
@@ -49,34 +49,34 @@ const styles = createSheet({
     color: launchColors.hex_9e9e9e,
   },
   skeletonContainer: {
-    width: "100%",
+    width: '100%',
     marginTop: 40,
     gap: 16,
   },
   skeletonTimer: {
-    width: "60%",
+    width: '60%',
     height: 60,
     backgroundColor: launchColors.hex_2a2a3e,
     borderRadius: 8,
-    alignSelf: "center",
+    alignSelf: 'center',
   },
   skeletonStats: {
-    flexDirection: "row",
-    justifyContent: "space-around",
+    flexDirection: 'row',
+    justifyContent: 'space-around',
     marginTop: 16,
   },
   skeletonStat: {
-    width: "25%",
+    width: '25%',
     height: 50,
     backgroundColor: launchColors.hex_2a2a3e,
     borderRadius: 8,
   },
   skeletonButton: {
-    width: "50%",
+    width: '50%',
     height: 48,
     backgroundColor: launchColors.hex_2a2a3e,
     borderRadius: 12,
-    alignSelf: "center",
+    alignSelf: 'center',
     marginTop: 16,
   },
 });

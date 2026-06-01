@@ -1,22 +1,22 @@
-import { MasteryService } from "../service";
-import { loadStoredMasteryState, persistMasteryState } from "../repository";
+import { MasteryService } from '../service';
+import { loadStoredMasteryState, persistMasteryState } from '../repository';
 import {
   TEST_USER_ID,
   setupMasteryMocks,
   makeBaseState,
   MASTERY_RANK_THRESHOLDS,
-} from "./testHelpers";
+} from './testHelpers';
 
-jest.mock("../repository");
+jest.mock('../repository');
 
 const mockedLoadStoredMasteryState = jest.mocked(loadStoredMasteryState);
 
-describe("Mastery Service > recordSessionMastery", () => {
+describe('Mastery Service > recordSessionMastery', () => {
   beforeEach(() => {
     setupMasteryMocks();
   });
 
-  it("should award XP for duration mastery", () => {
+  it('should award XP for duration mastery', () => {
     mockedLoadStoredMasteryState.mockReturnValue(makeBaseState());
     const result = MasteryService.applySessionXp(TEST_USER_ID, {
       durationMastery: 2,
@@ -30,7 +30,7 @@ describe("Mastery Service > recordSessionMastery", () => {
     expect(persistMasteryState).toHaveBeenCalled();
   });
 
-  it("should award bonus XP for purity mastery", () => {
+  it('should award bonus XP for purity mastery', () => {
     const state = makeBaseState({
       techniques: {
         durationMastery: 5,
@@ -51,7 +51,7 @@ describe("Mastery Service > recordSessionMastery", () => {
     expect(result.updatedState.techniques.purityMastery).toBeGreaterThan(5);
   });
 
-  it("should award comeback mastery", () => {
+  it('should award comeback mastery', () => {
     mockedLoadStoredMasteryState.mockReturnValue(makeBaseState());
     const result = MasteryService.applySessionXp(TEST_USER_ID, {
       durationMastery: 0,
@@ -63,7 +63,7 @@ describe("Mastery Service > recordSessionMastery", () => {
     expect(result.updatedState.techniques.comebackMastery).toBeGreaterThan(0);
   });
 
-  it("should award boss mastery", () => {
+  it('should award boss mastery', () => {
     mockedLoadStoredMasteryState.mockReturnValue(makeBaseState());
     const result = MasteryService.applySessionXp(TEST_USER_ID, {
       durationMastery: 0,
@@ -75,7 +75,7 @@ describe("Mastery Service > recordSessionMastery", () => {
     expect(result.updatedState.techniques.bossMastery).toBeGreaterThan(0);
   });
 
-  it("should rank up when threshold crossed", () => {
+  it('should rank up when threshold crossed', () => {
     const nearRankUpState = makeBaseState({
       totalMasteryPoints: MASTERY_RANK_THRESHOLDS.ADEPT - 5,
       techniques: {
@@ -95,13 +95,13 @@ describe("Mastery Service > recordSessionMastery", () => {
       bossMastery: 0,
     });
     expect(result.rankChanged).toBe(true);
-    expect(result.newRank).toBe("ADEPT");
+    expect(result.newRank).toBe('ADEPT');
   });
 
-  it("should cap technique values at 25", () => {
+  it('should cap technique values at 25', () => {
     const nearCapState = makeBaseState({
       totalMasteryPoints: 2000,
-      rank: "EXPERT",
+      rank: 'EXPERT',
       techniques: {
         durationMastery: 24,
         purityMastery: 24,
@@ -109,7 +109,7 @@ describe("Mastery Service > recordSessionMastery", () => {
         comebackMastery: 20,
         bossMastery: 20,
       },
-      unlockedFeatures: ["advanced_analytics"],
+      unlockedFeatures: ['advanced_analytics'],
     });
     mockedLoadStoredMasteryState.mockReturnValue(nearCapState);
     const result = MasteryService.applySessionXp(TEST_USER_ID, {

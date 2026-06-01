@@ -1,10 +1,10 @@
-import React, { useCallback, useState } from "react";
-import { Pressable, Switch, Alert } from "react-native";
-import { useTheme } from "../../theme";
-import { Box, Text, Card } from "../../components/primitives";
-import { Icon } from "../../icons";
-import { useUIStore } from "../../store/index";
-import { launchColors } from "@theme/tokens/launch-colors";
+import React, { useCallback, useState } from 'react';
+import { Pressable, Switch, Alert } from 'react-native';
+import { useTheme } from '../../theme';
+import { Box, Text, Card } from '../../components/primitives';
+import { Icon } from '../../icons';
+import { useUIStore } from '../../store/index';
+import { launchColors } from '@theme/tokens/launch-colors';
 
 export const TwoFactorSection: React.FC = () => {
   const { theme } = useTheme();
@@ -14,18 +14,18 @@ export const TwoFactorSection: React.FC = () => {
   const handleTwoFactorToggle = useCallback(() => {
     if (!twoFactorEnabled) {
       Alert.alert(
-        "Enable Two-Factor Authentication?",
-        "You will need an authenticator app like Google Authenticator or Authy.",
+        'Enable Two-Factor Authentication?',
+        'You will need an authenticator app like Google Authenticator or Authy.',
         [
-          { text: "Cancel", style: "cancel" },
+          { text: 'Cancel', style: 'cancel' },
           {
-            text: "Enable",
+            text: 'Enable',
             onPress: () => {
               setTwoFactorEnabled(true);
               showToast({
                 message:
-                  "2FA enabled. Please set up in your authenticator app.",
-                type: "success",
+                  '2FA enabled. Please set up in your authenticator app.',
+                type: 'success',
                 duration: 5000,
               });
             },
@@ -34,18 +34,18 @@ export const TwoFactorSection: React.FC = () => {
       );
     } else {
       Alert.alert(
-        "Disable Two-Factor Authentication?",
-        "This makes your account less secure. Are you sure?",
+        'Disable Two-Factor Authentication?',
+        'This makes your account less secure. Are you sure?',
         [
-          { text: "Cancel", style: "cancel" },
+          { text: 'Cancel', style: 'cancel' },
           {
-            text: "Disable",
-            style: "destructive",
+            text: 'Disable',
+            style: 'destructive',
             onPress: () => {
               setTwoFactorEnabled(false);
               showToast({
-                message: "2FA has been disabled",
-                type: "warning",
+                message: '2FA has been disabled',
+                type: 'warning',
                 duration: 3000,
               });
             },
@@ -63,17 +63,17 @@ export const TwoFactorSection: React.FC = () => {
         style={{
           marginLeft: 12,
           marginBottom: 8,
-          fontWeight: "600",
+          fontWeight: '600',
           letterSpacing: 0.5,
         }}
       >
         SECURITY
       </Text>
-      <Card size="sm" style={{ overflow: "hidden" }}>
+      <Card size="sm" style={{ overflow: 'hidden' }}>
         <Pressable
           style={{
-            flexDirection: "row",
-            alignItems: "center",
+            flexDirection: 'row',
+            alignItems: 'center',
             paddingVertical: 16,
             paddingHorizontal: 16,
           }}
@@ -109,7 +109,7 @@ export const TwoFactorSection: React.FC = () => {
             <Text
               variant="body"
               style={{
-                fontWeight: "500",
+                fontWeight: '500',
                 color: theme.colors.text.primary,
               }}
             >
@@ -120,7 +120,7 @@ export const TwoFactorSection: React.FC = () => {
               color="text.secondary"
               style={{ marginTop: 2 }}
             >
-              {twoFactorEnabled ? "Enabled" : "Add extra security"}
+              {twoFactorEnabled ? 'Enabled' : 'Add extra security'}
             </Text>
           </Box>
 
@@ -129,7 +129,7 @@ export const TwoFactorSection: React.FC = () => {
             onValueChange={handleTwoFactorToggle}
             trackColor={{
               false: theme.colors.background.tertiary,
-              true: theme.colors.success.DEFAULT + "80",
+              true: theme.colors.success.DEFAULT + '80',
             }}
             thumbColor={
               twoFactorEnabled

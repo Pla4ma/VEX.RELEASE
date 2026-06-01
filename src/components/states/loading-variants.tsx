@@ -1,19 +1,19 @@
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react';
 import {
   View,
   StyleSheet,
   ActivityIndicator,
-} from "react-native";
+} from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withRepeat,
   withTiming,
   Easing,
-} from "react-native-reanimated";
-import { useReducedMotion } from "../../hooks/useReducedMotion";
-import { launchColors } from "@theme/tokens/launch-colors";
-import { createSheet } from "@/shared/ui/create-sheet";
+} from 'react-native-reanimated';
+import { useReducedMotion } from '../../hooks/useReducedMotion';
+import { launchColors } from '@theme/tokens/launch-colors';
+import { createSheet } from '@/shared/ui/create-sheet';
 
 export const Spinner: React.FC<{ size: number; color: string }> = ({
   size,
@@ -153,7 +153,7 @@ export const Pulse: React.FC<{ size: number; color: string }> = ({
             height: size,
             borderRadius: size / 2,
             backgroundColor: color,
-            position: "absolute",
+            position: 'absolute',
             top: 0,
             left: 0,
           },
@@ -167,11 +167,11 @@ export const Pulse: React.FC<{ size: number; color: string }> = ({
 export const styles = createSheet({
   fullScreen: {
     ...StyleSheet.absoluteFill,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     zIndex: 100,
   },
-  dotsContainer: { flexDirection: "row", alignItems: "center" },
+  dotsContainer: { flexDirection: 'row', alignItems: 'center' },
   dot: { backgroundColor: launchColors.hex_000 },
   pulse: { opacity: 0.3 },
 });

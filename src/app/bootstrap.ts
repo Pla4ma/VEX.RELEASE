@@ -1,19 +1,19 @@
-import { getNetInfoAdapter } from "../network";
-import { getQueueLength, startAutoProcessing } from "../lib/offline/queue";
-import { createDebugger } from "../utils/debug";
+import { getNetInfoAdapter } from '../network';
+import { getQueueLength, startAutoProcessing } from '../lib/offline/queue';
+import { createDebugger } from '../utils/debug';
 import {
   analyticsService,
   capture,
   initializeAnalyticsEventBridge,
   ProductAnalyticsEvents,
-} from "../shared/analytics";
-import { initializeSessionCompletionOrchestrator } from "../features/session-completion/completion-orchestrator";
-import { setupGlobalErrorHandler, setupRejectionHandler } from "../errors";
-import { IS_DEVELOPMENT } from "../constants/app";
+} from '../shared/analytics';
+import { initializeSessionCompletionOrchestrator } from '../features/session-completion/completion-orchestrator';
+import { setupGlobalErrorHandler, setupRejectionHandler } from '../errors';
+import { IS_DEVELOPMENT } from '../constants/app';
 
 let bootstrapped = false;
 let sessionRuntimeInitialized = false;
-const debug = createDebugger("app:bootstrap");
+const debug = createDebugger('app:bootstrap');
 
 function deferBootCall(call: () => void): void {
   setTimeout(call, 0);
@@ -27,7 +27,7 @@ function initializeCoreSystems(): void {
   initializeAnalyticsEventBridge();
   analyticsService.initialize().then((enabled) => {
     if (enabled) {
-      capture(ProductAnalyticsEvents.APP_OPENED, { source: "bootstrap" });
+      capture(ProductAnalyticsEvents.APP_OPENED, { source: 'bootstrap' });
     }
   });
 }
@@ -40,7 +40,7 @@ export const initializeSessionRuntime = (): void => {
   sessionRuntimeInitialized = true;
   const netInfo = getNetInfoAdapter();
   netInfo.initialize();
-  debug.info("Offline sync queue size at runtime init: %d", getQueueLength());
+  debug.info('Offline sync queue size at runtime init: %d', getQueueLength());
   startAutoProcessing();
 };
 

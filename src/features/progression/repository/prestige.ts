@@ -3,22 +3,22 @@
  * Supabase integration for prestige system
  */
 
-import { supabase } from "../../../config/supabase";
-import type { PrestigeState } from "../prestige-system";
+import { supabase } from '../../../config/supabase';
+import type { PrestigeState } from '../prestige-system';
 
-const TABLE = "prestige_states";
+const TABLE = 'prestige_states';
 
 export async function fetchPrestigeState(
   userId: string,
 ): Promise<PrestigeState | null> {
   const { data, error } = await supabase
     .from(TABLE)
-    .select("*")
-    .eq("user_id", userId)
+    .select('*')
+    .eq('user_id', userId)
     .single();
 
   if (error) {
-    if (error.code === "PGRST116") {
+    if (error.code === 'PGRST116') {
       return null;
     }
     throw error;
@@ -55,7 +55,7 @@ export async function updatePrestigeState(
   const { error } = await supabase
     .from(TABLE)
     .update(updates)
-    .eq("user_id", userId);
+    .eq('user_id', userId);
 
   if (error) {
     throw error;
@@ -68,9 +68,9 @@ export async function incrementNightmareCompletions(
   const { error } = await supabase
     .from(TABLE)
     .update({
-      nightmare_completions: supabase.rpc("increment", { x: 1 }),
+      nightmare_completions: supabase.rpc('increment', { x: 1 }),
     })
-    .eq("user_id", userId);
+    .eq('user_id', userId);
 
   if (error) {
     throw error;

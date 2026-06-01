@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react';
 
-import { Box, Button, Text } from "../../../components/primitives";
-import { useTheme } from "../../../theme";
+import { Box, Button, Text } from '../../../components/primitives';
+import { useTheme } from '../../../theme';
 
 type SessionSummaryUnavailableProps = {
   message?: string;
@@ -33,7 +33,7 @@ export function SessionSummaryUnavailable({
         textAlign="center"
         mt={12}
       >
-        {message ?? "This victory screen could not load the completed session."}
+        {message ?? 'This victory screen could not load the completed session.'}
       </Text>
       <Box width="100%" mt={24}>
         {onRetry ? (

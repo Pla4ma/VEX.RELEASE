@@ -1,9 +1,9 @@
-import { z } from "zod";
-import { storage } from "../../store/mmkv-storage";
-import { supabase } from "../../config/supabase";
-import { FocusMemorySchema, type FocusMemory } from "./schemas";
+import { z } from 'zod';
+import { storage } from '../../store/mmkv-storage';
+import { supabase } from '../../config/supabase';
+import { FocusMemorySchema, type FocusMemory } from './schemas';
 
-const KEY_PREFIX = "focus-memory:";
+const KEY_PREFIX = 'focus-memory:';
 
 function keyFor(userId: string): string {
   return `${KEY_PREFIX}${userId}`;
@@ -31,7 +31,7 @@ function marshallForUpsert(
 
 export async function readMemories(userId: string): Promise<FocusMemory[]> {
   const raw = storage.getString(keyFor(userId));
-  if (!raw) return [];
+  if (!raw) {return [];}
   return FocusMemorySchema.array().parse(JSON.parse(raw));
 }
 
@@ -47,16 +47,16 @@ export async function writeMemories(
 export async function syncMemoriesToSupabase(userId: string): Promise<void> {
   try {
     const memories = await readMemories(userId);
-    if (memories.length === 0) return;
+    if (memories.length === 0) {return;}
     const rows = marshallForUpsert(userId, memories);
-    const { error } = await supabase.from("focus_memories").upsert(rows, {
-      onConflict: "id",
+    const { error } = await supabase.from('focus_memories').upsert(rows, {
+      onConflict: 'id',
       ignoreDuplicates: false,
     });
-    if (error && error.code !== "42P01") throw error;
+    if (error && error.code !== '42P01') {throw error;}
   } catch (error: unknown) {
     const code = (error as { code?: string }).code;
-    if (code === "42P01") return;
+    if (code === '42P01') {return;}
     throw error;
   }
 }
@@ -66,12 +66,12 @@ export async function fetchMemoriesFromSupabase(
 ): Promise<FocusMemory[]> {
   try {
     const { data, error } = await supabase
-      .from("focus_memories")
-      .select("*")
-      .eq("user_id", userId)
-      .order("created_at", { ascending: false });
+      .from('focus_memories')
+      .select('*')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false });
     if (error) {
-      if (error.code === "42P01") return [];
+      if (error.code === '42P01') {return [];}
       throw error;
     }
     const rowSchema = z.object({
@@ -94,9 +94,9 @@ export async function fetchMemoriesFromSupabase(
       .map((row) => ({
         id: row.id,
         userId: row.user_id,
-        type: row.type as FocusMemory["type"],
+        type: row.type as FocusMemory['type'],
         summary: row.summary,
-        source: row.source as FocusMemory["source"],
+        source: row.source as FocusMemory['source'],
         confidence: row.confidence,
         accepted: row.accepted,
         deletedAt: row.deleted_at ? new Date(row.deleted_at).getTime() : null,
@@ -107,7 +107,7 @@ export async function fetchMemoriesFromSupabase(
       }));
   } catch (error: unknown) {
     const code = (error as { code?: string }).code;
-    if (code === "42P01") return [];
+    if (code === '42P01') {return [];}
     throw error;
   }
 }

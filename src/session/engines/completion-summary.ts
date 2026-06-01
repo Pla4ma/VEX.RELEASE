@@ -3,10 +3,10 @@ import type {
   ScoreCalculation,
   SessionState,
   SessionSummary,
-} from "../types";
-import { resolveSessionMode } from "../modes";
-import type { ScoringEngine } from "./ScoringEngine";
-import type { AbandonResult, SessionStatsResult } from "./completion-types";
+} from '../types';
+import { resolveSessionMode } from '../modes';
+import type { ScoringEngine } from './ScoringEngine';
+import type { AbandonResult, SessionStatsResult } from './completion-types';
 
 function getBaseIntervalBonus(session: SessionState): number {
   if (session.intervalsCompleted >= 8) {
@@ -29,7 +29,7 @@ export function createSessionSummary(
   focusMetrics: FocusQualityMetrics,
   userStreak: number,
   reflection?: string,
-  mood?: "GREAT" | "GOOD" | "OKAY" | "STRUGGLING" | "DIFFICULT",
+  mood?: 'GREAT' | 'GOOD' | 'OKAY' | 'STRUGGLING' | 'DIFFICULT',
   tasksCompleted?: number,
 ): SessionSummary {
   const plannedDuration = session.config.duration * 1000;
@@ -48,7 +48,7 @@ export function createSessionSummary(
     scoreCalc.comebackBonus > 0
       ? [
           {
-            type: "COMEBACK_BONUS",
+            type: 'COMEBACK_BONUS',
             amount: scoreCalc.comebackBonus,
             description: `${scoreCalc.comebackMultiplier}x comeback XP applied`,
           },
@@ -105,10 +105,10 @@ export function computeAbandonResult(
   reason?: string,
 ): AbandonResult {
   const now = Date.now();
-  session.status = "ABANDONED";
+  session.status = 'ABANDONED';
   session.abandonedAt = now;
   session.endedAt = now;
-  const damage = scoringEngine.calculateDamage(session, "ABANDON");
+  const damage = scoringEngine.calculateDamage(session, 'ABANDON');
   session.damagePoints = damage.totalDamage;
   session.penaltyMultiplier = damage.finalPenalty;
   const canRecover = session.recoveryAttempts < session.maxRecoveryAttempts;
@@ -131,9 +131,9 @@ export function computeFailResult(
   canRecover: boolean = true,
 ): AbandonResult {
   const now = Date.now();
-  session.status = "FAILED";
+  session.status = 'FAILED';
   session.endedAt = now;
-  const damage = scoringEngine.calculateDamage(session, "INTERRUPTION");
+  const damage = scoringEngine.calculateDamage(session, 'INTERRUPTION');
   session.damagePoints = damage.totalDamage;
   session.penaltyMultiplier = damage.finalPenalty;
   const streakBroken =
@@ -154,15 +154,15 @@ export function computeCompletionStats(
   const totalTime = session.endedAt! - session.startedAt!;
   const efficiency =
     totalTime > 0 ? (session.effectiveTime / totalTime) * 100 : 0;
-  let focusRating: "EXCELLENT" | "GOOD" | "AVERAGE" | "NEEDS_IMPROVEMENT";
+  let focusRating: 'EXCELLENT' | 'GOOD' | 'AVERAGE' | 'NEEDS_IMPROVEMENT';
   if (focusMetrics.overallScore >= 90) {
-    focusRating = "EXCELLENT";
+    focusRating = 'EXCELLENT';
   } else if (focusMetrics.overallScore >= 75) {
-    focusRating = "GOOD";
+    focusRating = 'GOOD';
   } else if (focusMetrics.overallScore >= 50) {
-    focusRating = "AVERAGE";
+    focusRating = 'AVERAGE';
   } else {
-    focusRating = "NEEDS_IMPROVEMENT";
+    focusRating = 'NEEDS_IMPROVEMENT';
   }
   const productivity = Math.round(
     session.completionPercentage * 0.4 +
@@ -171,11 +171,11 @@ export function computeCompletionStats(
   );
   const recommendations: string[] = [];
   if (session.interruptions > 2) {
-    recommendations.push("Try enabling Do Not Disturb to reduce interruptions");
+    recommendations.push('Try enabling Do Not Disturb to reduce interruptions');
   }
   if (session.pauses > 3) {
     recommendations.push(
-      "Consider shorter sessions if you need frequent breaks",
+      'Consider shorter sessions if you need frequent breaks',
     );
   }
   if (focusMetrics.overallScore < 70) {
@@ -184,7 +184,7 @@ export function computeCompletionStats(
     );
   }
   if (session.completionPercentage < 100) {
-    recommendations.push("Build consistency by completing full sessions");
+    recommendations.push('Build consistency by completing full sessions');
   }
   return {
     efficiency: Math.round(efficiency),

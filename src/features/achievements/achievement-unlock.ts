@@ -1,12 +1,12 @@
-import * as Sentry from "@sentry/react-native";
-import { eventBus } from "../../events/EventBus";
-import { createDebugger } from "../../utils/debug";
-import { getAchievementById } from "./definitions";
-import type { Achievement } from "./types";
-import * as achievementRepository from "./repository";
-import type { AchievementUnlockResult } from "./event-handler-types";
+import * as Sentry from '@sentry/react-native';
+import { eventBus } from '../../events/EventBus';
+import { createDebugger } from '../../utils/debug';
+import { getAchievementById } from './definitions';
+import type { Achievement } from './types';
+import * as achievementRepository from './repository';
+import type { AchievementUnlockResult } from './event-handler-types';
 
-const debug = createDebugger("achievements:unlock");
+const debug = createDebugger('achievements:unlock');
 
 export async function checkAchievement(
   userId: string,
@@ -16,7 +16,7 @@ export async function checkAchievement(
   if (!achievement) {
     debug.warn(
       `Achievement ${achievementId} not found`,
-      new Error("Not found"),
+      new Error('Not found'),
     );
     return null;
   }
@@ -88,16 +88,16 @@ async function unlockAchievement(
     );
   }
   Sentry.addBreadcrumb({
-    category: "achievements",
+    category: 'achievements',
     message: `Achievement unlocked: ${achievement.title}`,
-    level: "info",
+    level: 'info',
     data: {
       userId,
       achievementId: achievement.id,
       rarity: achievement.rarity,
     },
   });
-  eventBus.publish("achievement:unlocked", {
+  eventBus.publish('achievement:unlocked', {
     userId,
     achievementId: achievement.id,
     unlockedAt: Date.now(),

@@ -1,18 +1,18 @@
-import { useCallback } from "react";
-import * as Sentry from "@sentry/react-native";
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { getSprintChainService } from "../../../features/session/SprintChainService";
-import type { SessionStackParams } from "../../../navigation/types";
-import type { Mood } from "../../../session/components/CreativeMoodLogger";
-import type { SessionSummary } from "../../../session/types/schemas";
-import { SessionSummarySchema } from "../../../session/types/schemas";
-import type { useSession } from "../../../session/hooks/useSession";
-import { SessionMode } from "../../../session/modes";
+import { useCallback } from 'react';
+import * as Sentry from '@sentry/react-native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { getSprintChainService } from '../../../features/session/SprintChainService';
+import type { SessionStackParams } from '../../../navigation/types';
+import type { Mood } from '../../../session/components/CreativeMoodLogger';
+import type { SessionSummary } from '../../../session/types/schemas';
+import { SessionSummarySchema } from '../../../session/types/schemas';
+import type { useSession } from '../../../session/hooks/useSession';
+import { SessionMode } from '../../../session/modes';
 import {
   buildActiveSessionControlFailure,
   type ActiveSessionControlFailure,
-} from "../utils/active-session-control-failure";
-import type { useCompanionSession } from "./useCompanionSession";
+} from '../utils/active-session-control-failure';
+import type { useCompanionSession } from './useCompanionSession';
 
 type SessionNavigationProp = NativeStackNavigationProp<SessionStackParams>;
 type SessionQuery = ReturnType<typeof useSession>;
@@ -53,22 +53,22 @@ export function useActiveSessionHandlers({
         await sessionQuery.resumeSession();
         setControlFailure(null);
         Sentry.addBreadcrumb({
-          category: "session",
-          message: "Session resumed",
-          level: "info",
+          category: 'session',
+          message: 'Session resumed',
+          level: 'info',
         });
         return;
       }
-      await sessionQuery.pauseSession("user");
+      await sessionQuery.pauseSession('user');
       setControlFailure(null);
       Sentry.addBreadcrumb({
-        category: "session",
-        message: "Session paused",
-        level: "info",
+        category: 'session',
+        message: 'Session paused',
+        level: 'info',
       });
     } catch (caught) {
-      setControlFailure(buildActiveSessionControlFailure("pause"));
-      Sentry.captureException(caught, { tags: { feature: "session-control" } });
+      setControlFailure(buildActiveSessionControlFailure('pause'));
+      Sentry.captureException(caught, { tags: { feature: 'session-control' } });
     }
   }, [sessionQuery, setControlFailure]);
 
@@ -88,11 +88,11 @@ export function useActiveSessionHandlers({
       });
       setControlFailure(null);
       Sentry.addBreadcrumb({
-        category: "session",
-        message: "Session completed",
-        level: "info",
+        category: 'session',
+        message: 'Session completed',
+        level: 'info',
       });
-      navigation.navigate("SessionComplete", {
+      navigation.navigate('SessionComplete', {
         sessionId,
         summary: SessionSummarySchema.parse({
           ...result,
@@ -103,9 +103,9 @@ export function useActiveSessionHandlers({
         }),
       });
     } catch (caught) {
-      setControlFailure(buildActiveSessionControlFailure("complete"));
+      setControlFailure(buildActiveSessionControlFailure('complete'));
       Sentry.captureException(caught, {
-        tags: { feature: "session-complete" },
+        tags: { feature: 'session-complete' },
       });
     }
   }, [
@@ -134,17 +134,17 @@ export function useActiveSessionHandlers({
     setIsExiting(true);
     setShowInterruption(false);
     try {
-      await sessionQuery.abandonSession("user");
+      await sessionQuery.abandonSession('user');
       setControlFailure(null);
       Sentry.addBreadcrumb({
-        category: "session",
-        message: "Session abandoned",
-        level: "warning",
+        category: 'session',
+        message: 'Session abandoned',
+        level: 'warning',
       });
       navigation.goBack();
     } catch (caught) {
-      setControlFailure(buildActiveSessionControlFailure("abandon"));
-      Sentry.captureException(caught, { tags: { feature: "session-abandon" } });
+      setControlFailure(buildActiveSessionControlFailure('abandon'));
+      Sentry.captureException(caught, { tags: { feature: 'session-abandon' } });
       setIsExiting(false);
     }
   }, [
@@ -159,12 +159,12 @@ export function useActiveSessionHandlers({
     async (
       controlFailure: ActiveSessionControlFailure | null,
     ): Promise<void> => {
-      if (!controlFailure) return;
-      if (controlFailure.action === "complete") {
+      if (!controlFailure) {return;}
+      if (controlFailure.action === 'complete') {
         await handleComplete();
         return;
       }
-      if (controlFailure.action === "abandon") {
+      if (controlFailure.action === 'abandon') {
         await handleAbandon();
         return;
       }

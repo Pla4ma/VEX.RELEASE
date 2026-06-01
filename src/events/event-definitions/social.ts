@@ -6,24 +6,24 @@
  */
 
 export type SocialEventType =
-  | "social:activity"
-  | "social:feed_post"
-  | "social:squad_activity"
-  | "social:guild_activity"
-  | "social:friend_request"
-  | "social:message"
-  | "social:duel_challenge";
+  | 'social:activity'
+  | 'social:feed_post'
+  | 'social:squad_activity'
+  | 'social:guild_activity'
+  | 'social:friend_request'
+  | 'social:message'
+  | 'social:duel_challenge';
 
 export interface SocialActivityEvent {
   userId: string;
   activityType:
-    | "session_completed"
-    | "level_up"
-    | "achievement_unlocked"
-    | "item_crafted"
-    | "boss_defeated"
-    | "streak_milestone";
-  visibility: "PRIVATE" | "FRIENDS" | "SQUAD" | "GUILD" | "PUBLIC";
+    | 'session_completed'
+    | 'level_up'
+    | 'achievement_unlocked'
+    | 'item_crafted'
+    | 'boss_defeated'
+    | 'streak_milestone';
+  visibility: 'PRIVATE' | 'FRIENDS' | 'SQUAD' | 'GUILD' | 'PUBLIC';
   data: {
     id: string;
     content: string;

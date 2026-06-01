@@ -10,7 +10,7 @@ function recordSetupFallback(error: unknown): void {
 }
 
 try {
-  jest.mock("@sentry/react-native", () => ({
+  jest.mock('@sentry/react-native', () => ({
     init: jest.fn(),
     captureException: jest.fn(),
     captureMessage: jest.fn(),
@@ -30,8 +30,8 @@ try {
       configureScope: jest.fn(),
     })),
   }));
-  jest.mock("posthog-react-native", () => {
-    const React = require("react");
+  jest.mock('posthog-react-native', () => {
+    const React = require('react');
     const mockCreateClient = () => ({
       capture: jest.fn(),
       flush: jest.fn(() => Promise.resolve()),
@@ -47,8 +47,8 @@ try {
       usePostHog: jest.fn(mockCreateClient),
     };
   });
-  jest.mock("@react-navigation/native", () => ({
-    ...jest.requireActual("@react-navigation/native"),
+  jest.mock('@react-navigation/native', () => ({
+    ...jest.requireActual('@react-navigation/native'),
     useNavigation: jest.fn(() => ({
       navigate: jest.fn(),
       goBack: jest.fn(),
@@ -62,8 +62,8 @@ try {
     })),
     useRoute: jest.fn(() => ({
       params: {},
-      name: "TestScreen",
-      key: "test-key",
+      name: 'TestScreen',
+      key: 'test-key',
     })),
     useIsFocused: jest.fn(() => true),
   }));

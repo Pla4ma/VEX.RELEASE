@@ -1,19 +1,19 @@
-import { captureSilentFailure } from "../../../utils/silent-failure";
-import { renderHook, act } from "@testing-library/react-native";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import React from "react";
+import { captureSilentFailure } from '../../../utils/silent-failure';
+import { renderHook, act } from '@testing-library/react-native';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import React from 'react';
 import {
   useContentInput,
   contentStudyQueryKeys,
-} from "../hooks";
+} from '../hooks';
 
-jest.mock("../store", () => ({
+jest.mock('../store', () => ({
   useAuthStore: () => ({
-    user: { id: "test-user-id", email: "test@example.com" },
+    user: { id: 'test-user-id', email: 'test@example.com' },
   }),
 }));
 
-jest.mock("../ContentStudyService", () => ({
+jest.mock('../ContentStudyService', () => ({
   submitContent: jest.fn(),
   extractContent: jest.fn(),
   generateStudyPlan: jest.fn(),
@@ -38,93 +38,93 @@ const wrapper = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-describe("contentStudyQueryKeys", () => {
-  it("should generate correct query keys", () => {
-    expect(contentStudyQueryKeys.all).toEqual(["content-study"]);
-    expect(contentStudyQueryKeys.content("123")).toEqual([
-      "content-study",
-      "content",
-      "123",
+describe('contentStudyQueryKeys', () => {
+  it('should generate correct query keys', () => {
+    expect(contentStudyQueryKeys.all).toEqual(['content-study']);
+    expect(contentStudyQueryKeys.content('123')).toEqual([
+      'content-study',
+      'content',
+      '123',
     ]);
-    expect(contentStudyQueryKeys.generation("456")).toEqual([
-      "content-study",
-      "generation",
-      "456",
+    expect(contentStudyQueryKeys.generation('456')).toEqual([
+      'content-study',
+      'generation',
+      '456',
     ]);
   });
 });
 
-describe("useContentInput", () => {
+describe('useContentInput', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
-  it("should initialize with default state", () => {
+  it('should initialize with default state', () => {
     const { result } = renderHook(() => useContentInput(), { wrapper });
-    expect(result.current.state.activeTab).toBe("paste");
-    expect(result.current.state.pastedText).toBe("");
-    expect(result.current.state.youtubeUrl).toBe("");
+    expect(result.current.state.activeTab).toBe('paste');
+    expect(result.current.state.pastedText).toBe('');
+    expect(result.current.state.youtubeUrl).toBe('');
     expect(result.current.state.selectedFile).toBeNull();
     expect(result.current.isSubmitting).toBe(false);
     expect(result.current.error).toBeNull();
   });
-  it("should update tab", () => {
+  it('should update tab', () => {
     const { result } = renderHook(() => useContentInput(), { wrapper });
     act(() => {
-      result.current.setTab("youtube");
+      result.current.setTab('youtube');
     });
-    expect(result.current.state.activeTab).toBe("youtube");
+    expect(result.current.state.activeTab).toBe('youtube');
   });
-  it("should update pasted text", () => {
+  it('should update pasted text', () => {
     const { result } = renderHook(() => useContentInput(), { wrapper });
     act(() => {
-      result.current.setPastedText("Test content");
+      result.current.setPastedText('Test content');
     });
-    expect(result.current.state.pastedText).toBe("Test content");
+    expect(result.current.state.pastedText).toBe('Test content');
   });
-  it("should update YouTube URL", () => {
+  it('should update YouTube URL', () => {
     const { result } = renderHook(() => useContentInput(), { wrapper });
     act(() => {
-      result.current.setYoutubeUrl("https://youtube.com/watch?v=123");
+      result.current.setYoutubeUrl('https://youtube.com/watch?v=123');
     });
     expect(result.current.state.youtubeUrl).toBe(
-      "https://youtube.com/watch?v=123",
+      'https://youtube.com/watch?v=123',
     );
   });
-  it("should update selected file", () => {
+  it('should update selected file', () => {
     const { result } = renderHook(() => useContentInput(), { wrapper });
     const file = {
-      uri: "file:///test.pdf",
-      name: "test.pdf",
+      uri: 'file:///test.pdf',
+      name: 'test.pdf',
       size: 1000,
-      type: "application/pdf",
+      type: 'application/pdf',
     };
     act(() => {
       result.current.setSelectedFile(file);
     });
     expect(result.current.state.selectedFile).toEqual(file);
   });
-  it("should clear error", () => {
+  it('should clear error', () => {
     const { result } = renderHook(() => useContentInput(), { wrapper });
     act(() => {
-      result.current.setPastedText("Test");
+      result.current.setPastedText('Test');
       result.current.clearError();
     });
     expect(result.current.error).toBeNull();
   });
-  it("should validate pasted text before submit", async () => {
+  it('should validate pasted text before submit', async () => {
     const { result } = renderHook(() => useContentInput(), { wrapper });
     act(() => {
-      result.current.setTab("paste");
-      result.current.setPastedText("Short");
+      result.current.setTab('paste');
+      result.current.setPastedText('Short');
     });
     await act(async () => {
       try {
         await result.current.submit();
       } catch (error) {
         captureSilentFailure(error, {
-          feature: "content-study",
-          operation: "network-fallback",
-          type: "network",
+          feature: 'content-study',
+          operation: 'network-fallback',
+          type: 'network',
         });
       }
     });

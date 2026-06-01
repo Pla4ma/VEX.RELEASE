@@ -1,1 +1,1 @@
-export type { WeakTopic, WeeklyIntelligence } from "./schemas";
+export type { WeakTopic, WeeklyIntelligence } from './schemas';

@@ -8,7 +8,7 @@
  * - Error reporting integration
  */
 
-import { IS_DEVELOPMENT } from "../constants/app";
+import { IS_DEVELOPMENT } from '../constants/app';
 
 // Log levels
 export enum LogLevel {
@@ -23,7 +23,7 @@ export enum LogLevel {
 let currentLogLevel = IS_DEVELOPMENT ? LogLevel.DEBUG : LogLevel.WARN;
 
 // Enabled namespaces for debugging
-let enabledNamespaces: string[] = IS_DEVELOPMENT ? ["*"] : [];
+let enabledNamespaces: string[] = IS_DEVELOPMENT ? ['*'] : [];
 
 /**
  * Set global log level
@@ -43,11 +43,11 @@ export function enableDebug(namespaces: string[]): void {
  * Check if namespace is enabled
  */
 function isNamespaceEnabled(namespace: string): boolean {
-  if (enabledNamespaces.includes("*")) {
+  if (enabledNamespaces.includes('*')) {
     return true;
   }
   return enabledNamespaces.some((ns) =>
-    namespace.startsWith(ns.replace("*", "")),
+    namespace.startsWith(ns.replace('*', '')),
   );
 }
 
@@ -106,7 +106,7 @@ export function createDebugger(namespace: string): Debugger {
 
     info: (message: string, ...args: unknown[]) => {
       if (currentLogLevel <= LogLevel.INFO) {
-        // eslint-disable-next-line no-restricted-syntax -- debugger info channel
+
         console.info(formatMessage(namespace, message), ...args);
       }
     },
@@ -143,7 +143,7 @@ export function createDebugger(namespace: string): Debugger {
 /**
  * Global debug instance
  */
-export const debug = createDebugger("app");
+export const debug = createDebugger('app');
 
 /**
  * Performance tracking decorator
@@ -155,7 +155,7 @@ export function measurePerformance(
 ): PropertyDescriptor {
   const originalMethod = descriptor.value;
   const methodDebugger = createDebugger(
-    `perf:${target?.constructor?.name || "unknown"}`,
+    `perf:${target?.constructor?.name || 'unknown'}`,
   );
 
   descriptor.value = async function (...args: unknown[]) {

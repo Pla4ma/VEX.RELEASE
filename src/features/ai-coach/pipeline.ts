@@ -1,10 +1,10 @@
-import { getSupabaseClient } from "../../config/supabase";
-import { getProgressionService } from "../../progression/ProgressionService";
-import { getSessionRepository } from "../../session/repository/SessionRepository";
-import { getCoachPersonas, getOrCreateCoachState } from "./persona-manager";
-import { scheduleReminder } from "./reminder-scheduler";
-import * as repository from "./repository";
-import { processBehaviorSignal as processBehaviorSignalBase } from "./session-analyzer";
+import { getSupabaseClient } from '../../config/supabase';
+import { getProgressionService } from '../../progression/ProgressionService';
+import { getSessionRepository } from '../../session/repository/SessionRepository';
+import { getCoachPersonas, getOrCreateCoachState } from './persona-manager';
+import { scheduleReminder } from './reminder-scheduler';
+import * as repository from './repository';
+import { processBehaviorSignal as processBehaviorSignalBase } from './session-analyzer';
 import {
   CoachMessageSchema,
   type CoachMessage,
@@ -12,9 +12,9 @@ import {
   type GenerateMessageInput,
   type InterventionExecution,
   type TriggerType,
-} from "./schemas";
-import { AIMessagePayloadSchema } from "./pipeline-schemas";
-import type { GenerateMessageArgs, EvaluateArgs } from "./pipeline-schemas";
+} from './schemas';
+import { AIMessagePayloadSchema } from './pipeline-schemas';
+import type { GenerateMessageArgs, EvaluateArgs } from './pipeline-schemas';
 import {
   normalizeGenerateMessageArgs,
   normalizeEvaluateArgs,
@@ -24,23 +24,23 @@ import {
   createExecution,
   readNumber,
   readBoolean,
-} from "./pipeline-helpers";
-import { activateComeback } from "./pipeline-comeback";
-import { sanitizeLLMContext } from "./llm-input-sanitizer";
+} from './pipeline-helpers';
+import { activateComeback } from './pipeline-comeback';
+import { sanitizeLLMContext } from './llm-input-sanitizer';
 
-export { activateComeback } from "./pipeline-comeback";
+export { activateComeback } from './pipeline-comeback';
 
 export async function generateMessage(
   input: GenerateMessageInput,
 ): Promise<CoachMessage | null>;
 export async function generateMessage(
   userId: string,
-  trigger: TriggerType | "COMEBACK" | "SESSION_COMPLETE",
+  trigger: TriggerType | 'COMEBACK' | 'SESSION_COMPLETE',
   context: Record<string, unknown>,
 ): Promise<CoachMessage | null>;
 export async function generateMessage(
   inputOrUserId: GenerateMessageArgs,
-  trigger?: TriggerType | "COMEBACK" | "SESSION_COMPLETE",
+  trigger?: TriggerType | 'COMEBACK' | 'SESSION_COMPLETE',
   context: Record<string, unknown> = {},
 ): Promise<CoachMessage | null> {
   const input = normalizeGenerateMessageArgs(inputOrUserId, trigger, context);
@@ -57,10 +57,10 @@ export async function generateMessage(
     .slice(-3)
     .reverse();
   const { data, error } = await getSupabaseClient().functions.invoke(
-    "ai-coach",
+    'ai-coach',
     {
       body: {
-        requestType: "GENERATE_COACH_MESSAGE",
+        requestType: 'GENERATE_COACH_MESSAGE',
         userId: input.userId,
         personaId: state.personaId,
         metadata: { timestamp: Date.now() },
@@ -92,10 +92,10 @@ export async function generateMessage(
         content: parsedPayload.data.message,
         deliveryMethod: input.preferredDelivery,
         priority: mapUrgencyToPriority(parsedPayload.data.urgency),
-        status: input.preferredDelivery === "PUSH" ? "SCHEDULED" : "SENT",
+        status: input.preferredDelivery === 'PUSH' ? 'SCHEDULED' : 'SENT',
         createdAt: Date.now(),
         scheduledFor: null,
-        deliveredAt: input.preferredDelivery === "PUSH" ? null : Date.now(),
+        deliveredAt: input.preferredDelivery === 'PUSH' ? null : Date.now(),
         readAt: null,
         dismissedAt: null,
         actionTaken: parsedPayload.data.actionLabel ?? null,
@@ -115,12 +115,12 @@ export async function evaluateInterventions(
 ): Promise<InterventionExecution[]>;
 export async function evaluateInterventions(
   userId: string,
-  trigger: TriggerType | "COMEBACK" | "SESSION_COMPLETE",
+  trigger: TriggerType | 'COMEBACK' | 'SESSION_COMPLETE',
   context: Record<string, unknown>,
 ): Promise<InterventionExecution[]>;
 export async function evaluateInterventions(
   inputOrUserId: EvaluateArgs,
-  trigger?: TriggerType | "COMEBACK" | "SESSION_COMPLETE",
+  trigger?: TriggerType | 'COMEBACK' | 'SESSION_COMPLETE',
   context: Record<string, unknown> = {},
 ): Promise<InterventionExecution[]> {
   const input = normalizeEvaluateArgs(inputOrUserId, trigger, context);
@@ -132,22 +132,22 @@ export async function evaluateInterventions(
     readNumber(input.context.daysSinceLastSession) ?? 0;
   const isFirstToday = readBoolean(input.context.isFirstToday) ?? false;
   const executions: InterventionExecution[] = [];
-  if (input.trigger === "STREAK_AT_RISK" && streak > 3) {
+  if (input.trigger === 'STREAK_AT_RISK' && streak > 3) {
     const message = await generateMessage(input.userId, input.trigger, {
       ...input.context,
-      urgency: "critical",
+      urgency: 'critical',
     });
     if (message) {
       await scheduleReminder({
         userId: input.userId,
-        reminderType: "STREAK_WARNING",
+        reminderType: 'STREAK_WARNING',
         scheduledFor: Date.now() + 2 * 60 * 60 * 1000,
         priority: 9,
       });
       executions.push(createExecution(input.userId, input.trigger, message.id));
     }
   }
-  if (input.trigger === "SESSION_COMPLETE" && isFirstToday) {
+  if (input.trigger === 'SESSION_COMPLETE' && isFirstToday) {
     const message = await generateMessage(input.userId, input.trigger, {
       ...input.context,
       celebration: true,
@@ -156,7 +156,7 @@ export async function evaluateInterventions(
       executions.push(createExecution(input.userId, input.trigger, message.id));
     }
   }
-  if (input.trigger === "COMEBACK_WINDOW_OPEN" && daysSinceLastSession > 3) {
+  if (input.trigger === 'COMEBACK_WINDOW_OPEN' && daysSinceLastSession > 3) {
     const plan = await activateComeback(input.userId);
     const message = await generateMessage(input.userId, input.trigger, {
       ...input.context,

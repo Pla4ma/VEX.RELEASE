@@ -1,4 +1,4 @@
-import type { SessionCompletionGrade } from "./schemas";
+import type { SessionCompletionGrade } from './schemas';
 
 export const FACTOR_WEIGHTS = {
   backgroundTime: 10,
@@ -16,27 +16,27 @@ export function clamp(value: number, min: number, max: number): number {
 
 export function scoreToGrade(score: number): SessionCompletionGrade {
   if (score >= 93) {
-    return "S";
+    return 'S';
   }
   if (score >= 84) {
-    return "A";
+    return 'A';
   }
   if (score >= 72) {
-    return "B";
+    return 'B';
   }
   if (score >= 60) {
-    return "C";
+    return 'C';
   }
-  return "D";
+  return 'D';
 }
 
 export function gradeToLabel(grade: SessionCompletionGrade): string {
   const labels: Record<SessionCompletionGrade, string> = {
-    A: "Excellent focus run",
-    B: "Solid focus block",
-    C: "Usable progress block",
-    D: "Recovery needed",
-    S: "Peak focus execution",
+    A: 'Excellent focus run',
+    B: 'Solid focus block',
+    C: 'Usable progress block',
+    D: 'Recovery needed',
+    S: 'Peak focus execution',
   };
   return labels[grade];
 }

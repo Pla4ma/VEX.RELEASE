@@ -1,22 +1,22 @@
-import React from "react";
-import { View } from "react-native";
-import Animated, { useAnimatedStyle } from "react-native-reanimated";
-import { Box, Card, Text } from "../../components/primitives";
-import { MasteryRankBadge } from "../../features/mastery/components/MasteryRankBadge";
+import React from 'react';
+import { View } from 'react-native';
+import Animated, { useAnimatedStyle } from 'react-native-reanimated';
+import { Box, Card, Text } from '../../components/primitives';
+import { MasteryRankBadge } from '../../features/mastery/components/MasteryRankBadge';
 import {
   getMasteryRankDisplay,
   type MasteryRank,
   type MasteryState,
-} from "../../features/mastery/types";
-import { Icon } from "../../icons";
-import { useTheme } from "../../theme";
+} from '../../features/mastery/types';
+import { Icon } from '../../icons';
+import { useTheme } from '../../theme';
 
 const RANK_UNLOCKS: Record<MasteryRank, string[]> = {
-  APPRENTICE: ["All base session modes", "Basic boss encounters"],
-  ADEPT: ["DEEP_WORK mode unlocked", "Advanced boss tier 3-4 access"],
-  EXPERT: ["Nightmare Mode sessions (2x XP)", "Boss tier 5-6 access"],
-  MASTER: ["Mastery Duel type", "Custom challenge creation"],
-  GRANDMASTER: ["Exclusive Grandmaster badge", "Priority support access"],
+  APPRENTICE: ['All base session modes', 'Basic boss encounters'],
+  ADEPT: ['DEEP_WORK mode unlocked', 'Advanced boss tier 3-4 access'],
+  EXPERT: ['Nightmare Mode sessions (2x XP)', 'Boss tier 5-6 access'],
+  MASTER: ['Mastery Duel type', 'Custom challenge creation'],
+  GRANDMASTER: ['Exclusive Grandmaster badge', 'Priority support access'],
 };
 
 export function RankUnlocks({
@@ -26,11 +26,11 @@ export function RankUnlocks({
 }): JSX.Element {
   const { theme } = useTheme();
   const ranks: MasteryRank[] = [
-    "APPRENTICE",
-    "ADEPT",
-    "EXPERT",
-    "MASTER",
-    "GRANDMASTER",
+    'APPRENTICE',
+    'ADEPT',
+    'EXPERT',
+    'MASTER',
+    'GRANDMASTER',
   ];
   return (
     <View style={{ gap: theme.spacing[3] }}>
@@ -45,8 +45,8 @@ export function RankUnlocks({
           <View
             key={rank}
             style={{
-              flexDirection: "row",
-              alignItems: "center",
+              flexDirection: 'row',
+              alignItems: 'center',
               gap: theme.spacing[3],
               padding: theme.spacing[3],
               borderRadius: 12,
@@ -63,7 +63,7 @@ export function RankUnlocks({
               <Text
                 variant="body"
                 color="text.primary"
-                fontWeight={isCurrent ? "700" : "500"}
+                fontWeight={isCurrent ? '700' : '500'}
                 style={{
                   color: isUnlocked
                     ? rankDisplay.color
@@ -71,11 +71,11 @@ export function RankUnlocks({
                 }}
               >
                 {rankDisplay.title}
-                {isCurrent && " (Current)"}
-                {!isUnlocked && " (Locked)"}
+                {isCurrent && ' (Current)'}
+                {!isUnlocked && ' (Locked)'}
               </Text>
               <Text variant="caption" color="text.tertiary">
-                {RANK_UNLOCKS[rank].join(" • ")}
+                {RANK_UNLOCKS[rank].join(' • ')}
               </Text>
             </View>
             {isUnlocked && (
@@ -117,12 +117,12 @@ export function MasteryHeader({
           size="lg"
         />
         {pointsToNext > 0 && (
-          <View style={{ width: "100%", gap: theme.spacing[2] }}>
+          <View style={{ width: '100%', gap: theme.spacing[2] }}>
             <View
               style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "center",
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
               }}
             >
               <Text variant="caption" color="text.secondary">
@@ -136,7 +136,7 @@ export function MasteryHeader({
               style={{
                 height: 8,
                 borderRadius: 4,
-                overflow: "hidden",
+                overflow: 'hidden',
                 backgroundColor: theme.colors.background.tertiary,
               }}
             >

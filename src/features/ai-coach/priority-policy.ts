@@ -1,18 +1,18 @@
-import * as repository from "./repository";
+import * as repository from './repository';
 import {
   PriorityEngineSchema,
   type CoachPriority,
   type PriorityEngine,
-} from "./suggestion-schemas";
+} from './suggestion-schemas';
 
 export function shouldCoachShowSuggestion(
   priorityEngine: PriorityEngine,
   suggestionPriority: CoachPriority,
 ): boolean {
   if (priorityEngine.streakCritical || priorityEngine.pendingSync) {
-    return suggestionPriority === "critical";
+    return suggestionPriority === 'critical';
   }
-  if (suggestionPriority === "critical" || suggestionPriority === "high") {
+  if (suggestionPriority === 'critical' || suggestionPriority === 'high') {
     return true;
   }
   return (
@@ -29,8 +29,8 @@ export async function getPriorityEngineState(
   const recentMessages = await repository.fetchRecentMessages(userId, 5);
 
   return PriorityEngineSchema.parse({
-    streakCritical: coachState?.currentState === "STREAK_AT_RISK",
-    pendingSync: recentMessages.some((message) => message.status === "SENT"),
+    streakCritical: coachState?.currentState === 'STREAK_AT_RISK',
+    pendingSync: recentMessages.some((message) => message.status === 'SENT'),
     coachNextAction: false,
     dailyMissionReminder: false,
     squadHelp: false,

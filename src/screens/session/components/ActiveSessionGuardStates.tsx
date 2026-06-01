@@ -1,12 +1,12 @@
-import React from "react";
+import React from 'react';
 
-import { Box } from "../../../components/primitives/Box";
-import { Button } from "../../../components/primitives/Button";
-import { Text } from "../../../components/primitives/Text";
-import { SessionDegradedState } from "../../../session/components/states/SessionDegradedState";
-import { SessionEmptyState } from "../../../session/components/states/SessionEmptyState";
-import { SessionErrorState } from "../../../session/components/states/SessionErrorState";
-import { SessionLoadingState } from "../../../session/components/states/SessionLoadingState";
+import { Box } from '../../../components/primitives/Box';
+import { Button } from '../../../components/primitives/Button';
+import { Text } from '../../../components/primitives/Text';
+import { SessionDegradedState } from '../../../session/components/states/SessionDegradedState';
+import { SessionEmptyState } from '../../../session/components/states/SessionEmptyState';
+import { SessionErrorState } from '../../../session/components/states/SessionErrorState';
+import { SessionLoadingState } from '../../../session/components/states/SessionLoadingState';
 
 type GuardSession = {
   canRecover?: boolean;
@@ -93,19 +93,19 @@ export function ActiveSessionGuardStates({
     <SessionDegradedState
       reason="Realtime purity tracking or persistence is temporarily limited."
       features={[
-        { name: "Core timer", available: true },
-        { name: "Purity updates", available: true },
+        { name: 'Core timer', available: true },
+        { name: 'Purity updates', available: true },
         {
-          name: "Full persistence sync",
-          available: session.storageStatus !== "DEGRADED",
-          reason: "Storage is currently in degraded mode.",
+          name: 'Full persistence sync',
+          available: session.storageStatus !== 'DEGRADED',
+          reason: 'Storage is currently in degraded mode.',
         },
         {
-          name: "Recovery safeguards",
+          name: 'Recovery safeguards',
           available: Boolean(session.canRecover),
           reason: session.canRecover
             ? undefined
-            : "Recovery is not currently available.",
+            : 'Recovery is not currently available.',
         },
       ]}
       onRetryFullMode={onRetry}

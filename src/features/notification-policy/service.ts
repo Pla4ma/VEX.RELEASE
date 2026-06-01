@@ -4,30 +4,30 @@ import {
   type NudgeDecision,
   type NudgePolicyInput,
   type NudgeType,
-} from "./schemas";
-import type { Lane } from "../lane-engine/types";
-import { laneToCategory, copyFor } from "./nudge-copy";
+} from './schemas';
+import type { Lane } from '../lane-engine/types';
+import { laneToCategory, copyFor } from './nudge-copy';
 
 function maxDailyFor(lane: Lane): number {
-  return lane === "minimal_normal" ? 1 : 2;
+  return lane === 'minimal_normal' ? 1 : 2;
 }
 
 function typeFor(input: NudgePolicyInput, lane: Lane): NudgeType {
-  if (input.journeyNudgeType !== undefined) return input.journeyNudgeType;
+  if (input.journeyNudgeType !== undefined) {return input.journeyNudgeType;}
 
   const paused = input.pausedCategories.includes(laneToCategory(lane));
-  if (paused) return "none";
+  if (paused) {return 'none';}
 
-  if (input.context === "avoidance") return "rescue";
-  if (input.context === "deadline" && lane === "student")
-    return "study_deadline";
-  if (input.context === "project_stale" && lane === "deep_creative")
-    return "project_resume";
-  if (input.context === "run_open" && lane === "game_like")
-    return "run_continue";
-  if (input.context === "weekly_ready") return "weekly_insight";
+  if (input.context === 'avoidance') {return 'rescue';}
+  if (input.context === 'deadline' && lane === 'student')
+    {return 'study_deadline';}
+  if (input.context === 'project_stale' && lane === 'deep_creative')
+    {return 'project_resume';}
+  if (input.context === 'run_open' && lane === 'game_like')
+    {return 'run_continue';}
+  if (input.context === 'weekly_ready') {return 'weekly_insight';}
 
-  return input.completedSessions > 0 ? "gentle_return" : "none";
+  return input.completedSessions > 0 ? 'gentle_return' : 'none';
 }
 
 function blocked(
@@ -38,13 +38,13 @@ function blocked(
   const lane = input.laneProfile?.primaryLane ?? input.lane;
   return NudgeDecisionSchema.parse({
     allowed: false,
-    type: "none",
+    type: 'none',
     title: null,
     body: null,
     scheduledFor: null,
     reason,
     lane,
-    priority: "low",
+    priority: 'low',
     budgetRemaining,
   });
 }
@@ -57,7 +57,7 @@ function isEveningQuietByBehavior(
   now: number,
   eveningDismissals: number,
 ): boolean {
-  if (eveningDismissals < 2) return false;
+  if (eveningDismissals < 2) {return false;}
   const hour = new Date(now).getHours();
   return hour >= 18 || hour < 6;
 }
@@ -70,50 +70,50 @@ export function decideNudge(rawInput: NudgePolicyInput): NudgeDecision {
   const nudgeType = typeFor(input, lane);
 
   if (input.userMuted)
-    return blocked(input, budgetRemaining, "User mute blocks all nudges.");
+    {return blocked(input, budgetRemaining, 'User mute blocks all nudges.');}
   if (input.completedSessions === 0 && !input.manuallyScheduled) {
     return blocked(
       input,
       budgetRemaining,
-      "Day 0 has no unsolicited notification.",
+      'Day 0 has no unsolicited notification.',
     );
   }
   if (input.quietHoursActive && !input.manuallyScheduled) {
-    return blocked(input, budgetRemaining, "Quiet hours block this nudge.");
+    return blocked(input, budgetRemaining, 'Quiet hours block this nudge.');
   }
   if (
     isEveningQuietByBehavior(input.now, input.recentDismissals) &&
     !input.manuallyScheduled &&
-    nudgeType !== "rescue"
+    nudgeType !== 'rescue'
   ) {
     return blocked(
       input,
       budgetRemaining,
-      "Evening dismissals learned — suppressing non-rescue nudges.",
+      'Evening dismissals learned — suppressing non-rescue nudges.',
     );
   }
   if (budgetRemaining <= 0)
-    return blocked(input, budgetRemaining, "Daily nudge budget reached.");
+    {return blocked(input, budgetRemaining, 'Daily nudge budget reached.');}
   if (input.recentDismissals >= 3) {
     return blocked(
       input,
       budgetRemaining,
-      "Repeated dismissals — category paused.",
+      'Repeated dismissals — category paused.',
     );
   }
-  if (input.recentDismissals >= 2 && nudgeType !== "rescue") {
+  if (input.recentDismissals >= 2 && nudgeType !== 'rescue') {
     return blocked(
       input,
       budgetRemaining,
-      "Recent dismissals suppress low-trust nudges.",
+      'Recent dismissals suppress low-trust nudges.',
     );
   }
 
   const aggressiveTypes: NudgeType[] = [
-    "rescue",
-    "study_deadline",
-    "project_resume",
-    "run_continue",
+    'rescue',
+    'study_deadline',
+    'project_resume',
+    'run_continue',
   ];
   const blockedByLowConfidence =
     aggressiveTypes.includes(nudgeType) &&
@@ -131,17 +131,17 @@ export function decideNudge(rawInput: NudgePolicyInput): NudgeDecision {
 
   const copy = copyFor(lane, nudgeType);
   return NudgeDecisionSchema.parse({
-    allowed: nudgeType !== "none",
+    allowed: nudgeType !== 'none',
     type: nudgeType,
     title: copy.title,
     body: copy.body,
     scheduledFor: input.now,
-    reason: "Lane policy and budget allow this nudge.",
+    reason: 'Lane policy and budget allow this nudge.',
     lane,
     priority:
-      nudgeType === "study_deadline" || nudgeType === "rescue"
-        ? "high"
-        : "medium",
+      nudgeType === 'study_deadline' || nudgeType === 'rescue'
+        ? 'high'
+        : 'medium',
     budgetRemaining,
   });
 }
@@ -150,4 +150,4 @@ export {
   buildRescueDeepLink,
   isRescueDeepLinkValid,
   markExpiredAsIgnored,
-} from "./nudge-deep-link";
+} from './nudge-deep-link';

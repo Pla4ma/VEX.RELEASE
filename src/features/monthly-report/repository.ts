@@ -1,12 +1,12 @@
-import { supabase } from "../../config/supabase";
+import { supabase } from '../../config/supabase';
 import {
   MonthlyFocusReportInputSchema,
   MonthlyFocusReportSummarySchema,
-} from "./schemas";
+} from './schemas';
 import type {
   MonthlyFocusReportInput,
   MonthlyFocusReportSummary,
-} from "./types";
+} from './types';
 
 export class MonthlyReportRepositoryError extends Error {
   constructor(
@@ -34,7 +34,7 @@ interface SessionRow {
 
 function computeBestFocusWindow(sessions: SessionRow[]): string {
   if (sessions.length === 0) {
-    return "No data";
+    return 'No data';
   }
 
   const hourBuckets = new Map<number, { count: number; gradeSum: number }>();
@@ -70,9 +70,9 @@ function computeBestFocusWindow(sessions: SessionRow[]): string {
   }
 
   const period =
-    bestHour < 12 ? "Morning" : bestHour < 17 ? "Afternoon" : "Evening";
+    bestHour < 12 ? 'Morning' : bestHour < 17 ? 'Afternoon' : 'Evening';
   const startHour = bestHour % 12 === 0 ? 12 : bestHour % 12;
-  const amPm = bestHour < 12 ? "AM" : "PM";
+  const amPm = bestHour < 12 ? 'AM' : 'PM';
   return `${period} (${startHour}:00 ${amPm})`;
 }
 
@@ -81,15 +81,15 @@ function computePatterns(factors: FocusFactors): {
   weakestPattern: string;
 } {
   const patternMap: Record<string, string> = {
-    consistency: "Consistency",
-    streakStability: "Streak Stability",
-    sessionQuality: "Session Quality",
-    intentionalDifficulty: "Challenge Level",
-    recency: "Recency",
+    consistency: 'Consistency',
+    streakStability: 'Streak Stability',
+    sessionQuality: 'Session Quality',
+    intentionalDifficulty: 'Challenge Level',
+    recency: 'Recency',
   };
 
   const entries = Object.entries(factors)
-    .filter(([, v]) => v !== undefined && typeof v.score === "number")
+    .filter(([, v]) => v !== undefined && typeof v.score === 'number')
     .map(([key, v]) => ({
       key,
       name: patternMap[key] ?? key,
@@ -97,7 +97,7 @@ function computePatterns(factors: FocusFactors): {
     }));
 
   if (entries.length === 0) {
-    return { strongestPattern: "No data", weakestPattern: "No data" };
+    return { strongestPattern: 'No data', weakestPattern: 'No data' };
   }
 
   entries.sort((a, b) => b.score - a.score);
@@ -115,36 +115,36 @@ export async function fetchMonthlyFocusReportInput(
   const endDate = new Date(validated.year, validated.month, 0, 23, 59, 59);
 
   const { data: scoreData, error: scoreError } = await supabase
-    .from("focus_score_history")
-    .select("score, created_at")
-    .eq("user_id", validated.userId)
-    .gte("created_at", startDate.toISOString())
-    .lte("created_at", endDate.toISOString())
-    .order("created_at", { ascending: true });
+    .from('focus_score_history')
+    .select('score, created_at')
+    .eq('user_id', validated.userId)
+    .gte('created_at', startDate.toISOString())
+    .lte('created_at', endDate.toISOString())
+    .order('created_at', { ascending: true });
 
   if (scoreError) {
-    throw new MonthlyReportRepositoryError("fetchHistory", scoreError);
+    throw new MonthlyReportRepositoryError('fetchHistory', scoreError);
   }
 
   const { data: sessions, error: sessionError } = await supabase
-    .from("session_ledgers")
-    .select("grade, duration_seconds, started_at")
-    .eq("user_id", validated.userId)
-    .gte("started_at", startDate.toISOString())
-    .lte("started_at", endDate.toISOString());
+    .from('session_ledgers')
+    .select('grade, duration_seconds, started_at')
+    .eq('user_id', validated.userId)
+    .gte('started_at', startDate.toISOString())
+    .lte('started_at', endDate.toISOString());
 
   if (sessionError) {
-    throw new MonthlyReportRepositoryError("fetchSessions", sessionError);
+    throw new MonthlyReportRepositoryError('fetchSessions', sessionError);
   }
 
   const { data: currentScore, error: factorsError } = await supabase
-    .from("focus_score_current")
-    .select("factors")
-    .eq("user_id", validated.userId)
+    .from('focus_score_current')
+    .select('factors')
+    .eq('user_id', validated.userId)
     .single();
 
-  if (factorsError && factorsError.code !== "PGRST116") {
-    throw new MonthlyReportRepositoryError("fetchFactors", factorsError);
+  if (factorsError && factorsError.code !== 'PGRST116') {
+    throw new MonthlyReportRepositoryError('fetchFactors', factorsError);
   }
 
   const typedSessions = (sessions ?? []) as SessionRow[];
@@ -156,8 +156,8 @@ export async function fetchMonthlyFocusReportInput(
     0,
   );
 
-  const gradeOrder = ["S", "A", "B", "C", "D"] as const;
-  let bestGrade: "S" | "A" | "B" | "C" | "D" = "D";
+  const gradeOrder = ['S', 'A', 'B', 'C', 'D'] as const;
+  let bestGrade: 'S' | 'A' | 'B' | 'C' | 'D' = 'D';
   for (const s of typedSessions) {
     if (
       gradeOrder.indexOf(s.grade as (typeof gradeOrder)[number]) <

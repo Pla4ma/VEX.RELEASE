@@ -7,12 +7,12 @@ import {
   calculateIntervalBonus,
   calculateSpecialBonuses,
   BONUS_CONSTANTS,
-} from "./bonus-calculator-helpers";
-import type { FocusQualityMetrics } from "./bonus-calculator-helpers";
+} from './bonus-calculator-helpers';
+import type { FocusQualityMetrics } from './bonus-calculator-helpers';
 
-describe("BonusCalculator", () => {
-  describe("edge cases", () => {
-    it("should cap bonus at max for negative durations", () => {
+describe('BonusCalculator', () => {
+  describe('edge cases', () => {
+    it('should cap bonus at max for negative durations', () => {
       const bonus = calculateTimeBonus({
         plannedDuration: 1500,
         actualDuration: -100,
@@ -21,15 +21,15 @@ describe("BonusCalculator", () => {
       expect(bonus).toBe(BONUS_CONSTANTS.TIME_BONUS_MAX);
     });
 
-    it("should handle very long streaks", () => {
+    it('should handle very long streaks', () => {
       const multiplier = getStreakMultiplier(1000);
       expect(multiplier).toBeGreaterThanOrEqual(2);
       expect(Number.isFinite(multiplier)).toBe(true);
     });
 
-    it("should handle perfect score with zero metrics", () => {
+    it('should handle perfect score with zero metrics', () => {
       const metrics: FocusQualityMetrics = {
-        sessionId: "test",
+        sessionId: 'test',
         timeInDeepFocus: 0,
         timeInShallowFocus: 0,
         timeDistracted: 0,
@@ -48,10 +48,10 @@ describe("BonusCalculator", () => {
       expect(bonus).toBe(BONUS_CONSTANTS.EXCELLENT_QUALITY_BONUS);
     });
 
-    it("should handle extreme disruption counts", () => {
+    it('should handle extreme disruption counts', () => {
       const bonus = calculateQualityBonus({
         focusMetrics: {
-          sessionId: "test",
+          sessionId: 'test',
           timeInDeepFocus: 100,
           timeInShallowFocus: 100,
           timeDistracted: 1000,
@@ -69,8 +69,8 @@ describe("BonusCalculator", () => {
     });
   });
 
-  describe("full bonus calculation flow", () => {
-    it("should calculate total bonuses for perfect session", () => {
+  describe('full bonus calculation flow', () => {
+    it('should calculate total bonuses for perfect session', () => {
       const timeBonus = calculateTimeBonus({
         plannedDuration: 1500,
         actualDuration: 1450,
@@ -82,7 +82,7 @@ describe("BonusCalculator", () => {
       });
       const qualityBonus = calculateQualityBonus({
         focusMetrics: {
-          sessionId: "test",
+          sessionId: 'test',
           timeInDeepFocus: 1200,
           timeInShallowFocus: 200,
           timeDistracted: 100,
@@ -102,7 +102,7 @@ describe("BonusCalculator", () => {
         allIntervalsCompleted: true,
       });
       const specialBonus = calculateSpecialBonuses({
-        session: { id: "test", completionPercentage: 100 },
+        session: { id: 'test', completionPercentage: 100 },
         startTime: Date.now() - 1500000,
         endTime: Date.now(),
         noPauses: true,

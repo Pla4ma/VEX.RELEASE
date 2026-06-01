@@ -1,6 +1,6 @@
-import { z } from "zod";
+import { z } from 'zod';
 
-import { HeadlineRewardSchema } from "./headline-reward.schemas";
+import { HeadlineRewardSchema } from './headline-reward.schemas';
 
 const StoryBeatSchema = z
   .object({
@@ -9,12 +9,12 @@ const StoryBeatSchema = z
     companionLine: z.string().min(1).nullable(),
     id: z.string().min(1),
     kind: z.enum([
-      "result",
-      "grade",
-      "meaning",
-      "companion",
-      "personal_best",
-      "tomorrow",
+      'result',
+      'grade',
+      'meaning',
+      'companion',
+      'personal_best',
+      'tomorrow',
     ]),
     metric: z
       .object({ label: z.string().min(1), value: z.string().min(1) })
@@ -26,14 +26,14 @@ const StoryBeatSchema = z
 const StoryRouteParamsSchema = z
   .object({
     presetMode: z.enum([
-      "LIGHT_FOCUS",
-      "DEEP_WORK",
-      "SPRINT",
-      "CREATIVE",
-      "STUDY",
+      'LIGHT_FOCUS',
+      'DEEP_WORK',
+      'SPRINT',
+      'CREATIVE',
+      'STUDY',
     ]),
     recommendationId: z.string().min(1),
-    suggestedDifficulty: z.enum(["EASY", "NORMAL", "CHALLENGING", "PUSH"]),
+    suggestedDifficulty: z.enum(['EASY', 'NORMAL', 'CHALLENGING', 'PUSH']),
     suggestedDurationSeconds: z.number().int().min(60),
   })
   .strict();
@@ -51,7 +51,7 @@ export const PostSessionStoryViewModelSchema = z
       .nullable(),
     companionPromise: z
       .object({
-        status: z.enum(["pending", "fulfilled", "missed", "replaced"]),
+        status: z.enum(['pending', 'fulfilled', 'missed', 'replaced']),
         targetDate: z.string(),
         targetDurationMinutes: z.number().int().min(5),
         targetMode: z.string().min(1),
@@ -80,7 +80,7 @@ export const PostSessionStoryViewModelSchema = z
       .object({
         label: z.string().min(1),
         reason: z.string().min(1),
-        route: z.enum(["Home", "SessionSetup"]),
+        route: z.enum(['Home', 'SessionSetup']),
         routeParams: StoryRouteParamsSchema.nullable(),
       })
       .strict(),

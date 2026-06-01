@@ -11,9 +11,9 @@ import {
   easingOut as stubEasingOut,
   type AnimatedValue,
   type CompositeAnimation,
-} from "./motion-animation-stubs";
-import type { AnimationConfig, AnimationType } from "./motion-preferences";
-import type { MotionPreferences } from "./motion-preferences";
+} from './motion-animation-stubs';
+import type { AnimationConfig, AnimationType } from './motion-preferences';
+import type { MotionPreferences } from './motion-preferences';
 
 type EasingFn = (value: number) => number;
 
@@ -41,14 +41,14 @@ export function adjustAnimationForAccessibility(
 
   if (preferences.reducedMotion) {
     switch (config.reducedMotionAlternative) {
-      case "none":
+      case 'none':
         adjusted.duration = 0;
         break;
-      case "instant":
+      case 'instant':
         adjusted.duration = 50;
         break;
-      case "fade":
-        adjusted.type = "fade";
+      case 'fade':
+        adjusted.type = 'fade';
         adjusted.duration = 150;
         break;
       default:
@@ -62,9 +62,9 @@ export function adjustAnimationForAccessibility(
 
   if (
     !preferences.transitionAnimationsEnabled &&
-    ["slide", "scale", "rotate"].includes(config.type)
+    ['slide', 'scale', 'rotate'].includes(config.type)
   ) {
-    adjusted.type = "fade";
+    adjusted.type = 'fade';
     adjusted.duration = Math.min(adjusted.duration, 200);
   }
 
@@ -73,19 +73,19 @@ export function adjustAnimationForAccessibility(
 
 export function parseEasing(easingString: string): EasingFn {
   switch (easingString) {
-    case "linear":
+    case 'linear':
       return easeLinear;
-    case "ease-in":
+    case 'ease-in':
       return easeInQuad;
-    case "ease-out":
+    case 'ease-out':
       return easeOutQuad;
-    case "ease-in-out":
+    case 'ease-in-out':
       return easeInOutQuad;
-    case "ease-in-quad":
+    case 'ease-in-quad':
       return easeInQuad;
-    case "ease-out-quad":
+    case 'ease-out-quad':
       return easeOutQuad;
-    case "ease-in-out-quad":
+    case 'ease-in-out-quad':
       return easeInOutQuad;
     default:
       return easeOutQuad;
@@ -103,9 +103,9 @@ export function createAnimationType(
   const useNativeDriver = adjustedConfig.useNativeDriver !== false;
 
   switch (type) {
-    case "fade":
-    case "slide":
-    case "scale":
+    case 'fade':
+    case 'slide':
+    case 'scale':
       return stubCreateTiming(animatedValue, {
         toValue: 1,
         duration: adjustedConfig.duration || 300,
@@ -113,13 +113,13 @@ export function createAnimationType(
         easing,
         useNativeDriver,
       });
-    case "spring":
+    case 'spring':
       return stubCreateTiming(animatedValue, {
         toValue: 1,
         duration: adjustedConfig.duration || 300,
         useNativeDriver,
       });
-    case "parallax":
+    case 'parallax':
       return stubCreateTiming(animatedValue, {
         toValue: 1,
         duration: adjustedConfig.duration || 300,

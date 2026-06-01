@@ -1,6 +1,6 @@
-import { withScreenErrorBoundary } from "../../shared/ui/components/ScreenErrorBoundary";
-import React from "react";
-import { useRoute } from "@react-navigation/native";
+import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+import React from 'react';
+import { useRoute } from '@react-navigation/native';
 import {
   GoalStep,
   LaneConfirmationStep,
@@ -10,16 +10,16 @@ import {
   OnboardingFlowLayout,
   SignedOutOnboardingState,
   StarterStep,
-} from "./components";
-import { LAST_STEP_INDEX, getStepValidation } from "./onboarding-flow-steps";
-import { useOnboardingFlow } from "./hooks/useOnboardingFlow";
-import type { OnboardingRouteProp } from "./hooks/useOnboardingFlow";
+} from './components';
+import { LAST_STEP_INDEX, getStepValidation } from './onboarding-flow-steps';
+import { useOnboardingFlow } from './hooks/useOnboardingFlow';
+import type { OnboardingRouteProp } from './hooks/useOnboardingFlow';
 
 export function OnboardingFlowScreen(): JSX.Element {
   const route = useRoute<OnboardingRouteProp>();
   const flow = useOnboardingFlow(route.params?.step);
 
-  if (!flow.userId) return <SignedOutOnboardingState />;
+  if (!flow.userId) {return <SignedOutOnboardingState />;}
 
   const { isContinueDisabled } = getStepValidation(
     flow.step,
@@ -84,4 +84,4 @@ export function OnboardingFlowScreen(): JSX.Element {
   );
 }
 
-export default withScreenErrorBoundary(OnboardingFlowScreen, "OnboardingFlow");
+export default withScreenErrorBoundary(OnboardingFlowScreen, 'OnboardingFlow');

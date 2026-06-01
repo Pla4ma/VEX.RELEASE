@@ -1,17 +1,17 @@
-import type { ActiveStudyPlan } from "../../../features/content-study/hooks/helpers";
-import type { useActiveBoss } from "../../../features/boss/hooks";
-import type { useProgressionSummary } from "../../../features/progression/hooks";
-import type { useStreakSummary } from "../../../features/streaks/hooks";
+import type { ActiveStudyPlan } from '../../../features/content-study/hooks/helpers';
+import type { useActiveBoss } from '../../../features/boss/hooks';
+import type { useProgressionSummary } from '../../../features/progression/hooks';
+import type { useStreakSummary } from '../../../features/streaks/hooks';
 
 export type RecommendationType =
-  | "focus_session"
-  | "study_plan"
-  | "comeback"
-  | "protect_streak"
-  | "boss_battle"
-  | "start_streak";
+  | 'focus_session'
+  | 'study_plan'
+  | 'comeback'
+  | 'protect_streak'
+  | 'boss_battle'
+  | 'start_streak';
 
-export type UrgencyLevel = "low" | "medium" | "high" | "critical";
+export type UrgencyLevel = 'low' | 'medium' | 'high' | 'critical';
 
 export type HomeRecommendation = {
   id: string;
@@ -21,10 +21,10 @@ export type HomeRecommendation = {
   headline: string;
   subtext: string;
   ctaText: string;
-  ctaAction: "start_focus" | "start_study" | "view_boss" | "view_streak";
+  ctaAction: 'start_focus' | 'start_study' | 'view_boss' | 'view_streak';
   ctaParams?: Record<string, unknown>;
   aiCoachMessage?: string;
-  visualCue?: "none" | "pulse" | "glow" | "urgent";
+  visualCue?: 'none' | 'pulse' | 'glow' | 'urgent';
   expiresAt?: number;
   evidence?: {
     memoryIds?: string[];
@@ -34,12 +34,12 @@ export type HomeRecommendation = {
 };
 
 type HookStreakSummary = NonNullable<
-  ReturnType<typeof useStreakSummary>["data"]
+  ReturnType<typeof useStreakSummary>['data']
 >;
 type HookProgressionSummary = NonNullable<
-  ReturnType<typeof useProgressionSummary>["data"]
+  ReturnType<typeof useProgressionSummary>['data']
 >;
-type HookBossEncounter = NonNullable<ReturnType<typeof useActiveBoss>["data"]>;
+type HookBossEncounter = NonNullable<ReturnType<typeof useActiveBoss>['data']>;
 
 export type RecommendationContext = {
   userId: string;

@@ -1,17 +1,17 @@
-import React from "react";
-import { Pressable } from "react-native";
-import { useTheme } from "@/theme";
-import { Box, Text, Card } from "@/components/primitives";
-import { Icon } from "@/icons";
-import { launchColors } from "@theme/tokens/launch-colors";
+import React from 'react';
+import { Pressable } from 'react-native';
+import { useTheme } from '@/theme';
+import { Box, Text, Card } from '@/components/primitives';
+import { Icon } from '@/icons';
+import { launchColors } from '@theme/tokens/launch-colors';
 import {
   ACCENT_COLORS,
   TIMER_FORMAT_OPTIONS,
   type AccentColor,
   type TimerFormat,
-} from "./color-scheme-constants";
-export type { AccentColor, TimerFormat } from "./color-scheme-constants";
-export { ACCENT_COLORS, TIMER_FORMAT_OPTIONS } from "./color-scheme-constants";
+} from './color-scheme-constants';
+export type { AccentColor, TimerFormat } from './color-scheme-constants';
+export { ACCENT_COLORS, TIMER_FORMAT_OPTIONS } from './color-scheme-constants';
 
 interface ColorSchemeToggleProps {
   accentColor: AccentColor;
@@ -37,7 +37,7 @@ export const ColorSchemeToggle: React.FC<ColorSchemeToggleProps> = ({
           style={{
             marginLeft: 12,
             marginBottom: 8,
-            fontWeight: "600",
+            fontWeight: '600',
             letterSpacing: 0.5,
           }}
         >
@@ -58,8 +58,8 @@ export const ColorSchemeToggle: React.FC<ColorSchemeToggleProps> = ({
                   height: 64,
                   borderRadius: 16,
                   marginBottom: 12,
-                  justifyContent: "center",
-                  alignItems: "center",
+                  justifyContent: 'center',
+                  alignItems: 'center',
                   backgroundColor: color.hex,
                   borderWidth: accentColor === color.id ? 3 : 0,
                   borderColor: theme.colors.text.primary,
@@ -84,20 +84,20 @@ export const ColorSchemeToggle: React.FC<ColorSchemeToggleProps> = ({
           style={{
             marginLeft: 12,
             marginBottom: 8,
-            fontWeight: "600",
+            fontWeight: '600',
             letterSpacing: 0.5,
           }}
         >
           TIMER DISPLAY
         </Text>
-        <Card size="sm" style={{ overflow: "hidden" }}>
+        <Card size="sm" style={{ overflow: 'hidden' }}>
           {TIMER_FORMAT_OPTIONS.map((option, index) => (
             <React.Fragment key={option.id}>
               <Pressable
                 onPress={() => onTimerFormatChange(option.id)}
                 style={{
-                  flexDirection: "row",
-                  alignItems: "center",
+                  flexDirection: 'row',
+                  alignItems: 'center',
                   paddingVertical: 16,
                   paddingHorizontal: 16,
                 }}
@@ -121,7 +121,7 @@ export const ColorSchemeToggle: React.FC<ColorSchemeToggleProps> = ({
                   <Text
                     style={{
                       fontSize: 14,
-                      fontWeight: "600",
+                      fontWeight: '600',
                       color:
                         timerFormat === option.id
                           ? theme.colors.primary[500]
@@ -135,7 +135,7 @@ export const ColorSchemeToggle: React.FC<ColorSchemeToggleProps> = ({
                   <Text
                     variant="body"
                     style={{
-                      fontWeight: timerFormat === option.id ? "600" : "500",
+                      fontWeight: timerFormat === option.id ? '600' : '500',
                       color: theme.colors.text.primary,
                     }}
                   >

@@ -1,14 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react';
 import Animated, {
   FadeIn,
   FadeInUp,
   FadeOut,
-} from "react-native-reanimated";
+} from 'react-native-reanimated';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { Button } from "../../../components/primitives/Button";
-import { useTheme } from "../../../theme";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { Button } from '../../../components/primitives/Button';
+import { useTheme } from '../../../theme';
 
 interface FirstCompletionOverlayProps {
   xpEarned: number;
@@ -82,7 +82,7 @@ function ComebackCTA({ onPress }: { onPress: () => void }): JSX.Element {
   return (
     <Animated.View
       entering={FadeIn.duration(400).delay(1800)}
-      style={{ width: "100%" }}
+      style={{ width: '100%' }}
     >
       <Box gap="md" mt="xl" width="100%">
         <Text variant="body" color="text.secondary" textAlign="center">
@@ -122,7 +122,7 @@ export function FirstCompletionOverlay({
       entering={FadeIn.duration(400)}
       exiting={FadeOut.duration(400)}
       style={{
-        position: "absolute",
+        position: 'absolute',
         top: 0,
         left: 0,
         right: 0,

@@ -1,7 +1,7 @@
-import { storage } from "../../store/mmkv-storage";
-import { StudyPlanSchema, type StudyPlan } from "./schemas";
+import { storage } from '../../store/mmkv-storage';
+import { StudyPlanSchema, type StudyPlan } from './schemas';
 
-const KEY_PREFIX = "study-os:";
+const KEY_PREFIX = 'study-os:';
 
 function keyFor(userId: string): string {
   return `${KEY_PREFIX}${userId}`;
@@ -11,7 +11,7 @@ export async function listStoredStudyPlans(
   userId: string,
 ): Promise<StudyPlan[]> {
   const raw = storage.getString(keyFor(userId));
-  if (!raw) return [];
+  if (!raw) {return [];}
   return StudyPlanSchema.array().parse(JSON.parse(raw));
 }
 

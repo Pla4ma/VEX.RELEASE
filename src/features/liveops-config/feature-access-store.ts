@@ -1,13 +1,13 @@
-import type { FeatureAccessMap, FeatureKey } from "./feature-access";
+import type { FeatureAccessMap, FeatureKey } from './feature-access';
 import {
   getFeatureAvailabilityFor,
   type FeatureAvailability,
-} from "./feature-availability";
+} from './feature-availability';
 
 let _featureAccessMap: FeatureAccessMap | null = null;
 
 /** Centralized degraded features — written by useFeatureHealth, read by useFeatureAccess. */
-let _degradedFeatures: Set<FeatureKey> = new Set(["premium_paywall"]);
+let _degradedFeatures: Set<FeatureKey> = new Set(['premium_paywall']);
 const degradedFeatureListeners = new Set<() => void>();
 
 export function setFeatureAccessMap(map: FeatureAccessMap): void {
@@ -40,7 +40,7 @@ export function getAvailabilityFor(key: FeatureKey): FeatureAvailability {
   const feature = _featureAccessMap?.[key];
   if (!feature) {
     return {
-      state: "disabled",
+      state: 'disabled',
       canRenderEntryPoint: false,
       canNavigate: false,
       canQuery: false,

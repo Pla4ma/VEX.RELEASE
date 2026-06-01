@@ -1,7 +1,7 @@
-import { eventBus } from "../../events";
-import type { CoachInputContract } from "./input-contract";
-import type { CoachPriority, CoachSuggestion } from "./suggestion-schemas";
-import { v4 } from "../../utils/uuid";
+import { eventBus } from '../../events';
+import type { CoachInputContract } from './input-contract';
+import type { CoachPriority, CoachSuggestion } from './suggestion-schemas';
+import { v4 } from '../../utils/uuid';
 
 export function generateUUID(): string {
   return v4();
@@ -14,15 +14,15 @@ export function determineCoachPriority(
     input.streakState.streakAtRisk &&
     input.streakState.hoursSinceLastSession > 20
   ) {
-    return "critical";
+    return 'critical';
   }
   if (input.streakState.streakAtRisk) {
-    return "high";
+    return 'high';
   }
-  if (input.focusScoreFactors.trend === "declining") {
-    return "medium";
+  if (input.focusScoreFactors.trend === 'declining') {
+    return 'medium';
   }
-  return "low";
+  return 'low';
 }
 
 export async function generateContextualMessage(
@@ -30,15 +30,15 @@ export async function generateContextualMessage(
   priority: CoachPriority,
 ): Promise<string> {
   const duration = getDurationMinutes(input.preferredSessionLengths[0]);
-  if (priority === "critical") {
+  if (priority === 'critical') {
     return `Your ${input.streakState.currentStreak}-day streak is at risk! Try a ${duration}-minute session tonight to protect it.`;
   }
-  if (priority === "high") {
+  if (priority === 'high') {
     return `Based on your recent sessions, a ${duration}-minute session would maintain your momentum.`;
   }
   const timeOfDay = input.timeContext?.currentHour
     ? getTimeOfDay(input.timeContext.currentHour)
-    : "evening";
+    : 'evening';
   return `Your patterns show you focus best in the ${timeOfDay}. Consider a session then.`;
 }
 
@@ -48,7 +48,7 @@ export function extractSuggestionTitle(message: string): string {
 
 export function extractActionFromMessage(message: string): string {
   const actionMatch = message.match(/(try|start|complete|do)\s+[^.!?]+/i);
-  return actionMatch ? actionMatch[0] : "Start your next block";
+  return actionMatch ? actionMatch[0] : 'Start your next block';
 }
 
 export async function analyzeSessionPatterns(
@@ -56,7 +56,7 @@ export async function analyzeSessionPatterns(
 ): Promise<{
   duration: number;
   difficulty: string;
-  priority: "high" | "medium" | "low";
+  priority: 'high' | 'medium' | 'low';
 } | null> {
   const preferredDuration = getDurationMinutes(
     input.preferredSessionLengths[0],
@@ -69,18 +69,18 @@ export async function analyzeSessionPatterns(
   const averageGrade =
     recentGrades.reduce((sum, session) => sum + session.grade, 0) /
     recentGrades.length;
-  let difficulty = "NORMAL";
+  let difficulty = 'NORMAL';
   if (averageGrade >= 90) {
-    difficulty = "CHALLENGING";
+    difficulty = 'CHALLENGING';
   } else if (averageGrade < 70) {
-    difficulty = "EASY";
+    difficulty = 'EASY';
   }
 
-  let priority: "high" | "medium" | "low" = "medium";
+  let priority: 'high' | 'medium' | 'low' = 'medium';
   if (input.streakState.streakAtRisk) {
-    priority = "high";
+    priority = 'high';
   } else if (averageGrade > 85) {
-    priority = "low";
+    priority = 'low';
   }
 
   return { duration: preferredDuration, difficulty, priority };
@@ -123,8 +123,8 @@ export function trackCoachSuggestionAccepted(
   suggestionId: string,
   action: string,
 ): void {
-  eventBus.publish("analytics:track", {
-    event: "vex_coach_suggestion_accepted",
+  eventBus.publish('analytics:track', {
+    event: 'vex_coach_suggestion_accepted',
     properties: { userId, suggestionId, action },
     timestamp: Date.now(),
   });
@@ -135,12 +135,12 @@ export function trackCoachSuggestionConversionFailed(
   suggestionId: string,
   error: unknown,
 ): void {
-  eventBus.publish("analytics:track", {
-    event: "vex_coach_suggestion_conversion_failed",
+  eventBus.publish('analytics:track', {
+    event: 'vex_coach_suggestion_conversion_failed',
     properties: {
       userId,
       suggestionId,
-      errorName: error instanceof Error ? error.name : "UnknownError",
+      errorName: error instanceof Error ? error.name : 'UnknownError',
     },
     timestamp: Date.now(),
   });
@@ -148,13 +148,13 @@ export function trackCoachSuggestionConversionFailed(
 
 function getTimeOfDay(hour: number): string {
   if (hour >= 5 && hour < 12) {
-    return "morning";
+    return 'morning';
   }
   if (hour >= 12 && hour < 17) {
-    return "afternoon";
+    return 'afternoon';
   }
   if (hour >= 17 && hour < 22) {
-    return "evening";
+    return 'evening';
   }
-  return "night";
+  return 'night';
 }

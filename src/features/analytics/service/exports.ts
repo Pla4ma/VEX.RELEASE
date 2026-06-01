@@ -1,14 +1,14 @@
-import * as repository from "../repository";
-import { uploadExportData, deleteExportData } from "../repository/storage";
+import * as repository from '../repository';
+import { uploadExportData, deleteExportData } from '../repository/storage';
 import {
   withRetry,
   CircuitBreaker,
   classifyError,
-} from "../../../shared/hardening";
-import { captureSilentFailure } from "../../../utils/silent-failure";
-import { eventBus } from "../../../events";
-import * as Sentry from "@sentry/react-native";
-import type { TimeRange, AnalyticsMetric } from "../schemas";
+} from '../../../shared/hardening';
+import { captureSilentFailure } from '../../../utils/silent-failure';
+import { eventBus } from '../../../events';
+import * as Sentry from '@sentry/react-native';
+import type { TimeRange, AnalyticsMetric } from '../schemas';
 
 const exportCircuitBreaker = new CircuitBreaker({
   failureThreshold: 3,
@@ -16,24 +16,24 @@ const exportCircuitBreaker = new CircuitBreaker({
   halfOpenMaxCalls: 1,
   onStateChange: (state) => {
     Sentry.addBreadcrumb({
-      category: "analytics_export",
+      category: 'analytics_export',
       message: `Export circuit breaker state: ${state}`,
-      level: state === "open" ? "error" : "warning",
+      level: state === 'open' ? 'error' : 'warning',
     });
   },
 });
 
 export async function exportAnalyticsData(
   userId: string,
-  format: "json" | "csv",
+  format: 'json' | 'csv',
   dateRange: { start: number; end: number },
 ) {
   const exportJob = await repository.createExportJob({
     id: crypto.randomUUID(),
     userId,
-    status: "pending",
+    status: 'pending',
     format,
-    dataTypes: ["sessions", "xp", "streaks", "insights"],
+    dataTypes: ['sessions', 'xp', 'streaks', 'insights'],
     dateRange,
     progress: 0,
     createdAt: Date.now(),
@@ -45,7 +45,7 @@ export async function exportAnalyticsData(
 async function processExportJob(
   jobId: string,
   userId: string,
-  format: "json" | "csv",
+  format: 'json' | 'csv',
   dateRange: { start: number; end: number },
   dataTypes?: string[],
 ) {
@@ -53,21 +53,21 @@ async function processExportJob(
   try {
     await exportCircuitBreaker.execute(async () => {
       await repository.updateExportJobProgress(jobId, 5);
-      const metricsToFetch = (dataTypes ?? ["sessions", "xp", "streaks"]).map(
+      const metricsToFetch = (dataTypes ?? ['sessions', 'xp', 'streaks']).map(
         (type) => {
           switch (type) {
-            case "sessions":
-              return "sessions_completed" as AnalyticsMetric;
-            case "xp":
-              return "xp_earned" as AnalyticsMetric;
-            case "streaks":
-              return "streak_days" as AnalyticsMetric;
-            case "boss":
-              return "boss_damage_dealt" as AnalyticsMetric;
-            case "items":
-              return "items_crafted" as AnalyticsMetric;
+            case 'sessions':
+              return 'sessions_completed' as AnalyticsMetric;
+            case 'xp':
+              return 'xp_earned' as AnalyticsMetric;
+            case 'streaks':
+              return 'streak_days' as AnalyticsMetric;
+            case 'boss':
+              return 'boss_damage_dealt' as AnalyticsMetric;
+            case 'items':
+              return 'items_crafted' as AnalyticsMetric;
             default:
-              return "sessions_completed" as AnalyticsMetric;
+              return 'sessions_completed' as AnalyticsMetric;
           }
         },
       );
@@ -79,8 +79,8 @@ async function processExportJob(
               repository.fetchTimeSeriesData(
                 userId,
                 metric,
-                "custom" as TimeRange,
-                "day",
+                'custom' as TimeRange,
+                'day',
               ),
             ),
           );
@@ -89,15 +89,15 @@ async function processExportJob(
           maxAttempts: 3,
           baseDelayMs: 1000,
           retryableErrors: [
-            "network_error",
-            "timeout",
-            "temporarily_unavailable",
+            'network_error',
+            'timeout',
+            'temporarily_unavailable',
           ],
           onRetry: (attempt, error) => {
             Sentry.addBreadcrumb({
-              category: "analytics_export",
+              category: 'analytics_export',
               message: `Retrying data fetch attempt ${attempt}`,
-              level: "warning",
+              level: 'warning',
               data: { jobId, error: error.message },
             });
           },
@@ -111,7 +111,7 @@ async function processExportJob(
           generatedAt: Date.now(),
           dateRange,
           format,
-          version: "2.0",
+          version: '2.0',
         },
       };
       metricsToFetch.forEach((metric, index) => {
@@ -131,12 +131,12 @@ async function processExportJob(
         {
           maxAttempts: 3,
           baseDelayMs: 2000,
-          retryableErrors: ["network_error", "timeout", "rate_limited"],
+          retryableErrors: ['network_error', 'timeout', 'rate_limited'],
           onRetry: (attempt, error) => {
             Sentry.addBreadcrumb({
-              category: "analytics_export",
+              category: 'analytics_export',
               message: `Retrying storage upload attempt ${attempt}`,
-              level: "warning",
+              level: 'warning',
               data: { jobId, error: error.message },
             });
           },
@@ -151,12 +151,12 @@ async function processExportJob(
       );
       const duration = Date.now() - startTime;
       Sentry.addBreadcrumb({
-        category: "analytics_export",
-        message: "Export completed successfully",
-        level: "info",
+        category: 'analytics_export',
+        message: 'Export completed successfully',
+        level: 'info',
         data: { jobId, userId, format, fileSize: uploadResult.size, duration },
       });
-      eventBus.publish("analytics:export_completed", {
+      eventBus.publish('analytics:export_completed', {
         jobId,
         userId,
         fileUrl: uploadResult.url,
@@ -164,14 +164,14 @@ async function processExportJob(
     });
   } catch (error) {
     const errorMessage =
-      error instanceof Error ? error.message : "Unknown error";
+      error instanceof Error ? error.message : 'Unknown error';
     const classified =
       error instanceof Error
         ? classifyError(error)
-        : { type: "unknown", retryable: false, severity: "high" };
+        : { type: 'unknown', retryable: false, severity: 'high' };
     Sentry.captureException(error, {
       tags: {
-        feature: "analytics_export",
+        feature: 'analytics_export',
         error_type: classified.type,
         retryable: String(classified.retryable),
       },
@@ -182,12 +182,12 @@ async function processExportJob(
       await deleteExportData(jobId, userId, format);
     } catch (deleteError) {
       captureSilentFailure(deleteError, {
-        feature: "analytics",
-        operation: "network-fallback",
-        type: "network",
+        feature: 'analytics',
+        operation: 'network-fallback',
+        type: 'network',
       });
     }
-    eventBus.publish("analytics:export_failed", {
+    eventBus.publish('analytics:export_failed', {
       jobId,
       userId,
       error: errorMessage,

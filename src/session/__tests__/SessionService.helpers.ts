@@ -1,14 +1,14 @@
-import { SessionService } from "../SessionService";
-import { getSessionOrchestrator } from "../orchestrator-factory";
-import type { SessionConfig, SessionState } from "../types";
+import { SessionService } from '../SessionService';
+import { getSessionOrchestrator } from '../orchestrator-factory';
+import type { SessionConfig, SessionState } from '../types';
 
-jest.mock("../orchestrator-factory", () => ({
+jest.mock('../orchestrator-factory', () => ({
   getSessionOrchestrator: jest.fn(),
   createSessionOrchestrator: jest.fn(),
   SessionOrchestrator: jest.fn(),
 }));
 
-jest.mock("../repository/SessionRepository", () => ({
+jest.mock('../repository/SessionRepository', () => ({
   getSessionRepository: jest.fn().mockReturnValue({
     setUserId: jest.fn(),
     getActiveSession: jest.fn().mockResolvedValue(null),
@@ -17,7 +17,7 @@ jest.mock("../repository/SessionRepository", () => ({
   }),
 }));
 
-jest.mock("../SessionEventEmitter", () => ({
+jest.mock('../SessionEventEmitter', () => ({
   getSessionEventEmitter: jest.fn().mockReturnValue({
     attach: jest.fn(),
     detach: jest.fn(),
@@ -26,20 +26,20 @@ jest.mock("../SessionEventEmitter", () => ({
   }),
 }));
 
-jest.mock("../integration/RewardAdapter", () => ({
+jest.mock('../integration/RewardAdapter', () => ({
   getRewardAdapter: jest.fn().mockReturnValue({
     setUserId: jest.fn(),
   }),
 }));
 
-jest.mock("../presets", () => ({
+jest.mock('../presets', () => ({
   getPresetService: jest.fn().mockReturnValue({
     setUserId: jest.fn(),
     getPresetById: jest.fn().mockReturnValue(null),
   }),
 }));
 
-jest.mock("../integration/SessionRewardIntegration", () => ({
+jest.mock('../integration/SessionRewardIntegration', () => ({
   getSessionRewardIntegration: jest.fn().mockReturnValue({
     onSessionComplete: jest.fn(),
   }),

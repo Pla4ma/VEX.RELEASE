@@ -1,10 +1,10 @@
-import React from "react";
-import { View } from "react-native";
+import React from 'react';
+import { View } from 'react-native';
 
-import { getPremiumCardStyle } from "../../../components/premiumStyles";
-import { Button } from "../../../components/primitives/Button";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
+import { getPremiumCardStyle } from '../../../components/premiumStyles';
+import { Button } from '../../../components/primitives/Button';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
 
 export function ProgressPreviewCard({
   body,
@@ -28,7 +28,7 @@ export function ProgressPreviewCard({
         backgroundColor: theme.colors.background.secondary,
         padding: theme.spacing[4],
         gap: theme.spacing[3],
-        ...getPremiumCardStyle("medium"),
+        ...getPremiumCardStyle('medium'),
       }}
     >
       <Text variant="label" color={theme.colors.text.secondary}>
@@ -59,7 +59,7 @@ export function ReturnReasonCard({
   eyebrow,
   onDismiss,
   onPress,
-  tone = "default",
+  tone = 'default',
   title,
 }: {
   body: string;
@@ -67,7 +67,7 @@ export function ReturnReasonCard({
   eyebrow: string;
   onDismiss?: () => void;
   onPress: () => void;
-  tone?: "default" | "celebration" | "info" | "warning";
+  tone?: 'default' | 'celebration' | 'info' | 'warning';
   title: string;
 }) {
   const { theme } = useTheme();
@@ -97,7 +97,7 @@ export function ReturnReasonCard({
         padding: theme.spacing[4],
         gap: theme.spacing[3],
         ...toneStyles,
-        ...getPremiumCardStyle("large"),
+        ...getPremiumCardStyle('large'),
       }}
     >
       <Text variant="label" color={theme.colors.primary[500]}>
@@ -111,8 +111,8 @@ export function ReturnReasonCard({
       </Text>
       <View
         style={{
-          flexDirection: "row",
-          flexWrap: "wrap",
+          flexDirection: 'row',
+          flexWrap: 'wrap',
           gap: theme.spacing[3],
         }}
       >

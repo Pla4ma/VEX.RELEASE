@@ -1,14 +1,14 @@
-import { Dimensions } from "react-native";
+import { Dimensions } from 'react-native';
 
-export const DAY_WIDTH = (Dimensions.get("window").width - 40) / 7;
+export const DAY_WIDTH = (Dimensions.get('window').width - 40) / 7;
 
-export type DayStatus = "completed" | "partial" | "upcoming" | "missed";
+export type DayStatus = 'completed' | 'partial' | 'upcoming' | 'missed';
 export type EventType =
-  | "squad_war"
-  | "double_xp"
-  | "challenge_expires"
-  | "season_ends"
-  | "boss_rush";
+  | 'squad_war'
+  | 'double_xp'
+  | 'challenge_expires'
+  | 'season_ends'
+  | 'boss_rush';
 
 export interface DayData {
   date: Date;
@@ -26,17 +26,17 @@ export interface WeeklyCalendarProps {
 }
 
 export const EVENT_ICONS: Record<EventType, string> = {
-  squad_war: "⚔️",
-  double_xp: "🔥",
-  challenge_expires: "🏆",
-  season_ends: "🌙",
-  boss_rush: "👹",
+  squad_war: '⚔️',
+  double_xp: '🔥',
+  challenge_expires: '🏆',
+  season_ends: '🌙',
+  boss_rush: '👹',
 };
 
 export const EVENT_LABELS: Record<EventType, string> = {
-  squad_war: "Squad War",
-  double_xp: "Double XP",
-  challenge_expires: "Challenge Ends",
-  season_ends: "Season Ends",
-  boss_rush: "Boss Rush",
+  squad_war: 'Squad War',
+  double_xp: 'Double XP',
+  challenge_expires: 'Challenge Ends',
+  season_ends: 'Season Ends',
+  boss_rush: 'Boss Rush',
 };

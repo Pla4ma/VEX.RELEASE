@@ -1,14 +1,14 @@
-import type { TimerState, TimerConfig } from "../types";
-import { createDebugger } from "../../utils/debug";
-import type { TimerCallbacks } from "./timer-types";
+import type { TimerState, TimerConfig } from '../types';
+import { createDebugger } from '../../utils/debug';
+import type { TimerCallbacks } from './timer-types';
 import {
   processTick,
   checkWarnings,
   createIntervalManager,
   type IntervalManager,
-} from "./timer-tick-handler";
+} from './timer-tick-handler';
 
-export const debug = createDebugger("session:timer");
+export const debug = createDebugger('session:timer');
 
 export class TimerEngineBase {
   protected state: TimerState;
@@ -53,7 +53,7 @@ export class TimerEngineBase {
       () => this.backgroundTick(),
     );
     debug.info(
-      "TimerEngine created for session %s, duration: %ds",
+      'TimerEngine created for session %s, duration: %ds',
       sessionId,
       duration,
     );
@@ -61,7 +61,7 @@ export class TimerEngineBase {
 
   start(): void {
     if (this.state.isRunning) {
-      debug.warn("Timer already running for session %s", this.sessionId);
+      debug.warn('Timer already running for session %s', this.sessionId);
       return;
     }
     const now = Date.now();
@@ -72,23 +72,23 @@ export class TimerEngineBase {
     this.lastTickTime = now;
     this.warningSent.clear();
     this.intervals.startTickInterval();
-    debug.info("Timer started for session %s", this.sessionId);
+    debug.info('Timer started for session %s', this.sessionId);
   }
 
   pause(reason?: string): void {
-    if (!this.state.isRunning || this.state.isPaused) return;
+    if (!this.state.isRunning || this.state.isPaused) {return;}
     this.state.isPaused = true;
     this.state.pauseTime = Date.now();
     this.intervals.stopTickInterval();
     debug.info(
-      "Timer paused for session %s (reason: %s)",
+      'Timer paused for session %s (reason: %s)',
       this.sessionId,
-      reason || "user",
+      reason || 'user',
     );
   }
 
   resume(): void {
-    if (!this.state.isRunning || !this.state.isPaused) return;
+    if (!this.state.isRunning || !this.state.isPaused) {return;}
     const now = Date.now();
     const pauseDuration = now - (this.state.pauseTime || now);
     this.state.isPaused = false;
@@ -98,7 +98,7 @@ export class TimerEngineBase {
     this.lastTickTime = now;
     this.intervals.startTickInterval();
     debug.info(
-      "Timer resumed for session %s (paused for %dms)",
+      'Timer resumed for session %s (paused for %dms)',
       this.sessionId,
       pauseDuration,
     );
@@ -109,20 +109,20 @@ export class TimerEngineBase {
     this.state.isPaused = false;
     this.intervals.stopTickInterval();
     this.intervals.stopBackgroundInterval();
-    debug.info("Timer stopped for session %s", this.sessionId);
+    debug.info('Timer stopped for session %s', this.sessionId);
   }
 
   background(): void {
-    if (!this.state.isRunning || this.state.isPaused) return;
+    if (!this.state.isRunning || this.state.isPaused) {return;}
     this.isBackgrounded = true;
     this.state.lastTickAt = Date.now();
     this.intervals.stopTickInterval();
     this.intervals.startBackgroundInterval();
-    debug.info("Timer backgrounded for session %s", this.sessionId);
+    debug.info('Timer backgrounded for session %s', this.sessionId);
   }
 
   foreground(): number {
-    if (!this.isBackgrounded) return 0;
+    if (!this.isBackgrounded) {return 0;}
     this.isBackgrounded = false;
     const now = Date.now();
     const backgroundDuration = now - (this.state.lastTickAt || now);
@@ -130,7 +130,7 @@ export class TimerEngineBase {
     if (backgroundDuration > (this.config.pauseThreshold ?? 5000)) {
       this.state.totalPausedTime += backgroundDuration;
       debug.info(
-        "Timer auto-paused after background: %dms",
+        'Timer auto-paused after background: %dms',
         backgroundDuration,
       );
     } else {
@@ -139,9 +139,9 @@ export class TimerEngineBase {
     this.state.lastTickAt = now;
     this.lastTickTime = now;
     if (this.state.isRunning && !this.state.isPaused)
-      this.intervals.startTickInterval();
+      {this.intervals.startTickInterval();}
     debug.info(
-      "Timer foregrounded for session %s (duration: %dms)",
+      'Timer foregrounded for session %s (duration: %dms)',
       this.sessionId,
       backgroundDuration,
     );
@@ -176,17 +176,17 @@ export class TimerEngineBase {
       );
     }
     this.callbacks.onTick(result.elapsed, result.remaining, result.percentage);
-    if (result.shouldComplete) this.complete();
+    if (result.shouldComplete) {this.complete();}
   }
 
   private complete(): void {
     this.stop();
     this.callbacks.onComplete();
-    debug.info("Timer completed for session %s", this.sessionId);
+    debug.info('Timer completed for session %s', this.sessionId);
   }
 
   destroy(): void {
     this.stop();
-    debug.info("TimerEngine destroyed for session %s", this.sessionId);
+    debug.info('TimerEngine destroyed for session %s', this.sessionId);
   }
 }

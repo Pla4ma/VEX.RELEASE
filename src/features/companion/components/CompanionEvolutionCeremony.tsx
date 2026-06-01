@@ -1,29 +1,29 @@
-import React, { useEffect, useState } from "react";
-import { Pressable } from "react-native";
-import { Box, Text } from "../../../components/primitives";
-import { useTheme } from "../../../theme";
-import { getElementThemeColors } from "./companion-evolution-types";
-import type { EvolutionPhase, CompanionEvolutionCeremonyProps } from "./companion-evolution-types";
-import { useCeremonyAnimation } from "./companion-evolution-hooks";
-import { companionEvolution } from "../../../utils/haptics";
+import React, { useEffect, useState } from 'react';
+import { Pressable } from 'react-native';
+import { Box, Text } from '../../../components/primitives';
+import { useTheme } from '../../../theme';
+import { getElementThemeColors } from './companion-evolution-types';
+import type { EvolutionPhase, CompanionEvolutionCeremonyProps } from './companion-evolution-types';
+import { useCeremonyAnimation } from './companion-evolution-hooks';
+import { companionEvolution } from '../../../utils/haptics';
 import {
   GlowLayer,
   FlashLayer,
   OldFormLayer,
   NewFormLayer,
-} from "./companion-evolution-layers";
+} from './companion-evolution-layers';
 import {
   ParticleLayer,
   CelebrationLayer,
   PhaseIndicators,
-} from "./companion-evolution-effects";
+} from './companion-evolution-effects';
 
 export const CompanionEvolutionCeremony: React.FC<
   CompanionEvolutionCeremonyProps
 > = ({ previousState, newPhase, onComplete }) => {
   const { theme } = useTheme();
   const [ceremonyPhase, setCeremonyPhase] =
-    useState<EvolutionPhase>("energy-buildup");
+    useState<EvolutionPhase>('energy-buildup');
 
   const { runCeremony, styles } = useCeremonyAnimation();
   const themeColors = getElementThemeColors(previousState.element);
@@ -33,7 +33,7 @@ export const CompanionEvolutionCeremony: React.FC<
   }, [runCeremony, setCeremonyPhase]);
 
   const handleTap = () => {
-    if (ceremonyPhase === "complete") {
+    if (ceremonyPhase === 'complete') {
       companionEvolution();
       onComplete();
     }
@@ -52,7 +52,7 @@ export const CompanionEvolutionCeremony: React.FC<
         alignItems="center"
         justifyContent="center"
         bg={theme.colors.background.primary}
-        style={{ position: "relative" }}
+        style={{ position: 'relative' }}
       >
         <GlowLayer
           glowStyle={styles.glowStyle}
@@ -61,7 +61,7 @@ export const CompanionEvolutionCeremony: React.FC<
         />
         <FlashLayer flashStyle={styles.flashStyle} />
 
-        {(ceremonyPhase === "energy-buildup" || ceremonyPhase === "flash") && (
+        {(ceremonyPhase === 'energy-buildup' || ceremonyPhase === 'flash') && (
           <OldFormLayer
             oldFormStyle={styles.oldFormStyle}
             themeColors={themeColors}
@@ -69,9 +69,9 @@ export const CompanionEvolutionCeremony: React.FC<
           />
         )}
 
-        {(ceremonyPhase === "transformation" ||
-          ceremonyPhase === "celebration" ||
-          ceremonyPhase === "complete") && (
+        {(ceremonyPhase === 'transformation' ||
+          ceremonyPhase === 'celebration' ||
+          ceremonyPhase === 'complete') && (
           <NewFormLayer
             newFormStyle={styles.newFormStyle}
             themeColors={themeColors}
@@ -79,15 +79,15 @@ export const CompanionEvolutionCeremony: React.FC<
           />
         )}
 
-        {ceremonyPhase === "transformation" && (
+        {ceremonyPhase === 'transformation' && (
           <ParticleLayer
             particleStyle={styles.particleStyle}
             themeColors={themeColors}
           />
         )}
 
-        {(ceremonyPhase === "celebration" ||
-          ceremonyPhase === "complete") && (
+        {(ceremonyPhase === 'celebration' ||
+          ceremonyPhase === 'complete') && (
           <CelebrationLayer
             textStyle={styles.textStyle}
             themeColors={themeColors}
@@ -96,7 +96,7 @@ export const CompanionEvolutionCeremony: React.FC<
           />
         )}
 
-        {ceremonyPhase === "complete" && (
+        {ceremonyPhase === 'complete' && (
           <Box
             position="absolute"
             bottom={40}

@@ -1,17 +1,17 @@
-import React, { useCallback } from "react";
-import { View } from "react-native";
-import { useTheme } from "../../../theme";
-import { progressStepsStyles as styles } from "./progress-steps-styles";
-import type { ProgressStepsProps, StepStatus } from "./progress-steps-types";
-import { StepIndicator } from "./StepIndicator";
-import { Connector } from "./Connector";
+import React, { useCallback } from 'react';
+import { View } from 'react-native';
+import { useTheme } from '../../../theme';
+import { progressStepsStyles as styles } from './progress-steps-styles';
+import type { ProgressStepsProps, StepStatus } from './progress-steps-types';
+import { StepIndicator } from './StepIndicator';
+import { Connector } from './Connector';
 
 export const ProgressSteps: React.FC<ProgressStepsProps> = ({
   steps,
   currentStep,
-  orientation = "horizontal",
-  size = "md",
-  variant = "default",
+  orientation = 'horizontal',
+  size = 'md',
+  variant = 'default',
   showDescriptions = true,
   allowClick = false,
   onStepPress,
@@ -28,31 +28,31 @@ export const ProgressSteps: React.FC<ProgressStepsProps> = ({
   );
   const containerStyle = [
     styles.container,
-    orientation === "horizontal"
+    orientation === 'horizontal'
       ? styles.containerHorizontal
       : styles.containerVertical,
     style,
   ];
   return (
     <View style={containerStyle}>
-      {" "}
+      {' '}
       {steps.map((step, index) => {
         const isLast = index === steps.length - 1;
-        const isCompleted = index < currentStep || step.status === "completed";
-        const isActive = index === currentStep || step.status === "active";
+        const isCompleted = index < currentStep || step.status === 'completed';
+        const isActive = index === currentStep || step.status === 'active';
         let effectiveStatus: StepStatus = step.status;
-        if (!effectiveStatus || effectiveStatus === "pending") {
+        if (!effectiveStatus || effectiveStatus === 'pending') {
           if (isCompleted) {
-            effectiveStatus = "completed";
+            effectiveStatus = 'completed';
           } else if (isActive) {
-            effectiveStatus = "active";
+            effectiveStatus = 'active';
           } else {
-            effectiveStatus = "pending";
+            effectiveStatus = 'pending';
           }
         }
         return (
           <React.Fragment key={step.id}>
-            {" "}
+            {' '}
             <StepIndicator
               status={effectiveStatus}
               index={index}
@@ -71,13 +71,13 @@ export const ProgressSteps: React.FC<ProgressStepsProps> = ({
                 orientation={orientation}
                 theme={theme}
               />
-            )}{" "}
+            )}{' '}
           </React.Fragment>
         );
-      })}{" "}
+      })}{' '}
     </View>
   );
 };
 
-export type { Step, StepStatus, ProgressStepsProps } from "./progress-steps-types";
+export type { Step, StepStatus, ProgressStepsProps } from './progress-steps-types';
 export default ProgressSteps;

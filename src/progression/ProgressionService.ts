@@ -1,5 +1,5 @@
-import { addXp } from "../features/progression/service";
-import type { XpSource } from "../features/progression/schemas";
+import { addXp } from '../features/progression/service';
+import type { XpSource } from '../features/progression/schemas';
 
 export type ProgressionServiceState = {
   currentLevel: number;
@@ -29,13 +29,13 @@ export type ProgressionService = {
 
 function normalizeXpSource(source: string): XpSource {
   if (
-    source === "STREAK_BONUS" ||
-    source === "BOSS_BONUS" ||
-    source === "SQUAD_BONUS"
+    source === 'STREAK_BONUS' ||
+    source === 'BOSS_BONUS' ||
+    source === 'SQUAD_BONUS'
   ) {
     return source;
   }
-  return "SESSION_COMPLETE";
+  return 'SESSION_COMPLETE';
 }
 
 function createDefaultState(): ProgressionServiceState {
@@ -78,7 +78,7 @@ export function getProgressionService(userId?: string): ProgressionService {
     },
     async prestige(): Promise<void> {
       if (!this.canPrestige()) {
-        throw new Error("Cannot prestige: requirements not met");
+        throw new Error('Cannot prestige: requirements not met');
       }
       state.level = 1;
       state.totalXp = 0;

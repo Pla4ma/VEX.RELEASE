@@ -1,5 +1,5 @@
-import { useQuery, type UseQueryOptions } from "@tanstack/react-query";
-import * as service from "../service";
+import { useQuery, type UseQueryOptions } from '@tanstack/react-query';
+import * as service from '../service';
 import {
   type Setting,
   type UserPreferences,
@@ -7,13 +7,13 @@ import {
   type CoachSettings,
   type AppearanceSettings,
   type PrivacySettings,
-} from "../types";
-import { settingsKeys } from "./queryKeys";
+} from '../types';
+import { settingsKeys } from './queryKeys';
 
 export function useSetting(
   userId: string,
   key: string,
-  options?: Omit<UseQueryOptions<Setting | null>, "queryKey" | "queryFn">,
+  options?: Omit<UseQueryOptions<Setting | null>, 'queryKey' | 'queryFn'>,
 ) {
   return useQuery({
     queryKey: settingsKeys.setting(userId, key),
@@ -26,7 +26,7 @@ export function useSetting(
 
 export function useAllSettings(
   userId: string,
-  options?: Omit<UseQueryOptions<Setting[]>, "queryKey" | "queryFn">,
+  options?: Omit<UseQueryOptions<Setting[]>, 'queryKey' | 'queryFn'>,
 ) {
   return useQuery({
     queryKey: settingsKeys.user(userId),
@@ -39,7 +39,7 @@ export function useAllSettings(
 
 export function useUserPreferences(
   userId: string,
-  options?: Omit<UseQueryOptions<UserPreferences>, "queryKey" | "queryFn">,
+  options?: Omit<UseQueryOptions<UserPreferences>, 'queryKey' | 'queryFn'>,
 ) {
   return useQuery({
     queryKey: settingsKeys.preferences(userId),
@@ -52,7 +52,7 @@ export function useUserPreferences(
 
 export function useNotificationSettings(
   userId: string,
-  options?: Omit<UseQueryOptions<NotificationSettings>, "queryKey" | "queryFn">,
+  options?: Omit<UseQueryOptions<NotificationSettings>, 'queryKey' | 'queryFn'>,
 ) {
   return useQuery({
     queryKey: settingsKeys.notifications(userId),
@@ -65,7 +65,7 @@ export function useNotificationSettings(
 
 export function useCoachSettings(
   userId: string,
-  options?: Omit<UseQueryOptions<CoachSettings>, "queryKey" | "queryFn">,
+  options?: Omit<UseQueryOptions<CoachSettings>, 'queryKey' | 'queryFn'>,
 ) {
   return useQuery({
     queryKey: settingsKeys.coach(userId),
@@ -78,7 +78,7 @@ export function useCoachSettings(
 
 export function useAppearanceSettings(
   userId: string,
-  options?: Omit<UseQueryOptions<AppearanceSettings>, "queryKey" | "queryFn">,
+  options?: Omit<UseQueryOptions<AppearanceSettings>, 'queryKey' | 'queryFn'>,
 ) {
   return useQuery({
     queryKey: settingsKeys.appearance(userId),
@@ -91,7 +91,7 @@ export function useAppearanceSettings(
 
 export function usePrivacySettings(
   userId: string,
-  options?: Omit<UseQueryOptions<PrivacySettings>, "queryKey" | "queryFn">,
+  options?: Omit<UseQueryOptions<PrivacySettings>, 'queryKey' | 'queryFn'>,
 ) {
   return useQuery({
     queryKey: settingsKeys.privacy(userId),

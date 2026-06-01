@@ -11,16 +11,16 @@
 export {
   MotionAccessibilityManager,
   motionAccessibilityManager,
-} from "../../src/accessibility/motion-manager";
+} from '../../src/accessibility/motion-manager';
 
 export {
   type MotionPreferences,
   DEFAULT_MOTION_PREFERENCES,
   type AnimationType,
   type AnimationConfig,
-} from "../../src/accessibility/motion-preferences";
+} from '../../src/accessibility/motion-preferences';
 
 export {
   type AnimatedValue,
   type CompositeAnimation,
-} from "../../src/accessibility/motion-animation-stubs";
+} from '../../src/accessibility/motion-animation-stubs';

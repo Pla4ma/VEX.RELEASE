@@ -5,10 +5,10 @@
  * adaptive difficulty preferences.
  */
 
-import { z } from "zod";
-import * as Sentry from "@sentry/react-native";
-import { getSupabaseClient } from "../../config/supabase";
-import type { DifficultyPreference, SessionDifficulty } from "./schemas";
+import { z } from 'zod';
+import * as Sentry from '@sentry/react-native';
+import { getSupabaseClient } from '../../config/supabase';
+import type { DifficultyPreference, SessionDifficulty } from './schemas';
 
 // ============================================================================
 // ERROR HANDLING
@@ -20,7 +20,7 @@ class RepositoryError extends Error {
     public originalError: unknown,
   ) {
     super(`Repository error in ${operation}: ${originalError}`);
-    this.name = "RepositoryError";
+    this.name = 'RepositoryError';
   }
 }
 
@@ -38,16 +38,16 @@ export async function getDifficultyPreference(
     const supabase = getSupabaseClient();
 
     const { data, error } = await supabase
-      .from("difficulty_preferences")
-      .select("*")
-      .eq("user_id", userId)
+      .from('difficulty_preferences')
+      .select('*')
+      .eq('user_id', userId)
       .single();
 
     if (error) {
-      if (error.code === "PGRST116") {
+      if (error.code === 'PGRST116') {
         return null; // No preference found
       }
-      throw new RepositoryError("getDifficultyPreference", error);
+      throw new RepositoryError('getDifficultyPreference', error);
     }
 
     return {
@@ -62,8 +62,8 @@ export async function getDifficultyPreference(
   } catch (error) {
     Sentry.captureException(error, {
       tags: {
-        feature: "session-start",
-        operation: "get-difficulty-preference",
+        feature: 'session-start',
+        operation: 'get-difficulty-preference',
       },
     });
     return null;
@@ -79,7 +79,7 @@ export async function saveDifficultyPreference(
   try {
     const supabase = getSupabaseClient();
 
-    const { error } = await supabase.from("difficulty_preferences").upsert({
+    const { error } = await supabase.from('difficulty_preferences').upsert({
       user_id: preference.userId,
       current_difficulty: preference.currentDifficulty,
       suggested_difficulty: preference.suggestedDifficulty,
@@ -91,13 +91,13 @@ export async function saveDifficultyPreference(
     });
 
     if (error) {
-      throw new RepositoryError("saveDifficultyPreference", error);
+      throw new RepositoryError('saveDifficultyPreference', error);
     }
   } catch (error) {
     Sentry.captureException(error, {
       tags: {
-        feature: "session-start",
-        operation: "save-difficulty-preference",
+        feature: 'session-start',
+        operation: 'save-difficulty-preference',
       },
     });
     throw error;
@@ -114,20 +114,20 @@ export async function updateCurrentDifficulty(
   try {
     const supabase = getSupabaseClient();
 
-    const { error } = await supabase.from("difficulty_preferences").upsert({
+    const { error } = await supabase.from('difficulty_preferences').upsert({
       user_id: userId,
       current_difficulty: difficulty,
       updated_at: new Date().toISOString(),
     });
 
     if (error) {
-      throw new RepositoryError("updateCurrentDifficulty", error);
+      throw new RepositoryError('updateCurrentDifficulty', error);
     }
   } catch (error) {
     Sentry.captureException(error, {
       tags: {
-        feature: "session-start",
-        operation: "update-current-difficulty",
+        feature: 'session-start',
+        operation: 'update-current-difficulty',
       },
     });
     throw error;

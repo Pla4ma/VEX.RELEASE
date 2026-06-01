@@ -1,8 +1,8 @@
-import React from "react";
-import Animated, { FadeInUp } from "react-native-reanimated";
-import { Text } from "../../../components/primitives";
-import { useTheme } from "../../../theme";
-import type { CoachMessage } from "../types";
+import React from 'react';
+import Animated, { FadeInUp } from 'react-native-reanimated';
+import { Text } from '../../../components/primitives';
+import { useTheme } from '../../../theme';
+import type { CoachMessage } from '../types';
 
 export interface SystemMessageBubbleProps {
   message: CoachMessage;
@@ -16,29 +16,29 @@ export function SystemMessageBubble({
   const { theme } = useTheme();
   const getCategoryIcon = () => {
     switch (message.category) {
-      case "STREAK_RISK":
-        return "🔥";
-      case "MILESTONE_HYPE":
-        return "🎉";
-      case "SESSION_SUGGESTION":
-        return "💡";
-      case "COMEBACK_SUPPORT":
-        return "💪";
-      case "POST_FAILURE":
-        return "🌱";
+      case 'STREAK_RISK':
+        return '🔥';
+      case 'MILESTONE_HYPE':
+        return '🎉';
+      case 'SESSION_SUGGESTION':
+        return '💡';
+      case 'COMEBACK_SUPPORT':
+        return '💪';
+      case 'POST_FAILURE':
+        return '🌱';
       default:
-        return "📢";
+        return '📢';
     }
   };
   const getCategoryColor = () => {
     switch (message.category) {
-      case "STREAK_RISK":
+      case 'STREAK_RISK':
         return theme.colors.error[500];
-      case "MILESTONE_HYPE":
+      case 'MILESTONE_HYPE':
         return theme.colors.success[500];
-      case "SESSION_SUGGESTION":
+      case 'SESSION_SUGGESTION':
         return theme.colors.primary[500];
-      case "COMEBACK_SUPPORT":
+      case 'COMEBACK_SUPPORT':
         return theme.colors.warning[500];
       default:
         return theme.colors.accent.purple;
@@ -50,10 +50,10 @@ export function SystemMessageBubble({
         .delay(index * 100)
         .springify()}
       style={{
-        alignSelf: "center",
-        alignItems: "center",
+        alignSelf: 'center',
+        alignItems: 'center',
         marginVertical: theme.spacing[3],
-        maxWidth: "80%",
+        maxWidth: '80%',
       }}
     >
       <Animated.View
@@ -61,7 +61,7 @@ export function SystemMessageBubble({
           backgroundColor: `${getCategoryColor()}15`,
           borderRadius: theme.borderRadius.xl,
           padding: theme.spacing[3],
-          alignItems: "center",
+          alignItems: 'center',
           borderWidth: 1,
           borderColor: `${getCategoryColor()}30`,
         }}
@@ -96,7 +96,7 @@ export function UserMessageBubble({
   const { theme } = useTheme();
   const formatTime = (ts: number): string => {
     const date = new Date(ts);
-    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
   return (
     <Animated.View
@@ -104,8 +104,8 @@ export function UserMessageBubble({
         .delay(index * 100)
         .springify()}
       style={{
-        alignSelf: "flex-end",
-        maxWidth: "80%",
+        alignSelf: 'flex-end',
+        maxWidth: '80%',
         marginBottom: theme.spacing[3],
       }}
     >

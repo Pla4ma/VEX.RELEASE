@@ -5,11 +5,11 @@ import {
   studyProfile,
   calmFirstWeek,
   baseStats,
-} from "./HomeHeroSurfaceGating-helpers";
+} from './HomeHeroSurfaceGating-helpers';
 
-describe("HomeHeroSurfaceGating — feature surface gates", () => {
-  describe("Day 0 user always gets Start First Session as primary", () => {
-    it("Day 0 surface map has start_session as primary", () => {
+describe('HomeHeroSurfaceGating — feature surface gates', () => {
+  describe('Day 0 user always gets Start First Session as primary', () => {
+    it('Day 0 surface map has start_session as primary', () => {
       const map = decideHomeSurfaces({
         featureAvailability,
         personalizationProfile: gameLikeProfile,
@@ -19,18 +19,18 @@ describe("HomeHeroSurfaceGating — feature surface gates", () => {
         hasActiveBoss: false,
         isFirstSession: true,
       });
-      expect(map.start_session).toBe("primary");
+      expect(map.start_session).toBe('primary');
     });
 
-    it("Day 0 firstWeek has START_SESSION primary CTA", () => {
+    it('Day 0 firstWeek has START_SESSION primary CTA', () => {
       const fw = calmFirstWeek();
-      expect(fw.currentDayStage).toBe("DAY_0_NOT_STARTED");
-      expect(fw.primaryCTA.intent).toBe("START_SESSION");
+      expect(fw.currentDayStage).toBe('DAY_0_NOT_STARTED');
+      expect(fw.primaryCTA.intent).toBe('START_SESSION');
     });
   });
 
-  describe("HomePriority OPEN_CHALLENGES is filtered when challenges surface blocked", () => {
-    it("challenges surface blocked when feature unavailable", () => {
+  describe('HomePriority OPEN_CHALLENGES is filtered when challenges surface blocked', () => {
+    it('challenges surface blocked when feature unavailable', () => {
       const map = decideHomeSurfaces({
         featureAvailability: { ...featureAvailability, challenges: false },
         personalizationProfile: gameLikeProfile,
@@ -41,15 +41,15 @@ describe("HomeHeroSurfaceGating — feature surface gates", () => {
         isFirstSession: false,
       });
       const challengesBlocked =
-        (map.challenge_teaser === "hidden" ||
-          map.challenge_teaser === "blocked") &&
-        (map.weekly_quest === "hidden" || map.weekly_quest === "blocked");
+        (map.challenge_teaser === 'hidden' ||
+          map.challenge_teaser === 'blocked') &&
+        (map.weekly_quest === 'hidden' || map.weekly_quest === 'blocked');
       expect(challengesBlocked).toBe(true);
     });
   });
 
-  describe("Premium CTA is blocked before value", () => {
-    it("premium_tease hidden when no sessions or attempts", () => {
+  describe('Premium CTA is blocked before value', () => {
+    it('premium_tease hidden when no sessions or attempts', () => {
       const map = decideHomeSurfaces({
         featureAvailability,
         personalizationProfile: studyProfile,
@@ -62,12 +62,12 @@ describe("HomeHeroSurfaceGating — feature surface gates", () => {
         hasActiveBoss: false,
         isFirstSession: false,
       });
-      expect(map.premium_tease).toBe("hidden");
+      expect(map.premium_tease).toBe('hidden');
     });
   });
 
-  describe("Study CTA only appears when study_layer surface allowed", () => {
-    it("study_layer visible for study user", () => {
+  describe('Study CTA only appears when study_layer surface allowed', () => {
+    it('study_layer visible for study user', () => {
       const map = decideHomeSurfaces({
         featureAvailability,
         personalizationProfile: studyProfile,
@@ -80,10 +80,10 @@ describe("HomeHeroSurfaceGating — feature surface gates", () => {
         hasActiveBoss: false,
         isFirstSession: false,
       });
-      expect(map.study_layer).toBe("spotlight");
+      expect(map.study_layer).toBe('spotlight');
     });
 
-    it("study_layer hidden for non-study user", () => {
+    it('study_layer hidden for non-study user', () => {
       const map = decideHomeSurfaces({
         featureAvailability,
         personalizationProfile: gameLikeProfile,
@@ -96,7 +96,7 @@ describe("HomeHeroSurfaceGating — feature surface gates", () => {
         hasActiveBoss: false,
         isFirstSession: false,
       });
-      expect(map.study_layer).toBe("hidden");
+      expect(map.study_layer).toBe('hidden');
     });
   });
 });

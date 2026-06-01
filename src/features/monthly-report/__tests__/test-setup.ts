@@ -5,7 +5,7 @@ export const mockLte = jest.fn();
 export const mockOrder = jest.fn();
 export const mockSingle = jest.fn();
 
-jest.mock("../../../config/supabase", () => ({
+jest.mock('../../../config/supabase', () => ({
   supabase: {
     from: jest.fn(() => ({
       select: mockSelect,

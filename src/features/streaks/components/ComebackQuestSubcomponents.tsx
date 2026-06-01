@@ -1,7 +1,7 @@
-import React from "react";
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
+import React from 'react';
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
 
 export function QuestStep({
   step,
@@ -25,7 +25,7 @@ export function QuestStep({
       gap="md"
       p="md"
       borderRadius="lg"
-      bg={isActive ? "background.tertiary" : "background.secondary"}
+      bg={isActive ? 'background.tertiary' : 'background.secondary'}
       style={{
         opacity: isCompleted ? 0.7 : 1,
         borderLeftWidth: 4,
@@ -56,7 +56,7 @@ export function QuestStep({
         ) : (
           <Text
             variant="caption"
-            color={isActive ? "white" : "text.tertiary"}
+            color={isActive ? 'white' : 'text.tertiary'}
             fontWeight="700"
           >
             {step}
@@ -68,8 +68,8 @@ export function QuestStep({
       <Box flex={1}>
         <Text
           variant="body"
-          color={isActive ? "text.primary" : "text.secondary"}
-          fontWeight={isActive ? "600" : "400"}
+          color={isActive ? 'text.primary' : 'text.secondary'}
+          fontWeight={isActive ? '600' : '400'}
         >
           {title}
         </Text>

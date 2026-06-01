@@ -1,34 +1,34 @@
-import type { FeatureAccessMap, FeatureKey } from "../features/liveops-config/feature-access";
+import type { FeatureAccessMap, FeatureKey } from '../features/liveops-config/feature-access';
 
 export const QueryKeys = {
   SESSION: {
-    CONFIG: ["session", "config"] as const,
-    ACTIVE: ["session", "active"] as const,
-    HISTORY: ["session", "history"] as const,
+    CONFIG: ['session', 'config'] as const,
+    ACTIVE: ['session', 'active'] as const,
+    HISTORY: ['session', 'history'] as const,
   },
   SQUAD: {
-    MEMBERS: ["squad", "members"] as const,
-    STATUS: ["squad", "status"] as const,
-    WARS: ["squad", "wars"] as const,
+    MEMBERS: ['squad', 'members'] as const,
+    STATUS: ['squad', 'status'] as const,
+    WARS: ['squad', 'wars'] as const,
   },
   SOCIAL: {
-    FEED: ["social", "feed"] as const,
-    RIVALS: ["social", "rivals"] as const,
-    LEADERBOARD: ["social", "leaderboard"] as const,
+    FEED: ['social', 'feed'] as const,
+    RIVALS: ['social', 'rivals'] as const,
+    LEADERBOARD: ['social', 'leaderboard'] as const,
   },
   SHOP: {
-    ITEMS: ["shop", "items"] as const,
-    CATEGORIES: ["shop", "categories"] as const,
-    OFFERS: ["shop", "offers"] as const,
+    ITEMS: ['shop', 'items'] as const,
+    CATEGORIES: ['shop', 'categories'] as const,
+    OFFERS: ['shop', 'offers'] as const,
   },
   BATTLE_PASS: {
-    PROGRESS: ["battle-pass", "progress"] as const,
-    TIERS: ["battle-pass", "tiers"] as const,
+    PROGRESS: ['battle-pass', 'progress'] as const,
+    TIERS: ['battle-pass', 'tiers'] as const,
   },
   USER: {
-    PROFILE: ["user", "profile"] as const,
-    WALLET: ["user", "wallet"] as const,
-    INVENTORY: ["user", "inventory"] as const,
+    PROFILE: ['user', 'profile'] as const,
+    WALLET: ['user', 'wallet'] as const,
+    INVENTORY: ['user', 'inventory'] as const,
   },
 } as const;
 

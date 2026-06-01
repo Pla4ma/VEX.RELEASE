@@ -1,23 +1,23 @@
-import { useMemo } from "react";
-import { useNavigation } from "@react-navigation/native";
-import { useSessionUIStore } from "../../../store/session-state";
-import { useHomeSpineModel } from "../../../features/home-spine/hooks";
+import { useMemo } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { useSessionUIStore } from '../../../store/session-state';
+import { useHomeSpineModel } from '../../../features/home-spine/hooks';
 import {
   useCreateRecommendation,
   useUpdateRecommendationStatus,
   useActiveCoachRecommendations,
-} from "../../../features/ai-coach";
-import { useActiveStudyPlan } from "../../../features/content-study";
-import { useLearningExecutionLayer } from "../../../features/learning-execution";
-import { useActiveBoss } from "../../../features/boss/hooks";
-import { useComebackState } from "../../../features/streaks/hooks";
-import { getNextBestAction } from "../../../features/progression";
+} from '../../../features/ai-coach';
+import { useActiveStudyPlan } from '../../../features/content-study';
+import { useLearningExecutionLayer } from '../../../features/learning-execution';
+import { useActiveBoss } from '../../../features/boss/hooks';
+import { useComebackState } from '../../../features/streaks/hooks';
+import { getNextBestAction } from '../../../features/progression';
 import {
   getFocusedMinutesForToday,
   getNextUnlockFeature,
   buildDisplayedReturnReason,
-} from "../hooks/home-controller-helpers";
-import type { HomeReturnReason } from "../hooks/useHomeReturnReason";
+} from '../hooks/home-controller-helpers';
+import type { HomeReturnReason } from '../hooks/useHomeReturnReason';
 import type {
   Nav,
   PowerUserContainerResult,
@@ -26,10 +26,10 @@ import type {
   ProgressionQueryData,
   ActiveStudyPlanData,
   ComebackData,
-} from "./power-user-home-types";
-import { buildReturnReasonConfig } from "./power-user-home-helpers";
-import { buildController } from "./power-user-home-controller";
-import { usePowerUserNavigation } from "./power-user-home-navigation";
+} from './power-user-home-types';
+import { buildReturnReasonConfig } from './power-user-home-helpers';
+import { buildController } from './power-user-home-controller';
+import { usePowerUserNavigation } from './power-user-home-navigation';
 
 export function usePowerUserContainerModel(
   input: PowerUserContainerInput,

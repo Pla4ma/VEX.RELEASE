@@ -4,47 +4,47 @@ import {
   networkState,
   ledger,
   queueEntry,
-} from "./offline-sync-service.fixtures";
+} from './offline-sync-service.fixtures';
 import {
   SessionCompletionRepositoryError,
   createCompletionLedger,
   updateCompletionSyncStatus,
-} from "../repository";
+} from '../repository';
 import {
   SessionCompletionOfflineSyncService,
   sessionCompletionOfflineSync,
-} from "../offline-sync-service";
-import { enqueue } from "../../../lib/offline/queue";
+} from '../offline-sync-service';
+import { enqueue } from '../../../lib/offline/queue';
 import {
   getNetInfoAdapter,
   type NetworkChangeCallback,
-} from "../../../network/NetInfoAdapter";
-import { captureSilentFailure } from "../../../utils/silent-failure";
+} from '../../../network/NetInfoAdapter';
+import { captureSilentFailure } from '../../../utils/silent-failure';
 
-jest.mock("../repository", () => {
+jest.mock('../repository', () => {
   const actual =
-    jest.requireActual<typeof import("../repository")>("../repository");
+    jest.requireActual<typeof import('../repository')>('../repository');
   return {
     ...actual,
     createCompletionLedger: jest.fn(),
     updateCompletionSyncStatus: jest.fn(),
   };
 });
-jest.mock("../../../lib/offline/queue");
-jest.mock("../../../network/NetInfoAdapter", () => ({
+jest.mock('../../../lib/offline/queue');
+jest.mock('../../../network/NetInfoAdapter', () => ({
   getNetInfoAdapter: jest.fn(() => ({
     getCurrentState: () => ({
       isConnected: false,
       isInternetReachable: false,
-      type: "wifi",
+      type: 'wifi',
       details: null,
     }),
     subscribe: jest.fn(() => jest.fn()),
   })),
 }));
-jest.mock("../../../utils/silent-failure");
+jest.mock('../../../utils/silent-failure');
 
-jest.mock("../../../persistence/MMKVStorageAdapter", () => ({
+jest.mock('../../../persistence/MMKVStorageAdapter', () => ({
   MMKVStorageAdapter: jest.fn().mockImplementation(() => ({
     getItemSync: jest.fn((key: string) => mockStorage[key] ?? null),
     setItemSync: jest.fn((key: string, value: string) => {
@@ -80,7 +80,7 @@ const captureSilentFailureMock = jest.mocked(captureSilentFailure);
 
 let networkCallback: NetworkChangeCallback | null = null;
 
-describe("SessionCompletionOfflineSyncService", () => {
+describe('SessionCompletionOfflineSyncService', () => {
   beforeAll(() => {
     jest.useFakeTimers();
   });
@@ -105,7 +105,7 @@ describe("SessionCompletionOfflineSyncService", () => {
     jest.useRealTimers();
   });
 
-  it("queues completion locally when offline", async () => {
+  it('queues completion locally when offline', async () => {
     const payload = ledger();
     enqueueMock.mockReturnValue(queueEntry(payload));
     const service = new SessionCompletionOfflineSyncService();
@@ -115,7 +115,7 @@ describe("SessionCompletionOfflineSyncService", () => {
     expect(result).toMatchObject({ queued: true, synced: false });
     expect(enqueueMock).toHaveBeenCalledWith(
       expect.objectContaining({
-        operation: "SESSION_COMPLETE",
+        operation: 'SESSION_COMPLETE',
         idempotencyKey: payload.idempotencyKey,
         payload,
       }),
@@ -124,7 +124,7 @@ describe("SessionCompletionOfflineSyncService", () => {
     service.cleanup();
   });
 
-  it("replays queued completions when connectivity returns", async () => {
+  it('replays queued completions when connectivity returns', async () => {
     const payload = ledger();
     enqueueMock.mockReturnValue(queueEntry(payload));
     createLedgerMock.mockResolvedValue(payload);
@@ -140,15 +140,15 @@ describe("SessionCompletionOfflineSyncService", () => {
     await Promise.resolve();
 
     expect(createLedgerMock).toHaveBeenCalledWith(payload);
-    expect(updateSyncMock).toHaveBeenCalledWith(payload.ledgerId, "synced");
+    expect(updateSyncMock).toHaveBeenCalledWith(payload.ledgerId, 'synced');
     expect(JSON.parse(mockStorage[storageKey]).entries).toHaveLength(0);
     service.cleanup();
   });
 
-  it("treats duplicate ledger replay as idempotent success", async () => {
+  it('treats duplicate ledger replay as idempotent success', async () => {
     const payload = ledger();
     createLedgerMock.mockRejectedValue(
-      new SessionCompletionRepositoryError("create", { code: "23505" }),
+      new SessionCompletionRepositoryError('create', { code: '23505' }),
     );
     networkState.isConnected = true;
     networkState.isInternetReachable = true;
@@ -162,18 +162,18 @@ describe("SessionCompletionOfflineSyncService", () => {
     service.cleanup();
   });
 
-  it("discards corrupt fallback queue data and captures it", () => {
+  it('discards corrupt fallback queue data and captures it', () => {
     mockStorage[storageKey] = JSON.stringify({
-      entries: [{ id: "not-a-uuid", operation: "SESSION_COMPLETE" }],
+      entries: [{ id: 'not-a-uuid', operation: 'SESSION_COMPLETE' }],
       lastSyncAt: 1,
     });
 
     const service = new SessionCompletionOfflineSyncService();
     expect(service.getDiagnostics().fallbackEntriesCount).toBe(0);
     expect(captureSilentFailureMock).toHaveBeenCalledWith(expect.any(Error), {
-      feature: "session-completion",
-      operation: "offline-fallback-parse",
-      type: "data",
+      feature: 'session-completion',
+      operation: 'offline-fallback-parse',
+      type: 'data',
     });
     service.cleanup();
   });

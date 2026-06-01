@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 import {
   MessageCategorySchema,
   SignalTypeSchema,
@@ -6,7 +6,7 @@ import {
   RecommendationTypeSchema,
   ReminderTypeSchema,
   DeliveryMethodSchema,
-} from "./enums";
+} from './enums';
 
 export const GenerateMessageInputSchema = z
   .object({

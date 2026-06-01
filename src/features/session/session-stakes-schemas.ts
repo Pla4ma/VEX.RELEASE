@@ -1,10 +1,10 @@
-import { z } from "zod";
-import { launchColors } from "@theme/tokens/launch-colors";
+import { z } from 'zod';
+import { launchColors } from '@theme/tokens/launch-colors';
 
 export const SessionDifficultySchema = z.enum([
-  "CASUAL",
-  "FOCUSED",
-  "DEEP_WORK",
+  'CASUAL',
+  'FOCUSED',
+  'DEEP_WORK',
 ]);
 
 export const SessionStakesSchema = z.object({
@@ -14,7 +14,7 @@ export const SessionStakesSchema = z.object({
   pausePenaltyPercent: z.number().min(0).max(100),
   gemWager: z.number().int().min(0),
   strictMode: z.boolean(),
-  failureConsequence: z.enum(["NONE", "REDUCED_XP", "LOSE_WAGER"]),
+  failureConsequence: z.enum(['NONE', 'REDUCED_XP', 'LOSE_WAGER']),
 });
 
 export const UserStakesPreferenceSchema = z.object({
@@ -34,10 +34,10 @@ export const DIFFICULTY_CONFIG = {
     pausePenaltyPercent: 10,
     gemWager: 0,
     strictMode: false,
-    failureConsequence: "NONE" as const,
-    label: "Casual",
-    description: "Practice mode. Unlimited pauses. 50% XP.",
-    icon: "🌱",
+    failureConsequence: 'NONE' as const,
+    label: 'Casual',
+    description: 'Practice mode. Unlimited pauses. 50% XP.',
+    icon: '🌱',
     color: launchColors.hex_4caf50,
   },
   FOCUSED: {
@@ -46,10 +46,10 @@ export const DIFFICULTY_CONFIG = {
     pausePenaltyPercent: 25,
     gemWager: 0,
     strictMode: false,
-    failureConsequence: "NONE" as const,
-    label: "Focused",
-    description: "Standard mode. 2 pauses allowed. 100% XP.",
-    icon: "🔥",
+    failureConsequence: 'NONE' as const,
+    label: 'Focused',
+    description: 'Standard mode. 2 pauses allowed. 100% XP.',
+    icon: '🔥',
     color: launchColors.hex_ff9800,
   },
   DEEP_WORK: {
@@ -58,11 +58,11 @@ export const DIFFICULTY_CONFIG = {
     pausePenaltyPercent: 100,
     gemWager: 5,
     strictMode: true,
-    failureConsequence: "LOSE_WAGER" as const,
-    label: "Deep Work",
+    failureConsequence: 'LOSE_WAGER' as const,
+    label: 'Deep Work',
     description:
-      "No pauses. Wager 5 gems. 150% XP if completed, lose gems if abandoned.",
-    icon: "⚡",
+      'No pauses. Wager 5 gems. 150% XP if completed, lose gems if abandoned.',
+    icon: '⚡',
     color: launchColors.hex_9c27b0,
   },
 } as const;

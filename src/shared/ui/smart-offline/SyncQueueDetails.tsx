@@ -1,12 +1,12 @@
-import React from "react";
-import { Pressable, Text, View } from "react-native";
+import React from 'react';
+import { Pressable, Text, View } from 'react-native';
 
-import { useTheme } from "@/theme";
-import { semanticOpacity } from "@/theme/tokens/opacity";
-import { spacing } from "@/theme/tokens/spacing";
-import { sizing } from "@/theme/tokens/sizing";
-import { QueueSection } from "./QueueSection";
-import type { GroupedPendingActions, PendingAction } from "./types";
+import { useTheme } from '@/theme';
+import { semanticOpacity } from '@/theme/tokens/opacity';
+import { spacing } from '@/theme/tokens/spacing';
+import { sizing } from '@/theme/tokens/sizing';
+import { QueueSection } from './QueueSection';
+import type { GroupedPendingActions, PendingAction } from './types';
 
 export function SyncQueueDetails({
   grouped,
@@ -58,8 +58,8 @@ export function SyncQueueDetails({
           onPress={onSync}
           style={({ pressed }) => ({
             minHeight: sizing.touchTarget.min,
-            alignItems: "center",
-            justifyContent: "center",
+            alignItems: 'center',
+            justifyContent: 'center',
             borderRadius: theme.borderRadius.lg,
             backgroundColor: theme.colors.primary[500],
             opacity: pressed ? semanticOpacity.pressed : theme.opacity[100],

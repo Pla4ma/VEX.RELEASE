@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import { Pressable, ScrollView } from "react-native";
-import Animated, { FadeIn } from "react-native-reanimated";
+import React, { useState } from 'react';
+import { Pressable, ScrollView } from 'react-native';
+import Animated, { FadeIn } from 'react-native-reanimated';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import type { MotivationProfileType } from "../../onboarding/schemas";
-import { MODE_OPTIONS, ModeCard } from "./ModeCard";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import type { MotivationProfileType } from '../../onboarding/schemas';
+import { MODE_OPTIONS, ModeCard } from './ModeCard';
 
 interface DeeperModePromptProps {
   onSelect: (mode: MotivationProfileType) => void;
@@ -22,7 +22,7 @@ export function DeeperModePrompt({
   const [isAdvancing, setIsAdvancing] = useState(false);
 
   const handleSelect = (mode: MotivationProfileType) => {
-    if (isAdvancing) return;
+    if (isAdvancing) {return;}
     setSelected(mode);
     setIsAdvancing(true);
     setTimeout(() => {

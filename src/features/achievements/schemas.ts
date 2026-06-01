@@ -1,20 +1,20 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const AchievementCategorySchema = z.enum([
-  "SESSION",
-  "STREAK",
-  "BOSS",
-  "SOCIAL",
-  "PROGRESSION",
-  "ECONOMY",
+  'SESSION',
+  'STREAK',
+  'BOSS',
+  'SOCIAL',
+  'PROGRESSION',
+  'ECONOMY',
 ]);
 
 export const AchievementRaritySchema = z.enum([
-  "COMMON",
-  "UNCOMMON",
-  "RARE",
-  "EPIC",
-  "LEGENDARY",
+  'COMMON',
+  'UNCOMMON',
+  'RARE',
+  'EPIC',
+  'LEGENDARY',
 ]);
 
 const ProgressHistoryEntrySchema = z.object({

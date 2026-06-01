@@ -1,7 +1,7 @@
-import { getStorageManager } from "../persistence";
-import type { Nullable } from "../types/global";
-import { createDebugger } from "../utils/debug";
-const debug = createDebugger("network");
+import { getStorageManager } from '../persistence';
+import type { Nullable } from '../types/global';
+import { createDebugger } from '../utils/debug';
+const debug = createDebugger('network');
 export interface QueuedRequest {
   id: string;
   url: string;
@@ -26,7 +26,7 @@ export class RequestQueue {
     this.config = {
       maxRetries: 3,
       retryDelay: 5000,
-      storageKey: "request-queue",
+      storageKey: 'request-queue',
       ...config,
     };
   }
@@ -40,18 +40,18 @@ export class RequestQueue {
         this.queue = persisted;
       }
     } catch (error) {
-      debug.error("Failed to load request queue", error as Error);
+      debug.error('Failed to load request queue', error as Error);
     }
   }
   private async persist(): Promise<void> {
     try {
       await this.storage.setJSON(this.config.storageKey, this.queue);
     } catch (error) {
-      debug.error("Failed to persist request queue", error as Error);
+      debug.error('Failed to persist request queue', error as Error);
     }
   }
   async enqueue(
-    request: Omit<QueuedRequest, "id" | "timestamp" | "retryCount">,
+    request: Omit<QueuedRequest, 'id' | 'timestamp' | 'retryCount'>,
   ): Promise<string> {
     const queuedRequest: QueuedRequest = {
       ...request,
@@ -136,7 +136,7 @@ export class RequestQueue {
           }
         }
       } catch (error) {
-        debug.error("Error processing request:", error as Error);
+        debug.error('Error processing request:', error as Error);
         break;
       }
     }

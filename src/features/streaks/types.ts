@@ -1,10 +1,10 @@
 export type StreakState =
-  | "ACTIVE"
-  | "AT_RISK"
-  | "CRITICAL"
-  | "BROKEN"
-  | "RECOVERING"
-  | "PROTECTED";
+  | 'ACTIVE'
+  | 'AT_RISK'
+  | 'CRITICAL'
+  | 'BROKEN'
+  | 'RECOVERING'
+  | 'PROTECTED';
 
 export interface StreakStateInfo {
   state: StreakState;
@@ -13,7 +13,7 @@ export interface StreakStateInfo {
   color: string;
   icon: string;
   animation: string;
-  urgency: "none" | "low" | "medium" | "high" | "critical";
+  urgency: 'none' | 'low' | 'medium' | 'high' | 'critical';
   coachMessage: string;
   entryThreshold?: number;
   exitThreshold?: number;
@@ -25,7 +25,7 @@ export interface StreakMilestone {
   name: string;
   description: string;
   badgeIcon: string;
-  rewardType: "COSMETIC" | "SHIELD" | "XP" | "FEATURE";
+  rewardType: 'COSMETIC' | 'SHIELD' | 'XP' | 'FEATURE';
   rewardId: string;
   visualEffect: string;
   achieved: boolean;
@@ -42,15 +42,15 @@ export interface StreakInsurance {
 }
 
 export type InsuranceSource =
-  | "MILESTONE_7"
-  | "MILESTONE_14"
-  | "MILESTONE_30"
-  | "MILESTONE_100"
-  | "ACHIEVEMENT_COMPLETE"
-  | "BOSS_DEFEAT"
-  | "PURCHASED"
-  | "SPECIAL_EVENT"
-  | "monthly_premium";
+  | 'MILESTONE_7'
+  | 'MILESTONE_14'
+  | 'MILESTONE_30'
+  | 'MILESTONE_100'
+  | 'ACHIEVEMENT_COMPLETE'
+  | 'BOSS_DEFEAT'
+  | 'PURCHASED'
+  | 'SPECIAL_EVENT'
+  | 'monthly_premium';
 
 export interface StreakRecoveryPlan {
   userId: string;
@@ -66,7 +66,7 @@ export interface StreakRecoveryPlan {
 
 export interface StreakProtectionResult {
   protected: boolean;
-  method: "INSURANCE" | "SHIELD" | "NONE";
+  method: 'INSURANCE' | 'SHIELD' | 'NONE';
   insuranceId: string | null;
   newState: StreakState;
   message: string;
@@ -75,6 +75,6 @@ export interface StreakProtectionResult {
 export interface InsuranceItem {
   id: string;
   source: string;
-  status: "active" | "used";
+  status: 'active' | 'used';
   earnedAt: number;
 }

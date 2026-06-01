@@ -7,13 +7,13 @@
  * @phase 4
  */
 
-import React from "react";
+import React from 'react';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import type { FocusDuration } from "../schemas";
-import { DURATION_OPTIONS } from "../service";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import type { FocusDuration } from '../schemas';
+import { DURATION_OPTIONS } from '../service';
 
 interface SessionPreviewProps {
   duration: FocusDuration;
@@ -42,9 +42,9 @@ export function SessionPreview({
     >
       {/* Duration Display */}
       <Box flexDirection="row" alignItems="center" gap="sm">
-        <Text fontSize={32}>{durationOption?.emoji ?? "🍅"}</Text>
+        <Text fontSize={32}>{durationOption?.emoji ?? '🍅'}</Text>
         <Text variant="h2" color="text.primary" fontWeight="700">
-          {durationOption?.label ?? "10 min"}
+          {durationOption?.label ?? '10 min'}
         </Text>
       </Box>
 
@@ -60,7 +60,7 @@ export function SessionPreview({
       >
         <Text fontSize={14}>🎯</Text>
         <Text variant="caption" color="primary.500" fontWeight="600">
-          {goal || "General focus"}
+          {goal || 'General focus'}
         </Text>
       </Box>
 

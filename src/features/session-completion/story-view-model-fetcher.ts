@@ -1,10 +1,10 @@
-import type { SessionSummary } from "../../session/types";
-import { getMemories } from "../companion/memory-repository";
-import { getRecentPromises } from "../companion-promise/repository";
-import { getContractForSession } from "../focus-contract/service";
-import type { PostSessionStoryViewModel } from "./story-view-model-service";
-import { buildPostSessionStoryViewModel } from "./story-view-model-service";
-import { getCompletionLedgerBySessionId } from "./repository";
+import type { SessionSummary } from '../../session/types';
+import { getMemories } from '../companion/memory-repository';
+import { getRecentPromises } from '../companion-promise/repository';
+import { getContractForSession } from '../focus-contract/service';
+import type { PostSessionStoryViewModel } from './story-view-model-service';
+import { buildPostSessionStoryViewModel } from './story-view-model-service';
+import { getCompletionLedgerBySessionId } from './repository';
 
 export async function getPostSessionStoryViewModel(input: {
   sessionId: string;

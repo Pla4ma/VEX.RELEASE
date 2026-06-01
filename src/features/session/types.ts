@@ -1,4 +1,4 @@
-import type { SessionMode, SessionStatus, SessionPhase } from "./schemas";
+import type { SessionMode, SessionStatus, SessionPhase } from './schemas';
 
 // Re-export types for backward compatibility
 export type { SessionMode, SessionStatus, SessionPhase };
@@ -50,14 +50,14 @@ export interface ActiveSessionConfig {
 export interface SessionStateTransition {
   from: SessionStatus;
   to: SessionStatus;
-  triggeredBy: "USER" | "SYSTEM" | "TIMER" | "ERROR" | "RECOVERY";
+  triggeredBy: 'USER' | 'SYSTEM' | 'TIMER' | 'ERROR' | 'RECOVERY';
   timestamp: number;
   metadata?: Record<string, unknown>;
 }
 
 export interface ModeSpecificUI {
-  theme: "dark" | "light" | "creative" | "study" | "energetic";
-  companionPosition: "bottom" | "side" | "hidden";
+  theme: 'dark' | 'light' | 'creative' | 'study' | 'energetic';
+  companionPosition: 'bottom' | 'side' | 'hidden';
   showProgressBar: boolean;
   showPurityIndicator: boolean;
   showStreakFlame: boolean;
@@ -68,12 +68,12 @@ export interface ModeSpecificUI {
 export interface CoachInterventionRule {
   id: string;
   trigger:
-    | "PAUSE"
-    | "RESUME"
-    | "MILESTONE"
-    | "STREAK_RISK"
-    | "LOW_PURITY"
-    | "IDLE";
+    | 'PAUSE'
+    | 'RESUME'
+    | 'MILESTONE'
+    | 'STREAK_RISK'
+    | 'LOW_PURITY'
+    | 'IDLE';
   cooldownSeconds: number;
   maxPerSession: number;
   messageTemplate: string;

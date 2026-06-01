@@ -3,10 +3,10 @@
  * Mutation hook for marking a study plan task as complete
  */
 
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useAuthStore } from "../../../store";
-import { contentStudyQueryKeys } from "./queryKeys";
-import { studySessionManager } from "../persistence";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useAuthStore } from '../../../store';
+import { contentStudyQueryKeys } from './queryKeys';
+import { studySessionManager } from '../persistence';
 
 interface CompleteTaskParams {
   generationId: string;
@@ -20,7 +20,7 @@ export function useCompleteStudyPlanTask() {
   return useMutation({
     mutationFn: async ({ generationId, taskId }: CompleteTaskParams) => {
       if (!user?.id) {
-        throw new Error("User not authenticated");
+        throw new Error('User not authenticated');
       }
 
       // Get existing session data
@@ -31,7 +31,7 @@ export function useCompleteStudyPlanTask() {
       )[0];
 
       if (!latestSession) {
-        throw new Error("No active study session found");
+        throw new Error('No active study session found');
       }
 
       // Update completed tasks

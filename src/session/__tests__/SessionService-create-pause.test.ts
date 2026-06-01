@@ -3,9 +3,9 @@ import {
   getSessionOrchestrator,
   type SessionConfig,
   type SessionState,
-} from "./SessionService.helpers";
+} from './SessionService.helpers';
 
-describe("SessionService", () => {
+describe('SessionService', () => {
   let service: ReturnType<typeof createService>;
   let mockOrchestrator: Record<string, jest.Mock>;
 
@@ -29,7 +29,7 @@ describe("SessionService", () => {
     };
     (getSessionOrchestrator as jest.Mock).mockReturnValue(mockOrchestrator);
     service = createService();
-    service.setUserId("test-user-id");
+    service.setUserId('test-user-id');
   });
 
   const validConfig: SessionConfig = {
@@ -44,15 +44,15 @@ describe("SessionService", () => {
     strictMode: false,
     autoStartBreaks: false,
     autoStartNextInterval: false,
-    category: "focus",
-    tags: ["work"],
+    category: 'focus',
+    tags: ['work'],
   };
 
-  describe("createSession", () => {
-    it("should create session with valid config", async () => {
+  describe('createSession', () => {
+    it('should create session with valid config', async () => {
       const mockSession: SessionState = {
-        id: "session-1",
-        status: "created",
+        id: 'session-1',
+        status: 'created',
         config: validConfig,
         progress: {
           elapsed: 0,
@@ -67,33 +67,33 @@ describe("SessionService", () => {
       expect(session).toEqual(mockSession);
     });
 
-    it("should throw error when no user is set", async () => {
+    it('should throw error when no user is set', async () => {
       const serviceWithoutUser =
-        new (require("./SessionService.helpers").SessionService)();
+        new (require('./SessionService.helpers').SessionService)();
       await expect(
         serviceWithoutUser.createCustomSession(validConfig),
-      ).rejects.toThrow("SessionService: No user set");
+      ).rejects.toThrow('SessionService: No user set');
     });
 
-    it("should throw error when active session exists", async () => {
+    it('should throw error when active session exists', async () => {
       mockOrchestrator.isSessionActive.mockReturnValue(true);
       // Access the mocked repository to make getActiveSession return a session
-      const { getSessionRepository } = require("../repository/SessionRepository");
+      const { getSessionRepository } = require('../repository/SessionRepository');
       const repo = getSessionRepository();
-      repo.getActiveSession.mockResolvedValue({ id: "existing-session" });
+      repo.getActiveSession.mockResolvedValue({ id: 'existing-session' });
       await expect(service.createCustomSession(validConfig)).rejects.toThrow(
-        "Cannot create new session: one is already active",
+        'Cannot create new session: one is already active',
       );
     });
 
-    it("should throw error for invalid duration (zero)", async () => {
+    it('should throw error for invalid duration (zero)', async () => {
       const invalidConfig = { ...validConfig, duration: 0 };
       await expect(
         service.createCustomSession(invalidConfig),
       ).rejects.toThrow();
     });
 
-    it("should throw error for invalid duration (negative)", async () => {
+    it('should throw error for invalid duration (negative)', async () => {
       const invalidConfig = { ...validConfig, duration: -1000 };
       await expect(
         service.createCustomSession(invalidConfig),
@@ -101,45 +101,45 @@ describe("SessionService", () => {
     });
   });
 
-  describe("pauseSession", () => {
-    it("should pause active session", async () => {
-      mockOrchestrator.getSessionStatus.mockReturnValue({ status: "active" });
+  describe('pauseSession', () => {
+    it('should pause active session', async () => {
+      mockOrchestrator.getSessionStatus.mockReturnValue({ status: 'active' });
       mockOrchestrator.pauseSession.mockResolvedValue(undefined);
-      await service.pauseSession("user_request");
+      await service.pauseSession('user_request');
       expect(mockOrchestrator.pauseSession).toHaveBeenCalledWith(
-        "user_request",
+        'user_request',
       );
     });
 
-    it("should throw error when pausing already paused session", async () => {
-      mockOrchestrator.getSessionStatus.mockReturnValue({ status: "paused" });
+    it('should throw error when pausing already paused session', async () => {
+      mockOrchestrator.getSessionStatus.mockReturnValue({ status: 'paused' });
       mockOrchestrator.pauseSession.mockRejectedValue(
-        new Error("Session already paused"),
+        new Error('Session already paused'),
       );
       await expect(service.pauseSession()).rejects.toThrow(
-        "Session already paused",
+        'Session already paused',
       );
     });
 
-    it("should throw error when pausing in strict mode", async () => {
+    it('should throw error when pausing in strict mode', async () => {
       mockOrchestrator.getSessionStatus.mockReturnValue({
-        status: "active",
+        status: 'active',
         isStrictMode: true,
       });
       mockOrchestrator.pauseSession.mockRejectedValue(
-        new Error("Cannot pause in strict mode"),
+        new Error('Cannot pause in strict mode'),
       );
       await expect(service.pauseSession()).rejects.toThrow(
-        "Cannot pause in strict mode",
+        'Cannot pause in strict mode',
       );
     });
 
-    it("should throw error when no active session", async () => {
-      mockOrchestrator.getSessionStatus.mockReturnValue({ status: "idle" });
+    it('should throw error when no active session', async () => {
+      mockOrchestrator.getSessionStatus.mockReturnValue({ status: 'idle' });
       mockOrchestrator.pauseSession.mockRejectedValue(
-        new Error("No active session"),
+        new Error('No active session'),
       );
-      await expect(service.pauseSession()).rejects.toThrow("No active session");
+      await expect(service.pauseSession()).rejects.toThrow('No active session');
     });
   });
 });

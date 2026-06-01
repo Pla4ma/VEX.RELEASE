@@ -1,10 +1,10 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const RewardLedgerStatusSchema = z.enum([
-  "pending",
-  "delivered",
-  "failed",
-  "expired",
+  'pending',
+  'delivered',
+  'failed',
+  'expired',
 ]);
 
 export const RewardLedgerRecordSchema = z.object({
@@ -13,7 +13,7 @@ export const RewardLedgerRecordSchema = z.object({
   idempotencyKey: z.string().min(1),
   rewardType: z.string(),
   amount: z.number().int(),
-  currency: z.enum(["XP", "COINS", "GEMS"]),
+  currency: z.enum(['XP', 'COINS', 'GEMS']),
   status: RewardLedgerStatusSchema,
   sourceEvent: z.string(),
   createdAt: z.string().datetime(),
@@ -27,7 +27,7 @@ export const CreateRewardLedgerInputSchema = z.object({
   idempotencyKey: z.string().min(1),
   rewardType: z.string(),
   amount: z.number().int().positive(),
-  currency: z.enum(["XP", "COINS", "GEMS"]),
+  currency: z.enum(['XP', 'COINS', 'GEMS']),
   sourceEvent: z.string(),
   expiresAt: z.string().datetime().optional(),
 });

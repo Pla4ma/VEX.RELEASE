@@ -1,7 +1,7 @@
 import type {
   StreakRepairQuest,
   RepairQuestStatusOutput,
-} from "../schemas-risk-repair";
+} from '../schemas-risk-repair';
 
 export interface RecordSessionResult {
   questUpdated: boolean;

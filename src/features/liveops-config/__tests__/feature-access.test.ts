@@ -1,7 +1,7 @@
-import { buildFeatureAccess } from "../feature-access";
+import { buildFeatureAccess } from '../feature-access';
 
-describe("buildFeatureAccess", () => {
-  it("spreads unlocks across the first fifteen sessions", () => {
+describe('buildFeatureAccess', () => {
+  it('spreads unlocks across the first fifteen sessions', () => {
     const afterOne = buildFeatureAccess({ totalCompletedSessions: 1 }).features;
     const afterThree = buildFeatureAccess({
       totalCompletedSessions: 3,
@@ -25,7 +25,7 @@ describe("buildFeatureAccess", () => {
     expect(afterFifteen.ai_coach_advanced.isUnlocked).toBe(true);
   });
 
-  it("keeps disabled social competition features invisible and locked", () => {
+  it('keeps disabled social competition features invisible and locked', () => {
     const features = buildFeatureAccess({
       totalCompletedSessions: 100,
     }).features;
@@ -40,11 +40,11 @@ describe("buildFeatureAccess", () => {
     expect(features.battle_pass.isUnlocked).toBe(false);
   });
 
-  it("uses specific locked copy for major gated features", () => {
+  it('uses specific locked copy for major gated features', () => {
     const features = buildFeatureAccess({ totalCompletedSessions: 0 }).features;
 
-    expect(features.boss_tab.recommendedUnlockMoment).toBe("After session 7");
-    expect(features.challenges.lockedDescription).toContain("few sessions");
-    expect(features.companion_detail.unlockReason).toContain("3 sessions");
+    expect(features.boss_tab.recommendedUnlockMoment).toBe('After session 7');
+    expect(features.challenges.lockedDescription).toContain('few sessions');
+    expect(features.companion_detail.unlockReason).toContain('3 sessions');
   });
 });

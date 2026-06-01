@@ -1,13 +1,13 @@
-import React from "react";
+import React from 'react';
 
-import { Pressable } from "react-native";
-import Animated, { FadeIn } from "react-native-reanimated";
+import { Pressable } from 'react-native';
+import Animated, { FadeIn } from 'react-native-reanimated';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { getPremiumCardStyle } from "../../../components/premiumStyles";
-import { Icon } from "../../../icons";
-import { formatMultiplier, withAlpha } from "../utils/active-session";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { getPremiumCardStyle } from '../../../components/premiumStyles';
+import { Icon } from '../../../icons';
+import { formatMultiplier, withAlpha } from '../utils/active-session';
 
 type ActiveSessionControlDockProps = {
   completionPercentage: number;
@@ -52,8 +52,8 @@ export const ActiveSessionControlDock: React.FC<
           onPress={onComplete}
           accessibilityLabel={
             completionPercentage >= 100
-              ? "Complete focus session"
-              : "Finish focus session early"
+              ? 'Complete focus session'
+              : 'Finish focus session early'
           }
           accessibilityRole="button"
           accessibilityHint="Ends this session and opens the completion reward screen"
@@ -72,18 +72,18 @@ export const ActiveSessionControlDock: React.FC<
           >
             <Text variant="label" style={{ color: themeColors.success }}>
               {completionPercentage >= 100
-                ? "Complete Session"
-                : "Finish Early"}
+                ? 'Complete Session'
+                : 'Finish Early'}
             </Text>
           </Box>
         </Pressable>
       ) : null}
       <Box
         style={{
-          ...getPremiumCardStyle("large"),
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
+          ...getPremiumCardStyle('large'),
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
           borderWidth: 1,
           paddingHorizontal: 14,
           paddingVertical: 12,
@@ -100,8 +100,8 @@ export const ActiveSessionControlDock: React.FC<
           <Box
             style={{
               minWidth: 104,
-              alignItems: "center",
-              justifyContent: "center",
+              alignItems: 'center',
+              justifyContent: 'center',
               borderRadius: 18,
               borderWidth: 1,
               paddingHorizontal: 18,
@@ -118,13 +118,13 @@ export const ActiveSessionControlDock: React.FC<
         <Pressable
           onPress={onPauseResume}
           accessibilityLabel={
-            isPaused ? "Resume session" : "Pause session"
+            isPaused ? 'Resume session' : 'Pause session'
           }
           accessibilityRole="button"
           accessibilityHint={
             isPaused
-              ? "Restarts the active session"
-              : "Pauses the active session"
+              ? 'Restarts the active session'
+              : 'Pauses the active session'
           }
         >
           <Box
@@ -132,24 +132,24 @@ export const ActiveSessionControlDock: React.FC<
               width: 64,
               height: 64,
               borderRadius: 32,
-              alignItems: "center",
-              justifyContent: "center",
+              alignItems: 'center',
+              justifyContent: 'center',
               backgroundColor: phaseAccent,
             }}
           >
             <Icon
-              name={isPaused ? "play" : "minus"}
+              name={isPaused ? 'play' : 'minus'}
               size="lg"
               color={themeColors.inverse}
             />
           </Box>
         </Pressable>
-        <Box style={{ position: "relative" }}>
+        <Box style={{ position: 'relative' }}>
           {showMultiplierInfo ? (
             <Animated.View
               entering={FadeIn.duration(180)}
               style={{
-                position: "absolute",
+                position: 'absolute',
                 right: 0,
                 bottom: 72,
                 width: 190,
@@ -175,8 +175,8 @@ export const ActiveSessionControlDock: React.FC<
             <Box
               style={{
                 minWidth: 84,
-                alignItems: "center",
-                justifyContent: "center",
+                alignItems: 'center',
+                justifyContent: 'center',
                 borderRadius: 18,
                 borderWidth: 1,
                 paddingHorizontal: 18,

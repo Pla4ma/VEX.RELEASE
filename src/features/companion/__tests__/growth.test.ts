@@ -1,2 +1,2 @@
-import "./growth-session.test";
-import "./growth-reactions.test";
+import './growth-session.test';
+import './growth-reactions.test';

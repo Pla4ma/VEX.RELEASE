@@ -1,17 +1,17 @@
-import { Dimensions } from "react-native";
-import { launchColors } from "@theme/tokens/launch-colors";
+import { Dimensions } from 'react-native';
+import { launchColors } from '@theme/tokens/launch-colors';
 
-const { width: SCREEN_WIDTH } = Dimensions.get("window");
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
 export const METER_WIDTH = SCREEN_WIDTH - 48;
 
 export const containerStyle = {
   width: METER_WIDTH,
-  alignSelf: "center" as const,
+  alignSelf: 'center' as const,
   marginVertical: 12,
 };
 
 export const glowStyle = {
-  position: "absolute" as const,
+  position: 'absolute' as const,
   top: -10,
   left: -10,
   right: -10,
@@ -21,10 +21,10 @@ export const glowStyle = {
 };
 
 export const fireContainerStyle = {
-  position: "absolute" as const,
+  position: 'absolute' as const,
   top: -30,
   right: 10,
-  flexDirection: "row" as const,
+  flexDirection: 'row' as const,
   zIndex: 1,
 };
 
@@ -41,8 +41,8 @@ export const mainContainerStyle = {
 };
 
 export const headerRowStyle = {
-  flexDirection: "row" as const,
-  alignItems: "center" as const,
+  flexDirection: 'row' as const,
+  alignItems: 'center' as const,
   marginBottom: 12,
 };
 
@@ -50,15 +50,15 @@ export const tierBadgeStyle = {
   width: 44,
   height: 44,
   borderRadius: 22,
-  justifyContent: "center" as const,
-  alignItems: "center" as const,
+  justifyContent: 'center' as const,
+  alignItems: 'center' as const,
   backgroundColor: launchColors.rgb_0_0_0_0_1,
   marginRight: 12,
 };
 
 export const tierEmojiStyle = { fontSize: 24 };
 export const comboInfoStyle = { flex: 1 };
-export const comboTextStyle = { fontWeight: "700" as const };
+export const comboTextStyle = { fontWeight: '700' as const };
 
 export const multiplierBadgeStyle = {
   paddingHorizontal: 12,
@@ -68,40 +68,40 @@ export const multiplierBadgeStyle = {
 
 export const multiplierTextStyle = {
   color: launchColors.hex_fff,
-  fontWeight: "700" as const,
+  fontWeight: '700' as const,
   fontSize: 14,
 };
 
 export const progressContainerStyle = {
   height: 12,
   borderRadius: 6,
-  overflow: "hidden" as const,
+  overflow: 'hidden' as const,
   marginBottom: 8,
 };
 
-export const progressBarStyle = { height: "100%" as const, borderRadius: 6 };
-export const nextTierTextStyle = { textAlign: "center" as const };
+export const progressBarStyle = { height: '100%' as const, borderRadius: 6 };
+export const nextTierTextStyle = { textAlign: 'center' as const };
 
 export const maxTierTextStyle = {
-  textAlign: "center" as const,
-  fontWeight: "700" as const,
+  textAlign: 'center' as const,
+  fontWeight: '700' as const,
 };
 
 export const milestoneOverlayStyle = {
-  position: "absolute" as const,
+  position: 'absolute' as const,
   top: 0,
   left: 0,
   right: 0,
   bottom: 0,
-  justifyContent: "center" as const,
-  alignItems: "center" as const,
+  justifyContent: 'center' as const,
+  alignItems: 'center' as const,
   zIndex: 10,
 };
 
 export const milestoneCardStyle = {
   padding: 24,
   borderRadius: 20,
-  alignItems: "center" as const,
+  alignItems: 'center' as const,
   shadowColor: launchColors.hex_000,
   shadowOffset: { width: 0, height: 4 },
   shadowOpacity: 0.3,
@@ -111,25 +111,25 @@ export const milestoneCardStyle = {
 
 export const milestoneEmojiStyle = { fontSize: 48, marginBottom: 12 };
 export const milestoneTextStyle = {
-  textAlign: "center" as const,
+  textAlign: 'center' as const,
   marginBottom: 8,
 };
 
 export const comboBrokenOverlayStyle = {
-  position: "absolute" as const,
+  position: 'absolute' as const,
   top: 0,
   left: 0,
   right: 0,
   bottom: 0,
-  justifyContent: "center" as const,
-  alignItems: "center" as const,
+  justifyContent: 'center' as const,
+  alignItems: 'center' as const,
   zIndex: 10,
 };
 
 export const comboBrokenCardStyle = {
   padding: 20,
   borderRadius: 16,
-  alignItems: "center" as const,
+  alignItems: 'center' as const,
 };
 
 export const comboBrokenEmojiStyle = { fontSize: 40, marginBottom: 8 };
@@ -143,7 +143,7 @@ export const comboBrokenSubtextStyle = {
 };
 
 export const warningOverlayStyle = {
-  position: "absolute" as const,
+  position: 'absolute' as const,
   top: -8,
   left: 0,
   right: 0,
@@ -153,6 +153,6 @@ export const warningOverlayStyle = {
 };
 
 export const warningTextStyle = {
-  textAlign: "center" as const,
-  fontWeight: "600" as const,
+  textAlign: 'center' as const,
+  fontWeight: '600' as const,
 };

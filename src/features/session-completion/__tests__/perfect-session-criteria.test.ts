@@ -1,7 +1,7 @@
-import { describe, it, expect } from "@jest/globals";
+import { describe, it, expect } from '@jest/globals';
 
-describe("Perfect Session detection", () => {
-  it("isPerfect is true when score >= 95, no pauses, >= 30min", () => {
+describe('Perfect Session detection', () => {
+  it('isPerfect is true when score >= 95, no pauses, >= 30min', () => {
     // This is tested in the ScoringEngine integration
     // Criteria: finalScore >= 95 && pauses === 0 && effectiveTime >= 30 * 60 && focusQualityScore >= 95
     const mockCalculation = {
@@ -20,7 +20,7 @@ describe("Perfect Session detection", () => {
     expect(isPerfect).toBe(true);
   });
 
-  it("isPerfect is false when paused even once", () => {
+  it('isPerfect is false when paused even once', () => {
     const mockCalculation = {
       finalScore: 95,
       pauses: 1,
@@ -37,7 +37,7 @@ describe("Perfect Session detection", () => {
     expect(isPerfect).toBe(false);
   });
 
-  it("isPerfect is false when duration < 30 minutes", () => {
+  it('isPerfect is false when duration < 30 minutes', () => {
     const mockCalculation = {
       finalScore: 95,
       pauses: 0,
@@ -54,7 +54,7 @@ describe("Perfect Session detection", () => {
     expect(isPerfect).toBe(false);
   });
 
-  it("isPerfect is false when score < 95", () => {
+  it('isPerfect is false when score < 95', () => {
     const mockCalculation = {
       finalScore: 94,
       pauses: 0,

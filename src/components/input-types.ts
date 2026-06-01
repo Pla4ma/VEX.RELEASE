@@ -1,4 +1,4 @@
-import type { TextInputProps, ViewStyle } from "react-native";
+import type { TextInputProps, ViewStyle } from 'react-native';
 
 // Icon name type from registry
 type IconName = string;
@@ -6,7 +6,7 @@ type IconName = string;
 /**
  * Input props
  */
-export interface InputProps extends Omit<TextInputProps, "style"> {
+export interface InputProps extends Omit<TextInputProps, 'style'> {
   /** Input label */
   label?: string;
   /** Error message */

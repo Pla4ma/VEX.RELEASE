@@ -1,6 +1,6 @@
-import React, { useMemo } from "react";
-import { View } from "react-native";
-import Animated, { type AnimatedStyle } from "react-native-reanimated";
+import React, { useMemo } from 'react';
+import { View } from 'react-native';
+import Animated, { type AnimatedStyle } from 'react-native-reanimated';
 
 interface CompanionParticlesProps {
   count: number;
@@ -38,7 +38,7 @@ export const CompanionParticles: React.FC<CompanionParticlesProps> = ({
   return (
     <Animated.View
       style={[
-        { position: "absolute", width: "100%", height: "100%" },
+        { position: 'absolute', width: '100%', height: '100%' },
         particleContainerStyle,
       ]}
     >
@@ -46,7 +46,7 @@ export const CompanionParticles: React.FC<CompanionParticlesProps> = ({
         <View
           key={p.key}
           style={{
-            position: "absolute",
+            position: 'absolute',
             borderRadius: 100,
             width: p.size,
             height: p.size,

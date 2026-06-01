@@ -1,16 +1,16 @@
 // Contract: liveops-config/feature-access owns user-visible progressive disclosure.
 // This service is limited to remote kill switches, rollouts, and local dev overrides.
-import { getStorageManager } from "../persistence";
-import type { StorageManager } from "../persistence/StorageManager";
-import { eventBus } from "../events";
-import { createDebugger } from "../utils/debug";
-import type { Nullable } from "../types/global";
-import { defaultFlags } from "./featureFlagDefaults";
+import { getStorageManager } from '../persistence';
+import type { StorageManager } from '../persistence/StorageManager';
+import { eventBus } from '../events';
+import { createDebugger } from '../utils/debug';
+import type { Nullable } from '../types/global';
+import { defaultFlags } from './featureFlagDefaults';
 import {
   loadFlagsFromStorage,
   loadOverridesFromStorage,
   startFetchTimer,
-} from "./featureFlagStorage";
+} from './featureFlagStorage';
 import {
   fetchAndApplyRemote,
   setFlagOverride,
@@ -19,12 +19,12 @@ import {
   updateFlagInStore,
   registerFlagInStore,
   hashString,
-} from "./featureFlagMutations";
-import type { FeatureFlagValue, FeatureFlag, FeatureFlagConfig } from "./featureFlagTypes";
+} from './featureFlagMutations';
+import type { FeatureFlagValue, FeatureFlag, FeatureFlagConfig } from './featureFlagTypes';
 
 export type { FeatureFlagValue, FeatureFlag, FeatureFlagConfig };
-export { getFeatureFlagService } from "./featureFlagInstance";
-const debug = createDebugger("features");
+export { getFeatureFlagService } from './featureFlagInstance';
+const debug = createDebugger('features');
 
 export class FeatureFlagService {
   private flags: Map<string, FeatureFlag> = new Map();
@@ -38,7 +38,7 @@ export class FeatureFlagService {
 
   constructor(config: FeatureFlagConfig = {}) {
     this.config = {
-      storageKey: "vex-feature-flags",
+      storageKey: 'vex-feature-flags',
       remoteFetchInterval: 300000,
       enableOverrides: __DEV__,
       ...config,
@@ -84,10 +84,10 @@ export class FeatureFlagService {
         this.config.storageKey,
         this.lastFetchAt,
       );
-      debug.info("Feature flags updated from remote");
+      debug.info('Feature flags updated from remote');
     } catch (error) {
-      debug.error("Failed to fetch remote feature flags", error as Error);
-      eventBus.publish("feature:fetch_failed", {
+      debug.error('Failed to fetch remote feature flags', error as Error);
+      eventBus.publish('feature:fetch_failed', {
         error: (error as Error).message,
         timestamp: Date.now(),
       });
@@ -179,7 +179,7 @@ export class FeatureFlagService {
   }
 
   async registerFlag(
-    flag: Omit<FeatureFlag, "createdAt" | "updatedAt">,
+    flag: Omit<FeatureFlag, 'createdAt' | 'updatedAt'>,
   ): Promise<void> {
     await registerFlagInStore(
       this.flags,

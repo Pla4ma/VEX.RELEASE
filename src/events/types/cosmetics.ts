@@ -3,7 +3,7 @@
  */
 
 export interface CosmeticsEventDefinitions {
-  "cosmetics:unlock_theme": {
+  'cosmetics:unlock_theme': {
     userId: string;
     themeId: string;
     source: string;

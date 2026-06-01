@@ -1,13 +1,13 @@
-import * as Sentry from "@sentry/react-native";
-import { capture } from "../../shared/analytics/analytics-service";
-import type { CompanionPromise } from "./types";
+import * as Sentry from '@sentry/react-native';
+import { capture } from '../../shared/analytics/analytics-service';
+import type { CompanionPromise } from './types';
 
 export const CompanionPromiseAnalyticsEvents = {
-  CREATED: "companion_promise_created",
-  FULFILLED: "companion_promise_fulfilled",
-  MISSED: "companion_promise_missed",
-  RECOVERED: "companion_promise_recovered",
-  VIEWED: "companion_promise_viewed",
+  CREATED: 'companion_promise_created',
+  FULFILLED: 'companion_promise_fulfilled',
+  MISSED: 'companion_promise_missed',
+  RECOVERED: 'companion_promise_recovered',
+  VIEWED: 'companion_promise_viewed',
 } as const;
 
 function track(
@@ -17,9 +17,9 @@ function track(
   extra: Record<string, unknown> = {},
 ): void {
   Sentry.addBreadcrumb({
-    category: "companion-promise",
+    category: 'companion-promise',
     data: { promiseId: promise.id, status: promise.status, ...extra },
-    level: "info",
+    level: 'info',
     message,
   });
   capture(event, {
@@ -36,7 +36,7 @@ function track(
 export function trackPromiseCreated(promise: CompanionPromise): void {
   track(
     CompanionPromiseAnalyticsEvents.CREATED,
-    "Companion promise created",
+    'Companion promise created',
     promise,
   );
 }
@@ -47,7 +47,7 @@ export function trackPromiseViewed(
 ): void {
   track(
     CompanionPromiseAnalyticsEvents.VIEWED,
-    "Companion promise viewed",
+    'Companion promise viewed',
     promise,
     { surface },
   );
@@ -56,7 +56,7 @@ export function trackPromiseViewed(
 export function trackPromiseFulfilled(promise: CompanionPromise): void {
   track(
     CompanionPromiseAnalyticsEvents.FULFILLED,
-    "Companion promise fulfilled",
+    'Companion promise fulfilled',
     promise,
   );
 }
@@ -64,7 +64,7 @@ export function trackPromiseFulfilled(promise: CompanionPromise): void {
 export function trackPromiseMissed(promise: CompanionPromise): void {
   track(
     CompanionPromiseAnalyticsEvents.MISSED,
-    "Companion promise missed",
+    'Companion promise missed',
     promise,
   );
 }
@@ -72,7 +72,7 @@ export function trackPromiseMissed(promise: CompanionPromise): void {
 export function trackPromiseRecovered(promise: CompanionPromise): void {
   track(
     CompanionPromiseAnalyticsEvents.RECOVERED,
-    "Companion promise recovery started",
+    'Companion promise recovery started',
     promise,
   );
 }

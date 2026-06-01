@@ -4,13 +4,13 @@
  * List view for challenges with filtering and refresh.
  */
 
-import React from "react";
-import { View, RefreshControl } from "react-native";
-import { FlashList } from "@shopify/flash-list";
-import { Text, Card, Button } from "../../../components";
-import { ChallengeCard } from "./ChallengeCard";
-import type { UserChallengeSummary } from "../schemas";
-import { challengeListStyles as styles } from "./challenge-list.styles";
+import React from 'react';
+import { View, RefreshControl } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
+import { Text, Card, Button } from '../../../components';
+import { ChallengeCard } from './ChallengeCard';
+import type { UserChallengeSummary } from '../schemas';
+import { challengeListStyles as styles } from './challenge-list.styles';
 
 interface ChallengeListProps {
   challenges: UserChallengeSummary[];
@@ -20,7 +20,7 @@ interface ChallengeListProps {
   loading?: boolean;
   error?: Error | null;
   onRetry?: () => void;
-  filter?: "ALL" | "ACTIVE" | "COMPLETED";
+  filter?: 'ALL' | 'ACTIVE' | 'COMPLETED';
 }
 
 export function ChallengeList({
@@ -31,15 +31,15 @@ export function ChallengeList({
   loading,
   error,
   onRetry,
-  filter = "ALL",
+  filter = 'ALL',
 }: ChallengeListProps): JSX.Element {
   const filteredChallenges = React.useMemo(() => {
     switch (filter) {
-      case "ACTIVE":
-        return challenges.filter((c) => c.status === "ACTIVE");
-      case "COMPLETED":
+      case 'ACTIVE':
+        return challenges.filter((c) => c.status === 'ACTIVE');
+      case 'COMPLETED':
         return challenges.filter(
-          (c) => c.status === "COMPLETED" || c.status === "CLAIMED",
+          (c) => c.status === 'COMPLETED' || c.status === 'CLAIMED',
         );
       default:
         return challenges;
@@ -102,16 +102,16 @@ export function ChallengeList({
       <View style={styles.centerContainer}>
         <Card style={styles.emptyCard}>
           <Text style={styles.emptyTitle}>
-            {filter === "ALL"
-              ? "No Challenges"
+            {filter === 'ALL'
+              ? 'No Challenges'
               : `No ${filter.toLowerCase()} challenges`}
           </Text>
           <Text style={styles.emptyText}>
-            {filter === "ALL"
-              ? "Check back later for new challenges!"
-              : "Try a different filter"}
+            {filter === 'ALL'
+              ? 'Check back later for new challenges!'
+              : 'Try a different filter'}
           </Text>
-          {filter !== "ALL" && onRefresh && (
+          {filter !== 'ALL' && onRefresh && (
             <Button
               variant="secondary"
               onPress={onRefresh}
@@ -144,7 +144,7 @@ export function ChallengeList({
         <View style={styles.header}>
           <Text style={styles.headerText}>
             {filteredChallenges.length} Challenge
-            {filteredChallenges.length !== 1 ? "s" : ""}
+            {filteredChallenges.length !== 1 ? 's' : ''}
           </Text>
         </View>
       }

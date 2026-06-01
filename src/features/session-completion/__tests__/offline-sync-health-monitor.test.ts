@@ -5,7 +5,7 @@ import {
   mockGetNetInfoAdapter,
   onlineState,
   flushPromises,
-} from "./offline-sync-test-fixtures";
+} from './offline-sync-test-fixtures';
 import {
   describe,
   it,
@@ -13,46 +13,46 @@ import {
   beforeEach,
   afterEach,
   jest,
-} from "@jest/globals";
+} from '@jest/globals';
 import {
   performSessionCompletionHealthCheck,
   SessionCompletionSyncMonitor,
-} from "../offline-sync-integration";
+} from '../offline-sync-integration';
 
-describe("offline sync health checks and monitoring", () => {
+describe('offline sync health checks and monitoring', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     mockGetCurrentState.mockReturnValue(onlineState);
   });
 
-  it("uses NetInfoAdapter state for health checks", async () => {
+  it('uses NetInfoAdapter state for health checks', async () => {
     mockSessionCompletionOfflineSync.getDiagnostics.mockReturnValue({
       fallbackEntriesCount: 0,
       lastSyncAt: Date.now() - 60000,
       isInitialized: true,
     });
     await expect(performSessionCompletionHealthCheck()).resolves.toMatchObject({
-      status: "healthy",
+      status: 'healthy',
       pendingCount: 0,
       isOnline: true,
     });
     mockGetCurrentState.mockReturnValue({
       isConnected: false,
       isInternetReachable: false,
-      type: "none",
+      type: 'none',
       details: null,
     });
     const offline = await performSessionCompletionHealthCheck();
-    expect(offline.status).toBe("critical");
+    expect(offline.status).toBe('critical');
     expect(
       offline.recommendations.some((item: string) =>
-        item.includes("Device is offline"),
+        item.includes('Device is offline'),
       ),
     ).toBe(true);
     expect(mockGetNetInfoAdapter).toHaveBeenCalled();
   });
 
-  it("classifies queued health severity by diagnostics", async () => {
+  it('classifies queued health severity by diagnostics', async () => {
     mockSessionCompletionOfflineSync.getDiagnostics.mockReturnValue({
       fallbackEntriesCount: 15,
       lastSyncAt: Date.now() - 3600000,
@@ -60,16 +60,16 @@ describe("offline sync health checks and monitoring", () => {
       oldestEntryAge: 7200000,
     });
     const result = await performSessionCompletionHealthCheck();
-    expect(result.status).toBe("critical");
+    expect(result.status).toBe('critical');
     expect(result.pendingCount).toBe(15);
     expect(
       result.recommendations.some((item: string) =>
-        item.includes("High number of pending sessions"),
+        item.includes('High number of pending sessions'),
       ),
     ).toBe(true);
   });
 
-  describe("SessionCompletionSyncMonitor", () => {
+  describe('SessionCompletionSyncMonitor', () => {
     let monitor: InstanceType<typeof SessionCompletionSyncMonitor>;
     let onHealthStatusChange: jest.Mock;
 
@@ -92,11 +92,11 @@ describe("offline sync health checks and monitoring", () => {
       jest.useRealTimers();
     });
 
-    it("runs initial and periodic health checks", async () => {
+    it('runs initial and periodic health checks', async () => {
       monitor.start();
       await flushPromises();
       expect(onHealthStatusChange).toHaveBeenCalledWith(
-        expect.objectContaining({ status: "healthy" }),
+        expect.objectContaining({ status: 'healthy' }),
       );
       jest.clearAllMocks();
       mockGetCurrentState.mockReturnValue(onlineState);
@@ -112,10 +112,10 @@ describe("offline sync health checks and monitoring", () => {
       );
     });
 
-    it("stops monitoring and preserves last health status", async () => {
+    it('stops monitoring and preserves last health status', async () => {
       monitor.start();
       await flushPromises();
-      expect(monitor.getLastHealthStatus()?.status).toBe("healthy");
+      expect(monitor.getLastHealthStatus()?.status).toBe('healthy');
       monitor.stop();
       jest.clearAllMocks();
       mockGetCurrentState.mockReturnValue(onlineState);

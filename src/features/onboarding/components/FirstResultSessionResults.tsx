@@ -4,12 +4,12 @@
  * Displays grade, focus score change, companion reaction, and XP earned.
  */
 
-import React from "react";
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import { FocusScoreChange } from "./FocusScoreChange";
-import type { SessionGradingResult } from "../../session-completion/grading-schemas";
+import React from 'react';
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import { FocusScoreChange } from './FocusScoreChange';
+import type { SessionGradingResult } from '../../session-completion/grading-schemas';
 
 interface FirstResultSessionResultsProps {
   sessionGrade: string;
@@ -77,10 +77,10 @@ export function FirstResultSessionResults({
           Your companion is excited!
         </Text>
         <Text variant="body" color="text.secondary" textAlign="center">
-          {sessionGrade === "S" || sessionGrade === "A"
+          {sessionGrade === 'S' || sessionGrade === 'A'
             ? "Amazing focus! Your companion can't wait for the next session."
-            : sessionGrade === "B"
-              ? "Great job! Your companion is proud of your progress."
+            : sessionGrade === 'B'
+              ? 'Great job! Your companion is proud of your progress.'
               : "Good start! Your companion knows you'll do even better next time."}
         </Text>
       </Box>

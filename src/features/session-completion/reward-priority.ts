@@ -1,24 +1,24 @@
-import { z } from "zod";
-import { HeadlineRewardConsequencesSchema } from "./headline-reward.schemas";
-import type { HeadlineRewardConsequences } from "./headline-reward.types";
+import { z } from 'zod';
+import { HeadlineRewardConsequencesSchema } from './headline-reward.schemas';
+import type { HeadlineRewardConsequences } from './headline-reward.types';
 
 export const RewardPriorityKindSchema = z.enum([
-  "personal_best",
-  "focus_score",
-  "streak",
-  "boss",
-  "level",
-  "companion",
-  "challenge",
-  "currency",
-  "xp",
-  "fallback",
+  'personal_best',
+  'focus_score',
+  'streak',
+  'boss',
+  'level',
+  'companion',
+  'challenge',
+  'currency',
+  'xp',
+  'fallback',
 ]);
 
 export const RewardPriorityLevelSchema = z.enum([
-  "major",
-  "supporting",
-  "standard",
+  'major',
+  'supporting',
+  'standard',
 ]);
 
 export const RewardPriorityRewardSchema = z
@@ -47,7 +47,7 @@ export type RewardPriorityInput = z.infer<typeof RewardPriorityInputSchema>;
 export type RewardPriorityReward = z.infer<typeof RewardPriorityRewardSchema>;
 export type RewardPrioritySummary = z.infer<typeof RewardPrioritySummarySchema>;
 
-const KIND_RANK: Record<RewardPriorityReward["kind"], number> = {
+const KIND_RANK: Record<RewardPriorityReward['kind'], number> = {
   personal_best: 0,
   focus_score: 1,
   streak: 2,
@@ -61,10 +61,10 @@ const KIND_RANK: Record<RewardPriorityReward["kind"], number> = {
 };
 
 const FALLBACK_REWARD: RewardPriorityReward = {
-  detail: "Your focus time is saved.",
-  kind: "fallback",
-  label: "Session complete",
-  priority: "standard",
+  detail: 'Your focus time is saved.',
+  kind: 'fallback',
+  label: 'Session complete',
+  priority: 'standard',
 };
 
 function compareRewards(
@@ -101,20 +101,20 @@ export function buildSessionRewardPriority(
   if (personalBest?.isPersonalBest) {
     rewards.push({
       detail: `${personalBest.purityScore ?? summary.focusPurityScore ?? 0} purity`,
-      kind: "personal_best",
-      label: "New personal best",
-      priority: "major",
+      kind: 'personal_best',
+      label: 'New personal best',
+      priority: 'major',
     });
   }
 
   if ((summary.focusScoreDelta ?? 0) >= 8 || summary.focusScoreBandChanged) {
     rewards.push({
       detail: summary.focusScoreBandChanged
-        ? "New Focus Score band"
+        ? 'New Focus Score band'
         : `+${summary.focusScoreDelta} Focus Score`,
-      kind: "focus_score",
-      label: "Focus Score moved",
-      priority: "major",
+      kind: 'focus_score',
+      label: 'Focus Score moved',
+      priority: 'major',
     });
   }
 
@@ -126,18 +126,18 @@ export function buildSessionRewardPriority(
       detail: streak.streakSaved
         ? `Day ${streak.currentDays} protected`
         : `Day ${streak.currentDays}`,
-      kind: "streak",
-      label: streak.streakSaved ? "Streak recovered" : "Streak extended",
-      priority: "major",
+      kind: 'streak',
+      label: streak.streakSaved ? 'Streak recovered' : 'Streak extended',
+      priority: 'major',
     });
   }
 
   if (boss?.isEnabled && boss.currentHealth <= 0) {
     rewards.push({
-      detail: "Blocker cleared",
-      kind: "boss",
-      label: "Blocker cleared",
-      priority: "major",
+      detail: 'Blocker cleared',
+      kind: 'boss',
+      label: 'Blocker cleared',
+      priority: 'major',
     });
   }
 
@@ -146,38 +146,38 @@ export function buildSessionRewardPriority(
       detail:
         summary.newLevel > summary.previousLevel
           ? `Depth ${summary.newLevel}`
-          : "Progress saved",
-      kind: "level",
+          : 'Progress saved',
+      kind: 'level',
       label:
-        summary.newLevel > summary.previousLevel ? "Progression depth" : "Progress gained",
-      priority: "major",
+        summary.newLevel > summary.previousLevel ? 'Progression depth' : 'Progress gained',
+      priority: 'major',
     });
   }
 
   if (companion?.evolved) {
     rewards.push({
-      detail: "Growth recorded",
-      kind: "companion",
-      label: "Companion growth",
-      priority: "supporting",
+      detail: 'Growth recorded',
+      kind: 'companion',
+      label: 'Companion growth',
+      priority: 'supporting',
     });
   }
 
   if (challenge?.isEnabled && challenge.completedThisSession) {
     rewards.push({
-      detail: "Progress locked",
-      kind: "challenge",
-      label: "Experiment progress",
-      priority: "supporting",
+      detail: 'Progress locked',
+      kind: 'challenge',
+      label: 'Experiment progress',
+      priority: 'supporting',
     });
   }
 
   if (summary.xpEarned > 0) {
     rewards.push({
-      detail: "Progress saved",
-      kind: "xp",
-      label: "Session progress saved",
-      priority: "standard",
+      detail: 'Progress saved',
+      kind: 'xp',
+      label: 'Session progress saved',
+      priority: 'standard',
     });
   }
 

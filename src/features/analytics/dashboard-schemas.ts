@@ -1,12 +1,12 @@
-import { z } from "zod";
+import { z } from 'zod';
 import {
   AnalyticsMetricSchema,
   AnalyticsDimensionSchema,
   TimeRangeSchema,
   DashboardWidgetTypeSchema,
   ExportFormatSchema,
-} from "./enums";
-import { AnalyticsFilterSchema } from "./data-schemas";
+} from './enums';
+import { AnalyticsFilterSchema } from './data-schemas';
 
 // ── Dashboard widget ─────────────────────────────────────────────────────
 
@@ -63,11 +63,11 @@ export const ExportJobSchema = z
     id: z.string().uuid(),
     userId: z.string().uuid(),
     status: z.enum([
-      "pending",
-      "processing",
-      "completed",
-      "failed",
-      "cancelled",
+      'pending',
+      'processing',
+      'completed',
+      'failed',
+      'cancelled',
     ]),
     format: ExportFormatSchema,
     dataTypes: z.array(z.string()).min(1),
@@ -97,11 +97,11 @@ export const AnalyticsPreferencesSchema = z
     defaultTimeRange: TimeRangeSchema,
     defaultDashboardId: z.string().uuid(),
     emailReportsEnabled: z.boolean(),
-    emailReportFrequency: z.enum(["daily", "weekly", "monthly", "never"]),
+    emailReportFrequency: z.enum(['daily', 'weekly', 'monthly', 'never']),
     insightNotificationsEnabled: z.boolean(),
     autoRefreshEnabled: z.boolean(),
     autoRefreshInterval: z.number().int().min(5000).max(300000),
-    currencyDisplay: z.enum(["coins", "gems", "both"]),
+    currencyDisplay: z.enum(['coins', 'gems', 'both']),
     timezone: z.string(),
     updatedAt: z.number().int().positive(),
   })

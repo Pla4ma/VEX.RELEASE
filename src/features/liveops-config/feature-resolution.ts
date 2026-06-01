@@ -2,14 +2,14 @@ import {
   FEATURE_RELEASE_STATES,
   FEATURE_TEASER_STARTS,
   FEATURE_THRESHOLDS,
-} from "./feature-access-config";
-import { FEATURE_MOTIVATION_PROFILES } from "./feature-motivation-config";
-import { FEATURE_DEPENDENCIES } from "./feature-dependencies";
+} from './feature-access-config';
+import { FEATURE_MOTIVATION_PROFILES } from './feature-motivation-config';
+import { FEATURE_DEPENDENCIES } from './feature-dependencies';
 import type {
   FeatureKey,
   FeatureReleaseState,
   MotivationProfile,
-} from "./feature-access";
+} from './feature-access';
 
 export interface FeatureAccessInput {
   feature: FeatureKey;
@@ -24,7 +24,7 @@ export function resolveEffectiveThreshold(
   profile: MotivationProfile | undefined,
 ): number {
   const accel = FEATURE_MOTIVATION_PROFILES[feature];
-  if (!accel || !profile) return baseThreshold;
+  if (!accel || !profile) {return baseThreshold;}
 
   const primaryAccelerated = accel.accelerate.includes(profile.primary);
   const primaryRestricted = accel.restrict.includes(profile.primary);
@@ -63,12 +63,12 @@ export function resolveFeatureVisibility(
   profile: MotivationProfile | undefined,
   sessions: number,
 ): boolean {
-  if (!baseVisible) return false;
+  if (!baseVisible) {return false;}
   const accel = FEATURE_MOTIVATION_PROFILES[feature];
-  if (!accel || !profile) return baseVisible;
+  if (!accel || !profile) {return baseVisible;}
 
   const primaryRestricted = accel.restrict.includes(profile.primary);
-  if (!primaryRestricted) return baseVisible;
+  if (!primaryRestricted) {return baseVisible;}
 
   if (
     accel.restrictVisibility &&
@@ -84,7 +84,7 @@ export function checkDependenciesSatisfied(
   unlockedFeatures: Set<FeatureKey>,
 ): boolean {
   const deps = FEATURE_DEPENDENCIES[feature];
-  if (!deps || deps.length === 0) return true;
+  if (!deps || deps.length === 0) {return true;}
   return deps.every((dep) => unlockedFeatures.has(dep));
 }
 
@@ -97,9 +97,9 @@ export function computeFeatureAccess(input: FeatureAccessInput): {
   const { feature, sessions, profile, unlockedFeatures } = input;
   const releaseState = FEATURE_RELEASE_STATES[feature];
   const disabled =
-    releaseState === "final_release_deactivated" ||
-    releaseState === "archived" ||
-    releaseState === "final_release_internal";
+    releaseState === 'final_release_deactivated' ||
+    releaseState === 'archived' ||
+    releaseState === 'final_release_internal';
 
   const baseThreshold = FEATURE_THRESHOLDS[feature];
   const threshold = resolveEffectiveThreshold(feature, baseThreshold, profile);
@@ -113,7 +113,7 @@ export function computeFeatureAccess(input: FeatureAccessInput): {
   const isTeased =
     !disabled &&
     !isUnlocked &&
-    typeof teaserStart === "number" &&
+    typeof teaserStart === 'number' &&
     sessions >= teaserStart;
   const isVisible = resolveFeatureVisibility(
     feature,

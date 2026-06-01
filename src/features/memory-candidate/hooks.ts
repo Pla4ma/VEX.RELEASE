@@ -1,16 +1,16 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   getMemoryCandidates,
   addMemoryCandidate,
   removeMemoryCandidate,
-} from "./service";
-import type { MemoryCandidateInput } from "./schemas";
+} from './service';
+import type { MemoryCandidateInput } from './schemas';
 
 export function useMemoryCandidates(userId: string | null, enabled = true) {
   const query = useQuery({
     enabled: Boolean(userId) && enabled,
-    queryFn: () => getMemoryCandidates(userId ?? ""),
-    queryKey: ["memory-candidate", userId],
+    queryFn: () => getMemoryCandidates(userId ?? ''),
+    queryKey: ['memory-candidate', userId],
   });
 
   return {
@@ -29,7 +29,7 @@ export function useAddMemoryCandidate() {
     mutationFn: (input: MemoryCandidateInput) => addMemoryCandidate(input),
     onSuccess: (_data, input) => {
       void queryClient.invalidateQueries({
-        queryKey: ["memory-candidate", input.userId],
+        queryKey: ['memory-candidate', input.userId],
       });
     },
   });
@@ -48,7 +48,7 @@ export function useRemoveMemoryCandidate() {
     }) => removeMemoryCandidate(userId, candidateId),
     onSuccess: (_data, input) => {
       void queryClient.invalidateQueries({
-        queryKey: ["memory-candidate", input.userId],
+        queryKey: ['memory-candidate', input.userId],
       });
     },
   });

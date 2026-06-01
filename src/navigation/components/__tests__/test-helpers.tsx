@@ -1,13 +1,13 @@
-import React from "react";
-import { View, Text } from "react-native";
-import { render } from "@testing-library/react-native";
-import { NavigationContainer } from "@react-navigation/native";
-import { jest } from "@jest/globals";
-import { NavigationGuard } from "../NavigationGuard";
+import React from 'react';
+import { View, Text } from 'react-native';
+import { render } from '@testing-library/react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { jest } from '@jest/globals';
+import { NavigationGuard } from '../NavigationGuard';
 
 const mockIsEnabled = jest.fn();
 
-jest.mock("../../../hooks/useFeatureFlags", () => ({
+jest.mock('../../../hooks/useFeatureFlags', () => ({
   useFeatureFlags: () => ({
     isEnabled: mockIsEnabled,
   }),

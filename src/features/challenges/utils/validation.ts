@@ -1,12 +1,12 @@
-import { z } from "zod";
-import { createDebugger } from "../../../utils/debug";
-import { eventBus } from "../../../events";
-const debug = createDebugger("challenges:validation");
+import { z } from 'zod';
+import { createDebugger } from '../../../utils/debug';
+import { eventBus } from '../../../events';
+const debug = createDebugger('challenges:validation');
 export const ChallengeDifficultySchema = z.enum([
-  "EASY",
-  "MEDIUM",
-  "HARD",
-  "EXPERT",
+  'EASY',
+  'MEDIUM',
+  'HARD',
+  'EXPERT',
 ]);
 export type ChallengeDifficulty = z.infer<typeof ChallengeDifficultySchema>;
 export const ChallengeCompletionSchema = z.object({
@@ -83,12 +83,12 @@ export function validateChallengeCompletion(
       Math.abs(c.completedAt - completion.completedAt) < 60000,
   );
   if (isDuplicate) {
-    result.errors.push("Duplicate completion detected");
+    result.errors.push('Duplicate completion detected');
     result.valid = false;
   }
   if (result.suspicious) {
-    eventBus.publish("analytics:track", {
-      event: "challenge_suspicious_completion",
+    eventBus.publish('analytics:track', {
+      event: 'challenge_suspicious_completion',
       properties: {
         challengeId: completion.challengeId,
         userId: completion.userId,
@@ -121,26 +121,26 @@ export function analyzeChallengeBalance(
   let adjustment = 0;
   const completionDiff = metrics.completionRate - expected.targetCompletionRate;
   if (completionDiff > 0.3) {
-    recommendations.push("Challenge too easy - consider increasing difficulty");
+    recommendations.push('Challenge too easy - consider increasing difficulty');
     adjustment += 1;
   } else if (completionDiff < -0.3) {
-    recommendations.push("Challenge too hard - consider decreasing difficulty");
+    recommendations.push('Challenge too hard - consider decreasing difficulty');
     adjustment -= 1;
   }
   const timeRatio = metrics.avgTimeSpent / expected.targetTimeSpent;
   if (timeRatio < 0.5) {
-    recommendations.push("Players finishing too quickly");
+    recommendations.push('Players finishing too quickly');
     adjustment += 0.5;
   } else if (timeRatio > 2) {
-    recommendations.push("Players taking too long (possible frustration)");
+    recommendations.push('Players taking too long (possible frustration)');
     adjustment -= 0.5;
   }
   if (metrics.abandonmentRate > expected.maxAbandonmentRate) {
-    recommendations.push("High abandonment rate - review challenge design");
+    recommendations.push('High abandonment rate - review challenge design');
     adjustment -= 0.5;
   }
   if (metrics.avgAttempts > 10) {
-    recommendations.push("High retry count - may need clearer instructions");
+    recommendations.push('High retry count - may need clearer instructions');
   }
   return {
     balanced: recommendations.length === 0,
