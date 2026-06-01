@@ -96,7 +96,7 @@ export function useRevenueCat(): UseRevenueCatState {
         await Promise.all([doRefreshOfferings(), doRefreshCustomer()]);
       }
     };
-    void initialize();
+    initialize();
     return () => {
       isMounted = false;
     };

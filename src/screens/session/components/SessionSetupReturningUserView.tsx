@@ -116,7 +116,7 @@ export function ReturningUserView({
           onCustomize={() =>
             controller.setupState.setShowCustomization((current) => !current)
           }
-          onStart={() => void controller.handleStartSession()}
+          onStart={() => controller.handleStartSession()}
           presetName={controller.setupState.selectedPreset.name}
           smartSuggestion={controller.setupState.smartSuggestion}
           subtitle={controller.sessionSummary.subtitle}
@@ -154,7 +154,7 @@ export function ReturningUserView({
           durationMinutes={Math.round(controller.selectedDurationSeconds / 60)}
           intervalCount={controller.setupState.selectedPreset.intervals}
           isStarting={controller.isStarting}
-          onStart={() => void controller.handleStartSession()}
+          onStart={() => controller.handleStartSession()}
           selectedSessionMode={controller.setupState.selectedSessionMode}
           selectedThemeLabel={
             controller.selectedThemeOwned ? controller.selectedTheme.name : null

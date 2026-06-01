@@ -159,7 +159,7 @@ export function ContentInputScreen(): JSX.Element {
         accessibilityRole="button"
         fullWidth
         isLoading={isSubmitting}
-        onPress={() => void handleSubmit()}
+        onPress={() => handleSubmit()}
         size="lg"
       >
         {UI_TEXT.SUBMIT_BUTTON}

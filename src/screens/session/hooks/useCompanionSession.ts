@@ -113,7 +113,7 @@ export function useCompanionSession(
         triggeredMilestonesRef.current.add(milestone);
         const label = getMilestoneLabel(milestone, currentMode);
         flashEvent(label);
-        void triggerHaptic(getMilestoneHaptic(milestone));
+        triggerHaptic(getMilestoneHaptic(milestone));
       }
     }
     if (purityScore < 60 && !dangerActiveRef.current) {
@@ -130,7 +130,7 @@ export function useCompanionSession(
           ? { ...current, currentMood: 'STRUGGLING', updatedAt: Date.now() }
           : current,
       );
-      void triggerHaptic('warning');
+      triggerHaptic('warning');
     }
     if (purityScore >= 60) {
       dangerActiveRef.current = false;
@@ -152,7 +152,7 @@ export function useCompanionSession(
             ? { ...current, currentMood: 'ECSTATIC', updatedAt: Date.now() }
             : current,
         );
-        void triggerHaptic('success');
+        triggerHaptic('success');
       }
       return;
     }

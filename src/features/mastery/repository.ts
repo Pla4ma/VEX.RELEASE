@@ -149,7 +149,7 @@ export async function loadMasteryState(
 export function persistMasteryState(state: MasteryState): MasteryState {
   const nextState = { ...state, updatedAt: Date.now() };
   storage.setJSONSync(STORAGE_KEY(state.userId), nextState);
-  void persistCloudMasteryState(nextState).catch((error: unknown) => {
+  persistCloudMasteryState(nextState).catch((error: unknown) => {
     captureSilentFailure(error, {
       feature: 'mastery',
       operation: 'cloud-sync',

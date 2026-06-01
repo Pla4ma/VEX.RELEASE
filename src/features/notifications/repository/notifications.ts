@@ -106,6 +106,6 @@ export function subscribeToNotificationCenter(
     )
     .subscribe();
   return () => {
-    void channel.unsubscribe();
+    channel.unsubscribe();
   };
 }

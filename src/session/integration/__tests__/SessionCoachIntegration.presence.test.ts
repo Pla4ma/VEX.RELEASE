@@ -41,13 +41,13 @@ describe('SessionCoachIntegration CoachPresence delegation', () => {
       canSubscribeToEvents: false,
     } as ReturnType<typeof getAvailabilityFor>);
 
-    new SessionCoachIntegration();
+    void new SessionCoachIntegration();
 
     expect(eventBusMock.subscribe).not.toHaveBeenCalled();
   });
 
   it('does not interrupt active focus for non-critical risk', () => {
-    new SessionCoachIntegration();
+    void new SessionCoachIntegration();
     const riskHandler = eventBusMock.subscribe.mock.calls.find(
       ([event]) => event === 'session:interruption:risk',
     )?.[1];
@@ -61,7 +61,7 @@ describe('SessionCoachIntegration CoachPresence delegation', () => {
   });
 
   it('uses short CoachPresence copy for critical interruption', () => {
-    new SessionCoachIntegration();
+    void new SessionCoachIntegration();
     const riskHandler = eventBusMock.subscribe.mock.calls.find(
       ([event]) => event === 'session:interruption:risk',
     )?.[1];

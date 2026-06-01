@@ -28,7 +28,7 @@ export function CriticalHitBanner({
     const triggerHaptics = async () => {
       await triggerHapticPattern(['success', 'success'], 200);
     };
-    void triggerHaptics();
+    triggerHaptics();
     const timer = setTimeout(() => {
       onRevealComplete();
     }, 3000);

@@ -34,7 +34,7 @@ export function SessionCompleteRewardsPhase({
   useEffect(() => {
     if (controller.rewards.completionStage === 1 && !advancedRef.current) {
       advancedRef.current = true;
-      void controller.rewards.actions.handleRevealComplete();
+      controller.rewards.actions.handleRevealComplete();
     }
   }, [controller.rewards.completionStage, controller.rewards.actions]);
 

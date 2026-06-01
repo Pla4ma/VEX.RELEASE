@@ -56,7 +56,7 @@ export function StudyLibraryScreen(): JSX.Element {
   );
 
   const handleRefresh = useCallback(() => {
-    void refetch();
+    refetch();
   }, [refetch]);
 
   const renderContentItem: ListRenderItem<StudyContent> = ({ item, index }) => (

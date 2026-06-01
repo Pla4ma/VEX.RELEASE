@@ -85,7 +85,7 @@ export function ProgressionDashboard({
         title="Progress needs a sync"
         description="Your earned momentum is still safe. Retry to refresh the current level and next milestone."
         retryLabel="Retry progress"
-        onRetry={() => void progressionQuery.refetch()}
+        onRetry={() => progressionQuery.refetch()}
         style={{
           backgroundColor: theme.colors.background.secondary,
           borderColor: theme.colors.border.light,

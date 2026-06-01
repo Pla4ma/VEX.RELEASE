@@ -42,7 +42,7 @@ export async function checkCumulativeAchievements(
   counterType: string,
   achievementIds: string[],
 ): Promise<void> {
-  void counterType;
+  counterType;
   const achievements =
     await achievementRepository.getAllUserAchievements(userId);
   for (const id of achievementIds) {

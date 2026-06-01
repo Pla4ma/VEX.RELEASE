@@ -39,7 +39,7 @@ export function SessionContractReminder({
   const handleDismiss = (): void => {
     setDismissedStages((current) => Array.from(new Set([...current, stage])));
     if (!isReducedMotion) {
-      void triggerHaptic('impactLight');
+      triggerHaptic('impactLight');
     }
   };
 

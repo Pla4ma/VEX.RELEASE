@@ -43,7 +43,7 @@ export function useContractForSession(sessionId: string | null): {
     isError: query.isError,
     error: query.error instanceof Error ? query.error : null,
     refetch: () => {
-      void refresh();
+      refresh();
     },
   };
 }
@@ -67,7 +67,7 @@ export function useCreateContract(): ReturnType<
         focusContractKeys.session(contract.sessionId),
         contract,
       );
-      void queryClient.invalidateQueries({
+      queryClient.invalidateQueries({
         queryKey: focusContractKeys.session(contract.sessionId),
       });
     },
@@ -115,11 +115,11 @@ export function useReflectOnContract(): ReturnType<
       return { key, previous };
     },
     onSuccess: (_data, variables) => {
-      void queryClient.invalidateQueries({
+      queryClient.invalidateQueries({
         queryKey: focusContractKeys.session(variables.contract.sessionId),
       });
       if (userId) {
-        void queryClient.invalidateQueries({
+        queryClient.invalidateQueries({
           queryKey: ['focus-score', userId],
         });
       }
@@ -164,7 +164,7 @@ export function useContractCompletionRate(
     isError: query.isError,
     error: query.error instanceof Error ? query.error : null,
     refetch: () => {
-      void refresh();
+      refresh();
     },
   };
 }

@@ -123,7 +123,7 @@ export function useSessionSetupState(
       if (result.showCustomizationOverride !== null)
         {setShowCustomization(result.showCustomizationOverride);}
     };
-    void run().finally(() => {
+    run().finally(() => {
       if (!isCancelled) {setHasHydratedDraft(true);}
     });
     return () => {
@@ -166,7 +166,7 @@ export function useSessionSetupState(
 
   useEffect(() => {
     if (!userId || !hasHydratedDraft) {return;}
-    void saveSessionDraft(storage, sessionDraftKey, {
+    saveSessionDraft(storage, sessionDraftKey, {
       presetId: selectedPreset.id,
       selectedCategory,
       customDuration,

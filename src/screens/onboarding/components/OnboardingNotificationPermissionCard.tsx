@@ -40,7 +40,7 @@ export function OnboardingNotificationPermissionCard({
       }
       setState(hasRequested ? 'hidden' : 'idle');
     };
-    void loadPromptState();
+    loadPromptState();
     return () => {
       isMounted = false;
     };
@@ -158,7 +158,7 @@ export function OnboardingNotificationPermissionCard({
           <Button
             variant="primary"
             onPress={() => {
-              void handleEnableReminders();
+              handleEnableReminders();
             }}
             isDisabled={state === 'submitting'}
             isLoading={state === 'submitting'}
@@ -172,7 +172,7 @@ export function OnboardingNotificationPermissionCard({
           <Button
             variant="ghost"
             onPress={() => {
-              void handleMaybeLater();
+              handleMaybeLater();
             }}
             isDisabled={state === 'submitting'}
             fullWidth

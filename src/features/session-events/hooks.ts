@@ -48,7 +48,7 @@ export function useMidSessionEvents(input: UseMidSessionEventsInput): void {
       priority: event.toastType === 'warning' ? 'high' : 'normal',
     });
     trackMidSessionEvent(event);
-    void triggerHaptic(event.haptic);
+    triggerHaptic(event.haptic);
   }, [
     input.bossHealthPercent,
     input.bossTaunts,

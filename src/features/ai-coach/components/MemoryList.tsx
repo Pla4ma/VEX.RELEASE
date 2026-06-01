@@ -33,7 +33,7 @@ export function MemoryList({
           error?.message ?? 'Your coach could not load its memory yet.'
         }
         onRetry={() => {
-          void refetch.call(undefined);
+          refetch.call(undefined);
         }}
       />
     );

@@ -101,6 +101,6 @@ export function getAchievementsByCategoryForUser(
   userId: string,
   category: AchievementCategory,
 ): Achievement[] {
-  void userId;
+  userId;
   return ALL_ACHIEVEMENTS.filter((a) => a.category === category);
 }

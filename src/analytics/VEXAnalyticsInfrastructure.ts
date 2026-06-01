@@ -45,13 +45,13 @@ export function trackRetentionEvent(
 }
 
 function getUserFirstOpen(userId: string): string | null {
-  void userId;
+  userId;
   return null;
 }
 
 function storeUserFirstOpen(userId: string, date: string): void {
-  void userId;
-  void date;
+  userId;
+  date;
 }
 
 function daysBetween(date1: string, date2: string): number {

@@ -51,7 +51,7 @@ export async function trackPendingChange(userId: string, key: string, value: unk
   const { error } = await supabase
     .from(TABLE_PENDING_CHANGES)
     .upsert({ user_id: userId, key, value, timestamp: Date.now() }, { onConflict: 'user_id,key' });
-  if (error) {void error;}
+  if (error) {error;}
 }
 
 export async function clearPendingChange(userId: string, key: string): Promise<void> {
@@ -60,7 +60,7 @@ export async function clearPendingChange(userId: string, key: string): Promise<v
     .delete()
     .eq('user_id', userId)
     .eq('key', key);
-  if (error) {void error;}
+  if (error) {error;}
 }
 
 export async function fetchPendingChanges(userId: string): Promise<PendingChange[]> {

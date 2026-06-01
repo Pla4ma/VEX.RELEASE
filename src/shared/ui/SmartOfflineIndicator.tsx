@@ -78,10 +78,10 @@ export const SmartOfflineIndicator: React.FC<SmartOfflineIndicatorProps> = ({
       const connected = state.isConnected ?? true;
       setIsConnected(connected);
       if (connected) {
-        void haptics.success('light');
+        haptics.success('light');
         setLastSyncTime(Date.now());
       } else {
-        void haptics.warning('light');
+        haptics.warning('light');
       }
     });
     return () => {
@@ -95,7 +95,7 @@ export const SmartOfflineIndicator: React.FC<SmartOfflineIndicatorProps> = ({
   }, [animateOut, onDismiss]);
 
   const handleSync = useCallback(() => {
-    void haptics.impact('medium');
+    haptics.impact('medium');
     handleScale();
     onManualSync?.();
   }, [handleScale, onManualSync]);
@@ -138,7 +138,7 @@ export const SmartOfflineIndicator: React.FC<SmartOfflineIndicatorProps> = ({
           onLongPress={handleDismiss}
           onPress={() => {
             setIsExpanded((value) => !value);
-            void haptics.selection();
+            haptics.selection();
           }}
           style={({ pressed }) => ({
             minHeight: sizing.touchTarget.min,

@@ -44,7 +44,7 @@ export function isValidURL(value: unknown): value is string {
     return false;
   }
   try {
-    new URL(value);
+    void new URL(value);
     return true;
   } catch (error) {
     captureSilentFailure(error, {

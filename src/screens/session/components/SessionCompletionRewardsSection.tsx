@@ -75,7 +75,7 @@ export function SessionCompletionRewardsSection({
               title="Rewards couldn't save right now - we'll retry automatically"
               variant="warning"
               actionText="Retry"
-              onAction={() => void rewards.actions.applyCompletionRewards()}
+              onAction={() => rewards.actions.applyCompletionRewards()}
             />
           </Box>
         ) : rewards.rewardCreditStatus === 'crediting' ||
@@ -105,7 +105,7 @@ export function SessionCompletionRewardsSection({
           streakIncreased={summary.streakIncreased}
           streakLabel={`${summary.streakDays} Day Streak`}
           studyProgress={null}
-          onRetryRewards={() => void rewards.actions.applyCompletionRewards()}
+          onRetryRewards={() => rewards.actions.applyCompletionRewards()}
           onStartNewSession={onStartNewSession}
         />
 

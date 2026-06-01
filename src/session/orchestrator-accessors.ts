@@ -92,7 +92,7 @@ export function applyStudyQuizBonus(
   };
   orch.session.updatedAt = Date.now();
   orch.session.isDirty = true;
-  void orch.saveSessionState();
+  orch.saveSessionState();
 }
 
 export function updateFocusQuality(
@@ -104,7 +104,7 @@ export function updateFocusQuality(
   orch.focusMetrics.calculatedAt = Date.now();
   orch.session.updatedAt = Date.now();
   orch.session.isDirty = true;
-  void orch.saveSessionState();
+  orch.saveSessionState();
 }
 
 export function addDocument(
@@ -121,7 +121,7 @@ export function addDocument(
     };
     orch.session.updatedAt = Date.now();
     orch.session.isDirty = true;
-    void orch.saveSessionState();
+    orch.saveSessionState();
   }
 }
 
@@ -138,7 +138,7 @@ export function removeDocument(
   };
   orch.session.updatedAt = Date.now();
   orch.session.isDirty = true;
-  void orch.saveSessionState();
+  orch.saveSessionState();
 }
 
 export async function getSessionHistory(

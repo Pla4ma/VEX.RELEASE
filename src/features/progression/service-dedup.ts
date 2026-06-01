@@ -27,7 +27,7 @@ async function loadPersistedKeys(): Promise<Map<string, number>> {
 
 function savePersistedKeys(entries: DedupEntry[]): void {
   const trimmed = entries.slice(-MAX_DEDUP_ENTRIES);
-  void mmkv.setItem(DEDUP_MMKV_KEY, JSON.stringify(trimmed));
+  mmkv.setItem(DEDUP_MMKV_KEY, JSON.stringify(trimmed));
 }
 
 let processedOperations = new Map<string, number>();

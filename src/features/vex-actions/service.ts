@@ -177,7 +177,7 @@ export function vexUpdateLaneOverride(
   rawInput: UpdateLaneOverrideInput,
   gate?: ActionGate,
 ): VexActionResult<LaneProfile> {
-  void gate;
+  gate;
 
   const parsed = UpdateLaneOverrideInputSchema.safeParse(rawInput);
   if (!parsed.success)

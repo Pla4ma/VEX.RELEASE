@@ -93,7 +93,7 @@ export function useProfileData(
         if (mounted) {setMasteryLoading(false);}
       }
     };
-    void load();
+    load();
     return () => { mounted = false; };
   }, [userId]);
 

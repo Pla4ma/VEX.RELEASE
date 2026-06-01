@@ -47,7 +47,7 @@ export function AnalyticsDashboard({
       title: 'Failed to load analytics',
       message: analyticsError.message,
       recoverable: true,
-      action: () => { void refetchData(); },
+      action: () => { refetchData(); },
     });
     Sentry.captureException(analyticsError, {
       tags: { component: 'AnalyticsDashboard', operation: 'fetchData' },

@@ -101,8 +101,8 @@ export async function updateBasicChallengeProgressFromSession(
   _sessionId: string,
   _sessionDuration: number,
 ): Promise<BasicChallengeProgressResult> {
-  void _sessionId;
-  void _sessionDuration;
+  _sessionId;
+  _sessionDuration;
 
   const daily = await getOrCreateBasicDailyChallenge(userId);
   const weekly = await getOrCreateBasicWeeklyChallenge(userId);

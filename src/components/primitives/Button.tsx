@@ -83,7 +83,7 @@ export function Button({
         ? 1
         : withSpring(0.97, springPresets.tactile);
       if (haptic !== 'none') {
-        void buttonTap();
+        buttonTap();
       }
       props.onPressIn?.(event);
     },
@@ -103,7 +103,7 @@ export function Button({
   const onPress = useCallback(
     (event: GestureResponderEvent) => {
       if (haptic !== 'none') {
-        void triggerHaptic(
+        triggerHaptic(
           haptic === 'success'
             ? 'success'
             : haptic === 'warning'

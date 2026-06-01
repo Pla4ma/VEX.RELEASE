@@ -42,7 +42,7 @@ export function initializeNotifications(): void {
   } catch (error) {
     debug.warn('Notification handler setup failed', error);
   }
-  void ensureNotificationChannel();
+  ensureNotificationChannel();
 }
 
 export async function scheduleLocalNotification(

@@ -37,7 +37,7 @@ export function usePrefetchQueries(
   const prefetchByKey = useCallback(
     (queryKey: readonly string[]) => {
       if (!isCoreQueryKey(queryKey)) {return;}
-      void queryClient.prefetchQuery({ queryKey, staleTime: 60 * 1000 });
+      queryClient.prefetchQuery({ queryKey, staleTime: 60 * 1000 });
     },
     [queryClient],
   );

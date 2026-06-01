@@ -163,7 +163,7 @@ export function HomeHeroSection({
         description="VEX could not choose the next move yet. Pull once more and the path will settle."
         retryLabel="Retry Home Action"
         onRetry={() => {
-          void priorityQuery.refetch();
+          priorityQuery.refetch();
         }}
       />
     );

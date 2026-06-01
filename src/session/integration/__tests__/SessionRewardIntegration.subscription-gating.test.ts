@@ -88,12 +88,12 @@ describe('SessionRewardIntegration — subscription gating', () => {
   });
 
   it('fully disabled integration has zero subscriptions', () => {
-    new SessionRewardIntegration(ALL_DISABLED);
+    void new SessionRewardIntegration(ALL_DISABLED);
     expect(mockedEventBus.subscribe).not.toHaveBeenCalled();
   });
 
   it('completion-only enabled subscribes only to session:completed', () => {
-    new SessionRewardIntegration(COMPLETION_ONLY);
+    void new SessionRewardIntegration(COMPLETION_ONLY);
 
     const subscribedEvents = mockedEventBus.subscribe.mock.calls.map(
       (call) => call[0],
@@ -105,7 +105,7 @@ describe('SessionRewardIntegration — subscription gating', () => {
   });
 
   it('recovery-only enabled subscribes only to recovery', () => {
-    new SessionRewardIntegration(RECOVERY_ONLY);
+    void new SessionRewardIntegration(RECOVERY_ONLY);
 
     const subscribedEvents = mockedEventBus.subscribe.mock.calls.map(
       (call) => call[0],
@@ -117,7 +117,7 @@ describe('SessionRewardIntegration — subscription gating', () => {
   });
 
   it('abandonment-only enabled subscribes only to abandoned', () => {
-    new SessionRewardIntegration(ABANDONMENT_ONLY);
+    void new SessionRewardIntegration(ABANDONMENT_ONLY);
 
     const subscribedEvents = mockedEventBus.subscribe.mock.calls.map(
       (call) => call[0],
@@ -129,12 +129,12 @@ describe('SessionRewardIntegration — subscription gating', () => {
   });
 
   it('final release config has zero legacy subscriptions', () => {
-    new SessionRewardIntegration(ALL_DISABLED);
+    void new SessionRewardIntegration(ALL_DISABLED);
     expect(mockedEventBus.subscribe).not.toHaveBeenCalled();
   });
 
   it('recovery + abandonment enabled subscribes to both but not completion', () => {
-    new SessionRewardIntegration({
+    void new SessionRewardIntegration({
       ...ALL_DISABLED,
       autoHandleRecoveryRewards: true,
       autoHandleAbandonmentPartialCredit: true,

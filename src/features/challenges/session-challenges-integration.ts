@@ -105,7 +105,7 @@ export function calculateChallengeContribution(sessionData: {
   canCompleteDaily: boolean;
   canCompleteWeekly: boolean;
 } {
-  void sessionData;
+  sessionData;
   const dailyContribution = 1; // Each session contributes 1 to daily challenge
   const weeklyContribution = 1; // Each session contributes 1 to weekly challenge
 

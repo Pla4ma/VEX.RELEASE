@@ -17,13 +17,13 @@ interface BossTemplateStub {
 export async function fetchBossTemplate(
   ..._args: unknown[]
 ): Promise<BossTemplateStub | null> {
-  void _args;
+  _args;
   return null;
 }
 export async function fetchActiveEncounter(
   ..._args: unknown[]
 ): Promise<BossEncounterStub | null> {
-  void _args;
+  _args;
   return null;
 }
 export async function hasActiveBossEncounter(): Promise<boolean> {

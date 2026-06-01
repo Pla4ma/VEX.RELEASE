@@ -96,7 +96,7 @@ export function ContentReviewScreen() {
         {isFailed && content?.errorMessage && (
           <ErrorDisplay
             errorMessage={content.errorMessage}
-            onRetry={() => void refetch()}
+            onRetry={() => refetch()}
           />
         )}
 

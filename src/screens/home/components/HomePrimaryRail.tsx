@@ -65,7 +65,7 @@ export function HomePrimaryRail({
           status="error"
           message="Session rewards need repair"
           description={completionSync.message}
-          onRetry={() => void onRepairSync()}
+          onRetry={() => onRepairSync()}
         />
       ) : null}
       <GradientStartButton
@@ -83,7 +83,7 @@ export function HomePrimaryRail({
         model={focusModel}
         onPress={onOpenProgress}
         onRetry={() => {
-          void focusModel.refetch();
+          focusModel.refetch();
         }}
       />
       <ProgressPreviewCard
@@ -102,7 +102,7 @@ export function HomePrimaryRail({
             ? onDismissHighlight
             : undefined
         }
-        onPress={() => void returnReason.onPress()}
+        onPress={() => returnReason.onPress()}
         tone={returnReason.tone}
         title={returnReason.title}
       />
@@ -111,7 +111,7 @@ export function HomePrimaryRail({
           status="error"
           message="Some sections are still syncing"
           description="Your progress is safe. Retrying will refresh the missing data."
-          onRetry={() => void onRetry()}
+          onRetry={() => onRetry()}
         />
       ) : null}
     </View>

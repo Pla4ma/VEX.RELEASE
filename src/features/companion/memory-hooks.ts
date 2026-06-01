@@ -26,7 +26,7 @@ export function useCompanionMemories(userId: string | null): {
     isError: query.isError,
     isPending: query.isPending,
     refetch: () => {
-      void refresh();
+      refresh();
     },
   };
 }

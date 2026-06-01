@@ -54,7 +54,7 @@ export const AchievementUnlockToast: React.FC<AchievementUnlockToastProps> = ({
   }, [onDismiss, opacity, translateY]);
   useEffect(() => {
     if (visible) {
-      void achievementUnlocked();
+      achievementUnlocked();
       translateY.value = withSpring(60, { damping: 15, stiffness: 200 });
       opacity.value = withTiming(1, { duration: 300 });
       scale.value = withSpring(1, { damping: 12, stiffness: 150 });

@@ -84,7 +84,7 @@ export class ChallengeManager {
         });
       }
     }
-    void this.onStateChange();
+    this.onStateChange();
   }
 
   claimChallengeReward(challengeId: string): void {
@@ -97,7 +97,7 @@ export class ChallengeManager {
     challenge.claimedBy.push(userId);
     challenge.status = 'CLAIMED';
     eventBus.publish('challenge:reward_claimed', { userId, challengeId, claimedAt: Date.now() });
-    void this.onStateChange();
+    this.onStateChange();
   }
 
   private completeChallenge(challengeId: string): void {

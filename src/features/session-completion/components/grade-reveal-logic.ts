@@ -95,7 +95,7 @@ export function useGradeRevealSequence(
       return;
     }
     const hapticTimeout = setTimeout(() => {
-      void gradeReveal(gradeLetter as 'S' | 'A' | 'B' | 'C' | 'D');
+      gradeReveal(gradeLetter as 'S' | 'A' | 'B' | 'C' | 'D');
     }, 200);
     const shrinkTimeout = setTimeout(() => {
       letterScale.value = withTiming(0.34, {

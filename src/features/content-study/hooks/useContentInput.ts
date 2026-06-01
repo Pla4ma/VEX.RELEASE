@@ -127,7 +127,7 @@ export function useContentInput() {
       const response = await submitContent(user.id, request);
 
       if (request.type === 'PDF' || request.type === 'YOUTUBE') {
-        void extractContent({ contentId: response.contentId }).catch(
+        extractContent({ contentId: response.contentId }).catch(
           (error: unknown) => {
             captureException(
               error instanceof Error
@@ -145,7 +145,7 @@ export function useContentInput() {
       return { contentId: response.contentId, status: response.status };
     },
     onSuccess: () => {
-      void queryClient.invalidateQueries({
+      queryClient.invalidateQueries({
         queryKey: contentStudyQueryKeys.all,
       });
     },

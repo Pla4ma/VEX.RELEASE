@@ -117,6 +117,6 @@ export function startFetchTimer(
   fetcher: () => Promise<void>,
 ): ReturnType<typeof setInterval> {
   return setInterval(() => {
-    void fetcher();
+    fetcher();
   }, intervalMs);
 }

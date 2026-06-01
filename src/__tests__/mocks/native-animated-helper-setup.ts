@@ -5,7 +5,7 @@
  */
 
 function recordSetupFallback(error: unknown): void {
-  void error;
+  error;
 }
 
 type AnimatedAPI = {

@@ -152,7 +152,7 @@ export function BossPreviewCard({
               </Box>
               <Pressable
                 onPress={() => {
-                  void Haptics.triggerHaptic('impactLight');
+                  Haptics.triggerHaptic('impactLight');
                   onPlaceBounty?.();
                 }}
                 disabled={

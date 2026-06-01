@@ -14,7 +14,7 @@ describe('SessionRewardIntegration - disabled (all flags false)', () => {
   });
 
   it('should NOT subscribe to any event when fully disabled', () => {
-    new SessionRewardIntegration({
+    void new SessionRewardIntegration({
       autoGrantRewards: false,
       autoUpdateStreak: false,
       autoAddXP: false,
@@ -31,7 +31,7 @@ describe('SessionRewardIntegration - disabled (all flags false)', () => {
   });
 
   it('should deduplicate via in-memory Set when enabled', async () => {
-    new SessionRewardIntegration({
+    void new SessionRewardIntegration({
       autoGrantRewards: true,
       autoUpdateStreak: true,
       autoAddXP: true,

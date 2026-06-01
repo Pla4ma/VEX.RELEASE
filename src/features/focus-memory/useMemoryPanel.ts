@@ -47,10 +47,10 @@ export function useMemoryPanel(userId: string | null) {
       await deleteMemory(memoryId, userId);
     },
     onSuccess: () => {
-      void queryClient.invalidateQueries({
+      queryClient.invalidateQueries({
         queryKey: ['memory-panel', userId],
       });
-      void queryClient.invalidateQueries({
+      queryClient.invalidateQueries({
         queryKey: ['focus-memory', userId],
       });
     },
@@ -62,10 +62,10 @@ export function useMemoryPanel(userId: string | null) {
       await acceptMemory(memoryId, userId);
     },
     onSuccess: () => {
-      void queryClient.invalidateQueries({
+      queryClient.invalidateQueries({
         queryKey: ['memory-panel', userId],
       });
-      void queryClient.invalidateQueries({
+      queryClient.invalidateQueries({
         queryKey: ['focus-memory', userId],
       });
     },

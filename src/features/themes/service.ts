@@ -15,7 +15,7 @@ export interface PurchaseThemeResult {
 export async function getOwnedSessionThemeIds(
   userId: string,
 ): Promise<string[]> {
-  void userId;
+  userId;
   return SESSION_THEMES.filter((theme) => theme.isFree).map(
     (theme) => theme.id,
   );
@@ -70,7 +70,7 @@ export async function purchaseTheme(
   }
 
   if (theme.isFree) {
-    void userId;
+    userId;
     return { success: true, errorMessage: null };
   }
 

@@ -6,6 +6,7 @@ module.exports = {
     '@typescript-eslint/no-unused-vars': 'warn',
     'react-hooks/exhaustive-deps': 'error',
     'react-hooks/rules-of-hooks': 'error',
+    'react/react-in-jsx-scope': 'off',
     'no-new-func': 'warn',
     'react-native/no-inline-styles': 'off',
   },

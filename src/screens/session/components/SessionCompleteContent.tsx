@@ -96,7 +96,7 @@ export function SessionCompleteContent({
   }, [tomorrowPreview, controller.userId]);
 
   useEffect(() => {
-    void sessionComplete();
+    sessionComplete();
   }, []);
 
   const lane = useMemo(

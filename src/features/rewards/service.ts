@@ -36,7 +36,7 @@ export async function createReward(input: {
   amount: number;
   metadata?: Record<string, unknown>;
 }): Promise<{ id: string }> {
-  void input;
+  input;
   return { id: `reward_${input.userId}_${Date.now()}` };
 }
 

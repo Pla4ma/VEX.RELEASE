@@ -33,7 +33,7 @@ export function useContentHistory() {
       await deleteItem(contentId);
     },
     onSuccess: () => {
-      void queryClient.invalidateQueries({
+      queryClient.invalidateQueries({
         queryKey: contentStudyQueryKeys.all,
       });
     },

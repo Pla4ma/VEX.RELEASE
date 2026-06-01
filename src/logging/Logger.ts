@@ -109,7 +109,7 @@ export class Logger {
    * Output log entry to console
    */
   private outputToConsole(logEntry: LogEntry): void {
-    void logEntry;
+    logEntry;
   }
 
   /**
@@ -119,7 +119,7 @@ export class Logger {
     // In a real implementation, this would write to a log file
     // For now, we'll just add it to a simple in-memory buffer
     // that could be periodically written to disk
-    void logEntry;
+    logEntry;
   }
 
   /**

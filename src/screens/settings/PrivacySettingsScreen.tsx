@@ -46,7 +46,7 @@ export const PrivacySettingsScreen: React.FC<Props> = () => {
           text: 'Delete Forever',
           style: 'destructive',
           onPress: () => {
-            void deleteAccountMutation
+            deleteAccountMutation
               .deleteAccountAsync({ userId: user.id })
               .then(() => {
                 clearUser();
@@ -58,7 +58,7 @@ export const PrivacySettingsScreen: React.FC<Props> = () => {
   }, [clearUser, deleteAccountMutation, user?.id]);
 
   const restorePurchases = useCallback((): void => {
-    void restore()
+    restore()
       .then((result) => {
         showToast({
           message: result.success
