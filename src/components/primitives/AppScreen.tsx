@@ -58,13 +58,13 @@ export function AppScreen({
       <StatusBar style={isDark ? 'light' : 'dark'} />
       <LinearGradient
         colors={[
-          theme.colors.semantic.primarySoft,
+          `${theme.colors.primary[900]}90`,
           theme.colors.semantic.background,
           theme.colors.semantic.background,
         ]}
-        locations={[0, 0.36, 1]}
+        locations={[0, 0.42, 1]}
         pointerEvents="none"
-        style={{ height: 280, left: 0, position: 'absolute', right: 0, top: 0 }}
+        style={{ height: 320, left: 0, position: 'absolute', right: 0, top: 0 }}
       />
       {body}
     </View>

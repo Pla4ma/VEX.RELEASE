@@ -1,16 +1,16 @@
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 const styles = {
-  container: { flex: 1, backgroundColor: launchColors.hex_1a1a2e },
+  container: { flex: 1, backgroundColor: '#1a1a2e' },
   content: { padding: 24 },
   header: { alignItems: 'center' as const, marginBottom: 24 },
   title: {
     fontSize: 28,
     fontWeight: '700' as const,
-    color: launchColors.hex_fff,
+    color: '#fff',
     marginBottom: 8,
   },
-  subtitle: { fontSize: 16, color: launchColors.hex_9e9e9e },
+  subtitle: { fontSize: 16, color: '#9e9e9e' },
   scoreCircle: {
     width: 160,
     height: 160,
@@ -25,20 +25,20 @@ const styles = {
   scoreNumber: {
     fontSize: 32,
     fontWeight: '700' as const,
-    color: launchColors.hex_fff,
+    color: '#fff',
   },
-  scoreLabel: { fontSize: 14, color: launchColors.hex_9e9e9e },
+  scoreLabel: { fontSize: 14, color: '#9e9e9e' },
   rewardsSection: { marginBottom: 24 },
   sectionTitle: {
     fontSize: 18,
     fontWeight: '600' as const,
-    color: launchColors.hex_fff,
+    color: '#fff',
     marginBottom: 12,
   },
   rewardsRow: { flexDirection: 'row' as const, gap: 12 },
   rewardBadge: {
     flex: 1,
-    backgroundColor: launchColors.hex_2a2a3e,
+    backgroundColor: '#2a2a3e',
     borderRadius: 12,
     padding: 16,
     alignItems: 'center' as const,
@@ -47,14 +47,14 @@ const styles = {
   rewardValue: {
     fontSize: 20,
     fontWeight: '700' as const,
-    color: launchColors.hex_ffd700,
+    color: '#ffd700',
   },
-  rewardLabel: { fontSize: 12, color: launchColors.hex_9e9e9e },
+  rewardLabel: { fontSize: 12, color: '#9e9e9e' },
   streakBanner: {
     flexDirection: 'row' as const,
     alignItems: 'center' as const,
     justifyContent: 'center' as const,
-    backgroundColor: launchColors.hex_ff6b35,
+    backgroundColor: '#ff6b35',
     borderRadius: 12,
     padding: 16,
     marginBottom: 24,
@@ -63,15 +63,15 @@ const styles = {
   streakText: {
     fontSize: 18,
     fontWeight: '700' as const,
-    color: launchColors.hex_fff,
+    color: '#fff',
   },
   streakBonus: {
     marginLeft: 8,
     paddingHorizontal: 8,
     paddingVertical: 4,
-    backgroundColor: launchColors.rgb_255_255_255_0_3,
+    backgroundColor: 'rgba(255,255,255,0.3)',
     borderRadius: 4,
-    color: launchColors.hex_fff,
+    color: '#fff',
     fontSize: 12,
     fontWeight: '600' as const,
   },
@@ -79,7 +79,7 @@ const styles = {
   bonusItem: {
     flexDirection: 'row' as const,
     alignItems: 'center' as const,
-    backgroundColor: launchColors.hex_2a2a3e,
+    backgroundColor: '#2a2a3e',
     borderRadius: 8,
     padding: 12,
     marginBottom: 8,
@@ -89,35 +89,35 @@ const styles = {
   bonusType: {
     fontSize: 14,
     fontWeight: '600' as const,
-    color: launchColors.hex_fff,
+    color: '#fff',
     textTransform: 'capitalize' as const,
   },
-  bonusDescription: { fontSize: 12, color: launchColors.hex_9e9e9e },
+  bonusDescription: { fontSize: 12, color: '#9e9e9e' },
   bonusAmount: {
     fontSize: 16,
     fontWeight: '700' as const,
-    color: launchColors.hex_4caf50,
+    color: '#4caf50',
   },
   actions: { gap: 12 },
   shareButton: {
     paddingVertical: 14,
     borderRadius: 8,
-    backgroundColor: launchColors.hex_2a2a3e,
+    backgroundColor: '#2a2a3e',
     alignItems: 'center' as const,
   },
   shareButtonText: {
-    color: launchColors.hex_fff,
+    color: '#fff',
     fontSize: 16,
     fontWeight: '600' as const,
   },
   newSessionButton: {
     paddingVertical: 16,
     borderRadius: 8,
-    backgroundColor: launchColors.hex_4caf50,
+    backgroundColor: '#4caf50',
     alignItems: 'center' as const,
   },
   newSessionButtonText: {
-    color: launchColors.hex_fff,
+    color: '#fff',
     fontSize: 16,
     fontWeight: '700' as const,
   },
@@ -126,7 +126,7 @@ const styles = {
     borderRadius: 8,
     alignItems: 'center' as const,
   },
-  closeButtonText: { color: launchColors.hex_9e9e9e, fontSize: 16 },
+  closeButtonText: { color: '#9e9e9e', fontSize: 16 },
 };
 
 export default styles;

@@ -10,7 +10,7 @@ import { useTheme } from '../../theme';
 import { Box, Text } from '../primitives';
 import { IconButton } from '../../icons';
 import { createSheet } from '@/shared/ui/create-sheet';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 import { useModalAnimation } from './useModalAnimation';
 
 export interface ModalProps {
@@ -72,7 +72,7 @@ export const Modal: React.FC<ModalProps> = ({
         <Animated.View
           style={[
             styles.backdrop,
-            { backgroundColor: launchColors.rgb_0_0_0_0_5 },
+            { backgroundColor: 'rgba(0,0,0,0.5)' },
             backdropStyle,
           ]}
         />
@@ -142,7 +142,7 @@ const styles = createSheet({
   footer: {
     padding: 16,
     borderTopWidth: 1,
-    borderTopColor: launchColors.rgb_0_0_0_0_1,
+    borderTopColor: 'rgba(0,0,0,0.1)',
   },
 });
 

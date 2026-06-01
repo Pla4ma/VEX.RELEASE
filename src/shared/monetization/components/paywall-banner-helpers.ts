@@ -22,19 +22,19 @@ export function getTriggerMessage(
   switch (trigger) {
     case 'BOSS_DEFEAT':
       return {
-        emoji: '⚔️',
+        emoji: '',
         headline: 'Unlock the next boss tier immediately',
         subtext: `Premium users skip the wait and face Tier ${nextBossTier ?? '++'} bosses right away.`,
       };
     case 'STREAK_MILESTONE':
       return {
-        emoji: '🛡️',
+        emoji: '',
         headline: 'Protect this streak with Premium',
         subtext: `Streak Insurance covers ${streakDays ?? 'your'} days — one rough day won't erase your progress.`,
       };
     case 'S_GRADE':
       return {
-        emoji: '⚡',
+        emoji: '',
         headline: 'Premium users earn 1.1× XP every session',
         subtext: bonusXp
           ? `That session would have earned ${bonusXp} more XP with Premium.`
@@ -42,7 +42,7 @@ export function getTriggerMessage(
       };
     default:
       return {
-        emoji: '⭐',
+        emoji: '',
         headline: 'Unlock Premium features',
         subtext: 'Get the most out of your focus sessions.',
       };

@@ -1,4 +1,3 @@
-import { launchColors } from '@theme/tokens/launch-colors';
 import { STREAK_STATES } from './constants';
 import type { StreakState, StreakStateInfo } from './types';
 
@@ -37,8 +36,8 @@ export function getStreakStateInfo(state: StreakState): StreakStateInfo {
       state: state,
       label: 'Unknown',
       description: 'Unknown state',
-      color: launchColors.hex_718096,
-      icon: '❓',
+      color: '#718096',
+      icon: '',
       animation: 'none',
       urgency: 'none',
       coachMessage: '',

@@ -1,5 +1,5 @@
 import { Dimensions, PixelRatio, Platform } from 'react-native';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 const { width, height } = Dimensions.get('window');
 export const Device = {
   width,
@@ -123,7 +123,7 @@ export const platform = {
   isWeb: Platform.OS === 'web',
   elevation: (level: number) => ({
     elevation: level,
-    shadowColor: launchColors.hex_000,
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: level / 2 },
     shadowOpacity: 0.3,
     shadowRadius: level,

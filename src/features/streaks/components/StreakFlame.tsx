@@ -9,7 +9,7 @@ import { Text } from '../../../components/primitives/Text';
 import { Box } from '../../../components/primitives/Box';
 import { Icon } from '../../../icons';
 import { glow } from '../../../theme/tokens/elevation';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 export function StreakFlame({ days }: { days: number }): JSX.Element {
   const flameStyle = useAnimatedStyle(() => ({
@@ -33,10 +33,10 @@ export function StreakFlame({ days }: { days: number }): JSX.Element {
     return 50;
   };
   const getFlameColor = (): string => {
-    if (days >= 100) {return launchColors.hex_f59e0b;}
-    if (days >= 60) {return launchColors.hex_a855f7;}
-    if (days >= 30) {return launchColors.hex_3b82f6;}
-    return launchColors.hex_ef4444;
+    if (days >= 100) {return '#f59e0b';}
+    if (days >= 60) {return '#a855f7';}
+    if (days >= 30) {return '#3b82f6';}
+    return '#ef4444';
   };
   const size = getFlameSize();
   const flameColor = getFlameColor();

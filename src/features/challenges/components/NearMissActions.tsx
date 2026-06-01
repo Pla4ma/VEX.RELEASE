@@ -33,7 +33,7 @@ export const NearMissActions: React.FC<NearMissActionsProps> = ({
   <>
     <Box p={4} borderRadius={12} bg={primaryBg} mb={4}>
       <Box flexDirection="row" alignItems="center" gap={2} mb={2}>
-        <Text style={{ fontSize: 20 }}>💪</Text>
+        <Text style={{ fontSize: 20 }}></Text>
         <Text variant="body" color={primaryText} fontWeight="semibold">
           You almost had it!
         </Text>
@@ -60,7 +60,7 @@ export const NearMissActions: React.FC<NearMissActionsProps> = ({
         }}
         mb={4}
       >
-        <Text style={{ fontSize: 20, marginRight: 8 }}>⏰</Text>
+        <Text style={{ fontSize: 20, marginRight: 8 }}></Text>
         <Text variant="body" color={infoColor}>
           Next challenge in {formatTimeUntil(hoursUntilNext)}
         </Text>
@@ -77,7 +77,7 @@ export const NearMissActions: React.FC<NearMissActionsProps> = ({
         accessibilityRole="button"
         accessibilityHint="Double tap to select"
       >
-        👍 I'll Get It Next Time
+        I'll Get It Next Time
       </Button>
       {onViewNextChallenge && (
         <Button
@@ -89,14 +89,14 @@ export const NearMissActions: React.FC<NearMissActionsProps> = ({
           accessibilityRole="button"
           accessibilityHint="Double tap to select"
         >
-          🎯 View Upcoming Challenges
+          View Upcoming Challenges
         </Button>
       )}
     </Box>
 
     <Box mt={4} alignItems="center">
       <Text variant="caption" color={tertiaryText} textAlign="center">
-        "This one got away... but the next one is yours! 🎯"
+        "This one got away... but the next one is yours."
       </Text>
     </Box>
   </>

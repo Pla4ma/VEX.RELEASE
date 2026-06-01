@@ -31,7 +31,7 @@ export function MonthlyReportErrorState({
         color="error"
         style={{ marginBottom: theme.spacing[4] }}
       >
-        ⚠️ Report Unavailable
+        Report Unavailable
       </Text>
       <Text
         variant="body"

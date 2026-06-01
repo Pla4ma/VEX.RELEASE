@@ -3,7 +3,7 @@ import { View, Text, Pressable, ScrollView } from 'react-native';
 import { useSessionPresets } from '../hooks/useSession';
 import type { SessionPreset } from '../types';
 import { createSheet } from '@/shared/ui/create-sheet';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 import { PresetCard } from './PresetCard';
 import { CreatePresetForm } from './CreatePresetForm';
 import { cardSelection } from '../../utils/haptics';
@@ -120,17 +120,17 @@ const styles = createSheet({
   categoryChip: {
     paddingHorizontal: 16,
     paddingVertical: 8,
-    backgroundColor: launchColors.hex_2a2a3e,
+    backgroundColor: '#2a2a3e',
     borderRadius: 20,
     marginRight: 8,
   },
-  categoryChipActive: { backgroundColor: launchColors.hex_e94560 },
+  categoryChipActive: { backgroundColor: '#e94560' },
   categoryChipText: {
-    color: launchColors.hex_9e9e9e,
+    color: '#9e9e9e',
     fontSize: 14,
     fontWeight: '500',
   },
-  categoryChipTextActive: { color: launchColors.hex_fff },
+  categoryChipTextActive: { color: '#fff' },
   presetsContainer: { flex: 1 },
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 12, padding: 4 },
   createButton: {
@@ -138,13 +138,13 @@ const styles = createSheet({
     padding: 16,
     backgroundColor: 'transparent',
     borderWidth: 2,
-    borderColor: launchColors.hex_e94560,
+    borderColor: '#e94560',
     borderStyle: 'dashed',
     borderRadius: 12,
     alignItems: 'center',
   },
   createButtonText: {
-    color: launchColors.hex_e94560,
+    color: '#e94560',
     fontSize: 16,
     fontWeight: '600',
   },

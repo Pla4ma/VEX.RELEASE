@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text } from 'react-native';
 import { useStreakCalendar } from '../hooks';
 import { createSheet } from '@/shared/ui/create-sheet';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 interface StreakCalendarProps {
   userId: string;
   month: number;
@@ -118,22 +118,22 @@ export function StreakCalendar({
 }
 const styles = createSheet({
   container: {
-    backgroundColor: launchColors.hex_1a1a2e,
+    backgroundColor: '#1a1a2e',
     borderRadius: 12,
     padding: 16,
   },
-  loadingText: { color: launchColors.hex_9ca3af, fontSize: 14 },
-  errorText: { color: launchColors.hex_ef4444, fontSize: 14 },
+  loadingText: { color: '#9ca3af', fontSize: 14 },
+  errorText: { color: '#ef4444', fontSize: 14 },
   header: { marginBottom: 16 },
   monthName: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: launchColors.hex_f3f4f6,
+    color: '#f3f4f6',
     marginBottom: 4,
   },
   stats: { flexDirection: 'row' },
-  statText: { fontSize: 12, color: launchColors.hex_9ca3af },
-  statValue: { color: launchColors.hex_fbbf24, fontWeight: '600' },
+  statText: { fontSize: 12, color: '#9ca3af' },
+  statValue: { color: '#fbbf24', fontWeight: '600' },
   weekdays: {
     flexDirection: 'row',
     justifyContent: 'space-around',
@@ -143,7 +143,7 @@ const styles = createSheet({
     width: 36,
     textAlign: 'center',
     fontSize: 12,
-    color: launchColors.hex_6b7280,
+    color: '#6b7280',
     fontWeight: '600',
   },
   calendar: {
@@ -159,15 +159,15 @@ const styles = createSheet({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  dayActive: { backgroundColor: launchColors.hex_3b82f6 },
-  dayToday: { borderWidth: 2, borderColor: launchColors.hex_fbbf24 },
-  dayText: { fontSize: 14, color: launchColors.hex_9ca3af },
-  dayTextActive: { color: launchColors.hex_ffffff, fontWeight: '600' },
+  dayActive: { backgroundColor: '#3b82f6' },
+  dayToday: { borderWidth: 2, borderColor: '#fbbf24' },
+  dayText: { fontSize: 14, color: '#9ca3af' },
+  dayTextActive: { color: '#ffffff', fontWeight: '600' },
   dayDot: {
     width: 4,
     height: 4,
     borderRadius: 2,
-    backgroundColor: launchColors.hex_22c55e,
+    backgroundColor: '#22c55e',
     marginTop: 2,
   },
   legend: {
@@ -175,11 +175,11 @@ const styles = createSheet({
     marginTop: 16,
     paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: launchColors.hex_374151,
+    borderTopColor: '#374151',
   },
   legendItem: { flexDirection: 'row', alignItems: 'center', marginRight: 16 },
   legendDot: { width: 8, height: 8, borderRadius: 4, marginRight: 6 },
-  legendActive: { backgroundColor: launchColors.hex_3b82f6 },
-  legendToday: { backgroundColor: launchColors.hex_fbbf24 },
-  legendText: { fontSize: 12, color: launchColors.hex_9ca3af },
+  legendActive: { backgroundColor: '#3b82f6' },
+  legendToday: { backgroundColor: '#fbbf24' },
+  legendText: { fontSize: 12, color: '#9ca3af' },
 });

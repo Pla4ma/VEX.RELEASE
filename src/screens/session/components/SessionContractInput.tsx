@@ -37,6 +37,13 @@ export function SessionContractInput({
         borderRadius={theme.borderRadius.lg}
         borderWidth={1}
         p="md"
+        style={{
+          shadowColor: theme.colors.semantic.shadow,
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.08,
+          shadowRadius: 8,
+          elevation: 2,
+        }}
       >
         <Box flexDirection="row" alignItems="center">
           <TextInput
@@ -53,6 +60,7 @@ export function SessionContractInput({
               flex: 1,
               minHeight: 44,
               padding: 0,
+              fontSize: 16,
             }}
             value={value}
           />
@@ -90,3 +98,5 @@ export function SessionContractInput({
     </Box>
   );
 }
+
+export default SessionContractInput;

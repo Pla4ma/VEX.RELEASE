@@ -3,7 +3,7 @@ import { Pressable } from 'react-native';
 import { useTheme } from '../../theme';
 import { Box, Text, Card } from '../../components/primitives';
 import { Icon } from '../../icons';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 import { PasswordField } from './PasswordField';
 import { usePasswordChange } from './usePasswordChange';
 
@@ -166,7 +166,7 @@ export const PasswordChangeSection: React.FC = () => {
                 accessibilityHint="Double tap to change setting"
               >
                 <Text
-                  style={{ color: launchColors.hex_fff, fontWeight: '600' }}
+                  style={{ color: '#fff', fontWeight: '600' }}
                 >
                   {isChangingPassword ? 'Changing...' : 'Change'}
                 </Text>

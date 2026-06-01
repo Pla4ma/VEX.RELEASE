@@ -12,7 +12,7 @@ import Animated, {
 import { Text } from '../primitives/Text';
 import { useTheme } from '../../theme';
 import { createSheet } from '@/shared/ui/create-sheet';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 export interface PremiumBadgeProps {
   size?: 'sm' | 'md' | 'lg';
@@ -174,7 +174,7 @@ const styles = createSheet({
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 2,
-    shadowColor: launchColors.hex_000,
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.15,
     shadowRadius: 4,
@@ -185,7 +185,7 @@ const styles = createSheet({
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 2,
-    shadowColor: launchColors.hex_000,
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 4,

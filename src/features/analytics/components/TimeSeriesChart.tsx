@@ -9,7 +9,7 @@ import { View, Text } from 'react-native';
 import { z } from 'zod';
 import { TimeSeriesDataSchema } from '../schemas';
 import { createSheet } from '@/shared/ui/create-sheet';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 type TimeSeriesData = z.infer<typeof TimeSeriesDataSchema>;
 
@@ -76,9 +76,9 @@ function StatBox({
 }) {
   const highlightColor =
     highlight === 'positive'
-      ? launchColors.hex_10b981
+      ? '#10b981'
       : highlight === 'negative'
-        ? launchColors.hex_ef4444
+        ? '#ef4444'
         : undefined;
 
   return (
@@ -117,11 +117,11 @@ function formatValue(value: number, metric: string): string {
 
 const styles = createSheet({
   container: {
-    backgroundColor: launchColors.hex_ffffff,
+    backgroundColor: '#ffffff',
     borderRadius: 12,
     padding: 16,
     marginVertical: 8,
-    shadowColor: launchColors.hex_000,
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     elevation: 2,
@@ -129,7 +129,7 @@ const styles = createSheet({
   title: {
     fontSize: 16,
     fontWeight: '600',
-    color: launchColors.hex_111827,
+    color: '#111827',
     marginBottom: 12,
   },
   stats: {
@@ -138,34 +138,34 @@ const styles = createSheet({
     gap: 12,
   },
   statBox: {
-    backgroundColor: launchColors.hex_f3f4f6,
+    backgroundColor: '#f3f4f6',
     borderRadius: 8,
     padding: 12,
     minWidth: 80,
   },
   statLabel: {
     fontSize: 12,
-    color: launchColors.hex_6b7280,
+    color: '#6b7280',
     marginBottom: 4,
   },
   statValue: {
     fontSize: 18,
     fontWeight: '700',
-    color: launchColors.hex_111827,
+    color: '#111827',
   },
   dataPreview: {
     marginTop: 12,
     paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: launchColors.hex_e5e7eb,
+    borderTopColor: '#e5e7eb',
   },
   previewText: {
     fontSize: 12,
-    color: launchColors.hex_9ca3af,
+    color: '#9ca3af',
   },
   emptyText: {
     textAlign: 'center',
-    color: launchColors.hex_9ca3af,
+    color: '#9ca3af',
     padding: 24,
   },
 });

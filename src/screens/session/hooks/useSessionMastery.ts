@@ -63,7 +63,7 @@ export function useSessionMastery(userId: string, showToast: ToastFn) {
       if (masteryResult.rankChanged && masteryResult.newRank) {
         showToast({
           type: 'success',
-          title: '🎖️ Mastery Rank Up!',
+          title: 'Mastery Rank Up',
           message: `You've reached ${getMasteryRankDisplay(masteryResult.newRank).title}`,
           duration: 4000,
         });

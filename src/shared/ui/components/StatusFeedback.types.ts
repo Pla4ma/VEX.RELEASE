@@ -26,11 +26,11 @@ export interface StatusFeedbackProps {
 
 export const STATUS_CONFIG: Record<AsyncStatus, { icon: string; title: string }> = {
   idle: { icon: '', title: '' },
-  loading: { icon: '⏳', title: 'Loading' },
-  retrying: { icon: '🔄', title: 'Retrying' },
+  loading: { icon: '...', title: 'Loading' },
+  retrying: { icon: 'R', title: 'Retrying' },
   success: { icon: '✓', title: 'Success' },
   error: { icon: '✕', title: 'Error' },
-  offline: { icon: '📡', title: 'Offline' },
+  offline: { icon: '!', title: 'Offline' },
 };
 
 export const getStatusColor = (status: AsyncStatus, theme: Theme): string => {

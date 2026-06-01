@@ -1,5 +1,4 @@
 import { createSheet } from '@/shared/ui/create-sheet';
-import { launchColors } from '@theme/tokens/launch-colors';
 
 export type SeverityLevel =
   | 'info'
@@ -13,29 +12,29 @@ export const SEVERITY_CONFIG: Record<
   { color: string; bgColor: string; icon: string }
 > = {
   info: {
-    color: launchColors.hex_3b82f6,
-    bgColor: launchColors.hex_dbeafe,
-    icon: 'ℹ️',
+    color: '#3b82f6',
+    bgColor: '#dbeafe',
+    icon: '',
   },
   positive: {
-    color: launchColors.hex_10b981,
-    bgColor: launchColors.hex_d1fae5,
-    icon: '✅',
+    color: '#10b981',
+    bgColor: '#d1fae5',
+    icon: '',
   },
   warning: {
-    color: launchColors.hex_f59e0b,
-    bgColor: launchColors.hex_fef3c7,
-    icon: '⚠️',
+    color: '#f59e0b',
+    bgColor: '#fef3c7',
+    icon: '',
   },
   critical: {
-    color: launchColors.hex_ef4444,
-    bgColor: launchColors.hex_fee2e2,
-    icon: '🚨',
+    color: '#ef4444',
+    bgColor: '#fee2e2',
+    icon: '',
   },
   celebration: {
-    color: launchColors.hex_8b5cf6,
-    bgColor: launchColors.hex_ede9fe,
-    icon: '🎉',
+    color: '#8b5cf6',
+    bgColor: '#ede9fe',
+    icon: '',
   },
 };
 
@@ -95,14 +94,14 @@ export const styles = createSheet({
     marginLeft: 8,
   },
   badgeText: {
-    color: launchColors.hex_ffffff,
+    color: '#ffffff',
     fontSize: 10,
     fontWeight: '600',
   },
   unreadDot: { width: 8, height: 8, borderRadius: 4, marginLeft: 8 },
   description: {
     fontSize: 14,
-    color: launchColors.hex_374151,
+    color: '#374151',
     lineHeight: 20,
     marginBottom: 12,
   },
@@ -113,7 +112,7 @@ export const styles = createSheet({
   },
   tag: { paddingHorizontal: 8, paddingVertical: 4, borderRadius: 8 },
   tagText: { fontSize: 12, fontWeight: '500' },
-  date: { fontSize: 12, color: launchColors.hex_9ca3af },
+  date: { fontSize: 12, color: '#9ca3af' },
   actions: { flexDirection: 'row', marginTop: 12, gap: 12 },
   actionButton: {
     paddingHorizontal: 16,
@@ -123,7 +122,7 @@ export const styles = createSheet({
     alignItems: 'center',
   },
   actionButtonText: {
-    color: launchColors.hex_ffffff,
+    color: '#ffffff',
     fontWeight: '600',
     fontSize: 14,
   },

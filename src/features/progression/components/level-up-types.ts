@@ -1,5 +1,3 @@
-import { launchColors } from '@theme/tokens/launch-colors';
-
 export interface LevelUpOverlayProps {
   isVisible: boolean;
   previousLevel: number;
@@ -20,35 +18,35 @@ export interface ConfettiPiece {
 
 export function getTierTitle(level: number): string {
   if (level >= 100) {
-    return '🏆 GRAND MASTER';
+    return 'GRAND MASTER';
   }
   if (level >= 50) {
-    return '🌟 MASTER';
+    return 'MASTER';
   }
   if (level >= 25) {
-    return '⭐ EXPERT';
+    return 'EXPERT';
   }
   if (level >= 10) {
-    return '💫 ADEPT';
+    return 'ADEPT';
   }
   if (level >= 5) {
-    return '✨ APPRENTICE';
+    return 'APPRENTICE';
   }
-  return '🌱 NOVICE';
+  return 'NOVICE';
 }
 
 export function getTierColor(level: number): [string, string] {
   if (level >= 100) {
-    return [launchColors.hex_ffd700, launchColors.hex_ff6b35];
+    return ['#FFD700', '#FF6B35'];
   }
   if (level >= 50) {
-    return [launchColors.hex_9c27b0, launchColors.hex_e91e63];
+    return ['#9C27B0', '#E91E63'];
   }
   if (level >= 25) {
-    return [launchColors.hex_2196f3, launchColors.hex_03a9f4];
+    return ['#2196F3', '#03A9F4'];
   }
   if (level >= 10) {
-    return [launchColors.hex_4caf50, launchColors.hex_8bc34a];
+    return ['#4CAF50', '#8BC34A'];
   }
-  return [launchColors.hex_ff9800, launchColors.hex_ffc107];
+  return ['#FF9800', '#FFC107'];
 }

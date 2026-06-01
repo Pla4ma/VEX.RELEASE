@@ -1,5 +1,5 @@
 import type { Setting, NotificationSettings, CoachSettings, AppearanceSettings, PrivacySettings } from './types';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 function getValue(settings: Setting[], key: string, defaultValue: unknown) {
   return settings.find((s) => s.key === key)?.value ?? defaultValue;
@@ -67,7 +67,7 @@ export function buildAppearanceSettings(userId: string, settings: Setting[]): Ap
   return {
     userId,
     theme: getValue(settings, 'appearance.theme', 'system') as 'light' | 'dark' | 'system',
-    accentColor: getValue(settings, 'appearance.accentColor', launchColors.hex_6366f1) as string,
+    accentColor: getValue(settings, 'appearance.accentColor', '#6366f1') as string,
     fontScale: getValue(settings, 'appearance.fontScale', 1) as number,
     useSystemFont: getValue(settings, 'appearance.useSystemFont', true) as boolean,
     reduceMotion: getValue(settings, 'appearance.reduceMotion', false) as boolean,

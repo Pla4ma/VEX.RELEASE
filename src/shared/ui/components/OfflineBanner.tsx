@@ -107,7 +107,11 @@ export function OfflineBanner({
     >
       <View style={[styles.content, { paddingTop: insets.top > 0 ? 48 : 12 }]}>
         <View style={[styles.iconContainer, { backgroundColor: rgaOverlay }]}>
-          <Text style={styles.icon}>📡</Text>
+          <Text
+            style={[styles.icon, { color: theme.colors.text.inverse }]}
+          >
+            !
+          </Text>
         </View>
         <Text
           variant="bodySmall"
@@ -132,7 +136,7 @@ export function OfflineBanner({
           <Text
             style={[styles.dismissText, { color: theme.colors.text.inverse }]}
           >
-            ✕
+            ×
           </Text>
         </Pressable>
       </View>
@@ -162,7 +166,7 @@ const styles = createSheet({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  icon: { fontSize: 14 },
+  icon: { fontSize: 14, fontWeight: '700' },
   message: { flex: 1, fontWeight: '600' },
   dismissButton: {
     width: 28,

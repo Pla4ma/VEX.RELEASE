@@ -17,13 +17,13 @@ export const REWARD_CONFIG: Record<
   RewardType,
   { icon: string; label: string }
 > = {
-  xp: { icon: '⭐', label: 'XP Gained' },
-  coins: { icon: '🪙', label: 'Coins' },
-  gems: { icon: '💎', label: 'Gems' },
-  streak: { icon: '🔥', label: 'Streak' },
-  level: { icon: '📈', label: 'Level Up' },
-  achievement: { icon: '🏆', label: 'Achievement' },
-  milestone: { icon: '🎯', label: 'Milestone' },
+  xp: { icon: '', label: 'XP Gained' },
+  coins: { icon: '', label: 'Coins' },
+  gems: { icon: '', label: 'Gems' },
+  streak: { icon: '', label: 'Streak' },
+  level: { icon: '', label: 'Level Up' },
+  achievement: { icon: '', label: 'Achievement' },
+  milestone: { icon: '', label: 'Milestone' },
 };
 
 export const getRewardColor = (type: RewardType, theme: Theme): string => {

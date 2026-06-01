@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useStudyPlan } from '../hooks';
 import { UI_TEXT } from '../constants';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 import { styles } from './StudyPlanScreen.styles';
 import {
   type RouteProps,
@@ -68,7 +68,7 @@ export function StudyPlanScreen() {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={launchColors.hex_3b82f6} />
+          <ActivityIndicator size="large" color={'#3b82f6'} />
           <Text style={styles.loadingText}>Loading study plan...</Text>
         </View>
       </SafeAreaView>
@@ -128,7 +128,7 @@ export function StudyPlanScreen() {
           accessibilityHint="Starts a study session from this plan"
         >
           {isStartingSession ? (
-            <ActivityIndicator size="small" color={launchColors.hex_fff} />
+            <ActivityIndicator size="small" color={'#fff'} />
           ) : (
             <>
               <Text style={styles.fabText}>▶</Text>

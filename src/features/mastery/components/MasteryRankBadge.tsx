@@ -3,7 +3,6 @@ import { View } from 'react-native';
 import { Box, Text } from '../../../components/primitives';
 import { useTheme } from '../../../theme';
 import type { MasteryRank } from '../types';
-import { launchColors } from '@theme/tokens/launch-colors';
 
 type Props = {
   rank: MasteryRank;
@@ -16,16 +15,16 @@ const rankConfig: Record<
   { icon: string; color: string; label: string }
 > = {
   APPRENTICE: {
-    icon: '⚔️',
-    color: launchColors.hex_9ca3af,
+    icon: '',
+    color: '#9ca3af',
     label: 'Apprentice',
   },
-  ADEPT: { icon: '🛡️', color: launchColors.hex_3b82f6, label: 'Adept' },
-  EXPERT: { icon: '🔮', color: launchColors.hex_8b5cf6, label: 'Expert' },
-  MASTER: { icon: '💎', color: launchColors.hex_4f46e5, label: 'Master' },
+  ADEPT: { icon: '', color: '#3b82f6', label: 'Adept' },
+  EXPERT: { icon: '', color: '#8b5cf6', label: 'Expert' },
+  MASTER: { icon: '', color: '#4f46e5', label: 'Master' },
   GRANDMASTER: {
-    icon: '👑',
-    color: launchColors.hex_f59e0b,
+    icon: '',
+    color: '#f59e0b',
     label: 'Grandmaster',
   },
 };

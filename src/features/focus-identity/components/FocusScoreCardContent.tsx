@@ -3,7 +3,7 @@ import { View, Pressable } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { Text } from '../../../components/primitives/Text';
 import { Box } from '../../../components/primitives/Box';
-import { launchColors } from '@theme/tokens/launch-colors';
+import { useTheme } from '../../../theme';
 import { getNextBandLabel } from './FocusScoreCardStates';
 
 interface FocusScoreCardContentProps {
@@ -41,6 +41,7 @@ export function FocusScoreCardContent({
   successColor,
   errorColor,
 }: FocusScoreCardContentProps) {
+  const { theme } = useTheme();
   const isPositiveChange = scoreChange > 0;
   const isNegativeChange = scoreChange < 0;
   return (
@@ -124,7 +125,7 @@ export function FocusScoreCardContent({
               style={{ marginTop: 12 }}
             >
               <Text variant="caption" color="warning">
-                🔥 Recovery Mode: +50% XP bonus active!
+                Recovery Mode: +50% XP bonus active
               </Text>
             </Box>
           )}
@@ -146,7 +147,7 @@ export function FocusScoreCardContent({
           <View
             style={{
               height: 4,
-              backgroundColor: launchColors.hex_e0e0e0,
+              backgroundColor: theme.colors.border.DEFAULT,
               borderRadius: 2,
               marginTop: 12,
               overflow: 'hidden',

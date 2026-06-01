@@ -2,7 +2,7 @@
  * WelcomeScreen Component
  *
  * First onboarding screen. Bold headline, 3-line value prop, single CTA.
- * Subtle animated background.
+ * Premium dark visual with custom VEX focus mark.
  *
  * @phase 2.2
  */
@@ -21,39 +21,45 @@ import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
 import { Button } from '../../../components/primitives/Button';
 import { useTheme } from '../../../theme';
+import { useReducedMotion } from '../../../hooks/useReducedMotion';
+import { VexFocusMark } from '../../../screens/auth/components/VexFocusMark';
 
 interface WelcomeScreenProps {
   onStart: () => void;
 }
 
 /**
- * Animated gradient background circles
+ * Animated gradient background orbs
  */
 function AnimatedBackground(): JSX.Element {
   const { width, height } = useWindowDimensions();
   const { theme } = useTheme();
+  const { isReducedMotion } = useReducedMotion();
 
-  const circle1Style = useAnimatedStyle(() => ({
+  const orb1 = useAnimatedStyle(() => ({
     transform: [
       {
-        scale: withRepeat(withTiming(1.2, { duration: 8000 }), -1, true),
-      },
-    ],
-    opacity: 0.3,
-  }));
-
-  const circle2Style = useAnimatedStyle(() => ({
-    transform: [
-      {
-        scale: withRepeat(withTiming(1.1, { duration: 10000 }), -1, true),
+        scale: isReducedMotion
+          ? 1
+          : withRepeat(withTiming(1.06, { duration: 10000 }), -1, true),
       },
     ],
     opacity: 0.2,
   }));
 
+  const orb2 = useAnimatedStyle(() => ({
+    transform: [
+      {
+        scale: isReducedMotion
+          ? 1
+          : withRepeat(withTiming(1.04, { duration: 14000 }), -1, true),
+      },
+    ],
+    opacity: 0.14,
+  }));
+
   return (
     <>
-      {/* Large gradient circle top-right */}
       <Animated.View
         style={[
           {
@@ -61,15 +67,14 @@ function AnimatedBackground(): JSX.Element {
             width: width * 0.8,
             height: width * 0.8,
             borderRadius: (width * 0.8) / 2,
-            backgroundColor: `${theme.colors.primary[500]}20`,
+            backgroundColor: `${theme.colors.semantic.vexCyan}18`,
             top: -width * 0.2,
             right: -width * 0.2,
           },
-          circle1Style,
+          orb1,
         ]}
+        pointerEvents="none"
       />
-
-      {/* Medium gradient circle bottom-left */}
       <Animated.View
         style={[
           {
@@ -77,12 +82,13 @@ function AnimatedBackground(): JSX.Element {
             width: width * 0.6,
             height: width * 0.6,
             borderRadius: (width * 0.6) / 2,
-            backgroundColor: `${theme.colors.accent.purple}15`,
+            backgroundColor: `${theme.colors.semantic.vexCyan}10`,
             bottom: height * 0.1,
             left: -width * 0.2,
           },
-          circle2Style,
+          orb2,
         ]}
+        pointerEvents="none"
       />
     </>
   );
@@ -93,6 +99,7 @@ function AnimatedBackground(): JSX.Element {
  */
 export function WelcomeScreen({ onStart }: WelcomeScreenProps): JSX.Element {
   const { theme } = useTheme();
+  const { isReducedMotion } = useReducedMotion();
 
   return (
     <Box flex={1} bg="background.primary">
@@ -107,25 +114,14 @@ export function WelcomeScreen({ onStart }: WelcomeScreenProps): JSX.Element {
         px="xl"
         gap="xl"
       >
-        {/* Logo/Icon */}
-        <Animated.View entering={FadeIn.duration(600).delay(200)}>
-          <Box
-            width={120}
-            height={120}
-            borderRadius="full"
-            bg={`${theme.colors.primary[500]}15`}
-            justifyContent="center"
-            alignItems="center"
-            borderWidth={2}
-            borderColor={`${theme.colors.primary[500]}30`}
-          >
-            <Text fontSize={56}>🎯</Text>
-          </Box>
+        {/* Custom VEX Focus Mark */}
+        <Animated.View entering={isReducedMotion ? undefined : FadeIn.duration(600).delay(200)}>
+          <VexFocusMark size={140} />
         </Animated.View>
 
-        {/* Core Identity Sentence — the one thing VEX stands for */}
+        {/* Core Identity Sentence */}
         <Animated.View
-          entering={FadeInUp.duration(500).delay(400)}
+          entering={isReducedMotion ? undefined : FadeInUp.duration(500).delay(400)}
           style={{ width: '100%' }}
         >
           <Box alignItems="center" gap="md">
@@ -142,7 +138,7 @@ export function WelcomeScreen({ onStart }: WelcomeScreenProps): JSX.Element {
 
         {/* Value Prop */}
         <Animated.View
-          entering={FadeInUp.duration(500).delay(600)}
+          entering={isReducedMotion ? undefined : FadeInUp.duration(500).delay(600)}
           style={{ width: '100%' }}
         >
           <Box alignItems="center" gap="sm">
@@ -158,7 +154,7 @@ export function WelcomeScreen({ onStart }: WelcomeScreenProps): JSX.Element {
 
         {/* CTA Button */}
         <Animated.View
-          entering={FadeInUp.duration(500).delay(800)}
+          entering={isReducedMotion ? undefined : FadeInUp.duration(500).delay(800)}
           style={{ width: '100%' }}
         >
           <Button
@@ -170,7 +166,7 @@ export function WelcomeScreen({ onStart }: WelcomeScreenProps): JSX.Element {
             accessibilityRole="button"
             accessibilityHint="Double tap to select"
           >
-            Let's go →
+            Enter VEX
           </Button>
         </Animated.View>
       </Box>

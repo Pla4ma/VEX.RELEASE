@@ -9,7 +9,6 @@ import {
   AppScreen,
   Box,
   Button,
-  Card,
   Text,
 } from '../../components/primitives';
 import { AuthValuePreview } from './components/AuthValuePreview';
@@ -19,6 +18,9 @@ import { useTheme } from '../../theme';
 import { getMinTouchTargetStyle } from '../../utils/touchTarget';
 import type { AuthStackParams } from '../../navigation';
 import { useLoginScreen } from './useLoginScreen';
+import { AuthHeroBrand } from './components/AuthHeroBrand';
+import { AuthCommandPanel } from './components/AuthCommandPanel';
+import { VexEntryBackground } from './components/VexEntryBackground';
 
 type Props = NativeStackScreenProps<AuthStackParams, 'Login'>;
 
@@ -41,16 +43,14 @@ export const LoginScreen: React.FC<Props> = ({ navigation, route }) => {
 
   return (
     <AppScreen keyboardAvoiding contentStyle={{ gap: theme.spacing[5] }}>
+      <VexEntryBackground />
+
       <Animated.View entering={introEntering}>
-        <Text color="primary.300" textAlign="center" variant="label">
-          VEX Command
-        </Text>
-        <Text color="text.primary" textAlign="center" variant="display">
-          VEX
-        </Text>
-        <Text color="text.secondary" mt="sm" textAlign="center" variant="body">
-          Protect one block. Leave with proof.
-        </Text>
+        <AuthHeroBrand
+          label="VEX Command"
+          title="VEX"
+          tagline="Protect one block. Leave with proof."
+        />
       </Animated.View>
 
       <Animated.View entering={bodyEntering}>
@@ -58,7 +58,7 @@ export const LoginScreen: React.FC<Props> = ({ navigation, route }) => {
       </Animated.View>
 
       <Animated.View entering={bodyEntering}>
-        <Card size="lg" variant="glass">
+        <AuthCommandPanel>
           <FormField
             accessibilityHint="Enter the email attached to your VEX account"
             accessibilityLabel="Account email"
@@ -102,7 +102,7 @@ export const LoginScreen: React.FC<Props> = ({ navigation, route }) => {
             size="lg"
             value={password}
           />
-        </Card>
+        </AuthCommandPanel>
       </Animated.View>
 
       <Animated.View entering={actionEntering}>
@@ -122,7 +122,7 @@ export const LoginScreen: React.FC<Props> = ({ navigation, route }) => {
             },
           ]}
         >
-          <Text color="primary.300" variant="caption">
+          <Text color="vexCyan" variant="caption">
             Forgot password?
           </Text>
         </Pressable>
@@ -155,7 +155,7 @@ export const LoginScreen: React.FC<Props> = ({ navigation, route }) => {
             }
             style={getMinTouchTargetStyle()}
           >
-            <Text color="primary.300" fontWeight="700" variant="body">
+            <Text color="vexCyan" fontWeight="700" variant="body">
               Sign up
             </Text>
           </Pressable>
@@ -183,9 +183,6 @@ export const LoginScreen: React.FC<Props> = ({ navigation, route }) => {
             >
               Test Sentry
             </Button>
-            <Text color="text.muted" textAlign="center" variant="caption">
-              Development controls
-            </Text>
           </View>
         </Animated.View>
       ) : null}

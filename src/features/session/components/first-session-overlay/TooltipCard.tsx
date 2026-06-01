@@ -8,7 +8,7 @@ import Animated, { FadeInUp } from 'react-native-reanimated';
 import { Text } from '../../../../components/primitives/Text';
 import { useTheme } from '../../../../theme';
 import type { TooltipCardProps } from './types';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 export function TooltipCard({
   step,
@@ -27,7 +27,7 @@ export function TooltipCard({
         padding: theme.spacing[5],
         marginHorizontal: theme.spacing[6],
         maxWidth: 320,
-        shadowColor: launchColors.hex_000,
+        shadowColor: '#000',
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.15,
         shadowRadius: 12,

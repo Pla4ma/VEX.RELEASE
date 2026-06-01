@@ -11,7 +11,7 @@ import { useTheme } from '../../theme';
 import { Box, Text } from '../primitives';
 import { Icon } from '../../icons';
 import { createSheet } from '@/shared/ui/create-sheet';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 type IconName = string;
 export type ToastType = 'info' | 'success' | 'warning' | 'error';
 export type ToastPosition = 'top' | 'bottom' | 'center';
@@ -38,19 +38,19 @@ const getTypeColors = (theme: ReturnType<typeof useTheme>['theme']) => ({
     icon: theme.colors.primary[500],
   },
   success: {
-    bg: launchColors.hex_dcfce7,
-    border: launchColors.hex_86efac,
-    icon: launchColors.hex_22c55e,
+    bg: '#dcfce7',
+    border: '#86efac',
+    icon: '#22c55e',
   },
   warning: {
-    bg: launchColors.hex_fef3c7,
-    border: launchColors.hex_fcd34d,
-    icon: launchColors.hex_f59e0b,
+    bg: '#fef3c7',
+    border: '#fcd34d',
+    icon: '#f59e0b',
   },
   error: {
-    bg: launchColors.hex_fee2e2,
-    border: launchColors.hex_fca5a5,
-    icon: launchColors.hex_ef4444,
+    bg: '#fee2e2',
+    border: '#fca5a5',
+    icon: '#ef4444',
   },
 });
 export const Toast: React.FC<ToastProps> = ({

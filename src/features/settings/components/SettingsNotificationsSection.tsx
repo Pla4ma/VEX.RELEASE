@@ -4,7 +4,7 @@ import type { NotificationSettings } from '../types';
 import { ToggleSetting } from './ToggleSetting';
 import { SettingItem } from './SettingItem';
 import { createSheet } from '@/shared/ui/create-sheet';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 interface SettingsNotificationsSectionProps {
   notifications: NotificationSettings | undefined;
@@ -41,7 +41,7 @@ export function SettingsNotificationsSection({
 
 const styles = createSheet({
   settingsGroup: {
-    backgroundColor: launchColors.hex_ffffff,
+    backgroundColor: '#ffffff',
     marginTop: 8,
     paddingHorizontal: 16,
   },

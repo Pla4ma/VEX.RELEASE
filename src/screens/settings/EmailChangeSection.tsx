@@ -3,7 +3,7 @@ import { Alert, Pressable } from 'react-native';
 import { useTheme } from '../../theme';
 import { Box, Text, Card } from '../../components/primitives';
 import { useUIStore } from '../../store/index';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 interface EmailChangeSectionProps {
   email: string | undefined;
@@ -78,7 +78,7 @@ export const EmailChangeSection: React.FC<EmailChangeSectionProps> = ({
             accessibilityHint="Double tap to change setting"
           >
             <Text
-              style={{ color: launchColors.hex_fff, fontWeight: '600' }}
+              style={{ color: '#fff', fontWeight: '600' }}
             >
               Change Email
             </Text>

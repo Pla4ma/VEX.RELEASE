@@ -17,50 +17,50 @@ export interface EmptyStateProps {
 
 export const PRESETS = {
   inventory: {
-    icon: '📦',
+    icon: '',
     title: 'Your inventory is empty',
     description: 'Complete sessions to earn rewards and items.',
     actionLabel: 'Start a session',
   },
   feed: {
-    icon: '📰',
+    icon: '',
     title: 'No activity yet',
     description: "Your squad's activity will appear here.",
     actionLabel: 'Invite Friends',
   },
   leaderboards: {
-    icon: '🏆',
+    icon: '',
     title: 'Leaderboard empty',
     description: "Complete this week's challenge to appear here.",
     actionLabel: 'View Challenge',
   },
   challenges: {
-    icon: '🎯',
+    icon: '',
     title: 'No active challenges',
     description: 'Daily and weekly challenges reset soon.',
     actionLabel: 'Browse All',
   },
   shop: {
-    icon: '🛍️',
+    icon: '',
     title: 'Shop empty',
     description: 'New items arrive weekly. Check back soon!',
     actionLabel: 'View Featured',
   },
   squadWars: {
-    icon: '⚔️',
+    icon: '',
     title: 'No active wars',
     description: 'Join a squad to participate in weekly wars.',
     actionLabel: 'Find a Squad',
   },
   offline: {
-    icon: '📡',
+    icon: '',
     title: "You're offline",
     description:
       "Some features are unavailable. We'll sync when you reconnect.",
     variant: 'offline' as const,
   },
   error: {
-    icon: '⚠️',
+    icon: '',
     title: 'Something went wrong',
     description: "We couldn't load this content. Try again in a moment.",
     variant: 'error' as const,

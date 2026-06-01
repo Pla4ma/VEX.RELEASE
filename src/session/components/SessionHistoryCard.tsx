@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Pressable } from 'react-native';
 import type { SessionHistoryEntry } from '../types';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 import { buttonTap } from '../../utils/haptics';
 import {
   formatDuration,
@@ -67,7 +67,7 @@ const styles = {
     padding: 16,
     marginHorizontal: 16,
     marginBottom: 8,
-    backgroundColor: launchColors.hex_2a2a3e,
+    backgroundColor: '#2a2a3e',
     borderRadius: 12,
   },
   itemLeft: {
@@ -79,14 +79,14 @@ const styles = {
   itemDate: {
     fontSize: 14,
     fontWeight: '600' as const,
-    color: launchColors.hex_fff,
+    color: '#fff',
   },
-  itemCategory: { fontSize: 12, color: launchColors.hex_9e9e9e, marginTop: 2 },
+  itemCategory: { fontSize: 12, color: '#9e9e9e', marginTop: 2 },
   itemRight: { alignItems: 'flex-end' as const },
   itemScore: {
     fontSize: 16,
     fontWeight: '700' as const,
-    color: launchColors.hex_e94560,
+    color: '#e94560',
   },
-  itemDuration: { fontSize: 12, color: launchColors.hex_9e9e9e, marginTop: 2 },
+  itemDuration: { fontSize: 12, color: '#9e9e9e', marginTop: 2 },
 };

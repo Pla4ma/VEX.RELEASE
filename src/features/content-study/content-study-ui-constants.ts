@@ -1,4 +1,4 @@
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 export const STUDY_PLAN_CONFIG = {
   MIN_TASKS: 3,
@@ -16,20 +16,20 @@ export const STUDY_PLAN_CONFIG = {
 export const TASK_PRIORITY_CONFIG = {
   HIGH: {
     label: 'High Priority',
-    color: launchColors.hex_ef4444,
-    textColor: launchColors.hex_ffffff,
+    color: '#ef4444',
+    textColor: '#ffffff',
     weight: 3,
   },
   MEDIUM: {
     label: 'Medium Priority',
-    color: launchColors.hex_f59e0b,
-    textColor: launchColors.hex_111827,
+    color: '#f59e0b',
+    textColor: '#111827',
     weight: 2,
   },
   LOW: {
     label: 'Low Priority',
-    color: launchColors.hex_10b981,
-    textColor: launchColors.hex_ffffff,
+    color: '#10b981',
+    textColor: '#ffffff',
     weight: 1,
   },
 } as const;
@@ -37,20 +37,20 @@ export const TASK_PRIORITY_CONFIG = {
 export const QUIZ_DIFFICULTY_CONFIG = {
   EASY: {
     label: 'Easy',
-    color: launchColors.hex_10b981,
-    textColor: launchColors.hex_ffffff,
+    color: '#10b981',
+    textColor: '#ffffff',
     weight: 1,
   },
   MEDIUM: {
     label: 'Medium',
-    color: launchColors.hex_f59e0b,
-    textColor: launchColors.hex_111827,
+    color: '#f59e0b',
+    textColor: '#111827',
     weight: 2,
   },
   HARD: {
     label: 'Hard',
-    color: launchColors.hex_ef4444,
-    textColor: launchColors.hex_ffffff,
+    color: '#ef4444',
+    textColor: '#ffffff',
     weight: 3,
   },
 } as const;

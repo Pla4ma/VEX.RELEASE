@@ -1,4 +1,4 @@
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 export type AccentColor =
   | 'indigo'
@@ -24,14 +24,14 @@ interface TimerFormatOption {
 }
 
 export const ACCENT_COLORS: AccentColorOption[] = [
-  { id: 'indigo', hex: launchColors.hex_6366f1 },
-  { id: 'purple', hex: launchColors.hex_a855f7 },
-  { id: 'blue', hex: launchColors.hex_3b82f6 },
-  { id: 'green', hex: launchColors.hex_10b981 },
-  { id: 'orange', hex: launchColors.hex_f97316 },
-  { id: 'pink', hex: launchColors.hex_ec4899 },
-  { id: 'red', hex: launchColors.hex_ef4444 },
-  { id: 'teal', hex: launchColors.hex_14b8a6 },
+  { id: 'indigo', hex: '#6366f1' },
+  { id: 'purple', hex: '#a855f7' },
+  { id: 'blue', hex: '#3b82f6' },
+  { id: 'green', hex: '#10b981' },
+  { id: 'orange', hex: '#f97316' },
+  { id: 'pink', hex: '#ec4899' },
+  { id: 'red', hex: '#ef4444' },
+  { id: 'teal', hex: '#14b8a6' },
 ];
 
 export const TIMER_FORMAT_OPTIONS: TimerFormatOption[] = [

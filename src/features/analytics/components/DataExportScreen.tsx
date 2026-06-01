@@ -4,7 +4,7 @@ import { useExportAnalytics, useExportJobs } from '../hooks';
 import { ExportProgress } from './ExportProgress';
 import { ErrorBoundary } from '../../../errors/ErrorBoundary';
 import { SkeletonList } from '../../../shared/ui/primitives/Skeleton';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 import { styles } from './DataExportScreen.styles';
 import {
   type DataExportScreenProps,
@@ -75,7 +75,7 @@ export function DataExportScreen({ userId, onClose }: DataExportScreenProps) {
           accessibilityRole="button"
           accessibilityHint="Double tap to select"
         >
-          <Text style={styles.closeIcon}>✕</Text>
+          <Text style={styles.closeIcon}>×</Text>
         </Pressable>
         <Text style={styles.headerTitle}>Data Export</Text>
         <View style={styles.headerSpacer} />
@@ -103,7 +103,7 @@ export function DataExportScreen({ userId, onClose }: DataExportScreenProps) {
               <Switch
                 value={includeMetadata}
                 onValueChange={setIncludeMetadata}
-                trackColor={{ false: launchColors.hex_e5e7eb, true: launchColors.hex_6366f1 }}
+                trackColor={{ false: '#e5e7eb', true: '#6366f1' }}
               />
             </View>
           </View>

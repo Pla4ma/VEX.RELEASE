@@ -61,14 +61,14 @@ export function DailyQuestCard({
               marginBottom: theme.spacing[3],
             }}
           >
-            <Text fontSize={24}>{quest ? getQuestIcon(quest.type) : '🤖'}</Text>
+            <Text fontSize={24}>{quest ? getQuestIcon(quest.type) : ''}</Text>
             <View style={{ flex: 1 }}>
               <Text
                 variant="h3"
                 color={isCompleted ? 'success' : 'primary'}
                 style={{ marginBottom: 2 }}
               >
-                {isCompleted ? 'Quest Complete!' : "Today's Quest"}
+                {isCompleted ? 'Quest Complete' : "Today's Quest"}
               </Text>
               <Text variant="caption" color="secondary">
                 {`From ${coachName}`}
@@ -89,7 +89,7 @@ export function DailyQuestCard({
                     fontWeight: '600',
                   }}
                 >
-                  ✓ Done
+                  Done
                 </Text>
               </View>
             )}
@@ -155,13 +155,13 @@ export function DailyQuestCard({
                     gap: theme.spacing[1],
                   }}
                 >
-                  <Text fontSize={14}>🏆</Text>
+                  <Text fontSize={14}></Text>
                   <Text variant="caption" color="secondary">
                     {quest.rewardXp} XP
                   </Text>
                 </View>
                 <Text variant="caption" color="secondary">
-                  ⏰ {formatTimeRemaining(quest.expiresAt)} remaining
+                  {formatTimeRemaining(quest.expiresAt)} remaining
                 </Text>
               </View>
             </>

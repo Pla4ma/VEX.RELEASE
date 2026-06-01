@@ -52,9 +52,9 @@ export function generateStudyPlanCompleteMessage(
       };
     case 'peer':
       return {
-        headline: 'You did it! 🎉',
+        headline: 'You did it',
         subtext: `${plan.title} is complete — you're amazing!`,
-        coachMessage: `OMG you finished ${plan.title}! That's HUGE! Time to celebrate! 🎊`,
+        coachMessage: `You finished ${plan.title}. That's outstanding progress.`,
       };
     case 'professor':
       return {
@@ -117,7 +117,7 @@ export function generateBossBattleMessage(
     case 'trainer':
       return { headline: 'BOSS ACTIVE', subtext: `${hp}% health remaining.`, coachMessage: 'Boss is waiting. Focus = damage. Attack.' };
     case 'peer':
-      return { headline: 'Boss time! 👊', subtext: `${hp}% health to chip away`, coachMessage: `That boss is at ${hp}%! Let's take it down together!` };
+      return {         headline: 'Boss time', subtext: `${hp}% health to chip away`, coachMessage: `That boss is at ${hp}%! Let's take it down together!` };
     case 'professor':
       return { headline: 'Boss Encounter Active', subtext: `${hp}% adversary vitality remains`, coachMessage: `Sustained focus reduces opponent vitality. Current level: ${hp}%.` };
   }

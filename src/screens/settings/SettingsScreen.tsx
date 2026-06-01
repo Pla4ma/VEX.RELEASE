@@ -118,7 +118,7 @@ export const SettingsScreen = withScreenErrorBoundary(function _SettingsScreen({
             color="text.tertiary"
             style={{ marginTop: 4 }}
           >
-            Made with ♥ by the VEX Team
+            Made with care by the VEX Team
           </Text>
         </Box>
 

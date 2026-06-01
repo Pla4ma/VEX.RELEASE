@@ -7,7 +7,7 @@ import Animated, {
   withSequence,
   withTiming,
 } from 'react-native-reanimated';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 import { styles } from './streak-flame-chain.styles';
 import {
   getRiskColor,
@@ -141,7 +141,7 @@ export const StreakFlameChain: React.FC<StreakFlameChainProps> = ({
                 width: `${(currentStreak / Math.max(longestStreak, 30)) * 100}%`,
                 backgroundColor: isAtRisk
                   ? getRiskColor(riskLevel)
-                  : launchColors.hex_ff6b35,
+                  : '#ff6b35',
               },
             ]}
           />

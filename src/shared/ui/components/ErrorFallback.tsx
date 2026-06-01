@@ -6,7 +6,7 @@
  */
 
 import React from 'react';
-import { ScrollView } from 'react-native';
+import { ScrollView, View } from 'react-native';
 
 import { useTheme } from '../../../theme';
 import { Text } from '../../../components/primitives';
@@ -54,12 +54,30 @@ export function ErrorFallback({
         padding: theme.spacing[6],
       }}
     >
-      <Text
-        variant="display"
-        style={{ marginBottom: theme.spacing[6], textAlign: 'center' }}
+      <View
+        style={{
+          width: 64,
+          height: 64,
+          borderRadius: 32,
+          backgroundColor: isOffline
+            ? `${theme.colors.warning.DEFAULT}18`
+            : `${theme.colors.error.DEFAULT}18`,
+          alignItems: 'center',
+          justifyContent: 'center',
+          marginBottom: theme.spacing[6],
+        }}
       >
-        {isOffline ? '📡' : '⚠️'}
-      </Text>
+        <Text
+          variant="h3"
+          style={{
+            color: isOffline
+              ? theme.colors.warning.DEFAULT
+              : theme.colors.error.DEFAULT,
+          }}
+        >
+          {isOffline ? '!' : '×'}
+        </Text>
+      </View>
       <Text
         variant="h3"
         color="text.primary"

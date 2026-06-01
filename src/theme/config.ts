@@ -10,7 +10,7 @@ import type { ThemeConfig } from './types';
  * Default theme configuration
  */
 export const defaultThemeConfig: ThemeConfig = {
-  defaultMode: 'system',
+  defaultMode: 'dark',
   supportDarkMode: true,
   persistThemePreference: true,
   respectSystemPreference: true,

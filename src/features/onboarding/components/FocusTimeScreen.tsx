@@ -149,7 +149,7 @@ export function FocusTimeScreen({
       <Animated.View entering={FadeIn.duration(400).delay(600)}>
         <Box mt="xl" p="md" borderRadius="lg" bg="background.secondary">
           <Text variant="bodySmall" color="text.tertiary" textAlign="center">
-            💡 Tip: 25 minutes is the classic Pomodoro length. Great for
+            Tip: 25 minutes is the classic Pomodoro length. Great for
             beginners!
           </Text>
         </Box>

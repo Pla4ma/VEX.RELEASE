@@ -128,7 +128,7 @@ export const StreakFuneralScreen: React.FC = () => {
               "Every comeback is proof of real consistency.
             </Text>
             <Text variant="body" color="text.secondary" textAlign="center">
-              Starting fresh is not failure. It is commitment." 💪
+              Starting fresh is not failure. It is commitment."
             </Text>
           </Box>
         </Animated.View>

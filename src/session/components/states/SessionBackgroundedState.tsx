@@ -33,13 +33,11 @@ export function SessionBackgroundedState({
   maxBackgroundTime = MAX_BACKGROUND_TIME_DEFAULT,
 }: SessionBackgroundedStateProps): JSX.Element {
   const { theme } = useTheme();
+  const semantic = theme.colors.semantic;
   const [selectedAction, setSelectedAction] = useState<string | null>(null);
   const isLongBackground = backgroundDuration > maxBackgroundTime;
   const formattedDuration = formatDuration(backgroundDuration);
-  const progressLoss = calculateProgressLoss(
-    backgroundDuration,
-    sessionProgress,
-  );
+  const progressLoss = calculateProgressLoss(backgroundDuration, sessionProgress);
   useEffect(() => {
     triggerHapticEvent(HapticEvents.WARNING);
     eventBus.publish('analytics:track', {
@@ -62,47 +60,33 @@ export function SessionBackgroundedState({
   return (
     <Box flex={1} bg="background.primary" p="lg" justifyContent="center">
       <Animated.View entering={FadeIn.duration(400)} style={styles.container}>
-        {}
         <View
           style={[
             styles.iconContainer,
-            { backgroundColor: theme.colors.warning.light },
+            { backgroundColor: `${semantic.warning}18` },
           ]}
         >
-          <Text style={styles.icon}>📱</Text>
+          <Text style={[styles.icon, { color: semantic.warning }]}>
+            !
+          </Text>
         </View>
-
-        {}
         <Text variant="h3" textAlign="center" mb="md">
           Session Interrupted
         </Text>
-
-        {}
         <Text variant="body" color="text.secondary" textAlign="center" mb="lg">
-          You were away for {formattedDuration}. The session continued in the
-          background.
+          You were away for {formattedDuration}. The session continued in the background.
         </Text>
-
-        {}
-        <Box
-          bg="background.secondary"
-          p="md"
-          borderRadius="lg"
-          mb="lg"
-          style={styles.impactCard}
-        >
+        <Box bg="background.secondary" p="md" borderRadius="lg" mb="lg" style={styles.impactCard}>
           <Text variant="bodySmall" color="text.tertiary" mb="xs">
             Session Progress
           </Text>
-          <View style={styles.progressBar}>
+          <View style={[styles.progressBar, { backgroundColor: semantic.border }]}>
             <View
               style={[
                 styles.progressFill,
                 {
                   width: `${sessionProgress}%`,
-                  backgroundColor: isLongBackground
-                    ? theme.colors.error.DEFAULT
-                    : theme.colors.success.DEFAULT,
+                  backgroundColor: isLongBackground ? semantic.danger : semantic.success,
                 },
               ]}
             />
@@ -112,29 +96,31 @@ export function SessionBackgroundedState({
           </Text>
           {progressLoss > 0 && (
             <Text variant="caption" color="error.DEFAULT" textAlign="center">
-              ⚠️ Lost {progressLoss.toFixed(1)}% due to inactivity
+              Lost {progressLoss.toFixed(1)}% due to inactivity
             </Text>
           )}
         </Box>
-
-        {}
         {isLongBackground && (
           <Animated.View
             entering={FadeInUp.delay(200)}
-            style={styles.warningBox}
+            style={[
+              styles.warningBox,
+              {
+                backgroundColor: `${semantic.warning}10`,
+                borderColor: `${semantic.warning}30`,
+              },
+            ]}
           >
             <Text
               variant="bodySmall"
               color="warning.DEFAULT"
               textAlign="center"
             >
-              ⚠️ Session was backgrounded for an extended period. Continuing may
+              Session was backgrounded for an extended period. Continuing may
               affect your focus score accuracy.
             </Text>
           </Animated.View>
         )}
-
-        {}
         <Box gap="sm" width="100%">
           <Button
             variant="primary"
@@ -146,9 +132,8 @@ export function SessionBackgroundedState({
             accessibilityRole="button"
             accessibilityHint="Double tap to activate"
           >
-            Resume Session →
+            Resume Session
           </Button>
-
           <Button
             variant="secondary"
             size="md"
@@ -160,7 +145,6 @@ export function SessionBackgroundedState({
           >
             Pause & Review
           </Button>
-
           <Box flexDirection="row" gap="sm">
             <Button
               variant="ghost"

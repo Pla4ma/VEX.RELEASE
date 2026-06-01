@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Pressable, ScrollView } from 'react-native';
 import { createSheet } from '@/shared/ui/create-sheet';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 import {
   DAYS,
   HOURS,
@@ -124,33 +124,33 @@ function Stat({ label, value }: { label: string; value: string }) {
 
 const styles = createSheet({
   container: {
-    backgroundColor: launchColors.hex_ffffff,
+    backgroundColor: '#ffffff',
     borderRadius: 16,
     padding: 16,
     marginHorizontal: 12,
     marginVertical: 8,
   },
   header: { marginBottom: 16 },
-  title: { fontSize: 18, fontWeight: '700', color: launchColors.hex_111827 },
-  subtitle: { fontSize: 14, color: launchColors.hex_6b7280, marginTop: 4 },
+  title: { fontSize: 18, fontWeight: '700', color: '#111827' },
+  subtitle: { fontSize: 14, color: '#6b7280', marginTop: 4 },
   heatmap: { gap: 4 },
   row: { flexDirection: 'row', alignItems: 'center', gap: 4 },
   dayLabel: {
     width: 40,
     fontSize: 12,
-    color: launchColors.hex_6b7280,
+    color: '#6b7280',
     fontWeight: '500',
   },
   hourLabel: {
     width: 32,
     fontSize: 10,
-    color: launchColors.hex_9ca3af,
+    color: '#9ca3af',
     textAlign: 'center',
   },
   cell: { width: 12, height: 28, borderRadius: 2, marginHorizontal: 1 },
   hiddenCell: { opacity: 0.3 },
-  activeCell: { borderWidth: 1, borderColor: launchColors.rgb_0_0_0_0_1 },
-  intensityIndicator: { flex: 1, backgroundColor: launchColors.rgb_0_0_0_0_2 },
+  activeCell: { borderWidth: 1, borderColor: 'rgba(0,0,0,0.1)' },
+  intensityIndicator: { flex: 1, backgroundColor: 'rgba(0,0,0,0.2)' },
   legend: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -160,7 +160,7 @@ const styles = createSheet({
   },
   legendText: {
     fontSize: 12,
-    color: launchColors.hex_9ca3af,
+    color: '#9ca3af',
     marginHorizontal: 8,
   },
   legendCell: { width: 16, height: 16, borderRadius: 4 },
@@ -170,13 +170,13 @@ const styles = createSheet({
     marginTop: 16,
     paddingTop: 16,
     borderTopWidth: 1,
-    borderTopColor: launchColors.hex_f3f4f6,
+    borderTopColor: '#f3f4f6',
   },
   statItem: { alignItems: 'center' },
   statValue: {
     fontSize: 16,
     fontWeight: '700',
-    color: launchColors.hex_111827,
+    color: '#111827',
   },
-  statLabel: { fontSize: 12, color: launchColors.hex_9ca3af, marginTop: 4 },
+  statLabel: { fontSize: 12, color: '#9ca3af', marginTop: 4 },
 });

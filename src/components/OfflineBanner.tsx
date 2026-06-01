@@ -21,7 +21,7 @@ import Animated, {
 
 import { Box, Text } from './primitives';
 import { Icon } from '../icons';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 import { useReducedMotion } from '@/hooks';
 
 interface OfflineBannerProps {
@@ -112,12 +112,12 @@ export const OfflineBanner: React.FC<OfflineBannerProps> = ({
         py={12}
         style={{
           backgroundColor: isOffline
-            ? launchColors.hex_fef3c7
-            : launchColors.hex_dcfce7,
+            ? '#fef3c7'
+            : '#dcfce7',
           borderBottomWidth: 1,
           borderBottomColor: isOffline
-            ? launchColors.hex_fcd34d
-            : launchColors.hex_86efac,
+            ? '#fcd34d'
+            : '#86efac',
         }}
       >
         <Box flexDirection="row" alignItems="center" justifyContent="center">
@@ -125,7 +125,7 @@ export const OfflineBanner: React.FC<OfflineBannerProps> = ({
             name={isOffline ? 'wifi-off' : 'wifi'}
             size={16}
             color={
-              isOffline ? launchColors.hex_d97706 : launchColors.hex_16a34a
+              isOffline ? '#d97706' : '#16a34a'
             }
           />
           <Text
@@ -134,8 +134,8 @@ export const OfflineBanner: React.FC<OfflineBannerProps> = ({
               marginLeft: 8,
               fontWeight: '600',
               color: isOffline
-                ? launchColors.hex_92400e
-                : launchColors.hex_166534,
+                ? '#92400e'
+                : '#166534',
             }}
           >
             {isOffline ? message : 'Back online — syncing changes...'}
@@ -148,12 +148,12 @@ export const OfflineBanner: React.FC<OfflineBannerProps> = ({
               py={2}
               borderRadius={10}
               style={{
-                backgroundColor: launchColors.hex_d97706,
+                backgroundColor: '#d97706',
               }}
             >
               <Text
                 style={{
-                  color: launchColors.hex_fff,
+                  color: '#fff',
                   fontSize: 11,
                   fontWeight: '700',
                 }}

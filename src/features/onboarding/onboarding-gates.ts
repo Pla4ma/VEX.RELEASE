@@ -1,4 +1,4 @@
-import { launchColors } from '@theme/tokens/launch-colors';
+
 import type {
   FeatureUnlockGate,
   OnboardingStep,
@@ -27,7 +27,7 @@ export const FEATURE_UNLOCK_GATES: FeatureUnlockGate[] = [
     description: "See today's planned sessions at a glance",
     requiresSessions: 2,
     icon: '📋',
-    color: launchColors.hex_48bb78,
+    color: '#48bb78',
   },
   {
     featureId: 'study_intelligence',
@@ -35,7 +35,7 @@ export const FEATURE_UNLOCK_GATES: FeatureUnlockGate[] = [
     description: 'Review, recall, and study plan support',
     requiresSessions: 3,
     icon: '📚',
-    color: launchColors.hex_4299e1,
+    color: '#4299e1',
   },
   {
     featureId: 'what_vex_learned',
@@ -43,7 +43,7 @@ export const FEATURE_UNLOCK_GATES: FeatureUnlockGate[] = [
     description: 'VEX remembers your patterns — edit or hide anything',
     requiresSessions: 3,
     icon: '🧠',
-    color: launchColors.hex_9f7aea,
+    color: '#9f7aea',
   },
   {
     featureId: 'focus_run',
@@ -51,7 +51,7 @@ export const FEATURE_UNLOCK_GATES: FeatureUnlockGate[] = [
     description: 'Run-style sessions with personal blockers',
     requiresSessions: 4,
     icon: '🏃',
-    color: launchColors.hex_e53e3e,
+    color: '#e53e3e',
   },
   {
     featureId: 'project_thread',
@@ -59,7 +59,7 @@ export const FEATURE_UNLOCK_GATES: FeatureUnlockGate[] = [
     description: 'Resume project context and next moves',
     requiresSessions: 5,
     icon: '🧵',
-    color: launchColors.hex_38b2ac,
+    color: '#38b2ac',
   },
   {
     featureId: 'coach_evolution',
@@ -67,7 +67,7 @@ export const FEATURE_UNLOCK_GATES: FeatureUnlockGate[] = [
     description: 'Coach adapts tone and timing to your rhythm',
     requiresSessions: 8,
     icon: '🤖',
-    color: launchColors.hex_ed8936,
+    color: '#ed8936',
   },
 ];
 

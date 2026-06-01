@@ -9,7 +9,7 @@ import { Pressable } from 'react-native';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 import type { LiveFocusingWidgetProps } from './live-focusing/types';
 import { useCountUp, formatNumber } from './live-focusing/helpers';
 import { PulsingLiveDot } from './live-focusing/PulsingLiveDot';
@@ -77,7 +77,7 @@ export function LiveFocusingWidget({
           borderColor="border.light"
           gap="lg"
           style={{
-            shadowColor: launchColors.hex_000,
+            shadowColor: '#000',
             shadowOffset: { width: 0, height: 2 },
             shadowOpacity: 0.05,
             shadowRadius: 4,

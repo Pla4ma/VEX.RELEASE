@@ -1,5 +1,3 @@
-import { launchColors } from '@theme/tokens/launch-colors';
-
 export interface Particle {
   id: number;
   x: number;
@@ -14,24 +12,24 @@ export const PROGRESS_MESSAGES: Record<
   { title: string; subtitle: string; emoji: string }
 > = {
   25: {
-    title: '25% Complete!',
-    subtitle: 'Great start! Keep going!',
-    emoji: '🌟',
+    title: '25% Complete',
+    subtitle: 'Great start. Keep going.',
+    emoji: '',
   },
   50: {
-    title: 'Halfway There!',
-    subtitle: "You're doing amazing!",
-    emoji: '🔥',
+    title: 'Halfway There',
+    subtitle: "You're doing great.",
+    emoji: '',
   },
   75: {
-    title: '75% Done!',
-    subtitle: 'Almost there! Push through!',
-    emoji: '⚡',
+    title: '75% Done',
+    subtitle: 'Almost there. Push through.',
+    emoji: '',
   },
   90: {
-    title: 'Almost Done!',
-    subtitle: 'Final stretch! You got this!',
-    emoji: '🏆',
+    title: 'Almost Done',
+    subtitle: 'Final stretch. You got this.',
+    emoji: '',
   },
 };
 
@@ -39,29 +37,29 @@ export const MINUTE_MESSAGES: Record<
   number,
   { title: string; subtitle: string; emoji: string }
 > = {
-  10: { title: '10 Minutes!', subtitle: 'Focus power building!', emoji: '💪' },
-  20: { title: '20 Minutes!', subtitle: 'Deep focus zone!', emoji: '🧠' },
+  10: { title: '10 Minutes', subtitle: 'Focus power building.', emoji: '' },
+  20: { title: '20 Minutes', subtitle: 'Deep focus zone.', emoji: '' },
   30: {
-    title: '30 Minutes!',
-    subtitle: 'Half hour of pure focus!',
-    emoji: '👑',
+    title: '30 Minutes',
+    subtitle: 'Half hour of pure focus.',
+    emoji: '',
   },
   45: {
-    title: '45 Minutes!',
-    subtitle: 'Legendary concentration!',
-    emoji: '💎',
+    title: '45 Minutes',
+    subtitle: 'Legendary concentration.',
+    emoji: '',
   },
-  60: { title: '1 Hour!', subtitle: 'You are unstoppable!', emoji: '🚀' },
+  60: { title: '1 Hour', subtitle: 'You are unstoppable.', emoji: '' },
 };
 
 export function generateParticles(count: number): Particle[] {
   const colors = [
-    launchColors.hex_f59e0b,
-    launchColors.hex_3b82f6,
-    launchColors.hex_10b981,
-    launchColors.hex_ec4899,
-    launchColors.hex_8b5cf6,
-    launchColors.hex_fbbf24,
+    '#f59e0b',
+    '#3b82f6',
+    '#10b981',
+    '#ec4899',
+    '#8b5cf6',
+    '#fbbf24',
   ];
   return Array.from({ length: count }, (_, i) => ({
     id: i,

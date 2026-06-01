@@ -1,4 +1,4 @@
-import { launchColors } from '@theme/tokens/launch-colors';
+
 /**
  * Rarity Utilities
  *
@@ -18,12 +18,12 @@ export type ItemRarity =
  */
 export function getRarityColor(rarity: ItemRarity): string {
   const colors: Record<ItemRarity, string> = {
-    COMMON: launchColors.hex_9e9e9e, // Gray
-    UNCOMMON: launchColors.hex_4caf50, // Green
-    RARE: launchColors.hex_2196f3, // Blue
-    EPIC: launchColors.hex_9c27b0, // Purple
-    LEGENDARY: launchColors.hex_ff9800, // Orange
-    MYTHIC: launchColors.hex_ffd700, // Gold
+    COMMON: '#9e9e9e', // Gray
+    UNCOMMON: '#4caf50', // Green
+    RARE: '#2196f3', // Blue
+    EPIC: '#9c27b0', // Purple
+    LEGENDARY: '#ff9800', // Orange
+    MYTHIC: '#ffd700', // Gold
   };
 
   return colors[rarity] ?? colors.COMMON;

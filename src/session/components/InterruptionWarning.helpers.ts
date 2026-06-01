@@ -1,4 +1,4 @@
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 export type Severity = 'MINOR' | 'MODERATE' | 'MAJOR' | 'CRITICAL';
 
@@ -16,15 +16,15 @@ export interface InterruptionWarningProps {
 export function getSeverityColor(severity: Severity): string {
   switch (severity) {
     case 'CRITICAL':
-      return launchColors.hex_f44336;
+      return '#f44336';
     case 'MAJOR':
-      return launchColors.hex_ff6b35;
+      return '#ff6b35';
     case 'MODERATE':
-      return launchColors.hex_ffa500;
+      return '#ffa500';
     case 'MINOR':
-      return launchColors.hex_ffc107;
+      return '#ffc107';
     default:
-      return launchColors.hex_9e9e9e;
+      return '#9e9e9e';
   }
 }
 

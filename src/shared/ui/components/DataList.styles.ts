@@ -2,7 +2,7 @@
  * DataList — shared styles
  */
 import { createSheet } from '@/shared/ui/create-sheet';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 export const styles = createSheet({
   container: { flex: 1 },
@@ -15,7 +15,7 @@ export const styles = createSheet({
     left: 0,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: launchColors.rgb_0_0_0_0_3,
+    backgroundColor: 'rgba(0,0,0,0.3)',
   },
   footerContainer: {
     padding: 16,
@@ -31,7 +31,7 @@ export const styles = createSheet({
     alignItems: 'center',
     padding: 12,
     borderTopWidth: 1,
-    borderTopColor: launchColors.rgb_0_0_0_0_1,
+    borderTopColor: 'rgba(0,0,0,0.1)',
   },
   toolbarLeft: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   toolbarActions: { flexDirection: 'row', gap: 8 },

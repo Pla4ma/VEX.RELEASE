@@ -123,7 +123,6 @@
     },
     "plugins": [
       [
-      [
         "./plugins/withCertificatePinning",
         {
           "domains": {
@@ -134,6 +133,7 @@
           }
         }
       ],
+      [
         "expo-build-properties",
         {
           "ios": {

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import type { MasteryRank } from '../progression/unified-mastery';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 export const CoachPersonaSchema = z.enum([
   'SUPPORTIVE',
@@ -40,7 +40,7 @@ export const COACH_PERSONAS: Record<CoachPersona, CoachPersonaConfig> = {
     unlockRequirement: { type: 'FREE' },
     messageStyle: 'gentle',
     avatarUrl: 'coaches/supportive.png',
-    colorTheme: launchColors.hex_4ecdc4,
+    colorTheme: '#4ecdc4',
     freeFeatures: [
       'Basic reminders',
       'Streak warnings',
@@ -56,7 +56,7 @@ export const COACH_PERSONAS: Record<CoachPersona, CoachPersonaConfig> = {
     unlockRequirement: { type: 'PREMIUM' },
     messageStyle: 'analytical',
     avatarUrl: 'coaches/analytical.png',
-    colorTheme: launchColors.hex_4169e1,
+    colorTheme: '#4169e1',
     freeFeatures: [],
     premiumFeatures: [
       'Pattern analysis',
@@ -72,7 +72,7 @@ export const COACH_PERSONAS: Record<CoachPersona, CoachPersonaConfig> = {
     unlockRequirement: { type: 'MASTERY_RANK', value: 'ADEPT' },
     messageStyle: 'challenging',
     avatarUrl: 'coaches/strict.png',
-    colorTheme: launchColors.hex_ff6b35,
+    colorTheme: '#ff6b35',
     freeFeatures: [
       'Accountability checks',
       'Direct feedback',
@@ -87,7 +87,7 @@ export const COACH_PERSONAS: Record<CoachPersona, CoachPersonaConfig> = {
     unlockRequirement: { type: 'MASTERY_RANK', value: 'EXPERT' },
     messageStyle: 'gentle',
     avatarUrl: 'coaches/zen.png',
-    colorTheme: launchColors.hex_9b59b6,
+    colorTheme: '#9b59b6',
     freeFeatures: [
       'Breathing exercises',
       'Mindfulness tips',
@@ -102,7 +102,7 @@ export const COACH_PERSONAS: Record<CoachPersona, CoachPersonaConfig> = {
     unlockRequirement: { type: 'MASTERY_RANK', value: 'MASTER' },
     messageStyle: 'energetic',
     avatarUrl: 'coaches/enthusiastic.png',
-    colorTheme: launchColors.hex_ffd700,
+    colorTheme: '#ffd700',
     freeFeatures: [
       'Motivation boosts',
       'Celebration messages',
@@ -117,7 +117,7 @@ export const COACH_PERSONAS: Record<CoachPersona, CoachPersonaConfig> = {
     unlockRequirement: { type: 'MASTERY_RANK', value: 'GRANDMASTER' },
     messageStyle: 'challenging',
     avatarUrl: 'coaches/drill.png',
-    colorTheme: launchColors.hex_8b0000,
+    colorTheme: '#8b0000',
     freeFeatures: [
       'Discipline drills',
       'No-excuses mode',

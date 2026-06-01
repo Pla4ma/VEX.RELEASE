@@ -6,7 +6,7 @@ import { Button } from '../../../components/primitives/Button';
 import { Box } from '../../../components/primitives/Box';
 import { useTheme } from '../../../theme';
 import { createSheet } from '@/shared/ui/create-sheet';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 import { useOnboardingResumeState } from '../hooks/useOnboardingResumeState';
 
 interface OnboardingResumePromptProps {
@@ -41,7 +41,7 @@ export function OnboardingResumePrompt({
       left={0}
       right={0}
       bottom={0}
-      bg={launchColors.rgb_0_0_0_0_7}
+      bg={'rgba(0,0,0,0.7)'}
       justifyContent="center"
       alignItems="center"
       p="lg"
@@ -157,7 +157,7 @@ const styles = createSheet({
   icon: { fontSize: 30 },
   progressBar: {
     height: 6,
-    backgroundColor: launchColors.rgb_0_0_0_0_1,
+    backgroundColor: 'rgba(0,0,0,0.1)',
     borderRadius: 3,
     overflow: 'hidden',
   },

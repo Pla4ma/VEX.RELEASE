@@ -5,7 +5,7 @@ import { STORAGE_KEYS } from '../../../constants/storage';
 import { getMMKVStorageAdapter } from '../../../persistence/MMKVStorageAdapter';
 import { createDebugger } from '../../../utils/debug';
 import { NOTIFICATION_CONFIG } from './notification-config';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 const debug = createDebugger('ai-coach:notifications');
 
@@ -64,7 +64,7 @@ export async function ensureNotificationChannel(): Promise<void> {
         description: NOTIFICATION_CONFIG.androidChannelDescription,
         importance: Notifications.AndroidImportance.HIGH,
         vibrationPattern: [0, 250, 250, 250],
-        lightColor: launchColors.hex_ff6b6b,
+        lightColor: '#ff6b6b',
       },
     );
   } catch (error) {

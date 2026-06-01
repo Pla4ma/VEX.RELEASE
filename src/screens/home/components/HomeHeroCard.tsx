@@ -4,14 +4,13 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 import { Button } from '../../../components/primitives/Button';
 import { Text } from '../../../components/primitives/Text';
-import { AuroraField } from '../../../components/primitives/AuroraField';
+import { Box } from '../../../components/primitives/Box';
 import type {
   HomePrimaryPriority,
   HomeStakes,
 } from '../../../features/home-spine/priority-schemas';
 import { useTheme } from '../../../theme';
 import { glow } from '../../../theme/tokens/elevation';
-import { launchColors } from '@theme/tokens/launch-colors';
 
 function getHeroTitle(type: HomePrimaryPriority['type']): string {
   switch (type) {
@@ -99,9 +98,9 @@ export function HomeHeroCard({
     >
       <LinearGradient
         colors={[
-          theme.colors.primary[500] ?? launchColors.hex_7c3aed,
-          theme.colors.primary[600] ?? launchColors.hex_4f46e5,
-          theme.colors.primary[700] ?? launchColors.hex_4f46e5,
+          theme.colors.primary[600] ?? '#4f46e5',
+          theme.colors.primary[700] ?? '#4338ca',
+          theme.colors.primary[800] ?? '#3730a3',
         ]}
         start={{ x: 0.1, y: 0 }}
         end={{ x: 0.9, y: 1 }}
@@ -113,47 +112,70 @@ export function HomeHeroCard({
           padding: theme.spacing[5],
         }}
       >
-        <AuroraField
-          colors={[
-            launchColors.rgb_255_255_255_0_15,
-            theme.colors.primary[300] ?? launchColors.hex_7c3aed,
-            launchColors.rgb_255_255_255_0_15,
-          ]}
-          size={280}
-          intensity={0.5}
-          style={{ top: -130, right: -90 }}
+        <View
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: theme.spacing[5],
+            right: theme.spacing[5],
+            height: 1,
+            backgroundColor: `${theme.colors.primary[300]}40`,
+          }}
         />
-        <Text variant="label" color={launchColors.rgb_255_255_255_0_72}>
-          {getHeroEyebrow(priority.type)}
+
+        <Text
+          variant="label"
+          color={theme.colors.primary[300]}
+          style={{ opacity: 0.9, letterSpacing: 1 }}
+        >
+          {getHeroEyebrow(priority.type).toUpperCase()}
         </Text>
         <Text variant="h3" color={theme.colors.text.inverse}>
           {getHeroTitle(priority.type)}
         </Text>
-        <Text variant="body" color={launchColors.rgb_255_255_255_0_9}>
+        <Text
+          variant="body"
+          color={theme.colors.text.inverse}
+          style={{ opacity: 0.72 }}
+        >
           {priority.reason}
         </Text>
         {stakes ? (
           <View
             style={{
-              backgroundColor: launchColors.rgb_255_255_255_0_15,
+              backgroundColor: `${theme.colors.text.inverse}12`,
               borderRadius: theme.borderRadius.lg,
+              borderWidth: 1,
+              borderColor: `${theme.colors.text.inverse}18`,
               gap: theme.spacing[2],
               padding: theme.spacing[4],
             }}
           >
-            <Text variant="label" color={launchColors.rgb_255_255_255_0_72}>
+            <Text
+              variant="label"
+              color={theme.colors.text.inverse}
+              style={{ opacity: 0.62 }}
+            >
               What matters now
             </Text>
             <Text variant="body" color={theme.colors.text.inverse}>
               {stakes.what}
             </Text>
             {stakes.atRisk ? (
-              <Text variant="bodySmall" color={launchColors.rgb_255_255_255_0_9}>
+              <Text
+                variant="bodySmall"
+                color={theme.colors.text.inverse}
+                style={{ opacity: 0.6 }}
+              >
                 At risk: {stakes.atRisk}
               </Text>
             ) : null}
             {stakes.potentialGain ? (
-              <Text variant="bodySmall" color={launchColors.rgb_255_255_255_0_9}>
+              <Text
+                variant="bodySmall"
+                color={theme.colors.text.inverse}
+                style={{ opacity: 0.6 }}
+              >
                 Gain: {stakes.potentialGain}
               </Text>
             ) : null}
@@ -174,3 +196,5 @@ export function HomeHeroCard({
     </View>
   );
 }
+
+export default HomeHeroCard;

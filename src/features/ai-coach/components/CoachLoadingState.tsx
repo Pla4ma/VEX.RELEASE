@@ -10,7 +10,7 @@ import React from 'react';
 import { View, Text } from 'react-native';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import { createSheet } from '@/shared/ui/create-sheet';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 export function CoachLoadingState(): JSX.Element {
   return (
@@ -38,7 +38,7 @@ export function CoachLoadingState(): JSX.Element {
 const styles = createSheet({
   container: {
     flex: 1,
-    backgroundColor: launchColors.hex_1a1a2e,
+    backgroundColor: '#1a1a2e',
     padding: 24,
   },
   header: {
@@ -50,13 +50,13 @@ const styles = createSheet({
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: launchColors.hex_2a2a3e,
+    backgroundColor: '#2a2a3e',
     marginRight: 12,
   },
   skeletonName: {
     width: '40%',
     height: 24,
-    backgroundColor: launchColors.hex_2a2a3e,
+    backgroundColor: '#2a2a3e',
     borderRadius: 4,
   },
   messageList: {
@@ -66,13 +66,13 @@ const styles = createSheet({
   skeletonMessage: {
     width: '70%',
     height: 60,
-    backgroundColor: launchColors.hex_2a2a3e,
+    backgroundColor: '#2a2a3e',
     borderRadius: 12,
   },
   loadingText: {
     textAlign: 'center',
     fontSize: 14,
-    color: launchColors.hex_9e9e9e,
+    color: '#9e9e9e',
     marginTop: 24,
   },
 });

@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { createSheet } from '@/shared/ui/create-sheet';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 const BAR_HEIGHT = 24;
 
@@ -16,7 +16,7 @@ export const styles = createSheet({
     height: BAR_HEIGHT,
     borderRadius: 12,
     overflow: 'hidden',
-    backgroundColor: launchColors.hex_1a1a2e,
+    backgroundColor: '#1a1a2e',
   },
   progressFill: {
     position: 'absolute',
@@ -32,7 +32,7 @@ export const styles = createSheet({
     left: 0,
     right: 0,
     height: '50%',
-    backgroundColor: launchColors.rgb_255_255_255_0_2,
+    backgroundColor: 'rgba(255,255,255,0.2)',
   },
   tipGlow: {
     position: 'absolute',
@@ -62,30 +62,30 @@ export const styles = createSheet({
   },
   xpText: { flexDirection: 'row', fontSize: 12, fontWeight: '700' },
   xpCurrent: { fontWeight: 'bold' },
-  xpSeparator: { color: launchColors.rgb_255_255_255_0_5 },
-  xpThreshold: { color: launchColors.rgb_255_255_255_0_6 },
+  xpSeparator: { color: 'rgba(255,255,255,0.5)' },
+  xpThreshold: { color: 'rgba(255,255,255,0.6)' },
   levelUpBadge: {
     position: 'absolute',
     right: 10,
     top: -30,
-    backgroundColor: launchColors.hex_ffd700,
+    backgroundColor: '#ffd700',
     paddingHorizontal: 12,
     paddingVertical: 4,
     borderRadius: 12,
-    shadowColor: launchColors.hex_ffd700,
+    shadowColor: '#ffd700',
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.5,
     shadowRadius: 10,
     elevation: 5,
   },
   levelUpText: {
-    color: launchColors.hex_1a1a2e,
+    color: '#1a1a2e',
     fontWeight: 'bold',
     fontSize: 11,
   },
   totalXp: {
     marginTop: 8,
     fontSize: 12,
-    color: launchColors.rgb_255_255_255_0_5,
+    color: 'rgba(255,255,255,0.5)',
   },
 });

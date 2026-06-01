@@ -29,19 +29,19 @@ export function getBannerColors(
 }
 
 const ICON_MAP: Record<InterventionType, string> = {
-  BURNOUT: '🔥',
-  PLATEAU: '📊',
-  STREAK_RISK: '⏰',
-  BOSS_FINISH: '⚔️',
-  BOSS_OPPORTUNITY: '🎯',
-  STUDY_BEHIND: '📚',
-  MOMENTUM_BUILDING: '📈',
-  COMEBACK_READY: '🔄',
-  STUDY_PLAN_COMPLETE: '🏆',
+  BURNOUT: '',
+  PLATEAU: '',
+  STREAK_RISK: '',
+  BOSS_FINISH: '',
+  BOSS_OPPORTUNITY: '',
+  STUDY_BEHIND: '',
+  MOMENTUM_BUILDING: '',
+  COMEBACK_READY: '',
+  STUDY_PLAN_COMPLETE: '',
 };
 
 export function getIcon(type: InterventionType): string {
-  return ICON_MAP[type] ?? '💡';
+  return ICON_MAP[type] ?? '';
 }
 
 export function isNonDismissable(type: InterventionType, hours?: number): boolean {

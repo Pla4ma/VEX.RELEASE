@@ -2,7 +2,7 @@ import React, { Component, type ReactNode, type ErrorInfo } from 'react';
 import { Box, Text } from '../components/primitives';
 import { createDebugger } from '../utils/debug';
 import { getAnalyticsService } from '../analytics/AnalyticsService';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 import { categorizeError, calculateRetryDelay } from './ErrorBoundary.helpers';
 import { ErrorFallback } from './ErrorFallback';
 import type {
@@ -81,7 +81,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorState> {
       fatal: category === 'client',
     });
     if (__DEV__) {
-      debug.debug('🔴 Error Report');
+      debug.debug('Error Report');
       debug.debug('Category: %s', category);
       debug.debug('Error: %s', error.message);
       debug.debug('Stack: %s', error.stack);
@@ -166,13 +166,13 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorState> {
         <Box
           p="md"
           style={{
-            backgroundColor: launchColors.hex_fef3c7,
+            backgroundColor: '#fef3c7',
             borderRadius: 8,
             borderLeftWidth: 4,
-            borderLeftColor: launchColors.hex_f59e0b,
+            borderLeftColor: '#f59e0b',
           }}
         >
-          <Text variant="body" style={{ color: launchColors.hex_92400e }}>
+          <Text variant="body" style={{ color: '#92400e' }}>
             Running in limited mode. Some features may be unavailable.
           </Text>
         </Box>

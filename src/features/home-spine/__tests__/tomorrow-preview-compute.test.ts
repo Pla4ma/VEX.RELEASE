@@ -41,7 +41,7 @@ describe('computeTomorrowPreview', () => {
     expect(preview.type).toBe('STREAK_MILESTONE');
     expect(preview.priority).toBeLessThanOrEqual(2);
     expect(preview.headline).toContain('7');
-    expect(preview.emoji).toBe('🔥');
+    expect(preview.emoji).toBe('');
   });
 
   it('returns BOSS_NEAR_DEATH when boss health is low', () => {

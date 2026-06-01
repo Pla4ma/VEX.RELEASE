@@ -4,7 +4,7 @@ import Animated, { FadeInUp } from 'react-native-reanimated';
 import { Text } from '../../../components/primitives/Text';
 import { Button } from '../../../components/primitives/Button';
 import { Box } from '../../../components/primitives/Box';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 import { styles } from './SessionConflictState.styles';
 import { formatTime } from './conflict-state-helpers';
 
@@ -53,7 +53,7 @@ export function ConflictDeviceCard({
             ? {
                 width: '100%',
                 borderWidth: 2,
-                borderColor: launchColors.hex_3b82f6,
+                borderColor: '#3b82f6',
               }
             : { width: '100%' }
         }

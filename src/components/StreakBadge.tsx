@@ -11,7 +11,6 @@ import Animated, {
 import { Text } from './primitives/Text';
 import { useTheme } from '../theme';
 import { createSheet } from '@/shared/ui/create-sheet';
-import { launchColors } from '@theme/tokens/launch-colors';
 import { useReducedMotion } from '@/hooks';
 
 type StreakBadgeProps = {
@@ -66,7 +65,7 @@ export function StreakBadge({
           variant="label"
           color={
             isGlass
-              ? launchColors.rgb_255_255_255_0_92
+              ? 'rgba(255,255,255,0.92)'
               : theme.colors.text.secondary
           }
         >
@@ -100,12 +99,12 @@ export function StreakBadge({
         variant="label"
         color={
           isGlass
-            ? launchColors.rgb_255_255_255_0_96
+            ? 'rgba(255,255,255,0.96)'
             : isAtRisk
               ? theme.colors.error.dark
               : theme.colors.accent.orange
         }
-      >{`🔥 ${days} days`}</Text>
+      >{`${days} days`}</Text>
     </Animated.View>
   );
 }
@@ -123,8 +122,8 @@ const styles = createSheet({
     shadowRadius: 12,
   },
   glassBadge: {
-    backgroundColor: launchColors.rgb_255_255_255_0_15,
-    borderColor: launchColors.rgb_255_255_255_0_3,
-    shadowColor: launchColors.rgb_0_0_0_0_2,
+    backgroundColor: 'rgba(255,255,255,0.15)',
+    borderColor: 'rgba(255,255,255,0.3)',
+    shadowColor: 'rgba(0,0,0,0.2)',
   },
 });

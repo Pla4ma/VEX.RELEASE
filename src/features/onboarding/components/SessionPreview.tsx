@@ -42,7 +42,7 @@ export function SessionPreview({
     >
       {/* Duration Display */}
       <Box flexDirection="row" alignItems="center" gap="sm">
-        <Text fontSize={32}>{durationOption?.emoji ?? '🍅'}</Text>
+        <Text fontSize={32}>{durationOption?.emoji ?? ''}</Text>
         <Text variant="h2" color="text.primary" fontWeight="700">
           {durationOption?.label ?? '10 min'}
         </Text>
@@ -58,7 +58,7 @@ export function SessionPreview({
         borderRadius="full"
         bg={`${theme.colors.primary[500]}15`}
       >
-        <Text fontSize={14}>🎯</Text>
+        <Text fontSize={14}></Text>
         <Text variant="caption" color="primary.500" fontWeight="600">
           {goal || 'General focus'}
         </Text>

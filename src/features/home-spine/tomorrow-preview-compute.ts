@@ -52,7 +52,7 @@ function buildFallback(
   input: ComputeTomorrowPreviewInput,
 ): TomorrowPreviewData {
   return {
-    emoji: input.streakWillContinue ? '🔥' : '✨',
+    emoji: '',
     headline: input.streakWillContinue
       ? 'Streak Continues!'
       : 'New Day, New Focus',

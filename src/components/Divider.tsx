@@ -7,7 +7,7 @@
 import React from 'react';
 import { View, type ViewStyle } from 'react-native';
 import { createSheet } from '@/shared/ui/create-sheet';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 export interface DividerProps {
   /** Orientation of the divider */
@@ -25,7 +25,7 @@ export interface DividerProps {
 export const Divider: React.FC<DividerProps> = ({
   orientation = 'horizontal',
   thickness = 1,
-  color = launchColors.hex_e2e8f0,
+  color = '#e2e8f0',
   style,
   spacing = 16,
 }) => {

@@ -8,7 +8,7 @@ import Animated, {
   withDelay,
   runOnJS,
 } from 'react-native-reanimated';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 export interface ParticleConfig {
   id: number;

@@ -10,7 +10,7 @@ import React from 'react';
 import { View, Text, Pressable } from 'react-native';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import { createSheet } from '@/shared/ui/create-sheet';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 interface OnboardingErrorStateProps {
   error: Error;
@@ -90,7 +90,7 @@ export function OnboardingErrorState({
 const styles = createSheet({
   container: {
     flex: 1,
-    backgroundColor: launchColors.hex_1a1a2e,
+    backgroundColor: '#1a1a2e',
     justifyContent: 'center',
     alignItems: 'center',
     padding: 24,
@@ -106,12 +106,12 @@ const styles = createSheet({
   title: {
     fontSize: 24,
     fontWeight: '700',
-    color: launchColors.hex_fff,
+    color: '#fff',
     marginBottom: 12,
   },
   message: {
     fontSize: 16,
-    color: launchColors.hex_9e9e9e,
+    color: '#9e9e9e',
     textAlign: 'center',
     marginBottom: 32,
     lineHeight: 22,
@@ -122,13 +122,13 @@ const styles = createSheet({
     maxWidth: 300,
   },
   primaryButton: {
-    backgroundColor: launchColors.hex_e94560,
+    backgroundColor: '#e94560',
     paddingVertical: 16,
     borderRadius: 12,
     alignItems: 'center',
   },
   primaryButtonText: {
-    color: launchColors.hex_fff,
+    color: '#fff',
     fontSize: 16,
     fontWeight: '600',
   },
@@ -137,18 +137,18 @@ const styles = createSheet({
     alignItems: 'center',
   },
   secondaryButtonText: {
-    color: launchColors.hex_9e9e9e,
+    color: '#9e9e9e',
     fontSize: 14,
   },
   debugContainer: {
     marginTop: 32,
     padding: 12,
-    backgroundColor: launchColors.hex_2a2a3e,
+    backgroundColor: '#2a2a3e',
     borderRadius: 8,
   },
   debugText: {
     fontSize: 12,
-    color: launchColors.hex_666,
+    color: '#666',
   },
 });
 

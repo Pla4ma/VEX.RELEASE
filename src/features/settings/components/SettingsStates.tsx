@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, ActivityIndicator, Pressable } from 'react-native';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 import { settingsStyles as styles } from './settings-screen-styles';
 
 interface SettingsLoadingStateProps {
@@ -12,7 +12,7 @@ export function SettingsLoadingState({
 }: SettingsLoadingStateProps) {
   return (
     <View style={styles.centerContainer}>
-      <ActivityIndicator size="large" color={launchColors.hex_6366f1} />
+      <ActivityIndicator size="large" color={'#6366f1'} />
       <Text style={styles.loadingText}>{message}</Text>
     </View>
   );

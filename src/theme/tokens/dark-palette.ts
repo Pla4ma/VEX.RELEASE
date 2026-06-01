@@ -98,5 +98,11 @@ export const darkColors: ColorPalette = {
     inputBorder: 'rgba(226,232,240,0.18)',
     tabActive: '#F8FAFC',
     tabInactive: '#9BA8BA',
+    vexCyan: '#00E5FF',
+    vexCyanSoft: 'rgba(0,229,255,0.08)',
+    vexCyanGlow: 'rgba(0,229,255,0.25)',
+    vexGold: '#FFB300',
+    vexGoldSoft: 'rgba(255,179,0,0.15)',
+    obsidian: '#0A0A0F',
   },
 };

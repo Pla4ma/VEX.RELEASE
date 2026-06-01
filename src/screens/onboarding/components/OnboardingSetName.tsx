@@ -86,7 +86,7 @@ export function OnboardingSetName({
         {/* Header */}
         <Animated.View entering={FadeIn.duration(400)}>
           <Box gap="md" mt="2xl">
-            <Text fontSize={48}>👋</Text>
+            <Text fontSize={48} color={theme.colors.primary[500]}>V</Text>
             <Box gap="sm">
               <Text variant="h2" color="text.primary">
                 What should we call you?

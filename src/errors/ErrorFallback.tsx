@@ -3,7 +3,6 @@ import { ActivityIndicator } from 'react-native';
 import { Box, Text } from '../components/primitives';
 import { Button } from '../components';
 import { useTheme } from '../theme';
-import { launchColors } from '@theme/tokens/launch-colors';
 import type { ErrorFallbackProps, ErrorCategory } from './ErrorBoundary.types';
 
 function getErrorMessage(category: ErrorCategory, error: Error | null): string {
@@ -26,15 +25,15 @@ function getErrorMessage(category: ErrorCategory, error: Error | null): string {
 function getErrorIcon(category: ErrorCategory): string {
   switch (category) {
     case 'network':
-      return '📡';
+      return '!';
     case 'auth':
-      return '🔐';
+      return '!';
     case 'server':
-      return '🔧';
+      return '!';
     case 'validation':
-      return '⚠️';
+      return '!';
     default:
-      return '❌';
+      return '×';
   }
 }
 
@@ -62,7 +61,8 @@ export function ErrorFallback({
 
       <Text
         variant="body"
-        style={{ color: launchColors.hex_6b7280, textAlign: 'center' }}
+        color="text.secondary"
+        textAlign="center"
         mb="lg"
       >
         {getErrorMessage(category, error)}
@@ -71,7 +71,7 @@ export function ErrorFallback({
       {retryCount > 0 && (
         <Text
           variant="caption"
-          style={{ color: launchColors.hex_9ca3af }}
+          color="text.tertiary"
           mb="lg"
         >
           Retry attempt {retryCount} of {maxRetries}
@@ -80,8 +80,8 @@ export function ErrorFallback({
 
       {isRetrying ? (
         <Box flexDirection="row" alignItems="center" style={{ gap: 8 }}>
-          <ActivityIndicator color={launchColors.hex_3b82f6} />
-          <Text variant="body" style={{ color: launchColors.hex_6b7280 }}>
+          <ActivityIndicator color="#3b82f6" />
+          <Text variant="body" color="text.secondary">
             Retrying...
           </Text>
         </Box>

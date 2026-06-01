@@ -2,7 +2,7 @@ import React from 'react';
 import { Pressable } from 'react-native';
 import { Box, Text, Button, Card } from '../../components/primitives';
 import { Avatar } from '../../components/Avatar';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 import type {
   Notification,
   NotificationType,
@@ -47,7 +47,7 @@ export function NotificationFilterBar({
             style={{
               fontWeight: '600',
               color:
-                activeFilter === filter ? launchColors.hex_fff : textSecondary,
+                activeFilter === filter ? '#fff' : textSecondary,
             }}
           >
             {FILTER_LABELS[filter] ?? filter}
@@ -75,7 +75,7 @@ export function NotificationCard({
       interactive
       style={{
         opacity: item.read ? 0.8 : 1,
-        backgroundColor: item.read ? undefined : launchColors.hex_eef2ff20,
+        backgroundColor: item.read ? undefined : '#eef2ff20',
       }}
       size="md"
       onPress={() => onPress(item)}

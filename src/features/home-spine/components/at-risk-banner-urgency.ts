@@ -36,21 +36,21 @@ export function getUrgencyMessage(
   }
   if (hoursRemaining <= 1) {
     return {
-      headline: `⚠️ FINAL HOUR — ${streakDays}-Day Streak!`,
+      headline: `FINAL HOUR — ${streakDays}-Day Streak`,
       subtext: 'Start a session NOW to save your streak',
       tone: 'critical',
     };
   }
   if (hoursRemaining <= 4) {
     return {
-      headline: `🔥 ${hoursRemaining}h Left to Save ${streakDays}-Day Streak`,
+      headline: `${hoursRemaining}h Left to Save ${streakDays}-Day Streak`,
       subtext: 'Your streak expires soon — start a focus session',
       tone: 'urgent',
     };
   }
   if (hoursRemaining <= 8) {
     return {
-      headline: `⏰ ${hoursRemaining} Hours Remaining`,
+      headline: `${hoursRemaining} Hours Remaining`,
       subtext: `Protect your ${streakDays}-day streak before bed`,
       tone: 'warning',
     };

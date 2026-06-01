@@ -26,11 +26,11 @@ export interface WeeklyCalendarProps {
 }
 
 export const EVENT_ICONS: Record<EventType, string> = {
-  squad_war: '⚔️',
-  double_xp: '🔥',
-  challenge_expires: '🏆',
-  season_ends: '🌙',
-  boss_rush: '👹',
+  squad_war: '',
+  double_xp: '',
+  challenge_expires: '',
+  season_ends: '',
+  boss_rush: '',
 };
 
 export const EVENT_LABELS: Record<EventType, string> = {

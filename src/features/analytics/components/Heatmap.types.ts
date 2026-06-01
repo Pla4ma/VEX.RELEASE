@@ -1,4 +1,4 @@
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 export interface HeatmapData {
   day: string;
@@ -18,25 +18,25 @@ export const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 export const HOURS = Array.from({ length: 24 }, (_, i) => i);
 export const COLOR_SCHEMES = {
   blue: [
-    launchColors.hex_eff6ff,
-    launchColors.hex_dbeafe,
-    launchColors.hex_93c5fd,
-    launchColors.hex_3b82f6,
-    launchColors.hex_1e40af,
+    '#eff6ff',
+    '#dbeafe',
+    '#93c5fd',
+    '#3b82f6',
+    '#1e40af',
   ],
   green: [
-    launchColors.hex_f0fdf4,
-    launchColors.hex_dcfce7,
-    launchColors.hex_86efac,
-    launchColors.hex_22c55e,
-    launchColors.hex_166534,
+    '#f0fdf4',
+    '#dcfce7',
+    '#86efac',
+    '#22c55e',
+    '#166534',
   ],
   purple: [
-    launchColors.hex_faf5ff,
-    launchColors.hex_f3e8ff,
-    launchColors.hex_d8b4fe,
-    launchColors.hex_a855f7,
-    launchColors.hex_6b21a8,
+    '#faf5ff',
+    '#f3e8ff',
+    '#d8b4fe',
+    '#a855f7',
+    '#6b21a8',
   ],
 };
 

@@ -72,7 +72,7 @@ export function TodaysChallengesWidget({
                 justifyContent="center"
                 alignItems="center"
               >
-                <Text fontSize={20}>🎯</Text>
+                <Text fontSize={20}></Text>
               </Box>
               <Box>
                 <Text variant="h4" color="text.primary">

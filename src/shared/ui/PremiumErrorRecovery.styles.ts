@@ -1,12 +1,12 @@
 import { createSheet } from '@/shared/ui/create-sheet';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 export const styles = createSheet({
   container: { padding: 16 },
   card: {
     borderRadius: 16,
     padding: 20,
-    shadowColor: launchColors.hex_000,
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.1,
     shadowRadius: 8,
@@ -36,7 +36,7 @@ export const styles = createSheet({
   actions: { gap: 10 },
   retryButton: { paddingVertical: 14, borderRadius: 10, alignItems: 'center' },
   retryButtonText: {
-    color: launchColors.hex_fff,
+    color: '#fff',
     fontSize: 15,
     fontWeight: '700',
   },

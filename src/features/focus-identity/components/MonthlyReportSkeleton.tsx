@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { useTheme } from '../../../theme';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 export function MonthlyReportSkeleton(): JSX.Element {
   const { theme } = useTheme();
@@ -26,7 +26,7 @@ export function MonthlyReportSkeleton(): JSX.Element {
             width: 200,
             height: 32,
             backgroundColor:
-              theme.colors.border?.DEFAULT || launchColors.hex_e5e5e5,
+              theme.colors.border?.DEFAULT || '#e5e5e5',
             borderRadius: 4,
           }}
         />
@@ -35,7 +35,7 @@ export function MonthlyReportSkeleton(): JSX.Element {
             width: 32,
             height: 32,
             backgroundColor:
-              theme.colors.border?.DEFAULT || launchColors.hex_e5e5e5,
+              theme.colors.border?.DEFAULT || '#e5e5e5',
             borderRadius: 16,
           }}
         />
@@ -45,7 +45,7 @@ export function MonthlyReportSkeleton(): JSX.Element {
           style={{
             height: 200,
             backgroundColor:
-              theme.colors.surface?.card || launchColors.hex_f5f5f5,
+              theme.colors.surface?.card || '#f5f5f5',
             borderRadius: 16,
           }}
         />
@@ -53,7 +53,7 @@ export function MonthlyReportSkeleton(): JSX.Element {
           style={{
             height: 150,
             backgroundColor:
-              theme.colors.surface?.card || launchColors.hex_f5f5f5,
+              theme.colors.surface?.card || '#f5f5f5',
             borderRadius: 16,
           }}
         />
@@ -61,7 +61,7 @@ export function MonthlyReportSkeleton(): JSX.Element {
           style={{
             height: 100,
             backgroundColor:
-              theme.colors.surface?.card || launchColors.hex_f5f5f5,
+              theme.colors.surface?.card || '#f5f5f5',
             borderRadius: 16,
           }}
         />

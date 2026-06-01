@@ -114,7 +114,7 @@ export function AtRiskBanner({
               justifyContent="center"
               alignItems="center"
             >
-              <Text fontSize={24}>{isCritical ? '🚨' : '🔥'}</Text>
+              <Text fontSize={24}></Text>
             </Box>
 
             <Box flex={1}>

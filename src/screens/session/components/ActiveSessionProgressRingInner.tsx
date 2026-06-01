@@ -11,7 +11,7 @@ import { Text } from '../../../components/primitives/Text';
 import { PurityHUD } from '../../../session/components/PurityHUD';
 import { AnimatedCircle } from '../hooks/useSessionAnimations';
 import { formatTime, PERFECT_PARTICLE_COUNT } from '../utils/active-session';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 import { PerfectFocusBurstParticle } from './PerfectFocusBurstParticle';
 import {
   USE_SAFE_PROGRESS_RING,
@@ -129,10 +129,10 @@ export const ActiveSessionProgressRing: React.FC<
                   x2="100%"
                   y2="100%"
                 >
-                  <Stop offset="0%" stopColor={launchColors.hex_fde68a} />
-                  <Stop offset="35%" stopColor={launchColors.hex_f59e0b} />
-                  <Stop offset="68%" stopColor={launchColors.hex_f472b6} />
-                  <Stop offset="100%" stopColor={launchColors.hex_60a5fa} />
+                  <Stop offset="0%" stopColor={'#fde68a'} />
+                  <Stop offset="35%" stopColor={'#f59e0b'} />
+                  <Stop offset="68%" stopColor={'#f472b6'} />
+                  <Stop offset="100%" stopColor={'#60a5fa'} />
                 </SvgLinearGradient>
               </Defs>
               <Circle

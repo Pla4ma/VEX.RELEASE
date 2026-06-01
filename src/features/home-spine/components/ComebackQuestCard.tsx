@@ -90,7 +90,7 @@ export function ComebackQuestCard({
               justifyContent="center"
               alignItems="center"
             >
-              <Text fontSize={24}>🔥</Text>
+              <Text fontSize={24}></Text>
             </Box>
             <Box flex={1}>
               <Text variant="h4" color={theme.colors.text.primary}>
@@ -160,7 +160,7 @@ export function ComebackQuestCard({
             bg={theme.colors.background.primary}
           >
             <Box flexDirection="row" alignItems="center" gap="sm">
-              <Text fontSize={16}>⚡</Text>
+              <Text fontSize={16}></Text>
               <Text variant="bodySmall" color={theme.colors.text.secondary}>
                 {multiplier.toFixed(1)}x XP bonus active
               </Text>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, Pressable, ActivityIndicator } from 'react-native';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 import {
   type ExportProgressProps,
   STATUS_CONFIG,
@@ -47,8 +47,8 @@ export function ExportProgress({
                 {
                   width: `${job.progress}%`,
                   backgroundColor: isComplete
-                    ? launchColors.hex_10b981
-                    : launchColors.hex_3b82f6,
+                    ? '#10b981'
+                    : '#3b82f6',
                 },
               ]}
             />
@@ -93,7 +93,7 @@ export function ExportProgress({
 
         {isActive && (
           <View style={styles.loadingIndicator}>
-            <ActivityIndicator size="small" color={launchColors.hex_3b82f6} />
+            <ActivityIndicator size="small" color={'#3b82f6'} />
             <Text style={styles.loadingText}>Working...</Text>
           </View>
         )}

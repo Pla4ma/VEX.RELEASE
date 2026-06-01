@@ -3,6 +3,7 @@ import Animated, {
   FadeIn,
   FadeInUp,
 } from 'react-native-reanimated';
+import { View } from 'react-native';
 import { Box } from '../../../components/primitives/Box';
 import { Button } from '../../../components/primitives/Button';
 import { Text } from '../../../components/primitives/Text';
@@ -26,6 +27,7 @@ export function OnboardingPermissions({
   onContinue,
 }: OnboardingPermissionsProps): JSX.Element {
   const { theme } = useTheme();
+  const semantic = theme.colors.semantic;
   const [status, setStatus] = useState<
     'idle' | 'requesting' | 'granted' | 'denied'
   >('idle');
@@ -46,7 +48,20 @@ export function OnboardingPermissions({
       {}
       <Animated.View entering={FadeIn.duration(400)}>
         <Box gap="md" mt="xl">
-          <Text fontSize={40}>🔔</Text>
+          <View
+            style={{
+              width: 64,
+              height: 64,
+              borderRadius: 32,
+              backgroundColor: `${semantic.primary}18`,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Text fontSize={28} color="primary.DEFAULT" fontWeight="700">
+              N
+            </Text>
+          </View>
           <Box gap="sm">
             <Text variant="h2" color="text.primary">
               Stay in the loop

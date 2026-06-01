@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 import { UserPreferencesSchema, AppearanceSettingsSchema } from './core-schemas';
 import type { AppearanceSettings } from './core-schemas';
 import { NotificationSettingsSchema } from './notification-schemas';
@@ -93,7 +93,7 @@ export function createDefaultAppearanceSettings(
   return AppearanceSettingsSchema.parse({
     userId,
     theme: 'system',
-    accentColor: launchColors.hex_6366f1,
+    accentColor: '#6366f1',
     fontScale: 1,
     useSystemFont: true,
     reduceMotion: false,

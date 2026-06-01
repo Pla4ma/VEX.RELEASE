@@ -37,6 +37,14 @@ export const CompanionBody: React.FC<CompanionBodyProps> = ({
             <Stop offset="100%" stopColor={theme.secondary} stopOpacity="0.3" />
           </RadialGradient>
           <Circle cx={center} cy={center} r={radius} fill="url(#eggGradient)" />
+          {/* Abstract core seed instead of literal egg */}
+          <Circle
+            cx={center}
+            cy={center}
+            r={radius * 0.35}
+            fill={theme.glow}
+            opacity="0.5"
+          />
         </>
       );
 
@@ -60,6 +68,7 @@ export const CompanionBody: React.FC<CompanionBodyProps> = ({
             r={radius}
             fill="url(#hatchGradient)"
           />
+          {/* Energy points instead of literal crack dots */}
           <Circle
             cx={center - radius * 0.3}
             cy={center - radius * 0.2}
@@ -94,6 +103,7 @@ export const CompanionBody: React.FC<CompanionBodyProps> = ({
             r={radius * 0.8}
             fill="url(#youngGradient)"
           />
+          {/* Light nodes instead of literal eyes */}
           <Circle
             cx={center - 8}
             cy={center - 5}
@@ -136,6 +146,7 @@ export const CompanionBody: React.FC<CompanionBodyProps> = ({
           />
           {phase !== 'MATURE' && (
             <>
+              {/* Signal flares instead of literal eyes */}
               <Circle
                 cx={center - radius * 0.5}
                 cy={center - radius * 0.3}
@@ -154,3 +165,5 @@ export const CompanionBody: React.FC<CompanionBodyProps> = ({
       );
   }
 };
+
+export default CompanionBody;

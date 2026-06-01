@@ -4,7 +4,7 @@ import Animated from 'react-native-reanimated';
 import type { AnimatedStyle } from 'react-native-reanimated';
 import { Box, Text } from '../../../components/primitives';
 import type { CompanionPhase } from '../types';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 import { PHASE_NAMES, PHASE_EMOJIS } from './companion-evolution-types';
 import type { EvolutionPhase, ElementThemeColors } from './companion-evolution-types';
 
@@ -57,7 +57,7 @@ export const FlashLayer: React.FC<{ flashStyle: AnimatedStyle }> = ({
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundColor: launchColors.hex_ffffff,
+        backgroundColor: '#ffffff',
         zIndex: 50,
       },
       flashStyle,

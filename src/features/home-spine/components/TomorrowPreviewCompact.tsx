@@ -15,14 +15,14 @@ export function TomorrowPreviewCompact({
   onPress: () => void;
 }): JSX.Element {
   const firstEvent = events[0];
-  const eventEmoji = firstEvent
+  const eventMark = firstEvent
     ? firstEvent.type === 'double_xp'
-      ? '🔥'
+      ? '2x'
       : firstEvent.type === 'squad_war'
-        ? '⚔️'
+        ? 'SW'
         : firstEvent.type === 'boss_rush'
-          ? '👹'
-          : '🌙'
+          ? 'BR'
+          : 'EV'
     : null;
   return (
     <Pressable
@@ -40,7 +40,7 @@ export function TomorrowPreviewCompact({
         bg="background.secondary"
       >
         <Box flexDirection="row" alignItems="center" gap="sm">
-          <Text fontSize={16}>➡️</Text>
+          <Text fontSize={16}></Text>
           <Text variant="body" color="text.secondary">
             Tomorrow:
           </Text>
@@ -49,9 +49,9 @@ export function TomorrowPreviewCompact({
             color={streakWillContinue ? 'text.primary' : 'error.DEFAULT'}
             fontWeight="600"
           >
-            {streakWillContinue ? '🔥 Streak continues' : '⚠️ Streak at risk'}
+            {streakWillContinue ? 'Streak continues' : 'Streak at risk'}
           </Text>
-          {eventEmoji && <Text fontSize={16}>{eventEmoji}</Text>}
+          {eventMark && <Text fontSize={16}>{eventMark}</Text>}
         </Box>
         <Text variant="caption" color="text.tertiary">
           ›

@@ -115,7 +115,7 @@ export const OnboardingStateSchema = z.object({
 export const GoalOptionSchema = z.object({
   key: FocusGoalSchema,
   label: z.string().min(1),
-  emoji: z.string().min(1),
+  emoji: z.string(),
   description: z.string().min(1),
 });
 
@@ -125,7 +125,7 @@ export const GoalOptionSchema = z.object({
 export const DurationOptionSchema = z.object({
   value: FocusDurationSchema,
   label: z.string().min(1),
-  emoji: z.string().min(1),
+  emoji: z.string(),
 });
 
 /**

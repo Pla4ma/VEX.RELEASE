@@ -1,13 +1,13 @@
 {
-  "timestamp": "2026-05-14T19:32:56.099Z",
+  "timestamp": "2026-06-01T20:58:19.297Z",
   "summary": {
-    "totalFiles": 1351,
+    "totalFiles": 3096,
     "issues": {
       "error": 0,
-      "warning": 2,
+      "warning": 1250,
       "info": 0
     },
-    "filesWithIssues": 2
+    "filesWithIssues": 327
   },
   "files": [
     {
@@ -22,7 +22,79 @@
       ]
     },
     {
-      "path": "app\\App.tsx",
+      "path": "animation\\Particle.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "path": "components\\Avatar.tsx",
+      "issues": [
+        {
+          "rule": "unoptimizedImages",
+          "severity": "warning",
+          "message": "Images should use react-native-fast-image for better performance",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "components\\Banner.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 3
+        },
+        {
+          "rule": "unoptimizedImages",
+          "severity": "warning",
+          "message": "Images should use react-native-fast-image for better performance",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "components\\coach\\SmartCoachHint.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 4
+        }
+      ]
+    },
+    {
+      "path": "components\\EmptyState.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 4
+        }
+      ]
+    },
+    {
+      "path": "components\\FeatureTeaserCard.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "components\\Input.tsx",
       "issues": [
         {
           "rule": "inlineObjectsInProps",
@@ -31,7 +103,3547 @@
           "count": 1
         }
       ]
+    },
+    {
+      "path": "components\\LevelUpCelebration.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 7
+        }
+      ]
+    },
+    {
+      "path": "components\\LockedFeatureScreen.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "path": "components\\MobileOptimizedContainer.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "components\\OfflineBanner.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 4
+        }
+      ]
+    },
+    {
+      "path": "components\\overlays\\Toast.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "components\\premium\\premium-surface-extras.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "path": "components\\premium\\PremiumSurface.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "components\\primitives\\AppScreen.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "components\\primitives\\CardSubcomponents.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "components\\primitives\\FeatureScreen.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 5
+        }
+      ]
+    },
+    {
+      "path": "components\\states\\ErrorState.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 7
+        }
+      ]
+    },
+    {
+      "path": "components\\states\\loading-variants.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "components\\states\\LoadingState.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "components\\ui\\CircularProgress.tsx",
+      "issues": [
+        {
+          "rule": "inlineAnimatedStyles",
+          "severity": "warning",
+          "message": "Avoid inline animated style objects - use useAnimatedStyle hook",
+          "count": 1
+        },
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "path": "components\\ui\\ProgressBar.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "path": "components\\ui\\StepIndicator.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 5
+        }
+      ]
+    },
+    {
+      "path": "components\\UnlockRequirementRow.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "errors\\ErrorBoundary.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "errors\\ErrorFallback.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 6
+        }
+      ]
+    },
+    {
+      "path": "features\\achievements\\components\\AchievementDetailIcon.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "features\\achievements\\components\\AchievementDetailSheet.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "features\\achievements\\components\\AchievementRewards.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 6
+        }
+      ]
+    },
+    {
+      "path": "features\\achievements\\components\\AchievementUnlockStatus.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 4
+        }
+      ]
+    },
+    {
+      "path": "features\\achievements\\components\\AchievementUnlockToast.main.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "features\\ai-coach\\components\\CoachBubble.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 6
+        }
+      ]
+    },
+    {
+      "path": "features\\ai-coach\\components\\CoachInterventionBanner.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 7
+        }
+      ]
+    },
+    {
+      "path": "features\\ai-coach\\components\\CoachScreen.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "features\\ai-coach\\components\\CoachSessionBanner.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "path": "features\\ai-coach\\components\\DailyQuestCard.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 16
+        }
+      ]
+    },
+    {
+      "path": "features\\ai-coach\\components\\MemoryList.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 9
+        }
+      ]
+    },
+    {
+      "path": "features\\ai-coach\\components\\MessageBubbleVariants.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 5
+        }
+      ]
+    },
+    {
+      "path": "features\\boss\\components\\boss-battle-hud.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "features\\challenges\\components\\NearMissActions.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "features\\challenges\\components\\NearMissProgressBar.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "features\\coach-presence\\components\\CoachPresenceCard.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 6
+        }
+      ]
+    },
+    {
+      "path": "features\\companion\\components\\companion-evolution-effects.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "features\\companion\\components\\CompanionEvolutionCeremony.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "features\\companion\\components\\CompanionParticles.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "features\\companion\\components\\MoodIndicator.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "path": "features\\companion-promise\\components\\CompanionPromiseCard.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 11
+        }
+      ]
+    },
+    {
+      "path": "features\\content-study\\components\\ContentItemCard.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "features\\content-study\\components\\ExtractionProgress.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 5
+        }
+      ]
+    },
+    {
+      "path": "features\\content-study\\components\\FilterChip.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "features\\content-study\\components\\InputTypeSelector.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "features\\content-study\\components\\PdfUploaderFileCard.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "features\\content-study\\components\\SkeletonCards.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 10
+        }
+      ]
+    },
+    {
+      "path": "features\\content-study\\components\\StudyPlanSuggestionCard.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "features\\content-study\\components\\TextPasteInput.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 5
+        }
+      ]
+    },
+    {
+      "path": "features\\content-study\\components\\YouTubeVideoPreview.tsx",
+      "issues": [
+        {
+          "rule": "unoptimizedImages",
+          "severity": "warning",
+          "message": "Images should use react-native-fast-image for better performance",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "features\\content-study\\screens\\ContentInputScreen.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "features\\economy\\components\\SimpleWalletBadge.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "features\\economy\\components\\StreakInsuranceCard.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "features\\feature-gate\\NavigationGate.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "features\\focus-identity\\components\\factor-map.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "path": "features\\focus-identity\\components\\focus-score-dashboard.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "features\\focus-identity\\components\\focus-score-home-widget.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "path": "features\\focus-identity\\components\\FocusScoreCardContent.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 12
+        }
+      ]
+    },
+    {
+      "path": "features\\focus-identity\\components\\FocusScoreCardStates.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 13
+        }
+      ]
+    },
+    {
+      "path": "features\\focus-identity\\components\\loading-skeleton.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "features\\focus-identity\\components\\MonthlyFocusReport.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "path": "features\\focus-identity\\components\\MonthlyReportSkeleton.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 8
+        }
+      ]
+    },
+    {
+      "path": "features\\focus-identity\\components\\MonthlyReportStates.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 7
+        }
+      ]
+    },
+    {
+      "path": "features\\focus-identity\\components\\ReportCards.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 13
+        }
+      ]
+    },
+    {
+      "path": "features\\focus-identity\\components\\score-card.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "features\\focus-identity\\components\\ScoreHistoryChart.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 12
+        }
+      ]
+    },
+    {
+      "path": "features\\focus-identity\\components\\ScoreOverviewCard.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 7
+        }
+      ]
+    },
+    {
+      "path": "features\\focus-identity\\components\\what-changed.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "features\\focus-memory\\components\\MemoryPanel.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 15
+        }
+      ]
+    },
+    {
+      "path": "features\\home-experience\\components\\HomeExperiencePrelude.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 6
+        }
+      ]
+    },
+    {
+      "path": "features\\home-spine\\components\\BossPreviewCard.indicators.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "features\\home-spine\\components\\BossPreviewCard.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "features\\home-spine\\components\\GreetingHeader.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "path": "features\\home-spine\\components\\GreetingHeaderParts.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "features\\home-spine\\components\\StartSessionButton.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 4
+        }
+      ]
+    },
+    {
+      "path": "features\\home-spine\\components\\StartSessionButtonCompact.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "features\\home-spine\\components\\streak-widget-controls.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "features\\home-spine\\components\\TodaysChallengesWidget.tsx",
+      "issues": [
+        {
+          "rule": "inlineAnimatedStyles",
+          "severity": "warning",
+          "message": "Avoid inline animated style objects - use useAnimatedStyle hook",
+          "count": 1
+        },
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "features\\home-spine\\components\\TomorrowPreviewSession.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "features\\mastery\\components\\LockedFeaturePreview.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "features\\mastery\\components\\MasteryCard.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 11
+        }
+      ]
+    },
+    {
+      "path": "features\\mastery\\components\\MasteryRankBadge.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "features\\mastery\\components\\MasteryUnlockGate.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 4
+        }
+      ]
+    },
+    {
+      "path": "features\\mastery\\components\\TechniqueBar.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "path": "features\\mode-native\\components\\ModeCompletionSurface.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "features\\mode-native\\components\\ModeQuickContract.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "features\\monthly-report\\components\\MonthlyFocusReportScreen.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 4
+        }
+      ]
+    },
+    {
+      "path": "features\\monthly-report\\components\\report-content-helpers.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 4
+        }
+      ]
+    },
+    {
+      "path": "features\\monthly-report\\components\\ReportContent.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 7
+        }
+      ]
+    },
+    {
+      "path": "features\\notifications\\components\\WeeklyReportCompact.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "features\\onboarding\\components\\CompanionCreature.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "path": "features\\onboarding\\components\\CompanionRevealScreen.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 4
+        }
+      ]
+    },
+    {
+      "path": "features\\onboarding\\components\\DurationCard.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "features\\onboarding\\components\\FirstCompletionOverlay.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "features\\onboarding\\components\\FirstResultScreen.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "path": "features\\onboarding\\components\\FirstSessionCTA.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "path": "features\\onboarding\\components\\FirstSessionSetup.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 5
+        }
+      ]
+    },
+    {
+      "path": "features\\onboarding\\components\\FocusTimeScreen.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "path": "features\\onboarding\\components\\GoalCard.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "features\\onboarding\\components\\GoalScreen.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "path": "features\\onboarding\\components\\MotivationCard.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "features\\onboarding\\components\\MotivationScreen.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "features\\onboarding\\components\\NameAndGoalScreen.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 4
+        }
+      ]
+    },
+    {
+      "path": "features\\onboarding\\components\\NameAvatarPreview.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "features\\onboarding\\components\\NameInputSection.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "path": "features\\onboarding\\components\\NameScreen.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 5
+        }
+      ]
+    },
+    {
+      "path": "features\\onboarding\\components\\OnboardingFlow.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 7
+        }
+      ]
+    },
+    {
+      "path": "features\\onboarding\\components\\OnboardingNavigator.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "features\\onboarding\\components\\OnboardingProgressBar.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "features\\onboarding\\components\\SuccessCelebration.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "features\\onboarding\\components\\TooltipBubble.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "features\\onboarding\\components\\WelcomeScreen.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "path": "features\\progression\\components\\progression-dashboard.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 8
+        }
+      ]
+    },
+    {
+      "path": "features\\progression\\components\\progression-stat-card.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "features\\progression\\first-week-pacing\\ModeCard.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "features\\project-focus\\components\\ProjectHomeCardStates.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 19
+        }
+      ]
+    },
+    {
+      "path": "features\\rescue-mode\\components\\RescueBanner.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 6
+        }
+      ]
+    },
+    {
+      "path": "features\\rewards\\components\\reward-chest.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "features\\session\\components\\CompanionWaiting.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "path": "features\\session\\components\\first-session-overlay\\FirstSessionOverlay.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "features\\session\\components\\first-session-overlay\\TooltipCard.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 6
+        }
+      ]
+    },
+    {
+      "path": "features\\session\\StudyQuizBreak.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "features\\session-completion\\components\\CriticalHitBanner.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "features\\session-completion\\components\\GradeRevealAnimation.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "path": "features\\session-completion\\components\\PerfectSessionBanner.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 5
+        }
+      ]
+    },
+    {
+      "path": "features\\session-completion\\components\\XPEarnAnimation.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "features\\session-history\\components\\HistoryFilterTabs.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "features\\session-recommendation\\components\\SessionRecommendationCard.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 6
+        }
+      ]
+    },
+    {
+      "path": "features\\session-start\\components\\AdaptiveDifficultyBanner.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 15
+        }
+      ]
+    },
+    {
+      "path": "features\\session-start\\components\\ConfidenceIndicator.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 4
+        }
+      ]
+    },
+    {
+      "path": "features\\session-start\\components\\CustomDurationInput.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "features\\session-start\\components\\DifficultySelector.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 4
+        }
+      ]
+    },
+    {
+      "path": "features\\session-start\\components\\EmptyStakesMessage.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "features\\session-start\\components\\live-focusing\\AvatarStack.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 4
+        }
+      ]
+    },
+    {
+      "path": "features\\session-start\\components\\live-focusing\\LiveFocusingSkeleton.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "features\\session-start\\components\\ModeSelector.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "features\\session-start\\components\\SessionStakesBriefing.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "path": "features\\session-start\\components\\SessionSuggestions.tsx",
+      "issues": [
+        {
+          "rule": "inlineAnimatedStyles",
+          "severity": "warning",
+          "message": "Avoid inline animated style objects - use useAnimatedStyle hook",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "features\\session-start\\components\\StakeCard.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "path": "features\\streaks\\components\\ComebackQuestSubcomponents.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "features\\streaks\\components\\StreakBrokenModal\\RestoreStreakCard.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "features\\streaks\\components\\StreakBrokenModal\\StreakBrokenModal.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "features\\streaks\\components\\StreakCriticalAlert.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "features\\streaks\\components\\streakGamblePrompt\\GambleActionButtons.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "path": "features\\streaks\\components\\streakGamblePrompt\\OutcomeViews.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 7
+        }
+      ]
+    },
+    {
+      "path": "features\\streaks\\components\\streakGamblePrompt\\PromptView.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "features\\streaks\\components\\StreakMilestoneModal.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "features\\study-os\\components\\RecallQuestionCard.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 5
+        }
+      ]
+    },
+    {
+      "path": "features\\study-os\\components\\StudyOsPreview.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "features\\study-os\\components\\UnlockBanner.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "features\\unlock-explainer\\components\\UnlockExplainerCard.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "path": "navigation\\AuthNavigator.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "navigation\\components\\RootCrashBoundary.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 6
+        }
+      ]
+    },
+    {
+      "path": "navigation\\MainNavigator.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "path": "navigation\\root-stack-authenticated-routes.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 5
+        }
+      ]
+    },
+    {
+      "path": "navigation\\RootStackScreens.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "navigation\\SessionNavigator.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "screens\\auth\\components\\AuthValuePreview.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 5
+        }
+      ]
+    },
+    {
+      "path": "screens\\auth\\ForgotPasswordScreen.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 5
+        }
+      ]
+    },
+    {
+      "path": "screens\\auth\\LoginScreen.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "screens\\auth\\RegisterScreen.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "screens\\auth\\ResetPasswordScreen.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 8
+        }
+      ]
+    },
+    {
+      "path": "screens\\auth\\VerifyEmailScreen.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 9
+        }
+      ]
+    },
+    {
+      "path": "screens\\boss\\BossScreenContent.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "path": "screens\\boss\\BossScreenSectionsInner.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 4
+        }
+      ]
+    },
+    {
+      "path": "screens\\ComebackCard.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 4
+        }
+      ]
+    },
+    {
+      "path": "screens\\ComebackScreen.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "path": "screens\\companion\\CompanionDetailScreen.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "screens\\home\\components\\HomeCompanionWidget.cards.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 10
+        }
+      ]
+    },
+    {
+      "path": "screens\\home\\components\\HomeCompanionWidget.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 4
+        }
+      ]
+    },
+    {
+      "path": "screens\\home\\components\\HomeHeroCard.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 6
+        }
+      ]
+    },
+    {
+      "path": "screens\\home\\components\\HomeHeroSecondaryActions.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "screens\\home\\components\\HomePrimaryRail.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "screens\\home\\components\\HomeSecondaryRail.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "screens\\home\\components\\MiniBossPreview.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 4
+        }
+      ]
+    },
+    {
+      "path": "screens\\home\\containers\\HomeColdStartFallback.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 5
+        }
+      ]
+    },
+    {
+      "path": "screens\\home\\ContentStudyHeroCard.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "screens\\home\\FocusScreen.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "path": "screens\\home\\GradientStartButton.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "screens\\home\\HomeHero.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "path": "screens\\home\\progressive-blocks\\ComingSoonSection.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "screens\\home\\progressive-blocks\\GoalCard.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "screens\\home\\progressive-blocks\\NextBestActionCard.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "screens\\home\\progressive-blocks\\ProgressCards.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "path": "screens\\notifications\\NotificationComponents.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 9
+        }
+      ]
+    },
+    {
+      "path": "screens\\notifications\\NotificationsScreen.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "screens\\notifications\\NotificationStateViews.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 6
+        }
+      ]
+    },
+    {
+      "path": "screens\\onboarding\\components\\ElementCard.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 6
+        }
+      ]
+    },
+    {
+      "path": "screens\\onboarding\\components\\ElementVisual.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 20
+        }
+      ]
+    },
+    {
+      "path": "screens\\onboarding\\components\\LaneChoiceStep.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "path": "screens\\onboarding\\components\\LaneConfirmationStep.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 6
+        }
+      ]
+    },
+    {
+      "path": "screens\\onboarding\\components\\OnboardingChooseElement.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 6
+        }
+      ]
+    },
+    {
+      "path": "screens\\onboarding\\components\\OnboardingNotificationPermissionCard.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "screens\\onboarding\\components\\OnboardingProgressIndicator.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "path": "screens\\onboarding\\components\\OnboardingSetName.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "screens\\onboarding\\components\\OnboardingWelcome.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "screens\\paywall\\PaywallHero.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "screens\\profile\\AchievementCategorySection.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 5
+        }
+      ]
+    },
+    {
+      "path": "screens\\profile\\AchievementProgressBar.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "screens\\profile\\AchievementSearchFilter.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 5
+        }
+      ]
+    },
+    {
+      "path": "screens\\profile\\CompanionScreen.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "screens\\profile\\components\\AchievementShowcase.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 6
+        }
+      ]
+    },
+    {
+      "path": "screens\\profile\\components\\AchievementShowcaseCard.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 8
+        }
+      ]
+    },
+    {
+      "path": "screens\\profile\\components\\CompanionScreenSupport.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "screens\\profile\\components\\CompanionStatsBar.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "screens\\profile\\components\\CosmeticCategorySelector.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 6
+        }
+      ]
+    },
+    {
+      "path": "screens\\profile\\components\\CosmeticEquippingSheet.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 5
+        }
+      ]
+    },
+    {
+      "path": "screens\\profile\\components\\CosmeticPreviewCard.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 7
+        }
+      ]
+    },
+    {
+      "path": "screens\\profile\\components\\PersonalBestsGrid.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 4
+        }
+      ]
+    },
+    {
+      "path": "screens\\profile\\MasteryChallengesList.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 10
+        }
+      ]
+    },
+    {
+      "path": "screens\\profile\\MasteryHeader.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 7
+        }
+      ]
+    },
+    {
+      "path": "screens\\profile\\MasteryScreen.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 8
+        }
+      ]
+    },
+    {
+      "path": "screens\\profile\\MasteryTechniqueGrid.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "path": "screens\\profile\\MemoryConsoleScreen.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 9
+        }
+      ]
+    },
+    {
+      "path": "screens\\profile\\ProfileAchievementsTab.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 6
+        }
+      ]
+    },
+    {
+      "path": "screens\\profile\\ProfileActivityTab.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 6
+        }
+      ]
+    },
+    {
+      "path": "screens\\profile\\ProfileHeader.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 10
+        }
+      ]
+    },
+    {
+      "path": "screens\\profile\\ProfileMasterySheet.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 4
+        }
+      ]
+    },
+    {
+      "path": "screens\\profile\\ProfileScreen.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 4
+        }
+      ]
+    },
+    {
+      "path": "screens\\profile\\ProfileStatsTab.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 7
+        }
+      ]
+    },
+    {
+      "path": "screens\\progress\\components\\BattlePassXPProgress.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "screens\\progress\\ProgressScreen.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 4
+        }
+      ]
+    },
+    {
+      "path": "screens\\progress\\StudyOSCard.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "screens\\rewards\\components\\ChestCard.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "screens\\rewards\\VaultScreen.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "screens\\RivalsScreen.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "path": "screens\\search\\components\\CategoriesBar.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "path": "screens\\search\\components\\RecentSearches.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "path": "screens\\search\\components\\SearchBar.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 5
+        }
+      ]
+    },
+    {
+      "path": "screens\\search\\components\\SearchResults.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 5
+        }
+      ]
+    },
+    {
+      "path": "screens\\search\\components\\TrendingTags.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "path": "screens\\search\\SearchScreen.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "screens\\session\\ActiveSessionContent.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "screens\\session\\components\\ActiveChallenges.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "screens\\session\\components\\ActiveSessionBackground.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 4
+        }
+      ]
+    },
+    {
+      "path": "screens\\session\\components\\ActiveSessionControlDock.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 10
+        }
+      ]
+    },
+    {
+      "path": "screens\\session\\components\\ActiveSessionControlRecovery.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "screens\\session\\components\\ActiveSessionHeader.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "path": "screens\\session\\components\\ActiveSessionHero.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 4
+        }
+      ]
+    },
+    {
+      "path": "screens\\session\\components\\ActiveSessionHeroSecondary.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "screens\\session\\components\\ActiveSessionModeOverlays.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "path": "screens\\session\\components\\ActiveSessionProgressRingInner.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "screens\\session\\components\\BossCombatHUDView.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 7
+        }
+      ]
+    },
+    {
+      "path": "screens\\session\\components\\BossImpactCard.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "screens\\session\\components\\ChallengeImpactCard.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "screens\\session\\components\\CompanionGrowthSection.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "screens\\session\\components\\FirstSessionOptionalCards.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "screens\\session\\components\\MetricRow.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 4
+        }
+      ]
+    },
+    {
+      "path": "screens\\session\\components\\RivalImpactCard.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 4
+        }
+      ]
+    },
+    {
+      "path": "screens\\session\\components\\SessionAdaptivePayoffCard.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "screens\\session\\components\\SessionCompleteContent.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "screens\\session\\components\\SessionCompleteSkeleton.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "screens\\session\\components\\SessionCompleteState.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "screens\\session\\components\\SessionCompletionFollowThrough.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "screens\\session\\components\\SessionConsequenceCards.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "screens\\session\\components\\SessionContractInput.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "screens\\session\\components\\SessionGradeCard.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 5
+        }
+      ]
+    },
+    {
+      "path": "screens\\session\\components\\SessionGradePurityProof.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "screens\\session\\components\\SessionProgressionCard.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "path": "screens\\session\\components\\SessionReflectionSheet.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "screens\\session\\components\\SessionReturnReasonCard.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "screens\\session\\components\\SessionSetupCustomization.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "screens\\session\\components\\SessionSetupFooter.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "screens\\session\\components\\SessionSetupHeader.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "screens\\session\\components\\SessionSummaryUnavailable.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "screens\\session\\components\\SessionThemeSelector.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 6
+        }
+      ]
+    },
+    {
+      "path": "screens\\session\\components\\StreakConsequenceCard.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "path": "screens\\session\\components\\StudyProgressPanel.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 5
+        }
+      ]
+    },
+    {
+      "path": "screens\\session\\SessionQuickStartCard.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "screens\\settings\\AccountSettingsScreen.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "screens\\settings\\AppearancePreviewCard.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 5
+        }
+      ]
+    },
+    {
+      "path": "screens\\settings\\AppearanceSettingsScreen.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 4
+        }
+      ]
+    },
+    {
+      "path": "screens\\settings\\CoachFrequencySelector.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 9
+        }
+      ]
+    },
+    {
+      "path": "screens\\settings\\CoachPersonaSelector.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 17
+        }
+      ]
+    },
+    {
+      "path": "screens\\settings\\CoachSettingsScreen.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 7
+        }
+      ]
+    },
+    {
+      "path": "screens\\settings\\CoachToneSelector.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 7
+        }
+      ]
+    },
+    {
+      "path": "screens\\settings\\ColorSchemeToggle.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 11
+        }
+      ]
+    },
+    {
+      "path": "screens\\settings\\EmailChangeSection.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 6
+        }
+      ]
+    },
+    {
+      "path": "screens\\settings\\FontSizeControl.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 8
+        }
+      ]
+    },
+    {
+      "path": "screens\\settings\\LaneModeSettingsScreen.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 8
+        }
+      ]
+    },
+    {
+      "path": "screens\\settings\\NotificationCategoryToggle.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 4
+        }
+      ]
+    },
+    {
+      "path": "screens\\settings\\NotificationScheduleSection.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 13
+        }
+      ]
+    },
+    {
+      "path": "screens\\settings\\NotificationSettingsScreen.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 7
+        }
+      ]
+    },
+    {
+      "path": "screens\\settings\\PasswordChangeSection.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 11
+        }
+      ]
+    },
+    {
+      "path": "screens\\settings\\PasswordField.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "screens\\settings\\PrivacySettingsScreen.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 8
+        }
+      ]
+    },
+    {
+      "path": "screens\\settings\\PrivacyToggleRow.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "screens\\settings\\SettingsProfileRow.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "screens\\settings\\SettingsScreen.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 4
+        }
+      ]
+    },
+    {
+      "path": "screens\\settings\\SettingsSectionGroup.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 8
+        }
+      ]
+    },
+    {
+      "path": "screens\\settings\\ThemePicker.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 7
+        }
+      ]
+    },
+    {
+      "path": "screens\\settings\\TwoFactorSection.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 6
+        }
+      ]
+    },
+    {
+      "path": "screens\\streaks\\StreakFuneralScreen.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "session\\components\\CompanionSessionLayer.tsx",
+      "issues": [
+        {
+          "rule": "inlineAnimatedStyles",
+          "severity": "warning",
+          "message": "Avoid inline animated style objects - use useAnimatedStyle hook",
+          "count": 1
+        },
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "session\\components\\CreativeMoodLogger.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "path": "session\\components\\ModeIndicatorBadge.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "session\\components\\PresetCard.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 6
+        }
+      ]
+    },
+    {
+      "path": "session\\components\\PurityHUD.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "path": "session\\components\\SessionValidationFeedback.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "session\\components\\SquadMemberIndicator.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        },
+        {
+          "rule": "unoptimizedImages",
+          "severity": "warning",
+          "message": "Images should use react-native-fast-image for better performance",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "session\\components\\states\\ConflictDeviceCard.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "session\\components\\states\\SessionBackgroundedState.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "shared\\monetization\\components\\ContextualPaywallBanner.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 5
+        }
+      ]
+    },
+    {
+      "path": "shared\\monetization\\components\\PaywallComponents.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "path": "shared\\monetization\\components\\VipPaywallScreen.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 5
+        }
+      ]
+    },
+    {
+      "path": "shared\\ui\\components\\CardSkeleton.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "shared\\ui\\components\\CardStatusOverlay.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "shared\\ui\\components\\CompactRewardBadge.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "shared\\ui\\components\\EmptyState.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "shared\\ui\\components\\ErrorFallback.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 6
+        }
+      ]
+    },
+    {
+      "path": "shared\\ui\\components\\FormField.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "shared\\ui\\components\\FormFieldParts.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "path": "shared\\ui\\components\\MicroRewardBanner.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 7
+        }
+      ]
+    },
+    {
+      "path": "shared\\ui\\components\\skeletonLayouts.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 5
+        }
+      ]
+    },
+    {
+      "path": "shared\\ui\\components\\StatusBanner.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 5
+        }
+      ]
+    },
+    {
+      "path": "shared\\ui\\components\\StatusChip.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "shared\\ui\\components\\WittyLoadingState.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "shared\\ui\\smart-offline\\QueueSection.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 8
+        }
+      ]
+    },
+    {
+      "path": "shared\\ui\\smart-offline\\SyncQueueDetails.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "shared\\ui\\SmartOfflineIndicator.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 3
+        }
+      ]
     }
   ],
-  "recommendations": []
+  "recommendations": [
+    {
+      "priority": "medium",
+      "category": "Image Loading",
+      "action": "Consider using react-native-fast-image for better image caching",
+      "count": 4
+    }
+  ]
 }

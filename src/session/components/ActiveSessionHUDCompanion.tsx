@@ -13,7 +13,7 @@ import { LivingCompanion } from '@/features/companion/components/LivingCompanion
 import { getCompanionService } from '@/features/companion/service';
 import type { CompanionState } from '@/features/companion/types';
 import { createDebugger } from '@/utils/debug';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 const debug = createDebugger('ActiveSessionHUDCompanion');
 
@@ -105,7 +105,7 @@ const styles = createSheet({
     justifyContent: 'center',
     marginVertical: 16,
     minHeight: 200,
-    backgroundColor: launchColors.hex_1a1a2e,
+    backgroundColor: '#1a1a2e',
     borderRadius: 16,
     padding: 24,
     margin: 16,

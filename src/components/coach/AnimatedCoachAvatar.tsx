@@ -11,7 +11,6 @@ import Animated, {
 import Svg, {
   Circle,
   Defs,
-  Ellipse,
   LinearGradient,
   Path,
   Stop,
@@ -102,7 +101,7 @@ export function AnimatedCoachAvatar({
       <Animated.View style={shellStyle}>
         <Svg height={size} width={size} viewBox="0 0 120 120">
           <Defs>
-            <LinearGradient id="coachBody" x1="18" y1="8" x2="104" y2="112">
+            <LinearGradient id="coachCore" x1="18" y1="8" x2="104" y2="112">
               <Stop
                 offset="0"
                 stopColor={theme.colors.semantic.accent}
@@ -119,7 +118,7 @@ export function AnimatedCoachAvatar({
                 stopOpacity="1"
               />
             </LinearGradient>
-            <LinearGradient id="coachFace" x1="31" y1="30" x2="90" y2="88">
+            <LinearGradient id="coachSignal" x1="31" y1="30" x2="90" y2="88">
               <Stop
                 offset="0"
                 stopColor={theme.colors.semantic.textPrimary}
@@ -132,26 +131,21 @@ export function AnimatedCoachAvatar({
               />
             </LinearGradient>
           </Defs>
-          <Ellipse
-            cx="60"
-            cy="107"
-            rx="32"
-            ry="7"
-            fill={theme.colors.semantic.shadow}
-            opacity="0.28"
-          />
+          {/* Abstract focus core - outer ring */}
           <Path
             d="M60 10C36 10 19 29 19 55c0 32 19 52 41 52s41-20 41-52C101 29 84 10 60 10Z"
-            fill="url(#coachBody)"
+            fill="url(#coachCore)"
           />
+          {/* Inner signal surface - no face, just a calm gradient panel */}
           <Path
             d="M34 53c0-15 11-26 26-26s26 11 26 26v15c0 13-11 24-26 24S34 81 34 68V53Z"
             fill={theme.colors.semantic.surfaceGlass}
             stroke={theme.colors.semantic.borderStrong}
             strokeWidth="2"
           />
-          <Circle cx="49" cy="58" r="5" fill="url(#coachFace)" />
-          <Circle cx="71" cy="58" r="5" fill="url(#coachFace)" />
+          {/* Focus signal dot - center core */}
+          <Circle cx="60" cy="60" r="5" fill="url(#coachSignal)" />
+          {/* Mood arc - abstract expression instead of face */}
           <Path
             d={
               mood === 'celebrate'
@@ -161,7 +155,9 @@ export function AnimatedCoachAvatar({
             stroke={theme.colors.semantic.textPrimary}
             strokeLinecap="round"
             strokeWidth="4"
+            opacity="0.35"
           />
+          {/* Side signal nodes */}
           <Circle
             cx="22"
             cy="54"
@@ -176,6 +172,7 @@ export function AnimatedCoachAvatar({
             fill={theme.colors.semantic.secondary}
             opacity="0.9"
           />
+          {/* Top crown arc - abstract antenna */}
           <Path
             d="M37 28c10-10 34-11 47 1"
             stroke={theme.colors.semantic.textPrimary}
@@ -188,3 +185,5 @@ export function AnimatedCoachAvatar({
     </View>
   );
 }
+
+export default AnimatedCoachAvatar;

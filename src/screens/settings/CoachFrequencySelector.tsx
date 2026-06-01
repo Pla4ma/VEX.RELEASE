@@ -3,7 +3,7 @@ import { Pressable } from 'react-native';
 import { useTheme } from '@/theme';
 import { Box, Text, Card } from '@/components/primitives';
 import { Icon } from '@/icons';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 export type MessageFrequency = 'frequent' | 'normal' | 'minimal';
 
@@ -139,7 +139,7 @@ export const CoachFrequencySelector: React.FC<
                   <Icon
                     name="check"
                     size={14}
-                    color={launchColors.hex_fff}
+                    color={'#fff'}
                   />
                 </Box>
               )}

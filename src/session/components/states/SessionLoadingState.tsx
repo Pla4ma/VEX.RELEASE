@@ -7,7 +7,7 @@
 import React from 'react';
 import { View, Text, ActivityIndicator } from 'react-native';
 import { createSheet } from '@/shared/ui/create-sheet';
-import { launchColors } from '@theme/tokens/launch-colors';
+import { useTheme } from '../../../theme';
 
 interface SessionLoadingStateProps {
   message?: string;
@@ -16,20 +16,23 @@ interface SessionLoadingStateProps {
 export const SessionLoadingState: React.FC<SessionLoadingStateProps> = ({
   message = 'Loading session...',
 }) => {
+  const { theme } = useTheme();
+  const semantic = theme.colors.semantic;
+
   return (
-    <View style={styles.container}>
-      <ActivityIndicator size="large" color={launchColors.hex_e94560} />
-      <Text style={styles.message}>{message}</Text>
+    <View style={[styles.container, { backgroundColor: semantic.background }]}>
+      <ActivityIndicator size="large" color={semantic.danger} />
+      <Text style={[styles.message, { color: semantic.textMuted }]}>{message}</Text>
 
       {/* Skeleton placeholders */}
       <View style={styles.skeletonContainer}>
-        <View style={styles.skeletonTimer} />
+        <View style={[styles.skeletonTimer, { backgroundColor: semantic.surfaceElevated }]} />
         <View style={styles.skeletonStats}>
-          <View style={styles.skeletonStat} />
-          <View style={styles.skeletonStat} />
-          <View style={styles.skeletonStat} />
+          <View style={[styles.skeletonStat, { backgroundColor: semantic.surfaceElevated }]} />
+          <View style={[styles.skeletonStat, { backgroundColor: semantic.surfaceElevated }]} />
+          <View style={[styles.skeletonStat, { backgroundColor: semantic.surfaceElevated }]} />
         </View>
-        <View style={styles.skeletonButton} />
+        <View style={[styles.skeletonButton, { backgroundColor: semantic.surfaceElevated }]} />
       </View>
     </View>
   );
@@ -38,7 +41,6 @@ export const SessionLoadingState: React.FC<SessionLoadingStateProps> = ({
 const styles = createSheet({
   container: {
     flex: 1,
-    backgroundColor: launchColors.hex_1a1a2e,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 24,
@@ -46,7 +48,6 @@ const styles = createSheet({
   message: {
     marginTop: 16,
     fontSize: 16,
-    color: launchColors.hex_9e9e9e,
   },
   skeletonContainer: {
     width: '100%',
@@ -56,7 +57,6 @@ const styles = createSheet({
   skeletonTimer: {
     width: '60%',
     height: 60,
-    backgroundColor: launchColors.hex_2a2a3e,
     borderRadius: 8,
     alignSelf: 'center',
   },
@@ -68,13 +68,11 @@ const styles = createSheet({
   skeletonStat: {
     width: '25%',
     height: 50,
-    backgroundColor: launchColors.hex_2a2a3e,
     borderRadius: 8,
   },
   skeletonButton: {
     width: '50%',
     height: 48,
-    backgroundColor: launchColors.hex_2a2a3e,
     borderRadius: 12,
     alignSelf: 'center',
     marginTop: 16,

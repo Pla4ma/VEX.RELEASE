@@ -58,12 +58,12 @@ export function DayDetailsPopover({
         <Box flexDirection="row" alignItems="center" gap="sm">
           <Text fontSize={24}>
             {day.status === 'completed'
-              ? '✅'
+              ? 'Done'
               : day.status === 'partial'
-                ? '◐'
+                ? 'Partial'
                 : day.status === 'missed'
-                  ? '❌'
-                  : '📅'}
+                  ? 'Missed'
+                  : 'Upcoming'}
           </Text>
           <Text variant="body" color="text.primary">
             {day.sessionsCompleted > 0
@@ -102,7 +102,7 @@ export function DayDetailsPopover({
           borderColor="warning.DEFAULT"
         >
           <Box flexDirection="row" alignItems="center" gap="sm">
-            <Text fontSize={16}>⏰</Text>
+            <Text fontSize={16}></Text>
             <Text variant="bodySmall" color="warning.DEFAULT">
               Challenge ends: {day.challengeExpiring}
             </Text>

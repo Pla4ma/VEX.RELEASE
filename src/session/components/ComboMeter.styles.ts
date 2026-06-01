@@ -1,5 +1,5 @@
 import { Dimensions } from 'react-native';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 export const METER_WIDTH = SCREEN_WIDTH - 48;
@@ -33,7 +33,7 @@ export const fireEmojiStyle = { fontSize: 24, marginLeft: -8 };
 export const mainContainerStyle = {
   borderRadius: 16,
   padding: 16,
-  shadowColor: launchColors.hex_000,
+  shadowColor: '#000',
   shadowOffset: { width: 0, height: 2 },
   shadowOpacity: 0.1,
   shadowRadius: 4,
@@ -52,7 +52,7 @@ export const tierBadgeStyle = {
   borderRadius: 22,
   justifyContent: 'center' as const,
   alignItems: 'center' as const,
-  backgroundColor: launchColors.rgb_0_0_0_0_1,
+  backgroundColor: 'rgba(0,0,0,0.1)',
   marginRight: 12,
 };
 
@@ -67,7 +67,7 @@ export const multiplierBadgeStyle = {
 };
 
 export const multiplierTextStyle = {
-  color: launchColors.hex_fff,
+  color: '#fff',
   fontWeight: '700' as const,
   fontSize: 14,
 };
@@ -102,7 +102,7 @@ export const milestoneCardStyle = {
   padding: 24,
   borderRadius: 20,
   alignItems: 'center' as const,
-  shadowColor: launchColors.hex_000,
+  shadowColor: '#000',
   shadowOffset: { width: 0, height: 4 },
   shadowOpacity: 0.3,
   shadowRadius: 8,
@@ -134,11 +134,11 @@ export const comboBrokenCardStyle = {
 
 export const comboBrokenEmojiStyle = { fontSize: 40, marginBottom: 8 };
 export const comboBrokenTextStyle = {
-  color: launchColors.hex_fff,
+  color: '#fff',
   marginBottom: 4,
 };
 export const comboBrokenSubtextStyle = {
-  color: launchColors.hex_fff,
+  color: '#fff',
   opacity: 0.8,
 };
 

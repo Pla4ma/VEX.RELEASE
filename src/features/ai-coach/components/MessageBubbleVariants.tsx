@@ -17,17 +17,17 @@ export function SystemMessageBubble({
   const getCategoryIcon = () => {
     switch (message.category) {
       case 'STREAK_RISK':
-        return '🔥';
+        return '';
       case 'MILESTONE_HYPE':
-        return '🎉';
+        return '';
       case 'SESSION_SUGGESTION':
-        return '💡';
+        return '';
       case 'COMEBACK_SUPPORT':
-        return '💪';
+        return '';
       case 'POST_FAILURE':
-        return '🌱';
+        return '';
       default:
-        return '📢';
+        return '';
     }
   };
   const getCategoryColor = () => {

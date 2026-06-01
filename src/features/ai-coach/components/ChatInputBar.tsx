@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, TextInput, Pressable, Text } from 'react-native';
 import { styles } from './CoachScreen.styles';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 interface ChatInputBarProps {
   value: string;
@@ -23,7 +23,7 @@ export function ChatInputBar({
         value={value}
         onChangeText={onChangeText}
         placeholder="Ask your coach anything..."
-        placeholderTextColor={launchColors.hex_9ca3af}
+        placeholderTextColor={'#9ca3af'}
         multiline
         maxLength={200}
         onSubmitEditing={onSend}

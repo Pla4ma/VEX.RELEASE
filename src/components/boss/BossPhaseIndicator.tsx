@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react';
 import { View, Text } from 'react-native';
 import Animated from 'react-native-reanimated';
-import { launchColors } from '@theme/tokens/launch-colors';
 import { styles } from './BossPhaseIndicator.styles';
 import { PhaseTips } from './PhaseTips';
 
@@ -32,26 +31,26 @@ export const BossPhaseIndicator: React.FC<BossPhaseIndicatorProps> = ({
       case 'PHASE_1':
         return {
           name: 'Phase 1: Standard',
-          color: launchColors.hex_38a169,
-          description: 'Normal combat conditions',
+          color: '#38a169',
+          description: 'Normal conditions',
         };
       case 'PHASE_2':
         return {
           name: 'Phase 2: Enrage',
-          color: launchColors.hex_d69e2e,
-          description: 'Increased pressure - pauses deal damage!',
+          color: '#d69e2e',
+          description: 'Increased pressure — pauses affect score',
         };
       case 'PHASE_3':
         return {
           name: 'Phase 3: Execute',
-          color: launchColors.hex_e53e3e,
-          description: 'FINAL PUSH! Maintain 90%+ purity or fail!',
+          color: '#e53e3e',
+          description: 'Final phase — maintain 90%+ purity',
         };
       default:
         return {
           name: 'Archived',
-          color: launchColors.hex_718096,
-          description: 'Boss combat archived',
+          color: '#718096',
+          description: 'Phase archived',
         };
     }
   }, [phase]);
@@ -70,7 +69,7 @@ export const BossPhaseIndicator: React.FC<BossPhaseIndicatorProps> = ({
         <Text style={styles.phaseName}>{phaseInfo.name}</Text>
         {phase === 'ENRAGED' && (
           <View style={styles.enragedBadge}>
-            <Text style={styles.enragedText}>ENRAGED!</Text>
+            <Text style={styles.enragedText}>ENRAGED</Text>
           </View>
         )}
       </View>
@@ -101,7 +100,7 @@ export const BossPhaseIndicator: React.FC<BossPhaseIndicatorProps> = ({
           />
           <ThresholdMarker
             percent={0}
-            label="Defeat"
+            label="Complete"
             active={bossHealthPercent <= 0}
           />
         </View>
@@ -136,7 +135,7 @@ export const BossPhaseIndicator: React.FC<BossPhaseIndicatorProps> = ({
 
       {mechanicActive && (
         <View style={styles.mechanicWarning}>
-          <Text style={styles.mechanicTitle}>⚠️ MECHANIC ACTIVE</Text>
+          <Text style={styles.mechanicTitle}>! MECHANIC ACTIVE</Text>
           {mechanicTimeRemaining && (
             <Text style={styles.mechanicTimer}>
               {Math.ceil(mechanicTimeRemaining / 1000)}s remaining

@@ -4,7 +4,7 @@ import {
   type ScoreBand,
 } from './FocusIdentityEngine';
 import { useTheme } from '../../theme';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 /**
  * Hook for getting the color associated with a focus score
@@ -22,19 +22,19 @@ export function useFocusScoreColor(score: number | null): string {
 
     switch (band.label) {
       case 'Building':
-        return launchColors.hex_cd7f32;
+        return '#cd7f32';
       case 'Fair':
-        return launchColors.hex_c0c0c0;
+        return '#c0c0c0';
       case 'Good':
-        return launchColors.hex_ffd700;
+        return '#ffd700';
       case 'Strong':
-        return launchColors.hex_e5e4e2;
+        return '#e5e4e2';
       case 'Exceptional':
-        return launchColors.hex_b9f2ff;
+        return '#b9f2ff';
       case 'Elite':
-        return launchColors.hex_9c27b0;
+        return '#9c27b0';
       case 'Legendary':
-        return launchColors.hex_ff1744;
+        return '#ff1744';
       default:
         return theme.colors.text.secondary;
     }

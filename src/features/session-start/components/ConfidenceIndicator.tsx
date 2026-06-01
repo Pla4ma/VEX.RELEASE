@@ -3,7 +3,7 @@ import { View } from 'react-native';
 
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 type Confidence = 'low' | 'medium' | 'high';
 
@@ -44,7 +44,7 @@ export function ConfidenceIndicator({
           marginLeft: theme.spacing[2],
           width: 60,
           height: 4,
-          backgroundColor: launchColors.rgb_255_255_255_0_2,
+          backgroundColor: 'rgba(255,255,255,0.2)',
           borderRadius: 2,
           overflow: 'hidden',
         }}

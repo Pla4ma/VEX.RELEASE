@@ -5,6 +5,7 @@ import { Button } from '../../../components/primitives/Button';
 import { Text } from '../../../components/primitives/Text';
 import { SessionMode } from '../../../session/modes';
 import { useTheme } from '../../../theme';
+import { glassEdge } from '../../../theme/tokens/elevation';
 
 type SessionSetupFooterProps = {
   breakDurationSeconds: number;
@@ -37,18 +38,24 @@ export function SessionSetupFooter({
       py="md"
       pb="xl"
       bg="background.primary"
-      style={{ borderTopWidth: 1, borderTopColor: theme.colors.border.light }}
+      style={[
+        {
+          borderTopWidth: 1,
+          borderTopColor: theme.colors.border.light,
+        },
+        glassEdge,
+      ]}
     >
       <Text variant="caption" color="text.secondary" textAlign="center" mb="sm">
         {`${durationMinutes} min focus`}
         {breakDurationSeconds > 0
-          ? ` - ${Math.round(breakDurationSeconds / 60)} min break`
+          ? ` · ${Math.round(breakDurationSeconds / 60)} min break`
           : ''}
-        {intervalCount > 1 ? ` - ${intervalCount} intervals` : ''}
+        {intervalCount > 1 ? ` · ${intervalCount} intervals` : ''}
         {selectedSessionMode === SessionMode.SPRINT
-          ? ' - Sprint chain active'
+          ? ' · Sprint chain active'
           : ''}
-        {selectedThemeLabel ? ` - ${selectedThemeLabel}` : ''}
+        {selectedThemeLabel ? ` · ${selectedThemeLabel}` : ''}
       </Text>
 
       <Button
@@ -66,3 +73,5 @@ export function SessionSetupFooter({
     </Box>
   );
 }
+
+export default SessionSetupFooter;

@@ -4,7 +4,7 @@ import Animated, { FadeInUp } from 'react-native-reanimated';
 
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
-import { MoodIndicator } from '../../../features/companion/components/MoodIndicator';
+import { VexCompanionAura } from '../../../features/companion/components/VexCompanionAura';
 import { ELEMENT_THEMES } from '../../../features/companion/types';
 import type { CompanionState } from '../../../features/companion/types';
 
@@ -22,50 +22,38 @@ export function CompanionCard({
     <TouchableOpacity
       onPress={onPress}
       activeOpacity={0.85}
-      accessibilityLabel="Companion status card"
+      accessibilityLabel="Companion status"
       accessibilityRole="button"
       accessibilityHint="View companion details"
     >
       <Animated.View
         entering={FadeInUp.duration(300)}
         style={{
-          backgroundColor: theme.colors.background.elevated,
-          borderRadius: theme.spacing[4],
+          backgroundColor: theme.colors.semantic.backgroundElevated,
+          borderRadius: theme.spacing[3] ?? 12,
           borderWidth: 1,
-          borderColor: theme.colors.border.light,
+          borderColor: theme.colors.semantic.border,
           padding: theme.spacing[4],
           flexDirection: 'row',
           alignItems: 'center',
           gap: theme.spacing[4],
         }}
       >
-        <View
-          style={{
-            width: 48,
-            height: 48,
-            borderRadius: 24,
-            backgroundColor: elementTheme.primary + '20',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <MoodIndicator
-            mood={state.currentMood}
-            size={28}
-            showLabel={false}
-          />
-        </View>
+        <VexCompanionAura
+          size={48}
+          laneColor={elementTheme.primary}
+        />
 
         <View style={{ flex: 1 }}>
           <Text
             variant="body"
-            color="text.primary"
-            style={{ fontWeight: '700' }}
+            color="textPrimary"
+            style={{ fontWeight: '600' }}
           >
-            {state.element} {state.phase}
+            Ready when you are
           </Text>
-          <Text variant="caption" color="text.secondary">
-            Level {state.level} · {Math.floor(state.totalFocusMinutes)}m focused
+          <Text variant="caption" color="textMuted">
+            {Math.floor(state.totalFocusMinutes)}m protected
           </Text>
         </View>
 
@@ -74,7 +62,7 @@ export function CompanionCard({
             width: 8,
             height: 8,
             borderRadius: 4,
-            backgroundColor: elementTheme.primary,
+            backgroundColor: theme.colors.semantic.vexCyan,
           }}
         />
       </Animated.View>

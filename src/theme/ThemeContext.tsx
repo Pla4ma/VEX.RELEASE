@@ -157,10 +157,10 @@ export function useTheme(): ThemeContextValue {
   const context = useContext(ThemeContext);
 
   if (context === undefined) {
-    const defaultTheme = createTheme('light');
+    const defaultTheme = createTheme('dark');
     return {
       theme: defaultTheme,
-      mode: 'light',
+      mode: 'dark',
       setMode: () => undefined,
       toggleMode: () => undefined,
       isDark: false,

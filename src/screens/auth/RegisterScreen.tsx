@@ -14,6 +14,9 @@ import { useTheme } from '../../theme';
 import { getMinTouchTargetStyle } from '../../utils/touchTarget';
 import { registerSchema, type RegisterFormData } from './schemas';
 import { AuthValuePreview } from './components/AuthValuePreview';
+import { AuthHeroBrand } from './components/AuthHeroBrand';
+import { AuthCommandPanel } from './components/AuthCommandPanel';
+import { VexEntryBackground } from './components/VexEntryBackground';
 
 type Props = NativeStackScreenProps<AuthStackParams, 'Register'>;
 type RegisterErrors = Partial<Record<keyof RegisterFormData, string>>;
@@ -86,16 +89,14 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
 
   return (
     <AppScreen keyboardAvoiding contentStyle={{ gap: theme.spacing[5] }}>
+      <VexEntryBackground />
+
       <Animated.View entering={entering}>
-        <Text color="primary.300" textAlign="center" variant="label">
-          Start with the loop
-        </Text>
-        <Text color="text.primary" textAlign="center" variant="h1">
-          Create your VEX account
-        </Text>
-        <Text color="text.secondary" mt="sm" textAlign="center" variant="body">
-          Two fields, then your first protected session.
-        </Text>
+        <AuthHeroBrand
+          label="Start with the loop"
+          title="Create your VEX account"
+          tagline="Two fields, then your first protected session."
+        />
       </Animated.View>
 
       <Animated.View entering={entering}>
@@ -103,49 +104,51 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
       </Animated.View>
 
       <Animated.View entering={entering}>
-        <FormField
-          accessibilityHint="Enter the email you want to use for VEX"
-          accessibilityLabel="Account email"
-          autoCapitalize="none"
-          autoComplete="email"
-          error={getFieldError(errors, 'email')}
-          keyboardType="email-address"
-          label="Email"
-          leftIcon="email"
-          onChangeText={(value) => {
-            setEmail(value);
-            clearError('email');
-          }}
-          placeholder="you@example.com"
-          returnKeyType="next"
-          size="lg"
-          value={email}
-        />
-        <FormField
-          accessibilityHint="Create a password for your VEX account"
-          accessibilityLabel="Account password"
-          autoComplete="new-password"
-          error={getFieldError(errors, 'password')}
-          helperText="Use 8+ characters with a number and symbol."
-          label="Password"
-          leftIcon="lock"
-          onChangeText={(value) => {
-            setPassword(value);
-            clearError('password');
-          }}
-          onSubmitEditing={() => {
-            handleRegister();
-          }}
-          placeholder="Create a password"
-          returnKeyType="done"
-          secureTextEntry
-          size="lg"
-          value={password}
-        />
-        <Text color="text.muted" variant="caption">
-          By creating an account, you agree to the Terms of Service and Privacy
-          Policy.
-        </Text>
+        <AuthCommandPanel>
+          <FormField
+            accessibilityHint="Enter the email you want to use for VEX"
+            accessibilityLabel="Account email"
+            autoCapitalize="none"
+            autoComplete="email"
+            error={getFieldError(errors, 'email')}
+            keyboardType="email-address"
+            label="Email"
+            leftIcon="email"
+            onChangeText={(value) => {
+              setEmail(value);
+              clearError('email');
+            }}
+            placeholder="you@example.com"
+            returnKeyType="next"
+            size="lg"
+            value={email}
+          />
+          <FormField
+            accessibilityHint="Create a password for your VEX account"
+            accessibilityLabel="Account password"
+            autoComplete="new-password"
+            error={getFieldError(errors, 'password')}
+            helperText="Use 8+ characters with a number and symbol."
+            label="Password"
+            leftIcon="lock"
+            onChangeText={(value) => {
+              setPassword(value);
+              clearError('password');
+            }}
+            onSubmitEditing={() => {
+              handleRegister();
+            }}
+            placeholder="Create a password"
+            returnKeyType="done"
+            secureTextEntry
+            size="lg"
+            value={password}
+          />
+          <Text color="text.muted" variant="caption">
+            By creating an account, you agree to the Terms of Service and Privacy
+            Policy.
+          </Text>
+        </AuthCommandPanel>
       </Animated.View>
 
       <Animated.View entering={entering}>

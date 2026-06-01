@@ -9,7 +9,7 @@ import Animated, {
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
 import { ELEMENT_THEMES } from '../../../features/companion/types';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 import type { ElementInfo } from './elementData';
 import { ElementVisual } from './ElementVisual';
 
@@ -131,7 +131,7 @@ export function ElementCard({
                 alignItems: 'center',
               }}
             >
-              <Text style={{ color: launchColors.hex_fff, fontSize: 14 }}>
+              <Text style={{ color: '#fff', fontSize: 14 }}>
                 ✓
               </Text>
             </View>

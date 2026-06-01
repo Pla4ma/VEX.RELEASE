@@ -15,9 +15,9 @@ import { ShimmerSweep } from '../../components/primitives/ShimmerSweep';
 import { useTheme } from '../../theme';
 import { glow } from '../../theme/tokens/elevation';
 import { createSheet } from '@/shared/ui/create-sheet';
-import { launchColors } from '@theme/tokens/launch-colors';
 
-const WHITE_MUTED = launchColors.rgb_255_255_255_0_72;
+
+const WHITE_MUTED = 'rgba(255,255,255,0.72)';
 
 export function GradientStartButton({
   body,
@@ -59,9 +59,9 @@ export function GradientStartButton({
     <Animated.View style={animatedStyle}>
       <LinearGradient
         colors={[
-          theme.colors.primary[500] ?? launchColors.hex_7c3aed,
-          theme.colors.primary[600] ?? launchColors.hex_4f46e5,
-          theme.colors.primary[700] ?? launchColors.hex_4f46e5,
+          theme.colors.primary[500] ?? '#7c3aed',
+          theme.colors.primary[600] ?? '#4f46e5',
+          theme.colors.primary[700] ?? '#4f46e5',
         ]}
         start={{ x: 0.1, y: 0 }}
         end={{ x: 0.9, y: 1 }}

@@ -72,7 +72,7 @@ export function initializeSocialFeedIntegration(): () => void {
         }
         if (event.previousRank && event.rank < event.previousRank) {
           await sendPushNotification(event.userId, {
-            title: 'Rank Up! 🏆',
+            title: 'Rank Up',
             body: `You climbed from #${event.previousRank} to #${event.rank}!`,
             data: { type: 'RANK_UP', leaderboardId: event.leaderboardId },
           });
@@ -126,7 +126,7 @@ export function initializeSocialFeedIntegration(): () => void {
           const topContributor = event.contributors[0];
           if (topContributor && event.contributors.length > 1) {
             await sendPushNotification(topContributor.userId, {
-              title: 'Top Contributor! 🌟',
+              title: 'Top Contributor',
               body: `You're leading the squad challenge with ${topContributor.contribution} points!`,
               data: {
                 type: 'TOP_CONTRIBUTOR',

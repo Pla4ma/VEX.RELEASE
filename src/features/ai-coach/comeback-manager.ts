@@ -58,17 +58,17 @@ function generateComebackMessages(): Array<{
     {
       day: 1,
       content:
-        'Welcome back! 💪 Your comeback story starts today. First session gets {{bonusMultiplier}}x XP!',
+        'Welcome back. Your comeback story starts today. First session gets {{bonusMultiplier}}x XP.',
     },
     {
       day: 2,
       content:
-        "Day 2 of your comeback! 🔥 You're rebuilding stronger than before. Keep it up!",
+        "Day 2 of your comeback. You're rebuilding stronger than before. Keep it up.",
     },
     {
       day: 3,
       content:
-        "Comeback complete! 🎉 You've earned your full {{bonusMultiplier}}x bonus. Your streak is back on track!",
+        "Comeback complete. You've earned your full {{bonusMultiplier}}x bonus. Your streak is back on track.",
     },
   ];
   return messages.map((m) => ({

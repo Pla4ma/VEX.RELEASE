@@ -1,5 +1,3 @@
-import { launchColors } from '@theme/tokens/launch-colors';
-
 export type CoachPersona = 'cheerleader' | 'mentor' | 'drill-sergeant';
 
 export interface PersonaOption {
@@ -15,34 +13,34 @@ export const PERSONA_OPTIONS: PersonaOption[] = [
   {
     id: 'cheerleader',
     label: 'The Cheerleader',
-    emoji: '🎉',
+    emoji: '',
     description: 'Enthusiastic, encouraging, high energy',
     exampleMessages: [
-      "You're absolutely crushing it! 🔥",
-      'That focus session was AMAZING!',
+      "You're absolutely crushing it.",
+      'That focus session was outstanding.',
     ],
-    color: launchColors.hex_ec4899,
+    color: '#ec4899',
   },
   {
     id: 'mentor',
     label: 'The Mentor',
-    emoji: '📚',
+    emoji: '',
     description: 'Calm, wise, strategic guidance',
     exampleMessages: [
       'Your consistency is building momentum.',
       'Consider a longer session tomorrow for deeper focus.',
     ],
-    color: launchColors.hex_3b82f6,
+    color: '#3b82f6',
   },
   {
     id: 'drill-sergeant',
     label: 'The Drill Sergeant',
-    emoji: '💀',
+    emoji: '',
     description: 'Intense, zero tolerance for excuses',
     exampleMessages: [
       'Excuses are for losers. FOCUS!',
       'Your enemy is winning while you hesitate.',
     ],
-    color: launchColors.hex_ef4444,
+    color: '#ef4444',
   },
 ];

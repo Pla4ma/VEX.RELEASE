@@ -1,5 +1,5 @@
 import { createSheet } from '@/shared/ui/create-sheet';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 export type BannerVariant =
   | 'default'
@@ -29,15 +29,15 @@ export function getVariantStyles(
     case 'primary':
       return {
         backgroundColor: colors.primary[500],
-        textColor: launchColors.hex_ffffff,
-        iconColor: launchColors.hex_ffffff,
+        textColor: '#ffffff',
+        iconColor: '#ffffff',
         buttonVariant: 'secondary' as const,
       };
     case 'success':
       return {
         backgroundColor: colors.success.DEFAULT,
-        textColor: launchColors.hex_ffffff,
-        iconColor: launchColors.hex_ffffff,
+        textColor: '#ffffff',
+        iconColor: '#ffffff',
         buttonVariant: 'secondary' as const,
       };
     case 'warning':
@@ -50,22 +50,22 @@ export function getVariantStyles(
     case 'error':
       return {
         backgroundColor: colors.error.DEFAULT,
-        textColor: launchColors.hex_ffffff,
-        iconColor: launchColors.hex_ffffff,
+        textColor: '#ffffff',
+        iconColor: '#ffffff',
         buttonVariant: 'secondary' as const,
       };
     case 'info':
       return {
         backgroundColor: colors.info.DEFAULT,
-        textColor: launchColors.hex_ffffff,
-        iconColor: launchColors.hex_ffffff,
+        textColor: '#ffffff',
+        iconColor: '#ffffff',
         buttonVariant: 'secondary' as const,
       };
     case 'gradient':
       return {
         backgroundColor: `linear-gradient(135deg, ${colors.primary[500]}, ${colors.accent.purple})`,
-        textColor: launchColors.hex_ffffff,
-        iconColor: launchColors.hex_ffffff,
+        textColor: '#ffffff',
+        iconColor: '#ffffff',
         buttonVariant: 'secondary' as const,
       };
     default:

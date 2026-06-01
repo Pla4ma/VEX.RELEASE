@@ -9,24 +9,24 @@ import { SimpleWalletBadge } from '../../features/economy/components/SimpleWalle
 import { getPremiumCardStyle } from '../../components/premiumStyles';
 import { useTheme } from '../../theme';
 import { createSheet } from '@/shared/ui/create-sheet';
-import { launchColors } from '@theme/tokens/launch-colors';
 
-const WHITE_MUTED = launchColors.rgb_255_255_255_0_72;
-const WHITE_SOFT = launchColors.rgb_255_255_255_0_18;
+
+const WHITE_MUTED = 'rgba(255,255,255,0.72)';
+const WHITE_SOFT = 'rgba(255,255,255,0.18)';
 
 export function getHeroGradientColors(
   streak: number,
 ): readonly [string, string] {
   if (streak >= 30) {
-    return [launchColors.hex_0d1b2a, launchColors.hex_1b4332];
+    return ['#0d1b2a', '#1b4332'];
   }
   if (streak >= 7) {
-    return [launchColors.hex_1a0533, launchColors.hex_6b0f1a];
+    return ['#1a0533', '#6b0f1a'];
   }
   if (streak >= 1) {
-    return [launchColors.hex_0f3460, launchColors.hex_533483];
+    return ['#0f3460', '#533483'];
   }
-  return [launchColors.hex_1a1a2e, launchColors.hex_16213e];
+  return ['#1a1a2e', '#16213e'];
 }
 
 function formatMinutes(totalMinutes: number) {
@@ -148,7 +148,7 @@ export function HomeHero({
               getPremiumCardStyle('medium'),
               {
                 backgroundColor: WHITE_SOFT,
-                borderColor: launchColors.rgb_255_255_255_0_22,
+                borderColor: 'rgba(255,255,255,0.22)',
               },
             ]}
           >

@@ -3,7 +3,7 @@ import { Pressable } from 'react-native';
 import { useTheme } from '@/theme';
 import { Box, Text, Card } from '@/components/primitives';
 import { Icon } from '@/icons';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 import {
   ACCENT_COLORS,
   TIMER_FORMAT_OPTIONS,
@@ -69,7 +69,7 @@ export const ColorSchemeToggle: React.FC<ColorSchemeToggleProps> = ({
                 accessibilityHint="Double tap to change setting"
               >
                 {accentColor === color.id && (
-                  <Icon name="check" size={24} color={launchColors.hex_fff} />
+                  <Icon name="check" size={24} color={'#fff'} />
                 )}
               </Pressable>
             ))}
@@ -154,7 +154,7 @@ export const ColorSchemeToggle: React.FC<ColorSchemeToggleProps> = ({
                     <Icon
                       name="check"
                       size={14}
-                      color={launchColors.hex_fff}
+                      color={'#fff'}
                     />
                   </Box>
                 )}

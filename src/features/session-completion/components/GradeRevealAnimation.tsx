@@ -13,7 +13,7 @@ import {
   useGradeRevealSequence,
   type GradeRevealAnimationProps,
 } from './grade-reveal-logic';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 export function GradeRevealAnimation({
   chainCount,
@@ -50,7 +50,7 @@ export function GradeRevealAnimation({
       style={[
         {
           alignItems: 'center',
-          backgroundColor: launchColors.hex_000000,
+          backgroundColor: '#000000',
           bottom: 0,
           justifyContent: 'center',
           left: 0,

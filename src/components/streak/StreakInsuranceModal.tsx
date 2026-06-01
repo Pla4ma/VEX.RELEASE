@@ -74,7 +74,7 @@ export const StreakInsuranceModal: React.FC<StreakInsuranceModalProps> = ({
       <View style={overlayStyle(theme)}>
         <View style={containerStyle(theme)}>
           <View style={[headerStyle, { backgroundColor: riskColor }]}>
-            <Text style={headerTitleStyle(theme)}>⚠️ Streak at Risk!</Text>
+            <Text style={headerTitleStyle(theme)}>! Streak at Risk</Text>
             <Text style={streakDaysStyle(theme)}>Streak Protection</Text>
           </View>
           <View style={riskSectionStyle(theme)}>
@@ -101,7 +101,7 @@ export const StreakInsuranceModal: React.FC<StreakInsuranceModalProps> = ({
               ]}
             >
               <View style={optionIconStyle(theme)}>
-                <Text style={iconTextStyle}>🛡️</Text>
+                <Text style={iconTextStyle}>S</Text>
               </View>
               <View style={optionContentStyle}>
                 <Text style={optionTitleStyle(theme)}>Buy Insurance</Text>
@@ -159,7 +159,7 @@ export const StreakInsuranceModal: React.FC<StreakInsuranceModalProps> = ({
                 ]}
               >
                 <View style={optionIconStyle(theme)}>
-                  <Text style={iconTextStyle}>🔄</Text>
+                  <Text style={iconTextStyle}>R</Text>
                 </View>
                 <View style={optionContentStyle}>
                   <Text style={optionTitleStyle(theme)}>
@@ -184,7 +184,7 @@ export const StreakInsuranceModal: React.FC<StreakInsuranceModalProps> = ({
             ]}
           >
             <Text style={dismissTextStyle(theme)}>
-              Decide Later (Risky!)
+              Decide Later
             </Text>
           </Pressable>
         </View>

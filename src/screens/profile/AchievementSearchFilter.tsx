@@ -4,7 +4,7 @@ import { FlashList } from '@shopify/flash-list';
 import { Box, Text } from '@/components/primitives';
 import { useTheme } from '@/theme';
 import type { AchievementCategory } from '@/features/achievements/types';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 export type FilterType = 'ALL' | 'UNLOCKED' | 'LOCKED';
 export type SortType = 'RARITY' | 'RECENT' | 'CATEGORY';
@@ -64,7 +64,7 @@ export const CategoryTabs: React.FC<{
                     variant="body"
                     color={
                       isSelected
-                        ? launchColors.hex_ffffff
+                        ? '#ffffff'
                         : theme.colors.text.secondary
                     }
                     fontWeight={isSelected ? 'semibold' : 'normal'}
@@ -126,7 +126,7 @@ export const FilterSortBar: React.FC<{
                 variant="caption"
                 color={
                   filter === f
-                    ? launchColors.hex_ffffff
+                    ? '#ffffff'
                     : theme.colors.text.secondary
                 }
               >

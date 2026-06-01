@@ -72,9 +72,9 @@ export function ComboMeter({
 
       {comboMinutes >= 10 && (
         <Animated.View style={[fireContainerStyle, fireStyle]}>
-          <Text style={fireEmojiStyle}>🔥</Text>
-          {comboMinutes >= 20 && <Text style={fireEmojiStyle}>🔥</Text>}
-          {comboMinutes >= 30 && <Text style={fireEmojiStyle}>🔥</Text>}
+          <Text style={fireEmojiStyle}></Text>
+          {comboMinutes >= 20 && <Text style={fireEmojiStyle}></Text>}
+          {comboMinutes >= 30 && <Text style={fireEmojiStyle}></Text>}
         </Animated.View>
       )}
 
@@ -126,7 +126,7 @@ export function ComboMeter({
             variant="caption"
             style={[maxTierTextStyle, { color: tier.color }]}
           >
-            💎 DIAMOND TIER MAXED! Keep going! 💎
+            Diamond tier maxed. Keep going.
           </Text>
         )}
       </View>

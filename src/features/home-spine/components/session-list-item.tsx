@@ -61,7 +61,7 @@ export function EmptyState(): JSX.Element {
   return (
     <Animated.View entering={FadeIn.duration(400)}>
       <Box py="xl" px="lg" alignItems="center" justifyContent="center" gap="md">
-        <Text fontSize={48}>🎯</Text>
+        <Text fontSize={48}></Text>
         <Text variant="h4" color="text.secondary" textAlign="center">
           No sessions yet
         </Text>
@@ -127,7 +127,7 @@ export function SessionRow({
           borderRadius="lg"
           bg={theme.colors.background.tertiary}
         >
-          <Text fontSize={12}>✨</Text>
+          <Text fontSize={12}></Text>
           <Text variant="caption" color="text.secondary" fontWeight="600">
             +{session.xpEarned}
           </Text>

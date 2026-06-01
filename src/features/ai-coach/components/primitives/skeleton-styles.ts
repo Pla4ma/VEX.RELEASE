@@ -1,18 +1,18 @@
 import { createSheet } from '@/shared/ui/create-sheet';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 export const skeletonStyles = createSheet({
-  container: { backgroundColor: launchColors.hex_e1e4e8, overflow: 'hidden' },
+  container: { backgroundColor: '#e1e4e8', overflow: 'hidden' },
   shimmer: {
     width: '100%',
     height: '100%',
-    backgroundColor: launchColors.rgb_255_255_255_0_3,
+    backgroundColor: 'rgba(255,255,255,0.3)',
   },
   textContainer: { gap: 8 },
   textLine: { marginBottom: 8 },
   cardContainer: {
     padding: 16,
-    backgroundColor: launchColors.hex_fff,
+    backgroundColor: '#fff',
     borderRadius: 12,
     gap: 12,
   },
@@ -25,7 +25,7 @@ export const skeletonStyles = createSheet({
     alignItems: 'center',
     gap: 8,
     padding: 16,
-    backgroundColor: launchColors.hex_fff,
+    backgroundColor: '#fff',
     borderRadius: 12,
     flex: 1,
   },
@@ -36,7 +36,7 @@ export const skeletonStyles = createSheet({
     alignItems: 'center',
     gap: 12,
     padding: 12,
-    backgroundColor: launchColors.hex_fff,
+    backgroundColor: '#fff',
     borderRadius: 8,
   },
   listContent: { flex: 1, gap: 6 },
@@ -46,7 +46,7 @@ export const skeletonStyles = createSheet({
   streakBadge: { alignSelf: 'center' },
   comebackContainer: {
     padding: 16,
-    backgroundColor: launchColors.hex_fff,
+    backgroundColor: '#fff',
     borderRadius: 12,
     gap: 16,
   },

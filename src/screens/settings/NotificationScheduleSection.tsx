@@ -3,7 +3,7 @@ import { Alert, Pressable, Switch } from 'react-native';
 import { useTheme } from '../../theme';
 import { Box, Text, Card } from '../../components/primitives';
 import { Icon } from '../../icons';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 interface QuietHours {
   enabled: boolean;
@@ -118,7 +118,7 @@ export const NotificationScheduleSection: React.FC = () => {
             thumbColor={
               quietHours.enabled
                 ? theme.colors.primary[500]
-                : launchColors.hex_fff
+                : '#fff'
             }
           />
         </Pressable>

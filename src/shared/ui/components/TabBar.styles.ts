@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { createSheet } from '@/shared/ui/create-sheet';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 export const styles = createSheet({
   container: { width: '100%' },
@@ -32,7 +32,7 @@ export const styles = createSheet({
   badgeTextSmall: { fontSize: 8 },
   disabledOverlay: {
     ...StyleSheet.absoluteFill,
-    backgroundColor: launchColors.rgb_0_0_0_0_3,
+    backgroundColor: 'rgba(0,0,0,0.3)',
     borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',

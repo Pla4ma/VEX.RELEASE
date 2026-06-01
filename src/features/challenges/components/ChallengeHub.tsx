@@ -119,7 +119,7 @@ export const ChallengeHub: React.FC<ChallengeHubProps> = ({
       {(activeFilter === 'ALL' || activeFilter === 'DAILY') && (
         <Card style={styles.streakCard}>
           <View style={styles.streakHeader}>
-            <Text style={styles.streakTitle}>🔥 Daily Streak</Text>
+            <Text style={styles.streakTitle}>Daily Streak</Text>
             <Badge variant="warning">3 Days</Badge>
           </View>
           <Text style={styles.streakDescription}>
@@ -146,7 +146,7 @@ export const ChallengeHub: React.FC<ChallengeHubProps> = ({
         </Text>
         {filteredChallenges.length === 0 ? (
           <Card style={styles.emptyCard}>
-            <Text style={styles.emptyIcon}>🎯</Text>
+            <Text style={styles.emptyIcon}></Text>
             <Text style={styles.emptyTitle}>No challenges found</Text>
             <Text style={styles.emptyText}>
               {activeFilter === 'COMPLETED'
