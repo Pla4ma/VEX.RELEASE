@@ -1,14 +1,7 @@
 import { launchColors } from '@theme/tokens/launch-colors';
 import type { SessionHistoryEntry } from '../types';
 
-export const formatDuration = (seconds: number): string => {
-  const hours = Math.floor(seconds / 3600);
-  const mins = Math.floor((seconds % 3600) / 60);
-  if (hours > 0) {
-    return `${hours}h ${mins}m`;
-  }
-  return `${mins}m`;
-};
+export { formatDuration } from '../../utils/format-duration';
 
 export const formatDate = (timestamp: number): string => {
   const date = new Date(timestamp);

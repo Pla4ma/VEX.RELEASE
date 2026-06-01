@@ -1,15 +1,8 @@
 import { launchColors } from '@theme/tokens/launch-colors';
 
-export type MoodType = 'GREAT' | 'GOOD' | 'NEUTRAL' | 'BAD' | 'TERRIBLE' | null;
+export { formatDuration } from '../../utils/format-duration';
 
-export const formatDuration = (seconds: number): string => {
-  const hours = Math.floor(seconds / 3600);
-  const mins = Math.floor((seconds % 3600) / 60);
-  if (hours > 0) {
-    return `${hours}h ${mins}m`;
-  }
-  return `${mins}m`;
-};
+export type MoodType = 'GREAT' | 'GOOD' | 'NEUTRAL' | 'BAD' | 'TERRIBLE' | null;
 
 export const getMoodEmoji = (m: MoodType): string => {
   switch (m) {
