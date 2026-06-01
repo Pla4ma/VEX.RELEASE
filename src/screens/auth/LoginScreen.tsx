@@ -94,7 +94,7 @@ export const LoginScreen: React.FC<Props> = ({ navigation, route }) => {
               }
             }}
             onSubmitEditing={() => {
-              void handleLogin();
+              handleLogin();
             }}
             placeholder="Your password"
             returnKeyType="done"
@@ -130,7 +130,7 @@ export const LoginScreen: React.FC<Props> = ({ navigation, route }) => {
           fullWidth
           isLoading={isLoading}
           onPress={() => {
-            void handleLogin();
+            handleLogin();
           }}
           size="lg"
           variant="primary"

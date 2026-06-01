@@ -28,7 +28,7 @@ export function useAddMemoryCandidate() {
   return useMutation({
     mutationFn: (input: MemoryCandidateInput) => addMemoryCandidate(input),
     onSuccess: (_data, input) => {
-      void queryClient.invalidateQueries({
+      queryClient.invalidateQueries({
         queryKey: ['memory-candidate', input.userId],
       });
     },
@@ -47,7 +47,7 @@ export function useRemoveMemoryCandidate() {
       candidateId: string;
     }) => removeMemoryCandidate(userId, candidateId),
     onSuccess: (_data, input) => {
-      void queryClient.invalidateQueries({
+      queryClient.invalidateQueries({
         queryKey: ['memory-candidate', input.userId],
       });
     },

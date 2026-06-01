@@ -47,7 +47,7 @@ export function useCreateRescuePlan() {
       return plan;
     },
     onSuccess: (_plan, variables) => {
-      void queryClient.invalidateQueries({
+      queryClient.invalidateQueries({
         queryKey: ['rescue-mode', variables.userId],
       });
     },
@@ -91,10 +91,10 @@ export function useRescueCompletion() {
       return { record, memory, reflection };
     },
     onSuccess: (_result, params) => {
-      void queryClient.invalidateQueries({
+      queryClient.invalidateQueries({
         queryKey: ['rescue-mode', params.plan.userId],
       });
-      void queryClient.invalidateQueries({
+      queryClient.invalidateQueries({
         queryKey: ['rescue-completions', params.plan.userId],
       });
     },
@@ -117,7 +117,7 @@ export function useClearRescuePlan() {
       await clearActiveRescuePlan(userId);
     },
     onSuccess: (_result, userId) => {
-      void queryClient.invalidateQueries({ queryKey: ['rescue-mode', userId] });
+      queryClient.invalidateQueries({ queryKey: ['rescue-mode', userId] });
     },
   });
 }

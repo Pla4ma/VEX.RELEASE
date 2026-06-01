@@ -51,7 +51,7 @@ export function createPrefetcher(
   defaultPolicy?: PrefetchPolicy,
 ) {
   const prefetch = (options: PrefetchOptions): void => {
-    void queryClient.prefetchQuery(options);
+    queryClient.prefetchQuery(options);
   };
   const canQuery = (feature: FeatureKey, policy?: PrefetchPolicy): boolean =>
     canPrefetchFeature(mergePolicy(defaultPolicy, policy), feature);

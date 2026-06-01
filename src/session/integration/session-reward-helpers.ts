@@ -20,10 +20,10 @@ export async function recordSquadWarDamageIfNeeded(
   summary: SessionSummary,
   streakMultiplier: number,
 ): Promise<void> {
-  void sessionId;
-  void userId;
-  void summary;
-  void streakMultiplier;
+  sessionId;
+  userId;
+  summary;
+  streakMultiplier;
   await Promise.resolve();
 }
 export function updateStreak(
@@ -100,9 +100,9 @@ export function publishSocialActivity(
   summary: SessionSummary,
   rewards: RewardCalculationResult,
 ): void {
-  void userId;
-  void summary;
-  void rewards;
+  userId;
+  summary;
+  rewards;
 }
 export function publishChallengeProgress(
   userId: string,

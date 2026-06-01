@@ -59,7 +59,7 @@ export const AppProviders: React.FC<AppProvidersProps> = ({ children }) => {
     let cleanup: (() => void) | null = null;
     let disposed = false;
 
-    void initializeServices().then((nextCleanup) => {
+    initializeServices().then((nextCleanup) => {
       if (disposed) {
         nextCleanup();
         return;

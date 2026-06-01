@@ -38,7 +38,7 @@ try {
   const serverModule: { server: TestServer } = require('./mocks/server');
   server = serverModule.server;
 } catch (error) {
-  void error;
+  error;
 }
 
 beforeAll(() => server?.listen({ onUnhandledRequest: 'error' }));

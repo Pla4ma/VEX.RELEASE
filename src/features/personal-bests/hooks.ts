@@ -41,7 +41,7 @@ export function usePersonalBestPreview(
     isError: query.isError,
     error: query.error instanceof Error ? query.error : null,
     refetch: () => {
-      void refresh();
+      refresh();
     },
   };
 }
@@ -65,7 +65,7 @@ export function usePersonalBests(userId: string | null): {
     isError: query.isError,
     error: query.error instanceof Error ? query.error : null,
     refetch: () => {
-      void refresh();
+      refresh();
     },
   };
 }

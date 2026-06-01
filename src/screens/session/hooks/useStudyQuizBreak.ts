@@ -62,7 +62,7 @@ export function useStudyQuizBreak(input: {
       setCompletedQuizBreaks((current) => [...current, quizBreakKey]);
     }
     setQuizBreakKey(null);
-    void sessionQuery.resumeSession();
+    sessionQuery.resumeSession();
   };
 
   return {

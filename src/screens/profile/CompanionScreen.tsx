@@ -73,7 +73,7 @@ export function CompanionScreen(): JSX.Element {
   }, [userId]);
 
   useEffect(() => {
-    void load();
+    load();
   }, [load]);
 
   if (loadState.status === 'loading') {

@@ -33,7 +33,7 @@ function useDeferredFeatureHealth(
     let cancelled = false;
     let cleanup: (() => void) | null = null;
 
-    void import('../../../features/liveops-config/deferred-feature-health')
+    import('../../../features/liveops-config/deferred-feature-health')
       .then(({ startDeferredFeatureHealth }) => {
         if (cancelled) {
           return;

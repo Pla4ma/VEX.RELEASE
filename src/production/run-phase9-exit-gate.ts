@@ -63,4 +63,4 @@ async function runPhase9ExitGate() {
   }
 }
 
-void runPhase9ExitGate();
+runPhase9ExitGate();

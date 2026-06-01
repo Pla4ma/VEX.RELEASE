@@ -87,7 +87,7 @@ export function FocusScoreCardError({
         </Text>
       )}
       <Pressable
-        onPress={() => void retry?.()}
+        onPress={() => retry?.()}
         disabled={isRetrying}
         style={{
           paddingHorizontal: 16,

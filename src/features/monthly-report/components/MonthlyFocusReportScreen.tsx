@@ -80,7 +80,7 @@ export const MonthlyFocusReportScreen = withScreenErrorBoundary(
               'Unable to load your monthly focus report. Give it another shot.'}
           </Text>
           <Button
-            onPress={() => void refetch()}
+            onPress={() => refetch()}
             variant="primary"
             accessibilityLabel="Retry loading report"
             accessibilityRole="button"
@@ -149,7 +149,7 @@ export const MonthlyFocusReportScreen = withScreenErrorBoundary(
           refreshControl={
             <RefreshControl
               refreshing={false}
-              onRefresh={() => void refetch()}
+              onRefresh={() => refetch()}
               tintColor={theme.colors.primary[500]}
             />
           }

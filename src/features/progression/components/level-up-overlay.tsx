@@ -36,7 +36,7 @@ export const LevelUpOverlay: React.FC<LevelUpOverlayProps> = ({
 
   useEffect(() => {
     if (isVisible) {
-      void levelUp();
+      levelUp();
       const pieces: ConfettiPiece[] = Array.from({ length: 100 }, (_, i) => ({
         id: i,
         x: Math.random() * width,

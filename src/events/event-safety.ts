@@ -56,7 +56,7 @@ export function subscribeIdempotent<T extends keyof EventChannels>(
     if (options.ttlMs) {
       setTimeout(() => channelKeys.delete(key), options.ttlMs);
     }
-    void handler(data);
+    handler(data);
   };
 
   return eventBus.subscribe(channel, wrappedHandler);

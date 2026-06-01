@@ -38,7 +38,7 @@ export function handleTimerTick(
   }
   orch.session.isDirty = true;
   orch.session.updatedAt = Date.now();
-  if (Math.floor(elapsed / 1000) % 5 === 0) {void orch.saveSessionState();}
+  if (Math.floor(elapsed / 1000) % 5 === 0) {orch.saveSessionState();}
   orch.eventEmitter.emitTick(
     elapsed,
     remaining,
@@ -90,7 +90,7 @@ export async function startBreak(orch: SessionOrchestratorBase): Promise<void> {
         handleBreakTick(orch, _e);
       },
       onComplete: () => {
-        void orch.handleBreakComplete();
+        orch.handleBreakComplete();
       },
       onWarning: (s: number) => {
         handleTimerWarning(orch, s);

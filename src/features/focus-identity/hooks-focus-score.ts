@@ -49,7 +49,7 @@ export function useFocusScore(
     status: scoreQuery.status,
     error: scoreQuery.error instanceof Error ? scoreQuery.error : null,
     refetch: () => {
-      void refresh();
+      refresh();
     },
     isRefetching: scoreQuery.isRefetching,
   };
@@ -76,7 +76,7 @@ export function useFocusScoreHistory(
     status: historyQuery.status,
     error: historyQuery.error instanceof Error ? historyQuery.error : null,
     refetch: () => {
-      void refresh();
+      refresh();
     },
   };
 }

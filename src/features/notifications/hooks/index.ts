@@ -29,7 +29,7 @@ export function useUnreadNotificationsCount(userId: string | null) {
     }
 
     return service.subscribeToNotificationCenter(userId, () => {
-      void queryClient.invalidateQueries({
+      queryClient.invalidateQueries({
         queryKey: notificationKeys.unreadCount(userId),
       });
     });

@@ -105,7 +105,7 @@ export function useSessionCompleteStudyProgress({
           : null,
       isCompleting: completeStudyTaskMutation.isPending,
       onMarkComplete: () => {
-        void completeStudyTaskMutation
+        completeStudyTaskMutation
           .mutateAsync({
             generationId: activePlan.generationId,
             taskId: nextTask.id,

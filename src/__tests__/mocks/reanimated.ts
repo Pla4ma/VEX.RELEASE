@@ -6,7 +6,7 @@
  */
 
 function recordSetupFallback(error: unknown): void {
-  void error;
+  error;
 }
 
 const mockChain = () => ({

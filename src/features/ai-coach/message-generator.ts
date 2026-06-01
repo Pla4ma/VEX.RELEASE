@@ -194,5 +194,5 @@ async function trackEffectiveness(
   _action: string,
   _metadata?: Record<string, unknown>,
 ): Promise<void> {
-  void message;
+  message;
 }

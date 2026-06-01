@@ -39,7 +39,7 @@ export async function broadcastActivity(
 
   const channelToClean = channel;
   setTimeout(() => {
-    void channelToClean?.unsubscribe();
+    channelToClean?.unsubscribe();
     if (activeChannels.get(txKey) === channelToClean) {
       activeChannels.delete(txKey);
     }

@@ -41,7 +41,7 @@ export function useSessionHistoryRecords(
     isError: query.isError,
     error: query.error instanceof Error ? query.error : null,
     refetch: () => {
-      void retryHistory();
+      retryHistory();
     },
   };
 }

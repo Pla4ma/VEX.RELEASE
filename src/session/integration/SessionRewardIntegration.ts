@@ -77,7 +77,7 @@ export class SessionRewardIntegration {
           }
           const summary = SessionSummarySchema.safeParse(data.summary);
           if (summary.success) {
-            void this.handleCompleted(
+            this.handleCompleted(
               data.sessionId,
               data.userId,
               summary.data,
@@ -91,7 +91,7 @@ export class SessionRewardIntegration {
       this.unsubscribeFns.push(
         eventBus.subscribe('session:recovery:successful', (data) => {
           if (data) {
-            void handlePartialCompletion(
+            handlePartialCompletion(
               this.config,
               data.sessionId,
               data.userId,
@@ -106,7 +106,7 @@ export class SessionRewardIntegration {
       this.unsubscribeFns.push(
         eventBus.subscribe('session:abandoned', (data) => {
           if (data) {
-            void handleAbandonment(
+            handleAbandonment(
               this.config,
               data.sessionId,
               data.userId,

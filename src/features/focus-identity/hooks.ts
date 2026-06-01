@@ -117,7 +117,7 @@ export function useFocusIdentity(userId: string) {
     loadingState,
     error,
     isRetrying,
-    retry: () => void refetch(),
+    retry: () => refetch(),
     currentBand,
     scoreChange,
   };

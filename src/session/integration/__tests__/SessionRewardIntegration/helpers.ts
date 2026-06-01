@@ -43,7 +43,7 @@ export function setupMocks(): { publish: jest.Mock; subscribe: jest.Mock } {
   const mockEventBus = { publish: jest.fn(), subscribe: jest.fn() };
   (eventBus.publish as jest.Mock) = mockEventBus.publish;
   (eventBus.subscribe as jest.Mock) = mockEventBus.subscribe;
-  new SessionRewardIntegration({
+  void new SessionRewardIntegration({
     autoGrantRewards: true,
     autoUpdateStreak: true,
     autoAddXP: true,

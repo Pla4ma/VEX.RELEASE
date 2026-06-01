@@ -54,7 +54,7 @@ export function SessionContractReflectionCard({
   }
 
   const handleReflect = (status: ReflectionStatus): void => {
-    void triggerHaptic(status === 'done' ? 'success' : 'impactLight');
+    triggerHaptic(status === 'done' ? 'success' : 'impactLight');
     onReflect(status);
   };
 

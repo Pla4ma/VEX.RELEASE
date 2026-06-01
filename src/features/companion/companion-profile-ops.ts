@@ -107,7 +107,7 @@ export async function feedCompanion(
   userId: string,
   options: { skipSyncEnqueue?: boolean } = {},
 ): Promise<_CompanionProfile> {
-  void options;
+  options;
   const current = await _loadProfile(userId);
   return _saveProfile(userId, {
     ...current,

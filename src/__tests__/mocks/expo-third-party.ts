@@ -7,7 +7,7 @@
  */
 
 function recordSetupFallback(error: unknown): void {
-  void error;
+  error;
 }
 
 jest.mock('react-native-purchases', () => {

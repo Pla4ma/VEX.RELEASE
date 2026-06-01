@@ -158,7 +158,7 @@ export function ProgressScreen(): JSX.Element {
         </View>
         <Button
           variant="outline"
-          onPress={() => void refresh()}
+          onPress={() => refresh()}
           accessibilityLabel="Refresh progress stats"
           accessibilityRole="button"
           accessibilityHint="Reloads your latest execution stats"

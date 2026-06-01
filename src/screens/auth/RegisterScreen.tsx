@@ -134,7 +134,7 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
             clearError('password');
           }}
           onSubmitEditing={() => {
-            void handleRegister();
+            handleRegister();
           }}
           placeholder="Create a password"
           returnKeyType="done"
@@ -155,7 +155,7 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
           fullWidth
           isLoading={isLoading}
           onPress={() => {
-            void handleRegister();
+            handleRegister();
           }}
           size="lg"
           variant="primary"

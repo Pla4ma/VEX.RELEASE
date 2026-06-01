@@ -101,7 +101,7 @@ export function useFirstSessionStart({
 
         if (config.mode === SessionMode.DEEP_WORK) {
           setTimeout(() => {
-            void sessionStart();
+            sessionStart();
           }, 120);
         }
 

@@ -77,7 +77,7 @@ export function useCompanionPromise(): {
   const keepPromiseMutation = useMutation({
     mutationFn: (promise: CompanionPromise) => service.keepPromise(promise),
     onSuccess: () => {
-      void invalidate();
+      invalidate();
     },
     onError: (error) => {
       Sentry.captureException(error, {
@@ -94,7 +94,7 @@ export function useCompanionPromise(): {
   const dismissRecoveryMutation = useMutation({
     mutationFn: (promiseId: string) => service.dismissRecovery(promiseId),
     onSuccess: () => {
-      void invalidate();
+      invalidate();
     },
     onError: (error) => {
       Sentry.captureException(error, {
@@ -113,7 +113,7 @@ export function useCompanionPromise(): {
     : ({ kind: 'offline', showOfflineBanner: true } as const);
   const rerunQuery = (): void => {
     const refresh = query.refetch;
-    void refresh();
+    refresh();
   };
 
   return {

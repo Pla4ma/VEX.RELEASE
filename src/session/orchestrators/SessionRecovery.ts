@@ -132,7 +132,7 @@ export function logInterruption(
   recordInterruption(orch, type as InterruptionType, severity);
   orch.session.updatedAt = Date.now();
   orch.session.isDirty = true;
-  void orch.saveSessionState();
+  orch.saveSessionState();
 }
 
 export function logRecovery(
@@ -154,5 +154,5 @@ export function logRecovery(
   orch.eventEmitter.emitRecoverySuccessful(Date.now(), 0);
   orch.session.updatedAt = Date.now();
   orch.session.isDirty = true;
-  void orch.saveSessionState();
+  orch.saveSessionState();
 }

@@ -121,7 +121,7 @@ export function useContentReview(contentId: string) {
           ? { ...prev.content, userEditedText: text }
           : null,
       }));
-      void queryClient.invalidateQueries({
+      queryClient.invalidateQueries({
         queryKey: contentStudyQueryKeys.content(contentId),
       });
     },
@@ -140,7 +140,7 @@ export function useContentReview(contentId: string) {
       return result;
     },
     onSuccess: () => {
-      void queryClient.invalidateQueries({
+      queryClient.invalidateQueries({
         queryKey: contentStudyQueryKeys.all,
       });
     },

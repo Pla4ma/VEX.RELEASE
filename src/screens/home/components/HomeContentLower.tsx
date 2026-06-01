@@ -121,7 +121,7 @@ export const HomeContentLower: React.FC<HomeContentLowerProps> = ({
           openSetup={controller.openSetup}
           startLearningTarget={startLearningTarget}
           showToast={(toastData) =>
-            void data.showToast({
+            data.showToast({
               type: toastData.type as 'success' | 'error' | 'warning' | 'info',
               title: toastData.title,
               message: toastData.message,

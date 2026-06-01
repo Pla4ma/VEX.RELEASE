@@ -120,10 +120,10 @@ export class SessionCompletionOfflineSyncService {
   private startAutoSync(): void {
     const adapter = getNetInfoAdapter();
     this.unsubscribeNetwork = adapter.subscribe((state) => {
-      if (state.isConnected && state.isInternetReachable) {void this.attemptFallbackSync();}
+      if (state.isConnected && state.isInternetReachable) {this.attemptFallbackSync();}
     });
     this.syncIntervalId = setInterval(() => {
-      if (this.isOnline()) {void this.attemptFallbackSync();}
+      if (this.isOnline()) {this.attemptFallbackSync();}
     }, 30000);
   }
 

@@ -80,7 +80,7 @@ export function HomeSecondaryRail({
           isLoading={isStudyLoading}
           copy={learningCopy}
           onContinue={onContinueStudyPlan}
-          onRetry={() => void onRetryStudyPlan()}
+          onRetry={() => onRetryStudyPlan()}
           onSeeHowItWorks={onOpenProgress}
           onStart={onStartStudy}
         />

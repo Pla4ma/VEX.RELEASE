@@ -54,7 +54,7 @@ export function SessionGradeCard({
         easing: Easing.out(Easing.cubic),
       }),
     );
-    const timeoutId = setTimeout(() => void pulseCompleteHaptic(), 1000);
+    const timeoutId = setTimeout(() => pulseCompleteHaptic(), 1000);
     return () => clearTimeout(timeoutId);
   }, [clampedPurity, ringProgress]);
   const animatedProps = useAnimatedProps(() => ({

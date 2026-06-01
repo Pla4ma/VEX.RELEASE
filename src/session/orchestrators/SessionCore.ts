@@ -79,7 +79,7 @@ export async function createSession(
 }
 
 export function loadActiveSession(orch: SessionOrchestratorBase): void {
-  void persistence.loadActiveSession(orch.repository).then((s) => {
+  persistence.loadActiveSession(orch.repository).then((s) => {
     if (!s) {return;}
     orch.session = s;
     orch.userId = s.userId;
@@ -105,12 +105,12 @@ export function finalizeSession(
   summary: Parameters<typeof persistence.finalizeSession>[1],
 ): void {
   if (!orch.session) {return;}
-  void persistence.finalizeSession(orch.session, summary, orch.repository);
+  persistence.finalizeSession(orch.session, summary, orch.repository);
 }
 
 export function finalizeAbandonedSession(orch: SessionOrchestratorBase): void {
   if (!orch.session) {return;}
-  void persistence.finalizeAbandonedSession(orch.session, orch.repository);
+  persistence.finalizeAbandonedSession(orch.session, orch.repository);
 }
 
 export function createEmptyFocusMetrics(

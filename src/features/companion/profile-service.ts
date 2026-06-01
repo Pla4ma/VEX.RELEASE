@@ -131,7 +131,7 @@ export async function feedCompanion(
     mood: 'happy',
   });
   const leveled = await levelUpCompanion(userId);
-  void options.skipSyncEnqueue;
+  options.skipSyncEnqueue;
   return { ...leveled, mood: updated.mood };
 }
 

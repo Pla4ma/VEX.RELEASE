@@ -110,7 +110,7 @@ export async function backgroundSession(
   if (orch.config.pauseOnBackground) {
     setTimeout(() => {
       if (orch.session?.status === 'BACKGROUNDED') {
-        void pauseSession(orch, 'auto_background');
+        pauseSession(orch, 'auto_background');
       }
     }, orch.config.pauseThreshold);
   }

@@ -80,7 +80,7 @@ export function useCoachPresence(input: UseCoachPresenceInput): {
     isError: false,
     isPending: false,
     refetch: () => {
-      void memoryQuery.refetch();
+      memoryQuery.refetch();
     },
   };
 }

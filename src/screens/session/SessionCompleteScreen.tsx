@@ -34,7 +34,7 @@ export const SessionCompleteScreen = withScreenErrorBoundary(
           onRetry={
             parsedRoute.recoverySessionId && recoveredCompletion.isError
               ? () => {
-                  void recoveredCompletion.refetch();
+                  recoveredCompletion.refetch();
                 }
               : undefined
           }

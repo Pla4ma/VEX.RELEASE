@@ -123,7 +123,7 @@ export function useStartSessionFlow({
 
       if (selectedSessionMode === SessionMode.DEEP_WORK) {
         setTimeout(() => {
-          void sessionStart();
+          sessionStart();
         }, 120);
       }
 

@@ -104,7 +104,7 @@ export function useStreakRepairQuest(): UseStreakRepairQuestReturn {
     await refetchStatusFn();
   }, [refetchStatusFn]);
   const retry = useCallback(() => {
-    void refetchQuest();
+    refetchQuest();
   }, [refetchQuest]);
   const retryCreate = useCallback(() => {
     createQuestMutation.reset();

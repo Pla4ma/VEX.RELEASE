@@ -38,7 +38,7 @@ export function useContentExtractionPolling(
           status.status === 'FAILED'
         ) {
           clearInterval(pollInterval);
-          void queryClient.invalidateQueries({
+          queryClient.invalidateQueries({
             queryKey: contentStudyQueryKeys.content(contentId),
           });
         }

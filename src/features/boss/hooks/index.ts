@@ -26,7 +26,7 @@ export interface BossEncounterStub {
 }
 
 export function useActiveBoss(..._args: unknown[]) {
-  void _args;
+  _args;
   return useQuery<BossEncounterStub | null>({
     queryFn: () => Promise.resolve(null),
     queryKey: ['boss', 'active'],
@@ -34,7 +34,7 @@ export function useActiveBoss(..._args: unknown[]) {
 }
 
 export function useBossEngagementSummary(..._args: unknown[]) {
-  void _args;
+  _args;
   return useQuery<BossEngagementSummary>({
     queryFn: () =>
       Promise.resolve({
@@ -48,7 +48,7 @@ export function useBossEngagementSummary(..._args: unknown[]) {
 }
 
 export function useAvailableBosses(..._args: unknown[]) {
-  void _args;
+  _args;
   return useQuery<BossTemplate[]>({
     queryFn: () => Promise.resolve([]),
     queryKey: ['boss', 'available'],

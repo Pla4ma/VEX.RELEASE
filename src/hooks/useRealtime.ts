@@ -47,7 +47,7 @@ export function usePresence({
     init();
     return () => {
       mounted = false;
-      void cleanupPresence();
+      cleanupPresence();
     };
   }, [userId, initialStatus]);
   const setPresenceStatus = useCallback(

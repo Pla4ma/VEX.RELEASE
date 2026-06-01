@@ -72,11 +72,11 @@ export function useFeatureHealth(totalCompletedSessions: number): {
       }
     }
 
-    void poll();
+    poll();
 
     const interval = setInterval(() => {
       if (!cancelled) {
-        void poll();
+        poll();
       }
     }, 60_000);
 

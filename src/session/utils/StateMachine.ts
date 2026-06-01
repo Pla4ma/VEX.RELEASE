@@ -184,7 +184,7 @@ export class StateMachine<TContext> {
   private flushQueue(): void {
     const next = this.eventQueue.shift();
     if (next) {
-      void this.send(next.event, next.payload);
+      this.send(next.event, next.payload);
     }
   }
 }

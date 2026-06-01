@@ -167,7 +167,7 @@ export class SessionNotifications {
       data: payload.data,
     });
     if ('Notification' in window && Notification.permission === 'granted') {
-      new Notification(payload.title, {
+      void new Notification(payload.title, {
         body: payload.body,
         icon: '/icon.png',
         badge: '/badge.png',

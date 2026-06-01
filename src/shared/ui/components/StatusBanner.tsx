@@ -39,9 +39,9 @@ export const StatusBanner: React.FC<StatusFeedbackProps> = ({
 
   useEffect(() => {
     if (status === 'success') {
-      void triggerHaptic('success');
+      triggerHaptic('success');
     } else if (status === 'error') {
-      void triggerHaptic('error');
+      triggerHaptic('error');
     }
   }, [status]);
 

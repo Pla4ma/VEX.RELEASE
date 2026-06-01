@@ -125,12 +125,12 @@ let isAutoProcessingEnabled = false;
 export function startAutoProcessing(intervalMs: number = 5000): void {
   if (isAutoProcessingEnabled) {return;}
   isAutoProcessingEnabled = true;
-  if (getConnectionState() === 'online') {void processQueue();}
+  if (getConnectionState() === 'online') {processQueue();}
   subscribeToConnectionChanges((state) => {
-    if (state === 'online') {void processQueue();}
+    if (state === 'online') {processQueue();}
   });
   autoProcessInterval = setInterval(() => {
-    if (getConnectionState() === 'online' && queue.length > 0) {void processQueue();}
+    if (getConnectionState() === 'online' && queue.length > 0) {processQueue();}
   }, intervalMs);
 }
 export function stopAutoProcessing(): void {

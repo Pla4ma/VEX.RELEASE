@@ -25,7 +25,7 @@ export function usePersistence<T>(config: PersistenceConfig<T>): {
         setLoading(false);
       }
     };
-    void load();
+    load();
   }, [config]);
 
   const save = React.useCallback(

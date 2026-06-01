@@ -49,7 +49,7 @@ export const MicroRewardBanner: React.FC<MicroRewardBannerProps> = ({
   const displayLabel = customLabel || config.label;
   const displayColor = getRewardColor(type, theme);
   useEffect(() => {
-    void triggerHaptic('success');
+    triggerHaptic('success');
   }, []);
   useEffect(() => {
     if (!autoDismiss) {

@@ -84,7 +84,7 @@ export function useSessionRewardSync(input: SessionRewardSyncInput) {
 
       if (isMountedRef.current) {
         setRewardCreditStatus('success');
-        void triggerHaptic('success');
+        triggerHaptic('success');
         input.showToast({
           duration: 2500,
           message: 'Rewards are owned by the saved completion ledger.',
@@ -97,7 +97,7 @@ export function useSessionRewardSync(input: SessionRewardSyncInput) {
         setRewardCreditStatus('failed');
         setRewardCreditError('Reward display could not refresh yet.');
       }
-      void triggerHaptic('warning');
+      triggerHaptic('warning');
       Sentry.captureException(error, {
         tags: { feature: 'session-complete-display' },
       });

@@ -61,9 +61,9 @@ export function startDeferredFeatureHealth(
 ): () => void {
   let cancelled = false;
 
-  void pollFeatureHealth(totalCompletedSessions, () => cancelled);
+  pollFeatureHealth(totalCompletedSessions, () => cancelled);
   const interval = setInterval(() => {
-    void pollFeatureHealth(totalCompletedSessions, () => cancelled);
+    pollFeatureHealth(totalCompletedSessions, () => cancelled);
   }, 60_000);
 
   return () => {

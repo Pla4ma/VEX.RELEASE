@@ -13,7 +13,7 @@ describe('SessionRewardIntegration recovery/abandonment gating', () => {
   });
 
   it('should NOT publish XP for recovery when autoHandleRecoveryRewards is false (default)', async () => {
-    new SessionRewardIntegration({});
+    void new SessionRewardIntegration({});
 
     const recoveryHandler = mockedEventBus.subscribe.mock.calls.find(
       (call) => call[0] === 'session:recovery:successful',
@@ -29,7 +29,7 @@ describe('SessionRewardIntegration recovery/abandonment gating', () => {
   });
 
   it('should NOT publish XP for abandonment when autoHandleAbandonmentPartialCredit is false (default)', async () => {
-    new SessionRewardIntegration({});
+    void new SessionRewardIntegration({});
 
     const abandonHandler = mockedEventBus.subscribe.mock.calls.find(
       (call) => call[0] === 'session:abandoned',
@@ -41,7 +41,7 @@ describe('SessionRewardIntegration recovery/abandonment gating', () => {
   });
 
   it('should publish XP for recovery when autoHandleRecoveryRewards is true', async () => {
-    new SessionRewardIntegration({ autoHandleRecoveryRewards: true });
+    void new SessionRewardIntegration({ autoHandleRecoveryRewards: true });
 
     const recoveryHandler = mockedEventBus.subscribe.mock.calls.find(
       (call) => call[0] === 'session:recovery:successful',
@@ -61,7 +61,7 @@ describe('SessionRewardIntegration recovery/abandonment gating', () => {
   });
 
   it('should publish XP for abandonment when autoHandleAbandonmentPartialCredit is true and time >= 300s', async () => {
-    new SessionRewardIntegration({ autoHandleAbandonmentPartialCredit: true });
+    void new SessionRewardIntegration({ autoHandleAbandonmentPartialCredit: true });
 
     const abandonHandler = mockedEventBus.subscribe.mock.calls.find(
       (call) => call[0] === 'session:abandoned',
@@ -77,7 +77,7 @@ describe('SessionRewardIntegration recovery/abandonment gating', () => {
   });
 
   it('should NOT publish XP for short abandonment (<300s) even when enabled', async () => {
-    new SessionRewardIntegration({ autoHandleAbandonmentPartialCredit: true });
+    void new SessionRewardIntegration({ autoHandleAbandonmentPartialCredit: true });
 
     const abandonHandler = mockedEventBus.subscribe.mock.calls.find(
       (call) => call[0] === 'session:abandoned',

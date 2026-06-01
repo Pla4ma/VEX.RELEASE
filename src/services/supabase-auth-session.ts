@@ -72,7 +72,7 @@ export function onAuthStateChange(callback: (user: User | null) => void): {
   const { data } = supabase.auth.onAuthStateChange((_, session) => {
     if (session?.user) {
       const mapped = mapSupabaseUser(session.user);
-      void buildUserWithOnboarding(mapped)
+      buildUserWithOnboarding(mapped)
         .then((resolvedUser) => callback(resolvedUser))
         .catch(() => callback(mapped));
     } else {

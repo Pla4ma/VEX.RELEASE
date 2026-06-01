@@ -37,7 +37,7 @@ export function ContextualPaywallBanner({
       const allowed = await canShowBanner();
       setCanShow(allowed);
     };
-    void checkRateLimit();
+    checkRateLimit();
   }, []);
   useEffect(() => {
     if (isPremium || !canShow) {
@@ -45,7 +45,7 @@ export function ContextualPaywallBanner({
     }
     const timer = setTimeout(() => {
       setVisible(true);
-      void recordBannerShown();
+      recordBannerShown();
     }, 1500);
     return () => clearTimeout(timer);
   }, [isPremium, canShow]);

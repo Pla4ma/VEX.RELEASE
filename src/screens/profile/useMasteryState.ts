@@ -50,7 +50,7 @@ export function useMasteryState(userId: string | null) {
     }
   }, [userId]);
   useEffect(() => {
-    void loadMastery();
+    loadMastery();
   }, [loadMastery]);
   const claimChallenge = useCallback(
     (challengeId: string) => {
