@@ -1,7 +1,7 @@
 import { eventBus } from "../../events";
 import { capture } from "../../shared/analytics/analytics-service";
 import { SessionEvents } from "../../shared/analytics/analytics-events";
-import { getOrchestratorHandlesCompletion } from "./SessionAnalytics";
+import { getOrchestratorHandlesCompletion } from "./session-analytics-state";
 import { subscribeErrorEventListeners } from "./session-analytics-listener-helpers";
 
 type TrackFunction = (

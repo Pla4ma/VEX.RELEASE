@@ -1,47 +1,10 @@
-import type { CoachRecommendation, CoachRecommendationType, RecommendationContext, CoachPersona } from "./CoachRecommendationService-types";
-import {
-  generateProtectStreakMessage,
-  generateStudyBehindMessage,
-  generateBossOpportunityMessage,
-  generateMomentumBuildingMessage,
-} from "./recommendation-messages";
-import {
-  generateComebackMessage,
-  generateStudyPlanCompleteMessage,
-  generateFocusSessionMessage,
-  generateStudyPlanMessage,
-  generateBossBattleMessage,
-} from "./recommendation-messages-engaging";
+import type { CoachRecommendation, RecommendationContext, CoachPersona } from "./CoachRecommendationService-types";
+import { generateMessage } from "./recommendation-message-generator";
+import type { RecommendationRule } from "./recommendation-rules-types";
 import { RECOMMENDATION_RULES_STANDARD } from "./recommendation-rules-standard";
 
-export function generateMessage(
-  type: CoachRecommendationType,
-  context: RecommendationContext,
-  persona: CoachPersona,
-): { headline: string; subtext: string; coachMessage: string } {
-  const generators: Record<
-    CoachRecommendationType,
-    (ctx: RecommendationContext, p: CoachPersona) => { headline: string; subtext: string; coachMessage: string }
-  > = {
-    protect_streak: generateProtectStreakMessage,
-    study_behind: generateStudyBehindMessage,
-    boss_opportunity: generateBossOpportunityMessage,
-    momentum_building: generateMomentumBuildingMessage,
-    comeback: generateComebackMessage,
-    study_plan_complete: generateStudyPlanCompleteMessage,
-    focus_session: generateFocusSessionMessage,
-    study_plan: generateStudyPlanMessage,
-    boss_battle: generateBossBattleMessage,
-  };
-  return generators[type](context, persona);
-}
-
-export interface RecommendationRule {
-  name: string;
-  priority: number;
-  condition: (ctx: RecommendationContext) => boolean;
-  generate: (ctx: RecommendationContext, persona: CoachPersona) => CoachRecommendation;
-}
+export type { RecommendationRule } from "./recommendation-rules-types";
+export { generateMessage } from "./recommendation-message-generator";
 
 const RULES_HIGH_PRIORITY: RecommendationRule[] = [
   {

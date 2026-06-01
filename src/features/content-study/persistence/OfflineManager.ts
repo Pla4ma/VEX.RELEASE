@@ -1,5 +1,5 @@
 import { captureSilentFailure } from "../../../utils/silent-failure";
-import { getStorage, STORAGE_KEYS } from "../persistence";
+import { getStorage, STORAGE_KEYS } from "./storage-config";
 
 export class OfflineManager {
   private static instance: OfflineManager;

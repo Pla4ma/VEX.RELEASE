@@ -1,7 +1,7 @@
 import { captureSilentFailure } from "../../../utils/silent-failure";
 import type { SyncQueueItem } from "../types";
 import { CONTENT_STUDY_CONSTANTS } from "../types";
-import { getStorage, STORAGE_KEYS } from "../persistence";
+import { getStorage, STORAGE_KEYS } from "./storage-config";
 
 export class SyncQueueManager {
   private static instance: SyncQueueManager;

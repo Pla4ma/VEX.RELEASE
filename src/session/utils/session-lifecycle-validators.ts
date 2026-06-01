@@ -1,5 +1,5 @@
-import type { ValidationResult, SessionValidationInput } from "./validation";
-import { validateSessionConfig } from "./validation";
+import type { ValidationResult, SessionValidationInput } from "./session-config-validator";
+import { validateSessionConfig } from "./session-config-validator";
 
 export function validateSessionStart(
   config: unknown,

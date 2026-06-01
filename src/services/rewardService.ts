@@ -2,6 +2,7 @@ import { createDebugger } from "../utils/debug";
 import { capture } from "../shared/analytics/analytics-service";
 import { RewardEvents } from "../shared/analytics/analytics-events";
 import { type Reward, type ClaimableReward, generateRewards } from "./reward-catalog";
+import { eventBus } from "../events";
 
 const debug = createDebugger("reward-service");
 
@@ -95,10 +96,10 @@ class RewardService {
     return undefined;
   }
   private async grantRewardBenefits(reward: Reward): Promise<void> {
-    const { progressionService } = await import("./progressionService");
     const { economyService } = await import("./economyService");
     if (reward.rewards.xp) {
-      await progressionService.grantXP({
+      eventBus.publish("progression:add_xp", {
+        userId: this.userId,
         amount: reward.rewards.xp,
         source: "achievement_unlock",
         metadata: { rewardId: reward.id },

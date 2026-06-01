@@ -3,7 +3,6 @@ import { captureSilentFailure } from "../../../utils/silent-failure";
 import { createDebugger } from "../../../utils/debug";
 import { eventBus } from "../../../events";
 import type { OnboardingState } from "../types";
-import { loadPersistedOnboarding } from "./persistence";
 
 const debug = createDebugger("onboarding:persistence");
 
@@ -111,14 +110,4 @@ export function recordCompletionAttempt(
 
 export function getCompletionAttempts(): number {
   return storage.getNumber(KEYS.COMPLETION_ATTEMPTS) || 0;
-}
-
-export function getPartialData(): Partial<OnboardingState> | null {
-  const state = loadPersistedOnboarding();
-  if (!state || state.isOnboarded) return null;
-  const partial: Partial<OnboardingState> = {};
-  if (state.currentStep > 1) partial.goal = state.goal;
-  if (state.currentStep > 2) partial.focusDuration = state.focusDuration;
-  if (state.currentStep > 3) partial.displayName = state.displayName;
-  return Object.keys(partial).length > 0 ? partial : null;
 }

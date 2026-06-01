@@ -1,6 +1,6 @@
 import { captureSilentFailure } from "../../../utils/silent-failure";
 import type { PersistedStudySession } from "../types";
-import { getStorage, STORAGE_KEYS } from "../persistence";
+import { getStorage, STORAGE_KEYS } from "./storage-config";
 
 export class StudySessionManager {
   private static instance: StudySessionManager;

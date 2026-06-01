@@ -13,18 +13,14 @@ import type {
 } from "./session-analytics-types";
 import { setupAnalyticsEventListeners } from "./session-analytics-listeners";
 import { calculatePatternMetricsFromHistory } from "./session-analytics-helpers";
+import {
+  setOrchestratorHandlesCompletion,
+  getOrchestratorHandlesCompletion,
+} from "./session-analytics-state";
+
+export { setOrchestratorHandlesCompletion, getOrchestratorHandlesCompletion };
 
 const debug = createDebugger("session:analytics");
-
-let orchestratorHandlesCompletion = false;
-
-export function setOrchestratorHandlesCompletion(v: boolean): void {
-  orchestratorHandlesCompletion = v;
-}
-
-export function getOrchestratorHandlesCompletion(): boolean {
-  return orchestratorHandlesCompletion;
-}
 
 export class SessionAnalytics {
   private userId: string | null = null;

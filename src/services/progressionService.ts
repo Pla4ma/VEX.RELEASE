@@ -8,7 +8,7 @@
 import { createDebugger } from "../utils/debug";
 import { capture } from "../shared/analytics/analytics-service";
 import { ProgressionEvents } from "../shared/analytics/analytics-events";
-import { rewardService } from "./rewardService";
+import { eventBus } from "../events";
 
 const debug = createDebugger("progression-service");
 
@@ -35,6 +35,18 @@ class ProgressionService {
   private userId: string = "";
   private currentXP: number = 0;
   private currentLevel: number = 1;
+  private unsubscribeAddXP: (() => void) | null = null;
+
+  constructor() {
+    this.unsubscribeAddXP = eventBus.subscribe("progression:add_xp", (data) => {
+      if (!data) { return; }
+      void this.grantXP({
+        amount: data.amount,
+        source: data.source as XPGrant["source"],
+        metadata: data.metadata,
+      });
+    });
+  }
 
   /**
    * Set the current user ID
@@ -56,7 +68,7 @@ class ProgressionService {
       currentXP: this.currentXP,
       xpToNext,
       totalXP,
-      isMaxLevel: this.currentLevel >= 100, // Max level cap
+      isMaxLevel: this.currentLevel >= 100,
     };
   }
 
@@ -107,8 +119,6 @@ class ProgressionService {
    * Calculate level from total XP
    */
   private calculateLevelFromXP(totalXP: number): number {
-    // Formula: XP needed for level n = 100 * n * (n + 1) / 2
-    // Simplified: XP needed = 50 * level * (level + 1)
     let level = 1;
     let xpNeeded = 0;
 
@@ -124,9 +134,7 @@ class ProgressionService {
    * Calculate XP needed for next level
    */
   private calculateXPToNext(level: number): number {
-    if (level >= 100) {
-      return 0;
-    } // Max level
+    if (level >= 100) { return 0; }
     const nextLevel = level + 1;
     const totalXPForNext = 50 * nextLevel * (nextLevel + 1);
     const totalXPForCurrent = 50 * level * (level + 1);
@@ -141,7 +149,7 @@ class ProgressionService {
   }
 
   /**
-   * Handle level up event
+   * Handle level up event — uses dynamic import to avoid circular dependency
    */
   private async handleLevelUp(
     oldLevel: number,
@@ -149,13 +157,13 @@ class ProgressionService {
   ): Promise<void> {
     debug.info("Level up!", { from: oldLevel, to: newLevel });
 
-    // Track level up analytics
     capture(ProgressionEvents.LEVEL_UP, {
       user_id: this.userId,
       old_level: oldLevel,
       new_level: newLevel,
     });
 
+    const { rewardService } = await import("./rewardService");
     rewardService.setUserId(this.userId);
     await rewardService.claimReward(`level_${Math.floor(newLevel / 5) * 5}`);
   }
@@ -167,6 +175,10 @@ class ProgressionService {
     this.userId = "";
     this.currentXP = 0;
     this.currentLevel = 1;
+    if (this.unsubscribeAddXP) {
+      this.unsubscribeAddXP();
+      this.unsubscribeAddXP = null;
+    }
     debug.info("Progression service reset");
   }
 }

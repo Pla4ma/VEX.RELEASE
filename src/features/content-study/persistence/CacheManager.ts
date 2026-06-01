@@ -1,6 +1,6 @@
 import { captureSilentFailure } from "../../../utils/silent-failure";
 import type { LocalCacheEntry, StudyContent, StudyGeneration } from "../types";
-import { getStorage, STORAGE_KEYS } from "../persistence";
+import { getStorage, STORAGE_KEYS } from "./storage-config";
 
 export class CacheManager {
   private static instance: CacheManager;

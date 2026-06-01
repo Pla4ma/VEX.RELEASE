@@ -11,7 +11,6 @@ import {
   isHighAbandonRisk as isHighAbandonRiskFn,
   recordCompletionAttempt as recordCompletionAttemptFn,
   getCompletionAttempts as getCompletionAttemptsFn,
-  getPartialData as getPartialDataFn,
 } from "./abandon-tracking";
 
 const debug = createDebugger("onboarding:persistence");
@@ -169,8 +168,17 @@ export {
   isHighAbandonRiskFn as isHighAbandonRisk,
   recordCompletionAttemptFn as recordCompletionAttempt,
   getCompletionAttemptsFn as getCompletionAttempts,
-  getPartialDataFn as getPartialData,
 };
+
+export function getPartialData(): Partial<OnboardingState> | null {
+  const state = loadPersistedOnboarding();
+  if (!state || state.isOnboarded) return null;
+  const partial: Partial<OnboardingState> = {};
+  if (state.currentStep > 1) partial.goal = state.goal;
+  if (state.currentStep > 2) partial.focusDuration = state.focusDuration;
+  if (state.currentStep > 3) partial.displayName = state.displayName;
+  return Object.keys(partial).length > 0 ? partial : null;
+}
 
 export const OnboardingPersistence = {
   persist: persistOnboardingState,
@@ -185,7 +193,7 @@ export const OnboardingPersistence = {
   isHighAbandonRisk: isHighAbandonRiskFn,
   recordCompletionAttempt: recordCompletionAttemptFn,
   getCompletionAttempts: getCompletionAttemptsFn,
-  getPartialData: getPartialDataFn,
+  getPartialData: getPartialData,
 };
 
 export default OnboardingPersistence;

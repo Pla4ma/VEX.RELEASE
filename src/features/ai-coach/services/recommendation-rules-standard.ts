@@ -1,6 +1,6 @@
 import type { RecommendationContext, CoachPersona, CoachRecommendation } from "./CoachRecommendationService-types";
-import { generateMessage } from "./recommendation-rules";
-import type { RecommendationRule } from "./recommendation-rules";
+import { generateMessage } from "./recommendation-message-generator";
+import type { RecommendationRule } from "./recommendation-rules-types";
 
 export const RECOMMENDATION_RULES_STANDARD: RecommendationRule[] = [
   {
