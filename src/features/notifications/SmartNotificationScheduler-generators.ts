@@ -1,10 +1,16 @@
 /**
  * Smart Notification Scheduler — Content Generators
  *
- * Each generator fetches context from Supabase and returns typed notification content.
+ * Each generator fetches context from the repository and returns typed notification content.
  */
 
-import { getSupabaseClient } from '../../config/supabase';
+import {
+  fetchCurrentStreak,
+  fetchActiveBossEncounter,
+  fetchActiveRival,
+  fetchCompletedSessionDurationsSince,
+  fetchActiveComebackQuest,
+} from './repository';
 import type {
   NotificationContent,
   NotificationContentType,
@@ -15,12 +21,8 @@ export async function generateStreakNotification(
   userId: string,
 ): Promise<NotificationContent | null> {
   try {
-    const { data: streak, error } = await getSupabaseClient()
-      .from('user_streaks')
-      .select('current_streak')
-      .eq('user_id', userId)
-      .single();
-    if (error || !streak) {
+    const streak = await fetchCurrentStreak(userId);
+    if (!streak) {
       return null;
     }
     const streakDays = streak.current_streak;
@@ -36,7 +38,7 @@ export async function generateStreakNotification(
       body: "Complete today's session to keep it alive!",
       data: { type: 'STREAK_CONTINUE', streakDays },
     };
-  } catch (error) {
+  } catch {
     return null;
   }
 }
@@ -45,15 +47,8 @@ export async function generateBossNotification(
   userId: string,
 ): Promise<NotificationContent | null> {
   try {
-    const { data: encounter, error } = await getSupabaseClient()
-      .from('boss_encounters')
-      .select('boss_name, current_health, max_health')
-      .eq('user_id', userId)
-      .eq('status', 'ACTIVE')
-      .order('created_at', { ascending: false })
-      .limit(1)
-      .maybeSingle();
-    if (error || !encounter) {
+    const encounter = await fetchActiveBossEncounter(userId);
+    if (!encounter) {
       return null;
     }
     const healthPercent =
@@ -74,7 +69,7 @@ export async function generateBossNotification(
         healthPercent,
       },
     };
-  } catch (error) {
+  } catch {
     return null;
   }
 }
@@ -83,13 +78,8 @@ export async function generateSocialNotification(
   userId: string,
 ): Promise<NotificationContent | null> {
   try {
-    const { data: rival, error } = await getSupabaseClient()
-      .from('rivals')
-      .select('rival_name, rival_minutes, my_minutes')
-      .eq('user_id', userId)
-      .eq('is_active', true)
-      .maybeSingle();
-    if (error || !rival) {
+    const rival = await fetchActiveRival(userId);
+    if (!rival) {
       return null;
     }
     const gap = rival.rival_minutes - rival.my_minutes;
@@ -105,7 +95,7 @@ export async function generateSocialNotification(
       body: `You're ${Math.abs(gap)} minutes ahead. Keep the lead!`,
       data: { type: 'RIVAL_LEADING', rivalName: rival.rival_name },
     };
-  } catch (error) {
+  } catch {
     return null;
   }
 }
@@ -116,13 +106,8 @@ export async function generatePositiveNotification(
   try {
     const weekStart = new Date();
     weekStart.setDate(weekStart.getDate() - 7);
-    const { data: sessions, error } = await getSupabaseClient()
-      .from('sessions')
-      .select('duration_seconds')
-      .eq('user_id', userId)
-      .eq('status', 'COMPLETED')
-      .gte('completed_at', weekStart.toISOString());
-    if (error || !sessions || sessions.length === 0) {
+    const sessions = await fetchCompletedSessionDurationsSince(userId, weekStart);
+    if (sessions.length === 0) {
       return null;
     }
     const totalMinutes = sessions.reduce(
@@ -134,7 +119,7 @@ export async function generatePositiveNotification(
       body: `You've focused for ${Math.round(totalMinutes)} minutes this week. Today's session keeps it going!`,
       data: { type: 'MOMENTUM', totalMinutes },
     };
-  } catch (error) {
+  } catch {
     return null;
   }
 }
@@ -143,15 +128,8 @@ export async function generateComebackNotification(
   userId: string,
 ): Promise<NotificationContent | null> {
   try {
-    const { data: quest, error } = await getSupabaseClient()
-      .from('comeback_quests')
-      .select('stage, days_absent')
-      .eq('user_id', userId)
-      .eq('all_quests_completed', false)
-      .order('created_at', { ascending: false })
-      .limit(1)
-      .maybeSingle();
-    if (error || !quest) {
+    const quest = await fetchActiveComebackQuest(userId);
+    if (!quest) {
       return null;
     }
     const stageNum =
@@ -161,7 +139,7 @@ export async function generateComebackNotification(
       body: `You're on Quest ${stageNum}/3. Complete today's session to progress!`,
       data: { type: 'COMEBACK_QUEST', stage: stageNum },
     };
-  } catch (error) {
+  } catch {
     return null;
   }
 }
