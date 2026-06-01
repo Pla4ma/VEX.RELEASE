@@ -38,11 +38,12 @@ export function useVexRuntimeExperience(
     return undefined;
   })();
 
-  const effectiveInput: VexRuntimeInput = {
-    ...input,
-    motivationStyle: input.motivationStyle ?? normalizedStyle,
-    primaryGoal: input.primaryGoal ?? resolvedGoal,
-  };
-
-  return useMemo(() => computeVexRuntimeExperience(effectiveInput), [effectiveInput]);
+  return useMemo(() => {
+    const effectiveInput: VexRuntimeInput = {
+      ...input,
+      motivationStyle: input.motivationStyle ?? normalizedStyle,
+      primaryGoal: input.primaryGoal ?? resolvedGoal,
+    };
+    return computeVexRuntimeExperience(effectiveInput);
+  }, [input, normalizedStyle, resolvedGoal]);
 }

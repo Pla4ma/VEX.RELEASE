@@ -11,7 +11,7 @@ import {
   getAvailableInsuranceCount,
   getUserInsurance,
   canUseInsurance,
-  useInsurance,
+  useInsurance as consumeInsurance,
 } from '../insurance';
 
 // ============================================================================
@@ -91,7 +91,7 @@ describe('Insurance In-Memory Store', () => {
   beforeEach(() => {
     // Clear by using all insurance
     while (getAvailableInsuranceCount(userId) > 0) {
-      useInsurance(userId, 'test');
+      consumeInsurance(userId, 'test');
     }
   });
 
@@ -149,7 +149,7 @@ describe('Insurance In-Memory Store', () => {
   describe('useInsurance', () => {
     it('consumes one insurance', () => {
       awardInsurance(userId, 'test', 2);
-      const result = useInsurance(userId, 'test');
+      const result = consumeInsurance(userId, 'test');
       expect(result.success).toBe(true);
       expect(result.remainingInsurance).toBe(1);
     });

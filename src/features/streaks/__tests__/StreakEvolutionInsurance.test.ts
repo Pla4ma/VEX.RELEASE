@@ -2,7 +2,7 @@ import {
   awardInsurance,
   getAvailableInsuranceCount,
   getUserInsurance,
-  useInsurance,
+  useInsurance as consumeInsurance,
   canUseInsurance,
 } from '../StreakEvolutionSystem';
 
@@ -23,7 +23,7 @@ describe('StreakEvolutionSystem', () => {
       if (insurance) {
         for (const ins of insurance.insurances) {
           if (ins.status === 'active') {
-            useInsurance(userId, 'test-context');
+            consumeInsurance(userId, 'test-context');
           }
         }
       }
@@ -72,7 +72,7 @@ describe('StreakEvolutionSystem', () => {
 
       it('should return 0 after using all insurance', () => {
         awardInsurance(userId, 'monthly_premium', 1);
-        useInsurance(userId, 'test-context');
+        consumeInsurance(userId, 'test-context');
         const count = getAvailableInsuranceCount(userId);
         expect(count).toBe(0);
       });
@@ -100,13 +100,13 @@ describe('StreakEvolutionSystem', () => {
     describe('useInsurance', () => {
       it('should use insurance successfully', () => {
         awardInsurance(userId, 'monthly_premium', 1);
-        const result = useInsurance(userId, 'streak_break');
+        const result = consumeInsurance(userId, 'streak_break');
         expect(result.success).toBe(true);
         expect(result.remainingInsurance).toBe(0);
       });
 
       it('should fail when no insurance available', () => {
-        const result = useInsurance(userId, 'streak_break');
+        const result = consumeInsurance(userId, 'streak_break');
         expect(result.success).toBe(false);
         expect(result.error).toBe('No active insurance available');
       });
@@ -114,7 +114,7 @@ describe('StreakEvolutionSystem', () => {
       it('should publish event on use', () => {
         const { eventBus } = require('../../../events');
         awardInsurance(userId, 'monthly_premium', 1);
-        useInsurance(userId, 'streak_break');
+        consumeInsurance(userId, 'streak_break');
         expect(eventBus.publish).toHaveBeenCalledWith(
           'streak:insurance_used',
           expect.any(Object),
