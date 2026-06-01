@@ -123,6 +123,17 @@
     },
     "plugins": [
       [
+      [
+        "./plugins/withCertificatePinning",
+        {
+          "domains": {
+            "supabase.co": {
+              "pins": ["sha256/PLACEHOLDER_REPLACE_BEFORE_SHIP"],
+              "includeSubdomains": true
+            }
+          }
+        }
+      ],
         "expo-build-properties",
         {
           "ios": {
