@@ -154,7 +154,6 @@ export type {
   SyncState,
   SyncConflict,
   SettingsExport,
-  SettingsUIState,
   SettingValidationResult,
   SettingsChangeEvent,
 } from './types-sync';
