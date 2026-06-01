@@ -5,7 +5,6 @@ import {
   updateRewardLedgerStatus,
   fetchPendingRewards,
 } from './repository';
-import { addCurrency } from '../economy/wallet-service';
 import { CreateRewardLedgerInputSchema } from './schemas';
 import type { CreateRewardLedgerInput, RewardLedgerRecord } from './types';
 
@@ -18,20 +17,6 @@ export class RewardLedgerServiceError extends Error {
   }
 }
 
-function mapCurrencyToEconomyCurrency(
-  currency: string,
-): 'COINS' | 'GEMS' | 'FOCUS_POINTS' | 'SEASONAL' {
-  switch (currency) {
-    case 'COINS':
-      return 'COINS';
-    case 'GEMS':
-      return 'GEMS';
-    case 'XP':
-      return 'FOCUS_POINTS';
-    default:
-      return 'COINS';
-  }
-}
 
 export async function createReward(
   input: CreateRewardLedgerInput,
@@ -66,22 +51,7 @@ export async function deliverReward(
       return ledgerRecord;
     }
 
-    const economyCurrency = mapCurrencyToEconomyCurrency(ledgerRecord.currency);
-    await addCurrency({
-      userId: ledgerRecord.userId,
-      currency: economyCurrency,
-      amount: ledgerRecord.amount,
-      source: 'REWARD',
-      sourceId: ledgerRecord.id,
-      description: `${ledgerRecord.rewardType} reward from ${ledgerRecord.sourceEvent}`,
-      skipEvents: false,
-      metadata: {
-        ledgerId: ledgerRecord.id,
-        rewardType: ledgerRecord.rewardType,
-        sourceEvent: ledgerRecord.sourceEvent,
-      },
-    });
-
+    // Currency system is disabled (ARCH-04). Reward is recorded but no currency granted.
     const record = await updateRewardLedgerStatus(ledgerId, 'delivered');
     addBreadcrumb('reward_delivered', 'reward-ledger', {
       ledgerId,

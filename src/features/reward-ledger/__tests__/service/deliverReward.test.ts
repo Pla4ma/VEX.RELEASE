@@ -1,6 +1,5 @@
 import {
   repository,
-  addCurrency,
   captureException,
   deliverReward,
   mockRecord,
@@ -14,7 +13,7 @@ describe('reward-ledger service', () => {
   describe('deliverReward', () => {
     const ledgerId = 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa';
 
-    it('fetches ledger, credits economy, updates status to delivered', async () => {
+    it('fetches ledger and updates status to delivered (currency disabled)', async () => {
       (repository.getRewardLedgerById as jest.Mock).mockResolvedValue(
         mockRecord,
       );
@@ -28,28 +27,19 @@ describe('reward-ledger service', () => {
       );
       const result = await deliverReward(ledgerId);
       expect(result.status).toBe('delivered');
-      expect(addCurrency).toHaveBeenCalledWith(
-        expect.objectContaining({
-          userId: mockRecord.userId,
-          currency: 'FOCUS_POINTS',
-          amount: 50,
-          source: 'REWARD',
-        }),
-      );
       expect(repository.updateRewardLedgerStatus).toHaveBeenCalledWith(
         ledgerId,
         'delivered',
       );
     });
 
-    it('skips crediting if already not pending', async () => {
+    it('skips if already not pending', async () => {
       const alreadyDelivered = { ...mockRecord, status: 'delivered' as const };
       (repository.getRewardLedgerById as jest.Mock).mockResolvedValue(
         alreadyDelivered,
       );
       const result = await deliverReward(ledgerId);
       expect(result.status).toBe('delivered');
-      expect(addCurrency).not.toHaveBeenCalled();
     });
 
     it('captures Sentry on error', async () => {

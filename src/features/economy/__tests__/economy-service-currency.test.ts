@@ -1,18 +1,14 @@
-const mockRpc = jest.fn();
-const mockUpsert = jest.fn();
-const mockSelect = jest.fn();
 const mockSingle = jest.fn();
 const mockGetUser = jest.fn();
 
 const mockSupabaseClient = {
   from: jest.fn(() => ({
-    upsert: mockUpsert.mockReturnValue({
-      select: mockSelect.mockReturnValue({
+    upsert: jest.fn().mockReturnValue({
+      select: jest.fn().mockReturnValue({
         single: mockSingle,
       }),
     }),
   })),
-  rpc: mockRpc,
   auth: {
     getUser: mockGetUser,
   },
@@ -30,7 +26,6 @@ jest.mock('../repository', () => {
   };
 });
 
-import { RepositoryError } from '../repository';
 import { hasEnoughBalance } from '../service';
 import { spendCurrency, addCurrency } from '../wallet-service';
 
@@ -116,28 +111,8 @@ describe('hasEnoughBalance', () => {
   });
 });
 
-describe('spendCurrency (wallet-service)', () => {
-  it('returns {success: true} on successful spend', async () => {
-    mockRpc.mockResolvedValue({
-      data: { success: true },
-      error: null,
-    });
-
-    const result = await spendCurrency({
-      userId: '550e8400-e29b-41d4-a716-446655440001',
-      currency: 'COINS',
-      amount: 50,
-      sink: 'shop',
-    });
-    expect(result.success).toBe(true);
-  });
-
-  it('returns {success: false, error} on rpc error', async () => {
-    mockRpc.mockResolvedValue({
-      data: null,
-      error: { message: 'rpc failed', code: 'P0001' },
-    });
-
+describe('spendCurrency (wallet-service) — ARCH-04 no-op', () => {
+  it('always returns {success: false} (currency disabled)', async () => {
     const result = await spendCurrency({
       userId: '550e8400-e29b-41d4-a716-446655440001',
       currency: 'COINS',
@@ -145,37 +120,18 @@ describe('spendCurrency (wallet-service)', () => {
       sink: 'shop',
     });
     expect(result.success).toBe(false);
-    expect(result.error).toBeDefined();
-    expect(result.error?.code).toBe('DB_ERROR');
+    expect(result.error?.message).toBe('Currency system is disabled');
   });
 });
 
-describe('addCurrency (wallet-service)', () => {
-  it('returns true on success', async () => {
-    mockRpc.mockResolvedValue({ data: { success: true }, error: null });
-
+describe('addCurrency (wallet-service) — ARCH-04 no-op', () => {
+  it('always returns false (currency disabled)', async () => {
     const result = await addCurrency({
       userId: '550e8400-e29b-41d4-a716-446655440001',
       amount: 100,
       currency: 'COINS',
       source: 'session_complete',
     });
-    expect(result).toBe(true);
-  });
-
-  it('throws RepositoryError on rpc error', async () => {
-    mockRpc.mockResolvedValue({
-      data: null,
-      error: { message: 'insert failed', code: '23503' },
-    });
-
-    await expect(
-      addCurrency({
-        userId: '550e8400-e29b-41d4-a716-446655440001',
-        amount: 100,
-        currency: 'COINS',
-        source: 'session_complete',
-      }),
-    ).rejects.toThrow(RepositoryError);
+    expect(result).toBe(false);
   });
 });
