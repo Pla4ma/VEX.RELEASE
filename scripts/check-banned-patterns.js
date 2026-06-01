@@ -14,7 +14,7 @@ const rules = [
   { id: 'stylesheet-create', pattern: /StyleSheet\.create\s*\(/ },
   { id: 'flatlist', pattern: /\bFlatList\b/ },
   { id: 'async-storage', pattern: /\bAsyncStorage\b/ },
-  { id: 'raw-fetch', pattern: /\bfetch\s*\(/ },
+  { id: 'raw-fetch', pattern: /(?<!\.)\bfetch\s*\(/ },
   { id: 'expo-haptics-direct', pattern: /from ['"]expo-haptics['"]/ },
 ];
 
@@ -27,6 +27,11 @@ const allowedBoundaries = new Map([
   ['src/accessibility/checks-types.ts:flatlist', 'Static accessibility role map, not a FlatList import/use.'],
 ]);
 
+const allowedDirectories = [
+  { prefix: 'src/api/', ruleId: 'raw-fetch', reason: 'API client layer owns fetch.' },
+  { prefix: 'src/network/', ruleId: 'raw-fetch', reason: 'Network adapters own fetch.' },
+];
+
 function walk(directory) {
   const entries = fs.readdirSync(directory, { withFileTypes: true });
   return entries.flatMap((entry) => {
@@ -38,13 +43,22 @@ function walk(directory) {
   });
 }
 
+function isAllowed(relativePath, ruleId) {
+  if (allowedBoundaries.has(`${relativePath}:${ruleId}`)) {
+    return true;
+  }
+  return allowedDirectories.some(
+    (dir) => dir.ruleId === ruleId && relativePath.startsWith(dir.prefix),
+  );
+}
+
 function scanFile(filePath) {
   const lines = fs.readFileSync(filePath, 'utf8').split(/\r?\n/);
   const findings = [];
   const relativePath = path.relative(ROOT, filePath).replace(/\\/g, '/');
   lines.forEach((line, index) => {
     rules.forEach((rule) => {
-      if (rule.pattern.test(line) && !allowedBoundaries.has(`${relativePath}:${rule.id}`)) {
+      if (rule.pattern.test(line) && !isAllowed(relativePath, rule.id)) {
         findings.push({
           line: index + 1,
           path: relativePath,

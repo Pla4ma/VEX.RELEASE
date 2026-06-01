@@ -1,4 +1,5 @@
 import type { InterventionType } from './intervention-types';
+import type { ColorPalette } from '../../../theme/colorTypes';
 
 interface BannerColors {
   bg: string;
@@ -6,24 +7,24 @@ interface BannerColors {
   accent: string;
 }
 
-const SEVERITY_COLOR_MAP: Record<InterventionType, (theme: Record<string, Record<string, string | undefined>>) => string> = {
-  BURNOUT: (t) => t.colors?.warning?.[500] ?? '#ff9800',
-  PLATEAU: (t) => t.colors?.info?.[500] ?? '#2196f3',
-  STREAK_RISK: (t) => t.colors?.error?.[500] ?? '#f44336',
-  BOSS_FINISH: (t) => t.colors?.success?.[500] ?? '#4caf50',
-  BOSS_OPPORTUNITY: (t) => t.colors?.success?.[500] ?? '#4caf50',
-  STUDY_BEHIND: (t) => t.colors?.warning?.[500] ?? '#ff9800',
-  MOMENTUM_BUILDING: (t) => t.colors?.primary?.[500] ?? '#6200ee',
-  COMEBACK_READY: (t) => t.colors?.primary?.[500] ?? '#6200ee',
-  STUDY_PLAN_COMPLETE: (t) => t.colors?.success?.[500] ?? '#4caf50',
+const SEVERITY_COLOR_MAP: Record<InterventionType, (colors: ColorPalette) => string> = {
+  BURNOUT: (c) => c.warning?.[500] ?? '#ff9800',
+  PLATEAU: (c) => c.info?.[500] ?? '#2196f3',
+  STREAK_RISK: (c) => c.error?.[500] ?? '#f44336',
+  BOSS_FINISH: (c) => c.success?.[500] ?? '#4caf50',
+  BOSS_OPPORTUNITY: (c) => c.success?.[500] ?? '#4caf50',
+  STUDY_BEHIND: (c) => c.warning?.[500] ?? '#ff9800',
+  MOMENTUM_BUILDING: (c) => c.primary?.[500] ?? '#6200ee',
+  COMEBACK_READY: (c) => c.primary?.[500] ?? '#6200ee',
+  STUDY_PLAN_COMPLETE: (c) => c.success?.[500] ?? '#4caf50',
 };
 
 export function getBannerColors(
   type: InterventionType,
-  theme: Record<string, Record<string, string | undefined>>,
+  colors: ColorPalette,
 ): BannerColors {
   const resolveColor = SEVERITY_COLOR_MAP[type] ?? SEVERITY_COLOR_MAP.MOMENTUM_BUILDING;
-  const color = resolveColor(theme);
+  const color = resolveColor(colors);
   return { bg: color + '15', border: color, accent: color };
 }
 

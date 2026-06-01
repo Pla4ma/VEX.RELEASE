@@ -12,6 +12,7 @@ import {
   StandardHitSlops,
   getMinTouchTargetStyle,
 } from '../../../utils/touchTarget';
+import { formatDuration } from '../../../utils/format-duration';
 
 function formatDate(timestamp: number): string {
   return new Date(timestamp).toLocaleDateString('en-US', {
@@ -20,15 +21,6 @@ function formatDate(timestamp: number): string {
     hour: '2-digit',
     minute: '2-digit',
   });
-}
-
-function formatDuration(seconds: number): string {
-  const minutes = Math.floor(seconds / 60);
-  if (minutes >= 60) {
-    const hours = Math.floor(minutes / 60);
-    return `${hours}h ${minutes % 60}m`;
-  }
-  return `${minutes}m`;
 }
 
 export function HistoryItem({

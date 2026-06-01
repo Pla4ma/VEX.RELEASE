@@ -1,35 +1,33 @@
-const mockRpc = jest.fn();
-const mockUpsert = jest.fn();
-const mockSelect = jest.fn();
 const mockSingle = jest.fn();
 const mockGetUser = jest.fn();
+
+const mockSupabaseClient = {
+  from: jest.fn(() => ({
+    upsert: jest.fn().mockReturnValue({
+      select: jest.fn().mockReturnValue({
+        single: mockSingle,
+      }),
+    }),
+  })),
+  auth: {
+    getUser: mockGetUser,
+  },
+};
+
+jest.mock('../../../config/supabase', () => ({
+  getSupabaseClient: jest.fn(() => mockSupabaseClient),
+}));
 
 jest.mock('../repository', () => {
   const actual = jest.requireActual('../repository');
   return {
     ...actual,
-    getSupabase: jest.fn(() => ({
-      from: jest.fn(() => ({
-        upsert: mockUpsert.mockReturnValue({
-          select: mockSelect.mockReturnValue({
-            single: mockSingle,
-          }),
-        }),
-      })),
-      rpc: mockRpc,
-      auth: {
-        getUser: mockGetUser,
-      },
-    })),
+    getSupabase: jest.fn(() => mockSupabaseClient),
   };
 });
 
-import { RepositoryError } from '../repository';
-import {
-  hasEnoughBalance,
-  spendCurrency,
-  addCurrency,
-} from '../service';
+import { hasEnoughBalance } from '../service';
+import { spendCurrency, addCurrency } from '../wallet-service';
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -113,76 +111,27 @@ describe('hasEnoughBalance', () => {
   });
 });
 
-describe('spendCurrency (service)', () => {
-  it('returns true on successful spend', async () => {
-    mockRpc.mockResolvedValue({
-      data: { success: true },
-      error: null,
-    });
-
+describe('spendCurrency (wallet-service) — ARCH-04 no-op', () => {
+  it('always returns {success: false} (currency disabled)', async () => {
     const result = await spendCurrency({
       userId: '550e8400-e29b-41d4-a716-446655440001',
       currency: 'COINS',
       amount: 50,
       sink: 'shop',
     });
-    expect(result).toBe(true);
-  });
-
-  it('throws RepositoryError on rpc error', async () => {
-    mockRpc.mockResolvedValue({
-      data: null,
-      error: { message: 'rpc failed', code: 'P0001' },
-    });
-
-    await expect(
-      spendCurrency({
-        userId: '550e8400-e29b-41d4-a716-446655440001',
-        currency: 'COINS',
-        amount: 50,
-        sink: 'shop',
-      }),
-    ).rejects.toThrow(RepositoryError);
-  });
-
-  it('validates input via SpendInputSchema', async () => {
-    await expect(
-      spendCurrency({
-        userId: 'invalid-uuid',
-        currency: 'COINS',
-        amount: 50,
-        sink: 'shop',
-      }),
-    ).rejects.toThrow();
+    expect(result.success).toBe(false);
+    expect(result.error?.message).toBe('Currency system is disabled');
   });
 });
 
-describe('addCurrency (service)', () => {
-  it('resolves on success', async () => {
-    mockRpc.mockResolvedValue({ error: null });
-
-    await expect(
-      addCurrency(
-        '550e8400-e29b-41d4-a716-446655440001',
-        100,
-        'COINS',
-        'session_complete',
-      ),
-    ).resolves.toBeUndefined();
-  });
-
-  it('throws RepositoryError on error', async () => {
-    mockRpc.mockResolvedValue({
-      error: { message: 'insert failed', code: '23503' },
+describe('addCurrency (wallet-service) — ARCH-04 no-op', () => {
+  it('always returns false (currency disabled)', async () => {
+    const result = await addCurrency({
+      userId: '550e8400-e29b-41d4-a716-446655440001',
+      amount: 100,
+      currency: 'COINS',
+      source: 'session_complete',
     });
-
-    await expect(
-      addCurrency(
-        '550e8400-e29b-41d4-a716-446655440001',
-        100,
-        'COINS',
-        'session_complete',
-      ),
-    ).rejects.toThrow(RepositoryError);
+    expect(result).toBe(false);
   });
 });

@@ -1,18 +1,8 @@
 import { getSupabaseClient } from '../../config/supabase';
 import { CurrencyRpcResultSchema, type CurrencyRpcResult } from './schemas';
-import type { PostgrestError } from '@supabase/supabase-js';
+import { RepositoryError } from '../../lib/repository/error-handling';
 
-export class RepositoryError extends Error {
-  public readonly operation: string;
-  public readonly cause: PostgrestError | Error;
-
-  constructor(operation: string, cause: PostgrestError | Error) {
-    super(`Repository operation "${operation}" failed: ${cause.message}`);
-    this.name = 'RepositoryError';
-    this.operation = operation;
-    this.cause = cause;
-  }
-}
+export { RepositoryError };
 
 export function getSupabase() {
   return getSupabaseClient();

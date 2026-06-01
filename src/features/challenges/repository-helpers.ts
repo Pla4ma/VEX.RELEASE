@@ -6,17 +6,9 @@ import {
   type ChallengeDetail,
 } from './schemas';
 
-const supabase = getSupabaseClient();
+export { RepositoryError } from '../../lib/repository/error-handling';
 
-export class RepositoryError extends Error {
-  constructor(
-    public operation: string,
-    public originalError: unknown,
-  ) {
-    super(`Repository error in ${operation}: ${String(originalError)}`);
-    this.name = 'RepositoryError';
-  }
-}
+const supabase = getSupabaseClient();
 
 export const baseJoinedSelect = `
   id,

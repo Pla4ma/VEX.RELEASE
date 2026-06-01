@@ -89,6 +89,7 @@
     "@types/uuid": "^9.0.8",
     "babel-jest": "^29.7.0",
     "babel-plugin-module-resolver": "^5.0.0",
+    "babel-plugin-transform-remove-console": "^6.9.4",
     "detox": "^20.18.1",
     "eslint": "^8.56.0",
     "jest": "^29.7.0",

@@ -30,7 +30,11 @@ const DEFAULT_THRESHOLDS: PerformanceThresholds = {
   maxLongTasks: 3,
 };
 export class PerformanceMonitor {
-  private isRunning = false;
+  private _isRunning = false;
+
+  get isRunning(): boolean {
+    return this._isRunning;
+  }
   private frameCount = 0;
   private lastFrameTime = 0;
   private jankFrameCount = 0;
@@ -43,16 +47,16 @@ export class PerformanceMonitor {
     this.thresholds = { ...DEFAULT_THRESHOLDS, ...thresholds };
   }
   start(): void {
-    if (this.isRunning) {
+    if (this._isRunning) {
       return;
     }
-    this.isRunning = true;
+    this._isRunning = true;
     this.lastFrameTime = performance.now();
     this.monitorFrame();
     debug.info('Performance monitoring started');
   }
   stop(): void {
-    this.isRunning = false;
+    this._isRunning = false;
     if (this.rafId !== null) {
       cancelAnimationFrame(this.rafId);
     }
@@ -95,7 +99,7 @@ export class PerformanceMonitor {
     );
   }
   private monitorFrame = (): void => {
-    if (!this.isRunning) {
+    if (!this._isRunning) {
       return;
     }
     const now = performance.now();

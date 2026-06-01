@@ -7,17 +7,7 @@ import {
 } from './schemas';
 import { v4 } from '../../utils/uuid';
 import { withResilience } from '../../utils/supabase-resilience';
-class RepositoryError extends Error {
-  constructor(
-    public operation: string,
-    public originalError: unknown,
-  ) {
-    super(
-      `Repository error in ${operation}: ${originalError instanceof Error ? originalError.message : 'Unknown error'}`,
-    );
-    this.name = 'RepositoryError';
-  }
-}
+import { RepositoryError } from '../../lib/repository/error-handling';
 const supabase = getSupabaseClient();
 export async function fetchProgression(
   userId: string,

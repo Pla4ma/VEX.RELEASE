@@ -1,10 +1,10 @@
-import { getSupabaseClient } from '../../config/supabase';
 import { createDebugger } from '../../utils/debug';
 import { useState, useEffect, useCallback } from 'react';
 import { ANALYSIS_WINDOW_DAYS, DEFAULT_PEAK_HOUR } from './SmartNotificationScheduler-types';
 import type { PeakFocusWindow } from './SmartNotificationScheduler-types';
 import { selectNotificationType } from './SmartNotificationScheduler-generators';
 import { checkRateLimit, recordNotificationSent } from './SmartNotificationScheduler-rankReport';
+import { fetchCompletedSessionsInWindow, fetchNotificationEnabledUsers } from './repository';
 
 const debug = createDebugger('notifications:smart-scheduler');
 
@@ -22,14 +22,8 @@ export async function analyzePeakFocusWindow(
   try {
     const fromDate = new Date();
     fromDate.setDate(fromDate.getDate() - ANALYSIS_WINDOW_DAYS);
-    const { data: sessions, error } = await getSupabaseClient()
-      .from('sessions')
-      .select('started_at, timezone')
-      .eq('user_id', userId)
-      .eq('status', 'COMPLETED')
-      .gte('started_at', fromDate.toISOString())
-      .order('started_at', { ascending: false });
-    if (error || !sessions || sessions.length === 0) {
+    const sessions = await fetchCompletedSessionsInWindow(userId, fromDate);
+    if (sessions.length === 0) {
       return { userId, ...DEFAULT_RESULT };
     }
     const hourDistribution: Record<number, number> = {};
@@ -78,14 +72,7 @@ export function isInPeakWindow(peakHour: number, windowSize = 2): boolean {
 
 export async function processSmartNotifications(): Promise<void> {
   try {
-    const { data: users, error } = await getSupabaseClient()
-      .from('users')
-      .select('id, timezone')
-      .eq('notifications_enabled', true);
-    if (error || !users) {
-      debug.error('Failed to fetch users', error instanceof Error ? error : undefined);
-      return;
-    }
+    const users = await fetchNotificationEnabledUsers();
     for (const user of users) {
       await processUserSmartNotification(user.id, user.timezone || 'UTC');
     }
@@ -96,11 +83,11 @@ export async function processSmartNotifications(): Promise<void> {
 
 export async function processUserSmartNotification(
   userId: string,
-  timezone: string,
+  _timezone: string,
 ): Promise<void> {
   try {
-    const canSend = await checkRateLimit(userId);
-    if (!canSend) {
+    const rateLimit = await checkRateLimit(userId);
+    if (!rateLimit.allowed) {
       debug.info('Rate limit reached for user', { userId });
       return;
     }
@@ -117,7 +104,7 @@ export async function processUserSmartNotification(
       return;
     }
     debug.info('Would send smart notification', { userId, title: content.title });
-    await recordNotificationSent(userId);
+    await recordNotificationSent(userId, String(content.data.type ?? 'UNKNOWN'));
   } catch (error) {
     debug.error('Error processing user notification', error instanceof Error ? error : undefined);
   }
@@ -147,8 +134,8 @@ export function useSmartNotifications(
     const window = await analyzePeakFocusWindow(userId);
     setPeakWindow(window);
     const inWindow = isInPeakWindow(window.peakHour);
-    const underLimit = await checkRateLimit(userId);
-    setCanSend(inWindow && underLimit);
+    const rateLimit = await checkRateLimit(userId);
+    setCanSend(inWindow && rateLimit.allowed);
     setIsLoading(false);
   }, [userId]);
   useEffect(() => {

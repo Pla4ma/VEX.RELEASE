@@ -1,6 +1,7 @@
 import { NOTIFICATION_CONFIG } from './notification-config';
 import { getScheduledCoachNotifications } from './notification-support';
 import { createDebugger } from '../../../utils/debug';
+export { isQuietHours } from '../../notifications/service-helpers';
 
 const debug = createDebugger('ai-coach:notifications');
 
@@ -9,14 +10,6 @@ export function isSameCalendarDay(left: Date, right: Date): boolean {
     left.getFullYear() === right.getFullYear() &&
     left.getMonth() === right.getMonth() &&
     left.getDate() === right.getDate()
-  );
-}
-
-export function isQuietHours(): boolean {
-  const hour = new Date().getHours();
-  return (
-    hour >= NOTIFICATION_CONFIG.quietHoursStart ||
-    hour < NOTIFICATION_CONFIG.quietHoursEnd
   );
 }
 

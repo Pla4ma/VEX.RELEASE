@@ -1,20 +1,12 @@
 import { describe, it, expect, beforeEach } from '@jest/globals';
 
 jest.mock('../../repository');
-jest.mock('../../../economy/wallet-service', () => ({
-  addCurrency: jest.fn().mockResolvedValue({
-    newBalance: 1100,
-    earnedAmount: 50,
-    transaction: { id: 'tx-1', type: 'EARN', amount: 50, currency: 'COINS' },
-  }),
-}));
 jest.mock('../../../../config/sentry', () => ({
   captureException: jest.fn(),
   addBreadcrumb: jest.fn(),
 }));
 
 import * as repository from '../../repository';
-import { addCurrency } from '../../../economy/wallet-service';
 import { captureException } from '../../../../config/sentry';
 import {
   createReward,
@@ -27,7 +19,6 @@ import type { CreateRewardLedgerInput, RewardLedgerRecord } from '../../types';
 
 export {
   repository,
-  addCurrency,
   captureException,
   createReward,
   deliverReward,

@@ -1,6 +1,11 @@
-import { RepositoryError, grantCurrencyRpc, spendCurrencyRpc } from './repository';
-import { CurrencyRpcResultSchema } from './schemas';
 import type { SpendError } from './types';
+
+/**
+ * Economy currency is DISABLED (ARCH-04).
+ * All spendable currency logic is archived.
+ * These functions are no-ops that always return failure/zero.
+ * Streak insurance is the only active economy feature.
+ */
 
 export interface CurrencyGrant {
   userId: string;
@@ -22,37 +27,21 @@ export interface SpendRequest {
   metadata?: Record<string, unknown>;
 }
 
-export async function addCurrency(grant: CurrencyGrant): Promise<boolean> {
-  try {
-    const result = await grantCurrencyRpc({
-      userId: grant.userId,
-      currency: grant.currency,
-      amount: grant.amount,
-      source: grant.source,
-      sourceId: grant.sourceId ?? null,
-      description: grant.description ?? null,
-    });
-    return result.success;
-  } catch (err) {
-    if (err instanceof RepositoryError) {throw err;}
-    throw new RepositoryError('addCurrency', err as Error);
-  }
+/**
+ * No-op: currency system is archived.
+ * Always returns false (no currency granted).
+ */
+export async function addCurrency(_grant: CurrencyGrant): Promise<boolean> {
+  return false;
 }
 
-export async function spendCurrency(input: SpendRequest): Promise<{
+/**
+ * No-op: currency system is archived.
+ * Always returns { success: false } (no currency spent).
+ */
+export async function spendCurrency(_input: SpendRequest): Promise<{
   success: boolean;
   error?: SpendError;
 }> {
-  try {
-    const result = await spendCurrencyRpc({
-      userId: input.userId,
-      currency: input.currency,
-      amount: input.amount,
-      sink: input.sink,
-    });
-    return { success: result.success };
-  } catch (err) {
-    const message = err instanceof Error ? err.message : 'Spend failed';
-    return { success: false, error: { code: 'DB_ERROR', message } };
-  }
+  return { success: false, error: { code: 'DB_ERROR', message: 'Currency system is disabled' } };
 }

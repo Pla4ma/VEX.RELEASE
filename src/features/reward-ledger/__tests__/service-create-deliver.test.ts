@@ -4,13 +4,6 @@ jest.mock('../repository', () => ({
   updateRewardLedgerStatus: jest.fn(),
   fetchPendingRewards: jest.fn(),
 }));
-jest.mock('../../economy/wallet-service', () => ({
-  addCurrency: jest.fn().mockResolvedValue({
-    newBalance: 1100,
-    earnedAmount: 50,
-    transaction: { id: 'tx-1', type: 'EARN', amount: 50, currency: 'COINS' },
-  }),
-}));
 jest.mock('../../../config/sentry', () => ({
   captureException: jest.fn(),
   addBreadcrumb: jest.fn(),
@@ -18,7 +11,6 @@ jest.mock('../../../config/sentry', () => ({
 
 import { createReward, deliverReward } from '../service';
 import * as repository from '../repository';
-import { addCurrency } from '../../economy/wallet-service';
 import { captureException } from '../../../config/sentry';
 import type { CreateRewardLedgerInput, RewardLedgerRecord } from '../types';
 
@@ -90,7 +82,7 @@ describe('reward-ledger service', () => {
   describe('deliverReward', () => {
     const ledgerId = 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa';
 
-    it('fetches ledger, credits economy, updates status to delivered', async () => {
+    it('fetches ledger and updates status to delivered (currency disabled)', async () => {
       (repository.getRewardLedgerById as jest.Mock).mockResolvedValue(
         mockRecord,
       );
@@ -104,28 +96,19 @@ describe('reward-ledger service', () => {
       );
       const result = await deliverReward(ledgerId);
       expect(result.status).toBe('delivered');
-      expect(addCurrency).toHaveBeenCalledWith(
-        expect.objectContaining({
-          userId: mockRecord.userId,
-          currency: 'FOCUS_POINTS',
-          amount: 50,
-          source: 'REWARD',
-        }),
-      );
       expect(repository.updateRewardLedgerStatus).toHaveBeenCalledWith(
         ledgerId,
         'delivered',
       );
     });
 
-    it('skips crediting if already not pending', async () => {
+    it('skips if already not pending', async () => {
       const alreadyDelivered = { ...mockRecord, status: 'delivered' as const };
       (repository.getRewardLedgerById as jest.Mock).mockResolvedValue(
         alreadyDelivered,
       );
       const result = await deliverReward(ledgerId);
       expect(result.status).toBe('delivered');
-      expect(addCurrency).not.toHaveBeenCalled();
     });
 
     it('captures Sentry on error', async () => {

@@ -1,11 +1,11 @@
 import { Platform } from 'react-native';
 import { createDebugger } from '../../utils/debug';
 import type { CalendarEvent, FreeBusyInfo } from './types';
+import { Calendar } from './AppleCalendarAdapter.utils';
 import {
-  Calendar,
   mergeBusySlots,
   calculateFreeSlots,
-} from './AppleCalendarAdapter.utils';
+} from './calendar-sync-helpers';
 
 const debug = createDebugger('calendar:apple');
 

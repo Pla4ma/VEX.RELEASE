@@ -14,5 +14,17 @@ export {
   fetchReEngagementCandidates,
 } from './repository/retention';
 export { upsertPushToken } from './repository/push';
+export {
+  fetchCompletedSessionsInWindow,
+  fetchCompletedSessionDurationsSince,
+  fetchCurrentStreak,
+  fetchActiveBossEncounter,
+  fetchActiveRival,
+  fetchActiveComebackQuest,
+  fetchWeeklyLeaderboard,
+  fetchNotificationCountToday,
+  recordNotificationSend,
+  fetchNotificationEnabledUsers,
+} from './repository/scheduler';
 export type { RetentionReminderType } from './schemas';
 export type { NotificationCenterItem } from './schemas';

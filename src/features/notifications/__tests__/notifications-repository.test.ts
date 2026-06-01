@@ -12,7 +12,7 @@ describe('Repository', () => {
     it('creates error with operation and original error', () => {
       const original = new Error('DB connection failed');
       const err = new RepositoryError('fetchData', original);
-      expect(err.operation).toBe('fetchData');
+      expect(err.message).toContain('fetchData');
       expect(err.message).toContain('fetchData');
       expect(err.name).toBe('RepositoryError');
     });

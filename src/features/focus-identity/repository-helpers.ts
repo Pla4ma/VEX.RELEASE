@@ -1,15 +1,8 @@
 import * as Sentry from '@sentry/react-native';
 import { z } from 'zod';
+import { RepositoryError } from '../../lib/repository/error-handling';
 
-export class RepositoryError extends Error {
-  constructor(
-    public operation: string,
-    public originalError: unknown,
-  ) {
-    super(`Repository error in ${operation}: ${originalError}`);
-    this.name = 'RepositoryError';
-  }
-}
+export { RepositoryError };
 
 export async function withRetry<T>(
   operation: () => Promise<T>,
