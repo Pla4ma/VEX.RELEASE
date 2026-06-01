@@ -1,6 +1,6 @@
-import { getSupabase, RepositoryError, spendCurrencyRpc, addCurrencyRpc } from './repository';
-import { WalletSchema, SpendInputSchema, type SpendInput } from './schemas';
-import type { WalletSummary, SpendError } from './types';
+import { getSupabase, RepositoryError } from './repository';
+import { WalletSchema } from './schemas';
+import type { WalletSummary } from './types';
 
 export async function getOrCreateWallet(
   userId: string,
@@ -35,24 +35,4 @@ export async function hasEnoughBalance(
 ): Promise<boolean> {
   const wallet = await getOrCreateWallet(userId);
   return currency === 'COINS' ? wallet.coins >= amount : wallet.gems >= amount;
-}
-
-export async function spendCurrency(input: SpendInput): Promise<boolean> {
-  const parsed = SpendInputSchema.parse(input);
-  const result = await spendCurrencyRpc({
-    userId: parsed.userId,
-    currency: parsed.currency,
-    amount: parsed.amount,
-    sink: parsed.sink,
-  });
-  return result.success;
-}
-
-export async function addCurrency(
-  userId: string,
-  amount: number,
-  currency: 'COINS' | 'GEMS',
-  source: string,
-): Promise<void> {
-  await addCurrencyRpc({ userId, currency, amount, source });
 }
