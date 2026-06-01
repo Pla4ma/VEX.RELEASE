@@ -5,24 +5,10 @@
  * adaptive difficulty preferences.
  */
 
-import { z } from 'zod';
 import * as Sentry from '@sentry/react-native';
 import { getSupabaseClient } from '../../config/supabase';
+import { RepositoryError } from '../../lib/repository/error-handling';
 import type { DifficultyPreference, SessionDifficulty } from './schemas';
-
-// ============================================================================
-// ERROR HANDLING
-// ============================================================================
-
-class RepositoryError extends Error {
-  constructor(
-    public operation: string,
-    public originalError: unknown,
-  ) {
-    super(`Repository error in ${operation}: ${originalError}`);
-    this.name = 'RepositoryError';
-  }
-}
 
 // ============================================================================
 // DIFFICULTY PREFERENCES

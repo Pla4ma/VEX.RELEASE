@@ -7,11 +7,11 @@ import type {
   GoogleCalendarListResponse,
   GoogleFreeBusyResponse,
 } from './google-calendar-types';
+import { mapGoogleEvent } from './google-calendar-helpers';
 import {
-  mapGoogleEvent,
   mergeBusySlots,
   calculateFreeSlots,
-} from './google-calendar-helpers';
+} from './calendar-sync-helpers';
 
 export type { GoogleCalendarConfig } from './google-calendar-types';
 
