@@ -14,7 +14,7 @@ export interface RiskConfig {
   bg: string;
   border: string;
   text: string;
-  emoji: string;
+  iconName: string;
   label: string;
   message: string;
   pulse: boolean;
@@ -30,7 +30,7 @@ export function getRiskConfig(
         bg: `${theme.colors.error.DEFAULT}30`,
         border: theme.colors.error.DEFAULT,
         text: theme.colors.error.DEFAULT,
-        emoji: '🚨',
+        iconName: 'exclamation-triangle',
         label: 'CRITICAL',
         message: 'LAST CHANCE — Start now!',
         pulse: true,
@@ -40,7 +40,7 @@ export function getRiskConfig(
         bg: `${theme.colors.error.DEFAULT}20`,
         border: theme.colors.error.light,
         text: theme.colors.error.DEFAULT,
-        emoji: '🔥',
+        iconName: 'fire',
         label: 'HIGH RISK',
         message: 'Streak at risk — act now',
         pulse: true,
@@ -50,7 +50,7 @@ export function getRiskConfig(
         bg: `${theme.colors.warning.DEFAULT}20`,
         border: theme.colors.warning.DEFAULT,
         text: theme.colors.warning.dark,
-        emoji: '⏰',
+        iconName: 'clock',
         label: 'AT RISK',
         message: 'Start a session soon',
         pulse: false,

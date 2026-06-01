@@ -6,11 +6,17 @@ import { HomeHeroCard } from '../HomeHeroCard';
 jest.mock('../../../../theme', () => ({
   useTheme: () => ({
     theme: {
-      borderRadius: { lg: 12, xl: 16 },
+      borderRadius: { lg: 12, xl: 16, '2xl': 24 },
       colors: {
         background: { secondary: '#111111' },
         border: { light: '#333333' },
-        primary: { 500: '#5b8cff', 600: '#3f6fff' },
+        primary: {
+          300: '#9db4ff',
+          500: '#5b8cff',
+          600: '#3f6fff',
+          700: '#2f55cc',
+        },
+        semantic: { primary: '#5b8cff' },
         text: { inverse: '#ffffff', primary: '#ffffff', secondary: '#d0d0d0' },
       },
       spacing: { 1: 4, 2: 8, 3: 12, 4: 16, 5: 20 },

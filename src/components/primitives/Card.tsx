@@ -14,6 +14,8 @@ import Animated, {
   withSpring,
 } from 'react-native-reanimated';
 import { useTheme } from '../../theme';
+import { depth, glow, glassEdge } from '../../theme/tokens/elevation';
+import { springPresets } from '../../theme/tokens/motion';
 
 export type CardVariant =
   | 'default'
@@ -84,16 +86,13 @@ export const Card = forwardRef<View, CardProps>(
         backgroundColor: semantic.surface,
         borderColor: semantic.border,
         borderWidth: 1,
+        ...depth.resting,
       },
       elevated: {
         backgroundColor: semantic.surfaceElevated,
         borderColor: semantic.border,
         borderWidth: 1,
-        elevation: 8,
-        shadowColor: semantic.shadow,
-        shadowOffset: { width: 0, height: 14 },
-        shadowOpacity: 0.22,
-        shadowRadius: 28,
+        ...depth.floating,
       },
       outlined: {
         backgroundColor: 'transparent',
@@ -105,18 +104,14 @@ export const Card = forwardRef<View, CardProps>(
       },
       glass: {
         backgroundColor: semantic.surfaceGlass,
-        borderColor: semantic.border,
-        borderWidth: 1,
+        ...glassEdge,
+        ...depth.raised,
       },
       premium: {
         backgroundColor: semantic.surfaceElevated,
         borderColor: semantic.primary,
         borderWidth: 1,
-        elevation: 10,
-        shadowColor: semantic.primary,
-        shadowOffset: { width: 0, height: 10 },
-        shadowOpacity: 0.28,
-        shadowRadius: 24,
+        ...glow(semantic.primary, 'soft'),
       },
     };
 
@@ -159,10 +154,10 @@ export const Card = forwardRef<View, CardProps>(
           onLongPress={onLongPress}
           onPress={onPress}
           onPressIn={() => {
-            pressed.value = withSpring(1, { damping: 16, stiffness: 360 });
+            pressed.value = withSpring(1, springPresets.tactile);
           }}
           onPressOut={() => {
-            pressed.value = withSpring(0, { damping: 16, stiffness: 360 });
+            pressed.value = withSpring(0, springPresets.tactile);
           }}
           style={[combined, animatedStyle]}
           testID={testID}

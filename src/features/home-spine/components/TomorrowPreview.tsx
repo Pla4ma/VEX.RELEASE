@@ -3,8 +3,8 @@ import { Pressable } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
+import { Icon } from '../../../icons';
 import { useTheme } from '../../../theme';
-import { buttonTap } from '../../../utils/haptics';
 import { TomorrowPreviewPersonalized } from './TomorrowPreviewPersonalized';
 export interface TomorrowPreviewProps {
   streakWillContinue: boolean;
@@ -44,14 +44,15 @@ function EventIcon({
 }: {
   type: TomorrowPreviewProps['events'][number]['type'];
 }): JSX.Element {
-  return (
-    <Text fontSize={14}>
-      {type === 'double_xp' && '🔥'}
-      {type === 'squad_war' && '⚔️'}
-      {type === 'boss_rush' && '👹'}
-      {type === 'season_event' && '🌙'}
-    </Text>
-  );
+  const iconName =
+    type === 'double_xp'
+      ? 'fire'
+      : type === 'squad_war'
+        ? 'target'
+        : type === 'boss_rush'
+          ? 'bolt'
+          : 'star';
+  return <Icon name={iconName} size="sm" color="secondary" variant="solid" />;
 }
 export function TomorrowPreview(props: TomorrowPreviewProps): JSX.Element {
   const { theme } = useTheme();
@@ -59,12 +60,12 @@ export function TomorrowPreview(props: TomorrowPreviewProps): JSX.Element {
   const hasChallenges = props.challengesResetting.length > 0;
   const streakStatus = props.streakWillContinue
     ? {
-        icon: '🔥',
+        iconName: 'fire',
         text: `Streak continues (${props.currentStreak + 1} days)`,
         color: theme.colors.accent.orange,
       }
     : {
-        icon: '⚠️',
+        iconName: 'exclamation-triangle',
         text: 'Streak at risk - focus today!',
         color: theme.colors.error.DEFAULT,
       };
@@ -91,7 +92,7 @@ export function TomorrowPreview(props: TomorrowPreviewProps): JSX.Element {
             mb="md"
           >
             <Box flexDirection="row" alignItems="center" gap="sm">
-              <Text fontSize={20}>➡️</Text>
+              <Icon name="arrow-right" size="md" color="primary" variant="solid" />
               <Text variant="h4" color="text.primary">
                 Tomorrow
               </Text>
@@ -106,7 +107,12 @@ export function TomorrowPreview(props: TomorrowPreviewProps): JSX.Element {
             gap="sm"
             mb={hasEvents || hasChallenges ? 'md' : undefined}
           >
-            <Text fontSize={20}>{streakStatus.icon}</Text>
+            <Icon
+              name={streakStatus.iconName}
+              size="md"
+              color={streakStatus.color}
+              variant="solid"
+            />
             <Text variant="body" color={streakStatus.color} fontWeight="600">
               {streakStatus.text}
             </Text>
@@ -114,7 +120,7 @@ export function TomorrowPreview(props: TomorrowPreviewProps): JSX.Element {
           {hasChallenges ? (
             <Box mb={hasEvents ? 'md' : undefined}>
               <Box flexDirection="row" alignItems="center" gap="sm" mb="xs">
-                <Text fontSize={16}>🔄</Text>
+                <Icon name="bolt" size="sm" color="tertiary" variant="solid" />
                 <Text variant="caption" color="text.tertiary">
                   CHALLENGES RESET
                 </Text>
@@ -134,7 +140,7 @@ export function TomorrowPreview(props: TomorrowPreviewProps): JSX.Element {
           {hasEvents ? (
             <Box>
               <Box flexDirection="row" alignItems="center" gap="sm" mb="xs">
-                <Text fontSize={16}>📅</Text>
+                <Icon name="calendar" size="sm" color="tertiary" variant="solid" />
                 <Text variant="caption" color="text.tertiary">
                   EVENTS
                 </Text>

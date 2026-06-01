@@ -15,6 +15,7 @@ import Animated, {
 
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { useTheme } from '../../theme';
+import { springPresets } from '../../theme/tokens/motion';
 import { buttonTap, triggerHaptic } from '../../utils/haptics';
 import { Text } from './Text';
 import type { SpacingValue } from './types';
@@ -80,7 +81,7 @@ export function Button({
     (event: GestureResponderEvent) => {
       scale.value = isReducedMotion
         ? 1
-        : withSpring(0.98, { damping: 16, stiffness: 420 });
+        : withSpring(0.97, springPresets.tactile);
       if (haptic !== 'none') {
         void buttonTap();
       }
@@ -93,7 +94,7 @@ export function Button({
     (event: GestureResponderEvent) => {
       scale.value = isReducedMotion
         ? 1
-        : withSpring(1, { damping: 14, stiffness: 260 });
+        : withSpring(1, springPresets.settle);
       props.onPressOut?.(event);
     },
     [isReducedMotion, props, scale],

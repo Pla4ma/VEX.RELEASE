@@ -13,3 +13,5 @@ export * from './zIndex';
 export * from './timing';
 export * from './sizing';
 export * from './opacity';
+export * from './motion';
+export * from './elevation';

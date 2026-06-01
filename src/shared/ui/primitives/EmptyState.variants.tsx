@@ -8,7 +8,8 @@ export function EmptyAnalytics({
 }) {
   return (
     <EmptyState
-      icon="📊"
+      iconName="chart"
+      tone="primary"
       title="No Data Yet"
       message="We can't analyze what hasn't happened. One session changes everything — your patterns, your insights, your trajectory."
       actionLabel="Start First Session"
@@ -24,7 +25,8 @@ export function EmptyInsights({
 }) {
   return (
     <EmptyState
-      icon="💡"
+      iconName="bolt"
+      tone="info"
       title="Pattern Analysis Pending"
       message="We need more focus sessions to understand your rhythm. The AI Coach learns from consistency — give it something to work with."
       actionLabel="View Sessions"
@@ -40,7 +42,8 @@ export function EmptyChallenges({
 }) {
   return (
     <EmptyState
-      icon="🏆"
+      iconName="trophy"
+      tone="warning"
       title="No Active Challenges"
       message="Challenges are where legends are made. Pick a mission, rally your squad, and prove what you're capable of."
       actionLabel="Find a Challenge"
@@ -56,9 +59,10 @@ export function EmptyNotifications({
 }) {
   return (
     <EmptyState
-      icon="🔔"
+      iconName="bell"
+      tone="primary"
       title="Quiet... Too Quiet"
-      message="Nothing to see yet — but your streak breaking would change that real fast. 👀"
+      message="Nothing to see yet — but your streak breaking would change that real fast."
       secondaryActionLabel="Notification Settings"
       onSecondaryAction={onAdjustSettings}
     />
@@ -68,7 +72,8 @@ export function EmptyNotifications({
 export function NetworkError({ onRetry }: { onRetry?: () => void }) {
   return (
     <EmptyState
-      icon="🌐"
+      iconName="compass"
+      tone="error"
       title="VEX Lost Connection"
       message="Your progress is safe locally. Check your connection and we'll sync when you're back online."
       actionLabel="Try Again"
@@ -86,7 +91,8 @@ export function EmptyFeed({
 }) {
   return (
     <EmptyState
-      icon="👹"
+      iconName="users"
+      tone="primary"
       title="No sessions yet"
       message="Your squad doesn't have any sessions to show yet. Start one to lead the way."
       actionLabel="Start a session"
@@ -98,7 +104,8 @@ export function EmptyFeed({
 export function EmptyRivals({ onFindRivals }: { onFindRivals?: () => void }) {
   return (
     <EmptyState
-      icon="⚔️"
+      iconName="target"
+      tone="warning"
       title="No Rivals Yet"
       message="Ghost rivals are warming your seat. They're already focused. Find real competitors and take them on."
       actionLabel="Find Rivals"
@@ -114,7 +121,8 @@ export function EmptyAchievements({
 }) {
   return (
     <EmptyState
-      icon="🏆"
+      iconName="trophy"
+      tone="warning"
       title="Zero Achievements"
       message="Zero. One session changes that permanently. Every legend starts with a single focus block."
       actionLabel="Start Session"

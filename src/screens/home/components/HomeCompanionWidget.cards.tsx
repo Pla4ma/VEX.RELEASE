@@ -4,7 +4,7 @@ import Animated, { FadeInUp } from 'react-native-reanimated';
 
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
-import { getMoodEmoji } from '../../../features/companion/components/companion-helpers';
+import { MoodIndicator } from '../../../features/companion/components/MoodIndicator';
 import { ELEMENT_THEMES } from '../../../features/companion/types';
 import type { CompanionState } from '../../../features/companion/types';
 
@@ -49,9 +49,11 @@ export function CompanionCard({
             justifyContent: 'center',
           }}
         >
-          <Text variant="h3" style={{ fontSize: 24 }}>
-            {getMoodEmoji(state.currentMood)}
-          </Text>
+          <MoodIndicator
+            mood={state.currentMood}
+            size={28}
+            showLabel={false}
+          />
         </View>
 
         <View style={{ flex: 1 }}>

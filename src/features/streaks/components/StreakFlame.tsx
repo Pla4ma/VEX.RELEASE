@@ -7,6 +7,8 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Text } from '../../../components/primitives/Text';
 import { Box } from '../../../components/primitives/Box';
+import { Icon } from '../../../icons';
+import { glow } from '../../../theme/tokens/elevation';
 import { launchColors } from '@theme/tokens/launch-colors';
 
 export function StreakFlame({ days }: { days: number }): JSX.Element {
@@ -37,6 +39,7 @@ export function StreakFlame({ days }: { days: number }): JSX.Element {
     return launchColors.hex_ef4444;
   };
   const size = getFlameSize();
+  const flameColor = getFlameColor();
   return (
     <Animated.View
       style={[
@@ -44,16 +47,17 @@ export function StreakFlame({ days }: { days: number }): JSX.Element {
           width: size * 2,
           height: size * 2,
           borderRadius: size,
-          backgroundColor: `${getFlameColor()}30`,
+          backgroundColor: `${flameColor}30`,
           justifyContent: 'center',
           alignItems: 'center',
           borderWidth: 3,
-          borderColor: getFlameColor(),
+          borderColor: flameColor,
+          ...glow(flameColor, 'soft'),
         },
         flameStyle,
       ]}
     >
-      <Text fontSize={size}>🔥</Text>
+      <Icon name="fire" size={size} color={flameColor} variant="solid" />
     </Animated.View>
   );
 }

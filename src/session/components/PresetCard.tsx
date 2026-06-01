@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Pressable } from 'react-native';
 import { Text } from '../../components/primitives';
+import { Icon } from '../../icons';
 import { useTheme } from '../../theme';
 import { buttonTap } from '../../utils/haptics';
 import type { SessionPreset } from '../types';
@@ -16,18 +17,18 @@ const formatDuration = (seconds: number): string => {
   return `${mins} min`;
 };
 
-const getCategoryEmoji = (category?: string): string => {
+const getCategoryIcon = (category?: string): string => {
   switch (category) {
     case 'Study':
-      return '📚';
+      return 'file';
     case 'Work':
-      return '💼';
+      return 'grid';
     case 'Creative':
-      return '🎨';
+      return 'star';
     case 'Health':
-      return '💪';
+      return 'heart';
     default:
-      return '🎯';
+      return 'target';
   }
 };
 
@@ -72,9 +73,12 @@ export const PresetCard: React.FC<PresetCardProps> = ({
           marginBottom: 12,
         }}
       >
-        <Text style={{ fontSize: 24 }}>
-          {getCategoryEmoji(preset.category)}
-        </Text>
+        <Icon
+          name={getCategoryIcon(preset.category)}
+          size="lg"
+          color="primary"
+          variant="solid"
+        />
       </View>
       <Text
         variant="body"

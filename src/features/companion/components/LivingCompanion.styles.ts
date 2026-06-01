@@ -23,12 +23,6 @@ export const companionStyles = createSheet({
     bottom: 0,
     alignItems: 'center',
   } satisfies ViewStyle,
-  moodText: {
-    fontWeight: '700',
-    fontSize: 14,
-    textTransform: 'uppercase',
-    letterSpacing: 1,
-  } satisfies TextStyle,
   phaseText: {
     opacity: 0.6,
     marginTop: 4,

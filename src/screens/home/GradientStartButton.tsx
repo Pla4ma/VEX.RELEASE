@@ -11,7 +11,9 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Button } from '../../components/primitives/Button';
 import { Text } from '../../components/primitives/Text';
+import { ShimmerSweep } from '../../components/primitives/ShimmerSweep';
 import { useTheme } from '../../theme';
+import { glow } from '../../theme/tokens/elevation';
 import { createSheet } from '@/shared/ui/create-sheet';
 import { launchColors } from '@theme/tokens/launch-colors';
 
@@ -57,11 +59,16 @@ export function GradientStartButton({
     <Animated.View style={animatedStyle}>
       <LinearGradient
         colors={[
-          theme.colors.primary[600] ?? launchColors.hex_7c3aed,
-          theme.colors.primary[500] ?? launchColors.hex_4f46e5,
+          theme.colors.primary[500] ?? launchColors.hex_7c3aed,
+          theme.colors.primary[600] ?? launchColors.hex_4f46e5,
+          theme.colors.primary[700] ?? launchColors.hex_4f46e5,
         ]}
+        start={{ x: 0.1, y: 0 }}
+        end={{ x: 0.9, y: 1 }}
+        locations={[0, 0.55, 1]}
         style={[
           styles.ctaGradient,
+          glow(theme.colors.semantic.primary, 'soft'),
           {
             borderRadius: theme.borderRadius['2xl'],
             gap: theme.spacing[3],
@@ -69,6 +76,7 @@ export function GradientStartButton({
           },
         ]}
       >
+        <ShimmerSweep borderRadius={theme.borderRadius['2xl']} />
         <Text variant="label" color={WHITE_MUTED}>
           {eyebrow}
         </Text>

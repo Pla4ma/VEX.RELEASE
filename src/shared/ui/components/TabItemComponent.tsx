@@ -9,6 +9,7 @@ import Animated, {
 import { Text } from '../../../components/primitives/Text';
 import { Icon } from '../../../icons';
 import { useTheme } from '../../../theme';
+import { glow } from '../../../theme/tokens/elevation';
 import type { TabItemProps } from './TabBar.types';
 import { sizeConfig } from './TabBar.types';
 import { styles } from './TabBar.styles';
@@ -75,12 +76,21 @@ const TabItemComponent: React.FC<TabItemProps> = ({
         ]}
       >
         {item.icon ? (
-          <Icon
-            name={item.icon}
-            size={size === 'sm' ? 'sm' : 'md'}
-            color={variantStyles.icon.color}
-            style={showLabels ? styles.iconWithLabel : undefined}
-          />
+          <View
+            style={
+              isActive
+                ? glow(variantStyles.icon.color, 'whisper')
+                : undefined
+            }
+          >
+            <Icon
+              name={item.icon}
+              size={size === 'sm' ? 'sm' : 'md'}
+              color={variantStyles.icon.color}
+              variant={isActive ? 'solid' : 'outline'}
+              style={showLabels ? styles.iconWithLabel : undefined}
+            />
+          </View>
         ) : null}
 
         {showLabels ? (

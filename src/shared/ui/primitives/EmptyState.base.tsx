@@ -2,11 +2,15 @@ import React from 'react';
 import { View, Text, Pressable, ViewStyle } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { useTheme } from '../../../theme';
+import { Icon } from '../../../icons';
+import { glow } from '../../../theme/tokens/elevation';
 import { useFadeIn, useSlideIn } from '../hooks/useReanimated';
 import { createSheet } from '@/shared/ui/create-sheet';
 
 interface EmptyStateProps {
-  icon: string;
+  icon?: string;
+  iconName?: string;
+  tone?: 'primary' | 'success' | 'warning' | 'error' | 'info';
   title: string;
   message: string;
   actionLabel?: string;
@@ -19,6 +23,8 @@ interface EmptyStateProps {
 
 export function EmptyState({
   icon,
+  iconName,
+  tone = 'primary',
   title,
   message,
   actionLabel,
@@ -33,16 +39,33 @@ export function EmptyState({
   const slideStyle = useSlideIn('up', 30);
   const containerStyle = animated ? fadeStyle : undefined;
   const contentStyle = animated ? slideStyle : undefined;
+  const toneColorMap: Record<NonNullable<EmptyStateProps['tone']>, string> = {
+    primary: theme.colors.primary[400],
+    success: theme.colors.success.DEFAULT,
+    warning: theme.colors.warning.DEFAULT,
+    error: theme.colors.error.DEFAULT,
+    info: theme.colors.info.DEFAULT,
+  };
+  const accent = toneColorMap[tone];
   return (
     <Animated.View style={[styles.container, containerStyle, style]}>
       <Animated.View style={[styles.content, contentStyle]}>
         <View
           style={[
             styles.iconContainer,
-            { backgroundColor: theme.colors.background.tertiary },
+            iconName
+              ? {
+                  backgroundColor: theme.colors.background.tertiary,
+                  ...glow(accent, 'whisper'),
+                }
+              : { backgroundColor: theme.colors.background.tertiary },
           ]}
         >
-          <Text style={styles.icon}>{icon}</Text>
+          {iconName ? (
+            <Icon name={iconName} size="2xl" color={accent} variant="solid" />
+          ) : (
+            <Text style={styles.icon}>{icon}</Text>
+          )}
         </View>
 
         <Text style={[styles.title, { color: theme.colors.text.primary }]}>

@@ -1,6 +1,7 @@
 import type { ViewStyle } from 'react-native';
 
 import type { Theme } from '../../theme/themeCoreTypes';
+import { glow } from '../../theme/tokens/elevation';
 import type { ButtonProps } from './Button';
 
 interface ButtonSizeConfig {
@@ -64,10 +65,15 @@ export function getButtonVariantStyle(
     return {
       ...base,
       backgroundColor: pressed ? semantic.primaryPressed : semantic.primary,
+      ...glow(semantic.primary, pressed ? 'soft' : 'whisper'),
     };
   }
   if (variant === 'danger') {
-    return { ...base, backgroundColor: semantic.danger };
+    return {
+      ...base,
+      backgroundColor: semantic.danger,
+      ...glow(semantic.danger, pressed ? 'soft' : 'whisper'),
+    };
   }
   if (variant === 'outline') {
     return {

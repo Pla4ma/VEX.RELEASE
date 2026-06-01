@@ -60,6 +60,7 @@ export function ActiveSessionContent({
     >
       <ActiveSessionBackground
         accentOverlay={metrics.withAlpha(metrics.phaseAccent, 0.06)}
+        accentColor={metrics.phaseAccent}
         colors={[
           metrics.gradientState.top,
           metrics.gradientState.middle,

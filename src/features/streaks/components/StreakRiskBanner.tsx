@@ -8,6 +8,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
+import { Icon } from '../../../icons';
 import { useTheme } from '../../../theme';
 import {
   getRiskConfig,
@@ -87,7 +88,12 @@ export function StreakRiskBanner({
               justifyContent="center"
               alignItems="center"
             >
-              <Text fontSize={24}>{config.emoji}</Text>
+              <Icon
+                name={config.iconName}
+                size="md"
+                color={config.text}
+                variant="solid"
+              />
             </Box>
 
             <Box flex={1}>
@@ -101,7 +107,7 @@ export function StreakRiskBanner({
               </Box>
 
               <Text variant="body" color="text.primary" fontWeight="600">
-                🔥 {streakDays}-day streak at risk
+                {streakDays}-day streak at risk
               </Text>
 
               <Text variant="bodySmall" color={config.text}>
@@ -109,9 +115,7 @@ export function StreakRiskBanner({
               </Text>
             </Box>
 
-            <Text fontSize={20} color={config.text}>
-              →
-            </Text>
+            <Icon name="arrow-right" size="sm" color={config.text} variant="solid" />
           </Box>
         </Box>
       </Animated.View>
@@ -119,78 +123,6 @@ export function StreakRiskBanner({
   );
 }
 
-export function StreakCriticalAlert({
-  hoursRemaining,
-  streakDays,
-  onStartSession,
-}: {
-  hoursRemaining: number;
-  streakDays: number;
-  onStartSession: () => void;
-}): JSX.Element {
-  const { theme } = useTheme();
-  const pulseStyle = useAnimatedStyle(() => ({
-    backgroundColor: withRepeat(
-      withSequence(
-        withTiming(`${theme.colors.error.DEFAULT}40`, { duration: 400 }),
-        withTiming(`${theme.colors.error.DEFAULT}20`, { duration: 400 }),
-      ),
-      -1,
-      true,
-    ),
-  }));
-  const shakeStyle = useAnimatedStyle(() => ({
-    transform: [
-      {
-        translateX: withRepeat(
-          withSequence(
-            withTiming(-2, { duration: 50 }),
-            withTiming(2, { duration: 50 }),
-            withTiming(0, { duration: 50 }),
-          ),
-          5,
-          true,
-        ),
-      },
-    ],
-  }));
-  return (
-    <Pressable
-      onPress={() => { sessionStart(); onStartSession(); }}
-      accessibilityLabel={`Last chance: save your ${streakDays}-day streak`}
-      accessibilityRole="button"
-      accessibilityHint="Double tap to start a session now"
-    >
-      <Animated.View style={[pulseStyle]}>
-        <Box
-          px="lg"
-          py="md"
-          style={{
-            borderBottomWidth: 2,
-            borderBottomColor: theme.colors.error.DEFAULT,
-          }}
-        >
-          <Animated.View style={[shakeStyle]}>
-            <Box alignItems="center" gap="xs">
-              <Box flexDirection="row" alignItems="center" gap="sm">
-                <Text fontSize={20}>🚨</Text>
-                <Text variant="h4" color="error.DEFAULT" fontWeight="800">
-                  LAST CHANCE
-                </Text>
-                <Text fontSize={20}>🚨</Text>
-              </Box>
-              <Text variant="body" color="text.primary" textAlign="center">
-                Your 🔥 {streakDays}-day streak ends in {hoursRemaining} hours!
-              </Text>
-              <Text variant="bodySmall" color="error.DEFAULT" fontWeight="600">
-                Tap to start a session NOW →
-              </Text>
-            </Box>
-          </Animated.View>
-        </Box>
-      </Animated.View>
-    </Pressable>
-  );
-}
+export { StreakCriticalAlert } from './StreakCriticalAlert';
 
 export default StreakRiskBanner;

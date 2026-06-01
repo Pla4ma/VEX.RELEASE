@@ -39,6 +39,8 @@ try {
         ease: jest.fn((t: number) => t),
         quad: jest.fn((t: number) => t * t),
         cubic: jest.fn((t: number) => t * t * t),
+        sin: jest.fn((t: number) => t),
+        bezier: jest.fn(() => (t: number) => t),
         inOut: jest.fn(
           (easing: (t: number) => number) => (t: number) =>
             t < 0.5 ? easing(t * 2) / 2 : (2 - easing((1 - t) * 2)) / 2,
@@ -51,6 +53,7 @@ try {
       useSharedValue: jest.fn((initial: number) => ({ value: initial })),
       useAnimatedStyle: jest.fn((fn: () => unknown) => fn()),
       useReducedMotion: jest.fn(() => false),
+      cancelAnimation: jest.fn(),
       useAnimatedGestureHandler: jest.fn(() => ({
         onStart: jest.fn(),
         onActive: jest.fn(),

@@ -6,6 +6,7 @@ import Animated, {
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
 import { Button } from '../../../components/primitives/Button';
+import { Icon } from '../../../icons';
 import { useTheme } from '../../../theme';
 import { ConfettiBurst } from './Confetti';
 import { StreakFlame, RewardItem } from './StreakFlame';
@@ -65,7 +66,7 @@ export function StreakMilestoneModal({
             <Animated.View entering={FadeInUp.duration(600).delay(200)}>
               <Box alignItems="center" gap="sm">
                 <Text variant="label" color="accent.orange">
-                  🔥 MILESTONE REACHED
+                  MILESTONE REACHED
                 </Text>
                 <Box alignItems="center" gap="md">
                   <StreakFlame days={milestone} />
@@ -151,12 +152,15 @@ export function StreakMilestoneModal({
                     variant="secondary"
                     size="lg"
                     fullWidth
+                    leftIcon={
+                      <Icon name="share" size="sm" color="primary" variant="solid" />
+                    }
                     onPress={onShare}
                     accessibilityLabel={`Share ${milestone}-day streak`}
                     accessibilityRole="button"
                     accessibilityHint="Double tap to activate"
                   >
-                    {`📤 Share my ${milestone}-day streak`}
+                    {`Share my ${milestone}-day streak`}
                   </Button>
                 )}
                 <Button

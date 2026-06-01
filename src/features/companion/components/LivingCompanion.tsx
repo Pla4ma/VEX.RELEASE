@@ -18,7 +18,8 @@ import { CompanionService } from '../service';
 import { getCompanionService } from '../service-instance';
 import { CompanionBody } from './CompanionBody';
 import { CompanionParticles } from './CompanionParticles';
-import { getPhaseMultiplier, getMoodEmoji } from './companion-helpers';
+import { getPhaseMultiplier } from './companion-helpers';
+import { MoodIndicator } from './MoodIndicator';
 import { COMPANION_SIZE, PARTICLE_COUNT, companionStyles as styles } from './LivingCompanion.styles';
 
 interface LivingCompanionProps {
@@ -178,13 +179,7 @@ export const LivingCompanion: React.FC<LivingCompanionProps> = ({
       </Animated.View>
 
       <View style={styles.statusContainer}>
-        <Text
-          variant="bodySmall"
-          style={[styles.moodText, { color: theme.primary }]}
-        >
-          {getMoodEmoji(companionState.currentMood)}{' '}
-          {companionState.currentMood}
-        </Text>
+        <MoodIndicator mood={companionState.currentMood} />
         <Text variant="caption" style={styles.phaseText}>
           {companionState.phase} Level {companionState.level}
         </Text>

@@ -12,10 +12,8 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { Box, Text } from '../../../components/primitives';
-import {
-  getPremiumCardStyle,
-  withAlpha,
-} from '../../../components/premiumStyles';
+import { BreathingGlow } from '../../../components/primitives/BreathingGlow';
+import { withAlpha } from '../../../components/premiumStyles';
 import { useTheme } from '../../../theme';
 import {
   AnimatedCircle,
@@ -23,6 +21,7 @@ import {
   styles,
   type SessionGradeCardProps,
 } from './SessionGradeCard.types';
+import { SessionGradePurityProof } from './SessionGradePurityProof';
 export type { SessionGradeCardProps };
 
 export function SessionGradeCard({
@@ -103,6 +102,15 @@ export function SessionGradeCard({
               alignItems: 'center',
             }}
           >
+            <BreathingGlow
+              color={gradeColor}
+              size={size * 0.9}
+              intensity={0.22}
+              style={{
+                top: size * 0.05,
+                left: size * 0.05,
+              }}
+            />
             <Svg width={size} height={size}>
               <Defs>
                 <LinearGradient
@@ -166,33 +174,13 @@ export function SessionGradeCard({
             </View>
           </View>
         </Animated.View>
-        <Animated.View entering={FadeInUp.delay(380).springify()}>
-          <Box
-            mt={24}
-            px={24}
-            py={20}
-            alignItems="center"
-            style={{
-              backgroundColor: withAlpha(
-                theme.colors.background.secondary,
-                0.92,
-              ),
-              borderWidth: 1,
-              borderColor: withAlpha(gradeColor, 0.34),
-              ...getPremiumCardStyle('hero'),
-            }}
-          >
-            <Text variant="h3" color={theme.colors.text.primary}>
-              {clampedPurity}% purity
-            </Text>
-            <Text variant="body" color={purityColor} mt={8}>
-              {purityLabel}
-            </Text>
-            <Text variant="caption" color={theme.colors.text.secondary} mt={14}>
-              {durationLabel}
-            </Text>
-          </Box>
-        </Animated.View>
+        <SessionGradePurityProof
+          clampedPurity={clampedPurity}
+          purityColor={purityColor}
+          purityLabel={purityLabel}
+          durationLabel={durationLabel}
+          gradeColor={gradeColor}
+        />
       </Box>
     </Box>
   );

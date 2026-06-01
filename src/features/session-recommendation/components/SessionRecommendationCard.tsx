@@ -6,10 +6,10 @@
  */
 
 import React from 'react';
-import { Pressable, View } from 'react-native';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
 import { Button } from '../../../components/primitives/Button';
+import { Icon } from '../../../icons';
 import { useTheme } from '../../../theme';
 import type { SessionRecommendation } from '../types';
 
@@ -42,13 +42,13 @@ export function SessionRecommendationCard({
 
   const getSessionModeIcon = (mode: string): string => {
     const icons: Record<string, string> = {
-      FOCUS: '🎯',
-      RECOVERY: '🌱',
-      STUDY: '📚',
-      BOSS_PREP: '⚔️',
-      HABIT_BUILD: '🔄',
+      FOCUS: 'target',
+      RECOVERY: 'heart',
+      STUDY: 'file',
+      BOSS_PREP: 'bolt',
+      HABIT_BUILD: 'check-circle',
     };
-    return icons[mode] || '🎯';
+    return icons[mode] || 'target';
   };
 
   const modeColor = getSessionModeColor(recommendation.mode);
@@ -73,7 +73,7 @@ export function SessionRecommendationCard({
             justifyContent="center"
             alignItems="center"
           >
-            <Text fontSize={24}>⏸️</Text>
+            <Icon name="clock" size="lg" color="warning" variant="solid" />
           </Box>
 
           <Box flex={1}>
@@ -123,7 +123,7 @@ export function SessionRecommendationCard({
           justifyContent="center"
           alignItems="center"
         >
-          <Text fontSize={24}>{modeIcon}</Text>
+          <Icon name={modeIcon} size="lg" color={modeColor} variant="solid" />
         </Box>
 
         <Box flex={1}>
