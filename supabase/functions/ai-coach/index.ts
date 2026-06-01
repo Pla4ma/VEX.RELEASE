@@ -25,6 +25,10 @@
 26|    const rateLimit = await checkRateLimit(parsed.data.userId, 'ai:coach', supabaseUrl, serviceRoleKey);
 27|    if (!rateLimit.allowed) return respond(buildError(parsed.data.requestType, startedAt, 'GEMINI_RATE_LIMIT', 'Hourly AI coach message limit reached', true), 200, request);
 28|  }
+    // REVIEW: entitlement check — no server-side entitlement table exists yet.
+    // TODO: query profiles.entitlement_tier (or equivalent) here before allowing AI coach access.
+    // Current behavior: fail-open. Remove this block once entitlement sync is implemented.
+    // See audit SEC-05.
 29|  try {
 30|    const prompt = buildPrompt(parsed.data);
 31|    const gemini = await callGemini(apiKey, prompt.system, prompt.user, prompt.maxOutputTokens);
