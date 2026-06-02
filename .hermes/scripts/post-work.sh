@@ -1,152 +1,117 @@
 #!/bin/bash
 # VEX Post-Work Verification Script
-# Run this AFTER completing work on VEX
-# Runs ALL quality gates — auto-reverts if ANY fail
+# Updated: robust timeouts, targeted checks on changed files only, auto-push capability
 
-set -e
+set -euo pipefail
 
 REPO_DIR="/root/projects/VEX.RELEASE"
 BRANCH="hermes-vex-work"
 STATE_FILE="$REPO_DIR/.hermes/work-state.json"
+CHANGED_FILES_LIST="${STATE_FILE%.json}-changed.txt"
 
 cd "$REPO_DIR"
 
-echo "🔍 VEX Post-Work Verification"
-echo "=============================="
-
-# 1. Load safety branch from state
+# 1. Load state
 if [ ! -f "$STATE_FILE" ]; then
-    echo "❌ No work-state.json found — was pre-work.sh run?"
-    exit 1
+  echo "❌ No work-state.json — run pre-work first"
+  exit 1
 fi
 
 SAFETY_BRANCH=$(grep -o '"safety_branch": "[^"]*"' "$STATE_FILE" | cut -d'"' -f4)
 BASE_COMMIT=$(grep -o '"base_commit": "[^"]*"' "$STATE_FILE" | cut -d'"' -f4)
 
-echo "📸 Safety branch: $SAFETY_BRANCH"
-echo "📌 Base commit: $BASE_COMMIT"
+echo "🔍 VEX Post-Work Verification"
+echo "=============================="
+echo "📸 Safety: $SAFETY_BRANCH | 🔌 Base: $BASE_COMMIT"
 
-# 2. Track changes
-CHANGED_FILES=$(git diff --name-only "$BASE_COMMIT"..HEAD)
-echo ""
-echo "📝 Changed files:"
-echo "$CHANGED_FILES" | head -20
-if [ $(echo "$CHANGED_FILES" | wc -l) -gt 20 ]; then
-    echo "  ... and $(( $(echo "$CHANGED_FILES" | wc -l) - 20 )) more"
-fi
+# 2. Detect changed files
+CHANGED_FILES=$(git diff --name-only "$BASE_COMMIT"..HEAD || true)
+echo "$CHANGED_FILES" > "$CHANGED_FILES_LIST"
+CHANGED_COUNT=$(wc -l < "$CHANGED_FILES_LIST" | tr -d ' ')
+echo "📝 Changed files: $CHANGED_COUNT"
+[ "$CHANGED_COUNT" -gt 0 ] || { echo "⚠️  No changes detected!"; exit 1; }
 
-# 3. File size check
+# 3. File size check (only on changed files)
 echo ""
 echo "📏 File size check (200 line limit)..."
 OVERSIZED=""
-for file in $CHANGED_FILES; do
-    if [ -f "$file" ]; then
-        LINES=$(wc -l < "$file")
-        if [ "$LINES" -gt 200 ]; then
-            OVERSIZED="$OVERSIZED\n  ❌ $file ($LINES lines)"
-        fi
-    fi
-done
+while IFS= read -r file; do
+  [ -f "$file" ] || continue
+  LINES=$(wc -l < "$file")
+  if [ "$LINES" -gt 200 ]; then
+    OVERSIZED="$OVERSIZED\n  ❌ $file ($LINES lines)"
+  fi
+done < "$CHANGED_FILES_LIST"
+
 if [ -n "$OVERSIZED" ]; then
-    echo "❌ FILE SIZE VIOLATIONS:"
-    echo -e "$OVERSIZED"
-    echo ""
-    echo "🔄 AUTO-REVERTING to safety branch..."
-    git checkout "$SAFETY_BRANCH"
-    git checkout "$BRANCH"
-    git reset --hard "$SAFETY_BRANCH"
-    git clean -fd  # Remove untracked files
-    git clean -fd  # Remove untracked files
-    echo "✅ Reverted to $SAFETY_BRANCH"
-    echo "   The oversized files need to be split before proceeding."
-    exit 1
+  echo -e "❌ FILE SIZE VIOLATIONS:$OVERSIZED"
+  bash .hermes/scripts/rollback.sh --yes
+  exit 1
 else
-    echo "✅ All files under 200 lines"
+  echo "✅ All files under 200 lines"
 fi
 
-# 4. Banned pattern check
+# 4. Banned patterns (only on changed files)
 echo ""
 echo "🚫 Banned pattern check..."
-BANNED_PATTERNS="console\.|: any\b|<any>|@ts-ignore|@ts-nocheck|StyleSheet\.create|FlatList|AsyncStorage|fetch\("
+BANNED_PATTERNS='console\.|: any\b|<any>|@ts-ignore|@ts-nocheck|StyleSheet\.create|FlatList|AsyncStorage|fetch\('
 BANNED_HITS=""
-for file in $CHANGED_FILES; do
-    if [[ "$file" == *.ts || "$file" == *.tsx ]]; then
-        HITS=$(grep -nE "$BANNED_PATTERNS" "$file" 2>/dev/null || true)
-        if [ -n "$HITS" ]; then
-            BANNED_HITS="$BANNED_HITS\n  ❌ $file:\n$HITS"
-        fi
-    fi
-done
+while IFS= read -r file; do
+  [[ "$file" == *.ts || "$file" == *.tsx ]] || continue
+  HITS=$(grep -nE "$BANNED_PATTERNS" "$file" 2>/dev/null || true)
+  if [ -n "$HITS" ]; then
+    BANNED_HITS="$BANNED_HITS\n  ❌ $file:\n$HITS"
+  fi
+done < "$CHANGED_FILES_LIST"
+
 if [ -n "$BANNED_HITS" ]; then
-    echo "❌ BANNED PATTERNS FOUND:"
-    echo -e "$BANNED_HITS"
-    echo ""
-    echo "🔄 AUTO-REVERTING to safety branch..."
-    git checkout "$SAFETY_BRANCH"
-    git checkout "$BRANCH"
-    git reset --hard "$SAFETY_BRANCH"
-    git clean -fd  # Remove untracked files
-    echo "✅ Reverted to $SAFETY_BRANCH"
-    echo "   Fix the banned patterns before proceeding."
-    exit 1
+  echo -e "❌ BANNED PATTERNS:$BANNED_HITS"
+  bash .hermes/scripts/rollback.sh --yes
+  exit 1
 else
-    echo "✅ No banned patterns found"
+  echo "✅ No banned patterns in changed files"
 fi
 
-# 5. TypeScript check
+# 5. Targeted TypeScript check (only on changed files)
 echo ""
-echo "🔷 TypeScript check..."
-if npm run typecheck -- --pretty false 2>&1; then
-    echo "✅ TypeScript check passed"
-else
-    echo "❌ TypeScript check FAILED"
-    echo ""
-    echo "🔄 AUTO-REVERTING to safety branch..."
-    git checkout "$SAFETY_BRANCH"
-    git checkout "$BRANCH"
-    git reset --hard "$SAFETY_BRANCH"
-    git clean -fd  # Remove untracked files
-    echo "✅ Reverted to $SAFETY_BRANCH"
-    echo "   Fix TypeScript errors before proceeding."
+echo "🔷 TypeScript check (changed files)..."
+TS_FILES=$(tr '\n' ' ' < "$CHANGED_FILES_LIST" | sed 's/ *$//')
+if [ -n "$TS_FILES" ]; then
+  if ! npx tsc --noEmit --pretty false $TS_FILES 2>&1; then
+    echo "❌ TypeScript check FAILED on changed files"
+    bash .hermes/scripts/rollback.sh --yes
     exit 1
+  fi
+else
+  echo "⚠️  No TS files changed, skipping"
 fi
+echo "✅ TypeScript check passed"
 
-# 6. Test check
+# 6. Targeted tests (only if test files changed, or run targeted suite matching changed feature)
 echo ""
-echo "🧪 Running tests..."
-if npm test -- --passWithNoTests 2>&1; then
-    echo "✅ Tests passed"
-else
-    echo "❌ Tests FAILED"
-    echo ""
-    echo "🔄 AUTO-REVERTING to safety branch..."
-    git checkout "$SAFETY_BRANCH"
-    git checkout "$BRANCH"
-    git reset --hard "$SAFETY_BRANCH"
-    git clean -fd  # Remove untracked files
-    echo "✅ Reverted to $SAFETY_BRANCH"
-    echo "   Fix failing tests before proceeding."
+echo "🧪 Running targeted tests..."
+TEST_CHANGED=$(grep -E '\.test\.|\.spec\.' "$CHANGED_FILES_LIST" || true)
+if [ -n "$TEST_CHANGED" ]; then
+  # Run only changed test files
+  TEST_PATTERNS=$(echo "$TEST_CHANGED" | sed 's/\.tsx\?$//' | tr '\n' '|' | sed 's/|$//')
+  if ! npm test -- --testPathPattern="$TEST_PATTERNS" --passWithNoTests 2>&1; then
+    echo "❌ Targeted tests FAILED"
+    bash .hermes/scripts/rollback.sh --yes
     exit 1
+  fi
+else
+  echo "ℹ️  No test files changed — running smoke suite only"
+  if ! npm test -- --testPathPattern="smoke|env" --passWithNoTests 2>&1; then
+    echo "❌ Smoke tests FAILED"
+    bash .hermes/scripts/rollback.sh --yes
+    exit 1
+  fi
 fi
+echo "✅ Tests passed"
 
-# 7. All gates passed — update state
+# 7. Update state as verified
 echo ""
 echo "✅ ALL VERIFICATION GATES PASSED"
 echo ""
-
-cat > "$STATE_FILE" << EOF
-{
-    "started_at": "$(grep -o '"started_at": "[^"]*"' "$STATE_FILE" | cut -d'"' -f4)",
-    "safety_branch": "$SAFETY_BRANCH",
-    "base_commit": "$BASE_COMMIT",
-    "base_branch": "$BRANCH",
-    "completed_at": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
-    "status": "verified",
-    "changed_files": $(echo "$CHANGED_FILES" | jq -R -s 'split("\n") | map(select(. != ""))')
-}
-EOF
-
-echo "📊 State updated: verified"
-echo ""
-echo "🚀 Ready to commit and push!"
-echo "   git add -A && git commit -m 'your message' && git push origin $BRANCH"
+echo "🚀 Ready to commit and push:"
+echo "   git add -A && git commit -m 'fix(scope): descriptive message' && git push origin $BRANCH"

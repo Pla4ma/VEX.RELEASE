@@ -1,9 +1,8 @@
 #!/bin/bash
 # VEX Rollback Script
-# Use this to revert to the last known good state
-# Run from the VEX repo directory
+# Updated: faster, clearer, always use --yes flag to prevent accidental rolls
 
-set -e
+set -euo pipefail
 
 REPO_DIR="/root/projects/VEX.RELEASE"
 BRANCH="hermes-vex-work"
@@ -11,89 +10,55 @@ STATE_FILE="$REPO_DIR/.hermes/work-state.json"
 
 cd "$REPO_DIR"
 
-echo "🔄 VEX Rollback"
-echo "==============="
-
-# 1. Check for state file
-if [ ! -f "$STATE_FILE" ]; then
-    echo "❌ No work-state.json found"
-    echo "   Looking for safety branches..."
-    SAFETY_BRANCHES=$(git branch | grep "safety/pre-work-" | head -5)
-    if [ -n "$SAFETY_BRANCHES" ]; then
-        echo "   Found safety branches:"
-        echo "$SAFETY_BRANCHES"
-        echo ""
-        echo "   To rollback to a specific one:"
-        echo "   git checkout <branch-name>"
-        echo "   git checkout $BRANCH"
-        echo "   git reset --hard <branch-name>"
-    else
-        echo "   No safety branches found."
-        echo "   Manual recovery needed. Check git reflog:"
-        echo "   git reflog | head -20"
-    fi
-    exit 1
+FORCE=""
+if [ "${1:-}" = "--yes" ]; then
+  FORCE="yes"
 fi
 
-# 2. Load state
+if [ -z "$FORCE" ]; then
+  echo "⚠️  This will RESET all work back to the safety snapshot."
+  echo "   All uncommitted and committed changes after pre-work will be LOST."
+  read -p "Type 'ROLLBACK' to confirm: " CONFIRM
+  if [ "$CONFIRM" != "ROLLBACK" ]; then
+    echo "❌ Rollback cancelled"
+    exit 1
+  fi
+fi
+
+# Load state
+if [ ! -f "$STATE_FILE" ]; then
+  echo "❌ No work-state.json found"
+  exit 1
+fi
+
 SAFETY_BRANCH=$(grep -o '"safety_branch": "[^"]*"' "$STATE_FILE" | cut -d'"' -f4)
 BASE_COMMIT=$(grep -o '"base_commit": "[^"]*"' "$STATE_FILE" | cut -d'"' -f4)
-STATUS=$(grep -o '"status": "[^"]*"' "$STATE_FILE" | cut -d'"' -f4)
 
-echo "📊 Current state:"
-echo "   Status: $STATUS"
-echo "   Safety branch: $SAFETY_BRANCH"
-echo "   Base commit: $BASE_COMMIT"
+echo "🔄 Rolling back to: $SAFETY_BRANCH"
 
-# 3. Check if safety branch exists
-if ! git rev-parse --verify "$SAFETY_BRANCH" >/dev/null 2>&1; then
-    echo "❌ Safety branch $SAFETY_BRANCH not found!"
-    echo "   Manual recovery needed. Check git reflog:"
-    echo "   git reflog | head -20"
-    exit 1
-fi
+# Hard reset and clean
+git reset --hard "$SAFETY_BRANCH" 2>/dev/null || git reset --hard "$BASE_COMMIT"
+git clean -fd
 
-# 4. Show what will be lost
-echo ""
-echo "📝 Changes since safety snapshot:"
-git diff --stat "$SAFETY_BRANCH"..HEAD
+# Delete any new untracked files from the work session
+git clean -fd src/ || true
 
-echo ""
-echo "⚠️  This will revert ALL changes since the safety snapshot."
-echo "   Safety branch: $SAFETY_BRANCH"
-echo "   Current HEAD: $(git rev-parse --short HEAD)"
+echo "✅ Rollback complete — worktree restored to $SAFETY_BRANCH"
+echo "   Commit: $(git rev-parse --short HEAD)"
+echo "   Branch: $(git branch --show-current)"
 
-# 5. Confirm (skip if --yes flag passed)
-if [ "$1" != "--yes" ]; then
-    read -p "   Continue? (y/N): " -n 1 -r
-    echo
-    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-        echo "   Cancelled."
-        exit 0
-    fi
-fi
-
-# 6. Rollback
-echo ""
-echo "🔄 Rolling back..."
-git checkout "$BRANCH"
-git reset --hard "$SAFETY_BRANCH"
-    git clean -fd  # Remove untracked files
-echo "✅ Rolled back to $SAFETY_BRANCH"
-echo "   Current commit: $(git rev-parse --short HEAD)"
-
-# 7. Update state
+# Update state
 cat > "$STATE_FILE" << EOF
 {
-    "rolled_back_at": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
-    "safety_branch": "$SAFETY_BRANCH",
-    "base_commit": "$BASE_COMMIT",
-    "base_branch": "$BRANCH",
-    "status": "rolled_back"
+  "started_at": "$(grep -o '"started_at": "[^"]*"' "$STATE_FILE" | cut -d'"' -f4)",
+  "safety_branch": "$SAFETY_BRANCH",
+  "base_commit": "$(git rev-parse HEAD)",
+  "base_branch": "$BRANCH",
+  "status": "rolled_back",
+  "rolled_back_at": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 }
 EOF
 
 echo ""
-echo "✅ Rollback complete!"
-echo "   You're back to the state before work started."
-echo "   Safety branch preserved: $SAFETY_BRANCH"
+echo "📊 State updated: rolled_back"
+echo "   Ready to restart: bash .hermes/scripts/pre-work.sh"
