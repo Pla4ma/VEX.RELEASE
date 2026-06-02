@@ -12,6 +12,24 @@ import { sanitizeFilename } from './validators-file';
 
 const debug = createDebugger('content-study:repository');
 
+const ALLOWED_URI_SCHEMES = ['file://', 'content://', 'https://'] as const;
+
+/**
+ * Validates that a file URI uses an allowed scheme.
+ * Throws a descriptive error if the URI scheme is not permitted.
+ * SEC-002: Prevent arbitrary URI schemes from being fetched.
+ */
+export function validateFileUri(fileUri: string): void {
+  const hasAllowedScheme = ALLOWED_URI_SCHEMES.some((scheme) =>
+    fileUri.startsWith(scheme),
+  );
+  if (!hasAllowedScheme) {
+    throw new Error(
+      `Invalid file URI scheme. URI must start with one of: ${ALLOWED_URI_SCHEMES.join(', ')}. Received: ${fileUri.split(':')[0]}://`,
+    );
+  }
+}
+
 export async function invokeContentStudy(
   path: string,
   body?: unknown,
@@ -39,6 +57,7 @@ export async function uploadStudyFileRecord(
 ): Promise<string> {
   try {
     debug.info('Uploading study file: %s for user: %s', filename, userId);
+    validateFileUri(fileUri);
     const response = await globalThis.fetch(fileUri);
     if (!response.ok) {
       throw new Error('Failed to read file for upload');

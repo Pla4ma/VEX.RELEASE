@@ -1,9 +1,18 @@
-const ALLOWED_ORIGINS = [
+const PRODUCTION_ORIGINS = [
   'https://vex.app',
   'https://www.vex.app',
+] as const;
+
+const DEVELOPMENT_ORIGINS: readonly string[] = [
+  ...PRODUCTION_ORIGINS,
   'http://localhost:8081',
   'http://localhost:19006',
-] as const;
+];
+
+function getAllowedOrigins(): readonly string[] {
+  const env = Deno.env.get('ENVIRONMENT') ?? 'development';
+  return env === 'production' ? PRODUCTION_ORIGINS : DEVELOPMENT_ORIGINS;
+}
 
 type CorsOptions = {
   methods?: string;
@@ -14,16 +23,16 @@ type CorsOptions = {
 export function resolveCorsOrigin(request: Request): string {
   const origin = request.headers.get('origin');
   if (!origin) {
-    return ALLOWED_ORIGINS[0];
+    return getAllowedOrigins()[0];
   }
 
-  const allowed = ALLOWED_ORIGINS as readonly string[];
+  const allowed = getAllowedOrigins();
   if (allowed.includes(origin)) {
     return origin;
   }
 
   // Reject unknown origins — do not mirror them
-  return ALLOWED_ORIGINS[0];
+  return getAllowedOrigins()[0];
 }
 
 export function buildCorsHeaders(

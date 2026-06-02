@@ -1,6 +1,26 @@
+export interface AuthUser {
+  id: string;
+  email: string | null;
+  emailVerified: boolean;
+  role: string | null;
+  banned: boolean;
+}
+
 export type AuthResult =
-  | { ok: true; userId: string }
+  | { ok: true; user: AuthUser }
   | { ok: false; response: Response };
+
+interface SupabaseUser {
+  id: string;
+  email?: string | null;
+  email_confirmed_at?: string | null;
+  app_metadata?: {
+    role?: string;
+    banned?: boolean;
+    [key: string]: unknown;
+  };
+  [key: string]: unknown;
+}
 
 export async function verifyAuthorizedUser(
   request: Request,
@@ -31,8 +51,33 @@ export async function verifyAuthorizedUser(
     return { ok: false, response: jsonResponse({ error: 'Unauthorized' }, 401, request) };
   }
 
-  const user = (await authResponse.json()) as { id?: string };
-  return user.id
-    ? { ok: true, userId: user.id }
-    : { ok: false, response: jsonResponse({ error: 'Unauthorized' }, 401, request) };
+  const rawUser = (await authResponse.json()) as SupabaseUser;
+  if (!rawUser.id) {
+    return { ok: false, response: jsonResponse({ error: 'Unauthorized' }, 401, request) };
+  }
+
+  if (!rawUser.email_confirmed_at) {
+    return {
+      ok: false,
+      response: jsonResponse({ error: 'Email not verified' }, 403, request),
+    };
+  }
+
+  const appMeta = rawUser.app_metadata ?? {};
+  if (appMeta.banned === true) {
+    return {
+      ok: false,
+      response: jsonResponse({ error: 'Account suspended' }, 403, request),
+    };
+  }
+
+  const user: AuthUser = {
+    id: rawUser.id,
+    email: rawUser.email ?? null,
+    emailVerified: !!rawUser.email_confirmed_at,
+    role: appMeta.role ?? null,
+    banned: appMeta.banned === true,
+  };
+
+  return { ok: true, user };
 }

@@ -31,7 +31,7 @@
 32|
 33|  if (supabaseUrl && serviceRoleKey) {
 34|    const rateLimit = await checkRateLimit(
-35|      auth.userId,
+35|      auth.user.id,
 36|      RATE_LIMIT_OPERATION,
 37|      supabaseUrl,
 38|      serviceRoleKey,
@@ -84,7 +84,7 @@
 85|  const supabase = createClient(supabaseUrl, serviceRoleKey);
 86|
 87|  const { data, error } = await supabase.rpc('complete_session', {
-88|    p_user_id: auth.userId,
+88|    p_user_id: auth.user.id,
 89|    p_session_id: req.sessionId,
 90|    p_idempotency_key: req.idempotencyKey,
 91|    p_duration_seconds: clampedDuration,
