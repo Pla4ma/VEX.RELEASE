@@ -1,4 +1,4 @@
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.49.8';
+export { getRateLimitClient, resetRateLimitClient } from './rate-limit-client';
 
 export interface RateLimitConfig {
   maxRequests: number;
@@ -23,7 +23,7 @@ export async function checkRateLimit(
 ): Promise<{ allowed: boolean; remaining: number; resetAt: number }> {
   const { maxRequests, windowSeconds } =
     config ?? DEFAULT_CONFIGS[operation] ?? DEFAULT_CONFIGS.default!;
-  const supabase = createClient(supabaseUrl, serviceRoleKey);
+  const supabase = getRateLimitClient(supabaseUrl, serviceRoleKey);
 
   const { data, error } = await supabase.rpc('check_rate_limit', {
     p_user_id: userId,
