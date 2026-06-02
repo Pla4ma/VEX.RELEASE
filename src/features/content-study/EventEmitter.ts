@@ -28,10 +28,10 @@ export class EventEmitter<Events extends object> {
       callbacks.forEach((cb) => {
         try {
           cb(data);
-        } catch (e) {
+        } catch (error: unknown) {
           captureException(
-            e instanceof Error
-              ? e
+            error instanceof Error
+              ? error
               : new Error(`Event listener error for ${String(event)}`),
             { area: 'content-study.events.emit', event: String(event) },
           );
