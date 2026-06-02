@@ -71,9 +71,18 @@ export class FeatureFlagService {
   }
 
   private startRemoteFetch(): void {
-    this.fetchTimer = startFetchTimer(this.config.remoteFetchInterval, () =>
-      this.fetchRemote(),
-    );
+    this.fetchTimer = setInterval(() => {
+      this.fetchRemote().catch((error) => {
+        debug.error('Background feature flag fetch failed', error as Error);
+      });
+    }, this.config.remoteFetchInterval);
+  }
+
+  private stopRemoteFetch(): void {
+    if (this.fetchTimer) {
+      clearInterval(this.fetchTimer);
+      this.fetchTimer = null;
+    }
   }
 
   async fetchRemote(): Promise<void> {
@@ -92,13 +101,6 @@ export class FeatureFlagService {
         timestamp: Date.now(),
       });
       throw error;
-    }
-  }
-
-  stopRemoteFetch(): void {
-    if (this.fetchTimer) {
-      clearInterval(this.fetchTimer);
-      this.fetchTimer = null;
     }
   }
 
@@ -163,6 +165,7 @@ export class FeatureFlagService {
   getAll(): Record<string, FeatureFlag> {
     return Object.fromEntries(this.flags.entries());
   }
+
   getEnabled(): string[] {
     return Array.from(this.flags.keys()).filter((key) => this.isEnabled(key));
   }
@@ -192,6 +195,7 @@ export class FeatureFlagService {
   setUserId(userId: string): void {
     this.userId = userId;
   }
+
   cleanup(): void {
     this.stopRemoteFetch();
     this.flags.clear();
