@@ -3,6 +3,7 @@ import {
   CurrencyRpcResultSchema,
   SpendCurrencyRpcInputSchema,
   GrantCurrencyRpcInputSchema,
+  AddCurrencyRpcParamsSchema,
   type CurrencyRpcResult,
 } from './schemas';
 import { RepositoryError } from '../../lib/repository/error-handling';
@@ -55,12 +56,13 @@ export async function addCurrencyRpc(params: {
   amount: number;
   source: string;
 }): Promise<void> {
+  const parsed = AddCurrencyRpcParamsSchema.parse(params);
   const supabase = getSupabaseClient();
   const { error } = await supabase.rpc('atomic_add_currency', {
-    p_user_id: params.userId,
-    p_currency: params.currency,
-    p_amount: params.amount,
-    p_source: params.source,
+    p_user_id: parsed.userId,
+    p_currency: parsed.currency,
+    p_amount: parsed.amount,
+    p_source: parsed.source,
   });
   if (error) {throw new RepositoryError('addCurrencyRpc', error);}
 }

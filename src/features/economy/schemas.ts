@@ -61,3 +61,11 @@ export const GrantCurrencyRpcInputSchema = z.object({
   description: z.string().nullable().optional(),
 });
 export type GrantCurrencyRpcInput = z.infer<typeof GrantCurrencyRpcInputSchema>;
+
+export const AddCurrencyRpcParamsSchema = z.object({
+  userId: z.string().uuid(),
+  currency: CurrencyTypeSchema,
+  amount: z.number().int().positive().max(1_000_000),
+  source: z.string().min(1),
+});
+export type AddCurrencyRpcParams = z.infer<typeof AddCurrencyRpcParamsSchema>;
