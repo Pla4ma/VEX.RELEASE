@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import * as Sentry from '@sentry/react-native';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useDisclosureAnalytics } from '../../../features/liveops-config';
@@ -145,7 +146,9 @@ export function useOnboardingFlow(routeStep?: number) {
   const handleStartFirstSession = useCallback((): void => {
     if (!selectedPreset) {return;}
     setIsLaunchingSession(true);
-    triggerHaptic('impactMedium').catch(() => undefined);
+    triggerHaptic('impactMedium').catch(() => {
+      // Haptic failure is non-critical — safe to swallow in onboarding
+    });
     disclosureAnalytics.trackFirstSessionStarted(userId, 'onboarding');
     navigation.navigate('SessionStack', {
       screen: 'SessionSetup',
@@ -166,7 +169,9 @@ export function useOnboardingFlow(routeStep?: number) {
 
   const handleFinish = useCallback(
     (message?: string) => {
-      finishOnboarding(goal, starterPresetId, message).catch(() => undefined);
+      finishOnboarding(goal, starterPresetId, message).catch((error: unknown) => {
+        Sentry.captureException(error, { tags: { feature: 'onboarding', operation: 'finishOnboarding' } });
+      });
     },
     [finishOnboarding, goal, starterPresetId],
   );

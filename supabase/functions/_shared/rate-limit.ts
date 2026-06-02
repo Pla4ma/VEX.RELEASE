@@ -1,4 +1,4 @@
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.49.8';
+export { getRateLimitClient, resetRateLimitClient } from './rate-limit-client';
 
 export interface RateLimitConfig {
   maxRequests: number;
@@ -14,6 +14,22 @@ const DEFAULT_CONFIGS: Record<string, RateLimitConfig> = {
   'default': { maxRequests: 20, windowSeconds: 60 },
 };
 
+function logStructured(
+  level: string,
+  message: string,
+  data?: Record<string, unknown>,
+): void {
+  console.log(
+    JSON.stringify({
+      level,
+      feature: 'rate-limit',
+      message,
+      timestamp: new Date().toISOString(),
+      ...data,
+    }),
+  );
+}
+
 export async function checkRateLimit(
   userId: string,
   operation: string,
@@ -23,7 +39,7 @@ export async function checkRateLimit(
 ): Promise<{ allowed: boolean; remaining: number; resetAt: number }> {
   const { maxRequests, windowSeconds } =
     config ?? DEFAULT_CONFIGS[operation] ?? DEFAULT_CONFIGS.default!;
-  const supabase = createClient(supabaseUrl, serviceRoleKey);
+  const supabase = getRateLimitClient(supabaseUrl, serviceRoleKey);
 
   const { data, error } = await supabase.rpc('check_rate_limit', {
     p_user_id: userId,
@@ -33,7 +49,11 @@ export async function checkRateLimit(
   });
 
   if (error) {
-    console.error(`Rate limit check failed for ${operation}:`, error);
+    logStructured('error', `Rate limit check failed for ${operation}`, {
+      operation,
+      userId,
+      error: error.message ?? String(error),
+    });
     return { allowed: false, remaining: 0, resetAt: Date.now() + windowSeconds * 1000 };
   }
 

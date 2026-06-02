@@ -8,6 +8,23 @@ import {
   type BroadcastMessage,
 } from './realtimeShared';
 
+function parseBroadcastPayload(
+  event: string,
+  rawPayload: unknown,
+): BroadcastMessage {
+  const validTypes = ['activity', 'notification', 'sync', 'typing'] as const;
+  const type = validTypes.includes(event as typeof validTypes[number])
+    ? (event as BroadcastMessage['type'])
+    : 'activity';
+  const payloadObj = rawPayload as Record<string, unknown> | null;
+  return {
+    type,
+    payload: rawPayload,
+    senderId: (payloadObj?.senderId as string) ?? '',
+    timestamp: (payloadObj?.timestamp as number) ?? Date.now(),
+  };
+}
+
 const debug = createDebugger('realtime');
 
 export async function broadcastActivity(
@@ -46,23 +63,18 @@ export async function broadcastActivity(
   }, 5_000);
 }
 
-export function subscribeToActivity(
+export async function subscribeToActivity(
   channelName: string,
   callback: (message: BroadcastMessage) => void,
-): () => void {
+) {
   const client = getSupabaseClient();
   const fullChannelName = getActivityChannelName(channelName);
   const channel = client
     .channel(fullChannelName)
     .on('broadcast', { event: '*' }, (payload) => {
-      callback({
-        type: payload.event as BroadcastMessage['type'],
-        payload: payload.payload,
-        senderId: payload.payload?.senderId,
-        timestamp: payload.payload?.timestamp || Date.now(),
-      });
+      callback(parseBroadcastPayload(payload.event as string, payload.payload));
     });
-  channel.subscribe();
+  await channel.subscribe();
   activeChannels.set(fullChannelName, channel);
   return () => {
     channel.unsubscribe();
@@ -70,10 +82,10 @@ export function subscribeToActivity(
   };
 }
 
-export function subscribeToFeedChanges(
+export async function subscribeToFeedChanges(
   userId: string,
   callback: (payload: unknown) => void,
-): () => void {
+) {
   const client = getSupabaseClient();
   const channelName = `feed:changes:${userId}`;
   const channel = client
@@ -98,7 +110,7 @@ export function subscribeToFeedChanges(
         });
       },
     );
-  channel.subscribe();
+  await channel.subscribe();
   activeChannels.set(channelName, channel);
   return () => {
     channel.unsubscribe();
@@ -106,10 +118,10 @@ export function subscribeToFeedChanges(
   };
 }
 
-export function subscribeToSquadChanges(
+export async function subscribeToSquadChanges(
   squadId: string,
   callback: (payload: unknown) => void,
-): () => void {
+) {
   const client = getSupabaseClient();
   const channelName = `squad:${squadId}:changes`;
   const channel = client
@@ -137,7 +149,7 @@ export function subscribeToSquadChanges(
         });
       },
     );
-  channel.subscribe();
+  await channel.subscribe();
   activeChannels.set(channelName, channel);
   return () => {
     channel.unsubscribe();
@@ -145,10 +157,10 @@ export function subscribeToSquadChanges(
   };
 }
 
-export function subscribeToGuildQuests(
+export async function subscribeToGuildQuests(
   guildId: string,
   callback: (payload: unknown) => void,
-): () => void {
+) {
   const client = getSupabaseClient();
   const channelName = CHANNELS.guild(guildId);
   const channel = client
@@ -169,7 +181,7 @@ export function subscribeToGuildQuests(
     .on('broadcast', { event: 'message' }, ({ payload }) => {
       debug.debug('Broadcast received:', payload);
     });
-  channel.subscribe();
+  await channel.subscribe();
   activeChannels.set(channelName, channel);
   return () => {
     channel.unsubscribe();

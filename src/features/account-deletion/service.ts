@@ -38,7 +38,7 @@ export async function deleteAccount(
   const validated = AccountDeletionInputSchema.parse(input);
   trackAccountDeletionStarted(validated.userId);
   try {
-    await deleteCurrentUser();
+    await deleteCurrentUser(validated.userId);
     const [monetizationSignedOut, secureStorageCleared, localStorageCleared] =
       await Promise.all([
         signOutMonetization(),

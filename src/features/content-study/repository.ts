@@ -12,6 +12,24 @@ import { sanitizeFilename } from './validators-file';
 
 const debug = createDebugger('content-study:repository');
 
+const ALLOWED_URI_SCHEMES = ['file://', 'content://', 'https://'] as const;
+
+/**
+ * Validates that a file URI uses an allowed scheme.
+ * Throws a descriptive error if the URI scheme is not permitted.
+ * SEC-002: Prevent arbitrary URI schemes from being fetched.
+ */
+export function validateFileUri(fileUri: string): void {
+  const hasAllowedScheme = ALLOWED_URI_SCHEMES.some((scheme) =>
+    fileUri.startsWith(scheme),
+  );
+  if (!hasAllowedScheme) {
+    throw new Error(
+      `Invalid file URI scheme. URI must start with one of: ${ALLOWED_URI_SCHEMES.join(', ')}. Received: ${fileUri.split(':')[0]}://`,
+    );
+  }
+}
+
 export async function invokeContentStudy(
   path: string,
   body?: unknown,
@@ -39,6 +57,11 @@ export async function uploadStudyFileRecord(
 ): Promise<string> {
   try {
     debug.info('Uploading study file: %s for user: %s', filename, userId);
+    validateFileUri(fileUri);
+    const scheme = fileUri.split(':', 1)[0]!.toLowerCase();
+    if (scheme !== 'file' && scheme !== 'content' && scheme !== 'https') {
+      throw new Error(`Unsupported file URI scheme: ${scheme}`);
+    }
     const response = await globalThis.fetch(fileUri);
     if (!response.ok) {
       throw new Error('Failed to read file for upload');
@@ -85,7 +108,7 @@ export async function fetchContentHistoryRecords(userId: string, limit = 20) {
   const { data, error } = await withResilience(
     getSupabaseClient()
       .from('study_content')
-      .select('*')
+      .select('id,user_id,source_type,source_url,original_filename,storage_path,title,extracted_text,extracted_length,language,user_edited_text,is_user_edited,status,error_message,generation_count_today,last_generation_date,deleted_at,created_at,updated_at,extracted_at')
       .eq('user_id', userId)
       .is('deleted_at', null)
       .order('created_at', { ascending: false })
@@ -101,7 +124,7 @@ export async function fetchContentHistoryRecords(userId: string, limit = 20) {
 export async function fetchContentRecord(contentId: string) {
   const { data, error } = await getSupabaseClient()
     .from('study_content')
-    .select('*')
+    .select('id,user_id,source_type,source_url,original_filename,storage_path,title,extracted_text,extracted_length,language,user_edited_text,is_user_edited,status,error_message,generation_count_today,last_generation_date,deleted_at,created_at,updated_at,extracted_at')
     .eq('id', contentId)
     .is('deleted_at', null)
     .maybeSingle();
@@ -114,7 +137,7 @@ export async function fetchContentRecord(contentId: string) {
 export async function fetchGenerationRecord(generationId: string) {
   const { data, error } = await getSupabaseClient()
     .from('study_generations')
-    .select('*')
+    .select('id,content_id,user_id,model,generation_version,processing_time_ms,summary,key_concepts,tasks,quiz_items,session_plan,user_rating,was_helpful,times_used,last_used_at,deleted_at,created_at,updated_at')
     .eq('id', generationId)
     .is('deleted_at', null)
     .maybeSingle();

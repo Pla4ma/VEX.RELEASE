@@ -83,10 +83,10 @@ export function initSentry(): void {
       beforeSend: SENTRY_CONFIG.beforeSend,
       integrations: createSentryIntegrations(),
     });
-  } catch (e) {
+  } catch (error: unknown) {
     // Sentry may fail in Expo Go if native PlatformConstants is unavailable.
     // The app continues without crash reporting in that environment.
-    debug.warn('[Sentry] Failed to initialize (likely Expo Go):', e as Error);
+    debug.warn('[Sentry] Failed to initialize (likely Expo Go):', error instanceof Error ? error : new Error(String(error)));
   }
 }
 

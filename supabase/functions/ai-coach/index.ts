@@ -16,7 +16,7 @@
 17|  const body = await request.json().catch(() => null);
 18|  const parsed = AIRequestSchema.safeParse(body);
 19|  if (!parsed.success) return respond(buildError(readRequestType(body), startedAt, 'INVALID_REQUEST', 'Invalid AI request payload', false), 400, request);
-20|  if (parsed.data.userId !== auth.userId) return respond(buildError(parsed.data.requestType, startedAt, 'FORBIDDEN', 'Request user does not match auth token', false), 403, request);
+20|  if (parsed.data.userId !== auth.user.id) return respond(buildError(parsed.data.requestType, startedAt, 'FORBIDDEN', 'Request user does not match auth token', false), 403, request);
 21|  const apiKey = Deno.env.get('GEMINI_API_KEY');
 22|  if (!apiKey) return respond(buildError(parsed.data.requestType, startedAt, 'GEMINI_API_ERROR', 'Missing Gemini configuration', true), 200, request);
 23|  const supabaseUrl = Deno.env.get('SUPABASE_URL');

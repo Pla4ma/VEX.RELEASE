@@ -1,4 +1,5 @@
 import React from 'react';
+import * as Sentry from '@sentry/react-native';
 import { Box } from '../../components/primitives/Box';
 import { CompanionSessionLayer } from '../../session/components/CompanionSessionLayer';
 import { DeepWorkVignette } from '../../session/components/DeepWorkVignette';
@@ -176,21 +177,29 @@ export function ActiveSessionContent({
         theme={theme}
         onClearControlFailure={actions.clearControlFailure}
         onRetryControlFailure={() => {
-          actions.retryControlFailure().catch(() => undefined);
+          actions.retryControlFailure().catch((error: unknown) => {
+            Sentry.captureException(error, { tags: { feature: 'session-controls' } });
+          });
         }}
         onComplete={() => {
-          actions.handleComplete().catch(() => undefined);
+          actions.handleComplete().catch((error: unknown) => {
+            Sentry.captureException(error, { tags: { feature: 'session-controls' } });
+          });
         }}
         onEnd={() => actions.setShowInterruption(true)}
         onPauseResume={() => {
-          actions.handlePauseResume().catch(() => undefined);
+          actions.handlePauseResume().catch((error: unknown) => {
+            Sentry.captureException(error, { tags: { feature: 'session-controls' } });
+          });
         }}
         onToggleMultiplierInfo={() =>
           actions.setShowMultiplierInfo(!showMultiplierInfo)
         }
         onResume={() => actions.setShowInterruption(false)}
         onAbandon={() => {
-          actions.handleAbandon().catch(() => undefined);
+          actions.handleAbandon().catch((error: unknown) => {
+            Sentry.captureException(error, { tags: { feature: 'session-controls' } });
+          });
         }}
       />
     </Box>

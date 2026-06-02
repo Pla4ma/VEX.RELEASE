@@ -45,7 +45,7 @@ export async function fetchRecentMessages(
 ): Promise<CoachMessage[]> {
   const { data, error } = await supabase
     .from('coach_messages')
-    .select('*')
+    .select('id,user_id,persona_id,category,content,delivery_method,priority,status,created_at,scheduled_for,delivered_at,read_at,dismissed_at,action_taken,action_taken_at')
     .eq('user_id', userId)
     .order('created_at', { ascending: false })
     .limit(limit)
@@ -61,7 +61,7 @@ export async function fetchUserMessages(
   limit: number = 50,
   status?: MessageStatus,
 ): Promise<CoachMessage[]> {
-  let query = supabase.from('coach_messages').select('*').eq('user_id', userId);
+  let query = supabase.from('coach_messages').select('id,user_id,persona_id,category,content,delivery_method,priority,status,created_at,scheduled_for,delivered_at,read_at,dismissed_at,action_taken,action_taken_at').eq('user_id', userId);
   if (status) {
     query = query.eq('status', status);
   }
@@ -79,7 +79,7 @@ export async function fetchUndeliveredMessages(
 ): Promise<CoachMessage[]> {
   const { data, error } = await supabase
     .from('coach_messages')
-    .select('*')
+    .select('id,user_id,persona_id,category,content,delivery_method,priority,status,created_at,scheduled_for,delivered_at,read_at,dismissed_at,action_taken,action_taken_at')
     .eq('user_id', userId)
     .in('status', ['SCHEDULED', 'SENT'])
     .order('priority', { ascending: false })
@@ -176,7 +176,7 @@ export async function fetchCoachHistory(
 ): Promise<{ messages: CoachMessage[]; mutedCategories: string[] }> {
   const { data, error } = await supabase
     .from('coach_messages')
-    .select('*')
+    .select('id,user_id,persona_id,category,content,delivery_method,priority,status,created_at,scheduled_for,delivered_at,read_at,dismissed_at,action_taken,action_taken_at')
     .eq('user_id', userId)
     .order('created_at', { ascending: false })
     .limit(limit);

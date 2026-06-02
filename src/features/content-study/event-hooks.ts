@@ -50,9 +50,9 @@ export function composeEventHandlers<T>(
             );
           });
         }
-      } catch (e) {
+      } catch (error: unknown) {
         captureException(
-          e instanceof Error ? e : new Error('Event handler error'),
+          error instanceof Error ? error : new Error('Event handler error'),
           { area: 'content-study.events.compose' },
         );
       }

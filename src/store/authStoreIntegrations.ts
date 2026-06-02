@@ -1,4 +1,5 @@
 import { revenueCatService } from '../shared/monetization/revenuecat-service';
+import { resetSessionOrchestrator } from '../session/SessionOrchestrator';
 import type { User } from '../types/models';
 import { createDebugger } from '../utils/debug';
 
@@ -24,6 +25,11 @@ export function deinitializeServicesAfterLogout(): void {
     revenueCatService.clearUserId();
   } catch (error) {
     debug.error('[AuthStore] Failed to clear RevenueCat user ID:', error);
+  }
+  try {
+    resetSessionOrchestrator();
+  } catch (error) {
+    debug.error('[AuthStore] Failed to reset session orchestrator:', error);
   }
   integrationsInitializedForUserId = null;
 }

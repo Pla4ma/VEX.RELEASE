@@ -19,9 +19,9 @@
       "bundleIdentifier": "com.jonathan.vex",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false,
-        "NSPrivacyPolicyURL": "https://pla4ma.github.io/",
-        "NSSupportURL": "https://pla4ma.github.io/support",
-        "NSTermsOfServiceURL": "https://pla4ma.github.io/terms"
+        "NSPrivacyPolicyURL": "https://vex.app/privacy",
+        "NSSupportURL": "https://vex.app/support",
+        "NSTermsOfServiceURL": "https://vex.app/terms"
       },
       "privacyManifests": {
         "NSPrivacyTracking": false,
@@ -127,7 +127,10 @@
         {
           "domains": {
             "supabase.co": {
-              "pins": ["sha256/PLACEHOLDER_REPLACE_BEFORE_SHIP"],
+              "pins": [
+                "sha256/p51goejPCgGH+Oog/MU2k6PObcEfTrrr73jUcuWJ7w0=",
+                "sha256/kIdp6NNEd8wsugYyyIYFsi1ylMCED3hZbSR8ZFsa/A4="
+              ],
               "includeSubdomains": true
             }
           }
@@ -159,13 +162,28 @@
           "organization": "nueroflow"
         }
       ],
-      "expo-status-bar"
+      "expo-status-bar",
+      "expo-splash-screen",
+      "expo-image"
     ],
     "extra": {
       "eas": {
         "projectId": "d4b472ef-85f4-49a2-895d-4f3c5fce10fc"
       }
     },
-    "owner": "jeppygeja"
+    "owner": "jeppygeja",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0A0A0A"
+    },
+    "updates": {
+      "enabled": true,
+      "checkAutomatically": "ON_LOAD",
+      "fallbackToCacheTimeout": 30000
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    }
   }
 }

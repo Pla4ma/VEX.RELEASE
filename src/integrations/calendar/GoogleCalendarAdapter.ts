@@ -1,4 +1,4 @@
-import { getApiClient } from '../../api/client';
+import { getApiClient } from '../../api/api-client';
 import { createDebugger } from '../../utils/debug';
 import type { CalendarEvent, FreeBusyInfo } from './types';
 import type {
@@ -31,14 +31,14 @@ export class GoogleCalendarAdapter {
 
   async refreshToken(): Promise<boolean> {
     try {
-      const response = await getApiClient().post<{
+      const { data } = await getApiClient().post<{
         accessToken: string;
         expiresIn?: number;
-      }>('/auth/google/refresh', { refreshToken: this.config.refreshToken });
-      if (response?.accessToken) {
-        this.config.accessToken = response.accessToken;
+      }>('/auth/google/refresh', { data: { refreshToken: this.config.refreshToken } });
+      if (data?.accessToken) {
+        this.config.accessToken = data.accessToken;
         this.config.expiresAt =
-          Date.now() + (response.expiresIn || 3600) * 1000;
+          Date.now() + (data.expiresIn || 3600) * 1000;
         debug.info('Token refreshed successfully');
         return true;
       }
@@ -63,7 +63,7 @@ export class GoogleCalendarAdapter {
   ): Promise<CalendarEvent[]> {
     try {
       const authHeader = await this.getAuthHeader();
-      const response = await getApiClient().get<GoogleCalendarListResponse>(
+      const { data } = await getApiClient().get<GoogleCalendarListResponse>(
         `${GOOGLE_CALENDAR_BASE_URL}/calendars/${calendarId}/events`,
         {
           headers: { Authorization: authHeader },
@@ -75,7 +75,7 @@ export class GoogleCalendarAdapter {
           },
         },
       );
-      const events = response?.items || [];
+      const events = data?.items || [];
       return events.map((event) => mapGoogleEvent(event));
     } catch (error) {
       debug.error('Failed to fetch events:', error);
@@ -91,7 +91,7 @@ export class GoogleCalendarAdapter {
     try {
       const authHeader = await this.getAuthHeader();
       const endTime = new Date(startTime.getTime() + duration * 60 * 1000);
-      const response = await getApiClient().post<GoogleCalendarEventRaw>(
+      const { data: eventData } = await getApiClient().post<GoogleCalendarEventRaw>(
         `${GOOGLE_CALENDAR_BASE_URL}/calendars/primary/events`,
         {
           headers: { Authorization: authHeader },
@@ -112,7 +112,7 @@ export class GoogleCalendarAdapter {
           },
         },
       );
-      return mapGoogleEvent(response);
+      return mapGoogleEvent(eventData);
     } catch (error) {
       debug.error('Failed to create focus event:', error);
       throw error;
@@ -140,7 +140,7 @@ export class GoogleCalendarAdapter {
   ): Promise<FreeBusyInfo> {
     try {
       const authHeader = await this.getAuthHeader();
-      const response = await getApiClient().post<GoogleFreeBusyResponse>(
+      const { data: freeBusyData } = await getApiClient().post<GoogleFreeBusyResponse>(
         `${GOOGLE_CALENDAR_BASE_URL}/freeBusy`,
         {
           headers: { Authorization: authHeader },
@@ -152,7 +152,7 @@ export class GoogleCalendarAdapter {
           },
         },
       );
-      const calendars = response?.calendars || {};
+      const calendars = freeBusyData?.calendars || {};
       const busySlots: Array<{ start: Date; end: Date }> = [];
       Object.values(calendars).forEach((cal) => {
         const busy = cal.busy || [];

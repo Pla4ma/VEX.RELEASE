@@ -122,6 +122,8 @@ function getFocusEnhancements(
     if (!('accessibilityRole' in sourceProps)) {
       enhancements.accessibilityRole = 'button';
     }
+    enhancements.accessibilityViewIsModal = false;
+    enhancements.accessibilityElementsHidden = false;
   }
 
   if ('onPress' in sourceProps && !('accessibilityHint' in sourceProps)) {
@@ -139,6 +141,7 @@ function getMotionEnhancements(
 
   if ('animated' in sourceProps || 'useNativeDriver' in sourceProps) {
     enhancements.accessibilityReduceMotion = true;
+    enhancements.accessibilityIgnoresPageScaling = false;
   }
 
   return enhancements;

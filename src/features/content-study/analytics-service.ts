@@ -95,8 +95,8 @@ export class ContentStudyAnalyticsService {
         sessionId: event.sessionId,
         context: event.context,
       });
-    } catch (e) {
-      debug.error('Analytics tracking error:', e as Error);
+    } catch (error: unknown) {
+      debug.error('Analytics tracking error:', error instanceof Error ? error : new Error(String(error)));
       this.queue.push(event);
     }
   }
@@ -107,8 +107,8 @@ export class ContentStudyAnalyticsService {
         `${CONTENT_STUDY_CONSTANTS.LOCAL_STORAGE_KEY}:analytics-queue`,
         JSON.stringify(this.queue),
       );
-    } catch (e) {
-      debug.error('Failed to persist analytics queue:', e as Error);
+    } catch (error: unknown) {
+      debug.error('Failed to persist analytics queue:', error instanceof Error ? error : new Error(String(error)));
     }
   }
 

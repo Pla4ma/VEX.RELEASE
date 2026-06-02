@@ -1,0 +1,26 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "Running pre-commit checks..."
+
+# Type check (fast fail)
+echo "→ Type checking..."
+npx tsc --noEmit
+if [ $? -ne 0 ]; then echo "❌ Type check failed"; exit 1; fi
+
+# Lint (fast fail)
+echo "→ Linting..."
+npm run lint -- --max-warnings=0
+if [ $? -ne 0 ]; then echo "❌ Lint failed"; exit 1; fi
+
+# Banned patterns
+echo "→ Checking banned patterns..."
+npm run check:banned-patterns
+if [ $? -ne 0 ]; then echo "❌ Banned patterns found"; exit 1; fi
+
+# Line limit
+echo "→ Checking file line limits..."
+npm run check:line-limit
+if [ $? -ne 0 ]; then echo "❌ Line limit exceeded"; exit 1; fi
+
+echo "✅ All pre-commit checks passed"

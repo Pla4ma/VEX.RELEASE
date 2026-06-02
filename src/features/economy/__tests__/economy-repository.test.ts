@@ -1,14 +1,13 @@
 import { RepositoryError } from '../repository';
 
 describe('RepositoryError', () => {
-  it('constructs with operation and PostgrestError-like cause', () => {
+  it('constructs with operation and Error cause in message', () => {
     const cause = new Error('connection failed');
     const error = new RepositoryError('fetchWallet', cause);
     expect(error.name).toBe('RepositoryError');
-    expect(error.operation).toBe('fetchWallet');
     expect(error.message).toContain('fetchWallet');
     expect(error.message).toContain('connection failed');
-    expect(error.cause).toBe(cause);
+    expect(error.originalError).toBe(cause);
   });
 
   it('is an instance of Error', () => {
@@ -16,8 +15,8 @@ describe('RepositoryError', () => {
     expect(error).toBeInstanceOf(Error);
   });
 
-  it('preserves the operation field', () => {
+  it('preserves the operation in the message', () => {
     const error = new RepositoryError('spendCurrency', new Error('db down'));
-    expect(error.operation).toBe('spendCurrency');
+    expect(error.message).toBe('[spendCurrency] db down');
   });
 });

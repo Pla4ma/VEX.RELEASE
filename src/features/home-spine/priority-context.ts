@@ -75,6 +75,10 @@ export async function buildHomeContextSnapshot(
   userId: string,
   featureAccess?: FeatureAccessMap,
 ): Promise<HomeContextSnapshot> {
+  // PERF-003: Fetch home data in parallel with individual error isolation.
+  // Post-release optimization: consolidate into a single Supabase RPC
+  // to reduce connection overhead. Each catch() prevents one failed
+  // query from blocking the entire home screen.
   const timeZone = getTimeZone();
   const canQuery = (key: keyof FeatureAccessMap): boolean => {
     if (!featureAccess) {

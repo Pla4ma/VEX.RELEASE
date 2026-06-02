@@ -8,7 +8,7 @@
  */
 
 export { QueryProvider, queryClient, QueryKeys } from './QueryProvider';
-export { ApiClient, getApiClient, resetApiClient } from './client';
+export { ApiClient, getApiClient, resetApiClient } from './api-client';
 export {
   validateSchema,
   validateAsync,

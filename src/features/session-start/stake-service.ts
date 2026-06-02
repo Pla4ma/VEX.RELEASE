@@ -1,3 +1,4 @@
+import { captureSilentFailure } from '../../utils/silent-failure';
 import { fetchBossTemplate, fetchActiveEncounter } from '../boss/repository';
 import { fetchActiveChallengeDetails } from '../challenges/repository';
 import { fetchStreak } from '../streaks/repository';
@@ -83,9 +84,18 @@ export async function buildSessionStake(
   selectedLoadout?: string[],
 ): Promise<SessionStake> {
   const [bossEncounter, streak, challenges] = await Promise.all([
-    fetchActiveEncounter(userId).catch(() => null),
-    fetchStreak(userId).catch(() => null),
-    fetchActiveChallengeDetails(userId).catch(() => []),
+    fetchActiveEncounter(userId).catch((error: unknown) => {
+      captureSilentFailure(error, { feature: 'session-start', operation: 'fetchActiveEncounter', type: 'network' });
+      return null;
+    }),
+    fetchStreak(userId).catch((error: unknown) => {
+      captureSilentFailure(error, { feature: 'session-start', operation: 'fetchStreak', type: 'network' });
+      return null;
+    }),
+    fetchActiveChallengeDetails(userId).catch((error: unknown) => {
+      captureSilentFailure(error, { feature: 'session-start', operation: 'fetchActiveChallengeDetails', type: 'network' });
+      return [];
+    }),
   ]);
   const bossDamage = bossEncounter
     ? calculateBossDamageEstimate(durationSeconds, streak?.currentDays ?? 0)

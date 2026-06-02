@@ -3,11 +3,11 @@ import { captureSilentFailure } from '../utils/silent-failure';
  * Secure Storage Adapter
  *
  * Encrypted storage using expo-secure-store for native platforms.
- * Falls back to sessionStorage for web platform.
+  * Falls back to localStorage for web platform (persists across tab closes).
  * Used for tokens, credentials, and private keys.
  */
 
-import * as SecureStore from 'expo-secure-store';
+ import * as SecureStore from 'expo-secure-store';
 import { Platform } from 'react-native';
 import type { Nullable } from '../types/global';
 import type { StorageAdapter, StorageResult } from './StorageAdapter';
@@ -20,7 +20,7 @@ const WEB_STORAGE_PREFIX = 'vex_secure_';
 
 /**
  * Secure storage adapter implementation
- * Uses expo-secure-store on native, sessionStorage on web
+ * Uses expo-secure-store on native, localStorage on web (RB-006 fix)
  */
 export class SecureStorage implements StorageAdapter {
   private isWeb: boolean;
@@ -35,8 +35,8 @@ export class SecureStorage implements StorageAdapter {
   async getItem(key: string): Promise<Nullable<string>> {
     try {
       if (this.isWeb) {
-        // Use tab-scoped storage on web so token-like values are not persisted.
-        return sessionStorage.getItem(WEB_STORAGE_PREFIX + key);
+        // Use localStorage on web so auth sessions persist across tab closes (RB-006).
+        return localStorage.getItem(WEB_STORAGE_PREFIX + key);
       }
       // Use expo-secure-store on native
       return await SecureStore.getItemAsync(key);
@@ -52,8 +52,8 @@ export class SecureStorage implements StorageAdapter {
   async setItem(key: string, value: string): Promise<void> {
     try {
       if (this.isWeb) {
-        // Use tab-scoped storage on web so token-like values are not persisted.
-        sessionStorage.setItem(WEB_STORAGE_PREFIX + key, value);
+        // Use localStorage on web so auth sessions persist across tab closes (RB-006).
+        localStorage.setItem(WEB_STORAGE_PREFIX + key, value);
         return;
       }
       // Use expo-secure-store on native
@@ -70,7 +70,7 @@ export class SecureStorage implements StorageAdapter {
   async removeItem(key: string): Promise<void> {
     try {
       if (this.isWeb) {
-        sessionStorage.removeItem(WEB_STORAGE_PREFIX + key);
+        localStorage.removeItem(WEB_STORAGE_PREFIX + key);
         return;
       }
       // Use expo-secure-store on native
@@ -87,7 +87,7 @@ export class SecureStorage implements StorageAdapter {
   async containsKey(key: string): Promise<boolean> {
     try {
       if (this.isWeb) {
-        return sessionStorage.getItem(WEB_STORAGE_PREFIX + key) !== null;
+        return localStorage.getItem(WEB_STORAGE_PREFIX + key) !== null;
       }
       return (await SecureStore.getItemAsync(key)) !== null;
     } catch (error) {

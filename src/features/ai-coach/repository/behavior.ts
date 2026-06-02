@@ -14,7 +14,7 @@ export async function fetchBehaviorProfile(
 ): Promise<BehaviorProfile | null> {
   const { data, error } = await supabase
     .from('behavior_profiles')
-    .select('*')
+    .select('id,user_id,confidence_level,cold_start,data_points,signals,last_updated,created_at,updated_at,metadata')
     .eq('user_id', userId)
     .single();
   if (error) {

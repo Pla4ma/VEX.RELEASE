@@ -1,0 +1,17 @@
+.github/workflows/ci.yml
+.hermes/work-state.json
+.husky/commit-msg
+.husky/pre-commit
+babel.config.js
+src/__tests__/rls-verification.test.ts
+src/features/ai-coach/PredictiveInterventionEngine.ts
+src/features/auth/repository.ts
+src/features/economy/repository.ts
+src/features/economy/schemas.ts
+src/features/session-completion/completion-query-invalidation.ts
+src/features/session-completion/hooks/useSessionCompleteActions.ts
+src/features/session-start/stake-service.ts
+src/hooks/useRealtime.ts
+src/lib/offline/queue.ts
+src/services/realtimeSubscriptions.ts
+src/shared/ui/components/AnimatedCounter.tsx

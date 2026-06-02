@@ -43,7 +43,9 @@ export function useOnboardingCompletion(userId: string) {
             'Start one clean focus block and VEX will begin tailoring the next action around your progress.',
           tone: 'celebration',
         });
-        triggerHaptic('success').catch(() => undefined);
+        triggerHaptic('success').catch(() => {
+          // Haptic failure is non-critical — safe to swallow in onboarding completion
+        });
         navigation.replace('Main', {
           screen: 'Home',
           params: message ? { comebackMessage: message } : undefined,

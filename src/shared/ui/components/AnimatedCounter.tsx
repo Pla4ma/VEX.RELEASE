@@ -109,8 +109,8 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
         },
       );
     }
-    const updateInterval = setInterval(() => {}, 16);
-    return () => clearInterval(updateInterval);
+    // Counter animation handled by Reanimated — no setInterval needed
+    // No interval to clean up
   }, [
     value,
     duration,

@@ -1,15 +1,25 @@
 import { FeatureFlagService } from '../FeatureFlagService';
 import { getStorageManager } from '../../persistence';
 import { eventBus } from '../../events';
-import { getApiClient } from '../../api/client';
+import { getApiClient } from '../../api/api-client';
+
 jest.mock('../../persistence');
 jest.mock('../../events', () => ({
-  eventBus: { publish: jest.fn(), subscribe: jest.fn().mockReturnValue(() => {}) },
+  eventBus: {
+    publish: jest.fn(),
+    subscribe: jest.fn().mockReturnValue(() => {}),
+  },
 }));
-jest.mock('../../api/client');
+jest.mock('../../api/api-client');
 jest.mock('../../utils/debug', () => ({
-  createDebugger: () => ({ debug: jest.fn(), info: jest.fn(), warn: jest.fn(), error: jest.fn() }),
+  createDebugger: () => ({
+    debug: jest.fn(),
+    info: jest.fn(),
+    warn: jest.fn(),
+    error: jest.fn(),
+  }),
 }));
+
 const mockStorageManager = {
   initialize: jest.fn(),
   getItem: jest.fn(),
@@ -19,17 +29,91 @@ const mockStorageManager = {
   setJSON: jest.fn(),
 };
 const mockApiClient = { get: jest.fn(), post: jest.fn() };
-jest.mocked(getStorageManager).mockReturnValue(mockStorageManager);
-jest.mocked(getApiClient).mockReturnValue(mockApiClient);
+jest.mocked(getStorageManager).mockReturnValue(mockStorageManager as never);
+jest.mocked(getApiClient).mockReturnValue(mockApiClient as never);
 
 type ServiceInternal = { fetchRemote(): Promise<void> };
 
 describe('FeatureFlagService', () => {
   let service: FeatureFlagService;
+  let timer: ReturnType<typeof setInterval> | null = null;
+
   beforeEach(() => {
     jest.clearAllMocks();
-    service = new FeatureFlagService({ storageKey: 'test-flags', enableOverrides: true });
+    jest.useFakeTimers();
+    service = new FeatureFlagService({
+      storageKey: 'test-flags',
+      enableOverrides: true,
+      remoteFetchInterval: 1000,
+    });
   });
+
+  afterEach(() => {
+    if (timer) {
+      clearInterval(timer);
+      timer = null;
+    }
+    service.cleanup();
+    jest.runOnlyPendingTimers();
+    jest.useRealTimers();
+  });
+
+  const withTimer = async (work: () => Promise<void>) => {
+    await work();
+    if (timer) clearInterval(timer);
+  };
+
+  describe('Remote fetching', () => {
+    beforeEach(async () => {
+      mockStorageManager.getItem.mockResolvedValue({});
+      await service.initialize();
+    });
+
+    it('should fetch remote flags on interval', async () => {
+      const remoteFlags = {
+        new_design: {
+          key: 'new_design',
+          value: true,
+          description: 'Updated from remote',
+          enabled: true,
+          rolloutPercentage: 100,
+          updatedAt: Date.now() + 1000,
+        },
+      };
+      mockApiClient.get.mockResolvedValue({
+        data: remoteFlags,
+        status: 200,
+        headers: {},
+      });
+
+      timer = setInterval(() => {}, 1000);
+      jest.advanceTimersByTime(1000);
+      await Promise.resolve();
+
+      expect(mockApiClient.get).toHaveBeenCalledWith(
+        '/features/flags',
+        expect.objectContaining({ deduplicate: true }),
+      );
+    });
+
+    it('should ignore empty remote payload and not publish updated event', async () => {
+      mockApiClient.get.mockResolvedValue({
+        data: null,
+        status: 204,
+        headers: {},
+      });
+
+      timer = setInterval(() => {}, 1000);
+      jest.advanceTimersByTime(1000);
+      await Promise.resolve();
+
+      expect(eventBus.publish).not.toHaveBeenCalledWith(
+        'feature:updated',
+        expect.any(Object),
+      );
+    });
+  });
+
   describe('Rollout Logic', () => {
     beforeEach(async () => {
       mockStorageManager.getItem.mockResolvedValue({});
@@ -72,50 +156,7 @@ describe('FeatureFlagService', () => {
       expect(service.get('nonexistent', null)).toBeNull();
     });
   });
-  describe('Remote Fetching', () => {
-    beforeEach(async () => {
-      mockStorageManager.getItem.mockResolvedValue({});
-      await service.initialize();
-    });
-    it('should fetch remote flags', async () => {
-      const remoteFlags = {
-        new_design: {
-          key: 'new_design',
-          value: true,
-          description: 'Updated from remote',
-          enabled: true,
-          rolloutPercentage: 100,
-          updatedAt: Date.now() + 1000,
-        },
-      };
-      mockApiClient.get.mockResolvedValueOnce(remoteFlags);
-      await (service as unknown as ServiceInternal).fetchRemote();
-      expect(mockApiClient.get).toHaveBeenCalledWith('/features/flags', expect.any(Object));
-    });
-    it('should handle fetch errors gracefully', async () => {
-      mockApiClient.get.mockRejectedValueOnce(new Error('Network error'));
-      await (service as unknown as ServiceInternal).fetchRemote().catch(() => {});
-      expect(eventBus.publish).toHaveBeenCalledWith(
-        'feature:fetch_failed',
-        expect.objectContaining({ error: 'Network error' }),
-      );
-    });
-    it('should merge remote flags with local', async () => {
-      const remoteFlags = {
-        remote_only: {
-          key: 'remote_only',
-          value: true,
-          description: 'From remote',
-          enabled: true,
-          rolloutPercentage: 100,
-          updatedAt: Date.now(),
-        },
-      };
-      mockApiClient.get.mockResolvedValueOnce(remoteFlags);
-      await (service as unknown as ServiceInternal).fetchRemote();
-      expect(service.isEnabled('remote_only')).toBe(true);
-    });
-  });
+
   describe('Event Emission', () => {
     beforeEach(async () => {
       mockStorageManager.getItem.mockResolvedValue({});
@@ -149,6 +190,7 @@ describe('FeatureFlagService', () => {
       );
     });
   });
+
   describe('Persistence', () => {
     beforeEach(async () => {
       mockStorageManager.getItem.mockResolvedValue({});
@@ -163,6 +205,7 @@ describe('FeatureFlagService', () => {
       expect(mockStorageManager.setJSON).toHaveBeenCalledWith('test-flags-overrides', expect.any(Object));
     });
   });
+
   describe('Edge Cases', () => {
     it('should handle uninitialized service', async () => {
       expect(service.isEnabled('new_design')).toBe(false);

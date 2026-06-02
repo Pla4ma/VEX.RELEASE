@@ -31,7 +31,7 @@ export async function signUpWithEmail(
     });
 
     if (error) {
-      return { user: null, error: new Error('Invalid email or password.') };
+      return { user: null, error: new Error('Unable to create account. Please try again.') };
     }
 
     if (data.user) {

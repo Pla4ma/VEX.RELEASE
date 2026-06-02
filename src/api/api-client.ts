@@ -22,6 +22,7 @@ import {
 } from './api-request-handler';
 
 export type { RequestInterceptor, ResponseInterceptor };
+export type { ApiConfig, AuthProvider, ApiRequestConfig, ApiResponse, ApiError } from './client-types';
 
 export class ApiClient {
   private config: ApiConfig;
@@ -153,6 +154,19 @@ export class ApiClient {
     return executeWithRetry<T>(this.getDeps(), endpoint, finalConfig);
   }
 
+  async request<T>(
+    endpoint: string,
+    config: ApiRequestConfig = {},
+  ): Promise<ApiResponse<T>> {
+    const finalConfig = await this.runRequestInterceptors(config);
+    const method = finalConfig.method ?? 'GET';
+    const deps = this.getDeps();
+    if (method === 'GET' && finalConfig.deduplicate) {
+      return executeWithDeduplication<T>(deps, endpoint, finalConfig);
+    }
+    return executeWithRetry<T>(deps, endpoint, finalConfig);
+  }
+
   getCircuitBreakerState(): CircuitState {
     return this.circuitBreaker.getState();
   }
@@ -178,3 +192,6 @@ export function resetApiClient(): void {
 }
 
 export default ApiClient;
+
+// Re-export standalone request handler functions for direct usage
+export { executeWithRetry, executeWithDeduplication } from './api-request-handler';

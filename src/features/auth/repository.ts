@@ -3,14 +3,14 @@ import { mapSupabaseUser, attachOnboardingCompletion } from '../../services/supa
 import type { User } from './types';
 import type { SignUpMetadata, AuthResult } from './types';
 
-const supabase = getSupabaseClient();
+// Supabase client obtained per-call to avoid top-level instantiation
 
 export async function signUpWithEmail(
   email: string,
   password: string,
   metadata: SignUpMetadata,
 ): Promise<AuthResult> {
-  const { data, error } = await supabase.auth.signUp({
+  const { data, error } = await getSupabaseClient().auth.signUp({
     email,
     password,
     options: {
@@ -22,7 +22,7 @@ export async function signUpWithEmail(
   });
 
   if (error) {
-    return { user: null, error: new Error(error.message) };
+    return { user: null, error: new Error('Unable to create account. Please try again.') };
   }
 
   if (data.user) {
@@ -38,10 +38,10 @@ export async function signInWithEmail(
   email: string,
   password: string,
 ): Promise<AuthResult> {
-  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+  const { data, error } = await getSupabaseClient().auth.signInWithPassword({ email, password });
 
   if (error) {
-    return { user: null, error: new Error(error.message) };
+    return { user: null, error: new Error('Invalid email or password.') };
   }
 
   const user = data.user ? mapSupabaseUser(data.user) : null;
@@ -50,14 +50,14 @@ export async function signInWithEmail(
 }
 
 export async function signOut(): Promise<void> {
-  const { error } = await supabase.auth.signOut();
+  const { error } = await getSupabaseClient().auth.signOut();
   if (error) {
     throw handleSupabaseError(error);
   }
 }
 
 export async function getSessionUser(): Promise<User | null> {
-  const { data, error } = await supabase.auth.getSession();
+  const { data, error } = await getSupabaseClient().auth.getSession();
   if (error || !data.session?.user) {
     return null;
   }
@@ -66,21 +66,21 @@ export async function getSessionUser(): Promise<User | null> {
 }
 
 export async function sendPasswordResetEmail(email: string): Promise<void> {
-  const { error } = await supabase.auth.resetPasswordForEmail(email);
+  const { error } = await getSupabaseClient().auth.resetPasswordForEmail(email);
   if (error) {
     throw handleSupabaseError(error);
   }
 }
 
 export async function updateUserPassword(newPassword: string): Promise<void> {
-  const { error } = await supabase.auth.updateUser({ password: newPassword });
+  const { error } = await getSupabaseClient().auth.updateUser({ password: newPassword });
   if (error) {
     throw handleSupabaseError(error);
   }
 }
 
 export async function resendVerificationEmail(email: string): Promise<void> {
-  const { error } = await supabase.auth.resend({ type: 'signup', email });
+  const { error } = await getSupabaseClient().auth.resend({ type: 'signup', email });
   if (error) {
     throw handleSupabaseError(error);
   }

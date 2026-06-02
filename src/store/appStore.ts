@@ -14,7 +14,7 @@ export interface AppState {
 export const useAppStore = create<AppState>()(
   immer((set) => ({
     isInitialized: false,
-    isOnline: true,
+    isOnline: false,
     lastSyncTime: null,
     setInitialized: (initialized) =>
       set((state) => {

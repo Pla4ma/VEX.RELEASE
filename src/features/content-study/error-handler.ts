@@ -79,10 +79,10 @@ export class ContentStudyErrorHandler {
       callbacks.forEach((cb) => {
         try {
           cb(error);
-        } catch (e) {
+        } catch (error: unknown) {
           captureException(
-            e instanceof Error
-              ? e
+            error instanceof Error
+              ? error
               : new Error('Content study error callback failed'),
             { area: 'content-study.error-callback' },
           );
