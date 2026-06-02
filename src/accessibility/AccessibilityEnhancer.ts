@@ -94,6 +94,87 @@ export class AccessibilityEnhancer {
     }
     return stats;
   }
+  performHealthCheck(): {
+    score: number;
+    issues: string[];
+    recommendations: string[];
+  } {
+    const issues: string[] = [];
+    const recommendations: string[] = [];
+
+    if (!this.config.autoContrastFixes) {
+      issues.push('Contrast auto-fixes disabled');
+      recommendations.push('Enable contrast auto-fixes');
+    }
+    if (!this.config.autoFocusManagement) {
+      issues.push('Focus management disabled');
+      recommendations.push('Enable focus management');
+    }
+    if (!this.config.motionOptimizations) {
+      issues.push('Motion optimizations disabled');
+      recommendations.push('Enable motion optimizations');
+    }
+    if (!this.config.screenReaderOptimizations) {
+      issues.push('Screen reader optimizations disabled');
+      recommendations.push('Enable screen reader optimizations');
+    }
+
+    const score =
+      (this.config.autoContrastFixes ? 25 : 0) +
+      (this.config.autoFocusManagement ? 25 : 0) +
+      (this.config.motionOptimizations ? 25 : 0) +
+      (this.config.screenReaderOptimizations ? 25 : 0);
+
+    return { score, issues, recommendations };
+  }
+  createEnhancedButton<P extends object>(
+    Component: React.ComponentType<P>,
+  ): React.ForwardRefExoticComponent<
+    React.PropsWithoutRef<P> & React.RefAttributes<unknown>
+  > {
+    return this.enhanceComponent<P>(Component, {
+      accessibilityRole: 'button',
+      accessibilityViewIsModal: false,
+      accessibilityElementsHidden: false,
+      accessibilityIgnoresPageScaling: false,
+    });
+  }
+  createEnhancedInput<P extends object>(
+    Component: React.ComponentType<P>,
+  ): React.ForwardRefExoticComponent<
+    React.PropsWithoutRef<P> & React.RefAttributes<unknown>
+  > {
+    return this.enhanceComponent<P>(Component, {
+      accessibilityRole: 'none',
+      accessibilityViewIsModal: false,
+      accessibilityElementsHidden: false,
+      accessibilityIgnoresPageScaling: false,
+    });
+  }
+  createEnhancedModal<P extends object>(
+    Component: React.ComponentType<P>,
+  ): React.ForwardRefExoticComponent<
+    React.PropsWithoutRef<P> & React.RefAttributes<unknown>
+  > {
+    return this.enhanceComponent<P>(Component, {
+      accessibilityRole: 'alert',
+      accessibilityViewIsModal: true,
+      accessibilityElementsHidden: false,
+      accessibilityIgnoresPageScaling: false,
+    });
+  }
+  createEnhancedList<P extends object>(
+    Component: React.ComponentType<P>,
+  ): React.ForwardRefExoticComponent<
+    React.PropsWithoutRef<P> & React.RefAttributes<unknown>
+  > {
+    return this.enhanceComponent<P>(Component, {
+      accessibilityRole: 'list',
+      accessibilityViewIsModal: false,
+      accessibilityElementsHidden: false,
+      accessibilityIgnoresPageScaling: false,
+    });
+  }
   private getAutomaticEnhancements<P extends object>(
     props: P,
   ): Partial<EnhancedAccessibilityProps> {

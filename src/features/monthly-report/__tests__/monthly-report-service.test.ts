@@ -98,7 +98,7 @@ describe('generateMonthlyReport', () => {
       fail('Expected error');
     } catch (error: unknown) {
       expect(error).toBeInstanceOf(MonthlyReportServiceError);
-      expect((e as MonthlyReportServiceError).cause).toBe(cause);
+      expect((error as MonthlyReportServiceError).cause).toBe(cause);
     }
   });
 });
