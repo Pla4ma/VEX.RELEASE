@@ -1,11 +1,12 @@
-import { getSupabase, RepositoryError } from './repository';
+import { getSupabaseClient } from '../../config/supabase';
+import { RepositoryError } from './repository';
 import { WalletSchema } from './schemas';
 import type { WalletSummary } from './types';
 
 export async function getOrCreateWallet(
   userId: string,
 ): Promise<{ coins: number; gems: number }> {
-  const supabase = getSupabase();
+  const supabase = getSupabaseClient();
   const { data, error } = await supabase
     .from('wallets')
     .upsert({ user_id: userId, coins: 0, gems: 0 }, { onConflict: 'user_id' })
@@ -17,7 +18,7 @@ export async function getOrCreateWallet(
 }
 
 export async function getWalletSummary(): Promise<WalletSummary> {
-  const supabase = getSupabase();
+  const supabase = getSupabaseClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) {return { coins: 0, gems: 0 };}
   return getOrCreateWallet(user.id);

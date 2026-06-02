@@ -9,10 +9,6 @@ import { RepositoryError } from '../../lib/repository/error-handling';
 
 export { RepositoryError };
 
-export function getSupabase() {
-  return getSupabaseClient();
-}
-
 export async function spendCurrencyRpc(params: {
   userId: string;
   currency: string;
