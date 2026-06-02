@@ -58,6 +58,10 @@ export async function uploadStudyFileRecord(
   try {
     debug.info('Uploading study file: %s for user: %s', filename, userId);
     validateFileUri(fileUri);
+    const scheme = fileUri.split(':', 1)[0]!.toLowerCase();
+    if (scheme !== 'file' && scheme !== 'content' && scheme !== 'https') {
+      throw new Error(`Unsupported file URI scheme: ${scheme}`);
+    }
     const response = await globalThis.fetch(fileUri);
     if (!response.ok) {
       throw new Error('Failed to read file for upload');
