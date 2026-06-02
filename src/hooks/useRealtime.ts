@@ -69,25 +69,23 @@ export function useSquadPresence({ squadId }: UseSquadPresenceOptions) {
     if (!squadId) {
       return;
     }
-    let mounted = true;
-    let unsubscribe: (() => void) | null = null;
-    const subscribe = async () => {
-      const nextUnsubscribe = await subscribeToSquadPresence(squadId, (data) => {
-        if (mounted) {
-          setPresence(data);
-        }
-      });
-      if (!mounted) {
-        nextUnsubscribe();
+    let cancelled = false;
+    let unsubscribeRef: (() => void) | null = null;
+    subscribeToSquadPresence(squadId, (data) => {
+      if (!cancelled) {
+        setPresence(data);
+      }
+    }).then((unsub) => {
+      if (cancelled) {
+        unsub();
         return;
       }
-      unsubscribe = nextUnsubscribe;
-    };
-    subscribe();
+      unsubscribeRef = unsub;
+    });
     return () => {
-      mounted = false;
-      unsubscribe?.();
-      unsubscribe = null;
+      cancelled = true;
+      unsubscribeRef?.();
+      unsubscribeRef = null;
     };
   }, [squadId]);
   return {
@@ -110,11 +108,12 @@ export function useActivityBroadcast({
   useEffect(() => { onMessageRef.current = onMessage; }, [onMessage]);
   useEffect(() => {
     if (!channelName) {return;}
-    const unsubscribe = subscribeToActivity(channelName, (message) => {
+    let unsub: (() => void) | null = null;
+    subscribeToActivity(channelName, (message) => {
       setMessages((prev) => [...prev.slice(-49), message]);
       onMessageRef.current?.(message);
-    });
-    return unsubscribe;
+    }).then((u) => { unsub = u; });
+    return () => { unsub?.(); };
   }, [channelName]);
   const sendActivity = useCallback(
     async (type: BroadcastMessage['type'], payload: unknown) => {
@@ -134,11 +133,12 @@ export function useFeedUpdates({ userId, onUpdate }: UseFeedUpdatesOptions) {
   const onUpdateRef = useRef(onUpdate);
   useEffect(() => { onUpdateRef.current = onUpdate; }, [onUpdate]);
   useEffect(() => {
-    const unsubscribe = subscribeToFeedChanges(userId, (payload) => {
+    let unsub: (() => void) | null = null;
+    subscribeToFeedChanges(userId, (payload) => {
       setUpdates((prev) => [...prev.slice(-19), payload]);
       onUpdateRef.current?.(payload);
-    });
-    return unsubscribe;
+    }).then((u) => { unsub = u; });
+    return () => { unsub?.(); };
   }, [userId]);
   const clearUpdates = useCallback(() => { setUpdates([]); }, []);
   return { updates, clearUpdates };
@@ -149,16 +149,19 @@ interface UseSquadChangesOptions {
 }
 export function useSquadChanges({ squadId, onChange }: UseSquadChangesOptions) {
   const [changes, setChanges] = useState<unknown[]>([]);
+  const onChangeRef = useRef(onChange);
+  useEffect(() => { onChangeRef.current = onChange; }, [onChange]);
   useEffect(() => {
     if (!squadId) {
       return;
     }
-    const unsubscribe = subscribeToSquadChanges(squadId, (payload) => {
+    let unsub: (() => void) | null = null;
+    subscribeToSquadChanges(squadId, (payload) => {
       setChanges((prev) => [...prev.slice(-19), payload]);
-      onChange?.(payload);
-    });
-    return unsubscribe;
-  }, [squadId, onChange]);
+      onChangeRef.current?.(payload);
+    }).then((u) => { unsub = u; });
+    return () => { unsub?.(); };
+  }, [squadId]);
   return { changes, changeCount: changes.length };
 }
 interface UseGuildQuestsOptions {
@@ -170,15 +173,18 @@ export function useGuildQuests({
   onQuestUpdate,
 }: UseGuildQuestsOptions) {
   const [questUpdates, setQuestUpdates] = useState<unknown[]>([]);
+  const onQuestUpdateRef = useRef(onQuestUpdate);
+  useEffect(() => { onQuestUpdateRef.current = onQuestUpdate; }, [onQuestUpdate]);
   useEffect(() => {
     if (!guildId) {
       return;
     }
-    const unsubscribe = subscribeToGuildQuests(guildId, (payload) => {
+    let unsub: (() => void) | null = null;
+    subscribeToGuildQuests(guildId, (payload) => {
       setQuestUpdates((prev) => [...prev.slice(-19), payload]);
-      onQuestUpdate?.(payload);
-    });
-    return unsubscribe;
-  }, [guildId, onQuestUpdate]);
+      onQuestUpdateRef.current?.(payload);
+    }).then((u) => { unsub = u; });
+    return () => { unsub?.(); };
+  }, [guildId]);
   return { questUpdates, latestUpdate: questUpdates[questUpdates.length - 1] };
 }

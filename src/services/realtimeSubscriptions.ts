@@ -46,10 +46,10 @@ export async function broadcastActivity(
   }, 5_000);
 }
 
-export function subscribeToActivity(
+export async function subscribeToActivity(
   channelName: string,
   callback: (message: BroadcastMessage) => void,
-): () => void {
+) {
   const client = getSupabaseClient();
   const fullChannelName = getActivityChannelName(channelName);
   const channel = client
@@ -62,7 +62,7 @@ export function subscribeToActivity(
         timestamp: payload.payload?.timestamp || Date.now(),
       });
     });
-  channel.subscribe();
+  await channel.subscribe();
   activeChannels.set(fullChannelName, channel);
   return () => {
     channel.unsubscribe();
@@ -70,10 +70,10 @@ export function subscribeToActivity(
   };
 }
 
-export function subscribeToFeedChanges(
+export async function subscribeToFeedChanges(
   userId: string,
   callback: (payload: unknown) => void,
-): () => void {
+) {
   const client = getSupabaseClient();
   const channelName = `feed:changes:${userId}`;
   const channel = client
@@ -98,7 +98,7 @@ export function subscribeToFeedChanges(
         });
       },
     );
-  channel.subscribe();
+  await channel.subscribe();
   activeChannels.set(channelName, channel);
   return () => {
     channel.unsubscribe();
@@ -106,10 +106,10 @@ export function subscribeToFeedChanges(
   };
 }
 
-export function subscribeToSquadChanges(
+export async function subscribeToSquadChanges(
   squadId: string,
   callback: (payload: unknown) => void,
-): () => void {
+) {
   const client = getSupabaseClient();
   const channelName = `squad:${squadId}:changes`;
   const channel = client
@@ -137,7 +137,7 @@ export function subscribeToSquadChanges(
         });
       },
     );
-  channel.subscribe();
+  await channel.subscribe();
   activeChannels.set(channelName, channel);
   return () => {
     channel.unsubscribe();
@@ -145,10 +145,10 @@ export function subscribeToSquadChanges(
   };
 }
 
-export function subscribeToGuildQuests(
+export async function subscribeToGuildQuests(
   guildId: string,
   callback: (payload: unknown) => void,
-): () => void {
+) {
   const client = getSupabaseClient();
   const channelName = CHANNELS.guild(guildId);
   const channel = client
@@ -169,7 +169,7 @@ export function subscribeToGuildQuests(
     .on('broadcast', { event: 'message' }, ({ payload }) => {
       debug.debug('Broadcast received:', payload);
     });
-  channel.subscribe();
+  await channel.subscribe();
   activeChannels.set(channelName, channel);
   return () => {
     channel.unsubscribe();
