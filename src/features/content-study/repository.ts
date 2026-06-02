@@ -108,7 +108,7 @@ export async function fetchContentHistoryRecords(userId: string, limit = 20) {
   const { data, error } = await withResilience(
     getSupabaseClient()
       .from('study_content')
-      .select('*')
+      .select('id,user_id,source_type,source_url,original_filename,storage_path,title,extracted_text,extracted_length,language,user_edited_text,is_user_edited,status,error_message,generation_count_today,last_generation_date,deleted_at,created_at,updated_at,extracted_at')
       .eq('user_id', userId)
       .is('deleted_at', null)
       .order('created_at', { ascending: false })
@@ -124,7 +124,7 @@ export async function fetchContentHistoryRecords(userId: string, limit = 20) {
 export async function fetchContentRecord(contentId: string) {
   const { data, error } = await getSupabaseClient()
     .from('study_content')
-    .select('*')
+    .select('id,user_id,source_type,source_url,original_filename,storage_path,title,extracted_text,extracted_length,language,user_edited_text,is_user_edited,status,error_message,generation_count_today,last_generation_date,deleted_at,created_at,updated_at,extracted_at')
     .eq('id', contentId)
     .is('deleted_at', null)
     .maybeSingle();
@@ -137,7 +137,7 @@ export async function fetchContentRecord(contentId: string) {
 export async function fetchGenerationRecord(generationId: string) {
   const { data, error } = await getSupabaseClient()
     .from('study_generations')
-    .select('*')
+    .select('id,content_id,user_id,model,generation_version,processing_time_ms,summary,key_concepts,tasks,quiz_items,session_plan,user_rating,was_helpful,times_used,last_used_at,deleted_at,created_at,updated_at')
     .eq('id', generationId)
     .is('deleted_at', null)
     .maybeSingle();
