@@ -4,6 +4,7 @@ import { Box, Card, Text } from '../../components/primitives';
 import { Badge } from '../../components/Badge';
 import { EmptyState } from '../../components/EmptyState';
 import { Skeleton } from '../../components/ui/Skeleton';
+import { Icon } from '../../icons';
 import type { Theme } from '../../theme/types';
 
 interface AchievementCard {
@@ -46,7 +47,7 @@ export const ProfileAchievementsTab: React.FC<ProfileAchievementsTabProps> = ({
     return (
       <Card size="lg" style={{ backgroundColor: theme.colors.background.secondary }}>
         <EmptyState
-          icon="!"
+          iconName="exclamation-circle"
           title="Achievements unavailable"
           body="Your identity rewards could not load right now. Retry from the achievements screen or come back after your next session."
           actionLabel="Open achievements"
@@ -60,7 +61,7 @@ export const ProfileAchievementsTab: React.FC<ProfileAchievementsTabProps> = ({
     return (
       <Card size="lg" style={{ backgroundColor: theme.colors.background.secondary }}>
         <EmptyState
-          icon="+"
+          iconName="plus-circle"
           title="No earned proof yet"
           body="Complete your first focus session to unlock real achievements on this profile."
           actionLabel="Start session"
@@ -97,11 +98,16 @@ export const ProfileAchievementsTab: React.FC<ProfileAchievementsTabProps> = ({
                 style={{
                   backgroundColor:
                     item.statusTone === 'success'
-                      ? theme.colors.primary[100]
+                      ? theme.colors.semantic.vexCyanSoft
                       : theme.colors.background.tertiary,
                 }}
               >
-                <Text variant="h3" color="text.primary">{item.icon}</Text>
+                <Icon
+                  name={item.statusTone === 'success' ? 'check-circle' : 'award'}
+                  size={20}
+                  color={item.statusTone === 'success' ? theme.colors.semantic.vexCyan : theme.colors.text.secondary}
+                  variant="outline"
+                />
               </Box>
               <Box flex={1}>
                 <Text variant="h4" color="text.primary">{item.title}</Text>

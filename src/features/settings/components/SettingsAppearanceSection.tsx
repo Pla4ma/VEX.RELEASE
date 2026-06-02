@@ -5,7 +5,7 @@ import { ToggleSetting } from './ToggleSetting';
 import { SettingItem } from './SettingItem';
 import { SliderSetting } from './SliderSetting';
 import { createSheet } from '@/shared/ui/create-sheet';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 interface SettingsAppearanceSectionProps {
   appearance: AppearanceSettings | undefined;
@@ -23,7 +23,7 @@ export function SettingsAppearanceSection({
       />
       <SettingItem
         label="Accent Color"
-        value={appearance?.accentColor ?? launchColors.hex_6366f1}
+        value={appearance?.accentColor ?? '#6366f1'}
         onPress={() => {}}
       />
       <SliderSetting
@@ -49,7 +49,7 @@ export function SettingsAppearanceSection({
 
 const styles = createSheet({
   settingsGroup: {
-    backgroundColor: launchColors.hex_ffffff,
+    backgroundColor: '#ffffff',
     marginTop: 8,
     paddingHorizontal: 16,
   },

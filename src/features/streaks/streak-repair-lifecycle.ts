@@ -26,7 +26,7 @@ export async function completeRepairQuest(
   eventBus.publish('notification:send', {
     userId,
     type: 'STREAK_REPAIR_COMPLETE',
-    title: '🎉 Streak Restored!',
+    title: 'Streak Restored',
     body: `Amazing! You restored your streak to ${quest.targetRestoreDays} days. Your dedication paid off!`,
     data: {
       restoredDays: quest.targetRestoreDays,

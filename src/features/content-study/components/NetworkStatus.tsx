@@ -11,7 +11,7 @@ import { useTheme } from '../../../theme';
 import { Icon } from '../../../icons';
 import { createSheet } from '@/shared/ui/create-sheet';
 import { buttonTap } from '../../../utils/haptics';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 interface NetworkStatusProps {
   isOffline: boolean;
@@ -53,14 +53,14 @@ export const NetworkStatus: React.FC<NetworkStatusProps> = ({
         <Icon
           name={isOffline ? 'wifi-off' : 'alert-triangle'}
           size="sm"
-          color={launchColors.hex_ffffff}
+          color={'#ffffff'}
         />
         <View style={styles.textContainer}>
-          <Text style={[styles.title, { color: launchColors.hex_ffffff }]}>
+          <Text style={[styles.title, { color: '#ffffff' }]}>
             {isOffline ? 'Offline Mode' : 'Slow Connection'}
           </Text>
           <Text
-            style={[styles.description, { color: launchColors.hex_ffffff }]}
+            style={[styles.description, { color: '#ffffff' }]}
           >
             {isOffline
               ? pendingSyncCount
@@ -82,7 +82,7 @@ export const NetworkStatus: React.FC<NetworkStatusProps> = ({
             accessibilityHint="Double tap to activate"
           >
             <Text
-              style={[styles.actionText, { color: launchColors.hex_ffffff }]}
+              style={[styles.actionText, { color: '#ffffff' }]}
             >
               Sync
             </Text>
@@ -100,7 +100,7 @@ export const NetworkStatus: React.FC<NetworkStatusProps> = ({
             accessibilityRole="button"
             accessibilityHint="Double tap to dismiss"
           >
-            <Icon name="x" size="sm" color={launchColors.hex_ffffff} />
+            <Icon name="x" size="sm" color={'#ffffff'} />
           </Pressable>
         )}
       </View>
@@ -166,7 +166,7 @@ const styles = createSheet({
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 6,
-    backgroundColor: launchColors.rgb_255_255_255_0_2,
+    backgroundColor: 'rgba(255,255,255,0.2)',
   },
   actionText: {
     fontSize: 13,

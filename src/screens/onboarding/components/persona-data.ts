@@ -1,4 +1,4 @@
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 export type CoachPersonaType = 'cheerleader' | 'mentor' | 'drill-sergeant';
 
@@ -14,35 +14,35 @@ export interface CoachPersona {
 export const PERSONAS: CoachPersona[] = [
   {
     id: 'cheerleader',
-    icon: '🎉',
+    icon: 'star',
     name: 'The Cheerleader',
     description: 'Enthusiastic, encouraging',
     examples: [
-      '"You\'re absolutely crushing this! 🔥"',
+      '"You\'re absolutely crushing this!"',
       '"I knew you had it in you! Keep going!"',
     ],
-    color: launchColors.hex_f59e0b,
+    color: '#f59e0b',
   },
   {
     id: 'mentor',
-    icon: '📚',
+    icon: 'compass',
     name: 'The Mentor',
     description: 'Calm, wise, strategic',
     examples: [
       '"Small steps lead to big progress."',
       '"Your consistency is building something great."',
     ],
-    color: launchColors.hex_3b82f6,
+    color: '#3b82f6',
   },
   {
     id: 'drill-sergeant',
-    icon: '💀',
+    icon: 'bolt',
     name: 'The Drill Sergeant',
     description: 'Intense, zero tolerance',
     examples: [
       '"Excuses don\'t build empires. Focus!"',
       '"You asked for this. Now deliver."',
     ],
-    color: launchColors.hex_ef4444,
+    color: '#ef4444',
   },
 ];

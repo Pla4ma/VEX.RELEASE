@@ -3,7 +3,7 @@ import { Pressable, ViewStyle } from 'react-native';
 import { useTheme } from '../../../theme';
 import { Box, Text } from '../../../components/primitives';
 import { Icon } from '../../../icons';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 import {
   type FeaturedAchievement,
   AchievementSlot,
@@ -98,7 +98,7 @@ export const AchievementShowcase: React.FC<AchievementShowcaseProps> = ({
               borderRadius={8}
               style={{
                 backgroundColor: isEditMode
-                  ? theme.colors.success[50] || launchColors.hex_ecfdf5
+                  ? theme.colors.success[50] || '#ecfdf5'
                   : theme.colors.background.secondary,
                 borderWidth: 1,
                 borderColor: isEditMode

@@ -3,7 +3,7 @@ import { View, Image, Pressable } from 'react-native';
 import { useTheme } from '../theme';
 import { buttonTap } from '../utils/haptics';
 import { Text } from './primitives';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 import { SIZE_MAP, FONT_SIZE_MAP, STATUS_COLOR_MAP } from './Avatar.types';
 import { avatarStyles } from './Avatar.styles';
 import type { AvatarProps, AvatarShape } from './Avatar.types';
@@ -86,7 +86,7 @@ export const Avatar: React.FC<AvatarProps> = ({
         <Text
           style={[
             avatarStyles.initials,
-            { fontSize, color: launchColors.hex_ffffff, fontWeight: '600' },
+            { fontSize, color: '#ffffff', fontWeight: '600' },
           ]}
         >
           {getInitials(name)}

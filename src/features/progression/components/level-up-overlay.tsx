@@ -8,7 +8,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { levelUp } from '../../../utils/haptics';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 import type { LevelUpOverlayProps, ConfettiPiece } from './level-up-types';
 import { getTierTitle, getTierColor } from './level-up-types';
 import {
@@ -43,11 +43,11 @@ export const LevelUpOverlay: React.FC<LevelUpOverlayProps> = ({
         y: -20 - Math.random() * 100,
         rotation: Math.random() * 360,
         color: [
-          launchColors.hex_ffd700,
-          launchColors.hex_ff6b35,
-          launchColors.hex_4caf50,
-          launchColors.hex_2196f3,
-          launchColors.hex_9c27b0,
+          '#FFD700',
+          '#FF6B35',
+          '#4CAF50',
+          '#2196F3',
+          '#9C27B0',
         ][Math.floor(Math.random() * 5)]!,
         size: 5 + Math.random() * 10,
       }));
@@ -86,9 +86,9 @@ export const LevelUpOverlay: React.FC<LevelUpOverlayProps> = ({
       <View style={styles.container}>
         <LinearGradient
           colors={[
-            launchColors.hex_1a1a2e,
-            launchColors.hex_0f0f1e,
-            launchColors.hex_1a1a2e,
+            '#1A1A2E',
+            '#0F0F1E',
+            '#1A1A2E',
           ]}
           style={styles.background}
         />
@@ -138,12 +138,12 @@ export const LevelUpOverlay: React.FC<LevelUpOverlayProps> = ({
             accessibilityHint="Double tap to activate"
           >
             <LinearGradient
-              colors={[launchColors.hex_ffd700, launchColors.hex_ff6b35]}
+              colors={['#FFD700', '#FF6B35']}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
               style={styles.continueGradient}
             >
-              <Text style={styles.continueText}>AWESOME! 🎉</Text>
+              <Text style={styles.continueText}>CONTINUE</Text>
             </LinearGradient>
           </Pressable>
         </Animated.View>

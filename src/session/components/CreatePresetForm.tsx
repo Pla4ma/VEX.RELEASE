@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, Pressable, Modal, TextInput } from 'react-native';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 import { buttonTap } from '../../utils/haptics';
 
 interface CreatePresetFormProps {
@@ -42,7 +42,7 @@ export const CreatePresetForm: React.FC<CreatePresetFormProps> = ({
             value={name}
             onChangeText={setName}
             placeholder="e.g., Deep Work"
-            placeholderTextColor={launchColors.hex_666}
+            placeholderTextColor={'#666'}
           />
 
           <Text style={styles.inputLabel}>Duration (minutes)</Text>
@@ -52,7 +52,7 @@ export const CreatePresetForm: React.FC<CreatePresetFormProps> = ({
             onChangeText={setDuration}
             keyboardType="numeric"
             placeholder="25"
-            placeholderTextColor={launchColors.hex_666}
+            placeholderTextColor={'#666'}
           />
 
           <View style={styles.modalButtons}>
@@ -92,31 +92,31 @@ export const CreatePresetForm: React.FC<CreatePresetFormProps> = ({
 const styles = {
   modalOverlay: {
     flex: 1,
-    backgroundColor: launchColors.rgb_0_0_0_0_7,
+    backgroundColor: 'rgba(0,0,0,0.7)',
     justifyContent: 'center' as const,
     padding: 24,
   },
   modalContent: {
-    backgroundColor: launchColors.hex_1a1a2e,
+    backgroundColor: '#1a1a2e',
     borderRadius: 16,
     padding: 24,
   },
   modalTitle: {
     fontSize: 20,
     fontWeight: '700' as const,
-    color: launchColors.hex_fff,
+    color: '#fff',
     marginBottom: 20,
   },
-  inputLabel: { fontSize: 14, color: launchColors.hex_9e9e9e, marginBottom: 8 },
+  inputLabel: { fontSize: 14, color: '#9e9e9e', marginBottom: 8 },
   input: {
-    backgroundColor: launchColors.hex_2a2a3e,
+    backgroundColor: '#2a2a3e',
     borderRadius: 8,
     padding: 12,
-    color: launchColors.hex_fff,
+    color: '#fff',
     fontSize: 16,
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: launchColors.hex_3a3a4e,
+    borderColor: '#3a3a4e',
   },
   modalButtons: { flexDirection: 'row' as const, gap: 12 },
   modalButton: {
@@ -128,16 +128,16 @@ const styles = {
   cancelButton: {
     backgroundColor: 'transparent',
     borderWidth: 1,
-    borderColor: launchColors.hex_9e9e9e,
+    borderColor: '#9e9e9e',
   },
   cancelButtonText: {
-    color: launchColors.hex_9e9e9e,
+    color: '#9e9e9e',
     fontSize: 16,
     fontWeight: '600' as const,
   },
-  createConfirmButton: { backgroundColor: launchColors.hex_e94560 },
+  createConfirmButton: { backgroundColor: '#e94560' },
   createButtonTextConfirm: {
-    color: launchColors.hex_fff,
+    color: '#fff',
     fontSize: 16,
     fontWeight: '600' as const,
   },

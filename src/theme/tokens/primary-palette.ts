@@ -111,5 +111,11 @@ export const lightColors: ColorPalette = {
     inputBorder: '#C8D3E2',
     tabActive: '#5B4DFF',
     tabInactive: '#64748B',
+    vexCyan: '#00A3C4',
+    vexCyanSoft: 'rgba(0,163,196,0.08)',
+    vexCyanGlow: 'rgba(0,163,196,0.25)',
+    vexGold: '#C78D00',
+    vexGoldSoft: 'rgba(199,141,0,0.15)',
+    obsidian: '#0A0A0F',
   },
 };

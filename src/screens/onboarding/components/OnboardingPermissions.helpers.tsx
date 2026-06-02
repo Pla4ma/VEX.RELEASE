@@ -5,32 +5,32 @@ import Animated, {
   withSpring,
   useSharedValue,
 } from 'react-native-reanimated';
+import { View } from 'react-native';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
-import { launchColors } from '@theme/tokens/launch-colors';
 
 export interface PermissionBenefit {
-  icon: string;
+  mark: string;
   title: string;
   description: string;
 }
 
 export const BENEFITS: PermissionBenefit[] = [
   {
-    icon: '🔥',
-    title: 'Streak at Risk Alerts',
+    mark: 'S',
+    title: 'Streak Protection',
     description: 'Get notified when your streak is about to break',
   },
   {
-    icon: '👹',
-    title: 'Boss Spawn Alerts',
-    description: 'Never miss a boss encounter opportunity',
+    mark: 'C',
+    title: 'Challenge Alerts',
+    description: 'Never miss a focus session opportunity',
   },
   {
-    icon: '⚔️',
-    title: 'Squad Challenges',
-    description: 'Get notified when squad wars start',
+    mark: 'F',
+    title: 'Focus Squad Updates',
+    description: 'Get notified when focus sessions begin',
   },
 ];
 
@@ -42,6 +42,7 @@ export function BenefitCard({
   index: number;
 }): JSX.Element {
   const { theme } = useTheme();
+  const semantic = theme.colors.semantic;
   return (
     <Animated.View entering={FadeInUp.delay(index * 100).duration(400)}>
       <Box
@@ -52,16 +53,20 @@ export function BenefitCard({
         borderRadius="xl"
         bg={theme.colors.background.secondary}
       >
-        <Box
-          width={48}
-          height={48}
-          borderRadius="lg"
-          bg={`${theme.colors.primary[500]}15`}
-          justifyContent="center"
-          alignItems="center"
+        <View
+          style={{
+            width: 48,
+            height: 48,
+            borderRadius: 12,
+            backgroundColor: `${semantic.primary}15`,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
         >
-          <Text fontSize={24}>{benefit.icon}</Text>
-        </Box>
+          <Text fontSize={20} color="primary.DEFAULT" fontWeight="700">
+            {benefit.mark}
+          </Text>
+        </View>
 
         <Box flex={1} gap="xs">
           <Text variant="body" color="text.primary" fontWeight="600">
@@ -78,6 +83,8 @@ export function BenefitCard({
 
 export function SuccessAnimation(): JSX.Element {
   const scale = useSharedValue(0);
+  const { theme } = useTheme();
+  const semantic = theme.colors.semantic;
   React.useEffect(() => {
     scale.value = withSpring(1, { damping: 10, stiffness: 200 });
   }, [scale]);
@@ -87,18 +94,22 @@ export function SuccessAnimation(): JSX.Element {
   return (
     <Animated.View style={animatedStyle}>
       <Box alignItems="center" gap="md">
-        <Box
-          width={80}
-          height={80}
-          borderRadius="full"
-          bg={launchColors.hex_22c55e30}
-          justifyContent="center"
-          alignItems="center"
+        <View
+          style={{
+            width: 80,
+            height: 80,
+            borderRadius: 40,
+            backgroundColor: `${semantic.success}20`,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
         >
-          <Text fontSize={40}>✓</Text>
-        </Box>
+          <Text fontSize={32} color="success.DEFAULT" fontWeight="700">
+            &#x2713;
+          </Text>
+        </View>
         <Text variant="h4" color="success.DEFAULT">
-          All set!
+          All set
         </Text>
       </Box>
     </Animated.View>

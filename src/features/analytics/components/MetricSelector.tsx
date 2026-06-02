@@ -26,7 +26,7 @@ const AVAILABLE_METRICS: {
   { value: 'longest_streak', label: 'Longest Streak', category: 'Progress' },
   { value: 'xp_earned', label: 'XP Earned', category: 'Progress' },
   { value: 'level_progression', label: 'Level Progression', category: 'Progress' },
-  { value: 'boss_damage_dealt', label: 'Boss Damage', category: 'Combat' },
+    { value: 'boss_damage_dealt', label: 'Focus Intensity', category: 'Combat' },
   { value: 'items_crafted', label: 'Items Crafted', category: 'Economy' },
   { value: 'coins_spent', label: 'Coins Spent', category: 'Economy' },
   { value: 'challenges_completed', label: 'Challenges Completed', category: 'Social' },

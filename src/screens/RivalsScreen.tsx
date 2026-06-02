@@ -123,7 +123,7 @@ export function RivalsScreen(): JSX.Element {
           </>
         ) : (
           <EmptyState
-            icon="!"
+            iconName="exclamation-circle"
             title="Sign in to find rivals"
             body="Rivalries need your profile before they can start."
           />

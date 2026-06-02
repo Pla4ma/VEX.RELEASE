@@ -29,7 +29,7 @@ function PreviewLine({
   return (
     <Box mb="md">
       <Box flexDirection="row" alignItems="center" gap="sm" mb="xs">
-        <Text fontSize={16}>{icon}</Text>
+        <Text fontSize={16}></Text>
         <Text variant="caption" color="text.tertiary">
           {label}
         </Text>
@@ -48,11 +48,11 @@ export function TomorrowPreviewPersonalized(props: Props): JSX.Element | null {
     const boss = props.bossPreview;
     return (
       <PreviewLine
-        icon="👹"
+        icon=""
         label="BOSS ALERT"
         text={
           boss.canDefeatTomorrow
-            ? `One good session defeats ${boss.bossName}! Drops: ${boss.rewardName}`
+            ? `One good session defeats ${boss.bossName}. Drops: ${boss.rewardName}`
             : `${boss.bossName} at ${boss.healthPercent.toFixed(0)}% - squad needs your help!`
         }
       />
@@ -62,9 +62,9 @@ export function TomorrowPreviewPersonalized(props: Props): JSX.Element | null {
     const streak = props.streakMilestonePreview;
     return (
       <PreviewLine
-        icon="🔥"
+        icon=""
         label="STREAK MILESTONE"
-        text={`${streak.days}-day streak! Claim your ${streak.badgeName}`}
+        text={`${streak.days}-day streak. Claim your ${streak.badgeName}`}
       />
     );
   }
@@ -72,9 +72,9 @@ export function TomorrowPreviewPersonalized(props: Props): JSX.Element | null {
     const powerHour = props.powerHourPreview;
     return (
       <PreviewLine
-        icon="🌟"
+        icon=""
         label="POWER HOUR TOMORROW"
-        text={`${powerHour.day} at ${powerHour.time} - Triple XP for 1 hour!`}
+        text={`${powerHour.day} at ${powerHour.time} - Triple XP for 1 hour`}
       />
     );
   }
@@ -82,16 +82,16 @@ export function TomorrowPreviewPersonalized(props: Props): JSX.Element | null {
     const rival = props.rivalPreview;
     return (
       <PreviewLine
-        icon="⚔️"
+        icon=""
         label="RIVAL ALERT"
-        text={`${rival.rivalName} is ${rival.gap} min ahead. Close the gap!`}
+        text={`${rival.rivalName} is ${rival.gap} min ahead. Close the gap`}
       />
     );
   }
   if (props.dailyChallengesIncomplete) {
     return (
       <PreviewLine
-        icon="📋"
+        icon=""
         label="CHALLENGES"
         text={`New challenges reset at midnight (+${props.xpAvailableTomorrow ?? 50} more XP available)`}
       />
@@ -100,9 +100,9 @@ export function TomorrowPreviewPersonalized(props: Props): JSX.Element | null {
   if (!props.hasEvents && !props.hasChallenges && props.streakWillContinue) {
     return (
       <Box flexDirection="row" alignItems="center" gap="sm">
-        <Text fontSize={16}>✨</Text>
+        <Text fontSize={16}></Text>
         <Text variant="bodySmall" color="text.tertiary">
-          Quiet day - perfect for building that streak!
+          Quiet day - perfect for building that streak
         </Text>
       </Box>
     );

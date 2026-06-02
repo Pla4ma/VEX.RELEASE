@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 import type { ConfettiPiece } from './level-up-types';
 import { levelUpStyles as styles } from './level-up-styles';
 
@@ -59,21 +59,21 @@ export const RewardsSection: React.FC<RewardsSectionProps> = ({ rewards }) => {
       <View style={styles.rewardsRow}>
         {rewards.map((reward, index) => (
           <View key={index} style={styles.rewardBadge}>
-            <LinearGradient
-              colors={[
-                launchColors.rgb_255_255_255_0_2,
-                launchColors.rgb_255_255_255_0_1,
-              ]}
+              <LinearGradient
+                colors={[
+                  'rgba(255,255,255,0.2)',
+                  'rgba(255,255,255,0.1)',
+                ]}
               style={styles.rewardGradient}
             >
               <Text style={styles.rewardIcon}>
                 {reward.type === 'XP'
-                  ? '⭐'
+                  ? 'XP'
                   : reward.type === 'COINS'
-                    ? '🪙'
+                    ? '$'
                     : reward.type === 'GEMS'
-                      ? '💎'
-                      : '🎁'}
+                      ? 'G'
+                      : '?'}
               </Text>
               <Text style={styles.rewardAmount}>+{reward.amount}</Text>
               <Text style={styles.rewardType}>{reward.type}</Text>
@@ -98,7 +98,7 @@ export const UnlocksSection: React.FC<UnlocksSectionProps> = ({ unlocks }) => {
       <Text style={styles.unlocksLabel}>NEW UNLOCKS</Text>
       {unlocks.map((unlock, index) => (
         <View key={index} style={styles.unlockItem}>
-          <Text style={styles.unlockIcon}>🔓</Text>
+          <Text style={styles.unlockIcon}>→</Text>
           <Text style={styles.unlockText}>{unlock}</Text>
         </View>
       ))}

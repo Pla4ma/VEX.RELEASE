@@ -33,7 +33,7 @@ export function CoachMessageBubble({
       ? message.content
       : message.content.slice(0, 200) + '...';
   const getPersonaEmoji = () => {
-    return '🤖';
+    return '';
   };
   return (
     <Animated.View

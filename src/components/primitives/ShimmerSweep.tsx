@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, type LayoutChangeEvent } from 'react-native';
+import { Platform, StyleSheet, View, type LayoutChangeEvent } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Animated, {
   cancelAnimation,
@@ -12,7 +12,7 @@ import Animated, {
 } from 'react-native-reanimated';
 
 import { useReducedMotion } from '../../hooks/useReducedMotion';
-import { launchColors } from '../../theme/tokens/launch-colors';
+
 
 interface ShimmerSweepProps {
   color?: string;
@@ -22,7 +22,7 @@ interface ShimmerSweepProps {
 }
 
 export function ShimmerSweep({
-  color = launchColors.rgb_255_255_255_0_18,
+  color = 'rgba(255,255,255,0.18)',
   bandWidth = 90,
   periodMs = 4200,
   borderRadius = 0,
@@ -63,6 +63,10 @@ export function ShimmerSweep({
   };
 
   if (isReducedMotion) {
+    return null;
+  }
+
+  if (Platform.OS === 'web') {
     return null;
   }
 

@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { createSheet } from '@/shared/ui/create-sheet';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 export const levelUpStyles = createSheet({
   container: { flex: 1, justifyContent: 'center', alignItems: 'center' },
@@ -21,7 +21,7 @@ export const levelUpStyles = createSheet({
     borderRadius: 50,
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: launchColors.hex_ffd700,
+    shadowColor: '#FFD700',
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.8,
     shadowRadius: 20,
@@ -31,21 +31,21 @@ export const levelUpStyles = createSheet({
     ...StyleSheet.absoluteFill,
     borderRadius: 60,
     borderWidth: 3,
-    borderColor: launchColors.rgb_255_255_255_0_3,
+    borderColor: 'rgba(255,255,255,0.3)',
   },
   levelNumber: {
     fontSize: 48,
     fontWeight: 'bold',
-    color: launchColors.hex_fff,
-    textShadowColor: launchColors.rgb_0_0_0_0_3,
+    color: '#FFFFFF',
+    textShadowColor: 'rgba(0,0,0,0.3)',
     textShadowOffset: { width: 2, height: 2 },
     textShadowRadius: 4,
   },
   levelUpText: {
     fontSize: 36,
     fontWeight: 'bold',
-    color: launchColors.hex_ffd700,
-    textShadowColor: launchColors.hex_ffd700,
+    color: '#FFD700',
+    textShadowColor: '#FFD700',
     textShadowOffset: { width: 0, height: 0 },
     textShadowRadius: 20,
     marginBottom: 16,
@@ -57,12 +57,12 @@ export const levelUpStyles = createSheet({
   },
   previousLevel: {
     fontSize: 20,
-    color: launchColors.rgb_255_255_255_0_5,
+    color: 'rgba(255,255,255,0.5)',
     textDecorationLine: 'line-through',
   },
   arrow: {
     fontSize: 24,
-    color: launchColors.hex_ffd700,
+    color: '#FFD700',
     marginHorizontal: 12,
   },
   newLevel: { fontSize: 28, fontWeight: 'bold' },
@@ -70,14 +70,14 @@ export const levelUpStyles = createSheet({
     fontSize: 18,
     fontWeight: '600',
     marginBottom: 24,
-    textShadowColor: launchColors.rgb_0_0_0_0_5,
+    textShadowColor: 'rgba(0,0,0,0.5)',
     textShadowOffset: { width: 1, height: 1 },
     textShadowRadius: 2,
   },
   rewardsSection: { alignItems: 'center', marginBottom: 24 },
   rewardsLabel: {
     fontSize: 14,
-    color: launchColors.rgb_255_255_255_0_6,
+    color: 'rgba(255,255,255,0.6)',
     marginBottom: 12,
     letterSpacing: 2,
   },
@@ -88,7 +88,7 @@ export const levelUpStyles = createSheet({
     borderRadius: 16,
     overflow: 'hidden',
     borderWidth: 2,
-    borderColor: launchColors.rgb_255_255_255_0_2,
+    borderColor: 'rgba(255,255,255,0.2)',
   },
   rewardGradient: {
     flex: 1,
@@ -100,11 +100,11 @@ export const levelUpStyles = createSheet({
   rewardAmount: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: launchColors.hex_fff,
+    color: '#FFFFFF',
   },
   rewardType: {
     fontSize: 10,
-    color: launchColors.rgb_255_255_255_0_7,
+    color: 'rgba(255,255,255,0.7)',
     marginTop: 2,
   },
   unlocksSection: {
@@ -114,7 +114,7 @@ export const levelUpStyles = createSheet({
   },
   unlocksLabel: {
     fontSize: 14,
-    color: launchColors.rgb_255_255_255_0_6,
+    color: 'rgba(255,255,255,0.6)',
     marginBottom: 12,
     textAlign: 'center',
     letterSpacing: 2,
@@ -122,7 +122,7 @@ export const levelUpStyles = createSheet({
   unlockItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: launchColors.rgb_255_255_255_0_1,
+    backgroundColor: 'rgba(255,255,255,0.1)',
     padding: 12,
     borderRadius: 12,
     marginBottom: 8,
@@ -130,14 +130,14 @@ export const levelUpStyles = createSheet({
   unlockIcon: { fontSize: 20, marginRight: 12 },
   unlockText: {
     fontSize: 14,
-    color: launchColors.hex_fff,
+    color: '#FFFFFF',
     fontWeight: '500',
   },
   continueButton: {
     width: 200,
     borderRadius: 12,
     overflow: 'hidden',
-    shadowColor: launchColors.hex_ffd700,
+    shadowColor: '#FFD700',
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.5,
     shadowRadius: 20,
@@ -145,7 +145,7 @@ export const levelUpStyles = createSheet({
   },
   continueGradient: { paddingVertical: 16, alignItems: 'center' },
   continueText: {
-    color: launchColors.hex_fff,
+    color: '#FFFFFF',
     fontSize: 18,
     fontWeight: 'bold',
   },

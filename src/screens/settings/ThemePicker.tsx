@@ -3,7 +3,7 @@ import { Pressable } from 'react-native';
 import { useTheme, type ThemeMode } from '@/theme';
 import { Box, Text, Card } from '@/components/primitives';
 import { Icon } from '@/icons';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 interface ThemeOption {
   id: ThemeMode;
@@ -103,7 +103,7 @@ export const ThemePicker: React.FC<ThemePickerProps> = ({
                   <Icon
                     name="check"
                     size={14}
-                    color={launchColors.hex_fff}
+                    color={'#fff'}
                   />
                 </Box>
               )}

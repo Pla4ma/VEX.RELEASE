@@ -3,16 +3,16 @@ import Animated, {
   useAnimatedStyle,
   type SharedValue,
 } from 'react-native-reanimated';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 export const PARTICLE_COUNT = 12;
 
 export const GRADE_REVEAL_COLORS: Record<string, string> = {
-  A: launchColors.hex_22c55e,
-  B: launchColors.hex_3b82f6,
-  C: launchColors.hex_94a3b8,
-  D: launchColors.hex_ef4444,
-  S: launchColors.hex_ffd700,
+  A: '#22c55e',
+  B: '#3b82f6',
+  C: '#94a3b8',
+  D: '#ef4444',
+  S: '#ffd700',
 };
 
 export function hexToRgba(color: string, alpha: number): string {

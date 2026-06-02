@@ -3,7 +3,7 @@ import { View, Text, Pressable, Alert } from 'react-native';
 import { SettingItem } from './SettingItem';
 import { eventBus } from '../../../events';
 import { createSheet } from '@/shared/ui/create-sheet';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 interface SettingsDataControlSectionProps {
   userId: string;
@@ -114,7 +114,7 @@ export function SettingsDataControlSection({
 
 const styles = createSheet({
   settingsGroup: {
-    backgroundColor: launchColors.hex_ffffff,
+    backgroundColor: '#ffffff',
     marginTop: 8,
     paddingHorizontal: 16,
   },
@@ -124,38 +124,38 @@ const styles = createSheet({
     alignItems: 'center',
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: launchColors.hex_f3f4f6,
+    borderBottomColor: '#f3f4f6',
   },
-  actionRowText: { fontSize: 16, color: launchColors.hex_6366f1 },
+  actionRowText: { fontSize: 16, color: '#6366f1' },
   actionRowSubtext: {
     fontSize: 12,
-    color: launchColors.hex_9ca3af,
+    color: '#9ca3af',
     marginTop: 2,
   },
-  actionRowArrow: { fontSize: 18, color: launchColors.hex_6366f1 },
+  actionRowArrow: { fontSize: 18, color: '#6366f1' },
   dangerZone: {
     marginTop: 24,
     padding: 16,
-    backgroundColor: launchColors.hex_fef2f2,
+    backgroundColor: '#fef2f2',
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: launchColors.hex_fecaca,
+    borderColor: '#fecaca',
   },
   dangerTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: launchColors.hex_ef4444,
+    color: '#ef4444',
     marginBottom: 12,
   },
   dangerAction: {
-    backgroundColor: launchColors.hex_ef4444,
+    backgroundColor: '#ef4444',
     paddingVertical: 12,
     paddingHorizontal: 16,
     borderRadius: 8,
     alignItems: 'center',
   },
   dangerActionText: {
-    color: launchColors.hex_ffffff,
+    color: '#ffffff',
     fontSize: 14,
     fontWeight: '600',
   },

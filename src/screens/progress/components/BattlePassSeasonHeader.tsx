@@ -9,7 +9,7 @@
 import React from 'react';
 import { Box, Text } from '@/components/primitives';
 import { useTheme } from '@/theme';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 interface BattlePassSeasonHeaderProps {
   seasonName: string;
@@ -47,7 +47,7 @@ export function BattlePassSeasonHeader({
         >
           <Text
             variant="caption"
-            color={launchColors.hex_ffffff}
+            color={'#ffffff'}
             fontWeight="bold"
           >
             {isUrgent ? '⏰ ' : ''}

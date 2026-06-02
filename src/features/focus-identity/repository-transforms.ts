@@ -1,5 +1,5 @@
 import type { z } from 'zod';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 import type {
   FocusIdentityProfile,
   FocusScoreFactors,
@@ -46,7 +46,7 @@ export function transformRowToProfile(
                     : 419,
       label: row.band_label,
       title: row.band_title,
-      color: launchColors.hex_4caf50,
+      color: '#4caf50',
       percentile: row.percentile_rank,
     },
     factors: {

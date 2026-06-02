@@ -93,12 +93,12 @@ export function BossPreviewCard({
                   : theme.colors.border.DEFAULT
               }
             >
-              <Text fontSize={28}>{showFinalStrike ? '🔥' : '👹'}</Text>
+              <Text fontSize={28}></Text>
             </Box>
             <Box flex={1} gap="xs">
               <Box flexDirection="row" alignItems="center" gap="sm">
                 <Text variant="h4" color="text.primary" numberOfLines={1}>
-                  {showFinalStrike ? `⚔️ ${bossName}` : bossName}
+                  {bossName}
                 </Text>
               </Box>
               <TierBadge tier={tier} />
@@ -118,7 +118,7 @@ export function BossPreviewCard({
             <EscapeTimer hoursRemaining={hoursRemaining} />
             {estimatedDamage && estimatedDamage > 0 && (
               <Box flexDirection="row" alignItems="center" gap="xs">
-                <Text fontSize={12}>⚔️</Text>
+                <Text fontSize={12}></Text>
                 <Text variant="caption" color="text.secondary">
                   ~{estimatedDamage} dmg this session
                 </Text>
@@ -138,7 +138,7 @@ export function BossPreviewCard({
             >
               <Box>
                 <Text variant="caption" color="text.secondary">
-                  🎯 Boss Bounty
+                  Boss Bounty
                 </Text>
                 {activeBountyCount !== undefined && activeBountyCount > 0 ? (
                   <Text variant="caption" color="warning.500" fontWeight="600">
@@ -177,7 +177,7 @@ export function BossPreviewCard({
                   fontWeight="600"
                   color="background.primary"
                 >
-                  {isPlacingBounty ? '...' : '50 🪙'}
+                  {isPlacingBounty ? '...' : '50 coins'}
                 </Text>
               </Pressable>
             </Box>

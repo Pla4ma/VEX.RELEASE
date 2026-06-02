@@ -11,7 +11,7 @@ import { useTheme } from '../../theme';
 import { Box } from '../primitives/Box';
 import { Button } from '../primitives/Button';
 import { Text } from '../primitives/Text';
-import { launchColors } from '@theme/tokens/launch-colors';
+import { Icon } from '../../icons';
 
 /**
  * ErrorState props
@@ -41,8 +41,8 @@ export interface ErrorStateProps {
  * ErrorState component
  */
 export const ErrorState: React.FC<ErrorStateProps> = ({
-  title = 'Boss Interference Detected',
-  description = "Something disrupted your focus flow. Try again and show that boss who's in control.",
+  title = 'Something went wrong',
+  description = 'We ran into an issue. Please try again.',
   errorCode,
   retryLabel = 'Try Again',
   onRetry,
@@ -64,12 +64,12 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
         {},
         {
           backgroundColor:
-            theme?.colors?.semantic?.background || launchColors.hex_f7f9fc,
+            theme?.colors?.semantic?.background || '#0a0a1a',
         },
         style,
       )}
     >
-      {/* Error Icon - X in circle per spec */}
+      {/* Error Icon */}
       <Box mb="lg">
         <Box
           style={{
@@ -77,24 +77,21 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
             height: 64,
             borderRadius: 32,
             backgroundColor:
-              theme?.colors?.semantic?.primarySoft ||
-              launchColors.rgb_91_77_255_0_12,
+              theme?.colors?.semantic?.vexCyanSoft ||
+              'rgba(0,229,255,0.08)',
             borderColor:
-              theme?.colors?.semantic?.danger || launchColors.hex_b91c1c,
+              theme?.colors?.semantic?.vexCyan || '#00E5FF',
             borderWidth: 1,
             alignItems: 'center',
             justifyContent: 'center',
           }}
         >
-          <Text
-            variant="h1"
-            style={{
-              fontSize: 32,
-              color: theme?.colors?.error?.DEFAULT || launchColors.hex_b91c1c,
-            }}
-          >
-            ✕
-          </Text>
+          <Icon
+            name="x-circle"
+            size={28}
+            color={theme?.colors?.semantic?.vexCyan || '#00E5FF'}
+            variant="outline"
+          />
         </Box>
       </Box>
 
@@ -104,7 +101,7 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
         mb="md"
         textAlign="center"
         style={{
-          color: theme?.colors?.text?.primary || launchColors.hex_07111f,
+          color: theme?.colors?.text?.primary || '#07111f',
         }}
       >
         {title}
@@ -116,7 +113,7 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
         mb="lg"
         textAlign="center"
         style={{
-          color: theme?.colors?.text?.secondary || launchColors.hex_334155,
+          color: theme?.colors?.text?.secondary || '#334155',
           maxWidth: 300,
         }}
       >
@@ -131,14 +128,14 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
           style={{
             backgroundColor:
               theme?.colors?.semantic?.surfaceGlass ||
-              launchColors.rgb_255_255_255_0_86,
+              'rgba(255,255,255,0.86)',
             borderRadius: theme?.borderRadius?.md || 8,
           }}
         >
           <Text
             variant="caption"
             style={{
-              color: theme?.colors?.text?.tertiary || launchColors.hex_64748b,
+              color: theme?.colors?.text?.tertiary || '#64748b',
               fontFamily: 'monospace',
             }}
           >

@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { styles } from './SessionDegradedState.styles';
+import { useTheme } from '../../../theme';
 
 interface DegradedFeature {
   name: string;
@@ -21,51 +22,73 @@ export const SessionDegradedState: React.FC<SessionDegradedStateProps> = ({
   onRetryFullMode,
   onEndSession,
 }) => {
+  const { theme } = useTheme();
+  const semantic = theme.colors.semantic;
   const availableCount = features.filter((f) => f.available).length;
   const totalCount = features.length;
   return (
-    <View style={styles.container}>
-      <View style={styles.warningBanner}>
-        <Text style={styles.warningIcon}>⚡</Text>
-        <Text style={styles.warningText}>Limited Mode</Text>
+    <View style={[styles.container, { backgroundColor: semantic.background }]}>
+      <View style={[styles.warningBanner, { backgroundColor: semantic.warning }]}>
+        <Text style={[styles.warningIcon, { color: semantic.background }]}>
+          !
+        </Text>
+        <Text style={[styles.warningText, { color: semantic.background }]}>
+          Limited Mode
+        </Text>
       </View>
-
-      <Text style={styles.title}>Session Degraded</Text>
-      <Text style={styles.reason}>{reason}</Text>
-
-      {}
-      <View style={styles.featuresContainer}>
-        <Text style={styles.featuresTitle}>
+      <Text style={[styles.title, { color: semantic.textPrimary }]}>
+        Session Degraded
+      </Text>
+      <Text style={[styles.reason, { color: semantic.textMuted }]}>
+        {reason}
+      </Text>
+      <View style={[styles.featuresContainer, { backgroundColor: semantic.surfaceElevated }]}>
+        <Text style={[styles.featuresTitle, { color: semantic.textMuted }]}>
           Features ({availableCount}/{totalCount} available):
         </Text>
         {features.map((feature, index) => (
-          <View key={index} style={styles.featureRow}>
-            <Text style={styles.featureIcon}>
-              {feature.available ? '✅' : '❌'}
+          <View
+            key={index}
+            style={[styles.featureRow, { borderBottomColor: semantic.border }]}
+          >
+            <Text
+              style={[
+                styles.featureIcon,
+                {
+                  color: feature.available ? semantic.success : semantic.danger,
+                },
+              ]}
+            >
+              {feature.available ? '●' : '○'}
             </Text>
             <View style={styles.featureInfo}>
               <Text
                 style={[
                   styles.featureName,
-                  !feature.available && styles.featureUnavailable,
+                  { color: semantic.textPrimary },
+                  !feature.available && [
+                    styles.featureUnavailable,
+                    { color: semantic.textMuted },
+                  ],
                 ]}
               >
                 {feature.name}
               </Text>
               {!feature.available && feature.reason && (
-                <Text style={styles.featureReason}>{feature.reason}</Text>
+                <Text style={[styles.featureReason, { color: semantic.warning }]}>
+                  {feature.reason}
+                </Text>
               )}
             </View>
           </View>
         ))}
       </View>
-
-      {}
       <View style={styles.actions}>
         {onRetryFullMode && (
           <Pressable
             style={({ pressed }) => [
               styles.primaryButton,
+              { backgroundColor: semantic.danger },
               pressed && { opacity: 0.8 },
             ]}
             onPress={onRetryFullMode}
@@ -73,14 +96,16 @@ export const SessionDegradedState: React.FC<SessionDegradedStateProps> = ({
             accessibilityRole="button"
             accessibilityHint="Double tap to activate"
           >
-            <Text style={styles.primaryButtonText}>🔄 Retry Full Mode</Text>
+            <Text style={[styles.primaryButtonText, { color: semantic.textPrimary }]}>
+              Retry Full Mode
+            </Text>
           </Pressable>
         )}
-
         {onContinueAnyway && (
           <Pressable
             style={({ pressed }) => [
               styles.secondaryButton,
+              { borderColor: semantic.borderStrong },
               pressed && { opacity: 0.8 },
             ]}
             onPress={onContinueAnyway}
@@ -88,12 +113,11 @@ export const SessionDegradedState: React.FC<SessionDegradedStateProps> = ({
             accessibilityRole="button"
             accessibilityHint="Double tap to activate"
           >
-            <Text style={styles.secondaryButtonText}>
+            <Text style={[styles.secondaryButtonText, { color: semantic.textSecondary }]}>
               Continue in Limited Mode
             </Text>
           </Pressable>
         )}
-
         {onEndSession && (
           <Pressable
             style={({ pressed }) => [
@@ -105,15 +129,25 @@ export const SessionDegradedState: React.FC<SessionDegradedStateProps> = ({
             accessibilityRole="button"
             accessibilityHint="Double tap to activate"
           >
-            <Text style={styles.endButtonText}>End Session</Text>
+            <Text style={[styles.endButtonText, { color: semantic.danger }]}>
+              End Session
+            </Text>
           </Pressable>
         )}
       </View>
-
-      {}
-      <View style={styles.explanation}>
-        <Text style={styles.explanationTitle}>What does this mean?</Text>
-        <Text style={styles.explanationText}>
+      <View
+        style={[
+          styles.explanation,
+          {
+            backgroundColor: `${semantic.warning}10`,
+            borderColor: `${semantic.warning}30`,
+          },
+        ]}
+      >
+        <Text style={[styles.explanationTitle, { color: semantic.warning }]}>
+          What does this mean?
+        </Text>
+        <Text style={[styles.explanationText, { color: semantic.textMuted }]}>
           Your session is still running, but some features are temporarily
           unavailable. Your progress is still being tracked and will sync once
           full service is restored.

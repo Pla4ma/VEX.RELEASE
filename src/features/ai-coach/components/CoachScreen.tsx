@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { FlashList, type ListRenderItem } from '@shopify/flash-list';
 import { styles } from './CoachScreen.styles';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 import type { ChatMessage } from './coach-chat-types';
 import {
   getPersonalityName,
@@ -56,7 +56,7 @@ export function CoachScreen(): JSX.Element {
       <SafeAreaView style={styles.container}>
         <View style={{ height: 44 }} />
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={launchColors.hex_6366f1} />
+          <ActivityIndicator size="large" color={'#6366f1'} />
           <Text style={styles.loadingText}>Loading your coach...</Text>
         </View>
       </SafeAreaView>
@@ -118,7 +118,7 @@ export function CoachScreen(): JSX.Element {
               </Text>
             </View>
             <View style={styles.typingBubble}>
-              <ActivityIndicator size="small" color={launchColors.hex_6366f1} />
+              <ActivityIndicator size="small" color={'#6366f1'} />
               <Text style={styles.typingText}>Thinking...</Text>
             </View>
           </View>

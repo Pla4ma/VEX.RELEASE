@@ -1,26 +1,29 @@
-import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
-import React from 'react';
-import { Pressable, View } from 'react-native';
+﻿import React from 'react';
+import { Platform, Pressable, View } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import * as Sentry from '@sentry/react-native';
-import Animated, { FadeInDown } from 'react-native-reanimated';
-
-import {
-  AppScreen,
-  Box,
-  Button,
-  Card,
-  Text,
-} from '../../components/primitives';
-import { AuthValuePreview } from './components/AuthValuePreview';
+import { AppScreen, Text } from '../../components/primitives';
 import { FormField } from '../../shared/ui/components/FormField';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { useTheme } from '../../theme';
 import { getMinTouchTargetStyle } from '../../utils/touchTarget';
 import type { AuthStackParams } from '../../navigation';
 import { useLoginScreen } from './useLoginScreen';
+import { VexDevotionalBackground } from './components/VexDevotionalBackground';
+import { VexEditorialMark } from './components/VexEditorialMark';
+import { VexDevotionalCard } from './components/VexDevotionalCard';
+import { EditorialCta } from './components/EditorialCta';
+import { Stage } from './components/LoginStage';
+import { EditorialFieldBlock } from './components/EditorialFieldBlock';
+import { Colophon } from './components/Colophon';
+import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 
 type Props = NativeStackScreenProps<AuthStackParams, 'Login'>;
+
+const SERIF_STACK = Platform.select({
+  ios: 'New York',
+  android: 'Noto Serif',
+  default: 'Georgia',
+}) ?? 'Georgia';
 
 export const LoginScreen: React.FC<Props> = ({ navigation, route }) => {
   const { theme } = useTheme();
@@ -34,118 +37,103 @@ export const LoginScreen: React.FC<Props> = ({ navigation, route }) => {
     setErrors,
     isLoading,
     handleLogin,
-    introEntering,
-    bodyEntering,
-    actionEntering,
   } = useLoginScreen(route.params?.email ?? '');
 
   return (
     <AppScreen keyboardAvoiding contentStyle={{ gap: theme.spacing[5] }}>
-      <Animated.View entering={introEntering}>
-        <Text color="primary.300" textAlign="center" variant="label">
-          VEX Command
-        </Text>
-        <Text color="text.primary" textAlign="center" variant="display">
-          VEX
-        </Text>
-        <Text color="text.secondary" mt="sm" textAlign="center" variant="body">
-          Protect one block. Leave with proof.
-        </Text>
-      </Animated.View>
+      <VexDevotionalBackground />
 
-      <Animated.View entering={bodyEntering}>
-        <AuthValuePreview />
-      </Animated.View>
+      <Stage delay={120} isReducedMotion={isReducedMotion}>
+        <VexEditorialMark
+          title="VEX"
+          edition="Vol. I"
+          tagline="Protect one block. Leave with proof."
+        />
+      </Stage>
 
-      <Animated.View entering={bodyEntering}>
-        <Card size="lg" variant="glass">
-          <FormField
-            accessibilityHint="Enter the email attached to your VEX account"
-            accessibilityLabel="Account email"
-            autoCapitalize="none"
-            autoComplete="email"
-            error={errors.email}
-            keyboardType="email-address"
-            label="Email"
-            leftIcon="email"
-            onChangeText={(value) => {
-              setEmail(value);
-              if (errors.email) {
-                setErrors((prev) => ({ ...prev, email: undefined }));
+      <Stage delay={520} isReducedMotion={isReducedMotion}>
+        <VexDevotionalCard delay={0} borderRadius={24} innerPadding={26}>
+          <View style={{ gap: 18 }}>
+            <EditorialFieldBlock label="Your credentials">
+              <View style={{ height: 1 }} />
+            </EditorialFieldBlock>
+            <EditorialFieldBlock label="Email" error={errors.email}>
+              <FormField
+                accessibilityHint="Enter the email attached to your VEX account"
+                accessibilityLabel="Account email"
+                autoCapitalize="none"
+                autoComplete="email"
+                keyboardType="email-address"
+                onChangeText={(value: string) => {
+                  setEmail(value);
+                  if (errors.email) {
+                    setErrors((prev: { email?: string; password?: string }) => ({ ...prev, email: undefined }));
+                  }
+                }}
+                placeholder="you@example.com"
+                returnKeyType="next"
+                size="lg"
+                value={email}
+              />
+            </EditorialFieldBlock>
+            <EditorialFieldBlock label="Password" error={errors.password}>
+              <FormField
+                accessibilityHint="Enter your VEX account password"
+                accessibilityLabel="Account password"
+                autoComplete="password"
+                containerStyle={{ marginBottom: 0 }}
+                onChangeText={(value: string) => {
+                  setPassword(value);
+                  if (errors.password) {
+                    setErrors((prev: { email?: string; password?: string }) => ({ ...prev, password: undefined }));
+                  }
+                }}
+                onSubmitEditing={handleLogin}
+                placeholder="Your password"
+                returnKeyType="done"
+                secureTextEntry
+                size="lg"
+                value={password}
+              />
+            </EditorialFieldBlock>
+          </View>
+        </VexDevotionalCard>
+      </Stage>
+
+      <Stage delay={760} isReducedMotion={isReducedMotion}>
+        <View style={{ gap: theme.spacing[4] }}>
+          <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+            <Pressable
+              accessibilityHint="Opens password recovery"
+              accessibilityLabel="Forgot password"
+              accessibilityRole="link"
+              onPress={() =>
+                navigation.navigate({ name: 'ForgotPassword', params: undefined })
               }
-            }}
-            placeholder="you@example.com"
-            returnKeyType="next"
-            size="lg"
-            value={email}
-          />
-          <FormField
-            accessibilityHint="Enter your VEX account password"
-            accessibilityLabel="Account password"
-            autoComplete="password"
-            containerStyle={{ marginBottom: 0 }}
-            error={errors.password}
-            label="Password"
-            leftIcon="lock"
-            onChangeText={(value) => {
-              setPassword(value);
-              if (errors.password) {
-                setErrors((prev) => ({ ...prev, password: undefined }));
-              }
-            }}
-            onSubmitEditing={() => {
-              handleLogin();
-            }}
-            placeholder="Your password"
-            returnKeyType="done"
-            secureTextEntry
-            size="lg"
-            value={password}
-          />
-        </Card>
-      </Animated.View>
+              style={getMinTouchTargetStyle()}
+            >
+              <Text
+                style={{
+                  color: 'rgba(242,234,217,0.55)',
+                  fontSize: 12,
+                  fontFamily: SERIF_STACK,
+                  fontStyle: 'italic',
+                  letterSpacing: 0.4,
+                }}
+              >
+                Forgot password?
+              </Text>
+            </Pressable>
+          </View>
 
-      <Animated.View entering={actionEntering}>
-        <Pressable
-          accessibilityHint="Opens password recovery"
-          accessibilityLabel="Forgot password"
-          accessibilityRole="link"
-          onPress={() =>
-            navigation.navigate({ name: 'ForgotPassword', params: undefined })
-          }
-          style={[
-            getMinTouchTargetStyle(),
-            {
-              alignSelf: 'flex-end',
-              marginBottom: theme.spacing[5],
-              marginTop: theme.spacing[3],
-            },
-          ]}
-        >
-          <Text color="primary.300" variant="caption">
-            Forgot password?
-          </Text>
-        </Pressable>
-        <Button
-          fullWidth
-          isLoading={isLoading}
-          onPress={() => {
-            handleLogin();
-          }}
-          size="lg"
-          variant="primary"
-        >
-          Sign In
-        </Button>
-        <Box
-          flexDirection="row"
-          justifyContent="center"
-          mt="lg"
-          style={{ gap: theme.spacing[1] }}
-        >
-          <Text color="text.secondary" variant="body">
-            Don't have an account?
-          </Text>
+          <EditorialCta
+            label="Enter VEX"
+            loadingLabel="Entering…"
+            isLoading={isLoading}
+            onPress={handleLogin}
+            delay={860}
+          />
+
           <Pressable
             accessibilityHint="Creates a new VEX account"
             accessibilityLabel="Create a VEX account"
@@ -153,42 +141,38 @@ export const LoginScreen: React.FC<Props> = ({ navigation, route }) => {
             onPress={() =>
               navigation.navigate({ name: 'Register', params: undefined })
             }
-            style={getMinTouchTargetStyle()}
+            style={[getMinTouchTargetStyle(), { alignSelf: 'center', marginTop: 8 }]}
           >
-            <Text color="primary.300" fontWeight="700" variant="body">
-              Sign up
-            </Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+              <Text
+                style={{
+                  color: 'rgba(242,234,217,0.55)',
+                  fontSize: 13,
+                  fontFamily: SERIF_STACK,
+                  fontStyle: 'italic',
+                }}
+              >
+                New here?
+              </Text>
+              <Text
+                style={{
+                  color: '#E0B870',
+                  fontSize: 13,
+                  fontFamily: SERIF_STACK,
+                  fontWeight: '600',
+                  letterSpacing: 0.5,
+                }}
+              >
+                Begin a practice
+              </Text>
+            </View>
           </Pressable>
-        </Box>
-      </Animated.View>
+        </View>
+      </Stage>
 
-      {__DEV__ ? (
-        <Animated.View
-          entering={
-            isReducedMotion ? undefined : FadeInDown.delay(320).duration(420)
-          }
-        >
-          <View
-            style={{
-              borderTopColor: theme.colors.semantic.border,
-              borderTopWidth: 1,
-              gap: theme.spacing[3],
-              marginTop: theme.spacing[8],
-              paddingTop: theme.spacing[5],
-            }}
-          >
-            <Button
-              onPress={() => Sentry.captureException(new Error('First error'))}
-              variant="outline"
-            >
-              Test Sentry
-            </Button>
-            <Text color="text.muted" textAlign="center" variant="caption">
-              Development controls
-            </Text>
-          </View>
-        </Animated.View>
-      ) : null}
+      <View style={{ marginTop: 12 }}>
+        <Colophon delay={1500} isReducedMotion={isReducedMotion} />
+      </View>
     </AppScreen>
   );
 };

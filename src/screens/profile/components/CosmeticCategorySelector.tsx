@@ -4,7 +4,7 @@ import Animated from 'react-native-reanimated';
 import { useTheme } from '../../../theme';
 import { Box, Text } from '../../../components/primitives';
 import { Icon } from '../../../icons';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 import type { CosmeticType } from './CosmeticPreviewCard';
 
 export const TYPE_CONFIG: Record<CosmeticType, { label: string; icon: string }> = {
@@ -117,16 +117,16 @@ export const CosmeticEquipBar: React.FC<{
               height: 20,
               borderRadius: 10,
               borderWidth: 2,
-              borderColor: launchColors.hex_fff,
+              borderColor: '#fff',
               borderTopColor: 'transparent',
             }}
           />
         ) : (
-          <Icon name="check" size={20} color={launchColors.hex_fff} />
+          <Icon name="check" size={20} color={'#fff'} />
         )}
         <Text
           style={{
-            color: launchColors.hex_fff,
+            color: '#fff',
             fontWeight: '700',
             fontSize: 16,
             marginLeft: 8,

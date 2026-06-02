@@ -9,7 +9,7 @@ import { Pressable, type ViewStyle, type PressableProps } from 'react-native';
 import { Text } from './primitives';
 import { createSheet } from '@/shared/ui/create-sheet';
 import { buttonTap } from '../utils/haptics';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 export interface IconButtonProps extends PressableProps {
   /** Icon to display (emoji or text character) */
@@ -69,12 +69,12 @@ export const IconButton: React.FC<IconButtonProps> = ({
 const styles = createSheet({
   button: {
     borderRadius: 8,
-    backgroundColor: launchColors.hex_f1f5f9,
+    backgroundColor: '#f1f5f9',
     alignItems: 'center',
     justifyContent: 'center',
   },
   primary: {
-    backgroundColor: launchColors.hex_6366f1,
+    backgroundColor: '#6366f1',
   },
   ghost: {
     backgroundColor: 'transparent',

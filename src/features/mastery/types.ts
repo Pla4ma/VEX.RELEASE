@@ -1,5 +1,3 @@
-import { launchColors } from '@theme/tokens/launch-colors';
-
 export type MasteryRank =
   | 'APPRENTICE'
   | 'ADEPT'
@@ -61,28 +59,28 @@ type RankDisplay = { title: string; color: string; icon: string };
 const RANK_DISPLAYS: Record<MasteryRank, RankDisplay> = {
   APPRENTICE: {
     title: 'Apprentice',
-    color: launchColors.hex_8b4513,
-    icon: '🌱',
+    color: '#8b4513',
+    icon: '',
   },
   ADEPT: {
     title: 'Adept',
-    color: launchColors.hex_4a5568,
-    icon: '⚔️',
+    color: '#4a5568',
+    icon: '',
   },
   EXPERT: {
     title: 'Expert',
-    color: launchColors.hex_4169e1,
-    icon: '🛡️',
+    color: '#4169e1',
+    icon: '',
   },
   MASTER: {
     title: 'Master',
-    color: launchColors.hex_9400d3,
-    icon: '👑',
+    color: '#9400d3',
+    icon: '',
   },
   GRANDMASTER: {
     title: 'Grandmaster',
-    color: launchColors.hex_ffd700,
-    icon: '⭐',
+    color: '#ffd700',
+    icon: '',
   },
 };
 

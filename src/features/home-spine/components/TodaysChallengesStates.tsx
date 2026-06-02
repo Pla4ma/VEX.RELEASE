@@ -56,7 +56,7 @@ export function ChallengesEmptyState(): JSX.Element {
   );
   return (
     <Box alignItems="center" gap="sm" py="md">
-      <Text fontSize={32}>⏳</Text>
+      <Text fontSize={32}></Text>
       <Text variant="bodySmall" color="text.secondary" textAlign="center">
         Challenges reset at midnight
       </Text>
@@ -74,7 +74,7 @@ export function ChallengesErrorState({
 }): JSX.Element {
   return (
     <Box alignItems="center" gap="md" py="md">
-      <Text fontSize={32}>⚠️</Text>
+      <Text fontSize={32}></Text>
       <Text variant="bodySmall" color="error.DEFAULT" textAlign="center">
         Couldn't load challenges
       </Text>

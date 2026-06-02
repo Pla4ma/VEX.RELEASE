@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text } from 'react-native';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 import { formatDuration } from './SessionSummary.helpers';
 import type { SessionSummary as SessionSummaryType } from '../types';
 
@@ -48,7 +48,7 @@ const styles = {
   },
   statCard: {
     width: '48%' as const,
-    backgroundColor: launchColors.hex_2a2a3e,
+    backgroundColor: '#2a2a3e',
     borderRadius: 12,
     padding: 16,
     alignItems: 'center' as const,
@@ -56,8 +56,8 @@ const styles = {
   statValue: {
     fontSize: 20,
     fontWeight: '700' as const,
-    color: launchColors.hex_e94560,
+    color: '#e94560',
     marginBottom: 4,
   },
-  statLabel: { fontSize: 12, color: launchColors.hex_9e9e9e },
+  statLabel: { fontSize: 12, color: '#9e9e9e' },
 };

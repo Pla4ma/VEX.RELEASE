@@ -1,5 +1,5 @@
 import { ContentSourceType, ContentStatus } from './types';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 export const CONTENT_STUDY_API = {
   BASE_URL: '/functions/v1/content-study',
@@ -67,42 +67,42 @@ export const CONTENT_STATUS_CONFIG: Record<
   PENDING: {
     label: 'Pending',
     description: 'Waiting to process',
-    color: launchColors.hex_9ca3af,
+    color: '#9ca3af',
     isLoading: true,
     canGenerate: false,
   },
   EXTRACTING: {
     label: 'Extracting',
     description: 'Reading content...',
-    color: launchColors.hex_3b82f6,
+    color: '#3b82f6',
     isLoading: true,
     canGenerate: false,
   },
   EXTRACTED: {
     label: 'Extracted',
     description: 'Ready to generate study plan',
-    color: launchColors.hex_10b981,
+    color: '#10b981',
     isLoading: false,
     canGenerate: true,
   },
   PROCESSING: {
     label: 'Processing',
     description: 'AI is creating your study plan...',
-    color: launchColors.hex_8b5cf6,
+    color: '#8b5cf6',
     isLoading: true,
     canGenerate: false,
   },
   READY: {
     label: 'Ready',
     description: 'Study plan complete',
-    color: launchColors.hex_10b981,
+    color: '#10b981',
     isLoading: false,
     canGenerate: false,
   },
   FAILED: {
     label: 'Failed',
     description: 'Something went wrong',
-    color: launchColors.hex_ef4444,
+    color: '#ef4444',
     isLoading: false,
     canGenerate: false,
   },

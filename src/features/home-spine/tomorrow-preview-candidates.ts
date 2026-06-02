@@ -33,7 +33,7 @@ export function buildStreakMilestoneCandidate(
   const badgeName = getMilestoneBadgeName(nextMilestone);
   return {
     actionPrompt: "Don't break the chain!",
-    emoji: '🔥',
+    emoji: '',
     headline: `${nextMilestone}-Day Streak!`,
     metadata: { badgeName, milestoneDays: nextMilestone },
     priority: 1,

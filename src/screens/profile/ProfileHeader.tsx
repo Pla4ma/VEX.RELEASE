@@ -7,7 +7,7 @@ import { Badge } from '../../components/Badge';
 import { Box, Text } from '../../components/primitives';
 import { Icon } from '../../icons';
 import { useTheme } from '../../theme';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 import { getHeroGradientColors } from '../home/HomeScreenVisuals';
 import type { User } from '../../types/models';
 
@@ -91,7 +91,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
         <Text
           variant="h2"
           style={{
-            color: launchColors.hex_fff,
+            color: '#fff',
             fontWeight: '800',
             marginTop: theme.spacing[4],
           }}
@@ -100,7 +100,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
         </Text>
         <Text
           variant="body"
-          style={{ color: launchColors.rgb_255_255_255_0_78, marginTop: 4 }}
+          style={{ color: 'rgba(255,255,255,0.78)', marginTop: 4 }}
         >
           {user?.id ?? 'No email available'}
         </Text>
@@ -115,9 +115,9 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
         <Box flexDirection="row" justifyContent="space-between" alignItems="center" mb={8}>
           <Text
             variant="caption"
-            style={{ color: launchColors.rgb_255_255_255_0_86 }}
+            style={{ color: 'rgba(255,255,255,0.86)' }}
           >{`Level ${level} | ${xp}/${nextLevelThreshold} XP`}</Text>
-          <Text variant="caption" style={{ color: launchColors.rgb_255_255_255_0_68 }}>
+          <Text variant="caption" style={{ color: 'rgba(255,255,255,0.68)' }}>
             {`${Math.round(xpPercent)}%`}
           </Text>
         </Box>
@@ -125,12 +125,12 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
           height={6}
           borderRadius={999}
           overflow="hidden"
-          style={{ backgroundColor: launchColors.rgb_255_255_255_0_18 }}
+          style={{ backgroundColor: 'rgba(255,255,255,0.18)' }}
         >
           <Box
             height="100%"
             borderRadius={999}
-            style={{ width: `${xpPercent}%`, backgroundColor: launchColors.hex_fff }}
+            style={{ width: `${xpPercent}%`, backgroundColor: '#fff' }}
           />
         </Box>
       </Box>

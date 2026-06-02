@@ -50,6 +50,12 @@ type SemanticColors = {
   inputBorder: string;
   tabActive: string;
   tabInactive: string;
+  vexCyan: string;
+  vexCyanSoft: string;
+  vexCyanGlow: string;
+  vexGold: string;
+  vexGoldSoft: string;
+  obsidian: string;
 };
 
 export interface ColorPalette {

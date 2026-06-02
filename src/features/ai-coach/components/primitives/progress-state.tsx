@@ -5,7 +5,7 @@ import Animated, {
   useAnimatedStyle,
   withSpring,
 } from 'react-native-reanimated';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 import { styles } from './progress-state.styles';
 
 export { ProgressBar, SegmentedProgress, CircularProgress } from './progress-indicators';
@@ -133,7 +133,7 @@ export function ProcessingState({ steps }: ProcessingStateProps) {
               <Text style={styles.processingError}>✕</Text>
             )}
             {step.status === 'processing' && (
-              <ActivityIndicator size="small" color={launchColors.hex_fff} />
+              <ActivityIndicator size="small" color={'#fff'} />
             )}
           </View>
           <Text

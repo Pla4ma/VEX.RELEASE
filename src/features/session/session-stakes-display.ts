@@ -29,17 +29,17 @@ export function getDifficultyDisplay(difficulty: SessionDifficulty): {
 export function formatStakesSummary(result: StakesSessionResult): string {
   if (!result.completed) {
     if (result.gemsLost > 0) {
-      return `💔 Abandoned! Lost ${result.gemsLost} gems. Try Focused mode next time?`;
+      return `Abandoned. Lost ${result.gemsLost} gems. Try Focused mode next time?`;
     }
-    return '⚠️ Session abandoned. No rewards earned.';
+    return 'Session abandoned. No rewards earned.';
   }
   const difficultyConfig = DIFFICULTY_CONFIG[result.difficulty];
-  let summary = `${difficultyConfig.icon} ${difficultyConfig.label} complete! +${result.xpEarned} XP`;
+  let summary = `${difficultyConfig.label} complete. +${result.xpEarned} XP`;
   if (result.gemsWon > 0) {
     summary += ` (+${result.gemsWon} gems)`;
   }
   if (result.winStreakUpdated > 1 && result.difficulty === 'DEEP_WORK') {
-    summary += ` 🔥 ${result.winStreakUpdated} win streak!`;
+    summary += ` ${result.winStreakUpdated} win streak`;
   }
   return summary;
 }

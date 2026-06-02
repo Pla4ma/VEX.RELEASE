@@ -1,4 +1,4 @@
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 export const FOCUS_SCORE_CONFIG = {
   MIN_SCORE: 300,
@@ -10,7 +10,7 @@ export const FOCUS_SCORE_CONFIG = {
       max: 850,
       label: 'Legendary',
       title: 'Focus Virtuoso',
-      color: launchColors.hex_ffd700,
+      color: '#ffd700',
       percentile: 99,
     },
     {
@@ -18,7 +18,7 @@ export const FOCUS_SCORE_CONFIG = {
       max: 799,
       label: 'Elite',
       title: 'Elite Performer',
-      color: launchColors.hex_c0c0c0,
+      color: '#c0c0c0',
       percentile: 95,
     },
     {
@@ -26,7 +26,7 @@ export const FOCUS_SCORE_CONFIG = {
       max: 739,
       label: 'Exceptional',
       title: 'Exceptional Focus',
-      color: launchColors.hex_cd7f32,
+      color: '#cd7f32',
       percentile: 85,
     },
     {
@@ -34,7 +34,7 @@ export const FOCUS_SCORE_CONFIG = {
       max: 669,
       label: 'Strong',
       title: 'Strong Focus',
-      color: launchColors.hex_4caf50,
+      color: '#4caf50',
       percentile: 70,
     },
     {
@@ -42,7 +42,7 @@ export const FOCUS_SCORE_CONFIG = {
       max: 579,
       label: 'Good',
       title: 'Good Focus',
-      color: launchColors.hex_8bc34a,
+      color: '#8bc34a',
       percentile: 50,
     },
     {
@@ -50,7 +50,7 @@ export const FOCUS_SCORE_CONFIG = {
       max: 499,
       label: 'Fair',
       title: 'Developing Focus',
-      color: launchColors.hex_ffc107,
+      color: '#ffc107',
       percentile: 30,
     },
     {
@@ -58,7 +58,7 @@ export const FOCUS_SCORE_CONFIG = {
       max: 419,
       label: 'Building',
       title: 'Building Habits',
-      color: launchColors.hex_ff9800,
+      color: '#ff9800',
       percentile: 10,
     },
   ] as const,

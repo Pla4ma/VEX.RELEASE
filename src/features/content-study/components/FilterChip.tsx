@@ -5,7 +5,7 @@ import { Text } from '../../../components/primitives/Text';
 import { Icon } from '../../../icons';
 import { useTheme } from '../../../theme';
 import { buttonTap } from '../../../utils/haptics';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 interface FilterChipProps {
   label: string;
@@ -47,7 +47,7 @@ export function FilterChip({
             name={icon}
             size={14}
             color={
-              isActive ? launchColors.hex_fff : theme.colors.text.secondary
+              isActive ? '#fff' : theme.colors.text.secondary
             }
           />
         )}
@@ -55,7 +55,7 @@ export function FilterChip({
           variant="caption"
           style={{
             color: isActive
-              ? launchColors.hex_fff
+              ? '#fff'
               : theme.colors.text.secondary,
             fontWeight: isActive ? '600' : '400',
           }}

@@ -44,7 +44,7 @@ const renderStatItem =
   (theme: Theme, loading: boolean) =>
   (item: StatsItem) => (
     <Box key={item.label} style={{ width: '47%' }}>
-      <Card size="md" style={{ backgroundColor: theme.colors.background.secondary }}>
+      <Card size="md" variant="glass">
         <Icon name={item.icon} size={20} color={item.color} />
         <Text variant="caption" color="text.tertiary" style={{ marginTop: 10 }}>
           {item.label}
@@ -84,10 +84,13 @@ export const ProfileStatsTab: React.FC<ProfileStatsTabProps> = ({
   return (
     <Box gap={16}>
       {hasError ? (
-        <Card size="md" style={{ backgroundColor: theme.colors.background.secondary }}>
-          <Text variant="body" color="error.DEFAULT">
-            Some profile data could not load. Pull to refresh or revisit this screen in a moment.
-          </Text>
+        <Card size="md" variant="glass" state="error">
+          <Box flexDirection="row" alignItems="center" gap="sm">
+            <Icon name="exclamation-circle" size={18} color={theme.colors.semantic.danger} variant="outline" />
+            <Text variant="body" color="error.DEFAULT">
+              Some profile data could not load. Pull to refresh or revisit this screen in a moment.
+            </Text>
+          </Box>
         </Card>
       ) : null}
       {userId && <FocusScoreCard userId={userId} size="large" showTrend={true} animate={true} onPress={() => {}} />}
@@ -102,7 +105,7 @@ export const ProfileStatsTab: React.FC<ProfileStatsTabProps> = ({
         accessibilityRole="button"
         accessibilityHint="Opens the full mastery progression screen"
       >
-        <Card size="lg" style={{ backgroundColor: theme.colors.background.secondary }}>
+        <Card size="lg" variant="elevated">
           <Box flexDirection="row" justifyContent="space-between" alignItems="center" mb={12}>
             <Box>
               <Text variant="h4" color="text.primary">Mastery</Text>

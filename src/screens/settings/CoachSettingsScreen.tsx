@@ -8,7 +8,7 @@ import { Box, Text } from '../../components/primitives';
 import { Icon } from '../../icons';
 import { useUIStore } from '../../store/index';
 import type { SettingsStackParams } from '../../navigation';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 import {
   CoachPersonaSelector,
   type CoachPersona,
@@ -121,7 +121,7 @@ export const CoachSettingsScreen: React.FC<Props> = ({ navigation }) => {
             onPress={handleResetMemory}
             style={{
               backgroundColor:
-                theme.colors.error[50] || launchColors.hex_fef2f2,
+                theme.colors.error[50] || '#fef2f2',
               paddingVertical: 16,
               paddingHorizontal: 16,
               borderRadius: 12,

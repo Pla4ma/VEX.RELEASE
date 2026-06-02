@@ -32,30 +32,30 @@ export function generateRecommendations(issues: PerformanceIssue[]): string[] {
 
 export function generateReport(result: PerformanceGateResult): string {
   let report = '# Performance Gate Report\n\n';
-  report += `**Overall Status: ${result.passed ? '✅ PASSED' : '❌ FAILED'}**\n`;
+  report += `**Overall Status: ${result.passed ? 'PASSED' : 'FAILED'}**\n`;
   report += `**Score: ${result.score}/100**\n\n`;
   report += '## Metrics\n\n';
   report += '### FPS\n';
   report += `- Current: ${result.metrics.fps.current}\n`;
   report += `- Average: ${result.metrics.fps.average}\n`;
   report += `- Target: ${result.metrics.fps.target}\n`;
-  report += `- Status: ${result.metrics.fps.passed ? '✅ PASSED' : '❌ FAILED'}\n\n`;
+  report += `- Status: ${result.metrics.fps.passed ? 'PASSED' : 'FAILED'}\n\n`;
   report += '### Memory\n';
   report += `- Current: ${result.metrics.memory.current}MB\n`;
   report += `- Limit: ${result.metrics.memory.limit}MB\n`;
-  report += `- Status: ${result.metrics.memory.passed ? '✅ PASSED' : '❌ FAILED'}\n\n`;
+  report += `- Status: ${result.metrics.memory.passed ? 'PASSED' : 'FAILED'}\n\n`;
   report += '### Animations\n';
   report += `- Average Duration: ${result.metrics.animations.averageDuration.toFixed(2)}ms\n`;
   report += `- Limit: ${result.metrics.animations.limit}ms\n`;
-  report += `- Status: ${result.metrics.animations.passed ? '✅ PASSED' : '❌ FAILED'}\n\n`;
+  report += `- Status: ${result.metrics.animations.passed ? 'PASSED' : 'FAILED'}\n\n`;
   report += '### Network\n';
   report += `- Average Response: ${result.metrics.network.averageResponseTime.toFixed(2)}ms\n`;
   report += `- Limit: ${result.metrics.network.limit}ms\n`;
-  report += `- Status: ${result.metrics.network.passed ? '✅ PASSED' : '❌ FAILED'}\n\n`;
+  report += `- Status: ${result.metrics.network.passed ? 'PASSED' : 'FAILED'}\n\n`;
   report += '### Bundle\n';
   report += `- Size: ${result.metrics.bundle.size}KB\n`;
   report += `- Limit: ${result.metrics.bundle.limit}KB\n`;
-  report += `- Status: ${result.metrics.bundle.passed ? '✅ PASSED' : '❌ FAILED'}\n\n`;
+  report += `- Status: ${result.metrics.bundle.passed ? 'PASSED' : 'FAILED'}\n\n`;
   if (result.issues.length > 0) {
     report += '## Issues Found\n\n';
     result.issues.forEach((issue) => {

@@ -3,7 +3,7 @@
  */
 
 import { createSheet } from '@/shared/ui/create-sheet';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 export function formatFieldName(field: string): string {
   return field
@@ -27,7 +27,7 @@ export const styles = createSheet({
     marginTop: 12,
     paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: launchColors.rgb_0_0_0_0_1,
+    borderTopColor: 'rgba(0,0,0,0.1)',
   },
   bullet: {
     marginRight: 8,

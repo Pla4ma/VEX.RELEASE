@@ -1,4 +1,4 @@
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 export const overlayStyle = {
   position: 'absolute' as const,
@@ -9,7 +9,7 @@ export const overlayStyle = {
   justifyContent: 'center' as const,
   alignItems: 'center' as const,
   zIndex: 100,
-  backgroundColor: launchColors.rgb_0_0_0_0_3,
+  backgroundColor: 'rgba(0,0,0,0.3)',
 };
 
 export const particleContainerStyle = {
@@ -29,7 +29,7 @@ export const cardStyle = {
   padding: 32,
   borderRadius: 24,
   alignItems: 'center' as const,
-  shadowColor: launchColors.hex_000,
+  shadowColor: '#000',
   shadowOffset: { width: 0, height: 4 },
   shadowOpacity: 0.3,
   shadowRadius: 8,
@@ -50,7 +50,7 @@ export const bonusBadgeStyle = {
 };
 
 export const bonusTextStyle = {
-  color: launchColors.hex_fff,
+  color: '#fff',
   fontWeight: '700' as const,
   fontSize: 14,
 };
@@ -58,7 +58,7 @@ export const bonusTextStyle = {
 export const progressContainerStyle = {
   width: 200,
   height: 8,
-  backgroundColor: launchColors.rgb_0_0_0_0_1,
+  backgroundColor: 'rgba(0,0,0,0.1)',
   borderRadius: 4,
   marginTop: 12,
   overflow: 'hidden' as const,

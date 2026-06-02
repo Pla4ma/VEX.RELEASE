@@ -50,7 +50,7 @@ export function NavigationGate({
       bg={theme.colors.background.primary}
     >
       <Box maxWidth={sizing.width.xl} alignItems="center" gap="md">
-        <Text fontSize={sizing.icon['2xl']}>🔒</Text>
+        <Text fontSize={sizing.icon['2xl']}>!</Text>
 
         <Text variant="h3" color="text.primary" textAlign="center">
           Feature Not Available

@@ -9,7 +9,7 @@ import type {
 } from '../types';
 import { UI_TEXT, TASK_PRIORITY_CONFIG, QUIZ_DIFFICULTY_CONFIG } from '../constants';
 import { useTheme } from '@/theme';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 import { styles } from './StudyPlanScreen.styles';
 
 export type RouteProps = RouteProp<ContentStudyStackParamList, 'StudyPlan'>;
@@ -133,21 +133,21 @@ export function SessionPlanSection({ sessionPlan }: { sessionPlan: SessionPlan }
       <Text style={styles.sectionTitle}>{UI_TEXT.SESSION_SECTION}</Text>
       <View style={styles.sessionCard}>
         <View style={styles.sessionRow}>
-          <Icon name="clock" color={launchColors.hex_3b82f6} />
+          <Icon name="clock" color={'#3b82f6'} />
           <View style={styles.sessionInfo}>
             <Text style={styles.sessionLabel}>{UI_TEXT.SESSION_DURATION}</Text>
             <Text style={styles.sessionValue}>{formatDuration(sessionPlan.recommendedDuration)}</Text>
           </View>
         </View>
         <View style={styles.sessionRow}>
-          <Icon name="trending-up" color={launchColors.hex_10b981} />
+          <Icon name="trending-up" color={'#10b981'} />
           <View style={styles.sessionInfo}>
             <Text style={styles.sessionLabel}>{UI_TEXT.SESSION_DIFFICULTY}</Text>
             <Text style={styles.sessionValue}>{sessionPlan.suggestedDifficulty}</Text>
           </View>
         </View>
         <View style={styles.sessionRow}>
-          <Icon name="target" color={launchColors.hex_f59e0b} />
+          <Icon name="target" color={'#f59e0b'} />
           <View style={styles.sessionInfo}>
             <Text style={styles.sessionLabel}>{UI_TEXT.SESSION_FOCUS_AREAS}</Text>
             <View style={styles.focusAreas}>
@@ -187,7 +187,7 @@ export function RatingSection({ userRating, setUserRating }: {
             accessibilityRole="button"
             accessibilityHint={`Rates this study plan ${star} out of 5 stars`}
           >
-            <Text style={[styles.star, userRating && star <= userRating && styles.starFilled]}>★</Text>
+            <Text style={[styles.star, userRating && star <= userRating && styles.starFilled]}>●</Text>
           </Pressable>
         ))}
       </View>

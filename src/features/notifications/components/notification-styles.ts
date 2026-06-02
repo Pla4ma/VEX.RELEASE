@@ -1,15 +1,15 @@
 import { StyleSheet } from 'react-native';
 import { createSheet } from '@/shared/ui/create-sheet';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 export const styles = createSheet({
   overlay: {
     ...StyleSheet.absoluteFill,
-    backgroundColor: launchColors.rgb_0_0_0_0_5,
+    backgroundColor: 'rgba(0,0,0,0.5)',
     justifyContent: 'flex-end',
   },
   container: {
-    backgroundColor: launchColors.hex_1a1a2e,
+    backgroundColor: '#1a1a2e',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     maxHeight: '80%',
@@ -20,18 +20,18 @@ export const styles = createSheet({
     alignItems: 'center',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: launchColors.hex_2a2a4e,
+    borderBottomColor: '#2a2a4e',
   },
-  title: { fontSize: 18, fontWeight: '700', color: launchColors.hex_fff },
+  title: { fontSize: 18, fontWeight: '700', color: '#fff' },
   markAllButton: {
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 8,
-    backgroundColor: launchColors.hex_2a2a4e,
+    backgroundColor: '#2a2a4e',
   },
   markAllText: {
     fontSize: 12,
-    color: launchColors.hex_9e9e9e,
+    color: '#9e9e9e',
     fontWeight: '600',
   },
   scrollView: { maxHeight: 400 },
@@ -39,14 +39,14 @@ export const styles = createSheet({
     flexDirection: 'row',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: launchColors.hex_2a2a4e,
+    borderBottomColor: '#2a2a4e',
     alignItems: 'flex-start',
   },
   unreadIndicator: {
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: launchColors.hex_e94560,
+    backgroundColor: '#e94560',
     marginRight: 12,
     marginTop: 6,
   },
@@ -62,12 +62,12 @@ export const styles = createSheet({
   notificationTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: launchColors.hex_fff,
+    color: '#fff',
     marginBottom: 4,
   },
   notificationBody: {
     fontSize: 14,
-    color: launchColors.hex_9e9e9e,
+    color: '#9e9e9e',
     marginBottom: 8,
     lineHeight: 20,
   },
@@ -76,7 +76,7 @@ export const styles = createSheet({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  timestamp: { fontSize: 12, color: launchColors.hex_666 },
+  timestamp: { fontSize: 12, color: '#666' },
   priorityBadge: {
     paddingHorizontal: 8,
     paddingVertical: 2,
@@ -86,56 +86,56 @@ export const styles = createSheet({
     textTransform: 'uppercase',
   },
   criticalBadge: {
-    backgroundColor: launchColors.hex_e94560,
-    color: launchColors.hex_fff,
+    backgroundColor: '#e94560',
+    color: '#fff',
   },
   highBadge: {
-    backgroundColor: launchColors.hex_f5a623,
-    color: launchColors.hex_000,
+    backgroundColor: '#f5a623',
+    color: '#000',
   },
   actionButton: {
     marginTop: 8,
     paddingHorizontal: 16,
     paddingVertical: 8,
-    backgroundColor: launchColors.hex_e94560,
+    backgroundColor: '#e94560',
     borderRadius: 8,
     alignSelf: 'flex-start',
   },
   actionButtonText: {
-    color: launchColors.hex_fff,
+    color: '#fff',
     fontSize: 14,
     fontWeight: '600',
   },
   emptyState: { padding: 40, alignItems: 'center' },
   emptyText: {
     fontSize: 16,
-    color: launchColors.hex_9e9e9e,
+    color: '#9e9e9e',
     textAlign: 'center',
   },
   closeButton: {
     padding: 16,
     alignItems: 'center',
     borderTopWidth: 1,
-    borderTopColor: launchColors.hex_2a2a4e,
+    borderTopColor: '#2a2a4e',
   },
   closeButtonText: {
     fontSize: 16,
-    color: launchColors.hex_fff,
+    color: '#fff',
     fontWeight: '600',
   },
-  dismissText: { color: launchColors.hex_666, fontSize: 18 },
+  dismissText: { color: '#666', fontSize: 18 },
 });
 
 export const priorityStyles = {
   critical: styles.criticalBadge,
   high: styles.highBadge,
   normal: {
-    backgroundColor: launchColors.hex_2a2a4e,
-    color: launchColors.hex_fff,
+    backgroundColor: '#2a2a4e',
+    color: '#fff',
   },
   low: {
-    backgroundColor: launchColors.hex_1a1a2e,
-    color: launchColors.hex_666,
+    backgroundColor: '#1a1a2e',
+    color: '#666',
   },
 };
 

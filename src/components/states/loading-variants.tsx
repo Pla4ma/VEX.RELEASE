@@ -12,7 +12,7 @@ import Animated, {
   Easing,
 } from 'react-native-reanimated';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 import { createSheet } from '@/shared/ui/create-sheet';
 
 export const Spinner: React.FC<{ size: number; color: string }> = ({
@@ -172,6 +172,6 @@ export const styles = createSheet({
     zIndex: 100,
   },
   dotsContainer: { flexDirection: 'row', alignItems: 'center' },
-  dot: { backgroundColor: launchColors.hex_000 },
+  dot: { backgroundColor: '#000' },
   pulse: { opacity: 0.3 },
 });

@@ -17,7 +17,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { useReducedMotion } from '../../../../hooks/useReducedMotion';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger';
 type ButtonSize = 'sm' | 'md' | 'lg';
 interface ButtonProps extends PressableProps {
@@ -144,11 +144,11 @@ export function IconButton({
   );
 }
 const variantStyles = {
-  primary: { indicatorColor: launchColors.hex_fff },
-  secondary: { indicatorColor: launchColors.hex_4ecdc4 },
-  outline: { indicatorColor: launchColors.hex_4ecdc4 },
-  ghost: { indicatorColor: launchColors.hex_4ecdc4 },
-  danger: { indicatorColor: launchColors.hex_fff },
+  primary: { indicatorColor: '#fff' },
+  secondary: { indicatorColor: '#4ecdc4' },
+  outline: { indicatorColor: '#4ecdc4' },
+  ghost: { indicatorColor: '#4ecdc4' },
+  danger: { indicatorColor: '#fff' },
 };
 const styles = createSheet({
   base: {
@@ -165,20 +165,20 @@ const styles = createSheet({
   mdText: { fontSize: 16 },
   lg: { paddingVertical: 16, paddingHorizontal: 28 },
   lgText: { fontSize: 18 },
-  primary: { backgroundColor: launchColors.hex_4ecdc4 },
-  primaryText: { color: launchColors.hex_fff },
-  secondary: { backgroundColor: launchColors.hex_f0fdfb },
-  secondaryText: { color: launchColors.hex_4ecdc4 },
+  primary: { backgroundColor: '#4ecdc4' },
+  primaryText: { color: '#fff' },
+  secondary: { backgroundColor: '#f0fdfb' },
+  secondaryText: { color: '#4ecdc4' },
   outline: {
     backgroundColor: 'transparent',
     borderWidth: 2,
-    borderColor: launchColors.hex_4ecdc4,
+    borderColor: '#4ecdc4',
   },
-  outlineText: { color: launchColors.hex_4ecdc4 },
+  outlineText: { color: '#4ecdc4' },
   ghost: { backgroundColor: 'transparent' },
-  ghostText: { color: launchColors.hex_666 },
-  danger: { backgroundColor: launchColors.hex_ff6b6b },
-  dangerText: { color: launchColors.hex_fff },
+  ghostText: { color: '#666' },
+  danger: { backgroundColor: '#ff6b6b' },
+  dangerText: { color: '#fff' },
   iconButton: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -187,13 +187,13 @@ const styles = createSheet({
   smIconButton: { width: 32, height: 32 },
   mdIconButton: { width: 44, height: 44 },
   lgIconButton: { width: 56, height: 56 },
-  primaryIconButton: { backgroundColor: launchColors.hex_4ecdc4 },
-  secondaryIconButton: { backgroundColor: launchColors.hex_f0fdfb },
+  primaryIconButton: { backgroundColor: '#4ecdc4' },
+  secondaryIconButton: { backgroundColor: '#f0fdfb' },
   outlineIconButton: {
     backgroundColor: 'transparent',
     borderWidth: 2,
-    borderColor: launchColors.hex_4ecdc4,
+    borderColor: '#4ecdc4',
   },
   ghostIconButton: { backgroundColor: 'transparent' },
-  dangerIconButton: { backgroundColor: launchColors.hex_ff6b6b },
+  dangerIconButton: { backgroundColor: '#ff6b6b' },
 });

@@ -18,6 +18,7 @@ import { Icon } from '../../icons';
 import { FormField } from '../../shared/ui/components/FormField';
 import type { AuthStackParams } from '../../navigation';
 import { useForgotPasswordForm } from './useForgotPasswordForm';
+import { VexEntryBackground } from './components/VexEntryBackground';
 
 type Props = NativeStackScreenProps<AuthStackParams, 'ForgotPassword'>;
 
@@ -30,7 +31,7 @@ export const ForgotPasswordScreen: React.FC<Props> = ({ navigation }) => {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={{ flex: 1, backgroundColor: theme.colors.background.primary }}
+      style={{ flex: 1, backgroundColor: theme.colors.semantic.background }}
     >
       <ScrollView
         contentContainerStyle={{
@@ -40,6 +41,8 @@ export const ForgotPasswordScreen: React.FC<Props> = ({ navigation }) => {
         keyboardShouldPersistTaps="handled"
       >
         <Box flex={1} px="xl" py="2xl">
+          <VexEntryBackground />
+
           {/* Back Button */}
           <Animated.View entering={FadeInDown.delay(0).duration(600)}>
             <Button
@@ -72,13 +75,13 @@ export const ForgotPasswordScreen: React.FC<Props> = ({ navigation }) => {
                   borderRadius: 24,
                   justifyContent: 'center',
                   alignItems: 'center',
-                  backgroundColor: theme.colors.primary[50],
+                  backgroundColor: `${theme.colors.semantic.vexCyan}18`,
                 }}
               >
                 <Icon
                   name="lock"
                   size="2xl"
-                  color={theme.colors.primary[500]}
+                  color={theme.colors.semantic.vexCyan}
                 />
               </View>
               <Text variant="h1" textAlign="center" mt="lg">
@@ -108,7 +111,7 @@ export const ForgotPasswordScreen: React.FC<Props> = ({ navigation }) => {
                     borderRadius: 48,
                     justifyContent: 'center',
                     alignItems: 'center',
-                    backgroundColor: theme.colors.success.light + '30',
+                    backgroundColor: `${theme.colors.success.DEFAULT}20`,
                   }}
                 >
                   <Icon

@@ -9,34 +9,34 @@ export const GOAL_OPTIONS = [
   GoalOptionSchema.parse({
     key: 'WORK',
     label: 'Work',
-    emoji: '💼',
+    emoji: '',
     description: 'Meetings, emails, deep work',
   }),
   GoalOptionSchema.parse({
     key: 'STUDY',
     label: 'Study',
-    emoji: '📚',
+    emoji: '',
     description: 'Learning, reading, exams',
   }),
   GoalOptionSchema.parse({
     key: 'CREATIVE',
     label: 'Creative',
-    emoji: '🎨',
+    emoji: '',
     description: 'Design, writing, art',
   }),
   GoalOptionSchema.parse({
     key: 'PERSONAL',
     label: 'Personal',
-    emoji: '🌱',
+    emoji: '',
     description: 'Goals, habits, growth',
   }),
 ];
 export const DURATION_OPTIONS = [
-  DurationOptionSchema.parse({ value: 10, label: '10 min', emoji: '🌱' }),
-  DurationOptionSchema.parse({ value: 15, label: '15 min', emoji: '⚡' }),
-  DurationOptionSchema.parse({ value: 25, label: '25 min', emoji: '🍅' }),
-  DurationOptionSchema.parse({ value: 45, label: '45 min', emoji: '⏱️' }),
-  DurationOptionSchema.parse({ value: 60, label: '60+ min', emoji: '🚀' }),
+  DurationOptionSchema.parse({ value: 10, label: '10 min', emoji: '' }),
+  DurationOptionSchema.parse({ value: 15, label: '15 min', emoji: '' }),
+  DurationOptionSchema.parse({ value: 25, label: '25 min', emoji: '' }),
+  DurationOptionSchema.parse({ value: 45, label: '45 min', emoji: '' }),
+  DurationOptionSchema.parse({ value: 60, label: '60+ min', emoji: '' }),
 ];
 const STEP_ORDER = [
   'WELCOME',

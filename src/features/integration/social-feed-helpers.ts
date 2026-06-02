@@ -92,8 +92,8 @@ export async function completeSquadChallenge(
       source: 'SQUAD_CHALLENGE',
     });
     await sendPushNotification(memberId, {
-      title: 'Squad Challenge Complete! 🎉',
-      body: 'Your squad completed the challenge and earned 500 coins each!',
+      title: 'Squad Challenge Complete',
+      body: 'Your squad completed the challenge and earned 500 coins each',
       data: { type: 'CHALLENGE_COMPLETE', challengeId: challenge.challengeId },
     });
   }
@@ -169,11 +169,11 @@ export async function updateEngagementMetrics(
 
 export function getNotificationTitle(activity: SocialActivity): string {
   const titles: Record<string, string> = {
-    STREAK_MILESTONE: '🔥 Streak Milestone!',
-    LEVEL_UP: '📈 Level Up!',
-    BOSS_DEFEAT: '🏆 Boss Defeated!',
-    PODIUM_FINISH: '🥇 Podium Finish!',
-    RARE_ITEM_ACQUIRED: '✨ Rare Item!',
+    STREAK_MILESTONE: 'Streak Milestone',
+    LEVEL_UP: 'Level Up',
+    BOSS_DEFEAT: 'Boss Defeated',
+    PODIUM_FINISH: 'Podium Finish',
+    RARE_ITEM_ACQUIRED: 'Rare Item',
   };
   return titles[activity.activityType] || 'New Activity';
 }
@@ -181,13 +181,13 @@ export function getNotificationTitle(activity: SocialActivity): string {
 export function getNotificationBody(activity: SocialActivity): string {
   switch (activity.activityType) {
     case 'STREAK_MILESTONE':
-      return `Reached a ${activity.data.streakDays}-day streak!`;
+      return `Reached a ${activity.data.streakDays}-day streak`;
     case 'LEVEL_UP':
-      return `Leveled up to ${activity.data.level}!`;
+      return `Leveled up to ${activity.data.level}`;
     case 'BOSS_DEFEAT':
-      return `Defeated ${activity.data.bossName}!`;
+      return `Defeated ${activity.data.bossName}`;
     default:
-      return 'Check out the app for details!';
+      return 'Check out the app for details';
   }
 }
 

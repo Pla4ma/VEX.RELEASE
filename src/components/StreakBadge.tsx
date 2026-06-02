@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 import Animated, {
   cancelAnimation,
   useAnimatedStyle,
@@ -11,7 +11,6 @@ import Animated, {
 import { Text } from './primitives/Text';
 import { useTheme } from '../theme';
 import { createSheet } from '@/shared/ui/create-sheet';
-import { launchColors } from '@theme/tokens/launch-colors';
 import { useReducedMotion } from '@/hooks';
 
 type StreakBadgeProps = {
@@ -49,6 +48,24 @@ export function StreakBadge({
     shadowOpacity: isAtRisk ? 0.16 + pulse.value * 0.14 : 0.2,
   }));
 
+  const staticStyle = [
+    styles.badge,
+    isGlass
+      ? styles.glassBadge
+      : {
+          backgroundColor: isAtRisk
+            ? theme.colors.error[50]
+            : theme.colors.warning[50],
+          borderColor: isAtRisk
+            ? theme.colors.error[500]
+            : theme.colors.accent.orange,
+          shadowColor: isAtRisk
+            ? theme.colors.error[500]
+            : theme.colors.accent.orange,
+          shadowOpacity: isAtRisk ? 0.3 : 0.2,
+        },
+  ];
+
   if (days === 0) {
     return (
       <View
@@ -66,12 +83,29 @@ export function StreakBadge({
           variant="label"
           color={
             isGlass
-              ? launchColors.rgb_255_255_255_0_92
+              ? 'rgba(255,255,255,0.92)'
               : theme.colors.text.secondary
           }
         >
           Start streak
         </Text>
+      </View>
+    );
+  }
+
+  if (Platform.OS === 'web') {
+    return (
+      <View style={staticStyle}>
+        <Text
+          variant="label"
+          color={
+            isGlass
+              ? 'rgba(255,255,255,0.96)'
+              : isAtRisk
+                ? theme.colors.error.dark
+                : theme.colors.accent.orange
+          }
+        >{`${days} days`}</Text>
       </View>
     );
   }
@@ -100,12 +134,12 @@ export function StreakBadge({
         variant="label"
         color={
           isGlass
-            ? launchColors.rgb_255_255_255_0_96
+            ? 'rgba(255,255,255,0.96)'
             : isAtRisk
               ? theme.colors.error.dark
               : theme.colors.accent.orange
         }
-      >{`🔥 ${days} days`}</Text>
+      >{`${days} days`}</Text>
     </Animated.View>
   );
 }
@@ -123,8 +157,8 @@ const styles = createSheet({
     shadowRadius: 12,
   },
   glassBadge: {
-    backgroundColor: launchColors.rgb_255_255_255_0_15,
-    borderColor: launchColors.rgb_255_255_255_0_3,
-    shadowColor: launchColors.rgb_0_0_0_0_2,
+    backgroundColor: 'rgba(255,255,255,0.15)',
+    borderColor: 'rgba(255,255,255,0.3)',
+    shadowColor: 'rgba(0,0,0,0.2)',
   },
 });

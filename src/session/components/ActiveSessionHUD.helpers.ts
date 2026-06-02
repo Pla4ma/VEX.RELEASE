@@ -1,5 +1,5 @@
 import type { SessionPhase } from '../types';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 export const formatTime = (seconds: number): string => {
   const mins = Math.floor(seconds / 60);
@@ -28,7 +28,7 @@ export const getStatusColor = (
   isPaused: boolean,
   isActive: boolean,
 ): string => {
-  if (isPaused) {return launchColors.hex_ffa500;}
-  if (isActive) {return launchColors.hex_4caf50;}
-  return launchColors.hex_9e9e9e;
+  if (isPaused) {return '#ffa500';}
+  if (isActive) {return '#4caf50';}
+  return '#9e9e9e';
 };

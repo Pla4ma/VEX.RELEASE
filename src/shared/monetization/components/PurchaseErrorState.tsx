@@ -49,7 +49,7 @@ export function PurchaseErrorState({
       ]}
     >
       <View style={styles.content}>
-        <Text style={styles.icon}>⚠️</Text>
+        <Text style={styles.icon}>!</Text>
 
         <Text style={[styles.title, { color: theme.colors.text.primary }]}>
           Purchase Failed

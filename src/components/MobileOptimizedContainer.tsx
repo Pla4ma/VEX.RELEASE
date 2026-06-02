@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { createSheet } from '@/shared/ui/create-sheet';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 interface MobileOptimizedContainerProps {
   children: React.ReactNode;
@@ -39,7 +39,7 @@ export const MobileOptimizedContainer: React.FC<
   avoidHeader = true,
   avoidBottomNav = true,
   padding = 16,
-  backgroundColor = launchColors.hex_1a1a2e,
+  backgroundColor = '#1a1a2e',
 }) => {
   const insets = useSafeAreaInsets();
 

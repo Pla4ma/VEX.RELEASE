@@ -9,7 +9,7 @@ export function NoMessagesEmptyState({
 }) {
   return (
     <EmptyState
-      icon="✉️"
+      iconName="bell"
       title="No Messages Yet"
       message="Your coach will send personalized messages here based on your activity and progress."
       actionLabel="Start a session"
@@ -23,7 +23,7 @@ export function NoMessagesEmptyState({
 export function NoHistoryEmptyState() {
   return (
     <EmptyState
-      icon="📜"
+      iconName="file"
       title="No Message History"
       message="Complete sessions and build streaks to see your coaching history here."
       actionLabel="Start First Session"
@@ -38,7 +38,7 @@ export function NoRecommendationsEmptyState({
 }) {
   return (
     <EmptyState
-      icon="🎯"
+      iconName="target"
       title="No Recommendations"
       message="We're learning your patterns. Check back soon for personalized session suggestions!"
       actionLabel="View Challenges"
@@ -50,7 +50,7 @@ export function NoRecommendationsEmptyState({
 export function NoComebackEmptyState() {
   return (
     <EmptyState
-      icon="💪"
+      iconName="bolt"
       title="No Active Comeback"
       message="Your streak is healthy! Comeback mode activates if you break a streak of 3+ days."
     />
@@ -60,7 +60,7 @@ export function NoComebackEmptyState() {
 export function MutedStateEmptyState({ onUnmute }: { onUnmute?: () => void }) {
   return (
     <EmptyState
-      icon="🔕"
+      iconName="bell"
       title="Notifications Muted"
       message="You've muted coach notifications. You can still see messages in the app."
       actionLabel="Unmute Notifications"
@@ -78,7 +78,7 @@ export function ErrorStateEmptyState({
 }) {
   return (
     <EmptyState
-      icon="⚠️"
+      iconName="exclamation-triangle"
       title="Something Went Wrong"
       message={error || "We couldn't load your coach data. Please try again."}
       actionLabel="Retry"
@@ -90,7 +90,7 @@ export function ErrorStateEmptyState({
 export function OfflineEmptyState({ onRetry }: { onRetry?: () => void }) {
   return (
     <EmptyState
-      icon="📡"
+      iconName="exclamation-circle"
       title="You're Offline"
       message="Coach messages will sync when you reconnect. Some features may be limited."
       actionLabel="Try Again"
@@ -102,7 +102,7 @@ export function OfflineEmptyState({ onRetry }: { onRetry?: () => void }) {
 export function NoPersonasEmptyState() {
   return (
     <EmptyState
-      icon="🎭"
+      iconName="users"
       title="No Coach Personas"
       message="Loading coach personas..."
     />
@@ -112,7 +112,7 @@ export function NoPersonasEmptyState() {
 export function ColdStartEmptyState({ onStart }: { onStart?: () => void }) {
   return (
     <EmptyState
-      icon="🌱"
+      iconName="plus-circle"
       title="Welcome to Your Coach"
       message="Your AI coach learns from your sessions. Complete a few to get personalized guidance!"
       actionLabel="Start First Session"

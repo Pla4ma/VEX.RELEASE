@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, Pressable, TextInput } from 'react-native';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 import { getMoodEmoji, type MoodType } from './SessionSummary.helpers';
 import { selection } from '../../utils/haptics';
 
@@ -41,7 +41,7 @@ export const SessionSummaryMoodSelector: React.FC<
         multiline
         numberOfLines={3}
         placeholder="What did you accomplish? Any distractions?"
-        placeholderTextColor={launchColors.hex_666}
+        placeholderTextColor={'#666'}
         value={reflection}
         onChangeText={onReflectionChange}
       />
@@ -54,7 +54,7 @@ const styles = {
   sectionTitle: {
     fontSize: 18,
     fontWeight: '600' as const,
-    color: launchColors.hex_fff,
+    color: '#fff',
     marginBottom: 12,
   },
   moodSelector: {
@@ -64,16 +64,16 @@ const styles = {
   },
   moodButton: {
     padding: 12,
-    backgroundColor: launchColors.hex_2a2a3e,
+    backgroundColor: '#2a2a3e',
     borderRadius: 8,
   },
-  moodButtonActive: { backgroundColor: launchColors.hex_e94560 },
+  moodButtonActive: { backgroundColor: '#e94560' },
   moodEmoji: { fontSize: 24 },
   reflectionInput: {
-    backgroundColor: launchColors.hex_2a2a3e,
+    backgroundColor: '#2a2a3e',
     borderRadius: 12,
     padding: 16,
-    color: launchColors.hex_fff,
+    color: '#fff',
     fontSize: 16,
     minHeight: 100,
     textAlignVertical: 'top' as const,

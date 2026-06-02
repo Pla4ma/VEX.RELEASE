@@ -79,7 +79,7 @@ export function MonthlyFocusReport({
     if (!report) {
       return;
     }
-    const shareText = `📊 Monthly Focus Report - ${report.month}\n\n${identityStatement}\n\nScore: ${report.endingScore} (${report.change > 0 ? '+' : ''}${report.change})\nGrade: ${report.grade}\nSessions: ${report.sessionsCompleted}\nPercentile: Top ${100 - percentile}%\n\n${report.highlight}\n\n#VEX #FocusProductivity`;
+    const shareText = `Monthly Focus Report - ${report.month}\n\n${identityStatement}\n\nScore: ${report.endingScore} (${report.change > 0 ? '+' : ''}${report.change})\nGrade: ${report.grade}\nSessions: ${report.sessionsCompleted}\nPercentile: Top ${100 - percentile}%\n\n${report.highlight}\n\n#VEX #FocusProductivity`;
     try {
       await Share.share({ message: shareText, title: 'Monthly Focus Report' });
       if (report) {

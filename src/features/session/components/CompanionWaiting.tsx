@@ -82,7 +82,7 @@ export function CompanionWaiting({
           },
         ]}
       >
-        <Text fontSize={28}>🔥</Text>
+        <Text fontSize={20} color="text.inverse" fontWeight="700">V</Text>
       </Animated.View>
 
       {/* Progress sparkles */}
@@ -95,7 +95,7 @@ export function CompanionWaiting({
             right: 15,
           }}
         >
-          <Text fontSize={16}>✨</Text>
+          <Text fontSize={12} color="primary.500">+</Text>
         </Animated.View>
       )}
 
@@ -108,7 +108,7 @@ export function CompanionWaiting({
             left: 10,
           }}
         >
-          <Text fontSize={14}>⭐</Text>
+          <Text fontSize={12} color="primary.500">+</Text>
         </Animated.View>
       )}
 
@@ -121,7 +121,7 @@ export function CompanionWaiting({
             left: 15,
           }}
         >
-          <Text fontSize={16}>💫</Text>
+          <Text fontSize={12} color="primary.500">+</Text>
         </Animated.View>
       )}
     </Box>

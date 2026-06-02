@@ -9,7 +9,7 @@ import Svg, {
   Stop,
 } from 'react-native-svg';
 import type { FocusScoreHistoryPoint } from '../types';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 import type { ChartPadding } from './chartHelpers';
 
 interface ScoreChartSvgProps {
@@ -66,7 +66,7 @@ export function ScoreChartSvg({
                 y1={y}
                 x2={chartWidth - padding.right}
                 y2={y}
-                stroke={launchColors.hex_e0e0e0}
+                stroke={'#e0e0e0'}
                 strokeWidth={1}
                 strokeDasharray="4,4"
               />
@@ -74,7 +74,7 @@ export function ScoreChartSvg({
                 x={padding.left - 8}
                 y={y + 4}
                 fontSize={10}
-                fill={launchColors.hex_666}
+                fill={'#666'}
                 textAnchor="end"
               >
                 {score}
@@ -104,7 +104,7 @@ export function ScoreChartSvg({
             cx={x}
             cy={y}
             r={isLatest ? 6 : 4}
-            fill={isLatest ? scoreColor : launchColors.hex_fff}
+            fill={isLatest ? scoreColor : '#fff'}
             stroke={scoreColor}
             strokeWidth={isLatest ? 3 : 2}
           />
@@ -118,7 +118,7 @@ export function ScoreChartSvg({
             x={scaleX(i)}
             y={height - 8}
             fontSize={10}
-            fill={launchColors.hex_666}
+            fill={'#666'}
             textAnchor="middle"
           >
             {new Date(history[i]!.timestamp).toLocaleDateString('en-US', {

@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import type { UserPreferences } from '../types';
 import { SettingItem } from './SettingItem';
 import { createSheet } from '@/shared/ui/create-sheet';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 interface SettingsGeneralSectionProps {
   preferences: UserPreferences | undefined;
@@ -33,7 +33,7 @@ export function SettingsGeneralSection({
 
 const styles = createSheet({
   settingsGroup: {
-    backgroundColor: launchColors.hex_ffffff,
+    backgroundColor: '#ffffff',
     marginTop: 8,
     paddingHorizontal: 16,
   },

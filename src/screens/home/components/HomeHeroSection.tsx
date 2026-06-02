@@ -17,7 +17,7 @@ import type { HomeSurfaceMap } from '../../../features/home-experience/surface-d
 import type { FirstWeekExperience } from '../../../features/personalization/first-week-schemas';
 import type { ExtendedRootStackParams } from '../../../navigation/types';
 import type { HomeController } from '../hooks/home-controller-types';
-import { HomeHeroCard } from './HomeHeroCard';
+import { VexFocusSurface } from './VexFocusSurface';
 import {
   buildOfflineFallback,
   toSessionSetupParams,
@@ -170,7 +170,7 @@ export function HomeHeroSection({
   }
 
   return (
-    <HomeHeroCard
+    <VexFocusSurface
       isLoading={priorityQuery.isPending}
       onPressPrimary={handlePrimaryPress}
       priority={effectivePriority}

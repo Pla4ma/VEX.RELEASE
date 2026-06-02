@@ -12,9 +12,9 @@
  */
 
 import type { ViewStyle } from 'react-native';
-import { launchColors } from './launch-colors';
 
-const SHADOW_BLACK = launchColors.hex_000000;
+
+const SHADOW_BLACK = '#000000';
 
 /**
  * Neutral depth tiers. Use for cards/surfaces that float above the page.
@@ -115,5 +115,5 @@ export function glow(
  */
 export const glassEdge = {
   borderWidth: 1,
-  borderColor: launchColors.rgb_255_255_255_0_15,
+  borderColor: 'rgba(255,255,255,0.15)',
 } as const satisfies ViewStyle;

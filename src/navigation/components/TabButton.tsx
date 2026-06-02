@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Pressable, View } from 'react-native';
+import { Platform, Pressable, View } from 'react-native';
 import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import Animated, {
   useAnimatedStyle,
@@ -91,6 +91,44 @@ export function TabButton({
     onPress();
   };
 
+  if (Platform.OS === 'web') {
+    return (
+      <Pressable
+        accessibilityRole="button"
+        accessibilityState={{ selected: focused }}
+        onLongPress={onLongPress}
+        onPress={handlePress}
+        style={styles.pressable}
+        accessibilityLabel={`${label} tab`}
+        accessibilityHint={`Navigate to ${label}`}
+      >
+        <View style={styles.item}>
+          <View style={styles.iconShell}>
+            <Icon
+              color={color}
+              name={ICONS[route.name as keyof typeof ICONS]}
+              size={24}
+              variant={focused ? 'solid' : 'outline'}
+            />
+          </View>
+          <Text
+            color={focused ? theme.colors.semantic.vexCyan : theme.colors.text.tertiary}
+            style={styles.label}
+            variant="caption"
+          >
+            {label}
+          </Text>
+          <View
+            style={[
+              styles.indicator,
+              { backgroundColor: theme.colors.semantic.vexCyan, width: focused ? 24 : 14, opacity: focused ? 1 : 0 },
+            ]}
+          />
+        </View>
+      </Pressable>
+    );
+  }
+
   return (
     <Pressable
       accessibilityRole="button"
@@ -115,7 +153,7 @@ export function TabButton({
         <Animated.View style={labelStyle}>
           <Text
             color={
-              focused ? theme.colors.text.primary : theme.colors.text.tertiary
+              focused ? theme.colors.semantic.vexCyan : theme.colors.text.tertiary
             }
             style={styles.label}
             variant="caption"
@@ -126,7 +164,7 @@ export function TabButton({
         <Animated.View
           style={[
             styles.indicator,
-            { backgroundColor: theme.colors.primary[500] },
+            { backgroundColor: theme.colors.semantic.vexCyan },
             indicatorStyle,
           ]}
         />

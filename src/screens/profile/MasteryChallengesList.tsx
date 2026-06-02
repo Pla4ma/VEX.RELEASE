@@ -6,13 +6,13 @@ import { EmptyState } from '../../components/EmptyState';
 import type { MasteryChallenge } from '../../features/mastery/types';
 import { Icon } from '../../icons';
 import { useTheme } from '../../theme';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 const DIFFICULTY_COLORS = {
-  EASY: launchColors.hex_10b981,
-  MEDIUM: launchColors.hex_3b82f6,
-  HARD: launchColors.hex_f59e0b,
-  ELITE: launchColors.hex_8b5cf6,
+  EASY: '#10b981',
+  MEDIUM: '#3b82f6',
+  HARD: '#f59e0b',
+  ELITE: '#8b5cf6',
 };
 
 function ChallengeCard({
@@ -153,7 +153,7 @@ export function MasteryChallengesList({
           style={{ backgroundColor: theme.colors.background.secondary }}
         >
           <EmptyState
-            icon="target"
+            iconName="target"
             title="No active challenges"
             body="Complete sessions to unlock mastery challenges"
           />

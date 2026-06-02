@@ -1,5 +1,5 @@
 import { createSheet } from '@/shared/ui/create-sheet';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 export const challengeListStyles = createSheet({
   container: {
@@ -22,7 +22,7 @@ export const challengeListStyles = createSheet({
   headerText: {
     fontSize: 14,
     fontWeight: '600',
-    color: launchColors.hex_6b7280,
+    color: '#6b7280',
   },
   skeletonCard: {
     padding: 16,
@@ -30,14 +30,14 @@ export const challengeListStyles = createSheet({
   },
   skeletonHeader: {
     height: 20,
-    backgroundColor: launchColors.hex_e0e0e0,
+    backgroundColor: '#e0e0e0',
     borderRadius: 4,
     marginBottom: 12,
     width: '70%',
   },
   skeletonLine: {
     height: 12,
-    backgroundColor: launchColors.hex_e0e0e0,
+    backgroundColor: '#e0e0e0',
     borderRadius: 4,
     marginBottom: 8,
   },
@@ -50,11 +50,11 @@ export const challengeListStyles = createSheet({
     fontSize: 18,
     fontWeight: '700',
     marginBottom: 8,
-    color: launchColors.hex_dc2626,
+    color: '#dc2626',
   },
   errorMessage: {
     fontSize: 14,
-    color: launchColors.hex_6b7280,
+    color: '#6b7280',
     textAlign: 'center',
     marginBottom: 16,
   },
@@ -72,7 +72,7 @@ export const challengeListStyles = createSheet({
   },
   emptyText: {
     fontSize: 14,
-    color: launchColors.hex_6b7280,
+    color: '#6b7280',
     textAlign: 'center',
   },
 });

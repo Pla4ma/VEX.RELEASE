@@ -19,6 +19,11 @@ export function CoachPresenceCard({
 }: CoachPresenceCardProps): JSX.Element {
   const { theme } = useTheme();
 
+  const reactionColor = getReactionColor(
+    presence.visualCompanionState.reaction,
+    theme.colors.semantic,
+  );
+
   return (
     <Pressable
       onPress={() => {
@@ -46,19 +51,25 @@ export function CoachPresenceCard({
             gap: theme.spacing[3],
           }}
         >
+          {/* Visual reaction indicator - small signal orb */}
           <View
             style={{
               alignItems: 'center',
-              backgroundColor: theme.colors.background.tertiary,
+              backgroundColor: `${reactionColor}18`,
               borderRadius: theme.spacing[6],
               height: 48,
               justifyContent: 'center',
               width: 48,
             }}
           >
-            <Text variant="h3" color="text.primary">
-              {getPresenceMark(presence.visualCompanionState.reaction)}
-            </Text>
+            <View
+              style={{
+                width: 12,
+                height: 12,
+                borderRadius: 6,
+                backgroundColor: reactionColor,
+              }}
+            />
           </View>
           <View style={{ flex: 1, gap: theme.spacing[1] }}>
             <Text variant="label" color="text.secondary">
@@ -107,20 +118,22 @@ export function CoachPresenceCard({
   );
 }
 
-function getPresenceMark(
+function getReactionColor(
   reaction: CoachPresence['visualCompanionState']['reaction'],
+  semantic: Record<string, string>,
 ): string {
-  if (reaction === 'celebrating') {
-    return '*';
+  switch (reaction) {
+    case 'celebrating':
+      return semantic.success ?? '#4ADE80';
+    case 'focused':
+      return semantic.accent ?? '#38BDF8';
+    case 'recovering':
+      return semantic.warning ?? '#FBBF24';
+    case 'ready':
+      return semantic.primary ?? '#8B5CF6';
+    default:
+      return semantic.textMuted ?? '#9BA8BA';
   }
-  if (reaction === 'focused') {
-    return '>';
-  }
-  if (reaction === 'recovering') {
-    return '~';
-  }
-  if (reaction === 'ready') {
-    return '^';
-  }
-  return '.';
 }
+
+export default CoachPresenceCard;

@@ -31,9 +31,9 @@ const ENCOURAGEMENT_MESSAGES: Record<CoachPersonaStyle, string[]> = {
     'Every minute of focus compounds into real progress.',
   ],
   CHEERLEADER: [
-    "You're doing amazing! Keep going! 💪",
-    "OMG you're CRUSHING this session! 🌟",
-    "Look at you FOCUS! You're unstoppable! 🔥",
+    "You're doing amazing. Keep going.",
+    "You're crushing this session.",
+    "Look at you focus. You're unstoppable.",
   ],
   DRILL_SERGEANT: [
     "Eyes on the clock. Don't you dare pause.",
@@ -132,13 +132,7 @@ export function CoachSessionBanner({
           alignItems: 'center',
         }}
       >
-        <Text fontSize={14}>
-          {personaStyle === 'DRILL_SERGEANT'
-            ? '💀'
-            : personaStyle === 'CHEERLEADER'
-              ? '🎉'
-              : '🧠'}
-        </Text>
+        <Text fontSize={14}></Text>
       </View>
 
       {/* Message */}

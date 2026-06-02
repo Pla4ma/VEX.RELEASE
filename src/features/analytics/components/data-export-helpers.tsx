@@ -15,16 +15,16 @@ export interface DataExportScreenProps {
 // ─── Constants ──────────────────────────────────────────────────────
 
 export const CATEGORIES: Array<{ key: DataCategory; label: string; icon: string; description: string }> = [
-  { key: 'all', label: 'Everything', icon: '📦', description: 'All your data in one export' },
-  { key: 'sessions', label: 'Sessions', icon: '📅', description: 'Session history and stats' },
-  { key: 'analytics', label: 'Analytics', icon: '📊', description: 'Charts, trends, and insights' },
-  { key: 'achievements', label: 'Achievements', icon: '🏆', description: 'Badges and milestones' },
-  { key: 'settings', label: 'Settings', icon: '⚙️', description: 'Preferences and configuration' },
+  { key: 'all', label: 'Everything', icon: '', description: 'All your data in one export' },
+  { key: 'sessions', label: 'Sessions', icon: '', description: 'Session history and stats' },
+  { key: 'analytics', label: 'Analytics', icon: '', description: 'Charts, trends, and insights' },
+  { key: 'achievements', label: 'Achievements', icon: '', description: 'Badges and milestones' },
+  { key: 'settings', label: 'Settings', icon: '', description: 'Preferences and configuration' },
 ];
 
 export const FORMATS: Array<{ key: ExportFormat; label: string; icon: string; description: string }> = [
-  { key: 'json', label: 'JSON', icon: '📄', description: 'Machine-readable, great for backups' },
-  { key: 'csv', label: 'CSV', icon: '📑', description: 'Spreadsheet format, easy to analyze' },
+  { key: 'json', label: 'JSON', icon: '', description: 'Machine-readable, great for backups' },
+  { key: 'csv', label: 'CSV', icon: '', description: 'Spreadsheet format, easy to analyze' },
 ];
 
 // ─── Sub-components ─────────────────────────────────────────────────
@@ -59,7 +59,7 @@ export function CategorySelector({ selectedCategory, onSelect }: CategorySelecto
             <Text style={styles.optionDescription}>{category.description}</Text>
             {selectedCategory === category.key && (
               <View style={styles.checkmark}>
-                <Text style={styles.checkmarkIcon}>✓</Text>
+                <Text style={styles.checkmarkIcon}></Text>
               </View>
             )}
           </Pressable>
@@ -107,7 +107,7 @@ export function FormatSelector({ selectedFormat, onSelect }: FormatSelectorProps
 export function DangerZoneSection() {
   return (
     <View style={styles.dangerSection}>
-      <Text style={styles.dangerTitle}>⚠️ Danger Zone</Text>
+      <Text style={styles.dangerTitle}>Danger Zone</Text>
       <Text style={styles.dangerDescription}>These actions cannot be undone. Please be certain.</Text>
       <Pressable
         style={({ pressed }) => [styles.dangerButton, pressed && { opacity: 0.8 }]}

@@ -59,7 +59,7 @@ export class SessionNotifications {
     this.scheduler.schedule(
       `session_end_${sessionId}`,
       {
-        title: '🎉 Session Complete!',
+        title: 'Session Complete',
         body: `Great job! Your ${sessionName || 'focus session'} has ended.`,
         data: { sessionId, type: 'completion' },
         sound: 'completion.mp3',

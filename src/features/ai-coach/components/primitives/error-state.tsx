@@ -2,7 +2,7 @@ import { captureSilentFailure } from '../../../../utils/silent-failure';
 import React, { useState } from 'react';
 import { View, Text, Pressable, ActivityIndicator } from 'react-native';
 import Animated, { Keyframe, FadeIn } from 'react-native-reanimated';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 import { errorStateStyles as styles } from './error-state-styles';
 
 const Shake = new Keyframe({
@@ -97,7 +97,7 @@ export function ErrorState({
             accessibilityHint="Double tap to activate"
           >
             {isRetrying ? (
-              <ActivityIndicator color={launchColors.hex_fff} />
+              <ActivityIndicator color={'#fff'} />
             ) : (
               <Text style={styles.retryButtonText}>
                 {isDegraded ? 'Try Again' : 'Retry'}

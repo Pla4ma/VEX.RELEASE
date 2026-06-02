@@ -60,7 +60,7 @@ export function RecentSessionsEmpty({
       ]}
     >
       <EmptyState
-        icon="\u23F1\uFE0F"
+        iconName="clock"
         title="No sessions yet"
         body="Start a focus session. VEX builds your activity feed from what you actually finish."
         actionLabel="Start session"

@@ -4,7 +4,6 @@ import Animated, { FadeInUp } from 'react-native-reanimated';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
-import { launchColors } from '@theme/tokens/launch-colors';
 
 export interface TomorrowPreviewSessionProps {
   preview: {
@@ -37,9 +36,9 @@ export function TomorrowPreviewSession({
       case 'RIVAL_GAP':
         return theme.colors.primary[500];
       case 'POWER_HOUR':
-        return launchColors.hex_f59e0b;
+        return '#f59e0b';
       case 'CHALLENGE_RESET':
-        return launchColors.hex_10b981;
+        return '#10b981';
       default:
         return theme.colors.primary[500];
     }
@@ -65,7 +64,7 @@ export function TomorrowPreviewSession({
           }}
         >
           <Box flexDirection="row" alignItems="center" gap="sm" mb="md">
-            <Text fontSize={20}>➡️</Text>
+            <Text fontSize={20}></Text>
             <Text variant="label" color="text.tertiary">
               TOMORROW
             </Text>
@@ -82,7 +81,7 @@ export function TomorrowPreviewSession({
                 alignItems: 'center',
               }}
             >
-              <Text fontSize={24}>{preview.emoji}</Text>
+              <Text fontSize={24}></Text>
             </View>
 
             <View style={{ flex: 1 }}>

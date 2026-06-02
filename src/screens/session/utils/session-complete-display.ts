@@ -50,7 +50,7 @@ export function getGradeDisplay(
 
 export function getPurityDisplay(score: number, theme: Theme): DisplayState {
   if (score >= 90) {
-    return { label: 'Elite Focus 🔥', color: theme.colors.warning.light };
+    return { label: 'Elite Focus', color: theme.colors.warning.light };
   }
   if (score >= 70) {
     return { label: 'Good Focus', color: theme.colors.success.DEFAULT };

@@ -8,7 +8,7 @@ import Animated, {
   withSequence,
   withTiming,
 } from 'react-native-reanimated';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 export function PulsingLiveDot(): JSX.Element {
   const animatedStyle = useAnimatedStyle(() => ({
@@ -40,7 +40,7 @@ export function PulsingLiveDot(): JSX.Element {
           width: 8,
           height: 8,
           borderRadius: 4,
-          backgroundColor: launchColors.hex_22c55e,
+          backgroundColor: '#22c55e',
         },
         animatedStyle,
       ]}

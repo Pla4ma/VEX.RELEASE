@@ -5,8 +5,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import { Button } from '../../components/primitives/Button';
+import { Card } from '../../components/primitives/Card';
 import { Text } from '../../components/primitives/Text';
-import { getPremiumCardStyle } from '../../components/premiumStyles';
 import { Skeleton } from '../../components/ui/Skeleton';
 import { useFeatureAccess } from '../../features/liveops-config';
 import { FocusScoreDashboard } from '../../features/focus-identity/components/focus-score-dashboard';
@@ -81,11 +81,11 @@ export function ProgressScreen(): JSX.Element {
       showsVerticalScrollIndicator={false}
     >
       <View>
-        <Text variant="label" color={theme.colors.primary[500]}>
+        <Text variant="label" color={theme.colors.semantic.vexCyan}>
           Progress
         </Text>
         <Text variant="h2" color={theme.colors.text.primary}>
-          Your execution record.
+          Your focus record.
         </Text>
         <Text variant="body" color={theme.colors.text.secondary}>
           Focus sessions, study work, and coaching signals in one place.
@@ -130,18 +130,11 @@ export function ProgressScreen(): JSX.Element {
           }}
         >
           {statCards.map((item) => (
-            <View
+            <Card
               key={item.label}
-              style={{
-                minWidth: '30%',
-                flexGrow: 1,
-                borderWidth: 1,
-                borderColor: theme.colors.border.light,
-                backgroundColor: theme.colors.background.secondary,
-                padding: theme.spacing[4],
-                gap: theme.spacing[1],
-                ...getPremiumCardStyle('small'),
-              }}
+              size="sm"
+              variant="glass"
+              style={{ minWidth: '30%', flexGrow: 1 }}
             >
               <Text variant="label" color={theme.colors.text.secondary}>
                 {item.label}
@@ -153,7 +146,7 @@ export function ProgressScreen(): JSX.Element {
                   {item.value}
                 </Text>
               )}
-            </View>
+            </Card>
           ))}
         </View>
         <Button

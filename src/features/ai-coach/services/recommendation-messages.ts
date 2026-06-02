@@ -94,7 +94,7 @@ export function generateMomentumBuildingMessage(
     case 'trainer':
       return { headline: 'MOMENTUM BUILDING', subtext: `${ctx.streakDays} days — don't break the chain`, coachMessage: `You're in the zone. ${ctx.streakDays} days shows discipline. Keep the pressure on.` };
     case 'peer':
-      return { headline: `🔥 ${ctx.streakDays} days!`, subtext: "You're on fire — keep it going!", coachMessage: `${ctx.streakDays} days is AMAZING! You're building serious momentum now!` };
+      return { headline: `${ctx.streakDays} days`, subtext: "Keep the momentum going", coachMessage: `${ctx.streakDays} days is strong progress. You're building serious momentum now.` };
     case 'professor':
       return { headline: `${ctx.streakDays} Consecutive Days`, subtext: 'Positive momentum trajectory established', coachMessage: `Sustained engagement over ${ctx.streakDays} days indicates successful habit formation.` };
   }

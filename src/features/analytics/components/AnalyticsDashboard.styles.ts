@@ -1,38 +1,38 @@
 import { Dimensions } from 'react-native';
 import { createSheet } from '@/shared/ui/create-sheet';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 const { width: screenWidth } = Dimensions.get('window');
 
 export const styles = createSheet({
-  container: { flex: 1, backgroundColor: launchColors.hex_f9fafb },
+  container: { flex: 1, backgroundColor: '#f9fafb' },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 16,
-    backgroundColor: launchColors.hex_ffffff,
+    backgroundColor: '#ffffff',
     borderBottomWidth: 1,
-    borderBottomColor: launchColors.hex_e5e7eb,
+    borderBottomColor: '#e5e7eb',
   },
   headerTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: launchColors.hex_111827,
+    color: '#111827',
   },
   headerActions: { flexDirection: 'row', gap: 8 },
   iconButton: {
     padding: 8,
     borderRadius: 8,
-    backgroundColor: launchColors.hex_f3f4f6,
+    backgroundColor: '#f3f4f6',
   },
   iconButtonText: { fontSize: 12, fontWeight: '700' },
   filtersContainer: {
-    backgroundColor: launchColors.hex_ffffff,
+    backgroundColor: '#ffffff',
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: launchColors.hex_e5e7eb,
+    borderBottomColor: '#e5e7eb',
   },
   scrollView: { flex: 1 },
   scrollContent: { padding: 16, paddingBottom: 32 },
@@ -45,10 +45,10 @@ export const styles = createSheet({
   summaryCard: {
     flex: 1,
     minWidth: (screenWidth - 56) / 2,
-    backgroundColor: launchColors.hex_ffffff,
+    backgroundColor: '#ffffff',
     borderRadius: 12,
     padding: 16,
-    shadowColor: launchColors.hex_000,
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.05,
     shadowRadius: 2,
@@ -57,11 +57,11 @@ export const styles = createSheet({
   summaryValue: {
     fontSize: 24,
     fontWeight: '700',
-    color: launchColors.hex_111827,
+    color: '#111827',
   },
   summaryLabel: {
     fontSize: 12,
-    color: launchColors.hex_6b7280,
+    color: '#6b7280',
     marginTop: 4,
     textTransform: 'capitalize',
   },
@@ -72,12 +72,12 @@ export const styles = createSheet({
     borderRadius: 12,
     marginTop: 8,
   },
-  changePositive: { backgroundColor: launchColors.hex_d1fae5 },
-  changeNegative: { backgroundColor: launchColors.hex_fee2e2 },
+  changePositive: { backgroundColor: '#d1fae5' },
+  changeNegative: { backgroundColor: '#fee2e2' },
   changeText: {
     fontSize: 12,
     fontWeight: '600',
-    color: launchColors.hex_374151,
+    color: '#374151',
   },
   chartsContainer: { marginBottom: 16 },
   insightsSection: { marginTop: 8 },
@@ -90,29 +90,29 @@ export const styles = createSheet({
   sectionTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: launchColors.hex_111827,
+    color: '#111827',
   },
   seeAllText: {
     fontSize: 14,
-    color: launchColors.hex_6366f1,
+    color: '#6366f1',
     fontWeight: '500',
   },
   partialWarning: {
-    backgroundColor: launchColors.hex_fef3c7,
+    backgroundColor: '#fef3c7',
     borderRadius: 8,
     padding: 12,
     marginTop: 16,
   },
   partialText: {
     fontSize: 12,
-    color: launchColors.hex_92400e,
+    color: '#92400e',
     textAlign: 'center',
   },
   skeletonContainer: { padding: 16, gap: 16 },
   skeletonTitle: { marginBottom: 8 },
   skeletonFilters: { flexDirection: 'row', gap: 12, marginBottom: 8 },
   heatmapSkeleton: {
-    backgroundColor: launchColors.hex_ffffff,
+    backgroundColor: '#ffffff',
     borderRadius: 16,
     padding: 16,
     marginHorizontal: 12,
@@ -120,7 +120,7 @@ export const styles = createSheet({
     gap: 12,
   },
   infoCard: {
-    backgroundColor: launchColors.hex_ffffff,
+    backgroundColor: '#ffffff',
     borderRadius: 16,
     padding: 20,
     marginHorizontal: 12,
@@ -129,12 +129,12 @@ export const styles = createSheet({
   infoTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: launchColors.hex_111827,
+    color: '#111827',
     marginBottom: 6,
   },
   infoSubtitle: {
     fontSize: 14,
-    color: launchColors.hex_6b7280,
+    color: '#6b7280',
     lineHeight: 20,
   },
 });

@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { launchColors } from '@theme/tokens/launch-colors';
 
 export const SessionDifficultySchema = z.enum([
   'CASUAL',
@@ -37,8 +36,8 @@ export const DIFFICULTY_CONFIG = {
     failureConsequence: 'NONE' as const,
     label: 'Casual',
     description: 'Practice mode. Unlimited pauses. 50% XP.',
-    icon: '🌱',
-    color: launchColors.hex_4caf50,
+    icon: '',
+    color: '#4caf50',
   },
   FOCUSED: {
     xpMultiplier: 1.0,
@@ -49,8 +48,8 @@ export const DIFFICULTY_CONFIG = {
     failureConsequence: 'NONE' as const,
     label: 'Focused',
     description: 'Standard mode. 2 pauses allowed. 100% XP.',
-    icon: '🔥',
-    color: launchColors.hex_ff9800,
+    icon: '',
+    color: '#ff9800',
   },
   DEEP_WORK: {
     xpMultiplier: 1.5,
@@ -62,8 +61,8 @@ export const DIFFICULTY_CONFIG = {
     label: 'Deep Work',
     description:
       'No pauses. Wager 5 gems. 150% XP if completed, lose gems if abandoned.',
-    icon: '⚡',
-    color: launchColors.hex_9c27b0,
+    icon: '',
+    color: '#9c27b0',
   },
 } as const;
 

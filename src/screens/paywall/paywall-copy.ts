@@ -1,5 +1,5 @@
 import type { PurchasesPackageDisplayInfo } from '../../shared/monetization';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 export const VALUE_PROPOSITION =
   'Your VEX. Smarter over time. Deeper where it matters.';
@@ -59,42 +59,42 @@ export const FEATURE_HIGHLIGHT_MAP: Record<string, PaywallFeatureHighlight> = {
     benefit:
       'VEX remembers patterns, comeback style, best focus windows, and preferred push intensity across all sessions.',
     iconName: 'brain',
-    gradient: [launchColors.hex_4f46e5, launchColors.hex_7c3aed],
+    gradient: ['#4f46e5', '#7c3aed'],
   },
   progress_intelligence: {
     title: 'Weekly Focus Intelligence',
     benefit:
       'See your best rhythm, focus risk, recovery plan, consistency forecast, and calendar-aware planning.',
     iconName: 'bar-chart-3',
-    gradient: [launchColors.hex_0f766e, launchColors.hex_0d9488],
+    gradient: ['#0f766e', '#0d9488'],
   },
   advanced_study_os: {
     title: 'Advanced Study & Deep Work',
     benefit:
       'Advanced import, review intelligence, deadline risk, weak-topic plan, and smart next actions from your material.',
     iconName: 'book-open',
-    gradient: [launchColors.hex_d97706, launchColors.hex_f59e0b],
+    gradient: ['#d97706', '#f59e0b'],
   },
   recovery_planning: {
     title: 'Recovery & Continuity',
     benefit:
       'Build a recovery plan without shame. Long project memory and context restoration keep flow alive across sessions.',
     iconName: 'shield',
-    gradient: [launchColors.hex_059669, launchColors.hex_10b981],
+    gradient: ['#059669', '#10b981'],
   },
   premium_session_modes: {
     title: 'Advanced Friction Modes',
     benefit:
       'Custom modifiers, personal blocker depth, advanced run recap — no currency, no gimmicks.',
     iconName: 'zap',
-    gradient: [launchColors.hex_4f46e5, launchColors.hex_7c3aed],
+    gradient: ['#4f46e5', '#7c3aed'],
   },
   visual_identity: {
     title: 'Memory Console & Identity',
     benefit:
       'Editable long memory with source, confidence, and expiry. Shape companion forms and focus worlds.',
     iconName: 'award',
-    gradient: [launchColors.hex_0f766e, launchColors.hex_0d9488],
+    gradient: ['#0f766e', '#0d9488'],
   },
 };
 

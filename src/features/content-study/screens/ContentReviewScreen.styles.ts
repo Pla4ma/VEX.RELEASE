@@ -4,22 +4,22 @@
  */
 
 import { createSheet } from '@/shared/ui/create-sheet';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 export const styles = createSheet({
-  container: { flex: 1, backgroundColor: launchColors.hex_0f0f0f },
+  container: { flex: 1, backgroundColor: '#0f0f0f' },
   scrollView: { flex: 1 },
   scrollContent: { padding: 20 },
   header: { marginBottom: 20 },
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: launchColors.hex_ffffff,
+    color: '#ffffff',
     marginBottom: 8,
   },
-  subtitle: { fontSize: 16, color: launchColors.hex_9ca3af },
+  subtitle: { fontSize: 16, color: '#9ca3af' },
   loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  loadingText: { marginTop: 16, fontSize: 16, color: launchColors.hex_9ca3af },
+  loadingText: { marginTop: 16, fontSize: 16, color: '#9ca3af' },
   statusContainer: {
     borderRadius: 12,
     padding: 16,
@@ -30,18 +30,18 @@ export const styles = createSheet({
   statusLabel: { fontSize: 16, fontWeight: '600', marginTop: 8 },
   statusDescription: {
     fontSize: 14,
-    color: launchColors.hex_9ca3af,
+    color: '#9ca3af',
     marginTop: 4,
     textAlign: 'center',
   },
   hidden: { opacity: 0 },
   contentContainer: {
-    backgroundColor: launchColors.hex_1a1a1a,
+    backgroundColor: '#1a1a1a',
     borderRadius: 16,
     marginBottom: 20,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: launchColors.hex_2a2a2a,
+    borderColor: '#2a2a2a',
   },
   contentHeader: {
     flexDirection: 'row',
@@ -49,25 +49,25 @@ export const styles = createSheet({
     alignItems: 'center',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: launchColors.hex_2a2a2a,
+    borderBottomColor: '#2a2a2a',
   },
   contentTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: launchColors.hex_ffffff,
+    color: '#ffffff',
   },
-  contentStats: { fontSize: 12, color: launchColors.hex_9ca3af },
+  contentStats: { fontSize: 12, color: '#9ca3af' },
   contentScroll: { maxHeight: 300 },
   contentText: {
     fontSize: 14,
     lineHeight: 22,
-    color: launchColors.hex_d1d5db,
+    color: '#d1d5db',
     padding: 16,
   },
   contentEditInput: {
     fontSize: 14,
     lineHeight: 22,
-    color: launchColors.hex_ffffff,
+    color: '#ffffff',
     padding: 16,
     minHeight: 300,
     textAlignVertical: 'top',
@@ -76,12 +76,12 @@ export const styles = createSheet({
     flexDirection: 'row',
     padding: 12,
     borderTopWidth: 1,
-    borderTopColor: launchColors.hex_2a2a2a,
+    borderTopColor: '#2a2a2a',
     gap: 12,
   },
   editButton: {
     flex: 1,
-    backgroundColor: launchColors.hex_2a2a2a,
+    backgroundColor: '#2a2a2a',
     paddingVertical: 12,
     borderRadius: 8,
     alignItems: 'center',
@@ -89,11 +89,11 @@ export const styles = createSheet({
   editButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: launchColors.hex_ffffff,
+    color: '#ffffff',
   },
   cancelButton: {
     flex: 1,
-    backgroundColor: launchColors.hex_2a2a2a,
+    backgroundColor: '#2a2a2a',
     paddingVertical: 12,
     borderRadius: 8,
     alignItems: 'center',
@@ -101,11 +101,11 @@ export const styles = createSheet({
   cancelButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: launchColors.hex_9ca3af,
+    color: '#9ca3af',
   },
   saveButton: {
     flex: 1,
-    backgroundColor: launchColors.hex_3b82f6,
+    backgroundColor: '#3b82f6',
     paddingVertical: 12,
     borderRadius: 8,
     alignItems: 'center',
@@ -113,10 +113,10 @@ export const styles = createSheet({
   saveButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: launchColors.hex_ffffff,
+    color: '#ffffff',
   },
   generateButton: {
-    backgroundColor: launchColors.hex_3b82f6,
+    backgroundColor: '#3b82f6',
     borderRadius: 12,
     paddingVertical: 18,
     alignItems: 'center',
@@ -127,29 +127,29 @@ export const styles = createSheet({
   generateButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: launchColors.hex_ffffff,
+    color: '#ffffff',
   },
   buttonSpinner: { marginRight: 8 },
   processingNote: { marginTop: 16, alignItems: 'center' },
-  processingNoteText: { fontSize: 14, color: launchColors.hex_9ca3af },
+  processingNoteText: { fontSize: 14, color: '#9ca3af' },
   errorContainer: {
-    backgroundColor: launchColors.hex_ef444420,
+    backgroundColor: '#ef444420',
     borderRadius: 12,
     padding: 16,
     marginBottom: 20,
     borderWidth: 1,
-    borderColor: launchColors.hex_ef444440,
+    borderColor: '#ef444440',
   },
   errorTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: launchColors.hex_ef4444,
+    color: '#ef4444',
     marginBottom: 8,
   },
-  errorText: { fontSize: 14, color: launchColors.hex_ef4444 },
+  errorText: { fontSize: 14, color: '#ef4444' },
   retryButton: {
     marginTop: 12,
-    backgroundColor: launchColors.hex_ef444440,
+    backgroundColor: '#ef444440',
     paddingVertical: 10,
     paddingHorizontal: 16,
     borderRadius: 8,
@@ -158,6 +158,6 @@ export const styles = createSheet({
   retryButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: launchColors.hex_ffffff,
+    color: '#ffffff',
   },
 });

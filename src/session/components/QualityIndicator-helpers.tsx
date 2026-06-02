@@ -9,7 +9,7 @@ import Animated, {
 import { Box } from '../../components/primitives/Box';
 import { Text } from '../../components/primitives/Text';
 import { useTheme } from '../../theme';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 export type QualityGrade = 'S' | 'A' | 'B' | 'C' | 'D';
 
@@ -29,32 +29,32 @@ export const gradeConfig: Record<
   { color: string; bgColor: string; label: string; description: string }
 > = {
   S: {
-    color: launchColors.hex_9333ea,
-    bgColor: launchColors.rgb_147_51_234_0_15,
+    color: '#9333ea',
+    bgColor: 'rgba(147,51,234,0.15)',
     label: 'PERFECT',
     description: 'Flawless focus',
   },
   A: {
-    color: launchColors.hex_22c55e,
-    bgColor: launchColors.rgb_34_197_94_0_15,
+    color: '#22c55e',
+    bgColor: 'rgba(34,197,94,0.15)',
     label: 'EXCELLENT',
     description: 'Great focus',
   },
   B: {
-    color: launchColors.hex_3b82f6,
-    bgColor: launchColors.rgb_59_130_246_0_15,
+    color: '#3b82f6',
+    bgColor: 'rgba(59,130,246,0.15)',
     label: 'GOOD',
     description: 'Solid focus',
   },
   C: {
-    color: launchColors.hex_6b7280,
-    bgColor: launchColors.rgb_107_114_128_0_15,
+    color: '#6b7280',
+    bgColor: 'rgba(107,114,128,0.15)',
     label: 'FAIR',
     description: 'Some interruptions',
   },
   D: {
-    color: launchColors.hex_ef4444,
-    bgColor: launchColors.rgb_239_68_68_0_15,
+    color: '#ef4444',
+    bgColor: 'rgba(239,68,68,0.15)',
     label: 'NEEDS WORK',
     description: 'Many interruptions',
   },

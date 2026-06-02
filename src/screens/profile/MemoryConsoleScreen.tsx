@@ -77,7 +77,7 @@ export const MemoryConsoleScreen: React.FC<Props> = () => {
         }}
       >
         <EmptyState
-          icon="⏳"
+          iconName="clock"
           title="Memory Console"
           body="VEX needs at least 3 completed sessions before memory insights become available. Keep focusing."
         />
@@ -108,7 +108,7 @@ export const MemoryConsoleScreen: React.FC<Props> = () => {
 
         {memories.length === 0 ? (
           <EmptyState
-            icon="🧠"
+            iconName="activity"
             title="No memories yet"
             body="Memories build from completed sessions, reflections, and behavior patterns."
           />

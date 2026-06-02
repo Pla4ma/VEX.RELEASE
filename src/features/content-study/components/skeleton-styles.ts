@@ -1,12 +1,12 @@
 import { StyleSheet } from 'react-native';
 import { createSheet } from '@/shared/ui/create-sheet';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 export const styles = createSheet({
   container: { overflow: 'hidden' },
   shimmer: {
     ...StyleSheet.absoluteFill,
-    backgroundColor: launchColors.rgb_255_255_255_0_2,
+    backgroundColor: 'rgba(255,255,255,0.2)',
     width: '30%',
   },
   card: { borderRadius: 16, padding: 20, margin: 16 },

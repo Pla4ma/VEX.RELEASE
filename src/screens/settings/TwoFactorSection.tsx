@@ -4,7 +4,7 @@ import { useTheme } from '../../theme';
 import { Box, Text, Card } from '../../components/primitives';
 import { Icon } from '../../icons';
 import { useUIStore } from '../../store/index';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 export const TwoFactorSection: React.FC = () => {
   const { theme } = useTheme();
@@ -90,7 +90,7 @@ export const TwoFactorSection: React.FC = () => {
             alignItems="center"
             style={{
               backgroundColor: twoFactorEnabled
-                ? theme.colors.success[50] || launchColors.hex_ecfdf5
+                ? theme.colors.success[50] || '#ecfdf5'
                 : theme.colors.background.secondary,
             }}
           >
@@ -134,7 +134,7 @@ export const TwoFactorSection: React.FC = () => {
             thumbColor={
               twoFactorEnabled
                 ? theme.colors.success.DEFAULT
-                : launchColors.hex_fff
+                : '#fff'
             }
           />
         </Pressable>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Text, Card } from '../../components/primitives';
 import { Icon } from '../../icons';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 import type { AccentColor, TimerFormat } from './ColorSchemeToggle';
 import { ACCENT_COLORS, TIMER_FORMAT_OPTIONS } from './ColorSchemeToggle';
 import type { Theme } from '../../theme';
@@ -55,7 +55,7 @@ export function AppearancePreviewCard({
               theme.colors.primary[500],
           }}
         >
-          <Icon name="timer" size={28} color={launchColors.hex_fff} />
+          <Icon name="timer" size={28} color={'#fff'} />
         </Box>
         <Text
           variant="h3"

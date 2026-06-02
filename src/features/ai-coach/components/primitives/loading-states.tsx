@@ -8,7 +8,7 @@ import Animated, {
   withSequence,
   Easing,
 } from 'react-native-reanimated';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 import { styles } from './progress-state.styles';
 import { ProgressBar } from './progress-indicators';
 
@@ -27,7 +27,7 @@ export function LoadingState({
 }: LoadingStateProps) {
   return (
     <View style={styles.loadingContainer}>
-      <ActivityIndicator size="large" color={launchColors.hex_4ecdc4} />
+      <ActivityIndicator size="large" color={'#4ecdc4'} />
       <Text style={styles.loadingMessage}>{message}</Text>
       {submessage && <Text style={styles.loadingSubmessage}>{submessage}</Text>}
       {showProgress && progress !== undefined && (

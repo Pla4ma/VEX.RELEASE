@@ -32,8 +32,6 @@ export const SessionSetupScreen = withScreenErrorBoundary(
   function _SessionSetupScreen(): React.JSX.Element {
     const navigation = useNavigation<SessionNavigationProp>();
     const route = useRoute<SessionSetupRouteProp>();
-    const isFirstSessionSetup =
-      route.params?.source === SESSION_SETUP_SOURCE_ONBOARDING;
 
     const [contractText, setContractText] = useState('');
     const [selectedDifficulty, setSelectedDifficulty] =
@@ -44,6 +42,9 @@ export const SessionSetupScreen = withScreenErrorBoundary(
       routeParams: route.params,
       focusContractText: contractText.trim().length >= 3 ? contractText : null,
     });
+
+    const isFirstSessionSetup =
+      route.params?.source === SESSION_SETUP_SOURCE_ONBOARDING;
 
     if (isFirstSessionSetup) {
       return (

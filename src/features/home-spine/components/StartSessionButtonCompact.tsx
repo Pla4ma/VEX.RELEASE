@@ -37,7 +37,7 @@ export function StartSessionButtonCompact({
           <ActivityIndicator size="small" color={theme.colors.text.inverse} />
         ) : (
           <>
-            <Text fontSize={18}>{hasActiveSession ? '▶️' : '🔥'}</Text>
+            <Text fontSize={18}></Text>
             <Text
               variant="body"
               color={theme.colors.text.inverse}

@@ -1,6 +1,6 @@
 import type { ViewStyle, TextStyle } from 'react-native';
 import type { TabBarProps } from './TabBar.types';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 interface ThemeColors {
   primary: { [key: string]: string | undefined; 500: string };
@@ -31,12 +31,12 @@ export function getVariantStyles(
         },
         text: {
           color: isActive
-            ? launchColors.hex_ffffff
+            ? '#ffffff'
             : theme.colors.text.secondary,
         },
         icon: {
           color: isActive
-            ? launchColors.hex_ffffff
+            ? '#ffffff'
             : theme.colors.text.secondary,
         },
       };

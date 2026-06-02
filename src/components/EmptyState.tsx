@@ -4,9 +4,10 @@ import { View } from 'react-native';
 import { useTheme } from '../theme';
 import { Button } from './primitives/Button';
 import { Text } from './primitives/Text';
+import { Icon } from '../icons';
 
 interface EmptyStateProps {
-  icon: string;
+  iconName: string;
   title: string;
   body: string;
   actionLabel?: string;
@@ -14,7 +15,7 @@ interface EmptyStateProps {
 }
 
 export function EmptyState({
-  icon,
+  iconName,
   title,
   body,
   actionLabel,
@@ -39,14 +40,17 @@ export function EmptyState({
           borderRadius: 36,
           alignItems: 'center',
           justifyContent: 'center',
-          backgroundColor: theme.colors.semantic.primarySoft,
+          backgroundColor: theme.colors.semantic.vexCyanSoft,
           borderColor: theme.colors.semantic.border,
           borderWidth: 1,
         }}
       >
-        <Text fontSize={48} lineHeight={48}>
-          {icon}
-        </Text>
+        <Icon
+          name={iconName}
+          size={32}
+          color={theme.colors.semantic.vexCyan}
+          variant="outline"
+        />
       </View>
       <View style={{ alignItems: 'center', gap: theme.spacing[2] }}>
         <Text

@@ -86,7 +86,7 @@ export function StudyPlanSuggestionCard({
             justifyContent="center"
             alignItems="center"
           >
-            <Text fontSize={24}>📚</Text>
+            <Text fontSize={24} color={theme.colors.info.DEFAULT}>◊</Text>
           </Box>
 
           {/* Content */}

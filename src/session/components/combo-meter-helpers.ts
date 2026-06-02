@@ -1,52 +1,51 @@
-import { launchColors } from '@theme/tokens/launch-colors';
 import type { ComboTierConfig } from './combo-meter-types';
 
 export const COMBO_TIERS: ComboTierConfig[] = [
   {
     minCombo: 0,
     name: 'Focus',
-    color: launchColors.hex_6b7280,
-    emoji: '⚪',
+    color: '#6b7280',
+    emoji: '',
     multiplier: 1,
     animation: 'pulse',
   },
   {
     minCombo: 5,
     name: 'Bronze',
-    color: launchColors.hex_b45309,
-    emoji: '🥉',
+    color: '#b45309',
+    emoji: '',
     multiplier: 1.5,
     animation: 'pulse',
   },
   {
     minCombo: 10,
     name: 'Silver',
-    color: launchColors.hex_9ca3af,
-    emoji: '🥈',
+    color: '#9ca3af',
+    emoji: '',
     multiplier: 2,
     animation: 'shake',
   },
   {
     minCombo: 15,
     name: 'Gold',
-    color: launchColors.hex_fbbf24,
-    emoji: '🥇',
+    color: '#fbbf24',
+    emoji: '',
     multiplier: 3,
     animation: 'shake',
   },
   {
     minCombo: 20,
     name: 'Platinum',
-    color: launchColors.hex_a855f7,
-    emoji: '💜',
+    color: '#a855f7',
+    emoji: '',
     multiplier: 4,
     animation: 'rainbow',
   },
   {
     minCombo: 30,
     name: 'Diamond',
-    color: launchColors.hex_3b82f6,
-    emoji: '💎',
+    color: '#3b82f6',
+    emoji: '',
     multiplier: 5,
     animation: 'rainbow',
   },
@@ -74,16 +73,16 @@ export function getTierProgress(combo: number): number {
 
 export function getMilestoneMessage(milestone: number): string {
   const messages: Record<number, string> = {
-    5: "5 minutes! You're warming up! 🔥",
-    10: '10 minutes! Keep that momentum! 💪',
-    15: "15 minutes! You're in the zone! ⚡",
-    20: '20 minutes! Unstoppable! 🚀',
-    25: '25 minutes! Legendary focus! 👑',
-    30: '30 minutes! DIAMOND STATUS! 💎',
-    45: "45 minutes! You're a machine! 🤖",
-    60: '60 MINUTES! ABSOLUTE LEGEND! 🏆',
+    5: "5 minutes. You're warming up.",
+    10: '10 minutes. Keep that momentum.',
+    15: "15 minutes. You're in the zone.",
+    20: '20 minutes. Unstoppable.',
+    25: '25 minutes. Legendary focus.',
+    30: '30 minutes. Peak status reached.',
+    45: "45 minutes. You're a machine.",
+    60: '60 MINUTES. Absolute legend.',
   };
-  return messages[milestone] || `${milestone} minutes! Amazing! 🎉`;
+  return messages[milestone] || `${milestone} minutes. Amazing.`;
 }
 
 export function formatCombo(minutes: number): string {

@@ -123,20 +123,20 @@
     },
     "plugins": [
       [
-        [
-          "./plugins/withCertificatePinning",
-          {
-            "domains": {
-              "supabase.co": {
-                "pins": [
-                  "sha256/p51goejPCgGH+Oog/MU2k6PObcEfTrrr73jUcuWJ7w0=",
-                  "sha256/kIdp6NNEd8wsugYyyIYFsi1ylMCED3hZbSR8ZFsa/A4="
-                ],
-                "includeSubdomains": true
-              }
+        "./plugins/withCertificatePinning",
+        {
+          "domains": {
+            "supabase.co": {
+              "pins": [
+                "sha256/p51goejPCgGH+Oog/MU2k6PObcEfTrrr73jUcuWJ7w0=",
+                "sha256/kIdp6NNEd8wsugYyyIYFsi1ylMCED3hZbSR8ZFsa/A4="
+              ],
+              "includeSubdomains": true
             }
           }
-        ],
+        }
+      ],
+      [
         "expo-build-properties",
         {
           "ios": {

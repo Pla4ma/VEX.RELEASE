@@ -5,9 +5,9 @@ import type {
 } from './session-notification-types';
 
 const INTERRUPTION_TITLES: Record<string, string> = {
-  CRITICAL: '⚠️ Session at Risk!',
-  MAJOR: '⚡ Interruption Detected',
-  MODERATE: '⏸️ Session Paused',
+  CRITICAL: 'Session at Risk',
+  MAJOR: 'Interruption Detected',
+  MODERATE: 'Session Paused',
   MINOR: 'Session Paused',
 };
 
@@ -35,7 +35,7 @@ export function buildRecoveryPayload(
   minutesElapsed: number,
 ): NotificationPayload {
   return {
-    title: '🔄 Recovery Available',
+    title: 'Recovery Available',
     body: `You can still recover your session. ${minutesElapsed} minutes have passed.`,
     data: { sessionId, type: 'recovery_reminder' },
     priority: 'normal',
@@ -47,7 +47,7 @@ export function buildStreakWarningPayload(
   hoursRemaining: number,
 ): NotificationPayload {
   return {
-    title: '🔥 Streak at Risk!',
+    title: 'Streak at Risk',
     body: `Your ${streakDays}-day streak ends in ${hoursRemaining} hours. Start a session now!`,
     data: { type: 'streak_warning', streakDays, hoursRemaining },
     priority: 'high',
@@ -56,7 +56,7 @@ export function buildStreakWarningPayload(
 
 export function buildDailyReminderPayload(): NotificationPayload {
   return {
-    title: '📅 Daily Focus Reminder',
+    title: 'Daily Focus Reminder',
     body: 'Time to start your daily focus session and keep your streak going!',
     data: { type: 'daily_reminder' },
     priority: 'normal',
@@ -67,7 +67,7 @@ export function buildBreakReminderPayload(
   breakDuration: number,
 ): NotificationPayload {
   return {
-    title: '☕ Break Time',
+    title: 'Break Time',
     body: `Take a ${breakDuration / 60} minute break. You've earned it!`,
     data: { type: 'break_reminder', breakDuration },
     priority: 'normal',
@@ -85,7 +85,7 @@ export function buildRewardPayload(
   if (gems > 0) {parts.push(`${gems} gems`);}
   if (parts.length === 0) {return null;}
   return {
-    title: '🎉 Rewards Earned!',
+    title: 'Rewards Earned',
     body: `You earned: ${parts.join(', ')}`,
     data: { type: 'rewards', xp, coins, gems },
     priority: 'normal',
@@ -95,16 +95,16 @@ export function buildRewardPayload(
 export function buildStreakMilestoneResult(
   streakDays: number,
 ): StreakMilestoneResult {
-  let title = '🔥 Streak Milestone!';
+  let title = 'Streak Milestone';
   let body = `You've maintained focus for ${streakDays} days straight!`;
   if (streakDays === 7) {
-    title = '🏆 One Week Streak!';
+    title = 'One Week Streak';
     body = "Amazing dedication! You've focused for 7 days straight!";
   } else if (streakDays === 30) {
-    title = '🌟 Month-Long Streak!';
+    title = 'Month-Long Streak';
     body = 'Incredible! A full month of daily focus sessions!';
   } else if (streakDays === 100) {
-    title = '💯 Century Streak!';
+    title = 'Century Streak';
     body = 'Legendary! 100 days of unwavering focus!';
   }
   return { title, body };
@@ -112,15 +112,15 @@ export function buildStreakMilestoneResult(
 
 const ANTI_CHEAT_WARNINGS: Record<string, AntiCheatWarningResult> = {
   TIME_MANIPULATION: {
-    title: '⚠️ Time Anomaly Detected',
+    title: 'Time Anomaly Detected',
     body: 'System time changes were detected. Please keep system time accurate.',
   },
   DEVICE_CHANGE: {
-    title: '⚠️ Device Change',
+    title: 'Device Change',
     body: 'Session continued on different device. Monitoring for consistency.',
   },
   RAPID_COMPLETION: {
-    title: '⚠️ Suspicious Activity',
+    title: 'Suspicious Activity',
     body: 'Unusually rapid session completion detected.',
   },
 };
@@ -130,7 +130,7 @@ export function getAntiCheatWarning(
 ): AntiCheatWarningResult {
   return (
     ANTI_CHEAT_WARNINGS[violationType] || {
-      title: '⚠️ Session Warning',
+      title: 'Session Warning',
       body: 'An issue was detected with your session.',
     }
   );

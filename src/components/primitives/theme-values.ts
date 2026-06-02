@@ -4,14 +4,37 @@ export type ThemeSpacing = Record<string, number>;
 export type ColorTree = { colors?: ThemeColors } & ThemeColors;
 
 export function resolveColorValue(value: unknown, theme: unknown): string | undefined {
-  if (typeof value === 'string') {return value;}
-  if (typeof value === 'number') {
-    const themeObj = theme as Record<string, unknown> | null;
-    const nested = themeObj?.colors as Record<string, unknown> | undefined;
-    const primary = nested?.primary ?? (themeObj as Record<string, unknown> | null)?.primary;
-    if (typeof primary === 'string') {return primary;}
+  if (typeof value !== 'string') return undefined;
+
+  // Literal CSS color values (hex, rgb, rgba, hsl, etc.)
+  const isLiteralColor = /^#|^rgba?\(|^hsla?\(|^hsva?\(|^transparent$/i.test(value);
+  if (isLiteralColor) return value;
+
+  const themeObj = theme as Record<string, unknown> | null;
+  const colors = themeObj?.colors as Record<string, unknown> | undefined;
+  if (!colors) return value;
+
+  // Theme path resolution (e.g. "text.primary", "semantic.vexCyan")
+  if (value.includes('.')) {
+    return getThemeColor(colors, value);
   }
-  return undefined;
+
+  // Shorthand semantic resolution: try common nested groups
+  const groups = ['semantic', 'text', 'border', 'surface', 'background', 'accent'];
+  for (const group of groups) {
+    const groupObj = colors[group] as Record<string, unknown> | undefined;
+    if (groupObj && typeof groupObj[value] === 'string') {
+      return groupObj[value] as string;
+    }
+  }
+
+  // Top-level direct string lookup
+  if (typeof colors[value] === 'string') {
+    return colors[value] as string;
+  }
+
+  // Return as literal CSS color name (e.g. "white", "red", "cyan")
+  return value;
 }
 
 export function resolveSpacingValue(value: unknown, theme: unknown): number | undefined {

@@ -1,4 +1,4 @@
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 export { formatDuration } from '../../utils/format-duration';
 
@@ -23,19 +23,19 @@ export const getMoodEmoji = (m: MoodType): string => {
 
 export const getGrade = (score: number): { letter: string; color: string } => {
   if (score >= 900) {
-    return { letter: 'S', color: launchColors.hex_ffd700 };
+    return { letter: 'S', color: '#ffd700' };
   }
   if (score >= 800) {
-    return { letter: 'A', color: launchColors.hex_4caf50 };
+    return { letter: 'A', color: '#4caf50' };
   }
   if (score >= 700) {
-    return { letter: 'B', color: launchColors.hex_8bc34a };
+    return { letter: 'B', color: '#8bc34a' };
   }
   if (score >= 600) {
-    return { letter: 'C', color: launchColors.hex_ffc107 };
+    return { letter: 'C', color: '#ffc107' };
   }
   if (score >= 500) {
-    return { letter: 'D', color: launchColors.hex_ff9800 };
+    return { letter: 'D', color: '#ff9800' };
   }
-  return { letter: 'F', color: launchColors.hex_f44336 };
+  return { letter: 'F', color: '#f44336' };
 };

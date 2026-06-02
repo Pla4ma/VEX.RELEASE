@@ -41,7 +41,7 @@ export function VexTabBar({
         const focused =
           state.index === state.routes.findIndex((r) => r.key === route.key);
         const color = focused
-          ? theme.colors.semantic.tabActive
+          ? theme.colors.semantic.vexCyan
           : theme.colors.semantic.tabInactive;
         const onPress = () => {
           const event = navigation.emit({

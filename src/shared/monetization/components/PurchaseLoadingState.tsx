@@ -10,7 +10,7 @@ import React from 'react';
 import { View, Text } from 'react-native';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import { createSheet } from '@/shared/ui/create-sheet';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 interface PurchaseLoadingStateProps {
   productName?: string;
@@ -48,7 +48,7 @@ export function PurchaseLoadingState({
 const styles = createSheet({
   container: {
     flex: 1,
-    backgroundColor: launchColors.hex_1a1a2e,
+    backgroundColor: '#1a1a2e',
     justifyContent: 'center',
     alignItems: 'center',
     padding: 24,
@@ -61,40 +61,40 @@ const styles = createSheet({
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: launchColors.hex_2a2a3e,
+    backgroundColor: '#2a2a3e',
   },
   skeletonTitle: {
     width: '50%',
     height: 28,
-    backgroundColor: launchColors.hex_2a2a3e,
+    backgroundColor: '#2a2a3e',
     borderRadius: 8,
     marginTop: 24,
   },
   skeletonPrice: {
     width: '30%',
     height: 24,
-    backgroundColor: launchColors.hex_2a2a3e,
+    backgroundColor: '#2a2a3e',
     borderRadius: 8,
     marginTop: 12,
   },
   skeletonLine: {
     width: '90%',
     height: 16,
-    backgroundColor: launchColors.hex_2a2a3e,
+    backgroundColor: '#2a2a3e',
     borderRadius: 4,
     marginTop: 8,
   },
   skeletonButton: {
     width: '80%',
     height: 48,
-    backgroundColor: launchColors.hex_2a2a3e,
+    backgroundColor: '#2a2a3e',
     borderRadius: 12,
     marginTop: 32,
   },
   message: {
     marginTop: 24,
     fontSize: 14,
-    color: launchColors.hex_9e9e9e,
+    color: '#9e9e9e',
   },
 });
 

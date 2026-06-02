@@ -1,5 +1,5 @@
 import { createSheet } from '@/shared/ui/create-sheet';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 export const styles = createSheet({
   container: { gap: 12 },
@@ -26,7 +26,7 @@ export const styles = createSheet({
   thumbnail: {
     width: '100%',
     height: 160,
-    backgroundColor: launchColors.hex_000,
+    backgroundColor: '#000',
   },
   previewInfo: { padding: 12, gap: 4 },
   videoTitle: { fontSize: 15, fontWeight: '600', lineHeight: 20 },

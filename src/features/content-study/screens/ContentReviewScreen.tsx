@@ -17,7 +17,7 @@ import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { ContentStudyStackParamList } from '../types';
 import { useContentReview } from '../hooks';
 import { UI_TEXT } from '../constants';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 import { styles } from './ContentReviewScreen.styles';
 import { StatusBadge, ContentView, ErrorDisplay } from './ContentReviewScreen.helpers';
 
@@ -73,7 +73,7 @@ export function ContentReviewScreen() {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={launchColors.hex_3b82f6} />
+          <ActivityIndicator size="large" color={'#3b82f6'} />
           <Text style={styles.loadingText}>Loading content...</Text>
         </View>
       </SafeAreaView>
@@ -132,7 +132,7 @@ export function ContentReviewScreen() {
             accessibilityHint="Double tap to activate"
           >
             {isGenerating ? (
-              <ActivityIndicator size="small" color={launchColors.hex_fff} />
+              <ActivityIndicator size="small" color={'#fff'} />
             ) : (
               <Text style={styles.generateButtonText}>
                 {UI_TEXT.GENERATE_BUTTON}

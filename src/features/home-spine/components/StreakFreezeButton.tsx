@@ -79,7 +79,7 @@ export function StreakFreezeButton({
           bg={theme.colors.background.tertiary}
           opacity={0.7}
         >
-          <Text fontSize={12}>🧊</Text>
+          <Text fontSize={12}></Text>
           <Text variant="caption" color={theme.colors.text.tertiary}>
             Frozen today
           </Text>
@@ -110,7 +110,7 @@ export function StreakFreezeButton({
             borderColor={theme.colors.info.DEFAULT}
             opacity={isFreezing ? 0.5 : 1}
           >
-            <Text fontSize={12}>🧊</Text>
+            <Text fontSize={12}></Text>
             <Text
               variant="caption"
               color={theme.colors.info.dark}
@@ -154,7 +154,7 @@ export function StreakFreezeButton({
             justifyContent="center"
             alignItems="center"
           >
-            <Text fontSize={20}>🧊</Text>
+            <Text fontSize={20}></Text>
           </Box>
 
           <Box flex={1}>

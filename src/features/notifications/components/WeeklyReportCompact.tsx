@@ -2,7 +2,7 @@ import React from 'react';
 import { Pressable } from 'react-native';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 export interface WeeklyReportCompactProps {
   totalMinutes: number;
@@ -33,8 +33,8 @@ export function WeeklyReportCompact({
         style={{
           borderLeftWidth: 4,
           borderLeftColor: isImprovement
-            ? launchColors.hex_22c55e
-            : launchColors.hex_f59e0b,
+            ? '#22c55e'
+            : '#f59e0b',
         }}
       >
         <Text fontSize={24}>📊</Text>

@@ -22,6 +22,12 @@ export { Stack, VStack, HStack, Center } from './Stack';
 export type { StackProps } from './Stack';
 
 export { FeatureScreen } from './FeatureScreen';
+
+export { VexMotionSurface } from './VexMotionSurface';
+export type { VexMotionSurfaceProps } from './VexMotionSurface';
+
+export { VexLaunchButton } from './VexLaunchButton';
+export type { VexLaunchButtonProps } from './VexLaunchButton';
 export {
   Skeleton,
   SkeletonCard,

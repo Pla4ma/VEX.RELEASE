@@ -92,11 +92,8 @@ export function ScoreHistoryChart({
           Score History
         </Text>
         <View style={{ alignItems: 'center', paddingVertical: 40 }}>
-          <Text style={{ fontSize: 48, marginBottom: theme.spacing[2] }}>
-            📊
-          </Text>
           <Text variant="caption" color="textMuted">
-            No score data yet. Complete sessions to build your history!
+            No score data yet. Complete sessions to build your history.
           </Text>
         </View>
       </Box>

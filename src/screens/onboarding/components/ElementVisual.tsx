@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import type { CompanionElement } from '../../../features/onboarding/types';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 interface ElementVisualProps {
   element: CompanionElement;
@@ -130,7 +130,7 @@ export function ElementVisual({
             width: 12,
             height: 12,
             borderRadius: 6,
-            backgroundColor: launchColors.hex_fff,
+            backgroundColor: '#fff',
             position: 'absolute',
           }}
         />

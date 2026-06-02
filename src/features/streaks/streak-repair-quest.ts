@@ -79,7 +79,7 @@ export async function createRepairQuest(
   eventBus.publish('notification:send', {
     userId,
     type: 'STREAK_REPAIR_QUEST',
-    title: '🔥 Streak Repair Quest Started!',
+    title: 'Streak Repair Quest Started',
     body: `Complete 3 sessions in 24h to restore your ${previousStreak}-day streak to ${targetRestoreDays} days!`,
     data: { questId: quest.id, action: 'VIEW_REPAIR_QUEST' },
   });
@@ -153,7 +153,7 @@ export async function recordRepairQuestSession(
   eventBus.publish('notification:send', {
     userId,
     type: 'STREAK_REPAIR_PROGRESS',
-    title: `🔥 Repair Quest: ${sessionsCompleted}/3 Complete`,
+    title: `Repair Quest: ${sessionsCompleted}/3 Complete`,
     body: `${remainingSessions} more session${remainingSessions === 1 ? '' : 's'} to restore your streak!`,
     data: {
       questId: quest.id,

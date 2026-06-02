@@ -14,7 +14,7 @@ import {
   ProfileAvatar,
   StreakIndicator,
 } from './GreetingHeaderParts';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 export interface GreetingHeaderProps {
   userName?: string;
@@ -145,7 +145,7 @@ export function GreetingHeader({
                   <Text
                     variant="caption"
                     style={{
-                      color: launchColors.hex_fff,
+                      color: '#fff',
                       fontSize: 10,
                       fontWeight: '700',
                       lineHeight: 14,

@@ -1,15 +1,15 @@
 import { createSheet } from '@/shared/ui/create-sheet';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 export const styles = createSheet({
   container: {
-    backgroundColor: launchColors.hex_ffffff,
+    backgroundColor: '#ffffff',
     borderRadius: 12,
     padding: 16,
     marginVertical: 8,
     marginHorizontal: 12,
     borderLeftWidth: 4,
-    shadowColor: launchColors.hex_000,
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     shadowRadius: 2,
@@ -18,8 +18,8 @@ export const styles = createSheet({
   header: { flexDirection: 'row', alignItems: 'flex-start' },
   icon: { fontSize: 24, marginRight: 12 },
   info: { flex: 1 },
-  title: { fontSize: 16, fontWeight: '600', color: launchColors.hex_111827 },
-  subtitle: { fontSize: 13, color: launchColors.hex_6b7280, marginTop: 2 },
+  title: { fontSize: 16, fontWeight: '600', color: '#111827' },
+  subtitle: { fontSize: 13, color: '#6b7280', marginTop: 2 },
   statusBadge: { paddingHorizontal: 8, paddingVertical: 4, borderRadius: 12 },
   statusText: { fontSize: 12, fontWeight: '600' },
   progressSection: {
@@ -31,7 +31,7 @@ export const styles = createSheet({
   progressBarContainer: {
     flex: 1,
     height: 6,
-    backgroundColor: launchColors.hex_e5e7eb,
+    backgroundColor: '#e5e7eb',
     borderRadius: 3,
     overflow: 'hidden',
   },
@@ -39,24 +39,24 @@ export const styles = createSheet({
   progressText: {
     fontSize: 14,
     fontWeight: '600',
-    color: launchColors.hex_374151,
+    color: '#374151',
     minWidth: 40,
   },
   fileInfo: {
     marginTop: 12,
     padding: 12,
-    backgroundColor: launchColors.hex_f9fafb,
+    backgroundColor: '#f9fafb',
     borderRadius: 8,
   },
-  fileSize: { fontSize: 14, fontWeight: '500', color: launchColors.hex_374151 },
-  fileUrl: { fontSize: 12, color: launchColors.hex_6b7280, marginTop: 4 },
+  fileSize: { fontSize: 14, fontWeight: '500', color: '#374151' },
+  fileUrl: { fontSize: 12, color: '#6b7280', marginTop: 4 },
   errorSection: {
     marginTop: 12,
     padding: 12,
-    backgroundColor: launchColors.hex_fee2e2,
+    backgroundColor: '#fee2e2',
     borderRadius: 8,
   },
-  errorText: { fontSize: 13, color: launchColors.hex_ef4444 },
+  errorText: { fontSize: 13, color: '#ef4444' },
   actions: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
@@ -70,16 +70,16 @@ export const styles = createSheet({
     minWidth: 100,
     alignItems: 'center',
   },
-  cancelButton: { backgroundColor: launchColors.hex_f3f4f6 },
-  cancelButtonText: { color: launchColors.hex_6b7280, fontWeight: '500' },
+  cancelButton: { backgroundColor: '#f3f4f6' },
+  cancelButtonText: { color: '#6b7280', fontWeight: '500' },
   loadingIndicator: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   loadingText: {
     fontSize: 14,
-    color: launchColors.hex_3b82f6,
+    color: '#3b82f6',
     fontWeight: '500',
   },
-  downloadButton: { backgroundColor: launchColors.hex_10b981 },
-  downloadButtonText: { color: launchColors.hex_ffffff, fontWeight: '600' },
-  retryButton: { backgroundColor: launchColors.hex_3b82f6 },
-  retryButtonText: { color: launchColors.hex_ffffff, fontWeight: '600' },
+  downloadButton: { backgroundColor: '#10b981' },
+  downloadButtonText: { color: '#ffffff', fontWeight: '600' },
+  retryButton: { backgroundColor: '#3b82f6' },
+  retryButtonText: { color: '#ffffff', fontWeight: '600' },
 });

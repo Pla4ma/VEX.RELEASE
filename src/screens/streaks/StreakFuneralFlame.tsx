@@ -5,10 +5,13 @@ import Animated, {
   withSequence,
   withTiming,
 } from 'react-native-reanimated';
-
+import { View } from 'react-native';
 import { Text } from '../../components/primitives';
+import { useTheme } from '../../theme';
 
 export function StreakFuneralFlame(): React.JSX.Element {
+  const { theme } = useTheme();
+  const semantic = theme.colors.semantic;
   const flameScale = useSharedValue(1);
   const flameOpacity = useSharedValue(1);
 
@@ -34,7 +37,20 @@ export function StreakFuneralFlame(): React.JSX.Element {
 
   return (
     <Animated.View style={animatedStyle}>
-      <Text fontSize={96}>🔥</Text>
+      <View
+        style={{
+          width: 96,
+          height: 96,
+          borderRadius: 48,
+          backgroundColor: `${semantic.danger}18`,
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <Text fontSize={40} color="error.DEFAULT" fontWeight="700">
+          V
+        </Text>
+      </View>
     </Animated.View>
   );
 }

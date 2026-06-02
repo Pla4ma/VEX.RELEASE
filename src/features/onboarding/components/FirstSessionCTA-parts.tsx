@@ -67,7 +67,7 @@ export function SessionPreview({
       gap="md"
     >
       <Box flexDirection="row" alignItems="center" gap="sm">
-        <Text fontSize={40}>{durationOption?.emoji ?? '🍅'}</Text>
+        <Text fontSize={40}>{durationOption?.emoji ?? ''}</Text>
         <Text variant="h2" color="text.primary" fontWeight="700">
           {durationOption?.label ?? '25 min'}
         </Text>

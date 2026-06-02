@@ -2,7 +2,7 @@ import type {
   NotificationAction,
   NotificationActionType,
 } from '../../navigation/notification-routing-types';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 import { isFeatureHidden } from '../../features/liveops-config/final-release-feature-map';
 import {
   getFeatureAvailabilityFor,
@@ -43,43 +43,43 @@ export const NOTIFICATION_CONFIG: Record<
 > = {
   ACHIEVEMENT: {
     icon: '\u{1F3C6}',
-    color: launchColors.hex_eab308,
-    bgColor: launchColors.hex_fef9c3,
+    color: '#eab308',
+    bgColor: '#fef9c3',
   },
   STREAK_RISK: {
     icon: '\u{1F525}',
-    color: launchColors.hex_ef4444,
-    bgColor: launchColors.hex_fee2e2,
+    color: '#ef4444',
+    bgColor: '#fee2e2',
   },
   BOSS: {
     icon: '\u{1F480}',
-    color: launchColors.hex_a855f7,
-    bgColor: launchColors.hex_f3e8ff,
+    color: '#a855f7',
+    bgColor: '#f3e8ff',
   },
   SQUAD: {
     icon: '\u{1F6E1}',
-    color: launchColors.hex_3b82f6,
-    bgColor: launchColors.hex_dbeafe,
+    color: '#3b82f6',
+    bgColor: '#dbeafe',
   },
   RIVAL: {
     icon: '\u{2694}',
-    color: launchColors.hex_ef4444,
-    bgColor: launchColors.hex_fee2e2,
+    color: '#ef4444',
+    bgColor: '#fee2e2',
   },
   COACH: {
     icon: '\u{1F4AC}',
-    color: launchColors.hex_22c55e,
-    bgColor: launchColors.hex_dcfce7,
+    color: '#22c55e',
+    bgColor: '#dcfce7',
   },
   REWARD: {
     icon: '\u{1F381}',
-    color: launchColors.hex_f59e0b,
-    bgColor: launchColors.hex_fef3c7,
+    color: '#f59e0b',
+    bgColor: '#fef3c7',
   },
   LEVEL_UP: {
     icon: '\u{2B50}',
-    color: launchColors.hex_8b5cf6,
-    bgColor: launchColors.hex_ede9fe,
+    color: '#8b5cf6',
+    bgColor: '#ede9fe',
   },
 };
 

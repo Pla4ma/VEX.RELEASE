@@ -6,7 +6,7 @@
 import React from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { createSheet } from '@/shared/ui/create-sheet';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 import { toggleSwitch } from '../../../utils/haptics';
 
 interface ToggleSettingProps {
@@ -57,9 +57,9 @@ const styles = createSheet({
     justifyContent: 'space-between',
     paddingVertical: 16,
     paddingHorizontal: 16,
-    backgroundColor: launchColors.hex_ffffff,
+    backgroundColor: '#ffffff',
     borderBottomWidth: 1,
-    borderBottomColor: launchColors.hex_e5e7eb,
+    borderBottomColor: '#e5e7eb',
   },
   content: {
     flex: 1,
@@ -67,11 +67,11 @@ const styles = createSheet({
   },
   label: {
     fontSize: 16,
-    color: launchColors.hex_111827,
+    color: '#111827',
   },
   description: {
     fontSize: 12,
-    color: launchColors.hex_6b7280,
+    color: '#6b7280',
     marginTop: 4,
   },
   toggle: {
@@ -81,16 +81,16 @@ const styles = createSheet({
     padding: 2,
   },
   toggleActive: {
-    backgroundColor: launchColors.hex_6366f1,
+    backgroundColor: '#6366f1',
   },
   toggleInactive: {
-    backgroundColor: launchColors.hex_d1d5db,
+    backgroundColor: '#d1d5db',
   },
   toggleKnob: {
     width: 24,
     height: 24,
     borderRadius: 12,
-    backgroundColor: launchColors.hex_ffffff,
+    backgroundColor: '#ffffff',
   },
   knobActive: {
     marginLeft: 'auto',

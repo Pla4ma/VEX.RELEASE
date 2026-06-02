@@ -3,7 +3,7 @@ import { ActivityIndicator } from 'react-native';
 import { Box, Text } from '../components/primitives';
 import { Button } from '../components';
 import { useTheme } from '../theme';
-import { launchColors } from '@theme/tokens/launch-colors';
+import { Icon } from '../icons';
 import type { ErrorFallbackProps, ErrorCategory } from './ErrorBoundary.types';
 
 function getErrorMessage(category: ErrorCategory, error: Error | null): string {
@@ -23,18 +23,18 @@ function getErrorMessage(category: ErrorCategory, error: Error | null): string {
   }
 }
 
-function getErrorIcon(category: ErrorCategory): string {
+function getErrorIconName(category: ErrorCategory): string {
   switch (category) {
     case 'network':
-      return '📡';
+      return 'exclamation-circle';
     case 'auth':
-      return '🔐';
+      return 'logout';
     case 'server':
-      return '🔧';
+      return 'exclamation-triangle';
     case 'validation':
-      return '⚠️';
+      return 'info';
     default:
-      return '❌';
+      return 'x-circle';
   }
 }
 
@@ -49,12 +49,29 @@ export function ErrorFallback({
   onRetry,
   onDegraded,
 }: ErrorFallbackProps): ReactNode {
-  useTheme();
+  const { theme } = useTheme();
   return (
     <Box flex={1} justifyContent="center" alignItems="center" p="xl">
-      <Text variant="hero" style={{ fontSize: 64, marginBottom: 16 }}>
-        {getErrorIcon(category)}
-      </Text>
+      <Box
+        mb="lg"
+        style={{
+          width: 64,
+          height: 64,
+          borderRadius: 32,
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: theme.colors.semantic.vexCyanSoft,
+          borderColor: theme.colors.semantic.vexCyan,
+          borderWidth: 1,
+        }}
+      >
+        <Icon
+          name={getErrorIconName(category)}
+          size={28}
+          color={theme.colors.semantic.vexCyan}
+          variant="outline"
+        />
+      </Box>
 
       <Text variant="h3" mb="md" textAlign="center">
         Oops! Something went wrong
@@ -62,7 +79,8 @@ export function ErrorFallback({
 
       <Text
         variant="body"
-        style={{ color: launchColors.hex_6b7280, textAlign: 'center' }}
+        color="text.secondary"
+        textAlign="center"
         mb="lg"
       >
         {getErrorMessage(category, error)}
@@ -71,7 +89,7 @@ export function ErrorFallback({
       {retryCount > 0 && (
         <Text
           variant="caption"
-          style={{ color: launchColors.hex_9ca3af }}
+          color="text.tertiary"
           mb="lg"
         >
           Retry attempt {retryCount} of {maxRetries}
@@ -80,8 +98,8 @@ export function ErrorFallback({
 
       {isRetrying ? (
         <Box flexDirection="row" alignItems="center" style={{ gap: 8 }}>
-          <ActivityIndicator color={launchColors.hex_3b82f6} />
-          <Text variant="body" style={{ color: launchColors.hex_6b7280 }}>
+          <ActivityIndicator color={theme.colors.semantic.vexCyan} />
+          <Text variant="body" color="text.secondary">
             Retrying...
           </Text>
         </Box>

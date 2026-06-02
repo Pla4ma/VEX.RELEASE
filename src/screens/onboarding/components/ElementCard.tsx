@@ -8,8 +8,9 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
+import { Icon } from '../../../icons';
 import { ELEMENT_THEMES } from '../../../features/companion/types';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 import type { ElementInfo } from './elementData';
 import { ElementVisual } from './ElementVisual';
 
@@ -131,9 +132,7 @@ export function ElementCard({
                 alignItems: 'center',
               }}
             >
-              <Text style={{ color: launchColors.hex_fff, fontSize: 14 }}>
-                ✓
-              </Text>
+              <Icon name="check" size={14} color="#fff" variant="solid" />
             </View>
           )}
         </Animated.View>

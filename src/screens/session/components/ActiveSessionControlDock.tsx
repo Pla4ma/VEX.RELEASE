@@ -65,12 +65,12 @@ export const ActiveSessionControlDock: React.FC<
             borderRadius="full"
             alignItems="center"
             style={{
-              backgroundColor: withAlpha(themeColors.success, 0.14),
+              backgroundColor: 'rgba(0,229,255,0.12)',
               borderWidth: 1,
-              borderColor: withAlpha(themeColors.success, 0.28),
+              borderColor: 'rgba(0,229,255,0.25)',
             }}
           >
-            <Text variant="label" style={{ color: themeColors.success }}>
+            <Text variant="label" style={{ color: '#00E5FF' }}>
               {completionPercentage >= 100
                 ? 'Complete Session'
                 : 'Finish Early'}
@@ -134,7 +134,7 @@ export const ActiveSessionControlDock: React.FC<
               borderRadius: 32,
               alignItems: 'center',
               justifyContent: 'center',
-              backgroundColor: phaseAccent,
+              backgroundColor: '#00E5FF',
             }}
           >
             <Icon
@@ -181,11 +181,11 @@ export const ActiveSessionControlDock: React.FC<
                 borderWidth: 1,
                 paddingHorizontal: 18,
                 paddingVertical: 14,
-                backgroundColor: withAlpha(themeColors.info, 0.1),
-                borderColor: withAlpha(themeColors.info, 0.22),
-              }}
-            >
-              <Text variant="label" style={{ color: themeColors.info }}>
+               backgroundColor: 'rgba(0,229,255,0.08)',
+               borderColor: 'rgba(0,229,255,0.18)',
+             }}
+           >
+             <Text variant="label" style={{ color: '#00E5FF' }}>
                 {`${formatMultiplier(streakMultiplier)}x`}
               </Text>
             </Box>

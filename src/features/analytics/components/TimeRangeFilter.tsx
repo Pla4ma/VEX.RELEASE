@@ -8,7 +8,7 @@ import { View, Text, Pressable, ScrollView } from 'react-native';
 import { TimeRangeSchema } from '../schemas';
 import type { z } from 'zod';
 import { createSheet } from '@/shared/ui/create-sheet';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 type TimeRange = z.infer<typeof TimeRangeSchema>;
 
@@ -83,7 +83,7 @@ const styles = createSheet({
   label: {
     fontSize: 12,
     fontWeight: '500',
-    color: launchColors.hex_6b7280,
+    color: '#6b7280',
     marginBottom: 8,
     marginLeft: 4,
   },
@@ -95,14 +95,14 @@ const styles = createSheet({
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 16,
-    backgroundColor: launchColors.hex_f3f4f6,
+    backgroundColor: '#f3f4f6',
     borderWidth: 1,
-    borderColor: launchColors.hex_e5e7eb,
+    borderColor: '#e5e7eb',
     marginRight: 8,
   },
   chipActive: {
-    backgroundColor: launchColors.hex_6366f1,
-    borderColor: launchColors.hex_6366f1,
+    backgroundColor: '#6366f1',
+    borderColor: '#6366f1',
   },
   chipDisabled: {
     opacity: 0.5,
@@ -110,12 +110,12 @@ const styles = createSheet({
   chipText: {
     fontSize: 12,
     fontWeight: '500',
-    color: launchColors.hex_374151,
+    color: '#374151',
   },
   chipTextActive: {
-    color: launchColors.hex_ffffff,
+    color: '#ffffff',
   },
   chipTextDisabled: {
-    color: launchColors.hex_9ca3af,
+    color: '#9ca3af',
   },
 });

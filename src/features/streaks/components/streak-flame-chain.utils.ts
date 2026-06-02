@@ -1,17 +1,17 @@
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 export const getRiskColor = (riskLevel: string): string => {
   switch (riskLevel) {
     case 'CRITICAL':
-      return launchColors.hex_f44336;
+      return '#f44336';
     case 'HIGH':
-      return launchColors.hex_ff9800;
+      return '#ff9800';
     case 'MEDIUM':
-      return launchColors.hex_ffc107;
+      return '#ffc107';
     case 'LOW':
-      return launchColors.hex_ffeb3b;
+      return '#ffeb3b';
     default:
-      return launchColors.hex_4caf50;
+      return '#4caf50';
   }
 };
 
@@ -20,19 +20,19 @@ export const getFlameColor = (
   completed: boolean,
 ): [string, string] => {
   if (!completed) {
-    return [launchColors.hex_3a3a5a, launchColors.hex_2a2a4a];
+    return ['#3a3a5a', '#2a2a4a'];
   }
   const day = index + 1;
   if (day >= 100) {
-    return [launchColors.hex_ffd700, launchColors.hex_ff6b35];
+    return ['#ffd700', '#ff6b35'];
   }
   if (day >= 30) {
-    return [launchColors.hex_ff6b35, launchColors.hex_f44336];
+    return ['#ff6b35', '#f44336'];
   }
   if (day >= 7) {
-    return [launchColors.hex_ff9800, launchColors.hex_ff5722];
+    return ['#ff9800', '#ff5722'];
   }
-  return [launchColors.hex_ffc107, launchColors.hex_ff9800];
+  return ['#ffc107', '#ff9800'];
 };
 
 export const getMilestoneReward = (days: number): string => {

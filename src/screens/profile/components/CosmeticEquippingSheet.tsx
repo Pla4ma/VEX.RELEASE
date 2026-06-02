@@ -8,7 +8,7 @@ import Animated, {
 import { useTheme } from '../../../theme';
 import { Box, Card } from '../../../components/primitives';
 import { useUIStore } from '../../../store/index';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 import {
   type CosmeticItem,
   type CosmeticType,
@@ -113,7 +113,7 @@ export const CosmeticEquippingSheet: React.FC<CosmeticEquippingSheetProps> = ({
       <Box
         flex={1}
         style={{
-          backgroundColor: launchColors.rgb_0_0_0_0_7,
+          backgroundColor: 'rgba(0,0,0,0.7)',
           justifyContent: 'flex-end',
         }}
       >

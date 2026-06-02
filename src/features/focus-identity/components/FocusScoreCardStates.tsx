@@ -72,7 +72,7 @@ export function FocusScoreCardError({
       style={{ width: '100%', alignItems: 'center', gap: 8 }}
     >
       <Text variant="heading3" color="error" style={{ fontSize: 32 }}>
-        ⚠️
+        !
       </Text>
       <Text variant="body" color="error" style={{ textAlign: 'center' }}>
         Failed to load Focus Score

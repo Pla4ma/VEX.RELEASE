@@ -10,21 +10,21 @@ import Animated, {
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 import type { BossTier } from './BossPreviewCard.types';
 
 function getTierConfig(tier: BossTier, fallbackColor: string, fallbackBg: string) {
   if (tier === 'LEGENDARY') {
-    return { color: launchColors.hex_f59e0b, bg: launchColors.rgb_245_158_11_0_2, label: 'LEGENDARY' };
+    return { color: '#f59e0b', bg: 'rgba(245,158,11,0.2)', label: 'LEGENDARY' };
   }
   if (tier === 'EPIC') {
-    return { color: launchColors.hex_a855f7, bg: launchColors.rgb_168_85_247_0_2, label: 'EPIC' };
+    return { color: '#a855f7', bg: 'rgba(168,85,247,0.2)', label: 'EPIC' };
   }
   if (tier === 'RARE') {
-    return { color: launchColors.hex_3b82f6, bg: launchColors.rgb_59_130_246_0_2, label: 'RARE' };
+    return { color: '#3b82f6', bg: 'rgba(59,130,246,0.2)', label: 'RARE' };
   }
   if (tier === 'UNCOMMON') {
-    return { color: launchColors.hex_22c55e, bg: launchColors.rgb_34_197_94_0_2, label: 'UNCOMMON' };
+    return { color: '#22c55e', bg: 'rgba(34,197,94,0.2)', label: 'UNCOMMON' };
   }
   return { color: fallbackColor, bg: fallbackBg, label: 'COMMON' };
 }
@@ -91,7 +91,7 @@ export function BossTauntBubble({ taunt }: { taunt: string }): JSX.Element {
           color={theme.colors.error[500]}
           fontWeight="500"
         >
-          💬 {taunt}
+          {taunt}
         </Text>
         {}
         <Box
@@ -142,7 +142,7 @@ export function DefeatIndicator(): JSX.Element {
           color={theme.colors.success[500]}
           fontWeight="700"
         >
-          ⚔️ DEFEAT IMMINENT
+          DEFEAT IMMINENT
         </Text>
       </Box>
     </Animated.View>
@@ -188,7 +188,7 @@ export function FinalStrikeIndicator(): JSX.Element {
           color={theme.colors.error[500]}
           fontWeight="800"
         >
-          ⚔️ FINAL STRIKE AVAILABLE
+          FINAL STRIKE AVAILABLE
         </Text>
       </Box>
     </Animated.View>

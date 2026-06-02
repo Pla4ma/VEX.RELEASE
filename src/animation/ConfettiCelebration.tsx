@@ -2,7 +2,7 @@ import React, { useCallback, useEffect } from 'react';
 import { View, Dimensions } from 'react-native';
 import { useReducedMotion } from '@/hooks';
 import { useTheme } from '@/theme';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 import { Particle, type ParticleConfig } from './Particle';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -17,14 +17,14 @@ interface ConfettiCelebrationProps {
 }
 
 const DEFAULT_COLORS = [
-  launchColors.hex_4f46e5,
-  launchColors.hex_10b981,
-  launchColors.hex_f59e0b,
-  launchColors.hex_ef4444,
-  launchColors.hex_8b5cf6,
-  launchColors.hex_ec4899,
-  launchColors.hex_06b6d4,
-  launchColors.hex_f97316,
+  '#4f46e5',
+  '#10b981',
+  '#f59e0b',
+  '#ef4444',
+  '#8b5cf6',
+  '#ec4899',
+  '#06b6d4',
+  '#f97316',
 ];
 
 export const ConfettiCelebration: React.FC<ConfettiCelebrationProps> = ({

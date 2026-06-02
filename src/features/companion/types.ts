@@ -1,4 +1,4 @@
-import { launchColors } from '@theme/tokens/launch-colors';
+
 /**
  * Living Companion System - Core Types
  *
@@ -125,45 +125,45 @@ export const ELEMENT_THEMES: Record<
   }
 > = {
   FLAME: {
-    primary: launchColors.hex_ff6b35,
-    secondary: launchColors.hex_f7931e,
-    glow: launchColors.hex_ff4500,
-    particle: launchColors.hex_ffd700,
+    primary: '#ff6b35',
+    secondary: '#f7931e',
+    glow: '#ff4500',
+    particle: '#ffd700',
     ambience: 'warm',
   },
   WAVE: {
-    primary: launchColors.hex_4ecdc4,
-    secondary: launchColors.hex_44a08d,
-    glow: launchColors.hex_00ced1,
-    particle: launchColors.hex_87ceeb,
+    primary: '#4ecdc4',
+    secondary: '#44a08d',
+    glow: '#00ced1',
+    particle: '#87ceeb',
     ambience: 'cool',
   },
   TERRA: {
-    primary: launchColors.hex_8b4513,
-    secondary: launchColors.hex_228b22,
-    glow: launchColors.hex_9acd32,
-    particle: launchColors.hex_deb887,
+    primary: '#8b4513',
+    secondary: '#228b22',
+    glow: '#9acd32',
+    particle: '#deb887',
     ambience: 'earthy',
   },
   ZEPHYR: {
-    primary: launchColors.hex_e0e0e0,
-    secondary: launchColors.hex_b0c4de,
-    glow: launchColors.hex_ffffff,
-    particle: launchColors.hex_f0f8ff,
+    primary: '#e0e0e0',
+    secondary: '#b0c4de',
+    glow: '#ffffff',
+    particle: '#f0f8ff',
     ambience: 'ethereal',
   },
   VOID: {
-    primary: launchColors.hex_2c003e,
-    secondary: launchColors.hex_4b0082,
-    glow: launchColors.hex_9400d3,
-    particle: launchColors.hex_e6e6fa,
+    primary: '#2c003e',
+    secondary: '#4b0082',
+    glow: '#9400d3',
+    particle: '#e6e6fa',
     ambience: 'mysterious',
   },
   LUMINA: {
-    primary: launchColors.hex_ffd700,
-    secondary: launchColors.hex_ffa500,
-    glow: launchColors.hex_fffacd,
-    particle: launchColors.hex_ffffff,
+    primary: '#ffd700',
+    secondary: '#ffa500',
+    glow: '#fffacd',
+    particle: '#ffffff',
     ambience: 'divine',
   },
 };

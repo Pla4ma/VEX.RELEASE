@@ -6,14 +6,13 @@ import { captureSilentFailure } from '../../../utils/silent-failure';
 
 import { getSessionService } from '../../../session/SessionService';
 import type { SessionHistoryEntry } from '../../../session/types';
-import { launchColors } from '@theme/tokens/launch-colors';
 
 export const MOODS = [
-  { key: 'GREAT', emoji: '🤩', label: 'Great' },
-  { key: 'GOOD', emoji: '😊', label: 'Good' },
-  { key: 'NEUTRAL', emoji: '😐', label: 'Okay' },
-  { key: 'BAD', emoji: '😕', label: 'Bad' },
-  { key: 'TERRIBLE', emoji: '😫', label: 'Terrible' },
+  { key: 'GREAT', emoji: 'A', label: 'Great' },
+  { key: 'GOOD', emoji: 'B', label: 'Good' },
+  { key: 'NEUTRAL', emoji: 'C', label: 'Okay' },
+  { key: 'BAD', emoji: 'D', label: 'Bad' },
+  { key: 'TERRIBLE', emoji: 'F', label: 'Terrible' },
 ] as const;
 
 export type Mood = (typeof MOODS)[number]['key'];
@@ -82,27 +81,27 @@ export function getGrade(score: number): {
   label: string;
 } {
   if (score >= 900) {
-    return { letter: 'S', color: launchColors.hex_ffd700, label: 'Legendary!' };
+    return { letter: 'S', color: '#FFD700', label: 'Legendary!' };
   }
   if (score >= 800) {
-    return { letter: 'A', color: launchColors.hex_4caf50, label: 'Excellent!' };
+    return { letter: 'A', color: '#4CAF50', label: 'Excellent!' };
   }
   if (score >= 700) {
-    return { letter: 'B', color: launchColors.hex_8bc34a, label: 'Great Job!' };
+    return { letter: 'B', color: '#8BC34A', label: 'Great Job!' };
   }
   if (score >= 600) {
     return {
       letter: 'C',
-      color: launchColors.hex_ffc107,
+      color: '#FFC107',
       label: 'Good Effort!',
     };
   }
   if (score >= 500) {
     return {
       letter: 'D',
-      color: launchColors.hex_ff9800,
+      color: '#FF9800',
       label: 'Keep Going!',
     };
   }
-  return { letter: 'F', color: launchColors.hex_f44336, label: 'Try Again!' };
+  return { letter: 'F', color: '#F44336', label: 'Try Again!' };
 }

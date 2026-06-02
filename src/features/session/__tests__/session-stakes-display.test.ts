@@ -59,24 +59,24 @@ describe('Session Stakes - Quality & Display', () => {
       const { label, description, icon, color, riskLevel } =
         require('../session-stakes').getDifficultyDisplay('CASUAL');
       expect(label).toBe('Casual');
-      expect(icon).toBe('🌱');
-      expect(color).toBe('#4CAF50');
+      expect(icon).toBe('');
+      expect(color).toBe('#4caf50');
       expect(riskLevel).toBe('LOW');
     });
     it('should return correct display for FOCUSED', () => {
       const { label, description, icon, color, riskLevel } =
         require('../session-stakes').getDifficultyDisplay('FOCUSED');
       expect(label).toBe('Focused');
-      expect(icon).toBe('🔥');
-      expect(color).toBe('#FF9800');
+      expect(icon).toBe('');
+      expect(color).toBe('#ff9800');
       expect(riskLevel).toBe('MEDIUM');
     });
     it('should return correct display for DEEP_WORK', () => {
       const { label, description, icon, color, riskLevel } =
         require('../session-stakes').getDifficultyDisplay('DEEP_WORK');
       expect(label).toBe('Deep Work');
-      expect(icon).toBe('⚡');
-      expect(color).toBe('#9C27B0');
+      expect(icon).toBe('');
+      expect(color).toBe('#9c27b0');
       expect(riskLevel).toBe('HIGH');
     });
   });

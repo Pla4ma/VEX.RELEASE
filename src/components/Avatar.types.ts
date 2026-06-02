@@ -1,5 +1,5 @@
 import type { StyleProp, ViewStyle } from 'react-native';
-import { launchColors } from '@theme/tokens/launch-colors';
+
 
 export type AvatarSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
 export type AvatarStatus = 'online' | 'away' | 'offline' | 'busy' | 'none';
@@ -38,9 +38,9 @@ export const FONT_SIZE_MAP: Record<AvatarSize, number> = {
 };
 
 export const STATUS_COLOR_MAP: Record<AvatarStatus, string> = {
-  online: launchColors.hex_22c55e,
-  away: launchColors.hex_eab308,
-  offline: launchColors.hex_94a3b8,
-  busy: launchColors.hex_ef4444,
+  online: '#22c55e',
+  away: '#eab308',
+  offline: '#94a3b8',
+  busy: '#ef4444',
   none: 'transparent',
 };
