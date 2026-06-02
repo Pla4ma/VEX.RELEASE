@@ -1,122 +1,106 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Platform, View } from 'react-native';
 import Svg, { Circle, Defs, LinearGradient, Path, Stop } from 'react-native-svg';
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withRepeat,
-  withTiming,
-} from 'react-native-reanimated';
-
-import { useTheme } from '../../../theme';
-import { useReducedMotion } from '../../../hooks/useReducedMotion';
-
-const AnimatedSvg = Animated.createAnimatedComponent(Svg);
 
 interface VexFocusMarkProps {
   size?: number;
 }
 
-function StaticMark({ s, cx, cy, theme }: { s: number; cx: number; cy: number; theme: any }) {
-  return (
-    <>
-      <Svg width={s} height={s} style={{ position: 'absolute', left: 0, top: 0 }}>
-        <Defs>
-          <LinearGradient id="vm-ring" x1="0%" y1="0%" x2="100%" y2="100%">
-            <Stop offset="0%" stopColor={theme.colors.semantic.vexCyan} stopOpacity="0.5" />
-            <Stop offset="100%" stopColor={theme.colors.semantic.secondary} stopOpacity="0.2" />
-          </LinearGradient>
-        </Defs>
-        <Circle cx={cx} cy={cy} r={s * 0.42} stroke="url(#vm-ring)" strokeWidth={1.5} fill="none" />
-      </Svg>
-      <Svg width={s} height={s} style={{ position: 'absolute', left: 0, top: 0 }}>
-        <Defs>
-          <LinearGradient id="vm-core" x1="0%" y1="0%" x2="100%" y2="100%">
-            <Stop offset="0%" stopColor={theme.colors.semantic.vexCyan} />
-            <Stop offset="100%" stopColor={theme.colors.semantic.secondary} />
-          </LinearGradient>
-        </Defs>
-        <Path
-          d={`M ${cx} ${cy - s * 0.28} L ${cx - s * 0.22} ${cy - s * 0.06} L ${cx - s * 0.12} ${cy + s * 0.16} L ${cx} ${cy + s * 0.08} L ${cx + s * 0.12} ${cy + s * 0.16} L ${cx + s * 0.22} ${cy - s * 0.06} Z`}
-          fill="url(#vm-core)"
-          stroke={theme.colors.semantic.vexCyan}
-          strokeWidth={1.2}
-          strokeLinejoin="round"
-        />
-        <Circle cx={cx} cy={cy + s * 0.04} r={s * 0.06} fill={theme.colors.text.primary} />
-      </Svg>
-    </>
-  );
-}
-
 export function VexFocusMark({ size = 120 }: VexFocusMarkProps): JSX.Element {
-  const { theme } = useTheme();
-  const { isReducedMotion } = useReducedMotion();
-  const pulse = useSharedValue(1);
-  const breathe = useSharedValue(0);
-
-  useEffect(() => {
-    if (isReducedMotion) return;
-    pulse.value = withRepeat(
-      withTiming(1.08, { duration: 2600 }),
-      -1,
-      true,
-    );
-    breathe.value = withRepeat(
-      withTiming(1, { duration: 3200 }),
-      -1,
-      true,
-    );
-  }, [isReducedMotion, pulse, breathe]);
-
   const s = size;
   const cx = s / 2;
   const cy = s / 2;
+  const isWeb = Platform.OS === 'web';
 
-  if (Platform.OS === 'web') {
-    return (
-      <View style={{ width: s, height: s }} accessibilityLabel="VEX focus mark">
-        <StaticMark s={s} cx={cx} cy={cy} theme={theme} />
-      </View>
-    );
-  }
+  const MarkSvg = (
+    <Svg width={s} height={s} viewBox={`0 0 ${s} ${s}`}>
+      <Defs>
+        <LinearGradient id="vm-outer" x1="0%" y1="0%" x2="100%" y2="100%">
+          <Stop offset="0%" stopColor="#00E5FF" stopOpacity="0.6" />
+          <Stop offset="100%" stopColor="#22D3EE" stopOpacity="0.15" />
+        </LinearGradient>
+        <LinearGradient id="vm-core" x1="0%" y1="0%" x2="100%" y2="100%">
+          <Stop offset="0%" stopColor="#00E5FF" />
+          <Stop offset="100%" stopColor="#38BDF8" />
+        </LinearGradient>
+        <LinearGradient id="vm-inner" x1="0%" y1="100%" x2="100%" y2="0%">
+          <Stop offset="0%" stopColor="#00E5FF" stopOpacity="0.8" />
+          <Stop offset="100%" stopColor="#818CF8" stopOpacity="0.3" />
+        </LinearGradient>
+      </Defs>
 
-  const ringStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: pulse.value }],
-    opacity: 0.35 + breathe.value * 0.15,
-  }));
+      {/* Outer glow ring */}
+      <Circle
+        cx={cx}
+        cy={cy}
+        r={s * 0.46}
+        stroke="url(#vm-outer)"
+        strokeWidth={1}
+        fill="none"
+        opacity={0.5}
+      />
 
-  const coreStyle = useAnimatedStyle(() => ({
-    opacity: 0.9 + breathe.value * 0.1,
-  }));
+      {/* Main ring */}
+      <Circle
+        cx={cx}
+        cy={cy}
+        r={s * 0.38}
+        stroke="url(#vm-core)"
+        strokeWidth={1.5}
+        fill="none"
+      />
+
+      {/* Shield/V shape */}
+      <Path
+        d={`
+          M ${cx} ${cy - s * 0.24}
+          L ${cx - s * 0.2} ${cy - s * 0.05}
+          L ${cx - s * 0.1} ${cy + s * 0.18}
+          L ${cx} ${cy + s * 0.1}
+          L ${cx + s * 0.1} ${cy + s * 0.18}
+          L ${cx + s * 0.2} ${cy - s * 0.05}
+          Z
+        `}
+        fill="url(#vm-core)"
+        stroke="#00E5FF"
+        strokeWidth={1}
+        strokeLinejoin="round"
+      />
+
+      {/* Inner dot */}
+      <Circle
+        cx={cx}
+        cy={cy + s * 0.04}
+        r={s * 0.055}
+        fill="#F8FAFC"
+      />
+
+      {/* Inner glow */}
+      <Circle
+        cx={cx}
+        cy={cy + s * 0.04}
+        r={s * 0.1}
+        fill="url(#vm-inner)"
+        opacity={0.3}
+      />
+    </Svg>
+  );
 
   return (
-    <View style={{ width: s, height: s }} accessibilityLabel="VEX focus mark">
-      <AnimatedSvg width={s} height={s} style={[{ position: 'absolute', left: 0, top: 0 }, ringStyle]}>
-        <Defs>
-          <LinearGradient id="vm-ring" x1="0%" y1="0%" x2="100%" y2="100%">
-            <Stop offset="0%" stopColor={theme.colors.semantic.vexCyan} stopOpacity="0.5" />
-            <Stop offset="100%" stopColor={theme.colors.semantic.secondary} stopOpacity="0.2" />
-          </LinearGradient>
-        </Defs>
-        <Circle cx={cx} cy={cy} r={s * 0.42} stroke="url(#vm-ring)" strokeWidth={1.5} fill="none" />
-      </AnimatedSvg>
-      <AnimatedSvg width={s} height={s} style={[{ position: 'absolute', left: 0, top: 0 }, coreStyle]}>
-        <Defs>
-          <LinearGradient id="vm-core" x1="0%" y1="0%" x2="100%" y2="100%">
-            <Stop offset="0%" stopColor={theme.colors.semantic.vexCyan} />
-            <Stop offset="100%" stopColor={theme.colors.semantic.secondary} />
-          </LinearGradient>
-        </Defs>
-        <Path
-          d={`M ${cx} ${cy - s * 0.28} L ${cx - s * 0.22} ${cy - s * 0.06} L ${cx - s * 0.12} ${cy + s * 0.16} L ${cx} ${cy + s * 0.08} L ${cx + s * 0.12} ${cy + s * 0.16} L ${cx + s * 0.22} ${cy - s * 0.06} Z`}
-          fill="url(#vm-core)"
-          stroke={theme.colors.semantic.vexCyan}
-          strokeWidth={1.2}
-          strokeLinejoin="round"
-        />
-        <Circle cx={cx} cy={cy + s * 0.04} r={s * 0.06} fill={theme.colors.text.primary} />
-      </AnimatedSvg>
+    <View
+      style={{
+        width: s,
+        height: s,
+        alignItems: 'center',
+        justifyContent: 'center',
+        shadowColor: '#00E5FF',
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: isWeb ? 0.25 : 0.35,
+        shadowRadius: isWeb ? 16 : 20,
+      }}
+      accessibilityLabel="VEX focus mark"
+    >
+      {MarkSvg}
     </View>
   );
 }

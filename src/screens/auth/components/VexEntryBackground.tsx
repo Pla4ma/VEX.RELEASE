@@ -1,98 +1,114 @@
-import React, { useEffect } from 'react';
-import { Platform, useWindowDimensions, View } from 'react-native';
+﻿import React, { useEffect } from 'react';
+import { useWindowDimensions, View } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withRepeat,
   withTiming,
 } from 'react-native-reanimated';
-
-import { useTheme } from '../../../theme';
-import { useReducedMotion } from '../../../hooks/useReducedMotion';
+import { Starfield } from './Starfield';
 
 export function VexEntryBackground(): JSX.Element {
   const { width, height } = useWindowDimensions();
-  const { theme } = useTheme();
-  const { isReducedMotion } = useReducedMotion();
-  const drift1 = useSharedValue(0);
-  const drift2 = useSharedValue(0);
+
+  const o1x = useSharedValue(0);
+  const o1y = useSharedValue(0);
+  const o2x = useSharedValue(0);
+  const o2y = useSharedValue(0);
+  const o3x = useSharedValue(0);
+  const o3y = useSharedValue(0);
 
   useEffect(() => {
-    if (isReducedMotion) return;
-    drift1.value = withRepeat(
-      withTiming(1, { duration: 12000 }),
-      -1,
-      true,
-    );
-    drift2.value = withRepeat(
-      withTiming(1, { duration: 16000 }),
-      -1,
-      true,
-    );
-  }, [isReducedMotion, drift1, drift2]);
+    o1x.value = withRepeat(withTiming(40, { duration: 14000 }), -1, true);
+    o1y.value = withRepeat(withTiming(-30, { duration: 11000 }), -1, true);
+    o2x.value = withRepeat(withTiming(-50, { duration: 18000 }), -1, true);
+    o2y.value = withRepeat(withTiming(40, { duration: 13000 }), -1, true);
+    o3x.value = withRepeat(withTiming(30, { duration: 16000 }), -1, true);
+    o3y.value = withRepeat(withTiming(50, { duration: 12000 }), -1, true);
+  }, [o1x, o1y, o2x, o2y, o3x, o3y]);
 
-  const orb1Base = {
-    position: 'absolute' as const,
-    width: width * 0.9,
-    height: width * 0.9,
-    borderRadius: (width * 0.9) / 2,
-    backgroundColor: `${theme.colors.semantic.vexCyan}18`,
-    top: -height * 0.12,
-    right: -width * 0.25,
-    opacity: 0.18,
-  };
-
-  const orb2Base = {
-    position: 'absolute' as const,
-    width: width * 0.7,
-    height: width * 0.7,
-    borderRadius: (width * 0.7) / 2,
-    backgroundColor: `${theme.colors.semantic.vexCyan}10`,
-    bottom: height * 0.08,
-    left: -width * 0.2,
-    opacity: 0.12,
-  };
-
-  if (Platform.OS === 'web') {
-    return (
-      <>
-        <View style={orb1Base} pointerEvents="none" />
-        <View style={orb2Base} pointerEvents="none" />
-      </>
-    );
-  }
-
-  const orb1Style = useAnimatedStyle(() => ({
-    transform: [
-      {
-        translateX: isReducedMotion ? 0 : (drift1.value - 0.5) * 20,
-      },
-      {
-        translateY: isReducedMotion ? 0 : (drift2.value - 0.5) * 16,
-      },
-      { scale: isReducedMotion ? 1 : 1 + drift1.value * 0.06 },
-    ],
-    opacity: 0.18,
+  const s1 = useAnimatedStyle(() => ({
+    transform: [{ translateX: o1x.value }, { translateY: o1y.value }],
   }));
-
-  const orb2Style = useAnimatedStyle(() => ({
-    transform: [
-      {
-        translateX: isReducedMotion ? 0 : (drift2.value - 0.5) * 14,
-      },
-      {
-        translateY: isReducedMotion ? 0 : (drift1.value - 0.5) * 22,
-      },
-      { scale: isReducedMotion ? 1 : 1 + drift2.value * 0.04 },
-    ],
-    opacity: 0.12,
+  const s2 = useAnimatedStyle(() => ({
+    transform: [{ translateX: o2x.value }, { translateY: o2y.value }],
+  }));
+  const s3 = useAnimatedStyle(() => ({
+    transform: [{ translateX: o3x.value }, { translateY: o3y.value }],
   }));
 
   return (
-    <>
-      <Animated.View style={[orb1Base, orb1Style]} pointerEvents="none" />
-      <Animated.View style={[orb2Base, orb2Style]} pointerEvents="none" />
-    </>
+    <View style={{ position: 'absolute', width, height, top: 0, left: 0 }}>
+      <LinearGradient
+        colors={['#060810', '#070A12', '#0A0E1A']}
+        locations={[0, 0.5, 1]}
+        style={{ position: 'absolute', width, height }}
+        pointerEvents="none"
+      />
+
+      <Animated.View
+        style={[
+          {
+            position: 'absolute',
+            width: width * 0.8,
+            height: width * 0.8,
+            borderRadius: (width * 0.8) / 2,
+            backgroundColor: 'rgba(0,229,255,0.06)',
+            top: height * 0.1,
+            left: -width * 0.2,
+            shadowColor: '#00E5FF',
+            shadowOffset: { width: 0, height: 0 },
+            shadowOpacity: 0.3,
+            shadowRadius: 100,
+          },
+          s1,
+        ]}
+        pointerEvents="none"
+      />
+
+      <Animated.View
+        style={[
+          {
+            position: 'absolute',
+            width: width * 0.9,
+            height: width * 0.9,
+            borderRadius: (width * 0.9) / 2,
+            backgroundColor: 'rgba(139,92,246,0.05)',
+            bottom: -height * 0.15,
+            right: -width * 0.3,
+            shadowColor: '#8B5CF6',
+            shadowOffset: { width: 0, height: 0 },
+            shadowOpacity: 0.25,
+            shadowRadius: 120,
+          },
+          s2,
+        ]}
+        pointerEvents="none"
+      />
+
+      <Animated.View
+        style={[
+          {
+            position: 'absolute',
+            width: width * 0.6,
+            height: width * 0.6,
+            borderRadius: (width * 0.6) / 2,
+            backgroundColor: 'rgba(59,130,246,0.04)',
+            top: height * 0.4,
+            right: width * 0.1,
+            shadowColor: '#3B82F6',
+            shadowOffset: { width: 0, height: 0 },
+            shadowOpacity: 0.2,
+            shadowRadius: 90,
+          },
+          s3,
+        ]}
+        pointerEvents="none"
+      />
+
+      <Starfield />
+    </View>
   );
 }
 

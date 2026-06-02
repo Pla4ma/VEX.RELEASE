@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react';
-import { Platform, View } from 'react-native';
+﻿import React, { useEffect } from 'react';
+import { View } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withDelay,
   withRepeat,
+  withSpring,
   withTiming,
 } from 'react-native-reanimated';
 
@@ -19,57 +20,71 @@ interface VexSignalNodeProps {
 export function VexSignalNode({ active = false, index }: VexSignalNodeProps): JSX.Element {
   const { theme } = useTheme();
   const { isReducedMotion } = useReducedMotion();
-  const pulse = useSharedValue(0);
+  const pulseScale = useSharedValue(1);
+  const pulseOpacity = useSharedValue(0.4);
 
   useEffect(() => {
-    if (isReducedMotion || !active) return;
-    pulse.value = withRepeat(
-      withDelay(index * 400, withTiming(1, { duration: 2000 })),
-      -1,
-      true,
+    if (!active || isReducedMotion) {
+      pulseScale.value = 1;
+      pulseOpacity.value = 0;
+      return;
+    }
+    pulseScale.value = withDelay(
+      index * 400 + 600,
+      withRepeat(
+        withSpring(1.8, { damping: 12, stiffness: 180 }),
+        -1,
+        false,
+      ),
     );
-  }, [isReducedMotion, active, index, pulse]);
-
-  const ringBase = {
-    position: 'absolute' as const,
-    width: 20,
-    height: 20,
-    borderRadius: 10,
-    borderWidth: 1.5,
-    borderColor: theme.colors.semantic.vexCyan,
-    opacity: active ? 0.35 : 0,
-  };
-
-  if (Platform.OS === 'web') {
-    return (
-      <View style={{ width: 20, height: 20, alignItems: 'center', justifyContent: 'center' }}>
-        <View style={ringBase} />
-        <View
-          style={{
-            width: active ? 10 : 6,
-            height: active ? 10 : 6,
-            borderRadius: active ? 5 : 3,
-            backgroundColor: active ? theme.colors.semantic.vexCyan : theme.colors.text.muted,
-          }}
-        />
-      </View>
+    pulseOpacity.value = withDelay(
+      index * 400 + 600,
+      withRepeat(
+        withTiming(0, { duration: 1200 }),
+        -1,
+        false,
+      ),
     );
-  }
+  }, [active, index, isReducedMotion, pulseScale, pulseOpacity]);
 
-  const ringStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: 1 + pulse.value * 0.4 }],
-    opacity: active ? 0.35 - pulse.value * 0.2 : 0,
+  const pulseStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: pulseScale.value }],
+    opacity: pulseOpacity.value,
   }));
 
   return (
-    <View style={{ width: 20, height: 20, alignItems: 'center', justifyContent: 'center' }}>
-      <Animated.View style={[ringBase, ringStyle]} />
+    <View
+      style={{
+        width: 20,
+        height: 20,
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
+      <Animated.View
+        style={[
+          {
+            position: 'absolute',
+            width: active ? 16 : 0,
+            height: active ? 16 : 0,
+            borderRadius: 8,
+            backgroundColor: theme.colors.semantic.vexCyan,
+          },
+          pulseStyle,
+        ]}
+      />
       <View
         style={{
-          width: active ? 10 : 6,
-          height: active ? 10 : 6,
-          borderRadius: active ? 5 : 3,
-          backgroundColor: active ? theme.colors.semantic.vexCyan : theme.colors.text.muted,
+          width: active ? 7 : 5,
+          height: active ? 7 : 5,
+          borderRadius: active ? 3.5 : 2.5,
+          backgroundColor: active
+            ? theme.colors.semantic.vexCyan
+            : theme.colors.text.muted,
+          shadowColor: active ? theme.colors.semantic.vexCyan : 'transparent',
+          shadowOffset: { width: 0, height: 0 },
+          shadowOpacity: 0.5,
+          shadowRadius: active ? 8 : 0,
         }}
       />
     </View>
