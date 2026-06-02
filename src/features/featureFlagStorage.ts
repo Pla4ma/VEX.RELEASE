@@ -1,7 +1,7 @@
 import type { StorageManager } from '../persistence/StorageManager';
 import type { FeatureFlag, FeatureFlagValue } from './FeatureFlagService';
 import { eventBus } from '../events';
-import { getApiClient } from '../api/client';
+import { getApiClient } from '../api/api-client';
 import { createDebugger } from '../utils/debug';
 
 const debug = createDebugger('features');
@@ -76,7 +76,7 @@ export async function fetchRemoteFlags(
 ): Promise<{ hasChanges: boolean; lastFetchAt: number }> {
   debug.debug('Fetching remote feature flags...');
   const api = getApiClient();
-  const remoteFlags = await api.get<Record<string, FeatureFlag>>(
+  const { data: remoteFlags } = await api.get<Record<string, FeatureFlag>>(
     '/features/flags',
     { deduplicate: true, retries: 2 },
   );

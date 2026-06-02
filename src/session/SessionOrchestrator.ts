@@ -184,15 +184,17 @@ export class SessionOrchestrator extends SessionOrchestratorBase {
     this.session = null;
   }
 }
-
 let orchestratorInstance: SessionOrchestrator | null = null;
 export function getSessionOrchestrator(config?: OrchestratorConfig): SessionOrchestrator {
   if (!orchestratorInstance) {orchestratorInstance = new SessionOrchestrator(config);}
   loadActiveSession(orchestratorInstance);
   return orchestratorInstance;
 }
+export function resetSessionOrchestrator(): void {
+  if (orchestratorInstance) { orchestratorInstance.destroy(); orchestratorInstance = null; }
+}
 export function createSessionOrchestrator(config?: OrchestratorConfig): SessionOrchestrator {
-  const instance = new SessionOrchestrator(config);
-  loadActiveSession(instance);
-  return instance;
+  const inst = new SessionOrchestrator(config);
+  loadActiveSession(inst);
+  return inst;
 }

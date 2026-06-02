@@ -5,6 +5,7 @@
  */
 
 import React, { useEffect, useMemo, useState } from 'react';
+import * as Sentry from '@sentry/react-native';
 import {
   NavigationContainer,
   useNavigationContainerRef,
@@ -89,7 +90,12 @@ export const RootNavigator: React.FC = () => {
       }
     };
 
-    init().catch(() => undefined);
+    init().catch((error: unknown) => {
+      Sentry.captureException(error, { tags: { feature: 'auth-check' } });
+      if (!cancelled) {
+        setIsAuthCheckComplete(true);
+      }
+    });
 
     return () => {
       cancelled = true;

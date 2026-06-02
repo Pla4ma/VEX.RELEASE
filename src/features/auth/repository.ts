@@ -22,7 +22,7 @@ export async function signUpWithEmail(
   });
 
   if (error) {
-    return { user: null, error: new Error(error.message) };
+    return { user: null, error: new Error('Unable to create account. Please try again.') };
   }
 
   if (data.user) {
@@ -41,7 +41,7 @@ export async function signInWithEmail(
   const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
   if (error) {
-    return { user: null, error: new Error(error.message) };
+    return { user: null, error: new Error('Invalid email or password.') };
   }
 
   const user = data.user ? mapSupabaseUser(data.user) : null;

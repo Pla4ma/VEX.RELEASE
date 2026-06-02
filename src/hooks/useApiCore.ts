@@ -1,9 +1,6 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
-import {
-  getApiClient,
-  ApiRequestConfig,
-  ApiError,
-} from '../api/client';
+import { getApiClient } from '../api/api-client';
+import type { ApiRequestConfig, ApiError } from '../api/client-types';
 import { createDebugger } from '../utils/debug';
 
 const debug = createDebugger('hooks:api');

@@ -1,12 +1,12 @@
 import { FeatureFlagService } from '../FeatureFlagService';
 import { getStorageManager } from '../../persistence';
 import { eventBus } from '../../events';
-import { getApiClient } from '../../api/client';
+import { getApiClient } from '../../api/api-client';
 jest.mock('../../persistence');
 jest.mock('../../events', () => ({
   eventBus: { publish: jest.fn(), subscribe: jest.fn().mockReturnValue(() => {}) },
 }));
-jest.mock('../../api/client');
+jest.mock('../../api/api-client');
 jest.mock('../../utils/debug', () => ({
   createDebugger: () => ({ debug: jest.fn(), info: jest.fn(), warn: jest.fn(), error: jest.fn() }),
 }));
@@ -89,6 +89,7 @@ describe('FeatureFlagService', () => {
         },
       };
       mockApiClient.get.mockResolvedValueOnce(remoteFlags);
+      mockApiClient.get.mockResolvedValueOnce({ data: remoteFlags, status: 200, headers: {} });
       await (service as unknown as ServiceInternal).fetchRemote();
       expect(mockApiClient.get).toHaveBeenCalledWith('/features/flags', expect.any(Object));
     });
@@ -112,6 +113,7 @@ describe('FeatureFlagService', () => {
         },
       };
       mockApiClient.get.mockResolvedValueOnce(remoteFlags);
+      mockApiClient.get.mockResolvedValueOnce({ data: remoteFlags, status: 200, headers: {} });
       await (service as unknown as ServiceInternal).fetchRemote();
       expect(service.isEnabled('remote_only')).toBe(true);
     });

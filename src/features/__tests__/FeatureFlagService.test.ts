@@ -1,7 +1,7 @@
 import { FeatureFlagService } from '../FeatureFlagService';
 import { getStorageManager } from '../../persistence';
 import { eventBus } from '../../events';
-import { getApiClient } from '../../api/client';
+import { getApiClient } from '../../api/api-client';
 
 jest.mock('../../persistence');
 jest.mock('../../events', () => ({
@@ -10,7 +10,7 @@ jest.mock('../../events', () => ({
     subscribe: jest.fn().mockReturnValue(() => {}),
   },
 }));
-jest.mock('../../api/client');
+jest.mock('../../api/api-client');
 jest.mock('../../utils/debug', () => ({
   createDebugger: () => ({
     debug: jest.fn(),

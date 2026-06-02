@@ -7,7 +7,7 @@
  *   ["./plugins/withCertificatePinning", {
  *     "domains": {
  *       "supabase.co": {
- *         "pins": ["sha256/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="],
+ *         "pins": ["sha256/<leaf-cert-hash>", "sha256/<intermediate-cert-hash>"],
  *         "includeSubdomains": true
  *       }
  *     }
