@@ -110,7 +110,7 @@ export function useActivityBroadcast({
     if (!channelName) {return;}
     let unsub: (() => void) | null = null;
     subscribeToActivity(channelName, (message) => {
-      setMessages((prev) => [...prev.slice(-49), message]);
+      setMessages((prev) => [...prev.slice(-19), message]);
       onMessageRef.current?.(message);
     }).then((u) => { unsub = u; });
     return () => { unsub?.(); };

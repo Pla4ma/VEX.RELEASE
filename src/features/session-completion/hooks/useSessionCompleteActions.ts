@@ -1,3 +1,4 @@
+import { captureSilentFailure } from '../../../utils/silent-failure';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import * as Sentry from '@sentry/react-native';
 import { useCallback } from 'react';
@@ -47,7 +48,9 @@ export function useSessionCompleteActions(input: ActionsInput) {
           ? 'Session completion notes skipped'
           : 'Session completion notes submitted',
       });
-      syncHomeReturn().catch(() => undefined);
+      syncHomeReturn().catch((error: unknown) => {
+      captureSilentFailure(error, { feature: 'session-completion', operation: 'syncHomeReturn', type: 'data' });
+    });
       showHomeHighlight({
         message: returnPlan.highlightMessage,
         title: returnPlan.highlightTitle,

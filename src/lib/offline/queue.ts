@@ -5,6 +5,7 @@ import { v4 } from '../../utils/uuid';
 import { getConnectionState, subscribeToConnectionChanges } from '../repository/base';
 
 const OFFLINE_QUEUE_STORAGE_KEY = 'offline_queue_v1';
+const MAX_OFFLINE_QUEUE_SIZE = 100;
 const offlineQueueStorage = new MMKVStorageAdapter('offline-queue');
 
 export const OfflineQueueEntrySchema = z
@@ -57,6 +58,16 @@ export function loadQueue(): void {
 }
 loadQueue();
 export function enqueue(entry: OfflineQueueEntryInput): OfflineQueueEntry {
+  if (queue.length >= MAX_OFFLINE_QUEUE_SIZE) {
+    captureSilentFailure(new Error(`Offline queue full (${queue.length}/${MAX_OFFLINE_QUEUE_SIZE})`), { feature: 'lib', operation: 'offline-queue-overflow', type: 'data' });
+    // Evict oldest low-priority entry
+    const evictIndex = queue.findIndex((e) => e.priority === 'low');
+    const removeIndex = evictIndex >= 0 ? evictIndex : queue.length - 1;
+    const [evicted] = queue.splice(removeIndex, 1);
+    if (evicted) {
+      captureSilentFailure(new Error(`Evicted queue entry ${evicted.id} (${evicted.operation})`), { feature: 'lib', operation: 'offline-queue-evict', type: 'data' });
+    }
+  }
   const fullEntry: OfflineQueueEntry = { ...entry, retryCount: entry.retryCount ?? 0, maxRetries: entry.maxRetries ?? 3, priority: entry.priority ?? 'normal', id: v4(), createdAt: Date.now() };
   const existingIndex = queue.findIndex((e) => e.idempotencyKey === entry.idempotencyKey);
   if (existingIndex >= 0) {

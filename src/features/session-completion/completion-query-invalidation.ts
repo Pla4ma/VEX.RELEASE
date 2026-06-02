@@ -1,3 +1,4 @@
+import { captureSilentFailure } from '../../utils/silent-failure';
 import { queryClient, QueryKeys } from '../../api/QueryProvider';
 
 export function invalidateCompletionQueries(userId: string): void {
@@ -12,6 +13,8 @@ export function invalidateCompletionQueries(userId: string): void {
   ];
 
   for (const queryKey of keys) {
-    queryClient.invalidateQueries({ queryKey }).catch(() => undefined);
+    queryClient.invalidateQueries({ queryKey }).catch((error: unknown) => {
+      captureSilentFailure(error, { feature: 'session-completion', operation: 'invalidateQueries', type: 'data' });
+    });
   }
 }
