@@ -11,6 +11,7 @@ import { useTheme } from '../../theme';
 import { Box } from '../primitives/Box';
 import { Button } from '../primitives/Button';
 import { Text } from '../primitives/Text';
+import { Icon } from '../../icons';
 
 /**
  * ErrorState props
@@ -68,7 +69,7 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
         style,
       )}
     >
-      {/* Error Icon - X in circle per spec */}
+      {/* Error Icon */}
       <Box mb="lg">
         <Box
           style={{
@@ -76,24 +77,21 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
             height: 64,
             borderRadius: 32,
             backgroundColor:
-              theme?.colors?.semantic?.primarySoft ||
-              'rgba(91,77,255,0.12)',
+              theme?.colors?.semantic?.vexCyanSoft ||
+              'rgba(0,229,255,0.08)',
             borderColor:
-              theme?.colors?.semantic?.danger || '#b91c1c',
+              theme?.colors?.semantic?.vexCyan || '#00E5FF',
             borderWidth: 1,
             alignItems: 'center',
             justifyContent: 'center',
           }}
         >
-          <Text
-            variant="h1"
-            style={{
-              fontSize: 32,
-              color: theme?.colors?.error?.DEFAULT || '#b91c1c',
-            }}
-          >
-            ×
-          </Text>
+          <Icon
+            name="x-circle"
+            size={28}
+            color={theme?.colors?.semantic?.vexCyan || '#00E5FF'}
+            variant="outline"
+          />
         </Box>
       </Box>
 

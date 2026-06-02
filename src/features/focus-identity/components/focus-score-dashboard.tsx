@@ -46,7 +46,7 @@ export function FocusScoreDashboard({
   if (!model.current) {
     return (
       <EmptyState
-        icon="◎"
+        iconName="target"
         title="Your Focus Score needs three sessions"
         body="Finish three sessions and VEX will start reading your focus rhythm."
         actionLabel="Start session"

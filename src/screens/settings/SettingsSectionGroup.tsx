@@ -74,18 +74,19 @@ export function SettingsSectionGroup({
 function SettingRow({ item, theme }: { item: SettingItem; theme: Theme }) {
   const iconColor = item.danger
     ? theme.colors.error.DEFAULT
-    : theme.colors.primary[500];
+    : theme.colors.semantic.vexCyan;
   return (
     <Pressable
-      style={{
+      style={({ pressed }) => ({
         flexDirection: 'row',
         alignItems: 'center',
         paddingVertical: 12,
         paddingHorizontal: 16,
-      }}
+        backgroundColor: pressed ? theme.colors.background.tertiary : 'transparent',
+      })}
       onPress={item.type === 'toggle' ? undefined : item.onPress}
       disabled={item.type === 'toggle'}
-      accessibilityLabel="Settings section"
+      accessibilityLabel={item.title}
       accessibilityRole="button"
       accessibilityHint="Double tap to change setting"
     >
@@ -128,10 +129,10 @@ function SettingRow({ item, theme }: { item: SettingItem; theme: Theme }) {
             onValueChange={item.onToggle}
             trackColor={{
               false: theme.colors.background.tertiary,
-              true: theme.colors.primary[500] + '80',
+              true: theme.colors.semantic.vexCyanSoft,
             }}
             thumbColor={
-              item.value ? theme.colors.primary[500] : '#fff'
+              item.value ? theme.colors.semantic.vexCyan : '#fff'
             }
           />
         )}

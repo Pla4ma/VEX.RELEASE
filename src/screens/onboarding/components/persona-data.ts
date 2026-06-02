@@ -14,18 +14,18 @@ export interface CoachPersona {
 export const PERSONAS: CoachPersona[] = [
   {
     id: 'cheerleader',
-    icon: '🎉',
+    icon: 'star',
     name: 'The Cheerleader',
     description: 'Enthusiastic, encouraging',
     examples: [
-      '"You\'re absolutely crushing this! 🔥"',
+      '"You\'re absolutely crushing this!"',
       '"I knew you had it in you! Keep going!"',
     ],
     color: '#f59e0b',
   },
   {
     id: 'mentor',
-    icon: '📚',
+    icon: 'compass',
     name: 'The Mentor',
     description: 'Calm, wise, strategic',
     examples: [
@@ -36,7 +36,7 @@ export const PERSONAS: CoachPersona[] = [
   },
   {
     id: 'drill-sergeant',
-    icon: '💀',
+    icon: 'bolt',
     name: 'The Drill Sergeant',
     description: 'Intense, zero tolerance',
     examples: [

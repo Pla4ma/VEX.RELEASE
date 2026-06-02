@@ -5,13 +5,14 @@
  */
 
 import React from 'react';
-import { View, Text, Pressable, StyleSheet } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 import Animated, { FadeIn, FadeInUp } from 'react-native-reanimated';
 import { createSheet } from '@/shared/ui/create-sheet';
-
+import { useTheme } from '../../../../theme';
+import { Icon } from '../../../../icons';
 
 interface EmptyStateProps {
-  icon: string;
+  iconName: string;
   title: string;
   message: string;
   actionLabel?: string;
@@ -21,7 +22,7 @@ interface EmptyStateProps {
 }
 
 export function EmptyState({
-  icon,
+  iconName,
   title,
   message,
   actionLabel,
@@ -29,18 +30,21 @@ export function EmptyState({
   secondaryActionLabel,
   onSecondaryAction,
 }: EmptyStateProps) {
+  const { theme } = useTheme();
   return (
     <Animated.View entering={FadeIn.duration(400)} style={styles.container}>
       <Animated.View entering={FadeInUp.delay(100).duration(400)}>
-        <Text style={styles.icon}>{icon}</Text>
+        <View style={[styles.iconCircle, { backgroundColor: theme.colors.semantic.vexCyanSoft, borderColor: theme.colors.semantic.border }]}>
+          <Icon name={iconName} size={32} color={theme.colors.semantic.vexCyan} variant="outline" />
+        </View>
       </Animated.View>
 
       <Animated.View entering={FadeInUp.delay(200).duration(400)}>
-        <Text style={styles.title}>{title}</Text>
+        <Text style={[styles.title, { color: theme.colors.text.primary }]}>{title}</Text>
       </Animated.View>
 
       <Animated.View entering={FadeInUp.delay(300).duration(400)}>
-        <Text style={styles.message}>{message}</Text>
+        <Text style={[styles.message, { color: theme.colors.text.secondary }]}>{message}</Text>
       </Animated.View>
 
       {(actionLabel || secondaryActionLabel) && (
@@ -51,7 +55,7 @@ export function EmptyState({
           {actionLabel && onAction && (
             <Pressable
               onPress={onAction}
-              style={styles.primaryButton}
+              style={[styles.primaryButton, { backgroundColor: theme.colors.semantic.vexCyan }]}
               accessibilityLabel={actionLabel}
               accessibilityRole="button"
               accessibilityHint="Double tap to activate"
@@ -63,12 +67,12 @@ export function EmptyState({
           {secondaryActionLabel && onSecondaryAction && (
             <Pressable
               onPress={onSecondaryAction}
-              style={styles.secondaryButton}
+              style={[styles.secondaryButton, { borderColor: theme.colors.border.DEFAULT }]}
               accessibilityLabel={secondaryActionLabel}
               accessibilityRole="button"
               accessibilityHint="Double tap to activate"
             >
-              <Text style={styles.secondaryButtonText}>
+              <Text style={[styles.secondaryButtonText, { color: theme.colors.text.secondary }]}>
                 {secondaryActionLabel}
               </Text>
             </Pressable>
@@ -86,20 +90,23 @@ const styles = createSheet({
     padding: 32,
     flex: 1,
   },
-  icon: {
-    fontSize: 64,
+  iconCircle: {
+    width: 72,
+    height: 72,
+    borderRadius: 36,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
     marginBottom: 16,
   },
   title: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#1a1a1a',
     textAlign: 'center',
     marginBottom: 8,
   },
   message: {
     fontSize: 16,
-    color: '#666',
     textAlign: 'center',
     lineHeight: 22,
     marginBottom: 24,
@@ -111,7 +118,6 @@ const styles = createSheet({
     maxWidth: 280,
   },
   primaryButton: {
-    backgroundColor: '#4ecdc4',
     paddingVertical: 14,
     paddingHorizontal: 24,
     borderRadius: 12,
@@ -129,10 +135,8 @@ const styles = createSheet({
     borderRadius: 12,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#ddd',
   },
   secondaryButtonText: {
-    color: '#666',
     fontSize: 16,
     fontWeight: '500',
   },

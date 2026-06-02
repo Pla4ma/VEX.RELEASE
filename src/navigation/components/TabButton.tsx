@@ -115,7 +115,7 @@ export function TabButton({
         <Animated.View style={labelStyle}>
           <Text
             color={
-              focused ? theme.colors.text.primary : theme.colors.text.tertiary
+              focused ? theme.colors.semantic.vexCyan : theme.colors.text.tertiary
             }
             style={styles.label}
             variant="caption"
@@ -126,7 +126,7 @@ export function TabButton({
         <Animated.View
           style={[
             styles.indicator,
-            { backgroundColor: theme.colors.primary[500] },
+            { backgroundColor: theme.colors.semantic.vexCyan },
             indicatorStyle,
           ]}
         />

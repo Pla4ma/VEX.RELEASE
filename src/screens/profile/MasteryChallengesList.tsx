@@ -153,7 +153,7 @@ export function MasteryChallengesList({
           style={{ backgroundColor: theme.colors.background.secondary }}
         >
           <EmptyState
-            icon="target"
+            iconName="target"
             title="No active challenges"
             body="Complete sessions to unlock mastery challenges"
           />

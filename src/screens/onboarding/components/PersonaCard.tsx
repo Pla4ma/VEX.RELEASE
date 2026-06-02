@@ -12,6 +12,7 @@ import Animated, {
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
+import { Icon } from '../../../icons';
 import type { CoachPersona } from './persona-data';
 
 function ExampleMessage({
@@ -97,7 +98,7 @@ export function PersonaCard({
               justifyContent="center"
               alignItems="center"
             >
-              <Text fontSize={24}>{persona.icon}</Text>
+              <Icon name={persona.icon} size={24} color={isSelected ? '#fff' : theme.colors.text.secondary} variant="solid" />
             </Box>
 
             <Box flex={1}>
@@ -127,9 +128,7 @@ export function PersonaCard({
               alignItems="center"
             >
               {isSelected && (
-                <Text fontSize={14} color={theme.colors.text.inverse}>
-                  ✓
-                </Text>
+                <Icon name="check" size={14} color={theme.colors.text.inverse} variant="solid" />
               )}
             </Box>
           </Box>

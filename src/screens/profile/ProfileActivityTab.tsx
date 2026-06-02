@@ -23,12 +23,13 @@ function formatDuration(entry: SessionHistoryEntry): string {
   return `${Math.max(1, Math.round((entry.summary?.effectiveDuration ?? 0) / 60))} min`;
 }
 
-const renderSessionCard =
+  const renderSessionCard =
   (theme: Theme) =>
   ({ item }: { item: SessionHistoryEntry }) => (
     <Card
       size="md"
-      style={{ backgroundColor: theme.colors.background.secondary, marginBottom: 12 }}
+      variant="glass"
+      style={{ marginBottom: 12 }}
     >
       <Box flexDirection="row" justifyContent="space-between" alignItems="center">
         <Box flex={1}>
@@ -60,7 +61,7 @@ export const ProfileActivityTab: React.FC<ProfileActivityTabProps> = ({
 }) => {
   if (isLoading) {
     return (
-      <Card size="lg" style={{ backgroundColor: theme.colors.background.secondary }}>
+      <Card size="lg" variant="glass">
         <Skeleton lines={5} height={52} borderRadius={14} spacing={12} />
       </Card>
     );
@@ -68,9 +69,9 @@ export const ProfileActivityTab: React.FC<ProfileActivityTabProps> = ({
 
   if (isError) {
     return (
-      <Card size="lg" style={{ backgroundColor: theme.colors.background.secondary }}>
+      <Card size="lg" variant="glass">
         <EmptyState
-          icon="!"
+          iconName="exclamation-circle"
           title="Activity unavailable"
           body="We couldn't load your recent sessions right now."
           actionLabel="Start session"
@@ -82,9 +83,9 @@ export const ProfileActivityTab: React.FC<ProfileActivityTabProps> = ({
 
   if (history.length === 0) {
     return (
-      <Card size="lg" style={{ backgroundColor: theme.colors.background.secondary }}>
+      <Card size="lg" variant="glass">
         <EmptyState
-          icon="+"
+          iconName="plus-circle"
           title="No recent activity"
           body="Start a session to turn your profile into a live record of wins, streaks, and progression."
           actionLabel="Start session"

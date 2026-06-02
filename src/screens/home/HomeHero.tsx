@@ -18,15 +18,15 @@ export function getHeroGradientColors(
   streak: number,
 ): readonly [string, string] {
   if (streak >= 30) {
-    return ['#0d1b2a', '#1b4332'];
+    return ['#0A0A0F', '#003838'];
   }
   if (streak >= 7) {
-    return ['#1a0533', '#6b0f1a'];
+    return ['#0A0A0F', '#0A2A33'];
   }
   if (streak >= 1) {
-    return ['#0f3460', '#533483'];
+    return ['#0A0A0F', '#111A2E'];
   }
-  return ['#1a1a2e', '#16213e'];
+  return ['#0A0A0F', '#14151A'];
 }
 
 function formatMinutes(totalMinutes: number) {
