@@ -14,9 +14,11 @@ const debug = createDebugger('predictive-intervention');
 const MAX_MAP_ENTRIES = 1000;
 
 export class PredictiveInterventionEngine {
+  private static readonly MAX_MAP_SIZE = 1000;
   private predictions: Map<string, RiskPrediction[]> = new Map();
   private patterns: Map<string, BehavioralPattern> = new Map();
   private interventions: Map<string, InterventionResult[]> = new Map();
+  
   private checkInterval: ReturnType<typeof setInterval> | null = null;
   static isEnabled(): boolean {
     return featureFlags.isEnabled('predictive_interventions');
@@ -46,6 +48,7 @@ export class PredictiveInterventionEngine {
     if (!PredictiveInterventionEngine.isEnabled()) { return getDefaultPattern(userId); }
     const pattern = computeBehavioralPattern(userId, sessionHistory);
     this.evictOldest(this.patterns);
+    this.evictOldest(this.patterns);
     this.patterns.set(userId, pattern);
     return pattern;
   }
@@ -72,6 +75,7 @@ export class PredictiveInterventionEngine {
       }, optimalTime.nextWindow));
     }
     this.evictOldest(this.predictions);
+    this.evictOldest(this.predictions);
     this.predictions.set(userId, predictions);
     return predictions;
   }
@@ -91,6 +95,7 @@ export class PredictiveInterventionEngine {
     const userInterventions = this.interventions.get(prediction.userId) || [];
     userInterventions.push(result);
     if (!this.interventions.has(prediction.userId)) { this.evictOldest(this.interventions); }
+    this.evictOldest(this.interventions);
     this.interventions.set(prediction.userId, userInterventions);
     prediction.interventionSent = true;
     prediction.interventionType = channel;
