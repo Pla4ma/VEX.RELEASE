@@ -1,0 +1,17 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Check conventional commit format
+COMMIT_MSG_FILE=$1
+COMMIT_MSG=$(head -n1 "$COMMIT_MSG_FILE")
+
+# Allow merge commits
+echo "$COMMIT_MSG" | grep -qE "^Merge " && exit 0
+
+# Check conventional commit pattern
+echo "$COMMIT_MSG" | grep -qE "^(feat|fix|refactor|test|docs|chore|perf|style|ci|build|revert)(\(.+\))?: .+" && exit 0
+
+echo "❌ Commit message does not follow conventional commits format."
+echo "Expected: type(scope): description"
+echo "Types: feat, fix, refactor, test, docs, chore, perf, style, ci, build, revert"
+exit 1
