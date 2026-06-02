@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useWindowDimensions } from 'react-native';
+import { Platform, useWindowDimensions, View } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -31,6 +31,37 @@ export function VexEntryBackground(): JSX.Element {
     );
   }, [isReducedMotion, drift1, drift2]);
 
+  const orb1Base = {
+    position: 'absolute' as const,
+    width: width * 0.9,
+    height: width * 0.9,
+    borderRadius: (width * 0.9) / 2,
+    backgroundColor: `${theme.colors.semantic.vexCyan}18`,
+    top: -height * 0.12,
+    right: -width * 0.25,
+    opacity: 0.18,
+  };
+
+  const orb2Base = {
+    position: 'absolute' as const,
+    width: width * 0.7,
+    height: width * 0.7,
+    borderRadius: (width * 0.7) / 2,
+    backgroundColor: `${theme.colors.semantic.vexCyan}10`,
+    bottom: height * 0.08,
+    left: -width * 0.2,
+    opacity: 0.12,
+  };
+
+  if (Platform.OS === 'web') {
+    return (
+      <>
+        <View style={orb1Base} pointerEvents="none" />
+        <View style={orb2Base} pointerEvents="none" />
+      </>
+    );
+  }
+
   const orb1Style = useAnimatedStyle(() => ({
     transform: [
       {
@@ -59,36 +90,8 @@ export function VexEntryBackground(): JSX.Element {
 
   return (
     <>
-      <Animated.View
-        style={[
-          {
-            position: 'absolute',
-            width: width * 0.9,
-            height: width * 0.9,
-            borderRadius: (width * 0.9) / 2,
-            backgroundColor: `${theme.colors.semantic.vexCyan}18`,
-            top: -height * 0.12,
-            right: -width * 0.25,
-          },
-          orb1Style,
-        ]}
-        pointerEvents="none"
-      />
-      <Animated.View
-        style={[
-          {
-            position: 'absolute',
-            width: width * 0.7,
-            height: width * 0.7,
-            borderRadius: (width * 0.7) / 2,
-            backgroundColor: `${theme.colors.semantic.vexCyan}10`,
-            bottom: height * 0.08,
-            left: -width * 0.2,
-          },
-          orb2Style,
-        ]}
-        pointerEvents="none"
-      />
+      <Animated.View style={[orb1Base, orb1Style]} pointerEvents="none" />
+      <Animated.View style={[orb2Base, orb2Style]} pointerEvents="none" />
     </>
   );
 }

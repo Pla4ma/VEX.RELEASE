@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import Svg, { Circle, Defs, LinearGradient, Stop } from 'react-native-svg';
 import Animated, {
   Easing,
@@ -49,6 +49,8 @@ export function FocusRing({
     strokeDashoffset: circumference - (circumference * progress.value) / 100,
   }));
 
+  const isWeb = Platform.OS === 'web';
+
   return (
     <View
       accessibilityLabel={`Daily goal progress ${focusMinutes} minutes, ${Math.round(clamped)} percent`}
@@ -74,20 +76,37 @@ export function FocusRing({
           strokeWidth={strokeWidth}
           fill="none"
         />
-        <AnimatedCircle
-          cx={size / 2}
-          cy={size / 2}
-          r={radius}
-          stroke="url(#focus-ring)"
-          strokeWidth={strokeWidth}
-          strokeLinecap="round"
-          strokeDasharray={circumference}
-          animatedProps={animatedProps}
-          rotation="-90"
-          originX={size / 2}
-          originY={size / 2}
-          fill="none"
-        />
+        {isWeb ? (
+          <Circle
+            cx={size / 2}
+            cy={size / 2}
+            r={radius}
+            stroke="url(#focus-ring)"
+            strokeWidth={strokeWidth}
+            strokeLinecap="round"
+            strokeDasharray={circumference}
+            strokeDashoffset={circumference - (circumference * clamped) / 100}
+            rotation="-90"
+            originX={size / 2}
+            originY={size / 2}
+            fill="none"
+          />
+        ) : (
+          <AnimatedCircle
+            cx={size / 2}
+            cy={size / 2}
+            r={radius}
+            stroke="url(#focus-ring)"
+            strokeWidth={strokeWidth}
+            strokeLinecap="round"
+            strokeDasharray={circumference}
+            animatedProps={animatedProps}
+            rotation="-90"
+            originX={size / 2}
+            originY={size / 2}
+            fill="none"
+          />
+        )}
       </Svg>
       <View
         pointerEvents="none"

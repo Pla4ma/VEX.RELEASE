@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -62,8 +62,12 @@ export const Skeleton: React.FC<SkeletonProps> = ({
   };
   const renderLines = () => {
     const lineArray = Array.from({ length: lines }, (_, i) => i);
+    const LineWrapper = Platform.OS === 'web' ? View : Animated.View;
+    const lineStyle = Platform.OS === 'web'
+      ? { opacity: animate ? 0.5 : 0.3 }
+      : animatedOpacityStyle;
     return lineArray.map((_, index) => (
-      <Animated.View
+      <LineWrapper
         key={index}
         style={[
           styles.skeleton,
@@ -74,7 +78,7 @@ export const Skeleton: React.FC<SkeletonProps> = ({
             backgroundColor: theme.colors.surface.selected,
             marginBottom: index < lines - 1 ? spacing : 0,
           },
-          animatedOpacityStyle,
+          lineStyle,
         ]}
       />
     ));
@@ -100,12 +104,16 @@ export const SkeletonCard: React.FC<{ lines?: number; height?: number }> = ({
   const animatedOpacityStyle = useAnimatedStyle(() => ({
     opacity: opacity.value,
   }));
+  const CardWrapper = Platform.OS === 'web' ? View : Animated.View;
+  const cardStyle = Platform.OS === 'web'
+    ? { opacity: 0.5 }
+    : animatedOpacityStyle;
   return (
-    <Animated.View
+    <CardWrapper
       style={[
         styles.card,
         { backgroundColor: theme.colors.semantic.surfaceGlass },
-        animatedOpacityStyle,
+        cardStyle,
       ]}
     >
       <View style={styles.cardHeader}>
@@ -125,7 +133,7 @@ export const SkeletonCard: React.FC<{ lines?: number; height?: number }> = ({
           />
         ))}
       </View>
-    </Animated.View>
+    </CardWrapper>
   );
 };
 export const SkeletonList: React.FC<{

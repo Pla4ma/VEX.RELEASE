@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, type LayoutChangeEvent } from 'react-native';
+import { Platform, StyleSheet, View, type LayoutChangeEvent } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Animated, {
   cancelAnimation,
@@ -63,6 +63,10 @@ export function ShimmerSweep({
   };
 
   if (isReducedMotion) {
+    return null;
+  }
+
+  if (Platform.OS === 'web') {
     return null;
   }
 

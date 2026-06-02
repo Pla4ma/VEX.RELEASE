@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 import Animated, {
   cancelAnimation,
   useAnimatedStyle,
@@ -48,6 +48,24 @@ export function StreakBadge({
     shadowOpacity: isAtRisk ? 0.16 + pulse.value * 0.14 : 0.2,
   }));
 
+  const staticStyle = [
+    styles.badge,
+    isGlass
+      ? styles.glassBadge
+      : {
+          backgroundColor: isAtRisk
+            ? theme.colors.error[50]
+            : theme.colors.warning[50],
+          borderColor: isAtRisk
+            ? theme.colors.error[500]
+            : theme.colors.accent.orange,
+          shadowColor: isAtRisk
+            ? theme.colors.error[500]
+            : theme.colors.accent.orange,
+          shadowOpacity: isAtRisk ? 0.3 : 0.2,
+        },
+  ];
+
   if (days === 0) {
     return (
       <View
@@ -71,6 +89,23 @@ export function StreakBadge({
         >
           Start streak
         </Text>
+      </View>
+    );
+  }
+
+  if (Platform.OS === 'web') {
+    return (
+      <View style={staticStyle}>
+        <Text
+          variant="label"
+          color={
+            isGlass
+              ? 'rgba(255,255,255,0.96)'
+              : isAtRisk
+                ? theme.colors.error.dark
+                : theme.colors.accent.orange
+          }
+        >{`${days} days`}</Text>
       </View>
     );
   }

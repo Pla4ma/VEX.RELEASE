@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Animated, {
   cancelAnimation,
@@ -52,6 +52,60 @@ export function GradientStartButton({
     }
     return () => cancelAnimation(scale);
   }, [pulse, scale]);
+  if (Platform.OS === 'web') {
+    return (
+      <View>
+        <LinearGradient
+          colors={[
+            theme.colors.primary[500] ?? '#7c3aed',
+            theme.colors.primary[600] ?? '#4f46e5',
+            theme.colors.primary[700] ?? '#4f46e5',
+          ]}
+          start={{ x: 0.1, y: 0 }}
+          end={{ x: 0.9, y: 1 }}
+          locations={[0, 0.55, 1]}
+          style={[
+            styles.ctaGradient,
+            glow(theme.colors.semantic.primary, 'soft'),
+            {
+              borderRadius: theme.borderRadius['2xl'],
+              gap: theme.spacing[3],
+              padding: theme.spacing[4],
+            },
+          ]}
+        >
+          <Text variant="label" color={WHITE_MUTED}>
+            {eyebrow}
+          </Text>
+          <View style={{ gap: theme.spacing[2] }}>
+            <Text variant="h4" color={theme.colors.text.inverse}>
+              {title}
+            </Text>
+            <Text variant="bodySmall" color={WHITE_MUTED}>
+              {body}
+            </Text>
+          </View>
+          <Button
+            fullWidth
+            size="lg"
+            variant="primary"
+            style={{
+              backgroundColor: 'transparent',
+              borderRadius: theme.borderRadius['2xl'],
+              minHeight: 58,
+            }}
+            onPress={onPress}
+            accessibilityLabel={buttonLabel}
+            accessibilityRole="button"
+            accessibilityHint="Starts or resumes the recommended focus action"
+          >
+            {buttonLabel}
+          </Button>
+        </LinearGradient>
+      </View>
+    );
+  }
+
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ scale: scale.value }],
   }));

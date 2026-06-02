@@ -11,6 +11,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import { Platform, View } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 import Animated, {
   useSharedValue,
@@ -94,18 +95,45 @@ export const OfflineBanner: React.FC<OfflineBannerProps> = ({
     return null;
   }
 
+  const containerStyle = {
+    position: 'absolute' as const,
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 1000,
+  };
+
+  if (Platform.OS === 'web') {
+    return (
+      <View style={[containerStyle, { transform: [{ translateY: translateY.value }], opacity: opacity.value }]}>
+        <Box
+          px={16}
+          py={12}
+          style={{
+            backgroundColor: isOffline ? '#fef3c7' : '#dcfce7',
+            borderBottomWidth: 1,
+            borderBottomColor: isOffline ? '#fcd34d' : '#86efac',
+          }}
+        >
+          <Box flexDirection="row" alignItems="center" justifyContent="center">
+            <Icon name={isOffline ? 'wifi-off' : 'wifi'} size={16} color={isOffline ? '#d97706' : '#16a34a'} />
+            <Text variant="caption" style={{ marginLeft: 8, fontWeight: '600', color: isOffline ? '#92400e' : '#166534' }}>
+              {isOffline ? message : 'Back online — syncing changes...'}
+            </Text>
+            {showSyncPending && pendingCount > 0 && isOffline && (
+              <Box ml={10} px={8} py={2} borderRadius={10} style={{ backgroundColor: '#d97706' }}>
+                <Text style={{ color: '#fff', fontSize: 11, fontWeight: '700' }}>{pendingCount}</Text>
+              </Box>
+            )}
+          </Box>
+        </Box>
+      </View>
+    );
+  }
+
   return (
     <Animated.View
-      style={[
-        {
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          zIndex: 1000,
-        },
-        animatedStyle,
-      ]}
+      style={[containerStyle, animatedStyle]}
     >
       <Box
         px={16}

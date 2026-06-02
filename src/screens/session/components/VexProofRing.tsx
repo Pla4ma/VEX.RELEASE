@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 import Svg, { Circle, Defs, LinearGradient, Stop } from 'react-native-svg';
 import Animated, {
   useAnimatedProps,
@@ -70,13 +70,15 @@ export function VexProofRing({
     opacity: gradeScale.value,
   }));
 
+  const isWeb = Platform.OS === 'web';
+
   return (
     <View
       testID={testID}
       accessibilityLabel={`Grade ${grade}`}
       style={{ width: s, height: s, alignItems: 'center', justifyContent: 'center' }}
     >
-      <AnimatedSvg width={s} height={s} style={{ position: 'absolute', left: 0, top: 0 }}>
+      <Svg width={s} height={s} style={{ position: 'absolute', left: 0, top: 0 }}>
         <Defs>
           <LinearGradient id="proof-grad" x1="0%" y1="0%" x2="100%" y2="100%">
             <Stop offset="0%" stopColor={gradeColor} stopOpacity="0.6" />
@@ -92,23 +94,38 @@ export function VexProofRing({
           strokeWidth={strokeWidth}
           fill="none"
         />
-        {/* Animated ring */}
-        <AnimatedCircle
-          cx={cx}
-          cy={cy}
-          r={radius}
-          stroke="url(#proof-grad)"
-          strokeWidth={strokeWidth}
-          fill="none"
-          strokeLinecap="round"
-          strokeDasharray={circumference}
-          animatedProps={ringAnimatedProps}
-          transform={`rotate(-90 ${cx} ${cy})`}
-        />
-      </AnimatedSvg>
+        {/* Animated ring — static on web, animated on native */}
+        {isWeb ? (
+          <Circle
+            cx={cx}
+            cy={cy}
+            r={radius}
+            stroke="url(#proof-grad)"
+            strokeWidth={strokeWidth}
+            fill="none"
+            strokeLinecap="round"
+            strokeDasharray={circumference}
+            strokeDashoffset={0}
+            transform={`rotate(-90 ${cx} ${cy})`}
+          />
+        ) : (
+          <AnimatedCircle
+            cx={cx}
+            cy={cy}
+            r={radius}
+            stroke="url(#proof-grad)"
+            strokeWidth={strokeWidth}
+            fill="none"
+            strokeLinecap="round"
+            strokeDasharray={circumference}
+            animatedProps={ringAnimatedProps}
+            transform={`rotate(-90 ${cx} ${cy})`}
+          />
+        )}
+      </Svg>
 
       {/* Grade letter */}
-      <Animated.View style={[{ alignItems: 'center' }, gradeStyle]}>
+      <Animated.View style={[{ alignItems: 'center' }, isWeb ? undefined : gradeStyle]}>
         <Text
           variant="display"
           style={{
