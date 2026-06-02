@@ -4,6 +4,7 @@ import type {
   StreakGamble,
   ComebackToken,
 } from './streak-insurance';
+import { z } from 'zod';
 const INSURANCE_TABLE = 'streak_insurance';
 const GAMBLE_TABLE = 'streak_gambles';
 const TOKEN_TABLE = 'comeback_tokens';
@@ -12,7 +13,9 @@ export async function fetchActiveInsurance(
 ): Promise<StreakInsurance | null> {
   const { data, error } = await supabase
     .from(INSURANCE_TABLE)
-    .select('*')
+    .select(
+      'id, user_id, streak_days_protected, cost, purchased_at, expires_at, used, used_at'
+    )
     .eq('user_id', userId)
     .eq('used', false)
     .gt('expires_at', new Date().toISOString())
@@ -61,7 +64,9 @@ export async function fetchActiveGamble(
 ): Promise<StreakGamble | null> {
   const { data, error } = await supabase
     .from(GAMBLE_TABLE)
-    .select('*')
+    .select(
+      'id, user_id, streak_days_at_risk, started_at, session_id, status, required_grade, actual_grade, bonus_xp_if_won, settled_at'
+    )
     .eq('user_id', userId)
     .eq('status', 'ACTIVE')
     .single();
@@ -145,41 +150,50 @@ export async function useComebackToken(tokenId: string): Promise<void> {
     throw error;
   }
 }
-function dbToInsurance(row: Record<string, unknown>): StreakInsurance {
-  return {
-    id: row.id as string,
-    userId: row.user_id as string,
-    streakDaysProtected: row.streak_days_protected as number,
-    cost: row.cost as number,
-    purchasedAt: new Date(row.purchased_at as string).getTime(),
-    expiresAt: new Date(row.expires_at as string).getTime(),
-    used: row.used as boolean,
-    usedAt: row.used_at ? new Date(row.used_at as string).getTime() : undefined,
-  };
+const RawInsuranceSchema = z.object({
+  id: z.string(),
+  user_id: z.string(),
+  streak_days_protected: z.number(),
+  cost: z.number(),
+  purchased_at: z.string(),
+  expires_at: z.string(),
+  used: z.boolean(),
+  used_at: z.string().nullable().optional(),
+});
+
+const RawGambleSchema = z.object({
+  id: z.string(),
+  user_id: z.string(),
+  streak_days_at_risk: z.number(),
+  started_at: z.string(),
+  session_id: z.string(),
+  status: z.string(),
+  required_grade: z.string(),
+  actual_grade: z.string().nullable().optional(),
+  bonus_xp_if_won: z.number(),
+  settled_at: z.string().nullable().optional(),
+});
+
+const RawTokenSchema = z.object({
+  id: z.string(),
+  user_id: z.string(),
+  source_streak: z.number(),
+  earned_at: z.string(),
+  used: z.boolean(),
+  restore_value: z.number(),
+});
+
+function dbToInsurance(row: unknown): StreakInsurance {
+  const r = RawInsuranceSchema.parse(row);
+  return { id: r.id, userId: r.user_id, streakDaysProtected: r.streak_days_protected, cost: r.cost, purchasedAt: new Date(r.purchased_at).getTime(), expiresAt: new Date(r.expires_at).getTime(), used: r.used, usedAt: r.used_at ? new Date(r.used_at).getTime() : undefined };
 }
-function dbToGamble(row: Record<string, unknown>): StreakGamble {
-  return {
-    id: row.id as string,
-    userId: row.user_id as string,
-    streakDaysAtRisk: row.streak_days_at_risk as number,
-    startedAt: new Date(row.started_at as string).getTime(),
-    sessionId: row.session_id as string,
-    status: row.status as StreakGamble['status'],
-    requiredGrade: row.required_grade as 'S' | 'A' | 'B',
-    actualGrade: row.actual_grade as string | undefined,
-    bonusXpIfWon: row.bonus_xp_if_won as number,
-    settledAt: row.settled_at
-      ? new Date(row.settled_at as string).getTime()
-      : undefined,
-  };
+
+function dbToGamble(row: unknown): StreakGamble {
+  const r = RawGambleSchema.parse(row);
+  return { id: r.id, userId: r.user_id, streakDaysAtRisk: r.streak_days_at_risk, startedAt: new Date(r.started_at).getTime(), sessionId: r.session_id, status: r.status as StreakGamble['status'], requiredGrade: r.required_grade as 'S' | 'A' | 'B', actualGrade: r.actual_grade ?? undefined, bonusXpIfWon: r.bonus_xp_if_won, settledAt: r.settled_at ? new Date(r.settled_at).getTime() : undefined };
 }
-function dbToToken(row: Record<string, unknown>): ComebackToken {
-  return {
-    id: row.id as string,
-    userId: row.user_id as string,
-    sourceStreak: row.source_streak as number,
-    earnedAt: new Date(row.earned_at as string).getTime(),
-    used: row.used as boolean,
-    restoreValue: row.restore_value as number,
-  };
+
+function dbToToken(row: unknown): ComebackToken {
+  const r = RawTokenSchema.parse(row);
+  return { id: r.id, userId: r.user_id, sourceStreak: r.source_streak, earnedAt: new Date(r.earned_at).getTime(), used: r.used, restoreValue: r.restore_value };
 }

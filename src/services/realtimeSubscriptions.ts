@@ -8,6 +8,23 @@ import {
   type BroadcastMessage,
 } from './realtimeShared';
 
+function parseBroadcastPayload(
+  event: string,
+  rawPayload: unknown,
+): BroadcastMessage {
+  const validTypes = ['activity', 'notification', 'sync', 'typing'] as const;
+  const type = validTypes.includes(event as typeof validTypes[number])
+    ? (event as BroadcastMessage['type'])
+    : 'activity';
+  const payloadObj = rawPayload as Record<string, unknown> | null;
+  return {
+    type,
+    payload: rawPayload,
+    senderId: (payloadObj?.senderId as string) ?? '',
+    timestamp: (payloadObj?.timestamp as number) ?? Date.now(),
+  };
+}
+
 const debug = createDebugger('realtime');
 
 export async function broadcastActivity(
@@ -55,12 +72,7 @@ export async function subscribeToActivity(
   const channel = client
     .channel(fullChannelName)
     .on('broadcast', { event: '*' }, (payload) => {
-      callback({
-        type: payload.event as BroadcastMessage['type'],
-        payload: payload.payload,
-        senderId: payload.payload?.senderId,
-        timestamp: payload.payload?.timestamp || Date.now(),
-      });
+      callback(parseBroadcastPayload(payload.event as string, payload.payload));
     });
   await channel.subscribe();
   activeChannels.set(fullChannelName, channel);

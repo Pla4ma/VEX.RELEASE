@@ -14,6 +14,22 @@ const DEFAULT_CONFIGS: Record<string, RateLimitConfig> = {
   'default': { maxRequests: 20, windowSeconds: 60 },
 };
 
+function logStructured(
+  level: string,
+  message: string,
+  data?: Record<string, unknown>,
+): void {
+  console.log(
+    JSON.stringify({
+      level,
+      feature: 'rate-limit',
+      message,
+      timestamp: new Date().toISOString(),
+      ...data,
+    }),
+  );
+}
+
 export async function checkRateLimit(
   userId: string,
   operation: string,
@@ -33,7 +49,11 @@ export async function checkRateLimit(
   });
 
   if (error) {
-    console.error(`Rate limit check failed for ${operation}:`, error);
+    logStructured('error', `Rate limit check failed for ${operation}`, {
+      operation,
+      userId,
+      error: error.message ?? String(error),
+    });
     return { allowed: false, remaining: 0, resetAt: Date.now() + windowSeconds * 1000 };
   }
 
