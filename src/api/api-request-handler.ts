@@ -20,6 +20,14 @@ export function buildURL(
   endpoint: string,
   params?: Record<string, string | number | boolean>,
 ): string {
+  // Reject path traversal attempts
+  if (
+    !endpoint.startsWith('/') ||
+    endpoint.includes('..') ||
+    endpoint.includes('//')
+  ) {
+    throw new Error(`Invalid endpoint path: ${endpoint}`);
+  }
   const url = new URL(endpoint, baseURL);
   if (params) {
     Object.entries(params).forEach(([key, value]) => {

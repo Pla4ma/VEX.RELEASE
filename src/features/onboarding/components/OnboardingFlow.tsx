@@ -6,6 +6,7 @@ import { useOnboardingProgressState } from '../hooks';
 import { OnboardingNavigator } from './OnboardingNavigator';
 import type { FocusGoal } from '../schemas';
 import { withScreenErrorBoundary } from '../../../shared/ui/components/ScreenErrorBoundary';
+import { captureSilentFailure } from '../../../utils/silent-failure';
 interface OnboardingFlowProps {
   onStartSession: (config: {
     duration: number;
@@ -28,7 +29,8 @@ function NotificationPermissionScreen({
       .then((mod) => {
         setNotificationCard(() => mod.OnboardingNotificationPermissionCard);
       })
-      .catch(() => {
+      .catch((error: unknown) => {
+        captureSilentFailure(error, { feature: 'onboarding', operation: 'loadNotificationCard', type: 'data' });
         onComplete();
       });
   }, [onComplete]);
@@ -107,7 +109,8 @@ function FirstResultScreen({
             }>,
         );
       })
-      .catch(() => {
+      .catch((error: unknown) => {
+        captureSilentFailure(error, { feature: 'onboarding', operation: 'loadFirstResultScreen', type: 'data' });
         onComplete();
       });
   }, [onComplete]);

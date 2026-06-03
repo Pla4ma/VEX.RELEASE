@@ -1,6 +1,6 @@
 import React from 'react';
 import { Platform, View, type TextStyle } from 'react-native';
-import { Text } from '../../components/primitives/Text';
+import { Text } from '../../../components/primitives/Text';
 
 const SERIF_STACK = Platform.select({
   ios: 'New York',

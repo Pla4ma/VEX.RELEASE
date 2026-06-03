@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import Animated, {
+  cancelAnimation,
   Easing,
   useAnimatedStyle,
   useSharedValue,
@@ -26,9 +27,13 @@ export function Stage({
   const op = useSharedValue(isReducedMotion ? 1 : 0);
   const ty = useSharedValue(isReducedMotion ? 0 : 22);
   useEffect(() => {
-    if (isReducedMotion) return;
+    if (isReducedMotion) { return; }
     op.value = withDelay(delay, withTiming(1, { duration: 900, easing: EASE_EDITORIAL }));
     ty.value = withDelay(delay, withTiming(0, { duration: 900, easing: EASE_EDITORIAL }));
+    return () => {
+      cancelAnimation(op);
+      cancelAnimation(ty);
+    };
   }, [op, ty, delay, isReducedMotion]);
   const style = useAnimatedStyle(() => ({
     opacity: op.value,

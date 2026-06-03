@@ -101,7 +101,10 @@ export async function buildSessionStake(
     ? calculateBossDamageEstimate(durationSeconds, streak?.currentDays ?? 0)
     : null;
   const bossTemplate = bossEncounter
-    ? await fetchBossTemplate(bossEncounter.bossId).catch(() => null)
+    ? await     fetchBossTemplate(bossEncounter.bossId).catch((error: unknown) => {
+      captureSilentFailure(error, { feature: 'session-start', operation: 'fetchBossTemplate', type: 'network' });
+      return null;
+    })
     : null;
   return SessionStakeSchema.parse({
     boss:

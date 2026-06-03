@@ -4,6 +4,7 @@
  */
 
 import { eventBus } from '../../events/EventBus';
+import { captureSilentFailure } from '../../utils/silent-failure';
 import { addXpEnhanced } from '../progression/service-xp-core';
 import { createReward } from '../rewards/service';
 import { recordSession } from '../streaks/service';
@@ -135,7 +136,10 @@ async function createSessionRewards(
       amount: Math.floor(durationMinutes * 0.5),
       triggerType: 'SESSION_COMPLETE',
       triggerId: userId,
-    }).catch(() => null);
+    }).catch((error: unknown) => {
+      captureSilentFailure(error, { feature: 'integration', operation: 'createDurationReward', type: 'data' });
+      return null;
+    });
     if (reward) {
       rewardIds.push(reward.id);
     }

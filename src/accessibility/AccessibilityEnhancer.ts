@@ -1,9 +1,3 @@
-/**
- * Accessibility Enhancer
- *
- * Singleton class for automated accessibility improvements and fixes,
- * plus convenience functions, presets, and a React hook.
- */
 import React from 'react';
 import { createDebugger } from '../utils/debug';
 import { getAutomaticEnhancements } from './enhancer-logic';
@@ -202,58 +196,10 @@ export class AccessibilityEnhancer {
 }
 
 export const accessibilityEnhancer = AccessibilityEnhancer.getInstance();
-
-export function enhanceComponent<P extends object>(
-  Component: React.ComponentType<P>,
-  enhancements?: Partial<EnhancedAccessibilityProps>,
-): React.ForwardRefExoticComponent<
-  React.PropsWithoutRef<P> & React.RefAttributes<unknown>
-> {
-  return accessibilityEnhancer.enhanceComponent(Component, enhancements);
-}
-export function enhanceProps<P extends object>(
-  props: P,
-  enhancements?: Partial<EnhancedAccessibilityProps>,
-): P & EnhancedAccessibilityProps {
-  return accessibilityEnhancer.enhanceProps(props, enhancements);
-}
-export function withAccessibility<P extends object>(
-  enhancements?: Partial<EnhancedAccessibilityProps>,
-) {
-  return function (
-    Component: React.ComponentType<P>,
-  ): React.ForwardRefExoticComponent<
-    React.PropsWithoutRef<P> & React.RefAttributes<unknown>
-  > {
-    return accessibilityEnhancer.enhanceComponent(Component, enhancements);
-  };
-}
-export function useAccessibilityEnhancements(
-  baseProps: Record<string, unknown>,
-  customEnhancements?: Partial<EnhancedAccessibilityProps>,
-): EnhancedAccessibilityProps {
-  const [enhancedProps, setEnhancedProps] =
-    React.useState<EnhancedAccessibilityProps>({});
-  React.useEffect(() => {
-    const enhanced = accessibilityEnhancer.enhanceProps(
-      baseProps,
-      customEnhancements,
-    );
-    setEnhancedProps(enhanced);
-  }, [baseProps, customEnhancements]);
-  return enhancedProps;
-}
-
-export const ACCESSIBILITY_PRESETS = {
-  MAXIMUM: { autoContrastFixes: true, autoFocusManagement: true, motionOptimizations: true, screenReaderOptimizations: true, colorBlindSupport: 'none' as const },
-  ESSENTIAL: { autoContrastFixes: true, autoFocusManagement: true, motionOptimizations: false, screenReaderOptimizations: true, colorBlindSupport: 'none' as const },
-  VISUAL: { autoContrastFixes: true, autoFocusManagement: false, motionOptimizations: true, screenReaderOptimizations: false, colorBlindSupport: 'protanopia' as const },
-  MOTOR: { autoContrastFixes: false, autoFocusManagement: true, motionOptimizations: true, screenReaderOptimizations: false, colorBlindSupport: 'none' as const },
-  COGNITIVE: { autoContrastFixes: true, autoFocusManagement: true, motionOptimizations: true, screenReaderOptimizations: true, colorBlindSupport: 'none' as const },
-} as const;
-
-export function applyAccessibilityPreset(
-  preset: keyof typeof ACCESSIBILITY_PRESETS,
-): void {
-  accessibilityEnhancer.setConfig(ACCESSIBILITY_PRESETS[preset]);
-}
+export { ACCESSIBILITY_PRESETS, applyAccessibilityPreset } from './accessibility-presets';
+export {
+  enhanceComponent,
+  enhanceProps,
+  withAccessibility,
+  useAccessibilityEnhancements,
+} from './accessibility-wrappers';

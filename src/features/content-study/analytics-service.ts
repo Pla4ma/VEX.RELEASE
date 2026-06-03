@@ -120,7 +120,7 @@ export class ContentStudyAnalyticsService {
     for (const event of this.queue) {
       try {
         this.sendToProvider(event);
-      } catch (error) {
+      } catch (error: unknown) {
         captureSilentFailure(error, {
           feature: 'content-study',
           operation: 'ui-fallback',
@@ -155,7 +155,7 @@ export class ContentStudyAnalyticsService {
       if (data) {
         this.metrics = JSON.parse(data) as Partial<ContentStudyMetrics>;
       }
-    } catch (error) {
+    } catch (error: unknown) {
       captureSilentFailure(error, {
         feature: 'content-study',
         operation: 'ui-fallback',
@@ -170,7 +170,7 @@ export class ContentStudyAnalyticsService {
         `${CONTENT_STUDY_CONSTANTS.LOCAL_STORAGE_KEY}:metrics`,
         JSON.stringify(this.metrics),
       );
-    } catch (error) {
+    } catch (error: unknown) {
       captureSilentFailure(error, {
         feature: 'content-study',
         operation: 'ui-fallback',

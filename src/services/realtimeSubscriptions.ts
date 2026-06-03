@@ -8,6 +8,13 @@ import {
   type BroadcastMessage,
 } from './realtimeShared';
 
+const pendingTxTimeoutIds = new Set<ReturnType<typeof setTimeout>>();
+
+export function cancelPendingBroadcastCleanups(): void {
+  pendingTxTimeoutIds.forEach(clearTimeout);
+  pendingTxTimeoutIds.clear();
+}
+
 function parseBroadcastPayload(
   event: string,
   rawPayload: unknown,
@@ -55,12 +62,14 @@ export async function broadcastActivity(
   }
 
   const channelToClean = channel;
-  setTimeout(() => {
+  const timeoutId = setTimeout(() => {
     channelToClean?.unsubscribe();
     if (activeChannels.get(txKey) === channelToClean) {
       activeChannels.delete(txKey);
     }
+    pendingTxTimeoutIds.delete(timeoutId);
   }, 5_000);
+  pendingTxTimeoutIds.add(timeoutId);
 }
 
 export async function subscribeToActivity(

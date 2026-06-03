@@ -7,6 +7,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useTheme } from '../../theme';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
+import { rgbaColors } from '../../theme/tokens/rgba-colors';
 
 export interface VexMotionSurfaceProps extends ViewProps {
   variant?: 'glass' | 'elevated' | 'focused';
@@ -14,24 +15,6 @@ export interface VexMotionSurfaceProps extends ViewProps {
   animated?: boolean;
   testID?: string;
 }
-
-const VARIANT_STYLES = {
-  glass: {
-    backgroundColor: 'rgba(18,18,26,0.85)' as const,
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.06)' as const,
-  },
-  elevated: {
-    backgroundColor: '#12121A' as const,
-    borderWidth: 1,
-    borderColor: '#1A1A24' as const,
-  },
-  focused: {
-    backgroundColor: 'rgba(18,18,26,0.85)' as const,
-    borderWidth: 1,
-    borderColor: 'rgba(0,229,255,0.12)' as const,
-  },
-};
 
 export function VexMotionSurface({
   variant = 'elevated',
@@ -44,6 +27,24 @@ export function VexMotionSurface({
   const { theme } = useTheme();
   const { isReducedMotion } = useReducedMotion();
   const glowIntensity = useSharedValue(0);
+
+  const VARIANT_STYLES: Record<string, { backgroundColor: string; borderWidth: number; borderColor: string }> = {
+    glass: {
+      backgroundColor: rgbaColors.rgb_18_18_26_0_85 ?? 'rgba(18,18,26,0.85)',
+      borderWidth: 1,
+      borderColor: rgbaColors.rgb_255_255_255_0_06 ?? 'rgba(255,255,255,0.06)',
+    },
+    elevated: {
+      backgroundColor: theme.colors.semantic.background,
+      borderWidth: 1,
+      borderColor: theme.colors.semantic.border,
+    },
+    focused: {
+      backgroundColor: rgbaColors.rgb_18_18_26_0_85 ?? 'rgba(18,18,26,0.85)',
+      borderWidth: 1,
+      borderColor: rgbaColors.vexCyan_0_12 ?? 'rgba(0,229,255,0.12)',
+    },
+  };
 
   const base = VARIANT_STYLES[variant];
   const borderRadius = theme.spacing?.[3] ?? 12;

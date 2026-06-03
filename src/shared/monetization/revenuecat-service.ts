@@ -27,6 +27,13 @@ const debug = createDebugger('monetization:revenuecat');
 const IOS_API_KEY = process.env.EXPO_PUBLIC_REVENUECAT_IOS_KEY;
 const ANDROID_API_KEY = process.env.EXPO_PUBLIC_REVENUECAT_ANDROID_KEY;
 
+const PLACEHOLDER_PATTERN = /^(your[_\-].*|test[_\-]key|placeholder|REPLACE_ME|TODO)/i;
+
+function isPlaceholderKey(key: string | undefined): boolean {
+  if (!key || key.length === 0) return true;
+  return PLACEHOLDER_PATTERN.test(key.trim());
+}
+
 class RevenueCatService {
   private status: RevenueCatStatus = 'uninitialized';
   private currentUserId: string | null = null;
@@ -43,6 +50,18 @@ class RevenueCatService {
         debug.error('[RevenueCat] CRITICAL: No API keys configured. Set EXPO_PUBLIC_REVENUECAT_IOS_KEY and EXPO_PUBLIC_REVENUECAT_ANDROID_KEY in .env.local');
       }
       this.status = 'missing_keys';
+      return { status: 'missing_keys' };
+    }
+    // Block placeholder keys in production to prevent silent IAP failures
+    const iosPlaceholder = isPlaceholderKey(IOS_API_KEY);
+    const androidPlaceholder = isPlaceholderKey(ANDROID_API_KEY);
+    if (iosPlaceholder || androidPlaceholder) {
+      this.status = 'missing_keys';
+      const msg = iosPlaceholder && androidPlaceholder
+        ? 'Both RevenueCat API keys are placeholders'
+        : `${iosPlaceholder ? 'iOS' : 'Android'} RevenueCat API key is a placeholder`;
+      debug.error(`[RevenueCat] ${msg}. IAP will not work.`);
+      Sentry.captureMessage(`[RevenueCat] ${msg}`, { level: 'error', tags: { component: 'RevenueCatService' } });
       return { status: 'missing_keys' };
     }
     if (this.status === 'ready') {return { status: 'ready' };}

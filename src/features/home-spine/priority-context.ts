@@ -9,6 +9,7 @@ import {
   isFeatureAvailableForQueries,
   type FeatureAccessMap,
 } from '../liveops-config';
+import { captureSilentFailure } from '../../utils/silent-failure';
 import {
   HomeContextSnapshotSchema,
   type HomeContextSnapshot,
@@ -97,21 +98,36 @@ export async function buildHomeContextSnapshot(
     activeChallenges,
   ] = await Promise.all([
     onboardingRepository.getProgress(userId),
-    fetchStreak(userId).catch((): null => null),
+    fetchStreak(userId).catch((error: unknown) => {
+      captureSilentFailure(error, { feature: 'home-spine', operation: 'fetchStreak', type: 'network' });
+      return null;
+    }),
     canQuery('boss_tab')
-      ? fetchActiveEncounter(userId).catch((): null => null)
+      ? fetchActiveEncounter(userId).catch((error: unknown) => {
+          captureSilentFailure(error, { feature: 'home-spine', operation: 'fetchActiveEncounter', type: 'network' });
+          return null;
+        })
       : Promise.resolve(null),
     canQuery('companion_detail')
-      ? getHomePromiseState(userId, true, timeZone).catch(() => ({
-          kind: 'hidden' as const,
-          showOfflineBanner: false,
-        }))
+      ? getHomePromiseState(userId, true, timeZone).catch((error: unknown) => {
+          captureSilentFailure(error, { feature: 'home-spine', operation: 'getHomePromiseState', type: 'data' });
+          return {
+            kind: 'hidden' as const,
+            showOfflineBanner: false,
+          };
+        })
       : Promise.resolve({ kind: 'hidden' as const, showOfflineBanner: false }),
     canQuery('ai_coach_advanced')
-      ? fetchActiveRecommendations(userId, 1).catch(() => [])
+      ? fetchActiveRecommendations(userId, 1).catch((error: unknown) => {
+          captureSilentFailure(error, { feature: 'home-spine', operation: 'fetchActiveRecommendations', type: 'network' });
+          return [];
+        })
       : Promise.resolve([]),
     canQuery('challenges')
-      ? fetchActiveChallengeDetails(userId).catch(() => [])
+      ? fetchActiveChallengeDetails(userId).catch((error: unknown) => {
+          captureSilentFailure(error, { feature: 'home-spine', operation: 'fetchActiveChallengeDetails', type: 'network' });
+          return [];
+        })
       : Promise.resolve([]),
   ]);
   const activeRecommendation = recommendations.find(

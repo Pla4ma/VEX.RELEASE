@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { AppState, type AppStateStatus } from 'react-native';
 import { getSessionOrchestrator } from './SessionOrchestrator';
+import { cancelPendingBroadcastCleanups } from '../services/realtimeSubscriptions';
 import { createDebugger } from '../utils/debug';
 import { captureSilentFailure } from '../utils/silent-failure';
 
@@ -21,6 +22,7 @@ export function useSessionAppState(): void {
         try {
           if (nextAppState === 'background') {
             backgroundTimeRef.current = Date.now();
+            cancelPendingBroadcastCleanups();
             debug.info('[SessionAppState] App backgrounded, noting timestamp');
           } else if (nextAppState === 'active') {
             const bgDuration =

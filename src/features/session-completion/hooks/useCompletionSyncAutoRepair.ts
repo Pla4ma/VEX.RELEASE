@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 
 import { useSessionUIStore } from '../../../store/session-state';
+import { captureSilentFailure } from '../../../utils/silent-failure';
 import {
   getNextCompletionSyncState,
   invalidateCompletionReturnUserQueries,
@@ -39,7 +40,8 @@ export function useCompletionSyncAutoRepair(input: {
           );
         }
       })
-      .catch(() => {
+      .catch((error: unknown) => {
+        captureSilentFailure(error, { feature: 'session-completion', operation: 'autoRepair', type: 'data' });
         if (!cancelled) {
           setCompletionSyncState(
             getNextCompletionSyncState({
