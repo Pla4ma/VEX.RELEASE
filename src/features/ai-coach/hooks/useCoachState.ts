@@ -11,7 +11,7 @@ import {
   type RefetchOptions,
 } from '@tanstack/react-query';
 import { useCoachStore } from '../store';
-import * as service from '../service';
+import * as service from '../services/service';
 import { COACH_QUERY_KEYS } from '../constants';
 import { useNetworkStatus } from './useNetworkStatus';
 import type { CoachState } from '../types';

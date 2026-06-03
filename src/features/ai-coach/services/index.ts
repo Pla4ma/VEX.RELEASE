@@ -3,11 +3,11 @@
  *
  * This directory contains sub-service implementations and engines.
  * The public API for the ai-coach feature is re-exported through
- * the root service.ts barrel — do not import from this directory
+ * the services/service.ts barrel — do not import from this directory
  * directly in components or external features.
  *
  * Naming convention:
- * - Root service.ts = public API barrel (re-exports only)
+ * - services/service.ts = public API barrel (re-exports only)
  * - services/ = internal implementation modules
  */
 

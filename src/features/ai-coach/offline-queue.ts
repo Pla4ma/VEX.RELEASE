@@ -44,7 +44,7 @@ export async function processMutation(
   mutation: QueuedMutation,
   userId: string,
 ): Promise<void> {
-  const service = await import('./service');
+  const service = await import('./services/service');
   const repository = await import('./repository');
 
   switch (mutation.type) {

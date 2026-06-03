@@ -1,4 +1,4 @@
-import { getCoachService } from '../service';
+import { getCoachService } from '../services/service';
 export interface InterventionContext {
   sessionId: string;
   userId: string;

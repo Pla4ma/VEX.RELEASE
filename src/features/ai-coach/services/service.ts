@@ -1,5 +1,5 @@
 /**
- * AI Coach Service
+ * AI Coach Service — Public API Barrel
  * Business logic for coaching, personalization, predictions, and interventions
  *
  * Dependencies:
@@ -10,8 +10,8 @@
  * - Analytics (effectiveness tracking)
  *
  * This file serves as the public API entry point, re-exporting from focused modules:
- * - services/coach-service.ts: CoachService interface, singleton, fetchActiveRecommendations
- * - services/CoachRecommendationService.ts: Phase 2.1 - Coach as Recommendation Engine
+ * - coach-service.ts: CoachService interface, singleton, fetchActiveRecommendations
+ * - CoachRecommendationService.ts: Phase 2.1 - Coach as Recommendation Engine
  * - pipeline.ts: Message generation and interventions pipeline
  * - intervention-service.ts: Phase 2.3 - New Interventions
  * - message-generator.ts: Message actions and performance summaries
@@ -25,7 +25,7 @@
  *
  * ARCHITECTURE NOTE: This file is the PUBLIC API barrel for the ai-coach feature.
  * All implementation logic lives in either:
- * - Root-level sibling modules (pipeline.ts, session-analyzer.ts, etc.)
+ * - Sibling modules in the feature root (pipeline.ts, session-analyzer.ts, etc.)
  * - services/ directory (sub-engines, sub-services, CoachService interface)
  * Do NOT add implementation logic here — only re-exports.
  */
@@ -42,7 +42,7 @@ export {
   type CoachPersonaId,
   type CoachRecommendationType,
   type UrgencyLevel,
-} from './services/CoachRecommendationService';
+} from './CoachRecommendationService';
 
 export {
   generateMessage,
@@ -50,7 +50,7 @@ export {
   activateComeback,
   detectStreakRisk,
   processBehaviorSignal,
-} from './pipeline';
+} from '../pipeline';
 
 // Phase 2.3 - New Interventions
 export {
@@ -64,19 +64,19 @@ export {
   type MomentumBuildingInput,
   type ComebackReadyInput,
   type StudyPlanCompleteInput,
-} from './intervention-service';
+} from '../intervention-service';
 
 export {
   markMessageAction,
   generatePerformanceSummary,
-} from './message-generator';
+} from '../message-generator';
 
 // Repository exports for direct database operations
 export {
   markMessageRead,
   dismissMessage,
   fetchRecentMessages,
-} from './repository';
+} from '../repository';
 
 export {
   // Session Analyzer
@@ -84,7 +84,7 @@ export {
   createRecommendation,
   generateSessionSummary,
   suggestChallenges,
-} from './session-analyzer';
+} from '../session-analyzer';
 
 export {
   // Persona Manager
@@ -95,7 +95,7 @@ export {
   updateCoachState as transitionState,
   updateCoachPreferences,
   DEFAULT_PERSONA_ID,
-} from './persona-manager';
+} from '../persona-manager';
 
 export {
   // Reminder Scheduler
@@ -104,7 +104,7 @@ export {
   trackComebackSession,
   adjustDifficulty,
   COMEBACK_BONUS_MULTIPLIER,
-} from './reminder-scheduler';
+} from '../reminder-scheduler';
 
 // Phase 7 - Input Contract Integration
 export {
@@ -113,12 +113,12 @@ export {
   containsForbiddenPII,
   CoachInputContractSchema,
   type CoachInputContract,
-} from './input-contract';
+} from '../input-contract';
 
 // CoachService interface, singleton, and fetchActiveRecommendations
-// (moved from this file to services/coach-service.ts for clean separation)
+// (moved from this file to coach-service.ts for clean separation)
 export {
   fetchActiveRecommendations,
   getCoachService,
-} from './services/coach-service';
-export type { CoachService } from './services/coach-service';
+} from './coach-service';
+export type { CoachService } from './coach-service';

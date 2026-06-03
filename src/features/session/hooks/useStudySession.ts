@@ -12,7 +12,7 @@ import * as Sentry from '@sentry/react-native';
 import { useState } from 'react';
 import { createDebugger } from '../../../utils/debug';
 import { getSessionOrchestrator } from '../../../session/orchestrator-factory';
-import { getCoachService } from '../../ai-coach/service';
+import { getCoachService } from '../../ai-coach/services/service';
 import type { SessionConfig } from '../../../session/types';
 import { capture } from '../../../shared/analytics/analytics-service';
 import { SessionEvents } from '../../../shared/analytics/analytics-events';

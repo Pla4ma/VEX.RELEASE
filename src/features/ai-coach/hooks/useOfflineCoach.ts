@@ -1,9 +1,9 @@
 import { useEffect, useCallback, useRef, useState } from 'react';
 import { useNetInfo } from '@react-native-community/netinfo';
 import { useQueryClient } from '@tanstack/react-query';
-import { type CoachMessage, type CoachState } from './schemas';
-import { COACH_QUERY_KEYS } from './hooks';
-import { createDebugger } from '../../utils/debug';
+import { type CoachMessage, type CoachState } from '../schemas';
+import { COACH_QUERY_KEYS } from '.';
+import { createDebugger } from '../../../utils/debug';
 import {
   type QueuedMutation,
   type UseOfflineCoachResult,
@@ -12,7 +12,7 @@ import {
   getQueue,
   saveQueue,
   processMutation,
-} from './offline-queue';
+} from '../offline-queue';
 
 const debug = createDebugger('coach:offline');
 

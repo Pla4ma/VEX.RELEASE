@@ -5,15 +5,15 @@ import * as ExpoNotifications from 'expo-notifications';
 import {
   type CoachMessage,
   type CoachState,
-} from './schemas';
-import { COACH_QUERY_KEYS } from './hooks';
-import { createDebugger } from '../../utils/debug';
+} from '../schemas';
+import { COACH_QUERY_KEYS } from '.';
+import { createDebugger } from '../../../utils/debug';
 import {
   subscribeToCoachMessages,
   subscribeToCoachState,
   subscribeToComebackPlan,
   subscribeToRecommendations,
-} from './repository/messages';
+} from '../repository/messages';
 
 const debug = createDebugger('coach:realtime');
 
