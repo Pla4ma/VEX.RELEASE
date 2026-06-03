@@ -7,7 +7,7 @@ const FinalizeSeasonInputSchema = z.object({
   seasonId: z.string().uuid(),
 });
 
-const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_SERVICE_KEY!);
+const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
 
 Sentry.init({
   dsn: process.env.SENTRY_DSN,

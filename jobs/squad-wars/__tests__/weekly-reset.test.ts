@@ -74,12 +74,12 @@ describe('squadWarWeeklyReset', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     process.env.SUPABASE_URL = 'https://test.supabase.co';
-    process.env.SUPABASE_SERVICE_KEY = 'test-key';
+    process.env.SUPABASE_SERVICE_ROLE_KEY = 'test-key';
   });
 
   afterEach(() => {
     delete process.env.SUPABASE_URL;
-    delete process.env.SUPABASE_SERVICE_KEY;
+    delete process.env.SUPABASE_SERVICE_ROLE_KEY;
   });
 
   it('returns an empty result when no wars expired', async () => {

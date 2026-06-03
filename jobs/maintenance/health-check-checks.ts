@@ -4,7 +4,7 @@ import type { HealthCheckResult } from './health-check-types';
 
 const supabase = createClient(
   process.env.SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_KEY!
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
 export async function checkDatabase(): Promise<HealthCheckResult> {

@@ -4,8 +4,6 @@ import { CONTENT_STUDY_CONSTANTS } from '../content-study/types';
 import { premiumRevenueCatHealthChecks } from './premium-revenuecat-health-checks';
 import { bossHealthChecks } from './boss-health-checks';
 
-const GEMINI_API_KEY =
-  process.env.EXPO_PUBLIC_GEMINI_API_KEY ?? process.env.GEMINI_API_KEY;
 const SUPABASE_URL = process.env.EXPO_PUBLIC_SUPABASE_URL;
 const SUPABASE_ANON_KEY = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY;
 const CONTENT_STUDY_FUNCTION =
