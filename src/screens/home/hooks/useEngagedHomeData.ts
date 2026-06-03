@@ -7,7 +7,7 @@ import {
   useActiveChallenges,
   useClaimChallengeReward,
 } from '../../../features/challenges/hooks';
-import { useActiveIntervention } from '../../../features/ai-coach/hooks';
+import { useActiveIntervention } from '../../../features/ai-coach/hooks/useActiveIntervention';
 import { useToast } from '../../../shared/ui/components/Toast';
 import type { EngagedHomeData } from './home-data-types';
 

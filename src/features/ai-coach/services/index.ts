@@ -47,6 +47,6 @@ export * from './notification-permissions';
 // CoachService interface & singleton (moved from root service.ts)
 export {
   fetchActiveRecommendations,
-  CoachService,
   getCoachService,
 } from './coach-service';
+export type { CoachService } from './coach-service';

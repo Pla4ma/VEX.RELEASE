@@ -1,7 +1,7 @@
 import { resolveInterventionVisibility } from '../useInterventionVisibility';
 import type { HomeSurfaceMap } from '../../../../features/home-experience/surface-decision-schemas';
 import type { FirstWeekExperience } from '../../../../features/personalization/first-week-schemas';
-import type { ActiveIntervention } from '../../../../features/ai-coach/hooks';
+import type { ActiveIntervention } from '../../../../features/ai-coach/hooks/useActiveIntervention';
 import type { FeatureAccessMap } from '../../../../features/liveops-config/feature-access';
 
 export const defaultSurfaceMap: HomeSurfaceMap = {

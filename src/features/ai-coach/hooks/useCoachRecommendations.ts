@@ -5,9 +5,9 @@
  * Moved from root hooks.ts to resolve hooks.ts vs hooks/ coexistence.
  */
 
+import { useMemo } from 'react';
 import {
   useQuery,
-  useMemo,
   type QueryObserverResult,
   type RefetchOptions,
 } from '@tanstack/react-query';

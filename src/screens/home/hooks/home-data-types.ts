@@ -4,7 +4,7 @@ import type {
   ChallengeItem,
   SessionListItem,
 } from '../../../features/home-spine/components';
-import type { ActiveIntervention } from '../../../features/ai-coach/hooks';
+import type { ActiveIntervention } from '../../../features/ai-coach/hooks/useActiveIntervention';
 import type { ToastOptions } from '../../../shared/ui/components/Toast';
 
 export interface BaseHomeData {

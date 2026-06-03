@@ -119,6 +119,6 @@ export {
 // (moved from this file to services/coach-service.ts for clean separation)
 export {
   fetchActiveRecommendations,
-  CoachService,
   getCoachService,
 } from './services/coach-service';
+export type { CoachService } from './services/coach-service';

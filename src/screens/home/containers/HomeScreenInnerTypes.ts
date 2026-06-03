@@ -3,7 +3,7 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { ExtendedRootStackParams } from '../../../navigation/types';
 import type { HomeController } from '../hooks/home-controller-types';
 import type { HomeViewModel } from '../hooks/home-view-model';
-import type { ActiveIntervention } from '../../../features/ai-coach/hooks';
+import type { ActiveIntervention } from '../../../features/ai-coach/hooks/useActiveIntervention';
 import type {
   ChallengeItem,
   SessionListItem,

@@ -6,7 +6,7 @@
 
 import type { CompanionMood } from '../../features/companion/types';
 import type { SessionHistoryEntry } from '../../session/types';
-import type { ActiveIntervention } from '../../features/ai-coach/hooks';
+import type { ActiveIntervention } from '../../features/ai-coach/hooks/useActiveIntervention';
 import { resolveSessionMode } from '../../session/modes';
 import type { SessionStackParams } from '../../navigation/types';
 

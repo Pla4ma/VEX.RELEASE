@@ -1,7 +1,7 @@
 import { useMemo, useRef } from 'react';
 import { useActiveChallenges } from '../../../features/challenges/hooks';
 import { useSavedTomorrowPreview } from '../../../features/home-spine/hooks';
-import { useActiveIntervention } from '../../../features/ai-coach/hooks';
+import { useActiveIntervention } from '../../../features/ai-coach/hooks/useActiveIntervention';
 import { useNotificationBadge } from '../../../features/notifications/components/NotificationBadge';
 import { useToast } from '../../../shared/ui/components/Toast';
 import type { HomeController } from './home-controller-types';

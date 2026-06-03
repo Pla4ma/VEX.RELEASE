@@ -10,4 +10,44 @@
 
 export { COACH_QUERY_KEYS } from './constants';
 
-export * from './hooks';
+export {
+  useCoachPersona,
+  useCoachPersonas,
+  useCoachUIState,
+  useCoachUIActions,
+  useHasDismissedMessage,
+} from './hooks/useCoachPersona';
+export { useCoachState, type UseCoachStateResult } from './hooks/useCoachState';
+export { useNetworkStatus, type NetworkStatus } from './hooks/useNetworkStatus';
+export {
+  useCoachMessages,
+  type UseCoachMessagesResult,
+} from './hooks/useCoachMessages';
+export {
+  useCoachRecommendation,
+  useCoachHomeRecommendation,
+  type UseCoachRecommendationReturn,
+} from './hooks/useCoachRecommendation';
+export {
+  useCreateRecommendation,
+  useUpdateRecommendationStatus,
+  type SessionRecommendation,
+} from './hooks/useRecommendationMutations';
+export {
+  useCoachMemories,
+  useCreateCoachMemory,
+  type UseCoachMemoriesResult,
+} from './hooks/useMemories';
+export {
+  useCoachRecommendations,
+  useActiveCoachRecommendations,
+  type ActiveCoachRecommendationsResult,
+} from './hooks/useCoachRecommendations';
+export {
+  useCoachScreenState,
+  useAskCoachQuestionMutation,
+} from './hooks/useCoachScreen';
+export {
+  useActiveIntervention,
+  type ActiveIntervention,
+} from './hooks/useActiveIntervention';
