@@ -36,16 +36,23 @@ type SummaryExtraContext = CoachExtraContext;
 export async function sendAIRequest(request: AIRequest): Promise<AIResponse> {
   const fallbackCategory =
     REQUEST_TYPE_TO_CATEGORY[request.requestType] ?? 'coach_message';
+  // Context validated by Zod schemas upstream; bridge to invokeAIWithFallback's loose type
+  const context = request.context as Record<string, unknown>;
   const { response } = await invokeAIWithFallback(
     request.requestType,
     request.userId,
     request,
     fallbackCategory,
     'default',
-    request.context as Record<string, unknown>,
+    context,
   );
   return response;
 }
+
+/** Bridge from Zod-validated context to invokeAIWithFallback's loose Record param. */
+type LooselyTypedContext = Record<string, unknown>;
+const asLooselyTypedContext = (ctx: unknown): LooselyTypedContext =>
+  ctx as LooselyTypedContext;
 
 export async function generateCoachMessage(
   request: Omit<GenerateCoachMessageRequest, 'requestType'> & {
@@ -64,7 +71,7 @@ export async function generateCoachMessage(
     body,
     'coach_message',
     category,
-    validated.context as Record<string, unknown>,
+    asLooselyTypedContext(validated.context),
   );
   return response as GenerateCoachMessageResponse;
 }
@@ -85,7 +92,7 @@ export async function generateSessionSummary(
     body,
     'session_summary',
     'default',
-    validated.context as Record<string, unknown>,
+    asLooselyTypedContext(validated.context),
   );
   return response as GenerateSessionSummaryResponse;
 }
@@ -94,8 +101,9 @@ export async function generateComebackPrompt(
   request: Omit<GenerateComebackPromptRequest, 'requestType'>,
 ): Promise<GenerateComebackPromptResponse> {
   const validated = buildComebackPromptRequest(request);
+  const comebackContext = asLooselyTypedContext(validated.context);
   const comebackDay = String(
-    (validated.context as Record<string, unknown>).comebackDay ?? '1',
+    comebackContext.comebackDay ?? '1',
   );
   const { response } = await invokeAIWithFallback(
     validated.requestType,
@@ -103,7 +111,7 @@ export async function generateComebackPrompt(
     validated,
     'comeback_prompt',
     `day${comebackDay}`,
-    validated.context as Record<string, unknown>,
+    comebackContext,
   );
   return response as GenerateComebackPromptResponse;
 }
@@ -112,8 +120,9 @@ export async function generateStreakRiskNudge(
   request: Omit<GenerateStreakRiskNudgeRequest, 'requestType'>,
 ): Promise<GenerateStreakRiskNudgeResponse> {
   const validated = buildStreakRiskNudgeRequest(request);
+  const riskContext = asLooselyTypedContext(validated.context);
   const riskLevel = String(
-    (validated.context as Record<string, unknown>).riskLevel ?? 'medium',
+    riskContext.riskLevel ?? 'medium',
   );
   const { response } = await invokeAIWithFallback(
     validated.requestType,
@@ -121,7 +130,7 @@ export async function generateStreakRiskNudge(
     validated,
     'streak_nudge',
     riskLevel,
-    validated.context as Record<string, unknown>,
+    riskContext,
   );
   return response as GenerateStreakRiskNudgeResponse;
 }
@@ -136,7 +145,7 @@ export async function generateWeeklyReflection(
     validated,
     'weekly_reflection',
     'default',
-    validated.context as Record<string, unknown>,
+    asLooselyTypedContext(validated.context),
   );
   return response as GenerateWeeklyReflectionResponse;
 }

@@ -19,14 +19,27 @@ export function buildRescueDeepLink(
   };
 }
 
+/** Deep link payload for rescue flows. */
+interface RescuePayload {
+  rescuePlanId?: unknown;
+  [key: string]: unknown;
+}
+
+/** Deep link object shape. */
+interface RescueDeepLink {
+  type?: unknown;
+  payload?: RescuePayload | null;
+  [key: string]: unknown;
+}
+
 export function isRescueDeepLinkValid(deepLink: unknown): boolean {
   if (!deepLink || typeof deepLink !== 'object') {return false;}
-  const link = deepLink as Record<string, unknown>;
+  const link = deepLink as RescueDeepLink;
   return (
     link.type === 'start_rescue' &&
     typeof link.payload === 'object' &&
     link.payload !== null &&
-    typeof (link.payload as Record<string, unknown>).rescuePlanId === 'string'
+    typeof link.payload.rescuePlanId === 'string'
   );
 }
 

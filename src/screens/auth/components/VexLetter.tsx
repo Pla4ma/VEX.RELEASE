@@ -46,7 +46,11 @@ export function VexLetter({
     transform: [{ translateY: ty.value }],
   }));
 
-  const fontWeight = weight as unknown as '300' | '400' | '500' | '600' | '700' | '800';
+  const ALLOWED_FONT_WEIGHTS = ['300', '400', '500', '600', '700', '800'] as const;
+  type FontWeight = typeof ALLOWED_FONT_WEIGHTS[number];
+  const fontWeight = (ALLOWED_FONT_WEIGHTS.includes(weight.value as FontWeight)
+    ? weight.value
+    : '600') as FontWeight;
 
   return (
     <Animated.View style={[{ marginHorizontal: 2 }, entryStyle]}>

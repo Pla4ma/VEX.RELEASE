@@ -95,7 +95,7 @@ export async function sendSupportMessage(
     category: 'POST_FAILURE',
     day: message.day,
     tone: message.tone,
-  } as Record<string, unknown>);
+  } satisfies Record<string, unknown>);
   try {
     await generateMessage({
       userId,

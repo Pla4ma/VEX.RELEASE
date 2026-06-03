@@ -30,11 +30,17 @@ const FUNERAL_COOLDOWN_MS = 7 * 24 * 60 * 60 * 1000;
 const STREAK_FUNERAL_LAST_SHOWN_KEY = 'streak_funeral_last_shown';
 const STREAK_MINIMUM_FOR_FUNERAL = 3;
 
+/** Safely cast a value that has already been verified as a non-null object. */
+type ObjectRecord = Record<string, unknown>;
+function asObjectRecord(value: unknown): ObjectRecord {
+  return value as ObjectRecord;
+}
+
 function isStreakFuneralEvent(value: unknown): value is StreakFuneralEvent {
   if (!value || typeof value !== 'object') {
     return false;
   }
-  const event = value as Record<string, unknown>;
+  const event = asObjectRecord(value);
   return (
     typeof event.userId === 'string' &&
     typeof event.previousStreak === 'number' &&

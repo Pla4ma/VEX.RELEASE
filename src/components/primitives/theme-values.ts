@@ -3,6 +3,13 @@ export type ThemeSpacing = Record<string, number>;
 
 export type ColorTree = { colors?: ThemeColors } & ThemeColors;
 
+/** Theme object shape accepted by resolveColorValue / resolveSpacingValue. */
+interface ThemeShape {
+  colors?: Record<string, unknown>;
+  spacing?: ThemeSpacing;
+  [key: string]: unknown;
+}
+
 export function resolveColorValue(value: unknown, theme: unknown): string | undefined {
   if (typeof value !== 'string') return undefined;
 
@@ -10,8 +17,8 @@ export function resolveColorValue(value: unknown, theme: unknown): string | unde
   const isLiteralColor = /^#|^rgba?\(|^hsla?\(|^hsva?\(|^transparent$/i.test(value);
   if (isLiteralColor) return value;
 
-  const themeObj = theme as Record<string, unknown> | null;
-  const colors = themeObj?.colors as Record<string, unknown> | undefined;
+  const themeObj = theme as ThemeShape | null;
+  const colors = themeObj?.colors;
   if (!colors) return value;
 
   // Theme path resolution (e.g. "text.primary", "semantic.vexCyan")
@@ -39,7 +46,7 @@ export function resolveColorValue(value: unknown, theme: unknown): string | unde
 
 export function resolveSpacingValue(value: unknown, theme: unknown): number | undefined {
   if (typeof value === 'number') {return value;}
-  const spacing = (theme as Record<string, unknown> | null)?.spacing as ThemeSpacing | undefined;
+  const spacing = (theme as ThemeShape | null)?.spacing;
   if (typeof spacing !== 'object' || spacing === null) {return undefined;}
   if (typeof value !== 'string') {return undefined;}
   const resolved = spacing[value as keyof ThemeSpacing];

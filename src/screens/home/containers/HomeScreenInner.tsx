@@ -18,6 +18,7 @@ import { useInterventionVisibility } from '../hooks/useInterventionVisibility';
 import { ModeNativeHome } from '../../../features/mode-native/components/ModeNativeHome';
 import type { HomeSurfaceMap } from '../../../features/home-experience/surface-decision-schemas';
 import type { ExtendedRootStackParams } from '../../../navigation/types';
+import type { ActiveStudyPlanData } from '../hooks/home-query-types';
 import type { HomeData } from '../hooks/useHomeData';
 import type { FeatureAccessMap } from '../../../features/liveops-config/feature-access';
 
@@ -129,7 +130,7 @@ export function HomeScreenInner({
       <ModeNativeHome
         lane={primaryLane}
         homeContext={{
-          hasActiveProject: !!(controller.activeStudyPlanQuery?.data as Record<string, unknown> | null),
+          hasActiveProject: !!(controller.activeStudyPlanQuery?.data as ActiveStudyPlanData | null),
           projectTitle: undefined,
           nextMove: undefined,
           recentTopic: undefined,

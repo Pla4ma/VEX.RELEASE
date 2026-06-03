@@ -71,7 +71,7 @@ export async function startPostFailureSupport(
     day: 1,
     streak_before_break: context.streakDaysBeforeBreak,
     personality_style: style,
-  } as Record<string, unknown>);
+  } satisfies Record<string, unknown>);
   await sendSupportMessage(userId, sequence.messages[0]!);
   await scheduleFutureMessages(sequence);
   return sequence;
@@ -90,7 +90,7 @@ export async function completePostFailureSupport(
 ): Promise<void> {
   capture(CoachEvents.COACH_MESSAGE_RECEIVED, {
     category: 'POST_FAILURE_COMPLETE',
-  } as Record<string, unknown>);
+  } satisfies Record<string, unknown>);
   debug.debug(`[Post-Failure Support] Completed for ${userId}`);
 }
 

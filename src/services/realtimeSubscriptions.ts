@@ -8,6 +8,19 @@ import {
   type BroadcastMessage,
 } from './realtimeShared';
 
+/** Shape of a broadcast payload from Supabase Presence/Broadcast. */
+interface BroadcastPayload {
+  senderId?: string;
+  timestamp?: number;
+  [key: string]: unknown;
+}
+
+/** Shape of a Supabase postgres_changes payload.new / payload.old row. */
+interface RealtimeRow {
+  id?: string;
+  [key: string]: unknown;
+}
+
 const pendingTxTimeoutIds = new Set<ReturnType<typeof setTimeout>>();
 
 export function cancelPendingBroadcastCleanups(): void {
@@ -23,12 +36,12 @@ function parseBroadcastPayload(
   const type = validTypes.includes(event as typeof validTypes[number])
     ? (event as BroadcastMessage['type'])
     : 'activity';
-  const payloadObj = rawPayload as Record<string, unknown> | null;
+  const payloadObj = rawPayload as BroadcastPayload | null;
   return {
     type,
     payload: rawPayload,
-    senderId: (payloadObj?.senderId as string) ?? '',
-    timestamp: (payloadObj?.timestamp as number) ?? Date.now(),
+    senderId: payloadObj?.senderId ?? '',
+    timestamp: payloadObj?.timestamp ?? Date.now(),
   };
 }
 
@@ -54,7 +67,7 @@ export async function broadcastActivity(
       type: 'broadcast',
       event: type,
       payload: {
-        ...(payload as Record<string, unknown>),
+        ...(payload as BroadcastPayload),
         senderId: getCurrentUserId(),
         timestamp: Date.now(),
       },
@@ -109,11 +122,11 @@ export async function subscribeToFeedChanges(
       },
       (payload) => {
         callback(payload);
-        const newRecord = payload.new as Record<string, unknown> | undefined;
+        const newRecord = payload.new as RealtimeRow | undefined;
         eventBus.publish('realtime:feed_update', {
           itemId:
-            (newRecord?.id as string) ||
-            ((payload.old as Record<string, unknown>)?.id as string),
+            newRecord?.id ||
+            ((payload.old as RealtimeRow)?.id ?? ''),
           event: payload.eventType as 'INSERT' | 'UPDATE' | 'DELETE',
           data: newRecord,
         });
@@ -145,7 +158,7 @@ export async function subscribeToSquadChanges(
       },
       (payload) => {
         callback(payload);
-        const newData = payload.new as Record<string, unknown> | undefined;
+        const newData = payload.new as RealtimeRow | undefined;
         eventBus.publish('realtime:squad_update', {
           squadId,
           event:

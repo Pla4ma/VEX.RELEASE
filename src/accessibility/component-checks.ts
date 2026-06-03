@@ -16,6 +16,12 @@ import {
   checkTouchTargets,
 } from './component-checks-extended';
 
+/** Minimal shape of a React Native style object for contrast checks. */
+interface StyleWithColors {
+  color?: unknown;
+  backgroundColor?: unknown;
+}
+
 function checkAccessibilityLabels(
   component: AuditableComponent,
   config: ComponentAccessibilityConfig,
@@ -96,10 +102,9 @@ function checkColorContrast(
   config: ComponentAccessibilityConfig,
 ): AuditAccessibilityIssue[] {
   const issues: AuditAccessibilityIssue[] = [];
-  const style = component.props?.style;
-  if (style && (style as Record<string, unknown>).color && (style as Record<string, unknown>).backgroundColor) {
-    const s = style as Record<string, unknown>;
-    const contrast = checkContrast(String(s.color), String(s.backgroundColor));
+  const style = component.props?.style as StyleWithColors | undefined;
+  if (style && style.color && style.backgroundColor) {
+    const contrast = checkContrast(String(style.color), String(style.backgroundColor));
     if (!contrast.passesAA) {
       issues.push({
         id: 'poor-contrast',

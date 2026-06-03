@@ -63,6 +63,11 @@ export async function fetchUserActiveChallenges(
   return (data ?? []).map((row) => UserChallengeSchema.parse(row));
 }
 
+/** Supabase joined row type for challenge detail queries. */
+interface JoinedChallengeRow {
+  [key: string]: unknown;
+}
+
 export async function fetchActiveChallengeDetails(
   userId: string,
 ): Promise<ChallengeDetail[]> {
@@ -78,9 +83,9 @@ export async function fetchActiveChallengeDetails(
     throw new RepositoryError('fetchActiveChallengeDetails', error);
   }
   return (data ?? []).map((row) =>
-    // Cast needed: Supabase joined result type doesn't match Record<string, unknown> exactly;
+    // Cast needed: Supabase joined result type doesn't match JoinedChallengeRow exactly;
     // Zod validates the shape inside mapJoinedChallenge
-    mapJoinedChallenge(row as Record<string, unknown>),
+    mapJoinedChallenge(row as JoinedChallengeRow),
   );
 }
 
@@ -100,9 +105,9 @@ export async function fetchCompletedChallengeDetails(
     throw new RepositoryError('fetchCompletedChallengeDetails', error);
   }
   return (data ?? []).map((row) =>
-    // Cast needed: Supabase joined result type doesn't match Record<string, unknown> exactly;
+    // Cast needed: Supabase joined result type doesn't match JoinedChallengeRow exactly;
     // Zod validates the shape inside mapJoinedChallenge
-    mapJoinedChallenge(row as Record<string, unknown>),
+    mapJoinedChallenge(row as JoinedChallengeRow),
   );
 }
 

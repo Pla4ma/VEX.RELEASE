@@ -158,10 +158,16 @@ export function serializeSessionStartEvent(
   return JSON.stringify({ ...event, timestamp: event.timestamp.toISOString() });
 }
 
+/** Shape of a serialized session start event after JSON.parse. */
+interface SerializedSessionEvent {
+  timestamp?: unknown;
+  [key: string]: unknown;
+}
+
 export function deserializeSessionStartEvent(
   data: string,
 ): SessionStartEventType {
-  const parsed = JSON.parse(data) as Record<string, unknown>;
+  const parsed = JSON.parse(data) as SerializedSessionEvent;
   const result: SessionStartEventType = {
     ...parsed,
     timestamp: new Date(String(parsed.timestamp ?? '')),

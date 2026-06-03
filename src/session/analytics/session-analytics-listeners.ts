@@ -9,6 +9,21 @@ type TrackFunction = (
   properties: Record<string, unknown>,
 ) => void;
 
+/** Shape of data.config from session:created events */
+interface SessionCreatedConfig {
+  duration?: number;
+  [key: string]: unknown;
+}
+
+/** Shape of data.summary from session:completed events */
+interface SessionCompletedSummary {
+  effectiveDuration?: number;
+  completionPercentage?: number;
+  xpEarned?: number;
+  coinsEarned?: number;
+  [key: string]: unknown;
+}
+
 export function setupAnalyticsEventListeners(
   userId: string,
   track: TrackFunction,
@@ -18,9 +33,9 @@ export function setupAnalyticsEventListeners(
 
   unsubs.push(eventBus.subscribe('session:created', (data) => {
     if (!data) { return; }
-    const configObj =
+    const configObj: SessionCreatedConfig =
       data.config && typeof data.config === 'object'
-        ? (data.config as Record<string, unknown>)
+        ? (data.config as SessionCreatedConfig)
         : {};
     if (typeof configObj.duration === 'number') {
       sessionDuration = configObj.duration;
@@ -51,9 +66,9 @@ export function setupAnalyticsEventListeners(
   unsubs.push(eventBus.subscribe('session:completed', (data) => {
     if (!data) { return; }
     if (getOrchestratorHandlesCompletion()) { return; }
-    const summary =
+    const summary: SessionCompletedSummary =
       data.summary && typeof data.summary === 'object'
-        ? (data.summary as Record<string, unknown>)
+        ? (data.summary as SessionCompletedSummary)
         : {};
     const durationSeconds =
       data.duration ||

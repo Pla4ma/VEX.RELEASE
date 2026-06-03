@@ -18,6 +18,7 @@ import type { HomeSurfaceMap } from '../../../features/home-experience/surface-d
 import type { FirstWeekExperience } from '../../../features/personalization/first-week-schemas';
 import type { VexExperience } from '../../../features/personalization/schemas';
 import type { useHomeData } from '../hooks/useHomeData';
+import type { StreakSummaryData } from '../hooks/home-query-types';
 import {
   staggeredEnterStyle,
   openCompanion,
@@ -119,7 +120,7 @@ export const HomeContent: React.FC<HomeContentProps> = ({
           currentDays={controller.currentStreak}
           hoursRemaining={streakHoursRemaining}
           riskLevel={
-            (controller.streakQuery.data as Record<string, unknown> | undefined)
+            (controller.streakQuery.data as StreakSummaryData | undefined)
               ?.riskLevel as
               | 'NONE'
               | 'LOW'
@@ -129,7 +130,7 @@ export const HomeContent: React.FC<HomeContentProps> = ({
               | undefined
           }
           longestStreak={
-            (controller.streakQuery.data as Record<string, unknown> | undefined)
+            (controller.streakQuery.data as StreakSummaryData | undefined)
               ?.longestDays as number | undefined
           }
           isLoading={controller.streakQuery.isLoading}

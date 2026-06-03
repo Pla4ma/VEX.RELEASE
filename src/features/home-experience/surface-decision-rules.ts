@@ -109,10 +109,8 @@ export function applyPostPlacementRules(
     parsed.hasActiveStudyPlan && isStudyUser ? 'secondary' : 'primary';
 
   // Coach/study spotlight conflict
-  const coachIsSpotlight =
-    (map as Record<string, string>).coach_presence === 'spotlight';
-  const studyIsSpotlight =
-    (map as Record<string, string>).study_layer === 'spotlight';
+  const coachIsSpotlight = map.coach_presence === 'spotlight';
+  const studyIsSpotlight = map.study_layer === 'spotlight';
   if (coachIsSpotlight && studyIsSpotlight) {
     map.study_layer = 'secondary';
   }
@@ -165,7 +163,7 @@ export function applyPostPlacementRules(
     map.study_layer = currentStudy !== 'hidden' ? 'blocked' : 'hidden';
   }
   if (degradedFeatures.includes('ai_coach_advanced')) {
-    const coachVal = (map as Record<string, string>).coach_presence ?? 'hidden';
+    const coachVal = map.coach_presence ?? 'hidden';
     if (coachVal !== 'hidden') {
       map.coach_presence =
         coachVal === 'spotlight'

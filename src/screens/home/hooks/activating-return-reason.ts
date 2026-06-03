@@ -5,6 +5,7 @@ import {
 import { buildHomeReturnReasonState } from '../../../features/home-spine/service';
 import type { HomeReturnReason } from './useHomeReturnReason';
 import type { NextBestAction } from '../../../features/progression';
+import type { RecommendationForReturnReason } from './home-query-types';
 
 interface ActivatingReturnReasonParams {
   shouldShowExpansionSystems: boolean;
@@ -38,9 +39,9 @@ export function buildActivatingReturnReason(
       ? {
           id: primaryRecommendation.id,
           reasoning:
-            ((primaryRecommendation as Record<string, unknown>)
+            ((primaryRecommendation as RecommendationForReturnReason)
               .reasoning as string) ??
-            ((primaryRecommendation as Record<string, unknown>)
+            ((primaryRecommendation as RecommendationForReturnReason)
               .reason as string) ??
             '',
           suggestedDifficulty:

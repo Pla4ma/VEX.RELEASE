@@ -113,7 +113,7 @@ export async function updateStreakEnhanced(
   const queueEntry: OfflineQueueEntryInput = {
     operation: 'UPDATE',
     feature: 'streaks',
-    payload: { userId, updates } as Record<string, unknown>,
+    payload: { userId, updates } as { userId: string; updates: Partial<Streak> },
     idempotencyKey: `streak:update:${userId}`,
     maxRetries: 5,
     priority: 'high',
@@ -140,7 +140,7 @@ export async function recordShieldUsageEnhanced(
   const shieldQueueEntry: OfflineQueueEntryInput = {
     operation: 'UPDATE',
     feature: 'streaks',
-    payload: { userId, shieldData } as Record<string, unknown>,
+    payload: { userId, shieldData } as { userId: string; shieldData: { usedAt: number; reason: string } },
     idempotencyKey: `shield:use:${userId}:${shieldData.usedAt}`,
     maxRetries: 5,
     priority: 'high',

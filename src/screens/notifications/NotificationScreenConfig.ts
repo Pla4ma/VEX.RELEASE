@@ -186,6 +186,6 @@ export function mapToNotificationAction(
   const mappedType = NOTIFICATION_TYPE_TO_SAFE_ACTION[type] ?? 'view_progress';
   return {
     type: mappedType,
-    payload: notification.actionParams as Record<string, unknown> | undefined,
+    payload: notification.actionParams,
   };
 }

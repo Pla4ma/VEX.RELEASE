@@ -55,8 +55,8 @@ export function validateSessionConfig(
         code: err.code,
         value: err.path.reduce<unknown>(
           (obj, key) =>
-            obj && typeof obj === "object"
-              ? (obj as Record<string, unknown>)[key]
+            obj && typeof obj === 'object'
+              ? (obj as Record<string, unknown>)[key as string]
               : undefined,
           config,
         ),

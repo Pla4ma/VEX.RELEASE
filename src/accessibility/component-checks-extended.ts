@@ -11,6 +11,14 @@ import type {
 } from './checks-types';
 import { EXPECTED_ROLES } from './checks-types';
 
+/** Minimal shape of a React Native style object for touch-target checks. */
+interface TouchTargetStyle {
+  width?: number;
+  height?: number;
+  minWidth?: number;
+  minHeight?: number;
+}
+
 export function checkMotionAccessibility(
   component: AuditableComponent,
   config: ComponentAccessibilityConfig,
@@ -63,11 +71,11 @@ export function checkTouchTargets(
 ): AuditAccessibilityIssue[] {
   const issues: AuditAccessibilityIssue[] = [];
   if (component.props?.style) {
-    const style = component.props.style as Record<string, unknown>;
-    const width = style.width as number | undefined;
-    const height = style.height as number | undefined;
-    const minHeight = style.minHeight as number | undefined;
-    const minWidth = style.minWidth as number | undefined;
+    const style = component.props.style as TouchTargetStyle;
+    const width = style.width;
+    const height = style.height;
+    const minHeight = style.minHeight;
+    const minWidth = style.minWidth;
     const targetWidth = width || minWidth || 0;
     const targetHeight = height || minHeight || 0;
     if (targetWidth < 44 || targetHeight < 44) {

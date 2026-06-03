@@ -5,9 +5,10 @@
  * before Zod validation. Supports both camelCase and snake_case keys.
  */
 
+/** Safely cast an unknown value to a record if it's a non-null object. */
 export const asRecord = (value: unknown): Record<string, unknown> =>
   typeof value === 'object' && value !== null
-    ? (value as Record<string, unknown>)
+    ? (value as Readonly<Record<string, unknown>>)
     : {};
 
 export const readString = (

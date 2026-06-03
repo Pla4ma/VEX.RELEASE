@@ -68,12 +68,12 @@ export const HomeContentLower: React.FC<HomeContentLowerProps> = ({
 
   const isNewOrActivating = stage === 'ACTIVATING' || stage === 'NEW_USER';
   const showFocusScore =
-    (sm as Record<string, string>).focus_score !== 'hidden' &&
-    (sm as Record<string, string>).focus_score !== 'blocked';
+    sm.focus_score !== 'hidden' &&
+    sm.focus_score !== 'blocked';
   const canOpenProgressDetail =
-    (sm as Record<string, string>).progress_detail !== 'hidden' &&
-    (sm as Record<string, string>).progress_detail !== 'blocked' &&
-    (sm as Record<string, string>).progress_detail !== 'tiny_tease';
+    sm.progress_detail !== 'hidden' &&
+    sm.progress_detail !== 'blocked' &&
+    sm.progress_detail !== 'tiny_tease';
   const handleFocusScorePress = (): void => {
     if (isNewOrActivating || !canOpenProgressDetail) {return;}
     navigation.navigate('FocusScoreDashboard');

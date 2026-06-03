@@ -49,11 +49,11 @@ export function sanitizeLLMContext(
         typeof item === 'string'
           ? sanitizeForLLM(item)
           : typeof item === 'object' && item !== null
-            ? sanitizeLLMContext(item as Record<string, unknown>)
+            ? sanitizeLLMContext(item as Readonly<Record<string, unknown>>)
             : item,
       );
     } else if (typeof value === 'object' && value !== null) {
-      sanitized[key] = sanitizeLLMContext(value as Record<string, unknown>);
+      sanitized[key] = sanitizeLLMContext(value as Readonly<Record<string, unknown>>);
     } else {
       sanitized[key] = value;
     }
