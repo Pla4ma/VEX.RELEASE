@@ -23,7 +23,7 @@ export const rateLimitCleanupJob = job({
       const { createClient } = await import('@supabase/supabase-js');
       const supabase = createClient(
         process.env.SUPABASE_URL!,
-        process.env.SUPABASE_SERVICE_KEY!,
+        process.env.SUPABASE_SERVICE_ROLE_KEY!,
       );
       const { data, error } = await supabase.rpc('cleanup_rate_limit_buckets', {
         p_max_age_hours: MAX_BUCKET_AGE_HOURS,
