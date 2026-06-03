@@ -11,6 +11,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useTheme } from '../../theme';
+import { OfflineBanner } from '../../shared/ui/components/OfflineBanner';
 
 interface AppScreenProps {
   children: ReactNode;
@@ -67,6 +68,7 @@ export function AppScreen({
         style={{ height: 320, left: 0, position: 'absolute', right: 0, top: 0 }}
       />
       {body}
+      <OfflineBanner />
     </View>
   );
 

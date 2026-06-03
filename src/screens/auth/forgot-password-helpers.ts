@@ -1,5 +1,5 @@
 import { forgotPasswordSchema } from './schemas';
-import { resetPassword } from '../../services/supabaseAuth';
+import { resetPassword } from '../../features/auth/service';
 import { captureException } from '../../config/sentry';
 
 export interface ForgotPasswordResult {

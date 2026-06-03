@@ -167,9 +167,9 @@ const RawGambleSchema = z.object({
   streak_days_at_risk: z.number(),
   started_at: z.string(),
   session_id: z.string(),
-  status: z.string(),
-  required_grade: z.string(),
-  actual_grade: z.string().nullable().optional(),
+  status: z.enum(['ACTIVE', 'WON', 'LOST']),
+  required_grade: z.enum(['S', 'A', 'B']),
+  actual_grade: z.enum(['S', 'A', 'B']).nullable().optional(),
   bonus_xp_if_won: z.number(),
   settled_at: z.string().nullable().optional(),
 });
@@ -190,7 +190,7 @@ function dbToInsurance(row: unknown): StreakInsurance {
 
 function dbToGamble(row: unknown): StreakGamble {
   const r = RawGambleSchema.parse(row);
-  return { id: r.id, userId: r.user_id, streakDaysAtRisk: r.streak_days_at_risk, startedAt: new Date(r.started_at).getTime(), sessionId: r.session_id, status: r.status as StreakGamble['status'], requiredGrade: r.required_grade as 'S' | 'A' | 'B', actualGrade: r.actual_grade ?? undefined, bonusXpIfWon: r.bonus_xp_if_won, settledAt: r.settled_at ? new Date(r.settled_at).getTime() : undefined };
+  return { id: r.id, userId: r.user_id, streakDaysAtRisk: r.streak_days_at_risk, startedAt: new Date(r.started_at).getTime(), sessionId: r.session_id, status: r.status, requiredGrade: r.required_grade, actualGrade: r.actual_grade ?? undefined, bonusXpIfWon: r.bonus_xp_if_won, settledAt: r.settled_at ? new Date(r.settled_at).getTime() : undefined };
 }
 
 function dbToToken(row: unknown): ComebackToken {

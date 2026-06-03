@@ -122,7 +122,7 @@ export async function executeRecoveryAction(
         try {
           await context.retryCallback();
           return true;
-        } catch (error) {
+        } catch (error: unknown) {
           captureSilentFailure(error, {
             feature: 'content-study',
             operation: 'ui-fallback',
@@ -137,7 +137,7 @@ export async function executeRecoveryAction(
         try {
           await context.refreshCallback();
           return true;
-        } catch (error) {
+        } catch (error: unknown) {
           captureSilentFailure(error, {
             feature: 'content-study',
             operation: 'ui-fallback',

@@ -7,12 +7,7 @@ import {
   getSecureStorage,
   SecureStorageKeys,
 } from '../persistence/SecureStorage';
-import {
-  getCurrentUser,
-  signInWithEmail,
-  signOut,
-  signUpWithEmail,
-} from '../services/supabaseAuth';
+import * as authService from '../features/auth/service';
 import type { User } from '../types/models';
 import { createDebugger } from '../utils/debug';
 import {
@@ -79,7 +74,7 @@ export function createAuthActions(set: AuthStateSetter): AuthActions {
           state.isLoading = true;
           state.error = null;
         });
-        const { user, error } = await signInWithEmail(email, password);
+        const { user, error } = await authService.signIn({ email, password });
         if (error || !user) {
           set((state) => {
             state.isLoading = false;
@@ -107,9 +102,8 @@ export function createAuthActions(set: AuthStateSetter): AuthActions {
           state.isLoading = true;
           state.error = null;
         });
-        const { user, error } = await signUpWithEmail(
-          data.email,
-          data.password,
+        const { user, error } = await authService.signUp(
+          { email: data.email, password: data.password },
           { firstName: data.firstName, lastName: data.lastName },
         );
         if (error || !user) {
@@ -134,10 +128,11 @@ export function createAuthActions(set: AuthStateSetter): AuthActions {
       }
     },
     logout: async () => {
-      const { error: signOutError } = await signOut();
-      if (signOutError) {
+      try {
+        await authService.signOut();
+      } catch (signOutError) {
         debug.error('[AuthStore] Sign out failed:', signOutError);
-        captureException(signOutError, { tags: { feature: 'auth-logout' } });
+        captureException(toError(signOutError), { tags: { feature: 'auth-logout' } });
         return;
       }
       const secureStorage = getSecureStorage();
@@ -156,10 +151,7 @@ export function createAuthActions(set: AuthStateSetter): AuthActions {
       });
       try {
         await hydrateStoredProfile(set);
-        const { user, error: authError } = await getCurrentUser();
-        if (authError) {
-          throw authError;
-        }
+        const user = await authService.getCurrentUser();
         if (user) {
           setAuthenticatedUser(set, user);
           await saveUserProfile(user);

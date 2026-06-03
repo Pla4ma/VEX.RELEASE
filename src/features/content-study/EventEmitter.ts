@@ -1,5 +1,11 @@
 import { captureException } from '../../config/sentry';
 
+/**
+ * @deprecated Use the canonical EventBus in src/events/EventBus.ts for new code.
+ * Content-study events are bridged to EventBus automatically via
+ * initializeContentStudyEventIntegration() in event-hooks.ts.
+ * This class remains for backward compatibility with existing emitters.
+ */
 export class EventEmitter<Events extends object> {
   private listeners: Map<keyof Events, Array<(data: unknown) => void>> =
     new Map();

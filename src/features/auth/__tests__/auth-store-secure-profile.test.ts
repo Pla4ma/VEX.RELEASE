@@ -1,10 +1,5 @@
 import { useAuthStore } from '../../../store';
-import {
-  getCurrentUser,
-  signInWithEmail,
-  signOut,
-  signUpWithEmail,
-} from '../../../services/supabaseAuth';
+import * as authService from '../service';
 import { authTestUser } from './auth-test-user';
 
 const mockSecureStorage = {
@@ -13,11 +8,11 @@ const mockSecureStorage = {
   setItem: jest.fn<Promise<void>, [string, string]>(),
 };
 
-jest.mock('../../../services/supabaseAuth', () => ({
-  getCurrentUser: jest.fn(),
-  signInWithEmail: jest.fn(),
+jest.mock('../../service', () => ({
+  signIn: jest.fn(),
+  signUp: jest.fn(),
   signOut: jest.fn(),
-  signUpWithEmail: jest.fn(),
+  getCurrentUser: jest.fn(),
 }));
 jest.mock('../../../persistence/SecureStorage', () => ({
   getSecureStorage: () => mockSecureStorage,
@@ -64,7 +59,7 @@ describe('auth secure profile persistence', () => {
   });
 
   it('writes user profile to SecureStorage after login', async () => {
-    jest.mocked(signInWithEmail).mockResolvedValueOnce({
+    jest.mocked(authService.signIn).mockResolvedValueOnce({
       error: null,
       user: authTestUser,
     });
@@ -81,7 +76,7 @@ describe('auth secure profile persistence', () => {
 
   it('removes user profile from SecureStorage on logout', async () => {
     useAuthStore.setState({ isAuthenticated: true, user: authTestUser });
-    jest.mocked(signOut).mockResolvedValueOnce({ error: null });
+    jest.mocked(authService.signOut).mockResolvedValueOnce();
 
     await useAuthStore.getState().logout();
 
@@ -92,14 +87,14 @@ describe('auth secure profile persistence', () => {
 
   it('hydrates stored profile before checkAuth network validation', async () => {
     mockSecureStorage.getItem.mockResolvedValueOnce(JSON.stringify(authTestUser));
-    jest.mocked(getCurrentUser).mockImplementationOnce(() => {
+    jest.mocked(authService.getCurrentUser).mockImplementationOnce(() => {
       expect(useAuthStore.getState().user).toEqual(authTestUser);
       return Promise.resolve({ error: null, user: authTestUser });
     });
 
     await useAuthStore.getState().checkAuth();
 
-    expect(getCurrentUser).toHaveBeenCalledTimes(1);
+    expect(authService.getCurrentUser).toHaveBeenCalledTimes(1);
     expect(useAuthStore.getState().user).toEqual(authTestUser);
   });
 });

@@ -1,23 +1,16 @@
 import { useAuthStore } from '../index';
-import {
-  signInWithEmail,
-  signUpWithEmail,
-  signOut,
-  getCurrentUser,
-} from '../../services/supabaseAuth';
+import * as authService from '../../features/auth/service';
 import {
   captureException,
   clearSentryUser,
-  setSentryUser,
 } from '../../config/sentry';
 import { revenueCatService } from '../../shared/monetization/revenuecat-service';
 
-jest.mock('../../services/supabaseAuth', () => ({
-  getCurrentUser: jest.fn(),
-  onAuthStateChange: jest.fn(),
-  signInWithEmail: jest.fn(),
+jest.mock('../../features/auth/service', () => ({
+  signIn: jest.fn(),
+  signUp: jest.fn(),
   signOut: jest.fn(),
-  signUpWithEmail: jest.fn(),
+  getCurrentUser: jest.fn(),
 }));
 
 jest.mock('../../config/sentry', () => ({
@@ -92,7 +85,7 @@ describe('useAuthStore auth actions', () => {
 
   it('returns false instead of rejecting when sign in throws unexpectedly', async () => {
     jest
-      .mocked(signInWithEmail)
+      .mocked(authService.signIn)
       .mockRejectedValueOnce(new Error('native auth crash'));
 
     await expect(
@@ -108,7 +101,7 @@ describe('useAuthStore auth actions', () => {
 
   it('returns false instead of rejecting when sign up throws unexpectedly', async () => {
     jest
-      .mocked(signUpWithEmail)
+      .mocked(authService.signUp)
       .mockRejectedValueOnce(new Error('native signup crash'));
 
     await expect(
@@ -131,7 +124,7 @@ describe('useAuthStore auth actions', () => {
     it('preserves user state on network error during checkAuth', async () => {
       useAuthStore.setState({ user: mockUser, isAuthenticated: true });
       jest
-        .mocked(getCurrentUser)
+        .mocked(authService.getCurrentUser)
         .mockRejectedValueOnce(new Error('network timeout'));
 
       await useAuthStore.getState().checkAuth();
@@ -145,7 +138,7 @@ describe('useAuthStore auth actions', () => {
     it('clears user state on auth-specific error during checkAuth', async () => {
       useAuthStore.setState({ user: mockUser, isAuthenticated: true });
       jest
-        .mocked(getCurrentUser)
+        .mocked(authService.getCurrentUser)
         .mockRejectedValueOnce(new Error('Auth session missing'));
 
       await useAuthStore.getState().checkAuth();
@@ -161,8 +154,8 @@ describe('useAuthStore auth actions', () => {
     it('does not clear state when signOut fails', async () => {
       useAuthStore.setState({ user: mockUser, isAuthenticated: true });
       jest
-        .mocked(signOut)
-        .mockResolvedValueOnce({ error: new Error('sign out failed') });
+        .mocked(authService.signOut)
+        .mockRejectedValueOnce(new Error('sign out failed'));
 
       await useAuthStore.getState().logout();
 
@@ -173,7 +166,7 @@ describe('useAuthStore auth actions', () => {
 
     it('clears state when signOut succeeds', async () => {
       useAuthStore.setState({ user: mockUser, isAuthenticated: true });
-      jest.mocked(signOut).mockResolvedValueOnce({ error: null });
+      jest.mocked(authService.signOut).mockResolvedValueOnce();
       jest.mocked(revenueCatService.clearUserId).mockResolvedValue(true);
 
       await useAuthStore.getState().logout();

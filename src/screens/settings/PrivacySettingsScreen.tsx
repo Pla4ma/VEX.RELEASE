@@ -9,6 +9,7 @@ import type { SettingsStackParams } from '../../navigation';
 import { useDeleteAccount } from '../../features/account-deletion/hooks';
 import { useAuthStore, useUIStore } from '../../store/index';
 import { usePaywall } from '../../shared/monetization';
+import { captureSilentFailure } from '../../utils/silent-failure';
 import { PrivacyToggleRow } from './PrivacyToggleRow';
 import { TOGGLE_ROWS } from './privacy-toggle-data';
 import type { ToggleKey } from './privacy-toggle-data';
@@ -68,7 +69,8 @@ export const PrivacySettingsScreen: React.FC<Props> = () => {
           duration: 5000,
         });
       })
-      .catch(() => {
+      .catch((error: unknown) => {
+        captureSilentFailure(error, { feature: 'settings', operation: 'restorePurchases', type: 'network' });
         showToast({
           message:
             'Restore failed. Try again from the App Store account that purchased VEX.',

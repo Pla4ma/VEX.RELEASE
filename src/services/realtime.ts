@@ -12,6 +12,7 @@ import {
   type UserPresence,
   type SquadPresence,
 } from './realtimeShared';
+import { cancelPendingBroadcastCleanups } from './realtimeSubscriptions';
 export {
   type PresenceStatus,
   type UserPresence,
@@ -20,12 +21,12 @@ export {
 } from './realtimeShared';
 export {
   broadcastActivity,
+  cancelPendingBroadcastCleanups,
   subscribeToActivity,
   subscribeToFeedChanges,
   subscribeToSquadChanges,
   subscribeToGuildQuests,
 } from './realtimeSubscriptions';
-
 const debug = createDebugger('realtime');
 export async function initializePresence(userId: string): Promise<void> {
   setCurrentUserId(userId);
@@ -185,6 +186,7 @@ export async function cleanupPresence(): Promise<void> {
 }
 
 export async function cleanupRealtime(): Promise<void> {
+  cancelPendingBroadcastCleanups();
   for (const [name, channel] of activeChannels) {
     await channel.unsubscribe();
     debug.info('[Realtime] Unsubscribed from:', name);

@@ -16,6 +16,12 @@
         "EXPO_PUBLIC_ENABLE_EXPO_GO_SHIMS": "1"
       }
     },
+    "development-device": {
+      "extends": "development",
+      "ios": {
+        "resourceClass": "m-medium"
+      }
+    },
     "development-simulator": {
       "developmentClient": true,
       "distribution": "internal",
@@ -48,6 +54,19 @@
       "env": {
         "APP_ENV": "production",
         "EXPO_PUBLIC_ENVIRONMENT": "production"
+      }
+    }
+  },
+  "submit": {
+    "production": {
+      "ios": {
+        "appleId": "Set your Apple ID email",
+        "ascAppId": "Set your App Store Connect app ID",
+        "appleTeamId": "Set your Apple Team ID"
+      },
+      "android": {
+        "serviceAccountKeyPath": "path/to/google-service-account.json",
+        "track": "production"
       }
     }
   }

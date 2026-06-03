@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { captureSilentFailure } from '../../utils/silent-failure';
 import { fetchXpHistory } from './repository';
 import { fetchXpStats } from './repository/enhanced';
 
@@ -53,7 +54,10 @@ export async function getDailyProgress(userId: string): Promise<DailyProgress> {
       goalProgressPercent,
     });
   } catch (_error) {
-    const statsResult = await fetchXpStats(userId, 'day').catch(() => null);
+    const statsResult = await fetchXpStats(userId, 'day').catch((error: unknown) => {
+      captureSilentFailure(error, { feature: 'progression', operation: 'fetchXpStatsFallback', type: 'network' });
+      return null;
+    });
 
     if (statsResult?.error || !statsResult?.data) {
       return emptyDailyProgress(startOfDay);

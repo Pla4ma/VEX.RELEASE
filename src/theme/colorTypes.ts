@@ -56,6 +56,36 @@ type SemanticColors = {
   vexGold: string;
   vexGoldSoft: string;
   obsidian: string;
+  editorialGold: string;
+  editorialGoldBorder: string;
+  editorialGoldGlow: string;
+  editorialWarmText: string;
+  editorialWarmMuted: string;
+  editorialMuted: string;
+  editorialDeepBackground: string;
+  liquidNight: string;
+  liquidAbyss: string;
+  liquidMist: string;
+  liquidGlass: string;
+  liquidGlassStrong: string;
+  liquidGlassClear: string;
+  liquidPanel: string;
+  liquidSignal: string;
+  liquidGlassBorder: string;
+  liquidGlassHighlight: string;
+  liquidText: string;
+  liquidTextSoft: string;
+  liquidTextMuted: string;
+  liquidCyan: string;
+  liquidViolet: string;
+  liquidOrange: string;
+  liquidAmber: string;
+  liquidRose: string;
+  liquidLime: string;
+  liquidShadow: string;
+  liquidInput: string;
+  liquidInputBorder: string;
+  liquidButtonText: string;
 };
 
 export interface ColorPalette {

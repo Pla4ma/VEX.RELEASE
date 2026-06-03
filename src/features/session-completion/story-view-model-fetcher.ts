@@ -1,4 +1,5 @@
 import type { SessionSummary } from '../../session/types';
+import { captureSilentFailure } from '../../utils/silent-failure';
 import { getMemories } from '../companion/memory-repository';
 import { getRecentPromises } from '../companion-promise/repository';
 import { getContractForSession } from '../focus-contract/service';
@@ -19,7 +20,10 @@ export async function getPostSessionStoryViewModel(input: {
     ? await Promise.all([
         getMemories(input.userId),
         getRecentPromises(input.userId, 10),
-        getContractForSession(input.sessionId, input.userId).catch(() => null),
+        getContractForSession(input.sessionId, input.userId).catch((error: unknown) => {
+          captureSilentFailure(error, { feature: 'session-completion', operation: 'getContractForSession', type: 'network' });
+          return null;
+        }),
       ])
     : [[], [], null];
   return buildPostSessionStoryViewModel({

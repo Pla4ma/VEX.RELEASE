@@ -5,6 +5,7 @@ import { capture } from '../shared/analytics/analytics-service';
 import { AuthEvents } from '../shared/analytics/analytics-events';
 import { mapSupabaseUser } from './supabase-user-mapper';
 import { buildUserWithOnboarding } from './supabase-auth-helpers';
+import { captureSilentFailure } from '../utils/silent-failure';
 
 export async function signOut(
   userId?: string,
@@ -74,7 +75,10 @@ export function onAuthStateChange(callback: (user: User | null) => void): {
       const mapped = mapSupabaseUser(session.user);
       buildUserWithOnboarding(mapped)
         .then((resolvedUser) => callback(resolvedUser))
-        .catch(() => callback(mapped));
+        .catch((error: unknown) => {
+          captureSilentFailure(error, { feature: 'auth', operation: 'buildUserWithOnboarding', type: 'data' });
+          callback(mapped);
+        });
     } else {
       callback(null);
     }

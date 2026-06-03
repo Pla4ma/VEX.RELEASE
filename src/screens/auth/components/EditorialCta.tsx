@@ -12,6 +12,7 @@ import Animated, {
 import { LinearGradient } from 'expo-linear-gradient';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { springPresets } from '../../../theme/tokens/motion';
+import { useTheme } from '../../../theme';
 import { Text } from '../../../components/primitives/Text';
 import { Platform } from 'react-native';
 
@@ -49,6 +50,7 @@ export function EditorialCta({
   delay,
 }: EditorialCtaProps): React.JSX.Element {
   const { isReducedMotion } = useReducedMotion();
+  const { theme } = useTheme();
   const op = useSharedValue(isReducedMotion ? 1 : 0);
   const ty = useSharedValue(isReducedMotion ? 0 : 16);
   const breath = useSharedValue(0);
@@ -107,10 +109,10 @@ export function EditorialCta({
           style={{
             borderRadius: 18,
             overflow: 'hidden',
-            backgroundColor: '#1A1208',
+            backgroundColor: theme.colors.semantic.editorialDeepBackground,
             borderWidth: 1,
-            borderColor: 'rgba(224,184,112,0.45)',
-            shadowColor: '#E0B870',
+            borderColor: theme.colors.semantic.editorialGoldBorder,
+            shadowColor: theme.colors.semantic.editorialGold,
             shadowOffset: { width: 0, height: 8 },
             shadowOpacity: 0.30,
             shadowRadius: 28,
@@ -118,7 +120,7 @@ export function EditorialCta({
         >
           {/* Warm vertical wash */}
           <LinearGradient
-            colors={['#2A1F12', '#1A1208', '#15100A']}
+            colors={['#2A1F12', theme.colors.semantic.editorialDeepBackground, '#15100A']}
             locations={[0, 0.55, 1]}
             start={{ x: 0.5, y: 0 }}
             end={{ x: 0.5, y: 1 }}
@@ -163,7 +165,7 @@ export function EditorialCta({
             />
             <Text
               style={{
-                color: '#F2EAD9',
+                color: theme.colors.semantic.editorialWarmText,
                 fontSize: 14,
                 fontFamily: SERIF_STACK,
                 fontWeight: '600',

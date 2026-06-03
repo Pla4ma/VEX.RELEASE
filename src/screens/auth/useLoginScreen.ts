@@ -61,6 +61,7 @@ export function useLoginScreen(initialEmail: string) {
     handleLogin,
     introEntering,
     isLoading,
+    isReducedMotion,
     password,
     setErrors,
     setEmail,
