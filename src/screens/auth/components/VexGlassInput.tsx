@@ -2,161 +2,107 @@ import React, { useState } from 'react';
 import { TextInput, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
+  useAnimatedStyle, useSharedValue, withTiming,
 } from 'react-native-reanimated';
-
 import { SafeBlurView } from './SafeBlurView';
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
 
 type VexGlassInputProps = {
-  label: string;
-  value: string;
-  placeholder: string;
-  error?: string;
-  secureTextEntry?: boolean;
-  keyboardType?: 'email-address';
-  autoComplete?: 'email' | 'password';
-  returnKeyType?: 'next' | 'done';
-  onChangeText: (value: string) => void;
-  onSubmitEditing?: () => void;
+  label: string; value: string; placeholder: string; error?: string;
+  secureTextEntry?: boolean; keyboardType?: 'email-address';
+  autoComplete?: 'email' | 'password'; returnKeyType?: 'next' | 'done';
+  onChangeText: (value: string) => void; onSubmitEditing?: () => void;
 };
 
-const FOCUS_MS = 280;
-const R = '2xl' as const;
+const FOCUS_MS = 260;
 
 export function VexGlassInput({
-  label,
-  value,
-  placeholder,
-  error,
-  secureTextEntry,
-  keyboardType,
-  autoComplete,
-  returnKeyType,
-  onChangeText,
-  onSubmitEditing,
+  label, value, placeholder, error, secureTextEntry,
+  keyboardType, autoComplete, returnKeyType,
+  onChangeText, onSubmitEditing,
 }: VexGlassInputProps): React.JSX.Element {
   const { theme } = useTheme();
-  const r = theme.borderRadius[R];
-  const [isFocused, setIsFocused] = useState(false);
+  const r = theme.borderRadius['2xl'];
+  const [f, setF] = useState(false);
 
-  const focusProgress = useSharedValue(0);
-
+  const fp = useSharedValue(0);
   React.useEffect(() => {
-    focusProgress.value = withTiming(isFocused ? 1 : 0, { duration: FOCUS_MS });
-  }, [isFocused, focusProgress]);
+    fp.value = withTiming(f ? 1 : 0, { duration: FOCUS_MS });
+  }, [f, fp]);
 
-  const glowStyle = useAnimatedStyle(() => ({
-    shadowOpacity: isFocused ? 0.35 : 0,
-    shadowRadius: isFocused ? 18 : 0,
-    shadowColor: isFocused ? '#FF8A3D' : 'transparent',
-    shadowOffset: { width: 0, height: isFocused ? 4 : 0 },
+  const glow = useAnimatedStyle(() => ({
+    shadowOpacity: f ? 0.32 : 0,
+    shadowRadius: f ? 24 : 0,
   }));
 
-  const borderColor = error
-    ? '#F87171'
-    : isFocused
-      ? 'rgba(166, 107, 255, 0.70)'
-      : 'rgba(255, 255, 255, 0.06)';
+  const bc = error
+    ? 'rgba(255,107,122,0.50)'
+    : f ? 'rgba(166,107,255,0.60)' : 'rgba(255,255,255,0.08)';
 
   return (
     <View style={{ gap: theme.spacing[2] }}>
-      <Text
-        color="semantic.liquidTextMuted"
-        fontSize={12}
-        fontWeight="600"
-        letterSpacing={0.15}
-      >
-        {label}
-      </Text>
+      <Text color="semantic.liquidTextMuted" fontSize={12} fontWeight="600"
+        opacity={0.88} letterSpacing={0.35}>{label}</Text>
 
-      <Animated.View style={[glowStyle]}>
-        {/* Gradient rim on focus */}
-        {isFocused && (
-          <LinearGradient
-            colors={['rgba(166, 107, 255, 0.55)', 'rgba(255, 138, 61, 0.25)']}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            style={{
-              position: 'absolute',
-              top: -1,
-              left: -1,
-              right: -1,
-              bottom: -1,
-              borderRadius: r + 1,
-            }}
-          />
+      <Animated.View style={[glow, {
+        shadowColor: '#FF8A3D', shadowOffset: { width: 0, height: 6 },
+      }]}>
+        {f && (
+          <LinearGradient colors={['rgba(166,107,255,0.52)', 'rgba(255,138,61,0.22)']}
+            start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
+            style={{ position: 'absolute', top: -1, left: -1,
+              right: -1, bottom: -1, borderRadius: r + 1 }} />
+        )}
+        {error && (
+          <LinearGradient colors={['rgba(255,107,122,0.18)', 'rgba(255,107,122,0.04)']}
+            start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
+            style={{ position: 'absolute', top: -1, left: -1,
+              right: -1, bottom: -1, borderRadius: r + 1 }} />
         )}
 
-        {/* Smoked glass capsule */}
-        <View
-          style={{
-            borderRadius: r,
-            overflow: 'hidden',
-            margin: isFocused ? 1 : 0,
-            borderWidth: error ? 1 : isFocused ? 0 : 1,
-            borderColor,
-          }}
-        >
-          <SafeBlurView intensity={12} tint="dark" style={{ borderRadius: r, overflow: 'hidden' }}>
-            {/* Inner shadow — top */}
+        <View style={{
+          borderRadius: r, overflow: 'hidden',
+          margin: f || error ? 1 : 0,
+          borderWidth: !f && !error ? 1 : 0,
+          borderColor: bc,
+        }}>
+          <SafeBlurView intensity={16} tint="dark"
+            style={{ borderRadius: r, overflow: 'hidden' }}>
             <LinearGradient
-              colors={['rgba(0, 0, 0, 0.20)', 'rgba(0, 0, 0, 0)']}
-              locations={[0, 0.2]}
-              pointerEvents="none"
-              style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 20 }}
+              colors={['rgba(0,0,0,0.28)', 'rgba(0,0,0,0)']}
+              locations={[0, 0.13]} pointerEvents="none"
+              style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 24 }}
             />
-
-            {/* Specular rim — top */}
-            <View
-              pointerEvents="none"
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 16,
-                right: 16,
-                height: 0.5,
-                backgroundColor: 'rgba(255, 255, 255, 0.06)',
-              }}
-            />
-
+            <View pointerEvents="none" style={{
+              position: 'absolute', top: 0, left: 12, right: 12,
+              height: 0.5, backgroundColor: 'rgba(255,255,255,0.14)',
+            }} />
             <TextInput
               accessibilityHint={`Enter your VEX ${label.toLowerCase()}`}
               accessibilityLabel={label}
-              autoCapitalize="none"
-              autoComplete={autoComplete}
+              autoCapitalize="none" autoComplete={autoComplete}
               keyboardType={keyboardType}
-              onBlur={() => setIsFocused(false)}
-              onChangeText={onChangeText}
-              onFocus={() => setIsFocused(true)}
-              onSubmitEditing={onSubmitEditing}
+              onBlur={() => setF(false)} onChangeText={onChangeText}
+              onFocus={() => setF(true)} onSubmitEditing={onSubmitEditing}
               placeholder={placeholder}
-              placeholderTextColor="rgba(247, 245, 255, 0.20)"
+              placeholderTextColor="rgba(247,245,255,0.38)"
               returnKeyType={returnKeyType ?? (secureTextEntry ? 'done' : 'next')}
               secureTextEntry={secureTextEntry}
-              style={{
-                minHeight: 54,
-                color: '#F7F5FF',
-                fontSize: 16,
-                paddingHorizontal: theme.spacing[4],
-              }}
+              style={{ minHeight: 54, color: '#F7F5FF', fontSize: 16,
+                paddingHorizontal: theme.spacing[4] }}
               value={value}
             />
           </SafeBlurView>
         </View>
       </Animated.View>
 
-      <Text
-        color={error ? 'semantic.danger' : 'semantic.liquidGlassClear'}
-        fontSize={12}
-        lineHeight={18}
-        style={{ opacity: error ? 1 : 0, minHeight: 18 }}
-      >
-        {error ?? ' '}
-      </Text>
+      <View style={{ minHeight: 20, justifyContent: 'center' }}>
+        {error ? (
+          <Text fontSize={11} fontWeight="500" opacity={0.88} letterSpacing={0.2}
+            style={{ color: '#FF8B96' }}>{error}</Text>
+        ) : null}
+      </View>
     </View>
   );
 }
