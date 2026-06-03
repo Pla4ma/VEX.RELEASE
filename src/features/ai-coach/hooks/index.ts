@@ -30,3 +30,16 @@ export {
   useCreateCoachMemory,
   type UseCoachMemoriesResult,
 } from './useMemories';
+export {
+  useCoachRecommendations,
+  useActiveCoachRecommendations,
+  type ActiveCoachRecommendationsResult,
+} from './useCoachRecommendations';
+export {
+  useCoachScreenState,
+  useAskCoachQuestionMutation,
+} from './useCoachScreen';
+export {
+  useActiveIntervention,
+  type ActiveIntervention,
+} from './useActiveIntervention';

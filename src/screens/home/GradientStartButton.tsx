@@ -52,6 +52,10 @@ export function GradientStartButton({
     }
     return () => cancelAnimation(scale);
   }, [pulse, scale]);
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+  }));
+
   if (Platform.OS === 'web') {
     return (
       <View>
@@ -106,9 +110,6 @@ export function GradientStartButton({
     );
   }
 
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
-  }));
   return (
     <Animated.View style={animatedStyle}>
       <LinearGradient

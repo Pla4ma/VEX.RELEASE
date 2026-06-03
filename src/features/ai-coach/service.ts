@@ -10,17 +10,26 @@
  * - Analytics (effectiveness tracking)
  *
  * This file serves as the public API entry point, re-exporting from focused modules:
- * - message-generator.ts: Message generation and interventions
+ * - services/coach-service.ts: CoachService interface, singleton, fetchActiveRecommendations
+ * - services/CoachRecommendationService.ts: Phase 2.1 - Coach as Recommendation Engine
+ * - pipeline.ts: Message generation and interventions pipeline
+ * - intervention-service.ts: Phase 2.3 - New Interventions
+ * - message-generator.ts: Message actions and performance summaries
+ * - repository.ts: Direct database operations (read-only exports)
  * - session-analyzer.ts: Behavior modeling and session analysis
  * - persona-manager.ts: Coach state and persona management
  * - reminder-scheduler.ts: Reminders, comeback, and difficulty
- * - CoachRecommendationService.ts: Phase 2.1 - Coach as Recommendation Engine
  * - input-contract.ts: Phase 7 - Input validation and PII protection
  *
  * Cross-system integration via eventBus
+ *
+ * ARCHITECTURE NOTE: This file is the PUBLIC API barrel for the ai-coach feature.
+ * All implementation logic lives in either:
+ * - Root-level sibling modules (pipeline.ts, session-analyzer.ts, etc.)
+ * - services/ directory (sub-engines, sub-services, CoachService interface)
+ * Do NOT add implementation logic here — only re-exports.
  */
 
-// Re-export all public functions from focused modules
 // Phase 2.1 - Coach as Recommendation Engine
 export {
   CoachRecommendationService,
@@ -98,12 +107,6 @@ export {
 } from './reminder-scheduler';
 
 // Phase 7 - Input Contract Integration
-import {
-  validateCoachInput,
-  createFallbackInsight,
-  type CoachInputContract,
-} from './input-contract';
-
 export {
   validateCoachInput,
   createFallbackInsight,
@@ -112,45 +115,10 @@ export {
   type CoachInputContract,
 } from './input-contract';
 
-// Service getter for compatibility with hooks expecting service pattern
-import type { CoachRecommendation } from './services/CoachRecommendationService';
-import { fetchActiveRecommendations as fetchActiveRecommendationsRepository } from './repository';
-import type { SessionRecommendation } from './schemas';
-
-export async function fetchActiveRecommendations(
-  userId: string,
-): Promise<SessionRecommendation[]> {
-  return fetchActiveRecommendationsRepository(userId);
-}
-
-export interface CoachService {
-  createRecommendation: (
-    userId: string,
-    context: Record<string, unknown>,
-  ) => Promise<CoachRecommendation | null>;
-  generateMessage: (
-    type: string,
-    context: Record<string, unknown>,
-  ) => Promise<string>;
-  getSessionAdvice: (
-    sessionData: Record<string, unknown>,
-  ) => Promise<string | null>;
-  // Phase 7: Input validation methods
-  validateInput: (input: unknown) => CoachInputContract;
-  canCoach: (input: Partial<CoachInputContract>) => {
-    canCoach: boolean;
-    reason: string;
-  };
-}
-
-const coachServiceInstance: CoachService = {
-  createRecommendation: async () => null,
-  generateMessage: async () => '',
-  getSessionAdvice: async () => null,
-  validateInput: validateCoachInput,
-  canCoach: createFallbackInsight,
-};
-
-export function getCoachService(): CoachService {
-  return coachServiceInstance;
-}
+// CoachService interface, singleton, and fetchActiveRecommendations
+// (moved from this file to services/coach-service.ts for clean separation)
+export {
+  fetchActiveRecommendations,
+  CoachService,
+  getCoachService,
+} from './services/coach-service';
