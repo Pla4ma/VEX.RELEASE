@@ -1,12 +1,12 @@
 import { getDailyProgress } from '../service-daily-progress';
 import { fetchXpHistory } from '../repository';
-import { fetchXpStats } from '../repository/enhanced';
+import { fetchXpStats } from '../repository/progression-repository';
 
 jest.mock('../repository', () => ({
   fetchXpHistory: jest.fn(),
 }));
 
-jest.mock('../repository/enhanced', () => ({
+jest.mock('../repository/progression-repository', () => ({
   fetchXpStats: jest.fn(),
 }));
 

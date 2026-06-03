@@ -5,7 +5,7 @@ import {
   recordLevelUpEnhanced,
   recordXpEntryEnhanced,
   updateProgressionEnhanced,
-} from './repository/enhanced';
+} from './repository/progression-repository';
 import { createProgressionError } from './service-errors';
 import { handleFetchFailure } from './service-failures';
 import {

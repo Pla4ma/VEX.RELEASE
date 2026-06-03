@@ -1,5 +1,5 @@
 import { ProgressionSummarySchema, type Progression } from './schemas';
-import { fetchProgressionEnhanced } from './repository/enhanced';
+import { fetchProgressionEnhanced } from './repository/progression-repository';
 import { calculateProgressPercent } from './service-xp-calculations';
 
 export async function getProgressionEnhanced(

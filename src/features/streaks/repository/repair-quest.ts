@@ -8,7 +8,7 @@ import {
   executeWithFallback,
   StreaksRepositoryError,
   type RepositoryResult,
-} from './enhanced';
+} from './streak-repository';
 import { RepositoryErrorCode } from '../../../lib/repository/base';
 
 const supabase = getSupabaseClient();

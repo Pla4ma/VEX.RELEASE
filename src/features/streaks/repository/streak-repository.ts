@@ -191,10 +191,10 @@ export {
   saveRepairQuestEnhanced,
   updateRepairQuestEnhanced,
   fetchExpiredRepairQuestsEnhanced,
-} from './enhanced-repair-quest';
+} from './repair-quest';
 
 export {
   saveRiskStatusEnhanced,
   fetchRiskStatusEnhanced,
   fetchUsersWithActiveStreaksEnhanced,
-} from './enhanced-risk-status';
+} from './risk-status';
