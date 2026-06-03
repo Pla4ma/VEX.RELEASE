@@ -84,7 +84,7 @@ Output only the message content, no explanations.`,
 
 Period: {{period}}
 Sessions Completed: {{sessionCount}}
-Total Focus Hours: {{totalFocusHours}}
+Total Focus Minutes: {{totalFocusMinutes}}
 Average Quality: {{averageQuality}}/100
 Streak at Start: {{streakAtStart}} days
 Streak at End: {{streakAtEnd}} days
@@ -114,7 +114,7 @@ Generate one urgent, motivating sentence to save the streak.`,
 
 Sessions: {{sessionsCompleted}}
 Focus Hours: {{totalFocusHours}}
-Avg Quality: {{averageQuality}}/100
+Avg Quality: {{averageSessionQuality}}/100
 Streak Change: {{streakAtStart}} → {{streakAtEnd}}
 XP Earned: {{xpEarned}}
 Level Ups: {{levelUps}}

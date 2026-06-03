@@ -1,6 +1,5 @@
 import { useMemo } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { useQuery } from '@tanstack/react-query';
 import type { UseQueryResult } from '@tanstack/react-query';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useSessionUIStore } from '../../../store/session-state';
@@ -8,9 +7,9 @@ import { useHomeSpineModel } from '../../../features/home-spine/hooks';
 import {
   useCreateRecommendation,
   useUpdateRecommendationStatus,
+  useCoachRecommendations,
   type SessionRecommendation,
 } from '../../../features/ai-coach';
-import * as coachRepository from '../../../features/ai-coach/repository';
 import { getNextBestAction } from '../../../features/progression';
 import type { FeatureAccessResult } from '../../../features/liveops-config';
 import type { HomeFeatureRuntime } from './home-feature-runtime';
@@ -23,6 +22,7 @@ import { stubNavigationActions } from './home-controller-stubs';
 import { buildActivatingReturnReason } from './activating-return-reason';
 import { buildActivatingController, buildActivatingHomeReturnValue } from './activating-home-controller';
 import { useActivatingNavigation } from './useActivatingNavigation';
+import type { StreakSummaryData, ProgressionData } from './home-query-types';
 
 type Nav = NativeStackNavigationProp<ExtendedRootStackParams>;
 
@@ -60,10 +60,10 @@ export function useActivatingHomeModel(
     analytics, disclosure, navigation, userId,
   });
 
-  const streakData = streakQuery.data as Record<string, unknown> | undefined;
-  const progData = progressionQuery.data as Record<string, unknown> | undefined;
-  const currentStreak = (streakData?.currentDays as number | undefined) ?? 0;
-  const currentXp = (progData?.xp as number | undefined) ?? 0;
+  const streakData = streakQuery.data as StreakSummaryData | undefined;
+  const progData = progressionQuery.data as ProgressionData | undefined;
+  const currentStreak = streakData?.currentDays ?? 0;
+  const currentXp = progData?.xp ?? 0;
   const todayFocusMinutes = historyQuery.history.reduce(
     (sum: number, entry) => sum + getFocusedMinutesForToday(entry), 0,
   );
@@ -76,12 +76,10 @@ export function useActivatingHomeModel(
   const createRecommendation = useCreateRecommendation();
   const updateRecommendationStatus = useUpdateRecommendationStatus();
 
-  const recommendationsQuery = useQuery({
-    queryKey: ['coach', 'recommendations', userId],
-    queryFn: () => coachRepository.fetchActiveRecommendations(userId),
-    enabled: runtime.canQueryCoach && Boolean(userId) && !disclosure.isLoading,
-    staleTime: 1000 * 60 * 5,
-  });
+  const recommendationsQuery = useCoachRecommendations(
+    userId,
+    { enabled: runtime.canQueryCoach && !disclosure.isLoading },
+  );
 
   const primaryRecommendation = useMemo<SessionRecommendation | null>(
     () =>
@@ -122,7 +120,7 @@ export function useActivatingHomeModel(
   const homeSpine = useHomeSpineModel({
     currentStreak, homeHighlight,
     isAtRisk: Boolean(streakData?.isAtRisk), isFirstRun,
-    level: (progData?.level as number | undefined) ?? 1,
+    level: progData?.level ?? 1,
     progressPercent, progressXp: currentXp,
     returnReason: {
       body: returnReason.body, ctaLabel: returnReason.ctaLabel,

@@ -1,15 +1,14 @@
 import { useMemo } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { useQuery } from '@tanstack/react-query';
 import type { UseQueryResult } from '@tanstack/react-query';
 import { useSessionUIStore } from '../../../store/session-state';
 import { useHomeSpineModel } from '../../../features/home-spine/hooks';
 import {
   useCreateRecommendation,
   useUpdateRecommendationStatus,
+  useCoachRecommendations,
   type SessionRecommendation,
 } from '../../../features/ai-coach';
-import * as coachRepository from '../../../features/ai-coach/repository';
 import { useActiveStudyPlan } from '../../../features/content-study';
 import {
   buildLearningSessionParams,
@@ -34,6 +33,7 @@ import type { Nav, PowerUserModelInput } from './power-user-home-types';
 import { useNavigationCallbacks } from './power-user-home-navigation';
 import { buildReturnReason } from './power-user-home-return-reason';
 import { buildHomeController } from './power-user-home-controller';
+import type { StreakSummaryData, ProgressionData, ActiveStudyPlanData, ComebackStateData } from './home-query-types';
 
 export function usePowerUserHomeModel(
   input: PowerUserModelInput,
@@ -48,10 +48,10 @@ export function usePowerUserHomeModel(
   const completionSync = useSessionUIStore((s) => s.completionSync);
   const clearHomeHighlight = useSessionUIStore((s) => s.clearHomeHighlight);
 
-  const streakData = streakQuery.data as Record<string, unknown> | undefined;
-  const progData = progressionQuery.data as Record<string, unknown> | undefined;
-  const currentStreak = (streakData?.currentDays as number | undefined) ?? 0;
-  const currentXp = (progData?.xp as number | undefined) ?? 0;
+  const streakData = streakQuery.data as StreakSummaryData | undefined;
+  const progData = progressionQuery.data as ProgressionData | undefined;
+  const currentStreak = streakData?.currentDays ?? 0;
+  const currentXp = progData?.xp ?? 0;
   const todayFocusMinutes = historyQuery.history.reduce(
     (sum: number, entry) => sum + getFocusedMinutesForToday(entry), 0,
   );
@@ -66,12 +66,10 @@ export function usePowerUserHomeModel(
   const comebackQuery = useComebackState(runtime.canQueryComeback ? userId : null);
   const activeBossQuery = useActiveBoss(runtime.canQueryBoss ? userId || null : null);
 
-  const recommendationsQuery = useQuery({
-    queryKey: ['coach', 'recommendations', userId],
-    queryFn: () => coachRepository.fetchActiveRecommendations(userId),
-    enabled: runtime.canQueryCoach && Boolean(userId) && !disclosure.isLoading,
-    staleTime: 1000 * 60 * 5,
-  });
+  const recommendationsQuery = useCoachRecommendations(
+    userId,
+    { enabled: runtime.canQueryCoach && !disclosure.isLoading },
+  );
 
   const primaryRecommendation = useMemo<SessionRecommendation | null>(
     () => (recommendationsQuery.data ?? [])
@@ -106,8 +104,8 @@ export function usePowerUserHomeModel(
   const returnReason = useMemo(
     () =>
       buildReturnReason({
-        activeStudyPlanData: activeStudyPlanQuery.data as Record<string, unknown> | undefined,
-        comebackData: comebackQuery.data as Record<string, unknown> | undefined,
+        activeStudyPlanData: activeStudyPlanQuery.data as ActiveStudyPlanData | undefined,
+        comebackData: comebackQuery.data as ComebackStateData | undefined,
         runtime: runtime,
         nextBestAction: nextBestAction,
         primaryRecommendation: primaryRecommendation,
@@ -133,7 +131,7 @@ export function usePowerUserHomeModel(
 
   const homeSpine = useHomeSpineModel({
     currentStreak, homeHighlight, isAtRisk: Boolean(streakData?.isAtRisk),
-    isFirstRun, level: (progData?.level as number | undefined) ?? 1,
+    isFirstRun, level: progData?.level ?? 1,
     progressPercent, progressXp: currentXp,
     returnReason: {
       body: returnReason.body, ctaLabel: returnReason.ctaLabel,

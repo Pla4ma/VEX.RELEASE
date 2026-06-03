@@ -8,9 +8,15 @@
  */
 
 import { job } from '@trigger.dev/sdk';
+import { createClient } from '@supabase/supabase-js';
 import { JOB_IDS } from '../../shared/jobs/job-constants.ts';
 
 const MAX_BUCKET_AGE_HOURS = 2;
+
+const supabase = createClient(
+  process.env.SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!,
+);
 
 export const rateLimitCleanupJob = job({
   id: JOB_IDS.MAINTENANCE_RATE_LIMIT_CLEANUP,
@@ -20,11 +26,6 @@ export const rateLimitCleanupJob = job({
 
   run: async (_payload, io) => {
     const deleted = await io.runTask('cleanup-rate-limit-buckets', async () => {
-      const { createClient } = await import('@supabase/supabase-js');
-      const supabase = createClient(
-        process.env.SUPABASE_URL!,
-        process.env.SUPABASE_SERVICE_ROLE_KEY!,
-      );
       const { data, error } = await supabase.rpc('cleanup_rate_limit_buckets', {
         p_max_age_hours: MAX_BUCKET_AGE_HOURS,
       });

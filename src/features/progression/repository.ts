@@ -1,3 +1,4 @@
+import { z } from 'zod';
 import { getSupabaseClient } from '../../config/supabase';
 import {
   ProgressionSchema,
@@ -175,4 +176,46 @@ export async function fetchLevelUpHistory(
       xpAtLevel: row.xp_at_level,
     }),
   );
+}
+
+/**
+ * Atomic RPC: add XP and return level-up result.
+ * Moved from operation-atomic.ts — RPC calls belong in the repository layer.
+ */
+const AtomicXpRpcResultSchema = z.object({
+  success: z.boolean(),
+  duplicate: z.boolean(),
+  xp_added: z.number(),
+  new_total_xp: z.number(),
+  new_level: z.number(),
+  previous_level: z.number(),
+  level_up: z.boolean(),
+  rewards: z.array(z.string()),
+});
+
+export type AtomicXpRpcResult = z.infer<typeof AtomicXpRpcResultSchema>;
+
+export async function atomicAddXpRpc(params: {
+  userId: string;
+  amount: number;
+  source: string;
+  sessionId?: string | null;
+  idempotencyKey?: string | null;
+  metadata?: Record<string, unknown> | null;
+}): Promise<{ data: AtomicXpRpcResult | null; error: Error | null }> {
+  const sb = getSupabaseClient();
+  const { data, error } = await sb.rpc('atomic_add_xp', {
+    p_user_id: params.userId,
+    p_amount: params.amount,
+    p_source: params.source,
+    p_session_id: params.sessionId ?? null,
+    p_idempotency_key: params.idempotencyKey ?? null,
+    p_metadata: params.metadata
+      ? JSON.parse(JSON.stringify(params.metadata))
+      : null,
+  });
+  if (error) {
+    return { data: null, error: new RepositoryError('atomicAddXpRpc', error) };
+  }
+  return { data: AtomicXpRpcResultSchema.parse(data), error: null };
 }

@@ -6,10 +6,11 @@ import {
 import { buildHomeReturnReasonState } from '../../../features/home-spine/service';
 import type { HomeReturnReason } from './useHomeReturnReason';
 import type { NextBestAction } from '../../../features/progression';
+import type { ActiveStudyPlanData, ComebackStateData, RecommendationForReturnReason } from './home-query-types';
 
 interface ReturnReasonParams {
-  activeStudyPlanData: Record<string, unknown> | undefined;
-  comebackData: Record<string, unknown> | undefined;
+  activeStudyPlanData: ActiveStudyPlanData | undefined;
+  comebackData: ComebackStateData | undefined;
   shouldShowExpansionSystems: boolean;
   nextBestAction: NextBestAction;
   primaryRecommendation: SessionRecommendation | null;
@@ -39,26 +40,23 @@ export function buildEngagedReturnReason(
   const reasonState = buildHomeReturnReasonState({
     activeStudyPlan: activeStudyPlanData
       ? {
-          completedTasks: (activeStudyPlanData.completedTasks as number) ?? 0,
-          remainingMinutes:
-            (activeStudyPlanData.remainingMinutes as number) ?? 0,
-          title: (activeStudyPlanData.title as string) ?? '',
-          totalTasks: (activeStudyPlanData.totalTasks as number) ?? 0,
+          completedTasks: activeStudyPlanData.completedTasks,
+          remainingMinutes: activeStudyPlanData.remainingMinutes,
+          title: activeStudyPlanData.title,
+          totalTasks: activeStudyPlanData.totalTasks,
         }
       : null,
     canShowExpansionSystems: shouldShowExpansionSystems,
     comebackMessage: comebackData?.isComeback
-      ? ((comebackData.message as string) ?? null)
+      ? (comebackData.message ?? null)
       : null,
     nextBestAction,
     primaryRecommendation: primaryRecommendation
       ? {
           id: primaryRecommendation.id,
           reasoning:
-            ((primaryRecommendation as Record<string, unknown>)
-              .reasoning as string) ??
-            ((primaryRecommendation as Record<string, unknown>)
-              .reason as string) ??
+            (primaryRecommendation as RecommendationForReturnReason).reasoning ??
+            (primaryRecommendation as RecommendationForReturnReason).reason ??
             '',
           suggestedDifficulty:
             primaryRecommendation.suggestedDifficulty ?? 'NORMAL',

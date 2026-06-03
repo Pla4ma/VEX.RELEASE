@@ -58,7 +58,7 @@ export const DETERMINISTIC_MESSAGES: Record<string, Record<string, string>> = {
   },
   weekly_reflection: {
     default:
-      'This week: {sessionsCompleted} sessions, {totalFocusMinutes} min, {xpEarned} XP, {levelUps} level-ups.',
+      'This week: {sessionsCompleted} sessions, {totalFocusHours} hours, {xpEarned} XP, {levelUps} level-ups.',
   },
 };
 

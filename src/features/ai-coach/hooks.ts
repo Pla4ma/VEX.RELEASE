@@ -52,6 +52,18 @@ type ActiveCoachRecommendationsResult = {
   ) => Promise<QueryObserverResult<SessionRecommendation[], Error>>;
 };
 
+export function useCoachRecommendations(
+  userId: string | null,
+  options?: { enabled?: boolean },
+) {
+  return useQuery<SessionRecommendation[], Error>({
+    queryKey: COACH_QUERY_KEYS.recommendations(userId ?? ''),
+    queryFn: () => fetchActiveRecommendations(userId!),
+    enabled: !!userId && (options?.enabled ?? true),
+    staleTime: 5 * 60 * 1000,
+  });
+}
+
 export function useActiveCoachRecommendations(
   userId: string,
   options: ActiveCoachRecommendationsOptions | boolean = {},
