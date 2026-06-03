@@ -47,7 +47,7 @@ export const GenerateSessionSummaryRequestSchema = z.object({
   context: z.object({
     sessionCount: z.number(),
     totalFocusMinutes: z.number(),
-    averageQuality: z.number(),
+    averageSessionQuality: z.number(),
     streakDays: z.number(),
     xpEarned: z.number(),
     challengesCompleted: z.number(),
@@ -115,7 +115,7 @@ export const GenerateWeeklyReflectionRequestSchema = z.object({
   context: z.object({
     weekNumber: z.number(),
     sessionsCompleted: z.number(),
-    totalFocusHours: z.number(),
+    totalFocusMinutes: z.number(),
     averageSessionQuality: z.number(),
     streakAtStart: z.number(),
     streakAtEnd: z.number(),

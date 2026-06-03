@@ -164,7 +164,7 @@ function getFallbackContent(request: AIRequest): string {
       return persona === 'CALM_COACH' ? 'Keep breathing. Progress over perfection.' : persona === 'HARD_PUSHER' ? 'Push one more rep.' : 'Small step today. Big progress this week.';
     }
     case 'GENERATE_SESSION_SUMMARY': {
-      const quality = typeof ctx.averageQuality === 'number' ? ctx.averageQuality : 72;
+      const quality = typeof ctx.averageSessionQuality === 'number' ? ctx.averageSessionQuality : 72;
       const focus = typeof ctx.totalFocusMinutes === 'number' ? ctx.totalFocusMinutes : 90;
       const mins = Math.round(focus);
       return `You completed a solid session. Quality was ${quality}% across ${mins} minutes. Momentum is building.`;

@@ -106,7 +106,7 @@ export function getPersonalizedContext(
     preferredDuration: memory.mostUsedSessionDuration,
     favoriteSessionType: memory.favoriteSessionType,
     totalSessions: memory.totalSessionsCompleted,
-    totalFocusHours: Math.round(memory.totalFocusMinutes / 60),
+    totalFocusMinutes: memory.totalFocusMinutes,
     lastBossDefeated: memory.lastBossDefeated,
     comebackCount: memory.comebackCount,
     personalizedInsights: generateInsights(memory),

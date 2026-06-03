@@ -35,10 +35,10 @@ export function generatePersonalizedMessage(
       String(memory.totalSessionsCompleted),
     );
   }
-  if (personalized.includes('{{totalFocusHours}}')) {
+  if (personalized.includes('{{totalFocusMinutes}}')) {
     personalized = personalized.replace(
-      /\{\{totalFocusHours\}\}/g,
-      String(Math.round(memory.totalFocusMinutes / 60)),
+      /\{\{totalFocusMinutes\}\}/g,
+      String(memory.totalFocusMinutes),
     );
   }
   if (

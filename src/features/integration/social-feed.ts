@@ -166,7 +166,7 @@ export function initializeSocialFeedIntegration(): () => void {
               (sum, s) => sum + s.duration,
               0,
             ),
-            averageQuality:
+            averageSessionQuality:
               recentSessions.reduce((sum, s) => sum + s.qualityScore, 0) /
               recentSessions.length,
           },

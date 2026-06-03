@@ -6,7 +6,7 @@ import { getSessionRepository } from '../../session/repository/SessionRepository
 interface SummaryContext {
   sessionCount: number;
   totalFocusMinutes: number;
-  averageQuality: number;
+  averageSessionQuality: number;
   streakDays: number;
   xpEarned: number;
   challengesCompleted: number;
@@ -19,7 +19,7 @@ export async function generatePerformanceSummary(
   period: string;
   sessionsCompleted: number;
   totalFocusTime: number;
-  averageQuality: number;
+  averageSessionQuality: number;
   streakDays: number;
   xpEarned: number;
   coachMessage: string;
@@ -28,7 +28,7 @@ export async function generatePerformanceSummary(
   const sessionRepository = getSessionRepository(userId);
   const stats = await sessionRepository.getSessionStats();
   const summaries = await sessionRepository.getAllSummaries();
-  const averageQuality =
+  const averageSessionQuality =
     summaries.length > 0
       ? summaries.reduce((sum, summary) => sum + summary.focusQuality, 0) /
         summaries.length
@@ -41,7 +41,7 @@ export async function generatePerformanceSummary(
   const context: SummaryContext = {
     sessionCount: stats.completedSessions,
     totalFocusMinutes: Math.round(stats.totalFocusTime / 60),
-    averageQuality,
+    averageSessionQuality,
     streakDays: stats.currentStreak,
     xpEarned,
     challengesCompleted: 0,
@@ -58,7 +58,7 @@ export async function generatePerformanceSummary(
     period,
     sessionsCompleted: stats.completedSessions,
     totalFocusTime: stats.totalFocusTime,
-    averageQuality,
+    averageSessionQuality,
     streakDays: stats.currentStreak,
     xpEarned,
     coachMessage,
@@ -77,7 +77,7 @@ async function generateAISummaryMessage(
       context: {
         sessionCount: context.sessionCount,
         totalFocusMinutes: context.totalFocusMinutes,
-        averageQuality: Math.round(context.averageQuality),
+        averageSessionQuality: Math.round(context.averageSessionQuality),
         streakDays: context.streakDays,
         xpEarned: context.xpEarned,
         challengesCompleted: context.challengesCompleted,

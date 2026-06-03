@@ -66,18 +66,18 @@ export async function storeOptimalFocusTime(
   userId: string,
   dayOfWeek: string,
   hourRange: string,
-  averageQuality: number,
+  averageSessionQuality: number,
   sampleSize: number,
 ): Promise<CoachMemory> {
   return storeMemory(
     userId,
     'OPTIMAL_FOCUS_TIME',
     `Peak: ${dayOfWeek} ${hourRange}`,
-    `You average ${averageQuality.toFixed(0)}% quality during this time`,
+    `You average ${averageSessionQuality.toFixed(0)}% quality during this time`,
     {
       dayOfWeek,
       hourRange,
-      averageQuality,
+      averageSessionQuality,
       sampleSize,
       recordedAt: Date.now(),
     },

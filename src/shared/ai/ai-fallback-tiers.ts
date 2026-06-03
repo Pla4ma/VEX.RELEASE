@@ -38,7 +38,7 @@ export const DETERMINISTIC_MESSAGES: Record<string, Record<string, string>> = {
   },
   session_summary: {
     default:
-      'You completed {sessionCount} sessions this week totaling {totalFocusMinutes} minutes. Average quality: {averageQuality}/100.',
+      'You completed {sessionCount} sessions this week totaling {totalFocusMinutes} minutes. Average quality: {averageSessionQuality}/100.',
   },
   comeback_prompt: {
     day1: 'Day 1 of your comeback. {sessionsCompleted} sessions done — keep the momentum!',
@@ -58,7 +58,7 @@ export const DETERMINISTIC_MESSAGES: Record<string, Record<string, string>> = {
   },
   weekly_reflection: {
     default:
-      'This week: {sessionsCompleted} sessions, {totalFocusHours} hours, {xpEarned} XP, {levelUps} level-ups.',
+      'This week: {sessionsCompleted} sessions, {totalFocusMinutes} minutes, {xpEarned} XP, {levelUps} level-ups.',
   },
 };
 
