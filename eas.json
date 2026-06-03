@@ -60,12 +60,12 @@
   "submit": {
     "production": {
       "ios": {
-        "appleId": "Set your Apple ID email",
-        "ascAppId": "Set your App Store Connect app ID",
-        "appleTeamId": "Set your Apple Team ID"
+        "appleId": "${EAS_APPLE_ID}",
+        "ascAppId": "${EAS_ASC_APP_ID}",
+        "appleTeamId": "${EAS_APPLE_TEAM_ID}"
       },
       "android": {
-        "serviceAccountKeyPath": "path/to/google-service-account.json",
+        "serviceAccountKeyPath": "${EAS_GOOGLE_SERVICE_ACCOUNT_KEY_PATH}",
         "track": "production"
       }
     }
