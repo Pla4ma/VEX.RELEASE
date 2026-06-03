@@ -7,7 +7,7 @@ import Animated, {
   withDelay,
   withTiming,
 } from 'react-native-reanimated';
-import { Text } from '../../components/primitives/Text';
+import { Text } from '../../../components/primitives/Text';
 
 const EASE_EDITORIAL = Easing.bezier(0.22, 1, 0.36, 1);
 const SERIF_STACK = Platform.select({

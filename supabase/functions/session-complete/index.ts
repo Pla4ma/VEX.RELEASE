@@ -98,7 +98,6 @@ Deno.serve(async (request: Request) => {
   });
 
   if (error) {
-    console.error('complete_session RPC failed:', error);
     return respond({
       success: false,
       error: { code: 'SESSION_COMPLETION_FAILED', message: 'Session completion failed. Please try again.' },
