@@ -3,5 +3,6 @@
   "safety_branch": "safety/pre-work-20260603-035439",
   "base_commit": "2fb020aa33f31d6a6bd44667e28aaae0995730f2",
   "base_branch": "hermes-vex-work",
-  "status": "in_progress"
+  "status": "verified",
+  "verified_at": "2026-06-03T11:00:00Z"
 }
