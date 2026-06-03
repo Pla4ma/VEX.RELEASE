@@ -42,12 +42,12 @@ export const RootStackScreens: React.FC<RootStackScreensProps> = ({
     >
       {isAuthenticated ? (
         <>
-          <RootStackAuthenticatedRoutes
-            features={features}
-            hasCompletedOnboarding={hasCompletedOnboarding}
-            canShowHomePreview={canShowHomePreview}
-            Stack={Stack}
-          />
+          {RootStackAuthenticatedRoutes({
+            features,
+            hasCompletedOnboarding,
+            canShowHomePreview,
+            Stack,
+          })}
 
           <Stack.Screen
             name="SessionStack"

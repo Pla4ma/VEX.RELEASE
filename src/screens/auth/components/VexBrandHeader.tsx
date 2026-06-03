@@ -1,6 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-import Svg, { Defs, LinearGradient as SvgLG, Path, Rect, Stop, Text as SvgText } from 'react-native-svg';
+import Svg, { Defs, LinearGradient as SvgLG, Rect, Stop, Text as SvgText } from 'react-native-svg';
 import Animated, {
   useAnimatedStyle, useSharedValue, withRepeat, withTiming,
 } from 'react-native-reanimated';
@@ -116,7 +116,6 @@ export function VexBrandHeader(): React.JSX.Element {
 
       {/*===== CUSTOM GEOMETRIC WORDMARK =====*/}
       <View style={{ marginBottom: 10, alignItems: 'center' }}>
-        {/*Strong violet glow plate behind*/}
         <View pointerEvents="none" style={{
           position: 'absolute', top: -10, bottom: -10,
           alignSelf: 'center', width: 210, borderRadius: 9999,
@@ -124,7 +123,6 @@ export function VexBrandHeader(): React.JSX.Element {
           shadowColor: '#8B5CF6', shadowOffset: { width: 0, height: 0 },
           shadowOpacity: 0.70, shadowRadius: 76,
         }} />
-        {/*Orange warm bar below*/}
         <View pointerEvents="none" style={{
           position: 'absolute', bottom: -6, alignSelf: 'center',
           width: 120, height: 26, borderRadius: 9999,
@@ -135,66 +133,29 @@ export function VexBrandHeader(): React.JSX.Element {
 
         <Svg width={270} height={78} viewBox="0 0 270 78">
           <Defs>
-            {/*GLOW layer gradient — violet/orange rim light*/}
-            <SvgLG id="grGL" x1="0%" y1="0%" x2="100%" y2="100%">
+            <SvgLG id="vexGl" x1="0%" y1="0%" x2="100%" y2="100%">
               <Stop offset="0%" stopColor="#A66BFF" stopOpacity="0.65" />
               <Stop offset="50%" stopColor="#8B5CF6" stopOpacity="0.20" />
               <Stop offset="100%" stopColor="#FF8A3D" stopOpacity="0.40" />
             </SvgLG>
-            {/*MAIN text gradient — bright white top to warm silver bottom*/}
-            <SvgLG id="grTX" x1="0%" y1="0%" x2="0%" y2="100%">
+            <SvgLG id="vexTx" x1="0%" y1="0%" x2="0%" y2="100%">
               <Stop offset="0%" stopColor="#FFFFFF" stopOpacity="1" />
-              <Stop offset="35%" stopColor="#FFFFFF" stopOpacity="0.98" />
-              <Stop offset="70%" stopColor="#F5F0FF" stopOpacity="0.92" />
-              <Stop offset="100%" stopColor="#E8DFFA" stopOpacity="0.88" />
-            </SvgLG>
-            {/*Bracket gradient*/}
-            <SvgLG id="grBR" x1="0%" y1="0%" x2="100%" y2="100%">
-              <Stop offset="0%" stopColor="#A66BFF" stopOpacity="0.60" />
-              <Stop offset="50%" stopColor="#8B5CF6" stopOpacity="0.35" />
-              <Stop offset="100%" stopColor="#A66BFF" stopOpacity="0.60" />
+              <Stop offset="50%" stopColor="#FFFFFF" stopOpacity="0.98" />
+              <Stop offset="100%" stopColor="#E8DFFA" stopOpacity="0.90" />
             </SvgLG>
           </Defs>
 
-          {/*Glow layer — offset text with blur-like effect via lowered opacity violet/orange fill*/}
           <SvgText
-            x="135" y="54" textAnchor="middle"
-            fontSize="52" fontWeight="800" letterSpacing={5}
-            fill="url(#grGL)"
-            opacity="0.50"
-          />
+            x="135" y="55" textAnchor="middle"
+            fontSize={52} fontWeight="800" letterSpacing={5}
+            fontFamily="System"
+            fill="url(#vexTx)"
+            opacity={1}
+          >
+            VEX
+          </SvgText>
 
-          {/*Main VEX text — white gradient, bright top to warm bottom*/}
-          <SvgText
-            x="135" y="54" textAnchor="middle"
-            fontSize="52" fontWeight="800" letterSpacing={5}
-            fill="url(#grTX)"
-          />
-
-          {/*Top rule — violet*/}
           <Rect x="50" y="8" width="170" height="0.6" rx="0.3" fill="rgba(166,107,255,0.35)" />
-
-          {/*Left bracket — angular chevron*/}
-          <Path
-            d="M62 24 L48 40 L62 56"
-            stroke="url(#grBR)"
-            strokeWidth="2"
-            fill="none"
-            strokeLinecap="square"
-            strokeLinejoin="miter"
-          />
-
-          {/*Right bracket — angular chevron*/}
-          <Path
-            d="M208 24 L222 40 L208 56"
-            stroke="url(#grBR)"
-            strokeWidth="2"
-            fill="none"
-            strokeLinecap="square"
-            strokeLinejoin="miter"
-          />
-
-          {/*Bottom rule — orange*/}
           <Rect x="50" y="68" width="170" height="0.6" rx="0.3" fill="rgba(255,138,36,0.35)" />
         </Svg>
       </View>
