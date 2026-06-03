@@ -1,5 +1,5 @@
 import { task } from '@trigger.dev/sdk';
-import * as Sentry from '@sentry/node';
+import { Sentry, initJobSentry } from '../shared/sentry';
 import { z } from 'zod';
 import { createClient } from '@supabase/supabase-js';
 
@@ -9,10 +9,7 @@ const FinalizeSeasonInputSchema = z.object({
 
 const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
 
-Sentry.init({
-  dsn: process.env.SENTRY_DSN,
-  environment: process.env.NODE_ENV,
-});
+  initJobSentry();
 
 export const finalizeSeasonTask = task({
   id: 'season-finalize',

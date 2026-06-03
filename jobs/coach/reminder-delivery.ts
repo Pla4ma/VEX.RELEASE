@@ -5,7 +5,7 @@
  */
 
 import { job } from '@trigger.dev/sdk';
-import * as Sentry from '@sentry/node';
+import { Sentry, initJobSentry } from '../shared/sentry';
 import { getUserTimezone, isQuietHours, getOptimalReminderTimes } from '../../src/features/ai-coach/utils/timezone';
 import {
   fetchDueReminders,
@@ -18,10 +18,7 @@ import {
   scheduleReminder,
 } from './reminder-delivery-query';
 
-Sentry.init({
-  dsn: process.env.SENTRY_DSN,
-  environment: process.env.NODE_ENV,
-});
+  initJobSentry();
 
 export const coachReminderDeliveryJob = job({
   id: 'coach-reminder-delivery',

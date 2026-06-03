@@ -9,15 +9,12 @@
  */
 
 import { task } from '@trigger.dev/sdk/v3';
-import * as Sentry from '@sentry/node';
+import { Sentry, initJobSentry } from '../shared/sentry';
 import { getSupabaseClient } from '../../src/config/supabase';
 import type { WeekComparison } from './weekly-report-types';
 import { getWeekBoundaries, fetchWeeklyStats, compareWeeks } from './weekly-report-query';
 
-Sentry.init({
-  dsn: process.env.SENTRY_DSN,
-  environment: process.env.NODE_ENV,
-});
+  initJobSentry();
 
 function formatWeeklyReport(comparison: WeekComparison): {
   title: string;

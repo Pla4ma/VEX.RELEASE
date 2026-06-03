@@ -47,3 +47,5 @@ data/jest-results.json
 credentials.json
 state.json
 debug_logs/
+typecheck-errors.txt
+opencode.json

@@ -8,7 +8,6 @@
     "userInterfaceStyle": "dark",
     "icon": "./assets/icon.png",
     "sdkVersion": "56.0.0",
-    "githubUrl": "https://github.com/pla4ma/vex-app",
     "platforms": [
       "ios",
       "android",

@@ -9,7 +9,7 @@
  */
 
 import { task } from '@trigger.dev/sdk';
-import * as Sentry from '@sentry/node';
+import { Sentry, initJobSentry } from '../shared/sentry';
 import { z } from 'zod';
 import { createClient } from '@supabase/supabase-js';
 import { NotificationBatchInputSchema, NotificationBatchOutputSchema } from '../../shared/jobs/schemas.ts';
@@ -17,10 +17,7 @@ import { RETRY_CONFIGS, TIMEOUT_CONFIGS, BATCH_CONFIGS, JOB_IDS, RATE_LIMIT_CONF
 import type { NotificationBatchInput, NotificationBatchOutput } from '../../shared/jobs/schemas.ts';
 import { sendPushNotification } from './batch-send-helpers.ts';
 
-Sentry.init({
-  dsn: process.env.SENTRY_DSN,
-  environment: process.env.NODE_ENV,
-});
+  initJobSentry();
 
 // Create Supabase client
 const supabase = createClient(

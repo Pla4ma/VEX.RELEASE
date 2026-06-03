@@ -1,5 +1,5 @@
 import { task } from '@trigger.dev/sdk';
-import * as Sentry from '@sentry/node';
+import { Sentry, initJobSentry } from '../shared/sentry';
 import { createClient } from '@supabase/supabase-js';
 import { ChallengeRefreshInputSchema, ChallengeRefreshOutputSchema } from '../../shared/jobs/schemas.ts';
 import { JOB_IDS, SCHEDULE_CONFIGS } from '../../shared/jobs/job-constants.ts';
@@ -13,10 +13,7 @@ import {
   sendPushNotifications,
 } from './daily-refresh-query.ts';
 
-Sentry.init({
-  dsn: process.env.SENTRY_DSN,
-  environment: process.env.NODE_ENV,
-});
+  initJobSentry();
 
 const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
   auth: { persistSession: false },
