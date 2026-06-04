@@ -39,9 +39,9 @@ export const SettingsScreen = withScreenErrorBoundary(function _SettingsScreen({
     !isFeatureHidden('wagers');
 
   const handleThemeChange = (newMode: ThemeMode) => setMode(newMode);
-  const openPrivacyPolicy = () => Linking.openURL('https://vex.app/privacy');
-  const openTerms = () => Linking.openURL('https://vex.app/terms');
-  const openSupport = () => Linking.openURL('mailto:support@vex.app');
+  const openPrivacyPolicy = () => Linking.openURL('https://pla4ma.github.io/VEX.RELEASE/privacy');
+  const openTerms = () => Linking.openURL('https://pla4ma.github.io/VEX.RELEASE/terms');
+  const openSupport = () => Linking.openURL('https://pla4ma.github.io/VEX.RELEASE/support');
 
   const settingGroups = buildSettingsGroups({
     streakReminders, setStreakReminders: (v) => setPreference('streakReminders', v),

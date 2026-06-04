@@ -45,8 +45,8 @@ describe('APP_STORE_METADATA', () => {
   });
 
   it('should include support and privacy URLs', () => {
-    expect(APP_STORE_METADATA.supportUrl).toBe('https://vex.app/support');
-    expect(APP_STORE_METADATA.privacyPolicyUrl).toBe('https://vex.app/privacy');
+    expect(APP_STORE_METADATA.supportUrl).toBe('https://pla4ma.github.io/VEX.RELEASE/support');
+    expect(APP_STORE_METADATA.privacyPolicyUrl).toBe('https://pla4ma.github.io/VEX.RELEASE/privacy');
   });
 });
 

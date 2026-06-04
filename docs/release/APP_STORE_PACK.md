@@ -30,10 +30,10 @@ focus, productivity, study, deep work, project, planning, memory, flow
 6. **Premium durable intelligence** — Premium features overview: deep coach memory, calendar intelligence, memory console. Appears only when entitlements verified healthy.
 
 ## Support URL
-https://vex.app/support
+https://pla4ma.github.io/VEX.RELEASE/support
 
 ## Privacy Policy URL
-https://vex.app/privacy
+https://pla4ma.github.io/VEX.RELEASE/privacy
 
 ## Review Notes for App Reviewers
 - Reviewer access: create a sandbox reviewer account in Supabase Auth before upload and enter those credentials in App Store Connect Review Notes.

@@ -14,8 +14,8 @@ export const APP_METADATA = {
   copyright: `© ${new Date().getFullYear()} VEX Inc.`,
   supportEmail: 'support@vex.app',
   website: 'https://vex.app',
-  privacyPolicy: 'https://vex.app/privacy',
-  termsOfService: 'https://vex.app/terms',
+  privacyPolicy: 'https://pla4ma.github.io/VEX.RELEASE/privacy',
+  termsOfService: 'https://pla4ma.github.io/VEX.RELEASE/terms',
 } as const;
 export const APP_CONFIG: Record<AppEnvironment, AppConfig> = {
   development: {
