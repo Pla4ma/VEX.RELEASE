@@ -44,12 +44,13 @@ module.exports = {
     '^expo-status-bar$': '<rootDir>/src/__tests__/mocks/expo-status-bar.ts',
     '^react-native/Libraries/Animated/NativeAnimatedHelper$': '<rootDir>/src/__tests__/mocks/native-animated-helper.ts',
     '^@sentry/node$': '<rootDir>/src/__tests__/mocks/sentry-node.ts',
+    '^expo-crypto$': '<rootDir>/__mocks__/expo-crypto.js',
   },
   setupFiles: ['<rootDir>/src/__tests__/setupNativeBridge.js'],
   setupFilesAfterEnv: ['<rootDir>/src/__tests__/setupTests.ts'],
   transform: { '^.+\\.(mjs|js|jsx|ts|tsx)$': 'babel-jest' },
   transformIgnorePatterns: [
-    'node_modules/(?!((react-native|@react-native|@react-navigation|@gorhom|react-native-reanimated|react-native-gesture-handler|react-native-svg|styled-components|@tanstack|expo|expo-modules-core|@expo|expo-document-picker|msw|@mswjs|@open-draft|rettime|until-async|headers-polyfill|outvariant|strict-event-emitter|is-node-process|graphql|@revenuecat)/))',
+    'node_modules/(?!((react-native|@react-native|@react-navigation|@gorhom|react-native-reanimated|react-native-gesture-handler|react-native-svg|styled-components|@tanstack|expo|expo-modules-core|expo-crypto|@expo|expo-document-picker|msw|@mswjs|@open-draft|rettime|until-async|headers-polyfill|outvariant|strict-event-emitter|is-node-process|graphql|@revenuecat)/))',
   ],
   testMatch: [
     '<rootDir>/src/**/__tests__/**/*.test.ts',
