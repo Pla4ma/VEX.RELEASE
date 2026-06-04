@@ -49,6 +49,10 @@ function deriveGrade(finalScore: number): 'S' | 'A' | 'B' | 'C' | 'D' {
  */
 export function buildCompletionLedger(input: BuildLedgerInput): CompletionLedger {
   const summary: SessionSummary = SessionSummarySchema.parse(input.summary);
+  // idempotencyKey format: userId:sessionId
+  // - sessionId is cryptographically random (expo-crypto, see uuid.ts)
+  // - Server deduplicates on UNIQUE(idempotency_key) in session_completion_ledger
+  // - Retries with the same session ID are intentionally deduplicated (safe)
   const idempotencyKey = `${input.userId}:${input.sessionId}`;
   const grade = deriveGrade(summary.finalScore);
 

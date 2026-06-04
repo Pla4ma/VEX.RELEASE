@@ -1,5 +1,6 @@
 import { getSupabaseClient } from '../../config/supabase';
 import * as FileSystem from 'expo-file-system';
+import { getNetInfoAdapter } from '../../network/NetInfoAdapter';
 import type {
   ExtractContentRequest,
   GenerateStudyPlanRequest,
@@ -58,6 +59,13 @@ export async function uploadStudyFileRecord(
 ): Promise<string> {
   try {
     debug.info('Uploading study file: %s for user: %s', filename, userId);
+
+    // P2-15: Check connectivity before upload attempt
+    const netState = getNetInfoAdapter().getCurrentState();
+    if (!netState.isConnected) {
+      throw new Error('Upload requires an internet connection. Please connect and try again.');
+    }
+
     validateFileUri(fileUri);
     const scheme = fileUri.split(':', 1)[0]!.toLowerCase();
     if (scheme !== 'file' && scheme !== 'content' && scheme !== 'https') {
