@@ -1,0 +1,124 @@
+{
+  "thresholds": {
+    "achievements": 6,
+    "advanced_settings": 12,
+    "ai_coach_advanced": 8,
+    "ai_coach_basic": 0,
+    "battle_pass": null,
+    "boss_bounties": null,
+    "boss_tab": 7,
+    "challenges": 5,
+    "companion_detail": 3,
+    "content_study": 12,
+    "content_study_advanced": 18,
+    "economy_advanced": null,
+    "economy_basic": 8,
+    "focus_session": 0,
+    "focus_tab": 0,
+    "gems_prominent": null,
+    "home_tab": 0,
+    "inventory": null,
+    "memory_console": 3,
+    "premium_paywall": 40,
+    "profile_tab": 0,
+    "progress_view": 0,
+    "quiz_review_mode": 10,
+    "rankings": null,
+    "rivals": null,
+    "seasonal_features": null,
+    "shop": null,
+    "social_tab": null,
+    "squads": null,
+    "streak_insurance": null,
+    "wagers": null
+  },
+  "teaserStarts": {
+    "companion_detail": 2,
+    "challenges": 4,
+    "boss_tab": 5,
+    "ai_coach_advanced": 6,
+    "content_study": 8,
+    "quiz_review_mode": 9,
+    "memory_console": 2
+  },
+  "priorities": {
+    "companion_detail": 1,
+    "challenges": 2,
+    "content_study": 3,
+    "boss_tab": 4,
+    "ai_coach_advanced": 5,
+    "economy_basic": 6,
+    "quiz_review_mode": 7
+  },
+  "dependencies": {
+    "boss_tab": ["focus_session", "progress_view"],
+    "boss_bounties": ["boss_tab", "economy_basic", "inventory"],
+    "content_study": ["ai_coach_basic", "focus_session", "progress_view"],
+    "content_study_advanced": ["content_study", "ai_coach_advanced"],
+    "shop": ["economy_basic", "inventory", "premium_paywall"],
+    "battle_pass": ["seasonal_features", "economy_basic"],
+    "ai_coach_advanced": ["ai_coach_basic", "focus_session", "progress_view"],
+    "economy_advanced": ["economy_basic"],
+    "squads": ["social_tab", "focus_session"],
+    "rivals": ["rankings"],
+    "quiz_review_mode": ["content_study"],
+    "streak_insurance": ["economy_basic"],
+    "wagers": ["economy_basic", "boss_tab"],
+    "rankings": ["challenges", "progress_view"],
+    "gems_prominent": ["economy_advanced"],
+    "inventory": ["economy_basic"],
+    "seasonal_features": ["progress_view", "achievements"],
+    "social_tab": ["focus_session"],
+    "companion_detail": ["focus_session", "progress_view"]
+  },
+  "motivationProfiles": {
+    "boss_tab": {
+      "accelerate": ["game_like", "intense", "competitive"],
+      "accelerateOffset": 2,
+      "restrict": ["calm", "student"],
+      "restrictOffset": 8,
+      "restrictVisibility": true,
+      "restrictVisibilityMin": 20
+    },
+    "content_study": {
+      "accelerate": ["student", "creator"],
+      "accelerateOffset": 7,
+      "restrict": ["calm"],
+      "restrictOffset": 6
+    },
+    "content_study_advanced": {
+      "accelerate": ["student"],
+      "accelerateOffset": 6,
+      "restrict": ["calm"],
+      "restrictOffset": 10
+    },
+    "challenges": {
+      "accelerate": ["game_like", "intense", "competitive"],
+      "accelerateOffset": 2,
+      "restrict": ["calm"],
+      "restrictOffset": 5,
+      "restrictVisibility": true,
+      "restrictVisibilityMin": 8
+    },
+    "ai_coach_advanced": {
+      "accelerate": ["student", "worker", "coach_led", "intense"],
+      "accelerateOffset": 2,
+      "restrict": ["calm"],
+      "restrictOffset": 3
+    },
+    "economy_basic": {
+      "accelerate": ["game_like", "competitive"],
+      "accelerateOffset": 1,
+      "restrict": ["calm", "friendly"],
+      "restrictOffset": 2,
+      "restrictVisibility": true,
+      "restrictVisibilityMin": 12
+    },
+    "companion_detail": {
+      "accelerate": ["friendly", "calm", "student"],
+      "accelerateOffset": 1,
+      "restrict": ["intense"],
+      "restrictOffset": 1
+    }
+  }
+}

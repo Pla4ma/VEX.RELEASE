@@ -5,51 +5,13 @@ import { lightColors } from '@/theme/tokens/colors';
 
 import { Button } from '../../../components/primitives/Button';
 import { Text } from '../../../components/primitives/Text';
-import { Box } from '../../../components/primitives/Box';
 import type {
   HomePrimaryPriority,
   HomeStakes,
 } from '../../../features/home-spine/priority-schemas';
 import { useTheme } from '../../../theme';
 import { glow } from '../../../theme/tokens/elevation';
-
-function getHeroTitle(type: HomePrimaryPriority['type']): string {
-  switch (type) {
-    case 'STREAK_CRITICAL':
-      return 'Your streak needs one clean save';
-    case 'COMPANION_PROMISE':
-      return 'Keep the promise alive today';
-    case 'PROMISE_RECOVERY':
-      return 'Start small and rebuild the thread';
-    case 'STREAK_AT_RISK':
-      return 'Protect the habit before it slips';
-    case 'RECOMMENDED_SESSION':
-      return 'VEX already has the next session ready';
-    case 'CHALLENGE_NEAR_DONE':
-      return 'You are close enough to finish this today';
-    case 'BOSS_ACTIVE':
-      return 'The battle is already in motion';
-    case 'DEFAULT_SESSION':
-      return 'VEX changes based on how you work';
-  }
-}
-
-function getHeroEyebrow(type: HomePrimaryPriority['type']): string {
-  switch (type) {
-    case 'COMPANION_PROMISE':
-    case 'PROMISE_RECOVERY':
-      return 'Companion thread';
-    case 'CHALLENGE_NEAR_DONE':
-      return 'Challenge';
-    case 'BOSS_ACTIVE':
-      return 'Boss run';
-    case 'STREAK_AT_RISK':
-    case 'STREAK_CRITICAL':
-      return 'Habit protection';
-    default:
-      return 'Right next session';
-  }
-}
+import { getHeroTitle, getHeroEyebrow } from './HomeHeroCard.helpers';
 
 interface HomeHeroCardProps {
   isLoading: boolean;
@@ -134,11 +96,7 @@ export function HomeHeroCard({
         <Text variant="h3" color={theme.colors.text.inverse}>
           {getHeroTitle(priority.type)}
         </Text>
-        <Text
-          variant="body"
-          color={theme.colors.text.inverse}
-          style={{ opacity: 0.72 }}
-        >
+        <Text variant="body" color={theme.colors.text.inverse} style={{ opacity: 0.72 }}>
           {priority.reason}
         </Text>
         {stakes ? (
@@ -152,31 +110,19 @@ export function HomeHeroCard({
               padding: theme.spacing[4],
             }}
           >
-            <Text
-              variant="label"
-              color={theme.colors.text.inverse}
-              style={{ opacity: 0.62 }}
-            >
+            <Text variant="label" color={theme.colors.text.inverse} style={{ opacity: 0.62 }}>
               What matters now
             </Text>
             <Text variant="body" color={theme.colors.text.inverse}>
               {stakes.what}
             </Text>
             {stakes.atRisk ? (
-              <Text
-                variant="bodySmall"
-                color={theme.colors.text.inverse}
-                style={{ opacity: 0.6 }}
-              >
+              <Text variant="bodySmall" color={theme.colors.text.inverse} style={{ opacity: 0.6 }}>
                 At risk: {stakes.atRisk}
               </Text>
             ) : null}
             {stakes.potentialGain ? (
-              <Text
-                variant="bodySmall"
-                color={theme.colors.text.inverse}
-                style={{ opacity: 0.6 }}
-              >
+              <Text variant="bodySmall" color={theme.colors.text.inverse} style={{ opacity: 0.6 }}>
                 Gain: {stakes.potentialGain}
               </Text>
             ) : null}

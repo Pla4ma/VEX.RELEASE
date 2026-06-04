@@ -1,13 +1,7 @@
 import React from 'react';
 import { Pressable, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import Animated, {
-  Easing,
-  useAnimatedStyle,
-  useSharedValue,
-  withRepeat,
-  withTiming,
-} from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
 
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
@@ -15,6 +9,7 @@ import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { buttonTap } from '../../../utils/haptics';
 import { getMinTouchTargetStyle } from '../../../utils/touchTarget';
 import { lightColors } from '@/theme/tokens/colors';
+import { useButtonPressHandlers } from './VexPrimaryButton.hooks';
 
 type VexActivationButtonProps = {
   label: string;
@@ -22,10 +17,6 @@ type VexActivationButtonProps = {
   isLoading: boolean;
   onPress: () => void;
 };
-
-const PRESS_SCALE = 0.97;
-const PRESS_MS = 100;
-const PULSE_MS = 5000;
 
 export function VexActivationButton({
   label,
@@ -35,41 +26,7 @@ export function VexActivationButton({
 }: VexActivationButtonProps): React.JSX.Element {
   const { theme } = useTheme();
   const { isReducedMotion } = useReducedMotion();
-
-  const scale = useSharedValue(1);
-  const glowOpacity = useSharedValue(0.15);
-  const pulse = useSharedValue(isReducedMotion ? 0.3 : 0);
-
-  React.useEffect(() => {
-    if (isReducedMotion) return;
-    pulse.value = withRepeat(
-      withTiming(1, { duration: PULSE_MS, easing: Easing.inOut(Easing.sin) }),
-      -1,
-      true,
-    );
-  }, [pulse, isReducedMotion]);
-
-  const handlePressIn = React.useCallback(() => {
-    scale.value = withTiming(PRESS_SCALE, { duration: PRESS_MS });
-    glowOpacity.value = withTiming(0.45, { duration: PRESS_MS });
-  }, [scale, glowOpacity]);
-
-  const handlePressOut = React.useCallback(() => {
-    scale.value = withTiming(1, { duration: PRESS_MS });
-    glowOpacity.value = withTiming(0.15, { duration: PRESS_MS });
-  }, [scale, glowOpacity]);
-
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
-  }));
-
-  const glowStyle = useAnimatedStyle(() => ({
-    shadowOpacity: glowOpacity.value,
-  }));
-
-  const auraStyle = useAnimatedStyle(() => ({
-    opacity: 0.12 + pulse.value * 0.10,
-  }));
+  const { handlePressIn, handlePressOut, animatedStyle, glowStyle, auraStyle } = useButtonPressHandlers(isReducedMotion);
 
   return (
     <View style={{ alignItems: 'center' }}>
