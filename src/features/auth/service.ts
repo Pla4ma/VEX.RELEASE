@@ -1,4 +1,11 @@
-import type { User, AuthCredentials, SignUpMetadata, AuthResult } from './types';
+import { Linking } from 'react-native';
+import type {
+  AuthOAuthProvider,
+  User,
+  AuthCredentials,
+  SignUpMetadata,
+  AuthResult,
+} from './types';
 import * as repository from './repository';
 import { UserSchema } from './schemas';
 
@@ -32,6 +39,36 @@ export async function signIn(credentials: AuthCredentials): Promise<AuthResult> 
     credentials.email,
     credentials.password,
   );
+
+  if (result.user) {
+    UserSchema.parse(result.user);
+  }
+
+  return result;
+}
+
+export async function startOAuthSignIn(
+  provider: AuthOAuthProvider,
+): Promise<{ error: Error | null }> {
+  const result = await repository.startOAuthSignIn(provider);
+  if (result.error || !result.url) {
+    return { error: result.error ?? new Error('Unable to start social sign in.') };
+  }
+
+  try {
+    await Linking.openURL(result.url);
+    return { error: null };
+  } catch (error) {
+    return {
+      error: error instanceof Error
+        ? error
+        : new Error('Unable to open social sign in.'),
+    };
+  }
+}
+
+export async function completeOAuthCallback(url: string): Promise<AuthResult> {
+  const result = await repository.completeOAuthCallback(url);
 
   if (result.user) {
     UserSchema.parse(result.user);

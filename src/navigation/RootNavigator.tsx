@@ -18,6 +18,7 @@ import { useFeatureAccess } from '../features/liveops-config';
 
 import { RootCrashBoundary } from './components/RootCrashBoundary';
 import { useNotificationNavigation } from './hooks/useNotificationNavigation';
+import { useOAuthCallbackListener } from './hooks/useOAuthCallbackListener';
 import { useStreakFuneralNavigation } from './hooks/useStreakFuneralNavigation';
 import { RootStackScreens } from './RootStackScreens';
 import { markColdStart } from '../app/cold-start-performance';
@@ -35,7 +36,7 @@ function readOnboardingCompletedAt(user: unknown): string | null {
 }
 
 export const RootNavigator: React.FC = () => {
-  const { isAuthenticated, checkAuth, user } = useAuthStore();
+  const { completeOAuthCallback, isAuthenticated, checkAuth, user } = useAuthStore();
   const [isAuthCheckComplete, setIsAuthCheckComplete] = useState(false);
   const [isNavigationReady, setIsNavigationReady] = useState(false);
   const { theme, isDark } = useTheme();
@@ -101,6 +102,8 @@ export const RootNavigator: React.FC = () => {
       cancelled = true;
     };
   }, [checkAuth]);
+
+  useOAuthCallbackListener(completeOAuthCallback);
 
   useEffect(() => {
     if (!hasStaleOnboardingState) {

@@ -4,6 +4,7 @@ import type { UserRoleSchema, UserStatusSchema, UserSchema } from './schemas';
 export type UserRole = z.infer<typeof UserRoleSchema>;
 export type UserStatus = z.infer<typeof UserStatusSchema>;
 export type User = z.infer<typeof UserSchema>;
+export type AuthOAuthProvider = 'apple' | 'google';
 
 export interface AuthCredentials {
   email: string;
@@ -17,6 +18,11 @@ export interface SignUpMetadata {
 
 export interface AuthResult {
   user: User | null;
+  error: Error | null;
+}
+
+export interface OAuthStartResult {
+  url: string | null;
   error: Error | null;
 }
 

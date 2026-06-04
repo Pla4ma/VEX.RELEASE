@@ -35,6 +35,27 @@ type AuthActions = Omit<
   'error' | 'isAuthenticated' | 'isLoading' | 'user'
 >;
 
+async function finishLogin(set: AuthStateSetter, user: User): Promise<void> {
+  setAuthenticatedUser(set, user);
+  await saveUserProfile(user);
+  setSentryUser(user.id, user.email, user.username);
+  initializeServicesAfterAuth(user);
+}
+
+function setAuthLoading(set: AuthStateSetter): void {
+  set((state) => {
+    state.isLoading = true;
+    state.error = null;
+  });
+}
+
+function setAuthError(set: AuthStateSetter, error: string): void {
+  set((state) => {
+    state.isLoading = false;
+    state.error = error;
+  });
+}
+
 export function createAuthActions(set: AuthStateSetter): AuthActions {
   return {
     setUser: (user) =>
@@ -70,59 +91,66 @@ export function createAuthActions(set: AuthStateSetter): AuthActions {
     },
     loginWithCredentials: async (email, password) => {
       try {
-        set((state) => {
-          state.isLoading = true;
-          state.error = null;
-        });
+        setAuthLoading(set);
         const { user, error } = await authService.signIn({ email, password });
         if (error || !user) {
-          set((state) => {
-            state.isLoading = false;
-            state.error = error?.message ?? 'Sign in failed';
-          });
+          setAuthError(set, error?.message ?? 'Sign in failed');
           return false;
         }
-        setAuthenticatedUser(set, user);
-        await saveUserProfile(user);
-        setSentryUser(user.id, user.email, user.username);
-        initializeServicesAfterAuth(user);
+        await finishLogin(set, user);
         return true;
       } catch (err) {
+        setAuthError(set, toError(err).message);
+        captureException(toError(err), { tags: { feature: 'auth-login' } });
+        return false;
+      }
+    },
+    loginWithOAuth: async (provider) => {
+      try {
+        setAuthLoading(set);
+        const { error } = await authService.startOAuthSignIn(provider);
         set((state) => {
           state.isLoading = false;
-          state.error = toError(err).message;
+          state.error = error?.message ?? null;
         });
-        captureException(toError(err), { tags: { feature: 'auth-login' } });
+        return !error;
+      } catch (err) {
+        setAuthError(set, toError(err).message);
+        captureException(toError(err), { tags: { feature: 'auth-oauth-start' } });
+        return false;
+      }
+    },
+    completeOAuthCallback: async (url) => {
+      try {
+        setAuthLoading(set);
+        const { user, error } = await authService.completeOAuthCallback(url);
+        if (error || !user) {
+          setAuthError(set, error?.message ?? 'Social sign in failed');
+          return false;
+        }
+        await finishLogin(set, user);
+        return true;
+      } catch (err) {
+        setAuthError(set, toError(err).message);
+        captureException(toError(err), { tags: { feature: 'auth-oauth-callback' } });
         return false;
       }
     },
     register: async (data) => {
       try {
-        set((state) => {
-          state.isLoading = true;
-          state.error = null;
-        });
+        setAuthLoading(set);
         const { user, error } = await authService.signUp(
           { email: data.email, password: data.password },
           { firstName: data.firstName, lastName: data.lastName },
         );
         if (error || !user) {
-          set((state) => {
-            state.isLoading = false;
-            state.error = error?.message ?? 'Registration failed';
-          });
+          setAuthError(set, error?.message ?? 'Registration failed');
           return false;
         }
-        setAuthenticatedUser(set, user);
-        await saveUserProfile(user);
-        setSentryUser(user.id, user.email, user.username);
-        initializeServicesAfterAuth(user);
+        await finishLogin(set, user);
         return true;
       } catch (err) {
-        set((state) => {
-          state.isLoading = false;
-          state.error = toError(err).message;
-        });
+        setAuthError(set, toError(err).message);
         captureException(toError(err), { tags: { feature: 'auth-register' } });
         return false;
       }
@@ -145,18 +173,12 @@ export function createAuthActions(set: AuthStateSetter): AuthActions {
       deinitializeServicesAfterLogout();
     },
     checkAuth: async () => {
-      set((state) => {
-        state.isLoading = true;
-        state.error = null;
-      });
+      setAuthLoading(set);
       try {
         await hydrateStoredProfile(set);
         const user = await authService.getCurrentUser();
         if (user) {
-          setAuthenticatedUser(set, user);
-          await saveUserProfile(user);
-          setSentryUser(user.id, user.email, user.username);
-          initializeServicesAfterAuth(user);
+          await finishLogin(set, user);
           return;
         }
         setSignedOut(set);

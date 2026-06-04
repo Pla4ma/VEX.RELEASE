@@ -1,5 +1,6 @@
 import type { Nullable } from '../types/global';
 import type { User } from '../types/models';
+import type { AuthOAuthProvider } from '../features/auth/types';
 
 export interface RegisterInput {
   email: string;
@@ -23,6 +24,8 @@ export interface AuthState {
   clearError: () => void;
   login: (user: User) => void;
   loginWithCredentials: (email: string, password: string) => Promise<boolean>;
+  loginWithOAuth: (provider: AuthOAuthProvider) => Promise<boolean>;
+  completeOAuthCallback: (url: string) => Promise<boolean>;
   register: (data: RegisterInput) => Promise<boolean>;
   logout: () => Promise<void>;
   checkAuth: () => Promise<void>;

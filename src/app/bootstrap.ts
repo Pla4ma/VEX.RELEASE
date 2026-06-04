@@ -7,7 +7,6 @@ import {
   initializeAnalyticsEventBridge,
   ProductAnalyticsEvents,
 } from '../shared/analytics';
-import { initializeSessionCompletionOrchestrator } from '../features/session-completion/completion-orchestrator';
 import { setupGlobalErrorHandler, setupRejectionHandler } from '../errors';
 import { IS_DEVELOPMENT } from '../constants/app';
 
@@ -51,7 +50,7 @@ export const bootstrapApp = (): void => {
 
   bootstrapped = true;
   initializeCoreSystems();
-  initializeSessionCompletionOrchestrator();
+  debug.warn('Session completion orchestrator disabled: module graph incomplete');
   deferBootCall(initializeSessionRuntime);
 };
 

@@ -14,49 +14,15 @@ import { VexConsole } from './components/VexGlassPanel';
 import { VexGlassInput } from './components/VexGlassInput';
 import { VexActivationButton } from './components/VexPrimaryButton';
 import { Stage } from './components/LoginStage';
+import { OAuthProviderButtons } from './components/OAuthProviderButtons';
 
 type Props = NativeStackScreenProps<AuthStackParams, 'Login'>;
 
-function ConsoleHeading(): React.JSX.Element {
-  return (
-    <View style={{ alignItems: 'center', marginBottom: 12 }}>
-      <Text color="semantic.liquidText" fontSize={19} fontWeight="700" opacity={0.95} lineHeight={25} textAlign="center">Welcome back</Text>
-      <Text color="semantic.liquidTextSoft" fontSize={13} fontWeight="500" opacity={0.72} lineHeight={19} textAlign="center">Resume your focus system</Text>
-    </View>
-  );
-}
-
-function ConsoleFooter(): React.JSX.Element {
-  return (
-    <View style={{ alignItems: 'center', marginTop: 4 }}>
-      <Text color="semantic.liquidTextMuted" fontSize={11} fontWeight="500" opacity={0.50} textAlign="center">Neural coach &middot; Focus sync &middot; Secure vault</Text>
-    </View>
-  );
-}
-
-function RegisterCta({ onPress }: { onPress: () => void }): React.JSX.Element {
-  return (
-    <View style={{ marginTop: 40, alignItems: 'center' }}>
-      <Pressable
-        accessibilityHint="Creates a new VEX account" accessibilityLabel="Create a VEX account"
-        accessibilityRole="link" hitSlop={{ top: 8, bottom: 8, left: 12, right: 12 }}
-        onPress={onPress} style={getMinTouchTargetStyle()}
-      >
-        <Text color="semantic.liquidTextMuted" fontSize={14} textAlign="center" opacity={0.82}>
-          New here?{' '}
-          <Text fontWeight="700" style={{ color: lightColors.semantic.brandAmber, textShadowColor: 'rgba(255, 196, 107, 0.35)', textShadowOffset: { width: 0, height: 0 }, textShadowRadius: 8 }}>
-            Create your focus system
-          </Text>
-        </Text>
-      </Pressable>
-    </View>
-  );
-}
 export const LoginScreen: React.FC<Props> = ({ navigation, route }) => {
   const { theme } = useTheme();
   const {
     email, setEmail, password, setPassword,
-    errors, setErrors, isLoading, handleLogin, isReducedMotion,
+    errors, setErrors, isLoading, handleLogin, handleOAuthLogin, isReducedMotion,
   } = useLoginScreen(route.params?.email ?? '');
 
   const hem = useCallback((v: string) => {
@@ -80,7 +46,31 @@ export const LoginScreen: React.FC<Props> = ({ navigation, route }) => {
         </Stage>
         <Stage delay={300} isReducedMotion={isReducedMotion}>
           <View style={{ width: '100%', maxWidth: 440, alignSelf: 'center',
-            marginTop: theme.spacing[6] }}>
+            marginTop: theme.spacing[8] }}>
+            <OAuthProviderButtons
+              disabled={isLoading}
+              onProviderPress={handleOAuthLogin}
+            />
+            <View style={{
+              alignItems: 'center',
+              flexDirection: 'row',
+              gap: theme.spacing[3],
+              marginVertical: theme.spacing[5],
+            }}>
+              <View style={{
+                backgroundColor: theme.colors.semantic.liquidGlassBorder,
+                flex: 1,
+                height: 1,
+              }} />
+              <Text color="semantic.liquidTextMuted" fontSize={12} fontWeight="700">
+                EMAIL
+              </Text>
+              <View style={{
+                backgroundColor: theme.colors.semantic.liquidGlassBorder,
+                flex: 1,
+                height: 1,
+              }} />
+            </View>
             <VexConsole>
               <View style={{ alignItems: 'center', marginBottom: 2 }}>
                 <Text color="semantic.liquidText" fontSize={19} fontWeight="700"
@@ -134,8 +124,8 @@ export const LoginScreen: React.FC<Props> = ({ navigation, route }) => {
                   textAlign="center" opacity={0.78}>
                   New here?{' '}
                   <Text fontWeight="700" style={{
-                    color: '#FFC46B',
-                    textShadowColor: 'rgba(255,196,107,0.35)',
+                    color: lightColors.semantic.brandAmber,
+                    textShadowColor: lightColors.semantic.editorialGoldGlow,
                     textShadowOffset: { width: 0, height: 0 },
                     textShadowRadius: 8,
                   }}>Create your focus system</Text>

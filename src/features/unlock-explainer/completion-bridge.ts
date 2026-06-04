@@ -45,6 +45,7 @@ export function buildCompletionUnlock(
   if (hidden) {
     return {
       hidden: true,
+      isUnlocked: false,
       key: mappedKey as CompletionUnlockDecision['key'],
       reason: decision.userFacingReason,
       status: 'blocked',
@@ -53,6 +54,7 @@ export function buildCompletionUnlock(
 
   return {
     hidden: false,
+    isUnlocked: decision.decision === 'unlocked',
     key: mappedKey as CompletionUnlockDecision['key'],
     reason: decision.userFacingReason,
     status:
@@ -76,6 +78,7 @@ export function unlockDecisionToCompletion(
   if (isHidden) {
     return {
       hidden: true,
+      isUnlocked: false,
       key,
       reason: decision.userFacingReason,
       status: 'blocked',
@@ -84,6 +87,7 @@ export function unlockDecisionToCompletion(
 
   return {
     hidden: false,
+    isUnlocked: decision.decision === 'unlocked',
     key,
     reason: decision.userFacingReason,
     status:

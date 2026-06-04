@@ -71,7 +71,7 @@ export function getScaledTypography(
           ...original,
           fontSize: calculateScaledFontSize(original.fontSize, textScale),
         };
-      } else {
+      } else if (original) {
         scaled[key] = original;
       }
 

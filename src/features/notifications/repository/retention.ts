@@ -89,6 +89,8 @@ interface ChallengeExpiryRow {
   [key: string]: unknown;
 }
 
+type ChallengeJoin = ChallengeExpiryRow['challenges'] | ChallengeExpiryRow['challenges'][];
+
 /** Shape of a Supabase streaks row for re-engagement candidates. */
 interface ReEngagementRow {
   user_id?: string;
@@ -117,12 +119,16 @@ export async function fetchChallengeExpiryCandidates(
     throw new RepositoryError('fetchChallengeExpiryCandidates', error);
   }
   return (data ?? []).map((row) => {
-    const record = row as ChallengeExpiryRow;
-    const challenge = record.challenges;
+    const record = row as unknown as Omit<ChallengeExpiryRow, 'challenges'> & {
+      challenges?: ChallengeJoin;
+    };
+    const challenge = Array.isArray(record.challenges)
+      ? record.challenges[0]
+      : record.challenges;
     const challengeRecord =
       typeof challenge === 'object' && challenge !== null
         ? challenge
-        : {} as ChallengeExpiryRow['challenges'];
+        : {};
     return ChallengeExpiryCandidateSchema.parse({
       userId: record.user_id,
       challengeId: record.challenge_id,

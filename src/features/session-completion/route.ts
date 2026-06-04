@@ -7,13 +7,29 @@ import {
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import type { SessionStackParams } from '../../navigation/types';
-import { parseSessionCompletionParams } from './service';
+import {
+  SessionCompletionNavigationParamsSchema,
+  type SessionCompletionNavigationParams,
+} from './schemas';
 
 type SessionNavigationProp = NativeStackNavigationProp<SessionStackParams>;
 type SessionCompleteRouteProp = RouteProp<
   SessionStackParams,
   'SessionComplete'
 >;
+
+function parseSessionCompletionParams(params: unknown): {
+  params: SessionCompletionNavigationParams | null;
+  recoverySessionId: string | null;
+  warningMessage: string | null;
+} {
+  const parsed = SessionCompletionNavigationParamsSchema.safeParse(params);
+  return {
+    params: parsed.success ? parsed.data : null,
+    recoverySessionId: null,
+    warningMessage: parsed.success ? null : 'Session summary is unavailable.',
+  };
+}
 
 export function useSessionCompletionRouteState() {
   const navigation = useNavigation<SessionNavigationProp>();

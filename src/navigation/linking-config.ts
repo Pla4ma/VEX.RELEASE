@@ -5,6 +5,16 @@ import type { ExtendedRootStackParams } from './param-types';
 
 const PREFIXES = ['vex://', 'https://app.vex.com', 'https://vex.app'];
 
+function isAuthCallbackUrl(url: string): boolean {
+  try {
+    const parsed = new URL(url);
+    return parsed.protocol === 'vex:' && parsed.hostname === 'auth'
+      && parsed.pathname === '/callback';
+  } catch (error: unknown) {
+    return false;
+  }
+}
+
 const SCREEN_CONFIG = {
   Auth: {
     screens: {
@@ -61,13 +71,18 @@ export function createLinkingConfig(): LinkingOptions<ExtendedRootStackParams> {
     },
     async getInitialURL() {
       const url = await Linking.getInitialURL();
-      if (url != null) {return url;}
+      if (url != null) {
+        return isAuthCallbackUrl(url) ? null : url;
+      }
       const response = await Notifications.getLastNotificationResponseAsync();
       const notifUrl = response?.notification.request.content.data?.url;
       return typeof notifUrl === 'string' ? notifUrl : null;
     },
     subscribe(listener) {
       const linkingSub = Linking.addEventListener('url', ({ url }) => {
+        if (isAuthCallbackUrl(url)) {
+          return;
+        }
         listener(url);
       });
       const notifSub = Notifications.addNotificationResponseReceivedListener(

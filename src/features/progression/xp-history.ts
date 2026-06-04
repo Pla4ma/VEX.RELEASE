@@ -1,21 +1,15 @@
-import { getSupabaseClient } from '../../../config/supabase';
-import { RepositoryError } from '../../../lib/repository/error-handling';
-import { v4 } from '../../../utils/uuid';
 import { z } from 'zod';
-import {
-  XpEntrySchema,
-  type XpEntry,
-} from '../schemas';
-import { withResilience } from '../../../utils/supabase-resilience';
+import { getSupabaseClient } from '../../config/supabase';
+import { RepositoryError } from '../../lib/repository/error-handling';
+import { v4 } from '../../utils/uuid';
+import { withResilience } from '../../utils/supabase-resilience';
+import { XpEntrySchema, type XpEntry } from './schemas';
 
-const supabase = getSupabaseClient();
-
-/** Fetch XP entries for a user, ordered newest first. */
 export async function fetchXpHistory(
   userId: string,
   options?: { limit?: number; since?: number },
 ): Promise<XpEntry[]> {
-  let query = supabase
+  let query = getSupabaseClient()
     .from('xp_history')
     .select('*')
     .eq('user_id', userId)
@@ -35,24 +29,23 @@ export async function fetchXpHistory(
   return XpEntrySchema.array().parse(data);
 }
 
-/** Insert a single XP entry. */
 export async function recordXpEntry(
   userId: string,
   entry: Omit<XpEntry, 'id' | 'userId'>,
 ): Promise<XpEntry> {
   const newEntry = {
-    id: v4(),
-    user_id: userId,
     amount: entry.amount,
-    source: entry.source,
-    session_id: entry.sessionId,
-    metadata: entry.metadata,
     created_at: entry.createdAt,
+    id: v4(),
+    metadata: entry.metadata,
+    session_id: entry.sessionId,
+    source: entry.source,
+    user_id: userId,
   };
 
   const { data, error } = await withResilience(
-    supabase.from('xp_history').insert(newEntry).select().single(),
-    { operation: 'recordXpEntry', fallbackValue: newEntry },
+    getSupabaseClient().from('xp_history').insert(newEntry).select().single(),
+    { fallbackValue: newEntry, operation: 'recordXpEntry' },
   );
   if (error) {
     throw new RepositoryError('recordXpEntry', error);
@@ -60,13 +53,12 @@ export async function recordXpEntry(
   return XpEntrySchema.parse(data);
 }
 
-/** Sum XP awarded within a time window. */
 export async function fetchXpForPeriod(
   userId: string,
   startTime: number,
   endTime: number,
 ): Promise<number> {
-  const { data, error } = await supabase
+  const { data, error } = await getSupabaseClient()
     .from('xp_history')
     .select('amount')
     .eq('user_id', userId)
@@ -76,29 +68,24 @@ export async function fetchXpForPeriod(
   if (error) {
     throw new RepositoryError('fetchXpForPeriod', error);
   }
-  if (!data) {
-    return 0;
-  }
-  return data.reduce(
-    (sum: number, entry: { amount: number | null }) =>
-      sum + (entry.amount || 0),
+  return (data ?? []).reduce(
+    (sum: number, entry: { amount: number | null }) => sum + (entry.amount ?? 0),
     0,
   );
 }
 
-/** Insert a level-up milestone record. */
 export async function recordLevelUp(
   userId: string,
   level: number,
   xpAtLevel: number,
 ): Promise<void> {
-  const { error } = await supabase
+  const { error } = await getSupabaseClient()
     .from('level_up_history')
     .insert({
-      id: v4(),
-      user_id: userId,
-      level,
       achieved_at: Date.now(),
+      id: v4(),
+      level,
+      user_id: userId,
       xp_at_level: xpAtLevel,
     });
 
@@ -107,11 +94,10 @@ export async function recordLevelUp(
   }
 }
 
-/** Fetch all level-up milestones for a user. */
 export async function fetchLevelUpHistory(
   userId: string,
-): Promise<Array<{ level: number; achievedAt: number; xpAtLevel: number }>> {
-  const { data, error } = await supabase
+): Promise<Array<{ achievedAt: number; level: number; xpAtLevel: number }>> {
+  const { data, error } = await getSupabaseClient()
     .from('level_up_history')
     .select('level, achieved_at, xp_at_level')
     .eq('user_id', userId)
@@ -120,46 +106,43 @@ export async function fetchLevelUpHistory(
   if (error) {
     throw new RepositoryError('fetchLevelUpHistory', error);
   }
-  return (data || []).map(
-    (row: { level: number; achieved_at: number; xp_at_level: number }) => ({
-      level: row.level,
+  return (data ?? []).map(
+    (row: { achieved_at: number; level: number; xp_at_level: number }) => ({
       achievedAt: row.achieved_at,
+      level: row.level,
       xpAtLevel: row.xp_at_level,
     }),
   );
 }
 
 const AtomicXpRpcResultSchema = z.object({
-  success: z.boolean(),
   duplicate: z.boolean(),
-  xp_added: z.number(),
-  new_total_xp: z.number(),
-  new_level: z.number(),
-  previous_level: z.number(),
   level_up: z.boolean(),
+  new_level: z.number(),
+  new_total_xp: z.number(),
+  previous_level: z.number(),
   rewards: z.array(z.string()),
+  success: z.boolean(),
+  xp_added: z.number(),
 });
 
 export type AtomicXpRpcResult = z.infer<typeof AtomicXpRpcResultSchema>;
 
 export async function atomicAddXpRpc(params: {
-  userId: string;
   amount: number;
-  source: string;
-  sessionId?: string | null;
   idempotencyKey?: string | null;
   metadata?: Record<string, unknown> | null;
+  sessionId?: string | null;
+  source: string;
+  userId: string;
 }): Promise<{ data: AtomicXpRpcResult | null; error: Error | null }> {
-  const sb = getSupabaseClient();
-  const { data, error } = await sb.rpc('atomic_add_xp', {
-    p_user_id: params.userId,
+  const { data, error } = await getSupabaseClient().rpc('atomic_add_xp', {
     p_amount: params.amount,
-    p_source: params.source,
-    p_session_id: params.sessionId ?? null,
     p_idempotency_key: params.idempotencyKey ?? null,
-    p_metadata: params.metadata
-      ? JSON.parse(JSON.stringify(params.metadata))
-      : null,
+    p_metadata: params.metadata ?? null,
+    p_session_id: params.sessionId ?? null,
+    p_source: params.source,
+    p_user_id: params.userId,
   });
   if (error) {
     return { data: null, error: new RepositoryError('atomicAddXpRpc', error) };

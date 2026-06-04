@@ -3,13 +3,15 @@ import { FadeInDown } from 'react-native-reanimated';
 import { useToast } from '../../shared/ui/components/Toast';
 import { useAuthStore } from '../../store/index';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
+import { buttonTap } from '../../utils/haptics';
 import { loginSchema } from './schemas';
+import type { AuthOAuthProvider } from '../../features/auth/types';
 
 type LoginErrors = { email?: string; password?: string };
 
 export function useLoginScreen(initialEmail: string) {
   const { isReducedMotion } = useReducedMotion();
-  const { loginWithCredentials, isLoading } = useAuthStore();
+  const { loginWithCredentials, loginWithOAuth, isLoading } = useAuthStore();
   const { show: showToast } = useToast();
   const [email, setEmail] = useState(initialEmail);
   const [password, setPassword] = useState('');
@@ -53,12 +55,28 @@ export function useLoginScreen(initialEmail: string) {
     }
   }, [email, loginWithCredentials, password, showToast]);
 
+  const handleOAuthLogin = useCallback(async (
+    provider: AuthOAuthProvider,
+  ): Promise<void> => {
+    await buttonTap();
+    const success = await loginWithOAuth(provider);
+    if (!success) {
+      showToast({
+        duration: 4000,
+        message: `Try ${provider} again, or use email to enter VEX.`,
+        title: 'Social sign in failed',
+        type: 'error',
+      });
+    }
+  }, [loginWithOAuth, showToast]);
+
   return {
     actionEntering,
     bodyEntering,
     email,
     errors,
     handleLogin,
+    handleOAuthLogin,
     introEntering,
     isLoading,
     isReducedMotion,

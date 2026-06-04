@@ -92,6 +92,10 @@ export const InteractionManager = {
   }),
 };
 export const Linking = {
+  addEventListener: jest.fn(() => ({
+    remove: jest.fn(),
+  })),
+  getInitialURL: jest.fn(() => Promise.resolve(null)),
   openURL: jest.fn(),
 };
 export const AppState = {

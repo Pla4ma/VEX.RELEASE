@@ -1,7 +1,3 @@
-/**
-import { lightColors } from '@/theme/tokens/colors';
- * Animated pulsing green dot indicator for "live" status.
- */
 import React from 'react';
 import Animated, {
   useAnimatedStyle,
@@ -10,6 +6,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 
+import { lightColors } from '../../../../theme/tokens/colors';
 
 export function PulsingLiveDot(): JSX.Element {
   const animatedStyle = useAnimatedStyle(() => ({
