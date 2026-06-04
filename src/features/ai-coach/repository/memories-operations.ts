@@ -6,7 +6,7 @@
 
 import { supabase } from '../../../config/supabase';
 import { createDebugger } from '../../../utils/debug';
-import type { CoachMemory, MemoryType } from '../memory-schemas';
+import type { CoachMemory, MemoryType } from '../memory/memory-schemas';
 import { mapRowToMemory } from './memory-mapper';
 
 const debug = createDebugger('ai-coach:memory-repo');

@@ -4,7 +4,7 @@ import { FlashList, type ListRenderItem } from '@shopify/flash-list';
 import { useTheme } from '../../../theme';
 import { ErrorState } from '../../../components/states/ErrorState';
 import { useCoachMemories } from '../hooks/useMemories';
-import type { CoachMemory, MemoryType } from '../memory-schemas';
+import type { CoachMemory, MemoryType } from '../memory/memory-schemas';
 
 interface MemoryListProps {
   userId: string;

@@ -1,4 +1,4 @@
-import { generateCoachPrompt, shouldCoachIntervene } from '../context-snapshot';
+import { generateCoachPrompt, shouldCoachIntervene } from '../session/context-snapshot';
 import { createTestSnapshot } from './context-snapshot-fixtures';
 
 describe('generateCoachPrompt', () => {

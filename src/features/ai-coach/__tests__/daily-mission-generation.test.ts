@@ -4,8 +4,8 @@ import {
   convertSuggestionToMission,
   generateMissionSuggestion,
 } from '../integration';
-import type { CoachSuggestion } from '../suggestion-schemas';
-import { validateMessageQuality } from '../message-quality-gate';
+import type { CoachSuggestion } from '../recommendation/suggestion-schemas';
+import { validateMessageQuality } from '../message/message-quality-gate';
 import { eventBus } from '../../../events';
 
 jest.mock('../../../events', () => ({ eventBus: { publish: jest.fn() } }));

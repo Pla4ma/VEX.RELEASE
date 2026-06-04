@@ -1,7 +1,7 @@
 import {
   filterActiveRecommendations,
   getTopRecommendation,
-} from '../recommendation-pipeline';
+} from '../recommendation/recommendation-pipeline';
 
 describe('filterActiveRecommendations', () => {
   it('filters out expired recommendations', () => {

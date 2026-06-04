@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { ContextSnapshotSchema } from '../context-snapshot';
+import { ContextSnapshotSchema } from '../session/context-snapshot';
 
 export type ContextSnapshot = z.infer<typeof ContextSnapshotSchema>;
 

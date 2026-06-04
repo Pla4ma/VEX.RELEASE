@@ -2,7 +2,7 @@ import {
   buildColdStartEvidence,
   buildMemoryEvidence,
   generateRecommendationEvidence,
-} from '../CoachMemory';
+} from '../memory/CoachMemory';
 import { makeMemory } from './trust-hardening-boundary-helpers';
 
 describe('Evidence contract functions', () => {

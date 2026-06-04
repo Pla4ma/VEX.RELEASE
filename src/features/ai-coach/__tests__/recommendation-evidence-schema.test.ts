@@ -1,4 +1,4 @@
-import { RecommendationEvidenceSchema } from '../memory-schemas';
+import { RecommendationEvidenceSchema } from '../memory/memory-schemas';
 
 describe('RecommendationEvidence schema', () => {
   it('validates cold-start evidence', () => {

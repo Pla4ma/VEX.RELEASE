@@ -12,7 +12,7 @@ import {
   getQueue,
   saveQueue,
   processMutation,
-} from '../offline-queue';
+} from '../session/offline-queue';
 
 const debug = createDebugger('coach:offline');
 

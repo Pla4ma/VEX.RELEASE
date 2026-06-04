@@ -1,4 +1,4 @@
-import { canClaimStrongPattern } from '../CoachMemory';
+import { canClaimStrongPattern } from '../memory/CoachMemory';
 
 describe('Session count gating', () => {
   it('canClaimStrongPattern returns false before 3 sessions', () => {

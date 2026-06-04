@@ -2,7 +2,7 @@ import {
   RecommendationEvidenceSchema,
   CoachMemorySchema,
   type CoachMemory,
-} from '../memory-schemas';
+} from '../memory/memory-schemas';
 
 export function makeMemory(overrides: Partial<CoachMemory> = {}): CoachMemory {
   return CoachMemorySchema.parse({

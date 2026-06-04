@@ -1,4 +1,4 @@
-import { formatRecommendation } from '../recommendation-pipeline';
+import { formatRecommendation } from '../recommendation/recommendation-pipeline';
 
 describe('formatRecommendation', () => {
   it('formats session recommendation', () => {

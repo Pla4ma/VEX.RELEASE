@@ -1,7 +1,7 @@
 import {
   trackRecommendationInteraction,
   batchProcessRecommendations,
-} from '../recommendation-pipeline';
+} from '../recommendation/recommendation-pipeline';
 
 describe('trackRecommendationInteraction', () => {
   it('tracks view without error', async () => {

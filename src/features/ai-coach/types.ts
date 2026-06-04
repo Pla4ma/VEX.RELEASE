@@ -14,7 +14,7 @@ export type {
   CoachMessageTemplate,
   CoachMessage,
   CoachHistory,
-} from './coach-message-types';
+} from './message/coach-message-types';
 
 export type {
   InterventionType,
@@ -31,7 +31,7 @@ export type {
   InterventionRule,
   UserResponse,
   InterventionExecution,
-} from './coach-intervention-types';
+} from './intervention/coach-intervention-types';
 
 export type {
   RecommendationType,

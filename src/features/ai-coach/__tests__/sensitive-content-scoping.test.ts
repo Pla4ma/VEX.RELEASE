@@ -1,4 +1,4 @@
-import { isSensitiveMemoryType, scopeMemoryForContext } from '../CoachMemory';
+import { isSensitiveMemoryType, scopeMemoryForContext } from '../memory/CoachMemory';
 import { makeMemory } from './trust-hardening-boundary-helpers';
 
 describe('Sensitive content scoping', () => {

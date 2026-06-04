@@ -3,7 +3,7 @@ import {
   adjustStudyDifficulty,
   getStudyInsights,
   needsAttention,
-} from '../study-loop';
+} from '../session/study-loop';
 import { createMockPlan } from './study-loop-test-helpers';
 
 describe('Study Loop — Insights & Maintenance', () => {

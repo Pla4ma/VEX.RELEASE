@@ -1,8 +1,8 @@
 import * as Sentry from '@sentry/react-native';
-import { hashUserId, sanitizeContext } from './analytics-helpers';
+import { hashUserId, sanitizeContext } from './analytics-detail/analytics-helpers';
 
 // Re-export types so consumers can import from "./analytics".
-export type { InterventionType, CoachMetrics } from './analytics-types';
+export type { InterventionType, CoachMetrics } from './analytics-detail/analytics-types';
 
 // Re-export all tracking and metrics functions.
 export {
@@ -18,7 +18,7 @@ export {
   trackRecommendationGenerated,
   trackDifficultyAdjusted,
   trackBehaviorSignal,
-} from './analytics-tracking';
+} from './analytics-detail/analytics-tracking';
 
 export {
   recordCoachMetric,
@@ -31,7 +31,7 @@ export {
   getCoachAggregateMetrics,
   exportCoachMetrics,
   clearCoachMetrics,
-} from './analytics-metrics';
+} from './analytics-detail/analytics-metrics';
 
 // Error tracking — Sentry.captureException wrappers.
 

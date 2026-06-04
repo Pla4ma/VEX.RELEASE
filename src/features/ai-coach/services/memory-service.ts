@@ -4,10 +4,10 @@ import {
   type CoachMemory,
   type CreateCoachMemoryInput,
   type MemoryType,
-} from '../memory-schemas';
+} from '../memory/memory-schemas';
 import * as repository from '../repository/memories';
-import { createCoachMemoryCreatedEvent } from '../memory-events';
-import { trackMemoryCreated, trackMemoryError } from '../memory-analytics';
+import { createCoachMemoryCreatedEvent } from '../memory/memory-events';
+import { trackMemoryCreated, trackMemoryError } from '../memory/memory-analytics';
 
 export async function createCoachMemory(
   input: CreateCoachMemoryInput,

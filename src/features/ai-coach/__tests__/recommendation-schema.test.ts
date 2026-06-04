@@ -1,7 +1,7 @@
 import {
   CoachRecommendationSchema,
   generateRecommendations,
-} from '../recommendation-pipeline';
+} from '../recommendation/recommendation-pipeline';
 import { mockContext } from './recommendation-test-fixtures';
 
 describe('CoachRecommendationSchema', () => {

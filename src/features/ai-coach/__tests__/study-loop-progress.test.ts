@@ -1,7 +1,7 @@
 import {
   calculateStudyProgress,
   getStudyStreakMessage,
-} from '../study-loop';
+} from '../session/study-loop';
 import { createMockPlan } from './study-loop-test-helpers';
 
 describe('Study Loop — Progress & Streaks', () => {

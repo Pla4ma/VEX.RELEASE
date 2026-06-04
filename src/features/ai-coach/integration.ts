@@ -3,7 +3,7 @@ export {
   handleSessionAbandoned,
   handleStreakRiskDetected,
   handleStreakBroken,
-} from './session-handlers';
+} from './session/session-handlers';
 
 export {
   handleLevelUp,
@@ -12,14 +12,14 @@ export {
   handleBossTimeoutWarning,
   handleUserReturned,
   handleDailyCheck,
-} from './event-handlers';
+} from './event-detail/event-handlers';
 
 export {
   generateAndSendMessage,
   type IntegrationHealth,
   checkIntegrationHealth,
   subscribeToCoachEvents,
-} from './message-helpers';
+} from './message/message-helpers';
 
 export {
   CoachSuggestionSchema,
@@ -27,15 +27,15 @@ export {
   type CoachPriority,
   type CoachSuggestion,
   type PriorityEngine,
-} from './suggestion-schemas';
+} from './recommendation/suggestion-schemas';
 export {
   convertSuggestionToMission,
   generateMissionSuggestion,
-} from './mission-policy';
-export { generateSessionRecommendation } from './recommendation-policy';
-export { handleStreakRiskIntegration } from './streak-policy';
+} from './policy/mission-policy';
+export { generateSessionRecommendation } from './recommendation/recommendation-policy';
+export { handleStreakRiskIntegration } from './policy/streak-policy';
 export {
   getPriorityEngineState,
   shouldCoachShowSuggestion,
-} from './priority-policy';
-export { getHomeCoachSuggestion } from './home-policy';
+} from './policy/priority-policy';
+export { getHomeCoachSuggestion } from './policy/home-policy';

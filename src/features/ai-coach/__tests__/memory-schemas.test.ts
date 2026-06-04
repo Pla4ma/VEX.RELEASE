@@ -1,7 +1,7 @@
 import {
   CoachMemoryRowSchema,
   CreateCoachMemoryInputSchema,
-} from '../memory-schemas';
+} from '../memory/memory-schemas';
 
 const userId = '123e4567-e89b-12d3-a456-426614174000';
 const memoryId = '123e4567-e89b-12d3-a456-426614174001';

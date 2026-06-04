@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { StudyPlanSchema } from '../study-loop';
+import { StudyPlanSchema } from '../session/study-loop';
 
 export type StudyPlan = z.infer<typeof StudyPlanSchema>;
 

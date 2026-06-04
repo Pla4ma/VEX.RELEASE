@@ -3,7 +3,7 @@ import { View, Pressable } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 import { useTheme } from '../../../theme/ThemeContext';
 import { Text, ProgressBar } from '../../../components';
-import type { PersonalQuest } from '../PersonalQuestGenerator';
+import type { PersonalQuest } from '../recommendation/PersonalQuestGenerator';
 import { getQuestIcon, formatTimeRemaining } from './questCardHelpers';
 import { buttonTap } from '../../../utils/haptics';
 

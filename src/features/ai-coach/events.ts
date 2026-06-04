@@ -11,7 +11,7 @@ export type {
   RecommendationGeneratedEvent,
   DifficultyAdjustedEvent,
   CoachPreferencesUpdatedEvent,
-} from './event-schemas';
+} from './event-detail/event-schemas';
 
 export {
   CoachMessageGeneratedEventSchema,
@@ -26,7 +26,7 @@ export {
   RecommendationGeneratedEventSchema,
   DifficultyAdjustedEventSchema,
   CoachPreferencesUpdatedEventSchema,
-} from './event-schemas';
+} from './event-detail/event-schemas';
 
 export {
   createCoachMessageGeneratedEvent,
@@ -36,7 +36,7 @@ export {
   createBehaviorSignalDetectedEvent,
   createStateTransitionEvent,
   createInterventionExecutedEvent,
-} from './event-factories';
+} from './event-detail/event-factories';
 
 import type {
   CoachMessageGeneratedEvent,
@@ -51,7 +51,7 @@ import type {
   RecommendationGeneratedEvent,
   DifficultyAdjustedEvent,
   CoachPreferencesUpdatedEvent,
-} from './event-schemas';
+} from './event-detail/event-schemas';
 
 import {
   CoachMessageGeneratedEventSchema,
@@ -66,7 +66,7 @@ import {
   RecommendationGeneratedEventSchema,
   DifficultyAdjustedEventSchema,
   CoachPreferencesUpdatedEventSchema,
-} from './event-schemas';
+} from './event-detail/event-schemas';
 
 export const AI_COACH_EVENT_CHANNELS = {
   MESSAGE_GENERATED: 'coach:messageGenerated',

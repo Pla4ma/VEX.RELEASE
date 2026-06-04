@@ -10,7 +10,7 @@ import {
   CreateCoachMemoryInputSchema,
   type CoachMemory,
   type MemoryType,
-} from '../memory-schemas';
+} from '../memory/memory-schemas';
 import { mapInputToRow, mapRowToMemory } from './memory-mapper';
 
 const debug = createDebugger('ai-coach:memory-repo');

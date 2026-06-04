@@ -4,7 +4,7 @@ import {
   type CoachMemory,
   type CoachMemoryRow,
   type CreateCoachMemoryInput,
-} from '../memory-schemas';
+} from '../memory/memory-schemas';
 import { v4 } from '../../../utils/uuid';
 
 export type NewCoachMemoryRow = Omit<
