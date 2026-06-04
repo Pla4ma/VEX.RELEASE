@@ -1,3 +1,10 @@
+/**
+ * AI Quota Service
+ *
+ * Determines how many AI coach requests a user can make
+ * per hour/day based on their tier (free vs paid).
+ */
+
 import { z } from 'zod';
 import type {
   AIRequestCategory,
@@ -17,10 +24,42 @@ import {
   syncQuotaToSupabase,
 } from './ai-quota-repository';
 import { captureSilentFailure } from '../../utils/silent-failure';
+import { useMonetizationStore } from '../monetization/store';
 
+/**
+ * Resolve the user's tier by checking RevenueCat entitlements.
+ * Falls back to 'free' on any error — safe default.
+ *
+ * Uses Zustand's synchronous getState() which is safe to call
+ * outside React component tree (P0-2 fix).
+ */
 export async function resolveUserTier(userId: string): Promise<UserTier> {
-  // Default to free; paid detection hooks into monetization layer
-  // Internal users are identified by a config flag or email domain
+  try {
+    const { isPremium, activeEntitlements } =
+      useMonetizationStore.getState();
+
+    if (isPremium) {
+      return 'paid';
+    }
+
+    // Also check for VIP entitlement directly (defense in depth)
+    const hasVip = activeEntitlements.some(
+      (ent) =>
+        ent.isActive &&
+        (ent.identifier === 'vip' || ent.identifier === 'premium'),
+    );
+
+    if (hasVip) {
+      return 'paid';
+    }
+  } catch (error) {
+    captureSilentFailure(error, {
+      feature: 'ai-quota',
+      operation: 'resolve-tier',
+      type: 'logic',
+    });
+  }
+
   return 'free';
 }
 
@@ -41,119 +80,45 @@ export async function checkQuota(
       limit: Number.MAX_SAFE_INTEGER,
       remaining: Number.MAX_SAFE_INTEGER,
       resetAt: Date.now() + HOURLY_WINDOW_MS,
-      retryAfterMs: 0,
     };
   }
 
-  const hourly = getHourlyUsage(userId, category);
-  if (hourly.count >= limits.hourly) {
-    return QuotaCheckResultSchema.parse({
-      allowed: false,
-      category,
-      tier: resolvedTier,
-      window: 'hourly',
-      used: hourly.count,
-      limit: limits.hourly,
-      remaining: 0,
-      resetAt: Date.now() + HOURLY_WINDOW_MS,
-      retryAfterMs: HOURLY_WINDOW_MS,
-    });
-  }
+  const hourlyUsed = await getHourlyUsage(userId, category);
+  const dailyUsed = await getDailyUsage(userId, category);
 
-  const daily = getDailyUsage(userId, category);
-  if (daily.count >= limits.daily) {
-    const midnight = new Date();
-    midnight.setHours(24, 0, 0, 0);
-    return QuotaCheckResultSchema.parse({
-      allowed: false,
-      category,
-      tier: resolvedTier,
-      window: 'daily',
-      used: daily.count,
-      limit: limits.daily,
-      remaining: 0,
-      resetAt: midnight.getTime(),
-      retryAfterMs: midnight.getTime() - Date.now(),
-    });
-  }
+  const hourlyRemaining = Math.max(0, limits.hourly - hourlyUsed);
+  const dailyRemaining = Math.max(0, limits.daily - dailyUsed);
 
-  if (daily.tokenCount >= limits.tokenBudget) {
-    const midnight = new Date();
-    midnight.setHours(24, 0, 0, 0);
-    return QuotaCheckResultSchema.parse({
-      allowed: false,
-      category,
-      tier: resolvedTier,
-      window: 'daily',
-      used: daily.tokenCount,
-      limit: limits.tokenBudget,
-      remaining: 0,
-      resetAt: midnight.getTime(),
-      retryAfterMs: midnight.getTime() - Date.now(),
-    });
-  }
+  const allowed = hourlyRemaining > 0 && dailyRemaining > 0;
+  const window = !allowed && hourlyRemaining === 0 ? 'hourly' : 'daily';
 
   return QuotaCheckResultSchema.parse({
-    allowed: true,
+    allowed,
     category,
     tier: resolvedTier,
-    window: 'hourly',
-    used: hourly.count,
-    limit: limits.hourly,
-    remaining: limits.hourly - hourly.count - 1,
-    resetAt: Date.now() + HOURLY_WINDOW_MS,
-    retryAfterMs: 0,
+    window,
+    used: window === 'hourly' ? hourlyUsed : dailyUsed,
+    limit: window === 'hourly' ? limits.hourly : limits.daily,
+    remaining: window === 'hourly' ? hourlyRemaining : dailyRemaining,
+    resetAt:
+      window === 'hourly'
+        ? Date.now() + HOURLY_WINDOW_MS
+        : Date.now() + DAILY_WINDOW_MS,
   });
 }
 
-export async function consumeQuota(
+export async function recordAIUsage(
   userId: string,
   category: AIRequestCategory,
-  tokenCount: number,
-): Promise<QuotaCheckResult> {
-  const check = await checkQuota(userId, category);
-  if (!check.allowed) {
-    return check;
-  }
-
-  const record = {
-    userId,
-    category,
-    timestamp: Date.now(),
-    tokenCount,
-  };
-
-  recordUsage(record);
-  syncQuotaToSupabase(userId, category, record).catch((err) => {
-    captureSilentFailure(err, {
+): Promise<void> {
+  try {
+    await recordUsage(userId, category);
+    await syncQuotaToSupabase(userId, category);
+  } catch (error) {
+    captureSilentFailure(error, {
       feature: 'ai-quota',
-      operation: 'sync',
+      operation: 'record-usage',
       type: 'network',
     });
-  });
-
-  return check;
-}
-
-export function getRemainingQuota(
-  userId: string,
-  category: AIRequestCategory,
-  tier?: UserTier,
-): { hourly: number; daily: number; tokenBudget: number } {
-  const resolvedTier = tier ?? 'free';
-  const limits = DEFAULT_QUOTA_STRATEGIES[resolvedTier].limits[category];
-  if (!limits) {
-    return {
-      hourly: Number.MAX_SAFE_INTEGER,
-      daily: Number.MAX_SAFE_INTEGER,
-      tokenBudget: Number.MAX_SAFE_INTEGER,
-    };
   }
-  const hourly = getHourlyUsage(userId, category);
-  const daily = getDailyUsage(userId, category);
-  return {
-    hourly: Math.max(0, limits.hourly - hourly.count),
-    daily: Math.max(0, limits.daily - daily.count),
-    tokenBudget: Math.max(0, limits.tokenBudget - daily.tokenCount),
-  };
 }
