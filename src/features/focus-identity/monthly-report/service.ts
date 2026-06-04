@@ -65,7 +65,7 @@ export async function generateMonthlyReport(
     // Fetch session data for the month
     const { data: sessions, error: sessionError } = await getSupabaseClient()
       .from('sessions')
-      .select('*')
+      .select('id,user_id,completed_at,duration_minutes,grade,focus_purity_score,status')
       .eq('user_id', userId)
       .gte('completed_at', startDate.toISOString())
       .lte('completed_at', endDate.toISOString())

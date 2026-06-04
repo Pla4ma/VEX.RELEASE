@@ -5,7 +5,7 @@ import {
   handleStreakRiskIntegration,
   shouldCoachShowSuggestion,
 } from '../integration';
-import type { PriorityEngine } from '../suggestion-schemas';
+import type { PriorityEngine } from '../recommendation/suggestion-schemas';
 
 describe('Phase 7 streak and priority integration', () => {
   it('generates streak protection suggestion for critical risk', async () => {

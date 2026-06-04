@@ -5,6 +5,7 @@ import type {
   ComebackToken,
 } from './streak-insurance';
 import { z } from 'zod';
+import { tableColumns } from '../../lib/repository/tableColumns';
 const INSURANCE_TABLE = 'streak_insurance';
 const GAMBLE_TABLE = 'streak_gambles';
 const TOKEN_TABLE = 'comeback_tokens';
@@ -43,7 +44,7 @@ export async function createInsurance(
       cost,
       expires_at: new Date(Date.now() + 48 * 60 * 60 * 1000).toISOString(),
     })
-    .select()
+    .select(tableColumns(INSURANCE_TABLE))
     .single();
   if (error) {
     throw error;
@@ -92,7 +93,7 @@ export async function createGamble(
       required_grade: requiredGrade,
       bonus_xp_if_won: bonusXp,
     })
-    .select()
+    .select(tableColumns(GAMBLE_TABLE))
     .single();
   if (error) {
     throw error;
@@ -134,7 +135,7 @@ export async function createComebackToken(
   const { data, error } = await supabase
     .from(TOKEN_TABLE)
     .insert({ user_id: userId, source_streak: sourceStreak })
-    .select()
+    .select(tableColumns(TOKEN_TABLE))
     .single();
   if (error) {
     throw error;

@@ -12,7 +12,7 @@ import {
   validateCoachInput,
   createFallbackInsight,
   type CoachInputContract,
-} from '../input-contract';
+} from '../input/input-contract';
 // Note: input-contract.ts is a root feature module, not in services/
 
 export async function fetchActiveRecommendations(

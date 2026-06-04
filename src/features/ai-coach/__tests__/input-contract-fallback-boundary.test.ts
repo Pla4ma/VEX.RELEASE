@@ -3,7 +3,7 @@ import {
   CoachInputContractSchema,
   createFallbackInsight,
   FORBIDDEN_DATA_FIELDS,
-} from '../input-contract';
+} from '../input/input-contract';
 import { createMockCoachInput } from './input-contract-test-utils';
 
 function testUuid(): string {

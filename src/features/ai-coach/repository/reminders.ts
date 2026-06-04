@@ -7,6 +7,7 @@ import {
   type ComebackStatus,
 } from '../schemas';
 import { RepositoryError } from './error';
+import { tableColumns } from '../../../lib/repository/tableColumns';
 
 const supabase = getSupabaseClient();
 
@@ -27,7 +28,7 @@ export async function createReminderPlan(
       delivered: reminder.delivered,
       opened: reminder.opened,
     })
-    .select()
+    .select(tableColumns('reminder_plans'))
     .single();
   if (error) {
     throw new RepositoryError('createReminderPlan', error);
@@ -40,7 +41,7 @@ export async function fetchPendingReminders(
 ): Promise<ReminderPlan[]> {
   const { data, error } = await supabase
     .from('reminder_plans')
-    .select('*')
+    .select('id,user_id,reminder_type,scheduled_for,message_id,priority,sent,sent_at,delivered,opened')
     .eq('sent', false)
     .lte('scheduled_for', beforeTime)
     .order('priority', { ascending: false })
@@ -59,7 +60,7 @@ export async function markReminderSent(
     .from('reminder_plans')
     .update({ sent: true, sent_at: sentAt })
     .eq('id', reminderId)
-    .select()
+    .select(tableColumns('reminder_plans'))
     .single();
   if (error) {
     throw new RepositoryError('markReminderSent', error);
@@ -76,7 +77,7 @@ export async function updateReminderDelivery(
     .from('reminder_plans')
     .update({ delivered, opened })
     .eq('id', reminderId)
-    .select()
+    .select(tableColumns('reminder_plans'))
     .single();
   if (error) {
     throw new RepositoryError('updateReminderDelivery', error);
@@ -102,7 +103,7 @@ export async function upsertComebackPlan(
       bonus_multiplier: plan.bonusMultiplier,
       messages: plan.messages,
     })
-    .select()
+    .select(tableColumns('comeback_plans'))
     .single();
   if (error) {
     throw new RepositoryError('upsertComebackPlan', error);
@@ -116,7 +117,7 @@ export async function fetchActiveComebackPlan(
   const now = Date.now();
   const { data, error } = await supabase
     .from('comeback_plans')
-    .select('*')
+    .select('id,user_id,previous_streak,days_inactive,status,started_at,expires_at,sessions_completed,target_sessions,bonus_multiplier,messages')
     .eq('user_id', userId)
     .in('status', ['OFFERED', 'ACTIVE'])
     .gt('expires_at', now)
@@ -145,7 +146,7 @@ export async function updateComebackPlanStatus(
     .from('comeback_plans')
     .update(updates)
     .eq('id', planId)
-    .select()
+    .select(tableColumns('comeback_plans'))
     .single();
   if (error) {
     throw new RepositoryError('updateComebackPlanStatus', error);

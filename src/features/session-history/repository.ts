@@ -95,14 +95,14 @@ export async function createSessionRecord(
   const { data, error } = await supabase
     .from('sessions')
     .insert(row)
-    .select('*')
+    .select('id,user_id,status,duration,effective_duration,quality_score,mode,difficulty,metadata,started_at,completed_at,ended_at,created_at,updated_at')
     .single();
 
   if (error) {
     if (error.code === '23505' || error.code === '409') {
       const existing = await supabase
         .from('sessions')
-        .select('*')
+        .select('id,user_id,status,duration,effective_duration,quality_score,mode,difficulty,metadata,started_at,completed_at,ended_at,created_at,updated_at')
         .eq('id', validated.sessionId)
         .single();
 

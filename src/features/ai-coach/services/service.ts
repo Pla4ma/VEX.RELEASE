@@ -50,7 +50,7 @@ export {
   activateComeback,
   detectStreakRisk,
   processBehaviorSignal,
-} from '../pipeline';
+} from '../pipeline/pipeline';
 
 // Phase 2.3 - New Interventions
 export {
@@ -64,12 +64,12 @@ export {
   type MomentumBuildingInput,
   type ComebackReadyInput,
   type StudyPlanCompleteInput,
-} from '../intervention-service';
+} from '../intervention/intervention-service';
 
 export {
   markMessageAction,
   generatePerformanceSummary,
-} from '../message-generator';
+} from '../message/message-generator';
 
 // Repository exports for direct database operations
 export {
@@ -84,7 +84,7 @@ export {
   createRecommendation,
   generateSessionSummary,
   suggestChallenges,
-} from '../session-analyzer';
+} from '../session/session-analyzer';
 
 export {
   // Persona Manager
@@ -95,7 +95,7 @@ export {
   updateCoachState as transitionState,
   updateCoachPreferences,
   DEFAULT_PERSONA_ID,
-} from '../persona-manager';
+} from '../persona/persona-manager';
 
 export {
   // Reminder Scheduler
@@ -104,7 +104,7 @@ export {
   trackComebackSession,
   adjustDifficulty,
   COMEBACK_BONUS_MULTIPLIER,
-} from '../reminder-scheduler';
+} from '../notification/reminder-scheduler';
 
 // Phase 7 - Input Contract Integration
 export {
@@ -113,7 +113,7 @@ export {
   containsForbiddenPII,
   CoachInputContractSchema,
   type CoachInputContract,
-} from '../input-contract';
+} from '../input/input-contract';
 
 // CoachService interface, singleton, and fetchActiveRecommendations
 // (moved from this file to coach-service.ts for clean separation)

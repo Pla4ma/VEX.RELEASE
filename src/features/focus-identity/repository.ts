@@ -3,6 +3,7 @@ import type { FocusIdentityProfile } from './FocusIdentityEngine';
 import { withRetry, FocusProfileRowSchema } from './repository-helpers';
 import { transformRowToProfile } from './repository-transforms';
 import {
+import { tableColumns } from '../../lib/repository/tableColumns';
   insertScoreHistory,
   insertScoreHistoryBatch,
 } from './repository-score-history';
@@ -19,7 +20,7 @@ export async function getFocusProfile(
     const supabase = getSupabaseClient();
     const { data, error } = await supabase
       .from('focus_identity_profiles')
-      .select('*')
+      .select('id,user_id,current_score,previous_score,percentile_rank,band_label,band_title,identity_statement,streak_in_current_band,total_calculations,first_score_date,is_in_recovery,recovery_start_date,recovery_progress,pre_lapse_score,top_strength,top_weakness,recommended_actions,created_at,updated_at')
       .eq('user_id', userId)
       .single();
     if (error) {
@@ -67,7 +68,7 @@ export async function createFocusProfile(
     const { data, error } = await supabase
       .from('focus_identity_profiles')
       .insert(row)
-      .select()
+      .select(tableColumns('focus_identity_profiles'))
       .single();
     if (error) {
       throw error;
@@ -133,7 +134,7 @@ export async function updateFocusProfile(
       .from('focus_identity_profiles')
       .update(rowUpdates)
       .eq('user_id', userId)
-      .select()
+      .select(tableColumns('focus_identity_profiles'))
       .single();
     if (error) {
       throw error;

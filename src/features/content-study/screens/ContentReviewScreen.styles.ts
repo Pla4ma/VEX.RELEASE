@@ -134,14 +134,12 @@ export const styles = createSheet({
   processingNote: { marginTop: 16, alignItems: 'center' },
   processingNoteText: { fontSize: 14, color: lightColors.text.muted },
   errorContainer: {
-    // TODO: use theme token with opacity
-    backgroundColor: '#ef444420',
+    backgroundColor: lightColors.semantic.danger + '20',
     borderRadius: 12,
     padding: 16,
     marginBottom: 20,
     borderWidth: 1,
-    // TODO: use theme token with opacity
-    borderColor: '#ef444440',
+    borderColor: lightColors.semantic.danger + '40',
   },
   errorTitle: {
     fontSize: 16,
@@ -152,8 +150,7 @@ export const styles = createSheet({
   errorText: { fontSize: 14, color: lightColors.semantic.danger },
   retryButton: {
     marginTop: 12,
-    // TODO: use theme token with opacity
-    backgroundColor: '#ef444440',
+    backgroundColor: lightColors.semantic.danger + '40',
     paddingVertical: 10,
     paddingHorizontal: 16,
     borderRadius: 8,

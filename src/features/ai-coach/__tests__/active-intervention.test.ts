@@ -1,4 +1,4 @@
-import { buildActiveIntervention } from '../active-intervention';
+import { buildActiveIntervention } from '../intervention/active-intervention';
 import type {
   BehaviorProfile,
   BehaviorSignal,

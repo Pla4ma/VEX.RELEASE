@@ -2,11 +2,12 @@ import * as Sentry from '@sentry/react-native';
 import { v4 } from '../../utils/uuid';
 import type { Streak } from './schemas';
 import { RepositoryError, supabase, parseStreakRow } from './repository-helpers';
+import { tableColumns } from '../../lib/repository/tableColumns';
 
 export async function fetchStreak(userId: string): Promise<Streak | null> {
   const { data, error } = await supabase
     .from('streaks')
-    .select('*')
+    .select('id,user_id,current_days,longest_days,last_qualifying_session_at,current_day_completed_at,frozen_until,shields_available,grace_period_used,timezone,created_at,updated_at')
     .eq('user_id', userId)
     .single();
   if (error) {
@@ -40,7 +41,7 @@ export async function createStreak(
   const { data, error } = await supabase
     .from('streaks')
     .insert(newStreak)
-    .select()
+    .select(tableColumns('streaks'))
     .single();
   if (error) {
     throw new RepositoryError('createStreak', error);
@@ -73,7 +74,7 @@ export async function updateStreak(
       updated_at: Date.now(),
     })
     .eq('user_id', userId)
-    .select()
+    .select(tableColumns('streaks'))
     .single();
   if (error) {
     throw new RepositoryError('updateStreak', error);

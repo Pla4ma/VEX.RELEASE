@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from '@jest/globals';
 import { getHomeCoachSuggestion } from '../integration';
 import * as repository from '../repository';
-import { validateMessageQuality } from '../message-quality-gate';
+import { validateMessageQuality } from '../message/message-quality-gate';
 
 jest.mock('../repository', () => ({
   fetchCoachState: jest.fn(),

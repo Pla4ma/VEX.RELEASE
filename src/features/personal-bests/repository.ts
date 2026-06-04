@@ -43,7 +43,7 @@ export async function getPersonalBest(
   try {
     const { data, error } = await getSupabaseClient()
       .from('personal_bests')
-      .select('*')
+      .select('id,user_id,session_mode,duration_bucket,best_purity_score,best_grade,total_sessions,achieved_at,updated_at')
       .eq('user_id', userId)
       .eq('session_mode', sessionMode)
       .eq('duration_bucket', durationBucket)
@@ -79,7 +79,7 @@ export async function upsertPersonalBest(
       const { data, error } = await getSupabaseClient()
         .from('personal_bests')
         .insert(row)
-        .select('*')
+        .select('id,user_id,session_mode,duration_bucket,best_purity_score,best_grade,total_sessions,achieved_at,updated_at')
         .single();
       if (error) {
         throw new PersonalBestsRepositoryError('upsertPersonalBest', error);
@@ -97,7 +97,7 @@ export async function upsertPersonalBest(
       .from('personal_bests')
       .update(patch)
       .eq('id', current.id)
-      .select('*')
+      .select('id,user_id,session_mode,duration_bucket,best_purity_score,best_grade,total_sessions,achieved_at,updated_at')
       .single();
     if (error) {
       throw new PersonalBestsRepositoryError('upsertPersonalBest', error);
@@ -117,7 +117,7 @@ export async function getUserPersonalBests(
   try {
     const { data, error } = await getSupabaseClient()
       .from('personal_bests')
-      .select('*')
+      .select('id,user_id,session_mode,duration_bucket,best_purity_score,best_grade,total_sessions,achieved_at,updated_at')
       .eq('user_id', userId)
       .order('updated_at', { ascending: false });
     if (error) {

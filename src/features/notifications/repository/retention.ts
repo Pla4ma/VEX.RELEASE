@@ -49,7 +49,7 @@ export async function upsertReminderPlan(
       },
       { onConflict: 'user_id,reminder_type' },
     )
-    .select('*')
+    .select('id,user_id,reminder_type,scheduled_for,delivery_method,status,context,created_at,updated_at')
     .single();
   if (error) {
     throw new RepositoryError('upsertReminderPlan', error);

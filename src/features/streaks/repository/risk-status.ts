@@ -4,6 +4,7 @@ import {
   type StreakRiskStatus,
 } from '../schemas-risk-repair';
 import { executeWithFallback, type RepositoryResult } from './streak-repository';
+import { tableColumns } from '../../../lib/repository/tableColumns';
 
 const supabase = getSupabaseClient();
 
@@ -28,7 +29,7 @@ export async function saveRiskStatusEnhanced(
         },
         { onConflict: 'user_id' },
       )
-      .select()
+      .select(tableColumns('streak_risk_status'))
       .single();
     if (error) {
       throw error;
@@ -43,7 +44,7 @@ export async function fetchRiskStatusEnhanced(
   return executeWithFallback('fetchRiskStatus', async () => {
     const { data, error } = await supabase
       .from('streak_risk_status')
-      .select('*')
+      .select('user_id,current_days,hours_remaining,minutes_remaining,risk_level,flame_health_percent,is_at_risk,is_critical,notifications_sent,last_updated')
       .eq('user_id', userId)
       .single();
     if (error) {

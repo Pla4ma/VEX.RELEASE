@@ -1,6 +1,6 @@
 import { eventBus } from '../../events';
-import type { CoachInputContract } from './input-contract';
-import type { CoachPriority, CoachSuggestion } from './suggestion-schemas';
+import type { CoachInputContract } from './input/input-contract';
+import type { CoachPriority, CoachSuggestion } from './recommendation/suggestion-schemas';
 import { v4 } from '../../utils/uuid';
 
 export function generateUUID(): string {

@@ -1,4 +1,4 @@
-import { CoachMemorySchema } from '../memory-schemas';
+import { CoachMemorySchema } from '../memory/memory-schemas';
 
 describe('Soft delete fields', () => {
   it('CoachMemorySchema accepts null deletedAt', () => {

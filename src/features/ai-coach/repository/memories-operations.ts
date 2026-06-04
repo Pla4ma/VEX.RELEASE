@@ -6,7 +6,7 @@
 
 import { supabase } from '../../../config/supabase';
 import { createDebugger } from '../../../utils/debug';
-import type { CoachMemory, MemoryType } from '../memory-schemas';
+import type { CoachMemory, MemoryType } from '../memory/memory-schemas';
 import { mapRowToMemory } from './memory-mapper';
 
 const debug = createDebugger('ai-coach:memory-repo');
@@ -20,7 +20,7 @@ export async function getMemoriesByType(
 ): Promise<CoachMemory[]> {
   const { data, error } = await supabase
     .from('coach_memories')
-    .select('*')
+    .select('id,user_id,type,title,description,occurred_at,metadata,referenced_count,last_referenced_at,deleted_at,evidence_hash,created_at,updated_at')
     .eq('user_id', userId)
     .eq('type', type)
     .is('deleted_at', null)
@@ -40,7 +40,7 @@ export async function getMemoriesByType(
 export async function markMemoryReferenced(memoryId: string): Promise<void> {
   const { data: existing, error: fetchError } = await supabase
     .from('coach_memories')
-    .select('*')
+    .select('id,user_id,type,title,description,occurred_at,metadata,referenced_count,last_referenced_at,deleted_at,evidence_hash,created_at,updated_at')
     .eq('id', memoryId)
     .single();
 
@@ -91,7 +91,7 @@ export async function getMemoriesByTypes(
 ): Promise<CoachMemory[]> {
   const { data, error } = await supabase
     .from('coach_memories')
-    .select('*')
+    .select('id,user_id,type,title,description,occurred_at,metadata,referenced_count,last_referenced_at,deleted_at,evidence_hash,created_at,updated_at')
     .eq('user_id', userId)
     .in('type', types)
     .is('deleted_at', null)
@@ -114,7 +114,7 @@ export async function getMostRecentMemoryByType(
 ): Promise<CoachMemory | null> {
   const { data, error } = await supabase
     .from('coach_memories')
-    .select('*')
+    .select('id,user_id,type,title,description,occurred_at,metadata,referenced_count,last_referenced_at,deleted_at,evidence_hash,created_at,updated_at')
     .eq('user_id', userId)
     .eq('type', type)
     .is('deleted_at', null)
@@ -143,7 +143,7 @@ export async function hasMemoryOfType(
 ): Promise<boolean> {
   const { count, error } = await supabase
     .from('coach_memories')
-    .select('*', { count: 'exact', head: true })
+    .select('id', { count: 'exact', head: true })
     .eq('user_id', userId)
     .eq('type', type)
     .is('deleted_at', null);

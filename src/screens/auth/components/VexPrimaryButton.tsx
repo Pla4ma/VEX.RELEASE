@@ -9,16 +9,22 @@ import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { buttonTap } from '../../../utils/haptics';
 import { getMinTouchTargetStyle } from '../../../utils/touchTarget';
 import { lightColors } from '@/theme/tokens/colors';
+import { rgbaColors } from '@/theme/tokens/rgba-colors';
 import { useButtonPressHandlers } from './VexPrimaryButton.hooks';
 
-type Props = {
-  label: string; loadingLabel: string; isLoading: boolean; onPress: () => void;
+type VexActivationButtonProps = {
+  label: string;
+  loadingLabel: string;
+  isLoading: boolean;
+  onPress: () => void;
 };
 
-
 export function VexActivationButton({
-  label, loadingLabel, isLoading, onPress,
-}: Props): React.JSX.Element {
+  label,
+  loadingLabel,
+  isLoading,
+  onPress,
+}: VexActivationButtonProps): React.JSX.Element {
   const { theme } = useTheme();
   const { isReducedMotion } = useReducedMotion();
   const { handlePressIn, handlePressOut, animatedStyle, glowStyle, auraStyle } = useButtonPressHandlers(isReducedMotion);
@@ -36,7 +42,7 @@ export function VexActivationButton({
             left: -24,
             right: -24,
             borderRadius: 9999,
-            backgroundColor: 'rgba(255, 138, 36, 0.04)',
+            backgroundColor: rgbaColors.rgb_255_138_36_0_04,
             shadowColor: lightColors.semantic.brandOrange,
             shadowOffset: { width: 0, height: 0 },
             shadowOpacity: 0.5,
@@ -79,17 +85,26 @@ export function VexActivationButton({
       >
         <Pressable
           accessibilityHint="Authenticates and opens your VEX workspace"
-          accessibilityLabel={label} accessibilityRole="button"
+          accessibilityLabel={label}
+          accessibilityRole="button"
           accessibilityState={{ busy: isLoading, disabled: isLoading }}
-          disabled={isLoading} onPressIn={handlePressIn} onPressOut={handlePressOut}
-          onPress={() => { buttonTap(); onPress(); }}
-          style={({ pressed }: { pressed: boolean }) => [
-            getMinTouchTargetStyle(), {
-              borderRadius: theme.borderRadius['2xl'], overflow: 'hidden',
+          disabled={isLoading}
+          onPressIn={handlePressIn}
+          onPressOut={handlePressOut}
+          onPress={() => {
+            buttonTap();
+            onPress();
+          }}
+          style={({ pressed }) => [
+            getMinTouchTargetStyle(),
+            {
+              borderRadius: theme.borderRadius['2xl'],
+              overflow: 'hidden',
               opacity: isLoading ? 0.85 : 1,
             },
           ]}
         >
+          {/* Violet to orange gradient body */}
           <LinearGradient
             colors={[lightColors.accent.purple, lightColors.accent.purple, lightColors.semantic.warning, lightColors.accent.orange]}
             locations={[0, 0.35, 0.72, 1]}
@@ -102,28 +117,54 @@ export function VexActivationButton({
               paddingHorizontal: theme.spacing[6],
             }}
           >
+            {/* Inner shadow — top */}
             <LinearGradient
-              colors={['rgba(0,0,0,0.24)', 'rgba(0,0,0,0)']}
-              locations={[0, 0.34]} pointerEvents="none"
+              colors={[rgbaColors.rgb_0_0_0_0_14, rgbaColors.rgb_0_0_0_0]}
+              locations={[0, 0.35]}
+              pointerEvents="none"
               style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}
             />
-            <View pointerEvents="none" style={{
-              position: 'absolute', top: 1, left: 26, right: 26,
-              height: 1.5, backgroundColor: 'rgba(255,255,255,0.55)',
-              borderRadius: 1,
-            }} />
-            <View pointerEvents="none" style={{
-              position: 'absolute', top: 5, left: 54, right: 54,
-              height: 0.5, backgroundColor: 'rgba(255,255,255,0.32)',
-              borderRadius: 0.5,
-            }} />
-            <Text fontSize={17} fontWeight="700" letterSpacing={0.8}
-              textAlign="center" style={{
-                color: '#FFFFFF',
-                textShadowColor: 'rgba(255,255,255,0.48)',
+
+            {/* Top shine line */}
+            <View
+              pointerEvents="none"
+              style={{
+                position: 'absolute',
+                top: 1,
+                left: 40,
+                right: 40,
+                height: 1.5,
+                backgroundColor: rgbaColors.rgb_255_255_255_0_45,
+                borderRadius: 1,
+              }}
+            />
+
+            {/* Light sweep */}
+            <Animated.View
+              pointerEvents="none"
+              style={{
+                position: 'absolute',
+                top: 0,
+                bottom: 0,
+                width: 60,
+                backgroundColor: rgbaColors.rgb_255_255_255_0_06,
+                transform: [{ skewX: '-25deg' }, { translateX: -120 }],
+              }}
+            />
+
+            {/* White text with crisp glow */}
+            <Text
+              color="semantic.liquidButtonText"
+              fontSize={16}
+              fontWeight="700"
+              letterSpacing={0.3}
+              textAlign="center"
+              style={{
+                textShadowColor: rgbaColors.rgb_255_255_255_0_3,
                 textShadowOffset: { width: 0, height: 0 },
-                textShadowRadius: 16,
-              }}>
+                textShadowRadius: 6,
+              }}
+            >
               {isLoading ? loadingLabel : `${label}  \u2192`}
             </Text>
           </LinearGradient>

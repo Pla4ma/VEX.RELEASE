@@ -1,4 +1,4 @@
-import { compareStudyPlans, getNextStudyReminder } from '../study-loop';
+import { compareStudyPlans, getNextStudyReminder } from '../session/study-loop';
 import { createMockPlan } from './study-loop-test-helpers';
 
 describe('Study Loop — Reminders & Comparison', () => {

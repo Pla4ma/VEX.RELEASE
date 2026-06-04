@@ -84,8 +84,7 @@ export const styles = createSheet({
   sessionLabel: { fontSize: 13, color: lightColors.text.muted, marginBottom: 4 },
   sessionValue: { fontSize: 16, fontWeight: '500', color: lightColors.text.inverse },
   focusAreas: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 8 },
-  // TODO: use theme token with opacity
-  focusAreaTag: { backgroundColor: '#f59e0b20', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 6 },
+  focusAreaTag: { backgroundColor: lightColors.semantic.warning + '20', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 6 },
   focusAreaText: { fontSize: 12, color: lightColors.semantic.warning },
   ratingContainer: { paddingHorizontal: 20, marginBottom: 24, alignItems: 'center' },
   ratingTitle: { fontSize: 16, color: lightColors.text.muted, marginBottom: 12 },

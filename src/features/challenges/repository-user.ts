@@ -18,7 +18,7 @@ export async function fetchUserChallenge(
 ): Promise<UserChallenge | null> {
   const { data, error } = await supabase
     .from('user_challenges')
-    .select('*')
+    .select('id,user_id,challenge_id,current_value,status,assigned_at,completed_at,claimed_at,expires_at,reroll_count,rerolled_from_id,last_progress_at,progress_history,created_at')
     .eq('user_id', userId)
     .eq('challenge_id', challengeId)
     .maybeSingle();
@@ -34,7 +34,7 @@ export async function fetchUserChallenges(
 ): Promise<UserChallenge[]> {
   let query = supabase
     .from('user_challenges')
-    .select('*')
+    .select('id,user_id,challenge_id,current_value,status,assigned_at,completed_at,claimed_at,expires_at,reroll_count,rerolled_from_id,last_progress_at,progress_history,created_at')
     .eq('user_id', userId);
   if (filters?.status) {
     query = query.eq('status', filters.status);
@@ -53,7 +53,7 @@ export async function fetchUserActiveChallenges(
 ): Promise<UserChallenge[]> {
   const { data, error } = await supabase
     .from('user_challenges')
-    .select('*')
+    .select('id,user_id,challenge_id,current_value,status,assigned_at,completed_at,claimed_at,expires_at,reroll_count,rerolled_from_id,last_progress_at,progress_history,created_at')
     .eq('user_id', userId)
     .in('status', ['ACTIVE', 'COMPLETED'])
     .order('assigned_at', { ascending: false });
@@ -131,7 +131,7 @@ export async function createUserChallenge(
       reroll_count: 0,
       created_at: now,
     })
-    .select('*')
+    .select('id,user_id,challenge_id,current_value,status,assigned_at,completed_at,claimed_at,expires_at,reroll_count,rerolled_from_id,last_progress_at,progress_history,created_at')
     .single();
   if (error) {
     throw new RepositoryError('createUserChallenge', error);
@@ -176,7 +176,7 @@ export async function updateUserChallenge(
     .update(payload)
     .eq('user_id', userId)
     .eq('challenge_id', challengeId)
-    .select('*')
+    .select('id,user_id,challenge_id,current_value,status,assigned_at,completed_at,claimed_at,expires_at,reroll_count,rerolled_from_id,last_progress_at,progress_history,created_at')
     .single();
   if (error) {
     throw new RepositoryError('updateUserChallenge', error);

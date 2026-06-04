@@ -10,8 +10,9 @@ import {
   CreateCoachMemoryInputSchema,
   type CoachMemory,
   type MemoryType,
-} from '../memory-schemas';
+} from '../memory/memory-schemas';
 import { mapInputToRow, mapRowToMemory } from './memory-mapper';
+import { tableColumns } from '../../../lib/repository/tableColumns';
 
 const debug = createDebugger('ai-coach:memory-repo');
 
@@ -75,7 +76,7 @@ export async function createMemory(
   const { data, error } = await supabase
     .from('coach_memories')
     .insert(row)
-    .select()
+    .select(tableColumns('coach_memories'))
     .single();
 
   if (error) {
@@ -95,7 +96,7 @@ export async function getMemoriesByUser(
 ): Promise<CoachMemory[]> {
   const { data, error } = await supabase
     .from('coach_memories')
-    .select('*')
+    .select('id,user_id,type,title,description,occurred_at,metadata,referenced_count,last_referenced_at,deleted_at,evidence_hash,created_at,updated_at')
     .eq('user_id', userId)
     .is('deleted_at', null)
     .order('occurred_at', { ascending: false });

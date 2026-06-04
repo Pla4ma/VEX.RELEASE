@@ -1,7 +1,7 @@
 import {
   determineInterventionPriority,
   getContextHash,
-} from '../context-snapshot';
+} from '../session/context-snapshot';
 import { createTestSnapshot } from './context-snapshot-fixtures';
 
 describe('determineInterventionPriority', () => {

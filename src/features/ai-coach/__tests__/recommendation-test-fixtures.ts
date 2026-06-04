@@ -1,4 +1,4 @@
-import type { ContextSnapshot } from '../context-snapshot';
+import type { ContextSnapshot } from '../session/context-snapshot';
 
 export const mockContext: ContextSnapshot = {
   userId: 'user-123',

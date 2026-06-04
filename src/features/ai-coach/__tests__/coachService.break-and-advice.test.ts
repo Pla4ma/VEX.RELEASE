@@ -1,6 +1,6 @@
 import { describe, test, expect, beforeEach, jest } from '@jest/globals';
 import { createCoachTestSetup } from './coach-test-setup';
-import { detectOptimalBreak, detectStudyStuck, detectDistraction } from '../intervention-detectors';
+import { detectOptimalBreak, detectStudyStuck, detectDistraction } from '../intervention/intervention-detectors';
 import type { InterventionContext } from './coach-test-setup';
 
 jest.mock('../../../utils/debug', () => ({

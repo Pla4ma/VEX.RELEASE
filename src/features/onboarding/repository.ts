@@ -80,7 +80,7 @@ async function getProgress(
     const parsed = z.string().uuid().parse(userId);
     const { data, error } = await getSupabaseClient()
       .from('onboarding_profiles')
-      .select('*')
+      .select('id,user_id,status,steps,first_session,permissions,goal,focus_duration,display_name,persona,element,motivation_profile,chosen_lane,created_at,updated_at')
       .eq('user_id', parsed)
       .maybeSingle();
     if (error) {

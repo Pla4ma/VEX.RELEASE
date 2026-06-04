@@ -3,11 +3,11 @@ export {
   signInWithEmail,
   resetPassword,
   updatePassword,
-} from './supabase-auth-credentials';
+} from '../features/auth/repository-credentials';
 
 export {
   signOut,
   getCurrentSession,
   getCurrentUser,
   onAuthStateChange,
-} from './supabase-auth-session';
+} from '../features/auth/repository-session';

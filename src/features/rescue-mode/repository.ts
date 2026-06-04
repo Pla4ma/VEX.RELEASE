@@ -114,7 +114,7 @@ export async function getRescueCompletions(
 
   const query = db
     .from('rescue_completions')
-    .select('*')
+    .select('id,user_id,plan_id,reason,lane,duration_seconds,outcome,worked,next_recommendation,completed_at')
     .eq('user_id', userId)
     .order('completed_at', { ascending: false });
 

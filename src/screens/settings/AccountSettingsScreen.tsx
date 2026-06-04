@@ -1,6 +1,6 @@
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 import React from 'react';
-import { ScrollView, Pressable } from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView, Pressable } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTheme } from '../../theme';
@@ -20,38 +20,47 @@ export const AccountSettingsScreen: React.FC<Props> = ({ navigation }) => {
   const { user } = useAuthStore();
 
   return (
-    <Box flex={1} style={{ backgroundColor: theme.colors.background.primary }}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <Box
-          px={20}
-          pb={16}
-          pt={insets.top + 16}
-          flexDirection="row"
-          alignItems="center"
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{ flex: 1 }}
+    >
+      <Box flex={1} style={{ backgroundColor: theme.colors.background.primary }}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+          contentContainerStyle={{ flexGrow: 1 }}
         >
-          <Pressable
-            onPress={() => navigation.goBack()}
-            style={{ marginRight: 12 }}
-            accessibilityLabel="Account setting"
-            accessibilityRole="button"
-            accessibilityHint="Double tap to change setting"
+          <Box
+            px={20}
+            pb={16}
+            pt={insets.top + 16}
+            flexDirection="row"
+            alignItems="center"
           >
-            <Icon
-              name="arrow-left"
-              size={24}
-              color={theme.colors.text.primary}
-            />
-          </Pressable>
-          <Text variant="h2">Account</Text>
-        </Box>
+            <Pressable
+              onPress={() => navigation.goBack()}
+              style={{ marginRight: 12 }}
+              accessibilityLabel="Account setting"
+              accessibilityRole="button"
+              accessibilityHint="Double tap to change setting"
+            >
+              <Icon
+                name="arrow-left"
+                size={24}
+                color={theme.colors.text.primary}
+              />
+            </Pressable>
+            <Text variant="h2">Account</Text>
+          </Box>
 
-        <EmailChangeSection email={user?.email} />
-        <TwoFactorSection />
-        <PasswordChangeSection />
+          <EmailChangeSection email={user?.email} />
+          <TwoFactorSection />
+          <PasswordChangeSection />
 
-        <Box height={insets.bottom + 20} />
-      </ScrollView>
-    </Box>
+          <Box height={insets.bottom + 20} />
+        </ScrollView>
+      </Box>
+    </KeyboardAvoidingView>
   );
 };
 

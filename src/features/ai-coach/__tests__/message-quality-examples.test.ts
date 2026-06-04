@@ -5,7 +5,7 @@ import {
   createMockQualityAnalysis,
   REJECTED_MESSAGE_EXAMPLES,
   validateMessageQuality,
-} from '../message-quality-gate';
+} from '../message/message-quality-gate';
 
 describe('Message quality examples and edge cases', () => {
   it('approves and rejects curated example sets', () => {

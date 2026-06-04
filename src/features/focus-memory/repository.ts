@@ -67,7 +67,7 @@ export async function fetchMemoriesFromSupabase(
   try {
     const { data, error } = await supabase
       .from('focus_memories')
-      .select('*')
+      .select('id,user_id,type,summary,source,confidence,accepted,deleted_at,expires_at,evidence_hash,created_at,updated_at')
       .eq('user_id', userId)
       .order('created_at', { ascending: false });
     if (error) {

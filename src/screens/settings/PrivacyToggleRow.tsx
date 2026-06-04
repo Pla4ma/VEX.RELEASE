@@ -55,7 +55,7 @@ export const PrivacyToggleRow: React.FC<PrivacyToggleRowProps> = ({
           {row.description}
         </Text>
       </Box>
-      <Switch value={value} onValueChange={() => onToggle(row.key)} />
+      <Switch value={value} onValueChange={() => onToggle(row.key)} accessibilityLabel={`${row.title} toggle`} />
     </Pressable>
   );
 };

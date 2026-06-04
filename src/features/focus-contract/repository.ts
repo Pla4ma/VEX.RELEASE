@@ -48,7 +48,7 @@ export async function createContract(
     const { data, error } = await getSupabaseClient()
       .from('focus_contracts')
       .insert(row)
-      .select('*')
+      .select('id,session_id,user_id,task_description,completion_status,reflection_at,created_at')
       .single();
 
     if (error) {
@@ -95,7 +95,7 @@ export async function getContractForSession(
   try {
     const { data, error } = await getSupabaseClient()
       .from('focus_contracts')
-      .select('*')
+      .select('id,session_id,user_id,task_description,completion_status,reflection_at,created_at')
       .eq('session_id', sessionId)
       .eq('user_id', userId)
       .maybeSingle();
@@ -119,7 +119,7 @@ export async function getRecentContracts(
   try {
     const { data, error } = await getSupabaseClient()
       .from('focus_contracts')
-      .select('*')
+      .select('id,session_id,user_id,task_description,completion_status,reflection_at,created_at')
       .eq('user_id', userId)
       .order('created_at', { ascending: false })
       .limit(limit);

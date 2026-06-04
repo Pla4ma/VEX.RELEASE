@@ -1,6 +1,7 @@
 import { getSupabaseClient } from '../../../config/supabase';
 import { DifficultyProfileSchema, type DifficultyProfile } from '../schemas';
 import { RepositoryError } from './error';
+import { tableColumns } from '../../../lib/repository/tableColumns';
 
 const supabase = getSupabaseClient();
 
@@ -9,7 +10,7 @@ export async function fetchDifficultyProfile(
 ): Promise<DifficultyProfile | null> {
   const { data, error } = await supabase
     .from('difficulty_profiles')
-    .select('*')
+    .select('user_id,current_difficulty,recommended_difficulty,last_adjustment_at,adjustment_reason,success_rate_recent,success_rate_overall,trend')
     .eq('user_id', userId)
     .single();
   if (error) {
@@ -36,7 +37,7 @@ export async function upsertDifficultyProfile(
       success_rate_overall: profile.successRateOverall,
       trend: profile.trend,
     })
-    .select()
+    .select(tableColumns('difficulty_profiles'))
     .single();
   if (error) {
     throw new RepositoryError('upsertDifficultyProfile', error);

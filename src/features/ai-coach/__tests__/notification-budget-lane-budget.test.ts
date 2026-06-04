@@ -4,7 +4,7 @@ import {
   getNotificationBudgetStatus,
   maxDailyForLane,
   sendCoachNotification,
-} from '../notification-budget';
+} from '../notification/notification-budget';
 
 describe('maxDailyForLane', () => {
   it('Clean lane gets 1/day', () => {

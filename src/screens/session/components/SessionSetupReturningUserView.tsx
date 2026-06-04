@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScrollView } from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import {
   type CompositeNavigationProp,
   type RouteProp,
@@ -78,18 +78,23 @@ export function ReturningUserView({
   };
 
   return (
-    <Box flex={1} bg="background.primary">
-      <SessionSetupHeader
-        durationSeconds={controller.selectedDurationSeconds}
-        mode={controller.setupState.selectedSessionMode}
-        onBack={() => navigation.goBack()}
-        userId={controller.userId}
-      />
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{ flex: 1 }}
+    >
+      <Box flex={1} bg="background.primary">
+        <SessionSetupHeader
+          durationSeconds={controller.selectedDurationSeconds}
+          mode={controller.setupState.selectedSessionMode}
+          onBack={() => navigation.goBack()}
+          userId={controller.userId}
+        />
 
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 140 }}
-      >
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+          contentContainerStyle={{ paddingBottom: 140 }}
+        >
         <SessionStartStatusCard
           offlineMessage={controller.offlineMessage}
           routeWarningMessage={controller.parsedRoute.warningMessage}
@@ -161,6 +166,7 @@ export function ReturningUserView({
           }
         />
       ) : null}
-    </Box>
+      </Box>
+    </KeyboardAvoidingView>
   );
 }

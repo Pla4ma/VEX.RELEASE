@@ -3,6 +3,7 @@ import { enqueue } from '../../../lib/offline/queue';
 import { withRetry, RepositoryError } from '../../../lib/repository/base';
 import { captureSilentFailure } from '../../../utils/silent-failure';
 import {
+import { tableColumns } from '../../../lib/repository/tableColumns';
   StakesSessionRecordSchema,
   UserStakesPreferenceSchema,
   type StakesSessionRecord,
@@ -47,7 +48,7 @@ export async function saveStakesSession(
           created_at: record.created_at,
           completed_at: record.completed_at,
         })
-        .select()
+        .select(tableColumns('stakes_sessions'))
         .single();
     });
     if (error) {
@@ -77,7 +78,7 @@ export async function fetchUserStakesHistory(
       async () => {
         return await supabase
           .from('stakes_sessions')
-          .select('*')
+          .select('id,user_id,session_id,difficulty,xp_multiplier,max_pauses,gem_wager,completed,xp_earned,gems_won,gems_lost,pauses_used,quality_score,win_streak,created_at,completed_at')
           .eq('user_id', userId)
           .order('created_at', { ascending: false })
           .limit(limit);
@@ -115,7 +116,7 @@ export async function fetchStakesPreference(
       async () => {
         return await supabase
           .from('user_stakes_preferences')
-          .select('*')
+          .select('user_id,default_difficulty,total_deep_work_completed,total_gems_wagered,total_gems_won,current_win_streak,best_win_streak,updated_at')
           .eq('user_id', userId)
           .single();
       },

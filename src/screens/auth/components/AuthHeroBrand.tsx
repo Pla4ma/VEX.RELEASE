@@ -1,4 +1,5 @@
-﻿import React, { useEffect } from 'react';
+import React, { useEffect } from 'react';
+import { View } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -13,6 +14,7 @@ import { useTheme } from '../../../theme';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { springPresets } from '../../../theme/tokens/motion';
 import { VexFocusMark } from './VexFocusMark';
+import { AnimatedLetter } from './AnimatedLetter';
 
 interface AuthHeroBrandProps {
   label?: string;
@@ -32,8 +34,6 @@ export function AuthHeroBrand({
   const containerOpacity = useSharedValue(0);
   const containerTranslateY = useSharedValue(20);
   const taglineOpacity = useSharedValue(0);
-  const titleOpacity = useSharedValue(0);
-  const titleTranslateY = useSharedValue(12);
 
   useEffect(() => {
     if (isReducedMotion) {
@@ -42,8 +42,6 @@ export function AuthHeroBrand({
       containerOpacity.value = 1;
       containerTranslateY.value = 0;
       taglineOpacity.value = 1;
-      titleOpacity.value = 1;
-      titleTranslateY.value = 0;
       return;
     }
 
@@ -56,18 +54,7 @@ export function AuthHeroBrand({
     containerOpacity.value = withTiming(1, { duration: 520 });
     containerTranslateY.value = withSpring(0, springPresets.settle);
     taglineOpacity.value = withDelay(800, withTiming(1, { duration: 420 }));
-    titleOpacity.value = withDelay(360, withTiming(1, { duration: 420 }));
-    titleTranslateY.value = withDelay(360, withTiming(0, { duration: 420 }));
-  }, [
-    isReducedMotion,
-    glowOpacity,
-    dividerScale,
-    containerOpacity,
-    containerTranslateY,
-    taglineOpacity,
-    titleOpacity,
-    titleTranslateY,
-  ]);
+  }, [isReducedMotion, glowOpacity, dividerScale, containerOpacity, containerTranslateY, taglineOpacity]);
 
   const glowStyle = useAnimatedStyle(() => ({
     shadowOpacity: glowOpacity.value,
@@ -85,11 +72,6 @@ export function AuthHeroBrand({
 
   const taglineStyle = useAnimatedStyle(() => ({
     opacity: taglineOpacity.value,
-  }));
-
-  const titleStyle = useAnimatedStyle(() => ({
-    opacity: titleOpacity.value,
-    transform: [{ translateY: titleTranslateY.value }],
   }));
 
   return (
@@ -129,32 +111,16 @@ export function AuthHeroBrand({
         <VexFocusMark size={72} />
       </Animated.View>
 
-      <Animated.View
-        style={[
-          {
-            maxWidth: '100%',
-            paddingHorizontal: theme.spacing[2],
-          },
-          titleStyle,
-        ]}
-      >
-        <Text
-          color="text.primary"
-          textAlign="center"
-          variant="display"
-          letterSpacing={0}
-          style={{
-            flexShrink: 1,
-            fontSize: title.length > 8 ? 40 : 56,
-            lineHeight: title.length > 8 ? 46 : 60,
-            textShadowColor: 'rgba(0,229,255,0.15)',
-            textShadowOffset: { width: 0, height: 0 },
-            textShadowRadius: 24,
-          }}
-        >
-          {title}
-        </Text>
-      </Animated.View>
+      <View style={{ flexDirection: 'row' }}>
+        {title.split('').map((char, i) => (
+          <AnimatedLetter
+            key={`${char}-${i}`}
+            char={char}
+            index={i}
+            isReducedMotion={isReducedMotion}
+          />
+        ))}
+      </View>
 
       <Animated.View
         style={[

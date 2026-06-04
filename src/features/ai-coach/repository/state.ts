@@ -7,6 +7,7 @@
 import { getSupabaseClient } from '../../../config/supabase';
 import type { CoachState } from '../types';
 import { RepositoryError } from './error';
+import { tableColumns } from '../../../lib/repository/tableColumns';
 
 const supabase = getSupabaseClient();
 
@@ -20,7 +21,7 @@ export async function fetchCoachState(
 ): Promise<CoachState | null> {
   const { data, error } = await supabase
     .from(TABLE_NAME)
-    .select('*')
+    .select('user_id,current_state,previous_state,state_entered_at,persona_id,behavior_profile,last_intervention_at,interventions_today,mute_until,reduce_notifications')
     .eq('user_id', userId)
     .single();
 
@@ -72,7 +73,7 @@ export async function upsertCoachState(state: CoachState): Promise<CoachState> {
   const { data, error } = await supabase
     .from(TABLE_NAME)
     .upsert(dbRecord, { onConflict: 'user_id' })
-    .select()
+    .select(tableColumns(TABLE_NAME))
     .single();
 
   if (error) {

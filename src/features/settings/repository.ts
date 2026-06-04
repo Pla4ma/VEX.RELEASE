@@ -5,6 +5,7 @@ import type {
 } from './types';
 import { SettingRowSchema } from './schemas';
 import {
+import { tableColumns } from '../../lib/repository/tableColumns';
   trackPendingChange,
   clearPendingChange,
 } from './repository-sync';
@@ -18,7 +19,7 @@ export async function fetchSetting(
 ): Promise<Setting | null> {
   const { data, error } = await supabase
     .from(TABLE_SETTINGS)
-    .select('*')
+    .select('id,user_id,key,value,category,is_default,last_modified,last_synced,device_id')
     .eq('user_id', userId)
     .eq('key', key)
     .single();
@@ -34,7 +35,7 @@ export async function fetchSetting(
 export async function fetchAllSettings(userId: string): Promise<Setting[]> {
   const { data, error } = await supabase
     .from(TABLE_SETTINGS)
-    .select('*')
+    .select('id,user_id,key,value,category,is_default,last_modified,last_synced,device_id')
     .eq('user_id', userId)
     .order('key', { ascending: true });
   if (error) {
@@ -49,7 +50,7 @@ export async function fetchSettingsByCategory(
 ): Promise<Setting[]> {
   const { data, error } = await supabase
     .from(TABLE_SETTINGS)
-    .select('*')
+    .select('id,user_id,key,value,category,is_default,last_modified,last_synced,device_id')
     .eq('user_id', userId)
     .eq('category', category)
     .order('key', { ascending: true });
@@ -79,7 +80,7 @@ export async function upsertSetting(setting: {
   const { data, error } = await supabase
     .from(TABLE_SETTINGS)
     .upsert(dbRecord, { onConflict: 'user_id,key' })
-    .select()
+    .select(tableColumns(TABLE_SETTINGS))
     .single();
   if (error) {
     throw new Error(`Failed to upsert setting: ${error.message}`);
@@ -113,7 +114,7 @@ export async function batchUpsertSettings(
   const { data, error } = await supabase
     .from(TABLE_SETTINGS)
     .upsert(dbRecords, { onConflict: 'user_id,key' })
-    .select();
+    .select(tableColumns(TABLE_SETTINGS));
   if (error) {
     throw new Error(`Failed to batch upsert settings: ${error.message}`);
   }

@@ -1,4 +1,6 @@
 import { getSupabaseClient } from '../../config/supabase';
+import * as FileSystem from 'expo-file-system';
+import { getNetInfoAdapter } from '../../network/NetInfoAdapter';
 import type {
   ExtractContentRequest,
   GenerateStudyPlanRequest,
@@ -9,9 +11,7 @@ import { createDebugger } from '../../utils/debug';
 import { withResilience } from '../../utils/supabase-resilience';
 import { mapContentRow, mapGenerationRow } from './row-mappers';
 import { sanitizeFilename } from './validators-file';
-
 const debug = createDebugger('content-study:repository');
-
 const ALLOWED_URI_SCHEMES = ['file://', 'content://', 'https://'] as const;
 
 /**
@@ -57,15 +57,27 @@ export async function uploadStudyFileRecord(
 ): Promise<string> {
   try {
     debug.info('Uploading study file: %s for user: %s', filename, userId);
+
+    // P2-15: Check connectivity before upload attempt
+    const netState = getNetInfoAdapter().getCurrentState();
+    if (!netState.isConnected) {
+      throw new Error('Upload requires an internet connection. Please connect and try again.');
+    }
+
     validateFileUri(fileUri);
     const scheme = fileUri.split(':', 1)[0]!.toLowerCase();
     if (scheme !== 'file' && scheme !== 'content' && scheme !== 'https') {
       throw new Error(`Unsupported file URI scheme: ${scheme}`);
     }
-    const response = await globalThis.fetch(fileUri);
-    if (!response.ok) {
-      throw new Error('Failed to read file for upload');
+    // P0-6: Use expo-file-system for reliable cross-platform file reading
+    // globalThis.fetch() for file:// URIs is platform-specific and unreliable
+    const fileInfo = await FileSystem.getInfoAsync(fileUri);
+    if (!fileInfo.exists) {
+      throw new Error(`File not found at URI: ${fileUri}`);
     }
+    const base64Content = await FileSystem.readAsStringAsync(fileUri, {
+      encoding: FileSystem.EncodingType.Base64,
+    });
     const safeFilename = sanitizeFilename(filename);
     const ext = safeFilename.split('.').pop()?.toLowerCase() ?? '';
     const contentType = ext === 'pdf'
@@ -75,7 +87,13 @@ export async function uploadStudyFileRecord(
         : ext === 'md'
           ? 'text/markdown'
           : 'application/octet-stream';
-    const blob = await response.blob();
+    // Decode base64 to binary for upload
+    const binaryString = atob(base64Content);
+    const bytes = new Uint8Array(binaryString.length);
+    for (let i = 0; i < binaryString.length; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
+    }
+    const blob = new Blob([bytes], { type: contentType });
     const filePath = `${userId}/${Date.now()}_${safeFilename}`;
     const { error } = await getSupabaseClient()
       .storage.from('study-content')

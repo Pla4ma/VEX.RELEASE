@@ -1,42 +1,87 @@
-import { v4 } from '../../utils/uuid';
-import type { SessionSummary } from '../../session/types';
-import type { CompletionLedger } from './schemas';
+/**
+ * Session Completion Ledger Service
+ *
+ * Builds completion ledgers from session summary data.
+ * Ledger IDs and idempotency keys are cryptographically
+ * random — see src/utils/uuid.ts (expo-crypto backed).
+ */
 
-type LedgerInput = {
+import { v4 } from '../../utils/uuid';
+import type { CompletionLedger, CompletionSyncStatus } from './schemas';
+import {
+  CompletionLedgerSchema,
+  SessionCompletionGradeSchema,
+} from './schemas';
+import {
+  SessionSummarySchema,
+  type SessionSummary,
+} from '../../session/types/schemas';
+
+/** Input shape for building a completion ledger */
+interface BuildLedgerInput {
   completedAt: number;
-  offlineSyncStatus: CompletionLedger['offlineSyncStatus'];
+  offlineSyncStatus: CompletionSyncStatus;
   sessionId: string;
-  summary: SessionSummary;
+  summary: unknown;
   timezone: string;
   userId: string;
-};
+}
 
-export function buildCompletionLedger(input: LedgerInput): CompletionLedger {
-  const score = Math.max(0, Math.min(100, input.summary.finalScore));
-  return {
+/**
+ * Derive a completion grade from the session's final score.
+ * S: 95+, A: 80+, B: 60+, C: 40+, D: below 40.
+ */
+function deriveGrade(finalScore: number): 'S' | 'A' | 'B' | 'C' | 'D' {
+  if (finalScore >= 95) return 'S';
+  if (finalScore >= 80) return 'A';
+  if (finalScore >= 60) return 'B';
+  if (finalScore >= 40) return 'C';
+  return 'D';
+}
+
+/**
+ * Build a CompletionLedger from session completion input.
+ *
+ * idempotencyKey format: `userId:sessionId`
+ * - sessionId is cryptographically random (expo-crypto)
+ * - Server deduplicates on UNIQUE(idempotency_key)
+ * - Retries with same session ID are intentionally deduplicated
+ */
+export function buildCompletionLedger(input: BuildLedgerInput): CompletionLedger {
+  const summary: SessionSummary = SessionSummarySchema.parse(input.summary);
+  // idempotencyKey format: userId:sessionId
+  // - sessionId is cryptographically random (expo-crypto, see uuid.ts)
+  // - Server deduplicates on UNIQUE(idempotency_key) in session_completion_ledger
+  // - Retries with the same session ID are intentionally deduplicated (safe)
+  const idempotencyKey = `${input.userId}:${input.sessionId}`;
+  const grade = deriveGrade(summary.finalScore);
+
+  const ledger: CompletionLedger = {
     ledgerId: v4(),
-    idempotencyKey: `${input.userId}:${input.sessionId}`,
+    idempotencyKey,
     sessionId: input.sessionId,
     userId: input.userId,
-    mode: input.summary.sessionMode,
-    targetDurationSeconds: input.summary.plannedDuration,
-    completedDurationSeconds: input.summary.actualDuration,
-    effectiveFocusedSeconds: input.summary.effectiveDuration,
-    pauseCount: input.summary.pauses,
-    interruptionCount: input.summary.interruptions,
-    strictMode: false,
-    startedAt: input.summary.createdAt,
+    mode: summary.sessionMode,
+    targetDurationSeconds: summary.plannedDuration,
+    completedDurationSeconds: summary.actualDuration,
+    effectiveFocusedSeconds: summary.effectiveDuration,
+    pauseCount: summary.pauses,
+    interruptionCount: summary.interruptions,
+    strictMode: summary.pauses === 0 && summary.interruptions === 0,
+    startedAt: summary.createdAt,
     completedAt: input.completedAt,
     timezone: input.timezone,
-    grade: score >= 95 ? 'S' : score >= 85 ? 'A' : score >= 70 ? 'B' : score >= 55 ? 'C' : 'D',
-    gradeScore: score,
-    qualityScore: score,
-    focusScoreDelta: Math.round(score / 10),
-    xpDelta: input.summary.xpEarned ?? Math.round(score),
+    grade: SessionCompletionGradeSchema.parse(grade),
+    gradeScore: summary.finalScore,
+    qualityScore: summary.focusQuality,
+    focusScoreDelta: summary.focusPurityScore ?? 0,
+    xpDelta: summary.xpEarned,
     streakResult: {
-      action: input.summary.streakIncreased ? 'extended' : 'maintained',
-      newDays: input.summary.streakDays ?? 0,
-      previousDays: Math.max(0, (input.summary.streakDays ?? 0) - 1),
+      action: summary.streakIncreased ? 'extended' : 'maintained',
+      newDays: summary.streakDays,
+      previousDays: summary.streakIncreased
+        ? summary.streakDays - 1
+        : summary.streakDays,
     },
     companionReactionId: null,
     rewardIds: [],
@@ -49,4 +94,6 @@ export function buildCompletionLedger(input: LedgerInput): CompletionLedger {
     degradedSystems: [],
     createdAt: Date.now(),
   };
+
+  return CompletionLedgerSchema.parse(ledger);
 }

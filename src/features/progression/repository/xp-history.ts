@@ -1,12 +1,13 @@
-import { getSupabaseClient } from '../../../config/supabase';
-import { RepositoryError } from '../../../lib/repository/error-handling';
-import { v4 } from '../../../utils/uuid';
+import { getSupabaseClient } from '../../config/supabase';
+import { RepositoryError } from '../../lib/repository/error-handling';
+import { v4 } from '../../utils/uuid';
 import { z } from 'zod';
 import {
   XpEntrySchema,
   type XpEntry,
 } from '../schemas';
-import { withResilience } from '../../../utils/supabase-resilience';
+import { withResilience } from '../../utils/supabase-resilience';
+import { tableColumns } from '../../../lib/repository/tableColumns';
 
 const supabase = getSupabaseClient();
 
@@ -17,7 +18,7 @@ export async function fetchXpHistory(
 ): Promise<XpEntry[]> {
   let query = supabase
     .from('xp_history')
-    .select('*')
+    .select('id,amount,source,session_id,metadata,created_at')
     .eq('user_id', userId)
     .order('created_at', { ascending: false });
 
@@ -51,7 +52,7 @@ export async function recordXpEntry(
   };
 
   const { data, error } = await withResilience(
-    supabase.from('xp_history').insert(newEntry).select().single(),
+    supabase.from('xp_history').insert(newEntry).select(tableColumns('xp_history')).single(),
     { operation: 'recordXpEntry', fallbackValue: newEntry },
   );
   if (error) {

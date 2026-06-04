@@ -1,9 +1,9 @@
-import type { MessageCategory, DeliveryMethod } from './coach-message-types';
+import type { MessageCategory, DeliveryMethod } from './message/coach-message-types';
 import type {
   BehaviorProfile,
   SignalType,
   TriggerType,
-} from './coach-intervention-types';
+} from './intervention/coach-intervention-types';
 
 export type RecommendationType =
   | 'OPTIMAL_TIME'

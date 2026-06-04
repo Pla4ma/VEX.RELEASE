@@ -10,6 +10,7 @@ import { createDebugger } from '../../../utils/debug';
 import * as Sentry from '@sentry/react-native';
 import { FirstWeekProgressSchema, type FirstWeekProgress } from './schemas';
 import {
+import { tableColumns } from '../../../lib/repository/tableColumns';
   progressToNextSession as progressToNextSessionImpl,
   getSessionUnlocks,
   getSessionXpReward,
@@ -76,7 +77,7 @@ export async function getFirstWeekProgress(
 
     const { data, error } = await supabase
       .from('first_week_progress')
-      .select('*')
+      .select('user_id,current_session,sessions_completed,unlocked_features,next_unlock,total_xp_earned,level_progress,companion_unlocked,streak_explained,first_reward_earned,ai_coach_unlocked,weekly_milestone_earned,started_at,last_session_at')
       .eq('user_id', userId)
       .single();
 
@@ -111,7 +112,7 @@ export async function getFirstWeekProgress(
     const { data: createdData, error: createError } = await supabase
       .from('first_week_progress')
       .insert(newProgress)
-      .select()
+      .select(tableColumns('first_week_progress'))
       .single();
 
     if (createError) {

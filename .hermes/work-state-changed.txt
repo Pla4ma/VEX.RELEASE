@@ -1,16 +1,1 @@
-.github/workflows/vex-ci.yml
-.hermes/work-state.json
-jobs/challenges/daily-refresh.ts
-jobs/maintenance/health-check-checks.ts
-jobs/maintenance/health-check.ts
-jobs/maintenance/rate-limit-cleanup.ts
-jobs/notifications/batch-send.ts
-jobs/notifications/re-engagement-check.ts
-jobs/seasons/finalize-season.ts
-jobs/squad-wars/__tests__/weekly-reset.test.ts
-jobs/squad-wars/weekly-reset-database.ts
-src/features/liveops-config/feature-health-checks.ts
-supabase/functions/ai/auth.ts
-supabase/functions/ai/index.ts
-supabase/functions/content-study/index.ts
-supabase/functions/session-complete/index.ts
+

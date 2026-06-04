@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { getSupabaseClient, handleSupabaseError } from '../../../config/supabase';
 import {
+import { tableColumns } from '../../../lib/repository/tableColumns';
   AnalyticsPreferencesSchema,
   AggregatedStatsSchema,
   DetectedPatternSchema,
@@ -14,7 +15,7 @@ const supabase = getSupabaseClient();
 export async function fetchAnalyticsPreferences(userId: string) {
   const { data, error } = await supabase
     .from('analytics_preferences')
-    .select('*')
+    .select('user_id,default_time_range,default_dashboard_id,email_reports_enabled,email_report_frequency,insight_notifications_enabled,auto_refresh_enabled,auto_refresh_interval,currency_display,timezone,updated_at')
     .eq('user_id', userId)
     .single();
   if (error && error.code !== 'PGRST116') {
@@ -30,7 +31,7 @@ export async function updateAnalyticsPreferences(
   const { data, error } = await supabase
     .from('analytics_preferences')
     .upsert({ user_id: userId, ...preferences, updated_at: Date.now() })
-    .select()
+    .select(tableColumns('analytics_preferences'))
     .single();
   if (error) {
     throw handleSupabaseError(error);
@@ -41,7 +42,7 @@ export async function updateAnalyticsPreferences(
 export async function fetchAggregatedStats(userId: string, period: TimeRange) {
   const { data, error } = await supabase
     .from('aggregated_stats')
-    .select('*')
+    .select('user_id,period,generated_at,metrics,insights,patterns,top_performing')
     .eq('user_id', userId)
     .eq('period', period)
     .single();
@@ -57,7 +58,7 @@ export async function storeAggregatedStats(
   const { data, error } = await supabase
     .from('aggregated_stats')
     .upsert(stats)
-    .select()
+    .select(tableColumns('aggregated_stats'))
     .single();
   if (error) {
     throw handleSupabaseError(error);
@@ -71,7 +72,7 @@ export async function fetchDetectedPatterns(
 ) {
   let query = supabase
     .from('detected_patterns')
-    .select('*')
+    .select('id,user_id,type,metric,description,confidence,detected_at,start_date,end_date,related_events,recommendations')
     .eq('user_id', userId)
     .order('detected_at', { ascending: false });
   if (options?.since) {
@@ -96,7 +97,7 @@ export async function storeDetectedPattern(
   const { data, error } = await supabase
     .from('detected_patterns')
     .insert(pattern)
-    .select()
+    .select(tableColumns('detected_patterns'))
     .single();
   if (error) {
     throw handleSupabaseError(error);

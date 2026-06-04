@@ -6,6 +6,7 @@ import {
   type BehaviorProfile,
 } from '../schemas';
 import { RepositoryError } from './error';
+import { tableColumns } from '../../../lib/repository/tableColumns';
 
 const supabase = getSupabaseClient();
 
@@ -39,7 +40,7 @@ export async function upsertBehaviorProfile(
       cold_start: profile.coldStart,
       data_points: profile.dataPoints,
     })
-    .select()
+    .select(tableColumns('behavior_profiles'))
     .single();
   if (error) {
     throw new RepositoryError('upsertBehaviorProfile', error);
@@ -62,7 +63,7 @@ export async function addBehaviorSignal(
       metadata: signal.metadata,
       expires_at: signal.expiresAt,
     })
-    .select()
+    .select(tableColumns('behavior_signals'))
     .single();
   if (error) {
     throw new RepositoryError('addBehaviorSignal', error);
@@ -76,7 +77,7 @@ export async function fetchRecentBehaviorSignals(
 ): Promise<BehaviorSignal[]> {
   const { data, error } = await supabase
     .from('behavior_signals')
-    .select('*')
+    .select('id,user_id,signal_type,value,confidence,timestamp,metadata,expires_at')
     .eq('user_id', userId)
     .order('timestamp', { ascending: false })
     .limit(limit);

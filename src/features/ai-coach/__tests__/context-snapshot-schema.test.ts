@@ -1,7 +1,7 @@
 import {
   ContextSnapshotSchema,
   generateContextSnapshot,
-} from '../context-snapshot';
+} from '../session/context-snapshot';
 
 describe('Context Snapshot Service', () => {
   describe('ContextSnapshotSchema', () => {

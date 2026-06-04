@@ -9,6 +9,7 @@ import { getSupabaseClient } from '../../config/supabase';
 const supabase = getSupabaseClient();
 import { type UserAchievement } from './types';
 import { UserAchievementRowSchema } from './schemas';
+import { tableColumns } from '../../lib/repository/tableColumns';
 
 // ============================================================================
 // User Achievements
@@ -20,7 +21,7 @@ export async function getUserAchievement(
 ): Promise<UserAchievement | null> {
   const { data, error } = await supabase
     .from('user_achievements')
-    .select('*')
+    .select('user_id,achievement_id,progress,max_progress,is_unlocked,unlocked_at,progress_history')
     .eq('user_id', userId)
     .eq('achievement_id', achievementId)
     .single();
@@ -46,7 +47,7 @@ export async function getAllUserAchievements(
 ): Promise<UserAchievement[]> {
   const { data, error } = await supabase
     .from('user_achievements')
-    .select('*')
+    .select('user_id,achievement_id,progress,max_progress,is_unlocked,unlocked_at,progress_history')
     .eq('user_id', userId);
 
   if (error || !data) {
@@ -84,7 +85,7 @@ export async function createUserAchievement(
       is_unlocked: initialData.isUnlocked,
       progress_history: [],
     })
-    .select()
+    .select(tableColumns('user_achievements'))
     .single();
 
   if (error || !data) {
@@ -129,7 +130,7 @@ export async function updateAchievementProgress(
     .update(updateData)
     .eq('user_id', userId)
     .eq('achievement_id', achievementId)
-    .select()
+    .select(tableColumns('user_achievements'))
     .single();
 
   if (error || !data) {

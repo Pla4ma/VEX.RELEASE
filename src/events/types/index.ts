@@ -29,7 +29,6 @@ import type { MilestoneEventDefinitions } from './milestone';
 import type { SessionEventDefinitions } from './session';
 import type { InventoryEventDefinitions } from './inventory';
 import type { AchievementEventDefinitions } from './achievement';
-import type { BoostEventDefinitions } from './boost';
 import type { CoachEventDefinitions } from './coach';
 import type { IntegrationEventDefinitions } from './integration';
 import type { BossEventDefinitions } from './boss';
@@ -41,10 +40,6 @@ import type { FocusContractEventDefinitions } from './focus-contract';
 import type { CompanionEventDefinitions } from './companion';
 import type { FeatureGateEventDefinitions } from './feature-gate';
 import type { AccountDeletionEventDefinitions } from './account-deletion';
-import type { CosmeticsEventDefinitions } from './cosmetics';
-import type { DuelEventDefinitions } from './duel';
-import type { SeasonsEventDefinitions } from './seasons';
-import type { LeaderboardEventDefinitions } from './leaderboards';
 
 export * from './base';
 export * from './onboarding';
@@ -77,7 +72,6 @@ export * from './milestone';
 export * from './session';
 export * from './inventory';
 export * from './achievement';
-export * from './boost';
 export * from './coach';
 export * from './integration';
 export * from './boss';
@@ -89,10 +83,6 @@ export * from './focus-contract';
 export * from './companion';
 export * from './feature-gate';
 export * from './account-deletion';
-export * from './cosmetics';
-export * from './duel';
-export * from './seasons';
-export * from './leaderboards';
 
 export interface EventChannels
   extends
@@ -127,7 +117,6 @@ export interface EventChannels
     SessionEventDefinitions,
     InventoryEventDefinitions,
     AchievementEventDefinitions,
-    BoostEventDefinitions,
     CoachEventDefinitions,
     IntegrationEventDefinitions,
     BossEventDefinitions,
@@ -138,11 +127,7 @@ export interface EventChannels
     FocusContractEventDefinitions,
     CompanionEventDefinitions,
     FeatureGateEventDefinitions,
-    AccountDeletionEventDefinitions,
-    CosmeticsEventDefinitions,
-    DuelEventDefinitions,
-    SeasonsEventDefinitions,
-    LeaderboardEventDefinitions {
+    AccountDeletionEventDefinitions {
   // index signature removed — EventChannel must be a union of declared keys only
 }
 

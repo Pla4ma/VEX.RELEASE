@@ -23,6 +23,9 @@ export function SettingsProfileRow({
       style={{ marginHorizontal: 16, marginBottom: 24 }}
       size="lg"
       onPress={onPress}
+      accessibilityLabel={`${displayName} profile`}
+      accessibilityRole="button"
+      accessibilityHint="Opens your profile details"
     >
       <Box flexDirection="row" alignItems="center" flex={1}>
         <Avatar name={displayName} size="lg" />

@@ -71,9 +71,9 @@ export const CoachFrequencySelector: React.FC<
                 paddingVertical: 16,
                 paddingHorizontal: 16,
               }}
-              accessibilityLabel="Coach frequency option"
+              accessibilityLabel={`${option.label} coach frequency`}
               accessibilityRole="button"
-              accessibilityHint="Double tap to change setting"
+              accessibilityHint={`Set coach messages to ${option.label.toLowerCase()}`}
             >
               <Box
                 width={40}

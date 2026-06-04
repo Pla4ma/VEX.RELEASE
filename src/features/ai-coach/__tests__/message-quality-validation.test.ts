@@ -2,7 +2,7 @@ import { describe, expect, it } from '@jest/globals';
 import {
   MessageQualityElements,
   validateMessageQuality,
-} from '../message-quality-gate';
+} from '../message/message-quality-gate';
 
 describe('Message quality validation', () => {
   it('approves high-quality messages with multiple elements', () => {

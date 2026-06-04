@@ -7,8 +7,8 @@
 // Types - from schemas.ts (which includes types inferred from Zod schemas)
 export * from './schemas';
 export * from './events';
-export * from './memory-schemas';
-export * from './memory-events';
+export * from './memory/memory-schemas';
+export * from './memory/memory-events';
 
 // Service layer
 export * as coachService from './services/service';
@@ -43,7 +43,7 @@ export {
   getContextHash,
   shouldCoachIntervene,
   type ContextSnapshot,
-} from './context-snapshot';
+} from './session/context-snapshot';
 
 // Recommendation Pipeline
 export {
@@ -56,7 +56,7 @@ export {
   isRecommendationRelevant,
   trackRecommendationInteraction,
   type CoachRecommendation,
-} from './recommendation-pipeline';
+} from './recommendation/recommendation-pipeline';
 
 // Study Loop
 export {
@@ -75,7 +75,7 @@ export {
   StudyPlanSchema,
   type StudyPlan,
   type StudySessionResult,
-} from './study-loop';
+} from './session/study-loop';
 
 export {
   SessionSuggestionCard,

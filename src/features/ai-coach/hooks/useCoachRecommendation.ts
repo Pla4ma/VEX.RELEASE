@@ -6,8 +6,8 @@ import { useProgressionSummary } from '../../progression/hooks';
 import { useActiveBoss } from '../../boss/hooks';
 import { useSessionStats } from '../../../session/hooks/useSession';
 import { useAuthStore } from '../../../store';
-import { buildBehaviorProfile } from '../session-analyzer';
-import { getOrCreateCoachState } from '../persona-manager';
+import { buildBehaviorProfile } from '../session/session-analyzer';
+import { getOrCreateCoachState } from '../persona/persona-manager';
 import {
   CoachRecommendationService,
   type CoachRecommendation,

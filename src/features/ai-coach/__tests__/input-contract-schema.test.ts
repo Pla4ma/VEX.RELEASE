@@ -3,7 +3,7 @@ import {
   CoachInputContractSchema,
   containsForbiddenPII,
   validateCoachInput,
-} from '../input-contract';
+} from '../input/input-contract';
 import { createMockCoachInput } from './input-contract-test-utils';
 
 describe('Coach input contract schema', () => {

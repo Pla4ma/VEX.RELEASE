@@ -63,6 +63,11 @@ export function useRealtimeCoachMessages(userId: string) {
       ) {
         showLocalNotification(newMessage);
       }
+    }, () => {
+      // P2-10: Reconnect — invalidate to fetch missed messages
+      queryClient.invalidateQueries({
+        queryKey: COACH_QUERY_KEYS.messages(userId),
+      });
     });
     subscriptionRef.current = subscription;
     return () => {

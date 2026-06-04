@@ -1,4 +1,4 @@
-import { StudyPlanSchema } from '../study-loop';
+import { StudyPlanSchema } from '../session/study-loop';
 
 describe('StudyPlanSchema', () => {
   it('validates valid study plan', () => {

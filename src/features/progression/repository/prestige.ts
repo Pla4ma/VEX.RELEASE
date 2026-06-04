@@ -5,6 +5,7 @@
 
 import { supabase } from '../../../config/supabase';
 import type { PrestigeState } from '../prestige-system';
+import { tableColumns } from '../../../lib/repository/tableColumns';
 
 const TABLE = 'prestige_states';
 
@@ -13,7 +14,7 @@ export async function fetchPrestigeState(
 ): Promise<PrestigeState | null> {
   const { data, error } = await supabase
     .from(TABLE)
-    .select('*')
+    .select('user_id,prestige_level,total_prestiges,first_prestige_at,last_prestige_at,active_bonuses,fastest_prestige_days,most_xp_at_prestige,nightmare_unlocked,nightmare_completions')
     .eq('user_id', userId)
     .single();
 
@@ -37,7 +38,7 @@ export async function createPrestigeState(
   const { data, error } = await supabase
     .from(TABLE)
     .insert({ user_id: userId })
-    .select()
+    .select(tableColumns(TABLE))
     .single();
 
   if (error) {

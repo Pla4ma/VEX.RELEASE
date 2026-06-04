@@ -5,8 +5,8 @@ import {
   createMockNotificationBudget,
   createMockNotificationRequest,
   sendNotificationWithBudget,
-} from '../notification-budget';
-import { sendCoachNotification, getNotificationBudgetStatus } from '../notification-budget-coach';
+} from '../notification/notification-budget';
+import { sendCoachNotification, getNotificationBudgetStatus } from '../notification/notification-budget-coach';
 
 function mockCurrentHour(hour: number): void {
   const date = new Date('2026-05-07T00:00:00.000Z');

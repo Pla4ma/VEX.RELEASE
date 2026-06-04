@@ -69,7 +69,7 @@ export async function fetchNotificationCenterItems(
 ): Promise<NotificationCenterItem[]> {
   const { data, error } = await supabase
     .from('notifications')
-    .select('*')
+    .select('id,type,notification_type,title,message,body,created_at,timestamp,read,is_read,avatar,action_text,action_route,action_params')
     .eq('user_id', userId)
     .order('created_at', { ascending: false })
     .limit(100);

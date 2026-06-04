@@ -14,7 +14,7 @@ import type {
   CoachMemory,
   CreateCoachMemoryInput,
   MemoryType,
-} from '../memory-schemas';
+} from '../memory/memory-schemas';
 import { useNetworkStatus } from './useNetworkStatus';
 
 const memoryKeys = {

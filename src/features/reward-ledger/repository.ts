@@ -5,6 +5,7 @@ import {
 } from './schemas';
 import type { CreateRewardLedgerInput, RewardLedgerRecord } from './types';
 import * as z from 'zod';
+import { tableColumns } from '../../lib/repository/tableColumns';
 
 export class RewardLedgerRepositoryError extends Error {
   constructor(
@@ -36,7 +37,7 @@ export async function upsertRewardLedger(
       },
       { onConflict: 'idempotency_key' },
     )
-    .select()
+    .select(tableColumns('reward_ledger'))
     .single();
 
   if (error) {
@@ -64,7 +65,7 @@ export async function getRewardLedgerById(
 ): Promise<RewardLedgerRecord> {
   const { data, error } = await supabase
     .from('reward_ledger')
-    .select('*')
+    .select('id,user_id,idempotency_key,reward_type,amount,currency,status,source_event,created_at,delivered_at,failed_reason,expires_at')
     .eq('id', ledgerId)
     .single();
 
@@ -103,7 +104,7 @@ export async function updateRewardLedgerStatus(
     .from('reward_ledger')
     .update(updateData)
     .eq('id', ledgerId)
-    .select()
+    .select(tableColumns('reward_ledger'))
     .single();
 
   if (error) {
@@ -131,7 +132,7 @@ export async function fetchPendingRewards(
 ): Promise<RewardLedgerRecord[]> {
   const { data, error } = await supabase
     .from('reward_ledger')
-    .select('*')
+    .select('id,user_id,idempotency_key,reward_type,amount,currency,status,source_event,created_at,delivered_at,failed_reason,expires_at')
     .eq('user_id', userId)
     .eq('status', 'pending');
 

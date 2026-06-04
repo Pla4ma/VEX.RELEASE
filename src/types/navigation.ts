@@ -1,6 +1,33 @@
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import type { CompositeScreenProps } from '@react-navigation/native';
+
+/** Known modal screen names that can be presented inside the Modal route */
+export type ModalScreenName = keyof ModalStackParamList;
+
+/** Known settings sections that can be navigated to directly */
+export type SettingsSection =
+  | 'account'
+  | 'notifications'
+  | 'privacy'
+  | 'appearance'
+  | 'accessibility'
+  | 'coach'
+  | 'lane'
+  | 'data-export'
+  | 'about';
+
+/** Known filter keys that can be passed as initial filter state */
+export type FilterKey =
+  | 'category'
+  | 'difficulty'
+  | 'duration'
+  | 'status'
+  | 'tag'
+  | 'sort';
+
+export type FilterParams = Partial<Record<FilterKey, string | string[] | number>>;
+
 export type RootStackParamList = {
   Main: undefined;
   Auth: undefined;
@@ -10,8 +37,8 @@ export type RootStackParamList = {
   ResetPassword: { token: string };
   VerifyEmail: { token: string };
   Onboarding: { step?: number };
-  Modal: { screen: string; params?: Record<string, unknown> };
-  Settings: { section?: string };
+  Modal: { screen: ModalScreenName; params?: ModalStackParamList[ModalScreenName] };
+  Settings: { section?: SettingsSection };
   Profile: { userId: string };
   SquadDetails: { squadId: string };
   NotFound: undefined;
@@ -39,10 +66,10 @@ export type OnboardingStackParamList = {
   Complete: undefined;
 };
 export type ModalStackParamList = {
-  Settings: { section?: string };
+  Settings: { section?: SettingsSection };
   Notifications: undefined;
   Search: { query?: string };
-  Filters: { initialFilters?: Record<string, unknown> };
+  Filters: { initialFilters?: FilterParams };
 };
 export type RootStackScreenProps<T extends keyof RootStackParamList> =
   NativeStackScreenProps<RootStackParamList, T>;
@@ -67,7 +94,7 @@ export interface NavigationState {
   currentRoute: RouteName;
   previousRoute?: RouteName;
   routeHistory: RouteName[];
-  params?: Record<string, unknown>;
+  params?: RootStackParamList[keyof RootStackParamList];
   timestamp: string;
 }
 export interface DeepLinkConfig {
@@ -117,7 +144,7 @@ export interface GuardCheckResult {
 }
 export type NavigationGuard = (
   route: keyof RootStackParamList,
-  params?: Record<string, unknown>,
+  params?: RootStackParamList[keyof RootStackParamList],
 ) => GuardCheckResult | Promise<GuardCheckResult>;
 export type NavigationEventType =
   | 'focus'
@@ -132,12 +159,12 @@ export interface NavigationEvent {
   type: NavigationEventType;
   route: RouteName;
   timestamp: string;
-  data?: Record<string, unknown>;
+  data?: { [key: string]: string | number | boolean | undefined };
 }
 export interface NavigationAnalytics {
   screenName: string;
   screenClass: string;
   previousScreen?: string;
   timeOnScreen: number;
-  params?: Record<string, unknown>;
+  params?: RootStackParamList[keyof RootStackParamList];
 }

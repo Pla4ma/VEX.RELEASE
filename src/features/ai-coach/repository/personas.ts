@@ -13,7 +13,7 @@ const supabase = getSupabaseClient();
 export async function fetchCoachPersonas(): Promise<CoachPersona[]> {
   const { data, error } = await supabase
     .from('coach_personas')
-    .select('*')
+    .select('id,name,description,avatar_url,voice_tone,style,catchphrase,default_enabled')
     .eq('default_enabled', true)
     .order('name');
   if (error) {
@@ -27,7 +27,7 @@ export async function fetchCoachPersona(
 ): Promise<CoachPersona | null> {
   const { data, error } = await supabase
     .from('coach_personas')
-    .select('*')
+    .select('id,name,description,avatar_url,voice_tone,style,catchphrase,default_enabled')
     .eq('id', personaId)
     .single();
   if (error) {
@@ -45,7 +45,7 @@ export async function fetchMessageTemplates(
 ): Promise<CoachMessageTemplate[]> {
   const { data, error } = await supabase
     .from('coach_message_templates')
-    .select('*')
+    .select('id,persona_id,category,subcategory,priority,content,conditions,variations,cooldown_hours')
     .eq('persona_id', personaId)
     .eq('category', category)
     .order('priority', { ascending: false });
@@ -60,7 +60,7 @@ export async function fetchAllMessageTemplates(
 ): Promise<CoachMessageTemplate[]> {
   const { data, error } = await supabase
     .from('coach_message_templates')
-    .select('*')
+    .select('id,persona_id,category,subcategory,priority,content,conditions,variations,cooldown_hours')
     .eq('persona_id', personaId)
     .order('priority', { ascending: false });
   if (error) {

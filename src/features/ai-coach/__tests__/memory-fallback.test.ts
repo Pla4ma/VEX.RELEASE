@@ -12,7 +12,7 @@ import {
   storeMemory,
   getOnboardingGoal,
   getMilestoneSummary,
-} from '../CoachMemory';
+} from '../memory/CoachMemory';
 
 jest.mock('../repository/memories', () => ({
   createMemory: jest.fn().mockRejectedValue(new Error('Supabase unavailable')),

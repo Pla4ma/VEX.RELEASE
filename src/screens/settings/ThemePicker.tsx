@@ -54,9 +54,9 @@ export const ThemePicker: React.FC<ThemePickerProps> = ({
                 paddingVertical: 16,
                 paddingHorizontal: 16,
               }}
-              accessibilityLabel="Theme option"
+              accessibilityLabel={`${option.label} theme`}
               accessibilityRole="button"
-              accessibilityHint="Double tap to change setting"
+              accessibilityHint={`Switch to ${option.label.toLowerCase()} theme`}
             >
               <Box
                 width={40}

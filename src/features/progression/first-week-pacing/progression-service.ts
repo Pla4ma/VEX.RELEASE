@@ -13,6 +13,7 @@ import {
 } from './schemas';
 import { FIRST_WEEK_CONFIG, getNextSession, getSessionNumber } from './config';
 import { calculateLevelProgress } from './progression-helpers';
+import { tableColumns } from '../../../lib/repository/tableColumns';
 
 export {
   calculateLevelProgress,
@@ -41,7 +42,7 @@ export async function progressToNextSession(
     // Get current progress
     const { data: currentProgress, error: fetchError } = await supabase
       .from('first_week_progress')
-      .select('*')
+      .select('user_id,current_session,sessions_completed,unlocked_features,next_unlock,total_xp_earned,level_progress,companion_unlocked,streak_explained,first_reward_earned,ai_coach_unlocked,weekly_milestone_earned,started_at,last_session_at')
       .eq('user_id', userId)
       .single();
 
@@ -116,7 +117,7 @@ export async function progressToNextSession(
       .from('first_week_progress')
       .update(updateData)
       .eq('user_id', userId)
-      .select()
+      .select(tableColumns('first_week_progress'))
       .single();
 
     if (error) {

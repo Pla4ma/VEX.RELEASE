@@ -73,6 +73,17 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorState> {
     errorInfo: ErrorInfo,
     category: ErrorCategory,
   ): void {
+    // P1-16: Capture all uncaught errors in Sentry
+    try {
+      const Sentry = require('@sentry/react-native');
+      Sentry.captureException(error, {
+        tags: { errorBoundary: 'root', category },
+        extra: { componentStack: errorInfo.componentStack },
+      });
+    } catch {
+      // Sentry unavailable in Expo Go — non-critical
+    }
+
     const analytics = getAnalyticsService();
     analytics.track('error', {
       error: error.message,
@@ -127,11 +138,9 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorState> {
       }
     }
   };
-
   private handleDegradedContinue = (): void => {
     this.setState({ degraded: true, hasError: false });
   };
-
   private renderErrorUI(): ReactNode {
     const { fallback, maxRetries = 3, allowDegraded = true } = this.props;
     const { error, category, retryCount, isRetrying, degraded } = this.state;

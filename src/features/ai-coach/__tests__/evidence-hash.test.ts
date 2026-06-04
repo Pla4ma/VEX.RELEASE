@@ -1,4 +1,4 @@
-import { hashEvidence } from '../CoachMemory';
+import { hashEvidence } from '../memory/CoachMemory';
 
 describe('Evidence hash', () => {
   it('hashEvidence produces consistent output', () => {

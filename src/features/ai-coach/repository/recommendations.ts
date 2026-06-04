@@ -5,6 +5,7 @@ import {
   type RecommendationType,
 } from '../schemas';
 import { RepositoryError } from './error';
+import { tableColumns } from '../../../lib/repository/tableColumns';
 
 const supabase = getSupabaseClient();
 
@@ -14,7 +15,7 @@ export async function fetchRecommendations(
 ): Promise<SessionRecommendation[]> {
   const { data, error } = await supabase
     .from('session_recommendations')
-    .select('*')
+    .select('id,user_id,recommendation_type,title,description,priority,reason,metadata,status,created_at,expires_at,accepted_at,dismissed_at,suggested_duration,suggested_difficulty,reasoning,confidence,based_on')
     .eq('user_id', userId)
     .order('created_at', { ascending: false })
     .limit(limit);
@@ -30,7 +31,7 @@ export async function fetchActiveRecommendations(
 ): Promise<SessionRecommendation[]> {
   const { data, error } = await supabase
     .from('session_recommendations')
-    .select('*')
+    .select('id,user_id,recommendation_type,title,description,priority,reason,metadata,status,created_at,expires_at,accepted_at,dismissed_at,suggested_duration,suggested_difficulty,reasoning,confidence,based_on')
     .eq('user_id', userId)
     .eq('status', 'ACTIVE')
     .order('priority', { ascending: false })
@@ -48,7 +49,7 @@ export async function fetchRecommendationsByType(
 ): Promise<SessionRecommendation[]> {
   const { data, error } = await supabase
     .from('session_recommendations')
-    .select('*')
+    .select('id,user_id,recommendation_type,title,description,priority,reason,metadata,status,created_at,expires_at,accepted_at,dismissed_at,suggested_duration,suggested_difficulty,reasoning,confidence,based_on')
     .eq('user_id', userId)
     .eq('recommendation_type', type)
     .order('created_at', { ascending: false });
@@ -78,7 +79,7 @@ export async function createRecommendation(
       accepted_at: recommendation.acceptedAt,
       dismissed_at: recommendation.dismissedAt,
     })
-    .select()
+    .select(tableColumns('session_recommendations'))
     .single();
   if (error) {
     throw new RepositoryError('createRecommendation', error);
@@ -104,7 +105,7 @@ export async function updateRecommendationStatus(
     .from('session_recommendations')
     .update(updates)
     .eq('id', recommendationId)
-    .select()
+    .select(tableColumns('session_recommendations'))
     .single();
   if (error) {
     throw new RepositoryError('updateRecommendationStatus', error);

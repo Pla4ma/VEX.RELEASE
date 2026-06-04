@@ -1,4 +1,4 @@
-import { isRecommendationRelevant } from '../recommendation-pipeline';
+import { isRecommendationRelevant } from '../recommendation/recommendation-pipeline';
 import { mockContext } from './recommendation-test-fixtures';
 
 describe('isRecommendationRelevant', () => {

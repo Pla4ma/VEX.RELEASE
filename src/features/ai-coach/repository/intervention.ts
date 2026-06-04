@@ -7,13 +7,14 @@ import {
   type TriggerType,
 } from '../schemas';
 import { RepositoryError } from './error';
+import { tableColumns } from '../../../lib/repository/tableColumns';
 
 const supabase = getSupabaseClient();
 
 export async function fetchInterventionRules(): Promise<InterventionRule[]> {
   const { data, error } = await supabase
     .from('intervention_rules')
-    .select('*')
+    .select('id,name,trigger_type,trigger_threshold,conditions,action_type,message_template_id,delivery_method,delay_minutes,priority,cooldown_hours,max_per_day,is_active')
     .eq('is_active', true)
     .order('priority', { ascending: false });
   if (error) {
@@ -27,7 +28,7 @@ export async function fetchInterventionRulesByTrigger(
 ): Promise<InterventionRule[]> {
   const { data, error } = await supabase
     .from('intervention_rules')
-    .select('*')
+    .select('id,name,trigger_type,trigger_threshold,conditions,action_type,message_template_id,delivery_method,delay_minutes,priority,cooldown_hours,max_per_day,is_active')
     .eq('is_active', true)
     .eq('trigger_type', triggerType)
     .order('priority', { ascending: false });
@@ -52,7 +53,7 @@ export async function createInterventionExecution(
       status: execution.status,
       result: execution.result,
     })
-    .select()
+    .select(tableColumns('intervention_executions'))
     .single();
   if (error) {
     throw new RepositoryError('createInterventionExecution', error);
@@ -73,7 +74,7 @@ export async function updateInterventionExecution(
     .from('intervention_executions')
     .update(updates)
     .eq('id', executionId)
-    .select()
+    .select(tableColumns('intervention_executions'))
     .single();
   if (error) {
     throw new RepositoryError('updateInterventionExecution', error);
@@ -89,7 +90,7 @@ export async function fetchTodaysInterventionExecutions(
   const startOfDay = today.getTime();
   const { data, error } = await supabase
     .from('intervention_executions')
-    .select('*')
+    .select('id,user_id,rule_id,trigger_type,triggered_at,executed_at,status,result,message_id,user_response,effectiveness')
     .eq('user_id', userId)
     .gte('triggered_at', startOfDay)
     .order('triggered_at', { ascending: false });
@@ -107,7 +108,7 @@ export async function wasRuleTriggeredRecently(
   const cutoff = Date.now() - hours * 60 * 60 * 1000;
   const { count, error } = await supabase
     .from('intervention_executions')
-    .select('*', { count: 'exact', head: true })
+    .select('id', { count: 'exact', head: true })
     .eq('user_id', userId)
     .eq('rule_id', ruleId)
     .gte('triggered_at', cutoff);

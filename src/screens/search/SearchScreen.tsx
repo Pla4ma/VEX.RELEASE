@@ -1,6 +1,6 @@
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 import React, { useState, useCallback } from 'react';
-import { Keyboard } from 'react-native';
+import { Keyboard, KeyboardAvoidingView, Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../../theme';
 import { Box } from '../../components/primitives';
@@ -41,28 +41,33 @@ export const SearchScreen: React.FC = () => {
   };
 
   return (
-    <Box flex={1} style={{ backgroundColor: theme.colors.background.primary }}>
-      <SearchBar
-        query={query}
-        onQueryChange={setQuery}
-        onSubmit={handleSearch}
-        onClear={handleClear}
-        paddingTop={insets.top + 16}
-      />
-      <CategoriesBar
-        activeCategory={activeCategory}
-        onCategoryChange={setActiveCategory}
-      />
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{ flex: 1 }}
+    >
+      <Box flex={1} style={{ backgroundColor: theme.colors.background.primary }}>
+        <SearchBar
+          query={query}
+          onQueryChange={setQuery}
+          onSubmit={handleSearch}
+          onClear={handleClear}
+          paddingTop={insets.top + 16}
+        />
+        <CategoriesBar
+          activeCategory={activeCategory}
+          onCategoryChange={setActiveCategory}
+        />
 
-      {showResults ? (
-        <SearchResults isSearching={isSearching} />
-      ) : (
-        <Box flex={1} p={16}>
-          <RecentSearches onSelect={handleSelectSearch} />
-          <TrendingTags onSelect={handleSelectSearch} />
-        </Box>
-      )}
-    </Box>
+        {showResults ? (
+          <SearchResults isSearching={isSearching} />
+        ) : (
+          <Box flex={1} p={16}>
+            <RecentSearches onSelect={handleSelectSearch} />
+            <TrendingTags onSelect={handleSelectSearch} />
+          </Box>
+        )}
+      </Box>
+    </KeyboardAvoidingView>
   );
 };
 

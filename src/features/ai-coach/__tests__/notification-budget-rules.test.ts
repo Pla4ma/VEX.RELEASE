@@ -7,7 +7,7 @@ import {
   sendNotificationWithBudget,
   type NotificationBudget,
   type NotificationRequest,
-} from '../notification-budget';
+} from '../notification/notification-budget';
 
 describe('Notification budget rules', () => {
   let mockBudget: NotificationBudget;
