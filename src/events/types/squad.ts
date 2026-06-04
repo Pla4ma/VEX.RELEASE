@@ -2,10 +2,6 @@
  * Squad Events
  */
 
-import type { SquadRaidEventDefinitions } from './squad-raid';
-
-export type { SquadRaidEventDefinitions } from './squad-raid';
-
 export interface SquadCoreEventDefinitions {
   'squad:created': {
     squadId: string;
@@ -153,5 +149,4 @@ export interface SquadCoreEventDefinitions {
   };
 }
 
-export type SquadEventDefinitions = SquadCoreEventDefinitions &
-  SquadRaidEventDefinitions;
+export type SquadEventDefinitions = SquadCoreEventDefinitions;
