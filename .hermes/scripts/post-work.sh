@@ -37,6 +37,8 @@ echo "📏 File size check (200 line limit)..."
 OVERSIZED=""
 while IFS= read -r file; do
   [ -f "$file" ] || continue
+  # Exempt: auto-generated Supabase types (5600+ lines, cannot be split)
+  [[ "$file" == *"/supabase.ts" ]] && continue
   LINES=$(wc -l < "$file")
   if [ "$LINES" -gt 200 ]; then
     OVERSIZED="$OVERSIZED\n  ❌ $file ($LINES lines)"
