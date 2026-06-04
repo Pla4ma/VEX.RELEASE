@@ -1,3 +1,4 @@
+import { lightColors } from '@/theme/tokens/colors';
 export type ThemeColors = { [key: string]: unknown };
 export type ThemeSpacing = Record<string, number>;
 
@@ -65,5 +66,5 @@ export function getThemeColor(colors: ThemeColors, path: string): string {
   }
   const primary = colors.primary;
   if (typeof primary === 'string') {return primary;}
-  return '#000000';
+  return lightColors.text.primary;
 }

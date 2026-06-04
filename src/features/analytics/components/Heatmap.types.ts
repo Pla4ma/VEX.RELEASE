@@ -1,3 +1,4 @@
+import { lightColors } from '@/theme/tokens/colors';
 
 
 export interface HeatmapData {
@@ -18,25 +19,25 @@ export const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 export const HOURS = Array.from({ length: 24 }, (_, i) => i);
 export const COLOR_SCHEMES = {
   blue: [
-    '#eff6ff',
-    '#dbeafe',
-    '#93c5fd',
-    '#3b82f6',
-    '#1e40af',
+    lightColors.info[50],
+    lightColors.info[50],
+    lightColors.accent.blue,
+    lightColors.accent.blue,
+    lightColors.accent.blue,
   ],
   green: [
-    '#f0fdf4',
-    '#dcfce7',
-    '#86efac',
-    '#22c55e',
-    '#166534',
+    lightColors.success[50],
+    lightColors.success[50],
+    lightColors.success.light,
+    lightColors.semantic.success,
+    lightColors.semantic.success,
   ],
   purple: [
-    '#faf5ff',
-    '#f3e8ff',
-    '#d8b4fe',
-    '#a855f7',
-    '#6b21a8',
+    lightColors.primary[50],
+    lightColors.primary[50],
+    lightColors.accent.purple,
+    lightColors.accent.purple,
+    lightColors.accent.purple,
   ],
 };
 

@@ -1,4 +1,5 @@
 import { createSheet } from '@/shared/ui/create-sheet';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 export const styles = createSheet({
@@ -6,7 +7,7 @@ export const styles = createSheet({
   label: {
     fontSize: 12,
     fontWeight: '500',
-    color: '#6b7280',
+    color: lightColors.text.muted,
     marginBottom: 8,
     marginLeft: 4,
   },
@@ -16,9 +17,9 @@ export const styles = createSheet({
     justifyContent: 'space-between',
     padding: 12,
     borderRadius: 8,
-    backgroundColor: '#f9fafb',
+    backgroundColor: lightColors.surface.button,
     borderWidth: 1,
-    borderColor: '#e5e7eb',
+    borderColor: lightColors.border.light,
   },
   selectorDisabled: { opacity: 0.5 },
   selectedContainer: {
@@ -28,25 +29,25 @@ export const styles = createSheet({
     gap: 6,
   },
   selectedChip: {
-    backgroundColor: '#e0e7ff',
+    backgroundColor: lightColors.primary[50],
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
   },
   selectedChipText: {
     fontSize: 12,
-    color: '#4338ca',
+    color: lightColors.semantic.primaryPressed,
     fontWeight: '500',
   },
-  placeholder: { color: '#9ca3af', fontSize: 14 },
-  chevron: { fontSize: 12, color: '#6b7280', marginLeft: 8 },
+  placeholder: { color: lightColors.text.muted, fontSize: 14 },
+  chevron: { fontSize: 12, color: lightColors.text.muted, marginLeft: 8 },
   overlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.5)',
     justifyContent: 'flex-end',
   },
   modalContent: {
-    backgroundColor: '#ffffff',
+    backgroundColor: lightColors.text.inverse,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     maxHeight: '80%',
@@ -57,16 +58,16 @@ export const styles = createSheet({
     alignItems: 'center',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#e5e7eb',
+    borderBottomColor: lightColors.border.light,
   },
   modalTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#111827',
+    color: lightColors.semantic.backgroundMuted,
   },
   closeButton: {
     fontSize: 16,
-    color: '#6366f1',
+    color: lightColors.semantic.primary,
     fontWeight: '500',
   },
   modalScroll: { padding: 16 },
@@ -74,7 +75,7 @@ export const styles = createSheet({
   categoryTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#374151',
+    color: lightColors.text.muted,
     marginBottom: 8,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
@@ -86,28 +87,28 @@ export const styles = createSheet({
     paddingHorizontal: 8,
     borderRadius: 6,
   },
-  metricOptionSelected: { backgroundColor: '#f3f4f6' },
+  metricOptionSelected: { backgroundColor: lightColors.surface.button },
   metricOptionDisabled: { opacity: 0.4 },
   checkbox: {
     width: 20,
     height: 20,
     borderRadius: 4,
     borderWidth: 2,
-    borderColor: '#d1d5db',
+    borderColor: lightColors.border.light,
     marginRight: 12,
     alignItems: 'center',
     justifyContent: 'center',
   },
   checkboxSelected: {
-    backgroundColor: '#6366f1',
-    borderColor: '#6366f1',
+    backgroundColor: lightColors.semantic.primary,
+    borderColor: lightColors.semantic.primary,
   },
   checkmark: {
-    color: '#ffffff',
+    color: lightColors.text.inverse,
     fontSize: 12,
     fontWeight: '700',
   },
-  metricLabel: { fontSize: 14, color: '#374151' },
-  metricLabelSelected: { color: '#111827', fontWeight: '500' },
-  metricLabelDisabled: { color: '#9ca3af' },
+  metricLabel: { fontSize: 14, color: lightColors.text.muted },
+  metricLabelSelected: { color: lightColors.semantic.backgroundMuted, fontWeight: '500' },
+  metricLabelDisabled: { color: lightColors.text.muted },
 });

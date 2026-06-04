@@ -1,3 +1,4 @@
+import { lightColors } from '@/theme/tokens/colors';
 export interface LevelUpOverlayProps {
   isVisible: boolean;
   previousLevel: number;
@@ -37,16 +38,16 @@ export function getTierTitle(level: number): string {
 
 export function getTierColor(level: number): [string, string] {
   if (level >= 100) {
-    return ['#FFD700', '#FF6B35'];
+    return [lightColors.semantic.vexGold, lightColors.semantic.warning];
   }
   if (level >= 50) {
-    return ['#9C27B0', '#E91E63'];
+    return [lightColors.accent.purple, lightColors.accent.pink];
   }
   if (level >= 25) {
-    return ['#2196F3', '#03A9F4'];
+    return [lightColors.accent.blue, lightColors.accent.blue];
   }
   if (level >= 10) {
-    return ['#4CAF50', '#8BC34A'];
+    return [lightColors.semantic.success, lightColors.semantic.success];
   }
-  return ['#FF9800', '#FFC107'];
+  return [lightColors.semantic.warning, lightColors.semantic.warning];
 }

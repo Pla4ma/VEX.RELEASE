@@ -11,6 +11,7 @@ import { useTheme } from '../../theme';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { getMinTouchTargetStyle } from '../../utils/touchTarget';
 import { useHaptics } from '../../utils/haptics';
+import { lightColors } from '@/theme/tokens/colors';
 
 export interface VexLaunchButtonProps extends ViewProps {
   label: string;
@@ -79,7 +80,7 @@ export function VexLaunchButton({
       <Animated.View
         style={[
           {
-            backgroundColor: '#12121A',
+            backgroundColor: lightColors.semantic.obsidian,
             borderRadius: theme.spacing?.[3] ?? 12,
             borderWidth: 1,
             borderColor: 'rgba(0,229,255,0.08)',
@@ -87,7 +88,7 @@ export function VexLaunchButton({
             paddingHorizontal: theme.spacing?.[5] ?? 20,
             alignItems: 'center',
             justifyContent: 'center',
-            shadowColor: '#00E5FF',
+            shadowColor: lightColors.semantic.vexCyan,
             shadowOffset: { width: 0, height: 0 },
             shadowRadius: 16,
             width: '100%',
@@ -95,6 +96,7 @@ export function VexLaunchButton({
           animatedStyle,
         ]}
       >
+  // TODO(P2-1): map hex color JSX props to theme tokens
         <Text variant="heading3" color="#00E5FF">
           {label}
         </Text>

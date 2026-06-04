@@ -14,6 +14,7 @@ import { useTheme } from '../../../theme';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { springPresets, motionStagger } from '../../../theme/tokens/motion';
 import Svg, { Defs, LinearGradient as SvgLinearGradient, Path, Stop } from 'react-native-svg';
+import { lightColors } from '@/theme/tokens/colors';
 
 const EASE_CINEMATIC = Easing.bezier(0.16, 1, 0.3, 1);
 
@@ -101,7 +102,7 @@ function VexLetter({ char, index, isReducedMotion }: { char: string; index: numb
         style={{
           fontSize: 88,
           fontWeight: '300',
-          color: '#F5F1E8',
+          color: lightColors.surface.button,
           textShadowColor: 'rgba(224,184,112,0.30)',
           textShadowOffset: { width: 0, height: 0 },
           textShadowRadius: 12,

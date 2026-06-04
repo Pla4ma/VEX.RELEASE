@@ -11,6 +11,7 @@ import Svg, {
 import type { FocusScoreHistoryPoint } from '../types';
 
 import type { ChartPadding } from './chartHelpers';
+import { lightColors } from '@/theme/tokens/colors';
 
 interface ScoreChartSvgProps {
   history: FocusScoreHistoryPoint[];
@@ -66,7 +67,7 @@ export function ScoreChartSvg({
                 y1={y}
                 x2={chartWidth - padding.right}
                 y2={y}
-                stroke={'#e0e0e0'}
+                stroke={lightColors.border.light}
                 strokeWidth={1}
                 strokeDasharray="4,4"
               />
@@ -74,7 +75,7 @@ export function ScoreChartSvg({
                 x={padding.left - 8}
                 y={y + 4}
                 fontSize={10}
-                fill={'#666'}
+                fill={lightColors.text.muted}
                 textAnchor="end"
               >
                 {score}
@@ -104,7 +105,7 @@ export function ScoreChartSvg({
             cx={x}
             cy={y}
             r={isLatest ? 6 : 4}
-            fill={isLatest ? scoreColor : '#fff'}
+            fill={isLatest ? scoreColor : lightColors.text.inverse}
             stroke={scoreColor}
             strokeWidth={isLatest ? 3 : 2}
           />
@@ -118,7 +119,7 @@ export function ScoreChartSvg({
             x={scaleX(i)}
             y={height - 8}
             fontSize={10}
-            fill={'#666'}
+            fill={lightColors.text.muted}
             textAnchor="middle"
           >
             {new Date(history[i]!.timestamp).toLocaleDateString('en-US', {

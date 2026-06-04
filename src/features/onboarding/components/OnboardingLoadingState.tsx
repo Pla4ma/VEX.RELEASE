@@ -10,6 +10,7 @@ import React from 'react';
 import { View } from 'react-native';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import { createSheet } from '@/shared/ui/create-sheet';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 interface OnboardingLoadingStateProps {
@@ -47,7 +48,7 @@ export function OnboardingLoadingState({
 const styles = createSheet({
   container: {
     flex: 1,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: lightColors.semantic.background,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 24,
@@ -59,12 +60,12 @@ const styles = createSheet({
   skeletonTitle: {
     width: '50%',
     height: 32,
-    backgroundColor: '#2a2a3e',
+    backgroundColor: lightColors.semantic.backgroundElevated,
     borderRadius: 8,
   },
   skeletonLine: {
     height: 20,
-    backgroundColor: '#2a2a3e',
+    backgroundColor: lightColors.semantic.backgroundElevated,
     borderRadius: 4,
     width: '90%',
   },
@@ -76,13 +77,13 @@ const styles = createSheet({
   skeletonCard: {
     width: '100%',
     height: 80,
-    backgroundColor: '#2a2a3e',
+    backgroundColor: lightColors.semantic.backgroundElevated,
     borderRadius: 12,
   },
   skeletonButton: {
     width: '60%',
     height: 48,
-    backgroundColor: '#2a2a3e',
+    backgroundColor: lightColors.semantic.backgroundElevated,
     borderRadius: 12,
     marginTop: 48,
   },

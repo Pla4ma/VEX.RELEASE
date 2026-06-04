@@ -1,7 +1,8 @@
 import React, { useMemo } from 'react';
 import { View } from 'react-native';
+import { lightColors } from '@/theme/tokens/colors';
 
-const PALETTE_CREAM = '#F2EAD9';
+const PALETTE_CREAM = lightColors.text.secondary;
 
 /**
  * PaperGrain — a View-based noise veil. Cheaper than a Skia noise pass

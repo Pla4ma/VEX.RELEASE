@@ -10,6 +10,7 @@ import Animated, {
 import { Text } from '../../../components/primitives/Text';
 import { springPresets, motionStagger } from '../../../theme/tokens/motion';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
+import { lightColors } from '@/theme/tokens/colors';
 
 const EASE_CINEMATIC = Easing.bezier(0.16, 1, 0.3, 1);
 const EASE_EDITORIAL = Easing.bezier(0.22, 1, 0.36, 1);
@@ -89,7 +90,7 @@ export function VexLetter({
           fontSize: 124,
           fontFamily: SERIF_STACK,
           fontWeight,
-          color: '#F2EAD9',
+          color: lightColors.text.secondary,
           textShadowColor: 'rgba(224,184,112,0.18)',
           textShadowOffset: { width: 0, height: 0 },
           textShadowRadius: 8,

@@ -1,3 +1,4 @@
+import { lightColors } from '@/theme/tokens/colors';
 export type MasteryRank =
   | 'APPRENTICE'
   | 'ADEPT'
@@ -59,27 +60,27 @@ type RankDisplay = { title: string; color: string; icon: string };
 const RANK_DISPLAYS: Record<MasteryRank, RankDisplay> = {
   APPRENTICE: {
     title: 'Apprentice',
-    color: '#8b4513',
+    color: lightColors.text.muted,
     icon: '',
   },
   ADEPT: {
     title: 'Adept',
-    color: '#4a5568',
+    color: lightColors.text.tertiary,
     icon: '',
   },
   EXPERT: {
     title: 'Expert',
-    color: '#4169e1',
+    color: lightColors.accent.blue,
     icon: '',
   },
   MASTER: {
     title: 'Master',
-    color: '#9400d3',
+    color: lightColors.accent.purple,
     icon: '',
   },
   GRANDMASTER: {
     title: 'Grandmaster',
-    color: '#ffd700',
+    color: lightColors.semantic.vexGold,
     icon: '',
   },
 };

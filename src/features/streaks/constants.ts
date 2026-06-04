@@ -1,11 +1,12 @@
 import type { StreakMilestone, StreakState, StreakStateInfo } from './types';
+import { lightColors } from '@/theme/tokens/colors';
 
 export const STREAK_STATES: Record<StreakState, StreakStateInfo> = {
   ACTIVE: {
     state: 'ACTIVE',
     label: 'Active',
     description: 'Your streak is safe and growing',
-    color: '#48bb78',
+    color: lightColors.semantic.success,
     icon: '',
     animation: 'glow',
     urgency: 'none',
@@ -15,7 +16,7 @@ export const STREAK_STATES: Record<StreakState, StreakStateInfo> = {
     state: 'AT_RISK',
     label: 'At Risk',
     description: 'Complete a session today to protect your streak',
-    color: '#ed8936',
+    color: lightColors.accent.orange,
     icon: '',
     animation: 'pulse',
     urgency: 'medium',
@@ -28,7 +29,7 @@ export const STREAK_STATES: Record<StreakState, StreakStateInfo> = {
     state: 'CRITICAL',
     label: 'Critical',
     description: 'URGENT: Less than 1 hour remaining',
-    color: '#e53e3e',
+    color: lightColors.semantic.danger,
     icon: '',
     animation: 'shake',
     urgency: 'critical',
@@ -40,7 +41,7 @@ export const STREAK_STATES: Record<StreakState, StreakStateInfo> = {
     state: 'BROKEN',
     label: 'Broken',
     description: 'Your streak has ended. Time for a comeback',
-    color: '#e53e3e',
+    color: lightColors.semantic.danger,
     icon: '',
     animation: 'none',
     urgency: 'low',
@@ -51,7 +52,7 @@ export const STREAK_STATES: Record<StreakState, StreakStateInfo> = {
     state: 'RECOVERING',
     label: 'Recovering',
     description: 'Working to rebuild your streak',
-    color: '#9f7aea',
+    color: lightColors.accent.purple,
     icon: '',
     animation: 'pulse',
     urgency: 'low',
@@ -61,7 +62,7 @@ export const STREAK_STATES: Record<StreakState, StreakStateInfo> = {
     state: 'PROTECTED',
     label: 'Protected',
     description: 'Insurance used - streak maintained',
-    color: '#4299e1',
+    color: lightColors.accent.blue,
     icon: '',
     animation: 'shield',
     urgency: 'none',

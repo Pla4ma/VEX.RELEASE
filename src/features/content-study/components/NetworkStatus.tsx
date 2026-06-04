@@ -11,6 +11,7 @@ import { useTheme } from '../../../theme';
 import { Icon } from '../../../icons';
 import { createSheet } from '@/shared/ui/create-sheet';
 import { buttonTap } from '../../../utils/haptics';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 interface NetworkStatusProps {
@@ -53,14 +54,14 @@ export const NetworkStatus: React.FC<NetworkStatusProps> = ({
         <Icon
           name={isOffline ? 'wifi-off' : 'alert-triangle'}
           size="sm"
-          color={'#ffffff'}
+          color={lightColors.text.inverse}
         />
         <View style={styles.textContainer}>
-          <Text style={[styles.title, { color: '#ffffff' }]}>
+          <Text style={[styles.title, { color: lightColors.text.inverse }]}>
             {isOffline ? 'Offline Mode' : 'Slow Connection'}
           </Text>
           <Text
-            style={[styles.description, { color: '#ffffff' }]}
+            style={[styles.description, { color: lightColors.text.inverse }]}
           >
             {isOffline
               ? pendingSyncCount
@@ -82,7 +83,7 @@ export const NetworkStatus: React.FC<NetworkStatusProps> = ({
             accessibilityHint="Double tap to activate"
           >
             <Text
-              style={[styles.actionText, { color: '#ffffff' }]}
+              style={[styles.actionText, { color: lightColors.text.inverse }]}
             >
               Sync
             </Text>
@@ -100,7 +101,7 @@ export const NetworkStatus: React.FC<NetworkStatusProps> = ({
             accessibilityRole="button"
             accessibilityHint="Double tap to dismiss"
           >
-            <Icon name="x" size="sm" color={'#ffffff'} />
+            <Icon name="x" size="sm" color={lightColors.text.inverse} />
           </Pressable>
         )}
       </View>

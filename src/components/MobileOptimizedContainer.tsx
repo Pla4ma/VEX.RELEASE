@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { createSheet } from '@/shared/ui/create-sheet';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 interface MobileOptimizedContainerProps {
@@ -39,7 +40,7 @@ export const MobileOptimizedContainer: React.FC<
   avoidHeader = true,
   avoidBottomNav = true,
   padding = 16,
-  backgroundColor = '#1a1a2e',
+  backgroundColor = lightColors.semantic.background,
 }) => {
   const insets = useSafeAreaInsets();
 

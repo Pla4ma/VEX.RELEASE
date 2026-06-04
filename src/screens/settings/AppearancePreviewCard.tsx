@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Text, Card } from '../../components/primitives';
 import { Icon } from '../../icons';
+import { lightColors } from '@/theme/tokens/colors';
 
 import type { AccentColor, TimerFormat } from './ColorSchemeToggle';
 import { ACCENT_COLORS, TIMER_FORMAT_OPTIONS } from './ColorSchemeToggle';
@@ -55,7 +56,7 @@ export function AppearancePreviewCard({
               theme.colors.primary[500],
           }}
         >
-          <Icon name="timer" size={28} color={'#fff'} />
+          <Icon name="timer" size={28} color={lightColors.text.inverse} />
         </Box>
         <Text
           variant="h3"

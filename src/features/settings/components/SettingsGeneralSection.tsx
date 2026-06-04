@@ -3,6 +3,7 @@ import { View } from 'react-native';
 import type { UserPreferences } from '../types';
 import { SettingItem } from './SettingItem';
 import { createSheet } from '@/shared/ui/create-sheet';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 interface SettingsGeneralSectionProps {
@@ -33,7 +34,7 @@ export function SettingsGeneralSection({
 
 const styles = createSheet({
   settingsGroup: {
-    backgroundColor: '#ffffff',
+    backgroundColor: lightColors.text.inverse,
     marginTop: 8,
     paddingHorizontal: 16,
   },

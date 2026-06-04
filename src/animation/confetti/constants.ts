@@ -1,3 +1,4 @@
+import { lightColors } from '@/theme/tokens/colors';
 /**
  * Confetti Constants
  *
@@ -5,8 +6,9 @@
  */
 
 export const CONFETTI_COLORS = [
-  '#FF6B6B',
-  '#4ECDC4',
+  lightColors.semantic.danger,
+  lightColors.accent.teal,
+  // TODO(P2-1): map remaining hex colors to theme tokens
   '#45B7D1',
   '#FFA07A',
   '#98D8C8',
@@ -25,7 +27,7 @@ export const FRICTION = 0.98;
 export const particleStyle = { position: 'absolute' as const };
 
 export const shapeStyle = {
-  shadowColor: '#000',
+  shadowColor: lightColors.text.primary,
   shadowOffset: { width: 0, height: 2 },
   shadowOpacity: 0.2,
   shadowRadius: 3,
@@ -39,7 +41,7 @@ export const triangleStyle = {
   borderStyle: 'solid' as const,
   borderLeftColor: 'transparent' as const,
   borderRightColor: 'transparent' as const,
-  shadowColor: '#000',
+  shadowColor: lightColors.text.primary,
   shadowOffset: { width: 0, height: 2 },
   shadowOpacity: 0.2,
   shadowRadius: 3,

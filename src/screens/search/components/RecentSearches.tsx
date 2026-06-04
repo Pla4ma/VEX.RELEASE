@@ -3,6 +3,7 @@ import { Pressable } from 'react-native';
 import { useTheme } from '../../../theme';
 import { Box, Text } from '../../../components/primitives';
 import { Icon } from '../../../icons';
+import { lightColors } from '@/theme/tokens/colors';
 
 import { RECENT_SEARCHES } from '../searchData';
 
@@ -40,7 +41,7 @@ export const RecentSearches: React.FC<RecentSearchesProps> = ({ onSelect }) => {
             alignItems: 'center',
             paddingVertical: 12,
             borderBottomWidth: 1,
-            borderBottomColor: '#e2e8f0',
+            borderBottomColor: lightColors.surface.pressed,
           }}
           onPress={() => onSelect(search)}
           accessibilityLabel={`Search for ${search}`}

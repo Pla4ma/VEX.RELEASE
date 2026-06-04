@@ -9,6 +9,7 @@ import { VexMotionSurface } from '../../../components/primitives/VexMotionSurfac
 import { useTheme } from '../../../theme';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { VexProofRing } from './VexProofRing';
+import { lightColors } from '@/theme/tokens/colors';
 
 interface ProofLineProps {
   icon: string;
@@ -69,7 +70,7 @@ export function VexCompletionProof({
     <View testID={testID} style={{ flex: 1 }}>
       {/* Warm background */}
       <LinearGradient
-        colors={['#0A0A0F', 'rgba(255,179,0,0.04)']}
+        colors={[lightColors.semantic.obsidian, 'rgba(255,179,0,0.04)']}
         start={{ x: 0, y: 0 }}
         end={{ x: 0, y: 1 }}
         style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}

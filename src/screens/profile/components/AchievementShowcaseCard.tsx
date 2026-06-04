@@ -9,6 +9,7 @@ import Animated, {
 import { useTheme } from '../../../theme';
 import { Box, Text, Card } from '../../../components/primitives';
 import { Icon } from '../../../icons';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 export interface FeaturedAchievement {
@@ -22,10 +23,10 @@ export interface FeaturedAchievement {
 }
 
 export const RARITY_COLORS = {
-  common: '#94a3b8',
-  rare: '#3b82f6',
-  epic: '#a855f7',
-  legendary: '#f59e0b',
+  common: lightColors.text.disabled,
+  rare: lightColors.accent.blue,
+  epic: lightColors.accent.purple,
+  legendary: lightColors.semantic.warning,
 };
 
 export const LockedSlot: React.FC<{

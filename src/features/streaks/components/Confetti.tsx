@@ -5,6 +5,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { Dimensions } from 'react-native';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -47,12 +48,12 @@ function ConfettiPiece({
 
 export function ConfettiBurst({ count = 50 }: { count?: number }): JSX.Element {
   const colors = [
-    '#ef4444',
-    '#22c55e',
-    '#3b82f6',
-    '#f59e0b',
-    '#a855f7',
-    '#ec4899',
+    lightColors.semantic.danger,
+    lightColors.semantic.success,
+    lightColors.accent.blue,
+    lightColors.semantic.warning,
+    lightColors.accent.purple,
+    lightColors.accent.pink,
   ];
   return (
     <>

@@ -4,22 +4,23 @@
  */
 
 import { createSheet } from '@/shared/ui/create-sheet';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 export const styles = createSheet({
-  container: { flex: 1, backgroundColor: '#0f0f0f' },
+  container: { flex: 1, backgroundColor: lightColors.semantic.obsidian },
   scrollView: { flex: 1 },
   scrollContent: { padding: 20 },
   header: { marginBottom: 20 },
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#ffffff',
+    color: lightColors.text.inverse,
     marginBottom: 8,
   },
-  subtitle: { fontSize: 16, color: '#9ca3af' },
+  subtitle: { fontSize: 16, color: lightColors.text.muted },
   loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  loadingText: { marginTop: 16, fontSize: 16, color: '#9ca3af' },
+  loadingText: { marginTop: 16, fontSize: 16, color: lightColors.text.muted },
   statusContainer: {
     borderRadius: 12,
     padding: 16,
@@ -30,18 +31,18 @@ export const styles = createSheet({
   statusLabel: { fontSize: 16, fontWeight: '600', marginTop: 8 },
   statusDescription: {
     fontSize: 14,
-    color: '#9ca3af',
+    color: lightColors.text.muted,
     marginTop: 4,
     textAlign: 'center',
   },
   hidden: { opacity: 0 },
   contentContainer: {
-    backgroundColor: '#1a1a1a',
+    backgroundColor: lightColors.semantic.obsidian,
     borderRadius: 16,
     marginBottom: 20,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: '#2a2a2a',
+    borderColor: lightColors.semantic.obsidian,
   },
   contentHeader: {
     flexDirection: 'row',
@@ -49,25 +50,25 @@ export const styles = createSheet({
     alignItems: 'center',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#2a2a2a',
+    borderBottomColor: lightColors.semantic.obsidian,
   },
   contentTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#ffffff',
+    color: lightColors.text.inverse,
   },
-  contentStats: { fontSize: 12, color: '#9ca3af' },
+  contentStats: { fontSize: 12, color: lightColors.text.muted },
   contentScroll: { maxHeight: 300 },
   contentText: {
     fontSize: 14,
     lineHeight: 22,
-    color: '#d1d5db',
+    color: lightColors.border.light,
     padding: 16,
   },
   contentEditInput: {
     fontSize: 14,
     lineHeight: 22,
-    color: '#ffffff',
+    color: lightColors.text.inverse,
     padding: 16,
     minHeight: 300,
     textAlignVertical: 'top',
@@ -76,12 +77,12 @@ export const styles = createSheet({
     flexDirection: 'row',
     padding: 12,
     borderTopWidth: 1,
-    borderTopColor: '#2a2a2a',
+    borderTopColor: lightColors.semantic.obsidian,
     gap: 12,
   },
   editButton: {
     flex: 1,
-    backgroundColor: '#2a2a2a',
+    backgroundColor: lightColors.semantic.obsidian,
     paddingVertical: 12,
     borderRadius: 8,
     alignItems: 'center',
@@ -89,11 +90,11 @@ export const styles = createSheet({
   editButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#ffffff',
+    color: lightColors.text.inverse,
   },
   cancelButton: {
     flex: 1,
-    backgroundColor: '#2a2a2a',
+    backgroundColor: lightColors.semantic.obsidian,
     paddingVertical: 12,
     borderRadius: 8,
     alignItems: 'center',
@@ -101,11 +102,11 @@ export const styles = createSheet({
   cancelButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#9ca3af',
+    color: lightColors.text.muted,
   },
   saveButton: {
     flex: 1,
-    backgroundColor: '#3b82f6',
+    backgroundColor: lightColors.accent.blue,
     paddingVertical: 12,
     borderRadius: 8,
     alignItems: 'center',
@@ -113,10 +114,10 @@ export const styles = createSheet({
   saveButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#ffffff',
+    color: lightColors.text.inverse,
   },
   generateButton: {
-    backgroundColor: '#3b82f6',
+    backgroundColor: lightColors.accent.blue,
     borderRadius: 12,
     paddingVertical: 18,
     alignItems: 'center',
@@ -127,12 +128,13 @@ export const styles = createSheet({
   generateButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#ffffff',
+    color: lightColors.text.inverse,
   },
   buttonSpinner: { marginRight: 8 },
   processingNote: { marginTop: 16, alignItems: 'center' },
-  processingNoteText: { fontSize: 14, color: '#9ca3af' },
+  processingNoteText: { fontSize: 14, color: lightColors.text.muted },
   errorContainer: {
+  // TODO(P2-1): map remaining hex colors to theme tokens
     backgroundColor: '#ef444420',
     borderRadius: 12,
     padding: 16,
@@ -143,10 +145,10 @@ export const styles = createSheet({
   errorTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#ef4444',
+    color: lightColors.semantic.danger,
     marginBottom: 8,
   },
-  errorText: { fontSize: 14, color: '#ef4444' },
+  errorText: { fontSize: 14, color: lightColors.semantic.danger },
   retryButton: {
     marginTop: 12,
     backgroundColor: '#ef444440',
@@ -158,6 +160,6 @@ export const styles = createSheet({
   retryButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#ffffff',
+    color: lightColors.text.inverse,
   },
 });

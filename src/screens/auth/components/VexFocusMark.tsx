@@ -1,6 +1,7 @@
 import React from 'react';
 import { Platform, View } from 'react-native';
 import Svg, { Circle, Defs, LinearGradient, Path, Stop } from 'react-native-svg';
+import { lightColors } from '@/theme/tokens/colors';
 
 interface VexFocusMarkProps {
   size?: number;
@@ -16,6 +17,7 @@ export function VexFocusMark({ size = 120 }: VexFocusMarkProps): JSX.Element {
     <Svg width={s} height={s} viewBox={`0 0 ${s} ${s}`}>
       <Defs>
         <LinearGradient id="vm-outer" x1="0%" y1="0%" x2="100%" y2="100%">
+  // TODO(P2-1): map hex color JSX props to theme tokens
           <Stop offset="0%" stopColor="#00E5FF" stopOpacity="0.6" />
           <Stop offset="100%" stopColor="#22D3EE" stopOpacity="0.15" />
         </LinearGradient>
@@ -93,7 +95,7 @@ export function VexFocusMark({ size = 120 }: VexFocusMarkProps): JSX.Element {
         height: s,
         alignItems: 'center',
         justifyContent: 'center',
-        shadowColor: '#00E5FF',
+        shadowColor: lightColors.semantic.vexCyan,
         shadowOffset: { width: 0, height: 0 },
         shadowOpacity: isWeb ? 0.25 : 0.35,
         shadowRadius: isWeb ? 16 : 20,

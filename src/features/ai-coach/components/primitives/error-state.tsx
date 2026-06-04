@@ -2,6 +2,7 @@ import { captureSilentFailure } from '../../../../utils/silent-failure';
 import React, { useState } from 'react';
 import { View, Text, Pressable, ActivityIndicator } from 'react-native';
 import Animated, { Keyframe, FadeIn } from 'react-native-reanimated';
+import { lightColors } from '@/theme/tokens/colors';
 
 import { errorStateStyles as styles } from './error-state-styles';
 
@@ -97,7 +98,7 @@ export function ErrorState({
             accessibilityHint="Double tap to activate"
           >
             {isRetrying ? (
-              <ActivityIndicator color={'#fff'} />
+              <ActivityIndicator color={lightColors.text.inverse} />
             ) : (
               <Text style={styles.retryButtonText}>
                 {isDegraded ? 'Try Again' : 'Retry'}

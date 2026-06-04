@@ -13,6 +13,7 @@ import type {
 } from '../../../features/home-spine/priority-schemas';
 import { useTheme } from '../../../theme';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
+import { lightColors } from '@/theme/tokens/colors';
 
 function getHeroTitle(type: HomePrimaryPriority['type']): string {
   switch (type) {
@@ -87,7 +88,7 @@ export function VexFocusSurface({
     <Animated.View entering={entering} style={{ width: '100%' }}>
       <VexMotionSurface variant="focused" animated style={{ overflow: 'visible' }}>
         <LinearGradient
-          colors={['#12121A', '#0A0A0F', '#12121A']}
+          colors={[lightColors.semantic.obsidian, lightColors.semantic.obsidian, lightColors.semantic.obsidian]}
           start={{ x: 0, y: 0 }}
           end={{ x: 0, y: 1 }}
           style={{

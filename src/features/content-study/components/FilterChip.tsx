@@ -5,6 +5,7 @@ import { Text } from '../../../components/primitives/Text';
 import { Icon } from '../../../icons';
 import { useTheme } from '../../../theme';
 import { buttonTap } from '../../../utils/haptics';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 interface FilterChipProps {
@@ -47,7 +48,7 @@ export function FilterChip({
             name={icon}
             size={14}
             color={
-              isActive ? '#fff' : theme.colors.text.secondary
+              isActive ? lightColors.text.inverse : theme.colors.text.secondary
             }
           />
         )}
@@ -55,7 +56,7 @@ export function FilterChip({
           variant="caption"
           style={{
             color: isActive
-              ? '#fff'
+              ? lightColors.text.inverse
               : theme.colors.text.secondary,
             fontWeight: isActive ? '600' : '400',
           }}

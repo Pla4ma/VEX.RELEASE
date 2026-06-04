@@ -1,4 +1,5 @@
 import { createSheet } from '@/shared/ui/create-sheet';
+import { lightColors } from '@/theme/tokens/colors';
 
 export type SeverityLevel =
   | 'info'
@@ -12,28 +13,28 @@ export const SEVERITY_CONFIG: Record<
   { color: string; bgColor: string; icon: string }
 > = {
   info: {
-    color: '#3b82f6',
-    bgColor: '#dbeafe',
+    color: lightColors.accent.blue,
+    bgColor: lightColors.info[50],
     icon: '',
   },
   positive: {
-    color: '#10b981',
-    bgColor: '#d1fae5',
+    color: lightColors.accent.green,
+    bgColor: lightColors.success[50],
     icon: '',
   },
   warning: {
-    color: '#f59e0b',
-    bgColor: '#fef3c7',
+    color: lightColors.semantic.warning,
+    bgColor: lightColors.warning[50],
     icon: '',
   },
   critical: {
-    color: '#ef4444',
-    bgColor: '#fee2e2',
+    color: lightColors.semantic.danger,
+    bgColor: lightColors.error[50],
     icon: '',
   },
   celebration: {
-    color: '#8b5cf6',
-    bgColor: '#ede9fe',
+    color: lightColors.accent.purple,
+    bgColor: lightColors.primary[50],
     icon: '',
   },
 };
@@ -94,14 +95,14 @@ export const styles = createSheet({
     marginLeft: 8,
   },
   badgeText: {
-    color: '#ffffff',
+    color: lightColors.text.inverse,
     fontSize: 10,
     fontWeight: '600',
   },
   unreadDot: { width: 8, height: 8, borderRadius: 4, marginLeft: 8 },
   description: {
     fontSize: 14,
-    color: '#374151',
+    color: lightColors.text.muted,
     lineHeight: 20,
     marginBottom: 12,
   },
@@ -112,7 +113,7 @@ export const styles = createSheet({
   },
   tag: { paddingHorizontal: 8, paddingVertical: 4, borderRadius: 8 },
   tagText: { fontSize: 12, fontWeight: '500' },
-  date: { fontSize: 12, color: '#9ca3af' },
+  date: { fontSize: 12, color: lightColors.text.muted },
   actions: { flexDirection: 'row', marginTop: 12, gap: 12 },
   actionButton: {
     paddingHorizontal: 16,
@@ -122,7 +123,7 @@ export const styles = createSheet({
     alignItems: 'center',
   },
   actionButtonText: {
-    color: '#ffffff',
+    color: lightColors.text.inverse,
     fontWeight: '600',
     fontSize: 14,
   },

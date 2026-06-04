@@ -2,6 +2,7 @@ import React, { Component, type ReactNode, type ErrorInfo } from 'react';
 import { Box, Text } from '../components/primitives';
 import { createDebugger } from '../utils/debug';
 import { getAnalyticsService } from '../analytics/AnalyticsService';
+import { lightColors } from '@/theme/tokens/colors';
 
 import { categorizeError, calculateRetryDelay } from './ErrorBoundary.helpers';
 import { ErrorFallback } from './ErrorFallback';
@@ -166,13 +167,13 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorState> {
         <Box
           p="md"
           style={{
-            backgroundColor: '#fef3c7',
+            backgroundColor: lightColors.warning[50],
             borderRadius: 8,
             borderLeftWidth: 4,
-            borderLeftColor: '#f59e0b',
+            borderLeftColor: lightColors.semantic.warning,
           }}
         >
-          <Text variant="body" style={{ color: '#92400e' }}>
+          <Text variant="body" style={{ color: lightColors.semantic.warning }}>
             Running in limited mode. Some features may be unavailable.
           </Text>
         </Box>

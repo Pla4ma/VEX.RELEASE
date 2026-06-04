@@ -7,6 +7,7 @@ import Animated, {
 } from 'react-native-reanimated';
 
 import { styles } from './progress-state.styles';
+import { lightColors } from '@/theme/tokens/colors';
 
 export { ProgressBar, SegmentedProgress, CircularProgress } from './progress-indicators';
 export { LoadingState, LoadingDots } from './loading-states';
@@ -133,7 +134,7 @@ export function ProcessingState({ steps }: ProcessingStateProps) {
               <Text style={styles.processingError}>✕</Text>
             )}
             {step.status === 'processing' && (
-              <ActivityIndicator size="small" color={'#fff'} />
+              <ActivityIndicator size="small" color={lightColors.text.inverse} />
             )}
           </View>
           <Text

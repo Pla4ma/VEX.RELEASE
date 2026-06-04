@@ -10,6 +10,7 @@ import React from 'react';
 import { View, Text } from 'react-native';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import { createSheet } from '@/shared/ui/create-sheet';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 interface PurchaseLoadingStateProps {
@@ -48,7 +49,7 @@ export function PurchaseLoadingState({
 const styles = createSheet({
   container: {
     flex: 1,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: lightColors.semantic.background,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 24,
@@ -61,40 +62,40 @@ const styles = createSheet({
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: '#2a2a3e',
+    backgroundColor: lightColors.semantic.backgroundElevated,
   },
   skeletonTitle: {
     width: '50%',
     height: 28,
-    backgroundColor: '#2a2a3e',
+    backgroundColor: lightColors.semantic.backgroundElevated,
     borderRadius: 8,
     marginTop: 24,
   },
   skeletonPrice: {
     width: '30%',
     height: 24,
-    backgroundColor: '#2a2a3e',
+    backgroundColor: lightColors.semantic.backgroundElevated,
     borderRadius: 8,
     marginTop: 12,
   },
   skeletonLine: {
     width: '90%',
     height: 16,
-    backgroundColor: '#2a2a3e',
+    backgroundColor: lightColors.semantic.backgroundElevated,
     borderRadius: 4,
     marginTop: 8,
   },
   skeletonButton: {
     width: '80%',
     height: 48,
-    backgroundColor: '#2a2a3e',
+    backgroundColor: lightColors.semantic.backgroundElevated,
     borderRadius: 12,
     marginTop: 32,
   },
   message: {
     marginTop: 24,
     fontSize: 14,
-    color: '#9e9e9e',
+    color: lightColors.text.muted,
   },
 });
 

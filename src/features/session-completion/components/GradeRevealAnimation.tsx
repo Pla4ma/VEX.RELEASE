@@ -1,3 +1,4 @@
+import { lightColors } from '@/theme/tokens/colors';
 import React from 'react';
 import { useWindowDimensions, View } from 'react-native';
 import Animated from 'react-native-reanimated';
@@ -50,7 +51,7 @@ export function GradeRevealAnimation({
       style={[
         {
           alignItems: 'center',
-          backgroundColor: '#000000',
+          backgroundColor: lightColors.text.primary,
           bottom: 0,
           justifyContent: 'center',
           left: 0,

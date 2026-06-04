@@ -14,6 +14,7 @@ import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
 import { Icon } from '../../../icons';
 import type { CoachPersona } from './persona-data';
+import { lightColors } from '@/theme/tokens/colors';
 
 function ExampleMessage({
   text,
@@ -98,7 +99,7 @@ export function PersonaCard({
               justifyContent="center"
               alignItems="center"
             >
-              <Icon name={persona.icon} size={24} color={isSelected ? '#fff' : theme.colors.text.secondary} variant="solid" />
+              <Icon name={persona.icon} size={24} color={isSelected ? lightColors.text.inverse : theme.colors.text.secondary} variant="solid" />
             </Box>
 
             <Box flex={1}>

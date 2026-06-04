@@ -4,6 +4,7 @@ import Animated, { FadeInUp } from 'react-native-reanimated';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
+import { lightColors } from '@/theme/tokens/colors';
 
 export interface TomorrowPreviewSessionProps {
   preview: {
@@ -36,9 +37,9 @@ export function TomorrowPreviewSession({
       case 'RIVAL_GAP':
         return theme.colors.primary[500];
       case 'POWER_HOUR':
-        return '#f59e0b';
+        return lightColors.semantic.warning;
       case 'CHALLENGE_RESET':
-        return '#10b981';
+        return lightColors.accent.green;
       default:
         return theme.colors.primary[500];
     }

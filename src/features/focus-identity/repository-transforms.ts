@@ -1,4 +1,5 @@
 import type { z } from 'zod';
+import { lightColors } from '@/theme/tokens/colors';
 
 import type {
   FocusIdentityProfile,
@@ -46,7 +47,7 @@ export function transformRowToProfile(
                     : 419,
       label: row.band_label,
       title: row.band_title,
-      color: '#4caf50',
+      color: lightColors.semantic.success,
       percentile: row.percentile_rank,
     },
     factors: {

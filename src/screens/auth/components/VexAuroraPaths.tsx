@@ -49,6 +49,7 @@ export function DiagonalAurora({ width, height }: { width: number; height: numbe
           <LinearGradient
             start={vec(w * 0.10, h * 0.22)}
             end={vec(w * 0.90, h * 0.55)}
+  // TODO(P2-1): map remaining hex colors to theme tokens
             colors={['#3D2080', '#1E1060', '#0A0520']}
             positions={[0, 0.5, 1]}
           />

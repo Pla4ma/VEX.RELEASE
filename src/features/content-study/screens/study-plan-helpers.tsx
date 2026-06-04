@@ -11,6 +11,7 @@ import { UI_TEXT, TASK_PRIORITY_CONFIG, QUIZ_DIFFICULTY_CONFIG } from '../consta
 import { useTheme } from '@/theme';
 
 import { styles } from './StudyPlanScreen.styles';
+import { lightColors } from '@/theme/tokens/colors';
 
 export type RouteProps = RouteProp<ContentStudyStackParamList, 'StudyPlan'>;
 export type NavigationProp = { navigate: (screen: string, params?: unknown) => void; goBack: () => void };
@@ -133,21 +134,21 @@ export function SessionPlanSection({ sessionPlan }: { sessionPlan: SessionPlan }
       <Text style={styles.sectionTitle}>{UI_TEXT.SESSION_SECTION}</Text>
       <View style={styles.sessionCard}>
         <View style={styles.sessionRow}>
-          <Icon name="clock" color={'#3b82f6'} />
+          <Icon name="clock" color={lightColors.accent.blue} />
           <View style={styles.sessionInfo}>
             <Text style={styles.sessionLabel}>{UI_TEXT.SESSION_DURATION}</Text>
             <Text style={styles.sessionValue}>{formatDuration(sessionPlan.recommendedDuration)}</Text>
           </View>
         </View>
         <View style={styles.sessionRow}>
-          <Icon name="trending-up" color={'#10b981'} />
+          <Icon name="trending-up" color={lightColors.accent.green} />
           <View style={styles.sessionInfo}>
             <Text style={styles.sessionLabel}>{UI_TEXT.SESSION_DIFFICULTY}</Text>
             <Text style={styles.sessionValue}>{sessionPlan.suggestedDifficulty}</Text>
           </View>
         </View>
         <View style={styles.sessionRow}>
-          <Icon name="target" color={'#f59e0b'} />
+          <Icon name="target" color={lightColors.semantic.warning} />
           <View style={styles.sessionInfo}>
             <Text style={styles.sessionLabel}>{UI_TEXT.SESSION_FOCUS_AREAS}</Text>
             <View style={styles.focusAreas}>

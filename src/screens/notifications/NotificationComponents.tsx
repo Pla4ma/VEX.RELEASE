@@ -2,6 +2,7 @@ import React from 'react';
 import { Pressable } from 'react-native';
 import { Box, Text, Button, Card } from '../../components/primitives';
 import { Avatar } from '../../components/Avatar';
+import { lightColors } from '@/theme/tokens/colors';
 
 import type {
   Notification,
@@ -47,7 +48,7 @@ export function NotificationFilterBar({
             style={{
               fontWeight: '600',
               color:
-                activeFilter === filter ? '#fff' : textSecondary,
+                activeFilter === filter ? lightColors.text.inverse : textSecondary,
             }}
           >
             {FILTER_LABELS[filter] ?? filter}
@@ -75,6 +76,7 @@ export function NotificationCard({
       interactive
       style={{
         opacity: item.read ? 0.8 : 1,
+  // TODO(P2-1): map remaining hex colors to theme tokens
         backgroundColor: item.read ? undefined : '#eef2ff20',
       }}
       size="md"

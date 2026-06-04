@@ -4,6 +4,7 @@ import { FlashList } from '@shopify/flash-list';
 import { useTheme } from '../../../theme';
 import { Box, Text } from '../../../components/primitives';
 import { Icon } from '../../../icons';
+import { lightColors } from '@/theme/tokens/colors';
 
 import { CATEGORIES, type SearchCategory } from '../searchData';
 
@@ -50,7 +51,7 @@ export const CategoriesBar: React.FC<CategoriesBarProps> = ({
               size={16}
               color={
                 activeCategory === item.id
-                  ? '#fff'
+                  ? lightColors.text.inverse
                   : theme.colors.text.secondary
               }
               style={{ marginRight: 6 }}
@@ -61,7 +62,7 @@ export const CategoriesBar: React.FC<CategoriesBarProps> = ({
                 fontWeight: '600',
                 color:
                   activeCategory === item.id
-                    ? '#fff'
+                    ? lightColors.text.inverse
                     : theme.colors.text.secondary,
               }}
             >

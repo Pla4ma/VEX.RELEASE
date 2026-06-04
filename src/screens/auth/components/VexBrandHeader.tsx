@@ -11,6 +11,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Text } from '../../../components/primitives/Text';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { useTheme } from '../../../theme';
+import { lightColors } from '@/theme/tokens/colors';
 
 function StatusDot(): React.JSX.Element {
   const { isReducedMotion } = useReducedMotion();
@@ -33,8 +34,8 @@ function StatusDot(): React.JSX.Element {
           width: 6,
           height: 6,
           borderRadius: 3,
-          backgroundColor: '#4ADE80',
-          shadowColor: '#4ADE80',
+          backgroundColor: lightColors.semantic.success,
+          shadowColor: lightColors.semantic.success,
           shadowOffset: { width: 0, height: 0 },
           shadowOpacity: 0.8,
           shadowRadius: 6,
@@ -83,7 +84,7 @@ export function VexBrandHeader(): React.JSX.Element {
           pointerEvents="none"
           style={{
             position: 'absolute',
-            shadowColor: '#8B5CF6',
+            shadowColor: lightColors.accent.purple,
             shadowOffset: { width: 0, height: 0 },
             shadowOpacity: 0.55,
             shadowRadius: 36,
@@ -108,6 +109,7 @@ export function VexBrandHeader(): React.JSX.Element {
           style={{
             position: 'absolute',
             top: 8,
+  // TODO(P2-1): map remaining hex colors to theme tokens
             shadowColor: '#FF8A24',
             shadowOffset: { width: 0, height: 2 },
             shadowOpacity: 0.15,

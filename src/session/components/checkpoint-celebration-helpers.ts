@@ -1,3 +1,4 @@
+import { lightColors } from '@/theme/tokens/colors';
 export interface Particle {
   id: number;
   x: number;
@@ -54,12 +55,12 @@ export const MINUTE_MESSAGES: Record<
 
 export function generateParticles(count: number): Particle[] {
   const colors = [
-    '#f59e0b',
-    '#3b82f6',
-    '#10b981',
-    '#ec4899',
-    '#8b5cf6',
-    '#fbbf24',
+    lightColors.semantic.warning,
+    lightColors.accent.blue,
+    lightColors.accent.green,
+    lightColors.accent.pink,
+    lightColors.accent.purple,
+    lightColors.semantic.warning,
   ];
   return Array.from({ length: count }, (_, i) => ({
     id: i,

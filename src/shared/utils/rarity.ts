@@ -1,3 +1,4 @@
+import { lightColors } from '@/theme/tokens/colors';
 
 /**
  * Rarity Utilities
@@ -18,12 +19,12 @@ export type ItemRarity =
  */
 export function getRarityColor(rarity: ItemRarity): string {
   const colors: Record<ItemRarity, string> = {
-    COMMON: '#9e9e9e', // Gray
-    UNCOMMON: '#4caf50', // Green
-    RARE: '#2196f3', // Blue
-    EPIC: '#9c27b0', // Purple
-    LEGENDARY: '#ff9800', // Orange
-    MYTHIC: '#ffd700', // Gold
+    COMMON: lightColors.text.muted, // Gray
+    UNCOMMON: lightColors.semantic.success, // Green
+    RARE: lightColors.accent.blue, // Blue
+    EPIC: lightColors.accent.purple, // Purple
+    LEGENDARY: lightColors.semantic.warning, // Orange
+    MYTHIC: lightColors.semantic.vexGold, // Gold
   };
 
   return colors[rarity] ?? colors.COMMON;

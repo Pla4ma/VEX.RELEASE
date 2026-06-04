@@ -9,6 +9,7 @@ import { SimpleWalletBadge } from '../../features/economy/components/SimpleWalle
 import { getPremiumCardStyle } from '../../components/premiumStyles';
 import { useTheme } from '../../theme';
 import { createSheet } from '@/shared/ui/create-sheet';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 const WHITE_MUTED = 'rgba(255,255,255,0.72)';
@@ -18,15 +19,16 @@ export function getHeroGradientColors(
   streak: number,
 ): readonly [string, string] {
   if (streak >= 30) {
-    return ['#0A0A0F', '#003838'];
+  // TODO(P2-1): map remaining hex colors to theme tokens
+    return [lightColors.semantic.obsidian, '#003838'];
   }
   if (streak >= 7) {
-    return ['#0A0A0F', '#0A2A33'];
+    return [lightColors.semantic.obsidian, '#0A2A33'];
   }
   if (streak >= 1) {
-    return ['#0A0A0F', '#111A2E'];
+    return [lightColors.semantic.obsidian, lightColors.semantic.backgroundMuted];
   }
-  return ['#0A0A0F', '#14151A'];
+  return [lightColors.semantic.obsidian, '#14151A'];
 }
 
 function formatMinutes(totalMinutes: number) {

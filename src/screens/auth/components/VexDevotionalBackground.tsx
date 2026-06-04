@@ -4,6 +4,7 @@ import { Canvas, Group, RadialGradient, Rect, vec } from '@shopify/react-native-
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { FlowCurve, type CurveSpec } from './FlowCurve';
 import { PaperGrain } from './PaperGrain';
+import { lightColors } from '@/theme/tokens/colors';
 
 /**
  * VexDevotionalBackground — generative organic backdrop for the Editorial
@@ -12,14 +13,15 @@ import { PaperGrain } from './PaperGrain';
  */
 
 const PALETTE = {
+  // TODO(P2-1): map remaining hex colors to theme tokens
   base: '#110B07',
-  baseWarm: '#1A1208',
+  baseWarm: lightColors.semantic.editorialDeepBackground,
   baseCool: '#0C0805',
   warm: '#C8A062',
   warmSoft: '#8B6E3A',
-  ember: '#E0B870',
+  ember: lightColors.semantic.vexGold,
   ash: '#3A2A1A',
-  cream: '#F2EAD9',
+  cream: lightColors.text.secondary,
 } as const;
 
 const CURVE_STROKES: CurveSpec[] = [

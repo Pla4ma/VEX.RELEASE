@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, Pressable } from 'react-native';
 import type { SessionHistoryEntry } from '../types';
+import { lightColors } from '@/theme/tokens/colors';
 
 import { buttonTap } from '../../utils/haptics';
 import {
@@ -67,7 +68,7 @@ const styles = {
     padding: 16,
     marginHorizontal: 16,
     marginBottom: 8,
-    backgroundColor: '#2a2a3e',
+    backgroundColor: lightColors.semantic.backgroundElevated,
     borderRadius: 12,
   },
   itemLeft: {
@@ -79,14 +80,14 @@ const styles = {
   itemDate: {
     fontSize: 14,
     fontWeight: '600' as const,
-    color: '#fff',
+    color: lightColors.text.inverse,
   },
-  itemCategory: { fontSize: 12, color: '#9e9e9e', marginTop: 2 },
+  itemCategory: { fontSize: 12, color: lightColors.text.muted, marginTop: 2 },
   itemRight: { alignItems: 'flex-end' as const },
   itemScore: {
     fontSize: 16,
     fontWeight: '700' as const,
-    color: '#e94560',
+    color: lightColors.semantic.danger,
   },
-  itemDuration: { fontSize: 12, color: '#9e9e9e', marginTop: 2 },
+  itemDuration: { fontSize: 12, color: lightColors.text.muted, marginTop: 2 },
 };

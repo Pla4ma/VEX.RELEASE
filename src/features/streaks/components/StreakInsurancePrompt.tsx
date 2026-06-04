@@ -12,6 +12,7 @@ import { View, Text, Pressable } from 'react-native';
 import Animated, { FadeInUp, FadeOut } from 'react-native-reanimated';
 import { useTheme } from '../../../theme';
 import { createSheet } from '@/shared/ui/create-sheet';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 interface StreakInsurancePromptProps {
@@ -115,10 +116,10 @@ const styles = createSheet({
   container: {
     marginHorizontal: 16,
     marginTop: 12,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: lightColors.semantic.background,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#e94560',
+    borderColor: lightColors.semantic.danger,
     overflow: 'hidden',
   },
   content: {
@@ -159,7 +160,7 @@ const styles = createSheet({
     borderRadius: 8,
   },
   buttonText: {
-    color: '#fff',
+    color: lightColors.text.inverse,
     fontSize: 14,
     fontWeight: '600',
   },
@@ -176,7 +177,7 @@ const styles = createSheet({
     paddingVertical: 6,
   },
   warningText: {
-    color: '#e94560',
+    color: lightColors.semantic.danger,
     fontSize: 12,
     textAlign: 'center',
   },

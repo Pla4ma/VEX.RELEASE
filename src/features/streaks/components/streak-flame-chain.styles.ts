@@ -1,4 +1,5 @@
 import { createSheet } from '@/shared/ui/create-sheet';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 const DAY_SIZE = 44;
@@ -6,7 +7,7 @@ const SPACING = 8;
 
 export const styles = createSheet({
   container: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: lightColors.semantic.background,
     borderRadius: 20,
     padding: 20,
     margin: 16,
@@ -20,16 +21,16 @@ export const styles = createSheet({
     paddingVertical: 10,
     borderRadius: 16,
     borderWidth: 2,
-    borderColor: '#ff6b35',
+    borderColor: lightColors.semantic.warning,
   },
   streakEmoji: { fontSize: 24, marginRight: 8 },
   streakCount: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#ff6b35',
+    color: lightColors.semantic.warning,
   },
   streakInfo: { marginLeft: 16, flex: 1 },
-  streakLabel: { fontSize: 16, fontWeight: '600', color: '#fff' },
+  streakLabel: { fontSize: 16, fontWeight: '600', color: lightColors.text.inverse },
   longestText: {
     fontSize: 12,
     color: 'rgba(255,255,255,0.5)',
@@ -41,7 +42,7 @@ export const styles = createSheet({
   progressContainer: { marginBottom: 20 },
   progressTrack: {
     height: 8,
-    backgroundColor: '#2a2a4a',
+    backgroundColor: lightColors.semantic.backgroundElevated,
     borderRadius: 4,
     overflow: 'hidden',
   },
@@ -64,22 +65,22 @@ export const styles = createSheet({
     width: DAY_SIZE,
     height: DAY_SIZE,
     borderRadius: DAY_SIZE / 2,
-    backgroundColor: '#2a2a4a',
+    backgroundColor: lightColors.semantic.backgroundElevated,
     justifyContent: 'center',
     alignItems: 'center',
   },
   inactiveCircle: {
-    backgroundColor: '#2a2a4a',
+    backgroundColor: lightColors.semantic.backgroundElevated,
     borderWidth: 2,
-    borderColor: '#3a3a5a',
+    borderColor: lightColors.semantic.backgroundElevated,
   },
-  todayCircle: { borderWidth: 3, borderColor: '#4caf50' },
+  todayCircle: { borderWidth: 3, borderColor: lightColors.semantic.success },
   dayNumber: {
     fontSize: 14,
     fontWeight: '600',
     color: 'rgba(255,255,255,0.3)',
   },
-  activeDayNumber: { color: '#fff' },
+  activeDayNumber: { color: lightColors.text.inverse },
   flameIcon: { position: 'absolute', top: -4, right: -4 },
   flameEmoji: { fontSize: 16 },
   milestoneBadge: {
@@ -108,13 +109,13 @@ export const styles = createSheet({
   milestoneEmojiSmall: { fontSize: 20, marginBottom: 4 },
   milestoneText: {
     fontSize: 13,
-    color: '#fff',
+    color: lightColors.text.inverse,
     textAlign: 'center',
     fontWeight: '600',
   },
   milestoneReward: {
     fontSize: 11,
-    color: '#ffd700',
+    color: lightColors.semantic.vexGold,
     marginTop: 4,
   },
 });

@@ -20,6 +20,7 @@ import { UI_TEXT } from '../constants';
 
 import { styles } from './ContentReviewScreen.styles';
 import { StatusBadge, ContentView, ErrorDisplay } from './ContentReviewScreen.helpers';
+import { lightColors } from '@/theme/tokens/colors';
 
 type RouteProps = RouteProp<ContentStudyStackParamList, 'ContentReview'>;
 type NavigationProp = {
@@ -73,7 +74,7 @@ export function ContentReviewScreen() {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={'#3b82f6'} />
+          <ActivityIndicator size="large" color={lightColors.accent.blue} />
           <Text style={styles.loadingText}>Loading content...</Text>
         </View>
       </SafeAreaView>
@@ -132,7 +133,7 @@ export function ContentReviewScreen() {
             accessibilityHint="Double tap to activate"
           >
             {isGenerating ? (
-              <ActivityIndicator size="small" color={'#fff'} />
+              <ActivityIndicator size="small" color={lightColors.text.inverse} />
             ) : (
               <Text style={styles.generateButtonText}>
                 {UI_TEXT.GENERATE_BUTTON}

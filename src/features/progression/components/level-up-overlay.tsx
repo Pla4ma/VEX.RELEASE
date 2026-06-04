@@ -17,6 +17,7 @@ import {
   UnlocksSection,
 } from './level-up-subcomponents';
 import { levelUpStyles as styles } from './level-up-styles';
+import { lightColors } from '@/theme/tokens/colors';
 
 const { width, height } = Dimensions.get('window');
 
@@ -43,11 +44,11 @@ export const LevelUpOverlay: React.FC<LevelUpOverlayProps> = ({
         y: -20 - Math.random() * 100,
         rotation: Math.random() * 360,
         color: [
-          '#FFD700',
-          '#FF6B35',
-          '#4CAF50',
-          '#2196F3',
-          '#9C27B0',
+          lightColors.semantic.vexGold,
+          lightColors.semantic.warning,
+          lightColors.semantic.success,
+          lightColors.accent.blue,
+          lightColors.accent.purple,
         ][Math.floor(Math.random() * 5)]!,
         size: 5 + Math.random() * 10,
       }));
@@ -86,9 +87,9 @@ export const LevelUpOverlay: React.FC<LevelUpOverlayProps> = ({
       <View style={styles.container}>
         <LinearGradient
           colors={[
-            '#1A1A2E',
-            '#0F0F1E',
-            '#1A1A2E',
+            lightColors.semantic.background,
+            lightColors.semantic.backgroundMuted,
+            lightColors.semantic.background,
           ]}
           style={styles.background}
         />
@@ -138,7 +139,7 @@ export const LevelUpOverlay: React.FC<LevelUpOverlayProps> = ({
             accessibilityHint="Double tap to activate"
           >
             <LinearGradient
-              colors={['#FFD700', '#FF6B35']}
+              colors={[lightColors.semantic.vexGold, lightColors.semantic.warning]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
               style={styles.continueGradient}

@@ -1,20 +1,21 @@
+import { lightColors } from '@/theme/tokens/colors';
 
 
 export const TECHNIQUES = [
   { key: 'durationMastery', label: 'Duration Focus' },
-  { key: 'purityMastery', label: 'Purity', color: '#10b981' },
+  { key: 'purityMastery', label: 'Purity', color: lightColors.accent.green },
   {
     key: 'consistencyMastery',
     label: 'Consistency',
-    color: '#f59e0b',
+    color: lightColors.semantic.warning,
   },
-  { key: 'comebackMastery', label: 'Comeback', color: '#ef4444' },
-  { key: 'bossMastery', label: 'Boss Damage', color: '#8b5cf6' },
+  { key: 'comebackMastery', label: 'Comeback', color: lightColors.semantic.danger },
+  { key: 'bossMastery', label: 'Boss Damage', color: lightColors.accent.purple },
 ] as const;
 
 export const difficultyColors = {
-  EASY: '#10b981',
-  MEDIUM: '#3b82f6',
-  HARD: '#f59e0b',
-  ELITE: '#8b5cf6',
+  EASY: lightColors.accent.green,
+  MEDIUM: lightColors.accent.blue,
+  HARD: lightColors.semantic.warning,
+  ELITE: lightColors.accent.purple,
 } as const;

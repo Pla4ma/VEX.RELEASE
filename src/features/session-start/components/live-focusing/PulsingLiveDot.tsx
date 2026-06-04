@@ -1,4 +1,5 @@
 /**
+import { lightColors } from '@/theme/tokens/colors';
  * Animated pulsing green dot indicator for "live" status.
  */
 import React from 'react';
@@ -40,7 +41,7 @@ export function PulsingLiveDot(): JSX.Element {
           width: 8,
           height: 8,
           borderRadius: 4,
-          backgroundColor: '#22c55e',
+          backgroundColor: lightColors.semantic.success,
         },
         animatedStyle,
       ]}

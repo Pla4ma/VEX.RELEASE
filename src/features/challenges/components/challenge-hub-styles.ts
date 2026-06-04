@@ -1,4 +1,5 @@
 import { createSheet } from '@/shared/ui/create-sheet';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 export const styles = createSheet({
@@ -8,7 +9,7 @@ export const styles = createSheet({
     textAlign: 'center',
     marginTop: 12,
     fontSize: 14,
-    color: '#666',
+    color: lightColors.text.muted,
   },
   statsCard: { padding: 16, marginBottom: 12 },
   statsTitle: { fontSize: 16, fontWeight: '600', marginBottom: 12 },
@@ -21,9 +22,9 @@ export const styles = createSheet({
   statValue: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#007aff',
+    color: lightColors.accent.blue,
   },
-  statLabel: { fontSize: 12, color: '#666', marginTop: 2 },
+  statLabel: { fontSize: 12, color: lightColors.text.muted, marginTop: 2 },
   overallProgress: { marginTop: 8 },
   filterContainer: { marginBottom: 12 },
   filterContent: { gap: 8, paddingHorizontal: 4 },
@@ -31,15 +32,15 @@ export const styles = createSheet({
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 20,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: lightColors.surface.button,
   },
-  filterTabActive: { backgroundColor: '#007aff' },
-  filterText: { fontSize: 13, fontWeight: '500', color: '#666' },
-  filterTextActive: { color: '#fff' },
+  filterTabActive: { backgroundColor: lightColors.accent.blue },
+  filterText: { fontSize: 13, fontWeight: '500', color: lightColors.text.muted },
+  filterTextActive: { color: lightColors.text.inverse },
   streakCard: {
     padding: 16,
     marginBottom: 12,
-    backgroundColor: '#fff8e7',
+    backgroundColor: lightColors.warning[50],
   },
   streakHeader: {
     flexDirection: 'row',
@@ -50,7 +51,7 @@ export const styles = createSheet({
   streakTitle: { fontSize: 16, fontWeight: '600' },
   streakDescription: {
     fontSize: 13,
-    color: '#666',
+    color: lightColors.text.muted,
     marginBottom: 12,
   },
   streakDays: { flexDirection: 'row', gap: 8 },
@@ -58,21 +59,21 @@ export const styles = createSheet({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: '#e0e0e0',
+    backgroundColor: lightColors.border.light,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  streakDayCompleted: { backgroundColor: '#ff9500' },
+  streakDayCompleted: { backgroundColor: lightColors.semantic.warning },
   streakDayText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#666',
+    color: lightColors.text.muted,
   },
-  streakDayTextCompleted: { color: '#fff' },
+  streakDayTextCompleted: { color: lightColors.text.inverse },
   listSection: { marginTop: 8 },
   listTitle: { fontSize: 18, fontWeight: '600', marginBottom: 12 },
   emptyCard: { padding: 32, alignItems: 'center' },
   emptyIcon: { fontSize: 48, marginBottom: 12 },
   emptyTitle: { fontSize: 16, fontWeight: '600', marginBottom: 4 },
-  emptyText: { fontSize: 14, color: '#666', textAlign: 'center' },
+  emptyText: { fontSize: 14, color: lightColors.text.muted, textAlign: 'center' },
 });

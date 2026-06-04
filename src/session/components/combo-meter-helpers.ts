@@ -1,10 +1,11 @@
 import type { ComboTierConfig } from './combo-meter-types';
+import { lightColors } from '@/theme/tokens/colors';
 
 export const COMBO_TIERS: ComboTierConfig[] = [
   {
     minCombo: 0,
     name: 'Focus',
-    color: '#6b7280',
+    color: lightColors.text.muted,
     emoji: '',
     multiplier: 1,
     animation: 'pulse',
@@ -12,7 +13,7 @@ export const COMBO_TIERS: ComboTierConfig[] = [
   {
     minCombo: 5,
     name: 'Bronze',
-    color: '#b45309',
+    color: lightColors.semantic.warning,
     emoji: '',
     multiplier: 1.5,
     animation: 'pulse',
@@ -20,7 +21,7 @@ export const COMBO_TIERS: ComboTierConfig[] = [
   {
     minCombo: 10,
     name: 'Silver',
-    color: '#9ca3af',
+    color: lightColors.text.muted,
     emoji: '',
     multiplier: 2,
     animation: 'shake',
@@ -28,7 +29,7 @@ export const COMBO_TIERS: ComboTierConfig[] = [
   {
     minCombo: 15,
     name: 'Gold',
-    color: '#fbbf24',
+    color: lightColors.semantic.warning,
     emoji: '',
     multiplier: 3,
     animation: 'shake',
@@ -36,7 +37,7 @@ export const COMBO_TIERS: ComboTierConfig[] = [
   {
     minCombo: 20,
     name: 'Platinum',
-    color: '#a855f7',
+    color: lightColors.accent.purple,
     emoji: '',
     multiplier: 4,
     animation: 'rainbow',
@@ -44,7 +45,7 @@ export const COMBO_TIERS: ComboTierConfig[] = [
   {
     minCombo: 30,
     name: 'Diamond',
-    color: '#3b82f6',
+    color: lightColors.accent.blue,
     emoji: '',
     multiplier: 5,
     animation: 'rainbow',

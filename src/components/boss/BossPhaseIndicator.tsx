@@ -3,6 +3,7 @@ import { View, Text } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { styles } from './BossPhaseIndicator.styles';
 import { PhaseTips } from './PhaseTips';
+import { lightColors } from '@/theme/tokens/colors';
 
 /** BossPhaseIndicator — archived. Boss phases moved to archive/features/boss/ */
 type BossPhase = string;
@@ -31,25 +32,25 @@ export const BossPhaseIndicator: React.FC<BossPhaseIndicatorProps> = ({
       case 'PHASE_1':
         return {
           name: 'Phase 1: Standard',
-          color: '#38a169',
+          color: lightColors.semantic.success,
           description: 'Normal conditions',
         };
       case 'PHASE_2':
         return {
           name: 'Phase 2: Enrage',
-          color: '#d69e2e',
+          color: lightColors.semantic.warning,
           description: 'Increased pressure — pauses affect score',
         };
       case 'PHASE_3':
         return {
           name: 'Phase 3: Execute',
-          color: '#e53e3e',
+          color: lightColors.semantic.danger,
           description: 'Final phase — maintain 90%+ purity',
         };
       default:
         return {
           name: 'Archived',
-          color: '#718096',
+          color: lightColors.text.muted,
           description: 'Phase archived',
         };
     }

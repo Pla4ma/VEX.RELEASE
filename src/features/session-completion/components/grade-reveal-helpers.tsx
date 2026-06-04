@@ -1,3 +1,4 @@
+import { lightColors } from '@/theme/tokens/colors';
 import React from 'react';
 import Animated, {
   useAnimatedStyle,
@@ -8,11 +9,11 @@ import Animated, {
 export const PARTICLE_COUNT = 12;
 
 export const GRADE_REVEAL_COLORS: Record<string, string> = {
-  A: '#22c55e',
-  B: '#3b82f6',
-  C: '#94a3b8',
-  D: '#ef4444',
-  S: '#ffd700',
+  A: lightColors.semantic.success,
+  B: lightColors.accent.blue,
+  C: lightColors.text.disabled,
+  D: lightColors.semantic.danger,
+  S: lightColors.semantic.vexGold,
 };
 
 export function hexToRgba(color: string, alpha: number): string {

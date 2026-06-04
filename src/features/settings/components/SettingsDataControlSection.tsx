@@ -3,6 +3,7 @@ import { View, Text, Pressable, Alert } from 'react-native';
 import { SettingItem } from './SettingItem';
 import { eventBus } from '../../../events';
 import { createSheet } from '@/shared/ui/create-sheet';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 interface SettingsDataControlSectionProps {
@@ -114,7 +115,7 @@ export function SettingsDataControlSection({
 
 const styles = createSheet({
   settingsGroup: {
-    backgroundColor: '#ffffff',
+    backgroundColor: lightColors.text.inverse,
     marginTop: 8,
     paddingHorizontal: 16,
   },
@@ -124,38 +125,38 @@ const styles = createSheet({
     alignItems: 'center',
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#f3f4f6',
+    borderBottomColor: lightColors.surface.button,
   },
-  actionRowText: { fontSize: 16, color: '#6366f1' },
+  actionRowText: { fontSize: 16, color: lightColors.semantic.primary },
   actionRowSubtext: {
     fontSize: 12,
-    color: '#9ca3af',
+    color: lightColors.text.muted,
     marginTop: 2,
   },
-  actionRowArrow: { fontSize: 18, color: '#6366f1' },
+  actionRowArrow: { fontSize: 18, color: lightColors.semantic.primary },
   dangerZone: {
     marginTop: 24,
     padding: 16,
-    backgroundColor: '#fef2f2',
+    backgroundColor: lightColors.error[50],
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#fecaca',
+    borderColor: lightColors.error.light,
   },
   dangerTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#ef4444',
+    color: lightColors.semantic.danger,
     marginBottom: 12,
   },
   dangerAction: {
-    backgroundColor: '#ef4444',
+    backgroundColor: lightColors.semantic.danger,
     paddingVertical: 12,
     paddingHorizontal: 16,
     borderRadius: 8,
     alignItems: 'center',
   },
   dangerActionText: {
-    color: '#ffffff',
+    color: lightColors.text.inverse,
     fontSize: 14,
     fontWeight: '600',
   },

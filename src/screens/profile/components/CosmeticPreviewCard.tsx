@@ -9,6 +9,7 @@ import Animated, {
 import { useTheme } from '../../../theme';
 import { Box, Text, Card } from '../../../components/primitives';
 import { Icon } from '../../../icons';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 export type CosmeticType = 'avatar-frame' | 'badge' | 'background' | 'title';
@@ -27,11 +28,11 @@ export interface CosmeticItem {
 }
 
 export const RARITY_COLORS: Record<string, string> = {
-  common: '#94a3b8',
-  uncommon: '#22c55e',
-  rare: '#3b82f6',
-  epic: '#a855f7',
-  legendary: '#f59e0b',
+  common: lightColors.text.disabled,
+  uncommon: lightColors.semantic.success,
+  rare: lightColors.accent.blue,
+  epic: lightColors.accent.purple,
+  legendary: lightColors.semantic.warning,
 };
 
 export const RARITY_ORDER = ['legendary', 'epic', 'rare', 'uncommon', 'common'];
@@ -99,7 +100,7 @@ export const CosmeticPreviewCard: React.FC<{
               alignItems="center"
               style={{ backgroundColor: rarityColor, zIndex: 10 }}
             >
-              <Icon name="check" size={14} color={'#fff'} />
+              <Icon name="check" size={14} color={lightColors.text.inverse} />
             </Box>
           )}
 

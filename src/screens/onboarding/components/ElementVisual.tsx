@@ -1,6 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import type { CompanionElement } from '../../../features/onboarding/types';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 interface ElementVisualProps {
@@ -130,7 +131,7 @@ export function ElementVisual({
             width: 12,
             height: 12,
             borderRadius: 6,
-            backgroundColor: '#fff',
+            backgroundColor: lightColors.text.inverse,
             position: 'absolute',
           }}
         />

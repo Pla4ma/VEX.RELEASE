@@ -9,6 +9,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { Text } from '../../../components/primitives/Text';
+import { lightColors } from '@/theme/tokens/colors';
 
 const SANS = Platform.select({ ios: 'SF Pro Display', android: 'Roboto', default: 'Inter' }) ?? 'Inter';
 
@@ -27,16 +28,16 @@ export function LiquidMonogram({ isReducedMotion }: { isReducedMotion: boolean }
       <View style={{ width: 168, height: 168, alignItems: 'center', justifyContent: 'center' }}>
         <View style={{ position: 'absolute', width: 168, height: 168, borderRadius: 84, borderWidth: 1, borderColor: 'rgba(186,230,253,0.30)' }} />
         <View style={{ position: 'absolute', width: 140, height: 140, borderRadius: 70, borderWidth: 1, borderColor: 'rgba(186,230,253,0.18)' }} />
-        <Text style={{ fontSize: 88, fontWeight: '800', color: '#F0F9FF', letterSpacing: -2, fontFamily: SANS, textShadowColor: 'rgba(34,211,238,0.55)', textShadowOffset: { width: 0, height: 0 }, textShadowRadius: 24 }}>V</Text>
-        <View style={{ position: 'absolute', top: 14, right: 14, width: 6, height: 6, borderRadius: 3, backgroundColor: '#22D3EE' }} />
-        <View style={{ position: 'absolute', bottom: 14, left: 14, width: 6, height: 6, borderRadius: 3, backgroundColor: '#A78BFA' }} />
+        <Text style={{ fontSize: 88, fontWeight: '800', color: lightColors.surface.button, letterSpacing: -2, fontFamily: SANS, textShadowColor: 'rgba(34,211,238,0.55)', textShadowOffset: { width: 0, height: 0 }, textShadowRadius: 24 }}>V</Text>
+        <View style={{ position: 'absolute', top: 14, right: 14, width: 6, height: 6, borderRadius: 3, backgroundColor: lightColors.semantic.vexCyan }} />
+        <View style={{ position: 'absolute', bottom: 14, left: 14, width: 6, height: 6, borderRadius: 3, backgroundColor: lightColors.accent.purple }} />
       </View>
       <View style={{ alignItems: 'center', gap: 8 }}>
-        <Text style={{ color: '#7DD3FC', fontSize: 11, fontWeight: '600', letterSpacing: 6, textTransform: 'uppercase' }}>— N° 001 —</Text>
-        <Text style={{ color: '#F0F9FF', fontSize: 32, fontWeight: '200', letterSpacing: 14, fontFamily: SANS }}>VEX</Text>
+        <Text style={{ color: lightColors.accent.blue, fontSize: 11, fontWeight: '600', letterSpacing: 6, textTransform: 'uppercase' }}>— N° 001 —</Text>
+        <Text style={{ color: lightColors.surface.button, fontSize: 32, fontWeight: '200', letterSpacing: 14, fontFamily: SANS }}>VEX</Text>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
           <View style={{ width: 28, height: 1, backgroundColor: 'rgba(125,211,252,0.5)' }} />
-          <View style={{ width: 4, height: 4, backgroundColor: '#22D3EE', transform: [{ rotate: '45deg' }] }} />
+          <View style={{ width: 4, height: 4, backgroundColor: lightColors.semantic.vexCyan, transform: [{ rotate: '45deg' }] }} />
           <View style={{ width: 28, height: 1, backgroundColor: 'rgba(125,211,252,0.5)' }} />
         </View>
         <Text style={{ color: 'rgba(186,230,253,0.7)', fontSize: 13, fontWeight: '300', letterSpacing: 1.6, textAlign: 'center', maxWidth: 280, marginTop: 4 }}>Engage the work. Leave with proof.</Text>

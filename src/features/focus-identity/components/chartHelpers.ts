@@ -1,4 +1,5 @@
 import type { FocusScoreHistoryPoint } from '../types';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 export interface ChartPadding {
@@ -52,13 +53,13 @@ export function buildAreaD(
 }
 
 export function getScoreColor(latestScore: number): string {
-  if (latestScore >= 800) {return '#ffd700';}
-  if (latestScore >= 740) {return '#c0c0c0';}
-  if (latestScore >= 670) {return '#cd7f32';}
-  if (latestScore >= 580) {return '#4caf50';}
-  if (latestScore >= 500) {return '#8bc34a';}
-  if (latestScore >= 420) {return '#ffc107';}
-  return '#ff9800';
+  if (latestScore >= 800) {return lightColors.semantic.vexGold;}
+  if (latestScore >= 740) {return lightColors.text.disabled;}
+  if (latestScore >= 670) {return lightColors.text.muted;}
+  if (latestScore >= 580) {return lightColors.semantic.success;}
+  if (latestScore >= 500) {return lightColors.semantic.success;}
+  if (latestScore >= 420) {return lightColors.semantic.warning;}
+  return lightColors.semantic.warning;
 }
 
 export function computeScoreBounds(

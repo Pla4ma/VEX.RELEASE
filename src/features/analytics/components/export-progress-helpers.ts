@@ -1,5 +1,6 @@
 import { ExportJobSchema } from '../schemas';
 import type { z } from 'zod';
+import { lightColors } from '@/theme/tokens/colors';
 
 export type ExportJob = z.infer<typeof ExportJobSchema>;
 
@@ -11,15 +12,15 @@ export interface ExportProgressProps {
 }
 
 export const STATUS_CONFIG = {
-  pending: { color: '#6b7280', label: 'Queued', icon: '' },
+  pending: { color: lightColors.text.muted, label: 'Queued', icon: '' },
   processing: {
-    color: '#3b82f6',
+    color: lightColors.accent.blue,
     label: 'Processing',
     icon: '',
   },
-  completed: { color: '#10b981', label: 'Ready', icon: '' },
-  failed: { color: '#ef4444', label: 'Failed', icon: '' },
-  cancelled: { color: '#9ca3af', label: 'Cancelled', icon: '' },
+  completed: { color: lightColors.accent.green, label: 'Ready', icon: '' },
+  failed: { color: lightColors.semantic.danger, label: 'Failed', icon: '' },
+  cancelled: { color: lightColors.text.muted, label: 'Cancelled', icon: '' },
 };
 
 export function formatDate(timestamp: number): string {

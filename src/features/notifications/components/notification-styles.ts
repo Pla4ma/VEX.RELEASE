@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { createSheet } from '@/shared/ui/create-sheet';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 export const styles = createSheet({
@@ -9,7 +10,7 @@ export const styles = createSheet({
     justifyContent: 'flex-end',
   },
   container: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: lightColors.semantic.background,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     maxHeight: '80%',
@@ -20,18 +21,18 @@ export const styles = createSheet({
     alignItems: 'center',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#2a2a4e',
+    borderBottomColor: lightColors.semantic.backgroundElevated,
   },
-  title: { fontSize: 18, fontWeight: '700', color: '#fff' },
+  title: { fontSize: 18, fontWeight: '700', color: lightColors.text.inverse },
   markAllButton: {
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 8,
-    backgroundColor: '#2a2a4e',
+    backgroundColor: lightColors.semantic.backgroundElevated,
   },
   markAllText: {
     fontSize: 12,
-    color: '#9e9e9e',
+    color: lightColors.text.muted,
     fontWeight: '600',
   },
   scrollView: { maxHeight: 400 },
@@ -39,14 +40,14 @@ export const styles = createSheet({
     flexDirection: 'row',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#2a2a4e',
+    borderBottomColor: lightColors.semantic.backgroundElevated,
     alignItems: 'flex-start',
   },
   unreadIndicator: {
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: '#e94560',
+    backgroundColor: lightColors.semantic.danger,
     marginRight: 12,
     marginTop: 6,
   },
@@ -62,12 +63,12 @@ export const styles = createSheet({
   notificationTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#fff',
+    color: lightColors.text.inverse,
     marginBottom: 4,
   },
   notificationBody: {
     fontSize: 14,
-    color: '#9e9e9e',
+    color: lightColors.text.muted,
     marginBottom: 8,
     lineHeight: 20,
   },
@@ -76,7 +77,7 @@ export const styles = createSheet({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  timestamp: { fontSize: 12, color: '#666' },
+  timestamp: { fontSize: 12, color: lightColors.text.muted },
   priorityBadge: {
     paddingHorizontal: 8,
     paddingVertical: 2,
@@ -86,56 +87,56 @@ export const styles = createSheet({
     textTransform: 'uppercase',
   },
   criticalBadge: {
-    backgroundColor: '#e94560',
-    color: '#fff',
+    backgroundColor: lightColors.semantic.danger,
+    color: lightColors.text.inverse,
   },
   highBadge: {
-    backgroundColor: '#f5a623',
-    color: '#000',
+    backgroundColor: lightColors.semantic.warning,
+    color: lightColors.text.primary,
   },
   actionButton: {
     marginTop: 8,
     paddingHorizontal: 16,
     paddingVertical: 8,
-    backgroundColor: '#e94560',
+    backgroundColor: lightColors.semantic.danger,
     borderRadius: 8,
     alignSelf: 'flex-start',
   },
   actionButtonText: {
-    color: '#fff',
+    color: lightColors.text.inverse,
     fontSize: 14,
     fontWeight: '600',
   },
   emptyState: { padding: 40, alignItems: 'center' },
   emptyText: {
     fontSize: 16,
-    color: '#9e9e9e',
+    color: lightColors.text.muted,
     textAlign: 'center',
   },
   closeButton: {
     padding: 16,
     alignItems: 'center',
     borderTopWidth: 1,
-    borderTopColor: '#2a2a4e',
+    borderTopColor: lightColors.semantic.backgroundElevated,
   },
   closeButtonText: {
     fontSize: 16,
-    color: '#fff',
+    color: lightColors.text.inverse,
     fontWeight: '600',
   },
-  dismissText: { color: '#666', fontSize: 18 },
+  dismissText: { color: lightColors.text.muted, fontSize: 18 },
 });
 
 export const priorityStyles = {
   critical: styles.criticalBadge,
   high: styles.highBadge,
   normal: {
-    backgroundColor: '#2a2a4e',
-    color: '#fff',
+    backgroundColor: lightColors.semantic.backgroundElevated,
+    color: lightColors.text.inverse,
   },
   low: {
-    backgroundColor: '#1a1a2e',
-    color: '#666',
+    backgroundColor: lightColors.semantic.background,
+    color: lightColors.text.muted,
   },
 };
 

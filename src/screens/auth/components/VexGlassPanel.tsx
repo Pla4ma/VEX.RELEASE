@@ -1,6 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { lightColors } from '@/theme/tokens/colors';
 
 import { SafeBlurView } from './SafeBlurView';
 import { useTheme } from '../../../theme';
@@ -19,7 +20,7 @@ export function VexConsole({ children }: VexConsoleProps): React.JSX.Element {
     <View
       style={{
         borderRadius: r,
-        shadowColor: '#000',
+        shadowColor: lightColors.text.primary,
         shadowOffset: { width: 0, height: 20 },
         shadowOpacity: 0.55,
         shadowRadius: 36,

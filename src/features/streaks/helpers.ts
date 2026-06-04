@@ -1,5 +1,6 @@
 import { STREAK_STATES } from './constants';
 import type { StreakState, StreakStateInfo } from './types';
+import { lightColors } from '@/theme/tokens/colors';
 
 export function determineStreakState(
   streakDays: number,
@@ -36,7 +37,7 @@ export function getStreakStateInfo(state: StreakState): StreakStateInfo {
       state: state,
       label: 'Unknown',
       description: 'Unknown state',
-      color: '#718096',
+      color: lightColors.text.muted,
       icon: '',
       animation: 'none',
       urgency: 'none',

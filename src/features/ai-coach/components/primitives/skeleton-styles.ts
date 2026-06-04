@@ -1,8 +1,9 @@
 import { createSheet } from '@/shared/ui/create-sheet';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 export const skeletonStyles = createSheet({
-  container: { backgroundColor: '#e1e4e8', overflow: 'hidden' },
+  container: { backgroundColor: lightColors.border.light, overflow: 'hidden' },
   shimmer: {
     width: '100%',
     height: '100%',
@@ -12,7 +13,7 @@ export const skeletonStyles = createSheet({
   textLine: { marginBottom: 8 },
   cardContainer: {
     padding: 16,
-    backgroundColor: '#fff',
+    backgroundColor: lightColors.text.inverse,
     borderRadius: 12,
     gap: 12,
   },
@@ -25,7 +26,7 @@ export const skeletonStyles = createSheet({
     alignItems: 'center',
     gap: 8,
     padding: 16,
-    backgroundColor: '#fff',
+    backgroundColor: lightColors.text.inverse,
     borderRadius: 12,
     flex: 1,
   },
@@ -36,7 +37,7 @@ export const skeletonStyles = createSheet({
     alignItems: 'center',
     gap: 12,
     padding: 12,
-    backgroundColor: '#fff',
+    backgroundColor: lightColors.text.inverse,
     borderRadius: 8,
   },
   listContent: { flex: 1, gap: 6 },
@@ -46,7 +47,7 @@ export const skeletonStyles = createSheet({
   streakBadge: { alignSelf: 'center' },
   comebackContainer: {
     padding: 16,
-    backgroundColor: '#fff',
+    backgroundColor: lightColors.text.inverse,
     borderRadius: 12,
     gap: 16,
   },

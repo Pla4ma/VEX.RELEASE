@@ -1,4 +1,5 @@
 import { createSheet } from '@/shared/ui/create-sheet';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 export const styles = createSheet({
@@ -26,7 +27,7 @@ export const styles = createSheet({
   thumbnail: {
     width: '100%',
     height: 160,
-    backgroundColor: '#000',
+    backgroundColor: lightColors.text.primary,
   },
   previewInfo: { padding: 12, gap: 4 },
   videoTitle: { fontSize: 15, fontWeight: '600', lineHeight: 20 },

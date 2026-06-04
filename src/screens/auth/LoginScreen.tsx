@@ -43,6 +43,7 @@ function RegisterCta({ onPress }: { onPress: () => void }): React.JSX.Element {
       >
         <Text color="semantic.liquidTextMuted" fontSize={14} textAlign="center" opacity={0.82}>
           New here?{' '}
+  // TODO(P2-1): map remaining hex colors to theme tokens
           <Text fontWeight="700" style={{ color: '#FFC46B', textShadowColor: 'rgba(255, 196, 107, 0.35)', textShadowOffset: { width: 0, height: 0 }, textShadowRadius: 8 }}>
             Create your focus system
           </Text>

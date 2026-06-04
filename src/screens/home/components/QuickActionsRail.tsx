@@ -12,6 +12,7 @@ import { useTheme } from '../../../theme';
 import { Text } from '../../../components/primitives/Text';
 import { Icon } from '../../../icons';
 import { useHaptics } from '../../../utils/haptics';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 interface QuickAction {
@@ -31,21 +32,21 @@ const QUICK_ACTIONS: QuickAction[] = [
     id: 'focus',
     icon: 'target',
     label: 'Focus',
-    color: '#3b82f6', // Blue
+    color: lightColors.accent.blue, // Blue
     action: 'focus',
   },
   {
     id: 'study',
     icon: 'book-open',
     label: 'Study',
-    color: '#6366f1', // Indigo
+    color: lightColors.semantic.primary, // Indigo
     action: 'study',
   },
   {
     id: 'boss',
     icon: 'zap',
     label: 'Boss',
-    color: '#7c3aed', // Purple
+    color: lightColors.accent.purple, // Purple
     action: 'boss',
   },
 ];

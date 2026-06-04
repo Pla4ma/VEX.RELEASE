@@ -10,6 +10,7 @@ import Animated, {
 import { SafeBlurView } from './SafeBlurView';
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
+import { lightColors } from '@/theme/tokens/colors';
 
 type VexGlassInputProps = {
   label: string;
@@ -52,12 +53,12 @@ export function VexGlassInput({
   const glowStyle = useAnimatedStyle(() => ({
     shadowOpacity: isFocused ? 0.35 : 0,
     shadowRadius: isFocused ? 18 : 0,
-    shadowColor: isFocused ? '#FF8A3D' : 'transparent',
+    shadowColor: isFocused ? lightColors.accent.orange : 'transparent',
     shadowOffset: { width: 0, height: isFocused ? 4 : 0 },
   }));
 
   const borderColor = error
-    ? '#F87171'
+    ? lightColors.error.light
     : isFocused
       ? 'rgba(166, 107, 255, 0.70)'
       : 'rgba(255, 255, 255, 0.06)';
@@ -139,7 +140,7 @@ export function VexGlassInput({
               secureTextEntry={secureTextEntry}
               style={{
                 minHeight: 54,
-                color: '#F7F5FF',
+                color: lightColors.semantic.background,
                 fontSize: 16,
                 paddingHorizontal: theme.spacing[4],
               }}

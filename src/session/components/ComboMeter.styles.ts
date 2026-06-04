@@ -1,4 +1,5 @@
 import { Dimensions } from 'react-native';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -33,7 +34,7 @@ export const fireEmojiStyle = { fontSize: 24, marginLeft: -8 };
 export const mainContainerStyle = {
   borderRadius: 16,
   padding: 16,
-  shadowColor: '#000',
+  shadowColor: lightColors.text.primary,
   shadowOffset: { width: 0, height: 2 },
   shadowOpacity: 0.1,
   shadowRadius: 4,
@@ -67,7 +68,7 @@ export const multiplierBadgeStyle = {
 };
 
 export const multiplierTextStyle = {
-  color: '#fff',
+  color: lightColors.text.inverse,
   fontWeight: '700' as const,
   fontSize: 14,
 };
@@ -102,7 +103,7 @@ export const milestoneCardStyle = {
   padding: 24,
   borderRadius: 20,
   alignItems: 'center' as const,
-  shadowColor: '#000',
+  shadowColor: lightColors.text.primary,
   shadowOffset: { width: 0, height: 4 },
   shadowOpacity: 0.3,
   shadowRadius: 8,
@@ -134,11 +135,11 @@ export const comboBrokenCardStyle = {
 
 export const comboBrokenEmojiStyle = { fontSize: 40, marginBottom: 8 };
 export const comboBrokenTextStyle = {
-  color: '#fff',
+  color: lightColors.text.inverse,
   marginBottom: 4,
 };
 export const comboBrokenSubtextStyle = {
-  color: '#fff',
+  color: lightColors.text.inverse,
   opacity: 0.8,
 };
 

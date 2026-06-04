@@ -1,5 +1,6 @@
 
 import type { SessionHistoryEntry } from '../types';
+import { lightColors } from '@/theme/tokens/colors';
 
 export { formatDuration } from '../../utils/format-duration';
 
@@ -11,13 +12,13 @@ export const formatDate = (timestamp: number): string => {
 export const getStatusColor = (status: string): string => {
   switch (status) {
     case 'COMPLETED':
-      return '#4caf50';
+      return lightColors.semantic.success;
     case 'ABANDONED':
-      return '#ffa500';
+      return lightColors.semantic.warning;
     case 'FAILED':
-      return '#f44336';
+      return lightColors.semantic.danger;
     default:
-      return '#9e9e9e';
+      return lightColors.text.muted;
   }
 };
 

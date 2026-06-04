@@ -11,6 +11,7 @@ import { useTheme } from '../../theme';
 import { Box, Text } from '../primitives';
 import { Icon } from '../../icons';
 import { createSheet } from '@/shared/ui/create-sheet';
+import { lightColors } from '@/theme/tokens/colors';
 
 type IconName = string;
 export type ToastType = 'info' | 'success' | 'warning' | 'error';
@@ -38,19 +39,19 @@ const getTypeColors = (theme: ReturnType<typeof useTheme>['theme']) => ({
     icon: theme.colors.primary[500],
   },
   success: {
-    bg: '#dcfce7',
-    border: '#86efac',
-    icon: '#22c55e',
+    bg: lightColors.success[50],
+    border: lightColors.success.light,
+    icon: lightColors.semantic.success,
   },
   warning: {
-    bg: '#fef3c7',
-    border: '#fcd34d',
-    icon: '#f59e0b',
+    bg: lightColors.warning[50],
+    border: lightColors.warning.light,
+    icon: lightColors.semantic.warning,
   },
   error: {
-    bg: '#fee2e2',
-    border: '#fca5a5',
-    icon: '#ef4444',
+    bg: lightColors.error[50],
+    border: lightColors.error.light,
+    icon: lightColors.semantic.danger,
   },
 });
 export const Toast: React.FC<ToastProps> = ({

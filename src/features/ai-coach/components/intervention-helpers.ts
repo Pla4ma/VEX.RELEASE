@@ -1,5 +1,6 @@
 import type { InterventionType } from './intervention-types';
 import type { ColorPalette } from '../../../theme/colorTypes';
+import { lightColors } from '@/theme/tokens/colors';
 
 interface BannerColors {
   bg: string;
@@ -8,15 +9,15 @@ interface BannerColors {
 }
 
 const SEVERITY_COLOR_MAP: Record<InterventionType, (colors: ColorPalette) => string> = {
-  BURNOUT: (c) => c.warning?.[500] ?? '#ff9800',
-  PLATEAU: (c) => c.info?.[500] ?? '#2196f3',
-  STREAK_RISK: (c) => c.error?.[500] ?? '#f44336',
-  BOSS_FINISH: (c) => c.success?.[500] ?? '#4caf50',
-  BOSS_OPPORTUNITY: (c) => c.success?.[500] ?? '#4caf50',
-  STUDY_BEHIND: (c) => c.warning?.[500] ?? '#ff9800',
-  MOMENTUM_BUILDING: (c) => c.primary?.[500] ?? '#6200ee',
-  COMEBACK_READY: (c) => c.primary?.[500] ?? '#6200ee',
-  STUDY_PLAN_COMPLETE: (c) => c.success?.[500] ?? '#4caf50',
+  BURNOUT: (c) => c.warning?.[500] ?? lightColors.semantic.warning,
+  PLATEAU: (c) => c.info?.[500] ?? lightColors.accent.blue,
+  STREAK_RISK: (c) => c.error?.[500] ?? lightColors.semantic.danger,
+  BOSS_FINISH: (c) => c.success?.[500] ?? lightColors.semantic.success,
+  BOSS_OPPORTUNITY: (c) => c.success?.[500] ?? lightColors.semantic.success,
+  STUDY_BEHIND: (c) => c.warning?.[500] ?? lightColors.semantic.warning,
+  MOMENTUM_BUILDING: (c) => c.primary?.[500] ?? lightColors.accent.purple,
+  COMEBACK_READY: (c) => c.primary?.[500] ?? lightColors.accent.purple,
+  STUDY_PLAN_COMPLETE: (c) => c.success?.[500] ?? lightColors.semantic.success,
 };
 
 export function getBannerColors(

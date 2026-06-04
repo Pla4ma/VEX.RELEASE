@@ -1,6 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { lightColors } from '@/theme/tokens/colors';
 
 import { Button } from '../../../components/primitives/Button';
 import { Text } from '../../../components/primitives/Text';
@@ -98,9 +99,9 @@ export function HomeHeroCard({
     >
       <LinearGradient
         colors={[
-          theme.colors.primary[600] ?? '#4f46e5',
-          theme.colors.primary[700] ?? '#4338ca',
-          theme.colors.primary[800] ?? '#3730a3',
+          theme.colors.primary[600] ?? lightColors.semantic.primary,
+          theme.colors.primary[700] ?? lightColors.semantic.primaryPressed,
+          theme.colors.primary[800] ?? lightColors.semantic.primaryPressed,
         ]}
         start={{ x: 0.1, y: 0 }}
         end={{ x: 0.9, y: 1 }}

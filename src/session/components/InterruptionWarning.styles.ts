@@ -1,4 +1,5 @@
 import { createSheet } from '@/shared/ui/create-sheet';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 export const styles = createSheet({
@@ -10,7 +11,7 @@ export const styles = createSheet({
     padding: 24,
   },
   container: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: lightColors.semantic.background,
     borderRadius: 20,
     padding: 32,
     width: '100%',
@@ -29,12 +30,12 @@ export const styles = createSheet({
   title: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#fff',
+    color: lightColors.text.inverse,
     marginBottom: 8,
   },
   interruptionType: {
     fontSize: 16,
-    color: '#9e9e9e',
+    color: lightColors.text.muted,
     marginBottom: 16,
     textTransform: 'capitalize',
   },
@@ -48,13 +49,13 @@ export const styles = createSheet({
   countdown: { fontSize: 48, fontWeight: '700', fontVariant: ['tabular-nums'] },
   countdownLabel: {
     fontSize: 14,
-    color: '#9e9e9e',
+    color: lightColors.text.muted,
     marginTop: 4,
   },
   progressBarContainer: {
     width: '100%',
     height: 8,
-    backgroundColor: '#2a2a3e',
+    backgroundColor: lightColors.semantic.backgroundElevated,
     borderRadius: 4,
     marginBottom: 32,
     overflow: 'hidden',
@@ -62,23 +63,23 @@ export const styles = createSheet({
   progressBar: { height: '100%', borderRadius: 4 },
   actions: { width: '100%', gap: 12 },
   button: { paddingVertical: 16, borderRadius: 12, alignItems: 'center' },
-  resumeButton: { backgroundColor: '#4caf50' },
-  streakSaveButton: { backgroundColor: '#ff6b35' },
+  resumeButton: { backgroundColor: lightColors.semantic.success },
+  streakSaveButton: { backgroundColor: lightColors.semantic.warning },
   abandonButton: {
     backgroundColor: 'transparent',
     borderWidth: 1,
-    borderColor: '#e94560',
+    borderColor: lightColors.semantic.danger,
   },
-  buttonText: { color: '#fff', fontSize: 16, fontWeight: '600' },
+  buttonText: { color: lightColors.text.inverse, fontSize: 16, fontWeight: '600' },
   abandonButtonText: {
-    color: '#e94560',
+    color: lightColors.semantic.danger,
     fontSize: 16,
     fontWeight: '600',
   },
   penaltyWarning: {
     marginTop: 16,
     fontSize: 12,
-    color: '#f44336',
+    color: lightColors.semantic.danger,
     textAlign: 'center',
   },
 });

@@ -14,6 +14,7 @@ import Animated, {
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 
 import { createSheet } from '@/shared/ui/create-sheet';
+import { lightColors } from '@/theme/tokens/colors';
 
 export const Spinner: React.FC<{ size: number; color: string }> = ({
   size,
@@ -172,6 +173,6 @@ export const styles = createSheet({
     zIndex: 100,
   },
   dotsContainer: { flexDirection: 'row', alignItems: 'center' },
-  dot: { backgroundColor: '#000' },
+  dot: { backgroundColor: lightColors.text.primary },
   pulse: { opacity: 0.3 },
 });

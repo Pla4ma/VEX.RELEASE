@@ -1,3 +1,4 @@
+import { lightColors } from '@/theme/tokens/colors';
 
 /**
  * Living Companion System - Core Types
@@ -125,45 +126,46 @@ export const ELEMENT_THEMES: Record<
   }
 > = {
   FLAME: {
-    primary: '#ff6b35',
-    secondary: '#f7931e',
-    glow: '#ff4500',
-    particle: '#ffd700',
+    primary: lightColors.semantic.warning,
+    secondary: lightColors.semantic.warning,
+    glow: lightColors.semantic.danger,
+    particle: lightColors.semantic.vexGold,
     ambience: 'warm',
   },
   WAVE: {
-    primary: '#4ecdc4',
-    secondary: '#44a08d',
+    primary: lightColors.accent.teal,
+    secondary: lightColors.accent.teal,
+  // TODO(P2-1): map remaining hex colors to theme tokens
     glow: '#00ced1',
     particle: '#87ceeb',
     ambience: 'cool',
   },
   TERRA: {
-    primary: '#8b4513',
-    secondary: '#228b22',
-    glow: '#9acd32',
+    primary: lightColors.text.muted,
+    secondary: lightColors.semantic.success,
+    glow: lightColors.semantic.success,
     particle: '#deb887',
     ambience: 'earthy',
   },
   ZEPHYR: {
-    primary: '#e0e0e0',
+    primary: lightColors.border.light,
     secondary: '#b0c4de',
-    glow: '#ffffff',
-    particle: '#f0f8ff',
+    glow: lightColors.text.inverse,
+    particle: lightColors.info[50],
     ambience: 'ethereal',
   },
   VOID: {
-    primary: '#2c003e',
-    secondary: '#4b0082',
-    glow: '#9400d3',
-    particle: '#e6e6fa',
+    primary: lightColors.accent.purple,
+    secondary: lightColors.accent.purple,
+    glow: lightColors.accent.purple,
+    particle: lightColors.primary[50],
     ambience: 'mysterious',
   },
   LUMINA: {
-    primary: '#ffd700',
-    secondary: '#ffa500',
-    glow: '#fffacd',
-    particle: '#ffffff',
+    primary: lightColors.semantic.vexGold,
+    secondary: lightColors.semantic.warning,
+    glow: lightColors.warning[50],
+    particle: lightColors.text.inverse,
     ambience: 'divine',
   },
 };

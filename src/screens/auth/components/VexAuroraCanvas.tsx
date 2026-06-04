@@ -7,6 +7,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
+import { lightColors } from '@/theme/tokens/colors';
 
 export function VexAtmosphereCanvas(): React.JSX.Element {
   const { isReducedMotion } = useReducedMotion();
@@ -27,6 +28,7 @@ export function VexAtmosphereCanvas(): React.JSX.Element {
   return (
     <View style={StyleSheet.absoluteFill}>
       {/* Deep midnight base */}
+  // TODO(P2-1): map remaining hex colors to theme tokens
       <View style={[StyleSheet.absoluteFill, { backgroundColor: '#05040B' }]} />
 
       {/* Violet nebula — upper left */}
@@ -212,7 +214,7 @@ export function VexAtmosphereCanvas(): React.JSX.Element {
               width: 2 + Math.random() * 3,
               height: 2 + Math.random() * 3,
               borderRadius: 1,
-              backgroundColor: '#FFFFFF',
+              backgroundColor: lightColors.text.inverse,
               opacity: Math.random() * 0.5,
             }}
           />

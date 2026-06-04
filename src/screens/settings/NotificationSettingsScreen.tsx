@@ -8,6 +8,7 @@ import { Box, Text, Card } from '../../components/primitives';
 import { Icon } from '../../icons';
 import { useUIStore } from '../../store/index';
 import type { SettingsStackParams } from '../../navigation';
+import { lightColors } from '@/theme/tokens/colors';
 
 import { NotificationCategoryToggle } from './NotificationCategoryToggle';
 import { NotificationScheduleSection } from './NotificationScheduleSection';
@@ -125,10 +126,10 @@ export const NotificationSettingsScreen: React.FC<Props> = ({
             accessibilityHint="Double tap to change setting"
           >
             <Box flexDirection="row" alignItems="center">
-              <Icon name="bell" size={18} color={'#fff'} />
+              <Icon name="bell" size={18} color={lightColors.text.inverse} />
               <Text
                 style={{
-                  color: '#fff',
+                  color: lightColors.text.inverse,
                   fontWeight: '600',
                   fontSize: 16,
                   marginLeft: 8,

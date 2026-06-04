@@ -14,6 +14,7 @@ import { useTheme } from '../../../theme';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { buttonTap } from '../../../utils/haptics';
 import { getMinTouchTargetStyle } from '../../../utils/touchTarget';
+import { lightColors } from '@/theme/tokens/colors';
 
 type VexActivationButtonProps = {
   label: string;
@@ -84,6 +85,7 @@ export function VexActivationButton({
             right: -24,
             borderRadius: 9999,
             backgroundColor: 'rgba(255, 138, 36, 0.04)',
+  // TODO(P2-1): map remaining hex colors to theme tokens
             shadowColor: '#FF8A24',
             shadowOffset: { width: 0, height: 0 },
             shadowOpacity: 0.5,
@@ -115,7 +117,7 @@ export function VexActivationButton({
         style={[
           {
             borderRadius: theme.borderRadius['2xl'],
-            shadowColor: '#000',
+            shadowColor: lightColors.text.primary,
             shadowOffset: { width: 0, height: 4 },
             shadowOpacity: 0.4,
             shadowRadius: 12,
@@ -147,7 +149,7 @@ export function VexActivationButton({
         >
           {/* Violet to orange gradient body */}
           <LinearGradient
-            colors={['#8B5CF6', '#A855F7', '#F59E0B', '#FF8A3D']}
+            colors={[lightColors.accent.purple, lightColors.accent.purple, lightColors.semantic.warning, lightColors.accent.orange]}
             locations={[0, 0.35, 0.72, 1]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}

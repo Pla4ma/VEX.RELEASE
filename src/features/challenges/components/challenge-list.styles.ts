@@ -1,4 +1,5 @@
 import { createSheet } from '@/shared/ui/create-sheet';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 export const challengeListStyles = createSheet({
@@ -22,7 +23,7 @@ export const challengeListStyles = createSheet({
   headerText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#6b7280',
+    color: lightColors.text.muted,
   },
   skeletonCard: {
     padding: 16,
@@ -30,14 +31,14 @@ export const challengeListStyles = createSheet({
   },
   skeletonHeader: {
     height: 20,
-    backgroundColor: '#e0e0e0',
+    backgroundColor: lightColors.border.light,
     borderRadius: 4,
     marginBottom: 12,
     width: '70%',
   },
   skeletonLine: {
     height: 12,
-    backgroundColor: '#e0e0e0',
+    backgroundColor: lightColors.border.light,
     borderRadius: 4,
     marginBottom: 8,
   },
@@ -50,11 +51,11 @@ export const challengeListStyles = createSheet({
     fontSize: 18,
     fontWeight: '700',
     marginBottom: 8,
-    color: '#dc2626',
+    color: lightColors.semantic.danger,
   },
   errorMessage: {
     fontSize: 14,
-    color: '#6b7280',
+    color: lightColors.text.muted,
     textAlign: 'center',
     marginBottom: 16,
   },
@@ -72,7 +73,7 @@ export const challengeListStyles = createSheet({
   },
   emptyText: {
     fontSize: 14,
-    color: '#6b7280',
+    color: lightColors.text.muted,
     textAlign: 'center',
   },
 });

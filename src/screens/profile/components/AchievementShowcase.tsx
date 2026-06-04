@@ -1,3 +1,4 @@
+import { lightColors } from '@/theme/tokens/colors';
 import React, { useState, useCallback, useMemo } from 'react';
 import { Pressable, ViewStyle } from 'react-native';
 import { useTheme } from '../../../theme';
@@ -98,7 +99,7 @@ export const AchievementShowcase: React.FC<AchievementShowcaseProps> = ({
               borderRadius={8}
               style={{
                 backgroundColor: isEditMode
-                  ? theme.colors.success[50] || '#ecfdf5'
+                  ? theme.colors.success[50] || lightColors.success[50]
                   : theme.colors.background.secondary,
                 borderWidth: 1,
                 borderColor: isEditMode

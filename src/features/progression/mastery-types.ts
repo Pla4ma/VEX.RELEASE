@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 export const MasteryTrackSchema = z.enum([
@@ -60,7 +61,7 @@ export const RANK_CONFIG: Record<
     minLevel: 1,
     maxLevel: 10,
     displayName: 'Apprentice',
-    color: '#8b4513',
+    color: lightColors.text.muted,
     icon: '🌱',
     unlocks: ['Basic bosses', 'Light Focus mode'],
   },
@@ -68,7 +69,7 @@ export const RANK_CONFIG: Record<
     minLevel: 11,
     maxLevel: 20,
     displayName: 'Adept',
-    color: '#4a5568',
+    color: lightColors.text.tertiary,
     icon: '⚔️',
     unlocks: ['Sprint mode', 'Study mode', 'Advanced challenges'],
   },
@@ -76,7 +77,7 @@ export const RANK_CONFIG: Record<
     minLevel: 21,
     maxLevel: 30,
     displayName: 'Expert',
-    color: '#4169e1',
+    color: lightColors.accent.blue,
     icon: '🛡️',
     unlocks: [
       'Deep Work mode',
@@ -89,7 +90,7 @@ export const RANK_CONFIG: Record<
     minLevel: 31,
     maxLevel: 40,
     displayName: 'Master',
-    color: '#9400d3',
+    color: lightColors.accent.purple,
     icon: '👑',
     unlocks: ['Nightmare bosses', 'Rival system', 'Item crafting'],
   },
@@ -97,7 +98,7 @@ export const RANK_CONFIG: Record<
     minLevel: 41,
     maxLevel: 50,
     displayName: 'Grandmaster',
-    color: '#ffd700',
+    color: lightColors.semantic.vexGold,
     icon: '⭐',
     unlocks: ['Transcendence (Prestige)', 'Legendary items', 'Guild Wars'],
   },
@@ -105,7 +106,7 @@ export const RANK_CONFIG: Record<
     minLevel: 51,
     maxLevel: 999,
     displayName: 'Transcendent',
-    color: '#ff00ff',
+    color: lightColors.accent.purple,
     icon: '✨',
     unlocks: ['All previous + prestige bonuses'],
   },

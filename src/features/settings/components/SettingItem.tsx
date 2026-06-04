@@ -6,6 +6,7 @@
 import React from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { createSheet } from '@/shared/ui/create-sheet';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 interface SettingItemProps {
@@ -48,25 +49,25 @@ const styles = createSheet({
     justifyContent: 'space-between',
     paddingVertical: 16,
     paddingHorizontal: 16,
-    backgroundColor: '#ffffff',
+    backgroundColor: lightColors.text.inverse,
     borderBottomWidth: 1,
-    borderBottomColor: '#e5e7eb',
+    borderBottomColor: lightColors.border.light,
   },
   content: {
     flex: 1,
   },
   label: {
     fontSize: 16,
-    color: '#111827',
+    color: lightColors.semantic.backgroundMuted,
   },
   value: {
     fontSize: 14,
-    color: '#6b7280',
+    color: lightColors.text.muted,
     marginTop: 4,
   },
   arrow: {
     fontSize: 18,
-    color: '#9ca3af',
+    color: lightColors.text.muted,
     marginLeft: 8,
   },
 });

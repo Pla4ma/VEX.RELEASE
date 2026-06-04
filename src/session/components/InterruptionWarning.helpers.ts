@@ -1,3 +1,4 @@
+import { lightColors } from '@/theme/tokens/colors';
 
 
 export type Severity = 'MINOR' | 'MODERATE' | 'MAJOR' | 'CRITICAL';
@@ -16,15 +17,15 @@ export interface InterruptionWarningProps {
 export function getSeverityColor(severity: Severity): string {
   switch (severity) {
     case 'CRITICAL':
-      return '#f44336';
+      return lightColors.semantic.danger;
     case 'MAJOR':
-      return '#ff6b35';
+      return lightColors.semantic.warning;
     case 'MODERATE':
-      return '#ffa500';
+      return lightColors.semantic.warning;
     case 'MINOR':
-      return '#ffc107';
+      return lightColors.semantic.warning;
     default:
-      return '#9e9e9e';
+      return lightColors.text.muted;
   }
 }
 

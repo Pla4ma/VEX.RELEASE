@@ -3,6 +3,7 @@
  * Mapped to theme.colors.accent.* and theme.colors.semantic.* where applicable.
  */
 import { z } from 'zod';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 export const SessionThemeSchema = z
@@ -26,7 +27,7 @@ export const SESSION_THEMES: SessionTheme[] = [
     id: 'default',
     name: 'Focus Mode',
     description: 'Clean and minimal',
-    previewColor: '#6366f1',
+    previewColor: lightColors.semantic.primary,
     backgroundTint: 'transparent',
     ambientSoundKey: null,
     coinCost: 0,
@@ -36,8 +37,8 @@ export const SESSION_THEMES: SessionTheme[] = [
     id: 'deep-ocean',
     name: 'Deep Ocean',
     description: 'Calm blue waters',
-    previewColor: '#0ea5e9',
-    backgroundTint: '#0c1929',
+    previewColor: lightColors.accent.teal,
+    backgroundTint: lightColors.semantic.backgroundMuted,
     ambientSoundKey: 'ocean',
     coinCost: 500,
     isFree: false,
@@ -46,8 +47,8 @@ export const SESSION_THEMES: SessionTheme[] = [
     id: 'forest-night',
     name: 'Forest Night',
     description: 'Silent and grounded',
-    previewColor: '#22c55e',
-    backgroundTint: '#0d1f12',
+    previewColor: lightColors.semantic.success,
+    backgroundTint: lightColors.semantic.backgroundMuted,
     ambientSoundKey: 'forest',
     coinCost: 500,
     isFree: false,
@@ -56,7 +57,8 @@ export const SESSION_THEMES: SessionTheme[] = [
     id: 'ember',
     name: 'Ember',
     description: 'Warm and intense',
-    previewColor: '#f97316',
+    previewColor: lightColors.accent.orange,
+  // TODO(P2-1): map remaining hex colors to theme tokens
     backgroundTint: '#1f0d06',
     ambientSoundKey: null,
     coinCost: 800,
@@ -66,7 +68,7 @@ export const SESSION_THEMES: SessionTheme[] = [
     id: 'void',
     name: 'The Void',
     description: 'Pure focus, no distractions',
-    previewColor: '#a855f7',
+    previewColor: lightColors.accent.purple,
     backgroundTint: '#0a0010',
     ambientSoundKey: null,
     coinCost: 1200,
@@ -76,7 +78,7 @@ export const SESSION_THEMES: SessionTheme[] = [
     id: 'legendary',
     name: 'Legendary Focus',
     description: 'Unlock after 30 day streak',
-    previewColor: '#fbbf24',
+    previewColor: lightColors.semantic.warning,
     backgroundTint: '#1a1000',
     ambientSoundKey: null,
     coinCost: 5000,

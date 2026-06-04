@@ -1,4 +1,5 @@
 import type { SessionPhase } from '../types';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 export const formatTime = (seconds: number): string => {
@@ -28,7 +29,7 @@ export const getStatusColor = (
   isPaused: boolean,
   isActive: boolean,
 ): string => {
-  if (isPaused) {return '#ffa500';}
-  if (isActive) {return '#4caf50';}
-  return '#9e9e9e';
+  if (isPaused) {return lightColors.semantic.warning;}
+  if (isActive) {return lightColors.semantic.success;}
+  return lightColors.text.muted;
 };

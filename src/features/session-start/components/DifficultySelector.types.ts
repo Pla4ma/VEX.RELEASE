@@ -1,3 +1,4 @@
+import { lightColors } from '@/theme/tokens/colors';
 
 
 export type SessionDifficulty = 'CASUAL' | 'FOCUSED' | 'DEEP_WORK';
@@ -26,7 +27,7 @@ export const DIFFICULTY_OPTIONS: DifficultyOption[] = [
     pauseLimit: 'Unlimited',
     xpMultiplier: '50%',
     description: 'Good for maintenance',
-    color: '#22c55e',
+    color: lightColors.semantic.success,
   },
   {
     id: 'FOCUSED',
@@ -35,7 +36,7 @@ export const DIFFICULTY_OPTIONS: DifficultyOption[] = [
     pauseLimit: '2 max',
     xpMultiplier: '100%',
     description: 'Standard mode',
-    color: '#3b82f6',
+    color: lightColors.accent.blue,
   },
   {
     id: 'DEEP_WORK',
@@ -44,6 +45,6 @@ export const DIFFICULTY_OPTIONS: DifficultyOption[] = [
     pauseLimit: '0 pauses',
     xpMultiplier: '150%',
     description: 'Maximum impact',
-    color: '#ef4444',
+    color: lightColors.semantic.danger,
   },
 ];

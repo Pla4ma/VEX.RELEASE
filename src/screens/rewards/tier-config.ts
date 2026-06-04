@@ -1,3 +1,4 @@
+import { lightColors } from '@/theme/tokens/colors';
 
 /**
  * Colors below are documented game-mechanic config data — not UI styling.
@@ -14,31 +15,31 @@ export interface TierConfig {
 
 export const TIER_CONFIG: Record<ChestTier, TierConfig> = {
   WOOD: {
-    colors: ['#8b4513', '#654321'] as const,
+    colors: [lightColors.text.muted, lightColors.text.muted] as const,
     emoji: '📦',
     label: 'Wood Chest',
-    glow: '#8b4513',
+    glow: lightColors.text.muted,
   },
   SILVER: {
-    colors: ['#c0c0c0', '#808080'] as const,
+    colors: [lightColors.text.disabled, lightColors.text.disabled] as const,
     emoji: '🥈',
     label: 'Silver Chest',
-    glow: '#c0c0c0',
+    glow: lightColors.text.disabled,
   },
   GOLD: {
-    colors: ['#ffd700', '#ffa000'] as const,
+    colors: [lightColors.semantic.vexGold, lightColors.semantic.warning] as const,
     emoji: '🏆',
     label: 'Gold Chest',
-    glow: '#ffd700',
+    glow: lightColors.semantic.vexGold,
   },
   LEGENDARY: {
     colors: [
-      '#ffd700',
-      '#ff6b35',
-      '#8b5cf6',
+      lightColors.semantic.vexGold,
+      lightColors.semantic.warning,
+      lightColors.accent.purple,
     ] as const,
     emoji: '👑',
     label: 'Legendary Chest',
-    glow: '#ff6b35',
+    glow: lightColors.semantic.warning,
   },
 };

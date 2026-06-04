@@ -1,4 +1,5 @@
 import type { UrgencyLevel } from '../services/HomeRecommendationEngine';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 export function getHeroIcon(type: string): string {
@@ -34,13 +35,13 @@ export function getHeroUrgencyColor(
   },
 ): string {
   if (urgency === 'critical') {
-    return theme.colors.error[500] ?? '#ef4444';
+    return theme.colors.error[500] ?? lightColors.semantic.danger;
   }
   if (urgency === 'high') {
-    return theme.colors.warning[500] ?? '#f59e0b';
+    return theme.colors.warning[500] ?? lightColors.semantic.warning;
   }
   if (urgency === 'medium') {
-    return theme.colors.primary[400] ?? '#6366f1';
+    return theme.colors.primary[400] ?? lightColors.semantic.primary;
   }
   return 'transparent';
 }
@@ -59,42 +60,42 @@ export function getHeroGradientColors(
 ): [string, string] {
   if (urgency === 'critical') {
     return [
-      theme.colors.error[500] ?? '#dc2626',
-      theme.colors.error[700] ?? '#991b1b',
+      theme.colors.error[500] ?? lightColors.semantic.danger,
+      theme.colors.error[700] ?? lightColors.semantic.danger,
     ];
   }
   if (urgency === 'high') {
     return [
-      theme.colors.warning[500] ?? '#f59e0b',
-      theme.colors.warning[700] ?? '#d97706',
+      theme.colors.warning[500] ?? lightColors.semantic.warning,
+      theme.colors.warning[700] ?? lightColors.semantic.warning,
     ];
   }
   if (urgency === 'medium') {
     return [
-      theme.colors.primary[500] ?? '#6366f1',
-      theme.colors.primary[700] ?? '#4338ca',
+      theme.colors.primary[500] ?? lightColors.semantic.primary,
+      theme.colors.primary[700] ?? lightColors.semantic.primaryPressed,
     ];
   }
   if (type === 'study_plan') {
     return [
-      theme.colors.primary[500] ?? '#6366f1',
-      theme.colors.primary[600] ?? '#4f46e5',
+      theme.colors.primary[500] ?? lightColors.semantic.primary,
+      theme.colors.primary[600] ?? lightColors.semantic.primary,
     ];
   }
   if (type === 'boss_battle') {
     return [
-      theme.colors.primary[600] ?? '#7c3aed',
-      theme.colors.primary[700] ?? '#6d28d9',
+      theme.colors.primary[600] ?? lightColors.accent.purple,
+      theme.colors.primary[700] ?? lightColors.accent.purple,
     ];
   }
   if (type === 'comeback') {
     return [
-      theme.colors.success[500] ?? '#10b981',
-      theme.colors.success[700] ?? '#059669',
+      theme.colors.success[500] ?? lightColors.accent.green,
+      theme.colors.success[700] ?? lightColors.semantic.success,
     ];
   }
   return [
-    theme.colors.primary[500] ?? '#6366f1',
-    theme.colors.primary[700] ?? '#4338ca',
+    theme.colors.primary[500] ?? lightColors.semantic.primary,
+    theme.colors.primary[700] ?? lightColors.semantic.primaryPressed,
   ];
 }

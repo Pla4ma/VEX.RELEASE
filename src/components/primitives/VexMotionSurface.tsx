@@ -8,6 +8,7 @@ import Animated, {
 import { useTheme } from '../../theme';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { rgbaColors } from '../../theme/tokens/rgba-colors';
+import { lightColors } from '@/theme/tokens/colors';
 
 export interface VexMotionSurfaceProps extends ViewProps {
   variant?: 'glass' | 'elevated' | 'focused';
@@ -54,7 +55,7 @@ export function VexMotionSurface({
       return {};
     }
     return {
-      shadowColor: '#00E5FF',
+      shadowColor: lightColors.semantic.vexCyan,
       shadowOffset: { width: 0, height: 0 },
       shadowOpacity: glowIntensity.value,
       shadowRadius: 12,

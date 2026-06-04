@@ -1,6 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { useTheme } from '../../../theme';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 export function MonthlyReportSkeleton(): JSX.Element {
@@ -26,7 +27,7 @@ export function MonthlyReportSkeleton(): JSX.Element {
             width: 200,
             height: 32,
             backgroundColor:
-              theme.colors.border?.DEFAULT || '#e5e5e5',
+              theme.colors.border?.DEFAULT || lightColors.border.light,
             borderRadius: 4,
           }}
         />
@@ -35,7 +36,7 @@ export function MonthlyReportSkeleton(): JSX.Element {
             width: 32,
             height: 32,
             backgroundColor:
-              theme.colors.border?.DEFAULT || '#e5e5e5',
+              theme.colors.border?.DEFAULT || lightColors.border.light,
             borderRadius: 16,
           }}
         />
@@ -45,7 +46,7 @@ export function MonthlyReportSkeleton(): JSX.Element {
           style={{
             height: 200,
             backgroundColor:
-              theme.colors.surface?.card || '#f5f5f5',
+              theme.colors.surface?.card || lightColors.surface.button,
             borderRadius: 16,
           }}
         />
@@ -53,7 +54,7 @@ export function MonthlyReportSkeleton(): JSX.Element {
           style={{
             height: 150,
             backgroundColor:
-              theme.colors.surface?.card || '#f5f5f5',
+              theme.colors.surface?.card || lightColors.surface.button,
             borderRadius: 16,
           }}
         />
@@ -61,7 +62,7 @@ export function MonthlyReportSkeleton(): JSX.Element {
           style={{
             height: 100,
             backgroundColor:
-              theme.colors.surface?.card || '#f5f5f5',
+              theme.colors.surface?.card || lightColors.surface.button,
             borderRadius: 16,
           }}
         />

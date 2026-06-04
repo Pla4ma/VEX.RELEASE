@@ -6,6 +6,7 @@
 import React from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { createSheet } from '@/shared/ui/create-sheet';
+import { lightColors } from '@/theme/tokens/colors';
 
 import { toggleSwitch } from '../../../utils/haptics';
 
@@ -57,9 +58,9 @@ const styles = createSheet({
     justifyContent: 'space-between',
     paddingVertical: 16,
     paddingHorizontal: 16,
-    backgroundColor: '#ffffff',
+    backgroundColor: lightColors.text.inverse,
     borderBottomWidth: 1,
-    borderBottomColor: '#e5e7eb',
+    borderBottomColor: lightColors.border.light,
   },
   content: {
     flex: 1,
@@ -67,11 +68,11 @@ const styles = createSheet({
   },
   label: {
     fontSize: 16,
-    color: '#111827',
+    color: lightColors.semantic.backgroundMuted,
   },
   description: {
     fontSize: 12,
-    color: '#6b7280',
+    color: lightColors.text.muted,
     marginTop: 4,
   },
   toggle: {
@@ -81,16 +82,16 @@ const styles = createSheet({
     padding: 2,
   },
   toggleActive: {
-    backgroundColor: '#6366f1',
+    backgroundColor: lightColors.semantic.primary,
   },
   toggleInactive: {
-    backgroundColor: '#d1d5db',
+    backgroundColor: lightColors.border.light,
   },
   toggleKnob: {
     width: 24,
     height: 24,
     borderRadius: 12,
-    backgroundColor: '#ffffff',
+    backgroundColor: lightColors.text.inverse,
   },
   knobActive: {
     marginLeft: 'auto',

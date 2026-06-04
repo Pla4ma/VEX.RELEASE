@@ -1,4 +1,5 @@
 import { createSheet } from '@/shared/ui/create-sheet';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 export const styles = createSheet({
@@ -58,7 +59,7 @@ export const styles = createSheet({
     gap: 16,
   },
   valueTitle: {
-    color: '#ffffff',
+    color: lightColors.text.inverse,
     fontSize: 16,
     fontWeight: '700',
   },
@@ -69,7 +70,7 @@ export const styles = createSheet({
   },
   valueItem: { alignItems: 'center' },
   valueNumber: {
-    color: '#ffffff',
+    color: lightColors.text.inverse,
     fontSize: 28,
     fontWeight: '800',
   },
@@ -109,7 +110,7 @@ export const styles = createSheet({
     borderRadius: 12,
   },
   bestValueText: {
-    color: '#000000',
+    color: lightColors.text.primary,
     fontSize: 11,
     fontWeight: '800',
     textTransform: 'uppercase',
@@ -155,7 +156,7 @@ export const styles = createSheet({
     borderRadius: 8,
   },
   highlightBadgeText: {
-    color: '#000000',
+    color: lightColors.text.primary,
     fontSize: 9,
     fontWeight: '800',
     letterSpacing: 0.5,

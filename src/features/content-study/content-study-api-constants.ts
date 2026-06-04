@@ -1,4 +1,5 @@
 import { ContentSourceType, ContentStatus } from './types';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 export const CONTENT_STUDY_API = {
@@ -67,42 +68,42 @@ export const CONTENT_STATUS_CONFIG: Record<
   PENDING: {
     label: 'Pending',
     description: 'Waiting to process',
-    color: '#9ca3af',
+    color: lightColors.text.muted,
     isLoading: true,
     canGenerate: false,
   },
   EXTRACTING: {
     label: 'Extracting',
     description: 'Reading content...',
-    color: '#3b82f6',
+    color: lightColors.accent.blue,
     isLoading: true,
     canGenerate: false,
   },
   EXTRACTED: {
     label: 'Extracted',
     description: 'Ready to generate study plan',
-    color: '#10b981',
+    color: lightColors.accent.green,
     isLoading: false,
     canGenerate: true,
   },
   PROCESSING: {
     label: 'Processing',
     description: 'AI is creating your study plan...',
-    color: '#8b5cf6',
+    color: lightColors.accent.purple,
     isLoading: true,
     canGenerate: false,
   },
   READY: {
     label: 'Ready',
     description: 'Study plan complete',
-    color: '#10b981',
+    color: lightColors.accent.green,
     isLoading: false,
     canGenerate: false,
   },
   FAILED: {
     label: 'Failed',
     description: 'Something went wrong',
-    color: '#ef4444',
+    color: lightColors.semantic.danger,
     isLoading: false,
     canGenerate: false,
   },

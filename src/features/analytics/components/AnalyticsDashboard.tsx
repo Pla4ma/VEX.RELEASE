@@ -9,6 +9,7 @@ import { analyticsKeys, useAnalyticsData, useInsights, useSessionHeatmapData } f
 import type { AnalyticsMetric } from '../schemas';
 import { MetricSelector } from './MetricSelector';
 import { TimeRangeFilter } from './TimeRangeFilter';
+import { lightColors } from '@/theme/tokens/colors';
 
 import { DashboardContent } from './DashboardContent';
 import { styles } from './AnalyticsDashboard.styles';
@@ -137,7 +138,7 @@ export function AnalyticsDashboard({
           <RefreshControl
             refreshing={dashboardState === 'loading'}
             onRefresh={handleRefresh}
-            tintColor={'#6366f1'}
+            tintColor={lightColors.semantic.primary}
           />
         }
         showsVerticalScrollIndicator={false}

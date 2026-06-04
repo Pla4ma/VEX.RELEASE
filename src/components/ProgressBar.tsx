@@ -7,6 +7,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { createSheet } from '@/shared/ui/create-sheet';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 export interface ProgressBarProps {
@@ -26,8 +27,8 @@ export interface ProgressBarProps {
 
 export const ProgressBar: React.FC<ProgressBarProps> = ({
   progress,
-  backgroundColor = '#e0e0e0',
-  fillColor = '#007aff',
+  backgroundColor = lightColors.border.light,
+  fillColor = lightColors.accent.blue,
   height = 8,
   borderRadius = 4,
   style,

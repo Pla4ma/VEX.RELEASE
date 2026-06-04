@@ -13,6 +13,7 @@ import Animated, {
 
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { ambientLoop } from '../../theme/tokens/motion';
+import { lightColors } from '@/theme/tokens/colors';
 
 interface AuroraFieldProps {
   colors: readonly string[];
@@ -82,7 +83,7 @@ export function AuroraField({
   const clock = useSharedValue(0);
 
   const blooms = useMemo<BloomSpec[]>(() => {
-    const palette = colors.length > 0 ? colors : ['#6366F1'];
+    const palette = colors.length > 0 ? colors : [lightColors.semantic.primary];
     return Array.from({ length: 5 }, (_, index) => {
       const diameter = size * (0.55 + (index % 3) * 0.18);
       return {

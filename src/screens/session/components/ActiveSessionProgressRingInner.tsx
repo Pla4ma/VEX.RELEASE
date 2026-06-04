@@ -1,3 +1,4 @@
+import { lightColors } from '@/theme/tokens/colors';
 import React from 'react';
 import Svg, {
   Circle,
@@ -129,10 +130,10 @@ export const ActiveSessionProgressRing: React.FC<
                   x2="100%"
                   y2="100%"
                 >
-                  <Stop offset="0%" stopColor={'#fde68a'} />
-                  <Stop offset="35%" stopColor={'#f59e0b'} />
-                  <Stop offset="68%" stopColor={'#f472b6'} />
-                  <Stop offset="100%" stopColor={'#60a5fa'} />
+                  <Stop offset="0%" stopColor={lightColors.warning.light} />
+                  <Stop offset="35%" stopColor={lightColors.semantic.warning} />
+                  <Stop offset="68%" stopColor={lightColors.accent.pink} />
+                  <Stop offset="100%" stopColor={lightColors.accent.blue} />
                 </SvgLinearGradient>
               </Defs>
               <Circle

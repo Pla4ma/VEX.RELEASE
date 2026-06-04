@@ -31,6 +31,7 @@ export function EditorialFieldBlock({
     textTransform: 'uppercase',
   };
   const errorStyle: TextStyle = {
+  // TODO(P2-1): map remaining hex colors to theme tokens
     color: '#E89B7A',
     fontSize: 11,
     fontFamily: SERIF_STACK,

@@ -1,4 +1,5 @@
 import { createSheet } from '@/shared/ui/create-sheet';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 export type BannerVariant =
@@ -29,15 +30,15 @@ export function getVariantStyles(
     case 'primary':
       return {
         backgroundColor: colors.primary[500],
-        textColor: '#ffffff',
-        iconColor: '#ffffff',
+        textColor: lightColors.text.inverse,
+        iconColor: lightColors.text.inverse,
         buttonVariant: 'secondary' as const,
       };
     case 'success':
       return {
         backgroundColor: colors.success.DEFAULT,
-        textColor: '#ffffff',
-        iconColor: '#ffffff',
+        textColor: lightColors.text.inverse,
+        iconColor: lightColors.text.inverse,
         buttonVariant: 'secondary' as const,
       };
     case 'warning':
@@ -50,22 +51,22 @@ export function getVariantStyles(
     case 'error':
       return {
         backgroundColor: colors.error.DEFAULT,
-        textColor: '#ffffff',
-        iconColor: '#ffffff',
+        textColor: lightColors.text.inverse,
+        iconColor: lightColors.text.inverse,
         buttonVariant: 'secondary' as const,
       };
     case 'info':
       return {
         backgroundColor: colors.info.DEFAULT,
-        textColor: '#ffffff',
-        iconColor: '#ffffff',
+        textColor: lightColors.text.inverse,
+        iconColor: lightColors.text.inverse,
         buttonVariant: 'secondary' as const,
       };
     case 'gradient':
       return {
         backgroundColor: `linear-gradient(135deg, ${colors.primary[500]}, ${colors.accent.purple})`,
-        textColor: '#ffffff',
-        iconColor: '#ffffff',
+        textColor: lightColors.text.inverse,
+        iconColor: lightColors.text.inverse,
         buttonVariant: 'secondary' as const,
       };
     default:

@@ -9,6 +9,7 @@ import {
   formatDuration,
 } from './session-history-helpers';
 import { styles } from './SessionHistory.styles';
+import { lightColors } from '@/theme/tokens/colors';
 
 interface SessionHistoryProps {
   userId: string;
@@ -52,7 +53,7 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
           <Text style={styles.statBoxLabel}>Sessions</Text>
         </View>
         <View style={styles.statBox}>
-          <Text style={[styles.statBoxValue, { color: '#4caf50' }]}>
+          <Text style={[styles.statBoxValue, { color: lightColors.semantic.success }]}>
             {stats.completed}
           </Text>
           <Text style={styles.statBoxLabel}>Completed</Text>
@@ -73,7 +74,7 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
       <TextInput
         style={styles.searchInput}
         placeholder="Search sessions..."
-        placeholderTextColor="#666"
+        placeholderTextColor={lightColors.text.muted}
         value={searchQuery}
         onChangeText={setSearchQuery}
       />

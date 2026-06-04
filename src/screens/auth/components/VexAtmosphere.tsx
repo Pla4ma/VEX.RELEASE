@@ -10,6 +10,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { FlowCurves, SoftOrb } from './VexAtmosphereEffects';
+import { lightColors } from '@/theme/tokens/colors';
 
 const EASE_AMBIENT = Easing.bezier(0.37, 0, 0.63, 1);
 
@@ -44,7 +45,8 @@ function DustDot({ m }: { m: DustMote }) {
     transform: [{ translateY: ty.value }],
   }));
 
-  const color = m.hue === 'gold' ? '#E0B870' : m.hue === 'teal' ? '#5EEAD4' : '#FBE4B0';
+  // TODO(P2-1): map remaining hex colors to theme tokens
+  const color = m.hue === 'gold' ? lightColors.semantic.vexGold : m.hue === 'teal' ? '#5EEAD4' : '#FBE4B0';
 
   return (
     <Animated.View pointerEvents="none" style={[
@@ -81,7 +83,7 @@ function Grain() {
           position: 'absolute',
           left: `${d.x}%`, top: `${d.y}%`,
           width: d.s, height: d.s,
-          backgroundColor: '#F5F1E8', borderRadius: d.s / 2,
+          backgroundColor: lightColors.surface.button, borderRadius: d.s / 2,
         }} />
       ))}
     </View>
