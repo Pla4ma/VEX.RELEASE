@@ -1,6 +1,7 @@
 import React from 'react';
 import { Platform, View, type TextStyle } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
+import { lightColors } from '@/theme/tokens/colors';
 
 const SERIF_STACK = Platform.select({
   ios: 'New York',
@@ -31,8 +32,7 @@ export function EditorialFieldBlock({
     textTransform: 'uppercase',
   };
   const errorStyle: TextStyle = {
-  // TODO(P2-1): map remaining hex colors to theme tokens
-    color: '#E89B7A',
+    color: lightColors.semantic.brandCoral,
     fontSize: 11,
     fontFamily: SERIF_STACK,
     fontStyle: 'italic',

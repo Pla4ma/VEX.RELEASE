@@ -1,4 +1,5 @@
 import { lightColors } from '@/theme/tokens/colors';
+import { confettiColors } from '@/theme/tokens/decorative';
 /**
  * Confetti Constants
  *
@@ -8,13 +9,12 @@ import { lightColors } from '@/theme/tokens/colors';
 export const CONFETTI_COLORS = [
   lightColors.semantic.danger,
   lightColors.accent.teal,
-  // TODO(P2-1): map remaining hex colors to theme tokens
-  '#45B7D1',
-  '#FFA07A',
-  '#98D8C8',
-  '#F7DC6F',
-  '#BB8FCE',
-  '#85C1E2',
+  confettiColors.skyBlue,
+  confettiColors.salmon,
+  confettiColors.mint,
+  confettiColors.gold,
+  confettiColors.lavender,
+  confettiColors.paleBlue,
 ];
 
 export const PARTICLE_SHAPES = ['circle', 'square', 'triangle'] as const;

@@ -15,3 +15,5 @@ export * from './sizing';
 export * from './opacity';
 export * from './motion';
 export * from './elevation';
+export * from './brand';
+export * from './decorative';

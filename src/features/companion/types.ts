@@ -1,4 +1,5 @@
 import { lightColors } from '@/theme/tokens/colors';
+import { companionDecorative } from '@/theme/tokens/decorative';
 
 /**
  * Living Companion System - Core Types
@@ -135,21 +136,20 @@ export const ELEMENT_THEMES: Record<
   WAVE: {
     primary: lightColors.accent.teal,
     secondary: lightColors.accent.teal,
-  // TODO(P2-1): map remaining hex colors to theme tokens
-    glow: '#00ced1',
-    particle: '#87ceeb',
+    glow: companionDecorative.waveGlow,
+    particle: companionDecorative.waveParticle,
     ambience: 'cool',
   },
   TERRA: {
     primary: lightColors.text.muted,
     secondary: lightColors.semantic.success,
     glow: lightColors.semantic.success,
-    particle: '#deb887',
+    particle: companionDecorative.terraParticle,
     ambience: 'earthy',
   },
   ZEPHYR: {
     primary: lightColors.border.light,
-    secondary: '#b0c4de',
+    secondary: companionDecorative.zephyrSecondary,
     glow: lightColors.text.inverse,
     particle: lightColors.info[50],
     ambience: 'ethereal',

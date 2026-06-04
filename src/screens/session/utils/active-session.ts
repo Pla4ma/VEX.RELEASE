@@ -21,9 +21,8 @@ const ELITE_GRADIENT = [
   lightColors.semantic.backgroundMuted,
 ] as const;
 const BREAK_GRADIENT = [
-  // TODO(P2-1): map remaining hex colors to theme tokens
-  '#072226',
-  '#0e2a2e',
+  lightColors.semantic.breakGradientDark,
+  lightColors.semantic.breakGradientMid,
   lightColors.semantic.backgroundMuted,
 ] as const;
 

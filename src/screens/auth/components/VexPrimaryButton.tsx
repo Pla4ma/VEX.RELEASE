@@ -85,8 +85,7 @@ export function VexActivationButton({
             right: -24,
             borderRadius: 9999,
             backgroundColor: 'rgba(255, 138, 36, 0.04)',
-  // TODO(P2-1): map remaining hex colors to theme tokens
-            shadowColor: '#FF8A24',
+            shadowColor: lightColors.semantic.brandOrange,
             shadowOffset: { width: 0, height: 0 },
             shadowOpacity: 0.5,
             shadowRadius: 50,
@@ -105,7 +104,7 @@ export function VexActivationButton({
             alignSelf: 'center',
             width: '80%',
             borderRadius: theme.borderRadius['2xl'],
-            shadowColor: '#FF8A24',
+            shadowColor: lightColors.semantic.brandOrange,
             shadowOffset: { width: 0, height: 8 },
             shadowRadius: 30,
           },

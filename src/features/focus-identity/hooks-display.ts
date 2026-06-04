@@ -29,10 +29,9 @@ export function useFocusScoreColor(score: number | null): string {
       case 'Good':
         return lightColors.semantic.vexGold;
       case 'Strong':
-  // TODO(P2-1): map remaining hex colors to theme tokens
-        return '#e5e4e2';
+        return lightColors.semantic.scorePlatinum;
       case 'Exceptional':
-        return '#b9f2ff';
+        return lightColors.semantic.scoreCelestial;
       case 'Elite':
         return lightColors.accent.purple;
       case 'Legendary':

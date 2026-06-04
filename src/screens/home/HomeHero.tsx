@@ -19,16 +19,15 @@ export function getHeroGradientColors(
   streak: number,
 ): readonly [string, string] {
   if (streak >= 30) {
-  // TODO(P2-1): map remaining hex colors to theme tokens
-    return [lightColors.semantic.obsidian, '#003838'];
+    return [lightColors.semantic.obsidian, lightColors.semantic.highStreakDeep];
   }
   if (streak >= 7) {
-    return [lightColors.semantic.obsidian, '#0A2A33'];
+    return [lightColors.semantic.obsidian, lightColors.semantic.lowStreakTeal];
   }
   if (streak >= 1) {
     return [lightColors.semantic.obsidian, lightColors.semantic.backgroundMuted];
   }
-  return [lightColors.semantic.obsidian, '#14151A'];
+  return [lightColors.semantic.obsidian, lightColors.semantic.noStreakDark];
 }
 
 function formatMinutes(totalMinutes: number) {

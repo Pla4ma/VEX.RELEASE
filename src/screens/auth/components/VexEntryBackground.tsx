@@ -42,8 +42,7 @@ export function VexEntryBackground(): JSX.Element {
   return (
     <View style={{ position: 'absolute', width, height, top: 0, left: 0 }}>
       <LinearGradient
-  // TODO(P2-1): map remaining hex colors to theme tokens
-        colors={['#060810', '#070A12', lightColors.semantic.backgroundMuted]}
+        colors={[lightColors.semantic.auroraMidnight, lightColors.semantic.backgroundMuted, lightColors.semantic.backgroundMuted]}
         locations={[0, 0.5, 1]}
         style={{ position: 'absolute', width, height }}
         pointerEvents="none"

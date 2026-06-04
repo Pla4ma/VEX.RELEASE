@@ -28,8 +28,7 @@ export function VexAtmosphereCanvas(): React.JSX.Element {
   return (
     <View style={StyleSheet.absoluteFill}>
       {/* Deep midnight base */}
-  // TODO(P2-1): map remaining hex colors to theme tokens
-      <View style={[StyleSheet.absoluteFill, { backgroundColor: '#05040B' }]} />
+      <View style={[StyleSheet.absoluteFill, { backgroundColor: lightColors.semantic.auroraMidnight }]} />
 
       {/* Violet nebula — upper left */}
       <View
@@ -41,7 +40,7 @@ export function VexAtmosphereCanvas(): React.JSX.Element {
           height: '70%',
           borderRadius: 9999,
           backgroundColor: 'rgba(69, 30, 160, 0.07)',
-          shadowColor: '#6D3BFF',
+          shadowColor: lightColors.semantic.auroraBrightViolet,
           shadowOffset: { width: 0, height: 0 },
           shadowOpacity: 0.4,
           shadowRadius: 220,
@@ -58,7 +57,7 @@ export function VexAtmosphereCanvas(): React.JSX.Element {
           height: '50%',
           borderRadius: 9999,
           backgroundColor: 'rgba(88, 48, 200, 0.04)',
-          shadowColor: '#A66BFF',
+          shadowColor: lightColors.semantic.auroraAccentViolet,
           shadowOffset: { width: 0, height: 0 },
           shadowOpacity: 0.25,
           shadowRadius: 180,
@@ -88,7 +87,7 @@ export function VexAtmosphereCanvas(): React.JSX.Element {
           height: 90,
           borderRadius: 9999,
           backgroundColor: 'rgba(255, 138, 36, 0.04)',
-          shadowColor: '#FF8A24',
+          shadowColor: lightColors.semantic.brandOrange,
           shadowOffset: { width: 0, height: -30 },
           shadowOpacity: 0.45,
           shadowRadius: 130,

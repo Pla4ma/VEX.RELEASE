@@ -96,8 +96,7 @@ export function VexLaunchButton({
           animatedStyle,
         ]}
       >
-  // TODO(P2-1): map hex color JSX props to theme tokens
-        <Text variant="heading3" color="#00E5FF">
+        <Text variant="heading3" color={lightColors.semantic.vexCyan}>
           {label}
         </Text>
         {subLabel ? (

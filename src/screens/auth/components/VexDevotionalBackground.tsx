@@ -13,14 +13,13 @@ import { lightColors } from '@/theme/tokens/colors';
  */
 
 const PALETTE = {
-  // TODO(P2-1): map remaining hex colors to theme tokens
-  base: '#110B07',
+  base: lightColors.semantic.devotionalBase,
   baseWarm: lightColors.semantic.editorialDeepBackground,
-  baseCool: '#0C0805',
-  warm: '#C8A062',
-  warmSoft: '#8B6E3A',
+  baseCool: lightColors.semantic.devotionalBaseCool,
+  warm: lightColors.semantic.devotionalWarm,
+  warmSoft: lightColors.semantic.devotionalWarmSoft,
   ember: lightColors.semantic.vexGold,
-  ash: '#3A2A1A',
+  ash: lightColors.semantic.devotionalAsh,
   cream: lightColors.text.secondary,
 } as const;
 

@@ -109,8 +109,7 @@ export function VexBrandHeader(): React.JSX.Element {
           style={{
             position: 'absolute',
             top: 8,
-  // TODO(P2-1): map remaining hex colors to theme tokens
-            shadowColor: '#FF8A24',
+            shadowColor: lightColors.semantic.brandOrange,
             shadowOffset: { width: 0, height: 2 },
             shadowOpacity: 0.15,
             shadowRadius: 20,

@@ -26,8 +26,7 @@ const GRADE_COLORS: Record<string, string> = {
   A: lightColors.semantic.vexCyan,
   B: lightColors.surface.button,
   C: lightColors.surface.button,
-  // TODO(P2-1): map remaining hex colors to theme tokens
-  D: '#8B8B9A',
+  D: lightColors.semantic.gradeMuted,
 };
 
 const AnimatedSvg = Animated.createAnimatedComponent(Svg);

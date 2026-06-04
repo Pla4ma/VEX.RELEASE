@@ -7,6 +7,7 @@ import { getMinTouchTargetStyle } from '../../utils/touchTarget';
 import type { AuthStackParams } from '../../navigation';
 import { useLoginScreen } from './useLoginScreen';
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+import { lightColors } from '@/theme/tokens/colors';
 import { VexAtmosphereCanvas } from './components/VexAuroraCanvas';
 import { VexBrandHeader } from './components/VexBrandHeader';
 import { VexConsole } from './components/VexGlassPanel';
@@ -43,8 +44,7 @@ function RegisterCta({ onPress }: { onPress: () => void }): React.JSX.Element {
       >
         <Text color="semantic.liquidTextMuted" fontSize={14} textAlign="center" opacity={0.82}>
           New here?{' '}
-  // TODO(P2-1): map remaining hex colors to theme tokens
-          <Text fontWeight="700" style={{ color: '#FFC46B', textShadowColor: 'rgba(255, 196, 107, 0.35)', textShadowOffset: { width: 0, height: 0 }, textShadowRadius: 8 }}>
+          <Text fontWeight="700" style={{ color: lightColors.semantic.brandAmber, textShadowColor: 'rgba(255, 196, 107, 0.35)', textShadowOffset: { width: 0, height: 0 }, textShadowRadius: 8 }}>
             Create your focus system
           </Text>
         </Text>

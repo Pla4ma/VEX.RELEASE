@@ -60,8 +60,7 @@ export function EmptyState({
       <Text style={{ color: lightColors.primary[50], fontSize: 16, fontWeight: '600' }}>
         Project Thread
       </Text>
-  // TODO(P2-1): map remaining hex colors to theme tokens
-      <Text style={{ color: '#8888aa', fontSize: 13, marginTop: 4 }}>
+      <Text style={{ color: lightColors.semantic.textLavender, fontSize: 13, marginTop: 4 }}>
         Track your creative or deep work project across sessions.
       </Text>
       <View
@@ -109,9 +108,9 @@ export function ActiveCard({
         padding: 16,
         borderRadius: 12,
         backgroundColor: isRescued
-          ? '#1a2e1a'
+          ? lightColors.semantic.stateRescued
           : isStale
-            ? '#2e2a1a'
+            ? lightColors.semantic.stateStale
             : lightColors.semantic.background,
         opacity: pressed ? 0.7 : 1,
       })}
@@ -135,7 +134,7 @@ export function ActiveCard({
               paddingVertical: 2,
               paddingHorizontal: 8,
               borderRadius: 4,
-              backgroundColor: '#3a2a1a',
+              backgroundColor: lightColors.semantic.stateBlocked,
             }}
           >
             <Text style={{ color: lightColors.semantic.warning, fontSize: 11, fontWeight: '600' }}>
@@ -146,7 +145,7 @@ export function ActiveCard({
       </View>
 
       {isRescued && (
-        <Text style={{ color: '#66cc88', fontSize: 13, marginTop: 6 }}>
+        <Text style={{ color: lightColors.semantic.stateRescuedText, fontSize: 13, marginTop: 6 }}>
           Recovery session ready. Start small.
         </Text>
       )}
@@ -165,7 +164,7 @@ export function ActiveCard({
 
       {thread.handoffNote ? (
         <Text
-          style={{ color: '#7777aa', fontSize: 12, marginTop: 4 }}
+          style={{ color: lightColors.semantic.textSoftViolet, fontSize: 12, marginTop: 4 }}
           numberOfLines={2}
         >
           {thread.handoffNote}
