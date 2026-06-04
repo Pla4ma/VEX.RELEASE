@@ -1,6 +1,6 @@
 import type { FeatureKey } from './feature-access';
 import { setDegradedFeatures } from './feature-access-store';
-import { shouldRunHealthCheck } from './feature-health-policy';
+import { shouldRunHealthCheck } from './FeatureFlagService';
 
 const CHECKABLE_FEATURES: FeatureKey[] = [
   'content_study',

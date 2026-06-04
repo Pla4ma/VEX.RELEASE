@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { featureHealthRegistry } from '../feature-health';
 import { registerFeatureHealthChecks } from '../feature-health-checks';
 import { setDegradedFeatures as setGlobalDegradedFeatures } from '../feature-access-store';
-import { shouldRunHealthCheck } from '../feature-health-policy';
+import { shouldRunHealthCheck } from '../FeatureFlagService';
 import type { FeatureKey } from '../feature-access';
 
 let registered = false;
