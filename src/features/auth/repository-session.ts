@@ -13,14 +13,14 @@
  * Do NOT duplicate these calls in service, hook, or component files.
  */
 // Architecture note: Direct Supabase auth client access is acceptable here because this IS the auth data access layer. Moves to a feature-scoped auth/repository.ts would break the shared auth service contract.
-import { getSupabaseClient, handleSupabaseError } from '../config/supabase';
+import { getSupabaseClient, handleSupabaseError } from '../../config/supabase';
 
-import type { User } from '../types/models';
-import { capture } from '../shared/analytics/analytics-service';
-import { AuthEvents } from '../shared/analytics/analytics-events';
-import { mapSupabaseUser } from './supabase-user-mapper';
-import { buildUserWithOnboarding } from './supabase-auth-helpers';
-import { captureSilentFailure } from '../utils/silent-failure';
+import type { User } from '../../types/models';
+import { capture } from '../../shared/analytics/analytics-service';
+import { AuthEvents } from '../../shared/analytics/analytics-events';
+import { mapSupabaseUser } from '../../services/supabase-user-mapper';
+import { buildUserWithOnboarding } from '../../services/supabase-auth-helpers';
+import { captureSilentFailure } from '../../utils/silent-failure';
 
 export async function signOut(
   userId?: string,
