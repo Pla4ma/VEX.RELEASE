@@ -1,6 +1,7 @@
 import React from 'react';
 import { createDebugger } from '../utils/debug';
 import { getAutomaticEnhancements } from './enhancer-logic';
+import { performHealthCheck } from './accessibility-health-check';
 import type {
   AccessibilityEnhancementConfig,
   EnhancedAccessibilityProps,
@@ -93,33 +94,7 @@ export class AccessibilityEnhancer {
     issues: string[];
     recommendations: string[];
   } {
-    const issues: string[] = [];
-    const recommendations: string[] = [];
-
-    if (!this.config.autoContrastFixes) {
-      issues.push('Contrast auto-fixes disabled');
-      recommendations.push('Enable contrast auto-fixes');
-    }
-    if (!this.config.autoFocusManagement) {
-      issues.push('Focus management disabled');
-      recommendations.push('Enable focus management');
-    }
-    if (!this.config.motionOptimizations) {
-      issues.push('Motion optimizations disabled');
-      recommendations.push('Enable motion optimizations');
-    }
-    if (!this.config.screenReaderOptimizations) {
-      issues.push('Screen reader optimizations disabled');
-      recommendations.push('Enable screen reader optimizations');
-    }
-
-    const score =
-      (this.config.autoContrastFixes ? 25 : 0) +
-      (this.config.autoFocusManagement ? 25 : 0) +
-      (this.config.motionOptimizations ? 25 : 0) +
-      (this.config.screenReaderOptimizations ? 25 : 0);
-
-    return { score, issues, recommendations };
+    return performHealthCheck(this.config);
   }
   createEnhancedButton<P extends object>(
     Component: React.ComponentType<P>,
