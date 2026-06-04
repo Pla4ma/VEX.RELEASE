@@ -7,6 +7,7 @@ import {
   type ComebackStatus,
 } from '../schemas';
 import { RepositoryError } from './error';
+import { tableColumns } from '../../../lib/repository/tableColumns';
 
 const supabase = getSupabaseClient();
 
@@ -27,7 +28,7 @@ export async function createReminderPlan(
       delivered: reminder.delivered,
       opened: reminder.opened,
     })
-    .select()
+    .select(tableColumns('reminder_plans'))
     .single();
   if (error) {
     throw new RepositoryError('createReminderPlan', error);
@@ -59,7 +60,7 @@ export async function markReminderSent(
     .from('reminder_plans')
     .update({ sent: true, sent_at: sentAt })
     .eq('id', reminderId)
-    .select()
+    .select(tableColumns('reminder_plans'))
     .single();
   if (error) {
     throw new RepositoryError('markReminderSent', error);
@@ -76,7 +77,7 @@ export async function updateReminderDelivery(
     .from('reminder_plans')
     .update({ delivered, opened })
     .eq('id', reminderId)
-    .select()
+    .select(tableColumns('reminder_plans'))
     .single();
   if (error) {
     throw new RepositoryError('updateReminderDelivery', error);
@@ -102,7 +103,7 @@ export async function upsertComebackPlan(
       bonus_multiplier: plan.bonusMultiplier,
       messages: plan.messages,
     })
-    .select()
+    .select(tableColumns('comeback_plans'))
     .single();
   if (error) {
     throw new RepositoryError('upsertComebackPlan', error);
@@ -145,7 +146,7 @@ export async function updateComebackPlanStatus(
     .from('comeback_plans')
     .update(updates)
     .eq('id', planId)
-    .select()
+    .select(tableColumns('comeback_plans'))
     .single();
   if (error) {
     throw new RepositoryError('updateComebackPlanStatus', error);

@@ -4,6 +4,7 @@ import {
   type StreakRiskStatus,
 } from '../schemas-risk-repair';
 import { executeWithFallback, type RepositoryResult } from './streak-repository';
+import { tableColumns } from '../../../lib/repository/tableColumns';
 
 const supabase = getSupabaseClient();
 
@@ -28,7 +29,7 @@ export async function saveRiskStatusEnhanced(
         },
         { onConflict: 'user_id' },
       )
-      .select()
+      .select(tableColumns('streak_risk_status'))
       .single();
     if (error) {
       throw error;

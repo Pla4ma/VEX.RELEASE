@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { getSupabaseClient, handleSupabaseError } from '../../../config/supabase';
 import {
+import { tableColumns } from '../../../lib/repository/tableColumns';
   AnalyticsPreferencesSchema,
   AggregatedStatsSchema,
   DetectedPatternSchema,
@@ -30,7 +31,7 @@ export async function updateAnalyticsPreferences(
   const { data, error } = await supabase
     .from('analytics_preferences')
     .upsert({ user_id: userId, ...preferences, updated_at: Date.now() })
-    .select()
+    .select(tableColumns('analytics_preferences'))
     .single();
   if (error) {
     throw handleSupabaseError(error);
@@ -57,7 +58,7 @@ export async function storeAggregatedStats(
   const { data, error } = await supabase
     .from('aggregated_stats')
     .upsert(stats)
-    .select()
+    .select(tableColumns('aggregated_stats'))
     .single();
   if (error) {
     throw handleSupabaseError(error);
@@ -96,7 +97,7 @@ export async function storeDetectedPattern(
   const { data, error } = await supabase
     .from('detected_patterns')
     .insert(pattern)
-    .select()
+    .select(tableColumns('detected_patterns'))
     .single();
   if (error) {
     throw handleSupabaseError(error);

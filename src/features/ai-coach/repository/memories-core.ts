@@ -12,6 +12,7 @@ import {
   type MemoryType,
 } from '../memory/memory-schemas';
 import { mapInputToRow, mapRowToMemory } from './memory-mapper';
+import { tableColumns } from '../../../lib/repository/tableColumns';
 
 const debug = createDebugger('ai-coach:memory-repo');
 
@@ -75,7 +76,7 @@ export async function createMemory(
   const { data, error } = await supabase
     .from('coach_memories')
     .insert(row)
-    .select()
+    .select(tableColumns('coach_memories'))
     .single();
 
   if (error) {

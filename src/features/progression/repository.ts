@@ -2,6 +2,7 @@ import { getSupabaseClient } from '../../config/supabase';
 import { withResilience } from '../../utils/supabase-resilience';
 import { RepositoryError } from '../../lib/repository/error-handling';
 import {
+import { tableColumns } from '../../lib/repository/tableColumns';
   ProgressionSchema,
   type Progression,
 } from './schemas';
@@ -42,7 +43,7 @@ export async function createProgression(userId: string): Promise<Progression> {
   };
 
   const { data, error } = await withResilience(
-    supabase.from('progression').insert(newProgression).select().single(),
+    supabase.from('progression').insert(newProgression).select(tableColumns('progression')).single(),
     { operation: 'createProgression', fallbackValue: newProgression },
   );
   if (error) {
@@ -66,7 +67,7 @@ export async function updateProgression(
       .from('progression')
       .update({ ...updates, updated_at: Date.now() })
       .eq('user_id', userId)
-      .select()
+      .select(tableColumns('progression'))
       .single(),
     { operation: 'updateProgression' },
   );

@@ -5,6 +5,7 @@ import {
   type RecommendationType,
 } from '../schemas';
 import { RepositoryError } from './error';
+import { tableColumns } from '../../../lib/repository/tableColumns';
 
 const supabase = getSupabaseClient();
 
@@ -78,7 +79,7 @@ export async function createRecommendation(
       accepted_at: recommendation.acceptedAt,
       dismissed_at: recommendation.dismissedAt,
     })
-    .select()
+    .select(tableColumns('session_recommendations'))
     .single();
   if (error) {
     throw new RepositoryError('createRecommendation', error);
@@ -104,7 +105,7 @@ export async function updateRecommendationStatus(
     .from('session_recommendations')
     .update(updates)
     .eq('id', recommendationId)
-    .select()
+    .select(tableColumns('session_recommendations'))
     .single();
   if (error) {
     throw new RepositoryError('updateRecommendationStatus', error);

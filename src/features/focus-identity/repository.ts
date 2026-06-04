@@ -3,6 +3,7 @@ import type { FocusIdentityProfile } from './FocusIdentityEngine';
 import { withRetry, FocusProfileRowSchema } from './repository-helpers';
 import { transformRowToProfile } from './repository-transforms';
 import {
+import { tableColumns } from '../../lib/repository/tableColumns';
   insertScoreHistory,
   insertScoreHistoryBatch,
 } from './repository-score-history';
@@ -67,7 +68,7 @@ export async function createFocusProfile(
     const { data, error } = await supabase
       .from('focus_identity_profiles')
       .insert(row)
-      .select()
+      .select(tableColumns('focus_identity_profiles'))
       .single();
     if (error) {
       throw error;
@@ -133,7 +134,7 @@ export async function updateFocusProfile(
       .from('focus_identity_profiles')
       .update(rowUpdates)
       .eq('user_id', userId)
-      .select()
+      .select(tableColumns('focus_identity_profiles'))
       .single();
     if (error) {
       throw error;

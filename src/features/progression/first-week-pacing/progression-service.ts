@@ -13,6 +13,7 @@ import {
 } from './schemas';
 import { FIRST_WEEK_CONFIG, getNextSession, getSessionNumber } from './config';
 import { calculateLevelProgress } from './progression-helpers';
+import { tableColumns } from '../../../lib/repository/tableColumns';
 
 export {
   calculateLevelProgress,
@@ -116,7 +117,7 @@ export async function progressToNextSession(
       .from('first_week_progress')
       .update(updateData)
       .eq('user_id', userId)
-      .select()
+      .select(tableColumns('first_week_progress'))
       .single();
 
     if (error) {

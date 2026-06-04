@@ -5,6 +5,7 @@ import {
   type MessageStatus,
 } from '../schemas';
 import { RepositoryError } from './error';
+import { tableColumns } from '../../../lib/repository/tableColumns';
 
 const supabase = getSupabaseClient();
 
@@ -30,7 +31,7 @@ export async function createCoachMessage(
       action_taken: message.actionTaken,
       action_taken_at: message.actionTakenAt,
     })
-    .select()
+    .select(tableColumns('coach_messages'))
     .single();
   if (error) {
     throw new RepositoryError('createCoachMessage', error);
@@ -111,7 +112,7 @@ export async function updateMessageStatus(
     .from('coach_messages')
     .update(updates)
     .eq('id', messageId)
-    .select()
+    .select(tableColumns('coach_messages'))
     .single();
   if (error) {
     throw new RepositoryError('updateMessageStatus', error);
@@ -132,7 +133,7 @@ export async function markMessageAction(
       status: 'DISMISSED',
     })
     .eq('id', messageId)
-    .select()
+    .select(tableColumns('coach_messages'))
     .single();
   if (error) {
     throw new RepositoryError('markMessageAction', error);

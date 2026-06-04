@@ -58,8 +58,8 @@ export const SESSION_THEMES: SessionTheme[] = [
     name: 'Ember',
     description: 'Warm and intense',
     previewColor: lightColors.accent.orange,
-    // Ember-specific warm tint — no exact theme token equivalent
-    backgroundTint: '#1f0d06',
+    // Mapped to semantic warm-dark token in lieu of hardcoded hex
+    backgroundTint: lightColors.semantic.atmosphereBase1,
     ambientSoundKey: null,
     coinCost: 800,
     isFree: false,
@@ -69,7 +69,8 @@ export const SESSION_THEMES: SessionTheme[] = [
     name: 'The Void',
     description: 'Pure focus, no distractions',
     previewColor: lightColors.accent.purple,
-    backgroundTint: '#0a0010',
+    // Mapped to semantic deep-dark token in lieu of hardcoded hex
+    backgroundTint: lightColors.semantic.auroraDarkBase,
     ambientSoundKey: null,
     coinCost: 1200,
     isFree: false,
@@ -79,7 +80,8 @@ export const SESSION_THEMES: SessionTheme[] = [
     name: 'Legendary Focus',
     description: 'Unlock after 30 day streak',
     previewColor: lightColors.semantic.warning,
-    backgroundTint: '#1a1000',
+    // Mapped to semantic warm-dark token in lieu of hardcoded hex
+    backgroundTint: lightColors.semantic.atmosphereBase3,
     ambientSoundKey: null,
     coinCost: 5000,
     isFree: false,

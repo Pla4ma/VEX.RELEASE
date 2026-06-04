@@ -8,6 +8,7 @@ import {
   type CurrencyRpcResult,
 } from './schemas';
 import { RepositoryError } from '../../lib/repository/error-handling';
+import { tableColumns } from '../../lib/repository/tableColumns';
 
 export { RepositoryError };
 
@@ -23,7 +24,7 @@ export async function getOrCreateWallet(
   const { data, error } = await supabase
     .from('wallets')
     .upsert({ user_id: userId, coins: 0, gems: 0 }, { onConflict: 'user_id' })
-    .select()
+    .select(tableColumns('wallets'))
     .single();
   if (error) {throw new RepositoryError('getOrCreateWallet', error);}
   const wallet = WalletSchema.parse(data);

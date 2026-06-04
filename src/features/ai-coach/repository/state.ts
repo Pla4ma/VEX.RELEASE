@@ -7,6 +7,7 @@
 import { getSupabaseClient } from '../../../config/supabase';
 import type { CoachState } from '../types';
 import { RepositoryError } from './error';
+import { tableColumns } from '../../../lib/repository/tableColumns';
 
 const supabase = getSupabaseClient();
 
@@ -72,7 +73,7 @@ export async function upsertCoachState(state: CoachState): Promise<CoachState> {
   const { data, error } = await supabase
     .from(TABLE_NAME)
     .upsert(dbRecord, { onConflict: 'user_id' })
-    .select()
+    .select(tableColumns(TABLE_NAME))
     .single();
 
   if (error) {

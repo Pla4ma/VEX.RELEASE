@@ -10,6 +10,7 @@ import {
   type UserStakesPreference,
 } from './stakes-schemas';
 import { saveStakesSession } from './stakes-queries';
+import { tableColumns } from '../../../lib/repository/tableColumns';
 
 export async function updateStakesPreference(
   userId: string,
@@ -37,7 +38,7 @@ export async function updateStakesPreference(
             { user_id: userId, ...updates, updated_at: Date.now() },
             { onConflict: 'user_id' },
           )
-          .select()
+          .select(tableColumns('user_stakes_preferences'))
           .single();
       },
     );

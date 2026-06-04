@@ -5,6 +5,7 @@ import type {
 } from './types';
 import { SettingRowSchema } from './schemas';
 import {
+import { tableColumns } from '../../lib/repository/tableColumns';
   trackPendingChange,
   clearPendingChange,
 } from './repository-sync';
@@ -79,7 +80,7 @@ export async function upsertSetting(setting: {
   const { data, error } = await supabase
     .from(TABLE_SETTINGS)
     .upsert(dbRecord, { onConflict: 'user_id,key' })
-    .select()
+    .select(tableColumns(TABLE_SETTINGS))
     .single();
   if (error) {
     throw new Error(`Failed to upsert setting: ${error.message}`);
@@ -113,7 +114,7 @@ export async function batchUpsertSettings(
   const { data, error } = await supabase
     .from(TABLE_SETTINGS)
     .upsert(dbRecords, { onConflict: 'user_id,key' })
-    .select();
+    .select(tableColumns(TABLE_SETTINGS));
   if (error) {
     throw new Error(`Failed to batch upsert settings: ${error.message}`);
   }

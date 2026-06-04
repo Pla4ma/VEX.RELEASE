@@ -3,6 +3,7 @@ import { enqueue } from '../../../lib/offline/queue';
 import { withRetry, RepositoryError } from '../../../lib/repository/base';
 import { captureSilentFailure } from '../../../utils/silent-failure';
 import {
+import { tableColumns } from '../../../lib/repository/tableColumns';
   StakesSessionRecordSchema,
   UserStakesPreferenceSchema,
   type StakesSessionRecord,
@@ -47,7 +48,7 @@ export async function saveStakesSession(
           created_at: record.created_at,
           completed_at: record.completed_at,
         })
-        .select()
+        .select(tableColumns('stakes_sessions'))
         .single();
     });
     if (error) {

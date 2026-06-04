@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { getSupabaseClient, handleSupabaseError } from '../../../config/supabase';
 import { ExportJobSchema } from '../schemas';
+import { tableColumns } from '../../../lib/repository/tableColumns';
 
 const supabase = getSupabaseClient();
 
@@ -21,7 +22,7 @@ export async function createExportJob(job: z.infer<typeof ExportJobSchema>) {
   const { data, error } = await supabase
     .from('export_jobs')
     .insert(job)
-    .select()
+    .select(tableColumns('export_jobs'))
     .single();
   if (error) {
     throw handleSupabaseError(error);
@@ -46,7 +47,7 @@ export async function updateExportJobProgress(
     .from('export_jobs')
     .update(updates)
     .eq('id', jobId)
-    .select()
+    .select(tableColumns('export_jobs'))
     .single();
   if (error) {
     throw handleSupabaseError(error);
@@ -59,7 +60,7 @@ export async function markExportJobFailed(jobId: string, errorMessage: string) {
     .from('export_jobs')
     .update({ status: 'failed', error_message: errorMessage })
     .eq('id', jobId)
-    .select()
+    .select(tableColumns('export_jobs'))
     .single();
   if (error) {
     throw handleSupabaseError(error);

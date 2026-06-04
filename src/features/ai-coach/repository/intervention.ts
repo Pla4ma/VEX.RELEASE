@@ -7,6 +7,7 @@ import {
   type TriggerType,
 } from '../schemas';
 import { RepositoryError } from './error';
+import { tableColumns } from '../../../lib/repository/tableColumns';
 
 const supabase = getSupabaseClient();
 
@@ -52,7 +53,7 @@ export async function createInterventionExecution(
       status: execution.status,
       result: execution.result,
     })
-    .select()
+    .select(tableColumns('intervention_executions'))
     .single();
   if (error) {
     throw new RepositoryError('createInterventionExecution', error);
@@ -73,7 +74,7 @@ export async function updateInterventionExecution(
     .from('intervention_executions')
     .update(updates)
     .eq('id', executionId)
-    .select()
+    .select(tableColumns('intervention_executions'))
     .single();
   if (error) {
     throw new RepositoryError('updateInterventionExecution', error);

@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { getSupabaseClient, handleSupabaseError } from '../../../config/supabase';
 import { InsightSchema } from '../schemas';
+import { tableColumns } from '../../../lib/repository/tableColumns';
 
 const supabase = getSupabaseClient();
 
@@ -41,7 +42,7 @@ export async function createInsight(insight: z.infer<typeof InsightSchema>) {
   const { data, error } = await supabase
     .from('insights')
     .insert(insight)
-    .select()
+    .select(tableColumns('insights'))
     .single();
   if (error) {
     throw handleSupabaseError(error);
@@ -55,7 +56,7 @@ export async function markInsightAsRead(userId: string, insightId: string) {
     .update({ is_read: true })
     .eq('id', insightId)
     .eq('user_id', userId)
-    .select()
+    .select(tableColumns('insights'))
     .single();
   if (error) {
     throw handleSupabaseError(error);
@@ -78,7 +79,7 @@ export async function markInsightAsActioned(
     })
     .eq('id', insightId)
     .eq('user_id', userId)
-    .select()
+    .select(tableColumns('insights'))
     .single();
   if (error) {
     throw handleSupabaseError(error);

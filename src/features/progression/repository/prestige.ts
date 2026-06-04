@@ -5,6 +5,7 @@
 
 import { supabase } from '../../../config/supabase';
 import type { PrestigeState } from '../prestige-system';
+import { tableColumns } from '../../../lib/repository/tableColumns';
 
 const TABLE = 'prestige_states';
 
@@ -37,7 +38,7 @@ export async function createPrestigeState(
   const { data, error } = await supabase
     .from(TABLE)
     .insert({ user_id: userId })
-    .select()
+    .select(tableColumns(TABLE))
     .single();
 
   if (error) {

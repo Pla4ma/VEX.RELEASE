@@ -5,6 +5,7 @@ import {
 } from './schemas';
 import type { CreateRewardLedgerInput, RewardLedgerRecord } from './types';
 import * as z from 'zod';
+import { tableColumns } from '../../lib/repository/tableColumns';
 
 export class RewardLedgerRepositoryError extends Error {
   constructor(
@@ -36,7 +37,7 @@ export async function upsertRewardLedger(
       },
       { onConflict: 'idempotency_key' },
     )
-    .select()
+    .select(tableColumns('reward_ledger'))
     .single();
 
   if (error) {
@@ -103,7 +104,7 @@ export async function updateRewardLedgerStatus(
     .from('reward_ledger')
     .update(updateData)
     .eq('id', ledgerId)
-    .select()
+    .select(tableColumns('reward_ledger'))
     .single();
 
   if (error) {

@@ -10,6 +10,7 @@ import {
   type RepositoryResult,
 } from './streak-repository';
 import { RepositoryErrorCode } from '../../../lib/repository/base';
+import { tableColumns } from '../../../lib/repository/tableColumns';
 
 const supabase = getSupabaseClient();
 
@@ -64,7 +65,7 @@ export async function saveRepairQuestEnhanced(
         session_ids: quest.sessionIds,
         completed_at: quest.completedAt,
       })
-      .select()
+      .select(tableColumns('streak_repair_quests'))
       .single();
     if (error) {
       throw error;
@@ -96,7 +97,7 @@ export async function updateRepairQuestEnhanced(
         updated_at: Date.now(),
       })
       .eq('id', questId)
-      .select()
+      .select(tableColumns('streak_repair_quests'))
       .single();
     if (error) {
       throw error;

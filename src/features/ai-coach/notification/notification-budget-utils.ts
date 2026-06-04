@@ -4,7 +4,7 @@ import {
   type NotificationBudget,
   type NotificationRequest,
 } from './notification-budget-schema';
-import { v4 } from '../../utils/uuid';
+import { v4 } from '../../../utils/uuid';
 
 const budgetStore = new Map<string, NotificationBudget>();
 

@@ -7,6 +7,7 @@ import {
   type XpEntry,
 } from '../schemas';
 import { withResilience } from '../../utils/supabase-resilience';
+import { tableColumns } from '../../../lib/repository/tableColumns';
 
 const supabase = getSupabaseClient();
 
@@ -51,7 +52,7 @@ export async function recordXpEntry(
   };
 
   const { data, error } = await withResilience(
-    supabase.from('xp_history').insert(newEntry).select().single(),
+    supabase.from('xp_history').insert(newEntry).select(tableColumns('xp_history')).single(),
     { operation: 'recordXpEntry', fallbackValue: newEntry },
   );
   if (error) {

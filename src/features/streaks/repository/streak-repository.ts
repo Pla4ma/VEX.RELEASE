@@ -11,6 +11,7 @@ import {
 import { getSupabaseClient } from '../../../config/supabase';
 import { StreakSchema, type Streak } from '../schemas';
 import { v4 } from '../../../utils/uuid';
+import { tableColumns } from '../../../lib/repository/tableColumns';
 
 const supabase = getSupabaseClient();
 export class StreaksRepositoryError extends RepositoryError {
@@ -97,7 +98,7 @@ export async function createStreakEnhanced(
         created_at: streak.createdAt,
         updated_at: streak.updatedAt,
       })
-      .select()
+      .select(tableColumns('streaks'))
       .single();
     if (error) {
       throw error;
@@ -124,7 +125,7 @@ export async function updateStreakEnhanced(
       .from('streaks')
       .update({ ...updates, updated_at: Date.now() })
       .eq('user_id', userId)
-      .select()
+      .select(tableColumns('streaks'))
       .single();
     if (error) {
       throw error;

@@ -1,6 +1,7 @@
 import { getSupabaseClient } from '../../../config/supabase';
 import { DifficultyProfileSchema, type DifficultyProfile } from '../schemas';
 import { RepositoryError } from './error';
+import { tableColumns } from '../../../lib/repository/tableColumns';
 
 const supabase = getSupabaseClient();
 
@@ -36,7 +37,7 @@ export async function upsertDifficultyProfile(
       success_rate_overall: profile.successRateOverall,
       trend: profile.trend,
     })
-    .select()
+    .select(tableColumns('difficulty_profiles'))
     .single();
   if (error) {
     throw new RepositoryError('upsertDifficultyProfile', error);

@@ -1,6 +1,7 @@
 import { getSupabaseClient } from '../../../config/supabase';
 import { createDebugger } from '../../../utils/debug';
 import { ComebackQuestSchema, type ComebackQuest } from '../comeback/schemas';
+import { tableColumns } from '../../../lib/repository/tableColumns';
 
 const debug = createDebugger('streaks:comeback-repo');
 const supabase = getSupabaseClient();
@@ -59,7 +60,7 @@ export async function insertComebackQuest(
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     })
-    .select()
+    .select(tableColumns('comeback_quests'))
     .single();
   if (error || !data) {
     throw new Error(`Failed to create comeback quest: ${error?.message}`);
@@ -116,7 +117,7 @@ export async function updateComebackQuestProgress(
     .from('comeback_quests')
     .update(updateData)
     .eq('id', questId)
-    .select()
+    .select(tableColumns('comeback_quests'))
     .single();
   if (error || !data) {
     throw new Error(`Failed to update quest progress: ${error?.message}`);
