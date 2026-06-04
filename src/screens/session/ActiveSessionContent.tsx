@@ -1,5 +1,4 @@
 import React from 'react';
-import * as Sentry from '@sentry/react-native';
 import { Box } from '../../components/primitives/Box';
 import { CompanionSessionLayer } from '../../session/components/CompanionSessionLayer';
 import { DeepWorkVignette } from '../../session/components/DeepWorkVignette';
@@ -19,6 +18,7 @@ import {
   ENABLE_SESSION_HERO,
   type ActiveSessionContentProps,
 } from './ActiveSessionContent.types';
+import { useSessionControlHandlers } from './useSessionControlHandlers';
 
 export type { ActiveSessionContentProps };
 
@@ -48,6 +48,8 @@ export function ActiveSessionContent({
     userId,
   } = controller;
   const activeSession = sessionQuery.session;
+
+  const handlers = useSessionControlHandlers(actions, showMultiplierInfo, studyQuizBreak);
 
   if (!activeSession) {
     return <Box flex={1} bg="background.primary" />;
@@ -175,32 +177,14 @@ export function ActiveSessionContent({
         showInterruption={showInterruption}
         elapsedSeconds={sessionQuery.elapsedSeconds}
         theme={theme}
-        onClearControlFailure={actions.clearControlFailure}
-        onRetryControlFailure={() => {
-          actions.retryControlFailure().catch((error: unknown) => {
-            Sentry.captureException(error, { tags: { feature: 'session-controls' } });
-          });
-        }}
-        onComplete={() => {
-          actions.handleComplete().catch((error: unknown) => {
-            Sentry.captureException(error, { tags: { feature: 'session-controls' } });
-          });
-        }}
-        onEnd={() => actions.setShowInterruption(true)}
-        onPauseResume={() => {
-          actions.handlePauseResume().catch((error: unknown) => {
-            Sentry.captureException(error, { tags: { feature: 'session-controls' } });
-          });
-        }}
-        onToggleMultiplierInfo={() =>
-          actions.setShowMultiplierInfo(!showMultiplierInfo)
-        }
-        onResume={() => actions.setShowInterruption(false)}
-        onAbandon={() => {
-          actions.handleAbandon().catch((error: unknown) => {
-            Sentry.captureException(error, { tags: { feature: 'session-controls' } });
-          });
-        }}
+        onClearControlFailure={handlers.onClearControlFailure}
+        onRetryControlFailure={handlers.onRetryControlFailure}
+        onComplete={handlers.onComplete}
+        onEnd={handlers.onEnd}
+        onPauseResume={handlers.onPauseResume}
+        onToggleMultiplierInfo={handlers.onToggleMultiplierInfo}
+        onResume={handlers.onResume}
+        onAbandon={handlers.onAbandon}
       />
     </Box>
   );
