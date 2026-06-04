@@ -2,6 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { lightColors } from '@/theme/tokens/colors';
+import { rgbaColors } from '@/theme/tokens/rgba-colors';
 
 import { SafeBlurView } from './SafeBlurView';
 import { useTheme } from '../../../theme';
@@ -30,12 +31,12 @@ export function VexConsole({ children }: VexConsoleProps): React.JSX.Element {
       {/* Gradient border rim — violet through orange */}
       <LinearGradient
         colors={[
-          'rgba(166, 107, 255, 0.50)',
-          'rgba(139, 92, 246, 0.18)',
-          'rgba(255, 138, 36, 0.08)',
-          'rgba(255, 138, 36, 0.30)',
-          'rgba(166, 107, 255, 0.18)',
-          'rgba(139, 92, 246, 0.50)',
+          rgbaColors.rgb_166_107_255_0_5,
+          rgbaColors.rgb_139_92_246_0_18,
+          rgbaColors.rgb_255_138_36_0_08,
+          rgbaColors.rgb_255_138_36_0_3,
+          rgbaColors.rgb_166_107_255_0_18,
+          rgbaColors.rgb_139_92_246_0_5,
         ]}
         locations={[0, 0.15, 0.40, 0.55, 0.85, 1]}
         start={{ x: 0, y: 0 }}
@@ -55,7 +56,7 @@ export function VexConsole({ children }: VexConsoleProps): React.JSX.Element {
         <SafeBlurView intensity={38} tint="dark" style={{ borderRadius: r, overflow: 'hidden' }}>
           {/* Inner violet glow — top */}
           <LinearGradient
-            colors={['rgba(109, 59, 255, 0.10)', 'rgba(109, 59, 255, 0)']}
+            colors={[rgbaColors.rgb_109_59_255_0_1, rgbaColors.rgb_109_59_255_0]}
             locations={[0, 0.25]}
             start={{ x: 0.5, y: 0 }}
             end={{ x: 0.5, y: 1 }}
@@ -65,7 +66,7 @@ export function VexConsole({ children }: VexConsoleProps): React.JSX.Element {
 
           {/* Inner orange reflection — bottom */}
           <LinearGradient
-            colors={['rgba(255, 138, 36, 0)', 'rgba(255, 138, 36, 0.06)']}
+            colors={[rgbaColors.rgb_255_138_36_0, rgbaColors.rgb_255_138_36_0_06]}
             locations={[0, 0.8]}
             start={{ x: 0.5, y: 0 }}
             end={{ x: 0.5, y: 1 }}
@@ -82,17 +83,17 @@ export function VexConsole({ children }: VexConsoleProps): React.JSX.Element {
               left: 24,
               right: 24,
               height: 1,
-              backgroundColor: 'rgba(255, 255, 255, 0.12)',
+              backgroundColor: rgbaColors.rgb_255_255_255_0_12,
             }}
           />
 
           {/* Diagonal sheen */}
           <LinearGradient
             colors={[
-              'rgba(255, 255, 255, 0.03)',
-              'rgba(255, 255, 255, 0)',
-              'rgba(255, 255, 255, 0)',
-              'rgba(255, 138, 36, 0.02)',
+              rgbaColors.rgb_255_255_255_0_03,
+              rgbaColors.rgb_255_255_255_0,
+              rgbaColors.rgb_255_255_255_0,
+              rgbaColors.rgb_255_138_36_0_02,
             ]}
             locations={[0, 0.2, 0.7, 1]}
             start={{ x: 0, y: 0 }}

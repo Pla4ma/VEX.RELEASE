@@ -12,6 +12,7 @@ import { Text } from '../../../components/primitives/Text';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { useTheme } from '../../../theme';
 import { lightColors } from '@/theme/tokens/colors';
+import { rgbaColors } from '@/theme/tokens/rgba-colors';
 
 function StatusDot(): React.JSX.Element {
   const { isReducedMotion } = useReducedMotion();
@@ -61,9 +62,9 @@ export function VexBrandHeader(): React.JSX.Element {
           paddingHorizontal: theme.spacing[4],
           paddingVertical: theme.spacing[1],
           borderRadius: 9999,
-          backgroundColor: 'rgba(255, 255, 255, 0.03)',
+          backgroundColor: rgbaColors.rgb_255_255_255_0_03,
           borderWidth: 0.5,
-          borderColor: 'rgba(255, 255, 255, 0.05)',
+          borderColor: rgbaColors.rgb_255_255_255_0_05,
         }}
       >
         <StatusDot />
@@ -137,7 +138,7 @@ export function VexBrandHeader(): React.JSX.Element {
           lineHeight={48}
           textAlign="center"
           style={{
-            textShadowColor: 'rgba(139, 92, 246, 0.25)',
+            textShadowColor: rgbaColors.rgb_139_92_246_0_25,
             textShadowOffset: { width: 0, height: 0 },
             textShadowRadius: 8,
           }}
@@ -149,7 +150,7 @@ export function VexBrandHeader(): React.JSX.Element {
       {/* Focus core accent mark */}
       <View style={{ alignItems: 'center', marginTop: 2 }}>
         <LinearGradient
-          colors={['rgba(166, 107, 255, 0.30)', 'rgba(255, 138, 36, 0.35)']}
+          colors={[rgbaColors.rgb_166_107_255_0_3, rgbaColors.rgb_255_138_36_0_35]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
           style={{

@@ -172,6 +172,8 @@ export const lightColors: ColorPalette = {
     highStreakDeep: '#003838',
     auroraBrightViolet: '#6D3BFF',
     auroraAccentViolet: '#A66BFF',
+    brandViolet: '#8B5CF6',
+    brandCoralPink: '#FF8B96',
     auroraEditorialGold: '#E0B870',
     atmosphereBase1: '#08080C',
     atmosphereBase2: '#0C0A12',

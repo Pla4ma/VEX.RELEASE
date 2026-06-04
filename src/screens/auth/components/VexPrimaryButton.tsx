@@ -9,6 +9,7 @@ import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { buttonTap } from '../../../utils/haptics';
 import { getMinTouchTargetStyle } from '../../../utils/touchTarget';
 import { lightColors } from '@/theme/tokens/colors';
+import { rgbaColors } from '@/theme/tokens/rgba-colors';
 import { useButtonPressHandlers } from './VexPrimaryButton.hooks';
 
 type VexActivationButtonProps = {
@@ -41,7 +42,7 @@ export function VexActivationButton({
             left: -24,
             right: -24,
             borderRadius: 9999,
-            backgroundColor: 'rgba(255, 138, 36, 0.04)',
+            backgroundColor: rgbaColors.rgb_255_138_36_0_04,
             shadowColor: lightColors.semantic.brandOrange,
             shadowOffset: { width: 0, height: 0 },
             shadowOpacity: 0.5,
@@ -118,7 +119,7 @@ export function VexActivationButton({
           >
             {/* Inner shadow — top */}
             <LinearGradient
-              colors={['rgba(0,0,0,0.14)', 'rgba(0,0,0,0)']}
+              colors={[rgbaColors.rgb_0_0_0_0_14, rgbaColors.rgb_0_0_0_0]}
               locations={[0, 0.35]}
               pointerEvents="none"
               style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}
@@ -133,7 +134,7 @@ export function VexActivationButton({
                 left: 40,
                 right: 40,
                 height: 1.5,
-                backgroundColor: 'rgba(255,255,255,0.45)',
+                backgroundColor: rgbaColors.rgb_255_255_255_0_45,
                 borderRadius: 1,
               }}
             />
@@ -146,7 +147,7 @@ export function VexActivationButton({
                 top: 0,
                 bottom: 0,
                 width: 60,
-                backgroundColor: 'rgba(255,255,255,0.06)',
+                backgroundColor: rgbaColors.rgb_255_255_255_0_06,
                 transform: [{ skewX: '-25deg' }, { translateX: -120 }],
               }}
             />
@@ -159,7 +160,7 @@ export function VexActivationButton({
               letterSpacing={0.3}
               textAlign="center"
               style={{
-                textShadowColor: 'rgba(255, 255, 255, 0.30)',
+                textShadowColor: rgbaColors.rgb_255_255_255_0_3,
                 textShadowOffset: { width: 0, height: 0 },
                 textShadowRadius: 6,
               }}

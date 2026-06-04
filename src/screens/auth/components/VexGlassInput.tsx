@@ -11,6 +11,7 @@ import { SafeBlurView } from './SafeBlurView';
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
 import { lightColors } from '@/theme/tokens/colors';
+import { rgbaColors } from '@/theme/tokens/rgba-colors';
 
 type VexGlassInputProps = {
   label: string;
@@ -60,8 +61,8 @@ export function VexGlassInput({
   const borderColor = error
     ? lightColors.error.light
     : isFocused
-      ? 'rgba(166, 107, 255, 0.70)'
-      : 'rgba(255, 255, 255, 0.06)';
+      ? rgbaColors.rgb_166_107_255_0_7
+      : rgbaColors.rgb_255_255_255_0_06;
 
   return (
     <View style={{ gap: theme.spacing[2] }}>
@@ -78,7 +79,7 @@ export function VexGlassInput({
         {/* Gradient rim on focus */}
         {isFocused && (
           <LinearGradient
-            colors={['rgba(166, 107, 255, 0.55)', 'rgba(255, 138, 61, 0.25)']}
+            colors={[rgbaColors.rgb_166_107_255_0_55, rgbaColors.rgb_255_138_61_0_25]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
             style={{
@@ -105,7 +106,7 @@ export function VexGlassInput({
           <SafeBlurView intensity={12} tint="dark" style={{ borderRadius: r, overflow: 'hidden' }}>
             {/* Inner shadow — top */}
             <LinearGradient
-              colors={['rgba(0, 0, 0, 0.20)', 'rgba(0, 0, 0, 0)']}
+              colors={[rgbaColors.rgb_0_0_0_0_2, rgbaColors.rgb_0_0_0_0]}
               locations={[0, 0.2]}
               pointerEvents="none"
               style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 20 }}
@@ -120,7 +121,7 @@ export function VexGlassInput({
                 left: 16,
                 right: 16,
                 height: 0.5,
-                backgroundColor: 'rgba(255, 255, 255, 0.06)',
+                backgroundColor: rgbaColors.rgb_255_255_255_0_06,
               }}
             />
 
@@ -135,7 +136,7 @@ export function VexGlassInput({
               onFocus={() => setIsFocused(true)}
               onSubmitEditing={onSubmitEditing}
               placeholder={placeholder}
-              placeholderTextColor="rgba(247, 245, 255, 0.20)"
+              placeholderTextColor={rgbaColors.rgb_247_245_255_0_2}
               returnKeyType={returnKeyType ?? (secureTextEntry ? 'done' : 'next')}
               secureTextEntry={secureTextEntry}
               style={{

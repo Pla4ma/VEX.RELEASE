@@ -136,6 +136,10 @@ type SemanticColors = {
   auroraBrightViolet: string;
   /** Mid-bright violet accent for aurora glow */
   auroraAccentViolet: string;
+  /** Brand violet #8B5CF6 — rich purple for aurora glow */
+  brandViolet: string;
+  /** Brand coral pink #FF8B96 — soft warm pink for error highlights */
+  brandCoralPink: string;
   /** Warm editorial gold for orb/atmosphere effects */
   auroraEditorialGold: string;
   /** Deep warm dark for atmosphere base gradient */
