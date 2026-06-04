@@ -1,16 +1,20 @@
+/**
+ * Phase 3C — Clean Mode Polish
+ */
+
 import {
+  getLaneMechanicPolicy,
+  buildLaneSessionBrief,
+  decideNudge,
+  resolveCompletionExperiencePolicy,
+  decideHomeSurfaces,
+  SessionMode,
   baseLaneProfile,
   baseStats,
   baseProfile,
   featureAvailability,
   completionInput,
-  resolveCompletionExperiencePolicy,
-  getLaneMechanicPolicy,
-  buildLaneSessionBrief,
-  decideNudge,
-  decideHomeSurfaces,
-  SessionMode,
-} from './phase3-lane-polish/helpers';
+} from './lane-test-helpers';
 
 describe('Phase 3C — Clean Mode Polish', () => {
   const cleanProfile = baseLaneProfile({ primaryLane: 'minimal_normal' });

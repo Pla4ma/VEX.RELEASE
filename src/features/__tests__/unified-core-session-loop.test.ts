@@ -15,8 +15,8 @@ import {
   baseStats,
   baseProfile,
   featureAvailability,
-} from './phase3-test-helpers';
-import type { Lane } from './phase3-test-helpers';
+} from './lane-test-helpers';
+import type { Lane } from './lane-test-helpers';
 
 describe('Phase 3F — Unified Architecture Proof', () => {
   it('all modes share same core session loop (SessionMode enum covers all)', () => {

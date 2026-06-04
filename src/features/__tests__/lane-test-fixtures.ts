@@ -1,7 +1,7 @@
 /**
  * Phase 3 — Test fixtures and helper factories
  *
- * Extracted from phase3-test-helpers.ts to stay under the 200-line limit.
+ * Extracted from lane-test-helpers.ts to stay under the 200-line limit.
  */
 
 import { getLaneMechanicPolicy } from '../lane-engine';

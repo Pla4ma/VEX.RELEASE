@@ -10,12 +10,12 @@ import {
   SessionMode,
   baseLaneProfile,
   completionInput,
-} from './phase3-test-helpers';
+} from './lane-test-helpers';
 import type {
   Lane,
   NudgeDecision,
   CompletionExperiencePolicy,
-} from './phase3-test-helpers';
+} from './lane-test-helpers';
 
 describe('Phase 3F — Completion & Notification Proof', () => {
   it('Completion consumes LaneProfile for lane-aware experience', () => {

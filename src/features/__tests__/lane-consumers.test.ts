@@ -8,11 +8,11 @@ import {
   buildLaneSessionBrief,
   decideHomeSurfaces,
   SessionMode,
-} from './phase3-lane-polish/helpers';
+} from './lane-polish/helpers';
 import type {
   Lane,
   CompletionExperiencePolicy,
-} from './phase3-lane-polish/helpers';
+} from './lane-polish/helpers';
 
 describe('Phase 3F — Consumers', () => {
   it('Home consumes LaneProfile to decide surfaces per lane', () => {

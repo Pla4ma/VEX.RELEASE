@@ -9,7 +9,7 @@ import {
   buildLaneSessionBrief,
   decideHomeSurfaces,
   SessionMode,
-} from './phase3-lane-polish/helpers';
+} from './lane-polish/helpers';
 
 describe('Phase 3B — Study Mode Polish', () => {
   const studyProfile = baseLaneProfile({ primaryLane: 'student' });

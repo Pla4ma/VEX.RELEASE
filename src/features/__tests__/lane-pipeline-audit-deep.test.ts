@@ -1,20 +1,11 @@
-/**
- * Phase 3A — Lane Pipeline Audit
- */
-
 import {
-  getLaneMechanicPolicy,
-  getLanePresentationPolicy,
-  buildLaneSessionBrief,
-  decideNudge,
-  resolveCompletionExperiencePolicy,
-  resolveLaneCopy,
-  LANE_USER_FACING_NAMES,
   baseLaneProfile,
   auditLane,
-  completionInput,
-} from './phase3-test-helpers';
-import type { Lane, LaneMechanicPolicy } from './phase3-test-helpers';
+  getLaneMechanicPolicy,
+  getLanePresentationPolicy,
+  decideNudge,
+} from './lane-polish/helpers';
+import type { Lane, LaneMechanicPolicy } from './lane-polish/helpers';
 
 describe('Phase 3A — Lane Pipeline Audit', () => {
   it('audit table: all four modes produce distinct profiles', () => {

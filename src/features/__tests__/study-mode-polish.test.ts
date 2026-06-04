@@ -13,7 +13,7 @@ import {
   baseProfile,
   featureAvailability,
   completionInput,
-} from './phase3-test-helpers';
+} from './lane-test-helpers';
 
 describe('Phase 3B — Study Mode Polish', () => {
   const studyProfile = baseLaneProfile({ primaryLane: 'student' });

@@ -1,8 +1,8 @@
 /**
  * Phase 3 — Shared test fixtures and helpers
  *
- * Extracted from phase3-lane-polish.test.ts for per-describe test files.
- * Fixtures live in phase3-test-fixtures.ts; this file re-exports everything.
+ * Extracted from lane-polish.test.ts for per-describe test files.
+ * Fixtures live in lane-test-fixtures.ts; this file re-exports everything.
  */
 
 import {
@@ -55,7 +55,7 @@ export type {
 
 // ─── Fixture re-exports ────────────────────────────────────────────────
 
-export type { SessionModeString } from './phase3-test-fixtures';
+export type { SessionModeString } from './lane-test-fixtures';
 
 export {
   baseLaneProfile,
@@ -65,4 +65,4 @@ export {
   sessionSummary,
   completionInput,
   auditLane,
-} from './phase3-test-fixtures';
+} from './lane-test-fixtures';

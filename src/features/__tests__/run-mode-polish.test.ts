@@ -1,16 +1,20 @@
+/**
+ * Phase 3D — Run Mode Polish
+ */
+
 import {
+  getLaneMechanicPolicy,
+  buildLaneSessionBrief,
+  resolveCompletionExperiencePolicy,
+  decideHomeSurfaces,
+  SessionMode,
   baseLaneProfile,
   baseStats,
   baseProfile,
   featureAvailability,
   completionInput,
-  resolveCompletionExperiencePolicy,
-  getLaneMechanicPolicy,
-  buildLaneSessionBrief,
-  decideHomeSurfaces,
-  SessionMode,
-} from './phase3-lane-polish/helpers';
-import type { Lane } from './phase3-lane-polish/helpers';
+} from './lane-test-helpers';
+import type { Lane } from './lane-test-helpers';
 
 describe('Phase 3D — Run Mode Polish', () => {
   const runProfile = baseLaneProfile({ primaryLane: 'game_like' });

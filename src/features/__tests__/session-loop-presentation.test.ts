@@ -5,8 +5,8 @@ import {
   buildLaneSessionBrief,
   resolveLaneCopy,
   decideNudge,
-} from './phase3-lane-polish/helpers';
-import type { Lane } from './phase3-lane-polish/helpers';
+} from './lane-polish/helpers';
+import type { Lane } from './lane-polish/helpers';
 
 describe('Phase 3F — Session Loop and Presentation', () => {
   it('all modes share same core session loop (SessionMode enum covers all)', () => {

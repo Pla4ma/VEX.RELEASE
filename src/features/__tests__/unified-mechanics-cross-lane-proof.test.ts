@@ -17,11 +17,11 @@ import {
   SessionMode,
   baseLaneProfile,
   completionInput,
-} from './phase3-test-helpers';
+} from './lane-test-helpers';
 import type {
   Lane,
   NudgeDecision,
-} from './phase3-test-helpers';
+} from './lane-test-helpers';
 
 describe('Phase 3F — Mechanics & Cross-Lane Proof', () => {
   it('FeatureAvailability: LaneMechanicPolicy blockedMechanics enforces per-lane feature visibility', () => {
