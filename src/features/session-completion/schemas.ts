@@ -84,6 +84,15 @@ export type SessionCompletionNavigationParams = z.infer<
   typeof SessionCompletionNavigationParamsSchema
 >;
 
+export const SessionCompletionRecoveryParamsSchema = z
+  .object({
+    sessionId: z.string().uuid(),
+  })
+  .passthrough();
+export type SessionCompletionRecoveryParams = z.infer<
+  typeof SessionCompletionRecoveryParamsSchema
+>;
+
 export const SessionCompletionHeroSchema = z
   .object({
     body: z.string(),

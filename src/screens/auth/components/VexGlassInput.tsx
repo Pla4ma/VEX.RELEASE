@@ -89,12 +89,12 @@ export function VexGlassInput({
               onBlur={() => setF(false)} onChangeText={onChangeText}
               onFocus={() => setF(true)} onSubmitEditing={onSubmitEditing}
               placeholder={placeholder}
-              placeholderTextColor="rgba(247,245,255,0.38)"
+              placeholderTextColor={theme.colors.semantic.liquidTextMuted}
               returnKeyType={returnKeyType ?? (secureTextEntry ? 'done' : 'next')}
               secureTextEntry={secureTextEntry}
               style={{
                 minHeight: 54,
-                color: lightColors.semantic.background,
+                color: theme.colors.semantic.liquidText,
                 fontSize: 16,
                 paddingHorizontal: theme.spacing[4],
               }}

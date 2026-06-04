@@ -1,7 +1,5 @@
 ﻿import React, { useEffect } from 'react';
-import { View } from 'react-native';
 import Animated, {
-  Easing,
   useAnimatedStyle,
   useSharedValue,
   withDelay,
@@ -13,68 +11,13 @@ import Animated, {
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
-import { springPresets, motionStagger } from '../../../theme/tokens/motion';
+import { springPresets } from '../../../theme/tokens/motion';
 import { VexFocusMark } from './VexFocusMark';
 
 interface AuthHeroBrandProps {
   label?: string;
   title?: string;
   tagline?: string;
-}
-
-function AnimatedLetter({
-  char,
-  index,
-  isReducedMotion,
-}: {
-  char: string;
-  index: number;
-  isReducedMotion: boolean;
-}): JSX.Element {
-  const opacity = useSharedValue(0);
-  const translateY = useSharedValue(12);
-  const staggerMs = motionStagger.tight;
-
-  useEffect(() => {
-    if (isReducedMotion) {
-      opacity.value = 1;
-      translateY.value = 0;
-      return;
-    }
-    opacity.value = withDelay(
-      400 + index * staggerMs,
-      withTiming(1, { duration: 320, easing: Easing.bezier(0.22, 1, 0.36, 1) }),
-    );
-    translateY.value = withDelay(
-      400 + index * staggerMs,
-      withTiming(0, { duration: 320, easing: Easing.bezier(0.22, 1, 0.36, 1) }),
-    );
-  }, [isReducedMotion, index, opacity, translateY, staggerMs]);
-
-  const style = useAnimatedStyle(() => ({
-    opacity: opacity.value,
-    transform: [{ translateY: translateY.value }],
-  }));
-
-  return (
-    <Animated.View style={style}>
-      <Text
-        color="text.primary"
-        textAlign="center"
-        variant="display"
-        letterSpacing={4}
-        style={{
-          fontSize: 56,
-          lineHeight: 60,
-          textShadowColor: 'rgba(0,229,255,0.15)',
-          textShadowOffset: { width: 0, height: 0 },
-          textShadowRadius: 24,
-        }}
-      >
-        {char}
-      </Text>
-    </Animated.View>
-  );
 }
 
 export function AuthHeroBrand({
@@ -89,6 +32,8 @@ export function AuthHeroBrand({
   const containerOpacity = useSharedValue(0);
   const containerTranslateY = useSharedValue(20);
   const taglineOpacity = useSharedValue(0);
+  const titleOpacity = useSharedValue(0);
+  const titleTranslateY = useSharedValue(12);
 
   useEffect(() => {
     if (isReducedMotion) {
@@ -97,6 +42,8 @@ export function AuthHeroBrand({
       containerOpacity.value = 1;
       containerTranslateY.value = 0;
       taglineOpacity.value = 1;
+      titleOpacity.value = 1;
+      titleTranslateY.value = 0;
       return;
     }
 
@@ -109,7 +56,18 @@ export function AuthHeroBrand({
     containerOpacity.value = withTiming(1, { duration: 520 });
     containerTranslateY.value = withSpring(0, springPresets.settle);
     taglineOpacity.value = withDelay(800, withTiming(1, { duration: 420 }));
-  }, [isReducedMotion, glowOpacity, dividerScale, containerOpacity, containerTranslateY, taglineOpacity]);
+    titleOpacity.value = withDelay(360, withTiming(1, { duration: 420 }));
+    titleTranslateY.value = withDelay(360, withTiming(0, { duration: 420 }));
+  }, [
+    isReducedMotion,
+    glowOpacity,
+    dividerScale,
+    containerOpacity,
+    containerTranslateY,
+    taglineOpacity,
+    titleOpacity,
+    titleTranslateY,
+  ]);
 
   const glowStyle = useAnimatedStyle(() => ({
     shadowOpacity: glowOpacity.value,
@@ -127,6 +85,11 @@ export function AuthHeroBrand({
 
   const taglineStyle = useAnimatedStyle(() => ({
     opacity: taglineOpacity.value,
+  }));
+
+  const titleStyle = useAnimatedStyle(() => ({
+    opacity: titleOpacity.value,
+    transform: [{ translateY: titleTranslateY.value }],
   }));
 
   return (
@@ -166,16 +129,32 @@ export function AuthHeroBrand({
         <VexFocusMark size={72} />
       </Animated.View>
 
-      <View style={{ flexDirection: 'row' }}>
-        {title.split('').map((char, i) => (
-          <AnimatedLetter
-            key={`${char}-${i}`}
-            char={char}
-            index={i}
-            isReducedMotion={isReducedMotion}
-          />
-        ))}
-      </View>
+      <Animated.View
+        style={[
+          {
+            maxWidth: '100%',
+            paddingHorizontal: theme.spacing[2],
+          },
+          titleStyle,
+        ]}
+      >
+        <Text
+          color="text.primary"
+          textAlign="center"
+          variant="display"
+          letterSpacing={0}
+          style={{
+            flexShrink: 1,
+            fontSize: title.length > 8 ? 40 : 56,
+            lineHeight: title.length > 8 ? 46 : 60,
+            textShadowColor: 'rgba(0,229,255,0.15)',
+            textShadowOffset: { width: 0, height: 0 },
+            textShadowRadius: 24,
+          }}
+        >
+          {title}
+        </Text>
+      </Animated.View>
 
       <Animated.View
         style={[

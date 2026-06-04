@@ -9,6 +9,7 @@ import {
 } from '../shared/analytics';
 import { setupGlobalErrorHandler, setupRejectionHandler } from '../errors';
 import { IS_DEVELOPMENT } from '../constants/app';
+import { initializeSessionCompletionOrchestrator } from '../features/session-completion';
 
 let bootstrapped = false;
 let sessionRuntimeInitialized = false;
@@ -50,7 +51,7 @@ export const bootstrapApp = (): void => {
 
   bootstrapped = true;
   initializeCoreSystems();
-  debug.warn('Session completion orchestrator disabled: module graph incomplete');
+  initializeSessionCompletionOrchestrator();
   deferBootCall(initializeSessionRuntime);
 };
 

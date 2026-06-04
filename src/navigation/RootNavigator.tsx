@@ -25,6 +25,8 @@ import { markColdStart } from '../app/cold-start-performance';
 import { createLinkingConfig } from './linking-config';
 
 import type { ExtendedRootStackParams } from './types';
+import { RootAuthLoadingScreen } from './RootAuthLoadingScreen';
+import { createRootNavigationTheme } from './root-navigation-theme';
 
 function readOnboardingCompletedAt(user: unknown): string | null {
   if (!user || typeof user !== 'object' || !('onboardingCompletedAt' in user)) {
@@ -36,7 +38,13 @@ function readOnboardingCompletedAt(user: unknown): string | null {
 }
 
 export const RootNavigator: React.FC = () => {
-  const { completeOAuthCallback, isAuthenticated, checkAuth, user } = useAuthStore();
+  const {
+    completeOAuthCallback,
+    isAuthenticated,
+    isLoading: isAuthLoading,
+    checkAuth,
+    user,
+  } = useAuthStore();
   const [isAuthCheckComplete, setIsAuthCheckComplete] = useState(false);
   const [isNavigationReady, setIsNavigationReady] = useState(false);
   const { theme, isDark } = useTheme();
@@ -144,6 +152,19 @@ export const RootNavigator: React.FC = () => {
     userId: user?.id,
   });
 
+  const navigationTheme = createRootNavigationTheme(theme, isDark);
+
+  if (!isAuthCheckComplete || isAuthLoading) {
+    return (
+      <NavigationContainer ref={navigationRef} linking={linking} theme={navigationTheme}>
+        <RootAuthLoadingScreen
+          background={theme.colors.semantic.background}
+          primary={theme.colors.primary[500]}
+        />
+      </NavigationContainer>
+    );
+  }
+
   return (
     <NavigationContainer
       ref={navigationRef}
@@ -152,17 +173,7 @@ export const RootNavigator: React.FC = () => {
         markColdStart('root_navigator_ready');
         setIsNavigationReady(true);
       }}
-      theme={{
-        dark: isDark,
-        colors: {
-          primary: theme.colors.primary[500],
-          background: theme.colors.semantic.background,
-          card: theme.colors.semantic.surface,
-          text: theme.colors.text.primary,
-          border: theme.colors.semantic.border,
-          notification: theme.colors.error.DEFAULT,
-        },
-      }}
+      theme={navigationTheme}
     >
       <RootCrashBoundary
         colors={{

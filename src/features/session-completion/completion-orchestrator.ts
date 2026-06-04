@@ -130,6 +130,11 @@ export async function orchestrateSessionCompletion(
     });
     const finalLedger = subsystemResult.ledger;
     const degradedSystems = subsystemResult.degradedSystems;
+    setCompletionSyncState(
+      finalLedger.ledgerId,
+      degradedSystems,
+      finalLedger.offlineSyncStatus === 'pending_sync',
+    );
     const personalBest = await resolveCompletionPersonalBest(
       parsed.userId,
       finalLedger,

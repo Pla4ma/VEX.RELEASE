@@ -1,4 +1,5 @@
 import { PostHog, PostHogProvider } from 'posthog-react-native';
+import { Platform } from 'react-native';
 import { createDebugger } from '../../utils/debug';
 import {
   sanitizeAnalyticsProperties,
@@ -15,6 +16,7 @@ const ANALYTICS_DISABLED =
   process.env.EXPO_PUBLIC_ANALYTICS_DISABLED === 'true';
 const FORCE_DEV_ANALYTICS =
   process.env.EXPO_PUBLIC_ANALYTICS_FORCE_ENABLE === 'true';
+const CAN_INITIALIZE_POSTHOG = Platform.OS !== 'web';
 
 interface AnalyticsConfig {
   enabled: boolean;
@@ -33,6 +35,7 @@ class AnalyticsService {
     this.config = {
       enabled:
         Boolean(POSTHOG_API_KEY) &&
+        CAN_INITIALIZE_POSTHOG &&
         !ANALYTICS_DISABLED &&
         (!__DEV__ || FORCE_DEV_ANALYTICS),
       debug: __DEV__,

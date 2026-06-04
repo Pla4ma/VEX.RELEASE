@@ -13,6 +13,7 @@ export * from './headline-reward.types';
 
 // Core Services
 export * from './completion-orchestrator';
+export * from './completion-orchestrator-init';
 export * from './completion-experience';
 export * from './completion-personalization';
 
