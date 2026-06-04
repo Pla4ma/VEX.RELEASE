@@ -31,34 +31,56 @@ export {
 } from './navigation-deep-links';
 export type { DeepLinkValidationResult } from './navigation-deep-links';
 
-export function navigateToRootScreen(
+/**
+ * Type-safe navigation to a root screen.
+ * Uses a conditional call to avoid `as never` — when params are undefined
+ * we call the single-argument overload; otherwise the two-argument one.
+ */
+export function navigateToRootScreen<Route extends RootStackRoute>(
   navigation: NavigationProp<RootStackParams>,
-  route: RootStackRoute,
-  params?: RootStackParams[RootStackRoute],
+  route: Route,
+  params?: RootStackParams[Route],
 ): void {
   debug.info('Navigating to root screen: %s', route);
   if (params !== undefined) {
-    navigation.navigate(route as keyof RootStackParams & string, params as RootStackParams[typeof route]);
+    (navigation.navigate as (name: Route, params: RootStackParams[Route]) => void)(route, params);
   } else {
-    navigation.navigate(route as never);
+    (navigation.navigate as (name: Route) => void)(route);
   }
 }
-export function navigateToAuthScreen(
+
+/**
+ * Type-safe navigation to an auth sub-screen.
+ * `AuthStackRoute` is already a union of valid auth screen names,
+ * so we use it directly instead of `as string`.
+ */
+export function navigateToAuthScreen<Route extends AuthStackRoute>(
   navigation: NavigationProp<RootStackParams>,
-  route: AuthStackRoute,
-  params?: AuthStackParams[AuthStackRoute],
+  route: Route,
+  params?: AuthStackParams[Route],
 ): void {
   debug.info('Navigating to auth screen: %s', route);
-  navigation.navigate('Auth', { screen: route as string, params });
+  navigation.navigate('Auth', { screen: route, params });
 }
-export function navigateToMainTab(
+
+/**
+ * Type-safe navigation to a main tab.
+ * `MainTabRoute` is already a union of valid tab names,
+ * so we use it directly instead of `as string`.
+ */
+export function navigateToMainTab<Route extends MainTabRoute>(
   navigation: NavigationProp<RootStackParams>,
-  route: MainTabRoute,
-  params?: MainTabParams[MainTabRoute],
+  route: Route,
+  params?: MainTabParams[Route],
 ): void {
   debug.info('Navigating to main tab: %s', route);
-  navigation.navigate('Main', { screen: route as string, params });
+  navigation.navigate('Main', { screen: route, params });
 }
+
+/**
+ * Type-safe navigation to a main stack screen.
+ * Uses the same conditional-call pattern as navigateToRootScreen.
+ */
 export function navigateToMainStackScreen<Route extends MainStackRoute>(
   navigation: NavigationProp<MainStackParams>,
   route: Route,
@@ -66,9 +88,9 @@ export function navigateToMainStackScreen<Route extends MainStackRoute>(
 ): void {
   debug.info('Navigating to main stack screen: %s', route);
   if (params !== undefined) {
-    navigation.navigate(route as keyof MainStackParams & string, params as MainStackParams[Route]);
+    (navigation.navigate as (name: Route, params: MainStackParams[Route]) => void)(route, params);
   } else {
-    navigation.navigate(route as never);
+    (navigation.navigate as (name: Route) => void)(route);
   }
 }
 export function navigateToSessionStackScreen(

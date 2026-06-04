@@ -8,5 +8,5 @@ export interface NavigationEventDefinitions {
   'navigation:route:change': NavigationEvent;
   'navigation:back': { from: RouteName; to?: RouteName };
   'navigation:deepLink': { url: string; params?: Record<string, string> };
-  'navigation:navigate': { screen: string; params?: Record<string, unknown> };
+  'navigation:navigate': { screen: RouteName; params?: Record<string, string | number | boolean> };
 }

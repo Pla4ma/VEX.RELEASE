@@ -22,7 +22,7 @@ export function safeNavigate(
     | null
     | undefined,
   screen: string,
-  params?: Record<string, unknown>,
+  params?: { [key: string]: string | number | boolean | object | undefined },
 ): boolean {
   if (!isNavigationReady(navigation)) {
     debug.warn('Navigation not ready, cannot navigate to %s', screen);

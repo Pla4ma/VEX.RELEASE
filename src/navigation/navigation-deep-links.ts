@@ -19,16 +19,20 @@ const VALID_ROUTE_PATTERNS: Record<string, string[]> = {
   authRoutes: ['Login', 'Signup', 'ForgotPassword'],
 };
 
+/** Serializable param value types that are safe to pass through deep links */
+type SafeParamValue = string | number | boolean | null | undefined;
+export type SafeParamMap = { [key: string]: SafeParamValue | SafeParamValue[] | SafeParamMap };
+
 export interface DeepLinkValidationResult {
   isValid: boolean;
-  sanitizedParams?: Record<string, unknown>;
+  sanitizedParams?: SafeParamMap;
   error?: string;
   fallbackRoute?: string;
 }
 
 export function validateDeepLinkParams(
   route: string,
-  params?: Record<string, unknown>,
+  params?: SafeParamMap,
 ): DeepLinkValidationResult {
   const isValidRoute = Object.values(VALID_ROUTE_PATTERNS).some((routes) =>
     routes.includes(route),
@@ -57,9 +61,9 @@ export function validateDeepLinkParams(
 }
 
 function sanitizeParams(
-  params: Record<string, unknown>,
-): Record<string, unknown> {
-  const sanitized: Record<string, unknown> = {};
+  params: SafeParamMap,
+): SafeParamMap {
+  const sanitized: SafeParamMap = {};
   for (const [key, value] of Object.entries(params)) {
     if (typeof value === 'function' || typeof value === 'symbol') {
       continue;
@@ -84,7 +88,7 @@ function sanitizeParams(
 export function navigateWithValidation(
   navigation: NavigationProp<RootStackParams> | null | undefined,
   route: string,
-  params?: Record<string, unknown>,
+  params?: SafeParamMap,
 ): { success: boolean; error?: string; usedFallback?: boolean } {
   if (!navigation) {
     return { success: false, error: 'Navigation not available' };
@@ -98,7 +102,8 @@ export function navigateWithValidation(
     );
     if (validation.fallbackRoute) {
       try {
-        navigation.navigate(validation.fallbackRoute as string);
+        // Fallback route is validated against known routes above
+        navigation.navigate(validation.fallbackRoute as keyof RootStackParams & string);
         return { success: true, usedFallback: true };
       } catch (error) {
         Sentry.captureException(error, {
@@ -110,7 +115,8 @@ export function navigateWithValidation(
     return { success: false, error: validation.error };
   }
   try {
-    navigation.navigate(route as string, validation.sanitizedParams);
+    // Route has been validated against VALID_ROUTE_PATTERNS above
+    navigation.navigate(route as keyof RootStackParams & string, validation.sanitizedParams);
     return { success: true };
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
