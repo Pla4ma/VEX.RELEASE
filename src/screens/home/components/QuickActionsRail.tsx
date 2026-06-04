@@ -103,6 +103,9 @@ export function QuickActionsRail({
             pressed && { opacity: 0.8, transform: [{ scale: 0.98 }] },
           ]}
           android_ripple={{ color: theme.colors.primary[100] }}
+          accessibilityLabel={`${action.label} quick action`}
+          accessibilityRole="button"
+          accessibilityHint={`Starts a ${action.label.toLowerCase()} session`}
         >
           <View
             style={[

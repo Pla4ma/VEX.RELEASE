@@ -44,6 +44,8 @@ export const CreatePresetForm: React.FC<CreatePresetFormProps> = ({
             onChangeText={setName}
             placeholder="e.g., Deep Work"
             placeholderTextColor={lightColors.text.muted}
+            accessibilityLabel="Preset name"
+            accessibilityHint="Enter a name for your custom session preset"
           />
 
           <Text style={styles.inputLabel}>Duration (minutes)</Text>
@@ -54,6 +56,8 @@ export const CreatePresetForm: React.FC<CreatePresetFormProps> = ({
             keyboardType="numeric"
             placeholder="25"
             placeholderTextColor={lightColors.text.muted}
+            accessibilityLabel="Duration in minutes"
+            accessibilityHint="Enter the session duration in minutes"
           />
 
           <View style={styles.modalButtons}>

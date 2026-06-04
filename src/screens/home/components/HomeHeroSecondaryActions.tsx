@@ -21,6 +21,9 @@ export function HomeHeroSecondaryActions({
         onPress={onPress}
         style={buttonStyle}
         android_ripple={{ color: 'rgba(255,255,255,0.1)' }}
+        accessibilityLabel="Customize session"
+        accessibilityRole="button"
+        accessibilityHint="Opens session customization options"
       >
         <Icon
           name="settings"
@@ -40,6 +43,9 @@ export function HomeHeroSecondaryActions({
         onPress={onPress}
         style={buttonStyle}
         android_ripple={{ color: 'rgba(255,255,255,0.1)' }}
+        accessibilityLabel="Schedule session"
+        accessibilityRole="button"
+        accessibilityHint="Opens session scheduling options"
       >
         <Icon
           name="calendar"

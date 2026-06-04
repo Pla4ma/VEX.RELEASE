@@ -88,6 +88,7 @@ export function CreativeMoodLogger({
             }}
             accessibilityLabel={`${mood.label} mood`}
             accessibilityRole="button"
+            accessibilityHint={`Select ${mood.label.toLowerCase()} as your creative mood`}
           >
             <Text fontSize={24}>{mood.emoji}</Text>
             <Text variant="caption" color="text.secondary">
@@ -102,6 +103,7 @@ export function CreativeMoodLogger({
         style={{ marginTop: theme.spacing[3], alignSelf: 'flex-end' }}
         accessibilityLabel="Skip mood logging"
         accessibilityRole="button"
+        accessibilityHint="Skips the mood selection step"
       >
         <Text variant="caption" color="text.tertiary">
           Skip

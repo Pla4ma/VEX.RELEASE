@@ -36,9 +36,9 @@ export const NotificationCategoryToggle: React.FC<
         paddingHorizontal: 16,
       }}
       onPress={() => onToggle(item.id)}
-      accessibilityLabel="Notification category"
+      accessibilityLabel={`${item.title} notifications`}
       accessibilityRole="button"
-      accessibilityHint="Double tap to change setting"
+      accessibilityHint={`Toggle ${item.title.toLowerCase()} notifications`}
     >
       <Box
         width={40}
@@ -77,6 +77,7 @@ export const NotificationCategoryToggle: React.FC<
           true: theme.colors.primary[500] + '80',
         }}
         thumbColor={value ? theme.colors.primary[500] : lightColors.text.inverse}
+        accessibilityLabel={`${item.title} notification toggle`}
       />
     </Pressable>
   );

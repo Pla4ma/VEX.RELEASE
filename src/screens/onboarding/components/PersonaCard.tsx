@@ -73,9 +73,9 @@ export function PersonaCard({
     >
       <Pressable
         onPress={handlePress}
-        accessibilityLabel="Persona option"
+        accessibilityLabel={`${persona.name} persona`}
         accessibilityRole="button"
-        accessibilityHint="Double tap to activate"
+        accessibilityHint={`Select ${persona.name} as your coach persona`}
       >
         <Box
           p="lg"

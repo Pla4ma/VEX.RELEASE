@@ -45,6 +45,8 @@ export const SessionSummaryMoodSelector: React.FC<
         placeholderTextColor={lightColors.text.muted}
         value={reflection}
         onChangeText={onReflectionChange}
+        accessibilityLabel="Session reflection"
+        accessibilityHint="Write a short reflection about your session"
       />
     </View>
   );
