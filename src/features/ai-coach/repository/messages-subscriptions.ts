@@ -1,13 +1,54 @@
 import { getSupabaseClient } from '../../../config/supabase';
+import * as Sentry from '@sentry/react-native';
+import { createDebugger } from '../../../utils/debug';
+
+const debug = createDebugger('coach:realtime:subscriptions');
 
 const supabase = getSupabaseClient();
+
+/**
+ * Handle Supabase Realtime subscription status changes.
+ * Logs warnings and triggers query invalidation on reconnect.
+ */
+function handleSubscriptionStatus(
+  channelName: string,
+  status: string,
+  onReconnect?: () => void,
+): void {
+  if (status === 'SUBSCRIBED') {
+    debug.info('Channel %s subscribed', channelName);
+    return;
+  }
+
+  if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT') {
+    Sentry.addBreadcrumb({
+      category: 'realtime',
+      message: `Channel ${channelName} status: ${status}`,
+      level: 'warning',
+    });
+    debug.warn('Channel %s error status: %s', channelName, status);
+    return;
+  }
+
+  if (status === 'CLOSED') {
+    debug.info('Channel %s closed', channelName);
+    return;
+  }
+
+  // On reconnect, invalidate queries to fetch missed data
+  if (status === 'SUBSCRIBED' && onReconnect) {
+    onReconnect();
+  }
+}
 
 export function subscribeToCoachMessages(
   userId: string,
   onInsert: (payload: unknown) => void,
+  onReconnect?: () => void,
 ) {
+  const channelName = `coach-messages-${userId}`;
   return supabase
-    .channel(`coach-messages-${userId}`)
+    .channel(channelName)
     .on(
       'postgres_changes',
       {
@@ -18,15 +59,19 @@ export function subscribeToCoachMessages(
       },
       (payload) => onInsert(payload),
     )
-    .subscribe();
+    .subscribe((status) =>
+      handleSubscriptionStatus(channelName, status, onReconnect),
+    );
 }
 
 export function subscribeToCoachState(
   userId: string,
   onUpdate: (payload: unknown) => void,
+  onReconnect?: () => void,
 ) {
+  const channelName = `coach-state-${userId}`;
   return supabase
-    .channel(`coach-state-${userId}`)
+    .channel(channelName)
     .on(
       'postgres_changes',
       {
@@ -37,15 +82,19 @@ export function subscribeToCoachState(
       },
       (payload) => onUpdate(payload),
     )
-    .subscribe();
+    .subscribe((status) =>
+      handleSubscriptionStatus(channelName, status, onReconnect),
+    );
 }
 
 export function subscribeToComebackPlan(
   userId: string,
-  onAny: () => void,
+  onChange: () => void,
+  onReconnect?: () => void,
 ) {
+  const channelName = `coach-comeback-${userId}`;
   return supabase
-    .channel(`comeback-${userId}`)
+    .channel(channelName)
     .on(
       'postgres_changes',
       {
@@ -54,26 +103,32 @@ export function subscribeToComebackPlan(
         table: 'comeback_plans',
         filter: `user_id=eq.${userId}`,
       },
-      () => onAny(),
+      () => onChange(),
     )
-    .subscribe();
+    .subscribe((status) =>
+      handleSubscriptionStatus(channelName, status, onReconnect),
+    );
 }
 
 export function subscribeToRecommendations(
   userId: string,
-  onAny: () => void,
+  onChange: () => void,
+  onReconnect?: () => void,
 ) {
+  const channelName = `coach-recommendations-${userId}`;
   return supabase
-    .channel(`recommendations-${userId}`)
+    .channel(channelName)
     .on(
       'postgres_changes',
       {
         event: '*',
         schema: 'public',
-        table: 'session_recommendations',
+        table: 'coach_recommendations',
         filter: `user_id=eq.${userId}`,
       },
-      () => onAny(),
+      () => onChange(),
     )
-    .subscribe();
+    .subscribe((status) =>
+      handleSubscriptionStatus(channelName, status, onReconnect),
+    );
 }
