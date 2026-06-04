@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VEX App — Privacy Policy</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #0a0a0f;
+      color: #e4e4e7;
+      line-height: 1.7;
+      padding: 2rem 1rem;
+    }
+    .container { max-width: 720px; margin: 0 auto; }
+    h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.25rem; color: #fafafa; }
+    .subtitle { color: #a1a1aa; font-size: 0.875rem; margin-bottom: 2rem; }
+    h2 { font-size: 1.125rem; font-weight: 600; margin-top: 2rem; margin-bottom: 0.5rem; color: #f4f4f5; }
+    p { margin-bottom: 1rem; }
+    ul { margin-bottom: 1rem; padding-left: 1.5rem; }
+    li { margin-bottom: 0.375rem; }
+    strong { color: #fafafa; }
+    a { color: #818cf8; }
+    a:hover { color: #a5b4fc; }
+    hr { border: none; border-top: 1px solid #27272a; margin: 2rem 0; }
+    .footer { font-size: 0.8rem; color: #71717a; }
+    .effective { display: inline-block; background: #18181b; border: 1px solid #27272a; padding: 0.25rem 0.75rem; border-radius: 999px; font-size: 0.75rem; color: #a1a1aa; margin-bottom: 1.5rem; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>VEX Privacy Policy</h1>
+    <p class="subtitle">Focus differently.</p>
+    <div class="effective">Effective: May 21, 2026</div>
+
+    <p>This policy describes how VEX ("we," "our," or "us") collects, uses, and shares your personal information when you use the VEX mobile application (the "App"). By using VEX, you agree to the practices described in this policy.</p>
+
+    <p>If you have questions, contact us at <a href="mailto:jonathanlamitiepudens@gmail.com">jonathanlamitiepudens@gmail.com</a>.</p>
+
+    <hr />
+
+    <h2>1. Information We Collect</h2>
+
+    <h2>1.1 Account Information</h2>
+    <p>When you create an account, we collect your email address and a password (stored securely using bcrypt). This is managed through Supabase Auth. You may optionally provide a display name.</p>
+
+      <h2>1.2 Session &amp; Focus Data</h2>
+      <p>We record your focus sessions: start time, duration, lane (Study, Run, Project, or Clean), grade achieved, and the completion summary. This data powers your streaks, Focus Score, lane recommendations, and coach memory.</p>
+
+    <h2>1.3 Purchase Data</h2>
+    <p>In-app purchases and subscription status are processed through RevenueCat. We do not see or store your payment card details. RevenueCat shares your purchase receipt, transaction ID, and subscription expiry dates solely for entitlement verification.</p>
+
+    <h2>1.4 Crash &amp; Error Data</h2>
+    <p>We use Sentry to collect crash reports and performance data, including stack traces, device model, OS version, and the time of the error. This helps us fix bugs and improve stability.</p>
+
+    <h2>1.5 Usage Analytics</h2>
+    <p>We use PostHog to understand how the App is used — which screens you visit, which features you engage with, and approximate session duration. No personally identifiable information is sent to PostHog; events are tied to an anonymized user ID.</p>
+
+    <h2>1.6 Push Notification Tokens</h2>
+    <p>With your permission, we collect a push notification token (unique to your device) so we can send reminders, streak alerts, and coach messages. You can revoke this at any time in your device Settings.</p>
+
+      <h2>1.7 Coach Queries</h2>
+      <p>When you interact with the Coach, your messages are sent to Google Gemini API for processing. These are not used to train models. We store the conversation history locally and on Supabase to provide continuity.</p>
+
+    <h2>1.8 Local Storage</h2>
+    <p>We store certain data locally on your device using MMKV (for app preferences and offline queue) and expo-secure-store (for your auth session token). This data never leaves your device unless you explicitly sync it.</p>
+
+    <hr />
+
+    <h2>2. How We Use Your Information</h2>
+    <ul>
+      <li><strong>Operate the App:</strong> Create your account, record sessions, calculate streaks and focus scores, generate completion stories, and manage subscriptions.</li>
+      <li><strong>Personalize your experience:</strong> Tailor motivation style, coach tone, and lane recommendations based on your session history and preferences.</li>
+      <li><strong>Improve the App:</strong> Analyze crash reports and usage patterns to fix bugs and prioritize features.</li>
+      <li><strong>Communicate with you:</strong> Send push notifications you've opted into, and respond to support inquiries.</li>
+    </ul>
+
+    <hr />
+
+    <h2>3. Data Sharing</h2>
+    <p>We do not sell your personal information. We share data only with the service providers necessary to run the App:</p>
+    <ul>
+      <li><strong>Supabase</strong> — database, authentication, file storage (US-based)</li>
+      <li><strong>RevenueCat</strong> — purchase verification and subscription management (US-based)</li>
+      <li><strong>Sentry</strong> — crash and error reporting (US-based)</li>
+      <li><strong>PostHog</strong> — product analytics (US-based, self-hosted cloud)</li>
+      <li><strong>Google Gemini API</strong> — coach message processing (US-based)</li>
+    </ul>
+
+    <hr />
+
+    <h2>4. Data Retention</h2>
+    <p>We retain your data for as long as your account is active. If you delete your account, we delete or anonymize your personal data within 30 days, except where we are legally required to retain it (e.g., purchase records for tax purposes, retained for 7 years).</p>
+
+    <hr />
+
+    <h2>5. Your Rights</h2>
+    <p>Depending on your location, you may have the right to:</p>
+    <ul>
+      <li><strong>Access</strong> the personal data we hold about you</li>
+      <li><strong>Correct</strong> inaccurate data (you can update your email/settings in the App)</li>
+      <li><strong>Delete</strong> your account and associated data (available in App Settings)</li>
+      <li><strong>Export</strong> a copy of your data</li>
+      <li><strong>Withdraw consent</strong> for push notifications or analytics at any time</li>
+    </ul>
+    <p>To exercise these rights, contact us at <a href="mailto:jonathanlamitiepudens@gmail.com">jonathanlamitiepudens@gmail.com</a>.</p>
+
+    <hr />
+
+    <h2>6. Children's Privacy</h2>
+    <p>VEX is not intended for users under the age of 13. We do not knowingly collect personal information from children. If we become aware that a child under 13 has provided us with personal data, we will delete it.</p>
+
+    <hr />
+
+    <h2>7. Changes to This Policy</h2>
+    <p>We may update this policy from time to time. We will notify you of material changes via the App or by email. Continued use of VEX after changes take effect constitutes acceptance of the updated policy.</p>
+
+    <hr />
+
+    <h2>8. Contact</h2>
+    <p>
+      <strong>Developer:</strong> Jonathan Lamitie Pudens<br />
+      <strong>Email:</strong> <a href="mailto:jonathanlamitiepudens@gmail.com">jonathanlamitiepudens@gmail.com</a>
+    </p>
+
+    <hr class="footer" />
+    <p class="footer">VEX — Focus differently. This policy is hosted on GitHub Pages and was last updated May 21, 2026.</p>
+  </div>
+</body>
+</html>

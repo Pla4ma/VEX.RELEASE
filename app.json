@@ -18,9 +18,9 @@
       "bundleIdentifier": "com.jonathan.vex",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false,
-        "NSPrivacyPolicyURL": "https://vex.app/privacy",
-        "NSSupportURL": "https://vex.app/support",
-        "NSTermsOfServiceURL": "https://vex.app/terms"
+        "NSPrivacyPolicyURL": "https://pla4ma.github.io/VEX.RELEASE/privacy",
+        "NSSupportURL": "https://pla4ma.github.io/VEX.RELEASE/support",
+        "NSTermsOfServiceURL": "https://pla4ma.github.io/VEX.RELEASE/terms"
       },
       "privacyManifests": {
         "NSPrivacyTracking": false,
