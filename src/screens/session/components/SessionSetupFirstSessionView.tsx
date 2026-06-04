@@ -1,4 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
+import { KeyboardAvoidingView, Platform } from 'react-native';
 import type { CompositeNavigationProp } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
@@ -112,19 +113,24 @@ export function FirstSessionView({
   }
 
   return (
-    <Box flex={1} bg="background.primary">
-      <SessionStartStatusCard
-        offlineMessage={offlineMessage}
-        routeWarningMessage={null}
-        startErrorMessage={error}
-        onDismissStartError={() => setError(null)}
-      />
-      <ModeQuickContract
-        lane={lane}
-        isStarting={isStarting}
-        onStart={handleContractAnswers}
-        onBack={onBack}
-      />
-    </Box>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{ flex: 1 }}
+    >
+      <Box flex={1} bg="background.primary">
+        <SessionStartStatusCard
+          offlineMessage={offlineMessage}
+          routeWarningMessage={null}
+          startErrorMessage={error}
+          onDismissStartError={() => setError(null)}
+        />
+        <ModeQuickContract
+          lane={lane}
+          isStarting={isStarting}
+          onStart={handleContractAnswers}
+          onBack={onBack}
+        />
+      </Box>
+    </KeyboardAvoidingView>
   );
 }
