@@ -23,7 +23,7 @@ export async function fetchCurrentFocusScore(
   const { data, error } = await withResilience(
     supabase
       .from('focus_score_current')
-      .select('*')
+      .select('id,user_id,current_score,previous_score,band,factors,last_change_reason,top_positive_factor,top_negative_factor,created_at,updated_at')
       .eq('user_id', userId)
       .single(),
     { operation: 'fetchCurrentFocusScore' },
@@ -59,7 +59,7 @@ export async function upsertCurrentFocusScore(
         },
         { onConflict: 'user_id' },
       )
-      .select('*')
+      .select('id,user_id,current_score,previous_score,band,factors,last_change_reason,top_positive_factor,top_negative_factor,created_at,updated_at')
       .single(),
     { operation: 'upsertCurrentFocusScore' },
   );

@@ -20,7 +20,7 @@ export async function getMonthlyReportData(
     const supabase = getSupabaseClient();
     const { data, error } = await supabase
       .from('focus_monthly_reports')
-      .select('*')
+      .select('user_id,month,starting_score,ending_score,score_change,sessions_completed,grade,highlight')
       .eq('user_id', userId)
       .eq('month', yearMonth)
       .single();

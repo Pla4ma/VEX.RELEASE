@@ -12,7 +12,7 @@ type RemoteChange = { key: string; value: unknown; category: SettingCategory; ti
 export async function fetchSyncState(userId: string): Promise<SyncState | null> {
   const { data, error } = await supabase
     .from(TABLE_SYNC_STATE)
-    .select('*')
+    .select('user_id,status,last_sync_attempt,last_successful_sync,pending_changes,error_message')
     .eq('user_id', userId)
     .single();
   if (error) {
@@ -66,7 +66,7 @@ export async function clearPendingChange(userId: string, key: string): Promise<v
 export async function fetchPendingChanges(userId: string): Promise<PendingChange[]> {
   const { data, error } = await supabase
     .from(TABLE_PENDING_CHANGES)
-    .select('*')
+    .select('key,value,timestamp')
     .eq('user_id', userId)
     .order('timestamp', { ascending: true });
   if (error) {throw new Error(`Failed to fetch pending changes: ${error.message}`);}
@@ -104,7 +104,7 @@ export async function pushChanges(
 }
 
 export async function fetchRemoteChanges(userId: string, sinceTimestamp?: number): Promise<RemoteChange[]> {
-  let query = supabase.from(TABLE_SETTINGS).select('*').eq('user_id', userId);
+  let query = supabase.from(TABLE_SETTINGS).select('user_id,key,value,category,last_modified').eq('user_id', userId);
   if (sinceTimestamp) {query = query.gt('last_modified', sinceTimestamp);}
   const { data, error } = await query.order('last_modified', { ascending: true });
   if (error) {throw new Error(`Failed to fetch remote changes: ${error.message}`);}

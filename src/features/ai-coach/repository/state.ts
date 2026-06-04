@@ -20,7 +20,7 @@ export async function fetchCoachState(
 ): Promise<CoachState | null> {
   const { data, error } = await supabase
     .from(TABLE_NAME)
-    .select('*')
+    .select('user_id,current_state,previous_state,state_entered_at,persona_id,behavior_profile,last_intervention_at,interventions_today,mute_until,reduce_notifications')
     .eq('user_id', userId)
     .single();
 

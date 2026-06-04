@@ -14,7 +14,7 @@ export async function fetchRecommendations(
 ): Promise<SessionRecommendation[]> {
   const { data, error } = await supabase
     .from('session_recommendations')
-    .select('*')
+    .select('id,user_id,recommendation_type,title,description,priority,reason,metadata,status,created_at,expires_at,accepted_at,dismissed_at,suggested_duration,suggested_difficulty,reasoning,confidence,based_on')
     .eq('user_id', userId)
     .order('created_at', { ascending: false })
     .limit(limit);
@@ -30,7 +30,7 @@ export async function fetchActiveRecommendations(
 ): Promise<SessionRecommendation[]> {
   const { data, error } = await supabase
     .from('session_recommendations')
-    .select('*')
+    .select('id,user_id,recommendation_type,title,description,priority,reason,metadata,status,created_at,expires_at,accepted_at,dismissed_at,suggested_duration,suggested_difficulty,reasoning,confidence,based_on')
     .eq('user_id', userId)
     .eq('status', 'ACTIVE')
     .order('priority', { ascending: false })
@@ -48,7 +48,7 @@ export async function fetchRecommendationsByType(
 ): Promise<SessionRecommendation[]> {
   const { data, error } = await supabase
     .from('session_recommendations')
-    .select('*')
+    .select('id,user_id,recommendation_type,title,description,priority,reason,metadata,status,created_at,expires_at,accepted_at,dismissed_at,suggested_duration,suggested_difficulty,reasoning,confidence,based_on')
     .eq('user_id', userId)
     .eq('recommendation_type', type)
     .order('created_at', { ascending: false });

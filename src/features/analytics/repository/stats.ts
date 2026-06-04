@@ -14,7 +14,7 @@ const supabase = getSupabaseClient();
 export async function fetchAnalyticsPreferences(userId: string) {
   const { data, error } = await supabase
     .from('analytics_preferences')
-    .select('*')
+    .select('user_id,default_time_range,default_dashboard_id,email_reports_enabled,email_report_frequency,insight_notifications_enabled,auto_refresh_enabled,auto_refresh_interval,currency_display,timezone,updated_at')
     .eq('user_id', userId)
     .single();
   if (error && error.code !== 'PGRST116') {
@@ -41,7 +41,7 @@ export async function updateAnalyticsPreferences(
 export async function fetchAggregatedStats(userId: string, period: TimeRange) {
   const { data, error } = await supabase
     .from('aggregated_stats')
-    .select('*')
+    .select('user_id,period,generated_at,metrics,insights,patterns,top_performing')
     .eq('user_id', userId)
     .eq('period', period)
     .single();
@@ -71,7 +71,7 @@ export async function fetchDetectedPatterns(
 ) {
   let query = supabase
     .from('detected_patterns')
-    .select('*')
+    .select('id,user_id,type,metric,description,confidence,detected_at,start_date,end_date,related_events,recommendations')
     .eq('user_id', userId)
     .order('detected_at', { ascending: false });
   if (options?.since) {

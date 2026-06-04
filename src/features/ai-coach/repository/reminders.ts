@@ -40,7 +40,7 @@ export async function fetchPendingReminders(
 ): Promise<ReminderPlan[]> {
   const { data, error } = await supabase
     .from('reminder_plans')
-    .select('*')
+    .select('id,user_id,reminder_type,scheduled_for,message_id,priority,sent,sent_at,delivered,opened')
     .eq('sent', false)
     .lte('scheduled_for', beforeTime)
     .order('priority', { ascending: false })
@@ -116,7 +116,7 @@ export async function fetchActiveComebackPlan(
   const now = Date.now();
   const { data, error } = await supabase
     .from('comeback_plans')
-    .select('*')
+    .select('id,user_id,previous_streak,days_inactive,status,started_at,expires_at,sessions_completed,target_sessions,bonus_multiplier,messages')
     .eq('user_id', userId)
     .in('status', ['OFFERED', 'ACTIVE'])
     .gt('expires_at', now)

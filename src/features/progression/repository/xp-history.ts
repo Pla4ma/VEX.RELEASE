@@ -17,7 +17,7 @@ export async function fetchXpHistory(
 ): Promise<XpEntry[]> {
   let query = supabase
     .from('xp_history')
-    .select('*')
+    .select('id,amount,source,session_id,metadata,created_at')
     .eq('user_id', userId)
     .order('created_at', { ascending: false });
 

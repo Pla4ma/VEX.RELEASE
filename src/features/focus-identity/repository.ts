@@ -19,7 +19,7 @@ export async function getFocusProfile(
     const supabase = getSupabaseClient();
     const { data, error } = await supabase
       .from('focus_identity_profiles')
-      .select('*')
+      .select('id,user_id,current_score,previous_score,percentile_rank,band_label,band_title,identity_statement,streak_in_current_band,total_calculations,first_score_date,is_in_recovery,recovery_start_date,recovery_progress,pre_lapse_score,top_strength,top_weakness,recommended_actions,created_at,updated_at')
       .eq('user_id', userId)
       .single();
     if (error) {

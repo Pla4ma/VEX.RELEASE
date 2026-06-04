@@ -95,7 +95,7 @@ export async function getMemoriesByUser(
 ): Promise<CoachMemory[]> {
   const { data, error } = await supabase
     .from('coach_memories')
-    .select('*')
+    .select('id,user_id,type,title,description,occurred_at,metadata,referenced_count,last_referenced_at,deleted_at,evidence_hash,created_at,updated_at')
     .eq('user_id', userId)
     .is('deleted_at', null)
     .order('occurred_at', { ascending: false });

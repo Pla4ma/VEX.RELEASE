@@ -10,7 +10,7 @@ export async function fetchExistingComebackQuest(
 ): Promise<ComebackQuest | null> {
   const { data, error } = await supabase
     .from('comeback_quests')
-    .select('*')
+    .select('id,user_id,stage,days_absent,streak_before_break,quest1_completed,quest2_completed,quest3_completed,all_quests_completed,rewards_claimed,phoenix_badge_earned,created_at,updated_at')
     .eq('user_id', userId)
     .eq('all_quests_completed', false)
     .order('created_at', { ascending: false })

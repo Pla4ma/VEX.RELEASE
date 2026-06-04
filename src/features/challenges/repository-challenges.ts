@@ -23,7 +23,7 @@ export async function fetchChallengeById(
 ): Promise<Challenge | null> {
   const { data, error } = await supabase
     .from('challenges')
-    .select('*')
+    .select('id,season_id,type,category,title,description,icon_url,target_value,target_type,reward_type,reward_amount,reward_item_id,start_at,end_at,is_active,difficulty,xp_bonus,created_at')
     .eq('id', challengeId)
     .maybeSingle();
   if (error) {
@@ -38,7 +38,7 @@ export async function fetchActiveChallenges(
   const now = new Date().toISOString();
   const { data, error } = await supabase
     .from('challenges')
-    .select('*')
+    .select('id,season_id,type,category,title,description,icon_url,target_value,target_type,reward_type,reward_amount,reward_item_id,start_at,end_at,is_active,difficulty,xp_bonus,created_at')
     .eq('season_id', seasonId)
     .eq('is_active', true)
     .lte('start_at', now)
@@ -55,7 +55,7 @@ export async function fetchChallengesByType(
 ): Promise<Challenge[]> {
   const { data, error } = await supabase
     .from('challenges')
-    .select('*')
+    .select('id,season_id,type,category,title,description,icon_url,target_value,target_type,reward_type,reward_amount,reward_item_id,start_at,end_at,is_active,difficulty,xp_bonus,created_at')
     .eq('season_id', seasonId)
     .eq('type', type)
     .eq('is_active', true)
@@ -69,7 +69,7 @@ export async function fetchChallengesByType(
 export async function fetchChallengeTemplates(): Promise<ChallengeTemplate[]> {
   const { data, error } = await supabase
     .from('challenge_templates')
-    .select('*')
+    .select('id,category,type,title_template,description_template,min_target,max_target,min_reward,max_reward,reward_type,weight,min_level,requires_premium,requires_squad,is_active')
     .eq('is_active', true);
   if (error) {
     throw new RepositoryError('fetchChallengeTemplates', error);

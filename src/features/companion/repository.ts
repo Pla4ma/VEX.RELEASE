@@ -102,7 +102,7 @@ export async function getProfile(
     const parsed = z.string().uuid().parse(userId);
     const { data, error } = await getSupabaseClient()
       .from('companion_profiles')
-      .select('*')
+      .select('id,user_id,name,profile_type,phase,level,xp,total_focus_minutes,element,element_affinity,current_mood,session_progress,purity_score,energy_level,visual_seed,color_hue,particle_density,session_count,perfect_sessions,longest_focus_streak,next_evolution_at,special_ability_charge,equipped_items,unlocked_abilities,last_fed_at,last_petted_at,created_at,updated_at')
       .eq('user_id', parsed)
       .maybeSingle();
     if (error) {
@@ -124,7 +124,7 @@ export async function upsertProfile(
     const { data, error } = await getSupabaseClient()
       .from('companion_profiles')
       .upsert(parsed, { onConflict: 'user_id' })
-      .select('*')
+      .select('id,user_id,name,profile_type,phase,level,xp,total_focus_minutes,element,element_affinity,current_mood,session_progress,purity_score,energy_level,visual_seed,color_hue,particle_density,session_count,perfect_sessions,longest_focus_streak,next_evolution_at,special_ability_charge,equipped_items,unlocked_abilities,last_fed_at,last_petted_at,created_at,updated_at')
       .single();
     if (error) {
       throw new CompanionRepositoryError('upsertProfile', error);

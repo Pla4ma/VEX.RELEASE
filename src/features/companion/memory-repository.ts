@@ -40,7 +40,7 @@ export async function createMemory(
     const { data, error } = await getSupabaseClient()
       .from('companion_memories')
       .insert(row)
-      .select('*')
+      .select('id,user_id,body,created_at,grade,purity_score,session_date,session_id,streak_day,title,type')
       .single();
     if (error) {
       if (isDuplicateError(error)) {
@@ -61,7 +61,7 @@ export async function getMemories(userId: string): Promise<CompanionMemory[]> {
   try {
     const { data, error } = await getSupabaseClient()
       .from('companion_memories')
-      .select('*')
+      .select('id,user_id,body,created_at,grade,purity_score,session_date,session_id,streak_day,title,type')
       .eq('user_id', z.string().uuid().parse(userId))
       .order('created_at', { ascending: false })
       .limit(50);

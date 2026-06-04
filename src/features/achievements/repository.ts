@@ -20,7 +20,7 @@ export async function getUserAchievement(
 ): Promise<UserAchievement | null> {
   const { data, error } = await supabase
     .from('user_achievements')
-    .select('*')
+    .select('user_id,achievement_id,progress,max_progress,is_unlocked,unlocked_at,progress_history')
     .eq('user_id', userId)
     .eq('achievement_id', achievementId)
     .single();
@@ -46,7 +46,7 @@ export async function getAllUserAchievements(
 ): Promise<UserAchievement[]> {
   const { data, error } = await supabase
     .from('user_achievements')
-    .select('*')
+    .select('user_id,achievement_id,progress,max_progress,is_unlocked,unlocked_at,progress_history')
     .eq('user_id', userId);
 
   if (error || !data) {

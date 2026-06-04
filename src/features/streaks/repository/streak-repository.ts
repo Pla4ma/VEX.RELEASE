@@ -65,7 +65,7 @@ export async function fetchStreakEnhanced(
   return executeWithFallback('fetchStreak', async () => {
     const { data, error } = await supabase
       .from('streaks')
-      .select('*')
+      .select('id,user_id,current_days,longest_days,last_qualifying_session_at,current_day_completed_at,frozen_until,shields_available,grace_period_used,timezone,created_at,updated_at')
       .eq('user_id', userId)
       .single();
     if (error) {

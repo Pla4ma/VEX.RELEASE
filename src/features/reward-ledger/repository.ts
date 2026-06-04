@@ -64,7 +64,7 @@ export async function getRewardLedgerById(
 ): Promise<RewardLedgerRecord> {
   const { data, error } = await supabase
     .from('reward_ledger')
-    .select('*')
+    .select('id,user_id,idempotency_key,reward_type,amount,currency,status,source_event,created_at,delivered_at,failed_reason,expires_at')
     .eq('id', ledgerId)
     .single();
 
@@ -131,7 +131,7 @@ export async function fetchPendingRewards(
 ): Promise<RewardLedgerRecord[]> {
   const { data, error } = await supabase
     .from('reward_ledger')
-    .select('*')
+    .select('id,user_id,idempotency_key,reward_type,amount,currency,status,source_event,created_at,delivered_at,failed_reason,expires_at')
     .eq('user_id', userId)
     .eq('status', 'pending');
 

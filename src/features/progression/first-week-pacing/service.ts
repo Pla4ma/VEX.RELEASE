@@ -76,7 +76,7 @@ export async function getFirstWeekProgress(
 
     const { data, error } = await supabase
       .from('first_week_progress')
-      .select('*')
+      .select('user_id,current_session,sessions_completed,unlocked_features,next_unlock,total_xp_earned,level_progress,companion_unlocked,streak_explained,first_reward_earned,ai_coach_unlocked,weekly_milestone_earned,started_at,last_session_at')
       .eq('user_id', userId)
       .single();
 

@@ -76,7 +76,7 @@ export async function fetchRecentBehaviorSignals(
 ): Promise<BehaviorSignal[]> {
   const { data, error } = await supabase
     .from('behavior_signals')
-    .select('*')
+    .select('id,user_id,signal_type,value,confidence,timestamp,metadata,expires_at')
     .eq('user_id', userId)
     .order('timestamp', { ascending: false })
     .limit(limit);

@@ -7,7 +7,7 @@ const supabase = getSupabaseClient();
 export async function fetchExportJobs(userId: string, limit = 10) {
   const { data, error } = await supabase
     .from('export_jobs')
-    .select('*')
+    .select('id,user_id,status,format,data_types,date_range,filters,file_url,file_size,error_message,progress,created_at,completed_at,expires_at')
     .eq('user_id', userId)
     .order('created_at', { ascending: false })
     .limit(limit);

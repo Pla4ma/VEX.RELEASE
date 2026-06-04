@@ -15,7 +15,7 @@ export async function fetchInsights(
 ) {
   let query = supabase
     .from('insights')
-    .select('*')
+    .select('id,user_id,type,severity,title,description,metric,detected_at,expires_at,is_read,is_actioned,action_type,action_payload,related_metrics')
     .eq('user_id', userId)
     .order('detected_at', { ascending: false });
   if (options?.unreadOnly) {

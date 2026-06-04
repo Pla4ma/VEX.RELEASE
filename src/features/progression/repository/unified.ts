@@ -10,7 +10,7 @@ export async function fetchMasteryTrack(
 ): Promise<UnifiedMasteryState | null> {
   const { data, error } = await supabase
     .from(TABLE)
-    .select('*')
+    .select('user_id,duration_level,duration_xp,duration_total_xp,purity_level,purity_xp,purity_total_xp,consistency_level,consistency_xp,consistency_total_xp,comeback_level,comeback_xp,comeback_total_xp,boss_level,boss_xp,boss_total_xp,overall_level,overall_rank,updated_at,created_at')
     .eq('user_id', userId)
     .single();
   if (error) {
@@ -65,7 +65,7 @@ export async function incrementTrackXp(
     // Fallback if RPC doesn't exist
     const { data } = await supabase
       .from(TABLE)
-      .select('*')
+      .select('user_id,duration_level,duration_xp,duration_total_xp,purity_level,purity_xp,purity_total_xp,consistency_level,consistency_xp,consistency_total_xp,comeback_level,comeback_xp,comeback_total_xp,boss_level,boss_xp,boss_total_xp,overall_level,overall_rank,updated_at,created_at')
       .eq('user_id', userId)
       .single();
     if (data) {

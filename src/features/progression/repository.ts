@@ -12,7 +12,7 @@ export async function fetchProgression(
   userId: string,
 ): Promise<Progression | null> {
   const { data, error } = await withResilience(
-    supabase.from('progression').select('*').eq('user_id', userId).single(),
+    supabase.from('progression').select('id,user_id,level,xp,total_xp,next_level_threshold,last_level_up_at,created_at,updated_at').eq('user_id', userId).single(),
     { operation: 'fetchProgression' },
   );
   if (error) {

@@ -9,7 +9,7 @@ export async function fetchDifficultyProfile(
 ): Promise<DifficultyProfile | null> {
   const { data, error } = await supabase
     .from('difficulty_profiles')
-    .select('*')
+    .select('user_id,current_difficulty,recommended_difficulty,last_adjustment_at,adjustment_reason,success_rate_recent,success_rate_overall,trend')
     .eq('user_id', userId)
     .single();
   if (error) {

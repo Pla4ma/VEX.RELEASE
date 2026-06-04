@@ -64,7 +64,7 @@ async function updatePromiseById(
     .from('companion_promises')
     .update(patch)
     .eq('id', promiseId)
-    .select('*')
+    .select('id,user_id,created_at,promised_for,recommended_duration_minutes,recommended_mode,source_session_id,status,target_date,target_duration_minutes,target_mode,fulfilled_at,missed_at')
     .single();
   if (error) {
     throw new CompanionPromiseRepositoryError('update', error);
@@ -96,7 +96,7 @@ export async function createPromise(
     const { data, error } = await getSupabaseClient()
       .from('companion_promises')
       .insert(row)
-      .select('*')
+      .select('id,user_id,created_at,promised_for,recommended_duration_minutes,recommended_mode,source_session_id,status,target_date,target_duration_minutes,target_mode,fulfilled_at,missed_at')
       .single();
     if (error) {
       throw new CompanionPromiseRepositoryError('create', error);
@@ -119,7 +119,7 @@ export async function getRecentPromises(
 ): Promise<CompanionPromise[]> {
   const { data, error } = await getSupabaseClient()
     .from('companion_promises')
-    .select('*')
+    .select('id,user_id,created_at,promised_for,recommended_duration_minutes,recommended_mode,source_session_id,status,target_date,target_duration_minutes,target_mode,fulfilled_at,missed_at')
     .eq('user_id', userId)
     .order('created_at', { ascending: false })
     .limit(limit);

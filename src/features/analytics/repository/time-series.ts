@@ -30,7 +30,7 @@ export async function fetchTimeSeriesData(
   const { start, end } = getTimeRangeDates(timeRange);
   let query = supabase
     .from('analytics_events')
-    .select('*')
+    .select('user_id,metric_type,timestamp,value,dimension_type,dimension_value,metadata')
     .eq('user_id', userId)
     .eq('metric_type', metric)
     .gte('timestamp', start)
