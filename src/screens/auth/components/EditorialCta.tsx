@@ -120,8 +120,8 @@ export function EditorialCta({
         >
           {/* Warm vertical wash */}
           <LinearGradient
-            // Warm gradient endpoints for editorial wash — intentionally distinct from theme tokens
-            colors={['#2A1F12', theme.colors.semantic.editorialDeepBackground, '#15100A']}
+            // Warm gradient endpoints for editorial wash
+            colors={[theme.colors.semantic.editorialGradientTop, theme.colors.semantic.editorialDeepBackground, theme.colors.semantic.editorialGradientBottom]}
             locations={[0, 0.55, 1]}
             start={{ x: 0.5, y: 0 }}
             end={{ x: 0.5, y: 1 }}

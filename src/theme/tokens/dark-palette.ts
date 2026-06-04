@@ -111,6 +111,8 @@ export const darkColors: ColorPalette = {
     editorialWarmMuted: 'rgba(242,234,217,0.55)',
     editorialMuted: 'rgba(186,230,253,0.55)',
     editorialDeepBackground: '#1A1208',
+    editorialGradientTop: '#2A1F12',
+    editorialGradientBottom: '#15100A',
     liquidNight: '#070413',
     liquidAbyss: '#130A22',
     liquidMist: 'rgba(226,244,255,0.72)',

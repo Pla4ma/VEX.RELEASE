@@ -124,6 +124,8 @@ export const lightColors: ColorPalette = {
     editorialWarmMuted: 'rgba(15,23,42,0.55)',
     editorialMuted: 'rgba(15,23,42,0.45)',
     editorialDeepBackground: '#1A1208',
+    editorialGradientTop: '#2A1F12',
+    editorialGradientBottom: '#15100A',
     liquidNight: '#F7FBFF',
     liquidAbyss: '#DDEBFF',
     liquidMist: 'rgba(8,18,32,0.72)',
