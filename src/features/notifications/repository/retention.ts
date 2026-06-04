@@ -75,6 +75,29 @@ export async function hasScheduledReminderWithin(
   return (data ?? []).length > 0;
 }
 
+/** Shape of a Supabase user_challenges joined row for expiry candidates. */
+interface ChallengeExpiryRow {
+  user_id?: string;
+  challenge_id?: string;
+  current_value?: number;
+  expires_at?: string;
+  challenges?: {
+    title?: string;
+    target_value?: number;
+    [key: string]: unknown;
+  } | null;
+  [key: string]: unknown;
+}
+
+/** Shape of a Supabase streaks row for re-engagement candidates. */
+interface ReEngagementRow {
+  user_id?: string;
+  current_days?: number;
+  longest_days?: number;
+  last_qualifying_session_at?: string | number;
+  [key: string]: unknown;
+}
+
 export async function fetchChallengeExpiryCandidates(
   userId: string,
 ): Promise<ChallengeExpiryCandidate[]> {
@@ -94,12 +117,12 @@ export async function fetchChallengeExpiryCandidates(
     throw new RepositoryError('fetchChallengeExpiryCandidates', error);
   }
   return (data ?? []).map((row) => {
-    const record = row as Record<string, unknown>;
+    const record = row as ChallengeExpiryRow;
     const challenge = record.challenges;
     const challengeRecord =
       typeof challenge === 'object' && challenge !== null
-        ? (challenge as Record<string, unknown>)
-        : {};
+        ? challenge
+        : {} as ChallengeExpiryRow['challenges'];
     return ChallengeExpiryCandidateSchema.parse({
       userId: record.user_id,
       challengeId: record.challenge_id,
@@ -127,7 +150,7 @@ export async function fetchReEngagementCandidates(
   }
   return (data ?? [])
     .map((row) => {
-      const record = row as Record<string, unknown>;
+      const record = row as ReEngagementRow;
       const lastSessionAt = Number(record.last_qualifying_session_at);
       const currentDays = Number(record.current_days ?? 0);
       const longestDays = Number(record.longest_days ?? 0);

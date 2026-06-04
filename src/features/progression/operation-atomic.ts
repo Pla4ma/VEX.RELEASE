@@ -1,20 +1,8 @@
 import * as Sentry from '@sentry/react-native';
-import { z } from 'zod';
-import { getSupabaseClient } from '../../config/supabase';
+import { atomicAddXpRpc, type AtomicXpRpcResult } from './repository';
 import type { AddXpInput } from './schemas';
 
-const AtomicXpRpcResultSchema = z.object({
-  success: z.boolean(),
-  duplicate: z.boolean(),
-  xp_added: z.number(),
-  new_total_xp: z.number(),
-  new_level: z.number(),
-  previous_level: z.number(),
-  level_up: z.boolean(),
-  rewards: z.array(z.string()),
-});
-
-export type AtomicXpRpcResult = z.infer<typeof AtomicXpRpcResultSchema>;
+export type { AtomicXpRpcResult };
 
 export async function tryAtomicAddXp(
   userId: string,
@@ -23,16 +11,13 @@ export async function tryAtomicAddXp(
   idempotencyKey: string | undefined,
 ): Promise<AtomicXpRpcResult | null> {
   try {
-    const supabase = getSupabaseClient();
-    const { data, error } = await supabase.rpc('atomic_add_xp', {
-      p_user_id: userId,
-      p_amount: amount,
-      p_source: input.source,
-      p_session_id: input.sessionId ?? null,
-      p_idempotency_key: idempotencyKey ?? null,
-      p_metadata: input.metadata
-        ? JSON.parse(JSON.stringify(input.metadata))
-        : null,
+    const { data, error } = await atomicAddXpRpc({
+      userId,
+      amount,
+      source: input.source,
+      sessionId: input.sessionId,
+      idempotencyKey,
+      metadata: input.metadata,
     });
 
     if (error) {
@@ -42,7 +27,7 @@ export async function tryAtomicAddXp(
       return null;
     }
 
-    return AtomicXpRpcResultSchema.parse(data);
+    return data;
   } catch (error) {
     Sentry.captureException(error, {
       tags: { operation: 'tryAtomicAddXp' },

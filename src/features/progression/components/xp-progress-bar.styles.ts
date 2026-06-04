@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { createSheet } from '@/shared/ui/create-sheet';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 const BAR_HEIGHT = 24;
@@ -16,7 +17,7 @@ export const styles = createSheet({
     height: BAR_HEIGHT,
     borderRadius: 12,
     overflow: 'hidden',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: lightColors.semantic.background,
   },
   progressFill: {
     position: 'absolute',
@@ -68,18 +69,18 @@ export const styles = createSheet({
     position: 'absolute',
     right: 10,
     top: -30,
-    backgroundColor: '#ffd700',
+    backgroundColor: lightColors.semantic.vexGold,
     paddingHorizontal: 12,
     paddingVertical: 4,
     borderRadius: 12,
-    shadowColor: '#ffd700',
+    shadowColor: lightColors.semantic.vexGold,
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.5,
     shadowRadius: 10,
     elevation: 5,
   },
   levelUpText: {
-    color: '#1a1a2e',
+    color: lightColors.semantic.background,
     fontWeight: 'bold',
     fontSize: 11,
   },

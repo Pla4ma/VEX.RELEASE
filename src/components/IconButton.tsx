@@ -9,6 +9,7 @@ import { Pressable, type ViewStyle, type PressableProps } from 'react-native';
 import { Text } from './primitives';
 import { createSheet } from '@/shared/ui/create-sheet';
 import { buttonTap } from '../utils/haptics';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 export interface IconButtonProps extends PressableProps {
@@ -69,12 +70,12 @@ export const IconButton: React.FC<IconButtonProps> = ({
 const styles = createSheet({
   button: {
     borderRadius: 8,
-    backgroundColor: '#f1f5f9',
+    backgroundColor: lightColors.surface.button,
     alignItems: 'center',
     justifyContent: 'center',
   },
   primary: {
-    backgroundColor: '#6366f1',
+    backgroundColor: lightColors.semantic.primary,
   },
   ghost: {
     backgroundColor: 'transparent',

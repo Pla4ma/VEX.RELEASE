@@ -3,6 +3,7 @@ import { Pressable, Switch } from 'react-native';
 import type { Theme } from '../../theme';
 import { Box, Text } from '../../components/primitives';
 import { Icon } from '../../icons';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 export type SettingItemType = 'toggle' | 'link' | 'button' | 'select' | 'value';
@@ -132,7 +133,7 @@ function SettingRow({ item, theme }: { item: SettingItem; theme: Theme }) {
               true: theme.colors.semantic.vexCyanSoft,
             }}
             thumbColor={
-              item.value ? theme.colors.semantic.vexCyan : '#fff'
+              item.value ? theme.colors.semantic.vexCyan : lightColors.text.inverse
             }
           />
         )}

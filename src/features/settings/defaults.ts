@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { lightColors } from '@/theme/tokens/colors';
 
 import { UserPreferencesSchema, AppearanceSettingsSchema } from './core-schemas';
 import type { AppearanceSettings } from './core-schemas';
@@ -93,7 +94,7 @@ export function createDefaultAppearanceSettings(
   return AppearanceSettingsSchema.parse({
     userId,
     theme: 'system',
-    accentColor: '#6366f1',
+    accentColor: lightColors.semantic.primary,
     fontScale: 1,
     useSystemFont: true,
     reduceMotion: false,

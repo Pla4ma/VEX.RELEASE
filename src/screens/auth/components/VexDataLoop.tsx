@@ -12,6 +12,7 @@ import { Text } from '../../../components/primitives/Text';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { motionStagger } from '../../../theme/tokens/motion';
 import { HoloCard } from './HoloCard';
+import { lightColors } from '@/theme/tokens/colors';
 
 const STEPS = [
   { label: '01', title: 'Begin', detail: 'Open one protected block of focus' },
@@ -47,8 +48,8 @@ function StepDot({ active, isReducedMotion }: { active: boolean; isReducedMotion
         width: 8,
         height: 8,
         borderRadius: 4,
-        backgroundColor: active ? '#E0B870' : 'rgba(245,241,232,0.25)',
-        shadowColor: active ? '#E0B870' : 'transparent',
+        backgroundColor: active ? lightColors.semantic.vexGold : 'rgba(245,241,232,0.25)',
+        shadowColor: active ? lightColors.semantic.vexGold : 'transparent',
         shadowOffset: { width: 0, height: 0 },
         shadowOpacity: active ? 0.9 : 0,
         shadowRadius: 8,

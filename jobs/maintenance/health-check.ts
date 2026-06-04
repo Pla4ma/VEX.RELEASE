@@ -9,17 +9,20 @@
  */
 
 import { task } from '@trigger.dev/sdk';
-import * as Sentry from '@sentry/node';
+import { Sentry, initJobSentry } from '../shared/sentry';
+import { createClient } from '@supabase/supabase-js';
 import { MaintenanceJobInputSchema, MaintenanceJobOutputSchema } from '../../shared/jobs/schemas.ts';
 import { RETRY_CONFIGS, TIMEOUT_CONFIGS, JOB_IDS, SCHEDULE_CONFIGS } from '../../shared/jobs/job-constants.ts';
 import type { MaintenanceJobInput, MaintenanceJobOutput } from '../../shared/jobs/schemas.ts';
 import type { HealthCheckResult } from './health-check-types';
 import { checkDatabase, checkQueue, checkErrorRate, checkSeasons, checkEconomy } from './health-check-checks';
 
-Sentry.init({
-  dsn: process.env.SENTRY_DSN,
-  environment: process.env.NODE_ENV,
-});
+  initJobSentry();
+
+const supabase = createClient(
+  process.env.SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!,
+);
 
 export const maintenanceHealthCheck = task({
   id: JOB_IDS.MAINTENANCE_HEALTH_CHECK,
@@ -71,11 +74,6 @@ export const maintenanceHealthCheck = task({
     }
 
     await io.runTask('persist-status', async () => {
-      const { createClient } = await import('@supabase/supabase-js');
-      const supabase = createClient(
-        process.env.SUPABASE_URL!,
-        process.env.SUPABASE_SERVICE_ROLE_KEY!
-      );
       const { error } = await supabase
         .from('system_health')
         .upsert({

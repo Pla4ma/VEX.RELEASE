@@ -1,3 +1,4 @@
+import { lightColors } from '@/theme/tokens/colors';
 
 export type PurityLabel = 'Elite' | 'Good' | 'Okay' | 'Distracted';
 export type GradientState = { top: string; middle: string; bottom: string };
@@ -5,24 +6,24 @@ export type GradientState = { top: string; middle: string; bottom: string };
 export const DAILY_GOAL_SECONDS = 2 * 60 * 60;
 export const PERFECT_PARTICLE_COUNT = 8;
 const WARNING_GRADIENT = [
-  '#140e11',
-  '#231817',
-  '#090b12',
+  lightColors.semantic.backgroundMuted,
+  lightColors.semantic.backgroundMuted,
+  lightColors.semantic.backgroundMuted,
 ] as const;
 const FOCUS_GRADIENT = [
-  '#111827',
-  '#172033',
-  '#0a0f1a',
+  lightColors.semantic.backgroundMuted,
+  lightColors.semantic.backgroundElevated,
+  lightColors.semantic.backgroundMuted,
 ] as const;
 const ELITE_GRADIENT = [
-  '#091427',
-  '#101a31',
-  '#050914',
+  lightColors.semantic.backgroundMuted,
+  lightColors.semantic.backgroundMuted,
+  lightColors.semantic.backgroundMuted,
 ] as const;
 const BREAK_GRADIENT = [
-  '#072226',
-  '#0e2a2e',
-  '#051417',
+  lightColors.semantic.breakGradientDark,
+  lightColors.semantic.breakGradientMid,
+  lightColors.semantic.backgroundMuted,
 ] as const;
 
 export const formatTime = (seconds: number): string =>

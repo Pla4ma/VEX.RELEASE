@@ -1,3 +1,4 @@
+import { lightColors } from '@/theme/tokens/colors';
 import React, { useEffect } from 'react';
 import { View, Text } from 'react-native';
 import Animated, {
@@ -141,7 +142,7 @@ export const StreakFlameChain: React.FC<StreakFlameChainProps> = ({
                 width: `${(currentStreak / Math.max(longestStreak, 30)) * 100}%`,
                 backgroundColor: isAtRisk
                   ? getRiskColor(riskLevel)
-                  : '#ff6b35',
+                  : lightColors.semantic.warning,
               },
             ]}
           />

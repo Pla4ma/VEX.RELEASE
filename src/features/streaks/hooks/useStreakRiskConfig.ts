@@ -1,6 +1,7 @@
 import type { StreakRiskStatus } from '../streak-risk-monitor';
 import type { Streak, RiskLevel } from '../schemas';
 import { calculateStreakRisk } from '../streak-risk-monitor';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 export const QUERY_KEYS = {
@@ -36,15 +37,15 @@ export interface UseStreakRiskReturn {
 
 export function getFlameColor(healthPercent: number): string {
   if (healthPercent > 75) {
-    return '#4caf50';
+    return lightColors.semantic.success;
   }
   if (healthPercent > 50) {
-    return '#ff9800';
+    return lightColors.semantic.warning;
   }
   if (healthPercent > 25) {
-    return '#ff5722';
+    return lightColors.semantic.danger;
   }
-  return '#f44336';
+  return lightColors.semantic.danger;
 }
 
 export function getUrgencyLabel(riskLevel: RiskLevel): string {

@@ -3,6 +3,7 @@
  */
 
 import { createSheet } from '@/shared/ui/create-sheet';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 export const styles = createSheet({
@@ -15,12 +16,12 @@ export const styles = createSheet({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  startButton: { backgroundColor: '#4caf50' },
-  resumeButton: { backgroundColor: '#4caf50' },
-  pauseButton: { backgroundColor: '#ffa500' },
-  abandonButton: { backgroundColor: '#e94560' },
+  startButton: { backgroundColor: lightColors.semantic.success },
+  resumeButton: { backgroundColor: lightColors.semantic.success },
+  pauseButton: { backgroundColor: lightColors.semantic.warning },
+  abandonButton: { backgroundColor: lightColors.semantic.danger },
   disabled: { opacity: 0.5 },
-  buttonText: { color: '#fff', fontSize: 16, fontWeight: '600' },
+  buttonText: { color: lightColors.text.inverse, fontSize: 16, fontWeight: '600' },
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.7)',
@@ -29,7 +30,7 @@ export const styles = createSheet({
     padding: 24,
   },
   modalContent: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: lightColors.semantic.background,
     borderRadius: 16,
     padding: 24,
     width: '100%',
@@ -38,13 +39,13 @@ export const styles = createSheet({
   modalTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#e94560',
+    color: lightColors.semantic.danger,
     marginBottom: 12,
     textAlign: 'center',
   },
   modalText: {
     fontSize: 16,
-    color: '#9e9e9e',
+    color: lightColors.text.muted,
     textAlign: 'center',
     marginBottom: 24,
     lineHeight: 22,
@@ -54,12 +55,12 @@ export const styles = createSheet({
   cancelButton: {
     backgroundColor: 'transparent',
     borderWidth: 1,
-    borderColor: '#4caf50',
+    borderColor: lightColors.semantic.success,
   },
   cancelButtonText: {
-    color: '#4caf50',
+    color: lightColors.semantic.success,
     fontSize: 16,
     fontWeight: '600',
   },
-  confirmAbandonButton: { backgroundColor: '#e94560' },
+  confirmAbandonButton: { backgroundColor: lightColors.semantic.danger },
 });

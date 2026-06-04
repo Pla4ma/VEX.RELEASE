@@ -9,6 +9,7 @@ import { Text } from '../../../components/primitives/Text';
 import { Box } from '../../../components/primitives/Box';
 import { Icon } from '../../../icons';
 import { glow } from '../../../theme/tokens/elevation';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 export function StreakFlame({ days }: { days: number }): JSX.Element {
@@ -33,10 +34,10 @@ export function StreakFlame({ days }: { days: number }): JSX.Element {
     return 50;
   };
   const getFlameColor = (): string => {
-    if (days >= 100) {return '#f59e0b';}
-    if (days >= 60) {return '#a855f7';}
-    if (days >= 30) {return '#3b82f6';}
-    return '#ef4444';
+    if (days >= 100) {return lightColors.semantic.warning;}
+    if (days >= 60) {return lightColors.accent.purple;}
+    if (days >= 30) {return lightColors.accent.blue;}
+    return lightColors.semantic.danger;
   };
   const size = getFlameSize();
   const flameColor = getFlameColor();

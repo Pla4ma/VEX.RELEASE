@@ -1,3 +1,4 @@
+import { lightColors } from '@/theme/tokens/colors';
 ﻿import React, { memo, useEffect } from 'react';
 import { View } from 'react-native';
 import Animated, {
@@ -55,7 +56,7 @@ function Star({ spec }: { spec: ParticleSpec }): JSX.Element {
           width: spec.size,
           height: spec.size,
           borderRadius: spec.size / 2,
-          backgroundColor: '#FFFFFF',
+          backgroundColor: lightColors.text.inverse,
         },
         animatedStyle,
       ]}

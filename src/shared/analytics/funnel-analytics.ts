@@ -36,7 +36,7 @@ export function trackFunnelEvent(
     step_name: stepName,
     user_id: userId,
     ...metadata,
-  } as Record<string, unknown>);
+  } satisfies Record<string, unknown>);
 }
 
 export function calculateFunnelMetrics(

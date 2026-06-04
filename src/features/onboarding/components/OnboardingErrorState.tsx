@@ -10,6 +10,7 @@ import React from 'react';
 import { View, Text, Pressable } from 'react-native';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import { createSheet } from '@/shared/ui/create-sheet';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 interface OnboardingErrorStateProps {
@@ -90,7 +91,7 @@ export function OnboardingErrorState({
 const styles = createSheet({
   container: {
     flex: 1,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: lightColors.semantic.background,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 24,
@@ -106,12 +107,12 @@ const styles = createSheet({
   title: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#fff',
+    color: lightColors.text.inverse,
     marginBottom: 12,
   },
   message: {
     fontSize: 16,
-    color: '#9e9e9e',
+    color: lightColors.text.muted,
     textAlign: 'center',
     marginBottom: 32,
     lineHeight: 22,
@@ -122,13 +123,13 @@ const styles = createSheet({
     maxWidth: 300,
   },
   primaryButton: {
-    backgroundColor: '#e94560',
+    backgroundColor: lightColors.semantic.danger,
     paddingVertical: 16,
     borderRadius: 12,
     alignItems: 'center',
   },
   primaryButtonText: {
-    color: '#fff',
+    color: lightColors.text.inverse,
     fontSize: 16,
     fontWeight: '600',
   },
@@ -137,18 +138,18 @@ const styles = createSheet({
     alignItems: 'center',
   },
   secondaryButtonText: {
-    color: '#9e9e9e',
+    color: lightColors.text.muted,
     fontSize: 14,
   },
   debugContainer: {
     marginTop: 32,
     padding: 12,
-    backgroundColor: '#2a2a3e',
+    backgroundColor: lightColors.semantic.backgroundElevated,
     borderRadius: 8,
   },
   debugText: {
     fontSize: 12,
-    color: '#666',
+    color: lightColors.text.muted,
   },
 });
 

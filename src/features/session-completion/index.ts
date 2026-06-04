@@ -1,41 +1,23 @@
 /**
- * Session Completion Feature Barrel Export
+ * Session Completion Feature
+ *
+ * Barrel export for the session completion module.
  */
 
 // Schemas & Types
-export {
-  CompletionLedgerSchema,
-  SessionCompletionHeroSchema,
-  SessionCompletionNavigationParamsSchema,
-  SessionCompletionReturnPlanSchema,
-} from './schemas';
+export * from './schemas';
+export * from './grading-schemas';
+export * from './completion-experience-policy-schemas';
+export * from './completion-experience-types';
+export * from './headline-reward.types';
 
-export type {
-  CompletionLedger,
-  SessionCompletionHero,
-  SessionCompletionNavigationParams,
-  SessionCompletionReturnPlan,
-} from './schemas';
-
-// Service
-export {
-  buildSessionCompletionHero,
-  buildSessionCompletionReturnPlan,
-  buildCompletionPersonalization,
-  parseSessionCompletionParams,
-} from './service';
-
-// Repository
-export {
-  createCompletionLedger,
-  getCompletionLedgerByIdempotencyKey,
-  getCompletionLedgerBySessionId,
-  hasSessionBeenCompleted,
-  updateRewardStatus,
-} from './repository';
+// Core Services
+export * from './completion-orchestrator';
+export * from './completion-experience';
+export * from './completion-personalization';
 
 // Hooks
-export { useSessionCompleteController } from './hooks';
+export * from './hooks';
 
 // Route
-export { useSessionCompletionRouteState } from './route';
+export * from './route';

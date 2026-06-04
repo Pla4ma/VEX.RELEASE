@@ -4,6 +4,7 @@ import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
 import { Button } from '../../../components/primitives/Button';
 import { useTheme } from '../../../theme';
+import { lightColors } from '@/theme/tokens/colors';
 
 import { WeeklyReportStatsGrid } from './WeeklyReportStatsGrid';
 
@@ -52,7 +53,7 @@ export function WeeklyReportCard({
         bg="background.secondary"
         gap="lg"
         style={{
-          shadowColor: '#000',
+          shadowColor: lightColors.text.primary,
           shadowOffset: { width: 0, height: 2 },
           shadowOpacity: 0.05,
           shadowRadius: 8,

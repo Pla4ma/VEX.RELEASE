@@ -1,11 +1,10 @@
 import { useMemo } from 'react';
-import { useQuery } from '@tanstack/react-query';
 import {
   useCreateRecommendation,
   useUpdateRecommendationStatus,
+  useCoachRecommendations,
   type SessionRecommendation,
 } from '../../../features/ai-coach';
-import * as coachRepository from '../../../features/ai-coach/repository';
 import { getNextBestAction } from '../../../features/progression';
 import { useActiveStudyPlan } from '../../../features/content-study';
 import { useLearningExecutionLayer } from '../../../features/learning-execution';
@@ -16,14 +15,15 @@ import {
 } from '../../../features/liveops-config';
 import { getFocusedMinutesForToday, getNextUnlockFeature } from './home-controller-helpers';
 import type { EngagedModelInput } from './engaged-home-types';
+import type { StreakSummaryData, ProgressionData } from './home-query-types';
 
 export function useEngagedQueries(input: EngagedModelInput) {
   const { disclosure, historyQuery, progressionQuery, runtime, streakQuery, userId } = input;
 
-  const streakData = streakQuery.data as Record<string, unknown> | undefined;
-  const progData = progressionQuery.data as Record<string, unknown> | undefined;
-  const currentStreak = (streakData?.currentDays as number | undefined) ?? 0;
-  const currentXp = (progData?.xp as number | undefined) ?? 0;
+  const streakData = streakQuery.data as StreakSummaryData | undefined;
+  const progData = progressionQuery.data as ProgressionData | undefined;
+  const currentStreak = streakData?.currentDays ?? 0;
+  const currentXp = progData?.xp ?? 0;
   const todayFocusMinutes = historyQuery.history.reduce(
     (sum: number, entry) => sum + getFocusedMinutesForToday(entry),
     0,
@@ -41,12 +41,10 @@ export function useEngagedQueries(input: EngagedModelInput) {
   const learningExecutionLayer = useLearningExecutionLayer(activeStudyPlanQuery.data ?? null);
   const comebackQuery = useComebackState(runtime.canQueryComeback ? userId : null);
 
-  const recommendationsQuery = useQuery({
-    queryKey: ['coach', 'recommendations', userId],
-    queryFn: () => coachRepository.fetchActiveRecommendations(userId),
-    enabled: runtime.canQueryCoach && Boolean(userId) && !disclosure.isLoading,
-    staleTime: 1000 * 60 * 5,
-  });
+  const recommendationsQuery = useCoachRecommendations(
+    userId,
+    { enabled: runtime.canQueryCoach && !disclosure.isLoading },
+  );
 
   const primaryRecommendation = useMemo<SessionRecommendation | null>(
     () =>

@@ -7,6 +7,7 @@
 import React from 'react';
 import { View, type ViewStyle } from 'react-native';
 import { createSheet } from '@/shared/ui/create-sheet';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 export interface DividerProps {
@@ -25,7 +26,7 @@ export interface DividerProps {
 export const Divider: React.FC<DividerProps> = ({
   orientation = 'horizontal',
   thickness = 1,
-  color = '#e2e8f0',
+  color = lightColors.surface.pressed,
   style,
   spacing = 16,
 }) => {

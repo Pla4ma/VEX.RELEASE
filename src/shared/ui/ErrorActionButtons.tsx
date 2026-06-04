@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, Pressable, ActivityIndicator } from 'react-native';
+import { lightColors } from '@/theme/tokens/colors';
 
 import { styles } from './PremiumErrorRecovery.styles';
 
@@ -51,7 +52,7 @@ export const ErrorActionButtons: React.FC<ErrorActionButtonsProps> = ({
         accessibilityHint="Retries the failed operation"
       >
         {isRetrying ? (
-          <ActivityIndicator size="small" color={'#fff'} />
+          <ActivityIndicator size="small" color={lightColors.text.inverse} />
         ) : (
           <Text style={styles.retryButtonText}>
             {retryCount > 0 ? 'Try Again' : 'Retry Now'}

@@ -38,7 +38,7 @@ export {
   isFeatureAvailableForNavigation,
   isFeatureAvailableForQueries,
 } from './feature-access';
-export { FEATURE_DEPENDENCIES } from './feature-dependencies';
+export { FEATURE_DEPENDENCIES } from './FeatureFlagService';
 export { featureHealthRegistry } from './feature-health';
 export type { FeatureHealthCheck, FeatureHealthStatus } from './feature-health';
 export { registerFeatureHealthChecks } from './feature-health-checks';
@@ -50,6 +50,27 @@ export {
   getDegradedFeatures,
   setDegradedFeatures,
 } from './feature-access-store';
+// Final release map — re-exported from FeatureFlagService
+export {
+  isFeatureHidden,
+  isFeatureIncluded,
+  getFeatureStatus,
+  FINAL_RELEASE_FEATURE_MAP,
+  FINAL_RELEASE_INCLUDED_SYSTEMS,
+  FINAL_RELEASE_HIDDEN_SYSTEMS,
+  APP_STORE_READINESS_CHECKLIST,
+  FINAL_RELEASE_READINESS_CHECKLIST,
+  type FinalReleaseStatus,
+  type FinalReleaseFeatureEntry,
+} from './FeatureFlagService';
+// Degraded surfaces — re-exported from FeatureFlagService
+export {
+  DEGRADED_SURFACE_BLOCKS,
+  getDegradedBlockedSurfaces,
+  getDegradedFallbackSurface,
+  shouldBlockFullSurface,
+  type DegradedFeatureKey,
+} from './FeatureFlagService';
 
 export interface FeatureAccessResult {
   error: Error | null;

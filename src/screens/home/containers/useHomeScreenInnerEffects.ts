@@ -10,7 +10,7 @@ import { getOrchestratorHandlesCompletion } from '../../../session/analytics/Ses
 import { buildInterventionSessionParams } from '../buildInterventionSessionParams';
 import type { ExtendedRootStackParams } from '../../../navigation/types';
 import type { HomeController } from '../hooks/home-controller-types';
-import type { ActiveIntervention } from '../../../features/ai-coach/hooks';
+import type { ActiveIntervention } from '../../../features/ai-coach/hooks/useActiveIntervention';
 import type { ToastOptions } from '../../../shared/ui/components/Toast';
 import { buildToast } from './home-screen-inner-helpers';
 

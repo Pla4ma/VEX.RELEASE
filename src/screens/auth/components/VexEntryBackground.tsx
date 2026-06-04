@@ -8,6 +8,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { Starfield } from './Starfield';
+import { lightColors } from '@/theme/tokens/colors';
 
 export function VexEntryBackground(): JSX.Element {
   const { width, height } = useWindowDimensions();
@@ -41,7 +42,7 @@ export function VexEntryBackground(): JSX.Element {
   return (
     <View style={{ position: 'absolute', width, height, top: 0, left: 0 }}>
       <LinearGradient
-        colors={['#060810', '#070A12', '#0A0E1A']}
+        colors={[lightColors.semantic.auroraMidnight, lightColors.semantic.backgroundMuted, lightColors.semantic.backgroundMuted]}
         locations={[0, 0.5, 1]}
         style={{ position: 'absolute', width, height }}
         pointerEvents="none"
@@ -57,7 +58,7 @@ export function VexEntryBackground(): JSX.Element {
             backgroundColor: 'rgba(0,229,255,0.06)',
             top: height * 0.1,
             left: -width * 0.2,
-            shadowColor: '#00E5FF',
+            shadowColor: lightColors.semantic.vexCyan,
             shadowOffset: { width: 0, height: 0 },
             shadowOpacity: 0.3,
             shadowRadius: 100,
@@ -77,7 +78,7 @@ export function VexEntryBackground(): JSX.Element {
             backgroundColor: 'rgba(139,92,246,0.05)',
             bottom: -height * 0.15,
             right: -width * 0.3,
-            shadowColor: '#8B5CF6',
+            shadowColor: lightColors.accent.purple,
             shadowOffset: { width: 0, height: 0 },
             shadowOpacity: 0.25,
             shadowRadius: 120,
@@ -97,7 +98,7 @@ export function VexEntryBackground(): JSX.Element {
             backgroundColor: 'rgba(59,130,246,0.04)',
             top: height * 0.4,
             right: width * 0.1,
-            shadowColor: '#3B82F6',
+            shadowColor: lightColors.accent.blue,
             shadowOffset: { width: 0, height: 0 },
             shadowOpacity: 0.2,
             shadowRadius: 90,

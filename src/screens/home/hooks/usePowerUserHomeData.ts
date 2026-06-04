@@ -9,7 +9,7 @@ import {
 } from '../../../features/challenges/hooks';
 import { useFreezeStreak } from '../../../features/streaks/hooks';
 import { useSavedTomorrowPreview } from '../../../features/home-spine/hooks';
-import { useActiveIntervention } from '../../../features/ai-coach/hooks';
+import { useActiveIntervention } from '../../../features/ai-coach/hooks/useActiveIntervention';
 import { useNotificationBadge } from '../../../features/notifications/components/NotificationBadge';
 import { useToast } from '../../../shared/ui/components/Toast';
 import type { PowerUserHomeData } from './home-data-types';

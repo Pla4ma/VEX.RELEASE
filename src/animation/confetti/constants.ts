@@ -1,3 +1,5 @@
+import { lightColors } from '@/theme/tokens/colors';
+import { confettiColors } from '@/theme/tokens/decorative';
 /**
  * Confetti Constants
  *
@@ -5,14 +7,14 @@
  */
 
 export const CONFETTI_COLORS = [
-  '#FF6B6B',
-  '#4ECDC4',
-  '#45B7D1',
-  '#FFA07A',
-  '#98D8C8',
-  '#F7DC6F',
-  '#BB8FCE',
-  '#85C1E2',
+  lightColors.semantic.danger,
+  lightColors.accent.teal,
+  confettiColors.skyBlue,
+  confettiColors.salmon,
+  confettiColors.mint,
+  confettiColors.gold,
+  confettiColors.lavender,
+  confettiColors.paleBlue,
 ];
 
 export const PARTICLE_SHAPES = ['circle', 'square', 'triangle'] as const;
@@ -25,7 +27,7 @@ export const FRICTION = 0.98;
 export const particleStyle = { position: 'absolute' as const };
 
 export const shapeStyle = {
-  shadowColor: '#000',
+  shadowColor: lightColors.text.primary,
   shadowOffset: { width: 0, height: 2 },
   shadowOpacity: 0.2,
   shadowRadius: 3,
@@ -39,7 +41,7 @@ export const triangleStyle = {
   borderStyle: 'solid' as const,
   borderLeftColor: 'transparent' as const,
   borderRightColor: 'transparent' as const,
-  shadowColor: '#000',
+  shadowColor: lightColors.text.primary,
   shadowOffset: { width: 0, height: 2 },
   shadowOpacity: 0.2,
   shadowRadius: 3,

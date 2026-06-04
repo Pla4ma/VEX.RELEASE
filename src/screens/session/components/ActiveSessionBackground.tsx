@@ -10,6 +10,7 @@ import Animated, {
 } from 'react-native-reanimated';
 
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
+import { lightColors } from '@/theme/tokens/colors';
 
 type ActiveSessionBackgroundProps = {
   accentOverlay: string;
@@ -65,7 +66,7 @@ export function ActiveSessionBackground({
               width: width * 0.8,
               height: width * 0.8,
               borderRadius: (width * 0.8) / 2,
-              backgroundColor: `${accentColor || '#00E5FF'}10`,
+              backgroundColor: `${accentColor || lightColors.semantic.vexCyan}10`,
               top: height * 0.15,
               left: width * 0.1,
             },

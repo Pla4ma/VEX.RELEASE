@@ -17,6 +17,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { useReducedMotion } from '../../../../hooks/useReducedMotion';
+import { lightColors } from '@/theme/tokens/colors';
 
 type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger';
 type ButtonSize = 'sm' | 'md' | 'lg';
@@ -144,11 +145,11 @@ export function IconButton({
   );
 }
 const variantStyles = {
-  primary: { indicatorColor: '#fff' },
-  secondary: { indicatorColor: '#4ecdc4' },
-  outline: { indicatorColor: '#4ecdc4' },
-  ghost: { indicatorColor: '#4ecdc4' },
-  danger: { indicatorColor: '#fff' },
+  primary: { indicatorColor: lightColors.text.inverse },
+  secondary: { indicatorColor: lightColors.accent.teal },
+  outline: { indicatorColor: lightColors.accent.teal },
+  ghost: { indicatorColor: lightColors.accent.teal },
+  danger: { indicatorColor: lightColors.text.inverse },
 };
 const styles = createSheet({
   base: {
@@ -165,20 +166,20 @@ const styles = createSheet({
   mdText: { fontSize: 16 },
   lg: { paddingVertical: 16, paddingHorizontal: 28 },
   lgText: { fontSize: 18 },
-  primary: { backgroundColor: '#4ecdc4' },
-  primaryText: { color: '#fff' },
-  secondary: { backgroundColor: '#f0fdfb' },
-  secondaryText: { color: '#4ecdc4' },
+  primary: { backgroundColor: lightColors.accent.teal },
+  primaryText: { color: lightColors.text.inverse },
+  secondary: { backgroundColor: lightColors.success[50] },
+  secondaryText: { color: lightColors.accent.teal },
   outline: {
     backgroundColor: 'transparent',
     borderWidth: 2,
-    borderColor: '#4ecdc4',
+    borderColor: lightColors.accent.teal,
   },
-  outlineText: { color: '#4ecdc4' },
+  outlineText: { color: lightColors.accent.teal },
   ghost: { backgroundColor: 'transparent' },
-  ghostText: { color: '#666' },
-  danger: { backgroundColor: '#ff6b6b' },
-  dangerText: { color: '#fff' },
+  ghostText: { color: lightColors.text.muted },
+  danger: { backgroundColor: lightColors.semantic.danger },
+  dangerText: { color: lightColors.text.inverse },
   iconButton: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -187,13 +188,13 @@ const styles = createSheet({
   smIconButton: { width: 32, height: 32 },
   mdIconButton: { width: 44, height: 44 },
   lgIconButton: { width: 56, height: 56 },
-  primaryIconButton: { backgroundColor: '#4ecdc4' },
-  secondaryIconButton: { backgroundColor: '#f0fdfb' },
+  primaryIconButton: { backgroundColor: lightColors.accent.teal },
+  secondaryIconButton: { backgroundColor: lightColors.success[50] },
   outlineIconButton: {
     backgroundColor: 'transparent',
     borderWidth: 2,
-    borderColor: '#4ecdc4',
+    borderColor: lightColors.accent.teal,
   },
   ghostIconButton: { backgroundColor: 'transparent' },
-  dangerIconButton: { backgroundColor: '#ff6b6b' },
+  dangerIconButton: { backgroundColor: lightColors.semantic.danger },
 });

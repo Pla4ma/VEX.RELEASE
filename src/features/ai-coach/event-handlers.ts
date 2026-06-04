@@ -1,4 +1,4 @@
-import * as service from './service';
+import * as service from './services/service';
 import { generateAndSendMessage } from './message-helpers';
 
 export async function handleLevelUp(payload: {

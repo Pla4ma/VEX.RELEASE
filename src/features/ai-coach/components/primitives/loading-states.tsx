@@ -11,6 +11,7 @@ import Animated, {
 
 import { styles } from './progress-state.styles';
 import { ProgressBar } from './progress-indicators';
+import { lightColors } from '@/theme/tokens/colors';
 
 interface LoadingStateProps {
   message?: string;
@@ -27,7 +28,7 @@ export function LoadingState({
 }: LoadingStateProps) {
   return (
     <View style={styles.loadingContainer}>
-      <ActivityIndicator size="large" color={'#4ecdc4'} />
+      <ActivityIndicator size="large" color={lightColors.accent.teal} />
       <Text style={styles.loadingMessage}>{message}</Text>
       {submessage && <Text style={styles.loadingSubmessage}>{submessage}</Text>}
       {showProgress && progress !== undefined && (

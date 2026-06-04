@@ -18,6 +18,7 @@ import {
   type MessageFrequency,
 } from './CoachFrequencySelector';
 import { CoachToneSelector, type CoachLanguage } from './CoachToneSelector';
+import { lightColors } from '@/theme/tokens/colors';
 
 type Props = NativeStackScreenProps<SettingsStackParams, 'CoachSettings'>;
 
@@ -121,7 +122,7 @@ export const CoachSettingsScreen: React.FC<Props> = ({ navigation }) => {
             onPress={handleResetMemory}
             style={{
               backgroundColor:
-                theme.colors.error[50] || '#fef2f2',
+                theme.colors.error[50] || lightColors.error[50],
               paddingVertical: 16,
               paddingHorizontal: 16,
               borderRadius: 12,

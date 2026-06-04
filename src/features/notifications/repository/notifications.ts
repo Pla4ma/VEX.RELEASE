@@ -21,8 +21,27 @@ export async function fetchUnreadNotificationsCount(
   return UnreadNotificationsCountSchema.parse(count ?? 0);
 }
 
+/** Shape of a Supabase notifications row. */
+interface NotificationRow {
+  id?: string | number;
+  type?: string;
+  notification_type?: string;
+  title?: string;
+  message?: string;
+  body?: string;
+  created_at?: string | number;
+  timestamp?: string | number;
+  read?: boolean;
+  is_read?: boolean;
+  avatar?: string;
+  action_text?: string;
+  action_route?: string;
+  action_params?: Record<string, unknown>;
+  [key: string]: unknown;
+}
+
 function mapNotificationRow(
-  row: Record<string, unknown>,
+  row: NotificationRow,
 ): NotificationCenterItem {
   const rawType = String(row.type || row.notification_type || '').toUpperCase();
   const parsed = NotificationCenterItemSchema.shape.type.safeParse(rawType);
@@ -40,7 +59,7 @@ function mapNotificationRow(
       typeof row.action_route === 'string' ? row.action_route : undefined,
     actionParams:
       typeof row.action_params === 'object' && row.action_params !== null
-        ? (row.action_params as Record<string, unknown>)
+        ? row.action_params
         : undefined,
   });
 }
@@ -58,7 +77,7 @@ export async function fetchNotificationCenterItems(
     throw new RepositoryError('fetchNotificationCenterItems', error);
   }
   return (data ?? []).map((row) =>
-    mapNotificationRow(row as Record<string, unknown>),
+    mapNotificationRow(row as NotificationRow),
   );
 }
 

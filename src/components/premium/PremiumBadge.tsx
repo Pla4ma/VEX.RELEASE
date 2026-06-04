@@ -12,6 +12,7 @@ import Animated, {
 import { Text } from '../primitives/Text';
 import { useTheme } from '../../theme';
 import { createSheet } from '@/shared/ui/create-sheet';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 export interface PremiumBadgeProps {
@@ -174,7 +175,7 @@ const styles = createSheet({
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 2,
-    shadowColor: '#000',
+    shadowColor: lightColors.text.primary,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.15,
     shadowRadius: 4,
@@ -185,7 +186,7 @@ const styles = createSheet({
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 2,
-    shadowColor: '#000',
+    shadowColor: lightColors.text.primary,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 4,

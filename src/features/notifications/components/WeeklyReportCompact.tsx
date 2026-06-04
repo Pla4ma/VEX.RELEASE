@@ -2,6 +2,7 @@ import React from 'react';
 import { Pressable } from 'react-native';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 export interface WeeklyReportCompactProps {
@@ -33,8 +34,8 @@ export function WeeklyReportCompact({
         style={{
           borderLeftWidth: 4,
           borderLeftColor: isImprovement
-            ? '#22c55e'
-            : '#f59e0b',
+            ? lightColors.semantic.success
+            : lightColors.semantic.warning,
         }}
       >
         <Text fontSize={24}>📊</Text>

@@ -10,6 +10,7 @@ import React from 'react';
 import { View, Text, Pressable } from 'react-native';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import { createSheet } from '@/shared/ui/create-sheet';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 interface StreakRiskWarningProps {
@@ -43,13 +44,13 @@ export function StreakRiskWarning({
   const getColor = () => {
     switch (riskLevel) {
       case 'CRITICAL':
-        return '#f44336';
+        return lightColors.semantic.danger;
       case 'HIGH':
-        return '#ff9800';
+        return lightColors.semantic.warning;
       case 'MEDIUM':
-        return '#ffc107';
+        return lightColors.semantic.warning;
       default:
-        return '#4caf50';
+        return lightColors.semantic.success;
     }
   };
 
@@ -97,7 +98,7 @@ export function StreakRiskWarning({
 
 const styles = createSheet({
   container: {
-    backgroundColor: '#2a2a3e',
+    backgroundColor: lightColors.semantic.backgroundElevated,
     borderRadius: 12,
     padding: 16,
     margin: 16,
@@ -115,7 +116,7 @@ const styles = createSheet({
   message: {
     flex: 1,
     fontSize: 15,
-    color: '#fff',
+    color: lightColors.text.inverse,
     fontWeight: '600',
   },
   button: {
@@ -124,7 +125,7 @@ const styles = createSheet({
     alignItems: 'center',
   },
   buttonText: {
-    color: '#fff',
+    color: lightColors.text.inverse,
     fontSize: 16,
     fontWeight: '600',
   },
@@ -133,7 +134,7 @@ const styles = createSheet({
     alignItems: 'center',
   },
   dismissText: {
-    color: '#666',
+    color: lightColors.text.muted,
     fontSize: 13,
   },
 });

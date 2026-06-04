@@ -33,11 +33,13 @@ export function convertToCSV(data: unknown): string {
   if (data.length === 0) {
     return '';
   }
-  const headers = Object.keys(data[0] as object);
+  const firstRow = data[0] as Record<number | string, unknown>;
+  const headers = Object.keys(firstRow);
   const rows = data.map((row) =>
     headers
       .map((header) => {
-        const value = (row as Record<string, unknown>)[header];
+        const entry = row as Record<number | string, unknown>;
+        const value = entry[header];
         if (
           typeof value === 'string' &&
           (value.includes(',') || value.includes('"'))

@@ -7,7 +7,7 @@ import { trackInterventionActioned } from '../../../features/ai-coach/analytics'
 import { eventBus } from '../../../events';
 import type { ExtendedRootStackParams } from '../../../navigation/types';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import type { ActiveIntervention } from '../../../features/ai-coach/hooks';
+import type { ActiveIntervention } from '../../../features/ai-coach/hooks/useActiveIntervention';
 import { buildInterventionSessionParams } from '../buildInterventionSessionParams';
 
 interface HomeInterventionBannerProps {

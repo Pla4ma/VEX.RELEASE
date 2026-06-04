@@ -8,6 +8,7 @@ import Animated, {
 import { Text } from '../../../components/primitives/Text';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { useTheme } from '../../../theme';
+import { lightColors } from '@/theme/tokens/colors';
 
 function StatusDot(): React.JSX.Element {
   const { isReducedMotion } = useReducedMotion();
@@ -21,11 +22,21 @@ function StatusDot(): React.JSX.Element {
     transform: [{ scale: 0.76 + p.value * 0.24 }],
   }));
   return (
-    <Animated.View style={[{
-      width: 6, height: 6, borderRadius: 3, backgroundColor: '#4ADE80',
-      shadowColor: '#4ADE80', shadowOffset: { width: 0, height: 0 },
-      shadowOpacity: 0.50, shadowRadius: 6,
-    }, s]} />
+    <Animated.View
+      style={[
+        {
+          width: 6,
+          height: 6,
+          borderRadius: 3,
+          backgroundColor: lightColors.semantic.success,
+          shadowColor: lightColors.semantic.success,
+          shadowOffset: { width: 0, height: 0 },
+          shadowOpacity: 0.8,
+          shadowRadius: 6,
+        },
+        s,
+      ]}
+    />
   );
 }
 
@@ -114,50 +125,56 @@ export function VexBrandHeader(): React.JSX.Element {
           opacity={0.54} letterSpacing={0.3}>System active</Text>
       </View>
 
-      {/*===== CUSTOM GEOMETRIC WORDMARK =====*/}
-      <View style={{ marginBottom: 10, alignItems: 'center' }}>
-        <View pointerEvents="none" style={{
-          position: 'absolute', top: -10, bottom: -10,
-          alignSelf: 'center', width: 210, borderRadius: 9999,
-          backgroundColor: 'rgba(100,40,240,0.10)',
-          shadowColor: '#8B5CF6', shadowOffset: { width: 0, height: 0 },
-          shadowOpacity: 0.70, shadowRadius: 76,
-        }} />
-        <View pointerEvents="none" style={{
-          position: 'absolute', bottom: -6, alignSelf: 'center',
-          width: 120, height: 26, borderRadius: 9999,
-          backgroundColor: 'rgba(255,138,36,0.06)',
-          shadowColor: '#FF8A24', shadowOffset: { width: 0, height: 3 },
-          shadowOpacity: 0.30, shadowRadius: 44,
-        }} />
-
-        <Svg width={270} height={78} viewBox="0 0 270 78">
-          <Defs>
-            <SvgLG id="vexGl" x1="0%" y1="0%" x2="100%" y2="100%">
-              <Stop offset="0%" stopColor="#A66BFF" stopOpacity="0.65" />
-              <Stop offset="50%" stopColor="#8B5CF6" stopOpacity="0.20" />
-              <Stop offset="100%" stopColor="#FF8A3D" stopOpacity="0.40" />
-            </SvgLG>
-            <SvgLG id="vexTx" x1="0%" y1="0%" x2="0%" y2="100%">
-              <Stop offset="0%" stopColor="#FFFFFF" stopOpacity="1" />
-              <Stop offset="50%" stopColor="#FFFFFF" stopOpacity="0.98" />
-              <Stop offset="100%" stopColor="#E8DFFA" stopOpacity="0.90" />
-            </SvgLG>
-          </Defs>
-
-          <SvgText
-            x="135" y="55" textAnchor="middle"
-            fontSize={52} fontWeight="800" letterSpacing={5}
-            fontFamily="System"
-            fill="url(#vexTx)"
-            opacity={1}
+      {/* VEX — layered premium wordmark */}
+      <View style={{ position: 'relative', alignItems: 'center' }}>
+        {/* Violet outer glow layer */}
+        <View
+          pointerEvents="none"
+          style={{
+            position: 'absolute',
+            shadowColor: lightColors.accent.purple,
+            shadowOffset: { width: 0, height: 0 },
+            shadowOpacity: 0.55,
+            shadowRadius: 36,
+          }}
+        >
+          <Text
+            color="semantic.liquidText"
+            fontSize={40}
+            fontWeight="800"
+            letterSpacing={5}
+            lineHeight={48}
+            textAlign="center"
+            style={{ opacity: 0 }}
           >
             VEX
-          </SvgText>
+          </Text>
+        </View>
 
-          <Rect x="50" y="8" width="170" height="0.6" rx="0.3" fill="rgba(166,107,255,0.35)" />
-          <Rect x="50" y="68" width="170" height="0.6" rx="0.3" fill="rgba(255,138,36,0.35)" />
-        </Svg>
+        {/* Orange core reflection underneath */}
+        <View
+          pointerEvents="none"
+          style={{
+            position: 'absolute',
+            top: 8,
+            shadowColor: lightColors.semantic.brandOrange,
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.15,
+            shadowRadius: 20,
+          }}
+        >
+          <Text
+            color="semantic.liquidText"
+            fontSize={40}
+            fontWeight="800"
+            letterSpacing={5}
+            lineHeight={48}
+            textAlign="center"
+            style={{ opacity: 0 }}
+          >
+            VEX
+          </Text>
+        </View>
       </View>
 
       {/* Violet under-glow bar — second pass glow beneath mark */}

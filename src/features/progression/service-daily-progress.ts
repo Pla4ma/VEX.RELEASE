@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { captureSilentFailure } from '../../utils/silent-failure';
 import { fetchXpHistory } from './repository';
-import { fetchXpStats } from './repository/enhanced';
+import { fetchXpStats } from './repository/progression-repository';
 
 const DailyProgressSchema = z.object({
   date: z.number(),

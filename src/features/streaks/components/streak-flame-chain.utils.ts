@@ -1,17 +1,18 @@
+import { lightColors } from '@/theme/tokens/colors';
 
 
 export const getRiskColor = (riskLevel: string): string => {
   switch (riskLevel) {
     case 'CRITICAL':
-      return '#f44336';
+      return lightColors.semantic.danger;
     case 'HIGH':
-      return '#ff9800';
+      return lightColors.semantic.warning;
     case 'MEDIUM':
-      return '#ffc107';
+      return lightColors.semantic.warning;
     case 'LOW':
-      return '#ffeb3b';
+      return lightColors.semantic.warning;
     default:
-      return '#4caf50';
+      return lightColors.semantic.success;
   }
 };
 
@@ -20,19 +21,19 @@ export const getFlameColor = (
   completed: boolean,
 ): [string, string] => {
   if (!completed) {
-    return ['#3a3a5a', '#2a2a4a'];
+    return [lightColors.semantic.backgroundElevated, lightColors.semantic.backgroundElevated];
   }
   const day = index + 1;
   if (day >= 100) {
-    return ['#ffd700', '#ff6b35'];
+    return [lightColors.semantic.vexGold, lightColors.semantic.warning];
   }
   if (day >= 30) {
-    return ['#ff6b35', '#f44336'];
+    return [lightColors.semantic.warning, lightColors.semantic.danger];
   }
   if (day >= 7) {
-    return ['#ff9800', '#ff5722'];
+    return [lightColors.semantic.warning, lightColors.semantic.danger];
   }
-  return ['#ffc107', '#ff9800'];
+  return [lightColors.semantic.warning, lightColors.semantic.warning];
 };
 
 export const getMilestoneReward = (days: number): string => {

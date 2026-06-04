@@ -11,6 +11,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import Svg, { Circle, G, Text as SvgText } from 'react-native-svg';
 
 import { styles } from './xp-progress-bar.styles';
+import { lightColors } from '@/theme/tokens/colors';
 
 interface XpProgressBarProps {
   currentXp: number;
@@ -77,15 +78,15 @@ export const XpProgressBar: React.FC<XpProgressBarProps> = ({
 
   const getTierColor = (lvl: number): [string, string] => {
     if (lvl >= 50) {
-      return ['#ffd700', '#ffa500'];
+      return [lightColors.semantic.vexGold, lightColors.semantic.warning];
     }
     if (lvl >= 25) {
-      return ['#c0c0c0', '#808080'];
+      return [lightColors.text.disabled, lightColors.text.disabled];
     }
     if (lvl >= 10) {
-      return ['#cd7f32', '#8b4513'];
+      return [lightColors.text.muted, lightColors.text.muted];
     }
-    return ['#4caf50', '#2e7d32'];
+    return [lightColors.semantic.success, lightColors.semantic.success];
   };
 
   const [startColor, endColor] = getTierColor(level);
@@ -106,7 +107,7 @@ export const XpProgressBar: React.FC<XpProgressBarProps> = ({
             cx={28}
             cy={28}
             r={26}
-            fill={'#1a1a2e'}
+            fill={lightColors.semantic.background}
             stroke={startColor}
             strokeWidth={3}
           />
@@ -115,7 +116,7 @@ export const XpProgressBar: React.FC<XpProgressBarProps> = ({
               x={28}
               y={24}
               textAnchor="middle"
-              fill={'#fff'}
+              fill={lightColors.text.inverse}
               fontSize={10}
               fontWeight="600"
             >
@@ -138,7 +139,7 @@ export const XpProgressBar: React.FC<XpProgressBarProps> = ({
       <View style={styles.barContainer}>
         <View style={[styles.track, { width: BAR_WIDTH }]}>
           <LinearGradient
-            colors={['#2a2a4a', '#1a1a2e']}
+            colors={[lightColors.semantic.backgroundElevated, lightColors.semantic.background]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={StyleSheet.absoluteFill}

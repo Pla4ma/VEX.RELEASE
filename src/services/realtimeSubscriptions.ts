@@ -1,94 +1,30 @@
 import { getSupabaseClient } from '../config/supabase';
 import { eventBus } from '../events';
-import { createDebugger } from '../utils/debug';
 import {
   activeChannels,
   CHANNELS,
-  getCurrentUserId,
   type BroadcastMessage,
 } from './realtimeShared';
-
-const pendingTxTimeoutIds = new Set<ReturnType<typeof setTimeout>>();
-
-export function cancelPendingBroadcastCleanups(): void {
-  pendingTxTimeoutIds.forEach(clearTimeout);
-  pendingTxTimeoutIds.clear();
-}
-
-function parseBroadcastPayload(
-  event: string,
-  rawPayload: unknown,
-): BroadcastMessage {
-  const validTypes = ['activity', 'notification', 'sync', 'typing'] as const;
-  const type = validTypes.includes(event as typeof validTypes[number])
-    ? (event as BroadcastMessage['type'])
-    : 'activity';
-  const payloadObj = rawPayload as Record<string, unknown> | null;
-  return {
-    type,
-    payload: rawPayload,
-    senderId: (payloadObj?.senderId as string) ?? '',
-    timestamp: (payloadObj?.timestamp as number) ?? Date.now(),
-  };
-}
+import {
+  broadcastActivity,
+  cancelPendingBroadcastCleanups,
+  subscribeToActivity,
+} from './realtimeBroadcast';
+import { createDebugger } from '../utils/debug';
 
 const debug = createDebugger('realtime');
 
-export async function broadcastActivity(
-  channelName: string,
-  type: BroadcastMessage['type'],
-  payload: unknown,
-): Promise<void> {
-  const client = getSupabaseClient();
-  const fullChannelName = getActivityChannelName(channelName);
-  const txKey = `tx:${fullChannelName}`;
-  let channel = activeChannels.get(txKey);
-  if (!channel) {
-    const newChannel = client.channel(`${fullChannelName}:tx:${Date.now()}`);
-    await newChannel.subscribe();
-    activeChannels.set(txKey, newChannel);
-    channel = newChannel;
-  }
-  if (channel) {
-    await channel.send({
-      type: 'broadcast',
-      event: type,
-      payload: {
-        ...(payload as Record<string, unknown>),
-        senderId: getCurrentUserId(),
-        timestamp: Date.now(),
-      },
-    });
-  }
+// Re-export for backward compatibility
+export {
+  broadcastActivity,
+  cancelPendingBroadcastCleanups,
+  subscribeToActivity,
+} from './realtimeBroadcast';
 
-  const channelToClean = channel;
-  const timeoutId = setTimeout(() => {
-    channelToClean?.unsubscribe();
-    if (activeChannels.get(txKey) === channelToClean) {
-      activeChannels.delete(txKey);
-    }
-    pendingTxTimeoutIds.delete(timeoutId);
-  }, 5_000);
-  pendingTxTimeoutIds.add(timeoutId);
-}
-
-export async function subscribeToActivity(
-  channelName: string,
-  callback: (message: BroadcastMessage) => void,
-) {
-  const client = getSupabaseClient();
-  const fullChannelName = getActivityChannelName(channelName);
-  const channel = client
-    .channel(fullChannelName)
-    .on('broadcast', { event: '*' }, (payload) => {
-      callback(parseBroadcastPayload(payload.event as string, payload.payload));
-    });
-  await channel.subscribe();
-  activeChannels.set(fullChannelName, channel);
-  return () => {
-    channel.unsubscribe();
-    activeChannels.delete(fullChannelName);
-  };
+/** Shape of a Supabase postgres_changes payload.new / payload.old row. */
+interface RealtimeRow {
+  id?: string;
+  [key: string]: unknown;
 }
 
 export async function subscribeToFeedChanges(
@@ -109,11 +45,11 @@ export async function subscribeToFeedChanges(
       },
       (payload) => {
         callback(payload);
-        const newRecord = payload.new as Record<string, unknown> | undefined;
+        const newRecord = payload.new as RealtimeRow | undefined;
         eventBus.publish('realtime:feed_update', {
           itemId:
-            (newRecord?.id as string) ||
-            ((payload.old as Record<string, unknown>)?.id as string),
+            newRecord?.id ||
+            ((payload.old as RealtimeRow)?.id ?? ''),
           event: payload.eventType as 'INSERT' | 'UPDATE' | 'DELETE',
           data: newRecord,
         });
@@ -145,7 +81,7 @@ export async function subscribeToSquadChanges(
       },
       (payload) => {
         callback(payload);
-        const newData = payload.new as Record<string, unknown> | undefined;
+        const newData = payload.new as RealtimeRow | undefined;
         eventBus.publish('realtime:squad_update', {
           squadId,
           event:
@@ -196,12 +132,4 @@ export async function subscribeToGuildQuests(
     channel.unsubscribe();
     activeChannels.delete(channelName);
   };
-}
-
-function getActivityChannelName(channelName: string): string {
-  return channelName.startsWith('squad:') ||
-    channelName.startsWith('guild:') ||
-    channelName.startsWith('user:')
-    ? channelName
-    : `activity:${channelName}`;
 }

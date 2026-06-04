@@ -2,6 +2,7 @@ import React, { useCallback, useEffect } from 'react';
 import { View, Dimensions } from 'react-native';
 import { useReducedMotion } from '@/hooks';
 import { useTheme } from '@/theme';
+import { lightColors } from '@/theme/tokens/colors';
 
 import { Particle, type ParticleConfig } from './Particle';
 
@@ -17,14 +18,14 @@ interface ConfettiCelebrationProps {
 }
 
 const DEFAULT_COLORS = [
-  '#4f46e5',
-  '#10b981',
-  '#f59e0b',
-  '#ef4444',
-  '#8b5cf6',
-  '#ec4899',
-  '#06b6d4',
-  '#f97316',
+  lightColors.semantic.primary,
+  lightColors.accent.green,
+  lightColors.semantic.warning,
+  lightColors.semantic.danger,
+  lightColors.accent.purple,
+  lightColors.accent.pink,
+  lightColors.accent.teal,
+  lightColors.accent.orange,
 ];
 
 export const ConfettiCelebration: React.FC<ConfettiCelebrationProps> = ({

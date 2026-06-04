@@ -13,6 +13,7 @@ import { ELEMENT_THEMES } from '../../../features/companion/types';
 
 import type { ElementInfo } from './elementData';
 import { ElementVisual } from './ElementVisual';
+import { lightColors } from '@/theme/tokens/colors';
 
 interface ElementCardProps {
   element: ElementInfo;
@@ -132,7 +133,7 @@ export function ElementCard({
                 alignItems: 'center',
               }}
             >
-              <Icon name="check" size={14} color="#fff" variant="solid" />
+              <Icon name="check" size={14} color={lightColors.text.inverse} variant="solid" />
             </View>
           )}
         </Animated.View>

@@ -1,15 +1,16 @@
 import { createSheet } from '@/shared/ui/create-sheet';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 export const styles = createSheet({
   container: {
-    backgroundColor: '#ffffff',
+    backgroundColor: lightColors.text.inverse,
     borderRadius: 12,
     padding: 16,
     marginVertical: 8,
     marginHorizontal: 12,
     borderLeftWidth: 4,
-    shadowColor: '#000',
+    shadowColor: lightColors.text.primary,
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     shadowRadius: 2,
@@ -18,8 +19,8 @@ export const styles = createSheet({
   header: { flexDirection: 'row', alignItems: 'flex-start' },
   icon: { fontSize: 24, marginRight: 12 },
   info: { flex: 1 },
-  title: { fontSize: 16, fontWeight: '600', color: '#111827' },
-  subtitle: { fontSize: 13, color: '#6b7280', marginTop: 2 },
+  title: { fontSize: 16, fontWeight: '600', color: lightColors.semantic.backgroundMuted },
+  subtitle: { fontSize: 13, color: lightColors.text.muted, marginTop: 2 },
   statusBadge: { paddingHorizontal: 8, paddingVertical: 4, borderRadius: 12 },
   statusText: { fontSize: 12, fontWeight: '600' },
   progressSection: {
@@ -31,7 +32,7 @@ export const styles = createSheet({
   progressBarContainer: {
     flex: 1,
     height: 6,
-    backgroundColor: '#e5e7eb',
+    backgroundColor: lightColors.border.light,
     borderRadius: 3,
     overflow: 'hidden',
   },
@@ -39,24 +40,24 @@ export const styles = createSheet({
   progressText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#374151',
+    color: lightColors.text.muted,
     minWidth: 40,
   },
   fileInfo: {
     marginTop: 12,
     padding: 12,
-    backgroundColor: '#f9fafb',
+    backgroundColor: lightColors.surface.button,
     borderRadius: 8,
   },
-  fileSize: { fontSize: 14, fontWeight: '500', color: '#374151' },
-  fileUrl: { fontSize: 12, color: '#6b7280', marginTop: 4 },
+  fileSize: { fontSize: 14, fontWeight: '500', color: lightColors.text.muted },
+  fileUrl: { fontSize: 12, color: lightColors.text.muted, marginTop: 4 },
   errorSection: {
     marginTop: 12,
     padding: 12,
-    backgroundColor: '#fee2e2',
+    backgroundColor: lightColors.error[50],
     borderRadius: 8,
   },
-  errorText: { fontSize: 13, color: '#ef4444' },
+  errorText: { fontSize: 13, color: lightColors.semantic.danger },
   actions: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
@@ -70,16 +71,16 @@ export const styles = createSheet({
     minWidth: 100,
     alignItems: 'center',
   },
-  cancelButton: { backgroundColor: '#f3f4f6' },
-  cancelButtonText: { color: '#6b7280', fontWeight: '500' },
+  cancelButton: { backgroundColor: lightColors.surface.button },
+  cancelButtonText: { color: lightColors.text.muted, fontWeight: '500' },
   loadingIndicator: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   loadingText: {
     fontSize: 14,
-    color: '#3b82f6',
+    color: lightColors.accent.blue,
     fontWeight: '500',
   },
-  downloadButton: { backgroundColor: '#10b981' },
-  downloadButtonText: { color: '#ffffff', fontWeight: '600' },
-  retryButton: { backgroundColor: '#3b82f6' },
-  retryButtonText: { color: '#ffffff', fontWeight: '600' },
+  downloadButton: { backgroundColor: lightColors.accent.green },
+  downloadButtonText: { color: lightColors.text.inverse, fontWeight: '600' },
+  retryButton: { backgroundColor: lightColors.accent.blue },
+  retryButtonText: { color: lightColors.text.inverse, fontWeight: '600' },
 });

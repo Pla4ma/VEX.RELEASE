@@ -7,6 +7,7 @@ import { getMinTouchTargetStyle } from '../../utils/touchTarget';
 import type { AuthStackParams } from '../../navigation';
 import { useLoginScreen } from './useLoginScreen';
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+import { lightColors } from '@/theme/tokens/colors';
 import { VexAtmosphereCanvas } from './components/VexAuroraCanvas';
 import { VexBrandHeader } from './components/VexBrandHeader';
 import { VexConsole } from './components/VexGlassPanel';
@@ -16,6 +17,41 @@ import { Stage } from './components/LoginStage';
 
 type Props = NativeStackScreenProps<AuthStackParams, 'Login'>;
 
+function ConsoleHeading(): React.JSX.Element {
+  return (
+    <View style={{ alignItems: 'center', marginBottom: 12 }}>
+      <Text color="semantic.liquidText" fontSize={19} fontWeight="700" opacity={0.95} lineHeight={25} textAlign="center">Welcome back</Text>
+      <Text color="semantic.liquidTextSoft" fontSize={13} fontWeight="500" opacity={0.72} lineHeight={19} textAlign="center">Resume your focus system</Text>
+    </View>
+  );
+}
+
+function ConsoleFooter(): React.JSX.Element {
+  return (
+    <View style={{ alignItems: 'center', marginTop: 4 }}>
+      <Text color="semantic.liquidTextMuted" fontSize={11} fontWeight="500" opacity={0.50} textAlign="center">Neural coach &middot; Focus sync &middot; Secure vault</Text>
+    </View>
+  );
+}
+
+function RegisterCta({ onPress }: { onPress: () => void }): React.JSX.Element {
+  return (
+    <View style={{ marginTop: 40, alignItems: 'center' }}>
+      <Pressable
+        accessibilityHint="Creates a new VEX account" accessibilityLabel="Create a VEX account"
+        accessibilityRole="link" hitSlop={{ top: 8, bottom: 8, left: 12, right: 12 }}
+        onPress={onPress} style={getMinTouchTargetStyle()}
+      >
+        <Text color="semantic.liquidTextMuted" fontSize={14} textAlign="center" opacity={0.82}>
+          New here?{' '}
+          <Text fontWeight="700" style={{ color: lightColors.semantic.brandAmber, textShadowColor: 'rgba(255, 196, 107, 0.35)', textShadowOffset: { width: 0, height: 0 }, textShadowRadius: 8 }}>
+            Create your focus system
+          </Text>
+        </Text>
+      </Pressable>
+    </View>
+  );
+}
 export const LoginScreen: React.FC<Props> = ({ navigation, route }) => {
   const { theme } = useTheme();
   const {

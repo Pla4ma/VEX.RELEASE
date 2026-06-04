@@ -1,3 +1,4 @@
+import { lightColors } from '@/theme/tokens/colors';
 
 
 export interface GoogleCalendarConfig {
@@ -33,15 +34,15 @@ export interface GoogleFreeBusyResponse {
  * These are documented API mapping values, not UI styling tokens.
  */
 export const GOOGLE_COLOR_MAP: Record<string, string> = {
-  '1': '#7986cb',
-  '2': '#33b679',
-  '3': '#8e24aa',
-  '4': '#e67c73',
-  '5': '#f6bf26',
-  '6': '#f4511e',
-  '7': '#039be5',
-  '8': '#616161',
-  '9': '#3f51b5',
-  '10': '#0b8043',
-  '11': '#d81b60',
+  '1': lightColors.accent.blue,
+  '2': lightColors.semantic.success,
+  '3': lightColors.accent.purple,
+  '4': lightColors.semantic.danger,
+  '5': lightColors.semantic.warning,
+  '6': lightColors.semantic.danger,
+  '7': lightColors.accent.blue,
+  '8': lightColors.text.muted,
+  '9': lightColors.accent.blue,
+  '10': lightColors.semantic.success,
+  '11': lightColors.accent.pink,
 };

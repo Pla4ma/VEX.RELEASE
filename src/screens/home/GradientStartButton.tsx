@@ -15,6 +15,7 @@ import { ShimmerSweep } from '../../components/primitives/ShimmerSweep';
 import { useTheme } from '../../theme';
 import { glow } from '../../theme/tokens/elevation';
 import { createSheet } from '@/shared/ui/create-sheet';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 const WHITE_MUTED = 'rgba(255,255,255,0.72)';
@@ -52,14 +53,18 @@ export function GradientStartButton({
     }
     return () => cancelAnimation(scale);
   }, [pulse, scale]);
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+  }));
+
   if (Platform.OS === 'web') {
     return (
       <View>
         <LinearGradient
           colors={[
-            theme.colors.primary[500] ?? '#7c3aed',
-            theme.colors.primary[600] ?? '#4f46e5',
-            theme.colors.primary[700] ?? '#4f46e5',
+            theme.colors.primary[500] ?? lightColors.accent.purple,
+            theme.colors.primary[600] ?? lightColors.semantic.primary,
+            theme.colors.primary[700] ?? lightColors.semantic.primary,
           ]}
           start={{ x: 0.1, y: 0 }}
           end={{ x: 0.9, y: 1 }}
@@ -106,16 +111,13 @@ export function GradientStartButton({
     );
   }
 
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
-  }));
   return (
     <Animated.View style={animatedStyle}>
       <LinearGradient
         colors={[
-          theme.colors.primary[500] ?? '#7c3aed',
-          theme.colors.primary[600] ?? '#4f46e5',
-          theme.colors.primary[700] ?? '#4f46e5',
+          theme.colors.primary[500] ?? lightColors.accent.purple,
+          theme.colors.primary[600] ?? lightColors.semantic.primary,
+          theme.colors.primary[700] ?? lightColors.semantic.primary,
         ]}
         start={{ x: 0.1, y: 0 }}
         end={{ x: 0.9, y: 1 }}

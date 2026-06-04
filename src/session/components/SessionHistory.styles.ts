@@ -1,10 +1,11 @@
 import { createSheet } from '@/shared/ui/create-sheet';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 export const styles = createSheet({
-  container: { flex: 1, backgroundColor: '#1a1a2e' },
+  container: { flex: 1, backgroundColor: lightColors.semantic.background },
   loadingText: {
-    color: '#9e9e9e',
+    color: lightColors.text.muted,
     fontSize: 16,
     textAlign: 'center',
     marginTop: 40,
@@ -12,7 +13,7 @@ export const styles = createSheet({
   statsHeader: { flexDirection: 'row', padding: 16, gap: 12 },
   statBox: {
     flex: 1,
-    backgroundColor: '#2a2a3e',
+    backgroundColor: lightColors.semantic.backgroundElevated,
     borderRadius: 12,
     padding: 12,
     alignItems: 'center',
@@ -20,35 +21,35 @@ export const styles = createSheet({
   statBoxValue: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#fff',
+    color: lightColors.text.inverse,
   },
-  statBoxLabel: { fontSize: 12, color: '#9e9e9e', marginTop: 4 },
+  statBoxLabel: { fontSize: 12, color: lightColors.text.muted, marginTop: 4 },
   searchInput: {
-    backgroundColor: '#2a2a3e',
+    backgroundColor: lightColors.semantic.backgroundElevated,
     borderRadius: 8,
     padding: 12,
     marginHorizontal: 16,
     marginBottom: 12,
-    color: '#fff',
+    color: lightColors.text.inverse,
     fontSize: 16,
   },
   filterRow: { marginBottom: 8 },
   filterChip: {
     paddingHorizontal: 16,
     paddingVertical: 6,
-    backgroundColor: '#2a2a3e',
+    backgroundColor: lightColors.semantic.backgroundElevated,
     borderRadius: 16,
     marginHorizontal: 4,
   },
-  filterChipActive: { backgroundColor: '#e94560' },
+  filterChipActive: { backgroundColor: lightColors.semantic.danger },
   filterChipText: {
-    color: '#9e9e9e',
+    color: lightColors.text.muted,
     fontSize: 12,
     fontWeight: '500',
   },
-  filterChipTextActive: { color: '#fff' },
+  filterChipTextActive: { color: lightColors.text.inverse },
   list: { flex: 1 },
   emptyState: { padding: 40, alignItems: 'center' },
-  emptyText: { fontSize: 18, color: '#9e9e9e', marginBottom: 8 },
-  emptySubtext: { fontSize: 14, color: '#666' },
+  emptyText: { fontSize: 18, color: lightColors.text.muted, marginBottom: 8 },
+  emptySubtext: { fontSize: 14, color: lightColors.text.muted },
 });

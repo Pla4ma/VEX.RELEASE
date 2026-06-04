@@ -22,6 +22,7 @@ import { ChatMessageItem } from './ChatMessageItem';
 import { ChatInputBar } from './ChatInputBar';
 import { CoachRecommendationCard } from './CoachRecommendationCard';
 import { useCoachChat } from './useCoachChat';
+import { lightColors } from '@/theme/tokens/colors';
 
 export function CoachScreen(): JSX.Element {
   const {
@@ -56,7 +57,7 @@ export function CoachScreen(): JSX.Element {
       <SafeAreaView style={styles.container}>
         <View style={{ height: 44 }} />
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={'#6366f1'} />
+          <ActivityIndicator size="large" color={lightColors.semantic.primary} />
           <Text style={styles.loadingText}>Loading your coach...</Text>
         </View>
       </SafeAreaView>
@@ -118,7 +119,7 @@ export function CoachScreen(): JSX.Element {
               </Text>
             </View>
             <View style={styles.typingBubble}>
-              <ActivityIndicator size="small" color={'#6366f1'} />
+              <ActivityIndicator size="small" color={lightColors.semantic.primary} />
               <Text style={styles.typingText}>Thinking...</Text>
             </View>
           </View>

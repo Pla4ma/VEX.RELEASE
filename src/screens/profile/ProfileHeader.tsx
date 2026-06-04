@@ -7,6 +7,7 @@ import { Badge } from '../../components/Badge';
 import { Box, Text } from '../../components/primitives';
 import { Icon } from '../../icons';
 import { useTheme } from '../../theme';
+import { lightColors } from '@/theme/tokens/colors';
 
 import { getHeroGradientColors } from '../home/HomeScreenVisuals';
 import type { User } from '../../types/models';
@@ -91,7 +92,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
         <Text
           variant="h2"
           style={{
-            color: '#fff',
+            color: lightColors.text.inverse,
             fontWeight: '800',
             marginTop: theme.spacing[4],
           }}
@@ -130,7 +131,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
           <Box
             height="100%"
             borderRadius={999}
-            style={{ width: `${xpPercent}%`, backgroundColor: '#fff' }}
+            style={{ width: `${xpPercent}%`, backgroundColor: lightColors.text.inverse }}
           />
         </Box>
       </Box>

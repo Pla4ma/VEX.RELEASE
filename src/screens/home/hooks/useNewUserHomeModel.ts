@@ -24,6 +24,7 @@ import {
   stubNavigationActions,
 } from './home-controller-stubs';
 import { buildNewUserController } from './new-user-home-controller-builder';
+import type { StreakSummaryData, ProgressionData } from './home-query-types';
 
 type Nav = NativeStackNavigationProp<ExtendedRootStackParams>;
 
@@ -61,10 +62,10 @@ export function useNewUserHomeModel(input: NewUserModelInput): HomeViewModel & {
     (state) => state.clearHomeHighlight,
   );
 
-  const streakData = streakQuery.data as Record<string, unknown> | undefined;
-  const progData = progressionQuery.data as Record<string, unknown> | undefined;
-  const currentStreak = (streakData?.currentDays as number | undefined) ?? 0;
-  const currentXp = (progData?.xp as number | undefined) ?? 0;
+  const streakData = streakQuery.data as StreakSummaryData | undefined;
+  const progData = progressionQuery.data as ProgressionData | undefined;
+  const currentStreak = streakData?.currentDays ?? 0;
+  const currentXp = progData?.xp ?? 0;
   const todayFocusMinutes = historyQuery.history.reduce(
     (sum: number, entry) => sum + getFocusedMinutesForToday(entry),
     0,
@@ -123,7 +124,7 @@ export function useNewUserHomeModel(input: NewUserModelInput): HomeViewModel & {
     homeHighlight,
     isAtRisk: Boolean(streakData?.isAtRisk),
     isFirstRun,
-    level: (progData?.level as number | undefined) ?? 1,
+    level: progData?.level ?? 1,
     progressPercent,
     progressXp: currentXp,
     returnReason: {

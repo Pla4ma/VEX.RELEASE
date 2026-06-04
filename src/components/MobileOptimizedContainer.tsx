@@ -9,12 +9,15 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
-  Dimensions,
   StatusBar,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { createSheet } from '@/shared/ui/create-sheet';
+import { lightColors } from '@/theme/tokens/colors';
+import { isSmallScreen, isTablet, getResponsiveFontSize } from './MobileOptimizedContainer.helpers';
 
+// Re-export for backward compatibility
+export { getResponsiveFontSize, isSmallScreen, isTablet } from './MobileOptimizedContainer.helpers';
 
 interface MobileOptimizedContainerProps {
   children: React.ReactNode;
@@ -26,10 +29,6 @@ interface MobileOptimizedContainerProps {
   backgroundColor?: string;
 }
 
-const { height, width } = Dimensions.get('window');
-const isSmallScreen = height < 700;
-const isTablet = width > 768;
-
 export const MobileOptimizedContainer: React.FC<
   MobileOptimizedContainerProps
 > = ({
@@ -39,7 +38,7 @@ export const MobileOptimizedContainer: React.FC<
   avoidHeader = true,
   avoidBottomNav = true,
   padding = 16,
-  backgroundColor = '#1a1a2e',
+  backgroundColor = lightColors.semantic.background,
 }) => {
   const insets = useSafeAreaInsets();
 
@@ -141,22 +140,6 @@ export const TouchTarget: React.FC<TouchTargetProps> = ({
       {children}
     </View>
   );
-};
-
-/**
- * Responsive Text Sizing
- * Adjusts font sizes for small screens
- */
-export const getResponsiveFontSize = (baseSize: number): number => {
-  if (isSmallScreen) {
-    // Reduce font sizes by ~10% on small screens
-    return Math.round(baseSize * 0.9);
-  }
-  if (isTablet) {
-    // Increase slightly on tablets
-    return Math.round(baseSize * 1.1);
-  }
-  return baseSize;
 };
 
 /**

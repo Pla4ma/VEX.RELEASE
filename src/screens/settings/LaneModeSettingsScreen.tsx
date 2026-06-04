@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { lightColors } from '@/theme/tokens/colors';
 
 import { Box } from '../../components/primitives/Box';
 import { Text } from '../../components/primitives/Text';
@@ -125,7 +126,7 @@ export const LaneModeSettingsScreen = withScreenErrorBoundary(
                       alignItems="center"
                       style={{ backgroundColor: theme.colors.primary[500] }}
                     >
-                      <Text style={{ color: '#fff', fontSize: 14 }}>
+                      <Text style={{ color: lightColors.text.inverse, fontSize: 14 }}>
                         {'\u2713'}
                       </Text>
                     </Box>

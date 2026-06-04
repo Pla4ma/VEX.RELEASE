@@ -94,7 +94,7 @@ export function checkAlerts(
         current_value: currentValue,
         threshold: rule.threshold,
         severity: rule.severity,
-      } as Record<string, unknown>);
+      } satisfies Record<string, unknown>);
     }
   }
   return triggered;

@@ -4,11 +4,41 @@ import {
   SpendCurrencyRpcInputSchema,
   GrantCurrencyRpcInputSchema,
   AddCurrencyRpcParamsSchema,
+  WalletSchema,
   type CurrencyRpcResult,
 } from './schemas';
 import { RepositoryError } from '../../lib/repository/error-handling';
 
 export { RepositoryError };
+
+/**
+ * Upsert a wallet row for the given user and return the parsed wallet.
+ * This is the canonical data-access layer for wallet creation — moved
+ * from service.ts to enforce the repository pattern.
+ */
+export async function getOrCreateWallet(
+  userId: string,
+): Promise<{ coins: number; gems: number }> {
+  const supabase = getSupabaseClient();
+  const { data, error } = await supabase
+    .from('wallets')
+    .upsert({ user_id: userId, coins: 0, gems: 0 }, { onConflict: 'user_id' })
+    .select()
+    .single();
+  if (error) {throw new RepositoryError('getOrCreateWallet', error);}
+  const wallet = WalletSchema.parse(data);
+  return { coins: wallet.coins, gems: wallet.gems };
+}
+
+/**
+ * Get the current authenticated user's ID from Supabase Auth.
+ * Repository-level accessor so service code does not touch the client directly.
+ */
+export async function getCurrentUserId(): Promise<string | null> {
+  const supabase = getSupabaseClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  return user?.id ?? null;
+}
 
 export async function spendCurrencyRpc(params: {
   userId: string;

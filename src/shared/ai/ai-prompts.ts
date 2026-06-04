@@ -84,8 +84,8 @@ Output only the message content, no explanations.`,
 
 Period: {{period}}
 Sessions Completed: {{sessionCount}}
-Total Focus Hours: {{totalFocusHours}}
-Average Quality: {{averageQuality}}/100
+Total Focus Minutes: {{totalFocusMinutes}}
+Average Quality: {{averageSessionQuality}}/100
 Streak at Start: {{streakAtStart}} days
 Streak at End: {{streakAtEnd}} days
 XP Earned: {{xpEarned}}
@@ -113,8 +113,8 @@ Generate one urgent, motivating sentence to save the streak.`,
   WEEKLY_REFLECTION: `Generate weekly reflection for week {{weekNumber}}:
 
 Sessions: {{sessionsCompleted}}
-Focus Hours: {{totalFocusHours}}
-Avg Quality: {{averageQuality}}/100
+Focus Minutes: {{totalFocusMinutes}}
+Avg Quality: {{averageSessionQuality}}/100
 Streak Change: {{streakAtStart}} → {{streakAtEnd}}
 XP Earned: {{xpEarned}}
 Level Ups: {{levelUps}}

@@ -7,6 +7,7 @@ import Animated, {
 import { SafeBlurView } from './SafeBlurView';
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
+import { lightColors } from '@/theme/tokens/colors';
 
 type VexGlassInputProps = {
   label: string; value: string; placeholder: string; error?: string;
@@ -31,23 +32,25 @@ export function VexGlassInput({
     fp.value = withTiming(f ? 1 : 0, { duration: FOCUS_MS });
   }, [f, fp]);
 
-  const glow = useAnimatedStyle(() => ({
-    shadowOpacity: f ? 0.32 : 0,
-    shadowRadius: f ? 24 : 0,
+  const glowStyle = useAnimatedStyle(() => ({
+    shadowOpacity: f ? 0.35 : 0,
+    shadowRadius: f ? 18 : 0,
+    shadowColor: f ? lightColors.accent.orange : 'transparent',
+    shadowOffset: { width: 0, height: f ? 4 : 0 },
   }));
 
-  const bc = error
-    ? 'rgba(255,107,122,0.50)'
-    : f ? 'rgba(166,107,255,0.60)' : 'rgba(255,255,255,0.08)';
+  const borderColor = error
+    ? lightColors.error.light
+    : f
+      ? 'rgba(166, 107, 255, 0.70)'
+      : 'rgba(255, 255, 255, 0.06)';
 
   return (
     <View style={{ gap: theme.spacing[2] }}>
       <Text color="semantic.liquidTextMuted" fontSize={12} fontWeight="600"
         opacity={0.88} letterSpacing={0.35}>{label}</Text>
 
-      <Animated.View style={[glow, {
-        shadowColor: '#FF8A3D', shadowOffset: { width: 0, height: 6 },
-      }]}>
+      <Animated.View style={[glowStyle]}>
         {f && (
           <LinearGradient colors={['rgba(166,107,255,0.52)', 'rgba(255,138,61,0.22)']}
             start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
@@ -65,7 +68,7 @@ export function VexGlassInput({
           borderRadius: r, overflow: 'hidden',
           margin: f || error ? 1 : 0,
           borderWidth: !f && !error ? 1 : 0,
-          borderColor: bc,
+          borderColor: borderColor,
         }}>
           <SafeBlurView intensity={16} tint="dark"
             style={{ borderRadius: r, overflow: 'hidden' }}>
@@ -89,8 +92,12 @@ export function VexGlassInput({
               placeholderTextColor="rgba(247,245,255,0.38)"
               returnKeyType={returnKeyType ?? (secureTextEntry ? 'done' : 'next')}
               secureTextEntry={secureTextEntry}
-              style={{ minHeight: 54, color: '#F7F5FF', fontSize: 16,
-                paddingHorizontal: theme.spacing[4] }}
+              style={{
+                minHeight: 54,
+                color: lightColors.semantic.background,
+                fontSize: 16,
+                paddingHorizontal: theme.spacing[4],
+              }}
               value={value}
             />
           </SafeBlurView>

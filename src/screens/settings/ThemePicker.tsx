@@ -3,6 +3,7 @@ import { Pressable } from 'react-native';
 import { useTheme, type ThemeMode } from '@/theme';
 import { Box, Text, Card } from '@/components/primitives';
 import { Icon } from '@/icons';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 interface ThemeOption {
@@ -103,7 +104,7 @@ export const ThemePicker: React.FC<ThemePickerProps> = ({
                   <Icon
                     name="check"
                     size={14}
-                    color={'#fff'}
+                    color={lightColors.text.inverse}
                   />
                 </Box>
               )}

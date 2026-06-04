@@ -9,6 +9,7 @@
 import React from 'react';
 import { Box, Text } from '@/components/primitives';
 import { useTheme } from '@/theme';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 interface BattlePassSeasonHeaderProps {
@@ -47,7 +48,7 @@ export function BattlePassSeasonHeader({
         >
           <Text
             variant="caption"
-            color={'#ffffff'}
+            color={lightColors.text.inverse}
             fontWeight="bold"
           >
             {isUrgent ? '⏰ ' : ''}

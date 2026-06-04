@@ -1,7 +1,7 @@
 import * as Sentry from '@sentry/react-native';
 import { getProgressionServiceConfig } from './service-config';
 import { createProgressionError } from './service-errors';
-import type { EnhancedRepositoryError } from './repository/enhanced';
+import type { EnhancedRepositoryError } from './repository/progression-repository';
 import type { AddXpOperationResult } from './types';
 
 export function handleFetchFailure(

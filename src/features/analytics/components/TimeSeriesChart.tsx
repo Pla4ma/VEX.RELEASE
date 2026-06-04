@@ -9,6 +9,7 @@ import { View, Text } from 'react-native';
 import { z } from 'zod';
 import { TimeSeriesDataSchema } from '../schemas';
 import { createSheet } from '@/shared/ui/create-sheet';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 type TimeSeriesData = z.infer<typeof TimeSeriesDataSchema>;
@@ -76,9 +77,9 @@ function StatBox({
 }) {
   const highlightColor =
     highlight === 'positive'
-      ? '#10b981'
+      ? lightColors.accent.green
       : highlight === 'negative'
-        ? '#ef4444'
+        ? lightColors.semantic.danger
         : undefined;
 
   return (
@@ -117,11 +118,11 @@ function formatValue(value: number, metric: string): string {
 
 const styles = createSheet({
   container: {
-    backgroundColor: '#ffffff',
+    backgroundColor: lightColors.text.inverse,
     borderRadius: 12,
     padding: 16,
     marginVertical: 8,
-    shadowColor: '#000',
+    shadowColor: lightColors.text.primary,
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     elevation: 2,
@@ -129,7 +130,7 @@ const styles = createSheet({
   title: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#111827',
+    color: lightColors.semantic.backgroundMuted,
     marginBottom: 12,
   },
   stats: {
@@ -138,34 +139,34 @@ const styles = createSheet({
     gap: 12,
   },
   statBox: {
-    backgroundColor: '#f3f4f6',
+    backgroundColor: lightColors.surface.button,
     borderRadius: 8,
     padding: 12,
     minWidth: 80,
   },
   statLabel: {
     fontSize: 12,
-    color: '#6b7280',
+    color: lightColors.text.muted,
     marginBottom: 4,
   },
   statValue: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#111827',
+    color: lightColors.semantic.backgroundMuted,
   },
   dataPreview: {
     marginTop: 12,
     paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: '#e5e7eb',
+    borderTopColor: lightColors.border.light,
   },
   previewText: {
     fontSize: 12,
-    color: '#9ca3af',
+    color: lightColors.text.muted,
   },
   emptyText: {
     textAlign: 'center',
-    color: '#9ca3af',
+    color: lightColors.text.muted,
     padding: 24,
   },
 });

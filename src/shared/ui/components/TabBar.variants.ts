@@ -1,5 +1,6 @@
 import type { ViewStyle, TextStyle } from 'react-native';
 import type { TabBarProps } from './TabBar.types';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 interface ThemeColors {
@@ -31,12 +32,12 @@ export function getVariantStyles(
         },
         text: {
           color: isActive
-            ? '#ffffff'
+            ? lightColors.text.inverse
             : theme.colors.text.secondary,
         },
         icon: {
           color: isActive
-            ? '#ffffff'
+            ? lightColors.text.inverse
             : theme.colors.text.secondary,
         },
       };

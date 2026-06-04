@@ -3,6 +3,7 @@ import { Pressable } from 'react-native';
 import { useTheme } from '@/theme';
 import { Box, Text, Card } from '@/components/primitives';
 import { Icon } from '@/icons';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 export type FontSize = 'small' | 'medium' | 'large';
@@ -109,7 +110,7 @@ export const FontSizeControl: React.FC<FontSizeControlProps> = ({
                   <Icon
                     name="check"
                     size={14}
-                    color={'#fff'}
+                    color={lightColors.text.inverse}
                   />
                 </Box>
               )}

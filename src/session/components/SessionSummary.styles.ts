@@ -1,16 +1,17 @@
+import { lightColors } from '@/theme/tokens/colors';
 
 
 const styles = {
-  container: { flex: 1, backgroundColor: '#1a1a2e' },
+  container: { flex: 1, backgroundColor: lightColors.semantic.background },
   content: { padding: 24 },
   header: { alignItems: 'center' as const, marginBottom: 24 },
   title: {
     fontSize: 28,
     fontWeight: '700' as const,
-    color: '#fff',
+    color: lightColors.text.inverse,
     marginBottom: 8,
   },
-  subtitle: { fontSize: 16, color: '#9e9e9e' },
+  subtitle: { fontSize: 16, color: lightColors.text.muted },
   scoreCircle: {
     width: 160,
     height: 160,
@@ -25,20 +26,20 @@ const styles = {
   scoreNumber: {
     fontSize: 32,
     fontWeight: '700' as const,
-    color: '#fff',
+    color: lightColors.text.inverse,
   },
-  scoreLabel: { fontSize: 14, color: '#9e9e9e' },
+  scoreLabel: { fontSize: 14, color: lightColors.text.muted },
   rewardsSection: { marginBottom: 24 },
   sectionTitle: {
     fontSize: 18,
     fontWeight: '600' as const,
-    color: '#fff',
+    color: lightColors.text.inverse,
     marginBottom: 12,
   },
   rewardsRow: { flexDirection: 'row' as const, gap: 12 },
   rewardBadge: {
     flex: 1,
-    backgroundColor: '#2a2a3e',
+    backgroundColor: lightColors.semantic.backgroundElevated,
     borderRadius: 12,
     padding: 16,
     alignItems: 'center' as const,
@@ -47,14 +48,14 @@ const styles = {
   rewardValue: {
     fontSize: 20,
     fontWeight: '700' as const,
-    color: '#ffd700',
+    color: lightColors.semantic.vexGold,
   },
-  rewardLabel: { fontSize: 12, color: '#9e9e9e' },
+  rewardLabel: { fontSize: 12, color: lightColors.text.muted },
   streakBanner: {
     flexDirection: 'row' as const,
     alignItems: 'center' as const,
     justifyContent: 'center' as const,
-    backgroundColor: '#ff6b35',
+    backgroundColor: lightColors.semantic.warning,
     borderRadius: 12,
     padding: 16,
     marginBottom: 24,
@@ -63,7 +64,7 @@ const styles = {
   streakText: {
     fontSize: 18,
     fontWeight: '700' as const,
-    color: '#fff',
+    color: lightColors.text.inverse,
   },
   streakBonus: {
     marginLeft: 8,
@@ -71,7 +72,7 @@ const styles = {
     paddingVertical: 4,
     backgroundColor: 'rgba(255,255,255,0.3)',
     borderRadius: 4,
-    color: '#fff',
+    color: lightColors.text.inverse,
     fontSize: 12,
     fontWeight: '600' as const,
   },
@@ -79,7 +80,7 @@ const styles = {
   bonusItem: {
     flexDirection: 'row' as const,
     alignItems: 'center' as const,
-    backgroundColor: '#2a2a3e',
+    backgroundColor: lightColors.semantic.backgroundElevated,
     borderRadius: 8,
     padding: 12,
     marginBottom: 8,
@@ -89,35 +90,35 @@ const styles = {
   bonusType: {
     fontSize: 14,
     fontWeight: '600' as const,
-    color: '#fff',
+    color: lightColors.text.inverse,
     textTransform: 'capitalize' as const,
   },
-  bonusDescription: { fontSize: 12, color: '#9e9e9e' },
+  bonusDescription: { fontSize: 12, color: lightColors.text.muted },
   bonusAmount: {
     fontSize: 16,
     fontWeight: '700' as const,
-    color: '#4caf50',
+    color: lightColors.semantic.success,
   },
   actions: { gap: 12 },
   shareButton: {
     paddingVertical: 14,
     borderRadius: 8,
-    backgroundColor: '#2a2a3e',
+    backgroundColor: lightColors.semantic.backgroundElevated,
     alignItems: 'center' as const,
   },
   shareButtonText: {
-    color: '#fff',
+    color: lightColors.text.inverse,
     fontSize: 16,
     fontWeight: '600' as const,
   },
   newSessionButton: {
     paddingVertical: 16,
     borderRadius: 8,
-    backgroundColor: '#4caf50',
+    backgroundColor: lightColors.semantic.success,
     alignItems: 'center' as const,
   },
   newSessionButtonText: {
-    color: '#fff',
+    color: lightColors.text.inverse,
     fontSize: 16,
     fontWeight: '700' as const,
   },
@@ -126,7 +127,7 @@ const styles = {
     borderRadius: 8,
     alignItems: 'center' as const,
   },
-  closeButtonText: { color: '#9e9e9e', fontSize: 16 },
+  closeButtonText: { color: lightColors.text.muted, fontSize: 16 },
 };
 
 export default styles;

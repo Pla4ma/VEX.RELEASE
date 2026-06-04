@@ -64,8 +64,8 @@ Deno.serve(async (request) => {
     return jsonResponse(response, 200, corsHeaders);
   } catch (error) {
     if (error instanceof SyntaxError) return jsonResponse({ error: 'Invalid JSON payload' }, 400, corsHeaders);
-    const fallback = buildFallbackResponse({ requestType: expectedRequestType, userId: crypto.randomUUID(), context: {} } as AIRequest, error instanceof Error ? error.message : 'Unknown AI error');
-    return jsonResponse(fallback, 200, corsHeaders);
+    const fallback = buildFallbackResponse({ requestType: expectedRequestType, userId: crypto.randomUUID(), context: {} } as AIRequest, error instanceof Error ? error.message : 'Unknown AI error', 0, 503);
+    return jsonResponse(fallback, 503, corsHeaders);
   }
 });
 

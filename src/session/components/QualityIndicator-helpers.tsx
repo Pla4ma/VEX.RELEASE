@@ -9,6 +9,7 @@ import Animated, {
 import { Box } from '../../components/primitives/Box';
 import { Text } from '../../components/primitives/Text';
 import { useTheme } from '../../theme';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 export type QualityGrade = 'S' | 'A' | 'B' | 'C' | 'D';
@@ -29,31 +30,31 @@ export const gradeConfig: Record<
   { color: string; bgColor: string; label: string; description: string }
 > = {
   S: {
-    color: '#9333ea',
+    color: lightColors.accent.purple,
     bgColor: 'rgba(147,51,234,0.15)',
     label: 'PERFECT',
     description: 'Flawless focus',
   },
   A: {
-    color: '#22c55e',
+    color: lightColors.semantic.success,
     bgColor: 'rgba(34,197,94,0.15)',
     label: 'EXCELLENT',
     description: 'Great focus',
   },
   B: {
-    color: '#3b82f6',
+    color: lightColors.accent.blue,
     bgColor: 'rgba(59,130,246,0.15)',
     label: 'GOOD',
     description: 'Solid focus',
   },
   C: {
-    color: '#6b7280',
+    color: lightColors.text.muted,
     bgColor: 'rgba(107,114,128,0.15)',
     label: 'FAIR',
     description: 'Some interruptions',
   },
   D: {
-    color: '#ef4444',
+    color: lightColors.semantic.danger,
     bgColor: 'rgba(239,68,68,0.15)',
     label: 'NEEDS WORK',
     description: 'Many interruptions',

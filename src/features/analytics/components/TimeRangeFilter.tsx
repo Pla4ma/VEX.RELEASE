@@ -8,6 +8,7 @@ import { View, Text, Pressable, ScrollView } from 'react-native';
 import { TimeRangeSchema } from '../schemas';
 import type { z } from 'zod';
 import { createSheet } from '@/shared/ui/create-sheet';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 type TimeRange = z.infer<typeof TimeRangeSchema>;
@@ -83,7 +84,7 @@ const styles = createSheet({
   label: {
     fontSize: 12,
     fontWeight: '500',
-    color: '#6b7280',
+    color: lightColors.text.muted,
     marginBottom: 8,
     marginLeft: 4,
   },
@@ -95,14 +96,14 @@ const styles = createSheet({
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 16,
-    backgroundColor: '#f3f4f6',
+    backgroundColor: lightColors.surface.button,
     borderWidth: 1,
-    borderColor: '#e5e7eb',
+    borderColor: lightColors.border.light,
     marginRight: 8,
   },
   chipActive: {
-    backgroundColor: '#6366f1',
-    borderColor: '#6366f1',
+    backgroundColor: lightColors.semantic.primary,
+    borderColor: lightColors.semantic.primary,
   },
   chipDisabled: {
     opacity: 0.5,
@@ -110,12 +111,12 @@ const styles = createSheet({
   chipText: {
     fontSize: 12,
     fontWeight: '500',
-    color: '#374151',
+    color: lightColors.text.muted,
   },
   chipTextActive: {
-    color: '#ffffff',
+    color: lightColors.text.inverse,
   },
   chipTextDisabled: {
-    color: '#9ca3af',
+    color: lightColors.text.muted,
   },
 });

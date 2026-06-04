@@ -112,7 +112,7 @@ Deno.serve(async (request: Request) => {
     ...result,
     processingTimeMs: Date.now() - startedAt,
     rateLimit: {
-      remaining: typeof rateLimit.remaining === 'number' ? rateLimit.remaining : RATE_LIMIT_MAX,
+      remaining: typeof rateLimit.remaining === 'number' ? rateLimit.remaining : 0,
       windowSeconds: RATE_LIMIT_WINDOW,
     },
   }, 200, request);

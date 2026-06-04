@@ -47,15 +47,9 @@ function createSentryIntegrations(): NonNullable<
   const integrations: NonNullable<Sentry.ReactNativeOptions['integrations']> =
     [];
 
-  if (typeof Sentry.reactNativeTracingIntegration === 'function') {
-    integrations.push(Sentry.reactNativeTracingIntegration());
-  }
-  if (typeof Sentry.mobileReplayIntegration === 'function') {
-    integrations.push(Sentry.mobileReplayIntegration());
-  }
-  if (typeof Sentry.feedbackIntegration === 'function') {
-    integrations.push(Sentry.feedbackIntegration());
-  }
+  integrations.push(Sentry.reactNativeTracingIntegration());
+  integrations.push(Sentry.mobileReplayIntegration());
+  integrations.push(Sentry.feedbackIntegration());
 
   return integrations;
 }

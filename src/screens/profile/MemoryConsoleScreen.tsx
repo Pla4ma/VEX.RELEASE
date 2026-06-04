@@ -14,6 +14,7 @@ import { Box, Card, Text } from '../../components/primitives';
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 import { EmptyState } from '../../components/EmptyState';
 import type { ExtendedRootStackParams } from '../../navigation/types';
+import { lightColors } from '@/theme/tokens/colors';
 
 type Props = NativeStackScreenProps<ExtendedRootStackParams, 'MemoryConsole'>;
 
@@ -26,9 +27,9 @@ function formatDate(ts: number): string {
 }
 
 function confidenceLabel(c: number): { label: string; color: string } {
-  if (c >= 0.8) {return { label: 'High', color: '#22c55e' };}
-  if (c >= 0.5) {return { label: 'Medium', color: '#eab308' };}
-  return { label: 'Low', color: '#ef4444' };
+  if (c >= 0.8) {return { label: 'High', color: lightColors.semantic.success };}
+  if (c >= 0.5) {return { label: 'Medium', color: lightColors.semantic.warning };}
+  return { label: 'Low', color: lightColors.semantic.danger };
 }
 
 export const MemoryConsoleScreen: React.FC<Props> = () => {

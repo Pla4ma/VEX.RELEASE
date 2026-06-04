@@ -1,4 +1,5 @@
 import { createSheet } from '@/shared/ui/create-sheet';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 export const styles = createSheet({
@@ -6,7 +7,7 @@ export const styles = createSheet({
   card: {
     borderRadius: 16,
     padding: 20,
-    shadowColor: '#000',
+    shadowColor: lightColors.text.primary,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.1,
     shadowRadius: 8,
@@ -36,7 +37,7 @@ export const styles = createSheet({
   actions: { gap: 10 },
   retryButton: { paddingVertical: 14, borderRadius: 10, alignItems: 'center' },
   retryButtonText: {
-    color: '#fff',
+    color: lightColors.text.inverse,
     fontSize: 15,
     fontWeight: '700',
   },

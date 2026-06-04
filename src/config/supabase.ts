@@ -96,7 +96,7 @@ export function handleSupabaseError(error: unknown): Error {
   }
 
   if (error !== null && typeof error === 'object') {
-    const err = error as Record<string, unknown>;
+    const err = error as { message?: string; code?: string; [key: string]: unknown };
     const msg = typeof err.message === 'string' ? err.message : undefined;
     const code = typeof err.code === 'string' ? err.code : undefined;
     return new Error(msg || `Supabase error: ${code ?? 'unknown'}`);

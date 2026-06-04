@@ -1,38 +1,39 @@
 import { Dimensions } from 'react-native';
 import { createSheet } from '@/shared/ui/create-sheet';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 const { width: screenWidth } = Dimensions.get('window');
 
 export const styles = createSheet({
-  container: { flex: 1, backgroundColor: '#f9fafb' },
+  container: { flex: 1, backgroundColor: lightColors.surface.button },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 16,
-    backgroundColor: '#ffffff',
+    backgroundColor: lightColors.text.inverse,
     borderBottomWidth: 1,
-    borderBottomColor: '#e5e7eb',
+    borderBottomColor: lightColors.border.light,
   },
   headerTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#111827',
+    color: lightColors.semantic.backgroundMuted,
   },
   headerActions: { flexDirection: 'row', gap: 8 },
   iconButton: {
     padding: 8,
     borderRadius: 8,
-    backgroundColor: '#f3f4f6',
+    backgroundColor: lightColors.surface.button,
   },
   iconButtonText: { fontSize: 12, fontWeight: '700' },
   filtersContainer: {
-    backgroundColor: '#ffffff',
+    backgroundColor: lightColors.text.inverse,
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#e5e7eb',
+    borderBottomColor: lightColors.border.light,
   },
   scrollView: { flex: 1 },
   scrollContent: { padding: 16, paddingBottom: 32 },
@@ -45,10 +46,10 @@ export const styles = createSheet({
   summaryCard: {
     flex: 1,
     minWidth: (screenWidth - 56) / 2,
-    backgroundColor: '#ffffff',
+    backgroundColor: lightColors.text.inverse,
     borderRadius: 12,
     padding: 16,
-    shadowColor: '#000',
+    shadowColor: lightColors.text.primary,
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.05,
     shadowRadius: 2,
@@ -57,11 +58,11 @@ export const styles = createSheet({
   summaryValue: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#111827',
+    color: lightColors.semantic.backgroundMuted,
   },
   summaryLabel: {
     fontSize: 12,
-    color: '#6b7280',
+    color: lightColors.text.muted,
     marginTop: 4,
     textTransform: 'capitalize',
   },
@@ -72,12 +73,12 @@ export const styles = createSheet({
     borderRadius: 12,
     marginTop: 8,
   },
-  changePositive: { backgroundColor: '#d1fae5' },
-  changeNegative: { backgroundColor: '#fee2e2' },
+  changePositive: { backgroundColor: lightColors.success[50] },
+  changeNegative: { backgroundColor: lightColors.error[50] },
   changeText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#374151',
+    color: lightColors.text.muted,
   },
   chartsContainer: { marginBottom: 16 },
   insightsSection: { marginTop: 8 },
@@ -90,29 +91,29 @@ export const styles = createSheet({
   sectionTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#111827',
+    color: lightColors.semantic.backgroundMuted,
   },
   seeAllText: {
     fontSize: 14,
-    color: '#6366f1',
+    color: lightColors.semantic.primary,
     fontWeight: '500',
   },
   partialWarning: {
-    backgroundColor: '#fef3c7',
+    backgroundColor: lightColors.warning[50],
     borderRadius: 8,
     padding: 12,
     marginTop: 16,
   },
   partialText: {
     fontSize: 12,
-    color: '#92400e',
+    color: lightColors.semantic.warning,
     textAlign: 'center',
   },
   skeletonContainer: { padding: 16, gap: 16 },
   skeletonTitle: { marginBottom: 8 },
   skeletonFilters: { flexDirection: 'row', gap: 12, marginBottom: 8 },
   heatmapSkeleton: {
-    backgroundColor: '#ffffff',
+    backgroundColor: lightColors.text.inverse,
     borderRadius: 16,
     padding: 16,
     marginHorizontal: 12,
@@ -120,7 +121,7 @@ export const styles = createSheet({
     gap: 12,
   },
   infoCard: {
-    backgroundColor: '#ffffff',
+    backgroundColor: lightColors.text.inverse,
     borderRadius: 16,
     padding: 20,
     marginHorizontal: 12,
@@ -129,12 +130,12 @@ export const styles = createSheet({
   infoTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#111827',
+    color: lightColors.semantic.backgroundMuted,
     marginBottom: 6,
   },
   infoSubtitle: {
     fontSize: 14,
-    color: '#6b7280',
+    color: lightColors.text.muted,
     lineHeight: 20,
   },
 });

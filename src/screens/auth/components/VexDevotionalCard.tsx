@@ -12,6 +12,7 @@ import Animated, {
 import { LinearGradient } from 'expo-linear-gradient';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { springPresets } from '../../../theme/tokens/motion';
+import { lightColors } from '@/theme/tokens/colors';
 
 /**
  * VexDevotionalCard — a true glass card for the Editorial Devotional login.
@@ -98,7 +99,7 @@ export function VexDevotionalCard({
             marginBottom: style?.marginBottom ?? 0,
             overflow: 'hidden',
             minHeight,
-            shadowColor: '#000',
+            shadowColor: lightColors.text.primary,
             shadowOffset: { width: 0, height: 18 },
             shadowOpacity: 0.55,
             shadowRadius: 36,

@@ -81,6 +81,11 @@ export function mapContentRow(row: unknown) {
   });
 }
 
+/** Shape of a parsed study generation summary object. */
+interface GenerationSummary {
+  [key: string]: unknown;
+}
+
 export function mapGenerationRow(row: unknown) {
   const parsed = generationRowSchema.parse(row);
   return StudyGenerationSchema.parse({
@@ -91,7 +96,7 @@ export function mapGenerationRow(row: unknown) {
     generationVersion: parsed.generation_version,
     processingTimeMs: parsed.processing_time_ms ?? undefined,
     summary: typeof parsed.summary === 'string'
-      ? JSON.parse(parsed.summary) as Record<string, unknown>
+      ? JSON.parse(parsed.summary) as GenerationSummary
       : parsed.summary,
     keyConcepts: parsed.key_concepts,
     tasks: parsed.tasks,

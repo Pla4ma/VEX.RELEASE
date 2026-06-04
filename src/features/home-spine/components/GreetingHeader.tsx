@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { Pressable } from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
+import { lightColors } from '@/theme/tokens/colors';
 
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
@@ -145,7 +146,7 @@ export function GreetingHeader({
                   <Text
                     variant="caption"
                     style={{
-                      color: '#fff',
+                      color: lightColors.text.inverse,
                       fontSize: 10,
                       fontWeight: '700',
                       lineHeight: 14,

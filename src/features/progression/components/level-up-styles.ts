@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { createSheet } from '@/shared/ui/create-sheet';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 export const levelUpStyles = createSheet({
@@ -21,7 +22,7 @@ export const levelUpStyles = createSheet({
     borderRadius: 50,
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#FFD700',
+    shadowColor: lightColors.semantic.vexGold,
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.8,
     shadowRadius: 20,
@@ -36,7 +37,7 @@ export const levelUpStyles = createSheet({
   levelNumber: {
     fontSize: 48,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: lightColors.text.inverse,
     textShadowColor: 'rgba(0,0,0,0.3)',
     textShadowOffset: { width: 2, height: 2 },
     textShadowRadius: 4,
@@ -44,8 +45,8 @@ export const levelUpStyles = createSheet({
   levelUpText: {
     fontSize: 36,
     fontWeight: 'bold',
-    color: '#FFD700',
-    textShadowColor: '#FFD700',
+    color: lightColors.semantic.vexGold,
+    textShadowColor: lightColors.semantic.vexGold,
     textShadowOffset: { width: 0, height: 0 },
     textShadowRadius: 20,
     marginBottom: 16,
@@ -62,7 +63,7 @@ export const levelUpStyles = createSheet({
   },
   arrow: {
     fontSize: 24,
-    color: '#FFD700',
+    color: lightColors.semantic.vexGold,
     marginHorizontal: 12,
   },
   newLevel: { fontSize: 28, fontWeight: 'bold' },
@@ -100,7 +101,7 @@ export const levelUpStyles = createSheet({
   rewardAmount: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: lightColors.text.inverse,
   },
   rewardType: {
     fontSize: 10,
@@ -130,14 +131,14 @@ export const levelUpStyles = createSheet({
   unlockIcon: { fontSize: 20, marginRight: 12 },
   unlockText: {
     fontSize: 14,
-    color: '#FFFFFF',
+    color: lightColors.text.inverse,
     fontWeight: '500',
   },
   continueButton: {
     width: 200,
     borderRadius: 12,
     overflow: 'hidden',
-    shadowColor: '#FFD700',
+    shadowColor: lightColors.semantic.vexGold,
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.5,
     shadowRadius: 20,
@@ -145,7 +146,7 @@ export const levelUpStyles = createSheet({
   },
   continueGradient: { paddingVertical: 16, alignItems: 'center' },
   continueText: {
-    color: '#FFFFFF',
+    color: lightColors.text.inverse,
     fontSize: 18,
     fontWeight: 'bold',
   },

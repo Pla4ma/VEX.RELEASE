@@ -150,7 +150,8 @@ export function HomeHeroSection({
       }
     }
 
-    // Zod guarantees object shape; home-controller-types accepts Record<string, unknown>
+    // Bridge: openSetup expects Record<string, unknown>, SessionSetupParams lacks index signature.
+    // The shape is validated by Zod in toSessionSetupParams.
     controller.openSetup(
       toSessionSetupParams(params) as Record<string, unknown>,
     );

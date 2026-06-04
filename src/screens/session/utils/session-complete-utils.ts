@@ -6,6 +6,7 @@ import { captureSilentFailure } from '../../../utils/silent-failure';
 
 import { getSessionService } from '../../../session/SessionService';
 import type { SessionHistoryEntry } from '../../../session/types';
+import { lightColors } from '@/theme/tokens/colors';
 
 export const MOODS = [
   { key: 'GREAT', emoji: 'A', label: 'Great' },
@@ -81,27 +82,27 @@ export function getGrade(score: number): {
   label: string;
 } {
   if (score >= 900) {
-    return { letter: 'S', color: '#FFD700', label: 'Legendary!' };
+    return { letter: 'S', color: lightColors.semantic.vexGold, label: 'Legendary!' };
   }
   if (score >= 800) {
-    return { letter: 'A', color: '#4CAF50', label: 'Excellent!' };
+    return { letter: 'A', color: lightColors.semantic.success, label: 'Excellent!' };
   }
   if (score >= 700) {
-    return { letter: 'B', color: '#8BC34A', label: 'Great Job!' };
+    return { letter: 'B', color: lightColors.semantic.success, label: 'Great Job!' };
   }
   if (score >= 600) {
     return {
       letter: 'C',
-      color: '#FFC107',
+      color: lightColors.semantic.warning,
       label: 'Good Effort!',
     };
   }
   if (score >= 500) {
     return {
       letter: 'D',
-      color: '#FF9800',
+      color: lightColors.semantic.warning,
       label: 'Keep Going!',
     };
   }
-  return { letter: 'F', color: '#F44336', label: 'Try Again!' };
+  return { letter: 'F', color: lightColors.semantic.danger, label: 'Try Again!' };
 }

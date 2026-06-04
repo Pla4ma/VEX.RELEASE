@@ -8,6 +8,7 @@ import { Text } from '../../../components/primitives/Text';
 import { getPremiumCardStyle } from '../../../components/premiumStyles';
 import { Icon } from '../../../icons';
 import { formatMultiplier, withAlpha } from '../utils/active-session';
+import { lightColors } from '@/theme/tokens/colors';
 
 type ActiveSessionControlDockProps = {
   completionPercentage: number;
@@ -70,7 +71,7 @@ export const ActiveSessionControlDock: React.FC<
               borderColor: 'rgba(0,229,255,0.25)',
             }}
           >
-            <Text variant="label" style={{ color: '#00E5FF' }}>
+            <Text variant="label" style={{ color: lightColors.semantic.vexCyan }}>
               {completionPercentage >= 100
                 ? 'Complete Session'
                 : 'Finish Early'}
@@ -134,7 +135,7 @@ export const ActiveSessionControlDock: React.FC<
               borderRadius: 32,
               alignItems: 'center',
               justifyContent: 'center',
-              backgroundColor: '#00E5FF',
+              backgroundColor: lightColors.semantic.vexCyan,
             }}
           >
             <Icon
@@ -185,7 +186,7 @@ export const ActiveSessionControlDock: React.FC<
                borderColor: 'rgba(0,229,255,0.18)',
              }}
            >
-             <Text variant="label" style={{ color: '#00E5FF' }}>
+             <Text variant="label" style={{ color: lightColors.semantic.vexCyan }}>
                 {`${formatMultiplier(streakMultiplier)}x`}
               </Text>
             </Box>

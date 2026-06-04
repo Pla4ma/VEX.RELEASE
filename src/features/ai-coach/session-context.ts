@@ -17,7 +17,7 @@ const fetchGenerationRecord = async (
 export type SessionSummaryContext = {
   sessionCount: number;
   totalFocusMinutes: number;
-  averageQuality: number;
+  averageSessionQuality: number;
   streakDays: number;
   xpEarned: number;
   challengesCompleted: number;

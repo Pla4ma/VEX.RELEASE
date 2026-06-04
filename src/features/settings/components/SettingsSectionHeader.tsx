@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, ActivityIndicator } from 'react-native';
 import { createSheet } from '@/shared/ui/create-sheet';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 interface SettingsSectionHeaderProps {
@@ -16,7 +17,7 @@ export function SettingsSectionHeader({
     <View style={styles.categoryHeader}>
       <Text style={styles.categoryTitle}>{title}</Text>
       {isSyncing && (
-        <ActivityIndicator size="small" color={'#6366f1'} />
+        <ActivityIndicator size="small" color={lightColors.semantic.primary} />
       )}
     </View>
   );
@@ -28,11 +29,11 @@ const styles = createSheet({
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 16,
-    backgroundColor: '#ffffff',
+    backgroundColor: lightColors.text.inverse,
   },
   categoryTitle: {
     fontSize: 20,
     fontWeight: '600',
-    color: '#111827',
+    color: lightColors.semantic.backgroundMuted,
   },
 });

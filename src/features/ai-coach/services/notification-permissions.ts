@@ -1,5 +1,6 @@
 import * as Notifications from 'expo-notifications';
 import { Platform } from 'react-native';
+import { lightColors } from '@/theme/tokens/colors';
 
 import { STORAGE_KEYS } from '../../../constants/storage';
 import { getMMKVStorageAdapter } from '../../../persistence/MMKVStorageAdapter';
@@ -64,7 +65,7 @@ export async function ensureNotificationChannel(): Promise<void> {
         description: NOTIFICATION_CONFIG.androidChannelDescription,
         importance: Notifications.AndroidImportance.HIGH,
         vibrationPattern: [0, 250, 250, 250],
-        lightColor: '#ff6b6b',
+        lightColor: lightColors.semantic.danger,
       },
     );
   } catch (error) {

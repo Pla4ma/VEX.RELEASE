@@ -23,6 +23,10 @@ interface UseHomeSurfaceMapInput {
   behaviorStats: {
     totalCompletedSessions: number;
     studyUsageRatio: number;
+    deepWorkUsageRatio?: number;
+    learningUsageRatio?: number;
+    projectFocusUsageRatio?: number;
+    structuredExecutionUsageRatio?: number;
     bossChallengeEngagement: 'none' | 'low' | 'medium' | 'high';
     coachInteractions: number;
     comebackSessions: number;
@@ -114,16 +118,10 @@ export function useHomeSurfaceMap(
       behaviorStats: {
         totalCompletedSessions: b.totalCompletedSessions,
         studyUsageRatio: b.studyUsageRatio,
-        deepWorkUsageRatio:
-          ((b as Record<string, unknown>).deepWorkUsageRatio as number) ?? 0,
-        learningUsageRatio:
-          ((b as Record<string, unknown>).learningUsageRatio as number) ?? 0,
-        projectFocusUsageRatio:
-          ((b as Record<string, unknown>).projectFocusUsageRatio as number) ??
-          0,
-        structuredExecutionUsageRatio:
-          ((b as Record<string, unknown>)
-            .structuredExecutionUsageRatio as number) ?? 0,
+        deepWorkUsageRatio: b.deepWorkUsageRatio ?? 0,
+        learningUsageRatio: b.learningUsageRatio ?? 0,
+        projectFocusUsageRatio: b.projectFocusUsageRatio ?? 0,
+        structuredExecutionUsageRatio: b.structuredExecutionUsageRatio ?? 0,
         bossChallengeEngagement: b.bossChallengeEngagement,
         coachInteractions: b.coachInteractions,
         comebackSessions: b.comebackSessions,

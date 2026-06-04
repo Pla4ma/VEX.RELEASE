@@ -1,3 +1,18 @@
+/**
+ * Supabase Auth Credential Operations
+ *
+ * AUTH REPOSITORY EXCEPTION: This file makes direct calls to `supabase.auth.*`
+ * (signUp, signInWithPassword, resetPassword, updatePassword).
+ *
+ * These are inherently tied to the Supabase Auth client SDK — they are not
+ * table-level data access that could be abstracted behind a generic repository.
+ * Creating a separate repository layer for auth SDK calls would be
+ * over-engineering with no practical benefit.
+ *
+ * This file IS the canonical data-access layer for auth credential operations.
+ * Do NOT duplicate these calls in service, hook, or component files.
+ */
+// Architecture note: Direct Supabase auth client access is acceptable here because this IS the auth data access layer. Moves to a feature-scoped auth/repository.ts would break the shared auth service contract.
 import { getSupabaseClient, handleSupabaseError } from '../config/supabase';
 
 import type { User } from '../types/models';

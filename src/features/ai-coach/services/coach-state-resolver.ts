@@ -46,7 +46,7 @@ interface StreakStatus {
 interface SessionMetrics {
   sessionsToday: number;
   sessionsThisWeek: number;
-  averageQuality: number;
+  averageSessionQuality: number;
 }
 
 function buildCoachSignals(
@@ -149,12 +149,12 @@ async function fetchRecentSessionMetrics(
   try {
     const behaviorProfile = await repository.fetchBehaviorProfile(userId);
     if (!behaviorProfile)
-      {return { sessionsToday: 0, sessionsThisWeek: 0, averageQuality: 75 };}
+      {return { sessionsToday: 0, sessionsThisWeek: 0, averageSessionQuality: 75 };}
 
     const qualitySignals = behaviorProfile.signals.filter(
       (s) => s.signalType === 'SESSION_QUALITY_TREND',
     );
-    const averageQuality =
+    const averageSessionQuality =
       qualitySignals.length > 0
         ? Math.round(
             (qualitySignals.reduce((sum, s) => sum + s.value, 0) /
@@ -166,9 +166,9 @@ async function fetchRecentSessionMetrics(
     return {
       sessionsToday: 0,
       sessionsThisWeek: behaviorProfile.dataPoints,
-      averageQuality,
+      averageSessionQuality,
     };
   } catch (error: unknown) {
-    return { sessionsToday: 0, sessionsThisWeek: 0, averageQuality: 75 };
+    return { sessionsToday: 0, sessionsThisWeek: 0, averageSessionQuality: 75 };
   }
 }

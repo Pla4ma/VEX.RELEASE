@@ -7,7 +7,8 @@
 import { ColorBlindType, ColorBlindPalette } from './types';
 import { COLOR_BLIND_PALETTES } from './constants';
 import { checkContrast } from './contrast';
-const FALLBACK_COLOR = '#000000';
+import { lightColors } from '@/theme/tokens/colors';
+const FALLBACK_COLOR = lightColors.text.primary;
 
 const STATUS_PATTERNS: Record<
   ColorBlindType,
@@ -74,7 +75,7 @@ export function getColorBlindPalettes(): Record<string, ColorBlindPalette> {
 export function isColorAccessibleForColorBlind(
   color: string,
   colorBlindMode: ColorBlindType,
-  backgroundColor: string = '#FFFFFF',
+  backgroundColor: string = lightColors.text.inverse,
 ): boolean {
   const palette = COLOR_BLIND_PALETTES[colorBlindMode];
 

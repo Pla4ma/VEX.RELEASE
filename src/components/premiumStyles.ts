@@ -1,4 +1,5 @@
 import type { ViewStyle } from 'react-native';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 export type PremiumCardSize = 'small' | 'medium' | 'large' | 'hero';
@@ -11,7 +12,7 @@ const PREMIUM_RADII: Record<PremiumCardSize, number> = {
 };
 
 export const premiumCardShadow: ViewStyle = {
-  shadowColor: '#000',
+  shadowColor: lightColors.text.primary,
   shadowOffset: { width: 0, height: 8 },
   shadowOpacity: 0.08,
   shadowRadius: 16,

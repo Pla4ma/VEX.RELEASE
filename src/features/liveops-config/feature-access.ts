@@ -1,9 +1,23 @@
+/**
+ * feature-access — public API for building feature access maps.
+ *
+ * Logic delegated to FeatureFlagService; this module re-exports the
+ * public surface and adds React wiring for buildFeatureAccess.
+ */
+
 import {
   DEFAULT_COPY,
   FEATURE_COPY,
   FEATURE_PRIORITIES,
-} from './feature-access-config';
-import { computeFeatureAccess } from './feature-resolution';
+  FEATURE_BUILD_ORDER,
+  computeFeatureAccess,
+  getStage,
+  getProductTier,
+  getFeatureAvailability,
+  getFeatureAvailabilityFor,
+  isFeatureAvailableForNavigation,
+  isFeatureAvailableForQueries,
+} from './FeatureFlagService';
 import type {
   UserExperienceStage,
   ProductTier,
@@ -25,56 +39,7 @@ export type {
   FeatureAccessInputs,
 } from './feature-access-types';
 
-const FEATURE_BUILD_ORDER: FeatureKey[] = [
-  'focus_session',
-  'home_tab',
-  'focus_tab',
-  'profile_tab',
-  'progress_view',
-  'ai_coach_basic',
-  'companion_detail',
-  'challenges',
-  'economy_basic',
-  'achievements',
-  'boss_tab',
-  'ai_coach_advanced',
-  'content_study',
-  'quiz_review_mode',
-  'advanced_settings',
-  'seasonal_features',
-  'content_study_advanced',
-  'premium_paywall',
-  'social_tab',
-  'inventory',
-  'economy_advanced',
-  'shop',
-  'boss_bounties',
-  'rankings',
-  'rivals',
-  'battle_pass',
-  'squads',
-  'wagers',
-  'streak_insurance',
-  'gems_prominent',
-];
-
-export function getStage(totalCompletedSessions: number): UserExperienceStage {
-  if (totalCompletedSessions <= 0) {return 'NEW_USER';}
-  if (totalCompletedSessions < 3) {return 'ACTIVATING';}
-  if (totalCompletedSessions < 10) {return 'ENGAGED';}
-  return 'POWER_USER';
-}
-
-export function getProductTier(
-  stage: UserExperienceStage,
-  totalCompletedSessions: number,
-): ProductTier {
-  if (totalCompletedSessions >= 40) {return 'SOCIAL_DEPTH';}
-  if (totalCompletedSessions >= 20) {return 'RPG_DEPTH';}
-  if (totalCompletedSessions >= 10) {return 'STUDY_OS';}
-  if (stage === 'ENGAGED') {return 'COACHING';}
-  return 'CORE_EXECUTION';
-}
+export { getStage, getProductTier };
 
 export function buildFeatureAccess(inputs: FeatureAccessInputs): {
   features: FeatureAccessMap;
@@ -124,8 +89,8 @@ export {
   getFeatureAvailabilityFor,
   isFeatureAvailableForNavigation,
   isFeatureAvailableForQueries,
-} from './feature-availability';
+} from './FeatureFlagService';
 export type {
   FeatureAvailability,
   FeatureAvailabilityState,
-} from './feature-availability';
+} from './FeatureFlagService';

@@ -76,7 +76,7 @@ export function trackPurchase(event: PurchaseEvent): void {
     currency: event.currency,
     is_subscription: event.isSubscription,
     subscription_period: event.subscriptionPeriod,
-  } as Record<string, unknown>);
+  } satisfies Record<string, unknown>);
   if (event.isSubscription) {
     capture('subscription_started', {
       user_id: event.userId,

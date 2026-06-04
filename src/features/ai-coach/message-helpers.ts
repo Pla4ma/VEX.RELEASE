@@ -1,4 +1,4 @@
-import * as service from './service';
+import * as service from './services/service';
 import * as repository from './repository';
 import * as analytics from './analytics';
 import { createCoachMessageGeneratedEvent } from './events';

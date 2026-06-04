@@ -4,6 +4,7 @@ import {
   type ScoreBand,
 } from './FocusIdentityEngine';
 import { useTheme } from '../../theme';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 /**
@@ -22,19 +23,19 @@ export function useFocusScoreColor(score: number | null): string {
 
     switch (band.label) {
       case 'Building':
-        return '#cd7f32';
+        return lightColors.text.muted;
       case 'Fair':
-        return '#c0c0c0';
+        return lightColors.text.disabled;
       case 'Good':
-        return '#ffd700';
+        return lightColors.semantic.vexGold;
       case 'Strong':
-        return '#e5e4e2';
+        return lightColors.semantic.scorePlatinum;
       case 'Exceptional':
-        return '#b9f2ff';
+        return lightColors.semantic.scoreCelestial;
       case 'Elite':
-        return '#9c27b0';
+        return lightColors.accent.purple;
       case 'Legendary':
-        return '#ff1744';
+        return lightColors.semantic.danger;
       default:
         return theme.colors.text.secondary;
     }

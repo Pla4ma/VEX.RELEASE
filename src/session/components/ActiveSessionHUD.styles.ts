@@ -1,9 +1,10 @@
 import { createSheet } from '@/shared/ui/create-sheet';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 const styles = createSheet({
   container: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: lightColors.semantic.background,
     borderRadius: 16,
     padding: 24,
     margin: 16,
@@ -19,33 +20,33 @@ const styles = createSheet({
   phaseLabel: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#e94560',
+    color: lightColors.semantic.danger,
   },
   statusIndicator: {
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 12,
   },
-  statusText: { color: '#fff', fontSize: 12, fontWeight: '600' },
+  statusText: { color: lightColors.text.inverse, fontSize: 12, fontWeight: '600' },
   timerContainer: { alignItems: 'center', marginVertical: 24 },
   timer: {
     fontSize: 64,
     fontWeight: '200',
-    color: '#fff',
+    color: lightColors.text.inverse,
     fontVariant: ['tabular-nums'],
   },
-  timerLabel: { fontSize: 14, color: '#9e9e9e', marginTop: 4 },
+  timerLabel: { fontSize: 14, color: lightColors.text.muted, marginTop: 4 },
   progressContainer: { marginVertical: 16 },
   progressBar: {
     height: 8,
-    backgroundColor: '#2a2a3e',
+    backgroundColor: lightColors.semantic.backgroundElevated,
     borderRadius: 4,
     overflow: 'hidden',
   },
   progressFill: { height: '100%', borderRadius: 4 },
   progressText: {
     fontSize: 12,
-    color: '#9e9e9e',
+    color: lightColors.text.muted,
     textAlign: 'center',
     marginTop: 8,
   },
@@ -56,11 +57,11 @@ const styles = createSheet({
     paddingVertical: 16,
     borderTopWidth: 1,
     borderBottomWidth: 1,
-    borderColor: '#2a2a3e',
+    borderColor: lightColors.semantic.backgroundElevated,
   },
   stat: { alignItems: 'center' },
-  statValue: { fontSize: 20, fontWeight: '700', color: '#fff' },
-  statLabel: { fontSize: 12, color: '#9e9e9e', marginTop: 4 },
+  statValue: { fontSize: 20, fontWeight: '700', color: lightColors.text.inverse },
+  statLabel: { fontSize: 12, color: lightColors.text.muted, marginTop: 4 },
   controls: {
     flexDirection: 'row',
     justifyContent: 'space-around',
@@ -73,27 +74,27 @@ const styles = createSheet({
     minWidth: 120,
     alignItems: 'center',
   },
-  primaryButton: { backgroundColor: '#4caf50' },
-  secondaryButton: { backgroundColor: '#ffa500' },
-  dangerButton: { backgroundColor: '#e94560' },
-  buttonText: { color: '#fff', fontSize: 16, fontWeight: '600' },
+  primaryButton: { backgroundColor: lightColors.semantic.success },
+  secondaryButton: { backgroundColor: lightColors.semantic.warning },
+  dangerButton: { backgroundColor: lightColors.semantic.danger },
+  buttonText: { color: lightColors.text.inverse, fontSize: 16, fontWeight: '600' },
   loadingText: {
-    color: '#9e9e9e',
+    color: lightColors.text.muted,
     fontSize: 16,
     textAlign: 'center',
   },
   errorText: {
-    color: '#e94560',
+    color: lightColors.semantic.danger,
     fontSize: 16,
     textAlign: 'center',
   },
   emptyText: {
-    color: '#9e9e9e',
+    color: lightColors.text.muted,
     fontSize: 18,
     textAlign: 'center',
   },
   emptySubtext: {
-    color: '#666',
+    color: lightColors.text.muted,
     fontSize: 14,
     textAlign: 'center',
     marginTop: 8,

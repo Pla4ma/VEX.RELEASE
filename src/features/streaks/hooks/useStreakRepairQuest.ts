@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import * as Sentry from '@sentry/react-native';
 import { useAuthStore } from '../../../store';
-import { fetchActiveRepairQuestEnhanced } from '../repository/enhanced';
+import { fetchActiveRepairQuestEnhanced } from '../repository/streak-repository';
 import { StreakRepairQuestSchema } from '../schemas-risk-repair';
 import type { StreakRepairQuest } from '../schemas-risk-repair';
 import type { UseStreakRepairQuestReturn } from './types';

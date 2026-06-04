@@ -10,7 +10,7 @@ import {
 } from '../streak-repair-quest';
 import {
   saveRepairQuestEnhanced,
-} from '../repository/enhanced';
+} from '../repository/streak-repository';
 import { StreakRepairQuestSchema } from '../schemas-risk-repair';
 import type { StreakRepairQuest } from '../schemas-risk-repair';
 import type { RecordSessionResult } from './types';

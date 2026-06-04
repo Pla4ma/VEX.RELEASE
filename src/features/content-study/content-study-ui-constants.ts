@@ -1,3 +1,4 @@
+import { lightColors } from '@/theme/tokens/colors';
 
 
 export const STUDY_PLAN_CONFIG = {
@@ -16,20 +17,20 @@ export const STUDY_PLAN_CONFIG = {
 export const TASK_PRIORITY_CONFIG = {
   HIGH: {
     label: 'High Priority',
-    color: '#ef4444',
-    textColor: '#ffffff',
+    color: lightColors.semantic.danger,
+    textColor: lightColors.text.inverse,
     weight: 3,
   },
   MEDIUM: {
     label: 'Medium Priority',
-    color: '#f59e0b',
-    textColor: '#111827',
+    color: lightColors.semantic.warning,
+    textColor: lightColors.semantic.backgroundMuted,
     weight: 2,
   },
   LOW: {
     label: 'Low Priority',
-    color: '#10b981',
-    textColor: '#ffffff',
+    color: lightColors.accent.green,
+    textColor: lightColors.text.inverse,
     weight: 1,
   },
 } as const;
@@ -37,20 +38,20 @@ export const TASK_PRIORITY_CONFIG = {
 export const QUIZ_DIFFICULTY_CONFIG = {
   EASY: {
     label: 'Easy',
-    color: '#10b981',
-    textColor: '#ffffff',
+    color: lightColors.accent.green,
+    textColor: lightColors.text.inverse,
     weight: 1,
   },
   MEDIUM: {
     label: 'Medium',
-    color: '#f59e0b',
-    textColor: '#111827',
+    color: lightColors.semantic.warning,
+    textColor: lightColors.semantic.backgroundMuted,
     weight: 2,
   },
   HARD: {
     label: 'Hard',
-    color: '#ef4444',
-    textColor: '#ffffff',
+    color: lightColors.semantic.danger,
+    textColor: lightColors.text.inverse,
     weight: 3,
   },
 } as const;

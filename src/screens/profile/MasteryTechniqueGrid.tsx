@@ -4,37 +4,38 @@ import { Card, Text } from '../../components/primitives';
 import { TechniqueBar } from '../../features/mastery/components/TechniqueBar';
 import type { MasteryState } from '../../features/mastery/types';
 import { useTheme } from '../../theme';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 export const TECHNIQUES = [
   {
     key: 'durationMastery' as const,
     label: 'Duration Focus',
-    color: '#6366f1',
+    color: lightColors.semantic.primary,
     description: 'Long sessions without interruption',
   },
   {
     key: 'purityMastery' as const,
     label: 'Purity',
-    color: '#14b8a6',
+    color: lightColors.accent.teal,
     description: 'Sustained high focus scores',
   },
   {
     key: 'consistencyMastery' as const,
     label: 'Consistency',
-    color: '#f97316',
+    color: lightColors.accent.orange,
     description: 'Daily streaks maintained',
   },
   {
     key: 'comebackMastery' as const,
     label: 'Comeback',
-    color: '#ec4899',
+    color: lightColors.accent.pink,
     description: 'Recovering from broken streaks',
   },
   {
     key: 'bossMastery' as const,
     label: 'Boss',
-    color: '#eab308',
+    color: lightColors.semantic.warning,
     description: 'Boss defeat efficiency',
   },
 ] as const;

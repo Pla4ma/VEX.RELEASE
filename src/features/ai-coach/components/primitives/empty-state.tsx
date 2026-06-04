@@ -10,6 +10,7 @@ import Animated, { FadeIn, FadeInUp } from 'react-native-reanimated';
 import { createSheet } from '@/shared/ui/create-sheet';
 import { useTheme } from '../../../../theme';
 import { Icon } from '../../../../icons';
+import { lightColors } from '@/theme/tokens/colors';
 
 interface EmptyStateProps {
   iconName: string;
@@ -124,7 +125,7 @@ const styles = createSheet({
     alignItems: 'center',
   },
   primaryButtonText: {
-    color: '#fff',
+    color: lightColors.text.inverse,
     fontSize: 16,
     fontWeight: '600',
   },

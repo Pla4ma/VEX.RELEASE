@@ -14,6 +14,14 @@ import { useTheme } from '../../../theme';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { springPresets, motionStagger } from '../../../theme/tokens/motion';
 import Svg, { Defs, LinearGradient as SvgLinearGradient, Path, Stop } from 'react-native-svg';
+import { lightColors } from '@/theme/tokens/colors';
+import {
+  FLOURISH_PATH_WAVE,
+  FLOURISH_PATH_DIAMOND,
+  FLOURISH_GRADIENT_STOPS,
+  glowStyleDeepWarm,
+  glowStyleTealAccent,
+} from './VexHeroSignature.paths';
 
 const EASE_CINEMATIC = Easing.bezier(0.16, 1, 0.3, 1);
 
@@ -33,13 +41,13 @@ function Flourish({ isReducedMotion }: { isReducedMotion: boolean }) {
       <Svg width={180} height={18} viewBox="0 0 180 18">
         <Defs>
           <SvgLinearGradient id="flourishGrad" x1="0" y1="0" x2="1" y2="0">
-            <Stop offset="0%" stopColor="rgba(224,184,112,0)" />
-            <Stop offset="50%" stopColor="rgba(224,184,112,0.9)" />
-            <Stop offset="100%" stopColor="rgba(224,184,112,0)" />
+            {FLOURISH_GRADIENT_STOPS.map((s, i) => (
+              <Stop key={i} offset={s.offset} stopColor={s.stopColor} />
+            ))}
           </SvgLinearGradient>
         </Defs>
-        <Path d="M 0 9 Q 30 1, 60 9 T 120 9 T 180 9" stroke="url(#flourishGrad)" strokeWidth={1.2} fill="none" />
-        <Path d="M 88 4 L 90 9 L 92 4" stroke="rgba(224,184,112,0.85)" strokeWidth={1} fill="none" />
+        <Path d={FLOURISH_PATH_WAVE} stroke="url(#flourishGrad)" strokeWidth={1.2} fill="none" />
+        <Path d={FLOURISH_PATH_DIAMOND} stroke="rgba(224,184,112,0.85)" strokeWidth={1} fill="none" />
       </Svg>
     </Animated.View>
   );
@@ -66,42 +74,13 @@ function VexLetter({ char, index, isReducedMotion }: { char: string; index: numb
 
   return (
     <Animated.View style={[{ marginHorizontal: 1 }, style]}>
-      {/* Deep warm ambient glow */}
-      <Text
-        style={{
-          position: 'absolute',
-          fontSize: 88,
-          fontWeight: '300',
-          color: 'rgba(224,184,112,0.10)',
-          textShadowColor: 'rgba(224,184,112,0.45)',
-          textShadowOffset: { width: 0, height: 0 },
-          textShadowRadius: 32,
-          letterSpacing: 8,
-        }}
-      >
-        {char}
-      </Text>
-      {/* Mid teal accent glow */}
-      <Text
-        style={{
-          position: 'absolute',
-          fontSize: 88,
-          fontWeight: '300',
-          color: 'rgba(94,234,212,0.10)',
-          textShadowColor: 'rgba(94,234,212,0.35)',
-          textShadowOffset: { width: 0, height: 0 },
-          textShadowRadius: 18,
-          letterSpacing: 8,
-        }}
-      >
-        {char}
-      </Text>
-      {/* Refined type — warm cream on dark */}
+      <Text style={glowStyleDeepWarm}>{char}</Text>
+      <Text style={glowStyleTealAccent}>{char}</Text>
       <Text
         style={{
           fontSize: 88,
           fontWeight: '300',
-          color: '#F5F1E8',
+          color: lightColors.surface.button,
           textShadowColor: 'rgba(224,184,112,0.30)',
           textShadowOffset: { width: 0, height: 0 },
           textShadowRadius: 12,
@@ -185,29 +164,16 @@ export function VexHeroSignature({
   return (
     <View style={{ alignItems: 'center', gap: 18 }}>
       <Flourish isReducedMotion={isReducedMotion} />
-
-      {/* The VEX wordmark — type as the art */}
       <Animated.View style={[{ flexDirection: 'row', marginTop: 4, height: 100 }, wordBreath]}>
         {title.split('').map((c, i) => (
           <VexLetter key={i} char={c} index={i} isReducedMotion={isReducedMotion} />
         ))}
       </Animated.View>
-
       <Underline isReducedMotion={isReducedMotion} />
-
       <Animated.View style={tagStyle}>
         <Text
           color="text.secondary"
-          style={{
-            fontSize: 14,
-            lineHeight: 20,
-            fontWeight: '400',
-            textAlign: 'center',
-            maxWidth: 280,
-            letterSpacing: 0.6,
-            opacity: 0.85,
-            marginTop: 4,
-          }}
+          style={{ fontSize: 14, lineHeight: 20, fontWeight: '400', textAlign: 'center', maxWidth: 280, letterSpacing: 0.6, opacity: 0.85, marginTop: 4 }}
         >
           {tagline}
         </Text>

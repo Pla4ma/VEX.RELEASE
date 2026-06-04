@@ -6,6 +6,7 @@
 
 import React from 'react';
 import { type ViewStyle } from 'react-native';
+import { lightColors } from '@/theme/tokens/colors';
 
 import { useTheme } from '../../theme';
 import { Box } from '../primitives/Box';
@@ -64,7 +65,7 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
         {},
         {
           backgroundColor:
-            theme?.colors?.semantic?.background || '#0a0a1a',
+            theme?.colors?.semantic?.background || lightColors.semantic.backgroundMuted,
         },
         style,
       )}
@@ -80,7 +81,7 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
               theme?.colors?.semantic?.vexCyanSoft ||
               'rgba(0,229,255,0.08)',
             borderColor:
-              theme?.colors?.semantic?.vexCyan || '#00E5FF',
+              theme?.colors?.semantic?.vexCyan || lightColors.semantic.vexCyan,
             borderWidth: 1,
             alignItems: 'center',
             justifyContent: 'center',
@@ -89,7 +90,7 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
           <Icon
             name="x-circle"
             size={28}
-            color={theme?.colors?.semantic?.vexCyan || '#00E5FF'}
+            color={theme?.colors?.semantic?.vexCyan || lightColors.semantic.vexCyan}
             variant="outline"
           />
         </Box>
@@ -101,7 +102,7 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
         mb="md"
         textAlign="center"
         style={{
-          color: theme?.colors?.text?.primary || '#07111f',
+          color: theme?.colors?.text?.primary || lightColors.semantic.backgroundMuted,
         }}
       >
         {title}
@@ -113,7 +114,7 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
         mb="lg"
         textAlign="center"
         style={{
-          color: theme?.colors?.text?.secondary || '#334155',
+          color: theme?.colors?.text?.secondary || lightColors.text.secondary,
           maxWidth: 300,
         }}
       >
@@ -135,7 +136,7 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
           <Text
             variant="caption"
             style={{
-              color: theme?.colors?.text?.tertiary || '#64748b',
+              color: theme?.colors?.text?.tertiary || lightColors.text.tertiary,
               fontFamily: 'monospace',
             }}
           >

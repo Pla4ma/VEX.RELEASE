@@ -1,6 +1,7 @@
 import React from 'react';
 import { Platform, View } from 'react-native';
 import Svg, { Circle, Defs, LinearGradient, Path, Stop } from 'react-native-svg';
+import { lightColors } from '@/theme/tokens/colors';
 
 interface VexFocusMarkProps {
   size?: number;
@@ -16,16 +17,16 @@ export function VexFocusMark({ size = 120 }: VexFocusMarkProps): JSX.Element {
     <Svg width={s} height={s} viewBox={`0 0 ${s} ${s}`}>
       <Defs>
         <LinearGradient id="vm-outer" x1="0%" y1="0%" x2="100%" y2="100%">
-          <Stop offset="0%" stopColor="#00E5FF" stopOpacity="0.6" />
-          <Stop offset="100%" stopColor="#22D3EE" stopOpacity="0.15" />
+          <Stop offset="0%" stopColor={lightColors.semantic.vexCyan} stopOpacity="0.6" />
+          <Stop offset="100%" stopColor={lightColors.semantic.secondary} stopOpacity="0.15" />
         </LinearGradient>
         <LinearGradient id="vm-core" x1="0%" y1="0%" x2="100%" y2="100%">
-          <Stop offset="0%" stopColor="#00E5FF" />
-          <Stop offset="100%" stopColor="#38BDF8" />
+          <Stop offset="0%" stopColor={lightColors.semantic.vexCyan} />
+          <Stop offset="100%" stopColor={lightColors.semantic.accent} />
         </LinearGradient>
         <LinearGradient id="vm-inner" x1="0%" y1="100%" x2="100%" y2="0%">
-          <Stop offset="0%" stopColor="#00E5FF" stopOpacity="0.8" />
-          <Stop offset="100%" stopColor="#818CF8" stopOpacity="0.3" />
+          <Stop offset="0%" stopColor={lightColors.semantic.vexCyan} stopOpacity="0.8" />
+          <Stop offset="100%" stopColor={lightColors.primary[400]} stopOpacity="0.3" />
         </LinearGradient>
       </Defs>
 
@@ -62,7 +63,7 @@ export function VexFocusMark({ size = 120 }: VexFocusMarkProps): JSX.Element {
           Z
         `}
         fill="url(#vm-core)"
-        stroke="#00E5FF"
+        stroke={lightColors.semantic.vexCyan}
         strokeWidth={1}
         strokeLinejoin="round"
       />
@@ -72,7 +73,7 @@ export function VexFocusMark({ size = 120 }: VexFocusMarkProps): JSX.Element {
         cx={cx}
         cy={cy + s * 0.04}
         r={s * 0.055}
-        fill="#F8FAFC"
+        fill={lightColors.text.primary}
       />
 
       {/* Inner glow */}
@@ -93,7 +94,7 @@ export function VexFocusMark({ size = 120 }: VexFocusMarkProps): JSX.Element {
         height: s,
         alignItems: 'center',
         justifyContent: 'center',
-        shadowColor: '#00E5FF',
+        shadowColor: lightColors.semantic.vexCyan,
         shadowOffset: { width: 0, height: 0 },
         shadowOpacity: isWeb ? 0.25 : 0.35,
         shadowRadius: isWeb ? 16 : 20,

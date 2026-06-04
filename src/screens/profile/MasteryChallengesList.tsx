@@ -6,13 +6,14 @@ import { EmptyState } from '../../components/EmptyState';
 import type { MasteryChallenge } from '../../features/mastery/types';
 import { Icon } from '../../icons';
 import { useTheme } from '../../theme';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 const DIFFICULTY_COLORS = {
-  EASY: '#10b981',
-  MEDIUM: '#3b82f6',
-  HARD: '#f59e0b',
-  ELITE: '#8b5cf6',
+  EASY: lightColors.accent.green,
+  MEDIUM: lightColors.accent.blue,
+  HARD: lightColors.semantic.warning,
+  ELITE: lightColors.accent.purple,
 };
 
 function ChallengeCard({

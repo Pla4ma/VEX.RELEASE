@@ -3,6 +3,7 @@ import { Pressable, Switch } from 'react-native';
 import { useTheme } from '../../theme';
 import { Box, Text } from '../../components/primitives';
 import { Icon } from '../../icons';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 interface NotificationItem {
@@ -75,7 +76,7 @@ export const NotificationCategoryToggle: React.FC<
           false: theme.colors.background.tertiary,
           true: theme.colors.primary[500] + '80',
         }}
-        thumbColor={value ? theme.colors.primary[500] : '#fff'}
+        thumbColor={value ? theme.colors.primary[500] : lightColors.text.inverse}
       />
     </Pressable>
   );

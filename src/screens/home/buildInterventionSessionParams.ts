@@ -1,4 +1,4 @@
-import type { ActiveIntervention } from '../../features/ai-coach/hooks';
+import type { ActiveIntervention } from '../../features/ai-coach/hooks/useActiveIntervention';
 import { readSuggestedDuration, readSuggestedMode } from './utils';
 import type { SessionStackParams } from '../../navigation/types';
 

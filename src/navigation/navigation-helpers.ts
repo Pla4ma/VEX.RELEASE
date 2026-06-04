@@ -38,7 +38,7 @@ export function navigateToRootScreen(
 ): void {
   debug.info('Navigating to root screen: %s', route);
   if (params !== undefined) {
-    navigation.navigate(route as string, params as Record<string, unknown>);
+    navigation.navigate(route as keyof RootStackParams & string, params as RootStackParams[typeof route]);
   } else {
     navigation.navigate(route as never);
   }
@@ -66,7 +66,7 @@ export function navigateToMainStackScreen<Route extends MainStackRoute>(
 ): void {
   debug.info('Navigating to main stack screen: %s', route);
   if (params !== undefined) {
-    navigation.navigate(route as string, params as Record<string, unknown>);
+    navigation.navigate(route as keyof MainStackParams & string, params as MainStackParams[Route]);
   } else {
     navigation.navigate(route as never);
   }

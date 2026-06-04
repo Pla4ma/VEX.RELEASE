@@ -1,18 +1,19 @@
 import React from 'react';
 import { Pressable, Text, View } from 'react-native';
 import { type ProjectThread } from '../schemas';
+import { lightColors } from '@/theme/tokens/colors';
 
 export function Skeleton(): React.ReactElement {
   return (
     <View
       accessibilityLabel="Loading project card"
-      style={{ padding: 16, borderRadius: 12, backgroundColor: '#1a1a2e' }}
+      style={{ padding: 16, borderRadius: 12, backgroundColor: lightColors.semantic.background }}
     >
       <View
         style={{
           height: 16,
           width: '60%',
-          backgroundColor: '#2a2a3e',
+          backgroundColor: lightColors.semantic.backgroundElevated,
           borderRadius: 8,
         }}
       />
@@ -20,7 +21,7 @@ export function Skeleton(): React.ReactElement {
         style={{
           height: 12,
           width: '80%',
-          backgroundColor: '#2a2a3e',
+          backgroundColor: lightColors.semantic.backgroundElevated,
           borderRadius: 6,
           marginTop: 8,
         }}
@@ -29,7 +30,7 @@ export function Skeleton(): React.ReactElement {
         style={{
           height: 36,
           width: 120,
-          backgroundColor: '#2a2a3e',
+          backgroundColor: lightColors.semantic.backgroundElevated,
           borderRadius: 8,
           marginTop: 12,
         }}
@@ -52,14 +53,14 @@ export function EmptyState({
       style={({ pressed }) => ({
         padding: 16,
         borderRadius: 12,
-        backgroundColor: '#1a1a2e',
+        backgroundColor: lightColors.semantic.background,
         opacity: pressed ? 0.7 : 1,
       })}
     >
-      <Text style={{ color: '#e0e0ff', fontSize: 16, fontWeight: '600' }}>
+      <Text style={{ color: lightColors.primary[50], fontSize: 16, fontWeight: '600' }}>
         Project Thread
       </Text>
-      <Text style={{ color: '#8888aa', fontSize: 13, marginTop: 4 }}>
+      <Text style={{ color: lightColors.semantic.textLavender, fontSize: 13, marginTop: 4 }}>
         Track your creative or deep work project across sessions.
       </Text>
       <View
@@ -68,11 +69,11 @@ export function EmptyState({
           paddingVertical: 8,
           paddingHorizontal: 16,
           borderRadius: 8,
-          backgroundColor: '#2a2a4e',
+          backgroundColor: lightColors.semantic.backgroundElevated,
           alignSelf: 'flex-start',
         }}
       >
-        <Text style={{ color: '#aabbff', fontSize: 14, fontWeight: '600' }}>
+        <Text style={{ color: lightColors.accent.blue, fontSize: 14, fontWeight: '600' }}>
           Create project
         </Text>
       </View>
@@ -107,10 +108,10 @@ export function ActiveCard({
         padding: 16,
         borderRadius: 12,
         backgroundColor: isRescued
-          ? '#1a2e1a'
+          ? lightColors.semantic.stateRescued
           : isStale
-            ? '#2e2a1a'
-            : '#1a1a2e',
+            ? lightColors.semantic.stateStale
+            : lightColors.semantic.background,
         opacity: pressed ? 0.7 : 1,
       })}
     >
@@ -122,7 +123,7 @@ export function ActiveCard({
         }}
       >
         <Text
-          style={{ color: '#e0e0ff', fontSize: 16, fontWeight: '600' }}
+          style={{ color: lightColors.primary[50], fontSize: 16, fontWeight: '600' }}
           numberOfLines={1}
         >
           {thread.projectTitle}
@@ -133,10 +134,10 @@ export function ActiveCard({
               paddingVertical: 2,
               paddingHorizontal: 8,
               borderRadius: 4,
-              backgroundColor: '#3a2a1a',
+              backgroundColor: lightColors.semantic.stateBlocked,
             }}
           >
-            <Text style={{ color: '#ffaa44', fontSize: 11, fontWeight: '600' }}>
+            <Text style={{ color: lightColors.semantic.warning, fontSize: 11, fontWeight: '600' }}>
               Blocked
             </Text>
           </View>
@@ -144,18 +145,18 @@ export function ActiveCard({
       </View>
 
       {isRescued && (
-        <Text style={{ color: '#66cc88', fontSize: 13, marginTop: 6 }}>
+        <Text style={{ color: lightColors.semantic.stateRescuedText, fontSize: 13, marginTop: 6 }}>
           Recovery session ready. Start small.
         </Text>
       )}
       {isStale && !isRescued && (
-        <Text style={{ color: '#ffcc44', fontSize: 13, marginTop: 6 }}>
+        <Text style={{ color: lightColors.semantic.warning, fontSize: 13, marginTop: 6 }}>
           Project is stale. Short review block recommended.
         </Text>
       )}
 
       <Text
-        style={{ color: '#aaaacc', fontSize: 13, marginTop: 6 }}
+        style={{ color: lightColors.text.disabled, fontSize: 13, marginTop: 6 }}
         numberOfLines={2}
       >
         {thread.nextMove}
@@ -163,7 +164,7 @@ export function ActiveCard({
 
       {thread.handoffNote ? (
         <Text
-          style={{ color: '#7777aa', fontSize: 12, marginTop: 4 }}
+          style={{ color: lightColors.semantic.textSoftViolet, fontSize: 12, marginTop: 4 }}
           numberOfLines={2}
         >
           {thread.handoffNote}
@@ -178,10 +179,10 @@ export function ActiveCard({
             paddingVertical: 8,
             paddingHorizontal: 16,
             borderRadius: 8,
-            backgroundColor: '#2a2a4e',
+            backgroundColor: lightColors.semantic.backgroundElevated,
           }}
         >
-          <Text style={{ color: '#aabbff', fontSize: 14, fontWeight: '600' }}>
+          <Text style={{ color: lightColors.accent.blue, fontSize: 14, fontWeight: '600' }}>
             {isRescued
               ? 'Recover project'
               : isStale

@@ -9,6 +9,7 @@ import Animated, {
 } from 'react-native-reanimated';
 
 import { styles } from './progress-state.styles';
+import { lightColors } from '@/theme/tokens/colors';
 
 interface ProgressBarProps {
   progress: number;
@@ -23,8 +24,8 @@ interface ProgressBarProps {
 export function ProgressBar({
   progress,
   height = 8,
-  backgroundColor = '#e1e4e8',
-  fillColor = '#4ecdc4',
+  backgroundColor = lightColors.border.light,
+  fillColor = lightColors.accent.teal,
   animated = true,
   style,
   showPercentage = false,
@@ -89,8 +90,8 @@ export function SegmentedProgress({
               borderRadius: height / 2,
               backgroundColor:
                 i < completed
-                  ? '#4ecdc4'
-                  : '#e1e4e8',
+                  ? lightColors.accent.teal
+                  : lightColors.border.light,
               flex: 1,
             },
           ]}
@@ -113,8 +114,8 @@ export function CircularProgress({
   progress,
   size = 64,
   strokeWidth = 6,
-  color = '#4ecdc4',
-  backgroundColor = '#e1e4e8',
+  color = lightColors.accent.teal,
+  backgroundColor = lightColors.border.light,
   showText = true,
 }: CircularProgressProps) {
   const progressAnim = useSharedValue(0);

@@ -12,6 +12,7 @@ import Animated, {
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
+import { lightColors } from '@/theme/tokens/colors';
 
 interface VexProofRingProps {
   grade: 'S' | 'A' | 'B' | 'C' | 'D' | string;
@@ -21,11 +22,11 @@ interface VexProofRingProps {
 }
 
 const GRADE_COLORS: Record<string, string> = {
-  S: '#FFB300',
-  A: '#00E5FF',
-  B: '#F0F0F5',
-  C: '#F0F0F5',
-  D: '#8B8B9A',
+  S: lightColors.semantic.vexGold,
+  A: lightColors.semantic.vexCyan,
+  B: lightColors.surface.button,
+  C: lightColors.surface.button,
+  D: lightColors.semantic.gradeMuted,
 };
 
 const AnimatedSvg = Animated.createAnimatedComponent(Svg);

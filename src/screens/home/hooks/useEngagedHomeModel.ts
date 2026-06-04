@@ -12,6 +12,7 @@ import { useEngagedQueries } from './useEngagedQueries';
 import { useEngagedNavigation } from './useEngagedNavigation';
 import { buildEngagedReturnReason } from './engaged-return-reason';
 import { buildEngagedController } from './engaged-controller-builder';
+import type { ActiveStudyPlanData, ComebackStateData, StreakSummaryData, ProgressionData } from './home-query-types';
 
 export function useEngagedHomeModel(
   input: EngagedModelInput,
@@ -41,8 +42,8 @@ export function useEngagedHomeModel(
   const returnReason = useMemo<HomeReturnReason>(
     () =>
       buildEngagedReturnReason({
-        activeStudyPlanData: q.activeStudyPlanQuery.data as Record<string, unknown> | undefined,
-        comebackData: q.comebackQuery.data as Record<string, unknown> | undefined,
+        activeStudyPlanData: q.activeStudyPlanQuery.data as ActiveStudyPlanData | undefined,
+        comebackData: q.comebackQuery.data as ComebackStateData | undefined,
         shouldShowExpansionSystems: runtime.shouldShowExpansionSystems,
         nextBestAction: q.nextBestAction,
         primaryRecommendation: q.primaryRecommendation,
@@ -66,7 +67,7 @@ export function useEngagedHomeModel(
     homeHighlight,
     isAtRisk: Boolean(q.streakData?.isAtRisk),
     isFirstRun: q.isFirstRun,
-    level: (q.progData?.level as number | undefined) ?? 1,
+    level: (q.progData as ProgressionData | undefined)?.level ?? 1,
     progressPercent: q.progressPercent,
     progressXp: q.currentXp,
     returnReason: {

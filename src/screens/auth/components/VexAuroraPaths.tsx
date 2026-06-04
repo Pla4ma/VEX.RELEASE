@@ -9,6 +9,7 @@ import {
   Rect,
   vec,
 } from '@shopify/react-native-skia';
+import { lightColors } from '@/theme/tokens/colors';
 
 export function DiagonalAurora({ width, height }: { width: number; height: number }): React.JSX.Element {
   const w = width;
@@ -49,7 +50,7 @@ export function DiagonalAurora({ width, height }: { width: number; height: numbe
           <LinearGradient
             start={vec(w * 0.10, h * 0.22)}
             end={vec(w * 0.90, h * 0.55)}
-            colors={['#3D2080', '#1E1060', '#0A0520']}
+            colors={[lightColors.semantic.auroraDeepViolet, lightColors.semantic.auroraMidViolet, lightColors.semantic.auroraDarkBase]}
             positions={[0, 0.5, 1]}
           />
           <BlurMask blur={50} style="normal" />
@@ -163,7 +164,7 @@ export function BaseGradient({ width, height }: { width: number; height: number 
           <LinearGradient
             start={vec(0, 0)}
             end={vec(0, height)}
-            colors={['#0A0530', '#0A0528', '#050218']}
+            colors={[lightColors.semantic.auroraDarkBase, lightColors.semantic.auroraMidViolet, lightColors.semantic.auroraMidnight]}
             positions={[0, 0.5, 1]}
           />
         </Paint>
@@ -192,7 +193,7 @@ export function BottomVignette({ width, height }: { width: number; height: numbe
 export function GrainOverlay({ width, height }: { width: number; height: number }): React.JSX.Element {
   return (
     <Canvas style={{ position: 'absolute', width, height, opacity: 0.04 }} pointerEvents="none">
-      <Rect x={0} y={0} width={width} height={height} color="#FFFFFF" />
+      <Rect x={0} y={0} width={width} height={height} color={lightColors.text.inverse} />
     </Canvas>
   );
 }

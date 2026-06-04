@@ -1,5 +1,5 @@
 import type { FeatureHealthCheck, FeatureHealthStatus } from './feature-health';
-import { DISABLED_FEATURES } from './feature-access-config';
+import { DISABLED_FEATURES } from './FeatureFlagService';
 
 function bossFinalReleaseForbiddenDepsAreDisabled(): boolean {
   const disabled = new Set(DISABLED_FEATURES);

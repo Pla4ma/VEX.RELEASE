@@ -7,17 +7,14 @@
  */
 
 import { task } from '@trigger.dev/sdk';
-import * as Sentry from '@sentry/node';
+import { Sentry, initJobSentry } from '../shared/sentry';
 import { z } from 'zod';
 import { createClient } from '@supabase/supabase-js';
 import { ReEngagementCheckOutputSchema } from '../../shared/jobs/schemas';
 import { JOB_IDS, SCHEDULE_CONFIGS } from '../../shared/jobs/job-constants';
 import { scheduleReEngagementNotification } from '../../src/features/notifications/retention-strategy';
 
-Sentry.init({
-  dsn: process.env.SENTRY_DSN,
-  environment: process.env.NODE_ENV,
-});
+  initJobSentry();
 
 const supabase = createClient(
   process.env.SUPABASE_URL!,

@@ -8,7 +8,7 @@ export const CoachPayloadSchema = z.object({ message: z.string().min(1).max(1000
 
 const CoachContextSchema = z.object({ category: z.enum(['STREAK_RISK', 'SESSION_SUGGESTION', 'MILESTONE_HYPE', 'COMEBACK_SUPPORT', 'POST_FAILURE', 'PROGRESS_REMINDER', 'DIFFICULTY_ADJUST', 'CHALLENGE_PROMPT', 'MOTIVATION_BOOST', 'BREAK_SUGGESTION', 'OVERLOAD_WARNING']), currentStreak: z.number().optional(), currentLevel: z.number().optional(), hoursSinceLastSession: z.number().optional(), recentSessionQuality: z.number().optional(), daysInactive: z.number().optional(), personaStyle: PersonaSchema.optional(), recentSessionOutcomes: z.array(z.object({ score: z.number(), focusQuality: z.number().optional(), durationMinutes: z.number().optional() }).strict()).max(3).optional() }).passthrough();
 
-const SummaryContextSchema = z.object({ sessionCount: z.number(), totalFocusMinutes: z.number(), averageQuality: z.number(), streakDays: z.number(), xpEarned: z.number(), challengesCompleted: z.number() }).passthrough();
+const SummaryContextSchema = z.object({ sessionCount: z.number(), totalFocusMinutes: z.number(), averageSessionQuality: z.number(), streakDays: z.number(), xpEarned: z.number(), challengesCompleted: z.number() }).passthrough();
 
 export const AIRequestSchema = z.discriminatedUnion('requestType', [
   z.object({ requestType: z.literal('GENERATE_COACH_MESSAGE'), userId: z.string().uuid(), context: CoachContextSchema, personaId: z.string().uuid().optional() }),

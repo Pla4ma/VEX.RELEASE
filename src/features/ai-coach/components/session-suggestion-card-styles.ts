@@ -4,6 +4,7 @@
 
 import type { RecommendationType } from '../schemas';
 import { createSheet } from '@/shared/ui/create-sheet';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 export const TYPE_CONFIG: Record<
@@ -13,54 +14,54 @@ export const TYPE_CONFIG: Record<
   OPTIMAL_TIME: {
     icon: '🎯',
     title: 'Perfect Timing',
-    color: '#4ecdc4',
+    color: lightColors.accent.teal,
   },
   STREAK_PROTECTION: {
     icon: '🔥',
     title: 'Save Your Streak',
-    color: '#fc8181',
+    color: lightColors.error.light,
   },
   COMEBACK_BUILDER: {
     icon: '💪',
     title: 'Comeback Time',
-    color: '#68d391',
+    color: lightColors.semantic.success,
   },
   DIFFICULTY_ADJUST: {
     icon: '⚙️',
     title: 'Smart Adjustment',
-    color: '#a0aec0',
+    color: lightColors.text.disabled,
   },
   CHALLENGE_SYNC: {
     icon: '🎮',
     title: 'Challenge Ready',
-    color: '#f6ad55',
+    color: lightColors.semantic.warning,
   },
   BOSS_PREP: {
     icon: '⚔️',
     title: 'Boss Battle Prep',
-    color: '#9f7aea',
+    color: lightColors.accent.purple,
   },
   HABIT_BUILDER: {
     icon: '📅',
     title: 'Build The Habit',
-    color: '#63b3ed',
+    color: lightColors.accent.blue,
   },
   ENERGY_BASED: {
     icon: '⚡',
     title: 'Energy Match',
-    color: '#f6e05e',
+    color: lightColors.semantic.warning,
   },
 };
 
 export const styles = createSheet({
   container: {
-    backgroundColor: '#fff',
+    backgroundColor: lightColors.text.inverse,
     borderRadius: 16,
     padding: 20,
     marginHorizontal: 16,
     marginVertical: 8,
     borderWidth: 2,
-    shadowColor: '#000',
+    shadowColor: lightColors.text.primary,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -84,12 +85,12 @@ export const styles = createSheet({
   },
   confidence: {
     fontSize: 12,
-    color: '#666',
+    color: lightColors.text.muted,
   },
   reasoning: {
     fontSize: 15,
     lineHeight: 22,
-    color: '#333',
+    color: lightColors.text.secondary,
     marginBottom: 16,
   },
   details: {
@@ -98,20 +99,20 @@ export const styles = createSheet({
     marginBottom: 16,
     paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: '#f0f0f0',
+    borderTopColor: lightColors.surface.button,
   },
   detailItem: {
     flex: 1,
   },
   detailLabel: {
     fontSize: 12,
-    color: '#666',
+    color: lightColors.text.muted,
     marginBottom: 4,
   },
   detailValue: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333',
+    color: lightColors.text.secondary,
   },
   actions: {
     flexDirection: 'row',
@@ -126,7 +127,7 @@ export const styles = createSheet({
     justifyContent: 'center',
   },
   acceptButtonText: {
-    color: '#fff',
+    color: lightColors.text.inverse,
     fontSize: 16,
     fontWeight: '600',
   },
@@ -139,7 +140,7 @@ export const styles = createSheet({
     justifyContent: 'center',
   },
   dismissButtonText: {
-    color: '#666',
+    color: lightColors.text.muted,
     fontSize: 16,
     fontWeight: '500',
   },

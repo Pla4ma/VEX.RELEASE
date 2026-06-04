@@ -2,7 +2,7 @@ import type { FeatureAccessMap, FeatureKey } from './feature-access';
 import {
   getFeatureAvailabilityFor,
   type FeatureAvailability,
-} from './feature-availability';
+} from './FeatureFlagService';
 
 let _featureAccessMap: FeatureAccessMap | null = null;
 

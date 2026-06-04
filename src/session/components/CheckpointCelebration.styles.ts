@@ -1,3 +1,4 @@
+import { lightColors } from '@/theme/tokens/colors';
 
 
 export const overlayStyle = {
@@ -29,7 +30,7 @@ export const cardStyle = {
   padding: 32,
   borderRadius: 24,
   alignItems: 'center' as const,
-  shadowColor: '#000',
+  shadowColor: lightColors.text.primary,
   shadowOffset: { width: 0, height: 4 },
   shadowOpacity: 0.3,
   shadowRadius: 8,
@@ -50,7 +51,7 @@ export const bonusBadgeStyle = {
 };
 
 export const bonusTextStyle = {
-  color: '#fff',
+  color: lightColors.text.inverse,
   fontWeight: '700' as const,
   fontSize: 14,
 };

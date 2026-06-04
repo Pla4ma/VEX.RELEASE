@@ -10,6 +10,7 @@ import {
 } from '../../features/liveops-config/feature-availability';
 import type { FeatureAccessMap } from '../../features/liveops-config/feature-access';
 import type { NotificationCenterItem } from '../../features/notifications/service';
+import { lightColors } from '@/theme/tokens/colors';
 
 export type NotificationType =
   | 'ACHIEVEMENT'
@@ -43,43 +44,43 @@ export const NOTIFICATION_CONFIG: Record<
 > = {
   ACHIEVEMENT: {
     icon: '\u{1F3C6}',
-    color: '#eab308',
-    bgColor: '#fef9c3',
+    color: lightColors.semantic.warning,
+    bgColor: lightColors.warning[50],
   },
   STREAK_RISK: {
     icon: '\u{1F525}',
-    color: '#ef4444',
-    bgColor: '#fee2e2',
+    color: lightColors.semantic.danger,
+    bgColor: lightColors.error[50],
   },
   BOSS: {
     icon: '\u{1F480}',
-    color: '#a855f7',
-    bgColor: '#f3e8ff',
+    color: lightColors.accent.purple,
+    bgColor: lightColors.primary[50],
   },
   SQUAD: {
     icon: '\u{1F6E1}',
-    color: '#3b82f6',
-    bgColor: '#dbeafe',
+    color: lightColors.accent.blue,
+    bgColor: lightColors.info[50],
   },
   RIVAL: {
     icon: '\u{2694}',
-    color: '#ef4444',
-    bgColor: '#fee2e2',
+    color: lightColors.semantic.danger,
+    bgColor: lightColors.error[50],
   },
   COACH: {
     icon: '\u{1F4AC}',
-    color: '#22c55e',
-    bgColor: '#dcfce7',
+    color: lightColors.semantic.success,
+    bgColor: lightColors.success[50],
   },
   REWARD: {
     icon: '\u{1F381}',
-    color: '#f59e0b',
-    bgColor: '#fef3c7',
+    color: lightColors.semantic.warning,
+    bgColor: lightColors.warning[50],
   },
   LEVEL_UP: {
     icon: '\u{2B50}',
-    color: '#8b5cf6',
-    bgColor: '#ede9fe',
+    color: lightColors.accent.purple,
+    bgColor: lightColors.primary[50],
   },
 };
 
@@ -186,6 +187,6 @@ export function mapToNotificationAction(
   const mappedType = NOTIFICATION_TYPE_TO_SAFE_ACTION[type] ?? 'view_progress';
   return {
     type: mappedType,
-    payload: notification.actionParams as Record<string, unknown> | undefined,
+    payload: notification.actionParams,
   };
 }

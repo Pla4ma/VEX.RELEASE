@@ -3,7 +3,7 @@ import {
   CoachSessionBanner,
   type CoachPersonaStyle,
 } from '../../../features/ai-coach/components/CoachSessionBanner';
-import { useCoachState } from '../../../features/ai-coach/hooks';
+import { useCoachState } from '../../../features/ai-coach/hooks/useCoachState';
 
 type CoachSessionBannerLazyProps = {
   userId: string | undefined;

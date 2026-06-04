@@ -20,7 +20,14 @@
  * Pin rotation: Update pins BEFORE certificates expire (check cert expiry with openssl s_client).
  */
 
-const { withInfoPlist, withAndroidManifest, createRunOncePlugin } = require('@expo/config-plugins');
+const {
+  withInfoPlist,
+  withAndroidManifest,
+  withDangerousMod,
+  createRunOncePlugin,
+} = require('@expo/config-plugins');
+const fs = require('fs');
+const path = require('path');
 
 function withCertificatePinning(config, props = {}) {
   const { domains = {} } = props;
@@ -57,6 +64,69 @@ function withCertificatePinning(config, props = {}) {
     }
     return config;
   });
+
+  // Android: Create the actual network_security_config.xml resource file
+  config = withDangerousMod(config, [
+    'android',
+    async (config) => {
+      const resDir = path.join(
+        config.modRequest.platformProjectRoot,
+        'app',
+        'src',
+        'main',
+        'res',
+        'xml',
+      );
+
+      // Ensure res/xml directory exists
+      if (!fs.existsSync(resDir)) {
+        fs.mkdirSync(resDir, { recursive: true });
+      }
+
+      // Build <domain-config> entries from the configured pins
+      const domainConfigs = Object.entries(domains)
+        .map(([domain, settings]) => {
+          const pins = (settings.pins || [])
+            .map((pin) => {
+              // Strip "sha256/" prefix if present and format as base64 hash
+              const hash = pin.replace(/^sha256\//, '');
+              return `      <pin digest="SHA-256">${hash}</pin>`;
+            })
+            .join('\n');
+
+          const includeSubdomains = settings.includeSubdomains !== false;
+
+          return [
+            `    <domain-config${includeSubdomains ? ' includeSubdomains="true"' : ''}>`,
+            `      <domain>${domain}</domain>`,
+            pins,
+            '      <trust-anchors>',
+            '        <certificates src="system" />',
+            '      </trust-anchors>',
+            '    </domain-config>',
+          ].join('\n');
+        })
+        .join('\n\n');
+
+      const xml = [
+        '<?xml version="1.0" encoding="utf-8"?>',
+        '<network-security-config>',
+        '  <base-config cleartextTrafficPermitted="false">',
+        '    <trust-anchors>',
+        '      <certificates src="system" />',
+        '    </trust-anchors>',
+        '  </base-config>',
+        '',
+        domainConfigs,
+        '</network-security-config>',
+      ].join('\n');
+
+      const xmlPath = path.join(resDir, 'network_security_config.xml');
+      fs.writeFileSync(xmlPath, xml, 'utf8');
+
+      return config;
+    },
+  ]);
 
   return config;
 }

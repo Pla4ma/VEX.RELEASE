@@ -98,9 +98,9 @@ export class ThemeService {
     this.eventEmitter?.emit('theme:change', event);
 
     // Also emit via global event bus
-    const globalBus = (globalThis as Record<string, unknown>).eventBus;
+    const globalBus = (globalThis as { eventBus?: unknown }).eventBus;
     if (typeof globalBus === 'function') {
-      globalBus('theme:change', event);
+      (globalBus as (event: string, data: unknown) => void)('theme:change', event);
     }
   }
 

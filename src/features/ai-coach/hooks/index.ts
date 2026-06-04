@@ -2,6 +2,9 @@
  * AI Coach Hooks Barrel Export
  */
 
+// Query keys used across hooks
+export { COACH_QUERY_KEYS } from '../constants';
+
 export {
   useCoachPersona,
   useCoachPersonas,
@@ -30,3 +33,32 @@ export {
   useCreateCoachMemory,
   type UseCoachMemoriesResult,
 } from './useMemories';
+export {
+  useCoachRecommendations,
+  useActiveCoachRecommendations,
+  type ActiveCoachRecommendationsResult,
+} from './useCoachRecommendations';
+export {
+  useCoachScreenState,
+  useAskCoachQuestionMutation,
+} from './useCoachScreen';
+export {
+  useActiveIntervention,
+  type ActiveIntervention,
+} from './useActiveIntervention';
+
+// Offline & Realtime hooks (consolidated from root-level flat files)
+export {
+  useOfflineCoach,
+  useOptimisticCoachAction,
+  useOfflineCoachMessageActions,
+  useOfflinePersonaSelection,
+} from './useOfflineCoach';
+
+export {
+  useRealtimeCoachMessages,
+  useRealtimeCoachState,
+  useRealtimeComebackPlan,
+  useRealtimeRecommendations,
+  useRealtimeCoach,
+} from './useRealtimeCoach';

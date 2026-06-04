@@ -1,3 +1,4 @@
+import { lightColors } from '@/theme/tokens/colors';
 
 
 export type AccentColor =
@@ -24,14 +25,14 @@ interface TimerFormatOption {
 }
 
 export const ACCENT_COLORS: AccentColorOption[] = [
-  { id: 'indigo', hex: '#6366f1' },
-  { id: 'purple', hex: '#a855f7' },
-  { id: 'blue', hex: '#3b82f6' },
-  { id: 'green', hex: '#10b981' },
-  { id: 'orange', hex: '#f97316' },
-  { id: 'pink', hex: '#ec4899' },
-  { id: 'red', hex: '#ef4444' },
-  { id: 'teal', hex: '#14b8a6' },
+  { id: 'indigo', hex: lightColors.semantic.primary },
+  { id: 'purple', hex: lightColors.accent.purple },
+  { id: 'blue', hex: lightColors.accent.blue },
+  { id: 'green', hex: lightColors.accent.green },
+  { id: 'orange', hex: lightColors.accent.orange },
+  { id: 'pink', hex: lightColors.accent.pink },
+  { id: 'red', hex: lightColors.semantic.danger },
+  { id: 'teal', hex: lightColors.accent.teal },
 ];
 
 export const TIMER_FORMAT_OPTIONS: TimerFormatOption[] = [

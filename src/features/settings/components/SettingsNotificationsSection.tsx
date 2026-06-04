@@ -4,6 +4,7 @@ import type { NotificationSettings } from '../types';
 import { ToggleSetting } from './ToggleSetting';
 import { SettingItem } from './SettingItem';
 import { createSheet } from '@/shared/ui/create-sheet';
+import { lightColors } from '@/theme/tokens/colors';
 
 
 interface SettingsNotificationsSectionProps {
@@ -41,7 +42,7 @@ export function SettingsNotificationsSection({
 
 const styles = createSheet({
   settingsGroup: {
-    backgroundColor: '#ffffff',
+    backgroundColor: lightColors.text.inverse,
     marginTop: 8,
     paddingHorizontal: 16,
   },

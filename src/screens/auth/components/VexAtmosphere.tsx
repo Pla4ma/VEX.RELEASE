@@ -10,6 +10,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { FlowCurves, SoftOrb } from './VexAtmosphereEffects';
+import { lightColors } from '@/theme/tokens/colors';
 
 const EASE_AMBIENT = Easing.bezier(0.37, 0, 0.63, 1);
 
@@ -44,7 +45,7 @@ function DustDot({ m }: { m: DustMote }) {
     transform: [{ translateY: ty.value }],
   }));
 
-  const color = m.hue === 'gold' ? '#E0B870' : m.hue === 'teal' ? '#5EEAD4' : '#FBE4B0';
+  const color = m.hue === 'gold' ? lightColors.semantic.vexGold : m.hue === 'teal' ? lightColors.semantic.auroraTeal : lightColors.semantic.auroraWarmLight;
 
   return (
     <Animated.View pointerEvents="none" style={[
@@ -81,7 +82,7 @@ function Grain() {
           position: 'absolute',
           left: `${d.x}%`, top: `${d.y}%`,
           width: d.s, height: d.s,
-          backgroundColor: '#F5F1E8', borderRadius: d.s / 2,
+          backgroundColor: lightColors.surface.button, borderRadius: d.s / 2,
         }} />
       ))}
     </View>
@@ -112,7 +113,7 @@ export const VexAtmosphere = memo(function VexAtmosphere() {
     <View pointerEvents="none" style={{ position: 'absolute', width, height, top: 0, left: 0 }}>
       {/* Deep warm dark base */}
       <LinearGradient
-        colors={['#08080C', '#0C0A12', '#0E0C16', '#08080C']}
+        colors={[lightColors.semantic.atmosphereBase1, lightColors.semantic.atmosphereBase2, lightColors.semantic.atmosphereBase3, lightColors.semantic.atmosphereBase1]}
         locations={[0, 0.35, 0.7, 1]}
         style={{ position: 'absolute', width, height }}
       />
@@ -121,9 +122,9 @@ export const VexAtmosphere = memo(function VexAtmosphere() {
       <HorizonGlow />
 
       {/* Soft ambient orbs (very subtle) */}
-      <SoftOrb cx={width * 0.18} cy={height * 0.22} r={220} color="#E0B870" dur={14000} delay={0} />
-      <SoftOrb cx={width * 0.82} cy={height * 0.35} r={200} color="#5EEAD4" dur={17000} delay={3000} />
-      <SoftOrb cx={width * 0.5} cy={height * 0.95} r={260} color="#E0B870" dur={20000} delay={6000} />
+      <SoftOrb cx={width * 0.18} cy={height * 0.22} r={220} color={lightColors.semantic.auroraEditorialGold} dur={14000} delay={0} />
+      <SoftOrb cx={width * 0.82} cy={height * 0.35} r={200} color={lightColors.semantic.auroraTeal} dur={17000} delay={3000} />
+      <SoftOrb cx={width * 0.5} cy={height * 0.95} r={260} color={lightColors.semantic.auroraEditorialGold} dur={20000} delay={6000} />
 
       {/* Flowing curve lines (AURUM signature) */}
       <FlowCurves />

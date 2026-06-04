@@ -5,6 +5,7 @@ import { useTheme } from '../../../theme';
 import { getMinTouchTargetStyle } from '../../../utils/touchTarget';
 import { buttonTap } from '../../../utils/haptics';
 import type { CoachPresence } from '../schemas';
+import { lightColors } from '@/theme/tokens/colors';
 
 interface CoachPresenceCardProps {
   presence: CoachPresence;
@@ -124,15 +125,15 @@ function getReactionColor(
 ): string {
   switch (reaction) {
     case 'celebrating':
-      return semantic.success ?? '#4ADE80';
+      return semantic.success ?? lightColors.semantic.success;
     case 'focused':
-      return semantic.accent ?? '#38BDF8';
+      return semantic.accent ?? lightColors.accent.blue;
     case 'recovering':
-      return semantic.warning ?? '#FBBF24';
+      return semantic.warning ?? lightColors.semantic.warning;
     case 'ready':
-      return semantic.primary ?? '#8B5CF6';
+      return semantic.primary ?? lightColors.accent.purple;
     default:
-      return semantic.textMuted ?? '#9BA8BA';
+      return semantic.textMuted ?? lightColors.text.muted;
   }
 }
 

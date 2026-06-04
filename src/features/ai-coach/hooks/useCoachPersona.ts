@@ -6,7 +6,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import * as repository from '../repository';
-import * as service from '../service';
+import * as service from '../services/service';
 import { useCoachStore } from '../store';
 
 const coachKeys = {

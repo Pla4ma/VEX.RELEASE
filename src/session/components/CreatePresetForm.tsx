@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, Pressable, Modal, TextInput } from 'react-native';
+import { lightColors } from '@/theme/tokens/colors';
 
 import { buttonTap } from '../../utils/haptics';
 
@@ -42,7 +43,7 @@ export const CreatePresetForm: React.FC<CreatePresetFormProps> = ({
             value={name}
             onChangeText={setName}
             placeholder="e.g., Deep Work"
-            placeholderTextColor={'#666'}
+            placeholderTextColor={lightColors.text.muted}
           />
 
           <Text style={styles.inputLabel}>Duration (minutes)</Text>
@@ -52,7 +53,7 @@ export const CreatePresetForm: React.FC<CreatePresetFormProps> = ({
             onChangeText={setDuration}
             keyboardType="numeric"
             placeholder="25"
-            placeholderTextColor={'#666'}
+            placeholderTextColor={lightColors.text.muted}
           />
 
           <View style={styles.modalButtons}>
@@ -97,26 +98,26 @@ const styles = {
     padding: 24,
   },
   modalContent: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: lightColors.semantic.background,
     borderRadius: 16,
     padding: 24,
   },
   modalTitle: {
     fontSize: 20,
     fontWeight: '700' as const,
-    color: '#fff',
+    color: lightColors.text.inverse,
     marginBottom: 20,
   },
-  inputLabel: { fontSize: 14, color: '#9e9e9e', marginBottom: 8 },
+  inputLabel: { fontSize: 14, color: lightColors.text.muted, marginBottom: 8 },
   input: {
-    backgroundColor: '#2a2a3e',
+    backgroundColor: lightColors.semantic.backgroundElevated,
     borderRadius: 8,
     padding: 12,
-    color: '#fff',
+    color: lightColors.text.inverse,
     fontSize: 16,
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: '#3a3a4e',
+    borderColor: lightColors.semantic.border,
   },
   modalButtons: { flexDirection: 'row' as const, gap: 12 },
   modalButton: {
@@ -128,16 +129,16 @@ const styles = {
   cancelButton: {
     backgroundColor: 'transparent',
     borderWidth: 1,
-    borderColor: '#9e9e9e',
+    borderColor: lightColors.text.muted,
   },
   cancelButtonText: {
-    color: '#9e9e9e',
+    color: lightColors.text.muted,
     fontSize: 16,
     fontWeight: '600' as const,
   },
-  createConfirmButton: { backgroundColor: '#e94560' },
+  createConfirmButton: { backgroundColor: lightColors.semantic.danger },
   createButtonTextConfirm: {
-    color: '#fff',
+    color: lightColors.text.inverse,
     fontSize: 16,
     fontWeight: '600' as const,
   },

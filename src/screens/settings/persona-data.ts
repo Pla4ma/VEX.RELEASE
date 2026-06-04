@@ -1,3 +1,4 @@
+import { lightColors } from '@/theme/tokens/colors';
 export type CoachPersona = 'cheerleader' | 'mentor' | 'drill-sergeant';
 
 export interface PersonaOption {
@@ -19,7 +20,7 @@ export const PERSONA_OPTIONS: PersonaOption[] = [
       "You're absolutely crushing it.",
       'That focus session was outstanding.',
     ],
-    color: '#ec4899',
+    color: lightColors.accent.pink,
   },
   {
     id: 'mentor',
@@ -30,7 +31,7 @@ export const PERSONA_OPTIONS: PersonaOption[] = [
       'Your consistency is building momentum.',
       'Consider a longer session tomorrow for deeper focus.',
     ],
-    color: '#3b82f6',
+    color: lightColors.accent.blue,
   },
   {
     id: 'drill-sergeant',
@@ -41,6 +42,6 @@ export const PERSONA_OPTIONS: PersonaOption[] = [
       'Excuses are for losers. FOCUS!',
       'Your enemy is winning while you hesitate.',
     ],
-    color: '#ef4444',
+    color: lightColors.semantic.danger,
   },
 ];

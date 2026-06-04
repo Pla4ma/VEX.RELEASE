@@ -1,3 +1,4 @@
+import { lightColors } from '@/theme/tokens/colors';
 import type { CoachState, CoachUserState } from '../types';
 import {
   PERSONALITY_METADATA,
@@ -85,18 +86,18 @@ export function getStateColor(
   state?: CoachUserState | null,
 ): string {
   if (!state) {
-    return '#22c55e';
+    return lightColors.semantic.success;
   }
   const stateColors: Record<CoachUserState, string> = {
-    COLD_START: '#3b82f6',
-    LOW_CONFIDENCE: '#f59e0b',
-    HIGH_CONFIDENCE: '#22c55e',
-    STREAK_AT_RISK: '#ef4444',
-    COMEBACK_MODE: '#8b5cf6',
-    POST_FAILURE_SUPPORT: '#f97316',
-    MILESTONE_HYPE: '#ec4899',
-    OVERLOAD_PROTECTION: '#06b6d4',
-    MUTED_MODE: '#6b7280',
+    COLD_START: lightColors.accent.blue,
+    LOW_CONFIDENCE: lightColors.semantic.warning,
+    HIGH_CONFIDENCE: lightColors.semantic.success,
+    STREAK_AT_RISK: lightColors.semantic.danger,
+    COMEBACK_MODE: lightColors.accent.purple,
+    POST_FAILURE_SUPPORT: lightColors.accent.orange,
+    MILESTONE_HYPE: lightColors.accent.pink,
+    OVERLOAD_PROTECTION: lightColors.accent.teal,
+    MUTED_MODE: lightColors.text.muted,
   };
-  return stateColors[state] || '#22c55e';
+  return stateColors[state] || lightColors.semantic.success;
 }

@@ -4,6 +4,7 @@ import { useExportAnalytics, useExportJobs } from '../hooks';
 import { ExportProgress } from './ExportProgress';
 import { ErrorBoundary } from '../../../errors/ErrorBoundary';
 import { SkeletonList } from '../../../shared/ui/primitives/Skeleton';
+import { lightColors } from '@/theme/tokens/colors';
 
 import { styles } from './DataExportScreen.styles';
 import {
@@ -103,7 +104,7 @@ export function DataExportScreen({ userId, onClose }: DataExportScreenProps) {
               <Switch
                 value={includeMetadata}
                 onValueChange={setIncludeMetadata}
-                trackColor={{ false: '#e5e7eb', true: '#6366f1' }}
+                trackColor={{ false: lightColors.border.light, true: lightColors.semantic.primary }}
               />
             </View>
           </View>
