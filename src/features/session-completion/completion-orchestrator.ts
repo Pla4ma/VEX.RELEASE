@@ -16,6 +16,7 @@ import type { CompletionPersonalizationResult } from './schemas';
 import {
   createCompletionLedger,
   getCompletionLedgerByIdempotencyKey,
+  SessionCompletionRepositoryError,
 } from './repository';
 import { buildPostSessionStoryViewModel } from './story-view-model-service';
 import type { PostSessionStoryViewModel } from './story-view-model-service';
@@ -102,17 +103,37 @@ export async function orchestrateSessionCompletion(
             tags: { feature: 'session-record-creation' },
           });
         });
-      } catch (error) {
-        Sentry.captureException(error, {
-          tags: { feature: 'session-completion-ledger' },
-        });
-        enqueue({
-          feature: 'sessions',
-          idempotencyKey: ledger.idempotencyKey,
-          operation: 'CREATE',
-          payload: { ledger },
-        });
-        persisted = { ...ledger, offlineSyncStatus: 'pending_sync' };
+      } catch (error: unknown) {
+        // P0-5: If server returns 409 (duplicate idempotency key),
+        // the completion already landed — treat as success, not a retry.
+        const repoErr =
+          error instanceof SessionCompletionRepositoryError ? error : null;
+        const cause = repoErr?.cause;
+        const causeCode =
+          cause != null &&
+          typeof cause === 'object' &&
+          'code' in cause &&
+          typeof (cause as { code?: unknown }).code === 'string'
+            ? (cause as { code: string }).code
+            : null;
+        const isDuplicate =
+          causeCode === '23505' || causeCode === '409';
+
+        if (isDuplicate) {
+          debug.info('Duplicate idempotency key %s — already synced', key);
+          persisted = { ...ledger, offlineSyncStatus: 'synced' };
+        } else {
+          Sentry.captureException(error, {
+            tags: { feature: 'session-completion-ledger' },
+          });
+          enqueue({
+            feature: 'sessions',
+            idempotencyKey: ledger.idempotencyKey,
+            operation: 'CREATE',
+            payload: { ledger },
+          });
+          persisted = { ...ledger, offlineSyncStatus: 'pending_sync' };
+        }
       }
     } else {
       enqueue({
