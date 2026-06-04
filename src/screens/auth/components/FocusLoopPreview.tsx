@@ -1,4 +1,4 @@
-﻿import React, { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { View } from 'react-native';
 import Animated, {
   Easing,
@@ -15,64 +15,7 @@ import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { motionStagger } from '../../../theme/tokens/motion';
 import { VexSignalNode } from './VexSignalNode';
 import { AnimatedGradientBorder } from './AnimatedGradientBorder';
-
-const previewSteps = [
-  { label: 'Start', value: 'One protected block' },
-  { label: 'Protect', value: 'Focus without interruption' },
-  { label: 'Return', value: 'Proof saved for tomorrow' },
-] as const;
-
-interface LoopStepProps {
-  step: typeof previewSteps[number];
-  index: number;
-  isReducedMotion: boolean;
-  staggerMs: number;
-}
-
-function LoopStep({ step, index, isReducedMotion, staggerMs }: LoopStepProps): JSX.Element {
-  const labelOpacity = useSharedValue(0);
-  const labelTranslateY = useSharedValue(8);
-
-  useEffect(() => {
-    if (isReducedMotion) {
-      labelOpacity.value = 1;
-      labelTranslateY.value = 0;
-      return;
-    }
-    labelOpacity.value = withDelay(
-      600 + index * staggerMs,
-      withTiming(1, { duration: 420, easing: Easing.bezier(0.22, 1, 0.36, 1) }),
-    );
-    labelTranslateY.value = withDelay(
-      600 + index * staggerMs,
-      withTiming(0, { duration: 420, easing: Easing.bezier(0.22, 1, 0.36, 1) }),
-    );
-  }, [isReducedMotion, index, labelOpacity, labelTranslateY, staggerMs]);
-
-  const labelStyle = useAnimatedStyle(() => ({
-    opacity: labelOpacity.value,
-    transform: [{ translateY: labelTranslateY.value }],
-  }));
-
-  return (
-    <Animated.View style={[{ gap: 4 }, labelStyle]}>
-      <Text
-        color="text.primary"
-        variant="label"
-        style={{ opacity: 0.95 }}
-      >
-        {step.label}
-      </Text>
-      <Text
-        color="text.muted"
-        variant="bodySmall"
-        style={{ opacity: 0.75 }}
-      >
-        {step.value}
-      </Text>
-    </Animated.View>
-  );
-}
+import { previewSteps, LoopStep } from './LoopStep';
 
 export function FocusLoopPreview(): JSX.Element {
   const { theme } = useTheme();
