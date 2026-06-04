@@ -138,11 +138,9 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorState> {
       }
     }
   };
-
   private handleDegradedContinue = (): void => {
     this.setState({ degraded: true, hasError: false });
   };
-
   private renderErrorUI(): ReactNode {
     const { fallback, maxRetries = 3, allowDegraded = true } = this.props;
     const { error, category, retryCount, isRetrying, degraded } = this.state;

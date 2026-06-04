@@ -11,9 +11,7 @@ import { createDebugger } from '../../utils/debug';
 import { withResilience } from '../../utils/supabase-resilience';
 import { mapContentRow, mapGenerationRow } from './row-mappers';
 import { sanitizeFilename } from './validators-file';
-
 const debug = createDebugger('content-study:repository');
-
 const ALLOWED_URI_SCHEMES = ['file://', 'content://', 'https://'] as const;
 
 /**
