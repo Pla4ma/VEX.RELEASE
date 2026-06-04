@@ -9,28 +9,21 @@ import { invalidateCompletionQueries } from './completion-query-invalidation';
 import { setCompletionSyncState } from './completion-sync-state';
 import { applyCompletionSubsystems } from './completion-subsystems';
 import { buildCompletionLedger } from './ledger-service';
-import { resolveCompletionPersonalBest } from './personal-best-integration';
-import { applyCompletionSideEffects } from './completion-side-effects';
-import { integrateCompletionPersonalization } from './completion-personalization-integration';
-import type { CompletionPersonalizationResult } from './schemas';
+import { applyPersonalizationAndSideEffects } from './completion-personalization-step';
+import type { PostSessionStoryViewModel } from './story-view-model-service';
 import {
   createCompletionLedger,
   getCompletionLedgerByIdempotencyKey,
   SessionCompletionRepositoryError,
 } from './repository';
-import { buildPostSessionStoryViewModel } from './story-view-model-service';
-import type { PostSessionStoryViewModel } from './story-view-model-service';
 import {
   createSessionRecord,
-  countCompletedSessions,
 } from '../session-history/repository';
 import {
   beginKeyProcessing,
   markKeyProcessed,
   releaseKeyProcessing,
 } from './idempotency';
-import { getFocusProfile } from '../focus-profile/service';
-import { resolveInitialLane } from '../lane-engine/service';
 
 export { initializeSessionCompletionOrchestrator } from './completion-orchestrator-init';
 
@@ -73,11 +66,7 @@ export async function orchestrateSessionCompletion(
     if (existing) {
       markKeyProcessed(key);
       setCompletionSyncState(existing.ledgerId, [], false);
-      return buildPostSessionStoryViewModel({
-        degradedWarnings: existing.degradedSystems,
-        ledger: existing,
-        summary,
-      });
+      return null;
     }
 
     // LAYER 2: Persist session — Supabase primary, offline queue fallback
@@ -99,111 +88,45 @@ export async function orchestrateSessionCompletion(
           completedAt: new Date(ledger.completedAt).toISOString(),
           endedAt: new Date(ledger.completedAt).toISOString(),
         }).catch((err: unknown) => {
-          Sentry.captureException(err, {
-            tags: { feature: 'session-record-creation' },
-          });
+          Sentry.captureException(err, { tags: { feature: 'session-record-creation' } });
         });
       } catch (error: unknown) {
-        // P0-5: If server returns 409 (duplicate idempotency key),
-        // the completion already landed — treat as success, not a retry.
         const repoErr =
           error instanceof SessionCompletionRepositoryError ? error : null;
         const cause = repoErr?.cause;
         const causeCode =
-          cause != null &&
-          typeof cause === 'object' &&
-          'code' in cause &&
+          cause != null && typeof cause === 'object' && 'code' in cause &&
           typeof (cause as { code?: unknown }).code === 'string'
-            ? (cause as { code: string }).code
-            : null;
-        const isDuplicate =
-          causeCode === '23505' || causeCode === '409';
+            ? (cause as { code: string }).code : null;
+        const isDuplicate = causeCode === '23505' || causeCode === '409';
 
         if (isDuplicate) {
           debug.info('Duplicate idempotency key %s — already synced', key);
           persisted = { ...ledger, offlineSyncStatus: 'synced' };
         } else {
-          Sentry.captureException(error, {
-            tags: { feature: 'session-completion-ledger' },
-          });
-          enqueue({
-            feature: 'sessions',
-            idempotencyKey: ledger.idempotencyKey,
-            operation: 'CREATE',
-            payload: { ledger },
-          });
+          Sentry.captureException(error, { tags: { feature: 'session-completion-ledger' } });
+          enqueue({ feature: 'sessions', idempotencyKey: ledger.idempotencyKey, operation: 'CREATE', payload: { ledger } });
           persisted = { ...ledger, offlineSyncStatus: 'pending_sync' };
         }
       }
     } else {
-      enqueue({
-        feature: 'sessions',
-        idempotencyKey: ledger.idempotencyKey,
-        operation: 'CREATE',
-        payload: { ledger },
-      });
+      enqueue({ feature: 'sessions', idempotencyKey: ledger.idempotencyKey, operation: 'CREATE', payload: { ledger } });
     }
 
-    // LAYER 3: XP / streak / progression / rewards — required for user payoff
-    const subsystemResult = await applyCompletionSubsystems({
-      ledger: persisted,
-      summary,
-    });
+    // LAYER 3: XP / streak / progression / rewards
+    const subsystemResult = await applyCompletionSubsystems({ ledger: persisted, summary });
     const finalLedger = subsystemResult.ledger;
-    const degradedSystems = subsystemResult.degradedSystems;
-    const personalBest = await resolveCompletionPersonalBest(
-      parsed.userId,
-      finalLedger,
-      summary,
-    );
 
-    // LAYER 3.5: Personalization
-    let personalizationResult: CompletionPersonalizationResult | null = null;
-    try {
-      const sessionCount = await countCompletedSessions(parsed.userId).catch(
-        () => 0,
-      );
-      const focusProfile = await getFocusProfile(parsed.userId).catch(
-        () => null,
-      );
-      const laneProfile =
-        focusProfile?.laneProfile ||
-        resolveInitialLane({ observedAt: Date.now() });
-      personalizationResult = await integrateCompletionPersonalization({
-        deletedMemoryIds: [],
-        hiddenFeatureKeys: [
-          'shop',
-          'inventory',
-          'battle_pass',
-          'premium_currency',
-          'wagers',
-        ],
-        isComeback: summary.sessionMode === 'RECOVERY',
-        isPersonalBest: personalBest.isPersonalBest,
-        laneProfile,
-        ledger: finalLedger,
-        sessionCount,
-        summary,
-      });
-    } catch (error) {
-      Sentry.captureException(error, {
-        tags: { feature: 'completion-personalization' },
-      });
-    }
-
-    const storyViewModel = await applyCompletionSideEffects({
-      degradedSystems,
-      finalLedger,
-      isPersonalBest: personalBest.isPersonalBest,
-      personalizationResult,
-      sessionId: parsed.sessionId,
-      summary,
+    // LAYER 3.5 + 4: Personalization and side effects
+    const storyViewModel = await applyPersonalizationAndSideEffects({
       userId: parsed.userId,
+      finalLedger,
+      summary,
+      degradedSystems: subsystemResult.degradedSystems,
     });
 
     debug.info('Session completion orchestrated for %s', parsed.sessionId);
     invalidateCompletionQueries(parsed.userId);
-
     markKeyProcessed(key);
     return storyViewModel;
   } catch (error) {
