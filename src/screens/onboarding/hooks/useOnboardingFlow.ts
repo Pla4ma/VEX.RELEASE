@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import * as Sentry from '@sentry/react-native';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useDisclosureAnalytics } from '../../../features/liveops-config';
@@ -22,6 +21,7 @@ import {
   buildDraftPayload,
 } from '../onboarding-flow-steps';
 import { useOnboardingCompletion } from './useOnboardingCompletion';
+import { buildOnboardingHandlers } from './onboarding-flow-handlers';
 
 type NavigationProp = NativeStackNavigationProp<ExtendedRootStackParams>;
 
@@ -95,14 +95,6 @@ export function useOnboardingFlow(routeStep?: number) {
   useEffect(() => { persistDraft(); }, [persistDraft, step]);
   useEffect(() => { if (step === 2 && motivationStyle) {computeLaneConfirmation();} }, [step, motivationStyle, computeLaneConfirmation]);
 
-  const handleAcceptLaneAndAdvance = useCallback(
-    (lane: import('../../../features/lane-engine').Lane): void => {
-      handleAcceptLane(lane);
-      setStep(3);
-    },
-    [handleAcceptLane],
-  );
-
   useEffect(() => {
     navigation.setParams({ step });
   }, [navigation, step]);
@@ -124,57 +116,23 @@ export function useOnboardingFlow(routeStep?: number) {
     completedRef,
   ]);
 
-  const handleSelectGoal = useCallback(
-    (nextGoal: OnboardingGoal): void => {
-      setGoal(nextGoal);
-      if (userId) {
-        disclosureAnalytics.trackOnboardingGoalSet(userId, nextGoal);
-      }
-    },
-    [disclosureAnalytics, userId],
-  );
-
-  const handleSelectMotivationStyle = useCallback(
-    (style: typeof motivationStyle): void => {
-      if (!style) {return;}
-      setMotivationStyle(style);
-      setExplicitMotivationStyle(style);
-    },
-    [setExplicitMotivationStyle],
-  );
-
-  const handleStartFirstSession = useCallback((): void => {
-    if (!selectedPreset) {return;}
-    setIsLaunchingSession(true);
-    triggerHaptic('impactMedium').catch(() => {
-      // Haptic failure is non-critical — safe to swallow in onboarding
-    });
-    disclosureAnalytics.trackFirstSessionStarted(userId, 'onboarding');
-    navigation.navigate('SessionStack', {
-      screen: 'SessionSetup',
-      params: {
-        goal: selectedGoal?.label,
-        presetId: selectedPreset.id,
-        source: 'onboarding_first_session',
-      },
-    });
-    setIsLaunchingSession(false);
-  }, [
+  const handlers = buildOnboardingHandlers({
+    userId,
+    goal,
+    motivationStyle,
+    starterPresetId,
+    selectedGoal,
+    selectedPreset,
+    setGoal,
+    setMotivationStyle,
+    setExplicitMotivationStyle,
+    setStep,
+    setIsLaunchingSession,
     disclosureAnalytics,
     navigation,
-    selectedGoal?.label,
-    selectedPreset,
-    userId,
-  ]);
-
-  const handleFinish = useCallback(
-    (message?: string) => {
-      finishOnboarding(goal, starterPresetId, message).catch((error: unknown) => {
-        Sentry.captureException(error, { tags: { feature: 'onboarding', operation: 'finishOnboarding' } });
-      });
-    },
-    [finishOnboarding, goal, starterPresetId],
-  );
+    handleAcceptLane,
+    finishOnboarding,
+  });
 
   return {
     userId,
@@ -191,14 +149,14 @@ export function useOnboardingFlow(routeStep?: number) {
     historyQuery,
     laneConfirmation,
     isChoosingLane,
-    handleAcceptLaneAndAdvance,
+    handleAcceptLaneAndAdvance: handlers.handleAcceptLaneAndAdvance,
     handleChooseAnotherLane,
     handleSelectLane,
     selectedGoal,
     selectedPreset,
-    handleFinish,
-    handleSelectGoal,
-    handleSelectMotivationStyle,
-    handleStartFirstSession,
+    handleFinish: handlers.handleFinish,
+    handleSelectGoal: handlers.handleSelectGoal,
+    handleSelectMotivationStyle: handlers.handleSelectMotivationStyle,
+    handleStartFirstSession: handlers.handleStartFirstSession,
   };
 }
