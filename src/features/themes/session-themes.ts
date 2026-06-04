@@ -58,7 +58,7 @@ export const SESSION_THEMES: SessionTheme[] = [
     name: 'Ember',
     description: 'Warm and intense',
     previewColor: lightColors.accent.orange,
-  // TODO(P2-1): map remaining hex colors to theme tokens
+    // Ember-specific warm tint — no exact theme token equivalent
     backgroundTint: '#1f0d06',
     ambientSoundKey: null,
     coinCost: 800,

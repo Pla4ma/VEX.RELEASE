@@ -76,8 +76,7 @@ export function NotificationCard({
       interactive
       style={{
         opacity: item.read ? 0.8 : 1,
-        // TODO: use theme token with opacity
-        backgroundColor: item.read ? undefined : '#eef2ff20',
+        backgroundColor: item.read ? undefined : lightColors.surface.selected + '20',
       }}
       size="md"
       onPress={() => onPress(item)}

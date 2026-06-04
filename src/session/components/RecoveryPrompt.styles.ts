@@ -73,8 +73,7 @@ export const styles = createSheet({
   },
   abandonPenalty: {
     fontSize: 12,
-    // TODO: use theme token with opacity
-    color: '#e9456080',
+    color: lightColors.semantic.danger + '80',
     marginTop: 4,
   },
   helpText: {
