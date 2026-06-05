@@ -10,11 +10,16 @@ import { createDebugger } from '../utils/debug';
 
 const debug = createDebugger('config:sentry');
 
+const dsn = process.env.EXPO_PUBLIC_SENTRY_DSN;
+if (!dsn && process.env.EXPO_PUBLIC_ENVIRONMENT === 'production') {
+  throw new Error('EXPO_PUBLIC_SENTRY_DSN must be set in production');
+}
+
 /**
  * Sentry configuration options
  */
 export const SENTRY_CONFIG: Sentry.ReactNativeOptions = {
-  dsn: process.env.EXPO_PUBLIC_SENTRY_DSN || '',
+  dsn,
   environment: ENVIRONMENT,
   enabled: !IS_DEVELOPMENT, // Disable in dev, enable in staging/production
 
