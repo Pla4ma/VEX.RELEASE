@@ -52,6 +52,38 @@ import './mocks/reanimated';
 import './mocks/expo-third-party';
 import './mocks/analytics-navigation';
 
+/**
+ * Theme mock for tests with reduced-motion + border.DEFAULT support.
+ * Matches the current tokens shape and satisfies screens/components importing from @/theme.
+ */
+jest.mock('@/theme', () => {
+  const colors = {
+    background: { primary: '#fff', secondary: '#f5f5f5', tertiary: '#efefef' },
+    text: { primary: '#111', secondary: '#555', disabled: '#999', dark: '#0A0A0A' },
+    border: { DEFAULT: '#333333', light: '#444444', heavy: '#222222' },
+    overlay: { modal: 'rgba(0,0,0,0.5)' },
+  };
+  return {
+    __esModule: true,
+    useTheme: () => ({
+      colors,
+      spacing: { xs: 4, sm: 8, md: 16, lg: 24, xl: 32 },
+      borderRadius: { sm: 4, md: 8, lg: 12, xl: 16 },
+      typography: {
+        h1: { fontSize: 32, fontWeight: '700', lineHeight: 40 },
+        body: { fontSize: 16, fontWeight: '400', lineHeight: 22 },
+      },
+      motion: {
+        reducedMotion: false,
+        duration: { fast: 120, normal: 200, slow: 320 },
+      },
+    }),
+    createTheme: () => ({ colors, spacing: {}, borderRadius: {}, typography: {}, motion: {} }),
+    ReduceMotion: { System: 'system', Always: 'always', Never: 'never', muted: 'muted' },
+    useReducedMotion: () => false,
+  };
+});
+
 // ── Console suppression, lifecycle hooks, custom matchers ───────────
 
 import './setup/testLifecycle';
