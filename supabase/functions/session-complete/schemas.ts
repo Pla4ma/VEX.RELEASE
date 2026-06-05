@@ -10,8 +10,8 @@ export const CompleteSessionRequestSchema = z.object({
   interruptions: z.number().int().min(0).default(0),
   pauses: z.number().int().min(0).default(0),
   sessionMode: z.string().default('FLOW'),
-  finalScore: z.number().int().min(0).default(0),
-  modeBonus: z.number().int().min(0).default(0),
+  finalScore: z.number().int().min(0).max(10000).default(0),
+  modeBonus: z.number().int().min(0).max(500).default(0),
 }).strict();
 
 export type CompleteSessionRequest = z.infer<typeof CompleteSessionRequestSchema>;
