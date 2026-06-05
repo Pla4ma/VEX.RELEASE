@@ -4,6 +4,19 @@ import { RepositoryError } from '../../lib/repository/error-handling';
 import { v4 } from '../../utils/uuid';
 import { withResilience } from '../../utils/supabase-resilience';
 import { XpEntrySchema, type XpEntry } from './schemas';
+import { XpEntryRowSchema } from './progression-row-schemas';
+
+function parseXpEntryRow(row: unknown): XpEntry {
+  const parsed = XpEntryRowSchema.parse(row);
+  return XpEntrySchema.parse({
+    id: parsed.id,
+    amount: parsed.amount,
+    source: parsed.source,
+    sessionId: parsed.session_id,
+    metadata: parsed.metadata,
+    createdAt: parsed.created_at,
+  });
+}
 
 export async function fetchXpHistory(
   userId: string,
@@ -11,22 +24,20 @@ export async function fetchXpHistory(
 ): Promise<XpEntry[]> {
   let query = getSupabaseClient()
     .from('xp_history')
-    .select('*')
+    .select('id, amount, source, session_id, metadata, created_at')
     .eq('user_id', userId)
     .order('created_at', { ascending: false });
 
   if (options?.since) {
     query = query.gte('created_at', options.since);
   }
-  if (options?.limit) {
-    query = query.limit(options.limit);
-  }
+  query = query.limit(options?.limit ?? 50);
 
   const { data, error } = await query;
   if (error) {
     throw new RepositoryError('fetchXpHistory', error);
   }
-  return XpEntrySchema.array().parse(data);
+  return (data ?? []).map(parseXpEntryRow);
 }
 
 export async function recordXpEntry(
@@ -44,13 +55,13 @@ export async function recordXpEntry(
   };
 
   const { data, error } = await withResilience(
-    getSupabaseClient().from('xp_history').insert(newEntry).select().single(),
+    getSupabaseClient().from('xp_history').insert(newEntry).select('id, amount, source, session_id, metadata, created_at').single(),
     { fallbackValue: newEntry, operation: 'recordXpEntry' },
   );
   if (error) {
     throw new RepositoryError('recordXpEntry', error);
   }
-  return XpEntrySchema.parse(data);
+  return parseXpEntryRow(data);
 }
 
 export async function fetchXpForPeriod(

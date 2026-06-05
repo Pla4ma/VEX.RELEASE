@@ -9,7 +9,6 @@ import type { FeatureAccessMap } from '../features/liveops-config';
 
 interface RootStackScreensProps {
   hasCompletedOnboarding: boolean;
-  canShowHomePreview: boolean;
   features: FeatureAccessMap;
   isAuthenticated: boolean;
 }
@@ -19,12 +18,10 @@ const SessionNavigator = React.lazy(() => import('./SessionNavigator'));
 
 export const RootStackScreens: React.FC<RootStackScreensProps> = ({
   hasCompletedOnboarding,
-  canShowHomePreview,
   features,
   isAuthenticated,
 }) => {
-  const showApp =
-    isAuthenticated && (hasCompletedOnboarding || canShowHomePreview);
+  const showApp = isAuthenticated && hasCompletedOnboarding;
 
   const navigatorKey = isAuthenticated
     ? showApp
@@ -45,7 +42,6 @@ export const RootStackScreens: React.FC<RootStackScreensProps> = ({
           {RootStackAuthenticatedRoutes({
             features,
             hasCompletedOnboarding,
-            canShowHomePreview,
             Stack,
           })}
 

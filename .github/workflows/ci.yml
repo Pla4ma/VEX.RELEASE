@@ -68,6 +68,27 @@ jobs:
       - run: npm ci
       - run: npm test -- --passWithNoTests=false --no-coverage
 
+  supabase-types:
+    name: Supabase Types Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - run: npx tsc --noEmit src/types/supabase.ts --skipLibCheck
+      - name: Check Supabase types are current
+        run: |
+          npm run types:supabase
+          if [ -n "$(git diff --name-only src/types/supabase.ts)" ]; then
+            echo "supabase.ts is stale — run 'npm run types:supabase' and commit"
+            exit 1
+          fi
+        env:
+          SUPABASE_PROJECT_ID: ${{ secrets.SUPABASE_PROJECT_ID }}
+
   rls-check:
     name: RLS Verification
     runs-on: ubuntu-latest

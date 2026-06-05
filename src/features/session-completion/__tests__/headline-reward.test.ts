@@ -1,5 +1,5 @@
 import { selectHeadlineReward } from '../headline-reward.service';
-import type { HeadlineRewardConsequences } from '../headline-reward.types';
+import type { HeadlineRewardConsequences } from '../headline-reward.schemas';
 
 const baseConsequences: HeadlineRewardConsequences = {
   summary: {

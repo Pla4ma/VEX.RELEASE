@@ -16,9 +16,10 @@ import { useTheme } from '../../theme';
 import { glow } from '../../theme/tokens/elevation';
 import { createSheet } from '@/shared/ui/create-sheet';
 import { lightColors } from '@/theme/tokens/colors';
+import { rgbaColors } from '@/theme/tokens/rgba-colors';
 
 
-const WHITE_MUTED = 'rgba(255,255,255,0.72)';
+const WHITE_MUTED = rgbaColors.rgb_255_255_255_0_72;
 
 export function GradientStartButton({
   body,

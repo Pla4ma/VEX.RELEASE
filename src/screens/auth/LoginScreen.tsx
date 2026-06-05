@@ -1,139 +1,166 @@
+/**
+ * LoginScreen — June 2026 Ethereal Sky visual layer.
+ *
+ * Business logic (validation, OAuth, navigation) lives in
+ * useLoginScreen. This file is presentation only.
+ */
 import React, { useCallback } from 'react';
 import { Pressable, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+
 import { AppScreen, Text } from '../../components/primitives';
 import { useTheme } from '../../theme';
 import { getMinTouchTargetStyle } from '../../utils/touchTarget';
 import type { AuthStackParams } from '../../navigation';
 import { useLoginScreen } from './useLoginScreen';
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
-import { lightColors } from '@/theme/tokens/colors';
-import { VexAtmosphereCanvas } from './components/VexAuroraCanvas';
-import { VexBrandHeader } from './components/VexBrandHeader';
-import { VexConsole } from './components/VexGlassPanel';
-import { VexGlassInput } from './components/VexGlassInput';
-import { VexActivationButton } from './components/VexPrimaryButton';
-import { Stage } from './components/LoginStage';
-import { OAuthProviderButtons } from './components/OAuthProviderButtons';
+
+import {
+  EtherealAuthButtons,
+  EtherealSkyBackground,
+} from './components/ethereal';
+import type { EtherealAuthProvider } from './components/ethereal';
+import { LoginHero } from './components/ethereal/LoginHero';
+import { LoginEmailForm } from './components/ethereal/LoginEmailForm';
 
 type Props = NativeStackScreenProps<AuthStackParams, 'Login'>;
 
+const OAUTH_PROVIDER_MAP: Record<EtherealAuthProvider, 'apple' | 'google' | null> = {
+  apple: 'apple',
+  google: 'google',
+  email: null,
+};
+
 export const LoginScreen: React.FC<Props> = ({ navigation, route }) => {
   const { theme } = useTheme();
+  const insets = useSafeAreaInsets();
   const {
     email, setEmail, password, setPassword,
-    errors, setErrors, isLoading, handleLogin, handleOAuthLogin, isReducedMotion,
+    errors, setErrors, isLoading, handleLogin, handleOAuthLogin,
   } = useLoginScreen(route.params?.email ?? '');
 
   const hem = useCallback((v: string) => {
     setEmail(v);
-    if (errors.email) setErrors((c) => ({ ...c, email: undefined }));
+    if (errors.email) {
+      setErrors((c) => ({ ...c, email: undefined }));
+    }
   }, [errors.email, setEmail, setErrors]);
+
   const hpm = useCallback((v: string) => {
     setPassword(v);
-    if (errors.password) setErrors((c) => ({ ...c, password: undefined }));
-  }, [errors.password, setErrors, setPassword]);
+    if (errors.password) {
+      setErrors((c) => ({ ...c, password: undefined }));
+    }
+  }, [errors.password, setPassword, setErrors]);
+
+  const onProviderPress = useCallback(
+    (provider: EtherealAuthProvider) => {
+      const mapped = OAUTH_PROVIDER_MAP[provider];
+      if (mapped) {
+        void handleOAuthLogin(mapped);
+      }
+    },
+    [handleOAuthLogin],
+  );
+
+  const onForgotPassword = useCallback(() => {
+    navigation.navigate({ name: 'ForgotPassword', params: undefined });
+  }, [navigation]);
+
+  const onCreateAccount = useCallback(() => {
+    navigation.navigate({ name: 'Register', params: undefined });
+  }, [navigation]);
 
   return (
-    <AppScreen keyboardAvoiding padded={false}
-      contentStyle={{ flexGrow: 1, justifyContent: 'center',
-        paddingHorizontal: theme.spacing[5] }}>
-      <VexAtmosphereCanvas />
-      <View style={{ flex: 1, justifyContent: 'center',
-        paddingTop: theme.spacing[4], paddingBottom: theme.spacing[10] }}>
-        <Stage delay={0} isReducedMotion={isReducedMotion}>
-          <VexBrandHeader />
-        </Stage>
-        <Stage delay={300} isReducedMotion={isReducedMotion}>
-          <View style={{ width: '100%', maxWidth: 440, alignSelf: 'center',
-            marginTop: theme.spacing[8] }}>
-            <OAuthProviderButtons
-              disabled={isLoading}
-              onProviderPress={handleOAuthLogin}
-            />
-            <View style={{
+    <AppScreen
+      contentStyle={{ flexGrow: 1, paddingBottom: insets.bottom + 16 }}
+      keyboardAvoiding
+      padded={false}
+    >
+      <EtherealSkyBackground />
+
+      <View
+        style={{
+          flex: 1,
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          paddingTop: insets.top + 16,
+          paddingHorizontal: theme.spacing[5],
+        }}
+      >
+        <LoginHero />
+
+        <View style={{ width: '100%', maxWidth: 440, alignSelf: 'center', gap: 16 }}>
+          <EtherealAuthButtons
+            disabled={isLoading}
+            onProviderPress={onProviderPress}
+            startDelayMs={900}
+          />
+
+          <View
+            style={{
               alignItems: 'center',
               flexDirection: 'row',
-              gap: theme.spacing[3],
-              marginVertical: theme.spacing[5],
-            }}>
-              <View style={{
-                backgroundColor: theme.colors.semantic.liquidGlassBorder,
-                flex: 1,
-                height: 1,
-              }} />
-              <Text color="semantic.liquidTextMuted" fontSize={12} fontWeight="700">
-                EMAIL
-              </Text>
-              <View style={{
-                backgroundColor: theme.colors.semantic.liquidGlassBorder,
-                flex: 1,
-                height: 1,
-              }} />
-            </View>
-            <VexConsole>
-              <View style={{ alignItems: 'center', marginBottom: 2 }}>
-                <Text color="semantic.liquidText" fontSize={19} fontWeight="700"
-                  opacity={0.95} lineHeight={25} textAlign="center">
-                  Welcome back
-                </Text>
-                <Text color="semantic.liquidTextSoft" fontSize={13} fontWeight="500"
-                  opacity={0.68} lineHeight={19} textAlign="center">
-                  Resume your focus system
-                </Text>
-              </View>
-              <View style={{ gap: theme.spacing[1] }}>
-                <VexGlassInput autoComplete="email" error={errors.email}
-                  keyboardType="email-address" label="Email"
-                  onChangeText={hem} placeholder="you@vex.app"
-                  returnKeyType="next" value={email} />
-                <VexGlassInput autoComplete="password" error={errors.password}
-                  label="Password" onChangeText={hpm}
-                  onSubmitEditing={handleLogin} placeholder="Enter password"
-                  returnKeyType="done" secureTextEntry value={password} />
-              </View>
-              <View style={{ alignItems: 'flex-end' }}>
-                <Pressable accessibilityHint="Opens password recovery"
-                  accessibilityLabel="Forgot password" accessibilityRole="link"
-                  hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-                  onPress={() => navigation.navigate(
-                    { name: 'ForgotPassword', params: undefined })}
-                  style={getMinTouchTargetStyle()}>
-                  <Text color="semantic.liquidTextMuted" fontSize={13}
-                    fontWeight="600" opacity={0.74}>Forgot password?</Text>
-                </Pressable>
-              </View>
-              <VexActivationButton isLoading={isLoading}
-                label="Enter VEX" loadingLabel="Opening" onPress={handleLogin} />
-              <View style={{ alignItems: 'center', marginTop: 4 }}>
-                <Text color="semantic.liquidTextMuted" fontSize={11}
-                  fontWeight="500" opacity={0.54} textAlign="center"
-                  letterSpacing={0.3}>
-                  Coach ready{'\u00A0\u00B7\u00A0'}Focus sync{'\u00A0\u00B7\u00A0'}Secure vault
-                </Text>
-              </View>
-            </VexConsole>
-            <View style={{ marginTop: 40, alignItems: 'center' }}>
-              <Pressable accessibilityHint="Creates a new VEX account"
-                accessibilityLabel="Create a VEX account" accessibilityRole="link"
-                hitSlop={{ top: 8, bottom: 8, left: 12, right: 12 }}
-                onPress={() => navigation.navigate(
-                  { name: 'Register', params: undefined })}
-                style={getMinTouchTargetStyle()}>
-                <Text color="semantic.liquidTextMuted" fontSize={14}
-                  textAlign="center" opacity={0.78}>
-                  New here?{' '}
-                  <Text fontWeight="700" style={{
-                    color: lightColors.semantic.brandAmber,
-                    textShadowColor: lightColors.semantic.editorialGoldGlow,
-                    textShadowOffset: { width: 0, height: 0 },
-                    textShadowRadius: 8,
-                  }}>Create your focus system</Text>
-                </Text>
-              </Pressable>
-            </View>
+              gap: 12,
+              marginVertical: 8,
+            }}
+          >
+            <View
+              style={{ flex: 1, height: 1, backgroundColor: 'rgba(10, 10, 10, 0.12)' }}
+            />
+            <Text
+              color="#0A0A0A"
+              fontSize={11}
+              fontWeight="700"
+              style={{ color: 'rgba(10, 10, 10, 0.55)', letterSpacing: 2 }}
+            >
+              OR SIGN IN
+            </Text>
+            <View
+              style={{ flex: 1, height: 1, backgroundColor: 'rgba(10, 10, 10, 0.12)' }}
+            />
           </View>
-        </Stage>
+
+          <LoginEmailForm
+            email={email}
+            emailError={errors.email}
+            isLoading={isLoading}
+            onChangeEmail={hem}
+            onChangePassword={hpm}
+            onForgotPassword={onForgotPassword}
+            onSubmit={handleLogin}
+            password={password}
+            passwordError={errors.password}
+          />
+
+          <View style={{ alignItems: 'center', marginTop: 8 }}>
+            <Pressable
+              accessibilityHint="Creates a new VEX account"
+              accessibilityLabel="Create a VEX account"
+              accessibilityRole="link"
+              hitSlop={{ top: 8, bottom: 8, left: 12, right: 12 }}
+              onPress={onCreateAccount}
+              style={getMinTouchTargetStyle()}
+            >
+              <Text
+                color="#0A0A0A"
+                fontSize={14}
+                style={{ color: 'rgba(10, 10, 10, 0.78)' }}
+                textAlign="center"
+              >
+                New here?{' '}
+                <Text
+                  fontSize={14}
+                  fontWeight="700"
+                  style={{ color: '#0A0A0A', textDecorationLine: 'underline' }}
+                >
+                  Create your focus system
+                </Text>
+              </Text>
+            </Pressable>
+          </View>
+        </View>
       </View>
     </AppScreen>
   );

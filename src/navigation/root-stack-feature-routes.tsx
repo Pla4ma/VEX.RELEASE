@@ -20,11 +20,6 @@ const NotificationsScreen = React.lazy(
 const ChallengesScreen = React.lazy(
   () => import('../screens/challenges/ChallengesScreen'),
 );
-const CoachScreen = React.lazy(() =>
-  import('../features/ai-coach/components/CoachScreen').then((module) => ({
-    default: module.CoachScreen,
-  })),
-);
 const MasteryScreen = React.lazy(
   () => import('../screens/profile/MasteryScreen'),
 );
@@ -76,16 +71,6 @@ export function RootStackFeatureRoutes({
           {() => (
             <React.Suspense fallback={null}>
               <ChallengesScreen />
-            </React.Suspense>
-          )}
-        </Stack.Screen>
-      ) : null}
-
-      {canRegisterFeatureRoute(features, 'AICoach') ? (
-        <Stack.Screen name="AICoach">
-          {() => (
-            <React.Suspense fallback={null}>
-              <CoachScreen />
             </React.Suspense>
           )}
         </Stack.Screen>

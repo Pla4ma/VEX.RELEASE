@@ -1,5 +1,5 @@
 import { buildCompletionReflection } from '../completion-reflection-service';
-import { buildPostSessionStoryViewModel } from '../story-view-model-service';
+import { buildPostSessionStoryViewModel } from '../service';
 import {
   createCompletionLedger,
   createSessionSummary,

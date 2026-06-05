@@ -9,9 +9,10 @@ import { useTheme } from '../../theme';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { rgbaColors } from '../../theme/tokens/rgba-colors';
 import { lightColors } from '@/theme/tokens/colors';
+import { timingPresets } from '../../theme/tokens/motion';
 
 export interface VexMotionSurfaceProps extends ViewProps {
-  variant?: 'glass' | 'elevated' | 'focused';
+  variant?: 'glass' | 'elevated' | 'focused' | 'chrome';
   children?: React.ReactNode;
   animated?: boolean;
   testID?: string;
@@ -28,45 +29,56 @@ export function VexMotionSurface({
   const { theme } = useTheme();
   const { isReducedMotion } = useReducedMotion();
   const glowIntensity = useSharedValue(0);
+  const glowTarget = theme.opacity[10];
 
-  const VARIANT_STYLES: Record<string, { backgroundColor: string; borderWidth: number; borderColor: string }> = {
+  const variantStyles: Record<
+    NonNullable<VexMotionSurfaceProps['variant']>,
+    { backgroundColor: string; borderWidth: number; borderColor: string }
+  > = {
     glass: {
-      backgroundColor: rgbaColors.rgb_18_18_26_0_85 ?? 'rgba(18,18,26,0.85)',
-      borderWidth: 1,
-      borderColor: rgbaColors.rgb_255_255_255_0_06 ?? 'rgba(255,255,255,0.06)',
+      backgroundColor: rgbaColors.rgb_18_18_26_0_85,
+      borderWidth: theme.spacing[0] + 1,
+      borderColor: rgbaColors.rgb_255_255_255_0_06,
     },
     elevated: {
-      backgroundColor: theme.colors.semantic.background,
-      borderWidth: 1,
+      backgroundColor: theme.colors.semantic.surfaceElevated,
+      borderWidth: theme.spacing[0] + 1,
       borderColor: theme.colors.semantic.border,
     },
     focused: {
-      backgroundColor: rgbaColors.rgb_18_18_26_0_85 ?? 'rgba(18,18,26,0.85)',
-      borderWidth: 1,
-      borderColor: rgbaColors.vexCyan_0_12 ?? 'rgba(0,229,255,0.12)',
+      backgroundColor: rgbaColors.rgb_18_18_26_0_85,
+      borderWidth: theme.spacing[0] + 1,
+      borderColor: rgbaColors.vexCyan_0_12,
+    },
+    chrome: {
+      backgroundColor: rgbaColors.rgb_255_255_255_0_05,
+      borderWidth: theme.spacing[0] + 1,
+      borderColor: rgbaColors.rgb_255_255_255_0_12,
     },
   };
 
-  const base = VARIANT_STYLES[variant];
-  const borderRadius = theme.spacing?.[3] ?? 12;
+  const base = variantStyles[variant];
+  const borderRadius = theme.borderRadius.xl;
 
   const animatedStyle = useAnimatedStyle(() => {
-    if (!animated || isReducedMotion || variant !== 'focused') {
+    if (!animated || isReducedMotion) {
       return {};
     }
     return {
       shadowColor: lightColors.semantic.vexCyan,
       shadowOffset: { width: 0, height: 0 },
       shadowOpacity: glowIntensity.value,
-      shadowRadius: 12,
+      shadowRadius: theme.spacing[3],
     };
   }, [variant, isReducedMotion, animated]);
 
   React.useEffect(() => {
-    if (animated && !isReducedMotion && variant === 'focused') {
-      glowIntensity.value = withTiming(0.08, { duration: 600 });
+    if (animated && !isReducedMotion) {
+      glowIntensity.value = withTiming(glowTarget, {
+        duration: timingPresets.cinematicReveal.duration,
+      });
     }
-  }, [animated, isReducedMotion, variant, glowIntensity]);
+  }, [animated, glowIntensity, glowTarget, isReducedMotion]);
 
   return (
     <Animated.View
@@ -75,6 +87,11 @@ export function VexMotionSurface({
         {
           borderRadius,
           overflow: 'hidden',
+          shadowColor: theme.colors.semantic.shadow,
+          shadowOffset: { width: 0, height: theme.spacing[2] },
+          shadowOpacity:
+            variant === 'elevated' ? theme.opacity[20] : theme.opacity[10],
+          shadowRadius: theme.spacing[6],
           ...base,
         },
         animatedStyle,

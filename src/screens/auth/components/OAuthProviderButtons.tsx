@@ -40,24 +40,28 @@ function ProviderButton({
           ? theme.colors.semantic.liquidGlassBorder
           : theme.colors.semantic.border,
         borderRadius: theme.borderRadius['2xl'],
-        borderWidth: 1,
+        borderWidth: theme.spacing[0] + 1,
         flexDirection: 'row',
         gap: theme.spacing[3],
         justifyContent: 'center',
-        minHeight: 58,
-        opacity: disabled ? 0.62 : pressed ? 0.86 : 1,
+        minHeight: theme.spacing[12] + theme.spacing[2],
+        opacity: disabled
+          ? theme.opacity[80]
+          : pressed
+            ? theme.opacity[90]
+            : theme.opacity[100],
         paddingHorizontal: theme.spacing[5],
       })}
     >
       <Text
-        color={isDark ? 'text.inverse' : 'semantic.textPrimary'}
+        color={isDark ? 'semantic.liquidText' : 'semantic.textPrimary'}
         fontSize={20}
         fontWeight="800"
       >
         {mark}
       </Text>
       <Text
-        color={isDark ? 'text.inverse' : 'semantic.textPrimary'}
+        color={isDark ? 'semantic.liquidText' : 'semantic.textPrimary'}
         fontSize={16}
         fontWeight="800"
       >

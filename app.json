@@ -132,8 +132,8 @@
           "domains": {
             "supabase.co": {
               "pins": [
-                "sha256/p51goejPCgGH+Oog/MU2k6PObcEfTrrr73jUcuWJ7w0=",
-                "sha256/kIdp6NNEd8wsugYyyIYFsi1ylMCED3hZbSR8ZFsa/A4="
+                "sha256/JxYBCNfhi515HdL0cvKtauDKAZvS/HXZc8eHx6C/1pI=",
+                "sha256/H7AMYAvicN2+UcFPBz3kJXCDmGrTItZh4ujUBK8hoWg="
               ],
               "includeSubdomains": true
             }

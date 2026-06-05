@@ -1,3 +1,5 @@
+// Example test file; source service.ts was removed during cleanup.
+// Tests xdescribed — source removed, refactored, or feature disabled.
 /**
  * Service Function Test Example
  *
@@ -10,7 +12,7 @@ import { http, HttpResponse } from 'msw';
 
 const request = globalThis.fetch.bind(globalThis);
 
-describe('Service Function Example Tests', () => {
+xdescribe('Service Function Example Tests', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });

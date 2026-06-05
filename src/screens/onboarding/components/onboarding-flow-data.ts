@@ -1,13 +1,13 @@
 export const ONBOARDING_PROMISE_COPY = {
   primary: 'VEX changes based on how you work.',
   secondary:
-    'Answer a few questions, start one focused session, and VEX unlocks the system your brain needs.',
+    'Answer a few questions and VEX will open the app around the system your brain needs.',
 } as const;
 
 export const ONBOARDING_PROGRESS_PHASES = [
   'Understand',
   'Match',
-  'Start',
+  'Open',
 ] as const;
 
 export const DEFAULT_COMPANION_ELEMENT = 'LUMINA';
@@ -17,8 +17,6 @@ export const STEP_TITLES = [
   'Pick your first win',
   'Choose the motivation style',
   'Confirm your focus mode',
-  'Choose your first session',
-  'Start now',
 ] as const;
 
 export const STARTER_PRESETS = [

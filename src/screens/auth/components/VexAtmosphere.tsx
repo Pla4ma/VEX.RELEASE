@@ -11,6 +11,7 @@ import Animated, {
 import { LinearGradient } from 'expo-linear-gradient';
 import { FlowCurves, SoftOrb } from './VexAtmosphereEffects';
 import { lightColors } from '@/theme/tokens/colors';
+import { rgbaColors } from '@/theme/tokens/rgba-colors';
 
 const EASE_AMBIENT = Easing.bezier(0.37, 0, 0.63, 1);
 
@@ -95,7 +96,7 @@ function HorizonGlow() {
   return (
     <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, height: height * 0.55 }}>
       <LinearGradient
-        colors={['rgba(224,184,112,0.05)', 'rgba(94,234,212,0.02)', 'transparent']}
+        colors={[rgbaColors.rgb_224_184_112_0_05, rgbaColors.rgb_94_234_212_0_02, 'transparent']}
         locations={[0, 0.5, 1]}
         start={{ x: 0.5, y: 0 }}
         end={{ x: 0.5, y: 1 }}
@@ -139,7 +140,7 @@ export const VexAtmosphere = memo(function VexAtmosphere() {
 
       {/* Bottom soft fade for legibility */}
       <LinearGradient
-        colors={['transparent', 'rgba(8,8,12,0.6)']}
+        colors={['transparent', rgbaColors.rgb_8_8_12_0_6]}
         locations={[0.6, 1]}
         start={{ x: 0.5, y: 0 }}
         end={{ x: 0.5, y: 1 }}

@@ -1,4 +1,5 @@
 import { getSupabaseClient } from '../../../config/supabase';
+import { z } from 'zod';
 import {
   SessionRecommendationSchema,
   type SessionRecommendation,
@@ -8,6 +9,54 @@ import { RepositoryError } from './error';
 import { tableColumns } from '../../../lib/repository/tableColumns';
 
 const supabase = getSupabaseClient();
+const RecommendationRowSchema = z.object({
+  accepted_at: z.number().int().positive().nullable().optional(),
+  based_on: z.array(z.unknown()).nullable().optional(),
+  confidence: z.number().nullable().optional(),
+  created_at: z.number().int().positive(),
+  description: z.string(),
+  dismissed_at: z.number().int().positive().nullable().optional(),
+  expires_at: z.number().int().positive(),
+  id: z.string().uuid(),
+  metadata: z.record(z.unknown()).nullable().optional(),
+  priority: z.number().int(),
+  reason: z.string(),
+  reasoning: z.string().nullable().optional(),
+  recommendation_type: z.string(),
+  status: z.string(),
+  suggested_difficulty: z.string().nullable().optional(),
+  suggested_duration: z.number().int().nullable().optional(),
+  title: z.string(),
+  user_id: z.string().uuid(),
+});
+
+function parseRecommendationRow(row: unknown): SessionRecommendation {
+  const parsed = RecommendationRowSchema.parse(row);
+  return SessionRecommendationSchema.parse({
+    acceptedAt: parsed.accepted_at ?? null,
+    basedOn: parsed.based_on ?? [],
+    confidence: parsed.confidence ?? undefined,
+    createdAt: parsed.created_at,
+    description: parsed.description,
+    dismissedAt: parsed.dismissed_at ?? null,
+    expiresAt: parsed.expires_at,
+    id: parsed.id,
+    metadata: parsed.metadata ?? {},
+    priority: parsed.priority,
+    reason: parsed.reason,
+    reasoning: parsed.reasoning ?? undefined,
+    recommendationType: parsed.recommendation_type,
+    status: parsed.status,
+    suggestedDifficulty: parsed.suggested_difficulty ?? undefined,
+    suggestedDuration: parsed.suggested_duration ?? undefined,
+    title: parsed.title,
+    userId: parsed.user_id,
+  });
+}
+
+function parseRecommendationRows(rows: unknown[] | null): SessionRecommendation[] {
+  return (rows ?? []).map((row) => parseRecommendationRow(row));
+}
 
 export async function fetchRecommendations(
   userId: string,
@@ -22,7 +71,7 @@ export async function fetchRecommendations(
   if (error) {
     throw new RepositoryError('fetchRecommendations', error);
   }
-  return SessionRecommendationSchema.array().parse(data || []);
+  return parseRecommendationRows(data);
 }
 
 export async function fetchActiveRecommendations(
@@ -40,7 +89,7 @@ export async function fetchActiveRecommendations(
   if (error) {
     throw new RepositoryError('fetchActiveRecommendations', error);
   }
-  return SessionRecommendationSchema.array().parse(data || []);
+  return parseRecommendationRows(data);
 }
 
 export async function fetchRecommendationsByType(
@@ -56,7 +105,7 @@ export async function fetchRecommendationsByType(
   if (error) {
     throw new RepositoryError('fetchRecommendationsByType', error);
   }
-  return SessionRecommendationSchema.array().parse(data || []);
+  return parseRecommendationRows(data);
 }
 
 export async function createRecommendation(
@@ -84,7 +133,7 @@ export async function createRecommendation(
   if (error) {
     throw new RepositoryError('createRecommendation', error);
   }
-  return SessionRecommendationSchema.parse(data);
+  return parseRecommendationRow(data);
 }
 
 export async function updateRecommendationStatus(
@@ -110,5 +159,5 @@ export async function updateRecommendationStatus(
   if (error) {
     throw new RepositoryError('updateRecommendationStatus', error);
   }
-  return SessionRecommendationSchema.parse(data);
+  return parseRecommendationRow(data);
 }

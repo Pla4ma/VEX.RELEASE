@@ -19,7 +19,6 @@ import Svg, {
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { useTheme } from '../../theme';
 import {
-  type CoachMood,
   type AnimatedCoachAvatarProps,
   getMoodScale,
 } from './coach-avatar-types';
@@ -35,6 +34,7 @@ export function AnimatedCoachAvatar({
   const { isReducedMotion } = useReducedMotion();
   const pulse = useSharedValue(0);
   const float = useSharedValue(0);
+  const moodScale = getMoodScale(mood);
 
   useEffect(() => {
     if (isReducedMotion) {
@@ -63,9 +63,9 @@ export function AnimatedCoachAvatar({
   const shellStyle = useAnimatedStyle(() => ({
     transform: [
       { translateY: interpolate(float.value, [0, 1], [0, -6]) },
-      { scale: interpolate(pulse.value, [0, 1], [1, getMoodScale(mood)]) },
+      { scale: interpolate(pulse.value, [0, 1], [1, moodScale]) },
     ],
-  }));
+  }), [moodScale]);
 
   const haloStyle = useAnimatedStyle(() => ({
     opacity: interpolate(pulse.value, [0, 1], [0.28, 0.58]),

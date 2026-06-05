@@ -1,15 +1,28 @@
-import { getSupabaseClient } from '../../config/supabase';
-import { RepositoryError } from '../../lib/repository/error-handling';
-import { v4 } from '../../utils/uuid';
+import { getSupabaseClient } from '../../../config/supabase';
+import { RepositoryError } from '../../../lib/repository/error-handling';
+import { v4 } from '../../../utils/uuid';
 import { z } from 'zod';
 import {
   XpEntrySchema,
   type XpEntry,
 } from '../schemas';
-import { withResilience } from '../../utils/supabase-resilience';
+import { XpEntryRowSchema } from '../progression-row-schemas';
+import { withResilience } from '../../../utils/supabase-resilience';
 import { tableColumns } from '../../../lib/repository/tableColumns';
 
 const supabase = getSupabaseClient();
+
+function parseXpEntryRow(row: unknown): XpEntry {
+  const parsed = XpEntryRowSchema.parse(row);
+  return XpEntrySchema.parse({
+    id: parsed.id,
+    amount: parsed.amount,
+    source: parsed.source,
+    sessionId: parsed.session_id,
+    metadata: parsed.metadata,
+    createdAt: parsed.created_at,
+  });
+}
 
 /** Fetch XP entries for a user, ordered newest first. */
 export async function fetchXpHistory(
@@ -25,15 +38,13 @@ export async function fetchXpHistory(
   if (options?.since) {
     query = query.gte('created_at', options.since);
   }
-  if (options?.limit) {
-    query = query.limit(options.limit);
-  }
+  query = query.limit(options?.limit ?? 50);
 
   const { data, error } = await query;
   if (error) {
     throw new RepositoryError('fetchXpHistory', error);
   }
-  return XpEntrySchema.array().parse(data);
+  return (data ?? []).map(parseXpEntryRow);
 }
 
 /** Insert a single XP entry. */
@@ -58,7 +69,7 @@ export async function recordXpEntry(
   if (error) {
     throw new RepositoryError('recordXpEntry', error);
   }
-  return XpEntrySchema.parse(data);
+  return parseXpEntryRow(data);
 }
 
 /** Sum XP awarded within a time window. */

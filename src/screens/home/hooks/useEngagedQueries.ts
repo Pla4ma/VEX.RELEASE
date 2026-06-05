@@ -2,9 +2,9 @@ import { useMemo } from 'react';
 import {
   useCreateRecommendation,
   useUpdateRecommendationStatus,
-  useCoachRecommendations,
   type SessionRecommendation,
-} from '../../../features/ai-coach';
+} from '../../../features/ai-coach/hooks/useRecommendationMutations';
+import { useCoachRecommendations } from '../../../features/ai-coach/hooks/useCoachRecommendations';
 import { getNextBestAction } from '../../../features/progression';
 import { useActiveStudyPlan } from '../../../features/content-study';
 import { useLearningExecutionLayer } from '../../../features/learning-execution';

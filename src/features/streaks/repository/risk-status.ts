@@ -3,7 +3,7 @@ import {
   StreakRiskStatusSchema,
   type StreakRiskStatus,
 } from '../schemas-risk-repair';
-import { executeWithFallback, type RepositoryResult } from './streak-repository';
+import { executeWithFallback, type RepositoryResult } from '../../../lib/repository/fallback';
 import { tableColumns } from '../../../lib/repository/tableColumns';
 
 const supabase = getSupabaseClient();

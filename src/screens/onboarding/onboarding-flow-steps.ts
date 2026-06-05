@@ -1,8 +1,4 @@
-import {
-  DEFAULT_COMPANION_ELEMENT,
-  STARTER_PRESETS,
-  STEP_TITLES,
-} from './components';
+import { DEFAULT_COMPANION_ELEMENT, STEP_TITLES } from './components';
 import { DEFAULT_PERSONA_ID } from './components/onboarding-flow-data';
 import type {
   OnboardingGoal,
@@ -38,7 +34,6 @@ export function getStepValidation(
 export function buildDraftPayload(params: {
   goal: OnboardingGoal | undefined;
   motivationStyle: MotivationProfileType | undefined;
-  starterPresetId: string | undefined;
   chosenLane: string | undefined;
 }): OnboardingDraft {
   return {
@@ -47,7 +42,6 @@ export function buildDraftPayload(params: {
     goal: params.goal,
     personaId: DEFAULT_PERSONA_ID,
     squadId: null,
-    starterPresetId: params.starterPresetId,
     chosenLane: params.chosenLane ?? undefined,
   };
 }

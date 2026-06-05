@@ -2,10 +2,12 @@ import {
   checkQuota,
   consumeQuota,
   getRemainingQuota,
+  resolveUserTier,
 } from '../ai-quota-service';
 import { clearUsage } from '../ai-quota-repository';
 import type { AIRequestCategory } from '../ai-quota-types';
 import { DEFAULT_QUOTA_STRATEGIES } from '../ai-quota-strategies';
+import { useMonetizationStore } from '../../monetization/store';
 
 const TEST_USER = '00000000-0000-0000-0000-000000000001';
 
@@ -14,6 +16,60 @@ describe('AI Quota Service', () => {
     clearUsage(TEST_USER, 'coach_message');
     clearUsage(TEST_USER, 'session_summary');
     clearUsage(TEST_USER, 'weekly_reflection');
+  });
+
+  describe('resolveUserTier', () => {
+    it('returns paid when isPremium is true', async () => {
+      useMonetizationStore.setState({
+        isPremium: true,
+        activeEntitlements: [],
+      });
+      const tier = await resolveUserTier(TEST_USER);
+      expect(tier).toBe('paid');
+    });
+
+    it('returns paid when activeEntitlements contains vip', async () => {
+      useMonetizationStore.setState({
+        isPremium: false,
+        activeEntitlements: [
+          {
+            identifier: 'vip',
+            isActive: true,
+            willRenew: true,
+            latestPurchaseDate: new Date().toISOString(),
+            originalPurchaseDate: new Date().toISOString(),
+            expirationDate: null,
+            store: 'APP_STORE',
+            productIdentifier: 'vip_monthly',
+            isSandbox: false,
+            unsubscribeDetectedAt: null,
+            billingIssueDetectedAt: null,
+          },
+        ],
+      });
+      const tier = await resolveUserTier(TEST_USER);
+      expect(tier).toBe('paid');
+    });
+
+    it('returns free when no entitlements set', async () => {
+      useMonetizationStore.setState({
+        isPremium: false,
+        activeEntitlements: [],
+      });
+      const tier = await resolveUserTier(TEST_USER);
+      expect(tier).toBe('free');
+    });
+
+    it('returns free when store throws (safe fallback)', async () => {
+      const saved = useMonetizationStore.getState;
+      // @ts-expect-error: simulate store corruption for test
+      useMonetizationStore.getState = () => {
+        throw new Error('store broken');
+      };
+      const tier = await resolveUserTier(TEST_USER);
+      expect(tier).toBe('free');
+      useMonetizationStore.getState = saved;
+    });
   });
 
   describe('checkQuota', () => {

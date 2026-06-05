@@ -13,6 +13,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { springPresets } from '../../../theme/tokens/motion';
 import { lightColors } from '@/theme/tokens/colors';
+import { rgbaColors } from '@/theme/tokens/rgba-colors';
 
 /**
  * VexDevotionalCard — a true glass card for the Editorial Devotional login.
@@ -94,7 +95,7 @@ export function VexDevotionalCard({
         style={[
           {
             borderRadius,
-            backgroundColor: 'rgba(17, 11, 7, 0.42)',
+            backgroundColor: rgbaColors.rgb_17_11_7_0_42,
             marginTop: style?.marginTop ?? 0,
             marginBottom: style?.marginBottom ?? 0,
             overflow: 'hidden',
@@ -104,7 +105,7 @@ export function VexDevotionalCard({
             shadowOpacity: 0.55,
             shadowRadius: 36,
             borderWidth: 1,
-            borderColor: 'rgba(242,234,217,0.10)',
+            borderColor: rgbaColors.rgb_242_234_217_0_10,
           },
         ]}
       >
@@ -136,21 +137,21 @@ export function VexDevotionalCard({
         {/* Layer 2 — editorial frame */}
         <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}>
           <LinearGradient
-            colors={['rgba(200,160,98,0.10)', 'rgba(200,160,98,0)']}
+            colors={[rgbaColors.rgb_200_160_98_0_10, rgbaColors.rgb_200_160_98_0]}
             locations={[0, 0.7]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
             style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}
           />
           <LinearGradient
-            colors={['transparent', 'rgba(0,0,0,0.30)']}
+            colors={['transparent', rgbaColors.rgb_0_0_0_0_3]}
             locations={[0.5, 1]}
             start={{ x: 0.5, y: 0 }}
             end={{ x: 0.5, y: 1 }}
             style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}
           />
           <LinearGradient
-            colors={['transparent', 'rgba(224,184,112,0.55)', 'transparent']}
+            colors={['transparent', rgbaColors.rgb_224_184_112_0_55, 'transparent']}
             locations={[0.1, 0.5, 0.9]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
@@ -163,7 +164,7 @@ export function VexDevotionalCard({
                 top: 0,
                 bottom: 0,
                 width: 80,
-                backgroundColor: 'rgba(242,234,217,0.06)',
+                backgroundColor: rgbaColors.rgb_242_234_217_0_06,
                 transform: [{ skewX: '-18deg' }],
               },
               sheenStyle,

@@ -5,7 +5,9 @@
 // Multi-line safe: uses a depth-based walker that respects parens/braces/strings.
 // Safe to re-run: no-ops if the file already uses tableColumns().
 //
-// Usage: node scripts/replace-select-star.js
+// Usage:
+//   node scripts/replace-select-star.js           # auto-fix
+//   node scripts/replace-select-star.js --check   # report only, exit 1 if violations
 const fs = require('fs');
 const path = require('path');
 
@@ -89,6 +91,7 @@ function findSelectCallEnd(src, callStart) {
 
 const FROM_RE = /\.from\(\s*(['"][a-zA-Z_][a-zA-Z0-9_]*['"]|[A-Z_][A-Z0-9_]*)\s*\)/g;
 
+const checkMode = process.argv.includes('--check');
 const files = walk(SRC).filter((p) => !/__tests__/.test(p));
 let totalFiles = 0;
 let totalReplacements = 0;
@@ -125,6 +128,11 @@ for (const file of files) {
   totalFiles++;
   totalReplacements += fileReplacements;
 
+  if (checkMode) {
+    console.log(`  ${path.relative(REPO_ROOT, file)}: ${fileReplacements} select('*') violation(s)`);
+    continue;
+  }
+
   if (!/from\s+['"][^'"]*tableColumns['"]/.test(out)) {
     let rel = path.relative(path.dirname(file), HELPERS_PATH).replace(/\\/g, '/');
     if (!rel.startsWith('.')) rel = './' + rel;
@@ -140,6 +148,12 @@ for (const file of files) {
 
   fs.writeFileSync(file, out, 'utf8');
   console.log(`  ${path.relative(REPO_ROOT, file)}: ${fileReplacements} replacement(s)`);
+}
+
+if (checkMode && totalReplacements > 0) {
+  console.error(`\n${totalReplacements} select('*') violation(s) found in ${totalFiles} file(s).`);
+  console.error('Run "node scripts/replace-select-star.js" to auto-fix.');
+  process.exit(1);
 }
 
 console.log(`\nDone. ${totalReplacements} replacement(s) in ${totalFiles} file(s).`);

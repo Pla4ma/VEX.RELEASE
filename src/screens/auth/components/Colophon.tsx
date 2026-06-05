@@ -8,6 +8,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { Text } from '../../../components/primitives/Text';
+import { rgbaColors } from '@/theme/tokens/rgba-colors';
 
 const EASE_EDITORIAL = Easing.bezier(0.22, 1, 0.36, 1);
 const SERIF_STACK = Platform.select({
@@ -30,10 +31,10 @@ export function Colophon({ delay, isReducedMotion }: { delay: number; isReducedM
   return (
     <Animated.View style={[{ alignItems: 'center', gap: 6 }, style]}>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-        <View style={{ width: 12, height: 1, backgroundColor: 'rgba(224,184,112,0.45)' }} />
+        <View style={{ width: 12, height: 1, backgroundColor: rgbaColors.rgb_224_184_112_0_45 }} />
         <Text
           style={{
-            color: 'rgba(224,184,112,0.65)',
+            color: rgbaColors.rgb_224_184_112_0_65,
             fontSize: 9,
             fontFamily: SERIF_STACK,
             fontWeight: '500',
@@ -43,7 +44,7 @@ export function Colophon({ delay, isReducedMotion }: { delay: number; isReducedM
         >
           Est. MMXXVI · For Builders of Solitude
         </Text>
-        <View style={{ width: 12, height: 1, backgroundColor: 'rgba(224,184,112,0.45)' }} />
+        <View style={{ width: 12, height: 1, backgroundColor: rgbaColors.rgb_224_184_112_0_45 }} />
       </View>
     </Animated.View>
   );

@@ -5,6 +5,7 @@ import {
   makeStats,
   defaultAvailability,
 } from './personalization.helpers';
+import { VexPersonalizationProfileSchema } from '../schemas';
 
 describe('Calm work user', () => {
   it('gets soft tone and minimal gamification', () => {
@@ -38,6 +39,22 @@ describe('Calm work user', () => {
 });
 
 describe('Study-focused student', () => {
+  it('normalizes legacy student motivation style', () => {
+    const profile = VexPersonalizationProfileSchema.parse({
+      primaryGoal: 'study',
+      motivationStyle: 'student',
+      preferredTone: 'strategic',
+      gamificationIntensity: 'minimal',
+      coachMode: 'study_tutor',
+      studyLayerName: 'Study OS',
+      defaultSessionDuration: 25,
+      defaultSessionMode: 'STUDY',
+      userStage: 'new',
+    });
+
+    expect(profile.motivationStyle).toBe('study_focused');
+  });
+
   it('gets study_centered layout', () => {
     const profile = makeProfile({
       primaryGoal: 'study',

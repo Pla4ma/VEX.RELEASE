@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { XpSourceSchema } from './schemas-xp';
 
 export { XpSourceSchema };
+export { ProgressionRowSchema } from './progression-row-schemas';
 
 export const ProgressionSchema = z
   .object({

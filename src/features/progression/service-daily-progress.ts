@@ -30,7 +30,7 @@ export async function getDailyProgress(userId: string): Promise<DailyProgress> {
   today.setHours(0, 0, 0, 0);
   const startOfDay = today.getTime();
   try {
-    const history = await fetchXpHistory(userId, { since: startOfDay });
+    const history = await fetchXpHistory(userId, { since: startOfDay, limit: 200 });
     const xpEarned = history.reduce((sum, entry) => sum + entry.amount, 0);
     const sessionsCompleted = new Set(
       history

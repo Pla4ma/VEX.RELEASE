@@ -1,9 +1,10 @@
-import type { ReactNode } from 'react';
+import { useCallback, type ReactNode } from 'react';
 import { ActivityIndicator } from 'react-native';
 import { Box, Text } from '../components/primitives';
 import { Button } from '../components';
 import { useTheme } from '../theme';
 import { Icon } from '../icons';
+import { captureException } from '../config/sentry';
 import type { ErrorFallbackProps, ErrorCategory } from './ErrorBoundary.types';
 
 function getErrorMessage(category: ErrorCategory, error: Error | null): string {
@@ -50,6 +51,17 @@ export function ErrorFallback({
   onDegraded,
 }: ErrorFallbackProps): ReactNode {
   const { theme } = useTheme();
+
+  const handleRestart = useCallback(() => {
+    captureException(error ?? new Error('Fatal error requiring restart'), {
+      extra: { category, component: 'ErrorBoundary', action: 'restart' },
+    });
+    try {
+      const { reloadAsync } = require('expo-updates');
+      void reloadAsync();
+    } catch {
+    }
+  }, [category, error]);
   return (
     <Box flex={1} justifyContent="center" alignItems="center" p="xl">
       <Box
@@ -125,6 +137,17 @@ export function ErrorFallback({
               accessibilityHint="Double tap to activate"
             >
               Continue Anyway
+            </Button>
+          )}
+          {category === 'client' && (
+            <Button
+              variant="primary"
+              onPress={handleRestart}
+              accessibilityLabel="Restart app"
+              accessibilityRole="button"
+              accessibilityHint="Double tap to restart the application"
+            >
+              Restart App
             </Button>
           )}
         </Box>

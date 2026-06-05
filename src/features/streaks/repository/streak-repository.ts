@@ -1,64 +1,19 @@
-import { captureSilentFailure } from '../../../utils/silent-failure';
-import {
-  withRetry,
-  RepositoryError,
-  RepositoryErrorCode,
-} from '../../../lib/repository/base';
 import {
   enqueue,
   type OfflineQueueEntryInput,
 } from '../../../lib/offline/queue';
 import { getSupabaseClient } from '../../../config/supabase';
-import { StreakSchema, type Streak } from '../schemas';
+import type { Streak } from '../schemas';
 import { v4 } from '../../../utils/uuid';
 import { tableColumns } from '../../../lib/repository/tableColumns';
+import { parseStreakRow } from '../repository-helpers';
+import {
+  executeWithFallback,
+  type RepositoryResult,
+  StreaksRepositoryError,
+} from '../../../lib/repository/fallback';
 
 const supabase = getSupabaseClient();
-export class StreaksRepositoryError extends RepositoryError {
-  public override readonly name = 'StreaksRepositoryError';
-  constructor(operation: string, error: unknown, code?: RepositoryErrorCode) {
-    super(operation, error, code);
-  }
-}
-
-export interface RepositoryResult<T> {
-  data: T | null;
-  error: StreaksRepositoryError | null;
-  fromCache: boolean;
-}
-export async function executeWithFallback<T>(
-  operation: string,
-  onlineFn: () => Promise<T>,
-  offlineFn?: () => Promise<T | null>,
-): Promise<RepositoryResult<T>> {
-  try {
-    const data = await withRetry(operation, onlineFn);
-    return { data, error: null, fromCache: false };
-  } catch (error) {
-    const repoError =
-      error instanceof RepositoryError
-        ? new StreaksRepositoryError(operation, error.originalError, error.code)
-        : new StreaksRepositoryError(
-            operation,
-            error instanceof Error ? error : new Error(String(error)),
-          );
-    if (offlineFn) {
-      try {
-        const cached = await offlineFn();
-        if (cached) {
-          return { data: cached, error: repoError, fromCache: true };
-        }
-      } catch (error) {
-        captureSilentFailure(error, {
-          feature: 'streaks',
-          operation: 'network-fallback',
-          type: 'network',
-        });
-      }
-    }
-    return { data: null, error: repoError, fromCache: false };
-  }
-}
 
 export async function fetchStreakEnhanced(
   userId: string,
@@ -75,7 +30,7 @@ export async function fetchStreakEnhanced(
     if (!data) {
       throw new Error('No data returned');
     }
-    return StreakSchema.parse(data);
+    return parseStreakRow(data);
   });
 }
 
@@ -103,7 +58,7 @@ export async function createStreakEnhanced(
     if (error) {
       throw error;
     }
-    return StreakSchema.parse(data);
+    return parseStreakRow(data);
   });
 }
 
@@ -130,7 +85,7 @@ export async function updateStreakEnhanced(
     if (error) {
       throw error;
     }
-    return StreakSchema.parse(data);
+    return parseStreakRow(data);
   });
 }
 
@@ -186,6 +141,12 @@ export async function batchUpdateStreaks(
   }
   return results;
 }
+
+export {
+  executeWithFallback,
+  type RepositoryResult,
+  StreaksRepositoryError,
+} from '../../../lib/repository/fallback';
 
 export {
   fetchActiveRepairQuestEnhanced,

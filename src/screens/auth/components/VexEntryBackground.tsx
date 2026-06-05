@@ -9,6 +9,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Starfield } from './Starfield';
 import { lightColors } from '@/theme/tokens/colors';
+import { rgbaColors } from '@/theme/tokens/rgba-colors';
 
 export function VexEntryBackground(): JSX.Element {
   const { width, height } = useWindowDimensions();
@@ -55,7 +56,7 @@ export function VexEntryBackground(): JSX.Element {
             width: width * 0.8,
             height: width * 0.8,
             borderRadius: (width * 0.8) / 2,
-            backgroundColor: 'rgba(0,229,255,0.06)',
+            backgroundColor: rgbaColors.rgb_0_229_255_0_06,
             top: height * 0.1,
             left: -width * 0.2,
             shadowColor: lightColors.semantic.vexCyan,
@@ -75,7 +76,7 @@ export function VexEntryBackground(): JSX.Element {
             width: width * 0.9,
             height: width * 0.9,
             borderRadius: (width * 0.9) / 2,
-            backgroundColor: 'rgba(139,92,246,0.05)',
+            backgroundColor: rgbaColors.rgb_139_92_246_0_05,
             bottom: -height * 0.15,
             right: -width * 0.3,
             shadowColor: lightColors.accent.purple,
@@ -95,7 +96,7 @@ export function VexEntryBackground(): JSX.Element {
             width: width * 0.6,
             height: width * 0.6,
             borderRadius: (width * 0.6) / 2,
-            backgroundColor: 'rgba(59,130,246,0.04)',
+            backgroundColor: rgbaColors.rgb_59_130_246_0_04,
             top: height * 0.4,
             right: width * 0.1,
             shadowColor: lightColors.accent.blue,

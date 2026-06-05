@@ -9,7 +9,7 @@ export const PrimaryGoalSchema = z.enum([
   'learning',
 ]);
 
-export const MotivationStyleSchema = z.enum([
+const CanonicalMotivationStyleSchema = z.enum([
   'calm',
   'friendly',
   'coach_led',
@@ -17,6 +17,11 @@ export const MotivationStyleSchema = z.enum([
   'intense',
   'study_focused',
 ]);
+
+export const MotivationStyleSchema = z.preprocess(
+  (value) => (value === 'student' ? 'study_focused' : value),
+  CanonicalMotivationStyleSchema,
+);
 
 export const PreferredToneSchema = z.enum([
   'soft',

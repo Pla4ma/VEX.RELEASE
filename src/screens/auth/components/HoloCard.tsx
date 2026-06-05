@@ -9,6 +9,7 @@ import Animated, {
   withRepeat,
   withTiming,
 } from 'react-native-reanimated';
+import { rgbaColors } from '@/theme/tokens/rgba-colors';
 
 interface HoloCardProps {
   children: React.ReactNode;
@@ -61,8 +62,8 @@ export function HoloCard({
     transform: [{ translateX: sheenPos.value * 320 - 60 }],
   }));
 
-  const accentColor = accent === 'gold' ? 'rgba(224,184,112,0.6)' : accent === 'teal' ? 'rgba(94,234,212,0.55)' : 'rgba(245,241,232,0.25)';
-  const accentSoft = accent === 'gold' ? 'rgba(224,184,112,0.10)' : accent === 'teal' ? 'rgba(94,234,212,0.08)' : 'rgba(245,241,232,0.05)';
+  const accentColor = accent === 'gold' ? rgbaColors.rgb_224_184_112_0_6 : accent === 'teal' ? rgbaColors.rgb_94_234_212_0_55 : rgbaColors.rgb_245_241_232_0_25;
+  const accentSoft = accent === 'gold' ? rgbaColors.rgb_224_184_112_0_10 : accent === 'teal' ? rgbaColors.rgb_94_234_212_0_08 : rgbaColors.rgb_245_241_232_0_05;
 
   return (
     <Animated.View style={entryStyle}>
@@ -71,9 +72,9 @@ export function HoloCard({
           borderRadius,
           overflow: 'hidden',
           position: 'relative',
-          backgroundColor: 'rgba(14,12,22,0.72)',
+          backgroundColor: rgbaColors.rgb_14_12_22_0_72,
           borderWidth: 1,
-          borderColor: 'rgba(245,241,232,0.08)',
+          borderColor: rgbaColors.rgb_245_241_232_0_08,
         },
         style,
       ]}>
@@ -99,7 +100,7 @@ export function HoloCard({
         <Animated.View
           pointerEvents="none"
           style={[
-            { position: 'absolute', top: 0, bottom: 0, width: 40, backgroundColor: 'rgba(245,241,232,0.03)' },
+            { position: 'absolute', top: 0, bottom: 0, width: 40, backgroundColor: rgbaColors.rgb_245_241_232_0_03 },
             sheenStyle,
           ]}
         />

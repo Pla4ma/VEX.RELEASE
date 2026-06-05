@@ -1,45 +1,36 @@
-import React, { useCallback, useMemo, useState } from 'react';
+/**
+ * RegisterScreen — June 2026 Ethereal Sky visual layer.
+ *
+ * Business logic (validation, registration) lives in the auth store;
+ * this file is presentation only.
+ */
+import React, { useCallback, useState } from 'react';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import Animated, { FadeInDown } from 'react-native-reanimated';
-import { Pressable } from 'react-native';
+import { Pressable, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { AppScreen, Box, Button, Text } from '../../components/primitives';
+import { AppScreen, Text } from '../../components/primitives';
+import { Button } from '../../components/primitives/Button';
 import type { AuthStackParams } from '../../navigation';
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
-import { FormField } from '../../shared/ui/components/FormField';
 import { useToast } from '../../shared/ui/components/Toast';
 import { useAuthStore } from '../../store/index';
-import { useReducedMotion } from '../../hooks/useReducedMotion';
-import { useTheme } from '../../theme';
-import { getMinTouchTargetStyle } from '../../utils/touchTarget';
 import { registerSchema, type RegisterFormData } from './schemas';
-import { AuthValuePreview } from './components/AuthValuePreview';
-import { AuthHeroBrand } from './components/AuthHeroBrand';
-import { AuthCommandPanel } from './components/AuthCommandPanel';
-import { VexEntryBackground } from './components/VexEntryBackground';
+import { EtherealSkyBackground } from './components/ethereal';
+import { RegisterFormPanel } from './components/ethereal/RegisterFormPanel';
+import { RegisterHero } from './components/ethereal/RegisterHero';
+import { getMinTouchTargetStyle } from '../../utils/touchTarget';
 
 type Props = NativeStackScreenProps<AuthStackParams, 'Register'>;
 type RegisterErrors = Partial<Record<keyof RegisterFormData, string>>;
 
-function getFieldError(
-  errors: RegisterErrors,
-  field: keyof RegisterFormData,
-): string | undefined {
-  return errors[field];
-}
-
 export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
-  const { theme } = useTheme();
-  const { isReducedMotion } = useReducedMotion();
+  const insets = useSafeAreaInsets();
   const { register, isLoading } = useAuthStore();
   const { show: showToast } = useToast();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<RegisterErrors>({});
-  const entering = useMemo(
-    () => (isReducedMotion ? undefined : FadeInDown.duration(420)),
-    [isReducedMotion],
-  );
 
   const clearError = useCallback(
     (field: keyof RegisterFormData): void => {
@@ -51,10 +42,11 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
   );
 
   const handleRegister = useCallback(async (): Promise<void> => {
+    if (isLoading) {return;}
     const result = registerSchema.safeParse({
       agreeToTerms: true,
       confirmPassword: password,
-      email,
+      email: email.trim().toLowerCase(),
       firstName: '',
       lastName: '',
       password,
@@ -64,11 +56,7 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
       const fieldErrors: RegisterErrors = {};
       result.error.errors.forEach((error) => {
         const field = error.path[0];
-        if (
-          field === 'email' ||
-          field === 'password' ||
-          field === 'confirmPassword'
-        ) {
+        if (field === 'email' || field === 'password' || field === 'confirmPassword') {
           fieldErrors[field] = error.message;
         }
       });
@@ -78,116 +66,85 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
 
     const success = await register(result.data);
     if (!success) {
-      showToast({
-        duration: 4000,
-        message: 'Your account did not land. Check the details and try again.',
-        title: 'Signup did not finish',
-        type: 'error',
-      });
+      const authError =
+        useAuthStore.getState().error ?? 'Check the details and try again.';
+      showToast({ duration: 4000, message: authError, title: 'Signup did not finish', type: 'error' });
     }
-  }, [email, password, register, showToast]);
+  }, [email, isLoading, password, register, showToast]);
+
+  const onChangeEmail = useCallback(
+    (value: string) => { setEmail(value); clearError('email'); },
+    [clearError],
+  );
+  const onChangePassword = useCallback(
+    (value: string) => { setPassword(value); clearError('password'); },
+    [clearError],
+  );
+  const onGoToLogin = useCallback(() => { navigation.navigate({ name: 'Login', params: {} }); }, [navigation]);
+  const onBack = useCallback(() => { navigation.goBack(); }, [navigation]);
 
   return (
-    <AppScreen keyboardAvoiding contentStyle={{ gap: theme.spacing[5] }}>
-      <VexEntryBackground />
+    <AppScreen
+      contentStyle={{ flexGrow: 1, paddingBottom: insets.bottom + 16 }}
+      keyboardAvoiding
+      padded={false}
+    >
+      <EtherealSkyBackground />
 
-      <Animated.View entering={entering}>
-        <AuthHeroBrand
-          label="Start with the loop"
-          title="Create your VEX account"
-          tagline="Two fields, then your first protected session."
-        />
-      </Animated.View>
+      <View style={{ flex: 1, paddingTop: insets.top + 16, paddingHorizontal: 24 }}>
+        <RegisterHero />
 
-      <Animated.View entering={entering}>
-        <AuthValuePreview />
-      </Animated.View>
-
-      <Animated.View entering={entering}>
-        <AuthCommandPanel>
-          <FormField
-            accessibilityHint="Enter the email you want to use for VEX"
-            accessibilityLabel="Account email"
-            autoCapitalize="none"
-            autoComplete="email"
-            error={getFieldError(errors, 'email')}
-            keyboardType="email-address"
-            label="Email"
-            leftIcon="email"
-            onChangeText={(value) => {
-              setEmail(value);
-              clearError('email');
+        <View style={{ marginTop: 32 }}>
+          <RegisterFormPanel
+            fields={{
+              email,
+              emailError: errors.email,
+              password,
+              passwordError: errors.password,
             }}
-            placeholder="you@example.com"
-            returnKeyType="next"
-            size="lg"
-            value={email}
+            isLoading={isLoading}
+            onChangeEmail={onChangeEmail}
+            onChangePassword={onChangePassword}
+            onSubmit={() => { void handleRegister(); }}
           />
-          <FormField
-            accessibilityHint="Create a password for your VEX account"
-            accessibilityLabel="Account password"
-            autoComplete="new-password"
-            error={getFieldError(errors, 'password')}
-            helperText="Use 8+ characters with a number and symbol."
-            label="Password"
-            leftIcon="lock"
-            onChangeText={(value) => {
-              setPassword(value);
-              clearError('password');
-            }}
-            onSubmitEditing={() => {
-              handleRegister();
-            }}
-            placeholder="Create a password"
-            returnKeyType="done"
-            secureTextEntry
-            size="lg"
-            value={password}
-          />
-          <Text color="text.muted" variant="caption">
-            By creating an account, you agree to the Terms of Service and Privacy
-            Policy.
-          </Text>
-        </AuthCommandPanel>
-      </Animated.View>
+        </View>
 
-      <Animated.View entering={entering}>
-        <Button
-          accessibilityHint="Creates your VEX account and continues to onboarding"
-          accessibilityLabel="Create VEX account"
-          fullWidth
-          isLoading={isLoading}
-          onPress={() => {
-            handleRegister();
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginTop: 16,
+            gap: 4,
           }}
-          size="lg"
-          variant="primary"
         >
-          Create account
-        </Button>
-
-        <Box
-          flexDirection="row"
-          justifyContent="center"
-          mt="lg"
-          style={{ gap: theme.spacing[1] }}
-        >
-          <Text color="text.secondary" variant="body">
+          <Text color="#0A0A0A" variant="body" style={{ color: 'rgba(10, 10, 10, 0.78)' }}>
             Already have an account?
           </Text>
           <Pressable
             accessibilityHint="Returns to sign in"
             accessibilityLabel="Sign in to an existing VEX account"
             accessibilityRole="link"
-            onPress={() => navigation.navigate({ name: 'Login', params: {} })}
+            onPress={onGoToLogin}
             style={getMinTouchTargetStyle()}
           >
-            <Text color="primary.300" fontWeight="700" variant="body">
+            <Text color="#0A0A0A" fontWeight="700" style={{ color: '#0A0A0A', textDecorationLine: 'underline' }}>
               Sign in
             </Text>
           </Pressable>
-        </Box>
-      </Animated.View>
+        </View>
+      </View>
+
+      <View style={{ alignItems: 'center', paddingTop: 16 }}>
+        <Button
+          accessibilityHint="Returns to the sign in screen"
+          accessibilityLabel="Back to sign in"
+          onPress={onBack}
+          variant="ghost"
+        >
+          Back
+        </Button>
+      </View>
     </AppScreen>
   );
 };

@@ -13,6 +13,7 @@ import {
   trackAccountDeletionStarted,
 } from '../analytics';
 import { emitAccountDeletionCompleted } from '../events';
+import { secureStorageMock, defaultStorageMock, zustandStorageMock } from './test-helpers';
 
 jest.mock('../repository');
 jest.mock('../analytics', () => ({
@@ -42,42 +43,6 @@ const clearUserIdMock = jest.mocked(revenueCatService.clearUserId);
 const getDefaultStorageAdapterMock = jest.mocked(getDefaultStorageAdapter);
 const getMMKVStorageAdapterMock = jest.mocked(getMMKVStorageAdapter);
 const getSecureStorageMock = jest.mocked(getSecureStorage);
-
-const secureStorageMock: ReturnType<typeof getSecureStorage> = {
-  clear: jest.fn(),
-  clearCredentials: jest.fn(),
-  containsKey: jest.fn(),
-  getAllKeys: jest.fn(),
-  getCredentials: jest.fn(),
-  getItem: jest.fn(),
-  getSize: jest.fn(),
-  removeItem: jest.fn(),
-  setCredentials: jest.fn(),
-  setItem: jest.fn(),
-};
-
-const defaultStorageMock: ReturnType<typeof getDefaultStorageAdapter> = {
-  clear: jest.fn(),
-  containsKey: jest.fn(),
-  getAllKeys: jest.fn(),
-  getItem: jest.fn(),
-  getItemSync: jest.fn(),
-  getJSON: jest.fn(),
-  getJSONSync: jest.fn(),
-  getSize: jest.fn(),
-  removeItem: jest.fn(),
-  removeItemSync: jest.fn(),
-  setItem: jest.fn(),
-  setItemSync: jest.fn(),
-  setJSON: jest.fn(),
-  setJSONSync: jest.fn(),
-};
-
-const zustandStorageMock: ReturnType<typeof getMMKVStorageAdapter> = {
-  getItem: jest.fn(),
-  removeItem: jest.fn(),
-  setItem: jest.fn(),
-};
 
 describe('account deletion — comprehensive', () => {
   beforeEach(() => {

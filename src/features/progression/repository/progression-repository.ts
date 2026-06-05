@@ -142,6 +142,7 @@ export async function fetchXpStats(
   try {
     const history = await repository.fetchXpHistory(userId, {
       since: getPeriodStart(period),
+      limit: 500,
     });
     const stats = history.reduce<XpStats>(
       (current, entry) => ({

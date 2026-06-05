@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { getSupabaseClient, handleSupabaseError } from '../../../config/supabase';
-import {
 import { tableColumns } from '../../../lib/repository/tableColumns';
+import {
   AnalyticsPreferencesSchema,
   AggregatedStatsSchema,
   DetectedPatternSchema,

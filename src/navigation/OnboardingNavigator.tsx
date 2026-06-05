@@ -12,7 +12,7 @@ import OnboardingFlowScreen from '../screens/onboarding/OnboardingFlowScreen';
 
 import type { RootStackParams } from './types';
 
-type OnboardingStackParams = {
+export type OnboardingStackParams = {
   OnboardingFlow: RootStackParams['Onboarding'];
 };
 

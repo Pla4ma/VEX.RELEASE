@@ -17,7 +17,7 @@ export interface ScheduledNotification {
   trigger: Notifications.NotificationTriggerInput;
   payload: PushNotificationPayload;
 }
-const PushNotificationPayloadSchema = z.object({
+export const PushNotificationPayloadSchema = z.object({
   title: z.string(),
   body: z.string(),
   data: z.record(z.unknown()).optional(),

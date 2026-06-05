@@ -9,6 +9,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import Svg, { Defs, Path, RadialGradient, Stop, LinearGradient as SvgLinearGradient } from 'react-native-svg';
+import { rgbaColors } from '@/theme/tokens/rgba-colors';
 
 const EASE_AMBIENT = Easing.bezier(0.37, 0, 0.63, 1);
 
@@ -29,14 +30,14 @@ export function FlowCurves() {
       <Svg width={width} height={280} viewBox={`0 0 ${width} 280`}>
         <Defs>
           <SvgLinearGradient id="curveGold" x1="0" y1="0" x2="1" y2="0">
-            <Stop offset="0%" stopColor="rgba(224,184,112,0)" />
-            <Stop offset="50%" stopColor="rgba(224,184,112,0.20)" />
-            <Stop offset="100%" stopColor="rgba(224,184,112,0)" />
+            <Stop offset="0%" stopColor={rgbaColors.rgb_224_184_112_0} />
+            <Stop offset="50%" stopColor={rgbaColors.rgb_224_184_112_0_20} />
+            <Stop offset="100%" stopColor={rgbaColors.rgb_224_184_112_0} />
           </SvgLinearGradient>
           <SvgLinearGradient id="curveTeal" x1="0" y1="0" x2="1" y2="0">
-            <Stop offset="0%" stopColor="rgba(94,234,212,0)" />
-            <Stop offset="50%" stopColor="rgba(94,234,212,0.12)" />
-            <Stop offset="100%" stopColor="rgba(94,234,212,0)" />
+            <Stop offset="0%" stopColor={rgbaColors.rgb_94_234_212_0} />
+            <Stop offset="50%" stopColor={rgbaColors.rgb_94_234_212_0_12} />
+            <Stop offset="100%" stopColor={rgbaColors.rgb_94_234_212_0} />
           </SvgLinearGradient>
         </Defs>
         <Path

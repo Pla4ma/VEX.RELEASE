@@ -1,38 +1,31 @@
 import * as Sentry from '@sentry/react-native';
-import type { OnboardingGoal } from '../../../features/onboarding';
+import type {
+  MotivationProfileType,
+  OnboardingGoal,
+} from '../../../features/onboarding';
 import type { useOnboardingCompletion } from './useOnboardingCompletion';
 import type { useOnboardingLane } from './useOnboardingLane';
 
 export interface OnboardingFlowHandlers {
   handleSelectGoal: (nextGoal: OnboardingGoal) => void;
-  handleSelectMotivationStyle: (style: string | undefined) => void;
+  handleSelectMotivationStyle: (style: MotivationProfileType) => void;
   handleAcceptLaneAndAdvance: (
     lane: import('../../../features/lane-engine').Lane,
   ) => void;
-  handleStartFirstSession: () => void;
   handleFinish: (message?: string) => void;
 }
 
 export function buildOnboardingHandlers(deps: {
   userId: string;
   goal: OnboardingGoal | undefined;
-  motivationStyle: string | undefined;
-  starterPresetId: string | undefined;
-  selectedGoal: { label: string } | undefined;
-  selectedPreset: { id: string } | undefined;
   setGoal: (goal: OnboardingGoal) => void;
-  setMotivationStyle: (style: string | undefined) => void;
-  setExplicitMotivationStyle: (style: string | undefined) => void;
-  setStep: (step: number) => void;
-  setIsLaunchingSession: (launching: boolean) => void;
+  setMotivationStyle: (style: MotivationProfileType | undefined) => void;
+  setExplicitMotivationStyle: (style: MotivationProfileType) => void;
   disclosureAnalytics: {
     trackOnboardingGoalSet: (userId: string, goal: OnboardingGoal) => void;
-    trackFirstSessionStarted: (userId: string, source: string) => void;
-  };
-  navigation: {
-    navigate: (screen: string, params: unknown) => void;
   };
   handleAcceptLane: ReturnType<typeof useOnboardingLane>['handleAcceptLane'];
+  setChosenLane: (lane: import('../../../features/lane-engine').Lane) => void;
   finishOnboarding: ReturnType<typeof useOnboardingCompletion>['finishOnboarding'];
 }): OnboardingFlowHandlers {
   return {
@@ -42,8 +35,7 @@ export function buildOnboardingHandlers(deps: {
         deps.disclosureAnalytics.trackOnboardingGoalSet(deps.userId, nextGoal);
       }
     },
-    handleSelectMotivationStyle(style: string | undefined): void {
-      if (!style) {return;}
+    handleSelectMotivationStyle(style: MotivationProfileType): void {
       deps.setMotivationStyle(style);
       deps.setExplicitMotivationStyle(style);
     },
@@ -51,24 +43,15 @@ export function buildOnboardingHandlers(deps: {
       lane: import('../../../features/lane-engine').Lane,
     ): void {
       deps.handleAcceptLane(lane);
-      deps.setStep(3);
-    },
-    handleStartFirstSession(): void {
-      if (!deps.selectedPreset) {return;}
-      deps.setIsLaunchingSession(true);
-      deps.disclosureAnalytics.trackFirstSessionStarted(deps.userId, 'onboarding');
-      deps.navigation.navigate('SessionStack', {
-        screen: 'SessionSetup',
-        params: {
-          goal: deps.selectedGoal?.label,
-          presetId: deps.selectedPreset.id,
-          source: 'onboarding_first_session',
-        },
+      deps.setChosenLane(lane);
+      deps.finishOnboarding(deps.goal, undefined).catch((error: unknown) => {
+        Sentry.captureException(error, {
+          tags: { feature: 'onboarding', operation: 'finishOnboarding' },
+        });
       });
-      deps.setIsLaunchingSession(false);
     },
     handleFinish(message?: string): void {
-      deps.finishOnboarding(deps.goal, deps.starterPresetId, message).catch(
+      deps.finishOnboarding(deps.goal, message).catch(
         (error: unknown) => {
           Sentry.captureException(error, {
             tags: { feature: 'onboarding', operation: 'finishOnboarding' },

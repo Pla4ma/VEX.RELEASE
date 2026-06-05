@@ -1,28 +1,61 @@
 /**
  * UUID Utility
  *
- * Cryptographically secure ID generation for the application.
- * Uses expo-crypto for secure random bytes in React Native.
+ * ID generation for non-sensitive application records.
+ * Uses platform crypto when available.
  */
-
-import * as ExpoCrypto from 'expo-crypto';
 
 /**
- * Generate a UUID v4 using cryptographically secure random bytes.
- * Delegates to expo-crypto which uses the platform's CSPRNG.
+ * Generate a UUID v4.
  */
 export function v4(): string {
-  return ExpoCrypto.randomUUID();
+  if (globalThis.crypto?.randomUUID) {
+    return globalThis.crypto.randomUUID();
+  }
+
+  const bytes = getRandomBytes(16);
+  const versionByte = bytes[6];
+  const variantByte = bytes[8];
+  if (versionByte !== undefined) {
+    bytes[6] = (versionByte & 0x0f) | 0x40;
+  }
+  if (variantByte !== undefined) {
+    bytes[8] = (variantByte & 0x3f) | 0x80;
+  }
+
+  const hex = Array.from(bytes, (byte) =>
+    byte.toString(16).padStart(2, '0'),
+  );
+  return [
+    hex.slice(0, 4).join(''),
+    hex.slice(4, 6).join(''),
+    hex.slice(6, 8).join(''),
+    hex.slice(8, 10).join(''),
+    hex.slice(10, 16).join(''),
+  ].join('-');
+}
+
+function getRandomBytes(length: number): Uint8Array {
+  const bytes = new Uint8Array(length);
+  if (globalThis.crypto?.getRandomValues) {
+    globalThis.crypto.getRandomValues(bytes);
+    return bytes;
+  }
+
+  for (let index = 0; index < bytes.length; index += 1) {
+    bytes[index] = Math.floor(Math.random() * 256);
+  }
+  return bytes;
 }
 
 /**
- * Generate a short ID using cryptographically secure random bytes.
+ * Generate a short ID.
  * Suitable for internal use where UUID is overkill but uniqueness is required.
  */
 export function shortId(length: number = 8): string {
   const chars =
     'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  const bytes = ExpoCrypto.getRandomBytes(length);
+  const bytes = getRandomBytes(length);
   return Array.from(bytes)
     .map((b) => chars[b % chars.length]!)
     .join('');

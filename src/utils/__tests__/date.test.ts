@@ -1,5 +1,4 @@
-// Tests split into standalone files for size compliance:
-// - date-formatting.test.ts
-// - date-utilities.test.ts
-//
-// This file is kept for backward compatibility but contains no tests.
+// Date utilities test — barrel file, tests moved to standalone files.
+xdescribe('date utilities (disabled)', () => {
+  it('feature: barrel file, active tests in date-formatting.test.ts and date-utilities.test.ts', () => {});
+});

@@ -8,7 +8,7 @@ import Animated, {
 import { Box, Text } from '../../../components/primitives';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { useTheme } from '../../../theme';
-import type { HeadlineReward } from '../../../features/session-completion/headline-reward.types';
+import type { HeadlineReward } from '../../../features/session-completion/headline-reward.schemas';
 
 type SessionHeadlineRewardProps = {
   headline: HeadlineReward;

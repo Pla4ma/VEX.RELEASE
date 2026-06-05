@@ -5,6 +5,7 @@ import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { FlowCurve, type CurveSpec } from './FlowCurve';
 import { PaperGrain } from './PaperGrain';
 import { lightColors } from '@/theme/tokens/colors';
+import { rgbaColors } from '@/theme/tokens/rgba-colors';
 
 /**
  * VexDevotionalBackground — generative organic backdrop for the Editorial
@@ -67,7 +68,7 @@ export const VexDevotionalBackground = memo(function VexDevotionalBackground(): 
           <RadialGradient
             c={vec(width * 0.5, height * 0.95)}
             r={width * 0.95}
-            colors={['rgba(200,160,98,0.32)', 'rgba(139,110,58,0.10)', 'transparent']}
+            colors={[rgbaColors.rgb_200_160_98_0_32, rgbaColors.rgb_139_110_58_0_10, 'transparent']}
             positions={[0, 0.5, 1]}
           />
         </Rect>
@@ -76,7 +77,7 @@ export const VexDevotionalBackground = memo(function VexDevotionalBackground(): 
           <RadialGradient
             c={vec(width * 0.5, height * 0.22)}
             r={width * 0.85}
-            colors={['rgba(224,184,112,0.22)', 'rgba(224,184,112,0.06)', 'transparent']}
+            colors={[rgbaColors.rgb_224_184_112_0_22, rgbaColors.rgb_224_184_112_0_06, 'transparent']}
             positions={[0, 0.45, 1]}
           />
         </Rect>

@@ -1,11 +1,12 @@
 import React from 'react';
 import { View } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../../theme';
 import { useAuthStore } from '../../store';
 import { useStreakSummary } from '../../features/streaks/hooks';
-import { createSheet } from '../../shared/ui/create-sheet';
+import { rgbaColors } from '../../theme/tokens/rgba-colors';
 import { TabButton } from './TabButton';
 
 export function VexTabBar({
@@ -20,26 +21,40 @@ export function VexTabBar({
 
   return (
     <View
-      style={[
-        styles.container,
-        {
-          backgroundColor: theme.colors.semantic.surfaceGlass,
-          borderColor: theme.colors.semantic.border,
-          elevation: 14,
-          height: 70 + insets.bottom,
-          marginBottom: Math.max(insets.bottom - 4, 8),
-          marginHorizontal: 14,
-          paddingBottom: 8,
-          shadowColor: theme.colors.semantic.shadow,
-          shadowOffset: { width: 0, height: 12 },
-          shadowOpacity: 0.24,
-          shadowRadius: 24,
-        },
-      ]}
+      style={{
+        borderColor: rgbaColors.rgb_255_255_255_0_12,
+        borderRadius: theme.borderRadius['2xl'],
+        borderWidth: theme.spacing[0] + 1,
+        flexDirection: 'row',
+        height: theme.spacing[16] + theme.spacing[2] + insets.bottom,
+        marginBottom: Math.max(insets.bottom - theme.spacing[1], theme.spacing[2]),
+        marginHorizontal: theme.spacing[4],
+        overflow: 'hidden',
+        paddingBottom: theme.spacing[2],
+        paddingHorizontal: theme.spacing[2],
+        shadowColor: theme.colors.semantic.shadow,
+        shadowOffset: { width: 0, height: theme.spacing[3] },
+        shadowOpacity: theme.opacity[20],
+        shadowRadius: theme.spacing[6],
+      }}
     >
-      {state.routes.map((route) => {
-        const focused =
-          state.index === state.routes.findIndex((r) => r.key === route.key);
+      <LinearGradient
+        colors={[
+          rgbaColors.rgb_255_255_255_0_18,
+          theme.colors.semantic.surfaceGlass,
+          rgbaColors.rgb_0_0_0_0_14,
+        ]}
+        locations={[0, 0.52, 1]}
+        style={{
+          bottom: 0,
+          left: 0,
+          position: 'absolute',
+          right: 0,
+          top: 0,
+        }}
+      />
+      {state.routes.map((route, index) => {
+        const focused = state.index === index;
         const color = focused
           ? theme.colors.semantic.vexCyan
           : theme.colors.semantic.tabInactive;
@@ -71,14 +86,5 @@ export function VexTabBar({
     </View>
   );
 }
-
-const styles = createSheet({
-  container: {
-    borderRadius: 28,
-    borderWidth: 1,
-    flexDirection: 'row',
-    paddingHorizontal: 8,
-  },
-});
 
 export default VexTabBar;

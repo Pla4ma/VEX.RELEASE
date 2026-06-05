@@ -1,17 +1,11 @@
 import { useCallback, useRef, useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import * as Sentry from '@sentry/react-native';
 import { useDisclosureAnalytics } from '../../../features/liveops-config';
-import type { ExtendedRootStackParams } from '../../../navigation/types';
 import { useOnboardingStore } from '../../../features/onboarding';
 import { useSessionUIStore } from '../../../store/session-state';
 import { triggerHaptic } from '../../../utils/haptics';
 
-type NavigationProp = NativeStackNavigationProp<ExtendedRootStackParams>;
-
 export function useOnboardingCompletion(userId: string) {
-  const navigation = useNavigation<NavigationProp>();
   const completeOnboarding = useOnboardingStore(
     (state) => state.completeOnboarding,
   );
@@ -26,10 +20,9 @@ export function useOnboardingCompletion(userId: string) {
   const finishOnboarding = useCallback(
     async (
       goal: string | undefined,
-      starterPresetId: string | undefined,
       message?: string,
     ): Promise<void> => {
-      if (!userId || !goal || !starterPresetId) {return;}
+      if (!userId || !goal) {return;}
       setIsFinishing(true);
       setFinishError(null);
       completedRef.current = true;
@@ -46,10 +39,6 @@ export function useOnboardingCompletion(userId: string) {
         triggerHaptic('success').catch(() => {
           // Haptic failure is non-critical — safe to swallow in onboarding completion
         });
-        navigation.replace('Main', {
-          screen: 'Home',
-          params: message ? { comebackMessage: message } : undefined,
-        });
       } catch (error) {
         Sentry.captureException(error, {
           tags: { feature: 'onboarding', operation: 'finishOnboarding' },
@@ -65,7 +54,6 @@ export function useOnboardingCompletion(userId: string) {
     [
       completeOnboarding,
       disclosureAnalytics,
-      navigation,
       showHomeHighlight,
       userId,
     ],

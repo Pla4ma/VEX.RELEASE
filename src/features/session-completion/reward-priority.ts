@@ -1,6 +1,5 @@
 import { z } from 'zod';
-import { HeadlineRewardConsequencesSchema } from './headline-reward.schemas';
-import type { HeadlineRewardConsequences } from './headline-reward.types';
+import { HeadlineRewardConsequencesSchema, type HeadlineRewardConsequences } from './headline-reward.schemas';
 
 export const RewardPriorityKindSchema = z.enum([
   'personal_best',

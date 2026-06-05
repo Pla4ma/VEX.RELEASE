@@ -9,6 +9,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { springPresets } from '../../../theme/tokens/motion';
+import { rgbaColors } from '@/theme/tokens/rgba-colors';
 
 /**
  * EditorialRule — the "hairline · diamond · hairline" rule below the wordmark.
@@ -28,9 +29,9 @@ export function EditorialRule({ isReducedMotion }: { isReducedMotion: boolean })
   }));
   return (
     <Animated.View style={[{ flexDirection: 'row', alignItems: 'center', gap: 10 }, style]}>
-      <View style={{ width: 80, height: 1, backgroundColor: 'rgba(224,184,112,0.55)' }} />
-      <View style={{ width: 5, height: 5, backgroundColor: 'rgba(224,184,112,0.85)', transform: [{ rotate: '45deg' }] }} />
-      <View style={{ width: 80, height: 1, backgroundColor: 'rgba(224,184,112,0.55)' }} />
+      <View style={{ width: 80, height: 1, backgroundColor: rgbaColors.rgb_224_184_112_0_55 }} />
+      <View style={{ width: 5, height: 5, backgroundColor: rgbaColors.rgb_224_184_112_0_85, transform: [{ rotate: '45deg' }] }} />
+      <View style={{ width: 80, height: 1, backgroundColor: rgbaColors.rgb_224_184_112_0_55 }} />
     </Animated.View>
   );
 }

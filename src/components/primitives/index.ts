@@ -17,6 +17,7 @@ export { Card, CardFooter, CardHeader } from './Card';
 export type { CardProps, CardVariant, CardSize, CardState } from './Card';
 
 export { AppScreen } from './AppScreen';
+export { PremiumBackdrop } from './PremiumBackdrop';
 
 export { Stack, VStack, HStack, Center } from './Stack';
 export type { StackProps } from './Stack';

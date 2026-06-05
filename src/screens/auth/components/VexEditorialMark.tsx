@@ -10,6 +10,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Text } from '../../../components/primitives/Text';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
+import { rgbaColors } from '@/theme/tokens/rgba-colors';
 import { EditorialFlourish } from './EditorialFlourish';
 import { VexLetter } from './VexLetter';
 import { EditorialRule } from './EditorialRule';
@@ -73,7 +74,7 @@ export function VexEditorialMark({
       <Animated.View style={edStyle}>
         <Text
           style={{
-            color: 'rgba(224,184,112,0.85)',
+            color: rgbaColors.rgb_224_184_112_0_85,
             fontSize: 10,
             fontFamily: SERIF_STACK,
             fontWeight: '500',
@@ -118,7 +119,7 @@ export function VexEditorialMark({
       <Animated.View style={tagStyle}>
         <Text
           style={{
-            color: 'rgba(224,184,112,0.55)',
+            color: rgbaColors.rgb_224_184_112_0_55,
             fontSize: 9,
             fontFamily: SERIF_STACK,
             fontWeight: '500',

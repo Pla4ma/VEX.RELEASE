@@ -1,13 +1,29 @@
 import { getSupabaseClient } from '../../config/supabase';
 import { withResilience } from '../../utils/supabase-resilience';
 import { RepositoryError } from '../../lib/repository/error-handling';
-import {
 import { tableColumns } from '../../lib/repository/tableColumns';
+import {
   ProgressionSchema,
+  ProgressionRowSchema,
   type Progression,
 } from './schemas';
 
 const supabase = getSupabaseClient();
+
+function parseProgressionRow(row: unknown): Progression {
+  const parsed = ProgressionRowSchema.parse(row);
+  return ProgressionSchema.parse({
+    id: parsed.id,
+    userId: parsed.user_id,
+    level: parsed.level,
+    xp: parsed.xp,
+    totalXp: parsed.total_xp,
+    nextLevelThreshold: parsed.next_level_threshold,
+    lastLevelUpAt: parsed.last_level_up_at,
+    createdAt: parsed.created_at,
+    updatedAt: parsed.updated_at,
+  });
+}
 
 export async function fetchProgression(
   userId: string,
@@ -25,7 +41,7 @@ export async function fetchProgression(
   if (!data) {
     return null;
   }
-  return ProgressionSchema.parse(data);
+  return parseProgressionRow(data);
 }
 
 export async function createProgression(userId: string): Promise<Progression> {
@@ -49,7 +65,7 @@ export async function createProgression(userId: string): Promise<Progression> {
   if (error) {
     throw new RepositoryError('createProgression', error);
   }
-  return ProgressionSchema.parse(data);
+  return parseProgressionRow(data);
 }
 
 export async function updateProgression(
@@ -74,7 +90,7 @@ export async function updateProgression(
   if (error) {
     throw new RepositoryError('updateProgression', error);
   }
-  return ProgressionSchema.parse(data);
+  return parseProgressionRow(data);
 }
 
 // XP / level-up queries live in xp-history.ts

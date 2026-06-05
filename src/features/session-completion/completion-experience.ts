@@ -1,2 +1,4 @@
-export * from './completion-experience-core';
-export * from './completion-experience-social';
+export * from './completion-experience-policy';
+export * from './completion-experience-policy-schemas';
+export * from './completion-experience-types';
+export * from './completion-experience-schemas';

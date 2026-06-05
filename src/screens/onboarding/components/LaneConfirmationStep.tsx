@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Pressable, View } from 'react-native';
+import { View } from 'react-native';
 import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 
 import { Button } from '../../../components/primitives/Button';
@@ -119,11 +119,11 @@ export function LaneConfirmationStep({
             variant="primary"
             onPress={() => onAccept(lane)}
             isLoading={isChoosing}
-            accessibilityLabel={`Start with ${laneLabel}`}
+            accessibilityLabel={`Use ${laneLabel}`}
             accessibilityRole="button"
-            accessibilityHint={`Confirms ${laneLabel} as your focus mode and starts your first session`}
+            accessibilityHint={`Confirms ${laneLabel} as your focus mode and opens the app`}
           >
-            Start with this
+            Use this mode
           </Button>
           <Button
             fullWidth

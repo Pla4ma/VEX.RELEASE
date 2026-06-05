@@ -2,8 +2,8 @@ import { getSupabaseClient } from '../../../config/supabase';
 import { enqueue } from '../../../lib/offline/queue';
 import { withRetry, RepositoryError } from '../../../lib/repository/base';
 import { captureSilentFailure } from '../../../utils/silent-failure';
-import {
 import { tableColumns } from '../../../lib/repository/tableColumns';
+import {
   StakesSessionRecordSchema,
   UserStakesPreferenceSchema,
   type StakesSessionRecord,

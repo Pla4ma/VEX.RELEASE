@@ -37,16 +37,14 @@ const AnalyticsScreen = React.lazy(
 
 export function RootStackAuthenticatedRoutes({
   hasCompletedOnboarding,
-  canShowHomePreview,
   features,
   Stack,
 }: {
   hasCompletedOnboarding: boolean;
-  canShowHomePreview: boolean;
   features: FeatureAccessMap;
   Stack: RootStack;
 }): React.JSX.Element {
-  const showApp = hasCompletedOnboarding || canShowHomePreview;
+  const showApp = hasCompletedOnboarding;
   const canRegisterPaywall = canRegisterPremiumPaywallRoute(features);
 
   if (!showApp) {

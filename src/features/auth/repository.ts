@@ -10,33 +10,50 @@ import type {
 
 // Supabase client obtained per-call to avoid top-level instantiation
 
+function normalizeAuthError(error: unknown): Error {
+  const normalized = handleSupabaseError(error);
+  if (/rate limit|too many/i.test(normalized.message)) {
+    return new Error(
+      'Too many signup emails were sent. Wait a few minutes, then try signing in or use a different email.',
+    );
+  }
+  return normalized;
+}
+
 export async function signUpWithEmail(
   email: string,
   password: string,
   metadata: SignUpMetadata,
 ): Promise<AuthResult> {
-  const { data, error } = await getSupabaseClient().auth.signUp({
-    email,
-    password,
-    options: {
-      data: {
-        first_name: metadata.firstName,
-        last_name: metadata.lastName,
+  try {
+    const { data, error } = await getSupabaseClient().auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          first_name: metadata.firstName,
+          last_name: metadata.lastName,
+        },
       },
-    },
-  });
+    });
 
-  if (error) {
-    return { user: null, error: new Error('Unable to create account. Please try again.') };
+    if (error) {
+      return { user: null, error: normalizeAuthError(error) };
+    }
+
+    if (data.user) {
+      const mapped = mapSupabaseUser(data.user, metadata);
+      const user = attachOnboardingCompletion(mapped, null);
+      return { user, error: null };
+    }
+
+    return {
+      user: null,
+      error: new Error('Signup did not return an account. Please try again.'),
+    };
+  } catch (error) {
+    return { user: null, error: normalizeAuthError(error) };
   }
-
-  if (data.user) {
-    const mapped = mapSupabaseUser(data.user, metadata);
-    const user = await attachOnboardingCompletion(mapped, null);
-    return { user, error: null };
-  }
-
-  return { user: null, error: new Error('No user returned from sign up') };
 }
 
 export async function signInWithEmail(

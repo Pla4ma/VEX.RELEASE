@@ -7,6 +7,7 @@ import { Text } from '../../../components/primitives/Text';
 import { Box } from '../../../components/primitives/Box';
 import { VexLaunchButton } from '../../../components/primitives/VexLaunchButton';
 import { VexMotionSurface } from '../../../components/primitives/VexMotionSurface';
+import { AuroraField } from '../../../components/primitives/AuroraField';
 import type {
   HomePrimaryPriority,
   HomeStakes,
@@ -14,44 +15,8 @@ import type {
 import { useTheme } from '../../../theme';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { lightColors } from '@/theme/tokens/colors';
-
-function getHeroTitle(type: HomePrimaryPriority['type']): string {
-  switch (type) {
-    case 'STREAK_CRITICAL':
-      return 'Your streak needs one clean save';
-    case 'COMPANION_PROMISE':
-      return 'Keep the promise alive today';
-    case 'PROMISE_RECOVERY':
-      return 'Start small and rebuild the thread';
-    case 'STREAK_AT_RISK':
-      return 'Protect the habit before it slips';
-    case 'RECOMMENDED_SESSION':
-      return 'VEX already has the next session ready';
-    case 'CHALLENGE_NEAR_DONE':
-      return 'You are close enough to finish this today';
-    case 'BOSS_ACTIVE':
-      return 'The battle is already in motion';
-    case 'DEFAULT_SESSION':
-      return 'VEX changes based on how you work';
-  }
-}
-
-function getHeroEyebrow(type: HomePrimaryPriority['type']): string {
-  switch (type) {
-    case 'COMPANION_PROMISE':
-    case 'PROMISE_RECOVERY':
-      return 'Companion thread';
-    case 'CHALLENGE_NEAR_DONE':
-      return 'Challenge';
-    case 'BOSS_ACTIVE':
-      return 'Boss run';
-    case 'STREAK_AT_RISK':
-    case 'STREAK_CRITICAL':
-      return 'Habit protection';
-    default:
-      return 'Right next session';
-  }
-}
+import { rgbaColors } from '@/theme/tokens/rgba-colors';
+import { getHeroEyebrow, getHeroTitle } from './VexFocusSurfaceCopy';
 
 interface VexFocusSurfaceProps {
   isLoading: boolean;
@@ -68,15 +33,43 @@ export function VexFocusSurface({
 }: VexFocusSurfaceProps): JSX.Element {
   const { theme } = useTheme();
   const { isReducedMotion } = useReducedMotion();
+  const heroMinHeight =
+    theme.spacing[24] * 3 + theme.spacing[12] + theme.spacing[1];
+  const loadingMinHeight = theme.spacing[20] * 3 + theme.spacing[5];
+  const bloomSize = theme.spacing[20] * 3 + theme.spacing[5];
+  const bloomOffset = -theme.spacing[20];
 
   if (isLoading || !priority) {
     return (
-      <VexMotionSurface variant="elevated" style={{ minHeight: 220, padding: theme.spacing[5] }}>
+      <VexMotionSurface
+        variant="chrome"
+        style={{
+          gap: theme.spacing[4],
+          minHeight: loadingMinHeight,
+          padding: theme.spacing[5],
+        }}
+      >
         <Text variant="label" color="textMuted">
           Primary action
         </Text>
-        <Text variant="h4" color="textPrimary" style={{ marginTop: theme.spacing[3] }}>
-          Loading today&apos;s focus path...
+        <View
+          style={{
+            backgroundColor: rgbaColors.rgb_255_255_255_0_12,
+            borderRadius: theme.borderRadius.lg,
+            height: theme.spacing[16],
+            width: '88%',
+          }}
+        />
+        <View
+          style={{
+            backgroundColor: rgbaColors.rgb_255_255_255_0_06,
+            borderRadius: theme.borderRadius.md,
+            height: theme.spacing[4],
+            width: '72%',
+          }}
+        />
+        <Text variant="h4" color="textPrimary">
+          Loading today's focus path...
         </Text>
       </VexMotionSurface>
     );
@@ -88,31 +81,52 @@ export function VexFocusSurface({
     <Animated.View entering={entering} style={{ width: '100%' }}>
       <VexMotionSurface variant="focused" animated style={{ overflow: 'visible' }}>
         <LinearGradient
-          colors={[lightColors.semantic.obsidian, lightColors.semantic.obsidian, lightColors.semantic.obsidian]}
+          colors={[
+            lightColors.semantic.liquidNight,
+            lightColors.semantic.obsidian,
+            lightColors.semantic.background,
+          ]}
           start={{ x: 0, y: 0 }}
           end={{ x: 0, y: 1 }}
           style={{
-            borderRadius: theme.spacing[3] ?? 12,
+            borderRadius: theme.borderRadius.xl,
+            minHeight: heroMinHeight,
             padding: theme.spacing[5],
             gap: theme.spacing[3],
           }}
         >
-          {/* Top accent line */}
+          <AuroraField
+            colors={[
+              lightColors.semantic.vexCyanGlow,
+              lightColors.semantic.editorialGoldGlow,
+              rgbaColors.rgb_139_92_246_0_25,
+            ]}
+            intensity={theme.opacity[50]}
+            size={bloomSize}
+            style={{
+              position: 'absolute',
+              right: bloomOffset,
+              top: bloomOffset,
+            }}
+          />
           <View
             style={{
               position: 'absolute',
               top: 0,
               left: theme.spacing[5],
               right: theme.spacing[5],
-              height: 1,
-              backgroundColor: 'rgba(0,229,255,0.15)',
+              height: theme.spacing[0] + 1,
+              backgroundColor: rgbaColors.rgb_0_229_255_0_08,
             }}
           />
 
           <Text
             variant="label"
             color="vexCyan"
-            style={{ opacity: 0.9, letterSpacing: 1 }}
+            style={{
+              letterSpacing: theme.spacing[0] + 1,
+              opacity: theme.opacity[90],
+            }}
           >
             {getHeroEyebrow(priority.type).toUpperCase()}
           </Text>
@@ -121,37 +135,57 @@ export function VexFocusSurface({
             {getHeroTitle(priority.type)}
           </Text>
 
-          <Text variant="body" color="textSecondary" style={{ opacity: 0.72 }}>
+          <Text variant="body" color="textSecondary" opacity={theme.opacity[70]}>
             {priority.reason}
           </Text>
 
           {stakes ? (
             <VexMotionSurface
-              variant="glass"
+              variant="chrome"
               style={{
                 marginTop: theme.spacing[2],
                 padding: theme.spacing[4],
                 gap: theme.spacing[2],
               }}
             >
-              <Text variant="label" color="textMuted" style={{ opacity: 0.62 }}>
+              <Text variant="label" color="textMuted" opacity={theme.opacity[60]}>
                 What matters now
               </Text>
               <Text variant="body" color="textPrimary">
                 {stakes.what}
               </Text>
               {stakes.atRisk ? (
-                <Text variant="bodySmall" color="textSecondary" style={{ opacity: 0.6 }}>
+                <Text variant="bodySmall" color="textSecondary" opacity={theme.opacity[60]}>
                   At risk: {stakes.atRisk}
                 </Text>
               ) : null}
             </VexMotionSurface>
           ) : null}
 
+          <Box flexDirection="row" flexWrap="wrap" gap="sm">
+            <VexMotionSurface
+              variant="glass"
+              style={{ paddingHorizontal: theme.spacing[3], paddingVertical: theme.spacing[2] }}
+            >
+              <Text variant="caption" color="vexCyan">
+                Adaptive
+              </Text>
+            </VexMotionSurface>
+            <VexMotionSurface
+              variant="glass"
+              style={{ paddingHorizontal: theme.spacing[3], paddingVertical: theme.spacing[2] }}
+            >
+              <Text variant="caption" color="textSecondary">
+                {priority.cta.action.replace('_', ' ')}
+              </Text>
+            </VexMotionSurface>
+          </Box>
+
           <Box mt="sm">
             <VexLaunchButton
               label={priority.cta.text}
               onPress={onPressPrimary}
+              accessibilityHint="Opens the recommended next VEX action"
             />
           </Box>
         </LinearGradient>

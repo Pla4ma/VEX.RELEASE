@@ -8,7 +8,7 @@ import {
   executeWithFallback,
   StreaksRepositoryError,
   type RepositoryResult,
-} from './streak-repository';
+} from '../../../lib/repository/fallback';
 import { RepositoryErrorCode } from '../../../lib/repository/base';
 import { tableColumns } from '../../../lib/repository/tableColumns';
 

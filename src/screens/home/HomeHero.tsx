@@ -10,10 +10,11 @@ import { getPremiumCardStyle } from '../../components/premiumStyles';
 import { useTheme } from '../../theme';
 import { createSheet } from '@/shared/ui/create-sheet';
 import { lightColors } from '@/theme/tokens/colors';
+import { rgbaColors } from '@/theme/tokens/rgba-colors';
 
 
-const WHITE_MUTED = 'rgba(255,255,255,0.72)';
-const WHITE_SOFT = 'rgba(255,255,255,0.18)';
+const WHITE_MUTED = rgbaColors.rgb_255_255_255_0_72;
+const WHITE_SOFT = rgbaColors.rgb_255_255_255_0_18;
 
 export function getHeroGradientColors(
   streak: number,
@@ -149,7 +150,7 @@ export function HomeHero({
               getPremiumCardStyle('medium'),
               {
                 backgroundColor: WHITE_SOFT,
-                borderColor: 'rgba(255,255,255,0.22)',
+                borderColor: rgbaColors.rgb_255_255_255_0_22,
               },
             ]}
           >

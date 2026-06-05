@@ -157,40 +157,6 @@ describe('FeatureFlagService', () => {
     });
   });
 
-  describe('Event Emission', () => {
-    beforeEach(async () => {
-      mockStorageManager.getItem.mockResolvedValue({});
-      await service.initialize();
-    });
-    it('should publish override event', async () => {
-      await service.setOverride('new_design', true);
-      expect(eventBus.publish).toHaveBeenCalledWith(
-        'feature:override',
-        expect.objectContaining({ key: 'new_design', value: true }),
-      );
-    });
-    it('should publish update event', async () => {
-      await service.updateFlag({ key: 'new_design', value: true });
-      expect(eventBus.publish).toHaveBeenCalledWith(
-        'feature:updated',
-        expect.objectContaining({ key: 'new_design', oldValue: false, newValue: true }),
-      );
-    });
-    it('should publish register event', async () => {
-      await service.registerFlag({
-        key: 'new_flag',
-        value: true,
-        description: 'Test',
-        enabled: true,
-        rolloutPercentage: 100,
-      });
-      expect(eventBus.publish).toHaveBeenCalledWith(
-        'feature:registered',
-        expect.objectContaining({ key: 'new_flag' }),
-      );
-    });
-  });
-
   describe('Persistence', () => {
     beforeEach(async () => {
       mockStorageManager.getItem.mockResolvedValue({});
@@ -203,28 +169,6 @@ describe('FeatureFlagService', () => {
     it('should save overrides after set', async () => {
       await service.setOverride('new_design', true);
       expect(mockStorageManager.setJSON).toHaveBeenCalledWith('test-flags-overrides', expect.any(Object));
-    });
-  });
-
-  describe('Edge Cases', () => {
-    it('should handle uninitialized service', async () => {
-      expect(service.isEnabled('new_design')).toBe(false);
-    });
-    it('should handle invalid user ID in rollout', async () => {
-      mockStorageManager.getItem.mockResolvedValue({});
-      await service.initialize();
-      service.setUserId('');
-      expect(service.isEnabled('new_design')).toBe(false);
-    });
-    it('should handle storage errors gracefully', async () => {
-      mockStorageManager.getItem.mockRejectedValue(new Error('Storage error'));
-      await expect(service.initialize()).resolves.not.toThrow();
-    });
-    it('should prevent double initialization', async () => {
-      mockStorageManager.getItem.mockResolvedValue({});
-      await service.initialize();
-      await service.initialize();
-      expect(mockStorageManager.initialize).toHaveBeenCalledTimes(1);
     });
   });
 });

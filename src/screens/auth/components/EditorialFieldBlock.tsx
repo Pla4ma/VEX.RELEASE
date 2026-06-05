@@ -2,6 +2,7 @@ import React from 'react';
 import { Platform, View, type TextStyle } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
 import { lightColors } from '@/theme/tokens/colors';
+import { rgbaColors } from '@/theme/tokens/rgba-colors';
 
 const SERIF_STACK = Platform.select({
   ios: 'New York',
@@ -24,7 +25,7 @@ export function EditorialFieldBlock({
   children: React.ReactNode;
 }): React.JSX.Element {
   const microLabelStyle: TextStyle = {
-    color: 'rgba(224,184,112,0.85)',
+    color: rgbaColors.rgb_224_184_112_0_85,
     fontSize: 9,
     fontFamily: SERIF_STACK,
     fontWeight: '500',
@@ -42,7 +43,7 @@ export function EditorialFieldBlock({
   return (
     <View style={{ gap: 6 }}>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-        <View style={{ width: 12, height: 1, backgroundColor: 'rgba(224,184,112,0.55)' }} />
+        <View style={{ width: 12, height: 1, backgroundColor: rgbaColors.rgb_224_184_112_0_55 }} />
         <Text style={microLabelStyle}>{label}</Text>
       </View>
       {children}

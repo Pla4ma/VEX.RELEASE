@@ -1,17 +1,23 @@
 import * as Sentry from '@sentry/react-native';
-import { countCompletedSessions } from '../session-history/repository';
 import { getFocusProfile } from '../focus-profile/service';
 import { resolveInitialLane } from '../lane-engine/service';
-import { resolveCompletionPersonalBest } from './personal-best-integration';
-import { integrateCompletionPersonalization } from './completion-personalization-integration';
-import { applyCompletionSideEffects } from './completion-side-effects';
-import type { CompletionPersonalizationResult } from './schemas';
-import type { PostSessionStoryViewModel } from './story-view-model-service';
+import { buildCompletionPersonalizationResult } from './completion-personalization';
+import type { CompletionLedger } from './schemas';
+import type { PostSessionStoryViewModel } from './service';
 import type { SessionSummary } from '../../session/types';
+import { buildPostSessionStoryViewModel } from './service';
+
+async function resolveCompletionPersonalBest(
+  _userId: string,
+  _ledger: CompletionLedger,
+  _summary: SessionSummary,
+): Promise<{ isPersonalBest: boolean }> {
+  return { isPersonalBest: false };
+}
 
 interface PersonalizationInput {
   userId: string;
-  finalLedger: Parameters<typeof applyCompletionSideEffects>[0]['finalLedger'];
+  finalLedger: CompletionLedger;
   summary: SessionSummary;
   degradedSystems: string[];
 }
@@ -27,15 +33,15 @@ export async function applyPersonalizationAndSideEffects(
     summary,
   );
 
-  let personalizationResult: CompletionPersonalizationResult | null = null;
   try {
-    const sessionCount = await countCompletedSessions(userId).catch(() => 0);
     const focusProfile = await getFocusProfile(userId).catch(() => null);
     const laneProfile =
       focusProfile?.laneProfile ||
       resolveInitialLane({ observedAt: Date.now() });
-    personalizationResult = await integrateCompletionPersonalization({
+    buildCompletionPersonalizationResult({
       deletedMemoryIds: [],
+      focusScoreDelta: finalLedger.focusScoreDelta,
+      grade: finalLedger.grade,
       hiddenFeatureKeys: [
         'shop',
         'inventory',
@@ -46,9 +52,10 @@ export async function applyPersonalizationAndSideEffects(
       isComeback: summary.sessionMode === 'RECOVERY',
       isPersonalBest: personalBest.isPersonalBest,
       laneProfile,
-      ledger: finalLedger,
-      sessionCount,
+      streakAction: finalLedger.streakResult.action,
+      streakDays: finalLedger.streakResult.newDays,
       summary,
+      xpDelta: finalLedger.xpDelta,
     });
   } catch (error) {
     Sentry.captureException(error, {
@@ -56,13 +63,9 @@ export async function applyPersonalizationAndSideEffects(
     });
   }
 
-  return applyCompletionSideEffects({
+  return buildPostSessionStoryViewModel({
     degradedSystems,
-    finalLedger,
-    isPersonalBest: personalBest.isPersonalBest,
-    personalizationResult,
-    sessionId: finalLedger.sessionId,
+    ledger: finalLedger,
     summary,
-    userId,
   });
 }

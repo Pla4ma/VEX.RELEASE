@@ -15,6 +15,7 @@ import { springPresets } from '../../../theme/tokens/motion';
 import { useTheme } from '../../../theme';
 import { Text } from '../../../components/primitives/Text';
 import { Platform } from 'react-native';
+import { rgbaColors } from '@/theme/tokens/rgba-colors';
 
 /**
  * EditorialCta — a high-gravitas primary action for the Editorial Devotional
@@ -135,7 +136,7 @@ export function EditorialCta({
           >
             {/* Top hairline — the ceremonial rule */}
             <LinearGradient
-              colors={['transparent', 'rgba(224,184,112,0.85)', 'transparent']}
+              colors={['transparent', rgbaColors.rgb_224_184_112_0_85, 'transparent']}
               locations={[0.05, 0.5, 0.95]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
@@ -157,7 +158,7 @@ export function EditorialCta({
                   top: 0,
                   bottom: 0,
                   width: 60,
-                  backgroundColor: 'rgba(242,234,217,0.18)',
+                  backgroundColor: rgbaColors.rgb_242_234_217_0_18,
                   transform: [{ skewX: '-18deg' }],
                 },
                 shineStyle,
@@ -178,9 +179,9 @@ export function EditorialCta({
             </Text>
             {/* Em dash under the label — small editorial flourish */}
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 6 }}>
-              <View style={{ width: 18, height: 1, backgroundColor: 'rgba(224,184,112,0.55)' }} />
-              <View style={{ width: 3, height: 3, backgroundColor: 'rgba(224,184,112,0.85)', transform: [{ rotate: '45deg' }] }} />
-              <View style={{ width: 18, height: 1, backgroundColor: 'rgba(224,184,112,0.55)' }} />
+              <View style={{ width: 18, height: 1, backgroundColor: rgbaColors.rgb_224_184_112_0_55 }} />
+              <View style={{ width: 3, height: 3, backgroundColor: rgbaColors.rgb_224_184_112_0_85, transform: [{ rotate: '45deg' }] }} />
+              <View style={{ width: 18, height: 1, backgroundColor: rgbaColors.rgb_224_184_112_0_55 }} />
             </View>
           </LinearGradient>
         </View>

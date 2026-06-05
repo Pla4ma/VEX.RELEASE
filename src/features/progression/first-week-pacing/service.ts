@@ -9,8 +9,8 @@ import { getSupabaseClient } from '../../../config/supabase';
 import { createDebugger } from '../../../utils/debug';
 import * as Sentry from '@sentry/react-native';
 import { FirstWeekProgressSchema, type FirstWeekProgress } from './schemas';
-import {
 import { tableColumns } from '../../../lib/repository/tableColumns';
+import {
   progressToNextSession as progressToNextSessionImpl,
   getSessionUnlocks,
   getSessionXpReward,

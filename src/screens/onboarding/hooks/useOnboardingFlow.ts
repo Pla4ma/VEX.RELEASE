@@ -1,39 +1,29 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useIsFocused, useNavigation } from '@react-navigation/native';
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDisclosureAnalytics } from '../../../features/liveops-config';
-import type { ExtendedRootStackParams } from '../../../navigation/types';
+import type { OnboardingStackParams } from '../../../navigation/OnboardingNavigator';
 import type { RouteProp } from '@react-navigation/native';
-export type OnboardingRouteProp = RouteProp<ExtendedRootStackParams, 'Onboarding'>;
+export type OnboardingRouteProp = RouteProp<
+  OnboardingStackParams,
+  'OnboardingFlow'
+>;
 import {
-  ONBOARDING_GOALS,
   useOnboardingStore,
   type OnboardingGoal,
 } from '../../../features/onboarding';
-import { useSessionHistory } from '../../../session/hooks/useSession';
 import { useAuthStore } from '../../../store';
-import { triggerHaptic } from '../../../utils/haptics';
 import { useOnboardingLane } from './useOnboardingLane';
-import { STARTER_PRESETS } from '../components';
-import {
-  LAST_STEP_INDEX,
-  clampStep,
-  buildDraftPayload,
-} from '../onboarding-flow-steps';
+import { clampStep, buildDraftPayload } from '../onboarding-flow-steps';
 import { useOnboardingCompletion } from './useOnboardingCompletion';
 import { buildOnboardingHandlers } from './onboarding-flow-handlers';
 
-type NavigationProp = NativeStackNavigationProp<ExtendedRootStackParams>;
-
 export function useOnboardingFlow(routeStep?: number) {
-  const navigation = useNavigation<NavigationProp>();
-  const isFocused = useIsFocused();
   const { user } = useAuthStore();
   const userId = user?.id ?? '';
   const draft = useOnboardingStore((state) =>
     userId ? state.getDraft(userId) : undefined,
   );
   const saveDraft = useOnboardingStore((state) => state.saveDraft);
+  const setChosenLane = useOnboardingStore((state) => state.setChosenLane);
   const setExplicitMotivationStyle = useOnboardingStore(
     (state) => state.setExplicitMotivationStyle,
   );
@@ -43,15 +33,8 @@ export function useOnboardingFlow(routeStep?: number) {
   const [motivationStyle, setMotivationStyle] = useState(
     draft?.explicitMotivationStyle,
   );
-  const [starterPresetId, setStarterPresetId] = useState<string | undefined>(
-    draft?.starterPresetId ?? STARTER_PRESETS[0]?.id,
-  );
-  const [isLaunchingSession, setIsLaunchingSession] = useState(false);
-  const [hasSeenFirstWin, setHasSeenFirstWin] = useState(false);
   const startedTrackedRef = useRef(false);
-  const firstSessionCompletedTrackedRef = useRef(false);
-  const historyQuery = useSessionHistory(userId || '', 1);
-  const { isFinishing, finishError, completedRef, finishOnboarding } =
+  const { isFinishing, finishError, finishOnboarding } =
     useOnboardingCompletion(userId);
 
   const {
@@ -64,15 +47,6 @@ export function useOnboardingFlow(routeStep?: number) {
     handleSelectLane,
   } = useOnboardingLane(goal, motivationStyle);
 
-  const selectedGoal = useMemo(
-    () => ONBOARDING_GOALS.find((item) => item.id === goal),
-    [goal],
-  );
-  const selectedPreset = useMemo(
-    () => STARTER_PRESETS.find((preset) => preset.id === starterPresetId),
-    [starterPresetId],
-  );
-
   const persistDraft = useCallback((): void => {
     if (!userId) {return;}
     saveDraft(
@@ -80,11 +54,10 @@ export function useOnboardingFlow(routeStep?: number) {
       buildDraftPayload({
         goal,
         motivationStyle,
-        starterPresetId,
         chosenLane: chosenLane ?? undefined,
       }),
     );
-  }, [goal, motivationStyle, saveDraft, starterPresetId, userId, chosenLane]);
+  }, [goal, motivationStyle, saveDraft, userId, chosenLane]);
 
   useEffect(() => {
     if (!userId || startedTrackedRef.current) {return;}
@@ -92,45 +65,18 @@ export function useOnboardingFlow(routeStep?: number) {
     disclosureAnalytics.trackOnboardingStarted(userId);
   }, [disclosureAnalytics, userId]);
 
-  useEffect(() => { persistDraft(); }, [persistDraft, step]);
+  useEffect(() => { persistDraft(); }, [persistDraft]);
   useEffect(() => { if (step === 2 && motivationStyle) {computeLaneConfirmation();} }, [step, motivationStyle, computeLaneConfirmation]);
-
-  useEffect(() => {
-    navigation.setParams({ step });
-  }, [navigation, step]);
-
-  useEffect(() => {
-    if (!isFocused || step !== LAST_STEP_INDEX || completedRef.current) {return;}
-    if (historyQuery.history.length === 0) {return;}
-    setHasSeenFirstWin(true);
-    if (!firstSessionCompletedTrackedRef.current && userId) {
-      firstSessionCompletedTrackedRef.current = true;
-      disclosureAnalytics.trackOnboardingFirstSessionCompleted(userId);
-    }
-  }, [
-    disclosureAnalytics,
-    historyQuery.history.length,
-    isFocused,
-    step,
-    userId,
-    completedRef,
-  ]);
 
   const handlers = buildOnboardingHandlers({
     userId,
     goal,
-    motivationStyle,
-    starterPresetId,
-    selectedGoal,
-    selectedPreset,
     setGoal,
     setMotivationStyle,
     setExplicitMotivationStyle,
-    setStep,
-    setIsLaunchingSession,
     disclosureAnalytics,
-    navigation,
     handleAcceptLane,
+    setChosenLane,
     finishOnboarding,
   });
 
@@ -140,23 +86,15 @@ export function useOnboardingFlow(routeStep?: number) {
     setStep,
     goal,
     motivationStyle,
-    starterPresetId,
-    setStarterPresetId,
     isFinishing,
-    isLaunchingSession,
     finishError,
-    hasSeenFirstWin,
-    historyQuery,
     laneConfirmation,
     isChoosingLane,
     handleAcceptLaneAndAdvance: handlers.handleAcceptLaneAndAdvance,
     handleChooseAnotherLane,
     handleSelectLane,
-    selectedGoal,
-    selectedPreset,
     handleFinish: handlers.handleFinish,
     handleSelectGoal: handlers.handleSelectGoal,
     handleSelectMotivationStyle: handlers.handleSelectMotivationStyle,
-    handleStartFirstSession: handlers.handleStartFirstSession,
   };
 }

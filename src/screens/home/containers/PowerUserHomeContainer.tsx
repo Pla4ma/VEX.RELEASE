@@ -5,8 +5,8 @@ import { useHomeSpineModel } from '../../../features/home-spine/hooks';
 import {
   useCreateRecommendation,
   useUpdateRecommendationStatus,
-  useActiveCoachRecommendations,
-} from '../../../features/ai-coach';
+} from '../../../features/ai-coach/hooks/useRecommendationMutations';
+import { useActiveCoachRecommendations } from '../../../features/ai-coach/hooks/useCoachRecommendations';
 import { useActiveStudyPlan } from '../../../features/content-study';
 import { useLearningExecutionLayer } from '../../../features/learning-execution';
 import { useActiveBoss } from '../../../features/boss/hooks';

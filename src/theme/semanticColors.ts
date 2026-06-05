@@ -39,6 +39,8 @@ export type SemanticColors = {
   editorialWarmMuted: string;
   editorialMuted: string;
   editorialDeepBackground: string;
+  editorialGradientTop: string;
+  editorialGradientBottom: string;
   liquidNight: string;
   liquidAbyss: string;
   liquidMist: string;

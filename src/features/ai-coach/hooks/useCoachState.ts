@@ -11,7 +11,7 @@ import {
   type RefetchOptions,
 } from '@tanstack/react-query';
 import { useCoachStore } from '../store';
-import * as service from '../services/service';
+import { fetchCoachState } from '../repository/state';
 import { COACH_QUERY_KEYS } from '../constants';
 import { useNetworkStatus } from './useNetworkStatus';
 import type { CoachState } from '../types';
@@ -45,24 +45,28 @@ export function useCoachState(userId: string): UseCoachStateResult {
   const network = useNetworkStatus();
   const store = useCoachStore();
   const [isRetrying, setIsRetrying] = useState(false);
+  const fallbackState = useCallback(
+    (): CoachState => ({
+      userId,
+      currentState: 'MUTED_MODE',
+      previousState: null,
+      stateEnteredAt: Date.now(),
+      personaId: store.selectedPersona ?? 'FRIEND',
+      behaviorProfile: null,
+      lastInterventionAt: null,
+      interventionsToday: 0,
+      muteUntil: null,
+      reduceNotifications: store.reduceNotifications,
+    }),
+    [store.reduceNotifications, store.selectedPersona, userId],
+  );
   const query = useQuery({
     queryKey: COACH_QUERY_KEYS.state(userId),
     queryFn: async () => {
       if (!network.isConnected) {
-        return {
-          userId,
-          currentState: 'MUTED_MODE',
-          previousState: null,
-          stateEnteredAt: Date.now(),
-          personaId: store.selectedPersona ?? 'FRIEND',
-          behaviorProfile: null,
-          lastInterventionAt: null,
-          interventionsToday: 0,
-          muteUntil: null,
-          reduceNotifications: store.reduceNotifications,
-        } satisfies CoachState;
+        return fallbackState();
       }
-      return service.getOrCreateCoachState(userId);
+      return (await fetchCoachState(userId)) ?? fallbackState();
     },
     enabled: !!userId,
     staleTime: 5 * 60 * 1000,

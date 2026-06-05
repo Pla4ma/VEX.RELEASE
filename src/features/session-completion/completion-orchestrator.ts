@@ -5,12 +5,12 @@ import { getConnectionState } from '../../lib/repository/base';
 import { enqueue } from '../../lib/offline/queue';
 import { SessionSummarySchema } from '../../session/types';
 import { createDebugger } from '../../utils/debug';
-import { invalidateCompletionQueries } from './completion-query-invalidation';
-import { setCompletionSyncState } from './completion-sync-state';
+import { queryClient, QueryKeys } from '../../api/QueryProvider';
+import { useSessionUIStore } from '../../store/session-state';
 import { applyCompletionSubsystems } from './completion-subsystems';
 import { buildCompletionLedger } from './ledger-service';
 import { applyPersonalizationAndSideEffects } from './completion-personalization-step';
-import type { PostSessionStoryViewModel } from './story-view-model-service';
+import type { PostSessionStoryViewModel } from './service';
 import {
   createCompletionLedger,
   getCompletionLedgerByIdempotencyKey,
@@ -28,6 +28,35 @@ import {
 export { initializeSessionCompletionOrchestrator } from './completion-orchestrator-init';
 
 const debug = createDebugger('session-completion:orchestrator');
+
+function invalidateCompletionQueries(_userId: string): void {
+  void queryClient.invalidateQueries({ queryKey: QueryKeys.session });
+  void queryClient.invalidateQueries({ queryKey: QueryKeys.streak });
+  void queryClient.invalidateQueries({ queryKey: QueryKeys.achievements });
+}
+
+function setCompletionSyncState(
+  ledgerId: string,
+  degradedSystems: string[],
+  isSyncing: boolean,
+): void {
+  const hasDegradedSystems = degradedSystems.length > 0;
+  useSessionUIStore.getState().setCompletionSyncState({
+    ledgerId,
+    message: hasDegradedSystems
+      ? 'Session saved. Some rewards need a repair pass.'
+      : isSyncing
+        ? 'Session saved locally. VEX is syncing it now.'
+        : null,
+    repairCtaLabel: hasDegradedSystems ? 'Repair sync' : null,
+    status: hasDegradedSystems
+      ? 'failed_sync'
+      : isSyncing
+        ? 'pending_sync'
+        : 'synced',
+    updatedAt: Date.now(),
+  });
+}
 
 const SessionCompletedEventSchema = z
   .object({

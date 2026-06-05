@@ -6,12 +6,12 @@ import {
   View,
   type ViewStyle,
 } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
 import { StatusBar } from 'expo-status-bar';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useTheme } from '../../theme';
 import { OfflineBanner } from '../../shared/ui/components/OfflineBanner';
+import { PremiumBackdrop } from './PremiumBackdrop';
 
 interface AppScreenProps {
   children: ReactNode;
@@ -46,6 +46,7 @@ export function AppScreen({
   const body = scroll ? (
     <ScrollView
       contentContainerStyle={content}
+      keyboardShouldPersistTaps="handled"
       showsVerticalScrollIndicator={false}
     >
       {children}
@@ -57,16 +58,7 @@ export function AppScreen({
   const screen = (
     <View style={[{ backgroundColor: background, flex: 1 }, style]}>
       <StatusBar style={isDark ? 'light' : 'dark'} />
-      <LinearGradient
-        colors={[
-          `${theme.colors.primary[900]}90`,
-          theme.colors.semantic.background,
-          theme.colors.semantic.background,
-        ]}
-        locations={[0, 0.42, 1]}
-        pointerEvents="none"
-        style={{ height: 320, left: 0, position: 'absolute', right: 0, top: 0 }}
-      />
+      <PremiumBackdrop />
       {body}
       <OfflineBanner />
     </View>

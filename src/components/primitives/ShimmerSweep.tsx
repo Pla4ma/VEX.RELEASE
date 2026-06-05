@@ -12,6 +12,7 @@ import Animated, {
 } from 'react-native-reanimated';
 
 import { useReducedMotion } from '../../hooks/useReducedMotion';
+import { rgbaColors } from '../../theme/tokens/rgba-colors';
 
 
 interface ShimmerSweepProps {
@@ -22,7 +23,7 @@ interface ShimmerSweepProps {
 }
 
 export function ShimmerSweep({
-  color = 'rgba(255,255,255,0.18)',
+  color = rgbaColors.rgb_255_255_255_0_18,
   bandWidth = 90,
   periodMs = 4200,
   borderRadius = 0,

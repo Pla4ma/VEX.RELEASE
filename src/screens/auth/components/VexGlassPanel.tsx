@@ -3,6 +3,7 @@ import { View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { lightColors } from '@/theme/tokens/colors';
 import { rgbaColors } from '@/theme/tokens/rgba-colors';
+import { brandShadowTokens } from '@/theme/tokens/shadows';
 
 import { SafeBlurView } from './SafeBlurView';
 import { useTheme } from '../../../theme';
@@ -21,7 +22,7 @@ export function VexConsole({ children }: VexConsoleProps): React.JSX.Element {
     <View
       style={{
         borderRadius: r,
-        shadowColor: lightColors.text.primary,
+        shadowColor: brandShadowTokens.glass.color,
         shadowOffset: { width: 0, height: 20 },
         shadowOpacity: 0.55,
         shadowRadius: 36,

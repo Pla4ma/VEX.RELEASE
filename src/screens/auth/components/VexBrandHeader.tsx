@@ -13,6 +13,7 @@ import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { useTheme } from '../../../theme';
 import { lightColors } from '@/theme/tokens/colors';
 import { rgbaColors } from '@/theme/tokens/rgba-colors';
+import { brandShadowTokens } from '@/theme/tokens/shadows';
 
 function StatusDot(): React.JSX.Element {
   const { isReducedMotion } = useReducedMotion();
@@ -85,7 +86,7 @@ export function VexBrandHeader(): React.JSX.Element {
           pointerEvents="none"
           style={{
             position: 'absolute',
-            shadowColor: lightColors.accent.purple,
+            shadowColor: brandShadowTokens.primary.color,
             shadowOffset: { width: 0, height: 0 },
             shadowOpacity: 0.55,
             shadowRadius: 36,
@@ -110,7 +111,7 @@ export function VexBrandHeader(): React.JSX.Element {
           style={{
             position: 'absolute',
             top: 8,
-            shadowColor: lightColors.semantic.brandOrange,
+            shadowColor: brandShadowTokens.accent.color,
             shadowOffset: { width: 0, height: 2 },
             shadowOpacity: 0.15,
             shadowRadius: 20,

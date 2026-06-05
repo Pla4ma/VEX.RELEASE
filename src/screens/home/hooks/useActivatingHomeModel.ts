@@ -7,9 +7,9 @@ import { useHomeSpineModel } from '../../../features/home-spine/hooks';
 import {
   useCreateRecommendation,
   useUpdateRecommendationStatus,
-  useCoachRecommendations,
   type SessionRecommendation,
-} from '../../../features/ai-coach';
+} from '../../../features/ai-coach/hooks/useRecommendationMutations';
+import { useCoachRecommendations } from '../../../features/ai-coach/hooks/useCoachRecommendations';
 import { getNextBestAction } from '../../../features/progression';
 import type { FeatureAccessResult } from '../../../features/liveops-config';
 import type { HomeFeatureRuntime } from './home-feature-runtime';

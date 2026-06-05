@@ -45,6 +45,16 @@ export function getAndroidElevation(size: keyof ShadowScale): number {
 }
 
 /**
+ * Brand shadow colors for glass-morphism and glow effects.
+ * Centralised source — never import hex values directly in components.
+ */
+export const brandShadowTokens = {
+  primary: { color: '#A66BFF', radius: 20 },
+  accent: { color: '#FF8A24', radius: 14 },
+  glass: { color: '#FFFFFF', radius: 36 },
+} as const;
+
+/**
  * Component-specific shadow/elevation
  */
 export const componentShadows = {

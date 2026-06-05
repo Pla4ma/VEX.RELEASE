@@ -2,8 +2,8 @@ import { getSupabaseClient } from '../../config/supabase';
 import type { FocusIdentityProfile } from './FocusIdentityEngine';
 import { withRetry, FocusProfileRowSchema } from './repository-helpers';
 import { transformRowToProfile } from './repository-transforms';
-import {
 import { tableColumns } from '../../lib/repository/tableColumns';
+import {
   insertScoreHistory,
   insertScoreHistoryBatch,
 } from './repository-score-history';

@@ -1,9 +1,8 @@
 /**
- * Forgot Password Screen
+ * ForgotPasswordScreen — June 2026 Ethereal Sky visual layer.
  *
- * Premium password recovery flow with Supabase email verification.
+ * Business logic in useForgotPasswordForm. This file is presentation only.
  */
-
 import React from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -11,19 +10,21 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
-import { useTheme } from '../../theme';
-import { Box, Text } from '../../components/primitives';
-import { Button } from '../../components';
-import { Icon } from '../../icons';
+import { Text } from '../../components/primitives/Text';
 import { FormField } from '../../shared/ui/components/FormField';
+import { VexActivationButton } from './components/VexPrimaryButton';
 import type { AuthStackParams } from '../../navigation';
 import { useForgotPasswordForm } from './useForgotPasswordForm';
-import { VexEntryBackground } from './components/VexEntryBackground';
+import {
+  EtherealMedallion,
+  EtherealSkyBackground,
+  GlassSurface,
+  SerifTitle,
+} from './components/ethereal';
 
 type Props = NativeStackScreenProps<AuthStackParams, 'ForgotPassword'>;
 
 export const ForgotPasswordScreen: React.FC<Props> = ({ navigation }) => {
-  const { theme } = useTheme();
   const insets = useSafeAreaInsets();
   const { email, setEmail, error, setError, isLoading, isSuccess, handleSubmit, handleBack } =
     useForgotPasswordForm(navigation);
@@ -31,163 +32,105 @@ export const ForgotPasswordScreen: React.FC<Props> = ({ navigation }) => {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={{ flex: 1, backgroundColor: theme.colors.semantic.background }}
+      style={{ flex: 1 }}
     >
+      <EtherealSkyBackground />
       <ScrollView
         contentContainerStyle={{
           flexGrow: 1,
-          paddingBottom: insets.bottom + 20,
+          paddingBottom: insets.bottom + 24,
+          paddingTop: insets.top + 16,
         }}
         keyboardShouldPersistTaps="handled"
       >
-        <Box flex={1} px="xl" py="2xl">
-          <VexEntryBackground />
-
-          {/* Back Button */}
+        <View style={{ paddingHorizontal: 24 }}>
           <Animated.View entering={FadeInDown.delay(0).duration(600)}>
-            <Button
-              variant="ghost"
-              size="sm"
-              onPress={handleBack}
-              leftIcon={
-                <Icon
-                  name="back"
-                  size="sm"
-                  color={theme.colors.text.secondary}
+            <View style={{ alignItems: 'center', gap: 16, marginTop: 8 }}>
+              <EtherealMedallion size={100} />
+              <View style={{ alignItems: 'center', gap: 4 }}>
+                <SerifTitle
+                  color="#0A0A0A"
+                  fontSize={30}
+                  letterSpacing={-0.5}
+                  lineHeight={36}
+                  text={isSuccess ? 'Email sent' : 'Reset password'}
                 />
-              }
-              style={{ alignSelf: 'flex-start', marginBottom: 24 }}
-              accessibilityLabel="Back to login"
-              accessibilityRole="button"
-              accessibilityHint="Double tap to activate"
-            >
-              Back to Login
-            </Button>
-          </Animated.View>
-
-          {/* Header */}
-          <Animated.View entering={FadeInDown.delay(100).duration(600)}>
-            <Box alignItems="center" mb="xl">
-              <View
-                style={{
-                  width: 80,
-                  height: 80,
-                  borderRadius: 24,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  backgroundColor: `${theme.colors.semantic.vexCyan}18`,
-                }}
-              >
-                <Icon
-                  name="lock"
-                  size="2xl"
-                  color={theme.colors.semantic.vexCyan}
-                />
+                <Text
+                  color="#0A0A0A"
+                  fontSize={13}
+                  style={{ color: 'rgba(10, 10, 10, 0.62)', textAlign: 'center' }}
+                >
+                  {isSuccess
+                    ? `We sent password reset instructions to ${email}`
+                    : 'Enter your email and we will send you instructions to reset your password'}
+                </Text>
               </View>
-              <Text variant="h1" textAlign="center" mt="lg">
-                {isSuccess ? 'Email Sent!' : 'Reset Password'}
-              </Text>
-              <Text
-                variant="body"
-                color="text.secondary"
-                textAlign="center"
-                mt="sm"
-              >
-                {isSuccess
-                  ? `We've sent password reset instructions to ${email}`
-                  : 'Enter your email and we will send you instructions to reset your password'}
-              </Text>
-            </Box>
+            </View>
           </Animated.View>
 
-          {/* Success State */}
           {isSuccess ? (
             <Animated.View entering={FadeInDown.delay(200).duration(600)}>
-              <Box alignItems="center">
-                <View
-                  style={{
-                    width: 96,
-                    height: 96,
-                    borderRadius: 48,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    backgroundColor: `${theme.colors.success.DEFAULT}20`,
-                  }}
-                >
-                  <Icon
-                    name="check"
-                    size="3xl"
-                    color={theme.colors.success.DEFAULT}
-                  />
-                </View>
-                <Button
-                  variant="primary"
+              <View style={{ marginTop: 32, alignItems: 'center' }}>
+                <GlassSurface borderRadius={24} style={{ padding: 20, width: '100%' }}>
+                  <Text
+                    color="#0A0A0A"
+                    fontSize={14}
+                    style={{ color: 'rgba(10, 10, 10, 0.78)', textAlign: 'center' }}
+                  >
+                    Check your inbox in a few minutes.
+                  </Text>
+                </GlassSurface>
+                <VexActivationButton
+                  isLoading={false}
+                  label="Back to sign in"
+                  loadingLabel="Going back"
                   onPress={handleBack}
-                  fullWidth
-                  style={{ marginTop: 32 }}
-                  accessibilityLabel="Back to login"
-                  accessibilityRole="button"
-                  accessibilityHint="Double tap to activate"
-                >
-                  Back to Login
-                </Button>
-              </Box>
+                />
+              </View>
             </Animated.View>
           ) : (
             <Animated.View entering={FadeInDown.delay(200).duration(600)}>
-              {/* Form */}
-              <Box gap="lg">
-                <FormField
-                  label="Email Address"
-                  value={email}
-                  onChangeText={(value) => {
-                    setEmail(value);
-                    if (error) {
-                      setError(undefined);
-                    }
-                  }}
-                  placeholder="you@example.com"
-                  keyboardType="email-address"
-                  autoCapitalize="none"
-                  autoComplete="email"
-                  leftIcon="email"
-                  size="lg"
-                  error={error}
-                  editable={!isLoading}
-                  returnKeyType="done"
-                  onSubmitEditing={handleSubmit}
-                />
-
-                {/* Submit button */}
-                <Button
-                  variant="primary"
-                  size="lg"
-                  onPress={handleSubmit}
+              <View style={{ marginTop: 32, gap: 16 }}>
+                <GlassSurface borderRadius={28} style={{ padding: 20 }}>
+                  <FormField
+                    accessibilityLabel="Email address"
+                    autoCapitalize="none"
+                    autoComplete="email"
+                    editable={!isLoading}
+                    error={error}
+                    keyboardType="email-address"
+                    label="Email Address"
+                    leftIcon="email"
+                    onChangeText={(value) => {
+                      setEmail(value);
+                      if (error) {
+                        setError(undefined);
+                      }
+                    }}
+                    onSubmitEditing={handleSubmit}
+                    placeholder="you@example.com"
+                    returnKeyType="done"
+                    size="lg"
+                    value={email}
+                  />
+                </GlassSurface>
+                <VexActivationButton
                   isLoading={isLoading}
-                  disabled={isLoading || !email}
-                  fullWidth
-                  accessibilityLabel="Send reset link"
-                  accessibilityRole="button"
-                  accessibilityHint="Double tap to activate"
-                >
-                  Send Reset Link
-                </Button>
-              </Box>
-
-              {/* Help text */}
-              <Box alignItems="center" mt="xl">
+                  label="Send reset link"
+                  loadingLabel="Sending"
+                  onPress={handleSubmit}
+                />
                 <Text
+                  color="#0A0A0A"
                   variant="caption"
-                  color="text.tertiary"
-                  textAlign="center"
+                  style={{ color: 'rgba(10, 10, 10, 0.55)', textAlign: 'center' }}
                 >
-                  Did not receive the email? Check your spam folder or try
-                  again.
+                  Did not receive the email? Check your spam folder or try again.
                 </Text>
-              </Box>
+              </View>
             </Animated.View>
           )}
-        </Box>
+        </View>
       </ScrollView>
     </KeyboardAvoidingView>
   );

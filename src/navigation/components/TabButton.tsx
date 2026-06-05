@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Platform, Pressable, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import Animated, {
   useAnimatedStyle,
@@ -11,8 +11,9 @@ import Animated, {
 import { Icon } from '../../icons';
 import { Text } from '../../components/primitives/Text';
 import { useTheme } from '../../theme';
+import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { tabSwitch } from '../../utils/haptics';
-import { createSheet } from '../../shared/ui/create-sheet';
+import { springPresets, timingPresets } from '../../theme/tokens/motion';
 
 const ICONS = {
   Home: 'home',
@@ -20,6 +21,19 @@ const ICONS = {
   Progress: 'chart',
   Profile: 'user',
 } as const;
+
+function getRouteIcon(routeName: string): string {
+  switch (routeName) {
+    case 'Focus':
+      return ICONS.Focus;
+    case 'Progress':
+      return ICONS.Progress;
+    case 'Profile':
+      return ICONS.Profile;
+    default:
+      return ICONS.Home;
+  }
+}
 
 export interface TabButtonProps {
   route: BottomTabBarProps['state']['routes'][number];
@@ -41,41 +55,48 @@ export function TabButton({
   isActiveTab,
 }: TabButtonProps) {
   const { theme } = useTheme();
+  const { isReducedMotion } = useReducedMotion();
   const bounce = useSharedValue(1);
   const labelProgress = useSharedValue(focused ? 1 : 0);
-  const iconScale = useSharedValue(focused ? 1.15 : 1);
+  const iconScale = useSharedValue(focused ? 1.12 : 1);
+  const iconName = getRouteIcon(route.name);
 
   useEffect(() => {
-    labelProgress.value = withSpring(focused ? 1 : 0, {
-      damping: 15,
-      stiffness: 200,
-    });
-    iconScale.value = withSpring(focused ? 1.15 : 1, {
-      damping: 12,
-      stiffness: 150,
-    });
-  }, [focused, labelProgress, iconScale]);
+    if (isReducedMotion) {
+      labelProgress.value = focused ? 1 : 0;
+      iconScale.value = focused ? 1.12 : 1;
+      return;
+    }
+    labelProgress.value = withSpring(focused ? 1 : 0, springPresets.precise);
+    iconScale.value = withSpring(focused ? 1.12 : 1, springPresets.settle);
+  }, [focused, isReducedMotion, labelProgress, iconScale]);
 
   const iconStyle = useAnimatedStyle(() => ({
     transform: [{ scale: isActiveTab ? iconScale.value : bounce.value }],
   }));
   const labelStyle = useAnimatedStyle(() => ({
     opacity: labelProgress.value,
-    transform: [{ translateY: (1 - labelProgress.value) * -6 }],
+    transform: [
+      { translateY: (1 - labelProgress.value) * -theme.spacing[2] },
+    ],
   }));
-  const indicatorWidth = useSharedValue(focused ? 24 : 14);
+  const indicatorWidth = useSharedValue(
+    focused ? theme.spacing[6] : theme.spacing[4],
+  );
   const indicatorOpacity = useSharedValue(focused ? 1 : 0);
 
   useEffect(() => {
-    indicatorWidth.value = withSpring(focused ? 24 : 14, {
-      damping: 15,
-      stiffness: 200,
-    });
-    indicatorOpacity.value = withSpring(focused ? 1 : 0, {
-      damping: 15,
-      stiffness: 200,
-    });
-  }, [focused, indicatorWidth, indicatorOpacity]);
+    if (isReducedMotion) {
+      indicatorWidth.value = focused ? theme.spacing[6] : theme.spacing[4];
+      indicatorOpacity.value = focused ? 1 : 0;
+      return;
+    }
+    indicatorWidth.value = withSpring(
+      focused ? theme.spacing[6] : theme.spacing[4],
+      springPresets.precise,
+    );
+    indicatorOpacity.value = withSpring(focused ? 1 : 0, springPresets.precise);
+  }, [focused, indicatorWidth, indicatorOpacity, isReducedMotion, theme.spacing]);
 
   const indicatorStyle = useAnimatedStyle(() => ({
     width: indicatorWidth.value,
@@ -84,50 +105,14 @@ export function TabButton({
 
   const handlePress = () => {
     tabSwitch();
-    bounce.value = withSequence(
-      withTiming(0.85, { duration: 80 }),
-      withSpring(1, { damping: 10, stiffness: 200 }),
-    );
+    if (!isReducedMotion) {
+      bounce.value = withSequence(
+        withTiming(0.88, { duration: timingPresets.microFade.duration }),
+        withSpring(1, springPresets.tactile),
+      );
+    }
     onPress();
   };
-
-  if (Platform.OS === 'web') {
-    return (
-      <Pressable
-        accessibilityRole="button"
-        accessibilityState={{ selected: focused }}
-        onLongPress={onLongPress}
-        onPress={handlePress}
-        style={styles.pressable}
-        accessibilityLabel={`${label} tab`}
-        accessibilityHint={`Navigate to ${label}`}
-      >
-        <View style={styles.item}>
-          <View style={styles.iconShell}>
-            <Icon
-              color={color}
-              name={ICONS[route.name as keyof typeof ICONS]}
-              size={24}
-              variant={focused ? 'solid' : 'outline'}
-            />
-          </View>
-          <Text
-            color={focused ? theme.colors.semantic.vexCyan : theme.colors.text.tertiary}
-            style={styles.label}
-            variant="caption"
-          >
-            {label}
-          </Text>
-          <View
-            style={[
-              styles.indicator,
-              { backgroundColor: theme.colors.semantic.vexCyan, width: focused ? 24 : 14, opacity: focused ? 1 : 0 },
-            ]}
-          />
-        </View>
-      </Pressable>
-    );
-  }
 
   return (
     <Pressable
@@ -135,17 +120,19 @@ export function TabButton({
       accessibilityState={{ selected: focused }}
       onLongPress={onLongPress}
       onPress={handlePress}
-      style={styles.pressable}
+      style={{ flex: 1 }}
       accessibilityLabel={`${label} tab`}
       accessibilityHint={`Navigate to ${label}`}
     >
-      <View style={styles.item}>
-        <View style={styles.iconShell}>
+      <View
+        style={{ alignItems: 'center', flex: 1, justifyContent: 'center' }}
+      >
+        <View style={{ alignItems: 'center', justifyContent: 'center' }}>
           <Animated.View style={iconStyle}>
             <Icon
               color={color}
-              name={ICONS[route.name as keyof typeof ICONS]}
-              size={24}
+              name={iconName}
+              size="lg"
               variant={focused ? 'solid' : 'outline'}
             />
           </Animated.View>
@@ -155,7 +142,7 @@ export function TabButton({
             color={
               focused ? theme.colors.semantic.vexCyan : theme.colors.text.tertiary
             }
-            style={styles.label}
+            style={{ marginTop: theme.spacing[1] }}
             variant="caption"
           >
             {label}
@@ -163,8 +150,18 @@ export function TabButton({
         </Animated.View>
         <Animated.View
           style={[
-            styles.indicator,
-            { backgroundColor: theme.colors.semantic.vexCyan },
+            {
+              borderRadius: theme.borderRadius.full,
+              height: theme.spacing[1],
+              marginTop: theme.spacing[1],
+            },
+            {
+              backgroundColor: theme.colors.semantic.vexCyan,
+              shadowColor: theme.colors.semantic.vexCyan,
+              shadowOffset: { width: 0, height: 0 },
+              shadowOpacity: theme.opacity[40],
+              shadowRadius: theme.spacing[3],
+            },
             indicatorStyle,
           ]}
         />
@@ -172,22 +169,3 @@ export function TabButton({
     </Pressable>
   );
 }
-
-const styles = createSheet({
-  pressable: { flex: 1 },
-  item: {
-    alignItems: 'center',
-    flex: 1,
-    justifyContent: 'center',
-    paddingTop: 8,
-  },
-  iconShell: {
-    alignItems: 'center',
-    height: 28,
-    justifyContent: 'center',
-    minWidth: 28,
-    position: 'relative',
-  },
-  label: { marginTop: 4 },
-  indicator: { borderRadius: 999, height: 3, marginTop: 4, width: 14 },
-});

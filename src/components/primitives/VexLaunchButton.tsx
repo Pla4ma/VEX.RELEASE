@@ -1,5 +1,6 @@
 import React from 'react';
 import { Pressable, ViewProps } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -12,6 +13,8 @@ import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { getMinTouchTargetStyle } from '../../utils/touchTarget';
 import { useHaptics } from '../../utils/haptics';
 import { lightColors } from '@/theme/tokens/colors';
+import { rgbaColors } from '@/theme/tokens/rgba-colors';
+import { springPresets, timingPresets } from '../../theme/tokens/motion';
 
 export interface VexLaunchButtonProps extends ViewProps {
   label: string;
@@ -20,6 +23,7 @@ export interface VexLaunchButtonProps extends ViewProps {
   disabled?: boolean;
   isLoading?: boolean;
   hapticOnPress?: boolean;
+  accessibilityHint?: string;
   testID?: string;
 }
 
@@ -30,6 +34,7 @@ export function VexLaunchButton({
   disabled,
   isLoading,
   hapticOnPress = true,
+  accessibilityHint,
   style,
   testID,
   ...rest
@@ -46,15 +51,23 @@ export function VexLaunchButton({
   }));
 
   const handlePressIn = () => {
-    if (isReducedMotion) return;
-    scale.value = withSpring(0.97, { damping: 15, stiffness: 300 });
-    glow.value = withTiming(0.15, { duration: 150 });
+    if (isReducedMotion) {
+      return;
+    }
+    scale.value = withSpring(0.975, springPresets.tactile);
+    glow.value = withTiming(0.2, {
+      duration: timingPresets.microFade.duration,
+    });
   };
 
   const handlePressOut = () => {
-    if (isReducedMotion) return;
-    scale.value = withSpring(1, { damping: 15, stiffness: 300 });
-    glow.value = withTiming(0.06, { duration: 300 });
+    if (isReducedMotion) {
+      return;
+    }
+    scale.value = withSpring(1, springPresets.settle);
+    glow.value = withTiming(0.08, {
+      duration: timingPresets.enter.duration,
+    });
   };
 
   const handlePress = () => {
@@ -72,6 +85,7 @@ export function VexLaunchButton({
       onPressOut={handlePressOut}
       accessibilityRole="button"
       accessibilityLabel={label}
+      accessibilityHint={accessibilityHint ?? subLabel ?? 'Starts the next VEX session'}
       accessibilityState={{ disabled: disabled || isLoading, busy: isLoading }}
       style={[getMinTouchTargetStyle(), style]}
       testID={testID}
@@ -80,34 +94,47 @@ export function VexLaunchButton({
       <Animated.View
         style={[
           {
-            backgroundColor: lightColors.semantic.obsidian,
-            borderRadius: theme.spacing?.[3] ?? 12,
-            borderWidth: 1,
-            borderColor: 'rgba(0,229,255,0.08)',
-            paddingVertical: theme.spacing?.[4] ?? 16,
-            paddingHorizontal: theme.spacing?.[5] ?? 20,
+            borderRadius: theme.borderRadius.xl,
+            borderWidth: theme.spacing[0] + 1,
+            borderColor: rgbaColors.rgb_255_255_255_0_18,
             alignItems: 'center',
             justifyContent: 'center',
             shadowColor: lightColors.semantic.vexCyan,
             shadowOffset: { width: 0, height: 0 },
-            shadowRadius: 16,
+            shadowRadius: theme.spacing[6],
             width: '100%',
+            overflow: 'hidden',
+            opacity: disabled ? theme.opacity[50] : theme.opacity[100],
           },
           animatedStyle,
         ]}
       >
-        <Text variant="heading3" color={lightColors.semantic.vexCyan}>
-          {label}
-        </Text>
-        {subLabel ? (
-          <Text
-            variant="caption"
-            color="textMuted"
-            style={{ marginTop: 4 }}
-          >
-            {subLabel}
+        <LinearGradient
+          colors={[
+            lightColors.semantic.vexCyan,
+            lightColors.semantic.secondary,
+            lightColors.semantic.editorialGold,
+          ]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={{
+            alignItems: 'center',
+            gap: theme.spacing[1],
+            justifyContent: 'center',
+            paddingHorizontal: theme.spacing[5],
+            paddingVertical: theme.spacing[4],
+            width: '100%',
+          }}
+        >
+          <Text variant="heading3" color="text.inverse">
+            {isLoading ? 'Loading' : label}
           </Text>
-        ) : null}
+          {subLabel ? (
+            <Text variant="caption" color="text.inverse" opacity={theme.opacity[70]}>
+              {subLabel}
+            </Text>
+          ) : null}
+        </LinearGradient>
       </Animated.View>
     </Pressable>
   );

@@ -24,7 +24,6 @@ export const FEATURE_ROUTE_REGISTRY = [
   { feature: 'companion_detail', route: 'CompanionDetail' },
   { feature: 'boss_tab', route: 'Boss' },
   { feature: 'challenges', route: 'Challenges' },
-  { feature: 'ai_coach_advanced', route: 'AICoach' },
   { feature: 'achievements', route: 'Mastery' },
   { feature: 'content_study', route: 'ContentStudy' },
   { feature: 'memory_console', route: 'MemoryConsole' },
@@ -64,9 +63,10 @@ export function canNavigateToRegisteredRoute(
   features: FeatureAccessMap,
   route: keyof ExtendedRootStackParams | string,
 ): boolean {
-  const feature = getFeatureForRoute(String(route));
+  const routeName = String(route);
+  const feature = getFeatureForRoute(routeName);
   if (!feature) {
-    return true;
+    return !MAIN_STACK_FEATURE_ROUTES.some((name) => name === routeName);
   }
   return isFeatureAvailableForNavigation(
     getFeatureAvailabilityFor(feature, features[feature]),

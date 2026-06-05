@@ -16,6 +16,8 @@ interface MonetizationState {
   clear: () => void;
 }
 
+export const getRevenueCatStore = () => useMonetizationStore;
+
 export const useMonetizationStore = create<MonetizationState>()(
   immer((set) => ({
     isPurchasing: false,
