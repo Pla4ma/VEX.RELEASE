@@ -16,6 +16,7 @@ import Animated, {
 import { etherealMedallion } from '@/theme/tokens/ethereal-sky';
 import { springPresets, timingPresets } from '@/theme/tokens/motion';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
+import { useDeviceTilt } from '@/hooks/useDeviceTilt';
 
 type EtherealMedallionProps = {
   size?: number;
@@ -31,6 +32,7 @@ export function EtherealMedallion({
   glyphColor = '#0A0A0A',
 }: EtherealMedallionProps): React.JSX.Element {
   const { isReducedMotion } = useReducedMotion();
+  const { tiltX, tiltY } = useDeviceTilt();
   const entranceScale = useSharedValue(isReducedMotion ? 1 : 0.6);
   const entranceOpacity = useSharedValue(isReducedMotion ? 1 : 0);
   const rotation = useSharedValue(0);
@@ -64,7 +66,13 @@ export function EtherealMedallion({
 
   const containerStyle = useAnimatedStyle(() => ({
     opacity: entranceOpacity.value,
-    transform: [{ scale: entranceScale.value }, { rotate: `${rotation.value}deg` }],
+    transform: [
+      { perspective: 800 },
+      { rotateX: `${-tiltY.value * 5}deg` },
+      { rotateY: `${tiltX.value * 7}deg` },
+      { scale: entranceScale.value },
+      { rotate: `${rotation.value}deg` },
+    ],
   }));
 
   const reverseStyle = useAnimatedStyle(() => ({

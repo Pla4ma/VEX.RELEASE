@@ -1,8 +1,6 @@
 /**
- * CloudPuff — single soft radial cloud with continuous x-drift.
- *
- * Part of the Ethereal Sky visual layer used by Login + Onboarding.
- * Pure visual primitive; no business logic.
+ * CloudPuff — single soft radial cloud with continuous x-drift
+ * and device-tilt parallax. Sits in the Ethereal Sky visual stack.
  */
 import React, { useEffect, useMemo } from 'react';
 import { useWindowDimensions } from 'react-native';
@@ -19,21 +17,18 @@ import Animated, {
 import { etherealCloud, etherealSkyAccents } from '@/theme/tokens/ethereal-sky';
 import { timingPresets } from '@/theme/tokens/motion';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
+import { useDeviceTilt } from '@/hooks/useDeviceTilt';
 
 type CloudLayer = 'back' | 'mid' | 'front';
 
 type CloudPuffProps = {
   layer: CloudLayer;
-  /** Vertical position as a percentage of the screen height (0-100). */
   topPercent: number;
-  /** Diameter in points. */
   size: number;
-  /** Horizontal drift amplitude in points. */
   drift?: number;
-  /** Tint variant. */
   tint?: 'cool' | 'warm';
-  /** Delay (ms) before the loop starts. */
   delay?: number;
+  parallaxFactor?: number;
 };
 
 const OPACITY_BY_LAYER: Record<CloudLayer, number> = {
@@ -55,9 +50,11 @@ export function CloudPuff({
   drift = 80,
   tint = 'cool',
   delay = 0,
+  parallaxFactor = 8,
 }: CloudPuffProps): React.JSX.Element {
   const { width } = useWindowDimensions();
   const { isReducedMotion } = useReducedMotion();
+  const { tiltX, tiltY } = useDeviceTilt();
   const progress = useSharedValue(0);
 
   useEffect(() => {
@@ -78,8 +75,13 @@ export function CloudPuff({
   const animatedStyle = useAnimatedStyle(() => {
     const t = progress.value;
     return {
-      transform: [{ translateX: -drift + t * drift * 2 }],
-      opacity: isReducedMotion ? OPACITY_BY_LAYER[layer] : OPACITY_BY_LAYER[layer] * (0.6 + t * 0.4),
+      transform: [
+        { translateX: -drift + t * drift * 2 + tiltX.value * parallaxFactor },
+        { translateY: tiltY.value * parallaxFactor * 0.5 },
+      ],
+      opacity: isReducedMotion
+        ? OPACITY_BY_LAYER[layer]
+        : OPACITY_BY_LAYER[layer] * (0.6 + t * 0.4),
     };
   });
 

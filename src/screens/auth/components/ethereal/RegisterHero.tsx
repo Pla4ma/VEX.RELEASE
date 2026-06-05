@@ -1,19 +1,23 @@
 /**
  * RegisterHero — the brand block at the top of the Register screen.
- * Composes the Ethereal Medallion, Serif "Create account" title,
- * and tagline.
+ * Composes the animated VEX mark and the serif "Create account"
+ * title for tonal contrast.
  */
 import React from 'react';
 import { View } from 'react-native';
 
 import { Text } from '../../../../components/primitives/Text';
-import { EtherealMedallion } from './EtherealMedallion';
+import { AnimatedVexMark } from './AnimatedVexMark';
 import { SerifTitle } from './SerifTitle';
 
-export function RegisterHero(): React.JSX.Element {
+type RegisterHeroProps = {
+  startDelayMs?: number;
+};
+
+export function RegisterHero({ startDelayMs = 0 }: RegisterHeroProps): React.JSX.Element {
   return (
     <View style={{ alignItems: 'center', gap: 18, marginTop: 8 }}>
-      <EtherealMedallion size={110} />
+      <AnimatedVexMark size={104} startDelayMs={startDelayMs} />
       <View style={{ alignItems: 'center', gap: 4 }}>
         <SerifTitle
           color="#0A0A0A"

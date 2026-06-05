@@ -8,7 +8,7 @@
 import {
   useAnimatedSensor,
   useDerivedValue,
-  type SensorType,
+  SensorType,
   type SharedValue,
 } from 'react-native-reanimated';
 

@@ -89,7 +89,7 @@ export const LoginScreen: React.FC<Props> = ({ navigation, route }) => {
           paddingHorizontal: theme.spacing[5],
         }}
       >
-        <LoginHero />
+        <LoginHero startDelayMs={120} />
 
         <View style={{ width: '100%', maxWidth: 440, alignSelf: 'center', gap: 16 }}>
           <EtherealAuthButtons

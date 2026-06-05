@@ -92,7 +92,7 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
       <EtherealSkyBackground />
 
       <View style={{ flex: 1, paddingTop: insets.top + 16, paddingHorizontal: 24 }}>
-        <RegisterHero />
+        <RegisterHero startDelayMs={120} />
 
         <View style={{ marginTop: 32 }}>
           <RegisterFormPanel

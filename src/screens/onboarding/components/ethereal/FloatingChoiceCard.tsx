@@ -1,9 +1,10 @@
 /**
- * FloatingChoiceCard — glass choice card with ambient float + scale
- * on press. Used for onboarding step choices.
+ * FloatingChoiceCard — glass choice card with ambient float,
+ * device-tilt parallax, and premium press feedback (shimmer
+ * sweep + tap ripple). Used for onboarding step choices.
  */
 import React, { useEffect } from 'react';
-import { Pressable, View, type ViewStyle } from 'react-native';
+import { View, type ViewStyle } from 'react-native';
 import Animated, {
   Easing,
   useAnimatedStyle,
@@ -17,9 +18,10 @@ import Animated, {
 import { etherealCard, etherealGlass } from '@/theme/tokens/ethereal-sky';
 import { springPresets, timingPresets } from '@/theme/tokens/motion';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
+import { useDeviceTilt } from '@/hooks/useDeviceTilt';
 import { Text } from '../../../../components/primitives/Text';
 import { SafeBlurView } from '../../../../screens/auth/components/SafeBlurView';
-import { getMinTouchTargetStyle } from '../../../../utils/touchTarget';
+import { ShimmerSweep } from '../../../../screens/auth/components/ethereal/ShimmerSweep';
 
 type FloatingChoiceCardProps = {
   title: string;
@@ -45,9 +47,9 @@ export function FloatingChoiceCard({
   index,
 }: FloatingChoiceCardProps): React.JSX.Element {
   const { isReducedMotion } = useReducedMotion();
+  const { tiltX, tiltY } = useDeviceTilt();
   const enter = useSharedValue(isReducedMotion ? 1 : 0);
   const float = useSharedValue(0);
-  const press = useSharedValue(1);
 
   useEffect(() => {
     if (isReducedMotion) {return;}
@@ -77,8 +79,11 @@ export function FloatingChoiceCard({
     return {
       opacity: enter.value,
       transform: [
+        { perspective: 900 },
+        { rotateX: `${-tiltY.value * 3}deg` },
+        { rotateY: `${tiltX.value * 4}deg` },
         { translateY: 24 * (1 - enter.value) + floatY },
-        { scale: press.value },
+        { scale: enter.value },
       ],
     };
   });
@@ -97,24 +102,18 @@ export function FloatingChoiceCard({
 
   return (
     <Animated.View style={containerStyle}>
-      <Pressable
-        accessibilityHint={accessibilityHint}
+      <ShimmerSweep
+        accessibilityHint={accessibilityHint ?? 'Select this option'}
         accessibilityLabel={title}
-        accessibilityRole="button"
-        accessibilityState={{ disabled, selected }}
+        backgroundColor={selected ? etherealCard.fillSelected : etherealCard.fill}
+        borderColor={selected ? etherealCard.borderSelected : etherealCard.border}
+        borderRadius={24}
+        borderWidth={selected ? 1.5 : 1}
         disabled={disabled}
+        height={undefined}
         onPress={onPress}
-        onPressIn={() => {
-          press.value = withSpring(0.97, springPresets.tactile);
-        }}
-        onPressOut={() => {
-          press.value = withSpring(1, springPresets.tactile);
-        }}
-        style={({ pressed }) => [
-          surfaceStyle,
-          { opacity: disabled ? 0.6 : pressed ? 0.94 : 1 },
-          getMinTouchTargetStyle(),
-        ]}
+        selected={selected}
+        style={surfaceStyle}
       >
         <SafeBlurView intensity={40} tint="light" style={{ flex: 1 }}>
           <View style={{ padding: 18, gap: 6 }}>
@@ -135,7 +134,7 @@ export function FloatingChoiceCard({
             ) : null}
           </View>
         </SafeBlurView>
-      </Pressable>
+      </ShimmerSweep>
     </Animated.View>
   );
 }

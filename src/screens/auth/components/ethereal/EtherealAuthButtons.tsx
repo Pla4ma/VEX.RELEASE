@@ -1,18 +1,22 @@
 /**
  * EtherealAuthButtons — Apple, Google, and Email auth CTAs.
  *
- * Orchestrates the staggered entrance of OAuth pill buttons + a
- * ghost "Continue with Email" link. Button rendering is in
- * AuthPillButton; glyphs in AuthGlyphs.
+ * Each button uses ShimmerSweep for a diagonal light beam that
+ * crosses on press. OAuth pills enter with a small scale-in
+ * stagger. Email uses a ghost-style text link.
  */
 import React, { useCallback } from 'react';
-import { Pressable, View } from 'react-native';
+import { View } from 'react-native';
+import Animated from 'react-native-reanimated';
 
 import { Text } from '../../../../components/primitives/Text';
 import { etherealButton } from '@/theme/tokens/ethereal-sky';
-import { getMinTouchTargetStyle } from '../../../../utils/touchTarget';
+import { TapRipple } from './TapRipple';
 import { AppleGlyph, EnvelopeGlyph, GoogleGlyph } from './AuthGlyphs';
-import { AuthPillButton, type AuthButtonSpec } from './AuthPillButton';
+import {
+  StaggeredAuthButton,
+  type StaggeredButtonSpec,
+} from './StaggeredAuthButton';
 
 export type EtherealAuthProvider = 'apple' | 'google' | 'email';
 
@@ -33,67 +37,81 @@ export function EtherealAuthButtons({
     onProviderPress('email');
   }, [onProviderPress]);
 
-  const buttons: AuthButtonSpec[] = [
-    {
-      provider: 'google',
-      label: 'Continue with Google',
-      fill: etherealButton.googleFill,
-      textColor: etherealButton.googleText,
-      borderColor: etherealButton.googleBorder,
-      glyph: <GoogleGlyph />,
-      accessibilityHint: 'Continues with Google sign in',
-    },
-    {
-      provider: 'apple',
-      label: 'Continue with Apple',
-      fill: etherealButton.appleFill,
-      textColor: etherealButton.appleText,
-      glyph: <AppleGlyph color={etherealButton.appleText} />,
-      accessibilityHint: 'Continues with Apple sign in',
-    },
-  ];
+  const googleSpec: StaggeredButtonSpec = {
+    provider: 'google',
+    label: 'Continue with Google',
+    fill: etherealButton.googleFill,
+    textColor: etherealButton.googleText,
+    borderColor: etherealButton.googleBorder,
+    glyph: <GoogleGlyph />,
+    accessibilityHint: 'Continues with Google sign in',
+    useShimmer: true,
+    useRipple: false,
+  };
+
+  const appleSpec: StaggeredButtonSpec = {
+    provider: 'apple',
+    label: 'Continue with Apple',
+    fill: etherealButton.appleFill,
+    textColor: etherealButton.appleText,
+    glyph: <AppleGlyph color={etherealButton.appleText} />,
+    accessibilityHint: 'Continues with Apple sign in',
+    useShimmer: true,
+    useRipple: false,
+  };
 
   return (
     <View style={{ width: '100%', gap: 12 }}>
-      {buttons.map((spec, i) => (
-        <AuthPillButton
-          key={spec.provider}
-          delay={startDelayMs + i * 80}
-          disabled={disabled}
-          onPress={() => onProviderPress(spec.provider as EtherealAuthProvider)}
-          spec={spec}
-        />
-      ))}
-      <Pressable
-        accessibilityHint="Continues with email sign in"
-        accessibilityLabel={emailLabel}
-        accessibilityRole="button"
-        accessibilityState={{ disabled }}
+      <StaggeredAuthButton
+        delay={startDelayMs}
         disabled={disabled}
-        onPress={onEmailPress}
-        style={({ pressed }) => [
-          {
-            alignSelf: 'center',
-            paddingVertical: 12,
-            opacity: disabled ? 0.6 : pressed ? 0.7 : 1,
-          },
-          getMinTouchTargetStyle(),
-        ]}
+        onPress={() => onProviderPress('google')}
+        spec={googleSpec}
+      />
+      <StaggeredAuthButton
+        delay={startDelayMs + 80}
+        disabled={disabled}
+        onPress={() => onProviderPress('apple')}
+        spec={appleSpec}
+      />
+      <Animated.View
+        style={{
+          alignSelf: 'center',
+          marginTop: 4,
+        }}
       >
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-          <EnvelopeGlyph color={etherealButton.ghostText} />
-          <Text
-            fontSize={15}
-            fontWeight="600"
+        <TapRipple
+          accessibilityHint="Continues with email sign in"
+          accessibilityLabel={emailLabel}
+          backgroundColor="transparent"
+          borderRadius={20}
+          disabled={disabled}
+          height={48}
+          onPress={onEmailPress}
+          rippleColor="rgba(10, 10, 10, 0.35)"
+        >
+          <View
             style={{
-              color: etherealButton.ghostText,
-              textDecorationLine: 'underline',
+              flexDirection: 'row',
+              alignItems: 'center',
+              gap: 10,
+              paddingHorizontal: 18,
             }}
           >
-            {emailLabel}
-          </Text>
-        </View>
-      </Pressable>
+            <EnvelopeGlyph color={etherealButton.ghostText} />
+            <Text
+              fontSize={15}
+              fontWeight="600"
+              style={{
+                color: etherealButton.ghostText,
+                textDecorationLine: 'underline',
+              }}
+            >
+              {emailLabel}
+            </Text>
+          </View>
+        </TapRipple>
+      </Animated.View>
     </View>
   );
 }

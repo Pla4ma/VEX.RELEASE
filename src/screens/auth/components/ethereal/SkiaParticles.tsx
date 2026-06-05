@@ -5,201 +5,101 @@
  *
  * Pure visual primitive. Honors reduced-motion.
  */
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useWindowDimensions } from 'react-native';
-import {
-  Canvas,
-  Circle,
-  Group,
-  RadialGradient,
-  Blur,
-  vec,
-} from '@shopify/react-native-skia';
-import {
+import Animated, {
   Easing,
-  useDerivedValue,
+  useAnimatedStyle,
   useSharedValue,
   withRepeat,
   withTiming,
 } from 'react-native-reanimated';
+import { Blur, Canvas, Circle, RadialGradient, vec } from '@shopify/react-native-skia';
+
 import { useDeviceTilt } from '@/hooks/useDeviceTilt';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
-import { timingPresets } from '@/theme/tokens/motion';
-
-type Particle = {
-  baseX: number;
-  baseY: number;
-  radius: number;
-  phase: number;
-  hue: 'gold' | 'silver' | 'rose';
-  sizeFactor: number;
-};
-
-const PARTICLE_COUNT = 70;
-const PARALLAX_STRENGTH = 28;
-
-const HUE_COLORS: Record<Particle['hue'], readonly [string, string, string]> = {
-  gold: ['rgba(255, 230, 175, 0.95)', 'rgba(255, 200, 120, 0.55)', 'rgba(255, 200, 120, 0)'],
-  silver: ['rgba(255, 255, 255, 0.85)', 'rgba(220, 235, 255, 0.45)', 'rgba(220, 235, 255, 0)'],
-  rose: ['rgba(255, 210, 220, 0.85)', 'rgba(255, 170, 190, 0.45)', 'rgba(255, 170, 190, 0)'],
-};
-
-function generateParticles(count: number, width: number, height: number): Particle[] {
-  const arr: Particle[] = [];
-  for (let i = 0; i < count; i++) {
-    const hueRoll = i % 5;
-    let hue: Particle['hue'];
-    if (hueRoll === 0) {hue = 'rose';}
-    else if (hueRoll === 1) {hue = 'silver';}
-    else {hue = 'gold';}
-    arr.push({
-      baseX: (i * 137 + 23) % 100,
-      baseY: (i * 71 + 11) % 100,
-      radius: 1.2 + ((i * 19) % 10) * 0.4,
-      phase: (i * 0.27) % (Math.PI * 2),
-      hue,
-      sizeFactor: 0.6 + ((i * 31) % 10) * 0.08,
-    });
-  }
-  return arr;
-}
+import { buildParticles, type Particle, PARTICLE_COUNT, PARALLAX_STRENGTH } from './skia-particles.data';
 
 export function SkiaParticles(): React.JSX.Element {
   const { width, height } = useWindowDimensions();
   const { isReducedMotion } = useReducedMotion();
   const { tiltX, tiltY } = useDeviceTilt();
 
-  const particles = useMemo(
-    () => generateParticles(PARTICLE_COUNT, width, height),
-    [width, height],
-  );
-
+  const particles = useMemo(() => buildParticles(PARTICLE_COUNT), []);
   const clock = useSharedValue(0);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (isReducedMotion) {return;}
     clock.value = withRepeat(
-      withTiming(Math.PI * 2, {
-        duration: 18000,
-        easing: Easing.linear,
-      }),
+      withTiming(Math.PI * 2, { duration: 18000, easing: Easing.linear }),
       -1,
       false,
     );
   }, [clock, isReducedMotion]);
 
-  const opacityCycle = useDerivedValue<number>(() => {
-    'worklet';
-    return 0.45 + 0.35 * (0.5 + 0.5 * Math.sin(clock.value * 0.7));
-  }, [clock]);
+  const wrapperStyle = useAnimatedStyle(() => ({
+    transform: [
+      { translateX: tiltX.value * PARALLAX_STRENGTH * 0.5 },
+      { translateY: tiltY.value * PARALLAX_STRENGTH * 0.3 },
+    ],
+    opacity: isReducedMotion ? 0.6 : 0.75 + 0.15 * Math.sin(clock.value * 0.7),
+  }));
 
   return (
-    <Canvas
+    <Animated.View
       pointerEvents="none"
-      style={{ position: 'absolute', width, height, opacity: 0.85 }}
+      style={[
+        {
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+        },
+        wrapperStyle,
+      ]}
     >
-      <Group>
+      <Canvas style={{ width, height }}>
         {particles.map((p, i) => (
           <ParticleNode
             key={i}
-            baseX={p.baseX}
-            baseY={p.baseY}
-            baseRadius={p.radius}
-            clock={clock}
             height={height}
-            hue={p.hue}
-            opacityCycle={opacityCycle}
-            phase={p.phase}
-            sizeFactor={p.sizeFactor}
-            tiltX={tiltX}
-            tiltY={tiltY}
+            isReducedMotion={isReducedMotion}
+            particle={p}
             width={width}
           />
         ))}
-      </Group>
-    </Canvas>
+      </Canvas>
+    </Animated.View>
   );
 }
 
 type ParticleNodeProps = {
-  baseX: number;
-  baseY: number;
-  baseRadius: number;
+  particle: Particle;
   width: number;
   height: number;
-  phase: number;
-  hue: Particle['hue'];
-  sizeFactor: number;
-  clock: ReturnType<typeof useSharedValue<number>>;
-  opacityCycle: ReturnType<typeof useSharedValue<number>>;
-  tiltX: ReturnType<typeof useDerivedValue<number>>;
-  tiltY: ReturnType<typeof useDerivedValue<number>>;
+  isReducedMotion: boolean;
 };
 
 function ParticleNode({
-  baseX,
-  baseY,
-  baseRadius,
+  particle,
   width,
   height,
-  phase,
-  hue,
-  sizeFactor,
-  clock,
-  opacityCycle,
-  tiltX,
-  tiltY,
+  isReducedMotion,
 }: ParticleNodeProps): React.JSX.Element {
-  const colors = HUE_COLORS[hue];
-
-  const driftX = useDerivedValue<number>(() => {
-    'worklet';
-    return baseX + 6 * Math.sin(clock.value + phase);
-  }, [clock]);
-
-  const driftY = useDerivedValue<number>(() => {
-    'worklet';
-    const upDrift = (clock.value / (Math.PI * 2)) * 18;
-    const wave = 4 * Math.sin(clock.value * 1.4 + phase);
-    return baseY - upDrift + wave;
-  }, [clock]);
-
-  const radiusAnim = useDerivedValue<number>(() => {
-    'worklet';
-    const pulse = 0.5 + 0.5 * Math.sin(clock.value * 2 + phase);
-    return baseRadius * sizeFactor * (0.85 + pulse * 0.4);
-  }, [clock]);
-
-  const cx = useDerivedValue<number>(() => {
-    'worklet';
-    const px = (driftX.value / 100) * width;
-    return px + tiltX.value * PARALLAX_STRENGTH * (1 - sizeFactor);
-  }, [driftX, tiltX, width]);
-
-  const cy = useDerivedValue<number>(() => {
-    'worklet';
-    const py = (driftY.value / 100) * height;
-    return py + tiltY.value * PARALLAX_STRENGTH * (1 - sizeFactor);
-  }, [driftY, tiltY, height]);
-
-  const opacity = useDerivedValue<number>(() => {
-    'worklet';
-    return opacityCycle.value * (0.4 + 0.6 * (0.5 + 0.5 * Math.sin(clock.value * 1.6 + phase)));
-  }, [opacityCycle, clock]);
+  const { baseX, baseY, radius, sizeFactor } = particle;
+  const baseSize = radius * sizeFactor;
+  const px = (baseX / 100) * width;
+  const py = (baseY / 100) * height;
 
   return (
-    <Group
-      origin={vec(0, 0)}
-      transform={[{ translateX: cx }, { translateY: cy }]}
-    >
-      <Circle cx={0} cy={0} r={radiusAnim}>
-        <RadialGradient
-          c={vec(0, 0)}
-          colors={colors}
-          r={radiusAnim}
-        />
-        <Blur blur={2.5} />
-      </Circle>
-    </Group>
+    <Circle cx={px} cy={py} r={isReducedMotion ? baseSize : baseSize * 1.15}>
+      <RadialGradient
+        c={vec(0, 0)}
+        colors={[particle.innerColor, particle.midColor, particle.outerColor]}
+        r={baseSize * 4}
+      />
+      <Blur blur={2.5} />
+    </Circle>
   );
 }

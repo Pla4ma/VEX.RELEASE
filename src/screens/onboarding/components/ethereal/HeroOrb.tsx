@@ -14,6 +14,7 @@ import Animated, {
 import { etherealOrb } from '@/theme/tokens/ethereal-sky';
 import { timingPresets } from '@/theme/tokens/motion';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
+import { useDeviceTilt } from '@/hooks/useDeviceTilt';
 
 type HeroOrbProps = {
   size?: number;
@@ -32,6 +33,7 @@ export function HeroOrb({
   anchorY = 0.18,
 }: HeroOrbProps): React.JSX.Element {
   const { isReducedMotion } = useReducedMotion();
+  const { tiltX, tiltY } = useDeviceTilt();
   const breath = useSharedValue(0.5);
   const rotation = useSharedValue(0);
 
@@ -56,6 +58,9 @@ export function HeroOrb({
     const t = breath.value;
     return {
       transform: [
+        { perspective: 800 },
+        { rotateX: `${-tiltY.value * 6}deg` },
+        { rotateY: `${tiltX.value * 9}deg` },
         { scale: 0.94 + t * 0.12 },
         { rotate: `${rotation.value}deg` },
       ],
