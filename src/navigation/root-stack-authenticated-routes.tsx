@@ -4,10 +4,11 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { MainNavigator } from './MainNavigator';
 import { OnboardingNavigator } from './OnboardingNavigator';
 import { SettingsNavigator } from './SettingsNavigator';
-import { RootStackFeatureRoutes } from './root-stack-feature-routes';
+import { renderRootStackFeatureRoutes } from './root-stack-feature-routes';
 import { type FeatureAccessMap } from '../features/liveops-config';
 import type { ExtendedRootStackParams } from './types';
 import { canRegisterPremiumPaywallRoute } from './premium-route-gating';
+import { RouteLoadingFallback } from './RouteLoadingFallback';
 
 type RootStack = ReturnType<
   typeof createNativeStackNavigator<ExtendedRootStackParams>
@@ -66,7 +67,7 @@ export function RootStackAuthenticatedRoutes({
           options={{ animation: 'slide_from_bottom', presentation: 'modal' }}
         >
           {() => (
-            <React.Suspense fallback={null}>
+            <React.Suspense fallback={<RouteLoadingFallback label="Paywall" />}>
               <PaywallScreen />
             </React.Suspense>
           )}
@@ -78,7 +79,9 @@ export function RootStackAuthenticatedRoutes({
           options={{ animation: 'slide_from_bottom', presentation: 'modal' }}
         >
           {() => (
-            <React.Suspense fallback={null}>
+            <React.Suspense
+              fallback={<RouteLoadingFallback label="Premium" />}
+            >
               <VipPaywallScreen />
             </React.Suspense>
           )}
@@ -92,7 +95,7 @@ export function RootStackAuthenticatedRoutes({
         }}
       >
         {() => (
-          <React.Suspense fallback={null}>
+          <React.Suspense fallback={<RouteLoadingFallback label="Streak" />}>
             <StreakFuneralScreen />
           </React.Suspense>
         )}
@@ -105,34 +108,40 @@ export function RootStackAuthenticatedRoutes({
         }}
       >
         {() => (
-          <React.Suspense fallback={null}>
+          <React.Suspense fallback={<RouteLoadingFallback label="Comeback" />}>
             <ComebackScreen />
           </React.Suspense>
         )}
       </Stack.Screen>
       <Stack.Screen name="FocusScoreDashboard">
         {() => (
-          <React.Suspense fallback={null}>
+          <React.Suspense
+            fallback={<RouteLoadingFallback label="Focus Score" />}
+          >
             <FocusScoreDashboard />
           </React.Suspense>
         )}
       </Stack.Screen>
       <Stack.Screen name="Achievements">
         {() => (
-          <React.Suspense fallback={null}>
+          <React.Suspense
+            fallback={<RouteLoadingFallback label="Achievements" />}
+          >
             <AchievementsScreen />
           </React.Suspense>
         )}
       </Stack.Screen>
       <Stack.Screen name="Analytics">
         {() => (
-          <React.Suspense fallback={null}>
+          <React.Suspense
+            fallback={<RouteLoadingFallback label="Analytics" />}
+          >
             <AnalyticsScreen />
           </React.Suspense>
         )}
       </Stack.Screen>
 
-      <RootStackFeatureRoutes features={features} Stack={Stack} />
+      {renderRootStackFeatureRoutes({ features, Stack })}
     </>
   );
 }

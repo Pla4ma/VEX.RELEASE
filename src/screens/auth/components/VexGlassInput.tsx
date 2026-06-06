@@ -1,11 +1,6 @@
 import React, { useState } from 'react';
 import { TextInput, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from 'react-native-reanimated';
 
 import { SafeBlurView } from './SafeBlurView';
 import { Text } from '../../../components/primitives/Text';
@@ -26,7 +21,6 @@ type VexGlassInputProps = {
   onSubmitEditing?: () => void;
 };
 
-const FOCUS_MS = 280;
 const R = '2xl' as const;
 
 export function VexGlassInput({
@@ -45,19 +39,6 @@ export function VexGlassInput({
   const r = theme.borderRadius[R];
   const [isFocused, setIsFocused] = useState(false);
 
-  const focusProgress = useSharedValue(0);
-
-  React.useEffect(() => {
-    focusProgress.value = withTiming(isFocused ? 1 : 0, { duration: FOCUS_MS });
-  }, [isFocused, focusProgress]);
-
-  const glowStyle = useAnimatedStyle(() => ({
-    shadowOpacity: isFocused ? 0.35 : 0,
-    shadowRadius: isFocused ? 18 : 0,
-    shadowColor: isFocused ? lightColors.accent.orange : 'transparent',
-    shadowOffset: { width: 0, height: isFocused ? 4 : 0 },
-  }));
-
   const borderColor = error
     ? lightColors.error.light
     : isFocused
@@ -75,7 +56,7 @@ export function VexGlassInput({
         {label}
       </Text>
 
-      <Animated.View style={[glowStyle]}>
+      <View>
         {/* Gradient rim on focus */}
         {isFocused && (
           <LinearGradient
@@ -149,7 +130,7 @@ export function VexGlassInput({
             />
           </SafeBlurView>
         </View>
-      </Animated.View>
+      </View>
 
       <Text
         color={error ? 'semantic.danger' : 'semantic.liquidGlassClear'}

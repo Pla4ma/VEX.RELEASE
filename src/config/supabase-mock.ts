@@ -10,6 +10,7 @@ export function createMockSupabaseClient(): SupabaseClient {
       signUp: async () => ({ data: { user: null, session: null }, error: authErr }),
       signInWithPassword: async () => ({ data: { user: null, session: null }, error: authErr }),
       signInWithOAuth: async () => ({ data: { provider: null, url: null }, error: authErr }),
+      signInWithIdToken: async () => ({ data: { user: null, session: null }, error: authErr }),
       exchangeCodeForSession: async () => ({
         data: { session: null, user: null },
         error: authErr,

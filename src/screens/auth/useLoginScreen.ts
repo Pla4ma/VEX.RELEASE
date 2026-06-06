@@ -11,7 +11,7 @@ type LoginErrors = { email?: string; password?: string };
 
 export function useLoginScreen(initialEmail: string) {
   const { isReducedMotion } = useReducedMotion();
-  const { loginWithCredentials, loginWithOAuth, isLoading } = useAuthStore();
+  const { loginWithCredentials, loginWithOAuth, isLoading, error } = useAuthStore();
   const { show: showToast } = useToast();
   const [email, setEmail] = useState(initialEmail);
   const [password, setPassword] = useState('');
@@ -61,14 +61,15 @@ export function useLoginScreen(initialEmail: string) {
     await buttonTap();
     const success = await loginWithOAuth(provider);
     if (!success) {
+      const authError = useAuthStore.getState().error ?? error;
       showToast({
         duration: 4000,
-        message: `Try ${provider} again, or use email to enter VEX.`,
+        message: authError ?? `Try ${provider} again, or use email to enter VEX.`,
         title: 'Social sign in failed',
         type: 'error',
       });
     }
-  }, [loginWithOAuth, showToast]);
+  }, [error, loginWithOAuth, showToast]);
 
   return {
     actionEntering,

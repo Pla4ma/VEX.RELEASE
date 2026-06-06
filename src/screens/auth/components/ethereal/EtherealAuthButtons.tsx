@@ -1,13 +1,9 @@
 /**
  * EtherealAuthButtons — Apple, Google, and Email auth CTAs.
- *
- * Each button uses ShimmerSweep for a diagonal light beam that
- * crosses on press. OAuth pills enter with a small scale-in
- * stagger. Email uses a ghost-style text link.
+ * Static (motion stripped for performance).
  */
 import React, { useCallback } from 'react';
 import { View } from 'react-native';
-import Animated from 'react-native-reanimated';
 
 import { Text } from '../../../../components/primitives/Text';
 import { etherealButton } from '@/theme/tokens/ethereal-sky';
@@ -30,7 +26,7 @@ type EtherealAuthButtonsProps = {
 export function EtherealAuthButtons({
   onProviderPress,
   disabled = false,
-  startDelayMs = 800,
+  startDelayMs: _startDelayMs = 800,
   emailLabel = 'Continue with Email',
 }: EtherealAuthButtonsProps): React.JSX.Element {
   const onEmailPress = useCallback(() => {
@@ -63,23 +59,18 @@ export function EtherealAuthButtons({
   return (
     <View style={{ width: '100%', gap: 12 }}>
       <StaggeredAuthButton
-        delay={startDelayMs}
+        delay={0}
         disabled={disabled}
         onPress={() => onProviderPress('google')}
         spec={googleSpec}
       />
       <StaggeredAuthButton
-        delay={startDelayMs + 80}
+        delay={0}
         disabled={disabled}
         onPress={() => onProviderPress('apple')}
         spec={appleSpec}
       />
-      <Animated.View
-        style={{
-          alignSelf: 'center',
-          marginTop: 4,
-        }}
-      >
+      <View style={{ alignSelf: 'center', marginTop: 4 }}>
         <TapRipple
           accessibilityHint="Continues with email sign in"
           accessibilityLabel={emailLabel}
@@ -111,7 +102,7 @@ export function EtherealAuthButtons({
             </Text>
           </View>
         </TapRipple>
-      </Animated.View>
+      </View>
     </View>
   );
 }

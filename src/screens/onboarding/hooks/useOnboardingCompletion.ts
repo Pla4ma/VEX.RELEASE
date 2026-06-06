@@ -22,12 +22,12 @@ export function useOnboardingCompletion(userId: string) {
       goal: string | undefined,
       message?: string,
     ): Promise<void> => {
-      if (!userId || !goal) {return;}
+      if (!userId) {return;}
       setIsFinishing(true);
       setFinishError(null);
       completedRef.current = true;
       try {
-        completeOnboarding();
+        completeOnboarding(userId);
         disclosureAnalytics.trackOnboardingCompleted(userId);
         showHomeHighlight({
           title: 'VEX is ready for your first real session',

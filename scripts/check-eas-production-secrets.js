@@ -14,7 +14,9 @@ const requiredSecrets = [
   'EAS_GOOGLE_SERVICE_ACCOUNT_KEY_PATH',
   'SUPABASE_SERVICE_ROLE_KEY',
   'EXPO_PUBLIC_SUPABASE_URL',
+  'EXPO_PUBLIC_SUPABASE_ANON_KEY',
   'EXPO_PUBLIC_SENTRY_DSN',
+  'EXPO_PUBLIC_POSTHOG_KEY',
   'EXPO_PUBLIC_REVENUECAT_IOS_KEY',
   'EXPO_PUBLIC_REVENUECAT_ANDROID_KEY',
 ];
@@ -83,12 +85,16 @@ function listRemoteSecrets() {
     return new Set(requiredSecrets.filter((name) => output.includes(name)));
   } catch {
     fail('could not run "eas secret:list --scope project"; log in to EAS or install eas-cli.');
-    return new Set();
+    return null;
   }
 }
 
 function assertRemoteSecretsPresent() {
   const presentSecrets = listRemoteSecrets();
+  if (!presentSecrets) {
+    return;
+  }
+
   requiredSecrets.forEach((name) => {
     if (!presentSecrets.has(name)) {
       fail(`missing EAS project secret ${name}.`);

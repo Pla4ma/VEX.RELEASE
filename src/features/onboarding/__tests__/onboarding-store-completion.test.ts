@@ -20,6 +20,15 @@ describe('Store Helpers', () => {
       expect(result.completedForUserId).toBe('test-user-id');
     });
 
+    it('prefers explicit userId when completing onboarding', () => {
+      const result = mergeOnboardingCompletion(
+        true,
+        Date.now(),
+        'active-onboarding-user',
+      );
+      expect(result.completedForUserId).toBe('active-onboarding-user');
+    });
+
     it('returns incomplete state with null userId', () => {
       const result = mergeOnboardingCompletion(false, null);
       expect(result.isOnboarded).toBe(false);

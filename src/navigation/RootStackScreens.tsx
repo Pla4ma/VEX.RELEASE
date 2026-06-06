@@ -5,6 +5,7 @@ import { AuthNavigator } from './AuthNavigator';
 
 import type { ExtendedRootStackParams } from './types';
 import { RootStackAuthenticatedRoutes } from './root-stack-authenticated-routes';
+import { RouteLoadingFallback } from './RouteLoadingFallback';
 import type { FeatureAccessMap } from '../features/liveops-config';
 
 interface RootStackScreensProps {
@@ -33,7 +34,7 @@ export const RootStackScreens: React.FC<RootStackScreensProps> = ({
     <Stack.Navigator
       key={navigatorKey}
       screenOptions={{
-        animation: 'slide_from_right',
+        animation: 'none',
         headerShown: false,
       }}
     >
@@ -53,7 +54,9 @@ export const RootStackScreens: React.FC<RootStackScreensProps> = ({
             }}
           >
             {() => (
-              <React.Suspense fallback={null}>
+              <React.Suspense
+                fallback={<RouteLoadingFallback label="Session" />}
+              >
                 <SessionNavigator />
               </React.Suspense>
             )}

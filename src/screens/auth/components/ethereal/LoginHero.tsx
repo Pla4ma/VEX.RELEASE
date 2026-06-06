@@ -1,6 +1,6 @@
 /**
  * LoginHero — the top brand block of the Login screen.
- * Composes the animated VEX mark (stroke-draw SVG) and tagline.
+ * Composes the VEX mark and tagline.
  * Pure presentation.
  */
 import React from 'react';
@@ -14,10 +14,10 @@ type LoginHeroProps = {
   startDelayMs?: number;
 };
 
-export function LoginHero({ startDelayMs = 0 }: LoginHeroProps): React.JSX.Element {
+export function LoginHero({ startDelayMs: _startDelayMs = 0 }: LoginHeroProps): React.JSX.Element {
   return (
     <View style={{ alignItems: 'center', gap: 24, marginTop: 12 }}>
-      <AnimatedVexMark size={130} startDelayMs={startDelayMs} />
+      <AnimatedVexMark size={130} startDelayMs={0} />
       <View style={{ alignItems: 'center', gap: 6 }}>
         <Text
           color={etherealText.heading}

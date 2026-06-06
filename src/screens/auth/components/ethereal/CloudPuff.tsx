@@ -1,23 +1,12 @@
 /**
- * CloudPuff — single soft radial cloud with continuous x-drift
- * and device-tilt parallax. Sits in the Ethereal Sky visual stack.
+ * CloudPuff — single soft radial cloud.
+ * Static (motion stripped for performance).
  */
-import React, { useEffect, useMemo } from 'react';
-import { useWindowDimensions } from 'react-native';
+import React, { useMemo } from 'react';
+import { View } from 'react-native';
 import type { ViewStyle } from 'react-native';
-import Animated, {
-  Easing,
-  useAnimatedStyle,
-  useSharedValue,
-  withDelay,
-  withRepeat,
-  withTiming,
-} from 'react-native-reanimated';
 
 import { etherealCloud, etherealSkyAccents } from '@/theme/tokens/ethereal-sky';
-import { timingPresets } from '@/theme/tokens/motion';
-import { useReducedMotion } from '@/hooks/useReducedMotion';
-import { useDeviceTilt } from '@/hooks/useDeviceTilt';
 
 type CloudLayer = 'back' | 'mid' | 'front';
 
@@ -37,54 +26,15 @@ const OPACITY_BY_LAYER: Record<CloudLayer, number> = {
   front: etherealCloud.layerFront,
 };
 
-const DURATION_BY_LAYER: Record<CloudLayer, number> = {
-  back: 28000,
-  mid: 22000,
-  front: 18000,
-};
-
 export function CloudPuff({
   layer,
   topPercent,
   size,
-  drift = 80,
+  drift: _drift = 80,
   tint = 'cool',
-  delay = 0,
-  parallaxFactor = 8,
+  delay: _delay = 0,
+  parallaxFactor: _parallaxFactor = 8,
 }: CloudPuffProps): React.JSX.Element {
-  const { width } = useWindowDimensions();
-  const { isReducedMotion } = useReducedMotion();
-  const { tiltX, tiltY } = useDeviceTilt();
-  const progress = useSharedValue(0);
-
-  useEffect(() => {
-    if (isReducedMotion) {return;}
-    progress.value = withDelay(
-      delay,
-      withRepeat(
-        withTiming(1, {
-          duration: DURATION_BY_LAYER[layer],
-          easing: Easing.bezier(...timingPresets.breath.easing),
-        }),
-        -1,
-        true,
-      ),
-    );
-  }, [progress, isReducedMotion, layer, delay]);
-
-  const animatedStyle = useAnimatedStyle(() => {
-    const t = progress.value;
-    return {
-      transform: [
-        { translateX: -drift + t * drift * 2 + tiltX.value * parallaxFactor },
-        { translateY: tiltY.value * parallaxFactor * 0.5 },
-      ],
-      opacity: isReducedMotion
-        ? OPACITY_BY_LAYER[layer]
-        : OPACITY_BY_LAYER[layer] * (0.6 + t * 0.4),
-    };
-  });
-
   const baseStyle = useMemo<ViewStyle>(
     () => ({
       position: 'absolute',
@@ -93,6 +43,7 @@ export function CloudPuff({
       width: size,
       height: size * 0.55,
       borderRadius: size,
+      opacity: OPACITY_BY_LAYER[layer],
       backgroundColor:
         tint === 'warm' ? etherealSkyAccents.warmCloud : etherealSkyAccents.coolCloud,
       shadowColor: tint === 'warm' ? etherealSkyAccents.warmCloud : etherealSkyAccents.coolCloud,
@@ -100,15 +51,15 @@ export function CloudPuff({
       shadowOpacity: 0.6,
       shadowRadius: size * 0.4,
     }),
-    [size, topPercent, tint],
+    [size, topPercent, tint, layer],
   );
 
   return (
-    <Animated.View
+    <View
       accessibilityElementsHidden
       importantForAccessibility="no"
       pointerEvents="none"
-      style={[baseStyle, { width }, animatedStyle]}
+      style={baseStyle}
     />
   );
 }

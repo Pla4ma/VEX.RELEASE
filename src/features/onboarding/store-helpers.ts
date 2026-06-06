@@ -31,8 +31,9 @@ function getCurrentUserId(): string | null {
 export function mergeOnboardingCompletion(
   isOnboarded: boolean,
   completedAt: number | null,
+  userId?: string | null,
 ): Pick<OnboardingState, 'isOnboarded' | 'completedAt' | 'completedForUserId'> {
-  const currentUserId = getCurrentUserId();
+  const currentUserId = userId ?? getCurrentUserId();
   return {
     isOnboarded,
     completedAt,

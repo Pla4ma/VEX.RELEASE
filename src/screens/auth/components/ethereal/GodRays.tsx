@@ -1,25 +1,13 @@
 /**
  * GodRays — soft volumetric light beams descending from the
  * top of the screen, driving the "cathedral glow" effect.
- * Static layout with subtle tilt parallax via a wrapping
- * Animated.View.
+ * Static (motion stripped for performance).
  */
-import React, { useEffect, useMemo } from 'react';
-import { useWindowDimensions } from 'react-native';
-import Animated, {
-  Easing,
-  useAnimatedStyle,
-  useSharedValue,
-  withRepeat,
-  withTiming,
-} from 'react-native-reanimated';
+import React, { useMemo } from 'react';
+import { useWindowDimensions, View } from 'react-native';
 import { Blur, Canvas, Group, RoundedRect } from '@shopify/react-native-skia';
 
-import { useDeviceTilt } from '@/hooks/useDeviceTilt';
-import { useReducedMotion } from '@/hooks/useReducedMotion';
-
 const RAY_COUNT = 6;
-const CYCLE_MS = 14000;
 
 type RaySpec = {
   xOffset: number;
@@ -72,45 +60,19 @@ function RayBeam({
 }
 
 export function GodRays(): React.JSX.Element {
-  const { isReducedMotion } = useReducedMotion();
-  const { tiltX, tiltY } = useDeviceTilt();
   const { width, height } = useWindowDimensions();
-  const cycle = useSharedValue(0);
   const rays = useMemo(buildRays, []);
 
-  useEffect(() => {
-    if (isReducedMotion) {return;}
-    cycle.value = withRepeat(
-      withTiming(1, {
-        duration: CYCLE_MS,
-        easing: Easing.bezier(0.4, 0, 0.6, 1),
-      }),
-      -1,
-      false,
-    );
-  }, [cycle, isReducedMotion]);
-
-  const parallaxStyle = useAnimatedStyle(() => ({
-    transform: [
-      { translateX: tiltX.value * 22 },
-      { translateY: tiltY.value * 12 },
-    ],
-    opacity: isReducedMotion ? 0.7 : 0.55 + cycle.value * 0.15,
-  }));
-
   return (
-    <Animated.View
+    <View
       pointerEvents="none"
-      style={[
-        {
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-        },
-        parallaxStyle,
-      ]}
+      style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+      }}
     >
       <Canvas style={{ width, height }}>
         {rays.map((ray, i) => (
@@ -124,6 +86,6 @@ export function GodRays(): React.JSX.Element {
           />
         ))}
       </Canvas>
-    </Animated.View>
+    </View>
   );
 }

@@ -19,6 +19,7 @@ export const AuthNavigator: React.FC = () => {
   return (
     <Stack.Navigator
       screenOptions={{
+        animation: 'none',
         headerShown: false,
       }}
     >
@@ -26,16 +27,10 @@ export const AuthNavigator: React.FC = () => {
       <Stack.Screen
         name="Register"
         component={RegisterScreen}
-        options={{
-          animation: 'slide_from_bottom',
-        }}
       />
       <Stack.Screen
         name="ForgotPassword"
         component={ForgotPasswordScreen}
-        options={{
-          animation: 'slide_from_bottom',
-        }}
       />
       <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
       <Stack.Screen name="VerifyEmail" component={VerifyEmailScreen} />

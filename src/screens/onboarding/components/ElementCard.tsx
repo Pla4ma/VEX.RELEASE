@@ -1,11 +1,5 @@
 import React from 'react';
 import { Pressable, View } from 'react-native';
-import Animated, {
-  FadeInUp,
-  useSharedValue,
-  useAnimatedStyle,
-  withSpring,
-} from 'react-native-reanimated';
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
 import { Icon } from '../../../icons';
@@ -26,50 +20,32 @@ export function ElementCard({
   element,
   isSelected,
   onSelect,
-  delay,
+  delay: _delay,
 }: ElementCardProps): JSX.Element {
   const { theme } = useTheme();
-  const scale = useSharedValue(1);
   const themeColors = ELEMENT_THEMES[element.id];
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
-  }));
-  const handlePressIn = () => {
-    scale.value = withSpring(0.95, { damping: 15, stiffness: 400 });
-  };
-  const handlePressOut = () => {
-    scale.value = withSpring(1, { damping: 12, stiffness: 200 });
-  };
   return (
-    <Animated.View
-      entering={FadeInUp.duration(400).delay(delay)}
-      style={{ width: '48%' }}
-    >
+    <View style={{ width: '48%' }}>
       <Pressable
         onPress={onSelect}
-        onPressIn={handlePressIn}
-        onPressOut={handlePressOut}
         style={{ width: '100%' }}
         accessibilityLabel={`${element.name} element`}
         accessibilityRole="button"
         accessibilityHint={`Select ${element.name} as your focus element`}
       >
-        <Animated.View
-          style={[
-            {
-              padding: theme.spacing[4],
-              borderRadius: 16,
-              backgroundColor: isSelected
-                ? `${themeColors.primary}20`
-                : theme.colors.background.secondary,
-              borderWidth: 2,
-              borderColor: isSelected
-                ? themeColors.primary
-                : `${themeColors.primary}30`,
-              minHeight: 160,
-            },
-            animatedStyle,
-          ]}
+        <View
+          style={{
+            padding: theme.spacing[4],
+            borderRadius: 16,
+            backgroundColor: isSelected
+              ? `${themeColors.primary}20`
+              : theme.colors.background.secondary,
+            borderWidth: 2,
+            borderColor: isSelected
+              ? themeColors.primary
+              : `${themeColors.primary}30`,
+            minHeight: 160,
+          }}
         >
           <View
             style={{
@@ -136,8 +112,8 @@ export function ElementCard({
               <Icon name="check" size={14} color={lightColors.text.inverse} variant="solid" />
             </View>
           )}
-        </Animated.View>
+        </View>
       </Pressable>
-    </Animated.View>
+    </View>
   );
 }

@@ -1,10 +1,8 @@
 import React, { useMemo } from 'react';
 import { View } from 'react-native';
-import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 
 import { Button } from '../../../components/primitives/Button';
 import { Text } from '../../../components/primitives/Text';
-import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { useTheme } from '../../../theme';
 import { styles } from '../styles';
 import type { Lane, LaneConfirmation } from '../../../features/lane-engine';
@@ -37,18 +35,9 @@ export function LaneConfirmationStep({
   onChooseAnother,
 }: LaneConfirmationStepProps): JSX.Element {
   const { theme } = useTheme();
-  const { isReducedMotion } = useReducedMotion();
   const lane = confirmation?.recommendedLane ?? 'minimal_normal';
   const laneLabel = LANE_LABELS[lane];
   const laneEmoji = LANE_EMOJI[lane];
-
-  const titleIn = isReducedMotion ? undefined : FadeInDown.duration(400);
-  const cardIn = isReducedMotion
-    ? undefined
-    : FadeInUp.delay(150).duration(500);
-  const actionsIn = isReducedMotion
-    ? undefined
-    : FadeInUp.delay(400).duration(400);
 
   const cardStyle = useMemo(
     () => [
@@ -65,7 +54,7 @@ export function LaneConfirmationStep({
 
   return (
     <View style={styles.section}>
-      <Animated.View entering={titleIn}>
+      <View>
         <Text style={[styles.stepTitle, { color: theme.colors.text.primary }]}>
           VEX thinks {laneLabel} fits you best.
         </Text>
@@ -74,9 +63,9 @@ export function LaneConfirmationStep({
         >
           You can change this anytime.
         </Text>
-      </Animated.View>
+      </View>
 
-      <Animated.View entering={cardIn}>
+      <View>
         <View style={cardStyle}>
           <View
             style={{
@@ -109,9 +98,9 @@ export function LaneConfirmationStep({
             </View>
           </View>
         </View>
-      </Animated.View>
+      </View>
 
-      <Animated.View entering={actionsIn}>
+      <View>
         <View style={{ gap: theme.spacing[3], marginTop: theme.spacing[5] }}>
           <Button
             fullWidth
@@ -136,7 +125,7 @@ export function LaneConfirmationStep({
             Choose another
           </Button>
         </View>
-      </Animated.View>
+      </View>
     </View>
   );
 }

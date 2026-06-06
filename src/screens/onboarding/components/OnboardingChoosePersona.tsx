@@ -1,6 +1,5 @@
 import React from 'react';
-import { Pressable } from 'react-native';
-import Animated, { FadeIn, FadeInUp } from 'react-native-reanimated';
+import { Pressable, View } from 'react-native';
 import { Box } from '../../../components/primitives/Box';
 import { Button } from '../../../components/primitives/Button';
 import { Text } from '../../../components/primitives/Text';
@@ -22,8 +21,7 @@ export function OnboardingChoosePersona({
 }: OnboardingChoosePersonaProps): JSX.Element {
   return (
     <Box flex={1} justifyContent="space-between" px="xl" py="2xl">
-      {}
-      <Animated.View entering={FadeIn.duration(400)}>
+      <View>
         <Box gap="md" mt="xl">
           <Text fontSize={40}>🤖</Text>
           <Box gap="sm">
@@ -35,9 +33,8 @@ export function OnboardingChoosePersona({
             </Text>
           </Box>
         </Box>
-      </Animated.View>
+      </View>
 
-      {}
       <Box gap="md" flex={1} justifyContent="center">
         {PERSONAS.map((persona, index) => (
           <PersonaCard
@@ -50,8 +47,7 @@ export function OnboardingChoosePersona({
         ))}
       </Box>
 
-      {}
-      <Animated.View entering={FadeInUp.delay(600).duration(400)}>
+      <View>
         <Box gap="md">
           <Button
             size="lg"
@@ -79,7 +75,7 @@ export function OnboardingChoosePersona({
             </Box>
           </Pressable>
         </Box>
-      </Animated.View>
+      </View>
     </Box>
   );
 }

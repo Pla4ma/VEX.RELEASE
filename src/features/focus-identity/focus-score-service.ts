@@ -2,12 +2,20 @@ import {
   fetchCurrentFocusScore,
   fetchFocusScoreHistory,
 } from './repository-focus-score';
+import * as Sentry from '@sentry/react-native';
 import type { FocusScoreHistoryPoint, FocusScoreRecord } from './types';
 
 export async function getCurrentFocusScore(
   userId: string,
 ): Promise<FocusScoreRecord | null> {
-  return fetchCurrentFocusScore(userId);
+  try {
+    return await fetchCurrentFocusScore(userId);
+  } catch (error) {
+    Sentry.captureException(error, {
+      tags: { feature: 'focus-identity', operation: 'getCurrentFocusScore' },
+    });
+    return null;
+  }
 }
 
 export async function getFocusScoreHistory(

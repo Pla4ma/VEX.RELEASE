@@ -73,7 +73,7 @@ export const RootNavigator: React.FC = () => {
 
   const hasCompletedOnboarding = useMemo(
     () => canCompleteForUser(user?.id),
-    [canCompleteForUser, user?.id],
+    [canCompleteForUser, completedAt, completedForUserId, isOnboarded, user?.id],
   );
 
   const hasStaleOnboardingState = Boolean(

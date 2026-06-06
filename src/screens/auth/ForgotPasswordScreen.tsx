@@ -7,7 +7,6 @@ import React from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import Animated, { FadeInDown } from 'react-native-reanimated';
 
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 import { Text } from '../../components/primitives/Text';
@@ -45,7 +44,7 @@ export const ForgotPasswordScreen: React.FC<Props> = ({ navigation }) => {
         keyboardShouldPersistTaps="handled"
       >
         <View style={{ paddingHorizontal: 24 }}>
-          <Animated.View entering={FadeInDown.delay(0).duration(600)}>
+          <View>
             <View style={{ alignItems: 'center', gap: 16, marginTop: 8 }}>
               <EtherealMedallion size={100} />
               <View style={{ alignItems: 'center', gap: 4 }}>
@@ -67,10 +66,10 @@ export const ForgotPasswordScreen: React.FC<Props> = ({ navigation }) => {
                 </Text>
               </View>
             </View>
-          </Animated.View>
+          </View>
 
           {isSuccess ? (
-            <Animated.View entering={FadeInDown.delay(200).duration(600)}>
+            <View>
               <View style={{ marginTop: 32, alignItems: 'center' }}>
                 <GlassSurface borderRadius={24} style={{ padding: 20, width: '100%' }}>
                   <Text
@@ -88,9 +87,9 @@ export const ForgotPasswordScreen: React.FC<Props> = ({ navigation }) => {
                   onPress={handleBack}
                 />
               </View>
-            </Animated.View>
+            </View>
           ) : (
-            <Animated.View entering={FadeInDown.delay(200).duration(600)}>
+            <View>
               <View style={{ marginTop: 32, gap: 16 }}>
                 <GlassSurface borderRadius={28} style={{ padding: 20 }}>
                   <FormField
@@ -129,7 +128,7 @@ export const ForgotPasswordScreen: React.FC<Props> = ({ navigation }) => {
                   Did not receive the email? Check your spam folder or try again.
                 </Text>
               </View>
-            </Animated.View>
+            </View>
           )}
         </View>
       </ScrollView>

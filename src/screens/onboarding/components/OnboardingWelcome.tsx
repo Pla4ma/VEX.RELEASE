@@ -1,6 +1,5 @@
 import React from 'react';
-import { useWindowDimensions } from 'react-native';
-import Animated, { FadeIn, FadeInUp } from 'react-native-reanimated';
+import { useWindowDimensions, View } from 'react-native';
 import { Box } from '../../../components/primitives/Box';
 import { Button } from '../../../components/primitives/Button';
 import { Text } from '../../../components/primitives/Text';
@@ -42,8 +41,7 @@ function AdaptivePreview(): JSX.Element {
           bg={theme.colors.background.tertiary}
           overflow="hidden"
         >
-          <Animated.View
-            entering={FadeIn.duration(800)}
+          <View
             style={{
               height: '100%',
               width: '40%',
@@ -52,11 +50,11 @@ function AdaptivePreview(): JSX.Element {
             }}
           />
         </Box>
-        <Animated.View entering={FadeInUp.delay(800).duration(400)}>
+        <View>
           <Text variant="caption" color="text.tertiary" textAlign="center">
             Study {'\u2022'} Run {'\u2022'} Project {'\u2022'} Clean
           </Text>
-        </Animated.View>
+        </View>
       </Box>
     </Box>
   );
@@ -70,7 +68,7 @@ export function OnboardingWelcome({
 
   return (
     <Box flex={1} justifyContent="space-between" px="xl" py="2xl">
-      <Animated.View entering={FadeIn.duration(600)}>
+      <View>
         <Box alignItems="center" gap="lg" mt="2xl">
           <Box
             width={64}
@@ -108,13 +106,13 @@ export function OnboardingWelcome({
             </Text>
           </Box>
         </Box>
-      </Animated.View>
+      </View>
 
-      <Animated.View entering={FadeInUp.delay(300).duration(600)}>
+      <View>
         <AdaptivePreview />
-      </Animated.View>
+      </View>
 
-      <Animated.View entering={FadeInUp.delay(600).duration(400)}>
+      <View>
         <Box gap="md">
           <Button
             size="lg"
@@ -131,7 +129,7 @@ export function OnboardingWelcome({
             Takes 90 seconds. No email required.
           </Text>
         </Box>
-      </Animated.View>
+      </View>
     </Box>
   );
 }

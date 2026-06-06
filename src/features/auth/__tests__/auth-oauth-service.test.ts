@@ -1,8 +1,21 @@
 import { Linking } from 'react-native';
+import * as AppleAuthentication from 'expo-apple-authentication';
 import * as repository from '../repository';
 import { completeOAuthCallback, startOAuthSignIn } from '../service';
 
 jest.mock('../repository');
+jest.mock('expo-apple-authentication', () => ({
+  __esModule: true,
+  AppleAuthenticationScope: {
+    EMAIL: 'email',
+    FULL_NAME: 'fullName',
+  },
+  AppleAuthenticationUserDetectionStatus: {
+    UNKNOWN: 1,
+  },
+  isAvailableAsync: jest.fn(),
+  signInAsync: jest.fn(),
+}));
 
 const mockUser = {
   id: '550e8400-e29b-41d4-a716-446655440000',
@@ -64,10 +77,42 @@ describe('OAuth auth service', () => {
     const result = await startOAuthSignIn('google');
 
     expect(result.error).toBeNull();
+    expect(result.user).toBeNull();
     expect(repository.startOAuthSignIn).toHaveBeenCalledWith('google');
     expect(Linking.openURL).toHaveBeenCalledWith(
       'https://project.supabase.co/auth/v1/authorize',
     );
+  });
+
+  it('uses native Apple sign in token', async () => {
+    jest.mocked(AppleAuthentication.isAvailableAsync).mockResolvedValue(true);
+    jest.mocked(AppleAuthentication.signInAsync).mockResolvedValue({
+      authorizationCode: 'code',
+      email: 'test@example.com',
+      fullName: null,
+      identityToken: 'apple-id-token',
+      realUserStatus: AppleAuthentication.AppleAuthenticationUserDetectionStatus.UNKNOWN,
+      state: null,
+      user: 'apple-user-id',
+    });
+    jest.mocked(repository.signInWithAppleIdToken).mockResolvedValue({
+      error: null,
+      user: mockUser,
+    });
+
+    const result = await startOAuthSignIn('apple');
+
+    expect(result.error).toBeNull();
+    expect(result.user?.id).toBe(mockUser.id);
+    expect(AppleAuthentication.signInAsync).toHaveBeenCalledWith({
+      nonce: expect.any(String),
+      requestedScopes: ['fullName', 'email'],
+    });
+    expect(repository.signInWithAppleIdToken).toHaveBeenCalledWith(
+      'apple-id-token',
+      expect.any(String),
+    );
+    expect(Linking.openURL).not.toHaveBeenCalled();
   });
 
   it('returns start errors without opening browser', async () => {
@@ -76,9 +121,10 @@ describe('OAuth auth service', () => {
       url: null,
     });
 
-    const result = await startOAuthSignIn('apple');
+    const result = await startOAuthSignIn('google');
 
     expect(result.error?.message).toBe('Provider disabled');
+    expect(result.user).toBeNull();
     expect(Linking.openURL).not.toHaveBeenCalled();
   });
 

@@ -1,6 +1,5 @@
 import React from 'react';
 import { View } from 'react-native';
-import Animated, { FadeInUp } from 'react-native-reanimated';
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
 import type { CompanionElement } from '../../../features/onboarding/types';
@@ -20,10 +19,7 @@ export function OnboardingChooseElement({
   const { theme } = useTheme();
   return (
     <View style={{ flex: 1 }}>
-      <Animated.View
-        entering={FadeInUp.duration(400)}
-        style={{ marginBottom: theme.spacing[4] }}
-      >
+      <View style={{ marginBottom: theme.spacing[4] }}>
         <Text
           variant="h2"
           color="text.primary"
@@ -39,7 +35,7 @@ export function OnboardingChooseElement({
           Your companion's element shapes its personality and grants unique
           bonuses.
         </Text>
-      </Animated.View>
+      </View>
 
       <View
         style={{
@@ -61,8 +57,7 @@ export function OnboardingChooseElement({
       </View>
 
       {selectedElement && (
-        <Animated.View
-          entering={FadeInUp.duration(300)}
+        <View
           style={{
             marginTop: theme.spacing[4],
             padding: theme.spacing[4],
@@ -79,7 +74,7 @@ export function OnboardingChooseElement({
           >
             {ELEMENTS.find((e) => e.id === selectedElement)?.lore}
           </Text>
-        </Animated.View>
+        </View>
       )}
     </View>
   );

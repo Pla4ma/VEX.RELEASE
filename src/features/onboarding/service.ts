@@ -77,8 +77,8 @@ export function goToPreviousStep(): void {
 export function skipOnboarding(): void {
   useOnboardingStore.getState().skipOnboarding();
 }
-export function completeOnboarding(): void {
-  useOnboardingStore.getState().completeOnboarding();
+export function completeOnboarding(userId?: string | null): void {
+  useOnboardingStore.getState().completeOnboarding(userId);
 }
 export class OnboardingError extends Error {
   constructor(

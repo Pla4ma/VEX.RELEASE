@@ -15,10 +15,8 @@ import { AppScreen } from '../../../components/primitives';
 import { useHomeSurfaceMap } from '../hooks/useHomeSurfaceMap';
 import { useHomeResolvedExperience } from '../hooks/useHomeResolvedExperience';
 import { useInterventionVisibility } from '../hooks/useInterventionVisibility';
-import { ModeNativeHome } from '../../../features/mode-native/components/ModeNativeHome';
 import type { HomeSurfaceMap } from '../../../features/home-experience/surface-decision-schemas';
 import type { ExtendedRootStackParams } from '../../../navigation/types';
-import type { ActiveStudyPlanData } from '../hooks/home-query-types';
 import type { HomeData } from '../hooks/useHomeData';
 import type { FeatureAccessMap } from '../../../features/liveops-config/feature-access';
 
@@ -40,16 +38,8 @@ export function HomeScreenInner({
     dismissIntervention,
     showToast,
     streakHoursRemaining,
-    hasActiveSession,
-    recentSessions,
     comebackSessionsCompleted,
     handleClaimReward,
-    todaysChallenges,
-    challengesQuery,
-    claimRewardMutation,
-    freezeStreakMutation,
-    savedPreview,
-    squadMembersFocusing,
     interventionLoading,
     displayedInterventionIdRef,
   } = data;
@@ -100,21 +90,16 @@ export function HomeScreenInner({
         controller.disclosure.inputs.totalCompletedSessions,
     });
 
-  const { interventionBannerProps, handleInterventionAction } =
-    useHomeScreenInnerEffects({
-      controller,
-      intervention,
-      interventionLoading,
-      dismissIntervention,
-      showToast,
-      displayedInterventionIdRef,
-      showIntervention,
-      interventionType,
-    });
-
-  const primaryLane = laneProfile.primaryLane;
-  const isDayZero =
-    controller.disclosure.inputs.totalCompletedSessions === 0;
+  const { interventionBannerProps } = useHomeScreenInnerEffects({
+    controller,
+    intervention,
+    interventionLoading,
+    dismissIntervention,
+    showToast,
+    displayedInterventionIdRef,
+    showIntervention,
+    interventionType,
+  });
 
   return (
     <AppScreen scroll padded>
@@ -127,29 +112,17 @@ export function HomeScreenInner({
           userId={controller.userId ?? ''}
         />
       )}
-      <ModeNativeHome
-        lane={primaryLane}
-        homeContext={{
-          hasActiveProject: !!(controller.activeStudyPlanQuery?.data as ActiveStudyPlanData | null),
-          projectTitle: undefined,
-          nextMove: undefined,
-          recentTopic: undefined,
-        }}
-        onStart={() => controller.openSetup()}
+      <HomeContent
+        controller={controller}
+        data={data as HomeData}
+        comebackSessionsCompleted={comebackSessionsCompleted ?? 0}
+        features={features}
+        handleClaimReward={handleClaimReward}
+        streakHoursRemaining={safeStreakHours}
+        surfaceMap={surfaceMap}
+        resolvedExperience={resolvedExperience}
+        firstWeekExperience={firstWeekExperience}
       />
-      {!isDayZero && (
-        <HomeContent
-          controller={controller}
-          data={data as HomeData}
-          comebackSessionsCompleted={comebackSessionsCompleted ?? 0}
-          features={features}
-          handleClaimReward={handleClaimReward}
-          streakHoursRemaining={safeStreakHours}
-          surfaceMap={surfaceMap}
-          resolvedExperience={resolvedExperience}
-          firstWeekExperience={firstWeekExperience}
-        />
-      )}
     </AppScreen>
   );
 }

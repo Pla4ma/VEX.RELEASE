@@ -11,7 +11,6 @@ import { View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { EtherealSkyBackground } from '../../../../screens/auth/components/ethereal/EtherealSkyBackground';
-import { useReducedMotion } from '../../../../hooks/useReducedMotion';
 import { HeroOrb } from './HeroOrb';
 import { StepTransition } from './StepTransition';
 import { OnboardingHeader } from './OnboardingHeader';
@@ -51,7 +50,6 @@ export function EtherealOnboardingShell({
   subtitle,
 }: EtherealOnboardingShellProps): React.JSX.Element {
   const insets = useSafeAreaInsets();
-  const { isReducedMotion } = useReducedMotion();
   const isLaunchStep = step === lastStepIndex;
   const showBack = step > 0;
 
@@ -70,7 +68,7 @@ export function EtherealOnboardingShell({
         <HeroOrb
           anchorX={orbAnchor.x}
           anchorY={orbAnchor.y}
-          size={isReducedMotion ? 80 : 96}
+          size={96}
         />
       </View>
 

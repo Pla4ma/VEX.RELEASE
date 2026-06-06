@@ -1,9 +1,7 @@
 import React from 'react';
 import { Pressable, View } from 'react-native';
-import Animated, { FadeInUp } from 'react-native-reanimated';
 
 import { Text } from '../../../components/primitives/Text';
-import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { useTheme } from '../../../theme';
 import { styles } from '../styles';
 import type { Lane } from '../../../features/lane-engine';
@@ -29,10 +27,6 @@ export const LANE_DESCRIPTIONS: Record<Lane, string> = {
 
 export function LaneChoiceStep({ onSelect }: LaneChoiceStepProps): JSX.Element {
   const { theme } = useTheme();
-  const { isReducedMotion } = useReducedMotion();
-  const cardIn = isReducedMotion
-    ? undefined
-    : FadeInUp.delay(100).duration(400);
 
   return (
     <View style={styles.section}>
@@ -45,13 +39,8 @@ export function LaneChoiceStep({ onSelect }: LaneChoiceStepProps): JSX.Element {
         VEX will adapt to your choice. Change anytime from Settings.
       </Text>
       <View style={styles.choiceGrid}>
-        {ALL_LANES.map((lane, index) => (
-          <Animated.View
-            entering={
-              isReducedMotion
-                ? undefined
-                : FadeInUp.delay(150 + index * 80).duration(400)
-            }
+        {ALL_LANES.map((lane) => (
+          <View
             key={lane}
             style={{ width: '100%' }}
           >
@@ -91,7 +80,7 @@ export function LaneChoiceStep({ onSelect }: LaneChoiceStepProps): JSX.Element {
                 </Text>
               </View>
             </Pressable>
-          </Animated.View>
+          </View>
         ))}
       </View>
     </View>

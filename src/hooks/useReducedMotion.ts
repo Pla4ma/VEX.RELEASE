@@ -50,6 +50,23 @@ interface ReducedMotionResult {
  * Hook to detect and respond to reduced motion preference
  */
 export function useReducedMotion(): ReducedMotionResult {
+  return {
+    isReducedMotion: true,
+    animationConfig: {
+      duration: 0,
+      skipAnimations: true,
+    },
+    springConfig: {
+      damping: 50,
+      stiffness: 500,
+      mass: 0.1,
+      overshootClamping: true,
+    },
+    staggerDelay: 0,
+  };
+}
+
+function useSystemReducedMotion(): ReducedMotionResult {
   // Use Reanimated 3's built-in hook as primary source
   const reanimatedReducedMotion = useReanimatedReducedMotion();
 

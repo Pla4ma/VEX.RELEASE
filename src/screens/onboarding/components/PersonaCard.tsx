@@ -1,14 +1,5 @@
 import React, { useState } from 'react';
-import { Pressable } from 'react-native';
-import Animated, {
-  FadeIn,
-  FadeInUp,
-  useAnimatedStyle,
-  withSpring,
-  useSharedValue,
-  withTiming,
-  withSequence,
-} from 'react-native-reanimated';
+import { Pressable, View } from 'react-native';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
@@ -18,14 +9,13 @@ import { lightColors } from '@/theme/tokens/colors';
 
 function ExampleMessage({
   text,
-  delay,
 }: {
   text: string;
   delay: number;
 }): JSX.Element {
   const { theme } = useTheme();
   return (
-    <Animated.View entering={FadeIn.delay(delay).duration(400)}>
+    <View>
       <Box
         p="sm"
         borderRadius="lg"
@@ -37,7 +27,7 @@ function ExampleMessage({
           {text}
         </Text>
       </Box>
-    </Animated.View>
+    </View>
   );
 }
 
@@ -45,7 +35,7 @@ export function PersonaCard({
   persona,
   isSelected,
   onPress,
-  index,
+  index: _index,
 }: {
   persona: CoachPersona;
   isSelected: boolean;
@@ -54,23 +44,12 @@ export function PersonaCard({
 }): JSX.Element {
   const { theme } = useTheme();
   const [showExamples, setShowExamples] = useState(false);
-  const scale = useSharedValue(1);
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
-  }));
   const handlePress = () => {
-    scale.value = withSequence(
-      withTiming(0.98, { duration: 100 }),
-      withSpring(1, { damping: 15, stiffness: 200 }),
-    );
     setShowExamples(true);
     onPress();
   };
   return (
-    <Animated.View
-      entering={FadeInUp.delay(index * 150).duration(400)}
-      style={animatedStyle}
-    >
+    <View>
       <Pressable
         onPress={handlePress}
         accessibilityLabel={`${persona.name} persona`}
@@ -89,7 +68,6 @@ export function PersonaCard({
           borderColor={isSelected ? persona.color : theme.colors.border.DEFAULT}
           gap="md"
         >
-          {}
           <Box flexDirection="row" alignItems="center" gap="md">
             <Box
               width={48}
@@ -105,7 +83,7 @@ export function PersonaCard({
             <Box flex={1}>
               <Text
                 variant="h4"
-                color={isSelected ? 'text.primary' : 'text.primary'}
+                color="text.primary"
                 fontWeight={isSelected ? '700' : '600'}
               >
                 {persona.name}
@@ -115,7 +93,6 @@ export function PersonaCard({
               </Text>
             </Box>
 
-            {}
             <Box
               width={24}
               height={24}
@@ -134,7 +111,6 @@ export function PersonaCard({
             </Box>
           </Box>
 
-          {}
           {(isSelected || showExamples) && (
             <Box gap="sm">
               {persona.examples.map((example, i) => (
@@ -144,6 +120,6 @@ export function PersonaCard({
           )}
         </Box>
       </Pressable>
-    </Animated.View>
+    </View>
   );
 }

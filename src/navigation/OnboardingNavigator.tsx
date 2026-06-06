@@ -25,7 +25,7 @@ export const OnboardingNavigator: React.FC = () => {
   const route = useRoute<RouteProp<RootStackParams, 'Onboarding'>>();
 
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Navigator screenOptions={{ animation: 'none', headerShown: false }}>
       <Stack.Screen
         name="OnboardingFlow"
         initialParams={route.params}

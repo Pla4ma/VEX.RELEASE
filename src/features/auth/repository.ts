@@ -89,6 +89,25 @@ export async function startOAuthSignIn(
   return { url: data.url, error: null };
 }
 
+export async function signInWithAppleIdToken(
+  token: string,
+  nonce: string,
+): Promise<AuthResult> {
+  const { data, error } = await getSupabaseClient().auth.signInWithIdToken({
+    nonce,
+    provider: 'apple',
+    token,
+  });
+
+  if (error) {
+    return { user: null, error: handleSupabaseError(error) };
+  }
+
+  const user = data.user ? mapSupabaseUser(data.user) : null;
+  const finalUser = user ? await attachOnboardingCompletion(user, null) : null;
+  return { user: finalUser, error: null };
+}
+
 export async function completeOAuthCallback(url: string): Promise<AuthResult> {
   const parsed = new URL(url);
   const errorDescription = parsed.searchParams.get('error_description');

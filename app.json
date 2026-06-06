@@ -15,6 +15,7 @@
     ],
     "ios": {
       "supportsTablet": true,
+      "usesAppleSignIn": true,
       "bundleIdentifier": "com.jonathan.vex",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false,

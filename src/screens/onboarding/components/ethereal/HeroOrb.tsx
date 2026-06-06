@@ -1,20 +1,11 @@
 /**
  * HeroOrb — persistent luminous orb that follows the user through
- * the onboarding journey. Continuous breath + parallax translate.
+ * the onboarding journey. Static (motion stripped for performance).
  */
-import React, { useEffect } from 'react';
-import Animated, {
-  Easing,
-  useAnimatedStyle,
-  useSharedValue,
-  withRepeat,
-  withTiming,
-} from 'react-native-reanimated';
+import React from 'react';
+import { View, type ViewStyle } from 'react-native';
 
 import { etherealOrb } from '@/theme/tokens/ethereal-sky';
-import { timingPresets } from '@/theme/tokens/motion';
-import { useReducedMotion } from '@/hooks/useReducedMotion';
-import { useDeviceTilt } from '@/hooks/useDeviceTilt';
 
 type HeroOrbProps = {
   size?: number;
@@ -24,60 +15,42 @@ type HeroOrbProps = {
   anchorY?: number;
 };
 
-const BREATH_DURATION_MS = 2600;
-const ROTATION_DURATION_MS = 30000;
-
 export function HeroOrb({
   size = 96,
   anchorX = 0.5,
   anchorY = 0.18,
 }: HeroOrbProps): React.JSX.Element {
-  const { isReducedMotion } = useReducedMotion();
-  const { tiltX, tiltY } = useDeviceTilt();
-  const breath = useSharedValue(0.5);
-  const rotation = useSharedValue(0);
+  const outerHaloStyle: ViewStyle = {
+    position: 'absolute',
+    width: size * 2.4,
+    height: size * 2.4,
+    borderRadius: size * 1.2,
+    backgroundColor: etherealOrb.outerGlow,
+  };
 
-  useEffect(() => {
-    if (isReducedMotion) {return;}
-    breath.value = withRepeat(
-      withTiming(1, {
-        duration: BREATH_DURATION_MS,
-        easing: Easing.bezier(...timingPresets.breath.easing),
-      }),
-      -1,
-      true,
-    );
-    rotation.value = withRepeat(
-      withTiming(360, { duration: ROTATION_DURATION_MS, easing: Easing.linear }),
-      -1,
-      false,
-    );
-  }, [breath, rotation, isReducedMotion]);
+  const innerHaloStyle: ViewStyle = {
+    position: 'absolute',
+    width: size * 1.5,
+    height: size * 1.5,
+    borderRadius: size * 0.75,
+    backgroundColor: etherealOrb.innerGlow,
+  };
 
-  const orbStyle = useAnimatedStyle(() => {
-    const t = breath.value;
-    return {
-      transform: [
-        { perspective: 800 },
-        { rotateX: `${-tiltY.value * 6}deg` },
-        { rotateY: `${tiltX.value * 9}deg` },
-        { scale: 0.94 + t * 0.12 },
-        { rotate: `${rotation.value}deg` },
-      ],
-      opacity: 0.9 + t * 0.1,
-    };
-  });
-
-  const haloStyle = useAnimatedStyle(() => {
-    const t = breath.value;
-    return {
-      transform: [{ scale: 1 + t * 0.35 }],
-      opacity: 0.5 - t * 0.3,
-    };
-  });
+  const coreStyle: ViewStyle = {
+    width: size,
+    height: size,
+    borderRadius: size / 2,
+    backgroundColor: etherealOrb.core,
+    shadowColor: etherealOrb.ring,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.9,
+    shadowRadius: 24,
+    borderWidth: 1,
+    borderColor: etherealOrb.ring,
+  };
 
   return (
-    <Animated.View
+    <View
       accessibilityElementsHidden
       importantForAccessibility="no"
       pointerEvents="none"
@@ -93,47 +66,9 @@ export function HeroOrb({
         justifyContent: 'center',
       }}
     >
-      <Animated.View
-        style={[
-          {
-            position: 'absolute',
-            width: size * 2.4,
-            height: size * 2.4,
-            borderRadius: size * 1.2,
-            backgroundColor: etherealOrb.outerGlow,
-          },
-          haloStyle,
-        ]}
-      />
-      <Animated.View
-        style={[
-          {
-            position: 'absolute',
-            width: size * 1.5,
-            height: size * 1.5,
-            borderRadius: size * 0.75,
-            backgroundColor: etherealOrb.innerGlow,
-          },
-          haloStyle,
-        ]}
-      />
-      <Animated.View
-        style={[
-          {
-            width: size,
-            height: size,
-            borderRadius: size / 2,
-            backgroundColor: etherealOrb.core,
-            shadowColor: etherealOrb.ring,
-            shadowOffset: { width: 0, height: 0 },
-            shadowOpacity: 0.9,
-            shadowRadius: 24,
-            borderWidth: 1,
-            borderColor: etherealOrb.ring,
-          },
-          orbStyle,
-        ]}
-      />
-    </Animated.View>
+      <View style={outerHaloStyle} />
+      <View style={innerHaloStyle} />
+      <View style={coreStyle} />
+    </View>
   );
 }

@@ -108,12 +108,20 @@ export function createAuthActions(set: AuthStateSetter): AuthActions {
     loginWithOAuth: async (provider) => {
       try {
         setAuthLoading(set);
-        const { error } = await authService.startOAuthSignIn(provider);
-        set((state) => {
-          state.isLoading = false;
-          state.error = error?.message ?? null;
-        });
-        return !error;
+        const { user, error } = await authService.startOAuthSignIn(provider);
+        if (!error && !user) {
+          set((state) => {
+            state.isLoading = false;
+            state.error = null;
+          });
+          return true;
+        }
+        if (error || !user) {
+          setAuthError(set, error?.message ?? 'Social sign in failed');
+          return false;
+        }
+        await finishLogin(set, user);
+        return true;
       } catch (err) {
         setAuthError(set, toError(err).message);
         captureException(toError(err), { tags: { feature: 'auth-oauth-start' } });

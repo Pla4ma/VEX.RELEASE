@@ -1,10 +1,5 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { View } from 'react-native';
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withSpring,
-} from 'react-native-reanimated';
 
 import { ProgressBar } from '../../../components/ProgressBar';
 import { getPremiumCardStyle } from '../../../components/premiumStyles';
@@ -35,19 +30,6 @@ export function RevealStep({
   progress,
 }: RevealStepProps): JSX.Element {
   const { theme } = useTheme();
-  const scale = useSharedValue(0.8);
-
-  useEffect(() => {
-    scale.value = 0.8;
-    scale.value = withSpring(1, {
-      damping: 14,
-      stiffness: 120,
-    });
-  }, [scale]);
-
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
-  }));
 
   return (
     <View style={styles.section}>
@@ -60,9 +42,8 @@ export function RevealStep({
         This is the version of VEX you just built for yourself.
       </Text>
 
-      <Animated.View
+      <View
         style={[
-          animatedStyle,
           styles.identityCard,
           getPremiumCardStyle('large'),
           {
@@ -192,7 +173,7 @@ export function RevealStep({
           0 / 3 sessions needed
           </Text>
         </View>
-      </Animated.View>
+      </View>
     </View>
   );
 }

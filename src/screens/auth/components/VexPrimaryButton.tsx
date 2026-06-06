@@ -1,11 +1,9 @@
 import React from 'react';
 import { Pressable, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import Animated from 'react-native-reanimated';
 
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
-import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { buttonTap } from '../../../utils/haptics';
 import { getMinTouchTargetStyle } from '../../../utils/touchTarget';
 import { lightColors } from '@/theme/tokens/colors';
@@ -26,150 +24,88 @@ export function VexActivationButton({
   onPress,
 }: VexActivationButtonProps): React.JSX.Element {
   const { theme } = useTheme();
-  const { isReducedMotion } = useReducedMotion();
-  const { handlePressIn, handlePressOut, animatedStyle, glowStyle, auraStyle } = useButtonPressHandlers(isReducedMotion);
+  const { handlePressIn, handlePressOut } = useButtonPressHandlers(true);
 
   return (
     <View style={{ alignItems: 'center' }}>
-      {/* Ambient pulse glow behind button */}
-      <Animated.View
-        pointerEvents="none"
-        style={[
-          {
-            position: 'absolute',
-            top: -24,
-            bottom: -24,
-            left: -24,
-            right: -24,
-            borderRadius: 9999,
-            backgroundColor: rgbaColors.rgb_255_138_36_0_04,
-            shadowColor: lightColors.semantic.brandOrange,
-            shadowOffset: { width: 0, height: 0 },
-            shadowOpacity: 0.5,
-            shadowRadius: 50,
-          },
-          auraStyle,
-        ]}
-      />
-
-      {/* Orange glow beneath */}
-      <Animated.View
-        style={[
-          {
-            position: 'absolute',
-            top: 6,
-            bottom: -6,
-            alignSelf: 'center',
-            width: '80%',
-            borderRadius: theme.borderRadius['2xl'],
-            shadowColor: lightColors.semantic.brandOrange,
-            shadowOffset: { width: 0, height: 8 },
-            shadowRadius: 30,
-          },
-          glowStyle,
-        ]}
-      />
-
-      <Animated.View
-        style={[
+      <Pressable
+        accessibilityHint="Authenticates and opens your VEX workspace"
+        accessibilityLabel={label}
+        accessibilityRole="button"
+        accessibilityState={{ busy: isLoading, disabled: isLoading }}
+        disabled={isLoading}
+        onPressIn={handlePressIn}
+        onPressOut={handlePressOut}
+        onPress={() => {
+          buttonTap();
+          onPress();
+        }}
+        style={({ pressed }) => [
+          getMinTouchTargetStyle(),
           {
             borderRadius: theme.borderRadius['2xl'],
+            overflow: 'hidden',
+            opacity: isLoading ? 0.85 : pressed ? 0.94 : 1,
+          },
+        ]}
+      >
+        {/* Violet to orange gradient body */}
+        <LinearGradient
+          colors={[lightColors.accent.purple, lightColors.accent.purple, lightColors.semantic.warning, lightColors.accent.orange]}
+          locations={[0, 0.35, 0.72, 1]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={{
+            minHeight: 56,
+            alignItems: 'center',
+            justifyContent: 'center',
+            paddingHorizontal: theme.spacing[6],
             shadowColor: lightColors.text.primary,
             shadowOffset: { width: 0, height: 4 },
             shadowOpacity: 0.4,
             shadowRadius: 12,
             elevation: 8,
-          },
-          animatedStyle,
-        ]}
-      >
-        <Pressable
-          accessibilityHint="Authenticates and opens your VEX workspace"
-          accessibilityLabel={label}
-          accessibilityRole="button"
-          accessibilityState={{ busy: isLoading, disabled: isLoading }}
-          disabled={isLoading}
-          onPressIn={handlePressIn}
-          onPressOut={handlePressOut}
-          onPress={() => {
-            buttonTap();
-            onPress();
           }}
-          style={({ pressed }) => [
-            getMinTouchTargetStyle(),
-            {
-              borderRadius: theme.borderRadius['2xl'],
-              overflow: 'hidden',
-              opacity: isLoading ? 0.85 : 1,
-            },
-          ]}
         >
-          {/* Violet to orange gradient body */}
+          {/* Inner shadow — top */}
           <LinearGradient
-            colors={[lightColors.accent.purple, lightColors.accent.purple, lightColors.semantic.warning, lightColors.accent.orange]}
-            locations={[0, 0.35, 0.72, 1]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
+            colors={[rgbaColors.rgb_0_0_0_0_14, rgbaColors.rgb_0_0_0_0]}
+            locations={[0, 0.35]}
+            pointerEvents="none"
+            style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}
+          />
+
+          {/* Top shine line */}
+          <View
+            pointerEvents="none"
             style={{
-              minHeight: 56,
-              alignItems: 'center',
-              justifyContent: 'center',
-              paddingHorizontal: theme.spacing[6],
+              position: 'absolute',
+              top: 1,
+              left: 40,
+              right: 40,
+              height: 1.5,
+              backgroundColor: rgbaColors.rgb_255_255_255_0_45,
+              borderRadius: 1,
+            }}
+          />
+
+          {/* White text with crisp glow */}
+          <Text
+            color="semantic.liquidButtonText"
+            fontSize={16}
+            fontWeight="700"
+            letterSpacing={0.3}
+            textAlign="center"
+            style={{
+              textShadowColor: rgbaColors.rgb_255_255_255_0_3,
+              textShadowOffset: { width: 0, height: 0 },
+              textShadowRadius: 6,
             }}
           >
-            {/* Inner shadow — top */}
-            <LinearGradient
-              colors={[rgbaColors.rgb_0_0_0_0_14, rgbaColors.rgb_0_0_0_0]}
-              locations={[0, 0.35]}
-              pointerEvents="none"
-              style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}
-            />
-
-            {/* Top shine line */}
-            <View
-              pointerEvents="none"
-              style={{
-                position: 'absolute',
-                top: 1,
-                left: 40,
-                right: 40,
-                height: 1.5,
-                backgroundColor: rgbaColors.rgb_255_255_255_0_45,
-                borderRadius: 1,
-              }}
-            />
-
-            {/* Light sweep */}
-            <Animated.View
-              pointerEvents="none"
-              style={{
-                position: 'absolute',
-                top: 0,
-                bottom: 0,
-                width: 60,
-                backgroundColor: rgbaColors.rgb_255_255_255_0_06,
-                transform: [{ skewX: '-25deg' }, { translateX: -120 }],
-              }}
-            />
-
-            {/* White text with crisp glow */}
-            <Text
-              color="semantic.liquidButtonText"
-              fontSize={16}
-              fontWeight="700"
-              letterSpacing={0.3}
-              textAlign="center"
-              style={{
-                textShadowColor: rgbaColors.rgb_255_255_255_0_3,
-                textShadowOffset: { width: 0, height: 0 },
-                textShadowRadius: 6,
-              }}
-            >
-              {isLoading ? loadingLabel : `${label}  \u2192`}
-            </Text>
-          </LinearGradient>
-        </Pressable>
-      </Animated.View>
+            {isLoading ? loadingLabel : `${label}  \u2192`}
+          </Text>
+        </LinearGradient>
+      </Pressable>
     </View>
   );
 }

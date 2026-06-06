@@ -1,13 +1,5 @@
 import React from 'react';
-import { Pressable } from 'react-native';
-import Animated, {
-  FadeInUp,
-  useAnimatedStyle,
-  withSpring,
-  useSharedValue,
-  withTiming,
-  withSequence,
-} from 'react-native-reanimated';
+import { Pressable, View } from 'react-native';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
@@ -24,29 +16,14 @@ export function GoalCard({
   goal,
   isSelected,
   onPress,
-  index,
+  index: _index,
 }: GoalCardProps): JSX.Element {
   const { theme } = useTheme();
-  const scale = useSharedValue(1);
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
-  }));
-
-  const handlePress = () => {
-    scale.value = withSequence(
-      withTiming(0.95, { duration: 100 }),
-      withSpring(1, { damping: 15, stiffness: 200 }),
-    );
-    onPress();
-  };
 
   return (
-    <Animated.View
-      entering={FadeInUp.delay(index * 100).duration(400)}
-      style={[{ flex: 1 }, animatedStyle]}
-    >
+    <View style={{ flex: 1 }}>
       <Pressable
-        onPress={handlePress}
+        onPress={onPress}
         accessibilityLabel={goal.title}
         accessibilityRole="button"
         accessibilityHint={`Select ${goal.title} as your goal`}
@@ -110,6 +87,6 @@ export function GoalCard({
           </Box>
         </Box>
       </Pressable>
-    </Animated.View>
+    </View>
   );
 }

@@ -36,9 +36,9 @@ export function createNavigationActions(set: SetFn, get: GetFn) {
         profileStepsCompleted: true,
       }),
 
-    completeOnboarding: () =>
+    completeOnboarding: (userId?: string | null) =>
       set({
-        ...mergeOnboardingCompletion(true, Date.now()),
+        ...mergeOnboardingCompletion(true, Date.now(), userId),
         profileStepsCompleted: true,
       }),
 

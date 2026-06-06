@@ -21,7 +21,7 @@ export interface OnboardingActions {
   nextStep: () => void;
   previousStep: () => void;
   skipOnboarding: () => void;
-  completeOnboarding: () => void;
+  completeOnboarding: (userId?: string | null) => void;
   resetOnboarding: () => void;
   canSkipCurrentStep: () => boolean;
   canCompleteForUser: (userId: string | null | undefined) => boolean;

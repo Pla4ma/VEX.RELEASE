@@ -21,6 +21,14 @@ describe('focus score service', () => {
     expect(repository.fetchCurrentFocusScore).toHaveBeenCalledWith(userId);
   });
 
+  it('returns an empty current score when repository sync fails', async () => {
+    jest
+      .mocked(repository.fetchCurrentFocusScore)
+      .mockRejectedValue(new Error('focus identity repository failed'));
+
+    await expect(getCurrentFocusScore(userId)).resolves.toBeNull();
+  });
+
   it('loads score history through the repository layer', async () => {
     jest.mocked(repository.fetchFocusScoreHistory).mockResolvedValue([]);
 

@@ -1,12 +1,10 @@
 import React from 'react';
 import { View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Button } from '../../../components/primitives/Button';
 import { Text } from '../../../components/primitives/Text';
-import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { useTheme } from '../../../theme';
 import { getHeroGradientColors } from '../../home/HomeScreenVisuals';
 import { styles } from '../styles';
@@ -33,23 +31,15 @@ export function LauncherStep({
 }: LauncherStepProps): JSX.Element {
   const insets = useSafeAreaInsets();
   const { theme } = useTheme();
-  const { isReducedMotion } = useReducedMotion();
   const stepPadding = {
     paddingBottom: insets.bottom + theme.spacing[6],
     paddingTop: theme.spacing[6],
   };
-  const riseIn = isReducedMotion ? undefined : FadeInUp.duration(500);
-  const titleIn = isReducedMotion
-    ? undefined
-    : FadeInUp.delay(150).duration(500);
-  const actionIn = isReducedMotion
-    ? undefined
-    : FadeInDown.delay(500).duration(500);
 
   if (hasSeenFirstWin) {
     return (
       <View style={[styles.fullStepSection, stepPadding]}>
-        <Animated.View entering={riseIn}>
+        <View>
           <Text
             style={[
               styles.lockInTitle,
@@ -59,8 +49,8 @@ export function LauncherStep({
           >
             Your first session is saved.
           </Text>
-        </Animated.View>
-        <Animated.View entering={titleIn}>
+        </View>
+        <View>
           <Text
             style={[
               styles.lockInBody,
@@ -71,19 +61,14 @@ export function LauncherStep({
             VEX is learning what helps you start. Come back tomorrow and it will
             be ready.
           </Text>
-        </Animated.View>
+        </View>
         <View style={styles.celebrationStats}>
           {[
             'Session complete',
             'Progress saved',
             'VEX is learning',
-          ].map((stat, index) => (
-            <Animated.View
-              entering={
-                isReducedMotion
-                  ? undefined
-                  : FadeInUp.delay(250 + index * 80).duration(450)
-              }
+          ].map((stat) => (
+            <View
               key={stat}
               style={[
                 styles.celebrationStatCard,
@@ -102,10 +87,10 @@ export function LauncherStep({
               >
                 {stat}
               </Text>
-            </Animated.View>
+            </View>
           ))}
         </View>
-        <Animated.View entering={actionIn} style={styles.fullWidth}>
+        <View style={styles.fullWidth}>
           <Button
             fullWidth
             onPress={() =>
@@ -121,7 +106,7 @@ export function LauncherStep({
           >
             Enter VEX
           </Button>
-        </Animated.View>
+        </View>
       </View>
     );
   }

@@ -20,6 +20,12 @@ export function validateTick(
   timestamp: number,
   flagViolation: FlagFn,
 ): TickValidationResult {
+  const lastElapsed =
+    tickHistory.length > 0
+      ? tickHistory[tickHistory.length - 1]!.elapsed
+      : null;
+  const elapsedDelta = lastElapsed === null ? 0 : elapsed - lastElapsed;
+
   if (lastTickTime > 0) {
     const timeSinceLastTick = timestamp - lastTickTime;
     if (timeSinceLastTick < 0) {
@@ -31,7 +37,10 @@ export function validateTick(
       });
       return { valid: false, warning: 'Time manipulation detected' };
     }
-    if (timeSinceLastTick < THRESHOLDS.MIN_TICK_INTERVAL) {
+    if (
+      timeSinceLastTick < THRESHOLDS.MIN_TICK_INTERVAL &&
+      elapsedDelta > THRESHOLDS.MIN_TICK_INTERVAL
+    ) {
       flagViolation('TIME_MANIPULATION', 'WARNING', {
         reason: 'Tick interval too short',
         expected: THRESHOLDS.MIN_TICK_INTERVAL,
@@ -49,9 +58,7 @@ export function validateTick(
       });
     }
   }
-  if (tickHistory.length > 0) {
-    const lastElapsed = tickHistory[tickHistory.length - 1]!.elapsed;
-    const elapsedDelta = elapsed - lastElapsed;
+  if (lastElapsed !== null) {
     if (elapsedDelta < 0) {
       flagViolation('TIME_MANIPULATION', 'CRITICAL', {
         reason: 'Elapsed time decreased',

@@ -1,33 +1,21 @@
 /**
  * EtherealSkyBackground — the full Ethereal Sky visual stack.
+ * Static (motion stripped for performance).
  * Layers (back to front):
  *   1. 3-stop dawn gradient
- *   2. God rays (Skia, top-down light shafts)
- *   3. Light flare (large ambient halo)
- *   4. Starfield (twinkling stars in the upper sky)
- *   5. Cloud puffs (3 parallax layers, tilt-aware)
- *   6. Skia particles (gold/silver/rose dust with physics)
- *   7. Light shaft (subtle beam from top)
+ *   2. God rays (static Skia, top-down light shafts)
+ *   3. Light flare (static large ambient halo)
+ *   4. Starfield (static stars in the upper sky)
+ *   5. Cloud puffs (static, no parallax)
+ *   6. Skia particles (static, gold/silver/rose dust)
+ *   7. Light shaft (static beam from top)
  *   8. Film grain
- *
- * Every layer except the gradient responds to device tilt for a
- * premium parallax feel.
  */
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { useWindowDimensions, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import Animated, {
-  Easing,
-  useAnimatedStyle,
-  useSharedValue,
-  withDelay,
-  withTiming,
-} from 'react-native-reanimated';
 
 import { etherealSkyGradient, etherealOrb } from '@/theme/tokens/ethereal-sky';
-import { timingPresets } from '@/theme/tokens/motion';
-import { useReducedMotion } from '@/hooks/useReducedMotion';
-import { useDeviceTilt } from '@/hooks/useDeviceTilt';
 
 import { CloudPuff } from './CloudPuff';
 import { LightShaft } from './LightShaft';
@@ -92,38 +80,12 @@ function FilmGrain(): React.JSX.Element {
 }
 
 export function EtherealSkyBackground(): React.JSX.Element {
-  const { isReducedMotion } = useReducedMotion();
-  const { tiltX, tiltY } = useDeviceTilt();
-  const enter = useSharedValue(isReducedMotion ? 1 : 0);
-
-  useEffect(() => {
-    if (isReducedMotion) {return;}
-    enter.value = withDelay(
-      0,
-      withTiming(1, {
-        duration: timingPresets.enter.duration,
-        easing: Easing.bezier(...timingPresets.enter.easing),
-      }),
-    );
-  }, [enter, isReducedMotion]);
-
-  const skyEnterStyle = useAnimatedStyle(() => ({ opacity: enter.value }));
-  const tiltStyle = useAnimatedStyle(() => ({
-    transform: [
-      { translateX: tiltX.value * 4 },
-      { translateY: tiltY.value * 3 },
-    ],
-  }));
-
   return (
-    <Animated.View
+    <View
       accessibilityElementsHidden
       importantForAccessibility="no"
       pointerEvents="none"
-      style={[
-        { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 },
-        skyEnterStyle,
-      ]}
+      style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}
     >
       <LinearGradient
         colors={[
@@ -159,7 +121,7 @@ export function EtherealSkyBackground(): React.JSX.Element {
         size={200}
       />
       <Starfield />
-      <Animated.View style={[{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }, tiltStyle]}>
+      <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}>
         {CLOUDS.map((c, i) => (
           <CloudPuff
             key={i}
@@ -172,10 +134,10 @@ export function EtherealSkyBackground(): React.JSX.Element {
             topPercent={c.topPercent}
           />
         ))}
-      </Animated.View>
+      </View>
       <SkiaParticles />
       <LightShaft />
       <FilmGrain />
-    </Animated.View>
+    </View>
   );
 }

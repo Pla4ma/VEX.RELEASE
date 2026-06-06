@@ -1,5 +1,4 @@
 import React from 'react';
-import Animated, { FadeIn, FadeInUp } from 'react-native-reanimated';
 import { Box } from '../../../components/primitives/Box';
 import { Button } from '../../../components/primitives/Button';
 import { Text } from '../../../components/primitives/Text';
@@ -63,7 +62,7 @@ export function OnboardingChooseGoal({
 }: OnboardingChooseGoalProps): JSX.Element {
   return (
     <Box flex={1} justifyContent="space-between" px="xl" py="2xl">
-      <Animated.View entering={FadeIn.duration(400)}>
+      <View>
         <Box gap="md" mt="xl">
           <Text fontSize={40}>{'\uD83C\uDFAF'}</Text>
           <Box gap="sm">
@@ -75,7 +74,7 @@ export function OnboardingChooseGoal({
             </Text>
           </Box>
         </Box>
-      </Animated.View>
+      </View>
 
       <Box gap="md" flex={1} justifyContent="center">
         <Box flexDirection="row" gap="md">
@@ -108,7 +107,7 @@ export function OnboardingChooseGoal({
         </Box>
       </Box>
 
-      <Animated.View entering={FadeInUp.delay(500).duration(400)}>
+      <View>
         <Box gap="md">
           <Button
             size="lg"
@@ -127,9 +126,11 @@ export function OnboardingChooseGoal({
             {selectedGoal ? 'Continue' : 'Select a goal'}
           </Button>
         </Box>
-      </Animated.View>
+      </View>
     </Box>
   );
 }
+
+import { View } from 'react-native';
 
 export default OnboardingChooseGoal;
