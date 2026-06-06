@@ -7,7 +7,7 @@ import {
   useCreateRecommendation,
   useUpdateRecommendationStatus,
 } from '../../../features/ai-coach/hooks/useRecommendationMutations';
-import { useActiveCoachRecommendations } from '../../../features/ai-coach/hooks/useCoachRecommendations';
+import { useHomeRecommendations } from '../../../features/ai-coach/hooks';
 import { useActiveStudyPlan } from '../../../features/content-study';
 import {
   buildLearningSessionParams,
@@ -67,7 +67,7 @@ export function useEngagedContainerModel(
   const learningExecutionLayer = useLearningExecutionLayer(activeStudyPlanQuery.data ?? null);
   const comebackQuery = useComebackState(runtime.canQueryComeback ? userId : null);
   const { primaryRecommendation, isPending: recommendationsPending } =
-    useActiveCoachRecommendations(userId, runtime.canQueryCoach && !disclosure.isLoading);
+    useHomeRecommendations(userId, runtime.canQueryCoach && !disclosure.isLoading);
 
   const canNavigateContentStudy = isFeatureAvailableForNavigation(
     getFeatureAvailability(disclosure.features.content_study),

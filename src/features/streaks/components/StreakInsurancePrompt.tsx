@@ -13,6 +13,7 @@ import Animated, { FadeInUp, FadeOut } from 'react-native-reanimated';
 import { useTheme } from '../../../theme';
 import { createSheet } from '@/shared/ui/create-sheet';
 import { lightColors } from '@/theme/tokens/colors';
+import { rgbaColors } from '@/theme/tokens/rgba-colors';
 
 
 interface StreakInsurancePromptProps {
@@ -132,7 +133,7 @@ const styles = createSheet({
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: 'rgba(233,69,96,0.2)',
+    backgroundColor: rgbaColors.rgb_233_69_96_0_2,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -172,7 +173,7 @@ const styles = createSheet({
     fontSize: 12,
   },
   warningBanner: {
-    backgroundColor: 'rgba(233,69,96,0.1)',
+    backgroundColor: rgbaColors.rgb_233_69_96_0_1,
     paddingHorizontal: 16,
     paddingVertical: 6,
   },

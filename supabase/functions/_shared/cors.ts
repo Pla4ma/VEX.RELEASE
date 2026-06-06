@@ -1,17 +1,15 @@
-const PRODUCTION_ORIGINS = [
-  'https://vex.app',
-  'https://www.vex.app',
+const PRODUCTION_ORIGINS_PATTERNS: ReadonlyArray<RegExp> = [
+  /^https:\/\/vex\.app$/,
+  /^https:\/\/[a-z0-9-]+\.vex\.app$/,
 ] as const;
 
-const DEVELOPMENT_ORIGINS: readonly string[] = [
-  ...PRODUCTION_ORIGINS,
+const DEVELOPMENT_ORIGINS = [
   'http://localhost:8081',
   'http://localhost:19006',
-];
+] as const;
 
-function getAllowedOrigins(): readonly string[] {
-  const env = Deno.env.get('ENVIRONMENT') ?? 'development';
-  return env === 'production' ? PRODUCTION_ORIGINS : DEVELOPMENT_ORIGINS;
+function matchesOriginPattern(origin: string): boolean {
+  return PRODUCTION_ORIGINS_PATTERNS.some((pattern) => pattern.test(origin));
 }
 
 type CorsOptions = {
@@ -23,16 +21,21 @@ type CorsOptions = {
 export function resolveCorsOrigin(request: Request): string {
   const origin = request.headers.get('origin');
   if (!origin) {
-    return getAllowedOrigins()[0];
+    return 'https://vex.app';
   }
 
-  const allowed = getAllowedOrigins();
-  if (allowed.includes(origin)) {
+  if (matchesOriginPattern(origin)) {
     return origin;
   }
 
-  // Reject unknown origins — do not mirror them
-  return getAllowedOrigins()[0];
+  const isDev = (Deno.env.get('ENVIRONMENT') ?? 'development') !== 'production';
+  if (isDev) {
+    for (const devOrigin of DEVELOPMENT_ORIGINS) {
+      if (origin === devOrigin) return origin;
+    }
+  }
+
+  return 'https://vex.app';
 }
 
 export function buildCorsHeaders(

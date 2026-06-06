@@ -9,7 +9,7 @@ import { createDebugger } from '../../../utils/debug';
 import {
   hasRequestedOnboardingNotificationPrompt,
   markOnboardingNotificationPromptRequested,
-} from '../../../features/ai-coach/services';
+} from '../../../features/ai-coach/service/notification-permissions';
 import { scheduleOnboardingNotifications } from '../../../features/notifications/retention-strategy';
 import { trackNotificationPermission } from '../../../features/notifications/analytics';
 import { registerPushToken } from '../../../features/notifications/service';

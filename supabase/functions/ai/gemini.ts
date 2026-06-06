@@ -10,9 +10,9 @@ export async function callGemini(params: {
   let attempt = 0;
   let lastError: Error | null = null;
   while (attempt < RETRY_CONFIG.MAX_RETRIES) {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), params.timeoutMs);
     try {
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), params.timeoutMs);
       const response = await httpRequest(
         `https://generativelanguage.googleapis.com/v1beta/models/${params.model}:generateContent`,
         {
@@ -27,7 +27,6 @@ export async function callGemini(params: {
           signal: controller.signal,
         },
       );
-      clearTimeout(timeout);
       if (!response.ok) throw new Error(`Gemini API error: ${response.status}`);
       const payload = (await response.json()) as GeminiAPIResponse;
       const content = payload.candidates?.[0]?.content?.parts?.map((part) => part.text).join('\n');
@@ -38,6 +37,8 @@ export async function callGemini(params: {
       attempt += 1;
       if (attempt >= RETRY_CONFIG.MAX_RETRIES) break;
       await new Promise((resolve) => setTimeout(resolve, Math.min(RETRY_CONFIG.INITIAL_DELAY_MS * RETRY_CONFIG.BACKOFF_MULTIPLIER ** (attempt - 1), RETRY_CONFIG.MAX_DELAY_MS)));
+    } finally {
+      clearTimeout(timeout);
     }
   }
   throw lastError ?? new Error('Gemini call failed');

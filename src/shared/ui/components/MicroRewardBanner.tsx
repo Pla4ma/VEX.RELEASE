@@ -3,6 +3,7 @@ import { View, ViewStyle, Pressable } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
+  useReducedMotion,
   withSpring,
   FadeInUp,
   FadeOutUp,
@@ -43,6 +44,7 @@ export const MicroRewardBanner: React.FC<MicroRewardBannerProps> = ({
   style,
 }) => {
   const { theme } = useTheme();
+  const reducedMotion = useReducedMotion();
   const scale = useSharedValue(1);
   const config = REWARD_CONFIG[type];
   const displayIcon = customIcon || config.icon;
@@ -64,10 +66,10 @@ export const MicroRewardBanner: React.FC<MicroRewardBannerProps> = ({
     transform: [{ scale: scale.value }],
   }));
   const handlePressIn = () => {
-    scale.value = withSpring(0.97, { damping: 15, stiffness: 300 });
+    scale.value = reducedMotion ? 0.97 : withSpring(0.97, { damping: 15, stiffness: 300 });
   };
   const handlePressOut = () => {
-    scale.value = withSpring(1, { damping: 15, stiffness: 300 });
+    scale.value = reducedMotion ? 1 : withSpring(1, { damping: 15, stiffness: 300 });
   };
   const amountText =
     amount !== undefined ? `+${amount.toLocaleString()}` : null;
@@ -129,8 +131,8 @@ export const MicroRewardBanner: React.FC<MicroRewardBannerProps> = ({
 
   return (
     <Animated.View
-      entering={FadeInUp.duration(300)}
-      exiting={FadeOutUp.duration(200)}
+      entering={reducedMotion ? undefined : FadeInUp.duration(300)}
+      exiting={reducedMotion ? undefined : FadeOutUp.duration(200)}
       style={[
         {
           backgroundColor: theme.colors.background.secondary,

@@ -17,6 +17,7 @@ import { useToast } from '../../shared/ui/components/Toast';
 import { useAuthStore } from '../../store/index';
 import { registerSchema, type RegisterFormData } from './schemas';
 import { EtherealSkyBackground } from './components/ethereal';
+import { etherealText } from '@/theme/tokens/ethereal-sky';
 import { RegisterFormPanel } from './components/ethereal/RegisterFormPanel';
 import { RegisterHero } from './components/ethereal/RegisterHero';
 import { getMinTouchTargetStyle } from '../../utils/touchTarget';
@@ -118,7 +119,7 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
             gap: 4,
           }}
         >
-          <Text color="#0A0A0A" variant="body" style={{ color: 'rgba(10, 10, 10, 0.78)' }}>
+          <Text color={etherealText.heading} variant="body" style={{ color: etherealText.subtitle }}>
             Already have an account?
           </Text>
           <Pressable
@@ -128,7 +129,7 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
             onPress={onGoToLogin}
             style={getMinTouchTargetStyle()}
           >
-            <Text color="#0A0A0A" fontWeight="700" style={{ color: '#0A0A0A', textDecorationLine: 'underline' }}>
+            <Text color={etherealText.heading} fontWeight="700" style={{ color: etherealText.heading, textDecorationLine: 'underline' }}>
               Sign in
             </Text>
           </Pressable>

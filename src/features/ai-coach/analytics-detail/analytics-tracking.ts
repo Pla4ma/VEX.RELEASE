@@ -5,7 +5,7 @@ import {
   type CoachUserState,
   type TriggerType,
   type SessionRecommendation,
-} from './schemas';
+} from '../schemas';
 import type { InterventionType } from './analytics-types';
 import { hashUserId, sanitizeContext } from './analytics-helpers';
 

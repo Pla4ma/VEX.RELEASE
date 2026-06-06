@@ -1,7 +1,8 @@
 import * as Sentry from '@sentry/react-native';
 import { v4 } from '../../utils/uuid';
 import type { Streak } from './schemas';
-import { RepositoryError, supabase, parseStreakRow } from './repository-helpers';
+import { RepositoryError } from '../../lib/repository/error-handling';
+import { supabase, parseStreakRow } from './repository-helpers';
 import { tableColumns } from '../../lib/repository/tableColumns';
 
 export async function fetchStreak(userId: string): Promise<Streak | null> {

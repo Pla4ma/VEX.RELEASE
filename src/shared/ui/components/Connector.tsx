@@ -2,6 +2,7 @@ import React from 'react';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
+  useReducedMotion,
   withTiming,
 } from 'react-native-reanimated';
 import type { Theme } from '../../../theme';
@@ -12,10 +13,15 @@ export const Connector: React.FC<{
   orientation: 'horizontal' | 'vertical';
   theme: Theme;
 }> = ({ completed, orientation, theme }) => {
+  const reducedMotion = useReducedMotion();
   const progress = useSharedValue(completed ? 1 : 0);
   React.useEffect(() => {
+    if (reducedMotion) {
+      progress.value = completed ? 1 : 0;
+      return;
+    }
     progress.value = withTiming(completed ? 1 : 0, { duration: 300 });
-  }, [completed, progress]);
+  }, [completed, progress, reducedMotion]);
   const animatedStyle = useAnimatedStyle(() => ({
     backgroundColor: interpolateColor(
       progress.value,

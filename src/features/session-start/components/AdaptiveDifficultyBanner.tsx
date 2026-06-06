@@ -13,6 +13,7 @@ import { Text } from '../../../components/primitives/Text';
 import { Button } from '../../../components/primitives/Button';
 import { Box } from '../../../components/primitives/Box';
 import { useTheme } from '../../../theme';
+import { rgbaColors } from '@/theme/tokens/rgba-colors';
 import { DifficultySuggestion } from '../service/adaptiveDifficulty';
 
 import { ConfidenceIndicator } from './ConfidenceIndicator';
@@ -107,7 +108,7 @@ export function AdaptiveDifficultyBanner({
             gap: theme.spacing[4],
             marginBottom: theme.spacing[3],
             padding: theme.spacing[3],
-            backgroundColor: 'rgba(255,255,255,0.1)',
+            backgroundColor: rgbaColors.rgb_255_255_255_0_1,
             borderRadius: theme.borderRadius.md,
           }}
         >

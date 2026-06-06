@@ -108,9 +108,9 @@ export async function fetchRemoteChanges(userId: string, sinceTimestamp?: number
   if (sinceTimestamp) {query = query.gt('last_modified', sinceTimestamp);}
   const { data, error } = await query.order('last_modified', { ascending: true });
   if (error) {throw new Error(`Failed to fetch remote changes: ${error.message}`);}
-  return (data || []).map((row: RemoteChange & { last_modified: number }) => ({
+  return (data || []).map((row: Record<string, unknown>) => ({
     key: row.key, value: row.value, category: row.category, timestamp: row.last_modified,
-  }));
+  })) as RemoteChange[];
 }
 
 export async function applyRemoteChanges(userId: string, changes: RemoteChange[]): Promise<void> {

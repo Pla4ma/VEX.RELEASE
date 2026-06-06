@@ -1,6 +1,8 @@
 import { useState, useCallback } from 'react';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { submitForgotPassword } from './forgot-password-helpers';
+import { forgotPasswordSchema } from './schemas';
+import { resetPassword } from '../../features/auth/service';
+import { captureException } from '../../config/sentry';
 import { useToast } from '../../shared/ui/components/Toast';
 import type { AuthStackParams } from '../../navigation';
 
@@ -21,14 +23,42 @@ export function useForgotPasswordForm(navigation: Navigation) {
     setError(undefined);
     setIsLoading(true);
 
-    const result = await submitForgotPassword(email);
-
-    if (!result.success) {
-      setError(result.error);
+    const parseResult = forgotPasswordSchema.safeParse({ email });
+    if (!parseResult.success) {
+      setError('Please enter a valid email address');
       showToast({
         type: 'error',
         title: 'Failed to send email',
-        message: result.error ?? 'Unknown error',
+        message: 'Please enter a valid email address',
+        duration: 4000,
+      });
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      const { error: resetError } = await resetPassword(email.trim());
+
+      if (resetError) {
+        setError(resetError.message);
+        showToast({
+          type: 'error',
+          title: 'Failed to send email',
+          message: resetError.message,
+          duration: 4000,
+        });
+        setIsLoading(false);
+        return;
+      }
+    } catch (err) {
+      captureException(err instanceof Error ? err : new Error(String(err)), {
+        tags: { feature: 'forgot-password' },
+      });
+      setError('Something went wrong. Please try again.');
+      showToast({
+        type: 'error',
+        title: 'Failed to send email',
+        message: 'Something went wrong. Please try again.',
         duration: 4000,
       });
       setIsLoading(false);

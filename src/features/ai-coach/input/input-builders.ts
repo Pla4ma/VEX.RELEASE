@@ -1,5 +1,5 @@
 import type { CoachInputContract } from './input-contract';
-import { generateUUID } from './ai-helpers';
+import { generateUUID } from '../ai-helpers';
 
 export async function buildInputContractFromStreakData(
   _userId: string,

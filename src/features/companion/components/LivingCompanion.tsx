@@ -13,12 +13,11 @@ import Animated, {
 import { Svg, Circle, G } from 'react-native-svg';
 
 import { Text } from '../../../components/primitives/Text';
-import { CompanionState, ELEMENT_THEMES } from '../types';
+import { CompanionPhase, CompanionState, ELEMENT_THEMES } from '../types';
 import { CompanionService } from '../service';
 import { getCompanionService } from '../service-instance';
 import { CompanionBody } from './CompanionBody';
 import { CompanionParticles } from './CompanionParticles';
-import { getPhaseMultiplier } from './companion-helpers';
 import { MoodIndicator } from './MoodIndicator';
 import { COMPANION_SIZE, PARTICLE_COUNT, companionStyles as styles } from './LivingCompanion.styles';
 
@@ -117,7 +116,15 @@ export const LivingCompanion: React.FC<LivingCompanionProps> = ({
   }, [particlePhase, pulsePhase]);
 
   const theme = ELEMENT_THEMES[companionState.element];
-  const phaseMultiplier = getPhaseMultiplier(companionState.phase);
+  const PHASE_MULTIPLIERS: Record<CompanionPhase, number> = {
+    EGG: 0.5,
+    HATCHING: 0.7,
+    YOUNG: 0.85,
+    MATURE: 1,
+    AWAKENED: 1.2,
+    TRANSCENDENT: 1.5,
+  };
+  const phaseMultiplier = PHASE_MULTIPLIERS[companionState.phase];
 
   const companionStyle = useAnimatedStyle(() => {
     const breathing = interpolate(pulsePhase.value, [0, 1], [0.98, 1.02]);

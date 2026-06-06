@@ -4,7 +4,7 @@ import {
   TriggerTypeSchema,
   RecommendationTypeSchema,
   CoachUserStateSchema,
-} from './schemas';
+} from '../schemas';
 
 export const CoachMessageGeneratedEventSchema = z.object({
   userId: z.string().uuid(),

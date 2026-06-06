@@ -3,7 +3,7 @@ import {
   isFeatureAvailableForNavigation,
 } from '../features/liveops-config';
 import type { FeatureAccessMap } from '../features/liveops-config/feature-access';
-import { isFeatureHidden } from '../features/liveops-config/final-release-feature-map';
+import { isFeatureHidden } from '../features/liveops-config/FeatureFlagService';
 import type { NotificationActionType } from './notification-routing-types';
 
 export type FeatureAccessCheck = Partial<FeatureAccessMap>;

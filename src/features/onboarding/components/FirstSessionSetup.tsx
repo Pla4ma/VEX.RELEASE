@@ -67,7 +67,13 @@ export function FirstSessionSetup({
       {/* Header with Back Button */}
       <Box flexDirection="row" alignItems="center" mb="md">
         {onBack && (
-          <Pressable onPress={onBack} style={{ marginRight: 12 }}>
+          <Pressable
+            onPress={onBack}
+            style={{ marginRight: 12 }}
+            accessibilityLabel="Go back"
+            accessibilityRole="button"
+            accessibilityHint="Returns to previous screen"
+          >
             <Box p="xs">
               <Text variant="h3" color="text.secondary">
                 ‹

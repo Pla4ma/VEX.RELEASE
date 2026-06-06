@@ -6,7 +6,7 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 import { Box, Text } from '../../components/primitives';
 import { useAchievements } from '../../features/achievements/hooks';
-import { getFeatureAvailability, isFeatureAvailableForNavigation } from '../../features/liveops-config/feature-availability';
+import { getFeatureAvailability, isFeatureAvailableForNavigation } from '../../features/liveops-config/FeatureFlagService';
 import { useFeatureAccess } from '../../features/liveops-config';
 import { useSessionHistory } from '../../session/hooks/useSession';
 import { buildProfileAchievementCards } from './profile-achievements';

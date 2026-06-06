@@ -1,5 +1,5 @@
 import { MMKV } from 'react-native-mmkv';
-import { createDebugger } from '../../utils/debug';
+import { createDebugger } from '../../../utils/debug';
 
 const debug = createDebugger('coach:offline');
 
@@ -44,8 +44,8 @@ export async function processMutation(
   mutation: QueuedMutation,
   userId: string,
 ): Promise<void> {
-  const service = await import('./services/service');
-  const repository = await import('./repository');
+  const service = await import('../service/service');
+  const repository = await import('../repository');
 
   switch (mutation.type) {
     case 'MARK_READ':

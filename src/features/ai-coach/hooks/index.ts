@@ -56,6 +56,11 @@ export {
 } from './useOfflineCoach';
 
 export {
+  useHomeRecommendations,
+  type HomeRecommendationsResult,
+} from './useHomeRecommendations';
+
+export {
   useRealtimeCoachMessages,
   useRealtimeCoachState,
   useRealtimeComebackPlan,

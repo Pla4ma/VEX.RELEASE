@@ -1,4 +1,4 @@
-import type { BehaviorProfile, CoachMessage, CoachState } from './schemas';
+import type { BehaviorProfile, CoachMessage, CoachState } from '../schemas';
 
 export type InterventionType =
   | 'BURNOUT'

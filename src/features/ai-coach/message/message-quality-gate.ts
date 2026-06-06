@@ -9,7 +9,7 @@ import {
   detectQualityElements,
   determineSuggestedAction,
 } from './message-quality-scoring';
-import { v4 } from '../../utils/uuid';
+import { v4 } from '../../../utils/uuid';
 
 export {
   MessageQualityAnalysisSchema,

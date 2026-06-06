@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { useTheme } from '../../theme';
+import { rgbaColors } from '@/theme/tokens/rgba-colors';
 import { Box, Text } from '../primitives';
 import { IconButton } from '../../icons';
 import { createSheet } from '@/shared/ui/create-sheet';
@@ -72,7 +73,7 @@ export const Modal: React.FC<ModalProps> = ({
         <Animated.View
           style={[
             styles.backdrop,
-            { backgroundColor: 'rgba(0,0,0,0.5)' },
+            { backgroundColor: rgbaColors.rgb_0_0_0_0_5 },
             backdropStyle,
           ]}
         />
@@ -142,7 +143,7 @@ const styles = createSheet({
   footer: {
     padding: 16,
     borderTopWidth: 1,
-    borderTopColor: 'rgba(0,0,0,0.1)',
+    borderTopColor: rgbaColors.rgb_0_0_0_0_1,
   },
 });
 

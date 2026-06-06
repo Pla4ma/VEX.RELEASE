@@ -1,5 +1,5 @@
 import type { SessionConfig, SessionState, SessionSummary } from '../types';
-import type { SessionService } from '../SessionService';
+import type { SessionOrchestrator } from '../SessionOrchestrator';
 
 export interface SessionActions {
   createSession: (config: SessionConfig) => Promise<SessionState>;
@@ -18,45 +18,47 @@ export interface SessionActions {
   getAntiCheatLabel: () => 'Elite' | 'Good' | 'Okay' | 'Distracted';
 }
 
-export function createSessionActions(service: SessionService): SessionActions {
+export function createSessionActions(
+  orchestrator: SessionOrchestrator,
+): SessionActions {
   return {
     createSession: async (config: SessionConfig) => {
-      return service.createCustomSession(config);
+      return orchestrator.createSession(config);
     },
     startSession: async (countdownSeconds: number = 0) => {
-      await service.startSession(countdownSeconds);
+      await orchestrator.startSession(countdownSeconds);
     },
     pauseSession: async (reason?: string) => {
-      await service.pauseSession(reason);
+      await orchestrator.pauseSession(reason);
     },
     resumeSession: async () => {
-      await service.resumeSession();
+      await orchestrator.resumeSession();
     },
     endSession: async () => {
-      return service.completeSession();
+      return orchestrator.completeSession();
     },
     abandonSession: async (reason?: string) => {
-      await service.abandonSession(reason);
+      await orchestrator.abandonSession(reason);
     },
     backgroundSession: async () => {
-      await service.backgroundSession();
+      await orchestrator.backgroundSession();
     },
     foregroundSession: async () => {
-      await service.foregroundSession();
+      await orchestrator.foregroundSession();
     },
     attemptRecovery: async (
       type: 'USER_RESUME' | 'STREAK_SAVE' | 'PARTIAL_CREDIT',
     ) => {
-      return service.attemptRecovery(type);
+      return orchestrator.attemptRecovery(type);
     },
     applyStudyQuizBonus: (correctAnswers: number) => {
-      service.applyStudyQuizBonus(correctAnswers);
+      orchestrator.applyStudyQuizBonus(correctAnswers);
     },
     getAntiCheatScore: () => {
-      return service.getCurrentPurityScore();
+      return orchestrator.getCurrentPurityScore();
     },
     getAntiCheatLabel: () => {
-      return service.getPurityLabel();
+      return orchestrator.getPurityLabel();
     },
   };
 }

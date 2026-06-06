@@ -3,11 +3,11 @@ import type {
   NotificationActionType,
 } from '../../navigation/notification-routing-types';
 
-import { isFeatureHidden } from '../../features/liveops-config/final-release-feature-map';
+import { isFeatureHidden } from '../../features/liveops-config/FeatureFlagService';
 import {
   getFeatureAvailabilityFor,
   isFeatureAvailableForNavigation,
-} from '../../features/liveops-config/feature-availability';
+} from '../../features/liveops-config/FeatureFlagService';
 import type { FeatureAccessMap } from '../../features/liveops-config/feature-access';
 import type { NotificationCenterItem } from '../../features/notifications/service';
 import { lightColors } from '@/theme/tokens/colors';

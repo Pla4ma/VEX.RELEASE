@@ -11,7 +11,7 @@ export * from './memory/memory-schemas';
 export * from './memory/memory-events';
 
 // Service layer
-export * as coachService from './services/service';
+export * as coachService from './service/service';
 
 // Repository layer
 export * as coachRepository from './repository';

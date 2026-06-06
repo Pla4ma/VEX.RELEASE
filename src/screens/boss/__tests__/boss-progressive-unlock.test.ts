@@ -2,9 +2,9 @@ import { describe, expect, it } from '@jest/globals';
 
 import { buildFeatureAccess } from '../../../features/liveops-config/feature-access';
 import type { FeatureKey } from '../../../features/liveops-config/feature-access';
-import { getFeatureAvailability } from '../../../features/liveops-config/feature-availability';
+import { getFeatureAvailability } from '../../../features/liveops-config/FeatureFlagService';
 import { getBossScreenCopy } from '../BossScreenSections';
-import { isFeatureHidden } from '../../../features/liveops-config/final-release-feature-map';
+import { isFeatureHidden } from '../../../features/liveops-config/FeatureFlagService';
 
 function resolveBossIntensity(style: string | null): string {
   switch (style) {

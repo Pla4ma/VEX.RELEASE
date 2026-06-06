@@ -3,7 +3,7 @@ import type { CoachState, CoachUserState } from '../types';
 import {
   PERSONALITY_METADATA,
   type CoachStyle,
-} from '../services/personality-templates';
+} from '../service/personality-templates';
 
 function isCoachStyle(value: string): value is CoachStyle {
   return value in PERSONALITY_METADATA;

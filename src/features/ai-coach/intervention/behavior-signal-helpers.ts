@@ -3,8 +3,8 @@ import type {
   BehaviorSignal,
   SignalType,
   CoachUserState,
-} from './schemas';
-import { HIGH_CONFIDENCE_THRESHOLD_DATA_POINTS } from './session-analyzer-types';
+} from '../schemas';
+import { HIGH_CONFIDENCE_THRESHOLD_DATA_POINTS } from '../session/session-analyzer-types';
 
 // ─── Signal confidence mapping ──────────────────────────────────
 const BASE_CONFIDENCE: Record<SignalType, number> = {

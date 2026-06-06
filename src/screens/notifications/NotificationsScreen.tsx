@@ -1,10 +1,13 @@
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Pressable, RefreshControl } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { FlashList } from '@shopify/flash-list';
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useTheme } from '../../theme';
 import { Box, Text } from '../../components/primitives';
+import type { ExtendedRootStackParams } from '../../navigation/types';
 import {
   NotificationLoadingState,
   NotificationErrorState,
@@ -21,6 +24,7 @@ import type { NotificationListItem } from './NotificationScreenConfig';
 
 export const NotificationsScreen: React.FC = () => {
   const { theme } = useTheme();
+  const navigation = useNavigation<NativeStackNavigationProp<ExtendedRootStackParams>>();
   const insets = useSafeAreaInsets();
   const {
     notifications,
@@ -38,6 +42,10 @@ export const NotificationsScreen: React.FC = () => {
     handleRefresh,
     formatTime,
   } = useNotificationsData();
+
+  const handleOpenNotificationSettings = useCallback(() => {
+    navigation.navigate('Settings', { screen: 'NotificationSettings' });
+  }, [navigation]);
 
   const bg = theme.colors.background.primary;
   const inset = insets.top;
@@ -92,7 +100,7 @@ export const NotificationsScreen: React.FC = () => {
 
   if (notifications.length === 0)
     {return (
-      <NotificationEmptyState backgroundColor={bg} headerElement={header} />
+      <NotificationEmptyState backgroundColor={bg} headerElement={header} onAdjustSettings={handleOpenNotificationSettings} />
     );}
   if (listData.length === 0)
     {return (

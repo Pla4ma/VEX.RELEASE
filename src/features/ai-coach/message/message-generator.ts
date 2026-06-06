@@ -1,4 +1,4 @@
-import * as repository from './repository';
+import * as repository from '../repository';
 import {
   GenerateMessageInputSchema,
   MarkMessageActionInputSchema,
@@ -6,18 +6,18 @@ import {
   type CoachMessageTemplate,
   type GenerateMessageInput,
   type MarkMessageActionInput,
-} from './schemas';
-import { getOrCreateCoachState } from './persona-manager';
+} from '../schemas';
+import { getOrCreateCoachState } from '../persona/persona-manager';
 import { validateMessageQuality } from './message-quality-gate';
 import {
   generateAIBackedMessage,
   generateQualityFallback,
 } from './message-ai-backend';
 import { getDefaultTemplate } from './default-message-templates';
-export { generateMemoryAwareMessage } from './memory-message-templates';
+export { generateMemoryAwareMessage } from '../memory/memory-message-templates';
 
-export { evaluateInterventions } from './intervention-evaluator';
-export { generatePerformanceSummary } from './performance-summary';
+export { evaluateInterventions } from '../intervention/intervention-evaluator';
+export { generatePerformanceSummary } from '../analytics-detail/performance-summary';
 
 export async function generateMessage(
   input: GenerateMessageInput,

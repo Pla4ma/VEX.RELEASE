@@ -23,4 +23,5 @@ export interface RankingEventDefinitions {
     userId: string;
     finalRank: number;
   };
+  'leaderboards:result': Record<string, unknown>;
 }

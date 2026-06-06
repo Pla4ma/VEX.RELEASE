@@ -1,14 +1,12 @@
-import type { InsightCategory, LearnedItem, WhatVEXLearnedInput } from '../schemas';
+import type { WhatVEXLearnedInput } from '../schemas';
 import { buildStartSessionInsights } from './start-session-builders';
 import { buildModeNotifInsights } from './mode-notif-builders';
 import { buildRescueProjectInsights } from './rescue-project-builders';
 import { buildStudyGeneralInsights } from './study-general-builders';
+import type { InsightBuilder } from './builders-shared';
 
-export interface InsightBuilder {
-  category: InsightCategory;
-  condition: () => boolean;
-  build: () => LearnedItem;
-}
+export type { InsightBuilder } from './builders-shared';
+export { makeId } from './builders-shared';
 
 export function buildInsightBuilders(
   input: WhatVEXLearnedInput,

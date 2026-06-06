@@ -13,6 +13,7 @@ import { Text } from '../../components/primitives/Text';
 import { useTheme } from '../../theme';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { tabSwitch } from '../../utils/haptics';
+import { getMinTouchTargetStyle } from '../../utils/touchTarget';
 import { springPresets, timingPresets } from '../../theme/tokens/motion';
 
 const ICONS = {
@@ -120,7 +121,7 @@ export function TabButton({
       accessibilityState={{ selected: focused }}
       onLongPress={onLongPress}
       onPress={handlePress}
-      style={{ flex: 1 }}
+      style={{ flex: 1, ...getMinTouchTargetStyle() }}
       accessibilityLabel={`${label} tab`}
       accessibilityHint={`Navigate to ${label}`}
     >

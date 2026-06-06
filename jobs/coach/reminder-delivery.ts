@@ -6,7 +6,8 @@
 
 import { job } from '@trigger.dev/sdk';
 import { Sentry, initJobSentry } from '../shared/sentry';
-import { getUserTimezone, isQuietHours, getOptimalReminderTimes } from '../../src/features/ai-coach/utils/timezone';
+import { getUserTimezone, getOptimalReminderTimes } from '../../src/features/ai-coach/utils/timezone';
+import { isQuietHours } from '../../src/features/notifications/service-helpers';
 import {
   fetchDueReminders,
   rescheduleQuietHours,

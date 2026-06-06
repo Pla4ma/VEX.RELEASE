@@ -6,6 +6,8 @@
 
 import { useCallback } from 'react';
 import { useMutation } from '@tanstack/react-query';
+import * as Sentry from '@sentry/react-native';
+import { useToast } from '../ui/components/Toast';
 import { shareSession, shareAchievement, shareProfile } from './share-service';
 import type { SessionShareSummary, ShareResult } from './types';
 
@@ -18,6 +20,7 @@ type UseShareSessionResult = {
 };
 
 export function useShareSession(): UseShareSessionResult {
+  const { show } = useToast();
   const mutation = useMutation({
     mutationFn: ({
       sessionId,
@@ -26,6 +29,10 @@ export function useShareSession(): UseShareSessionResult {
       sessionId: string;
       summary: SessionShareSummary;
     }) => shareSession(sessionId, summary),
+    onError: (error) => {
+      Sentry.captureException(error, { tags: { feature: 'sharing', operation: 'shareSession' } });
+      show({ type: 'error', title: 'Share failed', message: 'Try again when connection returns.' });
+    },
   });
 
   const share = useCallback(
@@ -53,9 +60,14 @@ type UseShareAchievementResult = {
 };
 
 export function useShareAchievement(): UseShareAchievementResult {
+  const { show } = useToast();
   const mutation = useMutation({
     mutationFn: ({ achievementId, name }: { achievementId: string; name: string }) =>
       shareAchievement(achievementId, name),
+    onError: (error) => {
+      Sentry.captureException(error, { tags: { feature: 'sharing', operation: 'shareAchievement' } });
+      show({ type: 'error', title: 'Share failed', message: 'Try again when connection returns.' });
+    },
   });
 
   const share = useCallback(
@@ -83,8 +95,13 @@ type UseShareProfileResult = {
 };
 
 export function useShareProfile(): UseShareProfileResult {
+  const { show } = useToast();
   const mutation = useMutation({
     mutationFn: (userId: string) => shareProfile(userId),
+    onError: (error) => {
+      Sentry.captureException(error, { tags: { feature: 'sharing', operation: 'shareProfile' } });
+      show({ type: 'error', title: 'Share failed', message: 'Try again when connection returns.' });
+    },
   });
 
   const share = useCallback(

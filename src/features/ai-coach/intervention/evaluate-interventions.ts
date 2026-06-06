@@ -12,7 +12,7 @@ import {
   detectPlateau,
   detectStreakRescueNeeded,
   detectBossStrategyOpportunity,
-} from './intervention-detectors';
+} from './intervention-detectors-core';
 
 export function evaluateInterventions(
   burnoutInput?: BurnoutInput,

@@ -1,4 +1,4 @@
-import type { DeliveryMethod } from './coach-message-types';
+import type { DeliveryMethod } from '../message/coach-message-types';
 
 export type InterventionType =
   | 'STREAK_RISK'

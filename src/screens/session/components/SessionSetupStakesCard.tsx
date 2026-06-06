@@ -11,7 +11,7 @@ import { useFeatureAccess } from '../../../features/liveops-config';
 import {
   getFeatureAvailability,
   isFeatureAvailableForNavigation,
-} from '../../../features/liveops-config/feature-availability';
+} from '../../../features/liveops-config/FeatureFlagService';
 import type {
   ExtendedRootStackParams,
   SessionStackParams,

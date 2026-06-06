@@ -3,7 +3,7 @@ import type { NavigationContainerRefWithCurrent } from '@react-navigation/native
 import { addBreadcrumb } from '../../config/sentry';
 import { eventBus } from '../../events';
 import type { FeatureAccessMap } from '../../features/liveops-config/feature-access';
-import { routeNotificationAction } from '../notification-routing-core';
+import { routeNotificationAction } from '../notification-navigator';
 import type { ExtendedRootStackParams } from '../types';
 import {
   isHiddenV1Type,

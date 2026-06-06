@@ -1,6 +1,6 @@
 import { eventBus } from '../../../events';
 import * as repository from '../repository/memories';
-import { createCoachMemory } from '../services/memory-service';
+import { createCoachMemory } from '../service/memory-service';
 
 jest.mock('../repository/memories');
 jest.mock('../memory-analytics', () => ({

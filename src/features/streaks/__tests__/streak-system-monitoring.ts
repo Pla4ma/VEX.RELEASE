@@ -8,7 +8,7 @@ import {
   createRepairQuest,
   recordRepairQuestSession,
 } from '../streak-repair-quest';
-import { mockRepository, mockStreak } from './streak-system-helpers';
+import { mockRepository, mockStreak } from '../streak-system-helpers';
 
 describe('Streak Risk Monitor', () => {
   beforeEach(() => {

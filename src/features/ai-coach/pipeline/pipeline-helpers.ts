@@ -6,7 +6,7 @@ import {
   type GenerateMessageInput,
   type InterventionExecution,
   type TriggerType,
-} from './schemas';
+} from '../schemas';
 import { AIMessagePayloadSchema } from './pipeline-schemas';
 import type {
   GenerateMessageArgs,

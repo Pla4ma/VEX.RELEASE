@@ -124,7 +124,7 @@ export class SessionOrchestrator extends SessionOrchestratorBase {
     logRecovery(this, type, data);
   }
 
-  getActiveSession(): SessionState | null {
+  getActiveSessionInMemory(): SessionState | null {
     return getActiveSessionAccessor(this);
   }
   getTimerState() {
@@ -169,10 +169,10 @@ export class SessionOrchestrator extends SessionOrchestratorBase {
   removeDocument(docId: string): void {
     removeDocumentAccessor(this, docId);
   }
-  getSessionHistory(limit = 10): Promise<SessionState[]> {
+  getSessionHistoryFromAccessor(limit = 10): Promise<SessionState[]> {
     return getSessionHistoryAccessor(this, limit);
   }
-  getSessionStats() {
+  getSessionStatsFromAccessor() {
     return getSessionStatsAccessor(this);
   }
 

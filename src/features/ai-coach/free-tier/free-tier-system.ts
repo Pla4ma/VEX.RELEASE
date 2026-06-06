@@ -4,8 +4,8 @@ export {
   type CoachPersonaConfig,
   COACH_PERSONAS,
   getUnlockedPersonas,
-} from './coach-personas';
-export { type CoachQuest, generateDailyQuest } from './coach-quests';
+} from '../persona/coach-personas';
+export { type CoachQuest, generateDailyQuest } from '../recommendation/coach-quests';
 export {
   type FreeTierFeatures,
   COACH_FEATURE_MATRIX,

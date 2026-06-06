@@ -1,12 +1,12 @@
-import * as repository from './repository';
+import * as repository from '../repository';
 import {
   ActivateComebackInputSchema,
   type ComebackPlan,
   type ComebackStatus,
   type ActivateComebackInput,
-} from './schemas';
-import { updateCoachState } from './persona-manager';
-import { generateMessage } from './message-generator';
+} from '../schemas';
+import { updateCoachState } from '../persona/persona-manager';
+import { generateMessage } from '../message/message-generator';
 
 const COMEBACK_BONUS_MULTIPLIER = 2.0;
 const COMEBACK_TARGET_SESSIONS = 3;

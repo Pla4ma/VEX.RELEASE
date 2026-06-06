@@ -1,11 +1,11 @@
-import { createDebugger } from '../../utils/debug';
+import { createDebugger } from '../../../utils/debug';
 import {
   createMemory as repoCreateMemory,
   getMemoriesByUser as repoGetMemoriesByUser,
   getMemoriesByType as repoGetMemoriesByType,
   markMemoryReferenced as repoMarkMemoryReferenced,
   deleteMemory as repoDeleteMemory,
-} from './repository/memories';
+} from '../repository/memories';
 import {
   MemoryTypeSchema,
   type CoachMemory,

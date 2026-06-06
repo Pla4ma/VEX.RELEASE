@@ -133,9 +133,11 @@
             "supabase.co": {
               "pins": [
                 "sha256/JxYBCNfhi515HdL0cvKtauDKAZvS/HXZc8eHx6C/1pI=",
-                "sha256/H7AMYAvicN2+UcFPBz3kJXCDmGrTItZh4ujUBK8hoWg="
+                "sha256/H7AMYAvicN2+UcFPBz3kJXCDmGrTItZh4ujUBK8hoWg=",
+                "sha256/+gSmjONa2NEzJGiXHTxfDwn5zcujrfyPHe83jS2p0yk="
               ],
-              "includeSubdomains": true
+              "includeSubdomains": true,
+              "_pins_verified": "2026-06-05 — Verified against icnbpjkyupuqzuvwuvbk.supabase.co live cert chain. Leaf: supabase.co (CN), Intermediate: Google Trust Services WE1, Root: GlobalSign ECC Root CA R4. Verify after any Supabase cert rotation."
             }
           }
         }
@@ -168,6 +170,14 @@
       ],
       "expo-status-bar",
       "expo-splash-screen",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/splash.png",
+          "resizeMode": "contain",
+          "backgroundColor": "#0A0A0A"
+        }
+      ],
       "expo-image"
     ],
     "extra": {
@@ -176,11 +186,6 @@
       }
     },
     "owner": "jeppygeja",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#0A0A0A"
-    },
     "updates": {
       "enabled": true,
       "checkAutomatically": "ON_LOAD",

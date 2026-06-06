@@ -3,6 +3,7 @@ import { View, Pressable } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
+  useReducedMotion,
   withSpring,
   withTiming,
   runOnJS,
@@ -22,6 +23,7 @@ import type { ToastProps } from './Toast.types';
 
 export const ToastComponent: React.FC<ToastProps> = ({ toast, onDismiss }) => {
   const { theme } = useTheme();
+  const reducedMotion = useReducedMotion();
   const translateY = useSharedValue(0);
   const opacity = useSharedValue(1);
   const progress = useSharedValue(1);
@@ -34,21 +36,31 @@ export const ToastComponent: React.FC<ToastProps> = ({ toast, onDismiss }) => {
       return;
     }
     const duration = toast.duration || 5000;
-    progress.value = withTiming(0, { duration });
+    if (reducedMotion) {
+      progress.value = 0;
+    } else {
+      progress.value = withTiming(0, { duration });
+    }
     const timer = setTimeout(() => {
       handleDismissRef.current();
     }, duration);
     return () => clearTimeout(timer);
-  }, [progress, toast.id, toast.duration, toast.persistent]);
+  }, [progress, toast.id, toast.duration, toast.persistent, reducedMotion]);
 
   const handleDismiss = useCallback(() => {
+    if (reducedMotion) {
+      opacity.value = 0;
+      runOnJS(onDismiss)(toast.id);
+      toast.onDismiss?.();
+      return;
+    }
     opacity.value = withTiming(0, { duration: 200 }, (finished) => {
       if (finished) {
         runOnJS(onDismiss)(toast.id);
         toast.onDismiss?.();
       }
     });
-  }, [toast, onDismiss, opacity]);
+  }, [toast, onDismiss, opacity, reducedMotion]);
 
   handleDismissRef.current = handleDismiss;
 
@@ -64,12 +76,17 @@ export const ToastComponent: React.FC<ToastProps> = ({ toast, onDismiss }) => {
     })
     .onEnd((event) => {
       if (Math.abs(event.translationY) > 80) {
-        translateY.value = withSpring(event.translationY * 2, {}, () => {
+        if (reducedMotion) {
+          translateY.value = event.translationY * 2;
           runOnJS(handleDismiss)();
-        });
+        } else {
+          translateY.value = withSpring(event.translationY * 2, {}, () => {
+            runOnJS(handleDismiss)();
+          });
+        }
       } else {
-        translateY.value = withSpring(0);
-        opacity.value = withTiming(1);
+        translateY.value = reducedMotion ? 0 : withSpring(0);
+        opacity.value = reducedMotion ? 1 : withTiming(1);
       }
     });
 
@@ -90,13 +107,13 @@ export const ToastComponent: React.FC<ToastProps> = ({ toast, onDismiss }) => {
     width: `${progress.value * 100}%`,
   }));
 
-  const enteringAnimation = toast.position === 'top' ? SlideInUp : SlideInDown;
-  const exitingAnimation = toast.position === 'top' ? SlideOutUp : SlideOutDown;
+  const enteringAnimation = reducedMotion ? undefined : toast.position === 'top' ? SlideInUp : SlideInDown;
+  const exitingAnimation = reducedMotion ? undefined : toast.position === 'top' ? SlideOutUp : SlideOutDown;
 
   return (
     <Animated.View
-      entering={enteringAnimation.duration(300)}
-      exiting={exitingAnimation.duration(200)}
+      entering={enteringAnimation?.duration(300)}
+      exiting={exitingAnimation?.duration(200)}
       style={[
         styles.toastContainer,
         animatedStyle,

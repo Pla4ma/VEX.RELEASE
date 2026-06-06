@@ -9,6 +9,7 @@ import { View } from 'react-native';
 import { Text } from '../../../../components/primitives/Text';
 import { AnimatedVexMark } from './AnimatedVexMark';
 import { SerifTitle } from './SerifTitle';
+import { etherealText } from '@/theme/tokens/ethereal-sky';
 
 type RegisterHeroProps = {
   startDelayMs?: number;
@@ -20,7 +21,7 @@ export function RegisterHero({ startDelayMs = 0 }: RegisterHeroProps): React.JSX
       <AnimatedVexMark size={104} startDelayMs={startDelayMs} />
       <View style={{ alignItems: 'center', gap: 4 }}>
         <SerifTitle
-          color="#0A0A0A"
+          color={etherealText.heading}
           fontSize={34}
           letterSpacing={-1}
           lineHeight={40}

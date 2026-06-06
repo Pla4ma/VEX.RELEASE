@@ -4,7 +4,7 @@ import {
   CoachRecommendationService,
   type RecommendationContext,
   type CoachPersonaId,
-} from '../services/CoachRecommendationService';
+} from '../service/CoachRecommendationService';
 import type { ActiveStudyPlan } from '../../content-study/hooks/helpers';
 
 xdescribe('CoachRecommendationService - Priority & Personas', () => {

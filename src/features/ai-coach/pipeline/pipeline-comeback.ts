@@ -1,9 +1,9 @@
-import { eventBus } from '../../events';
-import * as repository from './repository';
+import { eventBus } from '../../../events';
+import * as repository from '../repository';
 import {
   ComebackPlanSchema,
   ActivateComebackInputSchema,
-} from './schemas';
+} from '../schemas';
 
 export async function activateComeback(
   input:

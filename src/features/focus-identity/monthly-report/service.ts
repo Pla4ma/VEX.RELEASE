@@ -79,8 +79,8 @@ export async function generateMonthlyReport(
     // Analyze session data
     const sessionAnalysis = analyzeSessionData(sessions || []);
 
-    // Generate AI insights for premium users
-    const aiInsight = isPremium
+    // Generate insights for premium users
+    const insight = isPremium
       ? await generateAIInsight(userId, sessions || [], scoreDelta)
       : undefined;
 
@@ -92,7 +92,7 @@ export async function generateMonthlyReport(
           'STREAK_HIGHLIGHTS',
           'BEST_PERFORMANCE',
           'WEEKLY_PATTERNS',
-          'AI_INSIGHTS',
+          'INSIGHTS',
           'NEXT_TARGETS',
         ]
       : ['SCORE_OVERVIEW', 'SESSION_ANALYSIS'];
@@ -114,7 +114,7 @@ export async function generateMonthlyReport(
       bestFocusWindow: sessionAnalysis.bestFocusWindow,
       strongestPattern: sessionAnalysis.strongestPattern,
       weakestPattern: sessionAnalysis.weakestPattern,
-      aiInsight,
+      insight,
       nextMonthTarget: generateNextMonthTarget(scoreDelta, sessionAnalysis),
       isPremium,
       unlockedSections,

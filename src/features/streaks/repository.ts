@@ -1,4 +1,4 @@
-export { RepositoryError } from './repository-helpers';
+export { RepositoryError } from '../../lib/repository/error-handling';
 
 export {
   fetchStreak,

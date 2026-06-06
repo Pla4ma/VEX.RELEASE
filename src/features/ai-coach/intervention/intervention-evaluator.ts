@@ -1,15 +1,15 @@
-import * as repository from './repository';
-import { getOrCreateCoachState } from './persona-manager';
+import * as repository from '../repository';
+import { getOrCreateCoachState } from '../persona/persona-manager';
 import type {
   EvaluateInterventionsInput,
   InterventionExecution,
   InterventionRule,
   MessageCategory,
   TriggerType,
-} from './schemas';
-import { EvaluateInterventionsInputSchema } from './schemas';
-import { checkConditions } from './message-generator';
-import { generateMessage } from './message-generator';
+} from '../schemas';
+import { EvaluateInterventionsInputSchema } from '../schemas';
+import { checkConditions } from '../message/message-generator';
+import { generateMessage } from '../message/message-generator';
 
 const MAX_INTERVENTIONS_PER_DAY = 5;
 

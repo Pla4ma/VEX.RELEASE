@@ -10,6 +10,7 @@ import Animated, {
 
 import { Text } from './primitives/Text';
 import { useTheme } from '../theme';
+import { rgbaColors } from '@/theme/tokens/rgba-colors';
 import { createSheet } from '@/shared/ui/create-sheet';
 import { useReducedMotion } from '@/hooks';
 
@@ -83,7 +84,7 @@ export function StreakBadge({
           variant="label"
           color={
             isGlass
-              ? 'rgba(255,255,255,0.92)'
+              ? rgbaColors.rgb_255_255_255_0_92
               : theme.colors.text.secondary
           }
         >
@@ -100,7 +101,7 @@ export function StreakBadge({
           variant="label"
           color={
             isGlass
-              ? 'rgba(255,255,255,0.96)'
+              ? rgbaColors.rgb_255_255_255_0_96
               : isAtRisk
                 ? theme.colors.error.dark
                 : theme.colors.accent.orange
@@ -134,7 +135,7 @@ export function StreakBadge({
         variant="label"
         color={
           isGlass
-            ? 'rgba(255,255,255,0.96)'
+            ? rgbaColors.rgb_255_255_255_0_96
             : isAtRisk
               ? theme.colors.error.dark
               : theme.colors.accent.orange
@@ -157,8 +158,8 @@ const styles = createSheet({
     shadowRadius: 12,
   },
   glassBadge: {
-    backgroundColor: 'rgba(255,255,255,0.15)',
-    borderColor: 'rgba(255,255,255,0.3)',
-    shadowColor: 'rgba(0,0,0,0.2)',
+    backgroundColor: rgbaColors.rgb_255_255_255_0_15,
+    borderColor: rgbaColors.rgb_255_255_255_0_3,
+    shadowColor: rgbaColors.rgb_0_0_0_0_2,
   },
 });

@@ -6,6 +6,7 @@ import React from 'react';
 import { View } from 'react-native';
 
 import { Text } from '../../../../components/primitives/Text';
+import { etherealText } from '@/theme/tokens/ethereal-sky';
 
 const GLYPH_SIZE = 18;
 
@@ -35,7 +36,7 @@ export function GoogleGlyph(): React.JSX.Element {
       }}
     >
       <Text style={{ fontSize: 16, fontWeight: '800' }}>
-        <Text style={{ color: '#4285F4' }}>G</Text>
+        <Text style={{ color: etherealText.googleBlue }}>G</Text>
       </Text>
     </View>
   );

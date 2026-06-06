@@ -1,11 +1,11 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { getSessionService } from '../SessionService';
+import { getSessionOrchestrator } from '../SessionOrchestrator';
 import { eventBus } from '../../events';
 import type { SessionHistoryEntry } from '../types';
 
 export function useSessionHistory(userId: string, limit: number = 50) {
-  const serviceRef = useRef(getSessionService());
-  const service = serviceRef.current;
+  const orchestratorRef = useRef(getSessionOrchestrator());
+  const orchestrator = orchestratorRef.current;
   const [history, setHistory] = useState<SessionHistoryEntry[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -13,8 +13,8 @@ export function useSessionHistory(userId: string, limit: number = 50) {
   const loadHistory = useCallback(async () => {
     setIsLoading(true);
     try {
-      service.setUserId(userId);
-      const entries = await service.getSessionHistory(limit);
+      orchestrator.setUserId(userId);
+      const entries = await orchestrator.getSessionHistory(limit);
       setHistory(entries);
       setError(null);
     } catch (err) {
@@ -22,7 +22,7 @@ export function useSessionHistory(userId: string, limit: number = 50) {
     } finally {
       setIsLoading(false);
     }
-  }, [service, userId, limit]);
+  }, [orchestrator, userId, limit]);
 
   useEffect(() => {
     loadHistory();

@@ -10,7 +10,7 @@
  * 6. notification routing excludes archived routes
  */
 
-import { resolveNotificationAction } from '../navigation/notification-routing-core';
+import { resolveNotificationAction } from '../navigation/notification-resolver';
 import type {
   NotificationAction,
   NotificationActionType,

@@ -4,7 +4,7 @@ import { captureSilentFailure } from '../../../utils/silent-failure';
  * Helper functions for the session complete screen
  */
 
-import { getSessionService } from '../../../session/SessionService';
+import { getSessionOrchestrator } from '../../../session/SessionOrchestrator';
 import type { SessionHistoryEntry } from '../../../session/types';
 import { lightColors } from '@/theme/tokens/colors';
 
@@ -35,10 +35,10 @@ export async function resolveIsFirstSessionToday(
   summaryTimestamp: number,
 ): Promise<boolean> {
   try {
-    const sessionService = getSessionService();
-    sessionService.setUserId(userId);
+    const orchestrator = getSessionOrchestrator();
+    orchestrator.setUserId(userId);
 
-    const history = await sessionService.getSessionHistory(50);
+    const history = await orchestrator.getSessionHistory(50);
     const priorSessionsToday = history.filter((entry: SessionHistoryEntry) => {
       if (entry.sessionId === sessionId) {
         return false;

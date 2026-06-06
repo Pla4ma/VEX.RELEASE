@@ -4,6 +4,7 @@ import Animated, {
   FadeInUp,
   FadeOutUp,
   useAnimatedStyle,
+  useReducedMotion,
   useSharedValue,
   withSpring,
 } from 'react-native-reanimated';
@@ -22,6 +23,7 @@ export const StatusChip: React.FC<{
   style?: ViewStyle;
 }> = ({ status, label, onPress, style }) => {
   const { theme } = useTheme();
+  const reducedMotion = useReducedMotion();
   const config = STATUS_CONFIG[status];
   const color = getStatusColor(status, theme);
   const scale = useSharedValue(1);
@@ -34,10 +36,10 @@ export const StatusChip: React.FC<{
   }
 
   const handlePressIn = () => {
-    scale.value = withSpring(0.95, { damping: 15, stiffness: 300 });
+    scale.value = reducedMotion ? 0.95 : withSpring(0.95, { damping: 15, stiffness: 300 });
   };
   const handlePressOut = () => {
-    scale.value = withSpring(1, { damping: 15, stiffness: 300 });
+    scale.value = reducedMotion ? 1 : withSpring(1, { damping: 15, stiffness: 300 });
   };
 
   const Wrapper = onPress ? Pressable : View;
@@ -50,8 +52,8 @@ export const StatusChip: React.FC<{
       disabled={!onPress}
     >
       <Animated.View
-        entering={FadeInUp.duration(200)}
-        exiting={FadeOutUp.duration(150)}
+        entering={reducedMotion ? undefined : FadeInUp.duration(200)}
+        exiting={reducedMotion ? undefined : FadeOutUp.duration(150)}
         style={[
           animatedStyle,
           {

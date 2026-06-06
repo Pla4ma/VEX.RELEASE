@@ -2,9 +2,9 @@ import { z } from 'https://esm.sh/zod@3.22.4';
 
 export const SubmitContentSchema = z.object({
   type: z.enum(['PASTE', 'PDF', 'YOUTUBE']),
-  content: z.string(),
-  title: z.string().optional(),
-  filename: z.string().optional(),
+  content: z.string().max(50000, 'Content exceeds maximum length of 50,000 characters'),
+  title: z.string().max(500).optional(),
+  filename: z.string().max(255).optional(),
 });
 
 export const GenerateStudyPlanSchema = z.object({

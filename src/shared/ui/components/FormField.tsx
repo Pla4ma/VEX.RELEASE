@@ -2,6 +2,7 @@ import React, { useCallback, useState } from 'react';
 import { TextInput, View } from 'react-native';
 import Animated, {
   useAnimatedStyle,
+  useReducedMotion,
   withTiming,
 } from 'react-native-reanimated';
 
@@ -45,6 +46,7 @@ export const FormField: React.FC<FormFieldProps> = ({
   ...textInputProps
 }) => {
   const { theme } = useTheme();
+  const reducedMotion = useReducedMotion();
   const [internalValue, setInternalValue] = useState(defaultValue ?? '');
   const [isFocused, setIsFocused] = useState(false);
   const [internalError, setInternalError] = useState<string | null>(null);
@@ -81,7 +83,7 @@ export const FormField: React.FC<FormFieldProps> = ({
           : semantic.inputBorder;
 
   const animatedStyle = useAnimatedStyle(() => ({
-    borderColor: withTiming(borderColor, { duration: 160 }),
+    borderColor: reducedMotion ? borderColor : withTiming(borderColor, { duration: 160 }),
   }));
   const message = error ?? internalError ?? successMessage ?? helperText;
   const messageColor =

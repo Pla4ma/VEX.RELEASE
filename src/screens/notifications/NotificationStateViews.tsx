@@ -2,6 +2,7 @@ import React from 'react';
 import { Box, Text } from '../../components/primitives';
 import { Skeleton, SkeletonList } from '../../shared/ui/primitives';
 import { ErrorState } from '../../components/states';
+import { EmptyNotifications } from '../../shared/ui/primitives/EmptyState.variants';
 import { FILTER_LABELS } from './NotificationScreenConfig';
 
 export function NotificationLoadingState({
@@ -60,23 +61,16 @@ export function NotificationErrorState({
 export function NotificationEmptyState({
   backgroundColor,
   headerElement,
+  onAdjustSettings,
 }: {
   backgroundColor: string;
   headerElement: JSX.Element;
+  onAdjustSettings?: () => void;
 }): JSX.Element {
   return (
     <Box flex={1} style={{ backgroundColor }}>
       {headerElement}
-      <Box flex={1} alignItems="center" justifyContent="center" px={24}>
-        <Text fontSize={48}>{'\u{1F514}'}</Text>
-        <Text variant="h4" mt={4}>
-          No notifications yet
-        </Text>
-        <Text variant="body" color="text.secondary" mt={2} textAlign="center">
-          You'll hear when something happens. Check back later for achievements,
-          streak alerts, and more.
-        </Text>
-      </Box>
+      <EmptyNotifications onAdjustSettings={onAdjustSettings} />
     </Box>
   );
 }

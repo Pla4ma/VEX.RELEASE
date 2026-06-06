@@ -1,5 +1,5 @@
-import { MMKVStorageAdapter } from '../../persistence/MMKVStorageAdapter';
-import type { CoachMessage, MessageCategory } from './types';
+import { MMKVStorageAdapter } from '../../../persistence/MMKVStorageAdapter';
+import type { CoachMessage, MessageCategory } from '../types';
 import type { PersonalQuest, UserPatterns } from './quest-types';
 import { PersonalQuestSchema } from './quest-types';
 import {

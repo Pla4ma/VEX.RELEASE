@@ -56,7 +56,7 @@ export async function resolveUserTier(userId: string): Promise<UserTier> {
     captureSilentFailure(error, {
       feature: 'ai-quota',
       operation: 'resolve-tier',
-      type: 'logic',
+      type: 'data',
     });
   }
 
@@ -80,14 +80,15 @@ export async function checkQuota(
       limit: Number.MAX_SAFE_INTEGER,
       remaining: Number.MAX_SAFE_INTEGER,
       resetAt: Date.now() + HOURLY_WINDOW_MS,
+      retryAfterMs: 0,
     };
   }
 
-  const hourlyUsed = await getHourlyUsage(userId, category);
-  const dailyUsed = await getDailyUsage(userId, category);
+  const hourlyUsed = (await getHourlyUsage(userId, category)).count;
+  const dailyUsed = (await getDailyUsage(userId, category)).count;
 
-  const hourlyRemaining = Math.max(0, limits.hourly - hourlyUsed);
-  const dailyRemaining = Math.max(0, limits.daily - dailyUsed);
+  const hourlyRemaining = Math.max(0, (limits.hourly ?? Infinity) - hourlyUsed);
+  const dailyRemaining = Math.max(0, (limits.daily ?? Infinity) - dailyUsed);
 
   const allowed = hourlyRemaining > 0 && dailyRemaining > 0;
   const window = !allowed && hourlyRemaining === 0 ? 'hourly' : 'daily';
@@ -112,8 +113,18 @@ export async function recordAIUsage(
   category: AIRequestCategory,
 ): Promise<void> {
   try {
-    await recordUsage(userId, category);
-    await syncQuotaToSupabase(userId, category);
+    await recordUsage({
+      userId,
+      category,
+      tokenCount: 0,
+      timestamp: Date.now(),
+    });
+    await syncQuotaToSupabase(userId, category, {
+      userId,
+      category,
+      tokenCount: 0,
+      timestamp: Date.now(),
+    });
   } catch (error) {
     captureSilentFailure(error, {
       feature: 'ai-quota',

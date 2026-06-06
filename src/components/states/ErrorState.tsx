@@ -7,6 +7,7 @@
 import React from 'react';
 import { type ViewStyle } from 'react-native';
 import { lightColors } from '@/theme/tokens/colors';
+import { rgbaColors } from '@/theme/tokens/rgba-colors';
 
 import { useTheme } from '../../theme';
 import { Box } from '../primitives/Box';
@@ -79,7 +80,7 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
             borderRadius: 32,
             backgroundColor:
               theme?.colors?.semantic?.vexCyanSoft ||
-              'rgba(0,229,255,0.08)',
+              rgbaColors.rgb_0_229_255_0_08,
             borderColor:
               theme?.colors?.semantic?.vexCyan || lightColors.semantic.vexCyan,
             borderWidth: 1,

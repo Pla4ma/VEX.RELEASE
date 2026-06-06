@@ -1,5 +1,5 @@
 import { jest } from '@jest/globals';
-import * as coachService from '../services/service';
+import * as coachService from '../service/service';
 import * as coachRepository from '../repository';
 import {
   handleSessionCompleted,

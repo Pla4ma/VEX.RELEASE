@@ -6,7 +6,7 @@ import {
   useCreateRecommendation,
   useUpdateRecommendationStatus,
 } from '../../../features/ai-coach/hooks/useRecommendationMutations';
-import { useActiveCoachRecommendations } from '../../../features/ai-coach/hooks/useCoachRecommendations';
+import { useHomeRecommendations } from '../../../features/ai-coach/hooks';
 import { useActiveStudyPlan } from '../../../features/content-study';
 import { useLearningExecutionLayer } from '../../../features/learning-execution';
 import { useActiveBoss } from '../../../features/boss/hooks';
@@ -63,7 +63,7 @@ export function usePowerUserContainerModel(
   const comebackQuery = useComebackState(runtime.canQueryComeback ? userId : null);
   const activeBossQuery = useActiveBoss(runtime.canQueryBoss ? userId || null : null);
   const { primaryRecommendation, isPending: recommendationsPending } =
-    useActiveCoachRecommendations(userId, runtime.canQueryCoach && !disclosure.isLoading);
+    useHomeRecommendations(userId, runtime.canQueryCoach && !disclosure.isLoading);
 
   const { openSetup, openProgress, openSocial, openContentStudy, continueStudyPlan, openNextAction } =
     usePowerUserNavigation({

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box } from '../../components/primitives/Box';
+import { Text } from '../../components/primitives/Text';
 import { CompanionSessionLayer } from '../../session/components/CompanionSessionLayer';
 import { DeepWorkVignette } from '../../session/components/DeepWorkVignette';
 import { SessionMode } from '../../session/modes';
@@ -11,6 +12,7 @@ import { SessionContractReminder } from './components/SessionContractReminder';
 import { CoachSessionBannerLazy } from './components/CoachSessionBannerLazy';
 import { ActiveSessionBottomControls } from './ActiveSessionBottomControls';
 import { ModeActiveIndicatorBar } from '../../features/mode-native/components/ModeRescueSurface';
+import { useNetInfo } from '../../network';
 import {
   ENABLE_SESSION_COMPANION_LAYER,
   ENABLE_SESSION_COACH_BANNER,
@@ -47,6 +49,7 @@ export function ActiveSessionContent({
     themeBackgroundColor,
     userId,
   } = controller;
+  const { isOffline } = useNetInfo();
   const activeSession = sessionQuery.session;
 
   const handlers = useSessionControlHandlers(actions, showMultiplierInfo, studyQuizBreak);
@@ -102,6 +105,20 @@ export function ActiveSessionContent({
         lane={lane}
         completionPercentage={sessionQuery.completionPercentage}
       />
+      {isOffline ? (
+        <Box
+          bg="warning.light"
+          px="sm"
+          py="xs"
+          alignItems="center"
+          accessibilityLabel="You are offline. Data will sync when connection returns."
+          accessibilityRole="alert"
+        >
+          <Text variant="caption" color="text.primary">
+            You are offline. Data will sync when connection returns.
+          </Text>
+        </Box>
+      ) : null}
       {displayPolicy.showContractReminder ? (
         <SessionContractReminder
           contract={contract}

@@ -1,7 +1,8 @@
 import type { QueryClient } from '@tanstack/react-query';
 import type { SessionConfig, SessionState } from '../../../session/types';
+import type { SessionHistoryEntry } from '../../../session/types/interfaces';
 import type { SessionOrchestrator } from '../../../session/SessionOrchestrator';
-import type { getCoachService } from '../../ai-coach/services/service';
+import type { getCoachService } from '../../ai-coach/service/service';
 
 export interface BuildReturnArgs {
   queryClient: QueryClient;
@@ -16,7 +17,7 @@ export interface BuildReturnArgs {
     isFetching: boolean;
   };
   sessionHistoryQuery: {
-    data: SessionState[] | undefined;
+    data: SessionHistoryEntry[] | undefined;
     error: Error | null;
     isLoading: boolean;
     isFetching: boolean;

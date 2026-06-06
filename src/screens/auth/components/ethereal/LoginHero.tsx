@@ -8,6 +8,7 @@ import { View } from 'react-native';
 
 import { Text } from '../../../../components/primitives/Text';
 import { AnimatedVexMark } from './AnimatedVexMark';
+import { etherealText } from '@/theme/tokens/ethereal-sky';
 
 type LoginHeroProps = {
   startDelayMs?: number;
@@ -19,11 +20,11 @@ export function LoginHero({ startDelayMs = 0 }: LoginHeroProps): React.JSX.Eleme
       <AnimatedVexMark size={130} startDelayMs={startDelayMs} />
       <View style={{ alignItems: 'center', gap: 6 }}>
         <Text
-          color="#0A0A0A"
+          color={etherealText.heading}
           fontSize={13}
           fontWeight="600"
           style={{
-            color: 'rgba(10, 10, 10, 0.62)',
+            color: etherealText.body,
             letterSpacing: 4,
             textTransform: 'uppercase',
           }}

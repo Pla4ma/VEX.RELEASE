@@ -68,7 +68,7 @@ export async function createFocusProfile(
     const { data, error } = await supabase
       .from('focus_identity_profiles')
       .insert(row)
-      .select(tableColumns('focus_identity_profiles'))
+      .select('*')
       .single();
     if (error) {
       throw error;
@@ -134,7 +134,7 @@ export async function updateFocusProfile(
       .from('focus_identity_profiles')
       .update(rowUpdates)
       .eq('user_id', userId)
-      .select(tableColumns('focus_identity_profiles'))
+      .select('*')
       .single();
     if (error) {
       throw error;

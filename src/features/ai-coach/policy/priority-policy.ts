@@ -1,9 +1,9 @@
-import * as repository from './repository';
+import * as repository from '../repository';
 import {
   PriorityEngineSchema,
   type CoachPriority,
   type PriorityEngine,
-} from './suggestion-schemas';
+} from '../recommendation/suggestion-schemas';
 
 export function shouldCoachShowSuggestion(
   priorityEngine: PriorityEngine,

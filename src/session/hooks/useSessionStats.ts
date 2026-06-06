@@ -1,13 +1,13 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { getSessionService } from '../SessionService';
+import { getSessionOrchestrator } from '../SessionOrchestrator';
 import { eventBus } from '../../events';
 import { createDebugger } from '../../utils/debug';
 
 const debug = createDebugger('session');
 
 export function useSessionStats(userId: string) {
-  const serviceRef = useRef(getSessionService());
-  const service = serviceRef.current;
+  const orchestratorRef = useRef(getSessionOrchestrator());
+  const orchestrator = orchestratorRef.current;
   const [stats, setStats] = useState<{
     totalSessions: number;
     completedSessions: number;
@@ -22,15 +22,15 @@ export function useSessionStats(userId: string) {
   const loadStats = useCallback(async () => {
     setIsLoading(true);
     try {
-      service.setUserId(userId);
-      const sessionStats = await service.getSessionStats();
+      orchestrator.setUserId(userId);
+      const sessionStats = await orchestrator.getSessionStats();
       setStats(sessionStats);
     } catch (err) {
       debug.error('Failed to load session stats:', err as Error);
     } finally {
       setIsLoading(false);
     }
-  }, [service, userId]);
+  }, [orchestrator, userId]);
 
   useEffect(() => {
     loadStats();

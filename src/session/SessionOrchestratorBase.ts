@@ -4,17 +4,21 @@ import { CompletionEngine } from './engines/CompletionEngine';
 import { AntiCheatEngine } from './antiCheat/AntiCheatEngine';
 import { SessionEventEmitter } from './SessionEventEmitter';
 import { getSessionRepository } from './repository/SessionRepository';
+import { getPresetService } from './presets';
 import type {
   SessionState,
   SessionConfig,
+  SessionPreset,
   FocusQualityMetrics,
   SessionSummary,
+  SessionHistoryEntry,
   InterruptionType,
   InterruptionSeverity,
 } from './types';
 import { v4 as uuidv4 } from '../utils/uuid';
 import { createDebugger } from '../utils/debug';
 import type { OrchestratorConfig } from './orchestrator-types';
+import type { SessionStatsResult, CreateCustomPresetInput } from './session-service-types';
 import * as persistence from './SessionPersistence';
 import {
   createSession,
@@ -56,6 +60,7 @@ export abstract class SessionOrchestratorBase {
   antiCheatEngine: AntiCheatEngine;
   eventEmitter: SessionEventEmitter;
   repository = getSessionRepository();
+  presetService = getPresetService();
   config: OrchestratorConfig;
   focusMetrics: FocusQualityMetrics;
   interruptions: import('./types').InterruptionRecord[] = [];
@@ -103,12 +108,45 @@ export abstract class SessionOrchestratorBase {
   setUserId(id: string): void {
     this.userId = id;
     this.repository.setUserId(id);
+    this.presetService.setUserId(id);
     this.scoringEngine.setUserStats(0, 1);
     debug.info('SessionOrchestrator user set: %s', id);
   }
   createSession(config: SessionConfig): Promise<SessionState> {
     return createSession(this, config);
   }
+
+  getActiveSession(): Promise<SessionState | null> {
+    return this.repository.getActiveSession();
+  }
+  getSessionHistory(limit = 100): Promise<SessionHistoryEntry[]> {
+    return this.repository.getSessionHistory(limit);
+  }
+  getSessionById(sessionId: string): Promise<SessionHistoryEntry | null> {
+    return this.repository.getSessionById(sessionId);
+  }
+  getSessionSummary(sessionId: string): Promise<SessionSummary | null> {
+    return this.repository.getSessionSummary(sessionId);
+  }
+  getAllSummaries(): Promise<SessionSummary[]> {
+    return this.repository.getAllSummaries();
+  }
+  getSessionStats(): Promise<SessionStatsResult> {
+    return this.repository.getSessionStats();
+  }
+  getAllPresets(): SessionPreset[] {
+    return this.presetService.getAllPresets();
+  }
+  getPresetById(presetId: string): SessionPreset | undefined {
+    return this.presetService.getPresetById(presetId);
+  }
+  createCustomPreset(config: CreateCustomPresetInput): Promise<SessionPreset> {
+    return this.presetService.createCustomPreset(config);
+  }
+  deletePreset(presetId: string): Promise<void> {
+    return this.presetService.deletePreset(presetId);
+  }
+
   cancelStart(): void {
     if (this.countdownActive) {
       this.countdownActive = false;

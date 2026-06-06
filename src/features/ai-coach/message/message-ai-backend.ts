@@ -1,10 +1,10 @@
-import { captureSilentFailure } from '../../utils/silent-failure';
-import { generateCoachMessage } from '../../shared/ai/edge-function-service';
+import { captureSilentFailure } from '../../../utils/silent-failure';
+import { generateCoachMessage } from '../../../shared/ai/edge-function-service';
 import {
   MessageQualityElements,
   type MessageQualityAnalysis,
 } from './message-quality-gate';
-import type { GenerateMessageInput } from './schemas';
+import type { GenerateMessageInput } from '../schemas';
 
 export function readNumericContext(
   context: Record<string, unknown>,

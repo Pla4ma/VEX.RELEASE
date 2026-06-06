@@ -34,10 +34,6 @@ import {
   type DegradedFeatureKey,
   type FinalReleaseFeatureEntry,
   type FinalReleaseStatus,
-  FINAL_RELEASE_INCLUDED_SYSTEMS,
-  FINAL_RELEASE_HIDDEN_SYSTEMS,
-  APP_STORE_READINESS_CHECKLIST,
-  FINAL_RELEASE_READINESS_CHECKLIST,
 } from './feature-flag-release';
 
 // ── Re-export types from split modules ──
@@ -122,7 +118,7 @@ export function computeFeatureAccess(input: FeatureAccessInput): { isUnlocked: b
 export type FeatureAvailabilityState = 'hidden' | 'teased' | 'locked' | 'unlocked' | 'disabled' | 'degraded';
 export interface FeatureAvailability { state: FeatureAvailabilityState; canRenderEntryPoint: boolean; canNavigate: boolean; canQuery: boolean; canUseBackend: boolean; canRegisterRoute: boolean; canSubscribeToEvents: boolean; canShowNotification: boolean; reason: string; }
 
-function resolveFeatureAvailability(feature: FeatureAccess | undefined, key: FeatureKey | null): FeatureAvailability {
+function resolveFeatureAvailability(feature: FeatureAccess | undefined): FeatureAvailability {
   const unavailable: FeatureAvailability = { state: 'disabled', canRenderEntryPoint: false, canNavigate: false, canQuery: false, canUseBackend: false, canRegisterRoute: false, canSubscribeToEvents: false, canShowNotification: false, reason: feature?.lockedDescription ?? 'Feature not configured.' };
   if (!feature) return unavailable;
   const disabled = !feature.isVisible || feature.releaseState === 'final_release_deactivated' || feature.releaseState === 'archived';
@@ -139,8 +135,8 @@ function resolveFeatureAvailability(feature: FeatureAccess | undefined, key: Fea
 }
 
 /** @deprecated Use getFeatureAvailabilityFor for feature-specific routing, premium, prefetch, and notifications. */
-export function getFeatureAvailability(feature: FeatureAccess): FeatureAvailability { return resolveFeatureAvailability(feature, null); }
-export function getFeatureAvailabilityFor(key: FeatureKey, feature: FeatureAccess): FeatureAvailability { return resolveFeatureAvailability(feature, key); }
+export function getFeatureAvailability(feature: FeatureAccess): FeatureAvailability { return resolveFeatureAvailability(feature); }
+export function getFeatureAvailabilityFor(_key: FeatureKey, feature: FeatureAccess): FeatureAvailability { return resolveFeatureAvailability(feature); }
 export function isFeatureAvailableForNavigation(availability: FeatureAvailability): boolean { return availability.canNavigate && availability.canRegisterRoute; }
 export function isFeatureAvailableForQueries(availability: FeatureAvailability): boolean { return availability.canQuery && availability.canUseBackend; }
 

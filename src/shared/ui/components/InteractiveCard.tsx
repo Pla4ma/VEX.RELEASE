@@ -3,6 +3,7 @@ import { View, ViewStyle, AccessibilityProps, Pressable } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
+  useReducedMotion,
   withSpring,
 } from 'react-native-reanimated';
 import { Text } from '../../../components/primitives/Text';
@@ -47,6 +48,7 @@ export const InteractiveCard: React.FC<InteractiveCardProps> = ({
   ...pressableProps
 }) => {
   const { theme } = useTheme();
+  const reducedMotion = useReducedMotion();
   const [, setIsPressed] = useState(false);
   const [, setIsLoading] = useState(false);
   const scale = useSharedValue(1);
@@ -75,15 +77,15 @@ export const InteractiveCard: React.FC<InteractiveCardProps> = ({
 
   const handlePressIn = useCallback(() => {
     if (!isDisabled && scaleOnPress) {
-      scale.value = withSpring(scaleOnPress, { damping: 15, stiffness: 300 });
+      scale.value = reducedMotion ? scaleOnPress : withSpring(scaleOnPress, { damping: 15, stiffness: 300 });
       setIsPressed(true);
     }
-  }, [isDisabled, scaleOnPress, scale]);
+  }, [isDisabled, scaleOnPress, scale, reducedMotion]);
 
   const handlePressOut = useCallback(() => {
-    scale.value = withSpring(1, { damping: 15, stiffness: 300 });
+    scale.value = reducedMotion ? 1 : withSpring(1, { damping: 15, stiffness: 300 });
     setIsPressed(false);
-  }, [scale]);
+  }, [scale, reducedMotion]);
 
   const variantStyles: Record<CardVariant, ViewStyle> = {
     default: {

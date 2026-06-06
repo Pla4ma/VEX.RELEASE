@@ -4,7 +4,7 @@
  * Covers: firstSentence, planId, makeBlock
  */
 
-import { firstSentence } from '../service-helpers';
+import { firstSentence } from '../service-helpers-plan';
 import { planId, makeBlock } from '../service';
 import { StudyBlockSchema } from '../schemas';
 

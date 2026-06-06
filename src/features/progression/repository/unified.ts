@@ -31,7 +31,7 @@ export async function createMasteryTrack(
   const { data, error } = await supabase
     .from(TABLE)
     .insert({ user_id: userId })
-    .select(tableColumns(TABLE))
+    .select('*')
     .single();
   if (error) {
     throw error;

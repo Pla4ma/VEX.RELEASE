@@ -1,8 +1,8 @@
-import type { MasteryRank } from '../progression/unified-mastery';
-import type { CoachPersona } from './coach-personas';
-import { getUnlockedPersonas } from './coach-personas';
-import type { CoachQuest } from './coach-quests';
-import { generateDailyQuest } from './coach-quests';
+import type { MasteryRank } from '../../progression/unified-mastery';
+import type { CoachPersona } from '../persona/coach-personas';
+import { getUnlockedPersonas } from '../persona/coach-personas';
+import type { CoachQuest } from '../recommendation/coach-quests';
+import { generateDailyQuest } from '../recommendation/coach-quests';
 
 export interface FreeTierFeatures {
   dailyReminders: boolean;

@@ -15,6 +15,7 @@ import { getMinTouchTargetStyle } from '../../utils/touchTarget';
 import type { AuthStackParams } from '../../navigation';
 import { useLoginScreen } from './useLoginScreen';
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+import { etherealText } from '@/theme/tokens/ethereal-sky';
 
 import {
   EtherealAuthButtons,
@@ -107,18 +108,18 @@ export const LoginScreen: React.FC<Props> = ({ navigation, route }) => {
             }}
           >
             <View
-              style={{ flex: 1, height: 1, backgroundColor: 'rgba(10, 10, 10, 0.12)' }}
+              style={{ flex: 1, height: 1, backgroundColor: etherealText.faintDivider }}
             />
             <Text
-              color="#0A0A0A"
+              color={etherealText.heading}
               fontSize={11}
               fontWeight="700"
-              style={{ color: 'rgba(10, 10, 10, 0.55)', letterSpacing: 2 }}
+              style={{ color: etherealText.muted, letterSpacing: 2 }}
             >
               OR SIGN IN
             </Text>
             <View
-              style={{ flex: 1, height: 1, backgroundColor: 'rgba(10, 10, 10, 0.12)' }}
+              style={{ flex: 1, height: 1, backgroundColor: etherealText.faintDivider }}
             />
           </View>
 
@@ -144,16 +145,16 @@ export const LoginScreen: React.FC<Props> = ({ navigation, route }) => {
               style={getMinTouchTargetStyle()}
             >
               <Text
-                color="#0A0A0A"
+                color={etherealText.heading}
                 fontSize={14}
-                style={{ color: 'rgba(10, 10, 10, 0.78)' }}
+                style={{ color: etherealText.subtitle }}
                 textAlign="center"
               >
                 New here?{' '}
                 <Text
                   fontSize={14}
                   fontWeight="700"
-                  style={{ color: '#0A0A0A', textDecorationLine: 'underline' }}
+                  style={{ color: etherealText.heading, textDecorationLine: 'underline' }}
                 >
                   Create your focus system
                 </Text>

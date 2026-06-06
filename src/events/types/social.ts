@@ -121,4 +121,9 @@ export interface SocialEventDefinitions {
     content: string;
     metadata: Record<string, unknown>;
   };
+  'duel:completed': {
+    winnerId: string;
+    challengerId: string;
+    challengedId: string;
+  };
 }

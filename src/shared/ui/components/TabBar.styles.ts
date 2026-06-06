@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { createSheet } from '@/shared/ui/create-sheet';
+import { rgbaColors } from '@/theme/tokens/rgba-colors';
 
 
 export const styles = createSheet({
@@ -32,7 +33,7 @@ export const styles = createSheet({
   badgeTextSmall: { fontSize: 8 },
   disabledOverlay: {
     ...StyleSheet.absoluteFill,
-    backgroundColor: 'rgba(0,0,0,0.3)',
+    backgroundColor: rgbaColors.rgb_0_0_0_0_3,
     borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',

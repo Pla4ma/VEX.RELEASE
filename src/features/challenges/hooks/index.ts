@@ -1,4 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import * as Sentry from '@sentry/react-native';
+import { useToast } from '../../../shared/ui/components/Toast';
 import { useCallback, useEffect } from 'react';
 import { eventBus } from '../../../events';
 import * as service from '../service';
@@ -6,6 +8,7 @@ import * as queries from '../queries';
 import * as repository from '../repository';
 import { economyKeys } from '../../economy/hooks';
 import type { UpdateChallengeProgressInput } from '../schemas';
+import type { UserChallengeSummary } from '../schemas/responses';
 export const challengeKeys = {
   all: ['challenges'] as const,
   byId: (id: string) => [...challengeKeys.all, id] as const,
@@ -66,6 +69,7 @@ export function useChallengeSummaries(userId: string) {
 }
 export function useUpdateChallengeProgress() {
   const queryClient = useQueryClient();
+  const { show } = useToast();
   return useMutation({
     mutationFn: (input: UpdateChallengeProgressInput) =>
       service.updateChallengeProgress(input),
@@ -77,10 +81,15 @@ export function useUpdateChallengeProgress() {
         queryKey: challengeKeys.userChallenge(input.userId, input.challengeId),
       });
     },
+    onError: (error) => {
+      Sentry.captureException(error, { tags: { feature: 'challenges', operation: 'updateChallengeProgress' } });
+      show({ type: 'error', title: 'Progress not saved', message: 'Try again when connection returns.' });
+    },
   });
 }
 export function useClaimChallengeReward() {
   const queryClient = useQueryClient();
+  const { show } = useToast();
   return useMutation({
     mutationFn: async (input: { userId: string; challengeId: string }) => {
       const result = await service.claimChallengeReward(input);
@@ -88,6 +97,31 @@ export function useClaimChallengeReward() {
         throw new Error(result.error ?? 'Challenge reward claim failed');
       }
       return result;
+    },
+    onMutate: async (variables) => {
+      const byUserKey = challengeKeys.byUser(variables.userId);
+      const activeKey = challengeKeys.active(variables.userId);
+      await queryClient.cancelQueries({ queryKey: byUserKey });
+      await queryClient.cancelQueries({ queryKey: activeKey });
+
+      const previousByUser = queryClient.getQueryData<UserChallengeSummary[]>(byUserKey);
+      const previousActive = queryClient.getQueryData<UserChallengeSummary[]>(activeKey);
+
+      if (previousByUser) {
+        queryClient.setQueryData<UserChallengeSummary[]>(byUserKey, previousByUser.map((c) =>
+          c.challengeId === variables.challengeId
+            ? { ...c, status: 'CLAIMED' as const, isClaimable: false }
+            : c,
+        ));
+      }
+
+      if (previousActive) {
+        queryClient.setQueryData<UserChallengeSummary[]>(activeKey, previousActive.filter(
+          (c) => c.challengeId !== variables.challengeId,
+        ));
+      }
+
+      return { byUserKey, activeKey, previousByUser, previousActive };
     },
     onSuccess: (_data, input) => {
       queryClient.invalidateQueries({
@@ -99,6 +133,16 @@ export function useClaimChallengeReward() {
       queryClient.invalidateQueries({
         queryKey: economyKeys.wallet(input.userId),
       });
+    },
+    onError: (error, variables, context) => {
+      if (context?.previousByUser) {
+        queryClient.setQueryData(context.byUserKey, context.previousByUser);
+      }
+      if (context?.previousActive) {
+        queryClient.setQueryData(context.activeKey, context.previousActive);
+      }
+      Sentry.captureException(error, { tags: { feature: 'challenges', operation: 'claimChallengeReward' } });
+      show({ type: 'error', title: 'Reward not claimed', message: 'Try again when connection returns.' });
     },
   });
 }
@@ -120,6 +164,7 @@ export function useChallengeProgress(userId: string) {
 }
 export function useRerollChallenge() {
   const queryClient = useQueryClient();
+  const { show } = useToast();
   return useMutation({
     mutationFn: (input: {
       userId: string;
@@ -134,6 +179,10 @@ export function useRerollChallenge() {
       queryClient.invalidateQueries({
         queryKey: challengeKeys.active(input.userId),
       });
+    },
+    onError: (error) => {
+      Sentry.captureException(error, { tags: { feature: 'challenges', operation: 'rerollChallenge' } });
+      show({ type: 'error', title: 'Reroll failed', message: 'Try again when connection returns.' });
     },
   });
 }

@@ -2,6 +2,7 @@ import React from 'react';
 import { Platform, View } from 'react-native';
 import Animated, {
   useAnimatedStyle,
+  useReducedMotion,
   useSharedValue,
   withRepeat,
   withSequence,
@@ -29,8 +30,13 @@ export const Skeleton: React.FC<SkeletonProps> = ({
   animate = true,
 }) => {
   const { theme } = useTheme();
+  const reducedMotion = useReducedMotion();
   const opacity = useSharedValue(0.3);
   React.useEffect(() => {
+    if (reducedMotion) {
+      opacity.value = 0.5;
+      return;
+    }
     opacity.value = animate
       ? withRepeat(
           withSequence(
@@ -41,7 +47,7 @@ export const Skeleton: React.FC<SkeletonProps> = ({
           true,
         )
       : 0.3;
-  }, [animate, opacity]);
+  }, [animate, opacity, reducedMotion]);
   const animatedOpacityStyle = useAnimatedStyle(() => ({
     opacity: opacity.value,
   }));

@@ -6,7 +6,7 @@ import {
   ALLOWED_ROOT_SCREENS,
   toOptionalString,
 } from './notification-routing-types';
-import { isFeatureHidden } from '../features/liveops-config/final-release-feature-map';
+import { isFeatureHidden } from '../features/liveops-config/FeatureFlagService';
 import { canUseFeature, type FeatureAccessCheck } from './notification-filters';
 
 /**

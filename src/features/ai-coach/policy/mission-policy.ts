@@ -1,5 +1,5 @@
-import { validateCoachInput, type CoachInputContract } from './input-contract';
-import { validateMessageQuality } from './message-quality-gate';
+import { validateCoachInput, type CoachInputContract } from '../input/input-contract';
+import { validateMessageQuality } from '../message/message-quality-gate';
 import {
   createDailyMissionFromSuggestion,
   determineCoachPriority,
@@ -9,8 +9,8 @@ import {
   generateUUID,
   trackCoachSuggestionAccepted,
   trackCoachSuggestionConversionFailed,
-} from './ai-helpers';
-import { CoachSuggestionSchema, type CoachSuggestion } from './suggestion-schemas';
+} from '../ai-helpers';
+import { CoachSuggestionSchema, type CoachSuggestion } from '../recommendation/suggestion-schemas';
 
 export async function generateMissionSuggestion(
   userId: string,

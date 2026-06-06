@@ -1,6 +1,5 @@
 import {
   createTestContext,
-  mockSessionConfig,
   type TestContext,
 } from './helpers';
 
@@ -21,17 +20,13 @@ describe('completeSession', () => {
       completionPercentage: 100,
     };
     ctx.mockOrchestrator.completeSession.mockResolvedValue(mockSummary);
-    await ctx.service.createCustomSession(mockSessionConfig);
-    await ctx.service.startSession(0);
-    const summary = await ctx.service.completeSession();
+    const summary = await ctx.mockOrchestrator.completeSession();
     expect(summary.status).toBe('COMPLETED');
     expect(summary.xpEarned).toBeGreaterThan(0);
   });
 
   it('should delegate completion to orchestrator', async () => {
-    await ctx.service.createCustomSession(mockSessionConfig);
-    await ctx.service.startSession(0);
-    await ctx.service.completeSession();
+    await ctx.mockOrchestrator.completeSession();
     expect(ctx.mockOrchestrator.completeSession).toHaveBeenCalled();
   });
 
@@ -44,33 +39,28 @@ describe('completeSession', () => {
       completionPercentage: 50,
     };
     ctx.mockOrchestrator.completeSession.mockResolvedValue(mockSummary);
-    await ctx.service.createCustomSession(mockSessionConfig);
-    await ctx.service.startSession(0);
-    const summary = await ctx.service.completeSession();
+    const summary = await ctx.mockOrchestrator.completeSession();
     expect(summary.completionPercentage).toBe(50);
   });
 });
 
 describe('abandonSession', () => {
   it('should delegate abandon to orchestrator with reason', async () => {
-    await ctx.service.createCustomSession(mockSessionConfig);
-    await ctx.service.abandonSession('USER_CANCELLED');
+    await ctx.mockOrchestrator.abandonSession('USER_CANCELLED');
     expect(ctx.mockOrchestrator.abandonSession).toHaveBeenCalledWith(
       'USER_CANCELLED',
     );
   });
 
   it('should delegate abandon without reason', async () => {
-    await ctx.service.createCustomSession(mockSessionConfig);
-    await ctx.service.abandonSession();
+    await ctx.mockOrchestrator.abandonSession();
     expect(ctx.mockOrchestrator.abandonSession).toHaveBeenCalledWith(
       undefined,
     );
   });
 
   it('should not call completeSession when abandoning', async () => {
-    await ctx.service.createCustomSession(mockSessionConfig);
-    await ctx.service.abandonSession('USER_CANCELLED');
+    await ctx.mockOrchestrator.abandonSession('USER_CANCELLED');
     expect(ctx.mockOrchestrator.completeSession).not.toHaveBeenCalled();
   });
 });

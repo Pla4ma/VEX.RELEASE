@@ -5,10 +5,8 @@ import { createDebugger } from '../../utils/debug';
 import { useAuthStore } from '../../store';
 import * as notificationService from '../../features/notifications/service';
 import type { ExtendedRootStackParams } from '../../navigation/types';
-import {
-  routeNotificationAction,
-  getAvailableNotificationFilters,
-} from '../../navigation/notification-routing-core';
+import { routeNotificationAction } from '../../navigation/notification-navigator';
+import { getAvailableNotificationFilters } from '../../navigation/notification-filters';
 import { useFeatureAccess } from '../../features/liveops-config';
 import { useOnboardingStore } from '../../features/onboarding/store';
 import {

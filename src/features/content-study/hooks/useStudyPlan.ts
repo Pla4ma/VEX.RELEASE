@@ -5,6 +5,8 @@
 
 import { useState, useCallback } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import * as Sentry from '@sentry/react-native';
+import { useToast } from '../../../shared/ui/components/Toast';
 import { useAuthStore } from '../../../store';
 import { fetchGenerationById, fetchContentById } from '../ContentStudyService';
 import { studySessionManager } from '../persistence';
@@ -16,6 +18,7 @@ import { getStudyPlanTitle } from './helpers';
 export function useStudyPlan(generationId: string) {
   const queryClient = useQueryClient();
   const { user } = useAuthStore();
+  const { show } = useToast();
   const [isStartingSession, setIsStartingSession] = useState(false);
 
   const generationQuery = useQuery({
@@ -119,6 +122,10 @@ export function useStudyPlan(generationId: string) {
       await queryClient.invalidateQueries({
         queryKey: contentStudyQueryKeys.activePlan(user?.id ?? ''),
       });
+    },
+    onError: (error) => {
+      Sentry.captureException(error, { tags: { feature: 'content-study', operation: 'completeTask' } });
+      show({ type: 'error', title: 'Task not completed', message: 'Try again when connection returns.' });
     },
   });
 

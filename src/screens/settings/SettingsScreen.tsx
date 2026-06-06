@@ -7,7 +7,7 @@ import { Box, Text } from '../../components/primitives';
 import { useAuthStore } from '../../store';
 import type { SettingsStackParams } from '../../navigation';
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
-import { isFeatureHidden } from '../../features/liveops-config/final-release-feature-map';
+import { isFeatureHidden } from '../../features/liveops-config/FeatureFlagService';
 import { useSettingsStore } from '../../features/settings/store';
 import { SettingsProfileRow } from './SettingsProfileRow';
 import { SettingsSectionGroup } from './SettingsSectionGroup';

@@ -92,11 +92,11 @@ export class FeatureFlagService {
   }
 
   isEnabled(key: string): boolean {
-    return evaluateFlag(key, this.flags, this.overrides, this.userId, hashString);
+    return evaluateFlag(key, this.flags, this.overrides, this.userId ?? null, hashString);
   }
 
   get<T extends FeatureFlagValue>(key: string, defaultValue: T): T {
-    return getFlagValue(key, defaultValue, this.flags, this.overrides, this.userId, this.isEnabled.bind(this));
+    return getFlagValue(key, defaultValue, this.flags, this.overrides, this.userId ?? null, this.isEnabled.bind(this));
   }
 
   async setOverride(key: string, value: FeatureFlagValue): Promise<void> {

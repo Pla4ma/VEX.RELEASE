@@ -1,30 +1,30 @@
 import { useState, useCallback, useRef } from 'react';
-import { getSessionService } from '../SessionService';
+import { getSessionOrchestrator } from '../SessionOrchestrator';
 
 export function useSessionPresets() {
-  const serviceRef = useRef(getSessionService());
-  const service = serviceRef.current;
-  const [presets, setPresets] = useState(service.getAllPresets());
+  const orchestratorRef = useRef(getSessionOrchestrator());
+  const orchestrator = orchestratorRef.current;
+  const [presets, setPresets] = useState(orchestrator.getAllPresets());
 
   const refresh = useCallback(() => {
-    setPresets(service.getAllPresets());
-  }, [service]);
+    setPresets(orchestrator.getAllPresets());
+  }, [orchestrator]);
 
   const createPreset = useCallback(
-    async (config: Parameters<typeof service.createCustomPreset>[0]) => {
-      const preset = await service.createCustomPreset(config);
+    async (config: Parameters<typeof orchestrator.createCustomPreset>[0]) => {
+      const preset = await orchestrator.createCustomPreset(config);
       refresh();
       return preset;
     },
-    [service, refresh],
+    [orchestrator, refresh],
   );
 
   const deletePreset = useCallback(
     async (presetId: string) => {
-      await service.deletePreset(presetId);
+      await orchestrator.deletePreset(presetId);
       refresh();
     },
-    [service, refresh],
+    [orchestrator, refresh],
   );
 
   return { presets, createPreset, deletePreset, refresh };

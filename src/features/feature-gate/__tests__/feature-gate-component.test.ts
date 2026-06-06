@@ -4,7 +4,7 @@ jest.mock('../../liveops-config/hooks/useFeatureAccess', () => ({
   useFeatureAccess: jest.fn(),
 }));
 
-jest.mock('../../liveops-config/feature-availability', () => ({
+jest.mock('../../liveops-config/FeatureFlagService', () => ({
   getFeatureAvailability: jest.fn(),
 }));
 
@@ -20,7 +20,7 @@ const { useFeatureAccess: mockUseFeatureAccess } = jest.requireMock(
   '../../liveops-config/hooks/useFeatureAccess',
 ) as { useFeatureAccess: jest.Mock };
 const { getFeatureAvailability: mockGetFeatureAvailability } = jest.requireMock(
-  '../../liveops-config/feature-availability',
+  '../../liveops-config/FeatureFlagService',
 ) as { getFeatureAvailability: jest.Mock };
 
 const { makeFeatureAccess, setupFeatureGate } =

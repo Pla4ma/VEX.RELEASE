@@ -1,7 +1,7 @@
-import { captureSilentFailure } from '../../utils/silent-failure';
-import { generateSessionSummary } from '../../shared/ai/edge-function-service';
-import { getOrCreateCoachState } from './persona-manager';
-import { getSessionRepository } from '../../session/repository/SessionRepository';
+import { captureSilentFailure } from '../../../utils/silent-failure';
+import { generateSessionSummary } from '../../../shared/ai/edge-function-service';
+import { getOrCreateCoachState } from '../persona/persona-manager';
+import { getSessionRepository } from '../../../session/repository/SessionRepository';
 
 interface SummaryContext {
   sessionCount: number;

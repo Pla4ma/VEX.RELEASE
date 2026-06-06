@@ -1,5 +1,5 @@
 import type { CoachMemory } from './memory-schemas';
-import { hasMemoryOfType as repoHasMemoryOfType } from './repository/memories';
+import { hasMemoryOfType as repoHasMemoryOfType } from '../repository/memories';
 import { storeMemory, getMemoriesByType } from './CoachMemory';
 
 export async function checkFirstSGrade(

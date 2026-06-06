@@ -2,7 +2,7 @@ import type { FeatureKey } from '../features/liveops-config/feature-access';
 import {
   getFeatureAvailabilityFor,
   isFeatureAvailableForQueries,
-} from '../features/liveops-config/feature-availability';
+} from '../features/liveops-config/FeatureFlagService';
 import { createDebugger } from '../utils/debug';
 import {
   QueryKeys,

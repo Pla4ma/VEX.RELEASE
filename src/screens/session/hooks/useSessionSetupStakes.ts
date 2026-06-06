@@ -4,7 +4,7 @@ import { useActiveBoss } from '../../../features/boss/hooks';
 import { useActiveChallenges } from '../../../features/challenges/hooks';
 import { useStreakSummary } from '../../../features/streaks/hooks';
 import type { SessionStakesBriefingProps } from '../../../features/session-start/components/SessionStakesBriefing';
-import { isFeatureHidden } from '../../../features/liveops-config/final-release-feature-map';
+import { isFeatureHidden } from '../../../features/liveops-config/FeatureFlagService';
 
 type UseSessionSetupStakesInput = {
   currentStreakDays: number | null;

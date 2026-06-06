@@ -7,7 +7,7 @@ import {
   isFeatureHidden,
   isFeatureIncluded,
   getFeatureStatus,
-} from '../../features/liveops-config/final-release-feature-map';
+} from '../../features/liveops-config/FeatureFlagService';
 import { decideHomeSurfaces } from '../../features/home-experience/home-surface-decision';
 import { buildLaneSessionBrief } from '../../features/session-start/service';
 import type { Lane } from '../../features/lane-engine/types';

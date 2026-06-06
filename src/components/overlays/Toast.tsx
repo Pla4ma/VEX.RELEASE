@@ -3,6 +3,7 @@ import { View, type ViewStyle } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
+  useReducedMotion,
   withTiming,
   withSpring,
   runOnJS,
@@ -12,6 +13,7 @@ import { Box, Text } from '../primitives';
 import { Icon } from '../../icons';
 import { createSheet } from '@/shared/ui/create-sheet';
 import { lightColors } from '@/theme/tokens/colors';
+import { rgbaColors } from '@/theme/tokens/rgba-colors';
 
 type IconName = string;
 export type ToastType = 'info' | 'success' | 'warning' | 'error';
@@ -65,6 +67,7 @@ export const Toast: React.FC<ToastProps> = ({
   style,
 }) => {
   const { theme } = useTheme();
+  const reducedMotion = useReducedMotion();
   const colors = getTypeColors(theme);
   const typeColors = colors[type];
   const toastIcon = icon || typeIconMap[type];
@@ -76,12 +79,27 @@ export const Toast: React.FC<ToastProps> = ({
     transform: [{ translateY: translateY.value }, { scale: scale.value }],
   }));
   const show = useCallback(() => {
+    if (reducedMotion) {
+      opacity.value = 1;
+      scale.value = 1;
+      translateY.value = position === 'top' ? 60 : position === 'center' ? 0 : -60;
+      return;
+    }
     opacity.value = withTiming(1, { duration: 200 });
     scale.value = withSpring(1, { damping: 20, stiffness: 300 });
     const targetY = position === 'top' ? 60 : position === 'center' ? 0 : -60;
     translateY.value = withSpring(targetY, { damping: 20, stiffness: 300 });
-  }, [opacity, scale, translateY, position]);
+  }, [opacity, scale, translateY, position, reducedMotion]);
   const hide = useCallback(() => {
+    if (reducedMotion) {
+      opacity.value = 0;
+      scale.value = 0.8;
+      translateY.value = position === 'top' ? -100 : position === 'bottom' ? 100 : 0;
+      if (onHide) {
+        runOnJS(onHide)();
+      }
+      return;
+    }
     opacity.value = withTiming(0, { duration: 150 });
     scale.value = withTiming(0.8, { duration: 150 });
     const targetY = position === 'top' ? -100 : position === 'bottom' ? 100 : 0;
@@ -90,7 +108,7 @@ export const Toast: React.FC<ToastProps> = ({
         runOnJS(onHide)();
       }
     });
-  }, [opacity, scale, translateY, position, onHide]);
+  }, [opacity, scale, translateY, position, onHide, reducedMotion]);
   useEffect(() => {
     if (visible) {
       show();
@@ -143,7 +161,7 @@ const styles = createSheet({
   container: {
     paddingHorizontal: 16,
     paddingVertical: 12,
-    boxShadow: '0px 2px 4px rgba(0,0,0,0.1)',
+    boxShadow: `0px 2px 4px ${rgbaColors.rgb_0_0_0_0_1}`,
     elevation: 4,
     zIndex: 2000,
   },

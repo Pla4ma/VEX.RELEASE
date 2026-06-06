@@ -9,7 +9,7 @@ import { useToastHelpers } from '../../../shared/ui/components/Toast';
 import {
   createCoachMemory,
   fetchCoachMemories,
-} from '../services/memory-service';
+} from '../service/memory-service';
 import type {
   CoachMemory,
   CreateCoachMemoryInput,

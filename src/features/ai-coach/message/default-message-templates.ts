@@ -1,4 +1,4 @@
-import type { MessageCategory } from './types';
+import type { MessageCategory } from '../types';
 
 export const DEFAULT_MESSAGE_TEMPLATES: Record<MessageCategory, string[]> = {
   STREAK_RISK: [

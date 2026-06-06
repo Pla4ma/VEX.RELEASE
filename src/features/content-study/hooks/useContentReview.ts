@@ -5,6 +5,8 @@
 
 import { useState, useCallback, useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import * as Sentry from '@sentry/react-native';
+import { useToast } from '../../../shared/ui/components/Toast';
 import { useAuthStore } from '../../../store';
 import {
   fetchContentById,
@@ -39,6 +41,7 @@ function createInitialContentReviewState(): ContentReviewState {
 export function useContentReview(contentId: string) {
   const { user } = useAuthStore();
   const queryClient = useQueryClient();
+  const { show } = useToast();
   const [state, setState] = useState<ContentReviewState>(
     createInitialContentReviewState,
   );
@@ -125,6 +128,10 @@ export function useContentReview(contentId: string) {
         queryKey: contentStudyQueryKeys.content(contentId),
       });
     },
+    onError: (error) => {
+      Sentry.captureException(error, { tags: { feature: 'content-study', operation: 'saveEdits' } });
+      show({ type: 'error', title: 'Save failed', message: 'Try again when connection returns.' });
+    },
   });
 
   const saveEdits = useCallback(async () => {
@@ -143,6 +150,10 @@ export function useContentReview(contentId: string) {
       queryClient.invalidateQueries({
         queryKey: contentStudyQueryKeys.all,
       });
+    },
+    onError: (error) => {
+      Sentry.captureException(error, { tags: { feature: 'content-study', operation: 'generateStudyPlan' } });
+      show({ type: 'error', title: 'Generation failed', message: 'Try again when connection returns.' });
     },
   });
 

@@ -5,6 +5,8 @@
  */
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import * as Sentry from '@sentry/react-native';
+import { useToast } from '../../../shared/ui/components/Toast';
 import * as service from './service';
 import { useAuthStore } from '../../../store';
 import { lightColors } from '@/theme/tokens/colors';
@@ -77,6 +79,7 @@ export function useCurrentMonthlyReportPreview() {
 
 export function useRefreshMonthlyReport() {
   const queryClient = useQueryClient();
+  const { show } = useToast();
 
   return useMutation({
     mutationFn: async ({
@@ -105,6 +108,10 @@ export function useRefreshMonthlyReport() {
           variables.month,
         ),
       });
+    },
+    onError: (error) => {
+      Sentry.captureException(error, { tags: { feature: 'monthly-report', operation: 'refreshMonthlyReport' } });
+      show({ type: 'error', title: 'Report not refreshed', message: 'Try again when connection returns.' });
     },
   });
 }

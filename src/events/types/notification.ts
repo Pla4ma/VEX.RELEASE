@@ -34,4 +34,14 @@ export interface NotificationEventDefinitions {
     body: string;
     timestamp: number;
   };
+  'notifications:squad_broadcast': {
+    squadId: string;
+    type: string;
+    data: {
+      challengeId: string;
+      progress: number;
+      target: number;
+      percentComplete: number;
+    };
+  };
 }

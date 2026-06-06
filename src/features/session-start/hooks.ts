@@ -23,7 +23,7 @@ import type { SessionStake } from './schemas';
 import { useSessionSetupState } from '../../screens/session/hooks/useSessionSetupState';
 import { useStartSessionFlow } from '../../screens/session/hooks/useStartSessionFlow';
 import { PRESETS } from '../../screens/session/utils/session-setup';
-import { isFeatureHidden } from '../liveops-config/final-release-feature-map';
+import { isFeatureHidden } from '../liveops-config/FeatureFlagService';
 
 type SessionSetupRouteParams = SessionStackParams['SessionSetup'];
 type SessionNavigationProp = NativeStackNavigationProp<SessionStackParams>;

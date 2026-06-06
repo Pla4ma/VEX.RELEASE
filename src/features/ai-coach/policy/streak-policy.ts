@@ -1,12 +1,12 @@
-import { validateCoachInput } from './input-contract';
-import { validateMessageQuality } from './message-quality-gate';
-import { buildInputContractFromStreakData } from './input-builders';
+import { validateCoachInput } from '../input/input-contract';
+import { validateMessageQuality } from '../message/message-quality-gate';
+import { buildInputContractFromStreakData } from '../input/input-builders';
 import {
   extractActionFromMessage,
   generateStreakProtectionMessage,
   generateUUID,
-} from './ai-helpers';
-import { CoachSuggestionSchema, type CoachSuggestion } from './suggestion-schemas';
+} from '../ai-helpers';
+import { CoachSuggestionSchema, type CoachSuggestion } from '../recommendation/suggestion-schemas';
 
 export async function handleStreakRiskIntegration(
   userId: string,

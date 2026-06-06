@@ -1,9 +1,6 @@
-import { SessionService, createSessionService } from '../SessionService';
+import { getSessionOrchestrator } from '../SessionOrchestrator';
 import { getSessionRepository } from '../repository/SessionRepository';
 import { eventBus } from '../../events';
-import { SESSION_CONSTANTS } from '../index';
-import { getSessionOrchestrator } from '../SessionOrchestrator';
-import { getSessionEventEmitter } from '../SessionEventEmitter';
 
 jest.mock('../repository/SessionRepository');
 jest.mock('../../events');
@@ -33,7 +30,7 @@ jest.mock('../presets', () => ({
 }));
 
 export interface TestContext {
-  service: SessionService;
+  orchestrator: Record<string, jest.Mock>;
   mockRepository: jest.Mocked<ReturnType<typeof getSessionRepository>>;
   mockOrchestrator: Record<string, jest.Mock>;
 }
@@ -79,6 +76,23 @@ export function createTestContext(): TestContext {
     destroy: jest.fn(),
     getSession: jest.fn(),
     getPercentageComplete: jest.fn(),
+    getCurrentSession: jest.fn().mockReturnValue(null),
+    isPaused: jest.fn().mockReturnValue(false),
+    isSessionPaused: jest.fn().mockReturnValue(false),
+    getRemainingSeconds: jest.fn().mockReturnValue(0),
+    getElapsedSeconds: jest.fn().mockReturnValue(0),
+    getCompletionPercentage: jest.fn().mockReturnValue(0),
+    getCurrentPurityScore: jest.fn().mockReturnValue(100),
+    getPurityLabel: jest.fn().mockReturnValue('Elite'),
+    getSessionHistory: jest.fn().mockResolvedValue([]),
+    getSessionStats: jest.fn().mockResolvedValue({
+      totalSessions: 0,
+      totalDuration: 0,
+      streak: 0,
+    }),
+    getAllPresets: jest.fn().mockReturnValue([]),
+    createCustomPreset: jest.fn(),
+    deletePreset: jest.fn().mockResolvedValue(undefined),
   };
 
   (getSessionOrchestrator as jest.Mock).mockReturnValue(mockOrchestrator);
@@ -111,7 +125,6 @@ export function createTestContext(): TestContext {
   (eventBus.publish as jest.Mock).mockImplementation(() => {});
   (eventBus.subscribe as jest.Mock).mockImplementation(() => () => {});
 
-  const service = createSessionService();
+  const service = orchestrator;
   service.setUserId(mockUserId);
-  return { service, mockRepository, mockOrchestrator };
-}
+  return { service, mockRepository, mockOrchestrator };}

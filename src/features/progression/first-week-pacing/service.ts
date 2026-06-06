@@ -112,7 +112,7 @@ export async function getFirstWeekProgress(
     const { data: createdData, error: createError } = await supabase
       .from('first_week_progress')
       .insert(newProgress)
-      .select(tableColumns('first_week_progress'))
+      .select('*')
       .single();
 
     if (createError) {

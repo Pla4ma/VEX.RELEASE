@@ -1,5 +1,5 @@
-import * as service from './services/service';
-import { generateAndSendMessage } from './message-helpers';
+import * as service from '../service/service';
+import { generateAndSendMessage } from '../message/message-helpers';
 
 export async function handleLevelUp(payload: {
   userId: string;

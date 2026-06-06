@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { View } from 'react-native';
 import Animated, {
   useAnimatedStyle,
+  useReducedMotion,
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
@@ -32,16 +33,21 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
   label,
 }) => {
   const { theme } = useTheme();
+  const reducedMotion = useReducedMotion();
   const animatedValue = useSharedValue(0);
   const nextProgress = clampProgress(progress);
   const barColor = color ?? theme.colors.semantic.primary;
   const bgColor = backgroundColor ?? theme.colors.semantic.border;
 
   useEffect(() => {
+    if (reducedMotion) {
+      animatedValue.value = nextProgress;
+      return;
+    }
     animatedValue.value = animated
       ? withTiming(nextProgress, { duration: 500 })
       : nextProgress;
-  }, [animated, animatedValue, nextProgress]);
+  }, [animated, animatedValue, nextProgress, reducedMotion]);
 
   const fillStyle = useAnimatedStyle(() => ({
     width: `${animatedValue.value * 100}%`,

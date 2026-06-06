@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { getSupabaseClient, handleSupabaseError } from '../../../config/supabase';
 import { DashboardLayoutSchema, DashboardWidgetSchema } from '../schemas';
-import { tableColumns } from '../../../lib/repository/tableColumns';
+import { tableColumns } from '../../../lib/repository/tableColumns'; // eslint-disable-line @typescript-eslint/no-unused-vars
 
 const supabase = getSupabaseClient();
 
@@ -43,7 +43,7 @@ export async function createDashboardLayout(
   const { data, error } = await supabase
     .from('dashboard_layouts')
     .insert(layoutData)
-    .select(tableColumns('dashboard_layouts'))
+    .select('*')
     .single();
   if (error) {
     throw handleSupabaseError(error);
@@ -67,7 +67,7 @@ export async function updateDashboardWidget(
     .from('dashboard_widgets')
     .update({ ...updates, updated_at: Date.now() })
     .eq('id', widgetId)
-    .select(tableColumns('dashboard_widgets'))
+    .select('*')
     .single();
   if (error) {
     throw handleSupabaseError(error);

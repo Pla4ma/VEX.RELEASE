@@ -1,4 +1,4 @@
-import * as repository from './repository';
+import * as repository from '../repository';
 import {
   ScheduleReminderInputSchema,
   AdjustDifficultyInputSchema,
@@ -8,15 +8,15 @@ import {
   type MessageCategory,
   type ScheduleReminderInput,
   type AdjustDifficultyInput,
-} from './schemas';
-import { generateMessage } from './message-generator';
+} from '../schemas';
+import { generateMessage } from '../message/message-generator';
 import {
   activateComeback,
   acceptComeback,
   trackComebackSession,
   COMEBACK_BONUS_MULTIPLIER,
   COMEBACK_TARGET_SESSIONS,
-} from './comeback-manager';
+} from '../session/comeback-manager';
 
 const MUTE_DURATION_HOURS = 24;
 

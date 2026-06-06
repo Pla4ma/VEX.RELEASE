@@ -11,6 +11,7 @@ import { VexActivationButton } from '../VexPrimaryButton';
 import { VexGlassInput } from '../VexGlassInput';
 import { GlassSurface } from './GlassSurface';
 import { getMinTouchTargetStyle } from '../../../../utils/touchTarget';
+import { etherealText } from '@/theme/tokens/ethereal-sky';
 
 type LoginEmailFormProps = {
   email: string;
@@ -70,10 +71,10 @@ export function LoginEmailForm({
           style={getMinTouchTargetStyle()}
         >
           <Text
-            color="#0A0A0A"
+            color={etherealText.heading}
             fontSize={13}
             fontWeight="600"
-            style={{ color: 'rgba(10, 10, 10, 0.72)' }}
+            style={{ color: etherealText.subtitle }}
           >
             Forgot password?
           </Text>

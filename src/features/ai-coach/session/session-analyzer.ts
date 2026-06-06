@@ -1,5 +1,5 @@
-import { v4 } from '../../utils/uuid';
-import * as repository from './repository';
+import { v4 } from '../../../utils/uuid';
+import * as repository from '../repository';
 import {
   ProcessBehaviorSignalInputSchema,
   CreateRecommendationInputSchema,
@@ -8,20 +8,20 @@ import {
   type ProcessBehaviorSignalInput,
   type CreateRecommendationInput,
   type SessionRecommendation,
-} from './schemas';
-import { getOrCreateCoachState, updateCoachState } from './persona-manager';
-import { generateSessionSummary as callEdgeSessionSummary } from '../../shared/ai/edge-function-service';
-import type { GenerateSessionSummaryResponse } from '../../shared/ai';
+} from '../schemas';
+import { getOrCreateCoachState, updateCoachState } from '../persona/persona-manager';
+import { generateSessionSummary as callEdgeSessionSummary } from '../../../shared/ai/edge-function-service';
+import type { GenerateSessionSummaryResponse } from '../../../shared/ai';
 import {
   calculateSignalConfidence,
   calculateConfidenceLevel,
   aggregateSignals,
   determineUserState,
-} from './behavior-signal-helpers';
+} from '../intervention/behavior-signal-helpers';
 import {
   buildRecommendation,
   readNumber,
-} from './recommendation-builder';
+} from '../recommendation/recommendation-builder';
 import {
   enrichSessionSummaryContext,
   type SessionSummaryContext,

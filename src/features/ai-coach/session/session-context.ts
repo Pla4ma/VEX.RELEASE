@@ -1,7 +1,7 @@
-import { captureSilentFailure } from '../../utils/silent-failure';
-import { getSessionRepository } from '../../session/repository/SessionRepository';
-import { getSessionService } from '../../session/SessionService';
-import type { SessionHistoryEntry } from '../../session/types';
+import { captureSilentFailure } from '../../../utils/silent-failure';
+import { getSessionRepository } from '../../../session/repository/SessionRepository';
+import { getSessionOrchestrator } from '../../../session/SessionOrchestrator';
+import type { SessionHistoryEntry } from '../../../session/types';
 import type { z } from 'zod';
 import type { GenerationRecord } from './session-analyzer-types';
 import { SessionNotesSchema } from './session-analyzer-types';
@@ -98,32 +98,13 @@ export async function getLatestSessionAIContext(
   };
 }
 
-// ─── Latest session fetch ───────────────────────────────────────
 async function getLatestSession(
   userId: string,
 ): Promise<SessionHistoryEntry | null> {
-  const sessionService = getSessionService();
-  sessionService.setUserId(userId);
-  if (hasRecentSessionsMethod(sessionService)) {
-    const recentSessions = await sessionService.getRecentSessions(userId, 1);
-    return recentSessions[0] ?? null;
-  }
-  const recentSessions = await sessionService.getSessionHistory(1);
+  const orchestrator = getSessionOrchestrator();
+  orchestrator.setUserId(userId);
+  const recentSessions = await orchestrator.getSessionHistory(1);
   return recentSessions[0] ?? null;
-}
-
-function hasRecentSessionsMethod(
-  service: ReturnType<typeof getSessionService>,
-): service is ReturnType<typeof getSessionService> & {
-  getRecentSessions: (
-    userId: string,
-    limit: number,
-  ) => Promise<SessionHistoryEntry[]>;
-} {
-  return (
-    'getRecentSessions' in service &&
-    typeof service.getRecentSessions === 'function'
-  );
 }
 
 // ─── Notes parsing ──────────────────────────────────────────────

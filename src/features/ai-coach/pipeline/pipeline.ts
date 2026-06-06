@@ -1,10 +1,10 @@
-import { getSupabaseClient } from '../../config/supabase';
-import { getProgressionService } from '../../progression/ProgressionService';
-import { getSessionRepository } from '../../session/repository/SessionRepository';
-import { getCoachPersonas, getOrCreateCoachState } from './persona-manager';
-import { scheduleReminder } from './reminder-scheduler';
-import * as repository from './repository';
-import { processBehaviorSignal as processBehaviorSignalBase } from './session-analyzer';
+import { getSupabaseClient } from '../../../config/supabase';
+import { getProgressionService } from '../../../progression/ProgressionService';
+import { getSessionRepository } from '../../../session/repository/SessionRepository';
+import { getCoachPersonas, getOrCreateCoachState } from '../persona/persona-manager';
+import { scheduleReminder } from '../notification/reminder-scheduler';
+import * as repository from '../repository';
+import { processBehaviorSignal as processBehaviorSignalBase } from '../session/session-analyzer';
 import {
   CoachMessageSchema,
   type CoachMessage,
@@ -12,7 +12,7 @@ import {
   type GenerateMessageInput,
   type InterventionExecution,
   type TriggerType,
-} from './schemas';
+} from '../schemas';
 import { AIMessagePayloadSchema } from './pipeline-schemas';
 import type { GenerateMessageArgs, EvaluateArgs } from './pipeline-schemas';
 import {
@@ -26,7 +26,7 @@ import {
   readBoolean,
 } from './pipeline-helpers';
 import { activateComeback } from './pipeline-comeback';
-import { sanitizeLLMContext } from './llm-input-sanitizer';
+import { sanitizeLLMContext } from '../input/llm-input-sanitizer';
 
 export { activateComeback } from './pipeline-comeback';
 

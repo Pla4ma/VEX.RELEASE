@@ -2,7 +2,7 @@ import {
   type MessageCategory,
   type InterventionExecution,
   type ComebackPlan,
-} from './schemas';
+} from '../schemas';
 import type { CoachMetrics } from './analytics-types';
 import {
   hashUserId,

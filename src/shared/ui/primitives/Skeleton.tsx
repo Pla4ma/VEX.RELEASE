@@ -2,6 +2,7 @@ import React from 'react';
 import { View, ViewStyle, DimensionValue } from 'react-native';
 import Animated, {
   useAnimatedStyle,
+  useReducedMotion,
   useSharedValue,
   withRepeat,
   withTiming,
@@ -32,16 +33,21 @@ export function Skeleton({
   animated = true,
 }: SkeletonProps) {
   const { theme } = useTheme();
+  const reducedMotion = useReducedMotion();
   const shimmerValue = useSharedValue(0);
   React.useEffect(() => {
     if (animated) {
+      if (reducedMotion) {
+        shimmerValue.value = 0;
+        return;
+      }
       shimmerValue.value = withRepeat(
         withTiming(1, { duration: 1500 }),
         -1,
         false,
       );
     }
-  }, [animated, shimmerValue]);
+  }, [animated, shimmerValue, reducedMotion]);
   const shimmerStyle = useAnimatedStyle(() => ({
     transform: [
       { translateX: interpolate(shimmerValue.value, [0, 1], [-200, 200]) },

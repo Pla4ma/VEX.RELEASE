@@ -1,10 +1,7 @@
 import { createDebugger } from '../utils/debug';
 
-import {
-  deepLinkToNotificationAction,
-  isValidNotificationAction,
-  routeNotificationAction,
-} from './notification-routing-core';
+import { deepLinkToNotificationAction } from './notification-deep-link';
+import { isValidNotificationAction, routeNotificationAction } from './notification-navigator';
 
 export type {
   NotificationAction,

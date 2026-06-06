@@ -1,19 +1,72 @@
-export const BOSS_ANALYTICS_EVENTS = [] as const;
-export function trackBossEvent(): void {}
+import * as Sentry from '@sentry/react-native';
+
+export const BOSS_ANALYTICS_EVENTS = [
+  'boss_route_opened',
+  'boss_cta_clicked',
+  'combat_ability_activated',
+] as const;
+
+export function trackBossEvent(): void {
+  try {
+    Sentry.addBreadcrumb({
+      category: 'boss',
+      message: 'boss_event',
+      level: 'info',
+    });
+  } catch {
+    // analytics failure must not break app flow
+  }
+}
+
 export function trackBossRouteOpened(
-  _userId?: string | null,
-  _intensity?: string,
-  _canQuery?: boolean,
-): void {}
+  userId?: string | null,
+  intensity?: string,
+  canQuery?: boolean,
+): void {
+  try {
+    Sentry.addBreadcrumb({
+      category: 'boss',
+      message: 'boss_route_opened',
+      data: { userId, intensity, canQuery },
+      level: 'info',
+    });
+  } catch {
+    // analytics failure must not break app flow
+  }
+}
+
 export function trackBossCTAClicked(
-  _userId?: string,
-  _minutes?: number,
-  _intensity?: string,
-): void {}
+  userId?: string,
+  minutes?: number,
+  intensity?: string,
+): void {
+  try {
+    Sentry.addBreadcrumb({
+      category: 'boss',
+      message: 'boss_cta_clicked',
+      data: { userId, minutes, intensity },
+      level: 'info',
+    });
+  } catch {
+    // analytics failure must not break app flow
+  }
+}
+
 export function trackCombatAbilityActivated(
-  _userId?: string,
-  _encounterId?: string,
-  _abilityId?: string,
-  _damage?: number,
-  _hadCombo?: boolean,
-): void {}
+  userId?: string,
+  encounterId?: string,
+  abilityId?: string,
+  damage?: number,
+  hadCombo?: boolean,
+): void {
+  try {
+    Sentry.addBreadcrumb({
+      category: 'boss',
+      message: 'combat_ability_activated',
+      data: { userId, encounterId, abilityId, damage, hadCombo },
+      level: 'info',
+    });
+  } catch {
+    // analytics failure must not break app flow
+  }
+}

@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useStudyPlan } from '../hooks';
 import { UI_TEXT } from '../constants';
+import { useNetInfo } from '../../../network';
 import { lightColors } from '@/theme/tokens/colors';
 
 import { styles } from './StudyPlanScreen.styles';
@@ -29,6 +30,7 @@ export function StudyPlanScreen() {
     error,
     startSession,
   } = useStudyPlan(generationId);
+  const { isOffline } = useNetInfo();
   const [revealedAnswers, setRevealedAnswers] = useState<Set<string>>(new Set());
   const [userRating, setUserRating] = useState<number | null>(null);
 
@@ -68,6 +70,22 @@ export function StudyPlanScreen() {
   if (isLoading) {
     return (
       <SafeAreaView style={styles.container}>
+        {isOffline ? (
+          <View style={{
+            backgroundColor: lightColors.warning.light,
+            paddingVertical: 8,
+            paddingHorizontal: 16,
+            alignItems: 'center',
+          }}>
+            <Text style={{
+              fontSize: 13,
+              fontWeight: '500',
+              color: lightColors.warning[500],
+            }}>
+              You are offline. Study plan generation requires a connection.
+            </Text>
+          </View>
+        ) : null}
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color={lightColors.accent.blue} />
           <Text style={styles.loadingText}>Loading study plan...</Text>
@@ -79,6 +97,22 @@ export function StudyPlanScreen() {
   if (error) {
     return (
       <SafeAreaView style={styles.container}>
+        {isOffline ? (
+          <View style={{
+            backgroundColor: lightColors.warning.light,
+            paddingVertical: 8,
+            paddingHorizontal: 16,
+            alignItems: 'center',
+          }}>
+            <Text style={{
+              fontSize: 13,
+              fontWeight: '500',
+              color: lightColors.warning[500],
+            }}>
+              You are offline. Study plan generation requires a connection.
+            </Text>
+          </View>
+        ) : null}
         <View style={styles.errorContainer}>
           <Text style={styles.errorText}>{error}</Text>
           <Pressable
@@ -97,6 +131,22 @@ export function StudyPlanScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
+      {isOffline ? (
+        <View style={{
+          backgroundColor: lightColors.warning.light,
+          paddingVertical: 8,
+          paddingHorizontal: 16,
+          alignItems: 'center',
+        }}>
+          <Text style={{
+            fontSize: 13,
+            fontWeight: '500',
+            color: lightColors.warning[500],
+          }}>
+            You are offline. Study plan generation requires a connection.
+          </Text>
+        </View>
+      ) : null}
       <ScrollView style={styles.scrollView}>
         <View style={styles.header}>
           <Text style={styles.title}>{UI_TEXT.PLAN_TITLE}</Text>

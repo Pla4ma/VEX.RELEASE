@@ -24,7 +24,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 
-import { etherealSkyGradient } from '@/theme/tokens/ethereal-sky';
+import { etherealSkyGradient, etherealOrb } from '@/theme/tokens/ethereal-sky';
 import { timingPresets } from '@/theme/tokens/motion';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { useDeviceTilt } from '@/hooks/useDeviceTilt';
@@ -83,7 +83,7 @@ function FilmGrain(): React.JSX.Element {
             width: d.s,
             height: d.s,
             borderRadius: d.s,
-            backgroundColor: '#FFFFFF',
+            backgroundColor: etherealOrb.core,
           }}
         />
       ))}

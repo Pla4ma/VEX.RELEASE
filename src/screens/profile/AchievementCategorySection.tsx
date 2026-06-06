@@ -6,6 +6,7 @@ import { Skeleton } from '@/shared/ui/primitives';
 import { useTheme } from '@/theme';
 import { getRarityColor, getAchievementDisplayInfo } from '@/features/achievements/definitions';
 import type { Achievement } from '@/features/achievements/types';
+import { EmptyAchievements } from '@/shared/ui/primitives/EmptyState.variants';
 
 export interface AchievementWithStatus extends Achievement {
   progress: number;
@@ -121,7 +122,13 @@ export const AchievementSkeletonCard: React.FC = () => {
   );
 };
 
-export const EmptyState: React.FC = () => {
+export const EmptyState: React.FC<{
+  onStartSession?: () => void;
+}> = ({ onStartSession }) => {
+  if (onStartSession) {
+    return <EmptyAchievements onStartSession={onStartSession} />;
+  }
+
   const { theme } = useTheme();
   return (
     <Box flex={1} alignItems="center" justifyContent="center" p={8}>

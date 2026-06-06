@@ -1,14 +1,6 @@
-import type { InsightCategory, LearnedItem, WhatVEXLearnedInput } from '../schemas';
-
-interface InsightBuilder {
-  category: InsightCategory;
-  condition: () => boolean;
-  build: () => LearnedItem;
-}
-
-function makeId(input: WhatVEXLearnedInput, suffix: string): string {
-  return `learned:${input.userId}:${suffix}`;
-}
+import type { WhatVEXLearnedInput } from '../schemas';
+import type { InsightBuilder } from './builders-shared';
+import { makeId } from './builders-shared';
 
 export function buildModeNotifInsights(
   input: WhatVEXLearnedInput,

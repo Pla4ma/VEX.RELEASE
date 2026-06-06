@@ -83,4 +83,10 @@ export interface ChallengeEventDefinitions {
     };
     completedAt: number;
   };
+  'seasons:challenge_progress': {
+    userId: string;
+    challengeId: string;
+    progress: number;
+    completed: boolean;
+  };
 }

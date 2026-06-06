@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { getSessionService } from '../SessionService';
+import { getSessionOrchestrator } from '../SessionOrchestrator';
 import { eventBus } from '../../events';
-import type { SessionConfig, SessionState, SessionSummary } from '../types';
+import type { SessionConfig, SessionState } from '../types';
 import type { SessionActions } from './useSessionActions';
 import { createSessionActions } from './useSessionActions';
 
@@ -25,14 +25,14 @@ export interface UseSessionReturn extends UseSessionState, SessionActions {
 }
 
 export function useSession(userId: string): UseSessionReturn {
-  const serviceRef = useRef(getSessionService());
-  const service = serviceRef.current;
-  const actionsRef = useRef<SessionActions>(createSessionActions(service));
+  const orchestratorRef = useRef(getSessionOrchestrator());
+  const orchestrator = orchestratorRef.current;
+  const actionsRef = useRef<SessionActions>(createSessionActions(orchestrator));
   const actions = actionsRef.current;
 
   useEffect(() => {
-    service.setUserId(userId);
-  }, [service, userId]);
+    orchestrator.setUserId(userId);
+  }, [orchestrator, userId]);
 
   const [state, setState] = useState<UseSessionState>({
     session: null,
@@ -47,12 +47,12 @@ export function useSession(userId: string): UseSessionReturn {
 
   const refresh = useCallback(() => {
     try {
-      const session = service.getCurrentSession();
-      const isActive = service.isSessionActive();
-      const isPaused = service.isSessionPaused();
-      const remainingSeconds = service.getRemainingSeconds();
-      const elapsedSeconds = service.getElapsedSeconds();
-      const completionPercentage = service.getCompletionPercentage();
+      const session = orchestrator.getSession();
+      const isActive = orchestrator.isSessionActive();
+      const isPaused = orchestrator.isPaused();
+      const remainingSeconds = orchestrator.getRemainingSeconds();
+      const elapsedSeconds = orchestrator.getElapsedSeconds();
+      const completionPercentage = orchestrator.getPercentageComplete();
       setState((prev) => ({
         ...prev,
         session,
@@ -71,7 +71,7 @@ export function useSession(userId: string): UseSessionReturn {
         error: err instanceof Error ? err : new Error(String(err)),
       }));
     }
-  }, [service]);
+  }, [orchestrator]);
 
   const sessionIdRef = useRef(state.session?.id);
   sessionIdRef.current = state.session?.id;

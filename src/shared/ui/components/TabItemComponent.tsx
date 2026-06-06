@@ -10,6 +10,7 @@ import { Text } from '../../../components/primitives/Text';
 import { Icon } from '../../../icons';
 import { useTheme } from '../../../theme';
 import { glow } from '../../../theme/tokens/elevation';
+import { getMinTouchTargetStyle } from '../../../utils/touchTarget';
 import type { TabItemProps } from './TabBar.types';
 import { sizeConfig } from './TabBar.types';
 import { styles } from './TabBar.styles';
@@ -63,6 +64,7 @@ const TabItemComponent: React.FC<TabItemProps> = ({
       accessibilityState={{ selected: isActive, disabled: item.disabled }}
       accessibilityLabel={item.label}
       accessibilityHint={item.disabled ? item.disabledReason : undefined}
+      style={getMinTouchTargetStyle(undefined, showLabels ? undefined : 44)}
     >
       <Animated.View
         style={[

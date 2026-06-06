@@ -1,4 +1,5 @@
-import { RepositoryError, supabase } from './repository-helpers';
+import { RepositoryError } from '../../lib/repository/error-handling';
+import { supabase } from './repository-helpers';
 
 export async function fetchActiveRepairQuest(
   userId: string,

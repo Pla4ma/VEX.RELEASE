@@ -7,8 +7,8 @@
 
 import { useMemo } from 'react';
 import { useFeatureAccess } from '../liveops-config/hooks/useFeatureAccess';
-import { getFeatureAvailability } from '../liveops-config/feature-availability';
-import type { FeatureAvailability } from '../liveops-config/feature-availability';
+import { getFeatureAvailability } from '../liveops-config/FeatureFlagService';
+import type { FeatureAvailability } from '../liveops-config/FeatureFlagService';
 import type { FeatureKey } from '../liveops-config/feature-access';
 
 export type FeatureGateMode =

@@ -37,7 +37,7 @@ export async function upsertRewardLedger(
       },
       { onConflict: 'idempotency_key' },
     )
-    .select(tableColumns('reward_ledger'))
+    .select('*')
     .single();
 
   if (error) {
@@ -104,7 +104,7 @@ export async function updateRewardLedgerStatus(
     .from('reward_ledger')
     .update(updateData)
     .eq('id', ledgerId)
-    .select(tableColumns('reward_ledger'))
+    .select('*')
     .single();
 
   if (error) {

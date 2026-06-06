@@ -2,7 +2,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.49.8';
 import { buildCorsHeaders } from '../_shared/cors.ts';
 import { verifyAuthorizedUser } from '../_shared/auth.ts';
 import { checkRateLimit } from '../_shared/rate-limit.ts';
-import { CompleteSessionRequestSchema, type CompleteSessionRequest } from './schemas.ts';
+import { CompleteSessionRequestSchema, CompleteSessionResponseSchema, type CompleteSessionRequest, type CompleteSessionResponse } from './schemas.ts';
 
 const RATE_LIMIT_OPERATION = 'session:complete';
 const RATE_LIMIT_MAX = 10;
@@ -74,6 +74,8 @@ Deno.serve(async (request: Request) => {
   const clampedDuration = Math.min(req.durationSeconds, MAX_SESSION_SECONDS);
   const clampedEffective = Math.min(req.effectiveDurationSeconds, clampedDuration);
   const clampedQuality = Math.max(0, Math.min(100, req.focusQuality));
+  const clampedFinalScore = Math.max(0, Math.min(10000, req.finalScore));
+  const clampedModeBonus = Math.max(0, Math.min(500, req.modeBonus));
 
   // Streak is now fully server-authoritative — no client-provided streakDays sent to RPC
 
@@ -93,8 +95,8 @@ Deno.serve(async (request: Request) => {
     p_interruptions: req.interruptions,
     p_pauses: req.pauses,
     p_session_mode: req.sessionMode,
-    p_final_score: req.finalScore,
-    p_mode_bonus: req.modeBonus,
+    p_final_score: clampedFinalScore,
+    p_mode_bonus: clampedModeBonus,
   });
 
   if (error) {
@@ -105,7 +107,15 @@ Deno.serve(async (request: Request) => {
     }, 500, request);
   }
 
-  const result = data as Record<string, unknown>;
+  const parsedResult = CompleteSessionResponseSchema.safeParse(data);
+  if (!parsedResult.success) {
+    return respond({
+      success: false,
+      error: { code: 'INVALID_RPC_RESPONSE', message: 'RPC returned unexpected shape. Please try again.' },
+      processingTimeMs: Date.now() - startedAt,
+    }, 500, request);
+  }
+  const result: CompleteSessionResponse = parsedResult.data;
 
   return respond({
     success: true,

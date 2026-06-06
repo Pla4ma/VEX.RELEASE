@@ -1,19 +1,22 @@
 import {
+  firstSentence,
   planId,
   makeBlock,
   buildStudySessionFromBlock,
   buildStudyOsHomeSurface,
   computeStudyOsUnlockGate,
   computeStudyOsPremiumGate,
+  buildDayZeroStudyPreview,
+  isContentStudyBackendAvailable,
+  getManualStudyFallbackMessage,
+} from './service-helpers-plan';
+import {
   generateRecallQuestion,
   getEmptyRecallFallback,
   shouldGenerateRecall,
   buildMemoryContentFromBlock,
   getPlannedBlocksFromPlan,
-  buildDayZeroStudyPreview,
-  isContentStudyBackendAvailable,
-  getManualStudyFallbackMessage,
-} from './service-helpers';
+} from './service-helpers-recall';
 import {
   createManualStudyPlan,
   createPasteStudyPlan,

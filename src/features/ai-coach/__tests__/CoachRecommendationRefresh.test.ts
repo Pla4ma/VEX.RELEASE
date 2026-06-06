@@ -5,7 +5,7 @@ import {
   COACH_PERSONAS,
   type RecommendationContext,
   type CoachPersonaId,
-} from '../services/CoachRecommendationService';
+} from '../service/CoachRecommendationService';
 
 describe('CoachRecommendationService - Refresh & Edge Cases', () => {
   const createBaseContext = (

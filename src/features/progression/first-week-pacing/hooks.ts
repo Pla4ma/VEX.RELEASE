@@ -5,6 +5,8 @@
  */
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import * as Sentry from '@sentry/react-native';
+import { useToast } from '../../../shared/ui/components/Toast';
 import * as service from './service';
 import { useAuthStore } from '../../../store';
 import type { FirstWeekProgress, FirstWeekSession } from './schemas';
@@ -45,6 +47,7 @@ export function useCurrentFirstWeekProgress() {
 
 export function useProgressToNextSession() {
   const queryClient = useQueryClient();
+  const { show } = useToast();
 
   return useMutation({
     mutationFn: async ({
@@ -76,6 +79,10 @@ export function useProgressToNextSession() {
       queryClient.invalidateQueries({
         queryKey: firstWeekKeys.byUser(variables.userId),
       });
+    },
+    onError: (error) => {
+      Sentry.captureException(error, { tags: { feature: 'first-week-pacing', operation: 'progressToNextSession' } });
+      show({ type: 'error', title: 'Progress not saved', message: 'Try again when connection returns.' });
     },
   });
 }

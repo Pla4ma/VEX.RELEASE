@@ -3,6 +3,7 @@ import { DimensionValue, ViewStyle } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
+  useReducedMotion,
   withRepeat,
   withTiming,
   interpolate,
@@ -35,17 +36,27 @@ export const SkeletonItem: React.FC<SkeletonItemProps> = ({
   style,
 }) => {
   const { theme } = useTheme();
+  const reducedMotion = useReducedMotion();
   const shimmerValue = useSharedValue(0);
   React.useEffect(() => {
+    if (reducedMotion) {
+      shimmerValue.value = 0;
+      return;
+    }
     shimmerValue.value = withRepeat(
       withTiming(1, { duration: 1500 }),
       -1,
       true,
     );
-  }, [shimmerValue]);
-  const animatedStyle = useAnimatedStyle(() => ({
-    opacity: interpolate(shimmerValue.value, [0, 0.5, 1], [0.6, 0.8, 0.6]),
-  }));
+  }, [shimmerValue, reducedMotion]);
+  const animatedStyle = useAnimatedStyle(() => {
+    if (reducedMotion) {
+      return { opacity: 0.6 };
+    }
+    return {
+      opacity: interpolate(shimmerValue.value, [0, 0.5, 1], [0.6, 0.8, 0.6]),
+    };
+  });
   const dimensions = useMemo(() => {
     switch (variant) {
       case 'title':

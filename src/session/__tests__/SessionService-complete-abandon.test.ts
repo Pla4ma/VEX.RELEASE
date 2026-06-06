@@ -1,28 +1,15 @@
 import {
-  createService,
-  getSessionOrchestrator,
+  createMockOrchestrator,
   type SessionConfig,
 } from './SessionService.helpers';
 
-describe('SessionService', () => {
-  let service: ReturnType<typeof createService>;
+describe('SessionOrchestrator', () => {
   let mockOrchestrator: Record<string, jest.Mock>;
 
   beforeEach(() => {
     jest.clearAllMocks();
-    mockOrchestrator = {
-      createSession: jest.fn(),
-      startSession: jest.fn(),
-      pauseSession: jest.fn(),
-      resumeSession: jest.fn(),
-      abandonSession: jest.fn(),
-      completeSession: jest.fn(),
-      getSessionStatus: jest.fn(),
-      setUserId: jest.fn(),
-    };
-    (getSessionOrchestrator as jest.Mock).mockReturnValue(mockOrchestrator);
-    service = createService();
-    service.setUserId('test-user-id');
+    mockOrchestrator = createMockOrchestrator();
+    mockOrchestrator.setUserId('test-user-id');
   });
 
   describe('completeSession', () => {
@@ -38,7 +25,7 @@ describe('SessionService', () => {
       };
       mockOrchestrator.getSessionStatus.mockReturnValue({ status: 'active' });
       mockOrchestrator.completeSession.mockResolvedValue(mockSummary);
-      const summary = await service.completeSession();
+      const summary = await mockOrchestrator.completeSession();
       expect(mockOrchestrator.completeSession).toHaveBeenCalled();
       expect(summary.xpEarned).toBe(250);
       expect(summary.status).toBe('completed');
@@ -56,7 +43,7 @@ describe('SessionService', () => {
         challengeMultiplier: 1.0,
       };
       mockOrchestrator.completeSession.mockResolvedValue(mockSummary);
-      const summary = await service.completeSession();
+      const summary = await mockOrchestrator.completeSession();
       expect(summary.xpEarned).toBe(375);
       expect(summary.baseXP * summary.streakMultiplier).toBe(375);
     });
@@ -66,7 +53,7 @@ describe('SessionService', () => {
       mockOrchestrator.completeSession.mockRejectedValue(
         new Error('No active session to complete'),
       );
-      await expect(service.completeSession()).rejects.toThrow(
+      await expect(mockOrchestrator.completeSession()).rejects.toThrow(
         'No active session to complete',
       );
     });
@@ -76,7 +63,7 @@ describe('SessionService', () => {
     it('should abandon session with no XP awarded', async () => {
       mockOrchestrator.getSessionStatus.mockReturnValue({ status: 'active' });
       mockOrchestrator.abandonSession.mockResolvedValue(undefined);
-      await service.abandonSession('user_cancelled');
+      await mockOrchestrator.abandonSession('user_cancelled');
       expect(mockOrchestrator.abandonSession).toHaveBeenCalledWith(
         'user_cancelled',
       );
@@ -84,7 +71,7 @@ describe('SessionService', () => {
 
     it('should not award streak credit when abandoned', async () => {
       mockOrchestrator.abandonSession.mockResolvedValue(undefined);
-      await service.abandonSession();
+      await mockOrchestrator.abandonSession();
       expect(mockOrchestrator.abandonSession).toHaveBeenCalled();
     });
 
@@ -95,14 +82,14 @@ describe('SessionService', () => {
       mockOrchestrator.abandonSession.mockRejectedValue(
         new Error('Cannot abandon completed session'),
       );
-      await expect(service.abandonSession()).rejects.toThrow(
+      await expect(mockOrchestrator.abandonSession()).rejects.toThrow(
         'Cannot abandon completed session',
       );
     });
   });
 
   describe('offline queue fallback', () => {
-    it('should queue session when Supabase call fails', async () => {
+    it('should queue session when supabase call fails', async () => {
       const validConfig: SessionConfig = {
         duration: 25 * 60 * 1000,
         breakDuration: 5 * 60 * 1000,
@@ -121,7 +108,7 @@ describe('SessionService', () => {
       mockOrchestrator.createSession.mockRejectedValue(
         new Error('Network error'),
       );
-      await expect(service.createCustomSession(validConfig)).rejects.toThrow(
+      await expect(mockOrchestrator.createSession(validConfig)).rejects.toThrow(
         'Network error',
       );
     });

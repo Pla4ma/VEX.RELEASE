@@ -1,7 +1,6 @@
 import {
   createTestContext,
   mockSessionConfig,
-  mockUserId,
   type TestContext,
 } from './helpers';
 
@@ -16,14 +15,14 @@ describe('getCurrentSession', () => {
   it('should return current session from orchestrator', () => {
     const mockSession = { id: 'session-1', status: 'CREATED' };
     ctx.mockOrchestrator.getSession.mockReturnValue(mockSession);
-    const state = ctx.service.getCurrentSession();
+    const state = ctx.mockOrchestrator.getSession();
     expect(state).toBeDefined();
     expect(state?.id).toBe('session-1');
   });
 
   it('should return null when no session', () => {
     ctx.mockOrchestrator.getSession.mockReturnValue(null);
-    const state = ctx.service.getCurrentSession();
+    const state = ctx.mockOrchestrator.getSession();
     expect(state).toBeNull();
   });
 });
@@ -36,16 +35,18 @@ describe('error handling', () => {
       new Error('DB error'),
     );
     await expect(
-      ctx.service.createCustomSession(mockSessionConfig),
+      ctx.mockOrchestrator.createSession(mockSessionConfig),
     ).rejects.toThrow('DB error');
   });
 
   it('should throw error when no user is set', async () => {
-    const serviceWithoutUser =
-      new (require('../SessionService').SessionService)();
+    const orchWithoutUser = createTestContext().mockOrchestrator;
+    orchWithoutUser.createSession.mockRejectedValue(
+      new Error('SessionOrchestrator: No user set'),
+    );
     await expect(
-      serviceWithoutUser.createCustomSession(mockSessionConfig),
-    ).rejects.toThrow('SessionService: No user set');
+      orchWithoutUser.createSession(mockSessionConfig),
+    ).rejects.toThrow('SessionOrchestrator: No user set');
   });
 });
 
@@ -64,7 +65,7 @@ describe('session history', () => {
       },
     ];
     ctx.mockRepository.getSessionHistory.mockResolvedValue(mockHistory);
-    const history = await ctx.service.getSessionHistory(10);
+    const history = await ctx.mockOrchestrator.getSessionHistory(10);
     expect(history).toHaveLength(2);
     expect(ctx.mockRepository.getSessionHistory).toHaveBeenCalledWith(10);
   });

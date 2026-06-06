@@ -9,6 +9,7 @@ import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorB
 import React, { useCallback } from 'react';
 import { View } from 'react-native';
 import { useRoute } from '@react-navigation/native';
+import { etherealText } from '@/theme/tokens/ethereal-sky';
 
 import { ONBOARDING_GOALS } from '../../features/onboarding';
 import { Text } from '../../components/primitives/Text';
@@ -164,16 +165,16 @@ function SignedOutOnboardingState(): JSX.Element {
         }}
       >
         <SerifTitle
-          color="#0A0A0A"
+          color={etherealText.heading}
           fontSize={28}
           letterSpacing={-0.5}
           lineHeight={34}
           text="Sign in to start"
         />
         <Text
-          color="#0A0A0A"
+          color={etherealText.heading}
           fontSize={14}
-          style={{ color: 'rgba(10, 10, 10, 0.65)', textAlign: 'center' }}
+          style={{ color: etherealText.body, textAlign: 'center' }}
         >
           Your onboarding picks up where you left off once you sign in.
         </Text>

@@ -3,7 +3,7 @@ import type {
   GenerateMessageInput,
   EvaluateInterventionsInput,
   TriggerType,
-} from './schemas';
+} from '../schemas';
 
 export const AIMessagePayloadSchema = z
   .object({

@@ -16,7 +16,7 @@ import {
   getCoachHistory,
   getCoachState,
   type CoachQuestionResponse,
-} from '../services/coach-screen-service';
+} from '../service/coach-screen-service';
 import type { CoachMessage, CoachState } from '../types';
 
 const debug = createDebugger('coach:hooks');

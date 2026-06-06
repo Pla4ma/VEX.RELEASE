@@ -1,6 +1,7 @@
 import { useEffect, useCallback } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { z } from 'zod';
 import {
   trackInterventionDisplayed,
   trackInterventionActioned,
@@ -12,7 +13,12 @@ import type { ExtendedRootStackParams } from '../../../navigation/types';
 import type { HomeController } from '../hooks/home-controller-types';
 import type { ActiveIntervention } from '../../../features/ai-coach/hooks/useActiveIntervention';
 import type { ToastOptions } from '../../../shared/ui/components/Toast';
-import { buildToast } from './home-screen-inner-helpers';
+
+const completionToastSummarySchema = z.object({
+  grade: z.string().optional(),
+  interruptions: z.number().int().nonnegative().optional(),
+  focusQuality: z.number().optional(),
+});
 
 type Nav = NativeStackNavigationProp<ExtendedRootStackParams>;
 
@@ -75,11 +81,22 @@ export function useHomeScreenInnerEffects(params: {
       'session:completed',
       (evt: Record<string, unknown>) => {
         if (evt.userId !== controller.userId) {return;}
-        const toast = buildToast(evt.summary);
+        const parsed = completionToastSummarySchema.safeParse(evt.summary);
+        let toastTitle = 'Session complete.';
+        let toastMessage = 'Result saved.';
+        if (parsed.success) {
+          const { grade, interruptions } = parsed.data;
+          toastTitle = grade
+            ? `${grade}-grade session.`
+            : 'Session complete.';
+          if ((interruptions ?? 0) > 0) {
+            toastMessage = `${String(interruptions)} interruption${interruptions === 1 ? '' : 's'} kept this from cleaner work.`;
+          }
+        }
         showToast({
           type: 'success',
-          title: toast.title,
-          message: toast.message,
+          title: toastTitle,
+          message: toastMessage,
         });
       },
     );

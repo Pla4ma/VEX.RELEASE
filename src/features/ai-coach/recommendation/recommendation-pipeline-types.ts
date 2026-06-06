@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { RecommendationEvidenceSchema } from '../focus-memory/schemas';
+import { RecommendationEvidenceSchema } from '../../focus-memory/schemas';
 
 export const CoachRecommendationSchema = z.object({
   id: z.string(),

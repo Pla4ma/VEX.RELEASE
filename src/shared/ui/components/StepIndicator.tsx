@@ -3,6 +3,7 @@ import { View, Pressable } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
+  useReducedMotion,
   withSpring,
   interpolate,
   Extrapolation,
@@ -26,15 +27,18 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({
   disabled = false,
 }) => {
   const { theme } = useTheme();
+  const reducedMotion = useReducedMotion();
   const progress = useSharedValue(
     status === 'completed' ? 1 : status === 'active' ? 0.5 : 0,
   );
   React.useEffect(() => {
-    progress.value = withSpring(
-      status === 'completed' ? 1 : status === 'active' ? 0.5 : 0,
-      { damping: 15, stiffness: 150 },
-    );
-  }, [status, progress]);
+    const target = status === 'completed' ? 1 : status === 'active' ? 0.5 : 0;
+    if (reducedMotion) {
+      progress.value = target;
+      return;
+    }
+    progress.value = withSpring(target, { damping: 15, stiffness: 150 });
+  }, [status, progress, reducedMotion]);
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [
       {

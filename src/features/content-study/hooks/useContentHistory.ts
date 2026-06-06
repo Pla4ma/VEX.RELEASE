@@ -4,6 +4,8 @@
  */
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import * as Sentry from '@sentry/react-native';
+import { useToast } from '../../../shared/ui/components/Toast';
 import { useAuthStore } from '../../../store';
 import { fetchContentHistory } from '../ContentStudyService';
 import { contentStudyQueryKeys } from './queryKeys';
@@ -11,6 +13,7 @@ import { contentStudyQueryKeys } from './queryKeys';
 export function useContentHistory() {
   const { user } = useAuthStore();
   const queryClient = useQueryClient();
+  const { show } = useToast();
 
   const historyQuery = useQuery({
     queryKey: contentStudyQueryKeys.history(user?.id ?? ''),
@@ -36,6 +39,10 @@ export function useContentHistory() {
       queryClient.invalidateQueries({
         queryKey: contentStudyQueryKeys.all,
       });
+    },
+    onError: (error) => {
+      Sentry.captureException(error, { tags: { feature: 'content-study', operation: 'deleteContent' } });
+      show({ type: 'error', title: 'Delete failed', message: 'Try again when connection returns.' });
     },
   });
 

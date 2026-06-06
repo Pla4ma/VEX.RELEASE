@@ -56,13 +56,12 @@ export {
   validateTimerConfig,
 } from './validation/schemas';
 export {
-  SessionService,
-  createSessionService,
-  getSessionService,
-} from './SessionService';
-export type { SessionServiceOptions } from './SessionService';
-export { SessionOrchestrator } from './SessionOrchestrator';
-export { createSessionOrchestrator, getSessionOrchestrator } from './orchestrator-factory';
+  SessionOrchestrator,
+  getSessionOrchestrator,
+  createSessionOrchestrator,
+} from './SessionOrchestrator';
+export { createSessionOrchestrator as getSessionOrchestratorDefault } from './SessionOrchestrator';
+export type { OrchestratorConfig } from './orchestrator-types';
 export {
   SessionEventEmitter,
   createSessionEventEmitter,
@@ -111,4 +110,4 @@ export const SESSION_CONSTANTS = {
   MIN_TICK_INTERVAL: 900,
   MAX_TICK_INTERVAL: 1100,
 } as const;
-export { getSessionService as default } from './SessionService';
+export { getSessionOrchestrator as default } from './SessionOrchestrator';

@@ -12,6 +12,7 @@ import { Card, Badge, ProgressBar } from '../../../components';
 import { useActiveChallenges, useChallengeSummaries } from '../hooks';
 import { ChallengeCard } from './ChallengeCard';
 import { type UserChallengeSummary } from '../schemas';
+import { EmptyChallenges } from '../../../shared/ui/primitives/EmptyState.variants';
 import { styles } from './challenge-hub-styles';
 import {
   type ChallengeFilter,
@@ -24,11 +25,13 @@ interface ChallengeHubProps {
   userId: string;
   onChallengePress?: (challengeId: string) => void;
   onClaimReward?: (challengeId: string) => void;
+  onBrowseChallenges?: () => void;
 }
 export const ChallengeHub: React.FC<ChallengeHubProps> = ({
   userId,
   onChallengePress,
   onClaimReward,
+  onBrowseChallenges,
 }) => {
   const theme = useThemeObject();
   const [activeFilter, setActiveFilter] = useState<ChallengeFilter>('ALL');
@@ -145,15 +148,7 @@ export const ChallengeHub: React.FC<ChallengeHubProps> = ({
           {activeFilter === 'ALL' ? 'All Challenges' : `${activeFilter} Challenges`}
         </Text>
         {filteredChallenges.length === 0 ? (
-          <Card style={styles.emptyCard}>
-            <Text style={styles.emptyIcon}></Text>
-            <Text style={styles.emptyTitle}>No challenges found</Text>
-            <Text style={styles.emptyText}>
-              {activeFilter === 'COMPLETED'
-                ? 'Complete some challenges to see them here!'
-                : 'Check back later for new challenges.'}
-            </Text>
-          </Card>
+          <EmptyChallenges onBrowseChallenges={onBrowseChallenges} />
         ) : (
           <FlashList<UserChallengeSummary>
             data={filteredChallenges}

@@ -5,7 +5,7 @@
  * This file only exports typed availability fixtures.
  */
 
-import type { FeatureAvailability } from '../../../features/liveops-config/feature-availability';
+import type { FeatureAvailability } from '../../../features/liveops-config/FeatureFlagService';
 
 export const ENABLED_AVAILABILITY: FeatureAvailability = {
   state: 'unlocked',

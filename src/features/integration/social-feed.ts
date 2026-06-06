@@ -52,7 +52,7 @@ export function initializeSocialFeedIntegration(): () => void {
 
   handlers.push(
     eventBus.subscribe('leaderboards:result', async (rawData) => {
-      const event = rawData as CompetitiveResult;
+      const event = rawData as unknown as CompetitiveResult;
       if (!event || !event.userId) {
         return;
       }

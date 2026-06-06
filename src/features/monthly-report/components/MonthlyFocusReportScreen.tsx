@@ -49,21 +49,37 @@ export const MonthlyFocusReportScreen = withScreenErrorBoundary(
 
     if (isPending) {
       return (
-        <Box flex={1} bg="background.primary" p="md">
-          <ReportSkeleton />
+        <Box flex={1} bg="background.primary">
+          {isOffline ? (
+            <Box bg="warning" p="sm" alignItems="center">
+              <Text variant="caption" color="text.primary">
+                You are offline. Data may be outdated.
+              </Text>
+            </Box>
+          ) : null}
+          <Box flex={1} p="md">
+            <ReportSkeleton />
+          </Box>
         </Box>
       );
     }
 
     if (isError) {
       return (
-        <Box
-          flex={1}
-          bg="background.primary"
-          p="md"
-          justifyContent="center"
-          alignItems="center"
-        >
+        <Box flex={1} bg="background.primary">
+          {isOffline ? (
+            <Box bg="warning" p="sm" alignItems="center">
+              <Text variant="caption" color="text.primary">
+                You are offline. Data may be outdated.
+              </Text>
+            </Box>
+          ) : null}
+          <Box
+            flex={1}
+            p="md"
+            justifyContent="center"
+            alignItems="center"
+          >
           <Text
             variant="h4"
             color="error"
@@ -88,19 +104,27 @@ export const MonthlyFocusReportScreen = withScreenErrorBoundary(
           >
             Try Again
           </Button>
+          </Box>
         </Box>
       );
     }
 
     if (!report) {
       return (
-        <Box
-          flex={1}
-          bg="background.primary"
-          p="md"
-          justifyContent="center"
-          alignItems="center"
-        >
+        <Box flex={1} bg="background.primary">
+          {isOffline ? (
+            <Box bg="warning" p="sm" alignItems="center">
+              <Text variant="caption" color="text.primary">
+                You are offline. Data may be outdated.
+              </Text>
+            </Box>
+          ) : null}
+          <Box
+            flex={1}
+            p="md"
+            justifyContent="center"
+            alignItems="center"
+          >
           <Text
             variant="h3"
             color="text"
@@ -127,6 +151,7 @@ export const MonthlyFocusReportScreen = withScreenErrorBoundary(
           >
             Start a session
           </Button>
+          </Box>
         </Box>
       );
     }
@@ -135,7 +160,7 @@ export const MonthlyFocusReportScreen = withScreenErrorBoundary(
       <Box flex={1} bg="background.primary">
         {isOffline ? (
           <Box bg="warning" p="sm" alignItems="center">
-            <Text variant="caption" color="onWarning">
+            <Text variant="caption" color="text.primary">
               You are offline. Data may be outdated.
             </Text>
           </Box>

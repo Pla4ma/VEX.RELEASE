@@ -17,6 +17,7 @@ import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { ContentStudyStackParamList } from '../types';
 import { useContentReview } from '../hooks';
 import { UI_TEXT } from '../constants';
+import { useNetInfo } from '../../../network';
 
 import { styles } from './ContentReviewScreen.styles';
 import { StatusBadge, ContentView, ErrorDisplay } from './ContentReviewScreen.helpers';
@@ -53,6 +54,7 @@ export function ContentReviewScreen() {
     generate,
     refetch,
   } = useContentReview(contentId);
+  const { isOffline } = useNetInfo();
 
   const handleGenerate = useCallback(async () => {
     try {
@@ -73,6 +75,22 @@ export function ContentReviewScreen() {
   if (isLoading) {
     return (
       <SafeAreaView style={styles.container}>
+        {isOffline ? (
+          <View style={{
+            backgroundColor: lightColors.warning.light,
+            paddingVertical: 8,
+            paddingHorizontal: 16,
+            alignItems: 'center',
+          }}>
+            <Text style={{
+              fontSize: 13,
+              fontWeight: '500',
+              color: lightColors.warning[500],
+            }}>
+              You are offline. Content processing requires a connection.
+            </Text>
+          </View>
+        ) : null}
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color={lightColors.accent.blue} />
           <Text style={styles.loadingText}>Loading content...</Text>
@@ -83,6 +101,22 @@ export function ContentReviewScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
+      {isOffline ? (
+        <View style={{
+          backgroundColor: lightColors.warning.light,
+          paddingVertical: 8,
+          paddingHorizontal: 16,
+          alignItems: 'center',
+        }}>
+          <Text style={{
+            fontSize: 13,
+            fontWeight: '500',
+            color: lightColors.warning[500],
+          }}>
+            You are offline. Content processing requires a connection.
+          </Text>
+        </View>
+      ) : null}
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}

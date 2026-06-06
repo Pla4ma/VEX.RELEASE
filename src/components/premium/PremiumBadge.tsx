@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { View, type ViewStyle } from 'react-native';
 import Animated, {
   useAnimatedStyle,
+  useReducedMotion,
   useSharedValue,
   withRepeat,
   withTiming,
@@ -29,10 +30,16 @@ export function PremiumBadge({
   showGlow = false,
 }: PremiumBadgeProps): JSX.Element {
   const { theme } = useTheme();
+  const reducedMotion = useReducedMotion();
   const scale = useSharedValue(1);
   const glowOpacity = useSharedValue(0);
 
   useEffect(() => {
+    if (reducedMotion) {
+      scale.value = 1;
+      glowOpacity.value = 0;
+      return;
+    }
     if (variant === 'animated' || showGlow) {
       scale.value = withRepeat(
         withSequence(
@@ -51,7 +58,7 @@ export function PremiumBadge({
         true,
       );
     }
-  }, [variant, showGlow, scale, glowOpacity]);
+  }, [variant, showGlow, scale, glowOpacity, reducedMotion]);
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ scale: scale.value }],

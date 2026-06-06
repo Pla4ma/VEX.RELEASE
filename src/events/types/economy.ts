@@ -104,4 +104,9 @@ export interface EconomyEventDefinitions {
     source: string;
     itemId?: string;
   };
+  'cosmetics:unlock_theme': {
+    userId: string;
+    themeId: string;
+    source: string;
+  };
 }

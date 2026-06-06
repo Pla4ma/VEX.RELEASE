@@ -1,10 +1,10 @@
-import type { MessageCategory } from './types';
-import { createDebugger } from '../../utils/debug';
+import type { MessageCategory } from '../types';
+import { createDebugger } from '../../../utils/debug';
 import {
   getMemoriesByUser as repoGetMemoriesByUser,
   getMemoriesByType as repoGetMemoriesByType,
   markMemoryReferenced as repoMarkMemoryReferenced,
-} from './repository/memories';
+} from '../repository/memories';
 import {
   MemoryTypeSchema,
   type CoachMemory,

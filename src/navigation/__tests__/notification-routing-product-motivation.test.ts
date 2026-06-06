@@ -1,4 +1,4 @@
-import { resolveNotificationAction } from '../notification-routing-core';
+import { resolveNotificationAction } from '../notification-resolver';
 import {
   hiddenFeatureAccess,
   availableFeatureAccess,

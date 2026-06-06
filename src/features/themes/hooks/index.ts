@@ -1,4 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import * as Sentry from '@sentry/react-native';
+import { useToast } from '../../../shared/ui/components/Toast';
 
 import { streakKeys } from '../../streaks/hooks';
 import type { Streak } from '../../streaks/schemas';
@@ -7,6 +9,7 @@ import {
   getSelectableThemes,
   purchaseTheme,
 } from '../service';
+import type { SessionTheme } from '../session-themes';
 
 export const sessionThemeKeys = {
   all: ['session-themes'] as const,
@@ -49,6 +52,7 @@ export function useSelectableThemes(
 
 export function usePurchaseTheme() {
   const queryClient = useQueryClient();
+  const { show } = useToast();
 
   return useMutation({
     mutationFn: ({
@@ -60,6 +64,27 @@ export function usePurchaseTheme() {
       themeId: string;
       streak: Pick<Streak, 'longestDays'> | null;
     }) => purchaseTheme(userId, themeId, streak),
+    onMutate: async (variables) => {
+      const ownedKey = sessionThemeKeys.owned(variables.userId);
+      await queryClient.cancelQueries({ queryKey: ownedKey });
+
+      const previousOwned = queryClient.getQueryData<string[]>(ownedKey);
+
+      if (previousOwned && !previousOwned.includes(variables.themeId)) {
+        queryClient.setQueryData<string[]>(ownedKey, [...previousOwned, variables.themeId]);
+      }
+
+      const listKey = sessionThemeKeys.list(variables.userId, variables.streak?.longestDays ?? 0);
+      const previousList = queryClient.getQueryData<SessionTheme[]>(listKey);
+
+      if (previousList) {
+        queryClient.setQueryData<SessionTheme[]>(listKey, previousList.map((theme) =>
+          theme.id === variables.themeId ? { ...theme, isOwned: true } : theme,
+        ));
+      }
+
+      return { ownedKey, listKey, previousOwned, previousList };
+    },
     onSuccess: async (_, variables) => {
       await Promise.all([
         queryClient.invalidateQueries({
@@ -78,6 +103,16 @@ export function usePurchaseTheme() {
           queryKey: streakKeys.byUser(variables.userId),
         }),
       ]);
+    },
+    onError: (error, _variables, context) => {
+      if (context?.previousOwned) {
+        queryClient.setQueryData(context.ownedKey, context.previousOwned);
+      }
+      if (context?.previousList) {
+        queryClient.setQueryData(context.listKey, context.previousList);
+      }
+      Sentry.captureException(error, { tags: { feature: 'themes', operation: 'purchaseTheme' } });
+      show({ type: 'error', title: 'Theme purchase failed', message: 'Try again when connection returns.' });
     },
   });
 }

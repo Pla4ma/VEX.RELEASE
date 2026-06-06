@@ -26,7 +26,7 @@ import { SessionSetupStakesCard } from './SessionSetupStakesCard';
 import { SessionSetupStudyPlanCard } from './SessionSetupStudyPlanCard';
 import { useSessionSetupStakes } from '../hooks/useSessionSetupStakes';
 import { buildLearningSessionParams } from '../../../features/learning-execution';
-import { isFeatureHidden } from '../../../features/liveops-config/final-release-feature-map';
+import { isFeatureHidden } from '../../../features/liveops-config/FeatureFlagService';
 
 type SessionNavigationProp = CompositeNavigationProp<
   NativeStackNavigationProp<SessionStackParams>,

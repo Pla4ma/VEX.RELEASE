@@ -1,5 +1,6 @@
 import { createSheet } from '@/shared/ui/create-sheet';
 import { lightColors } from '@/theme/tokens/colors';
+import { rgbaColors } from '@/theme/tokens/rgba-colors';
 
 
 const DAY_SIZE = 44;
@@ -16,7 +17,7 @@ export const styles = createSheet({
   streakBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(255,107,53,0.2)',
+    backgroundColor: rgbaColors.rgb_255_107_53_0_2,
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 16,
@@ -33,7 +34,7 @@ export const styles = createSheet({
   streakLabel: { fontSize: 16, fontWeight: '600', color: lightColors.text.inverse },
   longestText: {
     fontSize: 12,
-    color: 'rgba(255,255,255,0.5)',
+    color: rgbaColors.rgb_255_255_255_0_5,
     marginTop: 2,
   },
   riskBadge: { alignItems: 'center', padding: 8 },
@@ -49,7 +50,7 @@ export const styles = createSheet({
   progressFill: { height: '100%', borderRadius: 4 },
   progressText: {
     fontSize: 11,
-    color: 'rgba(255,255,255,0.5)',
+    color: rgbaColors.rgb_255_255_255_0_5,
     marginTop: 6,
     textAlign: 'right',
   },
@@ -78,7 +79,7 @@ export const styles = createSheet({
   dayNumber: {
     fontSize: 14,
     fontWeight: '600',
-    color: 'rgba(255,255,255,0.3)',
+    color: rgbaColors.rgb_255_255_255_0_3,
   },
   activeDayNumber: { color: lightColors.text.inverse },
   flameIcon: { position: 'absolute', top: -4, right: -4 },
@@ -99,11 +100,11 @@ export const styles = createSheet({
     marginTop: -2,
   },
   milestoneCard: {
-    backgroundColor: 'rgba(255,215,0,0.1)',
+    backgroundColor: rgbaColors.rgb_255_215_0_0_1,
     borderRadius: 12,
     padding: 12,
     borderWidth: 1,
-    borderColor: 'rgba(255,215,0,0.3)',
+    borderColor: rgbaColors.rgb_255_215_0_0_3,
     alignItems: 'center',
   },
   milestoneEmojiSmall: { fontSize: 20, marginBottom: 4 },

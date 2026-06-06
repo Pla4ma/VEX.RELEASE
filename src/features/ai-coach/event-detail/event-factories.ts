@@ -4,7 +4,7 @@ import {
   TriggerTypeSchema,
   CoachUserStateSchema,
 
-} from './schemas';
+} from '../schemas';
 import { BehaviorSignalDetectedEventSchema } from './event-schemas';
 import type {
   CoachMessageGeneratedEvent,

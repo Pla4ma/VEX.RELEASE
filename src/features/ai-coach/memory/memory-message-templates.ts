@@ -1,12 +1,12 @@
-import * as repository from './repository';
-import { getOrCreateCoachState } from './persona-manager';
+import * as repository from '../repository';
+import { getOrCreateCoachState } from '../persona/persona-manager';
 import {
   getRelevantMemories,
   getMilestoneSummary,
   canClaimStrongPattern,
   scopeMemoryForContext,
 } from './CoachMemory';
-import type { MessageCategory } from './types';
+import type { MessageCategory } from '../types';
 
 export const MEMORY_MESSAGE_TEMPLATES: Record<
   string,

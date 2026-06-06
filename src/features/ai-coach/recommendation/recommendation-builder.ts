@@ -1,16 +1,16 @@
-import { captureSilentFailure } from '../../utils/silent-failure';
-import { v4 } from '../../utils/uuid';
+import { captureSilentFailure } from '../../../utils/silent-failure';
+import { v4 } from '../../../utils/uuid';
 import type {
   BehaviorProfile,
   CreateRecommendationInput,
   SessionRecommendation,
-} from './schemas';
+} from '../schemas';
 import {
   generateCoachMessage,
   generateStreakRiskNudge,
-} from '../../shared/ai/edge-function-service';
-import { RISK_LEVEL_THRESHOLDS } from './session-analyzer-types';
-import { getLatestSessionAIContext } from './session-context';
+} from '../../../shared/ai/edge-function-service';
+import { RISK_LEVEL_THRESHOLDS } from '../session/session-analyzer-types';
+import { getLatestSessionAIContext } from '../session/session-context';
 
 // ─── Recommendation sources type ────────────────────────────────
 type RecommendationSource =

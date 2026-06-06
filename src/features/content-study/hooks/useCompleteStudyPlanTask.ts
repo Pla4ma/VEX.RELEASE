@@ -4,6 +4,8 @@
  */
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import * as Sentry from '@sentry/react-native';
+import { useToast } from '../../../shared/ui/components/Toast';
 import { useAuthStore } from '../../../store';
 import { contentStudyQueryKeys } from './queryKeys';
 import { studySessionManager } from '../persistence';
@@ -16,6 +18,7 @@ interface CompleteTaskParams {
 export function useCompleteStudyPlanTask() {
   const queryClient = useQueryClient();
   const { user } = useAuthStore();
+  const { show } = useToast();
 
   return useMutation({
     mutationFn: async ({ generationId, taskId }: CompleteTaskParams) => {
@@ -58,6 +61,10 @@ export function useCompleteStudyPlanTask() {
           queryKey: contentStudyQueryKeys.activePlan(user.id),
         });
       }
+    },
+    onError: (error) => {
+      Sentry.captureException(error, { tags: { feature: 'content-study', operation: 'completeStudyPlanTask' } });
+      show({ type: 'error', title: 'Task not completed', message: 'Try again when connection returns.' });
     },
   });
 }

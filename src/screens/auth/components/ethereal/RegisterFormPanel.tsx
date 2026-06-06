@@ -9,6 +9,7 @@ import { Text } from '../../../../components/primitives/Text';
 import { FormField } from '../../../../shared/ui/components/FormField';
 import { VexActivationButton } from '../VexPrimaryButton';
 import { GlassSurface } from './GlassSurface';
+import { etherealText } from '@/theme/tokens/ethereal-sky';
 
 export type RegisterFields = {
   email: string;
@@ -67,9 +68,9 @@ export function RegisterFormPanel({
           value={fields.password}
         />
         <Text
-          color="#0A0A0A"
+          color={etherealText.heading}
           variant="caption"
-          style={{ color: 'rgba(10, 10, 10, 0.55)' }}
+          style={{ color: etherealText.muted }}
         >
           By creating an account, you agree to the Terms of Service and
           Privacy Policy.

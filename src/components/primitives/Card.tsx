@@ -10,6 +10,7 @@ import {
 import Animated, {
   interpolate,
   useAnimatedStyle,
+  useReducedMotion,
   useSharedValue,
   withSpring,
 } from 'react-native-reanimated';
@@ -70,6 +71,7 @@ export const Card = forwardRef<View, CardProps>(
     ref,
   ) => {
     const { theme } = useTheme();
+    const reducedMotion = useReducedMotion();
     const pressed = useSharedValue(0);
     const semantic = theme.colors.semantic;
 
@@ -154,9 +156,17 @@ export const Card = forwardRef<View, CardProps>(
           onLongPress={onLongPress}
           onPress={onPress}
           onPressIn={() => {
+            if (reducedMotion) {
+              pressed.value = 1;
+              return;
+            }
             pressed.value = withSpring(1, springPresets.tactile);
           }}
           onPressOut={() => {
+            if (reducedMotion) {
+              pressed.value = 0;
+              return;
+            }
             pressed.value = withSpring(0, springPresets.tactile);
           }}
           style={[combined, animatedStyle]}

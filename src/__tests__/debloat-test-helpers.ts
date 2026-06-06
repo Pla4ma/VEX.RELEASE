@@ -6,7 +6,7 @@ import {
   type FeatureAccessMap,
   type FeatureKey,
 } from '../features/liveops-config/feature-access';
-import { getFeatureAvailability } from '../features/liveops-config/feature-availability';
+import { getFeatureAvailability } from '../features/liveops-config/FeatureFlagService';
 
 export { getFeatureAvailability };
 import { resolveVexExperience } from '../features/personalization/service';

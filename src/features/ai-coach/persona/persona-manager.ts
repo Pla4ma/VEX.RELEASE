@@ -8,7 +8,7 @@
  * - Schemas (validation)
  */
 
-import * as repository from './repository';
+import * as repository from '../repository';
 import {
   UpdateCoachPreferencesInputSchema,
   type CoachPersona,
@@ -18,7 +18,7 @@ import {
   type BehaviorProfile,
   type BehaviorSignal,
   type SignalType,
-} from './schemas';
+} from '../schemas';
 
 // ============================================================================
 // Constants

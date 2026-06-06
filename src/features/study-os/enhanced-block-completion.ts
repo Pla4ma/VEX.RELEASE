@@ -2,10 +2,7 @@ import {
   type StudyPlan,
   type RecallQuestion,
 } from './schemas';
-import {
-  generateRecallQuestion,
-  buildMemoryContentFromBlock,
-} from './service-helpers';
+import { generateRecallQuestion, buildMemoryContentFromBlock } from './service-helpers-recall';
 import { completeStudyBlock } from './study-plan-service';
 
 export interface StudyBlockCompletionResult {

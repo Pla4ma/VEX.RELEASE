@@ -1,0 +1,68 @@
+name: VEX E2E
+
+on:
+  workflow_dispatch:
+    inputs:
+      ios-only:
+        description: 'Run only iOS E2E (skip Android)'
+        type: boolean
+        default: true
+  pull_request:
+    branches: ['main']
+    paths:
+      - 'src/**'
+      - 'e2e/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'app.json'
+
+permissions:
+  contents: read
+
+jobs:
+  detox-ios:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Install Detox CLI and prerequisites
+        run: |
+          npm install -g detox-cli
+          brew tap wix/brew
+          brew install applesimutils
+
+      - name: Install Expo CLI and EAS CLI
+        run: npm install -g eas-cli
+
+      - name: Get latest EAS simulator build
+        run: |
+          BUILD_JSON=$(eas build:list \
+            --platform ios \
+            --profile development-simulator \
+            --limit 1 \
+            --status finished \
+            --json \
+            --non-interactive)
+          BUILD_URL=$(echo "$BUILD_JSON" | node -e "const d=require('fs').readFileSync('/dev/stdin','utf8');const b=JSON.parse(d);console.log(b[0]?.artifacts?.applicationArchiveUrl || '')")
+          if [ -z "$BUILD_URL" ]; then
+            echo "No finished simulator build found. Trigger an EAS build first."
+            exit 0
+          fi
+          echo "Downloading build from EAS..."
+          curl -fsSL -o app.tar.gz "$BUILD_URL"
+          mkdir -p ios/build/Build/Products/Debug-iphonesimulator
+          tar -xzf app.tar.gz -C ios/build/Build/Products/Debug-iphonesimulator
+          echo "Build downloaded and extracted."
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Run Detox E2E tests
+        run: npx detox test --configuration ios.sim.debug --cleanup
+        timeout-minutes: 20

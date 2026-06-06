@@ -4,7 +4,7 @@ import { useProgressionSummary } from '../../features/progression/hooks';
 import { useStreakSummary } from '../../features/streaks/hooks';
 import { useSessionStats } from '../../session/hooks/useSession';
 import { useWallet } from '../../features/economy/hooks';
-import { getFeatureStatus } from '../../features/liveops-config/final-release-feature-map';
+import { getFeatureStatus } from '../../features/liveops-config/FeatureFlagService';
 import {
   getMasteryRankDisplay,
   type MasteryState,

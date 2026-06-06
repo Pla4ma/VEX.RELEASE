@@ -1,10 +1,10 @@
-import { validateCoachInput, type CoachInputContract } from './input-contract';
-import { validateMessageQuality } from './message-quality-gate';
+import { validateCoachInput, type CoachInputContract } from '../input/input-contract';
+import { validateMessageQuality } from '../message/message-quality-gate';
 import {
   analyzeSessionPatterns,
   generateRecommendationMessage,
   generateUUID,
-} from './ai-helpers';
+} from '../ai-helpers';
 import { CoachSuggestionSchema, type CoachSuggestion } from './suggestion-schemas';
 
 export async function generateSessionRecommendation(

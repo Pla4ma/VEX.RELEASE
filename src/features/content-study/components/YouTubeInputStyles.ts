@@ -46,14 +46,6 @@ export const styles = createSheet({
   helpText: { fontSize: 13, lineHeight: 18 },
 });
 
-export function formatDuration(seconds?: number): string {
-  if (!seconds) {
-    return '';
-  }
-  const mins = Math.floor(seconds / 60);
-  const hrs = Math.floor(mins / 60);
-  if (hrs > 0) {
-    return `${hrs}:${String(mins % 60).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`;
-  }
-  return `${mins}:${String(seconds % 60).padStart(2, '0')}`;
-}
+import { formatDurationColon as formatDuration } from '../../../utils/format-duration';
+
+export { formatDuration };

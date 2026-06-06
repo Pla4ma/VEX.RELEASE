@@ -1,7 +1,5 @@
-import {
-  resolveNotificationAction,
-  getAvailableNotificationFilters,
-} from '../notification-routing-core';
+import { resolveNotificationAction } from '../notification-resolver';
+import { getAvailableNotificationFilters } from '../notification-filters';
 import type { FeatureAccessMap } from '../../features/liveops-config/feature-access';
 import { buildFeatureAccess } from '../../features/liveops-config/feature-access';
 

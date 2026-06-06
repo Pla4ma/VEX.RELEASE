@@ -18,6 +18,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useReducedMotion } from '../../../../hooks/useReducedMotion';
 import { lightColors } from '@/theme/tokens/colors';
+import { StandardHitSlops } from '@/utils/touchTarget';
 
 type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger';
 type ButtonSize = 'sm' | 'md' | 'lg';
@@ -136,6 +137,7 @@ export function IconButton({
         styles[`${variant}IconButton`],
         animatedStyle,
       ]}
+      hitSlop={size === 'sm' ? StandardHitSlops.ICON : undefined}
       onPressIn={() => (pressed.value = 1)}
       onPressOut={() => (pressed.value = 0)}
       {...props}

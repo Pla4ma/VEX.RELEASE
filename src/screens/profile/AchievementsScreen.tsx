@@ -2,6 +2,8 @@ import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorB
 import React, { useState, useCallback, useMemo } from 'react';
 import { Pressable } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Box, Text } from '@/components/primitives';
 import { Skeleton } from '@/shared/ui/primitives';
 import { useTheme } from '@/theme';
@@ -9,6 +11,7 @@ import { useAchievements, achievementKeys } from '@/features/achievements/hooks'
 import { useAchievementStats } from '@/features/achievements/hooks-computed';
 import type { AchievementCategory, AchievementRarity } from '@/features/achievements/types';
 import { useQueryClient } from '@tanstack/react-query';
+import type { ExtendedRootStackParams } from '@/navigation/types';
 import { AchievementsHeader } from './AchievementProgressBar';
 import { CategoryTabs, FilterSortBar, type FilterType, type SortType } from './AchievementSearchFilter';
 import { AchievementCard, AchievementSkeletonCard, EmptyState, type AchievementWithStatus } from './AchievementCategorySection';
@@ -18,6 +21,7 @@ const CATEGORY_ORDER: AchievementCategory[] = ['SESSION', 'STREAK', 'BOSS', 'SOC
 
 export const AchievementsScreen: React.FC = () => {
   const { theme } = useTheme();
+  const navigation = useNavigation<NativeStackNavigationProp<ExtendedRootStackParams>>();
   const queryClient = useQueryClient();
   const userId = 'current-user';
   const { data: achievements, isLoading } = useAchievements(userId);
@@ -26,6 +30,10 @@ export const AchievementsScreen: React.FC = () => {
   const [filter, setFilter] = useState<FilterType>('ALL');
   const [sort, setSort] = useState<SortType>('RARITY');
   const [selectedAchievement, setSelectedAchievement] = useState<AchievementWithStatus | null>(null);
+
+  const handleStartSession = useCallback(() => {
+    navigation.navigate('SessionStack', { screen: 'SessionSetup', params: {} });
+  }, [navigation]);
 
   const filteredAchievements = useMemo(() => {
     if (!achievements) {return [];}
@@ -77,7 +85,7 @@ export const AchievementsScreen: React.FC = () => {
       <Box flex={1} bg={theme.colors.background.primary}>
         <CategoryTabs selected={selectedCategory} onSelect={setSelectedCategory} />
         <FilterSortBar filter={filter} onFilterChange={setFilter} sort={sort} onSortChange={setSort} />
-        <EmptyState />
+        <EmptyState onStartSession={handleStartSession} />
       </Box>
     );
   }
@@ -127,7 +135,7 @@ export const AchievementsScreen: React.FC = () => {
         contentContainerStyle={{ paddingBottom: 20 }}
         refreshing={isLoading}
         onRefresh={handleRefresh}
-        ListEmptyComponent={<EmptyState />}
+        ListEmptyComponent={<EmptyState onStartSession={handleStartSession} />}
       />
     </Box>
   );

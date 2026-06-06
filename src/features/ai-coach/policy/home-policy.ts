@@ -1,13 +1,13 @@
-import { validateCoachInput } from './input-contract';
-import { buildInputContractForUser } from './input-builders';
+import { validateCoachInput } from '../input/input-contract';
+import { buildInputContractForUser } from '../input/input-builders';
 import { generateMissionSuggestion } from './mission-policy';
 import {
   getPriorityEngineState,
   shouldCoachShowSuggestion,
 } from './priority-policy';
-import { generateSessionRecommendation } from './recommendation-policy';
+import { generateSessionRecommendation } from '../recommendation/recommendation-policy';
 import { handleStreakRiskIntegration } from './streak-policy';
-import type { CoachSuggestion } from './suggestion-schemas';
+import type { CoachSuggestion } from '../recommendation/suggestion-schemas';
 
 export async function getHomeCoachSuggestion(
   userId: string,

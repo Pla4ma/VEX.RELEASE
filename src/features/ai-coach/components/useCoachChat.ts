@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { type FlashListRef } from '@shopify/flash-list';
 import { useAnalytics } from '@/shared/analytics';
 import { CoachEvents } from '@/shared/analytics/analytics-events';
-import { getCurrentRecommendation } from '../services/coach-screen-service';
+import { getCurrentRecommendation } from '../service/coach-screen-service';
 import { useAskCoachQuestionMutation, useCoachScreenState } from '../hooks';
 import type { ChatMessage } from './coach-chat-types';
 import { CoachMessageInputSchema } from './coach-chat-types';

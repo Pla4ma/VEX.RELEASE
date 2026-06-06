@@ -7,6 +7,8 @@
  */
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import * as Sentry from '@sentry/react-native';
+import { useToast } from '../../../shared/ui/components/Toast';
 import { useAuthStore } from '../../../store';
 import { onboardingRepository } from '../repository/index';
 import type { OnboardingProgress } from '../schemas';
@@ -40,6 +42,7 @@ export function useOnboardingProgressState() {
   const { user } = useAuthStore();
   const userId = user?.id ?? null;
   const queryClient = useQueryClient();
+  const { show } = useToast();
 
   const query = useQuery({
     queryKey: [ONBOARDING_PROGRESS_KEY, userId],
@@ -66,6 +69,10 @@ export function useOnboardingProgressState() {
     },
     onSuccess: (data) => {
       queryClient.setQueryData([ONBOARDING_PROGRESS_KEY, userId], data);
+    },
+    onError: (error) => {
+      Sentry.captureException(error, { tags: { feature: 'onboarding', operation: 'updateProgress' } });
+      show({ type: 'error', title: 'Progress not saved', message: 'Try again when connection returns.' });
     },
   });
 

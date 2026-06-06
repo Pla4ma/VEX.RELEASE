@@ -2,7 +2,7 @@ import { captureSilentFailure } from '../../utils/silent-failure';
 import { getSupabaseClient } from '../../config/supabase';
 import { getMMKVStorageAdapter } from '../../persistence/MMKVStorageAdapter';
 import * as Sentry from '@sentry/react-native';
-import { checkQuota, consumeQuota } from './ai-quota-service';
+import { checkQuota, recordAIUsage } from './ai-quota-service';
 import type { AIRequestCategory } from './ai-quota-types';
 import {
   resolveFallbackTier,
@@ -151,7 +151,7 @@ export async function invokeAIWithFallback(
       (response.metadata?.promptTokens ?? 0);
     const category = REQUEST_TYPE_TO_CATEGORY[requestType];
     if (category && tokenEstimate > 0) {
-      consumeQuota(userId, category, tokenEstimate).catch((error: unknown) => {
+      recordAIUsage(userId, category).catch((error: unknown) => {
         Sentry.captureException(error instanceof Error ? error : new Error(String(error)), {
           tags: { feature: 'ai-quota', operation: 'consumeQuota' },
         });

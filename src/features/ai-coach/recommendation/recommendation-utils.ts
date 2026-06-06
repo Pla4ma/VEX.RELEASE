@@ -1,7 +1,7 @@
-import type { ContextSnapshot } from './context-snapshot';
-import type { RecommendationEvidence } from '../focus-memory/schemas';
+import type { ContextSnapshot } from '../session/context-snapshot';
+import type { RecommendationEvidence } from '../../focus-memory/schemas';
 import type { CoachRecommendation } from './recommendation-pipeline-types';
-import { createDebugger } from '../../utils/debug';
+import { createDebugger } from '../../../utils/debug';
 
 const debug = createDebugger('ai-coach:recommendation-utils');
 

@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native';
 import { createSheet } from '@/shared/ui/create-sheet';
 import { lightColors } from '@/theme/tokens/colors';
+import { rgbaColors } from '@/theme/tokens/rgba-colors';
 
 
 const BAR_HEIGHT = 24;
@@ -33,7 +34,7 @@ export const styles = createSheet({
     left: 0,
     right: 0,
     height: '50%',
-    backgroundColor: 'rgba(255,255,255,0.2)',
+    backgroundColor: rgbaColors.rgb_255_255_255_0_2,
   },
   tipGlow: {
     position: 'absolute',
@@ -63,8 +64,8 @@ export const styles = createSheet({
   },
   xpText: { flexDirection: 'row', fontSize: 12, fontWeight: '700' },
   xpCurrent: { fontWeight: 'bold' },
-  xpSeparator: { color: 'rgba(255,255,255,0.5)' },
-  xpThreshold: { color: 'rgba(255,255,255,0.6)' },
+  xpSeparator: { color: rgbaColors.rgb_255_255_255_0_5 },
+  xpThreshold: { color: rgbaColors.rgb_255_255_255_0_6 },
   levelUpBadge: {
     position: 'absolute',
     right: 10,
@@ -87,6 +88,6 @@ export const styles = createSheet({
   totalXp: {
     marginTop: 8,
     fontSize: 12,
-    color: 'rgba(255,255,255,0.5)',
+    color: rgbaColors.rgb_255_255_255_0_5,
   },
 });

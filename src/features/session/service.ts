@@ -1,4 +1,5 @@
 import { SessionMode } from '../../session/modes';
+import { formatDurationColon } from '../../utils/format-duration';
 import {
   ACTIVE_SESSION_CONFIG,
   canBackground,
@@ -159,7 +160,5 @@ export function calculateProgressPercentage(
 }
 
 export function formatDuration(seconds: number): string {
-  const minutes = Math.floor(seconds / 60);
-  const remainingSeconds = seconds % 60;
-  return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+  return formatDurationColon(seconds);
 }

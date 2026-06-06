@@ -21,6 +21,7 @@ import {
   GlassSurface,
   SerifTitle,
 } from './components/ethereal';
+import { etherealText } from '@/theme/tokens/ethereal-sky';
 
 type Props = NativeStackScreenProps<AuthStackParams, 'ForgotPassword'>;
 
@@ -49,16 +50,16 @@ export const ForgotPasswordScreen: React.FC<Props> = ({ navigation }) => {
               <EtherealMedallion size={100} />
               <View style={{ alignItems: 'center', gap: 4 }}>
                 <SerifTitle
-                  color="#0A0A0A"
+                  color={etherealText.heading}
                   fontSize={30}
                   letterSpacing={-0.5}
                   lineHeight={36}
                   text={isSuccess ? 'Email sent' : 'Reset password'}
                 />
                 <Text
-                  color="#0A0A0A"
+                  color={etherealText.heading}
                   fontSize={13}
-                  style={{ color: 'rgba(10, 10, 10, 0.62)', textAlign: 'center' }}
+                  style={{ color: etherealText.body, textAlign: 'center' }}
                 >
                   {isSuccess
                     ? `We sent password reset instructions to ${email}`
@@ -73,9 +74,9 @@ export const ForgotPasswordScreen: React.FC<Props> = ({ navigation }) => {
               <View style={{ marginTop: 32, alignItems: 'center' }}>
                 <GlassSurface borderRadius={24} style={{ padding: 20, width: '100%' }}>
                   <Text
-                    color="#0A0A0A"
+                    color={etherealText.heading}
                     fontSize={14}
-                    style={{ color: 'rgba(10, 10, 10, 0.78)', textAlign: 'center' }}
+                    style={{ color: etherealText.subtitle, textAlign: 'center' }}
                   >
                     Check your inbox in a few minutes.
                   </Text>
@@ -121,9 +122,9 @@ export const ForgotPasswordScreen: React.FC<Props> = ({ navigation }) => {
                   onPress={handleSubmit}
                 />
                 <Text
-                  color="#0A0A0A"
+                  color={etherealText.heading}
                   variant="caption"
-                  style={{ color: 'rgba(10, 10, 10, 0.55)', textAlign: 'center' }}
+                  style={{ color: etherealText.muted, textAlign: 'center' }}
                 >
                   Did not receive the email? Check your spam folder or try again.
                 </Text>

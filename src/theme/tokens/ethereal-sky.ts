@@ -24,6 +24,22 @@ export const etherealSkyAccents = {
   starfield: '#7FA3CC',
 } as const;
 
+/** Dark text tokens on light ethereal sky background. */
+export const etherealText = {
+  /** Primary heading text — #0A0A0A */
+  heading: '#0A0A0A',
+  /** Subtitle / strong text — rgba(10, 10, 10, 0.78) */
+  subtitle: 'rgba(10, 10, 10, 0.78)',
+  /** Body text — rgba(10, 10, 10, 0.62) */
+  body: 'rgba(10, 10, 10, 0.62)',
+  /** Muted / caption text — rgba(10, 10, 10, 0.55) */
+  muted: 'rgba(10, 10, 10, 0.55)',
+  /** Faint divider / subtle line — rgba(10, 10, 10, 0.12) */
+  faintDivider: 'rgba(10, 10, 10, 0.12)',
+  /** Google brand blue for sign-in glyph */
+  googleBlue: '#4285F4',
+} as const;
+
 /** Frosted glass surface rgba values for cards/inputs. */
 export const etherealGlass = {
   fill: 'rgba(255, 255, 255, 0.55)',
@@ -81,5 +97,6 @@ export const etherealCard = {
 } as const;
 
 export type EtherealSkyGradient = typeof etherealSkyGradient;
+export type EtherealText = typeof etherealText;
 export type EtherealGlass = typeof etherealGlass;
 export type EtherealButton = typeof etherealButton;

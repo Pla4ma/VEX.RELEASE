@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import type { SessionConfig, SessionState } from '../../../session/types';
 import type { SessionOrchestrator } from '../../../session/SessionOrchestrator';
-import type { getCoachService } from '../../ai-coach/services/service';
+import type { getCoachService } from '../../ai-coach/service/service';
 import {
   studySessionKeys,
   getExpectedDuration,

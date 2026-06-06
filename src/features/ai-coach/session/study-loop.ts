@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { createDebugger } from '../../utils/debug';
+import { createDebugger } from '../../../utils/debug';
 
 const debug = createDebugger('ai-coach:study-loop');
 

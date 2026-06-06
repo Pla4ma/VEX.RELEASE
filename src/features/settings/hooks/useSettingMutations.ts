@@ -1,4 +1,6 @@
 import { useMutation, useQueryClient, type UseMutationOptions } from '@tanstack/react-query';
+import * as Sentry from '@sentry/react-native';
+import { useToast } from '../../../shared/ui/components/Toast';
 import * as service from '../service';
 import {
   type Setting,
@@ -20,9 +22,14 @@ export function useUpdateSetting(
   >,
 ) {
   const queryClient = useQueryClient();
+  const { show } = useToast();
   return useMutation({
     mutationFn: ({ key, value, category }) =>
       service.updateSetting(userId, key, value, category),
+    onError: (error) => {
+      Sentry.captureException(error, { tags: { feature: 'settings', operation: 'updateSetting' } });
+      show({ type: 'error', title: 'Setting not saved', message: 'Try again when connection returns.' });
+    },
     onSuccess: (data, variables) => {
       queryClient.invalidateQueries({
         queryKey: settingsKeys.setting(userId, variables.key),
@@ -51,8 +58,13 @@ export function useBatchUpdateSettings(
   >,
 ) {
   const queryClient = useQueryClient();
+  const { show } = useToast();
   return useMutation({
     mutationFn: (updates) => service.batchUpdateSettings(userId, updates),
+    onError: (error) => {
+      Sentry.captureException(error, { tags: { feature: 'settings', operation: 'batchUpdateSettings' } });
+      show({ type: 'error', title: 'Settings not saved', message: 'Try again when connection returns.' });
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: settingsKeys.user(userId) });
     },
@@ -65,8 +77,13 @@ export function useDeleteSetting(
   options?: Omit<UseMutationOptions<boolean, Error, string>, 'mutationFn'>,
 ) {
   const queryClient = useQueryClient();
+  const { show } = useToast();
   return useMutation({
     mutationFn: (key) => service.deleteSetting(userId, key),
+    onError: (error) => {
+      Sentry.captureException(error, { tags: { feature: 'settings', operation: 'deleteSetting' } });
+      show({ type: 'error', title: 'Setting not deleted', message: 'Try again when connection returns.' });
+    },
     onSuccess: (_, key) => {
       queryClient.invalidateQueries({
         queryKey: settingsKeys.setting(userId, key),
@@ -91,12 +108,17 @@ export function useSyncSettings(
   >,
 ) {
   const queryClient = useQueryClient();
+  const { show } = useToast();
   return useMutation({
     mutationFn: (params) =>
       service.syncSettings(userId, {
         force: params.force,
         direction: params.direction,
       }),
+    onError: (error) => {
+      Sentry.captureException(error, { tags: { feature: 'settings', operation: 'syncSettings' } });
+      show({ type: 'error', title: 'Sync failed', message: 'Try again when connection returns.' });
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: settingsKeys.user(userId) });
     },

@@ -12,7 +12,7 @@ export const MonthlyReportSectionSchema = z.enum([
   'STREAK_HIGHLIGHTS',
   'BEST_PERFORMANCE',
   'WEEKLY_PATTERNS',
-  'AI_INSIGHTS',
+  'INSIGHTS',
   'NEXT_TARGETS',
 ]);
 
@@ -46,8 +46,8 @@ export const MonthlyFocusReportSchema = z.object({
   strongestPattern: z.string(),
   weakestPattern: z.string(),
 
-  // AI Coach insights (premium only)
-  aiInsight: z.string().optional(),
+  // Performance insights (premium only)
+  insight: z.string().optional(),
   nextMonthTarget: z.string(),
 
   // Premium status

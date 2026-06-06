@@ -1,5 +1,5 @@
 import type { NavigationProp } from '@react-navigation/native';
-import { getFeatureAvailabilityFor } from '../features/liveops-config/feature-availability';
+import { getFeatureAvailabilityFor } from '../features/liveops-config/FeatureFlagService';
 import type {
   FeatureAccess,
   FeatureKey,

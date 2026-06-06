@@ -4,6 +4,8 @@
  */
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import * as Sentry from '@sentry/react-native';
+import { useToast } from '../../../shared/ui/components/Toast';
 import * as service from '../service';
 import * as repository from '../repository';
 import {
@@ -107,6 +109,7 @@ export function useDailyProgress(userId: string | null, date: string) {
 
 export function useAddXp() {
   const queryClient = useQueryClient();
+  const { show } = useToast();
 
   return useMutation<AddXpOperationResult, Error, AddXpInput>({
     mutationFn: async (input) => {
@@ -114,7 +117,6 @@ export function useAddXp() {
       return service.addXp(validated.userId, validated);
     },
     onSuccess: (data, variables) => {
-      // Invalidate progression queries
       queryClient.invalidateQueries({
         queryKey: progressionKeys.byUser(variables.userId),
       });
@@ -122,11 +124,16 @@ export function useAddXp() {
         queryKey: progressionKeys.summary(variables.userId),
       });
     },
+    onError: (error) => {
+      Sentry.captureException(error, { tags: { feature: 'progression', operation: 'addXp' } });
+      show({ type: 'error', title: 'XP not added', message: 'Try again when connection returns.' });
+    },
   });
 }
 
 export function usePrestige() {
   const queryClient = useQueryClient();
+  const { show } = useToast();
 
   return useMutation<void, Error, PrestigeInput>({
     mutationFn: async (input) => {
@@ -144,6 +151,10 @@ export function usePrestige() {
       queryClient.invalidateQueries({
         queryKey: progressionKeys.summary(variables.userId),
       });
+    },
+    onError: (error) => {
+      Sentry.captureException(error, { tags: { feature: 'progression', operation: 'prestige' } });
+      show({ type: 'error', title: 'Prestige failed', message: 'Try again when connection returns.' });
     },
   });
 }

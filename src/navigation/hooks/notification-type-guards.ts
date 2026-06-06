@@ -1,5 +1,5 @@
 import type { FeatureKey } from '../../features/liveops-config/feature-access';
-import { isFeatureHidden } from '../../features/liveops-config/final-release-feature-map';
+import { isFeatureHidden } from '../../features/liveops-config/FeatureFlagService';
 import type { NotificationAction } from '../notification-routing-types';
 
 export const HIDDEN_V1_NOTIFICATION_TYPES = new Set([

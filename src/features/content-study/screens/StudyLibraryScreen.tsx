@@ -9,6 +9,7 @@ import { Button } from '../../../components/primitives/Button';
 import type { ContentStudyStackParamList } from '../types';
 import type { StudyContent, ContentStatus, ContentSourceType } from '../types';
 import { useContentHistory } from '../hooks';
+import { useNetInfo } from '../../../network';
 import { ContentItemCard } from '../components/ContentItemCard';
 import { FilterChip } from '../components/FilterChip';
 import { EmptyLibraryState } from '../components/EmptyLibraryState';
@@ -24,6 +25,7 @@ export function StudyLibraryScreen(): JSX.Element {
   const navigation = useNavigation<ContentStudyNavigationProp>();
   const { content, isLoading, error, refetch, deleteContent } =
     useContentHistory();
+  const { isOffline } = useNetInfo();
   const [statusFilter, setStatusFilter] = useState<ContentStatus | 'all'>(
     'all',
   );
@@ -70,6 +72,20 @@ export function StudyLibraryScreen(): JSX.Element {
 
   return (
     <Box flex={1} bg="background.primary">
+      {isOffline ? (
+        <Box
+          bg="warning.light"
+          py="xs"
+          px="sm"
+          alignItems="center"
+          accessibilityLabel="You are offline. Library sync requires a connection."
+          accessibilityRole="alert"
+        >
+          <Text variant="caption" color="text.primary">
+            You are offline. Library sync requires a connection.
+          </Text>
+        </Box>
+      ) : null}
       <Box px="lg" pt="lg" pb="md">
         <Box
           flexDirection="row"

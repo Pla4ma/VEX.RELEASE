@@ -4,11 +4,7 @@ import {
   type ReviewItem,
   type StudyPlan,
 } from './schemas';
-import {
-  firstSentence,
-  planId,
-  makeBlock,
-} from './service-helpers';
+import { firstSentence, planId, makeBlock } from './service-helpers-plan';
 
 export async function createManualStudyPlan(input: {
   deadlineAt?: number | null;

@@ -38,7 +38,7 @@ export async function createPrestigeState(
   const { data, error } = await supabase
     .from(TABLE)
     .insert({ user_id: userId })
-    .select(tableColumns(TABLE))
+    .select('*')
     .single();
 
   if (error) {

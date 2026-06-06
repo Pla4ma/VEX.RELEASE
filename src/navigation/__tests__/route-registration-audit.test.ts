@@ -11,7 +11,7 @@
  * 7. Coach safe intents cannot navigate to hidden routes
  */
 import { describe, it, expect } from '@jest/globals';
-import { resolveNotificationAction } from '../notification-routing-core';
+import { resolveNotificationAction } from '../notification-resolver';
 import { getCoachPresenceMessage } from '../../features/coach-presence/copy-service';
 import { isNotArchivedRoute } from '../feature-route-registry';
 import { getFeatureForRoute } from '../feature-route-registry';

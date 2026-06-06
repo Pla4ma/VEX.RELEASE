@@ -8,6 +8,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import NetInfo, { type NetInfoState } from '@react-native-community/netinfo';
+import { getNetInfoAdapter } from '../../../network/NetInfoAdapter';
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
 import { capture } from '../../analytics';
@@ -45,9 +46,8 @@ export function OfflineBanner({
         });
       }
     });
-    NetInfo.fetch().then((state) => {
-      setIsConnected(state.isConnected ?? true);
-    });
+    const netInfo = getNetInfoAdapter();
+    setIsConnected(netInfo.isConnected());
     return () => {
       unsubscribe();
       if (dismissTimer) {

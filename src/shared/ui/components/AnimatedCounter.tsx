@@ -3,6 +3,7 @@ import { View } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
+  useReducedMotion,
   withTiming,
   withSpring,
   runOnJS,
@@ -68,6 +69,7 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
   locale = 'en-US',
 }) => {
   const { theme } = useTheme();
+  const reducedMotion = useReducedMotion();
   const [displayValue, setDisplayValue] = useState(value);
   const previousRef = useRef(previousValue ?? value);
   const animatedValue = useSharedValue(animateOnMount ? 0 : value);
@@ -84,8 +86,13 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
   useEffect(() => {
     const from = previousRef.current;
     const to = value;
-    animatedValue.value = from;
     previousRef.current = value;
+    if (reducedMotion) {
+      animatedValue.value = to;
+      setDisplayValue(to);
+      return;
+    }
+    animatedValue.value = from;
     if (trend !== 'neutral') {
       colorProgress.value = 0;
       colorProgress.value = withTiming(1, { duration: 300 }, () => {
@@ -109,8 +116,6 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
         },
       );
     }
-    // Counter animation handled by Reanimated — no setInterval needed
-    // No interval to clean up
   }, [
     value,
     duration,
@@ -119,6 +124,7 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
     animatedValue,
     colorProgress,
     trend,
+    reducedMotion,
   ]);
   const animatedTextStyle = useAnimatedStyle(() => ({
     color: interpolateColor(

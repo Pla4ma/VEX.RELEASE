@@ -1,7 +1,7 @@
 import {
   getFeatureAvailabilityFor,
   isFeatureAvailableForNavigation,
-} from '../../features/liveops-config/feature-availability';
+} from '../../features/liveops-config/FeatureFlagService';
 import type { FeatureAccess } from '../../features/liveops-config/feature-access';
 
 export type MonthlyReportAction = 'paywall' | 'start-session';

@@ -12,7 +12,7 @@ import {
   type RefetchOptions,
 } from '@tanstack/react-query';
 import { COACH_QUERY_KEYS } from '../constants';
-import { fetchActiveRecommendations } from '../services/coach-service';
+import { fetchActiveRecommendations } from '../service/coach-service';
 import type { SessionRecommendation } from './useRecommendationMutations';
 
 type ActiveCoachRecommendationsOptions = {

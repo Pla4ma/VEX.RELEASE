@@ -1,5 +1,6 @@
 import { createSheet } from '@/shared/ui/create-sheet';
 import { lightColors } from '@/theme/tokens/colors';
+import { rgbaColors } from '@/theme/tokens/rgba-colors';
 
 
 export const styles = createSheet({
@@ -48,7 +49,7 @@ export const styles = createSheet({
     paddingVertical: 10,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: 'rgba(255,215,0,0.3)',
+    borderColor: rgbaColors.rgb_255_215_0_0_3,
   },
   socialProofIcon: { fontSize: 16 },
 
@@ -75,7 +76,7 @@ export const styles = createSheet({
     fontWeight: '800',
   },
   valueLabel: {
-    color: 'rgba(255,255,255,0.8)',
+    color: rgbaColors.rgb_255_255_255_0_8,
     fontSize: 12,
     fontWeight: '600',
     marginTop: 2,
@@ -83,10 +84,10 @@ export const styles = createSheet({
   valueDivider: {
     width: 1,
     height: 40,
-    backgroundColor: 'rgba(255,255,255,0.3)',
+    backgroundColor: rgbaColors.rgb_255_255_255_0_3,
   },
   valueFootnote: {
-    color: 'rgba(255,255,255,0.9)',
+    color: rgbaColors.rgb_255_255_255_0_9,
     fontSize: 13,
     textAlign: 'center',
   },

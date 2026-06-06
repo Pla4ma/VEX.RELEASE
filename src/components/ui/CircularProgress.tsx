@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { View } from 'react-native';
 import Animated, {
   useAnimatedStyle,
+  useReducedMotion,
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
@@ -32,16 +33,21 @@ export const CircularProgress: React.FC<CircularProgressProps> = ({
   animated = true,
 }) => {
   const { theme } = useTheme();
+  const reducedMotion = useReducedMotion();
   const animatedValue = useSharedValue(0);
   const nextProgress = clampProgress(progress);
   const circleColor = color ?? theme.colors.semantic.primary;
   const bgCircleColor = backgroundColor ?? theme.colors.semantic.border;
 
   useEffect(() => {
+    if (reducedMotion) {
+      animatedValue.value = nextProgress;
+      return;
+    }
     animatedValue.value = animated
       ? withTiming(nextProgress, { duration: 800 })
       : nextProgress;
-  }, [animated, animatedValue, nextProgress]);
+  }, [animated, animatedValue, nextProgress, reducedMotion]);
 
   const rotationStyle = useAnimatedStyle(() => ({
     transform: [{ rotate: `${animatedValue.value * 360}deg` }],

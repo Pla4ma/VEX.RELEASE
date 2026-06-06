@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { MasteryRank } from '../progression/unified-mastery';
+import type { MasteryRank } from '../../progression/unified-mastery';
 import { lightColors } from '@/theme/tokens/colors';
 
 

@@ -5,7 +5,7 @@ import {
   checkMilestone,
   useShield,
 } from '../service';
-import { mockRepository, mockStreak } from './streak-system-helpers';
+import { mockRepository, mockStreak } from '../streak-system-helpers';
 
 describe('Streak System - Core Logic', () => {
   beforeEach(() => {

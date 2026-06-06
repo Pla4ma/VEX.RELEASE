@@ -1,5 +1,5 @@
-import { createDebugger } from '../../utils/debug';
-import type { ContextSnapshot } from './context-snapshot';
+import { createDebugger } from '../../../utils/debug';
+import type { ContextSnapshot } from '../session/context-snapshot';
 import type { CoachRecommendation } from './recommendation-pipeline-types';
 export {
   CoachRecommendationSchema,

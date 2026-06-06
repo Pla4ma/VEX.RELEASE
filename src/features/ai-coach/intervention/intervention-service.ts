@@ -23,6 +23,9 @@ export {
   detectPlateau,
   detectStreakRescueNeeded,
   detectBossStrategyOpportunity,
+} from './intervention-detectors-core';
+
+export {
   detectStudyStuck,
   detectDistraction,
   detectOptimalBreak,
@@ -31,7 +34,7 @@ export {
   detectMomentumBuilding,
   detectComebackReady,
   detectStudyPlanComplete,
-} from './intervention-detectors';
+} from './intervention-detectors-situational';
 
 export {
   generateBurnoutMessage,
@@ -47,10 +50,12 @@ import {
   detectPlateau,
   detectStreakRescueNeeded,
   detectBossStrategyOpportunity,
+} from './intervention-detectors-core';
+import {
   detectStudyStuck,
   detectDistraction,
   detectOptimalBreak,
-} from './intervention-detectors';
+} from './intervention-detectors-situational';
 import { evaluateInterventions } from './evaluate-interventions';
 import {
   generateBurnoutMessage,

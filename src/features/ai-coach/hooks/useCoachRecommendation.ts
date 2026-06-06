@@ -13,7 +13,7 @@ import {
   type CoachRecommendation,
   type RecommendationContext,
   convertToHomeRecommendation,
-} from '../services/CoachRecommendationService';
+} from '../service/CoachRecommendationService';
 function getLastSessionAt(stats: unknown): number {
   if (stats && typeof stats === 'object' && 'lastSessionAt' in stats) {
     const value = Reflect.get(stats, 'lastSessionAt');

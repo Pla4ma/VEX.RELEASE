@@ -1,11 +1,11 @@
-import * as service from './services/service';
-import * as repository from './repository';
-import * as analytics from './analytics';
+import * as service from '../service/service';
+import * as repository from '../repository';
+import * as analytics from '../analytics';
 import {
   createStreakRiskDetectedEvent,
   createComebackActivatedEvent,
-} from './events';
-import { generateAndSendMessage } from './message-helpers';
+} from '../events';
+import { generateAndSendMessage } from '../message/message-helpers';
 
 export async function handleSessionCompleted(payload: {
   userId: string;

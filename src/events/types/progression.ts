@@ -110,4 +110,10 @@ export interface ProgressionEventDefinitions {
     requirements: string[];
     timestamp: number;
   };
+  'progression:activate_boost': {
+    userId: string;
+    boostType: string;
+    multiplier: number;
+    duration: number;
+  };
 }

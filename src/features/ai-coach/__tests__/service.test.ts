@@ -1,4 +1,4 @@
-import * as service from '../services/service';
+import * as service from '../service/service';
 
 const mockFetchCoachState = jest.fn();
 const mockFetchRecentBehaviorSignals = jest.fn();
