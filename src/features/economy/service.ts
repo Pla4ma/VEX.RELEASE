@@ -1,4 +1,5 @@
 import { getOrCreateWallet, getCurrentUserId } from './repository';
+export { getOrCreateWallet } from './repository';
 import type { WalletSummary } from './types';
 
 export async function getWalletSummary(): Promise<WalletSummary> {

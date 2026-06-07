@@ -28,7 +28,7 @@ const queryClient = new QueryClient({
       retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
       refetchOnWindowFocus: false, // prevent jarring refetches when user switches from another app mid-session
       refetchOnReconnect: true,
-      refetchOnMount: false,
+      refetchOnMount: true,
       networkMode: 'online',
     },
     mutations: {

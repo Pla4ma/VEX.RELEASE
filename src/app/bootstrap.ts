@@ -8,7 +8,6 @@ import {
   ProductAnalyticsEvents,
 } from '../shared/analytics';
 import { setupGlobalErrorHandler, setupRejectionHandler } from '../errors';
-import { IS_DEVELOPMENT } from '../constants/app';
 import { initializeSessionCompletionOrchestrator } from '../features/session-completion';
 
 let bootstrapped = false;

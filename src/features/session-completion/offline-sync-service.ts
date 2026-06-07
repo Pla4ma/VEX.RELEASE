@@ -75,7 +75,7 @@ export class SessionCompletionOfflineSyncService {
   async generateHealthReport(): Promise<OfflineSyncReport> {
     const d = this.getDiagnostics();
     const issues = d.oldestEntryAge && d.oldestEntryAge > 86400000 ? ['Oldest entry is older than 24 hours'] : [];
-    return { queueSize: d.fallbackEntriesCount, successRate: this.isInitialized ? 95 : 0, averageRetryCount: 0, lastSyncTime: d.lastSyncAt > 0 ? d.lastSyncAt : null, isHealthy: issues.length === 0, issues, timestamp: Date.now() };
+    return { queueSize: d.fallbackEntriesCount, successRate: entries.length > 0 ? Math.round((syncedCount / entries.length) * 100) : 100, averageRetryCount: 0, lastSyncTime: d.lastSyncAt > 0 ? d.lastSyncAt : null, isHealthy: issues.length === 0, issues, timestamp: Date.now() };
   }
 
   getDiagnostics(): DiagnosticsResult {
