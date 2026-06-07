@@ -38,7 +38,7 @@ export async function signOut(
     }
 
     return { error: null };
-  } catch (err) {
+  } catch (err: unknown) {
     return { error: handleSupabaseError(err) };
   }
 }
@@ -53,7 +53,7 @@ export async function getCurrentSession() {
     }
 
     return { session: data.session, error: null };
-  } catch (err) {
+  } catch (err: unknown) {
     return { session: null, error: handleSupabaseError(err) };
   }
 }
@@ -76,7 +76,7 @@ export async function getCurrentUser(): Promise<{
     }
 
     return { user: null, error: null };
-  } catch (err) {
+  } catch (err: unknown) {
     return { user: null, error: handleSupabaseError(err) };
   }
 }

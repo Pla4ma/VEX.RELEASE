@@ -79,7 +79,7 @@ export function buildHomeController(input: BuildControllerInput): HomeController
     user: null,
     userId,
     isOnline,
-    isLoading: disclosure.isLoading || recommendationsPending,
+    isLoading: disclosure.isPending || recommendationsPending,
     isFirstRun,
     loadError,
     homeHighlight,

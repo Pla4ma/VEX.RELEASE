@@ -91,7 +91,7 @@ export function useEngagedHomeModel(
     q.activeStudyPlanQuery.error ??
     q.comebackQuery.error) as Error | null;
 
-  const isLoading = disclosure.isLoading || q.recommendationsQuery.isLoading;
+  const isLoading = disclosure.isPending || q.recommendationsQuery.isPending;
 
   const controller = buildEngagedController({
     userId,

@@ -157,7 +157,7 @@ export function useContentInput() {
     try {
       const result = await submitMutation.mutateAsync();
       return result;
-    } catch (err) {
+    } catch (err: unknown) {
       const message = getUserFacingSubmitError(err);
       captureException(
         err instanceof Error

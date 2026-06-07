@@ -8,7 +8,6 @@ import {
   ProductAnalyticsEvents,
 } from '../shared/analytics';
 import { setupGlobalErrorHandler, setupRejectionHandler } from '../errors';
-import { IS_DEVELOPMENT } from '../constants/app';
 import { initializeSessionCompletionOrchestrator } from '../features/session-completion';
 
 let bootstrapped = false;
@@ -20,10 +19,8 @@ function deferBootCall(call: () => void): void {
 }
 
 function initializeCoreSystems(): void {
-  if (!IS_DEVELOPMENT) {
-    setupGlobalErrorHandler();
-    setupRejectionHandler();
-  }
+  setupGlobalErrorHandler();
+  setupRejectionHandler();
   initializeAnalyticsEventBridge();
   analyticsService.initialize().then((enabled) => {
     if (enabled) {

@@ -3,11 +3,8 @@ import { View, Pressable } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { Text } from '../../../components/primitives/Text';
 import { Box } from '../../../components/primitives/Box';
-import { GlassCard } from '../../../components/glass/GlassCard';
-import { GlassProgressBar } from '../../../components/glass/GlassProgressBar';
+import { useTheme } from '../../../theme';
 import { getNextBandLabel } from './FocusScoreCardStates';
-import { FocusScoreHeader } from './FocusScoreHeader';
-import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 
 interface FocusScoreCardContentProps {
   size: 'small' | 'medium' | 'large';
@@ -27,31 +24,6 @@ interface FocusScoreCardContentProps {
   errorColor: string;
 }
 
-function RecoveryBanner(): JSX.Element {
-  return (
-    <View
-      style={{
-        backgroundColor: 'rgba(240, 138, 75, 0.18)',
-        borderColor: 'rgba(240, 138, 75, 0.45)',
-        borderRadius: 14,
-        borderWidth: 1,
-        marginTop: 12,
-        padding: 10,
-      }}
-    >
-      <Text
-        style={{
-          color: '#A04A12',
-          fontSize: 11,
-          fontWeight: '700',
-        }}
-      >
-        Recovery Mode: +50% XP bonus active
-      </Text>
-    </View>
-  );
-}
-
 export function FocusScoreCardContent({
   size,
   handlePress,
@@ -69,82 +41,140 @@ export function FocusScoreCardContent({
   successColor,
   errorColor,
 }: FocusScoreCardContentProps) {
-  const safeScore = Math.max(0, Math.min(100, scoreProgress * 100));
+  const { theme } = useTheme();
+  const isPositiveChange = scoreChange > 0;
+  const isNegativeChange = scoreChange < 0;
   return (
-    <Pressable disabled={!onPress} onPress={handlePress}>
+    <Pressable onPress={handlePress} disabled={!onPress} accessibilityLabel={`Focus Score ${currentScore}`}>
       <Animated.View style={[animatedStyles]}>
-        <GlassCard
-          padding={size === 'small' ? 14 : size === 'large' ? 22 : 18}
-          radius={26}
-          size={size === 'large' ? 'lg' : 'md'}
-          variant="hero"
+        <Box
+          padding={size === 'small' ? 'md' : size === 'large' ? 'xl' : 'lg'}
+          backgroundColor="surface"
+          borderRadius="lg"
+          style={{ width: '100%', borderColor: scoreColor, borderWidth: 2 }}
         >
           <View
-            pointerEvents="none"
             style={{
-              backgroundColor: 'rgba(95, 230, 197, 0.18)',
-              borderRadius: 200,
-              height: 200,
-              position: 'absolute',
-              right: -50,
-              top: -50,
-              width: 200,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'flex-start',
             }}
-          />
-          <FocusScoreHeader
-            currentBand={currentBand}
-            currentScore={currentScore}
-            errorColor={errorColor}
-            scoreChange={scoreChange}
-            scoreColor={scoreColor}
-            showTrend={showTrend}
-            size={size}
-            successColor={successColor}
-          />
-          {isInRecovery ? <RecoveryBanner /> : null}
+          >
+            <View>
+              <Text
+                variant={
+                  size === 'large'
+                    ? 'display'
+                    : size === 'small'
+                      ? 'heading3'
+                      : 'heading2'
+                }
+                color="text"
+                style={{ fontWeight: '700', color: scoreColor }}
+              >
+                {currentScore || '---'}
+              </Text>
+              <Text variant="caption" color="textMuted">
+                Focus Score
+              </Text>
+            </View>
+
+            {currentBand && (
+              <View
+                style={{
+                  paddingHorizontal: 12,
+                  paddingVertical: 4,
+                  borderRadius: 12,
+                  backgroundColor: scoreColor + '20',
+                }}
+              >
+                <Text
+                  variant="caption"
+                  style={{ fontWeight: '600', color: scoreColor }}
+                >
+                  {currentBand.label}
+                </Text>
+              </View>
+            )}
+          </View>
+
+          {showTrend && scoreChange !== 0 && (
+            <View style={{ marginTop: 8 }}>
+              <Text
+                variant="body"
+                style={{
+                  fontWeight: '500',
+                  color: isPositiveChange
+                    ? successColor
+                    : isNegativeChange
+                      ? errorColor
+                      : undefined,
+                }}
+              >
+                {isPositiveChange ? '↑' : '↓'} {Math.abs(scoreChange)} from
+                last check
+              </Text>
+            </View>
+          )}
+
+          {isInRecovery && (
+            <Box
+              padding="sm"
+              backgroundColor="warning"
+              borderRadius="md"
+              style={{ marginTop: 12 }}
+            >
+              <Text variant="caption" color="warning">
+                Recovery Mode: +50% XP bonus active
+              </Text>
+            </Box>
+          )}
+
           <Text
-            style={{
-              color: vexLightGlass.text.primary,
-              fontSize: 13,
-              fontStyle: 'italic',
-              marginTop: 12,
-            }}
+            variant="body"
+            color="text"
+            style={{ marginTop: 12, fontStyle: 'italic' }}
           >
             {identityStatement}
           </Text>
-          {percentileRank ? (
-            <Text
-              style={{
-                color: vexLightGlass.text.tertiary,
-                fontSize: 11,
-                fontWeight: '600',
-                marginTop: 8,
-              }}
-            >
+
+          {percentileRank && (
+            <Text variant="caption" color="textMuted" style={{ marginTop: 8 }}>
               Top {100 - percentileRank}% of users
             </Text>
-          ) : null}
-          <Box style={{ marginTop: 12 }}>
-            <GlassProgressBar height={6} value={safeScore} variant="mint" />
-          </Box>
-          {currentBand && currentBand.max < 850 ? (
-            <Text
+          )}
+
+          <View
+            style={{
+              height: 4,
+              backgroundColor: theme.colors.border.DEFAULT,
+              borderRadius: 2,
+              marginTop: 12,
+              overflow: 'hidden',
+            }}
+          >
+            <View
               style={{
-                color: vexLightGlass.text.tertiary,
-                fontSize: 11,
-                fontWeight: '600',
-                marginTop: 4,
-                textAlign: 'right',
+                height: '100%',
+                borderRadius: 2,
+                backgroundColor: scoreColor,
+                width: `${scoreProgress * 100}%`,
               }}
+            />
+          </View>
+
+          {currentBand && currentBand.max < 850 && (
+            <Text
+              variant="caption"
+              color="textMuted"
+              style={{ marginTop: 4, textAlign: 'right' }}
             >
               {currentBand.max + 1 - currentScore} points to{' '}
               {getNextBandLabel(currentBand.label)}
             </Text>
-          ) : null}
-        </GlassCard>
+          )}
+        </Box>
       </Animated.View>
     </Pressable>
   );
 }
-
-export default FocusScoreCardContent;

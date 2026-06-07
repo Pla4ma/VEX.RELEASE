@@ -3,6 +3,8 @@ import { captureSilentFailure } from '../../utils/silent-failure';
 import { useProgressionSummary } from '../../features/progression/hooks';
 import { useStreakSummary } from '../../features/streaks/hooks';
 import { useSessionStats } from '../../session/hooks/useSession';
+import { useWallet } from '../../features/economy/hooks';
+import { getFeatureStatus } from '../../features/liveops-config/final-release-feature-map';
 import {
   getMasteryRankDisplay,
   type MasteryState,
@@ -24,11 +26,11 @@ export interface UseProfileDataResult {
   progressionQuery: ReturnType<typeof useProgressionSummary>;
   streakQuery: ReturnType<typeof useStreakSummary>;
   statsQuery: ReturnType<typeof useSessionStats>;
+  walletQuery: ReturnType<typeof useWallet>;
   loading: boolean;
   hasStatsError: boolean;
   xpPercent: number;
   stats: ProfileStatsItem[];
-  theme: ReturnType<typeof useTheme>['theme'];
 }
 
 function makeMastery(userId: string): MasteryState {
@@ -58,11 +60,14 @@ export function useProfileData(
   const progressionQuery = useProgressionSummary(userId);
   const streakQuery = useStreakSummary(userId);
   const statsQuery = useSessionStats(userId ?? '');
+  const walletQuery = useWallet(userId ?? '', {
+    enabled: getFeatureStatus('economy_advanced') !== 'hidden',
+  });
   const rankDisplay = getMasteryRankDisplay(mastery.rank);
   const xpPercent = Math.max(0, Math.min(100, progressionQuery.data?.progressPercent ?? 0));
-  const loading = progressionQuery.isLoading || streakQuery.isLoading ||
-    statsQuery.isLoading;
-  const hasStatsError = !!(progressionQuery.error || streakQuery.error);
+  const loading = progressionQuery.isPending || streakQuery.isPending ||
+    statsQuery.isPending || walletQuery.isPending;
+  const hasStatsError = !!(progressionQuery.error || streakQuery.error || walletQuery.error);
 
   const stats = useMemo<ProfileStatsItem[]>(() => [
     { label: 'Current Streak', value: `${streakQuery.data?.currentDays ?? 0} days`, icon: 'fire', color: theme.colors.warning.DEFAULT },
@@ -70,8 +75,8 @@ export function useProfileData(
     { label: 'Level', value: `${progressionQuery.data?.level ?? 1}`, icon: 'star', color: theme.colors.primary[500] },
     { label: 'Total Sessions', value: `${statsQuery.stats?.totalSessions ?? 0}`, icon: 'activity', color: theme.colors.info.DEFAULT },
     { label: 'Focus Hours', value: hours(statsQuery.stats?.totalFocusTime ?? 0), icon: 'clock', color: theme.colors.success.DEFAULT },
-    { label: 'Avg. Session', value: hours(statsQuery.stats?.averageSessionDuration ?? 0), icon: 'timer', color: theme.colors.success.DEFAULT },
-  ], [streakQuery.data, progressionQuery.data, statsQuery.stats, theme]);
+    { label: 'Coins', value: `${walletQuery.data?.coins ?? 0}`, icon: 'gem', color: theme.colors.warning.DEFAULT },
+  ], [streakQuery.data, progressionQuery.data, statsQuery.stats, walletQuery.data, theme]);
 
   useEffect(() => {
     let mounted = true;
@@ -92,6 +97,6 @@ export function useProfileData(
     return () => { mounted = false; };
   }, [userId]);
 
-  return { mastery, masteryLoading, rankDisplay, progressionQuery, streakQuery, statsQuery, loading, hasStatsError, xpPercent, stats, theme };
+  return { mastery, masteryLoading, rankDisplay, progressionQuery, streakQuery, statsQuery, walletQuery, loading, hasStatsError, xpPercent, stats };
 }
 

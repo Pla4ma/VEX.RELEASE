@@ -48,7 +48,7 @@ export function useStreakRepairQuest(): UseStreakRepairQuestReturn {
         if (result.error) {throw result.error;}
         if (!result.data) {return null;}
         return StreakRepairQuestSchema.parse(result.data);
-      } catch (err) {
+      } catch (err: unknown) {
         Sentry.captureException(err, {
           tags: {
             feature: 'streaks',

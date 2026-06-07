@@ -8,7 +8,7 @@ import type { FeatureAccessResult } from '../../../features/liveops-config';
 import type { HomeFeatureRuntime } from '../hooks/home-feature-runtime';
 import type { HomeViewModel } from '../hooks/home-view-model';
 import type { HomeController } from '../hooks/home-controller-types';
-import type { ExtendedRootStackParams } from '../../../navigation/types';
+import type { ExtendedRootStackParams, SessionStackParams } from '../../../navigation/types';
 import {
   navigateToSessionStackScreen,
   navigateToMainTab,
@@ -87,7 +87,7 @@ export function useNewUserContainerModel(
     Math.round((todayFocusMinutes / 120) * 100),
   );
   const isFirstRun =
-    !disclosure.isLoading &&
+    !disclosure.isPending &&
     disclosure.inputs.totalCompletedSessions === 0 &&
     currentStreak === 0 &&
     currentXp === 0;
@@ -95,7 +95,7 @@ export function useNewUserContainerModel(
   const stubActions = useMemo(() => stubNavigationActions(), []);
 
   const openSetup = useCallback(
-    (params: Record<string, unknown> = {}): void => {
+    (params: SessionStackParams['SessionSetup'] = {}): void => {
       if (userId && disclosure.inputs.totalCompletedSessions === 0) {
         analytics.trackFirstSessionStarted(userId, 'home');
       }
@@ -140,7 +140,7 @@ export function useNewUserContainerModel(
   });
 
   const isLoading =
-    disclosure.isLoading || streakQuery.isLoading || progressionQuery.isLoading;
+    disclosure.isPending || streakQuery.isPending || progressionQuery.isPending;
 
   const controller = buildContainerController({
     userId,

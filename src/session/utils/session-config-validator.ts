@@ -32,6 +32,22 @@ export const SessionValidationSchema = z.object({
 
 export type SessionValidationInput = z.infer<typeof SessionValidationSchema>;
 
+/** Safely traverse a nested object by path segments to retrieve a value. */
+function getPathValue(
+  root: unknown,
+  path: Array<string | number>,
+): unknown {
+  let current: unknown = root;
+  for (const key of path) {
+    if (current !== null && typeof current === 'object') {
+      current = (current as Record<string, unknown>)[key as string];
+    } else {
+      return undefined;
+    }
+  }
+  return current;
+}
+
 export function validateSessionConfig(
   config: unknown,
 ): ValidationResult<SessionValidationInput> {
@@ -53,13 +69,7 @@ export function validateSessionConfig(
         field: err.path.join("."),
         message: err.message,
         code: err.code,
-        value: err.path.reduce<unknown>(
-          (obj, key) =>
-            obj && typeof obj === 'object'
-              ? (obj as Record<string, unknown>)[key as string]
-              : undefined,
-          config,
-        ),
+        value: getPathValue(config, err.path),
       }));
     } else {
       result.errors.push({

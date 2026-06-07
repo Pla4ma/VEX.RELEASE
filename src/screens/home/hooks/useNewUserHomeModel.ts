@@ -75,7 +75,7 @@ export function useNewUserHomeModel(input: NewUserModelInput): HomeViewModel & {
     Math.round((todayFocusMinutes / 120) * 100),
   );
   const isFirstRun =
-    !disclosure.isLoading &&
+    !disclosure.isPending &&
     disclosure.inputs.totalCompletedSessions === 0 &&
     currentStreak === 0 &&
     currentXp === 0;
@@ -140,7 +140,7 @@ export function useNewUserHomeModel(input: NewUserModelInput): HomeViewModel & {
   });
 
   const isLoading =
-    disclosure.isLoading || streakQuery.isLoading || progressionQuery.isLoading;
+    disclosure.isPending || streakQuery.isPending || progressionQuery.isPending;
 
   const controller = buildNewUserController({
     userId,

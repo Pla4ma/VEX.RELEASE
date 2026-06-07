@@ -38,7 +38,7 @@ export async function createPrestigeState(
   const { data, error } = await supabase
     .from(TABLE)
     .insert({ user_id: userId })
-    .select('*')
+    .select('active_bonuses,created_at,fastest_prestige_days,first_prestige_at,id,last_prestige_at,most_xp_at_prestige,nightmare_completions,nightmare_unlocked,prestige_level,total_prestiges,updated_at,user_id')
     .single();
 
   if (error) {

@@ -133,7 +133,7 @@ export const HomeContent: React.FC<HomeContentProps> = ({
             (controller.streakQuery.data as StreakSummaryData | undefined)
               ?.longestDays as number | undefined
           }
-          isLoading={controller.streakQuery.isLoading}
+          isLoading={controller.streakQuery.isPending}
           userId={controller.userId ?? undefined}
         />
       ) : null}
@@ -143,7 +143,7 @@ export const HomeContent: React.FC<HomeContentProps> = ({
           hoursRemaining={streakHoursRemaining}
           currentStreak={controller.currentStreak}
           onStartSession={() => controller.openSetup()}
-          isLoading={controller.streakQuery.isLoading}
+          isLoading={controller.streakQuery.isPending}
         />
       )}
 

@@ -38,7 +38,7 @@ export function CloudPuff({
   const baseStyle = useMemo<ViewStyle>(
     () => ({
       position: 'absolute',
-      top: `${topPercent}%` as unknown as number,
+      top: `${topPercent}%` as ViewStyle['top'],
       left: -size * 0.3,
       width: size,
       height: size * 0.55,

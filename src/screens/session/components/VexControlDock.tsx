@@ -49,6 +49,7 @@ function DockButton({
       }}
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
+      accessibilityLabel="Dock button"
       style={getMinTouchTargetStyle()}
     >
       <Animated.View

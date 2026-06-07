@@ -7,7 +7,7 @@ import {
   useCreateRecommendation,
   useUpdateRecommendationStatus,
 } from '../../../features/ai-coach/hooks/useRecommendationMutations';
-import { useHomeRecommendations } from '../../../features/ai-coach/hooks';
+import { useActiveCoachRecommendations } from '../../../features/ai-coach/hooks/useCoachRecommendations';
 import { useActiveStudyPlan } from '../../../features/content-study';
 import {
   buildLearningSessionParams,
@@ -22,6 +22,7 @@ import {
 import type { HomeViewModel } from '../hooks/home-view-model';
 import type { HomeController } from '../hooks/home-controller-types';
 import { navigateToSessionStackScreen } from '../../../navigation/navigation-helpers';
+import type { SessionStackParams } from '../../../navigation/types';
 import {
   getFocusedMinutesForToday,
   getNextUnlockFeature,
@@ -57,7 +58,7 @@ export function useEngagedContainerModel(
   );
   const progressPercent = Math.min(100, Math.round((todayFocusMinutes / 120) * 100));
   const isFirstRun =
-    !disclosure.isLoading &&
+    !disclosure.isPending &&
     disclosure.inputs.totalCompletedSessions === 0 &&
     currentStreak === 0 && currentXp === 0;
 
@@ -67,7 +68,7 @@ export function useEngagedContainerModel(
   const learningExecutionLayer = useLearningExecutionLayer(activeStudyPlanQuery.data ?? null);
   const comebackQuery = useComebackState(runtime.canQueryComeback ? userId : null);
   const { primaryRecommendation, isPending: recommendationsPending } =
-    useHomeRecommendations(userId, runtime.canQueryCoach && !disclosure.isLoading);
+    useActiveCoachRecommendations(userId, runtime.canQueryCoach && !disclosure.isPending);
 
   const canNavigateContentStudy = isFeatureAvailableForNavigation(
     getFeatureAvailability(disclosure.features.content_study),
@@ -77,7 +78,7 @@ export function useEngagedContainerModel(
   );
 
   const openSetup = useCallback(
-    (params: Record<string, unknown> = {}): void => {
+    (params: SessionStackParams['SessionSetup'] = {}): void => {
       if (userId && disclosure.inputs.totalCompletedSessions === 0) {
         analytics.trackFirstSessionStarted(userId, 'home');
       }
@@ -149,7 +150,7 @@ export function useEngagedContainerModel(
 
   return {
     userId, isOnline,
-    isLoading: disclosure.isLoading || recommendationsPending,
+    isLoading: disclosure.isPending || recommendationsPending,
     isFirstRun, loadError, currentStreak, currentXp,
     todayFocusMinutes, progressPercent,
     primaryRecommendation: primaryRecommendation ?? null, homeSpine,

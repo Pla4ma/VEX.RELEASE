@@ -12,8 +12,10 @@ import {
   TextInput,
   ScrollView,
   Pressable,
-  ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
+import { Skeleton } from '../../../components/ui/Skeleton';
 import type { StudyContent } from '../types';
 import { CONTENT_STATUS_CONFIG, UI_TEXT } from '../constants';
 import { styles } from './ContentReviewScreen.styles';
@@ -36,11 +38,7 @@ export function StatusBadge({ content }: StatusBadgeProps) {
         },
       ]}
     >
-      <ActivityIndicator
-        color={config.color}
-        animating={config.isLoading}
-        style={!config.isLoading && styles.hidden}
-      />
+      <Skeleton width={16} height={16} variant="circular" />
       <Text style={[styles.statusLabel, { color: config.color }]}>
         {config.label}
       </Text>
@@ -78,73 +76,80 @@ export function ContentView({
     ?.length || 0;
 
   return (
-    <View style={styles.contentContainer}>
-      <View style={styles.contentHeader}>
-        <Text style={styles.contentTitle}>Extracted Content</Text>
-        <Text style={styles.contentStats}>
-          {charCount} characters
-        </Text>
-      </View>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{ flex: 1 }}
+    >
+      <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{ flex: 1 }}>
+        <View style={styles.contentContainer}>
+          <View style={styles.contentHeader}>
+            <Text style={styles.contentTitle}>Extracted Content</Text>
+            <Text style={styles.contentStats}>
+              {charCount} characters
+            </Text>
+          </View>
 
-      {isEditing ? (
-        <TextInput
-          style={styles.contentEditInput}
-          multiline
-          value={editedText}
-          onChangeText={onTextChanged}
-          textAlignVertical="top"
-          autoFocus
-        />
-      ) : (
-        <ScrollView style={styles.contentScroll} nestedScrollEnabled>
-          <Text style={styles.contentText}>{textToShow}</Text>
-        </ScrollView>
-      )}
+          {isEditing ? (
+            <TextInput
+              style={styles.contentEditInput}
+              multiline
+              value={editedText}
+              onChangeText={onTextChanged}
+              textAlignVertical="top"
+              autoFocus
+            />
+          ) : (
+            <ScrollView style={styles.contentScroll} nestedScrollEnabled>
+              <Text style={styles.contentText}>{textToShow}</Text>
+            </ScrollView>
+          )}
 
-      <View style={styles.editActions}>
-        {isEditing ? (
-          <>
-            <Pressable
-              style={({ pressed }) => [
-                styles.cancelButton,
-                pressed && { opacity: 0.8 },
-              ]}
-              onPress={onCancelEditing}
-              accessibilityLabel="Cancel editing"
-              accessibilityRole="button"
-              accessibilityHint="Double tap to activate"
-            >
-              <Text style={styles.cancelButtonText}>Cancel</Text>
-            </Pressable>
-            <Pressable
-              style={({ pressed }) => [
-                styles.saveButton,
-                pressed && { opacity: 0.8 },
-              ]}
-              onPress={onSave}
-              accessibilityLabel="Save changes"
-              accessibilityRole="button"
-              accessibilityHint="Double tap to activate"
-            >
-              <Text style={styles.saveButtonText}>{UI_TEXT.SAVE_BUTTON}</Text>
-            </Pressable>
-          </>
-        ) : (
-          <Pressable
-            style={({ pressed }) => [
-              styles.editButton,
-              pressed && { opacity: 0.8 },
-            ]}
-            onPress={onStartEditing}
-            accessibilityLabel="Edit content"
-            accessibilityRole="button"
-            accessibilityHint="Double tap to activate"
-          >
-            <Text style={styles.editButtonText}>{UI_TEXT.EDIT_BUTTON}</Text>
-          </Pressable>
-        )}
-      </View>
-    </View>
+          <View style={styles.editActions}>
+            {isEditing ? (
+              <>
+                <Pressable
+                  style={({ pressed }) => [
+                    styles.cancelButton,
+                    pressed && { opacity: 0.8 },
+                  ]}
+                  onPress={onCancelEditing}
+                  accessibilityLabel="Cancel editing"
+                  accessibilityRole="button"
+                  accessibilityHint="Double tap to activate"
+                >
+                  <Text style={styles.cancelButtonText}>Cancel</Text>
+                </Pressable>
+                <Pressable
+                  style={({ pressed }) => [
+                    styles.saveButton,
+                    pressed && { opacity: 0.8 },
+                  ]}
+                  onPress={onSave}
+                  accessibilityLabel="Save changes"
+                  accessibilityRole="button"
+                  accessibilityHint="Double tap to activate"
+                >
+                  <Text style={styles.saveButtonText}>{UI_TEXT.SAVE_BUTTON}</Text>
+                </Pressable>
+              </>
+            ) : (
+              <Pressable
+                style={({ pressed }) => [
+                  styles.editButton,
+                  pressed && { opacity: 0.8 },
+                ]}
+                onPress={onStartEditing}
+                accessibilityLabel="Edit content"
+                accessibilityRole="button"
+                accessibilityHint="Double tap to activate"
+              >
+                <Text style={styles.editButtonText}>{UI_TEXT.EDIT_BUTTON}</Text>
+              </Pressable>
+            )}
+          </View>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 

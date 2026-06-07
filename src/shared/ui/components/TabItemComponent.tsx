@@ -5,6 +5,7 @@ import Animated, {
   useSharedValue,
   withSpring,
   withTiming,
+  useReducedMotion,
 } from 'react-native-reanimated';
 import { Text } from '../../../components/primitives/Text';
 import { Icon } from '../../../icons';
@@ -26,6 +27,7 @@ const TabItemComponent: React.FC<TabItemProps> = ({
   showLabels,
 }) => {
   const { theme } = useTheme();
+  const reduceMotion = useReducedMotion();
   const scale = useSharedValue(1);
   const opacity = useSharedValue(isActive ? 1 : 0.7);
 
@@ -46,8 +48,8 @@ const TabItemComponent: React.FC<TabItemProps> = ({
   };
 
   const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
-    opacity: opacity.value,
+    transform: [{ scale: reduceMotion ? 1 : scale.value }],
+    opacity: reduceMotion ? (isActive ? 1 : 0.7) : opacity.value,
   }));
 
   const config = sizeConfig[size];

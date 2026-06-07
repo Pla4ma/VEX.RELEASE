@@ -11,6 +11,7 @@ import { useAuthStore, useUIStore } from '../../store/index';
 import { usePaywall } from '../../shared/monetization';
 import { captureSilentFailure } from '../../utils/silent-failure';
 import { PrivacyToggleRow } from './PrivacyToggleRow';
+import { PrivacySettingsSkeleton } from './PrivacySettingsSkeleton';
 import { TOGGLE_ROWS } from './privacy-toggle-data';
 import type { ToggleKey } from './privacy-toggle-data';
 
@@ -82,6 +83,9 @@ export const PrivacySettingsScreen: React.FC<Props> = () => {
 
   return (
     <Box flex={1} style={{ backgroundColor: theme.colors.background.primary }}>
+      {deleteAccountMutation.isPending ? (
+        <PrivacySettingsSkeleton />
+      ) : (
       <ScrollView
         contentContainerStyle={{
           paddingBottom: insets.bottom + theme.spacing[6],
@@ -182,6 +186,7 @@ export const PrivacySettingsScreen: React.FC<Props> = () => {
           </Text>
         </Pressable>
       </ScrollView>
+      )}
     </Box>
   );
 };

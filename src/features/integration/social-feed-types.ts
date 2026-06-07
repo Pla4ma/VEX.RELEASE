@@ -1,3 +1,4 @@
+import { z } from 'zod';
 export interface SocialActivity {
   userId: string;
   activityType: string;
@@ -5,14 +6,16 @@ export interface SocialActivity {
   data: Record<string, unknown>;
 }
 
-export interface CompetitiveResult {
-  userId: string;
-  leaderboardId: string;
-  rank: number;
-  score: number;
-  previousRank?: number;
-  participants: number;
-}
+export const CompetitiveResultSchema = z.object({
+  userId: z.string(),
+  leaderboardId: z.string(),
+  rank: z.number(),
+  score: z.number(),
+  previousRank: z.number().optional(),
+  participants: z.number(),
+});
+
+export type CompetitiveResult = z.infer<typeof CompetitiveResultSchema>;
 
 export interface SquadChallenge {
   squadId: string;

@@ -136,7 +136,7 @@ export function useOnboardingProgressState() {
 
   return {
     state: query.data,
-    isLoading: query.isLoading,
+    isLoading: query.isPending,
     error: query.error,
     markFirstSessionStarted,
     markFirstSessionCompleted,

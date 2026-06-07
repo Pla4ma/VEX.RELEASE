@@ -137,7 +137,7 @@ export function useStudyPlan(generationId: string) {
     generation,
     content,
     title,
-    isLoading: generationQuery.isLoading || contentQuery.isLoading,
+    isLoading: generationQuery.isPending || contentQuery.isPending,
     error:
       generationQuery.error?.message || contentQuery.error?.message || null,
     startSession,

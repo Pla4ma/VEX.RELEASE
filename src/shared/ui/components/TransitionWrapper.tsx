@@ -5,6 +5,7 @@ import Animated, {
   useAnimatedStyle,
   FadeIn,
   FadeOut,
+  useReducedMotion,
 } from 'react-native-reanimated';
 import {
   useTransitionAnimation,
@@ -50,6 +51,7 @@ export const TransitionWrapper: React.FC<TransitionWrapperProps> = ({
   staggerChildren,
   childDelay = 0,
 }) => {
+  const reduceMotion = useReducedMotion();
   const [isMounted, setIsMounted] = React.useState(visible);
   const activeConfig = visible ? enterConfig : exitConfig;
   const handleAnimationComplete = useCallback(() => {
@@ -71,7 +73,9 @@ export const TransitionWrapper: React.FC<TransitionWrapperProps> = ({
     handleAnimationComplete,
   );
   const animatedStyle = useAnimatedStyle(() =>
-    createAnimatedStyles(activeConfig.preset, progress),
+    reduceMotion
+      ? { opacity: 1, transform: [{ scale: 1 }] }
+      : createAnimatedStyles(activeConfig.preset, progress),
   );
   if (!isMounted && !maintainLayout) {
     return null;

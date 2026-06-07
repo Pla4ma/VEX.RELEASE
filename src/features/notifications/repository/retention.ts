@@ -1,3 +1,4 @@
+import { z } from 'zod';
 import {
   ChallengeExpiryCandidateSchema,
   ReminderPlanInputSchema,
@@ -75,21 +76,33 @@ export async function hasScheduledReminderWithin(
   return (data ?? []).length > 0;
 }
 
-/** Shape of a Supabase user_challenges joined row for expiry candidates. */
-interface ChallengeExpiryRow {
-  user_id?: string;
-  challenge_id?: string;
-  current_value?: number;
-  expires_at?: string;
-  challenges?: {
-    title?: string;
-    target_value?: number;
-    [key: string]: unknown;
-  } | null;
-  [key: string]: unknown;
-}
+/** Zod schema for the raw Supabase user_challenges joined row. */
+const ChallengeExpiryRowSchema = z.object({
+  user_id: z.string().optional(),
+  challenge_id: z.string().optional(),
+  current_value: z.number().optional(),
+  expires_at: z.string().optional(),
+  challenges: z
+    .object({
+      title: z.string().optional(),
+      target_value: z.number().optional(),
+    })
+    .passthrough()
+    .nullable()
+    .or(
+      z.array(
+        z.object({
+          title: z.string().optional(),
+          target_value: z.number().optional(),
+        }).passthrough(),
+      ),
+    )
+    .optional(),
+}).passthrough();
 
-type ChallengeJoin = ChallengeExpiryRow['challenges'] | ChallengeExpiryRow['challenges'][];
+type ChallengeExpiryRow = z.infer<typeof ChallengeExpiryRowSchema>;
+
+type ChallengeJoin = ChallengeExpiryRow['challenges'];
 
 /** Shape of a Supabase streaks row for re-engagement candidates. */
 interface ReEngagementRow {
@@ -119,9 +132,7 @@ export async function fetchChallengeExpiryCandidates(
     throw new RepositoryError('fetchChallengeExpiryCandidates', error);
   }
   return (data ?? []).map((row) => {
-    const record = row as unknown as Omit<ChallengeExpiryRow, 'challenges'> & {
-      challenges?: ChallengeJoin;
-    };
+    const record = ChallengeExpiryRowSchema.parse(row);
     const challenge = Array.isArray(record.challenges)
       ? record.challenges[0]
       : record.challenges;

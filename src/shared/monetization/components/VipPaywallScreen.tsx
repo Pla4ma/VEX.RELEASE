@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { ActivityIndicator, ScrollView, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { useNavigation, useRoute, type RouteProp } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -14,6 +14,7 @@ import { usePaywall, usePremiumStatus } from '../use-revenuecat';
 import { PREMIUM_BENEFITS, type PaywallPlan } from './paywall-data';
 import { PlanCard, BenefitList } from './PaywallComponents';
 import { usePaywallActions } from './usePaywallActions';
+import { VipPaywallSkeleton } from './VipPaywallSkeleton';
 
 type NavigationProp = NativeStackNavigationProp<ExtendedRootStackParams>;
 type VipPaywallRouteProp = RouteProp<ExtendedRootStackParams, 'VipPaywall'>;
@@ -118,12 +119,7 @@ export function VipPaywallScreen(): JSX.Element {
         ) : null}
 
         {isLoading || isLoadingPremium ? (
-          <View style={{ alignItems: 'center', paddingVertical: spacing[6], gap: spacing[3] }}>
-            <ActivityIndicator color={theme.colors.primary[500]} size="large" />
-            <Text variant="bodySmall" color="text.secondary">
-              Loading Premium options...
-            </Text>
-          </View>
+          <VipPaywallSkeleton />
         ) : error ? (
           <StatusBanner
             status="error"

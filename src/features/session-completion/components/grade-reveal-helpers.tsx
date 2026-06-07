@@ -2,6 +2,7 @@ import { lightColors } from '@/theme/tokens/colors';
 import React from 'react';
 import Animated, {
   useAnimatedStyle,
+  useReducedMotion,
   type SharedValue,
 } from 'react-native-reanimated';
 
@@ -43,6 +44,10 @@ export function BurstParticle({
   index: number;
   progress: SharedValue<number>;
 }): JSX.Element {
+  const reduceMotion = useReducedMotion();
+  if (reduceMotion) {
+    return null;
+  }
   const angle = (Math.PI * 2 * index) / PARTICLE_COUNT;
   const style = useAnimatedStyle(() => ({
     opacity: 1 - progress.value,

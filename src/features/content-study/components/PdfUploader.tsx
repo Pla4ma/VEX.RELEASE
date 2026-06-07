@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react';
-import { Pressable, ActivityIndicator } from 'react-native';
+import { Pressable } from 'react-native';
+import { Skeleton } from '../../../components/ui/Skeleton';
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
 import { Icon } from '../../../icons';
@@ -117,7 +118,7 @@ export const PdfUploader: React.FC<PdfUploaderProps> = ({
       accessibilityHint="Opens the file picker to select a study document"
     >
       {isPicking ? (
-        <ActivityIndicator color={theme.colors.primary[500]} />
+        <Skeleton width={40} height={40} variant="circular" />
       ) : (
         <>
           <Icon

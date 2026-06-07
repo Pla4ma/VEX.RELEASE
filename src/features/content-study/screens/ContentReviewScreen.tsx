@@ -10,8 +10,8 @@ import {
   Text,
   Pressable,
   ScrollView,
-  ActivityIndicator,
 } from 'react-native';
+import { Skeleton } from '../../../components/ui/Skeleton';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { ContentStudyStackParamList } from '../types';
@@ -92,7 +92,7 @@ export function ContentReviewScreen() {
           </View>
         ) : null}
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={lightColors.accent.blue} />
+          <Skeleton width={60} height={20} variant="rounded" />
           <Text style={styles.loadingText}>Loading content...</Text>
         </View>
       </SafeAreaView>
@@ -167,7 +167,7 @@ export function ContentReviewScreen() {
             accessibilityHint="Double tap to activate"
           >
             {isGenerating ? (
-              <ActivityIndicator size="small" color={lightColors.text.inverse} />
+              <Skeleton width={20} height={20} variant="circular" />
             ) : (
               <Text style={styles.generateButtonText}>
                 {UI_TEXT.GENERATE_BUTTON}

@@ -1,4 +1,5 @@
 import type { UseQueryResult } from '@tanstack/react-query';
+import type { SessionStackParams } from '../../../navigation/types';
 import type { HomeHighlight, CompletionSyncState } from '../../../store/session-state';
 import type { FeatureAccessResult } from '../../../features/liveops-config';
 import type { HomeSpineModel } from '../../../features/home-spine/schemas';
@@ -31,7 +32,7 @@ export interface ContainerControllerInput {
   streakQuery: UseQueryResult;
   progressionQuery: UseQueryResult;
   historyQuery: SessionHistoryResult;
-  openSetup: (params?: Record<string, unknown>) => void;
+  openSetup: (params?: SessionStackParams['SessionSetup']) => void;
   openProgress: () => void;
   openSocial: () => void;
 }
@@ -43,7 +44,7 @@ export function buildContainerController(
     user: null,
     userId: input.userId,
     isOnline: input.isOnline,
-    isLoading: input.isLoading,
+    isLoading: input.isPending,
     isFirstRun: input.isFirstRun,
     loadError: input.loadError,
     homeHighlight: input.homeHighlight,

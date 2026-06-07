@@ -3,6 +3,7 @@ import Animated, {
   FadeIn,
   useAnimatedStyle,
   withTiming,
+  useReducedMotion,
 } from 'react-native-reanimated';
 import { Dimensions } from 'react-native';
 import { lightColors } from '@/theme/tokens/colors';
@@ -17,6 +18,10 @@ function ConfettiPiece({
   index: number;
   color: string;
 }): JSX.Element {
+  const reduceMotion = useReducedMotion();
+  if (reduceMotion) {
+    return null;
+  }
   const startX = Math.random() * SCREEN_WIDTH;
   const endX = startX + (Math.random() - 0.5) * 200;
   const duration = 2000 + Math.random() * 1000;

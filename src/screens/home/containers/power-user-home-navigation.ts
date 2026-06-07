@@ -5,7 +5,7 @@ import {
   isFeatureAvailableForNavigation,
   type FeatureAccessResult,
 } from '../../../features/liveops-config';
-import type { ExtendedRootStackParams } from '../../../navigation/types';
+import type { ExtendedRootStackParams, SessionStackParams } from '../../../navigation/types';
 import {
   navigateToSessionStackScreen,
   navigateToMainTab,
@@ -44,19 +44,31 @@ export function usePowerUserNavigation(params: {
   );
 
   const openSetup = useCallback(
-    (setupParams: Record<string, unknown> = {}): void => {
+    (params: SessionStackParams['SessionSetup'] = {}): void => {
       if (userId && disclosure.inputs.totalCompletedSessions === 0) {
         analytics.trackFirstSessionStarted(userId, 'home');
       }
-      navigateToSessionStackScreen(navigation, 'SessionSetup', setupParams);
+      navigateToSessionStackScreen(navigation, 'SessionSetup', params);
     },
     [analytics, disclosure.inputs.totalCompletedSessions, navigation, userId],
   );
 
-  const openProgress = useCallback(
-    () => navigateToMainTab(navigation, 'Progress'),
-    [navigation],
-  );
+  const openProgress = useCallback((): void => {
+    navigateToMainTab(navigation, 'Progress');
+  }, [navigation]);
+
+  const openNextAction = useCallback(() => {
+    analytics.trackNextBestActionPressed(
+      disclosure.stage,
+      disclosure.inputs.totalCompletedSessions,
+    );
+    openSetup();
+  }, [
+    analytics,
+    disclosure.inputs.totalCompletedSessions,
+    disclosure.stage,
+    openSetup,
+  ]);
 
   const openSocial = useCallback(() => {
     navigateToMainTab(navigation, 'Profile');

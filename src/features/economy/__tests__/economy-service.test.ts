@@ -4,25 +4,21 @@ const mockSelect = jest.fn();
 const mockSingle = jest.fn();
 const mockGetUser = jest.fn();
 
-jest.mock('../repository', () => {
-  const actual = jest.requireActual('../repository');
-  return {
-    ...actual,
-    getSupabase: jest.fn(() => ({
-      from: jest.fn(() => ({
-        upsert: mockUpsert.mockReturnValue({
-          select: mockSelect.mockReturnValue({
-            single: mockSingle,
-          }),
+jest.mock('../../../config/supabase', () => ({
+  getSupabaseClient: jest.fn(() => ({
+    from: jest.fn(() => ({
+      upsert: mockUpsert.mockReturnValue({
+        select: mockSelect.mockReturnValue({
+          single: mockSingle,
         }),
-      })),
-      rpc: mockRpc,
-      auth: {
-        getUser: mockGetUser,
-      },
+      }),
     })),
-  };
-});
+    rpc: mockRpc,
+    auth: {
+      getUser: mockGetUser,
+    },
+  })),
+}));
 
 import { RepositoryError } from '../repository';
 import {

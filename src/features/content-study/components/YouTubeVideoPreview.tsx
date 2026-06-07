@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Image, ActivityIndicator } from 'react-native';
+import { View, Image } from 'react-native';
+import { Skeleton } from '../../../components/ui/Skeleton';
 
 import { Text } from '../../../components/primitives/Text';
 import { Button } from '../../../components/primitives/Button';
@@ -36,7 +37,7 @@ export function YouTubeVideoPreview({
     >
       {isExtracting ? (
         <View style={styles.extractingContainer}>
-          <ActivityIndicator color={theme.colors.primary[500]} />
+          <Skeleton width={40} height={40} variant="circular" />
           <Text
             style={[
               styles.extractingText,

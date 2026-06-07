@@ -69,7 +69,7 @@ export function useActivatingHomeModel(
   );
   const progressPercent = Math.min(100, Math.round((todayFocusMinutes / 120) * 100));
   const isFirstRun =
-    !disclosure.isLoading &&
+    !disclosure.isPending &&
     disclosure.inputs.totalCompletedSessions === 0 &&
     currentStreak === 0 && currentXp === 0;
 
@@ -78,7 +78,7 @@ export function useActivatingHomeModel(
 
   const recommendationsQuery = useCoachRecommendations(
     userId,
-    { enabled: runtime.canQueryCoach && !disclosure.isLoading },
+    { enabled: runtime.canQueryCoach && !disclosure.isPending },
   );
 
   const primaryRecommendation = useMemo<SessionRecommendation | null>(
@@ -136,7 +136,7 @@ export function useActivatingHomeModel(
     [homeSpine.returnReason, returnReason],
   );
 
-  const isLoading = disclosure.isLoading || recommendationsQuery.isLoading;
+  const isLoading = disclosure.isPending || recommendationsQuery.isPending;
 
   const controller = buildActivatingController({
     userId, isOnline, isLoading, isFirstRun,

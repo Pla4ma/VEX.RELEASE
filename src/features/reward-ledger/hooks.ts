@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import * as Sentry from '@sentry/react-native';
 import { createReward, syncPendingRewards } from './service';
 import type { CreateRewardLedgerInput } from './types';
 
@@ -26,6 +27,11 @@ export function useCreateReward() {
     onSuccess: (_data, variables) => {
       queryClient.invalidateQueries({
         queryKey: ['rewards', 'pending', variables.userId],
+      });
+    },
+    onError: (error) => {
+      Sentry.captureException(error, {
+        tags: { feature: 'reward-ledger', operation: 'create-reward' },
       });
     },
   });

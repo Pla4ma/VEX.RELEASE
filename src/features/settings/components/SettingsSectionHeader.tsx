@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, ActivityIndicator } from 'react-native';
+import { View, Text } from 'react-native';
+import { Skeleton } from '../../../components/ui/Skeleton';
 import { createSheet } from '@/shared/ui/create-sheet';
 import { lightColors } from '@/theme/tokens/colors';
 
@@ -17,7 +18,7 @@ export function SettingsSectionHeader({
     <View style={styles.categoryHeader}>
       <Text style={styles.categoryTitle}>{title}</Text>
       {isSyncing && (
-        <ActivityIndicator size="small" color={lightColors.semantic.primary} />
+        <Skeleton width={16} height={16} variant="circular" />
       )}
     </View>
   );

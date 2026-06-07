@@ -50,6 +50,7 @@ export const StatusChip: React.FC<{
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
       disabled={!onPress}
+      accessibilityLabel={label || config.icon || 'Status chip'}
     >
       <Animated.View
         entering={reducedMotion ? undefined : FadeInUp.duration(200)}

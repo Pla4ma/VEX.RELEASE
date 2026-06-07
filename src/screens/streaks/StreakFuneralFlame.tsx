@@ -8,12 +8,17 @@ import Animated, {
 import { View } from 'react-native';
 import { Text } from '../../components/primitives';
 import { useTheme } from '../../theme';
+import { SkeletonItem } from '../../shared/ui/components';
 
-export function StreakFuneralFlame(): React.JSX.Element {
+export function StreakFuneralFlame({ isPending }: { isPending?: boolean }): React.JSX.Element {
   const { theme } = useTheme();
   const semantic = theme.colors.semantic;
   const flameScale = useSharedValue(1);
   const flameOpacity = useSharedValue(1);
+
+  if (isPending) {
+    return <SkeletonItem variant="circle" width={96} height={96} />;
+  }
 
   React.useEffect(() => {
     flameScale.value = withSequence(

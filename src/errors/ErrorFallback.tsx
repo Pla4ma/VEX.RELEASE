@@ -1,5 +1,5 @@
 import { useCallback, type ReactNode } from 'react';
-import { ActivityIndicator } from 'react-native';
+import { Skeleton } from '../components/ui/Skeleton';
 import { Box, Text } from '../components/primitives';
 import { Button } from '../components';
 import { useTheme } from '../theme';
@@ -110,7 +110,7 @@ export function ErrorFallback({
 
       {isRetrying ? (
         <Box flexDirection="row" alignItems="center" style={{ gap: 8 }}>
-          <ActivityIndicator color={theme.colors.semantic.vexCyan} />
+          <Skeleton width={16} height={16} variant="circular" />
           <Text variant="body" color="text.secondary">
             Retrying...
           </Text>

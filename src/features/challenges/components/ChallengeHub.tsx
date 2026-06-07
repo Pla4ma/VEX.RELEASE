@@ -1,14 +1,10 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  ScrollView,
-  Pressable,
-  ActivityIndicator,
-} from 'react-native';
+import { View, Text, ScrollView, Pressable } from 'react-native';
 import { FlashList, type ListRenderItem } from '@shopify/flash-list';
 import { useThemeObject } from '../../../theme';
 import { Card, Badge, ProgressBar } from '../../../components';
+import { SkeletonItem } from '../../../shared/ui/components/SkeletonItem';
+import { ChallengeHubSkeleton } from './ChallengeHub.skeleton';
 import { useActiveChallenges, useChallengeSummaries } from '../hooks';
 import { ChallengeCard } from './ChallengeCard';
 import { type UserChallengeSummary } from '../schemas';
@@ -53,12 +49,7 @@ export const ChallengeHub: React.FC<ChallengeHubProps> = ({
     </Pressable>
   );
   if (isLoading) {
-    return (
-      <View style={[styles.container, { backgroundColor: theme.colors.background.primary }]}>
-        <ActivityIndicator size="large" color={theme.colors.primary[500]} />
-        <Text style={styles.loadingText}>Loading challenges...</Text>
-      </View>
-    );
+    return <ChallengeHubSkeleton />;
   }
   return (
     <ScrollView

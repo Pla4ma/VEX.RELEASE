@@ -1,11 +1,14 @@
-import { StyleSheet } from 'react-native';
 import { createSheet } from '@/shared/ui/create-sheet';
 
 
 export const styles = createSheet({
   container: { overflow: 'hidden' },
   shimmer: {
-    ...StyleSheet.absoluteFill,
+    position: 'absolute' as const,
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
     backgroundColor: 'rgba(255,255,255,0.2)',
     width: '30%',
   },

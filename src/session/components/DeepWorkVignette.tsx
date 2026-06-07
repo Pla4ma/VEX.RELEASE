@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 
@@ -11,7 +11,7 @@ import { LinearGradient } from 'expo-linear-gradient';
  */
 export function DeepWorkVignette(): JSX.Element {
   return (
-    <View pointerEvents="none" style={StyleSheet.absoluteFill}>
+    <View pointerEvents="none" style={{ position: 'absolute' as const, left: 0, right: 0, top: 0, bottom: 0 }}>
       <LinearGradient
         colors={[
           'rgba(0,0,0,0.45)',
@@ -20,7 +20,7 @@ export function DeepWorkVignette(): JSX.Element {
           'rgba(0,0,0,0.35)',
         ]}
         locations={[0, 0.25, 0.75, 1]}
-        style={StyleSheet.absoluteFill}
+        style={{ position: 'absolute' as const, left: 0, right: 0, top: 0, bottom: 0 }}
       />
     </View>
   );

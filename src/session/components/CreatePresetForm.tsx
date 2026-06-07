@@ -1,5 +1,14 @@
 import React, { useState } from 'react';
-import { View, Text, Pressable, Modal, TextInput } from 'react-native';
+import {
+  View,
+  Text,
+  Pressable,
+  Modal,
+  TextInput,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+} from 'react-native';
 import { lightColors } from '@/theme/tokens/colors';
 
 import { buttonTap } from '../../utils/haptics';
@@ -33,63 +42,70 @@ export const CreatePresetForm: React.FC<CreatePresetFormProps> = ({
       animationType="slide"
       onRequestClose={onClose}
     >
-      <View style={styles.modalOverlay}>
-        <View style={styles.modalContent}>
-          <Text style={styles.modalTitle}>Create Custom Preset</Text>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={{ flex: 1 }}
+      >
+        <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{ flex: 1 }}>
+          <View style={styles.modalOverlay}>
+            <View style={styles.modalContent}>
+              <Text style={styles.modalTitle}>Create Custom Preset</Text>
 
-          <Text style={styles.inputLabel}>Preset Name</Text>
-          <TextInput
-            style={styles.input}
-            value={name}
-            onChangeText={setName}
-            placeholder="e.g., Deep Work"
-            placeholderTextColor={lightColors.text.muted}
-            accessibilityLabel="Preset name"
-            accessibilityHint="Enter a name for your custom session preset"
-          />
+              <Text style={styles.inputLabel}>Preset Name</Text>
+              <TextInput
+                style={styles.input}
+                value={name}
+                onChangeText={setName}
+                placeholder="e.g., Deep Work"
+                placeholderTextColor={lightColors.text.muted}
+                accessibilityLabel="Preset name"
+                accessibilityHint="Enter a name for your custom session preset"
+              />
 
-          <Text style={styles.inputLabel}>Duration (minutes)</Text>
-          <TextInput
-            style={styles.input}
-            value={duration}
-            onChangeText={setDuration}
-            keyboardType="numeric"
-            placeholder="25"
-            placeholderTextColor={lightColors.text.muted}
-            accessibilityLabel="Duration in minutes"
-            accessibilityHint="Enter the session duration in minutes"
-          />
+              <Text style={styles.inputLabel}>Duration (minutes)</Text>
+              <TextInput
+                style={styles.input}
+                value={duration}
+                onChangeText={setDuration}
+                keyboardType="numeric"
+                placeholder="25"
+                placeholderTextColor={lightColors.text.muted}
+                accessibilityLabel="Duration in minutes"
+                accessibilityHint="Enter the session duration in minutes"
+              />
 
-          <View style={styles.modalButtons}>
-            <Pressable
-              style={({ pressed }) => [
-                styles.modalButton,
-                styles.cancelButton,
-                pressed && { opacity: 0.8 },
-              ]}
-              onPress={onClose}
-              accessibilityLabel="Cancel preset creation"
-              accessibilityRole="button"
-              accessibilityHint="Double tap to activate"
-            >
-              <Text style={styles.cancelButtonText}>Cancel</Text>
-            </Pressable>
-            <Pressable
-              style={({ pressed }) => [
-                styles.modalButton,
-                styles.createConfirmButton,
-                pressed && { opacity: 0.8 },
-              ]}
-              onPress={() => { buttonTap(); handleCreate(); }}
-              accessibilityLabel="Create custom preset"
-              accessibilityRole="button"
-              accessibilityHint="Double tap to activate"
-            >
-              <Text style={styles.createButtonTextConfirm}>Create</Text>
-            </Pressable>
+              <View style={styles.modalButtons}>
+                <Pressable
+                  style={({ pressed }) => [
+                    styles.modalButton,
+                    styles.cancelButton,
+                    pressed && { opacity: 0.8 },
+                  ]}
+                  onPress={onClose}
+                  accessibilityLabel="Cancel preset creation"
+                  accessibilityRole="button"
+                  accessibilityHint="Double tap to activate"
+                >
+                  <Text style={styles.cancelButtonText}>Cancel</Text>
+                </Pressable>
+                <Pressable
+                  style={({ pressed }) => [
+                    styles.modalButton,
+                    styles.createConfirmButton,
+                    pressed && { opacity: 0.8 },
+                  ]}
+                  onPress={() => { buttonTap(); handleCreate(); }}
+                  accessibilityLabel="Create custom preset"
+                  accessibilityRole="button"
+                  accessibilityHint="Double tap to activate"
+                >
+                  <Text style={styles.createButtonTextConfirm}>Create</Text>
+                </Pressable>
+              </View>
+            </View>
           </View>
-        </View>
-      </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </Modal>
   );
 };

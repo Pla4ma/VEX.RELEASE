@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Pressable, ActivityIndicator } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 import { lightColors } from '@/theme/tokens/colors';
 
 import {
@@ -92,10 +92,10 @@ export function ExportProgress({
           </Pressable>
         )}
 
-        {isActive && (
+        {isActive && job.progress < 5 && (
           <View style={styles.loadingIndicator}>
-            <ActivityIndicator size="small" color={lightColors.accent.blue} />
-            <Text style={styles.loadingText}>Working...</Text>
+            <View style={styles.skeletonPill} />
+            <Text style={styles.loadingText}>Preparing...</Text>
           </View>
         )}
 

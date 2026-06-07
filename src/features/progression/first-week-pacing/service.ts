@@ -4,12 +4,13 @@
  * Manages the first 7-session progression arc with proper pacing and unlocks.
  */
 
-import { z } from 'zod';
-import { getSupabaseClient } from '../../../config/supabase';
 import { createDebugger } from '../../../utils/debug';
 import * as Sentry from '@sentry/react-native';
 import { FirstWeekProgressSchema, type FirstWeekProgress } from './schemas';
-import { tableColumns } from '../../../lib/repository/tableColumns';
+import {
+  fetchFirstWeekProgress,
+  createFirstWeekProgress,
+} from './repository';
 import {
   progressToNextSession as progressToNextSessionImpl,
   getSessionUnlocks,
@@ -73,30 +74,19 @@ export async function getFirstWeekProgress(
   userId: string,
 ): Promise<FirstWeekProgress | null> {
   try {
-    const supabase = getSupabaseClient();
+    const existing = await fetchFirstWeekProgress(userId);
 
-    const { data, error } = await supabase
-      .from('first_week_progress')
-      .select('user_id,current_session,sessions_completed,unlocked_features,next_unlock,total_xp_earned,level_progress,companion_unlocked,streak_explained,first_reward_earned,ai_coach_unlocked,weekly_milestone_earned,started_at,last_session_at')
-      .eq('user_id', userId)
-      .single();
-
-    if (error && error.code !== 'PGRST116') {
-      debug.error('Failed to fetch first week progress', error);
-      throw new Error(`Failed to fetch first week progress: ${error.message}`);
-    }
-
-    if (data) {
-      return mapRowToProgress(data);
+    if (existing) {
+      return mapRowToProgress(existing);
     }
 
     // Create new first week progress
     const now = Date.now();
-    const newProgress = {
+    const newRow = {
       user_id: userId,
       current_session: 'SESSION_1',
       sessions_completed: 0,
-      unlocked_features: [],
+      unlocked_features: [] as string[],
       next_unlock: 'Focus Score Movement',
       total_xp_earned: 0,
       level_progress: 0,
@@ -106,24 +96,10 @@ export async function getFirstWeekProgress(
       ai_coach_unlocked: false,
       weekly_milestone_earned: false,
       started_at: now,
-      last_session_at: null,
+      last_session_at: null as number | null,
     };
 
-    const { data: createdData, error: createError } = await supabase
-      .from('first_week_progress')
-      .insert(newProgress)
-      .select('*')
-      .single();
-
-    if (createError) {
-      debug.error('Failed to create first week progress', createError);
-      throw new Error(
-        `Failed to create first week progress: ${createError.message}`,
-      );
-    }
-
-    debug.info('Created first week progress', { userId });
-    return mapRowToProgress(createdData);
+    return await createFirstWeekProgress(newRow);
   } catch (error) {
     debug.error(
       'Error getting first week progress',

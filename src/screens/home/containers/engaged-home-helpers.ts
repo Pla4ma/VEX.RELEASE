@@ -2,7 +2,7 @@ import { useCallback, useMemo } from 'react';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { FeatureAccessResult } from '../../../features/liveops-config';
 import type { HomeFeatureRuntime } from '../hooks/home-feature-runtime';
-import type { ExtendedRootStackParams } from '../../../navigation/types';
+import type { ExtendedRootStackParams, SessionStackParams } from '../../../navigation/types';
 import type { SessionRecommendation, RecommendationStatus } from '../../../features/ai-coach';
 import type { HomeReturnReason } from '../hooks/useHomeReturnReason';
 import { navigateToMainTab } from '../../../navigation/navigation-helpers';
@@ -27,7 +27,7 @@ interface ActionsInput {
   disclosure: FeatureAccessResult;
   learningExecutionLayer: { target: LearningSessionTarget | null };
   navigation: Nav;
-  openSetup: (params?: Record<string, unknown>) => void;
+  openSetup: (params?: SessionStackParams['SessionSetup']) => void;
   userId: string;
 }
 
@@ -70,7 +70,7 @@ interface ReturnReasonInput {
   continueStudyPlan: () => void;
   nextBestAction: NextBestAction;
   openNextAction: () => void;
-  openSetup: (params?: Record<string, unknown>) => void;
+  openSetup: (params?: SessionStackParams['SessionSetup']) => void;
   primaryRecommendation: SessionRecommendation | null | undefined;
   runtime: HomeFeatureRuntime;
   updateRecommendationStatus: {

@@ -33,17 +33,16 @@ export function useEngagedNavigation(params: EngagedNavigationParams) {
   } = params;
 
   const openSetup = useCallback(
-    (params?: Record<string, unknown>): void => {
+    (params?: SessionStackParams['SessionSetup']): void => {
       if (userId && disclosure.inputs.totalCompletedSessions === 0) {
         analytics.trackFirstSessionStarted(
           userId,
-          (params as SessionStackParams['SessionSetup'] | undefined)?.source ??
-            'home',
+          params?.source ?? 'home',
         );
       }
       navigation.navigate('SessionStack', {
         screen: 'SessionSetup',
-        params: (params ?? {}) as SessionStackParams['SessionSetup'],
+        params: params ?? {},
       });
     },
     [analytics, disclosure.inputs.totalCompletedSessions, navigation, userId],

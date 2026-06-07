@@ -98,7 +98,7 @@ export function useBasicChallenges() {
   const claimMutation = useClaimBasicChallengeReward(challengesKeys);
 
   const isLoading =
-    statusQuery.isLoading || dailyQuery.isLoading || weeklyQuery.isLoading;
+    statusQuery.isPending || dailyQuery.isPending || weeklyQuery.isPending;
   const error = statusQuery.error || dailyQuery.error || weeklyQuery.error;
   const status = statusQuery.data;
 

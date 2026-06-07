@@ -1,5 +1,13 @@
 import React from 'react';
-import { View, Text, Pressable, TextInput } from 'react-native';
+import {
+  View,
+  Text,
+  Pressable,
+  TextInput,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+} from 'react-native';
 import { lightColors } from '@/theme/tokens/colors';
 
 import { getMoodEmoji, type MoodType } from './SessionSummary.helpers';
@@ -17,38 +25,45 @@ export const SessionSummaryMoodSelector: React.FC<
 > = ({ mood, reflection, onMoodChange, onReflectionChange }) => {
   const moods: MoodType[] = ['GREAT', 'GOOD', 'NEUTRAL', 'BAD', 'TERRIBLE'];
   return (
-    <View style={styles.reflectionSection}>
-      <Text style={styles.sectionTitle}>How was your session?</Text>
-      <View style={styles.moodSelector}>
-        {moods.map((m) => (
-          <Pressable
-            key={m}
-            style={({ pressed }) => [
-              styles.moodButton,
-              mood === m && styles.moodButtonActive,
-              pressed && { opacity: 0.8 },
-            ]}
-            onPress={() => { selection(); onMoodChange(m); }}
-            accessibilityLabel={`Select mood ${getMoodEmoji(m)}`}
-            accessibilityRole="button"
-            accessibilityHint="Double tap to activate"
-          >
-            <Text style={styles.moodEmoji}>{getMoodEmoji(m)}</Text>
-          </Pressable>
-        ))}
-      </View>
-      <TextInput
-        style={styles.reflectionInput}
-        multiline
-        numberOfLines={3}
-        placeholder="What did you accomplish? Any distractions?"
-        placeholderTextColor={lightColors.text.muted}
-        value={reflection}
-        onChangeText={onReflectionChange}
-        accessibilityLabel="Session reflection"
-        accessibilityHint="Write a short reflection about your session"
-      />
-    </View>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{ flex: 1 }}
+    >
+      <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{ flex: 1 }}>
+        <View style={styles.reflectionSection}>
+          <Text style={styles.sectionTitle}>How was your session?</Text>
+          <View style={styles.moodSelector}>
+            {moods.map((m) => (
+              <Pressable
+                key={m}
+                style={({ pressed }) => [
+                  styles.moodButton,
+                  mood === m && styles.moodButtonActive,
+                  pressed && { opacity: 0.8 },
+                ]}
+                onPress={() => { selection(); onMoodChange(m); }}
+                accessibilityLabel={`Select mood ${getMoodEmoji(m)}`}
+                accessibilityRole="button"
+                accessibilityHint="Double tap to activate"
+              >
+                <Text style={styles.moodEmoji}>{getMoodEmoji(m)}</Text>
+              </Pressable>
+            ))}
+          </View>
+          <TextInput
+            style={styles.reflectionInput}
+            multiline
+            numberOfLines={3}
+            placeholder="What did you accomplish? Any distractions?"
+            placeholderTextColor={lightColors.text.muted}
+            value={reflection}
+            onChangeText={onReflectionChange}
+            accessibilityLabel="Session reflection"
+            accessibilityHint="Write a short reflection about your session"
+          />
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 

@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { z } from 'zod';
+import * as Sentry from '@sentry/react-native';
 import * as service from '../service';
 import * as repository from '../repository';
 import {
@@ -19,6 +20,11 @@ export function useMarkInsightAsRead(userId: string) {
         queryKey: analyticsKeys.insights(userId),
       });
     },
+    onError: (error) => {
+      Sentry.captureException(error, {
+        tags: { feature: 'analytics', operation: 'mark-insight-as-read' },
+      });
+    },
   });
 }
 
@@ -30,6 +36,11 @@ export function useUpdateDashboardWidget(userId: string) {
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: analyticsKeys.dashboard(userId),
+      });
+    },
+    onError: (error) => {
+      Sentry.captureException(error, {
+        tags: { feature: 'analytics', operation: 'update-dashboard-widget' },
       });
     },
   });
@@ -53,6 +64,11 @@ export function useCreateExportJob(userId: string) {
         queryKey: analyticsKeys.exportJobs(userId),
       });
     },
+    onError: (error) => {
+      Sentry.captureException(error, {
+        tags: { feature: 'analytics', operation: 'create-export-job' },
+      });
+    },
   });
 }
 
@@ -67,6 +83,11 @@ export function useUpdateAnalyticsPreferences(userId: string) {
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: analyticsKeys.preferences(userId),
+      });
+    },
+    onError: (error) => {
+      Sentry.captureException(error, {
+        tags: { feature: 'analytics', operation: 'update-analytics-preferences' },
       });
     },
   });
@@ -84,6 +105,11 @@ export function useGenerateInsights(userId: string) {
         queryKey: analyticsKeys.summary(userId, 'last_30_days'),
       });
     },
+    onError: (error) => {
+      Sentry.captureException(error, {
+        tags: { feature: 'analytics', operation: 'generate-insights' },
+      });
+    },
   });
 }
 
@@ -95,6 +121,11 @@ export function useDetectPatterns(userId: string) {
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: analyticsKeys.patterns(userId),
+      });
+    },
+    onError: (error) => {
+      Sentry.captureException(error, {
+        tags: { feature: 'analytics', operation: 'detect-patterns' },
       });
     },
   });

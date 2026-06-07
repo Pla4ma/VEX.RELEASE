@@ -6,6 +6,7 @@ import {
   useSessionCompletionConsequences,
 } from '../../features/session-completion/hooks';
 import { SessionCompleteContent } from './components/SessionCompleteContent';
+import { SessionCompleteSkeleton } from './components/SessionCompleteSkeleton';
 import { SessionSummaryUnavailable } from './components/SessionSummaryUnavailable';
 import { useAuthStore } from '../../store';
 import type { SessionCompletionNavigationParams } from '../../features/session-completion/schemas';
@@ -19,6 +20,9 @@ export const SessionCompleteScreen = withScreenErrorBoundary(
     );
 
     if (!parsedRoute.params) {
+      if (recoveredCompletion.isPending && parsedRoute.recoverySessionId) {
+        return <SessionCompleteSkeleton />;
+      }
       if (recoveredCompletion.data) {
         return <SessionCompleteResolved params={recoveredCompletion.data} />;
       }

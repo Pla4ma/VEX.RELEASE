@@ -1,5 +1,5 @@
 import React from 'react';
-import { ActivityIndicator, Pressable } from 'react-native';
+import { Pressable } from 'react-native';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
@@ -33,20 +33,14 @@ export function StartSessionButtonCompact({
         borderRadius="xl"
         style={{ backgroundColor: colors.gradient[0] }}
       >
-        {isLoading ? (
-          <ActivityIndicator size="small" color={theme.colors.text.inverse} />
-        ) : (
-          <>
-            <Text fontSize={18}></Text>
-            <Text
-              variant="body"
-              color={theme.colors.text.inverse}
-              fontWeight="600"
-            >
-              {hasActiveSession ? 'Resume' : 'Start Session'}
-            </Text>
-          </>
-        )}
+        <Text fontSize={18}></Text>
+        <Text
+          variant="body"
+          color={theme.colors.text.inverse}
+          fontWeight="600"
+        >
+          {hasActiveSession ? 'Resume' : 'Start Session'}
+        </Text>
       </Box>
     </Pressable>
   );

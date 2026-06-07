@@ -163,7 +163,7 @@ export function useContentReview(contentId: string) {
     try {
       const result = await generateMutation.mutateAsync();
       return result;
-    } catch (err) {
+    } catch (err: unknown) {
       const message =
         err instanceof Error ? err.message : ERROR_MESSAGES.DEFAULT;
       setState((prev) => ({ ...prev, error: message }));
@@ -184,7 +184,7 @@ export function useContentReview(contentId: string) {
     editedText: state.editedText,
     isEditing: state.isEditing,
     isGenerating: state.isGenerating,
-    isLoading: contentQuery.isLoading,
+    isLoading: contentQuery.isPending,
     error: state.error || contentQuery.error?.message || null,
     canGenerate,
     isProcessing,
