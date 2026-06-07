@@ -4,7 +4,6 @@
  * Business logic for generating and managing monthly focus reports.
  */
 
-import { getSupabaseClient } from '../../../config/supabase';
 import { createDebugger } from '../../../utils/debug';
 import {
   MonthlyFocusReportSchema,
@@ -14,6 +13,12 @@ import {
 } from './schemas';
 import { analyzeSessionData, generateNextMonthTarget } from './report-analysis';
 import { calculateGrade, generateAIInsight } from './report-helpers';
+import {
+  fetchStartScore,
+  fetchEndScore,
+  fetchSessionsForMonth,
+  type SessionRow,
+} from './repository';
 
 const debug = createDebugger('focus-identity:monthly-report');
 
@@ -33,55 +38,26 @@ export async function generateMonthlyReport(
     const startDate = new Date(year, month - 1, 1);
     const endDate = new Date(year, month, 0); // Last day of month
 
+    const startDateIso = startDate.toISOString();
+    const endDateIso = endDate.toISOString();
+
     // Fetch user's focus score at start and end of month
-    const { data: startScore, error: startError } = await getSupabaseClient()
-      .from('focus_scores')
-      .select('score')
-      .eq('user_id', userId)
-      .lte('created_at', startDate.toISOString())
-      .order('created_at', { ascending: false })
-      .limit(1)
-      .single();
-
-    const { data: endScore, error: endError } = await getSupabaseClient()
-      .from('focus_scores')
-      .select('score')
-      .eq('user_id', userId)
-      .gte('created_at', startDate.toISOString())
-      .lte('created_at', endDate.toISOString())
-      .order('created_at', { ascending: false })
-      .limit(1)
-      .single();
-
-    if (startError || endError) {
-      debug.error('Failed to fetch score data', { startError, endError });
-      return null;
-    }
+    const startScore = await fetchStartScore(userId, startDateIso);
+    const endScore = await fetchEndScore(userId, startDateIso, endDateIso);
 
     const startingScore = startScore?.score || 0;
     const endingScore = endScore?.score || 0;
     const scoreDelta = endingScore - startingScore;
 
     // Fetch session data for the month
-    const { data: sessions, error: sessionError } = await getSupabaseClient()
-      .from('sessions')
-      .select('id,user_id,completed_at,duration_minutes,grade,focus_purity_score,status')
-      .eq('user_id', userId)
-      .gte('completed_at', startDate.toISOString())
-      .lte('completed_at', endDate.toISOString())
-      .eq('status', 'COMPLETED');
-
-    if (sessionError) {
-      debug.error('Failed to fetch session data', sessionError);
-      return null;
-    }
+    const sessions = await fetchSessionsForMonth(userId, startDateIso, endDateIso);
 
     // Analyze session data
-    const sessionAnalysis = analyzeSessionData(sessions || []);
+    const sessionAnalysis = analyzeSessionData(sessions as SessionRow[]);
 
     // Generate AI insights for premium users
     const aiInsight = isPremium
-      ? await generateAIInsight(userId, sessions || [], scoreDelta)
+      ? await generateAIInsight(userId, sessions as SessionRow[], scoreDelta)
       : undefined;
 
     // Determine unlocked sections based on premium status

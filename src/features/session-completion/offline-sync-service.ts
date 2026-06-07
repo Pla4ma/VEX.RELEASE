@@ -25,6 +25,9 @@ export class SessionCompletionOfflineSyncService {
   private isInitialized = false;
   private unsubscribeNetwork: (() => void) | null = null;
   private syncIntervalId: ReturnType<typeof setInterval> | null = null;
+  private successCount = 0;
+  private failureCount = 0;
+  private totalRetryCount = 0;
 
   constructor() {
     fallbackStorage.reload();
@@ -65,6 +68,7 @@ export class SessionCompletionOfflineSyncService {
         await this.processSessionCompletion(entry);
         successful += 1;
       } catch (error) {
+        this.recordFailure(entry.retryCount);
         failed += 1;
         debug.warn('Force retry failed for %s:', entry.payload.sessionId, error);
       }
@@ -75,7 +79,10 @@ export class SessionCompletionOfflineSyncService {
   async generateHealthReport(): Promise<OfflineSyncReport> {
     const d = this.getDiagnostics();
     const issues = d.oldestEntryAge && d.oldestEntryAge > 86400000 ? ['Oldest entry is older than 24 hours'] : [];
-    return { queueSize: d.fallbackEntriesCount, successRate: entries.length > 0 ? Math.round((syncedCount / entries.length) * 100) : 100, averageRetryCount: 0, lastSyncTime: d.lastSyncAt > 0 ? d.lastSyncAt : null, isHealthy: issues.length === 0, issues, timestamp: Date.now() };
+    const totalAttempts = this.successCount + this.failureCount;
+    const successRate = totalAttempts > 0 ? Math.round((this.successCount / totalAttempts) * 100) : (this.isInitialized ? 100 : 0);
+    const averageRetryCount = totalAttempts > 0 ? Math.round((this.totalRetryCount / totalAttempts) * 100) / 100 : 0;
+    return { queueSize: d.fallbackEntriesCount, successRate, averageRetryCount, lastSyncTime: d.lastSyncAt > 0 ? d.lastSyncAt : null, isHealthy: issues.length === 0, issues, timestamp: Date.now() };
   }
 
   getDiagnostics(): DiagnosticsResult {
@@ -101,8 +108,15 @@ export class SessionCompletionOfflineSyncService {
 
   private async processSessionCompletion(entry: OfflineQueueEntry): Promise<void> {
     const sessionEntry = SessionCompletionOfflineEntrySchema.parse(entry);
+    this.totalRetryCount += sessionEntry.retryCount;
     await this.syncImmediately(sessionEntry.payload);
     fallbackStorage.removeEntry(sessionEntry.payload.sessionId);
+    this.successCount += 1;
+  }
+
+  private recordFailure(retryCount: number): void {
+    this.failureCount += 1;
+    this.totalRetryCount += retryCount;
   }
 
   private async syncImmediately(ledger: CompletionLedger): Promise<CompletionLedger> {
@@ -137,6 +151,7 @@ export class SessionCompletionOfflineSyncService {
       try {
         await this.processSessionCompletion(entry);
       } catch (error) {
+        this.recordFailure(entry.retryCount);
         debug.warn('Failed to sync fallback entry %s:', entry.payload.sessionId, error);
       }
     }

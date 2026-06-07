@@ -35,9 +35,9 @@ export async function upsertRewardLedger(
         created_at: new Date().toISOString(),
         expires_at: validated.expiresAt ?? null,
       },
-      { onConflict: 'idempotency_key' },
+      { onConflict: 'idempotency_key' }
     )
-    .select(tableColumns('reward_ledger'))
+    .select('amount,created_at,currency,delivered_at,expires_at,failed_reason,id,idempotency_key,reward_type,source_event,status,user_id')
     .single();
 
   if (error) {
@@ -104,7 +104,7 @@ export async function updateRewardLedgerStatus(
     .from('reward_ledger')
     .update(updateData)
     .eq('id', ledgerId)
-    .select(tableColumns('reward_ledger'))
+    .select('amount,created_at,currency,delivered_at,expires_at,failed_reason,id,idempotency_key,reward_type,source_event,status,user_id')
     .single();
 
   if (error) {

@@ -80,7 +80,7 @@ export async function upsertSetting(setting: {
   const { data, error } = await supabase
     .from(TABLE_SETTINGS)
     .upsert(dbRecord, { onConflict: 'user_id,key' })
-    .select(tableColumns(TABLE_SETTINGS))
+    .select('id,user_id,key,value,category,is_default,last_modified,last_synced,device_id')
     .single();
   if (error) {
     throw new Error(`Failed to upsert setting: ${error.message}`);
@@ -114,7 +114,7 @@ export async function batchUpsertSettings(
   const { data, error } = await supabase
     .from(TABLE_SETTINGS)
     .upsert(dbRecords, { onConflict: 'user_id,key' })
-    .select(tableColumns(TABLE_SETTINGS));
+    .select('id,user_id,key,value,category,is_default,last_modified,last_synced,device_id');
   if (error) {
     throw new Error(`Failed to batch upsert settings: ${error.message}`);
   }

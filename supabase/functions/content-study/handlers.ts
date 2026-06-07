@@ -5,7 +5,7 @@
  * Extracted from index.ts for file size compliance.
  */
 
-import { createClient, SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.49.8';
+import { createClient, SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.103.3';
 import { SubmitContentSchema, GenerateStudyPlanSchema, SubmitFeedbackSchema, type StudyTask, type QuizItem, type SessionPlan, type RawStudyTask, type RawQuizItem, type RawStudyPlanResponse, type RawSessionPlan } from './schemas.ts';
 import { extractFromYouTube, extractFromPDF, generateStudyPlan } from './extractors.ts';
 

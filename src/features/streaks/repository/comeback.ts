@@ -60,7 +60,7 @@ export async function insertComebackQuest(
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     })
-    .select(tableColumns('comeback_quests'))
+    .select('id,user_id,stage,days_absent,streak_before_break,quest1_completed,quest2_completed,quest3_completed,all_quests_completed,rewards_claimed,phoenix_badge_earned,created_at,updated_at')
     .single();
   if (error || !data) {
     throw new Error(`Failed to create comeback quest: ${error?.message}`);
@@ -117,7 +117,7 @@ export async function updateComebackQuestProgress(
     .from('comeback_quests')
     .update(updateData)
     .eq('id', questId)
-    .select(tableColumns('comeback_quests'))
+    .select('id,user_id,stage,days_absent,streak_before_break,quest1_completed,quest2_completed,quest3_completed,all_quests_completed,rewards_claimed,phoenix_badge_earned,created_at,updated_at')
     .single();
   if (error || !data) {
     throw new Error(`Failed to update quest progress: ${error?.message}`);

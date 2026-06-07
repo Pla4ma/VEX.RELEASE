@@ -7,7 +7,7 @@ import {
   handleStatus,
   handleFeedback,
 } from './handlers.ts';
-import { createClient, type SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.49.8';
+import { createClient, type SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.103.3';
 
 let cachedServiceClient: SupabaseClient | null = null;
 
