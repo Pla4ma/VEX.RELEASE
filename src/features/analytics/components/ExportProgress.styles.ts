@@ -74,6 +74,12 @@ export const styles = createSheet({
   cancelButton: { backgroundColor: lightColors.surface.button },
   cancelButtonText: { color: lightColors.text.muted, fontWeight: '500' },
   loadingIndicator: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+  skeletonPill: {
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+    backgroundColor: lightColors.border.light,
+  },
   loadingText: {
     fontSize: 14,
     color: lightColors.accent.blue,

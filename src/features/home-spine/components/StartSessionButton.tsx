@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Pressable, ActivityIndicator, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   withSpring,
@@ -149,24 +149,20 @@ export function StartSessionButton({
                 {subtitleText}
               </Text>
             </Box>
-            {isLoading ? (
-              <ActivityIndicator color={theme.colors.text.inverse} />
-            ) : (
-              <Box
-                width={44}
-                height={44}
-                borderRadius="full"
-                bg={`${theme.colors.text.inverse}20`}
-                justifyContent="center"
-                alignItems="center"
-              >
-                <Icon
-                  name={hasActiveSession ? 'play' : 'chevron-right'}
-                  size="md"
-                  color={theme.colors.text.inverse}
-                />
-              </Box>
-            )}
+            <Box
+              width={44}
+              height={44}
+              borderRadius="full"
+              bg={`${theme.colors.text.inverse}20`}
+              justifyContent="center"
+              alignItems="center"
+            >
+              <Icon
+                name={hasActiveSession ? 'play' : 'chevron-right'}
+                size="md"
+                color={theme.colors.text.inverse}
+              />
+            </Box>
           </Box>
           {isUrgent && !isLoading && (
             <Box
