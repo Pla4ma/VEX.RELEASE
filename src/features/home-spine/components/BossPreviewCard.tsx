@@ -1,6 +1,7 @@
 import React from 'react';
 import { Pressable } from 'react-native';
 import Animated, { FadeIn } from 'react-native-reanimated';
+import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
@@ -36,6 +37,7 @@ export function BossPreviewCard({
   BOUNTY_COST = 50,
 }: BossPreviewCardProps): JSX.Element {
   const { theme } = useTheme();
+  const { isReducedMotion } = useReducedMotion();
   if (isLoading) {
     return <BossPreviewSkeleton />;
   }
@@ -48,7 +50,7 @@ export function BossPreviewCard({
       accessibilityRole="button"
       accessibilityHint="Double tap to view boss details"
     >
-      <Animated.View entering={FadeIn.duration(400).delay(200)}>
+      <Animated.View entering={isReducedMotion ? undefined : FadeIn.duration(400).delay(200)}>
         <Box
           m="lg"
           p="lg"

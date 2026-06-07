@@ -5,7 +5,8 @@
  */
 
 import React from 'react';
-import { View, Text, ActivityIndicator } from 'react-native';
+import { View, Text } from 'react-native';
+import { Skeleton } from '../../../components/ui/Skeleton';
 import { createSheet } from '@/shared/ui/create-sheet';
 import { useTheme } from '../../../theme';
 
@@ -21,7 +22,7 @@ export const SessionLoadingState: React.FC<SessionLoadingStateProps> = ({
 
   return (
     <View style={[styles.container, { backgroundColor: semantic.background }]}>
-      <ActivityIndicator size="large" color={semantic.danger} />
+      <Skeleton width={40} height={40} variant="circular" />
       <Text style={[styles.message, { color: semantic.textMuted }]}>{message}</Text>
 
       {/* Skeleton placeholders */}

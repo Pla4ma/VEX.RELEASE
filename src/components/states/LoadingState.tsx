@@ -7,7 +7,8 @@
  */
 
 import React from 'react';
-import { View, ActivityIndicator } from 'react-native';
+import { View } from 'react-native';
+import { Skeleton } from '../ui/Skeleton';
 import { useTheme } from '../../theme';
 import { Text } from '../primitives';
 
@@ -47,7 +48,7 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
           : undefined,
       }}
     >
-      <ActivityIndicator size={size} color={theme.colors.primary[500]} />
+      <Skeleton width={size === 'large' ? 40 : 20} height={size === 'large' ? 40 : 20} variant="circular" />
 
       {message && (
         <Text

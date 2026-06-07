@@ -10,6 +10,7 @@ import {
   withSpring,
   runOnJS,
 } from 'react-native-reanimated';
+import { useReducedMotion } from '../../hooks/useReducedMotion';
 
 type AnimationType = 'fade' | 'slide' | 'scale';
 
@@ -26,6 +27,7 @@ export function useModalAnimation({
   onClose,
   closeOnBackButton,
 }: UseModalAnimationOptions) {
+  const { isReducedMotion } = useReducedMotion();
   const opacity = useSharedValue(0);
   const translateY = useSharedValue(500);
   const scale = useSharedValue(0.9);
@@ -50,6 +52,12 @@ export function useModalAnimation({
   });
 
   const open = useCallback(() => {
+    if (isReducedMotion) {
+      opacity.value = 1;
+      scale.value = 1;
+      translateY.value = 0;
+      return;
+    }
     opacity.value = withTiming(1, { duration: 200 });
     switch (animation) {
       case 'scale':
@@ -60,9 +68,16 @@ export function useModalAnimation({
         translateY.value = withSpring(0, { damping: 25, stiffness: 300 });
         break;
     }
-  }, [animation, opacity, scale, translateY]);
+  }, [animation, isReducedMotion, opacity, scale, translateY]);
 
   const close = useCallback(() => {
+    if (isReducedMotion) {
+      opacity.value = 0;
+      scale.value = 0.9;
+      translateY.value = 500;
+      runOnJS(onClose)();
+      return;
+    }
     opacity.value = withTiming(0, { duration: 150 }, () => {
       runOnJS(onClose)();
     });
@@ -75,7 +90,7 @@ export function useModalAnimation({
         translateY.value = withTiming(500, { duration: 200 });
         break;
     }
-  }, [animation, onClose, opacity, scale, translateY]);
+  }, [animation, isReducedMotion, onClose, opacity, scale, translateY]);
 
   useEffect(() => {
     if (visible) {

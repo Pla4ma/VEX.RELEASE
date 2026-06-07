@@ -1,5 +1,6 @@
 import React from 'react';
-import { ActivityIndicator, View } from 'react-native';
+import { View } from 'react-native';
+import { Skeleton } from '../components/ui/Skeleton';
 
 interface RootAuthLoadingScreenProps {
   background: string;
@@ -19,7 +20,7 @@ export function RootAuthLoadingScreen({
         justifyContent: 'center',
       }}
     >
-      <ActivityIndicator color={primary} size="large" />
+      <Skeleton width={40} height={40} variant="circular" />
     </View>
   );
 }

@@ -2,6 +2,7 @@ import { captureSilentFailure } from '../../../../utils/silent-failure';
 import React from 'react';
 import { Modal, Dimensions } from 'react-native';
 import Animated, { FadeIn } from 'react-native-reanimated';
+import { useReducedMotion } from '../../../../hooks/useReducedMotion';
 import { Box } from '../../../../components/primitives/Box';
 import { Text } from '../../../../components/primitives/Text';
 import { Button } from '../../../../components/primitives/Button';
@@ -34,6 +35,7 @@ export function StreakBrokenModal({
   onRestoreStart,
 }: StreakBrokenModalProps): JSX.Element {
   const { theme } = useTheme();
+  const { isReducedMotion } = useReducedMotion();
   const [isRestoring, setIsRestoring] = useState(false);
   const [restoreError, setRestoreError] = useState<string | null>(null);
 
@@ -79,7 +81,7 @@ export function StreakBrokenModal({
         px="lg"
       >
         <Animated.View
-          entering={FadeIn.duration(300)}
+          entering={isReducedMotion ? undefined : FadeIn.duration(300)}
           style={{ width: SCREEN_WIDTH - 40, maxHeight: '80%' }}
         >
           <Box

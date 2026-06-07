@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, ActivityIndicator, Pressable } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
+import { Skeleton } from '../../../components/ui/Skeleton';
 import { lightColors } from '@/theme/tokens/colors';
 
 import { settingsStyles as styles } from './settings-screen-styles';
@@ -13,7 +14,7 @@ export function SettingsLoadingState({
 }: SettingsLoadingStateProps) {
   return (
     <View style={styles.centerContainer}>
-      <ActivityIndicator size="large" color={lightColors.semantic.primary} />
+      <Skeleton width={40} height={40} variant="circular" />
       <Text style={styles.loadingText}>{message}</Text>
     </View>
   );

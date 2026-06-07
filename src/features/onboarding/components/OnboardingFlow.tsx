@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, ActivityIndicator } from 'react-native';
+import { View } from 'react-native';
+import { Skeleton } from '../../../components/ui/Skeleton';
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
 import { useOnboardingProgressState } from '../hooks';
@@ -37,7 +38,7 @@ function NotificationPermissionScreen({
   if (!NotificationCard) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator />
+        <Skeleton width={40} height={40} variant="circular" />
       </View>
     );
   }
@@ -117,7 +118,7 @@ function FirstResultScreen({
   if (!FirstResult) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator />
+        <Skeleton width={40} height={40} variant="circular" />
       </View>
     );
   }
@@ -151,7 +152,7 @@ export const OnboardingFlow = withScreenErrorBoundary(function _OnboardingFlow({
   if (isLoading || !state) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator />
+        <Skeleton width={40} height={40} variant="circular" />
       </View>
     );
   }

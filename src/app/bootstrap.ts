@@ -19,10 +19,8 @@ function deferBootCall(call: () => void): void {
 }
 
 function initializeCoreSystems(): void {
-  if (!IS_DEVELOPMENT) {
-    setupGlobalErrorHandler();
-    setupRejectionHandler();
-  }
+  setupGlobalErrorHandler();
+  setupRejectionHandler();
   initializeAnalyticsEventBridge();
   analyticsService.initialize().then((enabled) => {
     if (enabled) {

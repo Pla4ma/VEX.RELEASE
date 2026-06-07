@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import {
   View,
   StyleSheet,
-  ActivityIndicator,
 } from 'react-native';
+import { Skeleton } from '../ui/Skeleton';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -20,7 +20,7 @@ export const Spinner: React.FC<{ size: number; color: string }> = ({
   size,
   color,
 }) => {
-  return <ActivityIndicator size={size} color={color} />;
+  return <Skeleton width={size} height={size} variant="circular" />;
 };
 
 export const Dots: React.FC<{ size: number; color: string }> = ({

@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
-import { View, Text, Pressable, ScrollView, ActivityIndicator } from 'react-native';
+import { View, Text, Pressable, ScrollView } from 'react-native';
+import { Skeleton } from '../../../components/ui/Skeleton';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useStudyPlan } from '../hooks';
@@ -69,7 +70,7 @@ export function StudyPlanScreen() {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={lightColors.accent.blue} />
+          <Skeleton width={60} height={20} variant="rounded" />
           <Text style={styles.loadingText}>Loading study plan...</Text>
         </View>
       </SafeAreaView>
@@ -129,7 +130,7 @@ export function StudyPlanScreen() {
           accessibilityHint="Starts a study session from this plan"
         >
           {isStartingSession ? (
-            <ActivityIndicator size="small" color={lightColors.text.inverse} />
+            <Skeleton width={20} height={20} variant="circular" />
           ) : (
             <>
               <Text style={styles.fabText}>▶</Text>

@@ -1,5 +1,6 @@
 import React from 'react';
-import { ActivityIndicator, Pressable } from 'react-native';
+import { Pressable } from 'react-native';
+import { Skeleton } from '../../../components/ui/Skeleton';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';

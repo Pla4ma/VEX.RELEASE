@@ -12,8 +12,8 @@ import {
   TextInput,
   ScrollView,
   Pressable,
-  ActivityIndicator,
 } from 'react-native';
+import { Skeleton } from '../../../components/ui/Skeleton';
 import type { StudyContent } from '../types';
 import { CONTENT_STATUS_CONFIG, UI_TEXT } from '../constants';
 import { styles } from './ContentReviewScreen.styles';
@@ -36,11 +36,7 @@ export function StatusBadge({ content }: StatusBadgeProps) {
         },
       ]}
     >
-      <ActivityIndicator
-        color={config.color}
-        animating={config.isLoading}
-        style={!config.isLoading && styles.hidden}
-      />
+      <Skeleton width={16} height={16} variant="circular" />
       <Text style={[styles.statusLabel, { color: config.color }]}>
         {config.label}
       </Text>

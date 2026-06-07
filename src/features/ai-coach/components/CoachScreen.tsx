@@ -2,12 +2,12 @@ import React, { useCallback } from 'react';
 import {
   View,
   Text,
-  ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
   SafeAreaView,
   Pressable,
 } from 'react-native';
+import { Skeleton } from '../../../components/ui/Skeleton';
 import { FlashList, type ListRenderItem } from '@shopify/flash-list';
 import { styles } from './CoachScreen.styles';
 
@@ -57,7 +57,7 @@ export function CoachScreen(): JSX.Element {
       <SafeAreaView style={styles.container}>
         <View style={{ height: 44 }} />
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={lightColors.semantic.primary} />
+          <Skeleton width={60} height={20} variant="rounded" />
           <Text style={styles.loadingText}>Loading your coach...</Text>
         </View>
       </SafeAreaView>
@@ -119,7 +119,7 @@ export function CoachScreen(): JSX.Element {
               </Text>
             </View>
             <View style={styles.typingBubble}>
-              <ActivityIndicator size="small" color={lightColors.semantic.primary} />
+              <Skeleton width={16} height={16} variant="circular" />
               <Text style={styles.typingText}>Thinking...</Text>
             </View>
           </View>
