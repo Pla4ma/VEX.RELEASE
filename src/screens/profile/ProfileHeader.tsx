@@ -1,6 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { GlassCard } from '../../components/glass/GlassCard';
+import { LiquidGlassObject } from '../../components/glass/LiquidGlassObject';
 import type { User } from '../../types/models';
 import { ProfileActionsRow } from './components/ProfileActionsRow';
 import { ProfileIdentityBlock } from './components/ProfileIdentityBlock';
@@ -42,31 +43,63 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
         onNotificationsPress={onNotificationsPress}
         onSettingsPress={onSettingsPress}
       />
-      <GlassCard padding={16} radius={24} variant="hero">
+      <GlassCard padding={20} radius={32} variant="hero">
         <View
           pointerEvents="none"
           style={{
-            backgroundColor: 'rgba(95, 230, 197, 0.20)',
+            backgroundColor: 'rgba(95, 230, 197, 0.22)',
+            borderRadius: 280,
+            height: 220,
+            position: 'absolute',
+            right: -50,
+            top: -80,
+            width: 220,
+          }}
+        />
+        <View
+          pointerEvents="none"
+          style={{
+            backgroundColor: 'rgba(132, 228, 229, 0.20)',
             borderRadius: 200,
-            height: 150,
-            left: 80,
+            height: 140,
             position: 'absolute',
-            top: -40,
-            width: 150,
+            right: 40,
+            top: 60,
+            width: 140,
           }}
         />
         <View
           pointerEvents="none"
           style={{
-            backgroundColor: 'rgba(132, 228, 229, 0.18)',
-            borderRadius: 160,
-            height: 120,
+            backgroundColor: 'rgba(255, 255, 255, 0.50)',
+            borderRadius: 220,
+            height: 130,
+            left: 60,
             position: 'absolute',
-            right: 30,
-            top: 50,
-            width: 120,
+            top: -10,
+            width: 130,
           }}
         />
+        <View
+          pointerEvents="none"
+          style={{
+            bottom: -30,
+            left: -20,
+            position: 'absolute',
+          }}
+        >
+          <LiquidGlassObject size={130} variant="swirl" />
+        </View>
+        <View
+          pointerEvents="none"
+          style={{
+            position: 'absolute',
+            right: -10,
+            top: 0,
+          }}
+        >
+          <LiquidGlassObject size={120} variant="orb" />
+        </View>
         <ProfileIdentityBlock
           level={level}
           streakDays={streakDays}

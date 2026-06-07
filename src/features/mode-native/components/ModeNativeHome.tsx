@@ -5,6 +5,7 @@ import { Text } from '../../../components/primitives/Text';
 import { VexLaunchButton } from '../../../components/primitives/VexLaunchButton';
 import { GlassCard } from '../../../components/glass/GlassCard';
 import { GlassPill } from '../../../components/glass/GlassPill';
+import { LiquidGlassObject } from '../../../components/glass/LiquidGlassObject';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { useTheme } from '../../../theme';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
@@ -48,17 +49,17 @@ export function ModeNativeHome({
       entering={entering}
       style={{ flex: 1, justifyContent: 'flex-start' }}
     >
-      <GlassCard variant="hero" padding={18} radius={24}>
+      <GlassCard variant="hero" padding={20} radius={32}>
         <View
           pointerEvents="none"
           style={{
             backgroundColor: 'rgba(95, 230, 197, 0.22)',
-            borderRadius: 200,
-            height: 180,
+            borderRadius: 280,
+            height: 240,
             position: 'absolute',
-            right: -50,
-            top: -80,
-            width: 180,
+            right: -70,
+            top: -100,
+            width: 240,
           }}
         />
         <View
@@ -66,26 +67,67 @@ export function ModeNativeHome({
           style={{
             backgroundColor: 'rgba(132, 228, 229, 0.20)',
             borderRadius: 180,
-            height: 120,
+            height: 140,
             position: 'absolute',
             right: 30,
-            top: 20,
-            width: 120,
+            top: 30,
+            width: 140,
           }}
         />
-
-        <View style={{ alignItems: 'flex-start', marginBottom: 10 }}>
-          <GlassPill label={`${laneLabel} mode`} variant="mint" />
+        <View
+          pointerEvents="none"
+          style={{
+            backgroundColor: 'rgba(255, 255, 255, 0.50)',
+            borderRadius: 200,
+            height: 110,
+            left: 30,
+            position: 'absolute',
+            top: 0,
+            width: 110,
+          }}
+        />
+        <View
+          pointerEvents="none"
+          style={{
+            position: 'absolute',
+            right: -16,
+            top: -20,
+          }}
+        >
+          <LiquidGlassObject size={170} variant="orb" />
+        </View>
+        <View
+          pointerEvents="none"
+          style={{
+            bottom: -50,
+            left: -20,
+            position: 'absolute',
+          }}
+        >
+          <LiquidGlassObject size={120} variant="swirl" />
         </View>
 
-        <View style={{ gap: 6, marginBottom: 12 }}>
+        <View
+          style={{
+            alignItems: 'flex-start',
+            flexDirection: 'row',
+            gap: 8,
+            marginBottom: 12,
+            zIndex: 2,
+          }}
+        >
+          <GlassPill label="DAILY FOCUS" variant="mint" />
+        </View>
+
+        <View style={{ marginBottom: 14, maxWidth: '68%', zIndex: 2 }}>
           <Text
             style={{
               color: vexLightGlass.text.primary,
-              fontSize: 28,
+              fontSize: 30,
               fontWeight: '800',
-              letterSpacing: -0.5,
-              lineHeight: 33,
+              letterSpacing: -0.6,
+              lineHeight: 36,
+              marginBottom: 8,
             }}
           >
             {surface.headline}
@@ -101,15 +143,34 @@ export function ModeNativeHome({
           </Text>
         </View>
 
-        <GlassCard variant="subtle" padding={12} radius={18} size="sm" style={{ marginBottom: 12 }}>
+        <View
+          style={{
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            gap: 8,
+            marginBottom: 14,
+            zIndex: 2,
+          }}
+        >
+          <GlassPill label="Adaptive" variant="mint" />
+          <GlassPill label={`${laneLabel} mode`} variant="neutral" />
+        </View>
+
+        <GlassCard
+          padding={14}
+          radius={20}
+          size="md"
+          style={{ marginBottom: 16 }}
+          variant="subtle"
+        >
           <View>
             <Text
               style={{
                 color: vexLightGlass.mint[700],
                 fontSize: 10,
-                fontWeight: '700',
-                letterSpacing: 1.2,
-                marginBottom: 4,
+                fontWeight: '800',
+                letterSpacing: 1.4,
+                marginBottom: 6,
                 textTransform: 'uppercase',
               }}
             >
@@ -120,7 +181,7 @@ export function ModeNativeHome({
                 color: vexLightGlass.text.primary,
                 fontSize: 14,
                 fontWeight: '700',
-                lineHeight: 19,
+                lineHeight: 20,
               }}
             >
               {surface.suggestedDurationMinutes} minutes, one clean start.

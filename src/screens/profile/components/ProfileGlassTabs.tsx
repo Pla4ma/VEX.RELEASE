@@ -1,6 +1,5 @@
 import React from 'react';
 import { Pressable, View } from 'react-native';
-import { BlurView } from 'expo-blur';
 import { Text } from '../../../components/primitives/Text';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 
@@ -36,19 +35,6 @@ export function ProfileGlassTabs({
         padding: 3,
       }}
     >
-      <BlurView
-        intensity={34}
-        pointerEvents="none"
-        tint="light"
-        style={{
-          borderRadius: 999,
-          bottom: 0,
-          left: 0,
-          position: 'absolute',
-          right: 0,
-          top: 0,
-        }}
-      />
       {PROFILE_TABS.map((tab) => {
         const isActive = activeTab === tab;
         return (

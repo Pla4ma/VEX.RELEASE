@@ -22,7 +22,7 @@ export interface GlassSurfaceVariantConfig {
 
 export const GLASS_SURFACE_VARIANTS: Record<GlassSurfaceVariant, GlassSurfaceVariantConfig> = {
   subtle: {
-    fill: 'rgba(255, 255, 255, 0.34)',
+    fill: 'rgba(255, 255, 255, 0.62)',
     border: 'rgba(255, 255, 255, 0.72)',
     highlightTop: 'rgba(255, 255, 255, 0.72)',
     highlightTopStop: 0.28,
@@ -34,7 +34,7 @@ export const GLASS_SURFACE_VARIANTS: Record<GlassSurfaceVariant, GlassSurfaceVar
     topEdgeIntensity: 0.7,
   },
   default: {
-    fill: 'rgba(255, 255, 255, 0.46)',
+    fill: 'rgba(255, 255, 255, 0.72)',
     border: 'rgba(255, 255, 255, 0.86)',
     highlightTop: 'rgba(255, 255, 255, 0.98)',
     highlightTopStop: 0.34,
@@ -48,7 +48,7 @@ export const GLASS_SURFACE_VARIANTS: Record<GlassSurfaceVariant, GlassSurfaceVar
     innerBottomStop: 0.82,
   },
   strong: {
-    fill: 'rgba(255, 255, 255, 0.56)',
+    fill: 'rgba(255, 255, 255, 0.80)',
     border: 'rgba(255, 255, 255, 0.94)',
     highlightTop: 'rgba(255, 255, 255, 1.0)',
     highlightTopStop: 0.36,
@@ -60,7 +60,7 @@ export const GLASS_SURFACE_VARIANTS: Record<GlassSurfaceVariant, GlassSurfaceVar
     topEdgeIntensity: 1.0,
   },
   hero: {
-    fill: 'rgba(255, 255, 255, 0.50)',
+    fill: 'rgba(255, 255, 255, 0.72)',
     border: 'rgba(255, 255, 255, 0.92)',
     highlightTop: 'rgba(255, 255, 255, 1.0)',
     highlightTopStop: 0.40,
@@ -74,7 +74,7 @@ export const GLASS_SURFACE_VARIANTS: Record<GlassSurfaceVariant, GlassSurfaceVar
     innerBottomStop: 0.92,
   },
   premium: {
-    fill: 'rgba(255, 255, 255, 0.54)',
+    fill: 'rgba(255, 255, 255, 0.76)',
     border: 'rgba(255, 255, 255, 0.95)',
     highlightTop: 'rgba(255, 255, 255, 1.0)',
     highlightTopStop: 0.38,

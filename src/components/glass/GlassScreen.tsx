@@ -38,8 +38,8 @@ function OrganicTopBlob(): JSX.Element {
     >
       <Defs>
         <RadialGradient cx="40%" cy="40%" id="blobMint" r="60%">
-          <Stop offset="0%" stopColor="#7ADFC0" stopOpacity={0.22} />
-          <Stop offset="45%" stopColor="#5FE6C5" stopOpacity={0.12} />
+          <Stop offset="0%" stopColor="#D8FBF1" stopOpacity={0.18} />
+          <Stop offset="45%" stopColor="#A9F0DD" stopOpacity={0.10} />
           <Stop offset="100%" stopColor="#5FE6C5" stopOpacity={0} />
         </RadialGradient>
       </Defs>
@@ -67,8 +67,8 @@ function OrganicCyanGlow(): JSX.Element {
     >
       <Defs>
         <RadialGradient cx="55%" cy="50%" id="blobCyan" r="55%">
-          <Stop offset="0%" stopColor="#A4E4DD" stopOpacity={0.16} />
-          <Stop offset="55%" stopColor="#A4E4DD" stopOpacity={0.08} />
+          <Stop offset="0%" stopColor="#FFFFFF" stopOpacity={0.32} />
+          <Stop offset="55%" stopColor="#D8FBF1" stopOpacity={0.10} />
           <Stop offset="100%" stopColor="#88DCD2" stopOpacity={0} />
         </RadialGradient>
       </Defs>
@@ -96,7 +96,7 @@ function TopRightAccent(): JSX.Element {
     >
       <Defs>
         <SvgLinearGradient id="topAccent" x1="0" x2="1" y1="0" y2="0">
-          <Stop offset="0%" stopColor="#5FE6C5" stopOpacity={0.10} />
+          <Stop offset="0%" stopColor="#FFFFFF" stopOpacity={0.22} />
           <Stop offset="100%" stopColor="#5FE6C5" stopOpacity={0} />
         </SvgLinearGradient>
       </Defs>
@@ -152,7 +152,7 @@ export function GlassScreen({
       testID={testID}
     >
       <LinearGradient
-        colors={['#F8FFFC', '#F1FAF6', '#E9F6F2', '#E3F1EE', '#F7FFFC']}
+        colors={['#FBFFFD', '#F7FCFA', '#EFF8F5', '#EAF4F1', '#FBFFFD']}
         locations={[0, 0.25, 0.55, 0.8, 1]}
         style={{
           bottom: 0,

@@ -1,7 +1,6 @@
 import React, { type ReactNode } from 'react';
 import { View, type StyleProp, type ViewStyle } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { BlurView } from 'expo-blur';
 
 export type GlassPillTone = 'neutral' | 'mint' | 'fire' | 'premium' | 'warning';
 
@@ -122,19 +121,6 @@ export function GlassPillSurface({
         style,
       ]}
     >
-      <BlurView
-        intensity={selected ? 38 : 26}
-        pointerEvents="none"
-        tint="light"
-        style={{
-          borderRadius: height / 2,
-          bottom: 0,
-          left: 0,
-          position: 'absolute',
-          right: 0,
-          top: 0,
-        }}
-      />
       <LinearGradient
         colors={[v.gradientTop, v.gradientBottom]}
         end={{ x: 0, y: 1 }}

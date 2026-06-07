@@ -29,26 +29,34 @@ export function PersonalStatsGrid({
           color: vexLightGlass.text.primary,
           fontSize: 18,
           fontWeight: '800',
-          letterSpacing: -0.2,
+          letterSpacing: -0.3,
         }}
       >
         Personal Stats
       </Text>
-      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 12 }}>
+      <View
+        style={{
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          gap: 10,
+        }}
+      >
         {stats.map((item) => (
           <GlassCard
             key={item.label}
             padding={14}
             radius={20}
             size="sm"
-            style={{ flexGrow: 1, minWidth: '30%' }}
+            style={{ flexGrow: 1, flexBasis: '30%', minWidth: '30%' }}
             variant="default"
           >
             <Text
               style={{
                 color: vexLightGlass.text.tertiary,
                 fontSize: 11,
-                fontWeight: '600',
+                fontWeight: '700',
+                letterSpacing: 0.3,
+                textTransform: 'uppercase',
               }}
             >
               {item.label}

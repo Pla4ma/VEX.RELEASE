@@ -3,7 +3,6 @@ import { View, type StyleProp, type ViewStyle } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 import { GLASS_SURFACE_VARIANTS, type GlassSurfaceVariant } from './GlassSurface.tokens';
-import { GlassBlurLayer } from './GlassBlurLayer';
 import { GlassTextureOverlay } from './GlassTextureOverlay';
 
 export type { GlassSurfaceVariant } from './GlassSurface.tokens';
@@ -175,7 +174,6 @@ export function GlassSurface({
           overflow: 'hidden',
         }}
       >
-        <GlassBlurLayer radius={radius} variant={variant} />
         <TopHighlight color={v.highlightTop} radius={radius} stop={v.highlightTopStop} />
         <GlassTextureOverlay
           intensity={variant === 'hero' || variant === 'premium' ? 'hero' : 'normal'}

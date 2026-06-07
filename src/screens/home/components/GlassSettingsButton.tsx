@@ -1,7 +1,6 @@
 import React from 'react';
 import { Pressable, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { BlurView } from 'expo-blur';
 import { Icon } from '../../../icons';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 
@@ -38,19 +37,6 @@ export function GlassSettingsButton({ onPress }: GlassSettingsButtonProps): JSX.
           width: 38,
         }}
       >
-        <BlurView
-          intensity={34}
-          pointerEvents="none"
-          tint="light"
-          style={{
-            borderRadius: 19,
-            bottom: 0,
-            left: 0,
-            position: 'absolute',
-            right: 0,
-            top: 0,
-          }}
-        />
         <LinearGradient
           colors={['rgba(255, 255, 255, 0.85)', 'rgba(255, 255, 255, 0.30)']}
           end={{ x: 0, y: 1 }}

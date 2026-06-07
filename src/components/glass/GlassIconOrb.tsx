@@ -1,7 +1,6 @@
 import React, { type ReactNode } from 'react';
 import { View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { BlurView } from 'expo-blur';
 
 interface GlassIconOrbProps {
   children?: ReactNode;
@@ -108,19 +107,6 @@ export function GlassIconOrb({
           width: size,
         }}
       >
-        <BlurView
-          intensity={30}
-          pointerEvents="none"
-          tint="light"
-          style={{
-            borderRadius: size / 2,
-            bottom: 0,
-            left: 0,
-            position: 'absolute',
-            right: 0,
-            top: 0,
-          }}
-        />
         <LinearGradient
           colors={[v.innerStart, v.innerEnd]}
           end={{ x: 0.5, y: 1 }}

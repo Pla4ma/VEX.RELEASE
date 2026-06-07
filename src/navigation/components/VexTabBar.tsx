@@ -1,7 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { BlurView } from 'expo-blur';
 import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuthStore } from '../../store';
@@ -41,19 +40,6 @@ export function VexTabBar({
           shadowRadius: 22,
         }}
       >
-        <BlurView
-          intensity={44}
-          pointerEvents="none"
-          tint="light"
-          style={{
-            borderRadius: 28,
-            bottom: 0,
-            left: 0,
-            position: 'absolute',
-            right: 0,
-            top: 0,
-          }}
-        />
         <View
           style={{
             backgroundColor: 'rgba(255, 255, 255, 0.58)',

@@ -1,6 +1,5 @@
 import React from 'react';
 import { Pressable, View } from 'react-native';
-import { BlurView } from 'expo-blur';
 import { Icon } from '../../../icons';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 
@@ -43,19 +42,6 @@ function GlassIconButton({
         width: 42,
       }}
     >
-      <BlurView
-        intensity={34}
-        pointerEvents="none"
-        tint="light"
-        style={{
-          borderRadius: 999,
-          bottom: 0,
-          left: 0,
-          position: 'absolute',
-          right: 0,
-          top: 0,
-        }}
-      />
       <Icon color={vexLightGlass.text.primary} name={iconName} size="md" />
     </Pressable>
   );

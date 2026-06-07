@@ -9,34 +9,34 @@ interface FocusScreenHeaderProps {
 
 export function FocusScreenHeader({ statusCopy }: FocusScreenHeaderProps): JSX.Element {
   return (
-    <View style={{ gap: 6, marginBottom: 14 }}>
+    <View style={{ gap: 6, marginBottom: 20 }}>
       <Text
         style={{
           color: vexLightGlass.text.primary,
-          fontSize: 22,
-          fontWeight: '500',
-          letterSpacing: -0.2,
-          lineHeight: 28,
+          fontSize: 28,
+          fontWeight: '800',
+          letterSpacing: -0.6,
+          lineHeight: 34,
         }}
       >
         Focus modes
       </Text>
       <Text
         style={{
-          color: vexLightGlass.text.primary,
-          fontSize: 13,
-          fontWeight: '400',
-          lineHeight: 18,
+          color: vexLightGlass.text.secondary,
+          fontSize: 14,
+          fontWeight: '500',
+          lineHeight: 19,
         }}
       >
         Choose the shape of this block
       </Text>
       <Text
         style={{
-          color: vexLightGlass.text.secondary,
+          color: vexLightGlass.text.tertiary,
           fontSize: 12,
           lineHeight: 18,
-          marginTop: 10,
+          marginTop: 8,
         }}
       >
         {statusCopy}

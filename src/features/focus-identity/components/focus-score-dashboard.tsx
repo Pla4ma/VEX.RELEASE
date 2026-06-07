@@ -1,7 +1,11 @@
 import React from 'react';
 import { View } from 'react-native';
-import { EmptyState } from '../../../components/EmptyState';
+import { GlassCard } from '../../../components/glass/GlassCard';
+import { GlassIconOrb } from '../../../components/glass/GlassIconOrb';
+import { LiquidButton } from '../../../components/glass/LiquidButton';
+import { Text } from '../../../components/primitives/Text';
 import { ErrorState } from '../../../components/states/ErrorState';
+import { Icon } from '../../../icons';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import type { FocusScoreDashboardModel } from '../types';
 import { loadingSkeleton } from './loading-skeleton';
@@ -43,13 +47,72 @@ export function FocusScoreDashboard({
   }
   if (!model.current) {
     return (
-      <EmptyState
-        iconName="target"
-        title="Your Focus Score needs three sessions"
-        body="Finish three sessions and VEX will start reading your focus rhythm."
-        actionLabel="Start session"
-        onAction={onStartSession}
-      />
+      <GlassCard padding={24} radius={32} variant="hero">
+        <View
+          pointerEvents="none"
+          style={{
+            backgroundColor: 'rgba(95, 230, 197, 0.20)',
+            borderRadius: 280,
+            height: 220,
+            position: 'absolute',
+            right: -60,
+            top: -80,
+            width: 220,
+          }}
+        />
+        <View
+          pointerEvents="none"
+          style={{
+            backgroundColor: 'rgba(132, 228, 229, 0.18)',
+            borderRadius: 200,
+            height: 130,
+            position: 'absolute',
+            right: 30,
+            top: 30,
+            width: 130,
+          }}
+        />
+        <View style={{ alignItems: 'center', gap: 12, paddingVertical: 8, zIndex: 2 }}>
+          <GlassIconOrb size={72} variant="cyan">
+            <Icon color="#0E7490" name="bolt" size="lg" variant="solid" />
+          </GlassIconOrb>
+          <Text
+            style={{
+              color: vexLightGlass.text.primary,
+              fontSize: 22,
+              fontWeight: '800',
+              letterSpacing: -0.4,
+              lineHeight: 28,
+              textAlign: 'center',
+            }}
+          >
+            Your Focus Score needs three sessions
+          </Text>
+          <Text
+            style={{
+              color: vexLightGlass.text.secondary,
+              fontSize: 13,
+              lineHeight: 19,
+              maxWidth: 280,
+              textAlign: 'center',
+            }}
+          >
+            Finish three sessions and VEX will start reading your focus rhythm.
+          </Text>
+          <View style={{ marginTop: 4 }}>
+            <LiquidButton
+              accessibilityHint="Starts a focus session to build your Focus Score"
+              label="Start session"
+              onPress={onStartSession}
+              size="md"
+              variant="primary"
+              rightIcon={
+                <Icon color="#FFFFFF" name="arrowRight" size="sm" variant="solid" />
+              }
+            />
+          </View>
+        </View>
+      </GlassCard>
     );
   }
 

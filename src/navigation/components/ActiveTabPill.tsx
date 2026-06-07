@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, type StyleProp, type ViewStyle } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { BlurView } from 'expo-blur';
 import Animated, { type AnimatedStyle } from 'react-native-reanimated';
 
 interface ActiveTabPillProps {
@@ -33,19 +32,6 @@ export function ActiveTabPill({
         pillStyle,
       ]}
     >
-      <BlurView
-        intensity={36}
-        pointerEvents="none"
-        tint="light"
-        style={{
-          borderRadius: 999,
-          bottom: 0,
-          left: 0,
-          position: 'absolute',
-          right: 0,
-          top: 0,
-        }}
-      />
       <View
         style={{
           backgroundColor: 'rgba(95, 230, 197, 0.26)',

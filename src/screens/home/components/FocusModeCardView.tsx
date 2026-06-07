@@ -35,58 +35,94 @@ export function FocusModeCardView({
   const isPrimary = card.id === 'sprint-15';
   return (
     <View style={{ marginBottom: 12 }}>
-      <GlassCard variant={isPrimary ? 'selected' : 'default'} padding={14} radius={18}>
+      <GlassCard
+        glowMint={isPrimary}
+        padding={16}
+        radius={26}
+        variant={isPrimary ? 'premium' : 'default'}
+      >
+        {isPrimary ? (
+          <>
+            <View
+              pointerEvents="none"
+              style={{
+                backgroundColor: 'rgba(95, 230, 197, 0.22)',
+                borderRadius: 280,
+                height: 200,
+                position: 'absolute',
+                right: -60,
+                top: -60,
+                width: 200,
+              }}
+            />
+            <View
+              pointerEvents="none"
+              style={{
+                backgroundColor: 'rgba(132, 228, 229, 0.18)',
+                borderRadius: 180,
+                height: 110,
+                position: 'absolute',
+                right: 30,
+                top: 20,
+                width: 110,
+              }}
+            />
+          </>
+        ) : null}
+
         <View
           style={{
             alignItems: 'center',
             flexDirection: 'row',
             flex: 1,
-            gap: 12,
+            gap: 14,
+            zIndex: 2,
           }}
         >
-            <GlassIconOrb size={56} variant={visual.orb}>
-              <Icon
-                color={visual.iconColor}
-                name={visual.icon}
-                size="md"
-                variant="solid"
-              />
-            </GlassIconOrb>
-            <View style={{ flex: 1, gap: 4 }}>
-              <Text
-                style={{
-                  color: vexLightGlass.text.primary,
-                  fontSize: 16,
-                  fontWeight: '800',
-                  letterSpacing: -0.3,
-                  lineHeight: 21,
-                }}
-              >
-                {card.title}
-              </Text>
-              <Text
-                style={{
-                  color: vexLightGlass.text.secondary,
-                  fontSize: 12,
-                  lineHeight: 17,
-                }}
-              >
-                {card.body}
-              </Text>
-            </View>
+          <GlassIconOrb size={60} variant={visual.orb}>
+            <Icon
+              color={visual.iconColor}
+              name={visual.icon}
+              size="md"
+              variant="solid"
+            />
+          </GlassIconOrb>
+          <View style={{ flex: 1, gap: 4 }}>
+            <Text
+              style={{
+                color: vexLightGlass.text.primary,
+                fontSize: 18,
+                fontWeight: '800',
+                letterSpacing: -0.3,
+                lineHeight: 23,
+              }}
+            >
+              {card.title}
+            </Text>
+            <Text
+              style={{
+                color: vexLightGlass.text.secondary,
+                fontSize: 12,
+                lineHeight: 17,
+              }}
+            >
+              {card.body}
+            </Text>
+          </View>
         </View>
         <View
           style={{
             alignItems: 'center',
             flexDirection: 'row',
             justifyContent: 'space-between',
-            marginTop: 10,
-            paddingLeft: 68,
+            marginTop: 14,
+            paddingLeft: 74,
+            zIndex: 2,
           }}
         >
           <GlassPill
             label={formatMinutes(card.durationSeconds)}
-            size="sm"
+            size="md"
             variant="neutral"
           />
           <LiquidButton

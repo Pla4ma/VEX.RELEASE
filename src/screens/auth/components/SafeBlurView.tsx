@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
-import { UIManager, View, type ViewProps } from 'react-native';
-import { BlurView } from 'expo-blur';
+import { View, type ViewProps } from 'react-native';
 
 type SafeBlurViewProps = {
   intensity?: number;
@@ -9,13 +8,7 @@ type SafeBlurViewProps = {
   style?: ViewProps['style'];
 };
 
-const looksLikeNativeBlurAvailable = ((): boolean => {
-  try {
-    return UIManager.hasViewManagerConfig('ExpoBlurView');
-  } catch {
-    return false;
-  }
-})();
+const looksLikeNativeBlurAvailable = false;
 
 export function SafeBlurView({
   intensity = 30,
@@ -23,13 +16,7 @@ export function SafeBlurView({
   children,
   style,
 }: SafeBlurViewProps): React.JSX.Element {
-  if (looksLikeNativeBlurAvailable) {
-    return (
-      <BlurView intensity={intensity} tint={tint} style={style}>
-        {children}
-      </BlurView>
-    );
-  }
+  void intensity;
 
   const darkOverlay =
     tint === 'dark'
