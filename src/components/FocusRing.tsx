@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Platform, StyleSheet, View } from 'react-native';
+import { Platform, View } from 'react-native';
 import Svg, { Circle, Defs, LinearGradient, Stop } from 'react-native-svg';
 import Animated, {
   Easing,
@@ -110,7 +110,7 @@ export function FocusRing({
       </Svg>
       <View
         pointerEvents="none"
-        style={[StyleSheet.absoluteFill, styles.center]}
+        style={[{ position: 'absolute' as const, left: 0, right: 0, top: 0, bottom: 0 }, styles.center]}
       >
         <Text fontSize={32} fontWeight="800" color={theme.colors.text.primary}>
           {Math.round(clamped)}%

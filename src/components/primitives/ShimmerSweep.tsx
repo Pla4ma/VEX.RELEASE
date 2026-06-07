@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Platform, StyleSheet, View, type LayoutChangeEvent } from 'react-native';
+import { Platform, View, type LayoutChangeEvent } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Animated, {
   cancelAnimation,
@@ -75,7 +75,7 @@ export function ShimmerSweep({
     <View
       onLayout={onLayout}
       pointerEvents="none"
-      style={[StyleSheet.absoluteFill, { borderRadius, overflow: 'hidden' }]}
+      style={[{ position: 'absolute' as const, left: 0, right: 0, top: 0, bottom: 0 }, { borderRadius, overflow: 'hidden' }]}
     >
       <Animated.View
         style={[
@@ -87,7 +87,7 @@ export function ShimmerSweep({
           colors={['transparent', color, 'transparent']}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
-          style={StyleSheet.absoluteFill}
+          style={{ position: 'absolute' as const, left: 0, right: 0, top: 0, bottom: 0 }}
         />
       </Animated.View>
     </View>

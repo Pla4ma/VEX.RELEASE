@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { ActivityIndicator, ScrollView, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { useNavigation, useRoute, type RouteProp } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -8,6 +8,7 @@ import { Text } from '../../../components/primitives/Text';
 import type { ExtendedRootStackParams } from '../../../navigation/types';
 import { capture } from '../../analytics';
 import { StatusBanner } from '../../ui/components/StatusFeedback';
+import { SkeletonItem } from '../../ui/components/SkeletonItem';
 import { useTheme } from '../../../theme';
 import { PurchaseEvents, createPaywallProperties } from '../purchase-events';
 import { usePaywall, usePremiumStatus } from '../use-revenuecat';
@@ -17,6 +18,35 @@ import { usePaywallActions } from './usePaywallActions';
 
 type NavigationProp = NativeStackNavigationProp<ExtendedRootStackParams>;
 type VipPaywallRouteProp = RouteProp<ExtendedRootStackParams, 'VipPaywall'>;
+
+function VipPaywallSkeleton(): JSX.Element {
+  const { theme } = useTheme();
+  const spacing = theme.spacing;
+
+  return (
+    <View style={{ gap: spacing[3] }}>
+      <View style={{ padding: spacing[4], borderRadius: theme.borderRadius.md, backgroundColor: theme.colors.background.secondary }}>
+        <SkeletonItem variant="title" width="60%" style={{ marginBottom: spacing[2] }} />
+        <SkeletonItem variant="text" width="40%" />
+      </View>
+      <View style={{ padding: spacing[4], borderRadius: theme.borderRadius.md, backgroundColor: theme.colors.background.secondary }}>
+        <SkeletonItem variant="title" width="50%" style={{ marginBottom: spacing[2] }} />
+        <SkeletonItem variant="text" width="35%" />
+      </View>
+      <View style={{ gap: spacing[3] }}>
+        {PREMIUM_BENEFITS.map(([title]) => (
+          <View
+            key={title}
+            style={{ padding: spacing[4], borderRadius: theme.borderRadius.md, backgroundColor: theme.colors.background.secondary }}
+          >
+            <SkeletonItem variant="title" width="55%" style={{ marginBottom: spacing[2] }} />
+            <SkeletonItem variant="text" width="80%" />
+          </View>
+        ))}
+      </View>
+    </View>
+  );
+}
 
 export function VipPaywallScreen(): JSX.Element {
   const navigation = useNavigation<NavigationProp>();
@@ -118,12 +148,7 @@ export function VipPaywallScreen(): JSX.Element {
         ) : null}
 
         {isLoading || isLoadingPremium ? (
-          <View style={{ alignItems: 'center', paddingVertical: spacing[6], gap: spacing[3] }}>
-            <ActivityIndicator color={theme.colors.primary[500]} size="large" />
-            <Text variant="bodySmall" color="text.secondary">
-              Loading Premium options...
-            </Text>
-          </View>
+          <VipPaywallSkeleton />
         ) : error ? (
           <StatusBanner
             status="error"

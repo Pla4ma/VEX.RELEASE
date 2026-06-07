@@ -1,7 +1,6 @@
 import React, { useCallback, type ReactNode } from 'react';
 import {
   View,
-  StyleSheet,
   TouchableWithoutFeedback,
   type ViewStyle,
 } from 'react-native';
@@ -118,12 +117,16 @@ export const Modal: React.FC<ModalProps> = ({
 
 const styles = createSheet({
   container: {
-    ...StyleSheet.absoluteFill,
+    position: 'absolute' as const,
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 1000,
   },
-  backdrop: { ...StyleSheet.absoluteFill },
+  backdrop: { position: 'absolute' as const, left: 0, right: 0, top: 0, bottom: 0 },
   content: {
     width: '90%',
     maxWidth: 400,

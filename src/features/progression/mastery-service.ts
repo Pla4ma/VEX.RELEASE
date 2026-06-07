@@ -18,22 +18,6 @@ import {
   calculatePurityMasteryXp,
 } from './xp-calculators';
 
-interface LegacyMasteryData {
-  durationMastery?: number;
-  purityMastery?: number;
-  consistencyMastery?: number;
-  comebackMastery?: number;
-  bossMastery?: number;
-}
-
-const TRACK_TO_LEGACY_KEY: Record<MasteryTrack, keyof LegacyMasteryData> = {
-  DURATION: 'durationMastery',
-  PURITY: 'purityMastery',
-  CONSISTENCY: 'consistencyMastery',
-  COMEBACK: 'comebackMastery',
-  BOSS: 'bossMastery',
-};
-
 export function calculateMasteryXpFromSession(
   state: UnifiedMasteryState,
   sessionData: {
@@ -173,13 +157,10 @@ export function migrateFromLegacyProgression(
   userId: string,
   oldLevel: number,
   oldXp: number,
-  masteryData?: LegacyMasteryData,
 ): UnifiedMasteryState {
   const state = createInitialMasteryState(userId);
   const xpPerTrack = Math.floor(oldXp / 5);
   for (const track of MASTERY_TRACKS) {
-    const trackKey = TRACK_TO_LEGACY_KEY[track];
-    const bonusXp = masteryData?.[trackKey] ?? 0;
     const xpByTrack: Record<MasteryTrack, number> = {
       DURATION: 0,
       PURITY: 0,
@@ -187,7 +168,7 @@ export function migrateFromLegacyProgression(
       COMEBACK: 0,
       BOSS: 0,
     };
-    xpByTrack[track] = xpPerTrack + bonusXp;
+    xpByTrack[track] = xpPerTrack;
     const result = applyMasteryXp(state, xpByTrack);
     state.tracks[track] = result.newState.tracks[track];
   }

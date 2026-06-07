@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import {
   View,
-  StyleSheet,
 } from 'react-native';
 import { Skeleton } from '../ui/Skeleton';
 import Animated, {
@@ -167,7 +166,11 @@ export const Pulse: React.FC<{ size: number; color: string }> = ({
 
 export const styles = createSheet({
   fullScreen: {
-    ...StyleSheet.absoluteFill,
+    position: 'absolute' as const,
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 100,
