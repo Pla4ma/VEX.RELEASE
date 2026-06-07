@@ -3,6 +3,7 @@
  * the onboarding journey. Continuous breath + parallax translate.
  */
 import React, { useEffect } from 'react';
+import type { ViewStyle } from 'react-native';
 import Animated, {
   Easing,
   useAnimatedStyle,
@@ -78,8 +79,8 @@ export function HeroOrb({
       pointerEvents="none"
       style={{
         position: 'absolute',
-        left: `${anchorX * 100}%` as unknown as number,
-        top: `${anchorY * 100}%` as unknown as number,
+        left: `${anchorX * 100}%` as ViewStyle['left'],
+        top: `${anchorY * 100}%` as ViewStyle['top'],
         width: size,
         height: size,
         marginLeft: -size / 2,
