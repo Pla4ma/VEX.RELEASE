@@ -1,5 +1,11 @@
 import React from 'react';
-import { View, TextInput } from 'react-native';
+import {
+  View,
+  TextInput,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+} from 'react-native';
 import { Button } from '../../../components/primitives/Button';
 import { useTheme } from '../../../theme';
 import { quizPanelStyles } from './QuizPanelStyles';
@@ -18,33 +24,40 @@ export const ShortAnswerInput: React.FC<ShortAnswerInputProps> = ({
   const { theme } = useTheme();
 
   return (
-    <View style={quizPanelStyles.shortAnswerContainer}>
-      <TextInput
-        style={[
-          quizPanelStyles.shortAnswerInput,
-          {
-            color: theme.colors.text.primary,
-            borderColor: theme.colors.border.DEFAULT,
-            backgroundColor: theme.colors.background.primary,
-          },
-        ]}
-        placeholder="Type your answer..."
-        placeholderTextColor={theme.colors.text.muted}
-        value={value}
-        onChangeText={onChangeText}
-        multiline
-        maxLength={500}
-      />
-      <Button
-        size="sm"
-        onPress={onSubmit}
-        disabled={!value.trim()}
-        accessibilityLabel="Submit answer"
-        accessibilityRole="button"
-        accessibilityHint="Double tap to activate"
-      >
-        Submit
-      </Button>
-    </View>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{ flex: 1 }}
+    >
+      <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{ flex: 1 }}>
+        <View style={quizPanelStyles.shortAnswerContainer}>
+          <TextInput
+            style={[
+              quizPanelStyles.shortAnswerInput,
+              {
+                color: theme.colors.text.primary,
+                borderColor: theme.colors.border.DEFAULT,
+                backgroundColor: theme.colors.background.primary,
+              },
+            ]}
+            placeholder="Type your answer..."
+            placeholderTextColor={theme.colors.text.muted}
+            value={value}
+            onChangeText={onChangeText}
+            multiline
+            maxLength={500}
+          />
+          <Button
+            size="sm"
+            onPress={onSubmit}
+            disabled={!value.trim()}
+            accessibilityLabel="Submit answer"
+            accessibilityRole="button"
+            accessibilityHint="Double tap to activate"
+          >
+            Submit
+          </Button>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };

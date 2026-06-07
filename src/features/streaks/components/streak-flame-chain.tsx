@@ -7,6 +7,7 @@ import Animated, {
   withRepeat,
   withSequence,
   withTiming,
+  useReducedMotion,
 } from 'react-native-reanimated';
 
 import { styles } from './streak-flame-chain.styles';
@@ -35,6 +36,7 @@ export const StreakFlameChain: React.FC<StreakFlameChainProps> = ({
   riskLevel,
   streakDays,
 }) => {
+  const reduceMotion = useReducedMotion();
   const pulseAnim = useSharedValue(1);
   useEffect(() => {
     if (isAtRisk) {
@@ -51,7 +53,7 @@ export const StreakFlameChain: React.FC<StreakFlameChainProps> = ({
     }
   }, [isAtRisk, pulseAnim]);
   const pulseStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: pulseAnim.value }],
+    transform: [{ scale: reduceMotion ? 1 : pulseAnim.value }],
   }));
 
   const renderDayNode = (

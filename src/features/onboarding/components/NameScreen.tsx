@@ -1,5 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { TextInput, Pressable, Keyboard } from 'react-native';
+import {
+  TextInput,
+  Pressable,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+} from 'react-native';
 import Animated, {
   FadeIn,
   FadeInUp,
@@ -52,130 +59,137 @@ export function NameScreen({
     ],
   }));
   return (
-    <Box flex={1} bg="background.primary" px="lg" py="xl">
-      {}
-      <Box flexDirection="row" alignItems="center" mb="md">
-        {onBack && (
-          <Pressable onPress={onBack} style={{ marginRight: 12 }}>
-            <Box p="xs">
-              <Text variant="h3" color="text.secondary">
-                ‹
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{ flex: 1 }}
+    >
+      <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{ flex: 1 }}>
+        <Box flex={1} bg="background.primary" px="lg" py="xl">
+          {}
+          <Box flexDirection="row" alignItems="center" mb="md">
+            {onBack && (
+              <Pressable onPress={onBack} style={{ marginRight: 12 }}>
+                <Box p="xs">
+                  <Text variant="h3" color="text.secondary">
+                    ‹
+                  </Text>
+                </Box>
+              </Pressable>
+            )}
+          </Box>
+
+          {}
+          <Animated.View entering={FadeIn.duration(400)}>
+            <Box gap="sm" mb="xl">
+              <Text variant="label" color="primary.500">
+                Step 3 of 4
+              </Text>
+              <Text variant="h2" color="text.primary">
+                What should we call you?
+              </Text>
+              <Text variant="body" color="text.secondary">
+                This is how you'll appear to your squad.
               </Text>
             </Box>
-          </Pressable>
-        )}
-      </Box>
+          </Animated.View>
 
-      {}
-      <Animated.View entering={FadeIn.duration(400)}>
-        <Box gap="sm" mb="xl">
-          <Text variant="label" color="primary.500">
-            Step 3 of 4
-          </Text>
-          <Text variant="h2" color="text.primary">
-            What should we call you?
-          </Text>
-          <Text variant="body" color="text.secondary">
-            This is how you'll appear to your squad.
-          </Text>
-        </Box>
-      </Animated.View>
-
-      {}
-      <Animated.View
-        entering={FadeInUp.duration(500).delay(200)}
-        style={{ width: '100%' }}
-      >
-        <Animated.View
-          style={[
-            {
-              borderRadius: 16,
-              borderWidth: 2,
-              backgroundColor: theme.colors.background.secondary,
-              padding: theme.spacing[4],
-            },
-            inputAnimatedStyle,
-          ]}
-        >
-          <TextInput
-            ref={inputRef}
-            value={name}
-            onChangeText={setName}
-            placeholder="Enter your name"
-            placeholderTextColor={theme.colors.text.placeholder}
-            onFocus={() => setIsFocused(true)}
-            onBlur={() => setIsFocused(false)}
-            onSubmitEditing={handleContinue}
-            returnKeyType="done"
-            maxLength={30}
-            style={{
-              fontSize: 24,
-              fontWeight: '600',
-              color: theme.colors.text.primary,
-              textAlign: 'center',
-            }}
-          />
-        </Animated.View>
-
-        {}
-        <Box mt="sm" alignItems="center">
-          <Text
-            variant="caption"
-            color={
-              name.length > 0 && !isValid ? 'error.DEFAULT' : 'text.tertiary'
-            }
+          {}
+          <Animated.View
+            entering={FadeInUp.duration(500).delay(200)}
+            style={{ width: '100%' }}
           >
-            {name.length > 0 && !isValid
-              ? 'Name must be at least 2 characters'
-              : `${name.length}/30 characters`}
-          </Text>
+            <Animated.View
+              style={[
+                {
+                  borderRadius: 16,
+                  borderWidth: 2,
+                  backgroundColor: theme.colors.background.secondary,
+                  padding: theme.spacing[4],
+                },
+                inputAnimatedStyle,
+              ]}
+            >
+              <TextInput
+                ref={inputRef}
+                value={name}
+                onChangeText={setName}
+                placeholder="Enter your name"
+                placeholderTextColor={theme.colors.text.placeholder}
+                onFocus={() => setIsFocused(true)}
+                onBlur={() => setIsFocused(false)}
+                onSubmitEditing={handleContinue}
+                returnKeyType="done"
+                maxLength={30}
+                style={{
+                  fontSize: 24,
+                  fontWeight: '600',
+                  color: theme.colors.text.primary,
+                  textAlign: 'center',
+                }}
+              />
+            </Animated.View>
+
+            {}
+            <Box mt="sm" alignItems="center">
+              <Text
+                variant="caption"
+                color={
+                  name.length > 0 && !isValid ? 'error.DEFAULT' : 'text.tertiary'
+                }
+              >
+                {name.length > 0 && !isValid
+                  ? 'Name must be at least 2 characters'
+                  : `${name.length}/30 characters`}
+              </Text>
+            </Box>
+          </Animated.View>
+
+          {}
+          {isValid && <NameAvatarPreview name={name} />}
+
+          {}
+          <Box flex={1} minHeight={40} />
+
+          {}
+          <Animated.View
+            entering={FadeInUp.duration(400).delay(400)}
+            style={{ width: '100%' }}
+          >
+            <Button
+              variant="primary"
+              size="lg"
+              fullWidth
+              onPress={handleContinue}
+              disabled={!isValid}
+              accessibilityLabel="Continue"
+              accessibilityRole="button"
+              accessibilityHint="Double tap to select"
+            >
+              Continue →
+            </Button>
+          </Animated.View>
+
+          {}
+          <Animated.View
+            entering={FadeIn.duration(400).delay(500)}
+            style={{ marginTop: 'auto' }}
+          >
+            <Pressable
+              onPress={onSkip}
+              accessibilityLabel="Skip for now"
+              accessibilityRole="button"
+              accessibilityHint="Double tap to select"
+            >
+              <Box alignItems="center" py="md">
+                <Text variant="bodySmall" color="text.tertiary">
+                  Skip for now ›
+                </Text>
+              </Box>
+            </Pressable>
+          </Animated.View>
         </Box>
-      </Animated.View>
-
-      {}
-      {isValid && <NameAvatarPreview name={name} />}
-
-      {}
-      <Box flex={1} minHeight={40} />
-
-      {}
-      <Animated.View
-        entering={FadeInUp.duration(400).delay(400)}
-        style={{ width: '100%' }}
-      >
-        <Button
-          variant="primary"
-          size="lg"
-          fullWidth
-          onPress={handleContinue}
-          disabled={!isValid}
-          accessibilityLabel="Continue"
-          accessibilityRole="button"
-          accessibilityHint="Double tap to select"
-        >
-          Continue →
-        </Button>
-      </Animated.View>
-
-      {}
-      <Animated.View
-        entering={FadeIn.duration(400).delay(500)}
-        style={{ marginTop: 'auto' }}
-      >
-        <Pressable
-          onPress={onSkip}
-          accessibilityLabel="Skip for now"
-          accessibilityRole="button"
-          accessibilityHint="Double tap to select"
-        >
-          <Box alignItems="center" py="md">
-            <Text variant="bodySmall" color="text.tertiary">
-              Skip for now ›
-            </Text>
-          </Box>
-        </Pressable>
-      </Animated.View>
-    </Box>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 export default NameScreen;

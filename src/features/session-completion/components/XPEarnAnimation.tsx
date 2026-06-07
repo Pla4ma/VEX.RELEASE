@@ -5,6 +5,7 @@ import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withTiming,
+  useReducedMotion,
 } from 'react-native-reanimated';
 
 import { Box, Text } from '../../../components/primitives';
@@ -75,6 +76,7 @@ export function XPEarnAnimation({
   totalXp,
 }: XPEarnAnimationProps): JSX.Element {
   const { theme } = useTheme();
+  const reduceMotion = useReducedMotion();
   const progress = useSharedValue(0);
   const items = useMemo(
     () => buildXpLineItems(summary, totalXp),
@@ -90,7 +92,7 @@ export function XPEarnAnimation({
   }, [progress, targetProgress]);
 
   const fillStyle = useAnimatedStyle(() => ({
-    width: `${progress.value * 100}%`,
+    width: reduceMotion ? `${targetProgress * 100}%` : `${progress.value * 100}%`,
   }));
 
   return (

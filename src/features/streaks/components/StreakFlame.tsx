@@ -4,6 +4,7 @@ import Animated, {
   withRepeat,
   withSequence,
   withSpring,
+  useReducedMotion,
 } from 'react-native-reanimated';
 import { Text } from '../../../components/primitives/Text';
 import { Box } from '../../../components/primitives/Box';
@@ -13,20 +14,25 @@ import { lightColors } from '@/theme/tokens/colors';
 
 
 export function StreakFlame({ days }: { days: number }): JSX.Element {
-  const flameStyle = useAnimatedStyle(() => ({
-    transform: [
-      {
-        scale: withRepeat(
-          withSequence(
-            withSpring(1.1, { damping: 3, stiffness: 100 }),
-            withSpring(1, { damping: 3, stiffness: 100 }),
-          ),
-          -1,
-          true,
-        ),
-      },
-    ],
-  }));
+  const reduceMotion = useReducedMotion();
+  const flameStyle = useAnimatedStyle(() =>
+    reduceMotion
+      ? { transform: [{ scale: 1 }] }
+      : {
+          transform: [
+            {
+              scale: withRepeat(
+                withSequence(
+                  withSpring(1.1, { damping: 3, stiffness: 100 }),
+                  withSpring(1, { damping: 3, stiffness: 100 }),
+                ),
+                -1,
+                true,
+              ),
+            },
+          ],
+        },
+  );
   const getFlameSize = (): number => {
     if (days >= 100) {return 80;}
     if (days >= 60) {return 70;}
