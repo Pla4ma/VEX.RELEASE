@@ -31,7 +31,7 @@ export function checkQuestCompletion(
   const gradeUpper = grade.toUpperCase();
   let questCompleted: ComebackQuestStage | null = null;
 
-  // Check Quest 1 (15 minutes, any grade)
+  // Check Quest 1 (15 minutes, all grades accepted)
   if (!quest.quest1Completed) {
     const quest1Met = sessionDuration >= COMEBACK_QUEST_CONFIG.quest1.duration;
     if (quest1Met) {
