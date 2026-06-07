@@ -1,13 +1,14 @@
 import React from 'react';
 import { View } from 'react-native';
 import { FlashList, type ListRenderItem } from '@shopify/flash-list';
-import { Badge } from '../../../components/Badge';
-import { Box, Card, Text } from '../../../components/primitives';
+import { Box, Text } from '../../../components/primitives';
+import { GlassCard } from '../../../components/glass/GlassCard';
+import { GlassPill } from '../../../components/glass/GlassPill';
 import { ErrorState } from '../../../components/states/ErrorState';
 import { Skeleton } from '../../../components/ui/Skeleton';
 import { usePersonalBests } from '../../../features/personal-bests/hooks';
 import type { PersonalBest } from '../../../features/personal-bests/types';
-import { useTheme } from '../../../theme';
+import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 
 const ESTIMATED_ITEM_SIZE = 88;
 
@@ -32,64 +33,73 @@ function formatDate(value: string): string {
 }
 
 function PersonalBestCard({ item }: { item: PersonalBest }): JSX.Element {
-  const { theme } = useTheme();
   const label = `${formatMode(item.sessionMode)} ${formatDuration(item.durationBucket)}, ${Math.round(item.bestPurityScore)} purity, grade ${item.bestGrade}`;
   return (
-    <Card
-      accessibilityLabel={label}
-      size="md"
-      style={{
-        backgroundColor: theme.colors.background.secondary,
-        marginBottom: theme.spacing[3],
-      }}
-    >
-      <Box
-        flexDirection="row"
-        justifyContent="space-between"
-        alignItems="center"
+    <View style={{ marginBottom: 10 }}>
+      <GlassCard
+        accessibilityLabel={label}
+        size="md"
+        padding={14}
+        radius={20}
+        variant="default"
       >
-        <Box flex={1}>
-          <Text variant="h4" color="text.primary">
-            {formatMode(item.sessionMode)}
-          </Text>
-          <Text variant="caption" color="text.secondary" mt="xs">
-            {`${formatDuration(item.durationBucket)} · Set ${formatDate(item.achievedAt)}`}
-          </Text>
+        <Box
+          flexDirection="row"
+          justifyContent="space-between"
+          alignItems="center"
+        >
+          <Box flex={1}>
+            <Text
+              style={{
+                color: vexLightGlass.text.primary,
+                fontSize: 15,
+                fontWeight: '800',
+                letterSpacing: -0.2,
+              }}
+            >
+              {formatMode(item.sessionMode)}
+            </Text>
+            <Text
+              style={{
+                color: vexLightGlass.text.secondary,
+                fontSize: 12,
+                marginTop: 2,
+              }}
+            >
+              {`${formatDuration(item.durationBucket)} · Set ${formatDate(item.achievedAt)}`}
+            </Text>
+          </Box>
+          <View style={{ alignItems: 'flex-end', gap: 4 }}>
+            <GlassPill
+              label={`Grade ${item.bestGrade}`}
+              variant="premium"
+              size="sm"
+            />
+            <Text
+              style={{
+                color: vexLightGlass.text.tertiary,
+                fontSize: 11,
+                fontWeight: '600',
+              }}
+            >
+              {`${Math.round(item.bestPurityScore)} purity`}
+            </Text>
+          </View>
         </Box>
-        <Box alignItems="flex-end">
-          <Badge variant="primary" size="sm">{`Grade ${item.bestGrade}`}</Badge>
-          <Text variant="caption" color="text.tertiary" mt="xs">
-            {`${Math.round(item.bestPurityScore)} purity`}
-          </Text>
-        </Box>
-      </Box>
-    </Card>
+      </GlassCard>
+    </View>
   );
 }
 
 function PersonalBestsSkeleton(): JSX.Element {
-  const { theme } = useTheme();
   return (
-    <Card
-      size="lg"
-      style={{ backgroundColor: theme.colors.background.secondary }}
-    >
-      <Skeleton
-        width="44%"
-        height={theme.spacing[5]}
-        borderRadius={theme.borderRadius.md}
-      />
-      <Box mt="md" gap="sm">
-        <Skeleton
-          height={theme.spacing[12]}
-          borderRadius={theme.borderRadius.lg}
-        />
-        <Skeleton
-          height={theme.spacing[12]}
-          borderRadius={theme.borderRadius.lg}
-        />
+    <GlassCard size="lg" padding={18} radius={26} variant="default">
+      <Skeleton width="44%" height={20} borderRadius={8} />
+      <Box mt={12} gap={10}>
+        <Skeleton height={64} borderRadius={16} />
+        <Skeleton height={64} borderRadius={16} />
       </Box>
-    </Card>
+    </GlassCard>
   );
 }
 
@@ -98,7 +108,6 @@ export function PersonalBestsGrid({
 }: {
   userId: string | null;
 }): JSX.Element {
-  const { theme } = useTheme();
   const query = usePersonalBests(userId);
   const renderItem: ListRenderItem<PersonalBest> = ({ item }) => (
     <PersonalBestCard item={item} />
@@ -117,24 +126,35 @@ export function PersonalBestsGrid({
   }
   if (query.data.length === 0) {
     return (
-      <Card
-        size="lg"
-        style={{ backgroundColor: theme.colors.background.secondary }}
-      >
-        <Text variant="h4" color="text.primary">
+      <GlassCard size="lg" padding={18} radius={26} variant="default">
+        <Text
+          style={{
+            color: vexLightGlass.text.primary,
+            fontSize: 16,
+            fontWeight: '800',
+            letterSpacing: -0.2,
+          }}
+        >
           Personal bests
         </Text>
-        <Text variant="body" color="text.secondary" mt="sm">
+        <Text
+          style={{
+            color: vexLightGlass.text.secondary,
+            fontSize: 13,
+            lineHeight: 19,
+            marginTop: 6,
+          }}
+        >
           Complete a session to set your first personal best.
         </Text>
-      </Card>
+      </GlassCard>
     );
   }
   return (
     <View
       style={{
         height: Math.max(
-          theme.spacing[24] * 2,
+          192,
           query.data.length * ESTIMATED_ITEM_SIZE,
         ),
       }}

@@ -15,7 +15,6 @@ import Animated, {
   withSpring,
 } from 'react-native-reanimated';
 import { useTheme } from '../../theme';
-import { depth, glow, glassEdge } from '../../theme/tokens/elevation';
 import { springPresets } from '../../theme/tokens/motion';
 
 export type CardVariant =
@@ -24,7 +23,11 @@ export type CardVariant =
   | 'outlined'
   | 'ghost'
   | 'premium'
-  | 'glass';
+  | 'glass'
+  | 'lightGlass'
+  | 'lightHero'
+  | 'lightSelected'
+  | 'lightSuccess';
 export type CardSize = 'sm' | 'md' | 'lg';
 export type CardState =
   | 'default'
@@ -85,43 +88,100 @@ export const Card = forwardRef<View, CardProps>(
 
     const variantStyles: Record<CardVariant, ViewStyle> = {
       default: {
-        backgroundColor: semantic.surface,
-        borderColor: semantic.border,
+        backgroundColor: 'rgba(255, 255, 255, 0.58)',
+        borderColor: 'rgba(255, 255, 255, 0.74)',
         borderWidth: 1,
-        ...depth.resting,
+        shadowColor: 'rgba(13, 76, 65, 0.13)',
+        shadowOpacity: 0.16,
+        shadowRadius: 22,
+        shadowOffset: { width: 0, height: 12 },
+        elevation: 5,
+      },
+      lightGlass: {
+        backgroundColor: 'rgba(255, 255, 255, 0.58)',
+        borderColor: 'rgba(255, 255, 255, 0.74)',
+        borderWidth: 1,
+        shadowColor: 'rgba(13, 76, 65, 0.13)',
+        shadowOpacity: 0.16,
+        shadowRadius: 22,
+        shadowOffset: { width: 0, height: 12 },
+        elevation: 5,
       },
       elevated: {
-        backgroundColor: semantic.surfaceElevated,
-        borderColor: semantic.border,
+        backgroundColor: 'rgba(255, 255, 255, 0.76)',
+        borderColor: 'rgba(255, 255, 255, 0.84)',
         borderWidth: 1,
-        ...depth.floating,
+        shadowColor: 'rgba(13, 76, 65, 0.22)',
+        shadowOpacity: 0.2,
+        shadowRadius: 28,
+        shadowOffset: { width: 0, height: 16 },
+        elevation: 8,
+      },
+      lightHero: {
+        backgroundColor: 'rgba(255, 255, 255, 0.66)',
+        borderColor: 'rgba(255, 255, 255, 0.78)',
+        borderWidth: 1,
+        shadowColor: '#0C765F',
+        shadowOpacity: 0.18,
+        shadowRadius: 36,
+        shadowOffset: { width: 0, height: 20 },
+        elevation: 10,
+      },
+      lightSelected: {
+        backgroundColor: 'rgba(255, 255, 255, 0.78)',
+        borderColor: '#42CFAE',
+        borderWidth: 1.4,
+        shadowColor: '#18B894',
+        shadowOpacity: 0.22,
+        shadowRadius: 26,
+        shadowOffset: { width: 0, height: 14 },
+        elevation: 8,
+      },
+      lightSuccess: {
+        backgroundColor: 'rgba(255, 255, 255, 0.62)',
+        borderColor: 'rgba(66, 207, 174, 0.45)',
+        borderWidth: 1,
+        shadowColor: '#18B894',
+        shadowOpacity: 0.18,
+        shadowRadius: 22,
+        shadowOffset: { width: 0, height: 12 },
+        elevation: 6,
       },
       outlined: {
         backgroundColor: 'transparent',
-        borderColor: semantic.borderStrong,
+        borderColor: 'rgba(13, 76, 65, 0.18)',
         borderWidth: 1,
       },
       ghost: {
         backgroundColor: 'transparent',
       },
       glass: {
-        backgroundColor: semantic.surfaceGlass,
-        ...glassEdge,
-        ...depth.raised,
+        backgroundColor: 'rgba(255, 255, 255, 0.58)',
+        borderColor: 'rgba(255, 255, 255, 0.74)',
+        borderWidth: 1,
+        shadowColor: 'rgba(13, 76, 65, 0.13)',
+        shadowOpacity: 0.16,
+        shadowRadius: 22,
+        shadowOffset: { width: 0, height: 12 },
+        elevation: 5,
       },
       premium: {
-        backgroundColor: semantic.surfaceElevated,
-        borderColor: semantic.primary,
-        borderWidth: 1,
-        ...glow(semantic.primary, 'soft'),
+        backgroundColor: 'rgba(255, 255, 255, 0.78)',
+        borderColor: 'rgba(121, 223, 201, 0.7)',
+        borderWidth: 1.2,
+        shadowColor: '#109779',
+        shadowOpacity: 0.22,
+        shadowRadius: 28,
+        shadowOffset: { width: 0, height: 16 },
+        elevation: 10,
       },
     };
 
     const sizeStyles: Record<CardSize, ViewStyle> = {
-      sm: { borderRadius: theme.borderRadius.lg, padding: theme.spacing[3] },
-      md: { borderRadius: theme.borderRadius.xl, padding: theme.spacing[4] },
+      sm: { borderRadius: 20, padding: theme.spacing[3] },
+      md: { borderRadius: 24, padding: theme.spacing[4] },
       lg: {
-        borderRadius: theme.borderRadius['2xl'],
+        borderRadius: 28,
         padding: theme.spacing[5],
       },
     };
@@ -130,8 +190,8 @@ export const Card = forwardRef<View, CardProps>(
       default: {},
       loading: { opacity: 0.72 },
       disabled: { opacity: 0.62 },
-      error: { borderColor: semantic.danger, borderWidth: 1 },
-      success: { borderColor: semantic.success, borderWidth: 1 },
+      error: { borderColor: '#E05E5E', borderWidth: 1 },
+      success: { borderColor: '#18B894', borderWidth: 1 },
     };
     const combined = [
       { overflow: 'hidden' as const },

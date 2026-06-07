@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import { View, Pressable, ActivityIndicator } from 'react-native';
 import Animated, { FadeInUp, FadeOutUp } from 'react-native-reanimated';
 import { Text } from '../../../components/primitives/Text';
-import { Button } from '../../../components/primitives/Button';
-import { useTheme } from '../../../theme';
+import { LiquidButton } from '../../../components/glass/LiquidButton';
+import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import { triggerHaptic } from '../../../utils/haptics';
 import {
   type AsyncStatus,
@@ -23,9 +23,8 @@ export const StatusBanner: React.FC<StatusFeedbackProps> = ({
   actionLabel,
   onAction,
 }) => {
-  const { theme } = useTheme();
   const config = STATUS_CONFIG[status];
-  const color = getStatusColor(status, theme);
+  const color = getStatusColor(status, {} as never);
 
   useEffect(() => {
     if (status === 'success' && autoDismissSuccess) {
@@ -59,113 +58,116 @@ export const StatusBanner: React.FC<StatusFeedbackProps> = ({
       exiting={FadeOutUp.duration(200)}
       style={{
         backgroundColor: isError
-          ? theme.colors.error[50]
+          ? 'rgba(192, 57, 43, 0.08)'
           : isOffline
-            ? theme.colors.background.tertiary
+            ? vexLightGlass.background.pageMid
             : `${color}10`,
-        borderRadius: theme.borderRadius.xl,
+        borderRadius: 20,
         borderWidth: 1,
         borderColor: isError
-          ? theme.colors.error.light
+          ? 'rgba(192, 57, 43, 0.25)'
           : isOffline
-            ? theme.colors.border.DEFAULT
+            ? 'rgba(16, 35, 31, 0.15)'
             : `${color}30`,
-        padding: theme.spacing[4],
-        gap: theme.spacing[2],
+        padding: 16,
+        gap: 8,
       }}
     >
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          gap: theme.spacing[3],
-        }}
-      >
-        <View
-          style={{
-            width: 36,
-            height: 36,
-            borderRadius: 18,
-            backgroundColor: isError ? theme.colors.error[50] : `${color}20`,
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          {status === 'loading' || status === 'retrying' ? (
-            <ActivityIndicator size="small" color={color} />
-          ) : (
-            <Text
-              style={{
-                color: isError ? theme.colors.error.DEFAULT : color,
-                fontSize: 16,
-                fontWeight: '700',
-              }}
-            >
-              {config.icon}
-            </Text>
-          )}
-        </View>
-        <View style={{ flex: 1, gap: 2 }}>
-          <Text
-            variant="bodySmall"
-            color={
-              isError ? theme.colors.error.DEFAULT : theme.colors.text.primary
-            }
-            style={{ fontWeight: '700' }}
-          >
-            {displayMessage}
-          </Text>
-          {description && (
-            <Text variant="caption" color={theme.colors.text.secondary}>
-              {description}
-            </Text>
-          )}
-        </View>
-        {onDismiss && (
-          <Pressable
-            onPress={onDismiss}
-            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-            accessibilityLabel="Dismiss"
-            accessibilityRole="button"
-            accessibilityHint="Dismisses this notification"
-          >
-            <Text color={theme.colors.text.tertiary}>✕</Text>
-          </Pressable>
-        )}
-      </View>
-      {(onRetry || onAction) && (
         <View
           style={{
             flexDirection: 'row',
-            gap: theme.spacing[2],
-            marginTop: theme.spacing[2],
+            alignItems: 'center',
+            gap: 12,
           }}
         >
-          {onRetry && (
-            <Button
-              variant="outline"
-              size="sm"
-              onPress={onRetry}
-              accessibilityLabel="Retry loading"
-              accessibilityRole="button"
-              accessibilityHint="Double tap to activate"
+          <View
+            style={{
+              width: 36,
+              height: 36,
+              borderRadius: 18,
+              backgroundColor: isError ? 'rgba(192, 57, 43, 0.12)' : `${color}20`,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            {status === 'loading' || status === 'retrying' ? (
+              <ActivityIndicator size="small" color={color} />
+            ) : (
+              <Text
+                style={{
+                  color: isError ? '#C0392B' : color,
+                  fontSize: 16,
+                  fontWeight: '700',
+                }}
+              >
+                {config.icon}
+              </Text>
+            )}
+          </View>
+          <View style={{ flex: 1, gap: 2 }}>
+            <Text
+              variant="bodySmall"
+              style={{
+                color: isError ? '#C0392B' : vexLightGlass.text.primary,
+                fontWeight: '700',
+                fontSize: 14,
+              }}
             >
-              Retry
-            </Button>
-          )}
-          {onAction && (
-            <Button
-              size="sm"
-              onPress={onAction}
-              accessibilityLabel="Perform action"
+              {displayMessage}
+            </Text>
+            {description && (
+              <Text
+                variant="caption"
+                style={{
+                  color: vexLightGlass.text.secondary,
+                  fontSize: 13,
+                }}
+              >
+                {description}
+              </Text>
+            )}
+          </View>
+          {onDismiss && (
+            <Pressable
+              onPress={onDismiss}
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+              accessibilityLabel="Dismiss"
               accessibilityRole="button"
-              accessibilityHint="Double tap to activate"
+              accessibilityHint="Dismisses this notification"
             >
-              {actionLabel || 'Continue'}
-            </Button>
+              <Text style={{ color: vexLightGlass.text.disabled }}>✕</Text>
+            </Pressable>
           )}
         </View>
-      )}
+        {(onRetry || onAction) && (
+          <View
+            style={{
+              flexDirection: 'row',
+              gap: 8,
+              marginTop: 8,
+            }}
+          >
+            {onRetry && (
+              <LiquidButton
+                variant="secondary"
+                label="Retry"
+                size="sm"
+                onPress={onRetry}
+                accessibilityLabel="Retry loading"
+                accessibilityHint="Double tap to activate"
+              />
+            )}
+            {onAction && (
+              <LiquidButton
+                label={actionLabel || 'Continue'}
+                size="sm"
+                onPress={onAction}
+                accessibilityLabel="Perform action"
+                accessibilityHint="Double tap to activate"
+              />
+            )}
+          </View>
+        )}
     </Animated.View>
   );
 };

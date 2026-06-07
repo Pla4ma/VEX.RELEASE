@@ -1,6 +1,6 @@
 import type { InterventionType } from './intervention-types';
 import type { ColorPalette } from '../../../theme/colorTypes';
-import { lightColors } from '@/theme/tokens/colors';
+import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 
 interface BannerColors {
   bg: string;
@@ -8,24 +8,23 @@ interface BannerColors {
   accent: string;
 }
 
-const SEVERITY_COLOR_MAP: Record<InterventionType, (colors: ColorPalette) => string> = {
-  BURNOUT: (c) => c.warning?.[500] ?? lightColors.semantic.warning,
-  PLATEAU: (c) => c.info?.[500] ?? lightColors.accent.blue,
-  STREAK_RISK: (c) => c.error?.[500] ?? lightColors.semantic.danger,
-  BOSS_FINISH: (c) => c.success?.[500] ?? lightColors.semantic.success,
-  BOSS_OPPORTUNITY: (c) => c.success?.[500] ?? lightColors.semantic.success,
-  STUDY_BEHIND: (c) => c.warning?.[500] ?? lightColors.semantic.warning,
-  MOMENTUM_BUILDING: (c) => c.primary?.[500] ?? lightColors.accent.purple,
-  COMEBACK_READY: (c) => c.primary?.[500] ?? lightColors.accent.purple,
-  STUDY_PLAN_COMPLETE: (c) => c.success?.[500] ?? lightColors.semantic.success,
+const SEVERITY_COLOR_MAP: Record<InterventionType, string> = {
+  BURNOUT: vexLightGlass.semantic.warning,
+  PLATEAU: '#54AEEA',
+  STREAK_RISK: vexLightGlass.semantic.danger,
+  BOSS_FINISH: vexLightGlass.semantic.success,
+  BOSS_OPPORTUNITY: vexLightGlass.semantic.success,
+  STUDY_BEHIND: vexLightGlass.semantic.warning,
+  MOMENTUM_BUILDING: '#8B5CF6',
+  COMEBACK_READY: '#8B5CF6',
+  STUDY_PLAN_COMPLETE: vexLightGlass.semantic.success,
 };
 
 export function getBannerColors(
   type: InterventionType,
-  colors: ColorPalette,
+  _colors: ColorPalette,
 ): BannerColors {
-  const resolveColor = SEVERITY_COLOR_MAP[type] ?? SEVERITY_COLOR_MAP.MOMENTUM_BUILDING;
-  const color = resolveColor(colors);
+  const color = SEVERITY_COLOR_MAP[type] ?? SEVERITY_COLOR_MAP.MOMENTUM_BUILDING;
   return { bg: color + '15', border: color, accent: color };
 }
 

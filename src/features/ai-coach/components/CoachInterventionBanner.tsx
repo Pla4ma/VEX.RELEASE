@@ -3,8 +3,8 @@ import { buttonTap } from '../../../utils/haptics';
 import React, { useCallback, useEffect, useState } from 'react';
 import { View, Pressable } from 'react-native';
 import Animated, { FadeInDown, FadeOutUp } from 'react-native-reanimated';
-import { useTheme } from '../../../theme/ThemeContext';
 import { Text } from '../../../components';
+import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import { MMKVStorageAdapter } from '../../../persistence/MMKVStorageAdapter';
 import type { Intervention, CoachInterventionBannerProps } from './intervention-types';
 import { DISMISSAL_STORAGE_KEY, DISMISSAL_TTL_HOURS } from './intervention-types';
@@ -23,7 +23,6 @@ export function CoachInterventionBanner({
   onAction,
   onDismiss,
 }: CoachInterventionBannerProps): JSX.Element | null {
-  const { theme } = useTheme();
   const [isDismissed, setIsDismissed] = useState(false);
   const [storage] = useState(
     () => new MMKVStorageAdapter('coach-interventions'),
@@ -95,7 +94,7 @@ export function CoachInterventionBanner({
   if (!intervention || isDismissed) {
     return null;
   }
-  const colors = getBannerColors(intervention.type, theme.colors);
+  const colors = getBannerColors(intervention.type, {} as never);
   const canDismiss = !isNonDismissable(
     intervention.type,
     intervention.hoursRemaining,
@@ -106,28 +105,35 @@ export function CoachInterventionBanner({
       entering={FadeInDown.duration(400)}
       exiting={FadeOutUp.duration(300)}
       style={{
-        marginHorizontal: theme.spacing[4],
-        marginTop: theme.spacing[2],
-        marginBottom: theme.spacing[2],
+        marginHorizontal: 16,
+        marginTop: 8,
+        marginBottom: 8,
         backgroundColor: colors.bg,
-        borderRadius: theme.borderRadius.xl,
+        borderRadius: 20,
         borderWidth: 1,
         borderColor: colors.border,
         overflow: 'hidden',
       }}
     >
-      <View style={{ padding: theme.spacing[4] }}>
+      <View style={{ padding: 16 }}>
         <View
           style={{
             flexDirection: 'row',
             alignItems: 'center',
-            gap: theme.spacing[2],
-            marginBottom: theme.spacing[2],
+            gap: 8,
+            marginBottom: 8,
           }}
         >
           <Text fontSize={20}>{coachAvatar || getIcon(intervention.type)}</Text>
           <View style={{ flex: 1 }}>
-            <Text variant="caption" color="secondary" weight="semibold">
+            <Text
+              variant="caption"
+              style={{
+                color: vexLightGlass.text.secondary,
+                fontWeight: '600',
+                fontSize: 13,
+              }}
+            >
               {coachName} • {intervention.type.replace('_', ' ')}
             </Text>
           </View>
@@ -139,7 +145,10 @@ export function CoachInterventionBanner({
               accessibilityRole="button"
               accessibilityHint="Double tap to activate"
             >
-              <Text fontSize={18} color="secondary">
+              <Text
+                fontSize={18}
+                style={{ color: vexLightGlass.text.secondary }}
+              >
                 ×
               </Text>
             </Pressable>
@@ -148,7 +157,7 @@ export function CoachInterventionBanner({
 
         <Text
           variant="body"
-          style={{ marginBottom: theme.spacing[3], lineHeight: 20 }}
+          style={{ marginBottom: 12, lineHeight: 20, color: vexLightGlass.text.primary, fontSize: 15 }}
         >
           {(intervention.message ?? '').slice(0, 600)}
         </Text>
@@ -157,9 +166,9 @@ export function CoachInterventionBanner({
           onPress={handleAction}
           style={{
             backgroundColor: colors.accent,
-            borderRadius: theme.borderRadius.lg,
-            paddingVertical: theme.spacing[2],
-            paddingHorizontal: theme.spacing[4],
+            borderRadius: 12,
+            paddingVertical: 8,
+            paddingHorizontal: 16,
             alignSelf: 'flex-start',
           }}
           accessibilityLabel={intervention.actionLabel}
@@ -168,7 +177,7 @@ export function CoachInterventionBanner({
         >
           <Text
             style={{
-              color: theme.colors.background.primary,
+              color: '#FFFFFF',
               fontWeight: '600',
               fontSize: 14,
             }}

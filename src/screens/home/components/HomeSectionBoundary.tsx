@@ -1,9 +1,9 @@
 import React from 'react';
 import { Pressable } from 'react-native';
 
-import { Box } from '../../../components/primitives/Box';
+import { GlassCard } from '../../../components/glass/GlassCard';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 
 interface HomeSectionBoundaryProps {
   children: React.ReactNode;
@@ -17,28 +17,30 @@ function SectionErrorFallback({
   sectionName: string;
   onRetry: () => void;
 }): JSX.Element {
-  const { theme } = useTheme();
   return (
     <Pressable
       onPress={onRetry}
       accessibilityLabel={`Retry ${sectionName}`}
       accessibilityRole="button"
     >
-      <Box
-        p="md"
-        borderRadius="lg"
-        bg={theme.colors.background.elevated}
-        borderWidth={1}
-        borderColor={theme.colors.error.light}
-        mb="md"
-      >
-        <Text variant="bodySmall" color="error.DEFAULT">
+      <GlassCard variant="subtle" style={{ marginBottom: 12 }}>
+        <Text
+          variant="bodySmall"
+          style={{ color: '#C0392B', fontSize: 14, fontWeight: '500' }}
+        >
           {sectionName} did not load.
         </Text>
-        <Text variant="caption" color="text.secondary">
+        <Text
+          variant="caption"
+          style={{
+            color: vexLightGlass.text.secondary,
+            fontSize: 13,
+            marginTop: 4,
+          }}
+        >
           Tap to retry.
         </Text>
-      </Box>
+      </GlassCard>
     </Pressable>
   );
 }

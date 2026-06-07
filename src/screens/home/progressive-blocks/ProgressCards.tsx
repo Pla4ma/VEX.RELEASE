@@ -1,10 +1,10 @@
 import React from 'react';
 import { View } from 'react-native';
 
-import { getPremiumCardStyle } from '../../../components/premiumStyles';
-import { Button } from '../../../components/primitives/Button';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { GlassCard } from '../../../components/glass/GlassCard';
+import { LiquidButton } from '../../../components/glass/LiquidButton';
+import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 
 export function ProgressPreviewCard({
   body,
@@ -19,37 +19,48 @@ export function ProgressPreviewCard({
   onPress: () => void;
   title: string;
 }) {
-  const { theme } = useTheme();
   return (
-    <View
-      style={{
-        borderWidth: 1,
-        borderColor: theme.colors.border.light,
-        backgroundColor: theme.colors.background.secondary,
-        padding: theme.spacing[4],
-        gap: theme.spacing[3],
-        ...getPremiumCardStyle('medium'),
-      }}
-    >
-      <Text variant="label" color={theme.colors.text.secondary}>
-        {eyebrow}
-      </Text>
-      <Text variant="h4" color={theme.colors.text.primary}>
-        {title}
-      </Text>
-      <Text variant="bodySmall" color={theme.colors.text.secondary}>
-        {body}
-      </Text>
-      <Button
-        variant="outline"
-        onPress={onPress}
-        accessibilityLabel="Perform action"
-        accessibilityRole="button"
-        accessibilityHint="Double tap to activate"
-      >
-        {ctaLabel}
-      </Button>
-    </View>
+    <GlassCard variant="default" padding={16} radius={22}>
+      <View style={{ gap: 8 }}>
+        <Text
+          style={{
+            color: vexLightGlass.text.secondary,
+            fontSize: 11,
+            fontWeight: '700',
+            letterSpacing: 0.5,
+            textTransform: 'uppercase',
+          }}
+        >
+          {eyebrow}
+        </Text>
+        <Text
+          style={{
+            color: vexLightGlass.text.primary,
+            fontSize: 18,
+            fontWeight: '800',
+            letterSpacing: -0.2,
+          }}
+        >
+          {title}
+        </Text>
+        <Text
+          style={{
+            color: vexLightGlass.text.secondary,
+            fontSize: 13,
+            lineHeight: 19,
+          }}
+        >
+          {body}
+        </Text>
+        <LiquidButton
+          label={ctaLabel}
+          onPress={onPress}
+          variant="outline"
+          accessibilityLabel="Perform action"
+          accessibilityHint="Double tap to activate"
+        />
+      </View>
+    </GlassCard>
   );
 }
 
@@ -70,72 +81,71 @@ export function ReturnReasonCard({
   tone?: 'default' | 'celebration' | 'info' | 'warning';
   title: string;
 }) {
-  const { theme } = useTheme();
-  const toneStyles = {
-    celebration: {
-      backgroundColor: theme.colors.surface.selected,
-      borderColor: theme.colors.primary[200],
-    },
-    default: {
-      backgroundColor: theme.colors.background.secondary,
-      borderColor: theme.colors.primary[100],
-    },
-    info: {
-      backgroundColor: theme.colors.info[50],
-      borderColor: theme.colors.info[500],
-    },
-    warning: {
-      backgroundColor: theme.colors.warning[50],
-      borderColor: theme.colors.warning[500],
-    },
-  }[tone];
+  const variant =
+    tone === 'celebration'
+      ? 'success'
+      : tone === 'warning'
+        ? 'warning'
+        : 'default';
 
   return (
-    <View
-      style={{
-        borderWidth: 1,
-        padding: theme.spacing[4],
-        gap: theme.spacing[3],
-        ...toneStyles,
-        ...getPremiumCardStyle('large'),
-      }}
-    >
-      <Text variant="label" color={theme.colors.primary[500]}>
-        {eyebrow}
-      </Text>
-      <Text variant="h4" color={theme.colors.text.primary}>
-        {title}
-      </Text>
-      <Text variant="bodySmall" color={theme.colors.text.secondary}>
-        {body}
-      </Text>
-      <View
-        style={{
-          flexDirection: 'row',
-          flexWrap: 'wrap',
-          gap: theme.spacing[3],
-        }}
-      >
-        <Button
-          onPress={onPress}
-          accessibilityLabel="Perform action"
-          accessibilityRole="button"
-          accessibilityHint="Double tap to activate"
+    <GlassCard variant={variant} padding={16} radius={22}>
+      <View style={{ gap: 8 }}>
+        <Text
+          style={{
+            color: vexLightGlass.mint[700],
+            fontSize: 11,
+            fontWeight: '700',
+            letterSpacing: 0.5,
+            textTransform: 'uppercase',
+          }}
         >
-          {ctaLabel}
-        </Button>
-        {onDismiss ? (
-          <Button
-            variant="outline"
-            onPress={onDismiss}
-            accessibilityLabel="Dismiss progress card"
-            accessibilityRole="button"
+          {eyebrow}
+        </Text>
+        <Text
+          style={{
+            color: vexLightGlass.text.primary,
+            fontSize: 18,
+            fontWeight: '800',
+            letterSpacing: -0.2,
+          }}
+        >
+          {title}
+        </Text>
+        <Text
+          style={{
+            color: vexLightGlass.text.secondary,
+            fontSize: 13,
+            lineHeight: 19,
+          }}
+        >
+          {body}
+        </Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            gap: 10,
+          }}
+        >
+          <LiquidButton
+            label={ctaLabel}
+            onPress={onPress}
+            variant="primary"
+            accessibilityLabel="Perform action"
             accessibilityHint="Double tap to activate"
-          >
-            Dismiss
-          </Button>
-        ) : null}
+          />
+          {onDismiss ? (
+            <LiquidButton
+              label="Dismiss"
+              onPress={onDismiss}
+              variant="ghost"
+              accessibilityLabel="Dismiss progress card"
+              accessibilityHint="Double tap to activate"
+            />
+          ) : null}
+        </View>
       </View>
-    </View>
+    </GlassCard>
   );
 }

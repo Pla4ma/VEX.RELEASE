@@ -2,16 +2,18 @@ import React from 'react';
 import { View } from 'react-native';
 import { Text } from '@/components/primitives/Text';
 import { StatusBanner } from '@/shared/ui/components/StatusFeedback';
-import { useTheme } from '@/theme';
+import { GlassCard } from '@/components/glass/GlassCard';
+import { GlassPill } from '@/components/glass/GlassPill';
+import { FocusScoreSparkline } from './score-sparkline';
 import { MAX_FOCUS_SCORE } from '../schemas';
 import type { FocusScoreDashboardModel } from '../types';
+import { vexLightGlass } from '@/theme/tokens/vex-light-glass';
 
 interface ScoreCardProps {
   model: FocusScoreDashboardModel;
 }
 
 export function ScoreCard({ model }: ScoreCardProps): JSX.Element | null {
-  const { theme } = useTheme();
   if (!model.current) {return null;}
 
   const latestDelta =
@@ -19,10 +21,9 @@ export function ScoreCard({ model }: ScoreCardProps): JSX.Element | null {
     model.current.currentScore - model.current.previousScore;
   const trendStart = model.history[0]?.score ?? model.current.previousScore;
   const trendDelta = model.current.currentScore - trendStart;
-  const nextTarget = Math.min(MAX_FOCUS_SCORE, model.current.currentScore + 20);
 
   return (
-    <View style={{ gap: theme.spacing[3] }}>
+    <View style={{ gap: 12 }}>
       {model.isOffline ? (
         <StatusBanner
           status="offline"
@@ -37,44 +38,102 @@ export function ScoreCard({ model }: ScoreCardProps): JSX.Element | null {
           description="Updating your latest score signals."
         />
       ) : null}
-      {model.isOptionalDataSyncing ? (
-        <StatusBanner
-          status="loading"
-          message="Calibrating deeper signals"
-          description="Your main Focus Score is ready. Trend and monthly insights will fill in as fresh data syncs."
+      <GlassCard variant="hero" padding={14} radius={18}>
+        <View
+          pointerEvents="none"
+          style={{
+            backgroundColor: 'rgba(95, 230, 197, 0.08)',
+            borderRadius: 200,
+            height: 120,
+            position: 'absolute',
+            right: -60,
+            top: -40,
+            width: 120,
+          }}
         />
-      ) : null}
-      {model.optionalDataError ? (
-        <StatusBanner
-          status="error"
-          message="Some insights are delayed"
-          description="Your current score is stable while history and monthly reports retry in the background."
-        />
-      ) : null}
-      <View
-        style={{
-          borderWidth: 1,
-          borderColor: theme.colors.border.light,
-          borderRadius: theme.borderRadius.lg,
-          padding: theme.spacing[4],
-          gap: theme.spacing[2],
-          backgroundColor: theme.colors.background.secondary,
-        }}
-      >
-        <Text variant="label" color={theme.colors.text.secondary}>
-          Focus Score
-        </Text>
-        <Text variant="h2" color={theme.colors.text.primary}>
-          {model.current.currentScore} · {model.current.band}
-        </Text>
-        <Text variant="bodySmall" color={theme.colors.text.secondary}>
-          Last session delta:{' '}
-          {latestDelta >= 0 ? `+${latestDelta}` : latestDelta}
-        </Text>
-        <Text variant="bodySmall" color={theme.colors.text.secondary}>
-          30-day trend: {trendDelta >= 0 ? `+${trendDelta}` : trendDelta}
-        </Text>
-      </View>
+        <View style={{ alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Text
+            style={{
+              color: vexLightGlass.text.primary,
+              fontSize: 14,
+              fontWeight: '700',
+              letterSpacing: 0.2,
+            }}
+          >
+            Focus Score
+          </Text>
+          <View style={{ alignItems: 'flex-end' }}>
+            <Text
+              style={{
+                color: vexLightGlass.text.secondary,
+                fontSize: 11,
+                fontWeight: '600',
+              }}
+            >
+              Last session
+            </Text>
+            <Text
+              style={{
+                color: latestDelta >= 0 ? vexLightGlass.mint[600] : '#B91C1C',
+                fontSize: 12,
+                fontWeight: '700',
+              }}
+            >
+              {latestDelta >= 0 ? `+${latestDelta}` : `${latestDelta}`}
+            </Text>
+            <Text
+              style={{
+                color: vexLightGlass.text.secondary,
+                fontSize: 11,
+                fontWeight: '600',
+                marginTop: 6,
+              }}
+            >
+              30-day trend
+            </Text>
+            <Text
+              style={{
+                color: trendDelta >= 0 ? vexLightGlass.mint[600] : '#B91C1C',
+                fontSize: 12,
+                fontWeight: '700',
+              }}
+            >
+              {trendDelta >= 0 ? `+${trendDelta}` : `${trendDelta}`}
+            </Text>
+          </View>
+        </View>
+        <View
+          style={{
+            alignItems: 'flex-end',
+            flexDirection: 'row',
+            gap: 12,
+            marginTop: 8,
+          }}
+        >
+          <Text
+            style={{
+              color: vexLightGlass.text.primary,
+              fontSize: 48,
+              fontWeight: '800',
+              letterSpacing: -1.2,
+              lineHeight: 52,
+            }}
+          >
+            {model.current.currentScore}
+          </Text>
+          <View style={{ paddingBottom: 10 }}>
+            <GlassPill label={model.current.band} variant="success" size="md" />
+          </View>
+        </View>
+        <View style={{ marginTop: 4 }}>
+          <FocusScoreSparkline
+            color={vexLightGlass.mint[500]}
+            data={model.history.map((h) => h.score)}
+            height={42}
+            max={MAX_FOCUS_SCORE}
+          />
+        </View>
+      </GlassCard>
     </View>
   );
 }

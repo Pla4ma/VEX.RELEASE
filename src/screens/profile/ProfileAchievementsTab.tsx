@@ -1,11 +1,14 @@
 import React from 'react';
-import { Pressable } from 'react-native';
-import { Box, Card, Text } from '../../components/primitives';
-import { Badge } from '../../components/Badge';
+import { Pressable, View } from 'react-native';
+import { Box, Text } from '../../components/primitives';
+import { GlassCard } from '../../components/glass/GlassCard';
+import { GlassIconOrb } from '../../components/glass/GlassIconOrb';
+import { GlassPill } from '../../components/glass/GlassPill';
 import { EmptyState } from '../../components/EmptyState';
 import { Skeleton } from '../../components/ui/Skeleton';
 import { Icon } from '../../icons';
 import type { Theme } from '../../theme/types';
+import { vexLightGlass } from '../../theme/tokens/vex-light-glass';
 
 interface AchievementCard {
   id: string;
@@ -35,17 +38,18 @@ export const ProfileAchievementsTab: React.FC<ProfileAchievementsTabProps> = ({
   onOpenAchievements,
   onStartSession,
 }) => {
+  void theme;
   if (isLoading) {
     return (
-      <Card size="lg" style={{ backgroundColor: theme.colors.background.secondary }}>
+      <GlassCard size="lg" variant="default" padding={18} radius={26}>
         <Skeleton lines={6} height={22} borderRadius={10} spacing={12} />
-      </Card>
+      </GlassCard>
     );
   }
 
   if (isError) {
     return (
-      <Card size="lg" style={{ backgroundColor: theme.colors.background.secondary }}>
+      <GlassCard size="lg" variant="default" padding={18} radius={26}>
         <EmptyState
           iconName="exclamation-circle"
           title="Achievements unavailable"
@@ -53,13 +57,13 @@ export const ProfileAchievementsTab: React.FC<ProfileAchievementsTabProps> = ({
           actionLabel="Open achievements"
           onAction={onOpenAchievements}
         />
-      </Card>
+      </GlassCard>
     );
   }
 
   if (achievements.length === 0) {
     return (
-      <Card size="lg" style={{ backgroundColor: theme.colors.background.secondary }}>
+      <GlassCard size="lg" variant="default" padding={18} radius={26}>
         <EmptyState
           iconName="plus-circle"
           title="No earned proof yet"
@@ -67,7 +71,7 @@ export const ProfileAchievementsTab: React.FC<ProfileAchievementsTabProps> = ({
           actionLabel="Start session"
           onAction={onStartSession}
         />
-      </Card>
+      </GlassCard>
     );
   }
 
@@ -81,44 +85,68 @@ export const ProfileAchievementsTab: React.FC<ProfileAchievementsTabProps> = ({
           accessibilityRole="button"
           accessibilityHint="Opens the full achievement collection"
         >
-          <Card
-            size="md"
+          <View
             style={{
-              backgroundColor: theme.colors.background.secondary,
-              opacity: item.statusTone === 'success' ? 1 : 0.7,
+              opacity: item.statusTone === 'success' ? 1 : 0.78,
             }}
           >
-            <Box flexDirection="row" alignItems="center" gap={12}>
-              <Box
-                width={44}
-                height={44}
-                borderRadius={12}
-                justifyContent="center"
-                alignItems="center"
-                style={{
-                  backgroundColor:
-                    item.statusTone === 'success'
-                      ? theme.colors.semantic.vexCyanSoft
-                      : theme.colors.background.tertiary,
-                }}
-              >
-                <Icon
-                  name={item.statusTone === 'success' ? 'check-circle' : 'award'}
-                  size={20}
-                  color={item.statusTone === 'success' ? theme.colors.semantic.vexCyan : theme.colors.text.secondary}
-                  variant="outline"
+            <GlassCard
+              size="md"
+              variant={item.statusTone === 'success' ? 'success' : 'subtle'}
+              padding={14}
+              radius={20}
+            >
+              <Box flexDirection="row" alignItems="center" gap={12}>
+                <GlassIconOrb
+                  size={44}
+                  variant={item.statusTone === 'success' ? 'mint' : 'pearl'}
+                >
+                  <Icon
+                    name={item.statusTone === 'success' ? 'check-circle' : 'award'}
+                    size="md"
+                    color={item.statusTone === 'success' ? '#0C765F' : vexLightGlass.text.secondary}
+                    variant="solid"
+                  />
+                </GlassIconOrb>
+                <Box flex={1}>
+                  <Text
+                    style={{
+                      color: vexLightGlass.text.primary,
+                      fontSize: 15,
+                      fontWeight: '800',
+                      letterSpacing: -0.2,
+                    }}
+                  >
+                    {item.title}
+                  </Text>
+                  <Text
+                    style={{
+                      color: vexLightGlass.text.secondary,
+                      fontSize: 12,
+                      lineHeight: 17,
+                    }}
+                  >
+                    {item.description}
+                  </Text>
+                  <Text
+                    style={{
+                      color: vexLightGlass.text.tertiary,
+                      fontSize: 11,
+                      fontWeight: '600',
+                      marginTop: 4,
+                    }}
+                  >
+                    {item.progressLabel}
+                  </Text>
+                </Box>
+                <GlassPill
+                  label={item.statusLabel}
+                  variant={item.statusTone === 'success' ? 'success' : 'neutral'}
+                  size="sm"
                 />
               </Box>
-              <Box flex={1}>
-                <Text variant="h4" color="text.primary">{item.title}</Text>
-                <Text variant="caption" color="text.secondary">{item.description}</Text>
-                <Text variant="caption" color="text.tertiary" style={{ marginTop: 4 }}>
-                  {item.progressLabel}
-                </Text>
-              </Box>
-              <Badge variant={item.statusTone} size="sm">{item.statusLabel}</Badge>
-            </Box>
-          </Card>
+            </GlassCard>
+          </View>
         </Pressable>
       ))}
     </Box>

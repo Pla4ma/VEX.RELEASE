@@ -3,8 +3,8 @@ import { View } from 'react-native';
 
 export function loadingSkeleton(
   spacing: number,
-  borderColor: string,
-  cardColor: string,
+  _borderColor: string,
+  _cardColor: string,
 ): JSX.Element {
   return (
     <View style={{ gap: spacing }}>
@@ -12,11 +12,11 @@ export function loadingSkeleton(
         <View
           key={item}
           style={{
-            height: spacing * 5,
-            borderRadius: spacing,
+            backgroundColor: 'rgba(255, 255, 255, 0.62)',
+            borderColor: 'rgba(255, 255, 255, 0.85)',
+            borderRadius: 24,
             borderWidth: 1,
-            borderColor,
-            backgroundColor: cardColor,
+            height: spacing * 5,
           }}
         />
       ))}

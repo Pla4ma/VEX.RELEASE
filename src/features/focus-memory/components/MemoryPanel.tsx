@@ -1,6 +1,7 @@
 import React from 'react';
 import { Pressable, Text, View } from 'react-native';
-import { useTheme } from '../../../theme/ThemeContext';
+import { GlassCard } from '../../../components/glass/GlassCard';
+import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import type { MemoryPanelProps } from '../memory-panel-types';
 
 export function MemoryPanel({
@@ -10,36 +11,24 @@ export function MemoryPanel({
   isAccepting = false,
   isHiding = false,
 }: MemoryPanelProps) {
-  const { theme } = useTheme();
-  const { colors } = theme;
 
   if (items.length === 0) {return null;}
 
   return (
-    <View
-      style={{
-        marginHorizontal: theme.spacing[4],
-        marginVertical: theme.spacing[2],
-        borderRadius: theme.borderRadius.lg,
-        backgroundColor: colors.semantic.surface,
-        borderWidth: 1,
-        borderColor: colors.border.light,
-        overflow: 'hidden',
-      }}
-    >
+    <GlassCard variant="subtle" style={{ marginHorizontal: 16, marginVertical: 8 }}>
       <View
         style={{
-          padding: theme.spacing[4],
+          padding: 16,
           borderBottomWidth: items.length > 0 ? 1 : 0,
-          borderBottomColor: colors.border.light,
-          gap: theme.spacing[1],
+          borderBottomColor: 'rgba(16, 35, 31, 0.08)',
+          gap: 4,
         }}
       >
         <Text
           style={{
             fontSize: 16,
             fontWeight: '700',
-            color: colors.text.primary,
+            color: vexLightGlass.text.primary,
           }}
           accessibilityRole="header"
         >
@@ -48,7 +37,7 @@ export function MemoryPanel({
         <Text
           style={{
             fontSize: 12,
-            color: colors.text.muted,
+            color: vexLightGlass.text.disabled,
             lineHeight: 16,
           }}
         >
@@ -61,11 +50,11 @@ export function MemoryPanel({
         <View
           key={item.id}
           style={{
-            padding: theme.spacing[3],
-            paddingLeft: theme.spacing[4],
+            padding: 12,
+            paddingLeft: 16,
             borderBottomWidth: index < items.length - 1 ? 1 : 0,
-            borderBottomColor: colors.border.light,
-            gap: theme.spacing[1],
+            borderBottomColor: 'rgba(16, 35, 31, 0.08)',
+            gap: 4,
           }}
         >
           <View
@@ -79,7 +68,7 @@ export function MemoryPanel({
               style={{
                 fontSize: 14,
                 fontWeight: '600',
-                color: colors.text.primary,
+                color: vexLightGlass.text.primary,
                 flex: 1,
               }}
               accessibilityRole="text"
@@ -92,8 +81,8 @@ export function MemoryPanel({
                 fontWeight: '500',
                 color:
                   item.confidence >= 0.7
-                    ? colors.semantic.success
-                    : colors.semantic.warning,
+                    ? vexLightGlass.semantic.success
+                    : vexLightGlass.semantic.warning,
               }}
             >
               {Math.round(item.confidence * 100)}%
@@ -103,14 +92,14 @@ export function MemoryPanel({
           <View
             style={{
               flexDirection: 'row',
-              gap: theme.spacing[1],
+              gap: 4,
               alignItems: 'center',
             }}
           >
             <Text
               style={{
                 fontSize: 11,
-                color: colors.text.muted,
+                color: vexLightGlass.text.disabled,
               }}
             >
               Source: {item.evidence}
@@ -120,13 +109,13 @@ export function MemoryPanel({
                 width: 4,
                 height: 4,
                 borderRadius: 2,
-                backgroundColor: colors.text.muted,
+                backgroundColor: vexLightGlass.text.disabled,
               }}
             />
             <Text
               style={{
                 fontSize: 11,
-                color: colors.text.muted,
+                color: vexLightGlass.text.disabled,
               }}
             >
               {item.type.replace(/_/g, ' ')}
@@ -136,8 +125,8 @@ export function MemoryPanel({
           <View
             style={{
               flexDirection: 'row',
-              gap: theme.spacing[3],
-              marginTop: theme.spacing[1],
+              gap: 12,
+              marginTop: 4,
             }}
           >
             {!item.isHidden && (
@@ -149,16 +138,16 @@ export function MemoryPanel({
                   accessibilityLabel={`Hide "${item.observation}" from memory`}
                   accessibilityHint="Removes this observation. VEX will not use it again."
                   style={({ pressed }) => ({
-                    paddingVertical: theme.spacing[2],
-                    paddingHorizontal: theme.spacing[3],
-                    borderRadius: theme.borderRadius.sm,
+                    paddingVertical: 8,
+                    paddingHorizontal: 12,
+                    borderRadius: 8,
                     opacity: pressed ? 0.6 : 1,
                     minHeight: 44,
                     justifyContent: 'center' as const,
                   })}
                 >
                   <Text
-                    style={{ fontSize: 12, color: colors.semantic.textMuted }}
+                    style={{ fontSize: 12, color: vexLightGlass.text.disabled }}
                   >
                     Hide
                   </Text>
@@ -170,16 +159,16 @@ export function MemoryPanel({
                   accessibilityLabel={`Confirm "${item.observation}" is accurate`}
                   accessibilityHint="Marks this observation as confirmed by you."
                   style={({ pressed }) => ({
-                    paddingVertical: theme.spacing[2],
-                    paddingHorizontal: theme.spacing[3],
-                    borderRadius: theme.borderRadius.sm,
+                    paddingVertical: 8,
+                    paddingHorizontal: 12,
+                    borderRadius: 8,
                     opacity: pressed ? 0.6 : 1,
                     minHeight: 44,
                     justifyContent: 'center' as const,
                   })}
                 >
                   <Text
-                    style={{ fontSize: 12, color: colors.semantic.primary }}
+                    style={{ fontSize: 12, color: vexLightGlass.mint[500] }}
                   >
                     Accept
                   </Text>
@@ -189,6 +178,6 @@ export function MemoryPanel({
           </View>
         </View>
       ))}
-    </View>
+    </GlassCard>
   );
 }

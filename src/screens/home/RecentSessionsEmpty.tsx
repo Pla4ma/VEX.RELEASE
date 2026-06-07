@@ -2,11 +2,10 @@ import React from 'react';
 import { View } from 'react-native';
 
 import { EmptyState } from '../../components/EmptyState';
-import { Button } from '../../components/primitives/Button';
+import { LiquidButton } from '../../components/glass/LiquidButton';
 import { Text } from '../../components/primitives/Text';
-import { getPremiumCardStyle } from '../../components/premiumStyles';
-import { useTheme } from '../../theme';
-import { styles } from './homeScreenCardStyles';
+import { GlassCard } from '../../components/glass/GlassCard';
+import { vexLightGlass } from '../../theme/tokens/vex-light-glass';
 
 export function RecentSessionsEmpty({
   isFirstRun,
@@ -15,50 +14,46 @@ export function RecentSessionsEmpty({
   isFirstRun: boolean;
   onStart: () => void;
 }): JSX.Element {
-  const { theme } = useTheme();
   if (isFirstRun) {
     return (
-      <View
-        style={[
-          styles.card,
-          getPremiumCardStyle('large'),
-          styles.studyCard,
-          {
-            backgroundColor: theme.colors.background.secondary,
-            borderColor: theme.colors.border.light,
-            padding: theme.spacing[4],
-          },
-        ]}
-      >
-        <Text variant="h4" color={theme.colors.text.primary}>
-          One session changes what you see here
-        </Text>
-        <Text variant="body" color={theme.colors.text.secondary}>
-          Start a focus session or study from content. VEX will build your
-          recent activity from real sessions.
-        </Text>
-        <Button
-          onPress={onStart}
-          accessibilityLabel="Start session"
-          accessibilityRole="button"
-          accessibilityHint="Double tap to activate"
-        >
-          Start session
-        </Button>
-      </View>
+      <GlassCard variant="default" padding={20} radius={24}>
+        <View style={{ gap: 10 }}>
+          <Text
+            style={{
+              color: vexLightGlass.text.primary,
+              fontSize: 18,
+              fontWeight: '800',
+              letterSpacing: -0.2,
+            }}
+          >
+            One session changes what you see here
+          </Text>
+          <Text
+            style={{
+              color: vexLightGlass.text.secondary,
+              fontSize: 14,
+              lineHeight: 20,
+            }}
+          >
+            Start a focus session or study from content. VEX will build your
+            recent activity from real sessions.
+          </Text>
+          <View style={{ marginTop: 6 }}>
+            <LiquidButton
+              label="Start session"
+              onPress={onStart}
+              variant="primary"
+              fullWidth
+              accessibilityLabel="Start session"
+              accessibilityHint="Double tap to activate"
+            />
+          </View>
+        </View>
+      </GlassCard>
     );
   }
   return (
-    <View
-      style={[
-        styles.card,
-        getPremiumCardStyle('large'),
-        {
-          backgroundColor: theme.colors.background.secondary,
-          borderColor: theme.colors.border.light,
-        },
-      ]}
-    >
+    <GlassCard variant="default" padding={20} radius={24}>
       <EmptyState
         iconName="clock"
         title="No sessions yet"
@@ -66,6 +61,6 @@ export function RecentSessionsEmpty({
         actionLabel="Start session"
         onAction={onStart}
       />
-    </View>
+    </GlassCard>
   );
 }

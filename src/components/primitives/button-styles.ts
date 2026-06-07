@@ -1,7 +1,6 @@
 import type { ViewStyle } from 'react-native';
 
 import type { Theme } from '../../theme/themeCoreTypes';
-import { glow } from '../../theme/tokens/elevation';
 import type { ButtonProps } from './Button';
 
 interface ButtonSizeConfig {
@@ -10,6 +9,20 @@ interface ButtonSizeConfig {
   minHeight: number;
   fontSize: number;
 }
+
+const LIGHT_MINT = {
+  300: '#72E0C5',
+  400: '#42CFAE',
+  500: '#18B894',
+  600: '#109779',
+  700: '#0C765F',
+};
+
+const LIGHT_TEXT = {
+  primary: '#10231F',
+  secondary: 'rgba(16, 35, 31, 0.68)',
+  inverse: '#FFFFFF',
+};
 
 export function getButtonSizes(
   size: NonNullable<ButtonProps['size']>,
@@ -30,7 +43,7 @@ export function getButtonSizes(
     },
     md: {
       py: theme.spacing[3],
-      px: theme.spacing[4],
+      px: theme.spacing[5],
       minHeight: 48,
       fontSize: 16,
     },
@@ -48,12 +61,11 @@ export function getButtonVariantStyle(
   sizes: ButtonSizeConfig,
   pressed: boolean,
   fullWidth: boolean,
-  theme: Theme,
+  _theme: Theme,
 ): ViewStyle {
-  const semantic = theme.colors.semantic;
   const base: ViewStyle = {
     alignItems: 'center',
-    borderRadius: theme.borderRadius.xl,
+    borderRadius: 999,
     flexDirection: 'row',
     justifyContent: 'center',
     minHeight: sizes.minHeight,
@@ -64,50 +76,71 @@ export function getButtonVariantStyle(
   if (variant === 'primary') {
     return {
       ...base,
-      backgroundColor: pressed ? semantic.primaryPressed : semantic.primary,
-      ...glow(semantic.primary, pressed ? 'soft' : 'whisper'),
+      backgroundColor: pressed ? LIGHT_MINT[600] : LIGHT_MINT[500],
+      borderColor: 'rgba(255, 255, 255, 0.55)',
+      borderWidth: 1,
+      shadowColor: LIGHT_MINT[600],
+      shadowOffset: { width: 0, height: 12 },
+      shadowOpacity: 0.30,
+      shadowRadius: 20,
+      elevation: 8,
     };
   }
   if (variant === 'danger') {
     return {
       ...base,
-      backgroundColor: semantic.danger,
-      ...glow(semantic.danger, pressed ? 'soft' : 'whisper'),
+      backgroundColor: '#E05E5E',
+      borderColor: 'rgba(255, 255, 255, 0.55)',
+      borderWidth: 1,
+      shadowColor: '#E05E5E',
+      shadowOffset: { width: 0, height: 8 },
+      shadowOpacity: 0.32,
+      shadowRadius: 18,
+      elevation: 6,
     };
   }
   if (variant === 'outline') {
     return {
       ...base,
-      backgroundColor: pressed ? semantic.primarySoft : semantic.surfaceGlass,
-      borderColor: semantic.borderStrong,
+      backgroundColor: pressed
+        ? 'rgba(66, 207, 174, 0.18)'
+        : 'rgba(255, 255, 255, 0.62)',
+      borderColor: 'rgba(66, 207, 174, 0.55)',
       borderWidth: 1,
     };
   }
   if (variant === 'ghost') {
     return {
       ...base,
-      backgroundColor: pressed ? semantic.surfaceGlass : 'transparent',
+      backgroundColor: pressed ? 'rgba(255, 255, 255, 0.42)' : 'transparent',
+      borderColor: 'rgba(255, 255, 255, 0.6)',
+      borderWidth: 1,
     };
   }
   return {
     ...base,
     backgroundColor: pressed
-      ? theme.colors.surface.pressed
-      : theme.colors.surface.button,
-    borderColor: semantic.border,
+      ? 'rgba(255, 255, 255, 0.78)'
+      : 'rgba(255, 255, 255, 0.62)',
+    borderColor: 'rgba(255, 255, 255, 0.85)',
     borderWidth: 1,
+    shadowColor: 'rgba(13, 76, 65, 0.20)',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.20,
+    shadowRadius: 14,
+    elevation: 3,
   };
 }
 
 export function getButtonTextColor(
   variant: NonNullable<ButtonProps['variant']>,
-  theme: Theme,
+  _theme: Theme,
 ): string {
   if (variant === 'primary' || variant === 'danger') {
-    return theme.colors.text.inverse;
+    return LIGHT_TEXT.inverse;
   }
   if (variant === 'outline') {
-    return theme.colors.primary[300];
+    return LIGHT_MINT[700];
   }
-  return theme.colors.text.primary;
+  return LIGHT_TEXT.primary;
 }

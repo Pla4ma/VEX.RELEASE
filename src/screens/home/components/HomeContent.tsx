@@ -89,15 +89,15 @@ export const HomeContent: React.FC<HomeContentProps> = ({
       />
 
       <HomeSectionBoundary sectionName="Hero Action">
-        <HomeExperiencePrelude
-          model={homeExperience}
-          firstWeekExperience={firstWeekExperience}
-          surfaceMap={surfaceMap}
-        />
         <HomeHeroSection
           controller={controller}
           surfaceMap={surfaceMap}
           firstWeekExperience={firstWeekExperience}
+        />
+        <HomeExperiencePrelude
+          model={homeExperience}
+          firstWeekExperience={firstWeekExperience}
+          surfaceMap={surfaceMap}
         />
       </HomeSectionBoundary>
 

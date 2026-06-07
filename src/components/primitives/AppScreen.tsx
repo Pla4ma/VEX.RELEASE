@@ -11,7 +11,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useTheme } from '../../theme';
 import { OfflineBanner } from '../../shared/ui/components/OfflineBanner';
-import { PremiumBackdrop } from './PremiumBackdrop';
+import { GlassScreen } from '../glass/GlassScreen';
+import { vexLightGlass } from '../../theme/tokens/vex-light-glass';
 
 interface AppScreenProps {
   children: ReactNode;
@@ -32,15 +33,14 @@ export function AppScreen({
   style,
   bottomInset = true,
 }: AppScreenProps): JSX.Element {
-  const { theme, isDark } = useTheme();
+  const { theme } = useTheme();
   const insets = useSafeAreaInsets();
-  const background = theme.colors.semantic.background;
   const content = {
     paddingBottom: bottomInset
-      ? insets.bottom + theme.spacing[8]
+      ? insets.bottom + 112
       : theme.spacing[8],
     paddingHorizontal: padded ? theme.spacing[5] : 0,
-    paddingTop: insets.top + theme.spacing[5],
+    paddingTop: theme.spacing[4],
     ...contentStyle,
   };
   const body = scroll ? (
@@ -56,13 +56,16 @@ export function AppScreen({
   );
 
   const screen = (
-    <View style={[{ backgroundColor: background, flex: 1 }, style]}>
-      <StatusBar style={isDark ? 'light' : 'dark'} />
-      <PremiumBackdrop />
-      {body}
-      <OfflineBanner />
-    </View>
+    <GlassScreen contentStyle={{ backgroundColor: 'transparent' }} showAura={false}>
+      <StatusBar style="dark" />
+      <View style={[{ backgroundColor: 'transparent', flex: 1 }, style]}>
+        {body}
+        <OfflineBanner />
+      </View>
+    </GlassScreen>
   );
+
+  void vexLightGlass;
 
   if (!keyboardAvoiding) {
     return screen;

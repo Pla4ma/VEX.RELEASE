@@ -1,8 +1,8 @@
 import React from 'react';
 import { View } from 'react-native';
-
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { GlassCard } from '../../../components/glass/GlassCard';
+import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 
 export function ProgressionStatCard({
   detail,
@@ -15,36 +15,51 @@ export function ProgressionStatCard({
   tone: 'default' | 'success' | 'warning';
   value: string;
 }): JSX.Element {
-  const { theme } = useTheme();
   const toneColor =
     tone === 'success'
-      ? theme.colors.success[500]
+      ? vexLightGlass.mint[700]
       : tone === 'warning'
-        ? theme.colors.warning[500]
-        : theme.colors.text.primary;
+        ? '#8A5A12'
+        : vexLightGlass.text.primary;
 
   return (
-    <View
-      style={{
-        backgroundColor: theme.colors.surface.card,
-        borderColor: theme.colors.border.light,
-        borderRadius: theme.borderRadius.md,
-        borderWidth: 1,
-        flexBasis: '47%',
-        flexGrow: 1,
-        gap: theme.spacing[1],
-        padding: theme.spacing[3],
-      }}
+    <GlassCard
+      variant="subtle"
+      padding={14}
+      radius={20}
+      size="sm"
+      style={{ flexBasis: '47%', flexGrow: 1 }}
     >
-      <Text variant="caption" color={theme.colors.text.tertiary}>
-        {label}
-      </Text>
-      <Text variant="h4" color={toneColor}>
-        {value}
-      </Text>
-      <Text variant="caption" color={theme.colors.text.secondary}>
-        {detail}
-      </Text>
-    </View>
+      <View style={{ gap: 4 }}>
+        <Text
+          style={{
+            color: vexLightGlass.text.tertiary,
+            fontSize: 11,
+            fontWeight: '600',
+          }}
+        >
+          {label}
+        </Text>
+        <Text
+          style={{
+            color: toneColor,
+            fontSize: 20,
+            fontWeight: '800',
+            letterSpacing: -0.3,
+          }}
+        >
+          {value}
+        </Text>
+        <Text
+          style={{
+            color: vexLightGlass.text.secondary,
+            fontSize: 11,
+            fontWeight: '500',
+          }}
+        >
+          {detail}
+        </Text>
+      </View>
+    </GlassCard>
   );
 }

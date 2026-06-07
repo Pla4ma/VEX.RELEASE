@@ -1,31 +1,28 @@
 import React from 'react';
-import { ScrollView, View } from 'react-native';
+import { ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-import { Button } from '../../components/primitives/Button';
-import { Card } from '../../components/primitives/Card';
-import { Text } from '../../components/primitives/Text';
-import { Skeleton } from '../../components/ui/Skeleton';
-import { useFeatureAccess } from '../../features/liveops-config';
+import { GlassScreen } from '../../components/glass/GlassScreen';
 import { FocusScoreDashboard } from '../../features/focus-identity/components/focus-score-dashboard';
 import { useFocusScoreDashboardModel } from '../../features/focus-identity/hooks-focus-score';
 import { ProgressionDashboard } from '../../features/progression/components';
 import { PersonalBestsGrid } from '../profile/components/PersonalBestsGrid';
 import { useSessionStats } from '../../session/hooks/useSession';
 import { useAuthStore } from '../../store';
-import { useTheme } from '../../theme';
 import type { ExtendedRootStackParams } from '../../navigation/types';
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+import { useFeatureAccess } from '../../features/liveops-config';
 import { resolveMonthlyReportAction } from './progress-actions';
 import { StudyOSCard } from './StudyOSCard';
+import { ProgressHeader } from './components/ProgressHeader';
+import { PersonalStatsGrid } from './components/PersonalStatsGrid';
 
 const formatHours = (totalMilliseconds: number): string =>
   `${(totalMilliseconds / 3600000).toFixed(totalMilliseconds >= 36000000 ? 0 : 1)}h`;
 
 export function ProgressScreen(): JSX.Element {
-  const { theme } = useTheme();
   const insets = useSafeAreaInsets();
   const navigation =
     useNavigation<NativeStackNavigationProp<ExtendedRootStackParams>>();
@@ -70,98 +67,48 @@ export function ProgressScreen(): JSX.Element {
   };
 
   return (
-    <ScrollView
-      style={{ flex: 1, backgroundColor: theme.colors.background.primary }}
-      contentContainerStyle={{
-        paddingTop: insets.top + theme.spacing[5],
-        paddingBottom: theme.spacing[10],
-        paddingHorizontal: theme.spacing[5],
-        gap: theme.spacing[4],
-      }}
-      showsVerticalScrollIndicator={false}
-    >
-      <View>
-        <Text variant="label" color={theme.colors.semantic.vexCyan}>
-          Progress
-        </Text>
-        <Text variant="h2" color={theme.colors.text.primary}>
-          Your focus record.
-        </Text>
-        <Text variant="body" color={theme.colors.text.secondary}>
-          Focus sessions, study work, and coaching signals in one place.
-        </Text>
-      </View>
-
-      <FocusScoreDashboard
-        model={focusDashboardModel}
-        onRetry={retryFocusDashboard}
-        onStartSession={openSession}
-        onOpenMonthlyReport={() => {
-          if (monthlyReportAction === 'paywall') {
-            navigation.navigate('Paywall', {
-              source: 'focus-monthly-report',
-              gatedFeature: 'monthly_focus_report',
-            });
-            return;
-          }
-          openSession();
+    <GlassScreen showAura={false}>
+      <ScrollView
+        contentContainerStyle={{
+          gap: 16,
+          paddingBottom: insets.bottom + 160,
+          paddingHorizontal: 20,
+          paddingTop: 12,
         }}
-      />
-
-      {userId ? (
-        <ProgressionDashboard userId={userId} onStartSession={openSession} />
-      ) : null}
-
-      <StudyOSCard
-        theme={theme}
-        canOpenStudy={canOpenStudy}
-        onOpenStudy={openStudy}
-      />
-
-      <View style={{ gap: theme.spacing[3] }}>
-        <Text variant="h4" color={theme.colors.text.primary}>
-          Personal Stats
-        </Text>
-        <View
-          style={{
-            flexDirection: 'row',
-            gap: theme.spacing[3],
-            flexWrap: 'wrap',
+        showsVerticalScrollIndicator={false}
+      >
+        <ProgressHeader
+          onOpenSettings={() =>
+            navigation.navigate('Settings', { screen: 'SettingsMain' })
+          }
+        />
+        <FocusScoreDashboard
+          model={focusDashboardModel}
+          onOpenMonthlyReport={() => {
+            if (monthlyReportAction === 'paywall') {
+              navigation.navigate('Paywall', {
+                gatedFeature: 'monthly_focus_report',
+                source: 'focus-monthly-report',
+              });
+              return;
+            }
+            openSession();
           }}
-        >
-          {statCards.map((item) => (
-            <Card
-              key={item.label}
-              size="sm"
-              variant="glass"
-              style={{ minWidth: '30%', flexGrow: 1 }}
-            >
-              <Text variant="label" color={theme.colors.text.secondary}>
-                {item.label}
-              </Text>
-              {isStatsLoading ? (
-                <Skeleton width="70%" height={28} borderRadius={10} />
-              ) : (
-                <Text variant="h4" color={theme.colors.text.primary}>
-                  {item.value}
-                </Text>
-              )}
-            </Card>
-          ))}
-        </View>
-        <Button
-          variant="outline"
-          onPress={() => refresh()}
-          accessibilityLabel="Refresh progress stats"
-          accessibilityRole="button"
-          accessibilityHint="Reloads your latest execution stats"
-        >
-          Refresh stats
-        </Button>
-      </View>
-
-      <PersonalBestsGrid userId={userId || null} />
-    </ScrollView>
+          onRetry={retryFocusDashboard}
+          onStartSession={openSession}
+        />
+        {userId ? (
+          <ProgressionDashboard onStartSession={openSession} userId={userId} />
+        ) : null}
+        <StudyOSCard canOpenStudy={canOpenStudy} onOpenStudy={openStudy} />
+        <PersonalStatsGrid
+          isLoading={isStatsLoading}
+          onRefresh={() => refresh()}
+          stats={statCards}
+        />
+        <PersonalBestsGrid userId={userId || null} />
+      </ScrollView>
+    </GlassScreen>
   );
 }
 

@@ -5,7 +5,7 @@
     "scheme": "vex",
     "version": "1.0.0",
     "orientation": "portrait",
-    "userInterfaceStyle": "dark",
+    "userInterfaceStyle": "light",
     "icon": "./assets/icon.png",
     "sdkVersion": "56.0.0",
     "platforms": [
@@ -113,7 +113,7 @@
       "package": "com.jonathan.vex",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#0A0A0A"
+        "backgroundColor": "#F8FFFC"
       },
       "permissions": [
         "android.permission.RECEIVE_BOOT_COMPLETED",
@@ -176,7 +176,7 @@
         {
           "image": "./assets/splash.png",
           "resizeMode": "contain",
-          "backgroundColor": "#0A0A0A"
+            "backgroundColor": "#F8FFFC"
         }
       ],
       "expo-image"

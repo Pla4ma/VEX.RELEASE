@@ -1,7 +1,7 @@
 import { View, useWindowDimensions } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
 import { Box } from '../../../components/primitives/Box';
-import { useTheme } from '../../../theme';
+import { GlassCard } from '../../../components/glass/GlassCard';
 import { useFocusScoreHistory } from '../hooks-focus-score';
 import {
   buildScaleX,
@@ -12,6 +12,7 @@ import {
   computeScoreBounds,
 } from './chartHelpers';
 import { ScoreChartSvg } from './ScoreChartSvg';
+import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 
 interface ScoreHistoryChartProps {
   userId: string;
@@ -25,8 +26,7 @@ export function ScoreHistoryChart({
   days = 90,
   height = 200,
   showGrid = true,
-}: ScoreHistoryChartProps) {
-  const { theme } = useTheme();
+}: ScoreHistoryChartProps): JSX.Element {
   const { width: screenWidth } = useWindowDimensions();
   const { history, status } = useFocusScoreHistory(userId, days);
   const chartWidth = screenWidth - 48;
@@ -37,66 +37,68 @@ export function ScoreHistoryChart({
 
   if (status === 'pending') {
     return (
-      <Box
-        padding="lg"
-        backgroundColor="surface"
-        borderRadius="lg"
-        style={{ width: '100%' }}
-      >
+      <GlassCard variant="default" size="lg" padding={18} radius={26}>
         <View
           style={{
-            borderRadius: theme.spacing[2],
-            backgroundColor: theme.colors.border.DEFAULT,
+            backgroundColor: 'rgba(16, 35, 31, 0.06)',
+            borderRadius: 14,
             height,
           }}
         />
-      </Box>
+      </GlassCard>
     );
   }
 
   if (status === 'error') {
     return (
-      <Box
-        padding="lg"
-        backgroundColor="surface"
-        borderRadius="lg"
-        style={{ width: '100%' }}
-      >
+      <GlassCard variant="default" size="lg" padding={18} radius={26}>
         <Text
-          variant="body"
-          color="error"
-          style={{ marginBottom: theme.spacing[4] }}
+          style={{
+            color: vexLightGlass.text.primary,
+            fontSize: 16,
+            fontWeight: '800',
+            marginBottom: 6,
+          }}
         >
           Score History
         </Text>
-        <Text variant="caption" color="textMuted">
+        <Text
+          style={{
+            color: '#B91C1C',
+            fontSize: 12,
+            fontWeight: '600',
+          }}
+        >
           Failed to load history
         </Text>
-      </Box>
+      </GlassCard>
     );
   }
 
   if (safeHistory.length === 0) {
     return (
-      <Box
-        padding="lg"
-        backgroundColor="surface"
-        borderRadius="lg"
-        style={{ width: '100%' }}
-      >
+      <GlassCard variant="default" size="lg" padding={18} radius={26}>
         <Text
-          variant="body"
-          color="text"
-          style={{ marginBottom: theme.spacing[4] }}
+          style={{
+            color: vexLightGlass.text.primary,
+            fontSize: 16,
+            fontWeight: '800',
+            marginBottom: 12,
+          }}
         >
           Score History
         </Text>
         <View style={{ alignItems: 'center', paddingVertical: 40 }}>
-          <Text variant="caption" color="textMuted">
+          <Text
+            style={{
+              color: vexLightGlass.text.tertiary,
+              fontSize: 12,
+            }}
+          >
             No score data yet. Complete sessions to build your history.
           </Text>
         </View>
-      </Box>
+      </GlassCard>
     );
   }
 
@@ -109,15 +111,19 @@ export function ScoreHistoryChart({
   const scoreColor = getScoreColor(latestScore);
 
   return (
-    <Box
-      padding="lg"
-      backgroundColor="surface"
-      borderRadius="lg"
-      style={{ width: '100%' }}
-    >
-      <Text variant="heading3" style={{ marginBottom: theme.spacing[4] }}>
-        Score History
-      </Text>
+    <GlassCard variant="default" size="lg" padding={18} radius={26}>
+      <Box style={{ marginBottom: 12 }}>
+        <Text
+          style={{
+            color: vexLightGlass.text.primary,
+            fontSize: 16,
+            fontWeight: '800',
+            letterSpacing: -0.2,
+          }}
+        >
+          Score History
+        </Text>
+      </Box>
 
       <ScoreChartSvg
         history={safeHistory}
@@ -153,10 +159,16 @@ export function ScoreHistoryChart({
             backgroundColor: scoreColor,
           }}
         />
-        <Text variant="caption" color="textMuted">
+        <Text
+          style={{
+            color: vexLightGlass.text.tertiary,
+            fontSize: 11,
+            fontWeight: '600',
+          }}
+        >
           Current: {latestScore} ({safeHistory.length} days)
         </Text>
       </View>
-    </Box>
+    </GlassCard>
   );
 }

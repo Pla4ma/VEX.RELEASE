@@ -1,29 +1,28 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Pressable, ScrollView } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet';
 import { useNavigation, useRoute, type RouteProp } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
-import { Box, Text } from '../../components/primitives';
+import { Text } from '../../components/primitives/Text';
+import { GlassScreen } from '../../components/glass/GlassScreen';
 import { useAchievements } from '../../features/achievements/hooks';
 import { getFeatureAvailability, isFeatureAvailableForNavigation } from '../../features/liveops-config/FeatureFlagService';
 import { useFeatureAccess } from '../../features/liveops-config';
 import { useSessionHistory } from '../../session/hooks/useSession';
 import { buildProfileAchievementCards } from './profile-achievements';
 import { useAuthStore } from '../../store';
-import { useTheme } from '../../theme';
 import { ProfileHeader } from './ProfileHeader';
 import { ProfileStatsTab } from './ProfileStatsTab';
 import { ProfileAchievementsTab } from './ProfileAchievementsTab';
 import { ProfileActivityTab } from './ProfileActivityTab';
 import { ProfileMasterySheet } from './ProfileMasterySheet';
 import { useProfileData } from './useProfileData';
+import { ProfileGlassTabs, type ProfileTab } from './components/ProfileGlassTabs';
 import type { ExtendedRootStackParams, MainTabParams } from '../../navigation/types';
-
-type Tab = 'stats' | 'achievements' | 'activity';
+import { vexLightGlass } from '../../theme/tokens/vex-light-glass';
 
 export const ProfileScreen: React.FC = () => {
-  const { theme } = useTheme();
   const navigation = useNavigation<NativeStackNavigationProp<ExtendedRootStackParams>>();
   const route = useRoute<RouteProp<MainTabParams, 'Profile'>>();
   const { user, logout } = useAuthStore();
@@ -31,18 +30,18 @@ export const ProfileScreen: React.FC = () => {
   const userId = user?.id ?? null;
 
   const requestedTab = route.params?.tab;
-  const initialTab: Tab =
+  const initialTab: ProfileTab =
     requestedTab === 'achievements' ? 'achievements'
     : requestedTab === 'activity' || requestedTab === 'social' ? 'activity'
     : 'stats';
 
-  const [activeTab, setActiveTab] = useState<Tab>(initialTab);
+  const [activeTab, setActiveTab] = useState<ProfileTab>(initialTab);
   useEffect(() => { setActiveTab(initialTab); }, [initialTab]);
 
   const sheetRef = useRef<BottomSheet>(null);
   const {
     mastery, masteryLoading, rankDisplay, streakQuery, progressionQuery,
-    loading, hasStatsError, xpPercent, stats,
+    loading, hasStatsError, xpPercent, stats, theme,
   } = useProfileData(userId);
 
   const historyQuery = useSessionHistory(userId ?? '', 20);
@@ -53,8 +52,11 @@ export const ProfileScreen: React.FC = () => {
   );
 
   return (
-    <Box flex={1} style={{ backgroundColor: theme.colors.background.primary }}>
-      <ScrollView showsVerticalScrollIndicator={false}>
+    <GlassScreen showAura={false}>
+      <ScrollView
+        contentContainerStyle={{ paddingBottom: 160 }}
+        showsVerticalScrollIndicator={false}
+      >
         <ProfileHeader
           user={user ?? null}
           streakDays={streakQuery.data?.currentDays ?? 0}
@@ -67,47 +69,20 @@ export const ProfileScreen: React.FC = () => {
           onLogout={logout}
         />
 
-        <Box p={16} gap={16}>
-          <Box flexDirection="row" style={{ borderBottomWidth: 1, borderBottomColor: theme.colors.border.light }}>
-            {(['stats', 'achievements', 'activity'] as const).map((tab) => (
-              <Pressable
-                key={tab}
-                onPress={() => setActiveTab(tab)}
-                style={{
-                  flex: 1, alignItems: 'center', paddingVertical: 12,
-                  borderBottomWidth: activeTab === tab ? 2 : 0,
-                  borderBottomColor: theme.colors.primary[500],
-                }}
-                accessibilityLabel={`Show ${tab} tab`}
-                accessibilityRole="tab"
-                accessibilityHint={`Switches the profile view to ${tab}`}
-                accessibilityState={{ selected: activeTab === tab }}
-              >
-                <Text
-                  variant="body"
-                  style={{
-                    color: activeTab === tab ? theme.colors.primary[500] : theme.colors.text.secondary,
-                    fontWeight: activeTab === tab ? '700' : '500',
-                    textTransform: 'capitalize',
-                  }}
-                >
-                  {tab}
-                </Text>
-              </Pressable>
-            ))}
-          </Box>
+        <View style={{ paddingHorizontal: 20, gap: 12 }}>
+          <ProfileGlassTabs activeTab={activeTab} onChange={setActiveTab} />
 
           {activeTab === 'stats' ? (
             <ProfileStatsTab
-              theme={theme} userId={userId} stats={stats} statsLoading={loading}
+              userId={userId} stats={stats} statsLoading={loading}
               hasError={hasStatsError} mastery={mastery} masteryLoading={masteryLoading}
               rankDisplay={rankDisplay}
               techniques={[
-                { key: 'durationMastery', label: 'Duration', color: theme.colors.primary[500] },
-                { key: 'purityMastery', label: 'Purity', color: theme.colors.success.DEFAULT },
-                { key: 'consistencyMastery', label: 'Consistency', color: theme.colors.warning.DEFAULT },
-                { key: 'comebackMastery', label: 'Comeback', color: theme.colors.accent.pink },
-                { key: 'bossMastery', label: 'Boss', color: theme.colors.info.DEFAULT },
+                { key: 'durationMastery', label: 'Duration', color: vexLightGlass.mint[500] },
+                { key: 'purityMastery', label: 'Purity', color: vexLightGlass.semantic.success },
+                { key: 'consistencyMastery', label: 'Consistency', color: '#DFA44A' },
+                { key: 'comebackMastery', label: 'Comeback', color: '#F08A4B' },
+                { key: 'bossMastery', label: 'Boss', color: '#54AEEA' },
               ]}
               onMasteryPress={() => {
                 if (isFeatureAvailableForNavigation(getFeatureAvailability(disclosure.features.achievements)))
@@ -128,7 +103,7 @@ export const ProfileScreen: React.FC = () => {
               onStartSession={() => navigation.navigate('SessionStack', { screen: 'SessionSetup', params: {} })}
             />
           )}
-        </Box>
+        </View>
       </ScrollView>
 
       <BottomSheet
@@ -140,10 +115,11 @@ export const ProfileScreen: React.FC = () => {
           <BottomSheetBackdrop {...props} appearsOnIndex={0} disappearsOnIndex={-1} />
         )}
         backgroundStyle={{
-          backgroundColor: theme.colors.background.secondary,
-          borderWidth: 1, borderColor: theme.colors.border.light,
+          backgroundColor: 'rgba(255, 255, 255, 0.85)',
+          borderWidth: 1,
+          borderColor: 'rgba(255, 255, 255, 0.92)',
         }}
-        handleIndicatorStyle={{ backgroundColor: theme.colors.text.tertiary }}
+        handleIndicatorStyle={{ backgroundColor: 'rgba(16, 35, 31, 0.30)' }}
       >
         <ProfileMasterySheet
           theme={theme} rankDisplay={rankDisplay}
@@ -151,7 +127,7 @@ export const ProfileScreen: React.FC = () => {
           challenges={mastery.activeChallenges}
         />
       </BottomSheet>
-    </Box>
+    </GlassScreen>
   );
 };
 

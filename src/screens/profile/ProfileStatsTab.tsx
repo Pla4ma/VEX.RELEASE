@@ -1,20 +1,16 @@
 import React from 'react';
-import { Pressable } from 'react-native';
-import { Box, Card, Text } from '../../components/primitives';
-import { Badge } from '../../components/Badge';
+import { Box, Text } from '../../components/primitives';
+import { GlassCard } from '../../components/glass/GlassCard';
 import { Icon } from '../../icons';
-import { Skeleton } from '../../components/ui/Skeleton';
 import { FocusScoreCard } from '../../features/focus-identity/components/FocusScoreCard';
 import { ScoreHistoryChart } from '../../features/focus-identity/components/ScoreHistoryChart';
 import { PersonalBestsGrid } from './components/PersonalBestsGrid';
-import type { Theme } from '../../theme/types';
-
-interface StatsItem {
-  label: string;
-  value: string;
-  icon: string;
-  color: string;
-}
+import {
+  ProfileStatTile,
+  type ProfileStatItem,
+} from './components/ProfileStatTile';
+import { MasteryCard } from './components/MasteryCard';
+import { vexLightGlass } from '../../theme/tokens/vex-light-glass';
 
 interface TechniqueItem {
   key: string;
@@ -28,9 +24,8 @@ interface MasteryState {
 }
 
 interface ProfileStatsTabProps {
-  theme: Theme;
   userId: string | null;
-  stats: StatsItem[];
+  stats: ProfileStatItem[];
   statsLoading: boolean;
   hasError: boolean;
   mastery: MasteryState;
@@ -40,35 +35,43 @@ interface ProfileStatsTabProps {
   onMasteryPress: () => void;
 }
 
-const renderStatItem =
-  (theme: Theme, loading: boolean) =>
-  (item: StatsItem) => (
-    <Box key={item.label} style={{ width: '47%' }}>
-      <Card size="md" variant="glass">
-        <Icon name={item.icon} size={20} color={item.color} />
-        <Text variant="caption" color="text.tertiary" style={{ marginTop: 10 }}>
-          {item.label}
+function ProfileStatsError(): JSX.Element {
+  return (
+    <GlassCard padding={16} radius={22} size="md" variant="warning">
+      <Box alignItems="center" flexDirection="row" gap={12}>
+        <Icon
+          color={vexLightGlass.semantic.danger}
+          name="exclamation-circle"
+          size="md"
+          variant="outline"
+        />
+        <Text
+          style={{ color: '#B91C1C', fontSize: 13, lineHeight: 18 }}
+        >
+          Some profile data could not load. Pull to refresh or revisit this screen in a moment.
         </Text>
-        {loading ? (
-          <Skeleton width="70%" height={28} borderRadius={10} />
-        ) : (
-          <Text
-            variant="h3"
-            style={{
-              marginTop: 6,
-              color: theme.colors.text.primary,
-              fontWeight: '800',
-            }}
-          >
-            {item.value}
-          </Text>
-        )}
-      </Card>
+      </Box>
+    </GlassCard>
+  );
+}
+
+function ProfileStatTiles({
+  stats,
+  loading,
+}: {
+  stats: ProfileStatItem[];
+  loading: boolean;
+}): JSX.Element {
+  return (
+    <Box flexDirection="row" flexWrap="wrap" gap={12}>
+      {stats.map((item) => (
+        <ProfileStatTile item={item} key={item.label} loading={loading} />
+      ))}
     </Box>
   );
+}
 
 export const ProfileStatsTab: React.FC<ProfileStatsTabProps> = ({
-  theme,
   userId,
   stats,
   statsLoading,
@@ -79,69 +82,22 @@ export const ProfileStatsTab: React.FC<ProfileStatsTabProps> = ({
   techniques,
   onMasteryPress,
 }) => {
-  const renderStat = renderStatItem(theme, statsLoading);
-
   return (
     <Box gap={16}>
-      {hasError ? (
-        <Card size="md" variant="glass" state="error">
-          <Box flexDirection="row" alignItems="center" gap="sm">
-            <Icon name="exclamation-circle" size={18} color={theme.colors.semantic.danger} variant="outline" />
-            <Text variant="body" color="error.DEFAULT">
-              Some profile data could not load. Pull to refresh or revisit this screen in a moment.
-            </Text>
-          </Box>
-        </Card>
+      {hasError ? <ProfileStatsError /> : null}
+      {userId ? (
+        <FocusScoreCard animate onPress={() => {}} showTrend size="large" userId={userId} />
       ) : null}
-      {userId && <FocusScoreCard userId={userId} size="large" showTrend={true} animate={true} onPress={() => {}} />}
-      {userId && <ScoreHistoryChart userId={userId} />}
+      {userId ? <ScoreHistoryChart userId={userId} /> : null}
       <PersonalBestsGrid userId={userId} />
-      <Box flexDirection="row" flexWrap="wrap" gap={12}>
-        {stats.map(renderStat)}
-      </Box>
-      <Pressable
+      <ProfileStatTiles loading={statsLoading} stats={stats} />
+      <MasteryCard
+        mastery={mastery}
+        masteryLoading={masteryLoading}
         onPress={onMasteryPress}
-        accessibilityLabel="View Mastery details"
-        accessibilityRole="button"
-        accessibilityHint="Opens the full mastery progression screen"
-      >
-        <Card size="lg" variant="elevated">
-          <Box flexDirection="row" justifyContent="space-between" alignItems="center" mb={12}>
-            <Box>
-              <Text variant="h4" color="text.primary">Mastery</Text>
-              <Text variant="caption" color="text.tertiary">
-                {`${rankDisplay.icon} ${rankDisplay.title.toUpperCase()}`}
-              </Text>
-            </Box>
-            {masteryLoading ? (
-              <Skeleton width={72} height={24} borderRadius={12} />
-            ) : (
-              <Badge variant="secondary" size="sm">{`${mastery.totalMasteryPoints} pts`}</Badge>
-            )}
-          </Box>
-          {masteryLoading ? (
-            <Skeleton lines={5} height={10} borderRadius={999} spacing={10} />
-          ) : (
-            techniques.map((tech) => (
-              <Box key={tech.key} mb={10}>
-                <Box flexDirection="row" justifyContent="space-between" mb={6}>
-                  <Text variant="caption" color="text.secondary">{tech.label}</Text>
-                  <Text variant="caption" color="text.tertiary">
-                    {`${mastery.techniques[tech.key]}/25`}
-                  </Text>
-                </Box>
-                <Box height={6} borderRadius={999} overflow="hidden" style={{ backgroundColor: theme.colors.background.tertiary }}>
-                  <Box
-                    height="100%"
-                    borderRadius={999}
-                    style={{ width: `${((mastery.techniques[tech.key] ?? 0) / 25) * 100}%`, backgroundColor: tech.color }}
-                  />
-                </Box>
-              </Box>
-            ))
-          )}
-        </Card>
-      </Pressable>
+        rankDisplay={rankDisplay}
+        techniques={techniques}
+      />
     </Box>
   );
 };

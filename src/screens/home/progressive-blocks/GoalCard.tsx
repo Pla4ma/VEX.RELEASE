@@ -1,10 +1,10 @@
 import React from 'react';
 import { View } from 'react-native';
 
-import { getPremiumCardStyle } from '../../../components/premiumStyles';
 import { Text } from '../../../components/primitives/Text';
+import { GlassCard } from '../../../components/glass/GlassCard';
+import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import type { UserExperienceStage } from '../../../features/liveops-config';
-import { useTheme } from '../../../theme';
 
 const GOAL_COPY: Record<UserExperienceStage, { title: string; body: string }> =
   {
@@ -27,29 +27,42 @@ const GOAL_COPY: Record<UserExperienceStage, { title: string; body: string }> =
   };
 
 export function GoalCard({ stage }: { stage: UserExperienceStage }) {
-  const { theme } = useTheme();
   const copy = GOAL_COPY[stage];
 
   return (
-    <View
-      style={{
-        borderWidth: 1,
-        borderColor: theme.colors.border.light,
-        backgroundColor: theme.colors.background.secondary,
-        padding: theme.spacing[4],
-        gap: theme.spacing[2],
-        ...getPremiumCardStyle('medium'),
-      }}
-    >
-      <Text variant="label" color={theme.colors.text.secondary}>
-        Today&apos;s Focus
-      </Text>
-      <Text variant="h4" color={theme.colors.text.primary}>
-        {copy.title}
-      </Text>
-      <Text variant="bodySmall" color={theme.colors.text.secondary}>
-        {copy.body}
-      </Text>
-    </View>
+    <GlassCard variant="default" padding={16} radius={22}>
+      <View style={{ gap: 6 }}>
+        <Text
+          style={{
+            color: vexLightGlass.text.secondary,
+            fontSize: 11,
+            fontWeight: '700',
+            letterSpacing: 0.5,
+            textTransform: 'uppercase',
+          }}
+        >
+          Today&apos;s Focus
+        </Text>
+        <Text
+          style={{
+            color: vexLightGlass.text.primary,
+            fontSize: 18,
+            fontWeight: '800',
+            letterSpacing: -0.2,
+          }}
+        >
+          {copy.title}
+        </Text>
+        <Text
+          style={{
+            color: vexLightGlass.text.secondary,
+            fontSize: 13,
+            lineHeight: 19,
+          }}
+        >
+          {copy.body}
+        </Text>
+      </View>
+    </GlassCard>
   );
 }

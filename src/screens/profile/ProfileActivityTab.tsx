@@ -1,11 +1,14 @@
 import React from 'react';
-import { Box, Card, Text } from '../../components/primitives';
-import { Badge } from '../../components/Badge';
+import { View } from 'react-native';
+import { Box, Text } from '../../components/primitives';
+import { GlassCard } from '../../components/glass/GlassCard';
+import { GlassPill } from '../../components/glass/GlassPill';
 import { EmptyState } from '../../components/EmptyState';
 import { Skeleton } from '../../components/ui/Skeleton';
 import { FlashList } from '@shopify/flash-list';
 import type { Theme } from '../../theme/types';
 import type { SessionHistoryEntry } from '../../session/types';
+import { vexLightGlass } from '../../theme/tokens/vex-light-glass';
 
 interface ProfileActivityTabProps {
   theme: Theme;
@@ -23,33 +26,52 @@ function formatDuration(entry: SessionHistoryEntry): string {
   return `${Math.max(1, Math.round((entry.summary?.effectiveDuration ?? 0) / 60))} min`;
 }
 
-  const renderSessionCard =
-  (theme: Theme) =>
-  ({ item }: { item: SessionHistoryEntry }) => (
-    <Card
-      size="md"
-      variant="glass"
-      style={{ marginBottom: 12 }}
-    >
-      <Box flexDirection="row" justifyContent="space-between" alignItems="center">
-        <Box flex={1}>
-          <Text variant="h4" color="text.primary">
-            {item.config.customName ?? 'Focus Session'}
-          </Text>
-          <Text variant="caption" color="text.secondary">
-            {`${formatDate(item.startedAt)} | ${formatDuration(item)}`}
-          </Text>
+const renderSessionCard =
+  (_theme: Theme) =>
+  ({ item }: { item: SessionHistoryEntry }): JSX.Element => (
+    <View style={{ marginBottom: 10 }}>
+      <GlassCard size="md" variant="default" padding={14} radius={20}>
+        <Box flexDirection="row" justifyContent="space-between" alignItems="center">
+          <Box flex={1}>
+            <Text
+              style={{
+                color: vexLightGlass.text.primary,
+                fontSize: 15,
+                fontWeight: '800',
+                letterSpacing: -0.2,
+              }}
+            >
+              {item.config.customName ?? 'Focus Session'}
+            </Text>
+            <Text
+              style={{
+                color: vexLightGlass.text.secondary,
+                fontSize: 12,
+                marginTop: 2,
+              }}
+            >
+              {`${formatDate(item.startedAt)} | ${formatDuration(item)}`}
+            </Text>
+          </Box>
+          <View style={{ alignItems: 'flex-end', gap: 4 }}>
+            <GlassPill
+              label={item.status}
+              variant={item.status === 'COMPLETED' ? 'success' : 'neutral'}
+              size="sm"
+            />
+            <Text
+              style={{
+                color: vexLightGlass.text.tertiary,
+                fontSize: 11,
+                fontWeight: '600',
+              }}
+            >
+              {`${item.summary?.xpEarned ?? 0} XP`}
+            </Text>
+          </View>
         </Box>
-        <Box alignItems="flex-end">
-          <Badge variant={item.status === 'COMPLETED' ? 'success' : 'secondary'} size="sm">
-            {item.status}
-          </Badge>
-          <Text variant="caption" color="text.tertiary" style={{ marginTop: 6 }}>
-            {`${item.summary?.xpEarned ?? 0} XP`}
-          </Text>
-        </Box>
-      </Box>
-    </Card>
+      </GlassCard>
+    </View>
   );
 
 export const ProfileActivityTab: React.FC<ProfileActivityTabProps> = ({
@@ -61,15 +83,15 @@ export const ProfileActivityTab: React.FC<ProfileActivityTabProps> = ({
 }) => {
   if (isLoading) {
     return (
-      <Card size="lg" variant="glass">
+      <GlassCard size="lg" variant="default" padding={18} radius={26}>
         <Skeleton lines={5} height={52} borderRadius={14} spacing={12} />
-      </Card>
+      </GlassCard>
     );
   }
 
   if (isError) {
     return (
-      <Card size="lg" variant="glass">
+      <GlassCard size="lg" variant="default" padding={18} radius={26}>
         <EmptyState
           iconName="exclamation-circle"
           title="Activity unavailable"
@@ -77,13 +99,13 @@ export const ProfileActivityTab: React.FC<ProfileActivityTabProps> = ({
           actionLabel="Start session"
           onAction={onStartSession}
         />
-      </Card>
+      </GlassCard>
     );
   }
 
   if (history.length === 0) {
     return (
-      <Card size="lg" variant="glass">
+      <GlassCard size="lg" variant="default" padding={18} radius={26}>
         <EmptyState
           iconName="plus-circle"
           title="No recent activity"
@@ -91,7 +113,7 @@ export const ProfileActivityTab: React.FC<ProfileActivityTabProps> = ({
           actionLabel="Start session"
           onAction={onStartSession}
         />
-      </Card>
+      </GlassCard>
     );
   }
 

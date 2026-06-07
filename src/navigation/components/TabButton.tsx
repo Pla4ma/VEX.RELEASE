@@ -15,10 +15,11 @@ import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { tabSwitch } from '../../utils/haptics';
 import { getMinTouchTargetStyle } from '../../utils/touchTarget';
 import { springPresets, timingPresets } from '../../theme/tokens/motion';
+import { ActiveTabPill } from './ActiveTabPill';
 
 const ICONS = {
   Home: 'home',
-  Focus: 'target',
+  Focus: 'check-circle',
   Progress: 'chart',
   Profile: 'user',
 } as const;
@@ -58,53 +59,30 @@ export function TabButton({
   const { theme } = useTheme();
   const { isReducedMotion } = useReducedMotion();
   const bounce = useSharedValue(1);
-  const labelProgress = useSharedValue(focused ? 1 : 0);
-  const iconScale = useSharedValue(focused ? 1.12 : 1);
+  const iconScale = useSharedValue(focused ? 1.08 : 1);
+  const pillProgress = useSharedValue(focused ? 1 : 0);
   const iconName = getRouteIcon(route.name);
+  const labelText = label;
 
   useEffect(() => {
     if (isReducedMotion) {
-      labelProgress.value = focused ? 1 : 0;
-      iconScale.value = focused ? 1.12 : 1;
+      iconScale.value = focused ? 1.08 : 1;
+      pillProgress.value = focused ? 1 : 0;
       return;
     }
-    labelProgress.value = withSpring(focused ? 1 : 0, springPresets.precise);
-    iconScale.value = withSpring(focused ? 1.12 : 1, springPresets.settle);
-  }, [focused, isReducedMotion, labelProgress, iconScale]);
+    iconScale.value = withSpring(focused ? 1.08 : 1, springPresets.settle);
+    pillProgress.value = withSpring(focused ? 1 : 0, springPresets.precise);
+  }, [focused, isReducedMotion, iconScale, pillProgress]);
 
   const iconStyle = useAnimatedStyle(() => ({
     transform: [{ scale: isActiveTab ? iconScale.value : bounce.value }],
   }));
-  const labelStyle = useAnimatedStyle(() => ({
-    opacity: labelProgress.value,
-    transform: [
-      { translateY: (1 - labelProgress.value) * -theme.spacing[2] },
-    ],
-  }));
-  const indicatorWidth = useSharedValue(
-    focused ? theme.spacing[6] : theme.spacing[4],
-  );
-  const indicatorOpacity = useSharedValue(focused ? 1 : 0);
-
-  useEffect(() => {
-    if (isReducedMotion) {
-      indicatorWidth.value = focused ? theme.spacing[6] : theme.spacing[4];
-      indicatorOpacity.value = focused ? 1 : 0;
-      return;
-    }
-    indicatorWidth.value = withSpring(
-      focused ? theme.spacing[6] : theme.spacing[4],
-      springPresets.precise,
-    );
-    indicatorOpacity.value = withSpring(focused ? 1 : 0, springPresets.precise);
-  }, [focused, indicatorWidth, indicatorOpacity, isReducedMotion, theme.spacing]);
-
-  const indicatorStyle = useAnimatedStyle(() => ({
-    width: indicatorWidth.value,
-    opacity: indicatorOpacity.value,
+  const pillStyle = useAnimatedStyle(() => ({
+    opacity: pillProgress.value,
+    transform: [{ scale: 0.9 + pillProgress.value * 0.1 }],
   }));
 
-  const handlePress = () => {
+  const handlePress = (): void => {
     tabSwitch();
     if (!isReducedMotion) {
       bounce.value = withSequence(
@@ -117,55 +95,52 @@ export function TabButton({
 
   return (
     <Pressable
+      accessibilityHint={`Navigate to ${labelText}`}
+      accessibilityLabel={`${labelText} tab`}
       accessibilityRole="button"
       accessibilityState={{ selected: focused }}
       onLongPress={onLongPress}
       onPress={handlePress}
       style={{ flex: 1, ...getMinTouchTargetStyle() }}
-      accessibilityLabel={`${label} tab`}
-      accessibilityHint={`Navigate to ${label}`}
     >
       <View
-        style={{ alignItems: 'center', flex: 1, justifyContent: 'center' }}
+        style={{
+          alignItems: 'center',
+          flex: 1,
+          justifyContent: 'center',
+        }}
       >
-        <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+        <ActiveTabPill height={46} pillStyle={pillStyle} />
+        <View
+          style={{
+            alignItems: 'center',
+            gap: 3,
+            justifyContent: 'center',
+            minWidth: 58,
+            paddingHorizontal: 8,
+            paddingVertical: 6,
+            zIndex: 1,
+          }}
+        >
           <Animated.View style={iconStyle}>
             <Icon
               color={color}
               name={iconName}
-              size="lg"
+              size="md"
               variant={focused ? 'solid' : 'outline'}
             />
           </Animated.View>
-        </View>
-        <Animated.View style={labelStyle}>
           <Text
-            color={
-              focused ? theme.colors.semantic.vexCyan : theme.colors.text.tertiary
-            }
-            style={{ marginTop: theme.spacing[1] }}
-            variant="caption"
+            style={{
+              color: focused ? '#0C765F' : 'rgba(16, 35, 31, 0.60)',
+              fontSize: 11,
+              fontWeight: focused ? '700' : '500',
+              letterSpacing: 0,
+            }}
           >
-            {label}
+            {labelText}
           </Text>
-        </Animated.View>
-        <Animated.View
-          style={[
-            {
-              borderRadius: theme.borderRadius.full,
-              height: theme.spacing[1],
-              marginTop: theme.spacing[1],
-            },
-            {
-              backgroundColor: theme.colors.semantic.vexCyan,
-              shadowColor: theme.colors.semantic.vexCyan,
-              shadowOffset: { width: 0, height: 0 },
-              shadowOpacity: theme.opacity[40],
-              shadowRadius: theme.spacing[3],
-            },
-            indicatorStyle,
-          ]}
-        />
+        </View>
       </View>
     </Pressable>
   );

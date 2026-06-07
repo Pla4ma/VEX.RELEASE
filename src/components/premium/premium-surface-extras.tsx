@@ -1,8 +1,8 @@
 import React from 'react';
 import { View } from 'react-native';
 
-import { useTheme } from '../../theme';
 import { Text } from '../primitives/Text';
+import { vexLightGlass } from '../../theme/tokens/vex-light-glass';
 
 type SurfaceTone = 'default' | 'celebration' | 'info' | 'warning' | 'locked';
 
@@ -17,20 +17,45 @@ export function SectionHeader({
   title,
   body,
 }: SectionHeaderProps): JSX.Element {
-  const { theme } = useTheme();
-
   return (
-    <View style={{ gap: theme.spacing[1] }}>
+    <View style={{ gap: 4 }}>
       {eyebrow ? (
-        <Text variant="label" color={theme.colors.primary[500]}>
+        <Text
+          variant="label"
+          style={{
+            color: vexLightGlass.mint[500],
+            fontSize: 13,
+            fontWeight: '600',
+            letterSpacing: 0.5,
+            textTransform: 'uppercase',
+          }}
+        >
           {eyebrow}
         </Text>
       ) : null}
-      <Text variant="h4" color={theme.colors.text.primary}>
+      <Text
+        variant="h4"
+        style={{
+          color: vexLightGlass.text.primary,
+          fontSize: 20,
+          fontWeight: '700',
+          letterSpacing: -0.3,
+          lineHeight: 28,
+        }}
+      >
         {title}
       </Text>
       {body ? (
-        <Text variant="bodySmall" color={theme.colors.text.secondary}>
+        <Text
+          variant="bodySmall"
+          style={{
+            color: vexLightGlass.text.secondary,
+            fontSize: 14,
+            fontWeight: '400',
+            letterSpacing: 0,
+            lineHeight: 20,
+          }}
+        >
           {body}
         </Text>
       ) : null}
@@ -49,29 +74,38 @@ export function InlineStatusRow({
   value,
   tone = 'default',
 }: InlineStatusRowProps): JSX.Element {
-  const { theme } = useTheme();
   const accent =
     tone === 'celebration'
-      ? theme.colors.primary[500]
+      ? vexLightGlass.mint[500]
       : tone === 'warning'
-        ? theme.colors.warning[500]
+        ? '#E05E5E'
         : tone === 'info'
-          ? theme.colors.info[500]
-          : theme.colors.text.secondary;
+          ? '#3B8BD4'
+          : vexLightGlass.text.secondary;
 
   return (
     <View
       style={{
         flexDirection: 'row',
         justifyContent: 'space-between',
-        gap: theme.spacing[3],
+        gap: 12,
         alignItems: 'center',
       }}
     >
-      <Text variant="caption" color={theme.colors.text.secondary}>
+      <Text
+        variant="caption"
+        style={{
+          color: vexLightGlass.text.secondary,
+          fontSize: 13,
+          fontWeight: '500',
+        }}
+      >
         {label}
       </Text>
-      <Text variant="bodySmall" color={accent} style={{ fontWeight: '700' }}>
+      <Text
+        variant="bodySmall"
+        style={{ color: accent, fontWeight: '700', fontSize: 14 }}
+      >
         {value}
       </Text>
     </View>

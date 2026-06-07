@@ -1,10 +1,12 @@
 import React, { useMemo } from 'react';
-import { Pressable } from 'react-native';
+import { Pressable, View } from 'react-native';
 import Animated, { FadeIn } from 'react-native-reanimated';
 
-import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { GlassCard } from '../../../components/glass/GlassCard';
+import { GlassProgressBar } from '../../../components/glass/GlassProgressBar';
+import { Icon } from '../../../icons';
+import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import {
   type AtRiskBannerProps,
   getUrgencyMessage,
@@ -19,28 +21,13 @@ export function AtRiskBanner({
   onStartSession,
   isLoading = false,
 }: AtRiskBannerProps): JSX.Element | null {
-  const { theme } = useTheme();
-
   const { headline, subtext, tone } = useMemo(
     () => getUrgencyMessage(hoursRemaining, currentStreak),
     [hoursRemaining, currentStreak],
   );
 
   const isCritical = tone === 'critical';
-  const isUrgent = tone === 'urgent';
-
   const pulseStyle = usePulseAnimation(isCritical);
-
-  const backgroundColor = isCritical
-    ? theme.colors.error.DEFAULT
-    : isUrgent
-      ? theme.colors.error.light
-      : theme.colors.warning.DEFAULT;
-
-  const textColor =
-    isCritical || isUrgent
-      ? theme.colors.text.inverse
-      : theme.colors.text.primary;
 
   if (
     hoursRemaining === null ||
@@ -53,27 +40,25 @@ export function AtRiskBanner({
 
   if (isLoading) {
     return (
-      <Box
-        mx="lg"
-        mb="md"
-        p="md"
-        borderRadius="lg"
-        bg={theme.colors.background.tertiary}
-      >
-        <Box
-          height={20}
-          width="80%"
-          bg={theme.colors.background.secondary}
-          borderRadius="sm"
+      <GlassCard variant="subtle" padding={16} radius={20}>
+        <View
+          style={{
+            backgroundColor: 'rgba(16, 35, 31, 0.10)',
+            borderRadius: 8,
+            height: 16,
+            width: '80%',
+          }}
         />
-        <Box
-          height={16}
-          width="60%"
-          bg={theme.colors.background.secondary}
-          borderRadius="sm"
-          mt="xs"
+        <View
+          style={{
+            backgroundColor: 'rgba(16, 35, 31, 0.06)',
+            borderRadius: 8,
+            height: 12,
+            marginTop: 8,
+            width: '60%',
+          }}
         />
-      </Box>
+      </GlassCard>
     );
   }
 
@@ -85,99 +70,95 @@ export function AtRiskBanner({
         accessibilityRole="button"
         accessibilityHint="Double tap to protect your streak"
       >
-        <Box
-          mx="lg"
-          mb="md"
-          p="md"
-          borderRadius="lg"
-          bg={backgroundColor}
-          style={{
-            shadowColor: isCritical
-              ? theme.colors.error[500]
-              : theme.colors.warning[500],
-            shadowOffset: { width: 0, height: 4 },
-            shadowOpacity: 0.3,
-            shadowRadius: 8,
-            elevation: 4,
-          }}
+        <GlassCard
+          variant="warning"
+          padding={16}
+          radius={22}
         >
-          <Box flexDirection="row" alignItems="center" gap="md">
-            <Box
-              width={40}
-              height={40}
-              borderRadius="full"
-              bg={
-                isCritical
-                  ? `${theme.colors.error.dark}40`
-                  : `${theme.colors.warning.dark}40`
-              }
-              justifyContent="center"
-              alignItems="center"
+          <View
+            style={{
+              alignItems: 'center',
+              flexDirection: 'row',
+              gap: 12,
+            }}
+          >
+            <View
+              style={{
+                alignItems: 'center',
+                backgroundColor: isCritical
+                  ? 'rgba(224, 94, 94, 0.20)'
+                  : 'rgba(240, 138, 75, 0.20)',
+                borderColor: isCritical
+                  ? 'rgba(224, 94, 94, 0.45)'
+                  : 'rgba(240, 138, 75, 0.45)',
+                borderRadius: 999,
+                borderWidth: 1,
+                height: 40,
+                justifyContent: 'center',
+                width: 40,
+              }}
             >
-              <Text fontSize={24}></Text>
-            </Box>
-
-            <Box flex={1}>
+              <Icon
+                color={isCritical ? '#B91C1C' : '#C2410C'}
+                name="alarm"
+                size="md"
+                variant="solid"
+              />
+            </View>
+            <View style={{ flex: 1 }}>
               <Text
-                variant="body"
-                color={textColor}
-                fontWeight="700"
+                style={{
+                  color: vexLightGlass.text.primary,
+                  fontSize: 14,
+                  fontWeight: '700',
+                }}
                 numberOfLines={1}
               >
                 {headline}
               </Text>
               <Text
-                variant="caption"
-                color={
-                  isCritical || isUrgent
-                    ? `${textColor}90`
-                    : theme.colors.text.secondary
-                }
+                style={{
+                  color: vexLightGlass.text.secondary,
+                  fontSize: 12,
+                  fontWeight: '500',
+                  marginTop: 2,
+                }}
               >
                 {subtext}
               </Text>
-            </Box>
-
-            <Box
-              px="sm"
-              py="xs"
-              borderRadius="md"
-              bg={
-                isCritical
-                  ? theme.colors.error.dark
-                  : theme.colors.background.primary
-              }
+            </View>
+            <View
+              style={{
+                alignItems: 'center',
+                backgroundColor: isCritical ? '#E05E5E' : vexLightGlass.mint[500],
+                borderRadius: 999,
+                flexDirection: 'row',
+                gap: 4,
+                paddingHorizontal: 12,
+                paddingVertical: 8,
+              }}
             >
               <Text
-                variant="caption"
-                color={
-                  isCritical
-                    ? theme.colors.text.inverse
-                    : theme.colors.primary[500]
-                }
-                fontWeight="700"
+                style={{
+                  color: '#FFFFFF',
+                  fontSize: 11,
+                  fontWeight: '800',
+                  letterSpacing: 0.4,
+                }}
               >
-                START →
+                START
               </Text>
-            </Box>
-          </Box>
-
-          {/* Progress bar showing time draining */}
-          <Box
-            mt="md"
-            height={4}
-            borderRadius="full"
-            bg={`${textColor}30`}
-            overflow="hidden"
-          >
-            <Box
-              width={`${(hoursRemaining / 12) * 100}%`}
-              height="100%"
-              borderRadius="full"
-              bg={textColor}
+              <Icon color="#FFFFFF" name="arrowRight" size="xs" variant="solid" />
+            </View>
+          </View>
+          <View style={{ marginTop: 12 }}>
+            <GlassProgressBar
+              value={Math.max(0, Math.min(1, hoursRemaining / 12))}
+              height={6}
+              variant="warning"
             />
-          </Box>
-        </Box>
+          </View>
+        </GlassCard>
       </Pressable>
     </Animated.View>
   );

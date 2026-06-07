@@ -10,13 +10,14 @@
 
 import React from 'react';
 import { View, Pressable } from 'react-native';
-import { useTheme } from '../../../theme';
 import { Text } from '../../../components/primitives/Text';
+import { GlassCard } from '../../../components/glass/GlassCard';
 import { Icon } from '../../../icons';
 import { useHaptics } from '../../../utils/haptics';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { ExtendedRootStackParams } from '../../../navigation/types';
+import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 
 import {
   isFeatureAvailableForNavigation,
@@ -36,13 +37,13 @@ interface MiniBossPreviewProps {
 export function MiniBossPreview({
   userId,
 }: MiniBossPreviewProps): JSX.Element | null {
-  const { theme } = useTheme();
   const haptics = useHaptics();
   const navigation =
     useNavigation<NativeStackNavigationProp<ExtendedRootStackParams>>();
   const policy = useBossDisplayPolicy('home_indicator');
   const { features } = useFeatureAccess();
 
+  void userId;
   if (!isBossVisibleAtSurface(policy)) {
     return null;
   }
@@ -64,39 +65,38 @@ export function MiniBossPreview({
         accessibilityLabel="Focus momentum indicator"
         accessibilityRole="button"
         accessibilityHint="View your focus momentum progress"
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          backgroundColor: theme.colors.background.secondary,
-          borderRadius: theme.borderRadius.xl,
-          padding: theme.spacing[3],
-          borderWidth: 1,
-          borderColor: theme.colors.border.light,
-          minHeight: 44,
-        }}
       >
-        <View
-          style={{
-            width: 32,
-            height: 32,
-            borderRadius: theme.borderRadius.lg,
-            backgroundColor: `${theme.colors.primary[500]}20`,
-            justifyContent: 'center',
-            alignItems: 'center',
-            marginRight: theme.spacing[2],
-          }}
-        >
-          <Text fontSize={14}>{'\u{1F4CA}'}</Text>
-        </View>
-        <Text variant="caption" color={theme.colors.text.secondary}>
-          Focus momentum building
-        </Text>
-        <Icon
-          name="chevron-right"
-          size={16}
-          color={theme.colors.text.tertiary}
-          style={{ marginLeft: theme.spacing[2] }}
-        />
+        <GlassCard variant="subtle" padding={12} radius={18}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', minHeight: 44 }}>
+            <View
+              style={{
+                width: 36,
+                height: 36,
+                borderRadius: 12,
+                backgroundColor: 'rgba(66, 207, 174, 0.15)',
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginRight: 12,
+              }}
+            >
+              <Text style={{ fontSize: 14 }}>{'\u{1F4CA}'}</Text>
+            </View>
+            <Text
+              style={{
+                color: vexLightGlass.text.secondary,
+                fontSize: 13,
+                flex: 1,
+              }}
+            >
+              Focus momentum building
+            </Text>
+            <Icon
+              name="chevron-right"
+              size={16}
+              color={vexLightGlass.text.tertiary}
+            />
+          </View>
+        </GlassCard>
       </Pressable>
     );
   }
@@ -108,45 +108,46 @@ export function MiniBossPreview({
       accessibilityRole="button"
       accessibilityHint="View current boss progress"
       style={({ pressed }) => [
-        {
-          flexDirection: 'row',
-          alignItems: 'center',
-          backgroundColor: theme.colors.background.secondary,
-          borderRadius: theme.borderRadius.xl,
-          padding: theme.spacing[3],
-          borderWidth: 1,
-          borderColor: theme.colors.border.light,
-          minHeight: 44,
-        },
-        pressed && { opacity: 0.8 },
+        pressed && { opacity: 0.85 },
       ]}
     >
-      <View
-        style={{
-          width: 36,
-          height: 36,
-          borderRadius: theme.borderRadius.lg,
-          backgroundColor: 'rgba(239,68,68,0.1)',
-          justifyContent: 'center',
-          alignItems: 'center',
-          marginRight: theme.spacing[2],
-        }}
-      >
-        <Text fontSize={16}>{'\u{1F409}'}</Text>
-      </View>
-      <View style={{ flex: 1 }}>
-        <Text
-          variant="caption"
-          color={theme.colors.text.primary}
-          fontWeight="600"
-        >
-          Boss active
-        </Text>
-        <Text variant="caption" color={theme.colors.text.secondary}>
-          Tap to view
-        </Text>
-      </View>
-      <Icon name="chevron-right" size={16} color={theme.colors.text.tertiary} />
+      <GlassCard variant="subtle" padding={12} radius={18}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', minHeight: 44 }}>
+          <View
+            style={{
+              width: 36,
+              height: 36,
+              borderRadius: 12,
+              backgroundColor: 'rgba(239,68,68,0.12)',
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginRight: 12,
+            }}
+          >
+            <Text style={{ fontSize: 16 }}>{'\u{1F409}'}</Text>
+          </View>
+          <View style={{ flex: 1 }}>
+            <Text
+              style={{
+                color: vexLightGlass.text.primary,
+                fontSize: 13,
+                fontWeight: '700',
+              }}
+            >
+              Boss active
+            </Text>
+            <Text
+              style={{
+                color: vexLightGlass.text.secondary,
+                fontSize: 12,
+              }}
+            >
+              Tap to view
+            </Text>
+          </View>
+          <Icon name="chevron-right" size={16} color={vexLightGlass.text.tertiary} />
+        </View>
+      </GlassCard>
     </Pressable>
   );
 }

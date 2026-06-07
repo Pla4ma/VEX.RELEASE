@@ -1,22 +1,20 @@
 import React from 'react';
 import { View } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 
 import { Text } from '../../../components/primitives/Text';
-import { Box } from '../../../components/primitives/Box';
 import { VexLaunchButton } from '../../../components/primitives/VexLaunchButton';
-import { VexMotionSurface } from '../../../components/primitives/VexMotionSurface';
-import { AuroraField } from '../../../components/primitives/AuroraField';
+import { GlassCard } from '../../../components/glass/GlassCard';
+import { GlassPill } from '../../../components/glass/GlassPill';
+import { LiquidGlassObject } from '../../../components/glass/LiquidGlassObject';
 import type {
   HomePrimaryPriority,
   HomeStakes,
 } from '../../../features/home-spine/priority-schemas';
-import { useTheme } from '../../../theme';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
-import { lightColors } from '@/theme/tokens/colors';
-import { rgbaColors } from '@/theme/tokens/rgba-colors';
+import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import { getHeroEyebrow, getHeroTitle } from './VexFocusSurfaceCopy';
+import { StakesCard } from './StakesCard';
 
 interface VexFocusSurfaceProps {
   isLoading: boolean;
@@ -25,171 +23,167 @@ interface VexFocusSurfaceProps {
   stakes: HomeStakes | null;
 }
 
+function VexFocusSkeleton(): JSX.Element {
+  return (
+    <GlassCard padding={20} radius={32} variant="hero">
+      <View style={{ gap: 12 }}>
+        <View
+          style={{
+            backgroundColor: 'rgba(16, 35, 31, 0.10)',
+            borderRadius: 999,
+            height: 12,
+            width: 96,
+          }}
+        />
+        <View
+          style={{
+            backgroundColor: 'rgba(16, 35, 31, 0.10)',
+            borderRadius: 14,
+            height: 32,
+            width: '70%',
+          }}
+        />
+        <View
+          style={{
+            backgroundColor: 'rgba(16, 35, 31, 0.06)',
+            borderRadius: 8,
+            height: 14,
+            width: '88%',
+          }}
+        />
+        <View
+          style={{
+            backgroundColor: 'rgba(16, 35, 31, 0.06)',
+            borderRadius: 8,
+            height: 14,
+            width: '72%',
+          }}
+        />
+      </View>
+    </GlassCard>
+  );
+}
+
 export function VexFocusSurface({
   isLoading,
   onPressPrimary,
   priority,
   stakes,
 }: VexFocusSurfaceProps): JSX.Element {
-  const { theme } = useTheme();
   const { isReducedMotion } = useReducedMotion();
-  const heroMinHeight =
-    theme.spacing[24] * 3 + theme.spacing[12] + theme.spacing[1];
-  const loadingMinHeight = theme.spacing[20] * 3 + theme.spacing[5];
-  const bloomSize = theme.spacing[20] * 3 + theme.spacing[5];
-  const bloomOffset = -theme.spacing[20];
 
   if (isLoading || !priority) {
-    return (
-      <VexMotionSurface
-        variant="chrome"
-        style={{
-          gap: theme.spacing[4],
-          minHeight: loadingMinHeight,
-          padding: theme.spacing[5],
-        }}
-      >
-        <Text variant="label" color="textMuted">
-          Primary action
-        </Text>
-        <View
-          style={{
-            backgroundColor: rgbaColors.rgb_255_255_255_0_12,
-            borderRadius: theme.borderRadius.lg,
-            height: theme.spacing[16],
-            width: '88%',
-          }}
-        />
-        <View
-          style={{
-            backgroundColor: rgbaColors.rgb_255_255_255_0_06,
-            borderRadius: theme.borderRadius.md,
-            height: theme.spacing[4],
-            width: '72%',
-          }}
-        />
-        <Text variant="h4" color="textPrimary">
-          Loading today's focus path...
-        </Text>
-      </VexMotionSurface>
-    );
+    return <VexFocusSkeleton />;
   }
 
   const entering = isReducedMotion ? undefined : FadeInUp.duration(500);
 
   return (
     <Animated.View entering={entering} style={{ width: '100%' }}>
-      <VexMotionSurface variant="focused" animated style={{ overflow: 'visible' }}>
-        <LinearGradient
-          colors={[
-            lightColors.semantic.liquidNight,
-            lightColors.semantic.obsidian,
-            lightColors.semantic.background,
-          ]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 0, y: 1 }}
+      <GlassCard padding={16} radius={20} variant="hero">
+        <View
+          pointerEvents="none"
           style={{
-            borderRadius: theme.borderRadius.xl,
-            minHeight: heroMinHeight,
-            padding: theme.spacing[5],
-            gap: theme.spacing[3],
+            backgroundColor: 'rgba(95, 230, 197, 0.12)',
+            borderRadius: 200,
+            height: 130,
+            position: 'absolute',
+            right: -34,
+            top: -40,
+            width: 130,
+          }}
+        />
+        <View
+          pointerEvents="none"
+          style={{
+            backgroundColor: 'rgba(132, 228, 229, 0.10)',
+            borderRadius: 160,
+            height: 90,
+            position: 'absolute',
+            right: 40,
+            top: 20,
+            width: 90,
+          }}
+        />
+        <View
+          pointerEvents="none"
+          style={{
+            backgroundColor: 'rgba(255, 255, 255, 0.50)',
+            borderRadius: 200,
+            height: 100,
+            left: 50,
+            position: 'absolute',
+            top: 8,
+            width: 100,
+          }}
+        />
+        <LiquidGlassObject
+          size={92}
+          variant="swirl"
+          style={{
+            position: 'absolute',
+            right: 14,
+            top: 14,
+          }}
+        />
+        <View
+          style={{
+            alignItems: 'flex-start',
+            flexDirection: 'row',
+            gap: 8,
+            marginBottom: 8,
           }}
         >
-          <AuroraField
-            colors={[
-              lightColors.semantic.vexCyanGlow,
-              lightColors.semantic.editorialGoldGlow,
-              rgbaColors.rgb_139_92_246_0_25,
-            ]}
-            intensity={theme.opacity[50]}
-            size={bloomSize}
-            style={{
-              position: 'absolute',
-              right: bloomOffset,
-              top: bloomOffset,
-            }}
+          <GlassPill
+            label={getHeroEyebrow(priority.type).toUpperCase()}
+            variant="mint"
           />
-          <View
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: theme.spacing[5],
-              right: theme.spacing[5],
-              height: theme.spacing[0] + 1,
-              backgroundColor: rgbaColors.rgb_0_229_255_0_08,
-            }}
+        </View>
+        <Text
+          style={{
+            color: vexLightGlass.text.primary,
+            fontSize: 24,
+            fontWeight: '800',
+            letterSpacing: -0.4,
+            lineHeight: 30,
+            marginBottom: 8,
+            maxWidth: '66%',
+          }}
+        >
+          {getHeroTitle(priority.type)}
+        </Text>
+        <Text
+          style={{
+            color: vexLightGlass.text.secondary,
+            fontSize: 13,
+            lineHeight: 19,
+            marginBottom: 12,
+            maxWidth: '72%',
+          }}
+        >
+          {priority.reason}
+        </Text>
+        {stakes ? <StakesCard stakes={stakes} /> : null}
+        <View
+          style={{
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            gap: 8,
+            marginBottom: 12,
+          }}
+        >
+          <GlassPill label="Adaptive" variant="mint" />
+          <GlassPill
+            label={priority.cta.action.replace('_', ' ')}
+            variant="neutral"
           />
-
-          <Text
-            variant="label"
-            color="vexCyan"
-            style={{
-              letterSpacing: theme.spacing[0] + 1,
-              opacity: theme.opacity[90],
-            }}
-          >
-            {getHeroEyebrow(priority.type).toUpperCase()}
-          </Text>
-
-          <Text variant="h3" color="textPrimary">
-            {getHeroTitle(priority.type)}
-          </Text>
-
-          <Text variant="body" color="textSecondary" opacity={theme.opacity[70]}>
-            {priority.reason}
-          </Text>
-
-          {stakes ? (
-            <VexMotionSurface
-              variant="chrome"
-              style={{
-                marginTop: theme.spacing[2],
-                padding: theme.spacing[4],
-                gap: theme.spacing[2],
-              }}
-            >
-              <Text variant="label" color="textMuted" opacity={theme.opacity[60]}>
-                What matters now
-              </Text>
-              <Text variant="body" color="textPrimary">
-                {stakes.what}
-              </Text>
-              {stakes.atRisk ? (
-                <Text variant="bodySmall" color="textSecondary" opacity={theme.opacity[60]}>
-                  At risk: {stakes.atRisk}
-                </Text>
-              ) : null}
-            </VexMotionSurface>
-          ) : null}
-
-          <Box flexDirection="row" flexWrap="wrap" gap="sm">
-            <VexMotionSurface
-              variant="glass"
-              style={{ paddingHorizontal: theme.spacing[3], paddingVertical: theme.spacing[2] }}
-            >
-              <Text variant="caption" color="vexCyan">
-                Adaptive
-              </Text>
-            </VexMotionSurface>
-            <VexMotionSurface
-              variant="glass"
-              style={{ paddingHorizontal: theme.spacing[3], paddingVertical: theme.spacing[2] }}
-            >
-              <Text variant="caption" color="textSecondary">
-                {priority.cta.action.replace('_', ' ')}
-              </Text>
-            </VexMotionSurface>
-          </Box>
-
-          <Box mt="sm">
-            <VexLaunchButton
-              label={priority.cta.text}
-              onPress={onPressPrimary}
-              accessibilityHint="Opens the recommended next VEX action"
-            />
-          </Box>
-        </LinearGradient>
-      </VexMotionSurface>
+        </View>
+        <VexLaunchButton
+          accessibilityHint="Opens the recommended next VEX action"
+          label={priority.cta.text}
+          onPress={onPressPrimary}
+        />
+      </GlassCard>
     </Animated.View>
   );
 }

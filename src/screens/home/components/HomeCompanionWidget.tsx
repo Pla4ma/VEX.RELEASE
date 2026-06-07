@@ -2,7 +2,8 @@ import React from 'react';
 import { View, TouchableOpacity } from 'react-native';
 
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { GlassCard } from '../../../components/glass/GlassCard';
+import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import type { HomeCompanionStatus } from '../hooks/useHomeCompanion';
 import { CompanionCard, SkeletonCard } from './HomeCompanionWidget.cards';
 
@@ -17,16 +18,19 @@ export function HomeCompanionWidget({
   onRetry,
   onPress,
 }: HomeCompanionWidgetProps): JSX.Element | null {
-  const { theme } = useTheme();
-
   if (status.kind === 'loading') {
     return <SkeletonCard />;
   }
 
   if (status.kind === 'empty') {
     return (
-      <View style={{ padding: theme.spacing[4], alignItems: 'center' }}>
-        <Text variant="caption" color="text.secondary">
+      <View style={{ padding: 16, alignItems: 'center' }}>
+        <Text
+          style={{
+            color: vexLightGlass.text.secondary,
+            fontSize: 13,
+          }}
+        >
           Your companion will appear after your first focus session.
         </Text>
       </View>
@@ -41,48 +45,45 @@ export function HomeCompanionWidget({
         accessibilityLabel="Retry loading companion"
         accessibilityRole="button"
       >
-        <View
-          style={{
-            backgroundColor: theme.colors.background.elevated,
-            borderRadius: theme.spacing[4],
-            borderWidth: 1,
-            borderColor: theme.colors.error.light,
-            padding: theme.spacing[4],
-            alignItems: 'center',
-          }}
-        >
-          <Text variant="body" color="error.DEFAULT">
-            Companion did not load.
-          </Text>
-          <Text
-            variant="caption"
-            color="text.secondary"
-            style={{ marginTop: theme.spacing[1] }}
-          >
-            Tap to retry.
-          </Text>
-        </View>
+        <GlassCard variant="warning" padding={16} radius={20}>
+          <View style={{ alignItems: 'center' }}>
+            <Text
+              style={{
+                color: '#B91C1C',
+                fontSize: 14,
+              }}
+            >
+              Companion did not load.
+            </Text>
+            <Text
+              style={{
+                color: vexLightGlass.text.secondary,
+                fontSize: 12,
+                marginTop: 4,
+              }}
+            >
+              Tap to retry.
+            </Text>
+          </View>
+        </GlassCard>
       </TouchableOpacity>
     );
   }
 
   if (status.kind === 'offline') {
     return (
-      <View
-        style={{
-          backgroundColor: theme.colors.background.elevated,
-          borderRadius: theme.spacing[4],
-          borderWidth: 1,
-          borderColor: theme.colors.border.light,
-          padding: theme.spacing[4],
-          alignItems: 'center',
-          opacity: 0.7,
-        }}
-      >
-        <Text variant="caption" color="text.secondary">
-          Companion data is offline. It will appear when you reconnect.
-        </Text>
-      </View>
+      <GlassCard variant="subtle" padding={16} radius={20}>
+        <View style={{ alignItems: 'center' }}>
+          <Text
+            style={{
+              color: vexLightGlass.text.secondary,
+              fontSize: 13,
+            }}
+          >
+            Companion data is offline. It will appear when you reconnect.
+          </Text>
+        </View>
+      </GlassCard>
     );
   }
 

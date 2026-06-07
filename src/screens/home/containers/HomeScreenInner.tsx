@@ -5,6 +5,7 @@
  * Wires controller + data to the existing HomeContent component.
  */
 import React from 'react';
+import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
@@ -12,6 +13,8 @@ import { HomeContent } from '../components/HomeContent';
 import { HomeInterventionBanner } from '../components/HomeInterventionBanner';
 import { useCompletionSyncAutoRepair } from '../../../features/session-completion/hooks';
 import { AppScreen } from '../../../components/primitives';
+import { VexBrandPill } from '../components/VexBrandPill';
+import { GlassSettingsButton } from '../components/GlassSettingsButton';
 import { useHomeSurfaceMap } from '../hooks/useHomeSurfaceMap';
 import { useHomeResolvedExperience } from '../hooks/useHomeResolvedExperience';
 import { useInterventionVisibility } from '../hooks/useInterventionVisibility';
@@ -103,6 +106,21 @@ export function HomeScreenInner({
 
   return (
     <AppScreen scroll padded>
+      <View
+        style={{
+          alignItems: 'center',
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          marginBottom: 12,
+        }}
+      >
+        <VexBrandPill />
+        <GlassSettingsButton
+          onPress={() =>
+            navigation.navigate('Settings', { screen: 'SettingsMain' })
+          }
+        />
+      </View>
       {interventionBannerProps && (
         <HomeInterventionBanner
           intervention={interventionBannerProps}

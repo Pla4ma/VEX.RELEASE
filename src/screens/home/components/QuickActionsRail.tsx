@@ -8,12 +8,11 @@
 
 import React from 'react';
 import { View, Pressable } from 'react-native';
-import { useTheme } from '../../../theme';
 import { Text } from '../../../components/primitives/Text';
+import { GlassCard } from '../../../components/glass/GlassCard';
 import { Icon } from '../../../icons';
 import { useHaptics } from '../../../utils/haptics';
-import { lightColors } from '@/theme/tokens/colors';
-
+import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 
 interface QuickAction {
   id: string;
@@ -32,21 +31,21 @@ const QUICK_ACTIONS: QuickAction[] = [
     id: 'focus',
     icon: 'target',
     label: 'Focus',
-    color: lightColors.accent.blue, // Blue
+    color: '#54AEEA',
     action: 'focus',
   },
   {
     id: 'study',
     icon: 'book-open',
     label: 'Study',
-    color: lightColors.semantic.primary, // Indigo
+    color: '#42CFAE',
     action: 'study',
   },
   {
     id: 'boss',
     icon: 'zap',
     label: 'Boss',
-    color: lightColors.accent.purple, // Purple
+    color: '#8B5CF6',
     action: 'boss',
   },
 ];
@@ -54,38 +53,7 @@ const QUICK_ACTIONS: QuickAction[] = [
 export function QuickActionsRail({
   onAction,
 }: QuickActionsRailProps): JSX.Element {
-  const { theme } = useTheme();
   const haptics = useHaptics();
-
-  const containerStyle = {
-    flexDirection: 'row' as const,
-    justifyContent: 'space-between' as const,
-    gap: theme.spacing[3],
-  };
-
-  const actionButtonStyle = {
-    flex: 1,
-    alignItems: 'center' as const,
-    paddingVertical: theme.spacing[4],
-    paddingHorizontal: theme.spacing[3],
-    backgroundColor: theme.colors.background.secondary,
-    borderRadius: theme.borderRadius.xl,
-    borderWidth: 1,
-    borderColor: theme.colors.border.light,
-  };
-
-  const iconContainerStyle = {
-    width: 48,
-    height: 48,
-    borderRadius: theme.borderRadius.lg,
-    justifyContent: 'center' as const,
-    alignItems: 'center' as const,
-    marginBottom: theme.spacing[2],
-  };
-
-  const labelStyle = {
-    textAlign: 'center' as const,
-  };
 
   const handlePress = (action: QuickAction) => {
     haptics.medium();
@@ -93,35 +61,44 @@ export function QuickActionsRail({
   };
 
   return (
-    <View style={containerStyle}>
+    <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap: 12 }}>
       {QUICK_ACTIONS.map((action) => (
         <Pressable
           key={action.id}
           onPress={() => handlePress(action)}
           style={({ pressed }) => [
-            actionButtonStyle,
-            pressed && { opacity: 0.8, transform: [{ scale: 0.98 }] },
+            { flex: 1 },
+            pressed && { opacity: 0.85, transform: [{ scale: 0.98 }] },
           ]}
-          android_ripple={{ color: theme.colors.primary[100] }}
           accessibilityLabel={`${action.label} quick action`}
           accessibilityRole="button"
           accessibilityHint={`Starts a ${action.label.toLowerCase()} session`}
         >
-          <View
-            style={[
-              iconContainerStyle,
-              { backgroundColor: `${action.color}15` },
-            ]}
-          >
-            <Icon name={action.icon} size={24} color={action.color} />
-          </View>
-          <Text
-            variant="label"
-            style={labelStyle}
-            color={theme.colors.text.primary}
-          >
-            {action.label}
-          </Text>
+          <GlassCard variant="subtle" padding={14} radius={20} style={{ alignItems: 'center' }}>
+            <View
+              style={{
+                width: 48,
+                height: 48,
+                borderRadius: 14,
+                backgroundColor: `${action.color}18`,
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginBottom: 8,
+              }}
+            >
+              <Icon name={action.icon} size={24} color={action.color} />
+            </View>
+            <Text
+              style={{
+                textAlign: 'center',
+                color: vexLightGlass.text.primary,
+                fontSize: 12,
+                fontWeight: '600',
+              }}
+            >
+              {action.label}
+            </Text>
+          </GlassCard>
         </Pressable>
       ))}
     </View>

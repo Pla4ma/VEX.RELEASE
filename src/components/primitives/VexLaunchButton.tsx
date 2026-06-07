@@ -12,8 +12,6 @@ import { useTheme } from '../../theme';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { getMinTouchTargetStyle } from '../../utils/touchTarget';
 import { useHaptics } from '../../utils/haptics';
-import { lightColors } from '@/theme/tokens/colors';
-import { rgbaColors } from '@/theme/tokens/rgba-colors';
 import { springPresets, timingPresets } from '../../theme/tokens/motion';
 
 export interface VexLaunchButtonProps extends ViewProps {
@@ -26,6 +24,9 @@ export interface VexLaunchButtonProps extends ViewProps {
   accessibilityHint?: string;
   testID?: string;
 }
+
+const MINT_PRESS = ['#109779', '#18B894', '#42CFAE'] as const;
+const MINT_REST = ['#18B894', '#42CFAE', '#72E0C5'] as const;
 
 export function VexLaunchButton({
   label,
@@ -43,34 +44,34 @@ export function VexLaunchButton({
   const { isReducedMotion } = useReducedMotion();
   const { primaryAction } = useHaptics();
   const scale = useSharedValue(1);
-  const glow = useSharedValue(0.06);
+  const glow = useSharedValue(0.18);
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ scale: scale.value }],
     shadowOpacity: glow.value,
   }));
 
-  const handlePressIn = () => {
+  const handlePressIn = (): void => {
     if (isReducedMotion) {
       return;
     }
     scale.value = withSpring(0.975, springPresets.tactile);
-    glow.value = withTiming(0.2, {
+    glow.value = withTiming(0.35, {
       duration: timingPresets.microFade.duration,
     });
   };
 
-  const handlePressOut = () => {
+  const handlePressOut = (): void => {
     if (isReducedMotion) {
       return;
     }
     scale.value = withSpring(1, springPresets.settle);
-    glow.value = withTiming(0.08, {
+    glow.value = withTiming(0.22, {
       duration: timingPresets.enter.duration,
     });
   };
 
-  const handlePress = () => {
+  const handlePress = (): void => {
     if (hapticOnPress && !isReducedMotion) {
       primaryAction();
     }
@@ -94,27 +95,23 @@ export function VexLaunchButton({
       <Animated.View
         style={[
           {
-            borderRadius: theme.borderRadius.xl,
-            borderWidth: theme.spacing[0] + 1,
-            borderColor: rgbaColors.rgb_255_255_255_0_18,
+            borderRadius: 999,
+            borderWidth: 1.2,
+            borderColor: 'rgba(255, 255, 255, 0.55)',
             alignItems: 'center',
             justifyContent: 'center',
-            shadowColor: lightColors.semantic.vexCyan,
-            shadowOffset: { width: 0, height: 0 },
-            shadowRadius: theme.spacing[6],
+            shadowColor: '#0C765F',
+            shadowOffset: { width: 0, height: 12 },
+            shadowRadius: 20,
             width: '100%',
             overflow: 'hidden',
-            opacity: disabled ? theme.opacity[50] : theme.opacity[100],
+            opacity: disabled ? 0.5 : 1,
           },
           animatedStyle,
         ]}
       >
         <LinearGradient
-          colors={[
-            lightColors.semantic.vexCyan,
-            lightColors.semantic.secondary,
-            lightColors.semantic.editorialGold,
-          ]}
+          colors={[...MINT_REST]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={{
@@ -126,11 +123,25 @@ export function VexLaunchButton({
             width: '100%',
           }}
         >
-          <Text variant="heading3" color="text.inverse">
+          <Animated.View
+            pointerEvents="none"
+            style={[
+              {
+                backgroundColor: 'rgba(255, 255, 255, 0.45)',
+                borderRadius: 999,
+                height: 10,
+                left: 20,
+                position: 'absolute',
+                right: 20,
+                top: 4,
+              },
+            ]}
+          />
+          <Text style={{ color: '#FFFFFF', fontSize: 16, fontWeight: '800', letterSpacing: 0.3 }}>
             {isLoading ? 'Loading' : label}
           </Text>
           {subLabel ? (
-            <Text variant="caption" color="text.inverse" opacity={theme.opacity[70]}>
+            <Text style={{ color: 'rgba(255, 255, 255, 0.85)', fontSize: 12, fontWeight: '600' }}>
               {subLabel}
             </Text>
           ) : null}
@@ -139,3 +150,5 @@ export function VexLaunchButton({
     </Pressable>
   );
 }
+
+void MINT_PRESS;

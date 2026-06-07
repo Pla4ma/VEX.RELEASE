@@ -1,11 +1,11 @@
 import React from 'react';
 import { View } from 'react-native';
 
-import { getPremiumCardStyle } from '../../../components/premiumStyles';
-import { Button } from '../../../components/primitives/Button';
 import { Text } from '../../../components/primitives/Text';
+import { GlassCard } from '../../../components/glass/GlassCard';
+import { LiquidButton } from '../../../components/glass/LiquidButton';
+import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import type { NextBestAction } from '../../../features/progression';
-import { useTheme } from '../../../theme';
 
 export function NextBestActionCard({
   action,
@@ -14,38 +14,56 @@ export function NextBestActionCard({
   action: NextBestAction;
   onPress: () => void;
 }) {
-  const { theme } = useTheme();
   return (
-    <View
-      style={{
-        borderWidth: 1,
-        borderColor: theme.colors.primary[100],
-        backgroundColor: theme.colors.background.secondary,
-        padding: theme.spacing[4],
-        gap: theme.spacing[3],
-        ...getPremiumCardStyle('large'),
-      }}
-    >
-      <Text variant="label" color={theme.colors.primary[500]}>
-        Next Best Action
-      </Text>
-      <Text variant="h4" color={theme.colors.text.primary}>
-        {action.title}
-      </Text>
-      <Text variant="bodySmall" color={theme.colors.text.secondary}>
-        {action.description}
-      </Text>
-      <Text variant="caption" color={theme.colors.text.tertiary}>
-        {action.rewardLabel}
-      </Text>
-      <Button
-        onPress={onPress}
-        accessibilityLabel="Perform action"
-        accessibilityRole="button"
-        accessibilityHint="Double tap to activate"
-      >
-        {action.ctaLabel}
-      </Button>
-    </View>
+    <GlassCard variant="premium" padding={20} radius={26}>
+      <View style={{ gap: 10 }}>
+        <Text
+          style={{
+            color: vexLightGlass.mint[700],
+            fontSize: 11,
+            fontWeight: '700',
+            letterSpacing: 0.5,
+            textTransform: 'uppercase',
+          }}
+        >
+          Next Best Action
+        </Text>
+        <Text
+          style={{
+            color: vexLightGlass.text.primary,
+            fontSize: 18,
+            fontWeight: '800',
+            letterSpacing: -0.2,
+          }}
+        >
+          {action.title}
+        </Text>
+        <Text
+          style={{
+            color: vexLightGlass.text.secondary,
+            fontSize: 13,
+            lineHeight: 19,
+          }}
+        >
+          {action.description}
+        </Text>
+        <Text
+          style={{
+            color: vexLightGlass.text.tertiary,
+            fontSize: 12,
+          }}
+        >
+          {action.rewardLabel}
+        </Text>
+        <LiquidButton
+          label={action.ctaLabel}
+          onPress={onPress}
+          variant="primary"
+          fullWidth
+          accessibilityLabel="Perform action"
+          accessibilityHint="Double tap to activate"
+        />
+      </View>
+    </GlassCard>
   );
 }

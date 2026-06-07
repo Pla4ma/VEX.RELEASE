@@ -1,7 +1,9 @@
 import React, { useMemo } from 'react';
 import { View } from 'react-native';
 import { Text } from '@/components/primitives/Text';
-import { useTheme } from '@/theme';
+import { GlassCard } from '@/components/glass/GlassCard';
+import { GlassProgressBar } from '@/components/glass/GlassProgressBar';
+import { vexLightGlass } from '@/theme/tokens/vex-light-glass';
 import type { FocusScoreDashboardModel } from '../types';
 
 interface FactorMapProps {
@@ -9,71 +11,80 @@ interface FactorMapProps {
 }
 
 export function FactorMap({ model }: FactorMapProps): JSX.Element | null {
-  const { theme } = useTheme();
-  const strongestWeakest = useMemo(() => {
+  const entries = useMemo(() => {
     if (!model.current) {
       return null;
     }
-    const entries = [
+    return [
       ['Consistency', model.current.factors.consistency.score],
       ['Streak stability', model.current.factors.streakStability.score],
       ['Session quality', model.current.factors.sessionQuality.score],
-      [
-        'Intentional difficulty',
-        model.current.factors.intentionalDifficulty.score,
-      ],
+      ['Intentional difficulty', model.current.factors.intentionalDifficulty.score],
       ['Recency', model.current.factors.recency.score],
     ] as const;
-    const strongest = [...entries].sort((a, b) => b[1] - a[1])[0];
-    const weakest = [...entries].sort((a, b) => a[1] - b[1])[0];
-    return { strongest, weakest, entries };
   }, [model]);
 
-  if (!strongestWeakest) {return null;}
+  if (!entries) {
+    return null;
+  }
 
   return (
-    <View
-      style={{
-        borderWidth: 1,
-        borderColor: theme.colors.border.light,
-        borderRadius: theme.borderRadius.lg,
-        padding: theme.spacing[4],
-        gap: theme.spacing[2],
-        backgroundColor: theme.colors.background.secondary,
-      }}
-    >
-      <Text variant="h4" color={theme.colors.text.primary}>
-        Factor map
-      </Text>
-      {strongestWeakest.entries.map(([label, score]) => (
-        <View key={label} style={{ gap: theme.spacing[1] }}>
-          <Text variant="caption" color={theme.colors.text.secondary}>
-            {label}: {score}
-          </Text>
-          <View
-            style={{
-              height: theme.spacing[2],
-              borderRadius: theme.borderRadius.sm,
-              backgroundColor: theme.colors.background.tertiary,
-            }}
-          >
+    <GlassCard variant="default" padding={14} radius={18}>
+      <View
+        style={{
+          alignItems: 'center',
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          marginBottom: 10,
+        }}
+      >
+        <Text
+          style={{
+            color: vexLightGlass.text.primary,
+            fontSize: 14,
+            fontWeight: '800',
+            letterSpacing: -0.2,
+          }}
+        >
+          Factor map
+        </Text>
+        <Text style={{ color: vexLightGlass.text.tertiary, fontSize: 11 }}>
+          i
+        </Text>
+      </View>
+      <View style={{ gap: 8 }}>
+        {entries.map(([label, score]) => (
+          <View key={label} style={{ gap: 4 }}>
             <View
               style={{
-                height: theme.spacing[2],
-                width: `${score}%`,
-                borderRadius: theme.borderRadius.sm,
-                backgroundColor: theme.colors.primary[500],
+                alignItems: 'center',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
               }}
-            />
+            >
+              <Text
+                style={{
+                  color: vexLightGlass.text.secondary,
+                  fontSize: 11,
+                  fontWeight: '600',
+                }}
+              >
+                {label}
+              </Text>
+              <Text
+                style={{
+                  color: vexLightGlass.text.primary,
+                  fontSize: 11,
+                  fontWeight: '700',
+                }}
+              >
+                {score}
+              </Text>
+            </View>
+            <GlassProgressBar value={score} height={5} variant="mint" />
           </View>
-        </View>
-      ))}
-      <Text variant="bodySmall" color={theme.colors.text.secondary}>
-        Strongest pattern: {strongestWeakest.strongest?.[0] ?? '—'}
-      </Text>
-      <Text variant="bodySmall" color={theme.colors.text.secondary}>
-        Weakest pattern: {strongestWeakest.weakest?.[0] ?? '—'}
-      </Text>
-    </View>
+        ))}
+      </View>
+    </GlassCard>
   );
 }

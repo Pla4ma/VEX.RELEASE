@@ -34,7 +34,6 @@ export function HomeStreakProgress({
       longestStreak={longestStreak ?? 0}
       isLoading={isLoading ?? false}
       userId={userId}
-      activeWager={null}
     />
   );
 }

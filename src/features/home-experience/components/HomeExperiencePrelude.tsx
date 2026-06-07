@@ -2,7 +2,9 @@ import React from 'react';
 import { Pressable, View } from 'react-native';
 
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { GlassPillSurface } from '../../../components/glass/GlassPillSurface';
+import { GlassCard } from '../../../components/glass/GlassCard';
+import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import { useOnboardingStore } from '../../onboarding/store';
 import type { ExplicitMotivationStyle, HomeExperienceModel } from '../schemas';
 import type { FirstWeekExperience } from '../../personalization/first-week-schemas';
@@ -27,7 +29,6 @@ export function HomeExperiencePrelude({
   firstWeekExperience,
   surfaceMap,
 }: HomeExperiencePreludeProps): JSX.Element {
-  const { theme } = useTheme();
   const selected = useOnboardingStore((state) => state.explicitMotivationStyle);
   const setStyle = useOnboardingStore(
     (state) => state.setExplicitMotivationStyle,
@@ -58,13 +59,29 @@ export function HomeExperiencePrelude({
     firstWeekExperience?.unlockTease ?? model.teasedElements[0]?.copy;
 
   return (
-    <View style={{ gap: theme.spacing[3] }}>
+    <View style={{ gap: 10 }}>
       {showCoachLine ? (
-        <View style={{ gap: theme.spacing[1] }}>
-          <Text variant="label" color="text.secondary">
+        <View style={{ gap: 4, paddingHorizontal: 2 }}>
+          <Text
+            style={{
+              color: vexLightGlass.text.secondary,
+              fontSize: 12,
+              fontWeight: '800',
+              letterSpacing: 1.4,
+              textTransform: 'uppercase',
+            }}
+          >
             AI Coach
           </Text>
-          <Text variant="body" color="text.primary">
+          <Text
+            style={{
+              color: vexLightGlass.text.primary,
+              fontSize: 14,
+              fontWeight: '500',
+              letterSpacing: -0.2,
+              lineHeight: 20,
+            }}
+          >
             {model.aiCoachMessageStyle}
           </Text>
         </View>
@@ -74,7 +91,7 @@ export function HomeExperiencePrelude({
           style={{
             flexDirection: 'row',
             flexWrap: 'wrap',
-            gap: theme.spacing[2],
+            gap: 6,
           }}
         >
           {OPTIONS.map((option) => (
@@ -84,64 +101,84 @@ export function HomeExperiencePrelude({
               accessibilityLabel={`Choose ${option.label} motivation style`}
               accessibilityRole="button"
               accessibilityHint="Personalizes Home copy and keeps the first session available"
-              style={{
-                backgroundColor:
-                  selected === option.value
-                    ? theme.colors.primary[500]
-                    : theme.colors.background.secondary,
-                borderColor: theme.colors.border.light,
-                borderRadius: theme.borderRadius.md,
-                borderWidth: 1,
-                minHeight: 44,
-                paddingHorizontal: theme.spacing[3],
-                paddingVertical: theme.spacing[2],
-              }}
             >
-              <Text
-                variant="bodySmall"
-                color={
-                  selected === option.value ? 'text.inverse' : 'text.primary'
-                }
+              <GlassPillSurface
+                height={32}
+                selected={selected === option.value}
+                tone={selected === option.value ? 'mint' : 'neutral'}
               >
-                {option.label}
-              </Text>
+                <View style={{ paddingHorizontal: 10 }}>
+                  <Text
+                    style={{
+                      color:
+                        selected === option.value
+                          ? '#FFFFFF'
+                          : vexLightGlass.text.primary,
+                      fontSize: 13,
+                      fontWeight: selected === option.value ? '700' : '500',
+                    }}
+                  >
+                    {option.label}
+                  </Text>
+                </View>
+              </GlassPillSurface>
             </Pressable>
           ))}
         </View>
       ) : null}
       {showEvolutionTeaser ? (
-        <View
-          style={{
-            backgroundColor: theme.colors.background.secondary,
-            borderRadius: theme.borderRadius.lg,
-            padding: theme.spacing[4],
-          }}
-        >
-          <Text variant="label" color="text.secondary">
+        <GlassCard padding={16} radius={22} variant="subtle">
+          <Text
+            style={{
+              color: vexLightGlass.text.secondary,
+              fontSize: 12,
+              fontWeight: '800',
+              letterSpacing: 1.4,
+              textTransform: 'uppercase',
+            }}
+          >
             Next evolution
           </Text>
-          <Text variant="body" color="text.primary">
+          <Text
+            style={{
+              color: vexLightGlass.text.primary,
+              fontSize: 14,
+              fontWeight: '500',
+              letterSpacing: -0.2,
+              lineHeight: 20,
+              marginTop: 4,
+            }}
+          >
             {teaseCopy}
           </Text>
-        </View>
+        </GlassCard>
       ) : null}
       {isBossVisible ? (
-        <View
-          style={{
-            backgroundColor: theme.colors.background.secondary,
-            borderRadius: theme.borderRadius.lg,
-            padding: theme.spacing[4],
-          }}
-          accessibilityLabel="Boss teaser active"
-          accessibilityRole="text"
-        >
-          <Text variant="label" color="text.secondary">
+        <GlassCard variant="subtle">
+          <Text
+            style={{
+              color: vexLightGlass.text.secondary,
+              fontSize: 13,
+              fontWeight: '600',
+              letterSpacing: 0.5,
+              textTransform: 'uppercase',
+            }}
+          >
             Challenge forming
           </Text>
-          <Text variant="body" color="text.primary">
+          <Text
+            style={{
+              color: vexLightGlass.text.primary,
+              fontSize: 15,
+              fontWeight: '500',
+              letterSpacing: -0.2,
+              lineHeight: 22,
+              marginTop: 4,
+            }}
+          >
             {model.rpgBossPlacement}
           </Text>
-        </View>
+        </GlassCard>
       ) : null}
     </View>
   );

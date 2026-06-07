@@ -1,13 +1,14 @@
 import React from 'react';
 import { View } from 'react-native';
 
-import { Button } from '../../components/primitives/Button';
 import { Text } from '../../components/primitives/Text';
-import { getPremiumCardStyle } from '../../components/premiumStyles';
+import { GlassCard } from '../../components/glass/GlassCard';
+import { GlassProgressBar } from '../../components/glass/GlassProgressBar';
+import { LiquidButton } from '../../components/glass/LiquidButton';
 import { Skeleton } from '../../components/ui/Skeleton';
-import { useTheme } from '../../theme';
+import { vexLightGlass } from '../../theme/tokens/vex-light-glass';
 import type { LearningExecutionCopy } from '../../features/learning-execution';
-import { styles, formatMinutes } from './homeScreenCardStyles';
+import { formatMinutes } from './homeScreenCardStyles';
 
 export interface ContentStudyHeroCardProps {
   activePlan: {
@@ -36,164 +37,168 @@ export function ContentStudyHeroCard({
   onStart,
   copy,
 }: ContentStudyHeroCardProps) {
-  const { theme } = useTheme();
   if (isLoading) {
     return (
-      <View
-        style={[
-          styles.card,
-          getPremiumCardStyle('large'),
-          styles.studyCard,
-          {
-            backgroundColor: theme.colors.background.secondary,
-            borderColor: theme.colors.primary[500],
-            padding: theme.spacing[4],
-          },
-        ]}
-      >
-        <Text variant="label" color={theme.colors.primary[500]}>
-          {copy.layerName}
-        </Text>
-        <Skeleton width={180} height={20} />
-        <Skeleton width="100%" height={16} />
-        <Skeleton width={132} height={40} borderRadius={12} />
-      </View>
+      <GlassCard variant="premium" padding={20} radius={26}>
+        <View style={{ gap: 10 }}>
+          <Text
+            style={{
+              color: vexLightGlass.mint[700],
+              fontSize: 11,
+              fontWeight: '700',
+              letterSpacing: 0.5,
+              textTransform: 'uppercase',
+            }}
+          >
+            {copy.layerName}
+          </Text>
+          <Skeleton width={180} height={20} borderRadius={8} />
+          <Skeleton width="100%" height={16} borderRadius={6} />
+          <Skeleton width={132} height={40} borderRadius={12} />
+        </View>
+      </GlassCard>
     );
   }
   if (hasError) {
     return (
-      <View
-        style={[
-          styles.card,
-          getPremiumCardStyle('large'),
-          styles.studyCard,
-          {
-            backgroundColor: theme.colors.background.secondary,
-            borderColor: theme.colors.primary[500],
-            padding: theme.spacing[4],
-          },
-        ]}
-      >
-        <Text variant="label" color={theme.colors.primary[500]}>
-          {copy.layerName}
-        </Text>
-        <Text variant="bodySmall" color={theme.colors.text.secondary}>
-          We could not load your execution progress right now.
-        </Text>
-        <Button
-          variant="outline"
-          onPress={onRetry}
-          accessibilityLabel="Retry loading"
-          accessibilityRole="button"
-          accessibilityHint="Double tap to activate"
-        >
-          Retry
-        </Button>
-      </View>
+      <GlassCard variant="premium" padding={20} radius={26}>
+        <View style={{ gap: 10 }}>
+          <Text
+            style={{
+              color: vexLightGlass.mint[700],
+              fontSize: 11,
+              fontWeight: '700',
+              letterSpacing: 0.5,
+              textTransform: 'uppercase',
+            }}
+          >
+            {copy.layerName}
+          </Text>
+          <Text
+            style={{
+              color: vexLightGlass.text.secondary,
+              fontSize: 13,
+            }}
+          >
+            We could not load your execution progress right now.
+          </Text>
+          <LiquidButton
+            label="Retry"
+            onPress={onRetry}
+            variant="outline"
+            accessibilityLabel="Retry loading"
+            accessibilityHint="Double tap to activate"
+          />
+        </View>
+      </GlassCard>
     );
   }
   if (activePlan) {
     return (
-      <View
-        style={[
-          styles.card,
-          getPremiumCardStyle('large'),
-          styles.studyCard,
-          {
-            backgroundColor: theme.colors.background.secondary,
-            borderColor: theme.colors.primary[500],
-            padding: theme.spacing[4],
-          },
-        ]}
-      >
-        <Text
-          variant="label"
-          color={theme.colors.primary[500]}
-        >{`${copy.homeTitle}: "${activePlan.title}"`}</Text>
-        <View style={{ gap: theme.spacing[2] }}>
-          <View style={[styles.row, { alignItems: 'center' }]}>
-            <Text
-              variant="bodySmall"
-              color={theme.colors.text.primary}
-            >{`Step ${Math.min(activePlan.completedTasks + 1, activePlan.totalTasks)}/${activePlan.totalTasks}`}</Text>
-            <Text variant="bodySmall" color={theme.colors.text.secondary}>
-              {formatMinutes(activePlan.remainingMinutes)}
-            </Text>
-          </View>
-          <View
-            style={[
-              styles.barTrack,
-              {
-                backgroundColor: theme.colors.background.primary,
-                borderRadius: theme.borderRadius.full,
-              },
-            ]}
+      <GlassCard variant="premium" padding={20} radius={26}>
+        <View style={{ gap: 12 }}>
+          <Text
+            style={{
+              color: vexLightGlass.mint[700],
+              fontSize: 11,
+              fontWeight: '700',
+              letterSpacing: 0.5,
+              textTransform: 'uppercase',
+            }}
           >
+            {`${copy.homeTitle}: "${activePlan.title}"`}
+          </Text>
+          <View style={{ gap: 8 }}>
             <View
-              style={[
-                styles.barFill,
-                {
-                  width: `${activePlan.progressPercent}%`,
-                  backgroundColor: theme.colors.primary[500],
-                  borderRadius: theme.borderRadius.full,
-                },
-              ]}
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}
+            >
+              <Text
+                style={{
+                  color: vexLightGlass.text.primary,
+                  fontSize: 14,
+                  fontWeight: '700',
+                }}
+              >
+                {`Step ${Math.min(activePlan.completedTasks + 1, activePlan.totalTasks)}/${activePlan.totalTasks}`}
+              </Text>
+              <Text
+                style={{
+                  color: vexLightGlass.text.secondary,
+                  fontSize: 13,
+                }}
+              >
+                {formatMinutes(activePlan.remainingMinutes)}
+              </Text>
+            </View>
+            <GlassProgressBar
+              value={activePlan.progressPercent}
+              height={8}
+              variant="premium"
             />
           </View>
+          <LiquidButton
+            label={`${copy.homeCta}: ${activePlan.title}`}
+            onPress={onContinue}
+            variant="primary"
+            fullWidth
+            accessibilityLabel={copy.homeCta}
+            accessibilityHint="Double tap to activate"
+          />
         </View>
-        <Button
-          onPress={onContinue}
-          accessibilityLabel={copy.homeCta}
-          accessibilityRole="button"
-          accessibilityHint="Double tap to activate"
-        >{`${copy.homeCta}: ${activePlan.title}`}</Button>
-      </View>
+      </GlassCard>
     );
   }
   return (
-    <View
-      style={[
-        styles.card,
-        getPremiumCardStyle('large'),
-        styles.studyCard,
-        {
-          backgroundColor: theme.colors.background.secondary,
-          borderColor: theme.colors.primary[500],
-          padding: theme.spacing[4],
-        },
-      ]}
-    >
-      <Text variant="label" color={theme.colors.primary[500]}>
-        {copy.layerName}
-      </Text>
-      <Text variant="body" color={theme.colors.text.primary}>
-        {copy.emptyTitle}
-      </Text>
-      <View
-        style={{
-          flexDirection: 'row',
-          gap: theme.spacing[3],
-          flexWrap: 'wrap',
-        }}
-      >
-        <Button
-          onPress={onStart}
-          accessibilityLabel="Get started"
-          accessibilityRole="button"
-          accessibilityHint="Double tap to activate"
+    <GlassCard variant="premium" padding={20} radius={26}>
+      <View style={{ gap: 12 }}>
+        <Text
+          style={{
+            color: vexLightGlass.mint[700],
+            fontSize: 11,
+            fontWeight: '700',
+            letterSpacing: 0.5,
+            textTransform: 'uppercase',
+          }}
         >
-          {copy.emptyCta}
-        </Button>
-        <Button
-          variant="outline"
-          onPress={onSeeHowItWorks}
-          accessibilityLabel="See how it works"
-          accessibilityRole="button"
-          accessibilityHint="Double tap to activate"
+          {copy.layerName}
+        </Text>
+        <Text
+          style={{
+            color: vexLightGlass.text.primary,
+            fontSize: 16,
+            fontWeight: '800',
+            letterSpacing: -0.2,
+          }}
         >
-          See How It Works
-        </Button>
+          {copy.emptyTitle}
+        </Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            gap: 10,
+            flexWrap: 'wrap',
+          }}
+        >
+          <LiquidButton
+            label={copy.emptyCta}
+            onPress={onStart}
+            variant="primary"
+            accessibilityLabel="Get started"
+            accessibilityHint="Double tap to activate"
+          />
+          <LiquidButton
+            label="See How It Works"
+            onPress={onSeeHowItWorks}
+            variant="outline"
+            accessibilityLabel="See how it works"
+            accessibilityHint="Double tap to activate"
+          />
+        </View>
       </View>
-    </View>
+    </GlassCard>
   );
 }

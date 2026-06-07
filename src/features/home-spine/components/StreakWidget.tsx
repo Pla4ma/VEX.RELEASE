@@ -1,21 +1,15 @@
 import React from 'react';
-import { Pressable } from 'react-native';
+import { Pressable, View } from 'react-native';
 import Animated, { FadeIn } from 'react-native-reanimated';
 
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
-import { AnimatedCounter } from '../../../shared/ui/components/AnimatedCounter';
-import { StreakInsuranceCard } from '../../economy/components/StreakInsuranceCard';
-import type { InsuranceStatus } from '../../economy/StreakInsurance';
-import {
-  FlameIcon,
-  MultiplierBadge,
-  RiskBanner,
-  StreakWidgetSkeleton,
-  WagerSection,
-} from './StreakWidget.parts';
-import type { ActiveStreakWager } from './streak-widget-types';
+import { GlassCard } from '../../../components/glass/GlassCard';
+import { GlassPill } from '../../../components/glass/GlassPill';
+import { Icon } from '../../../icons';
+import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
+import { StreakWidgetSkeleton } from './StreakWidget.parts';
+import { DayCheckRow } from './DayCheckRow';
 
 export interface StreakWidgetProps {
   currentDays: number;
@@ -26,16 +20,12 @@ export interface StreakWidgetProps {
   onPress?: () => void;
   isLoading?: boolean;
   userId?: string;
-  onWagerPress?: () => void;
-  activeWager?: ActiveStreakWager | null;
-  /** Streak Insurance - Phase 3 */
-  insuranceStatus?: InsuranceStatus | null;
-  insuranceIsLoading?: boolean;
-  insuranceError?: Error | null;
-  gemBalance?: number;
-  onPurchaseInsurance?: () => void;
-  isPurchasingInsurance?: boolean;
-  purchaseInsuranceError?: Error | null;
+}
+
+function formatHoursRemaining(hours: number | null): string {
+  if (hours === null || hours < 0) {return '—';}
+  if (hours < 1) {return `${Math.max(0, Math.round(hours * 60))}m until streak risk`;}
+  return `${hours.toFixed(hours < 10 ? 1 : 0)}h until streak risk`;
 }
 
 export function StreakWidget({
@@ -46,19 +36,7 @@ export function StreakWidget({
   longestStreak,
   onPress,
   isLoading = false,
-  onWagerPress,
-  activeWager,
-  userId,
-  insuranceStatus,
-  insuranceIsLoading,
-  insuranceError,
-  gemBalance,
-  onPurchaseInsurance,
-  isPurchasingInsurance,
-  purchaseInsuranceError,
 }: StreakWidgetProps): JSX.Element {
-  const { theme } = useTheme();
-
   if (isLoading) {
     return <StreakWidgetSkeleton />;
   }
@@ -68,113 +46,112 @@ export function StreakWidget({
 
   return (
     <Pressable
-      onPress={onPress}
+      accessibilityHint="Shows your streak and timing"
       accessibilityLabel="Open streak details"
       accessibilityRole="button"
-      accessibilityHint="Shows streak status, rewards, and protection options"
+      onPress={onPress}
     >
       <Animated.View entering={FadeIn.duration(400)}>
-        <Box
-          m="lg"
-          p="lg"
-          borderRadius="xl"
-          bg={theme.colors.background.secondary}
-          borderWidth={isUrgent ? 2 : 1}
-          borderColor={
-            isUrgent ? theme.colors.error.DEFAULT : theme.colors.border.DEFAULT
-          }
+        <GlassCard
+          padding={18}
+          radius={26}
+          variant={isUrgent ? 'warning' : 'default'}
         >
-          <Box flexDirection="row" alignItems="center" gap="md">
-            <Box
-              width={64}
-              height={64}
-              borderRadius="full"
-              bg={
-                isUrgent
-                  ? `${theme.colors.error[500]}20`
-                  : theme.colors.background.tertiary
-              }
-              justifyContent="center"
-              alignItems="center"
-            >
-              <FlameIcon
-                riskLevel={riskLevel}
-                currentDays={currentDays}
-                size={32}
-              />
+          <Box
+            alignItems="center"
+            flexDirection="row"
+            gap="sm"
+            justifyContent="space-between"
+          >
+            <Box alignItems="center" flexDirection="row" gap={12}>
+              <View
+                style={{
+                  alignItems: 'center',
+                  backgroundColor: isUrgent
+                    ? 'rgba(240, 138, 75, 0.22)'
+                    : 'rgba(240, 138, 75, 0.18)',
+                  borderColor: 'rgba(240, 138, 75, 0.55)',
+                  borderRadius: 999,
+                  borderWidth: 1,
+                  height: 44,
+                  justifyContent: 'center',
+                  shadowColor: '#F08A4B',
+                  shadowOffset: { width: 0, height: 4 },
+                  shadowOpacity: 0.45,
+                  shadowRadius: 10,
+                  width: 44,
+                }}
+              >
+                <Icon color="#C2410C" name="fire" size="md" variant="solid" />
+              </View>
+              {isEmpty ? (
+                <Text
+                  style={{
+                    color: vexLightGlass.text.primary,
+                    fontSize: 17,
+                    fontWeight: '800',
+                  }}
+                >
+                  No streak yet
+                </Text>
+              ) : (
+                <Text
+                  style={{
+                    color: vexLightGlass.text.primary,
+                    fontSize: 18,
+                    fontWeight: '800',
+                    letterSpacing: -0.2,
+                  }}
+                >
+                  {`${currentDays} Day Streak`}
+                </Text>
+              )}
             </Box>
-
-            <Box flex={1} gap="xs">
-              <Box flexDirection="row" alignItems="center" gap="sm">
-                {isEmpty ? (
-                  <Text variant="h3" color="text.primary">
-                    No streak yet
-                  </Text>
-                ) : (
-                  <Box flexDirection="row" alignItems="center" gap="xs">
-                    <AnimatedCounter
-                      value={currentDays}
-                      size="lg"
-                      color={theme.colors.text.primary}
-                      duration={800}
-                    />
-                    <Text variant="h3" color="text.primary">
-                      -day streak
-                    </Text>
-                  </Box>
-                )}
-              </Box>
-
-              <Box flexDirection="row" alignItems="center" gap="sm">
-                {isEmpty ? (
-                  <Text variant="bodySmall" color="text.secondary">
-                    Start your streak today.
-                  </Text>
-                ) : (
-                  <>
-                    <MultiplierBadge multiplier={multiplier} />
-                    {longestStreak > currentDays && (
-                      <Box flexDirection="row" alignItems="center" gap="xs">
-                        <Text variant="caption" color="text.tertiary">
-                          Best:
-                        </Text>
-                        <AnimatedCounter
-                          value={longestStreak}
-                          size="sm"
-                          color={theme.colors.text.tertiary}
-                          duration={600}
-                        />
-                      </Box>
-                    )}
-                  </>
-                )}
-              </Box>
-            </Box>
-
-            <Text fontSize={20} color={theme.colors.text.tertiary}>
-              {'>'}
-            </Text>
-          </Box>
-
-          <RiskBanner riskLevel={riskLevel} hoursRemaining={hoursRemaining} />
-          <WagerSection
-            currentDays={currentDays}
-            activeWager={activeWager}
-            onWagerPress={onWagerPress}
-          />
-          {currentDays >= 7 && userId && (
-            <StreakInsuranceCard
-              status={insuranceStatus ?? null}
-              isLoading={insuranceIsLoading ?? false}
-              error={insuranceError ?? null}
-              currentStreakDays={currentDays}
-              gemBalance={gemBalance ?? 0}
-              onPurchase={onPurchaseInsurance ?? (() => {})}
-              isPurchasing={isPurchasingInsurance ?? false}
-              purchaseError={purchaseInsuranceError ?? null}
+            <GlassPill
+              label={`x${multiplier.toFixed(1)}`}
+              size="sm"
+              variant="fire"
             />
-          )}
-        </Box>
+          </Box>
+          {!isEmpty ? <DayCheckRow currentDays={currentDays} /> : null}
+          <Box
+            alignItems="center"
+            flexDirection="row"
+            justifyContent="space-between"
+            mt={14}
+          >
+            <Text
+              style={{
+                color: isUrgent ? '#A04A12' : vexLightGlass.text.secondary,
+                fontSize: 12,
+                fontWeight: '600',
+              }}
+            >
+              {isEmpty
+                ? 'Start your streak today.'
+                : formatHoursRemaining(hoursRemaining)}
+            </Text>
+            {longestStreak > currentDays && !isEmpty ? (
+              <Text
+                style={{
+                  color: vexLightGlass.text.tertiary,
+                  fontSize: 11,
+                  fontWeight: '600',
+                }}
+              >
+                {`Best: ${longestStreak}d`}
+              </Text>
+            ) : null}
+          </Box>
+          <View style={{ alignItems: 'flex-end', marginTop: 4 }}>
+            <Icon
+              color={vexLightGlass.text.tertiary}
+              name="chevronRight"
+              size="sm"
+              variant="outline"
+            />
+          </View>
+        </GlassCard>
       </Animated.View>
     </Pressable>
   );

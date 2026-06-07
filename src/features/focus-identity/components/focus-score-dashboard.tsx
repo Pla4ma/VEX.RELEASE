@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import { EmptyState } from '../../../components/EmptyState';
 import { ErrorState } from '../../../components/states/ErrorState';
-import { useTheme } from '../../../theme';
+import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import type { FocusScoreDashboardModel } from '../types';
 import { loadingSkeleton } from './loading-skeleton';
 import { ScoreCard } from './score-card';
@@ -22,13 +22,11 @@ export function FocusScoreDashboard({
   onStartSession,
   onOpenMonthlyReport,
 }: FocusScoreDashboardProps): JSX.Element {
-  const { theme } = useTheme();
-
   if (model.isPending) {
     return loadingSkeleton(
-      theme.spacing[3],
-      theme.colors.border.DEFAULT,
-      theme.colors.background.secondary,
+      12,
+      'rgba(16, 35, 31, 0.15)',
+      vexLightGlass.background.pageMid,
     );
   }
   if (model.isError) {
@@ -56,7 +54,7 @@ export function FocusScoreDashboard({
   }
 
   return (
-    <View style={{ gap: theme.spacing[3] }}>
+    <View style={{ gap: 12 }}>
       <ScoreCard model={model} />
       <FactorMap model={model} />
       <WhatChanged model={model} onOpenMonthlyReport={onOpenMonthlyReport} />

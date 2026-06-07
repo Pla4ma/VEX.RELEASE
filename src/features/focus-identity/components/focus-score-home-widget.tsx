@@ -3,7 +3,8 @@ import { Pressable, View } from 'react-native';
 import { Text } from '@components/primitives/Text'; // Use alias
 import { Skeleton } from '@components/ui/Skeleton'; // Use alias
 import { StatusBanner } from '@/shared/ui/components/StatusFeedback'; // Use alias
-import { useTheme } from '../../../theme'; // Use alias
+import { GlassCard } from '../../../components/glass/GlassCard';
+import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import type { FocusScoreDashboardModel } from '../types'; // Import from types.ts
 import { getMinTouchTargetStyle } from '../../../utils/touchTarget';
 
@@ -18,24 +19,20 @@ export function FocusScoreHomeWidget({
   onPress,
   onRetry,
 }: FocusScoreHomeWidgetProps): JSX.Element {
-  const { theme } = useTheme();
   if (model.isPending) {
     return (
-      <View
+      <GlassCard
         testID="focus-score-home-widget-skeleton"
-        style={{
-          borderWidth: 1,
-          borderColor: theme.colors.border.light,
-          borderRadius: theme.borderRadius.lg,
-          backgroundColor: theme.colors.background.secondary,
-          padding: theme.spacing[4],
-          gap: theme.spacing[2],
-        }}
+        variant="default"
+        padding={16}
+        radius={24}
       >
-        <Skeleton width={100} height={16} />
-        <Skeleton width={200} height={24} />
-        <Skeleton width={150} height={16} />
-      </View>
+        <View style={{ gap: 8 }}>
+          <Skeleton width={100} height={16} />
+          <Skeleton width={200} height={24} />
+          <Skeleton width={150} height={16} />
+        </View>
+      </GlassCard>
     );
   }
 
@@ -64,7 +61,7 @@ export function FocusScoreHomeWidget({
   const reason = model.history.at(-1)?.reason ?? model.current.lastChangeReason;
 
   return (
-    <View style={{ gap: theme.spacing[2] }}>
+    <View style={{ gap: 8 }}>
       {model.isOffline ? (
         <StatusBanner
           status="offline"
@@ -77,32 +74,49 @@ export function FocusScoreHomeWidget({
         accessibilityLabel="Open focus score dashboard"
         accessibilityRole="button"
         accessibilityHint="Opens the full focus dashboard with trends and factor details"
-        style={{
-          ...getMinTouchTargetStyle(),
-          borderWidth: 1,
-          borderColor: theme.colors.border.light,
-          borderRadius: theme.borderRadius.lg,
-          backgroundColor: theme.colors.background.secondary,
-          padding: theme.spacing[4],
-          gap: theme.spacing[1],
-        }}
       >
-        <Text variant="label" color={theme.colors.text.secondary}>
-          Focus Score
-        </Text>
-        <Text variant="h3" color={theme.colors.text.primary}>
-          {model.current.currentScore} · {model.current.band}
-        </Text>
-        <Text variant="bodySmall" color={theme.colors.text.secondary}>
-          Delta since last session: {delta >= 0 ? `+${delta}` : delta}
-        </Text>
-        <Text
-          variant="bodySmall"
-          color={theme.colors.text.secondary}
-          numberOfLines={2}
-        >
-          {reason}
-        </Text>
+        <GlassCard variant="default" padding={16} radius={24}>
+          <View style={{ gap: 4 }}>
+            <Text
+              style={{
+                color: vexLightGlass.text.secondary,
+                fontSize: 11,
+                fontWeight: '700',
+                letterSpacing: 0.5,
+                textTransform: 'uppercase',
+              }}
+            >
+              Focus Score
+            </Text>
+            <Text
+              style={{
+                color: vexLightGlass.text.primary,
+                fontSize: 22,
+                fontWeight: '800',
+                letterSpacing: -0.3,
+              }}
+            >
+              {model.current.currentScore} · {model.current.band}
+            </Text>
+            <Text
+              style={{
+                color: vexLightGlass.text.secondary,
+                fontSize: 13,
+              }}
+            >
+              {delta >= 0 ? `+${delta}` : delta} since last session
+            </Text>
+            <Text
+              style={{
+                color: vexLightGlass.text.tertiary,
+                fontSize: 12,
+              }}
+              numberOfLines={2}
+            >
+              {reason}
+            </Text>
+          </View>
+        </GlassCard>
       </Pressable>
     </View>
   );

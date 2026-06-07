@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { useSharedValue, useAnimatedStyle, withSpring, withTiming } from 'react-native-reanimated';
-import { useTheme } from '../../../theme';
+import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import {
   useFocusIdentity,
   useFocusScoreColor,
@@ -29,7 +29,6 @@ export function FocusScoreCard({
   showTrend = true,
   animate = true,
 }: FocusScoreCardProps) {
-  const { theme } = useTheme();
   const {
     profile,
     loadingState,
@@ -72,7 +71,7 @@ export function FocusScoreCard({
     return (
       <FocusScoreCardSkeleton
         size={size}
-        borderColor={theme.colors.border.DEFAULT}
+        borderColor="rgba(16, 35, 31, 0.15)"
       />
     );
   }
@@ -83,7 +82,7 @@ export function FocusScoreCard({
         error={error}
         isRetrying={isRetrying}
         retry={retry}
-        primaryColor={theme.colors.primary[500]}
+        primaryColor={vexLightGlass.mint[500]}
       />
     );
   }
@@ -108,8 +107,8 @@ export function FocusScoreCard({
       scoreProgress={scoreProgress}
       percentileRank={profile?.percentileRank ?? null}
       isInRecovery={Boolean(profile?.isInRecovery)}
-      successColor={theme.colors.success.DEFAULT}
-      errorColor={theme.colors.error.DEFAULT}
+      successColor={vexLightGlass.semantic.success}
+      errorColor={vexLightGlass.semantic.danger}
     />
   );
 }

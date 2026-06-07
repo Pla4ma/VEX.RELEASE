@@ -1,11 +1,12 @@
 import React from 'react';
 import { Pressable, View } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { GlassCard } from '../../../components/glass/GlassCard';
+import { LiquidButton } from '../../../components/glass/LiquidButton';
 import { getMinTouchTargetStyle } from '../../../utils/touchTarget';
 import { buttonTap } from '../../../utils/haptics';
 import type { CoachPresence } from '../schemas';
-import { lightColors } from '@/theme/tokens/colors';
+import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 
 interface CoachPresenceCardProps {
   presence: CoachPresence;
@@ -18,11 +19,8 @@ export function CoachPresenceCard({
   onAction,
   onPress,
 }: CoachPresenceCardProps): JSX.Element {
-  const { theme } = useTheme();
-
   const reactionColor = getReactionColor(
     presence.visualCompanionState.reaction,
-    theme.colors.semantic,
   );
 
   return (
@@ -35,105 +33,101 @@ export function CoachPresenceCard({
       accessibilityRole="button"
       accessibilityHint="Opens the coach presence action"
     >
-      <View
-        style={{
-          backgroundColor: theme.colors.background.elevated,
-          borderColor: theme.colors.border.light,
-          borderRadius: theme.spacing[3],
-          borderWidth: 1,
-          gap: theme.spacing[3],
-          padding: theme.spacing[4],
-        }}
-      >
-        <View
-          style={{
-            alignItems: 'center',
-            flexDirection: 'row',
-            gap: theme.spacing[3],
-          }}
-        >
-          {/* Visual reaction indicator - small signal orb */}
+      <GlassCard variant="subtle">
+        <View style={{ gap: 12 }}>
           <View
             style={{
               alignItems: 'center',
-              backgroundColor: `${reactionColor}18`,
-              borderRadius: theme.spacing[6],
-              height: 48,
-              justifyContent: 'center',
-              width: 48,
+              flexDirection: 'row',
+              gap: 12,
             }}
           >
+            {/* Visual reaction indicator - small signal orb */}
             <View
               style={{
-                width: 12,
-                height: 12,
-                borderRadius: 6,
-                backgroundColor: reactionColor,
+                alignItems: 'center',
+                backgroundColor: `${reactionColor}18`,
+                borderRadius: 24,
+                height: 48,
+                justifyContent: 'center',
+                width: 48,
               }}
-            />
-          </View>
-          <View style={{ flex: 1, gap: theme.spacing[1] }}>
-            <Text variant="label" color="text.secondary">
-              Coach Presence
-            </Text>
-            <Text
-              variant="body"
-              color="text.primary"
-              style={{ fontWeight: '700' }}
             >
-              {presence.message}
-            </Text>
+              <View
+                style={{
+                  width: 12,
+                  height: 12,
+                  borderRadius: 6,
+                  backgroundColor: reactionColor,
+                }}
+              />
+            </View>
+            <View style={{ flex: 1, gap: 4 }}>
+              <Text
+                style={{
+                  color: vexLightGlass.text.secondary,
+                  fontSize: 13,
+                  fontWeight: '600',
+                  letterSpacing: 0.5,
+                  textTransform: 'uppercase',
+                }}
+              >
+                Coach Presence
+              </Text>
+              <Text
+                style={{
+                  color: vexLightGlass.text.primary,
+                  fontSize: 15,
+                  fontWeight: '700',
+                  letterSpacing: -0.2,
+                  lineHeight: 22,
+                }}
+              >
+                {presence.message}
+              </Text>
+            </View>
           </View>
-        </View>
 
-        <Text variant="caption" color="text.secondary">
-          {presence.progressReaction}
-        </Text>
-
-        <Pressable
-          onPress={() => {
-            buttonTap();
-            onAction();
-          }}
-          accessibilityLabel={presence.nextAction.label}
-          accessibilityRole="button"
-          accessibilityHint={presence.nextAction.reason}
-        >
-          <View
+          <Text
             style={{
-              ...getMinTouchTargetStyle(),
-              alignItems: 'center',
-              backgroundColor: theme.colors.primary[500],
-              borderRadius: theme.spacing[2],
-              justifyContent: 'center',
-              paddingHorizontal: theme.spacing[4],
+              color: vexLightGlass.text.secondary,
+              fontSize: 13,
+              lineHeight: 18,
             }}
           >
-            <Text variant="label" color={theme.colors.text.inverse}>
-              {presence.nextAction.label}
-            </Text>
-          </View>
-        </Pressable>
-      </View>
+            {presence.progressReaction}
+          </Text>
+
+          <LiquidButton
+            label={presence.nextAction.label}
+            onPress={() => {
+              buttonTap();
+              onAction();
+            }}
+            accessibilityLabel={presence.nextAction.label}
+            accessibilityHint={presence.nextAction.reason}
+            size="sm"
+          />
+        </View>
+      </GlassCard>
     </Pressable>
   );
 }
 
 function getReactionColor(
   reaction: CoachPresence['visualCompanionState']['reaction'],
-  semantic: Record<string, string>,
 ): string {
   switch (reaction) {
     case 'celebrating':
-      return semantic.success ?? lightColors.semantic.success;
+      return vexLightGlass.semantic.success;
     case 'focused':
-      return semantic.accent ?? lightColors.accent.blue;
+      return '#54AEEA';
     case 'recovering':
-      return semantic.warning ?? lightColors.semantic.warning;
+      return vexLightGlass.semantic.warning;
     case 'ready':
-      return semantic.primary ?? lightColors.accent.purple;
+      return '#8B5CF6';
     default:
-      return semantic.textMuted ?? lightColors.text.muted;
+      return vexLightGlass.text.disabled;
   }
 }
 
