@@ -5,6 +5,7 @@ import { useSessionUIStore } from '../../../store/session-state';
 import { useHomeSpineModel } from '../../../features/home-spine/hooks';
 import { getNextBestAction } from '../../../features/progression';
 import { navigateToSessionStackScreen, navigateToMainTab } from '../../../navigation/navigation-helpers';
+import type { SessionStackParams } from '../../../navigation/types';
 import { getNextUnlockFeature } from '../hooks/home-controller-helpers';
 import { buildHomeReturnReasonState } from '../../../features/home-spine/service';
 import type { HomeReturnReason } from '../hooks/useHomeReturnReason';
@@ -45,7 +46,7 @@ export function useActivatingContainerModel(
   const stubActions = useMemo(() => stubNavigationActions(), []);
 
   const openSetup = useCallback(
-    (params: Record<string, unknown> = {}): void => {
+    (params: SessionStackParams['SessionSetup'] = {}): void => {
       if (userId && disclosure.inputs.totalCompletedSessions === 0) {
         analytics.trackFirstSessionStarted(userId, 'home');
       }

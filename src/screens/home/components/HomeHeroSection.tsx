@@ -15,7 +15,7 @@ import {
 } from '../../../features/liveops-config';
 import type { HomeSurfaceMap } from '../../../features/home-experience/surface-decision-schemas';
 import type { FirstWeekExperience } from '../../../features/personalization/first-week-schemas';
-import type { ExtendedRootStackParams } from '../../../navigation/types';
+import type { ExtendedRootStackParams, SessionStackParams } from '../../../navigation/types';
 import type { HomeController } from '../hooks/home-controller-types';
 import { VexFocusSurface } from './VexFocusSurface';
 import {
@@ -150,10 +150,8 @@ export function HomeHeroSection({
       }
     }
 
-    // Bridge: openSetup expects Record<string, unknown>, SessionSetupParams lacks index signature.
-    // The shape is validated by Zod in toSessionSetupParams.
     controller.openSetup(
-      toSessionSetupParams(params) as Record<string, unknown>,
+      toSessionSetupParams(params),
     );
   };
 

@@ -1,3 +1,4 @@
+import type { SessionStackParams } from '../../../navigation/types';
 import type { SessionRecommendation, RecommendationStatus } from '../../../features/ai-coach';
 import type { HomeReturnReason } from '../hooks/useHomeReturnReason';
 import { buildHomeReturnReasonState } from '../../../features/home-spine/service';
@@ -15,7 +16,7 @@ export function buildReturnReasonConfig(params: {
   nextBestAction: NextBestAction;
   continueStudyPlan: () => void;
   openNextAction: () => void;
-  openSetup: (params?: Record<string, unknown>) => void;
+  openSetup: (params?: SessionStackParams['SessionSetup']) => void;
   updateRecommendationStatus: {
     mutateAsync: (args: {
       recommendationId: string;

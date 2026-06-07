@@ -22,6 +22,7 @@ import {
 import type { HomeViewModel } from '../hooks/home-view-model';
 import type { HomeController } from '../hooks/home-controller-types';
 import { navigateToSessionStackScreen } from '../../../navigation/navigation-helpers';
+import type { SessionStackParams } from '../../../navigation/types';
 import {
   getFocusedMinutesForToday,
   getNextUnlockFeature,
@@ -77,7 +78,7 @@ export function useEngagedContainerModel(
   );
 
   const openSetup = useCallback(
-    (params: Record<string, unknown> = {}): void => {
+    (params: SessionStackParams['SessionSetup'] = {}): void => {
       if (userId && disclosure.inputs.totalCompletedSessions === 0) {
         analytics.trackFirstSessionStarted(userId, 'home');
       }

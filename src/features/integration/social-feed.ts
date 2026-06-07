@@ -1,6 +1,7 @@
 import { eventBus } from '../../events/EventBus';
 import * as Sentry from '@sentry/react-native';
 import type { SocialActivity, CompetitiveResult, SquadChallenge } from './social-feed-types';
+import { CompetitiveResultSchema } from './social-feed-types';
 import {
   createFeedEntry,
   notifyRelevantUsers,
@@ -52,7 +53,7 @@ export function initializeSocialFeedIntegration(): () => void {
 
   handlers.push(
     eventBus.subscribe('leaderboards:result', async (rawData) => {
-      const event = rawData as CompetitiveResult;
+      const event = CompetitiveResultSchema.parse(rawData);
       if (!event || !event.userId) {
         return;
       }

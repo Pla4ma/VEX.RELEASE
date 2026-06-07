@@ -51,7 +51,16 @@ export { FINAL_RELEASE_INCLUDED_SYSTEMS, FINAL_RELEASE_HIDDEN_SYSTEMS, APP_STORE
 export const FEATURE_BUILD_ORDER = FLAGS.buildOrder as FeatureKey[];
 export const DISABLED_FEATURES = FLAGS.disabledFeatures as FeatureKey[];
 export const FEATURE_RELEASE_STATES = FLAGS.releaseStates as Record<FeatureKey, FeatureReleaseState>;
-const FLAGS_EXT_REC = FLAGS_EXT as Record<string, unknown>;
+/** Shape of feature-flags-extended.json */
+interface FeatureFlagsExtendedConfig {
+  thresholds: Record<string, number | null>;
+  teaserStarts: Partial<Record<FeatureKey, number>>;
+  priorities: Partial<Record<FeatureKey, number>>;
+  dependencies: Partial<Record<FeatureKey, FeatureKey[]>>;
+  motivationProfiles: Partial<Record<FeatureKey, MotivationProfileConfig>>;
+}
+
+const FLAGS_EXT_REC = FLAGS_EXT as FeatureFlagsExtendedConfig;
 export const FEATURE_THRESHOLDS = (() => {
   const result: Record<string, number> = {};
   for (const [k, v] of Object.entries(FLAGS_EXT_REC.thresholds as Record<string, number | null>)) {

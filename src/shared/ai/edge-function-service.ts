@@ -37,7 +37,7 @@ export async function sendAIRequest(request: AIRequest): Promise<AIResponse> {
   const fallbackCategory =
     REQUEST_TYPE_TO_CATEGORY[request.requestType] ?? 'coach_message';
   // Context validated by Zod schemas upstream; bridge to invokeAIWithFallback's loose type
-  const context = request.context as Record<string, unknown>;
+  const context = asLooselyTypedContext(request.context);
   const { response } = await invokeAIWithFallback(
     request.requestType,
     request.userId,

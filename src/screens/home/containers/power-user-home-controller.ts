@@ -1,4 +1,5 @@
 import type { UseQueryResult } from '@tanstack/react-query';
+import type { SessionStackParams } from '../../../navigation/types';
 import type { SessionRecommendation } from '../../../features/ai-coach';
 import type { LearningExecutionLayer } from '../../../features/learning-execution';
 import type { FeatureAccessResult } from '../../../features/liveops-config';
@@ -36,7 +37,7 @@ export function buildController(params: {
   activeBossQuery: UseQueryResult | null;
   createRecommendation: HomeController['createRecommendation'];
   updateRecommendationStatus: HomeController['updateRecommendationStatus'];
-  openSetup: (params?: Record<string, unknown>) => void;
+  openSetup: (params?: SessionStackParams['SessionSetup']) => void;
   openProgress: () => void;
   openSocial: () => void;
   openContentStudy: () => void;
