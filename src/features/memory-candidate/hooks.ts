@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import * as Sentry from '@sentry/react-native';
 import {
   getMemoryCandidates,
   addMemoryCandidate,
@@ -32,6 +33,9 @@ export function useAddMemoryCandidate() {
         queryKey: ['memory-candidate', input.userId],
       });
     },
+    onError: (error) => {
+      Sentry.captureException(error);
+    },
   });
 }
 
@@ -50,6 +54,9 @@ export function useRemoveMemoryCandidate() {
       queryClient.invalidateQueries({
         queryKey: ['memory-candidate', input.userId],
       });
+    },
+    onError: (error) => {
+      Sentry.captureException(error);
     },
   });
 }

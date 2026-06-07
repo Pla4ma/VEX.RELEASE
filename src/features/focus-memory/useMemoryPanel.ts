@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import * as Sentry from '@sentry/react-native';
 import { listActiveMemories, deleteMemory, acceptMemory } from './service';
 import {
   MemoryPanelItemSchema,
@@ -54,6 +55,9 @@ export function useMemoryPanel(userId: string | null) {
         queryKey: ['focus-memory', userId],
       });
     },
+    onError: (error) => {
+      Sentry.captureException(error);
+    },
   });
 
   const acceptMutation = useMutation({
@@ -68,6 +72,9 @@ export function useMemoryPanel(userId: string | null) {
       queryClient.invalidateQueries({
         queryKey: ['focus-memory', userId],
       });
+    },
+    onError: (error) => {
+      Sentry.captureException(error);
     },
   });
 

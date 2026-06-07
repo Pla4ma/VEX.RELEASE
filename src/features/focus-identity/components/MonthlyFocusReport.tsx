@@ -135,6 +135,7 @@ export function MonthlyFocusReport({
         </Text>
         <Pressable
           onPress={handleClose}
+          accessibilityLabel="Close monthly focus report"
           style={{ padding: theme.spacing[2] }}
         >
           <Text variant="heading3" color="textSecondary">

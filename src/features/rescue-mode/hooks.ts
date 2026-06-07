@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import * as Sentry from '@sentry/react-native';
 import {
   createRescuePlan,
   isRescueEligible,
@@ -51,6 +52,9 @@ export function useCreateRescuePlan() {
         queryKey: ['rescue-mode', variables.userId],
       });
     },
+    onError: (error) => {
+      Sentry.captureException(error);
+    },
   });
 }
 
@@ -65,6 +69,9 @@ export function useRescueEligibility() {
     },
     onMutate: (input) => {
       queryClient.setQueryData(['rescue-eligibility', input.userId], null);
+    },
+    onError: (error) => {
+      Sentry.captureException(error);
     },
   });
 }
@@ -98,6 +105,9 @@ export function useRescueCompletion() {
         queryKey: ['rescue-completions', params.plan.userId],
       });
     },
+    onError: (error) => {
+      Sentry.captureException(error);
+    },
   });
 }
 
@@ -118,6 +128,9 @@ export function useClearRescuePlan() {
     },
     onSuccess: (_result, userId) => {
       queryClient.invalidateQueries({ queryKey: ['rescue-mode', userId] });
+    },
+    onError: (error) => {
+      Sentry.captureException(error);
     },
   });
 }

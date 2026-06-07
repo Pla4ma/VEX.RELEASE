@@ -48,7 +48,7 @@ export function TomorrowPreviewSession({
   const CardWrapper = onPress ? Pressable : View;
   return (
     <Animated.View entering={FadeInUp.duration(500).delay(800)}>
-      <CardWrapper onPress={onPress}>
+      <CardWrapper onPress={onPress} accessibilityLabel={preview.headline}>
         <Box
           m="lg"
           p="lg"

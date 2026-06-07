@@ -53,7 +53,7 @@ export function StakeCard({
   const styles = getUrgencyStyles();
   const CardWrapper = onPress ? Pressable : View;
   return (
-    <CardWrapper onPress={onPress}>
+    <CardWrapper onPress={onPress} accessibilityLabel={title}>
       <View
         style={{
           flexDirection: 'row',

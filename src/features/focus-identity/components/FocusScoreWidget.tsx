@@ -49,7 +49,7 @@ export const FocusScoreWidget = () => {
   const delta = currentScore - previousScore;
 
   return (
-    <TouchableOpacity onPress={handlePress}>
+    <TouchableOpacity onPress={handlePress} accessibilityLabel="Focus Score Widget">
       <Stack padding="md" gap="sm">
         <Text>Focus Score</Text>
         <Text>{currentScore}</Text>

@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { z } from 'zod';
+import * as Sentry from '@sentry/react-native';
 import * as service from '../service';
 import * as repository from '../repository';
 import {
@@ -19,6 +20,9 @@ export function useMarkInsightAsRead(userId: string) {
         queryKey: analyticsKeys.insights(userId),
       });
     },
+    onError: (error) => {
+      Sentry.captureException(error);
+    },
   });
 }
 
@@ -31,6 +35,9 @@ export function useUpdateDashboardWidget(userId: string) {
       queryClient.invalidateQueries({
         queryKey: analyticsKeys.dashboard(userId),
       });
+    },
+    onError: (error) => {
+      Sentry.captureException(error);
     },
   });
 }
@@ -53,6 +60,9 @@ export function useCreateExportJob(userId: string) {
         queryKey: analyticsKeys.exportJobs(userId),
       });
     },
+    onError: (error) => {
+      Sentry.captureException(error);
+    },
   });
 }
 
@@ -69,6 +79,9 @@ export function useUpdateAnalyticsPreferences(userId: string) {
         queryKey: analyticsKeys.preferences(userId),
       });
     },
+    onError: (error) => {
+      Sentry.captureException(error);
+    },
   });
 }
 
@@ -84,6 +97,9 @@ export function useGenerateInsights(userId: string) {
         queryKey: analyticsKeys.summary(userId, 'last_30_days'),
       });
     },
+    onError: (error) => {
+      Sentry.captureException(error);
+    },
   });
 }
 
@@ -96,6 +112,9 @@ export function useDetectPatterns(userId: string) {
       queryClient.invalidateQueries({
         queryKey: analyticsKeys.patterns(userId),
       });
+    },
+    onError: (error) => {
+      Sentry.captureException(error);
     },
   });
 }

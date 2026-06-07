@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuthStore } from '../../../store';
+import * as Sentry from '@sentry/react-native';
 import * as service from '../basic-challenges-service';
 import type {
   BasicChallengeProgressResult,
@@ -58,6 +59,7 @@ export function useUpdateBasicChallengeProgress(
       }
     },
     onError: (error) => {
+      Sentry.captureException(error);
       debug.error(
         'Failed to update challenge progress',
         error instanceof Error ? error : new Error(String(error)),
@@ -106,6 +108,7 @@ export function useClaimBasicChallengeReward(
       }
     },
     onError: (error) => {
+      Sentry.captureException(error);
       debug.error(
         'Failed to claim challenge reward',
         error instanceof Error ? error : new Error(String(error)),

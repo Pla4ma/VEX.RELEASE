@@ -45,7 +45,7 @@ export function FocusScoreCardContent({
   const isPositiveChange = scoreChange > 0;
   const isNegativeChange = scoreChange < 0;
   return (
-    <Pressable onPress={handlePress} disabled={!onPress}>
+    <Pressable onPress={handlePress} disabled={!onPress} accessibilityLabel={`Focus Score ${currentScore}`}>
       <Animated.View style={[animatedStyles]}>
         <Box
           padding={size === 'small' ? 'md' : size === 'large' ? 'xl' : 'lg'}
