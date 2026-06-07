@@ -52,7 +52,7 @@ export function buildActivatingController(
     user: null,
     userId: params.userId,
     isOnline: params.isOnline,
-    isLoading: params.isLoading,
+    isLoading: params.isPending,
     isFirstRun: params.isFirstRun,
     loadError: params.loadError,
     homeHighlight: params.homeHighlight,
@@ -113,7 +113,7 @@ export function buildActivatingHomeReturnValue(
   return {
     userId: params.userId,
     isOnline: params.isOnline,
-    isLoading: params.isLoading,
+    isLoading: params.isPending,
     isFirstRun: params.isFirstRun,
     loadError: params.loadError,
     currentStreak: params.currentStreak,

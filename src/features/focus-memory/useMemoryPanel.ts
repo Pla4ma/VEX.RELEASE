@@ -56,7 +56,9 @@ export function useMemoryPanel(userId: string | null) {
       });
     },
     onError: (error) => {
-      Sentry.captureException(error);
+      Sentry.captureException(error, {
+        tags: { feature: 'focus-memory', operation: 'hide-memory' },
+      });
     },
   });
 
@@ -74,7 +76,9 @@ export function useMemoryPanel(userId: string | null) {
       });
     },
     onError: (error) => {
-      Sentry.captureException(error);
+      Sentry.captureException(error, {
+        tags: { feature: 'focus-memory', operation: 'accept-memory' },
+      });
     },
   });
 

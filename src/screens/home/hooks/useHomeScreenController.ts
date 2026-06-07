@@ -89,7 +89,7 @@ export function useHomeScreenController() {
     currentStreak,
     nextUnlockFeature,
   });
-  const isCoreLoading = disclosure.isLoading;
+  const isCoreLoading = disclosure.isPending;
   const recommendationsQuery = useActiveCoachRecommendations(userId, {
     enabled: runtime.canQueryCoach && Boolean(userId) && !isCoreLoading,
   });

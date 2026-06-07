@@ -94,7 +94,7 @@ export function BossScreenSections({
         <Text variant="h4" color={theme.colors.text.primary}>
           {copy.historyTitle}
         </Text>
-        {historyQuery.isLoading ? (
+        {historyQuery.isPending ? (
           <Text variant="bodySmall" color={theme.colors.text.secondary}>
             Loading recent sessions...
           </Text>

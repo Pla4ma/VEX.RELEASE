@@ -80,7 +80,7 @@ export function buildController(params: {
     user: null,
     userId,
     isOnline,
-    isLoading: disclosure.isLoading || recommendationsPending,
+    isLoading: disclosure.isPending || recommendationsPending,
     isFirstRun,
     loadError,
     homeHighlight,

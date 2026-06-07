@@ -50,7 +50,7 @@ export function SessionSetupCustomizationSection({
       showAdvanced={controller.setupState.showAdvanced}
       smartSuggestion={controller.setupState.smartSuggestion}
       themeQueryError={controller.selectableThemesQuery.isError}
-      themeQueryLoading={controller.selectableThemesQuery.isLoading}
+      themeQueryLoading={controller.selectableThemesQuery.isPending}
       themeQueryRetry={controller.selectableThemesQuery.refetch}
       themes={controller.userThemes}
     />

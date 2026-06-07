@@ -81,7 +81,7 @@ export function useCoachState(userId: string): UseCoachStateResult {
   }, [query]);
   return {
     data: query.data ?? null,
-    isLoading: query.isLoading,
+    isLoading: query.isPending,
     isError: query.isError,
     error: query.error,
     isRetrying,

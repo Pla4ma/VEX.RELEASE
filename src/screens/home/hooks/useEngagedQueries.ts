@@ -30,7 +30,7 @@ export function useEngagedQueries(input: EngagedModelInput) {
   );
   const progressPercent = Math.min(100, Math.round((todayFocusMinutes / 120) * 100));
   const isFirstRun =
-    !disclosure.isLoading &&
+    !disclosure.isPending &&
     disclosure.inputs.totalCompletedSessions === 0 &&
     currentStreak === 0 &&
     currentXp === 0;
@@ -43,7 +43,7 @@ export function useEngagedQueries(input: EngagedModelInput) {
 
   const recommendationsQuery = useCoachRecommendations(
     userId,
-    { enabled: runtime.canQueryCoach && !disclosure.isLoading },
+    { enabled: runtime.canQueryCoach && !disclosure.isPending },
   );
 
   const primaryRecommendation = useMemo<SessionRecommendation | null>(

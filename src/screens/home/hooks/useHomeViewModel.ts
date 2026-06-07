@@ -68,9 +68,9 @@ export function useHomeViewModel(): HomeModelResult {
 
   return {
     isLoading:
-      disclosure.isLoading ||
-      streakQuery.isLoading ||
-      progressionQuery.isLoading,
+      disclosure.isPending ||
+      streakQuery.isPending ||
+      progressionQuery.isPending,
     stage: disclosure.stage,
     sharedInput: {
       analytics,

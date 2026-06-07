@@ -28,7 +28,7 @@ export function FocusScreen(): JSX.Element {
     () => buildFocusModeCards({ streakDays }),
     [streakDays],
   );
-  const statusCopy = streakQuery.isLoading
+  const statusCopy = streakQuery.isPending
     ? 'Loading the best focus entry points for today.'
     : streakDays > 0
       ? `Day ${streakDays} is active. Pick the mode that matches your actual energy.`

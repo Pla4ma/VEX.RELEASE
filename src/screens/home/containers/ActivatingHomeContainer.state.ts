@@ -33,7 +33,7 @@ export function computeActivatingState(
     Math.round((todayFocusMinutes / 120) * 100),
   );
   const isFirstRun =
-    !disclosure.isLoading &&
+    !disclosure.isPending &&
     disclosure.inputs.totalCompletedSessions === 0 &&
     currentStreak === 0 &&
     currentXp === 0;

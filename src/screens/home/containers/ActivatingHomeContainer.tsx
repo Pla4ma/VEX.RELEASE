@@ -129,7 +129,7 @@ export function useActivatingContainerModel(
     todayFocusMinutes,
   });
 
-  const isLoading = disclosure.isLoading;
+  const isLoading = disclosure.isPending;
   const controller: HomeController = {
     user: null,
     userId,

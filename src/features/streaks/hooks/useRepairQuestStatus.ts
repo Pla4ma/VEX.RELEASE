@@ -39,7 +39,7 @@ export function useRepairQuestStatus(): Pick<
       try {
         const statusData = await getRepairQuestStatus(userId);
         return RepairQuestStatusOutputSchema.parse(statusData);
-      } catch (err) {
+      } catch (err: unknown) {
         Sentry.captureException(err, {
           tags: {
             feature: 'streaks',

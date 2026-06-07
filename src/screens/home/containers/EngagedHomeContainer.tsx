@@ -57,7 +57,7 @@ export function useEngagedContainerModel(
   );
   const progressPercent = Math.min(100, Math.round((todayFocusMinutes / 120) * 100));
   const isFirstRun =
-    !disclosure.isLoading &&
+    !disclosure.isPending &&
     disclosure.inputs.totalCompletedSessions === 0 &&
     currentStreak === 0 && currentXp === 0;
 
@@ -67,7 +67,7 @@ export function useEngagedContainerModel(
   const learningExecutionLayer = useLearningExecutionLayer(activeStudyPlanQuery.data ?? null);
   const comebackQuery = useComebackState(runtime.canQueryComeback ? userId : null);
   const { primaryRecommendation, isPending: recommendationsPending } =
-    useActiveCoachRecommendations(userId, runtime.canQueryCoach && !disclosure.isLoading);
+    useActiveCoachRecommendations(userId, runtime.canQueryCoach && !disclosure.isPending);
 
   const canNavigateContentStudy = isFeatureAvailableForNavigation(
     getFeatureAvailability(disclosure.features.content_study),
@@ -149,7 +149,7 @@ export function useEngagedContainerModel(
 
   return {
     userId, isOnline,
-    isLoading: disclosure.isLoading || recommendationsPending,
+    isLoading: disclosure.isPending || recommendationsPending,
     isFirstRun, loadError, currentStreak, currentXp,
     todayFocusMinutes, progressPercent,
     primaryRecommendation: primaryRecommendation ?? null, homeSpine,

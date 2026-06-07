@@ -59,7 +59,7 @@ export function buildEngagedController(
     user: null,
     userId: params.userId,
     isOnline: params.isOnline,
-    isLoading: params.isLoading,
+    isLoading: params.isPending,
     isFirstRun: params.isFirstRun,
     loadError: params.loadError,
     homeHighlight: params.homeHighlight,

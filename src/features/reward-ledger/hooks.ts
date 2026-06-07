@@ -30,7 +30,9 @@ export function useCreateReward() {
       });
     },
     onError: (error) => {
-      Sentry.captureException(error);
+      Sentry.captureException(error, {
+        tags: { feature: 'reward-ledger', operation: 'create-reward' },
+      });
     },
   });
 }

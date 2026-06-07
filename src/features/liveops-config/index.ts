@@ -128,7 +128,7 @@ export function useFeatureAccess(
     error: null,
     features: access.features,
     inputs: { totalCompletedSessions: completedSessions },
-    isLoading: enabled ? stats.isLoading : false,
+    isLoading: enabled ? stats.isPending : false,
     productTier: access.productTier,
     refetchAll: enabled ? stats.refresh : async (): Promise<void> => {},
     stage: access.stage,

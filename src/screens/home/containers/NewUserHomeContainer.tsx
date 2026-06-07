@@ -87,7 +87,7 @@ export function useNewUserContainerModel(
     Math.round((todayFocusMinutes / 120) * 100),
   );
   const isFirstRun =
-    !disclosure.isLoading &&
+    !disclosure.isPending &&
     disclosure.inputs.totalCompletedSessions === 0 &&
     currentStreak === 0 &&
     currentXp === 0;
@@ -140,7 +140,7 @@ export function useNewUserContainerModel(
   });
 
   const isLoading =
-    disclosure.isLoading || streakQuery.isLoading || progressionQuery.isLoading;
+    disclosure.isPending || streakQuery.isPending || progressionQuery.isPending;
 
   const controller = buildContainerController({
     userId,

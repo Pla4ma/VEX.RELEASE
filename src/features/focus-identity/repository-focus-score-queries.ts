@@ -122,7 +122,7 @@ export async function fetchFocusScoreHistory(
       return [];
     }
     return (data ?? []).map(mapHistoryRowToPoint);
-  } catch (err) {
+  } catch (err: unknown) {
     debug.error('Unexpected error in fetchFocusScoreHistory', err as Error);
     return [];
   }

@@ -77,8 +77,8 @@ export function RivalsScreen(): JSX.Element {
   const challengesResult = useActiveChallenges(userId);
   const suggestionsResult = useRivalSuggestions(userId, 5, 4, 30);
   const isInitialLoading =
-    (rivalsResult.isLoading && !rivalsResult.data) ||
-    (challengesResult.isLoading && !challengesResult.data);
+    (rivalsResult.isPending && !rivalsResult.data) ||
+    (challengesResult.isPending && !challengesResult.data);
 
   if (isInitialLoading) {
     return <RivalsScreenSkeleton />;

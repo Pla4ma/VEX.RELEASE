@@ -21,7 +21,9 @@ export function useMarkInsightAsRead(userId: string) {
       });
     },
     onError: (error) => {
-      Sentry.captureException(error);
+      Sentry.captureException(error, {
+        tags: { feature: 'analytics', operation: 'mark-insight-as-read' },
+      });
     },
   });
 }
@@ -37,7 +39,9 @@ export function useUpdateDashboardWidget(userId: string) {
       });
     },
     onError: (error) => {
-      Sentry.captureException(error);
+      Sentry.captureException(error, {
+        tags: { feature: 'analytics', operation: 'update-dashboard-widget' },
+      });
     },
   });
 }
@@ -61,7 +65,9 @@ export function useCreateExportJob(userId: string) {
       });
     },
     onError: (error) => {
-      Sentry.captureException(error);
+      Sentry.captureException(error, {
+        tags: { feature: 'analytics', operation: 'create-export-job' },
+      });
     },
   });
 }
@@ -80,7 +86,9 @@ export function useUpdateAnalyticsPreferences(userId: string) {
       });
     },
     onError: (error) => {
-      Sentry.captureException(error);
+      Sentry.captureException(error, {
+        tags: { feature: 'analytics', operation: 'update-analytics-preferences' },
+      });
     },
   });
 }
@@ -98,7 +106,9 @@ export function useGenerateInsights(userId: string) {
       });
     },
     onError: (error) => {
-      Sentry.captureException(error);
+      Sentry.captureException(error, {
+        tags: { feature: 'analytics', operation: 'generate-insights' },
+      });
     },
   });
 }
@@ -114,7 +124,9 @@ export function useDetectPatterns(userId: string) {
       });
     },
     onError: (error) => {
-      Sentry.captureException(error);
+      Sentry.captureException(error, {
+        tags: { feature: 'analytics', operation: 'detect-patterns' },
+      });
     },
   });
 }

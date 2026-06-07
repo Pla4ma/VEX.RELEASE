@@ -115,7 +115,7 @@ export const HomeContentLower: React.FC<HomeContentLowerProps> = ({
           comebackSessionsCompleted={comebackSessionsCompleted}
           todaysChallenges={todaysChallenges}
           challengesQueryError={data.challengesQuery.error ?? undefined}
-          challengesQueryIsLoading={data.challengesQuery.isLoading}
+          challengesQueryIsLoading={data.challengesQuery.isPending}
           handleClaimReward={handleClaimReward}
           challengesRefetch={() => data.challengesQuery.refetch()}
           openSetup={controller.openSetup}
@@ -161,7 +161,7 @@ export const HomeContentLower: React.FC<HomeContentLowerProps> = ({
           hasStudyError={Boolean(controller.activeStudyPlanQuery.error)}
           history={controller.historyQuery.history}
           isFirstRun={controller.isFirstRun}
-          isStudyLoading={controller.activeStudyPlanQuery.isLoading}
+          isStudyLoading={controller.activeStudyPlanQuery.isPending}
           learningCopy={controller.learningExecutionLayer.copy}
           onContinueStudyPlan={startLearningTarget}
           onOpenProgress={controller.openProgress}

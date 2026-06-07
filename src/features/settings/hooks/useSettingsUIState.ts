@@ -11,11 +11,11 @@ export function useSettingsUIState(userId: string) {
   const appearanceQuery = useAppearanceSettings(userId);
   const privacyQuery = usePrivacySettings(userId);
   const isLoading =
-    preferencesQuery.isLoading ||
-    notificationsQuery.isLoading ||
-    coachQuery.isLoading ||
-    appearanceQuery.isLoading ||
-    privacyQuery.isLoading;
+    preferencesQuery.isPending ||
+    notificationsQuery.isPending ||
+    coachQuery.isPending ||
+    appearanceQuery.isPending ||
+    privacyQuery.isPending;
   const isError =
     preferencesQuery.isError ||
     notificationsQuery.isError ||

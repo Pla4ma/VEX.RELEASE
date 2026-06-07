@@ -43,7 +43,7 @@ export function buildContainerController(
     user: null,
     userId: input.userId,
     isOnline: input.isOnline,
-    isLoading: input.isLoading,
+    isLoading: input.isPending,
     isFirstRun: input.isFirstRun,
     loadError: input.loadError,
     homeHighlight: input.homeHighlight,

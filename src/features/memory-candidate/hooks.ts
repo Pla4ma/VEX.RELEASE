@@ -34,7 +34,9 @@ export function useAddMemoryCandidate() {
       });
     },
     onError: (error) => {
-      Sentry.captureException(error);
+      Sentry.captureException(error, {
+        tags: { feature: 'memory-candidate', operation: 'add-memory-candidate' },
+      });
     },
   });
 }
@@ -56,7 +58,9 @@ export function useRemoveMemoryCandidate() {
       });
     },
     onError: (error) => {
-      Sentry.captureException(error);
+      Sentry.captureException(error, {
+        tags: { feature: 'memory-candidate', operation: 'remove-memory-candidate' },
+      });
     },
   });
 }

@@ -56,7 +56,7 @@ export function usePowerUserHomeModel(
     (sum: number, entry) => sum + getFocusedMinutesForToday(entry), 0,
   );
   const progressPercent = Math.min(100, Math.round((todayFocusMinutes / 120) * 100));
-  const isFirstRun = !disclosure.isLoading &&
+  const isFirstRun = !disclosure.isPending &&
     disclosure.inputs.totalCompletedSessions === 0 && currentStreak === 0 && currentXp === 0;
 
   const createRecommendation = useCreateRecommendation();
@@ -68,7 +68,7 @@ export function usePowerUserHomeModel(
 
   const recommendationsQuery = useCoachRecommendations(
     userId,
-    { enabled: runtime.canQueryCoach && !disclosure.isLoading },
+    { enabled: runtime.canQueryCoach && !disclosure.isPending },
   );
 
   const primaryRecommendation = useMemo<SessionRecommendation | null>(
@@ -150,7 +150,7 @@ export function usePowerUserHomeModel(
 
   const controller = buildHomeController({
     userId, isOnline,
-    isLoading: disclosure.isLoading || recommendationsQuery.isLoading,
+    isLoading: disclosure.isPending || recommendationsQuery.isPending,
     isFirstRun, loadError, homeHighlight, completionSync, clearHomeHighlight,
     currentStreak, currentXp, todayFocusMinutes, progressPercent,
     latestSession: historyQuery.history[0] ?? null,
@@ -173,7 +173,7 @@ export function usePowerUserHomeModel(
 
   return {
     userId, isOnline,
-    isLoading: disclosure.isLoading || recommendationsQuery.isLoading,
+    isLoading: disclosure.isPending || recommendationsQuery.isPending,
     isFirstRun, loadError, currentStreak, currentXp,
     todayFocusMinutes, progressPercent, primaryRecommendation,
     homeSpine, returnReason: displayedReturnReason,

@@ -61,7 +61,7 @@ export async function signUpWithEmail(
     }
 
     return { user: null, error: null };
-  } catch (err) {
+  } catch (err: unknown) {
     return { user: null, error: handleSupabaseError(err) };
   }
 }
@@ -90,7 +90,7 @@ export async function signInWithEmail(
     }
 
     return { user: null, error: null };
-  } catch (err) {
+  } catch (err: unknown) {
     return { user: null, error: handleSupabaseError(err) };
   }
 }
@@ -110,7 +110,7 @@ export async function resetPassword(
     }
 
     return { error: null };
-  } catch (err) {
+  } catch (err: unknown) {
     // Always return success for password reset to prevent email enumeration
     return { error: null };
   }
@@ -128,7 +128,7 @@ export async function updatePassword(
     }
 
     return { error: null };
-  } catch (err) {
+  } catch (err: unknown) {
     return { error: new Error('Password update failed. Please try again.') };
   }
 }

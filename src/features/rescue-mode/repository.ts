@@ -28,7 +28,7 @@ export async function getActiveRescuePlan(
     const raw = storage.getString(`${ACTIVE_PLAN_KEY_PREFIX}${userId}`);
     if (!raw) {return null;}
     return RescuePlanSchema.parse(JSON.parse(raw));
-  } catch (error) {
+  } catch (error: unknown) {
     debug.info('getActiveRescuePlan failed: %s', String(error));
     return null;
   }
@@ -101,7 +101,7 @@ export async function saveRescueMemory(
       const key = `rescue:memory:${memory.id}`;
       storage.set(key, JSON.stringify(memory));
     }
-  } catch (err) {
+  } catch (err: unknown) {
     debug.info('Rescue memory save failed: %s', String(err));
   }
 }

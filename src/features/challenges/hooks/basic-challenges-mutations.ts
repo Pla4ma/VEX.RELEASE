@@ -59,7 +59,9 @@ export function useUpdateBasicChallengeProgress(
       }
     },
     onError: (error) => {
-      Sentry.captureException(error);
+      Sentry.captureException(error, {
+        tags: { feature: 'challenges', operation: 'update-basic-challenge-progress' },
+      });
       debug.error(
         'Failed to update challenge progress',
         error instanceof Error ? error : new Error(String(error)),
@@ -108,7 +110,9 @@ export function useClaimBasicChallengeReward(
       }
     },
     onError: (error) => {
-      Sentry.captureException(error);
+      Sentry.captureException(error, {
+        tags: { feature: 'challenges', operation: 'claim-basic-challenge-reward' },
+      });
       debug.error(
         'Failed to claim challenge reward',
         error instanceof Error ? error : new Error(String(error)),

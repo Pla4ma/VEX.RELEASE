@@ -52,7 +52,7 @@ export function usePowerUserContainerModel(
   );
   const progressPercent = Math.min(100, Math.round((todayFocusMinutes / 120) * 100));
   const isFirstRun =
-    !disclosure.isLoading &&
+    !disclosure.isPending &&
     disclosure.inputs.totalCompletedSessions === 0 &&
     currentStreak === 0 && currentXp === 0;
 
@@ -63,7 +63,7 @@ export function usePowerUserContainerModel(
   const comebackQuery = useComebackState(runtime.canQueryComeback ? userId : null);
   const activeBossQuery = useActiveBoss(runtime.canQueryBoss ? userId || null : null);
   const { primaryRecommendation, isPending: recommendationsPending } =
-    useActiveCoachRecommendations(userId, runtime.canQueryCoach && !disclosure.isLoading);
+    useActiveCoachRecommendations(userId, runtime.canQueryCoach && !disclosure.isPending);
 
   const { openSetup, openProgress, openSocial, openContentStudy, continueStudyPlan, openNextAction } =
     usePowerUserNavigation({
@@ -134,7 +134,7 @@ export function usePowerUserContainerModel(
 
   return {
     userId, isOnline,
-    isLoading: disclosure.isLoading || recommendationsPending,
+    isLoading: disclosure.isPending || recommendationsPending,
     isFirstRun, loadError, currentStreak, currentXp,
     todayFocusMinutes, progressPercent, primaryRecommendation: primaryRecommendation ?? null,
     homeSpine, returnReason: displayedReturnReason,

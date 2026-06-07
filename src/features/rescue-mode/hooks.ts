@@ -53,7 +53,9 @@ export function useCreateRescuePlan() {
       });
     },
     onError: (error) => {
-      Sentry.captureException(error);
+      Sentry.captureException(error, {
+        tags: { feature: 'rescue-mode', operation: 'create-rescue-plan' },
+      });
     },
   });
 }
@@ -71,7 +73,9 @@ export function useRescueEligibility() {
       queryClient.setQueryData(['rescue-eligibility', input.userId], null);
     },
     onError: (error) => {
-      Sentry.captureException(error);
+      Sentry.captureException(error, {
+        tags: { feature: 'rescue-mode', operation: 'check-rescue-eligibility' },
+      });
     },
   });
 }
@@ -106,7 +110,9 @@ export function useRescueCompletion() {
       });
     },
     onError: (error) => {
-      Sentry.captureException(error);
+      Sentry.captureException(error, {
+        tags: { feature: 'rescue-mode', operation: 'complete-rescue' },
+      });
     },
   });
 }
@@ -130,7 +136,9 @@ export function useClearRescuePlan() {
       queryClient.invalidateQueries({ queryKey: ['rescue-mode', userId] });
     },
     onError: (error) => {
-      Sentry.captureException(error);
+      Sentry.captureException(error, {
+        tags: { feature: 'rescue-mode', operation: 'clear-rescue-plan' },
+      });
     },
   });
 }

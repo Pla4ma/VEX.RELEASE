@@ -41,7 +41,7 @@ export function useContentHistory() {
 
   return {
     content: historyQuery.data || [],
-    isLoading: historyQuery.isLoading,
+    isLoading: historyQuery.isPending,
     error: historyQuery.error?.message || null,
     refetch: historyQuery.refetch,
     deleteContent: deleteContentMutation.mutate,
