@@ -1,6 +1,8 @@
 import React from 'react';
-import { View, Image } from 'react-native';
+import { View } from 'react-native';
+import { Image } from 'expo-image';
 import { Skeleton } from '../../../components/ui/Skeleton';
+import { getOptimizedImageUrl } from '../../../shared/performance';
 
 import { Text } from '../../../components/primitives/Text';
 import { Button } from '../../../components/primitives/Button';
@@ -51,9 +53,10 @@ export function YouTubeVideoPreview({
         <>
           {videoInfo.thumbnail && (
             <Image
-              source={{ uri: videoInfo.thumbnail }}
+              source={{ uri: getOptimizedImageUrl(videoInfo.thumbnail, { maxWidth: 320 }) }}
               style={styles.thumbnail}
-              resizeMode="cover"
+              contentFit="cover"
+              cachePolicy="disk"
             />
           )}
           <View style={styles.previewInfo}>

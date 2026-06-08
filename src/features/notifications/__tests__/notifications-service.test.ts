@@ -132,9 +132,9 @@ describe('Service', () => {
       const mockItems = [
         { id: '1', type: 'ACHIEVEMENT', title: 'Test', message: 'Msg', timestamp: Date.now(), read: false },
       ];
-      (notificationsRepo.fetchNotificationCenterItems as jest.Mock).mockResolvedValue(mockItems);
+      (notificationsRepo.fetchNotificationCenterItems as jest.Mock).mockResolvedValue({ items: mockItems, nextCursor: null });
       const result = await getNotificationCenterItems('550e8400-e29b-41d4-a716-446655440000');
-      expect(result).toEqual(mockItems);
+      expect(result).toEqual({ items: mockItems, nextCursor: null });
     });
 
     it('rejects empty userId', async () => {

@@ -1,3 +1,4 @@
+import { z } from 'zod';
 import { supabase } from '../../supabase/client';
 import type { SyncState, SyncConflict, SettingCategory } from './types';
 
@@ -6,8 +7,20 @@ const TABLE_PENDING_CHANGES = 'settings_pending_changes';
 const TABLE_SYNC_CONFLICTS = 'settings_sync_conflicts';
 const TABLE_SETTINGS = 'user_settings';
 
-type PendingChange = { key: string; value: unknown; timestamp: number };
-type RemoteChange = { key: string; value: unknown; category: SettingCategory; timestamp: number };
+const PendingChangeSchema = z.object({
+  key: z.string(),
+  value: z.unknown(),
+  timestamp: z.number(),
+});
+type PendingChange = z.infer<typeof PendingChangeSchema>;
+
+const RemoteChangeSchema = z.object({
+  key: z.string(),
+  value: z.unknown(),
+  category: z.string() as z.ZodType<SettingCategory>,
+  timestamp: z.number(),
+});
+type RemoteChange = z.infer<typeof RemoteChangeSchema>;
 
 export async function fetchSyncState(userId: string): Promise<SyncState | null> {
   const { data, error } = await supabase

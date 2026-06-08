@@ -23,12 +23,12 @@ interface ChallengeHubProps {
   onClaimReward?: (challengeId: string) => void;
   onBrowseChallenges?: () => void;
 }
-export const ChallengeHub: React.FC<ChallengeHubProps> = ({
+export const ChallengeHub = React.memo(({
   userId,
   onChallengePress,
   onClaimReward,
   onBrowseChallenges,
-}) => {
+}: ChallengeHubProps) => {
   const theme = useThemeObject();
   const [activeFilter, setActiveFilter] = useState<ChallengeFilter>('ALL');
   const { isLoading: isLoadingAll } = useActiveChallenges(userId);
@@ -152,4 +152,6 @@ export const ChallengeHub: React.FC<ChallengeHubProps> = ({
       </View>
     </ScrollView>
   );
-};
+});
+
+ChallengeHub.displayName = 'ChallengeHub';

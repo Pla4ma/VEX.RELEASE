@@ -66,19 +66,29 @@ function mapNotificationRow(
 
 export async function fetchNotificationCenterItems(
   userId: string,
-): Promise<NotificationCenterItem[]> {
-  const { data, error } = await supabase
+  cursor?: string,
+): Promise<{ items: NotificationCenterItem[]; nextCursor: string | null }> {
+  let query = supabase
     .from('notifications')
     .select('id,type,notification_type,title,message,body,created_at,timestamp,read,is_read,avatar,action_text,action_route,action_params')
     .eq('user_id', userId)
-    .order('created_at', { ascending: false })
-    .limit(100);
+    .order('created_at', { ascending: false });
+
+  if (cursor) {
+    query = query.lt('created_at', cursor);
+  }
+
+  const { data, error } = await query.limit(100);
   if (error) {
     throw new RepositoryError('fetchNotificationCenterItems', error);
   }
-  return (data ?? []).map((row) =>
+  const items = (data ?? []).map((row) =>
     mapNotificationRow(row as NotificationRow),
   );
+  const nextCursor = items.length === 100
+    ? (items[items.length - 1]?.timestamp?.toString() ?? null)
+    : null;
+  return { items, nextCursor };
 }
 
 export async function markNotificationRead(
@@ -106,10 +116,21 @@ export async function markAllNotificationsRead(userId: string): Promise<void> {
   }
 }
 
+/**
+ * Tracks active notification channels to prevent duplicate subscriptions
+ * for the same userId. Keyed by userId.
+ */
+const activeNotificationChannels = new Map<string, ReturnType<typeof supabase.channel>>();
+
 export function subscribeToNotificationCenter(
   userId: string,
   onChange: () => void,
 ): () => void {
+  // Return no-op cleanup if a channel for this user already exists
+  if (activeNotificationChannels.has(userId)) {
+    return () => {};
+  }
+
   const channelName = `notifications-screen:${userId}`;
   const channel = supabase
     .channel(channelName)
@@ -124,7 +145,14 @@ export function subscribeToNotificationCenter(
       onChange,
     )
     .subscribe();
+
+  activeNotificationChannels.set(userId, channel);
+
   return () => {
-    channel.unsubscribe();
+    const activeChannel = activeNotificationChannels.get(userId);
+    if (activeChannel) {
+      activeChannel.unsubscribe();
+      activeNotificationChannels.delete(userId);
+    }
   };
 }

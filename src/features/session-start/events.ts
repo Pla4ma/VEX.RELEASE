@@ -8,10 +8,11 @@ import type {
   SessionMoodAssessedEvent,
   SessionContextEstablishedEvent,
 } from './types';
+import { v4 } from '../../utils/uuid';
 export { validateSessionStartEvent } from './event-validators';
 
 function generateEventId(): string {
-  return `evt_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  return `evt_${Date.now()}_${v4().replace(/-/g, '').slice(0, 9)}`;
 }
 
 function createEventMetadata(source: string): EventMetadata {

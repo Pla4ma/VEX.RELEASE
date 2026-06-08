@@ -19,7 +19,7 @@ import { AchievementCard, AchievementSkeletonCard, EmptyState, type AchievementW
 const RARITY_ORDER: AchievementRarity[] = ['LEGENDARY', 'EPIC', 'RARE', 'UNCOMMON', 'COMMON'];
 const CATEGORY_ORDER: AchievementCategory[] = ['SESSION', 'STREAK', 'BOSS', 'SOCIAL', 'PROGRESSION', 'ECONOMY'];
 
-export const AchievementsScreen: React.FC = () => {
+export const AchievementsScreen = React.memo(() => {
   const { theme } = useTheme();
   const navigation = useNavigation<NativeStackNavigationProp<ExtendedRootStackParams>>();
   const queryClient = useQueryClient();
@@ -139,6 +139,8 @@ export const AchievementsScreen: React.FC = () => {
       />
     </Box>
   );
-};
+});
+
+AchievementsScreen.displayName = 'AchievementsScreen';
 
 export default withScreenErrorBoundary(AchievementsScreen, 'Achievements');

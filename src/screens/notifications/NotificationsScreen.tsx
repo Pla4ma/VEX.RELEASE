@@ -22,7 +22,7 @@ import {
 import { useNotificationsData } from './useNotificationsData';
 import type { NotificationListItem } from './NotificationScreenConfig';
 
-export const NotificationsScreen: React.FC = () => {
+export const NotificationsScreen = React.memo(() => {
   const { theme } = useTheme();
   const navigation = useNavigation<NativeStackNavigationProp<ExtendedRootStackParams>>();
   const insets = useSafeAreaInsets();
@@ -150,6 +150,8 @@ export const NotificationsScreen: React.FC = () => {
       />
     </Box>
   );
-};
+});
+
+NotificationsScreen.displayName = 'NotificationsScreen';
 
 export default withScreenErrorBoundary(NotificationsScreen, 'Notifications');

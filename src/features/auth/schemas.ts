@@ -17,7 +17,7 @@ const UserPreferencesSchema = z.object({
       enabled: z.boolean(),
       start: z.string(),
       end: z.string(),
-      timezone: z.string(),
+      timezone: z.string().max(100),
     }),
   }),
   privacy: z.object({

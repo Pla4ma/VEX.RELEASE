@@ -74,13 +74,13 @@ const renderSessionCard =
     </View>
   );
 
-export const ProfileActivityTab: React.FC<ProfileActivityTabProps> = ({
+export const ProfileActivityTab = React.memo(({
   theme,
   isLoading,
   isError,
   history,
   onStartSession,
-}) => {
+}: ProfileActivityTabProps) => {
   if (isLoading) {
     return (
       <GlassCard size="lg" variant="default" padding={18} radius={26}>
@@ -128,4 +128,6 @@ export const ProfileActivityTab: React.FC<ProfileActivityTabProps> = ({
       />
     </Box>
   );
-};
+});
+
+ProfileActivityTab.displayName = 'ProfileActivityTab';

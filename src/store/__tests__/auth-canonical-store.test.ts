@@ -40,6 +40,11 @@ jest.mock('../../persistence/SecureStorage', () => ({
   },
 }));
 
+jest.mock('../../persistence/mmkv-key', () => ({
+  getMmkvEncryptionKey: jest.fn(async () => 'test-key'),
+  getMmkvEncryptionKeySync: jest.fn(() => 'test-key'),
+}));
+
 jest.mock('../authProfileStorage', () => ({
   saveUserProfile: jest.fn(),
   removeUserProfile: jest.fn(),

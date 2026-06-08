@@ -19,12 +19,12 @@ interface SessionTimerProps {
   showProgress?: boolean;
 }
 
-export const SessionTimer: React.FC<SessionTimerProps> = ({
+export const SessionTimer = React.memo(function SessionTimer({
   elapsedSeconds,
   totalSeconds,
   isPaused,
   size = 'lg',
-}) => {
+}: SessionTimerProps) {
   const { theme } = useTheme();
   const progress = Math.min(elapsedSeconds / totalSeconds, 1);
   const remainingSeconds = Math.max(totalSeconds - elapsedSeconds, 0);
@@ -40,7 +40,7 @@ export const SessionTimer: React.FC<SessionTimerProps> = ({
     md: { fontSize: 36, strokeWidth: 6, size: 120 },
     lg: { fontSize: 56, strokeWidth: 8, size: 200 },
     hero: { fontSize: 80, strokeWidth: 12, size: 280 },
-  };
+  } as const;
 
   const s = sizeStyles[size];
   const radius = (s.size - s.strokeWidth) / 2;
@@ -131,7 +131,7 @@ export const SessionTimer: React.FC<SessionTimerProps> = ({
       </View>
     </EnterAnimation>
   );
-};
+});
 
 const styles = createSheet({
   container: {

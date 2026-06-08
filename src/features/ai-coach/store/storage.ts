@@ -5,10 +5,11 @@
  */
 
 import { MMKV } from 'react-native-mmkv';
+import { getMmkvEncryptionKeySync } from '../../../persistence/mmkv-key';
 import type { CoachUIState } from './types';
 
 // Storage instance
-const storage = new MMKV({ id: 'coach-store' });
+const storage = new MMKV({ id: 'coach-store', encryptionKey: getMmkvEncryptionKeySync() });
 
 export const mmkvStorage = {
   getItem: (name: string): string | null => {

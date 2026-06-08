@@ -148,7 +148,12 @@ export async function handleExtract(req: Request, supabase: SupabaseClient, user
     return json({ success: true, contentId, extractedLength: extractedText.length, status: 'EXTRACTED' });
   } catch (e) {
     await supabase.from('study_content').update({ status: 'FAILED', error_message: 'Extraction failed' }).eq('id', contentId);
-    console.error('Extraction failed for content:', contentId, e);
+    console.error(JSON.stringify({
+      event: 'extraction_failed',
+      content_id: contentId,
+      error_type: e?.constructor?.name,
+      error_message: e instanceof Error ? e.message : 'Unknown error',
+    }));
     return json({ success: false, error: 'Content extraction failed. Please try again.' }, 400);
   }
 }
@@ -173,14 +178,24 @@ export async function handleGenerate(req: Request, supabase: SupabaseClient, use
       summary: parsed.summary, key_concepts: parsed.keyConcepts, tasks: parsed.tasks, quiz_items: parsed.quizItems, session_plan: parsed.sessionPlan,
     }).select().single();
     if (genError) {
-      console.error('Save failed:', genError);
+      console.error(JSON.stringify({
+        event: 'save_failed',
+        content_id: validated.contentId,
+        error_type: genError?.constructor?.name,
+        error_message: genError?.message,
+      }));
       throw new Error('Failed to save study generation');
     }
     await supabase.from('study_content').update({ status: 'READY', generation_count_today: supabase.rpc('increment'), last_generation_date: new Date().toISOString().split('T')[0] }).eq('id', validated.contentId);
     return json({ success: true, generationId: generation.id, contentId: validated.contentId, summary: parsed.summary, keyConcepts: parsed.keyConcepts, tasks: parsed.tasks, quizItems: parsed.quizItems, sessionPlan: parsed.sessionPlan, remaining: remaining - 1 });
   } catch (e) {
     await supabase.from('study_content').update({ status: 'FAILED' }).eq('id', validated.contentId);
-    console.error('Generation failed:', e);
+    console.error(JSON.stringify({
+      event: 'generation_failed',
+      content_id: validated.contentId,
+      error_type: e?.constructor?.name,
+      error_message: e instanceof Error ? e.message : 'Unknown error',
+    }));
     return json({ success: false, error: 'Study plan generation failed. Please try again.' }, 400);
   }
 }

@@ -30,6 +30,7 @@ export function useFirstWeekProgress(userId: string) {
     queryFn: () => service.getFirstWeekProgress(userId),
     enabled: !!userId,
     staleTime: 1000 * 60 * 5, // 5 minutes
+    gcTime: 1000 * 60 * 30,
     refetchInterval: 1000 * 60 * 2, // Check every 2 minutes
   });
 }

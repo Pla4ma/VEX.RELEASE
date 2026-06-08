@@ -12,6 +12,7 @@ import {
   DEFAULT_ENGINE_CONFIG,
   InterventionError,
 } from './intervention-engine-types';
+import { v4 } from '../../../utils/uuid';
 
 // ─── Condition Evaluation ───
 
@@ -144,7 +145,7 @@ export async function muteUserNotifications(
 // ─── Utilities ───
 
 export function generateExecutionId(): string {
-  return `exec_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
+  return `exec_${Date.now()}_${v4().replace(/-/g, '').slice(0, 11)}`;
 }
 
 export function inferCategoryFromTrigger(

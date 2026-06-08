@@ -59,7 +59,7 @@ export async function initializePresence(userId: string): Promise<void> {
       }
     }
   });
-  activeChannels.set('presence', channel);
+  activeChannels.set(`presence:${userId}`, channel);
 }
 
 export async function updatePresence(
@@ -70,10 +70,8 @@ export async function updatePresence(
   if (!currentUserId) {
     return;
   }
-  const channel = activeChannels.get('presence');
-  if (!channel) {
-    return;
-  }
+  const channel = activeChannels.get(`presence:${userId}`);
+  if (!channel) return;
   const trackStatus = await channel.track({
     userId: currentUserId,
     status,

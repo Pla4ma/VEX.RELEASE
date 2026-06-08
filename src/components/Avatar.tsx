@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Image, Pressable } from 'react-native';
+import { View, Pressable } from 'react-native';
+import { Image } from 'expo-image';
 import { useTheme } from '../theme';
 import { buttonTap } from '../utils/haptics';
 import { Text } from './primitives';
@@ -32,7 +33,7 @@ function getBorderRadius(shape: AvatarShape, sizeValue: number): number {
   }
 }
 
-export const Avatar: React.FC<AvatarProps> = ({
+export const Avatar = React.memo(({
   source,
   name = '?',
   size = 'md',
@@ -44,7 +45,7 @@ export const Avatar: React.FC<AvatarProps> = ({
   style,
   backgroundColor,
   shape = 'circle',
-}) => {
+}: AvatarProps) => {
   const { theme } = useTheme();
   const sizeValue = SIZE_MAP[size];
   const fontSize = FONT_SIZE_MAP[size];
@@ -55,7 +56,7 @@ export const Avatar: React.FC<AvatarProps> = ({
       return (
         <Image
           source={imageSource}
-          resizeMode="cover"
+          contentFit="cover"
           style={[
             avatarStyles.image,
             {
@@ -179,6 +180,8 @@ export const Avatar: React.FC<AvatarProps> = ({
     );
   }
   return AvatarContent;
-};
+});
+
+Avatar.displayName = 'Avatar';
 
 export default Avatar;

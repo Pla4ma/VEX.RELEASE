@@ -8,6 +8,7 @@ import {
   EventMetadata,
   DeviceInfo,
 } from './types';
+import { v4 } from '../../utils/uuid';
 
 export function createNotificationSentEvent(
   userId: string,
@@ -175,7 +176,7 @@ export function createNotificationPreferencesUpdatedEvent(
   };
 }
 function generateEventId(): string {
-  return `evt_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  return `evt_${Date.now()}_${v4().replace(/-/g, '').slice(0, 9)}`;
 }
 function createEventMetadata(source: string): EventMetadata {
   return { source, version: '1.0.0', platform: getPlatform() };

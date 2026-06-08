@@ -50,7 +50,7 @@ export function LoginEmailForm({
           value={email}
         />
         <VexGlassInput
-          autoComplete="password"
+          autoComplete="current-password"
           error={passwordError}
           label="Password"
           onChangeText={onChangePassword}
