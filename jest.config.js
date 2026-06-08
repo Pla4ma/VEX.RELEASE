@@ -68,12 +68,6 @@ module.exports = {
     ...legacyFailingTests,
     '<rootDir>/src/archive/',
     '<rootDir>/src/features/battle-pass/',
-
-    '<rootDir>/src/features/challenges/',
-    '<rootDir>/src/features/inventory/',
-    '<rootDir>/src/features/shop/',
-    '<rootDir>/src/features/squads/',
-    '<rootDir>/src/features/themes/',
   ],
   collectCoverageFrom: [
     'src/**/*.{service,repository,hooks,analytics,events}.{ts,tsx}',
@@ -86,7 +80,7 @@ module.exports = {
     '!src/**/__tests__/**',
     '!src/**/*.test.ts',
     '!src/**/*.test.tsx',
-    '!src/features/{battle-pass,boss,challenges,inventory,shop,squads,themes}/**',
+    '!src/features/{battle-pass,boss}/**',
     '!src/types/supabase.ts',
   ],
   coveragePathIgnorePatterns: ['/node_modules/', '/__tests__/', '/__mocks__/'],
