@@ -22,6 +22,11 @@ export type {
 } from './session-list-utils';
 export { formatDuration, formatTimeAgo, getGradeColor } from './session-list-utils';
 
+const ItemSeparator = React.memo(() => {
+  const { theme } = useTheme();
+  return <Box height={1} mx="lg" bg={theme.colors.border.light} />;
+});
+
 export function RecentSessionsList({
   sessions,
   onViewAll,
@@ -92,9 +97,7 @@ export function RecentSessionsList({
             estimatedItemSize={72}
             scrollEnabled={false}
             showsVerticalScrollIndicator={false}
-            ItemSeparatorComponent={() => (
-              <Box height={1} mx="lg" bg={theme.colors.border.light} />
-            )}
+            ItemSeparatorComponent={ItemSeparator}
           />
         </Box>
       </Box>
