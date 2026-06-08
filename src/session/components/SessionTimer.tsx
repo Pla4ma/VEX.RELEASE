@@ -131,7 +131,7 @@ export const SessionTimer = React.memo(function SessionTimer({
       </View>
     </EnterAnimation>
   );
-};
+});
 
 const styles = createSheet({
   container: {
