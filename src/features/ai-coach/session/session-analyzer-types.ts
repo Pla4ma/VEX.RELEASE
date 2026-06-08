@@ -1,13 +1,24 @@
 import { z } from 'zod';
 
-// ─── Domain types ───────────────────────────────────────────────
-export type KeyConcept = { term: string; definition?: string };
-export type Summary = { overview: string; keyPoints?: string[] };
-export type GenerationRecord = {
-  lastStudiedAt: number | null;
-  keyConcepts: KeyConcept[];
-  summary: Summary;
-};
+// ─── Schemas ────────────────────────────────────────────────────
+export const KeyConceptSchema = z.object({
+  term: z.string(),
+  definition: z.string().optional(),
+});
+export type KeyConcept = z.infer<typeof KeyConceptSchema>;
+
+export const SummarySchema = z.object({
+  overview: z.string(),
+  keyPoints: z.array(z.string()).optional(),
+});
+export type Summary = z.infer<typeof SummarySchema>;
+
+export const GenerationRecordSchema = z.object({
+  lastStudiedAt: z.number().nullable(),
+  keyConcepts: z.array(KeyConceptSchema),
+  summary: SummarySchema,
+});
+export type GenerationRecord = z.infer<typeof GenerationRecordSchema>;
 
 // ─── Constants ──────────────────────────────────────────────────
 export const HIGH_CONFIDENCE_THRESHOLD_DATA_POINTS = 20;
