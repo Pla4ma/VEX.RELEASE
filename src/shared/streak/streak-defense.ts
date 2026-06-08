@@ -65,6 +65,9 @@ export function calculateQualifyingWindow(
     hoursUntilOpen,
     timeLabel: `${timeLabel} tomorrow`,
   };
+}
+
+export function buildStreakDefenseState(
   streakSummary: StreakSummary | null | undefined,
   userId: string | null,
   isLoading: boolean,
