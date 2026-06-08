@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Image, Pressable } from 'react-native';
+import { View, Pressable } from 'react-native';
+import { Image } from 'expo-image';
 import { useTheme } from '../theme';
 import { buttonTap } from '../utils/haptics';
 import { Text } from './primitives';
@@ -55,7 +56,7 @@ export const Avatar = React.memo(({
       return (
         <Image
           source={imageSource}
-          resizeMode="cover"
+          contentFit="cover"
           style={[
             avatarStyles.image,
             {
