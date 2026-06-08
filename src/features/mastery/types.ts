@@ -1,40 +1,44 @@
+import { z } from 'zod';
 import { lightColors } from '@/theme/tokens/colors';
-export type MasteryRank =
-  | 'APPRENTICE'
-  | 'ADEPT'
-  | 'EXPERT'
-  | 'MASTER'
-  | 'GRANDMASTER';
 
-export interface MasteryState {
-  userId: string;
-  totalMasteryPoints: number;
-  rank: MasteryRank;
-  techniques: {
-    durationMastery: number;
-    purityMastery: number;
-    consistencyMastery: number;
-    comebackMastery: number;
-    bossMastery: number;
-  };
-  activeChallenges: MasteryChallenge[];
-  unlockedFeatures: string[];
-  updatedAt: number;
-}
+export const MasteryRankSchema = z.enum(['APPRENTICE', 'ADEPT', 'EXPERT', 'MASTER', 'GRANDMASTER']);
+export type MasteryRank = z.infer<typeof MasteryRankSchema>;
 
-export interface MasteryChallenge {
-  id: string;
-  technique: keyof MasteryState['techniques'];
-  title: string;
-  description: string;
-  difficulty: 'EASY' | 'MEDIUM' | 'HARD' | 'ELITE';
-  target: number;
-  current: number;
-  unit: string;
-  masteryPoints: number;
-  status: 'ACTIVE' | 'COMPLETED' | 'CLAIMED';
-  completedAt: number | null;
-}
+const techniqueKeys = ['durationMastery', 'purityMastery', 'consistencyMastery', 'comebackMastery', 'bossMastery'] as const;
+export const TechniqueKeySchema = z.enum(techniqueKeys);
+export type TechniqueKey = z.infer<typeof TechniqueKeySchema>;
+
+export const MasteryStateSchema = z.object({
+  userId: z.string(),
+  totalMasteryPoints: z.number(),
+  rank: MasteryRankSchema,
+  techniques: z.object({
+    durationMastery: z.number(),
+    purityMastery: z.number(),
+    consistencyMastery: z.number(),
+    comebackMastery: z.number(),
+    bossMastery: z.number(),
+  }),
+  activeChallenges: z.array(z.object({
+    id: z.string(),
+    technique: TechniqueKeySchema,
+    title: z.string(),
+    description: z.string(),
+    difficulty: z.enum(['EASY', 'MEDIUM', 'HARD', 'ELITE']),
+    target: z.number(),
+    current: z.number(),
+    unit: z.string(),
+    masteryPoints: z.number(),
+    status: z.enum(['ACTIVE', 'COMPLETED', 'CLAIMED']),
+    completedAt: z.number().nullable(),
+  })),
+  unlockedFeatures: z.array(z.string()),
+  updatedAt: z.number(),
+});
+export type MasteryState = z.infer<typeof MasteryStateSchema>;
+
+export const MasteryChallengeSchema = MasteryStateSchema.shape.activeChallenges.element;
+export type MasteryChallenge = z.infer<typeof MasteryChallengeSchema>;
 
 export const MASTERY_RANK_THRESHOLDS: Record<MasteryRank, number> = {
   APPRENTICE: 0,
@@ -44,18 +48,18 @@ export const MASTERY_RANK_THRESHOLDS: Record<MasteryRank, number> = {
   GRANDMASTER: 100,
 };
 
-export type TechniqueKey = keyof MasteryState['techniques'];
+export const ChallengeTemplateSchema = z.object({
+  title: z.string(),
+  description: z.string(),
+  target: z.number(),
+  unit: z.string(),
+  difficulty: z.enum(['EASY', 'MEDIUM', 'HARD', 'ELITE']),
+  points: z.number(),
+});
+export type ChallengeTemplate = z.infer<typeof ChallengeTemplateSchema>;
 
-export type ChallengeTemplate = {
-  title: string;
-  description: string;
-  target: number;
-  unit: string;
-  difficulty: 'EASY' | 'MEDIUM' | 'HARD' | 'ELITE';
-  points: number;
-};
-
-type RankDisplay = { title: string; color: string; icon: string };
+export const RankDisplaySchema = z.object({ title: z.string(), color: z.string(), icon: z.string() });
+export type RankDisplay = z.infer<typeof RankDisplaySchema>;
 
 const RANK_DISPLAYS: Record<MasteryRank, RankDisplay> = {
   APPRENTICE: {
