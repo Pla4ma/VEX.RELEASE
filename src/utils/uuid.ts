@@ -36,16 +36,10 @@ export function v4(): string {
 }
 
 function getRandomBytes(length: number): Uint8Array {
-  const bytes = new Uint8Array(length);
   if (globalThis.crypto?.getRandomValues) {
-    globalThis.crypto.getRandomValues(bytes);
-    return bytes;
+    return globalThis.crypto.getRandomValues(new Uint8Array(length));
   }
-
-  for (let index = 0; index < bytes.length; index += 1) {
-    bytes[index] = Math.floor(Math.random() * 256);
-  }
-  return bytes;
+  throw new Error('Crypto API unavailable — secure random generation failed');
 }
 
 /**

@@ -21,7 +21,7 @@ export function generateSessionId(): string {
   }
 
   // Format: sess_{timestamp}_{random}_{counter}
-  const random = Math.floor(Math.random() * 10000).toString(36);
+  const random = v4().replace(/-/g, '').slice(0, 8);
   const count = counter.toString(36).padStart(2, '0');
 
   return `sess_${timestamp.toString(36)}_${random}_${count}`;
@@ -29,7 +29,7 @@ export function generateSessionId(): string {
 
 export function generateShortId(prefix: string): string {
   const timestamp = Date.now().toString(36);
-  const random = Math.random().toString(36).substring(2, 6);
+  const random = v4().replace(/-/g, '').slice(0, 4);
   return `${prefix}_${timestamp}_${random}`;
 }
 

@@ -8,6 +8,7 @@
 import { MMKV } from 'react-native-mmkv';
 import type { Nullable } from '../types/global';
 import { safeJsonParse } from './safe-json';
+import { getMmkvEncryptionKeySync } from './mmkv-key';
 
 // Singleton MMKV instance for Zustand storage
 let mmkvStorage: MMKV | null = null;
@@ -16,6 +17,7 @@ function getStorage(): MMKV {
   if (!mmkvStorage) {
     mmkvStorage = new MMKV({
       id: 'zustand-storage',
+      encryptionKey: getMmkvEncryptionKeySync(),
     });
   }
   return mmkvStorage;
