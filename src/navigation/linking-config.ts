@@ -4,6 +4,7 @@ import type { LinkingOptions, PathConfigMap } from '@react-navigation/native';
 import type { ExtendedRootStackParams } from './param-types';
 
 const PREFIXES = ['vex://', 'https://app.vex.com', 'https://vex.app'];
+const ALLOWED_DEEP_LINK_HOSTS = ['app.vex.com', 'vex.app'];
 
 function isAuthCallbackUrl(url: string): boolean {
   try {
@@ -11,6 +12,16 @@ function isAuthCallbackUrl(url: string): boolean {
     return parsed.protocol === 'vex:' && parsed.hostname === 'auth'
       && parsed.pathname === '/callback';
   } catch (error: unknown) {
+    return false;
+  }
+}
+
+function isAllowedDeepLink(url: string): boolean {
+  try {
+    const parsed = new URL(url);
+    if (parsed.protocol === 'vex:') return true;
+    return ALLOWED_DEEP_LINK_HOSTS.includes(parsed.hostname);
+  } catch {
     return false;
   }
 }
@@ -76,7 +87,10 @@ export function createLinkingConfig(): LinkingOptions<ExtendedRootStackParams> {
       }
       const response = await Notifications.getLastNotificationResponseAsync();
       const notifUrl = response?.notification.request.content.data?.url;
-      return typeof notifUrl === 'string' ? notifUrl : null;
+      if (typeof notifUrl !== 'string' || !isAllowedDeepLink(notifUrl)) {
+        return null;
+      }
+      return notifUrl;
     },
     subscribe(listener) {
       const linkingSub = Linking.addEventListener('url', ({ url }) => {
@@ -88,7 +102,7 @@ export function createLinkingConfig(): LinkingOptions<ExtendedRootStackParams> {
       const notifSub = Notifications.addNotificationResponseReceivedListener(
         (response) => {
           const url = response.notification.request.content.data?.url;
-          if (typeof url === 'string') {
+          if (typeof url === 'string' && isAllowedDeepLink(url)) {
             listener(url);
           }
         },

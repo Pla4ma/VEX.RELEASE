@@ -27,7 +27,7 @@ const debug = createDebugger('monetization:revenuecat');
 const IOS_API_KEY = process.env.EXPO_PUBLIC_REVENUECAT_IOS_KEY;
 const ANDROID_API_KEY = process.env.EXPO_PUBLIC_REVENUECAT_ANDROID_KEY;
 
-const PLACEHOLDER_PATTERN = /^(your[_\-].*|test[_\-]key|placeholder|REPLACE_ME|TODO)/i;
+const PLACEHOLDER_PATTERN = /^(your[_\-].*|test[_\-].*|placeholder|REPLACE_ME|TODO|rc_(sk|pub)_(test|live)_)/i;
 
 function isPlaceholderKey(key: string | undefined): boolean {
   if (!key || key.length === 0) return true;

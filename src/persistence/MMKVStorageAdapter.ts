@@ -9,6 +9,7 @@ import { MMKV } from 'react-native-mmkv';
 import type { Nullable } from '../types/global';
 import { safeJsonParse } from './safe-json';
 import { getMmkvEncryptionKeySync } from './mmkv-key';
+import { configureDebouncedWrites, debouncedWrite, flushPendingWrites } from '../utils/debounced-write';
 
 // Singleton MMKV instance for Zustand storage
 let mmkvStorage: MMKV | null = null;
@@ -19,6 +20,13 @@ function getStorage(): MMKV {
       id: 'zustand-storage',
       encryptionKey: getMmkvEncryptionKeySync(),
     });
+    configureDebouncedWrites(
+      (key, op) => {
+        if (op.remove) mmkvStorage!.delete(key);
+        else mmkvStorage!.set(key, op.value ?? '');
+      },
+      { delay: 100 },
+    );
   }
   return mmkvStorage;
 }
@@ -31,13 +39,11 @@ export const getMMKVStorageAdapter = () => ({
     const value = getStorage().getString(name);
     return Promise.resolve(value ?? null);
   },
-  setItem: (name: string, value: string): Promise<void> => {
-    getStorage().set(name, value);
-    return Promise.resolve();
+  setItem: (name: string, value: string): void => {
+    debouncedWrite(name, value);
   },
-  removeItem: (name: string): Promise<void> => {
-    getStorage().delete(name);
-    return Promise.resolve();
+  removeItem: (name: string): void => {
+    debouncedWrite(name, null);
   },
 });
 
