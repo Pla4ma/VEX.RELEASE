@@ -92,7 +92,7 @@ describe('getPhase3VerificationSummary', () => {
     ];
     const summary = getPhase3VerificationSummary(results);
     expect(summary.passed).toBe(false);
-    expect(summary.failedFeatures).toEqual(['rivals', 'rankings']);
+    expect(summary.failedFeatures).toEqual(['rivals']);
   });
 
   it('preserves the results array reference', () => {

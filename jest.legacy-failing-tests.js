@@ -59,7 +59,5 @@ module.exports = [
   'src/__tests__/first-week-journey-hardening.test.ts',
   'src/__tests__/launch-schema-reconciliation.test.ts',
   'src/features/ai-coach/__tests__/service/coach-state-machine.test.ts',
-  'src/features/feature-gate/__tests__/feature-gate-verification.test.ts',
-  'src/store/__tests__/auth-canonical-store.test.ts',
   'src/screens/onboarding/components/__tests__/first-10-seconds.test.ts',
 ];
