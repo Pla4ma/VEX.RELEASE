@@ -27,6 +27,7 @@ export function useChallenge(challengeId: string) {
     queryFn: () => repository.fetchChallengeById(challengeId),
     enabled: Boolean(challengeId),
     staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 30,
   });
 }
 export function useChallengesByType(
@@ -38,6 +39,7 @@ export function useChallengesByType(
     queryFn: () => repository.fetchChallengesByType(seasonId, type),
     enabled: Boolean(seasonId) && Boolean(type),
     staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 30,
   });
 }
 export function useUserChallenges(userId: string) {
@@ -46,6 +48,7 @@ export function useUserChallenges(userId: string) {
     queryFn: () => repository.fetchUserChallenges(userId),
     enabled: Boolean(userId),
     staleTime: 1000 * 60 * 1,
+    gcTime: 1000 * 60 * 30,
   });
 }
 export function useActiveChallenges(
@@ -57,6 +60,7 @@ export function useActiveChallenges(
     queryFn: () => queries.getActiveChallenges(userId),
     enabled: Boolean(userId) && options.enabled !== false,
     staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 30,
   });
 }
 export function useChallengeSummaries(userId: string) {
@@ -65,6 +69,7 @@ export function useChallengeSummaries(userId: string) {
     queryFn: () => queries.getUserChallengeSummaries(userId),
     enabled: Boolean(userId),
     staleTime: 1000 * 30,
+    gcTime: 1000 * 60 * 30,
   });
 }
 export function useUpdateChallengeProgress() {

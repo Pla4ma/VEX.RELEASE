@@ -66,9 +66,8 @@ export function useNotificationsData() {
       if (showLoading) {setIsLoading(true);}
       setError(null);
       try {
-        setNotifications(
-          await notificationService.getNotificationCenterItems(userId),
-        );
+        const result = await notificationService.getNotificationCenterItems(userId);
+        setNotifications(result.items);
       } catch (err) {
         debug.error('Failed to load notifications', err as Error);
         setError(

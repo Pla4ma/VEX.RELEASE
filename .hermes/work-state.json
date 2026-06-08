@@ -1,7 +1,4 @@
 {
-  "started_at": "2026-06-08T07:09:58Z",
-  "safety_branch": "safety/pre-work-20260608-070958",
-  "base_commit": "727168e26b2d703ffc98c8c00990cc615b4f25eb",
   "base_branch": "hermes-vex-work",
-  "status": "in_progress"
+  "status": "rolled_back"
 }

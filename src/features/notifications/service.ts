@@ -82,9 +82,10 @@ export async function registerPushToken(input: {
 
 export async function getNotificationCenterItems(
   userId: string,
-): Promise<repository.NotificationCenterItem[]> {
+  cursor?: string,
+): Promise<{ items: repository.NotificationCenterItem[]; nextCursor: string | null }> {
   const validatedUserId = UserIdSchema.parse(userId);
-  return repository.fetchNotificationCenterItems(validatedUserId);
+  return repository.fetchNotificationCenterItems(validatedUserId, cursor);
 }
 
 export async function markNotificationRead(

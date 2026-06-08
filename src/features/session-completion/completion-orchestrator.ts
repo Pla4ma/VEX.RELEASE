@@ -29,10 +29,10 @@ export { initializeSessionCompletionOrchestrator } from './completion-orchestrat
 
 const debug = createDebugger('session-completion:orchestrator');
 
-function invalidateCompletionQueries(_userId: string): void {
-  void queryClient.invalidateQueries({ queryKey: QueryKeys.session });
-  void queryClient.invalidateQueries({ queryKey: QueryKeys.streak });
-  void queryClient.invalidateQueries({ queryKey: QueryKeys.achievements });
+function invalidateCompletionQueries(userId: string): void {
+  void queryClient.invalidateQueries({ queryKey: [...QueryKeys.session, userId] });
+  void queryClient.invalidateQueries({ queryKey: [...QueryKeys.streak, userId] });
+  void queryClient.invalidateQueries({ queryKey: [...QueryKeys.achievements, userId] });
 }
 
 function setCompletionSyncState(

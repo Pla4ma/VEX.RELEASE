@@ -13,7 +13,10 @@ export type RootStackRoute =
   | 'StreakFuneral'
   | 'FocusScoreDashboard'
   | 'VipPaywall'
-  | 'MemoryConsole';
+  | 'MemoryConsole'
+  | 'Rivals'
+  | 'Search'
+  | 'Vault';
 
 export type AuthStackRoute =
   | 'Login'
@@ -30,7 +33,9 @@ export type SettingsStackRoute =
   | 'NotificationSettings'
   | 'PrivacySettings'
   | 'AppearanceSettings'
-  | 'DataExport';
+  | 'DataExport'
+  | 'CoachSettings'
+  | 'LaneMode';
 
 export type SessionStackRoute =
   | 'SessionSetup'

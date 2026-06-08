@@ -132,3 +132,67 @@ export function subscribeToRecommendations(
       handleSubscriptionStatus(channelName, status, onReconnect),
     );
 }
+
+/**
+ * Combined realtime subscription for all coach-related tables.
+ * Creates a single channel with multiple .on() handlers instead of
+ * separate channels per table, reducing connection overhead.
+ * Kept alongside individual functions for backward compatibility.
+ */
+export function subscribeToCoachRealtime(
+  userId: string,
+  handlers: {
+    onMessageInsert: (payload: unknown) => void;
+    onStateUpdate: (payload: unknown) => void;
+    onComebackChange: () => void;
+    onRecommendationChange: () => void;
+  },
+  onReconnect?: () => void,
+) {
+  const channelName = `coach-realtime-${userId}`;
+  return supabase
+    .channel(channelName)
+    .on(
+      'postgres_changes',
+      {
+        event: 'INSERT',
+        schema: 'public',
+        table: 'coach_messages',
+        filter: `user_id=eq.${userId}`,
+      },
+      (payload) => handlers.onMessageInsert(payload),
+    )
+    .on(
+      'postgres_changes',
+      {
+        event: 'UPDATE',
+        schema: 'public',
+        table: 'coach_states',
+        filter: `user_id=eq.${userId}`,
+      },
+      (payload) => handlers.onStateUpdate(payload),
+    )
+    .on(
+      'postgres_changes',
+      {
+        event: '*',
+        schema: 'public',
+        table: 'comeback_plans',
+        filter: `user_id=eq.${userId}`,
+      },
+      () => handlers.onComebackChange(),
+    )
+    .on(
+      'postgres_changes',
+      {
+        event: '*',
+        schema: 'public',
+        table: 'coach_recommendations',
+        filter: `user_id=eq.${userId}`,
+      },
+      () => handlers.onRecommendationChange(),
+    )
+    .subscribe((status) =>
+      handleSubscriptionStatus(channelName, status, onReconnect),
+    );
+}

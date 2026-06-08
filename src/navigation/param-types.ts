@@ -72,6 +72,9 @@ export interface RootStackParams {
   StreakFuneral: { diedAt: number; previousStreak: number };
   FocusScoreDashboard: undefined;
   MemoryConsole: undefined;
+  Rivals: undefined;
+  Search: undefined;
+  Vault: undefined;
 }
 
 export type ExtendedRootStackParams = RootStackParams & MainStackParams;
