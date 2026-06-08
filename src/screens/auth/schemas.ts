@@ -28,7 +28,7 @@ const passwordSchema = z
 
 export const loginSchema = z.object({
   email: emailSchema,
-  password: z.string().min(1, 'Password is required'),
+  password: z.string().min(8, 'Password must be at least 8 characters'),
   rememberMe: z.boolean().optional().default(false),
 });
 export type LoginFormData = z.infer<typeof loginSchema>;
@@ -65,7 +65,10 @@ export const resetPasswordSchema = z
   .object({
     confirmPassword: z.string().min(1, 'Please confirm your new password'),
     password: passwordSchema,
-    token: z.string().min(1, 'Token is required'),
+    token: z.string().min(1, 'Token is required').regex(
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i,
+      'Invalid token format',
+    ),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",
