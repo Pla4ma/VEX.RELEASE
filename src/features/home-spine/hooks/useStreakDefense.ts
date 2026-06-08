@@ -8,6 +8,7 @@
  */
 
 import { useMemo } from 'react';
+// TODO: Move shared streak logic to src/shared/ or use EventBus for cross-feature communication
 import { useStreakSummary } from '../../../features/streaks/hooks';
 
 export interface StreakDefenseState {

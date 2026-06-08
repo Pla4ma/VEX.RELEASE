@@ -51,7 +51,6 @@ export async function checkRateLimit(
   if (error) {
     logStructured('error', `Rate limit check failed for ${operation}`, {
       operation,
-      userId,
       error: error.message ?? String(error),
     });
     return { allowed: false, remaining: 0, resetAt: Date.now() + windowSeconds * 1000 };

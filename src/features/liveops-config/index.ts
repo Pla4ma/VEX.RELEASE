@@ -2,7 +2,7 @@ import { useMemo, useSyncExternalStore } from 'react';
 
 import { useSessionStats } from '../../session/hooks/useSession';
 import { useAuthStore } from '../../store';
-import { useOnboardingStore } from '../onboarding/store';
+import { useOnboardingStore } from '../onboarding/store'; // TODO: Use EventBus for cross-feature communication
 import {
   buildFeatureAccess,
   type FeatureAccessMap,
