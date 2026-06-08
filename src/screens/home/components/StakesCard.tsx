@@ -1,6 +1,10 @@
 import React from 'react';
+import { View } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
 import { GlassCard } from '../../../components/glass/GlassCard';
+import { FloatingDroplets } from '../../../components/glass/FloatingDroplets';
+import { WaterBubble } from '../../../components/glass/WaterBubble';
+import { LiquidGlassSphere } from '../../../components/glass/LiquidGlassSphere';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import type { HomeStakes } from '../../../features/home-spine/priority-schemas';
 
@@ -17,6 +21,42 @@ export function StakesCard({ stakes }: StakesCardProps): JSX.Element {
       size="sm"
       style={{ marginBottom: 16, marginTop: 12 }}
     >
+      <View
+        pointerEvents="none"
+        style={{
+          opacity: 0.85,
+          position: 'absolute',
+          right: 8,
+          top: 8,
+          zIndex: 0,
+        }}
+      >
+        <FloatingDroplets count={3} opacity={0.65} size={24} />
+      </View>
+      <View
+        pointerEvents="none"
+        style={{
+          opacity: 0.85,
+          position: 'absolute',
+          left: 6,
+          bottom: 6,
+          zIndex: 0,
+        }}
+      >
+        <WaterBubble size={14} opacity={0.65} />
+      </View>
+      <View
+        pointerEvents="none"
+        style={{
+          opacity: 0.85,
+          position: 'absolute',
+          right: 32,
+          bottom: 6,
+          zIndex: 0,
+        }}
+      >
+        <LiquidGlassSphere color="pearl" size={10} intensity={0.42} />
+      </View>
       <Text
         style={{
           color: vexLightGlass.mint[700],

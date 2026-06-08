@@ -18,7 +18,7 @@ export function LiquidGlassPanel({ children }: { children: React.ReactNode }): R
         backgroundColor: semantic.liquidPanel,
         shadowColor: semantic.liquidShadow,
         shadowOffset: { width: 0, height: 28 },
-        shadowOpacity: 0.46,
+        shadowOpacity: 0.85,
         shadowRadius: 48,
       }}
     >
@@ -28,7 +28,7 @@ export function LiquidGlassPanel({ children }: { children: React.ReactNode }): R
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         pointerEvents="none"
-        style={{ position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, opacity: 0.42 }}
+        style={{ position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, opacity: 0.85 }}
       />
       <View style={{ padding: theme.spacing[5], gap: theme.spacing[3] }}>{children}</View>
     </View>

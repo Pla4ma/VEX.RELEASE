@@ -1,52 +1,31 @@
-﻿import React from 'react';
+import React from 'react';
 import { View } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
 import { GlassCard } from '../../../components/glass/GlassCard';
+import { FocusModeOrb } from '../../../components/glass/FocusModeOrb';
+import { FloatingDroplets } from '../../../components/glass/FloatingDroplets';
+import { WaterBubble } from '../../../components/glass/WaterBubble';
 import { LiquidGlassSphere } from '../../../components/glass/LiquidGlassSphere';
 import { LiquidButton } from '../../../components/glass/LiquidButton';
 import { Icon } from '../../../icons';
 import type { FocusModeCard } from '../../../features/session-start/schemas';
 
-export type ModeColor = 'mint' | 'cyan' | 'teal' | 'coral';
-
-export interface ModeVisual {
-  color: ModeColor;
-  iconName: string;
-  iconColor: string;
-}
-
 function formatMinutes(seconds: number): string {
   return `${Math.round(seconds / 60)} min`;
 }
 
-function getIconForMode(mode: string): React.ReactNode {
+function getOrbMode(mode: string): 'sprint' | 'light' | 'study' | 'recovery' {
   switch (mode) {
-    case 'sprint-15':
-      return <Icon color="#0C765F" name="bolt" size="md" strokeWidth="thin" variant="outline" />;
-    case 'light-focus':
-      return <Icon color="#0C765F" name="leaf" size="md" strokeWidth="thin" variant="outline" />;
-    case 'study':
-      return <Icon color="#0E7490" name="book" size="md" strokeWidth="thin" variant="outline" />;
-    case 'recovery':
-      return <Icon color="#C2410C" name="heart" size="md" strokeWidth="thin" variant="outline" />;
-    default:
-      return <Icon color="#0C765F" name="target" size="md" strokeWidth="thin" variant="outline" />;
-  }
-}
-
-function getColorForMode(mode: string): ModeColor {
-  switch (mode) {
-    case 'sprint-15': return 'mint';
-    case 'light-focus': return 'teal';
-    case 'study': return 'cyan';
-    case 'recovery': return 'coral';
-    default: return 'mint';
+    case 'sprint-15': return 'sprint';
+    case 'light-focus': return 'light';
+    case 'study': return 'study';
+    case 'recovery': return 'recovery';
+    default: return 'sprint';
   }
 }
 
 interface FocusModeCardViewProps {
   card: FocusModeCard;
-  visual: ModeVisual;
   onPress: () => void;
 }
 
@@ -55,8 +34,7 @@ export function FocusModeCardView({
   onPress,
 }: FocusModeCardViewProps): JSX.Element {
   const isPrimary = card.id === 'sprint-15';
-  const color = getColorForMode(card.id);
-  const icon = getIconForMode(card.id);
+  const orbMode = getOrbMode(card.id);
 
   return (
     <View style={{ marginBottom: 10 }}>
@@ -67,6 +45,42 @@ export function FocusModeCardView({
         variant={isPrimary ? 'premium' : 'default'}
       >
         <View
+          pointerEvents="none"
+          style={{
+            opacity: 0.85,
+            position: 'absolute',
+            right: 10,
+            top: 10,
+            zIndex: 0,
+          }}
+        >
+          <FloatingDroplets count={3} opacity={0.65} size={28} />
+        </View>
+        <View
+          pointerEvents="none"
+          style={{
+            opacity: 0.85,
+            position: 'absolute',
+            right: 48,
+            bottom: 14,
+            zIndex: 0,
+          }}
+        >
+          <WaterBubble size={32} opacity={0.65} />
+        </View>
+        <View
+          pointerEvents="none"
+          style={{
+            opacity: 0.85,
+            position: 'absolute',
+            left: 8,
+            bottom: 8,
+            zIndex: 0,
+          }}
+        >
+          <LiquidGlassSphere color="pearl" size={16} intensity={0.52} />
+        </View>
+        <View
           style={{
             alignItems: 'center',
             flexDirection: 'row',
@@ -75,11 +89,10 @@ export function FocusModeCardView({
             zIndex: 2,
           }}
         >
-          <LiquidGlassSphere
-            color={color}
-            icon={icon}
-            size={56}
-            intensity={0.85}
+          <FocusModeOrb
+            mode={orbMode}
+            size={isPrimary ? 72 : 62}
+            intensity={0.95}
           />
           <View style={{ flex: 1, gap: 3 }}>
             <Text

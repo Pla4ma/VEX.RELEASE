@@ -1,8 +1,12 @@
-﻿import React from 'react';
+import React from 'react';
 import { View } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
 import { GlassCard } from '../../../components/glass/GlassCard';
 import { GlassPill } from '../../../components/glass/GlassPill';
+import { LiquidProgressBar } from '../../../components/glass/LiquidProgressBar';
+import { FloatingDroplets } from '../../../components/glass/FloatingDroplets';
+import { WaterBubble } from '../../../components/glass/WaterBubble';
+import { LiquidGlassSphere } from '../../../components/glass/LiquidGlassSphere';
 import { ProgressionStatCard } from './progression-stat-card';
 
 export interface ProgressionDashboardProps {
@@ -22,6 +26,42 @@ export const ProgressionDashboard: React.FC<ProgressionDashboardProps> = ({
 }) => {
   return (
     <GlassCard glowMint padding={16} radius={24} variant="hero">
+      <View
+        pointerEvents="none"
+        style={{
+          opacity: 0.85,
+          position: 'absolute',
+          right: 10,
+          top: 10,
+          zIndex: 0,
+        }}
+      >
+        <FloatingDroplets count={4} opacity={0.65} size={32} />
+      </View>
+      <View
+        pointerEvents="none"
+        style={{
+          opacity: 0.85,
+          position: 'absolute',
+          left: 8,
+          bottom: 10,
+          zIndex: 0,
+        }}
+      >
+        <WaterBubble size={28} opacity={0.65} />
+      </View>
+      <View
+        pointerEvents="none"
+        style={{
+          opacity: 0.85,
+          position: 'absolute',
+          right: 48,
+          bottom: 8,
+          zIndex: 0,
+        }}
+      >
+        <LiquidGlassSphere color="pearl" size={14} intensity={0.52} />
+      </View>
       <View
         style={{
           flexDirection: 'row',
@@ -67,24 +107,8 @@ export const ProgressionDashboard: React.FC<ProgressionDashboardProps> = ({
         <GlassPill label="2.0x" size="sm" variant="mint" />
       </View>
 
-      <View
-        style={{
-          backgroundColor: 'rgba(10, 155, 138, 0.1)',
-          borderRadius: 10,
-          height: 8,
-          overflow: 'hidden',
-          zIndex: 2,
-          marginBottom: 12,
-        }}
-      >
-        <View
-          style={{
-            backgroundColor: '#0A9B8A',
-            borderRadius: 10,
-            height: 8,
-            width: `${xpPercent}%`,
-          }}
-        />
+      <View style={{ zIndex: 2, marginBottom: 12 }}>
+        <LiquidProgressBar height={8} progress={xpPercent / 100} />
       </View>
 
       <View

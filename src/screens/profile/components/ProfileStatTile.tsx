@@ -1,10 +1,24 @@
 import React from 'react';
 import { View, ActivityIndicator } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
-import { GlassIconOrb } from '../../../components/glass/GlassIconOrb';
+import { GlassCard } from '../../../components/glass/GlassCard';
+import { LiquidGlassSphere } from '../../../components/glass/LiquidGlassSphere';
+import { FloatingDroplets } from '../../../components/glass/FloatingDroplets';
+import { WaterBubble } from '../../../components/glass/WaterBubble';
 import { GlassPill } from '../../../components/glass/GlassPill';
 import { Icon } from '../../../icons';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
+
+type LiquidSphereColor = 'mint' | 'cyan' | 'teal' | 'coral' | 'amber' | 'pearl';
+
+function mapOrbToSphereColor(orb: string): LiquidSphereColor {
+  if (orb === 'fire') return 'coral';
+  if (orb === 'lavender') return 'pearl';
+  if (orb === 'mint' || orb === 'cyan' || orb === 'teal' || orb === 'coral' || orb === 'amber' || orb === 'pearl') {
+    return orb as LiquidSphereColor;
+  }
+  return 'mint';
+}
 
 export interface ProfileStatItem {
   icon: string;
@@ -25,50 +39,66 @@ export const ProfileStatTile: React.FC<ProfileStatTileProps> = ({
 }) => {
   if (loading) {
     return (
-      <View
+      <GlassCard
+        padding={14}
+        radius={22}
         style={{
           alignItems: 'center',
-          backgroundColor: 'rgba(255, 255, 255, 0.40)',
-          borderColor: 'rgba(255, 255, 255, 0.90)',
-          borderRadius: 22,
-          borderWidth: 1.5,
-          paddingHorizontal: 14,
-          paddingVertical: 16,
-          shadowColor: 'rgba(13, 76, 65, 0.12)',
-          shadowOffset: { width: 0, height: 4 },
-          shadowOpacity: 0.3,
-          shadowRadius: 8,
           gap: 8,
-          minWidth: 100,
-          minHeight: 100,
           justifyContent: 'center',
+          minHeight: 100,
+          minWidth: 100,
         }}
+        variant="default"
       >
         <ActivityIndicator color={vexLightGlass.mint[500]} />
-      </View>
+      </GlassCard>
     );
   }
 
   return (
-    <View
+    <GlassCard
+      padding={14}
+      radius={22}
       style={{
         alignItems: 'center',
-        backgroundColor: 'rgba(255, 255, 255, 0.40)',
-        borderColor: 'rgba(255, 255, 255, 0.90)',
-        borderRadius: 22,
-        borderWidth: 1.5,
-        paddingHorizontal: 14,
-        paddingVertical: 16,
-        shadowColor: 'rgba(13, 76, 65, 0.12)',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.3,
-        shadowRadius: 8,
         gap: 8,
+        minWidth: 100,
       }}
+      variant="default"
     >
-      <GlassIconOrb size={44} variant={item.iconOrb}>
-        <Icon color="#0C765F" name={item.icon} size="sm" variant="solid" />
-      </GlassIconOrb>
+      <View
+        pointerEvents="none"
+        style={{
+          opacity: 0.85,
+          position: 'absolute',
+          right: 6,
+          top: 6,
+          zIndex: 0,
+        }}
+      >
+        <FloatingDroplets count={2} opacity={0.65} size={22} />
+      </View>
+      <View
+        pointerEvents="none"
+        style={{
+          opacity: 0.85,
+          position: 'absolute',
+          left: 4,
+          bottom: 4,
+          zIndex: 0,
+        }}
+      >
+        <WaterBubble size={16} opacity={0.65} />
+      </View>
+      <LiquidGlassSphere
+        color={mapOrbToSphereColor(item.iconOrb)}
+        icon={
+          <Icon color="#0C765F" name={item.icon} size="sm" variant="solid" />
+        }
+        intensity={0.88}
+        size={48}
+      />
       <View style={{ alignItems: 'center', gap: 3 }}>
         <Text
           style={{
@@ -97,7 +127,7 @@ export const ProfileStatTile: React.FC<ProfileStatTileProps> = ({
           variant={item.change.startsWith('+') ? 'mint' : 'fire'}
         />
       ) : null}
-    </View>
+    </GlassCard>
   );
 };
 

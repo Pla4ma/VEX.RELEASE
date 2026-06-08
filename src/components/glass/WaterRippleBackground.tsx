@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { View, Dimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Svg, {
@@ -45,7 +45,7 @@ export function WaterRippleBackground(): JSX.Element {
       {/* Water ripple texture overlay */}
       <Svg
         height={SCREEN_H}
-        style={{ opacity: 0.12, position: 'absolute' }}
+        style={{ opacity: 0.85, position: 'absolute' }}
         width={SCREEN_W}
       >
         <Defs>
@@ -107,14 +107,14 @@ export function WaterRippleBackground(): JSX.Element {
           <Path
             d={`M 0 0 L ${SCREEN_W * 0.25} 0 L ${SCREEN_W * 0.15} ${SCREEN_H} L 0 ${SCREEN_H} Z`}
             fill="url(#lightBeam1)"
-            opacity={0.45}
+            opacity={0.65}
           />
 
           {/* Light beam from top-right */}
           <Path
             d={`M ${SCREEN_W * 0.75} 0 L ${SCREEN_W} 0 L ${SCREEN_W} ${SCREEN_H} L ${SCREEN_W * 0.85} ${SCREEN_H} Z`}
             fill="url(#lightBeam2)"
-            opacity={0.35}
+            opacity={0.65}
           />
 
           {/* Soft glow areas */}

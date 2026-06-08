@@ -9,7 +9,7 @@ export function VexFocusDecorations(): JSX.Element {
       <View
         pointerEvents="none"
         style={{
-          backgroundColor: 'rgba(95, 230, 197, 0.28)',
+          backgroundColor: 'rgba(95, 230, 197, 0.42)',
           borderRadius: 280,
           height: 220,
           position: 'absolute',
@@ -21,7 +21,7 @@ export function VexFocusDecorations(): JSX.Element {
       <View
         pointerEvents="none"
         style={{
-          backgroundColor: 'rgba(132, 228, 229, 0.24)',
+          backgroundColor: 'rgba(132, 228, 229, 0.38)',
           borderRadius: 200,
           height: 140,
           position: 'absolute',
@@ -33,7 +33,7 @@ export function VexFocusDecorations(): JSX.Element {
       <View
         pointerEvents="none"
         style={{
-          backgroundColor: 'rgba(255, 255, 255, 0.55)',
+          backgroundColor: 'rgba(255, 255, 255, 0.72)',
           borderRadius: 200,
           height: 120,
           left: 20,
@@ -47,6 +47,7 @@ export function VexFocusDecorations(): JSX.Element {
         style={{
           bottom: -44,
           left: -32,
+          opacity: 0.95,
           position: 'absolute',
         }}
       >
@@ -55,7 +56,7 @@ export function VexFocusDecorations(): JSX.Element {
       <View
         pointerEvents="none"
         style={{
-          opacity: 0.88,
+          opacity: 1,
           position: 'absolute',
           right: -8,
           top: 8,
@@ -66,7 +67,7 @@ export function VexFocusDecorations(): JSX.Element {
       <View
         pointerEvents="none"
         style={{
-          backgroundColor: 'rgba(255, 255, 255, 0.42)',
+          backgroundColor: 'rgba(255, 255, 255, 0.58)',
           borderRadius: 200,
           height: 100,
           position: 'absolute',

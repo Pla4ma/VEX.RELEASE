@@ -1,9 +1,21 @@
 import React from 'react';
 import { View } from 'react-native';
-import Svg, { Circle } from 'react-native-svg';
 import { Text } from '../../../components/primitives/Text';
-import { GlassIconOrb } from '../../../components/glass/GlassIconOrb';
+import { GlassCard } from '../../../components/glass/GlassCard';
+import { LiquidGlassSphere } from '../../../components/glass/LiquidGlassSphere';
+import { FloatingDroplets } from '../../../components/glass/FloatingDroplets';
 import { Icon } from '../../../icons';
+
+type LiquidSphereColor = 'mint' | 'cyan' | 'teal' | 'coral' | 'amber' | 'pearl';
+
+function mapOrbToSphereColor(orb: string): LiquidSphereColor {
+  if (orb === 'fire') return 'coral';
+  if (orb === 'lavender') return 'pearl';
+  if (orb === 'mint' || orb === 'cyan' || orb === 'teal' || orb === 'coral' || orb === 'amber' || orb === 'pearl') {
+    return orb as LiquidSphereColor;
+  }
+  return 'mint';
+}
 
 interface ProgressionStatCardProps {
   label: string;
@@ -25,67 +37,54 @@ export const ProgressionStatCard: React.FC<ProgressionStatCardProps> = ({
   const strokeDashoffset = circumference - progress * circumference;
 
   return (
-    <View
-      style={{
-        alignItems: 'center',
-        backgroundColor: 'rgba(255, 255, 255, 0.40)',
-        borderColor: 'rgba(255, 255, 255, 0.90)',
-        borderRadius: 18,
-        borderWidth: 1.5,
-        flex: 1,
-        paddingHorizontal: 10,
-        paddingVertical: 14,
-        gap: 8,
-      }}
+    <GlassCard
+      padding={12}
+      radius={20}
+      style={{ flex: 1 }}
+      variant="default"
     >
-      <View style={{ position: 'relative', width: size, height: size, alignItems: 'center', justifyContent: 'center' }}>
-        <Svg height={size} width={size} viewBox={`0 0 ${size} ${size}`}>
-          <Circle
-            cx={size / 2}
-            cy={size / 2}
-            r={radius}
-            stroke="rgba(10, 155, 138, 0.12)"
-            strokeWidth={strokeWidth}
-            fill="transparent"
-          />
-          <Circle
-            cx={size / 2}
-            cy={size / 2}
-            r={radius}
-            stroke="#0A9B8A"
-            strokeWidth={strokeWidth}
-            fill="transparent"
-            strokeDasharray={circumference}
-            strokeDashoffset={strokeDashoffset}
-            strokeLinecap="round"
-            rotation={-90}
-            origin={`${size / 2}, ${size / 2}`}
-          />
-        </Svg>
-        <View style={{ position: 'absolute' }}>
-          <Icon color="#0A9B8A" name="sparkles" size="sm" strokeWidth="thin" variant="outline" />
-        </View>
+      <View
+        pointerEvents="none"
+        style={{
+          opacity: 0.85,
+          position: 'absolute',
+          right: 6,
+          top: 6,
+          zIndex: 0,
+        }}
+      >
+        <FloatingDroplets count={3} opacity={0.65} size={28} />
       </View>
-      <Text
-        style={{
-          color: '#0A1F1A',
-          fontSize: 16,
-          fontWeight: '900',
-          letterSpacing: -0.3,
-        }}
-      >
-        {value}
-      </Text>
-      <Text
-        style={{
-          color: '#3D5A52',
-          fontSize: 11,
-          fontWeight: '500',
-        }}
-      >
-        {label}
-      </Text>
-    </View>
+      <View style={{ alignItems: 'center', gap: 10 }}>
+        <LiquidGlassSphere
+          color={mapOrbToSphereColor(orb)}
+          icon={
+            <Icon color="#0C765F" name="sparkles" size="sm" strokeWidth="thin" variant="outline" />
+          }
+          intensity={0.88}
+          size={52}
+        />
+        <Text
+          style={{
+            color: '#0A1F1A',
+            fontSize: 16,
+            fontWeight: '900',
+            letterSpacing: -0.3,
+          }}
+        >
+          {value}
+        </Text>
+        <Text
+          style={{
+            color: '#3D5A52',
+            fontSize: 11,
+            fontWeight: '500',
+          }}
+        >
+          {label}
+        </Text>
+      </View>
+    </GlassCard>
   );
 };
 

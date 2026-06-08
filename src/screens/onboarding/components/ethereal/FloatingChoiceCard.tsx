@@ -39,7 +39,7 @@ export function FloatingChoiceCard({
     overflow: 'hidden',
     shadowColor: etherealGlass.shadow,
     shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 0.16,
+    shadowOpacity: 0.85,
     shadowRadius: 28,
   };
 

@@ -24,7 +24,7 @@ function cardStyle(theme: ReturnType<typeof useTheme>['theme']) {
   };
 }
 
-export function BossScreenSections({
+function BossScreenSectionsRaw({
   bossIntensity = 'subtle',
   onLaunchAttack,
   streakMultiplier,
@@ -180,3 +180,6 @@ export function BossScreenSections({
     </>
   );
 }
+
+export const BossScreenSections = React.memo(BossScreenSectionsRaw);
+BossScreenSections.displayName = 'BossScreenSections';

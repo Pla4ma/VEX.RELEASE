@@ -54,7 +54,7 @@ export function VexAtmosphereCanvas(): React.JSX.Element {
           backgroundColor: 'rgba(88, 48, 200, 0.04)',
           shadowColor: lightColors.semantic.auroraAccentViolet,
           shadowOffset: { width: 0, height: 0 },
-          shadowOpacity: 0.25,
+          shadowOpacity: 0.85,
           shadowRadius: 180,
         }}
       />
@@ -84,7 +84,7 @@ export function VexAtmosphereCanvas(): React.JSX.Element {
           backgroundColor: 'rgba(255, 138, 36, 0.04)',
           shadowColor: lightColors.semantic.brandOrange,
           shadowOffset: { width: 0, height: -30 },
-          shadowOpacity: 0.45,
+          shadowOpacity: 0.85,
           shadowRadius: 130,
         }}
       />

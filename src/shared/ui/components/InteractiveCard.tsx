@@ -96,7 +96,7 @@ export const InteractiveCard: React.FC<InteractiveCardProps> = ({
       backgroundColor: theme.colors.background.secondary,
       shadowColor: theme.colors.text.primary,
       shadowOffset: { width: 0, height: 4 },
-      shadowOpacity: 0.15,
+      shadowOpacity: 0.85,
       shadowRadius: 12,
       elevation: 4,
     },

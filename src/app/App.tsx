@@ -4,7 +4,7 @@
  * Main application component that wraps all providers and renders the root navigator.
  */
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Platform, View, type StyleProp, type ViewStyle } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
@@ -22,24 +22,33 @@ import { markColdStart } from './cold-start-performance';
 
 const rootViewStyle: StyleProp<ViewStyle> = { flex: 1 };
 
-function useAppRuntimeBootstrap(): void {
+function useAppRuntimeBootstrap(): boolean {
+  const [ready, setReady] = useState(false);
+
   useEffect(() => {
-    markColdStart('app_mounted');
+    const init = async () => {
+      markColdStart('app_mounted');
 
-    try {
-      initSentry();
-    } catch (error: unknown) {
-      // Sentry unavailable in Expo Go.
-    }
+      try {
+        initSentry();
+      } catch (error: unknown) {
+        // Sentry unavailable in Expo Go.
+      }
 
-    bootstrapApp();
+      await bootstrapApp();
 
-    try {
-      initializeDevContrastChecker();
-    } catch (error: unknown) {
-      // Accessibility checker unavailable — non-critical.
-    }
+      try {
+        initializeDevContrastChecker();
+      } catch (error: unknown) {
+        // Accessibility checker unavailable — non-critical.
+      }
+
+      setReady(true);
+    };
+    void init();
   }, []);
+
+  return ready;
 }
 
 let GestureHandlerRootView: React.FC<{
@@ -61,7 +70,15 @@ if (Platform.OS !== 'web') {
 }
 
 export const App: React.FC = () => {
-  useAppRuntimeBootstrap();
+  const isReady = useAppRuntimeBootstrap();
+
+  if (!isReady) {
+    return (
+      <GestureHandlerRootView style={rootViewStyle}>
+        <View style={rootViewStyle} />
+      </GestureHandlerRootView>
+    );
+  }
 
   return (
     <GestureHandlerRootView style={rootViewStyle}>

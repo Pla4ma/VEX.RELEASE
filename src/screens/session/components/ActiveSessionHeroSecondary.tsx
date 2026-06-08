@@ -37,7 +37,7 @@ export function MomentumDots({
                   : score >= 45
                     ? themeColors.warning
                     : themeColors.error,
-              opacity: 0.45 + ((index + 1) / scores.length) * 0.55,
+              opacity: 0.85 + ((index + 1) / scores.length) * 0.55,
             }}
           />
         ))

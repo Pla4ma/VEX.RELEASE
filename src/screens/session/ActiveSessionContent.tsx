@@ -24,7 +24,7 @@ import { useSessionControlHandlers } from './useSessionControlHandlers';
 
 export type { ActiveSessionContentProps };
 
-export function ActiveSessionContent({
+function ActiveSessionContentRaw({
   controller,
   contract,
   currentMode,
@@ -206,3 +206,6 @@ export function ActiveSessionContent({
     </Box>
   );
 }
+
+export const ActiveSessionContent = React.memo(ActiveSessionContentRaw);
+

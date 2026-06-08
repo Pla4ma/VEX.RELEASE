@@ -71,14 +71,14 @@ function TopAccentBar({ color, radius }: {
   return (
     <>
       <LinearGradient
-        colors={[color, `${color}AA`, 'rgba(66, 207, 174, 0.0)']}
+        colors={[color, `${color}CC`, 'rgba(66, 207, 174, 0.0)']}
         end={{ x: 1, y: 0 }}
         locations={[0, 0.5, 1]}
         start={{ x: 0, y: 0 }}
         style={{
           borderTopLeftRadius: radius,
           borderTopRightRadius: radius,
-          height: 6,
+          height: 7,
           left: 0,
           position: 'absolute',
           right: 0,
@@ -88,12 +88,12 @@ function TopAccentBar({ color, radius }: {
       <View
         pointerEvents="none"
         style={{
-          backgroundColor: 'rgba(255, 255, 255, 0.7)',
-          height: 1,
-          left: 24,
+          backgroundColor: 'rgba(255, 255, 255, 0.92)',
+          height: 1.5,
+          left: 20,
           position: 'absolute',
-          right: 24,
-          top: 6,
+          right: 20,
+          top: 7,
         }}
       />
     </>
@@ -127,19 +127,19 @@ function GlassOuterBorder({ color, radius }: {
   radius: number;
 }): JSX.Element {
   return (
-    <View
-      pointerEvents="none"
-      style={{
-        borderColor: color,
-        borderRadius: radius + 1,
-        borderWidth: 1,
-        bottom: -2,
-        left: -2,
-        position: 'absolute',
-        right: -2,
-        top: -2,
-      }}
-    />
+      <View
+        pointerEvents="none"
+        style={{
+          borderColor: color,
+          borderRadius: radius + 2,
+          borderWidth: 1.5,
+          bottom: -3,
+          left: -3,
+          position: 'absolute',
+          right: -3,
+          top: -3,
+        }}
+      />
   );
 }
 
@@ -148,17 +148,17 @@ function TopEdgeHighlight({ intensity, radius }: {
   radius: number;
 }): JSX.Element {
   return (
-    <View
+      <View
       pointerEvents="none"
       style={{
         backgroundColor: `rgba(255, 255, 255, ${intensity})`,
         borderTopLeftRadius: radius - 1,
         borderTopRightRadius: radius - 1,
-        height: 1.5,
-        left: 12,
+        height: 2.2,
+        left: 10,
         position: 'absolute',
-        right: 12,
-        top: 1.5,
+        right: 10,
+        top: 1.2,
       }}
     />
   );
@@ -168,17 +168,17 @@ function SecondEdgeHighlight({ radius }: {
   radius: number;
 }): JSX.Element {
   return (
-    <View
+      <View
       pointerEvents="none"
       style={{
-        backgroundColor: 'rgba(255, 255, 255, 0.52)',
+        backgroundColor: 'rgba(255, 255, 255, 0.72)',
         borderTopLeftRadius: radius - 2,
         borderTopRightRadius: radius - 2,
-        height: 1,
-        left: 18,
+        height: 1.5,
+        left: 14,
         position: 'absolute',
-        right: 18,
-        top: 3.5,
+        right: 14,
+        top: 3.2,
       }}
     />
   );
@@ -188,17 +188,17 @@ function BottomEdgeShadow({ radius }: {
   radius: number;
 }): JSX.Element {
   return (
-    <View
+      <View
       pointerEvents="none"
       style={{
-        backgroundColor: 'rgba(13, 76, 65, 0.10)',
+        backgroundColor: 'rgba(13, 76, 65, 0.18)',
         borderBottomLeftRadius: radius - 1,
         borderBottomRightRadius: radius - 1,
-        bottom: 1.5,
-        height: 1.5,
-        left: 14,
+        bottom: 1.2,
+        height: 2,
+        left: 12,
         position: 'absolute',
-        right: 14,
+        right: 12,
       }}
     />
   );
@@ -210,17 +210,17 @@ function GlassGlow({ color, opacity, radius }: {
   radius: number;
 }): JSX.Element {
   return (
-    <View
+      <View
       pointerEvents="none"
       style={{
         backgroundColor: color,
         borderRadius: radius,
-        bottom: -8,
-        left: -8,
-        opacity,
+        bottom: -10,
+        left: -10,
+        opacity: opacity * 1.4,
         position: 'absolute',
-        right: -8,
-        top: -8,
+        right: -10,
+        top: -10,
       }}
     />
   );

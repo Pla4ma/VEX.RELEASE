@@ -32,7 +32,7 @@ const TONE_CONFIG: Record<GlassPillTone, ToneConfig> = {
     border: 'rgba(255, 255, 255, 1)',
     highlight: 'rgba(255, 255, 255, 1)',
     shadowColor: 'rgba(13, 76, 65, 0.10)',
-    shadowOpacity: 0.14,
+    shadowOpacity: 0.85,
     shadowRadius: 8,
     elevation: 2,
     gradientTop: 'rgba(255, 255, 255, 0.80)',
@@ -43,7 +43,7 @@ const TONE_CONFIG: Record<GlassPillTone, ToneConfig> = {
     border: 'rgba(66, 207, 174, 0.74)',
     highlight: 'rgba(255, 255, 255, 0.96)',
     shadowColor: 'rgba(18, 184, 148, 0.28)',
-    shadowOpacity: 0.22,
+    shadowOpacity: 0.85,
     shadowRadius: 10,
     elevation: 3,
     gradientTop: 'rgba(95, 230, 197, 0.36)',
@@ -54,7 +54,7 @@ const TONE_CONFIG: Record<GlassPillTone, ToneConfig> = {
     border: 'rgba(240, 138, 75, 0.55)',
     highlight: 'rgba(255, 255, 255, 0.45)',
     shadowColor: 'rgba(240, 138, 75, 0.30)',
-    shadowOpacity: 0.22,
+    shadowOpacity: 0.85,
     shadowRadius: 10,
     elevation: 3,
     gradientTop: 'rgba(240, 138, 75, 0.30)',
@@ -65,7 +65,7 @@ const TONE_CONFIG: Record<GlassPillTone, ToneConfig> = {
     border: 'rgba(223, 164, 74, 0.55)',
     highlight: 'rgba(255, 255, 255, 0.45)',
     shadowColor: 'rgba(223, 164, 74, 0.30)',
-    shadowOpacity: 0.22,
+    shadowOpacity: 0.85,
     shadowRadius: 10,
     elevation: 3,
     gradientTop: 'rgba(223, 164, 74, 0.30)',
@@ -76,7 +76,7 @@ const TONE_CONFIG: Record<GlassPillTone, ToneConfig> = {
     border: 'rgba(121, 223, 201, 0.78)',
     highlight: 'rgba(255, 255, 255, 0.98)',
     shadowColor: 'rgba(18, 184, 148, 0.28)',
-    shadowOpacity: 0.24,
+    shadowOpacity: 0.85,
     shadowRadius: 12,
     elevation: 3,
     gradientTop: 'rgba(121, 223, 201, 0.38)',
@@ -105,19 +105,19 @@ export function GlassPillSurface({
 }: GlassPillSurfaceProps): JSX.Element {
   const v = selected ? SELECTED_CONFIG : TONE_CONFIG[tone];
   return (
-    <View
+      <View
       style={[
         {
           backgroundColor: v.fill,
           borderColor: v.border,
           borderRadius: height / 2,
-          borderWidth: 1,
+          borderWidth: 1.2,
           elevation: v.elevation,
           overflow: 'hidden',
           shadowColor: v.shadowColor,
           shadowOffset: { width: 0, height: 4 },
-          shadowOpacity: v.shadowOpacity,
-          shadowRadius: v.shadowRadius,
+          shadowOpacity: v.shadowOpacity * 1.3,
+          shadowRadius: v.shadowRadius * 1.15,
         },
         style,
       ]}
@@ -157,13 +157,13 @@ export function GlassPillSurface({
       <View
         pointerEvents="none"
         style={{
-          backgroundColor: 'rgba(255, 255, 255, 0.85)',
+          backgroundColor: 'rgba(255, 255, 255, 0.95)',
           borderTopLeftRadius: height / 2,
           borderTopRightRadius: height / 2,
-          height: 1,
-          left: 8,
+          height: 1.2,
+          left: 6,
           position: 'absolute',
-          right: 8,
+          right: 6,
           top: 1,
         }}
       />

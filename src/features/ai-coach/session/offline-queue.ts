@@ -4,7 +4,13 @@ import { createDebugger } from '../../../utils/debug';
 
 const debug = createDebugger('coach:offline');
 
-const offlineStorage = new MMKV({ id: 'coach-offline-queue', encryptionKey: getMmkvEncryptionKeySync() });
+let _offlineStorage: MMKV | null = null;
+function getOfflineStorage(): MMKV {
+  if (!_offlineStorage) {
+    _offlineStorage = new MMKV({ id: 'coach-offline-queue', encryptionKey: getMmkvEncryptionKeySync() });
+  }
+  return _offlineStorage;
+}
 const QUEUE_KEY = 'coach_mutation_queue';
 export const MAX_QUEUE_SIZE = 50;
 const MAX_RETRY_ATTEMPTS = 3;
@@ -88,10 +94,10 @@ export async function processMutation(
 }
 
 export function getQueue(): QueuedMutation[] {
-  const data = offlineStorage.getString(QUEUE_KEY);
+  const data = getOfflineStorage().getString(QUEUE_KEY);
   return data ? JSON.parse(data) : [];
 }
 
 export function saveQueue(queue: QueuedMutation[]): void {
-  offlineStorage.set(QUEUE_KEY, JSON.stringify(queue));
+  getOfflineStorage().set(QUEUE_KEY, JSON.stringify(queue));
 }

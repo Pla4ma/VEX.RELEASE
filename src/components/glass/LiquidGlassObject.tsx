@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { View, type ViewStyle } from 'react-native';
 import Svg, {
   Circle,
@@ -135,7 +135,7 @@ function OrbVariant({ size }: { size: number }): JSX.Element {
       <Path
         d={`M ${center - r * 0.85} ${center + r * 0.35} Q ${center} ${center + r * 0.95} ${center + r * 0.85} ${center + r * 0.35}`}
         fill="none"
-        opacity={0.35}
+        opacity={0.65}
         stroke="#0A5E4D"
         strokeLinecap="round"
         strokeWidth={size * 0.015}
@@ -193,7 +193,7 @@ function GemVariant({ size }: { size: number }): JSX.Element {
       <Path
         d={`M ${cx - r * 0.72} ${cy + r * 0.42} Q ${cx} ${cy + r * 0.88} ${cx + r * 0.72} ${cy + r * 0.42}`}
         fill="none"
-        opacity={0.42}
+        opacity={0.65}
         stroke="#0A5E4D"
         strokeLinecap="round"
         strokeWidth={size * 0.012}
@@ -271,7 +271,7 @@ function LensVariant({ size }: { size: number }): JSX.Element {
   return (
     <G>
       {/* Outer glow */}
-      <Circle cx={cx} cy={cy} fill="url(#mintGlow)" r={r * 1.2} opacity={0.45} />
+      <Circle cx={cx} cy={cy} fill="url(#mintGlow)" r={r * 1.2} opacity={0.65} />
 
       {/* Contact shadow */}
       <Ellipse cx={cx} cy={cy + r * 0.6} fill="url(#contactShadow)" rx={r * 0.75} ry={r * 0.22} />
@@ -298,7 +298,7 @@ function LensVariant({ size }: { size: number }): JSX.Element {
       <Path
         d={`M ${cx - r * 0.78} ${cy + r * 0.42} Q ${cx} ${cy + r * 0.92} ${cx + r * 0.78} ${cy + r * 0.42}`}
         fill="none"
-        opacity={0.38}
+        opacity={0.65}
         stroke="#0A5E4D"
         strokeLinecap="round"
         strokeWidth={size * 0.015}
@@ -314,7 +314,7 @@ function BubbleVariant({ size }: { size: number }): JSX.Element {
   return (
     <G>
       {/* Soft aura */}
-      <Circle cx={cx} cy={cy} fill="url(#mintGlow)" r={r * 1.15} opacity={0.35} />
+      <Circle cx={cx} cy={cy} fill="url(#mintGlow)" r={r * 1.15} opacity={0.65} />
 
       {/* Contact shadow */}
       <Ellipse cx={cx} cy={cy + r * 0.55} fill="url(#contactShadow)" rx={r * 0.7} ry={r * 0.2} opacity={0.55} />
@@ -323,7 +323,7 @@ function BubbleVariant({ size }: { size: number }): JSX.Element {
       <Circle cx={cx} cy={cy} fill="url(#liquidCore)" opacity={0.75} r={r} stroke="url(#rimLight)" strokeWidth={size * 0.018} />
 
       {/* Inner hollow refraction */}
-      <Circle cx={cx} cy={cy} fill="url(#innerDistortion)" opacity={0.45} r={r * 0.82} />
+      <Circle cx={cx} cy={cy} fill="url(#innerDistortion)" opacity={0.65} r={r * 0.82} />
 
       {/* Sharp specular highlight */}
       <Ellipse cx={cx - r * 0.18} cy={cy - r * 0.25} fill="url(#specularHot)" rx={r * 0.28} ry={r * 0.2} />
@@ -338,7 +338,7 @@ function BubbleVariant({ size }: { size: number }): JSX.Element {
       <Path
         d={`M ${cx - r * 0.72} ${cy + r * 0.38} Q ${cx} ${cy + r * 0.85} ${cx + r * 0.72} ${cy + r * 0.38}`}
         fill="none"
-        opacity={0.28}
+        opacity={0.65}
         stroke="#0A5E4D"
         strokeLinecap="round"
         strokeWidth={size * 0.012}
@@ -362,7 +362,7 @@ function RibbonVariant({ size }: { size: number }): JSX.Element {
             Q ${cx - size * 0.38} ${cy + size * 0.12} ${cx - size * 0.42} ${cy - size * 0.08}
             Q ${cx - size * 0.45} ${cy - size * 0.18} ${cx - size * 0.35} ${cy - size * 0.25} Z`}
         fill="url(#mintGlow)"
-        opacity={0.35}
+        opacity={0.65}
       />
 
       {/* Shadow */}
@@ -371,7 +371,7 @@ function RibbonVariant({ size }: { size: number }): JSX.Element {
             Q ${cx - size * 0.08} ${cy + size * 0.42} ${cx + size * 0.12} ${cy + size * 0.32}
             Q ${cx + size * 0.28} ${cy + size * 0.22} ${cx + size * 0.22} ${cy + size * 0.18}`}
         fill="none"
-        opacity={0.22}
+        opacity={0.65}
         stroke="#0A5E4D"
         strokeLinecap="round"
         strokeWidth={size * 0.02}
@@ -409,7 +409,7 @@ function RibbonVariant({ size }: { size: number }): JSX.Element {
         d={`M ${cx + size * 0.12} ${cy + size * 0.15} 
             Q ${cx + size * 0.22} ${cy + size * 0.22} ${cx + size * 0.18} ${cy + size * 0.08}`}
         fill="none"
-        opacity={0.45}
+        opacity={0.65}
         stroke="#FFFFFF"
         strokeLinecap="round"
         strokeWidth={size * 0.01}
@@ -418,7 +418,7 @@ function RibbonVariant({ size }: { size: number }): JSX.Element {
   );
 }
 
-export function LiquidGlassObject({
+export function LiquidGlassObjectRaw({
   size = 96,
   style,
   variant = 'orb',
@@ -450,6 +450,9 @@ export function LiquidGlassObject({
     </View>
   );
 }
+
+export const LiquidGlassObject = React.memo(LiquidGlassObjectRaw);
+LiquidGlassObject.displayName = 'LiquidGlassObject';
 
 export default LiquidGlassObject;
 

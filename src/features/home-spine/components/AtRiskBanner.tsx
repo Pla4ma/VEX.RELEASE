@@ -5,6 +5,7 @@ import Animated, { FadeIn } from 'react-native-reanimated';
 import { Text } from '../../../components/primitives/Text';
 import { GlassCard } from '../../../components/glass/GlassCard';
 import { GlassProgressBar } from '../../../components/glass/GlassProgressBar';
+import { LiquidGlassSphere } from '../../../components/glass/LiquidGlassSphere';
 import { Icon } from '../../../icons';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import {
@@ -82,29 +83,19 @@ export function AtRiskBanner({
               gap: 12,
             }}
           >
-            <View
-              style={{
-                alignItems: 'center',
-                backgroundColor: isCritical
-                  ? 'rgba(224, 94, 94, 0.20)'
-                  : 'rgba(240, 138, 75, 0.20)',
-                borderColor: isCritical
-                  ? 'rgba(224, 94, 94, 0.45)'
-                  : 'rgba(240, 138, 75, 0.45)',
-                borderRadius: 999,
-                borderWidth: 1,
-                height: 40,
-                justifyContent: 'center',
-                width: 40,
-              }}
-            >
-              <Icon
-                color={isCritical ? '#B91C1C' : '#C2410C'}
-                name="alarm"
-                size="md"
-                variant="solid"
-              />
-            </View>
+            <LiquidGlassSphere
+              color={isCritical ? 'coral' : 'amber'}
+              icon={
+                <Icon
+                  color={isCritical ? '#B91C1C' : '#C2410C'}
+                  name="alarm"
+                  size="md"
+                  variant="solid"
+                />
+              }
+              intensity={0.88}
+              size={44}
+            />
             <View style={{ flex: 1 }}>
               <Text
                 style={{

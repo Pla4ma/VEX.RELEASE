@@ -1,7 +1,9 @@
-﻿import React from 'react';
+import React from 'react';
 import { View } from 'react-native';
 import { GlassCard } from '../../../components/glass/GlassCard';
 import { LiquidGlassSphere } from '../../../components/glass/LiquidGlassSphere';
+import { EmptyStateLens } from '../../../components/glass/EmptyStateLens';
+import { FloatingDroplets } from '../../../components/glass/FloatingDroplets';
 import { LiquidButton } from '../../../components/glass/LiquidButton';
 import { Text } from '../../../components/primitives/Text';
 import { Icon } from '../../../icons';
@@ -99,15 +101,8 @@ export function FocusScoreDashboard({
             >
               Focus Score
             </Text>
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-              <View
-                style={{
-                  backgroundColor: 'rgba(16, 35, 31, 0.08)',
-                  borderRadius: 999,
-                  height: 6,
-                  width: 40,
-                }}
-              />
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+              <EmptyStateLens sessionsNeeded={3} size={56} />
               <Text
                 style={{
                   color: vexLightGlass.text.tertiary,
@@ -147,6 +142,18 @@ export function FocusScoreDashboard({
 
   return (
     <View style={{ gap: 10 }}>
+      <View
+        pointerEvents="none"
+        style={{
+          opacity: 0.85,
+          position: 'absolute',
+          right: 8,
+          top: 8,
+          zIndex: 0,
+        }}
+      >
+        <FloatingDroplets count={3} opacity={0.65} size={28} />
+      </View>
       <ScoreCard score={model.current?.currentScore ?? 0} />
       <FactorMap model={model} />
       <WhatChanged model={model} onOpenMonthlyReport={onOpenMonthlyReport} />

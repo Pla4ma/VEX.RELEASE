@@ -73,6 +73,10 @@ export function GlassProgressBar({
           height: '100%',
           overflow: 'hidden',
           width: `${pct * 100}%`,
+          shadowColor: v.start,
+          shadowOffset: { width: 0, height: 0 },
+          shadowOpacity: 0.85,
+          shadowRadius: 6,
         }}
       >
         <LinearGradient
@@ -80,6 +84,32 @@ export function GlassProgressBar({
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
           style={{ flex: 1 }}
+        />
+        {/* Top specular highlight on the fill */}
+        <View
+          pointerEvents="none"
+          style={{
+            backgroundColor: 'rgba(255, 255, 255, 0.55)',
+            borderRadius: 999,
+            height: Math.max(1, height * 0.35),
+            left: 0,
+            position: 'absolute',
+            right: 0,
+            top: 0,
+          }}
+        />
+        {/* Bottom shadow on the fill */}
+        <View
+          pointerEvents="none"
+          style={{
+            backgroundColor: 'rgba(0, 0, 0, 0.08)',
+            borderRadius: 999,
+            bottom: 0,
+            height: Math.max(1, height * 0.25),
+            left: 0,
+            position: 'absolute',
+            right: 0,
+          }}
         />
       </View>
     </View>

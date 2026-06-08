@@ -30,9 +30,9 @@ function FocusRings(): React.JSX.Element {
         </RadialGradient>
       </Defs>
       <Circle cx={cx} cy={cy} r={width * 0.72} fill="url(#focusCore)" />
-      <Circle cx={cx} cy={cy + 8} r={width * 0.44} stroke={semantic.liquidGlassBorder} strokeWidth={1} fill="none" opacity={0.36} />
-      <Circle cx={cx} cy={cy + 8} r={width * 0.28} stroke={semantic.liquidViolet} strokeWidth={1} fill="none" opacity={0.28} />
-      <Line x1={width * 0.16} y1={cy} x2={width * 0.84} y2={cy} stroke={semantic.liquidGlassHighlight} strokeWidth={1} opacity={0.16} />
+      <Circle cx={cx} cy={cy + 8} r={width * 0.44} stroke={semantic.liquidGlassBorder} strokeWidth={1} fill="none" opacity={0.65} />
+      <Circle cx={cx} cy={cy + 8} r={width * 0.28} stroke={semantic.liquidViolet} strokeWidth={1} fill="none" opacity={0.65} />
+      <Line x1={width * 0.16} y1={cy} x2={width * 0.84} y2={cy} stroke={semantic.liquidGlassHighlight} strokeWidth={1} opacity={0.65} />
     </Svg>
   );
 }
@@ -82,7 +82,7 @@ function AuroraVeil(): React.JSX.Element {
         locations={[0, 0.34, 0.68, 1]}
         start={{ x: 0, y: 0.5 }}
         end={{ x: 1, y: 0.5 }}
-        style={{ flex: 1, opacity: 0.34 }}
+        style={{ flex: 1, opacity: 0.85 }}
       />
     </Animated.View>
   );

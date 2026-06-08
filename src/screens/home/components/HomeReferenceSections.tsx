@@ -1,7 +1,9 @@
-﻿import React from 'react';
+import React from 'react';
 import { View } from 'react-native';
 import { GlassCard } from '../../../components/glass/GlassCard';
 import { LiquidGlassSphere } from '../../../components/glass/LiquidGlassSphere';
+import { FloatingDroplets } from '../../../components/glass/FloatingDroplets';
+import { WaterBubble } from '../../../components/glass/WaterBubble';
 import { GlassPill } from '../../../components/glass/GlassPill';
 import { Text } from '../../../components/primitives/Text';
 import { Icon } from '../../../icons';
@@ -19,14 +21,26 @@ export function HomeReferenceSections({
     <View style={{ gap: 10, marginTop: 12 }}>
       {/* AI Coach Card */}
       <GlassCard padding={16} radius={22} variant="default">
+        <View
+          pointerEvents="none"
+          style={{
+            opacity: 0.85,
+            position: 'absolute',
+            right: 8,
+            bottom: 8,
+            zIndex: 0,
+          }}
+        >
+          <WaterBubble size={20} opacity={0.65} />
+        </View>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
           <LiquidGlassSphere
             color="pearl"
             icon={
               <Icon color="#0C765F" name="sparkles" size="sm" strokeWidth="thin" variant="outline" />
             }
-            intensity={0.7}
-            size={42}
+            intensity={0.92}
+            size={52}
           />
           <View style={{ flex: 1 }}>
             <Text
@@ -56,6 +70,18 @@ export function HomeReferenceSections({
 
       {/* Streak Card */}
       <GlassCard padding={16} radius={22} variant="default">
+        <View
+          pointerEvents="none"
+          style={{
+            opacity: 0.85,
+            position: 'absolute',
+            left: 8,
+            bottom: 8,
+            zIndex: 0,
+          }}
+        >
+          <LiquidGlassSphere color="pearl" size={12} intensity={0.48} />
+        </View>
         <View
           style={{
             alignItems: 'center',
@@ -128,6 +154,30 @@ export function HomeReferenceSections({
           style={{ flex: 1 }}
           variant="default"
         >
+          <View
+            pointerEvents="none"
+            style={{
+              opacity: 0.85,
+              position: 'absolute',
+              right: 8,
+              top: 8,
+              zIndex: 0,
+            }}
+          >
+            <FloatingDroplets count={3} opacity={0.65} size={32} />
+          </View>
+          <View
+            pointerEvents="none"
+            style={{
+              opacity: 0.85,
+              position: 'absolute',
+              left: 6,
+              bottom: 6,
+              zIndex: 0,
+            }}
+          >
+            <WaterBubble size={16} opacity={0.65} />
+          </View>
           <Text
             style={{
               color: '#0A1F1A',
@@ -184,6 +234,30 @@ export function HomeReferenceSections({
           style={{ flex: 1 }}
           variant="default"
         >
+          <View
+            pointerEvents="none"
+            style={{
+              opacity: 0.85,
+              position: 'absolute',
+              right: 8,
+              top: 8,
+              zIndex: 0,
+            }}
+          >
+            <LiquidGlassSphere color="pearl" intensity={0.48} size={24} />
+          </View>
+          <View
+            pointerEvents="none"
+            style={{
+              opacity: 0.85,
+              position: 'absolute',
+              left: 6,
+              bottom: 6,
+              zIndex: 0,
+            }}
+          >
+            <WaterBubble size={14} opacity={0.65} />
+          </View>
           <Text
             style={{
               color: '#0A1F1A',
@@ -211,6 +285,30 @@ export function HomeReferenceSections({
       {/* Project Atlas Card */}
       <GlassCard padding={16} radius={22} variant="default">
         <View
+          pointerEvents="none"
+          style={{
+            opacity: 0.85,
+            position: 'absolute',
+            right: 12,
+            top: 12,
+            zIndex: 0,
+          }}
+        >
+          <FloatingDroplets count={4} opacity={0.65} size={36} />
+        </View>
+        <View
+          pointerEvents="none"
+          style={{
+            opacity: 0.85,
+            position: 'absolute',
+            left: 8,
+            bottom: 8,
+            zIndex: 0,
+          }}
+        >
+          <WaterBubble size={18} opacity={0.65} />
+        </View>
+        <View
           style={{
             alignItems: 'center',
             flexDirection: 'row',
@@ -222,8 +320,8 @@ export function HomeReferenceSections({
             icon={
               <Icon color="#0E7490" name="book" size="sm" strokeWidth="thin" variant="outline" />
             }
-            intensity={0.7}
-            size={42}
+            intensity={0.92}
+            size={52}
           />
           <View style={{ flex: 1 }}>
             <Text

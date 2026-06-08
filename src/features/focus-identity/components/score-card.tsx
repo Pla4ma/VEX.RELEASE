@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { View } from 'react-native';
 import { GlassCard } from '../../../components/glass/GlassCard';
 import { LiquidGlassSphere } from '../../../components/glass/LiquidGlassSphere';

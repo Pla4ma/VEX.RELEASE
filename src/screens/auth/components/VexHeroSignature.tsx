@@ -1,4 +1,4 @@
-﻿import React, { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { View } from 'react-native';
 import Animated, {
   Easing,
@@ -25,7 +25,7 @@ import {
 
 const EASE_CINEMATIC = Easing.bezier(0.16, 1, 0.3, 1);
 
-/* ─── AURUM-style gold flourish above the wordmark ─── */
+/* --- AURUM-style gold flourish above the wordmark --- */
 function Flourish({ isReducedMotion }: { isReducedMotion: boolean }) {
   const draw = useSharedValue(isReducedMotion ? 1 : 0);
 
@@ -53,7 +53,7 @@ function Flourish({ isReducedMotion }: { isReducedMotion: boolean }) {
   );
 }
 
-/* ─── VEX letter with refined multi-layer glow (type as art) ─── */
+/* --- VEX letter with refined multi-layer glow (type as art) --- */
 function VexLetter({ char, index, isReducedMotion }: { char: string; index: number; isReducedMotion: boolean }) {
   const op = useSharedValue(isReducedMotion ? 1 : 0);
   const ty = useSharedValue(isReducedMotion ? 0 : 40);
@@ -93,7 +93,7 @@ function VexLetter({ char, index, isReducedMotion }: { char: string; index: numb
   );
 }
 
-/* ─── Underline divider (gold gradient bar) ─── */
+/* --- Underline divider (gold gradient bar) --- */
 function Underline({ isReducedMotion }: { isReducedMotion: boolean }) {
   const { theme } = useTheme();
   const scale = useSharedValue(isReducedMotion ? 1 : 0);
@@ -129,7 +129,7 @@ function Underline({ isReducedMotion }: { isReducedMotion: boolean }) {
   );
 }
 
-/* ─── Main signature ─── */
+/* --- Main signature --- */
 export function VexHeroSignature({
   title = 'VEX',
   tagline = 'Protect one block. Leave with proof.',

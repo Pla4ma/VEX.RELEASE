@@ -2,10 +2,22 @@ import React from 'react';
 import { View } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
 import { GlassCard } from '../../../components/glass/GlassCard';
-import { GlassIconOrb } from '../../../components/glass/GlassIconOrb';
+import { LiquidGlassSphere } from '../../../components/glass/LiquidGlassSphere';
+import { GlassProgressBar } from '../../../components/glass/GlassProgressBar';
 import { Icon } from '../../../icons';
 import type { FocusScoreDashboardModel } from '../types';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
+
+type LiquidSphereColor = 'mint' | 'cyan' | 'teal' | 'coral' | 'amber' | 'pearl';
+
+function mapOrbToSphereColor(orb: string): LiquidSphereColor {
+  if (orb === 'fire') return 'coral';
+  if (orb === 'lavender') return 'pearl';
+  if (orb === 'mint' || orb === 'cyan' || orb === 'teal' || orb === 'coral' || orb === 'amber' || orb === 'pearl') {
+    return orb as LiquidSphereColor;
+  }
+  return 'mint';
+}
 
 export interface FactorMapProps {
   model: FocusScoreDashboardModel;
@@ -27,10 +39,15 @@ export const FactorMap: React.FC<FactorMapProps> = ({ model }) => {
   return (
     <GlassCard padding={18} radius={24} variant="default">
       <View style={{ gap: 14 }}>
-        <View style={{ flexDirection: 'row', gap: 8 }}>
-          <GlassIconOrb size={36} variant="pearl">
-            <Icon color="#0C765F" name="chart" size="sm" variant="solid" />
-          </GlassIconOrb>
+        <View style={{ flexDirection: 'row', gap: 8, alignItems: 'center' }}>
+          <LiquidGlassSphere
+            color="pearl"
+            icon={
+              <Icon color="#0C765F" name="chart" size="sm" variant="solid" />
+            }
+            intensity={0.88}
+            size={40}
+          />
           <Text
             style={{
               color: vexLightGlass.text.primary,
@@ -52,14 +69,19 @@ export const FactorMap: React.FC<FactorMapProps> = ({ model }) => {
                 gap: 10,
               }}
             >
-              <GlassIconOrb size={32} variant={factor.orb}>
-                <Icon
-                  color="#0C765F"
-                  name={factor.icon}
-                  size="xs"
-                  variant="solid"
-                />
-              </GlassIconOrb>
+              <LiquidGlassSphere
+                color={mapOrbToSphereColor(factor.orb)}
+                icon={
+                  <Icon
+                    color="#0C765F"
+                    name={factor.icon}
+                    size="xs"
+                    variant="solid"
+                  />
+                }
+                intensity={0.82}
+                size={34}
+              />
               <Text
                 style={{
                   color: vexLightGlass.text.secondary,
@@ -70,23 +92,11 @@ export const FactorMap: React.FC<FactorMapProps> = ({ model }) => {
               >
                 {factor.label}
               </Text>
-              <View
-                style={{
-                  alignItems: 'center',
-                  backgroundColor: vexLightGlass.mint[100],
-                  borderRadius: 8,
-                  height: 8,
-                  overflow: 'hidden',
-                  width: 80,
-                }}
-              >
-                <View
-                  style={{
-                    backgroundColor: vexLightGlass.mint[500],
-                    borderRadius: 8,
-                    height: 8,
-                    width: `${factor.score}%`,
-                  }}
+              <View style={{ width: 80 }}>
+                <GlassProgressBar
+                  height={8}
+                  value={factor.score}
+                  variant="mint"
                 />
               </View>
               <Text

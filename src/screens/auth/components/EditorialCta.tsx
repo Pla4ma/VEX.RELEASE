@@ -115,7 +115,7 @@ export function EditorialCta({
             borderColor: theme.colors.semantic.editorialGoldBorder,
             shadowColor: theme.colors.semantic.editorialGold,
             shadowOffset: { width: 0, height: 8 },
-            shadowOpacity: 0.30,
+            shadowOpacity: 0.85,
             shadowRadius: 28,
           }}
         >

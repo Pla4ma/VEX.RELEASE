@@ -1,9 +1,15 @@
-﻿import React from 'react';
-import { View, Pressable } from 'react-native';
+import React from 'react';
+import { View, Pressable, Dimensions } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
 import { VexBrandPill } from '../../home/components/VexBrandPill';
 import { WaterBubble } from '../../../components/glass/WaterBubble';
+import { LiquidGlassSphere } from '../../../components/glass/LiquidGlassSphere';
+import { LiquidLens } from '../../../components/glass/LiquidLens';
+import { FloatingDroplets } from '../../../components/glass/FloatingDroplets';
+import { GlassBlurLayer } from '../../../components/glass/GlassBlurLayer';
 import { Icon } from '../../../icons';
+
+const { width: SCREEN_W } = Dimensions.get('window');
 
 interface ProgressHeaderProps {
   onOpenNotifications: () => void;
@@ -11,19 +17,55 @@ interface ProgressHeaderProps {
 
 export function ProgressHeader({ onOpenNotifications }: ProgressHeaderProps): JSX.Element {
   return (
-    <View style={{ width: '100%', marginBottom: 10 }}>
-      {/* Water bubble at top of progress screen */}
+    <View style={{ width: '100%', marginBottom: 10, position: 'relative' }}>
+      {/* Liquid analytics atmosphere at top of progress screen */}
       <View
         pointerEvents="none"
         style={{
-          left: -20,
-          opacity: 0.35,
+          left: -32,
+          opacity: 0.85,
           position: 'absolute',
-          top: -30,
+          top: -42,
           zIndex: 0,
         }}
       >
-        <WaterBubble opacity={0.45} size={100} />
+        <LiquidLens size={160} opacity={0.65} />
+      </View>
+      <View
+        pointerEvents="none"
+        style={{
+          right: -18,
+          opacity: 0.85,
+          position: 'absolute',
+          top: -24,
+          zIndex: 0,
+        }}
+      >
+        <WaterBubble opacity={0.65} size={78} />
+      </View>
+      <View
+        pointerEvents="none"
+        style={{
+          left: SCREEN_W * 0.48,
+          opacity: 0.85,
+          position: 'absolute',
+          top: -14,
+          zIndex: 0,
+        }}
+      >
+        <FloatingDroplets count={5} opacity={0.65} size={52} />
+      </View>
+      <View
+        pointerEvents="none"
+        style={{
+          left: SCREEN_W * 0.72,
+          opacity: 0.85,
+          position: 'absolute',
+          top: -6,
+          zIndex: 0,
+        }}
+      >
+        <LiquidGlassSphere color="pearl" size={20} intensity={0.62} />
       </View>
 
       <View
@@ -36,6 +78,18 @@ export function ProgressHeader({ onOpenNotifications }: ProgressHeaderProps): JS
         }}
       >
         <VexBrandPill />
+        <View
+          pointerEvents="none"
+          style={{
+            opacity: 0.85,
+            position: 'absolute',
+            right: 42,
+            top: 2,
+            zIndex: 0,
+          }}
+        >
+          <FloatingDroplets count={2} opacity={0.65} size={18} />
+        </View>
         <Pressable
           accessibilityHint="Shows your VEX notifications"
           accessibilityLabel="Open notifications"
@@ -52,11 +106,12 @@ export function ProgressHeader({ onOpenNotifications }: ProgressHeaderProps): JS
             overflow: 'hidden',
             shadowColor: 'rgba(13, 76, 65, 0.16)',
             shadowOffset: { width: 0, height: 6 },
-            shadowOpacity: 0.35,
+            shadowOpacity: 0.85,
             shadowRadius: 10,
             width: 38,
           }}
         >
+          <GlassBlurLayer intensity={72} radius={19} />
           <Icon
             color="#0A1F1A"
             name="notification"

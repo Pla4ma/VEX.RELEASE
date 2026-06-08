@@ -55,7 +55,7 @@ function AnimatedBackground(): JSX.Element {
           : withRepeat(withTiming(1.04, { duration: 14000 }), -1, true),
       },
     ],
-    opacity: 0.14,
+    opacity: 0.85,
   }));
 
   return (

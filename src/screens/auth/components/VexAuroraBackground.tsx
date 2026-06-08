@@ -97,7 +97,7 @@ function AuroraVeil(): React.JSX.Element {
         locations={[0, 0.38, 0.68, 1]}
         start={{ x: 0, y: 0.5 }}
         end={{ x: 1, y: 0.5 }}
-        style={{ flex: 1, opacity: 0.26 }}
+        style={{ flex: 1, opacity: 0.85 }}
       />
     </Animated.View>
   );
@@ -119,7 +119,7 @@ function OrbitalLines(): React.JSX.Element {
         stroke={s.liquidGlassBorder}
         strokeWidth={0.5}
         fill="none"
-        opacity={0.14}
+        opacity={0.65}
       />
       <Circle
         cx={cx}
@@ -128,7 +128,7 @@ function OrbitalLines(): React.JSX.Element {
         stroke={s.liquidViolet}
         strokeWidth={0.5}
         fill="none"
-        opacity={0.10}
+        opacity={0.65}
       />
     </Svg>
   );
