@@ -1,6 +1,8 @@
 import React, { type ReactNode } from 'react';
 import { View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { GlassIconOrbHighlights } from './GlassIconOrbHighlights';
+import { LiquidGlassObject } from './LiquidGlassObject';
 
 interface GlassIconOrbProps {
   children?: ReactNode;
@@ -78,7 +80,7 @@ export function GlassIconOrb({
   testID,
 }: GlassIconOrbProps): JSX.Element {
   const v = resolveVariant(variant);
-  const coreSize = Math.max(size - 18, 28);
+  const coreSize = Math.max(size - 24, 26);
 
   return (
     <View
@@ -89,8 +91,8 @@ export function GlassIconOrb({
         justifyContent: 'center',
         shadowColor: v.glow,
         shadowOffset: { width: 0, height: 8 },
-        shadowOpacity: 0.65,
-        shadowRadius: 18,
+        shadowOpacity: 0.82,
+        shadowRadius: 22,
         width: size,
       }}
     >
@@ -100,7 +102,7 @@ export function GlassIconOrb({
           backgroundColor: v.glow,
           borderColor: v.ring,
           borderRadius: size / 2,
-          borderWidth: 1.2,
+          borderWidth: 1.6,
           height: size,
           justifyContent: 'center',
           overflow: 'hidden',
@@ -121,25 +123,22 @@ export function GlassIconOrb({
             width: size,
           }}
         />
-        <LinearGradient
-          colors={['rgba(255, 255, 255, 0.92)', 'rgba(255, 255, 255, 0)']}
-          end={{ x: 0.7, y: 0.9 }}
-          start={{ x: 0.2, y: 0.05 }}
-          style={{
-            borderRadius: size / 2,
-            height: size * 0.72,
-            left: size * 0.10,
-            opacity: 0.72,
-            position: 'absolute',
-            top: size * 0.06,
-            transform: [{ rotate: '-18deg' }],
-            width: size * 0.42,
-          }}
-        />
+        <GlassIconOrbHighlights size={size} />
         <View
           pointerEvents="none"
           style={{
-            backgroundColor: 'rgba(255, 255, 255, 0.88)',
+            left: 0,
+            opacity: 0.94,
+            position: 'absolute',
+            top: 0,
+          }}
+        >
+          <LiquidGlassObject size={size} variant="orb" />
+        </View>
+        <View
+          pointerEvents="none"
+          style={{
+            backgroundColor: 'rgba(255, 255, 255, 0.96)',
             borderRadius: size / 10,
             height: size * 0.12,
             left: size * 0.26,
@@ -152,8 +151,8 @@ export function GlassIconOrb({
         <View
           style={{
             alignItems: 'center',
-            backgroundColor: v.core,
-            borderColor: 'rgba(255, 255, 255, 0.82)',
+            backgroundColor: 'rgba(255, 255, 255, 0.82)',
+            borderColor: 'rgba(255, 255, 255, 0.94)',
             borderRadius: size / 2,
             borderWidth: 1,
             height: coreSize,
@@ -161,7 +160,7 @@ export function GlassIconOrb({
             shadowColor: 'rgba(13, 76, 65, 0.16)',
             shadowOffset: { width: 0, height: 6 },
             shadowOpacity: 0.8,
-            shadowRadius: 10,
+            shadowRadius: 14,
             width: coreSize,
           }}
         >

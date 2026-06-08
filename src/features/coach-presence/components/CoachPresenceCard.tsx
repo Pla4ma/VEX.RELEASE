@@ -2,8 +2,8 @@ import React from 'react';
 import { Pressable, View } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
 import { GlassCard } from '../../../components/glass/GlassCard';
+import { GlassIconOrb } from '../../../components/glass/GlassIconOrb';
 import { LiquidButton } from '../../../components/glass/LiquidButton';
-import { getMinTouchTargetStyle } from '../../../utils/touchTarget';
 import { buttonTap } from '../../../utils/haptics';
 import type { CoachPresence } from '../schemas';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
@@ -33,8 +33,8 @@ export function CoachPresenceCard({
       accessibilityRole="button"
       accessibilityHint="Opens the coach presence action"
     >
-      <GlassCard variant="subtle">
-        <View style={{ gap: 12 }}>
+      <GlassCard padding={14} radius={22} variant="subtle">
+        <View style={{ gap: 10 }}>
           <View
             style={{
               alignItems: 'center',
@@ -42,17 +42,7 @@ export function CoachPresenceCard({
               gap: 12,
             }}
           >
-            {/* Visual reaction indicator - small signal orb */}
-            <View
-              style={{
-                alignItems: 'center',
-                backgroundColor: `${reactionColor}18`,
-                borderRadius: 24,
-                height: 48,
-                justifyContent: 'center',
-                width: 48,
-              }}
-            >
+            <GlassIconOrb size={46} variant="mint">
               <View
                 style={{
                   width: 12,
@@ -61,12 +51,12 @@ export function CoachPresenceCard({
                   backgroundColor: reactionColor,
                 }}
               />
-            </View>
+            </GlassIconOrb>
             <View style={{ flex: 1, gap: 4 }}>
               <Text
                 style={{
                   color: vexLightGlass.text.secondary,
-                  fontSize: 13,
+                  fontSize: 11,
                   fontWeight: '600',
                   letterSpacing: 0.5,
                   textTransform: 'uppercase',
@@ -77,7 +67,7 @@ export function CoachPresenceCard({
               <Text
                 style={{
                   color: vexLightGlass.text.primary,
-                  fontSize: 15,
+                  fontSize: 14,
                   fontWeight: '700',
                   letterSpacing: -0.2,
                   lineHeight: 22,
@@ -91,8 +81,8 @@ export function CoachPresenceCard({
           <Text
             style={{
               color: vexLightGlass.text.secondary,
-              fontSize: 13,
-              lineHeight: 18,
+              fontSize: 12,
+              lineHeight: 17,
             }}
           >
             {presence.progressReaction}

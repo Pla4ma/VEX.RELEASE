@@ -10,8 +10,8 @@ interface GlassTextureOverlayProps {
 
 const OPACITY = {
   quiet: 0.18,
-  normal: 0.26,
-  hero: 0.34,
+  normal: 0.28,
+  hero: 0.42,
 } as const;
 
 export function GlassTextureOverlay({
@@ -35,9 +35,9 @@ export function GlassTextureOverlay({
     >
       <LinearGradient
         colors={[
-          `rgba(255,255,255,${opacity + 0.22})`,
+          `rgba(255,255,255,${opacity + 0.18})`,
           'rgba(255,255,255,0)',
-          `rgba(114,224,197,${opacity * 0.5})`,
+          `rgba(114,224,197,${opacity * 0.72})`,
         ]}
         end={{ x: 1, y: 1 }}
         locations={[0, 0.54, 1]}
@@ -47,14 +47,14 @@ export function GlassTextureOverlay({
       <Svg
         height="100%"
         preserveAspectRatio="none"
-        style={{ opacity }}
+        style={{ opacity: opacity * 0.72 }}
         viewBox="0 0 100 100"
         width="100%"
       >
         <Defs>
           <SvgGradient id="glassLine" x1="0" x2="1" y1="0" y2="0">
             <Stop offset="0%" stopColor="#FFFFFF" stopOpacity="0" />
-            <Stop offset="42%" stopColor="#FFFFFF" stopOpacity="0.8" />
+            <Stop offset="42%" stopColor="#FFFFFF" stopOpacity="1" />
             <Stop offset="100%" stopColor="#79DFC9" stopOpacity="0" />
           </SvgGradient>
         </Defs>
@@ -63,14 +63,35 @@ export function GlassTextureOverlay({
           fill="none"
           stroke="url(#glassLine)"
           strokeLinecap="round"
-          strokeWidth="1.4"
+          strokeWidth="2.6"
+        />
+        <Path
+          d="M -14 18 C 18 6 45 26 74 13 C 92 5 105 8 116 -2"
+          fill="none"
+          stroke="rgba(255,255,255,0.82)"
+          strokeLinecap="round"
+          strokeWidth="2"
+        />
+        <Path
+          d="M 18 102 C 38 84 56 88 73 74 C 91 60 96 43 116 38"
+          fill="none"
+          stroke="rgba(95,230,197,0.58)"
+          strokeLinecap="round"
+          strokeWidth="2.7"
         />
         <Path
           d="M -8 84 C 24 62 47 82 77 62 C 94 50 105 53 114 44"
           fill="none"
-          stroke="rgba(114,224,197,0.34)"
+          stroke="rgba(114,224,197,0.66)"
           strokeLinecap="round"
-          strokeWidth="0.9"
+          strokeWidth="1.8"
+        />
+        <Path
+          d="M 4 42 C 28 33 48 45 67 32 C 82 22 95 25 108 18"
+          fill="none"
+          stroke="rgba(255,255,255,0.56)"
+          strokeLinecap="round"
+          strokeWidth="3.3"
         />
       </Svg>
     </View>

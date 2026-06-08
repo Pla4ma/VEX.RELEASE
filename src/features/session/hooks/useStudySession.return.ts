@@ -132,9 +132,9 @@ export function useStudySessionReturn(args: BuildReturnArgs) {
     progress,
     timeRemaining,
     isLoading:
-      currentSessionQuery.isPending ||
-      sessionHistoryQuery.isPending ||
-      sessionStatsQuery.isPending,
+      currentSessionQuery.isLoading ||
+      sessionHistoryQuery.isLoading ||
+      sessionStatsQuery.isLoading,
     isFetching:
       currentSessionQuery.isFetching ||
       sessionHistoryQuery.isFetching ||

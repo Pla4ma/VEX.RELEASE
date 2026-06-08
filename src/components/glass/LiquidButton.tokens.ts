@@ -1,4 +1,4 @@
-import { vexLightGlass } from '../../theme/tokens/vex-light-glass';
+﻿import { vexLightGlass } from '../../theme/tokens/vex-light-glass';
 
 export type LiquidButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost';
 export type LiquidButtonSize = 'sm' | 'md' | 'lg';
@@ -15,10 +15,15 @@ export interface LiquidVariantStyle {
 export const LIQUID_SIZE: Record<LiquidButtonSize, {
   paddingH: number; paddingV: number; minHeight: number; fontSize: number;
 }> = {
-  sm: { paddingH: 14, paddingV: 7, minHeight: 32, fontSize: 12 },
-  md: { paddingH: 20, paddingV: 10, minHeight: 40, fontSize: 13 },
-  lg: { paddingH: 24, paddingV: 12, minHeight: 46, fontSize: 15 },
+  sm: { paddingH: 16, paddingV: 5, minHeight: 30, fontSize: 12 },
+  md: { paddingH: 20, paddingV: 8, minHeight: 38, fontSize: 13 },
+  lg: { paddingH: 24, paddingV: 10, minHeight: 44, fontSize: 15 },
 };
+
+const PREMIUM_TEAL = '#0A9B8A';
+const PREMIUM_TEAL_DARK = '#078274';
+const PREMIUM_TEAL_LIGHT = '#0DBFA6';
+const PREMIUM_TEAL_MID = '#089B8A';
 
 export function resolveLiquidVariant(
   variant: LiquidButtonVariant,
@@ -27,23 +32,23 @@ export function resolveLiquidVariant(
   if (variant === 'primary') {
     return {
       gradientColors: isPressed
-        ? [vexLightGlass.mint[600], vexLightGlass.mint[500], vexLightGlass.mint[300]]
-        : [vexLightGlass.mint[300], vexLightGlass.mint[500], vexLightGlass.mint[700]],
-      textColor: vexLightGlass.text.inverse,
-      borderColor: 'rgba(255, 255, 255, 0.55)',
-      shadowColor: vexLightGlass.mint[600],
-      highlightColor: 'rgba(255, 255, 255, 0.55)',
+        ? [PREMIUM_TEAL_DARK, PREMIUM_TEAL_MID, '#065E54']
+        : [PREMIUM_TEAL_LIGHT, PREMIUM_TEAL, PREMIUM_TEAL_DARK],
+      textColor: '#FFFFFF',
+      borderColor: 'rgba(255, 255, 255, 0.72)',
+      shadowColor: 'rgba(10, 155, 138, 0.32)',
+      highlightColor: 'rgba(255, 255, 255, 0.92)',
     };
   }
   if (variant === 'outline') {
     return {
       gradientColors: isPressed
-        ? ['rgba(66, 207, 174, 0.30)', 'rgba(66, 207, 174, 0.18)']
-        : ['rgba(255, 255, 255, 0.78)', 'rgba(255, 255, 255, 0.50)'],
-      textColor: vexLightGlass.mint[700],
-      borderColor: 'rgba(66, 207, 174, 0.55)',
-      background: 'rgba(255, 255, 255, 0.50)',
-      shadowColor: 'rgba(13, 76, 65, 0.18)',
+        ? ['rgba(10, 155, 138, 0.12)', 'rgba(10, 155, 138, 0.06)']
+        : ['rgba(255, 255, 255, 0.88)', 'rgba(255, 255, 255, 0.55)'],
+      textColor: PREMIUM_TEAL,
+      borderColor: 'rgba(10, 155, 138, 0.38)',
+      background: 'rgba(255, 255, 255, 0.48)',
+      shadowColor: 'rgba(13, 76, 65, 0.1)',
       highlightColor: 'rgba(255, 255, 255, 0.85)',
     };
   }
@@ -54,7 +59,7 @@ export function resolveLiquidVariant(
         : ['rgba(255, 255, 255, 0.0)', 'rgba(255, 255, 255, 0.0)'],
       textColor: vexLightGlass.text.primary,
       borderColor: 'rgba(255, 255, 255, 0.6)',
-      shadowColor: 'rgba(13, 76, 65, 0.12)',
+      shadowColor: 'rgba(13, 76, 65, 0.1)',
       highlightColor: 'rgba(255, 255, 255, 0.5)',
     };
   }
@@ -64,7 +69,7 @@ export function resolveLiquidVariant(
       : ['rgba(255, 255, 255, 0.72)', 'rgba(255, 255, 255, 0.48)'],
     textColor: vexLightGlass.text.primary,
     borderColor: 'rgba(255, 255, 255, 0.85)',
-    shadowColor: 'rgba(13, 76, 65, 0.20)',
+    shadowColor: 'rgba(13, 76, 65, 0.18)',
     highlightColor: 'rgba(255, 255, 255, 0.92)',
   };
 }

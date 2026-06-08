@@ -25,11 +25,13 @@ import { useAuthStore } from '../store';
 const useMyRivals = (_userId: string | null) => ({
   data: null,
   isLoading: false,
+  isPending: false,
   error: null,
 });
 const useActiveChallenges = (_userId: string | null) => ({
   data: null,
   isLoading: false,
+  isPending: false,
 });
 const useRivalSuggestions = (
   _userId: string | null,

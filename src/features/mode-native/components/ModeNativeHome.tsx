@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { View } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 import { Text } from '../../../components/primitives/Text';
@@ -49,41 +49,41 @@ export function ModeNativeHome({
       entering={entering}
       style={{ flex: 1, justifyContent: 'flex-start' }}
     >
-      <GlassCard variant="hero" padding={20} radius={32}>
+      <GlassCard variant="hero" padding={18} radius={28}>
         <View
           pointerEvents="none"
           style={{
-            backgroundColor: 'rgba(95, 230, 197, 0.22)',
+            backgroundColor: 'rgba(95, 230, 197, 0.12)',
             borderRadius: 280,
-            height: 240,
+            height: 180,
             position: 'absolute',
             right: -70,
             top: -100,
-            width: 240,
+            width: 180,
           }}
         />
         <View
           pointerEvents="none"
           style={{
-            backgroundColor: 'rgba(132, 228, 229, 0.20)',
+            backgroundColor: 'rgba(132, 228, 229, 0.10)',
             borderRadius: 180,
-            height: 140,
+            height: 120,
             position: 'absolute',
             right: 30,
             top: 30,
-            width: 140,
+            width: 120,
           }}
         />
         <View
           pointerEvents="none"
           style={{
-            backgroundColor: 'rgba(255, 255, 255, 0.50)',
+            backgroundColor: 'rgba(255, 255, 255, 0.30)',
             borderRadius: 200,
-            height: 110,
+            height: 100,
             left: 30,
             position: 'absolute',
             top: 0,
-            width: 110,
+            width: 100,
           }}
         />
         <View
@@ -92,19 +92,21 @@ export function ModeNativeHome({
             position: 'absolute',
             right: -16,
             top: -20,
+            opacity: 0.5,
           }}
         >
-          <LiquidGlassObject size={170} variant="orb" />
+          <LiquidGlassObject size={120} variant="orb" />
         </View>
         <View
           pointerEvents="none"
           style={{
             bottom: -50,
             left: -20,
+            opacity: 0.4,
             position: 'absolute',
           }}
         >
-          <LiquidGlassObject size={120} variant="swirl" />
+          <LiquidGlassObject size={90} variant="swirl" />
         </View>
 
         <View
@@ -123,10 +125,10 @@ export function ModeNativeHome({
           <Text
             style={{
               color: vexLightGlass.text.primary,
-              fontSize: 30,
+              fontSize: 24,
               fontWeight: '800',
               letterSpacing: -0.6,
-              lineHeight: 36,
+              lineHeight: 30,
               marginBottom: 8,
             }}
           >

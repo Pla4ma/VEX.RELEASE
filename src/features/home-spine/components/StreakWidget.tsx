@@ -6,6 +6,7 @@ import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
 import { GlassCard } from '../../../components/glass/GlassCard';
 import { GlassPill } from '../../../components/glass/GlassPill';
+import { GlassIconOrb } from '../../../components/glass/GlassIconOrb';
 import { Icon } from '../../../icons';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import { StreakWidgetSkeleton } from './StreakWidget.parts';
@@ -53,8 +54,8 @@ export function StreakWidget({
     >
       <Animated.View entering={FadeIn.duration(400)}>
         <GlassCard
-          padding={18}
-          radius={26}
+          padding={16}
+          radius={22}
           variant={isUrgent ? 'warning' : 'default'}
         >
           <Box
@@ -64,31 +65,14 @@ export function StreakWidget({
             justifyContent="space-between"
           >
             <Box alignItems="center" flexDirection="row" gap={12}>
-              <View
-                style={{
-                  alignItems: 'center',
-                  backgroundColor: isUrgent
-                    ? 'rgba(240, 138, 75, 0.22)'
-                    : 'rgba(240, 138, 75, 0.18)',
-                  borderColor: 'rgba(240, 138, 75, 0.55)',
-                  borderRadius: 999,
-                  borderWidth: 1,
-                  height: 44,
-                  justifyContent: 'center',
-                  shadowColor: '#F08A4B',
-                  shadowOffset: { width: 0, height: 4 },
-                  shadowOpacity: 0.45,
-                  shadowRadius: 10,
-                  width: 44,
-                }}
-              >
-                <Icon color="#C2410C" name="fire" size="md" variant="solid" />
-              </View>
+              <GlassIconOrb size={42} variant="fire">
+                <Icon color="#C2410C" name="fire" size="sm" variant="solid" />
+              </GlassIconOrb>
               {isEmpty ? (
                 <Text
                   style={{
                     color: vexLightGlass.text.primary,
-                    fontSize: 17,
+                    fontSize: 16,
                     fontWeight: '800',
                   }}
                 >
@@ -98,7 +82,7 @@ export function StreakWidget({
                 <Text
                   style={{
                     color: vexLightGlass.text.primary,
-                    fontSize: 18,
+                    fontSize: 17,
                     fontWeight: '800',
                     letterSpacing: -0.2,
                   }}
@@ -118,7 +102,7 @@ export function StreakWidget({
             alignItems="center"
             flexDirection="row"
             justifyContent="space-between"
-            mt={14}
+            mt={12}
           >
             <Text
               style={{

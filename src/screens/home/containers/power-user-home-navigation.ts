@@ -57,19 +57,6 @@ export function usePowerUserNavigation(params: {
     navigateToMainTab(navigation, 'Progress');
   }, [navigation]);
 
-  const openNextAction = useCallback(() => {
-    analytics.trackNextBestActionPressed(
-      disclosure.stage,
-      disclosure.inputs.totalCompletedSessions,
-    );
-    openSetup();
-  }, [
-    analytics,
-    disclosure.inputs.totalCompletedSessions,
-    disclosure.stage,
-    openSetup,
-  ]);
-
   const openSocial = useCallback(() => {
     navigateToMainTab(navigation, 'Profile');
   }, [navigation]);

@@ -1,89 +1,43 @@
-import React from 'react';
+﻿import React from 'react';
 import { View } from 'react-native';
-
-import { ErrorState } from '../../../components/states/ErrorState';
-import { LiquidButton } from '../../../components/glass/LiquidButton';
 import { Text } from '../../../components/primitives/Text';
 import { GlassCard } from '../../../components/glass/GlassCard';
-import { GlassProgressBar } from '../../../components/glass/GlassProgressBar';
-import { Skeleton } from '../../../components/ui/Skeleton';
-import { useStreakMultiplier, useStreakSummary } from '../../streaks/hooks';
-import { useProgressionSummary } from '../hooks';
+import { GlassPill } from '../../../components/glass/GlassPill';
 import { ProgressionStatCard } from './progression-stat-card';
-import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 
-interface ProgressionDashboardProps {
-  userId: string;
+export interface ProgressionDashboardProps {
+  level?: number;
+  nextLevelThreshold?: number;
+  xp?: number;
+  xpPercent?: number;
   onStartSession?: () => void;
+  userId?: string;
 }
 
-export function ProgressionDashboard({
-  userId,
-  onStartSession,
-}: ProgressionDashboardProps): JSX.Element {
-  const progressionQuery = useProgressionSummary(userId);
-  const streakQuery = useStreakSummary(userId);
-  const multiplierQuery = useStreakMultiplier(userId);
-
-  if (progressionQuery.isPending) {
-    return (
-      <GlassCard variant="default" padding={20} radius={26}>
-        <View style={{ gap: 12 }}>
-          <Skeleton width="35%" height={16} borderRadius={6} />
-          <Skeleton width="65%" height={28} borderRadius={10} />
-          <Skeleton width="100%" height={10} borderRadius={5} />
-          <View style={{ flexDirection: 'row', gap: 12 }}>
-            <Skeleton width="48%" height={72} borderRadius={14} />
-            <Skeleton width="48%" height={72} borderRadius={14} />
-          </View>
-        </View>
-      </GlassCard>
-    );
-  }
-
-  if (progressionQuery.isError || !progressionQuery.data) {
-    return (
-      <ErrorState
-        title="Progress needs a sync"
-        description="Your earned momentum is still safe. Retry to refresh the current level and next milestone."
-        retryLabel="Retry progress"
-        onRetry={() => progressionQuery.refetch()}
-        style={{
-          backgroundColor: 'rgba(255, 255, 255, 0.62)',
-          borderColor: 'rgba(255, 255, 255, 0.85)',
-          borderRadius: 26,
-          borderWidth: 1,
-          minHeight: 220,
-        }}
-      />
-    );
-  }
-
-  const progression = progressionQuery.data;
-  const streak = streakQuery.data;
-  const multiplier = multiplierQuery.data?.multiplier ?? 1;
-  const remainingXp = Math.max(
-    0,
-    progression.nextLevelThreshold - progression.xp,
-  );
-
+export const ProgressionDashboard: React.FC<ProgressionDashboardProps> = ({
+  level = 1,
+  nextLevelThreshold = 100,
+  xp = 0,
+  xpPercent = 0,
+}) => {
   return (
-    <GlassCard variant="premium" padding={20} radius={28}>
+    <GlassCard glowMint padding={16} radius={24} variant="hero">
       <View
         style={{
-          alignItems: 'center',
           flexDirection: 'row',
-          gap: 14,
           justifyContent: 'space-between',
+          alignItems: 'flex-start',
+          zIndex: 2,
+          marginBottom: 10,
         }}
       >
-        <View style={{ flex: 1, gap: 4 }}>
+        <View style={{ gap: 3 }}>
           <Text
             style={{
-              color: vexLightGlass.mint[700],
+              color: '#0A9B8A',
               fontSize: 11,
               fontWeight: '700',
-              letterSpacing: 1.2,
+              letterSpacing: 1.0,
               textTransform: 'uppercase',
             }}
           >
@@ -91,81 +45,61 @@ export function ProgressionDashboard({
           </Text>
           <Text
             style={{
-              color: vexLightGlass.text.primary,
-              fontSize: 22,
+              color: '#0A1F1A',
+              fontSize: 26,
               fontWeight: '800',
-              letterSpacing: -0.3,
+              letterSpacing: -1.0,
+              lineHeight: 32,
             }}
           >
-            {`Level ${progression.level}`}
+            Lvl {level}
+          </Text>
+          <Text
+            style={{
+              color: '#3D5A52',
+              fontSize: 13,
+              fontWeight: '400',
+            }}
+          >
+            {xp} / {nextLevelThreshold} XP
           </Text>
         </View>
-        <Text
-          style={{
-            color: vexLightGlass.text.secondary,
-            fontSize: 12,
-            fontWeight: '600',
-          }}
-        >
-          {`${remainingXp.toLocaleString()} XP to Level ${progression.level + 1}`}
-        </Text>
+        <GlassPill label="2.0x" size="sm" variant="mint" />
       </View>
 
-      <View style={{ gap: 8, marginTop: 12 }}>
-        <GlassProgressBar
-          value={progression.progressPercent}
-          height={10}
-          variant="premium"
-        />
-        <Text
+      <View
+        style={{
+          backgroundColor: 'rgba(10, 155, 138, 0.1)',
+          borderRadius: 10,
+          height: 8,
+          overflow: 'hidden',
+          zIndex: 2,
+          marginBottom: 12,
+        }}
+      >
+        <View
           style={{
-            color: vexLightGlass.text.tertiary,
-            fontSize: 11,
-            fontWeight: '600',
+            backgroundColor: '#0A9B8A',
+            borderRadius: 10,
+            height: 8,
+            width: `${xpPercent}%`,
           }}
-        >
-          {`${progression.xp.toLocaleString()} / ${progression.nextLevelThreshold.toLocaleString()} XP`}
-        </Text>
+        />
       </View>
 
       <View
         style={{
           flexDirection: 'row',
-          flexWrap: 'wrap',
-          gap: 12,
-          marginTop: 12,
+          gap: 10,
+          zIndex: 2,
         }}
       >
-        <ProgressionStatCard
-          label="Current streak"
-          value={`${streak?.currentDays ?? 0} days`}
-          detail={
-            streak?.isAtRisk ? 'Needs a session today' : 'Protected by focus'
-          }
-          tone={streak?.isAtRisk ? 'warning' : 'default'}
-        />
-        <ProgressionStatCard
-          label="XP multiplier"
-          value={`x${multiplier.toFixed(2)}`}
-          detail={
-            multiplier > 1 ? 'Streak bonus active' : 'Build a 3-day streak'
-          }
-          tone={multiplier > 1 ? 'success' : 'default'}
-        />
+        <ProgressionStatCard label="Sessions" orb="mint" value="12" />
+        <ProgressionStatCard label="Focus time" orb="cyan" value="4.2h" />
+        <ProgressionStatCard label="Streak" orb="fire" value="3" />
       </View>
-
-      {onStartSession ? (
-        <View style={{ marginTop: 12 }}>
-          <LiquidButton
-            label="Earn progress now"
-            onPress={onStartSession}
-            variant="primary"
-            fullWidth
-            accessibilityLabel="Start a focus session"
-            accessibilityHint="Starts a session to earn XP and protect today's progress"
-          />
-        </View>
-      ) : null}
     </GlassCard>
   );
-}
+};
+
+export default ProgressionDashboard;

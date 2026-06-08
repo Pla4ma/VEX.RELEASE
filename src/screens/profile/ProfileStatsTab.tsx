@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Box, Text } from '../../components/primitives';
 import { GlassCard } from '../../components/glass/GlassCard';
 import { Icon } from '../../icons';
@@ -63,7 +63,7 @@ function ProfileStatTiles({
   loading: boolean;
 }): JSX.Element {
   return (
-    <Box flexDirection="row" flexWrap="wrap" gap={12}>
+    <Box flexDirection="row" flexWrap="wrap" gap={10}>
       {stats.map((item) => (
         <ProfileStatTile item={item} key={item.label} loading={loading} />
       ))}
@@ -83,7 +83,7 @@ export const ProfileStatsTab: React.FC<ProfileStatsTabProps> = ({
   onMasteryPress,
 }) => {
   return (
-    <Box gap={16}>
+    <Box gap={10}>
       {hasError ? <ProfileStatsError /> : null}
       {userId ? (
         <FocusScoreCard animate onPress={() => {}} showTrend size="large" userId={userId} />

@@ -17,32 +17,35 @@ export function StudyOSCard({
   onOpenStudy,
 }: StudyOSCardProps): JSX.Element {
   return (
-    <GlassCard variant="premium" padding={20} radius={28}>
+    <GlassCard variant="default" padding={12} radius={18}>
       <View
         pointerEvents="none"
         style={{
           backgroundColor: 'rgba(95, 230, 197, 0.18)',
           borderRadius: 200,
-          height: 180,
+          height: 112,
           position: 'absolute',
           right: -40,
           top: -40,
-          width: 180,
+          width: 112,
         }}
       />
       <View
         style={{
           alignItems: 'center',
           flexDirection: 'row',
-          gap: 14,
+          gap: 10,
           justifyContent: 'space-between',
         }}
       >
-        <View style={{ flex: 1, gap: 6 }}>
+        <GlassIconOrb size={40} variant="mint">
+          <Icon color="#0C765F" name="book" size="sm" variant="solid" />
+        </GlassIconOrb>
+        <View style={{ flex: 1, gap: 3 }}>
           <Text
             style={{
               color: vexLightGlass.mint[700],
-              fontSize: 11,
+              fontSize: 10,
               fontWeight: '700',
               letterSpacing: 1.4,
               textTransform: 'uppercase',
@@ -53,10 +56,10 @@ export function StudyOSCard({
           <Text
             style={{
               color: vexLightGlass.text.primary,
-              fontSize: 18,
+              fontSize: 14,
               fontWeight: '800',
               letterSpacing: -0.3,
-              lineHeight: 24,
+              lineHeight: 18,
             }}
           >
             {canOpenStudy
@@ -64,26 +67,23 @@ export function StudyOSCard({
               : 'Study tools unlock through sessions'}
           </Text>
         </View>
-        <GlassIconOrb size={56} variant="mint">
-          <Icon color="#0C765F" name="book" size="lg" variant="solid" />
-        </GlassIconOrb>
       </View>
       <Text
         style={{
           color: vexLightGlass.text.secondary,
-          fontSize: 13,
-          lineHeight: 19,
-          marginTop: 10,
+          fontSize: 11,
+          lineHeight: 15,
+          marginTop: 6,
         }}
       >
         Plans, review, and quizzes stay tied to the same start and complete loop.
       </Text>
-      <View style={{ marginTop: 14 }}>
+      <View style={{ marginTop: 8, maxWidth: 160 }}>
         <LiquidButton
           label={canOpenStudy ? 'Open study tools' : 'Start session'}
           onPress={onOpenStudy}
           variant={canOpenStudy ? 'primary' : 'outline'}
-          fullWidth
+          size="sm"
           accessibilityLabel={
             canOpenStudy
               ? 'Open study tools'

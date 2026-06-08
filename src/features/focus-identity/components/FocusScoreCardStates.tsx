@@ -1,7 +1,8 @@
 import React from 'react';
 import { View, Pressable } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
-import { Box } from '../../../components/primitives/Box';
+import { GlassCard } from '../../../components/glass/GlassCard';
+import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 
 interface FocusScoreCardSkeletonProps {
   size: 'small' | 'medium' | 'large';
@@ -13,12 +14,7 @@ export function FocusScoreCardSkeleton({
   borderColor,
 }: FocusScoreCardSkeletonProps) {
   return (
-    <Box
-      padding={size === 'small' ? 'md' : size === 'large' ? 'xl' : 'lg'}
-      backgroundColor="surface"
-      borderRadius="lg"
-      style={{ width: '100%' }}
-    >
+    <GlassCard padding={size === 'small' ? 14 : size === 'large' ? 18 : 16} radius={22}>
       <View style={{ gap: 12 }}>
         <View
           style={{
@@ -45,7 +41,7 @@ export function FocusScoreCardSkeleton({
           }}
         />
       </View>
-    </Box>
+    </GlassCard>
   );
 }
 
@@ -65,23 +61,32 @@ export function FocusScoreCardError({
   primaryColor,
 }: FocusScoreCardErrorProps) {
   return (
-    <Box
-      padding={size === 'small' ? 'md' : size === 'large' ? 'xl' : 'lg'}
-      backgroundColor="surface"
-      borderRadius="lg"
-      style={{ width: '100%', alignItems: 'center', gap: 8 }}
+    <GlassCard
+      padding={size === 'small' ? 14 : size === 'large' ? 18 : 16}
+      radius={22}
+      style={{ width: '100%' }}
     >
-      <Text variant="heading3" color="error" style={{ fontSize: 32 }}>
+      <View style={{ alignItems: 'center', gap: 8 }}>
+      <Text style={{ color: vexLightGlass.semantic.danger, fontSize: 32 }}>
         !
       </Text>
-      <Text variant="body" color="error" style={{ textAlign: 'center' }}>
+      <Text
+        style={{
+          color: vexLightGlass.semantic.danger,
+          fontSize: 13,
+          fontWeight: '700',
+          textAlign: 'center',
+        }}
+      >
         Failed to load Focus Score
       </Text>
       {error && (
         <Text
-          variant="caption"
-          color="textMuted"
-          style={{ textAlign: 'center' }}
+          style={{
+            color: vexLightGlass.text.secondary,
+            fontSize: 12,
+            textAlign: 'center',
+          }}
         >
           {error.message}
         </Text>
@@ -98,11 +103,18 @@ export function FocusScoreCardError({
           backgroundColor: primaryColor,
         }}
       >
-        <Text variant="button" color="background">
+        <Text
+          style={{
+            color: vexLightGlass.text.inverse,
+            fontSize: 12,
+            fontWeight: '800',
+          }}
+        >
           {isRetrying ? 'Retrying...' : 'Try Again'}
         </Text>
       </Pressable>
-    </Box>
+      </View>
+    </GlassCard>
   );
 }
 
@@ -114,16 +126,17 @@ export function FocusScoreCardRetrying({
   size,
 }: FocusScoreCardRetryingProps) {
   return (
-    <Box
-      padding={size === 'small' ? 'md' : size === 'large' ? 'xl' : 'lg'}
-      backgroundColor="surface"
-      borderRadius="lg"
-      style={{ width: '100%' }}
-    >
-      <Text variant="body" color="textMuted" style={{ textAlign: 'center' }}>
+    <GlassCard padding={size === 'small' ? 14 : size === 'large' ? 18 : 16} radius={22}>
+      <Text
+        style={{
+          color: vexLightGlass.text.secondary,
+          fontSize: 13,
+          textAlign: 'center',
+        }}
+      >
         Retrying...
       </Text>
-    </Box>
+    </GlassCard>
   );
 }
 
@@ -135,16 +148,11 @@ export function FocusScoreCardNoUser({
   size,
 }: FocusScoreCardNoUserProps) {
   return (
-    <Box
-      padding={size === 'small' ? 'md' : size === 'large' ? 'xl' : 'lg'}
-      backgroundColor="surface"
-      borderRadius="lg"
-      style={{ width: '100%' }}
-    >
-      <Text variant="body" color="textMuted">
+    <GlassCard padding={size === 'small' ? 14 : size === 'large' ? 18 : 16} radius={22}>
+      <Text style={{ color: vexLightGlass.text.secondary, fontSize: 13 }}>
         Sign in to see your Focus Score
       </Text>
-    </Box>
+    </GlassCard>
   );
 }
 

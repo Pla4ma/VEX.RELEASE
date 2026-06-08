@@ -1,10 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react';
+﻿import React, { useEffect, useRef, useState } from 'react';
 import { ScrollView, View } from 'react-native';
-import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet';
+import BottomSheet, {
+  BottomSheetBackdrop,
+  type BottomSheetBackdropProps,
+} from '@gorhom/bottom-sheet';
 import { useNavigation, useRoute, type RouteProp } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
-import { Text } from '../../components/primitives/Text';
 import { GlassScreen } from '../../components/glass/GlassScreen';
 import { useAchievements } from '../../features/achievements/hooks';
 import { getFeatureAvailability, isFeatureAvailableForNavigation } from '../../features/liveops-config/FeatureFlagService';
@@ -22,6 +24,18 @@ import { ProfileGlassTabs, type ProfileTab } from './components/ProfileGlassTabs
 import type { ExtendedRootStackParams, MainTabParams } from '../../navigation/types';
 import { vexLightGlass } from '../../theme/tokens/vex-light-glass';
 
+function ProfileBottomSheetBackdrop(
+  props: BottomSheetBackdropProps,
+): JSX.Element {
+  return (
+    <BottomSheetBackdrop
+      {...props}
+      appearsOnIndex={0}
+      disappearsOnIndex={-1}
+    />
+  );
+}
+
 export const ProfileScreen: React.FC = () => {
   const navigation = useNavigation<NativeStackNavigationProp<ExtendedRootStackParams>>();
   const route = useRoute<RouteProp<MainTabParams, 'Profile'>>();
@@ -31,7 +45,7 @@ export const ProfileScreen: React.FC = () => {
 
   const requestedTab = route.params?.tab;
   const initialTab: ProfileTab =
-    requestedTab === 'achievements' ? 'achievements'
+    requestedTab === 'achievements' ? 'mastery'
     : requestedTab === 'activity' || requestedTab === 'social' ? 'activity'
     : 'stats';
 
@@ -52,9 +66,9 @@ export const ProfileScreen: React.FC = () => {
   );
 
   return (
-    <GlassScreen showAura={false}>
+    <GlassScreen showAura>
       <ScrollView
-        contentContainerStyle={{ paddingBottom: 160 }}
+        contentContainerStyle={{ paddingBottom: 180 }}
         showsVerticalScrollIndicator={false}
       >
         <ProfileHeader
@@ -69,7 +83,7 @@ export const ProfileScreen: React.FC = () => {
           onLogout={logout}
         />
 
-        <View style={{ paddingHorizontal: 20, gap: 12 }}>
+        <View style={{ paddingHorizontal: 16, gap: 10 }}>
           <ProfileGlassTabs activeTab={activeTab} onChange={setActiveTab} />
 
           {activeTab === 'stats' ? (
@@ -89,16 +103,16 @@ export const ProfileScreen: React.FC = () => {
                   {navigation.navigate('Mastery');}
               }}
             />
-          ) : activeTab === 'achievements' ? (
+          ) : activeTab === 'mastery' ? (
             <ProfileAchievementsTab
-              theme={theme} isLoading={achievementsQuery.isPending}
+              theme={theme} isLoading={achievementsQuery.isLoading}
               isError={!!achievementsQuery.isError} achievements={achievements}
               onOpenAchievements={() => navigation.navigate('Achievements')}
               onStartSession={() => navigation.navigate('SessionStack', { screen: 'SessionSetup', params: {} })}
             />
           ) : (
             <ProfileActivityTab
-              theme={theme} isLoading={historyQuery.isPending}
+              theme={theme} isLoading={historyQuery.isLoading}
               isError={!!historyQuery.error} history={historyQuery.history}
               onStartSession={() => navigation.navigate('SessionStack', { screen: 'SessionSetup', params: {} })}
             />
@@ -111,9 +125,7 @@ export const ProfileScreen: React.FC = () => {
         index={-1}
         snapPoints={['60%', '90%']}
         enablePanDownToClose
-        backdropComponent={(props) => (
-          <BottomSheetBackdrop {...props} appearsOnIndex={0} disappearsOnIndex={-1} />
-        )}
+        backdropComponent={ProfileBottomSheetBackdrop}
         backgroundStyle={{
           backgroundColor: 'rgba(255, 255, 255, 0.85)',
           borderWidth: 1,
@@ -132,3 +144,4 @@ export const ProfileScreen: React.FC = () => {
 };
 
 export default withScreenErrorBoundary(ProfileScreen, 'Profile');
+

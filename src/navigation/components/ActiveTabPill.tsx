@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { View, type StyleProp, type ViewStyle } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Animated, { type AnimatedStyle } from 'react-native-reanimated';
@@ -20,22 +20,22 @@ export function ActiveTabPill({
           alignSelf: 'center',
           borderRadius: 999,
           height,
-          left: 6,
+          left: 8,
           position: 'absolute',
-          right: 6,
-          shadowColor: '#0C765F',
-          shadowOffset: { width: 0, height: 8 },
-          shadowOpacity: 0.35,
-          shadowRadius: 14,
-          top: 7,
+          right: 8,
+          shadowColor: 'rgba(18, 184, 148, 0.16)',
+          shadowOffset: { width: 0, height: 3 },
+          shadowOpacity: 0.3,
+          shadowRadius: 8,
+          top: 9,
         },
         pillStyle,
       ]}
     >
       <View
         style={{
-          backgroundColor: 'rgba(95, 230, 197, 0.26)',
-          borderColor: 'rgba(255, 255, 255, 0.95)',
+          backgroundColor: 'rgba(66, 207, 174, 0.14)',
+          borderColor: 'rgba(255, 255, 255, 0.82)',
           borderRadius: 999,
           borderWidth: 1,
           bottom: 0,
@@ -46,21 +46,7 @@ export function ActiveTabPill({
         }}
       />
       <LinearGradient
-        colors={['rgba(95, 230, 197, 0.45)', 'rgba(66, 207, 174, 0.18)']}
-        end={{ x: 0, y: 1 }}
-        locations={[0, 1]}
-        start={{ x: 0, y: 0 }}
-        style={{
-          borderRadius: 999,
-          bottom: 0,
-          left: 0,
-          position: 'absolute',
-          right: 0,
-          top: 0,
-        }}
-      />
-      <LinearGradient
-        colors={['rgba(255, 255, 255, 0.65)', 'rgba(255, 255, 255, 0)']}
+        colors={['rgba(255, 255, 255, 0.48)', 'rgba(255, 255, 255, 0.08)']}
         end={{ x: 0, y: 1 }}
         locations={[0, 0.6]}
         start={{ x: 0, y: 0 }}
@@ -68,23 +54,10 @@ export function ActiveTabPill({
           borderTopLeftRadius: 999,
           borderTopRightRadius: 999,
           height: '55%',
-          left: 1,
+          left: 0,
           position: 'absolute',
-          right: 1,
-          top: 1,
-        }}
-      />
-      <View
-        pointerEvents="none"
-        style={{
-          backgroundColor: 'rgba(255, 255, 255, 0.9)',
-          borderTopLeftRadius: 999,
-          borderTopRightRadius: 999,
-          height: 1,
-          left: 10,
-          position: 'absolute',
-          right: 10,
-          top: 1,
+          right: 0,
+          top: 0,
         }}
       />
     </Animated.View>

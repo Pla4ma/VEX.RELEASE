@@ -3,6 +3,7 @@ import { View, type StyleProp, type ViewStyle } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 import { GLASS_SURFACE_VARIANTS, type GlassSurfaceVariant } from './GlassSurface.tokens';
+import { GlassBlurLayer } from './GlassBlurLayer';
 import { GlassTextureOverlay } from './GlassTextureOverlay';
 
 export type { GlassSurfaceVariant } from './GlassSurface.tokens';
@@ -99,7 +100,29 @@ function TopAccentBar({ color, radius }: {
   );
 }
 
-function GlassBorder({ color, radius }: {
+function GlassBorder({ color, radius, width }: {
+  color: string;
+  radius: number;
+  width: number;
+}): JSX.Element {
+  return (
+    <View
+      pointerEvents="none"
+      style={{
+        borderColor: color,
+        borderRadius: radius,
+        borderWidth: width,
+        bottom: 0,
+        left: 0,
+        position: 'absolute',
+        right: 0,
+        top: 0,
+      }}
+    />
+  );
+}
+
+function GlassOuterBorder({ color, radius }: {
   color: string;
   radius: number;
 }): JSX.Element {
@@ -108,13 +131,13 @@ function GlassBorder({ color, radius }: {
       pointerEvents="none"
       style={{
         borderColor: color,
-        borderRadius: radius,
+        borderRadius: radius + 1,
         borderWidth: 1,
-        bottom: 0,
-        left: 0,
+        bottom: -2,
+        left: -2,
         position: 'absolute',
-        right: 0,
-        top: 0,
+        right: -2,
+        top: -2,
       }}
     />
   );
@@ -131,11 +154,73 @@ function TopEdgeHighlight({ intensity, radius }: {
         backgroundColor: `rgba(255, 255, 255, ${intensity})`,
         borderTopLeftRadius: radius - 1,
         borderTopRightRadius: radius - 1,
+        height: 1.5,
+        left: 12,
+        position: 'absolute',
+        right: 12,
+        top: 1.5,
+      }}
+    />
+  );
+}
+
+function SecondEdgeHighlight({ radius }: {
+  radius: number;
+}): JSX.Element {
+  return (
+    <View
+      pointerEvents="none"
+      style={{
+        backgroundColor: 'rgba(255, 255, 255, 0.52)',
+        borderTopLeftRadius: radius - 2,
+        borderTopRightRadius: radius - 2,
         height: 1,
+        left: 18,
+        position: 'absolute',
+        right: 18,
+        top: 3.5,
+      }}
+    />
+  );
+}
+
+function BottomEdgeShadow({ radius }: {
+  radius: number;
+}): JSX.Element {
+  return (
+    <View
+      pointerEvents="none"
+      style={{
+        backgroundColor: 'rgba(13, 76, 65, 0.10)',
+        borderBottomLeftRadius: radius - 1,
+        borderBottomRightRadius: radius - 1,
+        bottom: 1.5,
+        height: 1.5,
         left: 14,
         position: 'absolute',
         right: 14,
-        top: 1,
+      }}
+    />
+  );
+}
+
+function GlassGlow({ color, opacity, radius }: {
+  color: string;
+  opacity: number;
+  radius: number;
+}): JSX.Element {
+  return (
+    <View
+      pointerEvents="none"
+      style={{
+        backgroundColor: color,
+        borderRadius: radius,
+        bottom: -8,
+        left: -8,
+        opacity,
+        position: 'absolute',
+        right: -8,
+        top: -8,
       }}
     />
   );
@@ -167,6 +252,20 @@ export function GlassSurface({
         style,
       ]}
     >
+      {/* Outer glow for depth */}
+      {v.glowColor ? (
+        <GlassGlow
+          color={v.glowColor}
+          opacity={v.glowOpacity ?? 0.3}
+          radius={radius + 8}
+        />
+      ) : null}
+      
+      {/* Outer border for physical thickness */}
+      {bordered ? (
+        <GlassOuterBorder color={v.border} radius={radius} />
+      ) : null}
+      
       <View
         style={{
           backgroundColor: v.fill,
@@ -174,6 +273,10 @@ export function GlassSurface({
           overflow: 'hidden',
         }}
       >
+        <GlassBlurLayer
+          intensity={variant === 'hero' || variant === 'premium' ? 92 : 78}
+          radius={radius}
+        />
         <TopHighlight color={v.highlightTop} radius={radius} stop={v.highlightTopStop} />
         <GlassTextureOverlay
           intensity={variant === 'hero' || variant === 'premium' ? 'hero' : 'normal'}
@@ -182,8 +285,10 @@ export function GlassSurface({
         {v.innerBottomTint && v.innerBottomStop !== undefined ? (
           <BottomTint color={v.innerBottomTint} stop={v.innerBottomStop} />
         ) : null}
-        {bordered ? <GlassBorder color={v.border} radius={radius} /> : null}
+        {bordered ? <GlassBorder color={v.border} radius={radius} width={v.borderWidth} /> : null}
         <TopEdgeHighlight intensity={v.topEdgeIntensity} radius={radius} />
+        <SecondEdgeHighlight radius={radius} />
+        <BottomEdgeShadow radius={radius} />
         {accentTopBar ? <TopAccentBar color={topBarColor} radius={radius} /> : null}
         {children}
       </View>

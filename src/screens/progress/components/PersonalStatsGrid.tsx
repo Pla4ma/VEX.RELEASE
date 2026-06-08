@@ -23,11 +23,11 @@ export function PersonalStatsGrid({
   onRefresh,
 }: PersonalStatsGridProps): JSX.Element {
   return (
-    <View style={{ gap: 12 }}>
+    <View style={{ gap: 10 }}>
       <Text
         style={{
           color: vexLightGlass.text.primary,
-          fontSize: 18,
+          fontSize: 15,
           fontWeight: '800',
           letterSpacing: -0.3,
         }}
@@ -38,14 +38,14 @@ export function PersonalStatsGrid({
         style={{
           flexDirection: 'row',
           flexWrap: 'wrap',
-          gap: 10,
+          gap: 8,
         }}
       >
         {stats.map((item) => (
           <GlassCard
             key={item.label}
-            padding={14}
-            radius={20}
+            padding={10}
+            radius={16}
             size="sm"
             style={{ flexGrow: 1, flexBasis: '30%', minWidth: '30%' }}
             variant="default"
@@ -53,7 +53,7 @@ export function PersonalStatsGrid({
             <Text
               style={{
                 color: vexLightGlass.text.tertiary,
-                fontSize: 11,
+                fontSize: 9,
                 fontWeight: '700',
                 letterSpacing: 0.3,
                 textTransform: 'uppercase',
@@ -67,7 +67,7 @@ export function PersonalStatsGrid({
               <Text
                 style={{
                   color: vexLightGlass.text.primary,
-                  fontSize: 22,
+                  fontSize: 18,
                   fontWeight: '800',
                   letterSpacing: -0.3,
                   marginTop: 4,
@@ -79,14 +79,16 @@ export function PersonalStatsGrid({
           </GlassCard>
         ))}
       </View>
+      <View style={{ maxWidth: 150 }}>
       <LiquidButton
         accessibilityHint="Reloads your latest execution stats"
         accessibilityLabel="Refresh progress stats"
-        fullWidth
         label="Refresh stats"
         onPress={onRefresh}
+        size="sm"
         variant="ghost"
       />
+      </View>
     </View>
   );
 }

@@ -4,20 +4,14 @@ import { useProgressionSummary } from '../../features/progression/hooks';
 import { useStreakSummary } from '../../features/streaks/hooks';
 import { useSessionStats } from '../../session/hooks/useSession';
 import { useWallet } from '../../features/economy/hooks';
-import { getFeatureStatus } from '../../features/liveops-config/final-release-feature-map';
+import { getFeatureStatus } from '../../features/liveops-config';
 import {
   getMasteryRankDisplay,
   type MasteryState,
 } from '../../features/mastery/types';
 import { MasteryService } from '../../features/mastery/service';
 import { useTheme } from '../../theme';
-
-export interface ProfileStatsItem {
-  label: string;
-  value: string;
-  icon: string;
-  color: string;
-}
+import type { ProfileStatItem } from '../../screens/profile/components/ProfileStatTile';
 
 export interface UseProfileDataResult {
   mastery: MasteryState;
@@ -27,10 +21,11 @@ export interface UseProfileDataResult {
   streakQuery: ReturnType<typeof useStreakSummary>;
   statsQuery: ReturnType<typeof useSessionStats>;
   walletQuery: ReturnType<typeof useWallet>;
+  theme: ReturnType<typeof useTheme>['theme'];
   loading: boolean;
   hasStatsError: boolean;
   xpPercent: number;
-  stats: ProfileStatsItem[];
+  stats: ProfileStatItem[];
 }
 
 function makeMastery(userId: string): MasteryState {
@@ -66,17 +61,17 @@ export function useProfileData(
   const rankDisplay = getMasteryRankDisplay(mastery.rank);
   const xpPercent = Math.max(0, Math.min(100, progressionQuery.data?.progressPercent ?? 0));
   const loading = progressionQuery.isPending || streakQuery.isPending ||
-    statsQuery.isPending || walletQuery.isPending;
+    statsQuery.isLoading || walletQuery.isPending;
   const hasStatsError = !!(progressionQuery.error || streakQuery.error || walletQuery.error);
 
-  const stats = useMemo<ProfileStatsItem[]>(() => [
-    { label: 'Current Streak', value: `${streakQuery.data?.currentDays ?? 0} days`, icon: 'fire', color: theme.colors.warning.DEFAULT },
-    { label: 'Longest Streak', value: `${streakQuery.data?.longestDays ?? 0} days`, icon: 'calendar', color: theme.colors.error.DEFAULT },
-    { label: 'Level', value: `${progressionQuery.data?.level ?? 1}`, icon: 'star', color: theme.colors.primary[500] },
-    { label: 'Total Sessions', value: `${statsQuery.stats?.totalSessions ?? 0}`, icon: 'activity', color: theme.colors.info.DEFAULT },
-    { label: 'Focus Hours', value: hours(statsQuery.stats?.totalFocusTime ?? 0), icon: 'clock', color: theme.colors.success.DEFAULT },
-    { label: 'Coins', value: `${walletQuery.data?.coins ?? 0}`, icon: 'gem', color: theme.colors.warning.DEFAULT },
-  ], [streakQuery.data, progressionQuery.data, statsQuery.stats, walletQuery.data, theme]);
+  const stats = useMemo<ProfileStatItem[]>(() => [
+    { label: 'Current Streak', value: `${streakQuery.data?.currentDays ?? 0} days`, icon: 'fire', iconOrb: 'fire' as const, change: undefined },
+    { label: 'Longest Streak', value: `${streakQuery.data?.longestDays ?? 0} days`, icon: 'calendar', iconOrb: 'pearl' as const, change: undefined },
+    { label: 'Level', value: `${progressionQuery.data?.level ?? 1}`, icon: 'star', iconOrb: 'mint' as const, change: undefined },
+    { label: 'Total Sessions', value: `${statsQuery.stats?.totalSessions ?? 0}`, icon: 'activity', iconOrb: 'cyan' as const, change: undefined },
+    { label: 'Focus Hours', value: hours(statsQuery.stats?.totalFocusTime ?? 0), icon: 'clock', iconOrb: 'amber' as const, change: undefined },
+    { label: 'Coins', value: `${walletQuery.data?.coins ?? 0}`, icon: 'gem', iconOrb: 'lavender' as const, change: undefined },
+  ], [streakQuery.data, progressionQuery.data, statsQuery.stats, walletQuery.data]);
 
   useEffect(() => {
     let mounted = true;
@@ -97,6 +92,5 @@ export function useProfileData(
     return () => { mounted = false; };
   }, [userId]);
 
-  return { mastery, masteryLoading, rankDisplay, progressionQuery, streakQuery, statsQuery, walletQuery, loading, hasStatsError, xpPercent, stats };
+  return { mastery, masteryLoading, rankDisplay, progressionQuery, streakQuery, statsQuery, walletQuery, theme, loading, hasStatsError, xpPercent, stats };
 }
-

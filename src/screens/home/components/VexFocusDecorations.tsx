@@ -9,59 +9,72 @@ export function VexFocusDecorations(): JSX.Element {
       <View
         pointerEvents="none"
         style={{
-          backgroundColor: 'rgba(95, 230, 197, 0.20)',
+          backgroundColor: 'rgba(95, 230, 197, 0.28)',
           borderRadius: 280,
           height: 220,
           position: 'absolute',
-          right: -60,
-          top: -80,
+          right: -50,
+          top: -70,
           width: 220,
         }}
       />
       <View
         pointerEvents="none"
         style={{
-          backgroundColor: 'rgba(132, 228, 229, 0.18)',
+          backgroundColor: 'rgba(132, 228, 229, 0.24)',
           borderRadius: 200,
           height: 140,
           position: 'absolute',
-          right: 30,
-          top: 30,
+          right: 24,
+          top: 40,
           width: 140,
         }}
       />
       <View
         pointerEvents="none"
         style={{
-          backgroundColor: 'rgba(255, 255, 255, 0.50)',
+          backgroundColor: 'rgba(255, 255, 255, 0.55)',
           borderRadius: 200,
-          height: 110,
-          left: 30,
+          height: 120,
+          left: 20,
           position: 'absolute',
-          top: 0,
-          width: 110,
+          top: -10,
+          width: 120,
         }}
       />
       <View
         pointerEvents="none"
         style={{
-          bottom: -40,
-          left: -30,
+          bottom: -44,
+          left: -32,
           position: 'absolute',
         }}
       >
-        <LiquidGlassObject size={130} variant="swirl" />
+        <LiquidGlassObject size={132} variant="swirl" />
       </View>
       <View
         pointerEvents="none"
         style={{
+          opacity: 0.88,
           position: 'absolute',
-          right: -10,
-          top: 0,
+          right: -8,
+          top: 8,
         }}
       >
-        <LiquidGlassObject size={150} variant="orb" />
+        <LiquidGlassObject size={128} variant="swirl" />
       </View>
+      <View
+        pointerEvents="none"
+        style={{
+          backgroundColor: 'rgba(255, 255, 255, 0.42)',
+          borderRadius: 200,
+          height: 100,
+          position: 'absolute',
+          right: 60,
+          top: -40,
+          width: 100,
+        }}
+      />
     </>
   );
 }

@@ -151,7 +151,8 @@ export function HomeHeroSection({
     }
 
     controller.openSetup(
-      toSessionSetupParams(params),
+      toSessionSetupParams(params) as Record<string, unknown>,
+
     );
   };
 

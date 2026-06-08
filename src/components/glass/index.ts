@@ -6,3 +6,6 @@ export { LiquidButton } from './LiquidButton';
 export { GlassIconOrb } from './GlassIconOrb';
 export { GlassProgressBar } from './GlassProgressBar';
 export { GlassSectionHeader } from './GlassSectionHeader';
+export { LiquidGlassSphere } from './LiquidGlassSphere';
+export { WaterBubble } from './WaterBubble';
+export { WaterRippleBackground } from './WaterRippleBackground';

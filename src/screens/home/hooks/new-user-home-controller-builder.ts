@@ -44,7 +44,7 @@ export function buildNewUserController(
     user: null,
     userId: input.userId,
     isOnline: input.isOnline,
-    isLoading: input.isPending,
+    isLoading: input.isLoading,
     isFirstRun: input.isFirstRun,
     loadError: input.loadError,
     homeHighlight: input.homeHighlight,

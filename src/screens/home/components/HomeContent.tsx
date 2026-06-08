@@ -1,15 +1,12 @@
 import React from 'react';
-import { useNavigation } from '@react-navigation/native';
 import { AtRiskBanner } from '../../../features/home-spine/components';
 import { StaggeredEnter } from '../../../shared/ui/components/EnterAnimation';
 import type { HomeController } from '../hooks/home-controller-types';
-import type { CompletionSyncState } from '../../../store/session-state';
 import { HomeStatusBanners } from './HomeStatusBanners';
 import { HomeContentLower } from './HomeContentLower';
 import { HomeSectionBoundary } from './HomeSectionBoundary';
 import { HomeHeroSection } from './HomeHeroSection';
-import { HomeStreakProgress } from './HomeStreakProgress';
-import { HomeCompanionSection } from './HomeCompanionSection';
+import { HomeReferenceSections } from './HomeReferenceSections';
 import {
   HomeExperiencePrelude,
   useHomeExperienceModel,
@@ -18,11 +15,8 @@ import type { HomeSurfaceMap } from '../../../features/home-experience/surface-d
 import type { FirstWeekExperience } from '../../../features/personalization/first-week-schemas';
 import type { VexExperience } from '../../../features/personalization/schemas';
 import type { useHomeData } from '../hooks/useHomeData';
-import type { StreakSummaryData } from '../hooks/home-query-types';
 import {
   staggeredEnterStyle,
-  openCompanion,
-  type NavigationProp,
 } from './homeContentHelpers';
 
 type HomeData = ReturnType<typeof useHomeData>;
@@ -50,7 +44,6 @@ export const HomeContent: React.FC<HomeContentProps> = ({
   resolvedExperience,
   firstWeekExperience,
 }) => {
-  const navigation = useNavigation<NavigationProp>();
   const homeExperience = useHomeExperienceModel(
     controller.disclosure.inputs.totalCompletedSessions,
     resolvedExperience,
@@ -59,10 +52,6 @@ export const HomeContent: React.FC<HomeContentProps> = ({
   const isDayZero = homeExperience.stage === 'STAGE_0';
 
   const sm = surfaceMap;
-  const showCompanion = sm
-    ? sm.companion_thread !== 'hidden' && sm.companion_thread !== 'blocked'
-    : false;
-  const showStreak = sm ? sm.progress_proof !== 'hidden' : false;
   const showLowerContent = isDayZero
     ? false
     : sm
@@ -101,42 +90,11 @@ export const HomeContent: React.FC<HomeContentProps> = ({
         />
       </HomeSectionBoundary>
 
-      {showCompanion ? (
-        <HomeCompanionSection
-          currentStreakDays={controller.currentStreak}
-          features={features}
-          highFocusStreak={controller.currentStreak}
-          isOnline={controller.isOnline}
-          onAction={() => controller.openSetup()}
-          onPress={() => openCompanion(controller, navigation)}
-          onRetry={() => controller.retryAll()}
-          totalSessions={controller.disclosure.inputs.totalCompletedSessions}
-          userId={controller.userId}
-        />
-      ) : null}
-
-      {showStreak ? (
-        <HomeStreakProgress
-          currentDays={controller.currentStreak}
-          hoursRemaining={streakHoursRemaining}
-          riskLevel={
-            (controller.streakQuery.data as StreakSummaryData | undefined)
-              ?.riskLevel as
-              | 'NONE'
-              | 'LOW'
-              | 'MEDIUM'
-              | 'HIGH'
-              | 'CRITICAL'
-              | undefined
-          }
-          longestStreak={
-            (controller.streakQuery.data as StreakSummaryData | undefined)
-              ?.longestDays as number | undefined
-          }
-          isLoading={controller.streakQuery.isPending}
-          userId={controller.userId ?? undefined}
-        />
-      ) : null}
+      <HomeReferenceSections
+        currentStreak={controller.currentStreak}
+        onStartSession={() => controller.openSetup()}
+        totalSessions={controller.disclosure.inputs.totalCompletedSessions}
+      />
 
       {showAtRiskBanner && (
         <AtRiskBanner

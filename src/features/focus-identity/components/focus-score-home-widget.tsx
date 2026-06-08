@@ -4,9 +4,10 @@ import { Text } from '@components/primitives/Text'; // Use alias
 import { Skeleton } from '@components/ui/Skeleton'; // Use alias
 import { StatusBanner } from '@/shared/ui/components/StatusFeedback'; // Use alias
 import { GlassCard } from '../../../components/glass/GlassCard';
+import { GlassIconOrb } from '../../../components/glass/GlassIconOrb';
+import { Icon } from '../../../icons';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import type { FocusScoreDashboardModel } from '../types'; // Import from types.ts
-import { getMinTouchTargetStyle } from '../../../utils/touchTarget';
 
 interface FocusScoreHomeWidgetProps {
   model: FocusScoreDashboardModel;
@@ -75,14 +76,18 @@ export function FocusScoreHomeWidget({
         accessibilityRole="button"
         accessibilityHint="Opens the full focus dashboard with trends and factor details"
       >
-        <GlassCard variant="default" padding={16} radius={24}>
-          <View style={{ gap: 4 }}>
+        <GlassCard variant="default" padding={14} radius={22}>
+          <View style={{ alignItems: 'center', flexDirection: 'row', gap: 12 }}>
+            <GlassIconOrb size={48} variant="cyan">
+              <Icon color="#0E7490" name="bolt" size="sm" variant="solid" />
+            </GlassIconOrb>
+            <View style={{ flex: 1, gap: 3 }}>
             <Text
               style={{
                 color: vexLightGlass.text.secondary,
-                fontSize: 11,
-                fontWeight: '700',
-                letterSpacing: 0.5,
+                fontSize: 10,
+                fontWeight: '800',
+                letterSpacing: 0.8,
                 textTransform: 'uppercase',
               }}
             >
@@ -101,7 +106,7 @@ export function FocusScoreHomeWidget({
             <Text
               style={{
                 color: vexLightGlass.text.secondary,
-                fontSize: 13,
+                fontSize: 12,
               }}
             >
               {delta >= 0 ? `+${delta}` : delta} since last session
@@ -109,12 +114,13 @@ export function FocusScoreHomeWidget({
             <Text
               style={{
                 color: vexLightGlass.text.tertiary,
-                fontSize: 12,
+                fontSize: 11,
               }}
               numberOfLines={2}
             >
               {reason}
             </Text>
+            </View>
           </View>
         </GlassCard>
       </Pressable>

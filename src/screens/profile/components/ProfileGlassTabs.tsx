@@ -1,81 +1,79 @@
-import React from 'react';
+﻿import React from 'react';
 import { Pressable, View } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
-import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 
-export type ProfileTab = 'stats' | 'achievements' | 'activity';
+export type ProfileTab = 'stats' | 'mastery' | 'activity';
 
 interface ProfileGlassTabsProps {
   activeTab: ProfileTab;
   onChange: (tab: ProfileTab) => void;
 }
 
-const PROFILE_TABS: readonly ProfileTab[] = ['stats', 'achievements', 'activity'];
+const tabs = [
+  { key: 'stats' as const, label: 'Stats' },
+  { key: 'mastery' as const, label: 'Mastery' },
+  { key: 'activity' as const, label: 'Activity' },
+];
 
-function tabLabel(tab: ProfileTab): string {
-  return tab.charAt(0).toUpperCase() + tab.slice(1);
-}
-
-export function ProfileGlassTabs({
+export const ProfileGlassTabs: React.FC<ProfileGlassTabsProps> = ({
   activeTab,
   onChange,
-}: ProfileGlassTabsProps): JSX.Element {
+}) => {
   return (
     <View
       style={{
         alignItems: 'center',
-        backgroundColor: 'rgba(255, 255, 255, 0.36)',
-        borderColor: 'rgba(255, 255, 255, 0.90)',
-        borderRadius: 999,
-        borderWidth: 1,
+        backgroundColor: 'rgba(255, 255, 255, 0.28)',
+        borderColor: 'rgba(255, 255, 255, 0.82)',
+        borderRadius: 16,
+        borderWidth: 1.2,
         flexDirection: 'row',
-        gap: 4,
-        height: 36,
-        overflow: 'hidden',
+        height: 38,
         padding: 3,
+        shadowColor: 'rgba(13, 76, 65, 0.12)',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.25,
+        shadowRadius: 6,
       }}
     >
-      {PROFILE_TABS.map((tab) => {
-        const isActive = activeTab === tab;
+      {tabs.map((tab) => {
+        const isActive = tab.key === activeTab;
         return (
           <Pressable
-            accessibilityHint={`Switches the profile view to ${tab}`}
-            accessibilityLabel={`Show ${tab} tab`}
             accessibilityRole="tab"
             accessibilityState={{ selected: isActive }}
-            key={tab}
-            onPress={() => onChange(tab)}
+            key={tab.key}
+            onPress={() => onChange(tab.key)}
             style={{
               alignItems: 'center',
-              backgroundColor: isActive ? vexLightGlass.mint[500] : 'transparent',
-              borderColor: isActive ? 'rgba(255, 255, 255, 0.92)' : 'transparent',
-              borderRadius: 999,
+              backgroundColor: isActive ? 'rgba(66, 207, 174, 0.12)' : 'transparent',
+              borderColor: isActive ? 'rgba(255, 255, 255, 0.82)' : 'transparent',
+              borderRadius: 13,
               borderWidth: isActive ? 1 : 0,
               flex: 1,
-              height: 30,
+              height: 32,
               justifyContent: 'center',
-              shadowColor: isActive ? '#0C765F' : 'transparent',
-              shadowOffset: { width: 0, height: 4 },
-              shadowOpacity: isActive ? 0.25 : 0,
-              shadowRadius: 10,
+              shadowColor: isActive ? 'rgba(18, 184, 148, 0.18)' : 'transparent',
+              shadowOffset: { width: 0, height: 3 },
+              shadowOpacity: isActive ? 0.28 : 0,
+              shadowRadius: isActive ? 8 : 0,
             }}
           >
             <Text
               style={{
-                color: isActive
-                  ? vexLightGlass.text.inverse
-                  : vexLightGlass.text.secondary,
+                color: isActive ? '#0C765F' : '#3D5A52',
                 fontSize: 12,
-                fontWeight: isActive ? '800' : '600',
+                fontWeight: isActive ? '800' : '700',
+                letterSpacing: -0.2,
               }}
             >
-              {tabLabel(tab)}
+              {tab.label}
             </Text>
           </Pressable>
         );
       })}
     </View>
   );
-}
+};
 
 export default ProfileGlassTabs;

@@ -43,7 +43,7 @@ export function BurstParticle({
   color: string;
   index: number;
   progress: SharedValue<number>;
-}): JSX.Element {
+}): JSX.Element | null {
   const reduceMotion = useReducedMotion();
   if (reduceMotion) {
     return null;

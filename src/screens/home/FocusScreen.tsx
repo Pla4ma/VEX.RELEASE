@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+﻿import React, { useMemo } from 'react';
 import { ScrollView, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -11,21 +11,18 @@ import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorB
 import { useAuthStore } from '../../store';
 import {
   FocusModeCardView,
-  type ModeOrb,
   type ModeVisual,
 } from './components/FocusModeCardView';
-import { VexBrandPill } from './components/VexBrandPill';
-import { GlassSettingsButton } from './components/GlassSettingsButton';
 import { FocusScreenHeader } from './components/FocusScreenHeader';
 
 type NavigationProp = NativeStackNavigationProp<ExtendedRootStackParams>;
 
 function visualForMode(id: string): ModeVisual {
-  if (id === 'sprint-15') {return { orb: 'mint', icon: 'bolt', iconColor: '#0C765F' };}
-  if (id === 'light-focus') {return { orb: 'mint', icon: 'plus', iconColor: '#0C765F' };}
-  if (id === 'study') {return { orb: 'cyan', icon: 'book', iconColor: '#0E7490' };}
-  if (id === 'recovery') {return { orb: 'fire', icon: 'heart', iconColor: '#C2410C' };}
-  return { orb: 'mint' as ModeOrb, icon: 'target', iconColor: '#0C765F' };
+  if (id === 'sprint-15') {return { color: 'mint', iconName: 'bolt', iconColor: '#0C765F' };}
+  if (id === 'light-focus') {return { color: 'teal', iconName: 'leaf', iconColor: '#0C765F' };}
+  if (id === 'study') {return { color: 'cyan', iconName: 'book', iconColor: '#0E7490' };}
+  if (id === 'recovery') {return { color: 'coral', iconName: 'heart', iconColor: '#C2410C' };}
+  return { color: 'mint', iconName: 'target', iconColor: '#0C765F' };
 }
 
 export function FocusScreen(): JSX.Element {
@@ -58,28 +55,16 @@ export function FocusScreen(): JSX.Element {
   };
 
   return (
-    <GlassScreen showAura={false}>
-      <View style={{ flex: 1, paddingHorizontal: 20, paddingTop: 10 }}>
-        <View
-          style={{
-            alignItems: 'center',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            marginBottom: 24,
-            width: '100%',
-            zIndex: 2,
-          }}
-        >
-          <VexBrandPill />
-          <GlassSettingsButton
-            onPress={() => navigation.navigate('Settings', { screen: 'SettingsMain' })}
-          />
-        </View>
+    <GlassScreen showAura>
+      <View style={{ flex: 1, paddingHorizontal: 16, paddingTop: 6 }}>
         <ScrollView
-          contentContainerStyle={{ paddingBottom: 160 }}
+          contentContainerStyle={{ paddingBottom: 180 }}
           showsVerticalScrollIndicator={false}
         >
-          <FocusScreenHeader statusCopy={statusCopy} />
+          <FocusScreenHeader
+            body={statusCopy}
+            onSettingsPress={() => navigation.navigate('Settings', { screen: 'SettingsMain' })}
+          />
           {modeCards.map((card) => {
             const visual = visualForMode(card.id);
             return (

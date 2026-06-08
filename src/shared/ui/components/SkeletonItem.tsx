@@ -25,6 +25,7 @@ export interface SkeletonItemProps {
   width?: DimensionValue;
   height?: number;
   circle?: boolean;
+  borderRadius?: number;
   style?: ViewStyle;
 }
 
@@ -33,6 +34,7 @@ export const SkeletonItem: React.FC<SkeletonItemProps> = ({
   width,
   height,
   circle = false,
+  borderRadius: borderRadiusProp,
   style,
 }) => {
   const { theme } = useTheme();
@@ -75,11 +77,12 @@ export const SkeletonItem: React.FC<SkeletonItemProps> = ({
     }
   }, [variant, width, height]);
   const borderRadius =
-    circle || variant === 'avatar' || variant === 'circle'
+    borderRadiusProp ??
+    (circle || variant === 'avatar' || variant === 'circle'
       ? Math.max(Number(dimensions.width) || 0, dimensions.height) / 2
       : variant === 'button'
         ? 12
-        : 8;
+        : 8);
   return (
     <Animated.View
       style={[

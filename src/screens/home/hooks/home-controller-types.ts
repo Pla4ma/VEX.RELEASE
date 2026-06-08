@@ -53,7 +53,7 @@ export interface HomeController {
   recommendationsQuery: UseQueryResult;
   shouldShowSecondarySystems: boolean;
   shouldShowExpansionSystems: boolean;
-  openSetup: (params?: SessionSetupParams) => void;
+  openSetup: (params?: Record<string, unknown>) => void;
   openProgress: () => void;
   openSocial: () => void;
   openContentStudy: () => void;

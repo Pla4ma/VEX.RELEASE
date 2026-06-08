@@ -17,7 +17,7 @@ function ConfettiPiece({
 }: {
   index: number;
   color: string;
-}): JSX.Element {
+}): JSX.Element | null {
   const reduceMotion = useReducedMotion();
   if (reduceMotion) {
     return null;

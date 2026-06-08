@@ -1,5 +1,4 @@
 import React from 'react';
-import { View } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
 import { GlassCard } from '../../../components/glass/GlassCard';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
@@ -11,14 +10,20 @@ interface StakesCardProps {
 
 export function StakesCard({ stakes }: StakesCardProps): JSX.Element {
   return (
-    <GlassCard variant="subtle" padding={14} radius={20} size="sm" style={{ marginBottom: 14 }}>
+    <GlassCard
+      variant="subtle"
+      padding={16}
+      radius={20}
+      size="sm"
+      style={{ marginBottom: 16, marginTop: 12 }}
+    >
       <Text
         style={{
           color: vexLightGlass.mint[700],
           fontSize: 10,
           fontWeight: '700',
           letterSpacing: 1.2,
-          marginBottom: 4,
+          marginBottom: 6,
           textTransform: 'uppercase',
         }}
       >
@@ -27,8 +32,9 @@ export function StakesCard({ stakes }: StakesCardProps): JSX.Element {
       <Text
         style={{
           color: vexLightGlass.text.primary,
-          fontSize: 14,
-          lineHeight: 20,
+          fontSize: 15,
+          lineHeight: 21,
+          fontWeight: '600',
         }}
       >
         {stakes.what}
@@ -39,6 +45,7 @@ export function StakesCard({ stakes }: StakesCardProps): JSX.Element {
             color: '#A04A12',
             fontSize: 12,
             marginTop: 6,
+            fontWeight: '600',
           }}
         >
           At risk: {stakes.atRisk}

@@ -11,7 +11,7 @@ import {
   classifyError,
 } from '../../../lib/repository/error-handling';
 import { FirstWeekProgressSchema } from './schemas';
-import type { FirstWeekProgress } from './types';
+import type { FirstWeekProgress } from './schemas';
 
 // ============================================================================
 // Row type — mirrors the Supabase table columns used by this repository

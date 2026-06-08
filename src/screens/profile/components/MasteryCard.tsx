@@ -1,14 +1,17 @@
 import React from 'react';
-import { View } from 'react-native';
-import { Pressable } from 'react-native';
-import { Box, Text } from '../../../components/primitives';
+import { Pressable, View, ActivityIndicator } from 'react-native';
 import { GlassCard } from '../../../components/glass/GlassCard';
 import { GlassIconOrb } from '../../../components/glass/GlassIconOrb';
 import { GlassPill } from '../../../components/glass/GlassPill';
-import { GlassProgressBar } from '../../../components/glass/GlassProgressBar';
+import { LiquidGlassObject } from '../../../components/glass/LiquidGlassObject';
+import { Text } from '../../../components/primitives/Text';
 import { Icon } from '../../../icons';
-import { Skeleton } from '../../../components/ui/Skeleton';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
+
+interface MasteryState {
+  totalMasteryPoints: number;
+  techniques: Record<string, number>;
+}
 
 interface TechniqueItem {
   key: string;
@@ -16,116 +19,142 @@ interface TechniqueItem {
   color: string;
 }
 
-interface MasteryState {
-  totalMasteryPoints: number;
-  techniques: Record<string, number>;
+interface RankDisplay {
+  icon: string;
+  title: string;
 }
 
-interface MasteryCardProps {
+export interface MasteryCardProps {
   mastery: MasteryState;
   masteryLoading: boolean;
-  rankDisplay: { icon: string; title: string };
-  techniques: TechniqueItem[];
   onPress: () => void;
+  rankDisplay: RankDisplay;
+  techniques: TechniqueItem[];
 }
 
-export function MasteryCard({
+export const MasteryCard: React.FC<MasteryCardProps> = ({
   mastery,
   masteryLoading,
+  onPress,
   rankDisplay,
   techniques,
-  onPress,
-}: MasteryCardProps): JSX.Element {
+}) => {
+  if (masteryLoading) {
+    return (
+      <GlassCard padding={18} radius={24} variant="default">
+        <View style={{ alignItems: 'center', justifyContent: 'center', paddingVertical: 20 }}>
+          <ActivityIndicator color={vexLightGlass.mint[500]} />
+        </View>
+      </GlassCard>
+    );
+  }
+
   return (
-    <Pressable
-      accessibilityHint="Opens the full mastery progression screen"
-      accessibilityLabel="View Mastery details"
-      accessibilityRole="button"
-      onPress={onPress}
-    >
-      <GlassCard padding={14} radius={18} size="lg" variant="premium">
-        <Box
-          alignItems="center"
-          flexDirection="row"
-          justifyContent="space-between"
-          mb={12}
+    <Pressable onPress={onPress}>
+      <GlassCard padding={18} radius={24} variant="default">
+        <View
+          pointerEvents="none"
+          style={{
+            bottom: -10,
+            position: 'absolute',
+            right: -10,
+          }}
         >
-          <Box alignItems="center" flexDirection="row" gap={12}>
-            <GlassIconOrb size={40} variant="lavender">
-              <Icon color="#6D3BFF" name="diamond" size="md" variant="solid" />
-            </GlassIconOrb>
-            <Box>
-              <Text
-                style={{
-                  color: vexLightGlass.text.primary,
-                  fontSize: 15,
-                  fontWeight: '800',
-                  letterSpacing: -0.2,
-                }}
-              >
-                Mastery
-              </Text>
-              <Text
-                style={{
-                  color: vexLightGlass.text.tertiary,
-                  fontSize: 11,
-                  fontWeight: '600',
-                }}
-              >
-                {`${rankDisplay.icon} ${rankDisplay.title.toUpperCase()}`}
-              </Text>
-            </Box>
-          </Box>
-          {masteryLoading ? (
-            <Skeleton borderRadius={12} height={24} width={72} />
-          ) : (
-            <GlassPill
-              label={`${mastery.totalMasteryPoints} pts`}
-              size="sm"
-              variant="premium"
-            />
-          )}
-        </Box>
-        {masteryLoading ? (
-          <Skeleton borderRadius={999} height={10} lines={5} spacing={10} />
-        ) : (
-          techniques.map((tech) => (
-            <View key={tech.key} style={{ marginBottom: 8 }}>
-              <Box
-                flexDirection="row"
-                justifyContent="space-between"
-                style={{ marginBottom: 6 }}
-              >
-                <Text
+          <LiquidGlassObject size={80} variant="orb" />
+        </View>
+        <View
+          style={{
+            alignItems: 'center',
+            flexDirection: 'row',
+            gap: 14,
+            marginBottom: 12,
+            zIndex: 2,
+          }}
+        >
+          <GlassIconOrb size={44} variant="pearl">
+            <Icon color="#0C765F" name={rankDisplay.icon} size="sm" variant="solid" />
+          </GlassIconOrb>
+          <View style={{ flex: 1 }}>
+            <Text
+              style={{
+                color: vexLightGlass.text.primary,
+                fontSize: 15,
+                fontWeight: '900',
+                letterSpacing: -0.2,
+              }}
+            >
+              {rankDisplay.title}
+            </Text>
+            <Text
+              style={{
+                color: vexLightGlass.text.secondary,
+                fontSize: 12,
+                fontWeight: '500',
+              }}
+            >
+              {mastery.totalMasteryPoints} mastery points
+            </Text>
+          </View>
+          <GlassPill
+            label="View"
+            size="sm"
+            variant="mint"
+          />
+        </View>
+        <View style={{ gap: 10, zIndex: 2 }}>
+          {techniques.map((technique) => {
+            const progress = mastery.techniques[technique.key] ?? 0;
+            return (
+              <View key={technique.key} style={{ gap: 6 }}>
+                <View
                   style={{
-                    color: vexLightGlass.text.secondary,
-                    fontSize: 12,
-                    fontWeight: '600',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
                   }}
                 >
-                  {tech.label}
-                </Text>
-                <Text
+                  <Text
+                    style={{
+                      color: vexLightGlass.text.secondary,
+                      fontSize: 12,
+                      fontWeight: '600',
+                    }}
+                  >
+                    {technique.label}
+                  </Text>
+                  <Text
+                    style={{
+                      color: vexLightGlass.text.primary,
+                      fontSize: 12,
+                      fontWeight: '800',
+                    }}
+                  >
+                    {progress}%
+                  </Text>
+                </View>
+                <View
                   style={{
-                    color: vexLightGlass.text.tertiary,
-                    fontSize: 11,
-                    fontWeight: '600',
+                    backgroundColor: vexLightGlass.mint[100],
+                    borderRadius: 8,
+                    height: 8,
+                    overflow: 'hidden',
                   }}
                 >
-                  {`${mastery.techniques[tech.key]}/25`}
-                </Text>
-              </Box>
-              <GlassProgressBar
-                height={5}
-                value={((mastery.techniques[tech.key] ?? 0) / 25) * 100}
-                variant="mint"
-              />
-            </View>
-          ))
-        )}
+                  <View
+                    style={{
+                      backgroundColor: technique.color,
+                      borderRadius: 8,
+                      height: 8,
+                      width: `${progress}%`,
+                    }}
+                  />
+                </View>
+              </View>
+            );
+          })}
+        </View>
       </GlassCard>
     </Pressable>
   );
-}
+};
 
 export default MasteryCard;

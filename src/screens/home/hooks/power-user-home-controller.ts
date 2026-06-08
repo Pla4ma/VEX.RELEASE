@@ -51,7 +51,7 @@ export function buildHomeController(p: BuildControllerParams): HomeController {
     user: null,
     userId: p.userId,
     isOnline: p.isOnline,
-    isLoading: p.isPending,
+    isLoading: p.isLoading,
     isFirstRun: p.isFirstRun,
     loadError: p.loadError,
     homeHighlight: p.homeHighlight as HomeHighlight | null,

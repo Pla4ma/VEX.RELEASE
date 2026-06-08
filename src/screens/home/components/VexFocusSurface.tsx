@@ -1,19 +1,18 @@
-import React from 'react';
+﻿import React from 'react';
 import { View } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
-
 import { Text } from '../../../components/primitives/Text';
-import { VexLaunchButton } from '../../../components/primitives/VexLaunchButton';
 import { GlassCard } from '../../../components/glass/GlassCard';
 import { GlassPill } from '../../../components/glass/GlassPill';
+import { LiquidButton } from '../../../components/glass/LiquidButton';
+import { WaterBubble } from '../../../components/glass/WaterBubble';
+import { Icon } from '../../../icons';
 import type {
   HomePrimaryPriority,
   HomeStakes,
 } from '../../../features/home-spine/priority-schemas';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
-import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import { getHeroEyebrow, getHeroTitle } from './VexFocusSurfaceCopy';
-import { VexFocusDecorations } from './VexFocusDecorations';
 import { VexFocusSkeleton } from './VexFocusSurface.skeleton';
 import { StakesCard } from './StakesCard';
 
@@ -37,13 +36,47 @@ export function VexFocusSurface({
   }
 
   const entering = isReducedMotion ? undefined : FadeInUp.duration(500);
-  const ctaLabel = priority.cta.text;
-  const secondBadge = priority.cta.action.replace('_', ' ');
+  const ctaLabel =
+    priority.type === 'DEFAULT_SESSION' ? 'Resume project' : priority.cta.text;
+  const actionLabelMap: Record<string, string> = {
+    OPEN_SESSION_SETUP: 'Project Work',
+    OPEN_STUDY: 'Study',
+    OPEN_BOSS: 'Boss',
+    OPEN_CHALLENGES: 'Challenges',
+    OPEN_MONTHLY_REPORT: 'Report',
+  };
+  const secondBadge = actionLabelMap[priority.cta.action] ?? priority.cta.action.replace('_', ' ');
 
   return (
     <Animated.View entering={entering} style={{ width: '100%' }}>
-      <GlassCard padding={20} radius={32} variant="hero">
-        <VexFocusDecorations />
+      <GlassCard padding={18} radius={28} variant="hero">
+        {/* Large water bubble decoration top-right */}
+        <View
+          pointerEvents="none"
+          style={{
+            opacity: 0.55,
+            position: 'absolute',
+            right: -28,
+            top: -22,
+            zIndex: 1,
+          }}
+        >
+          <WaterBubble size={140} opacity={0.65} />
+        </View>
+
+        {/* Small water bubble accent */}
+        <View
+          pointerEvents="none"
+          style={{
+            bottom: 40,
+            opacity: 0.35,
+            position: 'absolute',
+            right: 70,
+            zIndex: 1,
+          }}
+        >
+          <WaterBubble size={48} opacity={0.45} />
+        </View>
 
         <View
           style={{
@@ -56,28 +89,30 @@ export function VexFocusSurface({
         >
           <GlassPill
             label={getHeroEyebrow(priority.type).toUpperCase()}
+            size="sm"
             variant="mint"
           />
         </View>
 
-        <View style={{ maxWidth: '68%', zIndex: 2 }}>
+        <View style={{ maxWidth: '66%', zIndex: 2 }}>
           <Text
             style={{
-              color: vexLightGlass.text.primary,
-              fontSize: 26,
+              color: '#0A1F1A',
+              fontSize: 22,
               fontWeight: '800',
               letterSpacing: -0.5,
-              lineHeight: 32,
-              marginBottom: 8,
+              lineHeight: 28,
+              marginBottom: 6,
             }}
           >
             {getHeroTitle(priority.type)}
           </Text>
           <Text
             style={{
-              color: vexLightGlass.text.secondary,
+              color: '#3D5A52',
               fontSize: 13,
               lineHeight: 19,
+              fontWeight: '400',
             }}
           >
             {priority.reason}
@@ -91,21 +126,79 @@ export function VexFocusSurface({
             flexDirection: 'row',
             flexWrap: 'wrap',
             gap: 8,
-            marginBottom: 14,
-            marginTop: 4,
+            marginBottom: 12,
+            marginTop: 10,
             zIndex: 2,
           }}
         >
-          <GlassPill label="Adaptive" variant="mint" />
-          <GlassPill label={secondBadge} variant="neutral" />
+          <GlassPill label="Adaptive" size="sm" variant="mint" />
+          <GlassPill label={secondBadge} size="sm" variant="neutral" />
         </View>
 
-        <VexLaunchButton
-          accessibilityHint="Opens the recommended next VEX action"
-          label={ctaLabel}
-          onPress={onPressPrimary}
-        />
+        <View
+          style={{
+            alignItems: 'center',
+            flexDirection: 'row',
+            gap: 14,
+            zIndex: 2,
+          }}
+        >
+          <View style={{ maxWidth: 220 }}>
+            <LiquidButton
+              accessibilityHint="Opens the recommended next VEX action"
+              label={ctaLabel}
+              onPress={onPressPrimary}
+              rightIcon={
+                <Icon
+                  color="#FFFFFF"
+                  name="arrowRight"
+                  size="sm"
+                  variant="solid"
+                />
+              }
+              size="md"
+              variant="primary"
+            />
+          </View>
+          <Text
+            style={{
+              color: '#6B8F85',
+              fontSize: 13,
+              fontWeight: '600',
+            }}
+          >
+            ~30 min
+          </Text>
+        </View>
+
+        <View
+          style={{
+            alignItems: 'center',
+            flexDirection: 'row',
+            gap: 6,
+            marginTop: 10,
+            zIndex: 2,
+          }}
+        >
+          <Icon
+            color="#6B8F85"
+            name="chevronRight"
+            size="xs"
+            variant="solid"
+          />
+          <Text
+            style={{
+              color: '#6B8F85',
+              fontSize: 12,
+              fontWeight: '500',
+            }}
+          >
+            Next move is saved. Open the thread.
+          </Text>
+        </View>
       </GlassCard>
     </Animated.View>
   );
 }
+
+export default VexFocusSurface;

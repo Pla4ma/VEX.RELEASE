@@ -2,7 +2,6 @@ import React from 'react';
 import { View } from 'react-native';
 import { GlassProgressBar } from '../../../components/glass/GlassProgressBar';
 import { Text } from '../../../components/primitives/Text';
-import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 
 interface ProfileXpBarProps {
   level: number;
@@ -18,7 +17,7 @@ export function ProfileXpBar({
   xpPercent,
 }: ProfileXpBarProps): JSX.Element {
   return (
-    <View style={{ marginTop: 16 }}>
+    <View style={{ marginTop: 12, zIndex: 2 }}>
       <View
         style={{
           alignItems: 'center',
@@ -29,24 +28,24 @@ export function ProfileXpBar({
       >
         <Text
           style={{
-            color: vexLightGlass.text.primary,
-            fontSize: 11,
-            fontWeight: '700',
+            color: '#0A1F1A',
+            fontSize: 12,
+            fontWeight: '800',
           }}
         >
           {`Level ${level} | ${xp.toLocaleString()}/${nextLevelThreshold.toLocaleString()} XP`}
         </Text>
         <Text
           style={{
-            color: vexLightGlass.text.secondary,
-            fontSize: 11,
-            fontWeight: '600',
+            color: '#3D5A52',
+            fontSize: 12,
+            fontWeight: '700',
           }}
         >
           {`${Math.round(xpPercent)}%`}
         </Text>
       </View>
-      <GlassProgressBar height={6} value={xpPercent} variant="premium" />
+      <GlassProgressBar height={8} value={xpPercent} variant="premium" />
     </View>
   );
 }

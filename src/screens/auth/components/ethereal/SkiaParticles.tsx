@@ -171,15 +171,17 @@ function ParticleNode({
     return opacityCycle.value * (0.4 + 0.6 * (0.5 + 0.5 * Math.sin(clock.value * 1.6 + phase)));
   }, [opacityCycle, clock]);
 
+  const transform = useDerivedValue(() => [
+    { translateX: cx.value },
+    { translateY: cy.value },
+  ]);
+
   return (
-    <Group
-      origin={vec(0, 0)}
-      transform={[{ translateX: cx }, { translateY: cy }]}
-    >
+    <Group origin={vec(0, 0)} transform={transform}>
       <Circle cx={0} cy={0} r={radiusAnim}>
         <RadialGradient
           c={vec(0, 0)}
-          colors={colors}
+          colors={[...colors]}
           r={radiusAnim}
         />
         <Blur blur={2.5} />

@@ -2,8 +2,9 @@ import React from 'react';
 import { View, Pressable } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { Text } from '../../../components/primitives/Text';
-import { Box } from '../../../components/primitives/Box';
-import { useTheme } from '../../../theme';
+import { GlassCard } from '../../../components/glass/GlassCard';
+import { GlassPill } from '../../../components/glass/GlassPill';
+import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import { getNextBandLabel } from './FocusScoreCardStates';
 
 interface FocusScoreCardContentProps {
@@ -41,68 +42,59 @@ export function FocusScoreCardContent({
   successColor,
   errorColor,
 }: FocusScoreCardContentProps) {
-  const { theme } = useTheme();
   const isPositiveChange = scoreChange > 0;
   const isNegativeChange = scoreChange < 0;
+  const padding = size === 'small' ? 14 : size === 'large' ? 18 : 16;
   return (
-    <Pressable onPress={handlePress} disabled={!onPress} accessibilityLabel={`Focus Score ${currentScore}`}>
+    <Pressable
+      accessibilityHint="Opens Focus Score details"
+      accessibilityLabel={`Focus Score ${currentScore}`}
+      accessibilityRole="button"
+      disabled={!onPress}
+      onPress={handlePress}
+    >
       <Animated.View style={[animatedStyles]}>
-        <Box
-          padding={size === 'small' ? 'md' : size === 'large' ? 'xl' : 'lg'}
-          backgroundColor="surface"
-          borderRadius="lg"
-          style={{ width: '100%', borderColor: scoreColor, borderWidth: 2 }}
-        >
+        <GlassCard padding={padding} radius={22} variant="default">
           <View
             style={{
+              alignItems: 'flex-start',
               flexDirection: 'row',
               justifyContent: 'space-between',
-              alignItems: 'flex-start',
             }}
           >
             <View>
               <Text
-                variant={
-                  size === 'large'
-                    ? 'display'
-                    : size === 'small'
-                      ? 'heading3'
-                      : 'heading2'
-                }
-                color="text"
-                style={{ fontWeight: '700', color: scoreColor }}
+                style={{
+                  color: vexLightGlass.text.primary,
+                  fontSize: size === 'large' ? 44 : size === 'small' ? 28 : 36,
+                  fontWeight: '800',
+                  letterSpacing: -0.9,
+                  lineHeight: size === 'large' ? 48 : size === 'small' ? 32 : 40,
+                }}
               >
                 {currentScore || '---'}
               </Text>
-              <Text variant="caption" color="textMuted">
+              <Text
+                style={{
+                  color: vexLightGlass.text.secondary,
+                  fontSize: 12,
+                  fontWeight: '700',
+                }}
+              >
                 Focus Score
               </Text>
             </View>
 
             {currentBand && (
-              <View
-                style={{
-                  paddingHorizontal: 12,
-                  paddingVertical: 4,
-                  borderRadius: 12,
-                  backgroundColor: scoreColor + '20',
-                }}
-              >
-                <Text
-                  variant="caption"
-                  style={{ fontWeight: '600', color: scoreColor }}
-                >
-                  {currentBand.label}
-                </Text>
-              </View>
+              <GlassPill label={currentBand.label} size="sm" variant="success" />
             )}
           </View>
 
           {showTrend && scoreChange !== 0 && (
             <View style={{ marginTop: 8 }}>
               <Text
-                variant="body"
                 style={{
+                  fontSize: 12,
                   fontWeight: '500',
                   color: isPositiveChange
                     ? successColor
@@ -118,28 +110,41 @@ export function FocusScoreCardContent({
           )}
 
           {isInRecovery && (
-            <Box
-              padding="sm"
-              backgroundColor="warning"
-              borderRadius="md"
-              style={{ marginTop: 12 }}
+            <View
+              style={{
+                backgroundColor: 'rgba(223, 164, 74, 0.14)',
+                borderRadius: 14,
+                marginTop: 12,
+                padding: 10,
+              }}
             >
-              <Text variant="caption" color="warning">
+              <Text style={{ color: '#8A4F08', fontSize: 12, fontWeight: '700' }}>
                 Recovery Mode: +50% XP bonus active
               </Text>
-            </Box>
+            </View>
           )}
 
           <Text
-            variant="body"
-            color="text"
-            style={{ marginTop: 12, fontStyle: 'italic' }}
+            style={{
+              color: vexLightGlass.text.secondary,
+              fontSize: 13,
+              fontStyle: 'italic',
+              lineHeight: 19,
+              marginTop: 12,
+            }}
           >
             {identityStatement}
           </Text>
 
           {percentileRank && (
-            <Text variant="caption" color="textMuted" style={{ marginTop: 8 }}>
+            <Text
+              style={{
+                color: vexLightGlass.text.tertiary,
+                fontSize: 11,
+                fontWeight: '600',
+                marginTop: 8,
+              }}
+            >
               Top {100 - percentileRank}% of users
             </Text>
           )}
@@ -147,7 +152,7 @@ export function FocusScoreCardContent({
           <View
             style={{
               height: 4,
-              backgroundColor: theme.colors.border.DEFAULT,
+              backgroundColor: 'rgba(16, 35, 31, 0.08)',
               borderRadius: 2,
               marginTop: 12,
               overflow: 'hidden',
@@ -165,15 +170,19 @@ export function FocusScoreCardContent({
 
           {currentBand && currentBand.max < 850 && (
             <Text
-              variant="caption"
-              color="textMuted"
-              style={{ marginTop: 4, textAlign: 'right' }}
+              style={{
+                color: vexLightGlass.text.tertiary,
+                fontSize: 11,
+                fontWeight: '600',
+                marginTop: 4,
+                textAlign: 'right',
+              }}
             >
               {currentBand.max + 1 - currentScore} points to{' '}
               {getNextBandLabel(currentBand.label)}
             </Text>
           )}
-        </Box>
+        </GlassCard>
       </Animated.View>
     </Pressable>
   );

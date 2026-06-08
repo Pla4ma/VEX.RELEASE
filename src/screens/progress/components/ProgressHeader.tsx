@@ -1,63 +1,106 @@
-import React from 'react';
-import { View } from 'react-native';
+﻿import React from 'react';
+import { View, Pressable } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
-import { GlassSettingsButton } from '../../home/components/GlassSettingsButton';
 import { VexBrandPill } from '../../home/components/VexBrandPill';
-import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
+import { WaterBubble } from '../../../components/glass/WaterBubble';
+import { Icon } from '../../../icons';
 
 interface ProgressHeaderProps {
-  onOpenSettings: () => void;
+  onOpenNotifications: () => void;
 }
 
-export function ProgressHeader({ onOpenSettings }: ProgressHeaderProps): JSX.Element {
+export function ProgressHeader({ onOpenNotifications }: ProgressHeaderProps): JSX.Element {
   return (
-    <>
+    <View style={{ width: '100%', marginBottom: 10 }}>
+      {/* Water bubble at top of progress screen */}
+      <View
+        pointerEvents="none"
+        style={{
+          left: -20,
+          opacity: 0.35,
+          position: 'absolute',
+          top: -30,
+          zIndex: 0,
+        }}
+      >
+        <WaterBubble opacity={0.45} size={100} />
+      </View>
+
       <View
         style={{
           alignItems: 'center',
           flexDirection: 'row',
           justifyContent: 'space-between',
-          marginBottom: 18,
-          width: '100%',
+          marginBottom: 10,
+          zIndex: 2,
         }}
       >
         <VexBrandPill />
-        <GlassSettingsButton onPress={onOpenSettings} />
+        <Pressable
+          accessibilityHint="Shows your VEX notifications"
+          accessibilityLabel="Open notifications"
+          accessibilityRole="button"
+          onPress={onOpenNotifications}
+          style={{
+            alignItems: 'center',
+            backgroundColor: 'rgba(255, 255, 255, 0.42)',
+            borderColor: 'rgba(255, 255, 255, 0.95)',
+            borderRadius: 19,
+            borderWidth: 1,
+            height: 38,
+            justifyContent: 'center',
+            overflow: 'hidden',
+            shadowColor: 'rgba(13, 76, 65, 0.16)',
+            shadowOffset: { width: 0, height: 6 },
+            shadowOpacity: 0.35,
+            shadowRadius: 10,
+            width: 38,
+          }}
+        >
+          <Icon
+            color="#0A1F1A"
+            name="notification"
+            size="sm"
+            variant="outline"
+          />
+        </Pressable>
       </View>
-      <View style={{ gap: 4, marginBottom: 8 }}>
+      <View style={{ gap: 3, marginBottom: 6, zIndex: 2 }}>
         <Text
           style={{
-            color: vexLightGlass.mint[700],
-            fontSize: 18,
-            fontWeight: '500',
-            letterSpacing: -0.2,
+            color: '#0A9B8A',
+            fontSize: 11,
+            fontWeight: '700',
+            letterSpacing: 1.2,
+            textTransform: 'uppercase',
           }}
         >
           Progress
         </Text>
         <Text
           style={{
-            color: vexLightGlass.text.primary,
-            fontSize: 21,
-            fontWeight: '700',
-            letterSpacing: -0.5,
-            lineHeight: 26,
+            color: '#0A1F1A',
+            fontSize: 22,
+            fontWeight: '800',
+            letterSpacing: -0.6,
+            lineHeight: 28,
           }}
         >
           Your focus record.
         </Text>
         <Text
           style={{
-            color: vexLightGlass.text.secondary,
-            fontSize: 12,
-            lineHeight: 18,
+            color: '#3D5A52',
+            fontSize: 13,
+            lineHeight: 19,
             marginTop: 4,
+            fontWeight: '400',
           }}
         >
           Focus sessions, study work, and coaching signals in one place.
         </Text>
       </View>
-    </>
+    </View>
   );
 }
 

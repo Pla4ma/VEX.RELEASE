@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+﻿import React, { useEffect } from 'react';
 import { Pressable, View } from 'react-native';
 import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import Animated, {
@@ -10,7 +10,6 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Icon } from '../../icons';
 import { Text } from '../../components/primitives/Text';
-import { useTheme } from '../../theme';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { tabSwitch } from '../../utils/haptics';
 import { getMinTouchTargetStyle } from '../../utils/touchTarget';
@@ -56,7 +55,6 @@ export function TabButton({
   onLongPress,
   isActiveTab,
 }: TabButtonProps) {
-  const { theme } = useTheme();
   const { isReducedMotion } = useReducedMotion();
   const bounce = useSharedValue(1);
   const iconScale = useSharedValue(focused ? 1.08 : 1);
@@ -110,14 +108,14 @@ export function TabButton({
           justifyContent: 'center',
         }}
       >
-        <ActiveTabPill height={46} pillStyle={pillStyle} />
+        <ActiveTabPill height={34} pillStyle={pillStyle} />
         <View
           style={{
             alignItems: 'center',
             gap: 3,
             justifyContent: 'center',
             minWidth: 58,
-            paddingHorizontal: 8,
+            paddingHorizontal: 10,
             paddingVertical: 6,
             zIndex: 1,
           }}
@@ -127,14 +125,15 @@ export function TabButton({
               color={color}
               name={iconName}
               size="md"
+              strokeWidth="thin"
               variant={focused ? 'solid' : 'outline'}
             />
           </Animated.View>
           <Text
             style={{
-              color: focused ? '#0C765F' : 'rgba(16, 35, 31, 0.60)',
+              color: focused ? '#0C765F' : 'rgba(16, 35, 31, 0.50)',
               fontSize: 11,
-              fontWeight: focused ? '700' : '500',
+              fontWeight: focused ? '800' : '500',
               letterSpacing: 0,
             }}
           >
@@ -145,3 +144,5 @@ export function TabButton({
     </Pressable>
   );
 }
+
+export default TabButton;

@@ -12,7 +12,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../../theme';
 import { OfflineBanner } from '../../shared/ui/components/OfflineBanner';
 import { GlassScreen } from '../glass/GlassScreen';
-import { vexLightGlass } from '../../theme/tokens/vex-light-glass';
 
 interface AppScreenProps {
   children: ReactNode;
@@ -39,8 +38,8 @@ export function AppScreen({
     paddingBottom: bottomInset
       ? insets.bottom + 112
       : theme.spacing[8],
-    paddingHorizontal: padded ? theme.spacing[5] : 0,
-    paddingTop: theme.spacing[4],
+    paddingHorizontal: padded ? theme.spacing[4] : 0,
+    paddingTop: theme.spacing[3],
     ...contentStyle,
   };
   const body = scroll ? (
@@ -56,7 +55,7 @@ export function AppScreen({
   );
 
   const screen = (
-    <GlassScreen contentStyle={{ backgroundColor: 'transparent' }} showAura={false}>
+    <GlassScreen contentStyle={{ backgroundColor: 'transparent' }} showAura>
       <StatusBar style="dark" />
       <View style={[{ backgroundColor: 'transparent', flex: 1 }, style]}>
         {body}
@@ -64,9 +63,6 @@ export function AppScreen({
       </View>
     </GlassScreen>
   );
-
-  void vexLightGlass;
-
   if (!keyboardAvoiding) {
     return screen;
   }

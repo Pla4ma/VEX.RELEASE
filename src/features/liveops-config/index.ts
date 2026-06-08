@@ -77,6 +77,8 @@ export interface FeatureAccessResult {
   features: FeatureAccessMap;
   inputs: { totalCompletedSessions: number };
   isLoading: boolean;
+  /** Alias for isLoading — consumers migrated to TanStack Query v5 isPending convention */
+  isPending: boolean;
   productTier: ProductTier;
   refetchAll: () => Promise<unknown>;
   stage: UserExperienceStage;
@@ -128,7 +130,8 @@ export function useFeatureAccess(
     error: null,
     features: access.features,
     inputs: { totalCompletedSessions: completedSessions },
-    isLoading: enabled ? stats.isPending : false,
+    isLoading: enabled ? stats.isLoading : false,
+    isPending: enabled ? stats.isLoading : false,
     productTier: access.productTier,
     refetchAll: enabled ? stats.refresh : async (): Promise<void> => {},
     stage: access.stage,
