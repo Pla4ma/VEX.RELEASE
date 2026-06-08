@@ -35,7 +35,7 @@ export interface BannerProps {
   style?: StyleProp<ViewStyle>;
 }
 
-export const Banner: React.FC<BannerProps> = ({
+export const Banner = React.memo(({
   title,
   description,
   variant = 'default',
@@ -49,7 +49,7 @@ export const Banner: React.FC<BannerProps> = ({
   onDismiss,
   fullWidth = true,
   style,
-}) => {
+}: BannerProps) => {
   const { theme } = useTheme();
   const variantStyles = getVariantStyles(variant, theme.colors);
   const currentSize = sizeStyles[size];
@@ -159,6 +159,8 @@ export const Banner: React.FC<BannerProps> = ({
       </View>
     </View>
   );
-};
+});
+
+Banner.displayName = 'Banner';
 
 export default Banner;

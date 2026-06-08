@@ -32,7 +32,7 @@ function getBorderRadius(shape: AvatarShape, sizeValue: number): number {
   }
 }
 
-export const Avatar: React.FC<AvatarProps> = ({
+export const Avatar = React.memo(({
   source,
   name = '?',
   size = 'md',
@@ -44,7 +44,7 @@ export const Avatar: React.FC<AvatarProps> = ({
   style,
   backgroundColor,
   shape = 'circle',
-}) => {
+}: AvatarProps) => {
   const { theme } = useTheme();
   const sizeValue = SIZE_MAP[size];
   const fontSize = FONT_SIZE_MAP[size];
@@ -179,6 +179,8 @@ export const Avatar: React.FC<AvatarProps> = ({
     );
   }
   return AvatarContent;
-};
+});
+
+Avatar.displayName = 'Avatar';
 
 export default Avatar;
