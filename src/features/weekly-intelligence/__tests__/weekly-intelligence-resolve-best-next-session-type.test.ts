@@ -4,7 +4,7 @@ import {
   InsightFindingSchema,
   type WeeklyInsightInput,
 } from '../schemas';
-import { buildWeeklyIntelligence } from '../service';
+
 import {
   buildWhatHelped,
   buildWhatGotInWay,

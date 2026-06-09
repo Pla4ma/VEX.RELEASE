@@ -1,6 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-import Animated, {
+import {
   useAnimatedStyle,
   useSharedValue,
   withRepeat,

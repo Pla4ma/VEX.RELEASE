@@ -1,6 +1,6 @@
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 import React, { useEffect, useRef } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 

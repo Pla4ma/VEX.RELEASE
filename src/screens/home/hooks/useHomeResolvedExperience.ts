@@ -8,7 +8,7 @@ import { useFirstWeekExperience } from '../../../features/personalization/useFir
 import {
   recordBehaviorSignal,
 } from '../../../features/personalization/behavior-signal-store';
-import type { BehaviorStats } from '../../../features/personalization/schemas';
+import type {} from '../../../features/personalization/schemas';
 import type { HomeController } from './home-controller-types';
 import { useHomeLaneProfile } from './useHomeLaneProfile';
 import type {

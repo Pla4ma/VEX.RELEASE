@@ -4,7 +4,7 @@
  * Network connectivity monitoring and management.
  */
 
-import type { Nullable } from '../types/global';
+import type {} from '../types/global';
 import type {
   NetInfoState,
   NetInfoSubscription,

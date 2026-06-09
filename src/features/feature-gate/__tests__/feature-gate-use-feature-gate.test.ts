@@ -21,7 +21,7 @@ const { getFeatureAvailability: mockGetFeatureAvailability } = jest.requireMock(
   '../../liveops-config/FeatureFlagService',
 ) as { getFeatureAvailability: jest.Mock };
 
-const { makeAvailability, makeFeatureAccess, setupFeatureGate } =
+const { makeAvailability: _makeAvailability, makeFeatureAccess, setupFeatureGate } =
   createTestHelpers(mockUseFeatureAccess, mockGetFeatureAvailability);
 
 // ── Hooks: useFeatureGate ──────────────────────────────────────────

@@ -40,7 +40,7 @@ export function ScoreCard({
 }
 
 export function PatternBar({ label, isStrong }: { label: string; isStrong: boolean }) {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
   return (
     <Box
       flexDirection="row"

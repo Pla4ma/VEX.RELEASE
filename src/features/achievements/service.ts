@@ -172,7 +172,7 @@ export function initializeAchievementTracking(): void {
     });
   });
   eventBus.subscribe('duel:completed', async (event) => {
-    const { winnerId, challengerId, challengedId } = event as {
+    const { winnerId, challengerId: _challengerId, challengedId: _challengedId } = event as {
       winnerId?: string;
       challengerId?: string;
       challengedId?: string;

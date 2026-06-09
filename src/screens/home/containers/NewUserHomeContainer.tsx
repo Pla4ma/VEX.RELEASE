@@ -4,7 +4,7 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useSessionUIStore } from '../../../store/session-state';
 import { useHomeSpineModel } from '../../../features/home-spine/hooks';
 import { getNextBestAction } from '../../../features/progression';
-import type { FeatureAccessResult } from '../../../features/liveops-config';
+import type {} from '../../../features/liveops-config';
 import type { HomeFeatureRuntime } from '../hooks/home-feature-runtime';
 import type { HomeViewModel } from '../hooks/home-view-model';
 import type { HomeController } from '../hooks/home-controller-types';

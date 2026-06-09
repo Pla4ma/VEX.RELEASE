@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 import { EVOLUTION_THRESHOLDS } from './types';
-import type { CompanionMood, CompanionState } from './types';
+import type { CompanionState } from './types';
 
 export const companionStateSchema = z
   .object({

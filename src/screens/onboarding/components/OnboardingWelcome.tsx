@@ -64,7 +64,7 @@ export function OnboardingWelcome({
   onContinue,
 }: OnboardingWelcomeProps): JSX.Element {
   const { theme } = useTheme();
-  const { width } = useWindowDimensions();
+  const { width: _width } = useWindowDimensions();
 
   return (
     <Box flex={1} justifyContent="space-between" px="xl" py="2xl">

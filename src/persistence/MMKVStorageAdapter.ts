@@ -9,7 +9,7 @@ import { MMKV } from 'react-native-mmkv';
 import type { Nullable } from '../types/global';
 import { safeJsonParse } from './safe-json';
 import { getMmkvEncryptionKeySync } from './mmkv-key';
-import { configureDebouncedWrites, debouncedWrite, flushPendingWrites } from '../utils/debounced-write';
+import { configureDebouncedWrites, debouncedWrite} from '../utils/debounced-write';
 
 // Singleton MMKV instance for Zustand storage
 let mmkvStorage: MMKV | null = null;

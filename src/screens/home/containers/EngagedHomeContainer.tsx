@@ -1,6 +1,6 @@
 import { useMemo, useCallback } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import type { UseQueryResult } from '@tanstack/react-query';
+import type {} from '@tanstack/react-query';
 import { useSessionUIStore } from '../../../store/session-state';
 import { useHomeSpineModel } from '../../../features/home-spine/hooks';
 import {

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Platform, StyleSheet, View } from 'react-native';
+import { Platform, View } from 'react-native';
 import * as Notifications from 'expo-notifications';
 import { Button } from '../../../components/primitives/Button';
 import { Text } from '../../../components/primitives/Text';

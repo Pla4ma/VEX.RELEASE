@@ -5,7 +5,6 @@
  */
 
 import { computeStudyOsUnlockGate, computeStudyOsPremiumGate } from '../service';
-import { StudyOsUnlockGateSchema, StudyOsPremiumGateSchema } from '../schemas';
 
 // ─── Mock external dependencies ──────────────────────────────────
 

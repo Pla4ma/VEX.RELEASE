@@ -5,7 +5,6 @@ import { captureSilentFailure } from '../utils/silent-failure';
  * Unified storage interface with automatic fallback.
  */
 
-import { MMKVStorage, getMMKVStorage } from './MMKVStorage';
 import { getDefaultStorageAdapter } from './MMKVStorageAdapter';
 import type { StorageAdapter, StorageOptions } from './StorageAdapter';
 import type { Nullable } from '../types/global';

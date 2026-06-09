@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { View, ViewStyle, AccessibilityProps, Pressable } from 'react-native';
+import { View, AccessibilityProps, Pressable } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -9,9 +9,9 @@ import Animated, {
 import { Text } from '../../../components/primitives/Text';
 import { Icon } from '../../../icons';
 import { useTheme } from '../../../theme';
-import type { InteractiveCardProps, CardVariant, CardSize } from './InteractiveCardTypes';
+import type { InteractiveCardProps} from './InteractiveCardTypes';
 import { cardStyles as styles } from './InteractiveCardStyles';
-import { variantStyles, sizeStyles, getThemeVariantStyles } from './InteractiveCardTypes';
+import { sizeStyles, getThemeVariantStyles } from './InteractiveCardTypes';
 import {
   LoadingOverlay,
   DisabledOverlay,

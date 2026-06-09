@@ -3,7 +3,7 @@
  * UI state types for content study feature
  */
 
-import type { ContentSourceType, ExtractionStage, InputTab } from './enums';
+import type { ExtractionStage, InputTab } from './enums';
 import type { StudyContent, StudyGeneration } from './content';
 import type { SessionDifficulty } from './enums';
 

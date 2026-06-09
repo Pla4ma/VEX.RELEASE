@@ -4,7 +4,7 @@ import {
   fetchMonthlyFocusReportInput,
   MonthlyReportRepositoryError,
 } from '../repository';
-import { mockSelect, setupChain } from './test-setup';
+import { mockSelect} from './test-setup';
 
 xdescribe('fetchMonthlyFocusReportInput', () => {
   beforeEach(() => {

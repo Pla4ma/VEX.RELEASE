@@ -9,7 +9,7 @@ export function CharacterCounter({
   current: number;
   max: number;
 }): JSX.Element {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
   const isNearLimit = current >= max - 3;
 
   return (

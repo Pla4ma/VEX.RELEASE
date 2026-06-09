@@ -4,7 +4,7 @@ import type {
   SessionHistoryResult,
 } from './home-controller-types';
 import type { HomeFeatureRuntime } from './home-feature-runtime';
-import type { HomeViewModel } from './home-view-model';
+import type {} from './home-view-model';
 import type { HomeReturnReason } from './useHomeReturnReason';
 import type { FeatureAccessResult } from '../../../features/liveops-config';
 import type { LearningExecutionLayer } from '../../../features/learning-execution';

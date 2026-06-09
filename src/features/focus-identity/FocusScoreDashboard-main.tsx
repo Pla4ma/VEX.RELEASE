@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, {} from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useFocusScore } from './hooks-focus-score';
 import { Box, Text, Stack, Button } from '@components/primitives';

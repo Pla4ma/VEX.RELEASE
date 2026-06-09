@@ -1,4 +1,4 @@
-import { experience } from './product-journey-debloat-personalization-helpers';
+
 
 describe('Risk 5 — Privacy inventory ↔ app manifest', () => {
   it('privacy inventory matches app manifest metadata', () => {

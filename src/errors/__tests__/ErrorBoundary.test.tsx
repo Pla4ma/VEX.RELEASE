@@ -1,7 +1,7 @@
 // ErrorBoundary test assertions do not match component rendeder output. Component active, test outdated.
 // Tests xdescribed — source refactored, API changed, or test environment needs update.
 import React from 'react';
-import { render, waitFor, fireEvent } from '@testing-library/react-native';
+import { render} from '@testing-library/react-native';
 
 import { ErrorBoundary } from '../ErrorBoundary';
 import type { ErrorCategory } from '../ErrorBoundary.types';
@@ -11,7 +11,8 @@ import {
   ThrowNetworkError,
   ThrowAuthError,
   ThrowClientError,
-} from './ErrorBoundary.test.helpers';xdescribe('ErrorBoundary', () => {
+} from './ErrorBoundary.test.helpers';
+xdescribe('ErrorBoundary', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     jest.useRealTimers();

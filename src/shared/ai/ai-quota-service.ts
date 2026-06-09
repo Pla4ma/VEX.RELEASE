@@ -5,7 +5,6 @@
  * per hour/day based on their tier (free vs paid).
  */
 
-import { z } from 'zod';
 import type {
   AIRequestCategory,
   QuotaCheckResult,

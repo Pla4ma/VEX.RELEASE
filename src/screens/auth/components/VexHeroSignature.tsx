@@ -95,7 +95,7 @@ function VexLetter({ char, index, isReducedMotion }: { char: string; index: numb
 
 /* ─── Underline divider (gold gradient bar) ─── */
 function Underline({ isReducedMotion }: { isReducedMotion: boolean }) {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
   const scale = useSharedValue(isReducedMotion ? 1 : 0);
   const op = useSharedValue(isReducedMotion ? 1 : 0);
   const shimmer = useSharedValue(0);

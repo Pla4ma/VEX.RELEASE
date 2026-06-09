@@ -7,7 +7,7 @@ import Animated, {
   withTiming,
   withSequence,
 } from 'react-native-reanimated';
-import { Box } from '../../../components/primitives/Box';
+
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
 import { cardSelection } from '../../../utils/haptics';

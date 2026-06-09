@@ -17,8 +17,8 @@ import { useSessionHistory } from '../../../session/hooks/useSession';
 import { useAuthStore } from '../../../store';
 import { buildHomeFeatureRuntime } from './home-feature-runtime';
 import { useHomeAnalyticsEffects } from './useHomeAnalyticsEffects';
-import type { HomeViewModel } from './home-view-model';
-import type { HomeController } from './home-controller-types';
+import type {} from './home-view-model';
+import type {} from './home-controller-types';
 
 export type { HomeController } from './home-controller-types';
 export type { HomeViewModel } from './home-view-model';

@@ -24,7 +24,7 @@ import {
 } from 'react-native-reanimated';
 import { useDeviceTilt } from '@/hooks/useDeviceTilt';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
-import { timingPresets } from '@/theme/tokens/motion';
+
 import type { Particle } from './SkiaParticles.types';
 import { PARTICLE_COUNT, PARALLAX_STRENGTH, HUE_COLORS } from './SkiaParticles.types';
 

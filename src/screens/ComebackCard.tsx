@@ -1,5 +1,4 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
 
 import { Box } from '../components/primitives/Box';
 import { Button } from '../components/primitives/Button';

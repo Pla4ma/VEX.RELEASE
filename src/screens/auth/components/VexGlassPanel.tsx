@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { lightColors } from '@/theme/tokens/colors';
+
 import { rgbaColors } from '@/theme/tokens/rgba-colors';
 import { brandShadowTokens } from '@/theme/tokens/shadows';
 

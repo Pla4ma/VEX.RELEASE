@@ -10,9 +10,8 @@ import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
 import { Icon } from '../../../icons';
 import { createSheet } from '@/shared/ui/create-sheet';
-import { buttonTap } from '../../../utils/haptics';
-import { lightColors } from '@/theme/tokens/colors';
 
+import { lightColors } from '@/theme/tokens/colors';
 
 interface NetworkStatusProps {
   isOffline: boolean;

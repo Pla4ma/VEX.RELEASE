@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View } from 'react-native';
+
 import Animated, {
   Easing,
   useAnimatedStyle,
@@ -14,7 +14,6 @@ import { getCompanionService } from '@/features/companion/service';
 import type { CompanionState } from '@/features/companion/types';
 import { createDebugger } from '@/utils/debug';
 import { lightColors } from '@/theme/tokens/colors';
-
 
 const debug = createDebugger('ActiveSessionHUDCompanion');
 

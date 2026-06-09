@@ -1,4 +1,4 @@
-import type { TimeBreakdown, TimeProgressMetrics } from '../types';
+import type { TimeProgressMetrics } from '../types';
 
 export const TIME_CONSTANTS = {
   MILLISECONDS_PER_SECOND: 1000,

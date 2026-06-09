@@ -3,7 +3,7 @@ import { View, Text, ScrollView, Pressable } from 'react-native';
 import { FlashList, type ListRenderItem } from '@shopify/flash-list';
 import { useThemeObject } from '../../../theme';
 import { Card, Badge, ProgressBar } from '../../../components';
-import { SkeletonItem } from '../../../shared/ui/components/SkeletonItem';
+
 import { ChallengeHubSkeleton } from './ChallengeHub.skeleton';
 import { useActiveChallenges, useChallengeSummaries } from '../hooks';
 import { ChallengeCard } from './ChallengeCard';

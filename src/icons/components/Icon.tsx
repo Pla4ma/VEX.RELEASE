@@ -9,7 +9,7 @@ import { View } from 'react-native';
 import Svg, { Path, G } from 'react-native-svg';
 
 import { useTheme } from '../../theme';
-import { iconRegistry, getIcon } from '../IconRegistry';
+import { getIcon } from '../IconRegistry';
 import { createDebugger } from '../../utils/debug';
 
 const debug = createDebugger('icons:component');

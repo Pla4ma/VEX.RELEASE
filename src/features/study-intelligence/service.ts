@@ -4,7 +4,7 @@ import {
   type WeakTopic,
   type WeeklyIntelligence,
 } from './schemas';
-import type { ReviewItem, StudyPlan } from '../study-os/schemas';
+import type { StudyPlan } from '../study-os/schemas';
 
 function wordFreq(text: string): Map<string, number> {
   const freq = new Map<string, number>();

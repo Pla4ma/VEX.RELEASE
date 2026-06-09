@@ -56,7 +56,7 @@ describe('Session Stakes - Quality & Display', () => {
   });
   describe('UI Display Helpers', () => {
     it('should return correct display for CASUAL', () => {
-      const { label, description, icon, color, riskLevel } =
+      const { label, description: _description, icon, color, riskLevel } =
         require('../session-stakes').getDifficultyDisplay('CASUAL');
       expect(label).toBe('Casual');
       expect(icon).toBe('');
@@ -64,7 +64,7 @@ describe('Session Stakes - Quality & Display', () => {
       expect(riskLevel).toBe('LOW');
     });
     it('should return correct display for FOCUSED', () => {
-      const { label, description, icon, color, riskLevel } =
+      const { label, description: _description, icon, color, riskLevel } =
         require('../session-stakes').getDifficultyDisplay('FOCUSED');
       expect(label).toBe('Focused');
       expect(icon).toBe('');
@@ -72,7 +72,7 @@ describe('Session Stakes - Quality & Display', () => {
       expect(riskLevel).toBe('MEDIUM');
     });
     it('should return correct display for DEEP_WORK', () => {
-      const { label, description, icon, color, riskLevel } =
+      const { label, description: _description, icon, color, riskLevel } =
         require('../session-stakes').getDifficultyDisplay('DEEP_WORK');
       expect(label).toBe('Deep Work');
       expect(icon).toBe('');

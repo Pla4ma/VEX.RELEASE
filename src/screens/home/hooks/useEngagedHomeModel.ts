@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import type { UseQueryResult } from '@tanstack/react-query';
+import type {} from '@tanstack/react-query';
 import { useSessionUIStore } from '../../../store/session-state';
 import { useHomeSpineModel } from '../../../features/home-spine/hooks';
 import type { HomeController } from './home-controller-types';
@@ -12,7 +12,7 @@ import { useEngagedQueries } from './useEngagedQueries';
 import { useEngagedNavigation } from './useEngagedNavigation';
 import { buildEngagedReturnReason } from './engaged-return-reason';
 import { buildEngagedController } from './engaged-controller-builder';
-import type { ActiveStudyPlanData, ComebackStateData, StreakSummaryData, ProgressionData } from './home-query-types';
+import type { ActiveStudyPlanData, ComebackStateData, ProgressionData } from './home-query-types';
 
 export function useEngagedHomeModel(
   input: EngagedModelInput,

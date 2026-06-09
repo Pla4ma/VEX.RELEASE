@@ -24,7 +24,7 @@ export const NotificationSettingsScreen: React.FC<Props> = ({
 }) => {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
-  const { showToast } = useUIStore();
+  const { showToast: _showToast } = useUIStore();
   const [toggles, setToggles] = useState<Record<string, boolean>>({
     streakReminders: true,
     bossAlerts: true,

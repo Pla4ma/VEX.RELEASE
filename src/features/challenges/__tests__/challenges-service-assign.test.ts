@@ -47,7 +47,7 @@ jest.mock('../../../store', () => ({
 
 import * as repository from '../repository';
 import { assignChallenge } from '../service';
-import { ChallengeSchema, UserChallengeSchema } from '../schemas';
+
 import { ChallengeError } from '../errors';
 
 const mockedRepo = jest.mocked(repository);

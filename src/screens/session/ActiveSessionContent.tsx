@@ -7,7 +7,7 @@ import { ActiveSessionBackground } from './components/ActiveSessionBackground';
 import { ActiveSessionHeader } from './components/ActiveSessionHeader';
 import { ActiveSessionHero } from './components/ActiveSessionHero';
 import { ActiveSessionModeOverlays } from './components/ActiveSessionModeOverlays';
-import { SessionContractReminder } from './components/SessionContractReminder';
+
 import { CoachSessionBannerLazy } from './components/CoachSessionBannerLazy';
 import { ActiveSessionBottomControls } from './ActiveSessionBottomControls';
 import { ModeActiveIndicatorBar } from '../../features/mode-native/components/ModeRescueSurface';

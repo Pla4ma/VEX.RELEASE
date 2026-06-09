@@ -12,7 +12,7 @@ import {
   baseJoinedSelect,
   mapJoinedChallenge,
 } from './repository-helpers';
-import type { ChallengeDetail } from './schemas';
+import type {} from './schemas';
 
 const supabase = getSupabaseClient();
 

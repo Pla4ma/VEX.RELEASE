@@ -1,4 +1,4 @@
-import type { SessionSetupParams } from '../../../navigation/param-types';
+import type {} from '../../../navigation/param-types';
 import type { UseQueryResult } from '@tanstack/react-query';
 import type {
   FeatureAccessResult,

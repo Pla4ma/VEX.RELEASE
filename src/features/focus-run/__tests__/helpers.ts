@@ -1,5 +1,5 @@
 import { buildFocusRunDisplay, computeFocusRunGrade, resolvePersonalBlocker } from '../service';
-import type { FocusRun, FocusRunGrade } from '../schemas';
+import type { FocusRun} from '../schemas';
 
 export const MOCK_RUN: FocusRun = {
   blockerId: null,

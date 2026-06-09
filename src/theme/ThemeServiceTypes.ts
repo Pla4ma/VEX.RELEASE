@@ -1,5 +1,5 @@
-import { type EventEmitter } from '../events/EventEmitter';
-import { THEME_STORAGE_KEYS } from './config';
+
+
 import type { ThemeMode } from './types';
 import { createDebugger } from '../utils/debug';
 

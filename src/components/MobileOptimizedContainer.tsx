@@ -14,7 +14,7 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { createSheet } from '@/shared/ui/create-sheet';
 import { lightColors } from '@/theme/tokens/colors';
-import { isSmallScreen, isTablet, getResponsiveFontSize } from './MobileOptimizedContainer.helpers';
+import { isSmallScreen, isTablet} from './MobileOptimizedContainer.helpers';
 
 // Re-export for backward compatibility
 export { getResponsiveFontSize, isSmallScreen, isTablet } from './MobileOptimizedContainer.helpers';

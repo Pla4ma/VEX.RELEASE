@@ -12,7 +12,7 @@ import { decideNudge } from '../../notification-policy/service';
 import { resolveCompletionExperiencePolicy } from '../../session-completion/completion-experience-policy';
 import { resolveLaneCopy } from '../../personalization/first-week-lane-copy';
 import { LANE_USER_FACING_NAMES } from '../../lane-engine/schemas';
-import type { CompletionExperiencePolicyInput } from '../../session-completion/completion-experience-policy-schemas';
+import type {} from '../../session-completion/completion-experience-policy-schemas';
 import { baseLaneProfile, completionInput } from './helpers';
 
 export function auditLane(lane: Lane): string {

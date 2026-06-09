@@ -1,5 +1,5 @@
-import type { SettingValue, SettingCategory, NotificationSettings, CoachSettings, AppearanceSettings, PrivacySettings, Setting, UserPreferences } from './types';
-import { batchUpdateSettings, getAllSettings, getUserPreferences } from './service';
+import type {Value,Category, Notifications, Coachs, Appearances} from './types';
+import { batchUpdateSettings, getAllSettings} from './service';
 
 export async function getNotificationSettings(userId: string): Promise<NotificationSettings> {
   const settings = await getAllSettings(userId);

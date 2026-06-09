@@ -1,4 +1,4 @@
-import { captureSilentFailure } from '../../../utils/silent-failure';
+
 import { z } from 'zod';
 import { createDebugger } from '../../../utils/debug';
 import { eventBus } from '../../../events';

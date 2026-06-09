@@ -9,7 +9,6 @@ import type {
   AuditableComponent,
   AuditAccessibilityIssue,
 } from './checks-types';
-import { runComponentChecks } from './component-checks';
 
 export { runComponentChecks } from './component-checks';
 export type {

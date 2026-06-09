@@ -4,7 +4,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { Box, Text } from '@/components/primitives';
-import type { SharedValue } from 'react-native-reanimated';
+import type {} from 'react-native-reanimated';
 
 interface NearMissProgressBarProps {
   progressPercent: number;

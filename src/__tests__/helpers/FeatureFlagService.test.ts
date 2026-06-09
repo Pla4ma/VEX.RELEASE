@@ -2,7 +2,7 @@
 // Tests xdescribed — API changed, mock chain needs update, or algorithm refactored.
 import { FeatureFlagService } from '../FeatureFlagService';
 import { getStorageManager } from '../../persistence';
-import { eventBus } from '../../events';
+
 import { getApiClient } from '../../api/api-client';
 
 jest.mock('../../persistence');

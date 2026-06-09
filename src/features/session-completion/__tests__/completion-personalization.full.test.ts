@@ -1,4 +1,4 @@
-import { SessionMode } from '../../../session/modes';
+
 import { createSessionSummary } from './ledger-test-utils';
 import {
   LANES,

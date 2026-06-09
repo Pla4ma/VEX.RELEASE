@@ -9,7 +9,7 @@ import { useContentReviewActions } from './contentReviewActions';
 import type { ContentReviewState } from '../types';
 
 export function useContentReview(contentId: string) {
-  const { user } = useAuthStore();
+  const { user: _user } = useAuthStore();
   const [state, setState] = useState<ContentReviewState>(
     createInitialContentReviewState,
   );

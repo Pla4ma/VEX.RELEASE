@@ -2,7 +2,7 @@
  * Tests for session-events feature: analytics trackMidSessionEvent.
  */
 
-import * as Sentry from '@sentry/react-native';
+import * asfrom '@sentry/react-native';
 import { trackMidSessionEvent } from '../analytics';
 
 jest.mock('@sentry/react-native', () => ({

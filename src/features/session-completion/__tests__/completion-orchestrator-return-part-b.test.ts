@@ -1,7 +1,7 @@
-import { SessionMode } from '../../../session/modes';
-import type { SessionSummary } from '../../../session/types';
+
+import type {} from '../../../session/types';
 import { orchestrateSessionCompletion } from '../completion-orchestrator';
-import type { CompletionLedger } from '../schemas';
+import type {} from '../schemas';
 import { summary, ledger } from './__fixtures__/orchestrator-return.fixtures';
 
 const mockSetCompletionSyncState = jest.fn();

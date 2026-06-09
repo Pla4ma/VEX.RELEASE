@@ -4,7 +4,7 @@ import {
   hasWeeklyIntelligenceData,
 } from '../service';
 import type { StudyPlan } from '../../study-os/schemas';
-import type { WeakTopic } from '../schemas';
+import type {} from '../schemas';
 
 const basePlan = {
   blocks: [],

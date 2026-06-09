@@ -22,7 +22,7 @@
  */
 
 import { useEffect, useState, useMemo } from 'react';
-import { AccessibilityInfo, Platform } from 'react-native';
+import { AccessibilityInfo} from 'react-native';
 import { useReducedMotion as useReanimatedReducedMotion } from 'react-native-reanimated';
 
 interface ReducedMotionResult {

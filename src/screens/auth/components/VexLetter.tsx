@@ -9,7 +9,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Text } from '../../../components/primitives/Text';
 import { springPresets, motionStagger } from '../../../theme/tokens/motion';
-import { useReducedMotion } from '../../../hooks/useReducedMotion';
+
 import { lightColors } from '@/theme/tokens/colors';
 
 const EASE_CINEMATIC = Easing.bezier(0.16, 1, 0.3, 1);

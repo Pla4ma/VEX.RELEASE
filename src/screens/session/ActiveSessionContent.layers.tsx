@@ -7,7 +7,7 @@ import { SessionMode } from '../../session/modes';
 import { ActiveSessionModeOverlays } from './components/ActiveSessionModeOverlays';
 import { SessionContractReminder } from './components/SessionContractReminder';
 import { CoachSessionBannerLazy } from './components/CoachSessionBannerLazy';
-import { ENABLE_SESSION_COMPANION_LAYER, ENABLE_SESSION_COACH_BANNER, ENABLE_SESSION_MODE_OVERLAYS, ENABLE_SESSION_HERO } from './ActiveSessionContent.types';
+import { ENABLE_SESSION_COMPANION_LAYER, ENABLE_SESSION_COACH_BANNER, ENABLE_SESSION_MODE_OVERLAYS} from './ActiveSessionContent.types';
 import type { ActiveSessionContentProps } from './ActiveSessionContent.types';
 
 interface SessionLayersProps {

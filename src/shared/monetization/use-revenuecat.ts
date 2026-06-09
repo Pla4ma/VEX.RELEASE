@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { CustomerInfo, PurchasesOffering } from 'react-native-purchases';
+import type { PurchasesOffering } from 'react-native-purchases';
 import { revenueCatService } from './revenuecat-service';
 import type {
   EntitlementInfo,

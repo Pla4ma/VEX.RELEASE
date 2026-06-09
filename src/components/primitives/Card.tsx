@@ -74,7 +74,7 @@ export const Card = forwardRef<View, CardProps>(
     },
     ref,
   ) => {
-    const { theme } = useTheme();
+    const { theme: _theme } = useTheme();
     const reducedMotion = useReducedMotion();
     const pressed = useSharedValue(0);
 

@@ -5,7 +5,6 @@ import { Box, Text, Card } from '@/components/primitives';
 import { Icon } from '@/icons';
 import { lightColors } from '@/theme/tokens/colors';
 
-
 export type CoachLanguage = 'en';
 
 interface LanguageOption {

@@ -2,7 +2,7 @@ import type { UseQueryResult } from '@tanstack/react-query';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { FeatureAccessResult } from '../../../features/liveops-config';
 import type { HomeFeatureRuntime } from '../hooks/home-feature-runtime';
-import type { HomeViewModel } from '../hooks/home-view-model';
+import type {} from '../hooks/home-view-model';
 import type {
   HomeController,
   SessionHistoryResult,

@@ -1,5 +1,5 @@
 import { orchestrateSessionCompletion } from '../completion-orchestrator';
-import type { CompletionLedger } from '../schemas';
+import type {} from '../schemas';
 import { summary, ledger } from './__fixtures__/orchestrator-return.fixtures';
 
 const mockSetCompletionSyncState = jest.fn();

@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback} from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import * as Sentry from '@sentry/react-native';
 import { useToast } from '../../../shared/ui/components/Toast';
