@@ -1,6 +1,5 @@
 import React from 'react';
 import { Box } from '../../components/primitives/Box';
-import { Text } from '../../components/primitives/Text';
 import { CompanionSessionLayer } from '../../session/components/CompanionSessionLayer';
 import { DeepWorkVignette } from '../../session/components/DeepWorkVignette';
 import { SessionMode } from '../../session/modes';
@@ -21,6 +20,7 @@ import {
   type ActiveSessionContentProps,
 } from './ActiveSessionContent.types';
 import { useSessionControlHandlers } from './useSessionControlHandlers';
+import { SessionNotices } from './SessionNotices';
 
 export type { ActiveSessionContentProps };
 
@@ -105,26 +105,12 @@ export function ActiveSessionContent({
         lane={lane}
         completionPercentage={sessionQuery.completionPercentage}
       />
-      {isOffline ? (
-        <Box
-          bg="warning.light"
-          px="sm"
-          py="xs"
-          alignItems="center"
-          accessibilityLabel="You are offline. Data will sync when connection returns."
-          accessibilityRole="alert"
-        >
-          <Text variant="caption" color="text.primary">
-            You are offline. Data will sync when connection returns.
-          </Text>
-        </Box>
-      ) : null}
-      {displayPolicy.showContractReminder ? (
-        <SessionContractReminder
-          contract={contract}
-          progressPercentage={sessionQuery.completionPercentage}
-        />
-      ) : null}
+      <SessionNotices
+        isOffline={isOffline}
+        showContractReminder={displayPolicy.showContractReminder}
+        contract={contract}
+        completionPercentage={sessionQuery.completionPercentage}
+      />
       {ENABLE_SESSION_MODE_OVERLAYS && displayPolicy.showModeOverlay ? (
         <ActiveSessionModeOverlays
           allowStudyQuizBreak={plannedQuizBreakOptedIn}
