@@ -175,10 +175,12 @@ export function onPresenceChange(
 }
 
 export async function cleanupPresence(): Promise<void> {
-  const channel = activeChannels.get('presence');
+  const currentUserId = getCurrentUserId();
+  const key = currentUserId ? `presence:${currentUserId}` : 'presence';
+  const channel = activeChannels.get(key);
   if (channel) {
     await channel.unsubscribe();
-    activeChannels.delete('presence');
+    activeChannels.delete(key);
   }
   resetCurrentUserId();
 }

@@ -109,11 +109,22 @@ export function useActivityBroadcast({
   useEffect(() => {
     if (!channelName) {return;}
     let unsub: (() => void) | null = null;
+    let cancelled = false;
     subscribeToActivity(channelName, (message) => {
+      if (cancelled) {return;}
       setMessages((prev) => [...prev.slice(-19), message]);
       onMessageRef.current?.(message);
-    }).then((u) => { unsub = u; });
-    return () => { unsub?.(); };
+    }).then((u) => {
+      if (cancelled) {
+        u();
+        return;
+      }
+      unsub = u;
+    });
+    return () => {
+      cancelled = true;
+      unsub?.();
+    };
   }, [channelName]);
   const sendActivity = useCallback(
     async (type: BroadcastMessage['type'], payload: unknown) => {
@@ -134,11 +145,22 @@ export function useFeedUpdates({ userId, onUpdate }: UseFeedUpdatesOptions) {
   useEffect(() => { onUpdateRef.current = onUpdate; }, [onUpdate]);
   useEffect(() => {
     let unsub: (() => void) | null = null;
+    let cancelled = false;
     subscribeToFeedChanges(userId, (payload) => {
+      if (cancelled) {return;}
       setUpdates((prev) => [...prev.slice(-19), payload]);
       onUpdateRef.current?.(payload);
-    }).then((u) => { unsub = u; });
-    return () => { unsub?.(); };
+    }).then((u) => {
+      if (cancelled) {
+        u();
+        return;
+      }
+      unsub = u;
+    });
+    return () => {
+      cancelled = true;
+      unsub?.();
+    };
   }, [userId]);
   const clearUpdates = useCallback(() => { setUpdates([]); }, []);
   return { updates, clearUpdates };
@@ -156,11 +178,22 @@ export function useSquadChanges({ squadId, onChange }: UseSquadChangesOptions) {
       return;
     }
     let unsub: (() => void) | null = null;
+    let cancelled = false;
     subscribeToSquadChanges(squadId, (payload) => {
+      if (cancelled) {return;}
       setChanges((prev) => [...prev.slice(-19), payload]);
       onChangeRef.current?.(payload);
-    }).then((u) => { unsub = u; });
-    return () => { unsub?.(); };
+    }).then((u) => {
+      if (cancelled) {
+        u();
+        return;
+      }
+      unsub = u;
+    });
+    return () => {
+      cancelled = true;
+      unsub?.();
+    };
   }, [squadId]);
   return { changes, changeCount: changes.length };
 }
@@ -180,11 +213,22 @@ export function useGuildQuests({
       return;
     }
     let unsub: (() => void) | null = null;
+    let cancelled = false;
     subscribeToGuildQuests(guildId, (payload) => {
+      if (cancelled) {return;}
       setQuestUpdates((prev) => [...prev.slice(-19), payload]);
       onQuestUpdateRef.current?.(payload);
-    }).then((u) => { unsub = u; });
-    return () => { unsub?.(); };
+    }).then((u) => {
+      if (cancelled) {
+        u();
+        return;
+      }
+      unsub = u;
+    });
+    return () => {
+      cancelled = true;
+      unsub?.();
+    };
   }, [guildId]);
   return { questUpdates, latestUpdate: questUpdates[questUpdates.length - 1] };
 }

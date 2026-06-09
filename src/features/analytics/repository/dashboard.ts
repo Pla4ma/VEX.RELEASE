@@ -62,7 +62,7 @@ export async function updateDashboardWidget(
 ) {
   const { data, error } = await supabase
     .from('dashboard_widgets')
-    .update({ ...updates, updated_at: Date.now() })
+    .update({ ...updates, updated_at: new Date().toISOString() })
     .eq('id', widgetId)
     .select(DASHBOARD_WIDGET_COLUMNS)
     .single();
