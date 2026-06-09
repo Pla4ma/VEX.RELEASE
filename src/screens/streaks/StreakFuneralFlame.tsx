@@ -31,14 +31,14 @@ export function StreakFuneralFlame({ isPending }: { isPending?: boolean }): Reac
     );
   }, [flameOpacity, flameScale]);
 
-  if (isPending) {
-    return <SkeletonItem variant="circle" width={96} height={96} />;
-  }
-
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ scale: flameScale.value }],
     opacity: flameOpacity.value,
   }));
+
+  if (isPending) {
+    return <SkeletonItem variant="circle" width={96} height={96} />;
+  }
 
   return (
     <Animated.View style={animatedStyle}>
