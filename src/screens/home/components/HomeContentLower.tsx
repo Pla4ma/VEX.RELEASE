@@ -60,6 +60,7 @@ export const HomeContentLower: React.FC<HomeContentLowerProps> = ({
   const showContextualCards =
     sm.study_layer !== 'hidden' || sm.boss_teaser !== 'hidden';
   const showSecondaryRail =
+    sm.study_layer !== 'hidden' && sm.study_layer !== 'blocked';
 
   const isNewOrActivating = stage === 'ACTIVATING' || stage === 'NEW_USER';
   const showFocusScore =

@@ -1,7 +1,7 @@
 import { eventBus } from '../../../events';
 import { initializeFocusIdentityIntegrations } from '../integration';
 import * as repository from '../repository-focus-score';
-import * asfrom '../';
+import * as integrations from '../';
 
 jest.mock('../repository-focus-score');
 jest.mock('../analytics');
