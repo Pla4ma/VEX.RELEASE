@@ -1,5 +1,5 @@
 import React from 'react';
-import { Circle, Stop} from 'react-native-svg';
+import { Circle, RadialGradient, Stop} from 'react-native-svg';
 import type {} from 'react-native-reanimated';
 
 import { CompanionPhase} from '../types';

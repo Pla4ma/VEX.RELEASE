@@ -1,5 +1,5 @@
 import React from 'react';
-import { G, Circle, Path } from 'react-native-svg';
+import { G, Circle, Ellipse, Path } from 'react-native-svg';
 
 interface VariantProps {
   size: number;

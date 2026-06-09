@@ -16,10 +16,6 @@ export function StreakFuneralFlame({ isPending }: { isPending?: boolean }): Reac
   const flameScale = useSharedValue(1);
   const flameOpacity = useSharedValue(1);
 
-  if (isPending) {
-    return <SkeletonItem variant="circle" width={96} height={96} />;
-  }
-
   React.useEffect(() => {
     flameScale.value = withSequence(
       withTiming(0.9, { duration: 500 }),
@@ -34,6 +30,10 @@ export function StreakFuneralFlame({ isPending }: { isPending?: boolean }): Reac
       withTiming(0, { duration: 500 }),
     );
   }, [flameOpacity, flameScale]);
+
+  if (isPending) {
+    return <SkeletonItem variant="circle" width={96} height={96} />;
+  }
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ scale: flameScale.value }],

@@ -15,6 +15,7 @@ import { useCompletionSyncAutoRepair } from '../../../features/session-completio
 import { GlassScreen } from '../../../components/glass/GlassScreen';
 import { VexBrandPill } from '../components/VexBrandPill';
 import { GlassPill } from '../../../components/glass/GlassPill';
+import { Icon } from '../../../icons';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import { useHomeSurfaceMap } from '../hooks/useHomeSurfaceMap';
 import { useHomeResolvedExperience } from '../hooks/useHomeResolvedExperience';
