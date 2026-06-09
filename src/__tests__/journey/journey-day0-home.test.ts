@@ -29,7 +29,7 @@ function visibleCount(map: HomeSurfaceMap): number {
 function day0Map(lane: Lane): HomeSurfaceMap {
   const m: Record<
     Lane,
-    { style: string; goal: string; intensity: 'minimal' | 'medium' | 'strong' }
+    { style: 'study_focused' | 'game_like' | 'coach_led' | 'calm'; goal: 'study' | 'work' | 'creative' | 'personal'; intensity: 'minimal' | 'medium' | 'strong' }
   > = {
     student: { style: 'study_focused', goal: 'study', intensity: 'medium' },
     game_like: { style: 'game_like', goal: 'work', intensity: 'strong' },
@@ -44,8 +44,8 @@ function day0Map(lane: Lane): HomeSurfaceMap {
   return decideHomeSurfaces({
     featureAvailability,
     personalizationProfile: {
-      motivationStyle: p.style as any,
-      primaryGoal: p.goal as any,
+      motivationStyle: p.style,
+      primaryGoal: p.goal,
       gamificationIntensity: p.intensity,
       studyLayerName: 'Growth Path',
       userStage: 'new',
