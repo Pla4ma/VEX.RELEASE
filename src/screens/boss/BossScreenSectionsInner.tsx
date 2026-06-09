@@ -94,7 +94,7 @@ export function BossScreenSections({
         <Text variant="h4" color={theme.colors.text.primary}>
           {copy.historyTitle}
         </Text>
-        {historyQuery.isLoading ? (
+        {historyQuery.isPending ? (
           <Text variant="bodySmall" color={theme.colors.text.secondary}>
             Loading recent sessions...
           </Text>
@@ -104,7 +104,7 @@ export function BossScreenSections({
             Recent session proof is unavailable right now.
           </Text>
         ) : null}
-        {!historyQuery.isLoading &&
+        {!historyQuery.isPending &&
         !historyQuery.error &&
         recentSessions.length === 0 ? (
           <Text variant="bodySmall" color={theme.colors.text.secondary}>

@@ -76,7 +76,7 @@ export const ActiveSessionScreen = withScreenErrorBoundary(
     });
     const shouldShowGuardState =
       !userId ||
-      sessionQuery.isLoading ||
+      sessionQuery.isPending ||
       !controller.companion.isLoaded ||
       Boolean(sessionQuery.error) ||
       !sessionQuery.session ||
@@ -88,7 +88,7 @@ export const ActiveSessionScreen = withScreenErrorBoundary(
           companionLoaded={controller.companion.isLoaded}
           error={sessionQuery.error}
           isDegradedSession={isDegradedSession}
-          isLoading={sessionQuery.isLoading}
+          isLoading={sessionQuery.isPending}
           session={sessionQuery.session}
           userId={userId}
           onBrowsePresets={() => navigation.goBack()}
