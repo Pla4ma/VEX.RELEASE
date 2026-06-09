@@ -75,7 +75,7 @@ export function ComebackQuestCard({
           style={{
             shadowColor: theme.colors.warning.DEFAULT,
             shadowOffset: { width: 0, height: 2 },
-            shadowOpacity: 0.15,
+            shadowOpacity: 0.85,
             shadowRadius: 4,
             elevation: 2,
           }}

@@ -1,6 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-import { GlassProgressBar } from '../../../components/glass/GlassProgressBar';
+import { LiquidProgressBar } from '../../../components/glass/LiquidProgressBar';
 import { Text } from '../../../components/primitives/Text';
 
 interface ProfileXpBarProps {
@@ -45,7 +45,7 @@ export function ProfileXpBar({
           {`${Math.round(xpPercent)}%`}
         </Text>
       </View>
-      <GlassProgressBar height={8} value={xpPercent} variant="premium" />
+      <LiquidProgressBar height={8} progress={xpPercent / 100} />
     </View>
   );
 }

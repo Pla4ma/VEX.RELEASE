@@ -8,6 +8,8 @@ import { View } from 'react-native';
 import { Text } from '../../../../components/primitives/Text';
 import { ShimmerSweep } from './ShimmerSweep';
 import { TapRipple } from './TapRipple';
+import { etherealButton } from '@/theme/tokens/ethereal-sky';
+import { ArrowGlyph } from './AuthGlyphs';
 
 export type StaggeredButtonSpec = {
   provider: 'apple' | 'google' | 'email';
@@ -15,6 +17,7 @@ export type StaggeredButtonSpec = {
   fill: string;
   textColor: string;
   borderColor?: string;
+  borderWidth?: number;
   glyph: React.ReactNode;
   accessibilityHint: string;
   useShimmer: boolean;
@@ -41,14 +44,21 @@ function AuthButtonContent({ spec }: { spec: StaggeredButtonSpec }): React.JSX.E
         paddingHorizontal: 24,
       }}
     >
-      {spec.glyph}
+      <View style={{ position: 'absolute', left: 32 }}>{spec.glyph}</View>
       <Text
-        fontSize={16}
+        fontSize={17}
         fontWeight="700"
         style={{ color: spec.textColor }}
       >
         {spec.label}
       </Text>
+      <View style={{ position: 'absolute', right: 28 }}>
+        <ArrowGlyph
+          color={spec.provider === 'google'
+            ? etherealButton.googleText
+            : etherealButton.emailText}
+        />
+      </View>
     </View>
   );
 }
@@ -69,7 +79,7 @@ export function StaggeredAuthButton({
           accessibilityLabel={spec.label}
           backgroundColor={spec.fill}
           borderColor={spec.borderColor}
-          borderWidth={spec.borderColor ? 1 : 0}
+          borderWidth={spec.borderWidth ?? (spec.borderColor ? 1 : 0)}
           disabled={disabled}
           height={56}
           onPress={onPress}

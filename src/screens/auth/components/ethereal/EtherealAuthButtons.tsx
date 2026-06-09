@@ -5,9 +5,7 @@
 import React, { useCallback } from 'react';
 import { View } from 'react-native';
 
-import { Text } from '../../../../components/primitives/Text';
 import { etherealButton } from '@/theme/tokens/ethereal-sky';
-import { TapRipple } from './TapRipple';
 import { AppleGlyph, EnvelopeGlyph, GoogleGlyph } from './AuthGlyphs';
 import {
   StaggeredAuthButton,
@@ -50,14 +48,29 @@ export function EtherealAuthButtons({
     label: 'Continue with Apple',
     fill: etherealButton.appleFill,
     textColor: etherealButton.appleText,
+    borderColor: etherealButton.appleBorder,
     glyph: <AppleGlyph color={etherealButton.appleText} />,
     accessibilityHint: 'Continues with Apple sign in',
     useShimmer: true,
     useRipple: false,
   };
 
+  const emailSpec: StaggeredButtonSpec = {
+    provider: 'email',
+    label: emailLabel,
+    fill: etherealButton.emailFill,
+    textColor: etherealButton.emailText,
+    borderColor: etherealButton.emailBorder,
+    borderWidth: 1.4,
+    glyph: <EnvelopeGlyph color={etherealButton.emailText} />,
+    accessibilityHint: 'Opens email sign in',
+    useShimmer: true,
+    useRipple: false,
+    rippleColor: 'rgba(84, 163, 164, 0.20)',
+  };
+
   return (
-    <View style={{ width: '100%', gap: 12 }}>
+    <View style={{ width: '100%', gap: 14 }}>
       <StaggeredAuthButton
         delay={0}
         disabled={disabled}
@@ -70,39 +83,12 @@ export function EtherealAuthButtons({
         onPress={() => onProviderPress('apple')}
         spec={appleSpec}
       />
-      <View style={{ alignSelf: 'center', marginTop: 4 }}>
-        <TapRipple
-          accessibilityHint="Continues with email sign in"
-          accessibilityLabel={emailLabel}
-          backgroundColor="transparent"
-          borderRadius={20}
-          disabled={disabled}
-          height={48}
-          onPress={onEmailPress}
-          rippleColor="rgba(10, 10, 10, 0.35)"
-        >
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              gap: 10,
-              paddingHorizontal: 18,
-            }}
-          >
-            <EnvelopeGlyph color={etherealButton.ghostText} />
-            <Text
-              fontSize={15}
-              fontWeight="600"
-              style={{
-                color: etherealButton.ghostText,
-                textDecorationLine: 'underline',
-              }}
-            >
-              {emailLabel}
-            </Text>
-          </View>
-        </TapRipple>
-      </View>
+      <StaggeredAuthButton
+        delay={0}
+        disabled={disabled}
+        onPress={onEmailPress}
+        spec={emailSpec}
+      />
     </View>
   );
 }

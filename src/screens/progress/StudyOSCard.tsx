@@ -3,7 +3,9 @@ import { View } from 'react-native';
 import { LiquidButton } from '../../components/glass/LiquidButton';
 import { Text } from '../../components/primitives/Text';
 import { GlassCard } from '../../components/glass/GlassCard';
-import { GlassIconOrb } from '../../components/glass/GlassIconOrb';
+import { LiquidGlassSphere } from '../../components/glass/LiquidGlassSphere';
+import { FloatingDroplets } from '../../components/glass/FloatingDroplets';
+import { WaterBubble } from '../../components/glass/WaterBubble';
 import { Icon } from '../../icons';
 import { vexLightGlass } from '../../theme/tokens/vex-light-glass';
 
@@ -31,6 +33,42 @@ export function StudyOSCard({
         }}
       />
       <View
+        pointerEvents="none"
+        style={{
+          opacity: 0.85,
+          position: 'absolute',
+          left: 8,
+          top: 8,
+          zIndex: 0,
+        }}
+      >
+        <FloatingDroplets count={3} opacity={0.65} size={24} />
+      </View>
+      <View
+        pointerEvents="none"
+        style={{
+          opacity: 0.85,
+          position: 'absolute',
+          right: 12,
+          bottom: 8,
+          zIndex: 0,
+        }}
+      >
+        <WaterBubble size={24} opacity={0.65} />
+      </View>
+      <View
+        pointerEvents="none"
+        style={{
+          opacity: 0.85,
+          position: 'absolute',
+          left: 48,
+          bottom: 6,
+          zIndex: 0,
+        }}
+      >
+        <LiquidGlassSphere color="pearl" size={12} intensity={0.52} />
+      </View>
+      <View
         style={{
           alignItems: 'center',
           flexDirection: 'row',
@@ -38,9 +76,14 @@ export function StudyOSCard({
           justifyContent: 'space-between',
         }}
       >
-        <GlassIconOrb size={40} variant="mint">
-          <Icon color="#0C765F" name="book" size="sm" variant="solid" />
-        </GlassIconOrb>
+        <LiquidGlassSphere
+          color="mint"
+          icon={
+            <Icon color="#0C765F" name="book" size="sm" variant="solid" />
+          }
+          intensity={0.88}
+          size={48}
+        />
         <View style={{ flex: 1, gap: 3 }}>
           <Text
             style={{

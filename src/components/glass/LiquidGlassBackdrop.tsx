@@ -64,7 +64,7 @@ export function LiquidGlassBackdrop(): JSX.Element {
       <Path
         d={`M ${width * 0.20} ${-height * 0.10} C ${width * 0.18} ${height * 0.20} ${width * 0.24} ${height * 0.48} ${width * 0.18} ${height * 1.08}`}
         fill="none"
-        opacity={0.28}
+        opacity={0.65}
         stroke="#FFFFFF"
         strokeLinecap="round"
         strokeWidth={18}
@@ -72,7 +72,7 @@ export function LiquidGlassBackdrop(): JSX.Element {
       <Path
         d={`M ${width * 0.56} ${-height * 0.06} C ${width * 0.52} ${height * 0.18} ${width * 0.58} ${height * 0.40} ${width * 0.52} ${height * 0.72}`}
         fill="none"
-        opacity={0.26}
+        opacity={0.65}
         stroke="#FFFFFF"
         strokeLinecap="round"
         strokeWidth={20}
@@ -80,7 +80,7 @@ export function LiquidGlassBackdrop(): JSX.Element {
       <Path
         d={`M ${width * 0.64} ${-height * 0.04} C ${width * 0.62} ${height * 0.20} ${width * 0.68} ${height * 0.42} ${width * 0.62} ${height * 0.78}`}
         fill="none"
-        opacity={0.18}
+        opacity={0.65}
         stroke="#79DFC9"
         strokeLinecap="round"
         strokeWidth={12}

@@ -110,7 +110,7 @@ export const NearMissIndicator: React.FC<NearMissIndicatorProps> = ({
           borderColor: theme.colors.error.DEFAULT,
           shadowColor: theme.colors.error.DEFAULT,
           shadowOffset: { width: 0, height: 0 },
-          shadowOpacity: 0.15,
+          shadowOpacity: 0.85,
           shadowRadius: 15,
           elevation: 5,
         }}

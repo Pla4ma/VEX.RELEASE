@@ -1,6 +1,7 @@
 import React from 'react';
 import { Pressable, View } from 'react-native';
 import { GlassBlurLayer } from '../../../components/glass/GlassBlurLayer';
+import { FloatingDroplets } from '../../../components/glass/FloatingDroplets';
 import { Icon } from '../../../icons';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 
@@ -29,21 +30,21 @@ function GlassIconButton({
       onPress={onPress}
       style={{
         alignItems: 'center',
-        backgroundColor: 'rgba(255, 255, 255, 0.38)',
-        borderColor: 'rgba(255, 255, 255, 0.88)',
+        backgroundColor: 'rgba(255, 255, 255, 0.48)',
+        borderColor: 'rgba(255, 255, 255, 0.92)',
         borderRadius: 999,
-        borderWidth: 1,
-        height: 42,
+        borderWidth: 1.5,
+        height: 44,
         justifyContent: 'center',
-        shadowColor: 'rgba(13, 76, 65, 0.14)',
-        shadowOffset: { width: 0, height: 6 },
-        shadowOpacity: 0.18,
-        shadowRadius: 12,
+        shadowColor: 'rgba(13, 76, 65, 0.18)',
+        shadowOffset: { width: 0, height: 7 },
+        shadowOpacity: 0.85,
+        shadowRadius: 14,
         overflow: 'hidden',
-        width: 42,
+        width: 44,
       }}
     >
-      <GlassBlurLayer intensity={62} radius={999} />
+      <GlassBlurLayer intensity={72} radius={999} />
       <Icon color={vexLightGlass.text.primary} name={iconName} size="md" />
     </Pressable>
   );
@@ -63,6 +64,18 @@ export function ProfileActionsRow({
         marginBottom: 16,
       }}
     >
+      <View
+        pointerEvents="none"
+        style={{
+          opacity: 0.85,
+          position: 'absolute',
+          right: 20,
+          top: -8,
+          zIndex: 0,
+        }}
+      >
+        <FloatingDroplets count={3} opacity={0.65} size={32} />
+      </View>
       <GlassIconButton
         hint="Opens account and app settings"
         iconName="setting"

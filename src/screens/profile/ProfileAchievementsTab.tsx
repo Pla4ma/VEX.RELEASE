@@ -6,6 +6,8 @@ import { GlassIconOrb } from '../../components/glass/GlassIconOrb';
 import { GlassPill } from '../../components/glass/GlassPill';
 import { EmptyState } from '../../components/EmptyState';
 import { Skeleton } from '../../components/ui/Skeleton';
+import { FloatingDroplets } from '../../components/glass/FloatingDroplets';
+import { EmptyStateLens } from '../../components/glass/EmptyStateLens';
 import { Icon } from '../../icons';
 import type { Theme } from '../../theme/types';
 import { vexLightGlass } from '../../theme/tokens/vex-light-glass';
@@ -64,6 +66,30 @@ export const ProfileAchievementsTab: React.FC<ProfileAchievementsTabProps> = ({
   if (achievements.length === 0) {
     return (
       <GlassCard size="lg" variant="default" padding={18} radius={26}>
+        <View
+          pointerEvents="none"
+          style={{
+            opacity: 0.85,
+            position: 'absolute',
+            right: 12,
+            top: 12,
+            zIndex: 0,
+          }}
+        >
+          <FloatingDroplets count={4} opacity={0.65} size={36} />
+        </View>
+        <View
+          pointerEvents="none"
+          style={{
+            opacity: 0.85,
+            position: 'absolute',
+            left: 12,
+            bottom: 12,
+            zIndex: 0,
+          }}
+        >
+          <EmptyStateLens size={56} opacity={0.65} dotCount={3} />
+        </View>
         <EmptyState
           iconName="plus-circle"
           title="No earned proof yet"

@@ -21,6 +21,7 @@ import { etherealText } from '@/theme/tokens/ethereal-sky';
 import { RegisterFormPanel } from './components/ethereal/RegisterFormPanel';
 import { RegisterHero } from './components/ethereal/RegisterHero';
 import { getMinTouchTargetStyle } from '../../utils/touchTarget';
+import { MascotGuide } from '../onboarding/components/ethereal/MascotGuide';
 
 type Props = NativeStackScreenProps<AuthStackParams, 'Register'>;
 type RegisterErrors = Partial<Record<keyof RegisterFormData, string>>;
@@ -95,7 +96,15 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
       <View style={{ flex: 1, paddingTop: insets.top + 16, paddingHorizontal: 24 }}>
         <RegisterHero startDelayMs={120} />
 
-        <View style={{ marginTop: 32 }}>
+        <View style={{ marginTop: 18 }}>
+          <MascotGuide
+            body="Create the account, then I will guide setup without blocking the app."
+            compact
+            title="Protected focus starts here."
+          />
+        </View>
+
+        <View style={{ marginTop: 18 }}>
           <RegisterFormPanel
             fields={{
               email,

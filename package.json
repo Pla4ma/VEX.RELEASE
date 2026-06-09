@@ -93,6 +93,7 @@
     "@babel/plugin-proposal-decorators": "^7.25.0",
     "@babel/preset-env": "^7.26.0",
     "@babel/runtime": "^7.26.0",
+    "@playwright/test": "^1.60.0",
     "@react-native/eslint-config": "^0.74.0",
     "@testing-library/jest-native": "^5.4.3",
     "@testing-library/react-native": "^12.4.3",

@@ -30,7 +30,7 @@ export function TooltipCard({
         maxWidth: 320,
         shadowColor: lightColors.text.primary,
         shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.15,
+        shadowOpacity: 0.85,
         shadowRadius: 12,
         elevation: 8,
       }}

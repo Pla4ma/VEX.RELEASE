@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pressable } from 'react-native';
+import { Pressable, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Animated, {
   useAnimatedStyle,
@@ -16,7 +16,6 @@ import {
   type LiquidButtonSize,
   type LiquidButtonVariant,
 } from './LiquidButton.tokens';
-import { LiquidButtonGlassEffects } from './LiquidButton.effects';
 
 export type { LiquidButtonSize, LiquidButtonVariant };
 
@@ -112,13 +111,14 @@ export function LiquidButton({
             overflow: 'hidden',
             paddingHorizontal: s.paddingH,
             paddingVertical: s.paddingV,
-            shadowColor: isPrimary ? '#0C765F' : liveV.shadowColor,
+            shadowColor: isPrimary ? 'rgba(10, 155, 138, 0.22)' : liveV.shadowColor,
             shadowOffset: { width: 0, height: isPrimary ? 8 : 3 },
-            shadowOpacity: isPrimary ? 0.32 : 0.12,
+            shadowOpacity: isPrimary ? 0.28 : 0.14,
             shadowRadius: isPrimary ? 12 : 6,
           }];
         }}
       >
+        {/* Primary gradient background */}
         <LinearGradient
           colors={v.gradientColors as readonly [string, string, ...string[]]}
           end={{ x: 1, y: 1 }}
@@ -136,7 +136,70 @@ export function LiquidButton({
           }}
         />
 
-        <LiquidButtonGlassEffects isPrimary={isPrimary} />
+        {/* Top specular highlight - glass reflection */}
+        <LinearGradient
+          colors={['rgba(255, 255, 255, 0.95)', 'rgba(255, 255, 255, 0.52)', 'rgba(255, 255, 255, 0)']}
+          end={{ x: 0, y: 1 }}
+          locations={[0, 0.42, 0.82]}
+          start={{ x: 0, y: 0 }}
+          style={{
+            borderTopLeftRadius: 999,
+            borderTopRightRadius: 999,
+            height: '52%',
+            left: 0,
+            position: 'absolute',
+            right: 0,
+            top: 0,
+          }}
+        />
+
+        {/* Inner glow highlight line */}
+        {isPrimary ? (
+          <View
+            pointerEvents="none"
+            style={{
+              backgroundColor: 'rgba(255, 255, 255, 0.98)',
+              borderRadius: 999,
+              height: 2,
+              left: 12,
+              position: 'absolute',
+              right: 12,
+              top: 2.2,
+            }}
+          />
+        ) : null}
+
+        {/* Secondary highlight line */}
+        {isPrimary ? (
+          <View
+            pointerEvents="none"
+            style={{
+              backgroundColor: 'rgba(255, 255, 255, 0.55)',
+              borderRadius: 999,
+              height: 1.2,
+              left: 16,
+              position: 'absolute',
+              right: 16,
+              top: 4.2,
+            }}
+          />
+        ) : null}
+
+        {/* Bottom inner shadow for depth */}
+        {isPrimary ? (
+          <View
+            pointerEvents="none"
+            style={{
+              backgroundColor: 'rgba(6, 67, 56, 0.22)',
+              borderRadius: 999,
+              bottom: 1.2,
+              height: 1.5,
+              left: 14,
+              position: 'absolute',
+              right: 14,
+            }}
+          />
+        ) : null}
 
         {leftIcon}
         <Text
@@ -153,7 +216,13 @@ export function LiquidButton({
           {label}
         </Text>
         {subLabel ? (
-          <Text style={{ color: v.textColor, fontSize: 11, opacity: 0.78 }}>
+          <Text
+            style={{
+              color: v.textColor,
+              fontSize: 11,
+              opacity: 0.78,
+            }}
+          >
             {subLabel}
           </Text>
         ) : null}

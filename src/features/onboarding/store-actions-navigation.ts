@@ -70,6 +70,12 @@ export function createNavigationActions(set: SetFn, get: GetFn) {
 
     markHomePreviewEntered: () => set({ homePreviewEntered: true }),
 
+    markMascotGuideCompleted: () =>
+      set({ mascotGuideCompletedAt: Date.now() }),
+
+    dismissMascotGuide: () =>
+      set({ mascotGuideDismissedAt: Date.now() }),
+
     setCompletionFromBackend: (userId: string, completedAt: number) => {
       set({ completedAt, completedForUserId: userId, isOnboarded: true });
     },

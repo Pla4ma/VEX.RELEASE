@@ -6,7 +6,7 @@ import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
 import { GlassCard } from '../../../components/glass/GlassCard';
 import { GlassPill } from '../../../components/glass/GlassPill';
-import { GlassIconOrb } from '../../../components/glass/GlassIconOrb';
+import { LiquidGlassSphere } from '../../../components/glass/LiquidGlassSphere';
 import { Icon } from '../../../icons';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import { StreakWidgetSkeleton } from './StreakWidget.parts';
@@ -65,9 +65,14 @@ export function StreakWidget({
             justifyContent="space-between"
           >
             <Box alignItems="center" flexDirection="row" gap={12}>
-              <GlassIconOrb size={42} variant="fire">
-                <Icon color="#C2410C" name="fire" size="sm" variant="solid" />
-              </GlassIconOrb>
+              <LiquidGlassSphere
+                color="coral"
+                icon={
+                  <Icon color="#C2410C" name="fire" size="sm" variant="solid" />
+                }
+                intensity={0.88}
+                size={48}
+              />
               {isEmpty ? (
                 <Text
                   style={{

@@ -1,24 +1,23 @@
-import React, { useMemo } from 'react';
-import { View } from 'react-native';
+import React from 'react';
+import { Pressable, View } from 'react-native';
 
-import { Button } from '../../../components/primitives/Button';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
-import { styles } from '../styles';
 import type { Lane, LaneConfirmation } from '../../../features/lane-engine';
-
-const LANE_EMOJI: Record<Lane, string> = {
-  student: '\uD83D\uDCDA',
-  game_like: '\uD83C\uDFC3',
-  deep_creative: '\uD83D\uDCA1',
-  minimal_normal: '\u2728',
-};
+import { etherealButton, etherealCard, etherealText } from '../../../theme/tokens/ethereal-sky';
+import { getMinTouchTargetStyle } from '../../../utils/touchTarget';
 
 const LANE_LABELS: Record<Lane, string> = {
   student: 'Study Mode',
   game_like: 'Run Mode',
   deep_creative: 'Project Mode',
   minimal_normal: 'Clean Mode',
+};
+
+const LANE_EMOJI: Record<Lane, string> = {
+  student: '•',
+  game_like: '•',
+  deep_creative: '•',
+  minimal_normal: '•',
 };
 
 type LaneConfirmationStepProps = {
@@ -28,104 +27,105 @@ type LaneConfirmationStepProps = {
   onChooseAnother: () => void;
 };
 
+function ModeSigil(): React.JSX.Element {
+  return (
+    <View
+      style={{
+        height: 44,
+        width: 44,
+        borderRadius: 22,
+        backgroundColor: 'rgba(125, 238, 228, 0.24)',
+        borderColor: 'rgba(31, 137, 139, 0.42)',
+        borderWidth: 1,
+      }}
+    />
+  );
+}
+
 export function LaneConfirmationStep({
   confirmation,
   isChoosing,
   onAccept,
   onChooseAnother,
 }: LaneConfirmationStepProps): JSX.Element {
-  const { theme } = useTheme();
   const lane = confirmation?.recommendedLane ?? 'minimal_normal';
   const laneLabel = LANE_LABELS[lane];
-  const laneEmoji = LANE_EMOJI[lane];
-
-  const cardStyle = useMemo(
-    () => [
-      styles.choiceCard,
-      {
-        backgroundColor: `${theme.colors.primary[500]}0D`,
-        borderColor: theme.colors.primary[500],
-        borderWidth: 2,
-        padding: theme.spacing[5],
-      },
-    ],
-    [theme.colors.primary, theme.spacing],
-  );
 
   return (
-    <View style={styles.section}>
-      <View>
-        <Text style={[styles.stepTitle, { color: theme.colors.text.primary }]}>
-          VEX thinks {laneLabel} fits you best.
+    <View style={{ gap: 16, paddingTop: 8 }}>
+      <View
+        style={{
+          backgroundColor: etherealCard.fillSelected,
+          borderColor: 'rgba(31, 137, 139, 0.64)',
+          borderRadius: 24,
+          borderWidth: 1.5,
+          gap: 14,
+          padding: 22,
+        }}
+      >
+        <ModeSigil />
+        <Text fontSize={28} fontWeight="800" style={{ color: etherealText.heading }}>
+          {laneLabel}
         </Text>
         <Text
-          style={[styles.stepSubtitle, { color: theme.colors.text.secondary }]}
+          fontSize={15}
+          fontWeight="600"
+          style={{ color: etherealText.subtitle, lineHeight: 22 }}
         >
-          You can change this anytime.
+          {confirmation?.reason ??
+            'VEX will start with the mode that best matches your answers.'}
         </Text>
       </View>
 
-      <View>
-        <View style={cardStyle}>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              gap: theme.spacing[3],
-            }}
-          >
-            <Text style={{ fontSize: 36 }}>{laneEmoji}</Text>
-            <View style={{ flex: 1 }}>
-              <Text
-                style={{
-                  fontSize: 28,
-                  fontWeight: '700',
-                  color: theme.colors.text.primary,
-                }}
-              >
-                {laneLabel}
-              </Text>
-              <Text
-                style={{
-                  fontSize: 15,
-                  color: theme.colors.text.secondary,
-                  marginTop: theme.spacing[1],
-                }}
-              >
-                {confirmation?.reason ??
-                  'VEX will start with the mode that best matches your answers.'}
-              </Text>
-            </View>
-          </View>
-        </View>
-      </View>
+      <Pressable
+        accessibilityHint={`Confirms ${laneLabel} as your focus mode and opens the app`}
+        accessibilityLabel={`Use ${laneLabel}`}
+        accessibilityRole="button"
+        accessibilityState={{ busy: isChoosing }}
+        disabled={isChoosing}
+        onPress={() => onAccept(lane)}
+        style={({ pressed }) => [
+          getMinTouchTargetStyle(),
+          {
+            alignItems: 'center',
+            backgroundColor: etherealButton.googleFill,
+            borderColor: etherealButton.googleBorder,
+            borderRadius: 28,
+            borderWidth: 1,
+            height: 56,
+            justifyContent: 'center',
+            opacity: pressed ? 0.94 : 1,
+          },
+        ]}
+      >
+        <Text fontSize={16} fontWeight="800" style={{ color: etherealButton.googleText }}>
+          Use this mode
+        </Text>
+      </Pressable>
 
-      <View>
-        <View style={{ gap: theme.spacing[3], marginTop: theme.spacing[5] }}>
-          <Button
-            fullWidth
-            size="lg"
-            variant="primary"
-            onPress={() => onAccept(lane)}
-            isLoading={isChoosing}
-            accessibilityLabel={`Use ${laneLabel}`}
-            accessibilityRole="button"
-            accessibilityHint={`Confirms ${laneLabel} as your focus mode and opens the app`}
-          >
-            Use this mode
-          </Button>
-          <Button
-            fullWidth
-            variant="ghost"
-            onPress={onChooseAnother}
-            accessibilityLabel="Choose another mode"
-            accessibilityRole="button"
-            accessibilityHint="Shows all available focus modes to pick from"
-          >
-            Choose another
-          </Button>
-        </View>
-      </View>
+      <Pressable
+        accessibilityHint="Shows all available focus modes to pick from"
+        accessibilityLabel="Choose another mode"
+        accessibilityRole="button"
+        onPress={onChooseAnother}
+        style={({ pressed }) => [
+          getMinTouchTargetStyle(),
+          {
+            alignItems: 'center',
+            backgroundColor: etherealButton.emailFill,
+            borderColor: etherealButton.emailBorder,
+            borderRadius: 28,
+            borderWidth: 1,
+            height: 56,
+            justifyContent: 'center',
+            opacity: pressed ? 0.88 : 1,
+          },
+        ]}
+      >
+        <Text fontSize={16} fontWeight="800" style={{ color: etherealText.heading }}>
+          Choose another
+        </Text>
+      </Pressable>
     </View>
   );
 }

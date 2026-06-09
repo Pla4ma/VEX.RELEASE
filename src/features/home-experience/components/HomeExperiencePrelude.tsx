@@ -4,6 +4,9 @@ import { Pressable, View } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
 import { GlassPillSurface } from '../../../components/glass/GlassPillSurface';
 import { GlassCard } from '../../../components/glass/GlassCard';
+import { FloatingDroplets } from '../../../components/glass/FloatingDroplets';
+import { WaterBubble } from '../../../components/glass/WaterBubble';
+import { LiquidGlassSphere } from '../../../components/glass/LiquidGlassSphere';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import { useOnboardingStore } from '../../onboarding/store';
 import type { ExplicitMotivationStyle, HomeExperienceModel } from '../schemas';
@@ -128,6 +131,30 @@ export function HomeExperiencePrelude({
       ) : null}
       {showEvolutionTeaser ? (
         <GlassCard padding={16} radius={22} variant="subtle">
+          <View
+            pointerEvents="none"
+            style={{
+              opacity: 0.85,
+              position: 'absolute',
+              right: 8,
+              top: 8,
+              zIndex: 0,
+            }}
+          >
+            <FloatingDroplets count={3} opacity={0.65} size={24} />
+          </View>
+          <View
+            pointerEvents="none"
+            style={{
+              opacity: 0.85,
+              position: 'absolute',
+              left: 6,
+              bottom: 6,
+              zIndex: 0,
+            }}
+          >
+            <WaterBubble size={14} opacity={0.65} />
+          </View>
           <Text
             style={{
               color: vexLightGlass.text.secondary,
@@ -155,6 +182,30 @@ export function HomeExperiencePrelude({
       ) : null}
       {isBossVisible ? (
         <GlassCard variant="subtle">
+          <View
+            pointerEvents="none"
+            style={{
+              opacity: 0.85,
+              position: 'absolute',
+              right: 8,
+              top: 8,
+              zIndex: 0,
+            }}
+          >
+            <FloatingDroplets count={2} opacity={0.65} size={20} />
+          </View>
+          <View
+            pointerEvents="none"
+            style={{
+              opacity: 0.85,
+              position: 'absolute',
+              left: 6,
+              bottom: 6,
+              zIndex: 0,
+            }}
+          >
+            <LiquidGlassSphere color="pearl" size={10} intensity={0.42} />
+          </View>
           <Text
             style={{
               color: vexLightGlass.text.secondary,

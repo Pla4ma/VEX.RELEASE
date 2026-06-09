@@ -135,21 +135,21 @@ export function OrbitalSystem({ width, height }: { width: number; height: number
         path={`M ${cx - w * 0.38} ${cy} A ${w * 0.38} ${w * 0.38} 0 1 1 ${cx + w * 0.38} ${cy} A ${w * 0.38} ${w * 0.38} 0 1 1 ${cx - w * 0.38} ${cy}`}
         style="stroke"
         strokeWidth={0.8}
-        opacity={0.15}
+        opacity={0.65}
         color="rgba(226,244,255,0.60)"
       />
       <Path
         path={`M ${cx - w * 0.24} ${cy + 4} A ${w * 0.24} ${w * 0.24} 0 1 1 ${cx + w * 0.24} ${cy + 4} A ${w * 0.24} ${w * 0.24} 0 1 1 ${cx - w * 0.24} ${cy + 4}`}
         style="stroke"
         strokeWidth={0.6}
-        opacity={0.10}
+        opacity={0.65}
         color="rgba(185,140,255,0.80)"
       />
       <Path
         path={`M ${cx} ${h * 0.20} L ${cx} ${h * 0.88}`}
         style="stroke"
         strokeWidth={0.5}
-        opacity={0.08}
+        opacity={0.65}
         color="rgba(255,255,255,0.50)"
       />
     </>

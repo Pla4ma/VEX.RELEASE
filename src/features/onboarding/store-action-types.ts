@@ -20,6 +20,8 @@ export const initialState: OnboardingState = {
   firstSessionCompleted: false,
   homePreviewEntered: false,
   chosenLane: null,
+  mascotGuideCompletedAt: null,
+  mascotGuideDismissedAt: null,
 };
 
 export function getCurrentUserIdForBool(): string | null {

@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
@@ -17,6 +17,9 @@ export function VexTabBar({
   const userId = useAuthStore((store) => store.user?.id ?? null);
   useStreakSummary(userId);
 
+  const tabBarHeight = 56 + insets.bottom;
+  const horizontalMargin = 24;
+
   return (
     <View
       pointerEvents="box-none"
@@ -29,25 +32,25 @@ export function VexTabBar({
     >
       <View
         style={{
-          borderRadius: 30,
+          borderRadius: 36,
           elevation: 6,
-          height: 58,
-          marginBottom: Math.max(insets.bottom + 10, 18),
-          marginHorizontal: 16,
+          height: tabBarHeight,
+          marginBottom: Math.max(insets.bottom - 2, 10),
+          marginHorizontal: horizontalMargin,
           overflow: 'hidden',
-          shadowColor: 'rgba(13, 76, 65, 0.14)',
-          shadowOffset: { width: 0, height: 8 },
-          shadowOpacity: 0.18,
-          shadowRadius: 20,
+          shadowColor: 'rgba(80, 100, 95, 0.14)',
+          shadowOffset: { width: 0, height: 6 },
+          shadowOpacity: 0.85,
+          shadowRadius: 18,
         }}
       >
-        <GlassBlurLayer intensity={80} radius={30} />
+        <GlassBlurLayer intensity={82} radius={36} />
         <View
           style={{
             backgroundColor: 'rgba(255, 255, 255, 0.68)',
-            borderColor: 'rgba(255, 255, 255, 0.82)',
-            borderRadius: 30,
-            borderWidth: 1,
+            borderColor: 'rgba(255, 255, 255, 0.78)',
+            borderRadius: 36,
+            borderWidth: 1.2,
             bottom: 0,
             left: 0,
             position: 'absolute',
@@ -56,13 +59,13 @@ export function VexTabBar({
           }}
         />
         <LinearGradient
-          colors={['rgba(255, 255, 255, 0.92)', 'rgba(255, 255, 255, 0.28)']}
+          colors={['rgba(255, 255, 255, 0.92)', 'rgba(255, 255, 255, 0.32)']}
           end={{ x: 0, y: 1 }}
           locations={[0, 1]}
           start={{ x: 0, y: 0 }}
           style={{
-            borderTopLeftRadius: 30,
-            borderTopRightRadius: 30,
+            borderTopLeftRadius: 36,
+            borderTopRightRadius: 36,
             height: '55%',
             left: 0,
             position: 'absolute',
@@ -70,17 +73,46 @@ export function VexTabBar({
             top: 0,
           }}
         />
+        {/* Top glass edge highlight - thin white line */}
         <View
           pointerEvents="none"
           style={{
-            backgroundColor: 'rgba(255, 255, 255, 0.88)',
-            borderTopLeftRadius: 30,
-            borderTopRightRadius: 30,
-            height: 1,
+            backgroundColor: 'rgba(255, 255, 255, 0.92)',
+            borderTopLeftRadius: 36,
+            borderTopRightRadius: 36,
+            height: 1.5,
             left: 28,
             position: 'absolute',
             right: 28,
-            top: 1,
+            top: 1.2,
+          }}
+        />
+        {/* Secondary glass edge highlight */}
+        <View
+          pointerEvents="none"
+          style={{
+            backgroundColor: 'rgba(255, 255, 255, 0.55)',
+            borderTopLeftRadius: 36,
+            borderTopRightRadius: 36,
+            height: 1,
+            left: 32,
+            position: 'absolute',
+            right: 32,
+            top: 3,
+          }}
+        />
+        {/* Bottom glass edge shadow */}
+        <View
+          pointerEvents="none"
+          style={{
+            backgroundColor: 'rgba(10, 94, 77, 0.06)',
+            borderBottomLeftRadius: 36,
+            borderBottomRightRadius: 36,
+            bottom: 1.2,
+            height: 1.2,
+            left: 24,
+            position: 'absolute',
+            right: 24,
           }}
         />
         <View
@@ -88,7 +120,7 @@ export function VexTabBar({
             alignItems: 'center',
             flex: 1,
             flexDirection: 'row',
-            paddingHorizontal: 6,
+            paddingHorizontal: 8,
           }}
         >
           {state.routes.map((route, index) => {

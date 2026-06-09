@@ -4,7 +4,8 @@ import { Text } from '@components/primitives/Text'; // Use alias
 import { Skeleton } from '@components/ui/Skeleton'; // Use alias
 import { StatusBanner } from '@/shared/ui/components/StatusFeedback'; // Use alias
 import { GlassCard } from '../../../components/glass/GlassCard';
-import { GlassIconOrb } from '../../../components/glass/GlassIconOrb';
+import { LiquidGlassSphere } from '../../../components/glass/LiquidGlassSphere';
+import { EmptyStateLens } from '../../../components/glass/EmptyStateLens';
 import { Icon } from '../../../icons';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import type { FocusScoreDashboardModel } from '../types'; // Import from types.ts
@@ -50,11 +51,41 @@ export function FocusScoreHomeWidget({
 
   if (!model.current) {
     return (
-      <StatusBanner
-        status="offline"
-        message="Focus Score needs three sessions"
-        description="Finish three sessions and VEX will start reading your focus rhythm."
-      />
+      <GlassCard variant="hero" padding={14} radius={22}>
+        <View style={{ alignItems: 'center', flexDirection: 'row', gap: 12 }}>
+          <EmptyStateLens sessionsNeeded={3} size={52} />
+          <View style={{ flex: 1, gap: 3 }}>
+            <Text
+              style={{
+                color: vexLightGlass.text.secondary,
+                fontSize: 10,
+                fontWeight: '800',
+                letterSpacing: 0.8,
+                textTransform: 'uppercase',
+              }}
+            >
+              Focus Score
+            </Text>
+            <Text
+              style={{
+                color: vexLightGlass.text.primary,
+                fontSize: 14,
+                fontWeight: '800',
+              }}
+            >
+              3 sessions needed
+            </Text>
+            <Text
+              style={{
+                color: vexLightGlass.text.secondary,
+                fontSize: 12,
+              }}
+            >
+              Finish three sessions and VEX will start reading your focus rhythm.
+            </Text>
+          </View>
+        </View>
+      </GlassCard>
     );
   }
 
@@ -78,9 +109,14 @@ export function FocusScoreHomeWidget({
       >
         <GlassCard variant="default" padding={14} radius={22}>
           <View style={{ alignItems: 'center', flexDirection: 'row', gap: 12 }}>
-            <GlassIconOrb size={48} variant="cyan">
-              <Icon color="#0E7490" name="bolt" size="sm" variant="solid" />
-            </GlassIconOrb>
+            <LiquidGlassSphere
+              color="cyan"
+              icon={
+                <Icon color="#0E7490" name="bolt" size="sm" variant="solid" />
+              }
+              intensity={0.88}
+              size={52}
+            />
             <View style={{ flex: 1, gap: 3 }}>
             <Text
               style={{

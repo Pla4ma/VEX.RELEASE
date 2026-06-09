@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import BottomSheet, {
   BottomSheetBackdrop,
@@ -66,9 +66,9 @@ export const ProfileScreen: React.FC = () => {
   );
 
   return (
-    <GlassScreen showAura>
+    <GlassScreen showAura variant="profile">
       <ScrollView
-        contentContainerStyle={{ paddingBottom: 180 }}
+        contentContainerStyle={{ paddingBottom: 200 }}
         showsVerticalScrollIndicator={false}
       >
         <ProfileHeader

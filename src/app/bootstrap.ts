@@ -9,6 +9,7 @@ import {
 } from '../shared/analytics';
 import { setupGlobalErrorHandler, setupRejectionHandler } from '../errors';
 import { initializeSessionCompletionOrchestrator } from '../features/session-completion';
+import { getMmkvEncryptionKey } from '../persistence/mmkv-key';
 
 let bootstrapped = false;
 let sessionRuntimeInitialized = false;
@@ -41,12 +42,13 @@ export const initializeSessionRuntime = (): void => {
   startAutoProcessing();
 };
 
-export const bootstrapApp = (): void => {
+export const bootstrapApp = async (): Promise<void> => {
   if (bootstrapped) {
     return;
   }
 
   bootstrapped = true;
+  await getMmkvEncryptionKey();
   initializeCoreSystems();
   initializeSessionCompletionOrchestrator();
   deferBootCall(initializeSessionRuntime);

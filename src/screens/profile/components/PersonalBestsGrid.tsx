@@ -4,6 +4,8 @@ import { FlashList, type ListRenderItem } from '@shopify/flash-list';
 import { Box, Text } from '../../../components/primitives';
 import { GlassCard } from '../../../components/glass/GlassCard';
 import { GlassPill } from '../../../components/glass/GlassPill';
+import { FloatingDroplets } from '../../../components/glass/FloatingDroplets';
+import { EmptyStateLens } from '../../../components/glass/EmptyStateLens';
 import { ErrorState } from '../../../components/states/ErrorState';
 import { Skeleton } from '../../../components/ui/Skeleton';
 import { usePersonalBests } from '../../../features/personal-bests/hooks';
@@ -43,6 +45,18 @@ function PersonalBestCard({ item }: { item: PersonalBest }): JSX.Element {
         radius={20}
         variant="default"
       >
+        <View
+          pointerEvents="none"
+          style={{
+            opacity: 0.85,
+            position: 'absolute',
+            right: 6,
+            top: 6,
+            zIndex: 0,
+          }}
+        >
+          <FloatingDroplets count={2} opacity={0.65} size={20} />
+        </View>
         <Box
           flexDirection="row"
           justifyContent="space-between"
@@ -127,6 +141,30 @@ export function PersonalBestsGrid({
   if (query.data.length === 0) {
     return (
       <GlassCard size="lg" padding={18} radius={26} variant="default">
+        <View
+          pointerEvents="none"
+          style={{
+            opacity: 0.85,
+            position: 'absolute',
+            right: 10,
+            top: 10,
+            zIndex: 0,
+          }}
+        >
+          <FloatingDroplets count={3} opacity={0.65} size={28} />
+        </View>
+        <View
+          pointerEvents="none"
+          style={{
+            opacity: 0.85,
+            position: 'absolute',
+            left: 10,
+            bottom: 10,
+            zIndex: 0,
+          }}
+        >
+          <EmptyStateLens size={56} opacity={0.65} dotCount={3} />
+        </View>
         <Text
           style={{
             color: vexLightGlass.text.primary,

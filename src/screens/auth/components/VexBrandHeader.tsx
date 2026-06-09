@@ -113,7 +113,7 @@ export function VexBrandHeader(): React.JSX.Element {
             top: 8,
             shadowColor: brandShadowTokens.accent.color,
             shadowOffset: { width: 0, height: 2 },
-            shadowOpacity: 0.15,
+            shadowOpacity: 0.85,
             shadowRadius: 20,
           }}
         >

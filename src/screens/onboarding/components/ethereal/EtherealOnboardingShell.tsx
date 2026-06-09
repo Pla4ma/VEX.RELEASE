@@ -6,17 +6,21 @@
  * Header / title / footer / error are split into their own files
  * for size discipline; this file is a thin orchestrator.
  */
-import React, { type ReactNode } from 'react';
-import { View } from 'react-native';
+import React, { type ReactNode, useState } from 'react';
+import { Pressable, ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { EtherealSkyBackground } from '../../../../screens/auth/components/ethereal/EtherealSkyBackground';
-import { HeroOrb } from './HeroOrb';
 import { StepTransition } from './StepTransition';
 import { OnboardingHeader } from './OnboardingHeader';
 import { OnboardingTitle } from './OnboardingTitle';
 import { OnboardingFooter } from './OnboardingFooter';
 import { OnboardingErrorBanner } from './OnboardingErrorBanner';
+import { MascotGuide } from './MascotGuide';
+import { Text } from '../../../../components/primitives/Text';
+import { useOnboardingStore } from '../../../../features/onboarding';
+import { etherealButton } from '@/theme/tokens/ethereal-sky';
+import { getMinTouchTargetStyle } from '../../../../utils/touchTarget';
 
 type EtherealOnboardingShellProps = {
   stepKey: string | number;
@@ -32,6 +36,8 @@ type EtherealOnboardingShellProps = {
   eyebrow?: string;
   title?: string;
   subtitle?: string;
+  guideTitle?: string;
+  guideBody?: string;
 };
 
 export function EtherealOnboardingShell({
@@ -48,29 +54,22 @@ export function EtherealOnboardingShell({
   eyebrow,
   title,
   subtitle,
+  guideTitle,
+  guideBody,
 }: EtherealOnboardingShellProps): React.JSX.Element {
   const insets = useSafeAreaInsets();
   const isLaunchStep = step === lastStepIndex;
   const showBack = step > 0;
-
-  const orbAnchor = { x: 0.5, y: isLaunchStep ? 0.35 : 0.18 } as const;
+  const guideDismissedAt = useOnboardingStore((state) => state.mascotGuideDismissedAt);
+  const dismissMascotGuide = useOnboardingStore((state) => state.dismissMascotGuide);
+  const markMascotGuideCompleted = useOnboardingStore(
+    (state) => state.markMascotGuideCompleted,
+  );
+  const [showGuide, setShowGuide] = useState(!guideDismissedAt);
 
   return (
     <View style={{ flex: 1 }}>
       <EtherealSkyBackground />
-
-      <View
-        accessibilityElementsHidden
-        importantForAccessibility="no"
-        pointerEvents="none"
-        style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 320 }}
-      >
-        <HeroOrb
-          anchorX={orbAnchor.x}
-          anchorY={orbAnchor.y}
-          size={96}
-        />
-      </View>
 
       <View
         style={{
@@ -83,21 +82,72 @@ export function EtherealOnboardingShell({
 
         <OnboardingTitle subtitle={subtitle} title={title} />
 
+        {showGuide && guideTitle && guideBody ? (
+          <View style={{ marginTop: 12 }}>
+            <MascotGuide
+              body={guideBody}
+              compact
+              onBack={showBack ? onBack : undefined}
+              onReplay={() => setShowGuide(true)}
+              onSkip={() => {
+                dismissMascotGuide();
+                setShowGuide(false);
+              }}
+              stepLabel={eyebrow}
+              title={guideTitle}
+            />
+          </View>
+        ) : guideTitle ? (
+          <ReplayGuideButton onPress={() => setShowGuide(true)} />
+        ) : null}
+
         <StepTransition stepKey={stepKey} style={{ flex: 1, marginTop: 8 }}>
-          {finishError ? (
-            <OnboardingErrorBanner message={finishError} onRetry={onRetryFinish} />
-          ) : null}
-          {children}
+          <ScrollView
+            contentContainerStyle={{
+              paddingBottom: isLaunchStep ? 24 : 116,
+            }}
+            showsVerticalScrollIndicator={false}
+          >
+            {finishError ? (
+              <OnboardingErrorBanner message={finishError} onRetry={onRetryFinish} />
+            ) : null}
+            {children}
+          </ScrollView>
         </StepTransition>
 
         {!isLaunchStep ? (
           <OnboardingFooter
             isContinueDisabled={isContinueDisabled}
             isFinishing={isFinishing}
-            onContinue={onContinue}
+            onContinue={() => {
+              if (step >= lastStepIndex - 1) {markMascotGuideCompleted();}
+              onContinue();
+            }}
           />
         ) : null}
       </View>
+    </View>
+  );
+}
+
+function ReplayGuideButton({ onPress }: { onPress: () => void }): React.JSX.Element {
+  return (
+    <View style={{ alignItems: 'flex-end', marginTop: 10 }}>
+      <Pressable
+        accessibilityHint="Shows the mascot guide again"
+        accessibilityLabel="Replay mascot guide"
+        accessibilityRole="button"
+        onPress={onPress}
+        style={getMinTouchTargetStyle()}
+      >
+        <Text
+          fontSize={12}
+          fontWeight="800"
+          style={{ color: etherealButton.emailText }}
+        >
+          Replay guide
+        </Text>
+      </Pressable>
     </View>
   );
 }

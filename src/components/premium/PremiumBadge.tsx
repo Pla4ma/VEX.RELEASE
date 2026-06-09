@@ -150,7 +150,7 @@ const styles = createSheet({
     borderWidth: 2,
     shadowColor: lightColors.text.primary,
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.15,
+    shadowOpacity: 0.85,
     shadowRadius: 4,
     elevation: 3,
   },

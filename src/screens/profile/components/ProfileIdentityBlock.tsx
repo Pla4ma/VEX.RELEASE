@@ -1,8 +1,8 @@
-﻿import React from 'react';
+import React from 'react';
 import { View } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
 import { GlassPill } from '../../../components/glass/GlassPill';
-import { LiquidGlassSphere } from '../../../components/glass/LiquidGlassSphere';
+import { CrystalAvatar } from '../../../components/glass/CrystalAvatar';
 import { Icon } from '../../../icons';
 import type { User } from '../../../types/models';
 
@@ -29,14 +29,10 @@ export const ProfileIdentityBlock: React.FC<ProfileIdentityBlockProps> = ({
         zIndex: 2,
       }}
     >
-      <View style={{ width: 72, height: 72 }}>
-        <LiquidGlassSphere
-          color="mint"
-          icon={
-            <Icon color="#0C765F" name="user" size="sm" strokeWidth="thin" variant="outline" />
-          }
-          intensity={0.85}
-          size={72}
+      <View style={{ width: 96, height: 96 }}>
+        <CrystalAvatar
+          active={streakDays > 0}
+          size={96}
         />
       </View>
       <View style={{ flex: 1, gap: 4 }}>

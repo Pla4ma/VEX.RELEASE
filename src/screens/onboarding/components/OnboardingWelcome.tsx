@@ -1,62 +1,59 @@
 import React from 'react';
-import { useWindowDimensions, View } from 'react-native';
-import { Box } from '../../../components/primitives/Box';
-import { Button } from '../../../components/primitives/Button';
+import { Pressable, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
+import { etherealButton, etherealText } from '../../../theme/tokens/ethereal-sky';
+import { getMinTouchTargetStyle } from '../../../utils/touchTarget';
+import { EtherealSkyBackground } from '../../auth/components/ethereal';
+import { LockGlyph, PrivacyShieldGlyph } from '../../auth/components/ethereal/AuthGlyphs';
+import { LoginHero } from '../../auth/components/ethereal/LoginHero';
+import { MascotGuide } from './ethereal/MascotGuide';
 
 interface OnboardingWelcomeProps {
   onContinue: () => void;
 }
 
-function AdaptivePreview(): JSX.Element {
-  const { theme } = useTheme();
-
+function StartButton({ onContinue }: OnboardingWelcomeProps): JSX.Element {
   return (
-    <Box alignItems="center" gap="md">
-      <Box
-        width={96}
-        height={96}
-        borderRadius="full"
-        bg={theme.colors.primary[500]}
-        justifyContent="center"
-        alignItems="center"
-        borderWidth={2}
-        borderColor={theme.colors.primary[300]}
+    <Pressable
+      accessibilityHint="Starts the onboarding flow"
+      accessibilityLabel="Start VEX onboarding"
+      accessibilityRole="button"
+      onPress={onContinue}
+      style={({ pressed }) => [
+        getMinTouchTargetStyle(),
+        {
+          alignItems: 'center',
+          backgroundColor: etherealButton.googleFill,
+          borderColor: etherealButton.googleBorder,
+          borderRadius: 28,
+          borderWidth: 1,
+          flexDirection: 'row',
+          height: 56,
+          justifyContent: 'center',
+          opacity: pressed ? 0.94 : 1,
+          paddingHorizontal: 28,
+          shadowColor: etherealButton.buttonShadow,
+          shadowOffset: { width: 0, height: 14 },
+          shadowOpacity: 0.5,
+          shadowRadius: 28,
+          width: '100%',
+        },
+      ]}
+    >
+      <Text fontSize={17} fontWeight="700" style={{ color: etherealButton.googleText }}>
+        Begin your focus system
+      </Text>
+      <Text
+        fontSize={28}
+        fontWeight="400"
+        style={{ color: etherealButton.googleText, position: 'absolute', right: 30 }}
       >
-        <Text fontSize={40}>{'\u2699\uFE0F'}</Text>
-      </Box>
-      <Box width={240} gap="xs">
-        <Box flexDirection="row" justifyContent="space-between">
-          <Text variant="caption" color="text.secondary">
-            VEX learns your rhythm
-          </Text>
-          <Text variant="caption" color="primary.DEFAULT" fontWeight="700">
-            Adapting...
-          </Text>
-        </Box>
-        <Box
-          height={4}
-          borderRadius="full"
-          bg={theme.colors.background.tertiary}
-          overflow="hidden"
-        >
-          <View
-            style={{
-              height: '100%',
-              width: '40%',
-              backgroundColor: theme.colors.primary[400],
-              borderRadius: 2,
-            }}
-          />
-        </Box>
-        <View>
-          <Text variant="caption" color="text.tertiary" textAlign="center">
-            Study {'\u2022'} Run {'\u2022'} Project {'\u2022'} Clean
-          </Text>
-        </View>
-      </Box>
-    </Box>
+        {'\u2192'}
+      </Text>
+    </Pressable>
   );
 }
 
@@ -64,73 +61,56 @@ export function OnboardingWelcome({
   onContinue,
 }: OnboardingWelcomeProps): JSX.Element {
   const { theme } = useTheme();
-  const { width: _width } = useWindowDimensions();
+  const insets = useSafeAreaInsets();
 
   return (
-    <Box flex={1} justifyContent="space-between" px="xl" py="2xl">
-      <View>
-        <Box alignItems="center" gap="lg" mt="2xl">
-          <Box
-            width={64}
-            height={64}
-            borderRadius="xl"
-            bg={theme.colors.primary[500]}
-            justifyContent="center"
-            alignItems="center"
+    <View style={{ flex: 1 }}>
+      <EtherealSkyBackground />
+      <View
+        style={{
+          alignItems: 'center',
+          flex: 1,
+          justifyContent: 'flex-end',
+          paddingBottom: insets.bottom + 22,
+          paddingHorizontal: theme.spacing[5],
+          paddingTop: insets.top + 8,
+        }}
+      >
+        <View style={{ flex: 1, justifyContent: 'flex-end', paddingBottom: 12 }}>
+          <LoginHero startDelayMs={0} />
+        </View>
+        <View style={{ alignItems: 'center', gap: 18, width: '100%', maxWidth: 296 }}>
+          <MascotGuide
+            body="I will guide the first setup, keep it short, and stay out of your way once focus starts."
+            compact
+            title="Meet your VEX guide."
+          />
+          <Text
+            fontSize={17}
+            fontWeight="600"
+            style={{ color: etherealText.subtitle, lineHeight: 24 }}
+            textAlign="center"
           >
-            <Text
-              fontSize={32}
-              fontWeight="800"
-              color={theme.colors.text.inverse}
-            >
-              V
-            </Text>
-          </Box>
-          <Box alignItems="center" gap="sm">
-            <Text
-              variant="h1"
-              color="text.primary"
-              textAlign="center"
-              style={{ fontSize: 32, lineHeight: 40 }}
-            >
-              {'VEX changes based on\nhow you work.'}
-            </Text>
-            <Text
-              variant="body"
-              color="text.secondary"
-              textAlign="center"
-              px="md"
-            >
-              Answer a few questions, start one focused session, and VEX
-              unlocks the system your brain needs.
-            </Text>
-          </Box>
-        </Box>
-      </View>
-
-      <View>
-        <AdaptivePreview />
-      </View>
-
-      <View>
-        <Box gap="md">
-          <Button
-            size="lg"
-            variant="primary"
-            fullWidth
-            onPress={onContinue}
-            accessibilityLabel="Get started"
-            accessibilityRole="button"
-            accessibilityHint="Starts the onboarding flow"
-          >
-            Let&apos;s Go
-          </Button>
-          <Text variant="caption" color="text.tertiary" textAlign="center">
-            Takes 90 seconds. No email required.
+            VEX adapts the first focused block to your rhythm, pressure, and momentum.
           </Text>
-        </Box>
+          <StartButton onContinue={onContinue} />
+          <View style={{ alignItems: 'center', flexDirection: 'row', gap: 18 }}>
+            <View style={{ alignItems: 'center', flexDirection: 'row', gap: 8 }}>
+              <PrivacyShieldGlyph color={etherealText.body} />
+              <Text fontSize={13} fontWeight="600" style={{ color: etherealText.body }}>
+                Your focus. Your data.
+              </Text>
+            </View>
+            <View style={{ alignItems: 'center', flexDirection: 'row', gap: 8 }}>
+              <LockGlyph color={etherealText.body} />
+              <Text fontSize={13} fontWeight="600" style={{ color: etherealText.body }}>
+                Private by design.
+              </Text>
+            </View>
+          </View>
+        </View>
       </View>
-    </Box>
+    </View>
   );
 }
 

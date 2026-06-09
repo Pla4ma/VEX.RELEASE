@@ -15,7 +15,7 @@ type VexGlassInputProps = {
   error?: string;
   secureTextEntry?: boolean;
   keyboardType?: 'email-address';
-  autoComplete?: 'email' | 'password';
+  autoComplete?: 'email' | 'password' | 'current-password';
   returnKeyType?: 'next' | 'done';
   onChangeText: (value: string) => void;
   onSubmitEditing?: () => void;

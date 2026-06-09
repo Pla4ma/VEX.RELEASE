@@ -1,11 +1,8 @@
-/**
- * OnboardingTitle — the title + subtitle block at the top of each
- * onboarding step.
- */
 import React from 'react';
 import { View } from 'react-native';
 
 import { Text } from '../../../../components/primitives/Text';
+import { etherealGlass, etherealText } from '@/theme/tokens/ethereal-sky';
 
 type OnboardingTitleProps = {
   title?: string;
@@ -17,16 +14,24 @@ export function OnboardingTitle({
   subtitle,
 }: OnboardingTitleProps): React.JSX.Element {
   return (
-    <View style={{ marginTop: 12, gap: 4 }}>
+    <View
+      style={{
+        backgroundColor: etherealGlass.fill,
+        borderColor: etherealGlass.border,
+        borderRadius: 18,
+        borderWidth: 1,
+        gap: 6,
+        padding: 16,
+      }}
+    >
       {title ? (
         <Text
-          fontSize={32}
-          fontWeight="500"
+          fontSize={30}
+          fontWeight="800"
           style={{
-            color: '#0A0A0A',
-            letterSpacing: -0.5,
-            lineHeight: 38,
-            fontFamily: 'serif',
+            color: etherealText.heading,
+            letterSpacing: -0.3,
+            lineHeight: 36,
           }}
         >
           {title}
@@ -34,8 +39,9 @@ export function OnboardingTitle({
       ) : null}
       {subtitle ? (
         <Text
-          fontSize={14}
-          style={{ color: 'rgba(10, 10, 10, 0.65)', lineHeight: 20 }}
+          fontSize={15}
+          fontWeight="600"
+          style={{ color: etherealText.subtitle, lineHeight: 22 }}
         >
           {subtitle}
         </Text>

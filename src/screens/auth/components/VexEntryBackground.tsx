@@ -1,4 +1,4 @@
-﻿import React, { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useWindowDimensions, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Animated, {
@@ -81,7 +81,7 @@ export function VexEntryBackground(): JSX.Element {
             right: -width * 0.3,
             shadowColor: lightColors.accent.purple,
             shadowOffset: { width: 0, height: 0 },
-            shadowOpacity: 0.25,
+            shadowOpacity: 0.85,
             shadowRadius: 120,
           },
           s2,

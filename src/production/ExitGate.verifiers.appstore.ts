@@ -16,7 +16,6 @@ export async function verifyAppStore(): Promise<{
 }> {
   const report: AppStoreSubmissionResult = {
     ready: false,
-    implemented: false,
     score: 0,
     results: {
       metadata: { complete: false, issues: ['Not implemented'], warnings: [] },

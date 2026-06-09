@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -45,11 +45,11 @@ export function ProgressScreen(): JSX.Element {
   };
 
   return (
-    <GlassScreen showAura>
+    <GlassScreen showAura variant="progress">
       <ScrollView
         contentContainerStyle={{
           gap: 12,
-          paddingBottom: insets.bottom + 180,
+          paddingBottom: insets.bottom + 200,
           paddingHorizontal: 16,
           paddingTop: 8,
         }}

@@ -25,12 +25,12 @@ const PALETTE = {
 } as const;
 
 const CURVE_STROKES: CurveSpec[] = [
-  { color: PALETTE.warm,     strokeWidth: 1.4, blur: 6,  opacity: 0.48, duration: 18000, delay: 0,    driftY: 6,  driftX: 14 },
-  { color: PALETTE.ember,    strokeWidth: 0.8, blur: 4,  opacity: 0.36, duration: 22000, delay: 1500, driftY: 8,  driftX: 18 },
-  { color: PALETTE.warmSoft, strokeWidth: 1.8, blur: 12, opacity: 0.28, duration: 26000, delay: 800,  driftY: 10, driftX: 12 },
-  { color: PALETTE.cream,    strokeWidth: 0.5, blur: 2,  opacity: 0.22, duration: 20000, delay: 2200, driftY: 5,  driftX: 22 },
-  { color: PALETTE.ash,      strokeWidth: 2.0, blur: 18, opacity: 0.30, duration: 30000, delay: 600,  driftY: 12, driftX: 10 },
-  { color: PALETTE.warm,     strokeWidth: 0.7, blur: 3,  opacity: 0.30, duration: 24000, delay: 3000, driftY: 7,  driftX: 16 },
+  { color: PALETTE.warm,     strokeWidth: 1.4, blur: 6,  opacity: 0.85, duration: 18000, delay: 0,    driftY: 6,  driftX: 14 },
+  { color: PALETTE.ember,    strokeWidth: 0.8, blur: 4,  opacity: 0.85, duration: 22000, delay: 1500, driftY: 8,  driftX: 18 },
+  { color: PALETTE.warmSoft, strokeWidth: 1.8, blur: 12, opacity: 0.85, duration: 26000, delay: 800,  driftY: 10, driftX: 12 },
+  { color: PALETTE.cream,    strokeWidth: 0.5, blur: 2,  opacity: 0.85, duration: 20000, delay: 2200, driftY: 5,  driftX: 22 },
+  { color: PALETTE.ash,      strokeWidth: 2.0, blur: 18, opacity: 0.85, duration: 30000, delay: 600,  driftY: 12, driftX: 10 },
+  { color: PALETTE.warm,     strokeWidth: 0.7, blur: 3,  opacity: 0.85, duration: 24000, delay: 3000, driftY: 7,  driftX: 16 },
 ];
 
 function buildFlowField(width: number, height: number): string[] {

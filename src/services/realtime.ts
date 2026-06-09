@@ -70,8 +70,8 @@ export async function updatePresence(
   if (!currentUserId) {
     return;
   }
-  const channel = activeChannels.get(`presence:${userId}`);
-  if (!channel) {return;}
+  const channel = activeChannels.get(`presence:${currentUserId}`);
+  if (!channel) return;
   const trackStatus = await channel.track({
     userId: currentUserId,
     status,
@@ -175,12 +175,10 @@ export function onPresenceChange(
 }
 
 export async function cleanupPresence(): Promise<void> {
-  const currentUserId = getCurrentUserId();
-  const key = currentUserId ? `presence:${currentUserId}` : 'presence';
-  const channel = activeChannels.get(key);
+  const channel = activeChannels.get('presence');
   if (channel) {
     await channel.unsubscribe();
-    activeChannels.delete(key);
+    activeChannels.delete('presence');
   }
   resetCurrentUserId();
 }
