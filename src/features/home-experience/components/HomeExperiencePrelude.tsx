@@ -3,23 +3,15 @@ import { Pressable, View } from 'react-native';
 
 import { Text } from '../../../components/primitives/Text';
 import { GlassPillSurface } from '../../../components/glass/GlassPillSurface';
-import { GlassCard } from '../../../components/glass/GlassCard';
-import { FloatingDroplets } from '../../../components/glass/FloatingDroplets';
-import { WaterBubble } from '../../../components/glass/WaterBubble';
-import { LiquidGlassSphere } from '../../../components/glass/LiquidGlassSphere';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import { useOnboardingStore } from '../../onboarding/store';
-import type { ExplicitMotivationStyle, HomeExperienceModel } from '../schemas';
+import type { HomeExperienceModel } from '../schemas';
 import type { FirstWeekExperience } from '../../personalization/first-week-schemas';
 import type { HomeSurfaceMap } from '../surface-decision-schemas';
-
-const OPTIONS: Array<{ label: string; value: ExplicitMotivationStyle }> = [
-  { label: 'Calm', value: 'calm' },
-  { label: 'Study-focused', value: 'study_focused' },
-  { label: 'Game-like', value: 'game_like' },
-  { label: 'Coach-led', value: 'coach_led' },
-  { label: 'Intense', value: 'intense' },
-];
+import { OPTIONS } from './HomeExperiencePrelude.options';
+import { CoachLineView } from './CoachLineView';
+import { EvolutionTeaserCard } from './EvolutionTeaserCard';
+import { BossTeaserCard } from './BossTeaserCard';
 
 interface HomeExperiencePreludeProps {
   model: HomeExperienceModel;
@@ -64,30 +56,7 @@ export function HomeExperiencePrelude({
   return (
     <View style={{ gap: 10 }}>
       {showCoachLine ? (
-        <View style={{ gap: 4, paddingHorizontal: 2 }}>
-          <Text
-            style={{
-              color: vexLightGlass.text.secondary,
-              fontSize: 12,
-              fontWeight: '800',
-              letterSpacing: 1.4,
-              textTransform: 'uppercase',
-            }}
-          >
-            AI Coach
-          </Text>
-          <Text
-            style={{
-              color: vexLightGlass.text.primary,
-              fontSize: 14,
-              fontWeight: '500',
-              letterSpacing: -0.2,
-              lineHeight: 20,
-            }}
-          >
-            {model.aiCoachMessageStyle}
-          </Text>
-        </View>
+        <CoachLineView message={model.aiCoachMessageStyle} />
       ) : null}
       {showMotivationPicker ? (
         <View
@@ -130,106 +99,10 @@ export function HomeExperiencePrelude({
         </View>
       ) : null}
       {showEvolutionTeaser ? (
-        <GlassCard padding={16} radius={22} variant="subtle">
-          <View
-            pointerEvents="none"
-            style={{
-              opacity: 0.85,
-              position: 'absolute',
-              right: 8,
-              top: 8,
-              zIndex: 0,
-            }}
-          >
-            <FloatingDroplets count={3} opacity={0.65} size={24} />
-          </View>
-          <View
-            pointerEvents="none"
-            style={{
-              opacity: 0.85,
-              position: 'absolute',
-              left: 6,
-              bottom: 6,
-              zIndex: 0,
-            }}
-          >
-            <WaterBubble size={14} opacity={0.65} />
-          </View>
-          <Text
-            style={{
-              color: vexLightGlass.text.secondary,
-              fontSize: 12,
-              fontWeight: '800',
-              letterSpacing: 1.4,
-              textTransform: 'uppercase',
-            }}
-          >
-            Next evolution
-          </Text>
-          <Text
-            style={{
-              color: vexLightGlass.text.primary,
-              fontSize: 14,
-              fontWeight: '500',
-              letterSpacing: -0.2,
-              lineHeight: 20,
-              marginTop: 4,
-            }}
-          >
-            {teaseCopy}
-          </Text>
-        </GlassCard>
+        <EvolutionTeaserCard teaseCopy={teaseCopy} />
       ) : null}
       {isBossVisible ? (
-        <GlassCard variant="subtle">
-          <View
-            pointerEvents="none"
-            style={{
-              opacity: 0.85,
-              position: 'absolute',
-              right: 8,
-              top: 8,
-              zIndex: 0,
-            }}
-          >
-            <FloatingDroplets count={2} opacity={0.65} size={20} />
-          </View>
-          <View
-            pointerEvents="none"
-            style={{
-              opacity: 0.85,
-              position: 'absolute',
-              left: 6,
-              bottom: 6,
-              zIndex: 0,
-            }}
-          >
-            <LiquidGlassSphere color="pearl" size={10} intensity={0.42} />
-          </View>
-          <Text
-            style={{
-              color: vexLightGlass.text.secondary,
-              fontSize: 13,
-              fontWeight: '600',
-              letterSpacing: 0.5,
-              textTransform: 'uppercase',
-            }}
-          >
-            Challenge forming
-          </Text>
-          <Text
-            style={{
-              color: vexLightGlass.text.primary,
-              fontSize: 15,
-              fontWeight: '500',
-              letterSpacing: -0.2,
-              lineHeight: 22,
-              marginTop: 4,
-            }}
-          >
-            {model.rpgBossPlacement}
-          </Text>
-        </GlassCard>
+        <BossTeaserCard rpgBossPlacement={model.rpgBossPlacement} />
       ) : null}
     </View>
   );

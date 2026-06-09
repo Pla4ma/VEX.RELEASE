@@ -1,24 +1,27 @@
 import React from 'react';
 import { View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import type { LiquidButtonVariant } from './LiquidButton.tokens';
 
 interface GlassEffectsProps {
+  variant: LiquidButtonVariant;
   isPrimary: boolean;
 }
 
-export function LiquidButtonGlassEffects({ isPrimary }: GlassEffectsProps): JSX.Element {
+export function LiquidButtonGlassEffects({ variant, isPrimary }: GlassEffectsProps): React.ReactNode {
+  void variant;
   return (
     <>
       {/* Top specular highlight - glass reflection */}
       <LinearGradient
-        colors={['rgba(255, 255, 255, 0.88)', 'rgba(255, 255, 255, 0.38)', 'rgba(255, 255, 255, 0)']}
+        colors={['rgba(255, 255, 255, 0.95)', 'rgba(255, 255, 255, 0.52)', 'rgba(255, 255, 255, 0)']}
         end={{ x: 0, y: 1 }}
-        locations={[0, 0.45, 0.85]}
+        locations={[0, 0.42, 0.82]}
         start={{ x: 0, y: 0 }}
         style={{
           borderTopLeftRadius: 999,
           borderTopRightRadius: 999,
-          height: '48%',
+          height: '52%',
           left: 0,
           position: 'absolute',
           right: 0,
@@ -31,13 +34,13 @@ export function LiquidButtonGlassEffects({ isPrimary }: GlassEffectsProps): JSX.
         <View
           pointerEvents="none"
           style={{
-            backgroundColor: 'rgba(255, 255, 255, 0.92)',
+            backgroundColor: 'rgba(255, 255, 255, 0.98)',
             borderRadius: 999,
-            height: 1.5,
-            left: 14,
+            height: 2,
+            left: 12,
             position: 'absolute',
-            right: 14,
-            top: 2.5,
+            right: 12,
+            top: 2.2,
           }}
         />
       ) : null}
@@ -47,13 +50,13 @@ export function LiquidButtonGlassEffects({ isPrimary }: GlassEffectsProps): JSX.
         <View
           pointerEvents="none"
           style={{
-            backgroundColor: 'rgba(255, 255, 255, 0.42)',
+            backgroundColor: 'rgba(255, 255, 255, 0.55)',
             borderRadius: 999,
-            height: 1,
-            left: 18,
+            height: 1.2,
+            left: 16,
             position: 'absolute',
-            right: 18,
-            top: 4.5,
+            right: 16,
+            top: 4.2,
           }}
         />
       ) : null}
@@ -63,13 +66,13 @@ export function LiquidButtonGlassEffects({ isPrimary }: GlassEffectsProps): JSX.
         <View
           pointerEvents="none"
           style={{
-            backgroundColor: 'rgba(6, 67, 56, 0.18)',
+            backgroundColor: 'rgba(6, 67, 56, 0.22)',
             borderRadius: 999,
-            bottom: 1.5,
-            height: 1.2,
-            left: 16,
+            bottom: 1.2,
+            height: 1.5,
+            left: 14,
             position: 'absolute',
-            right: 16,
+            right: 14,
           }}
         />
       ) : null}
