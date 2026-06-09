@@ -18,6 +18,8 @@ import {
   type FieldState,
   type FormFieldProps,
   sizeConfig,
+  getFieldBorderColor,
+  getFieldMessageColor,
 } from './FormFieldTypes';
 
 export const FormField: React.FC<FormFieldProps> = ({
@@ -73,25 +75,13 @@ export const FormField: React.FC<FormFieldProps> = ({
     [onChangeText, validate],
   );
 
-  const borderColor =
-    state === 'error'
-      ? semantic.danger
-      : state === 'success'
-        ? semantic.success
-        : state === 'focused'
-          ? semantic.primary
-          : semantic.inputBorder;
+  const borderColor = getFieldBorderColor(state, semantic);
 
   const animatedStyle = useAnimatedStyle(() => ({
     borderColor: reducedMotion ? borderColor : withTiming(borderColor, { duration: 160 }),
   }));
   const message = error ?? internalError ?? successMessage ?? helperText;
-  const messageColor =
-    error || internalError
-      ? 'error.DEFAULT'
-      : successMessage
-        ? 'success.DEFAULT'
-        : 'text.muted';
+  const messageColor = getFieldMessageColor(error, internalError, successMessage);
 
   return (
     <View style={[{ marginBottom: theme.spacing[4] }, containerStyle]}>
