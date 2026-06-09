@@ -1,0 +1,41 @@
+import React from 'react';
+import { View } from 'react-native';
+import { GlassCard } from '../../../components/glass/GlassCard';
+import { GlassPill } from '../../../components/glass/GlassPill';
+import { Text } from '../../../components/primitives/Text';
+import { Icon } from '../../../icons';
+
+interface StreakCardProps {
+  currentStreak: number;
+}
+
+export function StreakCard({ currentStreak }: StreakCardProps): JSX.Element {
+  return (
+    <GlassCard padding={16} radius={22} variant="default">
+      <View style={{ alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>
+        <GlassPill label={`${currentStreak} Day Streak`} size="sm" variant="fire" />
+        <GlassPill label="2.0x" size="sm" variant="mint" />
+      </View>
+      <View style={{ flexDirection: 'row', gap: 8, marginBottom: 10 }}>
+        {['M', 'T', 'W', 'T', 'F', 'S', 'S'].map((day, index) => (
+          <View key={`${day}-${index}`} style={{ alignItems: 'center', flex: 1, gap: 5 }}>
+            <View style={{
+              alignItems: 'center',
+              backgroundColor: index < Math.min(currentStreak, 7) ? '#0A9B8A' : 'rgba(16,35,31,0.10)',
+              borderRadius: 999,
+              height: 22,
+              justifyContent: 'center',
+              width: 22,
+            }}>
+              <Icon color="#FFFFFF" name="check" size="xs" variant="solid" />
+            </View>
+            <Text style={{ color: '#6B8F85', fontSize: 10, fontWeight: '700' }}>{day}</Text>
+          </View>
+        ))}
+      </View>
+      <Text style={{ color: '#6B8F85', fontSize: 12, fontWeight: '600' }}>
+        12h 40m until streak risk
+      </Text>
+    </GlassCard>
+  );
+}
