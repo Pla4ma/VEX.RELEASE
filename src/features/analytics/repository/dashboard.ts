@@ -1,17 +1,17 @@
 import { z } from 'zod';
 import { getSupabaseClient, handleSupabaseError } from '../../../config/supabase';
 import { DashboardLayoutSchema, DashboardWidgetSchema } from '../schemas';
-import { tableColumns } from '../../../lib/repository/tableColumns'; // eslint-disable-line @typescript-eslint/no-unused-vars
+import { tableColumns } from '../../../lib/repository/tableColumns';
 
 const supabase = getSupabaseClient();
+
+const DASHBOARD_LAYOUT_COLUMNS = tableColumns('dashboard_layouts');
+const DASHBOARD_WIDGET_COLUMNS = tableColumns('dashboard_widgets');
 
 export async function fetchDashboardLayouts(userId: string) {
   const { data, error } = await supabase
     .from('dashboard_layouts')
-    .select(`
-      *,
-      widgets:dashboard_widgets(*)
-    `)
+    .select(`${DASHBOARD_LAYOUT_COLUMNS}, widgets:dashboard_widgets(${DASHBOARD_WIDGET_COLUMNS})`)
     .eq('user_id', userId)
     .order('is_default', { ascending: false });
   if (error) {
@@ -23,10 +23,7 @@ export async function fetchDashboardLayouts(userId: string) {
 export async function fetchDefaultDashboard(userId: string) {
   const { data, error } = await supabase
     .from('dashboard_layouts')
-    .select(`
-      *,
-      widgets:dashboard_widgets(*)
-    `)
+    .select(`${DASHBOARD_LAYOUT_COLUMNS}, widgets:dashboard_widgets(${DASHBOARD_WIDGET_COLUMNS})`)
     .eq('user_id', userId)
     .eq('is_default', true)
     .single();
@@ -43,7 +40,7 @@ export async function createDashboardLayout(
   const { data, error } = await supabase
     .from('dashboard_layouts')
     .insert(layoutData)
-    .select('*')
+    .select(DASHBOARD_LAYOUT_COLUMNS)
     .single();
   if (error) {
     throw handleSupabaseError(error);
@@ -67,7 +64,7 @@ export async function updateDashboardWidget(
     .from('dashboard_widgets')
     .update({ ...updates, updated_at: Date.now() })
     .eq('id', widgetId)
-    .select('*')
+    .select(DASHBOARD_WIDGET_COLUMNS)
     .single();
   if (error) {
     throw handleSupabaseError(error);
