@@ -81,7 +81,7 @@ export async function checkSpendingMilestones(
   }
 }
 
-export async function getCumulativeSpending(key: string): Promise<number> {
+export async function getCumulativeSpending(_key: string): Promise<number> {
   return 0;
 }
 
@@ -98,8 +98,8 @@ export async function setCumulativeSpending(
 }
 
 export async function getEventBonusMultiplier(
-  userId: string,
-  eventId: string,
+  _userId: string,
+  _eventId: string,
 ): Promise<number> {
   return 1.0;
 }

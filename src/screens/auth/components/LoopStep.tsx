@@ -8,7 +8,6 @@ import Animated, {
 } from 'react-native-reanimated';
 
 import { Text } from '../../../components/primitives/Text';
-import { motionStagger } from '../../../theme/tokens/motion';
 
 export const previewSteps = [
   { label: 'Start', value: 'One protected block' },

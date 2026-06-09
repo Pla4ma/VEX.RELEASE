@@ -7,7 +7,7 @@ import {
 } from '../utils/persistence';
 
 // Use var so declaration is hoisted; assignment happens inside factory
-var mockMMKVInstance: any;
+var mockMMKVInstance: unknown;
 
 jest.mock('react-native-mmkv', () => {
   mockMMKVInstance = {

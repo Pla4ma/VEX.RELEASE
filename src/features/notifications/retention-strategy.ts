@@ -42,7 +42,7 @@ async function scheduleReminder(
   }
 }
 
-function streakProtectionAllowed(
+function _streakProtectionAllowed(
   lane: 'minimal_normal' | 'game_like' | 'deep_creative' | 'student',
 ): boolean {
   const decision = decideNudge({

@@ -7,7 +7,6 @@
 import { createDebugger } from '../../../utils/debug';
 import { COMEBACK_QUEST_CONFIG } from './config';
 import {
-  ComebackQuestSchema,
   ComebackQuestProgressSchema,
   type ComebackQuest,
   type ComebackQuestProgress,

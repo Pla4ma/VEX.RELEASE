@@ -34,7 +34,7 @@ export async function progressToNextSession(
   userId: string,
   completedSession: FirstWeekSession,
   xpEarned: number,
-  sessionData?: Record<string, unknown>,
+  _sessionData?: Record<string, unknown>,
 ): Promise<FirstWeekProgress> {
   try {
     const supabase = getSupabaseClient();
@@ -66,7 +66,7 @@ export async function progressToNextSession(
     const sessionNumber = getSessionNumber(completedSession);
     const sessionUnlocks =
       FIRST_WEEK_CONFIG.sessionUnlocks[completedSession] || [];
-    const xpReward = FIRST_WEEK_CONFIG.xpRewards[completedSession] || 0;
+    const _xpReward = FIRST_WEEK_CONFIG.xpRewards[completedSession] || 0;
 
     // Calculate new progress
     const newSessionsCompleted = currentProgress.sessions_completed + 1;

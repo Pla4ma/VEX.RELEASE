@@ -31,9 +31,9 @@ interface HomeContentLowerProps {
 export const HomeContentLower: React.FC<HomeContentLowerProps> = ({
   controller,
   data,
-  missionInput,
+  missionInput: _missionInput,
   handleClaimReward,
-  streakHoursRemaining,
+  streakHoursRemaining: _streakHoursRemaining,
   features,
   comebackSessionsCompleted,
   surfaceMap,
@@ -44,7 +44,7 @@ export const HomeContentLower: React.FC<HomeContentLowerProps> = ({
     'challenges',
     'navigation',
   );
-  const openChallenges = (): void => {
+  const _openChallenges = (): void => {
     if (canNavChallenges) {
       navigation.navigate('Challenges');
       return;
@@ -57,10 +57,6 @@ export const HomeContentLower: React.FC<HomeContentLowerProps> = ({
   if (isDayZero) {return null;}
 
   const sm = surfaceMap;
-  const showSecondary =
-    sm.challenge_teaser !== 'hidden' ||
-    sm.boss_teaser !== 'hidden' ||
-    sm.study_layer !== 'hidden';
   const showContextualCards =
     sm.study_layer !== 'hidden' || sm.boss_teaser !== 'hidden';
   const showSecondaryRail =

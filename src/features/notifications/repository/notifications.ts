@@ -50,7 +50,11 @@ function mapNotificationRow(
     type: parsed.success ? parsed.data : 'COACH',
     title: String(row.title || ''),
     message: String(row.message || row.body || ''),
-    timestamp: Number(row.created_at || row.timestamp || Date.now()),
+    timestamp: typeof row.created_at === 'string'
+      ? Date.parse(row.created_at)
+      : typeof row.timestamp === 'string'
+        ? Date.parse(row.timestamp)
+        : Number(row.created_at || row.timestamp || Date.now()),
     read: Boolean(row.read || row.is_read || false),
     avatar: typeof row.avatar === 'string' ? row.avatar : undefined,
     actionText:
@@ -85,8 +89,11 @@ export async function fetchNotificationCenterItems(
   const items = (data ?? []).map((row) =>
     mapNotificationRow(row as NotificationRow),
   );
+  // Use raw DB created_at for cursor — it is an ISO timestamp string that
+  // matches the .lt('created_at', cursor) filter. Using the mapped numeric
+  // timestamp would produce a mismatched cursor.
   const nextCursor = items.length === 100
-    ? (items[items.length - 1]?.timestamp?.toString() ?? null)
+    ? ((data?.[data.length - 1] as NotificationRow | undefined)?.created_at ?? null)
     : null;
   return { items, nextCursor };
 }
@@ -117,18 +124,35 @@ export async function markAllNotificationsRead(userId: string): Promise<void> {
 }
 
 /**
- * Tracks active notification channels to prevent duplicate subscriptions
- * for the same userId. Keyed by userId.
+ * Tracks active notification channels and subscriber counts per userId.
+ * Keyed by userId, holds channel + subscriber count + callback set.
  */
-const activeNotificationChannels = new Map<string, ReturnType<typeof supabase.channel>>();
+interface NotificationChannelEntry {
+  channel: ReturnType<typeof supabase.channel>;
+  refCount: number;
+  callbacks: Set<() => void>;
+}
+
+const activeNotificationChannels = new Map<string, NotificationChannelEntry>();
 
 export function subscribeToNotificationCenter(
   userId: string,
   onChange: () => void,
 ): () => void {
-  // Return no-op cleanup if a channel for this user already exists
-  if (activeNotificationChannels.has(userId)) {
-    return () => {};
+  const existing = activeNotificationChannels.get(userId);
+
+  if (existing) {
+    // Channel already exists — add this subscriber's callback and bump ref
+    existing.callbacks.add(onChange);
+    existing.refCount++;
+    return () => {
+      existing.callbacks.delete(onChange);
+      existing.refCount--;
+      if (existing.refCount <= 0) {
+        existing.channel.unsubscribe();
+        activeNotificationChannels.delete(userId);
+      }
+    };
   }
 
   const channelName = `notifications-screen:${userId}`;
@@ -142,16 +166,29 @@ export function subscribeToNotificationCenter(
         table: 'notifications',
         filter: `user_id=eq.${userId}`,
       },
-      onChange,
+      () => {
+        // Notify all active subscribers
+        const entry = activeNotificationChannels.get(userId);
+        if (entry) {
+          entry.callbacks.forEach((cb) => cb());
+        }
+      },
     )
     .subscribe();
 
-  activeNotificationChannels.set(userId, channel);
+  activeNotificationChannels.set(userId, {
+    channel,
+    refCount: 1,
+    callbacks: new Set([onChange]),
+  });
 
   return () => {
-    const activeChannel = activeNotificationChannels.get(userId);
-    if (activeChannel) {
-      activeChannel.unsubscribe();
+    const entry = activeNotificationChannels.get(userId);
+    if (!entry) {return;}
+    entry.callbacks.delete(onChange);
+    entry.refCount--;
+    if (entry.refCount <= 0) {
+      entry.channel.unsubscribe();
       activeNotificationChannels.delete(userId);
     }
   };

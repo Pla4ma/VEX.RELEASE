@@ -6,7 +6,7 @@ import { lightColors } from '@/theme/tokens/colors';
 import { useOrbitalAnimation, renderNoiseGrain } from './VexAuroraCanvas.helpers';
 
 type GD = { x: string; y: string; w: number; h: number; o: number };
-function grain(n: number): GD[] {
+function _grain(n: number): GD[] {
   const d: GD[] = [];
   for (let i = 0; i < n; i++) { d.push({
     x: `${(i * 37 + 13) % 100}%`, y: `${(i * 73 + 41) % 100}%`,

@@ -8,8 +8,6 @@ import {
   SessionStatusSchema,
   SessionPhaseSchema,
   ConflictStatusSchema,
-  StorageStatusSchema,
-  SyncStatusSchema,
   AntiCheatStatusSchema,
 } from '../types/enums';
 

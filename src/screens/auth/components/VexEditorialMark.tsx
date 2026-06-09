@@ -44,7 +44,7 @@ export function VexEditorialMark({
   const microBreath = useSharedValue(0);
 
   useEffect(() => {
-    if (isReducedMotion) return;
+    if (isReducedMotion) {return;}
     edOp.value = withDelay(100, withTiming(1, { duration: 700, easing: EASE_CINEMATIC }));
     tagOp.value = withDelay(1500, withTiming(1, { duration: 700, easing: EASE_CINEMATIC }));
     tagTy.value = withDelay(1500, withTiming(0, { duration: 700, easing: EASE_CINEMATIC }));

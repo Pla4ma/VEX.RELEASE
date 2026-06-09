@@ -1,7 +1,5 @@
 import {
   contentStudyEvents,
-  useContentStudyEvent,
-  useContentStudyEvents,
   composeEventHandlers,
   initializeContentStudyEventIntegration,
   emitDraftSaved,
@@ -11,7 +9,7 @@ import {
   emitSessionStarted,
   emitFeedbackSubmitted,
 } from '../events';
-import type { ContentStudyEventMap } from '../types';
+import type {} from '../types';
 describe('Event Emitter', () => {
   beforeEach(() => {
     contentStudyEvents.clearAll();

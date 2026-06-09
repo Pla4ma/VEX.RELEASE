@@ -158,5 +158,5 @@ export const TABLE_COLUMNS = {
 export type TableName = keyof typeof TABLE_COLUMNS;
 
 export function tableColumns(name: TableName): string {
-  return (TABLE_COLUMNS[name] as readonly string[]).join(", ");
+  return (TABLE_COLUMNS[name] as readonly string[]).join(', ');
 }

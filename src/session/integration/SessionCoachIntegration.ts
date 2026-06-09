@@ -10,7 +10,7 @@ import {
   handleSessionAbandoned,
   handleSessionCompleted,
   handleSuccessfulRecovery,
-  sendCoachMessage,
+  _sendCoachMessage,
   type CoachHandlerState,
 } from './coach-handlers';
 

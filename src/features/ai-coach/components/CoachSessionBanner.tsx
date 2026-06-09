@@ -132,7 +132,7 @@ export function CoachSessionBanner({
           alignItems: 'center',
         }}
       >
-        <Text fontSize={14}></Text>
+        <Text fontSize={14} />
       </View>
 
       {/* Message */}

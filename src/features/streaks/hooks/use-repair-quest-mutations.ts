@@ -1,6 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query';
 import * as Sentry from '@sentry/react-native';
-import { useAuthStore } from '../../../store';
 import { useOfflineAwareMutation } from '../../../shared/hooks/useOfflineAwareMutation';
 import { useAnalytics } from '../../../analytics/hooks/useAnalytics';
 import { eventBus } from '../../../events';

@@ -7,7 +7,6 @@
 import {
   calculateStreakRisk,
   StreakRiskCalculator,
-  type RiskFactors,
 } from './risk-calculator';
 
 describe('Streak Risk Calculator', () => {

@@ -55,7 +55,7 @@ describe('RLS Verification', () => {
     // SEC-008: Auth errors should not reveal whether email exists
     const fs = require('fs');
     const authRepo = fs.readFileSync(
-      require('path').join(__dirname, '../../features/auth/repository.ts'),
+      require('path').join(__dirname, '../features/auth/repository.ts'),
       'utf-8',
     );
     // Should NOT contain email-specific error messages
@@ -65,7 +65,7 @@ describe('RLS Verification', () => {
   it('verifies economy repository validates RPC params', () => {
     const fs = require('fs');
     const econRepo = fs.readFileSync(
-      require('path').join(__dirname, '../../features/economy/repository.ts'),
+      require('path').join(__dirname, '../features/economy/repository.ts'),
       'utf-8',
     );
     // Should use Zod schema validation

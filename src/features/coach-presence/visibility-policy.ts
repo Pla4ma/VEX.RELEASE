@@ -66,7 +66,7 @@ const VISIBILITY_MAP: VisibilityMap = {
 function reasonFor(
   surface: CoachVisibilitySurface,
   lane: Lane,
-  decision: CoachVisibilityDecision,
+  _decision: CoachVisibilityDecision,
 ): string {
   if (surface === 'ACTIVE_SESSION') {
     return 'Active focus — no Coach spam.';

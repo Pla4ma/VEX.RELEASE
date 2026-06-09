@@ -32,7 +32,7 @@ const mockApiClient = { get: jest.fn(), post: jest.fn() };
 jest.mocked(getStorageManager).mockReturnValue(mockStorageManager as never);
 jest.mocked(getApiClient).mockReturnValue(mockApiClient as never);
 
-type ServiceInternal = { fetchRemote(): Promise<void> };
+type _ServiceInternal = { fetchRemote(): Promise<void> };
 
 describe('FeatureFlagService', () => {
   let service: FeatureFlagService;
@@ -58,9 +58,9 @@ describe('FeatureFlagService', () => {
     jest.useRealTimers();
   });
 
-  const withTimer = async (work: () => Promise<void>) => {
+  const _withTimer = async (work: () => Promise<void>) => {
     await work();
-    if (timer) clearInterval(timer);
+    if (timer) {clearInterval(timer);}
   };
 
   describe('Remote fetching', () => {

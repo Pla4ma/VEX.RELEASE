@@ -8,7 +8,7 @@ import { useFirstWeekExperience } from '../../../features/personalization/useFir
 import {
   recordBehaviorSignal,
 } from '../../../features/personalization/behavior-signal-store';
-import type { BehaviorStats } from '../../../features/personalization/schemas';
+import type {} from '../../../features/personalization/schemas';
 import type { HomeController } from './home-controller-types';
 import { useHomeLaneProfile } from './useHomeLaneProfile';
 import type {
@@ -46,9 +46,9 @@ export function useHomeResolvedExperience(
   const motivationStyle = normalizeMotivationStyle(explicitStyle);
   const primaryGoal = resolvePrimaryGoal(goal);
 
-  const activeBossData = controller.activeBossQuery
+  const _activeBossData = controller.activeBossQuery
     ?.data as ActiveBossData | null;
-  const activeStudyPlanData = controller.activeStudyPlanQuery
+  const _activeStudyPlanData = controller.activeStudyPlanQuery
     ?.data as ActiveStudyPlanData | null;
 
   const startedAt = useOnboardingStore.getState().startedAt;

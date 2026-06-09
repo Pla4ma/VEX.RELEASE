@@ -29,7 +29,7 @@ export function VexCompanionAura({
   const drift = useSharedValue(0);
 
   useEffect(() => {
-    if (isReducedMotion) return;
+    if (isReducedMotion) {return;}
     pulse.value = withRepeat(
       withTiming(1.12, { duration: 3000 }),
       -1,

@@ -1,15 +1,14 @@
 import type { IconCollection, IconRegistryEntry } from './types';
 import { appIcons } from './appIcons';
-import { navigationIcons } from './navigationIcons';
-import { actionIcons } from './actionIcons';
-import { statusIcons } from './statusIcons';
+import { navigationIcons, actionIconPaths, statusIcons, miscIcons } from './actionIcons';
 import { socialIcons } from './socialIcons';
 
 export const iconRegistry: IconCollection = {
   ...appIcons,
   ...navigationIcons,
-  ...actionIcons,
+  ...actionIconPaths,
   ...statusIcons,
+  ...miscIcons,
   ...socialIcons,
 };
 

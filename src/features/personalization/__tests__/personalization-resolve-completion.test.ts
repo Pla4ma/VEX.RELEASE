@@ -19,7 +19,7 @@ describe('resolveCompletion', () => {
   it('includes study_progress when study available', () => {
     const result = resolveCompletion({
       availability: { ...fixtures.available, study: true },
-      boss: { isVisible: false, intensity: 'subtle' } as any,
+      boss: { isVisible: false, intensity: 'subtle' } as unknown,
       stats: makeStats(),
     });
     expect(result.sequence).toContain('study_progress');
@@ -27,7 +27,7 @@ describe('resolveCompletion', () => {
   it('includes boss_effect when boss is visible', () => {
     const result = resolveCompletion({
       availability: fixtures.available,
-      boss: { isVisible: true, intensity: 'standard' } as any,
+      boss: { isVisible: true, intensity: 'standard' } as unknown,
       stats: makeStats(),
     });
     expect(result.sequence).toContain('boss_effect');
@@ -35,7 +35,7 @@ describe('resolveCompletion', () => {
   it('always includes core_saved and next_action', () => {
     const result = resolveCompletion({
       availability: { ...fixtures.available, study: false },
-      boss: { isVisible: false, intensity: 'subtle' } as any,
+      boss: { isVisible: false, intensity: 'subtle' } as unknown,
       stats: makeStats(),
     });
     expect(result.sequence).toContain('core_saved');

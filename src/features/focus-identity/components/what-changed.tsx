@@ -25,7 +25,7 @@ export interface WhatChangedProps {
 
 export const WhatChanged: React.FC<WhatChangedProps> = ({ model }) => {
   const current = model.current;
-  if (!current) return null;
+  if (!current) {return null;}
 
   const changes = [
     { icon: 'arrowUp', label: 'Consistency', orb: 'mint' as const, value: `+${current.factors.consistency.delta}` },

@@ -4,7 +4,6 @@
  */
 import { supabase } from '../../../config/supabase';
 import type { UnifiedMasteryState, MasteryTrack } from '../unified-mastery';
-import { tableColumns } from '../../../lib/repository/tableColumns';
 const TABLE = 'mastery_tracks';
 export async function fetchMasteryTrack(
   userId: string,

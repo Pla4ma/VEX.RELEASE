@@ -3,7 +3,7 @@
  */
 
 import { RetryStrategy } from '../utils/RetryStrategy';
-import { DEFAULT_RETRY_CONFIG } from '../utils/retry-strategy-types';
+
 import { createRetryStrategy, getRetryStrategy } from '../utils/retry-factories';
 
 describe('RetryStrategy', () => {

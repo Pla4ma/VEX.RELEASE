@@ -22,7 +22,7 @@ import { ChatMessageItem } from './ChatMessageItem';
 import { ChatInputBar } from './ChatInputBar';
 import { CoachRecommendationCard } from './CoachRecommendationCard';
 import { useCoachChat } from './useCoachChat';
-import { lightColors } from '@/theme/tokens/colors';
+
 
 export function CoachScreen(): JSX.Element {
   const {

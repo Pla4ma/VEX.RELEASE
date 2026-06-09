@@ -7,7 +7,7 @@ jest.mock('../repository');
 xdescribe('StreaksService — recordSession', () => {
   describe('same-day session', () => {
     it('should NOT increment streak for same-day session', async () => {
-      const today = new Date().toISOString();
+      const _today = new Date().toISOString();
       (repository.fetchStreak as jest.Mock).mockResolvedValue({
         id: 'streak-1',
         userId: 'user-1',

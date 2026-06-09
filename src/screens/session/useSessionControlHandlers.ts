@@ -16,7 +16,7 @@ interface SessionControlHandlers {
 export function useSessionControlHandlers(
   actions: ReturnType<typeof useActiveSessionController>['actions'],
   showMultiplierInfo: boolean,
-  studyQuizBreak: ReturnType<typeof useStudyQuizBreak>,
+  _studyQuizBreak: ReturnType<typeof useStudyQuizBreak>,
 ): SessionControlHandlers {
   return {
     onClearControlFailure: actions.clearControlFailure,

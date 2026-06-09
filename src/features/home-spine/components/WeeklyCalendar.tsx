@@ -40,13 +40,13 @@ export function WeeklyCalendar({
         mb="md"
       >
         <Box flexDirection="row" alignItems="center" gap="sm">
-          <Text fontSize={20}></Text>
+          <Text fontSize={20} />
           <Text variant="h4" color="text.primary">
             This Week
           </Text>
         </Box>
         <Box flexDirection="row" alignItems="center" gap="sm">
-          <Text fontSize={16}></Text>
+          <Text fontSize={16} />
           <Text variant="body" color="accent.orange" fontWeight="600">
             {currentStreak} day streak
           </Text>

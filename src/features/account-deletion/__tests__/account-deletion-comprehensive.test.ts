@@ -5,7 +5,6 @@ import {
   getDefaultStorageAdapter,
   getMMKVStorageAdapter,
   getSecureStorage,
-  SecureStorageKeys,
 } from '../../../persistence';
 import {
   captureAccountDeletionError,

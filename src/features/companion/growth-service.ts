@@ -1,4 +1,4 @@
-import { CompanionState } from './types';
+
 import { emitCompanionStateChanged } from './events';
 import { trackCompanionGrowth } from './analytics';
 import { CompanionGrowthServiceCore } from './growth-service-core';

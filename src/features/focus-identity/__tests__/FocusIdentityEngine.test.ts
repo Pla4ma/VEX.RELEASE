@@ -1,6 +1,5 @@
 import {
   FocusIdentityEngine,
-  FOCUS_SCORE_CONFIG,
 } from '../FocusIdentityEngine';
 import {
   calculateConsistencyFactorForInput,

@@ -1,4 +1,4 @@
-import type { FreeBusyInfo, CalendarGap } from './types';
+import type { CalendarGap } from './types';
 
 export interface UserPatterns {
   preferredStartTimes: number[];

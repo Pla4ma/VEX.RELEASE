@@ -1,5 +1,4 @@
 import {
-  getMasteryRankDisplay,
   type MasteryRank,
   MASTERY_RANK_THRESHOLDS,
 } from '../types';

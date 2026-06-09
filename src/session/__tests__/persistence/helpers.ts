@@ -7,7 +7,7 @@ import {
 } from '../../utils/persistence';
 
 // Use var so declaration is hoisted; name prefixed with "mock" for jest.mock() access
-var mockCapturedInstance: any;
+var mockCapturedInstance: unknown;
 
 jest.mock('react-native-mmkv', () => {
   mockCapturedInstance = {

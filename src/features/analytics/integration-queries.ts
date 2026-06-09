@@ -2,7 +2,6 @@ import { eventBus } from '../../events';
 import * as Sentry from '@sentry/react-native';
 import { stateCache, DEFAULT_INTEGRATION_STATE } from './integration-types';
 import * as repository from './repository';
-import { generateInsights } from './service';
 
 export async function syncAnalyticsData(
   userId: string,

@@ -6,7 +6,7 @@
  */
 
 import { capture } from '../../shared/analytics/analytics-service';
-import type { DifficultySuggestion, SessionDifficulty } from './schemas';
+import type { SessionDifficulty } from './schemas';
 
 /**
  * Track difficulty suggestion shown

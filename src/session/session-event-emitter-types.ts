@@ -1,10 +1,10 @@
 import type { SessionEventChannels, SessionEventChannel } from './types/events';
 import type {
-  SessionSummary,
-  InterruptionRecord,
-  RecoveryRecord,
-  AntiCheatFlag,
-  SessionState,
+  _SessionSummary,
+  _InterruptionRecord,
+  _RecoveryRecord,
+  _AntiCheatFlag,
+  _SessionState,
 } from './types';
 
 export type InterruptionRiskLevel = 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';

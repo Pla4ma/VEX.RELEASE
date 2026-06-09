@@ -42,7 +42,7 @@ describe('Companion Reactions', () => {
 
   describe('Streak Maintenance Reaction', () => {
     it('should react positively to streak maintenance', () => {
-      const previousMood = service.getState()?.currentMood;
+      const _previousMood = service.getState()?.currentMood;
       const previousEnergy = service.getState()?.energyLevel;
       service.reactToStreakMaintained(userId);
       const state = service.getState();

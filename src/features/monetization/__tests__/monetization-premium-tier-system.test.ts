@@ -34,7 +34,7 @@ describe('monetization feature — comprehensive tests', () => {
       expect(gate!.requiresPremium).toBe(true);
     });
     it('getFeatureGate returns null for unknown feature', () => {
-      expect(getFeatureGate('nonexistent_feature' as any)).toBeNull();
+      expect(getFeatureGate('nonexistent_feature' as unknown)).toBeNull();
     });
     it('shouldShowPaywall shows for free user with premium feature', () => {
       const result = shouldShowPaywall('free', 'deepCoachMemory');

@@ -3,7 +3,6 @@ import { View } from 'react-native';
 
 import { Text } from '../../components/primitives/Text';
 import { GlassCard } from '../../components/glass/GlassCard';
-import { GlassPill } from '../../components/glass/GlassPill';
 import { vexLightGlass } from '../../theme/tokens/vex-light-glass';
 import type { SessionHistoryEntry } from '../../session/types';
 

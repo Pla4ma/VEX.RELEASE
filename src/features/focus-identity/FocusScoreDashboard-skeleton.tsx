@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Text, Stack, Skeleton } from '@components/primitives';
+import { Box, Stack, Skeleton } from '@components/primitives';
 import { useReducedMotion } from '../../hooks';
 
 export const FocusScoreDashboardSkeleton = () => {

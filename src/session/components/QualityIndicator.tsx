@@ -3,8 +3,8 @@ import Animated, {
   FadeIn,
   useAnimatedStyle,
   withSpring,
-  withSequence,
-  withTiming,
+  _withSequence,
+  _withTiming,
   useSharedValue,
 } from 'react-native-reanimated';
 import { Box } from '../../components/primitives/Box';

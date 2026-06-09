@@ -4,8 +4,6 @@ import Animated, { FadeInUp } from 'react-native-reanimated';
 
 import { Text } from '../../../components/primitives/Text';
 import { GlassCard } from '../../../components/glass/GlassCard';
-import { GlassIconOrb } from '../../../components/glass/GlassIconOrb';
-import { Icon } from '../../../icons';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import { VexCompanionAura } from '../../../features/companion/components/VexCompanionAura';
 import { ELEMENT_THEMES } from '../../../features/companion/types';

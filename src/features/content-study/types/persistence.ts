@@ -1,4 +1,4 @@
-import type { ContentSourceType } from './enums';
+import type {} from './enums';
 
 // Persistence Types
 export interface PersistedStudySession {

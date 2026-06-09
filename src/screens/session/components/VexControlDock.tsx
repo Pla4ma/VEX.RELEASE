@@ -35,16 +35,16 @@ function DockButton({
   }));
 
   const handlePressIn = () => {
-    if (!isReducedMotion) scale.value = withSpring(0.92, { damping: 15, stiffness: 300 });
+    if (!isReducedMotion) {scale.value = withSpring(0.92, { damping: 15, stiffness: 300 });}
   };
   const handlePressOut = () => {
-    if (!isReducedMotion) scale.value = withSpring(1, { damping: 15, stiffness: 300 });
+    if (!isReducedMotion) {scale.value = withSpring(1, { damping: 15, stiffness: 300 });}
   };
 
   return (
     <Pressable
       onPress={() => {
-        if (!isReducedMotion) light();
+        if (!isReducedMotion) {light();}
         onPress();
       }}
       onPressIn={handlePressIn}

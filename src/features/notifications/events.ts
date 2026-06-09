@@ -6,7 +6,6 @@ import {
   NotificationFailedEvent,
   NotificationPreferencesUpdatedEvent,
   EventMetadata,
-  DeviceInfo,
 } from './types';
 import { v4 } from '../../utils/uuid';
 

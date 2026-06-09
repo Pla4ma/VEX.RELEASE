@@ -33,7 +33,7 @@ export function SessionValidationFeedback({
   onDismissWarning,
   compact = false,
 }: SessionValidationFeedbackProps): JSX.Element | null {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
 
   if (errors.length === 0 && warnings.length === 0) {
     return null;

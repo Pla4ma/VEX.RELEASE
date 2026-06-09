@@ -61,7 +61,7 @@ export function useProfileData(
   const rankDisplay = getMasteryRankDisplay(mastery.rank);
   const xpPercent = Math.max(0, Math.min(100, progressionQuery.data?.progressPercent ?? 0));
   const loading = progressionQuery.isPending || streakQuery.isPending ||
-    statsQuery.isLoading || walletQuery.isPending;
+    statsQuery.isPending || walletQuery.isPending;
   const hasStatsError = !!(progressionQuery.error || streakQuery.error || walletQuery.error);
 
   const stats = useMemo<ProfileStatItem[]>(() => [

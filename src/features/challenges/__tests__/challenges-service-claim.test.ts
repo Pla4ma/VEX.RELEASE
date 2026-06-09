@@ -89,7 +89,7 @@ describe('Service', () => {
         coinReward: 50,
         requiredCount: 5,
       };
-      mockedRepo.fetchCompletedChallengeDetails.mockResolvedValue([detail] as any);
+      mockedRepo.fetchCompletedChallengeDetails.mockResolvedValue([detail] as unknown);
       const result = await claimChallengeReward({
         userId: 'user-1',
         challengeId: 'c-1',

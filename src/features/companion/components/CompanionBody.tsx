@@ -1,8 +1,8 @@
 import React from 'react';
-import { Circle, G, RadialGradient, Stop, Svg } from 'react-native-svg';
-import type { SharedValue } from 'react-native-reanimated';
+import { Circle, RadialGradient, Stop} from 'react-native-svg';
+import type {} from 'react-native-reanimated';
 
-import { CompanionPhase, CompanionElement } from '../types';
+import { CompanionPhase} from '../types';
 
 interface CompanionBodyProps {
   phase: CompanionPhase;

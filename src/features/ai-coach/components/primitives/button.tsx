@@ -4,7 +4,6 @@ import {
   Pressable,
   Text,
   ActivityIndicator,
-  StyleSheet,
   type GestureResponderEvent,
   type PressableProps,
   type ViewStyle,
@@ -18,10 +17,11 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useReducedMotion } from '../../../../hooks/useReducedMotion';
 import { lightColors } from '@/theme/tokens/colors';
-import { StandardHitSlops } from '@/utils/touchTarget';
+import { IconButton } from './IconButton';
 
 type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger';
 type ButtonSize = 'sm' | 'md' | 'lg';
+
 interface ButtonProps extends PressableProps {
   variant?: ButtonVariant;
   size?: ButtonSize;
@@ -32,6 +32,17 @@ interface ButtonProps extends PressableProps {
   style?: ViewStyle;
   textStyle?: TextStyle;
 }
+
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+
+const variantStyles = {
+  primary: { indicatorColor: lightColors.text.inverse },
+  secondary: { indicatorColor: lightColors.accent.teal },
+  outline: { indicatorColor: lightColors.accent.teal },
+  ghost: { indicatorColor: lightColors.accent.teal },
+  danger: { indicatorColor: lightColors.text.inverse },
+};
+
 export function Button({
   children,
   variant = 'primary',
@@ -50,6 +61,7 @@ export function Button({
   const pressed = useSharedValue(0);
   const defaultAccessibilityLabel =
     typeof children === 'string' ? `${children} button` : 'Coach action button';
+
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [
       { scale: isReducedMotion ? 1 : withSpring(1 - pressed.value * 0.02) },
@@ -58,15 +70,19 @@ export function Button({
       duration: isReducedMotion ? 0 : 150,
     }),
   }));
+
   const handlePressIn = (e: GestureResponderEvent): void => {
     pressed.value = 1;
     onPressIn?.(e);
   };
+
   const handlePressOut = (e: GestureResponderEvent): void => {
     pressed.value = 0;
     onPressOut?.(e);
   };
+
   const isDisabled = disabled || loading;
+
   return (
     <AnimatedPressable
       accessibilityHint="Activates the coach menu"
@@ -102,57 +118,9 @@ export function Button({
     </AnimatedPressable>
   );
 }
-const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
-interface IconButtonProps extends PressableProps {
-  icon: React.ReactNode;
-  variant?: ButtonVariant;
-  size?: ButtonSize;
-  loading?: boolean;
-  disabled?: boolean;
-}
-export function IconButton({
-  icon,
-  variant = 'ghost',
-  size = 'md',
-  loading = false,
-  disabled = false,
-  ...props
-}: IconButtonProps) {
-  const { isReducedMotion } = useReducedMotion();
-  const pressed = useSharedValue(0);
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [
-      { scale: isReducedMotion ? 1 : withSpring(1 - pressed.value * 0.05) },
-    ],
-  }));
-  return (
-    <AnimatedPressable
-      accessibilityHint="Activates the coach menu"
-      accessibilityLabel="Open coach menu"
-      accessibilityRole="button"
-      disabled={disabled || loading}
-      style={[
-        styles.iconButton,
-        styles[`${size}IconButton`],
-        styles[`${variant}IconButton`],
-        animatedStyle,
-      ]}
-      hitSlop={size === 'sm' ? StandardHitSlops.ICON : undefined}
-      onPressIn={() => (pressed.value = 1)}
-      onPressOut={() => (pressed.value = 0)}
-      {...props}
-    >
-      {loading ? <ActivityIndicator size="small" /> : icon}
-    </AnimatedPressable>
-  );
-}
-const variantStyles = {
-  primary: { indicatorColor: lightColors.text.inverse },
-  secondary: { indicatorColor: lightColors.accent.teal },
-  outline: { indicatorColor: lightColors.accent.teal },
-  ghost: { indicatorColor: lightColors.accent.teal },
-  danger: { indicatorColor: lightColors.text.inverse },
-};
+
+export { IconButton };
+
 const styles = createSheet({
   base: {
     flexDirection: 'row',
@@ -161,7 +129,7 @@ const styles = createSheet({
     borderRadius: 12,
     gap: 8,
   },
-  text: { fontWeight: '600', textAlign: 'center' },
+  text: { fontWeight: '600' as const, textAlign: 'center' as const },
   sm: { paddingVertical: 8, paddingHorizontal: 12 },
   smText: { fontSize: 14 },
   md: { paddingVertical: 12, paddingHorizontal: 20 },
@@ -182,21 +150,4 @@ const styles = createSheet({
   ghostText: { color: lightColors.text.muted },
   danger: { backgroundColor: lightColors.semantic.danger },
   dangerText: { color: lightColors.text.inverse },
-  iconButton: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 8,
-  },
-  smIconButton: { width: 32, height: 32 },
-  mdIconButton: { width: 44, height: 44 },
-  lgIconButton: { width: 56, height: 56 },
-  primaryIconButton: { backgroundColor: lightColors.accent.teal },
-  secondaryIconButton: { backgroundColor: lightColors.success[50] },
-  outlineIconButton: {
-    backgroundColor: 'transparent',
-    borderWidth: 2,
-    borderColor: lightColors.accent.teal,
-  },
-  ghostIconButton: { backgroundColor: 'transparent' },
-  dangerIconButton: { backgroundColor: lightColors.semantic.danger },
 });

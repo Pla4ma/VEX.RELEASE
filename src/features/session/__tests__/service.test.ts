@@ -2,8 +2,6 @@ import { SessionMode } from '../../../session/modes';
 import {
   buildSessionCapabilities,
   buildTimerState,
-  buildPurityState,
-  buildSessionViewModel,
   calculateProgressPercentage,
   formatDuration,
 } from '../service';

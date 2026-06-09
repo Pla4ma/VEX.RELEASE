@@ -28,7 +28,7 @@ export function aggregateSignals(signals: BehaviorSignal[]): BehaviorSignal[] {
     grouped.set(signal.signalType, existing);
   }
   const aggregated: BehaviorSignal[] = [];
-  for (const [signalType, typeSignals] of grouped) {
+  for (const [, typeSignals] of grouped) {
     const sorted = typeSignals.sort((a, b) => b.timestamp - a.timestamp);
     const mostRecent = sorted[0]!;
     const recentWindow = sorted.slice(0, 5);
@@ -104,7 +104,7 @@ export function calculateConfidenceLevel(
   }
   const avgConfidence =
     signals.reduce((sum, s) => sum + s.confidence, 0) / signals.length;
-  const { low, medium, high } = DEFAULT_SIGNAL_CONFIG.confidenceThresholds;
+  const { medium, high } = DEFAULT_SIGNAL_CONFIG.confidenceThresholds;
   if (avgConfidence >= high && dataPoints >= 15) {
     return 'HIGH';
   }

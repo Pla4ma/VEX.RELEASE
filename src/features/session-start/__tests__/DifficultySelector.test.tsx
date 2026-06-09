@@ -17,7 +17,6 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react-native';
 import {
   DifficultySelector,
-  type SessionDifficulty,
 } from '../components/DifficultySelector';
 import { ThemeProvider } from '../../../theme';
 
@@ -46,7 +45,8 @@ const renderWithTheme = (component: React.ReactElement) => {
       {component}
     </ThemeProvider>,
   );
-};xdescribe('DifficultySelector', () => {
+};
+xdescribe('DifficultySelector', () => {
   const mockOnChange = jest.fn();
 
   beforeEach(() => {

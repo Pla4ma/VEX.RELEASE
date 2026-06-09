@@ -2,7 +2,6 @@ import {
   describe,
   expect,
   it,
-  vexCompleteReflection,
   vexCreateFocusSession,
   vexStartSession,
   vexStartRescue,
@@ -13,7 +12,6 @@ import {
   validStartSession,
   validStartRescue,
   validUpdateLaneOverride,
-  validCompleteReflection,
 } from './helpers';
 
 describe('VexAction Boundaries', () => {

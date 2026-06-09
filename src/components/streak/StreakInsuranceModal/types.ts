@@ -1,4 +1,4 @@
-import type { ViewStyle } from 'react-native';
+import type {} from 'react-native';
 import type { useTheme } from '@/theme';
 import type { StreakRiskAssessment } from '@/features/streaks/streak-insurance';
 

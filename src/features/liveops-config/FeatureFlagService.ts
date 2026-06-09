@@ -129,17 +129,17 @@ export interface FeatureAvailability { state: FeatureAvailabilityState; canRende
 
 function resolveFeatureAvailability(feature: FeatureAccess | undefined): FeatureAvailability {
   const unavailable: FeatureAvailability = { state: 'disabled', canRenderEntryPoint: false, canNavigate: false, canQuery: false, canUseBackend: false, canRegisterRoute: false, canSubscribeToEvents: false, canShowNotification: false, reason: feature?.lockedDescription ?? 'Feature not configured.' };
-  if (!feature) return unavailable;
+  if (!feature) {return unavailable;}
   const disabled = !feature.isVisible || feature.releaseState === 'final_release_deactivated' || feature.releaseState === 'archived';
-  if (disabled) return { ...unavailable, reason: feature.lockedDescription };
+  if (disabled) {return { ...unavailable, reason: feature.lockedDescription };}
   if (feature.isUnlocked) {
     if (feature.isDegraded === true) {
-      if (feature.disableOnDegraded) return { ...unavailable, reason: feature.lockedDescription };
+      if (feature.disableOnDegraded) {return { ...unavailable, reason: feature.lockedDescription };}
       return { state: 'degraded', canRenderEntryPoint: true, canNavigate: false, canQuery: false, canUseBackend: false, canRegisterRoute: true, canSubscribeToEvents: false, canShowNotification: false, reason: feature.unlockReason };
     }
     return { state: 'unlocked', canRenderEntryPoint: true, canNavigate: true, canQuery: true, canUseBackend: true, canRegisterRoute: true, canSubscribeToEvents: true, canShowNotification: true, reason: feature.unlockReason };
   }
-  if (feature.isTeased) return { state: 'teased', canRenderEntryPoint: true, canNavigate: false, canQuery: false, canUseBackend: false, canRegisterRoute: false, canSubscribeToEvents: false, canShowNotification: false, reason: feature.recommendedUnlockMoment };
+  if (feature.isTeased) {return { state: 'teased', canRenderEntryPoint: true, canNavigate: false, canQuery: false, canUseBackend: false, canRegisterRoute: false, canSubscribeToEvents: false, canShowNotification: false, reason: feature.recommendedUnlockMoment };}
   return { ...unavailable, reason: feature.lockedDescription };
 }
 
@@ -170,17 +170,17 @@ export function getDegradedFallbackSurface(feature: DegradedFeatureKey): string 
 // ── Stage/tier functions ──
 
 export function getStage(totalCompletedSessions: number): UserExperienceStage {
-  if (totalCompletedSessions <= 0) return 'NEW_USER';
-  if (totalCompletedSessions < 3) return 'ACTIVATING';
-  if (totalCompletedSessions < 10) return 'ENGAGED';
+  if (totalCompletedSessions <= 0) {return 'NEW_USER';}
+  if (totalCompletedSessions < 3) {return 'ACTIVATING';}
+  if (totalCompletedSessions < 10) {return 'ENGAGED';}
   return 'POWER_USER';
 }
 
 export function getProductTier(stage: UserExperienceStage, totalCompletedSessions: number): ProductTier {
-  if (totalCompletedSessions >= 40) return 'SOCIAL_DEPTH';
-  if (totalCompletedSessions >= 20) return 'RPG_DEPTH';
-  if (totalCompletedSessions >= 10) return 'STUDY_OS';
-  if (stage === 'ENGAGED') return 'COACHING';
+  if (totalCompletedSessions >= 40) {return 'SOCIAL_DEPTH';}
+  if (totalCompletedSessions >= 20) {return 'RPG_DEPTH';}
+  if (totalCompletedSessions >= 10) {return 'STUDY_OS';}
+  if (stage === 'ENGAGED') {return 'COACHING';}
   return 'CORE_EXECUTION';
 }
 

@@ -3,22 +3,22 @@ import {
   WeeklyIntelligenceSchema,
   InsightFindingSchema,
   type WeeklyInsightInput,
-} from '../schemas';
-import { buildWeeklyIntelligence } from '../service';
+} from "../schemas";
+import { buildWeeklyIntelligence } from "../service";
 import {
   buildWhatHelped,
   buildWhatGotInWay,
   resolveBestNextSessionType,
   buildAdjustment,
   buildPremiumDeeperInsight,
-} from '../insight-builders/insight-builders';
+} from "../insight-builders/insight-builders";
 
 // ── Helpers ────────────────────────────────────────────────────────────────
 
 function baseInput(overrides: Partial<WeeklyInsightInput> = {}): WeeklyInsightInput {
   return WeeklyInsightInputSchema.parse({
-    userId: 'user-1',
-    lane: 'student',
+    userId: "user-1",
+    lane: "student",
     totalSessions: 5,
     totalFocusMinutes: 120,
     completedSessions: 4,
@@ -32,39 +32,39 @@ function baseInput(overrides: Partial<WeeklyInsightInput> = {}): WeeklyInsightIn
 
 // ── Schema validation ──────────────────────────────────────────────────────
 
-describe('weekly-intelligence schemas', () => {
-  it('parses a valid WeeklyInsightInput', () => {
+describe("weekly-intelligence schemas", () => {
+  it("parses a valid WeeklyInsightInput", () => {
     const input = baseInput();
     expect(() => WeeklyInsightInputSchema.parse(input)).not.toThrow();
   });
 
-  it('rejects negative totalSessions', () => {
+  it("rejects negative totalSessions", () => {
     expect(() =>
       WeeklyInsightInputSchema.parse({ ...baseInput(), totalSessions: -1 }),
     ).toThrow();
   });
 
-  it('rejects avgFocusScore above 100', () => {
+  it("rejects avgFocusScore above 100", () => {
     expect(() =>
       WeeklyInsightInputSchema.parse({ ...baseInput(), avgFocusScore: 101 }),
     ).toThrow();
   });
 
-  it('parses a valid InsightFinding', () => {
+  it("parses a valid InsightFinding", () => {
     const finding = InsightFindingSchema.parse({
-      category: 'helped',
-      observation: 'Strong focus this week.',
-      confidence: 'medium',
+      category: "helped",
+      observation: "Strong focus this week.",
+      confidence: "medium",
     });
-    expect(finding.category).toBe('helped');
+    expect(finding.category).toBe("helped");
   });
 
-  it('rejects an InsightFinding with empty observation', () => {
+  it("rejects an InsightFinding with empty observation", () => {
     expect(() =>
       InsightFindingSchema.parse({
-        category: 'blocked',
-        observation: '',
-        confidence: 'weak',
+        category: "blocked",
+        observation: "",
+        confidence: "weak",
       }),
     ).toThrow();
   });

@@ -69,7 +69,7 @@ describe('Analytics — Metrics', () => {
         makeUserChallenge({ id: 'uc3', status: 'CLAIMED', completedAt: NOW, assignedAt: NOW - 3000, claimedAt: NOW }),
       ];
       const challenges = [makeChallenge({ id: 'c-1' })];
-      const result = calculateChallengeMetrics(ucs as any, challenges as any);
+      const result = calculateChallengeMetrics(ucs as unknown, challenges as unknown);
       expect(result.totalIssued).toBe(3);
       expect(result.completionRate).toBeCloseTo(2 / 3, 2);
     });
@@ -79,7 +79,7 @@ describe('Analytics — Metrics', () => {
         makeUserChallenge({ id: 'uc1', status: 'EXPIRED' }),
         makeUserChallenge({ id: 'uc2', status: 'ACTIVE' }),
       ];
-      const result = calculateChallengeMetrics(ucs as any, []);
+      const result = calculateChallengeMetrics(ucs as unknown, []);
       expect(result.expirationRate).toBeCloseTo(0.5, 2);
     });
 
@@ -89,7 +89,7 @@ describe('Analytics — Metrics', () => {
         makeUserChallenge({ id: 'uc2', rerollCount: 0 }),
         makeUserChallenge({ id: 'uc3', rerollCount: 0 }),
       ];
-      const result = calculateChallengeMetrics(ucs as any, []);
+      const result = calculateChallengeMetrics(ucs as unknown, []);
       expect(result.rerollRate).toBeCloseTo(1 / 3, 2);
     });
   });
@@ -113,7 +113,7 @@ describe('Analytics — Metrics', () => {
         makeUserChallenge({ id: 'uc2', challengeId: 'c-medium', status: 'ACTIVE' }),
         makeUserChallenge({ id: 'uc3', challengeId: 'c-hard', status: 'ACTIVE' }),
       ];
-      const result = calculateDifficultyMetrics(ucs as any, challenges as any);
+      const result = calculateDifficultyMetrics(ucs as unknown, challenges as unknown);
       expect(result.easy.completionRate).toBe(1);
       expect(result.medium.completionRate).toBe(0);
       expect(result.hard.completionRate).toBe(0);

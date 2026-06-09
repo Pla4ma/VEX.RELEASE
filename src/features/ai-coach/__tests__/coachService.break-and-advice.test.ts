@@ -113,11 +113,6 @@ describe('CoachService', () => {
     });
 
     test('should handle invalid data types', async () => {
-      const invalidContext = {
-        ...mockContext,
-        focusQuality: 'invalid' as unknown as number,
-        sessionDuration: 'invalid' as unknown as number,
-      };
       const result = detectStudyStuck({
         documentId: 'test',
         documentName: 'test',

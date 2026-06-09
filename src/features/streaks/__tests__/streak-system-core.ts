@@ -108,7 +108,7 @@ describe('Streak System - Core Logic', () => {
       });
       mockRepository.fetchStreak.mockResolvedValue(streak);
 
-      (mockRepository.getAvailableShield as any).mockResolvedValue('shield-1');
+      (mockRepository.getAvailableShield as unknown).mockResolvedValue('shield-1');
       mockRepository.updateStreak.mockResolvedValue({
         ...streak,
         currentDays: 6,

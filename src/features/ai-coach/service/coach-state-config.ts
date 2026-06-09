@@ -19,13 +19,13 @@ async function ensureComebackPlan(userId: string): Promise<void> {
   }
 }
 
-async function sendPostFailureSupport(userId: string): Promise<void> {
+async function sendPostFailureSupport(_userId: string): Promise<void> {
   // Delegated to intervention engine
 }
 
 async function sendMilestoneCelebration(
-  userId: string,
-  state: CoachState,
+  _userId: string,
+  _state: CoachState,
 ): Promise<void> {
   // Delegated to intervention engine
 }

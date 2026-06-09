@@ -5,14 +5,9 @@
 import {
   getLaneMechanicPolicy,
   getLanePresentationPolicy,
-  buildLaneSessionBrief,
   decideNudge,
-  resolveCompletionExperiencePolicy,
-  resolveLaneCopy,
-  LANE_USER_FACING_NAMES,
   baseLaneProfile,
   auditLane,
-  completionInput,
 } from './lane-test-helpers';
 import type { Lane, LaneMechanicPolicy } from './lane-test-helpers';
 

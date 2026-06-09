@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import type {
   Achievement,
-  AchievementCategory,
-  AchievementRarity,
+  _AchievementCategory,
+  _AchievementRarity,
   UserAchievement,
 } from './types';
 import { ALL_ACHIEVEMENTS, getAchievementById } from './definitions';

@@ -1,6 +1,6 @@
 import type {
-  DataRetentionPolicy,
-  ExportFormat,
+  _DataRetentionPolicy,
+  _ExportFormat,
   SettingCategory,
   SettingValue,
   SyncStatus,

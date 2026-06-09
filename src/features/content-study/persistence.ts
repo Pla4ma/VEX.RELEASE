@@ -1,11 +1,11 @@
-import { captureSilentFailure } from '../../utils/silent-failure';
+
 import type {
-  PersistedDraft,
-  PersistedStudySession,
-  LocalCacheEntry,
-  SyncQueueItem,
-  StudyContent,
-  StudyGeneration,
+  _PersistedDraft,
+  _PersistedStudySession,
+  _LocalCacheEntry,
+  _SyncQueueItem,
+  _StudyContent,
+  _StudyGeneration,
 } from './types';
 import { CONTENT_STUDY_CONSTANTS } from './types';
 import { getDefaultStorageAdapter } from '../../persistence';

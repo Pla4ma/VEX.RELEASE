@@ -7,7 +7,7 @@ import type { HomeSpineModel } from '../../../features/home-spine/schemas';
 import type { HomeReturnReason } from '../hooks/useHomeReturnReason';
 import type { LearningExecutionLayer } from '../../../features/learning-execution';
 import type { HomeHighlight, CompletionSyncState } from '../../../store/session-state';
-import type { StreakQueryData, ProgressionQueryData } from './engaged-home-types';
+import type {} from './engaged-home-types';
 import { createStubQuery } from '../hooks/home-controller-stubs';
 
 interface BuildControllerInput {

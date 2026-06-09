@@ -1,8 +1,3 @@
-import {
-  decideHomeSurfaces,
-  getPrimarySurface,
-  getSpotlightSurface,
-} from '../home-surface-decision';
 import type { HomeSurfaceMap } from '../surface-decision-schemas';
 
 export const featureAvailability = {

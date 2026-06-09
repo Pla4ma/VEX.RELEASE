@@ -4,7 +4,6 @@ import type {
   SettingCategory,
 } from './types';
 import { SettingRowSchema } from './schemas';
-import { tableColumns } from '../../lib/repository/tableColumns';
 import {
   trackPendingChange,
   clearPendingChange,

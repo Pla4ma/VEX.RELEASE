@@ -1,4 +1,4 @@
-import type { BehaviorSignal } from '../../../features/personalization/behavior-signal-schemas';
+import type {} from '../../../features/personalization/behavior-signal-schemas';
 import type { MotivationStyle } from '../../../features/personalization/schemas';
 import type { HomeController } from './home-controller-types';
 

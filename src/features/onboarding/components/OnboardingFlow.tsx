@@ -16,6 +16,7 @@ interface OnboardingFlowProps {
   onBack?: () => void;
   onComplete?: () => void;
 }
+/* eslint-disable @typescript-eslint/no-unused-vars */
 function NotificationPermissionScreen({
   onComplete,
 }: {
@@ -64,7 +65,7 @@ function NotificationPermissionScreen({
     </View>
   );
 }
-function FirstResultScreen({
+function _FirstResultScreen({
   onComplete,
 }: {
   onComplete: () => void;

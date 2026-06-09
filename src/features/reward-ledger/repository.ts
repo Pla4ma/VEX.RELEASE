@@ -5,7 +5,6 @@ import {
 } from './schemas';
 import type { CreateRewardLedgerInput, RewardLedgerRecord } from './types';
 import * as z from 'zod';
-import { tableColumns } from '../../lib/repository/tableColumns';
 
 export class RewardLedgerRepositoryError extends Error {
   constructor(

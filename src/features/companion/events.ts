@@ -7,7 +7,7 @@
 import { eventBus } from '../../events/EventBus';
 import type { CompanionPhase, CompanionMood, CompanionState } from './types';
 
-interface CompanionEventPayloads {
+interface _CompanionEventPayloads {
   'companion:state_changed': {
     userId: string;
     companionId: string;

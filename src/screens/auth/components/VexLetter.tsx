@@ -9,7 +9,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Text } from '../../../components/primitives/Text';
 import { springPresets, motionStagger } from '../../../theme/tokens/motion';
-import { useReducedMotion } from '../../../hooks/useReducedMotion';
+
 import { lightColors } from '@/theme/tokens/colors';
 
 const EASE_CINEMATIC = Easing.bezier(0.16, 1, 0.3, 1);
@@ -35,7 +35,7 @@ export function VexLetter({
   const weight = useSharedValue<string>(isReducedMotion ? '600' : '300');
 
   useEffect(() => {
-    if (isReducedMotion) return;
+    if (isReducedMotion) {return;}
     const d = 200 + index * motionStagger.loose;
     op.value = withDelay(d, withTiming(1, { duration: 900, easing: EASE_CINEMATIC }));
     ty.value = withDelay(d, withSpring(0, springPresets.settle));

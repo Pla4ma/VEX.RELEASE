@@ -11,7 +11,7 @@ import {
 } from './completion-subsystems.helpers';
 import { applyCompletionSubsystems } from '../completion-subsystems';
 import { setFeatureAccessMap } from '../../liveops-config/feature-access-store';
-import type { FeatureAccessMap } from '../../liveops-config/feature-access';
+import type {} from '../../liveops-config/feature-access';
 
 describe('applyCompletionSubsystems', () => {
   beforeEach(() => {

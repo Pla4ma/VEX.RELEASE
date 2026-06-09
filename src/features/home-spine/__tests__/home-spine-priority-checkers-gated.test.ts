@@ -73,7 +73,7 @@ describe('home-spine: priority-checkers-gated', () => {
           isDegraded: false,
         },
       };
-      expect(checkChallengeNearDone(snap, lockedAccess as any)).toBeNull();
+      expect(checkChallengeNearDone(snap, lockedAccess as unknown)).toBeNull();
     });
 
     it('returns null when surfaceMap hides both challenge surfaces', () => {
@@ -86,7 +86,7 @@ describe('home-spine: priority-checkers-gated', () => {
           weekly_quest: 'blocked' as const,
         },
       };
-      expect(checkChallengeNearDone(snap, undefined, productContext as any)).toBeNull();
+      expect(checkChallengeNearDone(snap, undefined, productContext as unknown)).toBeNull();
     });
   });
 
@@ -123,7 +123,7 @@ describe('home-spine: priority-checkers-gated', () => {
           isDegraded: false,
         },
       };
-      expect(checkBossActive(snap, lockedAccess as any)).toBeNull();
+      expect(checkBossActive(snap, lockedAccess as unknown)).toBeNull();
     });
 
     it('returns null when firstWeekExperience hides boss', () => {
@@ -134,7 +134,7 @@ describe('home-spine: priority-checkers-gated', () => {
         firstWeekExperience: { bossIntensity: 'hidden' as const },
         totalCompletedSessions: 5,
       };
-      expect(checkBossActive(snap, undefined, pc as any)).toBeNull();
+      expect(checkBossActive(snap, undefined, pc as unknown)).toBeNull();
     });
 
     it('returns null when totalCompletedSessions is 0', () => {
@@ -142,7 +142,7 @@ describe('home-spine: priority-checkers-gated', () => {
         boss: { hasActiveEncounter: true, isFinalStrike: false },
       });
       const pc = { totalCompletedSessions: 0 };
-      expect(checkBossActive(snap, undefined, pc as any)).toBeNull();
+      expect(checkBossActive(snap, undefined, pc as unknown)).toBeNull();
     });
 
     it('returns null when surfaceMap hides boss surfaces', () => {
@@ -156,7 +156,7 @@ describe('home-spine: priority-checkers-gated', () => {
           boss_full_cta: 'blocked' as const,
         },
       };
-      expect(checkBossActive(snap, undefined, pc as any)).toBeNull();
+      expect(checkBossActive(snap, undefined, pc as unknown)).toBeNull();
     });
   });
 });

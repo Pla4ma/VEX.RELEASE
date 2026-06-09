@@ -5,10 +5,10 @@ import { Text } from '../../components/primitives/Text';
 import { GlassCard } from '../../components/glass/GlassCard';
 import { GlassProgressBar } from '../../components/glass/GlassProgressBar';
 import { LiquidButton } from '../../components/glass/LiquidButton';
-import { Skeleton } from '../../components/ui/Skeleton';
 import { vexLightGlass } from '../../theme/tokens/vex-light-glass';
 import type { LearningExecutionCopy } from '../../features/learning-execution';
 import { formatMinutes } from './homeScreenCardStyles';
+import { ContentStudyStates } from './ContentStudyStates';
 
 export interface ContentStudyHeroCardProps {
   activePlan: {
@@ -37,109 +37,40 @@ export function ContentStudyHeroCard({
   onStart,
   copy,
 }: ContentStudyHeroCardProps) {
-  if (isLoading) {
+  if (isLoading || hasError) {
     return (
-      <GlassCard variant="premium" padding={20} radius={26}>
-        <View style={{ gap: 10 }}>
-          <Text
-            style={{
-              color: vexLightGlass.mint[700],
-              fontSize: 11,
-              fontWeight: '700',
-              letterSpacing: 0.5,
-              textTransform: 'uppercase',
-            }}
-          >
-            {copy.layerName}
-          </Text>
-          <Skeleton width={180} height={20} borderRadius={8} />
-          <Skeleton width="100%" height={16} borderRadius={6} />
-          <Skeleton width={132} height={40} borderRadius={12} />
-        </View>
-      </GlassCard>
+      <ContentStudyStates
+        isLoading={isLoading}
+        hasError={hasError}
+        copy={copy}
+        onRetry={onRetry}
+        onSeeHowItWorks={onSeeHowItWorks}
+        onStart={onStart}
+      />
     );
   }
-  if (hasError) {
-    return (
-      <GlassCard variant="premium" padding={20} radius={26}>
-        <View style={{ gap: 10 }}>
-          <Text
-            style={{
-              color: vexLightGlass.mint[700],
-              fontSize: 11,
-              fontWeight: '700',
-              letterSpacing: 0.5,
-              textTransform: 'uppercase',
-            }}
-          >
-            {copy.layerName}
-          </Text>
-          <Text
-            style={{
-              color: vexLightGlass.text.secondary,
-              fontSize: 13,
-            }}
-          >
-            We could not load your execution progress right now.
-          </Text>
-          <LiquidButton
-            label="Retry"
-            onPress={onRetry}
-            variant="outline"
-            accessibilityLabel="Retry loading"
-            accessibilityHint="Double tap to activate"
-          />
-        </View>
-      </GlassCard>
-    );
-  }
+
   if (activePlan) {
     return (
       <GlassCard variant="premium" padding={20} radius={26}>
         <View style={{ gap: 12 }}>
-          <Text
-            style={{
-              color: vexLightGlass.mint[700],
-              fontSize: 11,
-              fontWeight: '700',
-              letterSpacing: 0.5,
-              textTransform: 'uppercase',
-            }}
-          >
-            {`${copy.homeTitle}: "${activePlan.title}"`}
-          </Text>
-          <View style={{ gap: 8 }}>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}
-            >
-              <Text
-                style={{
-                  color: vexLightGlass.text.primary,
-                  fontSize: 14,
-                  fontWeight: '700',
-                }}
-              >
-                {`Step ${Math.min(activePlan.completedTasks + 1, activePlan.totalTasks)}/${activePlan.totalTasks}`}
-              </Text>
-              <Text
-                style={{
-                  color: vexLightGlass.text.secondary,
-                  fontSize: 13,
-                }}
-              >
-                {formatMinutes(activePlan.remainingMinutes)}
-              </Text>
-            </View>
-            <GlassProgressBar
-              value={activePlan.progressPercent}
-              height={8}
-              variant="premium"
-            />
+          <Text style={{
+            color: vexLightGlass.mint[700], fontSize: 11,
+            fontWeight: '700', letterSpacing: 0.5, textTransform: 'uppercase',
+          }}>{copy.layerName}</Text>
+          <Text style={{
+            color: vexLightGlass.text.primary, fontSize: 16,
+            fontWeight: '800', letterSpacing: -0.2,
+          }}>{activePlan.title}</Text>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+            <Text style={{ color: vexLightGlass.text.secondary, fontSize: 13 }}>
+              {activePlan.completedTasks}/{activePlan.totalTasks} tasks
+            </Text>
+            <Text style={{ color: vexLightGlass.text.secondary, fontSize: 13 }}>
+              {formatMinutes(activePlan.remainingMinutes)}
+            </Text>
           </View>
+          <GlassProgressBar value={activePlan.progressPercent} height={8} variant="premium" />
           <LiquidButton
             label={`${copy.homeCta}: ${activePlan.title}`}
             onPress={onContinue}
@@ -152,51 +83,21 @@ export function ContentStudyHeroCard({
       </GlassCard>
     );
   }
+
   return (
     <GlassCard variant="premium" padding={20} radius={26}>
       <View style={{ gap: 12 }}>
-        <Text
-          style={{
-            color: vexLightGlass.mint[700],
-            fontSize: 11,
-            fontWeight: '700',
-            letterSpacing: 0.5,
-            textTransform: 'uppercase',
-          }}
-        >
-          {copy.layerName}
-        </Text>
-        <Text
-          style={{
-            color: vexLightGlass.text.primary,
-            fontSize: 16,
-            fontWeight: '800',
-            letterSpacing: -0.2,
-          }}
-        >
-          {copy.emptyTitle}
-        </Text>
-        <View
-          style={{
-            flexDirection: 'row',
-            gap: 10,
-            flexWrap: 'wrap',
-          }}
-        >
-          <LiquidButton
-            label={copy.emptyCta}
-            onPress={onStart}
-            variant="primary"
-            accessibilityLabel="Get started"
-            accessibilityHint="Double tap to activate"
-          />
-          <LiquidButton
-            label="See How It Works"
-            onPress={onSeeHowItWorks}
-            variant="outline"
-            accessibilityLabel="See how it works"
-            accessibilityHint="Double tap to activate"
-          />
+        <Text style={{
+          color: vexLightGlass.mint[700], fontSize: 11,
+          fontWeight: '700', letterSpacing: 0.5, textTransform: 'uppercase',
+        }}>{copy.layerName}</Text>
+        <Text style={{
+          color: vexLightGlass.text.primary, fontSize: 16,
+          fontWeight: '800', letterSpacing: -0.2,
+        }}>{copy.emptyTitle}</Text>
+        <View style={{ flexDirection: 'row', gap: 10, flexWrap: 'wrap' }}>
+          <LiquidButton label={copy.emptyCta} onPress={onStart} variant="primary" />
+          <LiquidButton label="See How It Works" onPress={onSeeHowItWorks} variant="outline" />
         </View>
       </View>
     </GlassCard>

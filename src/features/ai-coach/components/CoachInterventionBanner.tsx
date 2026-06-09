@@ -6,7 +6,7 @@ import Animated, { FadeInDown, FadeOutUp } from 'react-native-reanimated';
 import { Text } from '../../../components';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import { MMKVStorageAdapter } from '../../../persistence/MMKVStorageAdapter';
-import type { Intervention, CoachInterventionBannerProps } from './intervention-types';
+import type { CoachInterventionBannerProps } from './intervention-types';
 import { DISMISSAL_STORAGE_KEY, DISMISSAL_TTL_HOURS } from './intervention-types';
 import {
   getBannerColors,

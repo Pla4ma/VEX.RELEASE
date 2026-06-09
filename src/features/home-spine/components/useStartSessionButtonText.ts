@@ -32,14 +32,14 @@ export function useStartSessionButtonText({
   bossName,
 }: StartSessionButtonTextInput): StartSessionButtonText {
   const buttonLabel = useMemo(() => {
-    if (label) return label;
-    if (hasActiveSession) return 'Resume Session';
-    if (isFinalStrike && bossName) return `Defeat ${bossName} Now`;
+    if (label) {return label;}
+    if (hasActiveSession) {return 'Resume Session';}
+    if (isFinalStrike && bossName) {return `Defeat ${bossName} Now`;}
     return 'Start Focus Session';
   }, [label, hasActiveSession, isFinalStrike, bossName]);
 
   const subtitleText = useMemo(() => {
-    if (subtitle) return subtitle;
+    if (subtitle) {return subtitle;}
     if (hasActiveSession && resumeTimeSeconds) {
       return `${formatTime(resumeTimeSeconds)} elapsed`;
     }

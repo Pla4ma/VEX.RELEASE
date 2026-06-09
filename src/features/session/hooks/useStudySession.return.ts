@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
-import type { SessionConfig, SessionState } from '../../../session/types';
-import type { SessionOrchestrator } from '../../../session/SessionOrchestrator';
-import type { getCoachService } from '../../ai-coach/service/service';
+import type { SessionConfig} from '../../../session/types';
+import type {} from '../../../session/';
+import type {} from '../../ai-coach/service/service';
 import {
   studySessionKeys,
   getExpectedDuration,
@@ -132,9 +132,9 @@ export function useStudySessionReturn(args: BuildReturnArgs) {
     progress,
     timeRemaining,
     isLoading:
-      currentSessionQuery.isLoading ||
-      sessionHistoryQuery.isLoading ||
-      sessionStatsQuery.isLoading,
+      currentSessionQuery.isPending ||
+      sessionHistoryQuery.isPending ||
+      sessionStatsQuery.isPending,
     isFetching:
       currentSessionQuery.isFetching ||
       sessionHistoryQuery.isFetching ||

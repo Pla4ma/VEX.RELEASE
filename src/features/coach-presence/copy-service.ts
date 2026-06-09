@@ -1,6 +1,6 @@
 import type {
   CoachMemoryConfidence,
-  CoachPresenceMotivationStyle,
+  _CoachPresenceMotivationStyle,
 } from './schemas';
 import type {
   CoachPresenceContext,

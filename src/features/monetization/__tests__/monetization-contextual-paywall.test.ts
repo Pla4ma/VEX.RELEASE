@@ -74,7 +74,7 @@ describe('monetization feature — comprehensive tests', () => {
       expect(typeof result.context === 'string' || result.context === null).toBe(true);
     });
     it('evaluateTrigger returns false for unknown trigger type', () => {
-      const result = evaluateTrigger(TEST_USER, { type: 'UNKNOWN_TRIGGER' } as any);
+      const result = evaluateTrigger(TEST_USER, { type: 'UNKNOWN_TRIGGER' } as unknown);
       expect(result.shouldShow).toBe(false);
     });
     it('getPaywallCooldownRemaining returns 0 for no history', () => {

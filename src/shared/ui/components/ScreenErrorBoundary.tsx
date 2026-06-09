@@ -11,7 +11,7 @@ import React, { Component, type ReactNode, type ErrorInfo } from 'react';
 import { OfflineEmptyState } from './EmptyState';
 import { captureException } from '../../../config/sentry';
 import { ErrorFallback } from './ErrorFallback';
-import type { ErrorFallbackProps } from './ErrorFallback';
+import type {} from './ErrorFallback';
 
 export { ErrorFallback } from './ErrorFallback';
 export type { ErrorFallbackProps } from './ErrorFallback';

@@ -74,7 +74,7 @@ export async function getCompletionLedgerByIdempotencyKey(
 ): Promise<CompletionLedger | null> {
   try {
     const raw = ledgerMMKV.getString(storageKey(idempotencyKey));
-    if (!raw) return null;
+    if (!raw) {return null;}
     return CompletionLedgerSchema.parse(JSON.parse(raw));
   } catch (error) {
     captureSilentFailure(error, {
@@ -102,7 +102,7 @@ export async function updateCompletionSyncStatus(
 
     for (const key of ledgerKeys) {
       const raw = ledgerMMKV.getString(key);
-      if (!raw) continue;
+      if (!raw) {continue;}
       try {
         const ledger = CompletionLedgerSchema.parse(JSON.parse(raw));
         if (ledger.ledgerId === ledgerId) {
@@ -151,7 +151,7 @@ export function cleanupStaleLedgers(
 
     for (const key of ledgerKeys) {
       const raw = ledgerMMKV.getString(key);
-      if (!raw) continue;
+      if (!raw) {continue;}
       try {
         const ledger = CompletionLedgerSchema.parse(JSON.parse(raw));
         if (ledger.createdAt < cutoff) {

@@ -1,6 +1,6 @@
 import { createDebugger } from '../../utils/debug';
-import type { SessionStatus } from '../types';
-import type { CoachSessionInsight } from './sessionCoachContext';
+import type {} from '../types';
+import type {} from './sessionCoachContext';
 
 export const FEATURE_KEY = 'ai_coach_basic' as const;
 export const debug = createDebugger('session:coach-integration');

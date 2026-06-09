@@ -37,7 +37,7 @@ export function ScoreChartSvg({
   height,
   graphHeight,
   padding,
-  minScore,
+  _minScore,
   maxScore,
   scoreRange,
   scoreColor,

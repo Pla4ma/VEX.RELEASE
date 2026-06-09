@@ -13,7 +13,7 @@ import { contentStudyAnalytics } from './analytics-service';
 const composedAnalytics = { ...inputTrackers, ...studyTrackers };
 
 export async function calculateMetrics(
-  userId: string,
+  _userId: string,
 ): Promise<Partial<ContentStudyMetrics>> {
   return {
     totalContentsSubmitted: 0,

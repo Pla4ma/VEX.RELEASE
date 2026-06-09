@@ -2,7 +2,6 @@ import {
   getAnalyticsData,
 } from '../service';
 import * as repository from '../repository';
-import { eventBus } from '../../../events';
 
 jest.mock('../repository');
 

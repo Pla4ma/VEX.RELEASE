@@ -98,7 +98,7 @@ function AnimatedBackground(): JSX.Element {
  * Welcome screen component
  */
 export function WelcomeScreen({ onStart }: WelcomeScreenProps): JSX.Element {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
   const { isReducedMotion } = useReducedMotion();
 
   return (

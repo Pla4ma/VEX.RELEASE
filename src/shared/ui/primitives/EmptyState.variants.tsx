@@ -83,7 +83,7 @@ export function NetworkError({ onRetry }: { onRetry?: () => void }) {
 }
 
 export function EmptyFeed({
-  bossName,
+  _bossName,
   onStartSession,
 }: {
   bossName: string;

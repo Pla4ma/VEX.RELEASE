@@ -79,7 +79,7 @@ export async function handleStreakRiskDetected(payload: {
     payload.riskLevel,
     payload.hoursSinceLastSession,
   );
-  const event = createStreakRiskDetectedEvent(
+  const _event = createStreakRiskDetectedEvent(
     payload.userId,
     payload.currentStreak,
     payload.hoursSinceLastSession,
@@ -111,7 +111,7 @@ export async function handleStreakBroken(payload: {
       payload.previousStreak,
       payload.daysInactive,
     );
-    const event = createComebackActivatedEvent(
+    const _event = createComebackActivatedEvent(
       payload.userId,
       comeback.id,
       payload.previousStreak,

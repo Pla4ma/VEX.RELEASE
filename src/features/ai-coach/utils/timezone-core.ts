@@ -1,6 +1,6 @@
 import { captureSilentFailure } from '../../../utils/silent-failure';
 
-export function getUserTimezone(userId: string): string {
+export function getUserTimezone(_userId: string): string {
   const deviceTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   return deviceTimezone || 'UTC';
 }

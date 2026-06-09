@@ -20,7 +20,7 @@ export function SessionCompleteHeroSection({
   controller,
   summary,
 }: SessionCompleteHeroSectionProps): JSX.Element {
-  const { width } = useWindowDimensions();
+  const { width: _width } = useWindowDimensions();
 
   return (
     <>

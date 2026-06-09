@@ -1,6 +1,6 @@
 import { eventBus } from '../../events/EventBus';
 import * as Sentry from '@sentry/react-native';
-import type { SocialActivity, CompetitiveResult, SquadChallenge } from './social-feed-types';
+import type { SocialActivity, SquadChallenge } from './social-feed-types';
 import { CompetitiveResultSchema } from './social-feed-types';
 import {
   createFeedEntry,
@@ -10,7 +10,7 @@ import {
   sendPushNotification,
   completeSquadChallenge,
   getRecentSessions,
-  getSquadMemberIds,
+  _getSquadMemberIds,
 } from './social-feed-helpers';
 
 export { getNotificationTitle, getNotificationBody, generateId } from './social-feed-helpers';

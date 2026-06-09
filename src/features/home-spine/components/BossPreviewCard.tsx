@@ -95,7 +95,7 @@ export function BossPreviewCard({
                   : theme.colors.border.DEFAULT
               }
             >
-              <Text fontSize={28}></Text>
+              <Text fontSize={28} />
             </Box>
             <Box flex={1} gap="xs">
               <Box flexDirection="row" alignItems="center" gap="sm">
@@ -120,7 +120,7 @@ export function BossPreviewCard({
             <EscapeTimer hoursRemaining={hoursRemaining} />
             {estimatedDamage && estimatedDamage > 0 && (
               <Box flexDirection="row" alignItems="center" gap="xs">
-                <Text fontSize={12}></Text>
+                <Text fontSize={12} />
                 <Text variant="caption" color="text.secondary">
                   ~{estimatedDamage} dmg this session
                 </Text>

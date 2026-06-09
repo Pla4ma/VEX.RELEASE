@@ -1,17 +1,17 @@
 
 // Test helper — re-exports monetization utilities for test use.
 // Some original source paths have moved; using runtime require() fallback.
-let resolvePremiumStrategy: any;
-let resolvePremiumTiming: any;
-let PREMIUM_VALUE_MAP: any;
-let getLanePremiumValue: any;
-let mapProfileToLane: any;
-let resolvePersonalizedPremium: any;
-let getPaywallTiming: any;
-let VALUE_PROPOSITION: any;
-let FREE_BOUNDARY_COPY: any;
-let PREMIUM_BOUNDARY_COPY: any;
-let FEATURE_HIGHLIGHT_MAP: any;
+let resolvePremiumStrategy: unknown;
+let resolvePremiumTiming: unknown;
+let PREMIUM_VALUE_MAP: unknown;
+let getLanePremiumValue: unknown;
+let mapProfileToLane: unknown;
+let resolvePersonalizedPremium: unknown;
+let getPaywallTiming: unknown;
+let VALUE_PROPOSITION: unknown;
+let FREE_BOUNDARY_COPY: unknown;
+let PREMIUM_BOUNDARY_COPY: unknown;
+let FEATURE_HIGHLIGHT_MAP: unknown;
 
 try {
   const mod = require('../../../shared/monetization/premium-strategy');

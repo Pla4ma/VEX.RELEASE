@@ -5,7 +5,7 @@
  * session completed → XP calculated → progression updated → level up triggered
  */
 
-import { describe, it, expect, vi } from '@jest/globals';
+import { describe, it, expect} from '@jest/globals';
 import { setupIntegrationTests, server, http, HttpResponse } from './setup';
 import { eventBus } from '../../events';
 

@@ -27,7 +27,7 @@ describe('Analytics Events', () => {
     emitInsightGenerated('user-1', {
       id: 'insight-1',
       type: 'milestone_reached',
-    } as any);
+    } as unknown);
     expect(eventBus.publish).toHaveBeenCalledWith(
       'analytics:insight_generated',
       expect.objectContaining({ userId: 'user-1', insightId: 'insight-1' }),
@@ -49,7 +49,7 @@ describe('Analytics Events', () => {
       id: 'pattern-1',
       type: 'anomaly',
       confidence: 0.9,
-    } as any);
+    } as unknown);
     expect(eventBus.publish).toHaveBeenCalledWith(
       'analytics:pattern_detected',
       expect.objectContaining({
@@ -66,7 +66,7 @@ describe('Analytics Events', () => {
       id: 'job-1',
       userId: 'user-1',
       format: 'json',
-    } as any);
+    } as unknown);
     expect(eventBus.publish).toHaveBeenCalledWith(
       'analytics:export_requested',
       expect.objectContaining({ jobId: 'job-1', format: 'json' }),
@@ -79,7 +79,7 @@ describe('Analytics Events', () => {
       id: 'job-1',
       userId: 'user-1',
       fileUrl: 'https://example.com/export.json',
-    } as any);
+    } as unknown);
     expect(eventBus.publish).toHaveBeenCalledWith(
       'analytics:export_completed',
       expect.objectContaining({ jobId: 'job-1' }),

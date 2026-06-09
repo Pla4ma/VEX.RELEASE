@@ -1,6 +1,5 @@
 import { decideHomeSurfaces } from '../home-surface-decision';
 import {
-  enforceDay0SurfacePolicy,
   DEFAULT_DAY0_POLICY,
 } from '../day0-surface-policy';
 import type { HomeSurfaceMap } from '../surface-decision-schemas';

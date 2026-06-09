@@ -7,8 +7,8 @@ import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
 import type { CompanionMood } from '../../companion/types';
 import {
-  StreakIndicator,
-  LevelBadge,
+  _StreakIndicator,
+  _LevelBadge,
   getCompanionMoodSymbol,
 } from './GreetingHeaderBadges';
 

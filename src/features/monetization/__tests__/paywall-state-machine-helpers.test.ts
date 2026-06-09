@@ -4,7 +4,6 @@
 import {
   canDismissPaywall,
   canPurchase,
-  createInitialState,
   getPaywallStateMessage,
   getRetryAction,
   isTerminalState,

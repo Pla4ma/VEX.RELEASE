@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { View, ViewStyle, AccessibilityProps, Pressable } from 'react-native';
+import { View, Pressable, AccessibilityProps } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -10,7 +10,16 @@ import { Text } from '../../../components/primitives/Text';
 import { Icon } from '../../../icons';
 import { useTheme } from '../../../theme';
 import type { InteractiveCardProps, CardVariant, CardSize } from './InteractiveCardTypes';
-import { cardStyles as styles } from './InteractiveCardStyles';
+import {
+  fullWidth as fullWidthStyle,
+  card,
+  selected,
+  errorCard as error,
+  badge,
+  badgeText,
+  iconContainer,
+  contentStyle as content,
+} from './InteractiveCard.styles';
 import {
   LoadingOverlay,
   DisabledOverlay,
@@ -20,6 +29,19 @@ import {
 
 export type { InteractiveCardProps } from './InteractiveCardTypes';
 export { CardSkeleton } from './CardSkeleton';
+
+const variantStyleMap: Record<CardVariant, { backgroundColor: string; borderWidth: number; borderColor?: string }> = {
+  default: { backgroundColor: 'transparent', borderWidth: 0 },
+  elevated: { backgroundColor: 'transparent', borderWidth: 0 },
+  outlined: { backgroundColor: 'transparent', borderWidth: 1 },
+  ghost: { backgroundColor: 'transparent', borderWidth: 0 },
+};
+
+const sizeStyleMap: Record<CardSize, { padding: number; borderRadius: number }> = {
+  sm: { padding: 12, borderRadius: 12 },
+  md: { padding: 16, borderRadius: 16 },
+  lg: { padding: 20, borderRadius: 20 },
+};
 
 export const InteractiveCard: React.FC<InteractiveCardProps> = ({
   children,
@@ -42,7 +64,7 @@ export const InteractiveCard: React.FC<InteractiveCardProps> = ({
   accessibilityHint,
   hapticOnPress = true,
   scaleOnPress = 0.98,
-  fullWidth = false,
+  fullWidth: isFullWidth = false,
   aspectRatio,
   disabled: propDisabled,
   ...pressableProps
@@ -53,8 +75,7 @@ export const InteractiveCard: React.FC<InteractiveCardProps> = ({
   const [, setIsLoading] = useState(false);
   const scale = useSharedValue(1);
   const opacity = useSharedValue(1);
-  const isDisabled =
-    propDisabled || state === 'disabled' || state === 'loading';
+  const isDisabled = propDisabled || state === 'disabled' || state === 'loading';
   const isError = state === 'error';
 
   const animatedStyle = useAnimatedStyle(() => ({
@@ -63,10 +84,8 @@ export const InteractiveCard: React.FC<InteractiveCardProps> = ({
   }));
 
   const handlePress = useCallback(async () => {
-    if (isDisabled || !onPress) {return;}
-    if (hapticOnPress) {
-      // haptics handled externally
-    }
+    if (isDisabled || !onPress) return;
+    void hapticOnPress;
     setIsLoading(true);
     try {
       await onPress();
@@ -87,32 +106,8 @@ export const InteractiveCard: React.FC<InteractiveCardProps> = ({
     setIsPressed(false);
   }, [scale, reducedMotion]);
 
-  const variantStyles: Record<CardVariant, ViewStyle> = {
-    default: {
-      backgroundColor: theme.colors.background.secondary,
-      borderWidth: 0,
-    },
-    elevated: {
-      backgroundColor: theme.colors.background.secondary,
-      shadowColor: theme.colors.text.primary,
-      shadowOffset: { width: 0, height: 4 },
-      shadowOpacity: 0.85,
-      shadowRadius: 12,
-      elevation: 4,
-    },
-    outlined: {
-      backgroundColor: 'transparent',
-      borderWidth: 1,
-      borderColor: theme.colors.border.DEFAULT,
-    },
-    ghost: { backgroundColor: 'transparent', borderWidth: 0 },
-  };
-
-  const sizeStyles: Record<CardSize, ViewStyle> = {
-    sm: { padding: 12, borderRadius: 12 },
-    md: { padding: 16, borderRadius: 16 },
-    lg: { padding: 20, borderRadius: 20 },
-  };
+  const vStyle = variantStyleMap[variant];
+  const sStyle = sizeStyleMap[size];
 
   const accessibilityState: AccessibilityProps['accessibilityState'] = {
     disabled: isDisabled,
@@ -121,7 +116,7 @@ export const InteractiveCard: React.FC<InteractiveCardProps> = ({
   };
 
   return (
-    <Animated.View style={[animatedStyle, fullWidth && styles.fullWidth]}>
+    <Animated.View style={[animatedStyle, isFullWidth && fullWidth]}>
       <Pressable
         onPress={handlePress}
         onLongPress={onLongPress}
@@ -136,17 +131,16 @@ export const InteractiveCard: React.FC<InteractiveCardProps> = ({
       >
         <View
           style={[
-            styles.card,
-            variantStyles[variant],
-            sizeStyles[size],
-            selected && [
-              styles.selected,
-              { borderColor: theme.colors.primary[500] },
-            ],
-            isError && [
-              styles.error,
-              { borderColor: theme.colors.error.DEFAULT },
-            ],
+            card,
+            {
+              backgroundColor: vStyle.backgroundColor,
+              borderWidth: vStyle.borderWidth,
+              borderColor: vStyle.borderColor,
+              padding: sStyle.padding,
+              borderRadius: sStyle.borderRadius,
+            },
+            selected && [selected, { borderColor: theme.colors.primary[500] }],
+            isError && [error, { borderColor: theme.colors.error.DEFAULT }],
             aspectRatio !== undefined ? { aspectRatio } : undefined,
             style,
           ]}
@@ -154,48 +148,29 @@ export const InteractiveCard: React.FC<InteractiveCardProps> = ({
           {badge !== undefined && (
             <View
               style={[
-                styles.badge,
+                badge,
                 { backgroundColor: badgeColor || theme.colors.primary[500] },
               ]}
             >
-              <Text
-                variant="caption"
-                color="text.inverse"
-                style={styles.badgeText}
-              >
+              <Text variant="caption" color="text.inverse" style={badgeText}>
                 {typeof badge === 'number' && badge > 99 ? '99+' : badge}
               </Text>
             </View>
           )}
           {icon && (
-            <View style={styles.iconContainer}>
-              <Icon
-                name={icon}
-                size="lg"
-                color={theme.colors.primary[500]}
-              />
+            <View style={iconContainer}>
+              <Icon name={icon} size="lg" color={theme.colors.primary[500]} />
             </View>
           )}
-          <View style={styles.content}>{children}</View>
-          {state === 'loading' && (
-            <LoadingOverlay message={loadingMessage} theme={theme} />
-          )}
-          {state === 'disabled' && (
-            <DisabledOverlay reason={disabledReason} theme={theme} />
-          )}
-          {state === 'error' && (
-            <ErrorOverlay
-              message={errorMessage}
-              onRetry={onRetry}
-              theme={theme}
-            />
-          )}
-          {selected && (
-            <SelectedOverlay icon={selectionIcon} theme={theme} />
-          )}
+          <View style={content}>{children}</View>
+          {state === 'loading' && <LoadingOverlay message={loadingMessage} theme={theme} />}
+          {state === 'disabled' && <DisabledOverlay reason={disabledReason} theme={theme} />}
+          {state === 'error' && <ErrorOverlay message={errorMessage} onRetry={onRetry} theme={theme} />}
+          {selected && <SelectedOverlay icon={selectionIcon} theme={theme} />}
         </View>
       </Pressable>
     </Animated.View>
   );
 };
+
 export default InteractiveCard;

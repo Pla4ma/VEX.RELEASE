@@ -82,7 +82,7 @@ export class PaywallVerification {
       ...complianceResult.issues,
     ];
 
-    const allWarnings = [
+    const _allWarnings = [
       ...productCatalogResult.warnings,
       ...purchaseFlowResult.warnings,
       ...subscriptionManagementResult.warnings,

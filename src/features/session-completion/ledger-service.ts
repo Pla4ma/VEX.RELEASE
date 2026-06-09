@@ -32,10 +32,10 @@ interface BuildLedgerInput {
  * S: 95+, A: 80+, B: 60+, C: 40+, D: below 40.
  */
 function deriveGrade(finalScore: number): 'S' | 'A' | 'B' | 'C' | 'D' {
-  if (finalScore >= 95) return 'S';
-  if (finalScore >= 80) return 'A';
-  if (finalScore >= 60) return 'B';
-  if (finalScore >= 40) return 'C';
+  if (finalScore >= 95) {return 'S';}
+  if (finalScore >= 80) {return 'A';}
+  if (finalScore >= 60) {return 'B';}
+  if (finalScore >= 40) {return 'C';}
   return 'D';
 }
 

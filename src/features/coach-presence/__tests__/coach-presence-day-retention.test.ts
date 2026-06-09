@@ -2,7 +2,7 @@
  * Coach Presence — Day Retention Tests
  */
 
-import { coachMomentFromJourneyState, shouldShowRetentionMoment } from '../day-retention';
+import { shouldShowRetentionMoment } from '../day-retention';
 
 describe('day-retention', () => {
   test('shouldShowRetentionMoment returns null for day 0', () => {

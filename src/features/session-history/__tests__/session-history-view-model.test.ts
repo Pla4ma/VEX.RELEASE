@@ -1,5 +1,5 @@
-import { SessionMode } from '../../../session/modes';
-import type { SessionSummary } from '../../../session/types';
+
+import type {} from '../../../session/types';
 import type { SupabaseSessionRow } from '../schemas';
 import {
   buildSessionHistoryViewModel,

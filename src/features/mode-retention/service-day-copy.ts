@@ -1,4 +1,3 @@
-import type { Lane } from '../lane-engine/types';
 import { MODE_RETENTION_MANIFEST } from './copy';
 import type { ModeDayCopy } from './schemas';
 import { normalizeLane } from './service';

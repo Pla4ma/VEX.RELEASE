@@ -6,9 +6,9 @@
  */
 
 import {
-  createAnimatedValue as stubCreateAnimatedValue,
+  createAnimatedValue as _stubCreateAnimatedValue,
   createTiming as stubCreateTiming,
-  easingOut as stubEasingOut,
+  easingOut as _stubEasingOut,
   type AnimatedValue,
   type CompositeAnimation,
 } from './motion-animation-stubs';

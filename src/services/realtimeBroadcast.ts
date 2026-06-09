@@ -18,7 +18,7 @@ interface BroadcastPayload {
 }
 
 const pendingTxTimeoutIds = new Set<ReturnType<typeof setTimeout>>();
-const debug = createDebugger('realtime');
+const _debug = createDebugger('realtime');
 
 export function cancelPendingBroadcastCleanups(): void {
   pendingTxTimeoutIds.forEach(clearTimeout);

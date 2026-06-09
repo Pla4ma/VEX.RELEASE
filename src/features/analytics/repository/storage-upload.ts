@@ -32,7 +32,7 @@ export async function uploadExportData(
     }
     return await withRetry(
       async () => {
-        const { data: uploadData, error } = await withTimeout(
+        const { data: _uploadData, error } = await withTimeout(
           supabase.storage
             .from(bucket)
             .upload(path, blob, {
@@ -101,7 +101,7 @@ async function uploadLargeFile(
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     try {
       onProgress?.((attempt - 1) * 20);
-      const { data, error } = await withTimeout(
+      const { data: _data, error } = await withTimeout(
         supabase.storage
           .from(bucket)
           .upload(path, blob, {

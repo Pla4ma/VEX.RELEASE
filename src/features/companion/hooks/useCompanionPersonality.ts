@@ -10,7 +10,7 @@ import { useEffect, useState, useCallback } from 'react';
 import {
   getCompanionPersonalityEngine,
   CompanionPersonalityState,
-  PersonalityEventType,
+  _PersonalityEventType,
 } from '../CompanionPersonalityEngine';
 
 interface UseCompanionPersonalityReturn extends CompanionPersonalityState {

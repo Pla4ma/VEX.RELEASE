@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { Skeleton } from '../../../components/ui/Skeleton';
-import { lightColors } from '@/theme/tokens/colors';
 
 import { settingsStyles as styles } from './settings-screen-styles';
 

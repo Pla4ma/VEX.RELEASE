@@ -65,7 +65,7 @@ export function TomorrowPreviewSession({
           }}
         >
           <Box flexDirection="row" alignItems="center" gap="sm" mb="md">
-            <Text fontSize={20}></Text>
+            <Text fontSize={20} />
             <Text variant="label" color="text.tertiary">
               TOMORROW
             </Text>
@@ -82,7 +82,7 @@ export function TomorrowPreviewSession({
                 alignItems: 'center',
               }}
             >
-              <Text fontSize={24}></Text>
+              <Text fontSize={24} />
             </View>
 
             <View style={{ flex: 1 }}>

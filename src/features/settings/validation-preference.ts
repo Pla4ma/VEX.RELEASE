@@ -4,7 +4,7 @@ export function validateCoachSetting(
   key: string,
   value: unknown,
   errors: ValidationError[],
-  warnings: ValidationError[],
+  _warnings: ValidationError[],
 ): void {
   if (key.includes('personality') && typeof value === 'string') {
     const validPersonalities = ['supportive', 'tough', 'neutral', 'funny'];
@@ -102,7 +102,7 @@ export function validateDataSetting(
   key: string,
   value: unknown,
   errors: ValidationError[],
-  warnings: ValidationError[],
+  _warnings: ValidationError[],
 ): void {
   if (key.includes('retentionPolicy') && typeof value === 'string') {
     const validPolicies = ['minimal', 'standard', 'comprehensive', 'forever'];

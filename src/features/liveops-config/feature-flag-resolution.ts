@@ -27,7 +27,7 @@ export function resolveEffectiveThreshold(
   motivationProfiles: Partial<Record<FeatureKey, MotivationProfileConfig>>,
 ): number {
   const accel = motivationProfiles[feature];
-  if (!accel || !profile) return baseThreshold;
+  if (!accel || !profile) {return baseThreshold;}
 
   const primaryAccelerated = accel.accelerate.includes(profile.primary);
   const primaryRestricted = accel.restrict.includes(profile.primary);
@@ -67,12 +67,12 @@ export function resolveFeatureVisibility(
   sessions: number,
   motivationProfiles: Partial<Record<FeatureKey, MotivationProfileConfig>>,
 ): boolean {
-  if (!baseVisible) return false;
+  if (!baseVisible) {return false;}
   const accel = motivationProfiles[feature];
-  if (!accel || !profile) return baseVisible;
+  if (!accel || !profile) {return baseVisible;}
 
   const primaryRestricted = accel.restrict.includes(profile.primary);
-  if (!primaryRestricted) return baseVisible;
+  if (!primaryRestricted) {return baseVisible;}
 
   if (
     accel.restrictVisibility &&
@@ -89,7 +89,7 @@ export function checkDependenciesSatisfied(
   dependencies: Partial<Record<FeatureKey, FeatureKey[]>>,
 ): boolean {
   const deps = dependencies[feature];
-  if (!deps || deps.length === 0) return true;
+  if (!deps || deps.length === 0) {return true;}
   return deps.every((dep) => unlockedFeatures.has(dep));
 }
 

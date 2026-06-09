@@ -14,7 +14,7 @@ import Animated, { FadeInUp } from 'react-native-reanimated';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
-import { sessionStart } from '../../../utils/haptics';
+
 import { ComebackQuestCardSkeleton } from './ComebackQuestCardSkeleton';
 
 export type { ComebackQuestCardSkeleton } from './ComebackQuestCardSkeleton';
@@ -90,7 +90,7 @@ export function ComebackQuestCard({
               justifyContent="center"
               alignItems="center"
             >
-              <Text fontSize={24}></Text>
+              <Text fontSize={24} />
             </Box>
             <Box flex={1}>
               <Text variant="h4" color={theme.colors.text.primary}>
@@ -160,7 +160,7 @@ export function ComebackQuestCard({
             bg={theme.colors.background.primary}
           >
             <Box flexDirection="row" alignItems="center" gap="sm">
-              <Text fontSize={16}></Text>
+              <Text fontSize={16} />
               <Text variant="bodySmall" color={theme.colors.text.secondary}>
                 {multiplier.toFixed(1)}x XP bonus active
               </Text>

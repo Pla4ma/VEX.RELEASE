@@ -8,7 +8,7 @@ import {
 } from './repository';
 import {
   trackProjectThreadCreated,
-  trackProjectThreadUpdated,
+  _trackProjectThreadUpdated,
   trackProjectThreadRescued,
 } from './analytics';
 

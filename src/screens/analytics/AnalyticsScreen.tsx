@@ -1,6 +1,6 @@
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 import React, { useEffect, useRef } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
@@ -11,7 +11,7 @@ import { useAuthStore } from '../../store';
 import { useTheme } from '../../theme';
 import {
   Skeleton,
-  SkeletonCard,
+  _SkeletonCard,
   SkeletonList,
 } from '../../components/ui/Skeleton';
 import { createSheet } from '@/shared/ui/create-sheet';

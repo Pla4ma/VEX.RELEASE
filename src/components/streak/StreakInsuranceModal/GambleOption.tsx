@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, Pressable } from 'react-native';
-import type { GambleOptionProps, Theme } from './types';
+import type { GambleOptionProps} from './types';
 import { GAMBLE_COLORS } from './types';
 import { buttonTap } from '../../../utils/haptics';
 import {

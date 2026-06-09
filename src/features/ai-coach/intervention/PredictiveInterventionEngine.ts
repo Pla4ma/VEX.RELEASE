@@ -18,7 +18,7 @@ export class PredictiveInterventionEngine {
   private predictions: Map<string, RiskPrediction[]> = new Map();
   private patterns: Map<string, BehavioralPattern> = new Map();
   private interventions: Map<string, InterventionResult[]> = new Map();
-  
+
   private checkInterval: ReturnType<typeof setInterval> | null = null;
   static isEnabled(): boolean {
     return featureFlags.isEnabled('predictive_interventions');
@@ -157,7 +157,7 @@ export class PredictiveInterventionEngine {
   private evictOldest<K, V>(map: Map<K, V>): void {
     if (map.size >= MAX_MAP_ENTRIES) {
       const oldestKey = map.keys().next().value;
-      if (oldestKey !== undefined) map.delete(oldestKey);
+      if (oldestKey !== undefined) {map.delete(oldestKey);}
     }
   }
 }

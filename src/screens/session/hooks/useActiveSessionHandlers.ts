@@ -4,7 +4,7 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { getSprintChainService } from '../../../features/session/SprintChainService';
 import type { SessionStackParams } from '../../../navigation/types';
 import type { Mood } from '../../../session/components/CreativeMoodLogger';
-import type { SessionSummary } from '../../../session/types/schemas';
+import type {} from '../../../session/types/schemas';
 import { SessionSummarySchema } from '../../../session/types/schemas';
 import type { useSession } from '../../../session/hooks/useSession';
 import { SessionMode } from '../../../session/modes';

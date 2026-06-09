@@ -11,7 +11,6 @@ import { createDebugger } from '../../utils/debug';
 const debug = createDebugger('session:orchestrator:core');
 
 import type { SessionOrchestratorBase } from '../SessionOrchestratorBase';
-import { TimerEngine } from '../engines/TimerEngine';
 
 export async function createSession(
   orch: SessionOrchestratorBase,

@@ -18,7 +18,7 @@ import {
 import { ResolvedSuccessCard } from './ResolvedSuccessCard';
 import { ErrorActionButtons } from './ErrorActionButtons';
 
-const SEVERITY_KEYS = ['high', 'medium', 'low'] as const;
+const _SEVERITY_KEYS = ['high', 'medium', 'low'] as const;
 
 export const PremiumErrorRecovery: React.FC<PremiumErrorRecoveryProps> = ({
   error,

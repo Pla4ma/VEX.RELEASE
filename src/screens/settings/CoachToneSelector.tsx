@@ -5,7 +5,6 @@ import { Box, Text, Card } from '@/components/primitives';
 import { Icon } from '@/icons';
 import { lightColors } from '@/theme/tokens/colors';
 
-
 export type CoachLanguage = 'en';
 
 interface LanguageOption {
@@ -44,7 +43,7 @@ export const CoachToneSelector: React.FC<CoachToneSelectorProps> = ({
         LANGUAGE
       </Text>
       <Card size="sm" style={{ overflow: 'hidden' }}>
-        {LANGUAGE_OPTIONS.map((option, index) => (
+        {LANGUAGE_OPTIONS.map((option, _index) => (
           <React.Fragment key={option.id}>
             <Pressable
               onPress={() => onLanguageChange(option.id)}

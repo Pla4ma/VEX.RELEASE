@@ -1,5 +1,5 @@
 import { buildContentStudyVisibility } from '../content-study-visibility';
-import type { ContentStudyVisibility } from '../content-study-visibility';
+import type {} from '../content-study-visibility';
 
 function baseInput() {
   return {

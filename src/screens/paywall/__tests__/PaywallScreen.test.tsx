@@ -6,7 +6,6 @@ import {
   mockRefresh,
   mockRetry,
   mockGoBack,
-  mockedUsePaywall,
   mockedUsePremiumStatus,
   mockedCapture,
   revenueCatError,

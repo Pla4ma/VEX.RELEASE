@@ -1,16 +1,8 @@
-import type { TextInputProps, TextStyle, ViewStyle } from 'react-native';
+import type { ViewStyle } from 'react-native';
 
-export type FieldSize = 'sm' | 'md' | 'lg';
+export type FieldState = 'default' | 'focused' | 'error' | 'success' | 'loading' | 'disabled';
 
-export type FieldState =
-  | 'default'
-  | 'focused'
-  | 'error'
-  | 'success'
-  | 'disabled'
-  | 'loading';
-
-export interface FormFieldProps extends Omit<TextInputProps, 'style'> {
+export interface FormFieldProps {
   label?: string;
   placeholder?: string;
   error?: string;
@@ -22,34 +14,34 @@ export interface FormFieldProps extends Omit<TextInputProps, 'style'> {
   loading?: boolean;
   showCounter?: boolean;
   maxLength?: number;
-  size?: FieldSize;
+  size?: 'sm' | 'md' | 'lg';
   leftIcon?: string;
   rightIcon?: string;
   containerStyle?: ViewStyle;
-  inputStyle?: TextStyle;
+  inputStyle?: ViewStyle;
   accessibilityLabel?: string;
   accessibilityHint?: string;
-  onValidate?: (value: string) => string | null;
+  onValidate?: (text: string) => string | null;
   onChangeText?: (text: string) => void;
+  value?: string;
+  defaultValue?: string;
 }
 
 export const sizeConfig = {
-  sm: {
-    paddingVertical: 10,
-    paddingHorizontal: 12,
-    fontSize: 14,
-    minHeight: 44,
-  },
-  md: {
-    paddingVertical: 13,
-    paddingHorizontal: 16,
-    fontSize: 16,
-    minHeight: 52,
-  },
-  lg: {
-    paddingVertical: 16,
-    paddingHorizontal: 18,
-    fontSize: 17,
-    minHeight: 58,
-  },
+  sm: { minHeight: 40, paddingHorizontal: 12, paddingVertical: 8, fontSize: 14 },
+  md: { minHeight: 48, paddingHorizontal: 16, paddingVertical: 12, fontSize: 15 },
+  lg: { minHeight: 56, paddingHorizontal: 20, paddingVertical: 16, fontSize: 16 },
 };
+
+export function getFieldBorderColor(state: FieldState, semantic: { danger: string; success: string; primary: string; inputBorder: string }): string {
+  if (state === 'error') {return semantic.danger;}
+  if (state === 'success') {return semantic.success;}
+  if (state === 'focused') {return semantic.primary;}
+  return semantic.inputBorder;
+}
+
+export function getFieldMessageColor(error: string | undefined, internalError: string | undefined, successMessage: string | undefined): string {
+  if (error || internalError) {return 'error.DEFAULT';}
+  if (successMessage) {return 'success.DEFAULT';}
+  return 'text.muted';
+}

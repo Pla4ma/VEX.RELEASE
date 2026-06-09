@@ -6,7 +6,7 @@
  */
 
 import type { ContentStudyErrorCode } from './types';
-import { CONTENT_STUDY_CONSTANTS } from './types';
+
 import { contentStudyAnalytics } from './analytics-service';
 
 export const studyTrackers = {

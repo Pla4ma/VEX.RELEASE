@@ -77,10 +77,10 @@ export function trackMoodChange(
  * Set companion user properties
  */
 export function setCompanionUserProperties(
-  userId: string,
-  companionPhase: string,
-  currentMood: string,
-  responseCount: number,
+  _userId: string,
+  _companionPhase: string,
+  _currentMood: string,
+  _responseCount: number,
 ): void {
   // Set user properties for segmentation
   // This would typically call an analytics identify method

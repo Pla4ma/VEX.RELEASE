@@ -19,7 +19,7 @@ export function EditorialRule({ isReducedMotion }: { isReducedMotion: boolean })
   const scale = useSharedValue(isReducedMotion ? 1 : 0);
   const op = useSharedValue(isReducedMotion ? 1 : 0);
   useEffect(() => {
-    if (isReducedMotion) return;
+    if (isReducedMotion) {return;}
     scale.value = withDelay(1200, withSpring(1, springPresets.precise));
     op.value = withDelay(1200, withTiming(1, { duration: 600, easing: Easing.bezier(0.22, 1, 0.36, 1) }));
   }, [scale, op, isReducedMotion]);

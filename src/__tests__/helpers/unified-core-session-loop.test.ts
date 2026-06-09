@@ -6,7 +6,6 @@
  */
 
 import {
-  getLaneMechanicPolicy,
   getLanePresentationPolicy,
   buildLaneSessionBrief,
   decideHomeSurfaces,

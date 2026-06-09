@@ -1,5 +1,5 @@
 import { createUnlockDecision, isFeatureVisible } from '../service';
-import type { UnlockDecision } from '../types';
+import type {} from '../types';
 
 describe('Unlock Explainer', () => {
   const NOW = 1_764_000_000_000;

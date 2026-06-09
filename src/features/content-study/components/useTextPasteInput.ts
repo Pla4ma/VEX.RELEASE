@@ -37,7 +37,7 @@ export function useTextPasteInput({
   onChange,
   onValidationChange,
   onAutoSave,
-  disabled = false,
+  _disabled = false,
   autoFocus = false,
 }: TextPasteInputProps): UseTextPasteInputReturn {
   const { theme } = useTheme();

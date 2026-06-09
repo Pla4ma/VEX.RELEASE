@@ -10,7 +10,7 @@ jest.mock('../../../shared/hardening', () => ({
     clear() { this._store.clear(); }
   },
   CircuitBreaker: class { async execute(fn: () => unknown) { return fn(); } },
-  classifyError: (err: Error) => ({ type: 'unknown', retryable: false }),
+  classifyError: (_err: Error) => ({ type: 'unknown', retryable: false }),
 }));
 jest.mock('../../../events', () => ({
   eventBus: {

@@ -1,11 +1,10 @@
-import { getCoachPresenceMessage } from './copy-service';
+
 import type { CoachPresenceContext } from './copy-service';
 import { getCoachPresenceMessage as getMessageFromLibrary } from './message-library';
 import type {
   CoachPresenceMessageContext,
   CoachPresenceMessageStyle,
 } from './message-library';
-import { getCoachComebackMessage } from './comeback-message';
 
 export { getCoachComebackMessage } from './comeback-message';
 

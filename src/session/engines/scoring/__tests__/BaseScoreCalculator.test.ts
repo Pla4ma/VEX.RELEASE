@@ -78,7 +78,7 @@ describe('BaseScoreCalculator', () => {
   describe('calculateBaseScoreFromSession', () => {
     it('should extract values from session state', () => {
       const session: Partial<SessionState> = {
-        config: { duration: 1800 } as any,
+        config: { duration: 1800 } as unknown,
         completionPercentage: 90,
         effectiveTime: 1620,
       };

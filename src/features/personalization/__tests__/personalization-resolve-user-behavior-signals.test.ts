@@ -31,7 +31,7 @@ describe('resolveUserBehaviorSignals', () => {
     const result = resolveUserBehaviorSignals(
       makeInput({
         firstWeekExperience: { stage: 'DAY_0_NOT_STARTED', isDayZero: true },
-      }) as any,
+      }) as unknown,
     );
     expect(result.bossEngagement).toBe('none');
     expect(result.premiumFeatureAttempts).toHaveLength(0);
@@ -47,7 +47,7 @@ describe('resolveUserBehaviorSignals', () => {
           preferredMode: null,
           bestTimeOfDay: null,
         },
-      }) as any,
+      }) as unknown,
     );
     expect(result.studyUsageRatio).toBe(0.5);
   });
@@ -69,7 +69,7 @@ describe('resolveUserBehaviorSignals', () => {
       },
     ];
     const result = resolveUserBehaviorSignals(
-      makeInput({ recentSignals: signals }) as any,
+      makeInput({ recentSignals: signals }) as unknown,
     );
     expect(result.bossEngagement).toBe('medium');
   });

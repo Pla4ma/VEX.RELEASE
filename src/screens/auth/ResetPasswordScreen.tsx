@@ -22,7 +22,7 @@ type Props = NativeStackScreenProps<AuthStackParams, 'ResetPassword'>;
 export const ResetPasswordScreen: React.FC<Props> = ({ navigation, route }) => {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
-  const { token } = route.params;
+  const { token: _token } = route.params;
 
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');

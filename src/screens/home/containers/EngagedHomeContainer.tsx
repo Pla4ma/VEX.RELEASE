@@ -1,6 +1,6 @@
 import { useMemo, useCallback } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import type { UseQueryResult } from '@tanstack/react-query';
+import type {} from '@tanstack/react-query';
 import { useSessionUIStore } from '../../../store/session-state';
 import { useHomeSpineModel } from '../../../features/home-spine/hooks';
 import {
@@ -10,7 +10,7 @@ import {
 import { useActiveCoachRecommendations } from '../../../features/ai-coach/hooks/useCoachRecommendations';
 import { useActiveStudyPlan } from '../../../features/content-study';
 import {
-  buildLearningSessionParams,
+  _buildLearningSessionParams,
   useLearningExecutionLayer,
 } from '../../../features/learning-execution';
 import { useComebackState } from '../../../features/streaks/hooks';

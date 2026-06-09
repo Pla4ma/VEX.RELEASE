@@ -19,7 +19,7 @@ function isAuthCallbackUrl(url: string): boolean {
 function isAllowedDeepLink(url: string): boolean {
   try {
     const parsed = new URL(url);
-    if (parsed.protocol === 'vex:') return true;
+    if (parsed.protocol === 'vex:') {return true;}
     return ALLOWED_DEEP_LINK_HOSTS.includes(parsed.hostname);
   } catch {
     return false;

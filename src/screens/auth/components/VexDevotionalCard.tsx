@@ -59,7 +59,7 @@ export function VexDevotionalCard({
 
   const onLayout = (e: LayoutChangeEvent): void => {
     const { width: w, height: h } = e.nativeEvent.layout;
-    if (w > 0 && h > 0) setSize({ w, h });
+    if (w > 0 && h > 0) {setSize({ w, h });}
   };
 
   const op = useSharedValue(isReducedMotion ? 1 : 0);
@@ -67,7 +67,7 @@ export function VexDevotionalCard({
   const sheen = useSharedValue(-1);
 
   useEffect(() => {
-    if (isReducedMotion) return;
+    if (isReducedMotion) {return;}
     op.value = withDelay(delay, withTiming(1, { duration: 900, easing: EASE_EDITORIAL }));
     ty.value = withDelay(delay, withSpring(0, springPresets.settle));
     sheen.value = withDelay(

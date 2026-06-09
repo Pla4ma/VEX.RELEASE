@@ -1,6 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-import Animated, {
+import {
   useAnimatedStyle,
   useSharedValue,
   withRepeat,
@@ -17,7 +17,7 @@ export function useOrbitalAnimation(isReducedMotion: boolean) {
   const orbital = useSharedValue(0);
 
   React.useEffect(() => {
-    if (isReducedMotion) return;
+    if (isReducedMotion) {return;}
     orbital.value = withRepeat(withTiming(1, { duration: 12000 }), -1, true);
   }, [isReducedMotion, orbital]);
 

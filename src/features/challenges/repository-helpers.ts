@@ -8,7 +8,7 @@ import {
 
 export { RepositoryError } from '../../lib/repository/error-handling';
 
-const supabase = getSupabaseClient();
+const _supabase = getSupabaseClient();
 
 export const baseJoinedSelect = `
   id,

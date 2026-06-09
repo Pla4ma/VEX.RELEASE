@@ -28,7 +28,7 @@ function StepDot({ active, isReducedMotion }: { active: boolean; isReducedMotion
   const sc = useSharedValue(active ? 1 : 0.8);
 
   useEffect(() => {
-    if (isReducedMotion) return;
+    if (isReducedMotion) {return;}
     if (active) {
       op.value = withRepeat(
         withTiming(0.65, { duration: 2400, easing: EASE_CINEMATIC }),
@@ -67,7 +67,7 @@ function StepBlock({ step, index, isReducedMotion }: {
   const tx = useSharedValue(isReducedMotion ? 0 : -16);
 
   useEffect(() => {
-    if (isReducedMotion) return;
+    if (isReducedMotion) {return;}
     const d = 1000 + index * motionStagger.loose;
     op.value = withDelay(d, withTiming(1, { duration: 700, easing: EASE_CINEMATIC }));
     tx.value = withDelay(d, withTiming(0, { duration: 700, easing: EASE_CINEMATIC }));

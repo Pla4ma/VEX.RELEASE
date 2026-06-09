@@ -1,7 +1,6 @@
 import {
   getCompanionPersonalityEngine,
   resetCompanionPersonalityEngine,
-  type PersonalityEventType,
 } from '../CompanionPersonalityEngine';
 import * as analytics from '../analytics';
 import { eventBus } from '../../../events/EventBus';

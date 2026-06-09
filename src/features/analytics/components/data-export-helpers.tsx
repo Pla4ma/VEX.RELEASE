@@ -59,7 +59,7 @@ export function CategorySelector({ selectedCategory, onSelect }: CategorySelecto
             <Text style={styles.optionDescription}>{category.description}</Text>
             {selectedCategory === category.key && (
               <View style={styles.checkmark}>
-                <Text style={styles.checkmarkIcon}></Text>
+                <Text style={styles.checkmarkIcon} />
               </View>
             )}
           </Pressable>

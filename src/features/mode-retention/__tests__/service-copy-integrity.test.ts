@@ -1,5 +1,13 @@
-import { scoreModeRetention, buildDefaultAuditScores, getModeReturnHook, getModeRescueCopy, getModeNotificationCopy, getModePremiumBridge, getModeDayCopy, getModeRetentionManifest } from '../service';
-import { MODE_RETENTION_MANIFEST, MODE_RETURN_HOOK, MODE_RETURN_REASON, MODE_DAY3_MEMORY, MODE_DAY7_INTELLIGENCE, MODE_RESCUE_COPY, MODE_NOTIFICATION_COPY, MODE_PREMIUM_BRIDGE } from '../copy';
+import {
+  MODE_RETENTION_MANIFEST,
+  MODE_RETURN_HOOK,
+  MODE_RETURN_REASON,
+  MODE_DAY3_MEMORY,
+  MODE_DAY7_INTELLIGENCE,
+  MODE_RESCUE_COPY,
+  MODE_NOTIFICATION_COPY,
+  MODE_PREMIUM_BRIDGE,
+} from '../copy';
 
 describe('mode-retention copy integrity', () => {
   it('every lane has a return hook', () => {

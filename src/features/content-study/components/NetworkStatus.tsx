@@ -10,9 +10,8 @@ import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
 import { Icon } from '../../../icons';
 import { createSheet } from '@/shared/ui/create-sheet';
-import { buttonTap } from '../../../utils/haptics';
-import { lightColors } from '@/theme/tokens/colors';
 
+import { lightColors } from '@/theme/tokens/colors';
 
 interface NetworkStatusProps {
   isOffline: boolean;
@@ -35,7 +34,7 @@ export const NetworkStatus: React.FC<NetworkStatusProps> = ({
     return null;
   }
 
-  const isWarning = isSlowConnection && !isOffline;
+  const _isWarning = isSlowConnection && !isOffline;
 
   return (
     <Animated.View
@@ -120,7 +119,7 @@ export const InlineNetworkIndicator: React.FC<{
     return null;
   }
 
-  const iconSize = size === 'sm' ? 14 : 18;
+  const _iconSize = size === 'sm' ? 14 : 18;
 
   return (
     <View

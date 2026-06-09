@@ -22,12 +22,12 @@ export function configureDebouncedWrites(
 }
 
 function scheduleFlush(): void {
-  if (flushTimer) clearTimeout(flushTimer);
+  if (flushTimer) {clearTimeout(flushTimer);}
   flushTimer = setTimeout(flush, delayMs);
 }
 
 function flush(): void {
-  if (!onFlush) return;
+  if (!onFlush) {return;}
   for (const [key, op] of pendingWrites) {
     onFlush(key, op);
   }

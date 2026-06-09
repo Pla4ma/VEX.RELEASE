@@ -102,7 +102,7 @@ export function createSessionSummary(
 export function computeAbandonResult(
   scoringEngine: ScoringEngine,
   session: SessionState,
-  reason?: string,
+  _reason?: string,
 ): AbandonResult {
   const now = Date.now();
   session.status = 'ABANDONED';

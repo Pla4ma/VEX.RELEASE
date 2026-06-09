@@ -17,7 +17,7 @@ export class ScreenErrorRecovery {
     options: ScreenErrorRecoveryOptions = {},
   ): Promise<boolean> {
     const { autoRecover = false, recoveryDelay = 1000, onRecovery } = options;
-    const config = SCREEN_ERROR_CONFIGS[screenType];
+    const _config = SCREEN_ERROR_CONFIGS[screenType];
     const attempts = this.recoveryAttempts.get(screenType) || 0;
     if (
       error.message.includes('client') ||

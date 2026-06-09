@@ -4,7 +4,7 @@ import { eventBus } from '../../events';
 import { createDebugger } from '../../utils/debug';
 
 let isSessionCompletedSubscribed = false;
-let unsubscribeSessionCompleted: (() => void) | null = null;
+let _unsubscribeSessionCompleted: (() => void) | null = null;
 const debug = createDebugger('session-completion:init');
 
 export function initializeSessionCompletionOrchestrator(): void {

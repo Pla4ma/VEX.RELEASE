@@ -2,7 +2,7 @@ import React from 'react';
 import { ScrollView, RefreshControl } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { Box, Text, Button } from '@components/primitives';
+import { Box, Text } from '@components/primitives';
 import { useTheme } from '../../../theme';
 import { useNetInfo } from '../../../network';
 import { useMonthlyReport } from '../hooks';
@@ -11,6 +11,7 @@ import { useAuthStore } from '../../../store';
 import { withScreenErrorBoundary } from '../../../shared/ui/components/ScreenErrorBoundary';
 import { ReportSkeleton } from './ReportSkeleton';
 import { ReportContent } from './ReportContent';
+import { ReportEmptyState } from './ReportEmptyState';
 import type { ExtendedRootStackParams } from '../../../navigation/types';
 import { useFeatureAccess } from '../../liveops-config';
 import { resolveMonthlyReportAction } from '../../../screens/progress/progress-actions';
@@ -74,36 +75,28 @@ export const MonthlyFocusReportScreen = withScreenErrorBoundary(
               </Text>
             </Box>
           ) : null}
-          <Box
-            flex={1}
-            p="md"
-            justifyContent="center"
-            alignItems="center"
-          >
-          <Text
-            variant="h4"
-            color="error"
-            style={{ marginBottom: theme.spacing[3] }}
-          >
-            Report Unavailable
-          </Text>
-          <Text
-            variant="body"
-            color="textSecondary"
-            style={{ textAlign: 'center', marginBottom: theme.spacing[4] }}
-          >
-            {error?.message ??
-              'Unable to load your monthly focus report. Give it another shot.'}
-          </Text>
-          <Button
-            onPress={() => refetch()}
-            variant="primary"
-            accessibilityLabel="Retry loading report"
-            accessibilityRole="button"
-            accessibilityHint="Attempts to reload the monthly focus report"
-          >
-            Try Again
-          </Button>
+          <Box flex={1} p="md" justifyContent="center" alignItems="center">
+            <Text variant="h3" color="text" mb="sm">
+              Unable to Load Report
+            </Text>
+            <Text
+              variant="body"
+              color="textSecondary"
+              style={{ textAlign: 'center', marginBottom: 16 }}
+            >
+              {error?.message ?? 'Something went wrong.'}
+            </Text>
+            <Text
+              onPress={() => refetch()}
+              variant="body"
+              color="primary"
+              style={{ fontWeight: '600' }}
+              accessibilityLabel="Retry loading report"
+              accessibilityRole="button"
+              accessibilityHint="Attempts to reload the monthly focus report"
+            >
+              Try Again
+            </Text>
           </Box>
         </Box>
       );
@@ -111,48 +104,10 @@ export const MonthlyFocusReportScreen = withScreenErrorBoundary(
 
     if (!report) {
       return (
-        <Box flex={1} bg="background.primary">
-          {isOffline ? (
-            <Box bg="warning" p="sm" alignItems="center">
-              <Text variant="caption" color="text.primary">
-                You are offline. Data may be outdated.
-              </Text>
-            </Box>
-          ) : null}
-          <Box
-            flex={1}
-            p="md"
-            justifyContent="center"
-            alignItems="center"
-          >
-          <Text
-            variant="h3"
-            color="text"
-            style={{ marginBottom: theme.spacing[3] }}
-          >
-            No Sessions Yet
-          </Text>
-          <Text
-            variant="body"
-            color="textSecondary"
-            style={{ textAlign: 'center', marginBottom: theme.spacing[4] }}
-          >
-            Complete focus sessions this month to generate your first monthly
-            report.
-          </Text>
-          <Button
-            onPress={() =>
-              navigation.navigate('SessionStack', { screen: 'SessionSetup' })
-            }
-            variant="primary"
-            accessibilityLabel="Start a session"
-            accessibilityRole="button"
-            accessibilityHint="Navigates to session setup"
-          >
-            Start a session
-          </Button>
-          </Box>
-        </Box>
+        <ReportEmptyState
+          isOffline={isOffline}
+          onStartSession={() => navigation.navigate('SessionStack', { screen: 'SessionSetup' })}
+        />
       );
     }
 

@@ -2,7 +2,7 @@ import type { UseQueryResult } from '@tanstack/react-query';
 import type { SessionRecommendation } from '../../../features/ai-coach';
 import type { HomeFeatureRuntime } from './home-feature-runtime';
 import type { HomeController, SessionHistoryResult } from './home-controller-types';
-import type { HomeViewModel } from './home-view-model';
+import type {} from './home-view-model';
 import type { HomeReturnReason } from './useHomeReturnReason';
 import type { FeatureAccessResult } from '../../../features/liveops-config';
 import type { HomeSpineModel } from '../../../features/home-spine/schemas';

@@ -14,7 +14,7 @@ export function useSessionCompleteRewards({
   primarySquadId,
   progressionSummary,
   refetchProgressionSummary,
-  sessionId,
+  _sessionId,
   streakMultiplier,
   summary,
   userId,

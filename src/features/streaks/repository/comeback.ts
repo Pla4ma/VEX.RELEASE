@@ -1,7 +1,7 @@
 import { getSupabaseClient } from '../../../config/supabase';
 import { createDebugger } from '../../../utils/debug';
 import { ComebackQuestSchema, type ComebackQuest } from '../comeback/schemas';
-import { tableColumns } from '../../../lib/repository/tableColumns';
+
 
 const debug = createDebugger('streaks:comeback-repo');
 const supabase = getSupabaseClient();

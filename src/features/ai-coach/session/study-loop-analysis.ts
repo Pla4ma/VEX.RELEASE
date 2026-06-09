@@ -83,7 +83,7 @@ export function adjustStudyDifficulty(
   return plan;
 }
 
-export function abandonStudyPlan(plan: StudyPlan, reason?: string): StudyPlan {
+export function abandonStudyPlan(plan: StudyPlan, _reason?: string): StudyPlan {
   return { ...plan, status: 'abandoned' };
 }
 

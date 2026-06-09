@@ -2,9 +2,6 @@ import {
   trackSessionCompleted,
   syncAnalyticsData,
   getRealtimeAnalytics,
-  trackBossEncounter,
-  trackItemCrafted,
-  initializeAnalytics,
 } from '../integration';
 import * as repository from '../repository';
 import { eventBus } from '../../../events';

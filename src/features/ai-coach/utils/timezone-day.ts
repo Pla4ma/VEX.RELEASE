@@ -90,7 +90,7 @@ export function getOptimalReminderTimes(
   chronotype: 'morning' | 'evening' | 'variable',
   timezone: string,
 ): number[] {
-  const now = Date.now();
+  const _now = Date.now();
   switch (chronotype) {
     case 'morning':
       return [

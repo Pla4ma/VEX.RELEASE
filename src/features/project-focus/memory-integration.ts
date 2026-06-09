@@ -1,6 +1,5 @@
 import { type ProjectThread } from './schemas';
 import { buildProjectMemoryCandidate } from './service';
-import { trackProjectHandoffStored } from './analytics';
 
 export interface ProjectMemoryHandoff {
   content: string;

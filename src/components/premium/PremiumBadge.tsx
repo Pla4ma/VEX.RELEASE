@@ -9,12 +9,11 @@ import Animated, {
   withSequence,
   withDelay,
 } from 'react-native-reanimated';
-
 import { Text } from '../primitives/Text';
 import { useTheme } from '../../theme';
 import { createSheet } from '@/shared/ui/create-sheet';
 import { lightColors } from '@/theme/tokens/colors';
-
+import { SupporterBadge } from './SupporterBadge';
 
 export interface PremiumBadgeProps {
   size?: 'sm' | 'md' | 'lg';
@@ -22,6 +21,12 @@ export interface PremiumBadgeProps {
   style?: ViewStyle;
   showGlow?: boolean;
 }
+
+const sizeConfig = {
+  sm: { badge: 16, font: 10, glow: 24 },
+  md: { badge: 20, font: 12, glow: 32 },
+  lg: { badge: 28, font: 16, glow: 44 },
+};
 
 export function PremiumBadge({
   size = 'md',
@@ -65,11 +70,6 @@ export function PremiumBadge({
   }));
   const glowStyle = useAnimatedStyle(() => ({ opacity: glowOpacity.value }));
 
-  const sizeConfig = {
-    sm: { badge: 16, font: 10, glow: 24 },
-    md: { badge: 20, font: 12, glow: 32 },
-    lg: { badge: 28, font: 16, glow: 44 },
-  };
   const config = sizeConfig[size];
 
   const variantConfig = {
@@ -135,41 +135,7 @@ export function PremiumBadge({
   );
 }
 
-export interface SupporterBadgeProps {
-  size?: 'sm' | 'md' | 'lg';
-  style?: ViewStyle;
-}
-
-export function SupporterBadge({
-  size = 'md',
-  style,
-}: SupporterBadgeProps): JSX.Element {
-  const { theme } = useTheme();
-  const sizeConfig = {
-    sm: { badge: 18, font: 9, icon: 10 },
-    md: { badge: 24, font: 11, icon: 14 },
-    lg: { badge: 32, font: 14, icon: 18 },
-  };
-  const config = sizeConfig[size];
-
-  return (
-    <View
-      style={[
-        styles.supporterBadge,
-        {
-          width: config.badge,
-          height: config.badge,
-          borderRadius: config.badge / 2,
-          backgroundColor: theme.colors.warning.DEFAULT,
-          borderColor: theme.colors.warning.light,
-        },
-        style,
-      ]}
-    >
-      <Text style={[styles.supporterIcon, { fontSize: config.icon }]}>⭐</Text>
-    </View>
-  );
-}
+export { SupporterBadge };
 
 const styles = createSheet({
   container: {
@@ -177,7 +143,7 @@ const styles = createSheet({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  glow: { position: 'absolute' },
+  glow: { position: 'absolute' as const },
   badge: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -188,18 +154,7 @@ const styles = createSheet({
     shadowRadius: 4,
     elevation: 3,
   },
-  text: { fontWeight: '800', letterSpacing: -0.5 },
-  supporterBadge: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 2,
-    shadowColor: lightColors.text.primary,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  supporterIcon: { fontWeight: '700' },
+  text: { fontWeight: '800' as const, letterSpacing: -0.5 },
 });
 
 export default PremiumBadge;

@@ -5,7 +5,6 @@ import {
 } from '../integration';
 import * as repository from '../repository';
 import { eventBus } from '../../../events';
-import * as Sentry from '@sentry/react-native';
 jest.mock('../repository');
 jest.mock('../service', () => ({
   generateInsights: jest.fn().mockResolvedValue([]),

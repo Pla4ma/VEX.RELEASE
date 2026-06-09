@@ -37,7 +37,7 @@ export async function calculateTrend(
   userId: string,
   metric: AnalyticsMetric,
   timeRange: TimeRange,
-  lookbackPeriods: number = 3,
+  _lookbackPeriods: number = 3,
 ): Promise<TrendAnalysis> {
   const data = await repository.fetchTimeSeriesData(
     userId,

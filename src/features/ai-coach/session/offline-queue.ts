@@ -13,7 +13,6 @@ function getOfflineStorage(): MMKV {
 }
 const QUEUE_KEY = 'coach_mutation_queue';
 export const MAX_QUEUE_SIZE = 50;
-const MAX_RETRY_ATTEMPTS = 3;
 
 export interface QueuedMutation {
   id: string;

@@ -6,7 +6,7 @@ import { LiquidButton } from '../../../components/glass/LiquidButton';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import { triggerHaptic } from '../../../utils/haptics';
 import {
-  type AsyncStatus,
+  type _AsyncStatus,
   type StatusFeedbackProps,
   STATUS_CONFIG,
   getStatusColor,

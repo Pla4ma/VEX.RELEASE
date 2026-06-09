@@ -13,7 +13,7 @@ import {
   saveRiskStatusEnhanced,
   fetchStreakEnhanced,
 } from '../repository/streak-repository';
-import { StreakRiskStatusSchema, type StreakRiskStatus } from '../schemas-risk-repair';
+import { StreakRiskStatusSchema } from '../schemas-risk-repair';
 import {
   QUERY_KEYS,
   RISK_CHECK_INTERVAL,

@@ -1,7 +1,7 @@
 import { eventBus } from '../../events';
 import { createDebugger } from '../../utils/debug';
 import { SessionSummarySchema, type SessionSummary } from '../types';
-import type { RewardCalculationResult } from './session-reward-helpers';
+import type {} from './session-reward-helpers';
 import {
   handleSessionCompleted,
   handlePartialCompletion,

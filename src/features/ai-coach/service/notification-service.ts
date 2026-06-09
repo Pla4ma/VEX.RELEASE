@@ -6,8 +6,7 @@ import {
   ensureNotificationChannel,
   requestNotificationPermissions,
 } from './notification-permissions';
-import { getScheduledCoachNotifications } from './notification-support';
-import { isSameCalendarDay, isQuietHours, isRateLimited } from './notification-helpers';
+import { isQuietHours, isRateLimited } from './notification-helpers';
 
 const debug = createDebugger('ai-coach:notifications');
 

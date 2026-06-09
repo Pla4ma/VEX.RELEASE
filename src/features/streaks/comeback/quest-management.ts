@@ -6,7 +6,7 @@
 
 import { createDebugger } from '../../../utils/debug';
 import { checkComebackEligibility } from './eligibility';
-import { ComebackQuestSchema, type ComebackQuest } from './schemas';
+import type { ComebackQuest } from './schemas';
 import {
   fetchExistingComebackQuest,
   insertComebackQuest,

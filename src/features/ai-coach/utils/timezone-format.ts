@@ -3,7 +3,7 @@ import { getStartOfDay, getEndOfDay } from './timezone-day';
 
 export function formatRelativeTime(
   timestamp: number,
-  timezone: string,
+  _timezone: string,
 ): string {
   const now = Date.now();
   const diff = timestamp - now;
@@ -37,7 +37,7 @@ export function formatTimeOfDay(timestamp: number, timezone: string): string {
   return 'night';
 }
 
-export function mockTimezone(timezone: string): void {}
+export function mockTimezone(_timezone: string): void {}
 
 export function generateTestTimestamps(timezone: string): {
   startOfDay: number;

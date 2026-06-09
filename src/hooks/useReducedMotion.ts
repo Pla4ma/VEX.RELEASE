@@ -22,7 +22,7 @@
  */
 
 import { useEffect, useState, useMemo } from 'react';
-import { AccessibilityInfo, Platform } from 'react-native';
+import { AccessibilityInfo} from 'react-native';
 import { useReducedMotion as useReanimatedReducedMotion } from 'react-native-reanimated';
 
 interface ReducedMotionResult {
@@ -66,7 +66,7 @@ export function useReducedMotion(): ReducedMotionResult {
   };
 }
 
-function useSystemReducedMotion(): ReducedMotionResult {
+function _useSystemReducedMotion(): ReducedMotionResult {
   // Use Reanimated 3's built-in hook as primary source
   const reanimatedReducedMotion = useReanimatedReducedMotion();
 

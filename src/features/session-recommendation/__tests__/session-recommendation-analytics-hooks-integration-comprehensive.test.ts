@@ -40,8 +40,6 @@ import {
   isRecommendationValid,
 } from '../service';
 import {
-  trackRecommendationGenerated,
-  trackRecommendationAccepted,
   trackRecommendationDismissed,
   trackRecommendationBlocked,
   trackRecommendationPerformance,

@@ -58,7 +58,7 @@ export function SessionPreview({
         borderRadius="full"
         bg={`${theme.colors.primary[500]}15`}
       >
-        <Text fontSize={14}></Text>
+        <Text fontSize={14} />
         <Text variant="caption" color="primary.500" fontWeight="600">
           {goal || 'General focus'}
         </Text>

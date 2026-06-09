@@ -13,7 +13,7 @@ export async function updateAchievementProgress(
   userId: string,
   conditionType: string,
   value: number,
-  context?: Record<string, unknown>,
+  _context?: Record<string, unknown>,
 ): Promise<UserAchievement[]> {
   const updatedAchievements: UserAchievement[] = [];
   const relevantAchievements = ALL_ACHIEVEMENTS.filter(
@@ -172,7 +172,7 @@ export function initializeAchievementTracking(): void {
     });
   });
   eventBus.subscribe('duel:completed', async (event) => {
-    const { winnerId, challengerId, challengedId } = event as {
+    const { winnerId, challengerId: _challengerId, challengedId: _challengedId } = event as {
       winnerId?: string;
       challengerId?: string;
       challengedId?: string;

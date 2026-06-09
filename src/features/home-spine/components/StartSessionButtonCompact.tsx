@@ -33,7 +33,7 @@ export function StartSessionButtonCompact({
         borderRadius="xl"
         style={{ backgroundColor: colors.gradient[0] }}
       >
-        <Text fontSize={18}></Text>
+        <Text fontSize={18} />
         <Text
           variant="body"
           color={theme.colors.text.inverse}

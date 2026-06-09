@@ -1,8 +1,8 @@
 import type {
-  SessionHistoryEntry,
-  InterruptionRecord,
-  AntiCheatFlag,
-  RecoveryRecord,
+  _SessionHistoryEntry,
+  _InterruptionRecord,
+  _AntiCheatFlag,
+  _RecoveryRecord,
 } from '../types';
 
 export interface SessionAnalyticsEvent {

@@ -1,7 +1,3 @@
-import type {
-  NotificationBudget,
-  NotificationRequest,
-} from './notification-budget-schema';
 import {
   isGenericLoginReminder,
   isInQuietHours,

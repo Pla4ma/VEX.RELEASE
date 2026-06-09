@@ -24,7 +24,7 @@ const SERIF_STACK = Platform.select({
 export function Colophon({ delay, isReducedMotion }: { delay: number; isReducedMotion: boolean }): React.JSX.Element {
   const op = useSharedValue(isReducedMotion ? 1 : 0);
   useEffect(() => {
-    if (isReducedMotion) return;
+    if (isReducedMotion) {return;}
     op.value = withDelay(delay, withTiming(1, { duration: 1200, easing: EASE_EDITORIAL }));
   }, [op, delay, isReducedMotion]);
   const style = useAnimatedStyle(() => ({ opacity: op.value }));

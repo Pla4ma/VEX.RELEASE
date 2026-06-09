@@ -1,4 +1,4 @@
-import type { ViewStyle } from 'react-native';
+import type {} from 'react-native';
 import { Badge } from '../../../components';
 import { createSheet } from '@/shared/ui/create-sheet';
 import type { UserChallengeSummary } from '../schemas';

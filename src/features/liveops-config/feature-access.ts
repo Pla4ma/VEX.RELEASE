@@ -13,16 +13,16 @@ import {
   computeFeatureAccess,
   getStage,
   getProductTier,
-  getFeatureAvailability,
-  getFeatureAvailabilityFor,
-  isFeatureAvailableForNavigation,
-  isFeatureAvailableForQueries,
+  _getFeatureAvailability,
+  _getFeatureAvailabilityFor,
+  _isFeatureAvailableForNavigation,
+  _isFeatureAvailableForQueries,
 } from './FeatureFlagService';
 import type {
   UserExperienceStage,
   ProductTier,
   FeatureKey,
-  FeatureAccess,
+  _FeatureAccess,
   FeatureAccessMap,
   FeatureAccessInputs,
 } from './feature-access-types';

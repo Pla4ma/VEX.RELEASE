@@ -1,6 +1,5 @@
 import { FeatureFlagService } from '../FeatureFlagService';
 import { getStorageManager } from '../../persistence';
-import { eventBus } from '../../events';
 
 jest.mock('../../persistence');
 jest.mock('../../events', () => ({

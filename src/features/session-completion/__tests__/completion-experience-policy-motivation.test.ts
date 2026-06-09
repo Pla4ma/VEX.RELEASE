@@ -1,4 +1,4 @@
-import type { CompletionExperiencePolicyInput } from '../completion-experience-policy';
+import type {} from '../completion-experience-policy';
 import { resolveCompletionExperiencePolicy } from '../completion-experience-policy';
 import { baseInput } from './completion-experience-policy.helpers';
 

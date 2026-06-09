@@ -40,7 +40,7 @@ export function FlowCurve({
   const basePath = useMemo(() => Skia.Path.MakeFromSVGString(d), [d]);
 
   useEffect(() => {
-    if (isReducedMotion) return;
+    if (isReducedMotion) {return;}
     t.value = withDelay(
       spec.delay,
       withRepeat(
@@ -58,7 +58,7 @@ export function FlowCurve({
     return [{ translateX: tx }, { translateY: ty }];
   }, [t, spec.driftX, spec.driftY]);
 
-  if (!basePath) return <Group />;
+  if (!basePath) {return <Group />;}
 
   return (
     <Group opacity={spec.opacity} transform={transform}>

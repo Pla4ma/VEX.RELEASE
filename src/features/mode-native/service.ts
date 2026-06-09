@@ -1,7 +1,6 @@
 import { LaneSchema } from '../lane-engine/schemas';
 import type { Lane } from '../lane-engine/types';
 import {
-  HOME_COPY,
   QUICK_CONTRACT_COPY,
   ACTIVE_INDICATOR_COPY,
   RESCUE_COPY,

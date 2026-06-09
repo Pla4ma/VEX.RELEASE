@@ -2,9 +2,6 @@ import {
   blockedEconomyTerms,
   resolvePremiumStrategy,
   resolvePersonalizedPremium,
-  getLanePremiumValue,
-  mapProfileToLane,
-  type PremiumLane,
 } from './helpers';
 
 describe('premium strategy integration', () => {

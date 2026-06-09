@@ -5,7 +5,7 @@ import { createDebugger } from '../utils/debug';
 
 const debug = createDebugger('store:auth');
 
-let integrationsInitializedForUserId: string | null = null;
+let _integrationsInitializedForUserId: string | null = null;
 
 export function resetServiceSingletonsForLogout(): void {
   integrationsInitializedForUserId = null;

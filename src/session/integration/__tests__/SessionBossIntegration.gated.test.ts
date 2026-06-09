@@ -2,8 +2,6 @@ import { initializeSessionBossIntegration } from '../SessionBossIntegration';
 import { eventBus } from '../../../events';
 import { getAvailabilityFor } from '../../../features/liveops-config/feature-access-store';
 import {
-  applyDamage,
-  getActiveEncounter,
 } from '../../../features/boss/service';
 
 jest.mock('../../../events', () => ({

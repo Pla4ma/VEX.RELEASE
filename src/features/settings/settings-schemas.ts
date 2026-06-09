@@ -1,6 +1,5 @@
 import { z } from 'zod';
 import type { Setting, NotificationSettings, CoachSettings } from './types';
-import { launchColors } from '@theme/tokens/launch-colors';
 
 // ── Zod schemas for runtime validation ────────────────────────────────
 

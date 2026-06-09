@@ -8,7 +8,6 @@ import {
   FocusScoreBandLabelSchema,
   FocusScoreFactorKeySchema,
   FocusScoreUpdateInputSchema,
-  FocusScoreUpdateResultSchema,
   getFocusScoreFactorsWeightTotal,
 } from '../schemas';
 

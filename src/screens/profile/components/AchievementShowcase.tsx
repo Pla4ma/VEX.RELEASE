@@ -30,7 +30,7 @@ export const AchievementShowcase: React.FC<AchievementShowcaseProps> = ({
 }) => {
   const { theme } = useTheme();
   const [isEditMode, setIsEditMode] = useState(false);
-  const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
+  const [draggedIndex, _setDraggedIndex] = useState<number | null>(null);
   const slots = useMemo(() => {
     const nextSlots: Array<FeaturedAchievement | null> = [...achievements];
     while (nextSlots.length < 3) {
@@ -49,7 +49,7 @@ export const AchievementShowcase: React.FC<AchievementShowcaseProps> = ({
       onSelectSlot?.(index);
     }
   };
-  const handleSwap = useCallback(
+  const _handleSwap = useCallback(
     (fromIndex: number, toIndex: number) => {
       if (fromIndex === toIndex) {
         return;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Pressable } from 'react-native';
+import { Text, Pressable } from 'react-native';
 import { lightColors } from '@/theme/tokens/colors';
 
 type Props = {
@@ -9,7 +9,7 @@ type Props = {
 };
 
 export function SimpleWalletBadge({
-  userId,
+  userId: _userId,
   streak,
   onPress,
 }: Props): React.ReactElement {

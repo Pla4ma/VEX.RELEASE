@@ -3,12 +3,12 @@ import { eventBus } from '../events';
 import {
   activeChannels,
   CHANNELS,
-  type BroadcastMessage,
+  type _BroadcastMessage,
 } from './realtimeShared';
 import {
-  broadcastActivity,
-  cancelPendingBroadcastCleanups,
-  subscribeToActivity,
+  _broadcastActivity,
+  _cancelPendingBroadcastCleanups,
+  _subscribeToActivity,
 } from './realtimeBroadcast';
 import { createDebugger } from '../utils/debug';
 

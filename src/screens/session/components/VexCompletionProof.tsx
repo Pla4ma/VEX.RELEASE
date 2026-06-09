@@ -4,7 +4,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 
 import { Text } from '../../../components/primitives/Text';
-import { Box } from '../../../components/primitives/Box';
+
 import { VexMotionSurface } from '../../../components/primitives/VexMotionSurface';
 import { useTheme } from '../../../theme';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
@@ -19,7 +19,7 @@ interface ProofLineProps {
 }
 
 function ProofLine({ label, value, highlight }: ProofLineProps): JSX.Element {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
   return (
     <View
       style={{

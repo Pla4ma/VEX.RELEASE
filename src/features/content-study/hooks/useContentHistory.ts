@@ -7,7 +7,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import * as Sentry from '@sentry/react-native';
 import { useToast } from '../../../shared/ui/components/Toast';
 import { useAuthStore } from '../../../store';
-import { fetchContentHistory } from '../ContentStudyService';
+
 import { contentStudyQueryKeys } from './queryKeys';
 
 export function useContentHistory() {

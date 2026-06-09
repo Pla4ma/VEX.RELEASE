@@ -33,17 +33,17 @@ export interface StreakDefenseState {
 export function calculateHoursRemaining(
   nextDeadline: number | null | undefined,
 ): number | null {
-  if (!nextDeadline) return null;
+  if (!nextDeadline) {return null;}
   const now = Date.now();
   const diffMs = nextDeadline - now;
-  if (diffMs <= 0) return 0;
+  if (diffMs <= 0) {return 0;}
   return Math.floor(diffMs / (1000 * 60 * 60));
 }
 
 export function calculateQualifyingWindow(
   hoursRemaining: number | null,
 ): { hoursUntilOpen: number; timeLabel: string } | null {
-  if (hoursRemaining === null || hoursRemaining > 12) return null;
+  if (hoursRemaining === null || hoursRemaining > 12) {return null;}
 
   const now = new Date();
   const tomorrow6am = new Date(now);
@@ -94,10 +94,10 @@ export function buildStreakDefenseState(
 
   let riskLevel: StreakDefenseState['riskLevel'] = streakSummary.riskLevel;
   if (hoursLeft !== null && riskLevel === 'NONE') {
-    if (hoursLeft <= 1) riskLevel = 'CRITICAL';
-    else if (hoursLeft <= 4) riskLevel = 'HIGH';
-    else if (hoursLeft <= 8) riskLevel = 'MEDIUM';
-    else if (hoursLeft < 12) riskLevel = 'LOW';
+    if (hoursLeft <= 1) {riskLevel = 'CRITICAL';}
+    else if (hoursLeft <= 4) {riskLevel = 'HIGH';}
+    else if (hoursLeft <= 8) {riskLevel = 'MEDIUM';}
+    else if (hoursLeft < 12) {riskLevel = 'LOW';}
   }
 
   const canFreeze = streakSummary.currentDays > 0 && streakSummary.shieldAvailable;

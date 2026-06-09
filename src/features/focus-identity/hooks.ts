@@ -17,7 +17,7 @@ export { useFocusScoreColor, useIdentityStatement } from './hooks-display';
 /**
  * Hook for accessing focus identity data and state
  */
-export function useFocusIdentity(userId: string) {
+export function useFocusIdentity(_userId: string) {
   const { score, history, status, error, refetch } = useFocusScore();
 
   const engine = useMemo(() => new FocusIdentityEngine(), []);

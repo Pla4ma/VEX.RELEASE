@@ -30,7 +30,7 @@ export function OfflineBanner({
   const { isReducedMotion } = useReducedMotion();
   const { colors } = theme;
   const insets = useSafeAreaInsets();
-  const { width } = useWindowDimensions();
+  const { width: _width } = useWindowDimensions();
   const [isConnected, setIsConnected] = useState<boolean | null>(true);
   const [isDismissed, setIsDismissed] = useState(false);
   const [dismissTimer, setDismissTimer] = useState<NodeJS.Timeout | null>(null);

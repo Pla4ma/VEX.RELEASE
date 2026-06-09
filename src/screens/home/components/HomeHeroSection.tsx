@@ -5,7 +5,7 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { ErrorState } from '../../../components/states/ErrorState';
 import { useHomePriority } from '../../../features/home-spine/hooks';
 import type {
-  HomePrimaryPriority,
+  _HomePrimaryPriority,
   HomeStakes,
   ProductContext,
 } from '../../../features/home-spine/priority-schemas';
@@ -15,7 +15,7 @@ import {
 } from '../../../features/liveops-config';
 import type { HomeSurfaceMap } from '../../../features/home-experience/surface-decision-schemas';
 import type { FirstWeekExperience } from '../../../features/personalization/first-week-schemas';
-import type { ExtendedRootStackParams, SessionStackParams } from '../../../navigation/types';
+import type { ExtendedRootStackParams} from '../../../navigation/types';
 import type { HomeController } from '../hooks/home-controller-types';
 import { VexFocusSurface } from './VexFocusSurface';
 import {
