@@ -122,7 +122,7 @@ function aggregateSignals(signals: BehaviorSignal[]): BehaviorSignal[] {
 export async function updateCoachState(
   userId: string,
   newState: CoachUserState,
-  context?: Record<string, unknown>,
+  _context?: Record<string, unknown>,
 ): Promise<CoachState> {
   const currentState = await getOrCreateCoachState(userId);
 

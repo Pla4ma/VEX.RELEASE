@@ -16,10 +16,6 @@ import { tableColumns } from '../../../lib/repository/tableColumns';
 
 const debug = createDebugger('ai-coach:memory-repo');
 
-function isActive(memory: CoachMemory): boolean {
-  return memory.deletedAt === null;
-}
-
 /**
  * Check if an evidence hash was previously deleted (conflict)
  */

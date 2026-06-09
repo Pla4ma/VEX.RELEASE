@@ -7,15 +7,12 @@ import {
   type CoachState,
 } from '../schemas';
 import { COACH_QUERY_KEYS } from '.';
-import { createDebugger } from '../../../utils/debug';
 import {
   subscribeToCoachMessages,
   subscribeToCoachState,
   subscribeToComebackPlan,
   subscribeToRecommendations,
 } from '../repository/messages';
-
-const debug = createDebugger('coach:realtime');
 
 type Subscription = ReturnType<typeof subscribeToCoachMessages>;
 

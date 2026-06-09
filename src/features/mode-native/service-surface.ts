@@ -1,10 +1,8 @@
 import { LaneSchema } from '../lane-engine/schemas';
 import type { Lane } from '../lane-engine/types';
 import {
-  COMPLETION_COPY,
   COLD_START_COMPLETION_COPY,
   EVIDENCE_COMPLETION_COPY,
-  WEEKLY_INTELLIGENCE_COPY,
   EVIDENCE_WEEKLY_INTELLIGENCE_COPY,
   COLD_START_WEEKLY_INTELLIGENCE_COPY,
 } from './copy';

@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { FocusGoal, FocusDuration } from '../types';
+import type { FocusDuration } from '../types';
 
 const ValidGoals = ['WORK', 'STUDY', 'CREATIVE', 'PERSONAL'] as const;
 const ValidDurations = [15, 25, 45, 60] as const;

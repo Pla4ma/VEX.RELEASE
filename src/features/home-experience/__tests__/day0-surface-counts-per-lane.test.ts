@@ -1,7 +1,4 @@
-import { decideHomeSurfaces } from '../home-surface-decision';
 import {
-  featureAvailability,
-  baseStats,
   visibleCount,
   day0Map,
 } from './day0-surface-counts-helpers';

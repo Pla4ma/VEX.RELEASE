@@ -1,7 +1,6 @@
 import { resolvePersonalizedPremium } from '../personalized-premium';
 import type {
   PremiumPersonalizationInput,
-  SessionEvidence,
 } from '../personalized-premium';
 
 function makeInput(
@@ -18,17 +17,6 @@ function makeInput(
     hasTriedVisualIdentity: false,
     currentStreakDays: 0,
     daysSinceOnboarding: 2,
-    ...overrides,
-  };
-}
-
-function makeEvidence(
-  overrides: Partial<SessionEvidence> = {},
-): SessionEvidence {
-  return {
-    completedSessions: 12,
-    focusHours: 8,
-    consistencyRate: 0.75,
     ...overrides,
   };
 }

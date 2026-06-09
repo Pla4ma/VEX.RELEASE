@@ -2,7 +2,6 @@ import React from 'react';
 import { View } from 'react-native';
 import Svg, { Circle } from 'react-native-svg';
 import { Text } from '../../../components/primitives/Text';
-import { GlassIconOrb } from '../../../components/glass/GlassIconOrb';
 import { Icon } from '../../../icons';
 
 interface ProgressionStatCardProps {
@@ -14,7 +13,7 @@ interface ProgressionStatCardProps {
 
 export const ProgressionStatCard: React.FC<ProgressionStatCardProps> = ({
   label,
-  orb,
+  _orb,
   value,
   progress = 0.65,
 }) => {

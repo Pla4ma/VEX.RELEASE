@@ -4,10 +4,8 @@ import {
   initializePresence,
   updatePresence,
   subscribeToSquadPresence,
-  broadcastActivity,
   type PresenceStatus,
   type SquadPresence,
-  type BroadcastMessage,
 } from '../services/realtime';
 import { createDebugger } from '../utils/debug';
 

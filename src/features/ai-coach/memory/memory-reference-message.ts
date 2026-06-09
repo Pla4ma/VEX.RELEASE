@@ -1,5 +1,4 @@
 import type { MessageCategory } from '../types';
-import type { CoachMemory } from './memory-schemas';
 import { getRelevantMemories, canClaimStrongPattern } from './CoachMemory';
 
 type Persona = 'MENTOR' | 'CHEERLEADER' | 'DRILL_SERGEANT';

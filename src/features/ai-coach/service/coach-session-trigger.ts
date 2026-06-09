@@ -170,7 +170,7 @@ export function trackCoachCtaEffectiveness(
   });
 }
 
-export function getCoachCtaStats(userId: string): {
+export function getCoachCtaStats(_userId: string): {
   totalCtAsClicked: number;
   sessionsStarted: number;
   sessionsCompleted: number;

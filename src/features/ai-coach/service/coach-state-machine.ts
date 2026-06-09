@@ -1,7 +1,6 @@
 import {
   type CoachUserState,
   type CoachState,
-  type BehaviorProfile,
 } from '../schemas';
 import * as repository from '../repository';
 import { withRetry } from '../utils/retry';
@@ -114,10 +113,10 @@ async function getCurrentStateSafe(userId: string): Promise<CoachState> {
 }
 
 function emitStateChangedEvent(
-  userId: string,
-  previousState: CoachUserState | null,
-  newState: CoachUserState,
-  context?: Record<string, unknown>,
+  _userId: string,
+  _previousState: CoachUserState | null,
+  _newState: CoachUserState,
+  _context?: Record<string, unknown>,
 ): void {
   // Delegated to event bus - wired at integration layer
 }

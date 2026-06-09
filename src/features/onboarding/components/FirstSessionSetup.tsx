@@ -40,7 +40,7 @@ export function FirstSessionSetup({
   onStartSession,
   onBack,
 }: FirstSessionSetupProps): JSX.Element {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
   const [selectedDuration, setSelectedDuration] = useState<FocusDuration>(10);
   const [isAdvancing, setIsAdvancing] = useState(false);
 

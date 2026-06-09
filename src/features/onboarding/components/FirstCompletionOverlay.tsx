@@ -16,7 +16,7 @@ interface FirstCompletionOverlayProps {
 }
 
 function SessionCompleteCard(): JSX.Element {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
 
   return (
     <Animated.View entering={FadeInUp.duration(500).delay(200)}>
@@ -77,7 +77,7 @@ function SessionCompleteCard(): JSX.Element {
 }
 
 function ComebackCTA({ onPress }: { onPress: () => void }): JSX.Element {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
 
   return (
     <Animated.View

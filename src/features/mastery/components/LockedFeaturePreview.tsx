@@ -21,7 +21,7 @@ interface LockedFeaturePreviewProps {
 
 export function LockedFeaturePreview({
   feature,
-  userRank,
+  userRank: _userRank,
   userPoints,
   onNavigateToMastery,
 }: LockedFeaturePreviewProps): JSX.Element {

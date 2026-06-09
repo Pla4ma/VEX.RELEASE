@@ -51,7 +51,7 @@ import { validateLevelUp, validatePrestige } from '../utils/validation/level-val
 import { validateXPTransaction } from '../utils/validation/xp-validation';
 import { validateSourceSpecific } from '../utils/validation/source-validators';
 import { validateXPBatch } from '../utils/validation/batch-validation';
-import { MAX_XP_PER_SESSION, MAX_XP_PER_HOUR, MAX_STREAK_BONUS_MULTIPLIER, MAX_QUALITY_BONUS } from '../utils/validation/types';
+import { MAX_XP_PER_SESSION, MAX_STREAK_BONUS_MULTIPLIER, MAX_QUALITY_BONUS } from '../utils/validation/types';
 import type { XPTransaction, ValidationResult } from '../utils/validation/types';
 
 const TEST_USER_ID = '12345678-1234-1234-1234-123456789abc';

@@ -32,7 +32,7 @@ const BASE_MOCK_STREAK: Streak = {
   updatedAt: Date.now(),
 };
 
-function mockStreak(overrides: Partial<Streak> = {}): Streak {
+function _mockStreak(overrides: Partial<Streak> = {}): Streak {
   return { ...BASE_MOCK_STREAK, ...overrides };
 }
 

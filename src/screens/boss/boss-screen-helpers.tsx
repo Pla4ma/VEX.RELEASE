@@ -65,7 +65,7 @@ export const BossFallback: React.FC<{
   stage: string;
   resetLabel: string;
 }> = ({ intensity, onStartSession, unlockReason, stage, resetLabel }) => {
-  const { theme } = useTheme();
+  useTheme();
   const copy = getBossCopy(intensity);
   const isSubtle = intensity === 'subtle';
   return (

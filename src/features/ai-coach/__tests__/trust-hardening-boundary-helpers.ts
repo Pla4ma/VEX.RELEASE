@@ -1,5 +1,4 @@
 import {
-  RecommendationEvidenceSchema,
   CoachMemorySchema,
   type CoachMemory,
 } from '../memory/memory-schemas';

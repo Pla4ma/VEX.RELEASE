@@ -14,7 +14,6 @@ import {
   coldStudyHome,
   coldProjectHome,
   coldCleanHome,
-  coldStudyCompletion,
   coldRunCompletion,
   coldProjectCompletion,
 } from './cold-start-helpers';

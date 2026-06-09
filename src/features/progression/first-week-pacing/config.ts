@@ -5,9 +5,7 @@
  */
 
 import {
-  FirstWeekConfigSchema,
   type FirstWeekConfig,
-  type FirstWeekSession,
 } from './schemas';
 
 export { getNextSession, getSessionNumber } from './helpers';

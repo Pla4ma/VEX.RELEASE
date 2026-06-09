@@ -36,13 +36,13 @@ describe('BossScreenContent query gating', () => {
 
   describe('core queries remain un-gated', () => {
     it('progression query still receives real userId regardless of boss gating', () => {
-      const canQueryBoss = false;
+      const _canQueryBoss = false;
       const userId = 'user-2';
       expect(userId).toBe('user-2');
     });
 
     it('streak query still receives real userId regardless of boss gating', () => {
-      const canQueryBoss = false;
+      const _canQueryBoss = false;
       const userId = 'user-2';
       expect(userId).toBe('user-2');
     });

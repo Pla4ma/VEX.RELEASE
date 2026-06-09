@@ -92,7 +92,7 @@ async function executeIntervention(
   userId: string,
   rule: InterventionRule,
   context: Record<string, unknown>,
-  coachState: CoachState,
+  _coachState: CoachState,
 ): Promise<InterventionExecution> {
   const executionId = generateExecutionId();
   if (!(await engineState.acquireExecutionSlot(executionId))) {

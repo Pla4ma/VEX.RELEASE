@@ -43,7 +43,7 @@ const CATEGORIES: Array<{ key: SettingCategory; label: string; icon: string }> =
 export function SettingsScreen({
   userId,
   initialCategory = 'general',
-  onBackPress,
+  onBackPress: _onBackPress,
   onCategoryChange,
 }: SettingsScreenProps) {
   const [activeCategory, setActiveCategory] =

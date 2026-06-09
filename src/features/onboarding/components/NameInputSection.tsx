@@ -7,10 +7,9 @@
  * @phase 4
  */
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { TextInput, Keyboard } from 'react-native';
 import Animated, {
-  FadeIn,
   FadeInUp,
   useAnimatedStyle,
   withSpring,

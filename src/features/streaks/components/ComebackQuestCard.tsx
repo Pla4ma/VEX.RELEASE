@@ -29,7 +29,7 @@ export function ComebackQuestCard({
   onStartSession,
   onViewDetails,
 }: ComebackQuestCardProps): JSX.Element {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
   const isComplete = progress.currentStage === 'COMPLETE';
   const currentQuestNum =
     progress.currentStage === 'QUEST_1'

@@ -9,7 +9,7 @@
  */
 
 import React from 'react';
-import { Pressable } from 'react-native';
+
 import Animated, { FadeIn, FadeInUp } from 'react-native-reanimated';
 
 import { Box } from '../../../components/primitives/Box';
@@ -47,7 +47,7 @@ export function FirstResultScreen({
   focusScoreBefore,
   onComplete,
 }: FirstResultScreenProps): JSX.Element {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
   const displayName = userName || 'there';
 
   const resolvedMode = resolveSessionMode(sessionData.mode);

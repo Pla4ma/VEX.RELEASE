@@ -32,7 +32,7 @@ export function CompanionRevealScreen({
   onContinue,
   onBack,
 }: CompanionRevealScreenProps): JSX.Element {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
   const displayName = userName || 'there';
 
   return (

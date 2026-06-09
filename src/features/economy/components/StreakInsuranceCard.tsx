@@ -16,9 +16,9 @@ type Props = {
 
 export function StreakInsuranceCard({
   status,
-  isLoading,
-  error,
-  onPurchase,
+  isLoading: _isLoading,
+  error: _error,
+  onPurchase: _onPurchase,
 }: Props): React.ReactElement {
   const hasStatus = status ?? { isInsured: false, daysRemaining: 0 };
   return (

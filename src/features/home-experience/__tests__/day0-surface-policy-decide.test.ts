@@ -1,7 +1,6 @@
 import { decideHomeSurfaces } from '../home-surface-decision';
 import {
   featureAvailability,
-  studyProfile,
   gameLikeProfile,
   calmProfile,
   baseStats,

@@ -11,7 +11,7 @@ function readSource(filename: string): string {
   return readFileSync(resolve(hooksDir, filename), 'utf8');
 }
 
-function assertNoAdvancedImports(source: string, label: string): void {
+function assertNoAdvancedImports(source: string, _label: string): void {
   const banned = [
     /useActiveChallenges/,
     /useClaimChallengeReward/,

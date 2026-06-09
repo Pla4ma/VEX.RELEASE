@@ -1,4 +1,4 @@
-import type { RecommendationContext, CoachPersona, CoachRecommendation } from './CoachRecommendationService-types';
+import type { RecommendationContext, CoachPersona } from './CoachRecommendationService-types';
 import { generateMessage } from './recommendation-rules';
 import type { RecommendationRule } from './recommendation-rules';
 

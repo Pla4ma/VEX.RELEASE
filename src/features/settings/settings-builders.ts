@@ -7,8 +7,6 @@ import {
   safeValue,
   ThemeModeSchema,
   ProfileVisibilitySchema,
-  buildNotificationSettings,
-  buildCoachSettings,
 } from './settings-schemas';
 import { launchColors } from '@theme/tokens/launch-colors';
 

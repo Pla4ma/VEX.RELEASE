@@ -1,7 +1,6 @@
 import {
   decideHomeSurfaces,
   featureAvailability,
-  studyProfile,
   gameLikeProfile,
   calmProfile,
   baseStats,

@@ -1,7 +1,5 @@
-import * as Sentry from '@sentry/react-native';
 import { eventBus } from '../../events';
 import {
-  TIER_CONFIG,
   MILESTONE_BLOCKS,
   getTierConfig,
 } from './tower-constants';

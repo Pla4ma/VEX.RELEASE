@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from '@jest/globals';
+import { describe, expect, it } from '@jest/globals';
 import { createMockCoachInput } from './input-contract-test-utils';
 import { generateSessionRecommendation } from '../integration';
 

@@ -7,7 +7,6 @@ import {
   deleteMemory as repoDeleteMemory,
 } from '../repository/memories';
 import {
-  MemoryTypeSchema,
   type CoachMemory,
   type MemoryType,
 } from './memory-schemas';

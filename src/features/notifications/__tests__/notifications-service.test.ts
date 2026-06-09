@@ -38,7 +38,7 @@ describe('Service', () => {
       // Set up MMKV mock to return a high count
       const { MMKVStorageAdapter } = require('../../../persistence/MMKVStorageAdapter');
       const adapter = new MMKVStorageAdapter('notification-limits');
-      const key = `notifications:${makeSmartCtx().userId}:${new Date().toDateString()}`;
+      const _key = `notifications:${makeSmartCtx().userId}:${new Date().toDateString()}`;
       adapter.getItemSync.mockReturnValue('5'); // above max of 2
 
       const result = await dispatchUrgencyNotification(

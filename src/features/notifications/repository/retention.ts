@@ -100,9 +100,9 @@ const ChallengeExpiryRowSchema = z.object({
     .optional(),
 }).passthrough();
 
-type ChallengeExpiryRow = z.infer<typeof ChallengeExpiryRowSchema>;
+type _ChallengeExpiryRow = z.infer<typeof ChallengeExpiryRowSchema>;
 
-type ChallengeJoin = ChallengeExpiryRow['challenges'];
+// ChallengeJoin type derived from ChallengeExpiryRow['challenges'] when needed
 
 /** Shape of a Supabase streaks row for re-engagement candidates. */
 interface ReEngagementRow {

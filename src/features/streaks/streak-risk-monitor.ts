@@ -29,7 +29,6 @@ const NOTIFICATION_THRESHOLDS = [
       'A 10-minute Recovery session keeps the chain alive. You are stronger than the gap.',
   },
 ];
-const FLAME_HEALTH_SEGMENTS = 24;
 export interface StreakRiskStatus {
   userId: string;
   currentDays: number;

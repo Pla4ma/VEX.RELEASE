@@ -13,7 +13,6 @@ import {
 } from '../enums';
 import {
   SettingRowSchema,
-  SettingSchema,
   AppearanceSettingsSchema,
   PrivacySettingsSchema,
   DataControlSettingsSchema,

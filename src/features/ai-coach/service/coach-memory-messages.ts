@@ -1,10 +1,9 @@
-import type { CoachMemory } from './coach-memory-types';
-import { getOrCreateMemory, getPersonalizedContext } from './coach-memory';
+import { getOrCreateMemory } from './coach-memory';
 
 export function generatePersonalizedMessage(
   userId: string,
   baseMessage: string,
-  category: string,
+  _category: string,
 ): string {
   const memory = getOrCreateMemory(userId);
   let personalized = baseMessage;

@@ -15,7 +15,7 @@ import Animated, {
   withSpring,
 } from 'react-native-reanimated';
 
-import { Box } from '../../../components/primitives/Box';
+
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
 import type { GoalOption } from '../schemas';

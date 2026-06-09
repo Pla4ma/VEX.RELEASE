@@ -9,7 +9,6 @@ import {
 } from '../purchase-trust';
 import {
   initializeRevenueCat,
-  restorePurchases as restoreRevenueCatPurchases,
 } from '../../../shared/monetization/revenuecat-facade';
 
 jest.mock('../../../shared/monetization/revenuecat-facade', () => ({

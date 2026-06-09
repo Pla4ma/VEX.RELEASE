@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 import { scheduleForLocalTime } from '../ai-coach/utils/timezone';
 import type { RetentionReminderType } from './repository';
-import { ReminderPlanInputSchema } from './schemas';
+
 
 export const UserIdSchema = z.string().uuid();
 export const StreakInputSchema = z

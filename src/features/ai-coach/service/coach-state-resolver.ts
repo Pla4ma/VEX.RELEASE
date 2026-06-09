@@ -144,7 +144,7 @@ async function fetchStreakStatus(
 
 async function fetchRecentSessionMetrics(
   userId: string,
-  days: number,
+  _days: number,
 ): Promise<SessionMetrics> {
   try {
     const behaviorProfile = await repository.fetchBehaviorProfile(userId);

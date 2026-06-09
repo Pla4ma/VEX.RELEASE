@@ -1,5 +1,4 @@
 import { MMKVStorageAdapter } from '../../../persistence/MMKVStorageAdapter';
-import type { CoachMessage, MessageCategory } from '../types';
 import type { PersonalQuest, UserPatterns } from './quest-types';
 import { PersonalQuestSchema } from './quest-types';
 import {
@@ -20,7 +19,7 @@ function getQuestStorageKey(userId: string): string {
 }
 
 export async function analyzeUserPatterns(
-  userId: string,
+  _userId: string,
 ): Promise<UserPatterns> {
   return {
     peakFocusHour: 20,

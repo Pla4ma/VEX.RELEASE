@@ -3,7 +3,7 @@ import {
   listMemoryCandidates,
   deleteMemoryCandidate,
 } from './repository';
-import type { MemoryCandidate, MemoryCandidateInput } from './schemas';
+import type { MemoryCandidate } from './schemas';
 
 export async function addMemoryCandidate(input: {
   content: string;

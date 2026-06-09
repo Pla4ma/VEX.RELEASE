@@ -27,7 +27,7 @@ const StreakGamblePrompt: React.FC<StreakGamblePromptProps> = ({
     onGamble();
   };
 
-  const handleSessionComplete = (grade: 'S' | 'A' | 'B' | 'C' | 'D') => {
+  const _handleSessionComplete = (grade: 'S' | 'A' | 'B' | 'C' | 'D') => {
     const success = GAMBLE_SUCCESS_GRADES.includes(grade);
     const newOutcome: GambleOutcome = {
       success,

@@ -32,7 +32,6 @@ describe('Onboarding Friction', () => {
         isOnboarded: false,
         completedForUserId: 'user-1',
       };
-      const userId = 'user-1';
       const canPreviewHome = state.profileStepsCompleted && !state.isOnboarded;
       expect(canPreviewHome).toBe(true);
     });

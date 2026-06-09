@@ -169,7 +169,7 @@ function generateMessageId(): string {
 }
 
 function logGenerationError(
-  userId: string,
-  category: MessageCategory,
-  error: unknown,
+  _userId: string,
+  _category: MessageCategory,
+  _error: unknown,
 ): void {}

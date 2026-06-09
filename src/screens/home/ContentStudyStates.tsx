@@ -22,7 +22,7 @@ export function ContentStudyStates({
   copy,
   onRetry,
   onSeeHowItWorks,
-  onStart,
+  onStart: _onStart,
 }: ContentStudyStatesProps): JSX.Element | null {
   if (isLoading) {
     return (

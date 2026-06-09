@@ -1,7 +1,6 @@
 import * as service from '../service/service';
 import * as repository from '../repository';
 import * as analytics from '../analytics';
-import { createCoachMessageGeneratedEvent } from '../events';
 import type { CoachMessage, MessageCategory } from '../schemas';
 
 export async function generateAndSendMessage(
@@ -22,14 +21,6 @@ export async function generateAndSendMessage(
       deliveredAt: Date.now(),
     });
     analytics.trackMessageGenerated(userId, savedMessage, true);
-    const event = createCoachMessageGeneratedEvent(
-      userId,
-      savedMessage.id,
-      category,
-      savedMessage.content,
-      savedMessage.priority,
-      savedMessage.deliveryMethod,
-    );
     return savedMessage;
   }
   return null;

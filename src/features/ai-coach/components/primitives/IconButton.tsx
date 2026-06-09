@@ -3,9 +3,7 @@ import { createSheet } from '@/shared/ui/create-sheet';
 import {
   Pressable,
   ActivityIndicator,
-  type GestureResponderEvent,
   type PressableProps,
-  type ViewStyle,
 } from 'react-native';
 import Animated, {
   useSharedValue,

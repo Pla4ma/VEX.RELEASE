@@ -31,9 +31,9 @@ interface HomeContentLowerProps {
 export const HomeContentLower: React.FC<HomeContentLowerProps> = ({
   controller,
   data,
-  missionInput,
+  missionInput: _missionInput,
   handleClaimReward,
-  streakHoursRemaining,
+  streakHoursRemaining: _streakHoursRemaining,
   features,
   comebackSessionsCompleted,
   surfaceMap,
@@ -57,14 +57,9 @@ export const HomeContentLower: React.FC<HomeContentLowerProps> = ({
   if (isDayZero) {return null;}
 
   const sm = surfaceMap;
-  const showSecondary =
-    sm.challenge_teaser !== 'hidden' ||
-    sm.boss_teaser !== 'hidden' ||
-    sm.study_layer !== 'hidden';
   const showContextualCards =
     sm.study_layer !== 'hidden' || sm.boss_teaser !== 'hidden';
   const showSecondaryRail =
-    sm.study_layer !== 'hidden' && sm.study_layer !== 'blocked';
 
   const isNewOrActivating = stage === 'ACTIVATING' || stage === 'NEW_USER';
   const showFocusScore =

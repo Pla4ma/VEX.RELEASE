@@ -22,7 +22,7 @@ const GC_TIME = 10 * 60 * 1000;
 
 export function useStreakRepairQuest(): UseStreakRepairQuestReturn {
   const userId = useAuthStore((state) => state.user?.id);
-  const queryClient = useQueryClient();
+  const _queryClient = useQueryClient();
 
   const {
     status,

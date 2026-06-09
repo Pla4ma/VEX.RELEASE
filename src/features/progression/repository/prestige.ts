@@ -5,8 +5,6 @@
 
 import { supabase } from '../../../config/supabase';
 import type { PrestigeState } from '../prestige-system';
-import { tableColumns } from '../../../lib/repository/tableColumns';
-
 const TABLE = 'prestige_states';
 
 export async function fetchPrestigeState(

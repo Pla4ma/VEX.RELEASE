@@ -7,7 +7,6 @@ import {
   verifyPurchaseHash,
   isSuspiciousPurchase,
   getRefundEligibility,
-  TRUST_SIGNALS,
   PurchaseTrustError,
 } from '../purchase-trust';
 

@@ -5,7 +5,6 @@ import {
   type FocusGoal,
   type MotivationProfileType,
   type OnboardingElement,
-  type OnboardingState,
 } from './schemas';
 import {
   deriveMotivationProfile,

@@ -68,7 +68,7 @@ export const BossScreen = (): JSX.Element => {
     recentSessionsWithBossProgress: summaryData.recentSessionsWithBossProgress,
   };
 
-  const bossEngagement = useBossEngagementSignals(bossEngagementInputs);
+  const _bossEngagement = useBossEngagementSignals(bossEngagementInputs);
 
   const resolved = useResolvedVexExperienceRuntime({
     behaviorStats: {

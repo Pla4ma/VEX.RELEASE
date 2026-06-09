@@ -3,7 +3,7 @@ module.exports = {
   extends: ['@react-native'],
   rules: {
     'prettier/prettier': 'off',
-    '@typescript-eslint/no-unused-vars': 'error',
+    '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
     '@typescript-eslint/no-explicit-any': 'error',
     'react-hooks/exhaustive-deps': 'error',
     'react-hooks/rules-of-hooks': 'error',
