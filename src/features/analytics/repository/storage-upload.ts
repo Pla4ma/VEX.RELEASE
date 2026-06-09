@@ -32,7 +32,7 @@ export async function uploadExportData(
     }
     return await withRetry(
       async () => {
-        const { data: uploadData: _uploadData, error } = await withTimeout(
+        const { data: _uploadData, error } = await withTimeout(
           supabase.storage
             .from(bucket)
             .upload(path, blob, {

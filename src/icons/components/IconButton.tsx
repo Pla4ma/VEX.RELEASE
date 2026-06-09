@@ -5,7 +5,7 @@
  */
 
 import React, { useCallback } from 'react';
-import { Pressable, type type ViewStyle } from 'react-native';
+import { Pressable, type ViewStyle } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,

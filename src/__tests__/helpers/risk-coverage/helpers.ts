@@ -1,25 +1,25 @@
 import {
   hasActiveStudyFollowUp,
   extractStudyContextFromSession,
-} from '../../session-completion/study-context';
-import { buildPostSessionNextAction } from '../../session-completion/post-session-next-action';
+} from '../../../features/session-completion/study-context';
+import { buildPostSessionNextAction } from '../../../features/session-completion/post-session-next-action';
 import {
   computeWeakTopics,
   computeWeeklyIntelligence,
   hasWeeklyIntelligenceData,
-} from '../../study-intelligence/service';
-import type { StudyPlan } from '../../study-os/schemas';
-import { resolveFirstWeekExperience } from '../../personalization/first-week-service';
-import type { FirstWeekResolverInput } from '../../personalization/first-week-schemas';
-import { resolveCompletionExperiencePolicy } from '../../session-completion/completion-experience-policy';
-import type { CompletionExperiencePolicyInput } from '../../session-completion/completion-experience-policy-schemas';
-import { resolveLaneCopy } from '../../personalization/first-week-lane-copy';
-import { getLaneMechanicPolicy } from '../../lane-engine/service';
-import { decideNudge } from '../../notification-policy/service';
-import { decideHomeSurfaces } from '../../home-experience/home-surface-decision';
-import { buildLaneSessionBrief } from '../../session-start/service';
+} from '../../../features/study-intelligence/service';
+import type { StudyPlan } from '../../../features/study-os/schemas';
+import { resolveFirstWeekExperience } from '../../../features/personalization/first-week-service';
+import type { FirstWeekResolverInput } from '../../../features/personalization/first-week-schemas';
+import { resolveCompletionExperiencePolicy } from '../../../features/session-completion/completion-experience-policy';
+import type { CompletionExperiencePolicyInput } from '../../../features/session-completion/completion-experience-policy-schemas';
+import { resolveLaneCopy } from '../../../features/personalization/first-week-lane-copy';
+import { getLaneMechanicPolicy } from '../../../features/lane-engine/service';
+import { decideNudge } from '../../../features/notification-policy/service';
+import { decideHomeSurfaces } from '../../../features/home-experience/home-surface-decision';
+import { buildLaneSessionBrief } from '../../../features/session-start/service';
 import { SessionMode } from '../../../session/modes';
-import type { Lane, LaneProfile } from '../../lane-engine/types';
+import type { Lane, LaneProfile } from '../../../features/lane-engine/types';
 
 export {
   hasActiveStudyFollowUp,
