@@ -11,6 +11,7 @@ import { Icon } from '../../../icons';
 import { useTheme } from '../../../theme';
 import type { InteractiveCardProps, CardVariant, CardSize } from './InteractiveCardTypes';
 import { cardStyles as styles } from './InteractiveCardStyles';
+import { variantStyles, sizeStyles, getThemeVariantStyles } from './InteractiveCardTypes';
 import {
   LoadingOverlay,
   DisabledOverlay,
@@ -87,33 +88,6 @@ export const InteractiveCard: React.FC<InteractiveCardProps> = ({
     setIsPressed(false);
   }, [scale, reducedMotion]);
 
-  const variantStyles: Record<CardVariant, ViewStyle> = {
-    default: {
-      backgroundColor: theme.colors.background.secondary,
-      borderWidth: 0,
-    },
-    elevated: {
-      backgroundColor: theme.colors.background.secondary,
-      shadowColor: theme.colors.text.primary,
-      shadowOffset: { width: 0, height: 4 },
-      shadowOpacity: 0.15,
-      shadowRadius: 12,
-      elevation: 4,
-    },
-    outlined: {
-      backgroundColor: 'transparent',
-      borderWidth: 1,
-      borderColor: theme.colors.border.DEFAULT,
-    },
-    ghost: { backgroundColor: 'transparent', borderWidth: 0 },
-  };
-
-  const sizeStyles: Record<CardSize, ViewStyle> = {
-    sm: { padding: 12, borderRadius: 12 },
-    md: { padding: 16, borderRadius: 16 },
-    lg: { padding: 20, borderRadius: 20 },
-  };
-
   const accessibilityState: AccessibilityProps['accessibilityState'] = {
     disabled: isDisabled,
     selected,
@@ -137,7 +111,7 @@ export const InteractiveCard: React.FC<InteractiveCardProps> = ({
         <View
           style={[
             styles.card,
-            variantStyles[variant],
+            getThemeVariantStyles(theme)[variant],
             sizeStyles[size],
             selected && [
               styles.selected,

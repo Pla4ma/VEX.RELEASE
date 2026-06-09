@@ -1,0 +1,49 @@
+import React from 'react';
+import { View } from 'react-native';
+
+interface BorderProps {
+  color: string;
+  radius: number;
+  width: number;
+}
+
+export function GlassBorder({ color, radius, width }: BorderProps): JSX.Element {
+  return (
+    <View
+      pointerEvents="none"
+      style={{
+        borderColor: color,
+        borderRadius: radius,
+        borderWidth: width,
+        bottom: 0,
+        left: 0,
+        position: 'absolute',
+        right: 0,
+        top: 0,
+      }}
+    />
+  );
+}
+
+interface OuterBorderProps {
+  color: string;
+  radius: number;
+}
+
+export function GlassOuterBorder({ color, radius }: OuterBorderProps): JSX.Element {
+  return (
+    <View
+      pointerEvents="none"
+      style={{
+        borderColor: color,
+        borderRadius: radius + 1,
+        borderWidth: 1,
+        bottom: -2,
+        left: -2,
+        position: 'absolute',
+        right: -2,
+        top: -2,
+      }}
+    />
+  );
+}

@@ -1,0 +1,51 @@
+import React from 'react';
+import { LinearGradient } from 'expo-linear-gradient';
+
+interface TopHighlightProps {
+  color: string;
+  stop: number;
+  radius: number;
+}
+
+export function TopHighlight({ color, stop, radius }: TopHighlightProps): JSX.Element {
+  return (
+    <LinearGradient
+      colors={[color, 'rgba(255, 255, 255, 0)']}
+      end={{ x: 0, y: 1 }}
+      locations={[0, stop]}
+      start={{ x: 0, y: 0 }}
+      style={{
+        borderTopLeftRadius: radius,
+        borderTopRightRadius: radius,
+        bottom: 0,
+        left: 0,
+        position: 'absolute',
+        right: 0,
+        top: 0,
+      }}
+    />
+  );
+}
+
+interface BottomTintProps {
+  color: string;
+  stop: number;
+}
+
+export function BottomTint({ color, stop }: BottomTintProps): JSX.Element {
+  return (
+    <LinearGradient
+      colors={['rgba(255, 255, 255, 0)', color]}
+      end={{ x: 0, y: 1 }}
+      locations={[stop, 1]}
+      start={{ x: 0, y: 0 }}
+      style={{
+        bottom: 0,
+        left: 0,
+        position: 'absolute',
+        right: 0,
+        top: 0,
+      }}
+    />
+  );
+}

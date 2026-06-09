@@ -1,6 +1,5 @@
 ﻿import React, { type ReactNode } from 'react';
 import { View, type StyleProp, type ViewStyle } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
 import {
   resolveVariant,
   SIZE_PADDING,
@@ -8,6 +7,13 @@ import {
   type GlassCardSize,
   type GlassCardVariant,
 } from './GlassCard.tokens';
+import {
+  CardTopHighlight,
+  CardInnerGlow,
+  CardBottomShadow,
+  CardEdgeRefraction,
+  CardShineStreak,
+} from './GlassCard.highlights';
 
 export type { GlassCardSize, GlassCardVariant };
 
@@ -79,7 +85,7 @@ export function GlassCard({
         />
       ) : null}
 
-      {/* Top edge white glass highlight - strong specular */}
+      {/* Top edge white glass highlight */}
       <View
         pointerEvents="none"
         style={{
@@ -94,7 +100,7 @@ export function GlassCard({
         }}
       />
 
-      {/* Secondary top edge highlight - softer glow */}
+      {/* Secondary top edge highlight */}
       <View
         pointerEvents="none"
         style={{
@@ -124,7 +130,7 @@ export function GlassCard({
         }}
       />
 
-      {/* Bottom inner shadow - physical thickness */}
+      {/* Bottom inner shadow */}
       <View
         pointerEvents="none"
         style={{
@@ -154,119 +160,12 @@ export function GlassCard({
         }}
       />
 
-      {/* Top-left pearl glow - soft inner illumination */}
-      <LinearGradient
-        colors={['rgba(255, 255, 255, 0.52)', 'rgba(255, 255, 255, 0.08)', 'rgba(255, 255, 255, 0)']}
-        end={{ x: 1, y: 1 }}
-        locations={[0, 0.55, 1]}
-        pointerEvents="none"
-        start={{ x: 0, y: 0 }}
-        style={{
-          borderRadius: resolvedRadius,
-          height: '50%',
-          left: 0,
-          opacity: 0.85,
-          position: 'absolute',
-          right: 0,
-          top: 0,
-          zIndex: 10,
-        }}
-      />
-
-      {/* Soft top-left inner glow */}
-      <LinearGradient
-        colors={['rgba(132, 228, 229, 0.12)', 'rgba(132, 228, 229, 0.04)', 'rgba(255, 255, 255, 0)']}
-        end={{ x: 1, y: 1 }}
-        locations={[0, 0.45, 1]}
-        pointerEvents="none"
-        start={{ x: 0, y: 0 }}
-        style={{
-          borderRadius: resolvedRadius,
-          height: '55%',
-          left: 0,
-          opacity: 0.65,
-          position: 'absolute',
-          right: 0,
-          top: 0,
-          zIndex: 9,
-        }}
-      />
-
-      {/* Bottom-right depth shadow - ambient occlusion */}
-      <LinearGradient
-        colors={['rgba(255, 255, 255, 0)', 'rgba(10, 94, 77, 0.06)', 'rgba(10, 94, 77, 0.1)']}
-        end={{ x: 1, y: 1 }}
-        locations={[0, 0.65, 1]}
-        pointerEvents="none"
-        start={{ x: 0, y: 0 }}
-        style={{
-          borderRadius: resolvedRadius,
-          bottom: 0,
-          height: '50%',
-          left: 0,
-          opacity: 0.7,
-          position: 'absolute',
-          right: 0,
-          zIndex: 9,
-        }}
-      />
-
-      {/* Right edge subtle refraction */}
-      <LinearGradient
-        colors={['rgba(255, 255, 255, 0)', 'rgba(18, 184, 148, 0.06)', 'rgba(255, 255, 255, 0)']}
-        end={{ x: 1, y: 0.5 }}
-        locations={[0, 0.5, 1]}
-        pointerEvents="none"
-        start={{ x: 0, y: 0.5 }}
-        style={{
-          borderRadius: resolvedRadius,
-          bottom: 0,
-          opacity: 0.55,
-          position: 'absolute',
-          right: 0,
-          top: 0,
-          width: '12%',
-          zIndex: 8,
-        }}
-      />
-
-      {/* Left edge subtle refraction */}
-      <LinearGradient
-        colors={['rgba(255, 255, 255, 0.06)', 'rgba(255, 255, 255, 0.02)', 'rgba(255, 255, 255, 0)']}
-        end={{ x: 1, y: 0.5 }}
-        locations={[0, 0.5, 1]}
-        pointerEvents="none"
-        start={{ x: 0, y: 0.5 }}
-        style={{
-          borderRadius: resolvedRadius,
-          bottom: 0,
-          left: 0,
-          opacity: 0.45,
-          position: 'absolute',
-          top: 0,
-          width: '8%',
-          zIndex: 8,
-        }}
-      />
-
-      {/* Glass shine streak - diagonal reflection */}
-      <LinearGradient
-        colors={['rgba(255, 255, 255, 0.18)', 'rgba(255, 255, 255, 0.05)', 'rgba(255, 255, 255, 0)']}
-        end={{ x: 0.85, y: 0.55 }}
-        locations={[0, 0.45, 1]}
-        pointerEvents="none"
-        start={{ x: 0.15, y: 0.45 }}
-        style={{
-          borderRadius: resolvedRadius,
-          height: '25%',
-          left: 0,
-          opacity: 0.7,
-          position: 'absolute',
-          right: 0,
-          top: '15%',
-          zIndex: 11,
-        }}
-      />
+      <CardTopHighlight color="rgba(255, 255, 255, 0.52)" radius={resolvedRadius} />
+      <CardInnerGlow color="rgba(132, 228, 229, 0.12)" radius={resolvedRadius} />
+      <CardBottomShadow radius={resolvedRadius} />
+      <CardEdgeRefraction side="right" />
+      <CardEdgeRefraction side="left" />
+      <CardShineStreak radius={resolvedRadius} />
 
       <View style={{ padding: resolvedPadding }}>{children}</View>
     </View>
