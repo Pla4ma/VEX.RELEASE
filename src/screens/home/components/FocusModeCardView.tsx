@@ -9,6 +9,7 @@ import { LiquidGlassSphere } from '../../../components/glass/LiquidGlassSphere';
 import { LiquidButton } from '../../../components/glass/LiquidButton';
 import { Icon } from '../../../icons';
 import type { FocusModeCard } from '../../../features/session-start/schemas';
+import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 
 function formatMinutes(seconds: number): string {
   return `${Math.round(seconds / 60)} min`;
@@ -37,11 +38,11 @@ export function FocusModeCardView({
   const orbMode = getOrbMode(card.id);
 
   return (
-    <View style={{ marginBottom: 10 }}>
+    <View style={{ marginBottom: 9 }}>
       <GlassCard
         glowMint={isPrimary}
-        padding={16}
-        radius={24}
+        padding={14}
+        radius={22}
         variant={isPrimary ? 'premium' : 'default'}
       >
         <View
@@ -85,30 +86,30 @@ export function FocusModeCardView({
             alignItems: 'center',
             flexDirection: 'row',
             flex: 1,
-            gap: 14,
+            gap: 12,
             zIndex: 2,
           }}
         >
           <FocusModeOrb
             mode={orbMode}
-            size={isPrimary ? 72 : 62}
+            size={isPrimary ? 66 : 58}
             intensity={0.95}
           />
           <View style={{ flex: 1, gap: 3 }}>
             <Text
               style={{
-                color: '#0A1F1A',
-                fontSize: 16,
+                color: vexLightGlass.text.primary,
+                fontSize: 15,
                 fontWeight: '800',
-                letterSpacing: -0.3,
-                lineHeight: 22,
+                letterSpacing: 0,
+                lineHeight: 21,
               }}
             >
               {card.title}
             </Text>
             <Text
               style={{
-                color: '#3D5A52',
+                color: vexLightGlass.text.secondary,
                 fontSize: 12,
                 lineHeight: 17,
                 fontWeight: '400',
@@ -123,14 +124,14 @@ export function FocusModeCardView({
             alignItems: 'center',
             flexDirection: 'row',
             justifyContent: 'space-between',
-            marginTop: 12,
-            paddingLeft: 70,
+            marginTop: 10,
+            paddingLeft: 66,
             zIndex: 2,
           }}
         >
           <Text
             style={{
-              color: '#0A1F1A',
+              color: vexLightGlass.text.primary,
               fontSize: 13,
               fontWeight: '800',
             }}
@@ -144,7 +145,11 @@ export function FocusModeCardView({
             onPress={onPress}
             rightIcon={
               <Icon
-                color={isPrimary ? '#FFFFFF' : '#0A9B8A'}
+                color={
+                  isPrimary
+                    ? vexLightGlass.text.inverse
+                    : vexLightGlass.mint[600]
+                }
                 name="arrowRight"
                 size="sm"
                 variant="solid"

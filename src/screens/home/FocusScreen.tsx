@@ -45,9 +45,9 @@ export function FocusScreen(): JSX.Element {
 
   return (
     <GlassScreen showAura variant="focus">
-      <View style={{ flex: 1, paddingHorizontal: 16, paddingTop: 6 }}>
+      <View style={{ flex: 1, paddingHorizontal: 16, paddingTop: 2 }}>
         <ScrollView
-          contentContainerStyle={{ paddingBottom: 200 }}
+          contentContainerStyle={{ paddingBottom: 184 }}
           showsVerticalScrollIndicator={false}
         >
           <FocusScreenHeader

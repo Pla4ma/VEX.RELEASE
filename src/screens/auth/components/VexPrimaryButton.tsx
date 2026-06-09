@@ -1,13 +1,11 @@
 import React from 'react';
 import { Pressable, View } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
 
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
+import { etherealButton } from '@/theme/tokens/ethereal-sky';
 import { buttonTap } from '../../../utils/haptics';
 import { getMinTouchTargetStyle } from '../../../utils/touchTarget';
-import { lightColors } from '@/theme/tokens/colors';
-import { rgbaColors } from '@/theme/tokens/rgba-colors';
 import { useButtonPressHandlers } from './VexPrimaryButton.hooks';
 
 type VexActivationButtonProps = {
@@ -34,77 +32,59 @@ export function VexActivationButton({
         accessibilityRole="button"
         accessibilityState={{ busy: isLoading, disabled: isLoading }}
         disabled={isLoading}
-        onPressIn={handlePressIn}
-        onPressOut={handlePressOut}
         onPress={() => {
           buttonTap();
           onPress();
         }}
+        onPressIn={handlePressIn}
+        onPressOut={handlePressOut}
         style={({ pressed }) => [
           getMinTouchTargetStyle(),
           {
-            borderRadius: theme.borderRadius['2xl'],
+            borderRadius: 28,
             overflow: 'hidden',
-            opacity: isLoading ? 0.85 : pressed ? 0.94 : 1,
+            opacity: isLoading ? 0.82 : pressed ? 0.94 : 1,
           },
         ]}
       >
-        {/* Violet to orange gradient body */}
-        <LinearGradient
-          colors={[lightColors.accent.purple, lightColors.accent.purple, lightColors.semantic.warning, lightColors.accent.orange]}
-          locations={[0, 0.35, 0.72, 1]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
+        <View
           style={{
-            minHeight: 56,
             alignItems: 'center',
+            backgroundColor: etherealButton.googleFill,
+            borderColor: etherealButton.googleBorder,
+            borderWidth: 1,
             justifyContent: 'center',
+            minHeight: 56,
+            minWidth: 296,
             paddingHorizontal: theme.spacing[6],
-            shadowColor: lightColors.text.primary,
-            shadowOffset: { width: 0, height: 4 },
-            shadowOpacity: 0.4,
-            shadowRadius: 12,
-            elevation: 8,
+            shadowColor: etherealButton.buttonShadow,
+            shadowOffset: { width: 0, height: 12 },
+            shadowOpacity: 0.42,
+            shadowRadius: 24,
           }}
         >
-          {/* Inner shadow — top */}
-          <LinearGradient
-            colors={[rgbaColors.rgb_0_0_0_0_14, rgbaColors.rgb_0_0_0_0]}
-            locations={[0, 0.35]}
-            pointerEvents="none"
-            style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}
-          />
-
-          {/* Top shine line */}
           <View
             pointerEvents="none"
             style={{
-              position: 'absolute',
-              top: 1,
-              left: 40,
-              right: 40,
-              height: 1.5,
-              backgroundColor: rgbaColors.rgb_255_255_255_0_45,
+              backgroundColor: etherealButton.appleBorder,
               borderRadius: 1,
+              height: 1,
+              left: 52,
+              position: 'absolute',
+              right: 52,
+              top: 1,
             }}
           />
-
-          {/* White text with crisp glow */}
           <Text
-            color="semantic.liquidButtonText"
+            color={etherealButton.googleText}
             fontSize={16}
             fontWeight="700"
-            letterSpacing={0.3}
+            letterSpacing={0.2}
             textAlign="center"
-            style={{
-              textShadowColor: rgbaColors.rgb_255_255_255_0_3,
-              textShadowOffset: { width: 0, height: 0 },
-              textShadowRadius: 6,
-            }}
           >
             {isLoading ? loadingLabel : `${label}  \u2192`}
           </Text>
-        </LinearGradient>
+        </View>
       </Pressable>
     </View>
   );

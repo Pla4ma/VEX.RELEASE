@@ -115,6 +115,19 @@ describe('OAuth auth service', () => {
     expect(Linking.openURL).not.toHaveBeenCalled();
   });
 
+  it('treats Apple cancellation as a cleared auth attempt', async () => {
+    jest.mocked(AppleAuthentication.isAvailableAsync).mockResolvedValue(true);
+    jest.mocked(AppleAuthentication.signInAsync).mockRejectedValue(
+      new Error('ERR_REQUEST_CANCELED'),
+    );
+
+    const result = await startOAuthSignIn('apple');
+
+    expect(result.error).toBeNull();
+    expect(result.user).toBeNull();
+    expect(repository.signInWithAppleIdToken).not.toHaveBeenCalled();
+  });
+
   it('returns start errors without opening browser', async () => {
     jest.mocked(repository.startOAuthSignIn).mockResolvedValue({
       error: new Error('Provider disabled'),

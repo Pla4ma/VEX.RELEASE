@@ -11,9 +11,9 @@
 
 /** 3-stop vertical sky gradient — zenith → mid → horizon haze. */
 export const etherealSkyGradient = {
-  zenith: '#9BC4F0',
-  mid: '#C9DFF5',
-  horizon: '#F0E5DA',
+  zenith: '#F8FCFC',
+  mid: '#DDF5F3',
+  horizon: '#F7FFFF',
 } as const;
 
 /** Optional night/warm variant for streaks + accents. */
@@ -38,6 +38,9 @@ export const etherealText = {
   faintDivider: 'rgba(10, 10, 10, 0.12)',
   /** Google brand blue for sign-in glyph */
   googleBlue: '#4285F4',
+  googleRed: '#EA4335',
+  googleYellow: '#FBBC05',
+  googleGreen: '#34A853',
 } as const;
 
 /** Frosted glass surface rgba values for cards/inputs. */
@@ -59,13 +62,18 @@ export const etherealCloud = {
 
 /** Pill button fill tokens. */
 export const etherealButton = {
-  appleFill: '#0A0A0A',
-  appleText: '#FFFFFF',
-  googleFill: '#FFFFFF',
-  googleText: '#0A0A0A',
-  googleBorder: 'rgba(10, 10, 10, 0.10)',
-  ghostText: 'rgba(10, 10, 10, 0.72)',
-  ghostTextHover: '#0A0A0A',
+  googleFill: 'rgba(7, 31, 32, 0.94)',
+  googleText: '#FFFFFF',
+  googleBorder: 'rgba(126, 235, 225, 0.38)',
+  appleFill: 'rgba(255, 255, 255, 0.88)',
+  appleText: '#071F20',
+  appleBorder: 'rgba(255, 255, 255, 0.82)',
+  emailFill: 'rgba(255, 255, 255, 0.18)',
+  emailBorder: 'rgba(84, 163, 164, 0.58)',
+  emailText: '#4F999A',
+  buttonShadow: 'rgba(21, 113, 112, 0.24)',
+  ghostText: 'rgba(79, 153, 154, 0.92)',
+  ghostTextHover: '#235F61',
 } as const;
 
 /** Medallion ring colors — luminous whites/cyans. */
@@ -83,6 +91,12 @@ export const etherealOrb = {
   innerGlow: 'rgba(155, 196, 240, 0.55)',
   outerGlow: 'rgba(155, 196, 240, 0.20)',
   ring: 'rgba(255, 255, 255, 0.85)',
+  aqua: 'rgba(125, 238, 228, 0.62)',
+  teal: 'rgba(31, 137, 139, 0.52)',
+  crystal: '#92F4EE',
+  crystalDeep: '#1F898B',
+  glint: 'rgba(255, 255, 255, 0.95)',
+  mist: 'rgba(255, 255, 255, 0.68)',
 } as const;
 
 /** Floating card surface (onboarding choices). */

@@ -31,6 +31,8 @@ export interface OnboardingActions {
   markFirstSessionCompleted: () => void;
   markHomePreviewEntered: () => void;
   setCompletionFromBackend: (userId: string, completedAt: number) => void;
+  markMascotGuideCompleted: () => void;
+  dismissMascotGuide: () => void;
   setChosenLane: (lane: import('../lane-engine/types').Lane | null) => void;
   getDraft: (
     userId: string,
@@ -61,6 +63,8 @@ const initialState: OnboardingState = {
   firstSessionCompleted: false,
   homePreviewEntered: false,
   chosenLane: null,
+  mascotGuideCompletedAt: null,
+  mascotGuideDismissedAt: null,
 };
 
 const mmkvStorage = getMMKVStorageAdapter();
@@ -96,6 +100,8 @@ export const useOnboardingStore = create(
           motivationProfile: state.motivationProfile,
           explicitMotivationStyle: state.explicitMotivationStyle,
           chosenLane: state.chosenLane,
+          mascotGuideCompletedAt: state.mascotGuideCompletedAt,
+          mascotGuideDismissedAt: state.mascotGuideDismissedAt,
         }) as OnboardingStore,
       onRehydrateStorage: () =>
         createRehydrationHandler((partial) =>

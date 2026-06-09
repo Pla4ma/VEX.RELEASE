@@ -107,6 +107,8 @@ export const OnboardingStateSchema = z.object({
   firstSessionCompleted: z.boolean(),
   homePreviewEntered: z.boolean(),
   chosenLane: LaneSchema.nullable(),
+  mascotGuideCompletedAt: z.number().nullable().default(null),
+  mascotGuideDismissedAt: z.number().nullable().default(null),
 });
 
 /**

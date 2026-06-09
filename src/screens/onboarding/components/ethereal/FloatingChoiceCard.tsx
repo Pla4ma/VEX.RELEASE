@@ -32,10 +32,11 @@ export function FloatingChoiceCard({
   index: _index,
 }: FloatingChoiceCardProps): React.JSX.Element {
   const surfaceStyle: ViewStyle = {
-    borderRadius: 24,
+    borderRadius: 22,
     backgroundColor: selected ? etherealCard.fillSelected : etherealCard.fill,
-    borderWidth: selected ? 1.5 : 1,
-    borderColor: selected ? etherealCard.borderSelected : etherealCard.border,
+    borderWidth: selected ? 1.6 : 1,
+    borderColor: selected ? 'rgba(31, 137, 139, 0.72)' : etherealCard.border,
+    minHeight: 116,
     overflow: 'hidden',
     shadowColor: etherealGlass.shadow,
     shadowOffset: { width: 0, height: 10 },
@@ -50,7 +51,7 @@ export function FloatingChoiceCard({
         accessibilityLabel={title}
         backgroundColor={selected ? etherealCard.fillSelected : etherealCard.fill}
         borderColor={selected ? etherealCard.borderSelected : etherealCard.border}
-        borderRadius={24}
+        borderRadius={22}
         borderWidth={selected ? 1.5 : 1}
         disabled={disabled}
         height={undefined}
@@ -59,10 +60,10 @@ export function FloatingChoiceCard({
         style={surfaceStyle}
       >
         <SafeBlurView intensity={40} tint="light" style={{ flex: 1 }}>
-          <View style={{ padding: 18, gap: 6 }}>
+          <View style={{ padding: 18, gap: 8 }}>
             <Text
-              fontSize={17}
-              fontWeight="700"
+              fontSize={18}
+              fontWeight="800"
               style={{ color: etherealCard.title }}
             >
               {title}
@@ -70,7 +71,8 @@ export function FloatingChoiceCard({
             {body ? (
               <Text
                 fontSize={14}
-                style={{ color: etherealCard.body, lineHeight: 20 }}
+                fontWeight="600"
+                style={{ color: etherealCard.body, lineHeight: 21 }}
               >
                 {body}
               </Text>

@@ -15,7 +15,6 @@ import { ONBOARDING_GOALS } from '../../features/onboarding';
 import { Text } from '../../components/primitives/Text';
 import {
   MOTIVATION_STYLE_OPTIONS,
-  ONBOARDING_PROMISE_COPY,
 } from './components/onboarding-flow-data';
 import type { MotivationProfileType } from '../../features/onboarding';
 import { useOnboardingFlow } from './hooks/useOnboardingFlow';
@@ -29,27 +28,7 @@ import {
 } from './components/ethereal';
 import { LaneChoiceStep } from './components/LaneChoiceStep';
 import { LaneConfirmationStep } from './components/LaneConfirmationStep';
-
-const STEP_EYEBROW: Record<number, string> = {
-  0: 'STEP 1 OF 3',
-  1: 'STEP 2 OF 3',
-  2: 'STEP 3 OF 3',
-};
-
-const STEP_TITLES: Record<number, { title: string; subtitle: string }> = {
-  0: {
-    title: 'Pick your first win',
-    subtitle: ONBOARDING_PROMISE_COPY.secondary,
-  },
-  1: {
-    title: 'Choose your motivation style',
-    subtitle: 'This shapes how VEX frames progress. Change it anytime.',
-  },
-  2: {
-    title: 'Confirm your focus mode',
-    subtitle: 'VEX is ready to open around the way you actually work.',
-  },
-};
+import { GUIDE_COPY, STEP_EYEBROW, STEP_TITLES } from './onboarding-flow-copy';
 
 export function OnboardingFlowScreen(): JSX.Element {
   const route = useRoute<OnboardingRouteProp>();
@@ -67,6 +46,7 @@ export function OnboardingFlowScreen(): JSX.Element {
   );
 
   const stepCopy = STEP_TITLES[flow.step] ?? { title: '', subtitle: '' };
+  const guideCopy = GUIDE_COPY[flow.step];
 
   const renderStep0 = useCallback(
     () => (
@@ -143,6 +123,8 @@ export function OnboardingFlowScreen(): JSX.Element {
       stepKey={`onboarding-step-${flow.step}-${flow.goal ?? 'none'}-${flow.motivationStyle ?? 'none'}`}
       subtitle={stepCopy.subtitle}
       title={stepCopy.title}
+      guideBody={guideCopy?.body}
+      guideTitle={guideCopy?.title}
     >
       {flow.step === 0 ? renderStep0() : null}
       {flow.step === 1 ? renderStep1() : null}

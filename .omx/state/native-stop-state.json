@@ -1,0 +1,34 @@
+{
+  "sessions": {
+    "019ea9e9-161d-7293-be29-038c08d4b337": {
+      "ordinary_no_progress_guard": {
+        "fingerprint": "ordinary|implemented mascot-led cinematic onboarding/auth pass. key work: - added mascot asset: `assets/mascot/vex-mascot.png` - added clean liquid background asset: `assets/auth/vex-liquid-glass-entry-clean.png` - new animated mascot guide: [mascotguide.tsx](c:/users/jonat/cascadeprojects/vex-app-old/src/screens/onboarding/components/ethereal/mascotguide.tsx) - wired mascot into login, register, welcome, and onboarding flow. - added skip/replay/back behavior in onboarding shell. - added persisted mascot guide state: - `mascotguidecompletedat` - `mascotguidedismissedat` - made old persisted onboarding state migrate safely with `default(null)`. - kept auth buttons wired: google, apple, email. - removed active emoji-style auth/help visuals from the redesigned path. - split files to stay under the 200-line hard limit. verification passed: - `npx tsc --noemit --pretty false` - `npm test -- --runtestsbypath src/features/auth/__tests__/auth-oauth-service.test.ts src/screens/onboarding/components/__tests__/laneconfirmationstep.test.tsx src/features/onboarding/__tests__/onboarding-schemas-state.test.ts --runinband` - 25 tests passed. - checked touched core files stay under 200 lines.",
+        "first_seen_at": "2026-06-09T03:31:42.508Z",
+        "last_seen_at": "2026-06-09T03:31:42.508Z",
+        "repeat_count": 1,
+        "last_turn_id": "019eaa59-1c02-70b0-8bbb-6e28466d961d",
+        "last_thread_id": null
+      }
+    },
+    "019eaa0e-6d83-7220-9d64-b2aa7449a404": {
+      "ordinary_no_progress_guard": {
+        "fingerprint": "ordinary|done. installed all 5: - `ui-ux-pro-max` - `frontend-design` - `interface-design` - `sleek-design-mobile-apps` - `emil-design-eng` paths are under: `c:\\users\\jonat\\cascadeprojects\\vex-app-old\\.agents\\skills\\` note: installer flagged `ui-ux-pro-max` as `high risk`; the others were safe/low/medium risk.",
+        "first_seen_at": "2026-06-09T01:48:49.823Z",
+        "last_seen_at": "2026-06-09T01:48:49.823Z",
+        "repeat_count": 1,
+        "last_turn_id": "019eaa10-1579-7d73-85c1-ebf22643e6e9",
+        "last_thread_id": null
+      }
+    },
+    "019eaa5f-364e-7f43-809c-f5aa305ac12a": {
+      "ordinary_no_progress_guard": {
+        "fingerprint": "ordinary|created [ultimatefinalapp.md](c:/users/jonat/cascadeprojects/vex-app-old/ultimatefinalapp.md). it is 86 dense lines / about 28 kb, kept under the repo’s 200-line rule while still packing the release review, blockers, exact fixes, and final release phase. key evidence captured in the file: - typescript: passed. - expo doctor: passed 21/21. - expo install check: passed. - line limit: failed, 29 files over 200 lines. - debt freeze: failed, 28 new violations. - select-star: failed in `src/features/analytics/repository/dashboard.ts`. - eslint: failed with 1306 problems, 780 errors. - jest: timed out after 244 seconds. - npm audit: 12 moderate transitive vulnerabilities. - rls ci check: blocked locally by missing env secrets. - eas remote secret check: blocked because eas secret listing could not run. - concrete runtime blockers included: realtime presence cleanup key bug, async subscription leak risk, notification subscription ownership bug, timestamp/cursor parsing risk. i also recorded the github bug-hunter search limitation: `gh` is not installed, github code search api requires auth, but github repo search found current public bug-hunter style repos including [codexstar69/bug-hunter](https://github.com/codexstar69/bug-hunter), [oleks1y/bug-hunt-codex](https://github.com/oleks1y/bug-hunt-codex), and [shanemhamilton/bugsweep](https://github.com/shanemhamilton/bugsweep). note: running `npm run perf:audit` modified `docs/performance-metrics.json`; i called that out in the markdown so hermes/human review can decide whether to keep it as evidence or restore it. i did not stage or commit anything.",
+        "first_seen_at": "2026-06-09T03:46:40.439Z",
+        "last_seen_at": "2026-06-09T03:46:40.439Z",
+        "repeat_count": 1,
+        "last_turn_id": "019eaa5f-4afb-7280-8105-c105198c2bb1",
+        "last_thread_id": null
+      }
+    }
+  }
+}

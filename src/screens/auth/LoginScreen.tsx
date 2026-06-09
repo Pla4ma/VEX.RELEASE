@@ -4,7 +4,7 @@
  * Business logic (validation, OAuth, navigation) lives in
  * useLoginScreen. This file is presentation only.
  */
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Pressable, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -24,6 +24,8 @@ import {
 import type { EtherealAuthProvider } from './components/ethereal';
 import { LoginHero } from './components/ethereal/LoginHero';
 import { LoginEmailForm } from './components/ethereal/LoginEmailForm';
+import { MascotGuide } from '../onboarding/components/ethereal/MascotGuide';
+import { LoginPrivacyStrip } from './components/ethereal/LoginPrivacyStrip';
 
 type Props = NativeStackScreenProps<AuthStackParams, 'Login'>;
 
@@ -36,6 +38,7 @@ const OAUTH_PROVIDER_MAP: Record<EtherealAuthProvider, 'apple' | 'google' | null
 export const LoginScreen: React.FC<Props> = ({ navigation, route }) => {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
+  const [showEmailForm, setShowEmailForm] = useState(false);
   const {
     email, setEmail, password, setPassword,
     errors, setErrors, isLoading, handleLogin, handleOAuthLogin,
@@ -58,6 +61,10 @@ export const LoginScreen: React.FC<Props> = ({ navigation, route }) => {
   const onProviderPress = useCallback(
     (provider: EtherealAuthProvider) => {
       const mapped = OAUTH_PROVIDER_MAP[provider];
+      if (provider === 'email') {
+        setShowEmailForm(true);
+        return;
+      }
       if (mapped) {
         void handleOAuthLogin(mapped);
       }
@@ -75,9 +82,11 @@ export const LoginScreen: React.FC<Props> = ({ navigation, route }) => {
 
   return (
     <AppScreen
-      contentStyle={{ flexGrow: 1, paddingBottom: insets.bottom + 16 }}
+      bottomInset={false}
+      contentStyle={{ flex: 1 }}
       keyboardAvoiding
       padded={false}
+      scroll={false}
     >
       <EtherealSkyBackground />
 
@@ -85,82 +94,81 @@ export const LoginScreen: React.FC<Props> = ({ navigation, route }) => {
         style={{
           flex: 1,
           alignItems: 'center',
-          justifyContent: 'space-between',
-          paddingTop: insets.top + 16,
+          justifyContent: 'flex-end',
+          paddingBottom: insets.bottom + 18,
+          paddingTop: insets.top + 8,
           paddingHorizontal: theme.spacing[5],
         }}
       >
-        <LoginHero startDelayMs={120} />
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'flex-end',
+            paddingBottom: showEmailForm ? 6 : 10,
+          }}
+        >
+          <LoginHero startDelayMs={120} />
+        </View>
 
-        <View style={{ width: '100%', maxWidth: 440, alignSelf: 'center', gap: 16 }}>
+        <View style={{ width: '100%', maxWidth: 296, alignSelf: 'center', gap: 16 }}>
           <EtherealAuthButtons
             disabled={isLoading}
             onProviderPress={onProviderPress}
             startDelayMs={900}
           />
 
-          <View
-            style={{
-              alignItems: 'center',
-              flexDirection: 'row',
-              gap: 12,
-              marginVertical: 8,
-            }}
-          >
-            <View
-              style={{ flex: 1, height: 1, backgroundColor: etherealText.faintDivider }}
+          {!showEmailForm ? (
+            <MascotGuide
+              body="Sign in, then I will walk you through one clean focus setup."
+              compact
+              title="I will guide the first block."
             />
-            <Text
-              color={etherealText.heading}
-              fontSize={11}
-              fontWeight="700"
-              style={{ color: etherealText.muted, letterSpacing: 2 }}
-            >
-              OR SIGN IN
-            </Text>
-            <View
-              style={{ flex: 1, height: 1, backgroundColor: etherealText.faintDivider }}
+          ) : null}
+
+          {showEmailForm ? (
+            <LoginEmailForm
+              email={email}
+              emailError={errors.email}
+              isLoading={isLoading}
+              onChangeEmail={hem}
+              onChangePassword={hpm}
+              onForgotPassword={onForgotPassword}
+              onSubmit={handleLogin}
+              password={password}
+              passwordError={errors.password}
             />
-          </View>
+          ) : null}
 
-          <LoginEmailForm
-            email={email}
-            emailError={errors.email}
-            isLoading={isLoading}
-            onChangeEmail={hem}
-            onChangePassword={hpm}
-            onForgotPassword={onForgotPassword}
-            onSubmit={handleLogin}
-            password={password}
-            passwordError={errors.password}
-          />
-
-          <View style={{ alignItems: 'center', marginTop: 8 }}>
-            <Pressable
-              accessibilityHint="Creates a new VEX account"
-              accessibilityLabel="Create a VEX account"
-              accessibilityRole="link"
-              hitSlop={{ top: 8, bottom: 8, left: 12, right: 12 }}
-              onPress={onCreateAccount}
-              style={getMinTouchTargetStyle()}
-            >
-              <Text
-                color={etherealText.heading}
-                fontSize={14}
-                style={{ color: etherealText.subtitle }}
-                textAlign="center"
+          {showEmailForm ? (
+            <View style={{ alignItems: 'center' }}>
+              <Pressable
+                accessibilityHint="Creates a new VEX account"
+                accessibilityLabel="Create a VEX account"
+                accessibilityRole="link"
+                hitSlop={{ top: 8, bottom: 8, left: 12, right: 12 }}
+                onPress={onCreateAccount}
+                style={getMinTouchTargetStyle()}
               >
-                New here?{' '}
                 <Text
+                  color={etherealText.heading}
                   fontSize={14}
-                  fontWeight="700"
-                  style={{ color: etherealText.heading, textDecorationLine: 'underline' }}
+                  style={{ color: etherealText.subtitle }}
+                  textAlign="center"
                 >
-                  Create your focus system
+                  New here?{' '}
+                  <Text
+                    fontSize={14}
+                    fontWeight="700"
+                    style={{ color: etherealText.heading, textDecorationLine: 'underline' }}
+                  >
+                    Create your focus system
+                  </Text>
                 </Text>
-              </Text>
-            </Pressable>
-          </View>
+              </Pressable>
+            </View>
+          ) : null}
+
+          {!showEmailForm ? <LoginPrivacyStrip /> : null}
         </View>
       </View>
     </AppScreen>
