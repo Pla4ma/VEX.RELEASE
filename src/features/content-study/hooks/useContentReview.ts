@@ -1,47 +1,15 @@
-/**
- * useContentReview Hook
- * Manages content review and editing state
- */
-
 import { useState, useCallback, useEffect } from 'react';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import * as Sentry from '@sentry/react-native';
-import { useToast } from '../../../shared/ui/components/Toast';
+import { useQuery } from '@tanstack/react-query';
 import { useAuthStore } from '../../../store';
-import {
-  fetchContentById,
-  updateContentText,
-  generateStudyPlan,
-} from '../ContentStudyService';
-import type { ContentReviewState } from '../types';
-import { ERROR_MESSAGES } from '../constants';
+import { fetchContentById } from '../ContentStudyService';
 import { contentStudyQueryKeys } from './queryKeys';
 import { useContentExtractionPolling } from './content-review-polling';
-
-function createInitialContentReviewState(): ContentReviewState {
-  return {
-    content: null,
-    editedText: '',
-    isEditing: false,
-    isGenerating: false,
-    error: null,
-    originalText: '',
-    editHistory: [],
-    canUndo: false,
-    canRedo: false,
-    wordCount: 0,
-    isExtracting: false,
-    extractionProgress: 0,
-    extractionStage: 'uploading',
-    retryCount: 0,
-    autosaveEnabled: true,
-  };
-}
+import { createInitialContentReviewState } from './contentReviewState';
+import { useContentReviewActions } from './contentReviewActions';
+import type { ContentReviewState } from '../types';
 
 export function useContentReview(contentId: string) {
   const { user } = useAuthStore();
-  const queryClient = useQueryClient();
-  const { show } = useToast();
   const [state, setState] = useState<ContentReviewState>(
     createInitialContentReviewState,
   );
@@ -110,68 +78,11 @@ export function useContentReview(contentId: string) {
     }));
   }, []);
 
-  const saveMutation = useMutation({
-    mutationFn: async (text: string) => {
-      await updateContentText(contentId, text);
-      return text;
-    },
-    onSuccess: (text) => {
-      setState((prev) => ({
-        ...prev,
-        isEditing: false,
-        originalText: text,
-        content: prev.content
-          ? { ...prev.content, userEditedText: text }
-          : null,
-      }));
-      queryClient.invalidateQueries({
-        queryKey: contentStudyQueryKeys.content(contentId),
-      });
-    },
-    onError: (error) => {
-      Sentry.captureException(error, { tags: { feature: 'content-study', operation: 'saveEdits' } });
-      show({ type: 'error', title: 'Save failed', message: 'Try again when connection returns.' });
-    },
+  const { saveEdits, generate } = useContentReviewActions({
+    contentId,
+    state,
+    setState,
   });
-
-  const saveEdits = useCallback(async () => {
-    await saveMutation.mutateAsync(state.editedText);
-  }, [saveMutation, state.editedText]);
-
-  const generateMutation = useMutation({
-    mutationFn: async () => {
-      if (!user?.id) {
-        throw new Error('User not authenticated');
-      }
-      const result = await generateStudyPlan({ contentId, userId: user.id });
-      return result;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: contentStudyQueryKeys.all,
-      });
-    },
-    onError: (error) => {
-      Sentry.captureException(error, { tags: { feature: 'content-study', operation: 'generateStudyPlan' } });
-      show({ type: 'error', title: 'Generation failed', message: 'Try again when connection returns.' });
-    },
-  });
-
-  const generate = useCallback(async () => {
-    setState((prev) => ({ ...prev, isGenerating: true, error: null }));
-
-    try {
-      const result = await generateMutation.mutateAsync();
-      return result;
-    } catch (err: unknown) {
-      const message =
-        err instanceof Error ? err.message : ERROR_MESSAGES.DEFAULT;
-      setState((prev) => ({ ...prev, error: message }));
-      throw err;
-    } finally {
-      setState((prev) => ({ ...prev, isGenerating: false }));
-    }
-  }, [generateMutation]);
 
   const canGenerate =
     state.content?.status === 'EXTRACTED' || state.content?.status === 'READY';
