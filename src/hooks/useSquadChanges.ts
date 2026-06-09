@@ -11,11 +11,11 @@ export function useSquadChanges({ squadId, onChange }: UseSquadChangesOptions) {
   useEffect(() => { onChangeRef.current = onChange; }, [onChange]);
 
   useEffect(() => {
-    if (!squadId) return;
+    if (!squadId) {return;}
     let unsub: (() => void) | null = null;
     let cancelled = false;
     subscribeToSquadChanges(squadId, (payload) => {
-      if (cancelled) return;
+      if (cancelled) {return;}
       onChangeRef.current?.(payload);
     }).then((u) => {
       if (cancelled) { u(); return; }

@@ -69,7 +69,7 @@ export function SessionConsequenceCards({
             paddingHorizontal: theme.spacing[6],
           }}
         >
-          <Text fontSize={16}></Text>
+          <Text fontSize={16} />
           <Text variant="label" color="text.tertiary">
             ALSO HAPPENED
           </Text>

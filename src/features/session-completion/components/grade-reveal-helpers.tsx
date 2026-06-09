@@ -45,9 +45,6 @@ export function BurstParticle({
   progress: SharedValue<number>;
 }): JSX.Element | null {
   const reduceMotion = useReducedMotion();
-  if (reduceMotion) {
-    return null;
-  }
   const angle = (Math.PI * 2 * index) / PARTICLE_COUNT;
   const style = useAnimatedStyle(() => ({
     opacity: 1 - progress.value,
@@ -57,6 +54,10 @@ export function BurstParticle({
       { scale: 0.4 + progress.value },
     ],
   }));
+
+  if (reduceMotion) {
+    return null;
+  }
 
   return (
     <Animated.View

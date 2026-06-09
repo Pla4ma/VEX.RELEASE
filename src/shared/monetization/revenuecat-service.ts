@@ -30,7 +30,7 @@ const ANDROID_API_KEY = process.env.EXPO_PUBLIC_REVENUECAT_ANDROID_KEY;
 const PLACEHOLDER_PATTERN = /^(your[_\-].*|test[_\-].*|placeholder|REPLACE_ME|TODO|rc_(sk|pub)_(test|live)_)/i;
 
 function isPlaceholderKey(key: string | undefined): boolean {
-  if (!key || key.length === 0) return true;
+  if (!key || key.length === 0) {return true;}
   return PLACEHOLDER_PATTERN.test(key.trim());
 }
 

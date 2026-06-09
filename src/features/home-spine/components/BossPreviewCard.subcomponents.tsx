@@ -129,7 +129,7 @@ export function EscapeTimer({
   const isWarning = hoursRemaining <= 12;
   return (
     <Box flexDirection="row" alignItems="center" gap="xs">
-      <Text fontSize={12}></Text>
+      <Text fontSize={12} />
       <Text
         variant="caption"
         color={

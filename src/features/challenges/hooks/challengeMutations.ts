@@ -65,8 +65,8 @@ export function useClaimChallengeReward() {
       queryClient.invalidateQueries({ queryKey: economyKeys.wallet(input.userId) });
     },
     onError: (error, variables, context) => {
-      if (context?.previousByUser) queryClient.setQueryData(context.byUserKey, context.previousByUser);
-      if (context?.previousActive) queryClient.setQueryData(context.activeKey, context.previousActive);
+      if (context?.previousByUser) {queryClient.setQueryData(context.byUserKey, context.previousByUser);}
+      if (context?.previousActive) {queryClient.setQueryData(context.activeKey, context.previousActive);}
       Sentry.captureException(error, { tags: { feature: 'challenges', operation: 'claimChallengeReward' } });
       show({ type: 'error', title: 'Reward not claimed', message: 'Try again when connection returns.' });
     },
@@ -98,13 +98,13 @@ export function useChallengeEvents(userId: string, canSubscribe?: boolean) {
   const queryClient = useQueryClient();
   const handleChallengeCompleted = useCallback(
     (event: { userId: string; challengeId: string }) => {
-      if (event.userId !== userId) return;
+      if (event.userId !== userId) {return;}
       queryClient.invalidateQueries({ queryKey: challengeKeys.byUser(userId) });
     },
     [queryClient, userId],
   );
   useEffect(() => {
-    if (!canSubscribe) return;
+    if (!canSubscribe) {return;}
     const unsubscribe = eventBus.subscribe('challenge:completed', handleChallengeCompleted);
     return unsubscribe;
   }, [canSubscribe, handleChallengeCompleted]);

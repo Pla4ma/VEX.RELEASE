@@ -49,7 +49,7 @@ export function useContentReviewActions({
 
   const generateMutation = useMutation({
     mutationFn: async () => {
-      if (!user?.id) throw new Error('User not authenticated');
+      if (!user?.id) {throw new Error('User not authenticated');}
       return generateStudyPlan({ contentId, userId: user.id });
     },
     onSuccess: () => {

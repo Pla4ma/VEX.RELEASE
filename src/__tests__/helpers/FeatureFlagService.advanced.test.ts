@@ -60,7 +60,7 @@ describe('FeatureFlagService', () => {
 
   const withTimer = async (work: () => Promise<void>) => {
     await work();
-    if (timer) clearInterval(timer);
+    if (timer) {clearInterval(timer);}
   };
 
   describe('Remote fetching', () => {

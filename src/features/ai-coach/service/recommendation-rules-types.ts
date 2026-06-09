@@ -1,4 +1,4 @@
-import type { RecommendationContext, CoachPersona, CoachRecommendation } from "./CoachRecommendationService-types";
+import type { RecommendationContext, CoachPersona, CoachRecommendation } from './CoachRecommendationService-types';
 
 export interface RecommendationRule {
   name: string;

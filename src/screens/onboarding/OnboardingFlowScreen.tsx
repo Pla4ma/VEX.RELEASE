@@ -55,19 +55,6 @@ export function OnboardingFlowScreen(): JSX.Element {
   const route = useRoute<OnboardingRouteProp>();
   const flow = useOnboardingFlow(route.params?.step);
 
-  if (!flow.userId) {
-    return <SignedOutOnboardingState />;
-  }
-
-  const { isContinueDisabled } = getStepValidation(
-    flow.step,
-    flow.goal,
-    flow.motivationStyle,
-    flow.isFinishing,
-  );
-
-  const stepCopy = STEP_TITLES[flow.step] ?? { title: '', subtitle: '' };
-
   const renderStep0 = useCallback(
     () => (
       <View style={{ gap: 12, marginTop: 16 }}>
@@ -129,6 +116,19 @@ export function OnboardingFlowScreen(): JSX.Element {
     [flow],
   );
 
+  if (!flow.userId) {
+    return <SignedOutOnboardingState />;
+  }
+
+  const { isContinueDisabled } = getStepValidation(
+    flow.step,
+    flow.goal,
+    flow.motivationStyle,
+    flow.isFinishing,
+  );
+
+  const stepCopy = STEP_TITLES[flow.step] ?? { title: '', subtitle: '' };
+
   return (
     <EtherealOnboardingShell
       eyebrow={STEP_EYEBROW[flow.step]}
@@ -155,15 +155,10 @@ function SignedOutOnboardingState(): JSX.Element {
   return (
     <View style={{ flex: 1 }}>
       <EtherealSkyBackground />
-      <View
-        style={{
-          flex: 1,
-          alignItems: 'center',
-          justifyContent: 'center',
-          paddingHorizontal: 32,
-          gap: 16,
-        }}
-      >
+      <View style={{
+        flex: 1, alignItems: 'center', justifyContent: 'center',
+        paddingHorizontal: 32, gap: 16,
+      }}>
         <SerifTitle
           color={etherealText.heading}
           fontSize={28}

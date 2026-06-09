@@ -34,14 +34,14 @@ export const sizeConfig = {
 };
 
 export function getFieldBorderColor(state: FieldState, semantic: { danger: string; success: string; primary: string; inputBorder: string }): string {
-  if (state === 'error') return semantic.danger;
-  if (state === 'success') return semantic.success;
-  if (state === 'focused') return semantic.primary;
+  if (state === 'error') {return semantic.danger;}
+  if (state === 'success') {return semantic.success;}
+  if (state === 'focused') {return semantic.primary;}
   return semantic.inputBorder;
 }
 
 export function getFieldMessageColor(error: string | undefined, internalError: string | undefined, successMessage: string | undefined): string {
-  if (error || internalError) return 'error.DEFAULT';
-  if (successMessage) return 'success.DEFAULT';
+  if (error || internalError) {return 'error.DEFAULT';}
+  if (successMessage) {return 'success.DEFAULT';}
   return 'text.muted';
 }

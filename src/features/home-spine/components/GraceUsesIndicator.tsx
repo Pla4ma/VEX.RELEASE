@@ -63,7 +63,7 @@ export function GraceUsesIndicator({
             isLow ? theme.colors.warning.DEFAULT : theme.colors.info.DEFAULT
           }
         >
-          <Text fontSize={12}></Text>
+          <Text fontSize={12} />
           <Text
             variant="caption"
             color={isLow ? theme.colors.warning.dark : theme.colors.info.dark}

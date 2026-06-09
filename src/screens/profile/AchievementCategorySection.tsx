@@ -125,11 +125,12 @@ export const AchievementSkeletonCard: React.FC = () => {
 export const EmptyState: React.FC<{
   onStartSession?: () => void;
 }> = ({ onStartSession }) => {
+  const { theme } = useTheme();
+
   if (onStartSession) {
     return <EmptyAchievements onStartSession={onStartSession} />;
   }
 
-  const { theme } = useTheme();
   return (
     <Box flex={1} alignItems="center" justifyContent="center" p={8}>
       <Text style={{ fontSize: 64 }}>🏆</Text>

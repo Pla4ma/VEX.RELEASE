@@ -35,7 +35,7 @@ export function VexLetter({
   const weight = useSharedValue<string>(isReducedMotion ? '600' : '300');
 
   useEffect(() => {
-    if (isReducedMotion) return;
+    if (isReducedMotion) {return;}
     const d = 200 + index * motionStagger.loose;
     op.value = withDelay(d, withTiming(1, { duration: 900, easing: EASE_CINEMATIC }));
     ty.value = withDelay(d, withSpring(0, springPresets.settle));

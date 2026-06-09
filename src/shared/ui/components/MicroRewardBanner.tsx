@@ -54,7 +54,7 @@ export const MicroRewardBanner: React.FC<MicroRewardBannerProps> = ({
   useEffect(() => { triggerHaptic('success'); }, []);
 
   useEffect(() => {
-    if (!autoDismiss) return;
+    if (!autoDismiss) {return;}
     const timer = setTimeout(() => onDismiss?.(), autoDismissDelay);
     return () => clearTimeout(timer);
   }, [autoDismiss, autoDismissDelay, onDismiss]);

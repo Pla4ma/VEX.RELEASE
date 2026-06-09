@@ -67,8 +67,8 @@ export function useUseShield() {
       queryClient.invalidateQueries({ queryKey: streakKeys.byUser(variables.userId) });
     },
     onError: (error, variables, context) => {
-      if (context?.previousStreak) queryClient.setQueryData(context.key, context.previousStreak);
-      if (context?.previousSummary) queryClient.setQueryData(streakKeys.summary(variables.userId), context.previousSummary);
+      if (context?.previousStreak) {queryClient.setQueryData(context.key, context.previousStreak);}
+      if (context?.previousSummary) {queryClient.setQueryData(streakKeys.summary(variables.userId), context.previousSummary);}
       Sentry.captureException(error, { tags: { feature: 'streaks', operation: 'useShield' } });
       show({ type: 'error', title: 'Shield failed', message: 'Try again when connection returns.' });
     },

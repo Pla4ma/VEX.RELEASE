@@ -29,7 +29,7 @@ function PreviewLine({
   return (
     <Box mb="md">
       <Box flexDirection="row" alignItems="center" gap="sm" mb="xs">
-        <Text fontSize={16}></Text>
+        <Text fontSize={16} />
         <Text variant="caption" color="text.tertiary">
           {label}
         </Text>
@@ -100,7 +100,7 @@ export function TomorrowPreviewPersonalized(props: Props): JSX.Element | null {
   if (!props.hasEvents && !props.hasChallenges && props.streakWillContinue) {
     return (
       <Box flexDirection="row" alignItems="center" gap="sm">
-        <Text fontSize={16}></Text>
+        <Text fontSize={16} />
         <Text variant="bodySmall" color="text.tertiary">
           Quiet day - perfect for building that streak
         </Text>

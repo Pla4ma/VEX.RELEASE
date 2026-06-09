@@ -30,7 +30,7 @@ function Flourish({ isReducedMotion }: { isReducedMotion: boolean }) {
   const draw = useSharedValue(isReducedMotion ? 1 : 0);
 
   useEffect(() => {
-    if (isReducedMotion) return;
+    if (isReducedMotion) {return;}
     draw.value = withDelay(150, withTiming(1, { duration: 1200, easing: EASE_CINEMATIC }));
   }, [draw, isReducedMotion]);
 
@@ -60,7 +60,7 @@ function VexLetter({ char, index, isReducedMotion }: { char: string; index: numb
   const sc = useSharedValue(isReducedMotion ? 1 : 0.85);
 
   useEffect(() => {
-    if (isReducedMotion) return;
+    if (isReducedMotion) {return;}
     const d = 250 + index * motionStagger.tight;
     op.value = withDelay(d, withTiming(1, { duration: 900, easing: EASE_CINEMATIC }));
     ty.value = withDelay(d, withSpring(0, springPresets.settle));
@@ -101,7 +101,7 @@ function Underline({ isReducedMotion }: { isReducedMotion: boolean }) {
   const shimmer = useSharedValue(0);
 
   useEffect(() => {
-    if (isReducedMotion) return;
+    if (isReducedMotion) {return;}
     scale.value = withDelay(1300, withSpring(1, springPresets.settle));
     op.value = withDelay(1300, withTiming(1, { duration: 600 }));
     shimmer.value = withDelay(2400, withRepeat(
@@ -143,7 +143,7 @@ export function VexHeroSignature({
   const microBreath = useSharedValue(0);
 
   useEffect(() => {
-    if (isReducedMotion) return;
+    if (isReducedMotion) {return;}
     tagOp.value = withDelay(1500, withTiming(1, { duration: 700, easing: EASE_CINEMATIC }));
     tagTy.value = withDelay(1500, withTiming(0, { duration: 700, easing: EASE_CINEMATIC }));
     microBreath.value = withRepeat(

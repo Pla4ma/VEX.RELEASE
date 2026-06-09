@@ -12,15 +12,15 @@ interface ThemeShape {
 }
 
 export function resolveColorValue(value: unknown, theme: unknown): string | undefined {
-  if (typeof value !== 'string') return undefined;
+  if (typeof value !== 'string') {return undefined;}
 
   // Literal CSS color values (hex, rgb, rgba, hsl, etc.)
   const isLiteralColor = /^#|^rgba?\(|^hsla?\(|^hsva?\(|^transparent$/i.test(value);
-  if (isLiteralColor) return value;
+  if (isLiteralColor) {return value;}
 
   const themeObj = theme as ThemeShape | null;
   const colors = themeObj?.colors;
-  if (!colors) return value;
+  if (!colors) {return value;}
 
   // Theme path resolution (e.g. "text.primary", "semantic.vexCyan")
   if (value.includes('.')) {

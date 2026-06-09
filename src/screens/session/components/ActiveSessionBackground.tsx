@@ -28,7 +28,7 @@ export function ActiveSessionBackground({
   const drift = useSharedValue(0);
 
   useEffect(() => {
-    if (isReducedMotion) return;
+    if (isReducedMotion) {return;}
     drift.value = withRepeat(
       withTiming(1, { duration: 20000 }),
       -1,

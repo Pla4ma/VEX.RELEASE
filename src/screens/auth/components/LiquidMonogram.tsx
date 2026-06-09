@@ -18,7 +18,7 @@ export function LiquidMonogram({ isReducedMotion }: { isReducedMotion: boolean }
   const op = useSharedValue(isReducedMotion ? 1 : 0);
   const breath = useSharedValue(0);
   useEffect(() => {
-    if (isReducedMotion) return;
+    if (isReducedMotion) {return;}
     op.value = withDelay(200, withTiming(1, { duration: 1100, easing: Easing.bezier(0.16, 1, 0.3, 1) }));
     breath.value = withDelay(800, withRepeat(withTiming(1, { duration: 4800, easing: Easing.bezier(0.37, 0, 0.63, 1) }), -1, true));
   }, [op, breath, isReducedMotion]);

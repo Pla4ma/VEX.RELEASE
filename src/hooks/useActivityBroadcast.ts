@@ -15,11 +15,11 @@ export function useActivityBroadcast({
   useEffect(() => { onMessageRef.current = onMessage; }, [onMessage]);
 
   useEffect(() => {
-    if (!channelName) return;
+    if (!channelName) {return;}
     let unsub: (() => void) | null = null;
     let cancelled = false;
     subscribeToActivity(channelName, (message) => {
-      if (cancelled) return;
+      if (cancelled) {return;}
       onMessageRef.current?.(message);
     }).then((u) => {
       if (cancelled) { u(); return; }

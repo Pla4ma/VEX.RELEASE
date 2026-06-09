@@ -71,7 +71,7 @@ export async function updatePresence(
     return;
   }
   const channel = activeChannels.get(`presence:${userId}`);
-  if (!channel) return;
+  if (!channel) {return;}
   const trackStatus = await channel.track({
     userId: currentUserId,
     status,

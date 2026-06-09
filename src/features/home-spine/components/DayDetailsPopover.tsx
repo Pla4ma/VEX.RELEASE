@@ -102,7 +102,7 @@ export function DayDetailsPopover({
           borderColor="warning.DEFAULT"
         >
           <Box flexDirection="row" alignItems="center" gap="sm">
-            <Text fontSize={16}></Text>
+            <Text fontSize={16} />
             <Text variant="bodySmall" color="warning.DEFAULT">
               Challenge ends: {day.challengeExpiring}
             </Text>

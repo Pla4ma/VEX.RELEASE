@@ -19,9 +19,6 @@ function ConfettiPiece({
   color: string;
 }): JSX.Element | null {
   const reduceMotion = useReducedMotion();
-  if (reduceMotion) {
-    return null;
-  }
   const startX = Math.random() * SCREEN_WIDTH;
   const endX = startX + (Math.random() - 0.5) * 200;
   const duration = 2000 + Math.random() * 1000;
@@ -32,6 +29,10 @@ function ConfettiPiece({
       { rotate: withTiming(`${Math.random() * 720}deg`, { duration }) },
     ],
   }));
+
+  if (reduceMotion) {
+    return null;
+  }
   return (
     <Animated.View
       entering={FadeIn.duration(100).delay(index * 50)}

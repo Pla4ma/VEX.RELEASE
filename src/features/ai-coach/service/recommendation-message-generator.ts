@@ -1,17 +1,17 @@
-import type { CoachRecommendationType, RecommendationContext, CoachPersona } from "./CoachRecommendationService-types";
+import type { CoachRecommendationType, RecommendationContext, CoachPersona } from './CoachRecommendationService-types';
 import {
   generateProtectStreakMessage,
   generateStudyBehindMessage,
   generateBossOpportunityMessage,
   generateMomentumBuildingMessage,
-} from "./recommendation-messages";
+} from './recommendation-messages';
 import {
   generateComebackMessage,
   generateStudyPlanCompleteMessage,
   generateFocusSessionMessage,
   generateStudyPlanMessage,
   generateBossBattleMessage,
-} from "./recommendation-messages-engaging";
+} from './recommendation-messages-engaging';
 
 export function generateMessage(
   type: CoachRecommendationType,

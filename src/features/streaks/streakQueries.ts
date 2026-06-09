@@ -6,7 +6,7 @@ export function useStreak(userId: string | null) {
   return useQuery({
     queryKey: streakKeys.byUser(userId || ''),
     queryFn: () => {
-      if (!userId) throw new Error('User ID required');
+      if (!userId) {throw new Error('User ID required');}
       return service.getOrCreateStreak(userId);
     },
     enabled: !!userId,
@@ -18,7 +18,7 @@ export function useStreakSummary(userId: string | null) {
   return useQuery({
     queryKey: streakKeys.summary(userId || ''),
     queryFn: () => {
-      if (!userId) throw new Error('User ID required');
+      if (!userId) {throw new Error('User ID required');}
       return service.getStreakSummary(userId);
     },
     enabled: !!userId,
@@ -31,7 +31,7 @@ export function useComebackState(userId: string | null) {
   return useQuery({
     queryKey: streakKeys.comeback(userId || ''),
     queryFn: () => {
-      if (!userId) throw new Error('User ID required');
+      if (!userId) {throw new Error('User ID required');}
       return service.detectComeback(userId);
     },
     enabled: !!userId,
@@ -43,7 +43,7 @@ export function useStreakMultiplier(userId: string | null) {
   return useQuery({
     queryKey: streakKeys.multiplier(userId || ''),
     queryFn: () => {
-      if (!userId) throw new Error('User ID required');
+      if (!userId) {throw new Error('User ID required');}
       return service.getOrCreateStreak(userId).then((s) => ({
         days: s.currentDays,
         multiplier: service.getStreakMultiplier(s.currentDays),

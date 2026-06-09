@@ -14,7 +14,7 @@ export function useFeedUpdates({ userId, onUpdate }: UseFeedUpdatesOptions) {
     let unsub: (() => void) | null = null;
     let cancelled = false;
     subscribeToFeedChanges(userId, (payload) => {
-      if (cancelled) return;
+      if (cancelled) {return;}
       onUpdateRef.current?.(payload);
     }).then((u) => {
       if (cancelled) { u(); return; }

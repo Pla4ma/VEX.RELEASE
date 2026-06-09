@@ -58,7 +58,7 @@ export function EditorialCta({
   const shine = useSharedValue(-1);
 
   useEffect(() => {
-    if (isReducedMotion) return;
+    if (isReducedMotion) {return;}
     op.value = withDelay(delay, withTiming(1, { duration: 900, easing: EASE_CINEMATIC }));
     ty.value = withDelay(delay, withSpring(0, springPresets.settle));
     breath.value = withDelay(

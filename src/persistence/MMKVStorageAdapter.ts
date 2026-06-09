@@ -22,8 +22,8 @@ function getStorage(): MMKV {
     });
     configureDebouncedWrites(
       (key, op) => {
-        if (op.remove) mmkvStorage!.delete(key);
-        else mmkvStorage!.set(key, op.value ?? '');
+        if (op.remove) {mmkvStorage!.delete(key);}
+        else {mmkvStorage!.set(key, op.value ?? '');}
       },
       { delay: 100 },
     );

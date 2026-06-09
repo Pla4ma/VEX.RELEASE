@@ -13,7 +13,7 @@ export interface FactorMapProps {
 
 export const FactorMap: React.FC<FactorMapProps> = ({ model }) => {
   const factors = model.current?.factors;
-  if (!factors) return null;
+  if (!factors) {return null;}
 
   const factorItems = [
     { icon: 'clock', label: 'Consistency', orb: 'mint' as const, score: factors.consistency.score },

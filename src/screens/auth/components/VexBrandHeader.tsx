@@ -20,7 +20,7 @@ function StatusDot(): React.JSX.Element {
   const pulse = useSharedValue(isReducedMotion ? 0.6 : 0.25);
 
   React.useEffect(() => {
-    if (isReducedMotion) return;
+    if (isReducedMotion) {return;}
     pulse.value = withRepeat(withTiming(1, { duration: 2400 }), -1, true);
   }, [pulse, isReducedMotion]);
 

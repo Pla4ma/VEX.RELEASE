@@ -1,5 +1,5 @@
-import { getDefaultStorageAdapter } from "../../../persistence";
-import { CONTENT_STUDY_CONSTANTS } from "../types";
+import { getDefaultStorageAdapter } from '../../../persistence';
+import { CONTENT_STUDY_CONSTANTS } from '../types';
 
 export const getStorage = () => getDefaultStorageAdapter();
 

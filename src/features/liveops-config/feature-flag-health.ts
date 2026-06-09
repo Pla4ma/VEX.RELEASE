@@ -21,8 +21,8 @@ export function shouldRunHealthCheck(
   totalCompletedSessions: number,
   disabledFeatures: FeatureKey[],
 ): boolean {
-  if (disabledFeatures.includes(feature)) return false;
-  if (ROOT_ELIGIBLE.has(feature)) return true;
+  if (disabledFeatures.includes(feature)) {return false;}
+  if (ROOT_ELIGIBLE.has(feature)) {return true;}
   const proximitySession = PROXIMITY_GATED.get(feature);
   if (proximitySession !== undefined) {
     return totalCompletedSessions >= proximitySession;

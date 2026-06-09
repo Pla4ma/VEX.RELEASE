@@ -155,7 +155,7 @@ export function DailyQuestCard({
                     gap: theme.spacing[1],
                   }}
                 >
-                  <Text fontSize={14}></Text>
+                  <Text fontSize={14} />
                   <Text variant="caption" color="secondary">
                     {quest.rewardXp} XP
                   </Text>

@@ -72,9 +72,9 @@ export function ComboMeter({
 
       {comboMinutes >= 10 && (
         <Animated.View style={[fireContainerStyle, fireStyle]}>
-          <Text style={fireEmojiStyle}></Text>
-          {comboMinutes >= 20 && <Text style={fireEmojiStyle}></Text>}
-          {comboMinutes >= 30 && <Text style={fireEmojiStyle}></Text>}
+          <Text style={fireEmojiStyle} />
+          {comboMinutes >= 20 && <Text style={fireEmojiStyle} />}
+          {comboMinutes >= 30 && <Text style={fireEmojiStyle} />}
         </Animated.View>
       )}
 

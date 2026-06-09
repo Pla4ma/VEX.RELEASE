@@ -75,11 +75,11 @@ export function useSquadPresence({ squadId }: UseSquadPresenceOptions) {
   const [presence, setPresence] = useState<SquadPresence | null>(null);
 
   useEffect(() => {
-    if (!squadId) return;
+    if (!squadId) {return;}
     let cancelled = false;
     let unsubscribeRef: (() => void) | null = null;
     subscribeToSquadPresence(squadId, (data) => {
-      if (!cancelled) setPresence(data);
+      if (!cancelled) {setPresence(data);}
     }).then((unsub) => {
       if (cancelled) { unsub(); return; }
       unsubscribeRef = unsub;

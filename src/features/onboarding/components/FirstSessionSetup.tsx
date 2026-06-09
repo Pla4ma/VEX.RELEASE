@@ -51,7 +51,7 @@ export function FirstSessionSetup({
   };
 
   const handleStartSession = () => {
-    if (isAdvancing) return;
+    if (isAdvancing) {return;}
     setIsAdvancing(true);
     onStartSession({
       duration: selectedDuration,

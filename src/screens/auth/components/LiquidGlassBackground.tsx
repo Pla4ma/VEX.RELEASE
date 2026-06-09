@@ -43,7 +43,7 @@ function AuroraVeil(): React.JSX.Element {
   const drift = useSharedValue(0);
 
   useEffect(() => {
-    if (isReducedMotion) return;
+    if (isReducedMotion) {return;}
     drift.value = withRepeat(withTiming(1, { duration: 14000, easing: Easing.inOut(Easing.sin) }), -1, true);
   }, [drift, isReducedMotion]);
 

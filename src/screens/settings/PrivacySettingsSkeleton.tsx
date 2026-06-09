@@ -8,12 +8,12 @@ export const PrivacySettingsSkeleton: React.FC = () => {
 
   return (
     <Box flex={1} style={{ padding: theme.spacing[4] }}>
-      <SkeletonItem variant='title' style={{ marginBottom: theme.spacing[2] }} />
-      <SkeletonItem variant='text' width='80%' style={{ marginBottom: theme.spacing[4] }} />
-      <SkeletonItem variant='card' style={{ marginBottom: theme.spacing[4] }} />
-      <SkeletonItem variant='card' style={{ marginBottom: theme.spacing[4] }} />
-      <SkeletonItem variant='button' style={{ marginBottom: theme.spacing[3] }} />
-      <SkeletonItem variant='button' />
+      <SkeletonItem variant="title" style={{ marginBottom: theme.spacing[2] }} />
+      <SkeletonItem variant="text" width="80%" style={{ marginBottom: theme.spacing[4] }} />
+      <SkeletonItem variant="card" style={{ marginBottom: theme.spacing[4] }} />
+      <SkeletonItem variant="card" style={{ marginBottom: theme.spacing[4] }} />
+      <SkeletonItem variant="button" style={{ marginBottom: theme.spacing[3] }} />
+      <SkeletonItem variant="button" />
     </Box>
   );
 };

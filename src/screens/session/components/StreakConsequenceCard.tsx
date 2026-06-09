@@ -45,7 +45,7 @@ export function StreakConsequenceCard({
           marginBottom: theme.spacing[2],
         }}
       >
-        <Text fontSize={24}></Text>
+        <Text fontSize={24} />
         <Text variant="body" fontWeight="700" color="text.primary">
           {streakSaved ? 'Streak Saved!' : `Day ${currentDays} Complete`}
         </Text>

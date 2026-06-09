@@ -19,7 +19,7 @@ const EASE_CINEMATIC = Easing.bezier(0.16, 1, 0.3, 1);
 export function EditorialFlourish({ isReducedMotion }: { isReducedMotion: boolean }): React.JSX.Element {
   const draw = useSharedValue(isReducedMotion ? 1 : 0);
   useEffect(() => {
-    if (isReducedMotion) return;
+    if (isReducedMotion) {return;}
     draw.value = withDelay(120, withTiming(1, { duration: 1200, easing: EASE_CINEMATIC }));
   }, [draw, isReducedMotion]);
   const style = useAnimatedStyle(() => ({ opacity: draw.value }));

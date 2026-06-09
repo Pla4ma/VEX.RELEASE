@@ -14,11 +14,11 @@ export function useGuildQuests({
   useEffect(() => { onQuestUpdateRef.current = onQuestUpdate; }, [onQuestUpdate]);
 
   useEffect(() => {
-    if (!guildId) return;
+    if (!guildId) {return;}
     let unsub: (() => void) | null = null;
     let cancelled = false;
     subscribeToGuildQuests(guildId, (payload) => {
-      if (cancelled) return;
+      if (cancelled) {return;}
       onQuestUpdateRef.current?.(payload);
     }).then((u) => {
       if (cancelled) { u(); return; }

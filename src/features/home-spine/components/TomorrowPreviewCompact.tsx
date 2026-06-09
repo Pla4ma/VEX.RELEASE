@@ -40,7 +40,7 @@ export function TomorrowPreviewCompact({
         bg="background.secondary"
       >
         <Box flexDirection="row" alignItems="center" gap="sm">
-          <Text fontSize={16}></Text>
+          <Text fontSize={16} />
           <Text variant="body" color="text.secondary">
             Tomorrow:
           </Text>

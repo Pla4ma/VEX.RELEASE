@@ -17,7 +17,7 @@ export function VexGlassBrand(): React.JSX.Element {
   const glow = useSharedValue(isReducedMotion ? 0.55 : 0.28);
 
   useEffect(() => {
-    if (isReducedMotion) return;
+    if (isReducedMotion) {return;}
     glow.value = withRepeat(withTiming(0.72, { duration: 2600 }), -1, true);
   }, [glow, isReducedMotion]);
 
