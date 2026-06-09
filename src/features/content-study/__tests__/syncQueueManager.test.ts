@@ -101,7 +101,7 @@ describe('SyncQueueManager', () => {
         maxRetries: 3,
       });
     }
-    const item = await syncQueueManager.enqueue({
+    const _item = await syncQueueManager.enqueue({
       entity: 'content',
       operation: 'create',
       payload: {},

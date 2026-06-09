@@ -108,7 +108,7 @@ describe('Queries', () => {
         coinReward: 50,
         requiredCount: 5,
       }];
-      mockedRepo.fetchActiveChallengeDetails.mockResolvedValue(details as any);
+      mockedRepo.fetchActiveChallengeDetails.mockResolvedValue(details as unknown);
       const summaries = await getUserChallengeSummaries('user-1');
       expect(summaries).toHaveLength(1);
       expect(summaries[0].challengeId).toBe('c-1');
@@ -129,7 +129,7 @@ describe('Queries', () => {
     });
 
     it('returns canReroll false when daily limit reached', async () => {
-      mockedRepo.fetchUserChallenge.mockResolvedValue(makeUserChallenge() as any);
+      mockedRepo.fetchUserChallenge.mockResolvedValue(makeUserChallenge() as unknown);
       mockedRepo.getRerollCountToday.mockResolvedValue(10);
       mockedRepo.getFreeRerollCountToday.mockResolvedValue(1);
       const result = await checkRerollEligibility('user-1', 'c-1');
@@ -138,7 +138,7 @@ describe('Queries', () => {
     });
 
     it('returns canReroll true for ACTIVE challenge with free reroll', async () => {
-      mockedRepo.fetchUserChallenge.mockResolvedValue(makeUserChallenge({ status: 'ACTIVE' }) as any);
+      mockedRepo.fetchUserChallenge.mockResolvedValue(makeUserChallenge({ status: 'ACTIVE' }) as unknown);
       mockedRepo.getRerollCountToday.mockResolvedValue(0);
       mockedRepo.getFreeRerollCountToday.mockResolvedValue(0);
       const result = await checkRerollEligibility('user-1', 'c-1');
@@ -148,7 +148,7 @@ describe('Queries', () => {
     });
 
     it('returns canReroll false for COMPLETED challenge', async () => {
-      mockedRepo.fetchUserChallenge.mockResolvedValue(makeUserChallenge({ status: 'COMPLETED' }) as any);
+      mockedRepo.fetchUserChallenge.mockResolvedValue(makeUserChallenge({ status: 'COMPLETED' }) as unknown);
       mockedRepo.getRerollCountToday.mockResolvedValue(0);
       mockedRepo.getFreeRerollCountToday.mockResolvedValue(0);
       const result = await checkRerollEligibility('user-1', 'c-1');

@@ -42,7 +42,7 @@ describe('SmartNotificationScheduler Generators', () => {
     });
 
     it('skips unknown types gracefully', async () => {
-      const result = await selectNotificationType('user-1', ['RANK_REPORT' as any]);
+      const result = await selectNotificationType('user-1', ['RANK_REPORT' as unknown]);
       // RANK_REPORT generator checks day/hour, will return null in most cases
       // but it shouldn't throw
       expect(result === null || typeof result.title === 'string').toBe(true);

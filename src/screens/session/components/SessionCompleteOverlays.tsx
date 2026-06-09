@@ -23,7 +23,7 @@ interface SessionCompleteOverlaysProps {
 
 export function SessionCompleteOverlays({
   controller,
-  summary,
+  _summary,
   gradeRevealed,
   revealedGradeLetter,
   onGradeRevealComplete,

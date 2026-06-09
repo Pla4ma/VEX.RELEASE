@@ -39,7 +39,7 @@ export function usePowerUserNavigation(params: {
   const canNavigateContentStudy = isFeatureAvailableForNavigation(
     getFeatureAvailability(disclosure.features.content_study),
   );
-  const canNavigateSocial = isFeatureAvailableForNavigation(
+  const _canNavigateSocial = isFeatureAvailableForNavigation(
     getFeatureAvailability(disclosure.features.social_tab),
   );
 

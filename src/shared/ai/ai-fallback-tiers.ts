@@ -65,7 +65,7 @@ export const DETERMINISTIC_MESSAGES: Record<string, Record<string, string>> = {
 export function resolveFallbackTier(
   aiAvailable: boolean,
   hasContextData: boolean,
-  errorRetryable: boolean,
+  _errorRetryable: boolean,
 ): FallbackTier {
   if (aiAvailable) {return 'ai_success';}
   if (hasContextData) {return 'deterministic_contextual';}

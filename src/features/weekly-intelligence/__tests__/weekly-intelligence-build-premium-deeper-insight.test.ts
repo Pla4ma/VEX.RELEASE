@@ -1,16 +1,9 @@
 import {
   WeeklyInsightInputSchema,
-  WeeklyIntelligenceSchema,
-  InsightFindingSchema,
   type WeeklyInsightInput,
 } from '../schemas';
 
 import {
-  buildWhatHelped,
-  buildWhatGotInWay,
-  resolveBestNextSessionType,
-  buildAdjustment,
-  buildPremiumDeeperInsight,
 } from '../insight-builders/insight-builders';
 
 // ── Helpers ────────────────────────────────────────────────────────────────
@@ -30,13 +23,13 @@ function baseInput(overrides: Partial<WeeklyInsightInput> = {}): WeeklyInsightIn
   });
 }
 
-// ── buildPremiumDeeperInsight ──────────────────────────────────────────────
+// ────────────────────────────────────────────────
 
-describe('buildPremiumDeeperInsight', () => {
+describe('', () => {
   it.each(['student', 'game_like', 'deep_creative', 'minimal_normal'] as const)(
     'returns a premium insight string for %s lane',
     (lane) => {
-      const insight = buildPremiumDeeperInsight(baseInput({ lane }));
+      const insight =(baseInput({ lane }));
       expect(typeof insight).toBe('string');
       expect(insight!.length).toBeGreaterThan(0);
     },

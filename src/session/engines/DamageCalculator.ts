@@ -1,6 +1,6 @@
 import type { SessionState, DamageCalculation } from '../types';
 
-const BASE_SCORE_PER_MINUTE = 25;
+const _BASE_SCORE_PER_MINUTE = 25;
 
 export function calculateDamage(
   session: SessionState,

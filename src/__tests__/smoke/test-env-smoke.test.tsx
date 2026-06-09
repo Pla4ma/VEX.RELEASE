@@ -102,7 +102,7 @@ describe('Test environment smoke', () => {
 
   it('has ImageLoader turbo module mock', () => {
     expect(global.__turboModuleProxy).toBeDefined();
-    const loader = (global as any).__turboModuleProxy('ImageLoader');
+    const loader = (global as unknown).__turboModuleProxy('ImageLoader');
     expect(loader).toBeDefined();
     expect(loader.getConstants).toBeDefined();
   });

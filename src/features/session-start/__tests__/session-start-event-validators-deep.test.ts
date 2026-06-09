@@ -71,7 +71,7 @@ describe('event-validators', () => {
         type: 'session_initiated' as const,
         data: {},
       };
-      expect(validateSessionStartEvent(event as any)).toBe(false);
+      expect(validateSessionStartEvent(event as unknown)).toBe(false);
     });
 
     it('rejects event missing userId', () => {
@@ -81,7 +81,7 @@ describe('event-validators', () => {
         type: 'session_initiated' as const,
         data: {},
       };
-      expect(validateSessionStartEvent(event as any)).toBe(false);
+      expect(validateSessionStartEvent(event as unknown)).toBe(false);
     });
 
     it('rejects event missing data', () => {
@@ -90,7 +90,7 @@ describe('event-validators', () => {
         type: 'session_initiated' as const,
         data: null,
       };
-      expect(validateSessionStartEvent(event as any)).toBe(false);
+      expect(validateSessionStartEvent(event as unknown)).toBe(false);
     });
 
     it('validates session_initiated with complete data', () => {
@@ -105,7 +105,7 @@ describe('event-validators', () => {
           context: { source: 'home' },
         },
       };
-      expect(validateSessionStartEvent(event as any)).toBe(true);
+      expect(validateSessionStartEvent(event as unknown)).toBe(true);
     });
 
     it('validates session_preparation_started with complete data', () => {
@@ -119,7 +119,7 @@ describe('event-validators', () => {
           user: { mood: 'focused' },
         },
       };
-      expect(validateSessionStartEvent(event as any)).toBe(true);
+      expect(validateSessionStartEvent(event as unknown)).toBe(true);
     });
 
     it('validates session_readiness_assessed with complete data', () => {
@@ -135,7 +135,7 @@ describe('event-validators', () => {
           recommendations: [],
         },
       };
-      expect(validateSessionStartEvent(event as any)).toBe(true);
+      expect(validateSessionStartEvent(event as unknown)).toBe(true);
     });
 
     it('validates session_goals_set with complete data', () => {
@@ -149,7 +149,7 @@ describe('event-validators', () => {
           planning: {},
         },
       };
-      expect(validateSessionStartEvent(event as any)).toBe(true);
+      expect(validateSessionStartEvent(event as unknown)).toBe(true);
     });
 
     it('validates session_mood_assessed with complete data', () => {
@@ -164,7 +164,7 @@ describe('event-validators', () => {
           recommendations: [],
         },
       };
-      expect(validateSessionStartEvent(event as any)).toBe(true);
+      expect(validateSessionStartEvent(event as unknown)).toBe(true);
     });
 
     it('validates session_context_established with complete data', () => {
@@ -177,16 +177,16 @@ describe('event-validators', () => {
           adaptations: [],
         },
       };
-      expect(validateSessionStartEvent(event as any)).toBe(true);
+      expect(validateSessionStartEvent(event as unknown)).toBe(true);
     });
 
     it('returns true for unknown event types (default case)', () => {
       const event = {
         ...baseEvent,
-        type: 'unknown_event' as any,
+        type: 'unknown_event' as unknown,
         data: { anything: true },
       };
-      expect(validateSessionStartEvent(event as any)).toBe(true);
+      expect(validateSessionStartEvent(event as unknown)).toBe(true);
     });
   });
 });

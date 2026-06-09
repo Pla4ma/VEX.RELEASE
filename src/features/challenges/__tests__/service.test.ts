@@ -20,7 +20,7 @@ describe('Challenges Service', () => {
         createdAt: Date.now(),
       };
       mockedRepository.createUserChallenge.mockResolvedValue(
-        mockChallenge as any,
+        mockChallenge as unknown,
       );
       const result = await service.assignChallenge({
         userId: 'user-1',
@@ -57,16 +57,16 @@ describe('Challenges Service', () => {
         rewardAmount: 50,
       };
       mockedRepository.fetchUserChallenge.mockResolvedValue(
-        mockUserChallenge as any,
+        mockUserChallenge as unknown,
       );
       mockedRepository.fetchChallengeById.mockResolvedValue(
-        mockChallenge as any,
+        mockChallenge as unknown,
       );
       mockedRepository.addChallengeProgress.mockResolvedValue({
         ...mockUserChallenge,
         currentValue: 100,
         status: 'COMPLETED',
-      } as any);
+      } as unknown);
       const result = await service.updateChallengeProgress({
         userId: 'user-1',
         challengeId: 'c-1',
@@ -91,16 +91,16 @@ describe('Challenges Service', () => {
       };
       const mockChallenge = { id: 'c-1', targetValue: 100 };
       mockedRepository.fetchUserChallenge.mockResolvedValue(
-        mockUserChallenge as any,
+        mockUserChallenge as unknown,
       );
       mockedRepository.fetchChallengeById.mockResolvedValue(
-        mockChallenge as any,
+        mockChallenge as unknown,
       );
       mockedRepository.addChallengeProgress.mockResolvedValue({
         ...mockUserChallenge,
         currentValue: 75,
         status: 'ACTIVE',
-      } as any);
+      } as unknown);
       const result = await service.updateChallengeProgress({
         userId: 'user-1',
         challengeId: 'c-1',
@@ -119,7 +119,7 @@ describe('Challenges Service', () => {
         userId: 'user-1',
         challengeId: 'c-1',
         status: 'ACTIVE',
-      } as any);
+      } as unknown);
       const result = await service.rerollChallenge({
         userId: 'user-1',
         challengeId: 'c-1',
@@ -153,12 +153,12 @@ describe('Challenges Service', () => {
         rewardAmount: 100,
       };
       mockedRepository.fetchUserChallenge.mockResolvedValue(
-        mockUserChallenge as any,
+        mockUserChallenge as unknown,
       );
       mockedRepository.fetchChallengeById.mockResolvedValue(
-        mockChallenge as any,
+        mockChallenge as unknown,
       );
-      mockedRepository.markRewardClaimed.mockResolvedValue({} as any);
+      mockedRepository.markRewardClaimed.mockResolvedValue({} as unknown);
       const result = await service.claimChallengeReward({
         userId: 'user-1',
         challengeId: 'c-1',
@@ -175,7 +175,7 @@ describe('Challenges Service', () => {
         claimedAt: null,
       };
       mockedRepository.fetchUserChallenge.mockResolvedValue(
-        mockUserChallenge as any,
+        mockUserChallenge as unknown,
       );
       const result = await service.claimChallengeReward({
         userId: 'user-1',

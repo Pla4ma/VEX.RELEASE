@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import type { HomeController } from './home-controller-types';
 import type {
-  ChallengeItem,
+  _ChallengeItem,
   SessionListItem,
 } from '../../../features/home-spine/components';
 import {

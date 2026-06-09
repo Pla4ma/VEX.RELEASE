@@ -35,7 +35,7 @@ describe('validatePersonalizationEvent', () => {
         type: 'personalization:motivation-style-changed',
         motivationStyle: 'invalid_style',
         timestamp: Date.now(),
-      } as any),
+      } as unknown),
     ).toThrow();
   });
 });

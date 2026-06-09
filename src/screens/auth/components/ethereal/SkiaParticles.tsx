@@ -28,7 +28,7 @@ import { useReducedMotion } from '@/hooks/useReducedMotion';
 import type { Particle } from './SkiaParticles.types';
 import { PARTICLE_COUNT, PARALLAX_STRENGTH, HUE_COLORS } from './SkiaParticles.types';
 
-function generateParticles(count: number, width: number, height: number): Particle[] {
+function generateParticles(count: number, _width: number, _height: number): Particle[] {
   const arr: Particle[] = [];
   for (let i = 0; i < count; i++) {
     const hueRoll = i % 5;
@@ -166,7 +166,7 @@ function ParticleNode({
     return py + tiltY.value * PARALLAX_STRENGTH * (1 - sizeFactor);
   }, [driftY, tiltY, height]);
 
-  const opacity = useDerivedValue<number>(() => {
+  const _opacity = useDerivedValue<number>(() => {
     'worklet';
     return opacityCycle.value * (0.4 + 0.6 * (0.5 + 0.5 * Math.sin(clock.value * 1.6 + phase)));
   }, [opacityCycle, clock]);

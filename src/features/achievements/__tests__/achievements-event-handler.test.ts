@@ -40,14 +40,14 @@ import {
 import { eventBus as eventBusFromEventBus } from '../../../events/EventBus';
 
 // ─── Typed mock accessors ──────────────────────────────────────────────────
-const mockedRepository = jest.mocked(repository);
+const _mockedRepository = jest.mocked(repository);
 const mockedEventBusFromEventBus = jest.mocked(eventBusFromEventBus);
 const mockedGetAvailabilityFor = jest.mocked(getAvailabilityFor);
 
 describe('AchievementEventHandler', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    mockedGetAvailabilityFor.mockReturnValue({ canSubscribeToEvents: true, isEnabled: true } as any);
+    mockedGetAvailabilityFor.mockReturnValue({ canSubscribeToEvents: true, isEnabled: true } as unknown);
     // EventHandler.ts imports eventBus from events/EventBus, so use that mock
     mockedEventBusFromEventBus.subscribe.mockReturnValue(jest.fn());
   });
@@ -78,7 +78,7 @@ describe('AchievementEventHandler', () => {
   });
 
   it('skips initialization when feature not available', () => {
-    mockedGetAvailabilityFor.mockReturnValue({ canSubscribeToEvents: false, isEnabled: false } as any);
+    mockedGetAvailabilityFor.mockReturnValue({ canSubscribeToEvents: false, isEnabled: false } as unknown);
     const h = new AchievementEventHandler();
     h.initialize();
     expect(mockedEventBusFromEventBus.subscribe).not.toHaveBeenCalled();

@@ -75,7 +75,7 @@ export function makeFeatures(
   } as unknown as FeatureAccessMap;
 }
 
-export function makeFWE(stage: string): any {
+export function makeFWE(stage: string): unknown {
   return {
     currentDayStage: stage as FirstWeekExperience['currentDayStage'],
     allowedHomeSurfaces: ['start_session', 'coach_presence_line'],

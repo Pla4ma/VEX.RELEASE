@@ -34,7 +34,7 @@ export const NetworkStatus: React.FC<NetworkStatusProps> = ({
     return null;
   }
 
-  const isWarning = isSlowConnection && !isOffline;
+  const _isWarning = isSlowConnection && !isOffline;
 
   return (
     <Animated.View
@@ -119,7 +119,7 @@ export const InlineNetworkIndicator: React.FC<{
     return null;
   }
 
-  const iconSize = size === 'sm' ? 14 : 18;
+  const _iconSize = size === 'sm' ? 14 : 18;
 
   return (
     <View

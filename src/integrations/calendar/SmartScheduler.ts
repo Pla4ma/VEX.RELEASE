@@ -27,7 +27,7 @@ export class SmartScheduler {
   findBestGaps(
     freeBusy: FreeBusyInfo,
     minDuration: number = 25,
-    maxDuration: number = 90,
+    _maxDuration: number = 90,
     limit: number = 3,
   ): CalendarGap[] {
     const { freeSlots } = freeBusy;

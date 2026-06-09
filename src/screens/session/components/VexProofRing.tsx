@@ -29,7 +29,7 @@ const GRADE_COLORS: Record<string, string> = {
   D: lightColors.semantic.gradeMuted,
 };
 
-const AnimatedSvg = Animated.createAnimatedComponent(Svg);
+const _AnimatedSvg = Animated.createAnimatedComponent(Svg);
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
 export function VexProofRing({

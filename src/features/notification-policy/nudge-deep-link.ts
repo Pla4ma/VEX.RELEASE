@@ -49,7 +49,7 @@ export function markExpiredAsIgnored(
   sentAtOrRecords: number | NudgeSignalRecord[],
 ): NudgeSignalRecord[] {
   const now = Date.now();
-  const cutoff = typeof sentAtOrRecords === 'number' ? sentAtOrRecords : 0;
+  const _cutoff = typeof sentAtOrRecords === 'number' ? sentAtOrRecords : 0;
 
   const records: NudgeSignalRecord[] =
     typeof sentAtOrRecords === 'number'

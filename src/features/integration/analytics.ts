@@ -25,7 +25,7 @@ export function trackSystemError(
 export function trackOrchestrationError(
   userId: string,
   sessionId: string,
-  error: unknown,
+  _error: unknown,
 ): void {
   Sentry.addBreadcrumb({
     message: 'Session orchestration failed',

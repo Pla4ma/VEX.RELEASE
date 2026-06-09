@@ -1,7 +1,5 @@
 import {
   contentStudyEvents,
-  useContentStudyEvent,
-  useContentStudyEvents,
   composeEventHandlers,
   initializeContentStudyEventIntegration,
   emitDraftSaved,

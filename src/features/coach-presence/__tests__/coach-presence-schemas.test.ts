@@ -10,7 +10,6 @@ import {
   CoachPresenceVisualStateSchema,
   CoachPresenceMemorySummarySchema,
   CoachPresenceActionSchema,
-  CoachPresenceSchema,
   CoachPresenceProgressInputSchema,
   CompletionPresenceSummarySchema,
   CoachVisibilitySurfaceSchema,

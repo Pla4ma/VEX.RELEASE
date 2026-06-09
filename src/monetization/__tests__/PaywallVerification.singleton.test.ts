@@ -18,11 +18,11 @@ jest.mock('../../shared/monetization/revenuecat-service', () => ({
   },
 }));
 
-const mockRevenueCatService =
+const _mockRevenueCatService =
   revenueCatService as jest.Mocked<RevenueCatService>;
 
 describe('PaywallVerification', () => {
-  let verification: PaywallVerification;
+  let _verification: PaywallVerification;
 
   beforeEach(() => {
     verification = PaywallVerification.getInstance();

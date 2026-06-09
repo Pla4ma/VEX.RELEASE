@@ -9,7 +9,7 @@ import type {
 } from '../../../features/personalization/behavior-signal-schemas';
 import type { BehaviorStats } from '../../../features/personalization/schemas';
 import type {
-  LegacySessionData,
+  _LegacySessionData,
 } from './home-resolved-experience-types';
 import type { HomeController } from './home-controller-types';
 import type { SessionHistoryEntry } from '../../../session/types';

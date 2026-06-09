@@ -4,7 +4,6 @@ import {
   canSelectDifficulty,
   getRecommendedDifficulty,
   calculateStakesResult,
-  DIFFICULTY_CONFIG,
 } from '../session-stakes';
 import type {} from '../session-stakes';
 describe('Session Stakes - Core Logic', () => {

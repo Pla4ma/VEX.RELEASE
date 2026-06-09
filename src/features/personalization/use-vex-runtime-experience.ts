@@ -6,7 +6,7 @@ import type { VexRuntimeInput, VexRuntimeExperience } from './runtime-experience
 export function useVexRuntimeExperience(
   input: VexRuntimeInput,
 ): VexRuntimeExperience {
-  const duration = useOnboardingStore((s) => s.focusDuration);
+  const _duration = useOnboardingStore((s) => s.focusDuration);
   const goal = useOnboardingStore((s) => s.goal);
   const style = useOnboardingStore((s) => s.explicitMotivationStyle);
 

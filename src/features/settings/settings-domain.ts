@@ -1,4 +1,3 @@
-import type {Value,Category, Notifications, Coachs, Appearances} from './types';
 import { batchUpdateSettings, getAllSettings} from './service';
 
 export async function getNotificationSettings(userId: string): Promise<NotificationSettings> {

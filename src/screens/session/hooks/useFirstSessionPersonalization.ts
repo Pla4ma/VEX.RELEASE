@@ -54,7 +54,7 @@ const PROFILE_TO_COACH_LINE: Partial<Record<MotivationProfileType, string>> = {
 
 function pickProfileType(
   primary: MotivationProfileType,
-  secondary: MotivationProfileType[],
+  _secondary: MotivationProfileType[],
 ): MotivationProfileType {
   return primary;
 }

@@ -25,7 +25,7 @@ function makeRow(overrides: Partial<SupabaseSessionRow> = {}): SupabaseSessionRo
   };
 }
 
-function makeSummary(overrides: Partial<SessionSummary> = {}): SessionSummary {
+function _makeSummary(overrides: Partial<SessionSummary> = {}): SessionSummary {
   return {
     sessionId: 'session-1',
     userId: 'user-1',

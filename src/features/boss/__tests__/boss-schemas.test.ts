@@ -8,9 +8,6 @@ import {
   PersonalBossBlockSchema,
 } from '../types';
 import type {
-  PersonalBlockerBlock,
-  BlockerVisibility,
-  BlockerCompletionSignal,
 } from '../types';
 import {
   BossRewardTypeSchema,

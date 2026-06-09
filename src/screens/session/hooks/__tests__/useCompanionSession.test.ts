@@ -162,7 +162,7 @@ describe('useCompanionSession milestone events', () => {
       { milestone: 90, expected: 'impactLight' },
     ];
     hapticTests.forEach(({ expected }) => {
-      expect(() => haptics.triggerHaptic(expected as any)).not.toThrow();
+      expect(() => haptics.triggerHaptic(expected as unknown)).not.toThrow();
     });
   });
   it('handles undefined mode gracefully', async () => {

@@ -21,7 +21,7 @@ export function usePowerUserHomeData(
   const features = controller.features;
   const challengeAvail = getFeatureAvailability(features.challenges);
   const coachAvail = getFeatureAvailability(features.ai_coach_advanced);
-  const squadAvail = getFeatureAvailability(features.squads);
+  const _squadAvail = getFeatureAvailability(features.squads);
   const notifAvail = getFeatureAvailability(features.social_tab);
 
   const { show: showToast } = useToast();

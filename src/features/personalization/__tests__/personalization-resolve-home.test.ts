@@ -18,7 +18,7 @@ jest.mock('../../../persistence/MMKVStorageAdapter', () => ({
 describe('resolveHome', () => {
   it('always includes coach_line and primary_session', () => {
     const result = resolveHome({
-      boss: { isVisible: false, intensity: 'subtle' } as any,
+      boss: { isVisible: false, intensity: 'subtle' } as unknown,
       profile: fixtures.profile('calm'),
       stats: makeStats(),
     });
@@ -27,7 +27,7 @@ describe('resolveHome', () => {
   });
   it('includes study_layer when primaryGoal is study', () => {
     const result = resolveHome({
-      boss: { isVisible: false, intensity: 'subtle' } as any,
+      boss: { isVisible: false, intensity: 'subtle' } as unknown,
       profile: fixtures.profile('study_focused'),
       stats: makeStats(),
     });
@@ -35,7 +35,7 @@ describe('resolveHome', () => {
   });
   it('includes premium_tease for 5+ sessions', () => {
     const result = resolveHome({
-      boss: { isVisible: false, intensity: 'subtle' } as any,
+      boss: { isVisible: false, intensity: 'subtle' } as unknown,
       profile: fixtures.profile('calm'),
       stats: makeStats({ totalCompletedSessions: 5 }),
     });
@@ -43,7 +43,7 @@ describe('resolveHome', () => {
   });
   it('uses direct tone coach copy for preferredTone=direct', () => {
     const result = resolveHome({
-      boss: { isVisible: false, intensity: 'subtle' } as any,
+      boss: { isVisible: false, intensity: 'subtle' } as unknown,
       profile: fixtures.profile('intense'),
       stats: makeStats(),
     });

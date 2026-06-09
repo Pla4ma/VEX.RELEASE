@@ -25,7 +25,7 @@ describe('Push Delivery', () => {
     it('calls onSessionReminder for SESSION_REMINDER type', () => {
       const handler = jest.fn();
       handleNotificationResponse(
-        { notification: { request: { content: { data: { type: 'SESSION_REMINDER' } } } } } as any,
+        { notification: { request: { content: { data: { type: 'SESSION_REMINDER' } } } } } as unknown,
         { onSessionReminder: handler },
       );
       expect(handler).toHaveBeenCalled();
@@ -34,7 +34,7 @@ describe('Push Delivery', () => {
     it('calls onStreakRisk for STREAK_RISK type', () => {
       const handler = jest.fn();
       handleNotificationResponse(
-        { notification: { request: { content: { data: { type: 'STREAK_RISK' } } } } } as any,
+        { notification: { request: { content: { data: { type: 'STREAK_RISK' } } } } } as unknown,
         { onStreakRisk: handler },
       );
       expect(handler).toHaveBeenCalled();
@@ -43,7 +43,7 @@ describe('Push Delivery', () => {
     it('calls onBossEscape for BOSS_ESCAPE type', () => {
       const handler = jest.fn();
       handleNotificationResponse(
-        { notification: { request: { content: { data: { type: 'BOSS_ESCAPE' } } } } } as any,
+        { notification: { request: { content: { data: { type: 'BOSS_ESCAPE' } } } } } as unknown,
         { onBossEscape: handler },
       );
       expect(handler).toHaveBeenCalled();
@@ -52,7 +52,7 @@ describe('Push Delivery', () => {
     it('calls onSocialInteraction for SOCIAL type', () => {
       const handler = jest.fn();
       handleNotificationResponse(
-        { notification: { request: { content: { data: { type: 'SOCIAL' } } } } } as any,
+        { notification: { request: { content: { data: { type: 'SOCIAL' } } } } } as unknown,
         { onSocialInteraction: handler },
       );
       expect(handler).toHaveBeenCalled();
@@ -61,7 +61,7 @@ describe('Push Delivery', () => {
     it('does not throw for unknown type', () => {
       expect(() =>
         handleNotificationResponse(
-          { notification: { request: { content: { data: { type: 'UNKNOWN' } } } } } as any,
+          { notification: { request: { content: { data: { type: 'UNKNOWN' } } } } } as unknown,
           {},
         ),
       ).not.toThrow();

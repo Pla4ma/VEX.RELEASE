@@ -24,7 +24,7 @@ describe('Retention Strategy', () => {
       expect(retentionRepo.upsertReminderPlan).toHaveBeenCalledTimes(3);
       // Verify the types scheduled
       const calls = (retentionRepo.upsertReminderPlan as jest.Mock).mock.calls;
-      const types = calls.map((c: any[]) => c[0].type);
+      const types = calls.map((c: unknown[]) => c[0].type);
       expect(types).toContain('RETENTION_ONBOARDING_DAY_1');
       expect(types).toContain('RETENTION_ONBOARDING_DAY_3');
       expect(types).toContain('RETENTION_ONBOARDING_DAY_7');

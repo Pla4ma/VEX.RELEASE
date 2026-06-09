@@ -6,7 +6,7 @@ import { useOnboardingStore } from '../onboarding/store'; // motivationProfile i
 import {
   buildFeatureAccess,
   type FeatureAccessMap,
-  type FeatureKey,
+  type _FeatureKey,
   type ProductTier,
   type UserExperienceStage,
 } from './feature-access';

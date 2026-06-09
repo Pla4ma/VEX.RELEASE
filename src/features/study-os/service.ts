@@ -1,5 +1,5 @@
 import {
-  firstSentence,
+  _firstSentence,
   planId,
   makeBlock,
   buildStudySessionFromBlock,

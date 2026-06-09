@@ -1,6 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
 import {
-  vexCompleteReflection,
   vexCreateFocusSession,
   vexStartSession,
   vexStartRescue,

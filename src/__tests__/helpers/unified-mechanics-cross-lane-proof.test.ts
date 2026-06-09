@@ -14,13 +14,10 @@ import {
   createRescuePlan,
   decideNudge,
   resolveCompletionExperiencePolicy,
-  SessionMode,
   baseLaneProfile,
-  completionInput,
 } from './lane-test-helpers';
 import type {
   Lane,
-  NudgeDecision,
 } from './lane-test-helpers';
 
 describe('Phase 3F — Mechanics & Cross-Lane Proof', () => {

@@ -66,7 +66,7 @@ export function useReducedMotion(): ReducedMotionResult {
   };
 }
 
-function useSystemReducedMotion(): ReducedMotionResult {
+function _useSystemReducedMotion(): ReducedMotionResult {
   // Use Reanimated 3's built-in hook as primary source
   const reanimatedReducedMotion = useReanimatedReducedMotion();
 

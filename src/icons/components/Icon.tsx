@@ -19,7 +19,7 @@ import {
   ICON_STROKE_WIDTH_VALUES,
   type IconSize,
   type IconStrokeWidth,
-  type IconVariant,
+  type _IconVariant,
 } from '../types';
 
 /**
@@ -32,7 +32,7 @@ export function Icon({
   variant = 'outline',
   strokeWidth = 'normal',
   animated = false,
-  animation,
+  _animation,
   style,
   testID,
   accessibilityLabel,
@@ -107,7 +107,7 @@ export function Icon({
   }, [iconData, variant]);
 
   // Handle animation styles
-  const animatedStyle = useMemo(() => {
+  const _animatedStyle = useMemo(() => {
     if (!animated) {
       return {};
     }

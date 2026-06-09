@@ -27,9 +27,9 @@ export const ActiveSessionScreen = withScreenErrorBoundary(
       navigation,
       sessionQuery,
       showInterruption,
-      streak,
-      theme,
-      themeBackgroundColor,
+      _streak,
+      _theme,
+      _themeBackgroundColor,
       userId,
     } = controller;
     const { contract } = useContractForSession(

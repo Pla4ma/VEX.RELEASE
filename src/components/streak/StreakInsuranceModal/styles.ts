@@ -42,7 +42,7 @@ export const riskLabelStyle = (t: Theme) => ({
   textTransform: 'uppercase' as const,
 });
 
-export const riskValueStyle = (t: Theme) => ({
+export const riskValueStyle = (_t: Theme) => ({
   fontSize: 24,
   fontWeight: 'bold' as const,
   marginTop: 4,
@@ -100,7 +100,7 @@ export const optionDescriptionStyle = (t: Theme) => ({
   marginTop: 4,
 });
 
-export const costBaseStyle = (t: Theme) => ({
+export const costBaseStyle = (_t: Theme) => ({
   fontSize: 14,
   fontWeight: '600' as const,
   marginTop: 8,

@@ -10,7 +10,7 @@ import {
   sendPushNotification,
   completeSquadChallenge,
   getRecentSessions,
-  getSquadMemberIds,
+  _getSquadMemberIds,
 } from './social-feed-helpers';
 
 export { getNotificationTitle, getNotificationBody, generateId } from './social-feed-helpers';

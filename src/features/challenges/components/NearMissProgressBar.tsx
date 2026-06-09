@@ -1,7 +1,7 @@
 import React from 'react';
 import Animated, {
   useAnimatedStyle,
-  withTiming,
+  _withTiming,
 } from 'react-native-reanimated';
 import { Box, Text } from '@/components/primitives';
 import type {} from 'react-native-reanimated';

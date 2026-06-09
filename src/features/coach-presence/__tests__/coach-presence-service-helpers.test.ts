@@ -12,19 +12,19 @@ import {
 
 describe('service-helpers', () => {
   test('styleForLane returns STUDY_FOCUSED for student lane', () => {
-    expect(styleForLane({ primaryLane: 'student' } as any, 'CALM')).toBe('STUDY_FOCUSED');
+    expect(styleForLane({ primaryLane: 'student' } as unknown, 'CALM')).toBe('STUDY_FOCUSED');
   });
 
   test('styleForLane returns GAME_LIKE for game_like lane', () => {
-    expect(styleForLane({ primaryLane: 'game_like' } as any, 'CALM')).toBe('GAME_LIKE');
+    expect(styleForLane({ primaryLane: 'game_like' } as unknown, 'CALM')).toBe('GAME_LIKE');
   });
 
   test('styleForLane returns COACH_LED for deep_creative lane', () => {
-    expect(styleForLane({ primaryLane: 'deep_creative' } as any, 'CALM')).toBe('COACH_LED');
+    expect(styleForLane({ primaryLane: 'deep_creative' } as unknown, 'CALM')).toBe('COACH_LED');
   });
 
   test('styleForLane returns CALM for minimal_normal lane', () => {
-    expect(styleForLane({ primaryLane: 'minimal_normal' } as any, 'FRIENDLY')).toBe('CALM');
+    expect(styleForLane({ primaryLane: 'minimal_normal' } as unknown, 'FRIENDLY')).toBe('CALM');
   });
 
   test('styleForLane returns fallback when profile is null', () => {
@@ -33,10 +33,10 @@ describe('service-helpers', () => {
   });
 
   test('goalForLane returns correct goals per lane', () => {
-    expect(goalForLane({ primaryLane: 'student' } as any, 'focus')).toBe('study');
-    expect(goalForLane({ primaryLane: 'deep_creative' } as any, 'focus')).toBe('creative');
-    expect(goalForLane({ primaryLane: 'minimal_normal' } as any, 'focus')).toBe('personal');
-    expect(goalForLane({ primaryLane: 'game_like' } as any, 'focus')).toBe('focus');
+    expect(goalForLane({ primaryLane: 'student' } as unknown, 'focus')).toBe('study');
+    expect(goalForLane({ primaryLane: 'deep_creative' } as unknown, 'focus')).toBe('creative');
+    expect(goalForLane({ primaryLane: 'minimal_normal' } as unknown, 'focus')).toBe('personal');
+    expect(goalForLane({ primaryLane: 'game_like' } as unknown, 'focus')).toBe('focus');
     expect(goalForLane(null, 'study')).toBe('study');
   });
 
@@ -66,7 +66,7 @@ describe('service-helpers', () => {
 
   test('getVisualState uses companion data when provided', () => {
     const companion = { element: 'WAVE', level: 5, currentMood: 'HAPPY', phase: 'MATURE' };
-    const state = getVisualState(companion as any, 'CALM');
+    const state = getVisualState(companion as unknown, 'CALM');
     expect(state.element).toBe('WAVE');
     expect(state.level).toBe(5);
     expect(state.mood).toBe('HAPPY');

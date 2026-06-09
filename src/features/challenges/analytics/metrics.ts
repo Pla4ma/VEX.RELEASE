@@ -11,7 +11,7 @@ import type { Challenge, UserChallenge } from '../types';
  */
 export function calculateChallengeMetrics(
   userChallenges: UserChallenge[],
-  challenges: Challenge[],
+  _challenges: Challenge[],
 ): {
   totalIssued: number;
   completionRate: number;

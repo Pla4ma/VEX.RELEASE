@@ -18,7 +18,7 @@ export function useAchievementUnlockToast(
     }
   }, []);
   React.useEffect(() => {
-    const handleUnlock = (event: {
+    const _handleUnlock = (event: {
       userId: string;
       achievementId: string;
       unlockedAt: number;

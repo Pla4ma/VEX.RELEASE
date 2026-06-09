@@ -1,6 +1,5 @@
 import {
   accessFor,
-  assertFullyHidden,
   HIDDEN_FEATURE_KEYS,
 } from './debloat-test-helpers';
 import { getFeatureAvailability } from '../features/liveops-config/feature-access';

@@ -46,9 +46,9 @@ export function useHomeResolvedExperience(
   const motivationStyle = normalizeMotivationStyle(explicitStyle);
   const primaryGoal = resolvePrimaryGoal(goal);
 
-  const activeBossData = controller.activeBossQuery
+  const _activeBossData = controller.activeBossQuery
     ?.data as ActiveBossData | null;
-  const activeStudyPlanData = controller.activeStudyPlanQuery
+  const _activeStudyPlanData = controller.activeStudyPlanQuery
     ?.data as ActiveStudyPlanData | null;
 
   const startedAt = useOnboardingStore.getState().startedAt;

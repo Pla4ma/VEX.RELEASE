@@ -23,7 +23,7 @@ export interface UnlockBannerProps {
 
 export function UnlockBanner({
   gate,
-  currentSessions,
+  _currentSessions,
 }: UnlockBannerProps): JSX.Element {
   const { theme } = useTheme();
   if (gate.isUnlocked) {return <></>;}

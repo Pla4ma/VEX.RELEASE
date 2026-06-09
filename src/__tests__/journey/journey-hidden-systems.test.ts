@@ -3,7 +3,6 @@
  */
 import { describe, expect, it } from '@jest/globals';
 import {
-  FINAL_RELEASE_FEATURE_MAP,
   isFeatureHidden,
   isFeatureIncluded,
   getFeatureStatus,

@@ -4,7 +4,7 @@ import type { FeatureAccessResult } from '../../../features/liveops-config';
 import type { HomeFeatureRuntime } from '../hooks/home-feature-runtime';
 import type {} from '../hooks/home-view-model';
 import type {
-  HomeController,
+  _HomeController,
   SessionHistoryResult,
 } from '../hooks/home-controller-types';
 import type { ExtendedRootStackParams } from '../../../navigation/types';

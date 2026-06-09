@@ -6,7 +6,7 @@ import Animated, {
   withSequence,
   withTiming,
   useSharedValue,
-  FadeInUp,
+  _FadeInUp,
 } from 'react-native-reanimated';
 import { Box } from '../../components/primitives/Box';
 import { Text } from '../../components/primitives/Text';

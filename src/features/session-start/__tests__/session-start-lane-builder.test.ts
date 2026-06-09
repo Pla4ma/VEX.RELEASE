@@ -33,7 +33,7 @@ describe('session-start: lane-builder', () => {
 
     it('uses laneProfile primaryLane when provided', () => {
       const brief = buildLaneSessionBrief({
-        laneProfile: { primaryLane: 'student' } as any,
+        laneProfile: { primaryLane: 'student' } as unknown,
       });
       expect(brief.lane).toBe('student');
     });

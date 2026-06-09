@@ -128,7 +128,7 @@ class FeatureHealthRegistry {
 
   invalidateCache(feature?: FeatureKey): void {
     if (feature) {
-      for (const [id, entry] of this.cache) {
+      for (const [id, _entry] of this.cache) {
         const check = this.checks.get(id);
         if (check?.feature === feature) {
           this.cache.delete(id);

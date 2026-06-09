@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import type { PurchasesOffering } from 'react-native-purchases';
 import { revenueCatService } from './revenuecat-service';
 import type {
-  EntitlementInfo,
+  _EntitlementInfo,
   PurchaseResult,
   PurchasesOfferingDisplayInfo,
   PurchasesPackageDisplayInfo,

@@ -46,7 +46,7 @@ export const YouTubeInput: React.FC<YouTubeInputProps> = ({
   const clearInput = useCallback(() => {
     onChange('');
   }, [onChange]);
-  const handlePaste = useCallback(async () => {}, []);
+  const _handlePaste = useCallback(async () => {}, []);
   return (
     <View style={styles.container}>
       <View

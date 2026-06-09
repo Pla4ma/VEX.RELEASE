@@ -7,8 +7,8 @@ import type {
 import { createDebugger } from '../../utils/debug';
 import type { RecoveryConfig } from './recovery-analysis-types';
 import {
-  evaluateRecovery,
-  calculatePenalties,
+  _evaluateRecovery,
+  _calculatePenalties,
   canProtectStreak,
   calculatePartialCredit,
   attemptSessionRecovery,

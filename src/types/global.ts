@@ -10,7 +10,7 @@ export type DeepReadonly<T> = {
 export type KeyOf<T> = keyof T;
 export type ValueOf<T> = T[keyof T];
 export type Entries<T> = [keyof T, T[keyof T]][];
-export type StrictRecord<K extends keyof any, T> = Record<K, T>;
+export type StrictRecord<K extends PropertyKey, T> = Record<K, T>;
 export type AsyncResult<T, E = Error> =
   | { success: true; data: T; error: null }
   | { success: false; data: null; error: E };

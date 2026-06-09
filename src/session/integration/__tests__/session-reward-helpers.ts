@@ -4,7 +4,7 @@ import type { SessionSummary } from '../../types';
 
 export function createMockSummary(
   overrides: Partial<SessionSummary> = {},
-): any {
+): unknown {
   return {
     sessionId: 'test-session',
     userId: 'test-user',
@@ -38,11 +38,11 @@ export function setupMockEventBus() {
   const publish = jest
     .spyOn(eventBus, 'publish')
 
-    .mockImplementation((() => {}) as any);
+    .mockImplementation((() => {}) as unknown);
   const subscribe = jest
     .spyOn(eventBus, 'subscribe')
 
-    .mockImplementation((() => () => {}) as any);
+    .mockImplementation((() => () => {}) as unknown);
 
   return { publish, subscribe };
 }

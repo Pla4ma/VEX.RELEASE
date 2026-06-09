@@ -9,7 +9,7 @@ export function getErrorMessage(error: unknown): string {
 export function computeStatusAndScore(
   issues: string[],
   failThreshold: number,
-  warningThreshold: number,
+  _warningThreshold: number,
 ): { status: 'pass' | 'fail' | 'warning'; score: number } {
   if (issues.length === 0) {
     return { status: 'pass', score: 100 };

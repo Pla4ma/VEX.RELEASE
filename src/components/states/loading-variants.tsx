@@ -17,7 +17,7 @@ import { lightColors } from '@/theme/tokens/colors';
 
 export const Spinner: React.FC<{ size: number; color: string }> = ({
   size,
-  color,
+  _color,
 }) => {
   return <Skeleton width={size} height={size} variant="circular" />;
 };

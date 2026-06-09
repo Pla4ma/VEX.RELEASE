@@ -67,7 +67,7 @@ describe('battle-pass tests — NOT in required groups', () => {
 
 describe('shop/wallet/inventory tests — NOT release blockers', () => {
   it('shop test patterns are not required', () => {
-    for (const [name, group] of Object.entries(config.groups)) {
+    for (const [_name, group] of Object.entries(config.groups)) {
       if (groupContains(group, '/shop/')) {
         expect(group.required).toBe(false);
       }
@@ -75,7 +75,7 @@ describe('shop/wallet/inventory tests — NOT release blockers', () => {
   });
 
   it('wallet test patterns are not required', () => {
-    for (const [name, group] of Object.entries(config.groups)) {
+    for (const [_name, group] of Object.entries(config.groups)) {
       if (groupContains(group, '/wallet/')) {
         expect(group.required).toBe(false);
       }
@@ -83,7 +83,7 @@ describe('shop/wallet/inventory tests — NOT release blockers', () => {
   });
 
   it('inventory test patterns are not required', () => {
-    for (const [name, group] of Object.entries(config.groups)) {
+    for (const [_name, group] of Object.entries(config.groups)) {
       if (groupContains(group, '/inventory/')) {
         expect(group.required).toBe(false);
       }

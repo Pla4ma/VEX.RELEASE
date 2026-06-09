@@ -5,7 +5,6 @@
 import {
   getLaneMechanicPolicy,
   type Lane,
-  type LaneProfile,
 } from '../../lane-engine';
 import { buildLaneSessionBrief } from '../../session-start/service';
 import { decideNudge } from '../../notification-policy/service';

@@ -11,7 +11,7 @@ export type { SessionSummary };
 
 export function createMockSummary(
   overrides: Partial<SessionSummary> = {},
-): any {
+): unknown {
   return {
     sessionId: 'test-session',
     userId: 'test-user',

@@ -124,7 +124,7 @@ export async function updateCurrentDifficulty(
 // RETRY WRAPPER
 // ============================================================================
 
-async function withRetry<T>(
+async function _withRetry<T>(
   operation: () => Promise<T>,
   maxRetries = 3,
 ): Promise<T> {

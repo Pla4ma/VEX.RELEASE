@@ -43,7 +43,7 @@ export const SessionTimer = React.memo(function SessionTimer({
   } as const;
 
   const s = sizeStyles[size];
-  const radius = (s.size - s.strokeWidth) / 2;
+  const _radius = (s.size - s.strokeWidth) / 2;
   const remainingMinutes = Math.floor(remainingSeconds / 60);
   const remainingDisplaySeconds = remainingSeconds % 60;
   const timerAccessibilityLabel = `Timer: ${remainingMinutes} minutes ${remainingDisplaySeconds} seconds remaining`;

@@ -44,7 +44,7 @@ export const HomeContentLower: React.FC<HomeContentLowerProps> = ({
     'challenges',
     'navigation',
   );
-  const openChallenges = (): void => {
+  const _openChallenges = (): void => {
     if (canNavChallenges) {
       navigation.navigate('Challenges');
       return;

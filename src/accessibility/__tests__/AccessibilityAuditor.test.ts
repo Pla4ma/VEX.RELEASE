@@ -128,8 +128,8 @@ describe('AccessibilityAuditor', () => {
   });
   describe('Audit History', () => {
     it('should maintain audit history', async () => {
-      const result1 = await auditor.auditComponent(mockComponent);
-      const result2 = await auditor.auditComponent(mockComponent);
+      const _result1 = await auditor.auditComponent(mockComponent);
+      const _result2 = await auditor.auditComponent(mockComponent);
       const history = auditor.getAuditHistory();
       expect(history).toHaveLength(0);
     });

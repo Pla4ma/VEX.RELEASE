@@ -1,6 +1,5 @@
 import {
   ScoringEngine,
-  SessionMode,
   createMockSession,
   createMockFocusMetrics,
 } from './ScoringEngine.helpers';

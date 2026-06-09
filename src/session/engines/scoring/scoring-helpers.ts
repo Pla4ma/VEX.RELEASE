@@ -1,6 +1,6 @@
 import type { SessionState, FocusQualityMetrics } from '../../types';
 import {
-  getSessionModeConfig,
+  _getSessionModeConfig,
   getSprintChainMultiplier,
   resolveSessionMode,
   SessionMode,

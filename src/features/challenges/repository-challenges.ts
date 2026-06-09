@@ -3,14 +3,14 @@ import {
   ChallengeSchema,
   type Challenge,
   type ChallengeTemplate,
-  type UserChallenge,
+  type _UserChallenge,
   ChallengeTemplateSchema,
-  UserChallengeSchema,
+  _UserChallengeSchema,
 } from './schemas';
 import {
   RepositoryError,
-  baseJoinedSelect,
-  mapJoinedChallenge,
+  _baseJoinedSelect,
+  _mapJoinedChallenge,
 } from './repository-helpers';
 import type {} from './schemas';
 

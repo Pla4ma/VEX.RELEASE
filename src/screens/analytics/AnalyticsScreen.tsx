@@ -11,7 +11,7 @@ import { useAuthStore } from '../../store';
 import { useTheme } from '../../theme';
 import {
   Skeleton,
-  SkeletonCard,
+  _SkeletonCard,
   SkeletonList,
 } from '../../components/ui/Skeleton';
 import { createSheet } from '@/shared/ui/create-sheet';

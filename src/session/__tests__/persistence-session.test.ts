@@ -1,7 +1,7 @@
 import { SessionPersistence, mockSession, mockMMKVInstance } from './persistence.helpers';
 
 describe('SessionPersistence', () => {
-  let mockStorage: any;
+  let mockStorage: unknown;
 
   beforeEach(() => {
     mockStorage = mockMMKVInstance;

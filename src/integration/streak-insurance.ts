@@ -3,7 +3,7 @@ import { createDebugger } from '../utils/debug';
 
 const debug = createDebugger('integration:streak-insurance-archived');
 
-const StreakBrokenEventSchema = z.object({
+const _StreakBrokenEventSchema = z.object({
   userId: z.string(),
   previousStreak: z.number().int().min(0),
 });

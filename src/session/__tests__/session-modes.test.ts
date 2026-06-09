@@ -4,7 +4,6 @@
 
 import {
   SessionMode,
-  SessionModeSchema,
   SESSION_MODE_CONFIG,
   resolveSessionMode,
   getSessionModeConfig,

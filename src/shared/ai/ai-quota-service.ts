@@ -32,7 +32,7 @@ import { useMonetizationStore } from '../monetization/store';
  * Uses Zustand's synchronous getState() which is safe to call
  * outside React component tree (P0-2 fix).
  */
-export async function resolveUserTier(userId: string): Promise<UserTier> {
+export async function resolveUserTier(_userId: string): Promise<UserTier> {
   try {
     const { isPremium, activeEntitlements } =
       useMonetizationStore.getState();

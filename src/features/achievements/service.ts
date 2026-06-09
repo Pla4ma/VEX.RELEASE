@@ -13,7 +13,7 @@ export async function updateAchievementProgress(
   userId: string,
   conditionType: string,
   value: number,
-  context?: Record<string, unknown>,
+  _context?: Record<string, unknown>,
 ): Promise<UserAchievement[]> {
   const updatedAchievements: UserAchievement[] = [];
   const relevantAchievements = ALL_ACHIEVEMENTS.filter(

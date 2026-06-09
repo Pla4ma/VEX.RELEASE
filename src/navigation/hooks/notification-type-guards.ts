@@ -71,7 +71,7 @@ export function getErrorMessage(error: unknown): string {
 
 export function notificationTypeToAction(
   type: string,
-  data: Record<string, unknown>,
+  _data: Record<string, unknown>,
 ): NotificationAction {
   switch (type) {
     case 'boss_timeout_warning':

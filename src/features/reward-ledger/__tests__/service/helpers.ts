@@ -1,4 +1,3 @@
-import { describe} from '@jest/globals';
 
 jest.mock('../../repository');
 jest.mock('../../../../config/sentry', () => ({
