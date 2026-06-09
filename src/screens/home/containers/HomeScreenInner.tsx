@@ -1,5 +1,5 @@
 ﻿/**
- * HomeScreenInner â€” Shared UI rendering for all stages.
+ * HomeScreenInner — Shared UI rendering for all stages.
  *
  * Accepts stage-specific data via a minimal common interface.
  * Wires controller + data to the existing HomeContent component.
@@ -14,14 +14,12 @@ import { HomeInterventionBanner } from '../components/HomeInterventionBanner';
 import { useCompletionSyncAutoRepair } from '../../../features/session-completion/hooks';
 import { GlassScreen } from '../../../components/glass/GlassScreen';
 import { VexBrandPill } from '../components/VexBrandPill';
-import { Pressable } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import { Icon } from '../../../icons';
 import { GlassPill } from '../../../components/glass/GlassPill';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import { useHomeSurfaceMap } from '../hooks/useHomeSurfaceMap';
 import { useHomeResolvedExperience } from '../hooks/useHomeResolvedExperience';
 import { useInterventionVisibility } from '../hooks/useInterventionVisibility';
+import { NotificationButton } from './NotificationButton';
 import type { HomeSurfaceMap } from '../../../features/home-experience/surface-decision-schemas';
 import type { ExtendedRootStackParams } from '../../../navigation/types';
 import type { HomeData } from '../hooks/useHomeData';
@@ -134,62 +132,7 @@ export function HomeScreenInner({
             size="sm"
             variant="mint"
           />
-          <Pressable
-            accessibilityHint="Shows your VEX notifications"
-            accessibilityLabel="Open notifications"
-            accessibilityRole="button"
-            onPress={() => navigation.navigate('Notifications')}
-            style={{
-              alignItems: 'center',
-              backgroundColor: 'rgba(255, 255, 255, 0.42)',
-              borderColor: 'rgba(255, 255, 255, 0.95)',
-              borderRadius: 19,
-              borderWidth: 1,
-              height: 38,
-              justifyContent: 'center',
-              overflow: 'hidden',
-              shadowColor: 'rgba(13, 76, 65, 0.16)',
-              shadowOffset: { width: 0, height: 6 },
-              shadowOpacity: 0.35,
-              shadowRadius: 10,
-              width: 38,
-            }}
-          >
-            <LinearGradient
-              colors={['rgba(255, 255, 255, 0.88)', 'rgba(255, 255, 255, 0.32)']}
-              end={{ x: 0, y: 1 }}
-              locations={[0, 0.55]}
-              start={{ x: 0, y: 0 }}
-              style={{
-                borderTopLeftRadius: 19,
-                borderTopRightRadius: 19,
-                height: '60%',
-                left: 0,
-                position: 'absolute',
-                right: 0,
-                top: 0,
-              }}
-            />
-            <View
-              pointerEvents="none"
-              style={{
-                backgroundColor: 'rgba(255, 255, 255, 0.92)',
-                borderTopLeftRadius: 21,
-                borderTopRightRadius: 21,
-                height: 1,
-                left: 8,
-                position: 'absolute',
-                right: 8,
-                top: 1,
-              }}
-            />
-            <Icon
-              color={vexLightGlass.text.primary}
-              name="notification"
-              size="sm"
-              variant="outline"
-            />
-          </Pressable>
+          <NotificationButton onPress={() => navigation.navigate('Notifications')} />
         </View>
         <ScrollView
           contentContainerStyle={{ paddingBottom: 180 }}
@@ -220,4 +163,3 @@ export function HomeScreenInner({
     </GlassScreen>
   );
 }
-
