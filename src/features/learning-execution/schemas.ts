@@ -12,6 +12,8 @@ export const LearningExecutionCopySchema = z.object({
   completionTitle: z.string().min(1),
   emptyCta: z.string().min(1),
   emptyTitle: z.string().min(1),
+  errorCta: z.string().min(1),
+  errorTitle: z.string().min(1),
   homeCta: z.string().min(1),
   homeTitle: z.string().min(1),
   layerName: z.string().min(1),

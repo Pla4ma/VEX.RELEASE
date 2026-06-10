@@ -25,7 +25,8 @@ export function LiquidGlassSphereRaw({
   style,
   intensity = 1,
 }: LiquidGlassSphereProps): JSX.Element {
-  const c: GlassSphereColorConfig = COLOR_CONFIGS[color];
+  const raw = COLOR_CONFIGS[color] ?? COLOR_CONFIGS.mint;
+  const c: GlassSphereColorConfig = raw as GlassSphereColorConfig;
   const r = size * 0.46;
   const center = size / 2;
   const i = intensity;

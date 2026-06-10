@@ -92,18 +92,21 @@ export function FirstSessionSetup({
           Choose your focus duration
         </Text>
         <Box flexDirection="row" flexWrap="wrap" gap="sm" mb="lg">
-          {DURATION_OPTIONS.map((option) => (
+          {DURATION_OPTIONS.map((option, index) => (
             <DurationCard
               key={option.value}
               option={option}
               isSelected={selectedDuration === option.value}
-              onSelect={() => handleDurationSelect(option.value)}
+              onPress={() => handleDurationSelect(option.value)}
+              index={index}
             />
           ))}
         </Box>
       </Animated.View>
 
-      <SessionPreview duration={selectedDuration} goal={goal} />
+      {selectedDuration != null ? (
+        <SessionPreview duration={selectedDuration!} goal={goal ?? ''} />
+      ) : null}
 
       <Animated.View entering={FadeInUp.duration(400).delay(600)}>
         <Box p="md" mb="md" borderRadius="lg" bg="background.secondary">

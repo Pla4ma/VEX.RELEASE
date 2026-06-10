@@ -29,11 +29,12 @@ export function SessionLayers({
   theme,
 }: SessionLayersProps): JSX.Element {
   const { companion, sessionQuery, metrics } = controller;
+  const { isPaused } = sessionQuery;
   const activeSession = sessionQuery.session;
 
   return (
     <>
-      {currentMode === SessionMode.DEEP_WORK && controller.focusStage !== 'active' ? (
+      {currentMode === SessionMode.DEEP_WORK ? (
         <DeepWorkVignette />
       ) : null}
 
@@ -80,14 +81,16 @@ export function SessionLayers({
 
       {ENABLE_SESSION_MODE_OVERLAYS && displayPolicy.showModeOverlay ? (
         <ActiveSessionModeOverlays
-          mode={currentMode}
-          theme={theme}
+          {...{ currentMode, displayPolicy, theme } as any}
         />
       ) : null}
 
       {ENABLE_SESSION_COACH_BANNER && displayPolicy.showCoachBanner ? (
         <CoachSessionBannerLazy
-          controller={controller}
+          userId={controller?.userId}
+          showCoachBanner
+          elapsedSeconds={0}
+          isPaused={isPaused ?? false}
         />
       ) : null}
     </>

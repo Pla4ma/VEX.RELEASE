@@ -4,31 +4,25 @@ import { createDebugger } from '../utils/debug';
 import {
   activeChannels,
   CHANNELS,
+  getCurrentUserId,
   presenceCallbacks,
   resetCurrentUserId,
   setCurrentUserId,
-  getCurrentUserId,
-  type PresenceStatus,
-  type UserPresence,
-  type SquadPresence,
-} from './realtimeShared';
-import { cancelPendingBroadcastCleanups } from './realtimeSubscriptions';
-export {
-  type PresenceStatus,
-  type UserPresence,
-  type SquadPresence,
   type BroadcastMessage,
+  type PresenceStatus,
+  type SquadPresence,
+  type UserPresence,
+} from './realtimeShared';
+export {
+  type BroadcastMessage,
+  type PresenceStatus,
+  type SquadPresence,
+  type UserPresence,
   getCurrentUserId,
   activeChannels,
 } from './realtimeShared';
-export {
-  broadcastActivity,
-  cancelPendingBroadcastCleanups,
-  subscribeToActivity,
-  subscribeToFeedChanges,
-  subscribeToSquadChanges,
-  subscribeToGuildQuests,
-} from './realtimeSubscriptions';
+export { broadcastActivity, subscribeToActivity, subscribeToFeedChanges, subscribeToSquadChanges, subscribeToGuildQuests } from './realtimeSubscriptions';
+import { cancelPendingBroadcastCleanups } from './realtimeSubscriptions';
 const debug = createDebugger('realtime');
 export async function initializePresence(userId: string): Promise<void> {
   setCurrentUserId(userId);
@@ -191,12 +185,11 @@ export async function cleanupRealtime(): Promise<void> {
   cancelPendingBroadcastCleanups();
   for (const [name, channel] of activeChannels) {
     await channel.unsubscribe();
-    debug.info('[Realtime] Unsubscribed from:', name);
+    debug.info('[Realtime] Unsubscribed:', name);
   }
   activeChannels.clear();
   resetCurrentUserId();
 }
-
 export function getActiveChannelCount(): number {
   return activeChannels.size;
 }

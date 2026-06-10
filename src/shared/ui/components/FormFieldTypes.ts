@@ -1,8 +1,8 @@
-import type { ViewStyle } from 'react-native';
+import type { TextInput, ViewStyle } from 'react-native';
 
 export type FieldState = 'default' | 'focused' | 'error' | 'success' | 'loading' | 'disabled';
 
-export interface FormFieldProps {
+export interface FormFieldBaseProps {
   label?: string;
   placeholder?: string;
   error?: string;
@@ -26,6 +26,9 @@ export interface FormFieldProps {
   value?: string;
   defaultValue?: string;
 }
+
+export type FormFieldProps = FormFieldBaseProps &
+  Omit<React.ComponentProps<typeof TextInput>, keyof FormFieldBaseProps>;
 
 export const sizeConfig = {
   sm: { minHeight: 40, paddingHorizontal: 12, paddingVertical: 8, fontSize: 14 },

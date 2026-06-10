@@ -56,7 +56,7 @@ export function useNotificationSettings(
 ) {
   return useQuery({
     queryKey: settingsKeys.notifications(userId),
-    queryFn: () => service.getNotificationSettings(userId),
+    queryFn: () => service.getNotificationSettings(userId) as Promise<NotificationSettings>,
     enabled: !!userId,
     staleTime: 5 * 60 * 1000,
     ...options,
