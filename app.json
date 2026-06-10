@@ -139,6 +139,20 @@
               ],
               "includeSubdomains": true,
               "_pins_verified": "2026-06-05 — Verified against icnbpjkyupuqzuvwuvbk.supabase.co live cert chain. Leaf: supabase.co (CN), Intermediate: Google Trust Services WE1, Root: GlobalSign ECC Root CA R4. Verify after any Supabase cert rotation."
+            },
+            "api.revenuecat.com": {
+              "pins": [
+                "sha256/REPLACE_WITH_LIVE_CERT_HASH"
+              ],
+              "includeSubdomains": true,
+              "_pins_status": "Placeholder — extract live cert hashes before production build: openssl s_client -connect api.revenuecat.com:443 < /dev/null 2>/dev/null | openssl x509 -pubkey -noout | openssl pkey -pubin -outform der | openssl dgst -sha256 -binary | openssl base64"
+            },
+            "sentry.io": {
+              "pins": [
+                "sha256/REPLACE_WITH_LIVE_CERT_HASH"
+              ],
+              "includeSubdomains": true,
+              "_pins_status": "Placeholder — extract live cert hashes before production build: openssl s_client -connect sentry.io:443 < /dev/null 2>/dev/null | openssl x509 -pubkey -noout | openssl pkey -pubin -outform der | openssl dgst -sha256 -binary | openssl base64"
             }
           }
         }

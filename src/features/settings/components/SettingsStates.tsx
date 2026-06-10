@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { Skeleton } from '../../../components/ui/Skeleton';
+import { sanitizeErrorMessage } from '../../../utils/error-sanitizer';
 
 import { settingsStyles as styles } from './settings-screen-styles';
 
@@ -33,7 +34,7 @@ export function SettingsErrorState({
       <Text style={styles.errorIcon}>⚠️</Text>
       <Text style={styles.errorTitle}>Failed to load settings</Text>
       <Text style={styles.errorMessage}>
-        {error instanceof Error ? error.message : 'Unknown error'}
+        {sanitizeErrorMessage(error)}
       </Text>
       <Pressable
         style={({ pressed }) => [

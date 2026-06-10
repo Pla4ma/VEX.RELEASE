@@ -37,7 +37,7 @@ export function LoginEmailForm({
   onForgotPassword,
 }: LoginEmailFormProps): React.JSX.Element {
   return (
-    <GlassSurface borderRadius={28} style={{ padding: 20, gap: 12 }}>
+    <GlassSurface borderRadius={32} style={{ padding: 22, gap: 12, backgroundColor: 'rgba(255,255,255,0.88)' }}>
       <View style={{ gap: 10 }}>
         <VexGlassInput
           autoComplete="email"

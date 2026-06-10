@@ -4,12 +4,13 @@ import type { Database } from '../types/supabase';
 import { createDebugger } from '../utils/debug';
 import { getSecureStorage } from '../persistence/SecureStorage';
 import { createMockSupabaseClient } from './supabase-mock';
+import { TEST_CONSTANTS } from '../constants/test';
 
 const debug = createDebugger('config:supabase');
 
 const IS_JEST = Boolean(process.env.JEST_WORKER_ID);
-const TEST_SUPABASE_URL = IS_JEST ? 'https://test.supabase.co' : '';
-const TEST_SUPABASE_ANON_KEY = IS_JEST ? 'test-anon-key' : '';
+const TEST_SUPABASE_URL = IS_JEST ? TEST_CONSTANTS.SUPABASE_URL : '';
+const TEST_SUPABASE_ANON_KEY = IS_JEST ? TEST_CONSTANTS.SUPABASE_ANON_KEY : '';
 const SUPABASE_URL = process.env.EXPO_PUBLIC_SUPABASE_URL || TEST_SUPABASE_URL;
 const SUPABASE_ANON_KEY =
   process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || TEST_SUPABASE_ANON_KEY;

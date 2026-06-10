@@ -6,14 +6,15 @@
  */
 import '@testing-library/jest-native/extend-expect';
 import 'whatwg-fetch';
+import { TEST_CONSTANTS } from '../constants/test';
 
 // ── Environment variables ──────────────────────────────────────────
 
 if (!process.env.EXPO_PUBLIC_SUPABASE_URL) {
-  process.env.EXPO_PUBLIC_SUPABASE_URL = 'https://test.supabase.co';
+  process.env.EXPO_PUBLIC_SUPABASE_URL = TEST_CONSTANTS.SUPABASE_URL;
 }
 if (!process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY) {
-  process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY = 'test-anon-key';
+  process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY = TEST_CONSTANTS.SUPABASE_ANON_KEY;
 }
 if (typeof globalThis.crypto === 'undefined') {
   const cryptoModule: { webcrypto: Crypto } = require('crypto');

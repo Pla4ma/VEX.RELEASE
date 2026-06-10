@@ -150,7 +150,7 @@ export const ERROR_CODES = {
 } as const;
 export const FEATURE_DEFAULTS = {
   darkMode: false,
-  biometrics: true,
+  biometrics: false,
   analytics: true,
   crashReporting: true,
   pushNotifications: true,

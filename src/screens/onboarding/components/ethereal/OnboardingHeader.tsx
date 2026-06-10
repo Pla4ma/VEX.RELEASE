@@ -47,17 +47,17 @@ export function OnboardingHeader({
           </Pressable>
         ) : null}
       </View>
-      {eyebrow ? (
-        <Text
-          fontSize={11}
-          fontWeight="700"
-          style={{ color: 'rgba(10, 10, 10, 0.55)', letterSpacing: 2 }}
-        >
-          {eyebrow}
-        </Text>
-      ) : (
-        <View />
-      )}
+        {eyebrow ? (
+          <Text
+            fontSize={13}
+            fontWeight="700"
+            style={{ color: 'rgba(10, 10, 10, 0.55)', letterSpacing: 3 }}
+          >
+            {eyebrow}
+          </Text>
+        ) : (
+          <View />
+        )}
     </View>
   );
 }

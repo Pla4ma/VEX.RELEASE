@@ -31,7 +31,7 @@ export const FEATURE_FLAGS = {
   BOTTOM_TABS: 'bottom_tabs',
   GESTURE_NAVIGATION: 'gesture_navigation',
   QUICK_ACTIONS: 'quick_actions',
-  BIOMETRIC_LOGIN: 'biometric_login',
+  BIOMETRIC_LOGIN: 'biometric_login', // Not implemented — feature disabled at auth layer
   SOCIAL_LOGIN: 'social_login',
   MAGIC_LINK_LOGIN: 'magic_link_login',
   TWO_FACTOR_AUTH: 'two_factor_auth',

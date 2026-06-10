@@ -1,9 +1,9 @@
 /**
  * EtherealOnboardingShell — shared layout for the OnboardingFlow.
- * Fixed layout: safe areas, sticky CTA, compact guide, no clipping.
+ * Fixed layout zones: safe areas, title, mascot guide, scrollable options, sticky footer.
  */
-import React, { type ReactNode, useState } from 'react';
-import { Pressable, ScrollView, View } from 'react-native';
+import React, { type ReactNode } from 'react';
+import { ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { EtherealSkyBackground } from '../../../../screens/auth/components/ethereal/EtherealSkyBackground';
@@ -15,10 +15,7 @@ import { OnboardingFooter } from './OnboardingFooter';
 import { OnboardingErrorBanner } from './OnboardingErrorBanner';
 import { VexMascotGuide } from './VexMascotGuide';
 import type { MascotMood } from './VexMascotGuide';
-import { Text } from '../../../../components/primitives/Text';
 import { useOnboardingStore } from '../../../../features/onboarding';
-import { etherealButton } from '@/theme/tokens/ethereal-sky';
-import { getMinTouchTargetStyle } from '../../../../utils/touchTarget';
 
 type EtherealOnboardingShellProps = {
   stepKey: string | number;
@@ -65,7 +62,10 @@ export function EtherealOnboardingShell({
   const markMascotGuideCompleted = useOnboardingStore(
     (state) => state.markMascotGuideCompleted,
   );
-  const [showGuide, setShowGuide] = useState(!guideDismissedAt);
+  const showGuide = !guideDismissedAt && !!mascotMessage;
+
+  // Footer height estimate + safe area bottom + gap
+  const footerHeight = 76 + insets.bottom;
 
   return (
     <View style={{ flex: 1 }}>
@@ -76,41 +76,42 @@ export function EtherealOnboardingShell({
         style={{
           flex: 1,
           paddingTop: insets.top + 12,
-          paddingBottom: insets.bottom,
+          paddingBottom: 0,
           paddingHorizontal: 24,
         }}
       >
+        {/* Top row: back + eyebrow */}
         <OnboardingHeader eyebrow={eyebrow} onBack={onBack} showBack={showBack} />
 
-        <OnboardingTitle subtitle={subtitle} title={title} />
+        {/* Title block — compact */}
+        <View style={{ marginTop: 4, marginBottom: 8, maxHeight: 140 }}>
+          <OnboardingTitle subtitle={subtitle} title={title} />
+        </View>
 
+        {/* Mascot guide — compact row */}
         {showGuide && mascotMessage ? (
-          <View style={{ marginTop: 10, marginBottom: 8 }}>
+          <View style={{ marginBottom: 10, maxHeight: 120 }}>
             <VexMascotGuide
               message={mascotMessage}
               mood={mascotMood}
               onBack={showBack ? onBack : undefined}
-              onReplay={() => setShowGuide(true)}
+              onReplay={() => {}}
               onSkip={() => {
                 dismissMascotGuide();
-                setShowGuide(false);
               }}
               placement="inline"
-              size="medium"
-              stepLabel={eyebrow}
+              size="question"
               submessage={mascotSubmessage}
             />
           </View>
-        ) : mascotMessage ? (
-          <View style={{ marginTop: 8, marginBottom: 4, alignItems: 'flex-end' }}>
-            <ReplayGuideButton onPress={() => setShowGuide(true)} />
-          </View>
         ) : null}
 
-        <StepTransition stepKey={stepKey} style={{ flex: 1, marginTop: 4 }}>
+        {/* Scrollable options area */}
+        <StepTransition stepKey={stepKey} style={{ flex: 1, minHeight: 0 }}>
           <ScrollView
             contentContainerStyle={{
-              paddingBottom: isLaunchStep ? 24 : 100,
+              paddingBottom: footerHeight + 12,
+              flexGrow: 1,
             }}
             showsVerticalScrollIndicator={false}
           >
@@ -121,8 +122,18 @@ export function EtherealOnboardingShell({
           </ScrollView>
         </StepTransition>
 
+        {/* Footer CTA — fixed at bottom, never covers scroll content because of paddingBottom */}
         {!isLaunchStep ? (
-          <View style={{ position: 'absolute', bottom: 0, left: 24, right: 24 }}>
+          <View
+            style={{
+              position: 'absolute',
+              bottom: 0,
+              left: 24,
+              right: 24,
+              paddingBottom: insets.bottom + 8,
+              paddingTop: 8,
+            }}
+          >
             <OnboardingFooter
               isContinueDisabled={isContinueDisabled}
               isFinishing={isFinishing}
@@ -137,25 +148,5 @@ export function EtherealOnboardingShell({
         ) : null}
       </View>
     </View>
-  );
-}
-
-function ReplayGuideButton({ onPress }: { onPress: () => void }): React.JSX.Element {
-  return (
-    <Pressable
-      accessibilityHint="Shows the mascot guide again"
-      accessibilityLabel="Replay mascot guide"
-      accessibilityRole="button"
-      onPress={onPress}
-      style={getMinTouchTargetStyle()}
-    >
-      <Text
-        fontSize={12}
-        fontWeight="800"
-        style={{ color: etherealButton.emailText }}
-      >
-        Replay guide
-      </Text>
-    </Pressable>
   );
 }

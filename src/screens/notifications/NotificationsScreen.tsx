@@ -1,5 +1,6 @@
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 import React, { useCallback } from 'react';
+import { sanitizeErrorMessage } from '../../utils/error-sanitizer';
 import { Pressable, RefreshControl } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { FlashList } from '@shopify/flash-list';
@@ -57,7 +58,7 @@ export const NotificationsScreen = React.memo(() => {
       <NotificationErrorState
         insetsTop={inset}
         backgroundColor={bg}
-        message={error.message}
+        message={sanitizeErrorMessage(error)}
         onRetry={() => loadNotifications()}
       />
     );}

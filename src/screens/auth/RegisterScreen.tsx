@@ -114,7 +114,7 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
               message="Protected focus starts here."
               mood="encouraging"
               placement="inline"
-              size="inline"
+              size="authForm"
               submessage="Create the account, then I'll guide setup."
             />
           </View>

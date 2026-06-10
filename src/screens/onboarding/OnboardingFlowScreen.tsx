@@ -6,7 +6,7 @@
  * useOnboardingFlow; this file is presentation only.
  */
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { View } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import { etherealText } from '@/theme/tokens/ethereal-sky';
@@ -28,11 +28,13 @@ import {
 } from './components/ethereal';
 import { LaneChoiceStep } from './components/LaneChoiceStep';
 import { LaneConfirmationStep } from './components/LaneConfirmationStep';
+import type { Lane } from '../../features/lane-engine';
 import { MASCOT_COPY, STEP_EYEBROW, STEP_TITLES } from './onboarding-flow-copy';
 
 export function OnboardingFlowScreen(): JSX.Element {
   const route = useRoute<OnboardingRouteProp>();
   const flow = useOnboardingFlow(route.params?.step);
+  const [isCelebrating, setIsCelebrating] = useState(false);
 
   if (!flow.userId) {
     return <SignedOutOnboardingState />;
@@ -47,6 +49,13 @@ export function OnboardingFlowScreen(): JSX.Element {
 
   const stepCopy = STEP_TITLES[flow.step] ?? { title: '', subtitle: '' };
   const mascotCopy = MASCOT_COPY[flow.step];
+
+  const handleAccept = useCallback((lane: Lane) => {
+    setIsCelebrating(true);
+    setTimeout(() => {
+      flow.handleAcceptLaneAndAdvance(lane);
+    }, 900);
+  }, [flow]);
 
   const renderStep0 = useCallback(
     () => (
@@ -99,14 +108,15 @@ export function OnboardingFlowScreen(): JSX.Element {
       ) : (
         <View style={{ marginTop: 8 }}>
           <LaneConfirmationStep
+            celebrating={isCelebrating}
             confirmation={flow.laneConfirmation}
             isChoosing={false}
-            onAccept={flow.handleAcceptLaneAndAdvance}
+            onAccept={handleAccept}
             onChooseAnother={flow.handleChooseAnotherLane}
           />
         </View>
       ),
-    [flow],
+    [flow, isCelebrating, handleAccept],
   );
 
   return (
@@ -116,9 +126,9 @@ export function OnboardingFlowScreen(): JSX.Element {
       isContinueDisabled={isContinueDisabled}
       isFinishing={flow.isFinishing}
       lastStepIndex={LAST_STEP_INDEX}
-      mascotMessage={mascotCopy?.message}
-      mascotMood={mascotCopy?.mood}
-      mascotSubmessage={mascotCopy?.submessage}
+      mascotMessage={isCelebrating ? "You're set. I'll adapt from real progress." : mascotCopy?.message}
+      mascotMood={isCelebrating ? 'celebrate' : mascotCopy?.mood}
+      mascotSubmessage={isCelebrating ? undefined : mascotCopy?.submessage}
       onBack={() => flow.setStep(flow.step - 1)}
       onContinue={() => flow.setStep(flow.step + 1)}
       onRetryFinish={() => flow.handleFinish()}

@@ -1,5 +1,6 @@
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 import React, { useCallback } from 'react';
+import { sanitizeErrorMessage } from '../../utils/error-sanitizer';
 
 import { Box, Text } from '../../components/primitives';
 import { ChallengeHub } from '../../features/challenges/components';
@@ -42,7 +43,7 @@ export function ChallengesScreen(): JSX.Element {
               title: 'Reward claim failed',
               message:
                 error instanceof Error
-                  ? error.message
+                  ? sanitizeErrorMessage(error)
                   : 'Try again when your connection is stable.',
               action: {
                 label: 'Retry',

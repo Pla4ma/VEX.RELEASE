@@ -1,3 +1,3 @@
-export * from './PremiumSurface';
-export { PremiumBadge, SupporterBadge } from './PremiumBadge';
-export type { PremiumBadgeProps, SupporterBadgeProps } from './PremiumBadge';
+export { PremiumBadge } from './PremiumBadge';
+export type { PremiumBadgeProps } from './PremiumBadge';
+export { SupporterBadge } from './PremiumBadge';

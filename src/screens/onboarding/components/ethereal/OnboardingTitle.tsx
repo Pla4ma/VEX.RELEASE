@@ -14,7 +14,7 @@ export function OnboardingTitle({
   subtitle,
 }: OnboardingTitleProps): React.JSX.Element {
   return (
-    <View style={{ gap: 6, marginTop: 4, marginBottom: 4 }}>
+    <View style={{ gap: 5 }}>
       {title ? (
         <Text
           fontSize={28}

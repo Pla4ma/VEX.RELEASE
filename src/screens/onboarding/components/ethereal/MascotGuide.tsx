@@ -28,8 +28,7 @@ export function MascotGuide({
       onReplay={onReplay}
       onSkip={onSkip}
       placement="inline"
-      size={compact ? 'inline' : 'medium'}
-      stepLabel={stepLabel}
+      size={compact ? 'inline' : 'question'}
       submessage={body}
     />
   );

@@ -8,7 +8,7 @@ const INTENSITY_MAP: Record<BackgroundIntensity, number> = {
   form: 0.55,
   question: 0.48,
   confirm: 0.42,
-  login: 0.28,
+  login: 0.38,
   register: 0.52,
 };
 

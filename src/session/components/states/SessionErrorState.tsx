@@ -6,6 +6,7 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 import { useTheme } from '../../../theme';
+import { sanitizeErrorMessage } from '../../../utils/error-sanitizer';
 import { SessionErrorActions } from './SessionErrorActions';
 import { styles } from './SessionErrorState.styles';
 
@@ -41,7 +42,7 @@ export const SessionErrorState: React.FC<SessionErrorStateProps> = ({
     if (message.includes('sync') || message.includes('conflict')) {
       return 'Session sync failed. Your focus data is safe, but we need to resolve a conflict.';
     }
-    return 'Something went wrong. VEX is still here. Try again.';
+    return sanitizeErrorMessage(err);
   };
   return (
     <View style={[styles.container, { backgroundColor: semantic.background }]}>
@@ -71,7 +72,7 @@ export const SessionErrorState: React.FC<SessionErrorStateProps> = ({
           Error: {error.name}
         </Text>
         <Text style={[styles.errorHint, { color: semantic.textMuted }]}>
-          {error.message}
+          {sanitizeErrorMessage(error)}
         </Text>
       </View>
       <SessionErrorActions

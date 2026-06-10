@@ -20,7 +20,7 @@ export function ErrorState({
   const { theme } = useTheme();
   const fadeStyle = useFadeStyle(true, 300);
   const shakeStyle = useShakeStyle();
-  const errorMessage = error instanceof Error ? error.message : String(error);
+  const errorMessage = sanitizeErrorMessage(error);
   const errorBg = `${theme.colors.error.DEFAULT}20`;
   return (
     <Animated.View

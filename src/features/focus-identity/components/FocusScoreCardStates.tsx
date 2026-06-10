@@ -3,6 +3,7 @@ import { View, Pressable } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
 import { GlassCard } from '../../../components/glass/GlassCard';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
+import { sanitizeErrorMessage } from '../../../utils/error-sanitizer';
 
 interface FocusScoreCardSkeletonProps {
   size: 'small' | 'medium' | 'large';
@@ -88,7 +89,7 @@ export function FocusScoreCardError({
             textAlign: 'center',
           }}
         >
-          {error.message}
+          {sanitizeErrorMessage(error)}
         </Text>
       )}
       <Pressable

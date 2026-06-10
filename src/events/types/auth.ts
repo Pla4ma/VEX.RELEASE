@@ -8,5 +8,5 @@ export interface AuthEventDefinitions {
   'auth:login': { user: User };
   'auth:logout': { reason?: string };
   'auth:session:expired': undefined;
-  'auth:token:refresh': { token: string };
+  'auth:token:refresh': undefined;
 }

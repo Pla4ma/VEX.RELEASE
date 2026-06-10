@@ -63,21 +63,21 @@ export const MOTIVATION_STYLE_OPTIONS: MotivationStyleOption[] = [
   {
     id: 'calm',
     title: 'Clean',
-    description: 'Minimal, quiet, one thing at a time.',
+    description: 'Quiet, minimal, one thing.',
   },
   {
     id: 'worker',
     title: 'Project',
-    description: 'Resume where you left off and keep momentum.',
+    description: 'Keep the next move close.',
   },
   {
     id: 'study_focused',
     title: 'Study',
-    description: 'Structure material, review, and deep work.',
+    description: 'Structure material and review.',
   },
   {
     id: 'intense',
     title: 'Run',
-    description: 'Fast, energetic, game-like momentum.',
+    description: 'Fast, energized momentum.',
   },
 ];

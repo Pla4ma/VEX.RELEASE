@@ -23,6 +23,7 @@ const LANE_EMOJI: Record<Lane, string> = {
 type LaneConfirmationStepProps = {
   confirmation: LaneConfirmation | null;
   isChoosing: boolean;
+  celebrating?: boolean;
   onAccept: (lane: Lane) => void;
   onChooseAnother: () => void;
 };
@@ -45,6 +46,7 @@ function ModeSigil(): React.JSX.Element {
 export function LaneConfirmationStep({
   confirmation,
   isChoosing,
+  celebrating = false,
   onAccept,
   onChooseAnother,
 }: LaneConfirmationStepProps): JSX.Element {
@@ -56,11 +58,15 @@ export function LaneConfirmationStep({
       <View
         style={{
           backgroundColor: etherealCard.fillSelected,
-          borderColor: 'rgba(31, 137, 139, 0.64)',
+          borderColor: celebrating ? 'rgba(55,212,188,0.72)' : 'rgba(31, 137, 139, 0.64)',
           borderRadius: 24,
-          borderWidth: 1.5,
+          borderWidth: celebrating ? 2.5 : 1.5,
           gap: 14,
           padding: 22,
+          shadowColor: celebrating ? 'rgba(55,212,188,0.55)' : 'transparent',
+          shadowOffset: { width: 0, height: 8 },
+          shadowOpacity: celebrating ? 0.55 : 0,
+          shadowRadius: 28,
         }}
       >
         <ModeSigil />
@@ -92,14 +98,14 @@ export function LaneConfirmationStep({
             borderColor: etherealButton.googleBorder,
             borderRadius: 28,
             borderWidth: 1,
-            height: 56,
+            height: 62,
             justifyContent: 'center',
             opacity: pressed ? 0.94 : 1,
           },
         ]}
       >
         <Text fontSize={16} fontWeight="800" style={{ color: etherealButton.googleText }}>
-          Use this mode
+          Enter VEX
         </Text>
       </Pressable>
 
@@ -116,7 +122,7 @@ export function LaneConfirmationStep({
             borderColor: etherealButton.emailBorder,
             borderRadius: 28,
             borderWidth: 1,
-            height: 56,
+            height: 62,
             justifyContent: 'center',
             opacity: pressed ? 0.88 : 1,
           },

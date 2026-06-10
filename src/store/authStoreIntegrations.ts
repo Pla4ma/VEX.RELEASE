@@ -8,7 +8,7 @@ const debug = createDebugger('store:auth');
 let _integrationsInitializedForUserId: string | null = null;
 
 export function resetServiceSingletonsForLogout(): void {
-  integrationsInitializedForUserId = null;
+  _integrationsInitializedForUserId = null;
 }
 
 export function initializeServicesAfterAuth(user: User): void {
@@ -31,5 +31,5 @@ export function deinitializeServicesAfterLogout(): void {
   } catch (error) {
     debug.error('[AuthStore] Failed to reset session orchestrator:', error);
   }
-  integrationsInitializedForUserId = null;
+  _integrationsInitializedForUserId = null;
 }

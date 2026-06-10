@@ -48,21 +48,21 @@ describe('first 10 seconds clarity', () => {
     expect(ONBOARDING_PROMISE_COPY.primary).toBe(
       'VEX changes based on how you work.',
     );
-    expect(ONBOARDING_PROMISE_COPY.secondary).toContain(
-      'start one focused session',
+    expect(ONBOARDING_PROMISE_COPY.secondary).toBe(
+      'Answer a few questions and VEX will open around how you work.',
     );
   });
 
   it('first session is reachable within acceptable screens', () => {
-    expect(STEP_TITLES).toHaveLength(5);
-    expect(STEP_TITLES[STEP_TITLES.length - 1]).toBe('Start now');
+    expect(STEP_TITLES).toHaveLength(3);
+    expect(STEP_TITLES[STEP_TITLES.length - 1]).toBe('Confirm your focus mode');
   });
 
-  it('minimal progression uses Understand, Match, Start', () => {
+  it('minimal progression uses Understand, Match, Open', () => {
     expect(ONBOARDING_PROGRESS_PHASES).toEqual([
       'Understand',
       'Match',
-      'Start',
+      'Open',
     ]);
   });
 

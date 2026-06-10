@@ -7,7 +7,6 @@ import Animated, {
   withRepeat,
   withTiming,
   withSequence,
-  withDelay,
 } from 'react-native-reanimated';
 
 import { Text } from '../../../../components/primitives/Text';
@@ -24,28 +23,32 @@ export type MascotMood =
   | 'celebrate'
   | 'recovery';
 
-export type MascotSize = 'small' | 'medium' | 'large' | 'inline';
+export type MascotSize = 'loginCompact' | 'loginFeatured' | 'authForm' | 'question' | 'confirm' | 'complete' | 'inline';
 export type MascotPlacement = 'inline' | 'header' | 'corner';
 
+// All moods map to the single available asset; replace paths when more assets are added.
 const MOOD_ASSET_MAP: Record<MascotMood, ImageSourcePropType> = {
-  default: require('../../../../../MASCOT ASSETS/MASCOT_DEFAULT.png'),
-  wave: require('../../../../../MASCOT ASSETS/MASCOT_WAVE.png'),
-  pointing: require('../../../../../MASCOT ASSETS/MASCOT_POINTING.png'),
-  thinking: require('../../../../../MASCOT ASSETS/MASCOT_THINKING.png'),
-  encouraging: require('../../../../../MASCOT ASSETS/MASCOT_HAPPY.png'),
-  celebrate: require('../../../../../MASCOT ASSETS/MASCOT_CELEBRATING.png'),
-  recovery: require('../../../../../MASCOT ASSETS/MASCOT_RECOVERY.png'),
+  default: require('../../../../../assets/mascot/vex-mascot.png'),
+  wave: require('../../../../../assets/mascot/vex-mascot.png'),
+  pointing: require('../../../../../assets/mascot/vex-mascot.png'),
+  thinking: require('../../../../../assets/mascot/vex-mascot.png'),
+  encouraging: require('../../../../../assets/mascot/vex-mascot.png'),
+  celebrate: require('../../../../../assets/mascot/vex-mascot.png'),
+  recovery: require('../../../../../assets/mascot/vex-mascot.png'),
 };
 
-const FALLBACK_MASCOT = require('../../../../../MASCOT ASSETS/MASCOT_DEFAULT.png');
+const FALLBACK_MASCOT = require('../../../../../assets/mascot/vex-mascot.png');
 
 const SIZE_CONFIG: Record<
   MascotSize,
   { width: number; height: number; bubblePadding: number; bubbleRadius: number }
 > = {
-  small: { width: 56, height: 72, bubblePadding: 12, bubbleRadius: 20 },
-  medium: { width: 86, height: 110, bubblePadding: 14, bubbleRadius: 24 },
-  large: { width: 130, height: 170, bubblePadding: 18, bubbleRadius: 28 },
+  loginCompact: { width: 82, height: 104, bubblePadding: 14, bubbleRadius: 22 },
+  loginFeatured: { width: 118, height: 152, bubblePadding: 16, bubbleRadius: 24 },
+  authForm: { width: 80, height: 102, bubblePadding: 14, bubbleRadius: 22 },
+  question: { width: 96, height: 122, bubblePadding: 14, bubbleRadius: 24 },
+  confirm: { width: 104, height: 136, bubblePadding: 16, bubbleRadius: 26 },
+  complete: { width: 150, height: 196, bubblePadding: 18, bubbleRadius: 28 },
   inline: { width: 72, height: 96, bubblePadding: 12, bubbleRadius: 22 },
 };
 
@@ -94,8 +97,8 @@ function useMascotFloatAnimation(mood: MascotMood, reducedMotion: boolean) {
 
     glow.value = withRepeat(
       withSequence(
-        withTiming(0.35, { duration: 2200, easing: Easing.inOut(Easing.quad) }),
-        withTiming(0.15, { duration: 2200, easing: Easing.inOut(Easing.quad) }),
+        withTiming(0.28, { duration: 2200, easing: Easing.inOut(Easing.quad) }),
+        withTiming(0.12, { duration: 2200, easing: Easing.inOut(Easing.quad) }),
       ),
       -1,
       true,
@@ -111,7 +114,6 @@ type VexMascotGuideProps = {
   submessage?: string;
   size?: MascotSize;
   placement?: MascotPlacement;
-  stepLabel?: string;
   onBack?: () => void;
   onReplay?: () => void;
   onSkip?: () => void;
@@ -123,9 +125,8 @@ export function VexMascotGuide({
   mood = 'default',
   message,
   submessage,
-  size = 'medium',
+  size = 'question',
   placement = 'inline',
-  stepLabel,
   onBack,
   onReplay,
   onSkip,
@@ -166,30 +167,20 @@ export function VexMascotGuide({
       <View
         style={{
           flex: bubbleFlex,
-          backgroundColor: etherealGlass.fillStrong,
-          borderColor: etherealGlass.border,
+          backgroundColor: 'rgba(255,255,255,0.86)',
+          borderColor: 'rgba(255,255,255,0.75)',
           borderRadius: config.bubbleRadius,
           borderWidth: 1,
           gap: 4,
           padding: config.bubblePadding,
-          shadowColor: etherealGlass.shadow,
+          shadowColor: 'rgba(13,76,65,0.12)',
           shadowOffset: { width: 0, height: 4 },
-          shadowOpacity: 0.12,
+          shadowOpacity: 0.18,
           shadowRadius: 12,
         }}
       >
-        {stepLabel ? (
-          <Text
-            fontSize={11}
-            fontWeight="800"
-            style={{ color: etherealButton.emailText, letterSpacing: 1.4 }}
-          >
-            {stepLabel}
-          </Text>
-        ) : null}
-
         <Text
-          fontSize={placement === 'corner' ? 14 : 16}
+          fontSize={placement === 'corner' ? 14 : 17}
           fontWeight="800"
           style={{ color: etherealText.heading, lineHeight: 22 }}
         >

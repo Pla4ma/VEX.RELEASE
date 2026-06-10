@@ -9,30 +9,30 @@ export const STEP_EYEBROW: Record<number, string> = {
 export const STEP_TITLES: Record<number, { title: string; subtitle: string }> = {
   0: {
     title: 'Pick your first win',
-    subtitle: ONBOARDING_PROMISE_COPY.secondary,
+    subtitle: 'Choose what would make today feel lighter.',
   },
   1: {
-    title: 'How do you want to start?',
-    subtitle: 'VEX will tune your first block around your energy.',
+    title: 'Choose your rhythm',
+    subtitle: 'VEX will tune the setup to your energy.',
   },
   2: {
     title: 'Confirm your focus mode',
-    subtitle: 'VEX is ready to open around the way you actually work.',
+    subtitle: 'You can change this anytime.',
   },
 };
 
 export const MASCOT_COPY: Record<number, { mood: 'pointing' | 'thinking' | 'encouraging'; message: string; submessage?: string }> = {
   0: {
     mood: 'pointing',
-    message: 'Pick what would make today feel lighter.',
+    message: 'Pick one. I’ll shape the first block around it.',
   },
   1: {
     mood: 'thinking',
-    message: "I'm shaping the next step around your rhythm.",
+    message: 'I’m adapting the next step from your answer.',
   },
   2: {
     mood: 'encouraging',
-    message: 'Lock the first mode. You can change it later.',
+    message: 'Lock the first mode. I’ll guide the first block.',
   },
 };
 

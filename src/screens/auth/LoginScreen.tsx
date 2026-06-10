@@ -116,9 +116,9 @@ export const LoginScreen: React.FC<Props> = ({ navigation, route }) => {
               <VexMascotGuide
                 message="I'll guide your first block."
                 mood="wave"
-                placement="inline"
-                size="inline"
-                submessage="Sign in, then I'll walk you through setup."
+              placement="inline"
+              size="loginCompact"
+              submessage="Sign in, then I'll walk you through setup."
               />
             ) : null}
 
