@@ -131,32 +131,9 @@
         "./plugins/withCertificatePinning",
         {
           "domains": {
-            "supabase.co": {
-              "pins": [
-                "sha256/JxYBCNfhi515HdL0cvKtauDKAZvS/HXZc8eHx6C/1pI=",
-                "sha256/H7AMYAvicN2+UcFPBz3kJXCDmGrTItZh4ujUBK8hoWg=",
-                "sha256/+gSmjONa2NEzJGiXHTxfDwn5zcujrfyPHe83jS2p0yk="
-              ],
-              "includeSubdomains": true,
-              "_pins_verified": "2026-06-05 — Verified against icnbpjkyupuqzuvwuvbk.supabase.co live cert chain."
-            },
-            "api.revenuecat.com": {
-              "pins": [
-                "sha256/cScruLir0xVY/lla8OssSntPTNLaMzAGSFIG4Z9myl4=",
-                "sha256/8dcSZIGOkkJAXV71MH2lsFJuG8T2GkkAq3oGwdC4sHo=",
-                "sha256/NqvDJlas/GRcYbcWE8S/IceH9cq77kg0jVhZeAPXq8k="
-              ],
-              "includeSubdomains": false,
-              "_pins_verified": "2026-06-10 — Verified against api.revenuecat.com live cert chain. Leaf: *.revenuecat.com (Amazon ECDSA 256 M04), Intermediate: Amazon ECDSA 256 M04, Root: Amazon Root CA 3."
-            },
-            "sentry.io": {
-              "pins": [
-                "sha256/5nKd+KgGPrzW6hpn2s7dKScWJ0kPht1Kkiqi/PFw8h8=",
-                "sha256/Wec45nQiFwKvHtuHxSAMGkt19k+uPSw9JlEkxhvYPHk="
-              ],
-              "includeSubdomains": false,
-              "_pins_verified": "2026-06-10 — Verified against sentry.io live cert chain. Leaf: sentry.io (DigiCert Global G2 TLS RSA SHA256 2020 CA1), Intermediate: DigiCert Global G2 TLS RSA SHA256 2020 CA1, Root: DigiCert Global Root G2."
-            }
+            "supabase.co": {"pins":["sha256/JxYBCNfhi515HdL0cvKtauDKAZvS/HXZc8eHx6C/1pI=","sha256/H7AMYAvicN2+UcFPBz3kJXCDmGrTItZh4ujUBK8hoWg=","sha256/+gSmjONa2NEzJGiXHTxfDwn5zcujrfyPHe83jS2p0yk="],"includeSubdomains":true},
+            "api.revenuecat.com": {"pins":["sha256/cScruLir0xVY/lla8OssSntPTNLaMzAGSFIG4Z9myl4=","sha256/8dcSZIGOkkJAXV71MH2lsFJuG8T2GkkAq3oGwdC4sHo=","sha256/NqvDJlas/GRcYbcWE8S/IceH9cq77kg0jVhZeAPXq8k="],"includeSubdomains":false},
+            "sentry.io": {"pins":["sha256/5nKd+KgGPrzW6hpn2s7dKScWJ0kPht1Kkiqi/PFw8h8=","sha256/Wec45nQiFwKvHtuHxSAMGkt19k+uPSw9JlEkxhvYPHk="],"includeSubdomains":false}
           }
         }
       ],
