@@ -96,7 +96,7 @@ export function FirstSessionSetup({
             <DurationCard
               key={option.value}
               option={option}
-              selected={selectedDuration === option.value}
+              isSelected={selectedDuration === option.value}
               onSelect={() => handleDurationSelect(option.value)}
             />
           ))}

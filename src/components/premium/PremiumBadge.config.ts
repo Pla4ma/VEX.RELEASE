@@ -9,12 +9,12 @@ export const sizeConfig = {
 export const variantConfig = {
   default: {
     backgroundColor: lightColors.accent.teal,
-    borderColor: lightColors.accent.mint,
+    borderColor: lightColors.accent.teal,
     textColor: lightColors.text.inverse,
   },
   subtle: {
-    backgroundColor: lightColors.accent.mint,
-    borderColor: lightColors.accent.mint,
+    backgroundColor: lightColors.accent.teal,
+    borderColor: lightColors.accent.teal,
     textColor: lightColors.accent.teal,
   },
   animated: {

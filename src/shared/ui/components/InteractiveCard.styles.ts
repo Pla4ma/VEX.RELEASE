@@ -1,4 +1,4 @@
-import type { ViewStyle } from 'react-native';
+import type { TextStyle, ViewStyle } from 'react-native';
 
 export const fullWidth: ViewStyle = { width: '100%' };
 export const card: ViewStyle = { overflow: 'hidden', position: 'relative' };
@@ -15,6 +15,6 @@ export const badge: ViewStyle = {
   justifyContent: 'center',
   zIndex: 10,
 };
-export const badgeText: ViewStyle = { fontSize: 10, fontWeight: '700' };
+export const badgeText: TextStyle = { fontSize: 10, fontWeight: '700' };
 export const iconContainer: ViewStyle = { marginBottom: 8 };
 export const contentStyle: ViewStyle = { flex: 1 };

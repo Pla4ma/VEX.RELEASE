@@ -5,10 +5,12 @@ import { useCallback, useEffect } from 'react';
 import { eventBus } from '../../../events';
 import * as service from '../service';
 import * as queries from '../queries';
+import { useActiveChallenges } from './challengeQueries';
 import { challengeKeys } from './challengeKeys';
 import { economyKeys } from '../../economy/hooks';
 import type { UpdateChallengeProgressInput } from '../schemas';
 import type { UserChallengeSummary } from '../schemas/responses';
+import type { ChallengeDetail } from '../schemas/responses';
 
 export function useUpdateChallengeProgress() {
   const queryClient = useQueryClient();
@@ -115,7 +117,7 @@ export function useChallengeProgress(userId: string) {
   const challenges = query.data ?? [];
   const total = challenges.length;
   const completed = challenges.filter(
-    (item) =>
+    (item: ChallengeDetail) =>
       item.userChallenge.status === 'COMPLETED' ||
       item.userChallenge.status === 'CLAIMED',
   ).length;

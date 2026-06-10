@@ -10,7 +10,7 @@ export interface InteractiveCardProps {
   variant?: CardVariant;
   size?: CardSize;
   style?: ViewStyle;
-  state?: 'default' | 'loading' | 'disabled' | 'error' | 'success';
+  state?: 'default' | 'loading' | 'disabled' | 'error' | 'success' | 'selected';
   loadingMessage?: string;
   disabledReason?: string;
   errorMessage?: string;

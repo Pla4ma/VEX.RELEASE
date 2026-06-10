@@ -18,6 +18,8 @@ export {
   type UserPresence,
   type SquadPresence,
   type BroadcastMessage,
+  getCurrentUserId,
+  activeChannels,
 } from './realtimeShared';
 export {
   broadcastActivity,
@@ -175,10 +177,12 @@ export function onPresenceChange(
 }
 
 export async function cleanupPresence(): Promise<void> {
-  const channel = activeChannels.get('presence');
+  const userId = getCurrentUserId();
+  const key = `presence:${userId}`;
+  const channel = activeChannels.get(key);
   if (channel) {
     await channel.unsubscribe();
-    activeChannels.delete('presence');
+    activeChannels.delete(key);
   }
   resetCurrentUserId();
 }

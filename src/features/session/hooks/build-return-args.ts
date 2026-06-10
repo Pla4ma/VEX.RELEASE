@@ -14,18 +14,21 @@ export interface BuildReturnArgs {
     data: SessionState | null | undefined;
     error: Error | null;
     isLoading: boolean;
+    isPending: boolean;
     isFetching: boolean;
   };
   sessionHistoryQuery: {
     data: SessionHistoryEntry[] | undefined;
     error: Error | null;
     isLoading: boolean;
+    isPending: boolean;
     isFetching: boolean;
   };
   sessionStatsQuery: {
     data: unknown;
     error: Error | null;
     isLoading: boolean;
+    isPending: boolean;
     isFetching: boolean;
   };
   startSessionMutation: {

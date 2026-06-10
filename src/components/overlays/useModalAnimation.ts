@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from 'react';
 import {
   BackHandler,
-  type _ViewStyle,
+  type ViewStyle,
 } from 'react-native';
 import {
   useSharedValue,

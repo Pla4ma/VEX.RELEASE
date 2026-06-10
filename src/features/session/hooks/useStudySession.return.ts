@@ -135,6 +135,10 @@ export function useStudySessionReturn(args: BuildReturnArgs) {
       currentSessionQuery.isPending ||
       sessionHistoryQuery.isPending ||
       sessionStatsQuery.isPending,
+    isPending:
+      currentSessionQuery.isPending ||
+      sessionHistoryQuery.isPending ||
+      sessionStatsQuery.isPending,
     isFetching:
       currentSessionQuery.isFetching ||
       sessionHistoryQuery.isFetching ||

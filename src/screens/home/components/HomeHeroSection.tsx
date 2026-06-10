@@ -5,7 +5,7 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { ErrorState } from '../../../components/states/ErrorState';
 import { useHomePriority } from '../../../features/home-spine/hooks';
 import type {
-  _HomePrimaryPriority,
+  HomePrimaryPriority,
   HomeStakes,
   ProductContext,
 } from '../../../features/home-spine/priority-schemas';

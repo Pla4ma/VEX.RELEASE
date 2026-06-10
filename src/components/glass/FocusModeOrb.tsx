@@ -4,6 +4,7 @@ import Svg, {
   Circle,
   Defs,
   LinearGradient,
+  Path,
   RadialGradient,
   Stop,
   Ellipse,
@@ -27,6 +28,9 @@ export function FocusModeOrbRaw({
   intensity = 1,
 }: FocusModeOrbProps): JSX.Element {
   const c = MODE_CONFIGS[mode];
+  if (!c) {
+    return <View style={[{ height: size, width: size }, style]} />;
+  }
   const r = size * 0.46;
   const center = size / 2;
   const i = intensity;

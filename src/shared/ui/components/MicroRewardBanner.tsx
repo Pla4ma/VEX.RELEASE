@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Pressable } from 'react-native';
+import { Pressable, type ViewStyle } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -78,7 +78,7 @@ export const MicroRewardBanner: React.FC<MicroRewardBannerProps> = ({
       displayLabel={displayLabel}
       amountText={amountText}
       description={description}
-      spacing={theme.spacing}
+      spacing={theme.spacing as unknown as Record<string, number>}
       textColors={{ primary: theme.colors.text.primary, secondary: theme.colors.text.secondary }}
     />
   );

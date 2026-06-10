@@ -37,7 +37,7 @@ export const ActiveSessionControlDock: React.FC<
   completionPercentage,
   isPaused,
   multiplierDays,
-  _phaseAccent,
+  phaseAccent,
   showMultiplierInfo,
   streakMultiplier,
   themeColors,

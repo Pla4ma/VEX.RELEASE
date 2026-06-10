@@ -48,12 +48,13 @@ export async function createDashboardLayout(
   if (widgets?.length) {
     const { error: widgetError } = await supabase
       .from('dashboard_widgets')
-      .insert(widgets.map((widget) => ({ ...widget, dashboard_id: data.id })));
+      .insert(widgets.map((widget) => ({ ...widget, dashboard_id: data!.id })));
     if (widgetError) {
       throw handleSupabaseError(widgetError);
     }
   }
-  return DashboardLayoutSchema.parse({ ...data, widgets: widgets ?? [] });
+  const parsed = DashboardLayoutSchema.parse(data);
+  return { ...parsed, widgets: widgets ?? [] };
 }
 
 export async function updateDashboardWidget(

@@ -5,6 +5,8 @@
  * Provides structured logging with different log levels and context.
  */
 
+import { addBreadcrumb } from '../config/sentry';
+
 export interface LogContext {
   [key: string]: unknown;
 }
@@ -105,21 +107,24 @@ export class Logger {
     return messageLevelIndex >= currentLevelIndex;
   }
 
-  /**
-   * Output log entry to console
-   */
   private outputToConsole(logEntry: LogEntry): void {
-    logEntry;
+    if (logEntry.level === 'error' || logEntry.level === 'warn') {
+      addBreadcrumb(
+        `[${logEntry.level.toUpperCase()}] ${logEntry.message}`,
+        'log',
+        logEntry.context,
+      );
+    }
   }
 
-  /**
-   * Output log entry to file (simplified implementation)
-   */
   private outputToFile(logEntry: LogEntry): void {
-    // In a real implementation, this would write to a log file
-    // For now, we'll just add it to a simple in-memory buffer
-    // that could be periodically written to disk
-    logEntry;
+    if (__DEV__) {
+      addBreadcrumb(
+        `[${logEntry.level.toUpperCase()}] ${logEntry.message}`,
+        'log',
+        logEntry.context,
+      );
+    }
   }
 
   /**

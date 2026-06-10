@@ -27,6 +27,12 @@ const MasteryScreen = React.lazy(
 const ContentStudyNavigator = React.lazy(
   () => import('./ContentStudyNavigator'),
 );
+const CoachScreen = React.lazy(
+  () => import('../features/ai-coach/components/CoachScreen'),
+);
+const MemoryConsoleScreen = React.lazy(
+  () => import('../screens/profile/MemoryConsoleScreen'),
+);
 
 interface RenderRootStackFeatureRoutesProps {
   features: FeatureAccessMap;
@@ -95,6 +101,14 @@ export function renderRootStackFeatureRoutes({
             </React.Suspense>
           )}
         </Stack.Screen>
+      ) : null}
+
+      {canRegisterFeatureRoute(features, 'AICoach') ? (
+        <Stack.Screen name="AICoach" component={CoachScreen} />
+      ) : null}
+
+      {canRegisterFeatureRoute(features, 'MemoryConsole') ? (
+        <Stack.Screen name="MemoryConsole" component={MemoryConsoleScreen} />
       ) : null}
     </>
   );

@@ -6,6 +6,8 @@ import {
   subscribeToSquadPresence,
   type PresenceStatus,
   type SquadPresence,
+  getCurrentUserId,
+  activeChannels,
 } from '../services/realtime';
 import { createDebugger } from '../utils/debug';
 
@@ -49,7 +51,14 @@ export function usePresence({
     init();
     return () => {
       mounted = false;
-      cleanupPresence();
+      const userId = getCurrentUserId();
+      const key = `presence:${userId}`;
+      const channel = activeChannels.get(key);
+      if (channel) {
+        channel.unsubscribe().then(() => {
+          if (!mounted) activeChannels.delete(key);
+        });
+      }
     };
   }, [userId, initialStatus]);
 

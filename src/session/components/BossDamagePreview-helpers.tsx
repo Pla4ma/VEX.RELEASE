@@ -5,7 +5,7 @@ import Animated, {
   withSpring,
   withRepeat,
   withSequence,
-  _withTiming,
+  withTiming,
   useSharedValue,
 } from 'react-native-reanimated';
 import { Box } from '../../components/primitives/Box';

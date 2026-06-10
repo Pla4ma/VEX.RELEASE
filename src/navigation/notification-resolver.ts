@@ -1,6 +1,6 @@
 import {
   type NotificationAction,
-  type _NotificationSafeIntent,
+  type NotificationSafeIntent,
   type SafeNotificationResolution,
   ALLOWED_MAIN_TAB_SCREENS,
   ALLOWED_ROOT_SCREENS,

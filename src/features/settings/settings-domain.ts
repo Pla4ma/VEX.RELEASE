@@ -1,4 +1,12 @@
-import { batchUpdateSettings, getAllSettings} from './service';
+import { batchUpdateSettings, getAllSettings } from './service';
+import type {
+  CoachSettings,
+  AppearanceSettings,
+  PrivacySettings,
+  SettingValue,
+  SettingCategory,
+} from './types';
+import type { NotificationSettings } from './notification-schemas';
 
 export async function getNotificationSettings(userId: string): Promise<NotificationSettings> {
   const settings = await getAllSettings(userId);

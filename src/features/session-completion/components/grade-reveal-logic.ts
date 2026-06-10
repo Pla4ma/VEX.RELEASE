@@ -31,7 +31,7 @@ function buildModeMessage(
 export function useGradeRevealSequence({
   chainCount,
   creativeMoodLabel,
-  _height,
+  height,
   isReducedMotion,
   onComplete,
   sessionMode,

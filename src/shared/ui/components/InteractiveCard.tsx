@@ -15,7 +15,7 @@ import {
   card,
   selected,
   errorCard as error,
-  badge,
+  badge as badgeStyle,
   badgeText,
   iconContainer,
   contentStyle as content,
@@ -116,7 +116,7 @@ export const InteractiveCard: React.FC<InteractiveCardProps> = ({
   };
 
   return (
-    <Animated.View style={[animatedStyle, isFullWidth && fullWidth]}>
+    <Animated.View style={[animatedStyle, isFullWidth && fullWidthStyle]}>
       <Pressable
         onPress={handlePress}
         onLongPress={onLongPress}
@@ -139,8 +139,8 @@ export const InteractiveCard: React.FC<InteractiveCardProps> = ({
               padding: sStyle.padding,
               borderRadius: sStyle.borderRadius,
             },
-            selected && [selected, { borderColor: theme.colors.primary[500] }],
-            isError && [error, { borderColor: theme.colors.error.DEFAULT }],
+            selected && [{ borderColor: theme.colors.primary[500] }],
+            isError && [{ borderColor: theme.colors.error.DEFAULT }],
             aspectRatio !== undefined ? { aspectRatio } : undefined,
             style,
           ]}
@@ -148,7 +148,7 @@ export const InteractiveCard: React.FC<InteractiveCardProps> = ({
           {badge !== undefined && (
             <View
               style={[
-                badge,
+                badgeStyle,
                 { backgroundColor: badgeColor || theme.colors.primary[500] },
               ]}
             >

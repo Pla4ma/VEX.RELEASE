@@ -5,8 +5,8 @@ import type { SessionSummary } from '../types';
 import type { RewardIntegrationConfig } from './SessionRewardIntegration';
 import {
   advanceRestoreQuest,
-  _handleAbandonment,
-  _handlePartialCompletion,
+  handleAbandonment,
+  handlePartialCompletion,
 } from './session-reward-recovery';
 export {
   handleAbandonment,

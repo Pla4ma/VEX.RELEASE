@@ -18,7 +18,7 @@ type Props = Pick<
 };
 
 function PreviewLine({
-  _icon,
+  icon,
   label,
   text,
 }: {

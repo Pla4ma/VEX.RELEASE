@@ -1,5 +1,6 @@
 import { eventBus } from '../events';
 import type { Variant } from './ab-types';
+import type { ExperimentAssignment } from './ab-types';
 import {
   isUserEligibleForExperiment,
   selectVariant,
