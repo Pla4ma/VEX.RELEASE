@@ -6,11 +6,10 @@
  */
 import React, { useCallback, useState } from 'react';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Pressable, View } from 'react-native';
+import { Pressable, View, ScrollView } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AppScreen, Text } from '../../components/primitives';
-import { Button } from '../../components/primitives/Button';
 import type { AuthStackParams } from '../../navigation';
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 import { useToast } from '../../shared/ui/components/Toast';
@@ -21,7 +20,8 @@ import { etherealText } from '@/theme/tokens/ethereal-sky';
 import { RegisterFormPanel } from './components/ethereal/RegisterFormPanel';
 import { RegisterHero } from './components/ethereal/RegisterHero';
 import { getMinTouchTargetStyle } from '../../utils/touchTarget';
-import { MascotGuide } from '../onboarding/components/ethereal/MascotGuide';
+import { VexMascotGuide } from '../onboarding/components/ethereal/VexMascotGuide';
+import { BackgroundScrim } from '../onboarding/components/ethereal/BackgroundScrim';
 
 type Props = NativeStackScreenProps<AuthStackParams, 'Register'>;
 type RegisterErrors = Partial<Record<keyof RegisterFormData, string>>;
@@ -87,24 +87,38 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
 
   return (
     <AppScreen
-      contentStyle={{ flexGrow: 1, paddingBottom: insets.bottom + 16 }}
+      bottomInset={false}
+      contentStyle={{ flex: 1 }}
       keyboardAvoiding
       padded={false}
+      scroll={false}
     >
       <EtherealSkyBackground />
+      <BackgroundScrim intensity="register" />
 
-      <View style={{ flex: 1, paddingTop: insets.top + 16, paddingHorizontal: 24 }}>
-        <RegisterHero startDelayMs={120} />
+      <ScrollView
+        contentContainerStyle={{
+          flexGrow: 1,
+          paddingTop: insets.top + 16,
+          paddingBottom: insets.bottom + 16,
+          paddingHorizontal: 24,
+        }}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={{ flex: 1, justifyContent: 'space-between', gap: 16 }}>
+          <View style={{ gap: 8 }}>
+            <RegisterHero startDelayMs={120} />
 
-        <View style={{ marginTop: 18 }}>
-          <MascotGuide
-            body="Create the account, then I will guide setup without blocking the app."
-            compact
-            title="Protected focus starts here."
-          />
-        </View>
+            <VexMascotGuide
+              message="Protected focus starts here."
+              mood="encouraging"
+              placement="inline"
+              size="inline"
+              submessage="Create the account, then I'll guide setup."
+            />
+          </View>
 
-        <View style={{ marginTop: 18 }}>
           <RegisterFormPanel
             fields={{
               email,
@@ -117,44 +131,48 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
             onChangePassword={onChangePassword}
             onSubmit={() => { void handleRegister(); }}
           />
-        </View>
 
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
-            marginTop: 16,
-            gap: 4,
-          }}
-        >
-          <Text color={etherealText.heading} variant="body" style={{ color: etherealText.subtitle }}>
-            Already have an account?
-          </Text>
-          <Pressable
-            accessibilityHint="Returns to sign in"
-            accessibilityLabel="Sign in to an existing VEX account"
-            accessibilityRole="link"
-            onPress={onGoToLogin}
-            style={getMinTouchTargetStyle()}
-          >
-            <Text color={etherealText.heading} fontWeight="700" style={{ color: etherealText.heading, textDecorationLine: 'underline' }}>
-              Sign in
-            </Text>
-          </Pressable>
-        </View>
-      </View>
+          <View style={{ gap: 12 }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+                gap: 4,
+              }}
+            >
+              <Text color={etherealText.heading} variant="body" style={{ color: etherealText.subtitle }}>
+                Already have an account?
+              </Text>
+              <Pressable
+                accessibilityHint="Returns to sign in"
+                accessibilityLabel="Sign in to an existing VEX account"
+                accessibilityRole="link"
+                onPress={onGoToLogin}
+                style={getMinTouchTargetStyle()}
+              >
+                <Text color={etherealText.heading} fontWeight="700" style={{ color: etherealText.heading, textDecorationLine: 'underline' }}>
+                  Sign in
+                </Text>
+              </Pressable>
+            </View>
 
-      <View style={{ alignItems: 'center', paddingTop: 16 }}>
-        <Button
-          accessibilityHint="Returns to the sign in screen"
-          accessibilityLabel="Back to sign in"
-          onPress={onBack}
-          variant="ghost"
-        >
-          Back
-        </Button>
-      </View>
+            <View style={{ alignItems: 'center' }}>
+              <Pressable
+                accessibilityHint="Returns to the sign in screen"
+                accessibilityLabel="Back to sign in"
+                accessibilityRole="button"
+                onPress={onBack}
+                style={getMinTouchTargetStyle()}
+              >
+                <Text fontSize={14} fontWeight="600" style={{ color: etherealText.subtitle }}>
+                  Back
+                </Text>
+              </Pressable>
+            </View>
+          </View>
+        </View>
+      </ScrollView>
     </AppScreen>
   );
 };

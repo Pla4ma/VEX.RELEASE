@@ -13,7 +13,7 @@ export function initializeSessionCompletionOrchestrator(): void {
   }
 
   isSessionCompletedSubscribed = true;
-  unsubscribeSessionCompleted = eventBus.subscribe('session:completed', (event) => {
+  _unsubscribeSessionCompleted = eventBus.subscribe('session:completed', (event) => {
     void import('./completion-orchestrator')
       .then((module) =>
         module.orchestrateSessionCompletion({

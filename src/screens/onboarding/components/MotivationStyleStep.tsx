@@ -40,7 +40,7 @@ export function MotivationStyleStep({
           return (
             <Pressable
               key={style.id}
-              onPress={() => onSelectStyle(style.id)}
+              onPress={() => onSelectStyle(style.id as MotivationProfileType)}
               style={[
                 styles.choiceCard,
                 {

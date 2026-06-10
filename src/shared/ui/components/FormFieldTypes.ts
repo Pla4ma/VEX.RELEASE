@@ -1,8 +1,8 @@
-import type { ViewStyle } from 'react-native';
+import type { TextInputProps, ViewStyle } from 'react-native';
 
 export type FieldState = 'default' | 'focused' | 'error' | 'success' | 'loading' | 'disabled';
 
-export interface FormFieldProps {
+export interface FormFieldProps extends Omit<TextInputProps, 'onChangeText' | 'value' | 'defaultValue' | 'placeholder' | 'maxLength' | 'editable' | 'accessibilityLabel' | 'accessibilityHint' | 'style'> {
   label?: string;
   placeholder?: string;
   error?: string;

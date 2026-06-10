@@ -1,6 +1,5 @@
 /**
- * FloatingChoiceCard — glass choice card. Static (motion stripped for
- * performance). Used for onboarding step choices.
+ * FloatingChoiceCard — compact glass choice card for onboarding.
  */
 import React from 'react';
 import { View, type ViewStyle } from 'react-native';
@@ -36,12 +35,12 @@ export function FloatingChoiceCard({
     backgroundColor: selected ? etherealCard.fillSelected : etherealCard.fill,
     borderWidth: selected ? 1.6 : 1,
     borderColor: selected ? 'rgba(31, 137, 139, 0.72)' : etherealCard.border,
-    minHeight: 116,
+    minHeight: 82,
     overflow: 'hidden',
     shadowColor: etherealGlass.shadow,
-    shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 0.85,
-    shadowRadius: 28,
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.65,
+    shadowRadius: 18,
   };
 
   return (
@@ -60,7 +59,7 @@ export function FloatingChoiceCard({
         style={surfaceStyle}
       >
         <SafeBlurView intensity={40} tint="light" style={{ flex: 1 }}>
-          <View style={{ padding: 18, gap: 8 }}>
+          <View style={{ padding: 16, gap: 4 }}>
             <Text
               fontSize={18}
               fontWeight="800"
@@ -72,7 +71,7 @@ export function FloatingChoiceCard({
               <Text
                 fontSize={14}
                 fontWeight="600"
-                style={{ color: etherealCard.body, lineHeight: 21 }}
+                style={{ color: etherealCard.body, lineHeight: 20 }}
               >
                 {body}
               </Text>

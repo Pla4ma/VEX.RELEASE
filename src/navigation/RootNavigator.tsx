@@ -50,14 +50,12 @@ export const RootNavigator: React.FC = () => {
   const { theme, isDark } = useTheme();
   const navigationRef = useNavigationContainerRef<ExtendedRootStackParams>();
   const {
-    canCompleteForUser,
     completedAt,
     completedForUserId,
     isOnboarded,
     resetOnboarding,
     setCompletionFromBackend,
   } = useOnboardingStore((state) => ({
-    canCompleteForUser: state.canCompleteForUser,
     completedAt: state.completedAt,
     completedForUserId: state.completedForUserId,
     isOnboarded: state.isOnboarded,
@@ -71,9 +69,11 @@ export const RootNavigator: React.FC = () => {
   const totalCompletedSessions = featureAccess.inputs.totalCompletedSessions;
   const linking = useMemo(() => createLinkingConfig(), []);
 
-  const hasCompletedOnboarding = useMemo(
-    () => canCompleteForUser(user?.id),
-    [canCompleteForUser, user?.id],
+  const hasCompletedOnboarding = Boolean(
+    user?.id &&
+    isOnboarded &&
+    completedAt &&
+    completedForUserId === user.id,
   );
 
   const hasStaleOnboardingState = Boolean(

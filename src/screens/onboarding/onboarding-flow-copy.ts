@@ -12,12 +12,27 @@ export const STEP_TITLES: Record<number, { title: string; subtitle: string }> = 
     subtitle: ONBOARDING_PROMISE_COPY.secondary,
   },
   1: {
-    title: 'Choose your motivation style',
-    subtitle: 'This shapes how VEX frames progress. Change it anytime.',
+    title: 'How do you want to start?',
+    subtitle: 'VEX will tune your first block around your energy.',
   },
   2: {
     title: 'Confirm your focus mode',
     subtitle: 'VEX is ready to open around the way you actually work.',
+  },
+};
+
+export const MASCOT_COPY: Record<number, { mood: 'pointing' | 'thinking' | 'encouraging'; message: string; submessage?: string }> = {
+  0: {
+    mood: 'pointing',
+    message: 'Pick what would make today feel lighter.',
+  },
+  1: {
+    mood: 'thinking',
+    message: "I'm shaping the next step around your rhythm.",
+  },
+  2: {
+    mood: 'encouraging',
+    message: 'Lock the first mode. You can change it later.',
   },
 };
 

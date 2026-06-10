@@ -28,7 +28,7 @@ import {
 } from './components/ethereal';
 import { LaneChoiceStep } from './components/LaneChoiceStep';
 import { LaneConfirmationStep } from './components/LaneConfirmationStep';
-import { GUIDE_COPY, STEP_EYEBROW, STEP_TITLES } from './onboarding-flow-copy';
+import { MASCOT_COPY, STEP_EYEBROW, STEP_TITLES } from './onboarding-flow-copy';
 
 export function OnboardingFlowScreen(): JSX.Element {
   const route = useRoute<OnboardingRouteProp>();
@@ -46,11 +46,11 @@ export function OnboardingFlowScreen(): JSX.Element {
   );
 
   const stepCopy = STEP_TITLES[flow.step] ?? { title: '', subtitle: '' };
-  const guideCopy = GUIDE_COPY[flow.step];
+  const mascotCopy = MASCOT_COPY[flow.step];
 
   const renderStep0 = useCallback(
     () => (
-      <View style={{ gap: 12, marginTop: 16 }}>
+      <View style={{ gap: 12, marginTop: 8 }}>
         {ONBOARDING_GOALS.map((g, i) => (
           <FloatingChoiceCard
             key={g.id}
@@ -71,7 +71,7 @@ export function OnboardingFlowScreen(): JSX.Element {
 
   const renderStep1 = useCallback(
     () => (
-      <View style={{ gap: 12, marginTop: 16 }}>
+      <View style={{ gap: 12, marginTop: 8 }}>
         {MOTIVATION_STYLE_OPTIONS.map((style, i) => (
           <FloatingChoiceCard
             key={style.id}
@@ -93,11 +93,11 @@ export function OnboardingFlowScreen(): JSX.Element {
   const renderStep2 = useCallback(
     () =>
       flow.isChoosingLane ? (
-        <View style={{ marginTop: 16 }}>
+        <View style={{ marginTop: 8 }}>
           <LaneChoiceStep onSelect={flow.handleSelectLane} />
         </View>
       ) : (
-        <View style={{ marginTop: 16 }}>
+        <View style={{ marginTop: 8 }}>
           <LaneConfirmationStep
             confirmation={flow.laneConfirmation}
             isChoosing={false}
@@ -116,6 +116,9 @@ export function OnboardingFlowScreen(): JSX.Element {
       isContinueDisabled={isContinueDisabled}
       isFinishing={flow.isFinishing}
       lastStepIndex={LAST_STEP_INDEX}
+      mascotMessage={mascotCopy?.message}
+      mascotMood={mascotCopy?.mood}
+      mascotSubmessage={mascotCopy?.submessage}
       onBack={() => flow.setStep(flow.step - 1)}
       onContinue={() => flow.setStep(flow.step + 1)}
       onRetryFinish={() => flow.handleFinish()}
@@ -123,8 +126,6 @@ export function OnboardingFlowScreen(): JSX.Element {
       stepKey={`onboarding-step-${flow.step}-${flow.goal ?? 'none'}-${flow.motivationStyle ?? 'none'}`}
       subtitle={stepCopy.subtitle}
       title={stepCopy.title}
-      guideBody={guideCopy?.body}
-      guideTitle={guideCopy?.title}
     >
       {flow.step === 0 ? renderStep0() : null}
       {flow.step === 1 ? renderStep1() : null}

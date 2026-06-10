@@ -8,21 +8,21 @@ export const ONBOARDING_GOALS: Array<{
   {
     id: 'WORK',
     label: 'Find My Rhythm',
-    description: 'Let VEX learn what kind of sessions you finish best',
+    description: 'Let VEX learn what kind of sessions fit you best.',
   },
   {
     id: 'STUDY',
-    label: 'Study',
-    description: 'Learn and absorb new information with adaptive review',
+    label: 'Study Better',
+    description: 'Turn material into focused blocks.',
   },
   {
     id: 'CREATIVE',
-    label: 'Deep Work',
-    description: 'Protect creative focus — VEX remembers where you left off',
+    label: 'Start a Project',
+    description: 'Open around one clear next move.',
   },
   {
     id: 'PERSONAL',
-    label: 'Start Clean',
-    description: 'One focused session without noise or tracking pressure',
+    label: 'Recover Momentum',
+    description: 'Begin gently without losing the day.',
   },
 ];

@@ -96,7 +96,7 @@ export const ForgotPasswordScreen: React.FC<Props> = ({ navigation }) => {
                     accessibilityLabel="Email address"
                     autoCapitalize="none"
                     autoComplete="email"
-                    editable={!isLoading}
+                    disabled={isLoading}
                     error={error}
                     keyboardType="email-address"
                     label="Email Address"

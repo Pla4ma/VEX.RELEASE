@@ -1,6 +1,6 @@
 /**
- * OnboardingFooter — bottom bar with the Continue button.
- * Pure presentation; receives disabled/loading state.
+ * OnboardingFooter — sticky bottom bar with Continue button.
+ * Positioned absolute at bottom with safe-area padding.
  */
 import React from 'react';
 import { Pressable, View, type ViewStyle } from 'react-native';
@@ -22,15 +22,17 @@ export function OnboardingFooter({
   onContinue,
 }: OnboardingFooterProps): React.JSX.Element | null {
   const insets = useSafeAreaInsets();
-  if (isContinueDisabled && isFinishing) {return null;}
+  if (isContinueDisabled && isFinishing) {
+    return null;
+  }
 
   const footerStyle: ViewStyle = {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingTop: 16,
+    justifyContent: 'center',
+    paddingTop: 12,
     paddingBottom: insets.bottom + 12,
-    paddingHorizontal: 40,
+    paddingHorizontal: 0,
     gap: 12,
   };
 
@@ -45,10 +47,10 @@ export function OnboardingFooter({
         onPress={onContinue}
         style={({ pressed }) => [
           {
-            height: 56,
+            height: 60,
             width: '100%',
             paddingHorizontal: 32,
-            borderRadius: 28,
+            borderRadius: 30,
             backgroundColor: isContinueDisabled
               ? 'rgba(7, 31, 32, 0.34)'
               : etherealButton.googleFill,
@@ -58,9 +60,9 @@ export function OnboardingFooter({
             justifyContent: 'center',
             opacity: pressed ? 0.92 : 1,
             shadowColor: etherealButton.buttonShadow,
-            shadowOffset: { width: 0, height: 10 },
+            shadowOffset: { width: 0, height: 8 },
             shadowOpacity: isContinueDisabled ? 0 : 0.38,
-            shadowRadius: 22,
+            shadowRadius: 18,
           },
           getMinTouchTargetStyle(),
         ]}
