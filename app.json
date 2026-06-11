@@ -142,17 +142,20 @@
             },
             "api.revenuecat.com": {
               "pins": [
-                "sha256/REPLACE_WITH_LIVE_CERT_HASH"
+                "sha256/cScruLir0xVY/lla8OssSntPTNLaMzAGSFIG4Z9myl4=",
+                "sha256/8dcSZIGOkkJAXV71MH2lsFJuG8T2GkkAq3oGwdC4sHo=",
+                "sha256/NqvDJlas/GRcYbcWE8S/IceH9cq77kg0jVhZeAPXq8k="
               ],
-              "includeSubdomains": true,
-              "_pins_status": "Placeholder — extract live cert hashes before production build: openssl s_client -connect api.revenuecat.com:443 < /dev/null 2>/dev/null | openssl x509 -pubkey -noout | openssl pkey -pubin -outform der | openssl dgst -sha256 -binary | openssl base64"
+              "includeSubdomains": false,
+              "_pins_verified": "2026-06-09 — Pins from live cert chain. Verify after any RevenueCat cert rotation."
             },
             "sentry.io": {
               "pins": [
-                "sha256/REPLACE_WITH_LIVE_CERT_HASH"
+                "sha256/5nKd+KgGPrzW6hpn2s7dKScWJ0kPht1Kkiqi/PFw8h8=",
+                "sha256/Wec45nQiFwKvHtuHxSAMGkt19k+uPSw9JlEkxhvYPHk="
               ],
-              "includeSubdomains": true,
-              "_pins_status": "Placeholder — extract live cert hashes before production build: openssl s_client -connect sentry.io:443 < /dev/null 2>/dev/null | openssl x509 -pubkey -noout | openssl pkey -pubin -outform der | openssl dgst -sha256 -binary | openssl base64"
+              "includeSubdomains": false,
+              "_pins_verified": "2026-06-09 — Pins from live cert chain. Verify after any Sentry cert rotation."
             }
           }
         }

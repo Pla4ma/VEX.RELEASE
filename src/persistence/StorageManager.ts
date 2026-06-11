@@ -5,7 +5,7 @@ import { captureSilentFailure } from '../utils/silent-failure';
  * Unified storage interface with automatic fallback.
  */
 
-import { getDefaultStorageAdapter } from './MMKVStorageAdapter';
+import { getMMKVStorageAdapter, getDefaultStorageAdapter } from './MMKVStorageAdapter';
 import type { StorageAdapter, StorageOptions } from './StorageAdapter';
 import type { Nullable } from '../types/global';
 import { createDebugger } from '../utils/debug';
@@ -46,7 +46,7 @@ export class StorageManager implements StorageAdapter {
     // Try MMKV first if preferred
     if (this.config.preferMMKV) {
       try {
-        const mmkv = getMMKVStorage(this.config.options);
+        const mmkv = getMMKVStorageAdapter();
         await mmkv.initialize();
         this.primary = mmkv;
         this.active = mmkv;

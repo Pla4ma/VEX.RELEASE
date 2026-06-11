@@ -85,6 +85,8 @@ export function stubLearningExecutionLayer(): LearningExecutionLayer {
       completionTitle: 'Deep work plan advanced',
       emptyCta: 'Build a deep work path',
       emptyTitle: 'Attach the next work target',
+      errorTitle: 'Plan unavailable',
+      errorCta: 'Retry deep work plan',
       homeCta: 'Start deep work',
       homeTitle: 'Deep Work Plan',
       layerName: 'Deep Work Plan',

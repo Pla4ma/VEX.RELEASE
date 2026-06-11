@@ -1,3 +1,5 @@
-export { PremiumBadge } from './PremiumBadge';
+export * from './PremiumSurface';
+export { PremiumBadge, SupporterBadge } from './PremiumBadge';
 export type { PremiumBadgeProps } from './PremiumBadge';
-export { SupporterBadge } from './PremiumBadge';
+export type { SupporterBadgeProps } from './SupporterBadge';
+export { SectionHeader } from './premium-surface-extras';

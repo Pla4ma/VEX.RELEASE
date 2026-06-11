@@ -21,7 +21,7 @@ type LauncherStepProps = {
 };
 
 export function LauncherStep({
-  firstSessionXp: _firstSessionXp,
+  firstSessionXp,
   hasSeenFirstWin,
   isFinishing,
   isLaunchingSession,

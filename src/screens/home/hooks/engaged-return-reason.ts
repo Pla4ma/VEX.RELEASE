@@ -1,5 +1,5 @@
 import {
-  _useCreateRecommendation,
+  useCreateRecommendation,
   useUpdateRecommendationStatus,
   type SessionRecommendation,
 } from '../../../features/ai-coach';

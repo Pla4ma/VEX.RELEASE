@@ -1,1 +1,1 @@
-export { useSessionCompleteController } from './useSessionCompleteController.ts';
+export { useSessionCompleteController } from './useSessionCompleteController';

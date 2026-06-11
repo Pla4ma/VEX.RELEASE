@@ -54,8 +54,8 @@ export function HomeContextualCards({
   challengesRefetch,
   openSetup,
   startLearningTarget,
-  _showToast,
-  _userId,
+  showToast,
+  userId,
 }: HomeContextualCardsProps): JSX.Element | null {
   // Determine the ONE contextual card to show (priority order)
   const showStudyPlanCard =

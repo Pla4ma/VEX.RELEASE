@@ -11,7 +11,7 @@ interface DefsProps {
   intensity: number;
 }
 
-export function SphereDefs({ color, config: c, center: s, i }: DefsProps): JSX.Element {
+export function SphereDefs({ color, config: c, center: s, intensity: i }: DefsProps): JSX.Element {
   return (
     <Defs>
       <RadialGradient cx="50%" cy="50%" id={`glow-${color}`} r="55%">

@@ -93,7 +93,7 @@ export const Skeleton: React.FC<SkeletonProps> = ({
 };
 export const SkeletonCard: React.FC<{ lines?: number; height?: number }> = ({
   lines = 3,
-  _height = 120,
+  height = 120,
 }) => {
   const { theme } = useTheme();
   const opacity = useSharedValue(0.3);

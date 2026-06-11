@@ -27,7 +27,7 @@ export function useUpdateNotificationSettings(
   const { show } = useToast();
   return useMutation({
     mutationFn: (settings) =>
-      service.updateNotificationSettings(userId, settings),
+      service.updateNotificationSettings(userId, settings) as Promise<NotificationSettings>,
     onError: (error) => {
       Sentry.captureException(error, { tags: { feature: 'settings', operation: 'updateNotificationSettings' } });
       show({ type: 'error', title: 'Settings not saved', message: 'Try again when connection returns.' });

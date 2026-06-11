@@ -94,7 +94,7 @@ function BossScreenSectionsRaw({
         <Text variant="h4" color={theme.colors.text.primary}>
           {copy.historyTitle}
         </Text>
-        {historyQuery.isPending ? (
+        {historyQuery.isLoading ? (
           <Text variant="bodySmall" color={theme.colors.text.secondary}>
             Loading recent sessions...
           </Text>
@@ -104,7 +104,7 @@ function BossScreenSectionsRaw({
             Recent session proof is unavailable right now.
           </Text>
         ) : null}
-        {!historyQuery.isPending &&
+        {!historyQuery.isLoading &&
         !historyQuery.error &&
         recentSessions.length === 0 ? (
           <Text variant="bodySmall" color={theme.colors.text.secondary}>

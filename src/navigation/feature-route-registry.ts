@@ -21,6 +21,7 @@ export type FeatureRouteConfig = {
 };
 
 export const FEATURE_ROUTE_REGISTRY = [
+  { feature: 'ai_coach_basic', route: 'AICoach' },
   { feature: 'companion_detail', route: 'CompanionDetail' },
   { feature: 'boss_tab', route: 'Boss' },
   { feature: 'challenges', route: 'Challenges' },

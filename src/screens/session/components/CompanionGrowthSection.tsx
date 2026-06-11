@@ -7,7 +7,7 @@ import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import type { SessionSummary } from '../../../session/types';
 import type { Theme } from '../../../theme/types';
 import {
-  type _CompanionGrowth,
+  type CompanionGrowth,
   loadCompanionGrowth,
 } from '../../../features/companion/session-storage';
 import {

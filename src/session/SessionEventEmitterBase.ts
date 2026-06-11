@@ -3,8 +3,8 @@ import type { SessionEventChannel } from './types/events';
 import type {
   SessionSummary,
   InterruptionRecord,
-  _RecoveryRecord,
-  _AntiCheatFlag,
+  RecoveryRecord,
+  AntiCheatFlag,
 } from './types';
 import type {
   InterruptionRiskLevel,

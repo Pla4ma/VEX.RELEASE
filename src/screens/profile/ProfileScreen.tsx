@@ -105,14 +105,14 @@ export const ProfileScreen: React.FC = () => {
             />
           ) : activeTab === 'mastery' ? (
             <ProfileAchievementsTab
-              theme={theme} isLoading={achievementsQuery.isPending}
+              theme={theme} isLoading={achievementsQuery.isLoading}
               isError={!!achievementsQuery.isError} achievements={achievements}
               onOpenAchievements={() => navigation.navigate('Achievements')}
               onStartSession={() => navigation.navigate('SessionStack', { screen: 'SessionSetup', params: {} })}
             />
           ) : (
             <ProfileActivityTab
-              theme={theme} isLoading={historyQuery.isPending}
+              theme={theme} isLoading={historyQuery.isLoading}
               isError={!!historyQuery.error} history={historyQuery.history}
               onStartSession={() => navigation.navigate('SessionStack', { screen: 'SessionSetup', params: {} })}
             />

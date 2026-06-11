@@ -92,8 +92,9 @@ export async function fetchNotificationCenterItems(
   // Use raw DB created_at for cursor — it is an ISO timestamp string that
   // matches the .lt('created_at', cursor) filter. Using the mapped numeric
   // timestamp would produce a mismatched cursor.
-  const nextCursor = items.length === 100
-    ? ((data?.[data.length - 1] as NotificationRow | undefined)?.created_at ?? null)
+  const lastRow = data?.[data.length - 1] as NotificationRow | undefined;
+  const nextCursor = items.length === 100 && lastRow?.created_at != null
+    ? String(lastRow.created_at)
     : null;
   return { items, nextCursor };
 }

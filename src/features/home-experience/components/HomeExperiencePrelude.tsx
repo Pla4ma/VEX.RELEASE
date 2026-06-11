@@ -51,7 +51,7 @@ export function HomeExperiencePrelude({
     : false;
 
   const teaseCopy =
-    firstWeekExperience?.unlockTease ?? model.teasedElements[0]?.copy;
+    firstWeekExperience?.unlockTease ?? model.teasedElements[0]?.copy ?? '';
 
   return (
     <View style={{ gap: 10 }}>

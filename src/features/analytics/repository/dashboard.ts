@@ -46,14 +46,16 @@ export async function createDashboardLayout(
     throw handleSupabaseError(error);
   }
   if (widgets?.length) {
+    const dashboardId = (data as unknown as { id: string }).id;
     const { error: widgetError } = await supabase
       .from('dashboard_widgets')
-      .insert(widgets.map((widget) => ({ ...widget, dashboard_id: data.id })));
+      .insert(widgets.map((widget) => ({ ...widget, dashboard_id: dashboardId })));
     if (widgetError) {
       throw handleSupabaseError(widgetError);
     }
   }
-  return DashboardLayoutSchema.parse({ ...data, widgets: widgets ?? [] });
+  const parsed = DashboardLayoutSchema.parse(data);
+  return { ...parsed, widgets: widgets ?? [] };
 }
 
 export async function updateDashboardWidget(

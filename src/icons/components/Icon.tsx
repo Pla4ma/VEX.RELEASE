@@ -19,7 +19,7 @@ import {
   ICON_STROKE_WIDTH_VALUES,
   type IconSize,
   type IconStrokeWidth,
-  type _IconVariant,
+  type IconVariant,
 } from '../types';
 
 /**
@@ -32,7 +32,7 @@ export function Icon({
   variant = 'outline',
   strokeWidth = 'normal',
   animated = false,
-  _animation,
+  animation,
   style,
   testID,
   accessibilityLabel,

@@ -7,7 +7,7 @@ import {
   CoachPresenceSchema,
   CompletionPresenceSummarySchema,
   type CoachPresence,
-  type _CoachPresenceMotivationStyle,
+  type CoachPresenceMotivationStyle,
 } from './schemas';
 import type {
   CompletionPresenceInput,

@@ -21,7 +21,7 @@ interface OnboardingNavigatorProps {
 
 export function OnboardingNavigator({
   onStartSession,
-  _onBack,
+  onBack,
 }: OnboardingNavigatorProps): JSX.Element {
   const store = useOnboardingStore();
   useOnboardingProgress();

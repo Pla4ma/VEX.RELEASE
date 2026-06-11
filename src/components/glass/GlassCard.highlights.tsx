@@ -75,8 +75,8 @@ export function CardBottomShadow({ radius = 999 }: { radius?: number }): JSX.Ele
 
 export function CardEdgeRefraction({ side }: { side: 'left' | 'right' }): JSX.Element {
   const colors = side === 'right'
-    ? ['rgba(255, 255, 255, 0)', 'rgba(18, 184, 148, 0.06)', 'rgba(255, 255, 255, 0)']
-    : ['rgba(255, 255, 255, 0.06)', 'rgba(255, 255, 255, 0.02)', 'rgba(255, 255, 255, 0)'];
+    ? ['rgba(255, 255, 255, 0)', 'rgba(18, 184, 148, 0.06)', 'rgba(255, 255, 255, 0)'] as const
+    : ['rgba(255, 255, 255, 0.06)', 'rgba(255, 255, 255, 0.02)', 'rgba(255, 255, 255, 0)'] as const;
   const width = side === 'right' ? '12%' : '8%';
   const position: Record<string, string> = side === 'right' ? { right: '0' } : { left: '0' };
 

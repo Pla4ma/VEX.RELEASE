@@ -1,9 +1,9 @@
 import type {
-  _SessionState,
+  SessionState,
   SessionSummary,
-  _InterruptionRecord,
-  _RecoveryRecord,
-  _AntiCheatFlag,
+  InterruptionRecord,
+  RecoveryRecord,
+  AntiCheatFlag,
 } from './index';
 
 export interface SessionLifecycleEvents {

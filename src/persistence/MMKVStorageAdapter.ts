@@ -34,18 +34,9 @@ function getStorage(): MMKV {
 /**
  * MMKV storage adapter compatible with Zustand's persist middleware
  */
-export const getMMKVStorageAdapter = () => ({
-  getItem: (name: string): Promise<string | null> => {
-    const value = getStorage().getString(name);
-    return Promise.resolve(value ?? null);
-  },
-  setItem: (name: string, value: string): void => {
-    debouncedWrite(name, value);
-  },
-  removeItem: (name: string): void => {
-    debouncedWrite(name, null);
-  },
-});
+export const getMMKVStorageAdapter = (): MMKVStorageAdapter => {
+  return getDefaultStorageAdapter();
+};
 
 /**
  * Generic storage adapter interface implementation for MMKV
@@ -57,11 +48,15 @@ export class MMKVStorageAdapter {
     this.storage = new MMKV({ id });
   }
 
-  async getItem(key: string): Promise<Nullable<string>> {
+  async initialize(): Promise<void> {
+    // MMKV is initialized on construction, nothing to do here
+  }
+
+  async getItem(key: string): Promise<string | null> {
     return this.storage.getString(key) ?? null;
   }
 
-  getItemSync(key: string): Nullable<string> {
+  getItemSync(key: string): string | null {
     return this.storage.getString(key) ?? null;
   }
 

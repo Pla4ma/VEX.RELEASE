@@ -17,7 +17,7 @@ export function initializeServicesAfterAuth(user: User): void {
   } catch (error) {
     debug.error('[AuthStore] Failed to set RevenueCat user ID:', error);
   }
-  integrationsInitializedForUserId = user.id;
+  _integrationsInitializedForUserId = user.id;
 }
 
 export function deinitializeServicesAfterLogout(): void {

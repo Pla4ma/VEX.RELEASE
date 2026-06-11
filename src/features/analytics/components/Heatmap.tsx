@@ -11,7 +11,7 @@ import {
   calculatePeakDay,
   calculatePeakHour,
   calculateTotal,
-  type _HeatmapData,
+  type HeatmapData,
   type HeatmapProps,
 } from './Heatmap.types';
 

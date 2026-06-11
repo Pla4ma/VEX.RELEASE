@@ -81,7 +81,7 @@ export const FormField: React.FC<FormFieldProps> = ({
     borderColor: reducedMotion ? borderColor : withTiming(borderColor, { duration: 160 }),
   }));
   const message = error ?? internalError ?? successMessage ?? helperText;
-  const messageColor = getFieldMessageColor(error, internalError, successMessage);
+  const messageColor = getFieldMessageColor(error ?? undefined, internalError ?? undefined, successMessage);
 
   return (
     <View style={[{ marginBottom: theme.spacing[4] }, containerStyle]}>

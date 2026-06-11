@@ -2,7 +2,7 @@ import * as repository from './repository';
 import { withRetry, TTLCache } from '../../shared/hardening';
 import { eventBus } from '../../events';
 import * as Sentry from '@sentry/react-native';
-import type { Setting, UserPreferences, SettingCategory, SettingValue, SettingsExport } from './types';
+import type { Setting, UserPreferences, SettingCategory, SettingValue, SettingsExport, NotificationSettings, CoachSettings, AppearanceSettings, PrivacySettings } from './types';
 import { validateSettingValue, SettingsValidationError } from './settings-validation';
 import { syncSettings } from './settings-sync';
 
@@ -141,7 +141,11 @@ export async function getUserPreferences(userId: string): Promise<UserPreference
 export async function exportSettings(userId: string): Promise<SettingsExport> {
   const { getNotificationSettings, getCoachSettings, getAppearanceSettings, getPrivacySettings } = await import('./settings-domain');
   const [prefs, ns, cs, as, ps] = await Promise.all([
-    getUserPreferences(userId), getNotificationSettings(userId), getCoachSettings(userId), getAppearanceSettings(userId), getPrivacySettings(userId),
+    getUserPreferences(userId),
+    getNotificationSettings(userId) as Promise<NotificationSettings>,
+    getCoachSettings(userId) as Promise<CoachSettings>,
+    getAppearanceSettings(userId) as Promise<AppearanceSettings>,
+    getPrivacySettings(userId) as Promise<PrivacySettings>,
   ]);
   return {
     version: 1, exportedAt: Date.now(), userId, preferences: prefs,

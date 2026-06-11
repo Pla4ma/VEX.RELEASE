@@ -23,7 +23,7 @@ export const NearMissActions: React.FC<NearMissActionsProps> = ({
   hoursUntilNext,
   onAcknowledge,
   onViewNextChallenge,
-  _errorColor,
+  errorColor,
   primaryBg,
   primaryText,
   secondaryText,

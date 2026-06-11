@@ -7,7 +7,7 @@
 import type {} from '../types/global';
 import type {
   NetInfoState,
-  _NetInfoSubscription,
+  NetInfoSubscription,
 } from '@react-native-community/netinfo';
 import { createDebugger } from '../utils/debug';
 

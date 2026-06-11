@@ -21,7 +21,7 @@ interface HomeInterventionBannerProps {
   } | null;
   interventionLoading: boolean;
   dismissIntervention: (id: string) => void;
-  navigation: NativeStackNavigationProp<ExtendedRootStackParams>;
+  navigation: NativeStackNavigationProp<ExtendedRootStackParams> | undefined;
   userId: string;
 }
 
@@ -39,7 +39,7 @@ export function HomeInterventionBanner({
       actionLabel: string;
       metadata?: Record<string, unknown>;
     }): void => {
-      if (!userId) {
+      if (!userId || !navigation) {
         return;
       }
 

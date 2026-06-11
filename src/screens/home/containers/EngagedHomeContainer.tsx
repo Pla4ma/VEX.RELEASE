@@ -10,7 +10,7 @@ import {
 import { useActiveCoachRecommendations } from '../../../features/ai-coach/hooks/useCoachRecommendations';
 import { useActiveStudyPlan } from '../../../features/content-study';
 import {
-  _buildLearningSessionParams,
+  buildLearningSessionParams,
   useLearningExecutionLayer,
 } from '../../../features/learning-execution';
 import { useComebackState } from '../../../features/streaks/hooks';
