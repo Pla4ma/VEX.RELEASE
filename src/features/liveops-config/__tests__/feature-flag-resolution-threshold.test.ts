@@ -1,13 +1,6 @@
-/**
- * LiveOps Config — Feature Flag Resolution Tests
- *
- * Tests for threshold resolution, visibility resolution, and dependency checking.
- */
-
 import {
   resolveEffectiveThreshold,
   resolveFeatureVisibility,
-  checkDependenciesSatisfied,
 } from '../feature-flag-resolution';
 import type { MotivationProfileConfig } from '../feature-flag-resolution';
 
@@ -30,7 +23,7 @@ describe('feature-flag-resolution', () => {
       },
     };
 
-    it('should return base threshold when no profile matches', () => {
+    it('returns base threshold when no profile matches', () => {
       const result = resolveEffectiveThreshold(
         'boss_tab',
         7,
@@ -40,7 +33,7 @@ describe('feature-flag-resolution', () => {
       expect(result).toBe(7);
     });
 
-    it('should return base threshold when feature has no config', () => {
+    it('returns base threshold when feature has no config', () => {
       const result = resolveEffectiveThreshold(
         'unknown_feature' as any,
         10,
@@ -50,7 +43,7 @@ describe('feature-flag-resolution', () => {
       expect(result).toBe(10);
     });
 
-    it('should accelerate for matching primary profile', () => {
+    it('accelerates for matching primary profile', () => {
       const result = resolveEffectiveThreshold(
         'boss_tab',
         7,
@@ -60,7 +53,7 @@ describe('feature-flag-resolution', () => {
       expect(result).toBe(5);
     });
 
-    it('should restrict for matching primary profile', () => {
+    it('restricts for matching primary profile', () => {
       const result = resolveEffectiveThreshold(
         'boss_tab',
         7,
@@ -70,7 +63,7 @@ describe('feature-flag-resolution', () => {
       expect(result).toBe(10);
     });
 
-    it('should accelerate for matching secondary profile', () => {
+    it('accelerates for matching secondary profile', () => {
       const result = resolveEffectiveThreshold(
         'boss_tab',
         7,
@@ -80,7 +73,7 @@ describe('feature-flag-resolution', () => {
       expect(result).toBe(5);
     });
 
-    it('should not go below 0 when accelerating', () => {
+    it('does not go below 0 when accelerating', () => {
       const result = resolveEffectiveThreshold(
         'boss_tab',
         1,
@@ -90,7 +83,7 @@ describe('feature-flag-resolution', () => {
       expect(result).toBe(0);
     });
 
-    it('should handle restrictVisibility with min sessions', () => {
+    it('handles restrictVisibility with min sessions', () => {
       const result = resolveEffectiveThreshold(
         'challenges',
         5,
@@ -119,7 +112,7 @@ describe('feature-flag-resolution', () => {
       },
     };
 
-    it('should return false when baseVisible is false', () => {
+    it('returns false when baseVisible is false', () => {
       const result = resolveFeatureVisibility(
         'boss_tab',
         false,
@@ -130,7 +123,7 @@ describe('feature-flag-resolution', () => {
       expect(result).toBe(false);
     });
 
-    it('should return true when no profile matches', () => {
+    it('returns true when no profile matches', () => {
       const result = resolveFeatureVisibility(
         'boss_tab',
         true,
@@ -141,7 +134,7 @@ describe('feature-flag-resolution', () => {
       expect(result).toBe(true);
     });
 
-    it('should return true for non-restricted profile', () => {
+    it('returns true for non-restricted profile', () => {
       const result = resolveFeatureVisibility(
         'boss_tab',
         true,
@@ -152,7 +145,7 @@ describe('feature-flag-resolution', () => {
       expect(result).toBe(true);
     });
 
-    it('should return false for restricted profile below min sessions', () => {
+    it('returns false for restricted profile below min sessions', () => {
       const result = resolveFeatureVisibility(
         'boss_tab',
         true,
@@ -163,7 +156,7 @@ describe('feature-flag-resolution', () => {
       expect(result).toBe(false);
     });
 
-    it('should return true for restricted profile at min sessions', () => {
+    it('returns true for restricted profile at min sessions', () => {
       const result = resolveFeatureVisibility(
         'boss_tab',
         true,
@@ -174,7 +167,7 @@ describe('feature-flag-resolution', () => {
       expect(result).toBe(true);
     });
 
-    it('should return true for restricted profile above min sessions', () => {
+    it('returns true for restricted profile above min sessions', () => {
       const result = resolveFeatureVisibility(
         'boss_tab',
         true,
@@ -185,7 +178,7 @@ describe('feature-flag-resolution', () => {
       expect(result).toBe(true);
     });
 
-    it('should return true when restrictVisibility is not set', () => {
+    it('returns true when restrictVisibility is not set', () => {
       const result = resolveFeatureVisibility(
         'challenges',
         true,
@@ -196,6 +189,38 @@ describe('feature-flag-resolution', () => {
       expect(result).toBe(true);
     });
   });
+});
+describe('feature-flag-dependencies', () => {
+  const { checkDependenciesSatisfied } = require('../feature-flag-resolution');
 
+  const deps = {
+    boss_tab: ['focus_session', 'progress_view'],
+    challenges: ['focus_session'],
+  };
+
+  it('returns true when feature has no dependencies', () => {
+    expect(checkDependenciesSatisfied('focus_session', new Set(), deps)).toBe(true);
+  });
+
+  it('returns true when all dependencies are unlocked', () => {
+    expect(
+      checkDependenciesSatisfied('boss_tab', new Set(['focus_session', 'progress_view']), deps),
+    ).toBe(true);
+  });
+
+  it('returns false when some dependencies are missing', () => {
+    expect(
+      checkDependenciesSatisfied('boss_tab', new Set(['focus_session']), deps),
+    ).toBe(false);
+  });
+
+  it('returns false when no dependencies are unlocked', () => {
+    expect(checkDependenciesSatisfied('boss_tab', new Set(), deps)).toBe(false);
+  });
+
+  it('returns true for single satisfied dependency', () => {
+    expect(
+      checkDependenciesSatisfied('challenges', new Set(['focus_session']), deps),
+    ).toBe(true);
   });
 });
