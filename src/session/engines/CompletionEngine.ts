@@ -12,8 +12,8 @@ import {
   createSessionSummary,
   computeAbandonResult,
   computeFailResult,
-  computeCompletionStats,
 } from './completion-summary';
+import { computeCompletionStats } from './completion-stats';
 import {
   executePartialCompletion,
   attemptSessionRecovery,

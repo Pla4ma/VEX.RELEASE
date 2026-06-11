@@ -1,1 +1,2 @@
-export { useFeatureGate, useFeatureAvailability, useIsFeatureEnabled } from './hooks';
+export { useFeatureGate, featureGateKeys } from './hooks';
+export type { FeatureGateMode } from './types';

@@ -1,5 +1,5 @@
-export { useCompanionPromise, useCreatePromise, useCompletePromise, companionPromiseKeys } from './hooks';
-export { createPromise, completePromise, getHomePromiseState, evaluatePromiseLifecycle } from './service';
+export { companionPromiseKeys, useCompanionPromise } from './hooks';
+export { getHomePromiseState } from './service';
 export {
   PromiseTargetModeSchema,
   CompletedSessionPromiseInputSchema,
