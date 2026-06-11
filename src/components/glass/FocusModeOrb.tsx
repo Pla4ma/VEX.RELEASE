@@ -10,6 +10,7 @@ import Svg, {
   Ellipse,
   G,
   Mask,
+  Path,
 } from 'react-native-svg';
 import { MODE_CONFIGS } from './FocusModeOrb.tokens';
 import { EnergySymbol } from './FocusModeOrb.symbols';

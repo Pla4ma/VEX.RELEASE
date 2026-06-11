@@ -7,7 +7,7 @@ export const SecureStorageKeys = {
   USER_PROFILE: 'vex_user_profile',
   USER_CREDENTIALS: 'vex_user_credentials',
   ENCRYPTION_KEY: 'vex_encryption_key',
-  BIOMETRIC_TOKEN: 'vex_biometric_token',
+
 } as const;
 
 export type SecureStorageKey =

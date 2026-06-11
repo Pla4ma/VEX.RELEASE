@@ -41,7 +41,7 @@ export function VexActivationButton({
         style={({ pressed }) => [
           getMinTouchTargetStyle(),
           {
-            borderRadius: 28,
+            borderRadius: 32,
             overflow: 'hidden',
             opacity: isLoading ? 0.82 : pressed ? 0.94 : 1,
           },
@@ -54,7 +54,7 @@ export function VexActivationButton({
             borderColor: etherealButton.googleBorder,
             borderWidth: 1,
             justifyContent: 'center',
-            minHeight: 56,
+            minHeight: 62,
             minWidth: 296,
             paddingHorizontal: theme.spacing[6],
             shadowColor: etherealButton.buttonShadow,

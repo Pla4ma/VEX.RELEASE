@@ -49,9 +49,10 @@ export function VexGlassInput({
     <View style={{ gap: theme.spacing[2] }}>
       <Text
         color="semantic.liquidTextMuted"
-        fontSize={12}
-        fontWeight="600"
+        fontSize={13}
+        fontWeight="700"
         letterSpacing={0.15}
+        style={{ color: 'rgba(9,42,39,0.72)' }}
       >
         {label}
       </Text>
@@ -117,12 +118,12 @@ export function VexGlassInput({
               onFocus={() => setIsFocused(true)}
               onSubmitEditing={onSubmitEditing}
               placeholder={placeholder}
-              placeholderTextColor={rgbaColors.rgb_247_245_255_0_2}
+              placeholderTextColor={'rgba(143,160,156,0.85)'} 
               returnKeyType={returnKeyType ?? (secureTextEntry ? 'done' : 'next')}
               secureTextEntry={secureTextEntry}
               style={{
                 minHeight: 54,
-                color: lightColors.semantic.background,
+                color: '#092A27',
                 fontSize: 16,
                 paddingHorizontal: theme.spacing[4],
               }}

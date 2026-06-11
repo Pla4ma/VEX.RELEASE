@@ -1,7 +1,8 @@
 /**
- * StepTransition — wrapper for onboarding steps. Static (motion stripped).
+ * StepTransition — wrapper for onboarding steps with subtle fade entrance.
  */
 import React from 'react';
+import Animated, { FadeIn } from 'react-native-reanimated';
 import { View, type ViewStyle } from 'react-native';
 
 type StepTransitionProps = {
@@ -14,14 +15,20 @@ type StepTransitionProps = {
 };
 
 export function StepTransition({
-  stepKey: _stepKey,
+  stepKey,
   children,
   delayMs: _delayMs = 0,
   style,
 }: StepTransitionProps): React.JSX.Element {
   return (
     <View style={[style, { flex: 1 }]}>
-      {children}
+      <Animated.View
+        key={stepKey}
+        entering={FadeIn.duration(300).delay(_delayMs)}
+        style={{ flex: 1 }}
+      >
+        {children}
+      </Animated.View>
     </View>
   );
 }

@@ -1,8 +1,8 @@
-import type { TextInput, ViewStyle } from 'react-native';
+import type { TextInputProps, ViewStyle } from 'react-native';
 
 export type FieldState = 'default' | 'focused' | 'error' | 'success' | 'loading' | 'disabled';
 
-export interface FormFieldBaseProps {
+export interface FormFieldProps extends Omit<TextInputProps, 'onChangeText' | 'value' | 'defaultValue' | 'placeholder' | 'maxLength' | 'editable' | 'accessibilityLabel' | 'accessibilityHint' | 'style'> {
   label?: string;
   placeholder?: string;
   error?: string;
@@ -26,9 +26,6 @@ export interface FormFieldBaseProps {
   value?: string;
   defaultValue?: string;
 }
-
-export type FormFieldProps = FormFieldBaseProps &
-  Omit<React.ComponentProps<typeof TextInput>, keyof FormFieldBaseProps>;
 
 export const sizeConfig = {
   sm: { minHeight: 40, paddingHorizontal: 12, paddingVertical: 8, fontSize: 14 },

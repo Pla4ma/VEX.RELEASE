@@ -51,7 +51,7 @@ export const FormField: React.FC<FormFieldProps> = ({
   const reducedMotion = useReducedMotion();
   const [internalValue, setInternalValue] = useState(defaultValue ?? '');
   const [isFocused, setIsFocused] = useState(false);
-  const [internalError, setInternalError] = useState<string | null>(null);
+  const [internalError, setInternalError] = useState<string | undefined>(undefined);
   const effectiveValue = value ?? internalValue;
   const state: FieldState =
     propState ??
@@ -62,7 +62,7 @@ export const FormField: React.FC<FormFieldProps> = ({
   const config = sizeConfig[size];
   const validate = useCallback(
     (text: string) => {
-      if (onValidate) {setInternalError(onValidate(text));}
+      if (onValidate) {setInternalError(onValidate(text) ?? undefined);}
     },
     [onValidate],
   );

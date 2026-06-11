@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 
 import { Text } from '../../../../components/primitives/Text';
-import { etherealGlass, etherealText } from '@/theme/tokens/ethereal-sky';
+import { etherealText } from '@/theme/tokens/ethereal-sky';
 
 type OnboardingTitleProps = {
   title?: string;
@@ -14,24 +14,15 @@ export function OnboardingTitle({
   subtitle,
 }: OnboardingTitleProps): React.JSX.Element {
   return (
-    <View
-      style={{
-        backgroundColor: etherealGlass.fill,
-        borderColor: etherealGlass.border,
-        borderRadius: 18,
-        borderWidth: 1,
-        gap: 6,
-        padding: 16,
-      }}
-    >
+    <View style={{ gap: 5 }}>
       {title ? (
         <Text
-          fontSize={30}
+          fontSize={28}
           fontWeight="800"
           style={{
             color: etherealText.heading,
             letterSpacing: -0.3,
-            lineHeight: 36,
+            lineHeight: 34,
           }}
         >
           {title}

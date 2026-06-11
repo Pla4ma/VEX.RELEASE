@@ -8,6 +8,7 @@ import React from 'react';
 import { View, RefreshControl } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { Text, Card, Button } from '../../../components';
+import { sanitizeErrorMessage } from '../../../utils/error-sanitizer';
 import { ChallengeCard } from './ChallengeCard';
 import type { UserChallengeSummary } from '../schemas';
 import { challengeListStyles as styles } from './challenge-list.styles';
@@ -78,7 +79,7 @@ export function ChallengeList({
       <View style={styles.centerContainer}>
         <Card style={styles.errorCard}>
           <Text style={styles.errorTitle}>Failed to Load Challenges</Text>
-          <Text style={styles.errorMessage}>{error.message}</Text>
+          <Text style={styles.errorMessage}>{sanitizeErrorMessage(error)}</Text>
           {onRetry && (
             <Button
               variant="primary"

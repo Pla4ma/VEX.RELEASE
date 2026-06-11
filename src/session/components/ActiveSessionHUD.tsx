@@ -1,6 +1,7 @@
 import React from 'react';
 import { Pressable, View, Text } from 'react-native';
 import { useSession } from '../hooks/useSession';
+import { sanitizeErrorMessage } from '../../utils/error-sanitizer';
 import { ActiveSessionHUDCompanion } from './ActiveSessionHUDCompanion';
 import {
   formatTime,
@@ -177,7 +178,7 @@ const SessionHUDLoadingState: React.FC = () => (
 
 const SessionHUDErrorState: React.FC<{ error: Error }> = ({ error }) => (
   <View style={styles.container}>
-    <Text style={styles.errorText}>Error: {error.message}</Text>
+    <Text style={styles.errorText}>Error: {sanitizeErrorMessage(error)}</Text>
   </View>
 );
 

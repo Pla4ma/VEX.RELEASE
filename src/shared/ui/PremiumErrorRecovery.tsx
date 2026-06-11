@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text } from 'react-native';
+import { sanitizeErrorMessage } from '../../utils/error-sanitizer';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -40,8 +41,7 @@ export const PremiumErrorRecovery: React.FC<PremiumErrorRecoveryProps> = ({
     [customRetryConfig],
   );
   const errorState = ERROR_MESSAGES[context] ?? ERROR_MESSAGES.general!;
-  const errorMessage =
-    typeof error === 'string' ? error : error.message || errorState.message;
+  const errorMessage = sanitizeErrorMessage(error) || errorState.message;
 
   const shakeAnim = useSharedValue(0);
   const scaleAnim = useSharedValue(1);

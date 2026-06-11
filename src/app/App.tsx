@@ -11,6 +11,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { QueryProvider } from '../api';
 import { initSentry } from '../config/sentry';
 import { ErrorBoundary } from '../errors/ErrorBoundary';
+import { PrivacyBlurOverlay } from '../components/primitives/PrivacyBlurOverlay';
 
 import { RootNavigator } from '../navigation/RootNavigator';
 
@@ -87,13 +88,14 @@ export const App: React.FC = () => {
           <ThemeProvider>
             <ErrorBoundary>
               <ToastProvider position="top" maxToasts={3}>
-                <RootNavigator />
-              </ToastProvider>
-            </ErrorBoundary>
-          </ThemeProvider>
-        </QueryProvider>
-      </SafeAreaProvider>
-    </GestureHandlerRootView>
+                  <RootNavigator />
+                </ToastProvider>
+              </ErrorBoundary>
+            </ThemeProvider>
+          </QueryProvider>
+        </SafeAreaProvider>
+        <PrivacyBlurOverlay />
+      </GestureHandlerRootView>
   );
 };
 

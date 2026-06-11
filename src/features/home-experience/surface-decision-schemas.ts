@@ -91,6 +91,9 @@ export const SurfaceDecisionInputSchema = z.object({
         'intense',
         'study_focused',
         'student',
+        'worker',
+        'competitive',
+        'creator',
       ]),
       primaryGoal: z.enum([
         'focus',

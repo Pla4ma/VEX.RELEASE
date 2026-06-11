@@ -20,6 +20,15 @@ import { capture } from '../../shared/analytics/analytics-service';
 import { AuthEvents } from '../../shared/analytics/analytics-events';
 import { mapSupabaseUser } from '../../services/supabase-user-mapper';
 import { buildUserWithOnboarding } from '../../services/supabase-auth-helpers';
+import { TokenBucketLimiter } from '../../utils/token-bucket';
+
+const LOGIN_RATE_LIMIT = 5;
+const LOGIN_WINDOW_S = 60;
+const loginLimiter = new TokenBucketLimiter({
+  capacity: LOGIN_RATE_LIMIT,
+  refillRate: LOGIN_RATE_LIMIT / LOGIN_WINDOW_S,
+  key: 'auth:login',
+});
 
 export async function signUpWithEmail(
   email: string,
@@ -73,6 +82,14 @@ export async function signInWithEmail(
   user: User | null;
   error: Error | null;
 }> {
+  const rateCheck = await loginLimiter.consume(email.toLowerCase());
+  if (!rateCheck.allowed) {
+    return {
+      user: null,
+      error: new Error(`Too many attempts. Try again in ${rateCheck.retryAfter} seconds.`),
+    };
+  }
+
   try {
     const supabase = getSupabaseClient();
     const { data, error } = await supabase.auth.signInWithPassword({

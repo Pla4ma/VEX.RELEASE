@@ -35,11 +35,17 @@ export class SecureStorage implements StorageAdapter {
   async getItem(key: string): Promise<Nullable<string>> {
     try {
       if (this.isWeb) {
-        // Use localStorage on web so auth sessions persist across tab closes (RB-006).
-        return localStorage.getItem(WEB_STORAGE_PREFIX + key);
+        // Use sessionStorage on web so auth sessions do NOT persist across
+        // browser restarts. Session storage clears on tab close, which
+        // prevents auth token leakage from unattended browsers.
+        return sessionStorage.getItem(WEB_STORAGE_PREFIX + key);
       }
-      // Use expo-secure-store on native
-      return await SecureStore.getItemAsync(key);
+      // Use expo-secure-store on native.
+      // keychainAccessible: AfterFirstUnlockThisDeviceOnly prevents auth
+      // tokens from being included in iCloud/iTunes backups.
+      return await SecureStore.getItemAsync(key, {
+        keychainAccessible: SecureStore.AFTER_FIRST_UNLOCK_THIS_DEVICE_ONLY,
+      });
     } catch (error) {
       debug.error('[SecureStorage] getItem error:', error as Error);
       return null;
@@ -52,12 +58,15 @@ export class SecureStorage implements StorageAdapter {
   async setItem(key: string, value: string): Promise<void> {
     try {
       if (this.isWeb) {
-        // Use localStorage on web so auth sessions persist across tab closes (RB-006).
-        localStorage.setItem(WEB_STORAGE_PREFIX + key, value);
+        // Use sessionStorage on web so auth sessions do NOT persist across
+        // browser restarts.
+        sessionStorage.setItem(WEB_STORAGE_PREFIX + key, value);
         return;
       }
       // Use expo-secure-store on native
-      await SecureStore.setItemAsync(key, value);
+      await SecureStore.setItemAsync(key, value, {
+        keychainAccessible: SecureStore.AFTER_FIRST_UNLOCK_THIS_DEVICE_ONLY,
+      });
     } catch (error) {
       debug.error('[SecureStorage] setItem error:', error as Error);
       throw error;
@@ -70,7 +79,7 @@ export class SecureStorage implements StorageAdapter {
   async removeItem(key: string): Promise<void> {
     try {
       if (this.isWeb) {
-        localStorage.removeItem(WEB_STORAGE_PREFIX + key);
+        sessionStorage.removeItem(WEB_STORAGE_PREFIX + key);
         return;
       }
       // Use expo-secure-store on native
@@ -87,9 +96,11 @@ export class SecureStorage implements StorageAdapter {
   async containsKey(key: string): Promise<boolean> {
     try {
       if (this.isWeb) {
-        return localStorage.getItem(WEB_STORAGE_PREFIX + key) !== null;
+        return sessionStorage.getItem(WEB_STORAGE_PREFIX + key) !== null;
       }
-      return (await SecureStore.getItemAsync(key)) !== null;
+      return (await SecureStore.getItemAsync(key, {
+        keychainAccessible: SecureStore.AFTER_FIRST_UNLOCK_THIS_DEVICE_ONLY,
+      })) !== null;
     } catch (error) {
       captureSilentFailure(error, {
         feature: 'persistence',

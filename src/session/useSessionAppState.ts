@@ -7,6 +7,13 @@ import { captureSilentFailure } from '../utils/silent-failure';
 
 const debug = createDebugger('session:appstate');
 
+const REAUTH_BACKGROUND_THRESHOLD_MS = 15 * 60 * 1000;
+let _onReauthRequested: (() => void) | null = null;
+
+export function setSessionReauthHandler(handler: () => void): void {
+  _onReauthRequested = handler;
+}
+
 /**
  * MEM-004: Handle app state changes during active sessions.
  * Tracks background/foreground transitions and logs long background durations.
@@ -33,6 +40,11 @@ export function useSessionAppState(): void {
             debug.info(
               `[SessionAppState] App foregrounded after ${bgDuration}ms background`,
             );
+
+            // If backgrounded for > 15 minutes, request re-authentication
+            if (bgDuration > REAUTH_BACKGROUND_THRESHOLD_MS) {
+              _onReauthRequested?.();
+            }
 
             // If backgrounded for > 5 minutes, log a Sentry breadcrumb
             if (bgDuration > 5 * 60 * 1000) {

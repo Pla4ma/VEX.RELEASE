@@ -98,6 +98,10 @@ export const FirstWeekInputSchema = z
       'study_focused',
       'game_like',
       'intense',
+      'student',
+      'worker',
+      'competitive',
+      'creator',
     ]),
     premiumState: z.enum(['unavailable', 'configured', 'active']),
     primaryGoal: z.enum([

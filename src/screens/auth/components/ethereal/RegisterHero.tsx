@@ -18,7 +18,7 @@ export function RegisterHero({
       <View style={{ alignItems: 'center', gap: 6 }}>
         <Text
           color={etherealText.heading}
-          fontSize={30}
+          fontSize={40}
           fontWeight="800"
           style={{ color: etherealText.heading, letterSpacing: -0.4 }}
         >
@@ -26,8 +26,8 @@ export function RegisterHero({
         </Text>
         <Text
           color={etherealText.subtitle}
-          fontSize={14}
-          style={{ color: etherealText.subtitle, textAlign: 'center' }}
+          fontSize={18}
+          style={{ color: etherealText.subtitle, textAlign: 'center', lineHeight: 26 }}
         >
           Two fields, then your first protected session.
         </Text>

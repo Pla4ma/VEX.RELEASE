@@ -7,3 +7,6 @@ export { OnboardingTitle } from './OnboardingTitle';
 export { OnboardingFooter } from './OnboardingFooter';
 export { OnboardingErrorBanner } from './OnboardingErrorBanner';
 export { EtherealSkyBackground, SerifTitle } from '../../../../screens/auth/components/ethereal';
+export { VexMascotGuide } from './VexMascotGuide';
+export type { MascotMood, MascotSize, MascotPlacement } from './VexMascotGuide';
+export { BackgroundScrim } from './BackgroundScrim';

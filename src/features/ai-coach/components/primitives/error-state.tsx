@@ -1,4 +1,5 @@
 import { captureSilentFailure } from '../../../../utils/silent-failure';
+import { sanitizeErrorMessage } from '../../../../utils/error-sanitizer';
 import React, { useState } from 'react';
 import { View, Text, Pressable, ActivityIndicator } from 'react-native';
 import Animated, { Keyframe, FadeIn } from 'react-native-reanimated';
@@ -158,7 +159,7 @@ export function ErrorBoundaryFallback({
     <ErrorState
       title="Something Went Wrong"
       message={
-        error.message || 'An unexpected error occurred in the coach component.'
+        sanitizeErrorMessage(error) || 'An unexpected error occurred in the coach component.'
       }
       errorCode="BOUNDARY_ERROR"
       onRetry={async () => resetError()}

@@ -24,8 +24,9 @@ import {
 import type { EtherealAuthProvider } from './components/ethereal';
 import { LoginHero } from './components/ethereal/LoginHero';
 import { LoginEmailForm } from './components/ethereal/LoginEmailForm';
-import { MascotGuide } from '../onboarding/components/ethereal/MascotGuide';
 import { LoginPrivacyStrip } from './components/ethereal/LoginPrivacyStrip';
+import { VexMascotGuide } from '../onboarding/components/ethereal/VexMascotGuide';
+import { BackgroundScrim } from '../onboarding/components/ethereal/BackgroundScrim';
 
 type Props = NativeStackScreenProps<AuthStackParams, 'Login'>;
 
@@ -89,86 +90,83 @@ export const LoginScreen: React.FC<Props> = ({ navigation, route }) => {
       scroll={false}
     >
       <EtherealSkyBackground />
+      <BackgroundScrim intensity="login" />
 
       <View
         style={{
           flex: 1,
-          alignItems: 'center',
-          justifyContent: 'flex-end',
-          paddingBottom: insets.bottom + 18,
-          paddingTop: insets.top + 8,
+          paddingTop: insets.top + 16,
+          paddingBottom: insets.bottom + 12,
           paddingHorizontal: theme.spacing[5],
         }}
       >
-        <View
-          style={{
-            flex: 1,
-            justifyContent: 'flex-end',
-            paddingBottom: showEmailForm ? 6 : 10,
-          }}
-        >
-          <LoginHero startDelayMs={120} />
-        </View>
+        <View style={{ flex: 1, justifyContent: 'space-between' }}>
+          <View style={{ alignItems: 'center', marginTop: 16 }}>
+            <LoginHero startDelayMs={120} />
+          </View>
 
-        <View style={{ width: '100%', maxWidth: 296, alignSelf: 'center', gap: 16 }}>
-          <EtherealAuthButtons
-            disabled={isLoading}
-            onProviderPress={onProviderPress}
-            startDelayMs={900}
-          />
-
-          {!showEmailForm ? (
-            <MascotGuide
-              body="Sign in, then I will walk you through one clean focus setup."
-              compact
-              title="I will guide the first block."
+          <View style={{ width: '100%', maxWidth: 320, alignSelf: 'center', gap: 16 }}>
+            <EtherealAuthButtons
+              disabled={isLoading}
+              onProviderPress={onProviderPress}
+              startDelayMs={900}
             />
-          ) : null}
 
-          {showEmailForm ? (
-            <LoginEmailForm
-              email={email}
-              emailError={errors.email}
-              isLoading={isLoading}
-              onChangeEmail={hem}
-              onChangePassword={hpm}
-              onForgotPassword={onForgotPassword}
-              onSubmit={handleLogin}
-              password={password}
-              passwordError={errors.password}
-            />
-          ) : null}
+            {!showEmailForm ? (
+              <VexMascotGuide
+                message="I'll guide your first block."
+                mood="wave"
+              placement="inline"
+              size="loginCompact"
+              submessage="Sign in, then I'll walk you through setup."
+              />
+            ) : null}
 
-          {showEmailForm ? (
-            <View style={{ alignItems: 'center' }}>
-              <Pressable
-                accessibilityHint="Creates a new VEX account"
-                accessibilityLabel="Create a VEX account"
-                accessibilityRole="link"
-                hitSlop={{ top: 8, bottom: 8, left: 12, right: 12 }}
-                onPress={onCreateAccount}
-                style={getMinTouchTargetStyle()}
-              >
-                <Text
-                  color={etherealText.heading}
-                  fontSize={14}
-                  style={{ color: etherealText.subtitle }}
-                  textAlign="center"
+            {showEmailForm ? (
+              <LoginEmailForm
+                email={email}
+                emailError={errors.email}
+                isLoading={isLoading}
+                onChangeEmail={hem}
+                onChangePassword={hpm}
+                onForgotPassword={onForgotPassword}
+                onSubmit={handleLogin}
+                password={password}
+                passwordError={errors.password}
+              />
+            ) : null}
+
+            {showEmailForm ? (
+              <View style={{ alignItems: 'center' }}>
+                <Pressable
+                  accessibilityHint="Creates a new VEX account"
+                  accessibilityLabel="Create a VEX account"
+                  accessibilityRole="link"
+                  hitSlop={{ top: 8, bottom: 8, left: 12, right: 12 }}
+                  onPress={onCreateAccount}
+                  style={getMinTouchTargetStyle()}
                 >
-                  New here?{' '}
                   <Text
+                    color={etherealText.heading}
                     fontSize={14}
-                    fontWeight="700"
-                    style={{ color: etherealText.heading, textDecorationLine: 'underline' }}
+                    style={{ color: etherealText.subtitle }}
+                    textAlign="center"
                   >
-                    Create your focus system
+                    New here?{' '}
+                    <Text
+                      fontSize={14}
+                      fontWeight="700"
+                      style={{ color: etherealText.heading, textDecorationLine: 'underline' }}
+                    >
+                      Create your focus system
+                    </Text>
                   </Text>
-                </Text>
-              </Pressable>
-            </View>
-          ) : null}
+                </Pressable>
+              </View>
+            ) : null}
 
-          {!showEmailForm ? <LoginPrivacyStrip /> : null}
+            {!showEmailForm ? <LoginPrivacyStrip /> : null}
+          </View>
         </View>
       </View>
     </AppScreen>

@@ -1,7 +1,7 @@
 export const ONBOARDING_PROMISE_COPY = {
   primary: 'VEX changes based on how you work.',
   secondary:
-    'Answer a few questions and VEX will open the app around the system your brain needs.',
+    'Answer a few questions and VEX will open around how you work.',
 } as const;
 
 export const ONBOARDING_PROGRESS_PHASES = [
@@ -15,7 +15,7 @@ export const DEFAULT_PERSONA_ID = 'mentor';
 
 export const STEP_TITLES = [
   'Pick your first win',
-  'Choose the motivation style',
+  'How do you want to start?',
   'Confirm your focus mode',
 ] as const;
 
@@ -47,32 +47,37 @@ export const STARTER_PRESETS = [
 
 export type StarterPreset = (typeof STARTER_PRESETS)[number];
 
-export const MOTIVATION_STYLE_OPTIONS = [
+export type OnboardingGoalOption = {
+  id: string;
+  label: string;
+  description: string;
+};
+
+export type MotivationStyleOption = {
+  id: string;
+  title: string;
+  description: string;
+};
+
+export const MOTIVATION_STYLE_OPTIONS: MotivationStyleOption[] = [
   {
     id: 'calm',
-    title: 'Calm',
-    description: 'Quiet guidance, softer reminders, steady recovery language.',
+    title: 'Clean',
+    description: 'Quiet, minimal, one thing.',
   },
   {
-    id: 'friendly',
-    title: 'Friendly',
-    description:
-      'Warm nudges, companion continuity, low-pressure encouragement.',
+    id: 'worker',
+    title: 'Project',
+    description: 'Keep the next move close.',
   },
   {
-    id: 'game_like',
-    title: 'Structured',
-    description: 'Milestones, visible progress, and clear next actions.',
+    id: 'study_focused',
+    title: 'Study',
+    description: 'Structure material and review.',
   },
   {
     id: 'intense',
-    title: 'Intense',
-    description: 'Direct coaching, tighter prompts, less emotional padding.',
+    title: 'Run',
+    description: 'Fast, energized momentum.',
   },
-  {
-    id: 'student',
-    title: 'Study-focused',
-    description:
-      'Recall, deadlines, and review timing move forward when useful.',
-  },
-] as const;
+];

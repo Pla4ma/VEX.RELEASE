@@ -175,7 +175,7 @@ export function useAnalytics(): UseAnalyticsReturn {
     (error: Error, context?: Record<string, unknown>) => {
       capture('exception_captured', {
         error_message: error.message,
-        error_stack: error.stack,
+        error_stack: __DEV__ ? (error.stack ?? undefined) : undefined,
         ...context,
       });
     },

@@ -16,6 +16,7 @@ import { validateAIResponse } from './ai-client-contracts';
 
 export const FUNCTION_NAME = 'ai-coach';
 export const CACHE_WINDOW_MS = 300000;
+export const EDGE_FUNCTION_TIMEOUT_MS = 15000;
 
 export const REQUEST_TYPE_TO_CATEGORY: Record<string, AIRequestCategory> = {
   GENERATE_COACH_MESSAGE: 'coach_message',
@@ -121,10 +122,14 @@ export async function invokeAIWithFallback(
   }
 
   try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), EDGE_FUNCTION_TIMEOUT_MS);
+
     const { data, error } = await getSupabaseClient().functions.invoke(
       FUNCTION_NAME,
       { body },
     );
+    clearTimeout(timeoutId);
     if (error) {throw new Error(error.message);}
 
     const response = validateAIResponse(data);
