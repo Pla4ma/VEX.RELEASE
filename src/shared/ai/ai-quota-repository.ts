@@ -1,5 +1,7 @@
 import { getDefaultStorageAdapter } from '../../persistence/MMKVStorageAdapter';
 import { getSupabaseClient } from '../../config/supabase';
+import * as Sentry from '@sentry/react-native';
+import { captureSilentFailure } from '../../utils/silent-failure';
 import type { AIRequestCategory, QuotaUsageRecord } from './ai-quota-types';
 import { QuotaUsageRecordSchema } from './ai-quota-types';
 import { HOURLY_WINDOW_MS, DAILY_WINDOW_MS } from './ai-quota-strategies';
@@ -93,9 +95,15 @@ export async function syncQuotaToSupabase(
         created_at: new Date(record.timestamp).toISOString(),
       });
     if (error) {
-      // Non-blocking — client-side MMKV is the source of truth
+      captureSilentFailure(new Error(error.message), {
+        feature: 'ai-quota',
+        operation: 'syncQuotaToSupabase',
+        type: 'network',
+      });
     }
   } catch (error: unknown) {
-    // Non-blocking
+    Sentry.captureException(error instanceof Error ? error : new Error(String(error)), {
+      tags: { feature: 'ai-quota', operation: 'syncQuotaToSupabase' },
+    });
   }
 }

@@ -2,6 +2,7 @@
  * Realtime broadcast logic
  * Extracted from realtimeSubscriptions to keep it under 200 lines
  */
+import { z } from 'zod';
 import { getSupabaseClient } from '../config/supabase';
 import { createDebugger } from '../utils/debug';
 import {
@@ -10,12 +11,19 @@ import {
   type BroadcastMessage,
 } from './realtimeShared';
 
-/** Shape of a broadcast payload from Supabase Presence/Broadcast. */
-interface BroadcastPayload {
-  senderId?: string;
-  timestamp?: number;
-  [key: string]: unknown;
-}
+const BroadcastMessageTypeSchema = z.enum([
+  'activity',
+  'notification',
+  'sync',
+  'typing',
+]);
+
+const BroadcastPayloadSchema = z
+  .object({
+    senderId: z.string().optional(),
+    timestamp: z.number().optional(),
+  })
+  .passthrough();
 
 const pendingTxTimeoutIds = new Set<ReturnType<typeof setTimeout>>();
 const _debug = createDebugger('realtime');
@@ -29,16 +37,15 @@ function parseBroadcastPayload(
   event: string,
   rawPayload: unknown,
 ): BroadcastMessage {
-  const validTypes = ['activity', 'notification', 'sync', 'typing'] as const;
-  const type = validTypes.includes(event as typeof validTypes[number])
-    ? (event as BroadcastMessage['type'])
-    : 'activity';
-  const payloadObj = rawPayload as BroadcastPayload | null;
+  const typeResult = BroadcastMessageTypeSchema.safeParse(event);
+  const type = typeResult.success ? typeResult.data : 'activity';
+
+  const parsed = BroadcastPayloadSchema.safeParse(rawPayload);
   return {
     type,
     payload: rawPayload,
-    senderId: payloadObj?.senderId ?? '',
-    timestamp: payloadObj?.timestamp ?? Date.now(),
+    senderId: parsed.success ? (parsed.data.senderId ?? '') : '',
+    timestamp: parsed.success ? (parsed.data.timestamp ?? Date.now()) : Date.now(),
   };
 }
 
@@ -58,11 +65,15 @@ export async function broadcastActivity(
     channel = newChannel;
   }
   if (channel) {
+    const broadcastBody: Record<string, unknown> =
+      typeof payload === 'object' && payload !== null
+        ? { ...(payload as Record<string, unknown>) }
+        : {};
     await channel.send({
       type: 'broadcast',
       event: type,
       payload: {
-        ...(payload as BroadcastPayload),
+        ...broadcastBody,
         senderId: getCurrentUserId(),
         timestamp: Date.now(),
       },
@@ -89,7 +100,12 @@ export async function subscribeToActivity(
   const channel = client
     .channel(fullChannelName)
     .on('broadcast', { event: '*' }, (payload) => {
-      callback(parseBroadcastPayload(payload.event as string, payload.payload));
+      callback(
+        parseBroadcastPayload(
+          typeof payload.event === 'string' ? payload.event : String(payload.event),
+          payload.payload,
+        ),
+      );
     });
   await channel.subscribe();
   activeChannels.set(fullChannelName, channel);

@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { useActiveCoachRecommendations, useCreateRecommendation, useUpdateRecommendationStatus, type SessionRecommendation } from '../../../features/ai-coach';
+import { useActiveCoachRecommendations, useCreateRecommendation, useUpdateRecommendationStatus } from '../../../features/ai-coach';
 import { useActiveStudyPlan } from '../../../features/content-study';
 import { useLearningExecutionLayer } from '../../../features/learning-execution';
 import { useActiveBoss } from '../../../features/boss/hooks';
@@ -15,6 +15,7 @@ import { useSessionHistory } from '../../../session/hooks/useSession';
 import { useAuthStore } from '../../../store';
 import { useSessionUIStore } from '../../../store/session-state';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { pickPrimaryRecommendation, mapActiveStudyPlanInput } from './useHomeScreenController.helpers';
 import { buildHomeFeatureRuntime } from './home-feature-runtime';
 import { buildDisplayedReturnReason, getFocusedMinutesForToday, getNextUnlockFeature } from './home-controller-helpers';
 import { useHomeAnalyticsEffects } from './useHomeAnalyticsEffects';
@@ -93,13 +94,8 @@ export function useHomeScreenController() {
   const recommendationsQuery = useActiveCoachRecommendations(userId, {
     enabled: runtime.canQueryCoach && Boolean(userId) && !isCoreLoading,
   });
-  const primaryRecommendation = useMemo<SessionRecommendation | null>(
-    () =>
-      (recommendationsQuery.data ?? [])
-        .filter(
-          (item) => item.status === 'ACTIVE' && item.expiresAt > Date.now(),
-        )
-        .sort((a, b) => (b.confidence ?? 0) - (a.confidence ?? 0))[0] ?? null,
+  const primaryRecommendation = useMemo(
+    () => pickPrimaryRecommendation(recommendationsQuery.data),
     [recommendationsQuery.data],
   );
   const isLoading = isCoreLoading || recommendationsQuery.isPending;
@@ -117,13 +113,12 @@ export function useHomeScreenController() {
     totalCompletedSessions: disclosure.inputs.totalCompletedSessions,
     userId,
   });
+  const activeStudyPlanInput = useMemo(
+    () => mapActiveStudyPlanInput(activeStudyPlanQuery.data),
+    [activeStudyPlanQuery.data],
+  );
   const { continueStudyPlan, openContentStudy, openNextAction, openProgress, openSetup, openSocial } = useHomeNavigationActions({
-    activeStudyPlan: activeStudyPlanQuery.data
-      ? {
-          contentId: activeStudyPlanQuery.data.contentId,
-          generationId: activeStudyPlanQuery.data.generationId,
-        }
-      : null,
+    activeStudyPlan: activeStudyPlanInput,
     analytics,
     canNavigateContentStudy: isFeatureAvailableForNavigation(
       getFeatureAvailability(disclosure.features.content_study),

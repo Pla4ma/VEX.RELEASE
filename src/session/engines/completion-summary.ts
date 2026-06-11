@@ -33,7 +33,12 @@ export function createSessionSummary(
   tasksCompleted?: number,
 ): SessionSummary {
   const plannedDuration = session.config.duration * 1000;
-  const actualDuration = session.endedAt! - session.startedAt!;
+  if (session.endedAt == null || session.startedAt == null) {
+    throw new Error(
+      `Cannot create session summary: session ${session.id} is missing start/end timestamps`,
+    );
+  }
+  const actualDuration = session.endedAt - session.startedAt;
   const focusPurityScore = scoringEngine.calculateFocusPurityScore(session);
   const xpEarned = Math.floor(finalScore * 0.1);
   const coinsEarned = Math.floor(
@@ -151,7 +156,12 @@ export function computeCompletionStats(
   session: SessionState,
   focusMetrics: FocusQualityMetrics,
 ): SessionStatsResult {
-  const totalTime = session.endedAt! - session.startedAt!;
+  if (session.endedAt == null || session.startedAt == null) {
+    throw new Error(
+      `Cannot compute completion stats: session ${session.id} is missing start/end timestamps`,
+    );
+  }
+  const totalTime = session.endedAt - session.startedAt;
   const efficiency =
     totalTime > 0 ? (session.effectiveTime / totalTime) * 100 : 0;
   let focusRating: 'EXCELLENT' | 'GOOD' | 'AVERAGE' | 'NEEDS_IMPROVEMENT';

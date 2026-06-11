@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { supabase } from '../../supabase/client';
+import { supabase } from '../../config/supabase';
 import type { SyncState, SyncConflict, SettingCategory } from './types';
 
 const TABLE_SYNC_STATE = 'settings_sync_state';

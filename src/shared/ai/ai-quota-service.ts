@@ -83,8 +83,8 @@ export async function checkQuota(
     };
   }
 
-  const hourlyUsed = (await getHourlyUsage(userId, category)).count;
-  const dailyUsed = (await getDailyUsage(userId, category)).count;
+  const hourlyUsed = getHourlyUsage(userId, category).count;
+  const dailyUsed = getDailyUsage(userId, category).count;
 
   const hourlyRemaining = Math.max(0, (limits.hourly ?? Infinity) - hourlyUsed);
   const dailyRemaining = Math.max(0, (limits.daily ?? Infinity) - dailyUsed);
@@ -110,18 +110,19 @@ export async function checkQuota(
 export async function recordAIUsage(
   userId: string,
   category: AIRequestCategory,
+  tokenCount: number,
 ): Promise<void> {
   try {
-    await recordUsage({
+    recordUsage({
       userId,
       category,
-      tokenCount: 0,
+      tokenCount,
       timestamp: Date.now(),
     });
     await syncQuotaToSupabase(userId, category, {
       userId,
       category,
-      tokenCount: 0,
+      tokenCount,
       timestamp: Date.now(),
     });
   } catch (error) {

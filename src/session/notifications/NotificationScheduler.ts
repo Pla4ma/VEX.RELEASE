@@ -1,7 +1,7 @@
 import type { NotificationPayload } from './session-notification-types';
 
 export class NotificationScheduler {
-  private scheduledNotifications: Map<string, number> = new Map();
+  private scheduledNotifications: Map<string, ReturnType<typeof setTimeout>> = new Map();
 
   schedule(
     id: string,
@@ -14,7 +14,7 @@ export class NotificationScheduler {
       onDispatch(payload);
       return;
     }
-    const timeoutId = window.setTimeout(() => {
+    const timeoutId = setTimeout(() => {
       onDispatch(payload);
       this.scheduledNotifications.delete(id);
     }, delay);

@@ -1,5 +1,6 @@
 import type { ViewStyle } from 'react-native';
 import type { CardVariant, CardSize, CardState } from './Card';
+import { vexLightGlass } from '../../theme/tokens/vex-light-glass';
 
 export const variantStyles: Record<CardVariant, ViewStyle> = {
   default: {
@@ -36,7 +37,7 @@ export const variantStyles: Record<CardVariant, ViewStyle> = {
     backgroundColor: 'rgba(255, 255, 255, 0.66)',
     borderColor: 'rgba(255, 255, 255, 0.78)',
     borderWidth: 1,
-    shadowColor: '#0C765F',
+    shadowColor: vexLightGlass.mint[700],
     shadowOpacity: 0.85,
     shadowRadius: 36,
     shadowOffset: { width: 0, height: 20 },
@@ -44,9 +45,9 @@ export const variantStyles: Record<CardVariant, ViewStyle> = {
   },
   lightSelected: {
     backgroundColor: 'rgba(255, 255, 255, 0.78)',
-    borderColor: '#42CFAE',
+    borderColor: vexLightGlass.mint[400],
     borderWidth: 1.4,
-    shadowColor: '#18B894',
+    shadowColor: vexLightGlass.mint[500],
     shadowOpacity: 0.85,
     shadowRadius: 26,
     shadowOffset: { width: 0, height: 14 },
@@ -56,7 +57,7 @@ export const variantStyles: Record<CardVariant, ViewStyle> = {
     backgroundColor: 'rgba(255, 255, 255, 0.62)',
     borderColor: 'rgba(66, 207, 174, 0.45)',
     borderWidth: 1,
-    shadowColor: '#18B894',
+    shadowColor: vexLightGlass.mint[500],
     shadowOpacity: 0.85,
     shadowRadius: 22,
     shadowOffset: { width: 0, height: 12 },
@@ -84,7 +85,7 @@ export const variantStyles: Record<CardVariant, ViewStyle> = {
     backgroundColor: 'rgba(255, 255, 255, 0.78)',
     borderColor: 'rgba(121, 223, 201, 0.7)',
     borderWidth: 1.2,
-    shadowColor: '#109779',
+    shadowColor: vexLightGlass.mint[600],
     shadowOpacity: 0.85,
     shadowRadius: 28,
     shadowOffset: { width: 0, height: 16 },
@@ -102,6 +103,6 @@ export const stateStyles: Record<CardState, ViewStyle> = {
   default: {},
   loading: { opacity: 0.72 },
   disabled: { opacity: 0.62 },
-  error: { borderColor: '#E05E5E', borderWidth: 1 },
-  success: { borderColor: '#18B894', borderWidth: 1 },
+  error: { borderColor: vexLightGlass.semantic.danger, borderWidth: 1 },
+  success: { borderColor: vexLightGlass.mint[500], borderWidth: 1 },
 };

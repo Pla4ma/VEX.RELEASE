@@ -121,10 +121,10 @@ export async function consolidateBehaviorSignals(): Promise<number> {
     .lt('timestamp', cutoff)
     .order('timestamp', { ascending: false });
 
-  if (error || !oldSignals?.data) return 0;
+  if (error || !oldSignals || oldSignals.length === 0) return 0;
 
-  const grouped = new Map<string, typeof oldSignals.data>();
-  for (const signal of oldSignals.data) {
+  const grouped = new Map<string, typeof oldSignals>();
+  for (const signal of oldSignals) {
     const key = `${signal.user_id}-${signal.signal_type}`;
     if (!grouped.has(key)) {
       grouped.set(key, []);

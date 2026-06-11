@@ -166,15 +166,6 @@ export class SessionNotifications {
       priority: payload.priority || 'normal',
       data: payload.data,
     });
-    if ('Notification' in window && Notification.permission === 'granted') {
-      void new Notification(payload.title, {
-        body: payload.body,
-        icon: '/icon.png',
-        badge: '/badge.png',
-        tag: (payload.data?.sessionId as string) || 'session',
-        requireInteraction: payload.priority === 'high',
-      });
-    }
   }
 }
 

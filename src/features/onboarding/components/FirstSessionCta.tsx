@@ -1,9 +1,12 @@
 import React from 'react';
 import { Pressable } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
+
 import { Box } from '../../../components/primitives/Box';
+import { Button } from '../../../components/primitives/Button';
 import { Text } from '../../../components/primitives/Text';
 import type { FocusDuration } from '../schemas';
+import { DURATION_OPTIONS } from '../service';
 
 interface FirstSessionCtaProps {
   selectedDuration: FocusDuration;
@@ -18,40 +21,39 @@ export function FirstSessionCta({
   onStartSession,
   onBack,
 }: FirstSessionCtaProps): JSX.Element {
+  const durationOption = DURATION_OPTIONS.find(
+    (d) => d.value === selectedDuration,
+  );
+
   return (
-    <Animated.View entering={FadeInUp.duration(400).delay(800)}>
-      <Box gap="sm" mt="md">
-        <Pressable
+    <Animated.View
+      entering={FadeInUp.duration(400).delay(800)}
+      style={{ marginTop: 'auto' }}
+    >
+      <Box gap="sm">
+        <Button
+          variant="primary"
+          size="lg"
           onPress={onStartSession}
           disabled={isAdvancing}
-          accessibilityLabel={`Start ${selectedDuration}-minute focus session`}
+          isLoading={isAdvancing}
+          accessibilityLabel="Start session now"
           accessibilityRole="button"
-          accessibilityHint="Begins your first focus session"
+          accessibilityHint="Double tap to start your session"
         >
-          {({ pressed }) => (
-            <Box
-              py="md"
-              px="lg"
-              borderRadius="lg"
-              bg="primary.500"
-              alignItems="center"
-              opacity={pressed ? 0.8 : 1}
-            >
-              <Text variant="h3" color="text.inverse" fontWeight="700">
-                {isAdvancing ? 'Starting...' : `Start ${selectedDuration}-min session`}
-              </Text>
-            </Box>
-          )}
-        </Pressable>
+          {isAdvancing
+            ? 'Starting session...'
+            : `Start ${durationOption?.label ?? ''} Focus`}
+        </Button>
         <Pressable
           onPress={onBack}
           accessibilityLabel="Go back"
           accessibilityRole="button"
-          accessibilityHint="Returns to previous step"
+          accessibilityHint="Double tap to go back"
         >
-          <Box py="sm" alignItems="center">
-            <Text variant="body" color="text.secondary">
-              Back
+          <Box alignItems="center" py="md">
+            <Text variant="bodySmall" color="text.tertiary">
+              Change selection ›
             </Text>
           </Box>
         </Pressable>
@@ -59,3 +61,5 @@ export function FirstSessionCta({
     </Animated.View>
   );
 }
+
+export default FirstSessionCta;

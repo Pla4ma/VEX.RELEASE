@@ -4,6 +4,7 @@ import Animated from 'react-native-reanimated';
 import { useTheme } from '../../../theme';
 import { sanitizeErrorMessage } from '../../../utils/error-sanitizer';
 import { useFadeStyle, useShakeStyle } from './animations';
+import { sanitizeErrorMessage } from '../../../utils/error-sanitizer';
 import { styles } from './styles';
 import type { ErrorStateProps } from './types';
 

@@ -5,8 +5,8 @@
 6|import { buildCorsHeaders, jsonWithCors } from '../_shared/cors.ts';
 7|
 8|configure({
-9|  apiKey: Deno.env.get('TRIGGER_SECRET_KEY')!,
-10|  project: Deno.env.get('TRIGGER_PROJECT_REF')!,
+9|  apiKey: Deno.env.get('TRIGGER_SECRET_KEY') ?? '',
+10|  project: Deno.env.get('TRIGGER_PROJECT_REF') ?? '',
 11|  apiUrl: Deno.env.get('TRIGGER_API_URL') || 'https://api.trigger.dev',
 12|  logLevel: 'info',
 13|});

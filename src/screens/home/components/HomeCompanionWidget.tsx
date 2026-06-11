@@ -4,6 +4,7 @@ import { View, TouchableOpacity } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
 import { GlassCard } from '../../../components/glass/GlassCard';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
+import { lightColors } from '../../../theme/tokens/colors';
 import type { HomeCompanionStatus } from '../hooks/useHomeCompanion';
 import { CompanionCard, SkeletonCard } from './HomeCompanionWidget.cards';
 
@@ -49,7 +50,7 @@ export function HomeCompanionWidget({
           <View style={{ alignItems: 'center' }}>
             <Text
               style={{
-                color: '#B91C1C',
+                color: lightColors.semantic.danger,
                 fontSize: 14,
               }}
             >

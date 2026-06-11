@@ -20,7 +20,7 @@ export function initTriggerDev() {
     // Project reference
     project: process.env.TRIGGER_PROJECT_REF!,
     
-    // Log level
-    logLevel: (process.env.TRIGGER_LOG_LEVEL as any) || 'info',
+    // Log level — valid Trigger.dev log levels
+    logLevel: (process.env.TRIGGER_LOG_LEVEL ?? 'info') as 'debug' | 'info' | 'log' | 'warn' | 'error',
   });
 }

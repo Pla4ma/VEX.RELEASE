@@ -19,7 +19,7 @@ const DEFAULT_TIMER_CONFIG: TimerConfig = {
 };
 export class SessionTimerService {
   private config: TimerConfig;
-  private intervals: Map<string, number> = new Map();
+  private intervals: Map<string, ReturnType<typeof setInterval>> = new Map();
   private lastTick: Map<string, number> = new Map();
   private tickHandlers: Map<string, Set<TickHandler>> = new Map();
   constructor(config: Partial<TimerConfig> = {}) {
@@ -33,7 +33,7 @@ export class SessionTimerService {
     debug.info('Starting timer for session %s', sessionId);
     this.lastTick.set(sessionId, Date.now());
     this.tickHandlers.set(sessionId, new Set());
-    const intervalId = window.setInterval(() => {
+    const intervalId = setInterval(() => {
       this.tick(sessionId);
     }, this.config.tickIntervalMs);
     this.intervals.set(sessionId, intervalId);
@@ -41,7 +41,7 @@ export class SessionTimerService {
   }
   stopTimer(sessionId: string): boolean {
     const intervalId = this.intervals.get(sessionId);
-    if (!intervalId) {
+    if (intervalId === undefined) {
       debug.warn('No timer running for session %s', sessionId);
       return false;
     }

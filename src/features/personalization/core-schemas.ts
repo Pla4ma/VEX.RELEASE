@@ -19,7 +19,7 @@ const CanonicalMotivationStyleSchema = z.enum([
 ]);
 
 export const MotivationStyleSchema = z.preprocess(
-  (value) => (value === 'student' ? 'study_focused' : value),
+  (value) => (value === 'student' ? 'study_focused' : value === 'worker' ? 'coach_led' : value),
   CanonicalMotivationStyleSchema,
 );
 
