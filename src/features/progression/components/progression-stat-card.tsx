@@ -5,12 +5,13 @@ import { GlassCard } from '../../../components/glass/GlassCard';
 import { LiquidGlassSphere } from '../../../components/glass/LiquidGlassSphere';
 import { FloatingDroplets } from '../../../components/glass/FloatingDroplets';
 import { Icon } from '../../../icons';
+import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 
 type LiquidSphereColor = 'mint' | 'cyan' | 'teal' | 'coral' | 'amber' | 'pearl';
 
 function mapOrbToSphereColor(orb: string): LiquidSphereColor {
-  if (orb === 'fire') return 'coral';
-  if (orb === 'lavender') return 'pearl';
+  if (orb === 'fire') {return 'coral';}
+  if (orb === 'lavender') {return 'pearl';}
   if (orb === 'mint' || orb === 'cyan' || orb === 'teal' || orb === 'coral' || orb === 'amber' || orb === 'pearl') {
     return orb as LiquidSphereColor;
   }
@@ -59,14 +60,14 @@ export const ProgressionStatCard: React.FC<ProgressionStatCardProps> = ({
         <LiquidGlassSphere
           color={mapOrbToSphereColor(orb)}
           icon={
-            <Icon color="#0C765F" name="sparkles" size="sm" strokeWidth="thin" variant="outline" />
+            <Icon color={vexLightGlass.mint[700]} name="sparkles" size="sm" strokeWidth="thin" variant="outline" />
           }
           intensity={0.88}
           size={52}
         />
         <Text
           style={{
-            color: '#0A1F1A',
+            color: vexLightGlass.text.primary,
             fontSize: 16,
             fontWeight: '900',
             letterSpacing: -0.3,
@@ -76,7 +77,7 @@ export const ProgressionStatCard: React.FC<ProgressionStatCardProps> = ({
         </Text>
         <Text
           style={{
-            color: '#3D5A52',
+            color: vexLightGlass.text.secondary,
             fontSize: 11,
             fontWeight: '500',
           }}

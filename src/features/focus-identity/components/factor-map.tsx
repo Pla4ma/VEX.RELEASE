@@ -11,8 +11,8 @@ import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 type LiquidSphereColor = 'mint' | 'cyan' | 'teal' | 'coral' | 'amber' | 'pearl';
 
 function mapOrbToSphereColor(orb: string): LiquidSphereColor {
-  if (orb === 'fire') return 'coral';
-  if (orb === 'lavender') return 'pearl';
+  if (orb === 'fire') {return 'coral';}
+  if (orb === 'lavender') {return 'pearl';}
   if (orb === 'mint' || orb === 'cyan' || orb === 'teal' || orb === 'coral' || orb === 'amber' || orb === 'pearl') {
     return orb as LiquidSphereColor;
   }

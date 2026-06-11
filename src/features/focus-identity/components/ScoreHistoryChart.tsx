@@ -64,7 +64,7 @@ export function ScoreHistoryChart({
         </Text>
         <Text
           style={{
-            color: '#B91C1C',
+            color: vexLightGlass.semantic.danger,
             fontSize: 12,
             fontWeight: '600',
           }}

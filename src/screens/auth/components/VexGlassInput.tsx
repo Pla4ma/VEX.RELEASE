@@ -118,7 +118,7 @@ export function VexGlassInput({
               onFocus={() => setIsFocused(true)}
               onSubmitEditing={onSubmitEditing}
               placeholder={placeholder}
-              placeholderTextColor={'rgba(143,160,156,0.85)'} 
+              placeholderTextColor={'rgba(143,160,156,0.85)'}
               returnKeyType={returnKeyType ?? (secureTextEntry ? 'done' : 'next')}
               secureTextEntry={secureTextEntry}
               style={{

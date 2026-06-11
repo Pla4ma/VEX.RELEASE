@@ -111,7 +111,7 @@ export function StreakWidget({
           >
             <Text
               style={{
-                color: isUrgent ? '#A04A12' : vexLightGlass.text.secondary,
+                color: isUrgent ? vexLightGlass.semantic.fire : vexLightGlass.text.secondary,
                 fontSize: 12,
                 fontWeight: '600',
               }}

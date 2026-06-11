@@ -7,6 +7,7 @@ import { LiquidProgressBar } from '../../../components/glass/LiquidProgressBar';
 import { FloatingDroplets } from '../../../components/glass/FloatingDroplets';
 import { WaterBubble } from '../../../components/glass/WaterBubble';
 import { LiquidGlassSphere } from '../../../components/glass/LiquidGlassSphere';
+import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import { ProgressionStatCard } from './progression-stat-card';
 
 export interface ProgressionDashboardProps {
@@ -74,7 +75,7 @@ export const ProgressionDashboard: React.FC<ProgressionDashboardProps> = ({
         <View style={{ gap: 3 }}>
           <Text
             style={{
-              color: '#0A9B8A',
+              color: vexLightGlass.mint[500],
               fontSize: 11,
               fontWeight: '700',
               letterSpacing: 1.0,
@@ -85,7 +86,7 @@ export const ProgressionDashboard: React.FC<ProgressionDashboardProps> = ({
           </Text>
           <Text
             style={{
-              color: '#0A1F1A',
+              color: vexLightGlass.text.primary,
               fontSize: 26,
               fontWeight: '800',
               letterSpacing: -1.0,
@@ -96,7 +97,7 @@ export const ProgressionDashboard: React.FC<ProgressionDashboardProps> = ({
           </Text>
           <Text
             style={{
-              color: '#3D5A52',
+              color: vexLightGlass.text.secondary,
               fontSize: 13,
               fontWeight: '400',
             }}

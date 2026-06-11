@@ -6,6 +6,7 @@ import { GlassIconOrb } from '../../../components/glass/GlassIconOrb';
 import { LiquidButton } from '../../../components/glass/LiquidButton';
 import { buttonTap } from '../../../utils/haptics';
 import type { CoachPresence } from '../schemas';
+import { lightColors } from '../../../theme/tokens/primary-palette';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 
 interface CoachPresenceCardProps {
@@ -111,11 +112,11 @@ function getReactionColor(
     case 'celebrating':
       return vexLightGlass.semantic.success;
     case 'focused':
-      return '#54AEEA';
+      return vexLightGlass.semantic.info;
     case 'recovering':
       return vexLightGlass.semantic.warning;
     case 'ready':
-      return '#8B5CF6';
+      return lightColors.semantic.brandViolet;
     default:
       return vexLightGlass.text.disabled;
   }

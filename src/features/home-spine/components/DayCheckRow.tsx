@@ -42,7 +42,7 @@ export function DayCheckRow({ currentDays }: DayCheckRowProps): JSX.Element {
                 borderWidth: 1.2,
                 height: 24,
                 justifyContent: 'center',
-                shadowColor: active ? '#5FE6C5' : 'transparent',
+                shadowColor: active ? vexLightGlass.mint[300] : 'transparent',
                 shadowOffset: { width: 0, height: 2 },
                 shadowOpacity: active ? 0.50 : 0,
                 shadowRadius: 6,
