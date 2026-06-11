@@ -82,7 +82,7 @@ export function SessionLayers({
       {ENABLE_SESSION_MODE_OVERLAYS && displayPolicy.showModeOverlay ? (
         <ActiveSessionModeOverlays
           allowStudyQuizBreak={false}
-          chainCount={0}
+          chainCount={activeSession?.config.sprintChainCount ?? 0}
           completionPercentage={sessionQuery.completionPercentage}
           currentMode={currentMode}
           displayPolicy={displayPolicy}
@@ -91,7 +91,7 @@ export function SessionLayers({
           onSkipQuiz={() => {}}
           quizBreakKey={null}
           remainingSeconds={sessionQuery.remainingSeconds}
-          studyPlanId={undefined}
+          studyPlanId={activeSession?.config.studyPlanId}
         />
       ) : null}
 

@@ -118,7 +118,7 @@ export function FocusScoreCardContent({
                 padding: 10,
               }}
             >
-              <Text style={{ color: '#8A4F08', fontSize: 12, fontWeight: '700' }}>
+              <Text style={{ color: vexLightGlass.semantic.warning, fontSize: 12, fontWeight: '700' }}>
                 Recovery Mode: +50% XP bonus active
               </Text>
             </View>

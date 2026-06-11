@@ -1,5 +1,6 @@
 import type { InterventionType } from './intervention-types';
 import type { ColorPalette } from '../../../theme/colorTypes';
+import { lightColors } from '../../../theme/tokens/primary-palette';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 
 interface BannerColors {
@@ -8,15 +9,17 @@ interface BannerColors {
   accent: string;
 }
 
+const BRAND_VIOLET = lightColors.semantic.brandViolet;
+
 const SEVERITY_COLOR_MAP: Record<InterventionType, string> = {
   BURNOUT: vexLightGlass.semantic.warning,
-  PLATEAU: '#54AEEA',
+  PLATEAU: vexLightGlass.semantic.info,
   STREAK_RISK: vexLightGlass.semantic.danger,
   BOSS_FINISH: vexLightGlass.semantic.success,
   BOSS_OPPORTUNITY: vexLightGlass.semantic.success,
   STUDY_BEHIND: vexLightGlass.semantic.warning,
-  MOMENTUM_BUILDING: '#8B5CF6',
-  COMEBACK_READY: '#8B5CF6',
+  MOMENTUM_BUILDING: BRAND_VIOLET,
+  COMEBACK_READY: BRAND_VIOLET,
   STUDY_PLAN_COMPLETE: vexLightGlass.semantic.success,
 };
 

@@ -84,7 +84,7 @@ export const InteractiveCard: React.FC<InteractiveCardProps> = ({
   }));
 
   const handlePress = useCallback(async () => {
-    if (isDisabled || !onPress) return;
+    if (isDisabled || !onPress) {return;}
     void hapticOnPress;
     setIsLoading(true);
     try {

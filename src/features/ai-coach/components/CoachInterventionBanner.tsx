@@ -177,7 +177,7 @@ export function CoachInterventionBanner({
         >
           <Text
             style={{
-              color: '#FFFFFF',
+              color: vexLightGlass.text.primary,
               fontWeight: '600',
               fontSize: 14,
             }}

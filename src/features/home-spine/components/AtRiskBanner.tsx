@@ -87,7 +87,7 @@ export function AtRiskBanner({
               color={isCritical ? 'coral' : 'amber'}
               icon={
                 <Icon
-                  color={isCritical ? '#B91C1C' : '#C2410C'}
+                  color={isCritical ? vexLightGlass.semantic.danger : vexLightGlass.semantic.warning}
                   name="alarm"
                   size="md"
                   variant="solid"
@@ -121,7 +121,7 @@ export function AtRiskBanner({
             <View
               style={{
                 alignItems: 'center',
-                backgroundColor: isCritical ? '#E05E5E' : vexLightGlass.mint[500],
+                backgroundColor: isCritical ? vexLightGlass.semantic.danger : vexLightGlass.mint[500],
                 borderRadius: 999,
                 flexDirection: 'row',
                 gap: 4,
@@ -131,7 +131,7 @@ export function AtRiskBanner({
             >
               <Text
                 style={{
-                  color: '#FFFFFF',
+                  color: vexLightGlass.text.inverse,
                   fontSize: 11,
                   fontWeight: '800',
                   letterSpacing: 0.4,

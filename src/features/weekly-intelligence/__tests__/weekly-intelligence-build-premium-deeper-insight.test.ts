@@ -29,7 +29,7 @@ describe('', () => {
   it.each(['student', 'game_like', 'deep_creative', 'minimal_normal'] as const)(
     'returns a premium insight string for %s lane',
     (lane) => {
-      const insight =(baseInput({ lane }));
+      const insight = (baseInput({ lane }));
       expect(typeof insight).toBe('string');
       expect(insight!.length).toBeGreaterThan(0);
     },

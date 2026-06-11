@@ -56,7 +56,7 @@ export function usePresence({
       const channel = activeChannels.get(key);
       if (channel) {
         channel.unsubscribe().then(() => {
-          if (!mounted) activeChannels.delete(key);
+          if (!mounted) {activeChannels.delete(key);}
         });
       }
     };

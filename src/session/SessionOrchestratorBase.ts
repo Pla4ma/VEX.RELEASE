@@ -3,7 +3,7 @@ import { ScoringEngine } from './engines/ScoringEngine';
 import { CompletionEngine } from './engines/CompletionEngine';
 import { AntiCheatEngine } from './antiCheat/AntiCheatEngine';
 import { SessionEventEmitter } from './SessionEventEmitter';
-import { getSessionRepository } from './repository/SessionRepository';
+import { getSessionRepository } from './repository/SessionRepositoryFactory';
 import { getPresetService } from './presets';
 import type {
   SessionState,

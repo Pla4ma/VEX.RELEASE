@@ -2,8 +2,8 @@ import React from 'react';
 import { Pressable, Text, View } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { useTheme } from '../../../theme';
-import { useFadeStyle, useShakeStyle } from './animations';
 import { sanitizeErrorMessage } from '../../../utils/error-sanitizer';
+import { useFadeStyle, useShakeStyle } from './animations';
 import { styles } from './styles';
 import type { ErrorStateProps } from './types';
 

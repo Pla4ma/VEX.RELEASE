@@ -14,7 +14,7 @@ import { OnboardingTitle } from './OnboardingTitle';
 import { OnboardingFooter } from './OnboardingFooter';
 import { OnboardingErrorBanner } from './OnboardingErrorBanner';
 import { VexMascotGuide } from './VexMascotGuide';
-import type { MascotMood } from './VexMascotGuide';
+import type { MascotMood } from './VexMascotGuide.tokens';
 import { useOnboardingStore } from '../../../../features/onboarding';
 
 type EtherealOnboardingShellProps = {

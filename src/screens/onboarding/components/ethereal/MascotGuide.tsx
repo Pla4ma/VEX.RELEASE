@@ -1,5 +1,6 @@
 import React from 'react';
-import { VexMascotGuide, type MascotMood } from './VexMascotGuide';
+import { VexMascotGuide } from './VexMascotGuide';
+import type { MascotMood } from './VexMascotGuide.tokens';
 
 type MascotGuideProps = {
   title: string;
