@@ -1,1 +1,13 @@
-
+.hermes/work-state.json
+src/components/glass/FocusModeOrb.tsx
+src/features/onboarding/components/FirstSessionCta.tsx
+src/features/personalization/first-week-resolvers.ts
+src/screens/onboarding/components/ethereal/EtherealOnboardingShell.tsx
+src/screens/onboarding/components/ethereal/GuideAction.tsx
+src/screens/onboarding/components/ethereal/MascotGuide.tsx
+src/screens/onboarding/components/ethereal/VexMascotGuide.tokens.ts
+src/screens/onboarding/components/ethereal/VexMascotGuide.tsx
+src/screens/onboarding/components/ethereal/index.ts
+src/screens/session/ActiveSessionContent.layers.tsx
+src/screens/session/components/ActiveSessionModeOverlays.tsx
+src/shared/ui/state-components/error-state.tsx

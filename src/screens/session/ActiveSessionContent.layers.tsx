@@ -88,6 +88,10 @@ export function SessionLayers({
           remainingSeconds={sessionQuery.remainingSeconds}
           chainCount={activeSession?.config.sprintChainCount ?? 0}
           studyPlanId={activeSession?.config.studyPlanId}
+          allowStudyQuizBreak={false}
+          quizBreakKey={null}
+          onSkipQuiz={() => {}}
+          onCloseQuiz={() => {}}
         />
       ) : null}
 

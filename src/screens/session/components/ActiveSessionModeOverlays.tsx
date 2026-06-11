@@ -13,19 +13,19 @@ import { SessionMode } from '../../../session/modes';
 import type { ActiveSessionDisplayPolicy } from '../utils/active-session-display-policy';
 
 type ActiveSessionModeOverlaysProps = {
-  allowStudyQuizBreak?: boolean;
-  chainCount?: number;
+  allowStudyQuizBreak: boolean;
+  chainCount: number;
   completionPercentage: number;
   currentMode: SessionMode;
   displayPolicy: ActiveSessionDisplayPolicy;
   isPaused: boolean;
-  onCloseQuiz?: (correctAnswers: number) => void;
+  onCloseQuiz: (correctAnswers: number) => void;
   onCreativeMoodSelected?: (mood: Mood) => void;
   onSkipCreativeMood?: () => void;
-  onSkipQuiz?: () => void;
-  quizBreakKey?: string | null;
+  onSkipQuiz: () => void;
+  quizBreakKey: string | null;
   remainingSeconds: number;
-  studyPlanId?: string;
+  studyPlanId: string | undefined;
 };
 
 export function ActiveSessionModeOverlays(
