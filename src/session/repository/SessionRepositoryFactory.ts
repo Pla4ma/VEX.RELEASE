@@ -10,3 +10,7 @@ export function getSessionRepository(userId?: string): SessionRepository {
   }
   return repositoryInstance;
 }
+
+export function resetSessionRepository(): void {
+  repositoryInstance = null;
+}

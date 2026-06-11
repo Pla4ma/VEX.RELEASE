@@ -86,6 +86,7 @@ export {
 } from './repository/SessionRepository';
 export {
   getSessionRepository,
+  resetSessionRepository,
 } from './repository/SessionRepositoryFactory';
 export { PresetService, getPresetService, DEFAULT_PRESETS } from './presets';
 export {
