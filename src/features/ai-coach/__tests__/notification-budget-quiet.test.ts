@@ -54,6 +54,26 @@ describe('Notification budget quiet hours and suppression', () => {
     expect(result.rescheduleAt).toBeGreaterThan(Date.now());
   });
 
+  it('blocks exactly at quiet hours start boundary and reschedules after now', async () => {
+    const budget = createMockNotificationBudget('user-123', {
+      quietHoursStart: 22,
+      quietHoursEnd: 7,
+    });
+
+    const boundaryDate = new Date('2026-05-07T22:00:00.000Z');
+    jest.useFakeTimers();
+    jest.setSystemTime(boundaryDate);
+
+    const result = await canSendNotification(
+      createMockNotificationRequest('user-123'),
+      budget,
+    );
+
+    expect(result.allowed).toBe(false);
+    expect(result.reason).toBe('Quiet hours in effect');
+    expect((result.rescheduleAt ?? 0)).toBeGreaterThan(boundaryDate.getTime());
+  });
+
   it('respects opt-out for every priority', async () => {
     const budget = createMockNotificationBudget('user-123', { optOut: true });
     await expect(
