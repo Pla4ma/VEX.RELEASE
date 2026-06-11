@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
-import { Image, Pressable, View, type ImageSourcePropType } from 'react-native';
+import { Image, View } from 'react-native';
 import Animated, {
   Easing,
   useAnimatedStyle,
@@ -11,54 +11,17 @@ import Animated, {
 
 import { Text } from '../../../../components/primitives/Text';
 import { useReducedMotion } from '../../../../hooks/useReducedMotion';
-import { etherealButton, etherealGlass, etherealText } from '@/theme/tokens/ethereal-sky';
-import { getMinTouchTargetStyle } from '../../../../utils/touchTarget';
+import { etherealText } from '@/theme/tokens/ethereal-sky';
+import {
+  MOOD_ASSET_MAP,
+  FALLBACK_MASCOT,
+  SIZE_CONFIG,
+  PLACEMENT_STYLES,
+} from './VexMascotGuide.tokens';
+import type { MascotMood, MascotSize, MascotPlacement } from './VexMascotGuide.tokens';
+import { GuideAction } from './GuideAction';
 
-export type MascotMood =
-  | 'default'
-  | 'wave'
-  | 'pointing'
-  | 'thinking'
-  | 'encouraging'
-  | 'celebrate'
-  | 'recovery';
-
-export type MascotSize = 'loginCompact' | 'loginFeatured' | 'authForm' | 'question' | 'confirm' | 'complete' | 'inline';
-export type MascotPlacement = 'inline' | 'header' | 'corner';
-
-// All moods map to the single available asset; replace paths when more assets are added.
-const MOOD_ASSET_MAP: Record<MascotMood, ImageSourcePropType> = {
-  default: require('../../../../../assets/mascot/vex-mascot.png'),
-  wave: require('../../../../../assets/mascot/vex-mascot.png'),
-  pointing: require('../../../../../assets/mascot/vex-mascot.png'),
-  thinking: require('../../../../../assets/mascot/vex-mascot.png'),
-  encouraging: require('../../../../../assets/mascot/vex-mascot.png'),
-  celebrate: require('../../../../../assets/mascot/vex-mascot.png'),
-  recovery: require('../../../../../assets/mascot/vex-mascot.png'),
-};
-
-const FALLBACK_MASCOT = require('../../../../../assets/mascot/vex-mascot.png');
-
-const SIZE_CONFIG: Record<
-  MascotSize,
-  { width: number; height: number; bubblePadding: number; bubbleRadius: number }
-> = {
-  loginCompact: { width: 82, height: 104, bubblePadding: 14, bubbleRadius: 22 },
-  loginFeatured: { width: 118, height: 152, bubblePadding: 16, bubbleRadius: 24 },
-  authForm: { width: 80, height: 102, bubblePadding: 14, bubbleRadius: 22 },
-  question: { width: 96, height: 122, bubblePadding: 14, bubbleRadius: 24 },
-  confirm: { width: 104, height: 136, bubblePadding: 16, bubbleRadius: 26 },
-  complete: { width: 150, height: 196, bubblePadding: 18, bubbleRadius: 28 },
-  inline: { width: 72, height: 96, bubblePadding: 12, bubbleRadius: 22 },
-};
-
-const PLACEMENT_STYLES: Record<MascotPlacement, object> = {
-  inline: { flexDirection: 'row', alignItems: 'center', gap: 12 },
-  header: { flexDirection: 'column', alignItems: 'center', gap: 10 },
-  corner: { flexDirection: 'row', alignItems: 'flex-end', gap: 8 },
-};
-
-function resolveMoodAsset(mood: MascotMood): ImageSourcePropType {
+function resolveMoodAsset(mood: MascotMood) {
   try {
     return MOOD_ASSET_MAP[mood] ?? FALLBACK_MASCOT;
   } catch {
@@ -69,13 +32,11 @@ function resolveMoodAsset(mood: MascotMood): ImageSourcePropType {
 function useMascotFloatAnimation(mood: MascotMood, reducedMotion: boolean) {
   const float = useSharedValue(0);
   const scale = useSharedValue(1);
-  const glow = useSharedValue(0.15);
 
   useEffect(() => {
     if (reducedMotion) {
       float.value = 0;
       scale.value = 1;
-      glow.value = 0.2;
       return;
     }
 
@@ -94,18 +55,9 @@ function useMascotFloatAnimation(mood: MascotMood, reducedMotion: boolean) {
       -1,
       true,
     );
+  }, [float, scale, mood, reducedMotion]);
 
-    glow.value = withRepeat(
-      withSequence(
-        withTiming(0.28, { duration: 2200, easing: Easing.inOut(Easing.quad) }),
-        withTiming(0.12, { duration: 2200, easing: Easing.inOut(Easing.quad) }),
-      ),
-      -1,
-      true,
-    );
-  }, [float, scale, glow, mood, reducedMotion]);
-
-  return { float, scale, glow };
+  return { float, scale };
 }
 
 type VexMascotGuideProps = {
@@ -146,7 +98,6 @@ export function VexMascotGuide({
 
   const asset = useMemo(() => resolveMoodAsset(mood), [mood]);
   const placementStyle = PLACEMENT_STYLES[placement];
-
   const bubbleFlex = placement === 'header' ? 0 : 1;
 
   return (
@@ -206,40 +157,5 @@ export function VexMascotGuide({
         ) : null}
       </View>
     </View>
-  );
-}
-
-function GuideAction({
-  label,
-  onPress,
-  strong = false,
-}: {
-  label: string;
-  onPress: () => void;
-  strong?: boolean;
-}): React.JSX.Element {
-  return (
-    <Pressable
-      accessibilityHint={`Activates ${label}`}
-      accessibilityLabel={label}
-      accessibilityRole="button"
-      onPress={onPress}
-      style={({ pressed }) => [
-        getMinTouchTargetStyle(),
-        {
-          opacity: pressed ? 0.72 : 1,
-          paddingHorizontal: 4,
-          justifyContent: 'center',
-        },
-      ]}
-    >
-      <Text
-        fontSize={12}
-        fontWeight="800"
-        style={{ color: strong ? etherealButton.emailText : etherealText.heading }}
-      >
-        {label}
-      </Text>
-    </Pressable>
   );
 }

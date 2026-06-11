@@ -81,7 +81,13 @@ export function SessionLayers({
 
       {ENABLE_SESSION_MODE_OVERLAYS && displayPolicy.showModeOverlay ? (
         <ActiveSessionModeOverlays
-          {...{ currentMode, displayPolicy, theme } as any}
+          currentMode={currentMode}
+          displayPolicy={displayPolicy}
+          isPaused={sessionQuery.isPaused}
+          completionPercentage={sessionQuery.completionPercentage}
+          remainingSeconds={sessionQuery.remainingSeconds}
+          chainCount={activeSession?.config.sprintChainCount ?? 0}
+          studyPlanId={activeSession?.config.studyPlanId}
         />
       ) : null}
 

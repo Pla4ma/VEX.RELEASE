@@ -153,11 +153,21 @@ export function resolvePremiumMoment(
   return 'none';
 }
 
+function toCanonicalStyle(
+  style: FirstWeekResolverInput['motivationStyle'],
+): 'calm' | 'friendly' | 'coach_led' | 'game_like' | 'intense' | 'study_focused' | null {
+  if (!style) {return null;}
+  if (style === 'student' || style === 'study_focused') {return 'study_focused';}
+  if (style === 'competitive' || style === 'worker') {return 'intense';}
+  if (style === 'creator') {return 'calm';}
+  return style;
+}
+
 export function resolveLaneProfile(input: FirstWeekResolverInput): LaneProfile {
   if (input.laneProfile) {return input.laneProfile;}
   return resolveInitialLane({
     primaryGoal: toLaneGoal(input.primaryGoal),
-    motivationStyle: input.motivationStyle,
+    motivationStyle: toCanonicalStyle(input.motivationStyle),
   });
 }
 
