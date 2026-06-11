@@ -75,6 +75,7 @@ export function buildHomeFeatureRuntime(
   const economy = getFeatureAvailability(features.economy_basic);
   const seasonal = getFeatureAvailability(features.seasonal_features);
   const squads = getFeatureAvailability(features.squads);
+  const notifications = getFeatureAvailability(features.companion_detail);
   const canShowStudyDepth = study.canRenderEntryPoint;
 
   return {
@@ -84,7 +85,7 @@ export function buildHomeFeatureRuntime(
     canQueryCoach: !isDayZero && coach.canQuery,
     canQueryComeback: !isDayZero && comeback.canQuery,
     canQueryEconomy: !isDayZero && economy.canQuery,
-    canQueryNotifications: !isDayZero && challenges.canQuery,
+    canQueryNotifications: !isDayZero && notifications.canQuery,
     canQuerySeasons: !isDayZero && seasonal.canQuery,
     canQuerySquads: !isDayZero && squads.canQuery,
     canQueryStudy: !isDayZero && study.canQuery,

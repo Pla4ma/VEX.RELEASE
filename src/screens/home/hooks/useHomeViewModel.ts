@@ -24,6 +24,7 @@ export type { HomeController } from './home-controller-types';
 export type { HomeViewModel } from './home-view-model';
 
 export interface HomeModelResult {
+  error: Error | null;
   isLoading: boolean;
   stage: import('../../../features/liveops-config').UserExperienceStage;
   sharedInput: {
@@ -49,8 +50,17 @@ export function useHomeViewModel(): HomeModelResult {
   const userId = user?.id ?? '';
   const disclosure = useFeatureAccess();
   const runtime = useMemo(
-    () => buildHomeFeatureRuntime(disclosure.features, disclosure.productTier),
-    [disclosure.features, disclosure.productTier],
+    () =>
+      buildHomeFeatureRuntime({
+        features: disclosure.features,
+        productTier: disclosure.productTier,
+        totalSessions: disclosure.inputs.totalCompletedSessions,
+      }),
+    [
+      disclosure.features,
+      disclosure.productTier,
+      disclosure.inputs.totalCompletedSessions,
+    ],
   );
   const analytics = useDisclosureAnalytics();
 
@@ -66,11 +76,19 @@ export function useHomeViewModel(): HomeModelResult {
     userId,
   });
 
+  const error: Error | null =
+    disclosure.error ??
+    streakQuery.error ??
+    progressionQuery.error ??
+    null;
+
   return {
+    error,
     isLoading:
-      disclosure.isPending ||
-      streakQuery.isPending ||
-      progressionQuery.isPending,
+      !error &&
+      (disclosure.isPending ||
+        streakQuery.isPending ||
+        progressionQuery.isPending),
     stage: disclosure.stage,
     sharedInput: {
       analytics,

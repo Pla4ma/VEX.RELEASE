@@ -1,3 +1,4 @@
+import { z } from 'zod';
 import { getSupabaseClient } from '../config/supabase';
 import { eventBus } from '../events';
 import {
@@ -21,10 +22,28 @@ export {
   subscribeToActivity,
 } from './realtimeBroadcast';
 
-/** Shape of a Supabase postgres_changes payload.new / payload.old row. */
-interface RealtimeRow {
-  id?: string;
-  [key: string]: unknown;
+const RealtimeRowSchema = z
+  .object({
+    id: z.string().optional(),
+  })
+  .passthrough();
+
+type RealtimeRow = z.infer<typeof RealtimeRowSchema>;
+
+const PostgresEventTypeSchema = z.enum([
+  'INSERT',
+  'UPDATE',
+  'DELETE',
+]);
+
+function safeRealtimeRow(raw: unknown): RealtimeRow | undefined {
+  const parsed = RealtimeRowSchema.safeParse(raw);
+  return parsed.success ? parsed.data : undefined;
+}
+
+function safePostgresEvent(raw: unknown): 'INSERT' | 'UPDATE' | 'DELETE' {
+  const parsed = PostgresEventTypeSchema.safeParse(raw);
+  return parsed.success ? parsed.data : 'UPDATE';
 }
 
 export async function subscribeToFeedChanges(
@@ -45,12 +64,11 @@ export async function subscribeToFeedChanges(
       },
       (payload) => {
         callback(payload);
-        const newRecord = payload.new as RealtimeRow | undefined;
+        const newRecord = safeRealtimeRow(payload.new);
+        const oldRecord = safeRealtimeRow(payload.old);
         eventBus.publish('realtime:feed_update', {
-          itemId:
-            newRecord?.id ||
-            ((payload.old as RealtimeRow)?.id ?? ''),
-          event: payload.eventType as 'INSERT' | 'UPDATE' | 'DELETE',
+          itemId: newRecord?.id || oldRecord?.id || '',
+          event: safePostgresEvent(payload.eventType),
           data: newRecord,
         });
       },
@@ -81,13 +99,14 @@ export async function subscribeToSquadChanges(
       },
       (payload) => {
         callback(payload);
-        const newData = payload.new as RealtimeRow | undefined;
+        const newData = safeRealtimeRow(payload.new);
+        const eventType = safePostgresEvent(payload.eventType);
         eventBus.publish('realtime:squad_update', {
           squadId,
           event:
-            payload.eventType === 'INSERT'
+            eventType === 'INSERT'
               ? 'member_joined'
-              : payload.eventType === 'DELETE'
+              : eventType === 'DELETE'
                 ? 'member_left'
                 : 'progress_update',
           data: newData,

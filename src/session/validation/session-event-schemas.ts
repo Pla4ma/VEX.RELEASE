@@ -39,7 +39,8 @@ export const ValidateRecoveryRecordSchema = z.object({
     'FULL_RESET',
   ]),
   attemptedAt: z.number(),
-  successful: z.boolean(),
+  success: z.boolean(),
+  successful: z.boolean().optional(),
   recoveredTime: z.number().min(0),
   penalties: z.array(
     z.object({ type: z.string(), amount: z.number(), description: z.string() }),

@@ -1,18 +1,11 @@
-import React, { useEffect, useMemo } from 'react';
-import { Image, Pressable, View, type ImageSourcePropType } from 'react-native';
-import Animated, {
-  Easing,
-  useAnimatedStyle,
-  useSharedValue,
-  withRepeat,
-  withTiming,
-  withSequence,
-} from 'react-native-reanimated';
+import React, { useMemo } from 'react';
+import { Image, View, type ImageSourcePropType } from 'react-native';
+import Animated from 'react-native-reanimated';
 
 import { Text } from '../../../../components/primitives/Text';
 import { useReducedMotion } from '../../../../hooks/useReducedMotion';
-import { etherealButton, etherealGlass, etherealText } from '@/theme/tokens/ethereal-sky';
-import { getMinTouchTargetStyle } from '../../../../utils/touchTarget';
+import { etherealText } from '@/theme/tokens/ethereal-sky';
+import { useMascotFloatAnimation, useMascotGuideAnimatedStyle, GuideAction } from './VexMascotGuide.helpers';
 
 export type MascotMood =
   | 'default'
@@ -26,7 +19,6 @@ export type MascotMood =
 export type MascotSize = 'loginCompact' | 'loginFeatured' | 'authForm' | 'question' | 'confirm' | 'complete' | 'inline';
 export type MascotPlacement = 'inline' | 'header' | 'corner';
 
-// All moods map to the single available asset; replace paths when more assets are added.
 const MOOD_ASSET_MAP: Record<MascotMood, ImageSourcePropType> = {
   default: require('../../../../../assets/mascot/vex-mascot.png'),
   wave: require('../../../../../assets/mascot/vex-mascot.png'),
@@ -66,48 +58,6 @@ function resolveMoodAsset(mood: MascotMood): ImageSourcePropType {
   }
 }
 
-function useMascotFloatAnimation(mood: MascotMood, reducedMotion: boolean) {
-  const float = useSharedValue(0);
-  const scale = useSharedValue(1);
-  const glow = useSharedValue(0.15);
-
-  useEffect(() => {
-    if (reducedMotion) {
-      float.value = 0;
-      scale.value = 1;
-      glow.value = 0.2;
-      return;
-    }
-
-    const floatDuration = mood === 'wave' ? 1800 : mood === 'celebrate' ? 1600 : 2400;
-    float.value = withRepeat(
-      withTiming(1, { duration: floatDuration, easing: Easing.inOut(Easing.quad) }),
-      -1,
-      true,
-    );
-
-    scale.value = withRepeat(
-      withSequence(
-        withTiming(1.015, { duration: 2000, easing: Easing.inOut(Easing.quad) }),
-        withTiming(0.985, { duration: 2000, easing: Easing.inOut(Easing.quad) }),
-      ),
-      -1,
-      true,
-    );
-
-    glow.value = withRepeat(
-      withSequence(
-        withTiming(0.28, { duration: 2200, easing: Easing.inOut(Easing.quad) }),
-        withTiming(0.12, { duration: 2200, easing: Easing.inOut(Easing.quad) }),
-      ),
-      -1,
-      true,
-    );
-  }, [float, scale, glow, mood, reducedMotion]);
-
-  return { float, scale, glow };
-}
-
 type VexMascotGuideProps = {
   mood?: MascotMood;
   message: string;
@@ -135,18 +85,11 @@ export function VexMascotGuide({
 }: VexMascotGuideProps): React.JSX.Element {
   const { isReducedMotion } = useReducedMotion();
   const { float, scale } = useMascotFloatAnimation(mood, isReducedMotion);
+  const mascotStyle = useMascotGuideAnimatedStyle(float, scale, isReducedMotion);
   const config = SIZE_CONFIG[size];
-
-  const mascotStyle = useAnimatedStyle(() => ({
-    transform: [
-      { translateY: isReducedMotion ? 0 : -4 * float.value },
-      { scale: isReducedMotion ? 1 : scale.value },
-    ],
-  }));
 
   const asset = useMemo(() => resolveMoodAsset(mood), [mood]);
   const placementStyle = PLACEMENT_STYLES[placement];
-
   const bubbleFlex = placement === 'header' ? 0 : 1;
 
   return (
@@ -206,40 +149,5 @@ export function VexMascotGuide({
         ) : null}
       </View>
     </View>
-  );
-}
-
-function GuideAction({
-  label,
-  onPress,
-  strong = false,
-}: {
-  label: string;
-  onPress: () => void;
-  strong?: boolean;
-}): React.JSX.Element {
-  return (
-    <Pressable
-      accessibilityHint={`Activates ${label}`}
-      accessibilityLabel={label}
-      accessibilityRole="button"
-      onPress={onPress}
-      style={({ pressed }) => [
-        getMinTouchTargetStyle(),
-        {
-          opacity: pressed ? 0.72 : 1,
-          paddingHorizontal: 4,
-          justifyContent: 'center',
-        },
-      ]}
-    >
-      <Text
-        fontSize={12}
-        fontWeight="800"
-        style={{ color: strong ? etherealButton.emailText : etherealText.heading }}
-      >
-        {label}
-      </Text>
-    </Pressable>
   );
 }

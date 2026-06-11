@@ -2,7 +2,7 @@
 const fs = require("fs");
 const path = require("path");
 
-const SRC = "C:/Users/jonat/CascadeProjects/vex-app-old/src";
+const SRC = path.resolve(process.cwd(), "src");
 
 // Find all files >200 lines categorized as "types"
 const oversized = [];

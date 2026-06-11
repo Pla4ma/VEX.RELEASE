@@ -2,6 +2,7 @@ import type { ViewStyle } from 'react-native';
 
 import type { Theme } from '../../theme/themeCoreTypes';
 import type { ButtonProps } from './Button';
+import { vexLightGlass } from '../../theme/tokens/vex-light-glass';
 
 interface ButtonSizeConfig {
   py: number;
@@ -9,20 +10,6 @@ interface ButtonSizeConfig {
   minHeight: number;
   fontSize: number;
 }
-
-const LIGHT_MINT = {
-  300: '#72E0C5',
-  400: '#42CFAE',
-  500: '#18B894',
-  600: '#109779',
-  700: '#0C765F',
-};
-
-const LIGHT_TEXT = {
-  primary: '#10231F',
-  secondary: 'rgba(16, 35, 31, 0.68)',
-  inverse: '#FFFFFF',
-};
 
 export function getButtonSizes(
   size: NonNullable<ButtonProps['size']>,
@@ -76,10 +63,10 @@ export function getButtonVariantStyle(
   if (variant === 'primary') {
     return {
       ...base,
-      backgroundColor: pressed ? LIGHT_MINT[600] : LIGHT_MINT[500],
+      backgroundColor: pressed ? vexLightGlass.mint[600] : vexLightGlass.mint[500],
       borderColor: 'rgba(255, 255, 255, 0.55)',
       borderWidth: 1,
-      shadowColor: LIGHT_MINT[600],
+      shadowColor: vexLightGlass.mint[600],
       shadowOffset: { width: 0, height: 12 },
       shadowOpacity: 0.30,
       shadowRadius: 20,
@@ -89,10 +76,10 @@ export function getButtonVariantStyle(
   if (variant === 'danger') {
     return {
       ...base,
-      backgroundColor: '#E05E5E',
+      backgroundColor: vexLightGlass.semantic.danger,
       borderColor: 'rgba(255, 255, 255, 0.55)',
       borderWidth: 1,
-      shadowColor: '#E05E5E',
+      shadowColor: vexLightGlass.semantic.danger,
       shadowOffset: { width: 0, height: 8 },
       shadowOpacity: 0.32,
       shadowRadius: 18,
@@ -137,10 +124,10 @@ export function getButtonTextColor(
   _theme: Theme,
 ): string {
   if (variant === 'primary' || variant === 'danger') {
-    return LIGHT_TEXT.inverse;
+    return vexLightGlass.text.inverse;
   }
   if (variant === 'outline') {
-    return LIGHT_MINT[700];
+    return vexLightGlass.mint[700];
   }
-  return LIGHT_TEXT.primary;
+  return vexLightGlass.text.primary;
 }

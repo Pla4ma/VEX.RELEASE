@@ -24,6 +24,12 @@ export const restorePurchases = (): Promise<PurchaseResult> =>
 export const identifyUser = (appUserId: string): Promise<boolean> =>
   revenueCatService.identifyUser(appUserId);
 
+export const setUserId = (userId: string): Promise<boolean> =>
+  revenueCatService.setUserId(userId);
+
+export const clearUserId = (): Promise<boolean> =>
+  revenueCatService.clearUserId();
+
 export const logoutUser = (): Promise<boolean> =>
   revenueCatService.logoutUser();
 

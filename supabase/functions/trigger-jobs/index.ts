@@ -25,8 +25,8 @@
 26|
 27|// Configure Trigger.dev SDK
 28|configure({
-29|  apiKey: Deno.env.get('TRIGGER_SECRET_KEY')!,
-30|  project: Deno.env.get('TRIGGER_PROJECT_REF')!,
+29|  apiKey: Deno.env.get('TRIGGER_SECRET_KEY') ?? '',
+30|  project: Deno.env.get('TRIGGER_PROJECT_REF') ?? '',
 31|  apiUrl: Deno.env.get('TRIGGER_API_URL') || 'https://api.trigger.dev',
 32|  logLevel: resolveTriggerLogLevel(Deno.env.get('TRIGGER_LOG_LEVEL')),
 33|});

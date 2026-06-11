@@ -29,6 +29,16 @@
         "last_turn_id": "019eaa5f-4afb-7280-8105-c105198c2bb1",
         "last_thread_id": null
       }
+    },
+    "019eb425-a57a-7682-ac57-fc32e2aa1134": {
+      "ordinary_no_progress_guard": {
+        "fingerprint": "ordinary|{\"suggestions\":[{\"title\":\"keep google sign-in inside vex instead of kicking users to the browser\",\"description\":\"you asked for this on june 6, and the current auth service still calls `linking.openurl(...)` for google oauth. codex can replace that with an in-app auth session flow and wire the callback path end to end.\",\"prompt\":\"fix the google oauth flow so it stays inside the vex app instead of opening the external browser. inspect the current auth implementation, replace the `linking.openurl` path with an in-app auth session/web browser flow that works with the existing supabase callback, and update any navigation or callback handling needed so this is fully wired and verified.\",\"appid\":\"supabase\"},{\"title\":\"apply the pending supabase hardening fixes that vex official is still failing today\",\"description\":\"the live `vex official` supabase project is currently reporting security errors, including multiple tables with policies but rls still disabled. the repo already has `20260610_search_path_hardening_fix.sql`, so the fastest relief is to reconcile local migrations with prod and clear the remaining advisor failures.\",\"prompt\":\"check the live supabase advisors for vex official, compare them against the local migrations in `supabase/migrations`, and make the concrete fixes needed to clear the current security errors. prioritize the tables that still have policies with rls disabled, verify whether `20260610_search_path_hardening_fix.sql` has actually been applied, add any missing migration(s), and tell me exactly what changed and what still remains.\",\"appid\":\"supabase\"}]}",
+        "first_seen_at": "2026-06-11T00:55:13.750Z",
+        "last_seen_at": "2026-06-11T00:55:13.750Z",
+        "repeat_count": 1,
+        "last_turn_id": "019eb425-aeb1-77e0-b4ae-0488c0cdd001",
+        "last_thread_id": null
+      }
     }
   }
 }

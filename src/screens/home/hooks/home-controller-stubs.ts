@@ -1,11 +1,13 @@
-import type { UseQueryResult, QueryObserverPendingResult } from '@tanstack/react-query';
+import type { UseQueryResult } from '@tanstack/react-query';
 import type { HomeReturnReason } from './useHomeReturnReason';
 import type { SessionRecommendation } from '../../../features/ai-coach';
 import type { LearningExecutionLayer } from '../../../features/learning-execution';
 
+const stubRef = Symbol('stub-query');
+
 export function createStubQuery<TData = unknown>(): UseQueryResult<TData> {
-  const stub: QueryObserverPendingResult<TData> = {
-    data: undefined,
+  const stub = {
+    data: undefined as unknown as TData,
     dataUpdatedAt: 0,
     error: null,
     errorUpdatedAt: 0,
@@ -13,37 +15,35 @@ export function createStubQuery<TData = unknown>(): UseQueryResult<TData> {
     failureCount: 0,
     failureReason: null,
     fetchStatus: 'idle' as const,
-    isError: false,
-    isFetched: false,
-    isFetchedAfterMount: false,
-    isFetching: false,
-    isInitialLoading: false,
-    isLoading: false,
-    isLoadingError: false,
-    isEnabled: true,
-    isPaused: false,
-    isPending: true,
-    isPlaceholderData: false,
-    isRefetchError: false,
-    isRefetching: false,
-    isStale: false,
-    isSuccess: false,
-    promise: new Promise<TData>(() => {}),
-    refetch: () => Promise.resolve(createStubQuery<TData>()),
-    status: 'pending' as const,
+    isError: false as const,
+    isFetched: true as const,
+    isFetchedAfterMount: true as const,
+    isFetching: false as const,
+    isInitialLoading: false as const,
+    isLoading: false as const,
+    isLoadingError: false as const,
+    isPaused: false as const,
+    isPending: false as const,
+    isPlaceholderData: false as const,
+    isRefetchError: false as const,
+    isRefetching: false as const,
+    isStale: false as const,
+    isSuccess: true as const,
+    promise: Promise.resolve(undefined as unknown as TData),
+    refetch: () => Promise.resolve(stub as unknown as UseQueryResult<TData>),
+    status: 'success' as const,
   };
-  return stub;
+  return stub as unknown as UseQueryResult<TData>;
 }
 
 export function stubNavigationActions() {
-  const noop = (): void => {};
   return {
-    openSetup: noop,
-    openProgress: noop,
-    openSocial: noop,
-    openContentStudy: noop,
-    continueStudyPlan: noop,
-    openNextAction: noop,
+    openSetup: (): void => {},
+    openProgress: (): void => {},
+    openSocial: (): void => {},
+    openContentStudy: (): void => {},
+    continueStudyPlan: (): void => {},
+    openNextAction: (): void => {},
   };
 }
 

@@ -1,5 +1,6 @@
 import { resolveInitialLane } from '../lane-engine/service';
 import type { LaneProfile } from '../lane-engine/types';
+import { MotivationStyleSchema } from './core-schemas';
 import type { PrimaryGoal } from './core-schemas';
 import type { FirstWeekExperience, FirstWeekResolverInput, FirstWeekStage } from './first-week-schemas';
 
@@ -157,7 +158,7 @@ export function resolveLaneProfile(input: FirstWeekResolverInput): LaneProfile {
   if (input.laneProfile) {return input.laneProfile;}
   return resolveInitialLane({
     primaryGoal: toLaneGoal(input.primaryGoal),
-    motivationStyle: input.motivationStyle,
+    motivationStyle: MotivationStyleSchema.parse(input.motivationStyle),
   });
 }
 

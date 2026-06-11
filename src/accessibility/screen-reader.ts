@@ -93,5 +93,5 @@ export function clearOldAnnouncements(maxAge: number = 300000): void {
 }
 
 function generateId(): string {
-  return Math.random().toString(36).substr(2, 9);
+  return Math.random().toString(36).slice(2, 11);
 }

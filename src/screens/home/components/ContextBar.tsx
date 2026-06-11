@@ -96,7 +96,7 @@ export function ContextBar({ userId }: ContextBarProps): JSX.Element {
         <GlassPill
           label={`${currentStreak} day streak`}
           leftIcon={
-            <Icon color="#0A5E4D" name="flame" size="xs" variant="solid" />
+            <Icon color={vexLightGlass.mint[800]} name="flame" size="xs" variant="solid" />
           }
           size="sm"
           variant="success"

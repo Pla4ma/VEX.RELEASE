@@ -34,6 +34,8 @@ export function normalizeMotivationStyle(
     case 'intense':
     case 'study_focused':
       return style;
+    case 'worker':
+      return 'coach_led';
     default:
       return 'calm';
   }

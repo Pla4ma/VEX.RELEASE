@@ -7,6 +7,7 @@ import { LiquidLens } from '../../../components/glass/LiquidLens';
 import { WaterBubble } from '../../../components/glass/WaterBubble';
 import { FloatingDroplets } from '../../../components/glass/FloatingDroplets';
 import { GlassBlurLayer } from '../../../components/glass/GlassBlurLayer';
+import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 
 interface FocusScreenHeaderProps {
   onSettingsPress?: () => void;
@@ -16,7 +17,7 @@ interface FocusScreenHeaderProps {
 export function FocusScreenHeader({ onSettingsPress, body }: FocusScreenHeaderProps): JSX.Element {
   return (
     <View style={{ marginBottom: 6, width: '100%' }}>
-      {/* Cinematic liquid atmosphere — top-right, away from text */}
+      {/* Cinematic liquid atmosphere â€“ top-right, away from text */}
       <View
         pointerEvents="none"
         style={{
@@ -114,7 +115,7 @@ export function FocusScreenHeader({ onSettingsPress, body }: FocusScreenHeaderPr
               }}
             />
             <Icon
-              color="#0A1F1A"
+              color={vexLightGlass.text.primary}
               name="gear"
               size="sm"
               variant="outline"
@@ -126,7 +127,7 @@ export function FocusScreenHeader({ onSettingsPress, body }: FocusScreenHeaderPr
       <View style={{ gap: 4, marginBottom: 6 }}>
         <Text
           style={{
-            color: '#0A1F1A',
+            color: vexLightGlass.text.primary,
             fontSize: 22,
             fontWeight: '800',
             letterSpacing: -0.6,
@@ -137,7 +138,7 @@ export function FocusScreenHeader({ onSettingsPress, body }: FocusScreenHeaderPr
         </Text>
         <Text
           style={{
-            color: '#3D5A52',
+            color: vexLightGlass.text.secondary,
             fontSize: 14,
             fontWeight: '500',
             letterSpacing: -0.2,
@@ -149,7 +150,7 @@ export function FocusScreenHeader({ onSettingsPress, body }: FocusScreenHeaderPr
         {body ? (
           <Text
             style={{
-              color: '#6B8F85',
+              color: vexLightGlass.text.tertiary,
               fontSize: 13,
               lineHeight: 18,
               fontWeight: '400',

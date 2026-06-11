@@ -1,4 +1,4 @@
-import { supabase } from '../../supabase/client';
+import { supabase } from '../../config/supabase';
 import type {
   StreakInsurance,
   StreakGamble,

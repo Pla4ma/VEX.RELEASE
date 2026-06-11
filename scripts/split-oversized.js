@@ -2,7 +2,7 @@
 const fs = require("fs");
 const path = require("path");
 
-const SRC = process.argv[2] || "C:/Users/jonat/CascadeProjects/vex-app-old/src";
+const SRC = process.argv[2] || path.resolve(process.cwd(), "src");
 
 function walk(dir) {
   const results = [];

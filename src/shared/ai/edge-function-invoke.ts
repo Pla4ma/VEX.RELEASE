@@ -156,7 +156,7 @@ export async function invokeAIWithFallback(
       (response.metadata?.promptTokens ?? 0);
     const category = REQUEST_TYPE_TO_CATEGORY[requestType];
     if (category && tokenEstimate > 0) {
-      recordAIUsage(userId, category).catch((error: unknown) => {
+      recordAIUsage(userId, category, tokenEstimate).catch((error: unknown) => {
         Sentry.captureException(error instanceof Error ? error : new Error(String(error)), {
           tags: { feature: 'ai-quota', operation: 'consumeQuota' },
         });

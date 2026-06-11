@@ -18,7 +18,7 @@ export const useAuthStore = create<AuthState>()(
       {
         name: 'auth-storage',
         storage: createJSONStorage(() => getMMKVStorageAdapter()),
-        partialize: (state) => ({ isAuthenticated: state.isAuthenticated, user: state.user ? { id: state.user.id } : null }),
+        partialize: (state) => ({ isAuthenticated: state.isAuthenticated, user: state.user ? { id: state.user.id, onboardingCompletedAt: state.user.onboardingCompletedAt } : null }),
       },
     ),
   ),

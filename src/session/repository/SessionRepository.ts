@@ -4,6 +4,7 @@ import type {
   SessionSummary,
 } from '../types';
 import { createDebugger } from '../../utils/debug';
+import { captureSilentFailure } from '../../utils/silent-failure';
 import { parseSessionStateJson } from './SessionRepositoryParsers';
 import {
   calculateSessionStats,
@@ -88,7 +89,12 @@ export class SessionRepository {
     try {
       await this.storage.removeString(STORAGE_KEYS.activeSession(this.userId));
     } catch (error: unknown) {
-      /* ignore */
+      debug.error('Failed to clear active session', error instanceof Error ? error : new Error(String(error)));
+      captureSilentFailure(error, {
+        feature: 'session:repository',
+        operation: 'clearActiveSession',
+        type: 'data',
+      });
     }
   }
 

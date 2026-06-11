@@ -120,6 +120,8 @@ export function normalizeActiveSessionMotivationStyle(
       return 'study_focused';
     case 'competitive':
       return 'game_like';
+    case 'worker':
+      return 'coach_led';
     default:
       return 'calm';
   }

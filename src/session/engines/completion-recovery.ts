@@ -115,10 +115,15 @@ export function attemptSessionRecovery(
     recoveryType,
     success,
   );
+  if (summary === undefined) {
+    throw new Error(
+      `Session recovery for ${session.id} (type: ${recoveryType}) failed to produce a summary`,
+    );
+  }
   return {
     success,
     status,
-    summary: summary!,
+    summary,
     rewardsGranted: success,
     streakMaintained: success,
     recoveryAvailable: session.recoveryAttempts < session.maxRecoveryAttempts,

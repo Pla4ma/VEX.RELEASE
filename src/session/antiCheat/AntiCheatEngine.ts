@@ -123,7 +123,7 @@ export class AntiCheatEngine {
   private flagViolation(type: FlagType, severity: FlagSeverity, evidence: Record<string, unknown>): void {
     if (!this.sessionId) {return;}
     this.flags.push({
-      id: `flag-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      id: `flag-${Date.now()}-${Math.random().toString(36).slice(2, 11)}`,
       sessionId: this.sessionId, type, severity, detectedAt: Date.now(), evidence, actionTaken: 'NONE',
     });
     debug.warn('Anti-cheat flag: %s (%s)', type, severity);

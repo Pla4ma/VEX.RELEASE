@@ -19,7 +19,10 @@ export class RepositoryError extends Error {
     error: unknown,
     code: RepositoryErrorCode = RepositoryErrorCode.UNKNOWN,
   ) {
-    const message = error instanceof Error ? error.message : 'Unknown error';
+    const message = error instanceof Error ? error.message
+      : typeof error === 'object' && error !== null && 'message' in error
+        ? String((error as Record<string, unknown>).message)
+        : 'Unknown error';
     super(`[${operation}] ${message}`);
     this.name = 'RepositoryError';
     this.originalError = error;
