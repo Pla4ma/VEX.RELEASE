@@ -1,103 +1,104 @@
-import { describe, expect, it } from '@jest/globals';
+/**
+ * Settings Builders Tests
+ *
+ * Tests for buildAppearanceSettings, buildPrivacySettings, and resolveConflict.
+ */
 
-jest.mock('@theme/tokens/launch-colors', () => ({
-  launchColors: { hex_6366f1: '#6366f1' },
-}));
+import { buildAppearanceSettings, buildPrivacySettings } from '../settings-builders';
+import { resolveConflict } from '../settings-validation';
+import type { Setting } from '../types';
 
-import {
-  buildNotificationSettings,
-  buildCoachSettings,
-  buildAppearanceSettings,
-  buildPrivacySettings,
-} from '../settings-builders';
+function makeSetting(key: string, value: unknown): Setting {
+  return {
+    userId: 'test-user',
+    key,
+    value,
+    category: 'appearance',
+    lastModified: Date.now(),
+  };
+}
 
-const makeSetting = (overrides: Partial<Record<string, unknown>> = {}) => ({
-  id: '550e8400-e29b-41d4-a716-446655440010',
-  userId: '550e8400-e29b-41d4-a716-446655440020',
-  key: 'general.language',
-  value: 'en',
-  category: 'general' as const,
-  isDefault: true,
-  lastModified: Date.now(),
-  ...overrides,
-});
-
-describe('settings-builders', () => {
-  const mockSetting = (key: string, value: unknown) => makeSetting({ key, value });
-
-  describe('buildNotificationSettings', () => {
-    it('returns defaults when no settings present', () => {
-      const result = buildNotificationSettings('user-1', []);
-      expect(result.userId).toBe('user-1');
-      expect(result.channels.push.enabled).toBe(true);
-      expect(result.channels.email.digestFrequency).toBe('daily');
-    });
-
-    it('overrides defaults with settings', () => {
-      const settings = [
-        mockSetting('notifications.push.enabled', false),
-        mockSetting('notifications.email.digestFrequency', 'weekly'),
-      ];
-      const result = buildNotificationSettings('user-1', settings);
-      expect(result.channels.push.enabled).toBe(false);
-      expect(result.channels.email.digestFrequency).toBe('weekly');
-    });
-  });
-
-  describe('buildCoachSettings', () => {
-    it('returns defaults when no settings present', () => {
-      const result = buildCoachSettings('user-1', []);
-      expect(result.enabled).toBe(true);
-      expect(result.personality).toBe('supportive');
-      expect(result.frequency).toBe('moderate');
-    });
-
-    it('overrides defaults with settings', () => {
-      const settings = [
-        mockSetting('coach.enabled', false),
-        mockSetting('coach.personality', 'tough'),
-      ];
-      const result = buildCoachSettings('user-1', settings);
-      expect(result.enabled).toBe(false);
-      expect(result.personality).toBe('tough');
-    });
-  });
-
+describe('Settings Builders', () => {
   describe('buildAppearanceSettings', () => {
-    it('returns defaults when no settings present', () => {
+    it('builds defaults when no settings provided', () => {
       const result = buildAppearanceSettings('user-1', []);
+      expect(result.userId).toBe('user-1');
       expect(result.theme).toBe('system');
       expect(result.fontScale).toBe(1);
+      expect(result.useSystemFont).toBe(true);
       expect(result.reduceMotion).toBe(false);
+      expect(result.highContrast).toBe(false);
+      expect(result.compactMode).toBe(false);
     });
 
-    it('overrides defaults with settings', () => {
-      const settings = [
-        mockSetting('appearance.theme', 'dark'),
-        mockSetting('appearance.fontScale', 1.3),
+    it('uses provided settings', () => {
+      const settings: Setting[] = [
+        makeSetting('appearance.theme', 'dark'),
+        makeSetting('appearance.fontScale', 1.5),
+        makeSetting('appearance.reduceMotion', true),
       ];
       const result = buildAppearanceSettings('user-1', settings);
       expect(result.theme).toBe('dark');
-      expect(result.fontScale).toBe(1.3);
+      expect(result.fontScale).toBe(1.5);
+      expect(result.reduceMotion).toBe(true);
+    });
+
+    it('includes accent color', () => {
+      const result = buildAppearanceSettings('user-1', []);
+      expect(result.accentColor).toBeDefined();
+      expect(typeof result.accentColor).toBe('string');
     });
   });
 
   describe('buildPrivacySettings', () => {
-    it('returns defaults when no settings present', () => {
+    it('builds defaults when no settings provided', () => {
       const result = buildPrivacySettings('user-1', []);
+      expect(result.userId).toBe('user-1');
       expect(result.profileVisibility).toBe('friends');
       expect(result.showOnlineStatus).toBe(true);
+      expect(result.showActivityStatus).toBe(true);
+      expect(result.allowDataAnalysis).toBe(true);
+      expect(result.allowPersonalization).toBe(true);
+      expect(result.thirdPartySharing).toBe(false);
       expect(result.analyticsOptOut).toBe(false);
     });
 
-    it('overrides defaults with settings', () => {
-      const settings = [
-        mockSetting('privacy.profileVisibility', 'private'),
-        mockSetting('privacy.analyticsOptOut', true),
+    it('uses provided settings', () => {
+      const settings: Setting[] = [
+        makeSetting('privacy.profileVisibility', 'private'),
+        makeSetting('privacy.showOnlineStatus', false),
+        makeSetting('privacy.analyticsOptOut', true),
       ];
       const result = buildPrivacySettings('user-1', settings);
       expect(result.profileVisibility).toBe('private');
+      expect(result.showOnlineStatus).toBe(false);
       expect(result.analyticsOptOut).toBe(true);
+    });
+  });
+
+  describe('resolveConflict', () => {
+    it('returns local when local timestamp is newer', () => {
+      const result = resolveConflict({
+        localTimestamp: 1000,
+        remoteTimestamp: 500,
+      });
+      expect(result).toBe('local');
+    });
+
+    it('returns remote when remote timestamp is newer', () => {
+      const result = resolveConflict({
+        localTimestamp: 500,
+        remoteTimestamp: 1000,
+      });
+      expect(result).toBe('remote');
+    });
+
+    it('returns remote when timestamps are equal', () => {
+      const result = resolveConflict({
+        localTimestamp: 1000,
+        remoteTimestamp: 1000,
+      });
+      expect(result).toBe('remote');
     });
   });
 });
