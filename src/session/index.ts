@@ -83,8 +83,10 @@ export {
 } from './antiCheat/AntiCheatEngine';
 export {
   SessionRepository,
-  getSessionRepository,
 } from './repository/SessionRepository';
+export {
+  getSessionRepository,
+} from './repository/SessionRepositoryFactory';
 export { PresetService, getPresetService, DEFAULT_PRESETS } from './presets';
 export {
   RewardAdapter,
