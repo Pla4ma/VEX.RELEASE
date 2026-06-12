@@ -56,8 +56,14 @@ export function loadQueue(): void {
   }
   notifyListeners();
 }
-loadQueue();
+let queueInitialized = false;
+function ensureInitialized(): void {
+  if (queueInitialized) return;
+  queueInitialized = true;
+  loadQueue();
+}
 export function enqueue(entry: OfflineQueueEntryInput): OfflineQueueEntry {
+  ensureInitialized();
   if (queue.length >= MAX_OFFLINE_QUEUE_SIZE) {
     captureSilentFailure(new Error(`Offline queue full (${queue.length}/${MAX_OFFLINE_QUEUE_SIZE})`), { feature: 'lib', operation: 'offline-queue-overflow', type: 'data' });
     // Evict oldest low-priority entry
