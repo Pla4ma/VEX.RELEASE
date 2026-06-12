@@ -5,6 +5,8 @@ import { GlassPill } from '../../../components/glass/GlassPill';
 import { CrystalAvatar } from '../../../components/glass/CrystalAvatar';
 import { Icon } from '../../../icons';
 import type { User } from '../../../types/models';
+import { useTheme } from '../../../theme';
+import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 
 interface ProfileIdentityBlockProps {
   user: User | null;
@@ -17,6 +19,7 @@ export const ProfileIdentityBlock: React.FC<ProfileIdentityBlockProps> = ({
   streakDays,
   level,
 }) => {
+  const { theme } = useTheme();
   const displayName = user?.displayName ?? user?.firstName ?? 'Player';
 
   return (
@@ -30,15 +33,12 @@ export const ProfileIdentityBlock: React.FC<ProfileIdentityBlockProps> = ({
       }}
     >
       <View style={{ width: 96, height: 96 }}>
-        <CrystalAvatar
-          active={streakDays > 0}
-          size={96}
-        />
+        <CrystalAvatar active={streakDays > 0} size={96} />
       </View>
       <View style={{ flex: 1, gap: 4 }}>
         <Text
           style={{
-            color: '#0A1F1A',
+            color: theme.colors.text.primary,
             fontSize: 20,
             fontWeight: '800',
             letterSpacing: -0.4,
@@ -49,7 +49,7 @@ export const ProfileIdentityBlock: React.FC<ProfileIdentityBlockProps> = ({
         </Text>
         <Text
           style={{
-            color: '#3D5A52',
+            color: theme.colors.text.secondary,
             fontSize: 12,
             fontWeight: '400',
           }}
@@ -67,7 +67,12 @@ export const ProfileIdentityBlock: React.FC<ProfileIdentityBlockProps> = ({
           <GlassPill
             label={`${streakDays} streak`}
             leftIcon={
-              <Icon color="#F08A4B" name="flame" size="xs" variant="solid" />
+              <Icon
+                color={vexLightGlass.semantic.fire}
+                name="flame"
+                size="xs"
+                variant="solid"
+              />
             }
             size="sm"
             variant="fire"

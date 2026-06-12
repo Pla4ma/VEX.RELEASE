@@ -1,10 +1,3 @@
-/**
- * Coach Screen Hooks
- *
- * useCoachScreenState, useAskCoachQuestionMutation
- * Moved from root hooks.ts to resolve hooks.ts vs hooks/ coexistence.
- */
-
 import {
   useMutation,
   useQuery,
@@ -18,6 +11,7 @@ import {
   type CoachQuestionResponse,
 } from '../service/coach-screen-service';
 import type { CoachMessage, CoachState } from '../types';
+import { useAuthStore } from '../../../store';
 
 const debug = createDebugger('coach:hooks');
 
@@ -27,16 +21,19 @@ export function useCoachScreenState(): {
   stateLoading: boolean;
   historyLoading: boolean;
 } {
+  const { user } = useAuthStore();
+  const userId = user?.id ?? 'anonymous';
+
   const { data: coachState, isLoading: stateLoading } = useQuery<CoachState>({
-    queryKey: ['coach', 'state'],
-    queryFn: getCoachState,
+    queryKey: ['coach', 'state', userId],
+    queryFn: () => getCoachState(userId),
     staleTime: 60000,
   });
 
   const { data: coachHistory, isLoading: historyLoading } = useQuery<{
     messages: CoachMessage[];
   }>({
-    queryKey: ['coach', 'history'],
+    queryKey: ['coach', 'history', userId],
     queryFn: getCoachHistory,
     staleTime: 300000,
   });
