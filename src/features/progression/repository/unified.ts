@@ -5,7 +5,7 @@
 import { z } from 'zod';
 import { supabase } from '../../../config/supabase';
 import { RepositoryError } from '../../../lib/repository/error-handling';
-import type { UnifiedMasteryState, MasteryTrack } from '../unified-mastery';
+import type { UnifiedMasteryState, MasteryTrack, MasteryRank } from '../unified-mastery';
 
 const TABLE = 'mastery_tracks';
 
@@ -31,6 +31,8 @@ const MasteryTrackRowSchema = z.object({
   updated_at: z.string(),
   created_at: z.string(),
 });
+
+const DEFAULT_RANK: MasteryRank = 'APPRENTICE';
 
 type MasteryTrackRow = z.infer<typeof MasteryTrackRowSchema>;
 
@@ -75,7 +77,7 @@ function dbToState(row: MasteryTrackRow): UnifiedMasteryState {
       },
     },
     overallLevel: row.overall_level,
-    overallRank: row.overall_rank ?? 'NOVICE',
+    overallRank: (row.overall_rank as MasteryRank) ?? DEFAULT_RANK,
     prestigeLevel: 0,
     prestigeBonuses: [],
     lastUpdated: new Date(row.updated_at).getTime(),

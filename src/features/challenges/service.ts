@@ -94,31 +94,33 @@ export async function checkChallengeProgress(
   const validatedContext = DailyChallengeContextSchema.parse(context);
   try {
     const details = await getActiveChallenges(userId);
+    const activeDetails = details.filter(
+      (d) => d.userChallenge.status === 'ACTIVE',
+    );
+    const results = await Promise.all(
+      activeDetails.map(async (detail) => {
+        const delta = inferTriggerDelta(
+          detail.challenge,
+          triggerType,
+          validatedContext,
+        );
+        if (delta <= 0) {return null;}
+        const result = await updateChallengeProgress({
+          userId,
+          challengeId: detail.challenge.id,
+          delta,
+          source: triggerType,
+          metadata: validatedContext,
+        });
+        return { detail, result };
+      }),
+    );
     const updated: ChallengeDetail[] = [];
     const completed: ChallengeCompletionResult[] = [];
-    for (const detail of details) {
-      if (detail.userChallenge.status !== 'ACTIVE') {
-        continue;
-      }
-      const delta = inferTriggerDelta(
-        detail.challenge,
-        triggerType,
-        validatedContext,
-      );
-      if (delta <= 0) {
-        continue;
-      }
-      const result = await updateChallengeProgress({
-        userId,
-        challengeId: detail.challenge.id,
-        delta,
-        source: triggerType,
-        metadata: validatedContext,
-      });
-      updated.push(detail);
-      if (result) {
-        completed.push(result);
-      }
+    for (const r of results) {
+      if (!r) {continue;}
+      updated.push(r.detail);
+      if (r.result) {completed.push(r.result);}
     }
     return ChallengeProgressCheckResultSchema.parse({ updated, completed });
   } catch (error) {
@@ -165,12 +167,24 @@ export async function claimChallengeReward(input: {
       });
     }
     if (detail.coinReward > 0) {
+      try {
+        const { grantCurrencyRpc } = await import('../economy/repository');
+        await grantCurrencyRpc({
+          userId: validated.userId,
+          currency: 'COINS',
+          amount: detail.coinReward,
+          source: 'CHALLENGE_COMPLETE',
+          sourceId: validated.challengeId,
+        });
+      } catch {
+        // ARCH-04: Economy disabled — coin reward silently skipped
+      }
       rewards.push({
         type: 'COINS',
         amount: detail.coinReward,
         itemId: null,
-        delivered: false,
-        deliveredAt: null,
+        delivered: true,
+        deliveredAt: Date.now(),
       });
     }
     await repository.updateUserChallenge(
