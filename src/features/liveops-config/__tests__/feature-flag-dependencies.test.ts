@@ -7,82 +7,61 @@
 import { checkDependenciesSatisfied } from '../feature-flag-resolution';
 import type { FeatureKey } from '../feature-access-types';
 
+type PartialFeatureDeps = Partial<Record<FeatureKey, FeatureKey[]>>;
+
 describe('checkDependenciesSatisfied', () => {
-  const FeatureKeys = [
-    'boss_tab',
-    'challenges',
-    'weekly_report',
-    'analytics',
-    'focus_mode',
-  ] as const;
-
-  it('should return true when feature has no dependencies', () => {
-    const unlocked = new Set<FeatureKey>(['boss_tab']);
-    const dependencies: Partial<Record<FeatureKey, FeatureKey[]>> = {
-      boss_tab: [],
-    };
-    expect(checkDependenciesSatisfied('boss_tab' as FeatureKey, unlocked, dependencies)).toBe(true);
+  it('returns true when feature has empty deps', () => {
+    const deps: PartialFeatureDeps = { boss_tab: [] };
+    expect(checkDependenciesSatisfied('boss_tab' as FeatureKey, new Set(), deps)).toBe(true);
   });
 
-  it('should return true when all dependencies are unlocked', () => {
-    const unlocked = new Set<FeatureKey>(['boss_tab', 'challenges']);
-    const dependencies: Partial<Record<FeatureKey, FeatureKey[]>> = {
-      weekly_report: ['boss_tab', 'challenges'],
-    };
-    expect(checkDependenciesSatisfied('weekly_report' as FeatureKey, unlocked, dependencies)).toBe(true);
+  it('returns true when all deps unlocked', () => {
+    const unlocked = new Set<FeatureKey>(['boss_tab' as FeatureKey, 'challenges' as FeatureKey]);
+    const deps: PartialFeatureDeps = { weekly_report: ['boss_tab', 'challenges'] };
+    expect(checkDependenciesSatisfied('weekly_report' as FeatureKey, unlocked, deps)).toBe(true);
   });
 
-  it('should return false when some dependencies are missing', () => {
-    const unlocked = new Set<FeatureKey>(['boss_tab']);
-    const dependencies: Partial<Record<FeatureKey, FeatureKey[]>> = {
-      weekly_report: ['boss_tab', 'challenges'],
-    };
-    expect(checkDependenciesSatisfied('weekly_report' as FeatureKey, unlocked, dependencies)).toBe(false);
+  it('returns false when some deps missing', () => {
+    const unlocked = new Set<FeatureKey>(['boss_tab' as FeatureKey]);
+    const deps: PartialFeatureDeps = { weekly_report: ['boss_tab', 'challenges'] };
+    expect(checkDependenciesSatisfied('weekly_report' as FeatureKey, unlocked, deps)).toBe(false);
   });
 
-  it('should return false when no dependencies are unlocked', () => {
+  it('returns false when no deps unlocked', () => {
     const unlocked = new Set<FeatureKey>();
-    const dependencies: Partial<Record<FeatureKey, FeatureKey[]>> = {
-      analytics: ['boss_tab', 'challenges'],
-    };
-    expect(checkDependenciesSatisfied('analytics' as FeatureKey, unlocked, dependencies)).toBe(false);
+    const deps: PartialFeatureDeps = { analytics: ['boss_tab', 'challenges'] };
+    expect(checkDependenciesSatisfied('analytics' as FeatureKey, unlocked, deps)).toBe(false);
   });
 
-  it('should return true when dependency key is not in dependencies map', () => {
-    const unlocked = new Set<FeatureKey>();
-    const dependencies: Partial<Record<FeatureKey, FeatureKey[]>> = {};
-    expect(checkDependenciesSatisfied('boss_tab' as FeatureKey, unlocked, dependencies)).toBe(true);
+  it('returns true when feature not in deps map', () => {
+    const deps = {} as PartialFeatureDeps;
+    expect(checkDependenciesSatisfied('boss_tab' as FeatureKey, new Set(), deps)).toBe(true);
   });
 
-  it('should return true when deps list is undefined', () => {
-    const unlocked = new Set<FeatureKey>(['boss_tab']);
-    const dependencies: Partial<Record<FeatureKey, FeatureKey[]>> = {
-      focus_mode: undefined,
-    };
-    expect(checkDependenciesSatisfied('focus_mode' as FeatureKey, unlocked, dependencies)).toBe(true);
+  it('returns true when deps entry is undefined', () => {
+    const deps: PartialFeatureDeps = { focus_mode: undefined };
+    expect(checkDependenciesSatisfied('focus_mode' as FeatureKey, new Set(), deps)).toBe(true);
   });
 
-  it('should handle single dependency satisfied', () => {
-    const unlocked = new Set<FeatureKey>(['challenges']);
-    const dependencies: Partial<Record<FeatureKey, FeatureKey[]>> = {
-      analytics: ['challenges'],
-    };
-    expect(checkDependenciesSatisfied('analytics' as FeatureKey, unlocked, dependencies)).toBe(true);
+  it('returns true for single dep satisfied', () => {
+    const unlocked = new Set<FeatureKey>(['challenges' as FeatureKey]);
+    const deps: PartialFeatureDeps = { analytics: ['challenges'] };
+    expect(checkDependenciesSatisfied('analytics' as FeatureKey, unlocked, deps)).toBe(true);
   });
 
-  it('should handle single dependency missing', () => {
-    const unlocked = new Set<FeatureKey>(['boss_tab']);
-    const dependencies: Partial<Record<FeatureKey, FeatureKey[]>> = {
-      analytics: ['challenges'],
-    };
-    expect(checkDependenciesSatisfied('analytics' as FeatureKey, unlocked, dependencies)).toBe(false);
+  it('returns false for single dep missing', () => {
+    const unlocked = new Set<FeatureKey>(['boss_tab' as FeatureKey]);
+    const deps: PartialFeatureDeps = { analytics: ['challenges'] };
+    expect(checkDependenciesSatisfied('analytics' as FeatureKey, unlocked, deps)).toBe(false);
   });
 
-  it('should handle large dependency chain with all satisfied', () => {
-    const unlocked = new Set<FeatureKey>(['boss_tab', 'challenges', 'weekly_report', 'analytics']);
-    const dependencies: Partial<Record<FeatureKey, FeatureKey[]>> = {
+  it('returns true for large chain all satisfied', () => {
+    const unlocked = new Set<FeatureKey>([
+      'boss_tab', 'challenges', 'weekly_report', 'analytics',
+    ] as FeatureKey[]);
+    const deps: PartialFeatureDeps = {
       focus_mode: ['boss_tab', 'challenges', 'weekly_report', 'analytics'],
     };
-    expect(checkDependenciesSatisfied('focus_mode' as FeatureKey, unlocked, dependencies)).toBe(true);
+    expect(checkDependenciesSatisfied('focus_mode' as FeatureKey, unlocked, deps)).toBe(true);
   });
 });

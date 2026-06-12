@@ -196,5 +196,4 @@ describe('feature-flag-resolution', () => {
     });
   });
 
-  });
 });

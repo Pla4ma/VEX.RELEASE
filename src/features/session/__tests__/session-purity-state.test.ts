@@ -1,17 +1,13 @@
-/**
- * Session Service — Purity State Tests
- */
-
 import { SessionMode } from '../../../session/modes';
 import { buildPurityState } from '../service';
 
-function makePurityInput(overrides: Partial<{
-  purityScore: number;
-  pauseCount: number;
-  totalPauseSeconds: number;
-  backgroundTimeSeconds: number;
-  focusInterruptions: number;
-}> = {}) {
+function makePurityInput(overrides: {
+  purityScore?: number;
+  pauseCount?: number;
+  totalPauseSeconds?: number;
+  backgroundTimeSeconds?: number;
+  focusInterruptions?: number;
+} = {}) {
   return {
     sessionId: 'test-session',
     userId: 'test-user',
@@ -93,11 +89,7 @@ describe('buildPurityState', () => {
   describe('interruption data', () => {
     it('includes pause count and interruption data', () => {
       const purity = buildPurityState(makePurityInput({
-        purityScore: 80,
-        pauseCount: 3,
-        totalPauseSeconds: 120,
-        backgroundTimeSeconds: 45,
-        focusInterruptions: 2,
+        purityScore: 80, pauseCount: 3, totalPauseSeconds: 120, backgroundTimeSeconds: 45, focusInterruptions: 2,
       }));
       expect(purity.pauseCount).toBe(3);
       expect(purity.totalPauseSeconds).toBe(120);
