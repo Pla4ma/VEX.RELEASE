@@ -4,6 +4,7 @@
  * Handles coach state persistence and retrieval.
  */
 
+import { z } from 'zod';
 import { getSupabaseClient } from '../../../config/supabase';
 import type { CoachState } from '../types';
 import { RepositoryError } from './error';
@@ -12,6 +13,19 @@ import { tableColumns } from '../../../lib/repository/tableColumns';
 const supabase = getSupabaseClient();
 
 const TABLE_NAME = 'coach_states';
+
+const CoachStateRowSchema = z.object({
+  user_id: z.string(),
+  current_state: z.string(),
+  previous_state: z.string().nullable().optional(),
+  state_entered_at: z.number().nullable().optional(),
+  persona_id: z.string().nullable().optional(),
+  behavior_profile: z.unknown().nullable().optional(),
+  last_intervention_at: z.number().nullable().optional(),
+  interventions_today: z.number().optional(),
+  mute_until: z.number().nullable().optional(),
+  reduce_notifications: z.boolean().optional(),
+});
 
 /**
  * Fetch coach state for a user
@@ -37,18 +51,18 @@ export async function fetchCoachState(
     return null;
   }
 
-  // Transform DB record to CoachState
+  const parsed = CoachStateRowSchema.parse(data);
   return {
-    userId: data.user_id,
-    currentState: data.current_state,
-    previousState: data.previous_state,
-    stateEnteredAt: data.state_entered_at,
-    personaId: data.persona_id,
-    behaviorProfile: data.behavior_profile,
-    lastInterventionAt: data.last_intervention_at,
-    interventionsToday: data.interventions_today,
-    muteUntil: data.mute_until,
-    reduceNotifications: data.reduce_notifications,
+    userId: parsed.user_id,
+    currentState: parsed.current_state,
+    previousState: parsed.previous_state ?? null,
+    stateEnteredAt: parsed.state_entered_at ?? null,
+    personaId: parsed.persona_id ?? null,
+    behaviorProfile: parsed.behavior_profile,
+    lastInterventionAt: parsed.last_intervention_at ?? null,
+    interventionsToday: parsed.interventions_today ?? 0,
+    muteUntil: parsed.mute_until ?? null,
+    reduceNotifications: parsed.reduce_notifications ?? false,
   };
 }
 
@@ -87,6 +101,17 @@ export async function upsertCoachState(state: CoachState): Promise<CoachState> {
     );
   }
 
-  // Return the state that was passed in (it already has all fields)
-  return state;
+  const parsed = CoachStateRowSchema.parse(data);
+  return {
+    userId: parsed.user_id,
+    currentState: parsed.current_state,
+    previousState: parsed.previous_state ?? null,
+    stateEnteredAt: parsed.state_entered_at ?? null,
+    personaId: parsed.persona_id ?? null,
+    behaviorProfile: parsed.behavior_profile,
+    lastInterventionAt: parsed.last_intervention_at ?? null,
+    interventionsToday: parsed.interventions_today ?? 0,
+    muteUntil: parsed.mute_until ?? null,
+    reduceNotifications: parsed.reduce_notifications ?? false,
+  };
 }

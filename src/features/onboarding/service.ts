@@ -1,4 +1,9 @@
 import { useOnboardingStore } from './store';
+
+/** Get onboarding state without React hook (safe for service layer). */
+function getOnboardingState(): ReturnType<typeof useOnboardingStore.getState> {
+  return useOnboardingStore.getState();
+}
 import {
   type FocusGoal,
   type FocusDuration,
@@ -55,30 +60,30 @@ export function canSkip(stepNumber: number): boolean {
   return stepNumber >= 1;
 }
 export function saveGoal(goal: FocusGoal): void {
-  useOnboardingStore.getState().setGoal(goal);
+  getOnboardingState().setGoal(goal);
 }
 export function saveFocusDuration(duration: FocusDuration): void {
-  useOnboardingStore.getState().setFocusDuration(duration);
+  getOnboardingState().setFocusDuration(duration);
 }
 export function saveDisplayName(name: string): boolean {
   const trimmed = name.trim();
   if (trimmed.length < 2) {
     return false;
   }
-  useOnboardingStore.getState().setDisplayName(trimmed);
+  getOnboardingState().setDisplayName(trimmed);
   return true;
 }
 export function goToNextStep(): void {
-  useOnboardingStore.getState().nextStep();
+  getOnboardingState().nextStep();
 }
 export function goToPreviousStep(): void {
-  useOnboardingStore.getState().previousStep();
+  getOnboardingState().previousStep();
 }
 export function skipOnboarding(): void {
-  useOnboardingStore.getState().skipOnboarding();
+  getOnboardingState().skipOnboarding();
 }
 export function completeOnboarding(userId?: string | null): void {
-  useOnboardingStore.getState().completeOnboarding(userId);
+  getOnboardingState().completeOnboarding(userId);
 }
 export class OnboardingError extends Error {
   constructor(
@@ -106,7 +111,7 @@ export async function completeOnboardingWithGate(
   });
 }
 export function resetOnboarding(): void {
-  useOnboardingStore.getState().resetOnboarding();
+  getOnboardingState().resetOnboarding();
 }
 const DEFAULT_FOCUS_DURATION_MINUTES = 10;
 const ONBOARDING_TOTAL_STEPS = 4;
@@ -118,7 +123,7 @@ export function getFirstSessionConfig(): {
   category: FocusGoal | null;
   isOnboardingSession: true;
 } {
-  const state = useOnboardingStore.getState();
+  const state = getOnboardingState();
   const durationMinutes = state.focusDuration ?? DEFAULT_FOCUS_DURATION_MINUTES;
   return {
     duration: durationMinutes * 60,
@@ -127,7 +132,7 @@ export function getFirstSessionConfig(): {
   };
 }
 export function isOnboardingStalled(): boolean {
-  const state = useOnboardingStore.getState();
+  const state = getOnboardingState();
   if (!state.startedAt) {
     return false;
   }

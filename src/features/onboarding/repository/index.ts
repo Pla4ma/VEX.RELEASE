@@ -1,7 +1,9 @@
 /**
  * Onboarding Repository - Barrel Export
  *
- * @phase 2 - Deepening: Repository exports
+ * Exports the MMKV-based onboarding repository for local persistence.
+ * The Supabase-based repository at ../repository.ts is used separately
+ * for server-side sync via the onboarding service layer.
  */
 
 export {

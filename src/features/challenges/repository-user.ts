@@ -64,9 +64,7 @@ export async function fetchUserActiveChallenges(
 }
 
 /** Supabase joined row type for challenge detail queries. */
-interface JoinedChallengeRow {
-  [key: string]: unknown;
-}
+type JoinedChallengeRow = Record<string, unknown>;
 
 export async function fetchActiveChallengeDetails(
   userId: string,
