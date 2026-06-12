@@ -29,7 +29,7 @@ export function WaterRippleBackground(): JSX.Element {
     >
       {/* Base atmospheric gradient */}
       <LinearGradient
-        colors={['#F8FFFC', '#EEF8F4', '#E0F2EC', '#D5EDE6']}
+        colors={[vexLightGlass.background.pageTop, vexLightGlass.background.pageMid, 'rgba(132, 228, 229, 0.16)', 'rgba(95, 230, 197, 0.16)']}
         end={{ x: 0.5, y: 1 }}
         locations={[0, 0.4, 0.75, 1]}
         start={{ x: 0.5, y: 0 }}

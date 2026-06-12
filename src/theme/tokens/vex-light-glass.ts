@@ -56,6 +56,8 @@ export const vexLightGlass = {
     warning: '#DFA44A',
     danger: '#E05E5E',
     info: '#54AEEA',
+    accent: '#8B5CF6',
+    purple: '#8B5CF6',
     stable: '#18B894',
     premium: '#79DFC9',
     fire: '#F08A4B',

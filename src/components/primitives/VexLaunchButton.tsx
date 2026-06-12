@@ -25,8 +25,8 @@ export interface VexLaunchButtonProps extends ViewProps {
   testID?: string;
 }
 
-const MINT_PRESS = ['#109779', '#18B894', '#42CFAE'] as const;
-const MINT_REST = ['#18B894', '#42CFAE', '#72E0C5'] as const;
+const MINT_PRESS = ['#109779', '#18B894', vexLightGlass.mint[400]] as const;
+const MINT_REST = [vexLightGlass.mint[500], vexLightGlass.mint[400], '#72E0C5'] as const;
 
 export function VexLaunchButton({
   label,
@@ -100,7 +100,7 @@ export function VexLaunchButton({
             borderColor: 'rgba(255, 255, 255, 0.55)',
             alignItems: 'center',
             justifyContent: 'center',
-            shadowColor: '#0C765F',
+            shadowColor: vexLightGlass.mint[700],
             shadowOffset: { width: 0, height: 12 },
             shadowRadius: 20,
             width: '100%',

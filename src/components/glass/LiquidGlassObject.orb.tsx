@@ -21,7 +21,7 @@ export function OrbVariant({ size }: VariantProps): JSX.Element {
         d={`M ${center - r * 0.85} ${center + r * 0.35} Q ${center} ${center + r * 0.95} ${center + r * 0.85} ${center + r * 0.35}`}
         fill="none"
         opacity={0.35}
-        stroke="#0A5E4D"
+        stroke={vexLightGlass.mint[800]}
         strokeLinecap="round"
         strokeWidth={size * 0.015}
       />
