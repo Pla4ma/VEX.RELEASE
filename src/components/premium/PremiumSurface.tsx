@@ -48,7 +48,7 @@ export function PremiumSurface({
               <Text
                 variant="label"
                 style={{
-                  color: isWarning ? '#E05E5E' : vexLightGlass.mint[500],
+                  color: isWarning ? vexLightGlass.semantic.danger : vexLightGlass.mint[500],
                   fontSize: 13,
                   fontWeight: '600',
                   letterSpacing: 0.5,

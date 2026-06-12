@@ -11,6 +11,7 @@ export const CompletionUserFacingSummarySchema = z
   .object({
     body: z.string().min(1),
     title: z.string().min(1),
+    tone: z.enum(['calm', 'coach', 'study', 'intense']),
   })
   .passthrough();
 

@@ -70,12 +70,13 @@ export async function cleanupRerollHistory(
 ): Promise<number> {
   const cutoff = new Date();
   cutoff.setDate(cutoff.getDate() - olderThanDays);
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from('challenge_rerolls')
     .delete()
-    .lt('rerolled_at', cutoff.toISOString());
+    .lt('rerolled_at', cutoff.toISOString())
+    .select('id');
   if (error) {
     throw new RepositoryError('cleanupRerollHistory', error);
   }
-  return 0;
+  return data?.length ?? 0;
 }

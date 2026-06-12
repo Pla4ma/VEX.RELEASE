@@ -63,7 +63,7 @@ export const EmailChangeSection: React.FC<EmailChangeSectionProps> = ({
             variant="body"
             style={{ fontWeight: '500', marginBottom: 12 }}
           >
-            {email || 'user@example.com'}
+            {email || '---'}
           </Text>
           <Pressable
             onPress={handleChangeEmail}

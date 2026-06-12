@@ -64,9 +64,7 @@ export async function fetchUserActiveChallenges(
 }
 
 /** Supabase joined row type for challenge detail queries. */
-interface JoinedChallengeRow {
-  [key: string]: unknown;
-}
+type JoinedChallengeRow = Record<string, unknown>;
 
 export async function fetchActiveChallengeDetails(
   userId: string,
@@ -190,11 +188,20 @@ export async function addChallengeProgress(
   delta: number,
   _source: string,
 ): Promise<UserChallenge> {
-  const current = await fetchUserChallenge(userId, challengeId);
-  if (!current) {
-    throw new RepositoryError('addChallengeProgress', 'Challenge not found');
-  }
-  return updateUserChallenge(userId, challengeId, {
-    currentValue: current.currentValue + delta,
+  const { data, error } = await supabase.rpc('atomic_increment_challenge_progress', {
+    p_user_id: userId,
+    p_challenge_id: challengeId,
+    p_delta: delta,
   });
+  if (error) {
+    // Fallback: fetch then update (non-atomic, but RPC preferred)
+    const current = await fetchUserChallenge(userId, challengeId);
+    if (!current) {
+      throw new RepositoryError('addChallengeProgress', 'Challenge not found');
+    }
+    return updateUserChallenge(userId, challengeId, {
+      currentValue: current.currentValue + delta,
+    });
+  }
+  return UserChallengeSchema.parse(data);
 }

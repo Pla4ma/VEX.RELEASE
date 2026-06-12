@@ -7,7 +7,6 @@
 import {
   resolveEffectiveThreshold,
   resolveFeatureVisibility,
-  checkDependenciesSatisfied,
 } from '../feature-flag-resolution';
 import type { MotivationProfileConfig } from '../feature-flag-resolution';
 
@@ -42,7 +41,7 @@ describe('feature-flag-resolution', () => {
 
     it('should return base threshold when feature has no config', () => {
       const result = resolveEffectiveThreshold(
-        'unknown_feature' as any,
+        'unknown_feature' as const,
         10,
         { primary: 'game_like', secondary: [] },
         baseProfiles,
@@ -197,5 +196,4 @@ describe('feature-flag-resolution', () => {
     });
   });
 
-  });
 });

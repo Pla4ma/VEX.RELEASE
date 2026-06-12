@@ -2,8 +2,10 @@ import React from 'react';
 import { View } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
 import { GlassPill } from '../../../components/glass/GlassPill';
+import { CrystalAvatar } from '../../../components/glass/CrystalAvatar';
 import { Icon } from '../../../icons';
 import type { User } from '../../../types/models';
+import { useTheme } from '../../../theme';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 
 interface ProfileIdentityBlockProps {
@@ -17,8 +19,8 @@ export const ProfileIdentityBlock: React.FC<ProfileIdentityBlockProps> = ({
   streakDays,
   level,
 }) => {
+  const { theme } = useTheme();
   const displayName = user?.displayName ?? user?.firstName ?? 'Player';
-  const initial = displayName.slice(0, 1).toUpperCase();
 
   return (
     <View
@@ -30,50 +32,13 @@ export const ProfileIdentityBlock: React.FC<ProfileIdentityBlockProps> = ({
         zIndex: 2,
       }}
     >
-      <View
-        style={{
-          alignItems: 'center',
-          backgroundColor: 'rgba(240, 138, 75, 0.16)',
-          borderColor: vexLightGlass.semantic.fire,
-          borderRadius: 24,
-          borderWidth: 1.4,
-          height: 82,
-          justifyContent: 'center',
-          shadowColor: 'rgba(240, 138, 75, 0.22)',
-          shadowOffset: { width: 0, height: 8 },
-          shadowOpacity: 0.22,
-          shadowRadius: 14,
-          width: 82,
-        }}
-      >
-        <Text
-          style={{
-            color: vexLightGlass.semantic.fireDeep,
-            fontSize: 34,
-            fontWeight: '900',
-            lineHeight: 38,
-          }}
-        >
-          {initial}
-        </Text>
-        <View
-          style={{
-            backgroundColor: '#22C55E',
-            borderColor: '#FFFFFF',
-            borderRadius: 999,
-            borderWidth: 2,
-            bottom: 6,
-            height: 16,
-            position: 'absolute',
-            right: 6,
-            width: 16,
-          }}
-        />
+      <View style={{ width: 96, height: 96 }}>
+        <CrystalAvatar active={streakDays > 0} size={96} />
       </View>
       <View style={{ flex: 1, gap: 4 }}>
         <Text
           style={{
-            color: '#0A1F1A',
+            color: theme.colors.text.primary,
             fontSize: 20,
             fontWeight: '800',
             letterSpacing: -0.4,
@@ -84,7 +49,7 @@ export const ProfileIdentityBlock: React.FC<ProfileIdentityBlockProps> = ({
         </Text>
         <Text
           style={{
-            color: '#3D5A52',
+            color: theme.colors.text.secondary,
             fontSize: 12,
             fontWeight: '400',
           }}
@@ -102,7 +67,12 @@ export const ProfileIdentityBlock: React.FC<ProfileIdentityBlockProps> = ({
           <GlassPill
             label={`${streakDays} streak`}
             leftIcon={
-              <Icon color="#F08A4B" name="flame" size="xs" variant="solid" />
+              <Icon
+                color={vexLightGlass.semantic.fire}
+                name="flame"
+                size="xs"
+                variant="solid"
+              />
             }
             size="sm"
             variant="fire"

@@ -17,6 +17,7 @@ function handleSubscriptionStatus(
 ): void {
   if (status === 'SUBSCRIBED') {
     debug.info('Channel %s subscribed', channelName);
+    onReconnect?.();
     return;
   }
 
@@ -33,11 +34,6 @@ function handleSubscriptionStatus(
   if (status === 'CLOSED') {
     debug.info('Channel %s closed', channelName);
     return;
-  }
-
-  // On reconnect, invalidate queries to fetch missed data
-  if (status === 'SUBSCRIBED' && onReconnect) {
-    onReconnect();
   }
 }
 

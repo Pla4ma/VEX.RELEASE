@@ -7,3 +7,17 @@ export type RecommendationType =
   | 'BOSS_PREP'
   | 'HABIT_BUILDER'
   | 'ENERGY_BASED';
+
+export type HomeSpineModel = {
+  sections: HomeSpineSection[];
+  primaryAction?: { label: string; route: string };
+  secondaryAction?: { label: string; route: string };
+};
+
+export interface HomeSpineSection {
+  kind: string;
+  title: string;
+  subtitle?: string;
+  ctaLabel?: string;
+  priority: number;
+}

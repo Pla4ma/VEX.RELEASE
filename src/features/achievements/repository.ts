@@ -5,6 +5,7 @@
  */
 
 import { getSupabaseClient } from '../../config/supabase';
+import { RepositoryError } from '../../lib/repository/error-handling';
 
 const supabase = getSupabaseClient();
 import { type UserAchievement } from './types';
@@ -26,7 +27,13 @@ export async function getUserAchievement(
     .eq('achievement_id', achievementId)
     .single();
 
-  if (error || !data) {
+  if (error) {
+    if (error.code === 'PGRST116') {
+      return null;
+    }
+    throw new RepositoryError('getUserAchievement', error);
+  }
+  if (!data) {
     return null;
   }
 
@@ -50,7 +57,10 @@ export async function getAllUserAchievements(
     .select('user_id,achievement_id,progress,max_progress,is_unlocked,unlocked_at,progress_history')
     .eq('user_id', userId);
 
-  if (error || !data) {
+  if (error) {
+    throw new RepositoryError('getAllUserAchievements', error);
+  }
+  if (!data) {
     return [];
   }
 
@@ -88,7 +98,10 @@ export async function createUserAchievement(
     .select(tableColumns('user_achievements'))
     .single();
 
-  if (error || !data) {
+  if (error) {
+    throw new RepositoryError('createUserAchievement', error);
+  }
+  if (!data) {
     return null;
   }
 
@@ -133,7 +146,10 @@ export async function updateAchievementProgress(
     .select(tableColumns('user_achievements'))
     .single();
 
-  if (error || !data) {
+  if (error) {
+    throw new RepositoryError('updateAchievementProgress', error);
+  }
+  if (!data) {
     return null;
   }
 
@@ -150,5 +166,8 @@ export async function updateAchievementProgress(
 }
 
 export async function resetAllUserAchievements(userId: string): Promise<void> {
-  await supabase.from('user_achievements').delete().eq('user_id', userId);
+  const { error } = await supabase.from('user_achievements').delete().eq('user_id', userId);
+  if (error) {
+    throw new RepositoryError('resetAllUserAchievements', error);
+  }
 }

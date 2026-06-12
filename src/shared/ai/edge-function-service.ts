@@ -51,8 +51,12 @@ export async function sendAIRequest(request: AIRequest): Promise<AIResponse> {
 
 /** Bridge from Zod-validated context to invokeAIWithFallback's loose Record param. */
 type LooselyTypedContext = Record<string, unknown>;
-const asLooselyTypedContext = (ctx: unknown): LooselyTypedContext =>
-  ctx as LooselyTypedContext;
+function asLooselyTypedContext(ctx: unknown): LooselyTypedContext {
+  if (ctx && typeof ctx === 'object') {
+    return ctx as LooselyTypedContext;
+  }
+  return {};
+}
 
 export async function generateCoachMessage(
   request: Omit<GenerateCoachMessageRequest, 'requestType'> & {

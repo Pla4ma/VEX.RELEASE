@@ -16,10 +16,8 @@ function hasSupabaseConfig(): boolean {
 }
 
 function hasGeminiKey(): boolean {
-  return (
-    hasFunctionName(CONTENT_STUDY_FUNCTION) ||
-    hasFunctionName(AI_COACH_FUNCTION)
-  );
+  const geminiKey = process.env.EXPO_PUBLIC_GEMINI_API_KEY;
+  return typeof geminiKey === 'string' && geminiKey.trim().length > 0;
 }
 
 function hasFunctionName(value: string | undefined): boolean {
@@ -62,9 +60,10 @@ export const healthChecks: FeatureHealthCheck[] = [
     dependency: 'rate_limits',
     cacheMs: 300_000,
     check: (): FeatureHealthStatus => {
-      return CONTENT_STUDY_CONSTANTS.DAILY_GENERATION_LIMIT > 0
-        ? 'healthy'
-        : 'unavailable';
+      const limit = CONTENT_STUDY_CONSTANTS.DAILY_GENERATION_LIMIT;
+      if (limit <= 0) {return 'unavailable';}
+      if (!hasSupabaseConfig()) {return 'degraded';}
+      return hasGeminiKey() ? 'healthy' : 'degraded';
     },
   },
   {

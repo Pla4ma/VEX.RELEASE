@@ -171,7 +171,7 @@ class AnalyticsService {
     return {
       ...sanitizeAnalyticsProperties(properties),
       platform: 'mobile',
-      app_version: process.env.EXPO_PUBLIC_APP_VERSION || '1.0.0',
+      app_version: process.env.EXPO_PUBLIC_APP_VERSION || require('../../../app.json').version || '0.0.0',
     };
   }
 }

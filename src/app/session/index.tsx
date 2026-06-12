@@ -16,13 +16,16 @@ import { SessionLoadingState } from '../../session/components/states/SessionLoad
 import type { SessionPreset } from '../../session/types';
 import { createSheet } from '@/shared/ui/create-sheet';
 import { useTheme, type Theme } from '../../theme';
+import { useAuthStore } from '../../store/authStore';
 
 export default function SessionHomeScreen() {
   const [, setActiveView] = useState<'home' | 'custom'>('home');
-  const userId = 'current-user'; // In real app, get from auth context
-  const theme = useTheme();
+  const authUserId = useAuthStore((state) => state.user?.id);
+  const { theme } = useTheme();
 
-  const styles = getStyles(theme);
+  const styles = getStyles({ theme });
+
+  const userId = authUserId ?? '';
 
   const {
     isActive,
@@ -37,13 +40,20 @@ export default function SessionHomeScreen() {
   const stats = useSessionStats(userId);
 
   const handleSelectPreset = async (_preset: SessionPreset) => {
-    // Create and start session from preset
     setActiveView('custom');
   };
 
   const handleCreateCustom = () => {
     setActiveView('custom');
   };
+
+  if (!authUserId) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.errorText}>Please sign in to access sessions</Text>
+      </View>
+    );
+  }
 
   if (isLoading) {
     return <SessionLoadingState message="Loading your sessions..." />;
@@ -57,12 +67,11 @@ export default function SessionHomeScreen() {
     );
   }
 
-  // Show active session HUD if there's an active session
   if (isActive || isPaused) {
     return (
       <View style={styles.container}>
         <ActiveSessionHUD
-          userId={userId}
+          userId={authUserId}
           onPause={pauseSession}
           onResume={resumeSession}
           onAbandon={abandonSession}
@@ -73,7 +82,6 @@ export default function SessionHomeScreen() {
 
   return (
     <ScrollView style={styles.container}>
-      {/* Quick Stats */}
       {stats && stats.stats && (
         <View style={styles.statsContainer}>
           <View style={styles.statBox}>
@@ -81,24 +89,15 @@ export default function SessionHomeScreen() {
             <Text style={styles.statLabel}>Sessions</Text>
           </View>
           <View style={styles.statBox}>
-            <Text style={styles.statValue}>{stats.stats.currentStreak}</Text>
-            <Text style={styles.statLabel}>Day Streak</Text>
-          </View>
-          <View style={styles.statBox}>
-            <Text style={styles.statValue}>
-              {stats.stats.averageSessionDuration
-                ? Math.round(stats.stats.averageSessionDuration)
-                : 0}
-            </Text>
-            <Text style={styles.statLabel}>Avg Duration</Text>
+            <Text style={styles.statValue}>{stats.stats.totalFocusTime}</Text>
+            <Text style={styles.statLabel}>Minutes</Text>
           </View>
         </View>
       )}
 
-      {/* Presets or Empty State */}
       <View style={styles.content}>
         <SessionPresets
-          userId={userId}
+          userId={authUserId}
           onSelectPreset={handleSelectPreset}
           onCreateCustom={handleCreateCustom}
         />

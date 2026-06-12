@@ -112,7 +112,7 @@ export const MasteryCard: React.FC<MasteryCardProps> = ({
           }}
         >
           <GlassIconOrb size={44} variant="pearl">
-            <Icon color="#0C765F" name={rankDisplay.icon} size="sm" variant="solid" />
+            <Icon color={vexLightGlass.mint[700]} name={rankDisplay.icon} size="sm" variant="solid" />
           </GlassIconOrb>
           <View style={{ flex: 1 }}>
             <Text

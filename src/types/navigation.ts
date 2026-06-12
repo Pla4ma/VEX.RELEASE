@@ -42,6 +42,7 @@ export type RootStackParamList = {
   Profile: { userId: string };
   SquadDetails: { squadId: string };
   NotFound: undefined;
+  StreakFuneral: { previousStreak: number; diedAt: number };
   Error: { error?: Error; message?: string };
 };
 export type MainTabParamList = {

@@ -31,6 +31,17 @@ export {
 type HomeSpineInput = Parameters<typeof buildHomeSpineModel>[0];
 type HomeSpineModel = ReturnType<typeof buildHomeSpineModel>;
 
+export { buildHomeSpineModel };
+export type { HomeSpineModel };
+
+export interface HomeSpineSection {
+  kind: string;
+  title: string;
+  subtitle?: string;
+  ctaLabel?: string;
+  priority: number;
+}
+
 export function useHomeSpineModel(input: HomeSpineInput): HomeSpineModel {
   const {
     currentStreak,
@@ -134,3 +145,11 @@ export function useHomePriority(
     refetchOnWindowFocus: true,
   });
 }
+
+export { useHomeSpineModel as useHomeSpine };
+
+export const homeSpineKeys = {
+  all: ['home-spine'] as const,
+  model: (userId: string | null | undefined) => ['home-spine', 'model', userId] as const,
+  priority: (userId: string | null | undefined) => ['home-spine', 'priority', userId] as const,
+};

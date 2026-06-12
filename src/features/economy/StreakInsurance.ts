@@ -1,3 +1,5 @@
+// ARCH-04: Economy currency system disabled. All functions return stub values.
+// Re-enable by implementing StreakInsurance.ts with real Supabase RPCs.
 export interface StreakInsuranceStatus {
   isInsured: boolean;
   daysRemaining: number;

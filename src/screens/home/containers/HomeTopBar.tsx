@@ -58,22 +58,25 @@ export function HomeTopBar(): JSX.Element {
         onPress={() => navigation.navigate('Notifications')}
         style={{
           alignItems: 'center',
-          backgroundColor: 'rgba(255, 255, 255, 0.52)',
-          borderColor: 'rgba(255, 255, 255, 0.95)',
+          backgroundColor: vexLightGlass.glass.fill,
+          borderColor: vexLightGlass.glass.border,
           borderRadius: 19,
           borderWidth: 1.5,
           height: 40,
           justifyContent: 'center',
           overflow: 'hidden',
-          shadowColor: 'rgba(13, 76, 65, 0.18)',
+          shadowColor: vexLightGlass.glass.shadow,
           shadowOffset: { width: 0, height: 7 },
-          shadowOpacity: 0.85,
+          shadowOpacity: 0.16,
           shadowRadius: 12,
           width: 40,
         }}
       >
         <LinearGradient
-          colors={['rgba(255, 255, 255, 0.88)', 'rgba(255, 255, 255, 0.32)']}
+          colors={[
+            vexLightGlass.glass.innerHighlight,
+            vexLightGlass.glass.fillSubtle,
+          ]}
           end={{ x: 0, y: 1 }}
           locations={[0, 0.55]}
           start={{ x: 0, y: 0 }}
@@ -90,7 +93,7 @@ export function HomeTopBar(): JSX.Element {
         <View
           pointerEvents="none"
           style={{
-            backgroundColor: 'rgba(255, 255, 255, 0.92)',
+            backgroundColor: vexLightGlass.glass.innerHighlight,
             borderTopLeftRadius: 21,
             borderTopRightRadius: 21,
             height: 1,

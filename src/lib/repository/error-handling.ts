@@ -13,6 +13,7 @@ export class RepositoryError extends Error {
   public readonly code: RepositoryErrorCode;
   public readonly isRetryable: boolean;
   public readonly originalError: unknown;
+  public readonly operation: string;
 
   constructor(
     operation: string,
@@ -25,6 +26,7 @@ export class RepositoryError extends Error {
         : 'Unknown error';
     super(`[${operation}] ${message}`);
     this.name = 'RepositoryError';
+    this.operation = operation;
     this.originalError = error;
     this.code = code;
     this.isRetryable =

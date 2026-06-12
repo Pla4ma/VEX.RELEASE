@@ -23,7 +23,10 @@ export async function getOrCreateWallet(
   const supabase = getSupabaseClient();
   const { data, error } = await supabase
     .from('wallets')
-    .upsert({ user_id: userId, coins: 0, gems: 0 }, { onConflict: 'user_id' })
+    .upsert(
+      { user_id: userId },
+      { onConflict: 'user_id', ignoreDuplicates: true },
+    )
     .select(tableColumns('wallets'))
     .single();
   if (error) {throw new RepositoryError('getOrCreateWallet', error);}

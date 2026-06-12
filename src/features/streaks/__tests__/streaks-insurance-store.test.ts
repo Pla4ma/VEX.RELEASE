@@ -155,7 +155,7 @@ describe('Insurance In-Memory Store', () => {
     });
 
     it('fails when no insurance', () => {
-      const result = useInsurance('empty-user-2', 'test');
+      const result = consumeInsurance('empty-user-2', 'test');
       expect(result.success).toBe(false);
       expect(result.error).toBeDefined();
     });

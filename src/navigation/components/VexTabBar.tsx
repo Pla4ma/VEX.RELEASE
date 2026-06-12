@@ -137,7 +137,7 @@ export function VexTabBar({
             };
             return (
               <TabButton
-                color={focused ? '#0C765F' : 'rgba(16, 35, 31, 0.42)'}
+                color={focused ? vexLightGlass.mint[700] : vexLightGlass.text.tertiary}
                 focused={focused}
                 isActiveTab={focused}
                 key={route.key}

@@ -78,31 +78,45 @@ export const useOnboardingStore = create(
     {
       name: 'onboarding-storage',
       storage: createJSONStorage(() => ({
-        getItem: async (name: string): Promise<string | null> =>
-          mmkvStorage.getItem(name),
-        setItem: async (name: string, value: string): Promise<void> =>
-          mmkvStorage.setItem(name, value),
-        removeItem: async (name: string): Promise<void> =>
-          mmkvStorage.removeItem(name),
+        getItem: (name: string): string | null =>
+          mmkvStorage.getItemSync(name) ?? null,
+        setItem: (name: string, value: string): void =>
+          mmkvStorage.setItemSync(name, value),
+        removeItem: (name: string): void =>
+          mmkvStorage.removeItemSync(name),
       })),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       partialize: (state) =>
         ({
-          isOnboarded: state.isOnboarded,
-          currentStep: state.currentStep,
-          goal: state.goal,
-          focusDuration: state.focusDuration,
-          displayName: state.displayName,
-          startedAt: state.startedAt,
-          completedAt: state.completedAt,
-          completedForUserId: state.completedForUserId,
-          persona: state.persona,
-          element: state.element,
-          motivationProfile: state.motivationProfile,
-          explicitMotivationStyle: state.explicitMotivationStyle,
-          chosenLane: state.chosenLane,
-          mascotGuideCompletedAt: state.mascotGuideCompletedAt,
-          mascotGuideDismissedAt: state.mascotGuideDismissedAt,
-        }) as OnboardingStore,
+          ...state,
+          // Actions are no-ops after rehydration; real methods come from createStoreActions
+          startOnboarding: () => {},
+          setGoal: () => {},
+          setFocusDuration: () => {},
+          setDisplayName: () => {},
+          setPersona: () => {},
+          setElement: () => {},
+          setExplicitMotivationStyle: () => {},
+          recomputeMotivationProfile: () => {},
+          nextStep: () => {},
+          previousStep: () => {},
+          skipOnboarding: () => {},
+          completeOnboarding: () => {},
+          resetOnboarding: () => {},
+          canSkipCurrentStep: () => false,
+          canCompleteForUser: () => false,
+          canPreviewHome: () => false,
+          markProfileStepsComplete: () => {},
+          markFirstSessionStarted: () => {},
+          markFirstSessionCompleted: () => {},
+          markHomePreviewEntered: () => {},
+          setCompletionFromBackend: () => {},
+          markMascotGuideCompleted: () => {},
+          dismissMascotGuide: () => {},
+          setChosenLane: () => {},
+          getDraft: () => undefined,
+          saveDraft: () => {},
+        }) as any,
       onRehydrateStorage: () =>
         createRehydrationHandler((partial) =>
           useOnboardingStore.setState(partial),

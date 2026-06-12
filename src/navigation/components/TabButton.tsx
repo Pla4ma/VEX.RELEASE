@@ -131,7 +131,7 @@ export function TabButton({
           </Animated.View>
           <Text
             style={{
-              color: focused ? '#0C765F' : 'rgba(16, 35, 31, 0.50)',
+              color: focused ? vexLightGlass.mint[700] : vexLightGlass.text.disabled,
               fontSize: 11,
               fontWeight: focused ? '800' : '500',
               letterSpacing: 0,

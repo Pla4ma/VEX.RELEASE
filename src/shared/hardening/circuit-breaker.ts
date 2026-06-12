@@ -79,6 +79,7 @@ export class CircuitBreaker {
 
   private transitionTo(state: CircuitState): void {
     this.state = state;
+    this.failureCount = 0;
     this.successCount = 0;
     this.halfOpenCalls = 0;
     this.config.onStateChange?.(state);

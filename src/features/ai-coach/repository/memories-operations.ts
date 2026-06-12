@@ -6,6 +6,7 @@
 
 import { supabase } from '../../../config/supabase';
 import { createDebugger } from '../../../utils/debug';
+import { RepositoryError } from '../../../lib/repository/error-handling';
 import type { CoachMemory, MemoryType } from '../memory/memory-schemas';
 import { mapRowToMemory } from './memory-mapper';
 
@@ -28,7 +29,7 @@ export async function getMemoriesByType(
 
   if (error) {
     debug.error('Failed to get memories by type:', error);
-    throw new Error(`Failed to get memories by type: ${error.message}`);
+    throw new RepositoryError('getMemoriesByType', error);
   }
 
   return (data ?? []).map(mapRowToMemory);
@@ -78,7 +79,7 @@ export async function deleteMemory(memoryId: string): Promise<void> {
 
   if (error) {
     debug.error('Failed to delete memory:', error);
-    throw new Error(`Failed to delete memory: ${error.message}`);
+    throw new RepositoryError('deleteMemory', error);
   }
 }
 
@@ -99,7 +100,7 @@ export async function getMemoriesByTypes(
 
   if (error) {
     debug.error('Failed to get memories by types:', error);
-    throw new Error(`Failed to get memories by types: ${error.message}`);
+    throw new RepositoryError('getMemoriesByTypes', error);
   }
 
   return (data ?? []).map(mapRowToMemory);
@@ -128,7 +129,7 @@ export async function getMostRecentMemoryByType(
       return null;
     }
     debug.error('Failed to get most recent memory:', error);
-    throw new Error(`Failed to get most recent memory: ${error.message}`);
+    throw new RepositoryError('getMostRecentMemoryByType', error);
   }
 
   return mapRowToMemory(data);

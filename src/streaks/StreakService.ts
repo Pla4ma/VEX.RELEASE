@@ -1,5 +1,5 @@
 import { eventBus } from '../events';
-import { recordSession } from '../features/streaks/service';
+import { getOrCreateStreak, recordSession } from '../features/streaks/service';
 import { v4 } from '../utils/uuid';
 
 type LegacyStreakState = {
@@ -10,7 +10,7 @@ type LegacyStreakState = {
 };
 
 type StreakService = {
-  getState: () => LegacyStreakState;
+  getState: () => Promise<LegacyStreakState>;
   markFuneralShown: () => void;
   recordSession: (options?: {
     sessionId?: string;
@@ -30,8 +30,21 @@ const EMPTY_STREAK_STATE: LegacyStreakState = {
 
 export function getStreakService(userId?: string): StreakService {
   return {
-    getState(): LegacyStreakState {
-      return EMPTY_STREAK_STATE;
+    async getState(): Promise<LegacyStreakState> {
+      if (!userId) {
+        return EMPTY_STREAK_STATE;
+      }
+      try {
+        const streak = await getOrCreateStreak(userId);
+        return {
+          currentStreak: streak.currentDays,
+          longestStreak: streak.longestDays,
+          lastStreakDiedAt: streak.lastQualifyingSessionAt,
+          streakFuneralShown: false,
+        };
+      } catch {
+        return EMPTY_STREAK_STATE;
+      }
     },
     markFuneralShown(): void {
       if (!userId) {
