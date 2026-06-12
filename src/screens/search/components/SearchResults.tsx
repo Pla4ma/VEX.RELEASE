@@ -4,27 +4,38 @@ import { useTheme } from '../../../theme';
 import { Box, Text, Card } from '../../../components/primitives';
 import { Badge } from '../../../components/Badge';
 import { Icon } from '../../../icons';
-import { Loading } from '../../../components/states';
-import { MOCK_RESULTS, type SearchResult } from '../searchData';
+import { Skeleton } from '../../../shared/ui/primitives';
+import type { SearchResult } from '../searchData';
 
 interface SearchResultsProps {
-  isSearching: boolean;
+  results: SearchResult[];
+  query: string;
 }
 
-export const SearchResults: React.FC<SearchResultsProps> = ({ isSearching }) => {
+export const SearchResults: React.FC<SearchResultsProps> = ({ results, query }) => {
   const { theme } = useTheme();
 
-  if (isSearching) {
+  if (results.length === 0 && query.trim()) {
     return (
-      <Box flex={1} justifyContent="center" alignItems="center">
-        <Loading variant="spinner" size="lg" />
+      <Box flex={1} alignItems="center" justifyContent="center" p={32}>
+        <Icon name="search" size={48} color={theme.colors.text.tertiary} />
+        <Text variant="h4" style={{ marginTop: 16, textAlign: 'center' }}>
+          No Results Found
+        </Text>
+        <Text
+          variant="body"
+          color="text.secondary"
+          style={{ marginTop: 8, textAlign: 'center' }}
+        >
+          Try adjusting your search terms
+        </Text>
       </Box>
     );
   }
 
   return (
     <FlashList
-      data={MOCK_RESULTS}
+      data={results}
       keyExtractor={(item: SearchResult) => item.id}
       contentContainerStyle={{ padding: 16, gap: 12 }}
       estimatedItemSize={80}
@@ -93,14 +104,14 @@ export const SearchResults: React.FC<SearchResultsProps> = ({ isSearching }) => 
         <Box alignItems="center" py={48}>
           <Icon name="search" size={48} color={theme.colors.text.tertiary} />
           <Text variant="h4" style={{ marginTop: 16, textAlign: 'center' }}>
-            No Results Found
+            Start typing to search
           </Text>
           <Text
             variant="body"
             color="text.secondary"
             style={{ marginTop: 8, textAlign: 'center' }}
-          >
-            Try adjusting your search terms
+        >
+            Search for sessions, challenges, users, and content
           </Text>
         </Box>
       }

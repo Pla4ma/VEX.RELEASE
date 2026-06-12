@@ -1,44 +1,51 @@
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { Keyboard, KeyboardAvoidingView, Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../../theme';
-import { Box } from '../../components/primitives';
+import { Box, Text } from '../../components/primitives';
 import { SearchBar } from './components/SearchBar';
 import { CategoriesBar } from './components/CategoriesBar';
 import { RecentSearches } from './components/RecentSearches';
 import { SearchResults } from './components/SearchResults';
 import { TrendingTags } from './components/TrendingTags';
+import { MOCK_RESULTS } from './searchData';
 
 export const SearchScreen: React.FC = () => {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
   const [query, setQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState('all');
-  const [isSearching, setIsSearching] = useState(false);
-  const [showResults, setShowResults] = useState(false);
+  const [hasSearched, setHasSearched] = useState(false);
 
   const handleSearch = useCallback(() => {
     if (!query.trim()) {
       return;
     }
     Keyboard.dismiss();
-    setIsSearching(true);
-    setShowResults(true);
-    setTimeout(() => {
-      setIsSearching(false);
-    }, 800);
+    setHasSearched(true);
   }, [query]);
 
   const handleClear = () => {
     setQuery('');
-    setShowResults(false);
+    setHasSearched(false);
   };
 
   const handleSelectSearch = (search: string) => {
     setQuery(search);
-    handleSearch();
+    setHasSearched(true);
   };
+
+  const filteredResults = useMemo(() => {
+    if (!hasSearched) {return [];}
+    const lowerQuery = query.toLowerCase();
+    return MOCK_RESULTS.filter(
+      (r) =>
+        r.title.toLowerCase().includes(lowerQuery) ||
+        r.subtitle.toLowerCase().includes(lowerQuery) ||
+        r.type.includes(lowerQuery),
+    );
+  }, [hasSearched, query]);
 
   return (
     <KeyboardAvoidingView
@@ -58,8 +65,8 @@ export const SearchScreen: React.FC = () => {
           onCategoryChange={setActiveCategory}
         />
 
-        {showResults ? (
-          <SearchResults isSearching={isSearching} />
+        {hasSearched ? (
+          <SearchResults results={filteredResults} query={query} />
         ) : (
           <Box flex={1} p={16}>
             <RecentSearches onSelect={handleSelectSearch} />

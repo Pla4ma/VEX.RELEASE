@@ -11,6 +11,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { Box, Text } from '../../components/primitives';
+import { Skeleton } from '../../shared/ui/primitives';
 import { ErrorState } from '../../components/states/ErrorState';
 import { Icon } from '../../icons';
 import type { MainStackParams } from '../../navigation/types';
@@ -52,16 +53,17 @@ export function MasteryScreen(): JSX.Element {
         flex={1}
         style={{ backgroundColor: theme.colors.background.primary }}
       >
-        <View
+        <Box
           style={{
             paddingTop: insets.top + theme.spacing[5],
             paddingHorizontal: theme.spacing[5],
           }}
         >
-          <Text variant="h2" color="text.primary">
-            Loading...
-          </Text>
-        </View>
+          <Skeleton width={120} height={20} style={{ marginBottom: 12 }} />
+          <Skeleton width={200} height={32} style={{ marginBottom: 16 }} />
+          <Skeleton width="100%" height={100} style={{ marginBottom: 16 }} />
+          <Skeleton width="100%" height={200} />
+        </Box>
       </Box>
     );
   }
