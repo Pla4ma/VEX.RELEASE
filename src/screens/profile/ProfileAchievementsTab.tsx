@@ -130,7 +130,7 @@ export const ProfileAchievementsTab: React.FC<ProfileAchievementsTabProps> = ({
                   <Icon
                     name={item.statusTone === 'success' ? 'check-circle' : 'award'}
                     size="md"
-                    color={item.statusTone === 'success' ? '#0C765F' : vexLightGlass.text.secondary}
+                    color={item.statusTone === 'success' ? vexLightGlass.mint[700] : vexLightGlass.text.secondary}
                     variant="solid"
                   />
                 </GlassIconOrb>

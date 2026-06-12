@@ -113,7 +113,7 @@ export const CosmeticEquippingSheet: React.FC<CosmeticEquippingSheetProps> = ({
       <Box
         flex={1}
         style={{
-          backgroundColor: 'rgba(0,0,0,0.7)',
+          backgroundColor: 'rgba(10, 31, 26, 0.12)',
           justifyContent: 'flex-end',
         }}
       >

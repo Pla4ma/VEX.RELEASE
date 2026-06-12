@@ -94,7 +94,7 @@ export const ProfileStatTile: React.FC<ProfileStatTileProps> = ({
       <LiquidGlassSphere
         color={mapOrbToSphereColor(item.iconOrb)}
         icon={
-          <Icon color="#0C765F" name={item.icon} size="sm" variant="solid" />
+          <Icon color={vexLightGlass.mint[700]} name={item.icon} size="sm" variant="solid" />
         }
         intensity={0.88}
         size={48}

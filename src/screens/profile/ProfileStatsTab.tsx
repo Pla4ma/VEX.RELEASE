@@ -46,7 +46,7 @@ function ProfileStatsError(): JSX.Element {
           variant="outline"
         />
         <Text
-          style={{ color: '#B91C1C', fontSize: 13, lineHeight: 18 }}
+          style={{ color: vexLightGlass.semantic.danger, fontSize: 13, lineHeight: 18 }}
         >
           Some profile data could not load. Pull to refresh or revisit this screen in a moment.
         </Text>

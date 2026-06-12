@@ -28,7 +28,7 @@ export function ProfileXpBar({
       >
         <Text
           style={{
-            color: '#0A1F1A',
+            color: vexLightGlass.text.primary,
             fontSize: 12,
             fontWeight: '800',
           }}
@@ -37,7 +37,7 @@ export function ProfileXpBar({
         </Text>
         <Text
           style={{
-            color: '#3D5A52',
+            color: vexLightGlass.text.tertiary,
             fontSize: 12,
             fontWeight: '700',
           }}

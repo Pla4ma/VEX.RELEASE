@@ -78,9 +78,9 @@ export function InlineStatusRow({
     tone === 'celebration'
       ? vexLightGlass.mint[500]
       : tone === 'warning'
-        ? '#E05E5E'
+        ? vexLightGlass.semantic.danger
         : tone === 'info'
-          ? '#3B8BD4'
+          ? vexLightGlass.semantic.info
           : vexLightGlass.text.secondary;
 
   return (

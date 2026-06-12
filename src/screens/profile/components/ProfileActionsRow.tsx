@@ -30,13 +30,13 @@ function GlassIconButton({
       onPress={onPress}
       style={{
         alignItems: 'center',
-        backgroundColor: 'rgba(255, 255, 255, 0.48)',
-        borderColor: 'rgba(255, 255, 255, 0.92)',
+        backgroundColor: vexLightGlass.glass.fillSubtle,
+        borderColor: vexLightGlass.glass.innerHighlight,
         borderRadius: 999,
         borderWidth: 1.5,
         height: 44,
         justifyContent: 'center',
-        shadowColor: 'rgba(13, 76, 65, 0.18)',
+        shadowColor: vexLightGlass.glass.shadowStrong,
         shadowOffset: { width: 0, height: 7 },
         shadowOpacity: 0.85,
         shadowRadius: 14,
