@@ -50,7 +50,7 @@ export function createDefaultNotificationSettings(
         deviceTokens: [],
         timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
       },
-      email: { enabled: true, email: 'user@example.com', digestFrequency: 'daily' },
+      email: { enabled: true, email: '', digestFrequency: 'daily' },
       inApp: { enabled: true, soundEnabled: true, vibrationEnabled: true },
     },
     preferences: {
