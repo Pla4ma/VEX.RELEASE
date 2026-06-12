@@ -78,7 +78,7 @@ export function LiquidButton({
 
   const s = LIQUID_SIZE[size];
   const v = resolveLiquidVariant(variant, false);
-  const isPrimary = variant === 'primary';
+  const isPrimary = variant === 'primary' || variant === 'fire';
 
   return (
     <Animated.View
@@ -112,7 +112,7 @@ export function LiquidButton({
             overflow: 'hidden',
             paddingHorizontal: s.paddingH,
             paddingVertical: s.paddingV,
-            shadowColor: isPrimary ? 'rgba(10, 155, 138, 0.22)' : liveV.shadowColor,
+            shadowColor: isPrimary ? liveV.shadowColor : liveV.shadowColor,
             shadowOffset: { width: 0, height: isPrimary ? 8 : 3 },
             shadowOpacity: isPrimary ? 0.28 : 0.14,
             shadowRadius: isPrimary ? 12 : 6,

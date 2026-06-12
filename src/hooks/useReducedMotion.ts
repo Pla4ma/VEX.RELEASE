@@ -50,20 +50,7 @@ interface ReducedMotionResult {
  * Hook to detect and respond to reduced motion preference
  */
 export function useReducedMotion(): ReducedMotionResult {
-  return {
-    isReducedMotion: true,
-    animationConfig: {
-      duration: 0,
-      skipAnimations: true,
-    },
-    springConfig: {
-      damping: 50,
-      stiffness: 500,
-      mass: 0.1,
-      overshootClamping: true,
-    },
-    staggerDelay: 0,
-  };
+  return _useSystemReducedMotion();
 }
 
 function _useSystemReducedMotion(): ReducedMotionResult {

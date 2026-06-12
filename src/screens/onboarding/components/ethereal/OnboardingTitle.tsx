@@ -14,15 +14,15 @@ export function OnboardingTitle({
   subtitle,
 }: OnboardingTitleProps): React.JSX.Element {
   return (
-    <View style={{ gap: 5 }}>
+    <View style={{ gap: 3 }}>
       {title ? (
         <Text
-          fontSize={28}
+          fontSize={26}
           fontWeight="800"
           style={{
             color: etherealText.heading,
             letterSpacing: -0.3,
-            lineHeight: 34,
+            lineHeight: 31,
           }}
         >
           {title}
@@ -30,9 +30,10 @@ export function OnboardingTitle({
       ) : null}
       {subtitle ? (
         <Text
-          fontSize={15}
+          fontSize={14}
           fontWeight="600"
-          style={{ color: etherealText.subtitle, lineHeight: 22 }}
+          numberOfLines={2}
+          style={{ color: etherealText.subtitle, lineHeight: 19 }}
         >
           {subtitle}
         </Text>

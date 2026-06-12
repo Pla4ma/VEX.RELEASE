@@ -2,9 +2,9 @@ import React from 'react';
 import { View } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
 import { GlassPill } from '../../../components/glass/GlassPill';
-import { CrystalAvatar } from '../../../components/glass/CrystalAvatar';
 import { Icon } from '../../../icons';
 import type { User } from '../../../types/models';
+import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 
 interface ProfileIdentityBlockProps {
   user: User | null;
@@ -18,6 +18,7 @@ export const ProfileIdentityBlock: React.FC<ProfileIdentityBlockProps> = ({
   level,
 }) => {
   const displayName = user?.displayName ?? user?.firstName ?? 'Player';
+  const initial = displayName.slice(0, 1).toUpperCase();
 
   return (
     <View
@@ -29,10 +30,44 @@ export const ProfileIdentityBlock: React.FC<ProfileIdentityBlockProps> = ({
         zIndex: 2,
       }}
     >
-      <View style={{ width: 96, height: 96 }}>
-        <CrystalAvatar
-          active={streakDays > 0}
-          size={96}
+      <View
+        style={{
+          alignItems: 'center',
+          backgroundColor: 'rgba(240, 138, 75, 0.16)',
+          borderColor: vexLightGlass.semantic.fire,
+          borderRadius: 24,
+          borderWidth: 1.4,
+          height: 82,
+          justifyContent: 'center',
+          shadowColor: 'rgba(240, 138, 75, 0.22)',
+          shadowOffset: { width: 0, height: 8 },
+          shadowOpacity: 0.22,
+          shadowRadius: 14,
+          width: 82,
+        }}
+      >
+        <Text
+          style={{
+            color: vexLightGlass.semantic.fireDeep,
+            fontSize: 34,
+            fontWeight: '900',
+            lineHeight: 38,
+          }}
+        >
+          {initial}
+        </Text>
+        <View
+          style={{
+            backgroundColor: '#22C55E',
+            borderColor: '#FFFFFF',
+            borderRadius: 999,
+            borderWidth: 2,
+            bottom: 6,
+            height: 16,
+            position: 'absolute',
+            right: 6,
+            width: 16,
+          }}
         />
       </View>
       <View style={{ flex: 1, gap: 4 }}>

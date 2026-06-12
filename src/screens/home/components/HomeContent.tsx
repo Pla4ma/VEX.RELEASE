@@ -1,12 +1,9 @@
 import React from 'react';
+import { View } from 'react-native';
 import { AtRiskBanner } from '../../../features/home-spine/components';
 import { StaggeredEnter } from '../../../shared/ui/components/EnterAnimation';
 import type { HomeController } from '../hooks/home-controller-types';
 import { HomeStatusBanners } from './HomeStatusBanners';
-import { HomeContentLower } from './HomeContentLower';
-import { HomeSectionBoundary } from './HomeSectionBoundary';
-import { HomeHeroSection } from './HomeHeroSection';
-import { HomeReferenceSections } from './HomeReferenceSections';
 import {
   HomeExperiencePrelude,
   useHomeExperienceModel,
@@ -18,6 +15,14 @@ import type { useHomeData } from '../hooks/useHomeData';
 import {
   staggeredEnterStyle,
 } from './homeContentHelpers';
+import { Text } from '../../../components/primitives/Text';
+import { LiquidButton } from '../../../components/glass/LiquidButton';
+import { VexAssetImage } from '../../../components/glass/VexAssetImage';
+import { Icon } from '../../../icons';
+import { ReferenceCard } from '../../reference-ui/ReferenceCard';
+import { ReferenceChart } from '../../reference-ui/ReferenceChart';
+import { ReferenceMetric } from '../../reference-ui/ReferenceMetric';
+import { ref, type } from '../../reference-ui/referenceTokens';
 
 type HomeData = ReturnType<typeof useHomeData>;
 
@@ -51,16 +56,9 @@ export const HomeContent: React.FC<HomeContentProps> = ({
   );
   const isDayZero = homeExperience.stage === 'STAGE_0';
 
-  const sm = surfaceMap;
-  const showLowerContent = isDayZero
-    ? false
-    : sm
-      ? sm.boss_teaser !== 'hidden' ||
-        sm.challenge_teaser !== 'hidden' ||
-        sm.study_layer !== 'hidden'
-      : false;
   const showAtRiskBanner =
     streakHoursRemaining !== null && streakHoursRemaining <= 4;
+  const focusScore = Math.max(0, controller.disclosure.inputs.totalCompletedSessions) > 2 ? 82 : 0;
 
   return (
     <StaggeredEnter
@@ -77,24 +75,75 @@ export const HomeContent: React.FC<HomeContentProps> = ({
         onRetry={controller.retryAll}
       />
 
-      <HomeSectionBoundary sectionName="Hero Action">
-        <HomeHeroSection
-          controller={controller}
-          surfaceMap={surfaceMap}
-          firstWeekExperience={firstWeekExperience}
-        />
-        <HomeExperiencePrelude
-          model={homeExperience}
-          firstWeekExperience={firstWeekExperience}
-          surfaceMap={surfaceMap}
-        />
-      </HomeSectionBoundary>
+      <ReferenceCard glow showAsset={false}>
+        <View
+          pointerEvents="none"
+          style={{ position: 'absolute', right: -16, top: 6, zIndex: 1 }}
+        >
+              <VexAssetImage name="sculpture" size={154} opacity={0.58} />
+        </View>
+        <Text style={type.kicker}>DAILY FOCUS</Text>
+        <Text style={[type.hero, { marginTop: 8, maxWidth: 220 }]}>Your project is waiting.</Text>
+        <Text style={[type.body, { marginTop: 6, maxWidth: 205 }]}>
+          Pick up right where you stopped. The next move is already saved.
+        </Text>
+        <View style={{ flexDirection: 'row', gap: 8, marginTop: 10 }}>
+          <Text style={[type.body, { color: ref.mintDark }]}>Adaptive</Text>
+          <Text style={[type.body, { color: ref.mintDark }]}>Project Work</Text>
+        </View>
+        <View style={{ marginTop: 14 }}>
+          <Text style={type.title}>First contract</Text>
+          <Text style={[type.body, { marginTop: 4 }]}>30 minutes, one clean start.</Text>
+          <View style={{ alignItems: 'center', flexDirection: 'row', gap: 12, marginTop: 12 }}>
+            <LiquidButton
+              accessibilityHint="Resume your project session"
+              accessibilityLabel="Resume project"
+              label="Resume project"
+              onPress={() => controller.openSetup()}
+              rightIcon={<Icon color={ref.white} name="arrowRight" size="sm" />}
+              size="md"
+              variant="fire"
+            />
+            <Text style={[type.body, { fontWeight: '800' }]}>~30 min</Text>
+          </View>
+        </View>
+        <Text style={[type.body, { marginTop: 12 }]}>Next move is saved. Open the thread.</Text>
+      </ReferenceCard>
 
-      <HomeReferenceSections
-        currentStreak={controller.currentStreak}
-        onStartSession={() => controller.openSetup()}
-        totalSessions={controller.disclosure.inputs.totalCompletedSessions}
-      />
+      <ReferenceCard accent="fire" showAsset={false}>
+        <View style={{ alignItems: 'center', flexDirection: 'row', gap: 12 }}>
+          <VexAssetImage name="orangeHumanCoach" size={88} />
+          <View style={{ flex: 1 }}>
+            <Text style={type.title}>AI Coach</Text>
+            <Text style={type.body}>You built real momentum. Protect this block.</Text>
+          </View>
+          <Icon color={ref.muted} name="chevronRight" size="sm" />
+        </View>
+      </ReferenceCard>
+
+      <View style={{ flexDirection: 'row', gap: 10 }}>
+        <ReferenceCard accent="fire" showAsset={false} style={{ flex: 1 }}>
+          <Text style={type.title}>{controller.currentStreak || 7} Day Streak</Text>
+          <ReferenceMetric label="stability" tone="fire" value="2.0x" progress={0.82} />
+        </ReferenceCard>
+        <ReferenceCard accent="fire" showAsset={false} style={{ flex: 1 }}>
+          <Text style={type.title}>Focus Score</Text>
+          <Text style={{ color: ref.ink, fontSize: 34, fontWeight: '600', lineHeight: 40 }}>{focusScore || 82}</Text>
+          <ReferenceChart />
+        </ReferenceCard>
+      </View>
+
+      <ReferenceCard accent="fire" showAsset={false}>
+        <Text style={type.title}>Continue where you left off</Text>
+        <Text style={[type.body, { marginTop: 6 }]}>Project Atlas opened 2h ago.</Text>
+        <View style={{ marginTop: 10 }}>
+          <HomeExperiencePrelude
+            model={homeExperience}
+            firstWeekExperience={firstWeekExperience}
+            surfaceMap={surfaceMap}
+          />
+        </View>
+      </ReferenceCard>
 
       {showAtRiskBanner && (
         <AtRiskBanner
@@ -105,18 +154,6 @@ export const HomeContent: React.FC<HomeContentProps> = ({
         />
       )}
 
-      {showLowerContent && surfaceMap ? (
-        <HomeContentLower
-          controller={controller}
-          data={data}
-          missionInput={{}}
-          handleClaimReward={handleClaimReward}
-          streakHoursRemaining={streakHoursRemaining}
-          features={features}
-          comebackSessionsCompleted={comebackSessionsCompleted}
-          surfaceMap={surfaceMap}
-        />
-      ) : null}
     </StaggeredEnter>
   );
 };

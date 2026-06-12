@@ -189,3 +189,7 @@ export class SessionRepository {
     return calculateSessionStats(history, summaries);
   }
 }
+
+export function getSessionRepository(userId?: string): SessionRepository {
+  return new SessionRepository(userId);
+}

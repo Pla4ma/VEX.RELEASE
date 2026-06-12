@@ -83,7 +83,7 @@ export const ProfileScreen: React.FC = () => {
           onLogout={logout}
         />
 
-        <View style={{ paddingHorizontal: 16, gap: 10 }}>
+        <View style={{ paddingHorizontal: 12, gap: 10 }}>
           <ProfileGlassTabs activeTab={activeTab} onChange={setActiveTab} />
 
           {activeTab === 'stats' ? (

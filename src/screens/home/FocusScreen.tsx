@@ -10,7 +10,7 @@ import type { ExtendedRootStackParams } from '../../navigation/types';
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 import { useAuthStore } from '../../store';
 import { FocusModeCardView } from './components/FocusModeCardView';
-import { FocusScreenHeader } from './components/FocusScreenHeader';
+import { ReferenceHeader } from '../reference-ui/ReferenceHeader';
 
 type NavigationProp = NativeStackNavigationProp<ExtendedRootStackParams>;
 
@@ -45,14 +45,16 @@ export function FocusScreen(): JSX.Element {
 
   return (
     <GlassScreen showAura variant="focus">
-      <View style={{ flex: 1, paddingHorizontal: 16, paddingTop: 2 }}>
+      <View style={{ flex: 1, paddingHorizontal: 12, paddingTop: 2 }}>
         <ScrollView
           contentContainerStyle={{ paddingBottom: 184 }}
           showsVerticalScrollIndicator={false}
         >
-          <FocusScreenHeader
+          <ReferenceHeader
+            eyebrow="FOCUS MODES"
+            title="Focus modes"
             body={statusCopy}
-            onSettingsPress={() => navigation.navigate('Settings', { screen: 'SettingsMain' })}
+            onAction={() => navigation.navigate('Settings', { screen: 'SettingsMain' })}
           />
           {modeCards.map((card) => (
             <FocusModeCardView

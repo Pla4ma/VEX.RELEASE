@@ -1,7 +1,3 @@
-/**
- * EtherealAuthButtons — Apple, Google, and Email auth CTAs.
- * Static (motion stripped for performance).
- */
 import React, { useCallback } from 'react';
 import { View } from 'react-native';
 
@@ -24,10 +20,10 @@ type EtherealAuthButtonsProps = {
 export function EtherealAuthButtons({
   onProviderPress,
   disabled = false,
-  startDelayMs: _startDelayMs = 800,
+  startDelayMs = 800,
   emailLabel = 'Continue with Email',
 }: EtherealAuthButtonsProps): React.JSX.Element {
-  const onEmailPress = useCallback(() => {
+  const onEmailPress = useCallback((): void => {
     onProviderPress('email');
   }, [onProviderPress]);
 
@@ -66,25 +62,25 @@ export function EtherealAuthButtons({
     accessibilityHint: 'Opens email sign in',
     useShimmer: true,
     useRipple: false,
-    rippleColor: 'rgba(84, 163, 164, 0.20)',
+    rippleColor: etherealButton.googleBorder,
   };
 
   return (
     <View style={{ width: '100%', gap: 14 }}>
       <StaggeredAuthButton
-        delay={0}
+        delay={startDelayMs}
         disabled={disabled}
         onPress={() => onProviderPress('google')}
         spec={googleSpec}
       />
       <StaggeredAuthButton
-        delay={0}
+        delay={startDelayMs + 70}
         disabled={disabled}
         onPress={() => onProviderPress('apple')}
         spec={appleSpec}
       />
       <StaggeredAuthButton
-        delay={0}
+        delay={startDelayMs + 140}
         disabled={disabled}
         onPress={onEmailPress}
         spec={emailSpec}

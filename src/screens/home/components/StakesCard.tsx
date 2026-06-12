@@ -16,10 +16,10 @@ export function StakesCard({ stakes }: StakesCardProps): JSX.Element {
   return (
     <GlassCard
       variant="subtle"
-      padding={16}
-      radius={20}
+      padding={12}
+      radius={18}
       size="sm"
-      style={{ marginBottom: 16, marginTop: 12 }}
+      style={{ marginBottom: 10, marginTop: 10 }}
     >
       <View
         pointerEvents="none"
@@ -82,7 +82,7 @@ export function StakesCard({ stakes }: StakesCardProps): JSX.Element {
       {stakes.atRisk ? (
         <Text
           style={{
-            color: '#A04A12',
+            color: vexLightGlass.semantic.warning,
             fontSize: 12,
             marginTop: 6,
             fontWeight: '600',

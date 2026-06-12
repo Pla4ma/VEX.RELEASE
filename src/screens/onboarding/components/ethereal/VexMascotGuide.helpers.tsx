@@ -14,7 +14,7 @@ import { Text } from '../../../../components/primitives/Text';
 import { etherealButton, etherealText } from '@/theme/tokens/ethereal-sky';
 import { getMinTouchTargetStyle } from '../../../../utils/touchTarget';
 
-import type { MascotMood } from './VexMascotGuide';
+import type { MascotMood } from './VexMascotGuide.tokens';
 
 export function useMascotFloatAnimation(mood: MascotMood, reducedMotion: boolean) {
   const float = useSharedValue(0);

@@ -7,7 +7,7 @@ import { setSentryUser } from '../../config/sentry';
 import { initializeServicesAfterAuth } from '../../store/authStoreIntegrations';
 import type { AuthCredentials, SignUpMetadata, User } from './types';
 
-const AUTH_QUERY_KEYS = {
+export const AUTH_QUERY_KEYS = {
   currentUser: ['auth', 'currentUser'] as const,
 };
 

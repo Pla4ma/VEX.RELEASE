@@ -54,7 +54,7 @@ export function VexFocusSurface({
 
   return (
     <Animated.View entering={entering} style={{ width: '100%' }}>
-      <GlassCard padding={16} radius={26} variant="hero">
+      <GlassCard padding={15} radius={24} variant="hero">
         <VexFocusSurfaceDecor />
         <View style={{ alignItems: 'flex-start', marginBottom: 10, zIndex: 2 }}>
           <GlassPill
@@ -63,7 +63,7 @@ export function VexFocusSurface({
             variant="mint"
           />
         </View>
-        <View style={{ maxWidth: '68%', zIndex: 2 }}>
+        <View style={{ maxWidth: '72%', zIndex: 2 }}>
           <Text
             style={{
               color: vexLightGlass.text.primary,

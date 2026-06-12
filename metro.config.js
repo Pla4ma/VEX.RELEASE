@@ -32,6 +32,8 @@ if (!config.resolver.sourceExts.includes("mjs"))
 if (!config.resolver.assetExts) config.resolver.assetExts = [];
 if (!config.resolver.assetExts.includes("cjs"))
   config.resolver.assetExts.push("cjs");
+if (!config.resolver.assetExts.includes("riv"))
+  config.resolver.assetExts.push("riv");
 
 // ---------------------------------------------------------------------------
 // Native module shims

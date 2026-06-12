@@ -2,7 +2,7 @@
  * EtherealOnboardingShell — shared layout for the OnboardingFlow.
  * Fixed layout zones: safe areas, title, mascot guide, scrollable options, sticky footer.
  */
-import React, { type ReactNode } from 'react';
+import React, { type ReactNode, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -14,6 +14,7 @@ import { OnboardingTitle } from './OnboardingTitle';
 import { OnboardingFooter } from './OnboardingFooter';
 import { OnboardingErrorBanner } from './OnboardingErrorBanner';
 import { VexMascotGuide } from './VexMascotGuide';
+import { OnboardingCinematicIntro } from './OnboardingCinematicIntro';
 import type { MascotMood } from './VexMascotGuide.tokens';
 import { useOnboardingStore } from '../../../../features/onboarding';
 
@@ -34,6 +35,7 @@ type EtherealOnboardingShellProps = {
   mascotMood?: MascotMood;
   mascotMessage?: string;
   mascotSubmessage?: string;
+  mascotReactionKey?: string | number;
 };
 
 export function EtherealOnboardingShell({
@@ -53,19 +55,22 @@ export function EtherealOnboardingShell({
   mascotMood = 'default',
   mascotMessage,
   mascotSubmessage,
+  mascotReactionKey,
 }: EtherealOnboardingShellProps): React.JSX.Element {
   const insets = useSafeAreaInsets();
   const isLaunchStep = step === lastStepIndex;
   const showBack = step > 0;
   const guideDismissedAt = useOnboardingStore((state) => state.mascotGuideDismissedAt);
   const dismissMascotGuide = useOnboardingStore((state) => state.dismissMascotGuide);
+  const [guideReplayCount, setGuideReplayCount] = useState(0);
+  const [showStartupCinematic, setShowStartupCinematic] = useState(true);
   const markMascotGuideCompleted = useOnboardingStore(
     (state) => state.markMascotGuideCompleted,
   );
   const showGuide = !guideDismissedAt && !!mascotMessage;
 
   // Footer height estimate + safe area bottom + gap
-  const footerHeight = 76 + insets.bottom;
+  const footerHeight = 118 + insets.bottom;
 
   return (
     <View style={{ flex: 1 }}>
@@ -75,32 +80,34 @@ export function EtherealOnboardingShell({
       <View
         style={{
           flex: 1,
-          paddingTop: insets.top + 12,
+          paddingTop: insets.top + 6,
           paddingBottom: 0,
-          paddingHorizontal: 24,
+          paddingHorizontal: 20,
         }}
       >
         {/* Top row: back + eyebrow */}
         <OnboardingHeader eyebrow={eyebrow} onBack={onBack} showBack={showBack} />
 
         {/* Title block — compact */}
-        <View style={{ marginTop: 4, marginBottom: 8, maxHeight: 140 }}>
+        <View style={{ marginTop: 0, marginBottom: 6, maxHeight: 104 }}>
           <OnboardingTitle subtitle={subtitle} title={title} />
         </View>
 
         {/* Mascot guide — compact row */}
         {showGuide && mascotMessage ? (
-          <View style={{ marginBottom: 10, maxHeight: 120 }}>
+          <View style={{ marginBottom: 8, maxHeight: 118 }}>
             <VexMascotGuide
               message={mascotMessage}
               mood={mascotMood}
-              onBack={showBack ? onBack : undefined}
-              onReplay={() => {}}
+              onReplay={() => {
+                setGuideReplayCount((value) => value + 1);
+              }}
               onSkip={() => {
                 dismissMascotGuide();
               }}
               placement="inline"
-              size="question"
+              reactionKey={`${mascotReactionKey ?? 'guide'}-${guideReplayCount}`}
+              size={step === lastStepIndex ? 'confirm' : 'question'}
               submessage={mascotSubmessage}
             />
           </View>
@@ -128,8 +135,8 @@ export function EtherealOnboardingShell({
             style={{
               position: 'absolute',
               bottom: 0,
-              left: 24,
-              right: 24,
+              left: 20,
+              right: 20,
               paddingBottom: insets.bottom + 8,
               paddingTop: 8,
             }}
@@ -147,6 +154,26 @@ export function EtherealOnboardingShell({
           </View>
         ) : null}
       </View>
+      {showStartupCinematic ? (
+        <View
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 20,
+          }}
+        >
+          <EtherealSkyBackground />
+          <BackgroundScrim intensity="question" />
+          <OnboardingCinematicIntro
+            onBegin={() => {
+              setShowStartupCinematic(false);
+            }}
+          />
+        </View>
+      ) : null}
     </View>
   );
 }
