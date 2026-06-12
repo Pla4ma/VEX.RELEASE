@@ -26,33 +26,27 @@ describe('initializeAchievementTracking', () => {
     initializeAchievementTracking();
     expect(eventBus.subscribe).toHaveBeenCalledWith('session:completed', expect.any(Function));
   });
-
   it('subscribes to streak:updated', () => {
     initializeAchievementTracking();
     expect(eventBus.subscribe).toHaveBeenCalledWith('streak:updated', expect.any(Function));
   });
-
   it('subscribes to boss:defeated', () => {
     initializeAchievementTracking();
     expect(eventBus.subscribe).toHaveBeenCalledWith('boss:defeated', expect.any(Function));
   });
-
   it('subscribes to duel:completed', () => {
     initializeAchievementTracking();
     expect(eventBus.subscribe).toHaveBeenCalledWith('duel:completed', expect.any(Function));
   });
-
   it('subscribes to squad:joined', () => {
     initializeAchievementTracking();
     expect(eventBus.subscribe).toHaveBeenCalledWith('squad:joined', expect.any(Function));
   });
-
   it('subscribes to user:recruited', () => {
     initializeAchievementTracking();
     expect(eventBus.subscribe).toHaveBeenCalledWith('user:recruited', expect.any(Function));
   });
-
-  it('subscribes to exactly 6 event types', () => {
+  it('subscribes to exactly 6 events', () => {
     initializeAchievementTracking();
     expect(eventBus.subscribe).toHaveBeenCalledTimes(6);
   });

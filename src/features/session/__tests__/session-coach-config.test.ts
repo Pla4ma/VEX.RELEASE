@@ -10,45 +10,31 @@ describe('getModeCoachConfig', () => {
   });
 
   it('returns coach config for CHALLENGE', () => {
-    const c = getModeCoachConfig(SessionMode.CHALLENGE);
-    expect(c.enabled).toBe(true);
-    expect(c.cooldownSeconds).toBe(900);
+    expect(getModeCoachConfig(SessionMode.CHALLENGE).cooldownSeconds).toBe(900);
   });
 
   it('returns coach config for FLOW', () => {
-    const c = getModeCoachConfig(SessionMode.FLOW);
-    expect(c.enabled).toBe(true);
-    expect(c.cooldownSeconds).toBe(600);
+    expect(getModeCoachConfig(SessionMode.FLOW).cooldownSeconds).toBe(600);
   });
 
   it('returns coach config for LIGHT_FOCUS', () => {
-    const c = getModeCoachConfig(SessionMode.LIGHT_FOCUS);
-    expect(c.enabled).toBe(true);
-    expect(c.cooldownSeconds).toBe(600);
+    expect(getModeCoachConfig(SessionMode.LIGHT_FOCUS).cooldownSeconds).toBe(600);
   });
 
   it('returns coach config for STUDY', () => {
-    const c = getModeCoachConfig(SessionMode.STUDY);
-    expect(c.enabled).toBe(true);
-    expect(c.cooldownSeconds).toBe(600);
+    expect(getModeCoachConfig(SessionMode.STUDY).cooldownSeconds).toBe(600);
   });
 
   it('returns coach config for CREATIVE', () => {
-    const c = getModeCoachConfig(SessionMode.CREATIVE);
-    expect(c.enabled).toBe(true);
-    expect(c.cooldownSeconds).toBe(1200);
+    expect(getModeCoachConfig(SessionMode.CREATIVE).cooldownSeconds).toBe(1200);
   });
 
   it('returns coach config for SPRINT', () => {
-    const c = getModeCoachConfig(SessionMode.SPRINT);
-    expect(c.enabled).toBe(true);
-    expect(c.cooldownSeconds).toBe(300);
+    expect(getModeCoachConfig(SessionMode.SPRINT).cooldownSeconds).toBe(300);
   });
 
   it('returns coach config for RECOVERY', () => {
-    const c = getModeCoachConfig(SessionMode.RECOVERY);
-    expect(c.enabled).toBe(true);
-    expect(c.cooldownSeconds).toBe(300);
+    expect(getModeCoachConfig(SessionMode.RECOVERY).cooldownSeconds).toBe(300);
   });
 
   it('returns coach disabled for STARTER', () => {

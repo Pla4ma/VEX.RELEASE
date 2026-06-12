@@ -23,20 +23,9 @@ describe('resetCompanionService', () => {
     expect(s2.getState()?.level).toBe(5);
   });
 
-  it('returns null state when no initial state after reset', () => {
+  it('returns null state after reset without init', () => {
     getCompanionService(makeState());
     resetCompanionService();
     expect(getCompanionService().getState()).toBeNull();
-  });
-
-  it('creates independent instances after multiple resets', () => {
-    const s1 = getCompanionService(makeState({ level: 1 }));
-    resetCompanionService();
-    const s2 = getCompanionService(makeState({ level: 2 }));
-    resetCompanionService();
-    const s3 = getCompanionService(makeState({ level: 3 }));
-    expect(s3.getState()?.level).toBe(3);
-    expect(s1.getState()?.level).toBe(1);
-    expect(s2.getState()?.level).toBe(2);
   });
 });

@@ -19,23 +19,20 @@ describe('submitFeedback', () => {
     expect(result).toEqual({ success: true, feedbackId: 'fb-1' });
   });
 
-  it('propagates errors from invokeAndParse', async () => {
-    jest.mocked(invokeAndParse).mockRejectedValue(new Error('Network error'));
-    await expect(submitFeedback({ contentId: 'c-1', rating: 1 })).rejects.toThrow('Network error');
+  it('propagates errors', async () => {
+    jest.mocked(invokeAndParse).mockRejectedValue(new Error('fail'));
+    await expect(submitFeedback({ contentId: 'c-1', rating: 1 })).rejects.toThrow('fail');
   });
 });
 
 describe('buildContentStudyTimeoutFallback', () => {
-  it('returns valid timeout fallback', () => {
-    const fallback = buildContentStudyTimeoutFallback();
-    expect(() => ContentStudyTimeoutFallbackSchema.parse(fallback)).not.toThrow();
+  it('returns valid fallback', () => {
+    expect(() => ContentStudyTimeoutFallbackSchema.parse(buildContentStudyTimeoutFallback())).not.toThrow();
   });
-
-  it('includes study session CTA', () => {
+  it('includes study CTA', () => {
     expect(buildContentStudyTimeoutFallback().ctaLabel).toBe('Start study session');
   });
-
-  it('includes warming up title', () => {
+  it('includes warming title', () => {
     expect(buildContentStudyTimeoutFallback().title).toBe('Content generation is still warming up');
   });
 });

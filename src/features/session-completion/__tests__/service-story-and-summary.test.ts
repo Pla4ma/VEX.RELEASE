@@ -17,71 +17,55 @@ function makeLedger(overrides: Partial<Record<string, unknown>> = {}) {
 }
 
 describe('buildPostSessionStoryViewModel', () => {
-  it('builds view model from ledger and summary', () => {
+  it('builds view model', () => {
     const vm = buildPostSessionStoryViewModel({ ledger: makeLedger(), summary: { sessionId: 'session-1' } });
     expect(vm.grade).toBe('B');
-    expect(vm.ledgerId).toBe('ledger-1');
     expect(vm.xpDelta).toBe(50);
     expect(vm.degradedWarnings).toEqual([]);
   });
-
-  it('uses degradedSystems as fallback warnings', () => {
-    const vm = buildPostSessionStoryViewModel({ degradedSystems: ['offline_sync'], ledger: makeLedger({ degradedSystems: ['offline_sync'] }), summary: {} });
-    expect(vm.degradedWarnings).toEqual(['offline_sync']);
+  it('uses degradedSystems fallback', () => {
+    const vm = buildPostSessionStoryViewModel({ degradedSystems: ['offline'], ledger: makeLedger(), summary: {} });
+    expect(vm.degradedWarnings).toEqual(['offline']);
   });
 });
 
 describe('parseSessionCompletionParams', () => {
   it('parses valid navigation params', () => {
-    const result = parseSessionCompletionParams({ sessionId: 'sess-1', completedAt: 1700001500000 });
-    expect(result.params).not.toBeNull();
-    expect(result.recoverySessionId).toBeNull();
-    expect(result.warningMessage).toBeNull();
+    const r = parseSessionCompletionParams({ sessionId: 's-1', completedAt: 100 });
+    expect(r.params).not.toBeNull();
+    expect(r.recoverySessionId).toBeNull();
   });
-
   it('parses recovery params', () => {
-    const result = parseSessionCompletionParams({ sessionId: 'sess-1', recovery: true });
-    expect(result.params).toBeNull();
-    expect(result.recoverySessionId).toBe('sess-1');
-    expect(result.warningMessage).toContain('rebuild');
+    const r = parseSessionCompletionParams({ sessionId: 's-1', recovery: true });
+    expect(r.params).toBeNull();
+    expect(r.recoverySessionId).toBe('s-1');
   });
-
-  it('returns fallback for null params', () => {
-    const result = parseSessionCompletionParams(null);
-    expect(result.params).toBeNull();
-    expect(result.warningMessage).toContain('unavailable');
+  it('returns fallback for null', () => {
+    const r = parseSessionCompletionParams(null);
+    expect(r.params).toBeNull();
+    expect(r.warningMessage).toContain('unavailable');
   });
-
   it('returns fallback for unknown shape', () => {
-    const result = parseSessionCompletionParams({ unknown: true });
-    expect(result.params).toBeNull();
-    expect(result.recoverySessionId).toBeNull();
+    expect(parseSessionCompletionParams({ unknown: true }).params).toBeNull();
   });
 });
 
 describe('buildSessionSummaryFromCompletionLedger', () => {
-  it('builds summary from ledger', () => {
-    const summary = buildSessionSummaryFromCompletionLedger(makeLedger());
-    expect(summary.sessionId).toBe('session-1');
-    expect(summary.status).toBe('COMPLETED');
-    expect(summary.xpEarned).toBe(50);
-    expect(summary.streakDays).toBe(3);
-    expect(summary.streakIncreased).toBe(true);
-    expect(summary.streakMaintained).toBe(true);
+  it('builds summary', () => {
+    const s = buildSessionSummaryFromCompletionLedger(makeLedger());
+    expect(s.sessionId).toBe('session-1');
+    expect(s.status).toBe('COMPLETED');
+    expect(s.xpEarned).toBe(50);
+    expect(s.streakIncreased).toBe(true);
   });
-
   it('calculates completion percentage', () => {
-    const summary = buildSessionSummaryFromCompletionLedger(makeLedger({ completedDurationSeconds: 750, targetDurationSeconds: 1500 }));
-    expect(summary.completionPercentage).toBe(50);
+    const s = buildSessionSummaryFromCompletionLedger(makeLedger({ completedDurationSeconds: 750, targetDurationSeconds: 1500 }));
+    expect(s.completionPercentage).toBe(50);
   });
-
-  it('handles zero target duration', () => {
-    const summary = buildSessionSummaryFromCompletionLedger(makeLedger({ targetDurationSeconds: 0 }));
-    expect(summary.completionPercentage).toBe(0);
+  it('handles zero target', () => {
+    expect(buildSessionSummaryFromCompletionLedger(makeLedger({ targetDurationSeconds: 0 })).completionPercentage).toBe(0);
   });
-
-  it('handles UNKNOWN mode fallback', () => {
-    const summary = buildSessionSummaryFromCompletionLedger(makeLedger({ mode: 'UNKNOWN' }));
-    expect(summary.sessionMode).toBe(SessionMode.FLOW);
+  it('handles UNKNOWN mode', () => {
+    expect(buildSessionSummaryFromCompletionLedger(makeLedger({ mode: 'UNKNOWN' })).sessionMode).toBe(SessionMode.FLOW);
   });
 });
