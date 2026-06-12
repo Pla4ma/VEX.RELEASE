@@ -6,7 +6,7 @@
 
 import { z } from 'zod';
 import { getSupabaseClient } from '../../../config/supabase';
-import type { CoachState } from '../types';
+import type { CoachState, CoachUserState, BehaviorProfile } from '../types';
 import { RepositoryError } from './error';
 import { tableColumns } from '../../../lib/repository/tableColumns';
 
@@ -26,6 +26,22 @@ const CoachStateRowSchema = z.object({
   mute_until: z.number().nullable().optional(),
   reduce_notifications: z.boolean().optional(),
 });
+
+function parseCoachStateRow(data: unknown): CoachState {
+  const parsed = CoachStateRowSchema.parse(data);
+  return {
+    userId: parsed.user_id,
+    currentState: parsed.current_state as CoachUserState,
+    previousState: (parsed.previous_state ?? null) as CoachUserState | null,
+    stateEnteredAt: parsed.state_entered_at ?? 0,
+    personaId: parsed.persona_id ?? '',
+    behaviorProfile: parsed.behavior_profile as BehaviorProfile | null,
+    lastInterventionAt: parsed.last_intervention_at ?? null,
+    interventionsToday: parsed.interventions_today ?? 0,
+    muteUntil: parsed.mute_until ?? null,
+    reduceNotifications: parsed.reduce_notifications ?? false,
+  };
+}
 
 /**
  * Fetch coach state for a user
@@ -51,19 +67,7 @@ export async function fetchCoachState(
     return null;
   }
 
-  const parsed = CoachStateRowSchema.parse(data);
-  return {
-    userId: parsed.user_id,
-    currentState: parsed.current_state,
-    previousState: parsed.previous_state ?? null,
-    stateEnteredAt: parsed.state_entered_at ?? null,
-    personaId: parsed.persona_id ?? null,
-    behaviorProfile: parsed.behavior_profile,
-    lastInterventionAt: parsed.last_intervention_at ?? null,
-    interventionsToday: parsed.interventions_today ?? 0,
-    muteUntil: parsed.mute_until ?? null,
-    reduceNotifications: parsed.reduce_notifications ?? false,
-  };
+  return parseCoachStateRow(data);
 }
 
 /**
@@ -101,17 +105,5 @@ export async function upsertCoachState(state: CoachState): Promise<CoachState> {
     );
   }
 
-  const parsed = CoachStateRowSchema.parse(data);
-  return {
-    userId: parsed.user_id,
-    currentState: parsed.current_state,
-    previousState: parsed.previous_state ?? null,
-    stateEnteredAt: parsed.state_entered_at ?? null,
-    personaId: parsed.persona_id ?? null,
-    behaviorProfile: parsed.behavior_profile,
-    lastInterventionAt: parsed.last_intervention_at ?? null,
-    interventionsToday: parsed.interventions_today ?? 0,
-    muteUntil: parsed.mute_until ?? null,
-    reduceNotifications: parsed.reduce_notifications ?? false,
-  };
+  return parseCoachStateRow(data);
 }
