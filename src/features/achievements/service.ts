@@ -13,47 +13,46 @@ export async function updateAchievementProgress(
   userId: string,
   conditionType: string,
   value: number,
-  _context?: Record<string, unknown>,
+  context?: Record<string, unknown>,
 ): Promise<UserAchievement[]> {
-  const updatedAchievements: UserAchievement[] = [];
   const relevantAchievements = ALL_ACHIEVEMENTS.filter(
     (a) => a.unlockCondition.type === conditionType,
   );
-  for (const achievement of relevantAchievements) {
-    const userAchievement = await repository.getUserAchievement(
-      userId,
-      achievement.id,
-    );
-    if (userAchievement?.isUnlocked) {
-      continue;
-    }
-    const newProgress = calculateProgress(
-      userAchievement?.progress || 0,
-      value,
-      achievement.unlockCondition,
-    );
-    const shouldUnlock = checkUnlockCondition(
-      newProgress,
-      achievement.progressMax,
-      achievement.unlockCondition,
-    );
-    const updated = await repository.updateAchievementProgress(
-      userId,
-      achievement.id,
-      {
-        progress: newProgress,
-        isUnlocked: shouldUnlock,
-        unlockedAt: shouldUnlock ? Date.now() : undefined,
-      },
-    );
-    if (updated) {
-      updatedAchievements.push(updated);
-      if (shouldUnlock && !userAchievement?.isUnlocked) {
+  const results = await Promise.all(
+    relevantAchievements.map(async (achievement) => {
+      const userAchievement = await repository.getUserAchievement(
+        userId,
+        achievement.id,
+      );
+      if (userAchievement?.isUnlocked) {
+        return null;
+      }
+      const newProgress = calculateProgress(
+        userAchievement?.progress || 0,
+        value,
+        achievement.unlockCondition,
+      );
+      const shouldUnlock = checkUnlockCondition(
+        newProgress,
+        achievement.progressMax,
+        achievement.unlockCondition,
+      );
+      const updated = await repository.updateAchievementProgress(
+        userId,
+        achievement.id,
+        {
+          progress: newProgress,
+          isUnlocked: shouldUnlock,
+          unlockedAt: shouldUnlock ? Date.now() : undefined,
+        },
+      );
+      if (updated && shouldUnlock && !userAchievement?.isUnlocked) {
         await handleAchievementUnlock(userId, achievement);
       }
-    }
-  }
-  return updatedAchievements;
+      return updated;
+    }),
+  );
+  return results.filter((r): r is UserAchievement => r !== null);
 }
 
 function checkUnlockCondition(
@@ -154,24 +153,52 @@ async function grantAchievementRewards(
   }
 }
 
-export function initializeAchievementTracking(): void {
-  eventBus.subscribe('session:completed', async (event) => {
+async function updateBossDefeatUnique(
+  userId: string,
+  bossId: string,
+): Promise<void> {
+  const uniqueAchievement = ALL_ACHIEVEMENTS.find(
+    (a) => a.unlockCondition.type === 'BOSS_DEFEAT_UNIQUE',
+  );
+  if (!uniqueAchievement) {return;}
+  const existing = await repository.getUserAchievement(userId, uniqueAchievement.id);
+  if (existing?.isUnlocked) {return;}
+  const history = existing?.progressHistory ?? [];
+  const alreadyDefeated = history.some(
+    (h) => h.source === `boss:${bossId}`,
+  );
+  if (alreadyDefeated) {return;}
+  const newProgress = history.length + 1;
+  const shouldUnlock = newProgress >= uniqueAchievement.progressMax;
+  await repository.updateAchievementProgress(userId, uniqueAchievement.id, {
+    progress: newProgress,
+    isUnlocked: shouldUnlock,
+    unlockedAt: shouldUnlock ? Date.now() : undefined,
+  });
+  if (shouldUnlock && !existing?.isUnlocked) {
+    await handleAchievementUnlock(userId, uniqueAchievement);
+  }
+}
+
+export function initializeAchievementTracking(): () => void {
+  const unsubs: Array<() => void> = [];
+  unsubs.push(eventBus.subscribe('session:completed', async (event) => {
     const { userId, duration } = event;
     await updateAchievementProgress(userId, 'SESSION_COMPLETE', 1);
     await updateAchievementProgress(userId, 'FOCUS_MINUTES', duration);
-  });
-  eventBus.subscribe('streak:updated', async (event) => {
+  }));
+  unsubs.push(eventBus.subscribe('streak:updated', async (event) => {
     const { userId, state } = event;
     await updateAchievementProgress(userId, 'STREAK_DAYS', state.currentStreak);
-  });
-  eventBus.subscribe('boss:defeated', async (event) => {
+  }));
+  unsubs.push(eventBus.subscribe('boss:defeated', async (event) => {
     const { userId, bossId } = event;
     await updateAchievementProgress(userId, 'BOSS_DEFEAT', 1);
-    await updateAchievementProgress(userId, 'BOSS_DEFEAT_UNIQUE', 1, {
-      bossId,
-    });
-  });
-  eventBus.subscribe('duel:completed', async (event) => {
+    if (bossId) {
+      await updateBossDefeatUnique(userId, bossId);
+    }
+  }));
+  unsubs.push(eventBus.subscribe('duel:completed', async (event) => {
     const { winnerId, challengerId: _challengerId, challengedId: _challengedId } = event as {
       winnerId?: string;
       challengerId?: string;
@@ -180,13 +207,14 @@ export function initializeAchievementTracking(): void {
     if (winnerId) {
       await updateAchievementProgress(winnerId, 'DUEL_WIN', 1);
     }
-  });
-  eventBus.subscribe('squad:joined', async (event) => {
+  }));
+  unsubs.push(eventBus.subscribe('squad:joined', async (event) => {
     const { userId } = event;
     await updateAchievementProgress(userId, 'SQUAD_JOIN', 1);
-  });
-  eventBus.subscribe('user:recruited', async (event) => {
+  }));
+  unsubs.push(eventBus.subscribe('user:recruited', async (event) => {
     const { referrerId } = event;
     await updateAchievementProgress(referrerId, 'FRIEND_RECRUIT', 1);
-  });
+  }));
+  return () => { unsubs.forEach((unsub) => unsub()); };
 }
