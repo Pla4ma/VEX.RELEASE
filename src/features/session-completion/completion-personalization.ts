@@ -106,6 +106,7 @@ export function buildCompletionPersonalizationResult(input: {
     memoryCandidates: buildMemoryCandidates(
       { ...personalizationInput, reflectionAnswer: reflectionAnswer ?? null },
       situation,
+      deletedMemoryIds,
     ),
     unlockDecision: unlockFor(resolvedLane, hiddenFeatureKeys),
     nextAction,

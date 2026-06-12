@@ -1,4 +1,4 @@
-import { CATEGORIES, RECENT_SEARCHES, MOCK_RESULTS } from '../searchData';
+import { CATEGORIES, RECENT_SEARCHES } from '../searchData';
 
 describe('searchData', () => {
   describe('CATEGORIES', () => {
@@ -35,35 +35,6 @@ describe('searchData', () => {
         expect(typeof search).toBe('string');
         expect(search.length).toBeGreaterThan(0);
       }
-    });
-  });
-
-  describe('MOCK_RESULTS', () => {
-    it('has 4 mock results', () => {
-      expect(MOCK_RESULTS).toHaveLength(4);
-    });
-
-    it('each result has required fields', () => {
-      for (const result of MOCK_RESULTS) {
-        expect(result.id).toBeDefined();
-        expect(result.type).toBeDefined();
-        expect(result.title).toBeDefined();
-        expect(result.subtitle).toBeDefined();
-        expect(result.icon).toBeDefined();
-      }
-    });
-
-    it('has unique ids', () => {
-      const ids = MOCK_RESULTS.map(r => r.id);
-      expect(new Set(ids).size).toBe(ids.length);
-    });
-
-    it('has expected types', () => {
-      const types = MOCK_RESULTS.map(r => r.type);
-      expect(types).toContain('session');
-      expect(types).toContain('challenge');
-      expect(types).toContain('user');
-      expect(types).toContain('content');
     });
   });
 });

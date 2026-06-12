@@ -12,6 +12,7 @@ type Situation = 'abandoned' | 'clean' | 'comeback' | 'partial';
 type Display = {
   body: string;
   title: string;
+  tone: 'calm' | 'coach' | 'study' | 'intense';
 };
 
 export const REFLECTIONS: Record<Lane, Record<Situation, string>> = {
@@ -49,20 +50,32 @@ export function situationFor(summary: SessionSummary, isComeback: boolean): Situ
 }
 
 export function displayFor(lane: Lane, situation: Situation): Display {
+  const toneMap: Record<Situation, 'calm' | 'coach' | 'study' | 'intense'> = {
+    comeback: 'coach',
+    abandoned: 'calm',
+    clean: 'study',
+    partial: 'intense',
+  };
   return {
     body: `${lane} session saved with ${situation} momentum.`,
     title: situation === 'clean' ? 'Clean work logged' : 'Session logged',
+    tone: toneMap[situation],
   };
 }
 
 export function buildMemoryCandidates(
   input: CompletionPersonalizationInput,
   situation: Situation,
+  deletedMemoryIds?: string[],
 ): CompletionMemoryCandidate[] {
+  const key = `completion:${input.summary.sessionId}:${situation}`;
+  if (deletedMemoryIds?.includes(key)) {
+    return [];
+  }
   return [
     {
       confidence: 0.7,
-      key: `completion:${input.summary.sessionId}:${situation}`,
+      key,
       text: `Lane ${input.lane} finished a ${situation} session.`,
     },
   ];
