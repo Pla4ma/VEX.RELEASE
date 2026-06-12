@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { supabase } from '../../config/supabase';
+import { RepositoryError } from '../../lib/repository/error-handling';
 import type { SyncState, SyncConflict, SettingCategory } from './types';
 
 const TABLE_SYNC_STATE = 'settings_sync_state';
@@ -64,7 +65,7 @@ export async function trackPendingChange(userId: string, key: string, value: unk
   const { error } = await supabase
     .from(TABLE_PENDING_CHANGES)
     .upsert({ user_id: userId, key, value, timestamp: Date.now() }, { onConflict: 'user_id,key' });
-  if (error) {error;}
+  if (error) { throw new RepositoryError('trackPendingChange', error); }
 }
 
 export async function clearPendingChange(userId: string, key: string): Promise<void> {
@@ -73,7 +74,7 @@ export async function clearPendingChange(userId: string, key: string): Promise<v
     .delete()
     .eq('user_id', userId)
     .eq('key', key);
-  if (error) {error;}
+  if (error) { throw new RepositoryError('clearPendingChange', error); }
 }
 
 export async function fetchPendingChanges(userId: string): Promise<PendingChange[]> {

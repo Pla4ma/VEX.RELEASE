@@ -10,7 +10,7 @@ type LegacyStreakState = {
 };
 
 type StreakService = {
-  getState: () => LegacyStreakState;
+  getState: () => Promise<LegacyStreakState>;
   markFuneralShown: () => void;
   recordSession: (options?: {
     sessionId?: string;
@@ -30,8 +30,22 @@ const EMPTY_STREAK_STATE: LegacyStreakState = {
 
 export function getStreakService(userId?: string): StreakService {
   return {
-    getState(): LegacyStreakState {
-      return EMPTY_STREAK_STATE;
+    async getState(): Promise<LegacyStreakState> {
+      if (!userId) {
+        return EMPTY_STREAK_STATE;
+      }
+      try {
+        const { getOrCreateStreak } = await import('../../features/streaks/service');
+        const streak = await getOrCreateStreak(userId);
+        return {
+          currentStreak: streak.currentStreak,
+          longestStreak: streak.longestStreak,
+          lastStreakDiedAt: streak.lastStreakDiedAt,
+          streakFuneralShown: streak.streakFuneralShown,
+        };
+      } catch {
+        return EMPTY_STREAK_STATE;
+      }
     },
     markFuneralShown(): void {
       if (!userId) {

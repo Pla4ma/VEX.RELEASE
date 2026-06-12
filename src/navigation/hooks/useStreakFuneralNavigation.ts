@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { NavigationContainerRefWithCurrent } from '@react-navigation/native';
+import { MMKV } from 'react-native-mmkv';
 
 import { eventBus } from '../../events';
 import { getStreakService } from '../../streaks/StreakService';
@@ -27,7 +28,9 @@ interface UseStreakFuneralNavigationInput {
 
 const MIN_SESSIONS_FOR_FUNERAL = 5;
 const FUNERAL_COOLDOWN_MS = 7 * 24 * 60 * 60 * 1000;
-const _STREAK_FUNERAL_LAST_SHOWN_KEY = 'streak_funeral_last_shown';
+
+const funeralStorage = new MMKV({ id: 'streak-funeral' });
+const STREAK_FUNERAL_LAST_SHOWN_KEY = 'streak_funeral_last_shown';
 const STREAK_MINIMUM_FOR_FUNERAL = 3;
 
 /** Safely cast a value that has already been verified as a non-null object. */
@@ -49,10 +52,13 @@ function isStreakFuneralEvent(value: unknown): value is StreakFuneralEvent {
 }
 
 function getLastFuneralShown(): number | null {
-  return null;
+  const value = funeralStorage.getNumber(STREAK_FUNERAL_LAST_SHOWN_KEY);
+  return value ?? null;
 }
 
-function setLastFuneralShown(): void {}
+function setLastFuneralShown(): void {
+  funeralStorage.set(STREAK_FUNERAL_LAST_SHOWN_KEY, Date.now());
+}
 
 export function useStreakFuneralNavigation({
   hasCompletedOnboarding,
@@ -68,7 +74,7 @@ export function useStreakFuneralNavigation({
     useState<StreakFuneralData | null>(null);
   const hasShownRef = useRef(false);
 
-  const shouldShowFuneral = useCallback((): boolean => {
+  const shouldShowFuneral = useCallback(async (): Promise<boolean> => {
     if (!userId) {return false;}
     if (totalCompletedSessions < MIN_SESSIONS_FOR_FUNERAL) {return false;}
 
@@ -76,7 +82,7 @@ export function useStreakFuneralNavigation({
     if (lastShown && Date.now() - lastShown < FUNERAL_COOLDOWN_MS) {return false;}
 
     const streakService = getStreakService(userId);
-    const state = streakService.getState();
+    const state = await streakService.getState();
 
     if (!state.lastStreakDiedAt || state.streakFuneralShown) {return false;}
 
@@ -94,12 +100,12 @@ export function useStreakFuneralNavigation({
     return previousStreak >= STREAK_MINIMUM_FOR_FUNERAL;
   }, [userId, totalCompletedSessions]);
 
-  const checkStreakFuneral = useCallback(() => {
+  const checkStreakFuneral = useCallback(async () => {
     if (!userId || hasShownRef.current) {return;}
-    if (!shouldShowFuneral()) {return;}
+    if (!(await shouldShowFuneral())) {return;}
 
     const streakService = getStreakService(userId);
-    const state = streakService.getState();
+    const state = await streakService.getState();
     if (!state.lastStreakDiedAt) {return;}
 
     const previousStreak =
@@ -119,7 +125,7 @@ export function useStreakFuneralNavigation({
 
   useEffect(() => {
     if (isAuthenticated && isReady && hasCompletedOnboarding) {
-      checkStreakFuneral();
+      void checkStreakFuneral();
     }
   }, [checkStreakFuneral, hasCompletedOnboarding, isAuthenticated, isReady]);
 

@@ -10,6 +10,7 @@ import { useTheme } from '@/theme';
 import { useAchievements, achievementKeys } from '@/features/achievements/hooks';
 import { useAchievementStats } from '@/features/achievements/hooks-computed';
 import type { AchievementCategory, AchievementRarity } from '@/features/achievements/types';
+import { useAuthStore } from '../../store/authStore';
 import { useQueryClient } from '@tanstack/react-query';
 import type { ExtendedRootStackParams } from '@/navigation/types';
 import { AchievementsHeader } from './AchievementProgressBar';
@@ -23,7 +24,8 @@ export const AchievementsScreen = React.memo(() => {
   const { theme } = useTheme();
   const navigation = useNavigation<NativeStackNavigationProp<ExtendedRootStackParams>>();
   const queryClient = useQueryClient();
-  const userId = 'current-user';
+  const user = useAuthStore((state) => state.user);
+  const userId = user?.id ?? '';
   const { data: achievements, isLoading } = useAchievements(userId);
   const { data: stats } = useAchievementStats(userId);
   const [selectedCategory, setSelectedCategory] = useState<AchievementCategory | 'ALL'>('ALL');
