@@ -132,3 +132,8 @@ export function useMultiFeatureGate(
       .map((s) => s.feature),
   };
 }
+
+export const featureGateKeys = {
+  all: ['feature-gate'] as const,
+  feature: (feature: FeatureKey) => ['feature-gate', feature] as const,
+};

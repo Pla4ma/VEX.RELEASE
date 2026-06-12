@@ -68,7 +68,7 @@ export function useResolvedVexExperienceRuntime(
   return useMemo(() => {
     const profile = buildProfileFromOnboarding({ duration, goal, style });
     if (input.overrideStudyLayerLabel) {
-      profile.studyLayerName = input.overrideStudyLayerLabel;
+      profile.studyLayerName = input.overrideStudyLayerLabel as typeof profile.studyLayerName;
     }
     const stats = BehaviorStatsSchema.parse({
       ...input.behaviorStats,

@@ -5,7 +5,7 @@ import { Box, Text, Card } from '../../../components/primitives';
 import { Badge } from '../../../components/Badge';
 import { Icon } from '../../../icons';
 import { Skeleton } from '../../../shared/ui/primitives';
-import type { SearchResult } from '../searchData';
+import type { SearchResult } from '../searchSchemas';
 
 interface SearchResultsProps {
   results: SearchResult[];

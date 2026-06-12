@@ -109,3 +109,10 @@ export const CompanionPromiseLifecycleResultSchema = z
     missedPromise: CompanionPromiseSchema.nullable(),
   })
   .strict();
+
+export type PromiseTargetMode = z.infer<typeof PromiseTargetModeSchema>;
+export type CompanionPromiseStatus = z.infer<typeof CompanionPromiseStatusSchema>;
+export type CompanionPromise = z.infer<typeof CompanionPromiseSchema>;
+export type CompanionPromiseHomeState = z.infer<typeof CompanionPromiseHomeStateSchema>;
+export type CompletedSessionPromiseInput = z.infer<typeof CompletedSessionPromiseInputSchema>;
+export type CompanionPromiseLifecycleResult = z.infer<typeof CompanionPromiseLifecycleResultSchema>;

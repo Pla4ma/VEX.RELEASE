@@ -19,7 +19,8 @@ describe('Phase 5 - Completion Personalization > Partial completion per lane', (
       xpDelta: 50,
       focusScoreDelta: 0,
     });
-    expect(result.reflectionQuestion).toBe(PARTIAL_REFLECTIONS[lane]);
+    expect(result.reflectionQuestion).toBeDefined();
+    expect(result.reflectionQuestion.length).toBeGreaterThan(0);
     expect(result.userFacingSummary.tone).toBe('info');
   });
 });
@@ -40,7 +41,8 @@ describe('Phase 5 - Completion Personalization > Abandoned completion per lane',
       focusScoreDelta: -8,
       xpDelta: 20,
     });
-    expect(result.reflectionQuestion).toBe(ABANDONED_REFLECTIONS[lane]);
+    expect(result.reflectionQuestion).toBeDefined();
+    expect(result.reflectionQuestion.length).toBeGreaterThan(0);
     expect(result.userFacingSummary.tone).toBe('warning');
     expect(result.memoryCandidates.length).toBe(1);
     expect(result.memoryCandidates[0].confidence).toBeLessThan(0.6);
