@@ -7,7 +7,6 @@
 import {
   resolveEffectiveThreshold,
   resolveFeatureVisibility,
-  checkDependenciesSatisfied,
 } from '../feature-flag-resolution';
 import type { MotivationProfileConfig } from '../feature-flag-resolution';
 
