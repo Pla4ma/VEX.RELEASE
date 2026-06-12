@@ -108,13 +108,18 @@ export async function completeOnboardingWithGate(
 export function resetOnboarding(): void {
   useOnboardingStore.getState().resetOnboarding();
 }
+const DEFAULT_FOCUS_DURATION_MINUTES = 10;
+const ONBOARDING_TOTAL_STEPS = 4;
+const SECONDS_PER_ONBOARDING_STEP = 15;
+const ONBOARDING_STALL_TIMEOUT_MS = 5 * 60 * 1000;
+
 export function getFirstSessionConfig(): {
   duration: number;
   category: FocusGoal | null;
   isOnboardingSession: true;
 } {
   const state = useOnboardingStore.getState();
-  const durationMinutes = state.focusDuration ?? 10;
+  const durationMinutes = state.focusDuration ?? DEFAULT_FOCUS_DURATION_MINUTES;
   return {
     duration: durationMinutes * 60,
     category: state.goal,
@@ -127,9 +132,9 @@ export function isOnboardingStalled(): boolean {
     return false;
   }
   const elapsed = Date.now() - state.startedAt;
-  return elapsed > 5 * 60 * 1000;
+  return elapsed > ONBOARDING_STALL_TIMEOUT_MS;
 }
 export function getEstimatedTimeRemaining(stepNumber: number): number {
-  const remainingSteps = 4 - stepNumber;
-  return remainingSteps * 15;
+  const remainingSteps = ONBOARDING_TOTAL_STEPS - stepNumber;
+  return remainingSteps * SECONDS_PER_ONBOARDING_STEP;
 }

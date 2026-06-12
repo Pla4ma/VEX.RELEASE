@@ -78,31 +78,30 @@ export const useOnboardingStore = create(
     {
       name: 'onboarding-storage',
       storage: createJSONStorage(() => ({
-        getItem: async (name: string): Promise<string | null> =>
-          mmkvStorage.getItem(name),
-        setItem: async (name: string, value: string): Promise<void> =>
-          mmkvStorage.setItem(name, value),
-        removeItem: async (name: string): Promise<void> =>
-          mmkvStorage.removeItem(name),
+        getItem: (name: string): string | null =>
+          mmkvStorage.getString(name) ?? null,
+        setItem: (name: string, value: string): void =>
+          mmkvStorage.set(name, value),
+        removeItem: (name: string): void =>
+          mmkvStorage.delete(name),
       })),
-      partialize: (state) =>
-        ({
-          isOnboarded: state.isOnboarded,
-          currentStep: state.currentStep,
-          goal: state.goal,
-          focusDuration: state.focusDuration,
-          displayName: state.displayName,
-          startedAt: state.startedAt,
-          completedAt: state.completedAt,
-          completedForUserId: state.completedForUserId,
-          persona: state.persona,
-          element: state.element,
-          motivationProfile: state.motivationProfile,
-          explicitMotivationStyle: state.explicitMotivationStyle,
-          chosenLane: state.chosenLane,
-          mascotGuideCompletedAt: state.mascotGuideCompletedAt,
-          mascotGuideDismissedAt: state.mascotGuideDismissedAt,
-        }) as OnboardingStore,
+      partialize: (state): Partial<OnboardingState> => ({
+        isOnboarded: state.isOnboarded,
+        currentStep: state.currentStep,
+        goal: state.goal,
+        focusDuration: state.focusDuration,
+        displayName: state.displayName,
+        startedAt: state.startedAt,
+        completedAt: state.completedAt,
+        completedForUserId: state.completedForUserId,
+        persona: state.persona,
+        element: state.element,
+        motivationProfile: state.motivationProfile,
+        explicitMotivationStyle: state.explicitMotivationStyle,
+        chosenLane: state.chosenLane,
+        mascotGuideCompletedAt: state.mascotGuideCompletedAt,
+        mascotGuideDismissedAt: state.mascotGuideDismissedAt,
+      }),
       onRehydrateStorage: () =>
         createRehydrationHandler((partial) =>
           useOnboardingStore.setState(partial),

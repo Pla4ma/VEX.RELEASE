@@ -6,6 +6,7 @@
 
 import { supabase } from '../../../config/supabase';
 import { createDebugger } from '../../../utils/debug';
+import { RepositoryError } from '../../../lib/repository/error-handling';
 import {
   CreateCoachMemoryInputSchema,
   type CoachMemory,
@@ -53,8 +54,9 @@ export async function createMemory(
   if (evidenceHash) {
     const conflict = await hasEvidenceConflict(userId, evidenceHash);
     if (conflict) {
-      throw new Error(
-        'EvidenceConflict: memory with this evidence was previously deleted',
+      throw new RepositoryError(
+        'createMemory',
+        new Error('EvidenceConflict: memory with this evidence was previously deleted'),
       );
     }
   }
@@ -77,7 +79,7 @@ export async function createMemory(
 
   if (error) {
     debug.error('Failed to create memory:', error);
-    throw new Error(`Failed to create memory: ${error.message}`);
+    throw new RepositoryError('createMemory', error);
   }
 
   debug.info('Created memory: %s for user %s', type, userId);
@@ -99,7 +101,7 @@ export async function getMemoriesByUser(
 
   if (error) {
     debug.error('Failed to get memories:', error);
-    throw new Error(`Failed to get memories: ${error.message}`);
+    throw new RepositoryError('getMemoriesByUser', error);
   }
 
   return (data ?? []).map(mapRowToMemory);

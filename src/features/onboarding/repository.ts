@@ -76,48 +76,38 @@ function rowToProgress(row: OnboardingProfileRow): OnboardingProgress {
 async function getProgress(
   userId: string,
 ): Promise<OnboardingProgress | null> {
-  try {
-    const parsed = z.string().uuid().parse(userId);
-    const { data, error } = await getSupabaseClient()
-      .from('onboarding_profiles')
-      .select('id,user_id,status,steps,first_session,permissions,goal,focus_duration,display_name,persona,element,motivation_profile,chosen_lane,created_at,updated_at')
-      .eq('user_id', parsed)
-      .maybeSingle();
-    if (error) {
-      throw new OnboardingRepositoryError('getProgress', error);
-    }
-    if (!data) {return null;}
-    return rowToProgress(OnboardingProfileRowSchema.parse(data));
-  } catch (error) {
-    if (error instanceof OnboardingRepositoryError) {throw error;}
+  const parsed = z.string().uuid().parse(userId);
+  const { data, error } = await getSupabaseClient()
+    .from('onboarding_profiles')
+    .select('id,user_id,status,steps,first_session,permissions,goal,focus_duration,display_name,persona,element,motivation_profile,chosen_lane,created_at,updated_at')
+    .eq('user_id', parsed)
+    .maybeSingle();
+  if (error) {
     throw new OnboardingRepositoryError('getProgress', error);
   }
+  if (!data) {return null;}
+  return rowToProgress(OnboardingProfileRowSchema.parse(data));
 }
 
 async function saveProgress(
   userId: string,
   progress: OnboardingProgress,
 ): Promise<void> {
-  try {
-    const parsed = OnboardingProgressSchema.parse(progress);
-    const { error } = await getSupabaseClient()
-      .from('onboarding_profiles')
-      .upsert(
-        {
-          user_id: z.string().uuid().parse(userId),
-          status: parsed.status,
-          steps: parsed.steps,
-          first_session: parsed.firstSession,
-          permissions: parsed.permissions,
-          updated_at: new Date().toISOString(),
-        },
-        { onConflict: 'user_id' },
-      );
-    if (error) {
-      throw new OnboardingRepositoryError('saveProgress', error);
-    }
-  } catch (error) {
-    if (error instanceof OnboardingRepositoryError) {throw error;}
+  const parsed = OnboardingProgressSchema.parse(progress);
+  const { error } = await getSupabaseClient()
+    .from('onboarding_profiles')
+    .upsert(
+      {
+        user_id: z.string().uuid().parse(userId),
+        status: parsed.status,
+        steps: parsed.steps,
+        first_session: parsed.firstSession,
+        permissions: parsed.permissions,
+        updated_at: new Date().toISOString(),
+      },
+      { onConflict: 'user_id' },
+    );
+  if (error) {
     throw new OnboardingRepositoryError('saveProgress', error);
   }
 }
