@@ -40,9 +40,9 @@ export const AccountSettingsScreen: React.FC<Props> = ({ navigation }) => {
             <Pressable
               onPress={() => navigation.goBack()}
               style={{ marginRight: 12 }}
-              accessibilityLabel="Account setting"
+              accessibilityLabel="Go back"
               accessibilityRole="button"
-              accessibilityHint="Double tap to change setting"
+              accessibilityHint="Returns to settings"
             >
               <Icon
                 name="arrow-left"

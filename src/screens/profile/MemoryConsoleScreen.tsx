@@ -14,7 +14,6 @@ import { Box, Card, Text } from '../../components/primitives';
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 import { EmptyState } from '../../components/EmptyState';
 import type { ExtendedRootStackParams } from '../../navigation/types';
-import { lightColors } from '@/theme/tokens/colors';
 
 type Props = NativeStackScreenProps<ExtendedRootStackParams, 'MemoryConsole'>;
 
@@ -24,12 +23,6 @@ function formatDate(ts: number): string {
     day: 'numeric',
     year: 'numeric',
   });
-}
-
-function confidenceLabel(c: number): { label: string; color: string } {
-  if (c >= 0.8) {return { label: 'High', color: lightColors.semantic.success };}
-  if (c >= 0.5) {return { label: 'Medium', color: lightColors.semantic.warning };}
-  return { label: 'Low', color: lightColors.semantic.danger };
 }
 
 export const MemoryConsoleScreen: React.FC<Props> = () => {
@@ -67,6 +60,13 @@ export const MemoryConsoleScreen: React.FC<Props> = () => {
     },
     [userId, refetch],
   );
+
+  const confidenceLabel = (c: number): { label: string; color: string } => {
+    const colors = theme.colors.semantic;
+    if (c >= 0.8) {return { label: 'High', color: colors.success };}
+    if (c >= 0.5) {return { label: 'Medium', color: colors.warning };}
+    return { label: 'Low', color: colors.danger };
+  };
 
   if (!isVisible) {
     return (

@@ -94,9 +94,9 @@ export const ProfileScreen: React.FC = () => {
               techniques={[
                 { key: 'durationMastery', label: 'Duration', color: vexLightGlass.mint[500] },
                 { key: 'purityMastery', label: 'Purity', color: vexLightGlass.semantic.success },
-                { key: 'consistencyMastery', label: 'Consistency', color: '#DFA44A' },
-                { key: 'comebackMastery', label: 'Comeback', color: '#F08A4B' },
-                { key: 'bossMastery', label: 'Boss', color: '#54AEEA' },
+                { key: 'consistencyMastery', label: 'Consistency', color: vexLightGlass.semantic.warning },
+                { key: 'comebackMastery', label: 'Comeback', color: vexLightGlass.semantic.fire },
+                { key: 'bossMastery', label: 'Boss', color: vexLightGlass.semantic.info },
               ]}
               onMasteryPress={() => {
                 if (isFeatureAvailableForNavigation(getFeatureAvailability(disclosure.features.achievements)))
@@ -127,11 +127,11 @@ export const ProfileScreen: React.FC = () => {
         enablePanDownToClose
         backdropComponent={ProfileBottomSheetBackdrop}
         backgroundStyle={{
-          backgroundColor: 'rgba(255, 255, 255, 0.85)',
+          backgroundColor: vexLightGlass.glass.fillStrong,
           borderWidth: 1,
-          borderColor: 'rgba(255, 255, 255, 0.92)',
+          borderColor: vexLightGlass.glass.innerHighlight,
         }}
-        handleIndicatorStyle={{ backgroundColor: 'rgba(16, 35, 31, 0.30)' }}
+        handleIndicatorStyle={{ backgroundColor: vexLightGlass.text.disabled }}
       >
         <ProfileMasterySheet
           theme={theme} rankDisplay={rankDisplay}

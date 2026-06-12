@@ -120,7 +120,7 @@ export const AchievementsScreen = React.memo(() => {
               style={({ pressed }) => [pressed && { opacity: 0.8 }]}
               accessibilityLabel="Close achievements"
               accessibilityRole="button"
-              accessibilityHint="Double tap to activate"
+              accessibilityHint="Closes the achievement details"
             >
               <Text variant="body" color={theme.colors.text.secondary}>Close</Text>
             </Pressable>

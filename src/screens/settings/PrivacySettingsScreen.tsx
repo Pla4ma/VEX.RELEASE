@@ -52,12 +52,19 @@ export const PrivacySettingsScreen: React.FC<Props> = () => {
               .deleteAccountAsync({ userId: user.id })
               .then(() => {
                 clearUser();
+              })
+              .catch(() => {
+                showToast({
+                  message: 'Account deletion failed. Please try again.',
+                  type: 'error',
+                  duration: 5000,
+                });
               });
           },
         },
       ],
     );
-  }, [clearUser, deleteAccountMutation, user?.id]);
+  }, [clearUser, deleteAccountMutation, showToast, user?.id]);
 
   const restorePurchases = useCallback((): void => {
     restore()

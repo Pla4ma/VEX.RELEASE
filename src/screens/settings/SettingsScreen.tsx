@@ -94,7 +94,7 @@ export const SettingsScreen = withScreenErrorBoundary(function _SettingsScreen({
 
         <SettingsProfileRow
           displayName={user?.displayName || 'User'}
-          userId={user?.id || 'user@example.com'}
+          userId={user?.id || ''}
           theme={theme}
           onPress={() => navigation.navigate('Main', { screen: 'Profile' })}
         />
@@ -111,13 +111,6 @@ export const SettingsScreen = withScreenErrorBoundary(function _SettingsScreen({
 
         <Box alignItems="center" mt={8} mb={24}>
           <Text variant="caption" color="text.tertiary">
-            VEX v1.0.0 (Build 100)
-          </Text>
-          <Text
-            variant="caption"
-            color="text.tertiary"
-            style={{ marginTop: 4 }}
-          >
             Made with care by the VEX Team
           </Text>
         </Box>
@@ -134,7 +127,7 @@ export const SettingsScreen = withScreenErrorBoundary(function _SettingsScreen({
           onPress={logout}
           accessibilityLabel="Log out"
           accessibilityRole="button"
-          accessibilityHint="Double tap to change setting"
+          accessibilityHint="Signs out of your VEX account"
         >
           <Text
             style={{ color: theme.colors.error.DEFAULT, fontWeight: '600' }}
