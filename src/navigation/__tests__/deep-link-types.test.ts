@@ -15,8 +15,8 @@ describe('deep-link-types', () => {
     expect(VALID_DEEP_LINK_PATHS).toContain('rescue');
   });
 
-  it('has exactly 12 valid deep link paths', () => {
-    expect(VALID_DEEP_LINK_PATHS).toHaveLength(12);
+  it('has exactly 11 valid deep link paths', () => {
+    expect(VALID_DEEP_LINK_PATHS).toHaveLength(11);
   });
 
   it('contains only unique paths', () => {

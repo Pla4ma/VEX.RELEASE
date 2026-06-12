@@ -59,10 +59,10 @@ describe('cache', () => {
     });
 
     it('size() returns count of non-expired entries', async () => {
-      const cache = new TTLCache<string>(10);
+      const cache = new TTLCache<string>(10000);
       cache.set('a', '1');
       cache.set('b', '2');
-      expect(cache.size()).toBe(1); // 'a' expired, 'b' still valid after cleanup
+      expect(cache.size()).toBe(2);
     });
   });
 

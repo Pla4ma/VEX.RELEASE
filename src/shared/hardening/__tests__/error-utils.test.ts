@@ -113,9 +113,9 @@ describe('error-utils', () => {
       expect(result).toBe('{"error":"circular"}');
     });
 
-    it('handles undefined', () => {
-      const result = safeJsonStringify(undefined, '{}');
-      expect(result).toBe('{}');
+    it('handles null gracefully', () => {
+      const result = safeJsonStringify(null);
+      expect(result).toBe('null');
     });
 
     it('handles arrays', () => {

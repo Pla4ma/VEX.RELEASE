@@ -109,18 +109,20 @@ describe('retry', () => {
       const delays: number[] = [];
       let lastTime = Date.now();
       let attempts = 0;
-      await withRetry(
-        () => {
-          const now = Date.now();
-          if (attempts > 0) {
-            delays.push(now - lastTime);
-          }
-          lastTime = now;
-          attempts++;
-          throw new Error('network_error');
-        },
-        { maxAttempts: 3, baseDelayMs: 10, backoffMultiplier: 2 },
-      );
+      await expect(
+        withRetry(
+          () => {
+            const now = Date.now();
+            if (attempts > 0) {
+              delays.push(now - lastTime);
+            }
+            lastTime = now;
+            attempts++;
+            throw new Error('network_error');
+          },
+          { maxAttempts: 3, baseDelayMs: 10, backoffMultiplier: 2 },
+        ),
+      ).rejects.toThrow('network_error');
       // Second delay should be roughly 2x the first (with jitter tolerance)
       expect(delays[1]).toBeGreaterThan(delays[0]);
     });
