@@ -14,6 +14,7 @@ import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { tabSwitch } from '../../utils/haptics';
 import { getMinTouchTargetStyle } from '../../utils/touchTarget';
 import { springPresets, timingPresets } from '../../theme/tokens/motion';
+import { vexLightGlass } from '../../theme/tokens/vex-light-glass';
 import { ActiveTabPill } from './ActiveTabPill';
 
 const ICONS = {

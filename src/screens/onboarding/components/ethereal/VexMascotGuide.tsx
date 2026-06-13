@@ -1,62 +1,17 @@
-import React, { useMemo } from 'react';
-import { Image, View, type ImageSourcePropType } from 'react-native';
-import Animated from 'react-native-reanimated';
+import React, { useEffect, useMemo, useState } from 'react';
+import { View } from 'react-native';
 
-import { Text } from '../../../../components/primitives/Text';
 import { useReducedMotion } from '../../../../hooks/useReducedMotion';
-import { etherealText } from '@/theme/tokens/ethereal-sky';
-import { useMascotFloatAnimation, useMascotGuideAnimatedStyle, GuideAction } from './VexMascotGuide.helpers';
-
-export type MascotMood =
-  | 'default'
-  | 'wave'
-  | 'pointing'
-  | 'thinking'
-  | 'encouraging'
-  | 'celebrate'
-  | 'recovery';
-
-export type MascotSize = 'loginCompact' | 'loginFeatured' | 'authForm' | 'question' | 'confirm' | 'complete' | 'inline';
-export type MascotPlacement = 'inline' | 'header' | 'corner';
-
-const MOOD_ASSET_MAP: Record<MascotMood, ImageSourcePropType> = {
-  default: require('../../../../../assets/mascot/vex-mascot.png'),
-  wave: require('../../../../../assets/mascot/vex-mascot.png'),
-  pointing: require('../../../../../assets/mascot/vex-mascot.png'),
-  thinking: require('../../../../../assets/mascot/vex-mascot.png'),
-  encouraging: require('../../../../../assets/mascot/vex-mascot.png'),
-  celebrate: require('../../../../../assets/mascot/vex-mascot.png'),
-  recovery: require('../../../../../assets/mascot/vex-mascot.png'),
-};
-
-const FALLBACK_MASCOT = require('../../../../../assets/mascot/vex-mascot.png');
-
-const SIZE_CONFIG: Record<
-  MascotSize,
-  { width: number; height: number; bubblePadding: number; bubbleRadius: number }
-> = {
-  loginCompact: { width: 82, height: 104, bubblePadding: 14, bubbleRadius: 22 },
-  loginFeatured: { width: 118, height: 152, bubblePadding: 16, bubbleRadius: 24 },
-  authForm: { width: 80, height: 102, bubblePadding: 14, bubbleRadius: 22 },
-  question: { width: 96, height: 122, bubblePadding: 14, bubbleRadius: 24 },
-  confirm: { width: 104, height: 136, bubblePadding: 16, bubbleRadius: 26 },
-  complete: { width: 150, height: 196, bubblePadding: 18, bubbleRadius: 28 },
-  inline: { width: 72, height: 96, bubblePadding: 12, bubbleRadius: 22 },
-};
-
-const PLACEMENT_STYLES: Record<MascotPlacement, object> = {
-  inline: { flexDirection: 'row', alignItems: 'center', gap: 12 },
-  header: { flexDirection: 'column', alignItems: 'center', gap: 10 },
-  corner: { flexDirection: 'row', alignItems: 'flex-end', gap: 8 },
-};
-
-function resolveMoodAsset(mood: MascotMood): ImageSourcePropType {
-  try {
-    return MOOD_ASSET_MAP[mood] ?? FALLBACK_MASCOT;
-  } catch {
-    return FALLBACK_MASCOT;
-  }
-}
+import { GuideAction } from './VexMascotGuide.helpers';
+import { AnimatedMascot } from './AnimatedMascot';
+import { MascotSpeechBubble } from './MascotSpeechBubble';
+import {
+  PLACEMENT_STYLES,
+  SIZE_CONFIG,
+  type MascotMood,
+  type MascotPlacement,
+  type MascotSize,
+} from './VexMascotGuide.tokens';
 
 type VexMascotGuideProps = {
   mood?: MascotMood;
@@ -69,7 +24,24 @@ type VexMascotGuideProps = {
   onSkip?: () => void;
   hideActions?: boolean;
   style?: object;
+  reactionKey?: string | number;
 };
+
+function getDirectedFrames(mood: MascotMood): readonly MascotMood[] {
+  if (mood === 'thinking') {
+    return ['listening', 'thinking', 'pointing', 'thinking'];
+  }
+  if (mood === 'pointing') {
+    return ['wave', 'pointing', 'listening', 'pointing'];
+  }
+  if (mood === 'celebrate') {
+    return ['encouraging', 'celebrate', 'wave', 'celebrate'];
+  }
+  if (mood === 'recovery') {
+    return ['recovery', 'listening', 'encouraging', 'recovery'];
+  }
+  return ['wave', 'listening', 'pointing', mood];
+}
 
 export function VexMascotGuide({
   mood = 'default',
@@ -82,64 +54,54 @@ export function VexMascotGuide({
   onSkip,
   hideActions = false,
   style,
+  reactionKey,
 }: VexMascotGuideProps): React.JSX.Element {
   const { isReducedMotion } = useReducedMotion();
-  const { float, scale } = useMascotFloatAnimation(mood, isReducedMotion);
-  const mascotStyle = useMascotGuideAnimatedStyle(float, scale, isReducedMotion);
+  const [frame, setFrame] = useState(0);
   const config = SIZE_CONFIG[size];
-
-  const asset = useMemo(() => resolveMoodAsset(mood), [mood]);
   const placementStyle = PLACEMENT_STYLES[placement];
-  const bubbleFlex = placement === 'header' ? 0 : 1;
+  const directedFrames = useMemo(() => getDirectedFrames(mood), [mood]);
+  const directedMood = isReducedMotion
+    ? mood
+    : directedFrames[frame % directedFrames.length] ?? mood;
+
+  useEffect(() => {
+    setFrame(0);
+  }, [mood, message]);
+
+  useEffect(() => {
+    if (isReducedMotion) {
+      return;
+    }
+
+    const timer = setInterval(() => {
+      setFrame((current) => current + 1);
+    }, 620);
+
+    return () => clearInterval(timer);
+  }, [isReducedMotion, mood]);
 
   return (
     <View style={[{ width: '100%' }, placementStyle, style]}>
-      <Animated.View style={mascotStyle}>
-        <Image
-          accessibilityIgnoresInvertColors
-          accessibilityLabel={`VEX mascot ${mood}`}
-          source={asset}
-          style={{
-            width: config.width,
-            height: config.height,
-            resizeMode: 'contain',
-          }}
-        />
-      </Animated.View>
-
-      <View
-        style={{
-          flex: bubbleFlex,
-          backgroundColor: 'rgba(255,255,255,0.86)',
-          borderColor: 'rgba(255,255,255,0.75)',
-          borderRadius: config.bubbleRadius,
-          borderWidth: 1,
-          gap: 4,
-          padding: config.bubblePadding,
-          shadowColor: 'rgba(13,76,65,0.12)',
-          shadowOffset: { width: 0, height: 4 },
-          shadowOpacity: 0.18,
-          shadowRadius: 12,
-        }}
+      <AnimatedMascot
+        isCelebrating={directedMood === 'celebrate'}
+        isPointing={directedMood === 'pointing'}
+        preferPng
+        isSpeaking
+        isThinking={directedMood === 'thinking'}
+        mood={directedMood}
+        reactionKey={`${reactionKey ?? message}-${directedMood}-${frame}`}
+        reducedMotion={isReducedMotion}
+        size={{ width: config.width, height: config.height }}
+      />
+      <MascotSpeechBubble
+        config={config}
+        message={message}
+        placement={placement}
+        pulseKey={`${directedMood}-${frame}`}
+        reducedMotion={isReducedMotion}
+        submessage={submessage}
       >
-        <Text
-          fontSize={placement === 'corner' ? 14 : 17}
-          fontWeight="800"
-          style={{ color: etherealText.heading, lineHeight: 22 }}
-        >
-          {message}
-        </Text>
-
-        {submessage ? (
-          <Text
-            fontSize={13}
-            fontWeight="600"
-            style={{ color: etherealText.subtitle, lineHeight: 18 }}
-          >
-            {submessage}
-          </Text>
-        ) : null}
-
         {!hideActions && (onBack || onReplay || onSkip) ? (
           <View style={{ flexDirection: 'row', gap: 10, marginTop: 4 }}>
             {onBack ? <GuideAction label="Back" onPress={onBack} /> : null}
@@ -147,7 +109,7 @@ export function VexMascotGuide({
             {onSkip ? <GuideAction label="Skip guide" onPress={onSkip} strong /> : null}
           </View>
         ) : null}
-      </View>
+      </MascotSpeechBubble>
     </View>
   );
 }

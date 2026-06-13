@@ -27,6 +27,7 @@ import { SessionSetupStudyPlanCard } from './SessionSetupStudyPlanCard';
 import { useSessionSetupStakes } from '../hooks/useSessionSetupStakes';
 import { buildLearningSessionParams } from '../../../features/learning-execution';
 import { isFeatureHidden } from '../../../features/liveops-config/FeatureFlagService';
+import { LiquidGlassScreen } from '../../../shared/ui/liquid-glass';
 
 type SessionNavigationProp = CompositeNavigationProp<
   NativeStackNavigationProp<SessionStackParams>,
@@ -82,7 +83,7 @@ export function ReturningUserView({
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={{ flex: 1 }}
     >
-      <Box flex={1} bg="background.primary">
+      <LiquidGlassScreen>
         <SessionSetupHeader
           durationSeconds={controller.selectedDurationSeconds}
           mode={controller.setupState.selectedSessionMode}
@@ -166,7 +167,7 @@ export function ReturningUserView({
           }
         />
       ) : null}
-      </Box>
+      </LiquidGlassScreen>
     </KeyboardAvoidingView>
   );
 }

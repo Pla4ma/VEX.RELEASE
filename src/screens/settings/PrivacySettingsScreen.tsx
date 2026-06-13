@@ -14,6 +14,12 @@ import { PrivacyToggleRow } from './PrivacyToggleRow';
 import { PrivacySettingsSkeleton } from './PrivacySettingsSkeleton';
 import { TOGGLE_ROWS } from './privacy-toggle-data';
 import type { ToggleKey } from './privacy-toggle-data';
+import {
+  LiquidGlassCard,
+  LiquidGlassHeader,
+  LiquidGlassScreen,
+  liquidGlassSpacing,
+} from '../../shared/ui/liquid-glass';
 
 type Props = NativeStackScreenProps<SettingsStackParams, 'PrivacySettings'>;
 
@@ -89,36 +95,25 @@ export const PrivacySettingsScreen: React.FC<Props> = () => {
   }, [restore, showToast]);
 
   return (
-    <Box flex={1} style={{ backgroundColor: theme.colors.background.primary }}>
+    <LiquidGlassScreen>
       {deleteAccountMutation.isPending ? (
         <PrivacySettingsSkeleton />
       ) : (
       <ScrollView
         contentContainerStyle={{
           paddingBottom: insets.bottom + theme.spacing[6],
-          paddingHorizontal: theme.spacing[4],
-          paddingTop: theme.spacing[4],
+          paddingHorizontal: liquidGlassSpacing.screenX,
+          paddingTop: insets.top + liquidGlassSpacing.screenTop,
         }}
       >
-        <Text
-          variant="h2"
-          color="text.primary"
-          style={{ marginBottom: theme.spacing[2] }}
-        >
-          Privacy
-        </Text>
-        <Text
-          variant="body"
-          color="text.secondary"
-          style={{ marginBottom: theme.spacing[4] }}
-        >
-          Control what leaves your device and manage irreversible account
-          actions.
-        </Text>
+        <LiquidGlassHeader
+          eyebrow="Privacy"
+          title="Control room"
+          body="Manage what leaves your device and account recovery actions."
+        />
 
-        <Card
-          variant="elevated"
-          size="md"
+        <LiquidGlassCard
+          emphasized
           style={{ marginBottom: theme.spacing[4] }}
         >
           {TOGGLE_ROWS.map((row) => (
@@ -129,7 +124,7 @@ export const PrivacySettingsScreen: React.FC<Props> = () => {
               onToggle={toggleValue}
             />
           ))}
-        </Card>
+        </LiquidGlassCard>
 
         <Card
           variant="outlined"
@@ -194,7 +189,7 @@ export const PrivacySettingsScreen: React.FC<Props> = () => {
         </Pressable>
       </ScrollView>
       )}
-    </Box>
+    </LiquidGlassScreen>
   );
 };
 

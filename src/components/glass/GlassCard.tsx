@@ -60,7 +60,7 @@ export function GlassCard({
       style={[
         {
           backgroundColor: v.background, borderColor: v.border,
-          borderRadius: resolvedRadius, borderWidth: 1.2, overflow: 'hidden',
+          borderRadius: resolvedRadius, borderWidth: 1.35, elevation: 3, overflow: 'hidden',
           shadowColor: v.shadowColor, shadowOffset: v.shadowOffset,
           shadowOpacity: v.shadowOpacity, shadowRadius: v.shadowRadius,
         },
@@ -86,7 +86,7 @@ export function GlassCard({
       <GlassCardLeftEdge resolvedRadius={resolvedRadius} />
       <GlassCardShineStreak resolvedRadius={resolvedRadius} />
 
-      <View style={{ padding: resolvedPadding }}>{children}</View>
+      <View style={{ padding: resolvedPadding, zIndex: 20 }}>{children}</View>
     </View>
   );
 }

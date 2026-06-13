@@ -17,6 +17,7 @@ import PrivacySettingsScreen from '../screens/settings/PrivacySettingsScreen';
 import AccountSettingsScreen from '../screens/settings/AccountSettingsScreen';
 import { DataExportScreen } from '../screens/settings/DataExportScreen';
 import type { SettingsStackParams } from './types';
+import { lightColors } from '../theme/tokens';
 
 const Stack = createNativeStackNavigator<SettingsStackParams>();
 
@@ -25,7 +26,12 @@ const Stack = createNativeStackNavigator<SettingsStackParams>();
  */
 export const SettingsNavigator: React.FC = () => {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Navigator
+      screenOptions={{
+        contentStyle: { backgroundColor: lightColors.background.primary },
+        headerShown: false,
+      }}
+    >
       <Stack.Screen name="SettingsMain" component={SettingsScreen} />
       <Stack.Screen
         name="NotificationSettings"

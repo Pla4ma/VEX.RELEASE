@@ -1,11 +1,7 @@
 import React from 'react';
-import { View, Dimensions } from 'react-native';
+import { View } from 'react-native';
 import { GlassCard } from '../../components/glass/GlassCard';
-import { WaterBubble } from '../../components/glass/WaterBubble';
-import { LiquidGlassSphere } from '../../components/glass/LiquidGlassSphere';
-import { LiquidLens } from '../../components/glass/LiquidLens';
-import { CrystalAvatar } from '../../components/glass/CrystalAvatar';
-import { FloatingDroplets } from '../../components/glass/FloatingDroplets';
+import { VexAssetImage } from '../../components/glass/VexAssetImage';
 import type { User } from '../../types/models';
 import { ProfileActionsRow } from './components/ProfileActionsRow';
 import { ProfileIdentityBlock } from './components/ProfileIdentityBlock';
@@ -23,8 +19,6 @@ interface ProfileHeaderProps {
   onLogout: () => void;
 }
 
-const { width: SCREEN_W } = Dimensions.get('window');
-
 export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   user,
   streakDays,
@@ -40,7 +34,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
     <View
       style={{
         paddingTop: 4,
-        paddingHorizontal: 16,
+        paddingHorizontal: 12,
         paddingBottom: 4,
       }}
     >
@@ -49,67 +43,29 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
         onNotificationsPress={onNotificationsPress}
         onSettingsPress={onSettingsPress}
       />
-      {/* Cinematic water-filled capsule atmosphere */}
       <View
         pointerEvents="none"
         style={{
-          left: -28,
-          opacity: 0.85,
+          opacity: 0.28,
           position: 'absolute',
-          top: 32,
+          right: 8,
+          top: 70,
           zIndex: 0,
         }}
       >
-        <LiquidLens size={140} opacity={0.65} />
+        <VexAssetImage name="orangeMastery" opacity={0.78} size={72} />
       </View>
       <View
         pointerEvents="none"
         style={{
-          opacity: 0.85,
+          opacity: 0.18,
           position: 'absolute',
-          right: -12,
-          top: 48,
+          right: 54,
+          top: 104,
           zIndex: 0,
         }}
       >
-        <WaterBubble size={72} opacity={0.65} />
-      </View>
-      <View
-        pointerEvents="none"
-        style={{
-          left: SCREEN_W * 0.58,
-          opacity: 0.85,
-          position: 'absolute',
-          top: 28,
-          zIndex: 0,
-        }}
-      >
-        <FloatingDroplets count={6} opacity={0.65} size={60} />
-      </View>
-      <View
-        pointerEvents="none"
-        style={{
-          left: SCREEN_W * 0.72,
-          opacity: 0.85,
-          position: 'absolute',
-          top: 52,
-          zIndex: 0,
-        }}
-      >
-        <LiquidGlassSphere color="pearl" size={18} intensity={0.58} />
-      </View>
-      {/* Crystal avatar orb floating near identity block */}
-      <View
-        pointerEvents="none"
-        style={{
-          opacity: 0.85,
-          position: 'absolute',
-          right: 28,
-          top: 72,
-          zIndex: 0,
-        }}
-      >
-        <CrystalAvatar size={64} isOnline />
+        <VexAssetImage name="streakFlame" opacity={0.64} size={34} />
       </View>
       <GlassCard padding={18} radius={28} variant="hero" glowMint>
         <ProfileIdentityBlock

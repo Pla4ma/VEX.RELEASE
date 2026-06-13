@@ -5,6 +5,7 @@ import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
 import { SessionMode, SESSION_MODE_CONFIG } from '../../../session/modes';
 import { useTheme } from '../../../theme';
+import { SessionGlyph, type SessionGlyphName } from '../../../shared/ui/liquid-glass';
 import {
   isFeatureUnlocked,
   type UnlockableFeature,
@@ -15,7 +16,7 @@ export type { SessionMode };
 
 type ModeCard = {
   description: string;
-  icon: string;
+  glyph: SessionGlyphName;
   mode: SessionMode;
   name: string;
 };
@@ -23,31 +24,31 @@ type ModeCard = {
 const MODE_CARDS: ModeCard[] = [
   {
     description: 'High intensity — for hard, uninterrupted work',
-    icon: 'BRAIN',
+    glyph: 'deep',
     mode: SessionMode.DEEP_WORK,
     name: 'Deep Work',
   },
   {
     description: 'Steady, low-pressure — protect a single thread',
-    icon: 'LEAF',
+    glyph: 'casual',
     mode: SessionMode.LIGHT_FOCUS,
     name: 'Light Focus',
   },
   {
     description: 'Named study blocks with recall and review built in',
-    icon: 'BOOK',
+    glyph: 'study',
     mode: SessionMode.STUDY,
     name: 'Study',
   },
   {
     description: 'Open-ended creative flow — no pressure, no timers',
-    icon: 'PALETTE',
+    glyph: 'creative',
     mode: SessionMode.CREATIVE,
     name: 'Creative',
   },
   {
     description: 'Short blocks — chain them for momentum',
-    icon: 'BOLT',
+    glyph: 'sprint',
     mode: SessionMode.SPRINT,
     name: 'Sprint',
   },
@@ -93,7 +94,7 @@ export function ModeSelector({
   return (
     <Box gap="sm">
       <Text variant="label" color="text.secondary">
-        SESSION TYPE
+        Session Type
       </Text>
 
       <Box gap="sm">
@@ -121,39 +122,52 @@ export function ModeSelector({
               <Box
                 minHeight={76}
                 px="md"
-                py="sm"
-                bg={isSelected ? 'background.elevated' : 'background.secondary'}
-                borderRadius="lg"
+                py="md"
+                bg={isSelected ? 'surface.selected' : 'semantic.surfaceGlass'}
+                borderRadius={24}
                 style={{
-                  borderWidth: 1,
+                  borderWidth: isSelected ? 2 : 1,
                   borderColor: isSelected
-                    ? theme.colors.primary[500]
-                    : theme.colors.border.light,
+                    ? theme.colors.semantic.secondary
+                    : theme.colors.semantic.liquidGlassBorder,
                   opacity: isDisabled ? 0.55 : 1,
+                  shadowColor: theme.colors.semantic.shadow,
+                  shadowOffset: { width: 0, height: 8 },
+                  shadowOpacity: isSelected ? 0.18 : 0.08,
+                  shadowRadius: isSelected ? 16 : 10,
                 }}
               >
                 <Box flexDirection="row" alignItems="center" gap="md">
                   <Box
-                    width={44}
-                    height={44}
-                    borderRadius="lg"
-                    bg="background.tertiary"
+                    width={56}
+                    height={56}
+                    borderRadius={20}
+                    bg="semantic.surfaceElevated"
                     alignItems="center"
                     justifyContent="center"
                   >
-                    <Text variant="label" color="primary.500">
-                      {card.icon}
-                    </Text>
+                    <SessionGlyph name={card.glyph} size={44} />
                   </Box>
                   <Box flex={1}>
                     <Text variant="label" color="text.primary">
                       {card.name}
                     </Text>
-                    <Text variant="caption" color="text.secondary">
+                    <Text
+                      variant="caption"
+                      color="text.secondary"
+                      style={{ lineHeight: 19 }}
+                    >
                       {disabledReason ?? card.description}
                     </Text>
                   </Box>
-                  <Box alignItems="flex-end">
+                  <Box
+                    alignItems="center"
+                    bg="semantic.backgroundElevated"
+                    borderRadius={999}
+                    px="sm"
+                    py="xs"
+                    style={{ borderColor: theme.colors.border.light, borderWidth: 1 }}
+                  >
                     <Text variant="caption" color="text.secondary">
                       {config.minimumQualifyingDurationSeconds >= 45 * 60
                         ? 'Full session'

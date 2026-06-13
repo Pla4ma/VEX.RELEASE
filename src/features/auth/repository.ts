@@ -41,10 +41,14 @@ export async function signUpWithEmail(
       return { user: null, error: normalizeAuthError(error) };
     }
 
-    if (data.user) {
+    if (data.user && data.session) {
       const mapped = mapSupabaseUser(data.user, metadata);
       const user = attachOnboardingCompletion(mapped, null);
       return { user, error: null };
+    }
+
+    if (data.user && !data.session) {
+      return { user: null, error: null, requiresEmailConfirmation: true };
     }
 
     return {

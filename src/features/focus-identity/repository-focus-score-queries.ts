@@ -16,6 +16,10 @@ import {
 
 const debug = createDebugger('focus-identity:repository');
 
+function isMissingFocusScoreColumns(error: { code?: string; message?: string }): boolean {
+  return error.code === '42703' || /column .* does not exist|top_positive_factor|top_negative_factor/i.test(error.message ?? '');
+}
+
 export async function fetchCurrentFocusScore(
   userId: string,
 ): Promise<FocusScoreRecord | null> {
@@ -30,6 +34,9 @@ export async function fetchCurrentFocusScore(
   );
   if (error) {
     if (error.code === 'PGRST116') {
+      return null;
+    }
+    if (isMissingFocusScoreColumns(error)) {
       return null;
     }
     throw new FocusIdentityRepositoryError('fetchCurrentFocusScore', error);

@@ -23,7 +23,9 @@ import { LAST_STEP_INDEX, getStepValidation } from './onboarding-flow-steps';
 import {
   EtherealOnboardingShell,
   EtherealSkyBackground,
+  BackgroundScrim,
   FloatingChoiceCard,
+  OnboardingCinematicIntro,
   SerifTitle,
 } from './components/ethereal';
 import { LaneChoiceStep } from './components/LaneChoiceStep';
@@ -35,6 +37,8 @@ export function OnboardingFlowScreen(): JSX.Element {
   const route = useRoute<OnboardingRouteProp>();
   const flow = useOnboardingFlow(route.params?.step);
   const [isCelebrating, setIsCelebrating] = useState(false);
+  const [hasSeenCinematicIntro, setHasSeenCinematicIntro] = useState(false);
+  const choiceWrapStyle = { gap: 8, marginTop: 2 };
 
   if (!flow.userId) {
     return <SignedOutOnboardingState />;
@@ -59,7 +63,7 @@ export function OnboardingFlowScreen(): JSX.Element {
 
   const renderStep0 = useCallback(
     () => (
-      <View style={{ gap: 12, marginTop: 8 }}>
+      <View style={choiceWrapStyle}>
         {ONBOARDING_GOALS.map((g, i) => (
           <FloatingChoiceCard
             key={g.id}
@@ -75,12 +79,12 @@ export function OnboardingFlowScreen(): JSX.Element {
         ))}
       </View>
     ),
-    [flow],
+    [choiceWrapStyle, flow],
   );
 
   const renderStep1 = useCallback(
     () => (
-      <View style={{ gap: 12, marginTop: 8 }}>
+      <View style={choiceWrapStyle}>
         {MOTIVATION_STYLE_OPTIONS.map((style, i) => (
           <FloatingChoiceCard
             key={style.id}
@@ -96,7 +100,7 @@ export function OnboardingFlowScreen(): JSX.Element {
         ))}
       </View>
     ),
-    [flow],
+    [choiceWrapStyle, flow],
   );
 
   const renderStep2 = useCallback(
@@ -119,6 +123,20 @@ export function OnboardingFlowScreen(): JSX.Element {
     [flow, isCelebrating, handleAccept],
   );
 
+  if (!hasSeenCinematicIntro) {
+    return (
+      <View style={{ flex: 1 }}>
+        <EtherealSkyBackground />
+        <BackgroundScrim intensity="question" />
+        <OnboardingCinematicIntro
+          onBegin={() => {
+            setHasSeenCinematicIntro(true);
+          }}
+        />
+      </View>
+    );
+  }
+
   return (
     <EtherealOnboardingShell
       eyebrow={STEP_EYEBROW[flow.step]}
@@ -128,7 +146,7 @@ export function OnboardingFlowScreen(): JSX.Element {
       lastStepIndex={LAST_STEP_INDEX}
       mascotMessage={isCelebrating ? "You're set. I'll adapt from real progress." : mascotCopy?.message}
       mascotMood={isCelebrating ? 'celebrate' : mascotCopy?.mood}
-      mascotSubmessage={isCelebrating ? undefined : mascotCopy?.submessage}
+      mascotReactionKey={`${flow.step}-${flow.goal ?? 'none'}-${flow.motivationStyle ?? 'none'}-${isCelebrating}`}
       onBack={() => flow.setStep(flow.step - 1)}
       onContinue={() => flow.setStep(flow.step + 1)}
       onRetryFinish={() => flow.handleFinish()}

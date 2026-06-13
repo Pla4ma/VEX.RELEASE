@@ -3,6 +3,7 @@ import type { OnboardingState, UnlockedFeature } from './onboarding-types';
 import { FEATURE_UNLOCK_GATES, STEP_ORDER } from './onboarding-gates';
 
 const onboardingStates = new Map<string, OnboardingState>();
+const recordedSessionIds = new Map<string, Set<string>>();
 
 export function initializeOnboarding(userId: string): OnboardingState {
   const state: OnboardingState = {
@@ -60,9 +61,23 @@ export function skipToFirstSession(userId: string): OnboardingState | null {
 export function recordSession(
   userId: string,
   durationMinutes: number,
+  idempotencyKey?: string,
 ): OnboardingState | null {
   const state = onboardingStates.get(userId);
   if (!state) {return null;}
+
+  if (idempotencyKey) {
+    let keys = recordedSessionIds.get(userId);
+    if (!keys) {
+      keys = new Set();
+      recordedSessionIds.set(userId, keys);
+    }
+    if (keys.has(idempotencyKey)) {
+      return state;
+    }
+    keys.add(idempotencyKey);
+  }
+
   state.sessionsCompleted += 1;
   if (!state.firstSessionAt) {
     state.firstSessionAt = Date.now();

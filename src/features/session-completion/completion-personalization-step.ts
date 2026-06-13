@@ -6,6 +6,13 @@ import type { CompletionLedger } from './schemas';
 import type { PostSessionStoryViewModel } from './service';
 import type { SessionSummary } from '../../session/types';
 import { buildPostSessionStoryViewModel } from './service';
+import { buildFeatureAccess } from '../liveops-config/feature-access';
+import { useOnboardingStore } from '../onboarding/store';
+import {
+  initializeOnboarding,
+  getOnboardingState,
+  recordSession,
+} from '../onboarding/onboarding-state';
 
 async function resolveCompletionPersonalBest(
   _userId: string,
@@ -22,6 +29,53 @@ interface PersonalizationInput {
   degradedSystems: string[];
 }
 
+export function detectNewlyUnlockedFeatures(
+  userId: string,
+  summary: SessionSummary,
+): string[] {
+  const features: string[] = [];
+  try {
+    const state =
+      getOnboardingState(userId) ?? initializeOnboarding(userId);
+    const sessionsBefore = state.sessionsCompleted;
+    recordSession(
+      userId,
+      Math.max(1, Math.round(summary.effectiveDuration / 60)),
+      `session:${summary.sessionId ?? Date.now()}`,
+    );
+    const sessionsAfter = sessionsBefore + 1;
+    const stateAfter = getOnboardingState(userId);
+    if (stateAfter) {
+      const boardFeatures = stateAfter.unlockedFeatures
+        .filter((f) => !f.introduced)
+        .map((f) => f.featureId);
+      features.push(...boardFeatures);
+    }
+    const profile = useOnboardingStore.getState().motivationProfile;
+    const before = buildFeatureAccess({
+      totalCompletedSessions: sessionsBefore,
+      motivationProfile: profile ?? undefined,
+    });
+    const after = buildFeatureAccess({
+      totalCompletedSessions: sessionsAfter,
+      motivationProfile: profile ?? undefined,
+    });
+    for (const [key, feat] of Object.entries(after.features)) {
+      if (
+        feat.isUnlocked &&
+        !(before.features[key as keyof typeof before.features]?.isUnlocked)
+      ) {
+        if (!features.includes(key)) {features.push(key);}
+      }
+    }
+  } catch (error) {
+    Sentry.captureException(error, {
+      tags: { feature: 'completion-unlock-detection' },
+    });
+  }
+  return features;
+}
+
 export async function applyPersonalizationAndSideEffects(
   input: PersonalizationInput,
 ): Promise<PostSessionStoryViewModel> {
@@ -32,6 +86,8 @@ export async function applyPersonalizationAndSideEffects(
     finalLedger,
     summary,
   );
+
+  const newlyUnlockedFeatures = detectNewlyUnlockedFeatures(userId, summary);
 
   try {
     const focusProfile = await getFocusProfile(userId).catch(() => null);
@@ -66,6 +122,7 @@ export async function applyPersonalizationAndSideEffects(
   return buildPostSessionStoryViewModel({
     degradedSystems,
     ledger: finalLedger,
+    newlyUnlockedFeatures,
     summary,
   });
 }

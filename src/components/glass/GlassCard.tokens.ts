@@ -48,22 +48,22 @@ export function resolveVariant(variant: GlassCardVariant): VariantStyle {
       };
     case 'strong':
       return {
-        background: 'rgba(255, 255, 255, 0.55)',
-        border: 'rgba(255, 255, 255, 0.85)',
-        shadowColor: 'rgba(13, 76, 65, 0.08)',
-        shadowOpacity: 0.25,
-        shadowRadius: 18,
-        shadowOffset: { width: 0, height: 8 },
+        background: 'rgba(255, 255, 255, 0.64)',
+        border: 'rgba(255, 255, 255, 0.94)',
+        shadowColor: 'rgba(13, 76, 65, 0.1)',
+        shadowOpacity: 0.2,
+        shadowRadius: 14,
+        shadowOffset: { width: 0, height: 6 },
       };
     case 'hero':
       return {
-        background: 'rgba(255, 255, 255, 0.48)',
-        border: 'rgba(255, 255, 255, 0.78)',
-        shadowColor: 'rgba(13, 76, 65, 0.06)',
-        shadowOpacity: 0.22,
-        shadowRadius: 22,
-        shadowOffset: { width: 0, height: 10 },
-        accentTopBar: '#42CFAE',
+        background: 'rgba(255, 255, 255, 0.68)',
+        border: 'rgba(66, 207, 174, 0.9)',
+        shadowColor: 'rgba(13, 76, 65, 0.12)',
+        shadowOpacity: 0.2,
+        shadowRadius: 16,
+        shadowOffset: { width: 0, height: 7 },
+        accentTopBar: '#18B894',
       };
     case 'selected':
       return {
@@ -95,23 +95,23 @@ export function resolveVariant(variant: GlassCardVariant): VariantStyle {
       };
     case 'premium':
       return {
-        background: 'rgba(255, 255, 255, 0.52)',
-        border: 'rgba(121, 223, 201, 0.58)',
+        background: 'rgba(255, 255, 255, 0.66)',
+        border: 'rgba(66, 207, 174, 0.94)',
         shadowColor: 'rgba(18, 184, 148, 0.14)',
-        shadowOpacity: 0.28,
-        shadowRadius: 24,
-        shadowOffset: { width: 0, height: 12 },
-        accentTopBar: '#42CFAE',
+        shadowOpacity: 0.22,
+        shadowRadius: 18,
+        shadowOffset: { width: 0, height: 8 },
+        accentTopBar: '#18B894',
       };
     case 'default':
     default:
       return {
-        background: 'rgba(255, 255, 255, 0.42)',
-        border: 'rgba(255, 255, 255, 0.78)',
-        shadowColor: 'rgba(13, 76, 65, 0.06)',
-        shadowOpacity: 0.2,
-        shadowRadius: 18,
-        shadowOffset: { width: 0, height: 8 },
+        background: 'rgba(255, 255, 255, 0.64)',
+        border: 'rgba(255, 255, 255, 0.92)',
+        shadowColor: 'rgba(13, 76, 65, 0.08)',
+        shadowOpacity: 0.18,
+        shadowRadius: 14,
+        shadowOffset: { width: 0, height: 6 },
       };
   }
 }

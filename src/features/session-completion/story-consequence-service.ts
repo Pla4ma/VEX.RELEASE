@@ -4,6 +4,7 @@ import type { SessionConsequenceCardsProps } from '../../screens/session/compone
 export type SessionCompletionConsequences = {
   boss?: SessionConsequenceCardsProps['bossConsequence'];
   challenge?: SessionConsequenceCardsProps['challengeConsequence'];
+  newlyUnlockedFeatures: string[];
   rival?: SessionConsequenceCardsProps['rivalConsequence'];
   streak?: SessionConsequenceCardsProps['streakConsequence'];
 };
@@ -28,12 +29,14 @@ type ActiveChallengeInput = {
 export function buildSessionCompletionConsequences(input: {
   activeBoss: ActiveBossInput | null | undefined;
   activeChallenges: ActiveChallengeInput[] | null | undefined;
+  newlyUnlockedFeatures?: string[];
   streakSummary: StreakSummaryInput | null | undefined;
   summary: SessionSummary;
 }): SessionCompletionConsequences {
   return {
     boss: buildBossConsequence(input.summary, input.activeBoss),
     challenge: buildChallengeConsequence(input.activeChallenges),
+    newlyUnlockedFeatures: input.newlyUnlockedFeatures ?? [],
     streak: buildStreakConsequence(input.summary, input.streakSummary),
   };
 }

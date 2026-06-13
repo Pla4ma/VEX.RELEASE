@@ -23,6 +23,7 @@ export type PostSessionStoryViewModel = {
   degradedWarnings: string[];
   grade: CompletionLedger['grade'];
   ledgerId: string;
+  newlyUnlockedFeatures: string[];
   sessionId: string;
   summary: SessionSummary;
   xpDelta: number;
@@ -32,12 +33,14 @@ export function buildPostSessionStoryViewModel(input: {
   degradedWarnings?: string[];
   degradedSystems?: string[];
   ledger: CompletionLedger;
+  newlyUnlockedFeatures?: string[];
   summary: SessionSummary;
 }): PostSessionStoryViewModel {
   return {
     degradedWarnings: input.degradedWarnings ?? input.degradedSystems ?? [],
     grade: input.ledger.grade,
     ledgerId: input.ledger.ledgerId,
+    newlyUnlockedFeatures: input.newlyUnlockedFeatures ?? [],
     sessionId: input.ledger.sessionId,
     summary: input.summary,
     xpDelta: input.ledger.xpDelta,

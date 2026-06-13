@@ -1,5 +1,3 @@
-import { ONBOARDING_PROMISE_COPY } from './components/onboarding-flow-data';
-
 export const STEP_EYEBROW: Record<number, string> = {
   0: 'STEP 1 OF 3',
   1: 'STEP 2 OF 3',
@@ -16,37 +14,40 @@ export const STEP_TITLES: Record<number, { title: string; subtitle: string }> = 
     subtitle: 'VEX will tune the setup to your energy.',
   },
   2: {
-    title: 'Confirm your focus mode',
+    title: 'Confirm your mode',
     subtitle: 'You can change this anytime.',
   },
 };
 
-export const MASCOT_COPY: Record<number, { mood: 'pointing' | 'thinking' | 'encouraging'; message: string; submessage?: string }> = {
+export const MASCOT_COPY: Record<
+  number,
+  { mood: 'pointing' | 'thinking' | 'encouraging'; message: string }
+> = {
   0: {
     mood: 'pointing',
-    message: 'Pick one. I’ll shape the first block around it.',
+    message: 'Pick one. I shape your first block.',
   },
   1: {
     mood: 'thinking',
-    message: 'I’m adapting the next step from your answer.',
+    message: 'I adapt from your answer.',
   },
   2: {
     mood: 'encouraging',
-    message: 'Lock the first mode. I’ll guide the first block.',
+    message: 'Lock the mode. I guide first block.',
   },
 };
 
 export const GUIDE_COPY: Record<number, { title: string; body: string }> = {
   0: {
-    title: 'I will shape the first block.',
-    body: 'Pick the outcome that would make today feel lighter. I will tune the next screen around it.',
+    title: 'I shape the first block.',
+    body: 'Pick the outcome that would make today feel lighter.',
   },
   1: {
     title: 'Choose the coaching tone.',
-    body: 'This controls how direct, calm, or structured VEX feels when you return.',
+    body: 'This controls how direct, calm, or structured VEX feels.',
   },
   2: {
     title: 'Lock the first mode.',
-    body: 'This opens the app with one clear path. You can replay this guide later.',
+    body: 'This opens the app with one clear path.',
   },
 };

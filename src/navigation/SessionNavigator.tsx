@@ -10,6 +10,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { initializeSessionRuntime } from '../app/bootstrap';
 import type { SessionStackParams } from './types';
+import { lightColors } from '../theme/tokens';
 
 const Stack = createNativeStackNavigator<SessionStackParams>();
 
@@ -26,6 +27,7 @@ export const SessionNavigator: React.FC = () => {
       screenOptions={{
         headerShown: false,
         animation: 'slide_from_right',
+        contentStyle: { backgroundColor: lightColors.background.primary },
       }}
     >
       <Stack.Screen

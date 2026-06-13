@@ -2,10 +2,8 @@ import React from 'react';
 import { View } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
 import { GlassCard } from '../../../components/glass/GlassCard';
-import { FocusModeOrb } from '../../../components/glass/FocusModeOrb';
-import { FloatingDroplets } from '../../../components/glass/FloatingDroplets';
-import { WaterBubble } from '../../../components/glass/WaterBubble';
-import { LiquidGlassSphere } from '../../../components/glass/LiquidGlassSphere';
+import { RealisticModeOrb } from '../../../components/glass/RealisticModeOrb';
+import { VexAssetImage } from '../../../components/glass/VexAssetImage';
 import { LiquidButton } from '../../../components/glass/LiquidButton';
 import { Icon } from '../../../icons';
 import type { FocusModeCard } from '../../../features/session-start/schemas';
@@ -16,13 +14,16 @@ function formatMinutes(seconds: number): string {
 }
 
 function getOrbMode(mode: string): 'sprint' | 'light' | 'study' | 'recovery' {
-  switch (mode) {
-    case 'sprint-15': return 'sprint';
-    case 'light-focus': return 'light';
-    case 'study': return 'study';
-    case 'recovery': return 'recovery';
-    default: return 'sprint';
+  if (mode.startsWith('light-focus')) {
+    return 'light';
   }
+  if (mode.startsWith('study')) {
+    return 'study';
+  }
+  if (mode.startsWith('recovery')) {
+    return 'recovery';
+  }
+  return 'sprint';
 }
 
 interface FocusModeCardViewProps {
@@ -45,42 +46,35 @@ export function FocusModeCardView({
         radius={22}
         variant={isPrimary ? 'premium' : 'default'}
       >
+        {isPrimary ? (
+          <View
+            pointerEvents="none"
+            style={{
+              opacity: 0.34,
+              position: 'absolute',
+              right: 8,
+              top: 8,
+              zIndex: 0,
+            }}
+          >
+            <VexAssetImage name="orangePrism" opacity={0.72} size={38} />
+          </View>
+        ) : null}
         <View
           pointerEvents="none"
           style={{
-            opacity: 0.85,
+            backgroundColor: isPrimary
+              ? vexLightGlass.semantic.warning
+              : vexLightGlass.glass.innerHighlight,
+            borderRadius: 999,
+            height: 3,
+            left: 18,
+            opacity: isPrimary ? 0.32 : 0.2,
             position: 'absolute',
-            right: 10,
-            top: 10,
-            zIndex: 0,
+            right: 86,
+            top: 3,
           }}
-        >
-          <FloatingDroplets count={3} opacity={0.65} size={28} />
-        </View>
-        <View
-          pointerEvents="none"
-          style={{
-            opacity: 0.85,
-            position: 'absolute',
-            right: 48,
-            bottom: 14,
-            zIndex: 0,
-          }}
-        >
-          <WaterBubble size={32} opacity={0.65} />
-        </View>
-        <View
-          pointerEvents="none"
-          style={{
-            opacity: 0.85,
-            position: 'absolute',
-            left: 8,
-            bottom: 8,
-            zIndex: 0,
-          }}
-        >
-          <LiquidGlassSphere color="pearl" size={16} intensity={0.52} />
-        </View>
+        />
         <View
           style={{
             alignItems: 'center',
@@ -90,10 +84,9 @@ export function FocusModeCardView({
             zIndex: 2,
           }}
         >
-          <FocusModeOrb
+          <RealisticModeOrb
             mode={orbMode}
             size={isPrimary ? 66 : 58}
-            intensity={0.95}
           />
           <View style={{ flex: 1, gap: 3 }}>
             <Text
@@ -156,7 +149,7 @@ export function FocusModeCardView({
               />
             }
             size={isPrimary ? 'md' : 'sm'}
-            variant={isPrimary ? 'primary' : 'outline'}
+            variant={isPrimary ? 'fire' : 'outline'}
           />
         </View>
       </GlassCard>

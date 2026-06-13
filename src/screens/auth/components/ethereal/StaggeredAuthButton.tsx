@@ -4,8 +4,10 @@
  */
 import React from 'react';
 import { View } from 'react-native';
+import Animated, { FadeInUp } from 'react-native-reanimated';
 
 import { Text } from '../../../../components/primitives/Text';
+import { useReducedMotion } from '../../../../hooks/useReducedMotion';
 import { ShimmerSweep } from './ShimmerSweep';
 import { TapRipple } from './TapRipple';
 import { etherealButton } from '@/theme/tokens/ethereal-sky';
@@ -67,12 +69,15 @@ export function StaggeredAuthButton({
   spec,
   onPress,
   disabled,
-  delay: _delay,
+  delay,
 }: StaggeredAuthButtonProps): React.JSX.Element {
+  const { isReducedMotion } = useReducedMotion();
   const content = <AuthButtonContent spec={spec} />;
 
   return (
-    <View>
+    <Animated.View
+      entering={isReducedMotion ? undefined : FadeInUp.duration(320).delay(delay)}
+    >
       {spec.useShimmer ? (
         <ShimmerSweep
           accessibilityHint={spec.accessibilityHint}
@@ -99,6 +104,6 @@ export function StaggeredAuthButton({
           {content}
         </TapRipple>
       )}
-    </View>
+    </Animated.View>
   );
 }

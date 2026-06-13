@@ -2,6 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
+import { SessionGlyph } from '../../../shared/ui/liquid-glass';
 
 export function EmptyStakesMessage(): JSX.Element {
   const { theme } = useTheme();
@@ -18,7 +19,7 @@ export function EmptyStakesMessage(): JSX.Element {
         borderColor: theme.colors.border.light,
       }}
     >
-      <Text fontSize={20}>✨</Text>
+      <SessionGlyph name="stake" size={36} />
       <View style={{ flex: 1 }}>
         <Text variant="body" fontWeight="500" color="text.primary">
           Every session builds your streak

@@ -1,9 +1,11 @@
 import React from 'react';
 import { View, type ViewStyle } from 'react-native';
+import Animated, { FadeInUp } from 'react-native-reanimated';
 
 import { etherealCard, etherealGlass } from '@/theme/tokens/ethereal-sky';
 import { vexLightGlass } from '@/theme/tokens/vex-light-glass';
 import { Text } from '../../../../components/primitives/Text';
+import { useReducedMotion } from '../../../../hooks/useReducedMotion';
 import { SafeBlurView } from '../../../../screens/auth/components/SafeBlurView';
 import { ShimmerSweep } from '../../../../screens/auth/components/ethereal/ShimmerSweep';
 
@@ -16,6 +18,7 @@ type FloatingChoiceCardProps = {
   accessibilityHint?: string;
   delayMs?: number;
   index: number;
+  layout?: 'list' | 'grid';
 };
 
 export function FloatingChoiceCard({
@@ -25,24 +28,32 @@ export function FloatingChoiceCard({
   disabled = false,
   onPress,
   accessibilityHint,
-  delayMs: _delayMs = 0,
-  index: _index,
+  delayMs = 0,
+  index,
+  layout: _layout = 'list',
 }: FloatingChoiceCardProps): React.JSX.Element {
+  const { isReducedMotion } = useReducedMotion();
   const surfaceStyle: ViewStyle = {
-    borderRadius: 26,
+    borderRadius: 23,
     backgroundColor: selected ? etherealCard.fillSelected : etherealCard.fill,
     borderWidth: selected ? 2 : 1,
     borderColor: selected ? 'rgba(55,212,188,0.45)' : etherealCard.border,
-    minHeight: 78,
+    minHeight: 68,
     overflow: 'hidden',
     shadowColor: etherealGlass.shadow,
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.65,
-    shadowRadius: 18,
+    shadowRadius: selected ? 22 : 12,
+    transform: [{ scale: selected ? 1.015 : 1 }],
   };
 
   return (
-    <View>
+    <Animated.View
+      entering={
+        isReducedMotion ? undefined : FadeInUp.duration(280).delay(delayMs + index * 55)
+      }
+      style={{ width: '100%' }}
+    >
       {selected ? (
         <View
           style={{
@@ -50,9 +61,9 @@ export function FloatingChoiceCard({
             top: 10,
             right: 10,
             zIndex: 2,
-            width: 22,
-            height: 22,
-            borderRadius: 11,
+            width: 26,
+            height: 26,
+            borderRadius: 13,
             backgroundColor: vexLightGlass.mint[500],
             alignItems: 'center',
             justifyContent: 'center',
@@ -68,7 +79,7 @@ export function FloatingChoiceCard({
         accessibilityLabel={title}
         backgroundColor={selected ? etherealCard.fillSelected : etherealCard.fill}
         borderColor={selected ? 'rgba(55,212,188,0.45)' : etherealCard.border}
-        borderRadius={26}
+        borderRadius={23}
         borderWidth={selected ? 2 : 1}
         disabled={disabled}
         height={undefined}
@@ -77,20 +88,21 @@ export function FloatingChoiceCard({
         style={surfaceStyle}
       >
         <SafeBlurView intensity={40} tint="light" style={{ flex: 1 }}>
-          <View style={{ padding: 16, gap: 4 }}>
+          <View style={{ paddingHorizontal: 16, paddingVertical: 12, gap: 2 }}>
             <Text
-              fontSize={19}
+              fontSize={18}
               fontWeight="800"
               style={{ color: etherealCard.title }}
+              numberOfLines={1}
             >
               {title}
             </Text>
             {body ? (
               <Text
-                fontSize={14}
+                fontSize={13}
                 fontWeight="600"
-                style={{ color: etherealCard.body, lineHeight: 20 }}
-                numberOfLines={2}
+                style={{ color: etherealCard.body, lineHeight: 18 }}
+                numberOfLines={1}
               >
                 {body}
               </Text>
@@ -98,6 +110,6 @@ export function FloatingChoiceCard({
           </View>
         </SafeBlurView>
       </ShimmerSweep>
-    </View>
+    </Animated.View>
   );
 }

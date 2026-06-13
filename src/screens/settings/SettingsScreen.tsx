@@ -12,6 +12,11 @@ import { useSettingsStore } from '../../features/settings/store';
 import { SettingsProfileRow } from './SettingsProfileRow';
 import { SettingsSectionGroup } from './SettingsSectionGroup';
 import { buildSettingsGroups } from './buildSettingsGroups';
+import {
+  LiquidGlassHeader,
+  LiquidGlassScreen,
+  liquidGlassSpacing,
+} from '../../shared/ui/liquid-glass';
 
 type Props = NativeStackScreenProps<SettingsStackParams, 'SettingsMain'>;
 
@@ -86,10 +91,18 @@ export const SettingsScreen = withScreenErrorBoundary(function _SettingsScreen({
     }));
 
   return (
-    <Box flex={1} style={{ backgroundColor: theme.colors.background.primary }}>
+    <LiquidGlassScreen>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <Box px={20} pb={16} pt={insets.top + 16}>
-          <Text variant="h1">Settings</Text>
+        <Box
+          px={liquidGlassSpacing.screenX}
+          pb={16}
+          pt={insets.top + liquidGlassSpacing.screenTop}
+        >
+          <LiquidGlassHeader
+            eyebrow="Control room"
+            title="Settings"
+            body="Tune VEX without leaving the focus record."
+          />
         </Box>
 
         <SettingsProfileRow
@@ -138,7 +151,7 @@ export const SettingsScreen = withScreenErrorBoundary(function _SettingsScreen({
 
         <Box height={insets.bottom + 20} />
       </ScrollView>
-    </Box>
+    </LiquidGlassScreen>
   );
 }, 'Settings');
 

@@ -100,7 +100,7 @@ function HomeScreenInnerRaw({
 
   return (
       <GlassScreen showAura variant="home">
-        <View style={{ flex: 1, paddingHorizontal: 16, paddingTop: 6 }}>
+        <View style={{ flex: 1, paddingHorizontal: 12, paddingTop: 6 }}>
           <HomeTopBar />
           <ScrollView
             contentContainerStyle={{ paddingBottom: 200 }}

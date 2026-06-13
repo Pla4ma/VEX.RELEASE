@@ -8,8 +8,13 @@ interface GlassEffectsProps {
   isPrimary: boolean;
 }
 
+function bottomShadowFor(variant: LiquidButtonVariant): string {
+  if (variant === 'fire') return 'rgba(120, 50, 10, 0.22)';
+  if (variant === 'ocean') return 'rgba(20, 70, 110, 0.22)';
+  return 'rgba(6, 67, 56, 0.22)';
+}
+
 export function LiquidButtonGlassEffects({ variant, isPrimary }: GlassEffectsProps): React.ReactNode {
-  void variant;
   return (
     <>
       {/* Top specular highlight - glass reflection */}
@@ -66,7 +71,7 @@ export function LiquidButtonGlassEffects({ variant, isPrimary }: GlassEffectsPro
         <View
           pointerEvents="none"
           style={{
-            backgroundColor: 'rgba(6, 67, 56, 0.22)',
+            backgroundColor: bottomShadowFor(variant),
             borderRadius: 999,
             bottom: 1.2,
             height: 1.5,

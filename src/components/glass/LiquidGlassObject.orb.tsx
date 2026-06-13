@@ -1,5 +1,6 @@
 import React from 'react';
 import { G, Circle, Ellipse, Path } from 'react-native-svg';
+import { vexLightGlass } from '../../theme/tokens/vex-light-glass';
 
 interface VariantProps {
   size: number;

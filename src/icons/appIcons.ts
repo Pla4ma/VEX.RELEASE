@@ -1,6 +1,12 @@
 import type { IconCollection } from './types';
 
 export const appIcons: IconCollection = {
+  home: {
+    name: 'home',
+    outline:
+      'M3 10.5L12 3l9 7.5 M5 10v10h5v-6h4v6h5V10',
+    solid: 'M12 3L3 10.5V21h7v-6h4v6h7V10.5L12 3z',
+  },
   app: {
     name: 'app',
     outline: 'M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5',

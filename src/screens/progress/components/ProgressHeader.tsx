@@ -8,6 +8,7 @@ import { LiquidLens } from '../../../components/glass/LiquidLens';
 import { FloatingDroplets } from '../../../components/glass/FloatingDroplets';
 import { GlassBlurLayer } from '../../../components/glass/GlassBlurLayer';
 import { Icon } from '../../../icons';
+import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 
 const { width: SCREEN_W } = Dimensions.get('window');
 
@@ -15,7 +16,9 @@ interface ProgressHeaderProps {
   onOpenNotifications: () => void;
 }
 
-export function ProgressHeader({ onOpenNotifications }: ProgressHeaderProps): JSX.Element {
+export function ProgressHeader({
+  onOpenNotifications,
+}: ProgressHeaderProps): JSX.Element {
   return (
     <View style={{ width: '100%', marginBottom: 10, position: 'relative' }}>
       {/* Liquid analytics atmosphere at top of progress screen */}
@@ -97,14 +100,14 @@ export function ProgressHeader({ onOpenNotifications }: ProgressHeaderProps): JS
           onPress={onOpenNotifications}
           style={{
             alignItems: 'center',
-            backgroundColor: 'rgba(255, 255, 255, 0.42)',
-            borderColor: 'rgba(255, 255, 255, 0.95)',
+            backgroundColor: vexLightGlass.glass.fill,
+            borderColor: vexLightGlass.glass.border,
             borderRadius: 19,
             borderWidth: 1,
             height: 38,
             justifyContent: 'center',
             overflow: 'hidden',
-            shadowColor: 'rgba(13, 76, 65, 0.16)',
+            shadowColor: vexLightGlass.glass.shadow,
             shadowOffset: { width: 0, height: 6 },
             shadowOpacity: 0.85,
             shadowRadius: 10,
@@ -113,7 +116,7 @@ export function ProgressHeader({ onOpenNotifications }: ProgressHeaderProps): JS
         >
           <GlassBlurLayer intensity={72} radius={19} />
           <Icon
-            color="#0A1F1A"
+            color={vexLightGlass.text.primary}
             name="notification"
             size="sm"
             variant="outline"
@@ -123,7 +126,7 @@ export function ProgressHeader({ onOpenNotifications }: ProgressHeaderProps): JS
       <View style={{ gap: 3, marginBottom: 6, zIndex: 2 }}>
         <Text
           style={{
-            color: '#0A9B8A',
+            color: vexLightGlass.mint[600],
             fontSize: 11,
             fontWeight: '700',
             letterSpacing: 1.2,
@@ -134,7 +137,7 @@ export function ProgressHeader({ onOpenNotifications }: ProgressHeaderProps): JS
         </Text>
         <Text
           style={{
-            color: '#0A1F1A',
+            color: vexLightGlass.text.primary,
             fontSize: 22,
             fontWeight: '800',
             letterSpacing: -0.6,
@@ -145,7 +148,7 @@ export function ProgressHeader({ onOpenNotifications }: ProgressHeaderProps): JS
         </Text>
         <Text
           style={{
-            color: '#3D5A52',
+            color: vexLightGlass.text.secondary,
             fontSize: 13,
             lineHeight: 19,
             marginTop: 4,

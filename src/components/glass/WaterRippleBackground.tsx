@@ -12,6 +12,7 @@ import Svg, {
   G,
   Ellipse,
 } from 'react-native-svg';
+import { vexLightGlass } from '../../theme/tokens/vex-light-glass';
 
 const { width: SCREEN_W, height: SCREEN_H } = Dimensions.get('window');
 

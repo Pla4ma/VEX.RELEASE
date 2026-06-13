@@ -10,3 +10,4 @@ export { EtherealSkyBackground, SerifTitle } from '../../../../screens/auth/comp
 export { VexMascotGuide } from './VexMascotGuide';
 export type { MascotMood, MascotSize, MascotPlacement } from './VexMascotGuide.tokens';
 export { BackgroundScrim } from './BackgroundScrim';
+export { OnboardingCinematicIntro } from './OnboardingCinematicIntro';

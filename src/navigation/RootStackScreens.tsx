@@ -7,6 +7,7 @@ import type { ExtendedRootStackParams } from './types';
 import { RootStackAuthenticatedRoutes } from './root-stack-authenticated-routes';
 import { RouteLoadingFallback } from './RouteLoadingFallback';
 import type { FeatureAccessMap } from '../features/liveops-config';
+import { lightColors } from '../theme/tokens';
 
 interface RootStackScreensProps {
   hasCompletedOnboarding: boolean;
@@ -35,6 +36,7 @@ export const RootStackScreens: React.FC<RootStackScreensProps> = ({
       key={navigatorKey}
       screenOptions={{
         animation: 'none',
+        contentStyle: { backgroundColor: lightColors.background.primary },
         headerShown: false,
       }}
     >

@@ -1,7 +1,9 @@
+import type { SessionGlyphName } from '@/shared/ui/liquid-glass';
+
 export interface SessionStake {
   id: string;
   priority: number;
-  icon: string;
+  icon: SessionGlyphName;
   title: string;
   subtitle: string;
   urgency: 'critical' | 'high' | 'medium' | 'low';

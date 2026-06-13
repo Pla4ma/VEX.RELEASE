@@ -6,8 +6,8 @@ type BackgroundIntensity = 'auth' | 'form' | 'question' | 'confirm' | 'login' | 
 const INTENSITY_MAP: Record<BackgroundIntensity, number> = {
   auth: 0.35,
   form: 0.55,
-  question: 0.48,
-  confirm: 0.42,
+  question: 0.58,
+  confirm: 0.52,
   login: 0.38,
   register: 0.52,
 };

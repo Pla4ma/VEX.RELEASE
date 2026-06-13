@@ -5,6 +5,7 @@ import { resolveVexExperience } from './service';
 import {
   BehaviorStatsSchema,
   FeatureAvailabilitySnapshotSchema,
+  StudyLayerNameSchema,
 } from './schemas';
 import type {
   BehaviorStats,
@@ -68,7 +69,9 @@ export function useResolvedVexExperienceRuntime(
   return useMemo(() => {
     const profile = buildProfileFromOnboarding({ duration, goal, style });
     if (input.overrideStudyLayerLabel) {
-      profile.studyLayerName = input.overrideStudyLayerLabel as typeof profile.studyLayerName;
+      profile.studyLayerName = StudyLayerNameSchema.parse(
+        input.overrideStudyLayerLabel,
+      );
     }
     const stats = BehaviorStatsSchema.parse({
       ...input.behaviorStats,

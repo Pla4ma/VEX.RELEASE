@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 
 import { markColdStart } from '../../../app/cold-start-performance';
 import { captureException } from '../../../config/sentry';
+import { startDeferredFeatureHealth } from '../../../features/liveops-config/deferred-feature-health';
 import { useHomeViewModel } from '../hooks/useHomeViewModel';
+import { ActivatingStage } from './ActivatingStage';
+import { EngagedStage } from './EngagedStage';
 import { HomeColdStartFallback } from './HomeColdStartFallback';
-
-const NewUserStage = React.lazy(() => import('./NewUserStage'));
-const ActivatingStage = React.lazy(() => import('./ActivatingStage'));
-const EngagedStage = React.lazy(() => import('./EngagedStage'));
-const PowerUserStage = React.lazy(() => import('./PowerUserStage'));
+import { NewUserStage } from './NewUserStage';
+import { PowerUserStage } from './PowerUserStage';
 
 function useHydrationGate(): boolean {
   const [canHydrate, setCanHydrate] = useState(false);
@@ -33,20 +33,15 @@ function useDeferredFeatureHealth(
     let cancelled = false;
     let cleanup: (() => void) | null = null;
 
-    import('../../../features/liveops-config/deferred-feature-health')
-      .then(({ startDeferredFeatureHealth }) => {
-        if (cancelled) {
-          return;
-        }
-        cleanup = startDeferredFeatureHealth(totalCompletedSessions);
-      })
-      .catch((error: unknown) => {
-        const captured =
-          error instanceof Error
-            ? error
-            : new Error('Deferred feature health failed to load');
-        captureException(captured, { area: 'HomeStageResolver.featureHealth' });
-      });
+    try {
+      cleanup = startDeferredFeatureHealth(totalCompletedSessions);
+    } catch (error: unknown) {
+      const captured =
+        error instanceof Error
+          ? error
+          : new Error('Deferred feature health failed to start');
+      captureException(captured, { area: 'HomeStageResolver.featureHealth' });
+    }
 
     return () => {
       cancelled = true;
@@ -77,10 +72,8 @@ function HydratedHomeStageResolver(): JSX.Element {
     return <HomeColdStartFallback />;
   }
 
-  const fallback = <HomeColdStartFallback />;
-
   return (
-    <React.Suspense fallback={fallback}>
+    <>
       {stage === 'NEW_USER' ? (
         <NewUserStage sharedInput={sharedInput} />
       ) : stage === 'ACTIVATING' ? (
@@ -90,7 +83,7 @@ function HydratedHomeStageResolver(): JSX.Element {
       ) : (
         <PowerUserStage sharedInput={sharedInput} />
       )}
-    </React.Suspense>
+    </>
   );
 }
 

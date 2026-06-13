@@ -45,7 +45,7 @@ const QUICK_ACTIONS: QuickAction[] = [
     id: 'boss',
     icon: 'zap',
     label: 'Boss',
-    color: vexLightGlass.accent.purple,
+    color: vexLightGlass.semantic.purple,
     action: 'boss',
   },
 ];

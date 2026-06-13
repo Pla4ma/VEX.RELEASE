@@ -1,11 +1,12 @@
 import { lightColors } from '@/theme/tokens/colors';
+import type { SessionGlyphName } from '@/shared/ui/liquid-glass';
 
 
 export type SessionDifficulty = 'CASUAL' | 'FOCUSED' | 'DEEP_WORK';
 
 export interface DifficultyOption {
   id: SessionDifficulty;
-  icon: string;
+  glyph: SessionGlyphName;
   name: string;
   pauseLimit: string;
   xpMultiplier: string;
@@ -22,29 +23,29 @@ export interface DifficultySelectorProps {
 export const DIFFICULTY_OPTIONS: DifficultyOption[] = [
   {
     id: 'CASUAL',
-    icon: '🌿',
+    glyph: 'casual',
     name: 'Casual',
     pauseLimit: 'Unlimited',
     xpMultiplier: '50%',
     description: 'Good for maintenance',
-    color: lightColors.semantic.success,
+    color: lightColors.semantic.primary,
   },
   {
     id: 'FOCUSED',
-    icon: '⚡',
+    glyph: 'focused',
     name: 'Focused',
     pauseLimit: '2 max',
     xpMultiplier: '100%',
     description: 'Standard mode',
-    color: lightColors.accent.blue,
+    color: lightColors.semantic.secondary,
   },
   {
     id: 'DEEP_WORK',
-    icon: '🔥',
+    glyph: 'deep',
     name: 'Deep Work',
     pauseLimit: '0 pauses',
     xpMultiplier: '150%',
     description: 'Maximum impact',
-    color: lightColors.semantic.danger,
+    color: lightColors.semantic.accent,
   },
 ];
