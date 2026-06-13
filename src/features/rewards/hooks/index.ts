@@ -1,16 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
-
-export function useRewards() {
-  return useQuery({
-    queryFn: () => Promise.resolve([]),
-    queryKey: ['rewards'],
-  });
-}
-
-export function useVaultRewards(userId: string | null) {
-  return useQuery({
-    enabled: Boolean(userId),
-    queryFn: () => Promise.resolve([]),
-    queryKey: ['vault-rewards', userId],
-  });
-}
+// Rewards hooks — archived.
+// Economy reward systems (chest/loot/coins/daily-login/premium-chest)
+// archived to archive/features/rewards/.
+// Active runtime: reward-ledger (XP/progress/streak receipt only).

@@ -5,6 +5,7 @@
  * Route mapping happens only after FeatureAvailability checks.
  */
 import type { SessionStackParams } from './types';
+import type { ExtendedRootStackParams } from './param-types';
 
 export type NotificationSafeIntent =
   | 'OPEN_HOME'
@@ -51,7 +52,10 @@ export interface SafeNotificationResolution {
 }
 
 export interface NotificationNavigation {
-  navigate(screen: string, params?: object | undefined): void;
+  navigate<T extends keyof ExtendedRootStackParams>(
+    screen: T,
+    params?: ExtendedRootStackParams[T],
+  ): void;
 }
 
 export const ALLOWED_MAIN_TAB_SCREENS = new Set([

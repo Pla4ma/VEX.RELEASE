@@ -36,7 +36,7 @@ export interface GlassCardProps {
   glowMint?: boolean;
 }
 
-export function GlassCard({
+export const GlassCard: React.FC<GlassCardProps> = React.memo(function GlassCard({
   children,
   variant = 'default',
   size,
@@ -89,6 +89,6 @@ export function GlassCard({
       <View style={{ padding: resolvedPadding, zIndex: 20 }}>{children}</View>
     </View>
   );
-}
+});
 
 export default GlassCard;

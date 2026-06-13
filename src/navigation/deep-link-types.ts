@@ -3,14 +3,10 @@ import { z } from 'zod';
 export type DeepLinkPath =
   | 'session'
   | 'boss'
-  | 'duels'
-  | 'squad'
   | 'profile'
   | 'settings'
-  | 'invite'
   | 'study'
   | 'coach'
-  | 'shop'
   | 'rescue';
 
 export interface DeepLink {
@@ -35,14 +31,10 @@ export const DeepLinkUrlSchema = z.object({
 export const VALID_DEEP_LINK_PATHS: DeepLinkPath[] = [
   'session',
   'boss',
-  'duels',
-  'squad',
   'profile',
   'settings',
-  'invite',
   'study',
   'coach',
-  'shop',
   'rescue',
 ];
 

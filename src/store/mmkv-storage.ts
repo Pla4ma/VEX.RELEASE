@@ -1,4 +1,5 @@
 import { MMKV } from 'react-native-mmkv';
+import { getMmkvEncryptionKeySync } from '@/persistence/mmkv-key';
 
 // Lazy singleton — avoids crashing at module load time in Expo Go
 // (the shim requires React to be initialized before hook APIs are available)
@@ -6,7 +7,8 @@ let _mmkv: MMKV | null = null;
 
 function getMMKV(): MMKV {
   if (!_mmkv) {
-    _mmkv = new MMKV({ id: 'vex-runtime-storage' });
+    const encryptionKey = getMmkvEncryptionKeySync();
+    _mmkv = new MMKV({ id: 'vex-runtime-storage', encryptionKey });
   }
   return _mmkv;
 }

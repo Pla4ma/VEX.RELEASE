@@ -1,12 +1,10 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { ScrollView } from 'react-native';
 import BottomSheet from '@gorhom/bottom-sheet';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { sessionComplete } from '../../../utils/haptics';
 import {
-  type CompletionSurface,
   resolveCompletionExperiencePolicy,
 } from '../../../features/session-completion/completion-experience-policy';
 import { useSessionCompleteController } from '../../../features/session-completion/hooks';
@@ -20,14 +18,10 @@ import { saveTomorrowPreview } from '../../../features/home-spine/tomorrowPrevie
 import { useFeatureAccess } from '../../../features/liveops-config';
 import { useOnboardingStore } from '../../../features/onboarding/store';
 import { usePremiumStatus } from '../../../shared/monetization';
-import { ModeCompletionSurface } from '../../../features/mode-native/components/ModeCompletionSurface';
 import { FeatureUnlockCelebration } from '../../../features/session-completion/components/FeatureUnlockCelebration';
 
-import { SessionCompleteHeroSection } from './SessionCompleteHeroSection';
-import { SessionCompleteRewardsPhase } from './SessionCompleteRewardsPhase';
-import { SessionCompleteNextSteps } from './SessionCompleteNextSteps';
 import { SessionCompleteOverlays } from './SessionCompleteOverlays';
-import { SessionContractReflectionCard } from './SessionContractReflectionCard';
+import { SessionCompleteScrollView } from './SessionCompleteScrollView';
 import {
   SESSION_MODE_TO_LANE,
   type SessionCompleteContentProps,
@@ -66,6 +60,7 @@ export function SessionCompleteContent({
     }
     return undefined;
   }, [gradeRevealed, newlyUnlockedFeatures.length]);
+
   const policy = resolveCompletionExperiencePolicy({
     consequences,
     featureAvailability: {
@@ -82,13 +77,9 @@ export function SessionCompleteContent({
     sessionMode: summary.sessionMode,
     summary,
   });
+
   const revealedGradeLetter =
     controller.grade.letter === 'F' ? 'D' : controller.grade.letter;
-  const isHidden = useCallback(
-    (surface: CompletionSurface) =>
-      policy.hiddenCompletionSurfaces.includes(surface),
-    [policy.hiddenCompletionSurfaces],
-  );
 
   const tomorrowPreview = useTomorrowPreviewForSession(
     controller.userId ?? '',
@@ -127,9 +118,7 @@ export function SessionCompleteContent({
 
   const handleReflectContract = useCallback(
     (status: ReflectionStatus) => {
-      if (!contractQuery.contract) {
-        return;
-      }
+      if (!contractQuery.contract) return;
       reflectContract.mutate({ contract: contractQuery.contract, status });
     },
     [contractQuery.contract, reflectContract],
@@ -144,55 +133,20 @@ export function SessionCompleteContent({
       }}
     >
       {gradeRevealed ? (
-        <ScrollView
-          ref={controller.scrollRef}
-          contentContainerStyle={{
-            paddingBottom:
-              controller.theme.spacing[20] + controller.theme.spacing[12],
-            paddingTop: insets.top + controller.theme.spacing[5],
-          }}
-          showsVerticalScrollIndicator={false}
-        >
-          <SessionCompleteHeroSection
-            controller={controller}
-            summary={summary}
-          />
-
-          {!isHidden('contract_reflection_card') ? (
-            <SessionContractReflectionCard
-              contract={contractQuery.contract}
-              isPending={reflectContract.isPending}
-              onReflect={handleReflectContract}
-            />
-          ) : null}
-
-          <ModeCompletionSurface
-            lane={lane}
-            topic={contractQuery.contract?.taskDescription}
-            task={contractQuery.contract?.taskDescription}
-            project={contractQuery.contract?.taskDescription}
-            action={contractQuery.contract?.taskDescription}
-            onPrimaryAction={() => {
-              controller.navigation.navigate({ name: 'Home', params: {} });
-            }}
-          />
-
-          <SessionCompleteRewardsPhase
-            controller={controller}
-            summary={summary}
-            sessionId={sessionId}
-            policy={policy}
-            consequences={consequences}
-          />
-
-          <SessionCompleteNextSteps
-            controller={controller}
-            tomorrowPreview={tomorrowPreview}
-            bottomInset={Math.max(insets.bottom, controller.theme.spacing[4])}
-            onShare={undefined}
-            onOpenReflection={() => bottomSheetRef.current?.snapToIndex(0)}
-          />
-        </ScrollView>
+        <SessionCompleteScrollView
+          controller={controller}
+          summary={summary}
+          sessionId={sessionId}
+          policy={policy}
+          consequences={consequences}
+          contract={contractQuery.contract}
+          isContractPending={reflectContract.isPending}
+          lane={lane}
+          tomorrowPreview={tomorrowPreview}
+          insets={insets}
+          onReflectContract={handleReflectContract}
+          onOpenReflection={() => bottomSheetRef.current?.snapToIndex(0)}
+        />
       ) : null}
 
       <SessionCompleteOverlays

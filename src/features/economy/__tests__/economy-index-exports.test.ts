@@ -5,10 +5,6 @@ describe('economy index exports', () => {
     expect(economyIndex.SimpleWalletBadge).toBeDefined();
   });
 
-  it('exports useWallet', () => {
-    expect(typeof economyIndex.useWallet).toBe('function');
-  });
-
   it('exports addCurrency', () => {
     expect(typeof economyIndex.addCurrency).toBe('function');
   });

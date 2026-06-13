@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { View } from 'react-native';
 import Animated, {
+  cancelAnimation,
   useAnimatedStyle,
   useSharedValue,
   withDelay,
@@ -45,6 +46,10 @@ export function VexSignalNode({ active = false, index }: VexSignalNodeProps): JS
         false,
       ),
     );
+    return () => {
+      cancelAnimation(pulseScale);
+      cancelAnimation(pulseOpacity);
+    };
   }, [active, index, isReducedMotion, pulseScale, pulseOpacity]);
 
   const pulseStyle = useAnimatedStyle(() => ({

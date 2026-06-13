@@ -7,6 +7,7 @@ import {
 import Animated from 'react-native-reanimated';
 import { useTheme } from '../../theme';
 import { rgbaColors } from '@/theme/tokens/rgba-colors';
+import { iosShadows } from '@/theme/tokens/shadows';
 import { Box, Text } from '../primitives';
 import { IconButton } from '../../icons';
 import { createSheet } from '@/shared/ui/create-sheet';
@@ -27,6 +28,7 @@ export interface ModalProps {
   style?: ViewStyle;
   contentStyle?: ViewStyle;
   testID?: string;
+  accessibilityLabel?: string;
 }
 
 export const Modal: React.FC<ModalProps> = ({
@@ -43,6 +45,7 @@ export const Modal: React.FC<ModalProps> = ({
   style,
   contentStyle,
   testID,
+  accessibilityLabel,
 }) => {
   const { theme } = useTheme();
   const { backdropStyle, contentAnimatedStyle } = useModalAnimation({
@@ -68,7 +71,11 @@ export const Modal: React.FC<ModalProps> = ({
 
   return (
     <View style={styles.container} testID={testID}>
-      <TouchableWithoutFeedback onPress={handleBackdropPress}>
+      <TouchableWithoutFeedback
+        onPress={handleBackdropPress}
+        accessibilityLabel="Close modal backdrop"
+        accessibilityRole="button"
+      >
         <Animated.View
           style={[
             styles.backdrop,
@@ -89,6 +96,8 @@ export const Modal: React.FC<ModalProps> = ({
           style,
           contentStyle,
         ]}
+        accessibilityLabel={accessibilityLabel ?? title ?? "Modal dialog"}
+        accessibilityRole="alert"
       >
         {(title || showCloseButton || header) && (
           <View style={styles.header}>
@@ -132,7 +141,7 @@ const styles = createSheet({
     width: '90%',
     maxWidth: 400,
     maxHeight: '80%',
-    boxShadow: '0px 2px 4px rgba(0,0,0,0.25)',
+    boxShadow: iosShadows.sm,
     elevation: 5,
   },
   header: {

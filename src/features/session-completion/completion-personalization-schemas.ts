@@ -6,15 +6,18 @@ export const CompletionMemoryCandidateSchema = z
   .object({
     confidence: z.number().min(0).max(1).default(0.5),
     key: z.string().min(1),
+    source: z.string().optional(),
     text: z.string().min(1),
   })
   .passthrough();
 
 export const CompletionUnlockDecisionSchema = z
   .object({
+    hidden: z.boolean().optional(),
     isUnlocked: z.boolean().default(false),
     key: z.string().min(1),
     reason: z.string().min(1),
+    status: z.string().optional(),
   })
   .passthrough();
 

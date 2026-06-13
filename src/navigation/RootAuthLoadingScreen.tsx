@@ -1,6 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import Animated, {
+  cancelAnimation,
   useAnimatedStyle,
   useSharedValue,
   withRepeat,
@@ -29,6 +30,9 @@ export function RootAuthLoadingScreen({
       -1,
       true,
     );
+    return () => {
+      cancelAnimation(pulse);
+    };
   }, [pulse]);
 
   const brandMarkStyle = useAnimatedStyle(() => ({

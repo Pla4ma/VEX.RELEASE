@@ -46,7 +46,7 @@ export function navigateFromSafeIntent(
       return { success: true, screen: 'ContentStudy' };
     }
     case 'OPEN_SETTINGS':
-      navigation.navigate('Settings', {});
+      navigation.navigate('Settings', undefined);
       return { success: true, screen: 'Settings' };
     case 'OPEN_HOME':
     default:

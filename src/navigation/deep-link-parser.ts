@@ -1,4 +1,4 @@
-import * as Sentry from '@sentry/react-native';
+import { captureException } from '../config/sentry';
 
 import { createDebugger } from '../utils/debug';
 
@@ -89,8 +89,11 @@ export function parseDeepLink(url: string): ParsedDeepLink {
     debug.info('Parsed deep link: %s -> %s', url, path);
     return { valid: true, link };
   } catch (error) {
-    Sentry.captureException(error, {
-      tags: { feature: 'deep-links', operation: 'parseDeepLink' },
+    const errorInstance =
+      error instanceof Error ? error : new Error(String(error));
+    captureException(errorInstance, {
+      feature: 'deep-links',
+      operation: 'parseDeepLink',
     });
     debug.info('Failed to parse deep link: %s', url);
     return { valid: false, error: 'Invalid URL format' };

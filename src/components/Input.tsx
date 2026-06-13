@@ -122,6 +122,7 @@ export const Input = forwardRef<TextInput, InputProps>(
             onBlur={handleBlur}
             maxLength={textInputProps.maxLength || 500}
             {...textInputProps}
+            accessibilityLabel={textInputProps.accessibilityLabel ?? label}
           />
 
           {/* Right icon */}

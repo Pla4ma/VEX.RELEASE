@@ -24,7 +24,6 @@ import {
   useBossEngagementSignals,
   type BossEngagementInputs,
 } from '../../features/boss/boss-engagement-signals';
-import { useBossEngagementSummary } from '../../features/boss/hooks/useBossEngagementSummary';
 import type { ExtendedRootStackParams } from '../../navigation/types';
 import { BossScreenContent } from './BossScreenContent';
 import { useAuthStore } from '../../store';
@@ -50,22 +49,14 @@ export const BossScreen = (): JSX.Element => {
   const degradedFeatures = getDegradedFeatures();
   const bossIgnored = degradedFeatures.has('boss_tab');
 
-  const bossEngagementQuery = useBossEngagementSummary(userId);
-  const summaryData = bossEngagementQuery.data ?? {
-    bossRouteOpenedCount: 0,
-    bossCTAClickedCount: 0,
-    bossDamageEventsCount: 0,
-    recentSessionsWithBossProgress: 0,
-  };
-
   const bossEngagementInputs: BossEngagementInputs = {
     bossIgnored,
     bossUnlocked: disclosure.features.boss_tab.isUnlocked,
     canQueryBoss: false,
-    bossRouteOpenedCount: summaryData.bossRouteOpenedCount,
-    bossCTAClickedCount: summaryData.bossCTAClickedCount,
-    bossDamageEventsCount: summaryData.bossDamageEventsCount,
-    recentSessionsWithBossProgress: summaryData.recentSessionsWithBossProgress,
+    bossRouteOpenedCount: 0,
+    bossCTAClickedCount: 0,
+    bossDamageEventsCount: 0,
+    recentSessionsWithBossProgress: 0,
   };
 
   const _bossEngagement = useBossEngagementSignals(bossEngagementInputs);

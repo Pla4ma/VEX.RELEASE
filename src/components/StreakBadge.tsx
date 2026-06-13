@@ -18,12 +18,14 @@ type StreakBadgeProps = {
   days: number;
   isAtRisk: boolean;
   variant?: 'default' | 'glass';
+  accessibilityLabel?: string;
 };
 
 export function StreakBadge({
   days,
   isAtRisk,
   variant = 'default',
+  accessibilityLabel,
 }: StreakBadgeProps): JSX.Element {
   const { theme } = useTheme();
   const { isReducedMotion } = useReducedMotion();
@@ -79,6 +81,8 @@ export function StreakBadge({
                 borderColor: theme.colors.border.DEFAULT,
               },
         ]}
+        accessibilityLabel={accessibilityLabel ?? "Start streak"}
+        accessibilityRole="text"
       >
         <Text
           variant="label"
@@ -96,7 +100,11 @@ export function StreakBadge({
 
   if (Platform.OS === 'web') {
     return (
-      <View style={staticStyle}>
+      <View
+        style={staticStyle}
+        accessibilityLabel={accessibilityLabel ?? `${days} day streak${isAtRisk ? ', at risk' : ''}`}
+        accessibilityRole="text"
+      >
         <Text
           variant="label"
           color={
@@ -113,6 +121,8 @@ export function StreakBadge({
 
   return (
     <Animated.View
+      accessibilityLabel={accessibilityLabel ?? `${days} day streak${isAtRisk ? ', at risk' : ''}`}
+      accessibilityRole="text"
       style={[
         styles.badge,
         animatedStyle,

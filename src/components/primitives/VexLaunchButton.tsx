@@ -26,8 +26,8 @@ export interface VexLaunchButtonProps extends ViewProps {
   testID?: string;
 }
 
-const MINT_PRESS = ['#109779', '#18B894', vexLightGlass.mint[400]] as const;
-const MINT_REST = [vexLightGlass.mint[500], vexLightGlass.mint[400], '#72E0C5'] as const;
+const MINT_PRESS = [vexLightGlass.mint[600], vexLightGlass.mint[500], vexLightGlass.mint[400]] as const;
+const MINT_REST = [vexLightGlass.mint[500], vexLightGlass.mint[400], vexLightGlass.mint[300]] as const;
 
 export function VexLaunchButton({
   label,
@@ -138,7 +138,7 @@ export function VexLaunchButton({
               },
             ]}
           />
-          <Text style={{ color: '#FFFFFF', fontSize: 16, fontWeight: '800', letterSpacing: 0.3 }}>
+          <Text style={{ color: vexLightGlass.text.inverse, fontSize: 16, fontWeight: '800', letterSpacing: 0.3 }}>
             {isLoading ? 'Loading' : label}
           </Text>
           {subLabel ? (

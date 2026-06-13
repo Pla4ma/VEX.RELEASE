@@ -26,6 +26,10 @@ jest.mock('react-native-mmkv', () => ({
   },
 }));
 
+jest.mock('@/persistence/mmkv-key', () => ({
+  getMmkvEncryptionKeySync: () => 'test-encryption-key-32bytes!!',
+}));
+
 describe('runtime MMKV storage bridge', () => {
   beforeEach(() => {
     mockStore.clear();

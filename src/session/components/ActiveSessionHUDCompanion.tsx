@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import Animated, {
   Easing,
+  cancelAnimation,
   useAnimatedStyle,
   useSharedValue,
   withRepeat,
@@ -75,6 +76,9 @@ export const ActiveSessionHUDCompanion: React.FC<
     } else {
       pulseAnim.value = withTiming(1, { duration: 120 });
     }
+    return () => {
+      cancelAnimation(pulseAnim);
+    };
   }, [isActive, isPaused, pulseAnim]);
 
   const pulseStyle = useAnimatedStyle(() => ({

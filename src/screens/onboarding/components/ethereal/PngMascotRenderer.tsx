@@ -3,6 +3,7 @@ import { Image, View } from 'react-native';
 import Animated, {
   Easing,
   FadeIn,
+  cancelAnimation,
   useAnimatedStyle,
   useSharedValue,
   withRepeat,
@@ -18,7 +19,7 @@ function resolveMoodAsset(mood: AnimatedMascotProps['mood']) {
   return MOOD_ASSET_MAP[mood] ?? FALLBACK_MASCOT;
 }
 
-export function PngMascotRenderer({
+export const PngMascotRenderer = React.memo(function PngMascotRenderer({
   mood,
   size,
   reducedMotion,
@@ -78,6 +79,12 @@ export function PngMascotRenderer({
       -1,
       false,
     );
+    return () => {
+      cancelAnimation(float);
+      cancelAnimation(breath);
+      cancelAnimation(glow);
+      cancelAnimation(sparkle);
+    };
   }, [breath, float, glow, isCelebrating, reducedMotion, sparkle]);
 
   useEffect(() => {
@@ -192,4 +199,4 @@ export function PngMascotRenderer({
       </Animated.View>
     </View>
   );
-}
+});

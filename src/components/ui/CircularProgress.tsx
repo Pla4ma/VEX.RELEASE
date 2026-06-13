@@ -18,12 +18,13 @@ interface CircularProgressProps {
   backgroundColor?: string;
   showPercentage?: boolean;
   animated?: boolean;
+  accessibilityLabel?: string;
 }
 
 const clampProgress = (value: number): number =>
   Math.max(0, Math.min(1, value));
 
-export const CircularProgress: React.FC<CircularProgressProps> = ({
+export const CircularProgress = React.memo<CircularProgressProps>(function CircularProgress({
   progress,
   size = 80,
   strokeWidth = 8,
@@ -31,7 +32,8 @@ export const CircularProgress: React.FC<CircularProgressProps> = ({
   backgroundColor,
   showPercentage = true,
   animated = true,
-}) => {
+  accessibilityLabel,
+}) {
   const { theme } = useTheme();
   const reducedMotion = useReducedMotion();
   const animatedValue = useSharedValue(0);
@@ -54,7 +56,12 @@ export const CircularProgress: React.FC<CircularProgressProps> = ({
   }));
 
   return (
-    <View style={{ height: size, width: size }}>
+    <View
+      style={{ height: size, width: size }}
+      accessibilityLabel={accessibilityLabel ?? `${Math.round(nextProgress * 100)} percent complete`}
+      accessibilityRole="progressbar"
+      accessibilityValue={{ min: 0, max: 100, now: Math.round(nextProgress * 100) }}
+    >
       <Animated.View style={[{ position: 'absolute' }, rotationStyle]}>
         <View
           style={{
@@ -100,6 +107,5 @@ export const CircularProgress: React.FC<CircularProgressProps> = ({
       ) : null}
     </View>
   );
-};
-
+});
 export default CircularProgress;

@@ -14,7 +14,7 @@ import { vexLightGlass } from '@/theme/tokens/vex-light-glass';
 
 const ENTRY_BACKGROUND = require('../../../../../assets/auth/vex-liquid-glass-entry-clean.png');
 
-export function EtherealSkyBackground(): React.JSX.Element {
+export const EtherealSkyBackground = React.memo(function EtherealSkyBackground(): React.JSX.Element {
   const { isReducedMotion } = useReducedMotion();
   const pulse = useSharedValue(0);
 
@@ -72,4 +72,4 @@ export function EtherealSkyBackground(): React.JSX.Element {
       />
     </View>
   );
-}
+});

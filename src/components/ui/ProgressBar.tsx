@@ -23,7 +23,7 @@ interface ProgressBarProps {
 const clampProgress = (value: number): number =>
   Math.max(0, Math.min(1, value));
 
-export const ProgressBar: React.FC<ProgressBarProps> = ({
+export const ProgressBar = React.memo<ProgressBarProps>(function ProgressBar({
   progress,
   color,
   backgroundColor,
@@ -31,7 +31,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
   showPercentage = false,
   animated = true,
   label,
-}) => {
+}) {
   const { theme } = useTheme();
   const reducedMotion = useReducedMotion();
   const animatedValue = useSharedValue(0);
@@ -99,6 +99,6 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
       </View>
     </View>
   );
-};
+});
 
 export default ProgressBar;

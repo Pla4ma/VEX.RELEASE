@@ -4,7 +4,7 @@ import { lightColors } from '@/theme/tokens/colors';
 
 export const styles = createSheet({
   container: {
-    backgroundColor: 'white',
+    backgroundColor: lightColors.surface.card,
     borderRadius: 12,
     overflow: 'hidden',
     margin: 16,
@@ -20,14 +20,14 @@ export const styles = createSheet({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  phaseName: { fontSize: 16, fontWeight: 'bold', color: 'white' },
+  phaseName: { fontSize: 16, fontWeight: 'bold', color: lightColors.text.inverse },
   enragedBadge: {
     backgroundColor: 'rgba(0,0,0,0.3)',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 4,
   },
-  enragedText: { color: 'white', fontSize: 12, fontWeight: 'bold' },
+  enragedText: { color: lightColors.text.inverse, fontSize: 12, fontWeight: 'bold' },
   progressSection: {
     padding: 16,
     borderBottomWidth: 1,

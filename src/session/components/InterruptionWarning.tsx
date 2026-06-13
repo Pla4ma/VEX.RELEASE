@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, Pressable, Text, View } from 'react-native';
 import Animated, {
+  cancelAnimation,
   useAnimatedStyle,
   useSharedValue,
   withRepeat,
@@ -65,6 +66,9 @@ export const InterruptionWarning: React.FC<InterruptionWarningProps> = ({
     } else {
       pulseAnim.value = withTiming(1, { duration: 120 });
     }
+    return () => {
+      cancelAnimation(pulseAnim);
+    };
   }, [isVisible, remainingSeconds, pulseAnim]);
 
   const pulseStyle = useAnimatedStyle(() => ({

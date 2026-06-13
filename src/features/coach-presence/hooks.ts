@@ -77,8 +77,8 @@ export function useCoachPresence(input: UseCoachPresenceInput): {
   return {
     data,
     error: memoryQuery.error,
-    isError: false,
-    isPending: false,
+    isError: memoryQuery.isError,
+    isPending: memoryQuery.isPending,
     refetch: () => {
       memoryQuery.refetch();
     },

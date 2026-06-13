@@ -1,8 +1,8 @@
 import type { NavigationProp } from '@react-navigation/native';
+import type { ExtendedRootStackParams } from './param-types';
 import { createDebugger } from '../utils/debug';
-import * as Sentry from '@sentry/react-native';
+import { captureException } from '../config/sentry';
 import { validateRouteParams } from './route-param-schemas';
-import type { RootStackParams } from './types';
 
 const debug = createDebugger('navigation:deep-links');
 
@@ -85,15 +85,15 @@ function sanitizeParams(
   return sanitized;
 }
 
-export function navigateWithValidation(
-  navigation: NavigationProp<RootStackParams> | null | undefined,
-  route: string,
-  params?: SafeParamMap,
+export function navigateWithValidation<T extends keyof ExtendedRootStackParams>(
+  navigation: NavigationProp<ExtendedRootStackParams> | null | undefined,
+  route: T,
+  params?: ExtendedRootStackParams[T],
 ): { success: boolean; error?: string; usedFallback?: boolean } {
   if (!navigation) {
     return { success: false, error: 'Navigation not available' };
   }
-  const validation = validateDeepLinkParams(route, params);
+  const validation = validateDeepLinkParams(route as string, params as SafeParamMap | undefined);
   if (!validation.isValid) {
     debug.warn(
       'Deep link validation failed: %s, falling back to %s',
@@ -102,11 +102,13 @@ export function navigateWithValidation(
     );
     if (validation.fallbackRoute) {
       try {
-        // Fallback route is validated against known routes above
-        navigation.navigate(validation.fallbackRoute as keyof RootStackParams & string);
+        (navigation as unknown as { navigate: (screen: string, params?: unknown) => void }).navigate(
+          validation.fallbackRoute as string,
+          undefined,
+        );
         return { success: true, usedFallback: true };
       } catch (error) {
-        Sentry.captureException(error, {
+        captureException(error instanceof Error ? error : new Error(String(error)), {
           tags: { feature: 'navigation', operation: 'fallbackNavigation' },
         });
         return { success: false, error: 'Fallback navigation failed' };
@@ -115,8 +117,10 @@ export function navigateWithValidation(
     return { success: false, error: validation.error };
   }
   try {
-    // Route has been validated against VALID_ROUTE_PATTERNS above
-    navigation.navigate(route as keyof RootStackParams & string, validation.sanitizedParams);
+    (navigation as unknown as { navigate: (screen: string, params?: unknown) => void }).navigate(
+      route as string,
+      validation.sanitizedParams,
+    );
     return { success: true };
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);

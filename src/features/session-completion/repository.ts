@@ -1,176 +1,279 @@
 /**
  * Session Completion Repository
  *
- * Persists completion ledgers to MMKV for crash/restart safety.
- * Formerly an in-memory Map — now survives app backgrounding,
- * OS kills, and restarts. (P0-1 fix)
- *
- * Cleanup: call cleanupStaleLedgers() after confirmed sync
- * or on app startup to prevent accumulation (default: 7 days).
+ * Persists completion ledgers to Supabase with offline queue fallback.
  */
 
 import * as Sentry from '@sentry/react-native';
-
-import { MMKV } from 'react-native-mmkv';
-import { captureSilentFailure } from '../../utils/silent-failure';
+import { getSupabaseClient } from '../../config/supabase';
+import { createDebugger } from '../../utils/debug';
 import {
   CompletionLedgerSchema,
   type CompletionLedger,
   type CompletionSyncStatus,
 } from './schemas';
 
-// Dedicated MMKV instance for completion ledgers
-const ledgerMMKV = new MMKV({ id: 'session-completion-ledgers' });
+const debug = createDebugger('session-completion:repository');
 
-const LEDGER_KEY_PREFIX = 'ledger_ik:';
-
-/**
- * Custom error for repository operations — preserves cause chain.
- */
 export class SessionCompletionRepositoryError extends Error {
   public readonly cause: unknown;
 
   constructor(operation: string, cause: unknown) {
     super(
-      `SessionCompletionRepository[${operation}]: ${cause instanceof Error ? cause.message : String(cause)}`,
+      `Session completion repository failed during ${operation}: ${cause instanceof Error ? cause.message : String(cause)}`,
     );
     this.name = 'SessionCompletionRepositoryError';
     this.cause = cause;
   }
 }
 
-function storageKey(idempotencyKey: string): string {
-  return `${LEDGER_KEY_PREFIX}${idempotencyKey}`;
-}
-
-/**
- * Persist a completion ledger to MMKV.
- * Validates through Zod before writing.
- */
-export async function createCompletionLedger(
+export async function persistCompletionLedger(
   ledger: CompletionLedger,
 ): Promise<CompletionLedger> {
-  try {
-    const parsed = CompletionLedgerSchema.parse(ledger);
-    const key = storageKey(parsed.idempotencyKey);
-    ledgerMMKV.set(key, JSON.stringify(parsed));
-    return parsed;
-  } catch (error) {
-    captureSilentFailure(error, {
-      feature: 'session-completion',
-      operation: 'create-ledger',
-      type: 'data',
-    });
+  const supabase = getSupabaseClient();
+  const row = {
+    ledger_id: ledger.ledgerId,
+    idempotency_key: ledger.idempotencyKey,
+    session_id: ledger.sessionId,
+    user_id: ledger.userId,
+    mode: ledger.mode,
+    target_duration_seconds: ledger.targetDurationSeconds,
+    completed_duration_seconds: ledger.completedDurationSeconds,
+    effective_focused_seconds: ledger.effectiveFocusedSeconds,
+    pause_count: ledger.pauseCount,
+    interruption_count: ledger.interruptionCount,
+    strict_mode: ledger.strictMode,
+    started_at: ledger.startedAt,
+    completed_at: ledger.completedAt,
+    timezone: ledger.timezone,
+    grade: ledger.grade,
+    grade_score: ledger.gradeScore,
+    quality_score: ledger.qualityScore,
+    focus_score_delta: ledger.focusScoreDelta,
+    xp_delta: ledger.xpDelta,
+    streak_result: ledger.streakResult,
+    companion_reaction_id: ledger.companionReactionId,
+    reward_ids: ledger.rewardIds,
+    daily_mission_result: ledger.dailyMissionResult,
+    offline_sync_status: 'synced' as const,
+    degraded_systems: ledger.degradedSystems,
+    created_at: ledger.createdAt,
+  };
+
+  const { data, error } = await supabase
+    .from('session_completion_ledgers')
+    .insert(row)
+    .select('*')
+    .single();
+
+  if (error) {
+    const code =
+      error != null && typeof error === 'object' && 'code' in error &&
+      typeof (error as { code?: unknown }).code === 'string'
+        ? (error as { code: string }).code
+        : null;
+    if (code === '23505') {
+      // Duplicate idempotency key — fetch existing
+      const existing = await getCompletionLedgerByIdempotencyKey(ledger.idempotencyKey);
+      if (existing) {
+        return existing;
+      }
+    }
     throw new SessionCompletionRepositoryError('create', error);
   }
+
+  if (!data) {
+    throw new SessionCompletionRepositoryError('create', 'invalid-response');
+  }
+
+  const parsed = CompletionLedgerSchema.safeParse({
+    ledgerId: data.ledger_id,
+    idempotencyKey: data.idempotency_key,
+    sessionId: data.session_id,
+    userId: data.user_id,
+    mode: data.mode,
+    targetDurationSeconds: data.target_duration_seconds,
+    completedDurationSeconds: data.completed_duration_seconds,
+    effectiveFocusedSeconds: data.effective_focused_seconds,
+    pauseCount: data.pause_count,
+    interruptionCount: data.interruption_count,
+    strictMode: data.strict_mode,
+    startedAt: data.started_at,
+    completedAt: data.completed_at,
+    timezone: data.timezone,
+    grade: data.grade,
+    gradeScore: data.grade_score,
+    qualityScore: data.quality_score,
+    focusScoreDelta: data.focus_score_delta,
+    xpDelta: data.xp_delta,
+    streakResult: data.streak_result,
+    companionReactionId: data.companion_reaction_id,
+    rewardIds: data.reward_ids,
+    dailyMissionResult: data.daily_mission_result,
+    offlineSyncStatus: data.offline_sync_status,
+    degradedSystems: data.degraded_systems,
+    createdAt: data.created_at,
+  });
+
+  if (!parsed.success) {
+    throw new SessionCompletionRepositoryError('create', 'invalid-response');
+  }
+
+  return { ...parsed.data, offlineSyncStatus: 'synced' };
 }
 
-/**
- * Look up a ledger by its idempotency key.
- * Returns null if not found or if stored data is corrupt.
- */
 export async function getCompletionLedgerByIdempotencyKey(
   idempotencyKey: string,
 ): Promise<CompletionLedger | null> {
-  try {
-    const raw = ledgerMMKV.getString(storageKey(idempotencyKey));
-    if (!raw) {return null;}
-    return CompletionLedgerSchema.parse(JSON.parse(raw));
-  } catch (error) {
-    captureSilentFailure(error, {
-      feature: 'session-completion',
-      operation: 'lookup-ledger',
-      type: 'data',
-    });
+  const supabase = getSupabaseClient();
+  const { data, error } = await supabase
+    .from('session_completion_ledgers')
+    .select('*')
+    .eq('idempotency_key', idempotencyKey)
+    .single();
+
+  if (error) {
+    const code =
+      error != null && typeof error === 'object' && 'code' in error &&
+      typeof (error as { code?: unknown }).code === 'string'
+        ? (error as { code: string }).code
+        : null;
+    if (code === 'PGRST116') {
+      return null;
+    }
+    throw new SessionCompletionRepositoryError('lookup-idempotency-key', error);
+  }
+
+  if (!data) {
     return null;
   }
+
+  const parsed = CompletionLedgerSchema.safeParse({
+    ledgerId: data.ledger_id,
+    idempotencyKey: data.idempotency_key,
+    sessionId: data.session_id,
+    userId: data.user_id,
+    mode: data.mode,
+    targetDurationSeconds: data.target_duration_seconds,
+    completedDurationSeconds: data.completed_duration_seconds,
+    effectiveFocusedSeconds: data.effective_focused_seconds,
+    pauseCount: data.pause_count,
+    interruptionCount: data.interruption_count,
+    strictMode: data.strict_mode,
+    startedAt: data.started_at,
+    completedAt: data.completed_at,
+    timezone: data.timezone,
+    grade: data.grade,
+    gradeScore: data.grade_score,
+    qualityScore: data.quality_score,
+    focusScoreDelta: data.focus_score_delta,
+    xpDelta: data.xp_delta,
+    streakResult: data.streak_result,
+    companionReactionId: data.companion_reaction_id,
+    rewardIds: data.reward_ids,
+    dailyMissionResult: data.daily_mission_result,
+    offlineSyncStatus: data.offline_sync_status,
+    degradedSystems: data.degraded_systems,
+    createdAt: data.created_at,
+  });
+
+  if (!parsed.success) {
+    return null;
+  }
+
+  return parsed.data;
 }
 
-/**
- * Update the sync status of a ledger by ledgerId.
- * Scans all ledger keys in MMKV for a match.
- */
+export async function getCompletionLedgerBySessionId(
+  sessionId: string,
+): Promise<CompletionLedger | null> {
+  const supabase = getSupabaseClient();
+  const { data, error } = await supabase
+    .from('session_completion_ledgers')
+    .select('*')
+    .eq('session_id', sessionId)
+    .single();
+
+  if (error) {
+    const code =
+      error != null && typeof error === 'object' && 'code' in error &&
+      typeof (error as { code?: unknown }).code === 'string'
+        ? (error as { code: string }).code
+        : null;
+    if (code === 'PGRST116') {
+      return null;
+    }
+    throw new SessionCompletionRepositoryError('lookup-session-id', error);
+  }
+
+  if (!data) {
+    return null;
+  }
+
+  const parsed = CompletionLedgerSchema.safeParse({
+    ledgerId: data.ledger_id,
+    idempotencyKey: data.idempotency_key,
+    sessionId: data.session_id,
+    userId: data.user_id,
+    mode: data.mode,
+    targetDurationSeconds: data.target_duration_seconds,
+    completedDurationSeconds: data.completed_duration_seconds,
+    effectiveFocusedSeconds: data.effective_focused_seconds,
+    pauseCount: data.pause_count,
+    interruptionCount: data.interruption_count,
+    strictMode: data.strict_mode,
+    startedAt: data.started_at,
+    completedAt: data.completed_at,
+    timezone: data.timezone,
+    grade: data.grade,
+    gradeScore: data.grade_score,
+    qualityScore: data.quality_score,
+    focusScoreDelta: data.focus_score_delta,
+    xpDelta: data.xp_delta,
+    streakResult: data.streak_result,
+    companionReactionId: data.companion_reaction_id,
+    rewardIds: data.reward_ids,
+    dailyMissionResult: data.daily_mission_result,
+    offlineSyncStatus: data.offline_sync_status,
+    degradedSystems: data.degraded_systems,
+    createdAt: data.created_at,
+  });
+
+  if (!parsed.success) {
+    return null;
+  }
+
+  return parsed.data;
+}
+
+export async function hasSessionBeenCompleted(
+  sessionId: string,
+): Promise<boolean> {
+  const supabase = getSupabaseClient();
+  const { data, error } = await supabase
+    .from('session_completion_ledgers')
+    .select('session_id')
+    .eq('session_id', sessionId)
+    .single();
+
+  if (error) {
+    return false;
+  }
+
+  return data !== null;
+}
+
 export async function updateCompletionSyncStatus(
   ledgerId: string,
   offlineSyncStatus: CompletionSyncStatus,
 ): Promise<void> {
-  try {
-    const allKeys = ledgerMMKV.getAllKeys();
-    const ledgerKeys = allKeys.filter((k) =>
-      k.startsWith(LEDGER_KEY_PREFIX),
-    );
+  const supabase = getSupabaseClient();
+  const { error } = await supabase
+    .from('session_completion_ledgers')
+    .update({ offline_sync_status: offlineSyncStatus })
+    .eq('ledger_id', ledgerId);
 
-    for (const key of ledgerKeys) {
-      const raw = ledgerMMKV.getString(key);
-      if (!raw) {continue;}
-      try {
-        const ledger = CompletionLedgerSchema.parse(JSON.parse(raw));
-        if (ledger.ledgerId === ledgerId) {
-          const updated: CompletionLedger = {
-            ...ledger,
-            offlineSyncStatus,
-          };
-          ledgerMMKV.set(key, JSON.stringify(updated));
-          return;
-        }
-      } catch {
-        // Skip corrupt entries
-      }
-    }
-
-    Sentry.addBreadcrumb({
-      category: 'session-completion',
-      message: `Ledger ${ledgerId} not found for sync status update`,
-      level: 'warning',
-    });
-  } catch (error) {
-    captureSilentFailure(error, {
-      feature: 'session-completion',
-      operation: 'update-sync-status',
-      type: 'data',
-    });
+  if (error) {
+    throw new SessionCompletionRepositoryError('update-sync-status', error);
   }
-}
-
-/**
- * Remove ledgers older than maxAgeMs to prevent unbounded growth.
- * Default: 7 days. Call after confirmed sync or on app startup.
- * Returns the number of entries removed.
- */
-export function cleanupStaleLedgers(
-  maxAgeMs: number = 7 * 86_400_000,
-): number {
-  const cutoff = Date.now() - maxAgeMs;
-  let removed = 0;
-
-  try {
-    const allKeys = ledgerMMKV.getAllKeys();
-    const ledgerKeys = allKeys.filter((k) =>
-      k.startsWith(LEDGER_KEY_PREFIX),
-    );
-
-    for (const key of ledgerKeys) {
-      const raw = ledgerMMKV.getString(key);
-      if (!raw) {continue;}
-      try {
-        const ledger = CompletionLedgerSchema.parse(JSON.parse(raw));
-        if (ledger.createdAt < cutoff) {
-          ledgerMMKV.delete(key);
-          removed += 1;
-        }
-      } catch {
-        // Remove corrupt entries too
-        ledgerMMKV.delete(key);
-        removed += 1;
-      }
-    }
-  } catch (error) {
-    captureSilentFailure(error, {
-      feature: 'session-completion',
-      operation: 'cleanup-stale',
-      type: 'data',
-    });
-  }
-
-  return removed;
 }

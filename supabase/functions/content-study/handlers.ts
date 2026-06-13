@@ -140,7 +140,7 @@ export async function handleGenerate(req: Request, supabase: SupabaseClient, use
   const validated = GenerateStudyPlanSchema.parse(body);
   const { canGenerate, remaining } = await checkRateLimit(supabase, userId);
   if (!canGenerate) return json({ success: false, error: `Daily limit reached (${DAILY_GENERATION_LIMIT}/day)`, remaining: 0 }, 429);
-  const { data: content, error: contentError } = await supabase.from('study_content').select('*').eq('id', validated.contentId).eq('user_id', userId).single();
+  const { data: content, error: contentError } = await supabase.from('study_content').select('id, user_id, source_type, source_url, original_filename, storage_path, title, extracted_text, extracted_length, language, user_edited_text, is_user_edited, status, error_message, generation_count_today, last_generation_date, deleted_at, created_at, updated_at, extracted_at').eq('id', validated.contentId).eq('user_id', userId).single();
   if (contentError || !content) return json({ success: false, error: 'Content not found' }, 400);
   if (content.status !== 'EXTRACTED' && content.status !== 'READY') return json({ success: false, error: `Not ready: ${content.status}` }, 400);
   await supabase.from('study_content').update({ status: 'PROCESSING' }).eq('id', validated.contentId);
@@ -156,9 +156,7 @@ export async function handleGenerate(req: Request, supabase: SupabaseClient, use
     if (genError) {
       throw new Error('Failed to save study generation');
     }
-    const { data: incrementResult, error: incrementError } = await supabase.rpc('increment');
-    if (incrementError) { throw new Error('Failed to increment generation count'); }
-    await supabase.from('study_content').update({ status: 'READY', generation_count_today: incrementResult as number, last_generation_date: new Date().toISOString().split('T')[0] }).eq('id', validated.contentId);
+    await supabase.from('study_content').update({ status: 'READY', generation_count_today: remaining - 1, last_generation_date: new Date().toISOString().split('T')[0] }).eq('id', validated.contentId);
     return json({ success: true, generationId: generation.id, contentId: validated.contentId, summary: parsed.summary, keyConcepts: parsed.keyConcepts, tasks: parsed.tasks, quizItems: parsed.quizItems, sessionPlan: parsed.sessionPlan, remaining: remaining - 1 });
   } catch (e) {
     await supabase.from('study_content').update({ status: 'FAILED' }).eq('id', validated.contentId);
@@ -169,7 +167,7 @@ export async function handleGenerate(req: Request, supabase: SupabaseClient, use
 export async function handleStatus(req: Request, supabase: SupabaseClient, userId: string): Promise<Response> {
   const contentId = new URL(req.url).pathname.split('/').pop();
   if (!contentId) return json({ success: false, error: 'contentId required' }, 400);
-  const { data: content, error } = await supabase.from('study_content').select('*, study_generations(*)').eq('id', contentId).eq('user_id', userId).single();
+  const { data: content, error } = await supabase.from('study_content').select('id, user_id, source_type, source_url, original_filename, storage_path, title, extracted_text, extracted_length, language, user_edited_text, is_user_edited, status, error_message, generation_count_today, last_generation_date, deleted_at, created_at, updated_at, extracted_at, study_generations(id, content_id, user_id, model, generation_version, processing_time_ms, summary, key_concepts, tasks, quiz_items, session_plan, user_rating, was_helpful, times_used, last_used_at, deleted_at, created_at, updated_at)').eq('id', contentId).eq('user_id', userId).single();
   if (error || !content) return json({ success: false, error: 'Not found' }, 400);
   return json({ success: true, contentId: content.id, status: content.status, extractedLength: content.extracted_length, errorMessage: content.error_message, generation: content.study_generations?.[0] || null });
 }

@@ -12,6 +12,7 @@ interface EmptyStateProps {
   body: string;
   actionLabel?: string;
   onAction?: () => void;
+  accessibilityLabel?: string;
 }
 
 export function EmptyState({
@@ -20,6 +21,7 @@ export function EmptyState({
   body,
   actionLabel,
   onAction,
+  accessibilityLabel,
 }: EmptyStateProps): JSX.Element {
   const { theme } = useTheme();
 
@@ -32,6 +34,8 @@ export function EmptyState({
         paddingVertical: theme.spacing[8],
         gap: theme.spacing[3],
       }}
+      accessibilityLabel={accessibilityLabel ?? `${title}: ${body}`}
+      accessibilityRole="text"
     >
       <View
         style={{

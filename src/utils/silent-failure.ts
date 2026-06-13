@@ -1,4 +1,4 @@
-import * as Sentry from '@sentry/react-native';
+import { captureException } from '../config/sentry';
 
 type SilentFailureType = 'data' | 'network' | 'ui';
 
@@ -12,15 +12,13 @@ export function captureSilentFailure(
   error: unknown,
   context: SilentFailureContext,
 ): void {
-  Sentry.captureException(error, {
-    tags: {
-      feature: context.feature,
-      operation: context.operation,
-      failureType: context.type,
-    },
-    extra: {
-      fallback:
-        'Existing safe fallback preserved after previously empty catch.',
-    },
+  const errorInstance =
+    error instanceof Error ? error : new Error(String(error));
+  captureException(errorInstance, {
+    feature: context.feature,
+    operation: context.operation,
+    failureType: context.type,
+    fallback:
+      'Existing safe fallback preserved after previously empty catch.',
   });
 }

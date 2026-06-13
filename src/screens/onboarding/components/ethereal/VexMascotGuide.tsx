@@ -43,7 +43,7 @@ function getDirectedFrames(mood: MascotMood): readonly MascotMood[] {
   return ['wave', 'listening', 'pointing', mood];
 }
 
-export function VexMascotGuide({
+export const VexMascotGuide = React.memo(function VexMascotGuide({
   mood = 'default',
   message,
   submessage,
@@ -112,4 +112,4 @@ export function VexMascotGuide({
       </MascotSpeechBubble>
     </View>
   );
-}
+});

@@ -24,8 +24,6 @@ export {
 export { bossRepository } from './repository';
 export {
   useActiveBoss,
-  useBossEngagementSummary,
-  useAvailableBosses,
 } from './hooks';
 export {
   getBossEngagementSignals,
