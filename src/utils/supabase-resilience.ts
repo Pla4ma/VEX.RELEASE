@@ -1,5 +1,5 @@
 import type { PostgrestError } from '@supabase/supabase-js';
-import * as Sentry from '@sentry/react-native';
+import { addBreadcrumb, captureException } from '../config/sentry';
 import { useAuthStore } from '../store';
 
 type ResilientQueryResult<TData, TError = PostgrestError | null> = {
@@ -68,12 +68,11 @@ export async function withResilience<T>(
 
     if (result.error) {
       if (isRLSViolation(result.error) && isDevUser()) {
-        Sentry.addBreadcrumb({
-          category: 'repository',
-          message: 'Suppressed dev-user RLS violation',
-          level: 'info',
-          data: { operation: options.operation },
-        });
+        addBreadcrumb(
+          'Suppressed dev-user RLS violation',
+          'repository',
+          { operation: options.operation },
+        );
         return {
           data: (options.fallbackValue as T | null | undefined) ?? result.data,
           error: null,
@@ -81,12 +80,14 @@ export async function withResilience<T>(
       }
 
       if (!options.silent) {
-        Sentry.captureException(result.error, {
-          tags: {
-            feature: 'repository',
-            operation: options.operation,
-            resilience: 'failed',
-          },
+        const errorInstance =
+          result.error instanceof Error
+            ? result.error
+            : new Error(String(result.error));
+        captureException(errorInstance, {
+          feature: 'repository',
+          operation: options.operation,
+          resilience: 'failed',
         });
       }
     }
@@ -94,12 +95,12 @@ export async function withResilience<T>(
     return result;
   } catch (error) {
     if (!options.silent) {
-      Sentry.captureException(error, {
-        tags: {
-          feature: 'repository',
-          operation: options.operation,
-          resilience: 'exception',
-        },
+      const errorInstance =
+        error instanceof Error ? error : new Error(String(error));
+      captureException(errorInstance, {
+        feature: 'repository',
+        operation: options.operation,
+        resilience: 'exception',
       });
     }
     throw error;

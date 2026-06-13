@@ -8,6 +8,12 @@ const supabase = getSupabaseClient();
 const DASHBOARD_LAYOUT_COLUMNS = tableColumns('dashboard_layouts');
 const DASHBOARD_WIDGET_COLUMNS = tableColumns('dashboard_widgets');
 
+/** Extracts id from a supabase row that has passed error check */
+function getIdFromSupabaseRow<T extends { id: string }>(row: T | { error: true }): string {
+  // Supabase types don't narrow properly after error check; cast via unknown
+  return (row as unknown as { id: string }).id;
+}
+
 export async function fetchDashboardLayouts(userId: string) {
   const { data, error } = await supabase
     .from('dashboard_layouts')
@@ -45,8 +51,9 @@ export async function createDashboardLayout(
   if (error) {
     throw handleSupabaseError(error);
   }
+  // Supabase types don't narrow properly after error check; use helper
+  const dashboardId = getIdFromSupabaseRow(data);
   if (widgets?.length) {
-    const dashboardId = (data as unknown as { id: string }).id;
     const { error: widgetError } = await supabase
       .from('dashboard_widgets')
       .insert(widgets.map((widget) => ({ ...widget, dashboard_id: dashboardId })));

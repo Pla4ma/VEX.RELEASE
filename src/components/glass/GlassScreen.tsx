@@ -16,7 +16,7 @@ interface GlassScreenProps {
   variant?: GlassScreenAtmosphereVariant;
 }
 
-export function GlassScreen({
+export const GlassScreen: React.FC<GlassScreenProps> = React.memo(function GlassScreen({
   children,
   showAura = true,
   contentStyle,
@@ -36,6 +36,6 @@ export function GlassScreen({
       </View>
     </View>
   );
-}
+});
 
 export default GlassScreen;

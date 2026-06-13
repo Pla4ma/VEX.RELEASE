@@ -5,7 +5,6 @@ export type RootStackRoute =
   | 'Auth'
   | 'Onboarding'
   | 'Paywall'
-  | 'Splash'
   | 'Settings'
   | 'SessionStack'
   | 'CompanionDetail'
@@ -14,7 +13,6 @@ export type RootStackRoute =
   | 'FocusScoreDashboard'
   | 'VipPaywall'
   | 'MemoryConsole'
-  | 'Rivals'
   | 'Search'
   | 'Vault';
 

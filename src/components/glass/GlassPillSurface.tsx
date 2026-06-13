@@ -5,6 +5,8 @@ import { GlassBlurLayer } from './GlassBlurLayer';
 
 export type GlassPillTone = 'neutral' | 'mint' | 'fire' | 'premium' | 'warning';
 
+type AccessibilityRole = 'button' | 'link' | 'header' | 'image' | 'text' | 'none' | undefined;
+
 interface GlassPillSurfaceProps {
   children?: ReactNode;
   tone: GlassPillTone;
@@ -12,6 +14,9 @@ interface GlassPillSurfaceProps {
   height: number;
   style?: StyleProp<ViewStyle>;
   testID?: string;
+  accessibilityLabel?: string;
+  accessibilityRole?: AccessibilityRole;
+  accessibilityHint?: string;
 }
 
 interface ToneConfig {
@@ -102,10 +107,18 @@ export function GlassPillSurface({
   selected = false,
   height,
   style,
+  testID,
+  accessibilityLabel,
+  accessibilityRole,
+  accessibilityHint,
 }: GlassPillSurfaceProps): JSX.Element {
   const v = selected ? SELECTED_CONFIG : TONE_CONFIG[tone];
   return (
       <View
+      testID={testID}
+      accessibilityLabel={accessibilityLabel}
+      accessibilityRole={accessibilityRole}
+      accessibilityHint={accessibilityHint}
       style={[
         {
           backgroundColor: v.fill,

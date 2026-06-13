@@ -6,34 +6,35 @@ import type { LearningExecutionLayer } from '../../../features/learning-executio
 const stubRef = Symbol('stub-query');
 
 export function createStubQuery<TData = unknown>(): UseQueryResult<TData> {
-  const stub = {
-    data: undefined as unknown as TData,
+  const stub: UseQueryResult<TData> = {
+    data: undefined as TData,
     dataUpdatedAt: 0,
     error: null,
     errorUpdatedAt: 0,
     errorUpdateCount: 0,
     failureCount: 0,
     failureReason: null,
-    fetchStatus: 'idle' as const,
-    isError: false as const,
-    isFetched: true as const,
-    isFetchedAfterMount: true as const,
-    isFetching: false as const,
-    isInitialLoading: false as const,
-    isLoading: false as const,
-    isLoadingError: false as const,
-    isPaused: false as const,
-    isPending: false as const,
-    isPlaceholderData: false as const,
-    isRefetchError: false as const,
-    isRefetching: false as const,
-    isStale: false as const,
-    isSuccess: true as const,
-    promise: Promise.resolve(undefined as unknown as TData),
-    refetch: () => Promise.resolve(stub as unknown as UseQueryResult<TData>),
-    status: 'success' as const,
+    fetchStatus: 'idle',
+    isEnabled: true,
+    isError: false,
+    isFetched: true,
+    isFetchedAfterMount: true,
+    isFetching: false,
+    isInitialLoading: false,
+    isLoading: false,
+    isLoadingError: false,
+    isPaused: false,
+    isPending: false,
+    isPlaceholderData: false,
+    isRefetchError: false,
+    isRefetching: false,
+    isStale: false,
+    isSuccess: true,
+    promise: Promise.resolve() as Promise<TData>,
+    refetch: async () => stub,
+    status: 'success',
   };
-  return stub as unknown as UseQueryResult<TData>;
+  return stub;
 }
 
 export function stubNavigationActions() {

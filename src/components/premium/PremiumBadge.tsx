@@ -20,6 +20,7 @@ export interface PremiumBadgeProps {
   variant?: 'default' | 'subtle' | 'animated';
   style?: ViewStyle;
   showGlow?: boolean;
+  accessibilityLabel?: string;
 }
 
 const sizeConfig = {
@@ -33,6 +34,7 @@ export function PremiumBadge({
   variant = 'default',
   style,
   showGlow = false,
+  accessibilityLabel,
 }: PremiumBadgeProps): JSX.Element {
   const { theme } = useTheme();
   const reducedMotion = useReducedMotion();
@@ -94,7 +96,11 @@ export function PremiumBadge({
   const GlowWrapper = variant === 'animated' || showGlow ? Animated.View : View;
 
   return (
-    <View style={[styles.container, style]}>
+    <View
+      style={[styles.container, style]}
+      accessibilityLabel={accessibilityLabel ?? "Premium badge"}
+      accessibilityRole="image"
+    >
       {(variant === 'animated' || showGlow) && (
         <GlowWrapper
           style={[

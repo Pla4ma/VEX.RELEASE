@@ -1,5 +1,6 @@
 import type { TextStyle } from 'react-native';
 import type { FontFamilies, FontWeights, TypographyScale } from '../types';
+import { lightColors } from './primary-palette';
 
 export const fontFamilies: FontFamilies = {
   primary: 'Inter',
@@ -17,7 +18,7 @@ export const fontWeights: FontWeights = {
 };
 
 const baseTextStyle: TextStyle = {
-  color: '#F8FAFC',
+  color: lightColors.semantic.textPrimary,
   fontFamily: fontFamilies.primary,
   fontWeight: fontWeights.regular,
 };

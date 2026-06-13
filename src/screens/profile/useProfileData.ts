@@ -3,7 +3,6 @@ import { captureSilentFailure } from '../../utils/silent-failure';
 import { useProgressionSummary } from '../../features/progression/hooks';
 import { useStreakSummary } from '../../features/streaks/hooks';
 import { useSessionStats } from '../../session/hooks/useSession';
-import { useWallet } from '../../features/economy/hooks';
 import { getFeatureStatus } from '../../features/liveops-config';
 import {
   getMasteryRankDisplay,
@@ -20,7 +19,7 @@ export interface UseProfileDataResult {
   progressionQuery: ReturnType<typeof useProgressionSummary>;
   streakQuery: ReturnType<typeof useStreakSummary>;
   statsQuery: ReturnType<typeof useSessionStats>;
-  walletQuery: ReturnType<typeof useWallet>;
+  walletQuery: { data: { coins: number; gems: number } | undefined; isPending: boolean; error: null };
   theme: ReturnType<typeof useTheme>['theme'];
   loading: boolean;
   hasStatsError: boolean;
@@ -46,6 +45,8 @@ function makeMastery(userId: string): MasteryState {
 const hours = (ms: number): string =>
   `${Math.round((ms / 3600000) * 10) / 10}h`;
 
+const ZERO_WALLET = { coins: 0, gems: 0 };
+
 export function useProfileData(
   userId: string | null,
 ): UseProfileDataResult {
@@ -55,14 +56,17 @@ export function useProfileData(
   const progressionQuery = useProgressionSummary(userId);
   const streakQuery = useStreakSummary(userId);
   const statsQuery = useSessionStats(userId ?? '');
-  const walletQuery = useWallet(userId ?? '', {
-    enabled: getFeatureStatus('economy_advanced') !== 'hidden',
-  });
+  const walletEnabled = getFeatureStatus('economy_advanced') !== 'hidden';
+  const walletQuery = {
+    data: walletEnabled ? ZERO_WALLET : undefined,
+    isPending: false,
+    error: null,
+  };
   const rankDisplay = getMasteryRankDisplay(mastery.rank);
   const xpPercent = Math.max(0, Math.min(100, progressionQuery.data?.progressPercent ?? 0));
   const loading = progressionQuery.isPending || streakQuery.isPending ||
-    statsQuery.isLoading || walletQuery.isPending;
-  const hasStatsError = !!(progressionQuery.error || streakQuery.error || walletQuery.error);
+    statsQuery.isLoading;
+  const hasStatsError = !!(progressionQuery.error || streakQuery.error);
 
   const stats = useMemo<ProfileStatItem[]>(() => [
     { label: 'Current Streak', value: `${streakQuery.data?.currentDays ?? 0} days`, icon: 'fire', iconOrb: 'fire' as const, change: undefined },

@@ -9,6 +9,7 @@ interface StepIndicatorProps {
   currentStep: number;
   labels?: string[];
   color?: string;
+  accessibilityLabel?: string;
 }
 
 export const StepIndicator: React.FC<StepIndicatorProps> = ({
@@ -16,11 +17,17 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({
   currentStep,
   labels,
   color,
+  accessibilityLabel,
 }) => {
   const { theme } = useTheme();
   const stepColor = color ?? theme.colors.semantic.primary;
   return (
-    <View style={{ alignItems: 'flex-start', flexDirection: 'row' }}>
+    <View
+      style={{ alignItems: 'flex-start', flexDirection: 'row' }}
+      accessibilityLabel={accessibilityLabel ?? `Step ${currentStep + 1} of ${steps}`}
+      accessibilityRole="progressbar"
+      accessibilityValue={{ min: 0, max: steps, now: currentStep + 1 }}
+    >
       {Array.from({ length: steps }, (_, index) => {
         const isCompleted = index < currentStep;
         const isCurrent = index === currentStep;
@@ -45,6 +52,14 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({
                 justifyContent: 'center',
                 width: 28,
               }}
+              accessibilityLabel={
+                isCompleted
+                  ? `Step ${index + 1} completed`
+                  : isCurrent
+                    ? `Step ${index + 1} current`
+                    : `Step ${index + 1} not started`
+              }
+              accessibilityRole="text"
             >
               <Text
                 color={

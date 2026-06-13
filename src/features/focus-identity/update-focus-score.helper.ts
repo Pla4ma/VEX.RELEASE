@@ -16,6 +16,8 @@ export interface SessionCompletionData {
   interruptions?: number;
   quality?: number;
   completedAt?: string;
+  sessionId?: string;
+  focusScoreDelta?: number;
 }
 
 function readGrade(grade: string): 'S' | 'A' | 'B' | 'C' | 'D' {

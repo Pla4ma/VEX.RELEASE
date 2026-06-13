@@ -8,6 +8,7 @@ import { lightColors } from '@/theme/tokens/colors';
 export interface SupporterBadgeProps {
   size?: 'sm' | 'md' | 'lg';
   style?: object;
+  accessibilityLabel?: string;
 }
 
 const supporterSizeConfig = {
@@ -30,7 +31,7 @@ const supporterStyles = createSheet({
   icon: { fontWeight: '700' as const },
 });
 
-export function SupporterBadge({ size = 'md', style }: SupporterBadgeProps) {
+export function SupporterBadge({ size = 'md', style, accessibilityLabel }: SupporterBadgeProps) {
   const { theme } = useTheme();
   const config = supporterSizeConfig[size];
 
@@ -47,6 +48,8 @@ export function SupporterBadge({ size = 'md', style }: SupporterBadgeProps) {
         },
         style,
       ]}
+      accessibilityLabel={accessibilityLabel ?? "Supporter badge"}
+      accessibilityRole="image"
     >
       <Text style={[supporterStyles.icon, { fontSize: config.icon }]}>⭐</Text>
     </View>

@@ -1,0 +1,1 @@
+{"id": "TS-ERROR", "title": "Fix TypeScript error: @rive-app/react-native import", "column": "done", "description": "RiveMascotRenderer.tsx imports @rive-app/react-native but it's not installed. Either install the package or remove the component if unused.", "labels": ["p0", "lane1", "typescript"], "assignee": "coder", "dependencies": []}

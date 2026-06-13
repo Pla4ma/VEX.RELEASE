@@ -1,6 +1,6 @@
 import { enqueue, type OfflineQueueEntry, type OfflineQueueEntryInput } from '../../lib/offline/queue';
 import {
-  createCompletionLedger,
+  persistCompletionLedger,
   SessionCompletionRepositoryError,
   updateCompletionSyncStatus,
 } from './repository';
@@ -121,7 +121,7 @@ export class SessionCompletionOfflineSyncService {
 
   private async syncImmediately(ledger: CompletionLedger): Promise<CompletionLedger> {
     try {
-      const synced = await createCompletionLedger(ledger);
+      const synced = await persistCompletionLedger(ledger);
       await updateCompletionSyncStatus(ledger.ledgerId, 'synced');
       return synced;
     } catch (error) {

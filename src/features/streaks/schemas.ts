@@ -33,6 +33,8 @@ export const StreakSummarySchema = z
     nextDeadline: z.number().nullable(),
     frozenUntil: z.number().nullable(),
     shieldAvailable: z.boolean(),
+    hoursRemaining: z.number().optional(),
+    flameHealthPercent: z.number().optional(),
   })
   .strict();
 const StreakTimestampSchema = z.preprocess((value) => {

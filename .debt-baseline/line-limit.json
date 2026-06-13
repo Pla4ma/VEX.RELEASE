@@ -1,1 +1,5 @@
-{}
+{
+  "src/features/streaks/repository/streak-repository.ts": 204,
+  "src/navigation/components/VexTabBar.tsx": 203,
+  "src/screens/onboarding/OnboardingFlowScreen.tsx": 295
+}

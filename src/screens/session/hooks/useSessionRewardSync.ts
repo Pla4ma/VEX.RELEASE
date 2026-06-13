@@ -9,6 +9,9 @@ import {
 import type { SessionSummary } from '../../../session/types';
 import { triggerHaptic } from '../../../utils/haptics';
 
+const RETRY_DELAYS_MS = [500, 1000, 2000] as const;
+const MAX_RETRY_ATTEMPTS = 3;
+
 type RewardCreditStatus =
   | 'idle'
   | 'crediting'
@@ -32,6 +35,8 @@ interface SessionRewardSyncInput {
     isMounted: boolean;
     streakDays: number;
   }) => unknown;
+  applyChestRewards: (input: { sessionId: string; rewards: any[] }) => Promise<void>;
+  creditSessionRewards: (userId: string, rewards: any[]) => Promise<any[]>;
   focusedDuration: number;
   focusPurityScore: number;
   primarySquadId: string | null;
@@ -51,6 +56,7 @@ interface SessionRewardSyncInput {
 export function useSessionRewardSync(input: SessionRewardSyncInput) {
   const queryClient = useQueryClient();
   const isMountedRef = useRef(true);
+  const attemptRef = useRef(0);
   const [rewardCreditStatus, setRewardCreditStatus] =
     useState<RewardCreditStatus>('idle');
   const [rewardCreditError, setRewardCreditError] = useState<string | null>(
@@ -60,53 +66,75 @@ export function useSessionRewardSync(input: SessionRewardSyncInput) {
     useState<CelebrationState>(null);
 
   const applyCompletionRewards = useCallback(async (): Promise<void> => {
-    if (!input.userId) {
+    if (!input.userId || !input.summary) {
       return;
     }
 
-    setRewardCreditStatus('crediting');
-    setRewardCreditError(null);
+    // Call applyChestRewards which internally calls creditSessionRewards
+    await input.applyChestRewards({ sessionId: input.summary.sessionId, rewards: [] });
 
-    try {
-      await Promise.all([
-        queryClient.invalidateQueries({
-          queryKey: ['progression', input.userId],
-        }),
-        queryClient.invalidateQueries({
-          queryKey: progressionKeys.byUser(input.userId),
-        }),
-        queryClient.invalidateQueries({
-          queryKey: progressionKeys.summary(input.userId),
-        }),
-      ]);
+    attemptRef.current = 0;
+    await attemptRewardSync();
 
-      await input.refetchProgressionSummary();
+    async function attemptRewardSync(): Promise<void> {
+      setRewardCreditStatus(attemptRef.current === 0 ? 'crediting' : 'retrying');
+      setRewardCreditError(null);
 
-      if (isMountedRef.current) {
-        setRewardCreditStatus('success');
-        triggerHaptic('success');
-        input.showToast({
-          duration: 2500,
-          message: 'Rewards are owned by the saved completion ledger.',
-          title: 'Session rewards synced',
-          type: 'success',
+      try {
+        await Promise.all([
+          queryClient.invalidateQueries({
+            queryKey: ['progression', input.userId],
+          }),
+          queryClient.invalidateQueries({
+            queryKey: progressionKeys.byUser(input.userId),
+          }),
+          queryClient.invalidateQueries({
+            queryKey: progressionKeys.summary(input.userId),
+          }),
+        ]);
+
+        await input.refetchProgressionSummary();
+
+        if (isMountedRef.current) {
+          setRewardCreditStatus('success');
+          triggerHaptic('success');
+          input.showToast({
+            duration: 2500,
+            message: 'Rewards are owned by the saved completion ledger.',
+            title: 'Session rewards synced',
+            type: 'success',
+          });
+        }
+      } catch (error) {
+        attemptRef.current += 1;
+
+        // Retry loop with attemptIndex <= RETRY_DELAYS_MS.length
+        const attemptIndex = attemptRef.current;
+        if (attemptIndex <= RETRY_DELAYS_MS.length && isMountedRef.current) {
+          await new Promise((resolve) =>
+            setTimeout(resolve, RETRY_DELAYS_MS[attemptIndex - 1]),
+          );
+          return attemptRewardSync();
+        }
+
+        // All retries exhausted
+        if (isMountedRef.current) {
+          setRewardCreditStatus('failed');
+          setRewardCreditError('Reward display could not refresh after 3 attempts.');
+        }
+        triggerHaptic('warning');
+        Sentry.captureException(error, {
+          tags: { feature: 'session-complete-display' },
         });
+        if (isMountedRef.current) {
+          input.showToast({
+            duration: 5000,
+            message: 'Your session is saved. Pull to refresh rewards in a moment.',
+            title: 'Reward display delayed',
+            type: 'error',
+          });
+        }
       }
-    } catch (error) {
-      if (isMountedRef.current) {
-        setRewardCreditStatus('failed');
-        setRewardCreditError('Reward display could not refresh yet.');
-      }
-      triggerHaptic('warning');
-      Sentry.captureException(error, {
-        tags: { feature: 'session-complete-display' },
-      });
-      input.showToast({
-        duration: 5000,
-        message: 'Your session is saved. Pull to refresh rewards in a moment.',
-        title: 'Reward display delayed',
-        type: 'error',
-      });
     }
   }, [input, queryClient]);
 

@@ -20,7 +20,7 @@ import { useTheme } from '../../../theme';
 import { Text } from '../../../components/primitives/Text';
 import { useHaptics } from '../../../utils/haptics';
 import { eventBus } from '../../../events';
-import * as Sentry from '@sentry/react-native';
+import { addBreadcrumb } from '../../../config/sentry';
 import { SessionGlyph } from '../../../shared/ui/liquid-glass';
 import {
   DIFFICULTY_OPTIONS,
@@ -45,15 +45,10 @@ export function DifficultySelector({
     }
     haptics.light();
 
-    Sentry.addBreadcrumb({
-      category: 'session',
-      message: 'Difficulty selected',
-      data: {
-        difficulty,
-        xpMultiplier: DIFFICULTY_OPTIONS.find((d) => d.id === difficulty)
-          ?.xpMultiplier,
-      },
-      level: 'info',
+    addBreadcrumb('Difficulty selected', 'session', {
+      difficulty,
+      xpMultiplier: DIFFICULTY_OPTIONS.find((d) => d.id === difficulty)
+        ?.xpMultiplier,
     });
 
     eventBus.publish('session:difficulty_selected', {

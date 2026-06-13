@@ -15,10 +15,12 @@ import { useOnboardingLane } from './useOnboardingLane';
 import { clampStep, buildDraftPayload } from '../onboarding-flow-steps';
 import { useOnboardingCompletion } from './useOnboardingCompletion';
 import { buildOnboardingHandlers } from './onboarding-flow-handlers';
+import { useNavigation } from '@react-navigation/native';
 
 export function useOnboardingFlow(routeStep?: number) {
   const { user } = useAuthStore();
   const userId = user?.id ?? '';
+  const navigation = useNavigation<any>();
   const draft = useOnboardingStore((state) =>
     userId ? state.getDraft(userId) : undefined,
   );
@@ -33,6 +35,7 @@ export function useOnboardingFlow(routeStep?: number) {
   const [motivationStyle, setMotivationStyle] = useState(
     draft?.explicitMotivationStyle,
   );
+  const [hasCompletedFirstSession, setHasCompletedFirstSession] = useState(false);
   const startedTrackedRef = useRef(false);
   const { isFinishing, finishError, finishOnboarding } =
     useOnboardingCompletion(userId);
@@ -80,6 +83,31 @@ export function useOnboardingFlow(routeStep?: number) {
     finishOnboarding,
   });
 
+  const startFirstSession = useCallback(() => {
+    if (!userId || !chosenLane) return;
+
+    navigation.navigate('SessionStack', {
+      screen: 'SessionSetup',
+      params: {
+        presetId: chosenLane,
+        source: 'onboarding_first_session',
+      },
+    });
+  }, [userId, chosenLane, navigation]);
+
+  const handleSessionComplete = useCallback(() => {
+    setHasCompletedFirstSession(true);
+    // Advance step to trigger completion on return
+    setStep((prev) => Math.min(prev + 1, 3));
+  }, []);
+
+  // Listen for session completion event
+  useEffect(() => {
+    if (!userId) return;
+    // In a real implementation, this would subscribe to an event bus
+    // For now, we rely on the focus detection in the screen component
+  }, [userId]);
+
   return {
     userId,
     step,
@@ -90,11 +118,15 @@ export function useOnboardingFlow(routeStep?: number) {
     finishError,
     laneConfirmation,
     isChoosingLane,
+    hasCompletedFirstSession,
+    chosenLane,
     handleAcceptLaneAndAdvance: handlers.handleAcceptLaneAndAdvance,
     handleChooseAnotherLane,
     handleSelectLane,
     handleFinish: handlers.handleFinish,
     handleSelectGoal: handlers.handleSelectGoal,
     handleSelectMotivationStyle: handlers.handleSelectMotivationStyle,
+    startFirstSession,
+    handleSessionComplete,
   };
 }

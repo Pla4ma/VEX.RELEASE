@@ -1,6 +1,7 @@
 import { renderHook, act, waitFor } from '@testing-library/react-native';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import React from 'react';
+import { ToastProvider as ToastProviderComponent, useToast } from '../../../shared/ui/components/Toast';
 
 jest.mock('../../../store', () => ({
   useAuthStore: () => ({
@@ -33,6 +34,19 @@ const createWrapper = (queryClient: QueryClient) => {
   return wrapper;
 };
 
+// Mock ToastProvider for tests
+const ToastProvider = ({ children }: { children: React.ReactNode }) => {
+  const mockToast = {
+    show: jest.fn(),
+    dismiss: jest.fn(),
+    dismissAll: jest.fn(),
+    update: jest.fn(),
+    toasts: [],
+  };
+  const { ToastContext } = require('../../../shared/ui/components/Toast');
+  return React.createElement(ToastContext.Provider, { value: mockToast }, children);
+};
+
 describe('useContentHistory', () => {
   let queryClient: QueryClient;
 
@@ -53,7 +67,9 @@ describe('useContentHistory', () => {
       contentStudyQueryKeys.history('test-user-id'),
       mockHistory,
     );
-    const wrapper = createWrapper(queryClient);
+    const baseWrapper = createWrapper(queryClient);
+    const wrapper = ({ children }: { children: React.ReactNode }) => 
+      React.createElement(ToastProvider, null, baseWrapper({ children }));
     const { result } = renderHook(() => useContentHistory(), { wrapper });
     await waitFor(
       () => {
@@ -69,7 +85,9 @@ describe('useContentHistory', () => {
       contentStudyQueryKeys.history('test-user-id'),
       mockHistory,
     );
-    const wrapper = createWrapper(queryClient);
+    const baseWrapper = createWrapper(queryClient);
+    const wrapper = ({ children }: { children: React.ReactNode }) => 
+      React.createElement(ToastProvider, null, baseWrapper({ children }));
     const { result } = renderHook(() => useContentHistory(), { wrapper });
     await waitFor(
       () => {
@@ -104,7 +122,9 @@ describe('useRateLimit', () => {
       },
     ];
     (service.fetchContentHistory as jest.Mock).mockResolvedValue(mockHistory);
-    const wrapper = createWrapper(queryClient);
+    const baseWrapper = createWrapper(queryClient);
+    const wrapper = ({ children }: { children: React.ReactNode }) => 
+      React.createElement(ToastProvider, null, baseWrapper({ children }));
     const { result } = renderHook(() => useRateLimit(), { wrapper });
     await act(async () => {
       await result.current.checkLimit();
@@ -117,7 +137,9 @@ describe('useRateLimit', () => {
     (service.fetchContentHistory as jest.Mock).mockRejectedValue(
       new Error('Rate limit check failed'),
     );
-    const wrapper = createWrapper(queryClient);
+    const baseWrapper = createWrapper(queryClient);
+    const wrapper = ({ children }: { children: React.ReactNode }) => 
+      React.createElement(ToastProvider, null, baseWrapper({ children }));
     const { result } = renderHook(() => useRateLimit(), { wrapper });
     await act(async () => {
       try {

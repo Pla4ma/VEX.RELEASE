@@ -8,8 +8,8 @@ import type {
 import type { Lane } from '../lane-engine/types';
 import type { SessionSummary } from '../../session/types';
 
-type Situation = 'abandoned' | 'clean' | 'comeback' | 'partial';
-type Display = {
+export type Situation = 'abandoned' | 'clean' | 'comeback' | 'partial';
+export type Display = {
   body: string;
   title: string;
   tone: 'calm' | 'coach' | 'study' | 'intense';
@@ -46,6 +46,12 @@ export function situationFor(summary: SessionSummary, isComeback: boolean): Situ
   if (isComeback) {
     return 'comeback';
   }
+  if (summary.status === 'ABANDONED') {
+    return 'abandoned';
+  }
+  if (summary.completionPercentage < 50) {
+    return 'partial';
+  }
   return summary.finalScore >= 85 ? 'clean' : 'partial';
 }
 
@@ -68,15 +74,20 @@ export function buildMemoryCandidates(
   situation: Situation,
   deletedMemoryIds?: string[],
 ): CompletionMemoryCandidate[] {
-  const key = `completion:${input.summary.sessionId}:${situation}`;
+  const key = `${input.summary.sessionId}:${input.lane}:${situation}`;
   if (deletedMemoryIds?.includes(key)) {
     return [];
   }
+  const baseText = `Lane ${input.lane} finished a ${situation} session.`;
+  const text = input.reflectionAnswer
+    ? `${baseText} ${input.reflectionAnswer}`
+    : baseText;
   return [
     {
       confidence: 0.7,
       key,
-      text: `Lane ${input.lane} finished a ${situation} session.`,
+      source: 'session_completion',
+      text,
     },
   ];
 }
@@ -86,29 +97,40 @@ export function unlockFor(
   hiddenFeatureKeys: string[],
 ): CompletionUnlockDecision {
   const key = hiddenFeatureKeys[0] ?? lane;
+  const isHidden = hiddenFeatureKeys.length > 0;
   return {
-    isUnlocked: hiddenFeatureKeys.length === 0,
+    isUnlocked: !isHidden,
     key,
-    reason:
-      hiddenFeatureKeys.length === 0
-        ? 'Your session activity unlocked the next surface.'
-        : 'Keep building signal to unlock this surface.',
+    hidden: isHidden,
+    reason: isHidden
+      ? 'Keep building signal to unlock this surface.'
+      : 'Your session activity unlocked the next surface.',
+    status: isHidden ? 'blocked' : 'teased',
   };
 }
 
 export function buildProgressProof(
-  _input: CompletionPersonalizationInput,
+  input: CompletionPersonalizationInput,
   _situation: Situation,
   xpDelta: number,
   grade: string,
-  _streakDays?: number,
-  _streakAction?: string,
-  _focusScoreDelta?: number,
-  _isPersonalBest?: boolean,
-): { headline: string; items: string[] } {
+  streakDays: number = 0,
+  streakAction: string = 'extended',
+  focusScoreDelta: number = 0,
+  isPersonalBest: boolean = false,
+): { headline: string; items: string[]; xpDelta: number; grade: string; streakDays: number; streakAction: string; focusScoreDelta: number; isPersonalBest: boolean; effectiveMinutes: number; completionPercentage: number } {
+  const effectiveMinutes = Math.round((input.summary.effectiveDuration ?? 0) / 60);
   return {
     headline: `Grade ${grade} secured`,
     items: [`${xpDelta} XP earned`],
+    xpDelta,
+    grade,
+    streakDays,
+    streakAction,
+    focusScoreDelta,
+    isPersonalBest,
+    effectiveMinutes,
+    completionPercentage: input.summary.completionPercentage ?? 0,
   };
 }
 
@@ -117,7 +139,10 @@ export function buildUserFacingSummary(
   _situation: Situation,
   display: Display,
 ): CompletionUserFacingSummary {
-  return display;
+  return {
+    ...display,
+    displayTitle: display.title,
+  };
 }
 
 export function buildCompletionLearning(

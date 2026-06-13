@@ -151,7 +151,7 @@ describe('FeatureFlagService', () => {
     });
 
     it('should return disabled for undefined feature', () => {
-      const result = getFeatureAvailability(undefined as unknown as FeatureAccess);
+      const result = getFeatureAvailability(undefined as FeatureAccess | undefined);
       expect(result.state).toBe('disabled');
     });
   });

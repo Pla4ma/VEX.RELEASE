@@ -4,12 +4,21 @@ export const CompletionProgressProofSchema = z
   .object({
     headline: z.string().min(1),
     items: z.array(z.string()).default([]),
+    xpDelta: z.number().optional(),
+    grade: z.string().optional(),
+    streakDays: z.number().optional(),
+    streakAction: z.string().optional(),
+    focusScoreDelta: z.number().optional(),
+    isPersonalBest: z.boolean().optional(),
+    effectiveMinutes: z.number().optional(),
+    completionPercentage: z.number().optional(),
   })
   .passthrough();
 
 export const CompletionUserFacingSummarySchema = z
   .object({
     body: z.string().min(1),
+    displayTitle: z.string().min(1).optional(),
     title: z.string().min(1),
     tone: z.enum(['calm', 'coach', 'study', 'intense']),
   })

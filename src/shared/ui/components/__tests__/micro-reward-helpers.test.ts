@@ -1,4 +1,5 @@
 import { REWARD_CONFIG, getRewardColor, type RewardType } from '../micro-reward-helpers';
+import type { Theme } from '../../../theme';
 
 describe('micro-reward-helpers', () => {
   describe('REWARD_CONFIG', () => {
@@ -23,14 +24,26 @@ describe('micro-reward-helpers', () => {
   });
 
   describe('getRewardColor', () => {
-    const mockTheme = {
+    const mockTheme: Theme = {
+      name: 'test',
+      mode: 'light',
       colors: {
         primary: { 500: '#FF0000' },
         warning: { dark: '#FFAA00' },
         accent: { blue: '#0000FF', orange: '#FF8800', purple: '#8800FF', pink: '#FF0088' },
         success: { dark: '#00FF00' },
-      },
-    } as any;
+      } as Theme['colors'],
+      typography: {} as Theme['typography'],
+      fonts: {} as Theme['fonts'],
+      fontWeights: {} as Theme['fontWeights'],
+      spacing: {} as Theme['spacing'],
+      borderRadius: {} as Theme['borderRadius'],
+      shadows: {} as Theme['shadows'],
+      zIndex: {} as Theme['zIndex'],
+      breakpoints: {} as Theme['breakpoints'],
+      animation: {} as Theme['animation'],
+      opacity: {} as Theme['opacity'],
+    };
 
     it('returns correct color for each reward type', () => {
       expect(getRewardColor('xp', mockTheme)).toBe('#FF0000');

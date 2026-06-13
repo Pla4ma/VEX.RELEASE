@@ -64,7 +64,6 @@ export interface RootStackParams {
   Onboarding: { step?: number };
   Paywall: { gatedFeature?: string; source?: string; lane?: string };
   VipPaywall: { source?: string };
-  Splash: undefined;
   Settings: NavigatorScreenParams<SettingsStackParams>;
   SessionStack: NavigatorScreenParams<SessionStackParams>;
   CompanionDetail: undefined;
@@ -72,7 +71,6 @@ export interface RootStackParams {
   StreakFuneral: { diedAt: number; previousStreak: number };
   FocusScoreDashboard: undefined;
   MemoryConsole: undefined;
-  Rivals: undefined;
   Search: undefined;
   Vault: undefined;
 }

@@ -18,21 +18,27 @@ import {
   syncPurchases,
 } from '../revenuecat-service-purchases';
 
+type MockDeps = {
+  isReady: () => boolean;
+  debugMode: boolean;
+  reportError: ReturnType<typeof jest.fn>;
+};
+
+const createDeps = (overrides: Partial<MockDeps> = {}): MockDeps => ({
+  isReady: jest.fn().mockReturnValue(true),
+  debugMode: false,
+  reportError: jest.fn(),
+  ...overrides,
+});
+
+const mockPackage = {
+  identifier: 'pkg-monthly',
+  product: { identifier: 'prod-monthly' },
+};
+
+const mockCustomerInfo = { originalAppUserId: 'user-1' };
+
 describe('revenuecat-service-purchases', () => {
-  const createDeps = (overrides: Record<string, any> = {}) => ({
-    isReady: jest.fn().mockReturnValue(true),
-    debugMode: false,
-    reportError: jest.fn(),
-    ...overrides,
-  });
-
-  const mockPackage = {
-    identifier: 'pkg-monthly',
-    product: { identifier: 'prod-monthly' },
-  } as any;
-
-  const mockCustomerInfo = { originalAppUserId: 'user-1' } as any;
-
   describe('purchasePackage', () => {
     it('returns error when not ready', async () => {
       const deps = createDeps({ isReady: () => false });

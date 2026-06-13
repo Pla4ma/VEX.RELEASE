@@ -1,6 +1,6 @@
 import { FEATURE_FLAGS } from '../constants/features';
 
-import type { RootStackParams } from './types';
+import type { ExtendedRootStackParams } from './param-types';
 import type { DeepLink, DeepLinkPath } from './deep-link-types';
 
 const DEFAULT_FEATURE_FLAGS: Record<string, boolean> = {
@@ -15,10 +15,6 @@ export function isDeepLinkDisabled(
   switch (path) {
     case 'boss':
       return !featureFlags[FEATURE_FLAGS.BASIC_SOLO_BOSS];
-    case 'duels':
-    case 'squad':
-    case 'invite':
-      return !featureFlags[FEATURE_FLAGS.SQUADS_ACCOUNTABILITY];
     default:
       return false;
   }
@@ -27,7 +23,7 @@ export function isDeepLinkDisabled(
 export function deepLinkToNavigationParams(
   link: DeepLink,
   featureFlags: Record<string, boolean> = DEFAULT_FEATURE_FLAGS,
-): { screen: keyof RootStackParams; params?: unknown } | null {
+): { screen: keyof ExtendedRootStackParams; params?: unknown } | null {
   if (isDeepLinkDisabled(link.path, featureFlags)) {
     return { screen: 'Main', params: undefined };
   }
@@ -47,11 +43,7 @@ export function deepLinkToNavigationParams(
         },
       };
     case 'boss':
-      return { screen: 'Main', params: { screen: 'Boss' } };
-    case 'duels':
-      return { screen: 'Main', params: { screen: 'Home' } };
-    case 'squad':
-      return { screen: 'Main', params: { screen: 'Home' } };
+      return { screen: 'Boss' as keyof ExtendedRootStackParams };
     case 'profile':
       return {
         screen: 'Main',
@@ -59,8 +51,6 @@ export function deepLinkToNavigationParams(
       };
     case 'settings':
       return { screen: 'Settings', params: { screen: 'SettingsMain' } };
-    case 'invite':
-      return { screen: 'Main', params: { screen: 'Profile' } };
     case 'study':
       return {
         screen: 'SessionStack',
@@ -70,9 +60,7 @@ export function deepLinkToNavigationParams(
         },
       };
     case 'coach':
-      return { screen: 'Main', params: { screen: 'AICoach' } };
-    case 'shop':
-      return { screen: 'Main', params: { screen: 'Home' } };
+      return { screen: 'AICoach' as keyof ExtendedRootStackParams };
     case 'rescue':
       return {
         screen: 'SessionStack',

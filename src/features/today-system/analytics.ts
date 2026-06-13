@@ -1,12 +1,10 @@
-import * as Sentry from '@sentry/react-native';
+import { addBreadcrumb } from '../../config/sentry';
 import { TodaySystemEventSchema, type TodaySystemEvent } from './events';
 
 export function trackTodaySystemEvent(event: TodaySystemEvent): void {
   const parsed = TodaySystemEventSchema.parse(event);
-  Sentry.addBreadcrumb({
-    category: 'today_system',
-    level: 'info',
-    message: parsed.type,
-    data: { section: parsed.section, userId: parsed.userId },
+  addBreadcrumb(parsed.type, 'today_system', {
+    section: parsed.section,
+    userId: parsed.userId,
   });
 }

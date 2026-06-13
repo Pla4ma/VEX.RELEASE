@@ -12,8 +12,8 @@ import { buildCompletionLedger } from './ledger-service';
 import { applyPersonalizationAndSideEffects } from './completion-personalization-step';
 import type { PostSessionStoryViewModel } from './service';
 import {
-  createCompletionLedger,
   getCompletionLedgerByIdempotencyKey,
+  persistCompletionLedger,
   SessionCompletionRepositoryError,
 } from './repository';
 import {
@@ -102,7 +102,7 @@ export async function orchestrateSessionCompletion(
     let persisted = ledger;
     if (isOnline) {
       try {
-        persisted = await createCompletionLedger(ledger);
+        persisted = await persistCompletionLedger(ledger);
         createSessionRecord({
           sessionId: ledger.sessionId,
           userId: ledger.userId,

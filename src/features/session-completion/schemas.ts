@@ -189,3 +189,5 @@ export type {
   CompletionProgressProof,
   CompletionUserFacingSummary,
 } from './completion-personalization-result-schemas';
+
+export { SessionSummarySchema, type SessionSummary } from '../../session/types';

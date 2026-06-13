@@ -44,7 +44,11 @@ export {
 export * as streaksRepository from './repository';
 
 // Hooks
-export * from './hooks';
+export { useStreakRisk } from './hooks/useStreakRisk';
+export { useStreakSummary } from './hooks/useStreakSummary';
+export { useFlameHealth } from './hooks/useFlameHealth';
+export { useRepairQuestStatus } from './hooks/useRepairQuestStatus';
+export { useStreakRepairQuest } from './hooks/useStreakRepairQuest';
 
 // Analytics
 export * from './analytics';

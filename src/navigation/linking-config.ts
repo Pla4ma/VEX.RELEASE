@@ -72,6 +72,14 @@ const SCREEN_CONFIG = {
   ContentStudy: 'study',
   Challenges: 'challenges',
   FocusScoreDashboard: 'focus-score',
+  Comeback: 'comeback',
+  StreakFuneral: 'streak-funeral',
+  MemoryConsole: 'memory-console',
+  CompanionDetail: 'companion-detail',
+  Achievements: 'achievements',
+  Analytics: 'analytics',
+  Mastery: 'mastery',
+  Notifications: 'notifications',
 } as PathConfigMap<ExtendedRootStackParams>;
 
 export function createLinkingConfig(): LinkingOptions<ExtendedRootStackParams> {

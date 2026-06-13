@@ -27,6 +27,7 @@ export interface ToastProps {
   onHide?: () => void;
   icon?: IconName;
   style?: ViewStyle;
+  accessibilityLabel?: string;
 }
 const typeIconMap: Record<ToastType, IconName> = {
   info: 'info',
@@ -65,6 +66,7 @@ export const Toast: React.FC<ToastProps> = ({
   onHide,
   icon,
   style,
+  accessibilityLabel,
 }) => {
   const { theme } = useTheme();
   const reducedMotion = useReducedMotion();
@@ -145,6 +147,8 @@ export const Toast: React.FC<ToastProps> = ({
         animatedStyle,
         style,
       ]}
+      accessibilityLabel={accessibilityLabel ?? message}
+      accessibilityLiveRegion="polite"
     >
       <Box flexDirection="row" alignItems="center">
         <View style={{ marginRight: 8 }}>

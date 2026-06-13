@@ -28,6 +28,7 @@ export const StreakRiskStatusSchema = z.object({
   isCritical: z.boolean(),
   notificationsSent: z.array(z.string()),
   lastUpdated: z.number().default(() => Date.now()),
+  nextDeadline: z.number().nullable().optional(),
 });
 
 export const StreakRiskCheckInputSchema = z.object({

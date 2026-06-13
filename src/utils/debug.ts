@@ -1,14 +1,5 @@
-/**
- * Debug Utility
- *
- * Production-grade logging with:
- * - Namespaced debuggers
- * - Log level filtering
- * - Performance tracking
- * - Error reporting integration
- */
-
 import { IS_DEVELOPMENT } from '../constants/app';
+import { captureException, captureMessage } from '../config/sentry';
 
 // Log levels
 export enum LogLevel {
@@ -69,11 +60,10 @@ function reportToErrorTracking(
 ): void {
   if (!IS_DEVELOPMENT && level >= LogLevel.ERROR) {
     try {
-      const Sentry = require('@sentry/react-native');
       if (error) {
-        Sentry.captureException(error);
+        captureException(error);
       } else {
-        Sentry.captureMessage(message, 'error');
+        captureMessage(message, 'error');
       }
     } catch {
       // Sentry not available — fail silently

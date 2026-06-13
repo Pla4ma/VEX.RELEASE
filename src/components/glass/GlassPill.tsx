@@ -20,6 +20,8 @@ interface GlassPillProps {
   rightIcon?: ReactNode;
   size?: 'sm' | 'md' | 'lg';
   testID?: string;
+  accessibilityLabel?: string;
+  accessibilityHint?: string;
 }
 
 const SIZE_DIM: Record<'sm' | 'md' | 'lg', { height: number; padH: number; fontSize: number; }> = {
@@ -41,14 +43,14 @@ const TEXT_COLOR_FOR: Record<GlassPillVariant, string> = {
   neutral: vexLightGlass.text.primary,
   mint: vexLightGlass.mint[700],
   success: vexLightGlass.mint[700],
-  warning: '#8A5A12',
-  fire: '#A04A12',
-  premium: '#0C765F',
+  warning: vexLightGlass.semantic.warning,
+  fire: vexLightGlass.semantic.fire,
+  premium: vexLightGlass.semantic.premium,
 };
 
-const SELECTED_TEXT_COLOR = '#FFFFFF';
+const SELECTED_TEXT_COLOR = vexLightGlass.text.inverse;
 
-export function GlassPill({
+export const GlassPill: React.FC<GlassPillProps> = React.memo(function GlassPill({
   label,
   selected = false,
   variant = 'neutral',
@@ -56,6 +58,8 @@ export function GlassPill({
   rightIcon,
   size = 'sm',
   testID,
+  accessibilityLabel,
+  accessibilityHint,
 }: GlassPillProps): JSX.Element {
   const dim = SIZE_DIM[size];
   const tone = TONE_FOR[variant];
@@ -68,6 +72,9 @@ export function GlassPill({
       style={{ alignSelf: 'flex-start' }}
       testID={testID}
       tone={tone}
+      accessibilityLabel={accessibilityLabel ?? label}
+      accessibilityRole="button"
+      accessibilityHint={accessibilityHint}
     >
       <View
         style={{
@@ -93,6 +100,6 @@ export function GlassPill({
       </View>
     </GlassPillSurface>
   );
-}
+});
 
 export default GlassPill;

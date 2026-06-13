@@ -33,7 +33,7 @@ describe('feature-flag-threshold', () => {
 
   it('returns base threshold when feature has no config', () => {
     const result = resolveEffectiveThreshold(
-      'unknown_feature' as any,
+      'unknown_feature' as FeatureKey,
       10,
       { primary: 'game_like', secondary: [] },
       baseProfiles,

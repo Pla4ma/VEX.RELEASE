@@ -2,6 +2,10 @@ import { eventBus } from '../../events';
 import { createDebugger } from '../../utils/debug';
 import * as repository from './repository';
 import type { Streak, RiskLevel } from './schemas';
+import type { StreakRiskStatus } from './schemas-risk-repair';
+
+export type { StreakRiskStatus };
+
 const debug = createDebugger('streak-risk-monitor');
 const NOTIFICATION_THRESHOLDS = [
   {
@@ -29,18 +33,6 @@ const NOTIFICATION_THRESHOLDS = [
       'A 10-minute Recovery session keeps the chain alive. You are stronger than the gap.',
   },
 ];
-export interface StreakRiskStatus {
-  userId: string;
-  currentDays: number;
-  hoursRemaining: number;
-  minutesRemaining: number;
-  riskLevel: RiskLevel;
-  flameHealthPercent: number;
-  isAtRisk: boolean;
-  isCritical: boolean;
-  notificationsSent: string[];
-  lastUpdated?: number;
-}
 export function calculateStreakRisk(
   streak: Streak,
   now: number = Date.now(),
@@ -56,6 +48,8 @@ export function calculateStreakRisk(
       isAtRisk: false,
       isCritical: false,
       notificationsSent: [],
+      lastUpdated: Date.now(),
+      nextDeadline: undefined,
     };
   }
   const deadline = streak.lastQualifyingSessionAt + 24 * 60 * 60 * 1000;
@@ -96,6 +90,8 @@ export function calculateStreakRisk(
     isAtRisk,
     isCritical,
     notificationsSent: [],
+    lastUpdated: Date.now(),
+    nextDeadline: deadline,
   };
 }
 export async function checkAndSendRiskNotifications(

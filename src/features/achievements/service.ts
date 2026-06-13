@@ -8,6 +8,9 @@ import * as repository from './repository';
 import { eventBus } from '../../events';
 import { capture } from '../../shared/analytics/analytics-service';
 import { ProgressionEvents } from '../../shared/analytics/analytics-events';
+import { initializeAchievementTracking } from './achievement-tracking-init';
+
+export { initializeAchievementTracking };
 
 export async function updateAchievementProgress(
   userId: string,
@@ -92,7 +95,7 @@ function calculateProgress(
   }
 }
 
-async function handleAchievementUnlock(
+export async function handleAchievementUnlock(
   userId: string,
   achievement: Achievement,
 ): Promise<void> {
@@ -151,70 +154,4 @@ async function grantAchievementRewards(
       cosmeticId: reward.cosmetic,
     });
   }
-}
-
-async function updateBossDefeatUnique(
-  userId: string,
-  bossId: string,
-): Promise<void> {
-  const uniqueAchievement = ALL_ACHIEVEMENTS.find(
-    (a) => a.unlockCondition.type === 'BOSS_DEFEAT_UNIQUE',
-  );
-  if (!uniqueAchievement) {return;}
-  const existing = await repository.getUserAchievement(userId, uniqueAchievement.id);
-  if (existing?.isUnlocked) {return;}
-  const history = existing?.progressHistory ?? [];
-  const alreadyDefeated = history.some(
-    (h) => h.source === `boss:${bossId}`,
-  );
-  if (alreadyDefeated) {return;}
-  const newProgress = history.length + 1;
-  const shouldUnlock = newProgress >= uniqueAchievement.progressMax;
-  await repository.updateAchievementProgress(userId, uniqueAchievement.id, {
-    progress: newProgress,
-    isUnlocked: shouldUnlock,
-    unlockedAt: shouldUnlock ? Date.now() : undefined,
-  });
-  if (shouldUnlock && !existing?.isUnlocked) {
-    await handleAchievementUnlock(userId, uniqueAchievement);
-  }
-}
-
-export function initializeAchievementTracking(): () => void {
-  const unsubs: Array<() => void> = [];
-  unsubs.push(eventBus.subscribe('session:completed', async (event) => {
-    const { userId, duration } = event;
-    await updateAchievementProgress(userId, 'SESSION_COMPLETE', 1);
-    await updateAchievementProgress(userId, 'FOCUS_MINUTES', duration);
-  }));
-  unsubs.push(eventBus.subscribe('streak:updated', async (event) => {
-    const { userId, state } = event;
-    await updateAchievementProgress(userId, 'STREAK_DAYS', state.currentStreak);
-  }));
-  unsubs.push(eventBus.subscribe('boss:defeated', async (event) => {
-    const { userId, bossId } = event;
-    await updateAchievementProgress(userId, 'BOSS_DEFEAT', 1);
-    if (bossId) {
-      await updateBossDefeatUnique(userId, bossId);
-    }
-  }));
-  unsubs.push(eventBus.subscribe('duel:completed', async (event) => {
-    const { winnerId, challengerId: _challengerId, challengedId: _challengedId } = event as {
-      winnerId?: string;
-      challengerId?: string;
-      challengedId?: string;
-    };
-    if (winnerId) {
-      await updateAchievementProgress(winnerId, 'DUEL_WIN', 1);
-    }
-  }));
-  unsubs.push(eventBus.subscribe('squad:joined', async (event) => {
-    const { userId } = event;
-    await updateAchievementProgress(userId, 'SQUAD_JOIN', 1);
-  }));
-  unsubs.push(eventBus.subscribe('user:recruited', async (event) => {
-    const { referrerId } = event;
-    await updateAchievementProgress(referrerId, 'FRIEND_RECRUIT', 1);
-  }));
-  return () => { unsubs.forEach((unsub) => unsub()); };
 }
