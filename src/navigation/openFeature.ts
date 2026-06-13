@@ -72,7 +72,7 @@ export function openFeature<T extends keyof ExtendedRootStackParams>(
   }
 
   try {
-    (navigation.navigate as unknown as (screen: string, params?: object) => void)(targetRoute as string, targetParams as object);
+    navigation.navigate(targetRoute as string, targetParams as object);
     return { ...base, success: true, navigated: true, fallbackTaken: false };
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);

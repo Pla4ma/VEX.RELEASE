@@ -1,5 +1,5 @@
 import { buildError, mapOfferingToDisplayInfo } from '../revenuecat-helpers';
-import type { RevenueCatError, PurchasesOfferingDisplayInfo } from '../revenuecat-types';
+import type { RevenueCatError, PurchasesOfferingDisplayInfo, PurchasesPackageDisplayInfo } from '../revenuecat-types';
 
 jest.mock('react-native-purchases', () => ({}));
 
@@ -26,8 +26,8 @@ describe('revenuecat-helpers', () => {
   });
 
   describe('mapOfferingToDisplayInfo', () => {
-    const createMockProduct = (overrides: Record<string, any> = {}) => ({
-      identifier: overrides.productId ?? 'prod-monthly',
+    const createMockProduct = (overrides: Partial<PurchasesPackageDisplayInfo['product']> = {}) => ({
+      identifier: overrides.product?.identifier ?? 'prod-monthly',
       description: 'Monthly subscription',
       title: 'Monthly',
       price: 9.99,
@@ -38,17 +38,17 @@ describe('revenuecat-helpers', () => {
       ...overrides,
     });
 
-    const createMockPackage = (pkgType: string, productOverrides: Record<string, any> = {}) => ({
+    const createMockPackage = (pkgType: string, productOverrides: Partial<PurchasesPackageDisplayInfo['product']> = {}) => ({
       identifier: `pkg-${pkgType.toLowerCase()}`,
       packageType: pkgType,
       product: createMockProduct(productOverrides),
     });
 
-    const createMockOffering = (overrides: Record<string, any> = {}) => ({
+    const createMockOffering = (overrides: Partial<PurchasesOfferingDisplayInfo> = {}) => ({
       identifier: 'offering-1',
       serverDescription: 'Main offering',
       metadata: { version: '1' },
-      availablePackages: [] as any[],
+      availablePackages: [],
       lifetime: null,
       annual: null,
       sixMonth: null,
@@ -61,7 +61,7 @@ describe('revenuecat-helpers', () => {
 
     it('maps empty offering', () => {
       const offering = createMockOffering();
-      const result = mapOfferingToDisplayInfo(offering as any);
+      const result = mapOfferingToDisplayInfo(offering);
       expect(result.identifier).toBe('offering-1');
       expect(result.serverDescription).toBe('Main offering');
       expect(result.metadata).toEqual({ version: '1' });
@@ -77,7 +77,7 @@ describe('revenuecat-helpers', () => {
           createMockPackage('ANNUAL', { productId: 'prod-annual', price: 79.99, priceString: '$79.99' }),
         ],
       });
-      const result = mapOfferingToDisplayInfo(offering as any);
+      const result = mapOfferingToDisplayInfo(offering);
       expect(result.packages).toHaveLength(2);
       expect(result.packages[0].identifier).toBe('pkg-monthly');
       expect(result.packages[0].product.price).toBe(9.99);
@@ -89,7 +89,7 @@ describe('revenuecat-helpers', () => {
         annual: createMockPackage('ANNUAL', { productId: 'prod-annual' }),
         lifetime: createMockPackage('LIFETIME', { productId: 'prod-lifetime', price: 299.99 }),
       });
-      const result = mapOfferingToDisplayInfo(offering as any);
+      const result = mapOfferingToDisplayInfo(offering);
       expect(result.annual).not.toBeNull();
       expect(result.annual!.product.identifier).toBe('prod-annual');
       expect(result.lifetime).not.toBeNull();
@@ -111,7 +111,7 @@ describe('revenuecat-helpers', () => {
           }),
         ],
       });
-      const result = mapOfferingToDisplayInfo(offering as any);
+      const result = mapOfferingToDisplayInfo(offering);
       expect(result.packages[0].product.introPrice).not.toBeNull();
       expect(result.packages[0].product.introPrice!.price).toBe(0.99);
       expect(result.packages[0].product.introPrice!.cycles).toBe(1);
@@ -133,7 +133,7 @@ describe('revenuecat-helpers', () => {
           }),
         ],
       });
-      const result = mapOfferingToDisplayInfo(offering as any);
+      const result = mapOfferingToDisplayInfo(offering);
       expect(result.packages[0].product.discounts).toHaveLength(1);
       expect(result.packages[0].product.discounts![0].identifier).toBe('disc-1');
     });
@@ -142,10 +142,10 @@ describe('revenuecat-helpers', () => {
       const offering = createMockOffering({
         availablePackages: [
           createMockPackage('MONTHLY'),
-          null as any,
+          null as PurchasesPackageDisplayInfo | null,
         ],
       });
-      const result = mapOfferingToDisplayInfo(offering as any);
+      const result = mapOfferingToDisplayInfo(offering);
       expect(result.packages).toHaveLength(1);
     });
   });

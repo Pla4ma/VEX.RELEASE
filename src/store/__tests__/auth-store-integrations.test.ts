@@ -3,6 +3,7 @@ import {
   deinitializeServicesAfterLogout,
   resetServiceSingletonsForLogout,
 } from '../authStoreIntegrations';
+import type { User } from '../types/models';
 
 jest.mock('../../shared/monetization/revenuecat-service', () => ({
   revenueCatService: {
@@ -23,8 +24,59 @@ jest.mock('../../utils/debug', () => ({
   }),
 }));
 
+const makeMockUser = (overrides: Partial<User> = {}): User => ({
+  id: 'user-123',
+  createdAt: '2025-01-01T00:00:00Z',
+  updatedAt: '2025-01-01T00:00:00Z',
+  username: 'tester',
+  email: 'test@test.com',
+  firstName: 'Test',
+  lastName: 'User',
+  displayName: 'Test User',
+  squadId: null,
+  avatar: undefined,
+  bio: undefined,
+  location: undefined,
+  website: undefined,
+  verified: false,
+  role: 'user',
+  status: 'active',
+  preferences: {
+    theme: 'system',
+    language: 'en',
+    notifications: {
+      push: true,
+      email: true,
+      sms: false,
+      inApp: true,
+      digestFrequency: 'daily',
+      quietHours: { enabled: false, start: '22:00', end: '08:00', timezone: 'UTC' },
+    },
+    privacy: {
+      profileVisibility: 'public',
+      activityStatus: true,
+      readReceipts: true,
+      allowTagging: true,
+      allowMentions: true,
+      dataSharing: false,
+    },
+    accessibility: {
+      reduceMotion: false,
+      highContrast: false,
+      largeText: false,
+      screenReaderOptimized: false,
+    },
+  },
+  metadata: {
+    loginCount: 1,
+    deviceHistory: [],
+  },
+  onboardingCompletedAt: null,
+  ...overrides,
+});
+
 describe('authStoreIntegrations', () => {
-  const mockUser = { id: 'user-123', email: 'test@test.com', username: 'tester' } as any;
+  const mockUser = makeMockUser();
 
   beforeEach(() => {
     resetServiceSingletonsForLogout();

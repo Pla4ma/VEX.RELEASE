@@ -85,38 +85,39 @@ export const useOnboardingStore = create(
         removeItem: (name: string): void =>
           mmkvStorage.removeItemSync(name),
       })),
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      partialize: (state) =>
-        ({
-          ...state,
-          // Actions are no-ops after rehydration; real methods come from createStoreActions
-          startOnboarding: () => {},
-          setGoal: () => {},
-          setFocusDuration: () => {},
-          setDisplayName: () => {},
-          setPersona: () => {},
-          setElement: () => {},
-          setExplicitMotivationStyle: () => {},
-          recomputeMotivationProfile: () => {},
-          nextStep: () => {},
-          previousStep: () => {},
-          skipOnboarding: () => {},
-          completeOnboarding: () => {},
-          resetOnboarding: () => {},
-          canSkipCurrentStep: () => false,
-          canCompleteForUser: () => false,
-          canPreviewHome: () => false,
-          markProfileStepsComplete: () => {},
-          markFirstSessionStarted: () => {},
-          markFirstSessionCompleted: () => {},
-          markHomePreviewEntered: () => {},
-          setCompletionFromBackend: () => {},
-          markMascotGuideCompleted: () => {},
-          dismissMascotGuide: () => {},
-          setChosenLane: () => {},
-          getDraft: () => undefined,
-          saveDraft: () => {},
-        }) as any,
+      // partialize: persist only state, not actions
+      partialize: (state: OnboardingStore): OnboardingStore => {
+        const {
+          startOnboarding,
+          setGoal,
+          setFocusDuration,
+          setDisplayName,
+          setPersona,
+          setElement,
+          setExplicitMotivationStyle,
+          recomputeMotivationProfile,
+          nextStep,
+          previousStep,
+          skipOnboarding,
+          completeOnboarding,
+          resetOnboarding,
+          canSkipCurrentStep,
+          canCompleteForUser,
+          canPreviewHome,
+          markProfileStepsComplete,
+          markFirstSessionStarted,
+          markFirstSessionCompleted,
+          markHomePreviewEntered,
+          setCompletionFromBackend,
+          markMascotGuideCompleted,
+          dismissMascotGuide,
+          setChosenLane,
+          getDraft,
+          saveDraft,
+          ...stateToPersist
+        } = state;
+        return stateToPersist as OnboardingStore;
+      },
       onRehydrateStorage: () =>
         createRehydrationHandler((partial) =>
           useOnboardingStore.setState(partial),

@@ -78,7 +78,7 @@ export const MicroRewardBanner: React.FC<MicroRewardBannerProps> = ({
       displayLabel={displayLabel}
       amountText={amountText}
       description={description}
-      spacing={theme.spacing as unknown as Record<string, number>}
+      spacing={theme.spacing}
       textColors={{ primary: theme.colors.text.primary, secondary: theme.colors.text.secondary }}
     />
   );

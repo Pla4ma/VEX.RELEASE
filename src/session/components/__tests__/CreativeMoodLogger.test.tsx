@@ -2,6 +2,65 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
 import { CreativeMoodLogger, MOODS } from '../CreativeMoodLogger';
 
+// Mock useTheme to return a complete theme
+jest.mock('../../../theme/ThemeContext', () => {
+  const actualThemeContext = jest.requireActual('../../../theme/ThemeContext');
+  return {
+    ...actualThemeContext,
+    useTheme: () => ({
+      theme: {
+        name: 'vex-test',
+        mode: 'light',
+        colors: {
+          primary: {
+            50: '#ECFFFB',
+            100: '#D6FAF2',
+            200: '#AEEFE4',
+            300: '#78DED1',
+            400: '#2FC5B5',
+            500: '#149A8D',
+            600: '#0B7A70',
+            700: '#075F57',
+            800: '#064B45',
+            900: '#063D39',
+            950: '#042522',
+          },
+          success: { 50: '#ECFDF5', 500: '#15803D', light: '#86EFAC', DEFAULT: '#15803D', dark: '#15803D' },
+          warning: { 50: '#FFFBEB', 500: '#92400E', light: '#FDE047', DEFAULT: '#92400E', dark: '#A16207' },
+          error: { 50: '#FEF2F2', 500: '#B91C1C', light: '#FCA5A5', DEFAULT: '#B91C1C', dark: '#B91C1C' },
+          info: { 50: '#EFF6FF', 500: '#1D4ED8', light: '#93C5FD', DEFAULT: '#1D4ED8', dark: '#1D4ED8' },
+          background: { primary: '#F6FFFC', secondary: 'rgba(255,255,255,0.82)', tertiary: '#E8F7F1', elevated: 'rgba(255,255,255,0.92)', overlay: 'rgba(7,31,28,0.32)' },
+          text: { primary: '#0A1F1A', secondary: '#314843', tertiary: '#687C77', muted: '#687C77', inverse: '#FFFFFF', disabled: '#9BAEA8', placeholder: '#687C77', link: '#0C765F' },
+          border: { light: 'rgba(94,193,179,0.20)', DEFAULT: 'rgba(75,176,161,0.34)', strong: 'rgba(12,118,95,0.46)', focus: '#12BFA0' },
+          surface: { card: 'rgba(255,255,255,0.72)', input: 'rgba(255,255,255,0.58)', button: 'rgba(232,247,241,0.92)', hover: 'rgba(218,243,235,0.95)', pressed: 'rgba(197,232,222,0.95)', selected: 'rgba(18,191,160,0.16)' },
+          accent: { purple: '#A855F7', blue: '#3B82F6', green: '#10B981', orange: '#F97316', pink: '#EC4899', teal: '#14B8A6' },
+          semantic: {},
+        },
+        typography: {},
+        fonts: {},
+        fontWeights: {},
+        spacing: {
+          2: 8,
+          3: 12,
+          4: 16,
+          24: 96,
+        },
+        borderRadius: { xl: 16, lg: 8 },
+        shadows: {},
+        zIndex: {},
+        breakpoints: {},
+        animation: {},
+        opacity: {},
+      },
+      mode: 'light',
+      setMode: () => undefined,
+      toggleMode: () => undefined,
+      isDark: false,
+      isSystem: false,
+    }),
+  };
+});
+
 describe('CreativeMoodLogger', () => {
   const mockOnMoodSelected = jest.fn();
   const mockOnSkip = jest.fn();

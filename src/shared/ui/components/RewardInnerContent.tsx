@@ -1,6 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
+import type { SpacingScale } from '../../../theme';
 
 interface RewardInnerContentProps {
   displayIcon: string;
@@ -8,7 +9,7 @@ interface RewardInnerContentProps {
   displayLabel: string;
   amountText: string | null;
   description?: string;
-  spacing: Record<string, number>;
+  spacing: SpacingScale;
   textColors: { primary: string; secondary: string };
 }
 

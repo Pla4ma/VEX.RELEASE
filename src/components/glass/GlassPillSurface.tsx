@@ -5,6 +5,8 @@ import { GlassBlurLayer } from './GlassBlurLayer';
 
 export type GlassPillTone = 'neutral' | 'mint' | 'fire' | 'premium' | 'warning';
 
+type AccessibilityRole = 'button' | 'link' | 'header' | 'image' | 'text' | 'none' | undefined;
+
 interface GlassPillSurfaceProps {
   children?: ReactNode;
   tone: GlassPillTone;
@@ -13,7 +15,7 @@ interface GlassPillSurfaceProps {
   style?: StyleProp<ViewStyle>;
   testID?: string;
   accessibilityLabel?: string;
-  accessibilityRole?: string;
+  accessibilityRole?: AccessibilityRole;
   accessibilityHint?: string;
 }
 
@@ -115,7 +117,7 @@ export function GlassPillSurface({
       <View
       testID={testID}
       accessibilityLabel={accessibilityLabel}
-      accessibilityRole={accessibilityRole as any}
+      accessibilityRole={accessibilityRole}
       accessibilityHint={accessibilityHint}
       style={[
         {

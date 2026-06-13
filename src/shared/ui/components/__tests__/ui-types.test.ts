@@ -1,6 +1,7 @@
 import { sizeConfig } from '../TabBar.types';
 import { STATUS_CONFIG, getStatusColor, type AsyncStatus } from '../StatusFeedback.types';
 import { variantStyles, sizeStyles, getThemeVariantStyles, type CardVariant, type CardSize } from '../InteractiveCardTypes';
+import type { Theme } from '../../../theme';
 
 describe('TabBar.types', () => {
   describe('sizeConfig', () => {
@@ -37,15 +38,27 @@ describe('StatusFeedback.types', () => {
   });
 
   describe('getStatusColor', () => {
-    const mockTheme = {
+    const mockTheme: Theme = {
+      name: 'test',
+      mode: 'light',
       colors: {
         primary: { 500: '#FF0000' },
         warning: { dark: '#FFAA00' },
         success: { dark: '#00FF00' },
         error: { dark: '#FF0000' },
         text: { disabled: '#999999' },
-      },
-    } as any;
+      } as Theme['colors'],
+      typography: {} as Theme['typography'],
+      fonts: {} as Theme['fonts'],
+      fontWeights: {} as Theme['fontWeights'],
+      spacing: {} as Theme['spacing'],
+      borderRadius: {} as Theme['borderRadius'],
+      shadows: {} as Theme['shadows'],
+      zIndex: {} as Theme['zIndex'],
+      breakpoints: {} as Theme['breakpoints'],
+      animation: {} as Theme['animation'],
+      opacity: {} as Theme['opacity'],
+    };
 
     it('returns correct color for each status', () => {
       expect(getStatusColor('loading', mockTheme)).toBe('#FF0000');
@@ -85,31 +98,43 @@ describe('InteractiveCardTypes', () => {
   });
 
   describe('getThemeVariantStyles', () => {
-    const mockTheme = {
+    const mockTheme: Theme = {
+      name: 'test',
+      mode: 'light',
       colors: {
         background: { secondary: '#F5F5F5' },
         text: { primary: '#000000' },
         border: { DEFAULT: '#DDDDDD' },
-      },
-    } as any;
+      } as Theme['colors'],
+      typography: {} as Theme['typography'],
+      fonts: {} as Theme['fonts'],
+      fontWeights: {} as Theme['fontWeights'],
+      spacing: {} as Theme['spacing'],
+      borderRadius: {} as Theme['borderRadius'],
+      shadows: {} as Theme['shadows'],
+      zIndex: {} as Theme['zIndex'],
+      breakpoints: {} as Theme['breakpoints'],
+      animation: {} as Theme['animation'],
+      opacity: {} as Theme['opacity'],
+    };
 
     it('returns styles for all variants', () => {
       const styles = getThemeVariantStyles(mockTheme);
       const variants: CardVariant[] = ['default', 'elevated', 'outlined', 'ghost'];
       for (const variant of variants) {
-        expect(variants[variant]).toBeDefined();
+        expect(styles[variant]).toBeDefined();
       }
     });
 
     it('outlined variant uses theme border color', () => {
       const styles = getThemeVariantStyles(mockTheme);
-      expect((styles.outlined as any).borderColor).toBe('#DDDDDD');
+      expect(styles.outlined.borderColor).toBe('#DDDDDD');
     });
 
     it('elevated variant includes shadow', () => {
       const styles = getThemeVariantStyles(mockTheme);
-      expect((styles.elevated as any).shadowColor).toBe('#000000');
-      expect((styles.elevated as any).elevation).toBe(4);
+      expect(styles.elevated.shadowColor).toBe('#000000');
+      expect(styles.elevated.elevation).toBe(4);
     });
   });
 });

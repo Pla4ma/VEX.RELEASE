@@ -30,7 +30,7 @@ export function safeNavigate<T extends keyof ExtendedRootStackParams>(
     return false;
   }
   try {
-    (navigation as unknown as { navigate: (screen: string, params?: unknown) => void }).navigate(
+    navigation.navigate(
       screen as string,
       params,
     );

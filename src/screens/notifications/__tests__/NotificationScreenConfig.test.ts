@@ -18,7 +18,14 @@ describe('NotificationScreenConfig', () => {
   describe('NOTIFICATION_CONFIG', () => {
     it('has config for all notification types', () => {
       const types: NotificationType[] = [
-        'ACHIEVEMENT', 'STREAK_RISK', 'BOSS', 'SQUAD', 'RIVAL', 'COACH', 'REWARD', 'LEVEL_UP',
+        'ACHIEVEMENT',
+        'STREAK_RISK',
+        'BOSS',
+        'SQUAD',
+        'RIVAL',
+        'COACH',
+        'REWARD',
+        'LEVEL_UP',
       ];
       for (const type of types) {
         expect(NOTIFICATION_CONFIG[type]).toBeDefined();
@@ -32,7 +39,14 @@ describe('NotificationScreenConfig', () => {
   describe('NOTIFICATION_TYPE_TO_SAFE_ACTION', () => {
     it('maps all types to actions', () => {
       const types: NotificationType[] = [
-        'ACHIEVEMENT', 'STREAK_RISK', 'BOSS', 'SQUAD', 'RIVAL', 'COACH', 'REWARD', 'LEVEL_UP',
+        'ACHIEVEMENT',
+        'STREAK_RISK',
+        'BOSS',
+        'SQUAD',
+        'RIVAL',
+        'COACH',
+        'REWARD',
+        'LEVEL_UP',
       ];
       for (const type of types) {
         expect(NOTIFICATION_TYPE_TO_SAFE_ACTION[type]).toBeDefined();
@@ -75,7 +89,7 @@ describe('NotificationScreenConfig', () => {
       timestamp,
       read: false,
       actionParams: {},
-    } as any);
+    });
 
     it('groups notifications by time period', () => {
       const notifications = [
@@ -108,24 +122,32 @@ describe('NotificationScreenConfig', () => {
 
   describe('mapToNotificationAction', () => {
     it('maps notification to action with correct type', () => {
-      const notification = {
+      const notification: Notification = {
         id: 'n-1',
         type: 'ACHIEVEMENT',
         actionParams: { achievementId: 'ach-1' },
-      } as any;
+      };
       const result = mapToNotificationAction(notification);
       expect(result.type).toBe('view_progress');
       expect(result.payload).toEqual({ achievementId: 'ach-1' });
     });
 
     it('maps RIVAL to join_duel', () => {
-      const notification = { id: 'n-1', type: 'RIVAL', actionParams: {} } as any;
+      const notification: Notification = {
+        id: 'n-1',
+        type: 'RIVAL',
+        actionParams: {},
+      };
       const result = mapToNotificationAction(notification);
       expect(result.type).toBe('join_duel');
     });
 
     it('defaults unknown types to view_progress', () => {
-      const notification = { id: 'n-1', type: 'UNKNOWN', actionParams: {} } as any;
+      const notification: Notification = {
+        id: 'n-1',
+        type: 'UNKNOWN' as NotificationType,
+        actionParams: {},
+      };
       const result = mapToNotificationAction(notification);
       expect(result.type).toBe('view_progress');
     });

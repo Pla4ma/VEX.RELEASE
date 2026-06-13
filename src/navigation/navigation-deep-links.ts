@@ -102,7 +102,7 @@ export function navigateWithValidation<T extends keyof ExtendedRootStackParams>(
     );
     if (validation.fallbackRoute) {
       try {
-        (navigation as unknown as { navigate: (screen: string, params?: unknown) => void }).navigate(
+        navigation.navigate(
           validation.fallbackRoute as string,
           undefined,
         );
@@ -117,7 +117,7 @@ export function navigateWithValidation<T extends keyof ExtendedRootStackParams>(
     return { success: false, error: validation.error };
   }
   try {
-    (navigation as unknown as { navigate: (screen: string, params?: unknown) => void }).navigate(
+    navigation.navigate(
       route as string,
       validation.sanitizedParams,
     );
