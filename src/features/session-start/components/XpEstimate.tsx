@@ -3,6 +3,7 @@ import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
 import { calculateEstimatedXp } from './duration-picker-types';
+import { SessionGlyph } from '../../../shared/ui/liquid-glass';
 
 export function XpEstimate({
   minutes,
@@ -29,7 +30,7 @@ export function XpEstimate({
   return (
     <Box alignItems="center" gap="xs" mt="md">
       <Box flexDirection="row" alignItems="center" gap="sm">
-        <Text fontSize={20}>✨</Text>
+        <SessionGlyph name="focused" size={32} />
         <Text variant="h4" color="text.primary" fontWeight="700">
           ~{estimatedXp} XP
         </Text>
@@ -57,7 +58,7 @@ export function XpEstimate({
               color={theme.colors.accent.orange}
               fontWeight="700"
             >
-              🔥 {streakMultiplier.toFixed(1)}× streak
+              {streakMultiplier.toFixed(1)}× streak
             </Text>
           </Box>
         )}

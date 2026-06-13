@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScrollView, View } from 'react-native';
+import { ScrollView } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { StaggeredEnter } from '../../shared/ui/components/EnterAnimation';
@@ -15,6 +15,7 @@ import {
   PaywallUnavailableState,
 } from './PaywallStates';
 import { paywallStyles as styles } from './paywall-styles';
+import { LiquidGlassScreen } from '../../shared/ui/liquid-glass';
 
 export const PaywallScreen = withScreenErrorBoundary(
   function _PaywallScreen(): JSX.Element {
@@ -39,12 +40,7 @@ export const PaywallScreen = withScreenErrorBoundary(
     } = usePaywallScreen();
 
     return (
-      <View
-        style={[
-          styles.screen,
-          { backgroundColor: theme.colors.background.primary },
-        ]}
-      >
+      <LiquidGlassScreen style={styles.screen}>
         <ScrollView
           contentContainerStyle={{
             paddingTop: insets.top + 20,
@@ -107,7 +103,7 @@ export const PaywallScreen = withScreenErrorBoundary(
             />
           </StaggeredEnter>
         </ScrollView>
-      </View>
+      </LiquidGlassScreen>
     );
   },
   'Paywall',

@@ -2,6 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import { LiquidProgressBar } from '../../../components/glass/LiquidProgressBar';
 import { Text } from '../../../components/primitives/Text';
+import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 
 interface ProfileXpBarProps {
   level: number;

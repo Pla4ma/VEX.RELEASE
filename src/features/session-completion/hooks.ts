@@ -7,6 +7,7 @@ import type { SessionSummary } from '../../session/types';
 import type { MasteryState } from '../mastery/types';
 import { useAuthStore } from '../../store';
 import { useTheme } from '../../theme';
+import { detectNewlyUnlockedFeatures } from './completion-personalization-step';
 
 type SessionNavigation = NativeStackNavigationProp<SessionStackParams>;
 type Mood = 'GREAT' | 'GOOD' | 'NEUTRAL' | 'BAD' | 'TERRIBLE';
@@ -24,11 +25,17 @@ type LevelMetric = {
   value: string;
 } | null;
 
-export function useSessionCompletionConsequences(_input?: {
+export function useSessionCompletionConsequences(input?: {
   summary: SessionSummary;
   userId: string | null;
-}): undefined {
-  return undefined;
+}): { newlyUnlockedFeatures: string[] } {
+  return useMemo(() => {
+    if (!input?.userId || !input?.summary) {
+      return { newlyUnlockedFeatures: [] };
+    }
+    const features = detectNewlyUnlockedFeatures(input.userId, input.summary);
+    return { newlyUnlockedFeatures: features };
+  }, [input?.userId, input?.summary]);
 }
 
 export function useRecoveredSessionCompletion(_sessionId?: string | null): {

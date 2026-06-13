@@ -14,6 +14,7 @@ import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
 import { buttonTap } from '../../../utils/haptics';
 import type { SessionSuggestion } from './session-suggestions-types';
+import { SessionGlyph } from '../../../shared/ui/liquid-glass';
 
 /**
  * Individual suggestion card
@@ -64,7 +65,6 @@ export function SuggestionCard({
           borderWidth={1}
           borderColor={theme.colors.border.DEFAULT}
         >
-          {/* Icon */}
           <Box
             width={44}
             height={44}
@@ -73,10 +73,9 @@ export function SuggestionCard({
             justifyContent="center"
             alignItems="center"
           >
-            <Text fontSize={20}>{suggestion.icon}</Text>
+            <SessionGlyph name="focused" size={36} />
           </Box>
 
-          {/* Content */}
           <Box flex={1} gap="xs">
             <Text variant="body" color="text.primary" fontWeight="600">
               {suggestion.title}
@@ -102,16 +101,15 @@ export function SuggestionCard({
                 bg={theme.colors.background.tertiary}
               >
                 <Text variant="caption" color="text.secondary" fontSize={10}>
-                  {suggestion.mode === 'solo' ? '🧘 Solo' : '🛡️ Squad'}
+                  {suggestion.mode === 'solo' ? 'Solo' : 'Squad'}
                 </Text>
               </Box>
               {suggestion.confidence > 0.8 && (
-                <Text fontSize={10}>⭐ Recommended</Text>
+                <Text fontSize={10}>Recommended</Text>
               )}
             </Box>
           </Box>
 
-          {/* Arrow */}
           <Text fontSize={20} color={theme.colors.text.tertiary}>
             ›
           </Text>

@@ -21,6 +21,7 @@ import { Text } from '../../../components/primitives/Text';
 import { useHaptics } from '../../../utils/haptics';
 import { eventBus } from '../../../events';
 import * as Sentry from '@sentry/react-native';
+import { SessionGlyph } from '../../../shared/ui/liquid-glass';
 import {
   DIFFICULTY_OPTIONS,
   type DifficultyOption,
@@ -66,8 +67,7 @@ export function DifficultySelector({
   const containerStyle = {
     flexDirection: 'row' as const,
     justifyContent: 'space-between' as const,
-    gap: theme.spacing[2],
-    paddingHorizontal: theme.spacing[4],
+    gap: theme.spacing[3],
   };
 
   return (
@@ -115,10 +115,12 @@ function DifficultyCard({
     ],
   }));
 
-  const borderColor = isSelected ? option.color : theme.colors.border.light;
+  const borderColor = isSelected
+    ? option.color
+    : theme.colors.semantic.liquidGlassBorder;
   const backgroundColor = isSelected
-    ? `${option.color}10`
-    : theme.colors.background.secondary;
+    ? `${option.color}18`
+    : theme.colors.semantic.surfaceGlass;
 
   return (
     <Animated.View style={[{ flex: 1 }, scale]}>
@@ -128,26 +130,34 @@ function DifficultyCard({
         style={[
           {
             flex: 1,
+            minHeight: 178,
+            overflow: 'hidden',
             padding: theme.spacing[3],
-            borderRadius: theme.borderRadius.lg,
-            borderWidth: 2,
+            borderRadius: theme.borderRadius['2xl'],
+            borderWidth: isSelected ? 2 : 1,
             borderColor,
             backgroundColor,
             opacity: disabled ? 0.5 : 1,
+            shadowColor: theme.colors.semantic.shadow,
+            shadowOffset: { width: 0, height: 10 },
+            shadowOpacity: isSelected ? 0.2 : 0.08,
+            shadowRadius: isSelected ? 18 : 10,
           },
         ]}
         accessibilityLabel={`${option.name} difficulty: ${option.pauseLimit} pauses, ${option.xpMultiplier} XP. ${option.description}`}
         accessibilityRole="button"
         accessibilityState={{ selected: isSelected }}
       >
-        <Text style={{ fontSize: 24, marginBottom: theme.spacing[2] }}>
-          {option.icon}
-        </Text>
+        <SessionGlyph name={option.glyph} size={48} />
 
         <Text
           variant="body"
           color={theme.colors.text.primary}
-          style={{ marginBottom: theme.spacing[1], fontWeight: '700' }}
+          style={{
+            fontWeight: '800',
+            marginBottom: theme.spacing[1],
+            marginTop: theme.spacing[2],
+          }}
         >
           {option.name}
         </Text>
@@ -165,7 +175,11 @@ function DifficultyCard({
           </Text>
         </View>
 
-        <Text variant="caption" color={theme.colors.text.tertiary}>
+        <Text
+          variant="caption"
+          color={theme.colors.text.tertiary}
+          style={{ lineHeight: 17 }}
+        >
           {option.description}
         </Text>
       </Pressable>

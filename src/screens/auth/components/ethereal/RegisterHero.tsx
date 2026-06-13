@@ -13,21 +13,22 @@ export function RegisterHero({
   startDelayMs = 0,
 }: RegisterHeroProps): React.JSX.Element {
   return (
-    <View style={{ alignItems: 'center', gap: 22 }}>
+    <View style={{ alignItems: 'center', gap: 16 }}>
       <LoginHero startDelayMs={startDelayMs} />
-      <View style={{ alignItems: 'center', gap: 6 }}>
+      <View style={{ alignItems: 'center', gap: 4 }}>
         <Text
           color={etherealText.heading}
-          fontSize={40}
+          fontSize={34}
           fontWeight="800"
-          style={{ color: etherealText.heading, letterSpacing: -0.4 }}
+          style={{ color: etherealText.heading }}
+          textAlign="center"
         >
           Create account
         </Text>
         <Text
           color={etherealText.subtitle}
-          fontSize={18}
-          style={{ color: etherealText.subtitle, textAlign: 'center', lineHeight: 26 }}
+          fontSize={17}
+          style={{ color: etherealText.subtitle, textAlign: 'center', lineHeight: 24 }}
         >
           Two fields, then your first protected session.
         </Text>

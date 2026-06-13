@@ -3,9 +3,13 @@ import {
   NotificationCenterItemSchema,
   type NotificationCenterItem,
 } from '../schemas';
+import type { Database, Json } from '../../../types/supabase';
 import { RepositoryError, supabase } from './shared';
-
 const UnreadNotificationsCountSchema = z.number().int().nonnegative();
+
+function isBootstrapReadError(error: { code?: string; message?: string; status?: number }): boolean {
+  return error.status === 401 || error.status === 406 || /permission denied|row-level security/i.test(error.message ?? '');
+}
 
 export async function fetchUnreadNotificationsCount(
   userId: string,
@@ -16,55 +20,54 @@ export async function fetchUnreadNotificationsCount(
     .eq('user_id', userId)
     .eq('read', false);
   if (error) {
+    if (isBootstrapReadError(error)) {
+      return 0;
+    }
     throw new RepositoryError('fetchUnreadNotificationsCount', error);
   }
   return UnreadNotificationsCountSchema.parse(count ?? 0);
 }
 
-/** Shape of a Supabase notifications row. */
-interface NotificationRow {
-  id?: string | number;
-  type?: string;
-  notification_type?: string;
-  title?: string;
-  message?: string;
-  body?: string;
-  created_at?: string | number;
-  timestamp?: string | number;
-  read?: boolean;
-  is_read?: boolean;
-  avatar?: string;
-  action_text?: string;
-  action_route?: string;
-  action_params?: Record<string, unknown>;
-  [key: string]: unknown;
+type NotificationRow = Database['public']['Tables']['notifications']['Row'];
+
+function getObjectField(data: Json, key: string): Json | undefined {
+  if (data === null || Array.isArray(data) || typeof data !== 'object') {
+    return undefined;
+  }
+  return data[key];
+}
+
+function getStringField(data: Json, key: string): string | undefined {
+  const value = getObjectField(data, key);
+  return typeof value === 'string' ? value : undefined;
+}
+
+function getObjectParamField(
+  data: Json,
+  key: string,
+): Record<string, unknown> | undefined {
+  const value = getObjectField(data, key);
+  return value !== null && !Array.isArray(value) && typeof value === 'object'
+    ? value
+    : undefined;
 }
 
 function mapNotificationRow(
   row: NotificationRow,
 ): NotificationCenterItem {
-  const rawType = String(row.type || row.notification_type || '').toUpperCase();
+  const rawType = String(row.type || '').toUpperCase();
   const parsed = NotificationCenterItemSchema.shape.type.safeParse(rawType);
   return NotificationCenterItemSchema.parse({
     id: String(row.id),
     type: parsed.success ? parsed.data : 'COACH',
     title: String(row.title || ''),
-    message: String(row.message || row.body || ''),
-    timestamp: typeof row.created_at === 'string'
-      ? Date.parse(row.created_at)
-      : typeof row.timestamp === 'string'
-        ? Date.parse(row.timestamp)
-        : Number(row.created_at || row.timestamp || Date.now()),
-    read: Boolean(row.read || row.is_read || false),
-    avatar: typeof row.avatar === 'string' ? row.avatar : undefined,
-    actionText:
-      typeof row.action_text === 'string' ? row.action_text : undefined,
-    actionRoute:
-      typeof row.action_route === 'string' ? row.action_route : undefined,
-    actionParams:
-      typeof row.action_params === 'object' && row.action_params !== null
-        ? row.action_params
-        : undefined,
+    message: String(row.body || ''),
+    timestamp: Date.parse(row.created_at),
+    read: row.read,
+    avatar: getStringField(row.data, 'avatar'),
+    actionText: getStringField(row.data, 'actionText'),
+    actionRoute: getStringField(row.data, 'actionRoute'),
+    actionParams: getObjectParamField(row.data, 'actionParams'),
   });
 }
 
@@ -74,7 +77,7 @@ export async function fetchNotificationCenterItems(
 ): Promise<{ items: NotificationCenterItem[]; nextCursor: string | null }> {
   let query = supabase
     .from('notifications')
-    .select('id,type,notification_type,title,message,body,created_at,timestamp,read,is_read,avatar,action_text,action_route,action_params')
+    .select('id,type,title,body,created_at,read,data')
     .eq('user_id', userId)
     .order('created_at', { ascending: false });
 
@@ -84,6 +87,9 @@ export async function fetchNotificationCenterItems(
 
   const { data, error } = await query.limit(100);
   if (error) {
+    if (isBootstrapReadError(error)) {
+      return { items: [], nextCursor: null };
+    }
     throw new RepositoryError('fetchNotificationCenterItems', error);
   }
   const items = (data ?? []).map((row) =>
@@ -93,9 +99,7 @@ export async function fetchNotificationCenterItems(
   // matches the .lt('created_at', cursor) filter. Using the mapped numeric
   // timestamp would produce a mismatched cursor.
   const lastRow = data?.[data.length - 1] as NotificationRow | undefined;
-  const nextCursor = items.length === 100 && lastRow?.created_at != null
-    ? String(lastRow.created_at)
-    : null;
+  const nextCursor = items.length === 100 && lastRow?.created_at != null ? String(lastRow.created_at) : null;
   return { items, nextCursor };
 }
 
@@ -105,7 +109,7 @@ export async function markNotificationRead(
 ): Promise<void> {
   const { error } = await supabase
     .from('notifications')
-    .update({ read: true, updated_at: new Date().toISOString() })
+    .update({ read: true })
     .eq('id', notificationId)
     .eq('user_id', userId);
   if (error) {

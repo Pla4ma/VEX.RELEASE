@@ -25,7 +25,6 @@ import type { EtherealAuthProvider } from './components/ethereal';
 import { LoginHero } from './components/ethereal/LoginHero';
 import { LoginEmailForm } from './components/ethereal/LoginEmailForm';
 import { LoginPrivacyStrip } from './components/ethereal/LoginPrivacyStrip';
-import { VexMascotGuide } from '../onboarding/components/ethereal/VexMascotGuide';
 import { BackgroundScrim } from '../onboarding/components/ethereal/BackgroundScrim';
 
 type Props = NativeStackScreenProps<AuthStackParams, 'Login'>;
@@ -111,16 +110,6 @@ export const LoginScreen: React.FC<Props> = ({ navigation, route }) => {
               onProviderPress={onProviderPress}
               startDelayMs={900}
             />
-
-            {!showEmailForm ? (
-              <VexMascotGuide
-                message="I'll guide your first block."
-                mood="wave"
-              placement="inline"
-              size="loginCompact"
-              submessage="Sign in, then I'll walk you through setup."
-              />
-            ) : null}
 
             {showEmailForm ? (
               <LoginEmailForm

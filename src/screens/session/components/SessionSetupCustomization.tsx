@@ -1,7 +1,6 @@
 import React from 'react';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 
-import { Banner } from '../../../components/Banner';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
 import { Icon } from '../../../icons';
@@ -14,6 +13,7 @@ import { SessionAdvancedOptions } from './SessionAdvancedOptions';
 import { SessionThemeSelector } from './SessionThemeSelector';
 import { ActiveChallenges } from './ActiveChallenges';
 import type { SessionSetupCustomizationProps } from './session-setup-customization-types';
+import { SessionSmartPickCard } from './SessionSmartPickCard';
 
 export function SessionSetupCustomization({
   activeChallenges,
@@ -78,12 +78,9 @@ export function SessionSetupCustomization({
 
       {smartSuggestion && smartSuggestion.confidence >= 0.75 ? (
         <Box px="lg" mb="md">
-          <Banner
-            variant="info"
-            title="Smart Pick"
+          <SessionSmartPickCard
             description={smartSuggestion.description}
-            actionText="Use this"
-            onAction={onSelectSmartSuggestion}
+            onSelect={onSelectSmartSuggestion}
           />
         </Box>
       ) : null}

@@ -11,6 +11,21 @@ export const miscIcons: IconCollection = {
     outline: 'M9 5l7 7-7 7',
     solid: 'M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z',
   },
+  chevronDown: {
+    name: 'chevronDown',
+    outline: 'M19 9l-7 7-7-7',
+    solid: 'M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z',
+  },
+  chart: {
+    name: 'chart',
+    outline: 'M4 19V5 M4 19h16 M8 16v-5 M12 16V8 M16 16v-8',
+    solid: 'M5 3h2v16h14v2H5V3zm4 10h3v4H9v-4zm5-6h3v10h-3V7zm5 3h3v7h-3v-7z',
+  },
+  user: {
+    name: 'user',
+    outline: 'M20 21a8 8 0 10-16 0 M12 13a5 5 0 100-10 5 5 0 000 10z',
+    solid: 'M12 12a5 5 0 100-10 5 5 0 000 10zm0 2c-4.42 0-8 2.24-8 5v2h16v-2c0-2.76-3.58-5-8-5z',
+  },
   flame: {
     name: 'flame',
     outline: 'M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z',

@@ -13,6 +13,11 @@ import { lightColors } from '@/theme/tokens/colors';
 import { NotificationCategoryToggle } from './NotificationCategoryToggle';
 import { NotificationScheduleSection } from './NotificationScheduleSection';
 import { notificationGroups } from './notification-groups';
+import {
+  LiquidGlassHeader,
+  LiquidGlassScreen,
+  liquidGlassSpacing,
+} from '../../shared/ui/liquid-glass';
 
 type Props = NativeStackScreenProps<
   SettingsStackParams,
@@ -50,12 +55,12 @@ export const NotificationSettingsScreen: React.FC<Props> = ({
   }, []);
 
   return (
-    <Box flex={1} style={{ backgroundColor: theme.colors.background.primary }}>
+    <LiquidGlassScreen>
       <ScrollView showsVerticalScrollIndicator={false}>
         <Box
-          px={20}
+          px={liquidGlassSpacing.screenX}
           pb={16}
-          pt={insets.top + 16}
+          pt={insets.top + liquidGlassSpacing.screenTop}
           flexDirection="row"
           alignItems="center"
         >
@@ -72,7 +77,11 @@ export const NotificationSettingsScreen: React.FC<Props> = ({
               color={theme.colors.text.primary}
             />
           </Pressable>
-          <Text variant="h2">Notifications</Text>
+          <LiquidGlassHeader
+            eyebrow="Signal"
+            title="Notifications"
+            body="Choose which focus signals are allowed to reach you."
+          />
         </Box>
 
         <NotificationScheduleSection />
@@ -143,7 +152,7 @@ export const NotificationSettingsScreen: React.FC<Props> = ({
 
         <Box height={insets.bottom + 20} />
       </ScrollView>
-    </Box>
+    </LiquidGlassScreen>
   );
 };
 

@@ -19,6 +19,7 @@ export interface SignUpMetadata {
 export interface AuthResult {
   user: User | null;
   error: Error | null;
+  requiresEmailConfirmation?: boolean;
 }
 
 export interface OAuthStartResult {

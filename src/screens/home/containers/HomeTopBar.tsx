@@ -25,31 +25,35 @@ export function HomeTopBar(): JSX.Element {
         zIndex: 2,
       }}
     >
-      <VexBrandPill />
-      <GlassPill
-        label="Project mode"
-        rightIcon={
-          <Icon
-            color={vexLightGlass.mint[700]}
-            name="chevronDown"
-            size="xs"
-            variant="solid"
-          />
-        }
-        size="sm"
-        variant="mint"
-      />
       <View
         pointerEvents="none"
         style={{
-          opacity: 0.85,
+          left: -6,
+          opacity: 0.7,
           position: 'absolute',
-          right: 44,
-          top: 2,
+          top: -2,
           zIndex: 0,
         }}
       >
-        <FloatingDroplets count={2} opacity={0.65} size={20} />
+        <FloatingDroplets count={3} opacity={0.55} size={18} spread={28} />
+      </View>
+      <View style={{ zIndex: 3 }}>
+        <VexBrandPill />
+      </View>
+      <View style={{ zIndex: 3 }}>
+        <GlassPill
+          label="Project mode"
+          rightIcon={
+            <Icon
+              color={vexLightGlass.mint[700]}
+              name="chevronDown"
+              size="xs"
+              variant="solid"
+            />
+          }
+          size="sm"
+          variant="mint"
+        />
       </View>
       <Pressable
         accessibilityHint="Shows your VEX notifications"
@@ -70,6 +74,7 @@ export function HomeTopBar(): JSX.Element {
           shadowOpacity: 0.16,
           shadowRadius: 12,
           width: 40,
+          zIndex: 3,
         }}
       >
         <LinearGradient

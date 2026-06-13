@@ -9,6 +9,7 @@ import Animated, {
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
 import { CARD_WIDTH } from './session-consequence-types';
+import { SessionGlyph } from '../../../shared/ui/liquid-glass';
 
 interface ChallengeImpactCardProps {
   challengeName: string;
@@ -60,7 +61,7 @@ export function ChallengeImpactCard({
           marginBottom: theme.spacing[2],
         }}
       >
-        <Text fontSize={24}>{wasCompleted ? '📋✅' : '📋'}</Text>
+        <SessionGlyph name="focused" size={36} />
         <Text
           variant="body"
           fontWeight="700"

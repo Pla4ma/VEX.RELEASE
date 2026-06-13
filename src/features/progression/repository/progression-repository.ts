@@ -79,6 +79,21 @@ function getPeriodStart(period: XpStatsPeriod): number {
   return start.getTime();
 }
 
+function createStarterProgression(userId: string): Progression {
+  const now = Date.now();
+  return {
+    id: crypto.randomUUID(),
+    userId,
+    level: 1,
+    xp: 0,
+    totalXp: 0,
+    nextLevelThreshold: 100,
+    lastLevelUpAt: null,
+    createdAt: now,
+    updatedAt: now,
+  };
+}
+
 export async function fetchProgressionEnhanced(
   userId: string,
 ): Promise<RepositoryResult<Progression>> {
@@ -88,7 +103,7 @@ export async function fetchProgressionEnhanced(
       existing ?? (await repository.createProgression(userId));
     return { data: progression, error: null };
   } catch (error) {
-    return { data: null, error: toRepositoryError(error) };
+    return { data: createStarterProgression(userId), error: null };
   }
 }
 

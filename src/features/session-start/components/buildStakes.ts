@@ -18,9 +18,9 @@ export function buildStakes(
     stakes.push({
       id: 'boss',
       priority: isCritical ? 1 : 2,
-      icon: bossStake.isFinalStrike ? '⚔️' : '🐲',
+      icon: 'stake',
       title: bossStake.isFinalStrike
-        ? `⚔️ FINAL STRIKE: ${bossStake.bossName}`
+        ? `Final strike: ${bossStake.bossName}`
         : `${bossStake.bossName} at ${bossStake.healthPercent.toFixed(0)}%`,
       subtitle: bossStake.wouldDefeat
         ? 'This session defeats the boss!'
@@ -41,10 +41,10 @@ export function buildStakes(
     stakes.push({
       id: 'streak',
       priority: isCritical ? 1 : 3,
-      icon: '🔥',
+      icon: 'deep',
       title:
         streakStake.isAtRisk && streakStake.hoursUntilDeadline !== null
-          ? `🔥 Streak at risk — ${streakStake.hoursUntilDeadline}h left`
+          ? `Streak at risk — ${streakStake.hoursUntilDeadline}h left`
           : `Day ${streakStake.currentDays} of your streak`,
       subtitle: streakStake.isAtRisk
         ? 'Complete this session to save it!'
@@ -57,7 +57,7 @@ export function buildStakes(
     stakes.push({
       id: 'challenge',
       priority: challengeStake.canComplete ? 2 : 4,
-      icon: '📋',
+      icon: 'focused',
       title: `'${challengeStake.challengeName}'`,
       subtitle: challengeStake.canComplete
         ? `This session completes it! (${challengeStake.current}/${challengeStake.target})`
@@ -71,7 +71,7 @@ export function buildStakes(
     stakes.push({
       id: 'rival',
       priority: isBehind ? 3 : 5,
-      icon: '⚔️',
+      icon: 'sprint',
       title: `${rivalStake.rivalName}`,
       subtitle: isBehind
         ? `${rivalStake.gapMinutes} min behind — catch up?`
@@ -85,7 +85,7 @@ export function buildStakes(
     stakes.push({
       id: 'squadwar',
       priority: isUrgent ? 3 : 5,
-      icon: '🛡️',
+      icon: 'stake',
       title: `Squad War ends in ${squadWarStake.hoursRemaining}h`,
       subtitle: `Squad needs ${squadWarStake.squadMinutesNeeded} more min`,
       urgency: isUrgent ? 'high' : 'medium',

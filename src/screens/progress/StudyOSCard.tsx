@@ -5,16 +5,27 @@ import { Text } from '../../components/primitives/Text';
 import { GlassCard } from '../../components/glass/GlassCard';
 import { RealisticModeOrb } from '../../components/glass/RealisticModeOrb';
 import { vexLightGlass } from '../../theme/tokens/vex-light-glass';
+import type { MotivationProfile } from '../../features/liveops-config/feature-access-types';
+import { getSessionsUntilStudyUnlock } from './services/progress-unlock-helpers';
 
 type StudyOSCardProps = {
   canOpenStudy: boolean;
+  completedSessions: number;
+  motivationProfile?: MotivationProfile | null;
   onOpenStudy: () => void;
 };
 
 export function StudyOSCard({
   canOpenStudy,
+  completedSessions,
+  motivationProfile,
   onOpenStudy,
 }: StudyOSCardProps): JSX.Element {
+  const sessionsRemaining = getSessionsUntilStudyUnlock(
+    completedSessions,
+    motivationProfile,
+  );
+
   return (
     <GlassCard variant="default" padding={12} radius={18}>
       <View pointerEvents="none" style={{ backgroundColor: vexLightGlass.background.atmosphericMint, borderRadius: 200, height: 112, position: 'absolute', right: -40, top: -40, width: 112 }} />
@@ -50,7 +61,9 @@ export function StudyOSCard({
           >
             {canOpenStudy
               ? 'Turn material into focus sessions'
-              : 'Study tools unlock through sessions'}
+              : sessionsRemaining === 1
+                ? 'Study tools unlock in 1 session'
+                : `Study tools unlock in ${sessionsRemaining} sessions`}
           </Text>
         </View>
       </View>
@@ -73,7 +86,7 @@ export function StudyOSCard({
           accessibilityLabel={
             canOpenStudy
               ? 'Open study tools'
-              : 'Start session to unlock study tools'
+              : `Start session to unlock study tools in ${sessionsRemaining} sessions`
           }
           accessibilityHint="Moves you to the next study or focus action"
         />

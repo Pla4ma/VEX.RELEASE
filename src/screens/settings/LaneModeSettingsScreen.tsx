@@ -15,6 +15,11 @@ import {
   LANE_LABELS,
   LANE_EMOJI,
 } from '../onboarding/components/LaneConfirmationStep';
+import {
+  LiquidGlassHeader,
+  LiquidGlassScreen,
+  liquidGlassSpacing,
+} from '../../shared/ui/liquid-glass';
 
 type Props = NativeStackScreenProps<SettingsStackParams, 'LaneMode'>;
 
@@ -56,21 +61,18 @@ export const LaneModeSettingsScreen = withScreenErrorBoundary(
     );
 
     return (
-      <Box
-        flex={1}
-        style={{ backgroundColor: theme.colors.background.primary }}
-      >
+      <LiquidGlassScreen>
         <ScrollView showsVerticalScrollIndicator={false}>
-          <Box px={20} pb={16} pt={insets.top + 16}>
-            <Text variant="h1">Focus Mode</Text>
-            <Text
-              variant="body"
-              color="text.secondary"
-              style={{ marginTop: 8 }}
-            >
-              Choose how VEX tailors your home screen and coach experience. You
-              can change this anytime.
-            </Text>
+          <Box
+            px={liquidGlassSpacing.screenX}
+            pb={16}
+            pt={insets.top + liquidGlassSpacing.screenTop}
+          >
+            <LiquidGlassHeader
+              eyebrow="Lane"
+              title="Focus Mode"
+              body="Choose how VEX tailors your home and coach experience."
+            />
           </Box>
 
           <Box px={16} gap={12}>
@@ -138,7 +140,7 @@ export const LaneModeSettingsScreen = withScreenErrorBoundary(
 
           <Box height={insets.bottom + 40} />
         </ScrollView>
-      </Box>
+      </LiquidGlassScreen>
     );
   },
   'LaneMode',

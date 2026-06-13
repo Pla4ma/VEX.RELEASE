@@ -6,6 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuthStore } from '../../store';
 import { useStreakSummary } from '../../features/streaks/hooks';
 import { GlassBlurLayer } from '../../components/glass/GlassBlurLayer';
+import { vexLightGlass } from '../../theme/tokens/vex-light-glass';
 import { TabButton } from './TabButton';
 
 export function VexTabBar({

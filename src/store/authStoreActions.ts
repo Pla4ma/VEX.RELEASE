@@ -1,34 +1,17 @@
-import {
-  clearSentryUser,
-  captureException,
-  setSentryUser,
-} from '../config/sentry';
-import {
-  getSecureStorage,
-  SecureStorageKeys,
-} from '../persistence/SecureStorage';
+import { captureException, setSentryUser } from '../config/sentry';
 import * as authService from '../features/auth/service';
 import type { User } from '../types/models';
-import { createDebugger } from '../utils/debug';
-import {
-  removeUserProfile,
-  saveUserProfile,
-} from './authProfileStorage';
-import {
-  handleAuthCheckError,
-  hydrateStoredProfile,
-  setAuthenticatedUser,
-  setSignedOut,
-  toError,
-} from './authStoreActionHelpers';
-import {
-  deinitializeServicesAfterLogout,
-  initializeServicesAfterAuth,
-  resetServiceSingletonsForLogout,
-} from './authStoreIntegrations';
+import { saveUserProfile } from './authProfileStorage';
+import { setAuthenticatedUser, toError } from './authStoreActionHelpers';
+import { initializeServicesAfterAuth } from './authStoreIntegrations';
 import type { AuthState, AuthStateSetter } from './authStoreTypes';
-
-const debug = createDebugger('store:auth');
+import { checkAuthUser, logoutUser } from './authSessionActions';
+import {
+  beginSignup,
+  canSubmitSignup,
+  finishSignup,
+  normalizeSignupEmail,
+} from './signupGuard';
 
 type AuthActions = Omit<
   AuthState,
@@ -145,14 +128,25 @@ export function createAuthActions(set: AuthStateSetter): AuthActions {
       }
     },
     register: async (data) => {
+      const email = normalizeSignupEmail(data.email);
+      let sentVerification = false;
+      if (!canSubmitSignup(email)) {
+        setAuthError(set, 'Verification email already sent. Check your inbox before requesting another.');
+        return false;
+      }
       try {
+        beginSignup(email);
         setAuthLoading(set);
         const { user, error } = await authService.signUp(
-          { email: data.email, password: data.password },
+          { email, password: data.password },
           { firstName: data.firstName, lastName: data.lastName },
         );
         if (error || !user) {
-          setAuthError(set, error?.message ?? 'Registration failed');
+          const message = error?.message ?? 'Verification email sent. Check your inbox to finish setup.';
+          if (!error) {
+            sentVerification = true;
+          }
+          setAuthError(set, message);
           return false;
         }
         await finishLogin(set, user);
@@ -161,40 +155,11 @@ export function createAuthActions(set: AuthStateSetter): AuthActions {
         setAuthError(set, toError(err).message);
         captureException(toError(err), { tags: { feature: 'auth-register' } });
         return false;
+      } finally {
+        finishSignup(email, sentVerification);
       }
     },
-    logout: async () => {
-      try {
-        await authService.signOut();
-      } catch (signOutError) {
-        debug.error('[AuthStore] Sign out failed:', signOutError);
-        captureException(toError(signOutError), { tags: { feature: 'auth-logout' } });
-        return;
-      }
-      const secureStorage = getSecureStorage();
-      await secureStorage.removeItem(SecureStorageKeys.AUTH_TOKEN);
-      await secureStorage.removeItem(SecureStorageKeys.REFRESH_TOKEN);
-      await removeUserProfile();
-      setSignedOut(set);
-      resetServiceSingletonsForLogout();
-      clearSentryUser();
-      deinitializeServicesAfterLogout();
-    },
-    checkAuth: async () => {
-      setAuthLoading(set);
-      try {
-        await hydrateStoredProfile(set);
-        const user = await authService.getCurrentUser();
-        if (user) {
-          await finishLogin(set, user);
-          return;
-        }
-        setSignedOut(set);
-        clearSentryUser();
-        deinitializeServicesAfterLogout();
-      } catch (err) {
-        handleAuthCheckError(set, err);
-      }
-    },
+    logout: () => logoutUser(set),
+    checkAuth: () => checkAuthUser(set, (user) => finishLogin(set, user), setAuthLoading),
   };
 }

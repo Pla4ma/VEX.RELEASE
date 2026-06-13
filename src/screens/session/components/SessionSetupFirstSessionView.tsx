@@ -18,6 +18,7 @@ import { useFirstSessionStart } from '../hooks/useFirstSessionStart';
 import { useAuthStore } from '../../../store';
 import { useOnboardingStore } from '../../../features/onboarding';
 import type { Lane } from '../../../features/lane-engine/types';
+import { LiquidGlassScreen } from '../../../shared/ui/liquid-glass';
 
 type SessionNavigationProp = CompositeNavigationProp<
   NativeStackNavigationProp<SessionStackParams>,
@@ -117,7 +118,7 @@ export function FirstSessionView({
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={{ flex: 1 }}
     >
-      <Box flex={1} bg="background.primary">
+      <LiquidGlassScreen>
         <SessionStartStatusCard
           offlineMessage={offlineMessage}
           routeWarningMessage={null}
@@ -130,7 +131,7 @@ export function FirstSessionView({
           onStart={handleContractAnswers}
           onBack={onBack}
         />
-      </Box>
+      </LiquidGlassScreen>
     </KeyboardAvoidingView>
   );
 }

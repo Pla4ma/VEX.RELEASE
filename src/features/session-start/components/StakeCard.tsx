@@ -3,9 +3,13 @@ import { View, Pressable } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
 import type { SessionStake } from './SessionStakesBriefing.types';
+import {
+  SessionGlyph,
+  type SessionGlyphName,
+} from '../../../shared/ui/liquid-glass';
 
 interface StakeCardProps {
-  icon: string;
+  icon: SessionGlyphName;
   title: string;
   subtitle: string;
   urgency: SessionStake['urgency'];
@@ -68,15 +72,15 @@ export function StakeCard({
       >
         <View
           style={{
-            width: 36,
-            height: 36,
-            borderRadius: theme.borderRadius.full,
-            backgroundColor: styles.iconBg,
+            width: 44,
+            height: 44,
+            borderRadius: theme.borderRadius['2xl'],
+            backgroundColor: theme.colors.semantic.surfaceElevated,
             justifyContent: 'center',
             alignItems: 'center',
           }}
         >
-          <Text fontSize={18}>{icon}</Text>
+          <SessionGlyph name={icon} size={36} />
         </View>
         <View style={{ flex: 1 }}>
           <Text variant="body" fontWeight="600" color="text.primary">

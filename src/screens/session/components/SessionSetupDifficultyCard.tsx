@@ -5,6 +5,7 @@ import {
   DifficultySelector,
   type SessionDifficulty,
 } from '../../../features/session-start/components/DifficultySelector';
+import { LiquidGlassCard } from '../../../shared/ui/liquid-glass';
 
 type SessionSetupDifficultyCardProps = {
   disabled: boolean;
@@ -41,21 +42,23 @@ export function SessionSetupDifficultyCard({
 }: SessionSetupDifficultyCardProps): React.JSX.Element {
   return (
     <Box px="lg" mt="md" mb="md">
-      <Box mb="sm">
-        <Text variant="label" color="text.secondary">
-          Select Difficulty
-        </Text>
-        <Text variant="caption" color="text.tertiary">
-          Estimated XP:{' '}
-          {Math.round((selectedDurationSeconds / 60) * getMultiplier(selected))}{' '}
-          {getBonusLabel(selected)}
-        </Text>
-      </Box>
-      <DifficultySelector
-        selected={selected}
-        onChange={onChange}
-        disabled={disabled}
-      />
+      <LiquidGlassCard compact>
+        <Box mb="md">
+          <Text variant="label" color="text.secondary">
+            Intensity
+          </Text>
+          <Text variant="caption" color="text.tertiary">
+            Estimated XP:{' '}
+            {Math.round((selectedDurationSeconds / 60) * getMultiplier(selected))}{' '}
+            {getBonusLabel(selected)}
+          </Text>
+        </Box>
+        <DifficultySelector
+          selected={selected}
+          onChange={onChange}
+          disabled={disabled}
+        />
+      </LiquidGlassCard>
     </Box>
   );
 }

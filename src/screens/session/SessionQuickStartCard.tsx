@@ -1,10 +1,12 @@
 import React from 'react';
+import { Image } from 'react-native';
 
 import { Banner } from '../../components/Banner';
 import { Box } from '../../components/primitives/Box';
 import { Button } from '../../components/primitives/Button';
 import { Text } from '../../components/primitives/Text';
 import { useTheme } from '../../theme';
+import { LiquidGlassCard } from '../../shared/ui/liquid-glass';
 
 type SmartSuggestion = {
   description: string;
@@ -50,35 +52,39 @@ export function SessionQuickStartCard({
 
   return (
     <Box px="lg" mb="lg">
-      <Box
-        p="lg"
-        bg="background.secondary"
-        borderRadius="xl"
+      <LiquidGlassCard
+        emphasized
         style={{
-          borderWidth: 1,
-          borderColor: theme.colors.primary[500],
           gap: theme.spacing[4],
         }}
       >
-        <Box gap="xs">
-          <Text variant="label" color="primary.500">
-            {heroEyebrow}
-          </Text>
-          <Text variant="h4" color="text.primary">
-            {heroTitle}
-          </Text>
-          <Text variant="body" color="text.secondary">
-            {heroBody}
-          </Text>
+        <Box flexDirection="row" gap="md" alignItems="center">
+          <Box flex={1} gap="xs">
+            <Text variant="label" color="primary.500">
+              {heroEyebrow}
+            </Text>
+            <Text variant="h4" color="text.primary">
+              {heroTitle}
+            </Text>
+            <Text variant="body" color="text.secondary">
+              {heroBody}
+            </Text>
+          </Box>
+          <Image
+            source={require('../../assets/generated/session/focus-artifact.png')}
+            resizeMode="contain"
+            style={{ height: 108, width: 108 }}
+            accessibilityLabel="Liquid glass focus artifact"
+          />
         </Box>
 
         <Box
           p="md"
-          bg="background.primary"
-          borderRadius="lg"
+          bg="semantic.surfaceGlass"
+          borderRadius={24}
           style={{
             borderWidth: 1,
-            borderColor: theme.colors.border.light,
+            borderColor: theme.colors.semantic.liquidGlassBorder,
             gap: theme.spacing[2],
           }}
         >
@@ -128,7 +134,7 @@ export function SessionQuickStartCard({
         >
           {customizationLabel}
         </Button>
-      </Box>
+      </LiquidGlassCard>
     </Box>
   );
 }

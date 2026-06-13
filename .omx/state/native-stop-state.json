@@ -39,6 +39,76 @@
         "last_turn_id": "019eb9e3-cb63-7de2-8ed9-215643186623",
         "last_thread_id": null
       }
+    },
+    "019ebd93-057b-7c12-8807-8c8b3a4e801c": {
+      "ordinary_no_progress_guard": {
+        "fingerprint": "ordinary|fixed. root cause: several files used `vexlightglass` without importing it. changed: - [waterripplebackground.tsx](c:/users/jonat/cascadeprojects/vex-app-old/src/components/glass/waterripplebackground.tsx) - [liquidglassobject.orb.tsx](c:/users/jonat/cascadeprojects/vex-app-old/src/components/glass/liquidglassobject.orb.tsx) - [vexlaunchbutton.tsx](c:/users/jonat/cascadeprojects/vex-app-old/src/components/primitives/vexlaunchbutton.tsx) - [vextabbar.tsx](c:/users/jonat/cascadeprojects/vex-app-old/src/navigation/components/vextabbar.tsx) - [tabbutton.tsx](c:/users/jonat/cascadeprojects/vex-app-old/src/navigation/components/tabbutton.tsx) - [profilexpbar.tsx](c:/users/jonat/cascadeprojects/vex-app-old/src/screens/profile/components/profilexpbar.tsx) also fixed bad token path `vexlightglass.accent.purple` -> `vexlightglass.semantic.purple`, and removed duplicate `featuregatekeys`. verified: `npm run typecheck` passes.",
+        "first_seen_at": "2026-06-12T20:47:05.655Z",
+        "last_seen_at": "2026-06-12T20:47:05.655Z",
+        "repeat_count": 1,
+        "last_turn_id": "019ebd93-488d-7452-806c-08e6a31171cf",
+        "last_thread_id": null
+      }
+    },
+    "019ebd9a-2fd5-70b3-a9c8-75691efb5205": {
+      "ordinary_no_progress_guard": {
+        "fingerprint": "ordinary|done stronger pass. used `imagegen` built-in. added real png assets: - [focus-artifact.png](/c:/users/jonat/cascadeprojects/vex-app-old/src/assets/generated/session/focus-artifact.png) - [focus-talisman.png](/c:/users/jonat/cascadeprojects/vex-app-old/src/assets/generated/session/focus-talisman.png) - [liquid-glass-plate.png](/c:/users/jonat/cascadeprojects/vex-app-old/src/assets/generated/session/liquid-glass-plate.png) session screen changes: - generated liquid glass background plate now used in `liquidglassscreen` - quick-start card uses generated hero artifact - smart pick uses generated talisman, no blue slab - difficulty cards rebuilt with glass tiles + custom vector glyphs - mode selector rebuilt: no `brain/leaf/book`, no cramped labels - stakes/suggestions/xp/session impact emoji removed from session path - palette shifted to reference teal/mint/orange: `#0d9488`, `#14b8a6`, `#ea580c`, `#f0fdfa`, `#134e4a` validation: - `npx tsc --noemit` passed - `npm run check:banned-patterns` passed - `git diff --check` passed - session emoji scan clean - `npm run check:line-limit` still fails only on 6 pre-existing files i did not touch.",
+        "first_seen_at": "2026-06-12T21:55:25.134Z",
+        "last_seen_at": "2026-06-12T21:55:25.134Z",
+        "repeat_count": 1,
+        "last_turn_id": "019ebdc6-dafc-7701-9555-139a0f5071d9",
+        "last_thread_id": null
+      }
+    },
+    "019ebdb6-0938-7440-8997-aca31b6dd9b3": {
+      "ordinary_no_progress_guard": {
+        "fingerprint": "ordinary|fixed notification load error. changed [notifications.ts](c:/users/jonat/cascadeprojects/vex-app-old/src/features/notifications/repository/notifications.ts): - removed nonexistent db columns from select: `notification_type`, `message`, `timestamp`, `is_read`, `avatar`, `action_*`. - uses real `notifications` table columns from `src/types/supabase.ts`. - reads optional ui fields from `data`. - removed bad `updated_at` update from mark-read path. verified: - `npx tsc --noemit` passes. - `npx jest src/features/notifications/__tests__/notifications-repository.test.ts --runinband` passes. - file stays under 200 lines: 194.",
+        "first_seen_at": "2026-06-12T21:30:42.614Z",
+        "last_seen_at": "2026-06-12T21:30:42.614Z",
+        "repeat_count": 1,
+        "last_turn_id": "019ebdbb-7b5f-7912-8c02-1f7bc0539faf",
+        "last_thread_id": null
+      }
+    },
+    "019ebdd5-bc51-73c2-b434-05a967991cdb": {
+      "ordinary_no_progress_guard": {
+        "fingerprint": "ordinary|{\"suggestions\":[{\"title\":\"fix the post-signup home bootstrap breaking on live supabase\",\"description\":\"today’s vex official api logs show successful `/auth/v1/signup` followed immediately by 400/401/406 failures on `notifications`, `progression`, `user_achievements`, `focus_score_current`, `mastery_tracks`, and `streaks`. codex can trace the repo calls, align them with the live schema/auth behavior, and get a brand-new account to a stable first screen.\",\"prompt\":\"fix the post-signup bootstrap failures in vex. in supabase project `vex official`, successful signups today are immediately followed by live 400/401/406 errors on `notifications`, `progression`, `user_achievements`, `focus_score_current`, `mastery_tracks`, and `streaks`. trace the local repository and service code that issues those queries, identify which failures are schema mismatches vs auth/session issues vs `.single()`/empty-row handling, patch the app, and verify the new-account flow no longer falls apart after signup.\",\"appid\":\"asdk_app_69d3e5ee6a708191baa733f7b8931995\"},{\"title\":\"stop duplicate signup emails from burning supabase auth rate limits\",\"description\":\"auth logs from june 11-12 show repeated localhost `/signup` requests, repeated signups for the same addresses, and a live `429 email rate limit exceeded`. codex can harden the register flow so testing stops spamming confirmations and users get clearer retry behavior.\",\"prompt\":\"harden the vex signup flow so it stops hammering supabase auth. the live auth logs show repeated localhost signup attempts, duplicate confirmation requests for the same emails, and at least one `429 email rate limit exceeded`. inspect the register screen, auth store, and auth repository, then add the right submit guards, retry/resend behavior, and user-facing error handling so duplicate taps or loops do not keep sending signup emails.\",\"appid\":\"asdk_app_69d3e5ee6a708191baa733f7b8931995\"}]}",
+        "first_seen_at": "2026-06-12T22:00:52.014Z",
+        "last_seen_at": "2026-06-12T22:00:52.014Z",
+        "repeat_count": 1,
+        "last_turn_id": "019ebdd5-bd09-7ea3-b88a-25683478cefa",
+        "last_thread_id": null
+      }
+    },
+    "019ebdde-e5ba-70f1-9bba-7219432a2334": {
+      "ordinary_no_progress_guard": {
+        "fingerprint": "ordinary|added real day 0 content, not only unlock path. now day 0 home shows: - `vex path`: visible future unlocks. - `starter kit`: immediate thing to do now. - `baseline` preview card. - `coach` calibration preview card. - `today has a shape` proof card. also hid fake day 0 “7 day streak / focus score 82 / project atlas” cards, because those made app feel hollow. verified: - `npx eslint ...` touched files passes. - `npx tsc --noemit` passes. - targeted jest passes. - `npm run check:banned-patterns` passes. - new/touched line counts under 200: `homedayzerolaunchpad.tsx` 80, `homecontent.tsx` 179.",
+        "first_seen_at": "2026-06-12T22:29:03.102Z",
+        "last_seen_at": "2026-06-12T22:29:03.102Z",
+        "repeat_count": 1,
+        "last_turn_id": "019ebdf2-0fc1-7bd3-96cc-bcd82e6e5da8",
+        "last_thread_id": null
+      }
+    },
+    "019ebeaa-b519-74c3-ae37-f6b0c2d18f50": {
+      "ordinary_no_progress_guard": {
+        "fingerprint": "ordinary|implemented mobile-app fixes and sql proposals. db not changed. changed: - signup no longer authenticates unconfirmed supabase users, so post-signup bootstrap queries do not run under missing/invalid session. - added same-email signup cooldown/dedupe guard. - register screen routes confirmation-required users to `verifyemail`. - bootstrap reads now degrade safely for: - `notifications` auth/rls read errors - `progression` schema/create failure - `user_achievements` missing launch columns - `focus_score_current` missing selected columns - `mastery_tracks` empty/schema mismatch - split helper files to keep touched files at or under 200 lines. - added sql review file: [docs/supabase-release-sql-proposal.sql](/c:/users/jonat/cascadeprojects/vex-app-old/docs/supabase-release-sql-proposal.sql) - added readiness notes: [docs/vex-release-supabase-readiness.md](/c:/users/jonat/cascadeprojects/vex-app-old/docs/vex-release-supabase-readiness.md) - added live todo: [vex_release_todo.md](/c:/users/jonat/cascadeprojects/vex-app-old/vex_release_todo.md) verification: - `rtk npx tsc --noemit` passed. - targeted jest tests passed: auth signup/signin, auth store, progression read, achievements query. - `npm run check:line-limit` still fails on pre-existing unrelated oversized files. blocked: - no `vex-admin` project exists in this workspace, so admin overview/users/sessions screens could not be patched. - supabase security advisors require reauthentication, so live advisor list could not be fetched. - sql migration not applied because you asked to see sql/code before db changes.",
+        "first_seen_at": "2026-06-13T02:04:43.764Z",
+        "last_seen_at": "2026-06-13T02:04:43.764Z",
+        "repeat_count": 1,
+        "last_turn_id": "019ebeac-25e1-7af0-9809-64bf5ac2e38f",
+        "last_thread_id": null
+      }
+    },
+    "019ebec7-1bc3-71f0-9b53-6a8194e45b0c": {
+      "ordinary_no_progress_guard": {
+        "fingerprint": "ordinary|fixed. changed: - removed mascot card from login screen. - removed mascot card from create-account screen. - tightened create-account layout so title and helper text fit. - reduced register hero title size and spacing to stop clipping on narrow iphone screens. files: - [loginscreen.tsx](c:/users/jonat/cascadeprojects/vex-app-old/src/screens/auth/loginscreen.tsx) - [registerscreen.tsx](c:/users/jonat/cascadeprojects/vex-app-old/src/screens/auth/registerscreen.tsx) - [registerhero.tsx](c:/users/jonat/cascadeprojects/vex-app-old/src/screens/auth/components/ethereal/registerhero.tsx) verify: - `npx tsc --noemit` passed.",
+        "first_seen_at": "2026-06-13T02:25:49.699Z",
+        "last_seen_at": "2026-06-13T02:25:49.699Z",
+        "repeat_count": 1,
+        "last_turn_id": "019ebec8-5820-7bc3-98df-1c177167212f",
+        "last_thread_id": null
+      }
     }
   }
 }

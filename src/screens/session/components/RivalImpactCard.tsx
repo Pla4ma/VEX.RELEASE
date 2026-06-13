@@ -4,6 +4,7 @@ import { View } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
 import { CARD_WIDTH } from './session-consequence-types';
+import { SessionGlyph } from '../../../shared/ui/liquid-glass';
 
 interface RivalImpactCardProps {
   rivalName: string;
@@ -47,7 +48,7 @@ export function RivalImpactCard({
           marginBottom: theme.spacing[2],
         }}
       >
-        <Text fontSize={24}>{nowAhead ? '⚔️👑' : '⚔️'}</Text>
+        <SessionGlyph name={nowAhead ? 'sprint' : 'stake'} size={36} />
         <Text variant="body" fontWeight="700" color="text.primary">
           {rivalName}
         </Text>

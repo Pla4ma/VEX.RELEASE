@@ -13,6 +13,7 @@ import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { getMinTouchTargetStyle } from '../../utils/touchTarget';
 import { useHaptics } from '../../utils/haptics';
 import { springPresets, timingPresets } from '../../theme/tokens/motion';
+import { vexLightGlass } from '../../theme/tokens/vex-light-glass';
 
 export interface VexLaunchButtonProps extends ViewProps {
   label: string;

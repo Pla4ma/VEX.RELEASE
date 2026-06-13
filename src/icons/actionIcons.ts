@@ -44,6 +44,11 @@ export const actionIconPaths: IconCollection = {
     outline: 'M5 13l4 4L19 7',
     solid: 'M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z',
   },
+  'check-circle': {
+    name: 'check-circle',
+    outline: 'M9 12l2 2 4-4 M21 12a9 9 0 11-18 0 9 9 0 0118 0z',
+    solid: 'M12 2a10 10 0 100 20 10 10 0 000-20zm-1 14.2l-4.2-4.2 1.4-1.4 2.8 2.8 5.8-5.8 1.4 1.4-7.2 7.2z',
+  },
   plus: {
     name: 'plus',
     outline: 'M12 4v16m8-8H4',

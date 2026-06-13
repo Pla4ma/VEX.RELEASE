@@ -1,6 +1,12 @@
 ﻿import { vexLightGlass } from '../../theme/tokens/vex-light-glass';
 
-export type LiquidButtonVariant = 'primary' | 'fire' | 'secondary' | 'outline' | 'ghost';
+export type LiquidButtonVariant =
+  | 'primary'
+  | 'fire'
+  | 'ocean'
+  | 'secondary'
+  | 'outline'
+  | 'ghost';
 export type LiquidButtonSize = 'sm' | 'md' | 'lg';
 
 export interface LiquidVariantStyle {
@@ -29,6 +35,10 @@ const GLASS_FIRE = '#F5A13A';
 const GLASS_FIRE_MID = '#EA7D22';
 const GLASS_FIRE_DARK = '#B85B18';
 
+const GLASS_OCEAN = '#5BC4F5';
+const GLASS_OCEAN_MID = '#3DABE8';
+const GLASS_OCEAN_DARK = '#268AC9';
+
 export function resolveLiquidVariant(
   variant: LiquidButtonVariant,
   isPressed: boolean,
@@ -53,6 +63,17 @@ export function resolveLiquidVariant(
       textColor: '#FFFFFF',
       borderColor: 'rgba(255, 255, 255, 0.58)',
       shadowColor: 'rgba(213, 111, 28, 0.24)',
+      highlightColor: 'rgba(255, 255, 255, 0.94)',
+    };
+  }
+  if (variant === 'ocean') {
+    return {
+      gradientColors: isPressed
+        ? [GLASS_OCEAN_DARK, GLASS_OCEAN_MID, '#1A6FA6']
+        : [GLASS_OCEAN, GLASS_OCEAN_MID, GLASS_OCEAN_DARK],
+      textColor: '#FFFFFF',
+      borderColor: 'rgba(255, 255, 255, 0.58)',
+      shadowColor: 'rgba(38, 138, 201, 0.26)',
       highlightColor: 'rgba(255, 255, 255, 0.94)',
     };
   }

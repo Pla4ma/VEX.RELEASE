@@ -11,10 +11,6 @@ import { getFeatureAvailability } from '../liveops-config/FeatureFlagService';
 import type { FeatureAvailability } from '../liveops-config/FeatureFlagService';
 import type { FeatureKey } from '../liveops-config/feature-access';
 
-export const featureGateKeys = {
-  all: ['feature-gate'] as const,
-  feature: (feature: FeatureKey) => ['feature-gate', feature] as const,
-};
 
 export type FeatureGateMode =
   | 'entryPoint'

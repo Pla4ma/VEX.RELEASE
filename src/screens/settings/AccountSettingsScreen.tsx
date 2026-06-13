@@ -11,6 +11,11 @@ import type { SettingsStackParams } from '../../navigation';
 import { EmailChangeSection } from './EmailChangeSection';
 import { TwoFactorSection } from './TwoFactorSection';
 import { PasswordChangeSection } from './PasswordChangeSection';
+import {
+  LiquidGlassHeader,
+  LiquidGlassScreen,
+  liquidGlassSpacing,
+} from '../../shared/ui/liquid-glass';
 
 type Props = NativeStackScreenProps<SettingsStackParams, 'AccountSettings'>;
 
@@ -24,16 +29,16 @@ export const AccountSettingsScreen: React.FC<Props> = ({ navigation }) => {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={{ flex: 1 }}
     >
-      <Box flex={1} style={{ backgroundColor: theme.colors.background.primary }}>
+      <LiquidGlassScreen>
         <ScrollView
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
           contentContainerStyle={{ flexGrow: 1 }}
         >
           <Box
-            px={20}
+            px={liquidGlassSpacing.screenX}
             pb={16}
-            pt={insets.top + 16}
+            pt={insets.top + liquidGlassSpacing.screenTop}
             flexDirection="row"
             alignItems="center"
           >
@@ -50,7 +55,11 @@ export const AccountSettingsScreen: React.FC<Props> = ({ navigation }) => {
                 color={theme.colors.text.primary}
               />
             </Pressable>
-            <Text variant="h2">Account</Text>
+            <LiquidGlassHeader
+              eyebrow="Identity"
+              title="Account"
+              body="Protect sign-in, email, and recovery paths."
+            />
           </Box>
 
           <EmailChangeSection email={user?.email} />
@@ -59,7 +68,7 @@ export const AccountSettingsScreen: React.FC<Props> = ({ navigation }) => {
 
           <Box height={insets.bottom + 20} />
         </ScrollView>
-      </Box>
+      </LiquidGlassScreen>
     </KeyboardAvoidingView>
   );
 };

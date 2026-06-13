@@ -20,7 +20,6 @@ import { etherealText } from '@/theme/tokens/ethereal-sky';
 import { RegisterFormPanel } from './components/ethereal/RegisterFormPanel';
 import { RegisterHero } from './components/ethereal/RegisterHero';
 import { getMinTouchTargetStyle } from '../../utils/touchTarget';
-import { VexMascotGuide } from '../onboarding/components/ethereal/VexMascotGuide';
 import { BackgroundScrim } from '../onboarding/components/ethereal/BackgroundScrim';
 
 type Props = NativeStackScreenProps<AuthStackParams, 'Register'>;
@@ -70,9 +69,22 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
     if (!success) {
       const authError =
         useAuthStore.getState().error ?? 'Check the details and try again.';
+      if (authError.includes('Verification email')) {
+        navigation.navigate({
+          name: 'VerifyEmail',
+          params: { email: result.data.email },
+        });
+        showToast({
+          duration: 5000,
+          message: 'Check your inbox before requesting another signup email.',
+          title: 'Verification email sent',
+          type: 'success',
+        });
+        return;
+      }
       showToast({ duration: 4000, message: authError, title: 'Signup did not finish', type: 'error' });
     }
-  }, [email, isLoading, password, register, showToast]);
+  }, [email, isLoading, navigation, password, register, showToast]);
 
   const onChangeEmail = useCallback(
     (value: string) => { setEmail(value); clearError('email'); },
@@ -99,24 +111,16 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
       <ScrollView
         contentContainerStyle={{
           flexGrow: 1,
-          paddingTop: insets.top + 16,
-          paddingBottom: insets.bottom + 16,
+          paddingTop: insets.top + 12,
+          paddingBottom: insets.bottom + 24,
           paddingHorizontal: 24,
         }}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
-        <View style={{ flex: 1, justifyContent: 'space-between', gap: 16 }}>
-          <View style={{ gap: 8 }}>
+        <View style={{ flex: 1, justifyContent: 'center', gap: 18 }}>
+          <View style={{ gap: 8, marginTop: 4 }}>
             <RegisterHero startDelayMs={120} />
-
-            <VexMascotGuide
-              message="Protected focus starts here."
-              mood="encouraging"
-              placement="inline"
-              size="authForm"
-              submessage="Create the account, then I'll guide setup."
-            />
           </View>
 
           <RegisterFormPanel
@@ -132,7 +136,7 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
             onSubmit={() => { void handleRegister(); }}
           />
 
-          <View style={{ gap: 12 }}>
+          <View style={{ gap: 10 }}>
             <View
               style={{
                 flexDirection: 'row',

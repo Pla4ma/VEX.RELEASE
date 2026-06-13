@@ -78,7 +78,8 @@ export function LiquidButton({
 
   const s = LIQUID_SIZE[size];
   const v = resolveLiquidVariant(variant, false);
-  const isPrimary = variant === 'primary' || variant === 'fire';
+  const isPrimary =
+    variant === 'primary' || variant === 'fire' || variant === 'ocean';
 
   return (
     <Animated.View

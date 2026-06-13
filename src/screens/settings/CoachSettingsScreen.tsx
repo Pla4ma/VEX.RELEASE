@@ -19,6 +19,11 @@ import {
 } from './CoachFrequencySelector';
 import { CoachToneSelector, type CoachLanguage } from './CoachToneSelector';
 import { lightColors } from '@/theme/tokens/colors';
+import {
+  LiquidGlassHeader,
+  LiquidGlassScreen,
+  liquidGlassSpacing,
+} from '../../shared/ui/liquid-glass';
 
 type Props = NativeStackScreenProps<SettingsStackParams, 'CoachSettings'>;
 
@@ -65,12 +70,12 @@ export const CoachSettingsScreen: React.FC<Props> = ({ navigation }) => {
   }, [showToast]);
 
   return (
-    <Box flex={1} style={{ backgroundColor: theme.colors.background.primary }}>
+    <LiquidGlassScreen>
       <ScrollView showsVerticalScrollIndicator={false}>
         <Box
-          px={20}
+          px={liquidGlassSpacing.screenX}
           pb={16}
-          pt={insets.top + 16}
+          pt={insets.top + liquidGlassSpacing.screenTop}
           flexDirection="row"
           alignItems="center"
         >
@@ -87,7 +92,12 @@ export const CoachSettingsScreen: React.FC<Props> = ({ navigation }) => {
               color={theme.colors.text.primary}
             />
           </Pressable>
-          <Text variant="h2">AI Coach</Text>
+          <LiquidGlassHeader
+            eyebrow="Coach"
+            title="AI Coach"
+            body="Set the coaching voice that supports your sessions."
+            tone="amber"
+          />
         </Box>
 
         <CoachPersonaSelector
@@ -169,7 +179,7 @@ export const CoachSettingsScreen: React.FC<Props> = ({ navigation }) => {
 
         <Box height={insets.bottom + 20} />
       </ScrollView>
-    </Box>
+    </LiquidGlassScreen>
   );
 };
 

@@ -21,6 +21,7 @@ import { useFeatureAccess } from '../../../features/liveops-config';
 import { useOnboardingStore } from '../../../features/onboarding/store';
 import { usePremiumStatus } from '../../../shared/monetization';
 import { ModeCompletionSurface } from '../../../features/mode-native/components/ModeCompletionSurface';
+import { FeatureUnlockCelebration } from '../../../features/session-completion/components/FeatureUnlockCelebration';
 
 import { SessionCompleteHeroSection } from './SessionCompleteHeroSection';
 import { SessionCompleteRewardsPhase } from './SessionCompleteRewardsPhase';
@@ -40,6 +41,8 @@ export function SessionCompleteContent({
   const insets = useSafeAreaInsets();
   const bottomSheetRef = useRef<BottomSheet>(null);
   const [gradeRevealed, setGradeRevealed] = useState(false);
+  const [unlockFeatureIndex, setUnlockFeatureIndex] = useState(0);
+  const [showUnlockCelebration, setShowUnlockCelebration] = useState(false);
   const controller = useSessionCompleteController({ sessionId, summary });
   const contractQuery = useContractForSession(sessionId);
   const featureAccess = useFeatureAccess();
@@ -49,6 +52,20 @@ export function SessionCompleteContent({
   const primaryGoal = useOnboardingStore((state) => state.goal);
   const premiumStatus = usePremiumStatus();
   const reflectContract = useReflectOnContract();
+
+  const newlyUnlockedFeatures: string[] =
+    consequences?.newlyUnlockedFeatures ?? [];
+
+  useEffect(() => {
+    if (gradeRevealed && newlyUnlockedFeatures.length > 0) {
+      const timer = setTimeout(() => {
+        setUnlockFeatureIndex(0);
+        setShowUnlockCelebration(true);
+      }, 400);
+      return () => clearTimeout(timer);
+    }
+    return undefined;
+  }, [gradeRevealed, newlyUnlockedFeatures.length]);
   const policy = resolveCompletionExperiencePolicy({
     consequences,
     featureAvailability: {
@@ -186,6 +203,22 @@ export function SessionCompleteContent({
         onGradeRevealComplete={handleGradeRevealComplete}
         bottomSheetRef={bottomSheetRef}
       />
+
+      {showUnlockCelebration &&
+        newlyUnlockedFeatures.length > 0 &&
+        newlyUnlockedFeatures[unlockFeatureIndex] ? (
+        <FeatureUnlockCelebration
+          featureKey={newlyUnlockedFeatures[unlockFeatureIndex]}
+          onDismiss={() => {
+            const nextIndex = unlockFeatureIndex + 1;
+            if (nextIndex < newlyUnlockedFeatures.length) {
+              setUnlockFeatureIndex(nextIndex);
+            } else {
+              setShowUnlockCelebration(false);
+            }
+          }}
+        />
+      ) : null}
     </Animated.View>
   );
 }

@@ -12,6 +12,10 @@ import { type UserAchievement } from './types';
 import { UserAchievementRowSchema } from './schemas';
 import { tableColumns } from '../../lib/repository/tableColumns';
 
+function isMissingAchievementColumns(error: { code?: string; message?: string }): boolean {
+  return error.code === '42703' || /column .* does not exist|achievement_id/i.test(error.message ?? '');
+}
+
 // ============================================================================
 // User Achievements
 // ============================================================================
@@ -29,6 +33,9 @@ export async function getUserAchievement(
 
   if (error) {
     if (error.code === 'PGRST116') {
+      return null;
+    }
+    if (isMissingAchievementColumns(error)) {
       return null;
     }
     throw new RepositoryError('getUserAchievement', error);
@@ -58,6 +65,9 @@ export async function getAllUserAchievements(
     .eq('user_id', userId);
 
   if (error) {
+    if (isMissingAchievementColumns(error)) {
+      return [];
+    }
     throw new RepositoryError('getAllUserAchievements', error);
   }
   if (!data) {
