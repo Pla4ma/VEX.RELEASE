@@ -26,7 +26,8 @@ export function getStepValidation(
   const isContinueDisabled =
     (step === 0 && !goal) ||
     (step === 1 && !motivationStyle) ||
-    step === 2 ||
+    (step === 2 && !window?.__ONBOARDING_LANE_CHOSEN__) ||
+    step === 3 ||
     isFinishing;
   return { isContinueDisabled };
 }

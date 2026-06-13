@@ -31,6 +31,7 @@ type SessionCompletionRewardsSectionProps = {
   rewards: {
     actions: {
       applyCompletionRewards: () => Promise<void>;
+      applyChestRewards: (input: { sessionId: string; rewards: any[] }) => Promise<void>;
     };
     rewardCreditError: string | null;
     rewardCreditStatus:

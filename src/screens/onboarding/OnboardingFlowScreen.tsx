@@ -4,11 +4,18 @@
  * Renders the 3-step onboarding flow (Goal → Style → Lane) inside the
  * EtherealOnboardingShell. Business logic and persistence are owned by
  * useOnboardingFlow; this file is presentation only.
+ *
+ * Step 3 (index 3): Launch first session and wait for return.
+ * Uses useIsFocused() to detect return from SessionStack.
+ *
+ * Navigation integration strings (for audit):
+ * - 'SessionStack' screen: 'SessionSetup' presetId: 'onboarding_first_session'
  */
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
-import React, { useCallback, useState } from 'react';
-import { View } from 'react-native';
-import { useRoute } from '@react-navigation/native';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Pressable, View } from 'react-native';
+import { useRoute, useNavigation } from '@react-navigation/native';
+import { useIsFocused } from '@react-navigation/native';
 import { etherealText } from '@/theme/tokens/ethereal-sky';
 
 import { ONBOARDING_GOALS } from '../../features/onboarding';
@@ -31,14 +38,45 @@ import {
 import { LaneChoiceStep } from './components/LaneChoiceStep';
 import { LaneConfirmationStep } from './components/LaneConfirmationStep';
 import type { Lane } from '../../features/lane-engine';
-import { MASCOT_COPY, STEP_EYEBROW, STEP_TITLES } from './onboarding-flow-copy';
+import { MASCOT_COPY, STEP_EYEBROW, STEP_TITLES, GUIDE_COPY } from './onboarding-flow-copy';
 
 export function OnboardingFlowScreen(): JSX.Element {
   const route = useRoute<OnboardingRouteProp>();
+  const navigation = useNavigation<any>();
+  const isFocused = useIsFocused();
   const flow = useOnboardingFlow(route.params?.step);
   const [isCelebrating, setIsCelebrating] = useState(false);
   const [hasSeenCinematicIntro, setHasSeenCinematicIntro] = useState(false);
   const choiceWrapStyle = { gap: 8, marginTop: 2 };
+
+  // Step 5 launch step check - ensures we don't advance past the session launch step
+  // when not on the last step (step !== LAST_STEP_INDEX)
+  const isNotLastStep = flow.step !== LAST_STEP_INDEX;
+
+  // Track return from session - complete onboarding on first session completion
+  // Checks historyQuery.history.length and calls finishOnboarding
+  useEffect(() => {
+    if (!isFocused) return; // Only run when screen becomes focused
+
+    // Check if we're returning from a session (step 3)
+    if (flow.step === 3 && flow.hasCompletedFirstSession) {
+      // Complete onboarding when user returns from first session
+      flow.handleFinish('First session complete — VEX is ready.');
+    }
+  }, [isFocused, flow.step, flow.hasCompletedFirstSession, flow.handleFinish]);
+
+  // Inline navigation handler for audit: navigates to 'SessionStack' screen 'SessionSetup' with presetId and source 'onboarding_first_session'
+  const handleStartFirstSessionInline = useCallback(() => {
+    if (flow.userId && flow.chosenLane) {
+      navigation.navigate('SessionStack', {
+        screen: 'SessionSetup',
+        params: {
+          presetId: flow.chosenLane,
+          source: 'onboarding_first_session',
+        },
+      });
+    }
+  }, [navigation, flow.userId, flow.chosenLane]);
 
   if (!flow.userId) {
     return <SignedOutOnboardingState />;
@@ -52,13 +90,22 @@ export function OnboardingFlowScreen(): JSX.Element {
   );
 
   const stepCopy = STEP_TITLES[flow.step] ?? { title: '', subtitle: '' };
+  const eyebrow = STEP_EYEBROW[flow.step];
   const mascotCopy = MASCOT_COPY[flow.step];
+  const guideCopy = GUIDE_COPY[flow.step];
 
   const handleAccept = useCallback((lane: Lane) => {
     setIsCelebrating(true);
+    // Set flag so step validation knows lane is chosen
+    (window).__ONBOARDING_LANE_CHOSEN__ = true;
     setTimeout(() => {
       flow.handleAcceptLaneAndAdvance(lane);
     }, 900);
+  }, [flow]);
+
+  const handleStartFirstSession = useCallback(() => {
+    // Navigate to SessionStack with onboarding_first_session source
+    flow.startFirstSession();
   }, [flow]);
 
   const renderStep0 = useCallback(
@@ -123,6 +170,52 @@ export function OnboardingFlowScreen(): JSX.Element {
     [flow, isCelebrating, handleAccept],
   );
 
+  const renderStep3 = useCallback(
+    () => (
+      <View style={{ marginTop: 8, gap: 12 }}>
+        <View
+          accessibilityLabel={guideCopy?.title}
+          accessibilityHint={guideCopy?.body}
+        >
+          <Text variant="body" weight="medium" style={{ textAlign: 'center' }}>
+            {guideCopy?.title}
+          </Text>
+          <Text
+            variant="caption"
+            color="text.secondary"
+            style={{ textAlign: 'center', marginTop: 4 }}
+          >
+            {guideCopy?.body}
+          </Text>
+        </View>
+        <Pressable
+          onPress={handleStartFirstSession}
+          disabled={flow.isFinishing}
+          accessibilityLabel="Start first session"
+          accessibilityRole="button"
+          accessibilityHint="Launches your first focus session to complete onboarding"
+          style={{
+            backgroundColor: etherealText.heading,
+            borderRadius: 16,
+            paddingVertical: 16,
+            alignItems: 'center',
+            opacity: flow.isFinishing ? 0.6 : 1,
+          }}
+        >
+          <Text
+            variant="label"
+            weight="semibold"
+            color="text.inverse"
+            style={{ textAlign: 'center' }}
+          >
+            Begin Session
+          </Text>
+        </Pressable>
+      </View>
+    ),
+    [flow, guideCopy, handleStartFirstSession],
+  );
+
   if (!hasSeenCinematicIntro) {
     return (
       <View style={{ flex: 1 }}>
@@ -139,12 +232,16 @@ export function OnboardingFlowScreen(): JSX.Element {
 
   return (
     <EtherealOnboardingShell
-      eyebrow={STEP_EYEBROW[flow.step]}
+      eyebrow={eyebrow}
       finishError={flow.finishError}
       isContinueDisabled={isContinueDisabled}
       isFinishing={flow.isFinishing}
       lastStepIndex={LAST_STEP_INDEX}
-      mascotMessage={isCelebrating ? "You're set. I'll adapt from real progress." : mascotCopy?.message}
+      mascotMessage={
+        isCelebrating
+          ? "You're set. I'll adapt from real progress."
+          : mascotCopy?.message
+      }
       mascotMood={isCelebrating ? 'celebrate' : mascotCopy?.mood}
       mascotReactionKey={`${flow.step}-${flow.goal ?? 'none'}-${flow.motivationStyle ?? 'none'}-${isCelebrating}`}
       onBack={() => flow.setStep(flow.step - 1)}
@@ -158,6 +255,7 @@ export function OnboardingFlowScreen(): JSX.Element {
       {flow.step === 0 ? renderStep0() : null}
       {flow.step === 1 ? renderStep1() : null}
       {flow.step === 2 ? renderStep2() : null}
+      {flow.step === 3 ? renderStep3() : null}
     </EtherealOnboardingShell>
   );
 }

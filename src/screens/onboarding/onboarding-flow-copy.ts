@@ -2,6 +2,7 @@ export const STEP_EYEBROW: Record<number, string> = {
   0: 'STEP 1 OF 3',
   1: 'STEP 2 OF 3',
   2: 'STEP 3 OF 3',
+  3: 'STEP 4 OF 3',
 };
 
 export const STEP_TITLES: Record<number, { title: string; subtitle: string }> = {
@@ -16,6 +17,10 @@ export const STEP_TITLES: Record<number, { title: string; subtitle: string }> = 
   2: {
     title: 'Confirm your mode',
     subtitle: 'You can change this anytime.',
+  },
+  3: {
+    title: 'Start your first session',
+    subtitle: 'Begin a focus block to complete setup.',
   },
 };
 
@@ -35,6 +40,10 @@ export const MASCOT_COPY: Record<
     mood: 'encouraging',
     message: 'Lock the mode. I guide first block.',
   },
+  3: {
+    mood: 'encouraging',
+    message: 'Tap to begin. I track your progress.',
+  },
 };
 
 export const GUIDE_COPY: Record<number, { title: string; body: string }> = {
@@ -49,5 +58,9 @@ export const GUIDE_COPY: Record<number, { title: string; body: string }> = {
   2: {
     title: 'Lock the first mode.',
     body: 'This opens the app with one clear path.',
+  },
+  3: {
+    title: 'Start your first session.',
+    body: 'One clean focus block teaches VEX how you work.',
   },
 };

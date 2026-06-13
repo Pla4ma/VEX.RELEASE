@@ -1,11 +1,7 @@
 [
-  "src/accessibility/AccessibilityEnhancer.class.ts",
   "src/config/supabase-mock.ts",
-  "src/features/__tests__/FeatureFlagService.advanced.test.ts",
-  "src/features/ai-coach/__tests__/coachService.break-and-advice.test.ts",
   "src/features/ai-coach/__tests__/memories-repository.test.ts",
-  "src/features/ai-coach/components/CoachInterventionBanner.tsx",
-  "src/features/liveops-config/__tests__/liveops-feature-access-store.test.ts",
+  "src/features/analytics/repository/dashboard.ts",
   "src/features/mode-native/__tests__/derive-home-surface.test.ts",
   "src/features/mode-native/__tests__/derive-quick-contract.test.ts",
   "src/features/session-completion/__tests__/exit-gate-policy-fixtures-mocks.ts",

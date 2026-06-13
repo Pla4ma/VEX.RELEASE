@@ -1,9 +1,10 @@
+import { z } from 'zod';
 import {
   enqueue,
   type OfflineQueueEntryInput,
 } from '../../../lib/offline/queue';
 import { getSupabaseClient } from '../../../config/supabase';
-import type { Streak } from '../schemas';
+import type { Streak, StreakSummary } from '../schemas';
 import { v4 } from '../../../utils/uuid';
 import { tableColumns } from '../../../lib/repository/tableColumns';
 import { parseStreakRow } from '../repository-helpers';
@@ -12,8 +13,49 @@ import {
   type RepositoryResult,
   StreaksRepositoryError,
 } from '../../../lib/repository/fallback';
+import { calculateStreakRisk } from '../streak-risk-monitor';
 
 const supabase = getSupabaseClient();
+
+export async function fetchStreakSummary(
+  userId: string,
+): Promise<RepositoryResult<StreakSummary | null>> {
+  return executeWithFallback('fetchStreakSummary', async () => {
+    const { data: streakData, error: streakError } = await supabase
+      .from('streaks')
+      .select(tableColumns('streaks'))
+      .eq('user_id', userId)
+      .single();
+
+    if (streakError) {
+      if (streakError.code === 'PGRST116') {
+        return null;
+      }
+      throw streakError;
+    }
+
+    if (!streakData) {
+      return null;
+    }
+
+    const streak = parseStreakRow(streakData);
+    const risk = calculateStreakRisk(streak);
+
+    const summary: StreakSummary = {
+      id: streak.id,
+      userId: streak.userId,
+      currentDays: streak.currentDays,
+      longestDays: streak.longestDays,
+      isAtRisk: risk.isAtRisk,
+      riskLevel: risk.riskLevel,
+      nextDeadline: risk.nextDeadline !== undefined ? risk.nextDeadline : null,
+      frozenUntil: streak.frozenUntil,
+      shieldAvailable: streak.shieldsAvailable > 0,
+    };
+
+    return summary;
+  });
+}
 
 export async function fetchStreakEnhanced(
   userId: string,

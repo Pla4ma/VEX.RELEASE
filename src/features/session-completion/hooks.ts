@@ -98,6 +98,7 @@ export function useSessionCompleteController({
   rewards: {
     actions: {
       applyCompletionRewards: () => Promise<void>;
+      applyChestRewards: (input: { sessionId: string; rewards: any[] }) => Promise<void>;
       handleRevealComplete: () => void;
       setLevelUpCelebration: React.Dispatch<React.SetStateAction<LevelUpCelebrationState>>;
     };
@@ -134,6 +135,7 @@ export function useSessionCompleteController({
   const rewards = useMemo(() => ({
     actions: {
       applyCompletionRewards: async (): Promise<void> => {},
+      applyChestRewards: async (input: { sessionId: string; rewards: any[] }): Promise<void> => {},
       handleRevealComplete: () => {},
       setLevelUpCelebration,
     },

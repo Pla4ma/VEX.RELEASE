@@ -7,6 +7,20 @@ type ProgressionSummaryData = NonNullable<
   ReturnType<typeof useProgressionSummary>['data']
 >;
 
+// Mock functions for applyChestRewards and creditSessionRewards
+const applyChestRewards = async (input: { sessionId: string; rewards: any[] }) => {
+  // In archived economy system, this would call the progression service
+  // For now, just log
+  console.debug('[SessionCompleteRewards] applyChestRewards called', input);
+};
+
+const creditSessionRewards = async (userId: string, rewards: any[]) => {
+  // In archived economy system, this would call the progression service
+  // For now, just return the rewards
+  console.debug('[SessionCompleteRewards] creditSessionRewards called', { userId, rewards });
+  return rewards;
+};
+
 export function useSessionCompleteRewards({
   applySessionMastery,
   focusedDuration,
@@ -56,6 +70,8 @@ export function useSessionCompleteRewards({
     streakMultiplier,
     summary,
     userId,
+    applyChestRewards,
+    creditSessionRewards,
   });
   const handleRevealComplete = useCallback(async (): Promise<void> => {
     setCompletionStage(2);

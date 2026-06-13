@@ -45,6 +45,8 @@ export interface TabButtonProps {
   onPress: () => void;
   onLongPress: () => void;
   isActiveTab: boolean;
+  isPulsing?: boolean;
+  pulseStart?: number | null;
 }
 
 export function TabButton({
@@ -55,13 +57,32 @@ export function TabButton({
   onPress,
   onLongPress,
   isActiveTab,
+  isPulsing = false,
+  pulseStart = null,
 }: TabButtonProps) {
   const { isReducedMotion } = useReducedMotion();
   const bounce = useSharedValue(1);
   const iconScale = useSharedValue(focused ? 1.08 : 1);
   const pillProgress = useSharedValue(focused ? 1 : 0);
+  const pulseScale = useSharedValue(1);
   const iconName = getRouteIcon(route.name);
   const labelText = label;
+
+  // Pulse animation for streak at risk
+  useEffect(() => {
+    if (isPulsing && pulseStart !== null && !isReducedMotion) {
+      const elapsed = Date.now() - pulseStart;
+      // Pulse every 2 seconds
+      const pulseInterval = setInterval(() => {
+        pulseScale.value = withSequence(
+          withTiming(1.15, { duration: 300 }),
+          withTiming(1, { duration: 300 }),
+        );
+      }, 2000);
+      return () => clearInterval(pulseInterval);
+    }
+    return undefined;
+  }, [isPulsing, pulseStart, isReducedMotion, pulseScale]);
 
   useEffect(() => {
     if (isReducedMotion) {
@@ -74,7 +95,10 @@ export function TabButton({
   }, [focused, isReducedMotion, iconScale, pillProgress]);
 
   const iconStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: isActiveTab ? iconScale.value : bounce.value }],
+    transform: [
+      { scale: isActiveTab ? iconScale.value : bounce.value },
+      { scale: pulseScale.value },
+    ],
   }));
   const pillStyle = useAnimatedStyle(() => ({
     opacity: pillProgress.value,
