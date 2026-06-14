@@ -17,9 +17,9 @@ jest.mock('../../shared/monetization/revenuecat-service', () => ({
   },
 }));
 
-jest.mock('../../services/supabaseAuth', () => ({
-  signInWithEmail: jest.fn(),
-  signUpWithEmail: jest.fn(),
+jest.mock('../../features/auth/service', () => ({
+  signIn: jest.fn(),
+  signUp: jest.fn(),
   signOut: jest.fn(),
   getCurrentUser: jest.fn(),
   getCurrentSession: jest.fn(),
@@ -65,10 +65,10 @@ const { setSentryUser, clearSentryUser } = jest.requireMock(
 const { revenueCatService } = jest.requireMock(
   '../../shared/monetization/revenuecat-service',
 ) as { revenueCatService: { setUserId: jest.Mock; clearUserId: jest.Mock } };
-const { signInWithEmail, signUpWithEmail, signOut, getCurrentUser } =
-  jest.requireMock('../../services/supabaseAuth') as {
-    signInWithEmail: jest.Mock;
-    signUpWithEmail: jest.Mock;
+const { signIn, signUp, signOut, getCurrentUser } =
+  jest.requireMock('../../features/auth/service') as {
+    signIn: jest.Mock;
+    signUp: jest.Mock;
     signOut: jest.Mock;
     getCurrentUser: jest.Mock;
   };
@@ -96,7 +96,7 @@ describe('canonical auth store', () => {
       'utf8',
     );
 
-    expect(source.trim()).toBe('export * from "./store/index";');
+    expect(source.trim()).toBe("export * from './store/index';");
     ['sessionToken', 'setSessionToken', 'SecureStorageKeys.AUTH_TOKEN'].forEach(
       (token) => {
         expect(source).not.toContain(token);
@@ -105,7 +105,7 @@ describe('canonical auth store', () => {
   });
 
   it('loginWithCredentials uses Supabase auth and binds user services', async () => {
-    (signInWithEmail as jest.Mock).mockResolvedValueOnce({
+    (signIn as jest.Mock).mockResolvedValueOnce({
       error: null,
       user: mockUser,
     });
@@ -116,7 +116,10 @@ describe('canonical auth store', () => {
         .loginWithCredentials('test@example.com', 'password'),
     ).resolves.toBe(true);
 
-    expect(signInWithEmail).toHaveBeenCalledWith('test@example.com', 'password');
+    expect(signIn).toHaveBeenCalledWith({
+      email: 'test@example.com',
+      password: 'password',
+    });
     expect(setSentryUser).toHaveBeenCalledWith(
       mockUser.id,
       mockUser.email,
@@ -126,7 +129,7 @@ describe('canonical auth store', () => {
   });
 
   it('register uses Supabase auth', async () => {
-    (signUpWithEmail as jest.Mock).mockResolvedValueOnce({
+    (signUp as jest.Mock).mockResolvedValueOnce({
       error: null,
       user: mockUser,
     });
@@ -142,21 +145,14 @@ describe('canonical auth store', () => {
       }),
     ).resolves.toBe(true);
 
-    expect(signUpWithEmail).toHaveBeenCalledWith(
-      'test@example.com',
-      'Password1!',
-      {
-        firstName: 'Test',
-        lastName: 'User',
-      },
+    expect(signUp).toHaveBeenCalledWith(
+      { email: 'test@example.com', password: 'Password1!' },
+      { firstName: 'Test', lastName: 'User' },
     );
   });
 
   it('checkAuth reflects Supabase current user', async () => {
-    (getCurrentUser as jest.Mock).mockResolvedValueOnce({
-      error: null,
-      user: mockUser,
-    });
+    (getCurrentUser as jest.Mock).mockResolvedValueOnce(mockUser);
 
     await canonicalStore.useAuthStore.getState().checkAuth();
 
