@@ -120,14 +120,15 @@ function checkSquadShareDeepLink(check, fail) {
 
 function checkStreakAtRiskTabBarPulse(check, fail) {
   let pass = true;
+  const pulse = readFile(path.join(__dirname, '../src/navigation/components/useTabBarPulse.ts'));
   const bar = readFile(path.join(__dirname, '../src/navigation/components/VexTabBar.tsx'));
-  if (bar) {
-    const hasRisk = bar.includes('isAtRisk');
-    const hasDays = bar.includes('currentDays');
-    const hasHour = bar.includes('getHours()');
-    const has18 = bar.includes('hour >= 18');
-    const hasPulse = bar.includes('pulseStart');
-    const hasTab = bar.includes("route.name === 'Start' && pulseStart");
+  if (pulse && bar) {
+    const hasRisk = pulse.includes('isAtRisk');
+    const hasDays = pulse.includes('currentDays');
+    const hasHour = pulse.includes('getHours()');
+    const has18 = pulse.includes('hour >= 18');
+    const hasPulse = pulse.includes('pulseStart');
+    const hasTab = bar.includes("route.name === 'Start'");
     console.log(`   ${hasRisk ? check : fail} Checks streakSummary.isAtRisk`);
     console.log(`   ${hasDays ? check : fail} Checks currentStreak > 0 (currentDays > 0)`);
     console.log(`   ${hasHour && has18 ? check : fail} Checks new Date().getHours() >= 18`);
@@ -135,7 +136,7 @@ function checkStreakAtRiskTabBarPulse(check, fail) {
     console.log(`   ${hasTab ? check : fail} Pulse only on Start tab`);
     if (!(hasRisk && hasDays && hasHour && has18 && hasPulse && hasTab)) pass = false;
   } else {
-    console.log(`   ${fail} VexTabBar.tsx not found`);
+    console.log(`   ${fail} Pulse or TabBar files not found`);
     pass = false;
   }
   return pass;

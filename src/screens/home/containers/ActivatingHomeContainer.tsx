@@ -1,19 +1,14 @@
-import { useMemo, useCallback } from 'react';
-import { useNavigation } from '@react-navigation/native';
-import type { UseQueryResult } from '@tanstack/react-query';
-import { useSessionUIStore } from '../../../store/session-state';
-import { useHomeSpineModel } from '../../../features/home-spine/hooks';
-import { getNextBestAction } from '../../../features/progression';
-import { navigateToSessionStackScreen, navigateToMainTab, navigateToMainStackScreen } from '../../../navigation/navigation-helpers';
-import type { SessionStackParams } from '../../../navigation/types';
-import { getNextUnlockFeature } from '../hooks/home-controller-helpers';
-import { buildHomeReturnReasonState } from '../../../features/home-spine/service';
-import type { HomeReturnReason } from '../hooks/useHomeReturnReason';
-import { createStubQuery, stubLearningExecutionLayer, stubNavigationActions, stubCoachMutations } from '../hooks/home-controller-stubs';
-import type { HomeController } from '../hooks/home-controller-types';
-import type { HomeViewModel } from '../hooks/home-view-model';
+import { useMemo } from 'react';
+import { useSessionUIStore } from '@/store/session-state';
+import { useHomeSpineModel } from '@/features/home-spine/hooks';
+import { useActivatingContainerActions } from './ActivatingHomeContainer.actions';
 import { computeActivatingState } from './ActivatingHomeContainer.state';
-import type { Nav, ActivatingContainerInput } from './ActivatingHomeContainer.types';
+import { getNextUnlockFeature } from '@/screens/home/hooks/home-controller-helpers';
+import { createStubQuery, stubLearningExecutionLayer, stubCoachMutations } from '@/screens/home/hooks/home-controller-stubs';
+import { getNextBestAction } from '@/features/progression';
+import type { HomeViewModel } from '@/screens/home/hooks/home-view-model';
+import type { HomeController } from '@/screens/home/hooks/home-controller-types';
+import type { ActivatingContainerInput } from './ActivatingHomeContainer.types';
 
 export function useActivatingContainerModel(
   input: ActivatingContainerInput,
@@ -28,7 +23,7 @@ export function useActivatingContainerModel(
     streakQuery,
     userId,
   } = input;
-  const navigation = useNavigation<Nav>();
+
   const homeHighlight = useSessionUIStore((s) => s.homeHighlight);
   const completionSync = useSessionUIStore((s) => s.completionSync);
   const clearHomeHighlight = useSessionUIStore((s) => s.clearHomeHighlight);
@@ -43,78 +38,21 @@ export function useActivatingContainerModel(
     isFirstRun,
   } = computeActivatingState(disclosure, streakQuery, progressionQuery, historyQuery);
 
-  const stubActions = useMemo(() => stubNavigationActions(), []);
-
-  const openSetup = useCallback(
-    (params: SessionStackParams['SessionSetup'] = {}): void => {
-      if (userId && disclosure.inputs.totalCompletedSessions === 0) {
-        analytics.trackFirstSessionStarted(userId, 'home');
-      }
-      navigateToSessionStackScreen(navigation, 'SessionSetup', params);
-    },
-    [analytics, disclosure.inputs.totalCompletedSessions, navigation, userId],
-  );
-
-  const openProgress = useCallback(() => {
-    navigateToMainTab(navigation, 'Progress');
-  }, [navigation]);
-  const openPlan = useCallback(() => {
-    navigateToMainTab(navigation, 'Progress');
-  }, [navigation]);
-  const openCoach = useCallback(() => {
-    navigateToMainStackScreen(navigation, 'AICoach');
-  }, [navigation]);
-  const openNextAction = useCallback(() => {
-    analytics.trackNextBestActionPressed(
-      disclosure.stage,
-      disclosure.inputs.totalCompletedSessions,
-    );
-    openSetup();
-  }, [
-    analytics,
-    disclosure.inputs.totalCompletedSessions,
-    disclosure.stage,
-    openSetup,
-  ]);
-
-  const nextUnlockFeature = useMemo(
-    () => getNextUnlockFeature(disclosure.features),
-    [disclosure.features],
-  );
   const nextBestAction = getNextBestAction({
     completedSessions: disclosure.inputs.totalCompletedSessions,
     currentStreak,
-    nextUnlockFeature,
+    nextUnlockFeature: getNextUnlockFeature(disclosure.features),
   });
 
-  const returnReason = useMemo<HomeReturnReason>(() => {
-    const reasonState = buildHomeReturnReasonState({
-      activeStudyPlan: null,
-      canShowExpansionSystems: runtime.shouldShowExpansionSystems,
-      comebackMessage: null,
-      nextBestAction,
-      primaryRecommendation: null,
-    });
-    const onPress =
-      reasonState.source === 'next-best-action'
-        ? openNextAction
-        : () => openSetup();
-    return {
-      body: reasonState.body,
-      ctaLabel: reasonState.ctaLabel,
-      eyebrow: reasonState.eyebrow,
-      intent: reasonState.intent,
-      onPress,
-      source: reasonState.source,
-      title: reasonState.title,
-      tone: reasonState.tone,
-    };
-  }, [
-    nextBestAction,
-    openNextAction,
+  const {
     openSetup,
-    runtime.shouldShowExpansionSystems,
-  ]);
+    openProgress,
+    openPlan,
+    openCoach,
+    openNextAction,
+    returnReason,
+    stubActions,
+  } = useActivatingContainerActions(input, disclosure, analytics, userId, runtime, nextBestAction);
 
   const homeSpine = useHomeSpineModel({
     currentStreak,
@@ -137,6 +75,7 @@ export function useActivatingContainerModel(
   });
 
   const isLoading = disclosure.isPending;
+
   const controller: HomeController = {
     user: null,
     userId,
@@ -160,12 +99,12 @@ export function useActivatingContainerModel(
     streakQuery,
     progressionQuery,
     historyQuery,
-    squadsQuery: createStubQuery() as UseQueryResult,
-    activeStudyPlanQuery: createStubQuery() as UseQueryResult,
+    squadsQuery: createStubQuery<unknown>(),
+    activeStudyPlanQuery: createStubQuery<unknown>(),
     learningExecutionLayer: stubLearningExecutionLayer(),
-    comebackQuery: createStubQuery() as UseQueryResult,
-    activeBossQuery: createStubQuery() as UseQueryResult,
-    recommendationsQuery: createStubQuery() as UseQueryResult,
+    comebackQuery: createStubQuery<unknown>(),
+    activeBossQuery: createStubQuery<unknown>(),
+    recommendationsQuery: createStubQuery<unknown>(),
     shouldShowSecondarySystems: runtime.shouldShowSecondarySystems,
     shouldShowExpansionSystems: runtime.shouldShowExpansionSystems,
     openSetup,
