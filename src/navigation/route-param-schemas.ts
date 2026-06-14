@@ -44,7 +44,7 @@ export const sessionSetupParamsSchema = z
     learningExecutionLabel: optionalShortText,
     learningExecutionTaskId: optionalShortText,
     source: z
-      .enum(['content-study', 'learning-execution', 'onboarding_first_session'])
+      .enum(['content-study', 'learning-execution', 'onboarding_first_session', 'plan'])
       .optional(),
     generationId: optionalShortText,
     contentId: optionalShortText,

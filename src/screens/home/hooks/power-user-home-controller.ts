@@ -81,6 +81,8 @@ export function buildHomeController(p: BuildControllerParams): HomeController {
     openSetup: p.openSetup,
     openProgress: p.openProgress,
     openSocial: p.openSocial,
+    openPlan: () => {},
+    openCoach: () => {},
     openContentStudy: p.openContentStudy,
     continueStudyPlan: p.continueStudyPlan,
     createRecommendation: p.createRecommendation as HomeController['createRecommendation'],

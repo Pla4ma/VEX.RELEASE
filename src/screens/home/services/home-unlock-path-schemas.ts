@@ -19,6 +19,7 @@ export const HomeUnlockPathItemSchema = z.object({
 export const HomeUnlockPathModelSchema = z.object({
   items: HomeUnlockPathItemSchema.array(),
   nextItem: HomeUnlockPathItemSchema,
+  previewItems: HomeUnlockPathItemSchema.array(),
   progressLabel: z.string(),
 });
 

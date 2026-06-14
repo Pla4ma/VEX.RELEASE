@@ -56,6 +56,8 @@ export interface HomeController {
   openSetup: (params?: Record<string, unknown>) => void;
   openProgress: () => void;
   openSocial: () => void;
+  openPlan: () => void;
+  openCoach: () => void;
   openContentStudy: () => void;
   continueStudyPlan: () => void;
   createRecommendation: {

@@ -44,7 +44,7 @@ export const HomeContent: React.FC<HomeContentProps> = ({
 }) => {
   const { showToast } = data;
   const completedSessions = controller.disclosure.inputs.totalCompletedSessions;
-  const showUnlockPath = completedSessions < 3;
+  const showUnlockPath = completedSessions < 2;
   const isDayZero = completedSessions === 0;
   const unlockPathModel = buildHomeUnlockPathModel({
     completedSessions,
@@ -99,6 +99,8 @@ export const HomeContent: React.FC<HomeContentProps> = ({
         <HomeDayZeroLaunchpad
           onOpenProgress={controller.openProgress}
           onStartSession={() => controller.openSetup()}
+          onOpenPlan={controller.openPlan}
+          onOpenCoach={controller.openCoach}
         />
       ) : null}
 

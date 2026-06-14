@@ -1,4 +1,4 @@
-import { Linking } from 'react-native';
+import { requireOptionalNativeModule } from 'expo-modules-core';
 import type {
   AuthOAuthProvider,
   User,
@@ -9,6 +9,44 @@ import type {
 import * as repository from './repository';
 import { UserSchema } from './schemas';
 import { signInWithNativeApple } from './apple-oauth';
+
+function isMissingWebBrowserModule(error: unknown): boolean {
+  return error instanceof Error
+    && /Cannot find native module 'ExpoWebBrowser'/.test(error.message);
+}
+
+async function openSystemAuthSession(url: string): Promise<AuthResult> {
+  if (!requireOptionalNativeModule('ExpoWebBrowser')) {
+    return {
+      user: null,
+      error: new Error('Google sign in needs a rebuilt app before it can run in app.'),
+    };
+  }
+  try {
+    const WebBrowser: typeof import('expo-web-browser') = require('expo-web-browser');
+    const authResult = await WebBrowser.openAuthSessionAsync(
+      url,
+      'vex://auth/callback',
+    );
+    if (authResult.type === 'success') {
+      return completeOAuthCallback(authResult.url);
+    }
+    return { user: null, error: null };
+  } catch (error) {
+    if (isMissingWebBrowserModule(error)) {
+      return {
+        user: null,
+        error: new Error('Google sign in needs a rebuilt app before it can run in app.'),
+      };
+    }
+    return {
+      user: null,
+      error: error instanceof Error
+        ? error
+        : new Error('Unable to open social sign in.'),
+    };
+  }
+}
 
 export async function signUp(
   credentials: AuthCredentials,
@@ -63,17 +101,7 @@ export async function startOAuthSignIn(
     };
   }
 
-  try {
-    await Linking.openURL(result.url);
-    return { user: null, error: null };
-  } catch (error) {
-    return {
-      user: null,
-      error: error instanceof Error
-        ? error
-        : new Error('Unable to open social sign in.'),
-    };
-  }
+  return openSystemAuthSession(result.url);
 }
 
 export async function completeOAuthCallback(url: string): Promise<AuthResult> {

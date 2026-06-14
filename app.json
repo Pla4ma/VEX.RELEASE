@@ -193,10 +193,11 @@
         {
           "image": "./assets/splash.png",
           "resizeMode": "contain",
-            "backgroundColor": "#F8FFFC"
+          "backgroundColor": "#F8FFFC"
         }
       ],
-      "expo-image"
+      "expo-image",
+      "expo-web-browser"
     ],
     "extra": {
       "eas": {

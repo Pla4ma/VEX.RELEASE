@@ -1,9 +1,14 @@
-import { Linking } from 'react-native';
 import * as AppleAuthentication from 'expo-apple-authentication';
+import * as WebBrowser from 'expo-web-browser';
 import * as repository from '../repository';
 import { completeOAuthCallback, startOAuthSignIn } from '../service';
+import { authTestUser } from './auth-test-user';
 
 jest.mock('../repository');
+jest.mock('expo-web-browser', () => ({
+  __esModule: true,
+  openAuthSessionAsync: jest.fn(),
+}));
 jest.mock('expo-apple-authentication', () => ({
   __esModule: true,
   AppleAuthenticationScope: {
@@ -17,61 +22,18 @@ jest.mock('expo-apple-authentication', () => ({
   signInAsync: jest.fn(),
 }));
 
-const mockUser = {
-  id: '550e8400-e29b-41d4-a716-446655440000',
-  createdAt: '2026-01-01T00:00:00Z',
-  updatedAt: '2026-01-01T00:00:00Z',
-  username: 'vexuser',
-  email: 'test@example.com',
-  firstName: 'Vex',
-  lastName: 'User',
-  displayName: 'Vex User',
-  verified: true,
-  role: 'user' as const,
-  status: 'active' as const,
-  preferences: {
-    theme: 'system' as const,
-    language: 'en',
-    notifications: {
-      push: true,
-      email: false,
-      sms: false,
-      inApp: true,
-      digestFrequency: 'daily' as const,
-      quietHours: {
-        enabled: false,
-        start: '22:00',
-        end: '07:00',
-        timezone: 'UTC',
-      },
-    },
-    privacy: {
-      profileVisibility: 'private' as const,
-      activityStatus: true,
-      readReceipts: false,
-      allowTagging: true,
-      allowMentions: true,
-      dataSharing: false,
-    },
-    accessibility: {
-      reduceMotion: false,
-      highContrast: false,
-      largeText: false,
-      screenReaderOptimized: false,
-    },
-  },
-  metadata: { deviceHistory: [], loginCount: 1 },
-};
-
 describe('OAuth auth service', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it('opens provider OAuth URL', async () => {
+  it('opens provider OAuth URL inside an auth session', async () => {
     jest.mocked(repository.startOAuthSignIn).mockResolvedValue({
       error: null,
       url: 'https://project.supabase.co/auth/v1/authorize',
+    });
+    jest.mocked(WebBrowser.openAuthSessionAsync).mockResolvedValue({
+      type: 'cancel',
     });
 
     const result = await startOAuthSignIn('google');
@@ -79,8 +41,32 @@ describe('OAuth auth service', () => {
     expect(result.error).toBeNull();
     expect(result.user).toBeNull();
     expect(repository.startOAuthSignIn).toHaveBeenCalledWith('google');
-    expect(Linking.openURL).toHaveBeenCalledWith(
+    expect(WebBrowser.openAuthSessionAsync).toHaveBeenCalledWith(
       'https://project.supabase.co/auth/v1/authorize',
+      'vex://auth/callback',
+    );
+  });
+
+  it('finishes Google OAuth when the auth session returns a callback URL', async () => {
+    jest.mocked(repository.startOAuthSignIn).mockResolvedValue({
+      error: null,
+      url: 'https://project.supabase.co/auth/v1/authorize',
+    });
+    jest.mocked(WebBrowser.openAuthSessionAsync).mockResolvedValue({
+      type: 'success',
+      url: 'vex://auth/callback?code=abc',
+    });
+    jest.mocked(repository.completeOAuthCallback).mockResolvedValue({
+      error: null,
+      user: authTestUser,
+    });
+
+    const result = await startOAuthSignIn('google');
+
+    expect(result.error).toBeNull();
+    expect(result.user?.id).toBe(authTestUser.id);
+    expect(repository.completeOAuthCallback).toHaveBeenCalledWith(
+      'vex://auth/callback?code=abc',
     );
   });
 
@@ -97,13 +83,13 @@ describe('OAuth auth service', () => {
     });
     jest.mocked(repository.signInWithAppleIdToken).mockResolvedValue({
       error: null,
-      user: mockUser,
+      user: authTestUser,
     });
 
     const result = await startOAuthSignIn('apple');
 
     expect(result.error).toBeNull();
-    expect(result.user?.id).toBe(mockUser.id);
+    expect(result.user?.id).toBe(authTestUser.id);
     expect(AppleAuthentication.signInAsync).toHaveBeenCalledWith({
       nonce: expect.any(String),
       requestedScopes: ['fullName', 'email'],
@@ -112,7 +98,7 @@ describe('OAuth auth service', () => {
       'apple-id-token',
       expect.any(String),
     );
-    expect(Linking.openURL).not.toHaveBeenCalled();
+    expect(WebBrowser.openAuthSessionAsync).not.toHaveBeenCalled();
   });
 
   it('treats Apple cancellation as a cleared auth attempt', async () => {
@@ -138,18 +124,18 @@ describe('OAuth auth service', () => {
 
     expect(result.error?.message).toBe('Provider disabled');
     expect(result.user).toBeNull();
-    expect(Linking.openURL).not.toHaveBeenCalled();
+    expect(WebBrowser.openAuthSessionAsync).not.toHaveBeenCalled();
   });
 
   it('validates callback user shape', async () => {
     jest.mocked(repository.completeOAuthCallback).mockResolvedValue({
       error: null,
-      user: mockUser,
+      user: authTestUser,
     });
 
     const result = await completeOAuthCallback('vex://auth/callback?code=abc');
 
-    expect(result.user?.id).toBe(mockUser.id);
+    expect(result.user?.id).toBe(authTestUser.id);
     expect(result.error).toBeNull();
   });
 });

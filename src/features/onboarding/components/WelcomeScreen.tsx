@@ -1,14 +1,5 @@
-/**
- * WelcomeScreen Component
- *
- * First onboarding screen. Bold headline, 3-line value prop, single CTA.
- * Premium dark visual with custom VEX focus mark.
- *
- * @phase 2.2
- */
-
-import React from 'react';
-import { useWindowDimensions } from 'react-native';
+import React, { useState } from 'react';
+import { View, useWindowDimensions } from 'react-native';
 import Animated, {
   FadeIn,
   FadeInUp,
@@ -16,21 +7,21 @@ import Animated, {
   withRepeat,
   withTiming,
 } from 'react-native-reanimated';
-
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
 import { Button } from '../../../components/primitives/Button';
 import { useTheme } from '../../../theme';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { VexFocusMark } from '../../../screens/auth/components/VexFocusMark';
+import { PathSelectionCard } from './PathSelectionCard';
+import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
+import { spacing } from '../../../theme/tokens/spacing';
+import type { OnboardingPath } from '../onboarding-paths';
 
 interface WelcomeScreenProps {
-  onStart: () => void;
+  onStart: (path: OnboardingPath) => void;
 }
 
-/**
- * Animated gradient background orbs
- */
 function AnimatedBackground(): JSX.Element {
   const { width, height } = useWindowDimensions();
   const { theme } = useTheme();
@@ -94,19 +85,16 @@ function AnimatedBackground(): JSX.Element {
   );
 }
 
-/**
- * Welcome screen component
- */
 export function WelcomeScreen({ onStart }: WelcomeScreenProps): JSX.Element {
   const { theme: _theme } = useTheme();
   const { isReducedMotion } = useReducedMotion();
+  const [selectedPath, setSelectedPath] = useState<OnboardingPath>('focus');
+
+  const paths: OnboardingPath[] = ['focus', 'plan', 'study', 'habit'];
 
   return (
     <Box flex={1} bg="background.primary">
-      {/* Animated Background */}
       <AnimatedBackground />
-
-      {/* Content */}
       <Box
         flex={1}
         justifyContent="center"
@@ -114,45 +102,45 @@ export function WelcomeScreen({ onStart }: WelcomeScreenProps): JSX.Element {
         px="xl"
         gap="xl"
       >
-        {/* Custom VEX Focus Mark */}
-        <Animated.View entering={isReducedMotion ? undefined : FadeIn.duration(600).delay(200)}>
-          <VexFocusMark size={140} />
+        <Animated.View
+          entering={isReducedMotion ? undefined : FadeIn.duration(600).delay(200)}
+        >
+          <VexFocusMark size={120} />
         </Animated.View>
 
-        {/* Core Identity Sentence */}
         <Animated.View
-          entering={isReducedMotion ? undefined : FadeInUp.duration(500).delay(400)}
+          entering={isReducedMotion ? undefined : FadeInUp.duration(500).delay(300)}
           style={{ width: '100%' }}
         >
-          <Box alignItems="center" gap="md">
+          <Box alignItems="center" gap="sm">
             <Text
               variant="hero"
               color="text.primary"
               textAlign="center"
               fontWeight="800"
             >
-              VEX changes based{'\n'}on how you work.
+              How do you want{'\n'}to start?
             </Text>
-          </Box>
-        </Animated.View>
-
-        {/* Value Prop */}
-        <Animated.View
-          entering={isReducedMotion ? undefined : FadeInUp.duration(500).delay(600)}
-          style={{ width: '100%' }}
-        >
-          <Box alignItems="center" gap="sm">
             <Text variant="bodyLarge" color="text.secondary" textAlign="center">
-              Answer a few questions, start one focused session, and VEX unlocks
-              the system your brain needs.
+              VEX adapts to you. Pick the path that feels right.
             </Text>
           </Box>
         </Animated.View>
 
-        {/* Spacer */}
-        <Box flex={1} minHeight={40} />
+        <View style={{ width: '100%', gap: spacing[2] }}>
+          {paths.map((path, index) => (
+            <PathSelectionCard
+              key={path}
+              path={path}
+              isSelected={selectedPath === path}
+              onPress={() => setSelectedPath(path)}
+              index={index}
+            />
+          ))}
+        </View>
 
-        {/* CTA Button */}
+        <Box flex={1} minHeight={20} />
+
         <Animated.View
           entering={isReducedMotion ? undefined : FadeInUp.duration(500).delay(800)}
           style={{ width: '100%' }}
@@ -161,12 +149,12 @@ export function WelcomeScreen({ onStart }: WelcomeScreenProps): JSX.Element {
             variant="primary"
             size="lg"
             fullWidth
-            onPress={onStart}
-            accessibilityLabel="Get started"
+            onPress={() => onStart(selectedPath)}
+            accessibilityLabel={`Start with ${selectedPath}`}
             accessibilityRole="button"
-            accessibilityHint="Double tap to select"
+            accessibilityHint="Double tap to begin your journey"
           >
-            Enter VEX
+            Begin
           </Button>
         </Animated.View>
       </Box>

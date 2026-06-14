@@ -48,6 +48,7 @@ export const SessionSetupNavigationParamsSchema = z.object({
       'content-study',
       'learning-execution',
       'onboarding_first_session',
+      'plan',
       'rescue',
     ])
     .optional(),

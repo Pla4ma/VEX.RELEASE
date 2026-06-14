@@ -4,7 +4,7 @@ import type { UseQueryResult } from '@tanstack/react-query';
 import { useSessionUIStore } from '../../../store/session-state';
 import { useHomeSpineModel } from '../../../features/home-spine/hooks';
 import { getNextBestAction } from '../../../features/progression';
-import { navigateToSessionStackScreen, navigateToMainTab } from '../../../navigation/navigation-helpers';
+import { navigateToSessionStackScreen, navigateToMainTab, navigateToMainStackScreen } from '../../../navigation/navigation-helpers';
 import type { SessionStackParams } from '../../../navigation/types';
 import { getNextUnlockFeature } from '../hooks/home-controller-helpers';
 import { buildHomeReturnReasonState } from '../../../features/home-spine/service';
@@ -57,6 +57,12 @@ export function useActivatingContainerModel(
 
   const openProgress = useCallback(() => {
     navigateToMainTab(navigation, 'Progress');
+  }, [navigation]);
+  const openPlan = useCallback(() => {
+    navigateToMainTab(navigation, 'Progress');
+  }, [navigation]);
+  const openCoach = useCallback(() => {
+    navigateToMainStackScreen(navigation, 'AICoach');
   }, [navigation]);
   const openNextAction = useCallback(() => {
     analytics.trackNextBestActionPressed(
@@ -165,6 +171,8 @@ export function useActivatingContainerModel(
     openSetup,
     openProgress,
     openSocial: stubActions.openSocial,
+    openPlan,
+    openCoach,
     openContentStudy: openSetup as () => void,
     continueStudyPlan: openSetup as () => void,
     createRecommendation: stubCoachMutations()

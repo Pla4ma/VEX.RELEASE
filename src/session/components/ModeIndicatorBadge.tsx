@@ -14,6 +14,10 @@ const MODE_LABELS: Record<SessionMode, string> = {
   [SessionMode.SPRINT]: 'SPRINT',
   [SessionMode.RECOVERY]: 'RECOVERY',
   [SessionMode.STARTER]: 'STARTER',
+  [SessionMode.PLAN]: 'PLAN',
+  [SessionMode.REVIEW]: 'REVIEW',
+  [SessionMode.CAPTURE]: 'CAPTURE',
+  [SessionMode.HABIT]: 'HABIT',
 };
 
 type ModeIndicatorBadgeProps = {

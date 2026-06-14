@@ -109,6 +109,8 @@ export function buildHomeController(input: BuildControllerInput): HomeController
     openSetup: actions.openSetup,
     openProgress: actions.openProgress,
     openSocial: actions.openSocial,
+    openPlan: () => {},
+    openCoach: () => {},
     openContentStudy: actions.openContentStudy,
     continueStudyPlan: actions.continueStudyPlan,
     createRecommendation:

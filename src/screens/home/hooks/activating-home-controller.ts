@@ -82,6 +82,8 @@ export function buildActivatingController(
     openSetup: params.openSetup as (params?: Record<string, unknown>) => void,
     openProgress: params.openProgress,
     openSocial: params.openSocial,
+    openPlan: () => {},
+    openCoach: () => {},
     openContentStudy: params.openSetup as () => void,
     continueStudyPlan: params.openSetup as () => void,
     createRecommendation: params.createRecommendation,

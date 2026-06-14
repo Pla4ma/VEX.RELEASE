@@ -4,6 +4,12 @@ import type { AuthResult } from './types';
 
 const NONCE_ALPHABET = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-._';
 const NONCE_LENGTH = 32;
+type AppleSignInOptions =
+  Parameters<typeof import('expo-apple-authentication').signInAsync>[0];
+type AppleNoncePair = {
+  hashedNonce: string;
+  nonce: string;
+};
 
 function isMissingAppleModule(error: unknown): boolean {
   return error instanceof Error
@@ -14,24 +20,35 @@ function isAppleCancellation(error: unknown): boolean {
   return error instanceof Error && error.message === 'ERR_REQUEST_CANCELED';
 }
 
-function createAppleNonce(): string {
-  const bytes = new Uint8Array(NONCE_LENGTH);
-  if (!globalThis.crypto?.getRandomValues) {
-    throw new Error('Apple sign in needs secure random values on this device.');
+function createAppleNonceBytes(): Uint8Array | null {
+  const getRandomValues = globalThis.crypto?.getRandomValues?.bind(globalThis.crypto);
+  if (!getRandomValues) {
+    return null;
   }
-  globalThis.crypto.getRandomValues(bytes);
+  const bytes = new Uint8Array(NONCE_LENGTH);
+  getRandomValues(bytes);
+  return bytes;
+}
+
+function createAppleNonce(bytes: Uint8Array): string {
   return Array.from(bytes)
     .map((byte) => NONCE_ALPHABET[byte % NONCE_ALPHABET.length]!).join('');
 }
 
-async function sha256Hex(value: string): Promise<string> {
+async function createAppleNoncePair(): Promise<AppleNoncePair | null> {
   if (!globalThis.crypto?.subtle) {
-    throw new Error('Apple sign in needs secure hashing on this device.');
+    return null;
   }
-  const data = new TextEncoder().encode(value);
-  const digest = await globalThis.crypto.subtle.digest('SHA-256', data);
-  return Array.from(new Uint8Array(digest))
+  const bytes = createAppleNonceBytes();
+  if (!bytes) {
+    return null;
+  }
+  const nonce = createAppleNonce(bytes);
+  const encoded = new TextEncoder().encode(nonce);
+  const digest = await globalThis.crypto.subtle.digest('SHA-256', encoded);
+  const hashedNonce = Array.from(new Uint8Array(digest))
     .map((byte) => byte.toString(16).padStart(2, '0')).join('');
+  return { hashedNonce, nonce };
 }
 
 export async function signInWithNativeApple(): Promise<AuthResult> {
@@ -43,19 +60,24 @@ export async function signInWithNativeApple(): Promise<AuthResult> {
       return { user: null, error: new Error('Apple sign in is not available on this device.') };
     }
 
-    const nonce = createAppleNonce();
-    const hashedNonce = await sha256Hex(nonce);
-    const credential = await AppleAuthentication.signInAsync({
-      nonce: hashedNonce,
+    const noncePair = await createAppleNoncePair();
+    const options: AppleSignInOptions = {
       requestedScopes: [AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
         AppleAuthentication.AppleAuthenticationScope.EMAIL],
-    });
+    };
+    if (noncePair) {
+      options.nonce = noncePair.hashedNonce;
+    }
+    const credential = await AppleAuthentication.signInAsync(options);
 
     if (!credential.identityToken) {
       return { user: null, error: new Error('Apple did not return a sign in token.') };
     }
 
-    const result = await repository.signInWithAppleIdToken(credential.identityToken, nonce);
+    const result = await repository.signInWithAppleIdToken(
+      credential.identityToken,
+      noncePair?.nonce ?? null,
+    );
     if (result.user) {
       UserSchema.parse(result.user);
     }

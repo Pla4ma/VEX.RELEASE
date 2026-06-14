@@ -3,7 +3,7 @@ import { Pressable } from 'react-native';
 
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { SessionMode, SESSION_MODE_CONFIG } from '../../../session/modes';
+import { SessionMode, isSessionLessMode } from '../../../session/modes';
 import { useTheme } from '../../../theme';
 import { SessionGlyph, type SessionGlyphName } from '../../../shared/ui/liquid-glass';
 import {
@@ -21,7 +21,7 @@ type ModeCard = {
   name: string;
 };
 
-const MODE_CARDS: ModeCard[] = [
+const FOCUS_MODE_CARDS: ModeCard[] = [
   {
     description: 'High intensity — for hard, uninterrupted work',
     glyph: 'deep',
@@ -54,11 +54,39 @@ const MODE_CARDS: ModeCard[] = [
   },
 ];
 
+const SESSIONLESS_MODE_CARDS: ModeCard[] = [
+  {
+    description: 'Plan your week, projects, and study blocks',
+    glyph: 'deep',
+    mode: SessionMode.PLAN,
+    name: 'Plan',
+  },
+  {
+    description: 'Review your progress and insights',
+    glyph: 'casual',
+    mode: SessionMode.REVIEW,
+    name: 'Review',
+  },
+  {
+    description: 'Quick capture — voice, photo, link, brain dump',
+    glyph: 'creative',
+    mode: SessionMode.CAPTURE,
+    name: 'Capture',
+  },
+  {
+    description: 'Track habits and micro-commitments',
+    glyph: 'sprint',
+    mode: SessionMode.HABIT,
+    name: 'Habit',
+  },
+];
+
 export interface ModeSelectorProps {
   hasActiveStudyPlan: boolean;
   onModeChange: (mode: SessionMode) => void;
   selectedMode: SessionMode;
   userMasteryRank?: MasteryRank;
+  showSessionless?: boolean;
 }
 
 function getDisabledReason(
@@ -83,11 +111,95 @@ function getDisabledReason(
   return null;
 }
 
+function ModeCardItem({
+  card,
+  isSelected,
+  isDisabled,
+  disabledReason,
+  onPress,
+  theme,
+}: {
+  card: ModeCard;
+  isSelected: boolean;
+  isDisabled: boolean;
+  disabledReason: string | null;
+  onPress: () => void;
+  theme: ReturnType<typeof useTheme>['theme'];
+}): JSX.Element {
+  return (
+    <Pressable
+      key={card.mode}
+      accessibilityHint={disabledReason ?? `Selects ${card.name} mode`}
+      accessibilityLabel={`${card.name} mode`}
+      accessibilityRole="button"
+      disabled={isDisabled}
+      onPress={onPress}
+    >
+      <Box
+        minHeight={76}
+        px="md"
+        py="md"
+        bg={isSelected ? 'surface.selected' : 'semantic.surfaceGlass'}
+        borderRadius={24}
+        style={{
+          borderWidth: isSelected ? 2 : 1,
+          borderColor: isSelected
+            ? theme.colors.semantic.secondary
+            : theme.colors.semantic.liquidGlassBorder,
+          opacity: isDisabled ? 0.55 : 1,
+          shadowColor: theme.colors.semantic.shadow,
+          shadowOffset: { width: 0, height: 8 },
+          shadowOpacity: isSelected ? 0.18 : 0.08,
+          shadowRadius: isSelected ? 16 : 10,
+        }}
+      >
+        <Box flexDirection="row" alignItems="center" gap="md">
+          <Box
+            width={56}
+            height={56}
+            borderRadius={20}
+            bg="semantic.surfaceElevated"
+            alignItems="center"
+            justifyContent="center"
+          >
+            <SessionGlyph name={card.glyph} size={44} />
+          </Box>
+          <Box flex={1}>
+            <Text variant="label" color="text.primary">
+              {card.name}
+            </Text>
+            <Text
+              variant="caption"
+              color="text.secondary"
+              style={{ lineHeight: 19 }}
+            >
+              {disabledReason ?? card.description}
+            </Text>
+          </Box>
+          <Box
+            alignItems="center"
+            bg="semantic.backgroundElevated"
+            borderRadius={999}
+            px="sm"
+            py="xs"
+            style={{ borderColor: theme.colors.border.light, borderWidth: 1 }}
+          >
+            <Text variant="caption" color="text.secondary">
+              {isSessionLessMode(card.mode) ? 'No timer' : 'Timer'}
+            </Text>
+          </Box>
+        </Box>
+      </Box>
+    </Pressable>
+  );
+}
+
 export function ModeSelector({
   hasActiveStudyPlan,
   onModeChange,
   selectedMode,
   userMasteryRank,
+  showSessionless = false,
 }: ModeSelectorProps): JSX.Element {
   const { theme } = useTheme();
 
@@ -98,8 +210,7 @@ export function ModeSelector({
       </Text>
 
       <Box gap="sm">
-        {MODE_CARDS.map((card) => {
-          const config = SESSION_MODE_CONFIG[card.mode];
+        {FOCUS_MODE_CARDS.map((card) => {
           const disabledReason = getDisabledReason(
             card.mode,
             hasActiveStudyPlan,
@@ -109,79 +220,43 @@ export function ModeSelector({
           const isDisabled = disabledReason !== null;
 
           return (
-            <Pressable
+            <ModeCardItem
               key={card.mode}
-              accessibilityHint={
-                disabledReason ?? `Selects ${card.name} session rules`
-              }
-              accessibilityLabel={`${card.name} mode`}
-              accessibilityRole="button"
-              disabled={isDisabled}
+              card={card}
+              isSelected={isSelected}
+              isDisabled={isDisabled}
+              disabledReason={disabledReason}
               onPress={() => onModeChange(card.mode)}
-            >
-              <Box
-                minHeight={76}
-                px="md"
-                py="md"
-                bg={isSelected ? 'surface.selected' : 'semantic.surfaceGlass'}
-                borderRadius={24}
-                style={{
-                  borderWidth: isSelected ? 2 : 1,
-                  borderColor: isSelected
-                    ? theme.colors.semantic.secondary
-                    : theme.colors.semantic.liquidGlassBorder,
-                  opacity: isDisabled ? 0.55 : 1,
-                  shadowColor: theme.colors.semantic.shadow,
-                  shadowOffset: { width: 0, height: 8 },
-                  shadowOpacity: isSelected ? 0.18 : 0.08,
-                  shadowRadius: isSelected ? 16 : 10,
-                }}
-              >
-                <Box flexDirection="row" alignItems="center" gap="md">
-                  <Box
-                    width={56}
-                    height={56}
-                    borderRadius={20}
-                    bg="semantic.surfaceElevated"
-                    alignItems="center"
-                    justifyContent="center"
-                  >
-                    <SessionGlyph name={card.glyph} size={44} />
-                  </Box>
-                  <Box flex={1}>
-                    <Text variant="label" color="text.primary">
-                      {card.name}
-                    </Text>
-                    <Text
-                      variant="caption"
-                      color="text.secondary"
-                      style={{ lineHeight: 19 }}
-                    >
-                      {disabledReason ?? card.description}
-                    </Text>
-                  </Box>
-                  <Box
-                    alignItems="center"
-                    bg="semantic.backgroundElevated"
-                    borderRadius={999}
-                    px="sm"
-                    py="xs"
-                    style={{ borderColor: theme.colors.border.light, borderWidth: 1 }}
-                  >
-                    <Text variant="caption" color="text.secondary">
-                      {config.minimumQualifyingDurationSeconds >= 45 * 60
-                        ? 'Full session'
-                        : config.minimumQualifyingDurationSeconds >= 20 * 60
-                          ? 'Standard'
-                          : 'Short block'}
-                    </Text>
-                  </Box>
-                </Box>
-              </Box>
-            </Pressable>
+              theme={theme}
+            />
           );
         })}
       </Box>
+
+      {showSessionless && (
+        <>
+          <Text variant="label" color="text.secondary" style={{ marginTop: 8 }}>
+            Session-less
+          </Text>
+          <Box gap="sm">
+            {SESSIONLESS_MODE_CARDS.map((card) => {
+              const isSelected = selectedMode === card.mode;
+
+              return (
+                <ModeCardItem
+                  key={card.mode}
+                  card={card}
+                  isSelected={isSelected}
+                  isDisabled={false}
+                  disabledReason={null}
+                  onPress={() => onModeChange(card.mode)}
+                  theme={theme}
+                />
+              );
+            })}
+          </Box>
+        </>
+      )}
     </Box>
   );
 }

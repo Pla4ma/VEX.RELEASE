@@ -35,6 +35,8 @@ export interface ContainerControllerInput {
   openSetup: (params?: SessionStackParams['SessionSetup']) => void;
   openProgress: () => void;
   openSocial: () => void;
+  openPlan?: () => void;
+  openCoach?: () => void;
 }
 
 export function buildContainerController(
@@ -74,6 +76,8 @@ export function buildContainerController(
     openSetup: input.openSetup,
     openProgress: input.openProgress,
     openSocial: input.openSocial,
+    openPlan: input.openPlan ?? input.openProgress,
+    openCoach: input.openCoach ?? input.openSetup as () => void,
     openContentStudy: input.openSetup as () => void,
     continueStudyPlan: input.openSetup as () => void,
     createRecommendation: stubCoachMutations()

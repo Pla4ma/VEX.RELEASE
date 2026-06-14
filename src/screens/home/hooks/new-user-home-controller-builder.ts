@@ -74,6 +74,8 @@ export function buildNewUserController(
     openSetup: input.openSetup,
     openProgress: input.openProgress,
     openSocial: input.openSocial,
+    openPlan: () => {},
+    openCoach: () => {},
     openContentStudy: input.openSetup as () => void,
     continueStudyPlan: input.openSetup as () => void,
     createRecommendation: stubCoachMutations()

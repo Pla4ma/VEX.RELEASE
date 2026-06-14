@@ -95,10 +95,11 @@ export async function startOAuthSignIn(
 
 export async function signInWithAppleIdToken(
   token: string,
-  nonce: string,
+  nonce: string | null,
 ): Promise<AuthResult> {
+  const options = nonce ? { nonce } : {};
   const { data, error } = await getSupabaseClient().auth.signInWithIdToken({
-    nonce,
+    ...options,
     provider: 'apple',
     token,
   });

@@ -111,6 +111,8 @@ export function buildController(params: {
     openSetup,
     openProgress,
     openSocial,
+    openPlan: () => {},
+    openCoach: () => {},
     openContentStudy,
     continueStudyPlan,
     createRecommendation,

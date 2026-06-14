@@ -108,6 +108,14 @@ export function useNewUserContainerModel(
     navigateToMainTab(navigation, 'Progress');
   }, [navigation]);
 
+  const openPlan = useCallback((): void => {
+    navigateToMainTab(navigation, 'Progress');
+  }, [navigation]);
+
+  const openCoach = useCallback((): void => {
+    navigation.navigate('AICoach');
+  }, [navigation]);
+
   const nextUnlockFeature = useMemo(
     () => getNextUnlockFeature(disclosure.features),
     [disclosure.features],
@@ -165,6 +173,8 @@ export function useNewUserContainerModel(
     openSetup,
     openProgress,
     openSocial: stubActions.openSocial,
+    openPlan,
+    openCoach,
   });
 
   return {

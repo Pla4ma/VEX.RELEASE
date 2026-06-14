@@ -89,6 +89,8 @@ export function buildEngagedController(
     openSetup: params.openSetup as (params?: Record<string, unknown>) => void,
     openProgress: params.openProgress,
     openSocial: params.openSocial,
+    openPlan: () => {},
+    openCoach: () => {},
     openContentStudy: params.openContentStudy,
     continueStudyPlan: params.continueStudyPlan,
     createRecommendation:

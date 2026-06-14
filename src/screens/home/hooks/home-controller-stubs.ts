@@ -45,6 +45,8 @@ export function stubNavigationActions() {
     openContentStudy: (): void => {},
     continueStudyPlan: (): void => {},
     openNextAction: (): void => {},
+    openPlan: (): void => {},
+    openCoach: (): void => {},
   };
 }
 

@@ -37,6 +37,7 @@ export interface SessionSetupParams {
     | 'content-study'
     | 'learning-execution'
     | 'onboarding_first_session'
+    | 'plan'
     | 'rescue';
   studyPlanId?: string;
   suggestedDifficulty?: 'EASY' | 'NORMAL' | 'CHALLENGING' | 'PUSH';

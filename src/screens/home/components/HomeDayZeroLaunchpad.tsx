@@ -2,15 +2,16 @@ import React from 'react';
 import { Pressable, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import Animated, { FadeInUp } from 'react-native-reanimated';
 
 import { LiquidButton } from '../../../components/glass/LiquidButton';
 import { VexAssetImage } from '../../../components/glass/VexAssetImage';
 import { Text } from '../../../components/primitives/Text';
 import { Icon } from '../../../icons';
-import { spacing } from '../../../theme/tokens';
+import { spacing } from '../../../theme/tokens/spacing';
+import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import type { ExtendedRootStackParams } from '../../../navigation/types';
 import { ReferenceCard } from '../../reference-ui/ReferenceCard';
-import { ReferenceMetric } from '../../reference-ui/ReferenceMetric';
 import { ref, type } from '../../reference-ui/referenceTokens';
 
 type Nav = NativeStackNavigationProp<ExtendedRootStackParams>;
@@ -18,61 +19,105 @@ type Nav = NativeStackNavigationProp<ExtendedRootStackParams>;
 interface HomeDayZeroLaunchpadProps {
   onOpenProgress: () => void;
   onStartSession: () => void;
+  onOpenPlan: () => void;
+  onOpenCoach: () => void;
 }
 
 export function HomeDayZeroLaunchpad({
   onOpenProgress,
   onStartSession,
+  onOpenPlan,
+  onOpenCoach,
 }: HomeDayZeroLaunchpadProps): JSX.Element {
   const navigation = useNavigation<Nav>();
-  const onOpenCoach = (): void => navigation.navigate('AICoach');
+
+  const pathOptions = [
+    {
+      id: 'focus',
+      label: 'Focus',
+      description: 'Start a timer and get in the zone',
+      icon: 'check-circle',
+      color: vexLightGlass.mint[500],
+      action: onStartSession,
+    },
+    {
+      id: 'plan',
+      label: 'Plan',
+      description: 'Organize your week and goals',
+      icon: 'calendar',
+      color: vexLightGlass.semantic.info,
+      action: onOpenPlan,
+    },
+    {
+      id: 'coach',
+      label: 'Coach',
+      description: 'Get guidance from VEX',
+      icon: 'message-circle',
+      color: vexLightGlass.semantic.accent,
+      action: onOpenCoach,
+    },
+  ];
 
   return (
     <>
       <ReferenceCard accent="fire" asset="coachStar">
-        <Text style={type.kicker}>STARTER KIT</Text>
-        <Text style={[type.hero, { marginTop: spacing[2], maxWidth: 230 }]}>
-          Build your first signal.
+        <Text style={type.kicker}>WELCOME TO VEX</Text>
+        <Text style={[type.hero, { marginTop: spacing[2], maxWidth: 280 }]}>
+          How do you want to start?
         </Text>
-        <Text style={[type.body, { marginTop: spacing[2], maxWidth: 238 }]}>
-          Pick an intent, run one focused block, then VEX turns it into proof.
+        <Text style={[type.body, { marginTop: spacing[2], maxWidth: 280 }]}>
+          VEX adapts to your style. Pick your first move and the app will learn from there.
         </Text>
-        <View
-          style={{
-            flexDirection: 'row',
-            flexWrap: 'wrap',
-            gap: spacing[2],
-            marginTop: spacing[4],
-          }}
-        >
-          <LiquidButton
-            accessibilityHint="Start your first focus block"
-            accessibilityLabel="Start first focus block"
-            label="Start block"
-            onPress={onStartSession}
-            rightIcon={<Icon color={ref.white} name="arrowRight" size="sm" />}
-            size="sm"
-            variant="fire"
-          />
-          <LiquidButton
-            accessibilityHint="Ask the VEX coach a question"
-            accessibilityLabel="Ask coach"
-            label="Ask coach"
-            onPress={onOpenCoach}
-            rightIcon={<Icon color={ref.white} name="arrowRight" size="sm" />}
-            size="sm"
-            variant="ocean"
-          />
-          <LiquidButton
-            accessibilityHint="Open the baseline preview in progress"
-            accessibilityLabel="Preview baseline"
-            label="Preview baseline"
-            onPress={onOpenProgress}
-            size="sm"
-            variant="outline"
-          />
-        </View>
       </ReferenceCard>
+
+      <View style={{ flexDirection: 'row', gap: spacing[3], flexWrap: 'wrap' }}>
+        {pathOptions.map((option, index) => (
+          <Animated.View
+            key={option.id}
+            entering={FadeInUp.delay(index * 100)}
+            style={{ flex: 1, minWidth: 140 }}
+          >
+            <Pressable
+              accessibilityHint={option.description}
+              accessibilityLabel={option.label}
+              accessibilityRole="button"
+              onPress={option.action}
+              style={({ pressed }) => ({
+                flex: 1,
+                opacity: pressed ? 0.85 : 1,
+                transform: [{ scale: pressed ? 0.985 : 1 }],
+              })}
+            >
+              <ReferenceCard accent="fire" showAsset={false} style={{ flex: 1 }}>
+                <View
+                  style={{
+                    width: 40,
+                    height: 40,
+                    borderRadius: 10,
+                    backgroundColor: option.color + '20',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginBottom: spacing[2],
+                  }}
+                >
+                  <Icon
+                    color={option.color}
+                    name={option.icon}
+                    size="md"
+                    variant="solid"
+                  />
+                </View>
+                <Text style={[type.title, { marginTop: spacing[2] }]}>
+                  {option.label}
+                </Text>
+                <Text style={[type.body, { marginTop: spacing[1] }]}>
+                  {option.description}
+                </Text>
+              </ReferenceCard>
+            </Pressable>
+          </Animated.View>
+        ))}
+      </View>
 
       <View style={{ flexDirection: 'row', gap: spacing[3] }}>
         <Pressable
@@ -92,7 +137,9 @@ export function HomeDayZeroLaunchpad({
             <Text style={[type.body, { marginTop: spacing[1] }]}>
               First block creates your starting score.
             </Text>
-            <ReferenceMetric label="ready" tone="fire" value="0/1" progress={0} />
+            <Text style={{ fontSize: 11, color: ref.mintDark, marginTop: spacing[2], fontWeight: '700' }}>
+              ready • 0/1
+            </Text>
           </ReferenceCard>
         </Pressable>
         <Pressable
@@ -112,7 +159,9 @@ export function HomeDayZeroLaunchpad({
             <Text style={[type.body, { marginTop: spacing[1] }]}>
               Calibrates after one real finish.
             </Text>
-            <ReferenceMetric label="signal" value="warm" progress={0.18} />
+            <Text style={{ fontSize: 11, color: ref.mintDark, marginTop: spacing[2], fontWeight: '700' }}>
+              signal • warm
+            </Text>
           </ReferenceCard>
         </Pressable>
       </View>
