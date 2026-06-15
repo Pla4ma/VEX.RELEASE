@@ -8,7 +8,7 @@ import {
 import { observedAt } from './lane-engine.helpers';
 
 describe('Lane Engine — mechanic policy & Day 0', () => {
-  it('missing profile falls back to Clean low-confidence', () => {
+  it('missing profile falls back to Focus low-confidence', () => {
     const result = resolveInitialLane({ observedAt });
 
     expect(result.primaryLane).toBe('minimal_normal');
@@ -54,7 +54,7 @@ describe('Lane Engine — mechanic policy & Day 0', () => {
     expect(result.reason).toBeDefined();
     expect(result.confidence).toBeGreaterThan(0);
     expect(result.canChangeLater).toBe(true);
-    expect(['Study', 'Run', 'Project', 'Clean']).toContain(
+    expect(['Study', 'Quest', 'Create', 'Focus']).toContain(
       result.userFacingName,
     );
   });
@@ -95,7 +95,7 @@ describe('Lane Engine — mechanic policy & Day 0', () => {
       observedAt,
     });
     expect(override.recommendedLane).toBe('game_like');
-    expect(override.userFacingName).toBe('Run');
+    expect(override.userFacingName).toBe('Quest');
     expect(override.confidence).toBe(1);
   });
 
@@ -131,7 +131,7 @@ describe('Lane Engine — mechanic policy & Day 0', () => {
     expect(policy.blockedMechanics).not.toContain('study_os');
   });
 
-  it('Run Day 0 getLaneMechanicPolicy includes personal_boss, excludes wagers', () => {
+  it('Quest Day 0 getLaneMechanicPolicy includes personal_boss, excludes wagers', () => {
     const profile = resolveInitialLane({
       manualOverride: 'game_like',
       observedAt,
@@ -143,7 +143,7 @@ describe('Lane Engine — mechanic policy & Day 0', () => {
     expect(policy.blockedMechanics).toContain('generic_leaderboards');
   });
 
-  it('Project Day 0 getLaneMechanicPolicy includes project_thread, flow_window', () => {
+  it('Create Day 0 getLaneMechanicPolicy includes project_thread, flow_window', () => {
     const profile = resolveInitialLane({
       manualOverride: 'deep_creative',
       observedAt,
@@ -155,7 +155,7 @@ describe('Lane Engine — mechanic policy & Day 0', () => {
     expect(policy.blockedMechanics).toContain('loud_combat_default');
   });
 
-  it('Clean Day 0 getLaneMechanicPolicy blocks boss/challenge/premium mechanics', () => {
+  it('Focus Day 0 getLaneMechanicPolicy blocks boss/challenge/premium mechanics', () => {
     const profile = resolveInitialLane({
       manualOverride: 'minimal_normal',
       observedAt,

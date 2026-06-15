@@ -18,9 +18,9 @@ export const LANE_USER_FACING_NAMES: Record<
   string
 > = {
   student: 'Study',
-  game_like: 'Run',
-  deep_creative: 'Project',
-  minimal_normal: 'Clean',
+  game_like: 'Quest',
+  deep_creative: 'Create',
+  minimal_normal: 'Focus',
 };
 
 export const LANE_CONFIRMATION_COPY: Record<
@@ -29,11 +29,11 @@ export const LANE_CONFIRMATION_COPY: Record<
 > = {
   student: 'VEX thinks Study Mode fits you best. You can change this anytime.',
   game_like:
-    'VEX thinks Run Mode will keep you moving. You can change this anytime.',
+    'VEX thinks Quest Mode will keep you moving. You can change this anytime.',
   deep_creative:
-    'VEX thinks Project Mode fits your deep work. You can change this anytime.',
+    'VEX thinks Create Mode fits your deep work. You can change this anytime.',
   minimal_normal:
-    'VEX thinks Clean Mode fits you best. You can change this anytime.',
+    'VEX thinks Focus Mode fits you best. You can change this anytime.',
 };
 
 export const LaneSourceSchema = z.enum([

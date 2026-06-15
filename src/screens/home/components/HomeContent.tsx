@@ -97,10 +97,9 @@ export const HomeContent: React.FC<HomeContentProps> = ({
 
       {isDayZero ? (
         <HomeDayZeroLaunchpad
-          onOpenProgress={controller.openProgress}
           onStartSession={() => controller.openSetup()}
-          onOpenPlan={controller.openPlan}
           onOpenCoach={controller.openCoach}
+          userId={controller.userId}
         />
       ) : null}
 

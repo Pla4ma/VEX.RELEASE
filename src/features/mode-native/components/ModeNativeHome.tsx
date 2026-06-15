@@ -39,10 +39,10 @@ export function ModeNativeHome({
     surface.lane === 'student'
       ? 'Study'
       : surface.lane === 'game_like'
-        ? 'Run'
+        ? 'Quest'
         : surface.lane === 'deep_creative'
-          ? 'Project'
-          : 'Clean';
+          ? 'Create'
+          : 'Focus';
 
   return (
     <Animated.View
